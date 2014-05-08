@@ -7,6 +7,17 @@
 #   * nix-env -p /nix/var/nix/profiles/system -i <nix-expr for the configuration>
 #   * install the boot loader
 
+# Re-exec ourselves in a private mount namespace so that our bind
+# mounts get cleaned up automatically.
+if [ "$(id -u)" = 0 ]; then
+    if [ -z "$NIXOS_INSTALL_REEXEC" ]; then
+        export NIXOS_INSTALL_REEXEC=1
+        exec unshare --mount -- "$0" "$@"
+    else
+        mount --make-rprivate /
+    fi
+fi
+
 # Parse the command line for the -I flag
 extraBuildFlags=()
 
@@ -59,45 +70,19 @@ if ! test -e "$mountPoint/$NIXOS_CONFIG"; then
 fi
 
 
-
 # Mount some stuff in the target root directory.  We bind-mount /etc
 # into the chroot because we need networking and the nixbld user
 # accounts in /etc/passwd.  But we do need the target's /etc/nixos.
-mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/mnt $mountPoint/mnt2 $mountPoint/mnt-nixpkgs $mountPoint/etc /etc/nixos
-mount --make-private / # systemd makes / shared, which is annoying
-mount --bind / $mountPoint/mnt
-mount --bind /nix $mountPoint/mnt/nix
-mount --bind /nix/store $mountPoint/mnt/nix/store
-mount --bind /dev $mountPoint/dev
-mount --bind /dev/shm $mountPoint/dev/shm
-mount --bind /proc $mountPoint/proc
-mount --bind /sys $mountPoint/sys
-mount --bind /sys/firmware/efi/efivars $mountPoint/sys/firmware/efi/efivars &>/dev/null || true
-mount --bind $mountPoint/etc/nixos $mountPoint/mnt2
-mount --bind /etc $mountPoint/etc
-mount --bind $mountPoint/mnt2 $mountPoint/etc/nixos
-
-cleanup() {
-    set +e
-    mountpoint -q $mountPoint/etc/nixos && umount $mountPoint/etc/nixos
-    mountpoint -q $mountPoint/etc && umount $mountPoint/etc
-    umount $mountPoint/mnt2
-    umount $mountPoint/mnt-nixpkgs
-    umount $mountPoint/sys/firmware/efi/efivars &>/dev/null || true
-    umount $mountPoint/sys
-    umount $mountPoint/proc
-    umount $mountPoint/dev/shm
-    umount $mountPoint/dev
-    umount $mountPoint/mnt/nix/store
-    umount $mountPoint/mnt/nix
-    umount $mountPoint/mnt
-    rmdir $mountPoint/mnt $mountPoint/mnt2 $mountPoint/mnt-nixpkgs
-}
-
-trap "cleanup" EXIT
-
+mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/etc
 mkdir -m 01777 -p $mountPoint/tmp
+mkdir -m 0755 -p $mountPoint/tmp/root
 mkdir -m 0755 -p $mountPoint/var
+mount --rbind /dev $mountPoint/dev
+mount --rbind /proc $mountPoint/proc
+mount --rbind /sys $mountPoint/sys
+mount --rbind / $mountPoint/tmp/root
+mount --bind /etc $mountPoint/etc
+mount --bind $mountPoint/tmp/root/$mountPoint/etc/nixos $mountPoint/etc/nixos
 
 
 # Create the necessary Nix directories on the target device, if they
@@ -177,8 +162,8 @@ fi
 
 
 # Make the build below copy paths from the CD if possible.  Note that
-# /mnt in the chroot is the root of the CD.
-export NIX_OTHER_STORES=/mnt/nix:$NIX_OTHER_STORES
+# /tmp/root in the chroot is the root of the CD.
+export NIX_OTHER_STORES=/tmp/root/nix:$NIX_OTHER_STORES
 
 p=@nix@/libexec/nix/substituters
 export NIX_SUBSTITUTERS=$p/copy-from-other-stores.pl:$p/download-from-binary-cache.pl
@@ -193,15 +178,15 @@ done
 
 
 # Get the absolute path to the NixOS/Nixpkgs sources.
-mount --bind $(readlink -f $(nix-instantiate --find-file nixpkgs)) $mountPoint/mnt-nixpkgs
+nixpkgs="$(readlink -f $(nix-instantiate --find-file nixpkgs))"
 
 
 # Build the specified Nix expression in the target store and install
 # it into the system configuration profile.
 echo "building the system configuration..."
-NIX_PATH="nixpkgs=/mnt-nixpkgs:nixos=/mnt-nixpkgs/nixos:nixos-config=$NIXOS_CONFIG" NIXOS_CONFIG= \
+NIX_PATH="nixpkgs=/tmp/root/$nixpkgs:nixos-config=$NIXOS_CONFIG" NIXOS_CONFIG= \
     chroot $mountPoint @nix@/bin/nix-env \
-    "${extraBuildFlags[@]}" -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system
+    "${extraBuildFlags[@]}" -p /nix/var/nix/profiles/system -f '<nixpkgs/nixos>' --set -A system
 
 
 # Copy the NixOS/Nixpkgs sources to the target as the initial contents
