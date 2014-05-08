@@ -18,6 +18,9 @@ while [ "$#" -gt 0 ]; do
             absolute_path=$(readlink -m $given_path)
             extraBuildFlags+=("$i" "/mnt$absolute_path")
             ;;
+        --show-trace)
+            extraBuildFlags+=("$i")
+            ;;
         --help)
             exec man nixos-install
             exit 1
@@ -198,7 +201,7 @@ mount --bind $(readlink -f $(nix-instantiate --find-file nixpkgs)) $mountPoint/m
 echo "building the system configuration..."
 NIX_PATH="nixpkgs=/mnt-nixpkgs:nixos=/mnt-nixpkgs/nixos:nixos-config=$NIXOS_CONFIG" NIXOS_CONFIG= \
     chroot $mountPoint @nix@/bin/nix-env \
-    "${extraBuildFlags[@]}" -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system --show-trace
+    "${extraBuildFlags[@]}" -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system
 
 
 # Copy the NixOS/Nixpkgs sources to the target as the initial contents
