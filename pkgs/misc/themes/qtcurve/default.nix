@@ -23,7 +23,10 @@ stdenv.mkDerivation {
     xlibs.libxshmfence
   ];
 
-  patches = [ ./qtcurve-1.8.18-install-paths.patch ];
+  patches = [
+    ./qtcurve-1.8.18-install-paths.patch
+    ./qtcurve-1.8.18-toolbar-alpha.patch
+  ];
 
   cmakeFlags = ''
     -DENABLE_QT5=OFF
