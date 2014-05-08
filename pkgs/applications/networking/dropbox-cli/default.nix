@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation {
   # 1.6.0 because it's the only version mentioned in the script
-  name = "dropbox-cli-1.6.0";
+  name = "dropbox-cli-1.6.2";
 
   src = fetchurl {
     # Note: dropbox doesn't version this file. Annoying.
     url = "https://linux.dropbox.com/packages/dropbox.py";
-    sha256 = "0505k0xrhbmsv7g5phxxnz5wbff6m5gdsqyxkhd95wdi9d71c43c";
+    sha256 = "1hx27pn2l0mlrb5kjhbflpjhxradxrjhnrinrn5phriniacvybr9";
   };
 
   buildInputs = [ coreutils python ];
