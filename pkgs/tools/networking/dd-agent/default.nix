@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, python, pythonPackages, sysstat, unzip, tornado
+{ stdenv, fetchzip, python, pythonPackages, sysstat, unzip, tornado
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "4.2.1";
   name = "dd-agent-${version}";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/DataDog/dd-agent/archive/${version}.zip";
-    sha256 = "0s1lg7rqx86z0y111105gwkknzplq149cxd7v3yg30l22wn68dmv";
+    sha256 = "06f9nkvnpfzs2nw75cac2y9wnp2bay4sg94zz0wjm8886rigjjjm";
   };
 
   buildInputs = [ python unzip makeWrapper pythonPackages.psycopg2 ];

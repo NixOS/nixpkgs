@@ -338,6 +338,8 @@ let
   # linked curl in the case of stdenv-linux).
   fetchurlBoot = stdenv.fetchurlBoot;
 
+  fetchzip = import ../build-support/fetchzip { inherit lib fetchurl unzip; };
+
   resolveMirrorURLs = {url}: fetchurl {
     showURLs = true;
     inherit url;

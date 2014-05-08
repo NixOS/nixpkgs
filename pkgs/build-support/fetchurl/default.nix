@@ -54,12 +54,26 @@ in
   # first element of `urls').
   name ? ""
 
+, # A string to be appended to the name, if the name is derived from `url'.
+  nameSuffix ? ""
+
   # Different ways of specifying the hash.
 , outputHash ? ""
 , outputHashAlgo ? ""
 , md5 ? ""
 , sha1 ? ""
 , sha256 ? ""
+
+, recursiveHash ? false
+
+, # Shell code executed after the file has been fetched
+  # succesfully. This can do things like check or transform the file.
+  postFetch ? ""
+
+, # Whether to download to a temporary path rather than $out. Useful
+  # in conjunction with postFetch. The location of the temporary file
+  # is communicated to postFetch via $downloadedFile.
+  downloadToTemp ? false
 
 , # If set, don't download the file, but write a list of all possible
   # URLs (resulting from resolving mirror:// URLs) to $out.
@@ -83,11 +97,11 @@ stdenv.mkDerivation {
   name =
     if showURLs then "urls"
     else if name != "" then name
-    else baseNameOf (toString (builtins.head urls_));
+    else baseNameOf (toString (builtins.head urls_)) + nameSuffix;
 
   builder = ./builder.sh;
 
-  buildInputs = [curl];
+  buildInputs = [ curl ];
 
   urls = urls_;
 
@@ -101,7 +115,9 @@ stdenv.mkDerivation {
   outputHash = if outputHash != "" then outputHash else
       if sha256 != "" then sha256 else if sha1 != "" then sha1 else md5;
 
-  inherit curlOpts showURLs mirrorsFile impureEnvVars;
+  outputHashMode = if recursiveHash then "recursive" else "flat";
+
+  inherit curlOpts showURLs mirrorsFile impureEnvVars postFetch downloadToTemp;
 
   # Doing the download on a remote machine just duplicates network
   # traffic, so don't do that.
