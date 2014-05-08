@@ -1,16 +1,16 @@
 { stdenv, fetchurl, pkgconfig, gtk, spice_protocol, intltool, celt_0_5_1
 , openssl, pulseaudio, pixman, gobjectIntrospection, libjpeg_turbo, zlib
-, cyrus_sasl, python, pygtk, autoconf, automake, libtool, usbredir
+, cyrus_sasl, python, pygtk, autoconf, automake, libtool, usbredir, libsoup
 , gtk3, enableGTK3 ? false }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "spice-gtk-0.22";
+  name = "spice-gtk-0.24";
 
   src = fetchurl {
     url = "http://www.spice-space.org/download/gtk/${name}.tar.bz2";
-    sha256 = "0fpsn6qhy9a701lmd4yym6qz6zhpp8xp6vw42al0b4592pcybs85";
+    sha256 = "1l8y1pbaqyzb6w8w8xa097dvj4zxhksn85pif1b9847r8l451zkf";
   };
 
   buildInputs = [
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     libjpeg_turbo zlib cyrus_sasl python pygtk usbredir
   ] ++ (if enableGTK3 then [ gtk3 ] else [ gtk ]);
 
-  nativeBuildInputs = [ pkgconfig intltool libtool autoconf automake ];
+  nativeBuildInputs = [ pkgconfig intltool libtool libsoup autoconf automake ];
 
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
