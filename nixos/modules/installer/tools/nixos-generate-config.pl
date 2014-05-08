@@ -159,7 +159,7 @@ sub pciCheck {
     # Assume that all NVIDIA cards are supported by the NVIDIA driver.
     # There may be exceptions (e.g. old cards).
     # FIXME: do we want to enable an unfree driver here?
-    $videoDriver = "nvidia" if $vendor eq "0x10de" && $class =~ /^0x03/;
+    #$videoDriver = "nvidia" if $vendor eq "0x10de" && $class =~ /^0x03/;
 }
 
 foreach my $path (glob "/sys/bus/pci/devices/*") {
