@@ -14,7 +14,11 @@ stdenv.mkDerivation {
     sha256 = "0n2hrg99rsp77b3plpip315pyk0x4gh8gljs9z3iwcbcg14mliff";
   };
 
-  configurePhase = "makeFlags=PREFIX=$out";
+  configurePhase = ''
+    makeFlags="PREFIX=$out CFGDIR=$out/cfg"
+  '';
+
+  postInstall = "cp -r cfg $out/cfg";
 
   meta = {
     description = "Check C/C++ code for memory leaks, mismatching allocation-deallocation, buffer overrun and more";
