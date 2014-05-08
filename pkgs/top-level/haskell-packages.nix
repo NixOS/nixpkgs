@@ -58,7 +58,7 @@
 #
 # For most packages, however, we keep only one version, and use default.nix.
 
-{ pkgs, newScope, ghc, prefFun, modifyPrio ? (x : x)
+{ pkgs, newScope, ghc, modifyPrio ? (x : x)
 , enableLibraryProfiling ? false
 , enableSharedLibraries ? pkgs.stdenv.lib.versionOlder "7.7" ghc.version
 , enableSharedExecutables ? pkgs.stdenv.lib.versionOlder "7.7" ghc.version
@@ -70,17 +70,13 @@
 # modifyPrio argument can be set to lowPrio to make all Haskell packages have
 # low priority.
 
-let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x y);
-                 self = (prefFun result) result; in
+self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
 # Indentation deliberately broken at this point to keep the bulk
 # of this file at a low indentation level.
 
 {
-
-  finalReturn = self;
-
-  callPackage = callPackage;
+  inherit callPackage;
 
   # GHC and its wrapper
   #
@@ -3171,6 +3167,4 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
 # End of the main part of the file.
 
-};
-
-in result.finalReturn
+}
