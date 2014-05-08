@@ -68,7 +68,7 @@ fi
 
 
 # Mount some stuff in the target root directory.
-mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/etc $mountPoint/run
+mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/etc $mountPoint/run $mountPoint/home
 mkdir -m 01777 -p $mountPoint/tmp
 mkdir -m 0755 -p $mountPoint/tmp/root
 mkdir -m 0755 -p $mountPoint/var/setuid-wrappers
@@ -78,6 +78,9 @@ mount --rbind /sys $mountPoint/sys
 mount --rbind / $mountPoint/tmp/root
 mount -t tmpfs -o "mode=0755" none $mountPoint/run
 mount -t tmpfs -o "mode=0755" none $mountPoint/var/setuid-wrappers
+rm -rf $mountPoint/var/run
+ln -s /run $mountPoint/var/run
+cp -f /etc/resolv.conf $mountPoint/etc/resolv.conf
 
 
 if [ -n "$runChroot" ]; then
@@ -88,13 +91,6 @@ if [ -n "$runChroot" ]; then
     ln -s /nix/var/nix/profiles/system $mountPoint/run/current-system
     exec chroot $mountPoint "${chrootCommand[@]}"
 fi
-
-
-# Bind-mount /etc into the chroot because we need networking and the
-# nixbld user accounts in /etc/passwd.  But we do need the target's
-# /etc/nixos.
-mount --bind /etc $mountPoint/etc
-mount --bind $mountPoint/tmp/root/$mountPoint/etc/nixos $mountPoint/etc/nixos
 
 
 # Get the path of the NixOS configuration file.
@@ -141,6 +137,10 @@ if test -n "$binary_caches"; then
     echo "binary-caches = $binary_caches" >> $mountPoint/tmp/nix.conf
 fi
 export NIX_CONF_DIR=/tmp
+
+touch $mountPoint/etc/passwd $mountPoint/etc/group
+mount --bind -o ro /etc/passwd $mountPoint/etc/passwd
+mount --bind -o ro /etc/group $mountPoint/etc/group
 
 
 # Copy Nix to the Nix store on the target device, unless it's already there.
@@ -211,10 +211,8 @@ mkdir -m 0700 -p $mountPoint/root/.nix-defexpr
 ln -sfn /nix/var/nix/profiles/per-user/root/channels $mountPoint/root/.nix-defexpr/channels
 
 
-# We're done building/downloading, so we don't need the /etc bind
-# mount anymore.  In fact, below we want to modify the target's /etc.
-umount $mountPoint/etc/nixos
-umount $mountPoint/etc
+# Get rid of the /etc bind mounts.
+umount $mountPoint/etc/passwd $mountPoint/etc/group
 
 
 # Grub needs an mtab.
