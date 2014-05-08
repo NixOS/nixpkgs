@@ -20,7 +20,7 @@ cabal.mkDerivation (self: {
   ];
   jailbreak = true;
   patches = [ (fetchurl { url = "https://github.com/jgm/gitit/commit/48155008397bdaed4f97c5678d83c70d4bc3f0ff.patch";
-                          sha256 = "0xdg9frr8lany8ry6vj4vpskmhkpww8jswnb05pzl8a4xfqxh9gd";
+                          sha256 = "16n372wrikwb3g4pb3zljxnp19in0828wp40diqgkplhlnwww6nw";
                         })
             ];
   meta = {
