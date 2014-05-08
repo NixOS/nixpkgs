@@ -4,14 +4,14 @@
 , dnsmasq, libnl
 }:
 
-let version = "1.2.2"; in
+let version = "1.2.4"; in
 
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/${name}.tar.gz";
-    sha256 = "1hxvgh2fp2fk3wva7fnbz2pk6g5217wrmf9xwikiphn50zipg0x4";
+    sha256 = "0xg8m7x4a3dqrg2b9pqcikaghdp6jyl07gkp2z8grsmsnbvcafp4";
   };
 
   buildInputs = [
