@@ -1,12 +1,11 @@
 #! @shell@
 
-# - [mount target device] <- currently disabled
 # - make Nix store etc.
 # - copy closure of Nix to target device
 # - register validity
 # - with a chroot to the target device:
 #   * nix-env -p /nix/var/nix/profiles/system -i <nix-expr for the configuration>
-#   * run the activation script of the configuration (also installs Grub)
+#   * install the boot loader
 
 # Parse the command line for the -I flag
 extraBuildFlags=()
