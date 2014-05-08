@@ -1,19 +1,20 @@
 { stdenv, fetchurl, pidgin, intltool, libxml2 }:
 
-let version = "1.12.0"; in
+let version = "1.18.1"; in
 
 stdenv.mkDerivation {
   name = "pidgin-sipe-${version}";
-  
+
   src = fetchurl {
     url = "mirror://sourceforge/sipe/pidgin-sipe-${version}.tar.gz";
-    sha256 = "12ki6n360v2ja961fzw4mwpgb8jdp9k21y5mbiab151867c862r6";
+    sha256 = "18ch7jpi7ki7xlpahi88xrnmnhc6dcq4hafm0z6d5nfjfp8ldal5";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "SIPE plugin for Pidgin IM";
     homepage = http://sipe.sourceforge.net/;
-    license = "GPLv2";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 
   postInstall = "find $out -ls; ln -s \$out/lib/purple-2 \$out/share/pidgin-sipe";
