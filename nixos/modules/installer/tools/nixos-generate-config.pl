@@ -305,9 +305,11 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
     # Maybe this is a bind-mount of a filesystem we saw earlier?
     if (defined $fsByDev{$fields[2]}) {
         my $path = $fields[3]; $path = "" if $path eq "/";
+        my $base = $fsByDev{$fields[2]};
+        $base = "" if $base eq "/";
         $fileSystems .= <<EOF;
   fileSystems.\"$mountPoint\" =
-    { device = \"$fsByDev{$fields[2]}$path\";
+    { device = \"$base$path\";
       fsType = \"none\";
       options = \"bind\";
     };
