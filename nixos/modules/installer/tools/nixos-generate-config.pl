@@ -1,9 +1,11 @@
 #! @perl@
 
+use Cwd 'abs_path';
 use File::Spec;
 use File::Path;
 use File::Basename;
 use File::Slurp;
+use File::stat;
 
 
 sub uniq {
@@ -236,6 +238,24 @@ if ($virt eq "qemu" || $virt eq "kvm" || $virt eq "bochs") {
 }
 
 
+# For a device name like /dev/sda1, find a more stable path like
+# /dev/disk/by-uuid/X or /dev/disk/by-label/Y.
+sub findStableDevPath {
+    my ($dev) = @_;
+    return $dev if substr($dev, 0, 1) ne "/";
+    return $dev unless -e $dev;
+
+    my $st = stat($dev) or return $dev;
+
+    foreach my $dev2 (glob("/dev/disk/by-uuid/*"), glob("/dev/mapper/*"), glob("/dev/disk/by-label/*")) {
+        my $st2 = stat($dev2) or next;
+        return $dev2 if $st->rdev == $st2->rdev;
+    }
+
+    return $dev;
+}
+
+
 # Generate the swapDevices option from the currently activated swap
 # devices.
 my @swaps = read_file("/proc/swaps");
@@ -243,7 +263,9 @@ shift @swaps;
 my @swapDevices;
 foreach my $swap (@swaps) {
     $swap =~ /^(\S+)\s/;
-    push @swapDevices, "{ device = \"$1\"; }";
+    next unless -e $1;
+    my $dev = findStableDevPath $1;
+    push @swapDevices, "{ device = \"$dev\"; }";
 }
 
 
@@ -315,7 +337,7 @@ EOF
     # Emit the filesystem.
     $fileSystems .= <<EOF;
   fileSystems.\"$mountPoint\" =
-    { device = \"$device\";
+    { device = \"${\(findStableDevPath $device)}\";
       fsType = \"$fsType\";
 EOF
 
@@ -344,7 +366,7 @@ sub toNixExpr {
 
 sub multiLineList {
     my $indent = shift;
-    return "[ ]" if !@_;
+    return " [ ]" if !@_;
     $res = "\n${indent}[ ";
     my $first = 1;
     foreach my $s (@_) {
