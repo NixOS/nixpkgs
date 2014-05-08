@@ -17,12 +17,16 @@ curl="curl \
  $NIX_CURL_FLAGS"
 
 
+downloadedFile="$out"
+if [ -n "$downloadToTemp" ]; then downloadedFile="$TMPDIR/file"; fi
+
+
 tryDownload() {
     local url="$1"
     echo
     header "trying $url"
     success=
-    if $curl --fail "$url" --output "$out"; then
+    if $curl --fail "$url" --output "$downloadedFile"; then
         success=1
     fi
     stopNest
@@ -30,6 +34,8 @@ tryDownload() {
 
 
 finish() {
+    set +o noglob
+    runHook postFetch
     stopNest
     exit 0
 }
