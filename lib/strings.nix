@@ -157,8 +157,8 @@ rec {
       preLen = stringLength pre;
       sLen = stringLength s;
     in
-      if pre == substring 0 preLen s then
-        substring preLen (sub sLen preLen) s
+      if hasPrefix pre s then
+        substring preLen (sLen - preLen) s
       else
         s;
 
