@@ -1,11 +1,11 @@
-{ stdenv, fetchGitHub, python, pythonPackages, sysstat, unzip, tornado
+{ stdenv, fetchFromGitHub, python, pythonPackages, sysstat, unzip, tornado
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "4.2.1";
   name = "dd-agent-${version}";
 
-  src = fetchGitHub {
+  src = fetchFromGitHub {
     owner = "DataDog";
     repo = "dd-agent";
     rev = version;

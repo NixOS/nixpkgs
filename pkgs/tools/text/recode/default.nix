@@ -1,11 +1,11 @@
 # XXX: this may need -liconv on non-glibc systems.. 
 
-{ stdenv, fetchGitHub, python, perl, autoconf, automake, libtool, intltool, flex }:
+{ stdenv, fetchFromGitHub, python, perl, autoconf, automake, libtool, intltool, flex }:
 
 stdenv.mkDerivation rec {
   name = "recode-3.7-2fd838565";
 
-  src = fetchGitHub {
+  src = fetchFromGitHub {
     owner = "pinard";
     repo = "Recode";
     rev = "2fd8385658e5a08700e3b916053f6680ff85fdbd";
