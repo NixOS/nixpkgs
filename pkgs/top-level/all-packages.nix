@@ -329,7 +329,7 @@ let
   };
 
   # A wrapper around fetchurl that generates miror://gnome URLs automatically
-  fetchurl_gnome = callPackage ../build-support/fetchurl/gnome.nix { };
+  fetchurlGnome = callPackage ../build-support/fetchurl/gnome.nix { };
 
   # fetchurlBoot is used for curl and its dependencies in order to
   # prevent a cyclic dependency (curl depends on curl.tar.bz2,

@@ -1,9 +1,9 @@
-{ stdenv, fetchurl_gnome, pkgconfig, glib, bison, flex }:
+{ stdenv, fetchurlGnome, pkgconfig, glib, bison, flex }:
 
 stdenv.mkDerivation rec {
   name = src.pkgname;
 
-  src = fetchurl_gnome {
+  src = fetchurlGnome {
     project = "gob2";
     major = "2"; minor = "0"; patchlevel = "18"; extension = "gz";
     sha256 = "1r242s3rsxyqiw2ic2gdpvvrx903jgjd1aa4mkl26in5k9zk76fa";

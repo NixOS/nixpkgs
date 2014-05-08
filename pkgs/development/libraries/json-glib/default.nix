@@ -1,9 +1,9 @@
-{ stdenv, fetchurl_gnome, glib, pkgconfig, gobjectIntrospection, dbus }:
+{ stdenv, fetchurlGnome, glib, pkgconfig, gobjectIntrospection, dbus }:
 
 stdenv.mkDerivation rec {
   name = src.pkgname;
 
-  src = fetchurl_gnome {
+  src = fetchurlGnome {
     project = "json-glib";
     major = "0";
     minor = "16";
