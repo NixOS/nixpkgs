@@ -20,6 +20,7 @@ fi
 
 # Parse the command line for the -I flag
 extraBuildFlags=()
+chrootCommand=(/run/current-system/sw/bin/bash)
 
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
@@ -31,6 +32,11 @@ while [ "$#" -gt 0 ]; do
             ;;
         --show-trace)
             extraBuildFlags+=("$i")
+            ;;
+        --chroot)
+            runChroot=1
+            chrootCommand=("$@")
+            break
             ;;
         --help)
             exec man nixos-install
@@ -50,10 +56,6 @@ if test -z "$mountPoint"; then
     mountPoint=/mnt
 fi
 
-if test -z "$NIXOS_CONFIG"; then
-    NIXOS_CONFIG=/etc/nixos/configuration.nix
-fi
-
 if ! test -e "$mountPoint"; then
     echo "mount point $mountPoint doesn't exist"
     exit 1
@@ -64,15 +66,8 @@ if ! grep -F -q " $mountPoint " /proc/mounts; then
     exit 1
 fi
 
-if ! test -e "$mountPoint/$NIXOS_CONFIG"; then
-    echo "configuration file $mountPoint/$NIXOS_CONFIG doesn't exist"
-    exit 1
-fi
 
-
-# Mount some stuff in the target root directory.  We bind-mount /etc
-# into the chroot because we need networking and the nixbld user
-# accounts in /etc/passwd.  But we do need the target's /etc/nixos.
+# Mount some stuff in the target root directory.
 mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/etc $mountPoint/run
 mkdir -m 01777 -p $mountPoint/tmp
 mkdir -m 0755 -p $mountPoint/tmp/root
@@ -81,10 +76,36 @@ mount --rbind /dev $mountPoint/dev
 mount --rbind /proc $mountPoint/proc
 mount --rbind /sys $mountPoint/sys
 mount --rbind / $mountPoint/tmp/root
-mount --bind /etc $mountPoint/etc
-mount --bind $mountPoint/tmp/root/$mountPoint/etc/nixos $mountPoint/etc/nixos
 mount -t tmpfs -o "mode=0755" none $mountPoint/run
 mount -t tmpfs -o "mode=0755" none $mountPoint/var/setuid-wrappers
+
+
+if [ -n "$runChroot" ]; then
+    if ! [ -L $mountPoint/nix/var/nix/profiles/system ]; then
+        echo "$0: installation not finished; cannot chroot into installation directory"
+        exit 1
+    fi
+    ln -s /nix/var/nix/profiles/system $mountPoint/run/current-system
+    exec chroot $mountPoint "${chrootCommand[@]}"
+fi
+
+
+# Bind-mount /etc into the chroot because we need networking and the
+# nixbld user accounts in /etc/passwd.  But we do need the target's
+# /etc/nixos.
+mount --bind /etc $mountPoint/etc
+mount --bind $mountPoint/tmp/root/$mountPoint/etc/nixos $mountPoint/etc/nixos
+
+
+# Get the path of the NixOS configuration file.
+if test -z "$NIXOS_CONFIG"; then
+    NIXOS_CONFIG=/etc/nixos/configuration.nix
+fi
+
+if ! test -e "$mountPoint/$NIXOS_CONFIG"; then
+    echo "configuration file $mountPoint/$NIXOS_CONFIG doesn't exist"
+    exit 1
+fi
 
 
 # Create the necessary Nix directories on the target device, if they
@@ -145,12 +166,6 @@ fi
 mkdir -m 0755 -p $mountPoint/bin
 # !!! assuming that @shell@ is in the closure
 ln -sf @shell@ $mountPoint/bin/sh
-
-
-if test -n "$NIXOS_PREPARE_CHROOT_ONLY"; then
-    echo "User requested only to prepare chroot. Exiting."
-    exit 0
-fi
 
 
 # Make the build below copy paths from the CD if possible.  Note that
