@@ -340,6 +340,11 @@ let
 
   fetchzip = import ../build-support/fetchzip { inherit lib fetchurl unzip; };
 
+  fetchGitHub = { owner, repo, rev, sha256 }: fetchzip {
+    url = "https://github.com/${owner}/${repo}/archive/${rev}.zip";
+    inherit sha256;
+  };
+
   resolveMirrorURLs = {url}: fetchurl {
     showURLs = true;
     inherit url;
