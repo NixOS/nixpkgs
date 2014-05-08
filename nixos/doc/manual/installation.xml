@@ -209,7 +209,20 @@ $ nixos-install</screen>
     a network issue while downloading binaries from the NixOS binary
     cache), you can just re-run <command>nixos-install</command>.
     Otherwise, fix your <filename>configuration.nix</filename> and
-    then re-run <command>nixos-install</command>.</para></listitem>
+    then re-run <command>nixos-install</command>.</para>
+
+    <para>As the last step, <command>nixos-install</command> will ask
+    you to set the password for the <literal>root</literal> user, e.g.
+
+<screen>
+setting root password...
+Enter new UNIX password: ***
+Retype new UNIX password: ***
+</screen>
+
+    </para>
+
+  </listitem>
 
   <listitem><para>If everything went well:
 

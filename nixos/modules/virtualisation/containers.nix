@@ -117,7 +117,6 @@ in
                   modules =
                     let extraConfig =
                       { boot.isContainer = true;
-                        security.initialRootPassword = mkDefault "!";
                         networking.hostName = mkDefault name;
                         networking.useDHCP = false;
                       };

@@ -73,16 +73,18 @@ fi
 # Mount some stuff in the target root directory.  We bind-mount /etc
 # into the chroot because we need networking and the nixbld user
 # accounts in /etc/passwd.  But we do need the target's /etc/nixos.
-mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/etc
+mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/etc $mountPoint/run
 mkdir -m 01777 -p $mountPoint/tmp
 mkdir -m 0755 -p $mountPoint/tmp/root
-mkdir -m 0755 -p $mountPoint/var
+mkdir -m 0755 -p $mountPoint/var/setuid-wrappers
 mount --rbind /dev $mountPoint/dev
 mount --rbind /proc $mountPoint/proc
 mount --rbind /sys $mountPoint/sys
 mount --rbind / $mountPoint/tmp/root
 mount --bind /etc $mountPoint/etc
 mount --bind $mountPoint/tmp/root/$mountPoint/etc/nixos $mountPoint/etc/nixos
+mount -t tmpfs -o "mode=0755" none $mountPoint/run
+mount -t tmpfs -o "mode=0755" none $mountPoint/var/setuid-wrappers
 
 
 # Create the necessary Nix directories on the target device, if they
@@ -215,3 +217,17 @@ touch $mountPoint/etc/NIXOS
 echo "finalising the installation..."
 NIXOS_INSTALL_GRUB=1 chroot $mountPoint \
     /nix/var/nix/profiles/system/bin/switch-to-configuration boot
+
+
+# Run the activation script.
+chroot $mountPoint /nix/var/nix/profiles/system/activate
+
+
+# Ask the user to set a root password.
+if [ -t 0 ] ; then
+    echo "setting root password..."
+    chroot $mountPoint passwd
+fi
+
+
+echo "installation finished!"

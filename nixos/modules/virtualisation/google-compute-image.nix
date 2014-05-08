@@ -114,11 +114,6 @@ in
   # Always include cryptsetup so that NixOps can use it.
   environment.systemPackages = [ pkgs.cryptsetup ];
 
-  # Prevent logging in as root without a password.  This doesn't really matter,
-  # since the only PAM services that allow logging in with a null
-  # password are local ones that are inaccessible on Google Compute machines.
-  security.initialRootPassword = mkDefault "!";
-
   # Configure default metadata hostnames
   networking.extraHosts = ''
     169.254.169.254 metadata.google.internal metadata

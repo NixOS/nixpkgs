@@ -374,8 +374,8 @@ in {
 
     security.initialRootPassword = mkOption {
       type = types.str;
-      default = "";
-      example = "!";
+      default = "!";
+      example = "";
       description = ''
         The (hashed) password for the root account set on initial
         installation. The empty string denotes that root can login
@@ -383,9 +383,9 @@ in {
         as SSH, or indirectly via <command>su</command> or
         <command>sudo</command>). The string <literal>!</literal>
         prevents root from logging in using a password.
-        Note, setting this option sets
+        Note that setting this option sets
         <literal>users.extraUsers.root.hashedPassword</literal>.
-        Note, if <literal>users.mutableUsers</literal> is false
+        Also, if <literal>users.mutableUsers</literal> is false
         you cannot change the root password manually, so in that case
         the name of this option is a bit misleading, since it will define
         the root password beyond the user initialisation phase.

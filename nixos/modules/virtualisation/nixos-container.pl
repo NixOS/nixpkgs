@@ -64,7 +64,6 @@ sub writeNixOSConfig {
 with lib;
 
 { boot.isContainer = true;
-  security.initialRootPassword = mkDefault "!";
   networking.hostName = mkDefault "$containerName";
   networking.useDHCP = false;
   $extraConfig
