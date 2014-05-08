@@ -100,27 +100,14 @@ mkdir -m 1775 -p $mountPoint/nix/store
 chown root:nixbld $mountPoint/nix/store
 
 
-# Get the store paths to copy from the references graph.
-storePaths=$(@perl@/bin/perl @pathsFromGraph@ @nixClosure@)
-
-
-# Copy Nix to the Nix store on the target device.
-echo "copying Nix to $mountPoint...."
-for i in $storePaths; do
-    echo "  $i"
-    chattr -R -i $mountPoint/$i 2> /dev/null || true # clear immutable bit
-    rsync -a $i $mountPoint/nix/store/
-done
+# There is no daemon in the chroot.
+unset NIX_REMOTE
 
 
 # We don't have locale-archive in the chroot, so clear $LANG.
 export LANG=
 export LC_ALL=
 export LC_TIME=
-
-
-# There is no daemon in the chroot
-unset NIX_REMOTE
 
 
 # Create a temporary Nix config file that causes the nixbld users to
@@ -133,12 +120,22 @@ fi
 export NIX_CONF_DIR=/tmp
 
 
-# Register the paths in the Nix closure as valid.  This is necessary
-# to prevent them from being deleted the first time we install
-# something.  (I.e., Nix will see that, e.g., the glibc path is not
-# valid, delete it to get it out of the way, but as a result nothing
-# will work anymore.)
-chroot $mountPoint @nix@/bin/nix-store --register-validity < @nixClosure@
+# Copy Nix to the Nix store on the target device, unless it's already there.
+if ! NIX_DB_DIR=$mountPoint/nix/var/nix/db nix-store --check-validity @nix@ 2> /dev/null; then
+    echo "copying Nix to $mountPoint...."
+    for i in $(@perl@/bin/perl @pathsFromGraph@ @nixClosure@); do
+        echo "  $i"
+        chattr -R -i $mountPoint/$i 2> /dev/null || true # clear immutable bit
+        rsync -a $i $mountPoint/nix/store/
+    done
+
+    # Register the paths in the Nix closure as valid.  This is necessary
+    # to prevent them from being deleted the first time we install
+    # something.  (I.e., Nix will see that, e.g., the glibc path is not
+    # valid, delete it to get it out of the way, but as a result nothing
+    # will work anymore.)
+    chroot $mountPoint @nix@/bin/nix-store --register-validity < @nixClosure@
+fi
 
 
 # Create the required /bin/sh symlink; otherwise lots of things
