@@ -2,10 +2,10 @@
 let
   s = rec {
     baseName="sysdig";
-    version="0.1.81";
+    version="0.1.82";
     name="${baseName}-${version}";
     url="https://github.com/draios/sysdig/archive/${version}.tar.gz";
-    sha256="0p9j1fy7lr027nsvr5bq0416nlsbvk02irzazmigsbr03fg0x1wv";
+    sha256="0yjxsdjbkp5dihg5xhkyl3lg64dl40a0b5cvcai8gz74w2955mnk";
   };
   buildInputs = [
     cmake luajit kernel zlib
