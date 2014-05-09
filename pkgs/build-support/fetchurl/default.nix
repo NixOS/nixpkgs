@@ -64,7 +64,7 @@ in
 , recursiveHash ? false
 
 , # Shell code executed after the file has been fetched
-  # succesfully. This can do things like check or transform the file.
+  # successfully. This can do things like check or transform the file.
   postFetch ? ""
 
 , # Whether to download to a temporary path rather than $out. Useful
