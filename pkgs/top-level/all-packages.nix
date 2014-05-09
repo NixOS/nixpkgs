@@ -7330,6 +7330,10 @@ let
 
   statifier = builderDefsPackage (import ../os-specific/linux/statifier) { };
 
+  sysdig = callPackage ../os-specific/linux/sysdig {
+    kernel = null;
+  }; # pkgs.sysdig is a client, for a driver look at linuxPackagesFor
+
   sysfsutils = callPackage ../os-specific/linux/sysfsutils { };
 
   sysprof = callPackage ../development/tools/profiling/sysprof {
