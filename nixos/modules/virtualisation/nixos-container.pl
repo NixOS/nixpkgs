@@ -9,6 +9,9 @@ use Getopt::Long qw(:config gnu_getopt);
 
 my $socat = '@socat@/bin/socat';
 
+# Ensure a consistent umask.
+umask 0022;
+
 # Parse the command line.
 
 sub showHelp {
