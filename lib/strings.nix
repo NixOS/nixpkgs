@@ -160,6 +160,16 @@ rec {
       else
         s;
 
+  removeSuffix = suf: s:
+    let
+      sufLen = stringLength suf;
+      sLen = stringLength s;
+    in
+      if sufLen <= sLen && suf == substring (sLen - sufLen) sufLen s then
+        substring 0 (sLen - sufLen) s
+      else
+        s;
+
   # Return true iff string v1 denotes a version older than v2.
   versionOlder = v1: v2: builtins.compareVersions v2 v1 == 1;
 

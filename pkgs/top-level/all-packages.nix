@@ -341,7 +341,8 @@ let
   fetchzip = import ../build-support/fetchzip { inherit lib fetchurl unzip; };
 
   fetchFromGitHub = { owner, repo, rev, sha256 }: fetchzip {
-    url = "https://github.com/${owner}/${repo}/archive/${rev}.zip";
+    name = "${repo}-${rev}-src";
+    url = "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz";
     inherit sha256;
   };
 

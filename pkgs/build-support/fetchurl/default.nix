@@ -54,9 +54,6 @@ in
   # first element of `urls').
   name ? ""
 
-, # A string to be appended to the name, if the name is derived from `url'.
-  nameSuffix ? ""
-
   # Different ways of specifying the hash.
 , outputHash ? ""
 , outputHashAlgo ? ""
@@ -97,7 +94,7 @@ stdenv.mkDerivation {
   name =
     if showURLs then "urls"
     else if name != "" then name
-    else baseNameOf (toString (builtins.head urls_)) + nameSuffix;
+    else baseNameOf (toString (builtins.head urls_));
 
   builder = ./builder.sh;
 
