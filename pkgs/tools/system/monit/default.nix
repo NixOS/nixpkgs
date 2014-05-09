@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bison flex ];
   buildInputs = [ openssl ] ++ stdenv.lib.optionals usePAM [ pam ];
 
-  configureFlags = stdenv.lib.optionals (! usePAM) [ "--without-pam" ];
+  configureFlags = [
+    "--with-ssl-incl-dir=${openssl}/include"
+    "--with-ssl-lib-dir=${openssl}/lib"
+  ] ++ stdenv.lib.optionals (! usePAM) [ "--without-pam" ];
 
   meta = {
     homepage = http://mmonit.com/monit/;
