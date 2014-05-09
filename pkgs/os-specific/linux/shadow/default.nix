@@ -30,7 +30,10 @@ stdenv.mkDerivation rec {
 
   # Assume System V `setpgrp (void)', which is the default on GNU variants
   # (`AC_FUNC_SETPGRP' is not cross-compilation capable.)
-  preConfigure = "export ac_cv_func_setpgrp_void=yes";
+  preConfigure = ''
+    export ac_cv_func_setpgrp_void=yes
+    export shadow_cv_logdir=/var/log
+  '';
 
   preBuild = assert glibc != null;
     ''
