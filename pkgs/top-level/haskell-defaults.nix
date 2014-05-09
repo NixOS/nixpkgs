@@ -16,52 +16,52 @@
   # for a particular GHC version.
 
   ghcHEADPrefs =
-    self : self.haskellPlatformArgs_future self // {
+    self : super : super.haskellPlatformArgs_future self // {
       haskellPlatform = null;
       extensibleExceptions = self.extensibleExceptions_0_1_1_4;
       binary_0_7_1_0 = null;
     };
 
   ghc763Prefs =
-    self : self.haskellPlatformArgs_2013_2_0_0 self // {
+    self : super : super.haskellPlatformArgs_2013_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2013_2_0_0;
       extensibleExceptions = self.extensibleExceptions_0_1_1_4;
     };
 
   ghc742Prefs =
-    self : self.haskellPlatformArgs_2012_4_0_0 self // {
+    self : super : super.haskellPlatformArgs_2012_4_0_0 self // {
       haskellPlatform = self.haskellPlatform_2012_4_0_0;
-      cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
-      cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
+      cabalInstall_1_16_0_2 = super.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
+      cabal2nix = super.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
       haskeline = self.haskeline_0_7_1_1;
       terminfo = self.terminfo_0_3_2_6;
     };
 
   ghc741Prefs =
-    self : self.haskellPlatformArgs_2012_2_0_0 self // {
+    self : super : super.haskellPlatformArgs_2012_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2012_2_0_0;
-      cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
-      cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
+      cabalInstall_1_16_0_2 = super.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
+      cabal2nix = super.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
       haskeline = self.haskeline_0_7_1_1;
       terminfo = self.terminfo_0_3_2_6;
     };
 
   ghc722Prefs =
-    self : self.haskellPlatformArgs_2012_2_0_0 self // {
+    self : super : super.haskellPlatformArgs_2012_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2012_2_0_0;
       deepseq = self.deepseq_1_3_0_2;
-      cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; };
-      cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
-      cabalInstall_1_20_0_1 = self.cabalInstall_1_20_0_1.override { HTTP = self.HTTP_4000_2_14; };
-      cabalInstall = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; };
-      cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
+      cabalInstall_0_14_0 = super.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; };
+      cabalInstall_1_16_0_2 = super.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
+      cabalInstall_1_20_0_1 = super.cabalInstall_1_20_0_1.override { HTTP = self.HTTP_4000_2_14; };
+      cabalInstall = super.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; };
+      cabal2nix = super.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
       binary = self.binary_0_6_0_0;
       prettyShow = self.prettyShow_1_2;
-      quickcheckIo = self.quickcheckIo.override {
+      quickcheckIo = super.quickcheckIo.override {
         HUnit = self.HUnit_1_2_5_2;
         QuickCheck = self.QuickCheck2;
       };
-      hspecExpectations = self.hspecExpectations.override {
+      hspecExpectations = super.hspecExpectations.override {
         HUnit = self.HUnit_1_2_5_2;
       };
       haskeline = self.haskeline_0_7_1_1;
@@ -71,21 +71,21 @@
   ghc721Prefs = ghc722Prefs;
 
   ghc704Prefs =
-    self : self.haskellPlatformArgs_2011_4_0_0 self // {
+    self : super : super.haskellPlatformArgs_2011_4_0_0 self // {
       haskellPlatform = self.haskellPlatform_2011_4_0_0;
-      cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; };
-      cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
+      cabalInstall_0_14_0 = super.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; };
+      cabalInstall_1_16_0_2 = super.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
       monadPar = self.monadPar_0_1_0_3;
-      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
-      cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
+      jailbreakCabal = super.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
+      cabal2nix = super.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
       prettyShow = self.prettyShow_1_2;
       binary = self.binary_0_6_0_0;
-      Cabal_1_18_1_3 = self.Cabal_1_18_1_3.override { deepseq = self.deepseq_1_3_0_2; };
-      quickcheckIo = self.quickcheckIo.override {
+      Cabal_1_18_1_3 = super.Cabal_1_18_1_3.override { deepseq = self.deepseq_1_3_0_2; };
+      quickcheckIo = super.quickcheckIo.override {
         HUnit = self.HUnit_1_2_5_2;
         QuickCheck = self.QuickCheck2;
       };
-      hspecExpectations = self.hspecExpectations.override {
+      hspecExpectations = super.hspecExpectations.override {
         HUnit = self.HUnit_1_2_5_2;
       };
       haskeline = self.haskeline_0_7_1_1;
@@ -93,21 +93,21 @@
     };
 
   ghc703Prefs =
-    self : self.haskellPlatformArgs_2011_2_0_1 self // {
+    self : super : super.haskellPlatformArgs_2011_2_0_1 self // {
       haskellPlatform = self.haskellPlatform_2011_2_0_1;
-      cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
-      cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; zlib = self.zlib_0_5_3_3; };
+      cabalInstall_0_14_0 = super.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
+      cabalInstall_1_16_0_2 = super.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; zlib = self.zlib_0_5_3_3; };
       monadPar = self.monadPar_0_1_0_3;
-      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
-      cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
+      jailbreakCabal = super.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
+      cabal2nix = super.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
       prettyShow = self.prettyShow_1_2;
       binary = self.binary_0_6_0_0;
-      Cabal_1_18_1_3 = self.Cabal_1_18_1_3.override { deepseq = self.deepseq_1_3_0_2; };
-      quickcheckIo = self.quickcheckIo.override {
+      Cabal_1_18_1_3 = super.Cabal_1_18_1_3.override { deepseq = self.deepseq_1_3_0_2; };
+      quickcheckIo = super.quickcheckIo.override {
         HUnit = self.HUnit_1_2_5_2;
         QuickCheck = self.QuickCheck2;
       };
-      hspecExpectations = self.hspecExpectations.override {
+      hspecExpectations = super.hspecExpectations.override {
         HUnit = self.HUnit_1_2_5_2;
       };
       haskeline = self.haskeline_0_7_1_1;
@@ -117,21 +117,21 @@
   ghc702Prefs = ghc701Prefs;
 
   ghc701Prefs =
-    self : self.haskellPlatformArgs_2011_2_0_0 self // {
+    self : super : super.haskellPlatformArgs_2011_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2011_2_0_0;
-      cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
-      cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; zlib = self.zlib_0_5_3_3; };
+      cabalInstall_0_14_0 = super.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
+      cabalInstall_1_16_0_2 = super.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; zlib = self.zlib_0_5_3_3; };
       monadPar = self.monadPar_0_1_0_3;
-      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
-      cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
+      jailbreakCabal = super.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
+      cabal2nix = super.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
       prettyShow = self.prettyShow_1_2;
       binary = self.binary_0_6_0_0;
-      Cabal_1_18_1_3 = self.Cabal_1_18_1_3.override { deepseq = self.deepseq_1_3_0_2; };
-      quickcheckIo = self.quickcheckIo.override {
+      Cabal_1_18_1_3 = super.Cabal_1_18_1_3.override { deepseq = self.deepseq_1_3_0_2; };
+      quickcheckIo = super.quickcheckIo.override {
         HUnit = self.HUnit_1_2_5_2;
         QuickCheck = self.QuickCheck2;
       };
-      hspecExpectations = self.hspecExpectations.override {
+      hspecExpectations = super.hspecExpectations.override {
         HUnit = self.HUnit_1_2_5_2;
       };
       haskeline = self.haskeline_0_7_1_1;
@@ -141,25 +141,26 @@
   ghc6123Prefs = ghc6122Prefs;
 
   ghc6122Prefs =
-    self : self.haskellPlatformArgs_2010_2_0_0 self // {
-      haskellPlatform = self.haskellPlatform_2010_2_0_0;
+    self : super : super.haskellPlatformArgs_2010_2_0_0 self // {
+      haskellPlatform = super.haskellPlatform_2010_2_0_0;
       mtl1 = self.mtl_1_1_0_2;
       monadPar = self.monadPar_0_1_0_3;
       deepseq = self.deepseq_1_1_0_2;
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
-      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
-      cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
+      jailbreakCabal = super.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
+      cabal2nix = super.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
       binary = self.binary_0_6_0_0;
-      cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override {
-        Cabal = self.Cabal_1_16_0_3; zlib = self.zlib_0_5_3_3;
+      cabalInstall_1_16_0_2 = super.cabalInstall_1_16_0_2.override {
+        Cabal = self.Cabal_1_16_0_3; 
+        zlib = self.zlib_0_5_3_3;
         mtl = self.mtl_2_1_2;
         HTTP = self.HTTP_4000_1_1.override { mtl = self.mtl_2_1_2; };
       };
-      quickcheckIo = self.quickcheckIo.override {
+      quickcheckIo = super.quickcheckIo.override {
         HUnit = self.HUnit_1_2_5_2;
         QuickCheck = self.QuickCheck2;
       };
-      hspecExpectations = self.hspecExpectations.override {
+      hspecExpectations = super.hspecExpectations.override {
         HUnit = self.HUnit_1_2_5_2;
       };
       haskeline = self.haskeline_0_7_1_1;
@@ -167,27 +168,27 @@
     };
 
   ghc6121Prefs =
-    self : self.haskellPlatformArgs_2010_1_0_0 self // {
+    self : super : super.haskellPlatformArgs_2010_1_0_0 self // {
       haskellPlatform = self.haskellPlatform_2010_1_0_0;
       mtl1 = self.mtl_1_1_0_2;
       extensibleExceptions = self.extensibleExceptions_0_1_1_0;
       deepseq = self.deepseq_1_1_0_2;
       monadPar = self.monadPar_0_1_0_3;
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
-      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
-      cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
+      jailbreakCabal = super.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
+      cabal2nix = super.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
       binary = self.binary_0_6_0_0;
-      cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override {
+      cabalInstall_1_16_0_2 = super.cabalInstall_1_16_0_2.override {
         Cabal = self.Cabal_1_16_0_3;
         zlib = self.zlib_0_5_3_3;
         mtl = self.mtl_2_1_2;
         HTTP = self.HTTP_4000_1_1.override { mtl = self.mtl_2_1_2; };
       };
-      quickcheckIo = self.quickcheckIo.override {
+      quickcheckIo = super.quickcheckIo.override {
         HUnit = self.HUnit_1_2_5_2;
         QuickCheck = self.QuickCheck2;
       };
-      hspecExpectations = self.hspecExpectations.override {
+      hspecExpectations = super.hspecExpectations.override {
         HUnit = self.HUnit_1_2_5_2;
       };
       haskeline = self.haskeline_0_7_1_1;
@@ -195,18 +196,18 @@
     };
 
   ghc6104Prefs =
-    self : self.haskellPlatformArgs_2009_2_0_2 self // {
+    self : super : super.haskellPlatformArgs_2009_2_0_2 self // {
       haskellPlatform = self.haskellPlatform_2009_2_0_2;
-      mtl = self.mtl_1_1_0_2;
+      mtl = self.mtl1;
       mtl1 = self.mtl_1_1_0_2;
       extensibleExceptions = self.extensibleExceptions_0_1_1_0;
       text = self.text_0_11_0_6;
       deepseq = self.deepseq_1_1_0_2;
       monadPar = self.monadPar_0_1_0_3;
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
-      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
+      jailbreakCabal = super.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
       binary = self.binary_0_6_0_0;
-      cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override {
+      cabalInstall_1_16_0_2 = super.cabalInstall_1_16_0_2.override {
         Cabal = self.Cabal_1_16_0_3;
         zlib = self.zlib_0_5_3_3;
         mtl = self.mtl_2_1_2;
@@ -221,20 +222,22 @@
    ({ ghcPath
     , ghcBinary ? ghc6101Binary
     , prefFun
-    , extraPrefs ? (x : {})
+    , extension ? (self : super : {})
     , profExplicit ? false, profDefault ? false
     , modifyPrio ? lowPrio
     , extraArgs ? {}
     } :
-      import ./haskell-packages.nix {
-        inherit pkgs newScope modifyPrio;
-        prefFun = self : super : self // prefFun super // extraPrefs super;
-        # prefFun = self : super : self;
-        enableLibraryProfiling =
-          if profExplicit then profDefault
-                          else config.cabal.libraryProfiling or profDefault;
-        ghc = callPackage ghcPath ({ ghc = ghcBinary; } // extraArgs);
-      });
+    let haskellPackagesClass = import ./haskell-packages.nix {
+          inherit pkgs newScope modifyPrio;
+          enableLibraryProfiling =
+            if profExplicit then profDefault
+                            else config.cabal.libraryProfiling or profDefault;
+          ghc = callPackage ghcPath ({ ghc = ghcBinary; } // extraArgs);
+        };
+        haskellPackagesPrefsClass = self : let super = haskellPackagesClass self; in super // prefFun self super;
+        haskellPackagesExtensionClass = self : let super = haskellPackagesPrefsClass self; in super // extension self super;
+        haskellPackages = haskellPackagesExtensionClass haskellPackages;
+    in haskellPackages);
 
   defaultVersionPrioFun =
     profDefault :
