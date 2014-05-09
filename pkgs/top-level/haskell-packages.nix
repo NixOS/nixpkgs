@@ -1026,6 +1026,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   dualTree = callPackage ../development/libraries/haskell/dual-tree {};
 
+  dynamicCabal = callPackage ../development/libraries/haskell/dynamic-cabal {};
+
   dyre = callPackage ../development/libraries/haskell/dyre {};
 
   editDistance = callPackage ../development/libraries/haskell/edit-distance {};
@@ -1325,6 +1327,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   haskelineClass = callPackage ../development/libraries/haskell/haskeline-class {};
 
+  haskellGenerate = callPackage ../development/libraries/haskell/haskell-generate {};
+
   haskellLexer = callPackage ../development/libraries/haskell/haskell-lexer {};
 
   haskellMpi = callPackage ../development/libraries/haskell/haskell-mpi {
@@ -1348,6 +1352,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   haskore = callPackage ../development/libraries/haskell/haskore {};
 
   hastache = callPackage ../development/libraries/haskell/hastache {};
+
+  hcltest = callPackage ../development/libraries/haskell/hcltest {};
 
   heredoc = callPackage ../development/libraries/haskell/heredoc {};
 
@@ -2164,6 +2170,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   quickcheckIo = callPackage ../development/libraries/haskell/quickcheck-io {};
 
+  quickcheckPropertyMonad = callPackage ../development/libraries/haskell/quickcheck-property-monad {};
+
   qrencode = callPackage ../development/libraries/haskell/qrencode {
     inherit (pkgs) qrencode;
   };
@@ -2486,6 +2494,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   systemPosixRedirect = callPackage ../development/libraries/haskell/system-posix-redirect {};
 
+  systemTimeMonotonic = callPackage ../development/libraries/haskell/system-time-monotonic {};
+
   TableAlgebra = callPackage ../development/libraries/haskell/TableAlgebra {};
 
   tabular = callPackage ../development/libraries/haskell/tabular {};
@@ -2580,6 +2590,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   thLift = callPackage ../development/libraries/haskell/th-lift {};
 
+  thLiftInstances = callPackage ../development/libraries/haskell/th-lift-instances {};
+
   thOrphans = callPackage ../development/libraries/haskell/th-orphans {};
 
   threadmanager = callPackage ../development/libraries/haskell/threadmanager {};
@@ -2666,6 +2678,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   unixBytestring = callPackage ../development/libraries/haskell/unix-bytestring {};
 
   unixCompat = callPackage ../development/libraries/haskell/unix-compat {};
+
+  unixMemory = callPackage ../development/libraries/haskell/unix-memory {};
 
   unixProcessConduit = callPackage ../development/libraries/haskell/unix-process-conduit {};
 
