@@ -12,7 +12,7 @@
 if [ "$(id -u)" = 0 ]; then
     if [ -z "$NIXOS_INSTALL_REEXEC" ]; then
         export NIXOS_INSTALL_REEXEC=1
-        exec unshare --mount -- "$0" "$@"
+        exec unshare --mount --uts -- "$0" "$@"
     else
         mount --make-rprivate /
     fi
