@@ -136,7 +136,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   # NOTE: 2013.2.0.0 is the current default.
 
   haskellPlatformArgs_future = self : {
-    inherit (self) cabal ghc;
     async        = self.async_2_0_1_5;
     attoparsec   = self.attoparsec_0_11_3_0;
     caseInsensitive = self.caseInsensitive_1_2_0_0;
@@ -177,7 +176,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   };
 
   haskellPlatformArgs_2013_2_0_0 = self : {
-    inherit (self) cabal ghc;
     async        = self.async_2_0_1_4;
     attoparsec   = self.attoparsec_0_10_4_0;
     caseInsensitive = self.caseInsensitive_1_0_0_1;
@@ -222,7 +220,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
       (self.haskellPlatformArgs_2013_2_0_0 self);
 
   haskellPlatformArgs_2012_4_0_0 = self : {
-    inherit (self) cabal ghc;
     async        = self.async_2_0_1_3;
     cgi          = self.cgi_3001_1_7_4;
     fgl          = self.fgl_5_4_2_4;
@@ -261,7 +258,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
       (self.haskellPlatformArgs_2012_4_0_0 self);
 
   haskellPlatformArgs_2012_2_0_0 = self : {
-    inherit (self) cabal ghc;
     cgi          = self.cgi_3001_1_7_4;
     fgl          = self.fgl_5_4_2_4;
     GLUT         = self.GLUT_2_1_2_1;
@@ -296,7 +292,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
       (self.haskellPlatformArgs_2012_2_0_0 self);
 
   haskellPlatformArgs_2011_4_0_0 = self : {
-    inherit (self) cabal ghc;
     cgi          = self.cgi_3001_1_7_4;
     fgl          = self.fgl_5_4_2_4;
     GLUT         = self.GLUT_2_1_2_1;
@@ -331,7 +326,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
       (self.haskellPlatformArgs_2011_4_0_0 self);
 
   haskellPlatformArgs_2011_2_0_1 = self : {
-    inherit (self) cabal ghc;
     cgi          = self.cgi_3001_1_7_4;
     fgl          = self.fgl_5_4_2_3;
     GLUT         = self.GLUT_2_1_2_1;
@@ -366,7 +360,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
       (self.haskellPlatformArgs_2011_2_0_1 self);
 
   haskellPlatformArgs_2011_2_0_0 = self : {
-    inherit (self) cabal ghc;
     cgi          = self.cgi_3001_1_7_4;
     fgl          = self.fgl_5_4_2_3;
     GLUT         = self.GLUT_2_1_2_1;
@@ -401,7 +394,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
       (self.haskellPlatformArgs_2011_2_0_0 self);
 
   haskellPlatformArgs_2010_2_0_0 = self : {
-    inherit (self) cabal ghc;
     cgi          = self.cgi_3001_1_7_3;
     fgl          = self.fgl_5_4_2_3;
     GLUT         = self.GLUT_2_1_2_1;
@@ -433,7 +425,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
       (self.haskellPlatformArgs_2010_2_0_0 self);
 
   haskellPlatformArgs_2010_1_0_0 = self : {
-    inherit (self) cabal ghc;
     haskellSrc   = self.haskellSrc_1_0_1_3;
     html         = self.html_1_0_1_2;
     fgl          = self.fgl_5_4_2_2;
@@ -463,7 +454,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
       (self.haskellPlatformArgs_2010_1_0_0 self);
 
   haskellPlatformArgs_2009_2_0_2 = self : {
-    inherit (self) cabal ghc;
     time         = self.time_1_1_2_4;
     haddock      = self.haddock_2_4_2;
     cgi          = self.cgi_3001_1_7_1;
