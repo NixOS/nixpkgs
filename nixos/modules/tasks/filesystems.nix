@@ -187,6 +187,8 @@ in
           let
             mountPoint' = escapeSystemdPath fs.mountPoint;
             device' = escapeSystemdPath fs.device;
+            # -F needed to allow bare block device without partitions
+            mkfsOpts = optional ((builtins.substring 0 3 fs.fsType) == "ext") "-F";
           in nameValuePair "mkfs-${device'}"
           { description = "Initialisation of Filesystem ${fs.device}";
             wantedBy = [ "${mountPoint'}.mount" ];
@@ -201,7 +203,7 @@ in
                 type=$(blkid -p -s TYPE -o value "${fs.device}" || true)
                 if [ -z "$type" ]; then
                   echo "creating ${fs.fsType} filesystem on ${fs.device}..."
-                  mkfs.${fs.fsType} "${fs.device}"
+                  mkfs.${fs.fsType} ${concatStringsSep " " mkfsOpts} "${fs.device}"
                 fi
               '';
             unitConfig.RequiresMountsFor = [ "${dirOf fs.device}" ];
