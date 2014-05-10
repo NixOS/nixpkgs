@@ -10394,6 +10394,8 @@ let
 
   ### SCIENCE/LOGIC
 
+  abc-verifier = callPackage ../applications/science/logic/abc {};
+
   alt-ergo = callPackage ../applications/science/logic/alt-ergo {};
 
   coq = callPackage ../applications/science/logic/coq {
