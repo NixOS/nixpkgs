@@ -1,4 +1,4 @@
-{ stdenv, requireFile, gmp4, ncurses, zlib, makeWrapper }:
+{ stdenv, requireFile, gmp4, ncurses, zlib, clang_33, makeWrapper }:
 
 let
   name    = "cryptol-${version}-${rev}";
@@ -86,6 +86,9 @@ stdenv.mkDerivation rec {
     # Move LSS
     mv ${lss-ver}/bin/lss $out/bin
     mv ${lss-ver}/sym-api $out/include
+
+    # Create a convenient 'lss-clang' wrapper pointing to a valid Clang verison
+    ln -s ${clang_33}/bin/clang $out/bin/lss-clang
 
     # Hack around lack of libtinfo in NixOS
     ln -s ${ncurses}/lib/libncursesw.so.5.9 $out/lib/libtinfo.so.5
