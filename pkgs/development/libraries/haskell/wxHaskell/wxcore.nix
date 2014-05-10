@@ -8,6 +8,9 @@ cabal.mkDerivation (self: {
   sha256 = "1ma6vjf87b493vz3sj6hxzifqixk62n6b5gvixpfzfig1lysddgp";
   buildDepends = [ filepath parsec stm time wxc wxdirect ];
   extraLibraries = [ libX11 mesa wxGTK ];
+  patchPhase = ''
+    sed -i -e 's|array >= .*,|array,|' wxcore.cabal
+  '';
   meta = {
     homepage = "http://haskell.org/haskellwiki/WxHaskell";
     description = "wxHaskell core";
