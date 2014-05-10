@@ -26,6 +26,9 @@ cabal.mkDerivation (self: {
     testFrameworkHunit testFrameworkQuickcheck2 text time
   ];
   doCheck = false;
+  patchPhase = ''
+    sed -i -e 's|network .*,|network,|' hakyll.cabal
+  '';
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
     description = "A static website compiler library";
