@@ -9500,7 +9500,10 @@ let
     vimrc = config.vim.vimrc or "";
   };
 
-  virtviewer = callPackage ../applications/virtualization/virt-viewer {};
+  virtviewer = callPackage ../applications/virtualization/virt-viewer {
+    gtkvnc = gtkvnc.override { enableGTK3 = true; };
+    spice_gtk = spice_gtk.override { enableGTK3 = true; };
+  };
   virtmanager = callPackage ../applications/virtualization/virt-manager {
     inherit (gnome) gnome_python;
     vte = gnome3.vte;
