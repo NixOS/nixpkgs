@@ -6494,6 +6494,8 @@ let
 
   elasticmq = callPackage ../servers/elasticmq { };
 
+  fcgiwrap = callPackage ../servers/fcgiwrap { };
+
   felix = callPackage ../servers/felix { };
 
   felix_remoteshell = callPackage ../servers/felix/remoteshell.nix { };
