@@ -8891,11 +8891,11 @@ rec {
 
   libvirt = pkgs.stdenv.mkDerivation rec {
     name = "libvirt-python-${version}";
-    version = "1.2.2";
+    version = "1.2.4";
 
     src = fetchurl {
       url = "http://libvirt.org/sources/python/${name}.tar.gz";
-      sha256 = "0fccpyppz79kbbnzwdgsiza3cxq7jlnnp1dqi33gc4305dk9vmwl";
+      sha256 = "0zi1mxjcv9dz5hy54lwgk9j4i8r20hhijbxxn843h2w7p1ch1wx2";
     };
 
     buildInputs = [ python pkgs.pkgconfig pkgs.libvirt lxml ];
