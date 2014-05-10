@@ -1,18 +1,18 @@
-{ stdenv, fetch, cmake, libxml2, libedit, llvm, version }:
+{ stdenv, fetch, cmake, libxml2, libedit, llvm, version, clang-tools-extra_src }:
 
 stdenv.mkDerivation {
   name = "clang-${version}";
 
   unpackPhase = ''
-    unpackFile ${fetch "clang" "06rb4j1ifbznl3gfhl98s7ilj0ns01p7y7zap4p7ynmqnc6pia92"}
-    mv clang-${version} clang
+    unpackFile ${fetch "cfe" "1dvbkld0a1aqj6wcn0ia1wa8lwha30yfgq16j1r7akdka44z70xb"}
+    mv cfe-${version}.src clang
     sourceRoot=$PWD/clang
-    unpackFile ${fetch "clang-tools-extra" "1d1822mwxxl9agmyacqjw800kzz5x8xr0sdmi8fgx5xfa5sii1ds"}
-    mv clang-tools-extra-${version} $sourceRoot/tools/extra
+    unpackFile ${clang-tools-extra_src}
+    mv clang-tools-extra-* $sourceRoot/tools/extra
     # !!! Hopefully won't be needed for 3.5
     unpackFile ${llvm.src}
-    export cmakeFlags="$cmakeFlags -DCLANG_PATH_TO_LLVM_SOURCE=$PWD/llvm-${version}"
-    (cd llvm-${version} && patch -Np1 -i ${./llvm-separate-build.patch})
+    export cmakeFlags="$cmakeFlags -DCLANG_PATH_TO_LLVM_SOURCE="`ls -d $PWD/llvm-*`
+    (cd llvm-* && patch -Np1 -i ${./llvm-separate-build.patch})
   '';
 
   patches = [ ./clang-separate-build.patch ./clang-purity.patch ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   # Clang expects to find sanitizer libraries in its own prefix
   postInstall = ''
     ln -sv ${llvm}/lib/LLVMgold.so $out/lib
-    ln -sv ${llvm}/lib/clang/3.4/lib $out/lib/clang/3.4/
+    ln -sv ${llvm}/lib/clang/${version}/lib $out/lib/clang/${version}/
   '';
 
   passthru.gcc = stdenv.gcc.gcc;
