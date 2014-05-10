@@ -5,6 +5,7 @@ cabal.mkDerivation (self: {
   version = "0.4.0.1";
   sha256 = "0vbsv7h3zgp30mlgsw156jkv1rqy5zbm98as9haf7x15hd6jf254";
   buildDepends = [ filepath time ];
+  noHaddock = self.stdenv.lib.versionOlder self.ghc.version "6.11";
   meta = {
     description = "Reading, writing and manipulating \".tar\" archive files.";
     license = self.stdenv.lib.licenses.bsd3;
