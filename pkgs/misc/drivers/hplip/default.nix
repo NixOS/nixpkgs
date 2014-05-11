@@ -105,9 +105,11 @@ stdenv.mkDerivation rec {
     ] ++ stdenv.lib.optional qtSupport qt4;
 
   pythonPath = with pythonPackages; [
+      pillow
       pythonDBus
       pygobject
       recursivePthLoader
+      reportlab
     ] ++ stdenv.lib.optional qtSupport pyqt4;
 
   meta = with stdenv.lib; {
