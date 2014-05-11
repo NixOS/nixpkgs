@@ -36,6 +36,6 @@ import ./make-test.nix {
     print $slave->execute("sudo -u jenkins groups");
     $slave->mustSucceed("sudo -u jenkins groups | grep jenkins | grep users");
 
-    $slave->mustFail("systemctl status jenkins.service");
+    $slave->mustFail("systemctl is-enabled jenkins.service");
   '';
 }
