@@ -4717,6 +4717,8 @@ let
 
   gwenhywfar = callPackage ../development/libraries/gwenhywfar { };
 
+  hamlib = callPackage ../development/libraries/hamlib { };
+
   # TODO : Add MIT Kerberos and let admin choose.
   kerberos = heimdal;
 
