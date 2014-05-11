@@ -2902,6 +2902,8 @@ let
 
   metaocaml_3_09 = callPackage ../development/compilers/ocaml/metaocaml-3.09.nix { };
 
+  bedup = callPackage ../tools/filesystems/bedup/default.nix { };
+
   ber_metaocaml_003 = callPackage ../development/compilers/ocaml/ber-metaocaml-003.nix { };
 
   mkOcamlPackages = ocaml: self: let callPackage = newScope self; in rec {
