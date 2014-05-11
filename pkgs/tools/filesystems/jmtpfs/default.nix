@@ -7,11 +7,9 @@ stdenv.mkDerivation rec {
   version = "0.5";
   name = "jmtpfs-${version}";
 
-  rev = "928fb8f2eec34232e3b2cecc121195caa8865e15";
-
   src = fetchurl {
-    url = "https://github.com/JasonFerrara/jmtpfs/archive/${rev}.zip";
-    sha256 = "11904f8pkb84gah0h1m7s1hwkp9wa6dzcjj6d8nk4r37lqbillxc";
+    url = "https://github.com/JasonFerrara/jmtpfs/archive/v0.5.zip";
+    sha256 = "09fw4g350mjz1mnga7ws5nvnsnfzs8s7cscl300mas1m9s6vmhz6";
   };
 
   buildInputs = [ autoconf automake file fuse libmtp pkgconfig unzip ];
