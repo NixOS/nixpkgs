@@ -3,10 +3,11 @@
 
 stdenv.mkDerivation rec {
   version = "3.21.82";
-  name = "fldigi";
+  pname = "fldigi";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://www.w1hkj.com/downloads/${name}/${name}-${version}.tar.gz";
+    url = "http://www.w1hkj.com/downloads/${pname}/${name}.tar.gz";
     sha256 = "1q2fc1zm9kfsjir4g6fh95vmjdq984iyxfcs6q4gjqy1znhqcyqs";
   };
 

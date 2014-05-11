@@ -2,11 +2,12 @@
  boost, libtool, perlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "hamlib";
+  pname = "hamlib";
   version = "1.2.15.3";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${name}/${name}-${version}.tar.gz";
+    url = "mirror://sourceforge/${pname}/${name}.tar.gz";
     sha256 = "0ppp6fc2h9d8p30j2s9wlqd620kmnny4wd8fc3jxd6gxwi4lbjm2";
   };
 
