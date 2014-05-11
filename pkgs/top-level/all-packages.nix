@@ -8222,6 +8222,8 @@ let
     inherit stdenv fetchurl openssl;
   };
 
+  fldigi = callPackage ../applications/audio/fldigi { };
+
   fluidsynth = callPackage ../applications/audio/fluidsynth { };
 
   fossil = callPackage ../applications/version-management/fossil { };
