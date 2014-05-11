@@ -3,11 +3,11 @@ btrfsProgs, iptables, bash}:
 
 stdenv.mkDerivation rec {
   name = "docker-${version}";
-  version = "0.9.1";
+  version = "0.10.0";
 
   src = fetchurl {
     url = "https://github.com/dotcloud/docker/archive/v${version}.tar.gz";
-    sha256 = "0m4s21dxd1bj08xrmi7iw77djj3cpxvjsin12p6v6v1qnigm18ww";
+    sha256 = "14gmx119hd3j0c6rbks2mm83hk46s5wnnyvj8rhn25h0yp39pm5q";
   };
 
   phases = ["unpackPhase" "preBuild" "buildPhase" "installPhase"];
