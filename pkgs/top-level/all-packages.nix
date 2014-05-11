@@ -10735,6 +10735,8 @@ let
     hotplugSupport = config.sane.hotplugSupport or true;
   };
 
+  mkSaneConfig = callPackage ../applications/graphics/sane/config.nix { };
+
   saneFrontends = callPackage ../applications/graphics/sane/frontends.nix { };
 
   seafile-shared = callPackage ../misc/seafile-shared { };
