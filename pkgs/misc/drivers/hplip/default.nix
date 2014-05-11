@@ -90,6 +90,9 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/var/lib/hp
     cp ${hplip_state} $out/var/lib/hp/hplip.state
+
+    mkdir -p $out/etc/sane.d/dll.d
+    mv $out/etc/sane.d/dll.conf $out/etc/sane.d/dll.d/hpaio.conf
     ''));
 
   buildInputs = [
