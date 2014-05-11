@@ -3544,6 +3544,8 @@ let
     fftw = fftwSinglePrec;
   };
 
+  supercollider_scel = supercollider.override { useSCEL = true; };
+
   sysPerl = callPackage ../development/interpreters/perl/sys-perl { };
 
   tcl = callPackage ../development/interpreters/tcl { };
