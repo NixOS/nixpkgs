@@ -1274,6 +1274,8 @@ let
 
   jing = callPackage ../tools/text/xml/jing { };
 
+  jmtpfs = callPackage ../tools/filesystems/jmtpfs { };
+
   jnettop = callPackage ../tools/networking/jnettop { };
 
   jq = callPackage ../development/tools/jq {};
