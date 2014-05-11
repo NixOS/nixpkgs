@@ -6834,6 +6834,8 @@ let
 
   bluez = bluez4;
 
+  inherit (pythonPackages) bedup;
+
   beret = callPackage ../games/beret { };
 
   bridge_utils = callPackage ../os-specific/linux/bridge-utils { };
