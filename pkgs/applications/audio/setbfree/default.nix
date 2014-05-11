@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, alsaLib, jackaudio, lv2, pkgconfig }:
+{ stdenv, fetchurl, alsaLib, freetype, ftgl, jackaudio, libX11, lv2
+, mesa, pkgconfig, ttf_bitstream_vera
+}:
 
 stdenv.mkDerivation  rec {
   name = "setbfree-${version}";
@@ -9,9 +11,16 @@ stdenv.mkDerivation  rec {
     sha256 = "1chlmgwricc6l4kyg35vc9v8f1n8psr28iihn4a9q2prj1ihqcbc";
   };
 
-  patchPhase = "sed 's#/usr/local#$(out)#g' -i common.mak";
+  patchPhase = ''
+    sed 's#/usr/local#$(out)#g' -i common.mak
+    sed 's#/usr/share/fonts/truetype/ttf-bitstream-vera#${ttf_bitstream_vera}/share/fonts/truetype#g' \
+      -i b_synth/Makefile
+  '';
 
-  buildInputs = [ alsaLib jackaudio lv2 pkgconfig ];
+  buildInputs = [
+    alsaLib freetype ftgl jackaudio libX11 lv2 mesa pkgconfig
+    ttf_bitstream_vera
+  ];
 
   meta = with stdenv.lib; {
     description = "A DSP tonewheel organ emulator";
