@@ -10,8 +10,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pandoc";
-  version = "1.12.3.3";
-  sha256 = "0v7wvh93rz3k7phlz21627j5xakpi83174mchr3lwg4bmkfxn25s";
+  version = "1.12.4";
+  sha256 = "0dpvp630a5z7wp5a7q9f2i98vhv3c4m2acsb3qmw5ybs1awi3yry";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
