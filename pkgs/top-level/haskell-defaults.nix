@@ -21,6 +21,7 @@
   };
 
   ghc763Prefs = self : super : ghc782Prefs self super // {
+    binaryConduit = super.binaryConduit.override { binary = self.binary_0_7_0_1; };
     bson = super.bson.override { dataBinaryIeee754 = self.dataBinaryIeee754.override { binary = self.binary_0_7_0_1; }; };
     criterion = super.criterion.override {
       statistics = self.statistics.override {
