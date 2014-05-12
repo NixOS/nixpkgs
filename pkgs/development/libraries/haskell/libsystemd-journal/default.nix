@@ -16,6 +16,6 @@ cabal.mkDerivation (self: {
     homepage = "http://github.com/ocharles/libsystemd-journal";
     description = "Haskell bindings to libsystemd-journal";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.ghc.meta.platforms;
+    platforms = self.stdenv.lib.platforms.linux;
   };
 })
