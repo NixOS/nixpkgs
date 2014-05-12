@@ -10,7 +10,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     HsOpenSSL HUnit ioStreams network testFramework testFrameworkHunit
   ];
-  doCheck = false;
+  jailbreak = true;
   meta = {
     description = "OpenSSL network support for io-streams";
     license = self.stdenv.lib.licenses.bsd3;
