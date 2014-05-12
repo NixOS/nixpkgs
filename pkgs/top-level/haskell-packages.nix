@@ -357,7 +357,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   ChartDiagrams = callPackage ../development/libraries/haskell/Chart-diagrams {};
   ChartGtk = callPackage ../development/libraries/haskell/Chart-gtk {};
 
-  ChasingBottoms = callPackage ../development/libraries/haskell/ChasingBottoms {};
+  ChasingBottoms = callPackage ../development/libraries/haskell/ChasingBottoms { QuickCheck = self.QuickCheck_2_6; };
 
   cheapskate = callPackage ../development/libraries/haskell/cheapskate {};
 
