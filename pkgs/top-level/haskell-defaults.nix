@@ -34,6 +34,7 @@
       };
     };
     haddock = self.haddock_2_13_2;
+    pipesBinary = super.pipesBinary.override { binary = self.binary_0_7_0_1; };
     transformers = self.transformers_0_3_0_0;
   };
 
