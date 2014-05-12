@@ -361,7 +361,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   cheapskate = callPackage ../development/libraries/haskell/cheapskate {};
 
-  checkers = callPackage ../development/libraries/haskell/checkers {};
+  checkers = callPackage ../development/libraries/haskell/checkers { QuickCheck = self.QuickCheck_2_6; };
 
   chell = callPackage ../development/libraries/haskell/chell {};
 
