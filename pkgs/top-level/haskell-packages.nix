@@ -578,7 +578,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   attoparsec_0_10_4_0 = callPackage ../development/libraries/haskell/attoparsec/0.10.4.0.nix {};
   attoparsec_0_11_3_0 = callPackage ../development/libraries/haskell/attoparsec/0.11.3.0.nix {};
-  attoparsec = self.attoparsec_0_11_3_0;
+  attoparsec = if (pkgs.stdenv.lib.versionOlder ghc.version "7.6")
+    then self.attoparsec_0_10_4_0
+    else self.attoparsec_0_11_3_0;
 
   attoparsecBinary = callPackage ../development/libraries/haskell/attoparsec-binary {};
 
@@ -2303,7 +2305,11 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   setenv = callPackage ../development/libraries/haskell/setenv {};
 
-  shelly = callPackage ../development/libraries/haskell/shelly {};
+  shelly_0_15_4_1 = callPackage ../development/libraries/haskell/shelly/0.15.4.1.nix {};
+  shelly_1_5_3_1 = callPackage ../development/libraries/haskell/shelly {};
+  shelly = if (pkgs.stdenv.lib.versionOlder ghc.version "7.6")
+    then self.shelly_0_15_4_1
+    else self.shelly_1_5_3_1;
 
   simpleReflect = callPackage ../development/libraries/haskell/simple-reflect {};
 
@@ -2568,7 +2574,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   text_0_11_2_3 = callPackage ../development/libraries/haskell/text/0.11.2.3.nix {};
   text_0_11_3_1 = callPackage ../development/libraries/haskell/text/0.11.3.1.nix {};
   text_1_1_1_1 = callPackage ../development/libraries/haskell/text/1.1.1.1.nix {};
-  text = self.text_1_1_1_1;
+  text = if (pkgs.stdenv.lib.versionOlder ghc.version "7.6")
+    then self.text_0_11_3_1
+    else self.text_1_1_1_1;
 
   textFormat = callPackage ../development/libraries/haskell/text-format {};
 
