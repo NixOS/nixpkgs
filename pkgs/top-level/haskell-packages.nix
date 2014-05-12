@@ -855,12 +855,12 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     OpenGL = self.OpenGL_2_6_0_1;
   };
   GLUT_2_3_1_0 = callPackage ../development/libraries/haskell/GLUT/2.3.1.0.nix {
-    OpenGL = self.OpenGL_2_6_0_1;
+    OpenGLRaw = self.OpenGLRaw_1_3_0_0;
+    OpenGL = self.OpenGL_2_6_0_1.override { OpenGLRaw = self.OpenGLRaw_1_3_0_0; GLURaw = self.GLURaw_1_3_0_0; };
   };
   GLUT_2_4_0_0 = callPackage ../development/libraries/haskell/GLUT/2.4.0.0.nix {
     OpenGLRaw = self.OpenGLRaw_1_3_0_0;
     OpenGL = self.OpenGL_2_8_0_0.override { OpenGLRaw = self.OpenGLRaw_1_3_0_0; GLURaw = self.GLURaw_1_3_0_0; };
-
   };
   GLUT_2_5_1_0 = callPackage ../development/libraries/haskell/GLUT/2.5.1.0.nix {
     OpenGL = self.OpenGL_2_9_1_0;
