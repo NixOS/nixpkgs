@@ -70,6 +70,7 @@ with lib;
 
   boot.initrd.kernelModules = [ "xen-blkfront" ];
   boot.kernelModules = [ "xen-netfront" ];
+  boot.kernelParams = [ "console=ttyS0" ];
 
   # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
   boot.loader.grub.version = 1;
