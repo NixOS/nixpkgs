@@ -307,6 +307,8 @@ let
 
   fetchmtn = callPackage ../build-support/fetchmtn (config.fetchmtn or {});
 
+  fetchpatch = callPackage ../build-support/fetchpatch { };
+
   fetchsvn = import ../build-support/fetchsvn {
     inherit stdenv subversion openssh;
     sshSupport = true;
