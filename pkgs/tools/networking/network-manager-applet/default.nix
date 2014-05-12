@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${gnome3.gtk}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
       --set GCONF_CONFIG_SOURCE "xml::~/.gconf" \
       --prefix PATH ":" "${gnome3.gconf}/bin"
+    wrapProgram "$out/bin/nm-connection-editor" \
+      --prefix XDG_DATA_DIRS : "${gnome3.gtk}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {
