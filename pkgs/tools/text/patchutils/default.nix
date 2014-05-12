@@ -8,10 +8,13 @@ stdenv.mkDerivation rec {
     sha256 = "0g5df00cj4nczrmr4k791l7la0sq2wnf8rn981fsrz1f3d2yix4i";
   };
 
-  meta = {
+  patches = [ ./drop-comments.patch ]; # we would get into a cycle when using fetchpatch on this one
+
+  meta = with stdenv.lib; {
     description = "Tools to manipulate patch files";
     homepage = http://cyberelk.net/tim/software/patchutils;
-    license = "GPLv2";
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
     executables = [ "combinediff" "dehtmldiff" "editdiff" "espdiff"
       "filterdiff" "fixcvsdiff" "flipdiff" "grepdiff" "interdiff" "lsdiff"
       "recountdiff" "rediff" "splitdiff" "unwrapdiff" ];
