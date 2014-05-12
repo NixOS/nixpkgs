@@ -2334,6 +2334,27 @@ rec {
     };
   };
 
+  pyrtlsdr = buildPythonPackage rec {
+    name = "pyrtlsdr-0.2.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyrtlsdr/${name}.zip";
+      md5 = "646336675a00d38e6f54e77a17011b95";
+    };
+
+    postPatch = ''
+      sed "s|driver_files =.*|driver_files = ['${pkgs.rtl-sdr}/lib/librtlsdr.so']|" -i rtlsdr/librtlsdr.py
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Python wrapper for librtlsdr (a driver for Realtek RTL2832U based SDR's)";
+      homepage = https://github.com/roger-/pyrtlsdr;
+      license = licenses.gpl3;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
 
   repoze_sendmail = buildPythonPackage rec {
     name = "repoze.sendmail-4.1";
