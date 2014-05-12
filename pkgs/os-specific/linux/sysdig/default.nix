@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DUSE_BUNDLED_LUAJIT=OFF"
     "-DUSE_BUNDLED_ZLIB=OFF"
-  ];
+  ] ++ optional (kernel == null) "-DBUILD_DRIVER=OFF";
   preConfigure = ''
     export INSTALL_MOD_PATH="$out"
   '' + optionalString (kernel != null) ''
