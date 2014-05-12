@@ -10762,7 +10762,7 @@ let
       libXmu libXext xextproto libSM libICE;
     ghostscript = ghostscriptX;
     harfbuzz = harfbuzz.override {
-      withIcu = true; withGraphite2 = true;
+      withIcu = true; withGraphite2 = !stdenv.isDarwin;
     };
   };
 
