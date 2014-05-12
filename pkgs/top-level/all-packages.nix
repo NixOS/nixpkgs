@@ -1353,6 +1353,8 @@ let
 
   kazam = callPackage ../applications/video/kazam { };
 
+  kalibrate-rtl = callPackage ../tools/misc/kalibrate-rtl { };
+
   kexectools = callPackage ../os-specific/linux/kexectools { };
 
   keychain = callPackage ../tools/misc/keychain { };
