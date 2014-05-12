@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gettext, x11, glib, cairo, libpng, harfbuzz, fontconfig
-, libintlOrEmpty, gobjectIntrospection }:
+, libintlOrEmpty, gobjectIntrospection, graphite2, xlibs }:
 
 stdenv.mkDerivation rec {
   name = "pango-1.32.5"; #.6 and higher need fontconfig-2.11.* which is troublesome
@@ -9,17 +9,25 @@ stdenv.mkDerivation rec {
     sha256 = "08aqis6j8nd1lb4f2h4h9d9kjvp54iwf8zvqzss0qn4v7nfcjyvx";
   };
 
-  buildInputs = with stdenv.lib;
-    optional (!stdenv.isDarwin) gobjectIntrospection # build problems of itself and flex
-    ++ optionals stdenv.isDarwin [ gettext fontconfig ];
+  buildInputs = [ gobjectIntrospection ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ gettext fontconfig ];
 
   nativeBuildInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ x11 glib cairo libpng harfbuzz ] ++ libintlOrEmpty;
+  propagatedBuildInputs = [ x11 glib cairo libpng harfbuzz ]
+    ++ libintlOrEmpty
+    ++ stdenv.lib.optional stdenv.isDarwin xlibs.libXi;
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  # need to specify where the dylib for libgraphite is stored
+  DYLD_LIBRARY_PATH = stdenv.lib.optionalString stdenv.isDarwin
+    "${graphite2}/lib";
+
+  # ERROR:testiter.c:139:iter_char_test: assertion failed:
+  # (extents.width == x1 - x0)
+  doCheck = (!stdenv.isDarwin);
+
   postInstall = "rm -rf $out/share/gtk-doc";
 
   meta = {

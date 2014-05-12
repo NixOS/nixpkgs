@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gettext, glib, atk, pango, cairo, perl, xlibs
-, gdk_pixbuf, libintlOrEmpty, x11
+, gdk_pixbuf, libintlOrEmpty, x11, graphite2
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? true, cups ? null
 }:
@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
     ++ optionals cupsSupport [ cups ];
 
   configureFlags = "--with-xinput=yes";
+
+  # need to specify where the dylib for libgraphite is stored
+  DYLD_LIBRARY_PATH = stdenv.lib.optionalString stdenv.isDarwin
+    "${graphite2}/lib";
 
   postInstall = "rm -rf $out/share/gtk-doc";
 
