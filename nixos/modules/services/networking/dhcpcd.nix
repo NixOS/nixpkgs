@@ -57,6 +57,8 @@ let
       #if [ "$reason" = EXPIRE -o "$reason" = RELEASE -o "$reason" = NOCARRIER ] ; then
       #    ${config.systemd.package}/bin/systemctl start ip-down.target
       #fi
+
+      ${config.networking.dhcpcd.runHook}
     '';
 
 in
@@ -83,6 +85,16 @@ in
       default = "";
       description = ''
          Literal string to append to the config file generated for dhcpcd.
+      '';
+    };
+
+    networking.dhcpcd.runHook = mkOption {
+      type = types.lines;
+      default = "";
+      example = "if [[ $reason =~ BOUND ]]; then echo $interface: Routers are $new_routers - were $old_routers; fi";
+      description = ''
+         Shell code that will be run after all other hooks. See
+         `man dhcpcd-run-hooks` for details on what is possible.
       '';
     };
 
