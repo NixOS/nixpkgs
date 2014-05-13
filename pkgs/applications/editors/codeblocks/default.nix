@@ -1,6 +1,8 @@
 { stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, file, zip, wxGTK, gtk
-, contribPlugins ? false, hunspell, gamin , boost
+, contribPlugins ? false, hunspell, gamin, boost
 }:
+
+with { inherit (stdenv.lib) optionalString optional optionals; };
 
 stdenv.mkDerivation rec {
   name = "${pname}-${stdenv.lib.optionalString contribPlugins "full-"}${version}";
@@ -13,13 +15,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ automake autoconf libtool pkgconfig file zip wxGTK gtk ]
-    ++ stdenv.lib.optionals contribPlugins [ hunspell gamin boost ];
+    ++ optionals contribPlugins [ hunspell gamin boost ];
   enableParallelBuilding = true;
   patches = [ ./writable-projects.patch ];
   preConfigure = "substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file";
-  postConfigure = "substituteInPlace libtool --replace ldconfig ${stdenv.gcc.libc}/sbin/ldconfig";
+  postConfigure = optionalString stdenv.isLinux "substituteInPlace libtool --replace ldconfig ${stdenv.gcc.libc}/sbin/ldconfig";
   configureFlags = [ "--enable-pch=no" ]
-    ++ stdenv.lib.optional contribPlugins "--with-contrib-plugins";
+    ++ optional contribPlugins "--with-contrib-plugins";
 
   meta = with stdenv.lib; {
     maintainers = [ maintainers.linquize ];
