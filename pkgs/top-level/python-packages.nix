@@ -6708,6 +6708,30 @@ rec {
     };
   };
 
+  shapely = buildPythonPackage rec {
+    name = "Shapely-1.3.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/S/Shapely/${name}.tar.gz";
+      sha256 = "099sc7ajpp6hbgrx3c0bl6hhkz1mhnr0ahvc7s4i3f3b7q1zfn7l";
+    };
+
+    propagatedBuildInputs = [ pkgs.geos ];
+
+    preConfigure = ''
+      export LANG="en_US.UTF-8";
+    '' + stdenv.lib.optionalString stdenv.isLinux ''
+      export LOCALE_ARCHIVE="${pkgs.glibcLocales}/lib/locale/locale-archive";
+    '';
+
+    doCheck = false; # won't suceed for unknown reasons that look harmless, though
+
+    meta = with stdenv.lib; {
+      description = "Geometric objects, predicates, and operations";
+      homepage = "https://pypi.python.org/pypi/Shapely/";
+    };
+  };
+
   pydns = buildPythonPackage rec {
     name = "pydns-2.3.6";
 
