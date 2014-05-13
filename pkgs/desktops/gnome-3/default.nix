@@ -153,15 +153,23 @@ rec {
 
 #### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
 
+  bijiben = callPackage ./apps/bijiben { };
+
+  evolution = callPackage ./apps/evolution { };
+
   file-roller = callPackage ./apps/file-roller { };
 
   gedit = callPackage ./apps/gedit { };
 
   glade = callPackage ./apps/glade { };
 
+  gnome-clocks = callPackage ./apps/gnome-clocks { };
+
   gnome-documents = callPackage ./apps/gnome-documents { };
 
   gnome-music = callPackage ./apps/gnome-music { };
+
+  gnome-photos = callPackage ./apps/gnome-photos { };
 
   # scrollkeeper replacement
   rarian = callPackage ./desktop/rarian { };
@@ -184,4 +192,6 @@ rec {
   gexiv2 = callPackage ./misc/gexiv2 { };
 
   gnome-tweak-tool = callPackage ./misc/gnome-tweak-tool { };
+
+  gtkhtml = callPackage ./misc/gtkhtml { };
 }

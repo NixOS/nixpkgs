@@ -50,6 +50,7 @@ in {
     security.polkit.enable = true;
     services.udisks2.enable = true;
     services.accounts-daemon.enable = true;
+    services.geoclue2.enable = mkDefault true;
     services.gnome3.at-spi2-core.enable = true;
     services.gnome3.evolution-data-server.enable = true;
     services.gnome3.gnome-documents.enable = mkDefault true;
@@ -129,10 +130,14 @@ in {
         gnome3.gnome_terminal
         gnome3.gnome-user-docs
 
+        gnome3.bijiben
+        gnome3.evolution
         gnome3.file-roller
         gnome3.gedit
+        gnome3.gnome-clocks
         gnome3.gnome-music
         gnome3.gnome-tweak-tool
+        gnome3.gnome-photos
       ] config.environment.gnome3.excludePackages);
 
     # Needed for themes and backgrounds

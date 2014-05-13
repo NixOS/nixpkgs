@@ -6171,6 +6171,8 @@ let
     inherit ncurses flex bison autoconf automake m4 coreutils;
   };
 
+  zeitgeist = callPackage ../development/libraries/zeitgeist { };
+
   zlib = callPackage ../development/libraries/zlib {
     fetchurl = fetchurlBoot;
   };

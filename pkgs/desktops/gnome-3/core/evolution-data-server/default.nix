@@ -3,11 +3,11 @@
 
 
 stdenv.mkDerivation rec {
-  name = "evolution-data-server-3.10.2";
+  name = "evolution-data-server-3.10.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/3.10/${name}.tar.xz";
-    sha256 = "1fgchc1gzrhhzgn4zf9par4yz72m82j871kf7pky458mh4c4sf0g";
+    sha256 = "5c2d5e19af19ecfa81f31306411ab6155c3c62cf407d5a5aaa675a8ce940fa2d";
   };
 
   buildInputs = with gnome3;

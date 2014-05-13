@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, gnome3, libxml2
-, libsoup, json_glib, gmp, openssl }:
+, libsoup, json_glib, gmp, openssl, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "gnome-online-miners-3.10.3";
@@ -12,10 +12,18 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   buildInputs = [ pkgconfig glib gnome3.libgdata libxml2 libsoup gmp openssl
-                  gnome3.grilo gnome3.libzapojit gnome3.gnome_online_accounts
+                  gnome3.grilo gnome3.libzapojit gnome3.grilo-plugins
+                  gnome3.gnome_online_accounts makeWrapper
                   gnome3.tracker gnome3.gfbgraph json_glib gnome3.rest ];
 
   enableParallelBuilding = true;
+
+  preFixup = ''
+    for f in $out/libexec/*; do
+      wrapProgram "$f" \
+        --prefix GRL_PLUGIN_PATH : "${gnome3.grilo-plugins}/lib/grilo-0.2"
+    done
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/GnomeOnlineMiners;
