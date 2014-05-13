@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonPackage rec {
-  name = "pylint-0.28.0";
+  name = "pylint-1.2.1";
   namePrefix = "";
 
   src = fetchurl {
-    url = "http://download.logilab.org/pub/pylint/${name}.tar.gz";
-    sha256 = "1077hs8zpl1q5yc6wcg645nfqc4pwbdk8vjcv0qrldbb87f3yv7a";
+    url = "https://pypi.python.org/packages/source/p/pylint/${name}.tar.gz";
+    sha256 = "0q7zj5hgmz27wifhcqyaddc9yc5b2q6p16788zzm3da6qshv7xk3";
   };
 
-  propagatedBuildInputs = [ pythonPackages.logilab_astng ];
+  propagatedBuildInputs = with pythonPackages; [ astroid ];
 
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp
