@@ -3,7 +3,7 @@
 {stdenv, fetchurl, pkgconfig, ocaml, findlib, camlp5, ncurses, lablgtk ? null}:
 
 let 
-  version = "8.4pl3";
+  version = "8.4pl4";
   buildIde = lablgtk != null;
   ideFlags = if buildIde then "-lablgtkdir ${lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt" else "";
   idePath = if buildIde then ''
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://coq.inria.fr/distrib/V${version}/files/coq-${version}.tar.gz";
-    sha256 = "0f7v3j4zsrhpswdh47bb30vwgsr0ck79jkkz01a5a74qgxiksn4p";
+    sha256 = "00bzf4kfbd0g279jrr8ynzvb9wqcly3wi577bkrxivhrg2msxhq6";
   };
 
   buildInputs = [ pkgconfig ocaml findlib camlp5 ncurses lablgtk ];
