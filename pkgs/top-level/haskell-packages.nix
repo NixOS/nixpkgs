@@ -2352,10 +2352,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   warpTls = callPackage ../development/libraries/haskell/warp-tls {};
 
   WebBits_1_0 = callPackage ../development/libraries/haskell/WebBits/1.0.nix {
-    parsec = self.parsec2;
+    parsec = self.parsec_2_1_0_1;
   };
   WebBits_2_0 = callPackage ../development/libraries/haskell/WebBits/2.0.nix {
-    parsec = self.parsec2;
+    parsec = self.parsec_2_1_0_1;
   };
   WebBits_2_2 = callPackage ../development/libraries/haskell/WebBits/2.2.nix {};
   WebBits = self.WebBits_2_2;
