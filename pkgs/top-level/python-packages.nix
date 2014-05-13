@@ -506,6 +506,20 @@ rec {
     };
   });
 
+  avro3k = pkgs.lowPrio (buildPythonPackage (rec {
+    name = "avro3k-1.7.7-SNAPSHOT";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/a/avro/${name}.tar.gz";
+      sha256 = "15ahl0irwwj558s964abdxg4vp6iwlabri7klsm2am6q5r0ngsky";
+    };
+
+    meta = with stdenv.lib; {
+      description = "A serialization and RPC framework";
+      homepage = "https://pypi.python.org/pypi/avro3k/";
+    };
+  }));
+
   backports_ssl_match_hostname_3_4_0_2 = pythonPackages.buildPythonPackage rec {
     name = "backports.ssl_match_hostname-3.4.0.2";
 
