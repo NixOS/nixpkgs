@@ -6213,6 +6213,23 @@ rec {
     };
   };
 
+  redis = buildPythonPackage rec {
+    name = "redis-2.9.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/r/redis/${name}.tar.gz";
+      sha256 = "1r7lrh4kxccyhr4pyp13ilymmvh22pi7aa9514dmnhi74zn4g5xg";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "Python client for Redis key-value store";
+      homepage = "https://pypi.python.org/pypi/redis/";
+    };
+  };
+
+
   requests_oauth2 = buildPythonPackage rec {
     name = "requests-oauth2-0.1.1";
 
