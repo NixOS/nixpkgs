@@ -8808,6 +8808,26 @@ rec {
   };
 
 
+  usbtmc = buildPythonPackage rec {
+    name = "usbtmc-${version}";
+    version = "0.5";
+
+    src = fetchurl {
+      url = "https://github.com/python-ivi/python-usbtmc/archive/v${version}.tar.gz";
+      sha256 = "0xn8whjcdn8wgs9j1gj7sw7fh425akdmq3hi448m36fywldbhryg";
+    };
+
+    propagatedBuildInputs = [ pyusb ];
+
+    meta = {
+      description = "Python implementation of the USBTMC instrument control protocol";
+      homepage = http://alexforencich.com/wiki/en/python-usbtmc/start;
+      license = licenses.mit;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
   txamqp = buildPythonPackage rec {
     name = "txamqp-${version}";
     version = "0.3";
