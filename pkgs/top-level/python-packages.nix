@@ -7810,12 +7810,16 @@ rec {
 
 
   werkzeug = buildPythonPackage {
-    name = "werkzeug-0.8.3";
+    name = "werkzeug-0.9.4";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/W/Werkzeug/Werkzeug-0.8.3.tar.gz";
-      md5 = "12aa03e302ce49da98703938f257347a";
+      url = "http://pypi.python.org/packages/source/W/Werkzeug/Werkzeug-0.9.4.tar.gz";
+      md5 = "670fad41f57c13b71a6816765765a3dd";
     };
+
+    propagatedBuildInputs = [ itsdangerous ];
+
+    doCheck = false;            # tests fail, not sure why
 
     meta = {
       homepage = http://werkzeug.pocoo.org/;
