@@ -460,6 +460,15 @@ rec {
     };
   });
 
+  astroid = buildPythonPackage (rec {
+    name = "astroid-1.1.1";
+    propagatedBuildInputs = [ logilab_common ];
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/a/astroid/${name}.tar.gz";
+      sha256 = "1x7103mlzndgg66yas6xrfwkwpihcq4bi9m8py1fjnhz8p5ka1vq";
+    };
+  });
+
   autopep8 = buildPythonPackage (rec {
     name = "autopep8-1.0";
 
