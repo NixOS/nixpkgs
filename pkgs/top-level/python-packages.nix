@@ -2919,11 +2919,11 @@ rec {
 
 
   flask = buildPythonPackage {
-    name = "flask-0.9";
+    name = "flask-0.10.1";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/F/Flask/Flask-0.9.tar.gz";
-      md5 = "4a89ef2b3ab0f151f781182bd0cc8933";
+      url = "http://pypi.python.org/packages/source/F/Flask/Flask-0.10.1.tar.gz";
+      md5 = "378670fe456957eb3c27ddaef60b2b24";
     };
 
     propagatedBuildInputs = [ werkzeug jinja2 ];
