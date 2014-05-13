@@ -6755,12 +6755,16 @@ rec {
       sha256 = "099sc7ajpp6hbgrx3c0bl6hhkz1mhnr0ahvc7s4i3f3b7q1zfn7l";
     };
 
-    propagatedBuildInputs = [ pkgs.geos ];
+    buildInputs = [ pkgs.geos ];
 
     preConfigure = ''
       export LANG="en_US.UTF-8";
     '' + stdenv.lib.optionalString stdenv.isLinux ''
       export LOCALE_ARCHIVE="${pkgs.glibcLocales}/lib/locale/locale-archive";
+    '';
+
+    patchPhase = ''
+      sed -i "s|_lgeos = load_dll('geos_c', fallbacks=.*)|_lgeos = load_dll('geos_c', fallbacks=['${pkgs.geos}/lib/libgeos_c.so'])|" shapely/geos.py
     '';
 
     doCheck = false; # won't suceed for unknown reasons that look harmless, though
