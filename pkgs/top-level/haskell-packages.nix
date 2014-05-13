@@ -1030,8 +1030,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hint = callPackage ../development/libraries/haskell/hint {};
 
-  Hipmunk = callPackage ../development/libraries/haskell/Hipmunk {};
-
   hit = callPackage ../development/libraries/haskell/hit {};
 
   hjsmin = callPackage ../development/libraries/haskell/hjsmin {};
