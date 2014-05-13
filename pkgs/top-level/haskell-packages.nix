@@ -1215,11 +1215,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   jpeg = callPackage ../development/libraries/haskell/jpeg {};
 
-  JsContracts = callPackage ../development/libraries/haskell/JsContracts {
-    WebBits = self.WebBits_1_0;
-    WebBitsHtml = self.WebBitsHtml_1_0_1;
-  };
-
   json = callPackage ../development/libraries/haskell/json {};
 
   jsonAssertions = callPackage ../development/libraries/haskell/json-assertions {};
@@ -2349,23 +2344,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   warpTls = callPackage ../development/libraries/haskell/warp-tls {};
 
-  WebBits_1_0 = callPackage ../development/libraries/haskell/WebBits/1.0.nix {
-    parsec = self.parsec_2_1_0_1;
-  };
-  WebBits_2_0 = callPackage ../development/libraries/haskell/WebBits/2.0.nix {
-    parsec = self.parsec_2_1_0_1;
-  };
-  WebBits_2_2 = callPackage ../development/libraries/haskell/WebBits/2.2.nix {};
-  WebBits = self.WebBits_2_2;
-
-  WebBitsHtml_1_0_1 = callPackage ../development/libraries/haskell/WebBits-Html/1.0.1.nix {
-    WebBits = self.WebBits_2_0;
-  };
-  WebBitsHtml_1_0_2 = callPackage ../development/libraries/haskell/WebBits-Html/1.0.2.nix {
-    WebBits = self.WebBits_2_0;
-  };
-  WebBitsHtml = self.WebBitsHtml_1_0_2;
-
   webRoutes = callPackage ../development/libraries/haskell/web-routes {};
 
   webRoutesBoomerang = callPackage ../development/libraries/haskell/web-routes-boomerang {};
@@ -2516,8 +2494,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   uhc = callPackage ../development/compilers/uhc {};
 
   epic = callPackage ../development/compilers/epic {};
-
-  flapjax = callPackage ../development/compilers/flapjax {};
 
   pakcs = callPackage ../development/compilers/pakcs {};
 
