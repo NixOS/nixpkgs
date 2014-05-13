@@ -625,8 +625,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   DRBG = callPackage ../development/libraries/haskell/DRBG {};
 
-  DSH = callPackage ../development/libraries/haskell/DSH {};
-
   dsp = callPackage ../development/libraries/haskell/dsp {};
 
   dstring = callPackage ../development/libraries/haskell/dstring {};
@@ -1585,8 +1583,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   parsers = self.parsers_0_11;
 
   parsimony = callPackage ../development/libraries/haskell/parsimony {};
-
-  Pathfinder = callPackage ../development/libraries/haskell/Pathfinder {};
 
   pathtype = callPackage ../development/libraries/haskell/pathtype {};
 
