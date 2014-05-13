@@ -3460,7 +3460,7 @@ let
   python33 = callPackage ../development/interpreters/python/3.3 { };
   python34 = hiPrio (callPackage ../development/interpreters/python/3.4 { });
   python = python27;
-  python3 = python34;
+  python3 = python3Packages.python;
 
   pypy = callPackage ../development/interpreters/pypy/2.2 { };
 
@@ -6326,7 +6326,7 @@ let
     python = python26;
   };
 
-  python3Packages = python33Packages;
+  python3Packages = python34Packages;
 
   python33Packages = recurseIntoAttrs (import ./python-packages.nix {
     inherit pkgs;
