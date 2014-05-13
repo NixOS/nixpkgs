@@ -3454,18 +3454,13 @@ let
     llvm = llvm_33 ;
   };
 
-  python3 = hiPrio (callPackage ../development/interpreters/python/3.3 { });
+  python26 = callPackage ../development/interpreters/python/2.6 { db = db47; };
+  python27 = callPackage ../development/interpreters/python/2.7 { libX11 = xlibs.libX11; };
   python32 = callPackage ../development/interpreters/python/3.2 { };
   python33 = callPackage ../development/interpreters/python/3.3 { };
-  python34 = callPackage ../development/interpreters/python/3.4 { };
-
+  python34 = hiPrio (callPackage ../development/interpreters/python/3.4 { });
   python = python27;
-  python26 = callPackage ../development/interpreters/python/2.6 {
-    db = db47;
-  };
-  python27 = callPackage ../development/interpreters/python/2.7 {
-    libX11 = xlibs.libX11;
-  };
+  python3 = python34;
 
   pypy = callPackage ../development/interpreters/pypy/2.2 { };
 
