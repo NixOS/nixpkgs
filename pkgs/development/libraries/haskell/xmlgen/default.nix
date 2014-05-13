@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   sha256 = "1rmsg9wxs0bsj0xpagxrm3fmlqd63b0dfyc21rx9jj76g9za29wh";
   buildDepends = [ blazeBuilder mtl text ];
   testDepends = [ filepath HUnit hxt QuickCheck text ];
+  doCheck = false;
   meta = {
     description = "Fast XML generation library";
     license = self.stdenv.lib.licenses.bsd3;
