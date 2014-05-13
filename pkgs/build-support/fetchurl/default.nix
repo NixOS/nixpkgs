@@ -38,6 +38,16 @@ let
     "NIX_CONNECT_TIMEOUT"
   ] ++ (map (site: "NIX_MIRRORS_${site}") sites);
 
+  auto-detected-patch = with stdenv.lib; url:
+    let url2 = removePrefix "http://" (removePrefix "https://" url);
+    in  ( hasPrefix "github.com" url2
+          && (hasSuffix ".diff" url2 || hasSuffix ".patch" url2)
+        ) || (
+          hasPrefix "cgit." url2
+          && ("patch" == (builtins.elemAt (reverseList (splitString "/" url2)) 1))
+                        #^ next-to-last part of the URL is "/patch/"
+        );
+
 in
 
 { # URL to fetch.
@@ -75,6 +85,9 @@ in
 , # If set, don't download the file, but write a list of all possible
   # URLs (resulting from resolving mirror:// URLs) to $out.
   showURLs ? false
+
+  # set for patches to clean useless changing parts, true for github and cgit url
+, cleanPatch ? (auto-detected-patch url)
 }:
 
 assert builtins.isList urls;
@@ -119,4 +132,12 @@ stdenv.mkDerivation {
   # Doing the download on a remote machine just duplicates network
   # traffic, so don't do that.
   preferLocalBuild = true;
+
+  # The following sed commands are a bit crazy, I know
+  maybeCleanPatch = stdenv.lib.optionalString cleanPatch ''
+    echo "Cleaning the patch"
+    sed -e '/^[^-+ @]/d; 0,/^---[ \t]/s/^[^-].*//; /^--[- ]\?$/d; /^$/d' \
+      -e 's/^\(@@[^@]*@@\).*$/\1/; s/^\(\(---\|+++\) [^ \t]*\).*$/\1/' \
+      -i "$out"
+  '';
 }

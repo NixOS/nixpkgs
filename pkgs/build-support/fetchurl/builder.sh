@@ -1,5 +1,6 @@
 source $stdenv/setup
 
+
 source $mirrorsFile
 
 
@@ -37,6 +38,9 @@ finish() {
     set +o noglob
     runHook postFetch
     stopNest
+
+    eval "$maybeCleanPatch"
+
     exit 0
 }
 
