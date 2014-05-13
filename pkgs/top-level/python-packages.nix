@@ -483,6 +483,20 @@ rec {
     };
   });
 
+  avro = buildPythonPackage (rec {
+    name = "avro-1.7.6";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/a/avro/${name}.tar.gz";
+      md5 = "7f4893205e5ad69ac86f6b44efb7df72";
+    };
+
+    meta = with stdenv.lib; {
+      description = "A serialization and RPC framework";
+      homepage = "https://pypi.python.org/pypi/avro/";
+    };
+  });
+
   backports_ssl_match_hostname_3_4_0_2 = pythonPackages.buildPythonPackage rec {
     name = "backports.ssl_match_hostname-3.4.0.2";
 
