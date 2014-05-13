@@ -2685,8 +2685,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     };
   };
 
-  MazesOfMonad = callPackage ../games/MazesOfMonad {};
-
 # End of the main part of the file.
 
 }
