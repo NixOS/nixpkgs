@@ -510,7 +510,7 @@ rec {
     name = "avro3k-1.7.7-SNAPSHOT";
 
     src = fetchurl {
-      url = "https://pypi.python.org/packages/source/a/avro/${name}.tar.gz";
+      url = "https://pypi.python.org/packages/source/a/avro3k/${name}.tar.gz";
       sha256 = "15ahl0irwwj558s964abdxg4vp6iwlabri7klsm2am6q5r0ngsky";
     };
 
