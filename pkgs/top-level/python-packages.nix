@@ -1208,16 +1208,16 @@ rec {
 
   cython = buildPythonPackage rec {
     name = "Cython-0.20.1";
-  
+
     src = fetchurl {
       url = "http://www.cython.org/release/${name}.tar.gz";
       sha256 = "0v3nc9z5ynnnjdgcgkyy5g9wazmkjv53nnpjal1v3mr199s6799i";
     };
-  
+
     setupPyBuildFlags = ["--build-base=$out"];
-  
+
     buildInputs = [ pkgs.pkgconfig ];
-  
+
     meta = {
       description = "An interpreter to help writing C extensions for Python 2";
       platforms = stdenv.lib.platforms.all;
@@ -1595,7 +1595,7 @@ rec {
       platforms = stdenv.lib.platforms.all;
     };
   };
-  
+
   urllib3 = buildPythonPackage rec {
     name = "urllib3-1.8";
 
@@ -1603,11 +1603,11 @@ rec {
       url = "https://pypi.python.org/packages/source/u/urllib3/${name}.tar.gz";
       sha256 = "0pdigfxkq8mhzxxsn6isx8c4h9azqywr1k18yanwyxyj8cdzm28s";
     };
-    
+
     preConfigure = ''
       substituteInPlace test-requirements.txt --replace 'nose==1.3' 'nose'
     '';
-    
+
     checkPhase = ''
       nosetests --cover-min-percentage 70
     '';
@@ -1621,7 +1621,7 @@ rec {
     };
   };
 
-  
+
   dropbox = buildPythonPackage rec {
     name = "dropbox-2.0.0";
 
@@ -3114,8 +3114,8 @@ rec {
       maintainers = [ maintainers.bjornfor ];
     };
   };
-  
-  
+
+
   gevent-socketio = buildPythonPackage rec {
     name = "gevent-socketio-0.3.6";
 
@@ -3128,7 +3128,7 @@ rec {
     propagatedBuildInputs = [ gevent ];
 
   };
-  
+
   gevent-websocket = buildPythonPackage rec {
     name = "gevent-websocket-0.9.3";
 
@@ -3306,7 +3306,7 @@ rec {
       url = "http://pypi.python.org/packages/source/g/gunicorn/${name}.tar.gz";
       md5 = "c7138b9ac7515a42066922d2b6120fbe";
     };
-    
+
     buildInputs = [ pytest ];
 
     meta = {
@@ -6134,8 +6134,8 @@ rec {
       homepage = http://docs.python-requests.org/en/latest/;
     };
   };
-  
-  
+
+
   requests2 = buildPythonPackage rec {
     name = "requests-2.2.1";
 
@@ -7036,7 +7036,7 @@ rec {
       md5 = "ecf0738eaf1229bae27ad2be0f9978a8";
     };
   });
-   
+
   sqlalchemy9 = buildPythonPackage rec {
     name = "SQLAlchemy-0.9.3";
 
@@ -7050,7 +7050,7 @@ rec {
     propagatedBuildInputs = [ modules.sqlite3 ];
 
     checkPhase = ''
-      ${python.executable} sqla_nose.py 
+      ${python.executable} sqla_nose.py
     '';
 
     meta = {
@@ -8698,7 +8698,7 @@ rec {
       maintainers = [ stdenv.lib.maintainers.rickynils ];
     };
   };
-  
+
   versiontools = buildPythonPackage rec {
     name = "versiontools-1.9.1";
 
