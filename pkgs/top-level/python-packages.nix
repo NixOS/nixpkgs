@@ -1895,6 +1895,20 @@ rec {
     };
   };
 
+  itsdangerous = buildPythonPackage rec {
+    name = "itsdangerous-0.24";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/i/itsdangerous/${name}.tar.gz";
+      sha256 = "06856q6x675ly542ig0plbqcyab6ksfzijlyf1hzhgg3sgwgrcyb";
+    };
+
+    meta = with stdenv.lib; {
+      description = "helpers to pass trusted data to untrusted environments and back";
+      homepage = "https://pypi.python.org/pypi/itsdangerous/";
+    };
+  };
+
   # TODO: this shouldn't use a buildPythonPackage
   koji = buildPythonPackage (rec {
     name = "koji-1.8";
