@@ -35,5 +35,5 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig python makeWrapper ];
 
-  buildInputs = [ webkit pygtk ];
+  buildInputs = [ gsettings_desktop_schemas webkit pygtk ];
 }
