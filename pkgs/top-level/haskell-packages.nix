@@ -1456,8 +1456,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   mysqlSimple = callPackage ../development/libraries/haskell/mysql-simple {};
 
-  NanoProlog = callPackage ../development/libraries/haskell/NanoProlog {};
-
   nanospec = callPackage ../development/libraries/haskell/nanospec {};
 
   nat = callPackage ../development/libraries/haskell/nat {};
