@@ -10,9 +10,13 @@
 fetchurl ({
   postFetch = ''
     tmpfile="$TMPDIR/${args.sha256}"
-    "${patchutils}/bin/filterdiff" --strip=${toString stripLen} --clean < "$out" > "$tmpfile"
+    "${patchutils}/bin/lsdiff" "$out" \
+      | sort -u | sed -e 's/[*?]/\\&/g' \
+      | xargs -I{} \
+        "${patchutils}/bin/filterdiff" \
+        --include={} \
+        --strip=${toString stripLen} \
+        --clean "$out" > "$tmpfile"
     mv "$tmpfile" "$out"
   '';
-  #ToDo: maybe script sorting by filename, using 'lsdiff' and 'filterdiff -i'.
 } // args)
-
