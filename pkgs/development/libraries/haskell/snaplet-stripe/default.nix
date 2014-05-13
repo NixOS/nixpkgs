@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
     configurator heist mtl snap stripe text textFormat transformers
     xmlhtml
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/LukeHoersten/snaplet-stripe";
     description = "Stripe snaplet for the Snap Framework";
