@@ -716,6 +716,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   carray = callPackage ../development/libraries/haskell/carray {};
 
+  categories = callPackage ../development/libraries/haskell/categories {};
+
   cassava = callPackage ../development/libraries/haskell/cassava {};
 
   caseInsensitive_1_0_0_1 = callPackage ../development/libraries/haskell/case-insensitive/1.0.0.1.nix {};
@@ -803,6 +805,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   comonadTransformers = callPackage ../development/libraries/haskell/comonad-transformers {};
 
   compactStringFix = callPackage ../development/libraries/haskell/compact-string-fix {};
+
+  compdata = callPackage ../development/libraries/haskell/compdata {};
 
   composition = callPackage ../development/libraries/haskell/composition {};
 
@@ -2205,6 +2209,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   recaptcha = callPackage ../development/libraries/haskell/recaptcha {};
 
+  recursionSchemes = callPackage ../development/libraries/haskell/recursion-schemes {};
+
   reducers = callPackage ../development/libraries/haskell/reducers {};
 
   reflection = callPackage ../development/libraries/haskell/reflection {};
@@ -3135,6 +3141,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     Cabal = self.Cabal_1_20_0_0;
   };
   cabalInstall = self.cabalInstall_1_20_0_1;
+
+  codex = callPackage ../development/tools/haskell/codex {};
+
+  hobbes = callPackage ../development/tools/haskell/hobbes {};
 
   gitAnnex = callPackage ../applications/version-management/git-and-tools/git-annex {
     hS3 = self.hS3.override { Crypto = self.Crypto.override { QuickCheck = self.QuickCheck_2_7_3; }; };
