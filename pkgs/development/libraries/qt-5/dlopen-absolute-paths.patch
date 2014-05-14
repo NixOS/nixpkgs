@@ -1,15 +1,15 @@
 diff -ruN qt-everywhere-opensource-src-5.1.1-orig/qtbase/src/network/kernel/qhostinfo_unix.cpp qt-everywhere-opensource-src-5.1.1/qtbase/src/network/kernel/qhostinfo_unix.cpp
 --- qt-everywhere-opensource-src-5.1.1-orig/qtbase/src/network/kernel/qhostinfo_unix.cpp	2013-08-25 20:03:35.000000000 +0200
 +++ qt-everywhere-opensource-src-5.1.1/qtbase/src/network/kernel/qhostinfo_unix.cpp	2013-09-25 17:43:14.047015411 +0200
-@@ -93,7 +93,7 @@
- static void resolveLibrary()
- {
- #if !defined(QT_NO_LIBRARY) && !defined(Q_OS_QNX)
--    QLibrary lib(QLatin1String("resolv"));
-+    QLibrary lib(QLatin1String("@glibc@/lib/libresolv"));
+@@ -103,7 +103,7 @@
      if (!lib.load())
-         return;
- 
+ #endif
+     {
+-        lib.setFileName(QLatin1String("resolv"));
++        lib.setFileName(QLatin1String("@glibc@/lib/libresolv"));
+         if (!lib.load())
+             return;
+     }
 diff -ruN qt-everywhere-opensource-src-5.1.1-orig/qtbase/src/plugins/platforms/xcb/qglxintegration.cpp qt-everywhere-opensource-src-5.1.1/qtbase/src/plugins/platforms/xcb/qglxintegration.cpp
 --- qt-everywhere-opensource-src-5.1.1-orig/qtbase/src/plugins/platforms/xcb/qglxintegration.cpp	2013-08-25 20:03:35.000000000 +0200
 +++ qt-everywhere-opensource-src-5.1.1/qtbase/src/plugins/platforms/xcb/qglxintegration.cpp	2013-09-25 17:51:29.834674976 +0200
