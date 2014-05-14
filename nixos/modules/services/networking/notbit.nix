@@ -1,5 +1,6 @@
 { config, lib, pkgs, ... }:
 
+with pkgs.lib;
 let
   cfg = config.services.notbit;
   varDir = "/var/lib/notbit";
@@ -14,6 +15,10 @@ let
         --set XDG_RUNTIME_DIR ${varDir}
     '';
   };
+  opts = "${optionalString cfg.allowPrivateAddresses "-L"} ${optionalString cfg.noBootstrap "-b"} ${optionalString cfg.specifiedPeersOnly "-e"}";
+  peers = concatStringsSep " " (map (str: "-P \"${str}\"") cfg.peers);
+  listen = if cfg.listenAddress == [] then "-p ${toString cfg.port}" else
+    concatStringsSep " " (map (addr: "-a \"${addr}:${toString cfg.port}\"") cfg.listenAddress);
 in
 
 with lib;
@@ -45,6 +50,38 @@ with lib;
         description = "Set the nice level for the notbit daemon";
       };
 
+      listenAddress = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = [ "localhost" "myhostname" ];
+        description = "The addresses which notbit will use to listen for incoming connections. These addresses are advertised to connecting clients.";
+      };
+
+      peers = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = [ "bitmessage.org:8877" ];
+        description = "The initial set of peers notbit will connect to.";
+      };
+
+      specifiedPeersOnly = mkOption {
+        type = types.uniq types.bool;
+        default = false;
+        description = "If true, notbit will only connect to peers specified by the peers option.";
+      };
+
+      allowPrivateAddresses = mkOption {
+        type = types.uniq types.bool;
+        default = false;
+        description = "If true, notbit will allow connections to to RFC 1918 addresses.";
+      };
+
+      noBootstrap = mkOption {
+        type = types.uniq types.bool;
+        default = false;
+        description = "If true, notbit will not bootstrap an initial peerlist from bitmessage.org servers";
+      };
+
     };
 
   };
@@ -70,7 +107,7 @@ with lib;
 
       serviceConfig = {
         Type = "forking";
-        ExecStart = "${pkgs.notbit}/bin/notbit -d -p ${toString cfg.port}";
+        ExecStart = "${pkgs.notbit}/bin/notbit -d ${listen} ${peers} ${opts}";
         User = "notbit";
         Group = "notbit";
         UMask = "0077";
