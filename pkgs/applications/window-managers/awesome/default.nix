@@ -5,7 +5,7 @@
 , which, dbus, nettools, git, asciidoc, doxygen }:
 
 let
-  version = "3.5.2";
+  version = "3.5.5";
 in
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
  
   src = fetchurl {
     url    = "http://awesome.naquadah.org/download/awesome-${version}.tar.xz";
-    sha256 = "11iya03yzr8sa3snmywlw22ayg0d3dcy49pi8fz0bycf5aq6b38q";
+    sha256 = "0iwd4pjvq0akm9dbipbl4m4fm24m017l06arasr445v2qkbxnc5z";
   };
 
   meta = with stdenv.lib; {
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     xlibs.libXau
     xlibs.libXdmcp
     xlibs.libxcb
+    xlibs.libxshmfence
     xlibs.xcbutil
     xlibs.xcbutilimage
     xlibs.xcbutilkeysyms
@@ -53,8 +54,8 @@ stdenv.mkDerivation rec {
     xlibs.xcbutilwm
   ];
 
-  AWESOME_IGNORE_LGI = 1;
-
+  LD_LIBRARY_PATH = "${cairo}/lib:${pango}/lib:${gobjectIntrospection}/lib";
+  GI_TYPELIB_PATH = "${pango}/lib/girepository-1.0";
   LUA_CPATH = "${lgi}/lib/lua/5.1/?.so";
   LUA_PATH  = "${lgi}/share/lua/5.1/?.lua;${lgi}/share/lua/5.1/lgi/?.lua";
 
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
       --set LUA_CPATH '"${lgi}/lib/lua/5.1/?.so"' \
       --set LUA_PATH '"${lgi}/share/lua/5.1/?.lua;${lgi}/share/lua/5.1/lgi/?.lua"' \
       --set GI_TYPELIB_PATH "${pango}/lib/girepository-1.0" \
-      --set LD_LIBRARY_PATH "${cairo}/lib:${pango}/lib:${gobjectIntrospection}/lib" \
+      --prefix LD_LIBRARY_PATH : "${cairo}/lib:${pango}/lib:${gobjectIntrospection}/lib" \
       --prefix PATH : "${compton}/bin:${unclutter}/bin:${procps}/bin:${iproute}/sbin:${coreutils}/bin:${curl}/bin:${alsaUtils}/bin:${findutils}/bin:${rxvt_unicode}/bin"
 
     wrapProgram $out/bin/awesome-client \
