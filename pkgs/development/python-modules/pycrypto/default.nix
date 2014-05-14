@@ -11,9 +11,12 @@ buildPythonPackage rec {
 
   buildInputs = [ gmp ];
 
+  # error: AF_UNIX path too long
+  doCheck = !stdenv.isDarwin;
+
   meta = {
     homepage = "http://www.pycrypto.org/";
     description = "Python Cryptography Toolkit";
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
