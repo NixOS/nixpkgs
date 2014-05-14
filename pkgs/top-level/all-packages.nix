@@ -775,6 +775,8 @@ let
 
   usb_modeswitch = callPackage ../development/tools/misc/usb-modeswitch { };
 
+  biosdevname = callPackage ../tools/networking/biosdevname { };
+
   clamav = callPackage ../tools/security/clamav { };
 
   cloc = callPackage ../tools/misc/cloc {
