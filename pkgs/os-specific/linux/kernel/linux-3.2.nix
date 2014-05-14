@@ -12,7 +12,7 @@ import ./generic.nix (args // rec {
   # We don't provide these patches if grsecurity is enabled, because
   # the grsec 3.2 -stable patchset already includes them.
   kernelPatches = args.kernelPatches ++ (
-    stdenv.lib.optional (!(args.features.grsecurity or false))
+    stdenv.lib.optionals (!(args.features.grsecurity or false))
       [ { name = "0001-AppArmor-compatibility-patch-for-v5-network-controll";
           patch = ./apparmor-patches/3.2/0001-AppArmor-compatibility-patch-for-v5-network-controll.patch;
         }
