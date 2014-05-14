@@ -8782,6 +8782,8 @@ let
 
   minicom = callPackage ../tools/misc/minicom { };
 
+  minimodem = callPackage ../applications/audio/minimodem { };
+
   minidjvu = callPackage ../applications/graphics/minidjvu { };
 
   mirage = callPackage ../applications/graphics/mirage {};
