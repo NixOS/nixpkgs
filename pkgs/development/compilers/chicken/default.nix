@@ -1,16 +1,16 @@
 { stdenv, fetchurl, devSnapshot ? false }:
 
 let
-  version = if devSnapshot
-    then "4.8.2"
-    else "4.8.0.5";
+  stableVersion = "4.8.0.6";
+  devVersion = "4.9.0rc1";
+  version = if devSnapshot then devVersion else stableVersion;
   srcRelease = fetchurl {
-    url = "http://code.call-cc.org/releases/4.8.0/chicken-4.8.0.5.tar.gz";
-    sha256 = "1yrhqirqj3l535zr5mv8d1mz9gq876wwwg4nsjfw27663far54av";
+    url = "http://code.call-cc.org/releases/4.8.0/chicken-${stableVersion}.tar.gz";
+    sha256 = "0an6l09y9pa6r4crkn33w6l4j6nwhvk6fibx2ajv6h0pfl2jqkd5";
   };
   srcDev = fetchurl {
-    url = "http://code.call-cc.org/dev-snapshots/2013/08/08/chicken-4.8.2.tar.gz";
-    sha256 = "01g7h0664342nl536mnri4c72kwj4z40vmv1250xfndlr218qdqg";
+    url = "http://code.call-cc.org/dev-snapshots/2014/04/17/chicken-${devVersion}.tar.gz";
+    sha256 = "168f5ib02hh6cnilsrfg103ijhlg4j0z0fgs7i55kzd4aggy1w42";
   };
   platform = with stdenv;
     if isDarwin then "macosx"
