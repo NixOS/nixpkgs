@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       cacert cmake ]
     ++ stdenv.lib.optional stdenv.isDarwin pythonPackages.pync;
 
-  NIX_CFLAGS_COMPILE = "-I${python}/include/python2.7";
+  NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix}";
 
   postInstall = ''
     NIX_PYTHONPATH="$out/lib/${python.libPrefix}/site-packages"

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   # then.
   patches = [ ./fix-gnutls-32.diff ];
 
-  NIX_CFLAGS_COMPILE = "-I${python}/include/python2.7";
+  NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix}";
 
   postInstall = ''
     NIX_PYTHONPATH="$out/lib/${python.libPrefix}/site-packages"
