@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   # then.
   patches = [ ./fix-gnutls-32.diff ];
 
+  NIX_CFLAGS_COMPILE = "-I${python}/include/python2.7";
+
   postInstall = ''
        wrapProgram "$out/bin/weechat" \
          --prefix PYTHONPATH : "$PYTHONPATH" \
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.weechat.org/;
     description = "A fast, light and extensible chat client";
     license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ garbas the-kenny ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ lovek323 garbas the-kenny ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }
