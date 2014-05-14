@@ -4713,6 +4713,8 @@ let
 
   gwenhywfar = callPackage ../development/libraries/gwenhywfar { };
 
+  hamlib = callPackage ../development/libraries/hamlib { };
+
   # TODO : Add MIT Kerberos and let admin choose.
   kerberos = heimdal;
 
@@ -8226,6 +8228,8 @@ let
   fetchmail = import ../applications/misc/fetchmail {
     inherit stdenv fetchurl openssl;
   };
+
+  fldigi = callPackage ../applications/audio/fldigi { };
 
   fluidsynth = callPackage ../applications/audio/fluidsynth { };
 

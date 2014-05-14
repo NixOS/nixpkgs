@@ -3319,10 +3319,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExtUtilsMakeMaker = buildPerlPackage rec{
-    name = "ExtUtils-MakeMaker-6.84";
+    name = "ExtUtils-MakeMaker-6.98";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
-      sha256 = "1s3fn1fkm9l6pjhz7dbzsc6nhw1jm2hpf08fqhsqh1h50nj5pv5b";
+      sha256 = "1vv3v9rc2dnx8amwa7lpdywg3lakx7yv2n38qvfbk9jzkqc27c1f";
     };
     propagatedBuildInputs =
       [ ParseCPANMeta version JSONPP CPANMetaYAML CPANMeta
