@@ -3047,6 +3047,8 @@ let
     callPackage_i686 ../development/compilers/mentor {}
   );
 
+  mercury = callPackage ../development/compilers/mercury { };
+
   mitscheme = callPackage ../development/compilers/mit-scheme { };
 
   mlton = callPackage ../development/compilers/mlton { };
