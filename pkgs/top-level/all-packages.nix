@@ -1868,6 +1868,8 @@ let
 
   ripmime = callPackage ../tools/networking/ripmime {};
 
+  rkflashtool = callPackage ../tools/misc/rkflashtool { };
+
   rmlint = callPackage ../tools/misc/rmlint {};
 
   rng_tools = callPackage ../tools/security/rng-tools { };
