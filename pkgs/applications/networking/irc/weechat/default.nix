@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = 
     [ ncurses perl python openssl aspell gnutls zlib curl pkgconfig
       libgcrypt ruby lua5 tcl guile pythonPackages.pycrypto makeWrapper
-      cacert cmake
-    ];
+      cacert cmake ]
+    ++ stdenv.lib.optional stdenv.isDarwin pythonPackages.pync;
 
   # This patch is based on
   # weechat/c324610226cef15ecfb1235113c8243b068084c8. It fixes
@@ -27,9 +27,13 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${python}/include/python2.7";
 
   postInstall = ''
-       wrapProgram "$out/bin/weechat" \
-         --prefix PYTHONPATH : "$PYTHONPATH" \
-         --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages"
+    NIX_PYTHONPATH="$out/lib/${python.libPrefix}/site-packages"
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    NIX_PYTHONPATH+="${pythonPackages.pync}/lib/${python.libPrefix}/site-packages"
+  '' + ''
+     wrapProgram "$out/bin/weechat" \
+       --prefix PYTHONPATH : "$PYTHONPATH" \
+       --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages"
   '';
 
   meta = {
