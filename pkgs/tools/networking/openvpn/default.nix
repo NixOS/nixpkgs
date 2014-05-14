@@ -3,11 +3,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "openvpn-2.3.3";
+  name = "openvpn-2.3.4";
 
   src = fetchurl {
     url = "http://swupdate.openvpn.net/community/releases/${name}.tar.gz";
-    sha256 = "04xiwim56sb1vis93k9hhm1s29jdrlq7i2fa07jncnhh653d29gh";
+    sha256 = "0nn8rrh6jadsydnym69r4s7rm6jzsgxb6p23yb9ai3sn91gnsl5g";
   };
 
   patches = optional stdenv.isLinux ./systemd-notify.patch;
