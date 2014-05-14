@@ -677,6 +677,8 @@ let
     par2Support = (config.bup.par2Support or false);
   };
 
+  ori = callPackage ../tools/backup/ori { };
+
   atool = callPackage ../tools/archivers/atool { };
 
   bzip2 = callPackage ../tools/compression/bzip2 { };
