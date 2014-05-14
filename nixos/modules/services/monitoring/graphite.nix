@@ -184,6 +184,7 @@ in {
         ExecStart = "${pkgs.twisted}/bin/twistd ${carbonOpts "carbon-cache"}";
         User = "graphite";
         Group = "graphite";
+        PermissionsStartOnly = true;
       };
       restartTriggers = [
         pkgs.pythonPackages.carbon
@@ -193,8 +194,9 @@ in {
         cfg.carbon.rewriteRules
       ];
       preStart = ''
-        mkdir -m 0700 -p ${cfg.dataDir}/whisper
-        if [ "$(id -u)" = 0 ]; then chown -R graphite:graphite ${cfg.dataDir}; fi
+        mkdir -p ${cfg.dataDir}/whisper
+        chmod 0700 ${cfg.dataDir}/whisper
+        chown -R graphite:graphite ${cfg.dataDir}
       '';
     };
 
@@ -235,6 +237,7 @@ in {
       description = "Graphite Web Interface";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
+      path = [ pkgs.perl ];
       environment = {
         PYTHONPATH = "${pkgs.python27Packages.graphite_web}/lib/python2.7/site-packages";
         DJANGO_SETTINGS_MODULE = "graphite.settings";
@@ -248,11 +251,12 @@ in {
           --call django.core.handlers.wsgi:WSGIHandler'';
         User = "graphite";
         Group = "graphite";
+        PermissionsStartOnly = true;
       };
       preStart = ''
         if ! test -e ${dataDir}/db-created; then
-          mkdir -m 0700 -p ${dataDir}/{whisper/,log/webapp/}
-          if [ "$(id -u)" = 0 ]; then chown -R graphite:graphite ${cfg.dataDir}; fi
+          mkdir -p ${dataDir}/{whisper/,log/webapp/}
+          chmod 0700 ${dataDir}/{whisper/,log/webapp/}
 
           # populate database
           ${pkgs.python27Packages.graphite_web}/bin/manage-graphite.py syncdb --noinput
@@ -261,6 +265,8 @@ in {
           ${pkgs.python27Packages.graphite_web}/bin/build-index.sh
 
           touch ${dataDir}/db-created
+
+          chown -R graphite:graphite ${cfg.dataDir}
         fi
       '';
       restartTriggers = [
