@@ -512,9 +512,11 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   aes = callPackage ../development/libraries/haskell/aes {};
 
-  aeson = callPackage ../development/libraries/haskell/aeson {
+  aeson_0_6_2_1 = callPackage ../development/libraries/haskell/aeson/0.6.2.1.nix {};
+  aeson_0_7_0_3 = callPackage ../development/libraries/haskell/aeson/0.7.0.3.nix {
     blazeBuilder = if (pkgs.stdenv.lib.versionOlder ghc.version "7.6") then self.blazeBuilder else null;
   };
+  aeson = self.aeson_0_7_0_3;
 
   aesonPretty = callPackage ../development/libraries/haskell/aeson-pretty {};
 
@@ -2600,7 +2602,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   thyme = callPackage ../development/libraries/haskell/thyme {};
 
-  threepennyGui = callPackage ../development/libraries/haskell/threepenny-gui {};
+  threepennyGui = callPackage ../development/libraries/haskell/threepenny-gui {
+    aeson = self.aeson_0_6_2_1;
+  };
 
   time_1_1_2_4 = callPackage ../development/libraries/haskell/time/1.1.2.4.nix {};
   time_1_4_2 = callPackage ../development/libraries/haskell/time/1.4.2.nix {};
