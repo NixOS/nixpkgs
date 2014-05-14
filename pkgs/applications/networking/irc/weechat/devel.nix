@@ -3,14 +3,14 @@
 , pythonPackages, cacert, cmake, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  rev = "85b8e0d82bf99ca2c55a87482ee40b3043df14db";
-  version = "0.4.4-rev${rev}";
+  rev = "70d2b0ad8eb7854932d24c007a05b8627f751205";
+  version = "1.0-rev${rev}";
   name = "weechat-${version}";
 
   src = fetchgit {
     inherit rev;
-    url    = "git://github.com/weechat/weechat.git";
-    sha256 = "0kzsar7gmw2sgkdzcspg65prii8skpaqxvdyvas2a29dr07j2gnl";
+    url = "git://github.com/weechat/weechat.git";
+    sha256 = "1k7kcrq46anq87r14sq3vrhij8acn6id7zxyhn0qnjj2wqgrjp5i";
   };
 
   buildInputs = 
@@ -22,13 +22,13 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix}";
 
   postInstall = ''
-    NIX_PYTHONPATH="$out/lib/${python.libPrefix}/site-packages"
+    NIX_PYTHON_PATH="$out/lib/${python.libPrefix}/site-packages"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    NIX_PYTHONPATH+="${pythonPackages.pync}/lib/${python.libPrefix}/site-packages"
+    NIX_PYTHON_PATH+="${pythonPackages.pync}/lib/${python.libPrefix}/site-packages"
   '' + ''
      wrapProgram "$out/bin/weechat" \
        --prefix PYTHONPATH : "$PYTHONPATH" \
-       --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages"
+       --prefix PYTHONPATH : "$NIX_PYTHONPATH"
   '';
 
   meta = {

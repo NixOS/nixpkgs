@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '' + ''
      wrapProgram "$out/bin/weechat" \
        --prefix PYTHONPATH : "$PYTHONPATH" \
-       --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages"
+       --prefix PYTHONPATH : "$NIX_PYTHONPATH"
   '';
 
   meta = {
