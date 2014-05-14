@@ -53,7 +53,7 @@ with lib;
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.notbit sendmail ];
+    environment.systemPackages = [ sendmail ];
 
     systemd.services.notbit = {
       description = "Notbit daemon";
