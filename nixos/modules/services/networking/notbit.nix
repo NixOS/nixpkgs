@@ -35,7 +35,7 @@ with lib;
 
       port = mkOption {
         type = types.uniq types.int;
-        default = 8443;
+        default = 8444;
         description = "The port which the daemon listens for other bitmessage clients";
       };
 
