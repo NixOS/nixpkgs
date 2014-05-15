@@ -2091,6 +2091,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   temporary = callPackage ../development/libraries/haskell/temporary {};
 
+  temporaryRc = callPackage ../development/libraries/haskell/temporary-rc {};
+
   Tensor = callPackage ../development/libraries/haskell/Tensor {};
 
   terminalProgressBar = callPackage ../development/libraries/haskell/terminal-progress-bar {};
