@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "fay-text";
-  version = "0.3.0.1";
-  sha256 = "1bwsnhrj94j8jks5nhb0al8mymcgn2lp1pj9q7n935ygkzsaasbm";
+  version = "0.3.0.2";
+  sha256 = "12hgamqbrflmnr3ri0ajvzf6al5nn4adcdmv6ag6h5mrsik2sklf";
   buildDepends = [ fay fayBase text ];
   meta = {
     homepage = "https://github.com/faylang/fay-text";
