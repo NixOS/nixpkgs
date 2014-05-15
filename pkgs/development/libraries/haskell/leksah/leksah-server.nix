@@ -1,20 +1,21 @@
-{ cabal, attoparsec, attoparsecEnumerator, binary, binaryShared
-, Cabal, deepseq, enumerator, filepath, haddock, hslogger, HUnit
-, ltk, network, parsec, processLeksah, strict, time, transformers
+{ cabal, attoparsec, attoparsecConduit, binary, binaryShared, Cabal
+, conduit, deepseq, executablePath, filepath, haddock, hslogger
+, HUnit, ltk, network, parsec, processLeksah, strict, text, time
+, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "leksah-server";
-  version = "0.12.1.2";
-  sha256 = "0fzfyq1g1jrfl40nklgvkahlcv32m4gjbcyw52dky2qzc05b0g6m";
+  version = "0.13.1.0";
+  sha256 = "11dggg9zaf7fhh8s6bc3dwr4b1qk7k5bj429i1vvqhrxc6968yjb";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    attoparsec attoparsecEnumerator binary binaryShared Cabal deepseq
-    enumerator filepath haddock hslogger ltk network parsec
-    processLeksah strict time transformers
+    attoparsec attoparsecConduit binary binaryShared Cabal conduit
+    deepseq executablePath filepath haddock hslogger ltk network parsec
+    processLeksah strict text time transformers
   ];
-  testDepends = [ enumerator hslogger HUnit transformers ];
+  testDepends = [ conduit hslogger HUnit transformers ];
   meta = {
     homepage = "http://leksah.org";
     description = "Metadata collection for leksah";
