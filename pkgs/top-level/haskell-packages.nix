@@ -2132,8 +2132,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   text_0_11_2_0 = callPackage ../development/libraries/haskell/text/0.11.2.0.nix {};
   text_0_11_2_3 = callPackage ../development/libraries/haskell/text/0.11.2.3.nix {};
   text_0_11_3_1 = callPackage ../development/libraries/haskell/text/0.11.3.1.nix {};
-  text_1_1_1_1 = callPackage ../development/libraries/haskell/text/1.1.1.1.nix {};
-  text = self.text_1_1_1_1;
+  text_1_1_1_2 = callPackage ../development/libraries/haskell/text/1.1.1.2.nix {};
+  text = self.text_1_1_1_2;
 
   textFormat = callPackage ../development/libraries/haskell/text-format {};
 
