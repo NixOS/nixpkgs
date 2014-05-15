@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ex-pool";
-  version = "0.1.0.2";
-  sha256 = "11q63yfr59r6cfzi635xj75nhcc2yi83snc75k638wyamxgvxng4";
+  version = "0.2";
+  sha256 = "0da5grl2fdca24zhlngq2n16smdb4f5vvxqzc29ipsc3j7wkbmva";
   buildDepends = [
     exceptions hashable stm time transformers vector
   ];
