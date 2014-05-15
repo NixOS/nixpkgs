@@ -3333,6 +3333,8 @@ let
 
     ocaml_ssl = callPackage ../development/ocaml-modules/ssl { };
 
+    ocaml_text = callPackage ../development/ocaml-modules/ocaml-text { };
+
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
     ulex = callPackage ../development/ocaml-modules/ulex { };
