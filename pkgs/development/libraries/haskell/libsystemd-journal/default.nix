@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "libsystemd-journal";
-  version = "1.1.0";
-  sha256 = "0zdql5y40d0d044mwbsr3xxmfzgnnp02a36wbbslxmrm5c3w1qi2";
+  version = "1.2.0";
+  sha256 = "10gsqcy5f7m6f0giqhfcqspb17b3gyib4cpw5nrdl7hiah13hi7x";
   buildDepends = [
     hashable hsyslog pipes pipesSafe text transformers uniplate
     unixBytestring unorderedContainers uuid vector
