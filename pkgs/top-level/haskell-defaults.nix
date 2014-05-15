@@ -26,16 +26,16 @@
         haskellPackages = self.haskellPackages.override { Cabal = self.Cabal_1_18_1_3; };
       };
     };
-    binaryConduit = super.binaryConduit.override { binary = self.binary_0_7_0_1; };
-    bson = super.bson.override { dataBinaryIeee754 = self.dataBinaryIeee754.override { binary = self.binary_0_7_0_1; }; };
+    binaryConduit = super.binaryConduit.override { binary = self.binary_0_7_2_0; };
+    bson = super.bson.override { dataBinaryIeee754 = self.dataBinaryIeee754.override { binary = self.binary_0_7_2_0; }; };
     criterion = super.criterion.override {
       statistics = self.statistics.override {
-        vectorBinaryInstances = self.vectorBinaryInstances.override { binary = self.binary_0_7_0_1; };
+        vectorBinaryInstances = self.vectorBinaryInstances.override { binary = self.binary_0_7_2_0; };
       };
     };
     gloss = null;                       # requires base >= 4.7
     haddock = self.haddock_2_13_2;
-    pipesBinary = super.pipesBinary.override { binary = self.binary_0_7_0_1; };
+    pipesBinary = super.pipesBinary.override { binary = self.binary_0_7_2_0; };
     transformers = self.transformers_0_4_1_0;
   };
 
@@ -54,7 +54,7 @@
   };
 
   ghc704Prefs = self : super : ghc722Prefs self super // {
-    binary = self.binary_0_7_0_1;       # core package in ghc >= 7.2.2
+    binary = self.binary_0_7_2_0;       # core package in ghc >= 7.2.2
     haddock = self.haddock_2_9_2.override { alex = self.alex_2_3_5; };
     HsSyck = self.HsSyck_0_51;
     jailbreakCabal = super.jailbreakCabal.override { Cabal = self.Cabal_1_16_0_3; };

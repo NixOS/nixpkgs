@@ -227,7 +227,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   bimap = callPackage ../development/libraries/haskell/bimap {};
 
-  binary_0_7_0_1 = callPackage ../development/libraries/haskell/binary/0.7.1.0.nix {};
+  binary_0_7_2_0 = callPackage ../development/libraries/haskell/binary/0.7.2.0.nix {};
   binary = null;                # core package since ghc >= 7.2.x
 
   binaryConduit = callPackage ../development/libraries/haskell/binary-conduit {};
@@ -269,7 +269,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   bloomfilter = callPackage ../development/libraries/haskell/bloomfilter {};
 
   bmp = callPackage ../development/libraries/haskell/bmp {
-    binary = self.binary_0_7_0_1;
+    binary = self.binary_0_7_2_0;
   };
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
@@ -1356,7 +1356,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   minimorph = callPackage ../development/libraries/haskell/minimorph {};
 
   miniutter = callPackage ../development/libraries/haskell/miniutter {
-    binary = self.binary_0_7_0_1;
+    binary = self.binary_0_7_2_0;
   };
 
   mimeMail = callPackage ../development/libraries/haskell/mime-mail {};
@@ -2688,7 +2688,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   LambdaHack = callPackage ../games/LambdaHack {
     vectorBinaryInstances = self.vectorBinaryInstances.override {
-      binary = self.binary_0_7_0_1; # the miniutter build input requires this version
+      binary = self.binary_0_7_2_0; # the miniutter build input requires this version
     };
   };
 
