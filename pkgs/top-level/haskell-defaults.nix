@@ -36,9 +36,8 @@
     };
     gloss = null;                       # requires base >= 4.7
     haddock = self.haddock_2_13_2;
-    mtl = self.mtl_2_2_0_1;
     pipesBinary = super.pipesBinary.override { binary = self.binary_0_7_2_0; };
-    transformers = self.transformers_0_4_1_0;
+    transformers = self.transformers_0_3_0_0; # core packagen in ghc > 7.6.x
   };
 
   ghc742Prefs = self : super : ghc763Prefs self super // {
