@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
     bifunctors comonad distributive mtl preludeExtras profunctors
     semigroupoids semigroups transformers
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/ekmett/free/";
     description = "Monads for free";
