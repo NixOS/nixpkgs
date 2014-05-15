@@ -698,6 +698,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   fayBase = callPackage ../development/libraries/haskell/fay-base {};
 
+  fayText = callPackage ../development/libraries/haskell/fay-text {};
+
   fdoNotify = callPackage ../development/libraries/haskell/fdo-notify {};
 
   filepath_1_3_0_2 = callPackage ../development/libraries/haskell/filepath/1.3.0.2.nix {};
