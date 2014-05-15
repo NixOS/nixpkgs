@@ -236,6 +236,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   bindingsDSL = callPackage ../development/libraries/haskell/bindings-DSL {};
 
+  bindingsGLFW = callPackage ../development/libraries/haskell/bindings-GLFW {};
+
   bindingsLibusb = callPackage ../development/libraries/haskell/bindings-libusb {
     libusb = pkgs.libusb1;
   };
@@ -820,6 +822,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   };
 
   GLFW = callPackage ../development/libraries/haskell/GLFW {};
+
+  GLFWb = callPackage ../development/libraries/haskell/GLFW-b {};
 
   glib = callPackage ../development/libraries/haskell/glib {
     glib = pkgs.glib;
