@@ -36,6 +36,7 @@
     };
     gloss = null;                       # requires base >= 4.7
     haddock = self.haddock_2_13_2;
+    modularArithmetic = null;           # requires base >= 4.7
     pipesBinary = super.pipesBinary.override { binary = self.binary_0_7_2_0; };
     transformers = self.transformers_0_3_0_0; # core packagen in ghc > 7.6.x
   };
