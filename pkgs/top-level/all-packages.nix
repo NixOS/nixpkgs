@@ -3297,6 +3297,8 @@ let
 
     camlp5_transitional = camlp5_6_transitional;
 
+    calendar = callPackage ../development/ocaml-modules/calendar { };
+
     camlzip = callPackage ../development/ocaml-modules/camlzip { };
 
     camomile_0_8_2 = callPackage ../development/ocaml-modules/camomile/0.8.2.nix { };
