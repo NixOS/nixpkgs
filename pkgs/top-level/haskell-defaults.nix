@@ -15,6 +15,7 @@
   # Older compilers inherit the overrides from newer ones.
 
   ghcHEADPrefs = self : super : super // {
+    mtl = self.mtl_2_1_3_1;
   };
 
   ghc782Prefs = self : super : ghcHEADPrefs self super // {
@@ -35,6 +36,7 @@
     };
     gloss = null;                       # requires base >= 4.7
     haddock = self.haddock_2_13_2;
+    mtl = self.mtl_2_2_0_1;
     pipesBinary = super.pipesBinary.override { binary = self.binary_0_7_2_0; };
     transformers = self.transformers_0_4_1_0;
   };

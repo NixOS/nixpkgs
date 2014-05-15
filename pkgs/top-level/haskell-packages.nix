@@ -1431,7 +1431,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   mtl_2_1_1 = callPackage ../development/libraries/haskell/mtl/2.1.1.nix {};
   mtl_2_1_2 = callPackage ../development/libraries/haskell/mtl/2.1.2.nix {};
   mtl_2_1_3_1 = callPackage ../development/libraries/haskell/mtl/2.1.3.1.nix {};
-  mtl = self.mtl_2_1_3_1;
+  mtl_2_2_0_1 = callPackage ../development/libraries/haskell/mtl/2.2.0.1.nix {};
+  mtl = null; # tightly coupled with 'transformers' which is a core package
 
   mtlparse = callPackage ../development/libraries/haskell/mtlparse {};
 
