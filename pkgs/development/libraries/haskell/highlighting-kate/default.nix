@@ -9,8 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     blazeHtml filepath mtl parsec regexPcre utf8String
   ];
-  jailbreak = true;
-  prePatch = "sed -i -e 's|regex-pcre-builtin|regex-pcre|' highlighting-kate.cabal";
+  prePatch = "sed -i -e 's|regex-pcre-builtin >= .*|regex-pcre|' highlighting-kate.cabal";
   meta = {
     homepage = "http://github.com/jgm/highlighting-kate";
     description = "Syntax highlighting";
