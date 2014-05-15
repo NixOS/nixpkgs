@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
     HUnit mtl network pureMD5 split testFramework testFrameworkHunit
     wai warp
   ];
+  doCheck = false;
   noHaddock = self.stdenv.lib.versionOlder self.ghc.version "6.11";
   meta = {
     homepage = "https://github.com/haskell/HTTP";
