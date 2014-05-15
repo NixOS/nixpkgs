@@ -1,9 +1,10 @@
-{ cabal }:
+{ cabal, hashable }:
 
 cabal.mkDerivation (self: {
   pname = "nats";
-  version = "0.1.3";
-  sha256 = "1kh7wvgjqq39f0dp2pnbazvr1zp6anb1ksgx3q1m1x0qgxkj0xxz";
+  version = "0.2";
+  sha256 = "05skqs5ahbrnwlsxjihkvmsw0n49k9mqdhrv9nqh4dmd1j622r73";
+  buildDepends = [ hashable ];
   meta = {
     homepage = "http://github.com/ekmett/nats/";
     description = "Natural numbers";
