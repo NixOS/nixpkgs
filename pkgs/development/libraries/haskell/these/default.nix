@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
     bifunctors mtl profunctors semigroupoids semigroups transformers
     vector
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/isomorphism/these";
     description = "An either-or-both data type, with corresponding hybrid error/writer monad transformer";
