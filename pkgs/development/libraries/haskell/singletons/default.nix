@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "singletons";
-  version = "0.10.0";
-  sha256 = "14vnkw9ihrs3xg3lhb3wkyfz59lsaz4c3iqh3hqy7x9gmifgggwr";
+  version = "1.0";
+  sha256 = "1rd1728wghhqlg2djd7az8i01rf4i3wwwcnz2v43a39jjvhlklkg";
   buildDepends = [ mtl thDesugar ];
   testDepends = [ Cabal constraints filepath tasty tastyGolden ];
   noHaddock = true;
