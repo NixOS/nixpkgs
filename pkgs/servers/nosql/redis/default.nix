@@ -12,10 +12,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://redis.io;
     description = "An open source, advanced key-value store";
     license = "BSD";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.berdario ];
   };
 }
