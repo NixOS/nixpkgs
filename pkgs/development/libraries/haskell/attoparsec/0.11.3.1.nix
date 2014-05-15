@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     QuickCheck testFramework testFrameworkQuickcheck2 text
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/bos/attoparsec";
     description = "Fast combinator parsing for bytestrings and text";
