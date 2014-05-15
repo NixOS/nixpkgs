@@ -1446,9 +1446,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   multirec = callPackage ../development/libraries/haskell/multirec {};
 
-  multiset_0_2_1 = callPackage ../development/libraries/haskell/multiset/0.2.1.nix {};
-  multiset_0_2_2 = callPackage ../development/libraries/haskell/multiset/0.2.2.nix {};
-  multiset = self.multiset_0_2_2;
+  multiset = callPackage ../development/libraries/haskell/multiset {};
 
   murmurHash = callPackage ../development/libraries/haskell/murmur-hash {};
 
