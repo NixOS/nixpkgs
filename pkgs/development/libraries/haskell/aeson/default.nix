@@ -16,6 +16,9 @@ cabal.mkDerivation (self: {
     attoparsec HUnit QuickCheck testFramework testFrameworkHunit
     testFrameworkQuickcheck2 text time unorderedContainers vector
   ];
+  patchPhase = ''
+    sed -i -e 's|scientific >=.*,|scientific,|' aeson.cabal
+  '';
   meta = {
     homepage = "https://github.com/bos/aeson";
     description = "Fast JSON parsing and encoding";
