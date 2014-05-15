@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     comonad free semigroupoids semigroups transformers
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/ekmett/keys/";
     description = "Keyed functors and containers";
