@@ -190,8 +190,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   attoLisp = callPackage ../development/libraries/haskell/atto-lisp {};
 
   attoparsec_0_10_4_0 = callPackage ../development/libraries/haskell/attoparsec/0.10.4.0.nix {};
-  attoparsec_0_11_3_0 = callPackage ../development/libraries/haskell/attoparsec/0.11.3.0.nix {};
-  attoparsec = self.attoparsec_0_11_3_0;
+  attoparsec_0_11_3_1 = callPackage ../development/libraries/haskell/attoparsec/0.11.3.1.nix {};
+  attoparsec = self.attoparsec_0_11_3_1;
 
   attoparsecBinary = callPackage ../development/libraries/haskell/attoparsec-binary {};
 
@@ -2372,10 +2372,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   word8 = callPackage ../development/libraries/haskell/word8 {};
 
   wreq = callPackage ../development/libraries/haskell/wreq {
-    aeson = self.aeson.override { attoparsec = self.attoparsec_0_11_3_0; };
-    attoparsec = self.attoparsec_0_11_3_0;
+    aeson = self.aeson.override { attoparsec = self.attoparsec_0_11_3_1; };
+    attoparsec = self.attoparsec_0_11_3_1;
     lens = self.lens.override {
-      aeson = self.aeson.override { attoparsec = self.attoparsec_0_11_3_0; };
+      aeson = self.aeson.override { attoparsec = self.attoparsec_0_11_3_1; };
     };
   };
 

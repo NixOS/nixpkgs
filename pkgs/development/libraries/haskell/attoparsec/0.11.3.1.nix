@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "attoparsec";
-  version = "0.11.3.0";
-  sha256 = "1vnkm5pf0a381is4i0zyi41p4jv184lqpv1z9aadsnavpg0841qs";
+  version = "0.11.3.1";
+  sha256 = "0mmyab3a9mgmfxj1kc7xgxkmmcdj90ph9nzniv7bf2vyf8vhvirl";
   buildDepends = [ deepseq scientific text ];
   testDepends = [
     QuickCheck testFramework testFrameworkQuickcheck2 text
