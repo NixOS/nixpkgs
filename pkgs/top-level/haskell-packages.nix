@@ -527,6 +527,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   dataLens = callPackage ../development/libraries/haskell/data-lens {};
 
+  dataLensLight = callPackage ../development/libraries/haskell/data-lens-light {};
+
   dataLensTemplate = callPackage ../development/libraries/haskell/data-lens-template {};
 
   dataMemocombinators = callPackage ../development/libraries/haskell/data-memocombinators {};
