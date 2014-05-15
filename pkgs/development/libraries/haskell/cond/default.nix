@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cond";
-  version = "0.4.0.2";
-  sha256 = "13m7bcsx4nch767kf9wza0vqql711b8vjd3m5cahrvb7xbh3g593";
+  version = "0.4.1";
+  sha256 = "16xk8clsxv5qi5f745xvs44y8p8dnmlmjkjzwqz9jl8fbmkmki3b";
   meta = {
     homepage = "https://github.com/kallisti-dev/cond";
     description = "Basic conditional and boolean operators with monadic variants";
