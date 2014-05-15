@@ -919,8 +919,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   happstackFastCGI = callPackage ../development/libraries/haskell/happstack/happstack-fastcgi.nix {};
 
   hashable_1_1_2_5 = callPackage ../development/libraries/haskell/hashable/1.1.2.5.nix {};
-  hashable_1_2_1_0 = callPackage ../development/libraries/haskell/hashable/1.2.1.0.nix {};
-  hashable = self.hashable_1_2_1_0;
+  hashable_1_2_2_0 = callPackage ../development/libraries/haskell/hashable/1.2.2.0.nix {};
+  hashable = self.hashable_1_2_2_0;
 
   hashedStorage = callPackage ../development/libraries/haskell/hashed-storage {};
 
