@@ -5,6 +5,7 @@ cabal.mkDerivation (self: {
   version = "0.5.2.0";
   sha256 = "065gxljrjw59rdf7abq0v0c29wg1ymg984ckixnjrcs1yks0c2js";
   buildDepends = [ deepseq ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/michalt/enummapset";
     description = "IntMap and IntSet with Enum keys/elements";
