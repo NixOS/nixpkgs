@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "monadLib";
-  version = "3.7.2";
-  sha256 = "01s7jfwzr4jmwz1k4bkxi38q8v364vg6fnn77n5v8zpbimcv3rds";
+  version = "3.7.3";
+  sha256 = "17m9rj6spr5n9jlhwwvk8p40yrpwgz3j9kj3pjq7mpyrc1ssfd0q";
   meta = {
     homepage = "http://wiki.github.com/yav/monadlib";
     description = "A collection of monad transformers";
