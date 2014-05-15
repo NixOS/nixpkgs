@@ -1468,9 +1468,7 @@ let
 
   modemmanager = callPackage ../tools/networking/modemmanager {};
 
-  monit = builderDefsPackage ../tools/system/monit {
-    inherit openssl flex bison;
-  };
+  monit = callPackage ../tools/system/monit { };
 
   mosh = callPackage ../tools/networking/mosh {
     boost = boostHeaders;
