@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
     comonad dataDefaultClass semigroupoids semigroups stm tagged
     transformers
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/ekmett/pointed/";
     description = "Pointed and copointed data";
