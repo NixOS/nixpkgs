@@ -700,11 +700,11 @@ let
   })) // {inherit fixesproto libX11 xextproto xproto ;};
 
   libXfont = (stdenv.mkDerivation ((if overrides ? libXfont then overrides.libXfont else x: x) {
-    name = "libXfont-1.4.7";
+    name = "libXfont-1.4.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXfont-1.4.7.tar.bz2;
-      sha256 = "0hqm3nainxpc0922i4zbwzc768f69zkdf1gvkjqrdlim31aa6vni";
+      url = mirror://xorg/individual/lib/libXfont-1.4.8.tar.bz2;
+      sha256 = "01fh2hnnaby8x6mv57x78nsqwhls70gwykldzd8b43vrpzzd8s2m";
     };
     buildInputs = [pkgconfig libfontenc fontsproto freetype xproto xtrans zlib ];
   })) // {inherit libfontenc fontsproto freetype xproto xtrans zlib ;};
