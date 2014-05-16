@@ -3730,6 +3730,8 @@ let
      wrapGCC (ccache.links extraConfig)) {};
   ccacheStdenv = lowPrio (overrideGCC stdenv ccacheWrapper);
 
+  cccc = callPackage ../development/tools/analysis/cccc { };
+
   cgdb = callPackage ../development/tools/misc/cgdb { };
 
   chromedriver = callPackage ../development/tools/selenium/chromedriver { gconf = gnome.GConf; };
