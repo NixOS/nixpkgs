@@ -6984,6 +6984,8 @@ let
 
   htop = callPackage ../os-specific/linux/htop { };
 
+  htop_osx = callPackage ../os-specific/darwin/htop { };
+
   # GNU/Hurd core packages.
   gnu = recurseIntoAttrs (callPackage ../os-specific/gnu {
     inherit platform crossSystem;
