@@ -122,6 +122,14 @@ let
         '';
       };
 
+      requireWheel = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to permit root access only to members of group wheel.
+        '';
+      };
+
       limits = mkOption {
         description = ''
           Attribute set describing resource limits.  Defaults to the
@@ -184,6 +192,8 @@ let
           # Authentication management.
           ${optionalString cfg.rootOK
               "auth sufficient pam_rootok.so"}
+          ${optionalString cfg.requireWheel
+              "auth required pam_wheel.so use_uid"}
           ${optionalString cfg.logFailures
               "auth required pam_tally.so"}
           ${optionalString (config.security.pam.enableSSHAgentAuth && cfg.sshAgentAuth)
