@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "blender-2.70";
+  name = "blender-2.70a";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "0j73yfpavcrzg5v54kcha7sig6179g5ykrlhih8d288pnb5c7596";
+    sha256 = "1rgkijn1nirj3jwh058zv6piw8q4j5wwjapgbvh2hh6fpbj84bgb";
   };
 
   buildInputs = [
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     "-DPYTHON_LIBRARY=python${python.majorVersion}m"    
     "-DPYTHON_LIBPATH=${python}/lib"
     "-DPYTHON_INCLUDE_DIR=${python}/include/python${python.majorVersion}m"
+    "-DPYTHON_VERSION=${python.majorVersion}"
   ];
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR -I${python}/include/${python.libPrefix}m";
