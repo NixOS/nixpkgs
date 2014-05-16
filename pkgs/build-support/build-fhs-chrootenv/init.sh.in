@@ -36,9 +36,9 @@ rm $chrootenvDest/etc/pam.d
 ln -s ../host-etc/static/pam.d $chrootenvDest/etc/pam.d
 
 # Symlink Font stuff
-mkdir $chrootenvDest/etc/fonts
+mkdir -p $chrootenvDest/etc/fonts
 ln -s ../../host-etc/static/fonts/fonts.conf $chrootenvDest/etc/fonts
-mkdir $chrootenvDest/etc/fonts/conf.d
+mkdir -p $chrootenvDest/etc/fonts/conf.d
 ln -s ../../../host-etc/static/fonts/conf.d/00-nixos.conf $chrootenvDest/etc/fonts/conf.d
 
 # Create root folder
