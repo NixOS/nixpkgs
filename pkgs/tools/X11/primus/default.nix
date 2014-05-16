@@ -1,3 +1,8 @@
+# For a 64bit + 32bit system the LD_LIBRARY_PATH must contain both the 32bit and 64bit primus
+# libraries. Providing a different primusrun for each architecture does not work as expected. Using
+# steam under wine, for instance, can involve both 32bit and 64bit process. All of which inherit the
+# same LD_LIBRARY_PATH.
+# Other distributions do much the same.
 { stdenv
 , primusLib
 , writeScript
