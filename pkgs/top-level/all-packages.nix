@@ -6073,6 +6073,10 @@ let
 
   ucommon = callPackage ../development/libraries/ucommon { };
 
+  v8 = callPackage ../development/libraries/v8 {
+    inherit (pythonPackages) gyp;
+  };
+
   vaapiIntel = callPackage ../development/libraries/vaapi-intel { };
 
   vaapiVdpau = callPackage ../development/libraries/vaapi-vdpau { };
@@ -6184,6 +6188,8 @@ let
 
   xmlrpc_c = callPackage ../development/libraries/xmlrpc-c { };
 
+  xmlsec = callPackage ../development/libraries/xmlsec { };
+
   xvidcore = callPackage ../development/libraries/xvidcore { };
 
   yajl = callPackage ../development/libraries/yajl { };
@@ -6205,6 +6211,8 @@ let
   zeromq2 = callPackage ../development/libraries/zeromq/2.x.nix {};
   zeromq3 = callPackage ../development/libraries/zeromq/3.x.nix {};
   zeromq4 = callPackage ../development/libraries/zeromq/4.x.nix {};
+
+  zziplib = callPackage ../development/libraries/zziplib { };
 
 
   ### DEVELOPMENT / LIBRARIES / JAVA
@@ -6266,14 +6274,6 @@ let
   swt = callPackage ../development/libraries/java/swt {
     inherit (gnome) libsoup;
   };
-
-  v8 = callPackage ../development/libraries/v8 {
-    inherit (pythonPackages) gyp;
-  };
-
-  xmlsec = callPackage ../development/libraries/xmlsec { };
-
-  zziplib = callPackage ../development/libraries/zziplib { };
 
 
   ### DEVELOPMENT / LIBRARIES / JAVASCRIPT
