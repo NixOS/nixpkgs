@@ -3381,6 +3381,8 @@ let
 
     ocaml_oasis = callPackage ../development/tools/ocaml/oasis { };
 
+    ocaml_optcomp = callPackage ../development/ocaml-modules/optcomp { };
+
     ocaml_pcre = callPackage ../development/ocaml-modules/pcre {
       inherit pcre;
     };
