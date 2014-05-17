@@ -74,8 +74,10 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional syslog "--add-module=${syslog-ext}"
     ++ stdenv.lib.optional moreheaders "--add-module=${moreheaders-ext}";
 
+  additionalFlags = stdenv.lib.optionalString stdenv.isDarwin "-Wno-error=deprecated-declarations";
+
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2}/include/libxml2"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2}/include/libxml2 $additionalFlags"
   '';
 
   postInstall = ''
