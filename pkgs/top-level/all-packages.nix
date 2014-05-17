@@ -4263,6 +4263,8 @@ let
 
   ctl = callPackage ../development/libraries/ctl { };
 
+  cpp-netlib = callPackage ../development/libraries/cpp-netlib { };
+
   cppunit = callPackage ../development/libraries/cppunit { };
 
   cppnetlib = callPackage ../development/libraries/cppnetlib {
