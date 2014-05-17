@@ -1256,8 +1256,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   lazysmallcheck = callPackage ../development/libraries/haskell/lazysmallcheck {};
 
-  leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {};
-
   lens = callPackage ../development/libraries/haskell/lens {};
 
   lensDatetime = callPackage ../development/libraries/haskell/lens-datetime {};
@@ -1317,8 +1315,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   llvmGeneralPure = self.llvmGeneralPure_3_4_2_2;
 
   lrucache = callPackage ../development/libraries/haskell/lrucache {};
-
-  ltk = callPackage ../development/libraries/haskell/ltk {};
 
   lockfreeQueue = callPackage ../development/libraries/haskell/lockfree-queue {};
 
@@ -1704,8 +1700,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   processConduit = callPackage ../development/libraries/haskell/process-conduit {};
 
   processExtras = callPackage ../development/libraries/haskell/process-extras {};
-
-  processLeksah = callPackage ../development/libraries/haskell/leksah/process-leksah.nix {};
 
   prolog = callPackage ../development/libraries/haskell/prolog {};
   prologGraphLib = callPackage ../development/libraries/haskell/prolog-graph-lib {};
@@ -2589,8 +2583,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   };
 
   idris = callPackage ../development/compilers/idris/wrapper.nix {};
-
-  leksah = callPackage ../applications/editors/leksah {};
 
   nc-indicators = callPackage ../applications/misc/nc-indicators {};
 
