@@ -15,7 +15,21 @@ stdenv.mkDerivation rec {
   nativebuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ libpng libtiff lcms ]; # in closure anyway
 
-  postInstall = glib.flattenInclude;
+  postInstall = glib.flattenInclude + ''
+    mkdir -p "$out/lib/pkgconfig"
+    cat >"$out/lib/pkgconfig/libopenjp2.pc" <<EOF
+    prefix=$out
+    libdir=$out/lib
+    includedir=$out/include
+
+    Name: openjp2
+    Description: JPEG2000 library (Part 1 and 2)
+    URL: http://www.openjpeg.org/
+    Version: @OPENJPEG_VERSION@
+    Libs: -L$out/lib -lopenjp2
+    Cflags: -I$out/include
+    EOF
+  '';
 
   meta = {
     homepage = http://www.openjpeg.org/;
