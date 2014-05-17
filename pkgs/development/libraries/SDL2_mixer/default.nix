@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0nvjdxjchrajrn0jag877hdx9zb788hsd315zzg1lyck2wb0xkm8";
   };
 
-  buildInputs = [SDL2 libogg libvorbis];
+  propagatedBuildInputs = [SDL2 libogg libvorbis];
 
   configureFlags = "--disable-music-ogg-shared" + stdenv.lib.optionalString enableNativeMidi "--enable-music-native-midi-gpl";
 
