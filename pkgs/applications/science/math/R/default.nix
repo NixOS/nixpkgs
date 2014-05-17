@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
       --with-system-pcre
       --with-system-xz
       --with-ICU
+      --enable-R-shlib
       AR=$(type -p ar)
       AWK=$(type -p gawk)
       CC=$(type -p gcc)
