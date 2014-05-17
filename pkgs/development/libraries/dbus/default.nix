@@ -91,7 +91,7 @@ let
     configureFlags = [ "--with-dbus-daemondir=${daemon}/bin" ];
     buildInputs = buildInputsX ++ systemdOrEmpty ++ [ libs daemon dbus_glib ];
     NIX_CFLAGS_LINK = 
-      stdenv.lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed "
+      stdenv.lib.optionalString (!stdenv.isDarwin && !stdenv.isSunOS) "-Wl,--as-needed "
       + "-ldbus-1";
 
     meta.platforms = stdenv.lib.platforms.all;
@@ -108,7 +108,7 @@ let
     preBuild = makeInternalLib;
     buildInputs = buildInputsX ++ systemdOrEmpty ++ [ libs tools daemon dbus_glib python ];
     NIX_CFLAGS_LINK = 
-      stdenv.lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed "
+      stdenv.lib.optionalString (!stdenv.isDarwin && !stdenv.isSunOS) "-Wl,--as-needed "
       + "-ldbus-1";
   };
 
