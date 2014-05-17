@@ -30,10 +30,11 @@ let
 
     test-patch = with pkgs.kernelPatches; grsecurity_unstable;
     stable-patch = with pkgs.kernelPatches;
-      if (cfg.vserver or false) then grsecurity_vserver else grsecurity_stable;
+      if cfg.vserver then grsecurity_vserver else grsecurity_stable;
 
-    stableKernel = mkKernel pkgs.linux_3_2  stable-patch;
-    testKernel   = mkKernel pkgs.linux_3_14 test-patch;
+    grKernel = if (cfg.stable || cfg.vserver)
+               then mkKernel pkgs.linux_3_2  stable-patch
+               else mkKernel pkgs.linux_3_14 test-patch;
 
     ## -- grsecurity configuration ---------------------------------------------
 
@@ -147,7 +148,7 @@ let
 
     ## -- Kernel packages ------------------------------------------------------
 
-    grsecKernel  = mkGrsecKern (if cfg.stable then stableKernel else testKernel);
+    grsecKernel  = mkGrsecKern grKernel;
     grsecPackage = mkGrsecPkg grsecKernel;
   };
 in vals
