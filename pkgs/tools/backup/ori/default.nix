@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
-    scons PREFIX=$out install
+    scons PREFIX=$out WITH_ORILOCAL=1 install
   '';
 
   installPhase = ":";
