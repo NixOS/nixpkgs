@@ -16,9 +16,11 @@
 
   ghcHEADPrefs = self : super : super // {
     mtl = self.mtl_2_1_3_1;
+    cabalInstall_1_20_0_1 = super.cabalInstall_1_20_0_1.override { Cabal = null; };
   };
 
   ghc782Prefs = self : super : ghcHEADPrefs self super // {
+    cabalInstall_1_20_0_1 = super.cabalInstall_1_20_0_1.override { Cabal = self.Cabal_1_20_0_0; };
   };
 
   ghc763Prefs = self : super : ghc782Prefs self super // {
