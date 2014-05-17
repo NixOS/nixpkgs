@@ -2523,6 +2523,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   cpphs = callPackage ../development/tools/misc/cpphs {};
 
+  DrIFT = callPackage ../development/tools/haskell/DrIFT {};
+
   haddock_2_4_2 = callPackage ../development/tools/documentation/haddock/2.4.2.nix { Cabal = null; };
   haddock_2_7_2 = callPackage ../development/tools/documentation/haddock/2.7.2.nix { alex = self.alex_2_3_5; };
   haddock_2_9_2 = callPackage ../development/tools/documentation/haddock/2.9.2.nix {};
