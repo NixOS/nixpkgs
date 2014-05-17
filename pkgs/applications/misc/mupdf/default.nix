@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   preBuild = ''
-    export makeFlags="prefix=$out build=release"
+    export makeFlags="prefix=$out build=release XCFLAGS=-fpic"
     export NIX_CFLAGS_COMPILE=" $NIX_CFLAGS_COMPILE -I$(echo ${openjpeg}/include/openjpeg-*) "
   '';
 
