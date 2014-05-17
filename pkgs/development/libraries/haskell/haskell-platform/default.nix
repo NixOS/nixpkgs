@@ -50,7 +50,7 @@ let
       GLUT                      = self.GLUT_2_1_2_1;
       haskellSrc                = self.haskellSrc_1_0_1_5;
       html                      = self.html_1_0_1_2;
-      HTTP                      = self.HTTP_4000_2_5;
+      HTTP                      = super.HTTP_4000_2_5.override { network = self.network_2_3_1_0; };
       HUnit                     = self.HUnit_1_2_5_1;
       mtl                       = self.mtl_2_1_2;
       network                   = self.network_2_3_1_0;
