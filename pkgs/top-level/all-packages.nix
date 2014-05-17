@@ -3441,6 +3441,8 @@ let
 
     zed = callPackage ../development/ocaml-modules/zed { };
 
+    ocsigen_deriving = callPackage ../development/ocaml-modules/ocsigen-deriving { };
+
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
