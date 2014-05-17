@@ -178,9 +178,9 @@ in
   };
 
   xf86videonv = attrs: attrs // {
-    patches = [( args.fetchurl {
+    patches = [( args.fetchpatch {
       url = http://cgit.freedesktop.org/xorg/driver/xf86-video-nv/patch/?id=fc78fe98222b0204b8a2872a529763d6fe5048da;
-      sha256 = "0ikbnz6048ygs1qahb6ylnxkyjhfjcqr2gm9bk95ca90v57j7i0f";
+      sha256 = "0i2ddgqwj6cfnk8f4r73kkq3cna7hfnz7k3xj3ifx5v8mfiva6gw";
     })];
   };
 
