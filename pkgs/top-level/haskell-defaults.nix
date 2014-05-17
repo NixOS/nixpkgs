@@ -79,6 +79,7 @@
 
   ghc6104Prefs = self : super : ghc6123Prefs self super // {
     alex = self.alex_2_3_5.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
+    binary = super.binary_0_6_1_0.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
     Cabal = self.Cabal_1_16_0_3;
     GLUT = self.GLUT_2_2_2_1;
     haddock = self.haddock_2_4_2;
