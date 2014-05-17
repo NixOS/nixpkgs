@@ -480,7 +480,7 @@ in {
           if ! id "${u.name}" &>/dev/null; then
             ${pkgs.shadow}/sbin/useradd \
               -g "${u.group}" \
-              -G "${toString u.extraGroups}" \
+              -G "${concatStringsSep "," u.extraGroups}" \
               -s "${u.shell}" \
               -d "${u.home}" \
               ${optionalString u.isSystemUser "--system"} \
