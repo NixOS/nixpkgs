@@ -7165,8 +7165,8 @@ let
   linux_grsec_stable_server_xen = grKernel grFlavors.linux_grsec_stable_server_xen;
 
   # Stable+vserver kernels - server versions only
-  linux_grsec_vserver_server     = grKernel grFlavors.linux_grsec_vserver_server;
-  linux_grsec_vserver_server_xen = grKernel grFlavors.linux_grsec_vserver_server_xen;
+  #linux_grsec_vserver_server     = grKernel grFlavors.linux_grsec_vserver_server;
+  #linux_grsec_vserver_server_xen = grKernel grFlavors.linux_grsec_vserver_server_xen;
 
   # Testing kernels
   linux_grsec_testing_desktop = grKernel grFlavors.linux_grsec_testing_desktop;
@@ -7286,8 +7286,8 @@ let
   linuxPackages_grsec_stable_server_xen = grPackage grFlavors.linux_grsec_stable_server_xen;
 
   # Stable+vserver kernels - server versions only
-  linuxPackages_grsec_vserver_server     = grPackage grFlavors.linux_grsec_vserver_server;
-  linuxPackages_grsec_vserver_server_xen = grPackage grFlavors.linux_grsec_vserver_server_xen;
+  #linuxPackages_grsec_vserver_server     = grPackage grFlavors.linux_grsec_vserver_server;
+  #linuxPackages_grsec_vserver_server_xen = grPackage grFlavors.linux_grsec_vserver_server_xen;
 
   # Testing kernels
   linuxPackages_grsec_testing_desktop = grPackage grFlavors.linux_grsec_testing_desktop;
