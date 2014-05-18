@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   name = "libpeas-${version}";
-  version = "1.9.0";
+  version = "1.10.0";
 
   buildInputs =  [
    intltool pkgconfig
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libpeas/1.9/${name}.tar.xz";
-    sha256 = "13fzyzv6c0cfdj83z1s16lv8k997wpnzyzr0wfwcfkcmvz64g1q0";
+    url = "mirror://gnome/sources/libpeas/1.10/${name}.tar.xz";
+    sha256 = "4695bc40e4885a903dbc5ce6a3704392feae63af51fd4da7a3888bb88ca78c47";
   };
 
   preFixup = ''
