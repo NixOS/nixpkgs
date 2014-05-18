@@ -16,66 +16,65 @@
 
 with if stdenv.system == "i686-linux" then {
   platform = "linux-i386";
-  snapshot = "03e60be1f1b90dddd15f3597bc45ec8d9626b35d";
-  snapshot_sha = "1v1l082gj7d2d4p53xgsxz2k965jcgqhw4cyxmjxc6yh5fw0idx6";
+  snapshot = "3bef5684fd0582fbd4ddebd4514182d4f72924f7";
+  snapshot_sha = "1c72d65pcgm3z4sly7al09mjvpp8asxbbv7iyzzv5k8f66ny2agy";
   target = "i686-unknown-linux-gnu";
 } else if stdenv.system == "x86_64-linux" then {
   platform = "linux-x86_64";
-  snapshot = "aa8fbbacdb1d8a078f3a3fe3478dcbc506bd4090";
-  snapshot_sha = "17inc23jpznqp0vnskvznm74mm24c1nffhz2bkadhvp2ww0vpjjx";
+  snapshot = "a7b2af1076d48e4a687a71a21478293e834349bd";
+  snapshot_sha = "1c72d65pcgm3z4sly7al09mjvpp8asxbbv7iyzzv5k8f66ny2agy";
   target = "x86_64-unknown-linux-gnu";
 } else if stdenv.system == "x86_64-darwin" then {
   platform = "macos-x86_64";
-  snapshot = "ec746585cb20d1f9edffec74f6ff8be6e93a75f7";
-  snapshot_sha = "0r8f8x3x8jb1hm40pbgj4i9ll2y5dgjgvj24qg7mp4crbqcqhkd2";
+  snapshot = "22b884a3876cb3e40ad942ad68a496b5f239fca5";
+  snapshot_sha = "0qabkvyryiwlqhzy1kscff27rx788bv7lh7d8m1hnsv38wqhwqqb";
 } else {};
-let snapshotDate = "2014-01-05";
-    snapshotRev = "a6d3e57";
+let snapshotDate = "2014-03-28";
+    snapshotRev = "b8601a3";
     snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshot}.tar.bz2"; in
 stdenv.mkDerivation {
-  name = "rust-0.9";
+  name = "rust-0.10";
 
   src = fetchurl {
-    url = http://static.rust-lang.org/dist/rust-0.9.tar.gz;
-    sha256 = "1lfmgnn00wrc30nf5lgg52w58ir3xpsnpmzk2v5a35xp8lsir4f0";
+    url = http://static.rust-lang.org/dist/rust-0.10.tar.gz;
+    sha256 = "c72cfbbf03016804a81d7b68e8258ffaf018f8f5a25550ad64571ce6c2642cf9";
   };
 
-  # We need rust to build rust. If we don't provide it, configure will try to download it
-  snapshot = fetchurl {
-    url = "http://static.rust-lang.org/stage0-snapshots/${snapshotName}";
-    sha256 = snapshot_sha;
+  # We need rust to build rust. If we don't provide it, configure will try to download it.
+  snapshot = stdenv.mkDerivation {
+    name = "rust-stage0";
+    src = fetchurl {
+      url = "http://static.rust-lang.org/stage0-snapshots/${snapshotName}";
+      sha256 = snapshot_sha;
+    };
+    installPhase = ''
+      mkdir -p "$out"
+      cp -r bin "$out/bin"
+    '' + (if stdenv.isLinux then ''
+      patchelf --interpreter ${stdenv.glibc}/lib/${stdenv.gcc.dynamicLinker} \
+               --set-rpath ${stdenv.gcc.gcc}/lib/:${stdenv.gcc.gcc}/lib64/ \
+               $out/bin/rustc
+    '' else "");
   };
 
-  # Put the snapshot where it is expected
-  postUnpack = ''
-    mkdir $sourceRoot/dl
-    ln -s $snapshot $sourceRoot/dl/${snapshotName}
-  '';
+  configureFlags = [ "--enable-local-rust" "--local-rust-root=$snapshot" ];
 
   # The compiler requires cc, so we patch the source to tell it where to find it
-  patches = [ ./hardcode_paths.patch ];
+  patches = [ ./hardcode_paths.patch ./local_stage0.patch ];
   postPatch = ''
     substituteInPlace src/librustc/back/link.rs \
       --subst-var-by "gccPath" ${stdenv.gcc}/bin/cc \
       --subst-var-by "binutilsPath" ${stdenv.gcc.binutils}/bin/ar
   '';
 
-  # Modify the snapshot compiler so that is can be executed
-  preBuild = if stdenv.isLinux then ''
-    make ${target}/stage0/bin/rustc
-    patchelf --interpreter ${stdenv.glibc}/lib/${stdenv.gcc.dynamicLinker} \
-             --set-rpath ${stdenv.gcc.gcc}/lib/:${stdenv.gcc.gcc}/lib64/ \
-             ${target}/stage0/bin/rustc
-  '' else null;
-
   buildInputs = [ which file perl curl python27 makeWrapper ];
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.rust-lang.org/;
     description = "A safe, concurrent, practical language";
-    maintainers = [ stdenv.lib.maintainers.madjar ];
-    license = map (builtins.getAttr "shortName") [ stdenv.lib.licenses.mit stdenv.lib.licenses.asl20 ];
+    maintainers = with maintainers; [ madjar cstrahan ];
+    license = map (builtins.getAttr "shortName") [ licenses.mit licenses.asl20 ];
     # platforms as per http://static.rust-lang.org/doc/master/tutorial.html#getting-started
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
   };
