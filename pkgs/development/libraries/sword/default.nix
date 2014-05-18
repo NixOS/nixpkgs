@@ -2,19 +2,16 @@
 
 stdenv.mkDerivation rec {
 
-  version = "1.6.2";
+  version = "1.7.2";
 
   name = "sword-${version}";
 
   src = fetchurl {
-    url = "http://www.crosswire.org/ftpmirror/pub/sword/source/v1.6/${name}.tar.gz";
-    sha256 = "1fc71avaxkhx6kckjiflw6j02lpg569b9bzaksq49i1m87awfxmg";
+    url = "http://www.crosswire.org/ftpmirror/pub/sword/source/v1.7/${name}.tar.gz";
+    sha256 = "ac7aace0ecb7a405d4b4b211ee1ae5b2250bb5c57c9197179747c9e830787871";
   };
 
   buildInputs = [ pkgconfig icu clucene_core curl ];
-
-  # because curl/types.h disappeared since at least curl 7.21.7
-  patches = [ ./dont_include_curl_types_h.patch ./gcc47.patch ];
 
   prePatch = ''
     patchShebangs .;
@@ -27,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.crosswire.org/sword/;
     platforms = stdenv.lib.platforms.linux;
     license = "GPLv2";
-    maintainers = [ stdenv.lib.maintainers.piotr ];
+    maintainers = [ stdenv.lib.maintainers.piotr stdenv.lib.maintainers.AndersonTorres ];
   };
 
 }
