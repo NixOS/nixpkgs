@@ -3,10 +3,11 @@
 with lib;
 
 let
+  cfg = config.security.grsecurity;
+
   customGrsecPkg =
     (import ../../../pkgs/build-support/grsecurity
-      { grsecOptions = config.security.grsecurity;
-      };
+      { grsecOptions = cfg; }
     ).grsecPackage;
 in
 {
@@ -317,7 +318,7 @@ in
 
     # Enable AppArmor, gradm udev rules, and utilities
     security.apparmor.enable   = true;
-    boot.kernelPackages        = grsecPackage;
+    boot.kernelPackages        = customGrsecPkg;
     services.udev.packages     = [ pkgs.gradm ];
     environment.systemPackages = [ pkgs.gradm pkgs.paxctl pkgs.pax-utils ];
   };
