@@ -3816,6 +3816,8 @@ let
 
   libsigrok = callPackage ../development/tools/libsigrok { };
 
+  libsigrokdecode = callPackage ../development/tools/libsigrokdecode { };
+
   dejagnu = callPackage ../development/tools/misc/dejagnu { };
 
   dfeet = callPackage ../development/tools/misc/d-feet {
