@@ -6,14 +6,12 @@
 # use packaged gnome3.gnome_icon_theme_symbolic 
 
 stdenv.mkDerivation rec {
-  name = "gucharmap-3.10.1";
+  name = "gucharmap-3.12.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gucharmap/3.10/${name}.tar.xz";
-    sha256 = "04e8606c65adb14d267b50b1cf9eb4fee92bd9c5ab512a346bd4c9c686403f78";
+    url = "mirror://gnome/sources/gucharmap/3.12/${name}.tar.xz";
+    sha256 = "5e260767da43f6dc31a8be33ca363da56781349b367464fa9c478bca66aa18d9";
   };
-
-  configureFlags = [ "--disable-static" ];
 
   doCheck = true;
 
@@ -27,7 +25,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram "$out/bin/gucharmap" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
+      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {
