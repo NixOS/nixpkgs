@@ -2,11 +2,11 @@
 , itstool, libxml2, libxslt }:
 
 stdenv.mkDerivation rec {
-  name = "yelp-xsl-3.10.1";
+  name = "yelp-xsl-3.12.0";
 
   src = fetchurl {
-    url = "https://download.gnome.org/sources/yelp-xsl/3.10/${name}.tar.xz";
-    sha256 = "59c6dee3999121f6ffd33a9c5228316b75bc22e3bd68fff310beb4eeff245887";
+    url = "mirror://gnome/sources/yelp-xsl/3.12/${name}.tar.xz";
+    sha256 = "dd0b8af338b1cdae50444273d7c761e3f511224421487311103edc95a4493656";
   };
 
   doCheck = true;
