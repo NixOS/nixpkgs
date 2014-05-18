@@ -22,6 +22,9 @@ stdenv.mkDerivation rec {
     substituteInPlace src/Makefile.am --replace "ansi2knr" ""
 
     autoreconf -fi
+  ''
+  + stdenv.lib.optionalString stdenv.isDarwin ''
+    export LDFLAGS=-lintl
   '';
 
   #doCheck = true; # doesn't work yet
