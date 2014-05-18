@@ -8,11 +8,11 @@
 , libpng, libexif, libgsf, libuuid, bzip2 }:
 
 stdenv.mkDerivation rec {
-  name = "tracker-0.16.4";
+  name = "tracker-1.0.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/tracker/0.16/${name}.tar.xz";
-    sha256 = "9c2f50839c2b8b352ab9a022597ef985c1900e6286c0c3bcb7a64da39dbb3580";
+    url = "mirror://gnome/sources/tracker/1.0/${name}.tar.xz";
+    sha256 = "76e7918e62526a8209f9c9226f82abe592a6332826ac7c12e6e405063181e889";
   };
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     for f in $out/bin/* $out/libexec/*; do
       wrapProgram $f \
         --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-        --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+        --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
     done
   '';
 
