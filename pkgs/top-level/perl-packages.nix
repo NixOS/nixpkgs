@@ -9086,6 +9086,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TieHashIndexed = buildPerlPackage {
+    name = "Tie-Hash-Indexed-0.05";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MH/MHX/Tie-Hash-Indexed-0.05.tar.gz;
+      sha256 = "a8862a4763d58a8c785e34b8b18e5db4ce5c3e36b9b5cf565a3088584eab361e";
+    };
+    meta = {
+      description = "Ordered hashes for Perl";
+      license = "perl";
+    };
+  };
+
   TieToObject = buildPerlPackage {
     name = "Tie-ToObject-0.03";
     src = fetchurl {
