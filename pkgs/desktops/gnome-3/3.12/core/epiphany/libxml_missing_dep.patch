@@ -1,0 +1,10 @@
+--- configure.ac.orig	2014-05-19 13:28:28.493988695 +0200
++++ configure.ac	2014-05-19 13:28:54.837159748 +0200
+@@ -115,6 +115,7 @@
+ 
+ PKG_CHECK_MODULES(WEB_EXTENSION, [
+                   $WEBKIT_GTK_PC_NAME >= $WEBKIT_GTK_REQUIRED
++		  libxml-2.0 >= $LIBXML_REQUIRED
+                   libsecret-1 >= $LIBSECRET_REQUIRED
+                   ])
+ AC_SUBST(WEB_EXTENSION_CFLAGS)
