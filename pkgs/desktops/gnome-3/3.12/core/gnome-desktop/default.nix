@@ -4,8 +4,8 @@
 
 stdenv.mkDerivation rec {
 
-  majorVersion = "3.10";
-  minorVersion = "1";
+  majorVersion = "3.12";
+  minorVersion = "2";
   name = "gnome-desktop-${majorVersion}.${minorVersion}";
 
   # this should probably be setuphook for glib
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-desktop/${majorVersion}/${name}.tar.xz";
-    sha256 = "0hdvm909lbpnixqv11qdx9iaycx4dpxys46fa128bqp8alisgb0h";
+    sha256 = "b7d691363ccc90182caff1980efa7d99e4569bea968d39654102a0c4e824a44d";
   };
 
   buildInputs = [ pkgconfig python libxml2Python libxslt which libX11 xkeyboard_config isocodes itstool wayland
