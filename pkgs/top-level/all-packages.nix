@@ -5148,6 +5148,8 @@ let
 
   libresample = callPackage ../development/libraries/libresample {};
 
+  librevisa = callPackage ../development/libraries/librevisa { };
+
   libsamplerate = callPackage ../development/libraries/libsamplerate {
     stdenv = if stdenv.isDarwin
       then overrideGCC stdenv gccApple
