@@ -58,7 +58,7 @@ in
         default = null;
         example = literalExample ''
           pkgs.fetchurl {
-            url = "mirror://sourceforge/slim.berlios/${name}.tar.gz";
+            url = "mirror://sourceforge/slim.berlios/slim-wave.tar.gz";
             sha256 = "0ndr419i5myzcylvxb89m9grl2xyq6fbnyc3lkd711mzlmnnfxdy";
           }
         '';
