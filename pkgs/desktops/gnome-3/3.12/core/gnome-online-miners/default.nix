@@ -2,18 +2,18 @@
 , libsoup, json_glib, gmp, openssl, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-online-miners-3.10.3";
+  name = "gnome-online-miners-3.12.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-online-miners/3.10/${name}.tar.xz";
-    sha256 = "129807d398e7744870110e6875629b6858d289021271550569ce5afa10fe9ea8";
+    url = "mirror://gnome/sources/gnome-online-miners/3.12/${name}.tar.xz";
+    sha256 = "734db67bb158a046bc8bbbe418f0fdaf6d8652ac86406907a8d17d069fa48f23";
   };
 
   doCheck = true;
 
   buildInputs = [ pkgconfig glib gnome3.libgdata libxml2 libsoup gmp openssl
                   gnome3.grilo gnome3.libzapojit gnome3.grilo-plugins
-                  gnome3.gnome_online_accounts makeWrapper
+                  gnome3.gnome_online_accounts makeWrapper gnome3.libmediaart
                   gnome3.tracker gnome3.gfbgraph json_glib gnome3.rest ];
 
   enableParallelBuilding = true;
