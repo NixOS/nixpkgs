@@ -10171,9 +10171,13 @@ let
     inherit (pkgs) libsoup libwnck gtk_doc gnome_doc_utils;
   };
 
-  gnome3 = recurseIntoAttrs (callPackage ../desktops/gnome-3 {
+  gnome3 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.10 {
     callPackage = pkgs.newScope pkgs.gnome3;
     self = pkgs.gnome3;
+  });
+
+  gnome3_12 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.12 {
+    callPackage = pkgs.newScope pkgs.gnome3_12;
   });
 
   gnome = recurseIntoAttrs gnome2;
