@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pkgconfig, glib, itstool, libxml2, intltool, accountservice, libX11
-, gtk, libcanberra_gtk3, pam, libtool, gobjectIntrospection }:
+, gtk, libcanberra_gtk3, pam, libtool, gobjectIntrospection, dconf }:
 
 stdenv.mkDerivation rec {
-  name = "gdm-3.10.0.1";
+  name = "gdm-3.12.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gdm/3.10/${name}.tar.xz";
-    sha256 = "1rva3djas48m8w1gyv3nds3jxfkirdfl0bk30x79mizrk80456jl";
+    url = "mirror://gnome/sources/gdm/3.12/${name}.tar.xz";
+    sha256 = "cc91fff5afd2a7c3e712c960a0b60744774167dcfc16f486372e1eb3c0aa1cc4";
   };
 
-  buildInputs = [ pkgconfig glib itstool libxml2 intltool accountservice
+  buildInputs = [ pkgconfig glib itstool libxml2 intltool accountservice dconf
                   gobjectIntrospection libX11 gtk libcanberra_gtk3 pam libtool ];
 
   meta = with stdenv.lib; {
