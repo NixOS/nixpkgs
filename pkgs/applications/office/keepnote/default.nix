@@ -1,12 +1,12 @@
 { stdenv, fetchurl, buildPythonPackage, pythonPackages, pygtk }:
 
 buildPythonPackage {
-  name = "keepnote-0.6.5";
+  name = "keepnote-0.7.8";
   namePrefix = "";
 
   src = fetchurl {
-    url = http://rasm.ods.org/keepnote/download/keepnote-0.6.5.tar.gz;
-    sha256 = "0kipcy90r50z4m9p8pyy9wi4dknsiwdrgy974xgakris2rh4lafw";
+    url = "http://keepnote.org/download/keepnote-0.7.8.tar.gz";
+    sha256 = "0nhkkv1n0lqf3zn17pxg5cgryv1wwlj4hfmhixwd76rcy8gs45dh";
   };
 
   propagatedBuildInputs = [ pythonPackages.sqlite3 pygtk ];
