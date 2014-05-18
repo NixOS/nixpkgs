@@ -7,17 +7,17 @@
 , x86Only ? false
 }:
 
-let n = "qemu-1.7.1"; in
+let n = "qemu-2.0.0"; in
 
 stdenv.mkDerivation rec {
   name = n + (if x86Only then "-x86-only" else "");
 
   src = fetchurl {
     url = "http://wiki.qemu.org/download/${n}.tar.bz2";
-    sha256 = "1x5y06zhp0gc97g1sb98vf7dkawg63xywv0mbnpfnbi20jh452fn";
+    sha256 = "0frsahiw56jr4cqr9m6s383lyj4ar9hfs2wp3y4yr76krah1mk30";
   };
 
-  patches = [ ./cve-2014-0150.patch ./cve-2014-2894.patch ];
+  patches = [ ./cve-2014-0150.patch ];
 
   buildInputs =
     [ python zlib pkgconfig glib ncurses perl pixman attr libcap
