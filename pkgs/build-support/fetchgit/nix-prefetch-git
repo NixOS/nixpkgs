@@ -217,6 +217,8 @@ clone_user_rev() {
             fi;;
     esac
 
+    echo "git revision is $(cd $dir && git rev-parse $rev)"
+
     # Allow doing additional processing before .git removal
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
     if test -z "$leaveDotGit"; then
