@@ -284,7 +284,7 @@ with stdenv.lib;
   # Virtualisation.
   PARAVIRT? y
   ${if versionAtLeast version "3.10" then ''
-    HYPERVISOR_GUEST y
+    HYPERVISOR_GUEST? y
   '' else ''
     PARAVIRT_GUEST? y
   ''}
