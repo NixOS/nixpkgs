@@ -1,0 +1,72 @@
+From 524c9e39a0ca6f2d1699e6e6d9ba3db1ea80d9f9 Mon Sep 17 00:00:00 2001
+From: Bastien Nocera <hadess@hadess.net>
+Date: Thu, 15 May 2014 19:28:35 +0200
+Subject: main: Fix potential data loss when removing multiple files
+
+We were using a list of GtkTreePaths and deleting the items one-by-one
+when the user clicked the "Delete" button. But after the first deletion,
+the tree model would have changed, and instead of pointing to the 2nd
+item we wanted to delete, the GtkTreePath would have pointed to another
+item, usually not one that we wanted to delete.
+
+We now use GtkTreeRowReferences, which will always point to the same
+row, as long as it exists.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=729778
+
+diff --git a/src/totem-grilo.c b/src/totem-grilo.c
+index 2133d77..0cff0d6 100644
+--- a/src/totem-grilo.c
++++ b/src/totem-grilo.c
+@@ -2074,7 +2074,8 @@ static void
+ delete_foreach (gpointer data,
+ 		gpointer user_data)
+ {
+-	GtkTreePath *path = data;
++	GtkTreeRowReference *ref = data;
++	GtkTreePath *path;
+ 	GtkTreeModel *view_model = user_data;
+ 	GtkTreeIter iter;
+ 	GrlSource *source;
+@@ -2085,8 +2086,11 @@ delete_foreach (gpointer data,
+ 	GtkTreeModel *model;
+ 	GtkTreeIter real_model_iter;
+ 
+-	if (!gtk_tree_model_get_iter (view_model, &iter, path))
++	path = gtk_tree_row_reference_get_path (ref);
++	if (!path || !gtk_tree_model_get_iter (view_model, &iter, path)) {
++		g_warning ("An item that was scheduled for removal isn't available any more");
+ 		return;
++	}
+ 
+ 	gtk_tree_model_get (view_model, &iter,
+ 			    MODEL_RESULTS_CONTENT, &media,
+@@ -2151,14 +2155,23 @@ delete_cb (TotemSelectionToolbar *bar,
+ 	   TotemGrilo            *self)
+ {
+ 	GtkTreeModel *model;
+-	GList *list;
++	GList *list, *l;
+ 
+ 	g_signal_handlers_block_by_func (self->priv->browser, "view-selection-changed", self);
+ 
+ 	model = gd_main_view_get_model (GD_MAIN_VIEW (self->priv->browser));
+ 	list = gd_main_view_get_selection (GD_MAIN_VIEW (self->priv->browser));
++
++	/* GList of GtkTreePaths to a GList of GtkTreeRowReferences */
++	for (l = list; l != NULL; l = l->next) {
++		GtkTreeRowReference *ref;
++
++		ref = gtk_tree_row_reference_new (model, l->data);
++		gtk_tree_path_free (l->data);
++		l->data = ref;
++	}
+ 	g_list_foreach (list, delete_foreach, model);
+-	g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
++	g_list_free_full (list, (GDestroyNotify) gtk_tree_row_reference_free);
+ 
+ 	g_signal_handlers_unblock_by_func (self->priv->browser, "view-selection-changed", self);
+ 
+-- 
+cgit v0.10.1
+

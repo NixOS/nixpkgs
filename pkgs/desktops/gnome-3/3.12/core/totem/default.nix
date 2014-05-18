@@ -5,11 +5,11 @@
 , gnome3, librsvg, gdk_pixbuf, file }:
 
 stdenv.mkDerivation rec {
-  name = "totem-3.10.1";
+  name = "totem-3.12.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/totem/3.10/${name}.tar.xz";
-    sha256 = "b6b6038c9104965671a6d25e98496a487c3a9c590c9c104f668bd9f4fa7be9e2";
+    url = "mirror://gnome/sources/totem/3.12/${name}.tar.xz";
+    sha256 = "dd168cdd4051d01131d47c24fa45bfd08b6ccf45900ac4b64bae47f6f47a35e3";
   };
 
   doCheck = true;
@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
 
     rm $out/share/icons/hicolor/icon-theme.cache
   '';
+
+  patches = [ ./fix_files_loss.patch ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Videos;
