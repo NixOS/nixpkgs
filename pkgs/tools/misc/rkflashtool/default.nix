@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     ensureDir $out/bin
-    cp rkflashtool $out/bin
+    cp rkunpack rkcrc rkflashtool $out/bin
   '';
 
   meta = {
