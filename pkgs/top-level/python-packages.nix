@@ -5182,12 +5182,9 @@ rec {
 
     meta = {
       description = "ASN.1 tools for Python";
-
       homepage = http://pyasn1.sourceforge.net/;
-
       license = "mBSD";
-
-      platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+      platforms = stdenv.lib.platforms.unix;  # arbitrary choice
     };
   });
 
