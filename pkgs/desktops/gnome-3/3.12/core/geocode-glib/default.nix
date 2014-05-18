@@ -2,12 +2,12 @@
 
 
 stdenv.mkDerivation rec {
-  name = "geocode-glib-3.10.0";
+  name = "geocode-glib-3.12.2";
 
 
   src = fetchurl {
-    url = "mirror://gnome/sources/geocode-glib/3.10/${name}.tar.xz";
-    sha256 = "0dx6v9n4dsskcy6630s77cyb32xlykdall0d555976warycc3v8a";
+    url = "mirror://gnome/sources/geocode-glib/3.12/${name}.tar.xz";
+    sha256 = "5ca581a927cac3025adc2afadfdaf9a493ca887537a548aa47296bc77bcfa49e";
   };
 
   buildInputs = with gnome3;
