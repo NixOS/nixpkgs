@@ -3814,6 +3814,8 @@ let
   libcxx = callPackage ../development/libraries/libc++ { stdenv = pkgs.clangStdenv; };
   libcxxabi = callPackage ../development/libraries/libc++abi { stdenv = pkgs.clangStdenv; };
 
+  libsigrok = callPackage ../development/tools/libsigrok { };
+
   dejagnu = callPackage ../development/tools/misc/dejagnu { };
 
   dfeet = callPackage ../development/tools/misc/d-feet {
