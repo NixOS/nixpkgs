@@ -1,23 +1,26 @@
 { stdenv, fetchurl, pkgconfig, cairo, libxml2, gnome3, pango
 , gnome_doc_utils, intltool, libX11, which, gconf, libuuid
-, desktop_file_utils, itstool, ncurses, makeWrapper }:
+, desktop_file_utils, itstool, ncurses, makeWrapper, appdata-tools }:
 
 stdenv.mkDerivation rec {
 
-  versionMajor = "3.10";
+  versionMajor = "3.12";
   versionMinor = "2";
 
   name = "gnome-terminal-${versionMajor}.${versionMinor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-terminal/${versionMajor}/${name}.tar.xz";
-    sha256 = "04yrk9531f373nl64jx3pczsnq7a56mj3n436jbhjp74kp12fa70";
+    sha256 = "ea19ce610af2873d26e1e75491415e17af6a5080366db966f9220fdeea5ebecd";
   };
 
-  buildInputs = [ gnome3.gtk gnome3.gsettings_desktop_schemas gnome3.vte
+  buildInputs = [ gnome3.gtk gnome3.gsettings_desktop_schemas gnome3.vte appdata-tools
                   gnome3.dconf gnome3.gconf itstool ncurses makeWrapper ];
 
   nativeBuildInputs = [ pkgconfig intltool gnome_doc_utils which libuuid libxml2 desktop_file_utils ];
+
+  # FIXME: enable for gnome3
+  configureFlags = [ "--disable-search-provider" "--without-nautilus-extension" ];
 
   preFixup = ''
     for f in "$out/libexec/gnome-terminal-migration" "$out/libexec/gnome-terminal-server"; do
