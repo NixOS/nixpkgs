@@ -1,18 +1,18 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, gobjectIntrospection, spidermonkey_17, pango }:
+{ fetchurl, stdenv, pkgconfig, gnome3, gobjectIntrospection, spidermonkey_24, pango }:
 
 
 stdenv.mkDerivation rec {
-  name = "gjs-1.38.1";
+  name = "gjs-1.40.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gjs/1.38/${name}.tar.xz";
-    sha256 = "0xl1zc5ncaxqs5ww5j82rzqrg429l8pdapqclxiba7dxwyh6a83b";
+    url = "mirror://gnome/sources/gjs/1.40/${name}.tar.xz";
+    sha256 = "2f0d80ec96c6284785143abe51377d8a284977ea6c3cf0cef1020d92eae41793";
   };
 
   buildInputs = with gnome3;
     [ gobjectIntrospection pkgconfig glib pango ];
 
-  propagatedBuildInputs = [ spidermonkey_17 ];
+  propagatedBuildInputs = [ spidermonkey_24 ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
