@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, glib, libsoup, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  name = "rest-0.7.90";
+  name = "rest-0.7.91";
 
   src = fetchurl {
-    url = "http://ftp.acc.umu.se/pub/GNOME/core/3.10/3.10.2/sources/${name}.tar.xz";
-    sha256 = "08n0cvz44l4b1gkmjryap3ysd0wcbbbdjbcar73nr52dmk52ls0x";
+    url = "mirror://gnome/sources/rest/0.7/${name}.tar.xz";
+    sha256 = "838814d935143f2dc99eb79f1ac69c615e7b547339f6cd226dd0ed4d7c16b67a";
   };
 
   buildInputs = [ pkgconfig glib libsoup gobjectIntrospection];
