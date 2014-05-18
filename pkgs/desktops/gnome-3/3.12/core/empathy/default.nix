@@ -11,11 +11,11 @@
 # TODO: enable more features
 
 stdenv.mkDerivation rec {
-  name = "empathy-3.10.3";
+  name = "empathy-3.12.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/empathy/3.10/${name}.tar.xz";
-    sha256 = "49366acdd3c3ef9a74f63eb09920803c4c9df83056acbf8a7899e7890a9fb196";
+    url = "mirror://gnome/sources/empathy/3.12/${name}.tar.xz";
+    sha256 = "414d0c6b1a30b1afbf35ad04b0b9ff3ada3e06fab797a50a7147cdfe0905e7cd";
   };
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     for f in $out/bin/* $out/libexec/*; do
       wrapProgram $f \
         --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3}/share:${gnome3.gnome_themes_standard}/:${gnome3.gnome_themes_standard}/share:${hicolor_icon_theme}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
+        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.gnome_themes_standard}/:${gnome3.gnome_themes_standard}/share:${hicolor_icon_theme}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
     done
     rm $out/share/icons/hicolor/icon-theme.cache
   '';
