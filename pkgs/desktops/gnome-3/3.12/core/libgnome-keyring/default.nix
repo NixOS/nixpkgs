@@ -1,11 +1,11 @@
 { stdenv, fetchurl, glib, dbus_libs, libgcrypt, pkgconfig, intltool, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  name = "libgnome-keyring-3.10.1";
+  name = "libgnome-keyring-3.12.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgnome-keyring/3.10/${name}.tar.xz";
-    sha256 = "0wip88r91kwx4zp6sc9b38mnlv11grgl4k2kzsd3a8x83c9g2b05";
+    url = "mirror://gnome/sources/libgnome-keyring/3.12/${name}.tar.xz";
+    sha256 = "c4c178fbb05f72acc484d22ddb0568f7532c409b0a13e06513ff54b91e947783";
   };
 
   propagatedBuildInputs = [ glib gobjectIntrospection dbus_libs libgcrypt ];
