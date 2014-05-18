@@ -4,6 +4,9 @@
 
 with pkgs.lib;
 
+let
+  gnome3 = config.environment.gnome3.packageSet;
+in
 {
 
   ###### interface
@@ -30,9 +33,9 @@ with pkgs.lib;
 
   config = mkIf config.services.gnome3.gnome-user-share.enable {
 
-    environment.systemPackages = [ pkgs.gnome3.gnome-user-share ];
+    environment.systemPackages = [ gnome3.gnome-user-share ];
 
-    services.xserver.displayManager.sessionCommands = with pkgs.gnome3; ''
+    services.xserver.displayManager.sessionCommands = with gnome3; ''
       # Don't let gnome-control-center depend upon gnome-user-share
       export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${gnome-user-share}/share/gsettings-schemas/${gnome-user-share.name}
     '';

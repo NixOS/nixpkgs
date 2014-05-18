@@ -4,6 +4,9 @@
 
 with pkgs.lib;
 
+let
+  gnome3 = config.environment.gnome3.packageSet;
+in
 {
 
   ###### interface
@@ -30,9 +33,9 @@ with pkgs.lib;
 
   config = mkIf config.services.gnome3.gnome-documents.enable {
 
-    environment.systemPackages = [ pkgs.gnome3.gnome-documents ];
+    environment.systemPackages = [ gnome3.gnome-documents ];
 
-    services.dbus.packages = [ pkgs.gnome3.gnome-documents ];
+    services.dbus.packages = [ gnome3.gnome-documents ];
 
     services.gnome3.gnome-online-accounts.enable = true;
 
