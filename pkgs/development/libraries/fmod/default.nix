@@ -10,11 +10,11 @@ let
 in
 stdenv.mkDerivation rec {
   name    = "fmod-${version}";
-  version = "4.44.33";
+  version = "4.44.34";
 
   src = fetchurl {
-    url = "http://www.fmod.org/download/fmodex/api/Linux/fmodapi44433linux.tar.gz";
-    sha256 = "0s17jb7hbavglw0kiwak74ilppsalx53flc23sh4402ci7jg7qhk";
+    url = "http://www.fmod.org/download/fmodex/api/Linux/fmodapi44434linux.tar.gz";
+    sha256 = "057dvawckw3laavfkzvakyrw5lnvvfabs8myibjc95ap1awacb8x";
   };
 
   dontStrip = true;
