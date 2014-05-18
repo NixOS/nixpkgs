@@ -965,6 +965,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hexpat = callPackage ../development/libraries/haskell/hexpat {};
 
+  hgal = callPackage ../development/libraries/haskell/hgal {};  
+
   hourglass = callPackage ../development/libraries/haskell/hourglass {};
 
   hseCpp = callPackage ../development/libraries/haskell/hse-cpp {};
