@@ -6,11 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "evince-3.10.3";
+  name = "evince-3.12.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evince/3.10/${name}.tar.xz";
-    sha256 = "1bz9ypsvlfw1vgs7i5glba1h1n6c90f0d1g64linhg6xjcxcq3dk";
+    url = "mirror://gnome/sources/evince/3.12/${name}.tar.xz";
+    sha256 = "ef22cc29a7cbe70d2e7ce8c0b5b7ee774187ea69f3ae49a64c6d4a91559ef137";
   };
 
   buildInputs = [
