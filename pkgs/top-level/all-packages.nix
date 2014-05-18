@@ -4041,6 +4041,8 @@ let
 
   simpleBuildTool = callPackage ../development/tools/build-managers/simple-build-tool { };
 
+  sigrok-cli = callPackage ../development/tools/sigrok-cli { };
+
   slimerjs = callPackage ../development/tools/slimerjs {};
 
   sloccount = callPackage ../development/tools/misc/sloccount { };
