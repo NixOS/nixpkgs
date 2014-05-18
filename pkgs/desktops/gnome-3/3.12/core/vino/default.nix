@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   name = "vino-${versionMajor}.${versionMinor}";
-  versionMajor = "3.10";
-  versionMinor = "1";
+  versionMajor = "3.12";
+  versionMinor = "0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/vino/${versionMajor}/${name}.tar.xz";
-    sha256 = "0imyvz96b7kikikwxn1r5sfxwmi40523nd66gp9hrl23gik0vwgs";
+    sha256 = "86c9d8b60d79982e4488815db0d441c398e011ad8262659789afecc97a01ca5b";
   };
 
   doCheck = true;
@@ -16,9 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk3 intltool glib libsoup pkgconfig libnotify file makeWrapper ];
 
   preFixup = ''
-    for f in "$out/bin/vino-passwd" "$out/libexec/vino-server"; do
-      wrapProgram $f --prefix XDG_DATA_DIRS : "${gtk3}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
-    done
+    wrapProgram "$out/libexec/vino-server" \
+      --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {
