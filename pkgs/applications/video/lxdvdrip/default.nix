@@ -1,10 +1,10 @@
 { stdenv, fetchurl, libdvdread }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "lxdvdrip-1.76";
 
   src = fetchurl {
-    url = http://download.berlios.de/lxdvdrip/lxdvdrip-1.76.tgz;
+    url = "mirror://sourceforge/lxdvdrip/${name}.tgz";
     sha256 = "0vgslc7dapfrbgslnaicc8bggdccyrvcgjv1dwi19qswhh7jkzj6";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = { 
     description = "Command line tool to make a copy from a video DVD for private use";
-    homepage = http://lxdvdrip.berlios.de/;
+    homepage = http://sourceforge.net/projects/lxdvdrip;
     license = "GPLv2";
   };
 }

@@ -58,7 +58,7 @@ in
         default = null;
         example = literalExample ''
           pkgs.fetchurl {
-            url = http://download.berlios.de/slim/slim-wave.tar.gz;
+            url = "mirror://sourceforge/slim.berlios/${name}.tar.gz";
             sha256 = "0ndr419i5myzcylvxb89m9grl2xyq6fbnyc3lkd711mzlmnnfxdy";
           }
         '';
@@ -66,7 +66,7 @@ in
           The theme for the SLiM login manager.  If not specified, SLiM's
           default theme is used.  See <link
           xlink:href='http://slim.berlios.de/themes01.php'/> for a
-          collection of themes.
+          collection of themes. TODO: berlios shut down.
         '';
       };
 
