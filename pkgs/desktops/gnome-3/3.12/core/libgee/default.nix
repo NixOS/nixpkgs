@@ -1,14 +1,14 @@
 { stdenv, fetchurl, autoconf, vala, pkgconfig, glib, gobjectIntrospection }:
 let
-  ver_maj = "0.12";
+  ver_maj = "0.14";
   ver_min = "0";
 in
 stdenv.mkDerivation rec {
   name = "libgee-${ver_maj}.${ver_min}";
 
   src = fetchurl {
-    url = "https://download.gnome.org/sources/libgee/${ver_maj}/${name}.tar.xz";
-    sha256 = "19bf94ia1h5z8h0hdhwcd2b2p6ngffirg0dai7pdb98dzriys1ni";
+    url = "mirror://gnome/sources/libgee/${ver_maj}/${name}.tar.xz";
+    sha256 = "08e466d3f214c9466860b5a82629de0de9eb89b1de7bd918fe154e569b5834cd";
   };
 
   doCheck = true;
