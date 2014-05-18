@@ -129,7 +129,7 @@ in {
 
     systemd.services.dogstatsd = {
       description = "Datadog statsd";
-      path = [ pkgs."dd-agent" pkgs.python ];
+      path = [ pkgs."dd-agent" pkgs.python pkgs.procps ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.dd-agent}/bin/dogstatsd start";
