@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Whole-program, globally optimizing Haskell compiler";
     homepage = "http://repetae.net/computer/jhc/";
-    license = stdenv.lib.licenses.bsd;
+    license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers;
       [ aforemny simons thoughtpolice ];
