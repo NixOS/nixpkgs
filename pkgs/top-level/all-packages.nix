@@ -3694,7 +3694,7 @@ let
   binutilsCross =
     if crossSystem != null && crossSystem.libc == "libSystem" then darwin.cctools
     else lowPrio (forceNativeDrv (import ../development/tools/misc/binutils {
-      inherit stdenv fetchurl zlib;
+      inherit stdenv fetchurl zlib bison;
       noSysDirs = true;
       cross = assert crossSystem != null; crossSystem;
     }));
