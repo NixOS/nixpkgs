@@ -5,18 +5,16 @@
 , libsoup, vala, dbus_glib, automake114x, autoconf }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-contacts-3.10.1";
+  name = "gnome-contacts-3.12.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-contacts/3.10/${name}.tar.xz";
-    sha256 = "e119c32bb10136e7190f11f79334fa82ed56468cff5bb7836da0ebf7b572779b";
+    url = "mirror://gnome/sources/gnome-contacts/3.12/${name}.tar.xz";
+    sha256 = "fb3f25d409032b24fb67241e67d4da10cf6f77a48c088709455cea5f6f33e87d";
   };
 
   doCheck = true;
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard evolution_data_server ];
-  propagatedBuildInputs = [ gdk_pixbuf gnome3.gnome_icon_theme librsvg
-                            hicolor_icon_theme gnome3.gnome_icon_theme_symbolic ];
 
   # force build from vala
   preBuild = ''
@@ -27,17 +25,19 @@ stdenv.mkDerivation rec {
                   gnome3.gsettings_desktop_schemas makeWrapper file libnotify
                   folks gnome3.gnome_desktop telepathy_glib libsecret dbus_glib
                   libxml2 libsoup gnome3.gnome_online_accounts nspr nss
+                  gdk_pixbuf gnome3.gnome_icon_theme librsvg
+                  hicolor_icon_theme gnome3.gnome_icon_theme_symbolic
                   vala automake114x autoconf db ];
 
   preFixup = ''
     for f in "$out/bin/gnome-contacts" "$out/libexec/gnome-contacts-search-provider"; do
       wrapProgram $f \
         --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-        --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+        --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
     done
   '';
 
-  patches = [ ./configure_dbus_glib.patch ./fix_row_selected.patch ];
+  patches = [ ./configure_dbus_glib.patch ];
 
   patchFlags = "-p0";
 
