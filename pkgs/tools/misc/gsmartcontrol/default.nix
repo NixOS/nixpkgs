@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       It allows you to inspect the drive's SMART data to determine its health,
       as well as run various tests on it.
     '';
-    homepage = http://gsmartcontrol.berlios.de;
+    homepage = http://gsmartcontrol.sourceforge.net/;
     license = "GPLv2+";
     maintainers = with stdenv.lib.maintainers; [qknight];
     platforms = with stdenv.lib.platforms; linux;

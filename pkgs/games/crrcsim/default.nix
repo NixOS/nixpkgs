@@ -13,7 +13,7 @@ let
     baseName="crrcsim";
     version="0.9.11";
     name="${baseName}-${version}";
-    url="http://download.berlios.de/${baseName}/${name}.tar.gz";
+    url="mirror://sourceforge/${baseName}.berlios/${name}.tar.gz";
     hash="16z9gixp60920lqckij8kdw90jys0llls4lw5c8vqgk14ck5hhiz";
   };
 in
@@ -41,7 +41,7 @@ rec {
   };
   passthru = {
     updateInfo = {
-      downloadPage = "http://crrcsim.berlios.de/wiki/index.php?n=CRRCsim.DownLoad";
+      downloadPage = "http://crrcsim.berlios.de/wiki/index.php?n=CRRCsim.DownLoad"; #TODO: berlios shut down
     };
   };
 }) x

@@ -4,8 +4,8 @@ stdenv.mkDerivation rec {
   name = "tetgen-1.4.3";
 
   src = fetchurl {
-    url = http://tetgen.berlios.de/files/tetgen1.4.3.tar.gz;
-    sha256 = "159i0vdjz7abb8bycz47ax4fqlzc82kv19sygqnrkr86qm4g43wy";
+    url = "${meta.homepage}/files/tetgen1.4.3.tar.gz";
+    sha256 = "0d70vjqdapmy1ghlsxjlvl5z9yp310zw697bapc4zxmp0sxi29wm";
   };
 
   installPhase = ''
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Quality Tetrahedral Mesh Generator and 3D Delaunay Triangulator";
-    homepage = "http://tetgen.berlios.de/";
+    homepage = "http://tetgen.org/";
     license = "MIT";
   };
 }

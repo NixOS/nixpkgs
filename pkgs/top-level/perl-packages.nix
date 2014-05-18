@@ -7460,7 +7460,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "8e7dae184444e27ee959e33b3ae161cc83115d11da189ed5003b004450e04b48";
     };
     meta = {
-      homepage = http://web-cpan.berlios.de/modules/Statistics-Descriptive/;
+      #homepage = http://web-cpan.berlios.de/modules/Statistics-Descriptive/; # berlios shut down; I found no replacement
       description = "Module of basic descriptive statistical functions";
       license = "perl";
     };

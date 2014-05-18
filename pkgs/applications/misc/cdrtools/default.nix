@@ -1,6 +1,6 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "cdrtools-2.01";
   
   configurePhase = "prefix=$out";  
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   '';
   
   src = fetchurl {
-    url = ftp://ftp.berlios.de/pub/cdrecord/cdrtools-2.01.tar.bz2;
+    url = "mirror://sourceforge/cdrtools/${name}.tar.bz2";
     md5 = "d44a81460e97ae02931c31188fe8d3fd";
   };
   
@@ -24,6 +24,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Highly portable CD/DVD/BluRay command line recording software (deprecated; use cdrkit instead)";
-    homepage = http://cdrecord.berlios.de/old/private/cdrecord.html;
+    homepage = http://sourceforge.net/projects/cdrtools/; # berlios shut down; I found no better link
   };
 }
