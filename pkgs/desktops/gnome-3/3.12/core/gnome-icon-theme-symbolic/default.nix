@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, gnome3, iconnamingutils, gtk }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-icon-theme-symbolic-3.10.1";
+  name = "gnome-icon-theme-symbolic-3.12.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-icon-theme-symbolic/3.10/${name}.tar.xz";
-    sha256 = "344e88e5f9dac3184bf012d9bac972110df2133b93d76f2ad128d4c9cbf41412";
+    url = "mirror://gnome/sources/gnome-icon-theme-symbolic/3.12/${name}.tar.xz";
+    sha256 = "851a4c9d8e8cb0000c9e5e78259ab8b8e67c5334e4250ebcc8dfdaa33520068b";
   };
 
   configureFlags = "--enable-icon-mapping";
