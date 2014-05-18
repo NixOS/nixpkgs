@@ -4,22 +4,20 @@
 , libxml2, polkit, libxslt, libgtop, libsoup, colord, colord-gtk
 , cracklib, python, krb5, networkmanagerapplet, networkmanager
 , libwacom, samba, shared_mime_info, tzdata, icu, libtool
-, docbook_xsl, docbook_xsl_ns, modemmanager }:
+, docbook_xsl, docbook_xsl_ns, modemmanager, clutter, clutter_gtk }:
 
 # http://ftp.gnome.org/pub/GNOME/teams/releng/3.10.2/gnome-suites-core-3.10.2.modules
 # TODO: bluetooth, wacom, smbclient, printers
 
 stdenv.mkDerivation rec {
-  name = "gnome-control-center-3.10.2";
+  name = "gnome-control-center-3.12.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-control-center/3.10/${name}.tar.xz";
-    sha256 = "1ac34kqkf174w0qc12p927dfhcm69xnv7fqzmbhjab56rn49wypn";
+    url = "mirror://gnome/sources/gnome-control-center/3.12/${name}.tar.xz";
+    sha256 = "5297d448eff0ec58f6c0ad9fbd1b94bed0a850496df0ee65571c0622b49c1582";
   };
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard gnome3.libgnomekbd ];
-  propagatedBuildInputs = [ gdk_pixbuf gnome3.gnome_icon_theme librsvg
-                            hicolor_icon_theme gnome3.gnome_icon_theme_symbolic ];
 
   enableParallelBuilding = true;
 
@@ -28,7 +26,9 @@ stdenv.mkDerivation rec {
       libxml2 gnome_desktop gnome_settings_daemon polkit libxslt libgtop gnome-menus
       gnome_online_accounts libsoup colord pulseaudio fontconfig colord-gtk libpwquality
       accountservice krb5 networkmanagerapplet libwacom samba libnotify libxkbfile
-      shared_mime_info icu libtool docbook_xsl docbook_xsl_ns 
+      shared_mime_info icu libtool docbook_xsl docbook_xsl_ns gnome3.grilo
+      gdk_pixbuf gnome3.gnome_icon_theme librsvg clutter clutter_gtk
+      hicolor_icon_theme gnome3.gnome_icon_theme_symbolic
       networkmanager modemmanager makeWrapper  ];
 
   preBuild = ''
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   preFixup = with gnome3; ''
     wrapProgram $out/bin/gnome-control-center \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:${gnome_settings_daemon}/share:${glib}/share:${gtk}/share:${colord}/share:$out/share:$out/share/gnome-control-center:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$out/share:$out/share/gnome-control-center:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
     for i in $out/share/applications/*; do
       substituteInPlace $i --replace "gnome-control-center" "$out/bin/gnome-control-center"
     done
