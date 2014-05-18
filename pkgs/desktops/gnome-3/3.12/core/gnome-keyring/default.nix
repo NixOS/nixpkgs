@@ -3,11 +3,11 @@
 , docbook_xsl_ns, docbook_xsl, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-keyring-3.10.1";
+  name = "gnome-keyring-3.12.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-keyring/3.10/${name}.tar.xz";
-    sha256 = "1y6v2p14jx5h6yh14c53pd8r0r5zbmcgw8v4nxvf94kd9jliy00q";
+    url = "mirror://gnome/sources/gnome-keyring/3.12/${name}.tar.xz";
+    sha256 = "3bc39a42d445b82d24247a8c39eeb0eef7ecb1c8ebb8e6ec62671868be93fd4c";
   };
 
   buildInputs = with gnome3; [
