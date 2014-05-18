@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "gtksourceview-${version}";
-  version = "3.10.1";
+  version = "3.12.2";
 
   src = fetchurl {
-    url = "https://download.gnome.org/sources/gtksourceview/3.10/gtksourceview-${version}.tar.xz";
-    sha256 = "008bzfr1s6ywpj8c8qx7495lz9g0ziccwbxg88s0l4dl6bw49piq";
+    url = "mirror://gnome/sources/gtksourceview/3.12/gtksourceview-${version}.tar.xz";
+    sha256 = "62a31eee00f633d7959efb7eec44049ebd0345d670265853dcd21c057f3f30ad";
   };
 
   buildInputs = [ pkgconfig atk cairo glib gtk3 pango
