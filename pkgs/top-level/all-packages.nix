@@ -6769,6 +6769,8 @@ let
 
   sipwitch = callPackage ../servers/sip/sipwitch { };
 
+  spawn_fcgi = callPackage ../servers/http/spawn-fcgi { };
+
   squids = recurseIntoAttrs( import ../servers/squid/squids.nix {
     inherit fetchurl stdenv perl lib composableDerivation
       openldap pam db cyrus_sasl kerberos libcap expat libxml2 libtool
