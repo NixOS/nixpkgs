@@ -160,6 +160,7 @@ let version = "4.8.2";
           " --disable-libgomp " +
           " --disable-libquadmath" +
           " --disable-shared" +
+          " --disable-libatomic " +  # libatomic requires libc
           " --disable-decimal-float" # libdecnumber requires libc
           else
           (if crossDarwin then " --with-sysroot=${libcCross}/share/sysroot"
