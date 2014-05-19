@@ -2,15 +2,15 @@
 , gnome3, libsoup, json_glib }:
 
 stdenv.mkDerivation rec {
-  name = "gfbgraph-0.2";
+  name = "gfbgraph-0.2.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gfbgraph/0.2/${name}.tar.xz";
-    sha256 = "534ca84920445b9d89e2480348eedde3ce950db3628ae0a79703e8f2d52fa724";
+    sha256 = "66c7b1c951863565c179d0b4b5207f27b3b36f80afed9f6a9acfc5fc3ae775d4";
   };
 
-  buildInputs = [ pkgconfig glib libsoup gnome3.gnome_online_accounts
-                  json_glib gnome3.rest ];
+  buildInputs = [ pkgconfig glib gnome3.gnome_online_accounts ];
+  propagatedBuildInputs = [ libsoup json_glib gnome3.rest ];
 
   enableParallelBuilding = true;
 
