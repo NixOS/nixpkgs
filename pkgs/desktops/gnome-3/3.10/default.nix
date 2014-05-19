@@ -1,7 +1,7 @@
 { callPackage, self, pkgs }:
 
 rec {
-  inherit (pkgs) glib gtk2 gtk3 gnome2;
+  inherit (pkgs) glib gtk2 gtk3 gnome2 upower;
   gtk = gtk3; # just to be sure
   libcanberra = pkgs.libcanberra_gtk3; # just to be sure
   inherit (pkgs.gnome2) ORBit2;
