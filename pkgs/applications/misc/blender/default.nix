@@ -1,7 +1,8 @@
 { stdenv, fetchurl, SDL, boost, cmake, ffmpeg, gettext, glew
-, ilmbase, jackaudio, libXi, libjpeg, libpng, libsamplerate, libsndfile
+, ilmbase, libXi, libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, mesa, openal, opencolorio, openexr, openimageio, openjpeg, python
 , zlib
+, jackaudioSupport ? false, jackaudio
 }:
 
 stdenv.mkDerivation rec {
@@ -12,25 +13,23 @@ stdenv.mkDerivation rec {
     sha256 = "1rgkijn1nirj3jwh058zv6piw8q4j5wwjapgbvh2hh6fpbj84bgb";
   };
 
-  buildInputs = [
-    SDL boost cmake ffmpeg gettext glew ilmbase jackaudio libXi
-    libjpeg libpng libsamplerate libsndfile libtiff mesa openal
-    opencolorio openexr openimageio openjpeg python zlib
-  ];
+  buildInputs =
+    [ SDL boost cmake ffmpeg gettext glew ilmbase jackaudio libXi
+      libjpeg libpng libsamplerate libsndfile libtiff mesa openal
+      opencolorio openexr openimageio openjpeg python zlib
+    ] ++ stdenv.lib.optional jackaudioSupport jackaudio;
 
-
-  cmakeFlags = [
-    "-DOPENEXR_INC=${openexr}/include/OpenEXR"
-    "-DWITH_OPENCOLLADA=OFF"
-    "-DWITH_CODEC_FFMPEG=ON"
-    "-DWITH_CODEC_SNDFILE=ON"
-    "-DWITH_JACK=ON"
-    "-DWITH_INSTALL_PORTABLE=OFF"
-    "-DPYTHON_LIBRARY=python${python.majorVersion}m"    
-    "-DPYTHON_LIBPATH=${python}/lib"
-    "-DPYTHON_INCLUDE_DIR=${python}/include/python${python.majorVersion}m"
-    "-DPYTHON_VERSION=${python.majorVersion}"
-  ];
+  cmakeFlags =
+    [ "-DOPENEXR_INC=${openexr}/include/OpenEXR"
+      "-DWITH_OPENCOLLADA=OFF"
+      "-DWITH_CODEC_FFMPEG=ON"
+      "-DWITH_CODEC_SNDFILE=ON"
+      "-DWITH_INSTALL_PORTABLE=OFF"
+      "-DPYTHON_LIBRARY=python${python.majorVersion}m"
+      "-DPYTHON_LIBPATH=${python}/lib"
+      "-DPYTHON_INCLUDE_DIR=${python}/include/python${python.majorVersion}m"
+      "-DPYTHON_VERSION=${python.majorVersion}"
+    ] ++ stdenv.lib.optional jackaudioSupport "-DWITH_JACK=ON";
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR -I${python}/include/${python.libPrefix}m";
 
@@ -44,6 +43,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];
-
   };
 }
