@@ -1,13 +1,13 @@
 { stdenv, fetchurl }:
 
-let version = "4.10.4"; in
+let version = "4.10.5"; in
 
 stdenv.mkDerivation {
   name = "nspr-${version}";
 
   src = fetchurl {
     url = "http://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v${version}/src/nspr-${version}.tar.gz";
-    sha1 = "43b2029d990515f952c89d2921397c064fbbe2e7";
+    sha1 = "891de2b62ad42f9b38808a0aa58c95e8cbd5c9a9";
   };
 
   preConfigure = "cd nspr";
