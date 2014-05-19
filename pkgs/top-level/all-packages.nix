@@ -4264,6 +4264,8 @@ let
 
   cogl = callPackage ../development/libraries/cogl { };
 
+  cogl_1_18 = callPackage ../development/libraries/cogl/1.18.nix { };
+
   coin3d = callPackage ../development/libraries/coin3d { };
 
   commoncpp2 = callPackage ../development/libraries/commoncpp2 { };

@@ -4,6 +4,7 @@ rec {
   inherit (pkgs) glib gtk2 gtk3 gnome2;
   gnome3 = pkgs.gnome3_12;
   upower = pkgs.upower_99;
+  cogl = pkgs.cogl_1_18;
   gtk = gtk3; # just to be sure
   libcanberra = pkgs.libcanberra_gtk3; # just to be sure
   inherit (pkgs.gnome2) ORBit2;
