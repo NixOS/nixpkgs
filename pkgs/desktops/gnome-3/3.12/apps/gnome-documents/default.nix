@@ -6,11 +6,11 @@
 , gmp, desktop_file_utils }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-documents-3.10.2";
+  name = "gnome-documents-3.12.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-documents/3.10/${name}.tar.xz";
-    sha256 = "2b7267c9c4e5767039632cb31877ed2e57f994b657e8863dd79af5287db45745";
+    url = "mirror://gnome/sources/gnome-documents/3.12/${name}.tar.xz";
+    sha256 = "6d0df1d90781d56992ed5d5c2591833e89e3aa756ccab63f82dd935185ce5a53";
   };
 
   doCheck = true;
