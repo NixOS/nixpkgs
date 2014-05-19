@@ -642,6 +642,8 @@ let
 
   apparix = callPackage ../tools/misc/apparix { };
 
+  appdata-tools = callPackage ../tools/misc/appdata-tools { };
+
   asciidoc = callPackage ../tools/typesetting/asciidoc {
     inherit (pythonPackages) matplotlib numpy aafigure recursivePthLoader;
     enableStandardFeatures = false;
