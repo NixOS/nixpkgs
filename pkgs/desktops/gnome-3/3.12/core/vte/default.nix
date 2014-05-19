@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
 
-  versionMajor = "0.35";
-  versionMinor = "90";
+  versionMajor = "0.36";
+  versionMinor = "2";
   moduleName   = "vte";
   
   name = "${moduleName}-${versionMajor}.${versionMinor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${moduleName}/${versionMajor}/${name}.tar.xz";
-    sha256 = "c47182d1724db479095b918898ce62297ec71988f24cd575506151c59f7b98cf";
+    sha256 = "f45eed3aed823068c7563345ea947be0e6ddb3dacd74646e6d7d26a921e04345";
   };
 
   buildInputs = [ gobjectIntrospection intltool pkgconfig gnome3.glib gnome3.gtk3 ncurses ];
