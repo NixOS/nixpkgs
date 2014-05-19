@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.5.1";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/mednafen/Mednafen-Server/${version}/${name}-${version}.tar.gz";
+    url = "http://downloads.sourceforge.net/project/mednafen/Mednafen-Server/${version}/${name}.tar.gz";
     sha256="0c5wvg938y3h4n5lb0dl8pvmjzphhkbba34r6ikpvdahq166ps4j";
   };
 
