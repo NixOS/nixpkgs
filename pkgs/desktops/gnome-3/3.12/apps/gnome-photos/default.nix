@@ -5,11 +5,11 @@
 , gnome3, librsvg, gdk_pixbuf, libexif }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-photos-3.10.2";
+  name = "gnome-photos-3.12.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-photos/3.10/${name}.tar.xz";
-    sha256 = "820503c26a0f829682dd46653e8f0850ac687aba42728ac74350ba8406e80975";
+    url = "mirror://gnome/sources/gnome-photos/3.12/${name}.tar.xz";
+    sha256 = "077cc6c2ae28680457fba435a22184e25f3a60a6fbe1901a75e42f6f6136538f";
   };
 
   doCheck = true;
