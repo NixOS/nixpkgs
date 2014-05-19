@@ -1,15 +1,15 @@
 { stdenv, intltool, fetchurl, libxml2, webkitgtk, highlight
-, pkgconfig, gtk3, glib, hicolor_icon_theme, libnotify
-, makeWrapper, itstool, shared_mime_info, libical, db
+, pkgconfig, gtk3, glib, hicolor_icon_theme, libnotify, gtkspell3
+, makeWrapper, itstool, shared_mime_info, libical, db, gcr
 , gnome3, librsvg, gdk_pixbuf, libsecret, nss, nspr, icu
-, libcanberra_gtk3, bogofilter, gst_all_1, procps }:
+, libcanberra_gtk3, bogofilter, gst_all_1, procps, p11_kit }:
 
 stdenv.mkDerivation rec {
-  name = "evolution-3.10.4";
+  name = "evolution-3.12.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evolution/3.10/${name}.tar.xz";
-    sha256 = "ac60557f264f211e6a7bc0ced919041c154e4c7b9c79600516aee7acc1d03e40";
+    url = "mirror://gnome/sources/evolution/3.12/${name}.tar.xz";
+    sha256 = "60742334aaf1e3b9f044c2003c44a37be5905b166e24580e9e6e6c5ae1b9f948";
   };
 
   doCheck = true;
@@ -18,17 +18,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig gtk3 glib intltool itstool libxml2
                   gdk_pixbuf gnome3.gnome_icon_theme librsvg db icu
-                  gnome3.evolution_data_server libsecret libical
-                  webkitgtk shared_mime_info gnome3.gnome_desktop
+                  gnome3.evolution_data_server libsecret libical gcr
+                  webkitgtk shared_mime_info gnome3.gnome_desktop gtkspell3
                   libcanberra_gtk3 gnome3.gtkhtml bogofilter gnome3.libgdata
-                  gst_all_1.gstreamer gst_all_1.gst-plugins-base
+                  gst_all_1.gstreamer gst_all_1.gst-plugins-base p11_kit
                   hicolor_icon_theme gnome3.gnome_icon_theme_symbolic
                   nss nspr libnotify procps highlight gnome3.libgweather
                   gnome3.gsettings_desktop_schemas makeWrapper ];
 
   configureFlags = [ "--disable-spamassassin" "--disable-pst-import" ];
 
-  NIX_CFLAGS_COMPILE = "-I${nspr}/include/nspr -I${nss}/include/nss";
+  NIX_CFLAGS_COMPILE = "-I${nspr}/include/nspr -I${nss}/include/nss -I${glib}/include/gio-unix-2.0";
 
   enableParallelBuilding = true;
 
