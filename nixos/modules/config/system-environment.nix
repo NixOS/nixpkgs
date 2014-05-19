@@ -18,7 +18,7 @@ in
       default = {};
       description = ''
         A set of environment variables used in the global environment.
-        These varibales will be set by PAM.
+        These variables will be set by PAM.
         The value of each variable can be either a string or a list of
         strings.  The latter is concatenated, interspersed with colon
         characters.
