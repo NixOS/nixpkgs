@@ -642,6 +642,8 @@ let
 
   apparix = callPackage ../tools/misc/apparix { };
 
+  appdata-tools = callPackage ../tools/misc/appdata-tools { };
+
   asciidoc = callPackage ../tools/typesetting/asciidoc {
     inherit (pythonPackages) matplotlib numpy aafigure recursivePthLoader;
     enableStandardFeatures = false;
@@ -3563,6 +3565,7 @@ let
   spidermonkey_1_8_0rc1 = callPackage ../development/interpreters/spidermonkey/1.8.0-rc1.nix { };
   spidermonkey_185 = callPackage ../development/interpreters/spidermonkey/185-1.0.0.nix { };
   spidermonkey_17 = callPackage ../development/interpreters/spidermonkey/17.0.nix { };
+  spidermonkey_24 = callPackage ../development/interpreters/spidermonkey/24.2.nix { };
 
   supercollider = callPackage ../development/interpreters/supercollider {
     qt = qt4;
@@ -4252,6 +4255,10 @@ let
 
   clutter = callPackage ../development/libraries/clutter { };
 
+  clutter_1_18 = callPackage ../development/libraries/clutter/1.18.nix {
+    cogl = cogl_1_18;
+  };
+
   clutter-gst = callPackage ../development/libraries/clutter-gst { };
 
   clutter_gtk = callPackage ../development/libraries/clutter-gtk { };
@@ -4260,6 +4267,8 @@ let
   cminpack = callPackage ../development/libraries/cminpack { };
 
   cogl = callPackage ../development/libraries/cogl { };
+
+  cogl_1_18 = callPackage ../development/libraries/cogl/1.18.nix { };
 
   coin3d = callPackage ../development/libraries/coin3d { };
 
@@ -7543,6 +7552,8 @@ let
 
   upower = callPackage ../os-specific/linux/upower { };
 
+  upower_99 = callPackage ../os-specific/linux/upower/0.99.nix { };
+
   upstart = callPackage ../os-specific/linux/upstart { };
 
   usbutils = callPackage ../os-specific/linux/usbutils { };
@@ -10171,9 +10182,13 @@ let
     inherit (pkgs) libsoup libwnck gtk_doc gnome_doc_utils;
   };
 
-  gnome3 = recurseIntoAttrs (callPackage ../desktops/gnome-3 {
+  gnome3 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.10 {
     callPackage = pkgs.newScope pkgs.gnome3;
     self = pkgs.gnome3;
+  });
+
+  gnome3_12 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.12 {
+    callPackage = pkgs.newScope pkgs.gnome3_12;
   });
 
   gnome = recurseIntoAttrs gnome2;

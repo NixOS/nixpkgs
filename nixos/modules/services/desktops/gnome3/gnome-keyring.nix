@@ -4,6 +4,9 @@
 
 with pkgs.lib;
 
+let
+  gnome3 = config.environment.gnome3.packageSet;
+in
 {
 
   ###### interface
@@ -31,9 +34,9 @@ with pkgs.lib;
 
   config = mkIf config.services.gnome3.gnome-keyring.enable {
 
-    environment.systemPackages = [ pkgs.gnome3.gnome_keyring ];
+    environment.systemPackages = [ gnome3.gnome_keyring ];
 
-    services.dbus.packages = [ pkgs.gnome3.gnome_keyring ];
+    services.dbus.packages = [ gnome3.gnome_keyring ];
 
   };
 

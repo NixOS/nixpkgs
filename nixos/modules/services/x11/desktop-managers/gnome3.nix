@@ -4,13 +4,13 @@ with lib;
 
 let
   cfg = config.services.xserver.desktopManager.gnome3;
-  gnome3 = pkgs.gnome3;
+  gnome3 = config.environment.gnome3.packageSet;
 
   # Remove packages of ys from xs, based on their names
   removePackagesByName = xs: ys:
     let
       pkgName = drv: (builtins.parseDrvName drv.name).name;
-	  ysNames = map pkgName ys;
+      ysNames = map pkgName ys;
       res = (filter (x: !(builtins.elem (pkgName x) ysNames)) xs);
     in
       filter (x: !(builtins.elem (pkgName x) ysNames)) xs;
@@ -35,6 +35,12 @@ in {
       description = "Enable Gnome 3 desktop manager.";
     };
 
+    environment.gnome3.packageSet = mkOption {
+      default = pkgs.gnome3;
+      example = literalExample "pkgs.gnome3_12";
+      description = "Which Gnome 3 package set to use.";
+    };
+    
     environment.gnome3.excludePackages = mkOption {
       default = [];
       example = "[ pkgs.gnome3.totem ]";
@@ -64,6 +70,7 @@ in {
     services.telepathy.enable = mkDefault true;
     networking.networkmanager.enable = true;
     services.upower.enable = config.powerManagement.enable;
+    services.upower.package = gnome3.upower;
 
     fonts.fonts = [ pkgs.dejavu_fonts ];
 
@@ -80,7 +87,7 @@ in {
 
           # Don't let epiphany depend upon gnome-shell
           # Override default mimeapps
-          export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${pkgs.gnome3.gnome_shell}/share/gsettings-schemas/${pkgs.gnome3.gnome_shell.name}:${mimeAppsList}/share
+          export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${gnome3.gnome_shell}/share/gsettings-schemas/${gnome3.gnome_shell.name}:${mimeAppsList}/share
 
           # Let gnome-control-center find gnome-shell search providers
           export GNOME_SEARCH_PROVIDERS_DIR=${config.system.path}/share/gnome-shell/search-providers/

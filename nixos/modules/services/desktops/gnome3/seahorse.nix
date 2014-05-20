@@ -4,6 +4,9 @@
 
 with pkgs.lib;
 
+let
+  gnome3 = config.environment.gnome3.packageSet;
+in
 {
 
   ###### interface
@@ -29,9 +32,9 @@ with pkgs.lib;
 
   config = mkIf config.services.gnome3.seahorse.enable {
 
-    environment.systemPackages = [ pkgs.gnome3.seahorse ];
+    environment.systemPackages = [ gnome3.seahorse ];
 
-    services.dbus.packages = [ pkgs.gnome3.seahorse ];
+    services.dbus.packages = [ gnome3.seahorse ];
 
   };
 

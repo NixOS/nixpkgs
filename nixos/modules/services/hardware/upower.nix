@@ -4,6 +4,9 @@
 
 with lib;
 
+let
+  cfg = config.services.upower;
+in
 {
 
   ###### interface
@@ -21,6 +24,15 @@ with lib;
         '';
       };
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.upower;
+        example = lib.literalExample "pkgs.upower";
+        description = ''
+          Which upower package to use.
+        '';
+      };
+
     };
 
   };
@@ -28,13 +40,13 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.services.upower.enable {
+  config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.upower ];
+    environment.systemPackages = [ cfg.package ];
 
-    services.dbus.packages = [ pkgs.upower ];
+    services.dbus.packages = [ cfg.package ];
 
-    services.udev.packages = [ pkgs.upower ];
+    services.udev.packages = [ cfg.package ];
 
     systemd.services.upower =
       { description = "Power Management Daemon";
@@ -42,7 +54,7 @@ with lib;
         serviceConfig =
           { Type = "dbus";
             BusName = "org.freedesktop.UPower";
-            ExecStart = "@${pkgs.upower}/libexec/upowerd upowerd";
+            ExecStart = "@${cfg.package}/libexec/upowerd upowerd";
           };
       };
 

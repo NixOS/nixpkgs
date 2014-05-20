@@ -4,6 +4,9 @@
 
 with pkgs.lib;
 
+let
+  gnome3 = config.environment.gnome3.packageSet;
+in
 {
 
   ###### interface
@@ -30,9 +33,9 @@ with pkgs.lib;
 
   config = mkIf config.services.gnome3.gnome-online-accounts.enable {
 
-    environment.systemPackages = [ pkgs.gnome3.gnome_online_accounts ];
+    environment.systemPackages = [ gnome3.gnome_online_accounts ];
 
-    services.dbus.packages = [ pkgs.gnome3.gnome_online_accounts ];
+    services.dbus.packages = [ gnome3.gnome_online_accounts ];
 
   };
 
