@@ -4,12 +4,12 @@
 stdenv.mkDerivation rec {
   name = "file-roller-${version}";
 
-  majVersion = "3.10";
-  version = "${majVersion}.2.1";
+  majVersion = "3.12";
+  version = "${majVersion}.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/file-roller/${majVersion}/${name}.tar.xz";
-    sha256 = "14374z1yfbjlgpl4k1ih8b35x8kzvh99y22rwwkc2wfz0d0i1qgx";
+    sha256 = "0677be6618dba609eae2d76420e8a5a8d9a414bcec654e7b71e65b941764eacf";
   };
 
   # TODO: support nautilus
