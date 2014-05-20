@@ -1,5 +1,5 @@
 { stdenv, fetchurl, networkmanager, pptp, ppp, intltool, pkgconfig, substituteAll
-, withGnome ? false, gtk, libgnome_keyring }:
+, withGnome ? true, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ networkmanager pptp ppp ]
-    ++ stdenv.lib.optionals withGnome [ gtk libgnome_keyring ];
+    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome_keyring ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
 
   configureFlags =
-    if withGnome then "--with-gnome --with-gtkver=2" else "--without-gnome";
+    if withGnome then "--with-gnome --with-gtkver=3" else "--without-gnome";
 
   postConfigure = "sed 's/-Werror//g' -i Makefile */Makefile";
 
