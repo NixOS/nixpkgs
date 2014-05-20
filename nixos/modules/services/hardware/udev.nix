@@ -22,7 +22,7 @@ let
     KERNEL=="kqemu",                MODE="0666"
 
     # Needed for gpm.
-    KERNEL=="input/mice", TAG+="systemd"
+    SUBSYSTEM=="input", KERNEL=="mice", TAG+="systemd"
   '';
 
   # Perform substitutions in all udev rules files.
