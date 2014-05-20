@@ -4,11 +4,11 @@
 , gnome3, librsvg, gdk_pixbuf, geoclue2 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-clocks-3.10.1";
+  name = "gnome-clocks-3.12.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-clocks/3.10/${name}.tar.xz";
-    sha256 = "5f6f3b7bb9929353d974aa444b10bb4d0f414176449cce2c626fabd2d4b55b43";
+    url = "mirror://gnome/sources/gnome-clocks/3.12/${name}.tar.xz";
+    sha256 = "3fc0ce2b7b2540d6c2d791ff63ab1670f189a339c804fcf24c9010a478314604";
   };
 
   doCheck = true;
