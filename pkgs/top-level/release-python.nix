@@ -1190,7 +1190,6 @@ let
   networkmanager = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   networkmanagerapplet = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   networkmanager_pptp = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  networkmanager_pptp_gnome = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   neverball = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   nfsUtils = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   ngspice = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
