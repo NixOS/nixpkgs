@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
         -e "s|which |${which}/bin/which |" \
         -i "$out/share/fish/functions/_.fish"
     sed -i "s|Popen(\['manpath'|Popen(\['${man_db}/bin/manpath'|" "$out/share/fish/tools/create_manpage_completions.py"
+    sed -i "s|/sbin /usr/sbin||" \
+           "$out/share/fish/functions/__fish_complete_subcommand_root.fish"
   '';
 
   meta = with stdenv.lib; {
