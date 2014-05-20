@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, gnupg, p11_kit, glib
 , libgcrypt, libtasn1, dbus_glib, gtk, pango, gdk_pixbuf, atk
-, gobjectIntrospection, makeWrapper, libxslt }:
+, gobjectIntrospection, makeWrapper, libxslt, vala }:
 
 stdenv.mkDerivation rec {
   name = "gcr-3.12.2";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig intltool gnupg p11_kit glib gobjectIntrospection libxslt
-    libgcrypt libtasn1 dbus_glib gtk pango gdk_pixbuf atk makeWrapper
+    libgcrypt libtasn1 dbus_glib gtk pango gdk_pixbuf atk makeWrapper vala
   ];
 
   #doCheck = true;
