@@ -812,5 +812,7 @@ in
         ${concatStringsSep "\n" cfg.tmpfiles.rules}
       '';
 
+    systemd.services."user@".restartIfChanged = false;
+
   };
 }
