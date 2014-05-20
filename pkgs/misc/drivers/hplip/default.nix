@@ -93,6 +93,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/etc/sane.d/dll.d
     mv $out/etc/sane.d/dll.conf $out/etc/sane.d/dll.d/hpaio.conf
+
+    rm $out/etc/udev/rules.d/56-hpmud.rules
     ''));
 
   buildInputs = [
