@@ -45,6 +45,7 @@ in
 
         wantedBy = [ "multi-user.target" ];
         requires = [ "dev-input-mice.device" ];
+        after = [ "dev-input-mice.device" ];
 
         serviceConfig.ExecStart = "@${pkgs.gpm}/sbin/gpm gpm -m /dev/input/mice -t ${cfg.protocol}";
         serviceConfig.Type = "forking";
