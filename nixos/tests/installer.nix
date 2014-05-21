@@ -161,10 +161,10 @@ let
           "/mnt/etc/nixos/configuration.nix");
 
       # Perform the installation.
-      $machine->succeed("nixos-install >&2");
+      $machine->succeed("nixos-install < /dev/null >&2");
 
       # Do it again to make sure it's idempotent.
-      $machine->succeed("nixos-install >&2");
+      $machine->succeed("nixos-install < /dev/null >&2");
 
       $machine->succeed("umount /mnt/boot || true");
       $machine->succeed("umount /mnt");
