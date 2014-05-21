@@ -135,8 +135,7 @@ python.stdenv.mkDerivation (attrs // {
     runHook postInstall
   '';
 
-  postFixup =
-    ''
+  postFixup = attrs.postFixup or ''
       wrapPythonPrograms
 
       # If a user installs a Python package, they probably also wants its
