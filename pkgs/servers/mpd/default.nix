@@ -80,6 +80,7 @@ in stdenv.mkDerivation rec {
       (mkFlag mmsSupport "mms")
       (mkFlag mpg123Support "mpg123")
       (mkFlag aacSupport "aac")
+      (mkFlag stdenv.isDarwin "osx")
       "--enable-debugging" ]
     ++ opt stdenv.isLinux
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system";

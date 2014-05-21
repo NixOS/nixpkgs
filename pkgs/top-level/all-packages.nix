@@ -6606,12 +6606,7 @@ let
 
   mod_wsgi = callPackage ../servers/http/apache-modules/mod_wsgi { };
 
-  mpd = callPackage ../servers/mpd {
-    # resolve the "stray '@' in program" errors
-    stdenv = if stdenv.isDarwin
-      then overrideGCC stdenv gccApple
-      else stdenv;
-  };
+  mpd = callPackage ../servers/mpd { };
 
   mpd_clientlib = callPackage ../servers/mpd/clientlib.nix { };
 
