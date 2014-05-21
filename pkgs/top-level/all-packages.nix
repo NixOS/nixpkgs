@@ -2141,6 +2141,8 @@ let
 
   txt2man = callPackage ../tools/misc/txt2man { };
 
+  typescript = callPackage ../development/web/typescript { };
+
   ucl = callPackage ../development/libraries/ucl { };
 
   udftools = callPackage ../tools/filesystems/udftools {};
