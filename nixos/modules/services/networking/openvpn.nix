@@ -50,7 +50,7 @@ let
       description = "OpenVPN instance ‘${name}’";
 
       wantedBy = optional cfg.autoStart "multi-user.target";
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
 
       path = [ pkgs.iptables pkgs.iproute pkgs.nettools ];
 
