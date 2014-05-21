@@ -4632,6 +4632,8 @@ let
 
   gst_python = callPackage ../development/libraries/gstreamer/legacy/gst-python {};
 
+  gstreamermm = callPackage ../development/libraries/gstreamermm { };
+
   gnonlin = callPackage ../development/libraries/gstreamer/legacy/gnonlin {};
 
   gusb = callPackage ../development/libraries/gusb {
@@ -6023,6 +6025,8 @@ let
   stlport = callPackage ../development/libraries/stlport { };
 
   strigi = callPackage ../development/libraries/strigi { clucene_core = clucene_core_2; };
+
+  subtitleeditor = callPackage ../applications/video/subtitleeditor { };
 
   suil = callPackage ../development/libraries/audio/suil { };
 
