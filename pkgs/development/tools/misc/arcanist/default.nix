@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Command line interface to Phabricator";
     homepage    = "http://phabricator.org";
-    license     = stdenv.lib.licenses.apache;
+    license     = stdenv.lib.licenses.asl20;
     platforms   = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
