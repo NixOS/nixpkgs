@@ -712,6 +712,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   fileLocation = callPackage ../development/libraries/haskell/file-location {};
 
+  fmlist = callPackage ../development/libraries/haskell/fmlist {};
+
   ftphs = callPackage ../development/libraries/haskell/ftphs {};
 
   extensibleEffects = callPackage ../development/libraries/haskell/extensible-effects {};
