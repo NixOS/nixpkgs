@@ -16,11 +16,11 @@ cabal.mkDerivation (self: {
     binary clock connection dataBinaryIeee754 hspec hspecExpectations
     network split text
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/hreinhardt/amqp";
     description = "Client library for AMQP servers (currently only RabbitMQ)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };
-  doCheck = false;
 })
