@@ -1242,6 +1242,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   languageEcmascript = callPackage ../development/libraries/haskell/language-ecmascript {};
 
+  languageGlsl = callPackage ../development/libraries/haskell/language-glsl {};
+
   languageJava = callPackage ../development/libraries/haskell/language-java {};
 
   languageJavascript = callPackage ../development/libraries/haskell/language-javascript {};
