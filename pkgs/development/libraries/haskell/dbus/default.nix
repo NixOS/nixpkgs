@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "dbus";
-  version = "0.10.7";
-  sha256 = "0xszynw6p07r7z9nlq8alx5lxfjm57gljya835ccj63hqhkr5yxh";
+  version = "0.10.8";
+  sha256 = "1pqcb6fk6l2xzwyy3n9sa2q2k3qykym1f98n2zf75545ix46b1r6";
   buildDepends = [
     cereal libxmlSax network parsec random text transformers vector
     xmlTypes
