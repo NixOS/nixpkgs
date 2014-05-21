@@ -1,16 +1,21 @@
-{ cabal, ListLike, MonadCatchIOTransformers, monadControl, parallel
-, transformers, transformersBase
+{ cabal, exceptions, HUnit, ListLike, monadControl, mtl, parallel
+, QuickCheck, testFramework, testFrameworkHunit
+, testFrameworkQuickcheck2, transformers, transformersBase
 }:
 
 cabal.mkDerivation (self: {
   pname = "iteratee";
-  version = "0.8.9.5";
-  sha256 = "0akv7zcyb3c213f8qz1xv1qyq04wa427a4mh8rmz1jlmcwiznk7z";
+  version = "0.8.9.6";
+  sha256 = "1yc5fqqb8warvgld3cymka7d2wmjydvfin5jy7zaazb7alf14q1p";
   buildDepends = [
-    ListLike MonadCatchIOTransformers monadControl parallel
-    transformers transformersBase
+    exceptions ListLike monadControl parallel transformers
+    transformersBase
   ];
-  jailbreak = true;
+  testDepends = [
+    exceptions HUnit ListLike monadControl mtl QuickCheck testFramework
+    testFrameworkHunit testFrameworkQuickcheck2 transformers
+    transformersBase
+  ];
   meta = {
     homepage = "http://www.tiresiaspress.us/haskell/iteratee";
     description = "Iteratee-based I/O";
