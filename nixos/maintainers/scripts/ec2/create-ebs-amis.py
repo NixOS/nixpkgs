@@ -18,7 +18,7 @@ parser.add_argument('--hvm', dest='hvm', action='store_true', help='Create HVM i
 parser.add_argument('--key', dest='key_name', action='store_true', help='Keypair used for HVM instance creation', default="rob")
 args = parser.parse_args()
 
-instance_type = "m3.xlarge" if args.hvm else "m1.small"
+instance_type = "m3.medium" if args.hvm else "m1.small"
 ebs_size = 8 if args.hvm else 20
 
 
@@ -52,7 +52,6 @@ depl.deploy(allow_reboot=True)
 
 m = depl.machines['machine']
 
-
 # Do the installation.
 device="/dev/xvdg"
 if args.hvm:
@@ -66,23 +65,26 @@ m.run_command("mkdir -p /mnt")
 m.run_command("mount {0} /mnt".format(device))
 m.run_command("touch /mnt/.ebs")
 m.run_command("mkdir -p /mnt/etc/nixos")
+
 m.run_command("nix-channel --add http://nixos.org/channels/nixos-{} nixos".format(args.channel))
 m.run_command("nix-channel --update")
-m.run_command("nixos-rebuild switch")
-version = m.run_command("nixos-version", capture_stdout=True).split(' ')[0]
+
+version = m.run_command("nix-instantiate --eval-only -A lib.nixpkgsVersion '<nixpkgs>'", capture_stdout=True).split(' ')[0].replace('"','').strip()
 print >> sys.stderr, "NixOS version is {0}".format(version)
-m.upload_file("./amazon-base-config.nix", "/mnt/etc/nixos/configuration.nix")
-m.run_command("nixos-install")
 if args.hvm:
+    m.upload_file("./amazon-base-config.nix", "/mnt/etc/nixos/amazon-base-config.nix")
+    m.upload_file("./amazon-hvm-config.nix", "/mnt/etc/nixos/configuration.nix")
+    m.upload_file("./amazon-hvm-install-config.nix", "/mnt/etc/nixos/amazon-hvm-install-config.nix")
+    m.run_command("NIXOS_CONFIG=/etc/nixos/amazon-hvm-install-config.nix nixos-install")
     m.run_command('nix-env -iA nixos.pkgs.grub')
     m.run_command('cp /nix/store/*-grub-0.97*/lib/grub/i386-pc/* /mnt/boot/grub')
-    m.run_command('sed -i "s|hd0|hd0,0|" /mnt/boot/grub/menu.lst')
     m.run_command('echo "(hd1) /dev/xvdg" > device.map')
     m.run_command('echo -e "root (hd1,0)\nsetup (hd1)" | grub --device-map=device.map --batch')
-
+else:
+    m.upload_file("./amazon-base-config.nix", "/mnt/etc/nixos/configuration.nix")
+    m.run_command("nixos-install")
 
 m.run_command("umount /mnt")
-
 
 if args.hvm:
     ami_name = "nixos-{0}-x86_64-ebs-hvm".format(version)
