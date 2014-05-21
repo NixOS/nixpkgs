@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "threepenny-gui";
-  version = "0.4.1.0";
-  sha256 = "0fafwnlbl96z9m5fr3wiyv090fga78cr9hrd4yd3vyiz44gfrpcw";
+  version = "0.4.2.0";
+  sha256 = "1746l90h9xkwnwxvfqsr93nax7ihv8lwc4kz203v13rrwckr7m8h";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
