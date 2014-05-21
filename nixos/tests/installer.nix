@@ -129,9 +129,10 @@ let
       #$machine->waitForUnit('getty@tty2');
       $machine->waitForUnit("rogue");
       $machine->waitForUnit("nixos-manual");
-      $machine->waitForUnit("dhcpcd");
 
       ${optionalString testChannel ''
+        $machine->waitForUnit("dhcpcd");
+
         # Allow the machine to talk to the fake nixos.org.
         $machine->succeed(
             "rm /etc/hosts",
