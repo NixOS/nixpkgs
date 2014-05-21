@@ -169,7 +169,7 @@ in
       videoDrivers = mkOption {
         type = types.listOf types.str;
         # !!! We'd like "nv" here, but it segfaults the X server.
-        default = [ "ati" "cirrus" "intel" "vesa" "vmware" ];
+        default = [ "ati" "cirrus" "intel" "vesa" "vmware" "modesetting" ];
         example = [ "vesa" ];
         description = ''
           The names of the video drivers the configuration
