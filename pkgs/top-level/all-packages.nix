@@ -468,6 +468,8 @@ let
 
   arandr = callPackage ../tools/X11/arandr { };
 
+  arcanist = callPackage ../development/tools/misc/arcanist {};
+
   arduino_core = callPackage ../development/arduino/arduino-core {
     jdk = jdk;
     jre = jdk;
