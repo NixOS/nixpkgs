@@ -11046,5 +11046,7 @@ let
   # Attributes for backward compatibility.
   adobeReader = adobe-reader;
 
+  ansible = callPackage ../tools/system/ansible { };
+
 
 }; in self; in pkgs
