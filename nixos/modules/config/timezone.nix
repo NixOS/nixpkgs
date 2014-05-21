@@ -2,6 +2,12 @@
 
 with lib;
 
+let
+
+  tzdir = "${pkgs.tzdata}/share/zoneinfo";
+
+in
+
 {
   options = {
 
@@ -26,8 +32,10 @@ with lib;
 
     environment.variables.TZDIR = "/etc/zoneinfo";
 
+    systemd.globalEnvironment.TZDIR = tzdir;
+
     environment.etc.localtime =
-      { source = "${pkgs.tzdata}/share/zoneinfo/${config.time.timeZone}";
+      { source = "${tzdir}/${config.time.timeZone}";
         mode = "direct-symlink";
       };
 
