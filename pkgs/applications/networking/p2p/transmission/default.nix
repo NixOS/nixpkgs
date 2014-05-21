@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "2.82";
+  version = "2.83";
 in
 
 with { inherit (stdenv.lib) optional optionals optionalString; };
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.transmissionbt.com/files/transmission-${version}.tar.xz";
-    sha256 = "08imy28hpjxwdzgvhm66hkfyzp8qnnqr4jhv3rgshryzhw86b5ir";
+    sha256 = "0cqlgl6jmjw1caybz6nzh3l8z0jak1dxba01isv72zvy2r8b1qdh";
   };
 
   buildInputs = [ pkgconfig intltool file openssl curl libevent inotifyTools ]
