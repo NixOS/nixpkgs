@@ -33,9 +33,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   preFixup = ''
-    wrapProgram "$out/bin/evolution" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+    for f in $out/bin/* $out/libexec/*; do
+      wrapProgram "$f" \
+        --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
+        --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+    done
   '';
 
   meta = with stdenv.lib; {
