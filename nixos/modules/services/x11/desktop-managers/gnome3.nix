@@ -101,11 +101,11 @@ in {
       };
 
     environment.variables.GIO_EXTRA_MODULES = [ "${gnome3.dconf}/lib/gio/modules"
-                                                "${pkgs.glib_networking}/lib/gio/modules" ];
+                                                "${gnome3.glib_networking}/lib/gio/modules" ];
     environment.systemPackages =
       [ pkgs.desktop_file_utils
-        pkgs.glib_networking
-        pkgs.gtk3 # for gtk-update-icon-cache
+        gnome3.glib_networking
+        gnome3.gtk3 # for gtk-update-icon-cache
         pkgs.ibus
         pkgs.shared_mime_info # for update-mime-database
         gnome3.dconf
