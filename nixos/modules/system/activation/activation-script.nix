@@ -127,11 +127,6 @@ in
         mkdir -m 0555 -p /var/empty
       '';
 
-    system.activationScripts.media =
-      ''
-        mkdir -m 0755 -p /media
-      '';
-
     system.activationScripts.usrbinenv =
       ''
         mkdir -m 0755 -p /usr/bin
