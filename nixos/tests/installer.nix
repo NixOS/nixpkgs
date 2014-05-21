@@ -173,7 +173,7 @@ let
       $machine->shutdown;
 
       # Now see if we can boot the installation.
-      my $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}" });
+      $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}" });
 
       # Did /boot get mounted?
       $machine->waitForUnit("local-fs.target");
@@ -205,7 +205,7 @@ let
 
       # And just to be sure, check that the machine still boots after
       # "nixos-rebuild switch".
-      my $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}" });
+      $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}" });
       $machine->waitForUnit("network.target");
       $machine->shutdown;
     '';
