@@ -134,6 +134,16 @@ rec {
 
   nautilus = callPackage ./core/nautilus { };
 
+  networkmanager_openvpn = pkgs.networkmanager_openvpn.override { inherit gnome3; };
+
+  networkmanager_pptp = pkgs.networkmanager_pptp.override { inherit gnome3; };
+
+  networkmanager_vpnc = pkgs.networkmanager_vpnc.override { inherit gnome3; };
+
+  networkmanager_openconnect = pkgs.networkmanager_openconnect.override { inherit gnome3; };
+
+  networkmanagerapplet = pkgs.networkmanagerapplet.override { inherit gnome3; };
+
   rest = callPackage ./core/rest { };
 
   sushi = callPackage ./core/sushi { };
