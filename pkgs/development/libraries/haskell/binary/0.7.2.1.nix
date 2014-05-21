@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "binary";
-  version = "0.7.2.0";
-  sha256 = "149pdhzjg9bhl66azgv0nmj3fy38s4klzk01vhzazngdiagfq6wn";
+  version = "0.7.2.1";
+  sha256 = "0s0idmcmribgajxxnxdvppnz62qyxwrj9iy34pi7nvm41gj6q5nz";
   testDepends = [
     Cabal filepath HUnit QuickCheck random testFramework
     testFrameworkQuickcheck2

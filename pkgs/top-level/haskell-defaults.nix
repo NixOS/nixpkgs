@@ -29,17 +29,17 @@
         haskellPackages = self.haskellPackages.override { Cabal = self.Cabal_1_18_1_3; };
       };
     };
-    binaryConduit = super.binaryConduit.override { binary = self.binary_0_7_2_0; };
-    bson = super.bson.override { dataBinaryIeee754 = self.dataBinaryIeee754.override { binary = self.binary_0_7_2_0; }; };
+    binaryConduit = super.binaryConduit.override { binary = self.binary_0_7_2_1; };
+    bson = super.bson.override { dataBinaryIeee754 = self.dataBinaryIeee754.override { binary = self.binary_0_7_2_1; }; };
     criterion = super.criterion.override {
       statistics = self.statistics.override {
-        vectorBinaryInstances = self.vectorBinaryInstances.override { binary = self.binary_0_7_2_0; };
+        vectorBinaryInstances = self.vectorBinaryInstances.override { binary = self.binary_0_7_2_1; };
       };
     };
     gloss = null;                       # requires base >= 4.7
     haddock = self.haddock_2_13_2;
     modularArithmetic = null;           # requires base >= 4.7
-    pipesBinary = super.pipesBinary.override { binary = self.binary_0_7_2_0; };
+    pipesBinary = super.pipesBinary.override { binary = self.binary_0_7_2_1; };
     transformers = self.transformers_0_3_0_0; # core packagen in ghc > 7.6.x
   };
 
@@ -59,7 +59,7 @@
   };
 
   ghc704Prefs = self : super : ghc722Prefs self super // {
-    binary = self.binary_0_7_2_0;       # core package in ghc >= 7.2.2
+    binary = self.binary_0_7_2_1;       # core package in ghc >= 7.2.2
     haddock = self.haddock_2_9_2.override { alex = self.alex_2_3_5; };
     HsSyck = self.HsSyck_0_51;
     jailbreakCabal = super.jailbreakCabal.override { Cabal = self.Cabal_1_16_0_3; };
@@ -80,7 +80,7 @@
 
   ghc6104Prefs = self : super : ghc6123Prefs self super // {
     alex = self.alex_2_3_5.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
-    binary = super.binary_0_6_1_0.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
+    binary = super.binary_0_7_2_1.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
     Cabal = self.Cabal_1_16_0_3;
     GLUT = self.GLUT_2_2_2_1;
     haddock = self.haddock_2_4_2;
