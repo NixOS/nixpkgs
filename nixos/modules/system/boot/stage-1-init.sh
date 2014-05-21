@@ -58,6 +58,7 @@ echo
 mkdir -p /etc
 touch /etc/fstab # to shut up mount
 touch /etc/mtab # to shut up mke2fs
+touch /etc/initrd-release
 mkdir -p /proc
 mount -t proc none /proc
 mkdir -p /sys
@@ -345,8 +346,8 @@ exec 3>&-
 udevadm control --exit || true
 
 # Kill any remaining processes, just to be sure we're not taking any
-# with us into stage 2. unionfs-fuse mounts require the unionfs process.
-pkill -9 -v '(1|unionfs)'
+# with us into stage 2. But keep storage daemons like unionfs-fuse.
+pkill -9 -v -f '@'
 
 
 if test -n "$debug1mounts"; then fail; fi
