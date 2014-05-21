@@ -28,7 +28,9 @@ in
     $client1->execute("mumble mumble://client1\@server/test &");
     $client2->execute("mumble mumble://client2\@server/test &");
 
-    $server->sleep(10); # Wait for Mumble UI to pop up
+    $client1->waitForWindow(qr/Mumble/);
+    $client2->waitForWindow(qr/Mumble/);
+    $server->sleep(3); # Wait some more for the Mumble UI
 
     # cancel client audio configuration
     $client1->sendKeys("esc");
