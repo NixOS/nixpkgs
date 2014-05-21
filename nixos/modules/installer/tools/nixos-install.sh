@@ -80,6 +80,7 @@ mount -t tmpfs -o "mode=0755" none $mountPoint/run
 mount -t tmpfs -o "mode=0755" none $mountPoint/var/setuid-wrappers
 rm -rf $mountPoint/var/run
 ln -s /run $mountPoint/var/run
+rm -f $mountPoint/etc/{resolv.conf,hosts}
 cp -f /etc/resolv.conf /etc/hosts $mountPoint/etc/
 
 
