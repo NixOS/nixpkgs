@@ -66,6 +66,7 @@
   pierron = "Nicolas B. Pierron <nixos@nbp.name>";
   piotr = "Piotr Pietraszkiewicz <ppietrasa@gmail.com>";
   pkmx = "Chih-Mao Chen <pkmx.tw@gmail.com>";
+  plcplc = "Philip Lykke Carlsen <plcplc@gmail.com>";
   pSub = "Pascal Wittmann <mail@pascal-wittmann.de>";
   qknight = "Joachim Schiele <js@lastlog.de>";
   raskin = "Michael Raskin <7c6f434c@mail.ru>";
