@@ -67,7 +67,7 @@ let
         ${config.boot.kernelPackages.kernel}/bzImage ::boot/bzImage
       mcopy -v -i "$out" \
         ${config.system.build.initialRamdisk}/initrd ::boot/initrd
-    '';
+    ''; # */
 
   targetArch = if pkgs.stdenv.isi686 then
     "ia32"
@@ -177,39 +177,45 @@ in
     # recognise that.
     boot.kernelParams = [ "root=LABEL=${config.isoImage.volumeID}" ];
 
-    # Note that /dev/root is a symlink to the actual root device
-    # specified on the kernel command line, created in the stage 1 init
-    # script.
-    fileSystems."/".device = "/dev/root";
+    fileSystems."/" =
+      { fsType = "tmpfs";
+        device = "none";
+        options = "mode=0755";
+      };
 
-    fileSystems."/nix/store" =
+    # Note that /dev/root is a symlink to the actual root device
+    # specified on the kernel command line, created in the stage 1
+    # init script.
+    fileSystems."/iso" =
+      { device = "/dev/root";
+        neededForBoot = true;
+        noCheck = true;
+      };
+
+    fileSystems."/nix/.ro-store" =
       { fsType = "squashfs";
-        device = "/nix-store.squashfs";
+        device = "/iso/nix-store.squashfs";
         options = "loop";
+        neededForBoot = true;
+      };
+
+    fileSystems."/nix/.rw-store" =
+      { fsType = "tmpfs";
+        device = "none";
+        options = "mode=0755";
+        neededForBoot = true;
       };
 
     boot.initrd.availableKernelModules = [ "squashfs" "iso9660" ];
 
     boot.initrd.kernelModules = [ "loop" ];
 
-    # In stage 1, mount a tmpfs on top of / (the ISO image) and
-    # /nix/store (the squashfs image) to make this a live CD.
+    # In stage 1, mount a tmpfs on top of /nix/store (the squashfs
+    # image) to make this a live CD.
     boot.initrd.postMountCommands =
       ''
-        mkdir -p /unionfs-chroot/ro-root
-        mount --rbind $targetRoot /unionfs-chroot/ro-root
-
-        mkdir /unionfs-chroot/rw-root
-        mount -t tmpfs -o "mode=755" none /unionfs-chroot/rw-root
-        mkdir /mnt-root-union
-        unionfs -o allow_other,cow,chroot=/unionfs-chroot,max_files=32768 /rw-root=RW:/ro-root=RO /mnt-root-union
-        oldTargetRoot=$targetRoot
-        targetRoot=/mnt-root-union
-
-        mkdir /unionfs-chroot/rw-store
-        mount -t tmpfs -o "mode=755" none /unionfs-chroot/rw-store
-        mkdir -p $oldTargetRoot/nix/store
-        unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot,max_files=32768 /rw-store=RW:/ro-root/nix/store=RO /mnt-root-union/nix/store
+        mkdir -p $targetRoot/nix/store
+        unionfs -o allow_other,cow,nonempty,chroot=$targetRoot,max_files=32768 /nix/.rw-store=RW:/nix/.ro-store=RO $targetRoot/nix/store
       '';
 
     # Closures to be copied to the Nix store on the CD, namely the init
@@ -252,10 +258,6 @@ in
         }
         { source = config.system.build.squashfsStore;
           target = "/nix-store.squashfs";
-        }
-        { # Quick hack: need a mount point for the store.
-          source = pkgs.runCommand "empty" {} "mkdir -p $out";
-          target = "/nix/store";
         }
       ] ++ optionals config.isoImage.makeEfiBootable [
         { source = efiImg;

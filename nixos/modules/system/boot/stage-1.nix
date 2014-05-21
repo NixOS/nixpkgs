@@ -344,5 +344,8 @@ in
       (isYes "BLK_DEV_INITRD")
     ];
 
+    # Prevent systemd from waiting for the /dev/root symlink.
+    systemd.units."dev-root.device".text = "";
+
   };
 }
