@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vector";
-  version = "0.10.9.1";
-  sha256 = "1rdx0r7bwx6217ip9mg9yfymvgv52szqv63y89p41b8sfklmcmi0";
+  version = "0.10.9.2";
+  sha256 = "046w4w5dr5136smfxzhzkhzcx6jgpnqrc2x5lzy4vrlxhb8za6c1";
   buildDepends = [ deepseq primitive ];
   meta = {
     homepage = "https://github.com/haskell/vector";
