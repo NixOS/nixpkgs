@@ -98,4 +98,5 @@
   zef = "Zef Hemel <zef@zef.me>";
   zimbatm = "zimbatm <zimbatm@zimbatm.com>";
   zoomulator = "Kim Simmons <zoomulator@gmail.com>";
+  joamaki = "Jussi Maki <joamaki@gmail.com>";
 }

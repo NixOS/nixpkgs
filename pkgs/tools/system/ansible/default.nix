@@ -22,6 +22,8 @@ pythonPackages.buildPythonPackage rec {
   meta = {
     homepage = "http://www.ansible.com";
     description = "Ansible simple automation tool";
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3;
+    maintainers = [ stdenv.lib.maintainers.joamaki ];
+    platforms = stdenv.lib.platforms.linux; # Only tested on Linux
   };
 }
