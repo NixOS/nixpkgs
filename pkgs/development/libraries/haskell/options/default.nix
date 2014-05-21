@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "options";
-  version = "1.0";
-  sha256 = "0d40d6k1c8v2b0bgchgl54sk9wx28kysp8bjws8bwjcmmd57775f";
+  version = "1.2";
+  sha256 = "14qrkwd8h50wf6972p0ylvhnc8mh11fqk9l8q0h9lapj7ywm74vx";
   buildDepends = [ monadsTf transformers ];
   testDepends = [ chell chellQuickcheck monadsTf transformers ];
   doCheck = false;
