@@ -270,7 +270,7 @@ let
   buildFHSChrootEnv = import ../build-support/build-fhs-chrootenv {
     inherit stdenv glibc glibcLocales gcc coreutils diffutils findutils;
     inherit gnused gnugrep gnutar gzip bzip2 bashInteractive xz shadow gawk;
-    inherit less su buildEnv;
+    inherit less buildEnv;
   };
 
   dotnetenv = import ../build-support/dotnetenv {
