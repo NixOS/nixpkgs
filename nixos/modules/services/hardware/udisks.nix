@@ -36,6 +36,7 @@ with lib;
 
     system.activationScripts.udisks =
       ''
+        mkdir -m 0755 -p /media
         mkdir -m 0755 -p /var/lib/udisks
       '';
 
