@@ -1631,15 +1631,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   CPANMetaYAML = buildPerlPackage {
-    name = "CPAN-Meta-YAML-0.008";
+    name = "CPAN-Meta-YAML-0.012";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/CPAN-Meta-YAML-0.008.tar.gz;
-      sha256 = "1fxc8ybn6mdgzxyq1n69rgihmpfaarfclmbdw2rznya5zg2b0nz0";
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/CPAN-Meta-YAML-0.012.tar.gz;
+      sha256 = "7c728c573ba74294d3df2f0cbae2cd1b3830ed47040649b49a33a086b8300d28";
     };
+    buildInputs = [ JSONPP ];
+    doCheck = false; # Test::More too old
     meta = {
-      homepage = https://github.com/dagolden/cpan-meta-yaml;
+      homepage = https://github.com/dagolden/CPAN-Meta-YAML;
       description = "Read and write a subset of YAML for CPAN Meta files";
-      license = "perl5";
+      license = "perl";
     };
   };
 
@@ -3318,16 +3320,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ExtUtilsMakeMaker = buildPerlPackage rec{
+  ExtUtilsMakeMaker = buildPerlPackage {
     name = "ExtUtils-MakeMaker-6.98";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
-      sha256 = "1vv3v9rc2dnx8amwa7lpdywg3lakx7yv2n38qvfbk9jzkqc27c1f";
+      url = mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-MakeMaker-6.98.tar.gz;
+      sha256 = "2eb023189e5fa6b9dcc66858b1fde953d1f1b86f971ec5ab42dd36c172da63ef";
     };
     propagatedBuildInputs =
-      [ ParseCPANMeta version JSONPP CPANMetaYAML CPANMeta
-        FileCopyRecursive VersionRequirements ExtUtilsManifest
-      ];
+      [ ParseCPANMeta JSONPP JSONPPCompat5006 CPANMetaYAML FileCopyRecursive ];
+    meta = {
+      homepage = https://metacpan.org/release/ExtUtils-MakeMaker;
+      description = "Create a module Makefile";
+      license = "perl";
+    };
   };
 
   ExtUtilsManifest = buildPerlPackage rec {
@@ -4612,6 +4617,18 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       description = "JSON::XS compatible pure-Perl module";
+      license = "perl";
+    };
+  };
+
+  JSONPPCompat5006 = buildPerlPackage {
+    name = "JSON-PP-Compat5006-1.09";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MAKAMAKA/JSON-PP-Compat5006-1.09.tar.gz;
+      sha256 = "197030df52635f9bbe25af10742eea5bd74971473118c11311fcabcb62e3716a";
+    };
+    meta = {
+      description = "Helper module in using JSON::PP in Perl 5.6";
       license = "perl";
     };
   };
@@ -6610,13 +6627,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ParseCPANMeta = buildPerlPackage rec {
-    name = "Parse-CPAN-Meta-1.4409";
+  ParseCPANMeta = buildPerlPackage {
+    name = "Parse-CPAN-Meta-1.4414";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Parse/${name}.tar.gz";
-      sha256 = "0b7cp78zajmwf4a0968p3b2bb00axkxj3a9nq1rx8cb17hhva819";
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Parse-CPAN-Meta-1.4414.tar.gz;
+      sha256 = "cd7608154dfb72c9e110f012befe6b75d78448cb3e761716b60aa7545e16ca1b";
     };
     propagatedBuildInputs = [ CPANMetaYAML JSONPP ];
+    meta = {
+      homepage = https://github.com/Perl-Toolchain-Gang/Parse-CPAN-Meta;
+      description = "Parse META.yml and META.json CPAN metadata files";
+      license = "perl";
+    };
   };
 
   ParseRecDescent = buildPerlPackage rec {
@@ -9234,10 +9256,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   UNIVERSALrequire = buildPerlPackage {
-    name = "UNIVERSAL-require-0.16";
+    name = "UNIVERSAL-require-0.17";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NE/NEILB/UNIVERSAL-require-0.16.tar.gz;
-      sha256 = "0fbx3f39lvck3n4ksqwji5m1hfdagx25jk5kg2h0gkb01jwz3za2";
+      url = mirror://cpan/authors/id/N/NE/NEILB/UNIVERSAL-require-0.17.tar.gz;
+      sha256 = "5dc9f13f2d2bbdf852387e2a63c0753728c2bea9125dd628c313db3ef66ec4c3";
+    };
+    meta = {
+      description = "Require() modules from a variable";
+      license = "perl";
     };
   };
 
