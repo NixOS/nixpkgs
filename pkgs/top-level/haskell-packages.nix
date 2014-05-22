@@ -1876,6 +1876,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   setenv = callPackage ../development/libraries/haskell/setenv {};
 
+  setlocale = callPackage ../development/libraries/haskell/setlocale {};
+
   shelly = callPackage ../development/libraries/haskell/shelly {};
 
   simpleReflect = callPackage ../development/libraries/haskell/simple-reflect {};
