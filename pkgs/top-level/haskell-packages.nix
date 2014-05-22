@@ -2353,6 +2353,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   warpTls = callPackage ../development/libraries/haskell/warp-tls {};
 
+  wcwidth = callPackage ../development/libraries/haskell/wcwidth {};
+
   webRoutes = callPackage ../development/libraries/haskell/web-routes {};
 
   webRoutesBoomerang = callPackage ../development/libraries/haskell/web-routes-boomerang {};
