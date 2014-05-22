@@ -632,6 +632,8 @@ let
 
   mcrl2 = callPackage ../tools/misc/mcrl2 { };
 
+  mpdcron = callPackage ../tools/audio/mpdcron { };
+
   syslogng = callPackage ../tools/system/syslog-ng { };
 
   rsyslog = callPackage ../tools/system/rsyslog { };
@@ -6606,7 +6608,10 @@ let
 
   mod_wsgi = callPackage ../servers/http/apache-modules/mod_wsgi { };
 
-  mpd = callPackage ../servers/mpd { };
+  mpd = callPackage ../servers/mpd {
+    aacSupport    = config.mpd.aacSupport or true;
+    ffmpegSupport = config.mpd.ffmpegSupport or true;
+  };
 
   mpd_clientlib = callPackage ../servers/mpd/clientlib.nix { };
 
