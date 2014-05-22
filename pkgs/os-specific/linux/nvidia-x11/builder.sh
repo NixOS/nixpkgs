@@ -74,9 +74,9 @@ installPhase() {
         mkdir -p $out/bin
 
         for i in nvidia-settings nvidia-smi nvidia-xconfig; do
-	    cp $i $out/bin/$i
-	    patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-	        --set-rpath $out/lib:$programPath:$glPath $out/bin/$i
+            cp $i $out/bin/$i
+            patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+                --set-rpath $out/lib:$programPath:$glPath $out/bin/$i
         done
 
         # Header files etc.
@@ -96,6 +96,10 @@ installPhase() {
         substituteInPlace $out/share/applications/nvidia-settings.desktop \
             --replace '__UTILS_PATH__' $out/bin \
             --replace '__PIXMAP_PATH__' $out/share/pixmaps
+
+        # Test a bit.
+        $out/bin/nvidia-settings --version
+        $out/bin/nvidia-smi --help > /dev/null
     fi
 }
 
