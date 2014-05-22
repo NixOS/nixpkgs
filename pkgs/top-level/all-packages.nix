@@ -6390,10 +6390,10 @@ let
     python = python32;
   };
 
-  python27Packages = recurseIntoAttrs (import ./python-packages.nix {
+  python27Packages = lib.hiPrioSet (recurseIntoAttrs (import ./python-packages.nix {
     inherit pkgs;
     python = python27;
-  });
+  }));
 
   pypyPackages = recurseIntoAttrs (import ./python-packages.nix {
     inherit pkgs;
