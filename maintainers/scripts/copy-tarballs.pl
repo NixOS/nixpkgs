@@ -91,4 +91,7 @@ foreach my $file (@{$data->{list}->{attrs}}) {
 
     my $sha256 = hashFile("sha256", 0, $storePath) or die;
     symlink("../$fn", "$tarballsCache/sha256/$sha256");
+
+    $sha256 = hashFile("sha256", 1, $storePath) or die;
+    symlink("../$fn", "$tarballsCache/sha256/$sha256");
 }
