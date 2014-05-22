@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, file, makeWrapper
-, openssl, curl, libevent, inotifyTools
+, openssl, curl, libevent, inotifyTools, systemd
 , enableGTK3 ? false, gtk3
 }:
 
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig intltool file openssl curl libevent inotifyTools ]
-    ++ optionals enableGTK3 [ gtk3 makeWrapper ];
+    ++ optionals enableGTK3 [ gtk3 makeWrapper ]
+    ++ optional stdenv.isLinux systemd;
 
   preConfigure = ''
     sed -i -e 's|/usr/bin/file|${file}/bin/file|g' configure
