@@ -46,6 +46,7 @@
 
   ghc742Prefs = self : super : ghc763Prefs self super // {
     aeson = super.aeson.override { blazeBuilder = self.blazeBuilder; };
+    extensibleExceptions = null;        # core package in ghc <= 7.4.x
     hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_16_0_3; };
     haddock = self.haddock_2_11_0;
     haskeline = super.haskeline.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
@@ -54,7 +55,6 @@
   ghc722Prefs = self : super : ghc742Prefs self super // {
     deepseq = self.deepseq_1_3_0_2;
     DrIFT = null;                       # doesn't compile with old GHC versions
-    extensibleExceptions = null;        # core package in ghc <= 7.4.x
     haddock = self.haddock_2_9_4;
     syb = self.syb_0_4_0;
   };
