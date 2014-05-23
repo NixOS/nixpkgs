@@ -1,5 +1,5 @@
 { cabal, boundingboxes, colors, controlBool, filepath, free
-, freetype2, GLFWb, hashable, JuicyPixels, JuicyPixelsUtil, lens
+, freetype2, GLFWB, hashable, JuicyPixels, JuicyPixelsUtil, lens
 , linear, mtl, OpenGL, OpenGLRaw, random, reflection, transformers
 , vector, void
 }:
@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   version = "1.0.5";
   sha256 = "048hmb4zbn67ycdwy7alhfakdyv405ck79bzrxv2ra6w1v5b3yvf";
   buildDepends = [
-    boundingboxes colors controlBool filepath free freetype2 GLFWb
+    boundingboxes colors controlBool filepath free freetype2 GLFWB
     hashable JuicyPixels JuicyPixelsUtil lens linear mtl OpenGL
     OpenGLRaw random reflection transformers vector void
   ];

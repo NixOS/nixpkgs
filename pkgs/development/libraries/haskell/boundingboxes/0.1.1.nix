@@ -11,10 +11,7 @@ cabal.mkDerivation (self: {
     lens linear QuickCheck random testFramework
     testFrameworkQuickcheck2 testFrameworkTh
   ];
-
-  # https://github.com/fumieval/boundingboxes/issues/1
   doCheck = false;
-
   meta = {
     homepage = "https://github.com/fumieval/boundingboxes";
     description = "The type for 2D bounding box";
