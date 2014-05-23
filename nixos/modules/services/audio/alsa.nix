@@ -9,6 +9,8 @@ let
 
   soundState = "/var/lib/alsa/asound.state";
 
+  configPaht = "asound.conf";
+
 in
 
 {
@@ -35,6 +37,17 @@ in
         '';
       };
 
+      extraConfig = mkOption {
+        type = types.lines;
+        default = '''';
+        example = ''
+          defaults.pcm.!card 3
+        '';
+        description = ''
+          Set addition configuration for system-wide alsa.
+        '';
+      };
+
     };
 
   };
@@ -45,6 +58,11 @@ in
   config = mkIf config.sound.enable {
 
     environment.systemPackages = [ alsaUtils ];
+
+    environment.etc = [ { source = config.sound.extraConfig;
+                          target = configPath;
+                        }
+                      ];
 
     # ALSA provides a udev rule for restoring volume settings.
     services.udev.packages = [ alsaUtils ];
