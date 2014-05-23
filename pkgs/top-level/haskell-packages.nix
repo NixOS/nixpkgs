@@ -780,11 +780,17 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   free = callPackage ../development/libraries/haskell/free {};
 
+  freeGame_1_0_5 = callPackage ../development/libraries/haskell/free-game/1.0.5.nix {
+    boundingboxes = self.boundingboxes_0_1_1;
+  };
+  freeGame_1_1 = callPackage ../development/libraries/haskell/free-game/1.1.nix {};
+  freeGame = self.freeGame_1_1;
+
   fsnotify = callPackage ../development/libraries/haskell/fsnotify {};
 
-  gamma = callPackage ../development/libraries/haskell/gamma {};
-
   freetype2 = callPackage ../development/libraries/haskell/freetype2 {};
+
+  gamma = callPackage ../development/libraries/haskell/gamma {};
 
   geniplate = callPackage ../development/libraries/haskell/geniplate {};
 
