@@ -18,8 +18,8 @@ cabal.mkDerivation (self: {
     binary deepseq HUnit parsec pcreLight processExtras tasty
     tastyGolden tastyHunit time transformers utf8String
   ];
-  jailbreak = true;
   extraLibraries = [ libXScrnSaver ];
+  jailbreak = true;
   meta = {
     homepage = "http://arbtt.nomeata.de/";
     description = "Automatic Rule-Based Time Tracker";
