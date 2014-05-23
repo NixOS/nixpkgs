@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
     hashable JuicyPixels JuicyPixelsUtil lens linear mtl OpenGL
     OpenGLRaw random reflection transformers vector void
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/fumieval/free-game";
     description = "Create games for free";
