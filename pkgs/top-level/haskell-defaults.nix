@@ -75,6 +75,7 @@
     haddock = self.haddock_2_7_2;
     parallel = self.parallel_3_2_0_3;
     primitive = self.primitive_0_5_0_1;
+    split = self.split_0_1_4_3;
     stm = self.stm_2_4_2;
     syb = null;                         # core package in ghc < 7
   };
