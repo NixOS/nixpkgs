@@ -99,10 +99,11 @@
     async = null;                       # none of our versions compile
     attoparsec = null;                  # none of our versions compile
     binary = super.binary_0_7_2_1.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    caseInsensitive = super.caseInsensitive.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     GLUT = self.GLUT_2_2_2_1;
     haddock = self.haddock_2_4_2;
     happy = super.happy.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
-    hashable = self.hashable_1_1_2_5;
+    hashable = super.hashable.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     HTTP = super.HTTP.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     HUnit = super.HUnit.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     network = super.network.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
