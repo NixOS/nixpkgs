@@ -53,6 +53,7 @@
   };
 
   ghc722Prefs = self : super : ghc742Prefs self super // {
+    caseInsensitive = self.caseInsensitive_1_0_0_1;
     deepseq = self.deepseq_1_3_0_2;
     DrIFT = null;                       # doesn't compile with old GHC versions
     haddock = self.haddock_2_9_4;
@@ -61,6 +62,7 @@
 
   ghc704Prefs = self : super : ghc722Prefs self super // {
     binary = self.binary_0_7_2_1;       # core package in ghc >= 7.2.2
+    caseInsensitive = super.caseInsensitive; # undo the override from ghc 7.2.2
     haddock = self.haddock_2_9_2.override { alex = self.alex_2_3_5; };
     HsSyck = self.HsSyck_0_51;
     jailbreakCabal = super.jailbreakCabal.override { Cabal = self.Cabal_1_16_0_3; };
