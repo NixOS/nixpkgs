@@ -2677,6 +2677,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   githubBackup = callPackage ../applications/version-management/git-and-tools/github-backup {};
 
+  hobbes = callPackage ../development/tools/haskell/hobbes {};
+
   jailbreakCabal = callPackage ../development/tools/haskell/jailbreak-cabal {};
 
   keter = callPackage ../development/tools/haskell/keter {};
