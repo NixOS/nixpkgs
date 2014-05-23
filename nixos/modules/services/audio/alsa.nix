@@ -9,7 +9,7 @@ let
 
   soundState = "/var/lib/alsa/asound.state";
 
-  configPaht = "asound.conf";
+  configPath = "asound.conf";
 
 in
 
