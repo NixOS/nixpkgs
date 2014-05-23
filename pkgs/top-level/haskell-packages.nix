@@ -784,6 +784,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   gamma = callPackage ../development/libraries/haskell/gamma {};
 
+  freetype2 = callPackage ../development/libraries/haskell/freetype2 {};
+
   geniplate = callPackage ../development/libraries/haskell/geniplate {};
 
   gd = callPackage ../development/libraries/haskell/gd {
