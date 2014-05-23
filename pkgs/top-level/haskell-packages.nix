@@ -2671,6 +2671,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   cabalInstall_1_20_0_1 = callPackage ../tools/package-management/cabal-install/1.20.0.1.nix { Cabal = self.Cabal_1_20_0_0; };
   cabalInstall = self.cabalInstall_1_20_0_1;
 
+  codex = callPackage ../development/tools/haskell/codex {};
+
   gitAnnex = callPackage ../applications/version-management/git-and-tools/git-annex {};
 
   githubBackup = callPackage ../applications/version-management/git-and-tools/github-backup {};
