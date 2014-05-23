@@ -473,6 +473,19 @@ let
       ''}
     ''; # */
 
+  linkSleepHooks = sleepHooks:
+    pkgs.runCommand "systemd-suspend-sleep-hooks" { preferLocalBuild = true; } ''
+      mkdir -p $out
+      ${concatMapStrings (p: ''
+        if [ -d ${p} ]; then
+          for f in ${p}/bin/* ; do
+            ln -sfn $f $out/
+          done
+        else
+          ln -sfn ${p} $out/
+        fi
+      '') sleepHooks}
+    '';
 in
 
 {
@@ -584,6 +597,16 @@ in
       description = ''
         Extra config options for systemd. See man systemd-system.conf for
         available options.
+      '';
+    };
+
+    systemd.sleepHooks = mkOption {
+      default = [];
+      type = types.listOf types.path;
+      description = ''
+        Executables to place under /etc/systemd/system-sleep. Can be a path
+        to an executable or a path to a directory containing executables under
+        bin. See man systemd-suspend.service.
       '';
     };
 
@@ -710,6 +733,8 @@ in
     system.build.units = cfg.units;
 
     environment.systemPackages = [ systemd ];
+
+    environment.etc."systemd/system-sleep".source = linkSleepHooks cfg.sleepHooks;
 
     environment.etc."systemd/system".source =
       generateUnits "system" cfg.units upstreamSystemUnits upstreamSystemWants;
