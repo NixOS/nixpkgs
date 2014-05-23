@@ -852,8 +852,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   glpkHs = callPackage ../development/libraries/haskell/glpk-hs {};
 
   GLURaw_1_3_0_0 = callPackage ../development/libraries/haskell/GLURaw/1.3.0.0.nix { OpenGLRaw = self.OpenGLRaw_1_3_0_0; };
-  GLURaw_1_4_0_0 = callPackage ../development/libraries/haskell/GLURaw/1.4.0.0.nix { OpenGLRaw = self.OpenGLRaw_1_4_0_0; };
-  GLURaw = self.GLURaw_1_4_0_0;
+  GLURaw_1_4_0_1 = callPackage ../development/libraries/haskell/GLURaw/1.4.0.1.nix {};
+  GLURaw = self.GLURaw_1_4_0_1;
 
   GLUT_2_1_1_2 = callPackage ../development/libraries/haskell/GLUT/2.1.1.2.nix {};
   GLUT_2_1_2_1 = callPackage ../development/libraries/haskell/GLUT/2.1.2.1.nix {};
@@ -869,10 +869,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     OpenGLRaw = self.OpenGLRaw_1_3_0_0;
     OpenGL = self.OpenGL_2_8_0_0.override { OpenGLRaw = self.OpenGLRaw_1_3_0_0; GLURaw = self.GLURaw_1_3_0_0; };
   };
-  GLUT_2_5_1_0 = callPackage ../development/libraries/haskell/GLUT/2.5.1.0.nix {
-    OpenGL = self.OpenGL_2_9_1_0;
+  GLUT_2_5_1_1 = callPackage ../development/libraries/haskell/GLUT/2.5.1.1.nix {
+    OpenGL = self.OpenGL_2_9_2_0;
   };
-  GLUT = self.GLUT_2_5_1_0;
+  GLUT = self.GLUT_2_5_1_1;
 
   gnuidn = callPackage ../development/libraries/haskell/gnuidn {};
 
@@ -1534,9 +1534,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   oeis = callPackage ../development/libraries/haskell/oeis {};
 
-  OpenAL = callPackage ../development/libraries/haskell/OpenAL {
-    OpenGL = self.OpenGL_2_9_1_0;
-  };
+  OpenAL = callPackage ../development/libraries/haskell/OpenAL {};
 
   OpenGL_2_2_1_1 = callPackage ../development/libraries/haskell/OpenGL/2.2.1.1.nix {};
   OpenGL_2_2_3_0 = callPackage ../development/libraries/haskell/OpenGL/2.2.3.0.nix {};
@@ -1544,12 +1542,13 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   OpenGL_2_4_0_2 = callPackage ../development/libraries/haskell/OpenGL/2.4.0.2.nix {};
   OpenGL_2_6_0_1 = callPackage ../development/libraries/haskell/OpenGL/2.6.0.1.nix {};
   OpenGL_2_8_0_0 = callPackage ../development/libraries/haskell/OpenGL/2.8.0.0.nix {};
-  OpenGL_2_9_1_0 = callPackage ../development/libraries/haskell/OpenGL/2.9.1.0.nix {};
-  OpenGL = self.OpenGL_2_9_1_0;
+  OpenGL_2_9_2_0 = callPackage ../development/libraries/haskell/OpenGL/2.9.2.0.nix {};
+  OpenGL = self.OpenGL_2_9_2_0;
 
   OpenGLRaw_1_3_0_0 = callPackage ../development/libraries/haskell/OpenGLRaw/1.3.0.0.nix {};
   OpenGLRaw_1_4_0_0 = callPackage ../development/libraries/haskell/OpenGLRaw/1.4.0.0.nix {};
-  OpenGLRaw = self.OpenGLRaw_1_4_0_0;
+  OpenGLRaw_1_5_0_0 = callPackage ../development/libraries/haskell/OpenGLRaw/1.5.0.0.nix {};
+  OpenGLRaw = self.OpenGLRaw_1_5_0_0;
 
   opensslStreams = callPackage ../development/libraries/haskell/openssl-streams {};
 
