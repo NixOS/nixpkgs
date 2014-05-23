@@ -275,6 +275,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
+  boundingboxes_0_1_1 = callPackage ../development/libraries/haskell/boundingboxes/0.1.1.nix {};
+  boundingboxes_0_2 = callPackage ../development/libraries/haskell/boundingboxes/0.2.nix {};
+  boundingboxes = self.boundingboxes_0_2;
+
   brainfuck = callPackage ../development/libraries/haskell/brainfuck {};
 
   bson = callPackage ../development/libraries/haskell/bson {};
