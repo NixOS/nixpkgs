@@ -2405,13 +2405,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   word8 = callPackage ../development/libraries/haskell/word8 {};
 
-  wreq = callPackage ../development/libraries/haskell/wreq {
-    aeson = self.aeson.override { attoparsec = self.attoparsec_0_11_3_1; };
-    attoparsec = self.attoparsec_0_11_3_1;
-    lens = self.lens.override {
-      aeson = self.aeson.override { attoparsec = self.attoparsec_0_11_3_1; };
-    };
-  };
+  wreq = callPackage ../development/libraries/haskell/wreq {};
 
   wx = callPackage ../development/libraries/haskell/wxHaskell/wx.nix {};
 
