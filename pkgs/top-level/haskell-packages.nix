@@ -834,7 +834,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   GLFW = callPackage ../development/libraries/haskell/GLFW {};
 
-  GLFWb = callPackage ../development/libraries/haskell/GLFW-b {};
+  GLFWB = callPackage ../development/libraries/haskell/GLFW-b {};
 
   glib = callPackage ../development/libraries/haskell/glib {
     glib = pkgs.glib;
