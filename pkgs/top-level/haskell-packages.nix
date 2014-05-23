@@ -326,6 +326,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   carray = callPackage ../development/libraries/haskell/carray {};
 
+  categories = callPackage ../development/libraries/haskell/categories {};
+
   cassava = callPackage ../development/libraries/haskell/cassava {};
 
   caseInsensitive_1_0_0_1 = callPackage ../development/libraries/haskell/case-insensitive/1.0.0.1.nix {};
