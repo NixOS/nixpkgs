@@ -1,14 +1,14 @@
 { cabal, deepseq, derive, HUnit, mtl, QuickCheck, testFramework
 , testFrameworkHunit, testFrameworkQuickcheck2, thExpandSyns
-, transformers
+, transformers, treeView
 }:
 
 cabal.mkDerivation (self: {
   pname = "compdata";
-  version = "0.7.0.1";
-  sha256 = "0d511yjfydv43sr74ggz6pnqm0wqz2m9fgrxpl6avvj8p10va7h7";
+  version = "0.8.1.0";
+  sha256 = "06bsdhf40b8111k0fmfc53i5kib9n431f07qyj83pq8isgkk33xc";
   buildDepends = [
-    deepseq derive mtl QuickCheck thExpandSyns transformers
+    deepseq derive mtl QuickCheck thExpandSyns transformers treeView
   ];
   testDepends = [
     deepseq derive HUnit mtl QuickCheck testFramework
