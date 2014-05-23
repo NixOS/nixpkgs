@@ -69,6 +69,7 @@
 
   ghc6123Prefs = self : super : ghc704Prefs self super // {
     alex = self.alex_3_1_3;
+    async = self.async_2_0_1_4;
     cabalInstall = self.cabalInstall_1_16_0_2;
     cgi = self.cgi_3001_1_7_5;
     deepseq = self.deepseq_1_2_0_1;
@@ -82,6 +83,7 @@
 
   ghc6104Prefs = self : super : ghc6123Prefs self super // {
     alex = self.alex_2_3_5.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    async = null;                       # none of our versions compile
     binary = super.binary_0_7_2_1.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     GLUT = self.GLUT_2_2_2_1;
     haddock = self.haddock_2_4_2;
