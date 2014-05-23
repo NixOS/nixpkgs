@@ -81,24 +81,23 @@
   };
 
   ghc6104Prefs = self : super : ghc6123Prefs self super // {
-    alex = self.alex_2_3_5.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
-    binary = super.binary_0_7_2_1.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
-    Cabal = self.Cabal_1_16_0_3;
+    alex = self.alex_2_3_5.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    binary = super.binary_0_7_2_1.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     GLUT = self.GLUT_2_2_2_1;
     haddock = self.haddock_2_4_2;
-    happy = super.happy.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
+    happy = super.happy.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     hashable = self.hashable_1_1_2_5;
-    HTTP = super.HTTP.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
-    HUnit = super.HUnit.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
-    network = super.network.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
+    HTTP = super.HTTP.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    HUnit = super.HUnit.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    network = super.network.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     OpenGLRaw = self.OpenGLRaw_1_3_0_0;
     OpenGL = self.OpenGL_2_6_0_1;
-    QuickCheck = super.QuickCheck.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
-    stm = self.stm_2_4_2.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
-    tar = super.tar.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
-    text = self.text_0_11_2_3.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
-    time = self.time_1_1_2_4.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
-    zlib = super.zlib.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
+    QuickCheck = super.QuickCheck.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    stm = self.stm_2_4_2.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    tar = super.tar.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    text = self.text_0_11_2_3.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    time = self.time_1_1_2_4.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    zlib = super.zlib.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
  };
 
   # Abstraction for Haskell packages collections
