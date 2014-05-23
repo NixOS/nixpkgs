@@ -2634,6 +2634,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   xmobar = callPackage ../applications/misc/xmobar {};
 
+  xmobarFull = callPackage ../applications/misc/xmobar/all_extensions.nix {};
+
   xmonad = callPackage ../applications/window-managers/xmonad {};
 
   xmonadContrib = callPackage ../applications/window-managers/xmonad/xmonad-contrib.nix {};
