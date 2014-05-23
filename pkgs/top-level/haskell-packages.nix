@@ -3073,6 +3073,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   xmobar = callPackage ../applications/misc/xmobar {};
 
+  xmobarFull = callPackage ../applications/misc/xmobar/all_extensions.nix {};
+
   xmonad = callPackage ../applications/window-managers/xmonad {};
 
   xmonadContrib = callPackage ../applications/window-managers/xmonad/xmonad-contrib.nix {};
