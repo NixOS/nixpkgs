@@ -1781,6 +1781,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   recaptcha = callPackage ../development/libraries/haskell/recaptcha {};
 
+  recursionSchemes = callPackage ../development/libraries/haskell/recursion-schemes {};
+
   reducers = callPackage ../development/libraries/haskell/reducers {};
 
   reflection = callPackage ../development/libraries/haskell/reflection {};
