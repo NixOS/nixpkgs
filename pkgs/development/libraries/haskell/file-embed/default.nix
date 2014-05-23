@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "file-embed";
-  version = "0.0.6";
-  sha256 = "0ag3g8mv8cw8km785kskz8kv38zs8gimrc3lr9dvkc1qnp2fdmgz";
+  version = "0.0.7";
+  sha256 = "0mj8f70f9k78wjzcx59w68szajafmm119rcrsspmxsygglh8ji2g";
   buildDepends = [ filepath ];
   testDepends = [ filepath HUnit ];
   meta = {
