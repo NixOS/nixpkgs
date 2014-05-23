@@ -74,18 +74,28 @@
     cabalInstall = self.cabalInstall_1_16_0_2;
     cgi = self.cgi_3001_1_7_5;
     deepseq = self.deepseq_1_2_0_1;
+    dlist = super.dlist.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    exceptions = null;                  # none of our versions compile
     haddock = self.haddock_2_7_2;
+    logict = super.logict.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    monadPar = self.monadPar_0_1_0_3;
+    nats = null;                        # none of our versions compile
     parallel = self.parallel_3_2_0_3;
     primitive = self.primitive_0_5_0_1;
+    reflection = super.reflection.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     scientific = null;                  # none of our versions compile
     split = self.split_0_1_4_3;
     stm = self.stm_2_4_2;
     syb = null;                         # core package in ghc < 7
+    tagged = super.tagged.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    temporary = null;                   # none of our versions compile
+    vectorAlgorithms = super.vectorAlgorithms.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
   };
 
   ghc6104Prefs = self : super : ghc6123Prefs self super // {
     alex = self.alex_2_3_5.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     async = null;                       # none of our versions compile
+    attoparsec = null;                  # none of our versions compile
     binary = super.binary_0_7_2_1.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     GLUT = self.GLUT_2_2_2_1;
     haddock = self.haddock_2_4_2;
