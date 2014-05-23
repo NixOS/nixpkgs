@@ -1377,6 +1377,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   minimorph = callPackage ../development/libraries/haskell/minimorph {};
 
+  minioperational = callPackage ../development/libraries/haskell/minioperational {};
+
   miniutter = callPackage ../development/libraries/haskell/miniutter {
     binary = self.binary_0_7_2_1;
   };
