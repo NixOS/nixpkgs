@@ -275,6 +275,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
+  boundingboxes_0_1_1 = callPackage ../development/libraries/haskell/boundingboxes/0.1.1.nix {};
+  boundingboxes_0_2 = callPackage ../development/libraries/haskell/boundingboxes/0.2.nix {};
+  boundingboxes = self.boundingboxes_0_2;
+
   brainfuck = callPackage ../development/libraries/haskell/brainfuck {};
 
   bson = callPackage ../development/libraries/haskell/bson {};
@@ -406,6 +410,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   colorizeHaskell = callPackage ../development/libraries/haskell/colorize-haskell {};
 
+  colors = callPackage ../development/libraries/haskell/colors {};
+
   colour = callPackage ../development/libraries/haskell/colour {};
 
   comonad = callPackage ../development/libraries/haskell/comonad {};
@@ -439,6 +445,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   connection = callPackage ../development/libraries/haskell/connection {};
 
   constraints = callPackage ../development/libraries/haskell/constraints {};
+
+  controlBool = callPackage ../development/libraries/haskell/control-bool {};
 
   controlMonadFree = callPackage ../development/libraries/haskell/control-monad-free {};
 
@@ -772,7 +780,15 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   free = callPackage ../development/libraries/haskell/free {};
 
+  freeGame_1_0_5 = callPackage ../development/libraries/haskell/free-game/1.0.5.nix {
+    boundingboxes = self.boundingboxes_0_1_1;
+  };
+  freeGame_1_1 = callPackage ../development/libraries/haskell/free-game/1.1.nix {};
+  freeGame = self.freeGame_1_1;
+
   fsnotify = callPackage ../development/libraries/haskell/fsnotify {};
+
+  freetype2 = callPackage ../development/libraries/haskell/freetype2 {};
 
   gamma = callPackage ../development/libraries/haskell/gamma {};
 
@@ -1235,6 +1251,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
 
+  JuicyPixelsUtil = callPackage ../development/libraries/haskell/JuicyPixels-util {};
+
   kanExtensions = callPackage ../development/libraries/haskell/kan-extensions {};
 
   kansasLava = callPackage ../development/libraries/haskell/kansas-lava {};
@@ -1364,6 +1382,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   mime = callPackage ../development/libraries/haskell/mime {};
 
   minimorph = callPackage ../development/libraries/haskell/minimorph {};
+
+  minioperational = callPackage ../development/libraries/haskell/minioperational {};
 
   miniutter = callPackage ../development/libraries/haskell/miniutter {
     binary = self.binary_0_7_2_1;
