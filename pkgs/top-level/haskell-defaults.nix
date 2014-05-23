@@ -70,6 +70,7 @@
   ghc6123Prefs = self : super : ghc704Prefs self super // {
     alex = self.alex_3_1_3;
     async = self.async_2_0_1_4;
+    attoparsec = self.attoparsec_0_10_4_0;
     cabalInstall = self.cabalInstall_1_16_0_2;
     cgi = self.cgi_3001_1_7_5;
     deepseq = self.deepseq_1_2_0_1;
