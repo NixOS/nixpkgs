@@ -406,6 +406,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   colorizeHaskell = callPackage ../development/libraries/haskell/colorize-haskell {};
 
+  colors = callPackage ../development/libraries/haskell/colors {};
+
   colour = callPackage ../development/libraries/haskell/colour {};
 
   comonad = callPackage ../development/libraries/haskell/comonad {};
