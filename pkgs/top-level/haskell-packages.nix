@@ -416,6 +416,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   compactStringFix = callPackage ../development/libraries/haskell/compact-string-fix {};
 
+  compdata = callPackage ../development/libraries/haskell/compdata {};
+
   composition = callPackage ../development/libraries/haskell/composition {};
 
   concatenative = callPackage ../development/libraries/haskell/concatenative {};
