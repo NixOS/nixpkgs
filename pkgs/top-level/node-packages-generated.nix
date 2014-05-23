@@ -18226,6 +18226,26 @@
     ];
     passthru.names = [ "typedarray" ];
   };
+  by-spec."typescript"."*" =
+    self.by-version."typescript"."1.0.1";
+  by-version."typescript"."1.0.1" = lib.makeOverridable self.buildNodePackage {
+    name = "typescript-1.0.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/typescript/-/typescript-1.0.1.tgz";
+        name = "typescript-1.0.1.tgz";
+        sha1 = "e8eacde3084a091d3fe29b60ac5862252662a25a";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."typescript" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "typescript" ];
+  };
+  "typescript" = self.by-version."typescript"."1.0.1";
   by-spec."uglify-js"."*" =
     self.by-version."uglify-js"."2.4.13";
   by-version."uglify-js"."2.4.13" = lib.makeOverridable self.buildNodePackage {
