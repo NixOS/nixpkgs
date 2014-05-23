@@ -1245,6 +1245,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
 
+  JuicyPixelsUtil = callPackage ../development/libraries/haskell/JuicyPixels-util {};
+
   kanExtensions = callPackage ../development/libraries/haskell/kan-extensions {};
 
   kansasLava = callPackage ../development/libraries/haskell/kansas-lava {};
