@@ -1,19 +1,21 @@
-# This function downloads and unpacks a zip file. This is primarily
-# useful for dynamically generated zip files, such as GitHub's
-# /archive URLs, where the unpacked content of the zip file doesn't
-# change, but the zip file itself may (e.g. due to minor changes in
-# the compression algorithm, or changes in timestamps).
+# This function downloads and unpacks an archive file, such as a zip
+# or tar file. This is primarily useful for dynamically generated
+# archives, such as GitHub's /archive URLs, where the unpacked content
+# of the zip file doesn't change, but the zip file itself may
+# (e.g. due to minor changes in the compression algorithm, or changes
+# in timestamps).
 
 { lib, fetchurl, unzip }:
 
 { # Optionally move the contents of the unpacked tree up one level.
   stripRoot ? true
+, url
 , ... } @ args:
 
-fetchurl (args // {
-  # Apply a suffix to the name. Otherwise, unpackPhase will get
-  # confused by the .zip extension.
-  nameSuffix = "-unpacked";
+fetchurl ({
+  # Remove the extension, because otherwise unpackPhase will get
+  # confused. FIXME: fix unpackPhase.
+  name = args.name or lib.removeSuffix ".zip" (lib.removeSuffix ".tar.gz" (baseNameOf url));
 
   recursiveHash = true;
 
@@ -24,7 +26,7 @@ fetchurl (args // {
       export PATH=${unzip}/bin:$PATH
       mkdir $out
       cd $out
-      renamed="$TMPDIR/''${name%-unpacked}"
+      renamed="$TMPDIR/${baseNameOf url}"
       mv "$downloadedFile" "$renamed"
       unpackFile "$renamed"
     ''
@@ -39,4 +41,4 @@ fetchurl (args // {
       mv $out/$fn/* "$out/"
       rmdir "$out/$fn"
     '';
-})
+} // args)
