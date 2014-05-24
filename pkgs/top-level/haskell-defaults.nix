@@ -16,11 +16,11 @@
 
   ghcHEADPrefs = self : super : super // {
     mtl = self.mtl_2_1_3_1;
-    cabalInstall_1_20_0_1 = super.cabalInstall_1_20_0_1.override { Cabal = null; };
+    cabalInstall_1_20_0_2 = super.cabalInstall_1_20_0_2.override { Cabal = null; };
   };
 
   ghc782Prefs = self : super : ghcHEADPrefs self super // {
-    cabalInstall_1_20_0_1 = super.cabalInstall_1_20_0_1.override { Cabal = self.Cabal_1_20_0_0; };
+    cabalInstall_1_20_0_2 = super.cabalInstall_1_20_0_2.override { Cabal = self.Cabal_1_20_0_0; };
     codex = super.codex.override { hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_20_0_0; }; };
   };
 

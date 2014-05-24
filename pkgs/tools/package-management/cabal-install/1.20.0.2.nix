@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cabal-install";
-  version = "1.20.0.1";
-  sha256 = "14zrsbjr7kgrnjd5hxczll4j39vwj95drlw73gad2div2954dqxi";
+  version = "1.20.0.2";
+  sha256 = "1nsc8qklhlg2xpaj7k158gg45rlrp7mn15zyfsgjpaqf3rjm9dl4";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [

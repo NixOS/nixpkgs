@@ -2689,8 +2689,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   cabalInstall_0_14_0 = callPackage ../tools/package-management/cabal-install/0.14.0.nix {};
   cabalInstall_1_16_0_2 = callPackage ../tools/package-management/cabal-install/1.16.0.2.nix { Cabal = self.Cabal_1_16_0_3; };
   cabalInstall_1_18_0_3 = callPackage ../tools/package-management/cabal-install/1.18.0.3.nix { Cabal = self.Cabal_1_18_1_3; };
-  cabalInstall_1_20_0_1 = callPackage ../tools/package-management/cabal-install/1.20.0.1.nix { Cabal = self.Cabal_1_20_0_0; };
-  cabalInstall = self.cabalInstall_1_20_0_1;
+  cabalInstall_1_20_0_2 = callPackage ../tools/package-management/cabal-install/1.20.0.2.nix { Cabal = self.Cabal_1_20_0_0; };
+  cabalInstall = self.cabalInstall_1_20_0_2;
 
   codex = callPackage ../development/tools/haskell/codex {};
 
