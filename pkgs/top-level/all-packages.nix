@@ -1070,6 +1070,10 @@ let
 
   g500-control = callPackage ../tools/misc/g500-control { };
 
+  galculator = callPackage ../applications/misc/galculator {
+    gtk = gtk3;
+  };
+
   gawk = callPackage ../tools/text/gawk { };
 
   gawkInteractive = appendToName "interactive"
