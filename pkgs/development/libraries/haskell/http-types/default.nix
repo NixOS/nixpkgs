@@ -1,11 +1,15 @@
-{ cabal, blazeBuilder, caseInsensitive, hspec, QuickCheck, text }:
+{ cabal, blazeBuilder, caseInsensitive, doctest, hspec, QuickCheck
+, quickcheckInstances, text
+}:
 
 cabal.mkDerivation (self: {
   pname = "http-types";
-  version = "0.8.4";
-  sha256 = "0bz7g537if863vk29z72hndf1x019dj7shj1aa77pssrxma3a685";
+  version = "0.8.5";
+  sha256 = "0d282sf3xyk5makhnwfm2k9mgw1fkh07kasmy85fiwjkc1447ciw";
   buildDepends = [ blazeBuilder caseInsensitive text ];
-  testDepends = [ blazeBuilder hspec QuickCheck text ];
+  testDepends = [
+    blazeBuilder doctest hspec QuickCheck quickcheckInstances text
+  ];
   jailbreak = true;
   meta = {
     homepage = "https://github.com/aristidb/http-types";
