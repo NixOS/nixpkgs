@@ -141,7 +141,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python perl pkgconfig ];
 
-  postInstall = if buildDocs then "make docs&&make install_docs" else "";
+  postInstall =
+    ''
+      ${optionalString buildDocs ''
+        make docs && make install_docs
+      ''}
+
+      # Don't retain build-time dependencies like gdb and ruby.
+      sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $out/mkspecs/qconfig.pri
+    '';
 
   #enableParallelBuilding = true; # often fails on Hydra, as well as qt4
 
