@@ -2502,7 +2502,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   zeromq4Haskell = callPackage ../development/libraries/haskell/zeromq4-haskell { zeromq = pkgs.zeromq4; };
 
-  zipArchive = callPackage ../development/libraries/haskell/zip-archive {};
+  zipArchive_0_2_2_1 = callPackage ../development/libraries/haskell/zip-archive/0.2.2.1.nix {};
+  zipArchive_0_2_3_2 = callPackage ../development/libraries/haskell/zip-archive/0.2.3.2.nix {};
+  zipArchive = self.zipArchive_0_2_3_2;
 
   zipper = callPackage ../development/libraries/haskell/zipper {};
 
