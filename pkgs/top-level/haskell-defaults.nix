@@ -46,7 +46,7 @@
   };
 
   ghc742Prefs = self : super : ghc763Prefs self super // {
-    aeson = super.aeson.override { blazeBuilder = self.blazeBuilder; };
+    aeson = self.aeson_0_7_0_4.override { blazeBuilder = self.blazeBuilder; };
     attoparsec = self.attoparsec_0_11_3_1;
     extensibleExceptions = null;        # core package in ghc <= 7.4.x
     hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_16_0_3; };
