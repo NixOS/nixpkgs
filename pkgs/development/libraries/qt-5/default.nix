@@ -10,7 +10,7 @@
 , gtkStyle ? false, libgnomeui, gtk, GConf, gnome_vfs
 , buildDocs ? false
 , buildExamples ? false
-, buildTests ? true
+, buildTests ? false
 , developerBuild ? false
 }:
 
@@ -84,8 +84,6 @@ stdenv.mkDerivation rec {
     -optimized-qmake
     -strip
     -reduce-relocations
-    -force-debug-info
-    -no-separate-debug-info
     -system-proxies
 
     -gui
