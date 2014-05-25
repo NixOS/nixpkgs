@@ -47,6 +47,6 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     maintainers = [ maintainers.ttuegel ];
     # libspotify is unfree
-    hydraPlatforms = optional (not withSpotify) platforms.linux;
+    hydraPlatforms = optional (!withSpotify) platforms.linux;
   };
 }
