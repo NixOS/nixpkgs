@@ -9889,6 +9889,8 @@ let
 
   d2x_rebirth = callPackage ../games/d2x-rebirth { };
 
+  eboard = callPackage ../games/eboard { };
+
   eduke32 = callPackage ../games/eduke32 { };
 
   egoboo = callPackage ../games/egoboo { };
