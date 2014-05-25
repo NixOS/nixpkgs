@@ -11,6 +11,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.nasm.us/;
     description = "An 80x86 and x86-64 assembler designed for portability and modularity";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
