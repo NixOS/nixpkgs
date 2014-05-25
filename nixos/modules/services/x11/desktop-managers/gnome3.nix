@@ -63,6 +63,7 @@ in {
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-online-accounts.enable = mkDefault true;
     services.gnome3.gnome-user-share.enable = mkDefault true;
+    services.gnome3.gvfs.enable = true;
     services.gnome3.seahorse.enable = mkDefault true;
     services.gnome3.sushi.enable = mkDefault true;
     services.gnome3.tracker.enable = mkDefault true;
@@ -101,7 +102,8 @@ in {
       };
 
     environment.variables.GIO_EXTRA_MODULES = [ "${gnome3.dconf}/lib/gio/modules"
-                                                "${gnome3.glib_networking}/lib/gio/modules" ];
+                                                "${gnome3.glib_networking}/lib/gio/modules"
+                                                "${gnome3.gvfs}/lib/gio/modules" ];
     environment.systemPackages =
       [ pkgs.desktop_file_utils
         gnome3.glib_networking
