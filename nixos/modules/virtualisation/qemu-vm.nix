@@ -65,7 +65,7 @@ let
           ${if cfg.useBootLoader then ''
             -drive index=0,id=drive1,file=$NIX_DISK_IMAGE,if=virtio,cache=writeback,werror=report \
             -drive index=1,id=drive2,file=${bootDisk}/disk.img,if=virtio,readonly \
-            -boot menu=on
+            -boot menu=on \
           '' else ''
             -drive file=$NIX_DISK_IMAGE,if=virtio,cache=writeback,werror=report \
             -kernel ${config.system.build.toplevel}/kernel \
