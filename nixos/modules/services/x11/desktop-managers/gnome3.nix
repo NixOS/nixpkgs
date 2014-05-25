@@ -100,6 +100,7 @@ in {
         pkgs.gtk3 # for gtk-update-icon-cache
         pkgs.ibus
         pkgs.shared_mime_info # for update-mime-database
+        gnome3.gvfs
         gnome3.dconf
         gnome3.gnome-backgrounds
         gnome3.gnome_control_center
