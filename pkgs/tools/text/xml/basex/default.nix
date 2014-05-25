@@ -1,11 +1,11 @@
 { stdenv, fetchurl, unzip, jre, coreutils, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
-  name = "basex-7.7.2";
+  name = "basex-7.8.2";
 
   src = fetchurl {
-    url = "http://files.basex.org/releases/7.7.2/BaseX772.zip";
-    sha256 = "1rh91rzgca1waq8jnd3ard1r04qlalc2qqrawmrahwxgf3f16f4a";
+    url = "http://files.basex.org/releases/7.8.2/BaseX782.zip";
+    sha256 = "0i9h7fsvn8cy1g44f23iyqndwamvx4kvyc4y3i00j15qm6qd2kbm";
   };
 
   buildInputs = [ unzip jre ];
