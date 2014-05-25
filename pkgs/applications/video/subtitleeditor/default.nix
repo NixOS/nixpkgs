@@ -14,14 +14,14 @@ stdenv.mkDerivation rec {
     desktop_file_utils enchant gnome.gtk gnome.gtkmm gstreamer gstreamermm
     gst_plugins_base gst_plugins_good intltool hicolor_icon_theme libsigcxx libxmlxx
     xdg_utils
-    ];
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
 
   src = fetchurl {
     url = "http://download.gna.org/subtitleeditor/${ver_maj}/subtitleeditor-${ver_maj}.${ver_min}.tar.gz";
     md5 = "3c21ccd8296001dcb1a02c62396db1b6";
-    };
+  };
 
   doCheck = true;
 
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
       to synchronise subtitles to voices.
       '';
     homepage = http://home.gna.org/subtitleeditor;
-    license = "GPLv3";
-    maintainers = "Philip Lykke Carlsen <plcplc@gmail.com>";
+    license = stdenv.lib.licences.gpl3;
+    maintainers = stdenv.lib.maintainers.plcplc;
     platforms = stdenv.lib.platforms.linux;
   };
 
