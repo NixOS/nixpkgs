@@ -1,11 +1,11 @@
 { stdenv, fetchurl, eventlog, pkgconfig, glib, python }:
 
 stdenv.mkDerivation {
-  name = "syslog-ng-3.5.3";
+  name = "syslog-ng-3.5.4.1";
 
   src = fetchurl {
-    url = "http://www.balabit.com/downloads/files?path=/syslog-ng/sources/3.5.3/source/syslog-ng_3.5.3.tar.gz";
-    sha256 = "1l3424qn9bf9z742pqba8x3dj7g729asimmhlizv1rvjlaxa2jd3";
+    url = "http://www.balabit.com/downloads/files?path=/syslog-ng/sources/3.5.4.1/source/syslog-ng_3.5.4.1.tar.gz";
+    sha256 = "0rkgrmnyx1x6m3jw5n49k7r1dcg79lxh900g74rgvd3j86g9dilj";
   };
 
   buildInputs = [ eventlog pkgconfig glib python ];

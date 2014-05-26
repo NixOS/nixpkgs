@@ -1,0 +1,16 @@
+{ cabal, freeglut, mesa, OpenGLRaw }:
+
+cabal.mkDerivation (self: {
+  pname = "GLURaw";
+  version = "1.4.0.1";
+  sha256 = "1k0f1vbbrsfc7jb4qbif4w4q87lsis5gvq7jd2n8zzslxd5n8mcn";
+  buildDepends = [ OpenGLRaw ];
+  extraLibraries = [ freeglut mesa ];
+  meta = {
+    homepage = "http://www.haskell.org/haskellwiki/Opengl";
+    description = "A raw binding for the OpenGL graphics system";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
+  };
+})

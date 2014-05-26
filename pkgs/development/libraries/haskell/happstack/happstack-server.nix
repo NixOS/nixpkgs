@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "happstack-server";
-  version = "7.3.5";
-  sha256 = "1n0pdishsngrri83flipfzmk0gn01n256rg7vrbn7kjl1aff9r1g";
+  version = "7.3.6";
+  sha256 = "0js1rzg1zpqg9mbi0kdzb5i8ggsrq4l8p0c05k85ppw6h5lwkayd";
   buildDepends = [
     base64Bytestring blazeHtml extensibleExceptions filepath hslogger
     html monadControl mtl network parsec sendfile syb systemFilepath

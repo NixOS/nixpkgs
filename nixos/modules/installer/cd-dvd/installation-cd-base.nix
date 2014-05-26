@@ -39,6 +39,9 @@ with lib;
   # Add Memtest86+ to the CD.
   boot.loader.grub.memtest86.enable = true;
 
-  # Get a console as soon as the initrd loads fbcon on EFI boot
+  # Get a console as soon as the initrd loads fbcon on EFI boot.
   boot.initrd.kernelModules = [ "fbcon" ];
+
+  # Allow the user to log in as root without a password.
+  security.initialRootPassword = "";
 }

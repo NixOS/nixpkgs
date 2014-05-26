@@ -8,6 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "0qpnr4czgc62vsfnmv933w62nq3xwcbnvqch72qakfgca75rsp4d";
   };
 
+  patches =
+    [ # Prevent the unionfs daemon from being killed during
+      # shutdown. See
+      # http://www.freedesktop.org/wiki/Software/systemd/RootStorageDaemons/
+      # for details.
+      ./prevent-kill-on-shutdown.patch
+    ];
+
   buildInputs = [ cmake fuse ];
 
   # Put the unionfs mount helper in place as mount.unionfs-fuse. This makes it

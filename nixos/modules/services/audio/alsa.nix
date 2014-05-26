@@ -7,8 +7,6 @@ let
 
   inherit (pkgs) alsaUtils;
 
-  soundState = "/var/lib/alsa/asound.state";
-
 in
 
 {
@@ -35,6 +33,17 @@ in
         '';
       };
 
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          defaults.pcm.!card 3
+        '';
+        description = ''
+          Set addition configuration for system-wide alsa.
+        '';
+      };
+
     };
 
   };
@@ -45,6 +54,13 @@ in
   config = mkIf config.sound.enable {
 
     environment.systemPackages = [ alsaUtils ];
+
+    environment.etc = mkIf (config.sound.extraConfig != "")
+      [
+        { source = pkgs.writeText "asound.conf" config.sound.extraConfig;
+          target = "asound.conf";
+        }
+      ];
 
     # ALSA provides a udev rule for restoring volume settings.
     services.udev.packages = [ alsaUtils ];

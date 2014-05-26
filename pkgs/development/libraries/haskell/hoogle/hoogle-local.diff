@@ -1,0 +1,28 @@
+diff --git a/src/CmdLine/All.hs b/src/CmdLine/All.hs
+index 94b1d48..f41f270 100644
+--- a/src/CmdLine/All.hs
++++ b/src/CmdLine/All.hs
+@@ -86,8 +86,10 @@ guessLocal = do
+     ghc <- findExecutable "ghc"
+     home <- getHomeDirectory
+     lib <- getLibDir
++    path <- lookup "HOOGLE_DOC_PATH" <$> getEnvironment
+     let xs = [takeDirectory (takeDirectory lib) </> "doc" {- Windows, installed with Cabal -}  ] ++
+              [takeDirectory (takeDirectory ghc) </> "doc/html/libraries" | Just ghc <- [ghc] {- Windows, installed by GHC -} ] ++
++             maybeToList path ++
+              [home </> ".cabal/share/doc" {- Linux -} ]
+     filterM doesDirectoryExist xs
+ 
+diff --git a/src/Hoogle/Language/Haskell.hs b/src/Hoogle/Language/Haskell.hs
+index b037f11..f2ac047 100644
+--- a/src/Hoogle/Language/Haskell.hs
++++ b/src/Hoogle/Language/Haskell.hs
+@@ -112,7 +112,7 @@ setPriority pkg mod x = x{itemPriority = pri}
+ 
+ setModuleURL (Just pkg) _ x | itemLevel x == 1 = x{itemURL=if null $ itemURL x then f $ itemName x else itemURL x}
+     where f xs = if "http://hackage.haskell.org/package/" `isPrefixOf` itemURL pkg
+-                 then "http://hackage.haskell.org/packages/archive/" ++ itemName pkg ++ "/latest/doc/html/" ++ file
++                 then "http://hackage.haskell.org/package/" ++ itemName pkg ++ "/docs/" ++ file
+                  else takeDirectory (itemURL pkg) ++ "/" ++ file
+               where file = reps '.' '-' xs ++ ".html"
+ setModuleURL _ _ x = x

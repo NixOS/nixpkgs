@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub }:
-  
+
 stdenv.mkDerivation rec {
   name = "mkpasswd-${version}";
 
@@ -22,10 +22,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://packages.qa.debian.org/w/whois.html;
-    description = ''
-      Overfeatured front end to crypt, from the Debian whois package
-    '';
-    license     = licenses.gpl2;
-    maintainers = with maintainers; [ cstrahan ];
+    description = "Overfeatured front-end to crypt, from the Debian whois package";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.cstrahan ];
+    platforms = platforms.linux;
   };
 }

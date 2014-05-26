@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "network-simple";
-  version = "0.3.1";
-  sha256 = "0bk015d0np07887flah76vgrgrqaqj4x1sdxmghvazj8c78nkan8";
+  version = "0.4";
+  sha256 = "1jw0xd53c0mydh6jm6627c0d8w014r1s46fycdhavnimh7bb77cp";
   buildDepends = [ exceptions network transformers ];
   jailbreak = true;
   meta = {

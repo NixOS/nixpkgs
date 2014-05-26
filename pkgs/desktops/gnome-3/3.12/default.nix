@@ -44,6 +44,10 @@ rec {
 
   gjs = callPackage ./core/gjs { };
 
+  glib_networking = pkgs.glib_networking.override {
+    inherit gsettings_desktop_schemas;
+  };
+
   gnome-backgrounds = callPackage ./core/gnome-backgrounds { };
 
   gnome-contacts = callPackage ./core/gnome-contacts { };
@@ -112,7 +116,7 @@ rec {
 
   gucharmap = callPackage ./core/gucharmap { };
 
-  gvfs = pkgs.gvfs.override { gnome = pkgs.gnome3; };
+  gvfs = pkgs.gvfs.override { gnome = gnome3; };
 
   eog = callPackage ./core/eog { };
 
@@ -133,6 +137,28 @@ rec {
   mutter = callPackage ./core/mutter { };
 
   nautilus = callPackage ./core/nautilus { };
+
+  networkmanager_openvpn = pkgs.networkmanager_openvpn.override {
+    inherit gnome3;
+  };
+
+  networkmanager_pptp = pkgs.networkmanager_pptp.override {
+    inherit gnome3;
+  };
+
+  networkmanager_vpnc = pkgs.networkmanager_vpnc.override {
+    inherit gnome3;
+  };
+
+  networkmanager_openconnect = pkgs.networkmanager_openconnect.override {
+    inherit gnome3;
+  };
+
+  networkmanagerapplet = pkgs.networkmanagerapplet.override {
+    inherit gnome3 gsettings_desktop_schemas glib_networking
+      networkmanager_openvpn networkmanager_pptp networkmanager_vpnc
+      networkmanager_openconnect;
+  };
 
   rest = callPackage ./core/rest { };
 
@@ -184,6 +210,8 @@ rec {
 
 
 #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
+
+  geary = callPackage ./misc/geary { };
 
   gfbgraph = callPackage ./misc/gfbgraph { };
 

@@ -10,7 +10,7 @@
 , gtkStyle ? false, libgnomeui, gtk, GConf, gnome_vfs
 , buildDocs ? false
 , buildExamples ? false
-, buildTests ? true
+, buildTests ? false
 , developerBuild ? false
 }:
 
@@ -84,8 +84,6 @@ stdenv.mkDerivation rec {
     -optimized-qmake
     -strip
     -reduce-relocations
-    -force-debug-info
-    -no-separate-debug-info
     -system-proxies
 
     -gui
@@ -143,7 +141,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python perl pkgconfig ];
 
-  postInstall = if buildDocs then "make docs&&make install_docs" else "";
+  postInstall =
+    ''
+      ${optionalString buildDocs ''
+        make docs && make install_docs
+      ''}
+
+      # Don't retain build-time dependencies like gdb and ruby.
+      sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $out/mkspecs/qconfig.pri
+    '';
 
   #enableParallelBuilding = true; # often fails on Hydra, as well as qt4
 

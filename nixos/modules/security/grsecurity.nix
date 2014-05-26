@@ -7,7 +7,10 @@ let
 
   customGrsecPkg =
     (import ../../../pkgs/build-support/grsecurity
-      { grsecOptions = cfg; }
+      {
+        inherit lib pkgs;
+        grsecOptions = cfg;
+      }
     ).grsecPackage;
 in
 {

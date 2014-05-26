@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "openssl-streams";
-  version = "1.1.0.0";
-  sha256 = "0xww3n1mhw0sp9nkx4847gqbq4wnfcnc2m782kn5n8jxnjnm1fqn";
+  version = "1.1.0.2";
+  sha256 = "0h3jxxdls0p1xxr02rfag7j9y13ll3xgzx2ldv1nsfcv3rzw2pfy";
   buildDepends = [ HsOpenSSL ioStreams network ];
   testDepends = [
     HsOpenSSL HUnit ioStreams network testFramework testFrameworkHunit

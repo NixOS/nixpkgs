@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "http-reverse-proxy";
-  version = "0.3.1.6";
-  sha256 = "1ckxiabk685a47xy0khj6h05j26hsc5hlxfysbkmk2q70y0ljk7k";
+  version = "0.3.1.7";
+  sha256 = "0fhndk9zjv1kcqgrhj42brfg96p7flrcpy609asba1vc0i9213j4";
   buildDepends = [
     async blazeBuilder caseInsensitive conduit conduitExtra
     dataDefaultClass httpClient httpTypes liftedBase monadControl

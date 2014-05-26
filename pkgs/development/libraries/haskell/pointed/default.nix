@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pointed";
-  version = "4.0";
-  sha256 = "02y7ba1pcpmwcp762516p4x75y3ma2kml9mbiv1y8gcnn4ylvir4";
+  version = "4.1";
+  sha256 = "1l40nl1sx16hbqz1kv70g6jp2igvvj93p5db8b6bsgjxx9ibck6g";
   buildDepends = [
     comonad dataDefaultClass semigroupoids semigroups stm tagged
     transformers

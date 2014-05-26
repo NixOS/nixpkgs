@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xml-conduit";
-  version = "1.2.0.1";
-  sha256 = "0ry3h1csblssv2x8b63hvl2gqc0wyzyqbvp6iyisrk77wkz72jw9";
+  version = "1.2.0.2";
+  sha256 = "1kcrhyri4knkp1x9zn99qklkj4nd47gwdfy6q0pwdz7cgjskps1z";
   buildDepends = [
     attoparsec attoparsecConduit blazeBuilder blazeBuilderConduit
     blazeHtml blazeMarkup conduit conduitExtra dataDefault deepseq

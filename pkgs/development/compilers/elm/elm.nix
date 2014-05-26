@@ -1,27 +1,27 @@
 { cabal, aeson, aesonPretty, binary, blazeHtml, blazeMarkup
 , cmdargs, filemanip, filepath, HUnit, indents, languageEcmascript
-, mtl, pandoc, parsec, QuickCheck, testFramework
-, testFrameworkHunit, testFrameworkQuickcheck2, text, transformers
-, unionFind, unorderedContainers
+, languageGlsl, mtl, pandoc, parsec, QuickCheck, scientific
+, testFramework, testFrameworkHunit, testFrameworkQuickcheck2, text
+, transformers, unionFind, unorderedContainers, yaml
 }:
 
 cabal.mkDerivation (self: {
   pname = "Elm";
-  version = "0.12.1.3";
-  sha256 = "1p4py4qyxsp25qa8141ywfh0qnvdid4v7xlbqkk8aafxccb7lsm9";
+  version = "0.12.3";
+  sha256 = "1v6h9qbbz27ikh19xwjbyfw0zi5ag9x1gp0khh9v4af1g0j86320";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     aeson aesonPretty binary blazeHtml blazeMarkup cmdargs filepath
-    indents languageEcmascript mtl pandoc parsec text transformers
-    unionFind unorderedContainers
+    indents languageEcmascript languageGlsl mtl pandoc parsec
+    scientific text transformers unionFind unorderedContainers yaml
   ];
   testDepends = [
     aeson aesonPretty binary blazeHtml blazeMarkup cmdargs filemanip
-    filepath HUnit indents languageEcmascript mtl pandoc parsec
-    QuickCheck testFramework testFrameworkHunit
+    filepath HUnit indents languageEcmascript languageGlsl mtl pandoc
+    parsec QuickCheck scientific testFramework testFrameworkHunit
     testFrameworkQuickcheck2 text transformers unionFind
-    unorderedContainers
+    unorderedContainers yaml
   ];
   doCheck = false;
   meta = {

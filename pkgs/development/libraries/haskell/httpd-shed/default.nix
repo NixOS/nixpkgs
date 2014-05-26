@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "httpd-shed";
-  version = "0.4.0.1";
-  sha256 = "04m07wqhaggkgksha7x528y890j30ay5axipfy6b1ma9cf0a9jwq";
+  version = "0.4.0.2";
+  sha256 = "0w37ra59xhk6gqrxpk83m1wmm7mqygcg59y5nl00x279c77qzxj3";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ network ];

@@ -1,10 +1,10 @@
-{ cabal, baseUnicodeSymbols, bindingsLibusb, text, vector }:
+{ cabal, bindingsLibusb, text, vector }:
 
 cabal.mkDerivation (self: {
   pname = "usb";
-  version = "1.2";
-  sha256 = "1k73avkmpbmg6iq2kmwhg2ifibni5c1yp202afdb6v7w5akvmc0b";
-  buildDepends = [ baseUnicodeSymbols bindingsLibusb text vector ];
+  version = "1.2.0.1";
+  sha256 = "10bpkrsnin9f3g1p5a84nhxx5xlfjdxisc0q60iain30rn99g2mk";
+  buildDepends = [ bindingsLibusb text vector ];
   jailbreak = true;
   meta = {
     homepage = "http://basvandijk.github.com/usb";
