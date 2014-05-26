@@ -7980,6 +7980,8 @@ let
 
   source-sans-pro = callPackage ../data/fonts/source-sans-pro { };
 
+  source-serif-pro = callPackage ../data/fonts/source-serif-pro { };
+
   tango-icon-theme = callPackage ../data/icons/tango-icon-theme { };
 
   themes = name: import (../data/misc/themes + ("/" + name + ".nix")) {
