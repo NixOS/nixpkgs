@@ -373,6 +373,8 @@ let
     inherit url;
   };
 
+  libredirect = callPackage ../build-support/libredirect { };
+
   makeDesktopItem = import ../build-support/make-desktopitem {
     inherit stdenv;
   };

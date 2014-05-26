@@ -1,6 +1,7 @@
 { stdenv, fetchurl, libtool, xlibs, freetype, fontconfig, openssl, glib
 , mesa, gstreamer, gst_plugins_base, dbus, alsaLib, zlib, libuuid
-, libxml2, libxslt, sqlite, libogg, libvorbis, xz, libcanberra, makeWrapper }:
+, libxml2, libxslt, sqlite, libogg, libvorbis, xz, libcanberra
+, makeWrapper, libredirect, xkeyboard_config }:
 
 let
 
@@ -67,8 +68,8 @@ stdenv.mkDerivation {
   buildCommand = ''
     tar xf ${src}
 
-    d=$out/libexec/hipchat
-    mkdir -p $out/libexec
+    mkdir -p $out/libexec/hipchat/bin
+    d=$out/libexec/hipchat/lib
     rm -rfv opt/HipChat/lib/{libstdc++*,libz*,libuuid*,libxml2*,libxslt*,libsqlite*,libogg*,libvorbis*,liblzma*,libcanberra.*,libcanberra-*}
     mv opt/HipChat/lib/ $d
     mv usr/share $out
@@ -85,9 +86,11 @@ stdenv.mkDerivation {
 
     makeWrapper $d/hipchat.bin $out/bin/hipchat \
       --set HIPCHAT_LD_LIBRARY_PATH '"$LD_LIBRARY_PATH"' \
-      --set HIPCHAT_QT_PLUGIN_PATH '"$QT_PLUGIN_PATH"'
+      --set HIPCHAT_QT_PLUGIN_PATH '"$QT_PLUGIN_PATH"' \
+      --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+      --set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb
 
-    mv opt/HipChat/bin/linuxbrowserlaunch $out/bin
+    mv opt/HipChat/bin/linuxbrowserlaunch $out/libexec/hipchat/bin/
   '';
 
   meta = {
