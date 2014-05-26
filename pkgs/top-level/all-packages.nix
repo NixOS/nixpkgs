@@ -7978,6 +7978,8 @@ let
 
   sourceCodePro = callPackage ../data/fonts/source-code-pro {};
 
+  source-sans-pro = callPackage ../data/fonts/source-sans-pro { };
+
   tango-icon-theme = callPackage ../data/icons/tango-icon-theme { };
 
   themes = name: import (../data/misc/themes + ("/" + name + ".nix")) {
