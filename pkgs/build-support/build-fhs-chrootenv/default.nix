@@ -1,11 +1,11 @@
 {stdenv, glibc, glibcLocales, gcc, coreutils, diffutils, findutils, gnused, gnugrep, gnutar, gzip, bzip2, 
-bashInteractive, xz, shadow, gawk, less, su, buildEnv}:
+bashInteractive, xz, shadow, gawk, less, buildEnv}:
 {name, pkgs ? [], profile ? ""}:
 
 let
   basePkgs = [
     glibc glibcLocales gcc coreutils diffutils findutils gnused gnugrep gnutar
-    gzip bzip2 bashInteractive xz shadow gawk less su
+    gzip bzip2 bashInteractive xz shadow gawk less
   ];
 
   # Compose a global profile for the chroot environment

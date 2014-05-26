@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, gtk3, glib, libsoup, pkgconfig, makeWrapper
-, libnotify, file }:
+, libnotify, file, telepathy_glib, dbus_glib }:
 
 stdenv.mkDerivation rec {
   name = "vino-${versionMajor}.${versionMinor}";
@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  buildInputs = [ gtk3 intltool glib libsoup pkgconfig libnotify file makeWrapper ];
+  buildInputs = [ gtk3 intltool glib libsoup pkgconfig libnotify
+                  dbus_glib telepathy_glib file makeWrapper ];
 
   preFixup = ''
     wrapProgram "$out/libexec/vino-server" \

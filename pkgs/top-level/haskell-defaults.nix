@@ -16,11 +16,12 @@
 
   ghcHEADPrefs = self : super : super // {
     mtl = self.mtl_2_1_3_1;
-    cabalInstall_1_20_0_1 = super.cabalInstall_1_20_0_1.override { Cabal = null; };
+    cabalInstall_1_20_0_2 = super.cabalInstall_1_20_0_2.override { Cabal = null; };
   };
 
   ghc782Prefs = self : super : ghcHEADPrefs self super // {
-    cabalInstall_1_20_0_1 = super.cabalInstall_1_20_0_1.override { Cabal = self.Cabal_1_20_0_0; };
+    cabalInstall_1_20_0_2 = super.cabalInstall_1_20_0_2.override { Cabal = self.Cabal_1_20_0_0; };
+    codex = super.codex.override { hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_20_0_0; }; };
   };
 
   ghc763Prefs = self : super : ghc782Prefs self super // {
@@ -41,25 +42,30 @@
     modularArithmetic = null;           # requires base >= 4.7
     pipesBinary = super.pipesBinary.override { binary = self.binary_0_7_2_1; };
     transformers = self.transformers_0_3_0_0; # core packagen in ghc > 7.6.x
+    zipArchive = super.zipArchive_0_2_2_1;    # works without binary 0.7.x
   };
 
   ghc742Prefs = self : super : ghc763Prefs self super // {
-    aeson = super.aeson.override { blazeBuilder = self.blazeBuilder; };
+    aeson = self.aeson_0_7_0_4.override { blazeBuilder = self.blazeBuilder; };
+    attoparsec = self.attoparsec_0_11_3_1;
+    extensibleExceptions = null;        # core package in ghc <= 7.4.x
     hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_16_0_3; };
     haddock = self.haddock_2_11_0;
     haskeline = super.haskeline.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    scientific = self.scientific_0_2_0_2;
   };
 
   ghc722Prefs = self : super : ghc742Prefs self super // {
+    caseInsensitive = self.caseInsensitive_1_0_0_1;
     deepseq = self.deepseq_1_3_0_2;
     DrIFT = null;                       # doesn't compile with old GHC versions
-    extensibleExceptions = null;        # core package in ghc <= 7.4.x
     haddock = self.haddock_2_9_4;
     syb = self.syb_0_4_0;
   };
 
   ghc704Prefs = self : super : ghc722Prefs self super // {
     binary = self.binary_0_7_2_1;       # core package in ghc >= 7.2.2
+    caseInsensitive = super.caseInsensitive; # undo the override from ghc 7.2.2
     haddock = self.haddock_2_9_2.override { alex = self.alex_2_3_5; };
     HsSyck = self.HsSyck_0_51;
     jailbreakCabal = super.jailbreakCabal.override { Cabal = self.Cabal_1_16_0_3; };
@@ -68,35 +74,51 @@
 
   ghc6123Prefs = self : super : ghc704Prefs self super // {
     alex = self.alex_3_1_3;
+    async = self.async_2_0_1_4;
+    attoparsec = self.attoparsec_0_10_4_0;
     cabalInstall = self.cabalInstall_1_16_0_2;
     cgi = self.cgi_3001_1_7_5;
     deepseq = self.deepseq_1_2_0_1;
+    dlist = super.dlist.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    exceptions = null;                  # none of our versions compile
     haddock = self.haddock_2_7_2;
+    logict = super.logict.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    monadPar = self.monadPar_0_1_0_3;
+    nats = null;                        # none of our versions compile
     parallel = self.parallel_3_2_0_3;
     primitive = self.primitive_0_5_0_1;
+    reflection = super.reflection.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    scientific = null;                  # none of our versions compile
+    split = self.split_0_1_4_3;
     stm = self.stm_2_4_2;
     syb = null;                         # core package in ghc < 7
+    tagged = super.tagged.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    temporary = null;                   # none of our versions compile
+    vectorAlgorithms = super.vectorAlgorithms.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
   };
 
   ghc6104Prefs = self : super : ghc6123Prefs self super // {
-    alex = self.alex_2_3_5.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
-    binary = super.binary_0_7_2_1.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
-    Cabal = self.Cabal_1_16_0_3;
+    alex = self.alex_2_3_5.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    async = null;                       # none of our versions compile
+    attoparsec = null;                  # none of our versions compile
+    binary = super.binary_0_7_2_1.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    caseInsensitive = super.caseInsensitive.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     GLUT = self.GLUT_2_2_2_1;
     haddock = self.haddock_2_4_2;
-    happy = super.happy.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
-    hashable = self.hashable_1_1_2_5;
-    HTTP = super.HTTP.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
-    HUnit = super.HUnit.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
-    network = super.network.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
+    happy = super.happy.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    hashable = super.hashable.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    hashtables = super.hashtables.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    HTTP = super.HTTP.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    HUnit = super.HUnit.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    network = super.network.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     OpenGLRaw = self.OpenGLRaw_1_3_0_0;
     OpenGL = self.OpenGL_2_6_0_1;
-    QuickCheck = super.QuickCheck.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
-    stm = self.stm_2_4_2.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
-    tar = super.tar.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
-    text = self.text_0_11_2_3.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
-    time = self.time_1_1_2_4.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
-    zlib = super.zlib.override { cabal = self.cabal.override { Cabal = self.Cabal; }; };
+    QuickCheck = super.QuickCheck.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    stm = self.stm_2_4_2.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    tar = super.tar.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    text = self.text_0_11_2_3.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    time = self.time_1_1_2_4.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    zlib = super.zlib.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
  };
 
   # Abstraction for Haskell packages collections

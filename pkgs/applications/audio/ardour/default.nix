@@ -6,7 +6,7 @@
 , perl, pkgconfig, python, serd, sord, sratom, suil }:
 
 let
-  tag = "3.5.357";
+  tag = "3.5.380";
 in
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = git://git.ardour.org/ardour/ardour.git;
     rev = "refs/tags/${tag}";
-    sha256 = "1e026fb9a6ad4179d52c4b578cc3861bdfd3629b9e7b7a7341d431c7d3692c42";
+    sha256 = "dbcbb2d9143e196d079c27b15266e47d24b81cb7591fe64b717f3485965ded7b";
   };
 
   buildInputs = 
@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     # The funny revision number is from `git describe rev`
-    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = \"${tag}-gce4d125\"; }\n' > libs/ardour/revision.cc
+    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = \"${tag}-g2f6065b\"; }\n' > libs/ardour/revision.cc
     # Note the different version number
-    sed -i '33i rev = \"3.5-357-gce4d125\"' wscript
+    sed -i '33i rev = \"3.5-380-g2f6065b\"' wscript
     sed 's|/usr/include/libintl.h|${glibc}/include/libintl.h|' -i wscript
     sed -e 's|^#!/usr/bin/perl.*$|#!${perl}/bin/perl|g' -i tools/fmt-bindings
     sed -e 's|^#!/usr/bin/env.*$|#!${perl}/bin/perl|g' -i tools/*.pl

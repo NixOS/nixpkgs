@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wai-handler-launch";
-  version = "2.0.1.2";
-  sha256 = "1mcjxv4dkcc5rx1bj8zc5m2q2ifcdwhsl4x4fnrv1ir9kclzsm7q";
+  version = "2.0.1.3";
+  sha256 = "06im28x26jbzbdk9xz33kqvzblglk3b3b60qwal836hima69alsd";
   buildDepends = [
     blazeBuilder blazeBuilderConduit conduit conduitExtra httpTypes
     transformers wai warp zlibConduit

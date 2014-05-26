@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     "--enable-avresample"
     "--enable-runtime-cpudetect"
   ]
-    ++ stdenv.lib.optional subtitleSupport "--enable-libass"
+    ++ stdenv.lib.optional (!stdenv.isDarwin && subtitleSupport) "--enable-libass"
     ++ stdenv.lib.optional mp3Support "--enable-libmp3lame"
     ++ stdenv.lib.optional speexSupport "--enable-libspeex"
     ++ stdenv.lib.optional theoraSupport "--enable-libtheora"
@@ -55,13 +55,12 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional faacSupport "--enable-libfaac --enable-nonfree"
     ++ stdenv.lib.optional dc1394Support "--enable-libdc1394"
     ++ stdenv.lib.optional x11grabSupport "--enable-x11grab"
-    ++ stdenv.lib.optional playSupport "--enable-ffplay"
+    ++ stdenv.lib.optional (!stdenv.isDarwin && playSupport) "--enable-ffplay"
     ++ stdenv.lib.optional freetypeSupport "--enable-libfreetype --enable-fontconfig"
     ++ stdenv.lib.optional fdkAACSupport "--enable-libfdk_aac --enable-nonfree"
     ++ stdenv.lib.optional gnutlsSupport "--enable-gnutls";
 
-  buildInputs = [ pkgconfig lame yasm zlib bzip2 alsaLib texinfo perl ]
-    ++ stdenv.lib.optional subtitleSupport libass
+  buildInputs = [ pkgconfig lame yasm zlib bzip2 texinfo perl ]
     ++ stdenv.lib.optional mp3Support lame
     ++ stdenv.lib.optional speexSupport speex
     ++ stdenv.lib.optional theoraSupport libtheora
@@ -75,10 +74,12 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional faacSupport faac
     ++ stdenv.lib.optional dc1394Support libdc1394
     ++ stdenv.lib.optionals x11grabSupport [ libXext libXfixes ]
-    ++ stdenv.lib.optional playSupport SDL
+    ++ stdenv.lib.optional (!stdenv.isDarwin && playSupport) SDL
     ++ stdenv.lib.optionals freetypeSupport [ freetype fontconfig ]
     ++ stdenv.lib.optional fdkAACSupport fdk_aac
-    ++ stdenv.lib.optional gnutlsSupport gnutls;
+    ++ stdenv.lib.optional gnutlsSupport gnutls
+    ++ stdenv.lib.optional (!stdenv.isDarwin && subtitleSupport) libass
+    ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
 
   enableParallelBuilding = true;
 

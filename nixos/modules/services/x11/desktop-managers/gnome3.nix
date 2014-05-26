@@ -63,6 +63,7 @@ in {
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-online-accounts.enable = mkDefault true;
     services.gnome3.gnome-user-share.enable = mkDefault true;
+    services.gnome3.gvfs.enable = true;
     services.gnome3.seahorse.enable = mkDefault true;
     services.gnome3.sushi.enable = mkDefault true;
     services.gnome3.tracker.enable = mkDefault true;
@@ -86,8 +87,9 @@ in {
           export XDG_MENU_PREFIX=gnome
 
           # Don't let epiphany depend upon gnome-shell
+          # Don't let gnome-session depend upon vino (for .desktop autostart condition)
           # Override default mimeapps
-          export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${gnome3.gnome_shell}/share/gsettings-schemas/${gnome3.gnome_shell.name}:${mimeAppsList}/share
+          export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${gnome3.gnome_shell}/share/gsettings-schemas/${gnome3.gnome_shell.name}:${gnome3.vino}/share/gsettings-schemas/${gnome3.vino.name}:${mimeAppsList}/share
 
           # Let gnome-control-center find gnome-shell search providers
           export GNOME_SEARCH_PROVIDERS_DIR=${config.system.path}/share/gnome-shell/search-providers/
@@ -101,13 +103,15 @@ in {
       };
 
     environment.variables.GIO_EXTRA_MODULES = [ "${gnome3.dconf}/lib/gio/modules"
-                                                "${gnome3.glib_networking}/lib/gio/modules" ];
+                                                "${gnome3.glib_networking}/lib/gio/modules"
+                                                "${gnome3.gvfs}/lib/gio/modules" ];
     environment.systemPackages =
       [ pkgs.desktop_file_utils
         gnome3.glib_networking
         gnome3.gtk3 # for gtk-update-icon-cache
         pkgs.ibus
         pkgs.shared_mime_info # for update-mime-database
+        gnome3.gvfs
         gnome3.dconf
         gnome3.gnome-backgrounds
         gnome3.gnome_control_center

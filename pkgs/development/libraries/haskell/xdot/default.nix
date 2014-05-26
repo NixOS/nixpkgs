@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xdot";
-  version = "0.2.4.2";
-  sha256 = "0a5wmwcl3akw1n9xgdhvlrbvphvy9s528daax28137ixaphvrl0f";
+  version = "0.2.4.3";
+  sha256 = "0p6y3ng8nwi8sksy0881bs331asi73x816zd5v7qlg4v719s8jxg";
   buildDepends = [ cairo graphviz gtk mtl polyparse text ];
   jailbreak = true;
   meta = {

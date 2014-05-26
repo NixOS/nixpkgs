@@ -1,0 +1,14 @@
+diff --git a/src/spawn-fcgi.c b/src/spawn-fcgi.c
+index 7f3f594..2f1046f 100644
+--- a/src/spawn-fcgi.c
++++ b/src/spawn-fcgi.c
+@@ -405,8 +405,7 @@ static int find_user_group(const char *user, const char *group, uid_t *uid, gid_
+ 
+ static void show_version () {
+ 	write(1, CONST_STR_LEN(
+-		PACKAGE_DESC \
+-		"Build-Date: " __DATE__ " " __TIME__ "\n"
++		PACKAGE_DESC "\n"
+ 	));
+ }
+ 

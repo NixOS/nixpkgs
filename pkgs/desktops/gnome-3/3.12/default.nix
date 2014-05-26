@@ -211,6 +211,8 @@ rec {
 
 #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
 
+  geary = callPackage ./misc/geary { };
+
   gfbgraph = callPackage ./misc/gfbgraph { };
 
   goffice = callPackage ./misc/goffice { };

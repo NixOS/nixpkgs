@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       accountservice krb5 networkmanagerapplet libwacom samba libnotify libxkbfile
       shared_mime_info icu libtool docbook_xsl docbook_xsl_ns gnome3.grilo
       gdk_pixbuf gnome3.gnome_icon_theme librsvg clutter clutter_gtk
-      hicolor_icon_theme gnome3.gnome_icon_theme_symbolic
+      hicolor_icon_theme gnome3.gnome_icon_theme_symbolic gnome3.vino
       networkmanager modemmanager makeWrapper  ];
 
   preBuild = ''
