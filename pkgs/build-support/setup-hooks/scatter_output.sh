@@ -38,7 +38,7 @@ scatter_files() {
 	    rm -r $f
 	    rmdir --ignore-fail-on-non-empty $(dirname $f)
 	done
-	find ${!o} -type f -exec /bin/sh -c 'patchelf --set-rpath $(patchelf --print-rpath {} 2>/dev/null):'${!o}'/lib {} 2>/dev/null && patchelf --shrink-rpath {}' \;
+	find ${!o} -type f -exec $SHELL -c 'patchelf --set-rpath $(patchelf --print-rpath {} 2>/dev/null):'${!o}'/lib {} 2>/dev/null && patchelf --shrink-rpath {}' \;
     done
     eval $save_nullglob
 }
