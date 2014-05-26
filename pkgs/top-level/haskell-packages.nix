@@ -1362,6 +1362,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   maccatcher = callPackage ../development/libraries/haskell/maccatcher {};
 
+  machines = callPackage ../development/libraries/haskell/machines {};
+
   markdownUnlit = callPackage ../development/libraries/haskell/markdown-unlit {};
 
   mathFunctions = callPackage ../development/libraries/haskell/math-functions {};
