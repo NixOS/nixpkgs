@@ -1,50 +1,44 @@
-{ stdenv, fetchurl, cairo, gtk, libdrm, libpng, makeWrapper, pango, pkgconfig }:
+{ stdenv, fetchurl, autoconf, automake, cairo, docbook_xsl, gtk
+, libdrm, libpng , libtool, libxslt, makeWrapper, pango, pkgconfig
+, udev
+}:
 
 stdenv.mkDerivation rec {
   name = "plymouth-${version}";
-  version = "0.8.8";
+  version = "0.9.0";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/plymouth/releases/${name}.tar.bz2";
-    sha256 = "16vm3llgci7h63jaclfskj1ii61d8psq7ny2mncml6m3sghs9b8v";
+    sha256 = "0kfdwv179brg390ma003pmdqfvqlbybqiyp9fxrxx0wa19sjxqnk";
   };
 
-  buildInputs = [ cairo gtk libdrm libpng makeWrapper pango pkgconfig ];
+  buildInputs = [
+    autoconf automake cairo docbook_xsl gtk libdrm libpng libtool
+    libxslt makeWrapper pango pkgconfig udev
+  ];
+
+  prePatch = ''
+    sed -e "s#\$(\$PKG_CONFIG --variable=systemdsystemunitdir systemd)#$out/etc/systemd/system#g" \
+      -i configure.ac
+  '';
 
   configurePhase = ''
-    export DESTDIR=$out
     ./configure \
+      --prefix=$out \
       -bindir=$out/bin \
       -sbindir=$out/sbin \
-      --prefix=$out \
       --exec-prefix=$out \
       --libdir=$out/lib \
       --libexecdir=$out/lib \
-      --enable-tracing \
-      --sysconfdir=/etc \
+      --sysconfdir=$out/etc \
       --localstatedir=/var \
+      --with-log-viewer \
       --without-system-root-install \
+      --without-rhgb-compat-link \
+      --enable-tracing \
+      --enable-systemd-integration \
+      --enable-pango \
       --enable-gtk
-  '';
-#      --enable-systemd-integration
-#      -datadir=/share \
-#      --with-rhgb-compat-link \
-
-  preInstall = "mkdir -p $out/bin $out/sbin";
-
-  postInstall = ''
-    cd $out/$out
-    mv bin/* $out/bin
-    mv sbin/* $out/sbin
-
-    rmdir bin
-    rmdir sbin
-    mv * $out/
-    sed -e "s#> $output##" \
-      -e "s#> /dev/stderr##" \
-      -i $out/lib/plymouth/plymouth-populate-initrd
-    wrapProgram $out/lib/plymouth/plymouth-populate-initrd \
-      --set PATH $PATH:$out/bin:$out/sbin
   '';
 
   meta = with stdenv.lib; {
