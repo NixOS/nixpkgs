@@ -1,11 +1,11 @@
 { stdenv, fetchurl, trousers, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "tboot-1.8.0";
+  name = "tboot-1.8.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/tboot/${name}.tar.gz";
-    sha256 = "04z1maryqnr714f3rcynqrpmlx76lxr6bb543xwj5rdl1yvdw2xr";
+    sha256 = "1l9ccm7ik9fs7kzg1bjc5cjh0pcf4v0k1c84dmyr51r084i7p31m";
   };
 
   buildInputs = [ trousers openssl zlib ];
