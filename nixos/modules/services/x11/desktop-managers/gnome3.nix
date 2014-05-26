@@ -87,8 +87,9 @@ in {
           export XDG_MENU_PREFIX=gnome
 
           # Don't let epiphany depend upon gnome-shell
+          # Don't let gnome-session depend upon vino (for .desktop autostart condition)
           # Override default mimeapps
-          export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${gnome3.gnome_shell}/share/gsettings-schemas/${gnome3.gnome_shell.name}:${mimeAppsList}/share
+          export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${gnome3.gnome_shell}/share/gsettings-schemas/${gnome3.gnome_shell.name}:${gnome3.vino}/share/gsettings-schemas/${gnome3.vino.name}:${mimeAppsList}/share
 
           # Let gnome-control-center find gnome-shell search providers
           export GNOME_SEARCH_PROVIDERS_DIR=${config.system.path}/share/gnome-shell/search-providers/
