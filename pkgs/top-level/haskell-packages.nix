@@ -268,6 +268,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   blazeTextual = callPackage ../development/libraries/haskell/blaze-textual {};
 
+  BlogLiterately = callPackage ../development/libraries/haskell/BlogLiterately {};
+
   bloomfilter = callPackage ../development/libraries/haskell/bloomfilter {};
 
   bmp = callPackage ../development/libraries/haskell/bmp {
@@ -275,6 +277,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   };
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
+
+  boolExtras = callPackage ../development/libraries/haskell/bool-extras {};
 
   boundingboxes_0_1_1 = callPackage ../development/libraries/haskell/boundingboxes/0.1.1.nix {};
   boundingboxes_0_2 = callPackage ../development/libraries/haskell/boundingboxes/0.2.nix {};
@@ -2269,6 +2273,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   unionFind = callPackage ../development/libraries/haskell/union-find {};
 
   uniplate = callPackage ../development/libraries/haskell/uniplate {};
+
+  units = callPackage ../development/libraries/haskell/units {};
 
   uniqueid = callPackage ../development/libraries/haskell/uniqueid {};
 
