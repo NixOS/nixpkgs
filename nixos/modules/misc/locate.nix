@@ -25,13 +25,12 @@ in
         '';
       };
 
-      period = mkOption {
-        type = types.str;
-        default = "15 02 * * *";
+      hours = mkOption {
+        type = types.int;
+        default = 24;
         description = ''
-          This option defines (in the format used by cron) when the
-          locate database is updated.
-          The default is to update at 02:15 at night every day.
+          This option defines, in hours, when the locate database is updated.
+          The default is to update 24 hours after the last update.
         '';
       };
 
@@ -43,20 +42,19 @@ in
 
   config = {
 
-    systemd.services.update-locatedb =
-      { description = "Update Locate Database";
-        path  = [ pkgs.su ];
-        script =
-          ''
-            mkdir -m 0755 -p $(dirname ${locatedb})
-            exec updatedb --localuser=nobody --output=${locatedb} --prunepaths='/tmp /var/tmp /media /run'
-          '';
-        serviceConfig.Nice = 19;
-        serviceConfig.IOSchedulingClass = "idle";
-      };
-
-    services.cron.systemCronJobs = optional config.services.locate.enable
-      "${config.services.locate.period} root ${config.systemd.package}/bin/systemctl start update-locatedb.service";
+    systemd.services.update-locatedb = {
+      description = "Update Locate Database";
+      path  = [ pkgs.su ];
+      script = ''
+        mkdir -m 0755 -p $(dirname ${locatedb})
+        exec updatedb --localuser=nobody --output=${locatedb} --prunepaths='/tmp /var/tmp /media /run'
+      '';
+      serviceConfig.Nice = 19;
+      serviceConfig.IOSchedulingClass = "idle";
+    };
+    systemd.timers.update-locatedb = {
+      timerConfig.OnUnitInactiveSec = 3600 * config.services.locate.hours;
+    };
 
   };
 
