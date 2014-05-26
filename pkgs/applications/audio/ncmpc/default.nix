@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, ncurses, mpd_clientlib }:
+{ stdenv, fetchurl, pkgconfig, glib, ncurses, mpd_clientlib, libintlOrEmpty }:
 
 stdenv.mkDerivation rec {
   version = "0.21";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "648e846e305c867cb937dcb467393c2f5a30bf460bdf77b63de7af69fba1fd07";
   };
 
-  buildInputs = [ pkgconfig glib ncurses mpd_clientlib ];
+  buildInputs = [ pkgconfig glib ncurses mpd_clientlib ]
+    ++ libintlOrEmpty;
 
   meta = with stdenv.lib; {
     description = "Curses-based interface for MPD (music player daemon)";
