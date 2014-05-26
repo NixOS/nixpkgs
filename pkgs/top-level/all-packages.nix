@@ -1146,6 +1146,8 @@ let
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
+  grafana = callPackage ../development/tools/misc/grafana { };
+
   grafx2 = callPackage ../applications/graphics/grafx2 {};
 
   graphviz = callPackage ../tools/graphics/graphviz { };
