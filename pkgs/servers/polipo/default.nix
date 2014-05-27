@@ -1,12 +1,13 @@
 { stdenv, fetchurl, texinfo }:
+let
+  version = "1.1.1";
+in
 stdenv.mkDerivation rec {
-
   name = "polipo-${version}";
-  version = "1.0.4.1";
 
   src = fetchurl {
-    url = "http://freehaven.net/~chrisd/polipo/${name}.tar.gz";
-    sha256 = "1ykwkyvmdw6fsaj2hc40971pkwf60hvi9c43whijim00qvgbyvwd";
+    url = "http://www.pps.univ-paris-diderot.fr/~jch/software/files/polipo/polipo-${version}.tar.gz";
+    sha256 = "05g09sg9qkkhnc2mxldm1w1xkxzs2ylybkjzs28w8ydbjc3pand2";
   };
 
   buildInputs = [ texinfo ];
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.pps.jussieu.fr/~jch/software/polipo/;
     description = "A small and fast caching web proxy";
     license = licenses.mit;
-    maintainers = [ maintainers.phreedom ];
+    maintainers = [ maintainers.phreedom maintainers.emery ];
     platforms = platforms.all;
   };
 }
