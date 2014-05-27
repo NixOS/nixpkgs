@@ -28,7 +28,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = true;
-  preCheck = "rm jit-test/tests/sunspider/check-date-format-tofte.js"; # https://bugzil.la/600522
+  preCheck = ''
+    rm jit-test/tests/sunspider/check-date-format-tofte.js    # https://bugzil.la/600522
+
+    paxmark m shell/js17
+    paxmark mr jsapi-tests/jsapi-tests
+  '';
 
   meta = with stdenv.lib; {
     description = "Mozilla's JavaScript engine written in C/C++";

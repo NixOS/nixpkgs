@@ -59,7 +59,7 @@ with srcInfo; stdenv.mkDerivation {
     "--disable-downloading"
 
     "--without-rhino"
-    # Uncomment this when paxctl lands in stdenv: "--with-pax=paxctl"
+    "--with-pax=paxctl"
     "--with-jdk-home=${jdkPath}"
   ];
 

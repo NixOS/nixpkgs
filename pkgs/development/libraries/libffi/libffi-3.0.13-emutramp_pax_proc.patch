@@ -1,0 +1,37 @@
+2013-05-22  Magnus Granberg  <zorry@gentoo.org>
+
+	#457194
+	* src/closuer.c (emutramp_enabled_check): Check with /proc.
+
+--- a/src/closures.c	2013-03-17 23:27:11.000000000 +0100
++++ b/src/closures.c	2013-04-29 23:26:02.279022022 +0200
+@@ -181,10 +181,26 @@ static int emutramp_enabled = -1;
+ static int
+ emutramp_enabled_check (void)
+ {
+-  if (getenv ("FFI_DISABLE_EMUTRAMP") == NULL)
+-    return 1;
+-  else
++  char *buf = NULL;
++  size_t len = 0;
++  FILE *f;
++  int ret;
++  f = fopen ("/proc/self/status", "r");
++  if (f == NULL)
+     return 0;
++  ret = 0;
++
++  while (getline (&buf, &len, f) != -1)
++    if (!strncmp (buf, "PaX:", 4))
++      {
++        char emutramp;
++        if (sscanf (buf, "%*s %*c%c", &emutramp) == 1)
++          ret = (emutramp == 'E');
++        break;
++      }
++  free (buf);
++  fclose (f);
++  return ret;
+ }
+ 
+ #define is_emutramp_enabled() (emutramp_enabled >= 0 ? emutramp_enabled \

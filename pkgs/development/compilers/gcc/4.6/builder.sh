@@ -33,7 +33,7 @@ if test "$noSysDirs" = "1"; then
 
         # The path to the Glibc binaries such as `crti.o'.
         glibc_libdir="$(cat $NIX_GCC/nix-support/orig-libc)/lib"
-        
+
     else
         # Hack: support impure environments.
         extraFlags="-isystem /usr/include"
@@ -214,7 +214,7 @@ postInstall() {
     # previous gcc.
     rm -rf $out/libexec/gcc/*/*/install-tools
     rm -rf $out/lib/gcc/*/*/install-tools
-    
+
     # More dependencies with the previous gcc or some libs (gccbug stores the build command line)
     rm -rf $out/bin/gccbug
     # Take out the bootstrap-tools from the rpath, as it's not needed at all having $out
@@ -239,6 +239,11 @@ postInstall() {
             ln -sfn g++ $i
         fi
     done
+
+    # Disable RANDMMAP on grsec, which causes segfaults when using
+    # precompiled headers.
+    # See https://bugs.gentoo.org/show_bug.cgi?id=301299#c31
+    paxmark r $out/libexec/gcc/*/*/{cc1,cc1plus}
 
     eval "$postInstallGhdl"
 }

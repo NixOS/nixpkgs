@@ -68,6 +68,10 @@ stdenv.mkDerivation rec {
   doCheck = false;
   enableParallelBuilding = true;
 
+  postInstall = ''
+    paxmark pms $out/sbin/grub-{probe,bios-setup}
+  '';
+
   meta = {
     description = "GNU GRUB, the Grand Unified Boot Loader (2.x beta)";
 

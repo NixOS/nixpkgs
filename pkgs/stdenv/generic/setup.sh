@@ -93,6 +93,7 @@ PATH=
 for i in $NIX_GCC @initialPath@; do
     if [ "$i" = / ]; then i=; fi
     addToSearchPath PATH $i/bin
+    addToSearchPath PATH $i/sbin
 done
 
 if [ "$NIX_DEBUG" = 1 ]; then
@@ -293,6 +294,18 @@ stripDirs() {
     fi
 }
 
+# PaX-mark binaries
+paxmark() {
+    local flags="$1"
+    shift
+
+    if [ -z "@needsPax@" ]; then
+        return
+    fi
+
+    paxctl -c "$@"
+    paxctl -zex -${flags} "$@"
+}
 
 ######################################################################
 # Textual substitution functions.
