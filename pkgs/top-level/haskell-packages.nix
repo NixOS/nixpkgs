@@ -1752,6 +1752,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   pureMD5 = callPackage ../development/libraries/haskell/pureMD5 {};
 
+  purescript = callPackage ../development/libraries/haskell/purescript {};
+
   pwstoreFast = callPackage ../development/libraries/haskell/pwstore-fast {};
 
   QuickCheck_1_2_0_0 = callPackage ../development/libraries/haskell/QuickCheck/1.2.0.0.nix {};
