@@ -2233,6 +2233,37 @@ rec {
     };
   };
 
+  radicale = buildPythonPackage rec {
+    name = "radicale-${version}";
+    namePrefix = "";
+    version = "0.9b1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/R/Radicale/Radicale-${version}.tar.gz";
+      sha256 = "3a8451909de849f173f577ddec0a085f19040dbb6aa13d5256208a0f8e11d88d";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [
+      flup
+      ldap
+      sqlalchemy
+    ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = "http://www.radicale.org/";
+      longDescription = ''
+        The Radicale Project is a complete CalDAV (calendar) and CardDAV
+        (contact) server solution. Calendars and address books are available for
+        both local and remote access, possibly limited through authentication
+        policies. They can be viewed and edited by calendar and contact clients
+        on mobile phones or computers.
+      '';
+      license = stdenv.lib.licenses.gpl3Plus;
+      maintainers = [ stdenv.lib.maintainers.edwtjo ];
+    };
+  };
 
   raven = buildPythonPackage rec {
     name = "raven-3.4.1";
