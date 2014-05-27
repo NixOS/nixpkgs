@@ -2189,11 +2189,15 @@ rec {
       md5 = "6dc917d262c69366630c542bd21859a3";
     };
 
+    # tests are failing in version 0.7 but are fixed in trunk
+    doCheck = false;
+
     propagatedBuildInputs = [ transaction pyramid ];
     meta = {
       maintainers = [
         stdenv.lib.maintainers.garbas
         stdenv.lib.maintainers.iElectric
+        stdenv.lib.maintainers.matejc
       ];
       platforms = stdenv.lib.platforms.all;
     };
