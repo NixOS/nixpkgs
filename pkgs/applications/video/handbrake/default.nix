@@ -31,7 +31,8 @@ stdenv.mkDerivation rec {
   version = "0.9.9";
   name = "handbrake-${version}";
 
-  allowUnfree = config.allowUnfree or false;
+  # ToDo: doesn't work (yet)
+  allowUnfree = false; # config.allowUnfree or false;
 
   buildInputsX = stdenv.lib.optionals useGtk [
     glib gtk intltool libnotify
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals useWebKitGtk [ webkitgtk ];
 
   # Did not test compiling with it
-  unfreeInputs = stdenv.lib.optionals allowUnfree [ faac ];
+  unfreeInputs = stdenv.lib.optional allowUnfree faac;
 
   nativeBuildInputs = [ python pkgconfig yasm autoconf automake libtool m4 ];
   buildInputs = [
@@ -49,14 +50,14 @@ stdenv.mkDerivation rec {
     lame ffmpeg libdvdread libdvdnav libbluray mp4v2 mpeg2dec x264
   ] ++ buildInputsX ++ unfreeInputs;
 
-  
+
   src = fetchurl {
     name = "HandBrake-${version}.tar.bz2";
     url = "http://handbrake.fr/rotation.php?file=HandBrake-${version}.tar.bz2";
     sha256 = "1crmm1c32vx60jfl2bqzg59q4qqx6m83b08snp7h1njc21sdf7d7";
   };
 
-  patches = stdenv.lib.optionals (! allowUnfree) [ ./disable-unfree.patch ];
+  patches = stdenv.lib.optional (! allowUnfree) ./disable-unfree.patch;
 
   preConfigure = ''
     # Fake wget to prevent downloads
