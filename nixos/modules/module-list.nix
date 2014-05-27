@@ -98,6 +98,7 @@
   ./services/databases/postgresql.nix
   ./services/databases/virtuoso.nix
   ./services/databases/monetdb.nix
+  ./services/databases/influxdb.nix
   ./services/desktops/accountservice.nix
   ./services/desktops/geoclue2.nix
   ./services/desktops/gnome3/at-spi2-core.nix
