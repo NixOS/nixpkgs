@@ -121,9 +121,10 @@ fi
 # written to disk (generally used for NixOps, harmless elsewhere).
 if ! mountpoint -q /run/keys; then
     rm -rf /run/keys
-    mkdir -m 0750 /run/keys
-    chown 0:96 /run/keys
+    mkdir /run/keys
     mount -t ramfs none /run/keys
+    chown 0:96 /run/keys
+    chmod 0750 /run/keys
 fi
 
 mkdir -m 0755 -p /run/lock
