@@ -1627,6 +1627,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   pathtype = callPackage ../development/libraries/haskell/pathtype {};
 
+  patternArrows = callPackage ../development/libraries/haskell/pattern-arrows {};
+
   pbkdf = callPackage ../development/libraries/haskell/pbkdf {};
 
   pcap = callPackage ../development/libraries/haskell/pcap {};
