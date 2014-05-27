@@ -10739,6 +10739,8 @@ let
 
   hplip = callPackage ../misc/drivers/hplip { };
 
+  hplipWithPlugin = hplip.override { withPlugin = true; };
+
   # using the new configuration style proposal which is unstable
   jack1d = callPackage ../misc/jackaudio/jack1.nix { };
 
@@ -10867,6 +10869,8 @@ let
     snapscanFirmware = config.sane.snapscanFirmware or null;
     hotplugSupport = config.sane.hotplugSupport or true;
   };
+
+  mkSaneConfig = callPackage ../applications/graphics/sane/config.nix { };
 
   saneFrontends = callPackage ../applications/graphics/sane/frontends.nix { };
 
