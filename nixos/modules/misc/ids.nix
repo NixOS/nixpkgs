@@ -131,6 +131,7 @@
       starbound = 120;
       hydra = 122;
       spiped = 123;
+      polipo = 124;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
