@@ -1442,6 +1442,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   monadsTf = callPackage ../development/libraries/haskell/monads-tf {};
 
+  monadUnify = callPackage ../development/libraries/haskell/monad-unify {};
+
   monoidExtras = callPackage ../development/libraries/haskell/monoid-extras {};
 
   monoidTransformer = callPackage ../development/libraries/haskell/monoid-transformer {};
