@@ -1150,6 +1150,8 @@ let
 
   gnuvd = callPackage ../tools/misc/gnuvd { };
 
+  goaccess = callPackage ../tools/misc/goaccess { };
+  
   googleAuthenticator = callPackage ../os-specific/linux/google-authenticator { };
 
   gource = callPackage ../applications/version-management/gource {};
