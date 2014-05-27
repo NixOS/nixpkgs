@@ -899,6 +899,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   };
   GLUT = self.GLUT_2_5_1_1;
 
+  GLUtil = callPackage ../development/libraries/haskell/GLUtil {};
+
   gnuidn = callPackage ../development/libraries/haskell/gnuidn {};
 
   gnuplot = callPackage ../development/libraries/haskell/gnuplot {};
