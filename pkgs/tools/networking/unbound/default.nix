@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Validating, recursive, and caching DNS resolver";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
     homepage = http://www.unbound.net;
     maintainers = [ stdenv.lib.maintainers.emery ];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -49,9 +49,7 @@ in
 
       enable = mkOption {
 	default = false;
-	description = "
-	  Whether to enable the Unbound domain name server.
-	";
+	description = "Whether to enable the Unbound domain name server.";
       };
 
       allowedAccess = mkOption {
@@ -87,9 +85,9 @@ in
       name = username;
       uid = config.ids.uids.unbound;
       description = "unbound daemon user";
+      home = statedir;
+      createHome = true;
     };
-
-    system.activationScripts.unbound = "${pkgs.coreutils}/bin/mkdir -p ${stateDir}";
 
     systemd.services.unbound = {
       description="Unbound recursive Domain Name Server";
