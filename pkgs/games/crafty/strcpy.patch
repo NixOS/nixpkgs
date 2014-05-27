@@ -1,0 +1,21 @@
+--- a/utility.c
++++ b/utility.c
+@@ -2144,7 +2144,7 @@ int ReadPGN(FILE * input, int option) {
+         char *skip;
+ 
+         strcpy(temp, input_buffer);
+-        skip = strstr(input_buffer, buffer) + strlen(buffer);
++        skip = strstr(temp, buffer) + strlen(buffer);
+         if (skip)
+           strcpy(input_buffer, skip);
+       }
+@@ -2241,7 +2241,7 @@ int ReadPGN(FILE * input, int option) {
+             }
+           }
+           strcpy(temp, input_buffer);
+-          skip = strstr(input_buffer, buffer) + strlen(buffer);
++          skip = strstr(temp, buffer) + strlen(buffer);
+           strcpy(input_buffer, skip);
+       } else {
+         int skip;
+
