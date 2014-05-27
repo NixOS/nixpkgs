@@ -73,7 +73,8 @@ cabal.mkDerivation (self: rec {
 
     for i in $docPackages; do
         import_dbs $i/share/doc
-        ln -sf $i/share/doc/* $out/share/hoogle/doc
+        ln -sf $i/share/doc/*-ghc-*/* $out/share/hoogle/doc 2> /dev/null \
+            || ln -sf $i/share/doc/* $out/share/hoogle/doc
     done
 
     import_dbs ${self.ghc}/share/doc/ghc*/html/libraries
