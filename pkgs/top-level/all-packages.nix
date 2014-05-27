@@ -1661,6 +1661,12 @@ let
 
   opendkim = callPackage ../development/libraries/opendkim { };
 
+  opendylan = callPackage ../development/compilers/opendylan {
+    opendylan-bootstrap = opendylan_bin;
+  };
+
+  opendylan_bin = callPackage ../development/compilers/opendylan/bin.nix { };
+
   openjade = callPackage ../tools/text/sgml/openjade {
     perl = perl510;
   };
