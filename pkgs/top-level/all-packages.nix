@@ -1982,6 +1982,8 @@ let
 
   seqdiag = pythonPackages.seqdiag;
 
+  screenfetch = callPackage ../tools/misc/screenfetch { };
+
   sg3_utils = callPackage ../tools/system/sg3_utils { };
 
   sharutils = callPackage ../tools/archivers/sharutils { };
