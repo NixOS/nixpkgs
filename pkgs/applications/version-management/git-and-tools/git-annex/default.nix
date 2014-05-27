@@ -2,7 +2,7 @@
 , caseInsensitive, clientsession, cryptoApi, cryptohash, curl
 , dataDefault, dataenc, DAV, dbus, dlist, dns, editDistance
 , extensibleExceptions, fdoNotify, feed, filepath, git, gnupg1
-, gnutls, hamlet, hinotify, hS3, hslogger, HTTP, httpClient
+, gnutls, hamlet, fsnotify, hinotify, hS3, hslogger, HTTP, httpClient
 , httpConduit, httpTypes, IfElse, json, liftedBase, lsof, MissingH
 , MonadCatchIOTransformers, monadControl, mtl, network
 , networkConduit, networkInfo, networkMulticast
@@ -22,29 +22,33 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [
     aeson async blazeBuilder bloomfilter byteable caseInsensitive
-    clientsession cryptoApi cryptohash dataDefault dataenc DAV dbus
-    dlist dns editDistance extensibleExceptions fdoNotify feed filepath
-    gnutls hamlet hinotify hS3 hslogger HTTP httpClient httpConduit
+    clientsession cryptoApi cryptohash dataDefault dataenc DAV
+    dlist dns editDistance extensibleExceptions feed filepath
+    gnutls hamlet hS3 hslogger HTTP httpClient httpConduit
     httpTypes IfElse json liftedBase MissingH MonadCatchIOTransformers
     monadControl mtl network networkConduit networkInfo
     networkMulticast networkProtocolXmpp optparseApplicative QuickCheck
-    random regexTdfa SafeSemaphore securemem SHA shakespeare stm tasty
-    tastyHunit tastyQuickcheck tastyRerun text time transformers
-    unixCompat utf8String uuid wai waiLogger warp warpTls xmlTypes
-    yesod yesodCore yesodDefault yesodForm yesodStatic
-  ];
+    random regexTdfa SafeSemaphore securemem SHA stm tasty tastyHunit
+    tastyQuickcheck tastyRerun text time transformers unixCompat
+    utf8String uuid wai waiLogger warp warpTls xmlTypes yesod yesodCore
+    yesodDefault yesodForm yesodStatic
+  ] ++ (if (!self.stdenv.isDarwin) then [
+    dbus fdoNotify hinotify
+  ] else [
+    fsnotify
+  ]);
   buildTools = [ bup curl git gnupg1 lsof openssh perl rsync which ];
   configureFlags = "-fS3
                     -fWebDAV
-                    -fInotify
-                    -fDbus
                     -fAssistant
                     -fWebapp
                     -fPairing
                     -fXMPP
                     -fDNS
                     -fProduction
-                    -fTDFA";
+                    -fTDFA"
+    + (self.stdenv.lib.optionalString (!self.stdenv.isDarwin)
+            " -fInotify -fDbus");
   preConfigure = ''
     export HOME="$NIX_BUILD_TOP/tmp"
     mkdir "$HOME"
