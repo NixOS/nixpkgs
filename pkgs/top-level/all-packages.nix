@@ -9991,6 +9991,8 @@ let
 
   oilrush = callPackage ../games/oilrush { };
 
+  openra = callPackage ../games/openra { };
+
   openttd = callPackage ../games/openttd {
     zlib = zlibStatic;
   };
