@@ -5212,6 +5212,8 @@ let
 
   libmilter = callPackage ../development/libraries/libmilter { };
 
+  libmkv = callPackage ../development/libraries/libmkv { };
+
   libmms = callPackage ../development/libraries/libmms { };
 
   libmowgli = callPackage ../development/libraries/libmowgli { };
@@ -8846,6 +8848,8 @@ let
   lmms = callPackage ../applications/audio/lmms { };
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
+
+  handbrake = callPackage ../applications/video/handbrake { };
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
