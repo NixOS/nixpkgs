@@ -3371,6 +3371,8 @@ let
 
     ocamlify = callPackage ../development/tools/ocaml/ocamlify { };
 
+    ocaml_ipaddr = callPackage ../development/ocaml-modules/ocaml-ipaddr { };
+
     ocaml_lwt = callPackage ../development/ocaml-modules/lwt { };
 
     ocamlmod = callPackage ../development/tools/ocaml/ocamlmod { };
