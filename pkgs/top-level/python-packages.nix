@@ -3562,6 +3562,19 @@ rec {
     propagatedBuildInputs = [ pythonPackages.nose pythonPackages.ipythonLight ];
   };
 
+  iso8601_0_1_4 = buildPythonPackage {
+    name = "iso8601-0.1.4";
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/i/iso8601/iso8601-0.1.4.tar.gz;
+      sha256 = "03gnjxpfq0wwimqnsvz32xcngq0hrdqryn3zm8qh95hnnggwqa3s";
+    };
+
+    meta = {
+      homepage = https://bitbucket.org/micktwomey/pyiso8601/;
+      description = "Simple module to parse ISO 8601 dates";
+      maintainers = [ stdenv.lib.maintainers.phreedom ];
+    };
+  };
 
   jedi = buildPythonPackage (rec {
     name = "jedi-0.7.0";
