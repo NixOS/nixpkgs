@@ -3462,6 +3462,8 @@ let
 
   # mercurial (hg) bleeding edge version
   octaveHG = callPackage ../development/interpreters/octave/hg.nix { };
+  
+  ocropus = callPackage ../applications/misc/ocropus { };
 
   perl58 = callPackage ../development/interpreters/perl/5.8 {
     impureLibcPath = if stdenv.isLinux then null else "/usr";
