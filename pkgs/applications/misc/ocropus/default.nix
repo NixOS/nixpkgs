@@ -44,7 +44,8 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "1s0v0gd6psfjp6lghwl2dj49h18mgf2n2z8hqzw8430nzhglnlvr";
   };
 
-  buildInputs = with pythonPackages; [ curl numpy scipy pillow matplotlib ];
+  propagatedBuildInputs = with pythonPackages; [ curl numpy scipy pillow
+    matplotlib beautifulsoup4 pygtk ];
 
   enableParallelBuilding = true;
   
