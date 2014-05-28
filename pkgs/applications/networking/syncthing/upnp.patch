@@ -1,0 +1,28 @@
+Trying to fix upnp for miniupnpd:
+https://github.com/calmh/syncthing/issues/211
+
+diff --git a/upnp/upnp.go b/upnp/upnp.go
+index 9de719a..9c85b23 100644
+--- a/upnp/upnp.go
++++ b/upnp/upnp.go
+@@ -60,14 +60,12 @@ func Discover() (*IGD, error) {
+ 		return nil, err
+ 	}
+ 
+-	search := []byte(`
+-M-SEARCH * HTTP/1.1
+-Host: 239.255.255.250:1900
+-St: urn:schemas-upnp-org:device:InternetGatewayDevice:1
+-Man: "ssdp:discover"
+-Mx: 3
+-
+-`)
++	search := []byte("M-SEARCH * HTTP/1.1\r\n" +
++"Host: 239.255.255.250:1900\r\n" +
++"St: urn:schemas-upnp-org:device:InternetGatewayDevice:1\r\n" +
++"Man: \"ssdp:discover\"\r\n" +
++"Mx: 3\r\n" +
++"\r\n")
+ 
+ 	_, err = socket.WriteTo(search, ssdp)
+ 	if err != nil {

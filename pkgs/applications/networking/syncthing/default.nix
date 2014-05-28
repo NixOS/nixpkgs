@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ go ];
 
+  patches = [ ./upnp.patch ];
+
   buildPhase = ''
     mkdir -p "./dependencies/src/github.com/calmh/syncthing"
 
