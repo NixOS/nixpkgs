@@ -7783,6 +7783,8 @@ let
 
   mph_2b_damase = callPackage ../data/fonts/mph-2b-damase { };
 
+  nafees = callPackage ../data/fonts/nafees { };
+
   oldstandard = callPackage ../data/fonts/oldstandard { };
 
   poly = callPackage ../data/fonts/poly { };
