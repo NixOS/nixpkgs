@@ -1849,6 +1849,18 @@ rec {
     };
   };
 
+  gcutil = buildPythonPackage rec {
+    name = "gcutil-1.15.0";
+    meta.maintainers = [ stdenv.lib.maintainers.phreedom ];
+
+    src = fetchurl {
+      url = https://dl.google.com/dl/cloudsdk/release/artifacts/gcutil-1.15.0.tar.gz;
+      sha256 = "12c98ivhjr01iz6lkga574xm8p0bsil6arydvpblyw8sjkgim5sq";
+    };
+
+    propagatedBuildInputs = [ gflags iso8601_0_1_4 ipaddr httplib2 google_apputils google_api_python_client ];
+  };
+
   gitdb = buildPythonPackage rec {
     name = "gitdb-0.5.4";
     meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
