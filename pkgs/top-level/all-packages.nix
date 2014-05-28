@@ -6684,6 +6684,8 @@ let
 
   riak = callPackage ../servers/nosql/riak/1.3.1.nix { };
 
+  influxdb = callPackage ../servers/nosql/influxdb { };
+
   mysql51 = import ../servers/sql/mysql/5.1.x.nix {
     inherit fetchurl ncurses zlib perl openssl stdenv;
     ps = procps; /* !!! Linux only */
