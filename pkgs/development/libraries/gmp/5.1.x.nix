@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     # (x86), except on Solaris where some tests crash with "Memory fault".
     # See <http://hydra.nixos.org/build/2760931>, for instance.
     (stdenv.lib.optional (!stdenv.isSunOS) "--enable-fat")
-    ++ (if cxx then [ "--enable-cxx" ] else [ "--disable-cxx" ])
+    ++ (if cxx then [ "--enable-cxx" "CPPFLAGS=-fexceptions" ]
+               else [ "--disable-cxx" ])
     ++ (if stdenv.is64bit then [ "--with-pic" ] else []);
 
   doCheck = true;
