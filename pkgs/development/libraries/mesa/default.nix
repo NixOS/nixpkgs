@@ -157,6 +157,8 @@ stdenv.mkDerivation {
 
   passthru = { inherit libdrm version driverLink; };
 
+  NIX_LDFLAGS = optional stdenv.isLinux "-L${udev}/lib -ludev";
+
   meta = {
     description = "An open source implementation of OpenGL";
     homepage = http://www.mesa3d.org/;
