@@ -3337,6 +3337,8 @@ let
 
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
 
+    js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml { };
+
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
 
     lablgtk = callPackage ../development/ocaml-modules/lablgtk {
