@@ -3216,11 +3216,11 @@ rec {
 
 
   gflags = buildPythonPackage rec {
-    name = "gflags-1.5.1";
+    name = "gflags-2.0";
 
     src = fetchurl {
       url = "http://python-gflags.googlecode.com/files/python-${name}.tar.gz";
-      sha256 = "1p8blsc3z1wasi9dhbjij7m2czps17dll3cpj37v97fv5ww7al9v";
+      sha256 = "1mkc7315bpmh39vbn0jq237jpw34zsrjr1sck98xi36bg8hnc41i";
     };
 
     meta = {
