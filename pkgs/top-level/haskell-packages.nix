@@ -668,7 +668,15 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   elerea = callPackage ../development/libraries/haskell/elerea {};
 
-  Elm = callPackage ../development/compilers/elm/elm.nix {};
+  Elm = callPackage ../development/compilers/elm/elm.nix {
+    binary = self.binary_0_7_2_1;
+    pandoc = self.pandoc.override {
+      binary = self.binary_0_7_2_1;
+      zipArchive = self.zipArchive.override {
+        binary = self.binary_0_7_2_1;
+      };
+    };
+  };
 
   elmServer = callPackage ../development/compilers/elm/elm-server.nix {};
 
