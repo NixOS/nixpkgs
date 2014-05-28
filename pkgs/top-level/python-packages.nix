@@ -3319,6 +3319,22 @@ rec {
     };
   };
 
+   google_apputils = buildPythonPackage rec {
+    name = "google-apputils-0.4.0";
+
+    src = fetchurl {
+      url = http://pypi.python.org/packages/source/g/google-apputils/google-apputils-0.4.0.tar.gz;
+      sha256 = "18wlivnqxvx1wsw177lckpl32nmr6cq7f5nhk8r72fvjy8wynq5j";
+    };
+
+    propagatedBuildInputs = [ pytz gflags dateutil_1_5 mox ];
+
+    meta = with stdenv.lib; {
+      description = "Google Application Utilities for Python";
+      homepage = http://code.google.com/p/google-apputils-python;
+    };
+  };
+
   greenlet = buildPythonPackage rec {
     name = "greenlet-0.3.1";
 
