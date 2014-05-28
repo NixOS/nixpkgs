@@ -152,6 +152,7 @@ in {
         gnome3.gnome-music
         gnome3.gnome-tweak-tool
         gnome3.gnome-photos
+        gnome3.nautilus-sendto
       ] config.environment.gnome3.excludePackages);
 
     # Needed for themes and backgrounds
