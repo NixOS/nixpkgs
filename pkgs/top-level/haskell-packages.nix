@@ -431,6 +431,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   composition = callPackage ../development/libraries/haskell/composition {};
 
+  compressed = callPackage ../development/libraries/haskell/compressed {};
+
   concatenative = callPackage ../development/libraries/haskell/concatenative {};
 
   concreteTyperep = callPackage ../development/libraries/haskell/concreteTyperep {};
