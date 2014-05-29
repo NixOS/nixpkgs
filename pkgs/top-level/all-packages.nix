@@ -2487,6 +2487,8 @@ let
 
   aldor = callPackage ../development/compilers/aldor { };
 
+  aliceml = callPackage ../development/compilers/aliceml { };
+
   aspectj = callPackage ../development/compilers/aspectj { };
 
   ats = callPackage ../development/compilers/ats { };
