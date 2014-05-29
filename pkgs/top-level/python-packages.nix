@@ -3963,7 +3963,8 @@ rec {
         (if stdenv.isDarwin then [ pkgs.clangStdenv ] else [ pkgs.stdenv ]);
 
     propagatedBuildInputs =
-      [ dateutil nose numpy pyparsing tornado pkgs.freetype pkgs.libpng pkgs.pkgconfig ];
+      [ dateutil nose numpy pyparsing tornado pkgs.freetype pkgs.libpng pkgs.pkgconfig
+        pygtk ];
 
     meta = with stdenv.lib; {
       description = "python plotting library, making publication quality plots";

@@ -44,6 +44,8 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "1s0v0gd6psfjp6lghwl2dj49h18mgf2n2z8hqzw8430nzhglnlvr";
   };
 
+  patches = [ ./display.patch ];
+
   propagatedBuildInputs = with pythonPackages; [ curl numpy scipy pillow
     matplotlib beautifulsoup4 pygtk ];
 
@@ -51,6 +53,9 @@ pythonPackages.buildPythonPackage rec {
   
   preConfigure = with stdenv.lib; ''
     ${concatStrings (map (x: "ln -s ${x.src} models/${x.name};") models)}
+
+    sed -i 's|/usr/local|'$out'|' ocrolib/common.py
+    sed -i 's|/usr/local|'$out'|' ocrolib/default.py
     ${pythonPackages.python}/bin/${pythonPackages.python.executable} setup.py download_models
   '';
 
