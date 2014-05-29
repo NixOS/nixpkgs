@@ -47,7 +47,7 @@ pythonPackages.buildPythonPackage rec {
   patches = [ ./display.patch ];
 
   propagatedBuildInputs = with pythonPackages; [ curl numpy scipy pillow
-    matplotlib beautifulsoup4 pygtk ];
+    matplotlib beautifulsoup4 pygtk lxml ];
 
   enableParallelBuilding = true;
   
