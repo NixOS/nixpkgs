@@ -298,6 +298,7 @@ rec {
       pythonPackages.waitress
       pythonPackages.webhelpers
       pythonPackages.zope_sqlalchemy
+      pythonPackages.psycopg2
     ];
 
     postInstall = ''
