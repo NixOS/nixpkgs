@@ -11041,6 +11041,8 @@ let
 
   x2x = callPackage ../tools/X11/x2x { };
 
+  xboxdrv = callPackage ../misc/drivers/xboxdrv { };
+
   xosd = callPackage ../misc/xosd { };
 
   xsane = callPackage ../applications/graphics/sane/xsane.nix {
