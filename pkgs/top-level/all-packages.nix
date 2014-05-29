@@ -7589,6 +7589,8 @@ let
 
   usbutils = callPackage ../os-specific/linux/usbutils { };
 
+  usermount = callPackage ../os-specific/linux/usermount { };
+
   utillinux = lowPrio (callPackage ../os-specific/linux/util-linux {
     ncurses = null;
     perl = null;
