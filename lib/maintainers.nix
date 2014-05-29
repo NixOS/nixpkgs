@@ -33,7 +33,7 @@
   ederoyd46 = "Matthew Brown <matt@ederoyd.co.uk>";
   edwtjo = "Edward Tjörnhammar <ed@cflags.cc>";
   eelco = "Eelco Dolstra <eelco.dolstra@logicblox.com>";
-  emery = "Emery Hemingawy <emery@vfemail.net>";
+  emery = "Emery Hemingway <emery@vfemail.net>";
   ertes = "Ertugrul Söylemez <ertesx@gmx.de>";
   falsifian = "James Cook <james.cook@utoronto.ca>";
   fuuzetsu = "Mateusz Kowalczyk <fuuzetsu@fuuzetsu.co.uk>";
