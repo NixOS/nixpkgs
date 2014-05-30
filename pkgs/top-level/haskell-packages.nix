@@ -96,6 +96,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   cabal = callPackage ../build-support/cabal {
     Cabal = null;               # prefer the Cabal version shipped with the compiler
+    hscolour = self.hscolourBootstrap;
     inherit enableLibraryProfiling enableCheckPhase
       enableStaticLibraries enableSharedLibraries enableSharedExecutables;
     glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
@@ -1116,8 +1117,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hS3 = callPackage ../development/libraries/haskell/hS3 {};
 
   hsBibutils = callPackage ../development/libraries/haskell/hs-bibutils {};
-
-  hscolour = callPackage ../development/libraries/haskell/hscolour {};
 
   hsdns = callPackage ../development/libraries/haskell/hsdns {};
 
@@ -2604,6 +2603,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hdevtools = callPackage ../development/tools/haskell/hdevtools {};
 
   hlint = callPackage ../development/tools/haskell/hlint {};
+
+  hscolour = callPackage ../development/tools/haskell/hscolour {};
+  hscolourBootstrap = self.hscolour.override { hyperlinkSource = false; };
 
   hslogger = callPackage ../development/tools/haskell/hslogger {};
 
