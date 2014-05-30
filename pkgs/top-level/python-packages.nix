@@ -8919,7 +8919,7 @@ rec {
 
     preConfigure = ''
       substituteInPlace webapp/graphite/thirdparty/pytz/__init__.py --replace '/usr/share/zoneinfo' '/etc/zoneinfo'
-      substituteInPlace webapp/graphite/settings.py --replace "join(WEBAPP_DIR, 'content')" "join(WEBAPP_DIR, 'webapp', 'content')"
+      substituteInPlace webapp/graphite/settings.py --replace "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
       cp webapp/graphite/manage.py bin/manage-graphite.py
       substituteInPlace bin/manage-graphite.py --replace 'settings' 'graphite.settings'
     '';
