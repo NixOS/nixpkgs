@@ -2272,6 +2272,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  DevelTrace = buildPerlPackage {
+    name = "Devel-Trace-0.12";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MJ/MJD/Devel-Trace-0.12.tar.gz;
+      sha256 = "0s1q1a05gk3xvwqkya3k05vqjk13rvb489g0frprhzpzfvvwl0gm";
+    };
+    meta = {
+      description = "Print out each line before it is executed (like sh -x)";
+      license = "Public Domain";
+    };
+  };
+
   DBDSQLite = import ../development/perl-modules/DBD-SQLite {
     inherit stdenv fetchurl buildPerlPackage DBI;
     inherit (pkgs) sqlite;
