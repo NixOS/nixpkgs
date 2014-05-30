@@ -43,7 +43,7 @@ in
 
     environment.systemPackages = backends;
     environment.variables = {
-      SANE_CONFIG_DIR = "${saneConfig}/etc/sane.d";
+      SANE_CONFIG_DIR = mkDefault "${saneConfig}/etc/sane.d";
       LD_LIBRARY_PATH = [ "${saneConfig}/lib/sane" ];
     };
     services.udev.packages = backends;
