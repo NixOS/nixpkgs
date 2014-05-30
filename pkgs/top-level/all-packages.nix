@@ -6962,6 +6962,8 @@ let
 
   devicemapper = lvm2;
 
+  disk_indicator = callPackage ../os-specific/linux/disk-indicator { };
+
   dmidecode = callPackage ../os-specific/linux/dmidecode { };
 
   dmtcp = callPackage ../os-specific/linux/dmtcp { };
