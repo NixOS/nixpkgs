@@ -9187,6 +9187,26 @@ rec {
     };
   };
 
+  udiskie = buildPythonPackage rec {
+    name = "udiskie-0.8.0";
+
+    src = fetchurl {
+      url = "https://github.com/coldfix/udiskie/archive/0.8.0.tar.gz";
+      sha256 = "0yzrnl7bq0dkcd3wh55kbf41c4dbh7dky0mqx0drvnpxlrvzhvp2";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [ pygtk pyyaml dbus notify pkgs.udisks2 ];
+
+    # tests require dbusmock
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Removable disk automounter for udisks.";
+      license = licenses.mit;
+      homepage = https://github.com/coldfix/udiskie;
+    };
+  };
+
 # python2.7 specific packages
 } // optionalAttrs isPy27 (
   with pythonPackages;
