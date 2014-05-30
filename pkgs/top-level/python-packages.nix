@@ -20,8 +20,12 @@ let
 
 pythonPackages = modules // import ./python-packages-generated.nix {
   inherit pkgs python;
-  inherit (pkgs) stdenv fetchurl;
+  inherit (pythonPackages) buildPythonPackage;
   self = pythonPackages;
+  overrides = import ./python-overrides.nix {
+    inherit pkgs python;
+    self = pythonPackages;
+  };
 } //
 
 # Python packages for all python versions
@@ -9192,25 +9196,64 @@ rec {
   with pythonPackages;
 
 {
-
-  pypi2nix = pythonPackages.buildPythonPackage rec {
-    rev = "04a68d8577acbceb88bdf51b1231a9dbdead7003";
-    name = "pypi2nix-1.0_${rev}";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/garbas/pypi2nix/tarball/${rev}";
-      name = "${name}.tar.bz";
-      sha256 = "1fv85x2bz442iyxsvka2g75zibjcq48gp2fc7szaqcfqxq42syy9";
+  pypi2nix = buildPythonPackage (
+  let
+    mkEnv = name: pkgs.stdenv.mkDerivation {
+      name = "${name}-env";
+      phases = ["installPhase"];
+      installPhase = ''
+        ln -s "${pkgs.buildEnv {
+          name = "${name}-env";
+          paths = [
+            (getAttr name pkgs)
+            (getAttr "${name}Packages" pkgs).setuptools
+          ];
+        }}" $out
+      '';
+      passthrough = [(getAttr "${name}Packages" pkgs).python (getAttr "${name}Packages" pkgs).pythonName];
     };
+
+    pip14 = buildPythonPackage rec {
+      version = "1.4";
+      name = "pip-${version}";
+      src = fetchurl {
+        url = "http://pypi.python.org/packages/source/p/pip/pip-${version}.tar.gz";
+        sha256 = "15qvm9jsfnja51hpd9ml3dqxngabcyhrfp3rpgndqpfr0yzkrm0z";
+      };
+      doCheck = false;
+    };
+
+  in rec {
+    rev = "ff6a287cea444841707d1e79f9eeaa5b8f2f9555";
+    name = "pypi2nix-${rev}";
+
+    src = fetchurl {
+      url = "https://github.com/offlinehacker/pypi2nix/tarball/${rev}";
+      name = "${name}.tar.bz";
+      sha256 = "07sbv78p3kw0jxd55n9ighbp06f34xnxy63iin8sa2mgrljg7b05";
+    };
+
+    propagatedBuildInputs = [ pip14 jinja2 requests ];
 
     doCheck = false;
 
+    PYTHON_ENVS = concatMapStrings (e:
+        "${elemAt e.passthrough 1}|" +
+        "${e}/bin/${(elemAt e.passthrough 0).executable}|"+
+        "${e}/lib/${(elemAt e.passthrough 0).libPrefix}/site-packages,"
+    ) (map (name: mkEnv name)
+    ["python26" "python27" "python32" "python33" "pypy"]);
+
+    postInstall = ''
+      wrapProgram $out/bin/pypi2nix --prefix PYTHON_ENVS : "\"$PYTHON_ENVS\""
+    '';
+
     meta = {
-      homepage = https://github.com/garbas/pypi2nix;
+      homepage = https://github.com/offlinehacker/pypi2nix;
       description = "";
-      maintainers = [ pkgs.stdenv.lib.maintainers.garbas ];
+      maintainers = [ pkgs.stdenv.lib.maintainers.offline ];
     };
-  };
+  });
 
 
   thumbor = pythonPackages.buildPythonPackage rec {
