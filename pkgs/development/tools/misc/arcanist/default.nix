@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, php }:
+{ stdenv, fetchgit, php, makeWrapper }:
 
 let
   libphutil = fetchgit {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "20140530";
 
   src = [ arcanist libphutil ];
-  buildInputs = [ php ];
+  buildInputs = [ php makeWrapper ];
 
   unpackPhase = "true";
   buildPhase = "true";
@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
     cp -R ${arcanist}  $out/libexec/arcanist
 
     ln -s $out/libexec/arcanist/bin/arc $out/bin
+
+    wrapProgram $out/bin/arc \
+      --prefix PATH : "${php}/bin"
   '';
 
   meta = {
