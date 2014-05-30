@@ -147,6 +147,9 @@ let
             or die "bad `hello' output";
       ''}
 
+      # Wait for hard disks to appear in /dev
+      $machine->succeed("udevadm settle");
+
       # Partition the disk.
       ${createPartitions}
 
