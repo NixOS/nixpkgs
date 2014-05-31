@@ -8211,6 +8211,13 @@ let
     withX = false;
   }));
 
+  emacs24Macport = callPackage ../applications/editors/emacs-24/macport.nix {
+    # resolve unrecognised flag '-fconstant-cfstrings' errors
+    stdenv = if stdenv.isDarwin
+      then clangStdenv
+      else stdenv;
+  };
+
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
     inherit emacs;
 
