@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       ''}
       
       ${optionalString stdenv.isCygwin ''
-        cp cygwin/cygwin{,.bak}
+        cp cygwin/cygwin.c{,.bak}
         echo "#define PERLIO_NOT_STDIO 0" > tmp
         cat tmp cygwin/cygwin.c.bak > cygwin/cygwin.c
       ''}
