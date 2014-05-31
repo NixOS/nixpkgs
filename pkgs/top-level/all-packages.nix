@@ -9570,12 +9570,7 @@ let
     flup = pythonPackages.flup;
   };
 
-  vim = callPackage ../applications/editors/vim {
-    # for Objective-C compilation
-    stdenv = if stdenv.isDarwin
-      then clangStdenv
-      else stdenv;
-  };
+  vim = callPackage ../applications/editors/vim { };
 
   vimWrapper = wrapVim vim;
 
