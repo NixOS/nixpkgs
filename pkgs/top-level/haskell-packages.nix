@@ -2260,6 +2260,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   text_1_1_1_3 = callPackage ../development/libraries/haskell/text/1.1.1.3.nix {};
   text = self.text_1_1_1_3;
 
+  textBinary = callPackage ../development/libraries/haskell/text-binary {};
+
   textFormat = callPackage ../development/libraries/haskell/text-format {};
 
   textIcu = callPackage ../development/libraries/haskell/text-icu {};
