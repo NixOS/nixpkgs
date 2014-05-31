@@ -8200,12 +8200,6 @@ let
     librsvg = null;
     alsaLib = null;
     imagemagick = null;
-
-    # use clangStdenv on darwin to deal with: unexec: 'my_edata is not in
-    # section __data'
-    stdenv = if stdenv.isDarwin
-      then clangStdenv
-      else stdenv;
   };
 
   emacs24-nox = lowPrio (appendToName "nox" (emacs24.override {
