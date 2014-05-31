@@ -9220,6 +9220,8 @@ let
 
   pstree = callPackage ../applications/misc/pstree { };
 
+  pulseview = callPackage ../applications/science/electronics/pulseview { };
+
   puredata = callPackage ../applications/audio/puredata { };
 
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
