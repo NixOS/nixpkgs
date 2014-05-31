@@ -5044,6 +5044,8 @@ let
 
   libsecret = callPackage ../development/libraries/libsecret { };
 
+  libserialport = callPackage ../development/libraries/libserialport { };
+
   libgtop = callPackage ../development/libraries/libgtop {};
 
   liblo = callPackage ../development/libraries/liblo { };
