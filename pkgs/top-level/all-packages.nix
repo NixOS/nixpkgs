@@ -8200,6 +8200,11 @@ let
     librsvg = null;
     alsaLib = null;
     imagemagick = null;
+
+    # resolve unrecognized section __static_data in __DATA segment
+    stdenv = if stdenv.isDarwin
+      then clangStdenv
+      else stdenv;
   };
 
   emacs24-nox = lowPrio (appendToName "nox" (emacs24.override {
