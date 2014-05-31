@@ -4115,6 +4115,23 @@ rec {
     };
   });
 
+  moinmoin = let ver="1.9.7"; in buildPythonPackage (rec {
+    name = "moinmoin-${ver}";
+
+    src = fetchurl {
+      url = "http://static.moinmo.in/files/moin-${ver}.tar.gz";
+      sha256 = "f4ba1b5c956bd96d2a61e27e68d297aa63d1afbc80d5740e139dcdf0affb4db5";
+    };
+
+    meta = {
+      description = "Advanced, easy to use and extensible WikiEngine";
+
+      homepage = http://moinmo.in/;
+
+      license = "GPLv2+";
+    };
+  });
+
 
   mox = buildPythonPackage rec {
     name = "mox-0.5.3";
