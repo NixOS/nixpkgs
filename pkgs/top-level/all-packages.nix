@@ -5085,6 +5085,8 @@ let
 
   libftdi = callPackage ../development/libraries/libftdi { };
 
+  libftdi1 = callPackage ../development/libraries/libftdi/1.x.nix { };
+
   libgcrypt = callPackage ../development/libraries/libgcrypt { };
 
   libgcrypt_1_6 = lowPrio (callPackage ../development/libraries/libgcrypt/1.6.nix { });
