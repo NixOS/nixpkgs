@@ -7947,6 +7947,8 @@ let
     eigen = eigen2;
   };
 
+  avrdudess = callPackage ../applications/misc/avrdudess { };
+
   avxsynth = callPackage ../applications/video/avxsynth { };
 
   awesome-3-4 = callPackage ../applications/window-managers/awesome/3.4.nix {
