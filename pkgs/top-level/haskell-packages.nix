@@ -1644,7 +1644,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   options = callPackage ../development/libraries/haskell/options {};
 
-  optparseApplicative = callPackage ../development/libraries/haskell/optparse-applicative {};
+  optparseApplicative_0_7_0_2 = callPackage ../development/libraries/haskell/optparse-applicative/0.7.0.2.nix {};
+  optparseApplicative_0_9_0 = callPackage ../development/libraries/haskell/optparse-applicative/0.9.0.nix {};
+  optparseApplicative = self.optparseApplicative_0_9_0;
 
   pathPieces = callPackage ../development/libraries/haskell/path-pieces {};
 
