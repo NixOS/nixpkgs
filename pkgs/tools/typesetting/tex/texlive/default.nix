@@ -22,7 +22,7 @@ rec {
   setupHook = ./setup-hook.sh;
 
   doMainBuild = fullDepEntry ( stdenv.lib.optionalString stdenv.isDarwin ''
-    export DYLD_LIBRARY_PATH="${poppler}/lib:${graphite2}/lib"
+    export DYLD_LIBRARY_PATH="${poppler}/lib"
   '' + ''
     mkdir -p $out
     mkdir -p $out/nix-support
@@ -95,7 +95,7 @@ rec {
     PATH=$PATH:$out/bin mktexlsr $out/share/texmf*
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     for prog in $out/bin/*; do
-      wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${poppler}/lib:${graphite2}/lib"
+      wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${poppler}/lib"
     done
   '' ) [ "minInit" "defEnsureDir" "doUnpack" "doMakeInstall" "promoteLibexec" "patchShebangsInterim"];
 
