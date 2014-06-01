@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, bison, ncurses, buddy, tecla, libsigsegv, gmpxx, makeWrapper }:
+{ stdenv, fetchurl, flex, bison, ncurses, buddy, tecla, libsigsegv, gmpxx, makeWrapper, unzip }:
 
 stdenv.mkDerivation rec {
   name = "maude-2.6";
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   fullMaude = fetchurl {
-    url = "http://maude.cs.uiuc.edu/download/current/FM2.6/full-maude26.maude";
-    sha256 = "1382hjwwrsdgd5yjn3ph1b5i1bhrhzvqx0v369bmcjkly9k96v6q";
+    url = "http://maude.lcc.uma.es/FullMaude/FM261e/full-maude.maude.zip";
+    sha256 = "0g0chfrzc7923sh17zdy731wpsgnwz7rxci0jqqmrphlshwzqm2h";
   };
 
   buildInputs = [flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for n in "$out/bin/"*; do wrapProgram "$n" --suffix MAUDE_LIB ':' "$out/share/maude"; done
     mkdir -p $out/share/maude
-    cp ${fullMaude} $out/share/maude/full-maude.maude
+    ${unzip}/bin/unzip ${fullMaude} -d $out/share/maude
   '';
 
   meta = {
