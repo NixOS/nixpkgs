@@ -205,13 +205,13 @@ rec {
 
 
   afew = buildPythonPackage rec {
-    rev = "d5d0ddeae0c5758a3f6cf5de77913804d88e906a";
+    rev = "9744c18c4d6b0a3e7f57b01e5fe145a60fc82a47";
     name = "afew-1.0_${rev}";
 
     src = fetchurl {
       url = "https://github.com/teythoon/afew/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "0al7hz994sh0yrpixqafr25acglvniq4zsbs9aj89zr7yzq1g1j0";
+      sha256 = "1qyban022aji2hl91dh0j3xa6ikkxl5argc6w71yp2x8b02kp3mf";
     };
 
     buildInputs = [ pkgs.dbacl ];
@@ -313,13 +313,13 @@ rec {
 
 
   alot = buildPythonPackage rec {
-    rev = "fa10bfc2de105da819c8e11e913a44c3c1ac60a4";
+    rev = "fa4ddf000dc2ac4933852b210901b649634a5f86";
     name = "alot-0.3.5_${rev}";
 
     src = fetchurl {
       url = "https://github.com/pazz/alot/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "0zd4jiwxqb7m672xkr5jcqkfpk9jx1kmkllyvjjvswkgjjqdrhax";
+      sha256 = "0h11lqyxg0xbkc9y1xqjvd0kmfm5pdwnmv9chmlsi1614dxn08n0";
     };
 
     # error: invalid command 'test'
@@ -3497,11 +3497,11 @@ rec {
   });
 
   httplib2 = buildPythonPackage rec {
-    name = "httplib2-0.8";
+    name = "httplib2-0.9";
 
     src = fetchurl {
-      url = "http://httplib2.googlecode.com/files/${name}.tar.gz";
-      sha256 = "0gww8axb4j1vysbk9kfsk5vrws9a403gh30dxchmga8hrg1rns5g";
+      url = "https://pypi.python.org/packages/source/h/httplib2/${name}.tar.gz";
+      sha256 = "1asi5wpncnc6ki3bz33mhb9xh2lrkb24y4qng8bmqnczdmm8rsir";
     };
 
     meta = {
@@ -3603,11 +3603,11 @@ rec {
   };
 
   jedi = buildPythonPackage (rec {
-    name = "jedi-0.7.0";
+    name = "jedi-0.8.0-final0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/j/jedi/${name}.tar.gz";
-      sha256 = "1afs06k1j6raasdps1fvdqywyk3if1qchdpl4mivnliqzxqd1w01";
+      sha256 = "0jnhwh0b1hy5cssi3n5a4j7z9pgpcckyv5s52ba4jnq5bwgdpbcf";
     };
 
     meta = {
@@ -4920,26 +4920,12 @@ rec {
 
   pep8 = buildPythonPackage rec {
     name = "pep8-${version}";
-    version = "1.4.6";
+    version = "1.5.7";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pep8/${name}.tar.gz";
-      md5 = "a03bb494859e87b42601b61b1b043a0c";
+      md5 = "f6adbdd69365ecca20513c709f9b7c93";
     };
-
-    #======================================================================
-    #FAIL: test_check_simple (testsuite.test_shell.ShellTestCase)
-    #----------------------------------------------------------------------
-    #Traceback (most recent call last):
-    #  File "/tmp/nix-build-python-pep8-1.4.5.drv-0/pep8-1.4.5/testsuite/test_shell.py", line 84, in test_check_simple
-    #    self.assertTrue(config_filename.endswith('tox.ini'))
-    #AssertionError: False is not true
-    #
-    #----------------------------------------------------------------------
-    #Ran 21 tests in 0.711s
-    #
-    #FAILED (failures=1)
-    doCheck = false;
 
     meta = {
       homepage = "http://pep8.readthedocs.org/";
@@ -5479,11 +5465,11 @@ rec {
   };
 
   pyflakes = buildPythonPackage rec {
-    name = "pyflakes-0.7.3";
+    name = "pyflakes-0.8.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyflakes/${name}.tar.gz";
-      md5 = "ec94ac11cb110e6e72cca23c104b66b1";
+      md5 = "905fe91ad14b912807e8fdc2ac2e2c23";
     };
 
     buildInputs = [ unittest2 ];
@@ -7097,11 +7083,11 @@ rec {
   };
 
   subprocess32 = buildPythonPackage rec {
-    name = "subprocess32-3.2.5rc1";
+    name = "subprocess32-3.2.6";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/s/subprocess32/${name}.tar.gz";
-      md5 = "f5f46106368be6336b54af95d048fea9";
+      md5 = "754c5ab9f533e764f931136974b618f1";
     };
 
     doCheck = false;
@@ -7578,11 +7564,11 @@ rec {
 
 
   turses = buildPythonPackage (rec {
-    name = "turses-0.2.19";
+    name = "turses-0.2.22";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/t/turses/${name}.tar.gz";
-      sha256 = "1g58ahxpaf0wqn6gg5a2n3fkvc3vbx6jpylwqncxnl16qcczmjxn";
+      sha256 = "1dqgvdqly4c4d6819mbkqy4g8r7zch4dkmxicfwck7q8h96wmyx3";
     };
 
     propagatedBuildInputs = [ oauth2 urwid tweepy ] ++ optional isPy26 argparse;
@@ -7601,11 +7587,11 @@ rec {
   });
 
   tweepy = buildPythonPackage (rec {
-    name = "tweepy-2.1";
+    name = "tweepy-2.3.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/t/tweepy/${name}.tar.gz";
-      sha256 = "1irzwfva7g1k7db708mlxy2qribd6938zwn5xzjzn6i43j5mjysm";
+      sha256 = "0wcj5g21brcqr1g7m4by4rs72lfiib4scg19qynn2wz1x77jyrzp";
     };
 
     meta = {
@@ -7700,14 +7686,14 @@ rec {
 
 
   urwid = buildPythonPackage (rec {
-    name = "urwid-1.1.1";
+    name = "urwid-1.2.1";
 
     # multiple:  NameError: name 'evl' is not defined
     doCheck = false;
 
     src = fetchurl {
-      url = "http://excess.org/urwid/${name}.tar.gz";
-      md5 = "eca2e0413cf7216b01c84b99e0f2576d";
+      url = "https://pypi.python.org/packages/source/u/urwid/${name}.tar.gz";
+      md5 = "6a05ada11b87e7b026b01fc5150855b0";
     };
 
     meta = {
