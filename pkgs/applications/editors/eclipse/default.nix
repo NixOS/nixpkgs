@@ -1,6 +1,7 @@
 { stdenv, fetchurl, makeDesktopItem, makeWrapper
 , freetype, fontconfig, libX11, libXext, libXrender, zlib
 , glib, gtk, libXtst, jre
+, webkitgtk2 ? null  # for internal web browser
 }:
 
 assert stdenv ? glibc;
@@ -44,7 +45,7 @@ let
         
         makeWrapper $out/eclipse/eclipse $out/bin/eclipse \
           --prefix PATH : ${jre}/bin \
-          --prefix LD_LIBRARY_PATH : ${glib}/lib:${gtk}/lib:${libXtst}/lib \
+          --prefix LD_LIBRARY_PATH : ${glib}/lib:${gtk}/lib:${libXtst}/lib${stdenv.lib.optionalString (webkitgtk2 != null) ":${webkitgtk2}/lib"} \
           --add-flags "-configuration \$HOME/.eclipse/''${productId}_$productVersion/configuration"
 
         # Create desktop item.
