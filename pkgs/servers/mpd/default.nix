@@ -18,7 +18,9 @@
 , samplerateSupport ? true, libsamplerate
 , mmsSupport ? true, libmms
 , mpg123Support ? true, mpg123
-, aacSupport ? true, faad2 }:
+, aacSupport ? true, faad2
+, pulseaudioSupport ? true, pulseaudio
+}:
 
 let
 
@@ -56,7 +58,8 @@ in stdenv.mkDerivation rec {
     ++ opt mmsSupport libmms
     ++ opt mpg123Support mpg123
     ++ opt aacSupport faad2
-    ++ opt zipSupport zziplib;
+    ++ opt zipSupport zziplib
+    ++ opt zipSupport pulseaudio;
 
   configureFlags =
     [ (mkFlag (!stdenv.isDarwin && alsaSupport) "alsa")
@@ -80,6 +83,7 @@ in stdenv.mkDerivation rec {
       (mkFlag mmsSupport "mms")
       (mkFlag mpg123Support "mpg123")
       (mkFlag aacSupport "aac")
+      (mkFlag pulseaudioSupport "pulse")
       (mkFlag stdenv.isDarwin "osx")
       "--enable-debugging" ]
     ++ opt stdenv.isLinux
