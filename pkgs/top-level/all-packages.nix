@@ -2498,10 +2498,6 @@ let
 
   chicken = callPackage ../development/compilers/chicken { };
 
-  chicken-dev = chicken.override {
-    devSnapshot = true;
-  };
-
   ccl = builderDefsPackage ../development/compilers/ccl {};
 
   clang = wrapClang llvmPackages.clang;
