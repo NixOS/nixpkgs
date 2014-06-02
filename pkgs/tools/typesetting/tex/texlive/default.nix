@@ -121,6 +121,14 @@ rec {
     ++ stdenv.lib.optionals stdenv.isDarwin [
       # TODO: We should be able to fix these tests
       "--disable-devnag"
+
+      # jww (2014-06-02): The following fails with:
+      # FAIL: tests/dvisvgm
+      # ===================
+      #
+      # dyld: Library not loaded: libgs.dylib.9.06
+      #   Referenced from: .../Work/texk/dvisvgm/.libs/dvisvgm
+      #   Reason: image not found
       "--disable-dvisvgm"
     ];
 
