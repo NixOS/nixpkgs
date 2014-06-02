@@ -122,8 +122,6 @@ rec {
       # TODO: We should be able to fix these tests
       "--disable-devnag"
       "--disable-dvisvgm"
-      "--disable-xdv2pdf"
-      "--disable-xdvipdfmx"
     ];
 
   phaseNames = [ "addInputs" "doMainBuild" "doMakeInstall" "doPostInstall" ];
