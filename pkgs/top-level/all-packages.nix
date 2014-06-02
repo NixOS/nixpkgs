@@ -1962,6 +1962,8 @@ let
 
   s3cmd = callPackage ../tools/networking/s3cmd { };
 
+  s3cmd_git = callPackage ../tools/networking/s3cmd/git.nix { };
+
   s3sync = callPackage ../tools/networking/s3sync {
     ruby = ruby18;
   };

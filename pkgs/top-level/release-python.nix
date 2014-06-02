@@ -1521,6 +1521,7 @@ let
   rxvt = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   rxvt_unicode = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   s3cmd = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
+  s3cmd_git = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   sabnzbd = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   sakura = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   salut_a_toi = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
