@@ -3709,16 +3709,17 @@ rec {
 
 
   libcloud = buildPythonPackage (rec {
-    name = "libcloud-0.3.1";
+    name = "libcloud-0.14.1";
 
     src = fetchurl {
-      url = mirror://apache/incubator/libcloud/apache-libcloud-incubating-0.3.1.tar.bz2;
-      sha256 = "11qilrs4sd4c1mkd64ikrjsc2vwrshhc54n5mh4xrark9c7ayp0y";
+      url = https://pypi.python.org/packages/source/a/apache-libcloud/apache-libcloud-0.14.1.tar.bz2;
+      sha256 = "1l6190pjv54c7y8pzr089ij727qv7bqhhaznr2mkvimgr1wzsql5";
     };
 
-    buildInputs = [ zope_interface mock ];
+    buildInputs = [  mock ];
 
-    preConfigure = "cp test/secrets.py-dist test/secrets.py";
+    propagatedBuildInputs = [ pycrypto ];
+    preConfigure = "cp libcloud/test/secrets.py-dist libcloud/test/secrets.py";
 
     # failing tests for 26 and 27
     doCheck = false;
