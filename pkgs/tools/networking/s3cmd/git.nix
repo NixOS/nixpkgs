@@ -1,7 +1,7 @@
 { stdenv, fetchgit, pythonPackages }:
 
 pythonPackages.buildPythonPackage rec {
-  name = "s3cmd_git";
+  name = "s3cmd-1.5-pre-81e3842f7a";
 
   src  = fetchgit {
     url    = "https://github.com/s3tools/s3cmd.git";
