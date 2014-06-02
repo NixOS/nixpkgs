@@ -1,10 +1,13 @@
 # TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
 # but I have gvim with python support now :) - Marc
-args@{source ? "default", ...}: with args;
+args@{source ? "default", withGui ? true, ...}: with args;
 
-
-let inherit (args.composableDerivation) composableDerivation edf; in
-composableDerivation {
+let
+  inherit (args.composableDerivation) composableDerivation edf;
+  guiPkgs = [
+    gtk libX11 libXext libSM libXpm libXt libXaw libXau libXmu glib libICE
+  ];
+in composableDerivation {
   # use gccApple to compile on darwin
   mkDerivation = ( if stdenv.isDarwin
                    then stdenvAdapters.overrideGCC stdenv gccApple
@@ -44,11 +47,10 @@ composableDerivation {
       [ ./python_framework.patch ];
 
     configureFlags
-      = [ "--enable-gui=${args.gui}" "--with-features=${args.features}" ];
+      = [ "--with-features=${args.features}" ] ++ lib.optionals withGui [ "--enable-gui=${args.gui}" ];
 
     nativeBuildInputs
-      = [ ncurses pkgconfig gtk libX11 libXext libSM libXpm libXt libXaw libXau
-          libXmu glib libICE ];
+      = [ ncurses pkgconfig ] ++ lib.optionals withGui guiPkgs;
 
     # most interpreters aren't tested yet.. (see python for example how to do it)
     flags = {
