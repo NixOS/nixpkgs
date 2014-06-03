@@ -1789,8 +1789,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   QuickCheck_2_4_2 = callPackage ../development/libraries/haskell/QuickCheck/2.4.2.nix {};
   QuickCheck_2_5_1_1 = callPackage ../development/libraries/haskell/QuickCheck/2.5.1.1.nix {};
   QuickCheck_2_6 = callPackage ../development/libraries/haskell/QuickCheck/2.6.nix {};
-  QuickCheck_2_7_3 = callPackage ../development/libraries/haskell/QuickCheck/2.7.3.nix {};
-  QuickCheck = self.QuickCheck_2_7_3;
+  QuickCheck_2_7_5 = callPackage ../development/libraries/haskell/QuickCheck/2.7.5.nix {};
+  QuickCheck = self.QuickCheck_2_7_5;
 
   quickcheckAssertions = callPackage ../development/libraries/haskell/quickcheck-assertions {};
 
