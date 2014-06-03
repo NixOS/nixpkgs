@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "attoparsec-enumerator";
-  version = "0.3.2";
-  sha256 = "1jrrdhzqjfb78bhnjpy0j0qywqd2j67an41pcn8y6331nzmzsrl8";
+  version = "0.3.3";
+  sha256 = "0z57bbw97v92dkjp57zj9nfzsdas2n1qfw472k1aa84iqb6hbw9w";
   buildDepends = [ attoparsec enumerator text ];
   meta = {
     homepage = "https://john-millikin.com/software/attoparsec-enumerator/";
