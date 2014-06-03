@@ -9,7 +9,7 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "13jqw19ws5my8r856j1p7xydwpyp8agnzxkjv6pa7h72wl7rz90i";
   };
 
-  buildInputs = with pythonPackages; [ dateutil ];
+  propagatedBuildInputs = with pythonPackages; [ dateutil ];
 
   meta = with stdenv.lib;  {
     description = "Command line tool for managing Amazon S3 and CloudFront services";
