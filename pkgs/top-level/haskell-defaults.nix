@@ -15,7 +15,7 @@
   # Older compilers inherit the overrides from newer ones.
 
   ghcHEADPrefs = self : super : super // {
-    mtl = self.mtl_2_1_3_1;
+    mtl = self.mtl_2_2_1;
     cabalInstall_1_20_0_2 = super.cabalInstall_1_20_0_2.override { Cabal = null; };
   };
 

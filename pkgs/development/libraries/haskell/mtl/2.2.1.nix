@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "mtl";
-  version = "2.1.3.1";
-  sha256 = "1xpn2wjmqbh2cg1yssc6749xpgcqlrrg4iilwqgkcjgvaxlpdbvp";
+  version = "2.2.1";
+  sha256 = "1icdbj2rshzn0m1zz5wa7v3xvkf6qw811p4s7jgqwvx1ydwrvrfa";
   buildDepends = [ transformers ];
   meta = {
     homepage = "http://github.com/ekmett/mtl";
