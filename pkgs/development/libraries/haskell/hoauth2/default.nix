@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hoauth2";
-  version = "0.3.6.1";
-  sha256 = "0nfh77fxyl8vbdnrrp28hsl1zhxhmg8mjn0gfvc2i3w5rd6j0lda";
+  version = "0.3.7";
+  sha256 = "0v43hr7vw2iikhx2bldkb0fa5j95msgn7s7k09vkxz3qwqh9maz7";
   buildDepends = [
     aeson bytestringShow conduit httpConduit httpTypes monadControl mtl
     random resourcet text transformers
