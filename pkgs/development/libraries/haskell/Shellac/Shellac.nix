@@ -2,11 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "Shellac";
-  version = "0.9.5.1";
-  sha256 = "19fpbh5ijy9xc3rhl9qwyan8jfnz9nsqvnsjxb7kkb7l2bpz4qfp";
+  version = "0.9.5.2";
+  sha256 = "1js9la0hziqsmb56q9kzfycda2sw3xm4kv2y5q2h3zlw5gzc5xli";
   buildDepends = [ mtl ];
   meta = {
-    homepage = "http://www.cs.princeton.edu/~rdockins/shellac/home/";
+    homepage = "http://rwd.rdockins.name/shellac/home/";
     description = "A framework for creating shell envinronments";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
