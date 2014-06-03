@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haskell-packages";
-  version = "0.2.3.4";
-  sha256 = "0qj5n1yc481n5c8gi5dgk22pxj58gf7z30621spr7gwlv001sk1y";
+  version = "0.2.4";
+  sha256 = "1ygpa2k0hyx2xwny33kr0h847zvvsp4z1pwqrd92sf7vzpyz5nch";
   buildDepends = [
     aeson Cabal deepseq either filepath haskellSrcExts hseCpp mtl
     optparseApplicative tagged
