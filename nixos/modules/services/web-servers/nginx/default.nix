@@ -84,8 +84,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ nginx ];
-
     # TODO: test user supplied config file pases syntax test
 
     systemd.services.nginx = {
@@ -96,6 +94,7 @@ in
       preStart =
         ''
         mkdir -p ${cfg.stateDir}/logs
+        chmod 700 ${cfg.stateDir}
         chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
         '';
       serviceConfig = {
@@ -105,7 +104,7 @@ in
 
     users.extraUsers = optionalAttrs (cfg.user == "nginx") (singleton
       { name = "nginx";
-        group = "nginx";
+        group = cfg.group;
         uid = config.ids.uids.nginx;
       });
 
