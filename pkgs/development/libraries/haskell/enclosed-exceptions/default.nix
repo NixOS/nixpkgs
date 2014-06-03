@@ -1,16 +1,17 @@
 { cabal, async, deepseq, hspec, liftedBase, monadControl
-, QuickCheck, transformers
+, QuickCheck, transformers, transformersBase
 }:
 
 cabal.mkDerivation (self: {
   pname = "enclosed-exceptions";
-  version = "1.0.0.1";
-  sha256 = "0imq5kp45yfkhkz51ld869pf9hnlkbh92nk0aig1z8cc6akjnjw0";
+  version = "1.0.0.2";
+  sha256 = "1jbgqqavkhz2x5br17bdhv17rcmyi7a5mxplakhgyyg73wkjq04h";
   buildDepends = [
-    async deepseq liftedBase monadControl transformers
+    async deepseq liftedBase monadControl transformers transformersBase
   ];
   testDepends = [
     async deepseq hspec liftedBase monadControl QuickCheck transformers
+    transformersBase
   ];
   meta = {
     homepage = "https://github.com/jcristovao/enclosed-exceptions";
