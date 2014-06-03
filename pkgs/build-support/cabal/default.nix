@@ -1,12 +1,13 @@
 # generic builder for Cabal packages
 
 { stdenv, fetchurl, lib, pkgconfig, ghc, Cabal, jailbreakCabal, glibcLocales
-, gnugrep, coreutils
+, gnugrep, coreutils, hscolour
 , enableLibraryProfiling ? false
 , enableSharedLibraries ? false
 , enableSharedExecutables ? false
 , enableStaticLibraries ? true
 , enableCheckPhase ? stdenv.lib.versionOlder "7.4" ghc.version
+, enableHyperlinkSource ? true
 , extension ? (self : super : {})
 }:
 
@@ -50,6 +51,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
                 propagatedBuildInputs = filter (y : ! (y == null)) x.propagatedBuildInputs;
                 propagatedUserEnvPkgs = filter (y : ! (y == null)) x.propagatedUserEnvPkgs;
                 doCheck               = enableCheckPhase && x.doCheck;
+                hyperlinkSource       = enableHyperlinkSource && x.hyperlinkSource;
               };
 
         defaults =
@@ -92,6 +94,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
             buildInputs = [ghc Cabal] ++ self.extraBuildInputs;
             extraBuildInputs = self.buildTools ++
                                (optionals self.doCheck self.testDepends) ++
+                               (optional self.hyperlinkSource hscolour) ++
                                (if self.pkgconfigDepends == [] then [] else [pkgconfig]) ++
                                (if self.isLibrary then [] else self.buildDepends ++ self.extraLibraries ++ self.pkgconfigDepends);
 
@@ -139,6 +142,9 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
             # pass the '--enable-tests' flag to cabal in the configure stage
             # and run any regression test suites the package might have
             doCheck = enableCheckPhase;
+
+            # pass the '--hyperlink-source' flag to ./Setup haddock
+            hyperlinkSource = enableHyperlinkSource;
 
             # abort the build if the configure phase detects that the package
             # depends on multiple versions of the same build input
@@ -222,7 +228,8 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               ./Setup build ${self.buildTarget}
 
               export GHC_PACKAGE_PATH=$(${ghc.GHCPackages})
-              test -n "$noHaddock" || ./Setup haddock --html --hoogle
+              test -n "$noHaddock" || ./Setup haddock --html --hoogle \
+                  ${optionalString self.hyperlinkSource "--hyperlink-source"}
 
               eval "$postBuild"
             '';
