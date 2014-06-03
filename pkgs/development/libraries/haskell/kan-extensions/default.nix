@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "kan-extensions";
-  version = "4.0.2";
-  sha256 = "05invi86i2a115jdy2nzdkc0i6g170j0xcxycw2z2qjigvjsaizi";
+  version = "4.0.3";
+  sha256 = "05zqlxm6i66d996jcpjhnmij28a4zwc0l0nc9cyxamfwmyd9754b";
   buildDepends = [
     adjunctions comonad contravariant distributive free mtl pointed
     semigroupoids speculation transformers
