@@ -1,15 +1,15 @@
-{ cabal, baseUnicodeSymbols, HUnit, stm, testFramework
-, testFrameworkHunit, unboundedDelays
+{ cabal, async, baseUnicodeSymbols, HUnit, random, stm
+, testFramework, testFrameworkHunit, unboundedDelays
 }:
 
 cabal.mkDerivation (self: {
   pname = "concurrent-extra";
-  version = "0.7.0.7";
-  sha256 = "1736y8am24x29qq1016f2dvb6adavl1h46bsjfwnkw40a9djd5cr";
+  version = "0.7.0.8";
+  sha256 = "0q6n7wlakvnvfrjr3zmxbn9i0dxq96071j565vffp0r5abxkn83q";
   buildDepends = [ baseUnicodeSymbols stm unboundedDelays ];
   testDepends = [
-    baseUnicodeSymbols HUnit stm testFramework testFrameworkHunit
-    unboundedDelays
+    async baseUnicodeSymbols HUnit random stm testFramework
+    testFrameworkHunit unboundedDelays
   ];
   meta = {
     homepage = "https://github.com/basvandijk/concurrent-extra";
