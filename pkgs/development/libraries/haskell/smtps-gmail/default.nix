@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "smtps-gmail";
-  version = "1.2.0";
-  sha256 = "1gg3cglfsyfffh3b5cyrk3pnb8jg5s8s4yjzykdnfyjrdp1080xz";
+  version = "1.2.1";
+  sha256 = "04sancbfbbszajgb1jp613qp43qxvzz9b14c0v3sgfva7fdhaw9q";
   buildDepends = [
     base64Bytestring cprngAes dataDefault filepath mimeMail network
     stringsearch text tls
