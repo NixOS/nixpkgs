@@ -318,7 +318,7 @@ in
       };
 
     # Set up the environment variables for running Nix.
-    environment.variables = cfg.envVars;
+    environment.systemVariables = cfg.envVars;
 
     environment.extraInit =
       ''

@@ -24,7 +24,7 @@ with lib;
 
   config = {
 
-    environment.variables.TZDIR = "/etc/zoneinfo";
+    environment.systemVariables.TZDIR = "/etc/zoneinfo";
 
     environment.etc.localtime =
       { source = "${pkgs.tzdata}/share/zoneinfo/${config.time.timeZone}";
