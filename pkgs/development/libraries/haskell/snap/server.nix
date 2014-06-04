@@ -1,7 +1,7 @@
 { cabal, attoparsec, attoparsecEnumerator, blazeBuilder
 , blazeBuilderEnumerator, caseInsensitive, enumerator
 , MonadCatchIOTransformers, mtl, network, snapCore, text, time
-, unixCompat
+, unixCompat, HsOpenSSL, useOpenssl ? false
 }:
 
 cabal.mkDerivation (self: {
@@ -12,7 +12,8 @@ cabal.mkDerivation (self: {
     attoparsec attoparsecEnumerator blazeBuilder blazeBuilderEnumerator
     caseInsensitive enumerator MonadCatchIOTransformers mtl network
     snapCore text time unixCompat
-  ];
+  ] ++ self.stdenv.lib.optional useOpenssl HsOpenSSL;
+  configureFlags = [ ] ++ self.stdenv.lib.optional useOpenssl "-fopenssl";
   meta = {
     homepage = "http://snapframework.com/";
     description = "A fast, iteratee-based, epoll-enabled web server for the Snap Framework";
