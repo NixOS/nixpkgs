@@ -1155,7 +1155,7 @@ let
   gnuvd = callPackage ../tools/misc/gnuvd { };
 
   goaccess = callPackage ../tools/misc/goaccess { };
-  
+
   googleAuthenticator = callPackage ../os-specific/linux/google-authenticator { };
 
   gource = callPackage ../applications/version-management/gource {};
@@ -3458,7 +3458,7 @@ let
 
   # mercurial (hg) bleeding edge version
   octaveHG = callPackage ../development/interpreters/octave/hg.nix { };
-  
+
   ocropus = callPackage ../applications/misc/ocropus { };
 
   perl58 = callPackage ../development/interpreters/perl/5.8 {
@@ -10891,6 +10891,8 @@ let
   pjsip = callPackage ../applications/networking/pjsip { };
 
   polytable = callPackage ../tools/typesetting/tex/polytable { };
+
+  PPSSPP = callPackage ../misc/emulators/ppsspp { };
 
   uae = callPackage ../misc/emulators/uae { };
 
