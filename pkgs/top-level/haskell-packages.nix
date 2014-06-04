@@ -2037,7 +2037,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   SHA = callPackage ../development/libraries/haskell/SHA {};
 
-  shake = callPackage ../development/libraries/haskell/shake {};
+  shake = callPackage ../development/libraries/haskell/shake {
+    binary = self.binary_0_7_2_1;
+  };
 
   shakespeare = callPackage ../development/libraries/haskell/shakespeare {};
 
