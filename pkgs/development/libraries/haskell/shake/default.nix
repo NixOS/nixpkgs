@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "shake";
-  version = "0.12";
-  sha256 = "060bvbhk84zagghalg5nh5g17vj8z2kv0qb8vibcq58ahfayj655";
+  version = "0.13.1";
+  sha256 = "00dvf1ydfgpnkv09fywsvyn0sphjwdrqhvkc21axj580ykbqxrn7";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
     binary deepseq filepath hashable QuickCheck random time
     transformers unorderedContainers utf8String
   ];
+  doCheck = !self.stdenv.isDarwin;
   meta = {
     homepage = "https://github.com/ndmitchell/shake";
     description = "Build system library, like Make, but more accurate dependencies";
