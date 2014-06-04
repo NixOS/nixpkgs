@@ -1205,6 +1205,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ieee754 = callPackage ../development/libraries/haskell/ieee754 {};
 
+  imm = callPackage ../development/libraries/haskell/imm {};
+
   indents = callPackage ../development/libraries/haskell/indents {};
 
   indexed = callPackage ../development/libraries/haskell/indexed {};
@@ -1589,6 +1591,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   opensslStreams = callPackage ../development/libraries/haskell/openssl-streams {};
 
   operational = callPackage ../development/libraries/haskell/operational {};
+
+  opml = callPackage ../development/libraries/haskell/opml {};
 
   options = callPackage ../development/libraries/haskell/options {};
 
@@ -2219,6 +2223,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   time_1_1_2_4 = callPackage ../development/libraries/haskell/time/1.1.2.4.nix {};
   time_1_4_2 = callPackage ../development/libraries/haskell/time/1.4.2.nix {};
   time = null;                  # core package since ghc >= 6.12.x
+
+  timerep = callPackage ../development/libraries/haskell/timerep {};
 
   timeparsers = callPackage ../development/libraries/haskell/timeparsers {
     convertible = self.convertible_1_0_11_1;
