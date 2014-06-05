@@ -147,8 +147,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   aesonQq = callPackage ../development/libraries/haskell/aeson-qq {};
 
-  alternativeIo = callPackage ../development/libraries/haskell/alternative-io {};
-
   alsaCore = callPackage ../development/libraries/haskell/alsa-core {};
 
   alsaMixer = callPackage ../development/libraries/haskell/alsa-mixer {};
