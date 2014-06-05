@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     aeson hspec persistent QuickCheck text transformers
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.yesodweb.com/book/persistent";
     description = "Type-safe, non-relational, multi-backend persistence";
