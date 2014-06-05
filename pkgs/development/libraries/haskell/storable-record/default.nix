@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ transformers utilityHt ];
+  jailbreak = true;
   meta = {
     homepage = "http://code.haskell.org/~thielema/storable-record/";
     description = "Elegant definition of Storable instances for records";
