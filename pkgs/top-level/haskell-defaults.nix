@@ -17,6 +17,7 @@
   ghcHEADPrefs = self : super : super // {
     mtl = self.mtl_2_1_2;
     cabalInstall_1_20_0_2 = super.cabalInstall_1_20_0_2.override { Cabal = null; };
+    transformersCompat = super.transformersCompat_0_3_3;
   };
 
   ghc782Prefs = self : super : ghcHEADPrefs self super // {
@@ -44,6 +45,7 @@
     mtl = self.mtl_2_2_1;
     pipesBinary = super.pipesBinary.override { binary = self.binary_0_7_2_1; };
     transformers = self.transformers_0_4_1_0; # core packagen in ghc > 7.6.x
+    transformersCompat = super.transformersCompat;
     zipArchive = super.zipArchive_0_2_2_1;    # works without binary 0.7.x
   };
 
