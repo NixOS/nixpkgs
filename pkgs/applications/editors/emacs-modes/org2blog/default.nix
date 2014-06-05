@@ -1,19 +1,22 @@
-{ stdenv, fetchgit, emacs, xmlRpc }:
+{ stdenv, fetchgit, emacs, org, xmlRpc, metaweblog }:
 
 stdenv.mkDerivation rec {
-  name = "org2blog-0.5";
+  name = "org2blog-0.8.1";
 
   src = fetchgit {
     url = https://github.com/punchagan/org2blog.git;
-    rev = "338abe30e9bc89684f8384f8deaf826b63844da6";
-    sha256 = "46ab31e90d0d54071c126b7d5599a3e82062baa79ddf26b988bcb88d306d6827";
+    rev = "5f573ff3e4007c16517a5fe28c4f5d8dde3f8a77";
+    sha256 = "e83c08ceece92bb507be70046db4a7fa87a4af34ad3f84a727e0bd6a1dd99a33";
   };
 
   buildInputs = [ emacs ];
-  propagatedUserEnvPkgs = [ xmlRpc ];
+  propagatedUserEnvPkgs = [ org xmlRpc metaweblog ];
 
   buildPhase = ''
-    emacs -L . -L ${xmlRpc}/share/emacs/site-lisp --batch -f batch-byte-compile *.el
+    emacs -L . -L ${org}/share/emacs/site-lisp/org \
+               -L ${xmlRpc}/share/emacs/site-lisp \
+               -L ${metaweblog}/share/emacs/site-lisp \
+               --batch -f batch-byte-compile *.el
   '';
 
   installPhase = ''
