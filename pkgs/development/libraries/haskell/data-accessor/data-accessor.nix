@@ -5,6 +5,7 @@ cabal.mkDerivation (self: {
   version = "0.2.2.5";
   sha256 = "0z63fv41cnpk3h404gprk2f5jl7rrpyv97xmsgac9zgdm5zkkhm6";
   buildDepends = [ transformers ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Record_access";
     description = "Utilities for accessing and manipulating fields of records";
