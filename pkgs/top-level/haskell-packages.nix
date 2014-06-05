@@ -2721,10 +2721,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
               else self.Cabal_1_18_1_3;
   };
 
-  cabalDev = callPackage ../development/tools/haskell/cabal-dev {
-    HTTP = self.HTTP.override { network = self.network_2_4_1_2; };
-  };
-
   cabalMeta = callPackage ../development/tools/haskell/cabal-meta {};
 
   cabal2Ghci = callPackage ../development/tools/haskell/cabal2ghci {};
