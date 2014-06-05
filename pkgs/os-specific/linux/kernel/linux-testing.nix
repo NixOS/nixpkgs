@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ... } @ args:
 
 import ./generic.nix (args // rec {
-  version = "3.10.41";
-  extraMeta.branch = "3.10";
+  version = "3.15-rc8";
+  extraMeta.branch = "3.15";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.xz";
-    sha256 = "0rpz2nxay0a4573dnnb8szq3ly3bhjd6wrz5z6iw3kpj19crs0r1";
+    url = "mirror://kernel/linux/kernel/v3.x/testing/linux-${version}.tar.xz";
+    sha256 = "";
   };
 
   features.iwlwifi = true;
@@ -14,4 +14,4 @@ import ./generic.nix (args // rec {
   features.needsCifsUtils = true;
   features.canDisableNetfilterConntrackHelpers = true;
   features.netfilterRPFilter = true;
-})
+} // (args.argsOverride or {}))
