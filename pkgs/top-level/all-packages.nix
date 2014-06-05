@@ -7789,6 +7789,8 @@ let
 
   junicode = callPackage ../data/fonts/junicode { };
 
+  kochi-substitute = callPackage ../data/fonts/kochi-substitute {};
+
   liberation_ttf = callPackage ../data/fonts/redhat-liberation-fonts { };
 
   libertine = builderDefsPackage (import ../data/fonts/libertine) {
