@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "transformers-compat";
-  version = "0.3.3";
-  sha256 = "14lmwqr6q79k1f7byvb0jcm4r7lprhxkl85z72pr6ghn7bsvqwps";
+  version = "0.3.3.4";
+  sha256 = "1hab41ggyaxr4xn2szv8y9fg9np8zi8ifhimr33fspid1jz14xr5";
   buildDepends = [ transformers ];
   meta = {
     homepage = "http://github.com/ekmett/transformers-compat/";
