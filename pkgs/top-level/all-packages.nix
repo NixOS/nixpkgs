@@ -8343,7 +8343,8 @@ let
 
     rudel = callPackage ../applications/editors/emacs-modes/rudel { };
 
-    scalaMode = callPackage ../applications/editors/emacs-modes/scala-mode { };
+    scalaMode1 = callPackage ../applications/editors/emacs-modes/scala-mode/v1.nix { };
+    scalaMode2 = callPackage ../applications/editors/emacs-modes/scala-mode/v2.nix { };
 
     sunriseCommander = callPackage ../applications/editors/emacs-modes/sunrise-commander { };
 
