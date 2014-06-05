@@ -5507,11 +5507,11 @@ rec {
   };
 
   pygments = buildPythonPackage rec {
-    name = "Pygments-1.5";
+    name = "Pygments-1.6";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/P/Pygments/${name}.tar.gz";
-      md5 = "ef997066cc9ee7a47d01fb4f3da0b5ff";
+      md5 = "a18feedf6ffd0b0cc8c8b0fbdb2027b1";
     };
 
     meta = {
