@@ -1936,9 +1936,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   shelly_0_15_4_1 = callPackage ../development/libraries/haskell/shelly/0.15.4.1.nix {};
   shelly_1_5_3_1 = callPackage ../development/libraries/haskell/shelly {};
-  shelly = if (pkgs.stdenv.lib.versionOlder ghc.version "7.6")
-    then self.shelly_0_15_4_1
-    else self.shelly_1_5_3_1;
+  shelly = self.shelly_1_5_3_1;
 
   simpleReflect = callPackage ../development/libraries/haskell/simple-reflect {};
 

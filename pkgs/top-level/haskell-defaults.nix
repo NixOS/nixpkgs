@@ -57,6 +57,7 @@
     haddock = self.haddock_2_11_0;
     haskeline = super.haskeline.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     scientific = self.scientific_0_2_0_2;
+    shelly = self.shelly_0_15_4_1;
   };
 
   ghc722Prefs = self : super : ghc742Prefs self super // {
