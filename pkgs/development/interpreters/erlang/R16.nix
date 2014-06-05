@@ -8,11 +8,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "erlang-" + version;
-  version = "R16B02";
+  version = "R16B03-1";
 
   src = fetchurl {
     url = "http://www.erlang.org/download/otp_src_${version}.tar.gz";
-    sha256 = "119gnf3jfd98hpxxqs8vnzrc81myv07y302b99alalqqz0fsvf3a";
+    sha256 = "1rvyfh22g1fir1i4xn7v2md868wcmhajwhfsq97v7kn5kd2m7khp";
   };
 
   buildInputs =

@@ -3381,9 +3381,9 @@ let
 
   clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
-  erlangR14B04 = callPackage ../development/interpreters/erlang/R14B04.nix { };
-  erlangR15B03 = callPackage ../development/interpreters/erlang/R15B03.nix { };
-  erlangR16B02 = callPackage ../development/interpreters/erlang/R16B02.nix { };
+  erlangR14 = callPackage ../development/interpreters/erlang/R14.nix { };
+  erlangR15 = callPackage ../development/interpreters/erlang/R15.nix { };
+  erlangR16 = callPackage ../development/interpreters/erlang/R16.nix { };
   erlangR17 = callPackage ../development/interpreters/erlang/R17.nix { };
   erlang = erlangR17;
 
@@ -6568,6 +6568,7 @@ let
     spidermonkey = spidermonkey_185;
     python = python27;
     sphinx = python27Packages.sphinx;
+    erlang = erlangR16;
   };
 
   dico = callPackage ../servers/dico { };
@@ -6599,7 +6600,7 @@ let
   dovecot_pigeonhole = callPackage ../servers/mail/dovecot-pigeonhole { };
 
   ejabberd = callPackage ../servers/xmpp/ejabberd {
-    erlang = erlangR16B02;
+    erlang = erlangR16;
   };
 
   elasticmq = callPackage ../servers/elasticmq { };
@@ -9684,8 +9685,8 @@ let
   winswitch = callPackage ../tools/X11/winswitch { };
 
   wings = callPackage ../applications/graphics/wings {
-    erlang = erlangR14B04;
-    esdl = esdl.override { erlang = erlangR14B04; };
+    erlang = erlangR14;
+    esdl = esdl.override { erlang = erlangR14; };
   };
 
   wmname = callPackage ../applications/misc/wmname { };
