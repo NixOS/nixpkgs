@@ -8353,6 +8353,8 @@ let
 
     maudeMode = callPackage ../applications/editors/emacs-modes/maude { };
 
+    metaweblog = callPackage ../applications/editors/emacs-modes/metaweblog { };
+
     notmuch = lowPrio (callPackage ../applications/networking/mailreaders/notmuch { });
 
     offlineimap = callPackage ../applications/editors/emacs-modes/offlineimap {};
