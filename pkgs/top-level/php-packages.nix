@@ -40,4 +40,12 @@ let self = with self; {
       sha256 = "0vss35da615709kdvqji8pblckfvmabmj2njjjz6h8zzvj9gximd";
     };
   };
+
+  apc = buildPecl rec {
+    name = "apc-3.1.13";
+    src = pkgs.fetchurl {
+      url = "http://pecl.php.net/get/${name}.tgz";
+      sha256 = "1gcsh9iar5qa1yzpjki9bb5rivcb6yjp45lmjmp98wlyf83vmy2y";
+    };
+  };
 }; in self
