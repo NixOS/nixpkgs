@@ -4637,17 +4637,17 @@ rec {
     };
   };
 
-  livestreamer = if isPy34 then null else (buildPythonPackage {
-    #version = "1.8.0";
-    name = "livestreamer-1.8.0";
+  livestreamer = if isPy34 then null else (buildPythonPackage rec {
+    version = "1.8.2";
+    name = "livestreamer-${version}";
 
     src = fetchurl {
-      url = "https://github.com/chrippa/livestreamer/archive/v1.8.0.tar.gz";
-      sha256 = "0fzpznbnhzrqawxdljvyml5251wbr3nifdrvnmh2b8vz356js4l8";
+      url = "https://github.com/chrippa/livestreamer/archive/v${version}.tar.gz";
+      sha256 = "130h97qdb7qx8xg0gz54p5a6cb2zbffi5hsi305xf0ah9nf4rbrc";
     };
 
     buildInputs = [ pkgs.makeWrapper ];
-    propagatedBuildInputs = [ requests ];
+    propagatedBuildInputs = [ requests pkgs.rtmpdump pycrypto ];
     postInstall = ''
       wrapProgram $out/bin/livestreamer --prefix PATH : ${pkgs.rtmpdump}/bin
     '';
