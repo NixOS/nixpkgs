@@ -1457,6 +1457,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   monadsTf = callPackage ../development/libraries/haskell/monads-tf {};
 
+  monadUnify = callPackage ../development/libraries/haskell/monad-unify {};
+
   monoidExtras = callPackage ../development/libraries/haskell/monoid-extras {};
 
   monoidTransformer = callPackage ../development/libraries/haskell/monoid-transformer {};
@@ -1642,6 +1644,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   pathtype = callPackage ../development/libraries/haskell/pathtype {};
 
+  patternArrows = callPackage ../development/libraries/haskell/pattern-arrows {};
+
   pbkdf = callPackage ../development/libraries/haskell/pbkdf {};
 
   pcap = callPackage ../development/libraries/haskell/pcap {};
@@ -1764,6 +1768,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   publicsuffixlist = callPackage ../development/libraries/haskell/publicsuffixlist {};
 
   pureMD5 = callPackage ../development/libraries/haskell/pureMD5 {};
+
+  purescript = callPackage ../development/libraries/haskell/purescript {};
 
   pwstoreFast = callPackage ../development/libraries/haskell/pwstore-fast {};
 
