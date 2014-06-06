@@ -1174,6 +1174,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   httpTypes = callPackage ../development/libraries/haskell/http-types {};
 
+  holyProject = callPackage ../development/libraries/haskell/holy-project {};
+
   HUnit_1_2_0_3 = callPackage ../development/libraries/haskell/HUnit/1.2.0.3.nix {};
   HUnit_1_2_2_1 = callPackage ../development/libraries/haskell/HUnit/1.2.2.1.nix {};
   HUnit_1_2_2_3 = callPackage ../development/libraries/haskell/HUnit/1.2.2.3.nix {};
