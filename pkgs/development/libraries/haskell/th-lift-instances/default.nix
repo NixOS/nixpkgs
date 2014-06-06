@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "th-lift-instances";
-  version = "0.1.2";
-  sha256 = "0xfz7jnhqxqxd6ijn6vpd0nay38kj862ylsb71xqi35137g5zl9w";
+  version = "0.1.3";
+  sha256 = "0snqgcdkskwvrsw239j3xq84mwnf5x79kfsn495kprdc6yh3qdkx";
   buildDepends = [ text thLift vector ];
   testDepends = [ doctest filepath QuickCheck text vector ];
   meta = {
