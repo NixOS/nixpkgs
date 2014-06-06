@@ -529,6 +529,7 @@ let
 
   pass = callPackage ../tools/security/pass {
     gnupg = gnupg1compat;
+    withX = false;
   };
 
   setfile = callPackage ../os-specific/darwin/setfile { };
