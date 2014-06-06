@@ -2177,6 +2177,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   testFrameworkQuickcheck2 = callPackage ../development/libraries/haskell/test-framework-quickcheck2 {};
 
+  testFrameworkSmallcheck = callPackage ../development/libraries/haskell/test-framework-smallcheck {};
+
   testFrameworkTh = callPackage ../development/libraries/haskell/test-framework-th {};
 
   testFrameworkThPrime = callPackage ../development/libraries/haskell/test-framework-th-prime {};
