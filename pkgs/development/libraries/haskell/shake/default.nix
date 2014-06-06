@@ -16,7 +16,6 @@ cabal.mkDerivation (self: {
     binary deepseq filepath hashable QuickCheck random time
     transformers unorderedContainers utf8String
   ];
-  doCheck = !self.stdenv.isDarwin;
   meta = {
     homepage = "https://github.com/ndmitchell/shake";
     description = "Build system library, like Make, but more accurate dependencies";
