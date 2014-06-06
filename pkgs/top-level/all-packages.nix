@@ -8916,6 +8916,8 @@ let
 
   kochi-substitute-naga10 = callPackage ../data/fonts/kochi-substitute-naga10 {};
 
+  league-of-moveable-type = callPackage ../data/fonts/league-of-moveable-type {};
+
   liberation_ttf_from_source = callPackage ../data/fonts/redhat-liberation-fonts { };
   liberation_ttf_binary = callPackage ../data/fonts/redhat-liberation-fonts/binary.nix { };
   liberation_ttf = liberation_ttf_binary;
