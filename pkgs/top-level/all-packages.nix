@@ -9604,6 +9604,8 @@ let
 
   vim = callPackage ../applications/editors/vim { };
 
+  macvim = callPackage ../applications/editors/vim/macvim.nix { };
+
   vimWrapper = wrapVim vim;
 
   vimHugeX = vim_configurable;
