@@ -13,8 +13,10 @@ stdenv.mkDerivation {
 
   buildInputs =
     [
-      ocaml findlib ocaml_data_notation ocaml_typeconv ocamlmod ocamlify ounit
+      ocaml findlib ocaml_typeconv ocamlmod ocamlify ounit
     ];
+
+  propagatedBuildInputs = [ ocaml_data_notation ];
 
   configurePhase = "ocaml setup.ml -configure --prefix $out";
   buildPhase     = "ocaml setup.ml -build";
