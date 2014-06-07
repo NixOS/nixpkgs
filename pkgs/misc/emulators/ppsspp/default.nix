@@ -29,5 +29,6 @@ in stdenv.mkDerivation {
     description = "A PSP emulator, the Qt4 version.";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.fuuzetsu ];
+    platforms = platforms.linux ++ platforms.darwin ++ platforms.cygwin;
   };
 }
