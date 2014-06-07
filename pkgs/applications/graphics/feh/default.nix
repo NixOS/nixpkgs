@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    wrapProgram "$out/bin/feh" --prefix PATH : "${libjpeg}/bin"
+    wrapProgram "$out/bin/feh" --prefix PATH : "${libjpeg}/bin" \
+                               --add-flags '--theme=feh'
   '';
 
   meta = {
