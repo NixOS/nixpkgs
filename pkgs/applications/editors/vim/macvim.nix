@@ -62,6 +62,7 @@ in mkDerivation rec {
   '';
 
   postInstall = ''
+    ensureDir $out/Applications
     cp -r src/MacVim/build/Release/MacVim.app $out/Applications
 
     rm $out/bin/{Vimdiff,Vimtutor,Vim,ex,rVim,rview,view}
