@@ -24,7 +24,7 @@ in mkDerivation rec {
   patches = [ ./macvim.patch ];
 
   postPatch = ''
-    substituteInPlace src/MacVim/mvim --replace "# VIM_APP_DIR=/Applications" "VIM_APP_DIR=$out"
+    substituteInPlace src/MacVim/mvim --replace "# VIM_APP_DIR=/Applications" "VIM_APP_DIR=$out/Applications"
 
     # Don't create custom icons.
     substituteInPlace src/MacVim/icons/Makefile --replace '$(MAKE) -C makeicns' ""
@@ -62,7 +62,7 @@ in mkDerivation rec {
   '';
 
   postInstall = ''
-    cp -r src/MacVim/build/Release/MacVim.app $out
+    cp -r src/MacVim/build/Release/MacVim.app $out/Applications
 
     rm $out/bin/{Vimdiff,Vimtutor,Vim,ex,rVim,rview,view}
 
@@ -74,7 +74,7 @@ in mkDerivation rec {
     done
 
     # Fix rpaths
-    exe="$out/MacVim.app/Contents/MacOS/Vim"
+    exe="$out/Applications/MacVim.app/Contents/MacOS/Vim"
     libperl=$(dirname $(find ${perl} -name "libperl.dylib"))
     install_name_tool -add_rpath ${luajit}/lib $exe
     install_name_tool -add_rpath ${tcl}/lib $exe
