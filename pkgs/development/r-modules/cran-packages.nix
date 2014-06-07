@@ -49,6 +49,7 @@ let
     };
     propagatedBuildInputs = depends;
     meta.homepage = "http://cran.r-project.org/web/packages/${name}/";
+    meta.hydraPlatforms = R.meta.hydraPlatforms;
   };
 
 in
