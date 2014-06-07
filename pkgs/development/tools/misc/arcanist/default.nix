@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, php, makeWrapper }:
+{ stdenv, fetchgit, php, flex, makeWrapper }:
 
 let
   libphutil = fetchgit {
@@ -17,17 +17,23 @@ stdenv.mkDerivation rec {
   version = "20140606";
 
   src = [ arcanist libphutil ];
-  buildInputs = [ php makeWrapper ];
+  buildInputs = [ php makeWrapper flex ];
 
   unpackPhase = "true";
-  buildPhase = "true";
+  buildPhase = ''
+    ORIG=`pwd`
+    chmod +w -R ${libphutil}
+    cd ${libphutil}/support/xhpast
+    ls
+    make clean all install
+    cd $ORIG
+  '';
   installPhase = ''
     mkdir -p $out/bin $out/libexec
     cp -R ${libphutil} $out/libexec/libphutil
     cp -R ${arcanist}  $out/libexec/arcanist
 
     ln -s $out/libexec/arcanist/bin/arc $out/bin
-
     wrapProgram $out/bin/arc \
       --prefix PATH : "${php}/bin"
   '';
