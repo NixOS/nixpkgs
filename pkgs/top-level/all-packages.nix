@@ -10784,6 +10784,8 @@ let
 
   fakenes = callPackage ../misc/emulators/fakenes { };
 
+  fceux = callPackage ../misc/emulators/fceux { };
+
   foldingathome = callPackage ../misc/foldingathome { };
 
   foo2zjs = callPackage ../misc/drivers/foo2zjs {};
