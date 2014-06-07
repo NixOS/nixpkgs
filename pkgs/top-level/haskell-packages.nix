@@ -564,6 +564,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   dateCache = callPackage ../development/libraries/haskell/date-cache {};
 
+  dataChecked = callPackage ../development/libraries/haskell/data-checked {};
+
   datetime = callPackage ../development/libraries/haskell/datetime {};
 
   DAV = callPackage ../development/libraries/haskell/DAV {};
