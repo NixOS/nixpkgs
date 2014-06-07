@@ -2,14 +2,14 @@
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "4.2.1";
+  version = "4.3.1";
   name = "dd-agent-${version}";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "dd-agent";
     rev = version;
-    sha256 = "06f9nkvnpfzs2nw75cac2y9wnp2bay4sg94zz0wjm8886rigjjjm";
+    sha256 = "0z6b1s30fyd9ldahizrjwcxx7c7dd74xsqy19j3qykrb25j9cvmn";
   };
 
   buildInputs = [ python unzip makeWrapper pythonPackages.psycopg2 ];
