@@ -7940,6 +7940,10 @@ let
 
   arora = callPackage ../applications/networking/browsers/arora { };
 
+  atom = callPackage ../applications/editors/atom {
+    gconf = gnome.GConf;
+  };
+
   aseprite = callPackage ../applications/editors/aseprite {
     giflib = giflib_4_1;
   };
