@@ -800,6 +800,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   freetype2 = callPackage ../development/libraries/haskell/freetype2 {};
 
+  fuzzcheck = callPackage ../development/libraries/haskell/fuzzcheck {};
+
   gamma = callPackage ../development/libraries/haskell/gamma {};
 
   geniplate = callPackage ../development/libraries/haskell/geniplate {};
