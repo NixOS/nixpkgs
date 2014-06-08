@@ -1,19 +1,12 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, zlib, freetype, libjpeg, jbig2dec, openjpeg
 , libX11, libXext }:
 stdenv.mkDerivation rec {
-  name = "mupdf-1.3";
+  name = "mupdf-1.4";
 
   src = fetchurl {
     url = "http://mupdf.com/download/archive/${name}-source.tar.gz";
-    sha256 = "0y247nka5gkr1ajn47jrlp5rcnf6h4ff7dfsprma3h4wxqdv7a5b";
+    sha256 = "08pc6fv42sb9k9dzjs8ph32nixzrzmr08yxh7arkpsdm42asp2q1";
   };
-
-  patches = [(fetchpatch {
-    name = "CVE-2014-2013.patch";
-    url = "http://git.ghostscript.com/?p=mupdf.git;a=commitdiff_plain;"
-      + "h=60dabde18d7fe12b19da8b509bdfee9cc886aafc";
-    sha256 = "0p721f3g2djz9fy6rcgj83c20f5k257wg2d0yvvmp02m7sp06l0g";
-  })];
 
   buildInputs = [ pkgconfig zlib freetype libjpeg jbig2dec openjpeg libX11 libXext ];
 

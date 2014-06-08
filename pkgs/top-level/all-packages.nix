@@ -8907,6 +8907,8 @@ let
     bison = bison2;
   };
 
+  llpp = callPackage ../applications/misc/llpp { inherit (ocamlPackages) lablgl; };
+
   lmms = callPackage ../applications/audio/lmms { };
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
