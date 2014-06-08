@@ -10868,6 +10868,8 @@ let
 
   nixops = callPackage ../tools/package-management/nixops { };
 
+  nix-prefetch-tools = callPackage ../build-support/nix-prefetch-tools {};
+
   nix-repl = callPackage ../tools/package-management/nix-repl { };
 
   nut = callPackage ../applications/misc/nut { };
