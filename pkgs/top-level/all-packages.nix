@@ -3201,6 +3201,8 @@ let
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
+    eliom = callPackage ../development/ocaml-modules/eliom { };
+
     findlib = callPackage ../development/tools/ocaml/findlib { };
 
     dypgen = callPackage ../development/ocaml-modules/dypgen { };
