@@ -1,5 +1,5 @@
 { stdenv, fetchurl, mono, makeWrapper
-, SDL2, freetype, openal
+, SDL2, freetype, openal, systemd
 }:
 
 let
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
   '';
 
   postInstall = with stdenv.lib; let
-    runtime = makeLibraryPath [ SDL2 freetype openal ];
+    runtime = makeLibraryPath [ SDL2 freetype openal systemd ];
   in ''
     wrapProgram $out/bin/openra \
       --prefix PATH : "${mono}/bin" \
