@@ -18,9 +18,9 @@ let
   knownHosts = map (h: getAttr h cfg.knownHosts) (attrNames cfg.knownHosts);
 
   knownHostsFile = pkgs.writeText "ssh_known_hosts" (
-    flip concatMapStrings knownHosts (h:
-      "${concatStringsSep "," h.hostNames} ${readFile h.publicKeyFile}"
-    )
+    flip concatMapStrings knownHosts (h: ''
+      ${concatStringsSep "," h.hostNames} ${if h.publicKey != null then h.publicKey else readFile h.publicKeyFile}
+    '')
   );
 
   userOptions = {
@@ -39,7 +39,7 @@ let
       };
 
       keyFiles = mkOption {
-        type = types.listOf types.unspecified;
+        type = types.listOf types.path;
         default = [];
         description = ''
           A list of files each containing one OpenSSH public key that should be
@@ -182,7 +182,7 @@ in
       };
 
       authorizedKeysFiles = mkOption {
-        type = types.listOf types.unspecified;
+        type = types.listOf types.str;
         default = [];
         description = "Files from with authorized keys are read.";
       };
@@ -218,7 +218,18 @@ in
               the host's ssh service.
             '';
           };
+          publicKey = mkOption {
+            default = null;
+            type = types.nullOr types.str;
+            description = ''
+              The public key data for the host. You can fetch a public key
+              from a running SSH server with the <command>ssh-keyscan</command>
+              command.
+            '';
+          };
           publicKeyFile = mkOption {
+            default = null;
+            type = types.nullOr types.path;
             description = ''
               The path to the public key file for the host. The public
               key file is read at build time and saved in the Nix store.
@@ -367,7 +378,12 @@ in
       '';
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;
-                    message = "cannot enable X11 forwarding without setting xauth location";}];
+                    message = "cannot enable X11 forwarding without setting xauth location";}]
+      ++ flip mapAttrsToList cfg.knownHosts (name: data: {
+        assertion = (data.publicKey == null && data.publicKeyFile != null) ||
+                    (data.publicKey != null && data.publicKeyFile == null);
+        message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
+      });
 
   };
 

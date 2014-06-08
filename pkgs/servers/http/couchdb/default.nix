@@ -3,16 +3,15 @@
 
 stdenv.mkDerivation rec {
   name = "couchdb-${version}";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchurl {
-  url = "mirror://apache/couchdb/source/${version}/apache-couchdb-${version}.tar.gz";
-  sha256 = "1vwgcckp3svgifmagyjmgazm6387i9m6z182p6ja891i8fkb5gdb";
+    url = "mirror://apache/couchdb/source/${version}/apache-${name}.tar.gz";
+    sha256 = "0isddp29zh72idgwjaswqy887c1fwx5g1lwlbzscwcv6q70xrmfr";
   };
 
-  buildInputs = [
- erlang icu openssl spidermonkey curl help2man sphinx which file pkgconfig
- ];
+  buildInputs = [ erlang icu openssl spidermonkey curl help2man sphinx which
+    file pkgconfig ];
 
   postInstall = ''
     sed -i -e "s|\`getopt|\`${getopt}/bin/getopt|" $out/bin/couchdb

@@ -1,5 +1,7 @@
 { stdenv, fetchurl, m4, cxx ? true }:
 
+with { inherit (stdenv.lib) optional; };
+
 stdenv.mkDerivation rec {
   name = "gmp-5.1.3";
 
@@ -14,9 +16,12 @@ stdenv.mkDerivation rec {
     # Build a "fat binary", with routines for several sub-architectures
     # (x86), except on Solaris where some tests crash with "Memory fault".
     # See <http://hydra.nixos.org/build/2760931>, for instance.
-    (stdenv.lib.optional (!stdenv.isSunOS) "--enable-fat")
-    ++ (if cxx then [ "--enable-cxx" ] else [ "--disable-cxx" ])
-    ++ (if stdenv.is64bit then [ "--with-pic" ] else []);
+    optional (!stdenv.isSunOS) "--enable-fat"
+    ++ (if cxx then [ "--enable-cxx"  ]
+               else [ "--disable-cxx" ])
+    ++ optional (cxx && stdenv.isDarwin) "CPPFLAGS=-fexceptions"
+    ++ optional stdenv.is64bit "--with-pic"
+    ;
 
   doCheck = true;
 

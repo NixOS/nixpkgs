@@ -35,13 +35,14 @@ stdenv.mkDerivation rec {
     description = "Geeqie, a lightweight GTK+ based image viewer";
 
     longDescription =
-      '' Geeqie is a lightweight GTK+ based image viewer for Unix like
-         operating systems.  It features: EXIF, IPTC and XMP metadata
-         browsing and editing interoperability; easy integration with other
-         software; geeqie works on files and directories, there is no need to
-         import images; fast preview for many raw image formats; tools for
-         image comparison, sorting and managing photo collection.  Geeqie was
-         initially based on GQview.
+      ''
+        Geeqie is a lightweight GTK+ based image viewer for Unix like
+        operating systems.  It features: EXIF, IPTC and XMP metadata
+        browsing and editing interoperability; easy integration with other
+        software; geeqie works on files and directories, there is no need to
+        import images; fast preview for many raw image formats; tools for
+        image comparison, sorting and managing photo collection.  Geeqie was
+        initially based on GQview.
       '';
 
     license = "GPLv2+";

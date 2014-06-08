@@ -64,6 +64,9 @@ stdenv.mkDerivation rec {
       mkdir -p $out
       mv $TMPDIR/inst/$out/* $out/
 
+      mkdir -p "$out/lib/pkgconfig"
+      cp pkgconfig/*.pc "$out/lib/pkgconfig"
+
       mkdir -pv $out/lib/cups/backend
       ln -sv ../../../bin/smbspool $out/lib/cups/backend/smb
       mkdir -pv $out/etc/openldap/schema

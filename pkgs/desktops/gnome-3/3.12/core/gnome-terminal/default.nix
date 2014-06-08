@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gnome3.gtk gnome3.gsettings_desktop_schemas gnome3.vte appdata-tools
-                  gnome3.dconf itstool ncurses makeWrapper ];
+                  gnome3.dconf itstool ncurses makeWrapper gnome3.nautilus ];
 
   nativeBuildInputs = [ pkgconfig intltool gnome_doc_utils which libuuid libxml2 desktop_file_utils ];
 
   # FIXME: enable for gnome3
-  configureFlags = [ "--disable-search-provider" "--without-nautilus-extension" "--disable-migration" ];
+  configureFlags = [ "--disable-search-provider" "--disable-migration" ];
 
   preFixup = ''
     for f in "$out/libexec/gnome-terminal-server"; do

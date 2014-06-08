@@ -4,11 +4,11 @@
 assert guileBindings -> guile != null;
 
 stdenv.mkDerivation rec {
-  name = "gnutls-3.2.12.1";
+  name = "gnutls-3.2.15";
 
   src = fetchurl {
     url = "ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2/${name}.tar.lz";
-    sha256 = "1787n4iard3ad0p44xbl4aj3r3f5ir3sz0b2s27qpaaia2w4774g";
+    sha256 = "16c5c4k41mxib8i06npks940p9xllgn1wrackfp8712wdvl5zc4q";
   };
 
   patches =

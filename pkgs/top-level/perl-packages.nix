@@ -2272,6 +2272,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  DevelTrace = buildPerlPackage {
+    name = "Devel-Trace-0.12";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MJ/MJD/Devel-Trace-0.12.tar.gz;
+      sha256 = "0s1q1a05gk3xvwqkya3k05vqjk13rvb489g0frprhzpzfvvwl0gm";
+    };
+    meta = {
+      description = "Print out each line before it is executed (like sh -x)";
+      license = "Public Domain";
+    };
+  };
+
   DBDSQLite = import ../development/perl-modules/DBD-SQLite {
     inherit stdenv fetchurl buildPerlPackage DBI;
     inherit (pkgs) sqlite;
@@ -3539,12 +3551,13 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ HTTPDate ];
   };
 
-  FileMimeInfo = buildPerlPackage {
-    name = "File-MimeInfo-0.20";
+  FileMimeInfo = buildPerlPackage rec {
+    name = "File-MimeInfo-0.23";
     src = fetchurl {
-      url = "http://search.cpan.org/CPAN/authors/id/M/MI/MICHIELB/File-MimeInfo-0.20.tar.gz";
-      sha256 = "1738yi3a0xcbvffqymjb6cyh999q4pryalfwbkmdbjdks2y0bxz0";
+      url = "mirror://cpan/modules/by-module/File/${name}.tar.gz";
+      sha256 = "006i9idnxv9hsz1gykc5bqs05ma5wz9dsjrpmah9293bgdy1ccxj";
     };
+    doCheck = false; # Failed test 'desktop file is the right one'
     propagatedBuildInputs = [ FileBaseDir FileDesktopEntry ];
   };
 

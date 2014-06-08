@@ -119,18 +119,17 @@ rec {
     "--with-system-libgs" "--with-system-t1lib" "--with-system-freetype2" 
     "--with-system-freetype=no" "--disable-ttf2pk" "--enable-ttf2pk2" ]
     ++ stdenv.lib.optionals stdenv.isDarwin [
-      # Complains about a missing ICU directory
-      "--disable-bibtex-x"
-
       # TODO: We should be able to fix these tests
       "--disable-devnag"
-      "--disable-dvisvgm"
-      "--disable-xdv2pdf"
-      "--disable-xdvipdfmx"
-      "--disable-xetex"
 
-      "--with-system-harfbuzz=no"
-      "--with-system-icu=no"
+      # jww (2014-06-02): The following fails with:
+      # FAIL: tests/dvisvgm
+      # ===================
+      #
+      # dyld: Library not loaded: libgs.dylib.9.06
+      #   Referenced from: .../Work/texk/dvisvgm/.libs/dvisvgm
+      #   Reason: image not found
+      "--disable-dvisvgm"
     ];
 
   phaseNames = [ "addInputs" "doMainBuild" "doMakeInstall" "doPostInstall" ];

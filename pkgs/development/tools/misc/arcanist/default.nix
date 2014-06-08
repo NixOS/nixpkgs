@@ -1,23 +1,23 @@
-{ stdenv, fetchgit, php }:
+{ stdenv, fetchgit, php, makeWrapper }:
 
 let
   libphutil = fetchgit {
     url    = "git://github.com/facebook/libphutil.git";
-    rev    = "1ba1de50e9ee1ca63e472f625282346693eb0a18";
-    sha256 = "d571906b6ecb3700f0d57498426d2ab2a5fbed469d739ee1e03d410215738d2f";
+    rev    = "c4cb6d99c4a5903079350f85fcc71895c0a0ea14";
+    sha256 = "a7293aac4fdcfbaead09ee3e6ffb54c5d100b07905b4006194067411061ff994";
   };
   arcanist = fetchgit {
     url    = "git://github.com/facebook/arcanist.git";
-    rev    = "c999f3e6b5c7edef82761ed1db00d79683e2e37a";
-    sha256 = "d1d9f5ada8ffcb02f03210356c5087019e164f456660469e2825dcbdf5f07d35";
+    rev    = "50caec620a8ed45c54323cb71fee72fd0d935115";
+    sha256 = "dd18ed22375ad1ba058703952be0d339d9c93704e9d75dd7e4e6625236dfe9b0";
   };
 in
 stdenv.mkDerivation rec {
   name    = "arcanist-${version}";
-  version = "20140521";
+  version = "20140530";
 
   src = [ arcanist libphutil ];
-  buildInputs = [ php ];
+  buildInputs = [ php makeWrapper ];
 
   unpackPhase = "true";
   buildPhase = "true";
@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
     cp -R ${arcanist}  $out/libexec/arcanist
 
     ln -s $out/libexec/arcanist/bin/arc $out/bin
+
+    wrapProgram $out/bin/arc \
+      --prefix PATH : "${php}/bin"
   '';
 
   meta = {

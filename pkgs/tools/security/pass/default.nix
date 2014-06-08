@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1d32y6k625pv704icmhg46zg02kw5zcyxscgljxgy8bb5wv4lv2j";
   };
 
+  patches = [ ./darwin-getopt.patch ];
+
   buildInputs = [ makeWrapper ];
 
   meta = with stdenv.lib; {
