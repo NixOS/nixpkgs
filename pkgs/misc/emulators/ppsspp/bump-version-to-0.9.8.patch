@@ -1,0 +1,22 @@
+From 48f6bf352154511d5acddfe44dd241c6a9ed92d7 Mon Sep 17 00:00:00 2001
+From: Bhavin <bhavin192@users.noreply.github.com>
+Date: Tue, 6 May 2014 22:44:58 +0530
+Subject: [PATCH] Update vaersion to 0.9.8
+
+It was 0.9.6 :(
+---
+ Qt/Settings.pri | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Qt/Settings.pri b/Qt/Settings.pri
+index 8b4c1d7..67949f2 100644
+--- a/Qt/Settings.pri
++++ b/Qt/Settings.pri
+@@ -1,4 +1,4 @@
+-VERSION = 0.9.6
++VERSION = 0.9.8
+ DEFINES += USING_QT_UI USE_FFMPEG
+ unix:!qnx:!symbian:!mac: CONFIG += linux
+ maemo5|contains(MEEGO_EDITION,harmattan): CONFIG += maemo
+--
+1.9.3

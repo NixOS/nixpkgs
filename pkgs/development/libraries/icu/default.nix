@@ -26,6 +26,10 @@ stdenv.mkDerivation {
     echo Source root reset to ''${sourceRoot}
   '';
 
+  preConfigure = ''
+    sed -i -e "s|/bin/sh|${stdenv.shell}|" configure
+  '';
+
   configureFlags = "--disable-debug";
 
   enableParallelBuilding = true;

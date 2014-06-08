@@ -39,7 +39,37 @@ This will check out the latest NixOS sources to
 and the Nixpkgs sources to
 <filename><replaceable>/my/sources</replaceable>/nixpkgs</filename>.
 (The NixOS source tree lives in a subdirectory of the Nixpkgs
-repository.)  If you want to rebuild your system using your (modified)
+repository.)</para>
+
+<para>It’s often inconvenient to develop directly on the master
+branch, since if somebody has just committed (say) a change to GCC,
+then the binary cache may not have caught up yet and you’ll have to
+rebuild everything from source. So you may want to create a local
+branch based on your current NixOS version:
+
+<screen>
+$ nixos-version
+14.04.273.ea1952b (Baboon)
+
+$ git checkout -b local ea1952b
+</screen>
+
+Or, to base your local branch on the latest version available in the
+NixOS channel:
+
+<screen>
+$ curl -sI http://nixos.org/channels/nixos-unstable/ | grep Location
+Location: http://releases.nixos.org/nixos/unstable/nixos-14.10pre43986.acaf4a6/
+
+$ git checkout -b local acaf4a6
+</screen>
+
+You can then use <command>git rebase</command> to sync your local
+branch with the upstream branch, and use <command>git
+cherry-pick</command> to copy commits from your local branch to the
+upstream branch.</para>
+
+<para>If you want to rebuild your system using your (modified)
 sources, you need to tell <command>nixos-rebuild</command> about them
 using the <option>-I</option> flag:
 

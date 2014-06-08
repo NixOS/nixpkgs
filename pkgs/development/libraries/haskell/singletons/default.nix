@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ mtl thDesugar ];
   testDepends = [ Cabal constraints filepath tasty tastyGolden ];
   noHaddock = true;
+  patches = self.stdenv.lib.optional self.stdenv.isDarwin ./test.patch;
   meta = {
     homepage = "http://www.cis.upenn.edu/~eir/packages/singletons";
     description = "A framework for generating singleton types";

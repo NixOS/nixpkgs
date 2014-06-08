@@ -373,6 +373,8 @@ let
     inherit url;
   };
 
+  libredirect = callPackage ../build-support/libredirect { };
+
   makeDesktopItem = import ../build-support/make-desktopitem {
     inherit stdenv;
   };
@@ -1072,6 +1074,10 @@ let
 
   g500-control = callPackage ../tools/misc/g500-control { };
 
+  galculator = callPackage ../applications/misc/galculator {
+    gtk = gtk3;
+  };
+
   gawk = callPackage ../tools/text/gawk { };
 
   gawkInteractive = appendToName "interactive"
@@ -1148,11 +1154,15 @@ let
 
   gnuvd = callPackage ../tools/misc/gnuvd { };
 
+  goaccess = callPackage ../tools/misc/goaccess { };
+
   googleAuthenticator = callPackage ../os-specific/linux/google-authenticator { };
 
   gource = callPackage ../applications/version-management/gource {};
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
+
+  grafana = callPackage ../development/tools/misc/grafana { };
 
   grafx2 = callPackage ../applications/graphics/grafx2 {};
 
@@ -1661,6 +1671,12 @@ let
 
   opendkim = callPackage ../development/libraries/opendkim { };
 
+  opendylan = callPackage ../development/compilers/opendylan {
+    opendylan-bootstrap = opendylan_bin;
+  };
+
+  opendylan_bin = callPackage ../development/compilers/opendylan/bin.nix { };
+
   openjade = callPackage ../tools/text/sgml/openjade {
     perl = perl510;
   };
@@ -1975,6 +1991,8 @@ let
   };
 
   seqdiag = pythonPackages.seqdiag;
+
+  screenfetch = callPackage ../tools/misc/screenfetch { };
 
   sg3_utils = callPackage ../tools/system/sg3_utils { };
 
@@ -2471,6 +2489,8 @@ let
 
   aldor = callPackage ../development/compilers/aldor { };
 
+  aliceml = callPackage ../development/compilers/aliceml { };
+
   aspectj = callPackage ../development/compilers/aspectj { };
 
   ats = callPackage ../development/compilers/ats { };
@@ -2481,10 +2501,6 @@ let
   bigloo = callPackage ../development/compilers/bigloo { };
 
   chicken = callPackage ../development/compilers/chicken { };
-
-  chicken-dev = chicken.override {
-    devSnapshot = true;
-  };
 
   ccl = builderDefsPackage ../development/compilers/ccl {};
 
@@ -3447,6 +3463,8 @@ let
   # mercurial (hg) bleeding edge version
   octaveHG = callPackage ../development/interpreters/octave/hg.nix { };
 
+  ocropus = callPackage ../applications/misc/ocropus { };
+
   perl58 = callPackage ../development/interpreters/perl/5.8 {
     impureLibcPath = if stdenv.isLinux then null else "/usr";
   };
@@ -3796,6 +3814,10 @@ let
   libcxx = callPackage ../development/libraries/libc++ { stdenv = pkgs.clangStdenv; };
   libcxxabi = callPackage ../development/libraries/libc++abi { stdenv = pkgs.clangStdenv; };
 
+  libsigrok = callPackage ../development/tools/libsigrok { };
+
+  libsigrokdecode = callPackage ../development/tools/libsigrokdecode { };
+
   dejagnu = callPackage ../development/tools/misc/dejagnu { };
 
   dfeet = callPackage ../development/tools/misc/d-feet {
@@ -4018,6 +4040,8 @@ let
   scons = callPackage ../development/tools/build-managers/scons { };
 
   simpleBuildTool = callPackage ../development/tools/build-managers/simple-build-tool { };
+
+  sigrok-cli = callPackage ../development/tools/sigrok-cli { };
 
   slimerjs = callPackage ../development/tools/slimerjs {};
 
@@ -4640,6 +4664,8 @@ let
 
   gst_python = callPackage ../development/libraries/gstreamer/legacy/gst-python {};
 
+  gstreamermm = callPackage ../development/libraries/gstreamer/legacy/gstreamermm { };
+
   gnonlin = callPackage ../development/libraries/gstreamer/legacy/gnonlin {};
 
   gusb = callPackage ../development/libraries/gusb {
@@ -5026,6 +5052,8 @@ let
 
   libsecret = callPackage ../development/libraries/libsecret { };
 
+  libserialport = callPackage ../development/libraries/libserialport { };
+
   libgtop = callPackage ../development/libraries/libgtop {};
 
   liblo = callPackage ../development/libraries/liblo { };
@@ -5066,6 +5094,8 @@ let
   libffi = callPackage ../development/libraries/libffi { };
 
   libftdi = callPackage ../development/libraries/libftdi { };
+
+  libftdi1 = callPackage ../development/libraries/libftdi/1.x.nix { };
 
   libgcrypt = callPackage ../development/libraries/libgcrypt { };
 
@@ -5125,6 +5155,8 @@ let
   librem = callPackage ../development/libraries/librem {};
 
   libresample = callPackage ../development/libraries/libresample {};
+
+  librevisa = callPackage ../development/libraries/librevisa { };
 
   libsamplerate = callPackage ../development/libraries/libsamplerate {
     stdenv = if stdenv.isDarwin
@@ -5201,6 +5233,8 @@ let
   };
 
   libmilter = callPackage ../development/libraries/libmilter { };
+
+  libmkv = callPackage ../development/libraries/libmkv { };
 
   libmms = callPackage ../development/libraries/libmms { };
 
@@ -6032,6 +6066,8 @@ let
 
   strigi = callPackage ../development/libraries/strigi { clucene_core = clucene_core_2; };
 
+  subtitleeditor = callPackage ../applications/video/subtitleeditor { };
+
   suil = callPackage ../development/libraries/audio/suil { };
 
   suitesparse = callPackage ../development/libraries/suitesparse { };
@@ -6309,6 +6345,7 @@ let
 
   jquery_ui = callPackage ../development/libraries/javascript/jquery-ui { };
 
+  yuicompressor = callPackage ../development/tools/yuicompressor { };
 
   ### DEVELOPMENT / LISP MODULES
 
@@ -6671,6 +6708,8 @@ let
 
   riak = callPackage ../servers/nosql/riak/1.3.1.nix { };
 
+  influxdb = callPackage ../servers/nosql/influxdb { };
+
   mysql51 = import ../servers/sql/mysql/5.1.x.nix {
     inherit fetchurl ncurses zlib perl openssl stdenv;
     ps = procps; /* !!! Linux only */
@@ -6938,6 +6977,8 @@ let
   };
 
   devicemapper = lvm2;
+
+  disk_indicator = callPackage ../os-specific/linux/disk-indicator { };
 
   dmidecode = callPackage ../os-specific/linux/dmidecode { };
 
@@ -7423,7 +7464,9 @@ let
     config = config.pcmciaUtils.config or null;
   };
 
-  plymouth = callPackage ../os-specific/linux/plymouth { };
+  plymouth = callPackage ../os-specific/linux/plymouth {
+    automake = automake113x;
+  };
 
   pmount = callPackage ../os-specific/linux/pmount { };
 
@@ -7565,6 +7608,8 @@ let
   upstart = callPackage ../os-specific/linux/upstart { };
 
   usbutils = callPackage ../os-specific/linux/usbutils { };
+
+  usermount = callPackage ../os-specific/linux/usermount { };
 
   utillinux = lowPrio (callPackage ../os-specific/linux/util-linux {
     ncurses = null;
@@ -7756,6 +7801,8 @@ let
 
   lmodern = callPackage ../data/fonts/lmodern { };
 
+  lohit-fonts = callPackage ../data/fonts/lohit-fonts { };
+
   manpages = callPackage ../data/documentation/man-pages { };
 
   miscfiles = callPackage ../data/misc/miscfiles { };
@@ -7763,6 +7810,8 @@ let
   mobile_broadband_provider_info = callPackage ../data/misc/mobile-broadband-provider-info { };
 
   mph_2b_damase = callPackage ../data/fonts/mph-2b-damase { };
+
+  nafees = callPackage ../data/fonts/nafees { };
 
   oldstandard = callPackage ../data/fonts/oldstandard { };
 
@@ -7901,6 +7950,8 @@ let
   avogadro = callPackage ../applications/science/chemistry/avogadro {
     eigen = eigen2;
   };
+
+  avrdudess = callPackage ../applications/misc/avrdudess { };
 
   avxsynth = callPackage ../applications/video/avxsynth { };
 
@@ -8154,8 +8205,7 @@ let
     alsaLib = null;
     imagemagick = null;
 
-    # use clangStdenv on darwin to deal with: unexec: 'my_edata is not in
-    # section __data'
+    # resolve unrecognized section __static_data in __DATA segment
     stdenv = if stdenv.isDarwin
       then clangStdenv
       else stdenv;
@@ -8164,6 +8214,13 @@ let
   emacs24-nox = lowPrio (appendToName "nox" (emacs24.override {
     withX = false;
   }));
+
+  emacs24Macport = callPackage ../applications/editors/emacs-24/macport.nix {
+    # resolve unrecognised flag '-fconstant-cfstrings' errors
+    stdenv = if stdenv.isDarwin
+      then clangStdenv
+      else stdenv;
+  };
 
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
     inherit emacs;
@@ -8622,7 +8679,7 @@ let
 
   hexedit = callPackage ../applications/editors/hexedit { };
 
-  hipchat = callPackage_i686 ../applications/networking/instant-messengers/hipchat { };
+  hipchat = callPackage ../applications/networking/instant-messengers/hipchat { };
 
   homebank = callPackage ../applications/office/homebank { };
 
@@ -8835,6 +8892,8 @@ let
   lmms = callPackage ../applications/audio/lmms { };
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
+
+  handbrake = callPackage ../applications/video/handbrake { };
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
@@ -9173,6 +9232,8 @@ let
 
   pstree = callPackage ../applications/misc/pstree { };
 
+  pulseview = callPackage ../applications/science/electronics/pulseview { };
+
   puredata = callPackage ../applications/audio/puredata { };
 
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
@@ -9241,6 +9302,7 @@ let
   rxvt_unicode = callPackage ../applications/misc/rxvt_unicode {
     perlSupport = true;
     gdkPixbufSupport = true;
+    unicode3Support = true;
   };
 
   sakura = callPackage ../applications/misc/sakura {
@@ -9409,6 +9471,7 @@ let
   };
 
   teamspeak_client = callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
+  teamspeak_server = callPackage ../applications/networking/instant-messengers/teamspeak/server.nix { };
 
   taskjuggler = callPackage ../applications/misc/taskjuggler { };
 
@@ -9523,12 +9586,7 @@ let
     flup = pythonPackages.flup;
   };
 
-  vim = callPackage ../applications/editors/vim {
-    # for Objective-C compilation
-    stdenv = if stdenv.isDarwin
-      then clangStdenv
-      else stdenv;
-  };
+  vim = callPackage ../applications/editors/vim { };
 
   vimWrapper = wrapVim vim;
 
@@ -9804,7 +9862,10 @@ let
 
   zathuraCollection = recurseIntoAttrs
     (let callPackage = newScope pkgs.zathuraCollection; in
-      import ../applications/misc/zathura { inherit callPackage pkgs fetchurl; });
+      import ../applications/misc/zathura {
+        inherit callPackage pkgs fetchurl;
+        useMupdf = config.zathura.useMupdf or false;
+      });
 
   zathura = zathuraCollection.zathuraWrapper;
 
@@ -9860,6 +9921,8 @@ let
 
   castle_combat = callPackage ../games/castle-combat { };
 
+  chessdb = callPackage ../games/chessdb { };
+
   construoBase = lowPrio (callPackage ../games/construo {
     mesa = null;
     freeglut = null;
@@ -9870,6 +9933,9 @@ let
   };
 
   crack_attack = callPackage ../games/crack-attack { };
+
+  crafty = callPackage ../games/crafty { fullVariant = false; };
+  craftyFull = appendToName "full" (crafty.override { fullVariant = true; });
 
   crrcsim = callPackage ../games/crrcsim {};
 
@@ -9892,6 +9958,8 @@ let
   d1x_rebirth = callPackage ../games/d1x-rebirth { };
 
   d2x_rebirth = callPackage ../games/d2x-rebirth { };
+
+  eboard = callPackage ../games/eboard { };
 
   eduke32 = callPackage ../games/eduke32 { };
 
@@ -9974,6 +10042,8 @@ let
   njam = callPackage ../games/njam { };
 
   oilrush = callPackage ../games/oilrush { };
+
+  openra = callPackage ../games/openra { };
 
   openttd = callPackage ../games/openttd {
     zlib = zlibStatic;
@@ -10730,6 +10800,8 @@ let
 
   hplip = callPackage ../misc/drivers/hplip { };
 
+  hplipWithPlugin = hplip.override { withPlugin = true; };
+
   # using the new configuration style proposal which is unstable
   jack1d = callPackage ../misc/jackaudio/jack1.nix { };
 
@@ -10826,6 +10898,8 @@ let
 
   polytable = callPackage ../tools/typesetting/tex/polytable { };
 
+  PPSSPP = callPackage ../misc/emulators/ppsspp { };
+
   uae = callPackage ../misc/emulators/uae { };
 
   putty = callPackage ../applications/networking/remote/putty { };
@@ -10859,6 +10933,8 @@ let
     hotplugSupport = config.sane.hotplugSupport or true;
   };
 
+  mkSaneConfig = callPackage ../applications/graphics/sane/config.nix { };
+
   saneFrontends = callPackage ../applications/graphics/sane/frontends.nix { };
 
   seafile-shared = callPackage ../misc/seafile-shared { };
@@ -10888,7 +10964,7 @@ let
       libXmu libXext xextproto libSM libICE;
     ghostscript = ghostscriptX;
     harfbuzz = harfbuzz.override {
-      withIcu = true; withGraphite2 = !stdenv.isDarwin;
+      withIcu = true; withGraphite2 = true;
     };
   };
 
@@ -10997,6 +11073,8 @@ let
   wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
 
   x2x = callPackage ../tools/X11/x2x { };
+
+  xboxdrv = callPackage ../misc/drivers/xboxdrv { };
 
   xosd = callPackage ../misc/xosd { };
 

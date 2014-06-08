@@ -96,6 +96,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   cabal = callPackage ../build-support/cabal {
     Cabal = null;               # prefer the Cabal version shipped with the compiler
+    hscolour = self.hscolourBootstrap;
     inherit enableLibraryProfiling enableCheckPhase
       enableStaticLibraries enableSharedLibraries enableSharedExecutables;
     glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
@@ -143,6 +144,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   aeson = self.aeson_0_7_0_6;
 
   aesonPretty = callPackage ../development/libraries/haskell/aeson-pretty {};
+
+  aesonQq = callPackage ../development/libraries/haskell/aeson-qq {};
 
   alternativeIo = callPackage ../development/libraries/haskell/alternative-io {};
 
@@ -268,6 +271,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   blazeTextual = callPackage ../development/libraries/haskell/blaze-textual {};
 
+  BlogLiterately = callPackage ../development/libraries/haskell/BlogLiterately {};
+
   bloomfilter = callPackage ../development/libraries/haskell/bloomfilter {};
 
   bmp = callPackage ../development/libraries/haskell/bmp {
@@ -275,6 +280,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   };
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
+
+  boolExtras = callPackage ../development/libraries/haskell/bool-extras {};
 
   boundingboxes_0_1_1 = callPackage ../development/libraries/haskell/boundingboxes/0.1.1.nix {};
   boundingboxes_0_2 = callPackage ../development/libraries/haskell/boundingboxes/0.2.nix {};
@@ -426,6 +433,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   compdata = callPackage ../development/libraries/haskell/compdata {};
 
   composition = callPackage ../development/libraries/haskell/composition {};
+
+  compressed = callPackage ../development/libraries/haskell/compressed {};
 
   concatenative = callPackage ../development/libraries/haskell/concatenative {};
 
@@ -895,6 +904,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   };
   GLUT = self.GLUT_2_5_1_1;
 
+  GLUtil = callPackage ../development/libraries/haskell/GLUtil {};
+
   gnuidn = callPackage ../development/libraries/haskell/gnuidn {};
 
   gnuplot = callPackage ../development/libraries/haskell/gnuplot {};
@@ -1109,8 +1120,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hsBibutils = callPackage ../development/libraries/haskell/hs-bibutils {};
 
-  hscolour = callPackage ../development/libraries/haskell/hscolour {};
-
   hsdns = callPackage ../development/libraries/haskell/hsdns {};
 
   hsemail = if (pkgs.stdenv.lib.versionOlder ghc.version "7") then null else
@@ -1195,6 +1204,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   IfElse = callPackage ../development/libraries/haskell/IfElse {};
 
   ieee754 = callPackage ../development/libraries/haskell/ieee754 {};
+
+  imm = callPackage ../development/libraries/haskell/imm {};
 
   indents = callPackage ../development/libraries/haskell/indents {};
 
@@ -1361,6 +1372,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   lzmaEnumerator = callPackage ../development/libraries/haskell/lzma-enumerator {};
 
   maccatcher = callPackage ../development/libraries/haskell/maccatcher {};
+
+  machines = callPackage ../development/libraries/haskell/machines {};
 
   markdownUnlit = callPackage ../development/libraries/haskell/markdown-unlit {};
 
@@ -1578,6 +1591,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   opensslStreams = callPackage ../development/libraries/haskell/openssl-streams {};
 
   operational = callPackage ../development/libraries/haskell/operational {};
+
+  opml = callPackage ../development/libraries/haskell/opml {};
 
   options = callPackage ../development/libraries/haskell/options {};
 
@@ -1904,7 +1919,11 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   setlocale = callPackage ../development/libraries/haskell/setlocale {};
 
-  shelly = callPackage ../development/libraries/haskell/shelly {};
+  shelly_0_15_4_1 = callPackage ../development/libraries/haskell/shelly/0.15.4.1.nix {};
+  shelly_1_5_3_1 = callPackage ../development/libraries/haskell/shelly {};
+  shelly = if (pkgs.stdenv.lib.versionOlder ghc.version "7.6")
+    then self.shelly_0_15_4_1
+    else self.shelly_1_5_3_1;
 
   simpleReflect = callPackage ../development/libraries/haskell/simple-reflect {};
 
@@ -2205,6 +2224,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   time_1_4_2 = callPackage ../development/libraries/haskell/time/1.4.2.nix {};
   time = null;                  # core package since ghc >= 6.12.x
 
+  timerep = callPackage ../development/libraries/haskell/timerep {};
+
   timeparsers = callPackage ../development/libraries/haskell/timeparsers {
     convertible = self.convertible_1_0_11_1;
   };
@@ -2269,6 +2290,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   unionFind = callPackage ../development/libraries/haskell/union-find {};
 
   uniplate = callPackage ../development/libraries/haskell/uniplate {};
+
+  units = callPackage ../development/libraries/haskell/units {};
 
   uniqueid = callPackage ../development/libraries/haskell/uniqueid {};
 
@@ -2592,6 +2615,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hdevtools = callPackage ../development/tools/haskell/hdevtools {};
 
   hlint = callPackage ../development/tools/haskell/hlint {};
+
+  hscolour = callPackage ../development/tools/haskell/hscolour {};
+  hscolourBootstrap = self.hscolour.override { hyperlinkSource = false; };
 
   hslogger = callPackage ../development/tools/haskell/hslogger {};
 

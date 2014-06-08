@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45 }:
 
 stdenv.mkDerivation rec {
-  name = "tig-1.2.1";
+  name = "tig-2.0.2";
 
   src = fetchurl {
     url = "http://jonas.nitro.dk/tig/releases/${name}.tar.gz";
-    sha256 = "0i19lc6dd3vdpkdd8q07xii2c4mcpiwmg55av81jyhx0y82x425p";
+    sha256 = "0gi7iqiij37b0d3izxymxaw5ns2mv1y7qfic0fhl7xj4s2rz075r";
   };
 
   buildInputs = [ ncurses asciidoc xmlto docbook_xsl ];
