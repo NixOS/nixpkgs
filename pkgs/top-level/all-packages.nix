@@ -3269,6 +3269,8 @@ let
 
     ocaml_text = callPackage ../development/ocaml-modules/ocaml-text { };
 
+    ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
+
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
     tyxml = callPackage ../development/ocaml-modules/tyxml { };
