@@ -4635,7 +4635,9 @@ let
 
   gperftools = callPackage ../development/libraries/gperftools { };
 
-  gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer { });
+  gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer { 
+    callPackage = pkgs.newScope (pkgs // { libav = pkgs.libav_9; });
+  });
 
   gst_all = {
     inherit (pkgs) gstreamer gnonlin gst_python qt_gstreamer;
