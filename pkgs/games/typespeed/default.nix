@@ -2,7 +2,6 @@
 
 stdenv.mkDerivation {
   name = "typespeed-0.6.5";
-  builder = ./builder.sh;
   buildInputs = [ ncurses ];
   configureFlags = "--with-highscoredir=/tmp";
   src = fetchurl {
