@@ -3403,6 +3403,8 @@ let
 
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
+    tyxml = callPackage ../development/ocaml-modules/tyxml { };
+
     ulex = callPackage ../development/ocaml-modules/ulex { };
 
     ulex08 = callPackage ../development/ocaml-modules/ulex/0.8 {
