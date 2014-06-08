@@ -23,14 +23,17 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = with xlibs; with stdenv.lib;
     [ glib cairo pango gdk_pixbuf atk ]
-    ++ optionals stdenv.isLinux
-      [ libXrandr libXrender libXcomposite libXi libXcursor ]
-    ++ optional stdenv.isDarwin x11
+    ++ optionals (stdenv.isLinux || stdenv.isDarwin) [
+         libXrandr libXrender libXcomposite libXi libXcursor
+       ]
+    ++ optionals stdenv.isDarwin [ x11 libXdamage ]
     ++ libintlOrEmpty
     ++ optional xineramaSupport libXinerama
     ++ optionals cupsSupport [ cups ];
 
-  configureFlags = "--with-xinput=yes";
+  configureFlags = if stdenv.isDarwin
+    then "--disable-glibtest --disable-introspection --disable-visibility"
+    else "--with-xinput=yes";
 
   postInstall = "rm -rf $out/share/gtk-doc";
 

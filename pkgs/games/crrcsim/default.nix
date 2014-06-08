@@ -1,48 +1,24 @@
-x@{builderDefsPackage
-  , mesa, SDL, SDL_mixer, plib, libjpeg
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
-
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="crrcsim";
-    version="0.9.11";
-    name="${baseName}-${version}";
-    url="http://download.berlios.de/${baseName}/${name}.tar.gz";
-    hash="16z9gixp60920lqckij8kdw90jys0llls4lw5c8vqgk14ck5hhiz";
-  };
+{ stdenv, fetchurl, mesa, SDL, SDL_mixer, plib, libjpeg }:
+let
+  version = "0.9.12";
 in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  name = "crrcsim-${version}";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/crrcsim/${name}.tar.gz";
+    sha256 = "1yx3cn7ilwj92v6rk3zm565ap92vmky4r39na814lfglkzn6l5id";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [
+    mesa SDL SDL_mixer plib libjpeg
+  ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
   meta = {
     description = "A model-airplane flight simulator";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
+    maintainers = with stdenv.lib.maintainers; [ raskin the-kenny ];
+    platforms = stdenv.lib.platforms.linux;
     license = "GPLv2";
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://crrcsim.berlios.de/wiki/index.php?n=CRRCsim.DownLoad";
-    };
-  };
-}) x
+}
 

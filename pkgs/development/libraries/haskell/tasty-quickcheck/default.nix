@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tasty-quickcheck";
-  version = "0.8.0.3";
-  sha256 = "0dng415dsdg86rliwmz5hpn2111cn0x494c0vmdmzv5qgvx5naf6";
+  version = "0.8.1";
+  sha256 = "1diqc5dmddrfc6i0zqkmlnnhsv8paqy2fdmbx8484qa4ylk5r6bs";
   buildDepends = [ QuickCheck tagged tasty ];
   meta = {
     description = "QuickCheck support for the Tasty test framework";

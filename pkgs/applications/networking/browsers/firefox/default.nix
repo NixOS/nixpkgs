@@ -17,19 +17,14 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
 rec {
 
-  firefoxVersion = "27.0.1";
+  firefoxVersion = "29.0.1";
 
-  xulVersion = "27.0.1"; # this attribute is used by other packages
+  xulVersion = "29.0.1"; # this attribute is used by other packages
 
 
   src = fetchurl {
-    urls = [
-        # It is better to use this url for official releases, to take load off Mozilla's ftp server.
-        "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
-        # Fall back to this url for versions not available at releases.mozilla.org.
-        "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
-    ];
-    sha256 = "13qd53yf8dn9m03p4x5ml9h3mys60nba5nz82lcvaq7ycp1pl1bn";
+    url = "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
+    sha1 = "2819ef63403de2bcfff5496bd21a3b8cb5dfce82";
   };
 
   commonConfigureFlags =
@@ -41,7 +36,7 @@ rec {
       "--with-system-libevent"
       "--with-system-libvpx"
       "--with-system-png"
-      "--with-system-icu"
+      # "--with-system-icu" # causes ‘ar: invalid option -- 'L'’ in Firefox 28.0
       "--enable-system-ffi"
       "--enable-system-hunspell"
       "--enable-system-pixman"
@@ -56,6 +51,7 @@ rec {
       "--disable-necko-wifi" # maybe we want to enable this at some point
       "--disable-installer"
       "--disable-updater"
+      "--disable-pulseaudio"
     ] ++ (if debugBuild then [ "--enable-debug" "--enable-profiling"]
                         else [ "--disable-debug" "--enable-release"
                                "--enable-optimize" "--enable-strip" ]);

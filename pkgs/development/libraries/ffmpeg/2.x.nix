@@ -1,17 +1,18 @@
 { stdenv, fetchurl, config, pkgconfig, yasm, zlib, bzip2, alsaLib, texinfo, perl
-, lame, speex, libtheora, libvorbis, libvpx, x264, xvidcore, libopus
+, lame, speex, libass, libtheora, libvorbis, libvpx, x264, xvidcore, libopus
 , libvdpau, libva, faac, libdc1394, libXext, libXfixes, SDL
 , freetype, fontconfig, fdk_aac, gnutls
 }:
 
 stdenv.mkDerivation rec {
-  name = "ffmpeg-2.1.4";
+  name = "ffmpeg-2.2.2";
 
   src = fetchurl {
     url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
-    sha256 = "00c1k84amgkc7vk5xkrg7z99q7jbfhbz3qk854cxnc38d2ynrd3z";
+    sha256 = "062jn47sm1ifwswcd3lx47nff62rgcwp84964q0v983issnrfax4";
   };
 
+  subtitleSupport = config.ffmpeg.subtitle or true;
   mp3Support = config.ffmpeg.mp3 or true;
   speexSupport = config.ffmpeg.speex or true;
   theoraSupport = config.ffmpeg.theora or true;
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     "--enable-avresample"
     "--enable-runtime-cpudetect"
   ]
+    ++ stdenv.lib.optional (!stdenv.isDarwin && subtitleSupport) "--enable-libass"
     ++ stdenv.lib.optional mp3Support "--enable-libmp3lame"
     ++ stdenv.lib.optional speexSupport "--enable-libspeex"
     ++ stdenv.lib.optional theoraSupport "--enable-libtheora"
@@ -53,12 +55,12 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional faacSupport "--enable-libfaac --enable-nonfree"
     ++ stdenv.lib.optional dc1394Support "--enable-libdc1394"
     ++ stdenv.lib.optional x11grabSupport "--enable-x11grab"
-    ++ stdenv.lib.optional playSupport "--enable-ffplay"
+    ++ stdenv.lib.optional (!stdenv.isDarwin && playSupport) "--enable-ffplay"
     ++ stdenv.lib.optional freetypeSupport "--enable-libfreetype --enable-fontconfig"
     ++ stdenv.lib.optional fdkAACSupport "--enable-libfdk_aac --enable-nonfree"
     ++ stdenv.lib.optional gnutlsSupport "--enable-gnutls";
 
-  buildInputs = [ pkgconfig lame yasm zlib bzip2 alsaLib texinfo perl ]
+  buildInputs = [ pkgconfig lame yasm zlib bzip2 texinfo perl ]
     ++ stdenv.lib.optional mp3Support lame
     ++ stdenv.lib.optional speexSupport speex
     ++ stdenv.lib.optional theoraSupport libtheora
@@ -72,10 +74,12 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional faacSupport faac
     ++ stdenv.lib.optional dc1394Support libdc1394
     ++ stdenv.lib.optionals x11grabSupport [ libXext libXfixes ]
-    ++ stdenv.lib.optional playSupport SDL
+    ++ stdenv.lib.optional (!stdenv.isDarwin && playSupport) SDL
     ++ stdenv.lib.optionals freetypeSupport [ freetype fontconfig ]
     ++ stdenv.lib.optional fdkAACSupport fdk_aac
-    ++ stdenv.lib.optional gnutlsSupport gnutls;
+    ++ stdenv.lib.optional gnutlsSupport gnutls
+    ++ stdenv.lib.optional (!stdenv.isDarwin && subtitleSupport) libass
+    ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
 
   enableParallelBuilding = true;
 

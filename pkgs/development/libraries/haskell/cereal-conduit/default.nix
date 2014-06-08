@@ -2,12 +2,12 @@
 
 cabal.mkDerivation (self: {
   pname = "cereal-conduit";
-  version = "0.7.2.1";
-  sha256 = "1qjx5y8hznpanchhjfrmi0r6vmiqsj0lh9x09n563gschs8dfisw";
+  version = "0.7.2.2";
+  sha256 = "1syqilka5rv2j3yp419f2wdrcfw8js6i2p7qif4yxvlkm2hkvzzk";
   buildDepends = [ cereal conduit resourcet transformers ];
   testDepends = [ cereal conduit HUnit mtl resourcet transformers ];
   meta = {
-    homepage = "https://github.com/litherum/cereal-conduit";
+    homepage = "https://github.com/snoyberg/conduit";
     description = "Turn Data.Serialize Gets and Puts into Sources, Sinks, and Conduits";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

@@ -15,8 +15,6 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [ocaml findlib pkgconfig gtk libgnomecanvas libglade gtksourceview];
 
-  # patches = [ ./META.patch ];
-
   configureFlags = "--with-libdir=$(out)/lib/ocaml/${ocaml_version}/site-lib";
   buildFlags = "world";
 

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tasty-hspec";
-  version = "0.1";
-  sha256 = "1pf4ffaqy0f25a2sjirg5g4gdcfslapwq4mm0pkdsysmh9bv1f64";
+  version = "0.1.0.1";
+  sha256 = "0m8v9kj557vfqzmrindwfcjl7wqmdix2xvmsb94n8hx9qv075s3v";
   buildDepends = [ hspec tasty ];
   meta = {
     homepage = "http://github.com/mitchellwrosen/tasty-hspec";

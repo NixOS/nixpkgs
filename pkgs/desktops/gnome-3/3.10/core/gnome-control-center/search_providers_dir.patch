@@ -1,0 +1,17 @@
+diff --git a/panels/search/cc-search-panel.c b/panels/search/cc-search-panel.c
+index d08e230..3bff4ad 100644
+--- a/panels/search/cc-search-panel.c
++++ b/panels/search/cc-search-panel.c
+@@ -574,7 +574,11 @@ populate_search_providers (CcSearchPanel *self)
+ {
+   GFile *providers_location;
+ 
+-  providers_location = g_file_new_for_path (DATADIR "/gnome-shell/search-providers");
++  const gchar* search_providers_dir = g_getenv ("GNOME_SEARCH_PROVIDERS_DIR");
++  if (search_providers_dir == NULL) {
++    search_providers_dir = DATADIR "/gnome-shell/search-providers";
++  }
++  providers_location = g_file_new_for_path (search_providers_dir);
+   g_file_enumerate_children_async (providers_location,
+                                    "standard::type,standard::name,standard::content-type",
+                                    G_FILE_QUERY_INFO_NONE,

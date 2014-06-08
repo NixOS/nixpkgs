@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-test";
-  version = "1.2.1.2";
-  sha256 = "12b747sd5rrypv1i2b5rpa3qgpnzibwjw7rlv02hyz8g7kf6wvbm";
+  version = "1.2.1.5";
+  sha256 = "0ylm6zisz6l2rbn5dr8k0rxszgg1aa1w4ixpvai1xm6y8m17cy0i";
   buildDepends = [
     attoparsec blazeBuilder blazeHtml blazeMarkup caseInsensitive
     cookie hspec htmlConduit httpTypes HUnit monadControl network
@@ -15,7 +15,7 @@ cabal.mkDerivation (self: {
     yesodCore
   ];
   testDepends = [
-    hspec htmlConduit HUnit text xmlConduit yesodCore yesodForm
+    hspec htmlConduit HUnit text wai xmlConduit yesodCore yesodForm
   ];
   meta = {
     homepage = "http://www.yesodweb.com";

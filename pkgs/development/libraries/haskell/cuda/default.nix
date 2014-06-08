@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cuda";
-  version = "0.5.1.1";
-  sha256 = "0bz1pfcxxvq1s47nrwgj9cqmr20p9n3hh2hilih8083hnjjwh40x";
+  version = "0.6.0.0";
+  sha256 = "0zvyvk5yhwz7nl613yvfl32xnv9kgfdwbb0whyd6nrm663xa352y";
   buildTools = [ c2hs ];
   extraLibraries = [ cudatoolkit nvidia_x11 self.stdenv.gcc ];
   doCheck = false;

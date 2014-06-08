@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "repa-examples";
-  version = "3.2.3.2";
-  sha256 = "1l8bvaaap5gl62j9zinjgj8vlqq4b52p46hnj8kq9n09lxq6xq96";
+  version = "3.2.5.1";
+  sha256 = "0xrjfmwbq8mhcim261da7i68mp5jxkqiwjy2mhd1lgkr63m6x18j";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [

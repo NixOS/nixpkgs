@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = "BSD";
     maintainers = [ stdenv.lib.maintainers.viric ];
     platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = []; # because libdc1394avt is broken
   };
 }

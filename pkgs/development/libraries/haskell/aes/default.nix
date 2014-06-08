@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "AES";
-  version = "0.2.8";
-  sha256 = "1yf0mhmj294gf1b1m11gixa1xxlbvv0yl60b59fnv5lf0s170jn3";
+  version = "0.2.9";
+  sha256 = "12n484dpjr08910ni1vvw030g9p37lz68l5lw0212rvklkva6wzc";
   buildDepends = [ cereal monadsTf random transformers ];
   meta = {
     description = "Fast AES encryption/decryption for bytestrings";

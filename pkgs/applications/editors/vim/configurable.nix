@@ -11,7 +11,7 @@ composableDerivation {
                    else stdenv ).mkDerivation;
 } (fix: {
 
-    name = "vim_configurable-7.4.23";
+    name = "vim_configurable-7.4.316";
 
     enableParallelBuilding = true; # test this
 
@@ -21,8 +21,8 @@ composableDerivation {
         # latest release
       args.fetchhg {
             url = "https://vim.googlecode.com/hg/";
-            tag = "v7-4-131";
-            sha256 = "1akr0i4pykbrkqwrglm0dfn5nwpncb9pgg4h7fl6a8likbr5f3wb";
+            tag = "v7-4-316";
+            sha256 = "0scxx33p1ky0wihk04xqpd6rygp1crm0hx446zbjwbsjj6xxn7sx";
       };
 
       "vim-nox" =
@@ -35,16 +35,13 @@ composableDerivation {
           }.src;
       };
 
+    prePatch = "cd src";
+
     # if darwin support is enabled, we want to make sure we're not building with
     # OS-installed python framework
-    preConfigure
-      = stdenv.lib.optionalString
-        (stdenv.isDarwin && (config.vim.darwin or true)) ''
-          # TODO: we should find a better way of doing this as, if the configure
-          # file changes, we need to change these line numbers
-          sed -i "5641,5644d" src/auto/configure
-          sed -i "5648d" src/auto/configure
-        '';
+    patches = stdenv.lib.optionals 
+      (stdenv.isDarwin && (config.vim.darwin or true))
+      [ ./python_framework.patch ];
 
     configureFlags
       = [ "--enable-gui=${args.gui}" "--with-features=${args.features}" ];
@@ -53,8 +50,6 @@ composableDerivation {
       = [ ncurses pkgconfig gtk libX11 libXext libSM libXpm libXt libXaw libXau
           libXmu glib libICE ];
 
-    prePatch = "cd src";
-    
     # most interpreters aren't tested yet.. (see python for example how to do it)
     flags = {
         ftNix = {

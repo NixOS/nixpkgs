@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "dataenc";
-  version = "0.14.0.5";
-  sha256 = "13gajqbayar7x8sq3rw93i277gqd0bx1i34spshlj4b41fraxc8w";
+  version = "0.14.0.7";
+  sha256 = "1wwgm7wakkz6v94lyxyd3yi21l3h28sss4xxdb3d770vmjhp1lzr";
   isLibrary = true;
   isExecutable = true;
   jailbreak = true;

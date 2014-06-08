@@ -1,5 +1,5 @@
 { stdenv, writeScript, vmTools, makeInitrd
-, samba, vde2, openssh, socat, netcat, coreutils, gzip
+, samba, vde2, openssh, socat, netcat, coreutils, gnugrep, gzip
 }:
 
 { sshKey
@@ -86,6 +86,7 @@ let
       # Print a dot every 10 seconds only to shorten line length.
       ${coreutils}/bin/sleep 10
     done
+    ${coreutils}/bin/touch /xchg/waiting_done
     echo " success."
     # Loop forever, because this VM is going to be killed.
     ${loopForever}
@@ -123,6 +124,7 @@ let
       echo -n .
       ${coreutils}/bin/sleep 1
     done
+    ${coreutils}/bin/touch /xchg/waiting_done
     echo " success."
 
     ${openssh}/bin/ssh \
@@ -145,6 +147,7 @@ let
   ];
 
   controllerQemuArgs = concatStringsSep " " (maybeKvm64 ++ [
+    "-pidfile $CTRLVM_PIDFILE"
     "-nographic"
     "-no-reboot"
     "-virtfs local,path=/nix/store,security_model=none,mount_tag=store"
@@ -160,6 +163,7 @@ let
 
   cygwinQemuArgs = concatStringsSep " " (maybeKvm64 ++ [
     "-monitor unix:$MONITOR_SOCKET,server,nowait"
+    "-pidfile $WINVM_PIDFILE"
     "-nographic"
     "-net nic,vlan=0,macaddr=52:54:00:12:01:01"
     "-net vde,vlan=0,sock=$QEMU_VDE_SOCKET"
@@ -181,42 +185,73 @@ let
 
     QEMU_VDE_SOCKET="$(pwd)/vde.ctl"
     MONITOR_SOCKET="$(pwd)/monitor"
+    WINVM_PIDFILE="$(pwd)/winvm.pid"
+    CTRLVM_PIDFILE="$(pwd)/ctrlvm.pid"
     ${vde2}/bin/vde_switch -s "$QEMU_VDE_SOCKET" &
     echo 'alive?' | ${socat}/bin/socat - \
       UNIX-CONNECT:$QEMU_VDE_SOCKET/ctl,retry=20
   '';
 
-  bgBoth = optionalString (suspendTo != null) " &";
-
-  vmExec = if installMode then ''
+  vmExec = ''
     ${vmTools.qemuProg} ${controllerQemuArgs} &
-    ${vmTools.qemuProg} ${cygwinQemuArgs}${bgBoth}
-  '' else ''
     ${vmTools.qemuProg} ${cygwinQemuArgs} &
-    ${vmTools.qemuProg} ${controllerQemuArgs}${bgBoth}
+    echo -n "Waiting for VMs to start up..."
+    timeout=60
+    while ! test -e "$WINVM_PIDFILE" -a -e "$CTRLVM_PIDFILE"; do
+      timeout=$(($timeout - 1))
+      echo -n .
+      if test $timeout -le 0; then
+        echo " timed out."
+        exit 1
+      fi
+      ${coreutils}/bin/sleep 1
+    done
+    echo " done."
   '';
 
+  checkDropOut = ''
+    if ! test -e "$XCHG_DIR/waiting_done" &&
+       ! kill -0 $(< "$WINVM_PIDFILE"); then
+      echo "Windows VM has dropped out early, bailing out!" >&2
+      exit 1
+    fi
+  '';
+
+  toMonitor = "${socat}/bin/socat - UNIX-CONNECT:$MONITOR_SOCKET";
+
   postVM = if suspendTo != null then ''
-    while ! test -e "$XCHG_DIR/suspend_now"; do sleep 1; done
-    ${socat}/bin/socat - UNIX-CONNECT:$MONITOR_SOCKET <<CMD
+    while ! test -e "$XCHG_DIR/suspend_now"; do
+      ${checkDropOut}
+      ${coreutils}/bin/sleep 1
+    done
+    ${toMonitor} <<CMD
     stop
     migrate_set_speed 4095m
     migrate "exec:${gzip}/bin/gzip -c > '${suspendTo}'"
-    quit
     CMD
-    wait %-
-
+    echo -n "Waiting for memory dump to finish..."
+    while ! echo info migrate | ${toMonitor} | \
+          ${gnugrep}/bin/grep -qi '^migration *status: *complete'; do
+      ${coreutils}/bin/sleep 1
+      echo -n .
+    done
+    echo " done."
+    echo quit | ${toMonitor}
+    wait $(< "$WINVM_PIDFILE")
     eval "$postVM"
     exit 0
   '' else if installMode then ''
+    wait $(< "$WINVM_PIDFILE")
     eval "$postVM"
     exit 0
   '' else ''
+    while kill -0 $(< "$CTRLVM_PIDFILE"); do
+      ${checkDropOut}
+    done
     if ! test -e "$XCHG_DIR/in-vm-exit"; then
       echo "Virtual machine didn't produce an exit code."
       exit 1
     fi
-
     eval "$postVM"
     exit $(< "$XCHG_DIR/in-vm-exit")
   '';

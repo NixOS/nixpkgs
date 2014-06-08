@@ -1,0 +1,22 @@
+--- tk8.5.15-orig/unix/Makefile.in	2014-01-25 08:57:45.626713122 +0800
++++ tk8.5.15/unix/Makefile.in	2014-01-25 08:59:35.315341825 +0800
+@@ -995,7 +995,8 @@
+ 	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/tkVisual.c
+ 
+ tkWindow.o: $(GENERIC_DIR)/tkWindow.c
+-	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/tkWindow.c
++	$(CC) -c $(CC_SWITCHES) -DTK_LIBRARY=\"${TK_LIBRARY}\" \
++	    $(GENERIC_DIR)/tkWindow.c
+ 
+ tkButton.o: $(GENERIC_DIR)/tkButton.c
+ 	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/tkButton.c
+--- tk8.5.15-orig/generic/tkWindow.c	2014-01-25 10:10:03.964476436 +0800
++++ tk8.5.15/generic/tkWindow.c	2014-01-25 10:08:06.020950933 +0800
+@@ -983,6 +983,7 @@
+ 
+     Tcl_SetVar(interp, "tk_patchLevel", TK_PATCH_LEVEL, TCL_GLOBAL_ONLY);
+     Tcl_SetVar(interp, "tk_version",    TK_VERSION,     TCL_GLOBAL_ONLY);
++    Tcl_SetVar(interp, "tk_library",    TK_LIBRARY,     TCL_GLOBAL_ONLY);
+ 
+     tsdPtr->numMainWindows++;
+     return tkwin;

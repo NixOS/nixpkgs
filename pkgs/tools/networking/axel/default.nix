@@ -3,8 +3,11 @@
 stdenv.mkDerivation {
   name = "axel-2.4";
   src = fetchurl {
-    url = https://alioth.debian.org/frs/download.php/3016/axel-2.4.tar.bz2;
-    sha256 = "ebc7d40e989c680d2afa632a17e5208101608924cf446da20814a6f3c3338612";
+    urls = [
+      #https://alioth.debian.org/frs/download.php/3016/axel-2.4.tar.bz2
+      mirror://debian/pool/main/a/axel/axel_2.4.orig.tar.gz
+    ];
+    sha256 = "0dl0r9byd2ps90cq2nj1y7ib6gnkb5y9f3a3fmhcnjrm9smmg6im";
   };
 
   meta = {

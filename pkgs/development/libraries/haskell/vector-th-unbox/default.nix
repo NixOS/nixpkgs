@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vector-th-unbox";
-  version = "0.2.0.2";
-  sha256 = "1c8xy0rcl8il9ssclqshwi8dd2xx6bl1rfhrfm9h7wklw64db9xp";
+  version = "0.2.1.0";
+  sha256 = "0r8yxj63hvkm923y8mk1b5kv1b15lqadxhlncc02glvmy8zf1prh";
   buildDepends = [ vector ];
   testDepends = [ dataDefault vector ];
   meta = {

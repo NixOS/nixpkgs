@@ -1,15 +1,15 @@
 { cabal, aeson, attoparsec, Cabal, deepseq, filepath, mtl
 , profunctors, QuickCheck, random, systemPosixRedirect, text, time
-, vector, vectorSpace
+, vector, vectorSpace, vectorThUnbox
 }:
 
 cabal.mkDerivation (self: {
   pname = "thyme";
-  version = "0.3.3.0";
-  sha256 = "0mpwwpc82xcdyawz87rcmvga1miw7cx538nnh379m2ibn0g71zaa";
+  version = "0.3.5.1";
+  sha256 = "0v3aq7zv4fnkjhfc7mm6vx2wb5dh2npf2lsgpvcrdpy5zlfsrx50";
   buildDepends = [
     aeson attoparsec deepseq mtl profunctors QuickCheck random text
-    time vector vectorSpace
+    time vector vectorSpace vectorThUnbox
   ];
   testDepends = [
     attoparsec Cabal filepath mtl profunctors QuickCheck random

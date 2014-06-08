@@ -1,7 +1,7 @@
 { stdenv, fetchurl, python, buildPythonPackage, pythonPackages, pkgconfig
-, pyrex096, ffmpeg, boost, glib, pygobject, gtk2, webkit_gtk2, libsoup, pygtk
+, pyrex096, ffmpeg, boost, glib, pygobject, gtk2, webkitgtk2, libsoup, pygtk
 , taglib, pysqlite, pycurl, mutagen, pycairo, pythonDBus, pywebkitgtk
-, libtorrentRasterbar
+, libtorrentRasterbar, glib_networking, gsettings_desktop_schemas
 , gst_python, gst_plugins_base, gst_plugins_good, gst_ffmpeg
 }:
 
@@ -22,8 +22,7 @@ buildPythonPackage rec {
   patches = [ ./gconf.patch ];
 
   postPatch = ''
-    sed -i -e '2i import os; os.environ["GST_PLUGIN_PATH"] = \\\
-      '"'$GST_PLUGIN_PATH'" miro.real
+    patch -p1 -d .. < "${./youtube-feeds.patch}"
 
     sed -i -e 's/\$(shell which python)/python/' Makefile
     sed -i -e 's|/usr/bin/||' -e 's|/usr||' \
@@ -55,11 +54,15 @@ buildPythonPackage rec {
 
   postInstall = ''
     mv "$out/bin/miro.real" "$out/bin/miro"
+    wrapProgram "$out/bin/miro" \
+      --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH" \
+      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
   '';
 
   buildInputs = [
-    pkgconfig pyrex096 ffmpeg boost glib pygobject gtk2 webkit_gtk2 libsoup
-    pygtk taglib
+    pkgconfig pyrex096 ffmpeg boost glib pygobject gtk2 webkitgtk2 libsoup
+    pygtk taglib gsettings_desktop_schemas
   ];
 
   propagatedBuildInputs = [

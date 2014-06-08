@@ -100,12 +100,13 @@ let
         ln -sv ${configfile} $buildRoot/.config
         make $makeFlags "''${makeFlagsArray[@]}" oldconfig
         runHook postConfigure
+
+        buildFlagsArray+=("KBUILD_BUILD_TIMESTAMP=Thu Jan 1 00:00:01 UTC 1970")
       '';
 
       buildFlags = [
         "KBUILD_BUILD_VERSION=1-NixOS"
-        "KBUILD_BUILD_TIMESTAMP=Thu_Jan__1_00:00:01_UTC_1970"
-	platform.kernelTarget
+        platform.kernelTarget
       ] ++ optional isModular "modules";
 
       installFlags = [

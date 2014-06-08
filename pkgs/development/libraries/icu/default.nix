@@ -14,6 +14,9 @@ stdenv.mkDerivation {
     sha256 = "14l0kl17nirc34frcybzg0snknaks23abhdxkmsqg3k9sil5wk9g";
   };
 
+  makeFlags = stdenv.lib.optionalString stdenv.isDarwin
+    "CXXFLAGS=-headerpad_max_install_names";
+
   # FIXME: This fixes dylib references in the dylibs themselves, but
   # not in the programs in $out/bin.
   buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
@@ -21,6 +24,10 @@ stdenv.mkDerivation {
   postUnpack = ''
     sourceRoot=''${sourceRoot}/source
     echo Source root reset to ''${sourceRoot}
+  '';
+
+  preConfigure = ''
+    sed -i -e "s|/bin/sh|${stdenv.shell}|" configure
   '';
 
   configureFlags = "--disable-debug";

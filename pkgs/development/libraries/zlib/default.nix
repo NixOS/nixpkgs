@@ -36,8 +36,12 @@ stdenv.mkDerivation rec {
       "-f" "win32/Makefile.gcc"
       "PREFIX=${stdenv.cross.config}-"
     ] ++ (if static then [] else [ "SHARED_MODE=1" ]);
+  } // stdenv.lib.optionalAttrs (stdenv.cross.libc == "libSystem") {
+    makeFlags = [ "RANLIB=${stdenv.cross.config}-ranlib" ];
   };
 
   # zlib doesn't like the automatic --disable-shared from the Cygwin stdenv.
   cygwinConfigureEnableShared = true;
+
+  passthru.version = version;
 }

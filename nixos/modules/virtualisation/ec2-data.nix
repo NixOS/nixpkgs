@@ -2,9 +2,9 @@
 # host name of virtual machines running on Amazon EC2, Eucalyptus and
 # OpenStack Compute (Nova).
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
   options = {

@@ -1,5 +1,5 @@
-{ cabal, alex, Cabal, deepseq, filepath, ghcPaths, happy, hspec
-, QuickCheck, xhtml
+{ cabal, Cabal, deepseq, filepath, ghcPaths, hspec, QuickCheck
+, xhtml
 }:
 
 cabal.mkDerivation (self: {
@@ -10,7 +10,6 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [ Cabal deepseq filepath ghcPaths xhtml ];
   testDepends = [ Cabal deepseq filepath hspec QuickCheck ];
-  buildTools = [ alex happy ];
   doCheck = false;
   meta = {
     homepage = "http://www.haskell.org/haddock/";

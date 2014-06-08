@@ -194,6 +194,12 @@ rec {
             args = { name = ""; }; }).options;
       };
 
+    enum = values: mkOptionType {
+      name = "one of ${concatStringsSep ", " values}";
+      check = flip elem values;
+      merge = mergeOneOption;
+    };
+
     # Obsolete alternative to configOf.  It takes its option
     # declarations from the ‘options’ attribute of containing option
     # declaration.

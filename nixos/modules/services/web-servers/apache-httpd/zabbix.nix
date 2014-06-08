@@ -1,4 +1,6 @@
-{ config, pkgs, serverInfo, ... }:
+{ config, lib, pkgs, serverInfo, ... }:
+
+with lib;
 
 let
 
@@ -51,7 +53,7 @@ in
 
   options = {
 
-    urlPrefix = pkgs.lib.mkOption {
+    urlPrefix = mkOption {
       default = "/zabbix";
       description = "
         The URL prefix under which the Zabbix service appears.
@@ -59,9 +61,9 @@ in
       ";
     };
 
-    configFile = pkgs.lib.mkOption {
+    configFile = mkOption {
       default = null;
-      type = with pkgs.lib.types; nullOr path;
+      type = types.nullOr types.path;
       description = ''
         The configuration file (zabbix.conf.php) which contains the database
         connection settings. If not set, the configuration settings will created
@@ -69,7 +71,7 @@ in
       '';
     };
 
-    stateDir = pkgs.lib.mkOption {
+    stateDir = mkOption {
       default = "/var/lib/zabbix/frontend";
       description = "
         Directory where the dynamically generated configuration data

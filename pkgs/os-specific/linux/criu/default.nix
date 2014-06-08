@@ -1,13 +1,12 @@
 { stdenv, fetchurl, protobuf, protobufc, asciidoc, xmlto, utillinux }:
 
-assert stdenv.system == "x86_64-linux";
 stdenv.mkDerivation rec {
   name    = "criu-${version}";
-  version = "1.2";
+  version = "1.3-rc1";
 
   src = fetchurl {
     url    = "http://download.openvz.org/criu/${name}.tar.bz2";
-    sha256 = "04xlnqvgbjd5wfmi97m5rr76a3agkz8g96hdyzhc6x8gd52bbg9y";
+    sha256 = "00q3kyvaizg5x2zladj0mazmp69c9kg7nvlazcqf0w6bqp0y7sp0";
   };
 
   enableParallelBuilding = true;
@@ -16,12 +15,11 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     chmod +w ./scripts/gen-offsets.sh
     substituteInPlace ./scripts/gen-offsets.sh --replace hexdump ${utillinux}/bin/hexdump
+    substituteInPlace ./Documentation/Makefile --replace "2>/dev/null" ""
   '';
 
-  buildPhase = ''
-    make config PREFIX=$out
-    make PREFIX=$out
-  '';
+  configurePhase = "make config PREFIX=$out";
+  buildPhase     = "make PREFIX=$out";
 
   installPhase = ''
     mkdir -p $out/etc/logrotate.d

@@ -2,7 +2,14 @@
 
 let
   version = "20130715";
+
+  usr_prefix = if stdenv.isDarwin then "usr/local" else "usr";
+
+  dynamic_linker =
+    if stdenv.isx86_64 then "${stdenv.glibc}/lib/ld-linux-x86-64.so.2"
+                       else "${stdenv.glibc}/lib/ld-linux.so.2";
 in
+
 stdenv.mkDerivation rec {
   name = "mlton-${version}";
 
@@ -14,6 +21,10 @@ stdenv.mkDerivation rec {
     else if stdenv.system == "x86_64-linux" then (fetchurl {
         url = "http://sourceforge.net/projects/mlton/files/mlton/${version}/${name}-1.amd64-linux.tgz";
         sha256 = "0fyhwxb4nmpirjbjcvk9f6w67gmn2gkz7xcgz0xbfih9kc015ygn";
+    })
+    else if stdenv.system == "x86_64-darwin" then (fetchurl {
+        url = "http://sourceforge.net/projects/mlton/files/mlton/${version}/${name}-1.amd64-darwin.gmp-macports.tgz";
+        sha256 = "044wnh9hhg6if886xy805683k0as347xd37r0r1yi4x7qlxzzgx9";
     })
     else throw "Architecture not supported";
 
@@ -38,30 +49,31 @@ stdenv.mkDerivation rec {
     substituteInPlace $(pwd)/Makefile --replace '/bin/cp' $(type -p cp)
 
     # Fix paths in the binary distribution.
-    BIN_DIST_DIR="$(pwd)/../usr"
+    BIN_DIST_DIR="$(pwd)/../${usr_prefix}"
     for f in "bin/mlton" "lib/mlton/platform" "lib/mlton/static-library" ; do
-      substituteInPlace "$BIN_DIST_DIR/$f" --replace '/usr/bin/env bash' $(type -p bash)
+      substituteInPlace "$BIN_DIST_DIR/$f" --replace '/${usr_prefix}/bin/env bash' $(type -p bash)
     done
 
-    substituteInPlace $(pwd)/../usr/bin/mlton --replace '/usr/lib/mlton' $(pwd)/../usr/lib/mlton
+    substituteInPlace $(pwd)/../${usr_prefix}/bin/mlton --replace '/${usr_prefix}/lib/mlton' $(pwd)/../${usr_prefix}/lib/mlton
   '';
 
   preBuild = ''
     # To build the source we have to put the binary distribution in the $PATH.
-    export PATH="$PATH:$(pwd)/../usr/bin/"
+    export PATH="$PATH:$(pwd)/../${usr_prefix}/bin/"
 
     # Let the builder execute the binary distribution.
-    chmod u+x $(pwd)/../usr/bin/mllex
-    chmod u+x $(pwd)/../usr/bin/mlyacc
-    chmod u+x $(pwd)/../usr/bin/mlton
+    chmod u+x $(pwd)/../${usr_prefix}/bin/mllex
+    chmod u+x $(pwd)/../${usr_prefix}/bin/mlyacc
+    chmod u+x $(pwd)/../${usr_prefix}/bin/mlton
 
     # So the builder runs the binary compiler with gmp.
     export LD_LIBRARY_PATH=${gmp}/lib:$LD_LIBRARY_PATH
 
+  '' + stdenv.lib.optionalString stdenv.isLinux ''
     # Patch ELF interpreter.
-    patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 $(pwd)/../usr/lib/mlton/mlton-compile
+    patchelf --set-interpreter ${dynamic_linker} $(pwd)/../${usr_prefix}/lib/mlton/mlton-compile
     for e in mllex mlyacc ; do
-      patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 $(pwd)/../usr/bin/$e
+      patchelf --set-interpreter ${dynamic_linker} $(pwd)/../${usr_prefix}/bin/$e
     done
   '';
 
@@ -71,21 +83,21 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # Fix path to mlton libraries.
-    substituteInPlace $(pwd)/install/usr/bin/mlton --replace '/usr/lib/mlton' $out/lib/mlton
+    substituteInPlace $(pwd)/install/${usr_prefix}/bin/mlton --replace '/${usr_prefix}/lib/mlton' $out/lib/mlton
 
     # Path to libgmp.
-    substituteInPlace $(pwd)/install/usr/bin/mlton --replace "-link-opt '-lm -lgmp'" "-link-opt '-lm -lgmp -L${gmp}/lib'"
+    substituteInPlace $(pwd)/install/${usr_prefix}/bin/mlton --replace "-link-opt '-lm -lgmp'" "-link-opt '-lm -lgmp -L${gmp}/lib'"
 
     # Path to gmp.h.
-    substituteInPlace $(pwd)/install/usr/bin/mlton --replace "-cc-opt '-O1 -fno-common'" "-cc-opt '-O1 -fno-common -I${gmp}/include'"
+    substituteInPlace $(pwd)/install/${usr_prefix}/bin/mlton --replace "-cc-opt '-O1 -fno-common'" "-cc-opt '-O1 -fno-common -I${gmp}/include'"
 
     # Path to the same gcc used in the build; needed at runtime.
-    substituteInPlace $(pwd)/install/usr/bin/mlton --replace "gcc='gcc'" "gcc='"$(type -p gcc)"'"
+    substituteInPlace $(pwd)/install/${usr_prefix}/bin/mlton --replace "gcc='gcc'" "gcc='"$(type -p gcc)"'"
 
     # Copy files to final positions.
-    cp -r $(pwd)/install/usr/bin $out
-    cp -r $(pwd)/install/usr/lib $out
-    cp -r $(pwd)/install/usr/man $out
+    cp -r $(pwd)/install/${usr_prefix}/bin $out
+    cp -r $(pwd)/install/${usr_prefix}/lib $out
+    cp -r $(pwd)/install/${usr_prefix}/man $out
   '';
 
   meta = {
@@ -101,6 +113,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://mlton.org/;
     license = "bsd";
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin"];
   };
 }

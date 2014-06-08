@@ -55,7 +55,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig gettext perl python ];
 
-  propagatedBuildInputs = [ pcre zlib libffi ] ++ libiconvOrEmpty ++ libintlOrEmpty;
+  propagatedBuildInputs = [ pcre zlib libffi ]
+    ++ optional (!stdenv.isDarwin) libiconvOrEmpty
+    ++ libintlOrEmpty;
 
   configureFlags =
     optional stdenv.isDarwin "--disable-compile-warnings"

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/enscript/;
 
-    maintainer = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.all;
   };
 }

@@ -1,9 +1,9 @@
 # This module defines a global environment configuration and
 # a common configuration for all shells.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

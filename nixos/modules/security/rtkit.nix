@@ -1,9 +1,9 @@
 # A module for ‘rtkit’, a DBus system service that hands out realtime
 # scheduling priority to processes that ask for it.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
 
@@ -25,7 +25,12 @@ with pkgs.lib;
 
   config = mkIf config.security.rtkit.enable {
 
+    security.polkit.enable = true;
+
+    # To make polkit pickup rtkit policies
     environment.systemPackages = [ pkgs.rtkit ];
+
+    systemd.packages = [ pkgs.rtkit ];
 
     services.dbus.packages = [ pkgs.rtkit ];
 

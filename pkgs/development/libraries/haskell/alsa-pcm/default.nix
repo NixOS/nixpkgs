@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "alsa-pcm";
-  version = "0.6.0.1";
-  sha256 = "0gnq4p172sqmlks6aykzr5l2qx2shrs2fypcvs4g56c9zpk3c3ax";
+  version = "0.6.0.2";
+  sha256 = "0zckp83wdqb6nl2k63fapa5h4vf1xyvbaycd0ixwr9k7mw75q7b9";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

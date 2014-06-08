@@ -1,9 +1,12 @@
 { stdenv, fetchurl, cmake, pkgconfig
 , jackaudio, libsndfile, fftw, curl
-, libXt, qt
+, libXt, qt, readline
+, useSCEL ? false, emacs
 }:
+  
+let optional = stdenv.lib.optional; in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {  
   name = "supercollider-3.6.6";
 
   meta = {
@@ -24,15 +27,14 @@ stdenv.mkDerivation rec {
       --replace Q_WS_X11 Q_GTK_STYLE
   '';
 
-  cmakeFlags = [
-    "-DSC_WII=OFF"
-    "-DSC_EL=OFF"
-  ];
+  cmakeFlags = ''
+    -DSC_WII=OFF
+    -DSC_EL=${if useSCEL then "ON" else "OFF"} 
+  '';
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [
-    jackaudio libsndfile fftw curl
-    libXt qt
-  ];
+  buildInputs = [ 
+    jackaudio libsndfile fftw curl libXt qt readline ] 
+    ++ optional useSCEL emacs;
 }

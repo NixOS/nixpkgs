@@ -1,12 +1,12 @@
 { stdenv, fetchurl, libX11, libXext, libXinerama, libXpm, libXft, freetype,
   fontconfig }:
 
-stdenv.mkDerivation {
-  name = "jwm-2.0.1";
+stdenv.mkDerivation rec {
+  name = "jwm-2.2.2";
   
   src = fetchurl {
-     url = http://www.joewing.net/programs/jwm/releases/jwm-2.0.1.tar.bz2;
-     sha256 = "1ix5y00cmg3cyazl0adzgv49140zxaf2dpngyg1dyy4ma6ysdmnw";
+     url = "http://www.joewing.net/programs/jwm/releases/${name}.tar.xz";
+     sha256 = "0nhyy78c6imk85d47bakk460x0cfhkyghqq82zghmb00dhwiryln";
   };
 
   buildInputs = [ libX11 libXext libXinerama libXpm libXft freetype 

@@ -52,12 +52,12 @@ sub createMachine {
     my ($args) = @_;
     my $vm = Machine->new({%{$args}, log => $log, redirectSerial => ($ENV{USE_SERIAL} // "0") ne "1"});
     $vms{$vm->name} = $vm;
+    $context .= "my \$" . $vm->name . " = \$vms{'" . $vm->name . "'}; ";
     return $vm;
 }
 
 foreach my $vmScript (@ARGV) {
     my $vm = createMachine({startCommand => $vmScript});
-    $context .= "my \$" . $vm->name . " = \$vms{'" . $vm->name . "'}; ";
 }
 
 

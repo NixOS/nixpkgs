@@ -1,11 +1,11 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.services.fourStore;
   stateDir = "/var/lib/4store";
   fourStoreUser = "fourstore";
   run = "${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} ${fourStoreUser}";
 in
-with pkgs.lib;
+with lib;
 {
 
   ###### interface
@@ -45,7 +45,7 @@ with pkgs.lib;
 
     users.extraUsers = singleton
       { name = fourStoreUser;
-        uid = config.ids.uids.fourStore;
+        uid = config.ids.uids.fourstore;
         description = "4Store database user";
         home = stateDir;
       };

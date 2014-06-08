@@ -1,12 +1,14 @@
 # generic builder for Cabal packages
 
 { stdenv, fetchurl, lib, pkgconfig, ghc, Cabal, jailbreakCabal, glibcLocales
-, gnugrep, coreutils
+, gnugrep, coreutils, hscolour
 , enableLibraryProfiling ? false
 , enableSharedLibraries ? false
 , enableSharedExecutables ? false
 , enableStaticLibraries ? true
 , enableCheckPhase ? stdenv.lib.versionOlder "7.4" ghc.version
+, enableHyperlinkSource ? true
+, extension ? (self : super : {})
 }:
 
 let
@@ -49,6 +51,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
                 propagatedBuildInputs = filter (y : ! (y == null)) x.propagatedBuildInputs;
                 propagatedUserEnvPkgs = filter (y : ! (y == null)) x.propagatedUserEnvPkgs;
                 doCheck               = enableCheckPhase && x.doCheck;
+                hyperlinkSource       = enableHyperlinkSource && x.hyperlinkSource;
               };
 
         defaults =
@@ -91,6 +94,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
             buildInputs = [ghc Cabal] ++ self.extraBuildInputs;
             extraBuildInputs = self.buildTools ++
                                (optionals self.doCheck self.testDepends) ++
+                               (optional self.hyperlinkSource hscolour) ++
                                (if self.pkgconfigDepends == [] then [] else [pkgconfig]) ++
                                (if self.isLibrary then [] else self.buildDepends ++ self.extraLibraries ++ self.pkgconfigDepends);
 
@@ -133,13 +137,14 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
             jailbreak = false;
 
             # pass the '--enable-split-objs' flag to cabal in the configure stage
-            enableSplitObjs = !(  stdenv.isDarwin                       # http://hackage.haskell.org/trac/ghc/ticket/4013
-                               || versionOlder "7.6.99" ghc.version     # -fsplit-ojbs is broken in 7.7 snapshot
-                               );
+            enableSplitObjs = !stdenv.isDarwin;         # http://hackage.haskell.org/trac/ghc/ticket/4013
 
             # pass the '--enable-tests' flag to cabal in the configure stage
             # and run any regression test suites the package might have
             doCheck = enableCheckPhase;
+
+            # pass the '--hyperlink-source' flag to ./Setup haddock
+            hyperlinkSource = enableHyperlinkSource;
 
             # abort the build if the configure phase detects that the package
             # depends on multiple versions of the same build input
@@ -195,8 +200,11 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
                 done
               done
 
-              ${optionalString self.enableSharedExecutables ''
+              ${optionalString (self.enableSharedExecutables && self.stdenv.isLinux) ''
                 configureFlags+=" --ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.ghc.name}/${self.pname}-${self.version}";
+              ''}
+              ${optionalString (self.enableSharedExecutables && self.stdenv.isDarwin) ''
+                configureFlags+=" --ghc-option=-optl=-Wl,-headerpad_max_install_names";
               ''}
 
               echo "configure flags: $extraConfigureFlags $configureFlags"
@@ -220,7 +228,8 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               ./Setup build ${self.buildTarget}
 
               export GHC_PACKAGE_PATH=$(${ghc.GHCPackages})
-              test -n "$noHaddock" || ./Setup haddock --html --hoogle
+              test -n "$noHaddock" || ./Setup haddock --html --hoogle \
+                  ${optionalString self.hyperlinkSource "--hyperlink-source"}
 
               eval "$postBuild"
             '';
@@ -257,6 +266,13 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
                 ln -s $out/nix-support/propagated-native-build-inputs $out/nix-support/propagated-user-env-packages
               fi
 
+              ${optionalString (self.enableSharedExecutables && self.isExecutable && self.stdenv.isDarwin) ''
+                for exe in $out/bin/* ; do
+                  install_name_tool -add_rpath \
+                    $out/lib/${ghc.ghc.name}/${self.pname}-${self.version} $exe
+                done
+              ''}
+
               eval "$postInstall"
             '';
 
@@ -264,5 +280,8 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
             # in Cabal derivations.
             inherit stdenv ghc;
           };
-    in  stdenv.mkDerivation (postprocess ((rec { f = defaults f // args f; }).f)) ;
+    in
+    stdenv.mkDerivation (postprocess (let super = defaults self // args self;
+                                          self  = super // extension self super;
+                                      in self));
 }

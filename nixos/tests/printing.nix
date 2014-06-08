@@ -1,17 +1,15 @@
 # Test printing via CUPS.
 
-{ pkgs, ... }:
-
-{
+import ./make-test.nix ({pkgs, ... }: {
 
   nodes = {
 
     server =
       { config, pkgs, ... }:
       { services.printing.enable = true;
+        services.printing.listenAddresses = [ "*:631" ];
         services.printing.cupsdConf =
           ''
-            Listen server:631
             <Location />
               Order allow,deny
               Allow from all
@@ -88,4 +86,4 @@
       }
     '';
 
-}
+})

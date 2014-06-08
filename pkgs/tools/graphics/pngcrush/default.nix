@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libpng }:
 
 stdenv.mkDerivation rec {
-  name = "pngcrush-1.7.71";
+  name = "pngcrush-1.7.73";
 
   src = fetchurl {
     url = "mirror://sourceforge/pmt/${name}-nolib.tar.xz";
-    sha256 = "095al1l86h55aiig3y1aqlwkxcwwf215lq3f29z1hdgz4a0sbcyd";
+    sha256 = "073y19af0sw36nw7draqw9zfd6n7q7b84kscy26s76fhj5x2gb0l";
   };
 
   configurePhase = ''

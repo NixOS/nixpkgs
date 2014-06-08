@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "criterion";
-  version = "0.8.0.2";
-  sha256 = "126c3i9i88wqs5ihif4kpsc1gdqas57acd8h5jbyfqhgbwi1s7gz";
+  version = "0.8.1.0";
+  sha256 = "0yzrnma2whd4dnjiy4w24syxgnz1b5bflsi20hrbgd5rmx85k2zd";
   buildDepends = [
     aeson binary deepseq filepath Glob hastache mtl mwcRandom parsec
     statistics text time transformers vector vectorAlgorithms

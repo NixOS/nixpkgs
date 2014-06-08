@@ -1,17 +1,16 @@
-{ cabal, aeson, Cabal, dataLens, dataLensTemplate, filemanip
-, filepath, haskellPackages, haskellSrcExts, hseCpp, mtl
-, prettyShow, tagged, tasty, tastyGolden, transformers
-, traverseWithClass, typeEq, uniplate, utf8String
+{ cabal, aeson, Cabal, dataLensLight, filemanip, filepath
+, haskellPackages, haskellSrcExts, hseCpp, mtl, prettyShow, tagged
+, tasty, tastyGolden, transformers, traverseWithClass, typeEq
+, uniplate, utf8String
 }:
 
 cabal.mkDerivation (self: {
   pname = "haskell-names";
-  version = "0.3.3";
-  sha256 = "1f40dyrdb9c5iysmclql75l86zg3iisnyyiq5fkgixdafzsq31ir";
+  version = "0.4";
+  sha256 = "02cbs3bwakm9bwh4yy242msh5hibxfr9dsc6a0nbpihj1fhbv6b4";
   buildDepends = [
-    aeson Cabal dataLens dataLensTemplate filepath haskellPackages
-    haskellSrcExts hseCpp mtl tagged transformers traverseWithClass
-    typeEq uniplate
+    aeson Cabal dataLensLight filepath haskellPackages haskellSrcExts
+    hseCpp mtl tagged transformers traverseWithClass typeEq uniplate
   ];
   testDepends = [
     aeson Cabal filemanip filepath haskellPackages haskellSrcExts

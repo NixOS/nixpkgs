@@ -14,13 +14,12 @@ rec {
   lib = import ../../../lib;
 
   bootstrapFiles =
-    if system == "i686-linux" then import ./bootstrap/i686
-    else if system == "x86_64-linux" then import ./bootstrap/x86_64
-    else if system == "powerpc-linux" then import ./bootstrap/powerpc
-    else if system == "armv5tel-linux" then import ./bootstrap/armv5tel
-    else if system == "armv6l-linux" then import ./bootstrap/armv6l
-    else if system == "armv7l-linux" then import ./bootstrap/armv6l
-    else if system == "mips64el-linux" then import ./bootstrap/loongson2f
+    if system == "i686-linux" then import ./bootstrap/i686.nix
+    else if system == "x86_64-linux" then import ./bootstrap/x86_64.nix
+    else if system == "armv5tel-linux" then import ./bootstrap/armv5tel.nix
+    else if system == "armv6l-linux" then import ./bootstrap/armv6l.nix
+    else if system == "armv7l-linux" then import ./bootstrap/armv6l.nix
+    else if system == "mips64el-linux" then import ./bootstrap/loongson2f.nix
     else abort "unsupported platform for the pure Linux stdenv";
 
 
@@ -40,19 +39,6 @@ rec {
   # of coreutils, GCC, etc.
 
 
-  # This function downloads a file.
-  download = {url, sha256}: derivation {
-    name = baseNameOf (toString url);
-    builder = bootstrapFiles.sh;
-    inherit system url;
-    inherit (bootstrapFiles) bzip2 mkdir curl cpio ln;
-    args = [ ./scripts/download.sh ];
-    outputHashAlgo = "sha256";
-    outputHash = sha256;
-    impureEnvVars = [ "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy" ];
-  };
-
-
   # Download and unpack the bootstrap tools (coreutils, GCC, Glibc, ...).
   bootstrapTools = derivation {
     name = "bootstrap-tools";
@@ -65,9 +51,10 @@ rec {
       then [ ./scripts/unpack-bootstrap-tools-arm.sh ]
       else [ ./scripts/unpack-bootstrap-tools.sh ];
 
+    # FIXME: get rid of curl.
     inherit (bootstrapFiles) bzip2 mkdir curl cpio;
 
-    tarball = download {
+    tarball = import <nix/fetchurl.nix> {
       inherit (bootstrapFiles.bootstrapTools) url sha256;
     };
 

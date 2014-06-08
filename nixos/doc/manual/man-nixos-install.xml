@@ -42,6 +42,9 @@ the following steps:
   and generates a GRUB configuration file that boots into the NixOS
   configuration just installed.</para></listitem>
 
+  <listitem><para>It prompts you for a password for the root
+  account.</para></listitem>
+
 </itemizedlist>
 
 </para>

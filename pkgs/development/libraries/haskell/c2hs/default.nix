@@ -1,16 +1,16 @@
 { cabal, filepath, HUnit, languageC, shelly, testFramework
-, testFrameworkHunit, text
+, testFrameworkHunit, text, yaml
 }:
 
 cabal.mkDerivation (self: {
   pname = "c2hs";
-  version = "0.16.6";
-  sha256 = "1yf7mcslkf6m1nizifqva8j5sxnw87bg60dw8mfgpmqvrzpbxizm";
+  version = "0.17.2";
+  sha256 = "1xrk0izdy5akjgmg9k4l9ccmmgv1avwh152pfpc1xm2rrwrg4bxk";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ filepath languageC ];
   testDepends = [
-    filepath HUnit shelly testFramework testFrameworkHunit text
+    filepath HUnit shelly testFramework testFrameworkHunit text yaml
   ];
   jailbreak = true;
   doCheck = false;

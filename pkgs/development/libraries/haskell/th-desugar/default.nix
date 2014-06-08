@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "th-desugar";
-  version = "1.3.1";
-  sha256 = "1wi0c5d1w6vjjk580zhypgqnnkndcsx4cmx5qy01w97h6kyj8913";
+  version = "1.4.0";
+  sha256 = "0jadwqhk9dqnicg3p958a6cyfvl70amjc1hl7bhlygpxpdfffwad";
   buildDepends = [ mtl syb ];
   testDepends = [ hspec HUnit mtl syb ];
   meta = {

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "reactive-banana";
-  version = "0.8.0.0";
-  sha256 = "15dzvn7cbs9kg410lyd1kj6kf2r7ap2n9bc59byzkb0r8wzn9ra1";
+  version = "0.8.0.2";
+  sha256 = "0hfhq663dvvb3jbgdnarawryw09m8ckqvqp6p5n4d4dms4gfzcdv";
   buildDepends = [
     hashable pqueue transformers unorderedContainers vault
   ];

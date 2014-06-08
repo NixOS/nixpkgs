@@ -2,17 +2,15 @@
 
 stdenv.mkDerivation rec
 {
-  version = "1.4.0";
-  seafileVersion = "2.1.1";
+  version = "1.4.2";
+  seafileVersion = "3.0.4";
   name = "ccnet-${version}";
 
   src = fetchurl
   {
     url = "https://github.com/haiwen/ccnet/archive/v${seafileVersion}.tar.gz";
-    sha256 = "6882eb1a3066897e4f91fb60a3405b3f58b4b794334deaca73617003f77a7eb0";
+    sha256 = "1y9x6k9ql8bj83016a1mi1m5ixxh8fm7p4qbd5mslnamvjln171q";
   };
-
-  patches = [ ./libccnet.pc.patch ./0001-Add-autoconfiguration-for-libjansson.patch ];
 
   buildInputs = [ which automake autoconf pkgconfig libtool vala  python ];
   propagatedBuildInputs = [ libsearpc libzdb libuuid libevent sqlite openssl ];

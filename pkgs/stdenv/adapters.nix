@@ -285,7 +285,9 @@ rec {
     };
 
 
-  /* Modify a stdenv so that it used the Gold linker. */
+  /* Modify a stdenv so that it uses the Gold linker. FIXME: should
+     use -fuse-ld=gold instead, but then the ld-wrapper won't be
+     invoked. */
   useGoldLinker = stdenv:
     let
       binutils = stdenv.gcc.binutils;

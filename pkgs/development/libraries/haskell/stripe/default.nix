@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "stripe";
-  version = "0.8.0";
-  sha256 = "0bz932v7kcz2xsnmpx34ifqnf6kbgy7a7qd0dqnjqypc8g6kfl37";
+  version = "0.8.1";
+  sha256 = "0vmgj9n7q8ik31z7zzfjfv1qj8f8vrqn9cvk8kjp3k4shj25p7sy";
   buildDepends = [
     aeson httpConduit httpTypes mtl text time unorderedContainers
     utf8String

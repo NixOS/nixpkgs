@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -65,7 +65,7 @@ let
           options = {};
           documentRoot = null;
         };
-        res = defaults // svcFunction { inherit config pkgs serverInfo php; };
+        res = defaults // svcFunction { inherit config lib pkgs serverInfo php; };
       in res;
     in map f defs;
 
@@ -450,7 +450,7 @@ in
       extraModules = mkOption {
         type = types.listOf types.unspecified;
         default = [];
-        example = literalExample ''[ "proxy_connect" { name = "php5"; path = "''${php}/modules/libphp5.so"; } ]'';
+        example = literalExample ''[ "proxy_connect" { name = "php5"; path = "''${pkgs.php}/modules/libphp5.so"; } ]'';
         description = ''
           Additional Apache modules to be used.  These can be
           specified as a string in the case of modules distributed
@@ -510,7 +510,7 @@ in
       virtualHosts = mkOption {
         type = types.listOf (types.submodule (
           { options = import ./per-server-options.nix {
-              inherit pkgs;
+              inherit lib;
               forMainServer = false;
             };
           }));
@@ -577,7 +577,7 @@ in
 
     # Include the options shared between the main server and virtual hosts.
     // (import ./per-server-options.nix {
-      inherit pkgs;
+      inherit lib;
       forMainServer = true;
     });
 

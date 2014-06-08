@@ -1,13 +1,13 @@
-{ cabal, dataDefault, liftedBase, monadControl, transformers }:
+{ cabal, dataDefault, exceptions, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "retry";
-  version = "0.3.0.0";
-  sha256 = "00yjk5784h4w1cckw17w1k5r94acc3ycnprk642ndgggz3lxm36n";
-  buildDepends = [
-    dataDefault liftedBase monadControl transformers
-  ];
+  version = "0.4";
+  sha256 = "16njq924b5n7jyfc059dbypp529gqlc9qnzd7wjk4m7dpm5bww67";
+  buildDepends = [ dataDefault exceptions transformers ];
+  jailbreak = true;
   meta = {
+    homepage = "http://github.com/Soostone/retry";
     description = "Retry combinators for monadic actions that may fail";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "acid-state";
-  version = "0.12.1";
-  sha256 = "0smqhj4layckdsm8xjz1rwgpcqwm5xj2vr8g4i463vgq776fl0q6";
+  version = "0.12.2";
+  sha256 = "0hwi2254bj84djxmah23vy3xw8binh75fsn8ac6y89rwc8i35w1f";
   buildDepends = [
     cereal extensibleExceptions filepath mtl network safecopy stm
   ];

@@ -1,6 +1,6 @@
-{ config, pkgs, serverInfo, ... }:
+{ config, lib, pkgs, serverInfo, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -8,8 +8,6 @@ let
   subversion = pkgs.subversion.override (origArgs: {
     bdbSupport = true;
     httpServer = true;
-    sslSupport = true;
-    compressionSupport = true;
     pythonBindings = true;
   });
 

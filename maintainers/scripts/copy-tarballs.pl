@@ -75,7 +75,6 @@ foreach my $file (@{$data->{list}->{attrs}}) {
     waitpid($pid, 0) or die;
     if ($? != 0) {
         print STDERR "failed to fetch $url: $?\n";
-        last if $? >> 8 == 255;
         next;
     }
     <$fh>; my $storePath = <$fh>; chomp $storePath;
@@ -91,5 +90,8 @@ foreach my $file (@{$data->{list}->{attrs}}) {
     symlink("../$fn", "$tarballsCache/sha1/$sha1");
 
     my $sha256 = hashFile("sha256", 0, $storePath) or die;
+    symlink("../$fn", "$tarballsCache/sha256/$sha256");
+
+    $sha256 = hashFile("sha256", 1, $storePath) or die;
     symlink("../$fn", "$tarballsCache/sha256/$sha256");
 }

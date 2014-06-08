@@ -1,9 +1,9 @@
 # This module defines global configuration for the Bash shell, in
 # particular /etc/bashrc and /etc/profile.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -40,6 +40,7 @@ in
 
     programs.bash = {
 
+      /*
       enable = mkOption {
         default = true;
         description = ''
@@ -52,6 +53,7 @@ in
         '';
         type = types.bool;
       };
+      */
 
       shellAliases = mkOption {
         default = config.environment.shellAliases // { which = "type -P"; };
@@ -114,7 +116,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = /* mkIf cfg.enable */ {
 
     programs.bash = {
 

@@ -1,15 +1,16 @@
-{ cabal, bifunctors, comonad, distributive, mtl, profunctors
-, semigroupoids, semigroups, transformers
+{ cabal, bifunctors, comonad, distributive, mtl, preludeExtras
+, profunctors, semigroupoids, semigroups, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "free";
-  version = "4.6.1";
-  sha256 = "0xmnxp6x7b6pp2ap7jrjhz00cm30v334i9dcxc14d3r070h7l73w";
+  version = "4.7.1";
+  sha256 = "14qvc153g7n8fkl2giyyya8l7fs4limgnm18hdw5dpj841kwxgzm";
   buildDepends = [
-    bifunctors comonad distributive mtl profunctors semigroupoids
-    semigroups transformers
+    bifunctors comonad distributive mtl preludeExtras profunctors
+    semigroupoids semigroups transformers
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/ekmett/free/";
     description = "Monads for free";

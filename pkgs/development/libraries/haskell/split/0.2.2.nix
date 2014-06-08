@@ -5,6 +5,7 @@ cabal.mkDerivation (self: {
   version = "0.2.2";
   sha256 = "0xa3j0gwr6k5vizxybnzk5fgb3pppgspi6mysnp2gwjp2dbrxkzr";
   testDepends = [ QuickCheck ];
+  doCheck = self.stdenv.lib.versionOlder self.ghc.version "7.9";
   meta = {
     description = "Combinator library for splitting lists";
     license = self.stdenv.lib.licenses.bsd3;

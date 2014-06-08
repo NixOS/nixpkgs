@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     comonad fingertree hashable keys pointed semigroupoids semigroups
     text transformers unorderedContainers
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/ekmett/reducers/";
     description = "Semigroups, specialized containers and a general map/reduce framework";

@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "esqueleto";
-  version = "1.3.10";
-  sha256 = "0q333m7xaanxb1vzgf2yn6d7y3pgkbj9mjw5gnywms36v5zsfik7";
+  version = "1.4.1.2";
+  sha256 = "1qny5c0xy2vdsl4qmgqr83jxqw1r68r81xhmx236rhxcffs9yvw2";
   buildDepends = [
     conduit monadLogger persistent resourcet tagged text transformers
     unorderedContainers
@@ -18,7 +18,7 @@ cabal.mkDerivation (self: {
   ];
   meta = {
     homepage = "https://github.com/meteficha/esqueleto";
-    description = "Bare bones, type-safe EDSL for SQL queries on persistent backends";
+    description = "Type-safe EDSL for SQL queries on persistent backends";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.ocharles ];

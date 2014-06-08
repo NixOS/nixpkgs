@@ -81,10 +81,14 @@ rec {
     abiVersions = [ "armeabi-v7a" "x86" ];
     useGoogleAPIs = true;
   };
+
+  androidndk = import ./androidndk.nix {
+    inherit (pkgs) stdenv fetchurl zlib ncurses;
+  };
   
   buildApp = import ./build-app.nix {
-    inherit (pkgs) stdenv jdk ant;
-    inherit androidsdk;
+    inherit (pkgs) stdenv jdk ant gnumake gawk file which;
+    inherit androidsdk androidndk;
   };
   
   emulateApp = import ./emulate-app.nix {

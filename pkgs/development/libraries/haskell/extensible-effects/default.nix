@@ -1,11 +1,12 @@
 { cabal, HUnit, QuickCheck, testFramework, testFrameworkHunit
-, testFrameworkQuickcheck2
+, testFrameworkQuickcheck2, transformers, transformersBase
 }:
 
 cabal.mkDerivation (self: {
   pname = "extensible-effects";
-  version = "1.2.1";
-  sha256 = "066977hjhcg44v47hkjpf2gs48xsry74l4h8hp753jsvbfsv0030";
+  version = "1.6.0";
+  sha256 = "08g2py6iywwpsr09v6hfhq6ihjp1yq3aibz8jlqhsmagjjjxgfsq";
+  buildDepends = [ transformers transformersBase ];
   testDepends = [
     HUnit QuickCheck testFramework testFrameworkHunit
     testFrameworkQuickcheck2

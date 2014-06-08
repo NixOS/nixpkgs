@@ -1,21 +1,23 @@
 { cabal, binary, clock, connection, dataBinaryIeee754, hspec
-, hspecExpectations, monadControl, network, split, text, xml
+, hspecExpectations, monadControl, network, split, text, vector
+, xml
 }:
 
 cabal.mkDerivation (self: {
   pname = "amqp";
-  version = "0.8.2";
-  sha256 = "0hl9x6kbxdv32014k1w34d84wl4ivpiyg1ikpjr0nr9bsg3wr0gf";
+  version = "0.8.3";
+  sha256 = "0gl5vdhbic8llhbqmhnwj0wvykhbrci6zz53v5cayqfcwi1v1dw2";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     binary clock connection dataBinaryIeee754 monadControl network
-    split text xml
+    split text vector xml
   ];
   testDepends = [
     binary clock connection dataBinaryIeee754 hspec hspecExpectations
-    network split text
+    network split text vector
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/hreinhardt/amqp";
     description = "Client library for AMQP servers (currently only RabbitMQ)";

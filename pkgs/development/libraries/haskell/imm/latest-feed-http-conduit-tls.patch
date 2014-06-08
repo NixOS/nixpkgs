@@ -1,0 +1,73 @@
+# HG changeset patch
+# User Daniel Bergey <bergey@alum.mit.edu>
+# Date 1398284724 0
+#      Wed Apr 23 20:25:24 2014 +0000
+# Node ID 4cc692e7acc4f21ffab9e5572d286495791d22d1
+# Parent  31e3ba1aaaf9efdce66e8ef5c192d0f4214150f4
+Update for feed-0.3.9.2, http-conduit-2.0, tls-1.2
+
+diff -r 31e3ba1aaaf9 -r 4cc692e7acc4 Imm/Error.hs
+--- a/Imm/Error.hs	Sun Jun 16 12:23:40 2013 +0200
++++ b/Imm/Error.hs	Wed Apr 23 20:25:24 2014 +0000
+@@ -41,7 +41,7 @@
+ data ImmError =
+     OtherError         String
+   | HTTPError          HttpException
+-  | TLSError           HandshakeFailed
++  | TLSError           TLSException
+   | UnicodeError       UnicodeException
+   | ParseUriError      String
+   | ParseTimeError     String
+@@ -63,7 +63,7 @@
+         "/!\\ Cannot parse date from item: ",
+         "    title: "       ++ (show $ getItemTitle item),
+         "    link:"         ++ (show $ getItemLink item),
+-        "    publish date:" ++ (show $ getItemPublishDate item),
++        "    publish date:" ++ (show (getItemPublishDate item :: Maybe (Maybe UTCTime))),
+         "    date:"         ++ (show $ getItemDate item)]
+     show (ParseTimeError raw)      = "/!\\ Cannot parse time: " ++ raw
+     show (ParseFeedError raw)      = "/!\\ Cannot parse feed: " ++ raw
+diff -r 31e3ba1aaaf9 -r 4cc692e7acc4 Imm/HTTP.hs
+--- a/Imm/HTTP.hs	Sun Jun 16 12:23:40 2013 +0200
++++ b/Imm/HTTP.hs	Wed Apr 23 20:25:24 2014 +0000
+@@ -50,13 +50,13 @@
+     either throwError return res
+ 
+ -- | Monad-agnostic version of 'parseUrl'
+-parseURL :: (MonadBase IO m, MonadError ImmError m) => String -> m (Request m')
++parseURL :: (MonadBase IO m, MonadError ImmError m) => String -> m Request
+ parseURL uri = do
+     result <- io $ (Right <$> parseUrl uri) `catch` (return . Left . HTTPError)
+     either throwError return result
+ 
+ -- | Build an HTTP request for given URI
+-request :: (MonadBase IO m, MonadError ImmError m) => String -> m (Request a)
++request :: (MonadBase IO m, MonadError ImmError m) => String -> m Request
+ request uri = do
+     req <- parseURL uri
+     return $ req { requestHeaders = [
+diff -r 31e3ba1aaaf9 -r 4cc692e7acc4 imm.cabal
+--- a/imm.cabal	Sun Jun 16 12:23:40 2013 +0200
++++ b/imm.cabal	Wed Apr 23 20:25:24 2014 +0000
+@@ -46,10 +46,10 @@
+         data-default,
+         directory,
+         dyre,
+-        feed,
++        feed == 0.3.9.2,
+         filepath,
+         hslogger,
+-        http-conduit >= 1.9.0,
++        http-conduit >= 2.0 && < 2.2,
+         http-types,
+         lens,
+         mime-mail,
+@@ -66,7 +66,7 @@
+         transformers,
+         time,
+         timerep >= 1.0.3,
+-        tls,
++        tls >= 1.2 && < 1.3,
+         utf8-string,
+         xdg-basedir,
+         xml

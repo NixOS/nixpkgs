@@ -15,9 +15,9 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ gtk3 udev desktop_file_utils shared_mime_info intltool pkgconfig makeWrapper ];
 
-  postInstall = ''
+  preFixup = ''
     wrapProgram "$out/bin/spacefm" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share"
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = {

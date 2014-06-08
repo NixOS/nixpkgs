@@ -1,12 +1,12 @@
-{ cabal, filepath, hxt, MissingH, mtl, parsec }:
+{ cabal, filepath, hxt, mtl, parsec, split, text }:
 
 cabal.mkDerivation (self: {
   pname = "vcswrapper";
-  version = "0.0.3";
-  sha256 = "04gmiiv461qh8fypkkiynipn5jsjqvywkj17ldq5wag4qaspx97x";
+  version = "0.0.4";
+  sha256 = "130pmzxdsqv703k2g197vd5rl60fwkqqv2xck66ygb932wsq3fnk";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ filepath hxt MissingH mtl parsec ];
+  buildDepends = [ filepath hxt mtl parsec split text ];
   meta = {
     homepage = "https://github.com/forste/haskellVCSWrapper";
     description = "Wrapper for source code management systems";

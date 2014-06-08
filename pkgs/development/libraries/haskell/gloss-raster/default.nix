@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "gloss-raster";
-  version = "1.8.1.2";
-  sha256 = "1cpibilv027rfx7xz957f1d7wy6b5z6dgfjrw425ck497r8gfgp4";
+  version = "1.8.2.1";
+  sha256 = "0ls8rlwrbpisrmq2xigf9926pak028dmld6shrblcmdbykaz55ha";
   buildDepends = [ gloss repa ];
   extraLibraries = [ llvm ];
   meta = {

@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
     homepage = http://rigsofrods.sourceforge.net/;
     license = "GPLv3";
     maintainers = with stdenv.lib.maintainers; [viric raskin];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = [];
   };
 }

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "largeword";
-  version = "1.1.1";
-  sha256 = "0dizzyicfj41cmdr9s0k75gf7cqbd2z1qk9kkvlq6rcz0249fz0x";
+  version = "1.2.3";
+  sha256 = "1ldcsnnji6p84sn03j17pdcpg7vqn1xrhyn4wys0v5fyy0d383ln";
   buildDepends = [ binary ];
   testDepends = [
     binary HUnit QuickCheck testFramework testFrameworkHunit

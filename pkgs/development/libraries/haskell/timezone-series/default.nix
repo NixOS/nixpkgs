@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "timezone-series";
-  version = "0.1.2";
-  sha256 = "0clvm1kwmxid5bhb74vgrpzynn4sff2k6mfzb43i7737w5fy86gp";
+  version = "0.1.3";
+  sha256 = "0b13a929wrgfl1agkyp3d5wy89aw69zm4l0src7p16rh3kr38w73";
   buildDepends = [ time ];
   meta = {
     homepage = "http://projects.haskell.org/time-ng/";

@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 
-let version = "2013g"; in
+let version = "2014b"; in
 
 stdenv.mkDerivation rec {
   name = "tzdata-${version}";
@@ -8,22 +8,27 @@ stdenv.mkDerivation rec {
   srcs =
     [ (fetchurl {
         url = "http://www.iana.org/time-zones/repository/releases/tzdata${version}.tar.gz";
-        sha256 = "0krsgncjnk64g3xshj5xd3znskcx9wwy20g1wmm2lwycincx7kdn";
+        sha256 = "1d8w5g7fy8nrdj092cwmxdxw6rk3bzwpxqpz6l5sra2kqbhg7qfi";
       })
       (fetchurl {
         url = "http://www.iana.org/time-zones/repository/releases/tzcode${version}.tar.gz";
-        sha256 = "0ysqm72xm9vcykqg9zgry69w6gr3i6b6mpbvgfmwyrdvb6s5ihy7";
+        sha256 = "12x7ahbjxc3sj4ykcvx5c7kw1nbn6ywm8wzq6303y3l8qyqd7nmm";
       })
     ];
 
   sourceRoot = ".";
+  outputs = [ "out" "lib" ];
 
-  makeFlags = "TOPDIR=$(out) TZDIR=$(out)/share/zoneinfo ETCDIR=$(TMPDIR)/etc LIBDIR=$(TMPDIR)/lib MANDIR=$(TMPDIR)/man AWK=awk";
+  makeFlags = "TOPDIR=$(out) TZDIR=$(out)/share/zoneinfo ETCDIR=$(TMPDIR)/etc LIBDIR=$(lib)/lib MANDIR=$(TMPDIR)/man AWK=awk CFLAGS=-DHAVE_LINK=0";
 
   postInstall =
     ''
-      mv $out/share/zoneinfo-posix $out/share/zoneinfo/posix
+      rm $out/share/zoneinfo-posix
+      ln -s . $out/share/zoneinfo/posix
       mv $out/share/zoneinfo-leaps $out/share/zoneinfo/right
+
+      ensureDir "$lib/include"
+      cp tzfile.h "$lib/include/tzfile.h"
     '';
 
   meta = {

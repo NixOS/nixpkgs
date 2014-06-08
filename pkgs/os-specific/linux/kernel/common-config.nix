@@ -1,4 +1,4 @@
-{ stdenv, version, kernelPlatform, extraConfig }:
+{ stdenv, version, kernelPlatform, extraConfig, features }:
 
 with stdenv.lib;
 
@@ -16,7 +16,9 @@ with stdenv.lib;
   DEBUG_DEVRES n
   DEBUG_NX_TEST n
   DEBUG_STACK_USAGE n
-  DEBUG_STACKOVERFLOW n
+  ${optionalString (!(features.grsecurity or true)) ''
+    DEBUG_STACKOVERFLOW n
+  ''}
   RCU_TORTURE_TEST n
   SCHEDSTATS n
   DETECT_HUNG_TASK y
@@ -114,6 +116,7 @@ with stdenv.lib;
   VGA_SWITCHEROO y
 
   # Sound.
+  SND_DYNAMIC_MINORS y
   SND_AC97_POWER_SAVE y # AC97 Power-Saving Mode
   SND_HDA_INPUT_BEEP y # Support digital beep via input layer
   SND_USB_CAIAQ_INPUT y
@@ -166,15 +169,19 @@ with stdenv.lib;
   # Security related features.
   STRICT_DEVMEM y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
-  DEVKMEM n # Disable /dev/kmem
+  DEVKMEM? n # Disable /dev/kmem
   ${if versionOlder version "3.14" then ''
-    CC_STACKPROTECTOR y # Detect buffer overflows on the stack
+    CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
   '' else ''
-    CC_STACKPROTECTOR_REGULAR y
+    CC_STACKPROTECTOR_REGULAR? y
   ''}
   ${optionalString (versionAtLeast version "3.12") ''
     USER_NS y # Support for user namespaces
   ''}
+
+  # AppArmor support
+  SECURITY_APPARMOR y
+  DEFAULT_SECURITY_APPARMOR y
 
   # Misc. options.
   8139TOO_8129 y
@@ -275,17 +282,17 @@ with stdenv.lib;
   ''}
 
   # Virtualisation.
-  PARAVIRT y
+  PARAVIRT? y
   ${if versionAtLeast version "3.10" then ''
-    HYPERVISOR_GUEST y
+    HYPERVISOR_GUEST? y
   '' else ''
-    PARAVIRT_GUEST y
+    PARAVIRT_GUEST? y
   ''}
-  KVM_GUEST y
+  KVM_GUEST? y
   ${optionalString (versionOlder version "3.7") ''
-    KVM_CLOCK y
+    KVM_CLOCK? y
   ''}
-  XEN y
+  XEN? y
   XEN_DOM0? y
   KSM y
   ${optionalString (!stdenv.is64bit) ''
@@ -310,6 +317,17 @@ with stdenv.lib;
   # Enable the 9P cache to speed up NixOS VM tests.
   9P_FSCACHE y
   9P_FS_POSIX_ACL y
+
+  # Enable transparent support for huge pages.
+  TRANSPARENT_HUGEPAGE? y
+  TRANSPARENT_HUGEPAGE_ALWAYS? n
+  TRANSPARENT_HUGEPAGE_MADVISE? y
+
+  # zram support (e.g for in-memory compressed swap)
+  ${optionalString (versionAtLeast version "3.4") ''
+    ZSMALLOC y
+  ''}
+  ZRAM m
 
   ${kernelPlatform.kernelExtraConfig or ""}
   ${extraConfig}

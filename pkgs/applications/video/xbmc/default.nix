@@ -3,17 +3,17 @@
 , boost, avahi, libdvdcss, lame, autoreconfHook
 , gettext, pcre, yajl, fribidi, which
 , openssl, gperf, tinyxml2, taglib, libssh, swig, jre
-, libX11, xproto, inputproto
+, libX11, xproto, inputproto, libxml2
 , libXt, libXmu, libXext, xextproto
 , libXinerama, libXrandr, randrproto
-, libXtst, libXfixes, fixesproto
+, libXtst, libXfixes, fixesproto, systemd
 , SDL, SDL_image, SDL_mixer, alsaLib
 , mesa, glew, fontconfig, freetype, ftgl
 , libjpeg, jasper, libpng, libtiff
 , ffmpeg, libmpeg2, libsamplerate, libmad
-, libogg, libvorbis, flac
-, lzo, libcdio, libmodplug, libass
-, sqlite, mysql, nasm
+, libogg, libvorbis, flac, libxslt
+, lzo, libcdio, libmodplug, libass, libbluray
+, sqlite, mysql, nasm, gnutls, libva
 , curl, bzip2, zip, unzip, glxinfo, xdpyinfo
 , dbus_libs ? null, dbusSupport ? true
 , udev, udevSupport ? true
@@ -23,7 +23,7 @@
 # TODO: would be nice to have nfsSupport (needs libnfs library)
 # TODO: librtmp
 , libvdpau ? null, vdpauSupport ? true
-, pulseaudio ? null, pulseSupport ? false
+, pulseaudio ? null, pulseSupport ? true
 }:
 
 assert dbusSupport  -> dbus_libs != null;
@@ -34,18 +34,18 @@ assert vdpauSupport -> libvdpau != null && ffmpeg.vdpauSupport;
 assert pulseSupport -> pulseaudio != null;
 
 stdenv.mkDerivation rec {
-    name = "xbmc-12.3";
+    name = "xbmc-13.0";
 
     src = fetchurl {
-      url = "http://mirrors.xbmc.org/releases/source/${name}.tar.gz";
-      sha256 = "0wyy9rsl11px4mh0fyq75n29905ldiqp8yraz6jxxvrls1hcj59y";
+      url = "https://github.com/xbmc/xbmc/archive/13.0-Gotham.tar.gz";
+      sha256 = "096hin8qp1864ypyw9xysy13niwf79bgfgivxi7w7mh2dagn0mjx";
     };
 
     buildInputs = [
-      makeWrapper
+      makeWrapper libxml2 gnutls
       pkgconfig cmake gnumake yasm pythonFull
       boost libmicrohttpd autoreconfHook
-      gettext pcre yajl fribidi
+      gettext pcre yajl fribidi libva
       openssl gperf tinyxml2 taglib libssh swig jre
       libX11 xproto inputproto which
       libXt libXmu libXext xextproto
@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
       mesa glew fontconfig freetype ftgl
       libjpeg jasper libpng libtiff
       ffmpeg libmpeg2 libsamplerate libmad
-      libogg libvorbis flac
-      lzo libcdio libmodplug libass
+      libogg libvorbis flac libxslt systemd
+      lzo libcdio libmodplug libass libbluray
       sqlite mysql nasm avahi libdvdcss lame
       curl bzip2 zip unzip glxinfo xdpyinfo
     ]
@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
           --prefix PATH ":" "${glxinfo}/bin" \
           --prefix PATH ":" "${xdpyinfo}/bin" \
           --prefix LD_LIBRARY_PATH ":" "${curl}/lib" \
+          --prefix LD_LIBRARY_PATH ":" "${systemd}/lib" \
           --prefix LD_LIBRARY_PATH ":" "${libvdpau}/lib"
       done
     '';

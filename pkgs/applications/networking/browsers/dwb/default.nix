@@ -2,15 +2,15 @@
   m4, glib_networking, gsettings_desktop_schemas }:
 
 stdenv.mkDerivation {
-  name = "dwb-2014-03-27";
+  name = "dwb-2014-06-03";
 
   src = fetchgit {
     url = "https://bitbucket.org/portix/dwb.git";
-    rev = "4566d58575fbf687ebe9e3414996c45697b62787";
-    sha256 = "145sq2wv0s0n32cwpwgy59ff6ppcv80ialak7nnj1rpqicfqb72h";
+    rev = "d00af56c1e60978060f1b2077f3d49995b98c54f";
+    sha256 = "02bs9nbgk8ghaxywhqd8mii4lik748dssn551m00i1305p6q1cjj";
   };
 
-  buildInputs = [ pkgconfig makeWrapper gsettings_desktop_schemas libsoup webkit gtk3 gnutls json_c m4  ];
+  buildInputs = [ pkgconfig makeWrapper gsettings_desktop_schemas libsoup webkit gtk3 gnutls json_c m4 ];
 
   # There are Xlib and gtk warnings therefore I have set Wno-error
   preBuild=''

@@ -18,7 +18,9 @@
 , samplerateSupport ? true, libsamplerate
 , mmsSupport ? true, libmms
 , mpg123Support ? true, mpg123
-, aacSupport ? true, faad2 }:
+, aacSupport ? true, faad2
+, pulseaudioSupport ? true, pulseaudio
+}:
 
 let
 
@@ -27,10 +29,10 @@ let
   mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
 
 in stdenv.mkDerivation rec {
-  name = "mpd-0.18.9";
+  name = "mpd-0.18.11";
   src = fetchurl {
     url    = "http://www.musicpd.org/download/mpd/stable/${name}.tar.gz";
-    sha256 = "0mgfyrhjlalwngx9j3xxfpfwygh9a31k1ni1isi898bb2x8zsl08";
+    sha256 = "1j3jdwmxfnn4z1vjry2g54vcbrdrgi41nv3bf2i26xkgy5708icw";
   };
 
   buildInputs = [ pkgconfig glib ]
@@ -56,7 +58,8 @@ in stdenv.mkDerivation rec {
     ++ opt mmsSupport libmms
     ++ opt mpg123Support mpg123
     ++ opt aacSupport faad2
-    ++ opt zipSupport zziplib;
+    ++ opt zipSupport zziplib
+    ++ opt zipSupport pulseaudio;
 
   configureFlags =
     [ (mkFlag (!stdenv.isDarwin && alsaSupport) "alsa")
@@ -80,6 +83,8 @@ in stdenv.mkDerivation rec {
       (mkFlag mmsSupport "mms")
       (mkFlag mpg123Support "mpg123")
       (mkFlag aacSupport "aac")
+      (mkFlag pulseaudioSupport "pulse")
+      (mkFlag stdenv.isDarwin "osx")
       "--enable-debugging" ]
     ++ opt stdenv.isLinux
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system";

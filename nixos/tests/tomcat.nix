@@ -1,6 +1,5 @@
-{ pkgs, ... }:
+import ./make-test.nix {
 
-{
   nodes = {
     server =
       { pkgs, config, ... }:
@@ -25,4 +24,5 @@
     $client->succeed("curl --fail http://server/examples/servlets/servlet/HelloWorldExample");
     $client->succeed("curl --fail http://server/examples/jsp/jsp2/simpletag/hello.jsp");
   '';
+
 }

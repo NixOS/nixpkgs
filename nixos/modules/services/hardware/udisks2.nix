@@ -1,8 +1,8 @@
 # Udisks daemon.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
 
@@ -14,7 +14,7 @@ with pkgs.lib;
 
       enable = mkOption {
         type = types.bool;
-        default = false;
+        default = true;
         description = ''
           Whether to enable Udisks, a DBus service that allows
           applications to query and manipulate storage devices.

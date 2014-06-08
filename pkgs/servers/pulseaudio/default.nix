@@ -8,11 +8,11 @@
 assert jackaudioSupport -> jackaudio != null;
 
 stdenv.mkDerivation rec {
-  name = "pulseaudio-4.0";
+  name = "pulseaudio-5.0";
 
   src = fetchurl {
-    url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-4.0.tar.xz";
-    sha256 = "1bndz4l8jxyq3zq128gzp3gryxl6yjs66j2y1d7yabw2n5mv7kim";
+    url = "http://freedesktop.org/software/pulseaudio/releases/${name}.tar.xz";
+    sha256 = "0fgrr8v7yfh0byhzdv4c87v9lkj8g7gpjm8r9xrbvpa92a5kmhcr";
   };
 
   # Since `libpulse*.la' contain `-lgdbm' and `-lcap', it must be propagated.

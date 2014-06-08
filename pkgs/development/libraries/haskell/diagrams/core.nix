@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "diagrams-core";
-  version = "1.1.0.2";
-  sha256 = "1py1dk6w6f00kd48kxbdbxmd3rakxdmwgpb09g346vmkbxkj56mq";
+  version = "1.1.0.3";
+  sha256 = "0kl4bc5mvly227rzalzy9q6ki321drcdfsjqriv3ac70qmcfqyma";
   buildDepends = [
     dualTree lens MemoTrie monoidExtras newtype semigroups vectorSpace
     vectorSpacePoints

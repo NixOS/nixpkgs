@@ -1,10 +1,10 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.services.fourStoreEndpoint;
   endpointUser = "fourstorehttp";
   run = "${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} ${endpointUser} -c";
 in
-with pkgs.lib;
+with lib;
 {
 
   ###### interface
@@ -54,7 +54,7 @@ with pkgs.lib;
 
     users.extraUsers = singleton
       { name = endpointUser;
-        uid = config.ids.uids.fourStoreEndpoint;
+        uid = config.ids.uids.fourstorehttp;
         description = "4Store SPARQL endpoint user";
 #        home = stateDir;
       };

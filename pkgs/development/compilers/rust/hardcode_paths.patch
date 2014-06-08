@@ -1,8 +1,8 @@
 diff --git a/src/librustc/back/link.rs b/src/librustc/back/link.rs
-index 101b2e3..124267f 100644
+index f198a41..3a47e51 100644
 --- a/src/librustc/back/link.rs
 +++ b/src/librustc/back/link.rs
-@@ -728,7 +728,7 @@ pub fn get_cc_prog(sess: Session) -> ~str {
+@@ -730,7 +730,7 @@ pub fn get_cc_prog(sess: &Session) -> ~str {
          _ => {},
      }
  
@@ -10,18 +10,17 @@ index 101b2e3..124267f 100644
 +    ~"@gccPath@"
  }
  
- pub fn get_ar_prog(sess: Session) -> ~str {
-@@ -737,27 +737,9 @@ pub fn get_ar_prog(sess: Session) -> ~str {
+ pub fn get_ar_prog(sess: &Session) -> ~str {
+@@ -739,26 +739,7 @@ pub fn get_ar_prog(sess: &Session) -> ~str {
          None => {}
      }
  
 -    get_system_tool(sess, "ar")
-+    ~"@binutilsPath@"
- }
- 
--fn get_system_tool(sess: Session, tool: &str) -> ~str {
+-}
+-
+-fn get_system_tool(sess: &Session, tool: &str) -> ~str {
 -    match sess.targ_cfg.os {
--        abi::OsAndroid => match sess.opts.android_cross_path {
+-        abi::OsAndroid => match sess.opts.cg.android_cross_path {
 -            Some(ref path) => {
 -                let tool_str = match tool {
 -                    "cc" => "gcc",
@@ -31,14 +30,12 @@ index 101b2e3..124267f 100644
 -            }
 -            None => {
 -                sess.fatal(format!("need Android NDK path for the '{}' tool \
--                                    (--android-cross-path)", tool))
+-                                    (-C android-cross-path)", tool))
 -            }
 -        },
 -        _ => tool.to_owned(),
 -    }
--}
++    ~"@binutilsPath@"
+ }
  
- /// Perform the linkage portion of the compilation phase. This will generate all
- /// of the requested outputs for this compilation session.
-
-
+ fn remove(sess: &Session, path: &Path) {

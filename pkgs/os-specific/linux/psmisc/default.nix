@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ncurses];
 
+  # From upstream, will be in next release.
+  patches = [ ./0001-Typo-in-fuser-makes-M-on-all-the-time.patch ];
+
   meta = {
     homepage = http://psmisc.sourceforge.net/;
     description = "A set of small useful utilities that use the proc filesystem (such as fuser, killall and pstree)";

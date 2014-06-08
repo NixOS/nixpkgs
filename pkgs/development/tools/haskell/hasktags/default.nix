@@ -2,9 +2,9 @@
 
 cabal.mkDerivation (self: {
   pname = "hasktags";
-  version = "0.68.7";
-  sha256 = "0z98ha2xjc6npcyn15arp6h6ad87bs4acdhd1rnqrsy4lc0lny04";
-  isLibrary = false;
+  version = "0.69.0";
+  sha256 = "1bba6w5h5a5frc899cdlxcyshiqdni6lcqby618akr1917ih1qh8";
+  isLibrary = true;
   isExecutable = true;
   buildDepends = [ filepath json utf8String ];
   meta = {

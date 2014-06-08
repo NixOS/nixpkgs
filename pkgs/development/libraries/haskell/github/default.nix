@@ -5,17 +5,14 @@
 
 cabal.mkDerivation (self: {
   pname = "github";
-  version = "0.7.4";
-  sha256 = "1yalhixisjv1n9ihik3h6ya25f0066dd422nbpfysj9093hv3a5w";
+  version = "0.8";
+  sha256 = "0lzz7q2gjiq4z8yi1sb981m220qnwjizk9hqv09yfj5a4grqfchf";
   buildDepends = [
     aeson attoparsec caseInsensitive conduit dataDefault failure
     hashable HTTP httpConduit httpTypes network text time
     unorderedContainers vector
   ];
   jailbreak = true;
-  patchPhase = ''
-    sed -i -e '/^import Data.Conduit (ResourceT)/d' Github/Private.hs
-  '';
   meta = {
     homepage = "https://github.com/fpco/github";
     description = "Access to the Github API, v3";

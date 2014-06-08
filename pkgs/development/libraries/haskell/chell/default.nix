@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "chell";
-  version = "0.3.3";
-  sha256 = "1k5vxipf47753d41dgr1gr4zy7y72gz2x8lcn0fgfmxi2v810nsm";
+  version = "0.4";
+  sha256 = "1hynr7n7wxgc3z6zrc3xrfpiqlh4zfb3kagwwfhqmcamv9d4x0ng";
   buildDepends = [
     ansiTerminal options patience random text transformers
   ];

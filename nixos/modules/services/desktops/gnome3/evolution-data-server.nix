@@ -1,9 +1,12 @@
 # Evolution Data Server daemon.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
+let
+  gnome3 = config.environment.gnome3.packageSet;
+in
 {
 
   ###### interface
@@ -30,9 +33,9 @@ with pkgs.lib;
 
   config = mkIf config.services.gnome3.evolution-data-server.enable {
 
-    environment.systemPackages = [ pkgs.evolution_data_server ];
+    environment.systemPackages = [ gnome3.evolution_data_server ];
 
-    services.dbus.packages = [ pkgs.evolution_data_server ];
+    services.dbus.packages = [ gnome3.evolution_data_server ];
 
   };
 

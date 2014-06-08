@@ -11,19 +11,20 @@
 , ncurses
 , version
 , zlib
+, compiler-rt_src
 }:
 
 let
-  src = fetch "llvm" "0a169ba045r4apb9cv6ncrwl83l7yiajnzirkcdlhj1cd4nn3995";
+  src = fetch "llvm" "0fprxrilnlwk9qv7f0kplxc7kd8mp4x781asssv2nfi4r9pbna3x";
 in stdenv.mkDerivation rec {
   name = "llvm-${version}";
 
   unpackPhase = ''
     unpackFile ${src}
-    mv llvm-${version} llvm
+    mv llvm-${version}.src llvm
     sourceRoot=$PWD/llvm
-    unpackFile ${fetch "compiler-rt" "0p5b6varxdqn7q3n77xym63hhq4qqxd2981pfpa65r1w72qqjz7k"}
-    mv compiler-rt-${version} $sourceRoot/projects/compiler-rt
+    unpackFile ${compiler-rt_src}
+    mv compiler-rt-* $sourceRoot/projects/compiler-rt
   '';
 
   buildInputs = [ perl groff cmake libxml2 python libffi ] ++ stdenv.lib.optional stdenv.isLinux valgrind;

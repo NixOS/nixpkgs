@@ -1,8 +1,8 @@
 # This module defines a standard configuration for NixOS shells.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

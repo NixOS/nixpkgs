@@ -1,25 +1,38 @@
-{ fetchurl, stdenv, openssl, db, boost, zlib, miniupnpc, qt4 }:
+{ fetchurl, stdenv, openssl, db48, boost, zlib, miniupnpc, qt4, utillinux
+, pkgconfig, protobuf, qrencode }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.6";
+  version = "0.9.1";
   name = "bitcoin-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bitcoin/${name}-linux.tar.gz";
-    sha256 = "036xx06gyrfh65rpdapff3viz1f38vzkj7lnhil6fc0s7pjmsjbk";
+    url = "https://bitcoin.org/bin/${version}/${name}-linux.tar.gz";
+    sha256 = "3fabc1c629007b465a278525883663d41a2ba62699f2773536a8bf59ca210425";
   };
 
-  buildInputs = [ openssl db boost zlib miniupnpc qt4 ];
+  # hexdump from utillinux is required for tests
+  buildInputs = [
+    openssl db48 boost zlib miniupnpc qt4 utillinux pkgconfig protobuf qrencode
+  ];
 
-  configurePhase = ''
-    cd src
-    qmake
+  unpackPhase = ''
+    mkdir tmp-extract && (cd tmp-extract && tar xf $src)
+    tar xf tmp-extract/bitcoin*/src/bitcoin*.tar*
+    cd bitcoin*
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp bitcoin-qt $out/bin
+  configureFlags = [
+    "--with-boost=${boost}"
+  ];
+
+  preCheck = ''
+    # At least one test requires writing in $HOME
+    HOME=$TMPDIR
   '';
+
+  doCheck = true;
+
+  enableParallelBuilding = true;
 
   meta = {
       description = "Bitcoin is a peer-to-peer currency";

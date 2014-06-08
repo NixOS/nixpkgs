@@ -4,6 +4,7 @@
 , mesa
 , libass, fftw, ffms
 , ffmpeg, pkgconfig, zlib # Undocumented (?) dependencies
+, icu, boost, intltool # New dependencies
 , spellChecking ? true, hunspell ? null
 , automationSupport ? true, lua ? null
 , openalSupport ? false, openal ? null
@@ -21,15 +22,17 @@ assert portaudioSupport -> (portaudio != null);
 
 stdenv.mkDerivation rec {
   name = "aegisub-${version}";
-  version = "3.0.4";
+  version = "3.1.3";
 
   src = fetchurl {
     url = "http://ftp.aegisub.org/pub/releases/${name}.tar.xz";
-    md5 = "0f22d63ed4c502f3801795fa623a4f41";
+    sha256 = "0n2y5cggayr8246p2cvrz0ajlhhvmzcgsp7nljnm21jypk15pspg";
   };
 
+  nativeBuildInputs = [ intltool ];
+
   buildInputs = with stdenv.lib;
-  [ libX11 gettext wxGTK libiconv fontconfig freetype mesa libass fftw ffms ffmpeg pkgconfig zlib ]
+  [ libX11 gettext wxGTK libiconv fontconfig freetype mesa libass fftw ffms ffmpeg pkgconfig zlib icu boost ]
   ++ optional spellChecking hunspell
   ++ optional automationSupport lua
   ++ optional openalSupport openal
@@ -38,13 +41,13 @@ stdenv.mkDerivation rec {
   ++ optional portaudioSupport portaudio
   ;
 
-  NIX_LDFLAGS = "-liconv -lavutil -lavformat -lavcodec -lswscale -lz -lm";
+  NIX_LDFLAGS = "-liconv -lavutil -lavformat -lavcodec -lswscale -lz -lm -lGL";
 
-  preConfigure = "cd aegisub";
+  configureFlags = "--with-boost-libdir=${boost}/lib/";
 
-  postInstall = "ln -s $out/bin/aegisub-3.0 $out/bin/aegisub";
+  postInstall = "ln -s $out/bin/aegisub-* $out/bin/aegisub";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An advanced subtitle editor";
     longDescription = ''
       Aegisub is a free, cross-platform open source tool for creating and
@@ -53,12 +56,12 @@ stdenv.mkDerivation rec {
       built-in real-time video preview.
     '';
     homepage = http://www.aegisub.org/;
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.bsd3;
               # The Aegisub sources are itself BSD/ISC,
               # but they are linked against GPL'd softwares
               # - so the resulting program will be GPL
-    maintainers = [ stdenv.lib.maintainers.AndersonTorres ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.linux;
 
   };
 }

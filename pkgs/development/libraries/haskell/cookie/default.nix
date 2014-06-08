@@ -1,10 +1,10 @@
-{ cabal, blazeBuilder, dataDefault, text, time }:
+{ cabal, blazeBuilder, dataDefault, deepseq, text, time }:
 
 cabal.mkDerivation (self: {
   pname = "cookie";
-  version = "0.4.0.1";
-  sha256 = "01k5gq9kwbrivkhr1sj8aw4cgf2c1xgwwajqvd435r0g99fpx5kk";
-  buildDepends = [ blazeBuilder dataDefault text time ];
+  version = "0.4.1.1";
+  sha256 = "1w1nh7h4kc9pr9kpi8fkrqiih37mp3gcnxf42r01nciq4sh4yi3m";
+  buildDepends = [ blazeBuilder dataDefault deepseq text time ];
   meta = {
     homepage = "http://github.com/snoyberg/cookie";
     description = "HTTP cookie parsing and rendering";

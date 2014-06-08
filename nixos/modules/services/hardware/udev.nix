@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -20,6 +20,9 @@ let
     # Miscellaneous devices.
     KERNEL=="kvm",                  MODE="0666"
     KERNEL=="kqemu",                MODE="0666"
+
+    # Needed for gpm.
+    SUBSYSTEM=="input", KERNEL=="mice", TAG+="systemd"
   '';
 
   # Perform substitutions in all udev rules files.
@@ -83,8 +86,8 @@ let
         grep -l '\(RUN+\|IMPORT{program}\)="\(/usr\)\?/s\?bin' $i/*/udev/rules.d/* || true
       done
 
-      ${optionalString (!config.networking.usePredictableInterfaceNames) ''
-        ln -s /dev/null $out/80-net-name-slot.rules
+      ${optionalString config.networking.usePredictableInterfaceNames ''
+        cp ${./80-net-name-slot.rules} $out/80-net-name-slot.rules
       ''}
 
       # If auto-configuration is disabled, then remove
@@ -242,6 +245,10 @@ in
           ${config.systemd.package}/bin/udevadm hwdb --update && ln -sfn ${config.systemd.package} /var/lib/udev/prev-systemd
         fi
       '';
+
+    systemd.services.systemd-udevd =
+      { environment.MODULE_DIR = "/run/booted-system/kernel-modules/lib/modules";
+      };
 
   };
 }

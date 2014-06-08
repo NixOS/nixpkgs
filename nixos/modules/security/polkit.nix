@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -63,6 +63,9 @@ in
 
     systemd.packages = [ pkgs.polkit ];
 
+    systemd.services.polkit.restartTriggers = [ config.system.path ];
+    systemd.services.polkit.unitConfig.X-StopIfChanged = false;
+
     # The polkit daemon reads action/rule files
     environment.pathsToLink = [ "/share/polkit-1" ];
 
@@ -95,10 +98,6 @@ in
       ''
         # Probably no more needed, clean up
         rm -rf /var/lib/{polkit-1,PolicyKit}
-
-        # Force polkitd to be restarted so that it reloads its
-        # configuration.
-        ${pkgs.procps}/bin/pkill -INT -u root -x polkitd
       '';
 
     users.extraUsers.polkituser = {

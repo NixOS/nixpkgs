@@ -109,12 +109,6 @@ let
     crossConfig = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
   };
 
-  configWithPlatform = kernelPlatform:
-    import ./common-config.nix { inherit stdenv version kernelPlatform extraConfig; };
-
-  config = configWithPlatform stdenv.platform;
-  configCross = configWithPlatform stdenv.cross.platform;
-
   passthru = {
     # Combine the `features' attribute sets of all the kernel patches.
     features = lib.fold (x: y: (x.features or {}) // y) features kernelPatches;
@@ -123,6 +117,14 @@ let
 
     passthru = kernel.passthru // (removeAttrs passthru [ "passthru" "meta" ]);
   };
+
+  configWithPlatform = kernelPlatform: import ./common-config.nix
+    { inherit stdenv version kernelPlatform extraConfig;
+      features = passthru.features; # Ensure we know of all extra patches, etc.
+    };
+
+  config = configWithPlatform stdenv.platform;
+  configCross = configWithPlatform stdenv.cross.platform;
 
   nativeDrv = lib.addPassthru kernel.nativeDrv passthru;
 

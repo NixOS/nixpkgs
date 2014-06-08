@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
   cfg = config.services.btsync;
@@ -24,7 +24,7 @@ let
     optionalString (e ? "knownHosts")
       (concatStringsSep "," (map (v: "\"${v}\"") e."knownHosts"));
 
-  sharedFoldersRecord = with pkgs.lib;
+  sharedFoldersRecord =
     concatStringsSep "," (map (entry:
       let helper = attr: v:
         if (entry ? attr) then boolStr entry.attr else boolStr v;
@@ -164,6 +164,7 @@ in
       httpLogin = mkOption {
         type = types.str;
         example = "allyourbase";
+        default = "";
         description = ''
           HTTP web login username.
         '';
@@ -172,6 +173,7 @@ in
       httpPass = mkOption {
         type = types.str;
         example = "arebelongtous";
+        default = "";
         description = ''
           HTTP web login password.
         '';
@@ -237,12 +239,6 @@ in
         { assertion = cfg.apiKey != "" -> cfg.enableWebUI;
           message   = "If you're using an API key, you must enable the web server.";
         }
-        # TODO FIXME: the README says not specifying the login/pass means it
-        # should disable authentication, but apparently it doesn't?
-        { assertion = cfg.enableWebUI -> cfg.httpLogin != "" && cfg.httpPass != "";
-          message   = "If using the web UI, you must configure a login/password.";
-        }
-        # TODO FIXME: assert the existence of sharedFolder directories?
       ];
 
     users.extraUsers.btsync = {

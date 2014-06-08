@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "gtk-traymanager";
-  version = "0.1.3";
-  sha256 = "07671f3j3r07djgvrlpbdaqqnm2yc7sc5f5isjn5nczrwh8n0sj4";
+  version = "0.1.4";
+  sha256 = "0dprxds49ljn0n94ca423gvh5ks2jmb4qx3lkqwpxqbcp0j8il7p";
   buildDepends = [ glib gtk ];
   pkgconfigDepends = [ gtk x11 ];
   meta = {

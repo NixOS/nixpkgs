@@ -1,7 +1,7 @@
-{ stdenv, androidsdk, jdk, ant }:
+{ stdenv, androidsdk, jdk, ant, androidndk, gnumake, gawk, file, which }:
 args@{ name, src, platformVersions ? [ "8" ], useGoogleAPIs ? false, antFlags ? ""
 , release ? false, keyStore ? null, keyAlias ? null, keyStorePassword ? null, keyAliasPassword ? null
-, ...
+, useNDK ? false, ...
 }:
 
 assert release -> keyStore != null && keyAlias != null && keyStorePassword != null && keyAliasPassword != null;
@@ -18,11 +18,12 @@ let
 in
 stdenv.mkDerivation ({
   name = stdenv.lib.replaceChars [" "] [""] name;
-  
+
   ANDROID_HOME = "${androidsdkComposition}/libexec/android-sdk-${platformName}";
 
-  buildInputs = [ jdk ant ];
-  
+  buildInputs = [ jdk ant ] ++
+    stdenv.lib.optional useNDK [ androidndk gnumake gawk file which ];
+
   buildPhase = ''
     ${stdenv.lib.optionalString release ''
     
@@ -33,11 +34,16 @@ stdenv.mkDerivation ({
         echo "key.alias.password=${keyAliasPassword}"
       ) >> ant.properties
     ''}
-  
+
     export ANDROID_SDK_HOME=`pwd` # Key files cannot be stored in the user's home directory. This overrides it.
+    ${if useNDK then ''
+        export GNUMAKE=${gnumake}/bin/make
+        export NDK_HOST_AWK=${gawk}/bin/gawk
+        ${androidndk}/ndk-build
+      '' else ""}
     ant ${antFlags} ${if release then "release" else "debug"}
   '';
-  
+
   installPhase = ''
     mkdir -p $out
     mv bin/*-${if release then "release" else "debug"}.apk $out

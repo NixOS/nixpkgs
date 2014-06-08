@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -76,7 +76,12 @@ in
 
     environment.systemPackages = [ glibcLocales ];
 
-    environment.variables.LANG = config.i18n.defaultLocale;
+    environment.variables =
+      { LANG = config.i18n.defaultLocale;
+        LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
+      };
+
+    systemd.globalEnvironment.LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
 
     # ‘/etc/locale.conf’ is used by systemd.
     environment.etc = singleton

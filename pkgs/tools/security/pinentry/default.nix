@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, glib
-, useGtk ? true, gtk
+, useGtk ? !stdenv.isDarwin, gtk
 , useNcurses ? true, ncurses
 , useQt4 ? false, qt4 }:
 

@@ -1,10 +1,10 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   cfgFile = pkgs.writeText "reader.conf" "";
 in
 
-with pkgs.lib;
+with lib;
 
 {
 
@@ -28,9 +28,15 @@ with pkgs.lib;
 
   config = mkIf config.services.pcscd.enable {
 
+    systemd.sockets.pcscd = {
+      description = "PCSC-Lite Socket";
+      wantedBy = [ "sockets.target" ];
+      before = [ "multi-user.target" ];
+      socketConfig.ListenStream = "/run/pcscd/pcscd.comm";
+    };
+
     systemd.services.pcscd = {
       description = "PCSC-Lite daemon";
-      wantedBy = [ "multi-user.target" ];
       preStart = ''
           mkdir -p /var/lib/pcsc
           rm -Rf /var/lib/pcsc/drivers
@@ -38,7 +44,8 @@ with pkgs.lib;
       '';
       serviceConfig = {
         Type = "forking";
-        ExecStart = "${pkgs.pcsclite}/sbin/pcscd -c ${cfgFile}";
+        ExecStart = "${pkgs.pcsclite}/sbin/pcscd --auto-exit -c ${cfgFile}";
+        ExecReload = "${pkgs.pcsclite}/sbin/pcscd --hotplug";
       };
     };
 

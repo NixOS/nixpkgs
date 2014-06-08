@@ -2,7 +2,7 @@
 , binary, blazeHtml, blazeMarkup, dataDefault, Diff
 , extensibleExceptions, filepath, happy, highlightingKate, hslua
 , HTTP, httpConduit, httpTypes, HUnit, mtl, network, pandocTypes
-, parsec, QuickCheck, random, syb, tagsoup, temporary
+, parsec, QuickCheck, random, scientific, syb, tagsoup, temporary
 , testFramework, testFrameworkHunit, testFrameworkQuickcheck2
 , texmath, text, time, unorderedContainers, vector, xml, yaml
 , zipArchive, zlib
@@ -10,16 +10,16 @@
 
 cabal.mkDerivation (self: {
   pname = "pandoc";
-  version = "1.12.3.3";
-  sha256 = "0v7wvh93rz3k7phlz21627j5xakpi83174mchr3lwg4bmkfxn25s";
+  version = "1.12.4.2";
+  sha256 = "0ibzladj0xm0xnsphd26lzndxzkawz73pfd7rnlnmllqckrzairg";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     aeson alex attoparsec base64Bytestring binary blazeHtml blazeMarkup
     dataDefault extensibleExceptions filepath happy highlightingKate
     hslua HTTP httpConduit httpTypes mtl network pandocTypes parsec
-    random syb tagsoup temporary texmath text time unorderedContainers
-    vector xml yaml zipArchive zlib
+    random scientific syb tagsoup temporary texmath text time
+    unorderedContainers vector xml yaml zipArchive zlib
   ];
   testDepends = [
     ansiTerminal Diff filepath highlightingKate HUnit pandocTypes

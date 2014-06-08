@@ -4,9 +4,7 @@
 # router connected to both that performs Network Address Translation
 # for the client.
 
-{ pkgs, ... }:
-
-{
+import ./make-test.nix {
 
   nodes =
     { client =

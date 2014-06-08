@@ -1,12 +1,12 @@
 { lib, pythonPackages, fetchurl, libxslt, docbook5_xsl, openssh }:
 
 pythonPackages.buildPythonPackage rec {
-  name = "nixops-1.1.1";
+  name = "nixops-1.2";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://nixos.org/releases/nixops/${name}/${name}.tar.bz2";
-    sha256 = "0hb77cf9l8qcjp6a1gzkzv7k10j5zvp23ilxgx5x6j93602d5jwb";
+    sha256 = "06cf54c62a810cac5013d57d31707f0a6381b409485503a94a57ce6d8a1ac12b";
   };
 
   buildInputs = [ libxslt ];

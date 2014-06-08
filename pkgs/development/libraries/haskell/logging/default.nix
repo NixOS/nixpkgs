@@ -1,14 +1,14 @@
 { cabal, binary, fastLogger, hspec, liftedBase, monadControl
-, monadLogger, pcreLight, text, thyme, transformers, vectorSpace
+, monadLogger, pcreLight, text, time, transformers, vectorSpace
 }:
 
 cabal.mkDerivation (self: {
   pname = "logging";
-  version = "1.3.0";
-  sha256 = "1d2is6p828xvh59f9b971xf0w2l229652rniccxpm2mcfs893c79";
+  version = "1.4.1";
+  sha256 = "15mhpafv797f8aifjyjb5nc0fkd7if7bvx5hx9mzxycdzlk28gfp";
   buildDepends = [
     binary fastLogger liftedBase monadControl monadLogger pcreLight
-    text thyme transformers vectorSpace
+    text time transformers vectorSpace
   ];
   testDepends = [ hspec monadLogger ];
   meta = {

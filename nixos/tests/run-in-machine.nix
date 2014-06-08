@@ -2,7 +2,9 @@
 
 with import ../lib/testing.nix { inherit system; };
 
-runInMachine {
-  drv = pkgs.patchelf;
-  machine = { config, pkgs, ... }: { services.sshd.enable = true; };
+{
+  test = runInMachine {
+    drv = pkgs.hello;
+    machine = { config, pkgs, ... }: { /* services.sshd.enable = true; */ };
+  };
 }

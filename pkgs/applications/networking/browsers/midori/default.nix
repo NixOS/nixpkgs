@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "0.5.7";
+  version = "0.5.8";
 in
 stdenv.mkDerivation rec {
   name = "midori-${version}";
@@ -19,8 +19,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/downloads/midori_${version}_all_.tar.bz2";
-    sha256 = "0k8bppicgzm97g5x8ahvpw9wvg2f1mq093qp8biwr858m0mbnx98";
+    sha256 = "10ckm98rfqfbwr84b8mc1ssgj84wjgkr4dadvx2l7c64sigi66dg";
   };
+
+  sourceRoot = ".";
 
   buildInputs = [
     cmake pkgconfig intltool vala makeWrapper
@@ -32,9 +34,9 @@ stdenv.mkDerivation rec {
     -DUSE_ZEITGEIST=OFF
   '';
 
-  postInstall = ''
+  preFixup = ''
     wrapProgram $out/bin/midori \
       --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gsettings_desktop_schemas}/share"
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 }

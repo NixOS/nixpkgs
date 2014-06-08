@@ -1,6 +1,6 @@
 { stdenv, fetchurl, zlib, xz }:
 
-assert zlib != null;
+assert !(stdenv ? cross) -> zlib != null;
 
 stdenv.mkDerivation rec {
   name = "libpng-1.2.51";
@@ -15,6 +15,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ xz ];
 
   passthru = { inherit zlib; };
+
+  crossAttrs = stdenv.lib.optionalAttrs (stdenv.cross.libc == "libSystem") {
+    propagatedBuildInputs = [];
+    passthru = {};
+  };
+
+  configureFlags = "--enable-static";
 
   meta = {
     description = "The official reference implementation for the PNG file format";

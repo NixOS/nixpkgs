@@ -1,9 +1,9 @@
-{ stdenv, fetchurl_gnome, pkgconfig, gtk, glibmm, cairomm, pangomm, atkmm }:
+{ stdenv, fetchurlGnome, pkgconfig, gtk, glibmm, cairomm, pangomm, atkmm }:
 
 stdenv.mkDerivation rec {
   name = src.pkgname;
 
-  src = fetchurl_gnome {
+  src = fetchurlGnome {
     project = "gtkmm";
     major = "2"; minor = "24"; patchlevel = "4"; extension = "xz";
     sha256 = "1vpmjqv0aqb1ds0xi6nigxnhlr0c74090xzi15b92amlzkrjyfj4";

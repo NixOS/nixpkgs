@@ -1,7 +1,7 @@
 {cabal, fetchurl, GLUT, HTTP, HUnit, OpenGL, QuickCheck, cgi, fgl,
  haskellSrc, html, network, parallel, parsec, regexBase, regexCompat, regexPosix,
  stm, syb, deepseq, text, transformers, mtl, xhtml, zlib,
- cabalInstall, alex, happy, haddock, ghc}:
+ cabalInstall, alex, happy, ghc}:
 
 cabal.mkDerivation (self : {
   pname = "haskell-platform";
@@ -11,16 +11,18 @@ cabal.mkDerivation (self : {
     url = "http://lambda.haskell.org/hp-tmp/${self.version}/cabal/${self.pname}-${self.version}.tar.gz";
     sha256 = "01ppv8jdyvbngml9vgvrvnani6fj1nbk8mqmrkd8c508l7q9g6vb";
   };
+  isLibrary = false;
   propagatedBuildInputs = [
     GLUT HTTP HUnit OpenGL QuickCheck cgi fgl
     haskellSrc html network parallel parsec regexBase regexCompat regexPosix
     stm syb deepseq text transformers mtl xhtml zlib
-    cabalInstall alex happy ghc haddock
+    cabalInstall alex happy ghc
   ];
   noHaddock = true;
   meta = {
     description = "Haskell Platform meta package";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [andres simons];
   };
 })
-

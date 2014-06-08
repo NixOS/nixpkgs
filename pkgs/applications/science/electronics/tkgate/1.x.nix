@@ -1,7 +1,9 @@
-{ stdenv, fetchurl, tcl, tk, libX11, libiconvOrLibc, which, yacc, flex, imake, xproto, gccmakedep }:
+{ stdenv, fetchurl, tcl, tk, libX11, glibc, which, yacc, flex, imake, xproto, gccmakedep }:
 
-assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
-
+let
+  libiconvInc = stdenv.lib.optionalString stdenv.isLinux "${glibc}/include";
+  libiconvLib = stdenv.lib.optionalString stdenv.isLinux "${glibc}/lib";
+in
 stdenv.mkDerivation rec {
   name = "tkgate-1.8.7";
 
@@ -10,13 +12,13 @@ stdenv.mkDerivation rec {
     sha256 = "1pqywkidfpdbj18i03h97f4cimld4fb3mqfy8jjsxs12kihm18fs";
   };
 
-  buildInputs = [ tcl tk libX11 libiconvOrLibc which yacc flex imake xproto gccmakedep ];
+  buildInputs = [ tcl tk libX11 which yacc flex imake xproto gccmakedep ];
 
   patchPhase = ''
     sed -i config.h \
       -e 's|.*#define.*TKGATE_TCLTK_VERSIONS.*|#define TKGATE_TCLTK_VERSIONS "8.5"|' \
-      -e 's|.*#define.*TKGATE_INCDIRS.*|#define TKGATE_INCDIRS "${tcl}/include ${tk}/include ${libiconvOrLibc}/include ${libX11}/include"|' \
-      -e 's|.*#define.*TKGATE_LIBDIRS.*|#define TKGATE_LIBDIRS "${tcl}/lib ${tk}/lib ${libiconvOrLibc}/lib ${libX11}/lib"|' \
+      -e 's|.*#define.*TKGATE_INCDIRS.*|#define TKGATE_INCDIRS "${tcl}/include ${tk}/include ${libiconvInc} ${libX11}/include"|' \
+      -e 's|.*#define.*TKGATE_LIBDIRS.*|#define TKGATE_LIBDIRS "${tcl}/lib ${tk}/lib ${libiconvLib} ${libX11}/lib"|' \
       \
       -e '20 i #define TCL_LIBRARY "${tcl}/lib"' \
       -e '20 i #define TK_LIBRARY "${tk}/lib/${tk.libPrefix}"' \
@@ -33,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.tkgate.org/";
     license = "GPLv2+";
     maintainers = [ stdenv.lib.maintainers.simons ];
-    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = stdenv.lib.platforms.linux;
   };
 }

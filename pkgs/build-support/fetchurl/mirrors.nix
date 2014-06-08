@@ -180,11 +180,17 @@ rec {
   ];
 
   # Fedora (please only add full mirrors that carry old Fedora distributions as well).
+  # See: https://mirrors.fedoraproject.org/publiclist (but not all carry old content).
   fedora = [
+    http://archives.fedoraproject.org/pub/archive/fedora/
+    http://fedora.osuosl.org/
     http://ftp.nluug.nl/pub/os/Linux/distr/fedora/
     http://ftp.funet.fi/pub/mirrors/ftp.redhat.com/pub/fedora/
-    http://download.fedora.redhat.com/pub/fedora/
-    http://archives.fedoraproject.org/pub/archive/fedora/
+    http://fedora.bhs.mirrors.ovh.net/
+    http://mirror.csclub.uwaterloo.ca/fedora/
+    http://ftp.linux.cz/pub/linux/fedora/
+    http://ftp.heanet.ie/pub/fedora/
+    http://mirror.1000mbps.com/fedora/
   ];
 
   # Old SUSE distributions.  Unfortunately there is no master site,

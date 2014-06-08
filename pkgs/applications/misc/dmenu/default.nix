@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
 
   patches = optional enableXft xftPatch;
 
+  postPatch = ''
+    sed -ri -e 's!\<(dmenu|stest)\>!'"$out/bin"'/&!g' dmenu_run
+  '';
+
   preConfigure = [ ''sed -i "s@PREFIX = /usr/local@PREFIX = $out@g" config.mk'' ];
 
   meta = { 

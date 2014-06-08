@@ -1,23 +1,21 @@
-{ cabal, aeson, attoparsec, Cabal, cpphs, dataDefault, filepath
-, ghcPaths, haskellNames, haskellPackages, haskellSrcExts, HUnit
-, languageEcmascript, mtl, optparseApplicative, prettyShow, safe
-, scientific, sourcemap, split, syb, testFramework
-, testFrameworkHunit, testFrameworkTh, text, time, uniplate
+{ cabal, aeson, attoparsec, dataDefault, filepath, ghcPaths, groom
+, haskellNames, haskellPackages, haskellSrcExts, languageEcmascript
+, mtl, optparseApplicative, safe, sourcemap, split, spoon, syb
+, tasty, tastyHunit, tastyTh, text, transformers, uniplate
 , unorderedContainers, utf8String, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "fay";
-  version = "0.19.2";
-  sha256 = "08lq2x87gsf5szdj613k9h3qxzpb99hjhxnq3vggs2kf0ijp6xmh";
+  version = "0.20.0.4";
+  sha256 = "0cxcd4nxnq8nl03xgxa1nb0932hq4dz1lxpp3gqqs5k5wvs62303";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    aeson attoparsec Cabal cpphs dataDefault filepath ghcPaths
-    haskellNames haskellPackages haskellSrcExts HUnit
-    languageEcmascript mtl optparseApplicative prettyShow safe
-    scientific sourcemap split syb testFramework testFrameworkHunit
-    testFrameworkTh text time uniplate unorderedContainers utf8String
+    aeson attoparsec dataDefault filepath ghcPaths groom haskellNames
+    haskellPackages haskellSrcExts languageEcmascript mtl
+    optparseApplicative safe sourcemap split spoon syb tasty tastyHunit
+    tastyTh text transformers uniplate unorderedContainers utf8String
     vector
   ];
   meta = {

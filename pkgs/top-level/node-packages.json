@@ -121,4 +121,14 @@
 , "deepmerge"
 , "slasp"
 , "react"
+, { "pure-css": "git://github.com/yui/pure.git#v0.5.0-rc-1" }
+, "marked"
+, "browserify"
+, "uglify-js"
+, "less"
+, "mocha-phantomjs"
+, "phantomjs"
+, "sinon"
+, "shelljs"
+, "typescript"
 ]

@@ -2,11 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "pcre-light";
-  version = "0.4";
-  sha256 = "1xiikiap1bvx9czw64664vifdq64scx0yhfclh5m8mkvn3x6yzxk";
+  version = "0.4.0.2";
+  sha256 = "0baq46d3k376mhh98gkfi6phndk8ba25c2kll9zms1y07mn3bnnx";
   extraLibraries = [ pcre ];
   meta = {
-    homepage = "http://code.haskell.org/~dons/code/pcre-light";
+    homepage = "https://github.com/Daniel-Diaz/pcre-light";
     description = "A small, efficient and portable regex library for Perl 5 compatible regular expressions";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

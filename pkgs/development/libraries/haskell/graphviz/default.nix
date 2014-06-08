@@ -4,19 +4,15 @@
 
 cabal.mkDerivation (self: {
   pname = "graphviz";
-  version = "2999.16.0.0";
-  sha256 = "1g4q4wyj5amz9xvgnqn143p5nq6m4a0lggxz7jn9l2hwp41bx1g8";
+  version = "2999.17.0.1";
+  sha256 = "0s6l1mlqvllrlx7vc06lgcs68ajhfk98awm63ab1dkqmcnj23ixv";
+  isLibrary = true;
+  isExecutable = true;
   buildDepends = [
     colour dlist fgl filepath polyparse temporary text transformers
     wlPprintText
   ];
-  testDepends = [
-    colour dlist fgl filepath polyparse QuickCheck temporary text
-    transformers wlPprintText
-  ];
-  patchPhase = ''
-    sed -i -e 's|polyparse.*,|polyparse,|' -e 's|dlist ==.*|dlist|' -e 's|temporary.*,|temporary,|' graphviz.cabal
-  '';
+  testDepends = [ fgl filepath QuickCheck text ];
   doCheck = false;
   meta = {
     homepage = "http://projects.haskell.org/graphviz/";

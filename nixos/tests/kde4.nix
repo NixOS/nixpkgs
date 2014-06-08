@@ -1,13 +1,11 @@
-{ pkgs, ... }:
-
-{
+import ./make-test.nix ({ pkgs, ... }: {
 
   machine =
     { config, pkgs, ... }:
 
     { imports = [ ./common/user-account.nix ];
 
-      virtualisation.memorySize = 768;
+      virtualisation.memorySize = 1024;
 
       services.xserver.enable = true;
 
@@ -64,4 +62,4 @@
       $machine->screenshot("screen");
     '';
 
-}
+})

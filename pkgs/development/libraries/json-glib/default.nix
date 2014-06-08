@@ -1,15 +1,15 @@
-{ stdenv, fetchurl_gnome, glib, pkgconfig, gobjectIntrospection, dbus }:
+{ stdenv, fetchurlGnome, glib, pkgconfig, gobjectIntrospection, dbus }:
 
 stdenv.mkDerivation rec {
   name = src.pkgname;
 
-  src = fetchurl_gnome {
+  src = fetchurlGnome {
     project = "json-glib";
-    major = "0";
-    minor = "16";
-    patchlevel = "2";
+    major = "1";
+    minor = "0";
+    patchlevel = "0";
     extension = "xz";
-    sha256 = "0b22yw0n87mg7a5lkqw1d7xqnm8qj1bwy0wklv9b2yn29qv7am59";
+    sha256 = "dbf558d2da989ab84a27e4e13daa51ceaa97eb959c2c2f80976c9322a8f4cdde";
   };
 
   configureflags= "--with-introspection" ; 
@@ -17,8 +17,10 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ glib gobjectIntrospection ];
   nativeBuildInputs = [ pkgconfig ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://live.gnome.org/JsonGlib;
     description = "A library providing (de)serialization support for the JavaScript Object Notation (JSON) format";
+    license = licenses.lgpl2;
+    maintainers = with maintainers; [ lethalman ];
   };
 }

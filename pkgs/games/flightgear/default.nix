@@ -6,17 +6,17 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.12.1";
+  version = "3.0.0";
   name = "flightgear-${version}";
 
   src = fetchurl {
     url = "http://ftp.linux.kiev.ua/pub/fgfs/Source/${name}.tar.bz2";
-    sha256 = "1wj0a9k9pq404lylmv7v5f05vmrqd8fwj61kr78vldf44n44gixw";
+    sha256 = "1sd6ic9rrcgrqvc6ywkasj2pnmmmdv1i2rlyac2a882rh8i1kgz4";
   };
 
   datasrc = fetchurl {
-    url = "http://ftp.igh.cnrs.fr/pub/flightgear/ftp/Shared/FlightGear-${version}-data.tar.bz2";
-    sha256 = "0hlsvzz12pyzw3mb4xsv4iwblrbf7d27mdprll64kr7p1h9qlmkl";
+    url = "http://ftp.igh.cnrs.fr/pub/flightgear/ftp/Shared/FlightGear-data-${version}.tar.bz2";
+    sha256 = "0mq5hkh8zgm129mg1ij3rrk7h2xs9ijxa7d7hipjlp6mcyhlk0q4";
   };
 
   # Of all the files in the source and data archives, there doesn't seem to be
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    mkdir -p "$out/share/FlightGear"
-    tar xvf "${datasrc}" -C "$out/share/FlightGear/" --strip-components=1
-
     mkdir -p "$out/share/applications/"
     cp "${desktopItem}"/share/applications/* "$out/share/applications/"
+
+    mkdir -p "$out/share/FlightGear"
+    tar xvf "${datasrc}" -C "$out/share/FlightGear/" --strip-components=1
   '';
 
   meta = with stdenv.lib; {

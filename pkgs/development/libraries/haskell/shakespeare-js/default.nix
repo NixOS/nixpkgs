@@ -1,14 +1,14 @@
-{ cabal, aeson, hspec, HUnit, shakespeare, text }:
+{ cabal, shakespeare }:
 
 cabal.mkDerivation (self: {
   pname = "shakespeare-js";
-  version = "1.2.0.4";
-  sha256 = "1y7bqv3yrlzbhd5s8w36z6vcc9jk5b9i8chhsqda5qay85rd0ipz";
-  buildDepends = [ aeson shakespeare text ];
-  testDepends = [ aeson hspec HUnit shakespeare text ];
+  version = "1.3.0";
+  sha256 = "0hihcrgvzf4nsrgw6vqpkzbgskq01yc1mnvp7g2wy7vq0dv4pjp4";
+  buildDepends = [ shakespeare ];
+  noHaddock = true;
   meta = {
     homepage = "http://www.yesodweb.com/book/shakespearean-templates";
-    description = "Stick your haskell variables into javascript/coffeescript at compile time";
+    description = "Stick your haskell variables into javascript/coffeescript at compile time. (deprecated)";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];

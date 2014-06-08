@@ -6,6 +6,9 @@ cabal.mkDerivation (self: {
   sha256 = "0r23mqbfvvvx6shzdclzfrqi8r95gxl93cih7ny7w7px3w5yc5x6";
   buildDepends = [ HTTP network ];
   testDepends = [ HUnit testFramework testFrameworkHunit ];
+  patchPhase = ''
+    sed -i -e 's|network *==.*|network|' oeis.cabal
+  '';
   meta = {
     description = "Interface to the Online Encyclopedia of Integer Sequences (OEIS)";
     license = self.stdenv.lib.licenses.bsd3;

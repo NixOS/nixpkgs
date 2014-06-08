@@ -66,7 +66,11 @@ let
     propagatedBuildInputs = [ qt4 poppler_glib ];
     patches = qtcairo_patches;
     NIX_LDFLAGS = "-lpoppler";
-    postConfigure = "cd qt4";
+    postConfigure = ''
+      mkdir -p "$out/lib/pkgconfig"
+      install -c -m 644 poppler-qt4.pc "$out/lib/pkgconfig"
+      cd qt4
+    '';
   };
 
 in { inherit poppler_glib poppler_qt4; } // poppler_glib

@@ -1,30 +1,25 @@
-a :  
-let 
-  s = import ./src-for-default.nix;
-  buildInputs = with a; [
-    bison flex openssl
-  ];
-in
-rec {
-  src = a.fetchUrlFromSrcInfo s;
+{stdenv, fetchurl, openssl, bison, flex, pam, usePAM ? stdenv.isLinux }:
 
-  inherit (s) name;
-  inherit buildInputs;
+stdenv.mkDerivation rec {
+  name = "monit-5.8.1";
+  
+  src = fetchurl {
+    url = "${meta.homepage}dist/${name}.tar.gz";
+    sha256 = "1rbhr3aff8pbiz60r73607hci4yngv5xq1b6yjx9xhks4mwlnpm2";
+  };
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["preConfigure" "doConfigure" "doMakeInstall"];
+  nativeBuildInputs = [ bison flex ];
+  buildInputs = [ openssl ] ++ stdenv.lib.optionals usePAM [ pam ];
+
   configureFlags = [
-    "--with-ssl-incl-dir=${a.openssl}/include"
-    "--with-ssl-lib-dir=${a.openssl}/lib"
-    ];
-  preConfigure = a.fullDepEntry (''
-    sed -e 's@/bin/@@' -i Makefile.in
-  '') ["doUnpack" "minInit"];
-      
+    "--with-ssl-incl-dir=${openssl}/include"
+    "--with-ssl-lib-dir=${openssl}/lib"
+  ] ++ stdenv.lib.optionals (! usePAM) [ "--without-pam" ];
+
   meta = {
+    homepage = http://mmonit.com/monit/;
     description = "Monitoring system";
-    maintainers = [
-      a.lib.maintainers.raskin
-    ];
+    license = stdenv.lib.licenses.agpl3;
+    maintainer = with stdenv.lib.maintainers; [ raskin wmertens ];
   };
 }

@@ -1,17 +1,7 @@
-{ stdenv, fetchurl, devSnapshot ? false }:
+{ stdenv, fetchurl }:
 
 let
-  version = if devSnapshot
-    then "4.8.2"
-    else "4.8.0.5";
-  srcRelease = fetchurl {
-    url = "http://code.call-cc.org/releases/4.8.0/chicken-4.8.0.5.tar.gz";
-    sha256 = "1yrhqirqj3l535zr5mv8d1mz9gq876wwwg4nsjfw27663far54av";
-  };
-  srcDev = fetchurl {
-    url = "http://code.call-cc.org/dev-snapshots/2013/08/08/chicken-4.8.2.tar.gz";
-    sha256 = "01g7h0664342nl536mnri4c72kwj4z40vmv1250xfndlr218qdqg";
-  };
+  version = "4.9.0";
   platform = with stdenv;
     if isDarwin then "macosx"
     else if isCygwin then "cygwin"
@@ -22,9 +12,10 @@ in
 stdenv.mkDerivation {
   name = "chicken-${version}";
 
-  src = if devSnapshot
-    then srcDev
-    else srcRelease;
+  src = fetchurl {
+    url = "http://code.call-cc.org/releases/4.9.0/chicken-${version}.tar.gz";
+    sha256 = "08jaavr3lhs0z2q9k7b7w8l3fsxpms58zxg8nyk8674p54cbwaig";
+  };
 
   buildFlags = "PLATFORM=${platform} PREFIX=$(out) VARDIR=$(out)/var/lib";
   installFlags = "PLATFORM=${platform} PREFIX=$(out) VARDIR=$(out)/var/lib";

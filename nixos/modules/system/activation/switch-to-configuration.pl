@@ -65,7 +65,7 @@ $SIG{PIPE} = "IGNORE";
 sub getActiveUnits {
     # FIXME: use D-Bus or whatever to query this, since parsing the
     # output of list-units is likely to break.
-    my $lines = `@systemd@/bin/systemctl list-units --full`;
+    my $lines = `LANG= systemctl list-units --full --no-legend`;
     my $res = {};
     foreach my $line (split '\n', $lines) {
         chomp $line;
@@ -96,23 +96,32 @@ sub parseFstab {
 
 sub parseUnit {
     my ($filename) = @_;
-    parseKeyValues(read_file($filename));
+    my $info = {};
+    parseKeyValues($info, read_file($filename));
+    parseKeyValues($info, read_file("${filename}.d/overrides.conf")) if -f "${filename}.d/overrides.conf";
+    return $info;
 }
 
 sub parseKeyValues {
-    my @lines = @_;
-    my $info = {};
+    my $info = shift;
     foreach my $line (@_) {
         # FIXME: not quite correct.
         $line =~ /^([^=]+)=(.*)$/ or next;
         $info->{$1} = $2;
     }
-    return $info;
 }
 
 sub boolIsTrue {
     my ($s) = @_;
     return $s eq "yes" || $s eq "true";
+}
+
+# As a fingerprint for determining whether a unit has changed, we use
+# its absolute path. If it has an override file, we append *its*
+# absolute path as well.
+sub fingerprintUnit {
+    my ($s) = @_;
+    return abs_path($s) . (-f "${s}.d/overrides.conf" ? " " . abs_path "${s}.d/overrides.conf" : "");
 }
 
 # Stop all services that no longer exist or have changed in the new
@@ -166,7 +175,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
             }
         }
 
-        elsif (abs_path($prevUnitFile) ne abs_path($newUnitFile)) {
+        elsif (fingerprintUnit($prevUnitFile) ne fingerprintUnit($newUnitFile)) {
             if ($unit eq "sysinit.target" || $unit eq "basic.target" || $unit eq "multi-user.target" || $unit eq "graphical.target") {
                 # Do nothing.  These cannot be restarted directly.
             } elsif ($unit =~ /\.mount$/) {
@@ -179,7 +188,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
                 if (boolIsTrue($unitInfo->{'X-ReloadIfChanged'} // "no")) {
                     write_file($reloadListFile, { append => 1 }, "$unit\n");
                 }
-                elsif (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "yes")) {
+                elsif (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "yes") || boolIsTrue($unitInfo->{'RefuseManualStop'} // "no") ) {
                     push @unitsToSkip, $unit;
                 } else {
                     # If this unit is socket-activated, then stop the
@@ -288,7 +297,7 @@ foreach my $device (keys %$prevSwaps) {
 if (scalar @unitsToStop > 0) {
     @unitsToStop = unique(@unitsToStop);
     print STDERR "stopping the following units: ", join(", ", sort(@unitsToStop)), "\n";
-    system("@systemd@/bin/systemctl", "stop", "--", @unitsToStop); # FIXME: ignore errors?
+    system("systemctl", "stop", "--", @unitsToStop); # FIXME: ignore errors?
 }
 
 print STDERR "NOT restarting the following units: ", join(", ", sort(@unitsToSkip)), "\n"
@@ -354,7 +363,8 @@ while (my ($unit, $state) = each %{$activeNew}) {
     elsif ($state->{state} eq "auto-restart") {
         # A unit in auto-restart state is a failure *if* it previously failed to start
         my $lines = `@systemd@/bin/systemctl show '$unit'`;
-        my $info = parseKeyValues(split "\n", $lines);
+        my $info = {};
+        parseKeyValues($info, split("\n", $lines));
 
         if ($info->{ExecMainStatus} ne '0') {
             push @failed, $unit;

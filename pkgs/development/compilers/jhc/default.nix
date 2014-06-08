@@ -1,30 +1,31 @@
-{
-  stdenv, fetchurl, perl, ghc, binary, zlib, utf8String, readline, fgl,
-  regexCompat, HsSyck, random
-}:
+{ stdenv, fetchurl, perl, ghc, binary, zlib, utf8String, readline, fgl,
+  regexCompat, HsSyck, random }:
 
 stdenv.mkDerivation rec {
-
   name = "jhc-${version}";
-
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchurl {
     url = "http://repetae.net/dist/${name}.tar.gz";
-    sha256 = "0rbv0gpp7glhd9xqy7snbiaiizwnsfg9vzhvyywcvbmb35yivy2a";
+    sha256 = "11fya5ggk6q4vcm3kwjacfaaqvkammih25saqwlr1g40bcikbnf2";
   };
 
-  buildInputs = [
-    perl ghc binary zlib utf8String readline fgl regexCompat HsSyck random
-  ];
+  patchPhase = ''
+    substituteInPlace ./src/Util/Interact.hs \
+      --replace USE_NOLINE USE_READLINE
+  '';
+
+  buildInputs =
+    [ perl ghc binary zlib utf8String
+      readline fgl regexCompat HsSyck random
+    ];
 
   meta = {
+    description = "Whole-program, globally optimizing Haskell compiler";
     homepage = "http://repetae.net/computer/jhc/";
-    description = "A Haskell compiler which aims to produce the most efficient programs";
-    license = stdenv.lib.licenses.gpl2;
-
+    license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.aforemny stdenv.lib.maintainers.simons ];
+    maintainers = with stdenv.lib.maintainers;
+      [ aforemny simons thoughtpolice ];
   };
-
 }

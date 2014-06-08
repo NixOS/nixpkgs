@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
     description = "Graphical editor for finite state machines";
     homepage = "http://qfsm.sourceforge.net/";
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [ stdenv.lib.maintainers.simons ];
-    platforms = stdenv.lib.platforms.linux;
+    broken = true;
   };
 }

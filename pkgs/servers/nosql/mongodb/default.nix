@@ -1,29 +1,40 @@
-{ stdenv, fetchurl, scons, boost, v8, gperftools, pcre, snappy }:
+{ stdenv, fetchurl, scons, boost, gperftools, pcre, snappy }:
 
-let version = "2.4.8"; in stdenv.mkDerivation rec {
+let version = "2.6.0";
+    system-libraries = [
+      "tcmalloc"
+      "pcre"
+      "boost"
+      "snappy"
+      # "v8"      -- mongo still bundles 3.12 and does not work with 3.15+
+      # "stemmer" -- not nice to package yet (no versioning, no makefile, no shared libs)
+      # "yaml"    -- it seems nixpkgs' yamlcpp (0.5.1) is problematic for mongo
+    ];
+    system-lib-args = stdenv.lib.concatStringsSep " "
+                          (map (lib: "--use-system-${lib}") system-libraries);
+
+in stdenv.mkDerivation rec {
   name = "mongodb-${version}";
 
   src = fetchurl {
     url = "http://downloads.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "1p6gnharypglfp39halp72fig96fqjhakyy7m76a1prxwpjkqw7x";
+    sha256 = "066kppjdmdpadjr09ildla3aw42anzsc9pa55iwp3wa4rgqd2i33";
   };
 
-  nativeBuildInputs = [ scons boost v8 gperftools pcre snappy ];
+  nativeBuildInputs = [ scons boost gperftools pcre snappy ];
 
   postPatch = ''
     substituteInPlace SConstruct \
-        --replace "Environment( BUILD_DIR" "Environment( ENV = os.environ, BUILD_DIR" \
-        --replace 'CCFLAGS=["-Werror", "-pipe"]' 'CCFLAGS=["-pipe"]'
+        --replace "Environment( BUILD_DIR" "Environment( ENV = os.environ, BUILD_DIR"
   '';
 
   buildPhase = ''
-    export SCONSFLAGS="-j$NIX_BUILD_CORES"
-    scons all --use-system-all
+    scons all --release ${system-lib-args}
   '';
 
   installPhase = ''
     mkdir -p $out/lib
-    scons install --use-system-all --full --prefix=$out
+    scons install --release --prefix=$out ${system-lib-args}
   '';
 
   meta = {

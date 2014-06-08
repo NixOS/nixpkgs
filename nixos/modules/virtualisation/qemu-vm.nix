@@ -7,9 +7,9 @@
 # the VM in the host.  On the other hand, the root filesystem is a
 # read/writable disk image persistent across VM reboots.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -65,7 +65,7 @@ let
           ${if cfg.useBootLoader then ''
             -drive index=0,id=drive1,file=$NIX_DISK_IMAGE,if=virtio,cache=writeback,werror=report \
             -drive index=1,id=drive2,file=${bootDisk}/disk.img,if=virtio,readonly \
-            -boot menu=on
+            -boot menu=on \
           '' else ''
             -drive file=$NIX_DISK_IMAGE,if=virtio,cache=writeback,werror=report \
             -kernel ${config.system.build.toplevel}/kernel \
@@ -386,7 +386,7 @@ in
 
     # When building a regular system configuration, override whatever
     # video driver the host uses.
-    hardware.opengl.videoDrivers = mkVMOverride [ "vesa" ];
+    services.xserver.videoDrivers = mkVMOverride [ "vesa" ];
     services.xserver.defaultDepth = mkVMOverride 0;
     services.xserver.resolutions = mkVMOverride [ { x = 1024; y = 768; } ];
     services.xserver.monitorSection =
@@ -398,6 +398,11 @@ in
 
     # Wireless won't work in the VM.
     networking.wireless.enable = mkVMOverride false;
+
+    # Speed up booting by not waiting for ARP.
+    networking.dhcpcd.extraConfig = "noarp";
+
+    networking.usePredictableInterfaceNames = false;
 
     system.requiredKernelConfig = with config.lib.kernelConfig;
       [ (isEnabled "VIRTIO_BLK")

@@ -1,6 +1,6 @@
-{ config, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs, pkgs_i686, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -11,29 +11,15 @@ let
   xorg = pkgs.xorg;
 
 
-  # Map video driver names to driver packages.
+  # Map video driver names to driver packages. FIXME: move into card-specific modules.
   knownVideoDrivers = {
     ati_unfree   = { modules = [ kernelPackages.ati_drivers_x11 ]; driverName = "fglrx"; };
     nouveau       = { modules = [ pkgs.xf86_video_nouveau ]; };
-    nvidia       = { modules = [ kernelPackages.nvidia_x11 ]; };
-    nvidiaLegacy173 = { modules = [ kernelPackages.nvidia_x11_legacy173 ]; driverName = "nvidia"; };
-    nvidiaLegacy304 = { modules = [ kernelPackages.nvidia_x11_legacy304 ]; driverName = "nvidia"; };
     unichrome    = { modules = [ pkgs.xorgVideoUnichrome ]; };
     virtualbox   = { modules = [ kernelPackages.virtualboxGuestAdditions ]; driverName = "vboxvideo"; };
     ati = { modules = [ pkgs.xorg.xf86videoati pkgs.xorg.glamoregl ]; };
     intel-testing = { modules = with pkgs.xorg; [ xf86videointel-testing glamoregl ]; driverName = "intel"; };
   };
-
-  driverNames = config.hardware.opengl.videoDrivers;
-
-  needsAcpid =
-     (elem "nvidia" driverNames) ||
-     (elem "nvidiaLegacy173" driverNames) ||
-     (elem "nvidiaLegacy304" driverNames);
-
-  drivers = flip map driverNames
-    (name: { inherit name; driverName = name; } //
-      attrByPath [name] (if (hasAttr ("xf86video" + name) xorg) then { modules = [(getAttr ("xf86video" + name) xorg) ]; } else throw "unknown video driver `${name}'") knownVideoDrivers);
 
   fontsForXServer =
     config.fonts.fonts ++
@@ -78,7 +64,6 @@ let
     };
     monitors = foldl mkMonitor [] xrandrHeads;
   in concatMapStrings (getAttr "value") monitors;
-
 
   configFile = pkgs.stdenv.mkDerivation {
     name = "xserver.conf";
@@ -181,6 +166,18 @@ in
         '';
       };
 
+      videoDrivers = mkOption {
+        type = types.listOf types.str;
+        # !!! We'd like "nv" here, but it segfaults the X server.
+        default = [ "ati" "cirrus" "intel" "vesa" "vmware" "modesetting" ];
+        example = [ "vesa" ];
+        description = ''
+          The names of the video drivers the configuration
+          supports. They will be tried in order until one that
+          supports your card is found.
+        '';
+      };
+
       videoDriver = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -188,7 +185,16 @@ in
         description = ''
           The name of the video driver for your graphics card.  This
           option is obsolete; please set the
-          <option>hardware.opengl.videoDrivers</option> instead.
+          <option>services.xserver.videoDrivers</option> instead.
+        '';
+      };
+
+      drivers = mkOption {
+        type = types.listOf types.attrs;
+        internal = true;
+        description = ''
+          A list of attribute sets specifying drivers to be loaded by
+          the X11 server.
         '';
       };
 
@@ -198,17 +204,6 @@ in
         example = "[ pkgs.vaapiIntel pkgs.vaapiVdpau ]";
         description = ''
           Packages providing libva acceleration drivers.
-        '';
-      };
-
-      startOpenSSHAgent = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether to start the OpenSSH agent when you log in.  The OpenSSH agent
-          remembers private keys for you so that you don't have to type in
-          passphrases every time you make an SSH connection.  Use
-          <command>ssh-add</command> to add a key to the agent.
         '';
       };
 
@@ -396,15 +391,27 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    hardware.opengl.enable = true;
-    hardware.opengl.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
+
+    hardware.opengl.enable = mkDefault true;
+
+    services.xserver.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
+
+    # FIXME: somehow check for unknown driver names.
+    services.xserver.drivers = flip concatMap cfg.videoDrivers (name:
+      let driver =
+        attrByPath [name]
+          (if (hasAttr ("xf86video" + name) xorg)
+           then { modules = [(getAttr ("xf86video" + name) xorg) ]; }
+           else null)
+          knownVideoDrivers;
+      in optional (driver != null) ({ inherit name; driverName = name; } // driver));
 
     assertions =
-      [ { assertion = !(cfg.startOpenSSHAgent && cfg.startGnuPGAgent);
+      [ { assertion = !(config.programs.ssh.startAgent && cfg.startGnuPGAgent);
           message =
             ''
-              The OpenSSH agent and GnuPG agent cannot be started both.
-              Choose between `startOpenSSHAgent' and `startGnuPGAgent'.
+              The OpenSSH agent and GnuPG agent cannot be started both. Please
+              choose between ‘programs.ssh.startAgent’ and ‘services.xserver.startGnuPGAgent’.
             '';
         }
         { assertion = config.security.polkit.enable;
@@ -437,24 +444,18 @@ in
         pkgs.xterm
         pkgs.xdg_utils
       ]
-      ++ optional (elem "nvidia" driverNames) kernelPackages.nvidia_x11
-      ++ optional (elem "nvidiaLegacy173" driverNames) kernelPackages.nvidia_x11_legacy173
-      ++ optional (elem "nvidiaLegacy304" driverNames) kernelPackages.nvidia_x11_legacy304
-      ++ optional (elem "virtualbox" driverNames) xorg.xrefresh
-      ++ optional (elem "ati_unfree" driverNames) kernelPackages.ati_drivers_x11;
-
-    services.acpid.enable = mkIf needsAcpid true;
+      ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh
+      ++ optional (elem "ati_unfree" cfg.videoDrivers) kernelPackages.ati_drivers_x11;
 
     environment.pathsToLink =
       [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];
 
     systemd.defaultUnit = mkIf cfg.autorun "graphical.target";
 
-    systemd.services."display-manager" =
+    systemd.services.display-manager =
       { description = "X11 Server";
 
-        after = [ "systemd-udev-settle.service" "local-fs.target" ]
-                ++ optional needsAcpid "acpid.service";
+        after = [ "systemd-udev-settle.service" "local-fs.target" "acpid.service" ];
 
         restartIfChanged = false;
 
@@ -462,15 +463,11 @@ in
           { FONTCONFIG_FILE = "/etc/fonts/fonts.conf"; # !!! cleanup
             XKB_BINDIR = "${xorg.xkbcomp}/bin"; # Needed for the Xkb extension.
             XORG_DRI_DRIVER_PATH = "/run/opengl-driver/lib/dri"; # !!! Depends on the driver selected at runtime.
-          } // optionalAttrs (elem "nvidia" driverNames) {
-            LD_LIBRARY_PATH = "${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.nvidia_x11}/lib";
-          } // optionalAttrs (elem "nvidiaLegacy173" driverNames) {
-            LD_LIBRARY_PATH = "${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.nvidia_x11_legacy173}/lib";
-          } // optionalAttrs (elem "nvidiaLegacy304" driverNames) {
-            LD_LIBRARY_PATH = "${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.nvidia_x11_legacy304}/lib";
-          } // optionalAttrs (elem "ati_unfree" driverNames) {
-            LD_LIBRARY_PATH = "${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.ati_drivers_x11}/lib:${kernelPackages.ati_drivers_x11}/X11R6/lib64/modules/linux";
-            #XORG_DRI_DRIVER_PATH = "${kernelPackages.ati_drivers_x11}/lib/dri"; # is ignored because ati drivers ship their own unpatched libglx.so !
+            LD_LIBRARY_PATH = concatStringsSep ":" (
+              [ "${xorg.libX11}/lib" "${xorg.libXext}/lib" ]
+              ++ optionals (elem "ati_unfree" cfg.videoDrivers)
+                [ "${kernelPackages.ati_drivers_x11}/lib" "${kernelPackages.ati_drivers_x11}/X11R6/lib64/modules/linux" ]
+              ++ concatLists (catAttrs "libPath" cfg.drivers));
           } // cfg.displayManager.job.environment;
 
         preStart =
@@ -500,7 +497,7 @@ in
       ] ++ optional (!cfg.enableTCP) "-nolisten tcp";
 
     services.xserver.modules =
-      concatLists (catAttrs "modules" drivers) ++
+      concatLists (catAttrs "modules" cfg.drivers) ++
       [ xorg.xorgserver
         xorg.xf86inputevdev
       ];
@@ -536,7 +533,7 @@ in
           ${cfg.serverLayoutSection}
           # Reference the Screen sections for each driver.  This will
           # cause the X server to try each in turn.
-          ${flip concatMapStrings drivers (d: ''
+          ${flip concatMapStrings cfg.drivers (d: ''
             Screen "Screen-${d.name}[0]"
           '')}
         EndSection
@@ -550,11 +547,11 @@ in
 
         # For each supported driver, add a "Device" and "Screen"
         # section.
-        ${flip concatMapStrings drivers (driver: ''
+        ${flip concatMapStrings cfg.drivers (driver: ''
 
           Section "Device"
             Identifier "Device-${driver.name}[0]"
-            Driver "${driver.driverName}"
+            Driver "${driver.driverName or driver.name}"
             ${if cfg.useGlamor then ''Option "AccelMethod" "glamor"'' else ""}
             ${cfg.deviceSection}
             ${xrandrDeviceSection}
@@ -571,10 +568,6 @@ in
 
             ${optionalString (cfg.defaultDepth != 0) ''
               DefaultDepth ${toString cfg.defaultDepth}
-            ''}
-
-            ${optionalString (driver.name == "nvidia") ''
-              Option "RandRRotation" "on"
             ''}
 
             ${optionalString

@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ Cabal fgl filepath parsec text ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/gimbo/cabal-macosx";
     description = "Cabal support for creating Mac OSX application bundles";

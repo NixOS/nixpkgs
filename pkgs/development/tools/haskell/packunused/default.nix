@@ -1,12 +1,16 @@
-{ cabal, Cabal, cmdargs, filepath, haskellSrcExts }:
+{ cabal, Cabal, filepath, haskellSrcExts, optparseApplicative
+, split
+}:
 
 cabal.mkDerivation (self: {
   pname = "packunused";
-  version = "0.1.0.1";
-  sha256 = "130717k4rknj5jl904cmb4h09msp4xjj84w6iwzc10lz736dk3jd";
+  version = "0.1.1.2";
+  sha256 = "1kp004lh6sa4gjqm37ldgk70jbncrnr76rk9c77464cnj6ajxmlm";
   isLibrary = false;
   isExecutable = true;
-  buildDepends = [ Cabal cmdargs filepath haskellSrcExts ];
+  buildDepends = [
+    Cabal filepath haskellSrcExts optparseApplicative split
+  ];
   jailbreak = true;
   meta = {
     homepage = "https://github.com/hvr/packunused";

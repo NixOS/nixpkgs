@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "snap-cors";
-  version = "1.2.2";
-  sha256 = "1f32sj7y87lr0wjs3j3ynh95c4j4yx4fzizbgdfnjai1apcjkhcs";
+  version = "1.2.4";
+  sha256 = "0mg5sjvrcs60s8k28vgi49vbgfpswkcd7i7yyfi1n1649vqb69mb";
   buildDepends = [
     attoparsec caseInsensitive hashable network snap text transformers
     unorderedContainers

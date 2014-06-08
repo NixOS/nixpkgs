@@ -1,8 +1,6 @@
 # Test for NixOS' container support.
 
-{ pkgs, ... }:
-
-{
+import ./make-test.nix {
 
   machine =
     { config, pkgs, ... }:
@@ -27,7 +25,7 @@
 
   testScript =
     ''
-      $machine->succeed("nixos-container list") =~ /webserver/;
+      $machine->succeed("nixos-container list") =~ /webserver/ or die;
 
       # Start the webserver container.
       $machine->succeed("nixos-container start webserver");
@@ -67,7 +65,7 @@
       $machine->succeed("nixos-container start $id1");
 
       # Execute commands via the root shell.
-      $machine->succeed("nixos-container run $id1 -- uname") =~ /Linux/;
+      $machine->succeed("nixos-container run $id1 -- uname") =~ /Linux/ or die;
       $machine->succeed("nixos-container set-root-password $id1 foobar");
 
       # Destroy the containers.

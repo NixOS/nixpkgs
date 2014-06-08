@@ -1,22 +1,22 @@
 { stdenv, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonPackage rec {
-  name = "httpie-0.4.1";
+  name = "httpie-0.8.0";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://pypi.python.org/packages/source/h/httpie/${name}.tar.gz";
-    sha256 = "1qd03vd4657vdvkfhbd2wnlz4xh6hyw75m7wmfhgac5m2028y3cv";
+    sha256 = "16f3scm794plxbyw7a5b4541hb2psa85kfi98g83785i2qwz98ag";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ pygments requests ];
+  propagatedBuildInputs = with pythonPackages; [ pygments requests2 ];
 
   doCheck = false;
 
   meta = {
     description = "A command line HTTP client whose goal is to make CLI human-friendly";
     homepage = http://httpie.org/;
-    license = "BSD";
-    maintainers = [ stdenv.lib.maintainers.antono ];
+    license = stdenv.lib.licenses.bsd3;
+    maintainers = with stdenv.lib.maintainers; [ antono relrod ];
   };
 }

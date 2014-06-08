@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -188,6 +188,15 @@ in
       example = "home";
       description = ''
         The domain.  It can be left empty if it is auto-detected through DHCP.
+      '';
+    };
+
+    networking.useHostResolvConf = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        In containers, whether to use the
+        <filename>resolv.conf</filename> supplied by the host.
       '';
     };
 

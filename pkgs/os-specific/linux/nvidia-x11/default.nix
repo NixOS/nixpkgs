@@ -12,7 +12,7 @@ assert (!libsOnly) -> kernel != null;
 
 let
 
-  versionNumber = "331.49";
+  versionNumber = "331.79";
 
 in
 
@@ -21,18 +21,16 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
 
-  patches = optional (kernel ? version && versionAtLeast kernel.version "3.14") ./kernel-3.14.patch;
-
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}.run";
-        sha256 = "00d7bq8cfxk52qd4y226fz8m9m3mjq45fbgr3q7k08jyy9qmswmn";
+        sha256 = "0dl6gj1k6rz7bzyflfgi8y4489bxv03gfcni7zjzy440xjm3sk9l";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-no-compat32.run";
-        sha256 = "0q3lvl1lypi33i847nqz4k3161ackh2n9kgyjn6v2c480f405hfk";
+        sha256 = "14mwxz12kd5znnrmwia4qk35sd7xpr6cgpxs1xzjwmjgvz6gc71v";
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 

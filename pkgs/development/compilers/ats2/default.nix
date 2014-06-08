@@ -1,20 +1,21 @@
 { stdenv, fetchurl, gmp }:
 
-let version = "0.0.6"; in stdenv.mkDerivation {
-  name = "ats2-postiats-${version}";
+stdenv.mkDerivation rec {
+  name    = "ats2-${version}";
+  version = "0.0.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-${version}.tgz";
-    sha256 = "110a4drzf656j9s5yfvxj1cwgh5g9ysnh40cv8y9qfjjkki8vd5b";
+    sha256 = "1cv7caaf9fj6z3kln02ikkbmcy42324v39lzx3cf6qcsywwpm8fx";
   };
 
   buildInputs = [ gmp ];
 
   meta = {
-    description = "A statically typed programming language that unifies implementation with formal specification";
-    homepage = http://www.ats-lang.org/;
-    license = stdenv.lib.licenses.gpl3Plus;
+    description = "Functional programming language with dependent types";
+    homepage    = "http://www.ats-lang.org";
+    license     = stdenv.lib.licenses.gpl3Plus;
+    platforms   = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
-
-  platforms = stdenv.lib.platforms.all;
 }
