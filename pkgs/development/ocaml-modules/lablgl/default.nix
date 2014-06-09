@@ -39,6 +39,6 @@ stdenv.mkDerivation {
     homepage = http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html;
     description = "OpenGL bindings for ocaml";
     license = "GnuGPLV2";
-    maintainers = [ stdenv.lib.maintainers.psub ];
+    maintainers = [ stdenv.lib.maintainers.pSub ];
   };
 }
