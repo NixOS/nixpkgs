@@ -327,6 +327,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   Cabal_1_20_0_0 = callPackage ../development/libraries/haskell/Cabal/1.20.0.0.nix {};
   Cabal = null;                 # core package since forever
 
+  cabalCargs = callPackage ../development/libraries/haskell/cabalCargs {};
+
   cabalFileTh = callPackage ../development/libraries/haskell/cabal-file-th {};
 
   cabalLenses = callPackage ../development/libraries/haskell/cabal-lenses {};
