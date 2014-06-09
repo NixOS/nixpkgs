@@ -11,4 +11,10 @@ stdenv.mkDerivation {
   patches = [ ./typespeed-config-in-home.patch ];
 
   configureFlags = "--datadir=\${out}/share/";
+
+  meta = {
+    description = "A curses based typing game.";
+    homepage = http://typespeed.sourceforge.net/;
+    license = "GLPv2";
+  };
 }
