@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cairo, file, pango, glib, gtk
 , which, libtool, makeWrapper, libjpeg, libpng
-, fontconfig, liberation_ttf, sqlite } :
+, fontconfig, liberation_ttf, sqlite, openssl } :
 
 stdenv.mkDerivation rec {
   pname = "racket";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   # Various racket executables do run-time searches for these.
-  ffiSharedLibs = "${glib}/lib:${cairo}/lib:${pango}/lib:${gtk}/lib:${libjpeg}/lib:${libpng}/lib:${sqlite}/lib";
+  ffiSharedLibs = "${glib}/lib:${cairo}/lib:${pango}/lib:${gtk}/lib:${libjpeg}/lib:${libpng}/lib:${sqlite}/lib:${openssl}/lib";
 
   buildInputs = [ file libtool which makeWrapper fontconfig liberation_ttf sqlite ];
 
