@@ -2189,6 +2189,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   testFrameworkQuickcheck2 = callPackage ../development/libraries/haskell/test-framework-quickcheck2 {};
 
+  testFrameworkSmallcheck = callPackage ../development/libraries/haskell/test-framework-smallcheck {};
+
   testFrameworkTh = callPackage ../development/libraries/haskell/test-framework-th {};
 
   testFrameworkThPrime = callPackage ../development/libraries/haskell/test-framework-th-prime {};
@@ -2397,7 +2399,11 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   void = callPackage ../development/libraries/haskell/void {};
 
-  vty = callPackage ../development/libraries/haskell/vty {};
+  vty_4_7_5 = callPackage ../development/libraries/haskell/vty/4.7.5.nix {};
+  vty_5_1_0 = callPackage ../development/libraries/haskell/vty/5.1.0.nix {
+    Cabal = self.Cabal_1_20_0_0;
+  };
+  vty = self.vty_4_7_5;
 
   vtyUi = callPackage ../development/libraries/haskell/vty-ui {};
 
