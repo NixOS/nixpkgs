@@ -191,10 +191,7 @@ in {
       };
       restartTriggers = [
         pkgs.pythonPackages.carbon
-        cfg.carbon.config
-        cfg.carbon.storageAggregation
-        cfg.carbon.storageSchemas
-        cfg.carbon.rewriteRules
+        configDir
       ];
       preStart = ''
         mkdir -p ${cfg.dataDir}/whisper
@@ -215,7 +212,8 @@ in {
         Group = "graphite";
       };
       restartTriggers = [
-        pkgs.pythonPackages.carbon cfg.carbon.config cfg.carbon.aggregationRules
+        pkgs.pythonPackages.carbon
+        configDir
       ];
     };
 
@@ -231,7 +229,8 @@ in {
         Group = "graphite";
       };
       restartTriggers = [
-        pkgs.pythonPackages.carbon cfg.carbon.config cfg.carbon.relayRules
+        pkgs.pythonPackages.carbon
+        configDir
       ];
     };
 
@@ -274,7 +273,6 @@ in {
       '';
       restartTriggers = [
         pkgs.python27Packages.graphite_web
-        pkgs.python27Packages.waitress
       ];
     };
 
