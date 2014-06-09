@@ -9283,4 +9283,33 @@ rec {
     };
   };
 
+  pync = buildPythonPackage rec {
+    version  = "1.4";
+    baseName = "pync";
+    name     = "${baseName}-${version}";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/${baseName}/${name}.tar.gz";
+      md5 = "5cc79077f386a17b539f1e51c05a3650";
+    };
+
+    buildInputs = [ pkgs.coreutils ];
+
+    propagatedBuildInputs = [ dateutil ];
+
+    preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      sed -i 's|^\([ ]*\)self.bin_path.*$|\1self.bin_path = "${pkgs.rubyLibs.terminal_notifier}/bin/terminal-notifier"|' build/lib/pync/TerminalNotifier.py
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Python Wrapper for Mac OS 10.8 Notification Center";
+      homepage    = https://pypi.python.org/pypi/pync/1.4;
+      license     = licenses.mit;
+      platforms   = platforms.darwin;
+      maintainers = [ maintainers.lovek323 ];
+    };
+  };
+
+
+
 }); in pythonPackages
