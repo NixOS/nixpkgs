@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     ORIG=`pwd`
     cp -R ${libphutil} libphutil
     cp -R ${arcanist} arcanist
+    chmod +w -R libphutil arcanist
     cd libphutil/support/xhpast
     make clean all install
     cd $ORIG
