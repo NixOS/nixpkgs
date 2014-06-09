@@ -9104,11 +9104,19 @@ let
     inherit gettext highline iconv locale lockfile rmail_sup
       text trollop unicode xapian_ruby which;
 
+    # See https://github.com/NixOS/nixpkgs/issues/1804 and
+    # https://github.com/NixOS/nixpkgs/issues/2146
+    bundler = pkgs.lib.overrideDerivation pkgs.rubyLibs.bundler (
+      oldAttrs: {
+        dontPatchShebangs = 1;
+      }
+    );
+
     chronic      = chronic_0_9_1;
     gpgme        = ruby_gpgme;
     mime_types   = mime_types_1_25;
     ncursesw_sup = ruby_ncursesw_sup;
-    rake         = rake_10_1_0;
+    rake         = rubyLibs.rake_10_1_0;
   };
 
   synfigstudio = callPackage ../applications/graphics/synfigstudio { };
