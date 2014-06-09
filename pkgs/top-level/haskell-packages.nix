@@ -2692,6 +2692,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   # Tools.
 
+  cabalDb = callPackage ../development/tools/haskell/cabal-db {};
+
   cabal2nix = callPackage ../development/tools/haskell/cabal2nix {};
 
   # Build a cabal package given a local .cabal file
