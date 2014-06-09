@@ -43,6 +43,7 @@
     haddock = self.haddock_2_13_2;
     modularArithmetic = null;           # requires base >= 4.7
     pipesBinary = super.pipesBinary.override { binary = self.binary_0_7_2_1; };
+    singletons = null;                  # requires base >= 4.7
     transformers = self.transformers_0_3_0_0; # core packagen in ghc > 7.6.x
     zipArchive = super.zipArchive_0_2_2_1;    # works without binary 0.7.x
   };
