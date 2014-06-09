@@ -19,7 +19,8 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Japanese font, a free replacement for MS Gothic and MS Mincho.";
+    description = "Japanese font, a replacement for MS Gothic and MS Mincho.";
     homepage = http://sourceforge.jp/projects/efont/;
+    license = stdenv.lib.licenses.unfreeRedistributable;
   };
 }
