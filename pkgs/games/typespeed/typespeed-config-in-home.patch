@@ -1,5 +1,5 @@
 diff --git a/src/file.c b/src/file.c
-index d1d1982..dc679a2 100644
+index d1d1982..1655f6f 100644
 --- a/src/file.c
 +++ b/src/file.c
 @@ -125,6 +125,8 @@ int			 hcompar(const void *, const void *);
@@ -11,18 +11,7 @@ index d1d1982..dc679a2 100644
  static void		 readfile(char *, int);
  static void		 setoptions(char *, char *, int);
  
-@@ -1071,7 +1073,10 @@ parseline(char *line, char **option, char **value)
- 	 * let's drop it completely.
- 	 */
- 	if ((p = strchr(line, '\n')) == NULL)
-+	{
-+		printf("yes, we died here\n");
- 		return 1;
-+	}
- 	*p = '\0';
- 	if ((p = strchr(line, '\r')) != NULL)
- 		*p = '\0';
-@@ -1125,7 +1130,7 @@ void
+@@ -1125,7 +1127,7 @@ void
  readconfig(void)
  {
  	char *envhome;
@@ -31,7 +20,7 @@ index d1d1982..dc679a2 100644
  	struct stat sb;
  
  	if (xsnprintf(ruledir, sizeof(ruledir), "%s", RULEDIR)) {
-@@ -1140,18 +1145,33 @@ readconfig(void)
+@@ -1140,18 +1142,33 @@ readconfig(void)
  	readfile(CONFIGFILE, 1);
  
  	if ((envhome = getenv("HOME")) == NULL)
@@ -73,7 +62,7 @@ index d1d1982..dc679a2 100644
  
  	/*
  	 * Open a user writable high score.
-@@ -1159,14 +1179,48 @@ readconfig(void)
+@@ -1159,14 +1176,48 @@ readconfig(void)
  	 * file. Protect system-wide high score file with group
  	 * write permissions: privileged gid already dropped.
  	 */
