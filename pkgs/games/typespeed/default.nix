@@ -15,6 +15,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A curses based typing game.";
     homepage = http://typespeed.sourceforge.net/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
+    maintainers = [ stdenv.lib.maintainers.auntie ];
   };
 }
