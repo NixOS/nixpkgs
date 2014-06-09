@@ -15,13 +15,13 @@ let
       pkgs.runCommand "unit" { preferLocalBuild = true; inherit (unit) text; }
         ''
           mkdir -p $out
-          echo -n "$text" > $out/${name}
+          echo -n "$text" > $out/${shellEscape name}
         ''
     else
       pkgs.runCommand "unit" { preferLocalBuild = true; }
         ''
           mkdir -p $out
-          ln -s /dev/null $out/${name}
+          ln -s /dev/null $out/${shellEscape name}
         '';
 
   upstreamSystemUnits =
@@ -187,9 +187,11 @@ let
       "timers.target"
     ];
 
+  shellEscape = s: (replaceChars [ "\\" ] [ "\\\\" ] s);
+
   makeJobScript = name: text:
-    let x = pkgs.writeTextFile { name = "unit-script"; executable = true; destination = "/bin/${name}"; inherit text; };
-    in "${x}/bin/${name}";
+    let x = pkgs.writeTextFile { name = "unit-script"; executable = true; destination = "/bin/${shellEscape name}"; inherit text; };
+    in "${x}/bin/${shellEscape name}";
 
   unitConfig = { name, config, ... }: {
     config = {
