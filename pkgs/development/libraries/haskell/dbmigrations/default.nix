@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "dbmigrations";
-  version = "0.7";
-  sha256 = "1mpmka6jszip8sm8k9mrk0fg1q7wp36n0szyiqy7fnbzijfw0xlz";
+  version = "0.8";
+  sha256 = "0m1zvc61y0n7p66iwsb8wzwgivxnc08cm1h3xvf1jnwrv294dwch";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
