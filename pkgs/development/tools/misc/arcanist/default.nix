@@ -1,32 +1,41 @@
-{ stdenv, fetchgit, php }:
+{ stdenv, fetchgit, php, flex, makeWrapper }:
 
 let
   libphutil = fetchgit {
     url    = "git://github.com/facebook/libphutil.git";
-    rev    = "1ba1de50e9ee1ca63e472f625282346693eb0a18";
-    sha256 = "d571906b6ecb3700f0d57498426d2ab2a5fbed469d739ee1e03d410215738d2f";
+    rev    = "7e75bf271c669b61eb6e6e2ea312a36e64b80a4a";
+    sha256 = "ffb7ee8141b925889e9bbc945d2f38f12d1489148b9c9b7eaeadd7524d254a78";
   };
   arcanist = fetchgit {
     url    = "git://github.com/facebook/arcanist.git";
-    rev    = "c999f3e6b5c7edef82761ed1db00d79683e2e37a";
-    sha256 = "d1d9f5ada8ffcb02f03210356c5087019e164f456660469e2825dcbdf5f07d35";
+    rev    = "50caec620a8ed45c54323cb71fee72fd0d935115";
+    sha256 = "dd18ed22375ad1ba058703952be0d339d9c93704e9d75dd7e4e6625236dfe9b0";
   };
 in
 stdenv.mkDerivation rec {
   name    = "arcanist-${version}";
-  version = "20140521";
+  version = "20140606";
 
   src = [ arcanist libphutil ];
-  buildInputs = [ php ];
+  buildInputs = [ php makeWrapper flex ];
 
   unpackPhase = "true";
-  buildPhase = "true";
+  buildPhase = ''
+    ORIG=`pwd`
+    chmod +w -R ${libphutil}
+    cd ${libphutil}/support/xhpast
+    ls
+    make clean all install
+    cd $ORIG
+  '';
   installPhase = ''
     mkdir -p $out/bin $out/libexec
     cp -R ${libphutil} $out/libexec/libphutil
     cp -R ${arcanist}  $out/libexec/arcanist
 
     ln -s $out/libexec/arcanist/bin/arc $out/bin
+    wrapProgram $out/bin/arc \
+      --prefix PATH : "${php}/bin"
   '';
 
   meta = {

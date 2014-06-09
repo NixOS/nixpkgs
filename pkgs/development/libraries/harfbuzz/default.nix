@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, glib, freetype, cairo, libintlOrEmpty
 , icu, graphite2
 , withIcu ? false # recommended by upstream as default, but most don't needed and it's big
-, withGraphite2 ? !stdenv.isDarwin # it is small and major distros do include it
+, withGraphite2 ? true # it is small and major distros do include it
 }:
 
 # TODO: split non-icu and icu lib into different outputs?

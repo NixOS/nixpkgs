@@ -171,6 +171,8 @@ rec {
 
   gnome-photos = callPackage ./apps/gnome-photos { };
 
+  nautilus-sendto = callPackage ./apps/nautilus-sendto { };
+
   # scrollkeeper replacement
   rarian = callPackage ./desktop/rarian { };
 

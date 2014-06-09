@@ -1,0 +1,21 @@
+diff -Naur libdvdnav.orig/Makefile.am libdvdnav/Makefile.am
+--- libdvdnav.orig/Makefile.am	2008-10-03 16:11:46.000000000 -0400
++++ libdvdnav/Makefile.am	2009-04-24 02:53:15.000000000 -0400
+@@ -1,7 +1,7 @@
+ include $(top_srcdir)/misc/Makefile.common
+ 
+ 
+-SUBDIRS = src examples doc misc m4
++SUBDIRS = src doc misc m4
+ 
+ EXTRA_DIST = autogen.sh \
+ 	     AUTHORS \
+diff -Naur libdvdnav.orig/configure.ac libdvdnav/configure.ac
+--- libdvdnav.orig/configure.ac	2009-01-08 17:57:11.000000000 -0500
++++ libdvdnav/configure.ac	2009-04-24 02:52:34.000000000 -0400
+@@ -252,5 +252,4 @@
+ misc/relchk.sh
+ m4/Makefile
+ doc/Makefile
+-examples/Makefile
+ ])

@@ -9,6 +9,7 @@ import ../generic rec {
       export NIX_IGNORE_LD_THROUGH_GCC=1
 
       if [ "$system" = "i686-darwin" -o "$system" = "powerpc-darwin" -o "$system" = "x86_64-darwin" ]; then
+        export NIX_ENFORCE_PURITY=
         export NIX_DONT_SET_RPATH=1
         export NIX_NO_SELF_RPATH=1
         dontFixLibtool=1

@@ -31,7 +31,7 @@ EOF
 }
 
 my $ensureUniqueName = 0;
-my $extraConfig = "";
+my $extraConfig;
 
 GetOptions(
     "help" => sub { showHelp() },
@@ -190,7 +190,7 @@ elsif ($action eq "update") {
 
     # FIXME: may want to be more careful about clobbering the existing
     # configuration.nix.
-    writeNixOSConfig $nixosConfigFile if defined $extraConfig;
+    writeNixOSConfig $nixosConfigFile if (defined $extraConfig && $extraConfig ne "");
 
     system("nix-env", "-p", "$profileDir/system",
            "-I", "nixos-config=$nixosConfigFile", "-f", "<nixpkgs/nixos>",

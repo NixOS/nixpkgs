@@ -1,5 +1,7 @@
 { stdenv, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
+, langObjC ? stdenv.isDarwin
+, langObjCpp ? stdenv.isDarwin
 , langJava ? false
 , langAda ? false
 , langVhdl ? false
@@ -352,6 +354,8 @@ stdenv.mkDerivation ({
         ++ optional langAda      "ada"
         ++ optional langVhdl     "vhdl"
         ++ optional langGo       "go"
+        ++ optional langObjC     "objc"
+        ++ optional langObjCpp   "obj-c++"
         ++ optionals crossDarwin [ "objc" "obj-c++" ]
         )
       )
@@ -490,7 +494,7 @@ stdenv.mkDerivation ({
     else null;
 
   passthru =
-    { inherit langC langCC langAda langFortran langVhdl langGo enableMultilib version; };
+    { inherit langC langCC langObjC langObjCpp langAda langFortran langVhdl langGo enableMultilib version; };
 
   inherit enableParallelBuilding;
 

@@ -1,0 +1,101 @@
+diff -ru HandBrake-0.9.9-orig/gtk/configure.ac HandBrake-0.9.9/gtk/configure.ac
+--- HandBrake-0.9.9-orig/gtk/configure.ac	2014-05-02 22:50:00.047305795 +0200
++++ HandBrake-0.9.9/gtk/configure.ac	2014-05-02 22:48:57.119304020 +0200
+@@ -203,7 +203,7 @@
+     ;;
+ esac
+ 
+-HB_LIBS="-lhb -la52 -lmkv -lavresample -lavformat -lavcodec -lavutil -ldvdnav -ldvdread -lfaac -lmp3lame -lmpeg2 -lvorbis -lvorbisenc -logg -lsamplerate -lx264 -lmp4v2 -lswscale -ltheoraenc -ltheoradec -lz -lbz2 -lpthread -lbluray -lass -lfontconfig -lfreetype -lxml2"
++HB_LIBS="-lhb -la52 -lmkv -lavresample -lavformat -lavcodec -lavutil -ldvdnav -ldvdread -lmp3lame -lmpeg2 -lvorbis -lvorbisenc -logg -lsamplerate -lx264 -lmp4v2 -lswscale -ltheoraenc -ltheoradec -lz -lbz2 -lpthread -lbluray -lass -lfontconfig -lfreetype -lxml2"
+ 
+ if test "x$use_fdk_aac" = "xyes" ; then
+     HB_LIBS+=" -lfdk-aac"
+diff -ru HandBrake-0.9.9-orig/gtk/src/preset_xlat.c HandBrake-0.9.9/gtk/src/preset_xlat.c
+--- HandBrake-0.9.9-orig/gtk/src/preset_xlat.c	2014-05-02 22:50:00.043305794 +0200
++++ HandBrake-0.9.9/gtk/src/preset_xlat.c	2014-05-02 22:42:20.987292846 +0200
+@@ -260,7 +260,6 @@
+ 
+ static value_map_t acodec_xlat[] =
+ {
+-    {"AAC (faac)", "faac"},
+     {"AC3 Passthru", "ac3"},
+     {"MP3 (lame)", "lame"},
+     {"Vorbis (vorbis)", "vorbis"},
+diff -ru HandBrake-0.9.9-orig/gtk/src/presets.c HandBrake-0.9.9/gtk/src/presets.c
+--- HandBrake-0.9.9-orig/gtk/src/presets.c	2014-05-02 22:50:00.043305794 +0200
++++ HandBrake-0.9.9/gtk/src/presets.c	2014-05-02 22:42:41.283293419 +0200
+@@ -2029,8 +2029,6 @@
+ 
+ static value_map_t acodec_xlat_compat[] =
+ {
+-    {"AAC (CoreAudio)", "faac"},
+-    {"HE-AAC (CoreAudio)", "faac"},
+     {"AC3 (ffmpeg)", "ac3"},
+     {"AC3", "ac3"},
+     {"MP3 Passthru", "mp3pass"},
+diff -ru HandBrake-0.9.9-orig/libhb/common.c HandBrake-0.9.9/libhb/common.c
+--- HandBrake-0.9.9-orig/libhb/common.c	2014-05-02 22:50:00.047305795 +0200
++++ HandBrake-0.9.9/libhb/common.c	2014-05-02 22:37:24.679284489 +0200
+@@ -126,7 +126,6 @@
+     { "AAC (CoreAudio)",    "ca_aac",     HB_ACODEC_CA_AAC,       HB_MUX_MP4|HB_MUX_MKV },
+     { "HE-AAC (CoreAudio)", "ca_haac",    HB_ACODEC_CA_HAAC,      HB_MUX_MP4|HB_MUX_MKV },
+ #endif
+-    { "AAC (faac)",         "faac",       HB_ACODEC_FAAC,         HB_MUX_MP4|HB_MUX_MKV },
+ #ifdef USE_FDK_AAC
+     { "AAC (FDK)",          "fdk_aac",    HB_ACODEC_FDK_AAC,      HB_MUX_MP4|HB_MUX_MKV },
+     { "HE-AAC (FDK)",       "fdk_haac",   HB_ACODEC_FDK_HAAC,     HB_MUX_MP4|HB_MUX_MKV },
+diff -ru HandBrake-0.9.9-orig/libhb/common.h HandBrake-0.9.9/libhb/common.h
+--- HandBrake-0.9.9-orig/libhb/common.h	2014-05-02 22:50:00.047305795 +0200
++++ HandBrake-0.9.9/libhb/common.h	2014-05-02 22:39:37.839288245 +0200
+@@ -945,7 +945,6 @@
+ extern hb_work_object_t hb_decavcodeca;
+ extern hb_work_object_t hb_decavcodecv;
+ extern hb_work_object_t hb_declpcm;
+-extern hb_work_object_t hb_encfaac;
+ extern hb_work_object_t hb_enclame;
+ extern hb_work_object_t hb_encvorbis;
+ extern hb_work_object_t hb_muxer;
+diff -ru HandBrake-0.9.9-orig/libhb/hb.c HandBrake-0.9.9/libhb/hb.c
+--- HandBrake-0.9.9-orig/libhb/hb.c	2014-05-02 22:50:00.047305795 +0200
++++ HandBrake-0.9.9/libhb/hb.c	2014-05-02 22:39:02.287287242 +0200
+@@ -487,7 +487,6 @@
+ 	hb_register( &hb_decavcodeca );
+ 	hb_register( &hb_decavcodecv );
+ 	hb_register( &hb_declpcm );
+-	hb_register( &hb_encfaac );
+ 	hb_register( &hb_enclame );
+ 	hb_register( &hb_encvorbis );
+ 	hb_register( &hb_muxer );
+@@ -588,7 +587,6 @@
+ 	hb_register( &hb_decavcodeca );
+ 	hb_register( &hb_decavcodecv );
+ 	hb_register( &hb_declpcm );
+-	hb_register( &hb_encfaac );
+ 	hb_register( &hb_enclame );
+ 	hb_register( &hb_encvorbis );
+ 	hb_register( &hb_muxer );
+diff -ru HandBrake-0.9.9-orig/libhb/module.defs HandBrake-0.9.9/libhb/module.defs
+--- HandBrake-0.9.9-orig/libhb/module.defs	2014-05-02 22:50:00.047305795 +0200
++++ HandBrake-0.9.9/libhb/module.defs	2014-05-02 22:39:25.727287903 +0200
+@@ -95,7 +95,7 @@
+ LIBHB.lib = $(LIBHB.build/)hb.lib
+ 
+ LIBHB.dll.libs = $(foreach n, \
+-        a52 ass avcodec avformat avutil avresample dvdnav dvdread faac \
++        a52 ass avcodec avformat avutil avresample dvdnav dvdread \
+         fontconfig freetype mkv mpeg2 mp3lame mp4v2 \
+         ogg samplerate swscale theora vorbis vorbisenc x264 xml2 bluray, \
+         $(CONTRIB.build/)lib/lib$(n).a )
+Only in HandBrake-0.9.9: libhb-orig
+diff -ru HandBrake-0.9.9orig/test/module.defs HandBrake-0.9.9/test/module.defs
+--- HandBrake-0.9.9-orig/test/module.defs	2014-05-02 23:15:10.575348401 +0200
++++ HandBrake-0.9.9/test/module.defs	2014-05-02 23:17:00.523351502 +0200
+@@ -14,7 +14,7 @@
+ TEST.libs = $(LIBHB.a)
+ 
+ TEST.GCC.l = \
+-        a52 ass avcodec avformat avutil avresample dvdnav dvdread faac \
++        a52 ass avcodec avformat avutil avresample dvdnav dvdread \
+         fontconfig freetype fribidi mkv mpeg2 mp3lame mp4v2 ogg \
+         samplerate swscale theoraenc theoradec vorbis vorbisenc x264 \
+         bluray xml2 bz2 z

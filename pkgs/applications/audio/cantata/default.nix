@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (withTaglib && !withKDE4 && withDevices) udisks2;
 
   unpackPhase = "tar -xvf $src";
+  sourceRoot = "cantata-1.3.4";
 
   # Qt4 is implicit when KDE is switched off.
   cmakeFlags = stdenv.lib.flatten [

@@ -131,6 +131,8 @@
       starbound = 120;
       hydra = 122;
       spiped = 123;
+      teamspeak = 124;
+      influxdb = 125;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -236,6 +238,8 @@
       grsecurity = 121;
       hydra = 122;
       spiped = 123;
+      teamspeak = 124;
+      influxdb = 125;
 
       # When adding a gid, make sure it doesn't match an existing uid. And don't use gids above 399!
 

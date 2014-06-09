@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "compcert-${version}";
-  version = "2.2";
+  version = "2.3pl2";
 
   src = fetchurl {
     url    = "http://compcert.inria.fr/release/${name}.tgz";
-    sha256 = "0zhqx9mixlsycckl6wq6yrd795byj1jz7m4njcgfv29cx33j1nrk";
+    sha256 = "1cq4my646ll1mszs5mbzwk4vp8l8qnsc96fpcv2pl35aw5i6jqm8";
   };
 
   buildInputs = [ coq ocaml ];

@@ -98,6 +98,7 @@
   ./services/databases/postgresql.nix
   ./services/databases/virtuoso.nix
   ./services/databases/monetdb.nix
+  ./services/databases/influxdb.nix
   ./services/desktops/accountservice.nix
   ./services/desktops/geoclue2.nix
   ./services/desktops/gnome3/at-spi2-core.nix
@@ -222,6 +223,7 @@
   ./services/networking/syncthing.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
+  ./services/networking/teamspeak3.nix
   ./services/networking/tftpd.nix
   ./services/networking/unbound.nix
   ./services/networking/vsftpd.nix
@@ -253,6 +255,7 @@
   ./services/ttys/agetty.nix
   ./services/ttys/kmscon.nix
   ./services/web-servers/apache-httpd/default.nix
+  ./services/web-servers/fcgiwrap.nix
   ./services/web-servers/jboss/default.nix
   ./services/web-servers/lighttpd/default.nix
   ./services/web-servers/lighttpd/cgit.nix
@@ -314,11 +317,13 @@
   ./tasks/filesystems/vfat.nix
   ./tasks/filesystems/xfs.nix
   ./tasks/filesystems/zfs.nix
+  ./tasks/encrypted-devices.nix
   ./tasks/kbd.nix
   ./tasks/lvm.nix
   ./tasks/network-interfaces.nix
   ./tasks/scsi-link-power-management.nix
   ./tasks/swraid.nix
+  ./tasks/trackpoint.nix
   ./testing/service-runner.nix
   ./virtualisation/container-config.nix
   ./virtualisation/containers.nix

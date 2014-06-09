@@ -49,6 +49,7 @@ let
     };
     propagatedBuildInputs = depends;
     meta.homepage = "http://cran.r-project.org/web/packages/${name}/";
+    meta.hydraPlatforms = R.meta.hydraPlatforms;
   };
 
 in
@@ -2660,7 +2661,7 @@ let self = _self // overrides; _self = with self; {
   marg = derive { name="marg"; version="1.2-2"; sha256="0j08zzcrj8nqsargi6xi50gy9pl4smmsp4b7ywlga7r1ga38g82r"; depends=[statmod survival]; };
   margie = derive { name="margie"; version="1.0"; sha256="1jkhg15xdiqjvpzbbc39l8jlfw0yrbarnd3zbgb3p0rh733x5g4j"; depends=[]; };
   marginalmodelplots = derive { name="marginalmodelplots"; version="0.4.2"; sha256="0d7m7sddz9rp1mkvirhcmk7hlbxsag3nm3vqfampnr7l2h158baa"; depends=[locfit]; };
-  markdown = derive { name="markdown"; version="0.6.5"; sha256="0gixql675hyl38cha2xxklx8x2jin88iqs7mndfqmq7mfms62i31"; depends=[]; };
+  markdown = derive { name="markdown"; version="0.7"; sha256="18q1yvzv9fk5j09ngrldm32cnswxhrmqx6g8d17srriis6ng6i5v"; depends=[ mime ]; };
   marked = derive { name="marked"; version="1.1.3"; sha256="0nvk7fq2q7yqxmw507bsbss04wggy13kgvcv5v01g8a0wb3ig9ym"; depends=[R2admb truncnorm coda optimx ggplot2 Matrix numDeriv Rcpp plyr]; };
   MarkedPointProcess = derive { name="MarkedPointProcess"; version="0.2.21"; sha256="06bypa124raa4vbcvi082vpd8bndnar4p1v18dq261z6j3ixk44k"; depends=[RandomFields R2Cuba]; };
   maRketSim = derive { name="maRketSim"; version="0.9.2"; sha256="1cq17zjwyf4i5lcqgxqkw805s4mr6qp89blgpmpxy8gdrbfj93m4"; depends=[]; };
@@ -2826,7 +2827,7 @@ let self = _self // overrides; _self = with self; {
   migui = derive { name="migui"; version="0.00-09"; sha256="0mrvsls9q039pay0vf59xwg6bbr7ahwl4x3iwvar6sbfg8606as8"; depends=[tkrplot mi foreign]; };
   MIICD = derive { name="MIICD"; version="1.1"; sha256="0d697mggax1yp7b4dfxdi25rqmwrq25gmmjqsag6sa5raqr96gc9"; depends=[mstate prodlim cmprsk riskRegression MASS survival]; };
   MILC = derive { name="MILC"; version="1.0"; sha256="14xsiw5al6kixwvf3ph0dlm8s13gsbqvzb92da6ng3x4iiyb1g0w"; depends=[]; };
-  mime = derive { name="mime"; version="0.1"; sha256="1qmflb4339mx666ak7h47k5jgvp7prisvpay00b639sg7pwp2hbx"; depends=[]; };
+  mime = derive { name="mime"; version="0.1.1"; sha256="1kgm06n9flw2kh9f63h3i20wg663qscfdvs7dpyb68ic3c7aimci"; depends=[]; };
   MImix = derive { name="MImix"; version="1.0"; sha256="033gxr0z2xba0pgckiigblb1xa94wrfmpgv3j122cdynjch44j4r"; depends=[]; };
   MindOnStats = derive { name="MindOnStats"; version="0.8"; sha256="1fsswkbrxd3f0hz3nd25xvp36si292s4q2r52hw6rsps2mx6bgqi"; depends=[]; };
   minerva = derive { name="minerva"; version="1.3"; sha256="0ph65jfm05wck3zz0lh3bmaj0p4c9309nzkrjpjxqkcnrfdbw6wf"; depends=[]; };
@@ -4005,7 +4006,7 @@ let self = _self // overrides; _self = with self; {
   RcppClassicExamples = derive { name="RcppClassicExamples"; version="0.1.1"; sha256="0shs12y3gj5p7gharjik48dqk0fy4k2jx7h22ppvgbs8z85qjrb8"; depends=[Rcpp RcppClassic]; };
   RcppCNPy = derive { name="RcppCNPy"; version="0.2.3"; sha256="1baz9272vwc44yab7xb6ig0gd2gj8idrhywir2zq77q8bfhqc9gh"; depends=[Rcpp]; };
   RcppDE = derive { name="RcppDE"; version="0.1.2"; sha256="0ji5csfygqvrcahgx5gxy7dddpykckzw8hmqslsdl7l68wj60qkc"; depends=[Rcpp RcppArmadillo]; };
-  RcppEigen = derive { name="RcppEigen"; version="0.3.2.1.1"; sha256="099hrj4r2dh0yfn63lazmqcja1gwxqzy1zlsfia31kkaw6i82g5l"; depends=[Matrix Rcpp]; };
+  RcppEigen = derive { name="RcppEigen"; version="0.3.2.1.2"; sha256="010a27jby8c61mgw2qb47zkln1v33gj0xcn8lf7sw0kb2mdh58yl"; depends=[Matrix Rcpp]; };
   RcppExamples = derive { name="RcppExamples"; version="0.1.6"; sha256="1jnqh9nii5nncsah0lrkls8dqqcka9fnbvfg8ikl4cqjri17rpbv"; depends=[Rcpp]; };
   RcppGSL = derive { name="RcppGSL"; version="0.2.0"; sha256="0qdm5igjrifw8a0m36k9xrbnaj11j18236a1gvdz689vy6a4hfqz"; depends=[Rcpp]; };
   RcppOctave = derive { name="RcppOctave"; version="0.14.1"; sha256="0fdljr0jdnardcm2qm29ibz16xymal8xac3p4grscipa44vm1w0b"; depends=[Rcpp pkgmaker digest stringr]; };

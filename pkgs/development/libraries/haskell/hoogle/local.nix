@@ -38,13 +38,13 @@ cabal.mkDerivation (self: rec {
   sha256 = "1rhr7xh4x9fgflcszbsl176r8jq6rm81bwzmbz73f3pa1zf1v0zc";
   isLibrary = true;
   isExecutable = true;
-  buildInputs = [ self.ghc Cabal parallel perl wget rehoo ]
-    ++ self.extraBuildInputs ++ packages;
+  buildInputs = [self.ghc Cabal] ++ self.extraBuildInputs
+    ++ [ parallel perl wget rehoo ] ++ packages;
   buildDepends = [
       aeson binary blazeBuilder Cabal caseInsensitive cmdargs conduit
       deepseq filepath haskellSrcExts httpTypes parsec QuickCheck random
       resourcet safe shake tagsoup text time transformers uniplate vector
-      vectorAlgorithms wai warp parallel perl wget rehoo
+      vectorAlgorithms wai warp
     ];
   testDepends = [ filepath ];
   testTarget = "--test-option=--no-net";
@@ -73,7 +73,8 @@ cabal.mkDerivation (self: rec {
 
     for i in $docPackages; do
         import_dbs $i/share/doc
-        ln -sf $i/share/doc/* $out/share/hoogle/doc
+        ln -sf $i/share/doc/*-ghc-*/* $out/share/hoogle/doc 2> /dev/null \
+            || ln -sf $i/share/doc/* $out/share/hoogle/doc
     done
 
     import_dbs ${self.ghc}/share/doc/ghc*/html/libraries
@@ -111,6 +112,6 @@ cabal.mkDerivation (self: rec {
     description = "Haskell API Search";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [ self.stdenv.lib.maintainers.jwiegley ];
   };
 })

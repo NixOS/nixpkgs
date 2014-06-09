@@ -14,6 +14,7 @@
   AndersonTorres = "Anderson Torres <torres.anderson.85@gmail.com>";
   andres = "Andres Loeh <ksnixos@andres-loeh.de>";
   antono = "Antono Vasiljev <self@antono.info>";
+  arobyn = "Alexei Robyn <shados@shados.net>";
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
   aszlig = "aszlig <aszlig@redmoonstudios.org>";
   bbenoist = "Baptist BENOIST <return_0@live.com>";
@@ -29,9 +30,10 @@
   coconnor = "Corey O'Connor <coreyoconnor@gmail.com>";
   coroa = "Jonas Hörsch <jonas@chaoflow.net>";
   cstrahan = "Charles Strahan <charles.c.strahan@gmail.com>";
+  ederoyd46 = "Matthew Brown <matt@ederoyd.co.uk>";
   edwtjo = "Edward Tjörnhammar <ed@cflags.cc>";
   eelco = "Eelco Dolstra <eelco.dolstra@logicblox.com>";
-  emery = "Emery Hemingawy <emery@vfemail.net>";
+  emery = "Emery Hemingway <emery@vfemail.net>";
   ertes = "Ertugrul Söylemez <ertesx@gmx.de>";
   falsifian = "James Cook <james.cook@utoronto.ca>";
   fuuzetsu = "Mateusz Kowalczyk <fuuzetsu@fuuzetsu.co.uk>";
@@ -43,6 +45,7 @@
   iElectric = "Domen Kozar <domen@dev.si>";
   iyzsong = "Song Wenwu <iyzsong@gmail.com>";
   jcumming = "Jack Cummings <jack@mudshark.org>";
+  joelteon = "Joel Taylor <me@joelt.io>";
   jwiegley = "John Wiegley <johnw@newartisans.com>";
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   ktosiek = "Tomasz Kontusz <tomasz.kontusz@gmail.com>";
@@ -64,6 +67,7 @@
   pierron = "Nicolas B. Pierron <nixos@nbp.name>";
   piotr = "Piotr Pietraszkiewicz <ppietrasa@gmail.com>";
   pkmx = "Chih-Mao Chen <pkmx.tw@gmail.com>";
+  plcplc = "Philip Lykke Carlsen <plcplc@gmail.com>";
   pSub = "Pascal Wittmann <mail@pascal-wittmann.de>";
   qknight = "Joachim Schiele <js@lastlog.de>";
   raskin = "Michael Raskin <7c6f434c@mail.ru>";

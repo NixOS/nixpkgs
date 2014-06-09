@@ -3,11 +3,11 @@
 with stdenv.lib;
 assert stdenv.isi686;
 stdenv.mkDerivation {
-  name = "tibia-10.40";
+  name = "tibia-10.41";
 
   src = fetchurl {
-    url = http://static.tibia.com/download/tibia1040.tgz;
-    sha256 = "1d6wibwr84cnglnc0c9d6m3nynbg2zwgnxpyy9ykqiiwsz8qgzyg";
+    url = http://static.tibia.com/download/tibia1041.tgz;
+    sha256 = "1hmqn9c6qaa79ldcnl4ws9dm6rd3ymy48fw254pl6g601amn7b8v";
   };
 
   shell = stdenv.shell;
@@ -52,7 +52,6 @@ stdenv.mkDerivation {
     description = "Top-down MMORPG set in a fantasy world";
     homepage = "http://tibia.com";
     license = "unfree";
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
     platforms = ["i686-linux"];
   };
 }

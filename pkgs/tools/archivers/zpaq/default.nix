@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="zpaq";
-    version="649";
+    version="651";
     name="${baseName}-${version}";
-    hash="0rspkd8vdp06hyjlrhgqjrv37bwvnzvqw0smlcy5fjbny502s5nn";
-    url="http://mattmahoney.net/dc/zpaq649.zip";
-    sha256="0rspkd8vdp06hyjlrhgqjrv37bwvnzvqw0smlcy5fjbny502s5nn";
+    hash="1n0qq4lia25n62jpa0gg29388xf8r75nv4h1vpc3s5rpymkq2qw5";
+    url="http://mattmahoney.net/dc/zpaq651.zip";
+    sha256="1n0qq4lia25n62jpa0gg29388xf8r75nv4h1vpc3s5rpymkq2qw5";
   };
   buildInputs = [
     unzip

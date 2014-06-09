@@ -2,30 +2,25 @@
 
 stdenv.mkDerivation rec {
   name = "syncthing-${version}";
-  version = "0.8.5";
+  version = "0.8.11";
 
   src = fetchgit {
     url = "git://github.com/calmh/syncthing.git";
     rev = "refs/tags/v${version}";
-    sha256 = "0525fvar5c22sxg7737ajny80srds1adhi73a8yr12wsjnsqfi6x";
+    sha256 = "16dl9sqwhv0n1602pmi10d5j7z2196ijhvz4rfx7732210qbkpnn";
   };
 
   buildInputs = [ go ];
 
+  patches = [ ./upnp.patch ];
+
   buildPhase = ''
     mkdir -p "./dependencies/src/github.com/calmh/syncthing"
 
-    cp -r "./auto" "./dependencies/src/github.com/calmh/syncthing"
-    cp -r "./buffers" "./dependencies/src/github.com/calmh/syncthing"
-    cp -r "./cid" "./dependencies/src/github.com/calmh/syncthing"
-    cp -r "./discover" "./dependencies/src/github.com/calmh/syncthing"
-    cp -r "./files" "./dependencies/src/github.com/calmh/syncthing"
-    cp -r "./lamport" "./dependencies/src/github.com/calmh/syncthing"
-    cp -r "./protocol" "./dependencies/src/github.com/calmh/syncthing"
-    cp -r "./scanner" "./dependencies/src/github.com/calmh/syncthing"
-    cp -r "./mc" "./dependencies/src/github.com/calmh/syncthing"
-    cp -r "./xdr" "./dependencies/src/github.com/calmh/syncthing"
-    cp -r "./upnp" "./dependencies/src/github.com/calmh/syncthing"
+    for a in auto buffers cid discover files lamport protocol scanner \
+            logger beacon config xdr upnp model osutil versioner; do
+        cp -r "./$a" "./dependencies/src/github.com/calmh/syncthing"
+    done
 
     export GOPATH="`pwd`/Godeps/_workspace:`pwd`/dependencies"
 

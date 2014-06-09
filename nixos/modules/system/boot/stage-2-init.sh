@@ -36,9 +36,9 @@ mount -n -o remount,rw /
 # stage 1, we need to do that here.
 if [ ! -e /proc/1 ]; then
     mkdir -m 0755 -p /proc
-    mount -n -t proc none /proc
+    mount -n -t proc proc /proc
     mkdir -m 0755 -p /dev
-    mount -t devtmpfs none /dev
+    mount -t devtmpfs devtmpfs /dev
 fi
 
 
@@ -82,9 +82,9 @@ done
 
 # More special file systems, initialise required directories.
 mkdir -m 0755 /dev/shm
-mount -t tmpfs -o "rw,nosuid,nodev,size=@devShmSize@" none /dev/shm
+mount -t tmpfs -o "rw,nosuid,nodev,size=@devShmSize@" tmpfs /dev/shm
 mkdir -m 0755 -p /dev/pts
-[ -e /proc/bus/usb ] && mount -t usbfs none /proc/bus/usb # UML doesn't have USB by default
+[ -e /proc/bus/usb ] && mount -t usbfs usbfs /proc/bus/usb # UML doesn't have USB by default
 mkdir -m 01777 -p /tmp
 mkdir -m 0755 -p /var /var/log /var/lib /var/db
 mkdir -m 0755 -p /nix/var
@@ -114,16 +114,17 @@ rm -rf /nix/var/nix/gcroots/tmp /nix/var/nix/temproots
 if ! mountpoint -q /run; then
     rm -rf /run
     mkdir -m 0755 -p /run
-    mount -t tmpfs -o "mode=0755,size=@runSize@" none /run
+    mount -t tmpfs -o "mode=0755,size=@runSize@" tmpfs /run
 fi
 
 # Create a ramfs on /run/keys to hold secrets that shouldn't be
 # written to disk (generally used for NixOps, harmless elsewhere).
 if ! mountpoint -q /run/keys; then
     rm -rf /run/keys
-    mkdir -m 0750 /run/keys
+    mkdir /run/keys
+    mount -t ramfs ramfs /run/keys
     chown 0:96 /run/keys
-    mount -t ramfs none /run/keys
+    chmod 0750 /run/keys
 fi
 
 mkdir -m 0755 -p /run/lock
@@ -152,7 +153,7 @@ fi
 # Create /var/setuid-wrappers as a tmpfs.
 rm -rf /var/setuid-wrappers
 mkdir -m 0755 -p /var/setuid-wrappers
-mount -t tmpfs -o "mode=0755" none /var/setuid-wrappers
+mount -t tmpfs -o "mode=0755" tmpfs /var/setuid-wrappers
 
 
 # Run the script that performs all configuration activation that does

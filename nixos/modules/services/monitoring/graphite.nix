@@ -12,7 +12,7 @@ let
     name = "graphite-config";
     paths = lists.filter (el: el != null) [
       (writeTextOrNull "carbon.conf" cfg.carbon.config)
-      (writeTextOrNull "storage-agregation.conf" cfg.carbon.storageAggregation)
+      (writeTextOrNull "storage-aggregation.conf" cfg.carbon.storageAggregation)
       (writeTextOrNull "storage-schemas.conf" cfg.carbon.storageSchemas)
       (writeTextOrNull "blacklist.conf" cfg.carbon.blacklist)
       (writeTextOrNull "whitelist.conf" cfg.carbon.whitelist)

@@ -8,11 +8,11 @@ with stdenv.lib;
 let
 
   majorVersion = "2.7";
-  version = "${majorVersion}.6";
+  version = "${majorVersion}.7";
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
-    sha256 = "18gnpyh071dxa0rv3silrz92jw9qpblswzwv4gzqcwxzz20qxmhz";
+    sha256 = "0y6s12rdi89k24p8zarhy9fqmyy459yg0d125c7cac4v136y70r9";
   };
 
   patches =
@@ -28,10 +28,6 @@ let
       # patch python to put zero timestamp into pyc
       # if DETERMINISTIC_BUILD env var is set
       ./deterministic-build.patch
-
-      # See http://bugs.python.org/issue20246
-      # This will be fixed in 2.7.7.
-      ./CVE-2014-1912.patch
     ];
 
   postPatch = stdenv.lib.optionalString (stdenv.gcc.libc != null) ''

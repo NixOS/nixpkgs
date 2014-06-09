@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
 		(textClosure localDefs ["preConfigure" "doConfigure" "doMakeInstall" "doForceShare" "doPropagate"]);
 	meta = {
 		description = "Construo masses and springs simulation";
-		inherit src;
 	};
 }
