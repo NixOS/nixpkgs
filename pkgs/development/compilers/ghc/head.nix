@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ghc, perl, gmp, ncurses, happy, alex }:
 
 stdenv.mkDerivation rec {
-  version = "7.9.20140430";
+  version = "7.9.20140608";
   name = "ghc-${version}";
 
   src = fetchurl {
-    url = "http://deb.haskell.org/dailies/2014-05-01/ghc_7.9.20140430.orig.tar.bz2";
-    sha256 = "072c1d71idi7jw711icn1wz4q64laasvb0ii8xvg5mbhi9szbwk4";
+    url = "http://deb.haskell.org/dailies/2014-06-08/ghc_${version}.orig.tar.bz2";
+    sha256 = "0x3hgh4zfns2m6bbq9xwwlafav0a29azl0xh8549za256clz97w1";
   };
 
   buildInputs = [ ghc perl gmp ncurses happy alex ];
