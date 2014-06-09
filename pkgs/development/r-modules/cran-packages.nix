@@ -64,6 +64,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [Rcpp];
     patchPhase = "patchShebangs configure";
+    meta.hydraPlatforms = R.meta.hydraPlatforms;
   };
 
   A3 = derive { name="A3"; version="0.9.2"; sha256="01s7znhph2mr3snpscci3y7nbcisa6kg6hy7im3742r6ah0z3jv7"; depends=[xtable pbapply]; };
@@ -334,16 +335,16 @@ let self = _self // overrides; _self = with self; {
   bayesQR = derive { name="bayesQR"; version="2.2"; sha256="0w5fg7hdwpgs2dg4vzcdsm60wkxgjxhcssw9jzig5qgdjdkm07nm"; depends=[]; };
   BayesQTLBIC = derive { name="BayesQTLBIC"; version="1.0-2"; sha256="1pgd3h45v3l44pfkin2883lk1davp0y4fq80lp6nqrsbx9cpsy2z"; depends=[leaps]; };
   bayess = derive { name="bayess"; version="1.4"; sha256="0axipk5hn2hw3g4dfh7y3xa0dxqmi8kqpbr77nl14y7ydpija6xm"; depends=[MASS mnormt gplots combinat]; };
-  BayesSAE = derive { name="BayesSAE"; version="1.0-1"; sha256="09s7f472by689b2b0gahnkhyjriizpsx6r5qa95nf3f4bfqi2cpf"; depends=[Formula coda lattice]; };
+  BayesSAE = derive { name="BayesSAE"; version="1.0-1"; sha256="09s7f472by689b2b0gahnkhyjriizpsx6r5qa95nf3f4bfqi2cpf"; depends=[Formula coda lattice pkgs.gsl]; };
   BayesSingleSub = derive { name="BayesSingleSub"; version="0.6.2"; sha256="0hgmyhg4mpxx7k91hbfa9h3533mqyn9rz4kl9kb30cc9g7g0m045"; depends=[coda mvtnorm MCMCpack]; };
   bayesSurv = derive { name="bayesSurv"; version="2.1-1"; sha256="076lzaiwjp4ahw36wvx9sb1g86b9cidvjv91sc1r509s8khph91w"; depends=[survival coda smoothSurv]; };
   bayesTFR = derive { name="bayesTFR"; version="4.0-5"; sha256="1cyzkgx0f275ng0ds0lvm3rwryd2ai20shhilp7ajvsria4h4dcw"; depends=[mvtnorm MASS coda wpp2012]; };
   Bayesthresh = derive { name="Bayesthresh"; version="2.0.1"; sha256="0w26h1ragqcg1i4h7c2y6vd8fig2jb2zrnvvchgg5z2hg9qdplsf"; depends=[lme4 MASS VGAM mvtnorm matrixcalc coda]; };
   BayesTree = derive { name="BayesTree"; version="0.3-1.1"; sha256="1sdxya2nli590m837zmqn4y3h62ph1hx8qszp6ayb19liff2bnmd"; depends=[nnet]; };
   BayesValidate = derive { name="BayesValidate"; version="0.0"; sha256="1gli65avpkb90asx92l1yjbwaxcsyb920idyjwgd2sl2b3l657ly"; depends=[]; };
-  BayesVarSel = derive { name="BayesVarSel"; version="1.5.1"; sha256="0r2al4d74dbra7va88fcazq5h19f0i4wymd39apsz3a3hsb8vdvv"; depends=[MASS]; };
+  BayesVarSel = derive { name="BayesVarSel"; version="1.5.1"; sha256="0r2al4d74dbra7va88fcazq5h19f0i4wymd39apsz3a3hsb8vdvv"; depends=[MASS pkgs.gsl]; };
   BayesX = derive { name="BayesX"; version="0.2-8"; sha256="1kj0xwy972383vx52i8dn7vp0x8r5cbbii0s7nwfz0bn2iaks0c0"; depends=[shapefiles sp maptools colorspace coda]; };
-  BayesXsrc = derive { name="BayesXsrc"; version="2.1-2"; sha256="114804f6maak5dmwzw4cbigjcdw7c6sgx48af35yrvkspi1gsz3b"; depends=[]; };
+  BayesXsrc = derive { name="BayesXsrc"; version="2.1-2"; sha256="114804f6maak5dmwzw4cbigjcdw7c6sgx48af35yrvkspi1gsz3b"; depends=[pkgs.readline]; };
   BayHap = derive { name="BayHap"; version="1.0.1"; sha256="0xqnl2cbf0pyjlpywyy0j4mwknfn8msz4s719dsri3r7hvn9m6kd"; depends=[boa]; };
   BayHaz = derive { name="BayHaz"; version="0.1-3"; sha256="08ilghlkgyma5758yw7mdgqycqcillqmx73knzzdlg2kzc77dvg6"; depends=[]; };
   BaylorEdPsych = derive { name="BaylorEdPsych"; version="0.5"; sha256="1kq6nvzdqwawygp7k62lw5hyccsj81jg82hq60yidgxnmmnnf7y2"; depends=[]; };
@@ -646,7 +647,7 @@ let self = _self // overrides; _self = with self; {
   cdb = derive { name="cdb"; version="0.0.1"; sha256="1rdb4lacjcw67apdyiv7cl1xvv9d1mrzck1qk605n6794k7wf2ys"; depends=[bitops]; };
   CDFt = derive { name="CDFt"; version="1.0.1"; sha256="0sc8ga48l3vvqfjq3ak5j1y27hgr5dw61wp0w5jpwzjz22jzqbap"; depends=[]; };
   CDLasso = derive { name="CDLasso"; version="1.1"; sha256="0n699y18ia2yqpk78mszgggy7jz5dybwsi2y56kdyblddcmz1yv7"; depends=[]; };
-  CDM = derive { name="CDM"; version="3.2-6"; sha256="07vnvqzrs3zny0p2sq0df37jgiwhzrnlgw9p6dd9x9qn5m9asfm6"; depends=[mvtnorm MASS psych polycor sfsmisc Rcpp]; };
+  CDM = derive { name="CDM"; version="3.2-6"; sha256="07vnvqzrs3zny0p2sq0df37jgiwhzrnlgw9p6dd9x9qn5m9asfm6"; depends=[mvtnorm MASS psych polycor sfsmisc Rcpp RcppArmadillo]; };
   CDNmoney = derive { name="CDNmoney"; version="2012.4-1"; sha256="1bnfsygbzdd70m5s9qq7524b1fybdws46axxjbw9dhwqpr8w85id"; depends=[]; };
   CDVine = derive { name="CDVine"; version="1.2"; sha256="1qfjbzdfz2dydkfw3b0jjma4csn62177j5sgzh6rszf0nifsi97g"; depends=[MASS mvtnorm igraph]; };
   cec2005benchmark = derive { name="cec2005benchmark"; version="1.0.3"; sha256="1fc833ji557y2vb6snlxh90gz1n7fxjfkwjmdcmasj1sfzaalsjy"; depends=[]; };
