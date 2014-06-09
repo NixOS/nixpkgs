@@ -17,13 +17,13 @@ in stdenv.mkDerivation rec {
     sha256 = "1669m8k9q72rpd2mzs0bh2q6lcwqiwd1ax3vrard1dgn64yq4hxx";
   };
 
-  buildInputs = [ ghc perl gmp ncurses ]
-    ++ stdenv.lib.optional stdenv.isDarwin binutils; # as: I don't understand '-' flag!
+  buildInputs = [ ghc perl gmp ncurses ];
 
   buildMK = ''
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp}/lib"
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp}/include"
 
+  '' + stdenv.lib.optionalString stdenv.isLinux ''
     # Set ghcFlags for building ghc itself
     SRC_HC_OPTS += ${ghcFlags}
     SRC_CC_OPTS += ${cFlags}
@@ -33,6 +33,7 @@ in stdenv.mkDerivation rec {
     echo "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
 
+  '' + stdenv.lib.optionalString stdenv.isLinux ''
     # Set ghcFlags for binaries that ghc builds
     sed -i -e 's|"\$topdir"|"\$topdir" ${ghcFlags}|' ghc/ghc.wrapper
 
