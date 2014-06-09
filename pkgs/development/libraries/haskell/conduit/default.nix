@@ -4,13 +4,15 @@
 
 cabal.mkDerivation (self: {
   pname = "conduit";
-  version = "1.1.5";
-  sha256 = "107mfkw2jin724cdkn5mkhxgfv2mf1nkhcn12mwaw9cnkxxxx78z";
+  version = "1.1.6";
+  sha256 = "1nhjj5zz934fd6fdbmkl8xvnvlaprxccgpwxffmdgqwxhvxgprq3";
   buildDepends = [
     exceptions liftedBase mmorph monadControl mtl resourcet
     transformers transformersBase void
   ];
-  testDepends = [ hspec mtl QuickCheck resourcet transformers void ];
+  testDepends = [
+    exceptions hspec mtl QuickCheck resourcet transformers void
+  ];
   doCheck = false;
   meta = {
     homepage = "http://github.com/snoyberg/conduit";
