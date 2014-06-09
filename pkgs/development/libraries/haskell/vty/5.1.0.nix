@@ -21,6 +21,7 @@ cabal.mkDerivation (self: {
     testFramework testFrameworkHunit testFrameworkSmallcheck text
     utf8String vector
   ];
+  jailbreak = true;
   doCheck = false;
   meta = {
     homepage = "https://github.com/coreyoconnor/vty";
