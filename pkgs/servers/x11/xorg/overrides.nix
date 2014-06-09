@@ -73,6 +73,10 @@ in
       '';
   };
 
+  libXfont = attrs: attrs // {
+    propagatedBuildInputs = [ args.freetype ]; # propagate link reqs. like bzip2
+  };
+
   libXxf86vm = attrs: attrs // {
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
@@ -111,6 +115,10 @@ in
   libXft = attrs: attrs // {
     propagatedBuildInputs = [ xorg.libXrender args.freetype args.fontconfig ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    # the include files need ft2build.h, and Requires.private isn't enough for us
+    postInstall = ''
+      sed "/^Requires:/s/$/, freetype2/" -i "$out/lib/pkgconfig/xft.pc"
+    '';
   };
 
   libXext = attrs: attrs // {
