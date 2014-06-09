@@ -10205,6 +10205,8 @@ let
 
   trigger = callPackage ../games/trigger { };
 
+  typespeed = callPackage ../games/typespeed { };
+
   ufoai = callPackage ../games/ufoai { };
 
   ultimatestunts = callPackage ../games/ultimatestunts { };
