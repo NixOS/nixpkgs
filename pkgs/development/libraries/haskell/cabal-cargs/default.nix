@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
     systemFilepath text transformers unorderedContainers
   ];
   testDepends = [ filepath tasty tastyGolden ];
+  jailbreak = true;
   meta = {
     description = "A command line program for extracting compiler arguments from a cabal file";
     license = self.stdenv.lib.licenses.bsd3;
