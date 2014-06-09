@@ -22,16 +22,16 @@ stdenv.mkDerivation rec {
   unpackPhase = "true";
   buildPhase = ''
     ORIG=`pwd`
-    chmod +w -R ${libphutil}
-    cd ${libphutil}/support/xhpast
-    ls
+    cp -R ${libphutil} libphutil
+    cp -R ${arcanist} arcanist
+    cd libphutil/support/xhpast
     make clean all install
     cd $ORIG
   '';
   installPhase = ''
     mkdir -p $out/bin $out/libexec
-    cp -R ${libphutil} $out/libexec/libphutil
-    cp -R ${arcanist}  $out/libexec/arcanist
+    cp -R libphutil $out/libexec/libphutil
+    cp -R arcanist  $out/libexec/arcanist
 
     ln -s $out/libexec/arcanist/bin/arc $out/bin
     wrapProgram $out/bin/arc \
