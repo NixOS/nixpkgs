@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "tbb-4.0-u5";
+  name = "tbb-4.2-u5";
 
   src = fetchurl {
-    url = "http://threadingbuildingblocks.org/uploads/77/187/4.0%20update%205/tbb40_20120613oss_src.tgz";
-    sha256 = "aaa98146049e55f6ac969298340eeb49df61395403fcc1480824a4ecd0d46192";
+    url = "https://www.threadingbuildingblocks.org/sites/default/files/software_releases/source/tbb42_20140601oss_src.tgz";
+    sha256 = "1zjh81hvfxvk1v1li27w1nm3bp6kqv913lxfb2pqa134dibw2pp7";
   };
 
   checkTarget = "test";
@@ -22,10 +22,9 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://threadingbuildingblocks.org/";
     description = "Intel Thread Building Blocks C++ Library";
+    homepage = "http://threadingbuildingblocks.org/";
     license = "LGPLv3+";
-
     longDescription = ''
       Intel Threading Building Blocks offers a rich and complete approach to
       expressing parallelism in a C++ program. It is a library that helps you
@@ -34,8 +33,7 @@ stdenv.mkDerivation {
       represents a higher-level, task-based parallelism that abstracts platform
       details and threading mechanisms for scalability and performance.
     '';
-
-    maintainers = [ stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ simons thoughtpolice ];
   };
 }
