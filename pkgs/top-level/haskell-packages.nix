@@ -2420,6 +2420,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   waiAppStatic = callPackage ../development/libraries/haskell/wai-app-static {};
 
+  waiConduit = callPackage ../development/libraries/haskell/wai-conduit {};
+
   waiExtra = callPackage ../development/libraries/haskell/wai-extra {};
 
   waiHandlerLaunch = callPackage ../development/libraries/haskell/wai-handler-launch {};
