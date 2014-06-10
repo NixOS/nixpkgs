@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "parsers";
-  version = "0.11.0.1";
-  sha256 = "0jg91zzsq12vxxsxrd1kx8h2c06asccymjbpx0zl7nvj5dhjfkpq";
+  version = "0.11.0.2";
+  sha256 = "0b2qb6lhn647926s2g7qrzhnvnym5dr7fny784bv19mfvimwi81c";
   buildDepends = [
     attoparsec charset parsec text transformers unorderedContainers
   ];

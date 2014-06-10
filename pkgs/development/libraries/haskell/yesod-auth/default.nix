@@ -1,20 +1,22 @@
-{ cabal, aeson, authenticate, base16Bytestring, base64Bytestring
-, binary, blazeHtml, blazeMarkup, byteable, cryptohash, dataDefault
-, emailValidate, fileEmbed, hamlet, httpConduit, httpTypes
-, liftedBase, mimeMail, network, persistent, persistentTemplate
-, random, resourcet, safe, shakespeare, shakespeareCss
-, shakespeareJs, text, time, transformers, unorderedContainers, wai
-, yesodCore, yesodForm, yesodPersistent
+{ cabal, aeson, attoparsecConduit, authenticate, base16Bytestring
+, base64Bytestring, binary, blazeBuilder, blazeHtml, blazeMarkup
+, byteable, conduit, conduitExtra, cryptohash, dataDefault
+, emailValidate, fileEmbed, hamlet, httpClient, httpConduit
+, httpTypes, liftedBase, mimeMail, network, persistent
+, persistentTemplate, random, resourcet, safe, shakespeare
+, shakespeareCss, shakespeareJs, text, time, transformers
+, unorderedContainers, wai, yesodCore, yesodForm, yesodPersistent
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-auth";
-  version = "1.3.0.5";
-  sha256 = "03vwmc2hql07mfl2s7a3sry82x0y0icr1977p1ljfhinyh35zc6l";
+  version = "1.3.1";
+  sha256 = "1fv5z938rpiyhkl4zjb2ss496bgqvdvn7di5im089zmxvx1m81lz";
   buildDepends = [
-    aeson authenticate base16Bytestring base64Bytestring binary
-    blazeHtml blazeMarkup byteable cryptohash dataDefault emailValidate
-    fileEmbed hamlet httpConduit httpTypes liftedBase mimeMail network
+    aeson attoparsecConduit authenticate base16Bytestring
+    base64Bytestring binary blazeBuilder blazeHtml blazeMarkup byteable
+    conduit conduitExtra cryptohash dataDefault emailValidate fileEmbed
+    hamlet httpClient httpConduit httpTypes liftedBase mimeMail network
     persistent persistentTemplate random resourcet safe shakespeare
     shakespeareCss shakespeareJs text time transformers
     unorderedContainers wai yesodCore yesodForm yesodPersistent

@@ -6,6 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "178hzal5gqw3rmgijv9ph9xa6d4sld279z4a8cjyx3hv4azciwr4";
   buildDepends = [ filepath terminfo transformers utf8String ];
   configureFlags = "-fterminfo";
+  jailbreak = true;
   meta = {
     homepage = "http://trac.haskell.org/haskeline";
     description = "A command-line interface for user input, written in Haskell";

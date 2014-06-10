@@ -1,16 +1,16 @@
 { cabal, cairo, colour, dataDefaultClass, diagramsCore, diagramsLib
 , filepath, hashable, JuicyPixels, lens, mtl, optparseApplicative
-, split, statestack, time, vector
+, pango, split, statestack, time, transformers, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "diagrams-cairo";
-  version = "1.1.0.2";
-  sha256 = "0y36cx89rlbmj470a6g11wlzkwzznjkjmkcpm7dzbxvfxw4pp70z";
+  version = "1.2";
+  sha256 = "0vzjp1i5hk971r7f55gpdl0jibrjg9j4ny7p408kb8zl2ynlxv6l";
   buildDepends = [
     cairo colour dataDefaultClass diagramsCore diagramsLib filepath
-    hashable JuicyPixels lens mtl optparseApplicative split statestack
-    time vector
+    hashable JuicyPixels lens mtl optparseApplicative pango split
+    statestack time transformers vector
   ];
   meta = {
     homepage = "http://projects.haskell.org/diagrams";

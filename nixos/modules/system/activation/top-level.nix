@@ -95,7 +95,7 @@ let
   # kernel, systemd units, init scripts, etc.) as well as a script
   # `switch-to-configuration' that activates the configuration and
   # makes it bootable.
-  system = showWarnings (
+  baseSystem = showWarnings (
     if [] == failed then pkgs.stdenv.mkDerivation {
       name = "nixos-${config.system.nixosVersion}";
       preferLocalBuild = true;
@@ -118,6 +118,10 @@ let
       perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
   } else throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failed)}");
 
+  # Replace runtime dependencies
+  system = fold ({ oldDependency, newDependency }: drv:
+      pkgs.replaceDependency { inherit oldDependency newDependency drv; }
+    ) baseSystem config.system.replaceRuntimeDependencies;
 
 in
 
@@ -181,6 +185,33 @@ in
       default = "";
       description = ''
         This code will be added to the builder creating the system store path.
+      '';
+    };
+
+    system.replaceRuntimeDependencies = mkOption {
+      default = [];
+      example = lib.literalExample "[ ({ original = pkgs.openssl; replacement = pkgs.callPackage /path/to/openssl { ... }; }) ]";
+      type = types.listOf (types.submodule (
+        { options, ... }: {
+          options.original = mkOption {
+            type = types.package;
+            description = "The original package to override.";
+          };
+
+          options.replacement = mkOption {
+            type = types.package;
+            description = "The replacement package.";
+          };
+        })
+      );
+      apply = map ({ original, replacement, ... }: {
+        oldDependency = original;
+        newDependency = replacement;
+      });
+      description = ''
+        List of packages to override without doing a full rebuild.
+        The original derivation and replacement derivation must have the same
+        name length, and ideally should have close-to-identical directory layout.
       '';
     };
 

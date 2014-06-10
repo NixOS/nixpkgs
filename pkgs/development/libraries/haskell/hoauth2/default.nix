@@ -1,14 +1,16 @@
-{ cabal, aeson, bytestringShow, conduit, httpConduit, httpTypes
-, monadControl, mtl, random, resourcet, text, transformers
+{ cabal, aeson, bytestringShow, httpConduit, httpTypes
+, monadControl, mtl, random, text, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "hoauth2";
-  version = "0.3.6.1";
-  sha256 = "0nfh77fxyl8vbdnrrp28hsl1zhxhmg8mjn0gfvc2i3w5rd6j0lda";
+  version = "0.4.0";
+  sha256 = "1499rgcn3h4921x21s6l0spnjf3wvmsaa07pimgjgb4rjib3z2d5";
+  isLibrary = true;
+  isExecutable = true;
   buildDepends = [
-    aeson bytestringShow conduit httpConduit httpTypes monadControl mtl
-    random resourcet text transformers
+    aeson bytestringShow httpConduit httpTypes monadControl mtl random
+    text transformers
   ];
   meta = {
     homepage = "https://github.com/freizl/hoauth2";

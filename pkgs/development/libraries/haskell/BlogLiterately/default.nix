@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "BlogLiterately";
-  version = "0.7.1.6";
-  sha256 = "0mzq0br9jsymml57kcxqyr401lckzm43fy74l3wy25n6grv64hd4";
+  version = "0.7.1.7";
+  sha256 = "05i0v5mrmnxbmrqrm473z6hs9j4c2jv1l81i4kdmm2wia6p93s90";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

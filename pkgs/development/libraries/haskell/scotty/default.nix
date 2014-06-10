@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "scotty";
-  version = "0.7.2";
-  sha256 = "1y14af3qciwycgaxzx6rjan2jgfchjzs4zbxzh8p8s1d0l4gsqlb";
+  version = "0.7.3";
+  sha256 = "1cksnsaghcliwpbigs7fjb2qcxsnrqmjcjwndmf3vbfkn43w2prb";
   buildDepends = [
     aeson blazeBuilder caseInsensitive conduit conduitExtra dataDefault
     httpTypes mtl regexCompat text transformers wai waiExtra warp

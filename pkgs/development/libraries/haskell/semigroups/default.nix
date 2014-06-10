@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "semigroups";
-  version = "0.14";
-  sha256 = "07jmfb3h4kz3a2ysrkhzzpfdhxglszq6qqsmg2011f0hdzm24ay7";
+  version = "0.15";
+  sha256 = "1fkinmjyx7r39c8hf8f6n9zgn6m7c2y7l0san43s4g2cfg8pxn5s";
   buildDepends = [ hashable nats text unorderedContainers ];
   meta = {
     homepage = "http://github.com/ekmett/semigroups/";

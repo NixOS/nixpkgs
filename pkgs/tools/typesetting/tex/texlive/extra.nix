@@ -1,11 +1,11 @@
 args: with args;
 rec {
-  name    = "texlive-extra-2013";
-  version = "2013.20140408";
+  name    = "texlive-extra-2014";
+  version = "2014.20140528";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/t/texlive-extra/texlive-extra_${version}.orig.tar.xz";
-    sha256 = "0d6b5kip7j8ljqn92bkdncvqxyk2756404hzsp4mh0s1jhfwws7y";
+    sha256 = "1wlvafvc03qlic4gr883q3lvgjis0czw3z6gdp4qw8f51a0fyam9";
   };
 
   buildInputs = [texLive xz];

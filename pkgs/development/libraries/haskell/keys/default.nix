@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "keys";
-  version = "3.10";
-  sha256 = "1s2xkzvaqk507wrgabpxli8g8n83arflmdhxq40f7qkvyflhhmyh";
+  version = "3.10.1";
+  sha256 = "007lbpfan5n1cgswsrzc4xjv0kjmjr9vn4lpqm3gwk3lnfpg8i4n";
   buildDepends = [
     comonad free semigroupoids semigroups transformers
   ];

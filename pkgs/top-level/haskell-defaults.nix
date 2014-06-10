@@ -15,13 +15,14 @@
   # Older compilers inherit the overrides from newer ones.
 
   ghcHEADPrefs = self : super : super // {
-    mtl = self.mtl_2_1_3_1;
+    mtl = self.mtl_2_1_2;
     cabalInstall_1_20_0_2 = super.cabalInstall_1_20_0_2.override { Cabal = null; };
+    transformersCompat = super.transformersCompat_0_3_3;
   };
 
   ghc782Prefs = self : super : ghcHEADPrefs self super // {
-    cabalInstall_1_20_0_2 = super.cabalInstall_1_20_0_2.override { Cabal = self.Cabal_1_20_0_0; };
-    codex = super.codex.override { hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_20_0_0; }; };
+    cabalInstall_1_20_0_2 = super.cabalInstall_1_20_0_2.override { Cabal = self.Cabal_1_20_0_1; };
+    codex = super.codex.override { hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_20_0_1; }; };
   };
 
   ghc763Prefs = self : super : ghc782Prefs self super // {
@@ -42,6 +43,8 @@
     haddock = self.haddock_2_13_2;
     modularArithmetic = null;           # requires base >= 4.7
     pipesBinary = super.pipesBinary.override { binary = self.binary_0_7_2_1; };
+    singletons = null;                  # requires base >= 4.7
+    vty_5_1_0 = super.vty_5_1_0.override { cabal = self.cabal.override { Cabal = self.Cabal_1_18_1_3; }; };
     transformers = self.transformers_0_3_0_0; # core packagen in ghc > 7.6.x
     zipArchive = super.zipArchive_0_2_2_1;    # works without binary 0.7.x
   };
@@ -54,6 +57,7 @@
     haddock = self.haddock_2_11_0;
     haskeline = super.haskeline.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     scientific = self.scientific_0_2_0_2;
+    shelly = self.shelly_0_15_4_1;
   };
 
   ghc722Prefs = self : super : ghc742Prefs self super // {
@@ -111,11 +115,13 @@
     hashtables = super.hashtables.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     HTTP = super.HTTP.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     HUnit = super.HUnit.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
-    network = super.network.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    network = super.network_2_2_1_7.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     OpenGLRaw = self.OpenGLRaw_1_3_0_0;
     OpenGL = self.OpenGL_2_6_0_1;
     QuickCheck = super.QuickCheck.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     stm = self.stm_2_4_2.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    systemFilepath = super.systemFilepath.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    systemFileio = super.systemFileio.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     tar = super.tar.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     text = self.text_0_11_2_3.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     time = self.time_1_1_2_4.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };

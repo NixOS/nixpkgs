@@ -1,15 +1,16 @@
-{ cabal, blazeMarkup, blazeSvg, colour, diagramsCore, diagramsLib
-, filepath, hashable, lens, monoidExtras, mtl, split, time
-, vectorSpace
+{ cabal, base64Bytestring, blazeMarkup, blazeSvg, colour
+, diagramsCore, diagramsLib, filepath, hashable, JuicyPixels, lens
+, monoidExtras, mtl, split, time, vectorSpace
 }:
 
 cabal.mkDerivation (self: {
   pname = "diagrams-svg";
-  version = "1.0.2.1";
-  sha256 = "1qm4vk67knl4bpp84kwm95blshf7slarpl620m8irslsq3yag507";
+  version = "1.1";
+  sha256 = "0b34rh35pay4x8dg0i06xvr3d865hbxzj2x77jly9l1j7sa1qaj1";
   buildDepends = [
-    blazeMarkup blazeSvg colour diagramsCore diagramsLib filepath
-    hashable lens monoidExtras mtl split time vectorSpace
+    base64Bytestring blazeMarkup blazeSvg colour diagramsCore
+    diagramsLib filepath hashable JuicyPixels lens monoidExtras mtl
+    split time vectorSpace
   ];
   jailbreak = true;
   meta = {

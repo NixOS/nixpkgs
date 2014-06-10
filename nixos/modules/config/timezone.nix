@@ -30,7 +30,7 @@ in
 
   config = {
 
-    environment.variables.TZDIR = "/etc/zoneinfo";
+    environment.systemVariables.TZDIR = "/etc/zoneinfo";
 
     systemd.globalEnvironment.TZDIR = tzdir;
 

@@ -5800,11 +5800,11 @@ rec {
   });
 
   ldap = buildPythonPackage rec {
-    name = "ldap-2.4.10";
+    name = "ldap-2.4.15";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/p/python-ldap/${name}.tar.gz";
-      sha256 = "0m6fm2alcb5v9xdcjv2nw2lhz9nnd3mnr5lrmf397hi4pw0pik37";
+      url = "http://pypi.python.org/packages/source/p/python-ldap/python-${name}.tar.gz";
+      sha256 = "0w0nn5yj0nbbkvpbqgfni56v7sjx6jf6s6zvp9zmahyrvqrsrg1h";
     };
 
     NIX_CFLAGS_COMPILE = "-I${pkgs.cyrus_sasl}/include/sasl";
@@ -9282,5 +9282,34 @@ rec {
       license = licenses.mit;
     };
   };
+
+  pync = buildPythonPackage rec {
+    version  = "1.4";
+    baseName = "pync";
+    name     = "${baseName}-${version}";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/${baseName}/${name}.tar.gz";
+      md5 = "5cc79077f386a17b539f1e51c05a3650";
+    };
+
+    buildInputs = [ pkgs.coreutils ];
+
+    propagatedBuildInputs = [ dateutil ];
+
+    preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      sed -i 's|^\([ ]*\)self.bin_path.*$|\1self.bin_path = "${pkgs.rubyLibs.terminal_notifier}/bin/terminal-notifier"|' build/lib/pync/TerminalNotifier.py
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Python Wrapper for Mac OS 10.8 Notification Center";
+      homepage    = https://pypi.python.org/pypi/pync/1.4;
+      license     = licenses.mit;
+      platforms   = platforms.darwin;
+      maintainers = [ maintainers.lovek323 ];
+    };
+  };
+
+
 
 }); in pythonPackages

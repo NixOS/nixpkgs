@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="jq";
-    version="1.3";
+    version="1.4";
     name="${baseName}-${version}";
-    hash="1mzy9cj3d19y1m56mwk6slls543gnlhz8302hmnxkhdzdb1j6gv2";
-    url="http://stedolan.github.io/jq/download/source/jq-1.3.tar.gz";
-    sha256="1mzy9cj3d19y1m56mwk6slls543gnlhz8302hmnxkhdzdb1j6gv2";
+    hash="17dk17h7qj6xpnsbc09qwsqkm6r7jhqbfkjvwq246yxmpsx4334r";
+    url="http://stedolan.github.io/jq/download/source/jq-1.4.tar.gz";
+    sha256="17dk17h7qj6xpnsbc09qwsqkm6r7jhqbfkjvwq246yxmpsx4334r";
   };
   buildInputs = [
   ];

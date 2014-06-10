@@ -1,14 +1,15 @@
 { cabal, comonad, contravariant, distributive, free, mtl
-, semigroupoids, semigroups, tagged, transformers, void
+, profunctors, semigroupoids, semigroups, tagged, transformers
+, void
 }:
 
 cabal.mkDerivation (self: {
   pname = "adjunctions";
-  version = "4.0.3";
-  sha256 = "0rh3vffbq407k9g95dingw6zqq3fk87pknyrqj1mrbmgrnllr8k0";
+  version = "4.1.0.1";
+  sha256 = "18p2pabid7dx96qcpd2ywv5mhjp55srhm5g013pn697jcxyq2xiv";
   buildDepends = [
-    comonad contravariant distributive free mtl semigroupoids
-    semigroups tagged transformers void
+    comonad contravariant distributive free mtl profunctors
+    semigroupoids semigroups tagged transformers void
   ];
   meta = {
     homepage = "http://github.com/ekmett/adjunctions/";

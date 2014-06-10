@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "dual-tree";
-  version = "0.2.0.3";
-  sha256 = "17l0jjxi8lj17hbn73wg252gdpbnp81aay7xlmx42g99pj377bmb";
+  version = "0.2.0.4";
+  sha256 = "0visavx0zqgmcjcq07vfhk6dn867269w2gxa8nvc79gya56c6wdp";
   buildDepends = [ monoidExtras newtype semigroups ];
   jailbreak = true;
   meta = {

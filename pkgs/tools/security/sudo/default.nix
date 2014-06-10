@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, coreutils, pam, groff }:
+{ stdenv, fetchurl, coreutils, pam, groff, keepVisudo ? false }:
 
 stdenv.mkDerivation rec {
   name = "sudo-1.8.9p4";
@@ -32,8 +32,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
-    # ‘visudo’ does not make sense on NixOS.
-    rm $out/sbin/visudo $out/share/man/man8/visudo.8
+    # ‘visudo’ does not make sense on NixOS - except for checking sudoers
+    # file syntax
+    rm ${if keepVisudo then "" else "$out/sbin/visudo"} \
+        $out/share/man/man8/visudo.8
 
     rm $out/share/doc/sudo/ChangeLog
   '';
