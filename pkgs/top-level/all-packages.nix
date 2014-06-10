@@ -10894,7 +10894,7 @@ let
 
   nixops = callPackage ../tools/package-management/nixops { };
 
-  nix-prefetch-tools = callPackage ../build-support/nix-prefetch-tools {};
+  nix-prefetch-scripts = callPackage ../tools/package-management/nix-prefetch-scripts { };
 
   nix-repl = callPackage ../tools/package-management/nix-repl { };
 
