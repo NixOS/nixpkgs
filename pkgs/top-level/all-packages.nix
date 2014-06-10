@@ -9861,6 +9861,8 @@ let
 
   xmove = callPackage ../applications/misc/xmove { };
 
+  xmp = callPackage ../applications/audio/xmp { };
+
   xnee = callPackage ../tools/X11/xnee {
     # Work around "missing separator" error.
     stdenv = overrideInStdenv stdenv [ gnumake381 ];
