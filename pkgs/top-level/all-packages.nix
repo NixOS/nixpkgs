@@ -946,6 +946,8 @@ let
 
   efibootmgr = callPackage ../tools/system/efibootmgr { };
 
+  efivar = callPackage ../tools/system/efivar { };
+
   elasticsearch = callPackage ../servers/search/elasticsearch { };
 
   enblendenfuse = callPackage ../tools/graphics/enblend-enfuse {
