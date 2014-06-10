@@ -4841,8 +4841,6 @@ let
 
   iniparser = callPackage ../development/libraries/iniparser { };
 
-  inteltbb = callPackage ../development/libraries/intel-tbb { };
-
   intltool = callPackage ../development/tools/misc/intltool { };
 
   irrlicht3843 = callPackage ../development/libraries/irrlicht { };
