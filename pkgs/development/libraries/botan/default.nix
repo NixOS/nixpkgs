@@ -32,8 +32,13 @@ rec {
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
+  phaseNames = ["doConfigure" "doMakeInstall" "fixPkgConfig"];
   configureCommand = "python configure.py --with-gnump --with-bzip2 --with-zlib --with-openssl --with-tr1-implementation=boost";
+
+  fixPkgConfig = a.fullDepEntry ''
+    cd "$out"/lib/pkgconfig
+    ln -s botan-*.pc botan.pc || true
+  '' ["minInit" "doMakeInstall"];
       
   meta = {
     description = "Cryptographic algorithms library";
