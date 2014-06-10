@@ -2939,6 +2939,8 @@ let
 
   haxe = callPackage ../development/compilers/haxe { };
 
+  hhvm = callPackage ../development/compilers/hhvm { };
+
   hiphopvm = callPackage ../development/interpreters/hiphopvm {
     libevent = libevent14;
     boost = boost149;
