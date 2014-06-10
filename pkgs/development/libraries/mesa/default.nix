@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, flex, bison, autoreconfHook
+{ stdenv, fetchurl, pkgconfig, intltool, flex, bison, autoreconfHook, substituteAll
 , python, libxml2Python, file, expat, makedepend
 , libdrm, xorg, wayland, udev, llvm, libffi
 , libvdpau, libelf
@@ -45,7 +45,11 @@ stdenv.mkDerivation {
     ./glx_ro_text_segm.patch # fix for grsecurity/PaX
    # TODO: revive ./dricore-gallium.patch when it gets ported (from Ubuntu),
    #  as it saved ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
-  ];
+  ] ++ optional stdenv.isLinux
+      (substituteAll {
+        src = ./dlopen-absolute-paths.diff;
+        inherit udev;
+      });
 
   # Change the search path for EGL drivers from $drivers/* to driverLink
   postPatch = ''
