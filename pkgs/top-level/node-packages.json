@@ -80,6 +80,7 @@
 , { "guifi-earth": "https://github.com/jmendeth/guifi-earth/tarball/f3ee96835fd4fb0e3e12fadbd2cb782770d64854 " }
 , "bower"
 , "grunt-cli"
+, "gulp"
 , "grunt-contrib-jshint"
 , "grunt-contrib-requirejs"
 , "grunt-contrib-less"
