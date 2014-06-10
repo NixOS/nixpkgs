@@ -14,7 +14,6 @@
   ./config/power-management.nix
   ./config/pulseaudio.nix
   ./config/shells-environment.nix
-  ./config/system-environment.nix
   ./config/swap.nix
   ./config/sysctl.nix
   ./config/system-path.nix

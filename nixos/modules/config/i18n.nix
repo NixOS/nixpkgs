@@ -76,7 +76,7 @@ in
 
     environment.systemPackages = [ glibcLocales ];
 
-    environment.systemVariables =
+    environment.variables =
       { LANG = config.i18n.defaultLocale;
         LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
       };
