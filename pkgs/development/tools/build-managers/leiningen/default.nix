@@ -3,20 +3,20 @@
 
 stdenv.mkDerivation rec {
   pname = "leiningen";
-  version = "2.3.4";
+  version = "2.4.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://raw.github.com/technomancy/leiningen/${version}/bin/lein-pkg";
-    sha256 = "1v83hpvp349pgqqiy4babc5m5b9lcwk0fif80fpv4jqvp0a8v6r7";
+    sha256 = "0mdfp5r5qid42x7rq1cmyxqmvjdj2hk9rjz8pryf4zq3bk38m1cg";
   };
 
   jarsrc = fetchurl {
-    url = "https://leiningen.s3.amazonaws.com/downloads/${pname}-${version}-standalone.jar";
-    sha256 = "1pqc99p4vz4q3qcs90cqql6m7kc27ihx4hbqs5alxkzk7jv8s2bk";
+    url = "https://github.com/technomancy/leiningen/releases/download/${version}/${name}-standalone.jar";
+    sha256 = "099r5qcldb214c3857i7dbbqn531aahzrz39qfhqxc6f476ncdh0";
   };
 
-  patches = ./lein_2.3.0.patch;
+  patches = [ ./lein-fix-jar-path.patch ];
 
   inherit rlwrap clojure gnupg findutils coreutils jdk;
 
