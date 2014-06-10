@@ -5488,6 +5488,8 @@ let
 
   libxmlxx = callPackage ../development/libraries/libxmlxx { };
 
+  libxmp = callPackage ../development/libraries/libxmp { };
+
   libxslt = callPackage ../development/libraries/libxslt { };
 
   libixp_for_wmii = lowPrio (import ../development/libraries/libixp_for_wmii {
