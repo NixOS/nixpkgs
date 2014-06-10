@@ -5800,11 +5800,11 @@ rec {
   });
 
   ldap = buildPythonPackage rec {
-    name = "ldap-2.4.10";
+    name = "ldap-2.4.15";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/p/python-ldap/${name}.tar.gz";
-      sha256 = "0m6fm2alcb5v9xdcjv2nw2lhz9nnd3mnr5lrmf397hi4pw0pik37";
+      url = "http://pypi.python.org/packages/source/p/python-ldap/python-${name}.tar.gz";
+      sha256 = "0w0nn5yj0nbbkvpbqgfni56v7sjx6jf6s6zvp9zmahyrvqrsrg1h";
     };
 
     NIX_CFLAGS_COMPILE = "-I${pkgs.cyrus_sasl}/include/sasl";
