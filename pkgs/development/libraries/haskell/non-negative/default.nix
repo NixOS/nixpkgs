@@ -2,11 +2,10 @@
 
 cabal.mkDerivation (self: {
   pname = "non-negative";
-  version = "0.1";
-  sha256 = "0aebb6f5518191a02b11230798444997a03b84d63d2aaa6c38cac6718f6c351c";
-  isLibrary = true;
-  isExecutable = true;
+  version = "0.1.1";
+  sha256 = "163g3j3xrx1jkrbg2wnha3yyxyg1mn7kabmbpg82y3rbl3ihy1p7";
   buildDepends = [ QuickCheck utilityHt ];
+  testDepends = [ QuickCheck utilityHt ];
   meta = {
     homepage = "http://code.haskell.org/~thielema/non-negative/";
     description = "Non-negative numbers";
