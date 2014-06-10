@@ -58,12 +58,13 @@ rec {
 
   # Determine whether a string has given prefix/suffix.
   hasPrefix = pref: str:
-     substring 0 (stringLength pref) str == pref;
+    eqStrings (substring 0 (stringLength pref) str) pref;
   hasSuffix = suff: str:
-    let lenStr = stringLength str;
-        lenSuff = stringLength suff;
+    let
+      lenStr = stringLength str;
+      lenSuff = stringLength suff;
     in lenStr >= lenSuff &&
-       substring (lenStr - lenSuff) lenStr str == suff;
+       eqStrings (substring (lenStr - lenSuff) lenStr str) suff;
 
 
   # Convert a string to a list of characters (i.e. singleton strings).
@@ -118,17 +119,21 @@ rec {
   toLower = replaceChars upperChars lowerChars;
   toUpper = replaceChars lowerChars upperChars;
 
+  # Appends string context from another string
+  addContextFrom = a: b: (substring 0 0 a)+b;
 
   # Compares strings not requiring context equality
   # Obviously, a workaround but works on all Nix versions
-  eqStrings = a: b: (a+(substring 0 0 b)) == ((substring 0 0 a)+b);
+  eqStrings = a: b: addContextFrom b a == addContextFrom a b;
 
 
   # Cut a string with a separator and produces a list of strings which were
   # separated by this separator. e.g.,
   # `splitString "." "foo.bar.baz"' returns ["foo" "bar" "baz"].
-  splitString = sep: s:
+  splitString = _sep: _s:
     let
+      sep = addContextFrom _s _sep;
+      s = addContextFrom _sep _s;
       sepLen = stringLength sep;
       sLen = stringLength s;
       lastSearch = sub sLen sepLen;
@@ -167,7 +172,7 @@ rec {
       sufLen = stringLength suf;
       sLen = stringLength s;
     in
-      if sufLen <= sLen && suf == substring (sLen - sufLen) sufLen s then
+      if sufLen <= sLen && eqStrings suf (substring (sLen - sufLen) sufLen s) then
         substring 0 (sLen - sufLen) s
       else
         s;
