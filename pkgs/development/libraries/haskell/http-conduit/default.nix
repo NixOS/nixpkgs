@@ -2,13 +2,13 @@
 , connection, cookie, dataDefaultClass, hspec, httpClient
 , httpClientTls, httpTypes, HUnit, liftedBase, monadControl, mtl
 , network, networkConduit, resourcet, streamingCommons, text, time
-, transformers, utf8String, wai, warp, warpTls
+, transformers, utf8String, wai, waiConduit, warp, warpTls
 }:
 
 cabal.mkDerivation (self: {
   pname = "http-conduit";
-  version = "2.1.2";
-  sha256 = "11g79yfgm2fzcy7gwk9f5np4p6fknsbjkm858v8khb4a1gmbrqvn";
+  version = "2.1.2.1";
+  sha256 = "17bq72qkgn7sh31ad5w7gqf15dlzl027nmx8k7kmm268mf9bz0b5";
   buildDepends = [
     conduit httpClient httpClientTls httpTypes liftedBase monadControl
     mtl resourcet transformers
@@ -17,7 +17,7 @@ cabal.mkDerivation (self: {
     blazeBuilder caseInsensitive conduit conduitExtra connection cookie
     dataDefaultClass hspec httpClient httpTypes HUnit liftedBase
     network networkConduit streamingCommons text time transformers
-    utf8String wai warp warpTls
+    utf8String wai waiConduit warp warpTls
   ];
   doCheck = false;
   meta = {
