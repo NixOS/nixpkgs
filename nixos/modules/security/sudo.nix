@@ -58,9 +58,6 @@ in
         # Don't edit this file. Set the NixOS option ‘security.sudo.configFile’ instead.
 
         # Environment variables to keep for root and %wheel.
-        Defaults:root,%wheel env_keep+=LOCALE_ARCHIVE
-        Defaults:root,%wheel env_keep+=NIX_CONF_DIR
-        Defaults:root,%wheel env_keep+=NIX_PATH
         Defaults:root,%wheel env_keep+=TERMINFO_DIRS
         Defaults:root,%wheel env_keep+=TERMINFO
 
