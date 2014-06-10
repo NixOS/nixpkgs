@@ -10657,7 +10657,7 @@ let
 
   tptp = callPackage ../applications/science/logic/tptp {};
 
-  verifast = callPackage_i686 ../applications/science/logic/verifast {};
+  verifast = callPackage ../applications/science/logic/verifast {};
 
   why3 = callPackage ../applications/science/logic/why3 {};
 
