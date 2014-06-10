@@ -3549,6 +3549,8 @@ let
 
   racket = callPackage ../development/interpreters/racket { };
 
+  rakudo = callPackage ../development/interpreters/rakudo { };
+
   rascal = callPackage ../development/interpreters/rascal { };
 
   regina = callPackage ../development/interpreters/regina { };
