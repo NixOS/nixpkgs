@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "syb";
-  version = "0.4.1";
-  sha256 = "1lkh4rrqdzvb8kyry07x2z88v478hrw5cp8wmhjgpg0ck8ywncma";
+  version = "0.4.2";
+  sha256 = "1gvyw2gbccip24wpp9xi6qgwvg4m5cijhzz1v51wvyamqv4p2b8l";
   testDepends = [ HUnit mtl ];
   doCheck = self.stdenv.lib.versionOlder self.ghc.version "7.9";
   meta = {
