@@ -111,8 +111,7 @@ rec {
   buildInputs = [ zlib bzip2 ncurses libpng flex bison libX11 libICE xproto
     freetype t1lib gd libXaw icu ghostscript ed libXt libXpm libXmu libXext
     xextproto perl libSM ruby expat curl libjpeg python fontconfig xz pkgconfig
-    poppler libpaper graphite2 lesstif zziplib harfbuzz texinfo ]
-    ++ stdenv.lib.optionals (! stdenv.isDarwin) [ potrace ]
+    poppler libpaper graphite2 lesstif zziplib harfbuzz texinfo potrace ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ makeWrapper ]
     ;
 
