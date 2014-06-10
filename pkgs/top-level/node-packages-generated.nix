@@ -592,6 +592,8 @@
   };
   by-spec."archy"."0.0.2" =
     self.by-version."archy"."0.0.2";
+  by-spec."archy"."^0.0.2" =
+    self.by-version."archy"."0.0.2";
   by-spec."archy"."~0.0.2" =
     self.by-version."archy"."0.0.2";
   by-spec."argparse"."0.1.15" =
@@ -1922,7 +1924,7 @@
       (self.nativeDeps."browserchannel" or []);
     deps = [
       self.by-version."hat"."0.0.3"
-      self.by-version."connect"."2.19.4"
+      self.by-version."connect"."2.19.5"
       self.by-version."request"."2.36.0"
       self.by-version."ascii-json"."0.2.0"
     ];
@@ -1932,14 +1934,14 @@
   };
   "browserchannel" = self.by-version."browserchannel"."1.2.0";
   by-spec."browserify"."*" =
-    self.by-version."browserify"."4.1.8";
-  by-version."browserify"."4.1.8" = lib.makeOverridable self.buildNodePackage {
-    name = "browserify-4.1.8";
+    self.by-version."browserify"."4.1.9";
+  by-version."browserify"."4.1.9" = lib.makeOverridable self.buildNodePackage {
+    name = "browserify-4.1.9";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/browserify/-/browserify-4.1.8.tgz";
-        name = "browserify-4.1.8.tgz";
-        sha1 = "fe567fd8493e25c0ab33985eb62595bc9be66780";
+        url = "http://registry.npmjs.org/browserify/-/browserify-4.1.9.tgz";
+        name = "browserify-4.1.9.tgz";
+        sha1 = "c4a6a9113b1ed478123504314d656e9e4669269b";
       })
     ];
     buildInputs =
@@ -1976,7 +1978,7 @@
       self.by-version."punycode"."1.2.4"
       self.by-version."querystring-es3"."0.2.1-0"
       self.by-version."readable-stream"."1.1.13-1"
-      self.by-version."resolve"."0.6.3"
+      self.by-version."resolve"."0.7.1"
       self.by-version."shallow-copy"."0.0.1"
       self.by-version."shell-quote"."0.0.1"
       self.by-version."stream-browserify"."1.0.0"
@@ -1998,7 +2000,7 @@
     ];
     passthru.names = [ "browserify" ];
   };
-  "browserify" = self.by-version."browserify"."4.1.8";
+  "browserify" = self.by-version."browserify"."4.1.9";
   by-spec."browserify"."~3.38.0" =
     self.by-version."browserify"."3.38.1";
   by-version."browserify"."3.38.1" = lib.makeOverridable self.buildNodePackage {
@@ -3028,6 +3030,25 @@
     ];
     passthru.names = [ "clone" ];
   };
+  by-spec."clone-stats"."~0.0.1" =
+    self.by-version."clone-stats"."0.0.1";
+  by-version."clone-stats"."0.0.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-clone-stats-0.0.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/clone-stats/-/clone-stats-0.0.1.tgz";
+        name = "clone-stats-0.0.1.tgz";
+        sha1 = "b88f94a82cf38b8791d58046ea4029ad88ca99d1";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."clone-stats" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "clone-stats" ];
+  };
   by-spec."cmd-shim"."~1.1.1" =
     self.by-version."cmd-shim"."1.1.1";
   by-version."cmd-shim"."1.1.1" = lib.makeOverridable self.buildNodePackage {
@@ -3315,7 +3336,7 @@
     deps = [
       self.by-version."inline-source-map"."0.3.0"
       self.by-version."convert-source-map"."0.3.4"
-      self.by-version."source-map"."0.1.33"
+      self.by-version."source-map"."0.1.34"
     ];
     peerDependencies = [
     ];
@@ -3739,15 +3760,15 @@
     ];
     passthru.names = [ "connect" ];
   };
-  by-spec."connect"."2.19.4" =
-    self.by-version."connect"."2.19.4";
-  by-version."connect"."2.19.4" = lib.makeOverridable self.buildNodePackage {
-    name = "node-connect-2.19.4";
+  by-spec."connect"."2.19.5" =
+    self.by-version."connect"."2.19.5";
+  by-version."connect"."2.19.5" = lib.makeOverridable self.buildNodePackage {
+    name = "node-connect-2.19.5";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/connect/-/connect-2.19.4.tgz";
-        name = "connect-2.19.4.tgz";
-        sha1 = "01f8f103b2ec7c7f26fea65645d38f3c89d295f7";
+        url = "http://registry.npmjs.org/connect/-/connect-2.19.5.tgz";
+        name = "connect-2.19.5.tgz";
+        sha1 = "7c5257b4968e5bc00f4e87f7db276deda7330d97";
       })
     ];
     buildInputs =
@@ -3761,7 +3782,8 @@
       self.by-version."cookie-signature"."1.0.3"
       self.by-version."compression"."1.0.6"
       self.by-version."connect-timeout"."1.1.0"
-      self.by-version."csurf"."1.2.0"
+      self.by-version."csurf"."1.2.1"
+      self.by-version."debug"."1.0.1"
       self.by-version."errorhandler"."1.0.2"
       self.by-version."escape-html"."1.0.1"
       self.by-version."express-session"."1.2.1"
@@ -3775,11 +3797,10 @@
       self.by-version."response-time"."2.0.0"
       self.by-version."serve-favicon"."2.0.1"
       self.by-version."serve-index"."1.1.0"
-      self.by-version."serve-static"."1.2.1"
-      self.by-version."type-is"."1.2.0"
+      self.by-version."serve-static"."1.2.2"
+      self.by-version."type-is"."1.2.1"
       self.by-version."vhost"."1.0.0"
       self.by-version."pause"."0.0.1"
-      self.by-version."debug"."0.8.1"
     ];
     peerDependencies = [
     ];
@@ -3871,7 +3892,7 @@
     passthru.names = [ "connect" ];
   };
   by-spec."connect"."~2" =
-    self.by-version."connect"."2.19.4";
+    self.by-version."connect"."2.19.5";
   by-spec."connect"."~2.12.0" =
     self.by-version."connect"."2.12.0";
   by-version."connect"."2.12.0" = lib.makeOverridable self.buildNodePackage {
@@ -4637,6 +4658,28 @@
     ];
     passthru.names = [ "cscodegen" ];
   };
+  by-spec."csrf-tokens"."~1.0.2" =
+    self.by-version."csrf-tokens"."1.0.3";
+  by-version."csrf-tokens"."1.0.3" = lib.makeOverridable self.buildNodePackage {
+    name = "node-csrf-tokens-1.0.3";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/csrf-tokens/-/csrf-tokens-1.0.3.tgz";
+        name = "csrf-tokens-1.0.3.tgz";
+        sha1 = "a2241f71903bc94f82c36adfae1d006fbb3b2c0e";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."csrf-tokens" or []);
+    deps = [
+      self.by-version."rndm"."1.0.0"
+      self.by-version."uid2"."0.0.3"
+      self.by-version."scmp"."0.0.3"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "csrf-tokens" ];
+  };
   by-spec."css"."~1.0.8" =
     self.by-version."css"."1.0.8";
   by-version."css"."1.0.8" = lib.makeOverridable self.buildNodePackage {
@@ -4715,22 +4758,21 @@
     ];
     passthru.names = [ "css-stringify" ];
   };
-  by-spec."csurf"."1.2.0" =
-    self.by-version."csurf"."1.2.0";
-  by-version."csurf"."1.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "node-csurf-1.2.0";
+  by-spec."csurf"."1.2.1" =
+    self.by-version."csurf"."1.2.1";
+  by-version."csurf"."1.2.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-csurf-1.2.1";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/csurf/-/csurf-1.2.0.tgz";
-        name = "csurf-1.2.0.tgz";
-        sha1 = "56d1d1e921a4027e6adf87f51e706b825c74ab13";
+        url = "http://registry.npmjs.org/csurf/-/csurf-1.2.1.tgz";
+        name = "csurf-1.2.1.tgz";
+        sha1 = "3928fa237592ed5824a7c221d8581bf356a9da76";
       })
     ];
     buildInputs =
       (self.nativeDeps."csurf" or []);
     deps = [
-      self.by-version."uid2"."0.0.3"
-      self.by-version."scmp"."0.0.3"
+      self.by-version."csrf-tokens"."1.0.3"
     ];
     peerDependencies = [
     ];
@@ -4872,7 +4914,7 @@
     ];
     passthru.names = [ "dateformat" ];
   };
-  by-spec."dateformat"."~1.0.6" =
+  by-spec."dateformat"."^1.0.7-1.2.3" =
     self.by-version."dateformat"."1.0.8-1.2.3";
   by-version."dateformat"."1.0.8-1.2.3" = lib.makeOverridable self.buildNodePackage {
     name = "node-dateformat-1.0.8-1.2.3";
@@ -4891,6 +4933,8 @@
     ];
     passthru.names = [ "dateformat" ];
   };
+  by-spec."dateformat"."~1.0.6" =
+    self.by-version."dateformat"."1.0.8-1.2.3";
   by-spec."debug"."*" =
     self.by-version."debug"."1.0.1";
   by-version."debug"."1.0.1" = lib.makeOverridable self.buildNodePackage {
@@ -4987,29 +5031,9 @@
     ];
     passthru.names = [ "debug" ];
   };
-  by-spec."debug"."1.0.0" =
-    self.by-version."debug"."1.0.0";
-  by-version."debug"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "node-debug-1.0.0";
-    src = [
-      (fetchurl {
-        url = "http://registry.npmjs.org/debug/-/debug-1.0.0.tgz";
-        name = "debug-1.0.0.tgz";
-        sha1 = "553678b67494cacc2d5330c24dfb2f275b1ceb5a";
-      })
-    ];
-    buildInputs =
-      (self.nativeDeps."debug" or []);
-    deps = [
-      self.by-version."ms"."0.6.2"
-    ];
-    peerDependencies = [
-    ];
-    passthru.names = [ "debug" ];
-  };
+  by-spec."debug"."1.0.1" =
+    self.by-version."debug"."1.0.1";
   by-spec."debug".">= 0.7.3 < 1" =
-    self.by-version."debug"."0.8.1";
-  by-spec."debug".">= 0.8.0 < 1" =
     self.by-version."debug"."0.8.1";
   by-spec."debug"."^0.8.0" =
     self.by-version."debug"."0.8.1";
@@ -5255,6 +5279,25 @@
     peerDependencies = [
     ];
     passthru.names = [ "delayed-stream" ];
+  };
+  by-spec."deprecated"."^0.0.1" =
+    self.by-version."deprecated"."0.0.1";
+  by-version."deprecated"."0.0.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-deprecated-0.0.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/deprecated/-/deprecated-0.0.1.tgz";
+        name = "deprecated-0.0.1.tgz";
+        sha1 = "f9c9af5464afa1e7a971458a8bdef2aa94d5bb19";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."deprecated" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "deprecated" ];
   };
   by-spec."deps-sort"."~0.1.1" =
     self.by-version."deps-sort"."0.1.2";
@@ -6048,7 +6091,7 @@
       self.by-version."esutils"."1.0.0"
       self.by-version."estraverse"."1.5.0"
       self.by-version."esprima"."1.1.1"
-      self.by-version."source-map"."0.1.33"
+      self.by-version."source-map"."0.1.34"
     ];
     peerDependencies = [
     ];
@@ -6070,7 +6113,7 @@
     deps = [
       self.by-version."esprima"."1.0.4"
       self.by-version."estraverse"."1.3.2"
-      self.by-version."source-map"."0.1.33"
+      self.by-version."source-map"."0.1.34"
     ];
     peerDependencies = [
     ];
@@ -6095,7 +6138,7 @@
       self.by-version."esprima"."1.0.4"
       self.by-version."estraverse"."1.5.0"
       self.by-version."esutils"."1.0.0"
-      self.by-version."source-map"."0.1.33"
+      self.by-version."source-map"."0.1.34"
     ];
     peerDependencies = [
     ];
@@ -6161,7 +6204,7 @@
       self.by-version."escope"."1.0.1"
       self.by-version."escodegen"."0.0.28"
       self.by-version."estraverse"."1.3.2"
-      self.by-version."source-map"."0.1.33"
+      self.by-version."source-map"."0.1.34"
       self.by-version."esshorten"."0.0.2"
       self.by-version."optimist"."0.6.1"
     ];
@@ -6575,7 +6618,7 @@
       self.by-version."node-swt"."0.1.1"
       self.by-version."node-wsfederation"."0.1.1"
       self.by-version."debug"."0.5.0"
-      self.by-version."express"."3.10.3"
+      self.by-version."express"."3.10.4"
     ];
     peerDependencies = [
     ];
@@ -6625,14 +6668,14 @@
   by-spec."exit"."~0.1.1" =
     self.by-version."exit"."0.1.2";
   by-spec."express"."*" =
-    self.by-version."express"."4.4.1";
-  by-version."express"."4.4.1" = lib.makeOverridable self.buildNodePackage {
-    name = "node-express-4.4.1";
+    self.by-version."express"."4.4.2";
+  by-version."express"."4.4.2" = lib.makeOverridable self.buildNodePackage {
+    name = "node-express-4.4.2";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/express/-/express-4.4.1.tgz";
-        name = "express-4.4.1.tgz";
-        sha1 = "9e0364d1c74e076d7409d302429a384b10dfbd42";
+        url = "http://registry.npmjs.org/express/-/express-4.4.2.tgz";
+        name = "express-4.4.2.tgz";
+        sha1 = "ff6c8a513d31cc60cabe0f71848dea3cb4f56df6";
       })
     ];
     buildInputs =
@@ -6640,28 +6683,29 @@
     deps = [
       self.by-version."accepts"."1.0.2"
       self.by-version."buffer-crc32"."0.2.1"
+      self.by-version."debug"."1.0.1"
+      self.by-version."escape-html"."1.0.1"
       self.by-version."methods"."1.0.1"
       self.by-version."parseurl"."1.0.1"
-      self.by-version."proxy-addr"."1.0.0"
+      self.by-version."proxy-addr"."1.0.1"
       self.by-version."range-parser"."1.0.0"
-      self.by-version."send"."0.4.1"
-      self.by-version."serve-static"."1.2.1"
-      self.by-version."type-is"."1.2.0"
+      self.by-version."send"."0.4.2"
+      self.by-version."serve-static"."1.2.2"
+      self.by-version."type-is"."1.2.1"
+      self.by-version."vary"."0.1.0"
       self.by-version."cookie"."0.1.2"
       self.by-version."fresh"."0.2.2"
       self.by-version."cookie-signature"."1.0.3"
       self.by-version."merge-descriptors"."0.0.2"
       self.by-version."utils-merge"."1.0.0"
-      self.by-version."escape-html"."1.0.1"
       self.by-version."qs"."0.6.6"
       self.by-version."path-to-regexp"."0.1.2"
-      self.by-version."debug"."0.8.1"
     ];
     peerDependencies = [
     ];
     passthru.names = [ "express" ];
   };
-  "express" = self.by-version."express"."4.4.1";
+  "express" = self.by-version."express"."4.4.2";
   by-spec."express"."2.5.11" =
     self.by-version."express"."2.5.11";
   by-version."express"."2.5.11" = lib.makeOverridable self.buildNodePackage {
@@ -6746,30 +6790,30 @@
     passthru.names = [ "express" ];
   };
   by-spec."express"."3.x" =
-    self.by-version."express"."3.10.3";
-  by-version."express"."3.10.3" = lib.makeOverridable self.buildNodePackage {
-    name = "express-3.10.3";
+    self.by-version."express"."3.10.4";
+  by-version."express"."3.10.4" = lib.makeOverridable self.buildNodePackage {
+    name = "express-3.10.4";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/express/-/express-3.10.3.tgz";
-        name = "express-3.10.3.tgz";
-        sha1 = "d669d5fa2d79fa6349af5fa6338d646bc346ada5";
+        url = "http://registry.npmjs.org/express/-/express-3.10.4.tgz";
+        name = "express-3.10.4.tgz";
+        sha1 = "527bd28b0e17cd41722617ab88cb4a41b15f497d";
       })
     ];
     buildInputs =
       (self.nativeDeps."express" or []);
     deps = [
       self.by-version."buffer-crc32"."0.2.1"
-      self.by-version."connect"."2.19.4"
+      self.by-version."connect"."2.19.5"
       self.by-version."commander"."1.3.2"
-      self.by-version."debug"."1.0.0"
+      self.by-version."debug"."1.0.1"
       self.by-version."escape-html"."1.0.1"
       self.by-version."methods"."1.0.1"
       self.by-version."mkdirp"."0.5.0"
       self.by-version."parseurl"."1.0.1"
       self.by-version."proxy-addr"."1.0.1"
       self.by-version."range-parser"."1.0.0"
-      self.by-version."send"."0.4.1"
+      self.by-version."send"."0.4.2"
       self.by-version."vary"."0.1.0"
       self.by-version."cookie"."0.1.2"
       self.by-version."fresh"."0.2.2"
@@ -6781,7 +6825,7 @@
     passthru.names = [ "express" ];
   };
   by-spec."express".">=3.0.0" =
-    self.by-version."express"."4.4.1";
+    self.by-version."express"."4.4.2";
   by-spec."express"."~3.1.1" =
     self.by-version."express"."3.1.2";
   by-version."express"."3.1.2" = lib.makeOverridable self.buildNodePackage {
@@ -6903,7 +6947,7 @@
       self.by-version."async"."0.2.10"
     ];
     peerDependencies = [
-      self.by-version."express"."4.4.1"
+      self.by-version."express"."4.4.2"
     ];
     passthru.names = [ "express-form" ];
   };
@@ -7331,15 +7375,15 @@
     self.by-version."findup-sync"."0.1.3";
   by-spec."findup-sync"."~0.1.2" =
     self.by-version."findup-sync"."0.1.3";
-  by-spec."finished"."1.1.4" =
-    self.by-version."finished"."1.1.4";
-  by-version."finished"."1.1.4" = lib.makeOverridable self.buildNodePackage {
-    name = "node-finished-1.1.4";
+  by-spec."finished"."1.2.1" =
+    self.by-version."finished"."1.2.1";
+  by-version."finished"."1.2.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-finished-1.2.1";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/finished/-/finished-1.1.4.tgz";
-        name = "finished-1.1.4.tgz";
-        sha1 = "4db9fe20f920bccc2e7126ffa84175c8fcacb5d9";
+        url = "http://registry.npmjs.org/finished/-/finished-1.2.1.tgz";
+        name = "finished-1.2.1.tgz";
+        sha1 = "d92dc3d7886d4c866d55e07c1a9096eb185f19c8";
       })
     ];
     buildInputs =
@@ -7349,6 +7393,25 @@
     peerDependencies = [
     ];
     passthru.names = [ "finished" ];
+  };
+  by-spec."first-chunk-stream"."^0.1.0" =
+    self.by-version."first-chunk-stream"."0.1.0";
+  by-version."first-chunk-stream"."0.1.0" = lib.makeOverridable self.buildNodePackage {
+    name = "node-first-chunk-stream-0.1.0";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/first-chunk-stream/-/first-chunk-stream-0.1.0.tgz";
+        name = "first-chunk-stream-0.1.0.tgz";
+        sha1 = "755d3ec14d49a86e3d2fcc08beead5c0ca2b9c0a";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."first-chunk-stream" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "first-chunk-stream" ];
   };
   by-spec."flatiron"."*" =
     self.by-version."flatiron"."0.3.11";
@@ -7945,6 +8008,26 @@
     ];
     passthru.names = [ "fstream-npm" ];
   };
+  by-spec."gaze"."^0.5.1" =
+    self.by-version."gaze"."0.5.1";
+  by-version."gaze"."0.5.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-gaze-0.5.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/gaze/-/gaze-0.5.1.tgz";
+        name = "gaze-0.5.1.tgz";
+        sha1 = "22e731078ef3e49d1c4ab1115ac091192051824c";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."gaze" or []);
+    deps = [
+      self.by-version."globule"."0.1.0"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "gaze" ];
+  };
   by-spec."generator-angular"."*" =
     self.by-version."generator-angular"."0.9.0-0";
   by-version."generator-angular"."0.9.0-0" = lib.makeOverridable self.buildNodePackage {
@@ -8301,7 +8384,7 @@
     self.by-version."glob"."3.2.11";
   by-spec."glob"."^3.2.0" =
     self.by-version."glob"."3.2.11";
-  by-spec."glob"."^4.0.2" =
+  by-spec."glob"."^4.0.0" =
     self.by-version."glob"."4.0.2";
   by-version."glob"."4.0.2" = lib.makeOverridable self.buildNodePackage {
     name = "node-glob-4.0.2";
@@ -8323,6 +8406,8 @@
     ];
     passthru.names = [ "glob" ];
   };
+  by-spec."glob"."^4.0.2" =
+    self.by-version."glob"."4.0.2";
   by-spec."glob"."~ 3.2.1" =
     self.by-version."glob"."3.2.11";
   by-spec."glob"."~3.1.21" =
@@ -8361,6 +8446,94 @@
     self.by-version."glob"."3.2.11";
   by-spec."glob"."~3.2.9" =
     self.by-version."glob"."3.2.11";
+  by-spec."glob-stream"."^3.1.5" =
+    self.by-version."glob-stream"."3.1.11";
+  by-version."glob-stream"."3.1.11" = lib.makeOverridable self.buildNodePackage {
+    name = "node-glob-stream-3.1.11";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/glob-stream/-/glob-stream-3.1.11.tgz";
+        name = "glob-stream-3.1.11.tgz";
+        sha1 = "af96c6df065e124f12108064275cf7f708d9438c";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."glob-stream" or []);
+    deps = [
+      self.by-version."glob"."4.0.2"
+      self.by-version."minimatch"."0.3.0"
+      self.by-version."ordered-read-streams"."0.0.7"
+      self.by-version."glob2base"."0.0.9"
+      self.by-version."unique-stream"."1.0.0"
+      self.by-version."through"."2.3.4"
+      self.by-version."map-stream"."0.1.0"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "glob-stream" ];
+  };
+  by-spec."glob-watcher"."^0.0.6" =
+    self.by-version."glob-watcher"."0.0.6";
+  by-version."glob-watcher"."0.0.6" = lib.makeOverridable self.buildNodePackage {
+    name = "node-glob-watcher-0.0.6";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/glob-watcher/-/glob-watcher-0.0.6.tgz";
+        name = "glob-watcher-0.0.6.tgz";
+        sha1 = "b95b4a8df74b39c83298b0c05c978b4d9a3b710b";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."glob-watcher" or []);
+    deps = [
+      self.by-version."gaze"."0.5.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "glob-watcher" ];
+  };
+  by-spec."glob2base"."^0.0.9" =
+    self.by-version."glob2base"."0.0.9";
+  by-version."glob2base"."0.0.9" = lib.makeOverridable self.buildNodePackage {
+    name = "node-glob2base-0.0.9";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/glob2base/-/glob2base-0.0.9.tgz";
+        name = "glob2base-0.0.9.tgz";
+        sha1 = "50a7bb1fc1260e1eb5ba1b136003569a1fe57f98";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."glob2base" or []);
+    deps = [
+      self.by-version."lodash.findindex"."2.4.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "glob2base" ];
+  };
+  by-spec."globule"."~0.1.0" =
+    self.by-version."globule"."0.1.0";
+  by-version."globule"."0.1.0" = lib.makeOverridable self.buildNodePackage {
+    name = "node-globule-0.1.0";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/globule/-/globule-0.1.0.tgz";
+        name = "globule-0.1.0.tgz";
+        sha1 = "d9c8edde1da79d125a151b79533b978676346ae5";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."globule" or []);
+    deps = [
+      self.by-version."lodash"."1.0.1"
+      self.by-version."glob"."3.1.21"
+      self.by-version."minimatch"."0.2.14"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "globule" ];
+  };
   by-spec."graceful-fs"."2" =
     self.by-version."graceful-fs"."2.0.3";
   by-version."graceful-fs"."2.0.3" = lib.makeOverridable self.buildNodePackage {
@@ -8399,6 +8572,8 @@
     ];
     passthru.names = [ "graceful-fs" ];
   };
+  by-spec."graceful-fs"."^3.0.0" =
+    self.by-version."graceful-fs"."3.0.1";
   by-spec."graceful-fs"."~1" =
     self.by-version."graceful-fs"."1.2.3";
   by-version."graceful-fs"."1.2.3" = lib.makeOverridable self.buildNodePackage {
@@ -8866,6 +9041,65 @@
     passthru.names = [ "guifi-earth" ];
   };
   "guifi-earth" = self.by-version."guifi-earth"."0.2.1";
+  by-spec."gulp"."*" =
+    self.by-version."gulp"."3.7.0";
+  by-version."gulp"."3.7.0" = lib.makeOverridable self.buildNodePackage {
+    name = "gulp-3.7.0";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/gulp/-/gulp-3.7.0.tgz";
+        name = "gulp-3.7.0.tgz";
+        sha1 = "6f728d6ab2da8cadd1c58838cea48cb2dbd949e1";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."gulp" or []);
+    deps = [
+      self.by-version."archy"."0.0.2"
+      self.by-version."chalk"."0.4.0"
+      self.by-version."deprecated"."0.0.1"
+      self.by-version."gulp-util"."2.2.16"
+      self.by-version."interpret"."0.3.3"
+      self.by-version."liftoff"."0.11.3"
+      self.by-version."minimist"."0.1.0"
+      self.by-version."orchestrator"."0.3.3"
+      self.by-version."pretty-hrtime"."0.2.1"
+      self.by-version."semver"."2.3.0"
+      self.by-version."tildify"."0.2.0"
+      self.by-version."vinyl-fs"."0.2.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "gulp" ];
+  };
+  "gulp" = self.by-version."gulp"."3.7.0";
+  by-spec."gulp-util"."^2.2.0" =
+    self.by-version."gulp-util"."2.2.16";
+  by-version."gulp-util"."2.2.16" = lib.makeOverridable self.buildNodePackage {
+    name = "node-gulp-util-2.2.16";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/gulp-util/-/gulp-util-2.2.16.tgz";
+        name = "gulp-util-2.2.16.tgz";
+        sha1 = "88a59cac4441362c41a516567302c99fdd842bfd";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."gulp-util" or []);
+    deps = [
+      self.by-version."chalk"."0.4.0"
+      self.by-version."lodash.template"."2.4.1"
+      self.by-version."lodash._reinterpolate"."2.4.1"
+      self.by-version."vinyl"."0.2.3"
+      self.by-version."through2"."0.4.2"
+      self.by-version."dateformat"."1.0.8-1.2.3"
+      self.by-version."multipipe"."0.1.1"
+      self.by-version."minimist"."0.1.0"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "gulp-util" ];
+  };
   by-spec."gzip-size"."^0.1.0" =
     self.by-version."gzip-size"."0.1.1";
   by-version."gzip-size"."0.1.1" = lib.makeOverridable self.buildNodePackage {
@@ -8901,7 +9135,7 @@
     buildInputs =
       (self.nativeDeps."gzippo" or []);
     deps = [
-      self.by-version."send"."0.4.1"
+      self.by-version."send"."0.4.2"
     ];
     peerDependencies = [
     ];
@@ -9757,7 +9991,7 @@
     buildInputs =
       (self.nativeDeps."inline-source-map" or []);
     deps = [
-      self.by-version."source-map"."0.1.33"
+      self.by-version."source-map"."0.1.34"
     ];
     peerDependencies = [
     ];
@@ -9916,6 +10150,25 @@
     ];
     passthru.names = [ "insight" ];
   };
+  by-spec."interpret"."^0.3.2" =
+    self.by-version."interpret"."0.3.3";
+  by-version."interpret"."0.3.3" = lib.makeOverridable self.buildNodePackage {
+    name = "node-interpret-0.3.3";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/interpret/-/interpret-0.3.3.tgz";
+        name = "interpret-0.3.3.tgz";
+        sha1 = "834e6f83dece228839d73af80cae11f05bd63eee";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."interpret" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "interpret" ];
+  };
   by-spec."intersect"."~0.0.3" =
     self.by-version."intersect"."0.0.3";
   by-version."intersect"."0.0.3" = lib.makeOverridable self.buildNodePackage {
@@ -9973,7 +10226,7 @@
       self.by-version."nconf"."0.6.9"
       self.by-version."fs-walk"."0.0.1"
       self.by-version."async"."0.9.0"
-      self.by-version."express"."4.4.1"
+      self.by-version."express"."4.4.2"
       self.by-version."jade"."1.3.1"
       self.by-version."passport"."0.2.0"
       self.by-version."passport-http"."0.2.2"
@@ -10027,6 +10280,25 @@
     peerDependencies = [
     ];
     passthru.names = [ "is-root" ];
+  };
+  by-spec."is-utf8"."^0.2.0" =
+    self.by-version."is-utf8"."0.2.0";
+  by-version."is-utf8"."0.2.0" = lib.makeOverridable self.buildNodePackage {
+    name = "node-is-utf8-0.2.0";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/is-utf8/-/is-utf8-0.2.0.tgz";
+        name = "is-utf8-0.2.0.tgz";
+        sha1 = "b8aa54125ae626bfe4e3beb965f16a89c58a1137";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."is-utf8" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "is-utf8" ];
   };
   by-spec."isarray"."0.0.1" =
     self.by-version."isarray"."0.0.1";
@@ -10674,7 +10946,7 @@
       self.by-version."useragent"."2.0.8"
       self.by-version."graceful-fs"."2.0.3"
       self.by-version."connect"."2.12.0"
-      self.by-version."source-map"."0.1.33"
+      self.by-version."source-map"."0.1.34"
     ];
     peerDependencies = [
     ];
@@ -11111,7 +11383,7 @@
       self.by-version."request"."2.34.0"
       self.by-version."mkdirp"."0.3.5"
       self.by-version."clean-css"."2.1.8"
-      self.by-version."source-map"."0.1.33"
+      self.by-version."source-map"."0.1.34"
     ];
     peerDependencies = [
     ];
@@ -11182,6 +11454,29 @@
     passthru.names = [ "libyaml" ];
   };
   "libyaml" = self.by-version."libyaml"."0.2.3";
+  by-spec."liftoff"."^0.11.0" =
+    self.by-version."liftoff"."0.11.3";
+  by-version."liftoff"."0.11.3" = lib.makeOverridable self.buildNodePackage {
+    name = "node-liftoff-0.11.3";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/liftoff/-/liftoff-0.11.3.tgz";
+        name = "liftoff-0.11.3.tgz";
+        sha1 = "91824d0692e656ff5455b39151d5a01011d8963c";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."liftoff" or []);
+    deps = [
+      self.by-version."findup-sync"."0.1.3"
+      self.by-version."resolve"."0.7.1"
+      self.by-version."minimist"."0.1.0"
+      self.by-version."extend"."1.2.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "liftoff" ];
+  };
   by-spec."lockfile"."~0.4.0" =
     self.by-version."lockfile"."0.4.2";
   by-version."lockfile"."0.4.2" = lib.makeOverridable self.buildNodePackage {
@@ -11250,6 +11545,25 @@
         url = "http://registry.npmjs.org/lodash/-/lodash-0.9.2.tgz";
         name = "lodash-0.9.2.tgz";
         sha1 = "8f3499c5245d346d682e5b0d3b40767e09f1a92c";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash" ];
+  };
+  by-spec."lodash"."~1.0.1" =
+    self.by-version."lodash"."1.0.1";
+  by-version."lodash"."1.0.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash-1.0.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash/-/lodash-1.0.1.tgz";
+        name = "lodash-1.0.1.tgz";
+        sha1 = "57945732498d92310e5bd4b1ff4f273a79e6c9fc";
       })
     ];
     buildInputs =
@@ -11359,6 +11673,241 @@
     ];
     passthru.names = [ "lodash-node" ];
   };
+  by-spec."lodash._arraypool"."~2.4.1" =
+    self.by-version."lodash._arraypool"."2.4.1";
+  by-version."lodash._arraypool"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash._arraypool-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash._arraypool/-/lodash._arraypool-2.4.1.tgz";
+        name = "lodash._arraypool-2.4.1.tgz";
+        sha1 = "e88eecb92e2bb84c9065612fd958a0719cd47f94";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash._arraypool" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash._arraypool" ];
+  };
+  by-spec."lodash._basebind"."~2.4.1" =
+    self.by-version."lodash._basebind"."2.4.1";
+  by-version."lodash._basebind"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash._basebind-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash._basebind/-/lodash._basebind-2.4.1.tgz";
+        name = "lodash._basebind-2.4.1.tgz";
+        sha1 = "e940b9ebdd27c327e0a8dab1b55916c5341e9575";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash._basebind" or []);
+    deps = [
+      self.by-version."lodash._basecreate"."2.4.1"
+      self.by-version."lodash.isobject"."2.4.1"
+      self.by-version."lodash._setbinddata"."2.4.1"
+      self.by-version."lodash._slice"."2.4.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash._basebind" ];
+  };
+  by-spec."lodash._basecreate"."~2.4.1" =
+    self.by-version."lodash._basecreate"."2.4.1";
+  by-version."lodash._basecreate"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash._basecreate-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash._basecreate/-/lodash._basecreate-2.4.1.tgz";
+        name = "lodash._basecreate-2.4.1.tgz";
+        sha1 = "f8e6f5b578a9e34e541179b56b8eeebf4a287e08";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash._basecreate" or []);
+    deps = [
+      self.by-version."lodash._isnative"."2.4.1"
+      self.by-version."lodash.isobject"."2.4.1"
+      self.by-version."lodash.noop"."2.4.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash._basecreate" ];
+  };
+  by-spec."lodash._basecreatecallback"."~2.4.1" =
+    self.by-version."lodash._basecreatecallback"."2.4.1";
+  by-version."lodash._basecreatecallback"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash._basecreatecallback-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash._basecreatecallback/-/lodash._basecreatecallback-2.4.1.tgz";
+        name = "lodash._basecreatecallback-2.4.1.tgz";
+        sha1 = "7d0b267649cb29e7a139d0103b7c11fae84e4851";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash._basecreatecallback" or []);
+    deps = [
+      self.by-version."lodash.bind"."2.4.1"
+      self.by-version."lodash.identity"."2.4.1"
+      self.by-version."lodash._setbinddata"."2.4.1"
+      self.by-version."lodash.support"."2.4.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash._basecreatecallback" ];
+  };
+  by-spec."lodash._basecreatewrapper"."~2.4.1" =
+    self.by-version."lodash._basecreatewrapper"."2.4.1";
+  by-version."lodash._basecreatewrapper"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash._basecreatewrapper-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash._basecreatewrapper/-/lodash._basecreatewrapper-2.4.1.tgz";
+        name = "lodash._basecreatewrapper-2.4.1.tgz";
+        sha1 = "4d31f2e7de7e134fbf2803762b8150b32519666f";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash._basecreatewrapper" or []);
+    deps = [
+      self.by-version."lodash._basecreate"."2.4.1"
+      self.by-version."lodash.isobject"."2.4.1"
+      self.by-version."lodash._setbinddata"."2.4.1"
+      self.by-version."lodash._slice"."2.4.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash._basecreatewrapper" ];
+  };
+  by-spec."lodash._baseisequal"."~2.4.1" =
+    self.by-version."lodash._baseisequal"."2.4.1";
+  by-version."lodash._baseisequal"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash._baseisequal-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash._baseisequal/-/lodash._baseisequal-2.4.1.tgz";
+        name = "lodash._baseisequal-2.4.1.tgz";
+        sha1 = "6b1e62e587c5523111f6f228553dab19e445fc03";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash._baseisequal" or []);
+    deps = [
+      self.by-version."lodash.forin"."2.4.1"
+      self.by-version."lodash._getarray"."2.4.1"
+      self.by-version."lodash.isfunction"."2.4.1"
+      self.by-version."lodash._objecttypes"."2.4.1"
+      self.by-version."lodash._releasearray"."2.4.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash._baseisequal" ];
+  };
+  by-spec."lodash._createwrapper"."~2.4.1" =
+    self.by-version."lodash._createwrapper"."2.4.1";
+  by-version."lodash._createwrapper"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash._createwrapper-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash._createwrapper/-/lodash._createwrapper-2.4.1.tgz";
+        name = "lodash._createwrapper-2.4.1.tgz";
+        sha1 = "51d6957973da4ed556e37290d8c1a18c53de1607";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash._createwrapper" or []);
+    deps = [
+      self.by-version."lodash._basebind"."2.4.1"
+      self.by-version."lodash._basecreatewrapper"."2.4.1"
+      self.by-version."lodash.isfunction"."2.4.1"
+      self.by-version."lodash._slice"."2.4.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash._createwrapper" ];
+  };
+  by-spec."lodash._escapehtmlchar"."~2.4.1" =
+    self.by-version."lodash._escapehtmlchar"."2.4.1";
+  by-version."lodash._escapehtmlchar"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash._escapehtmlchar-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash._escapehtmlchar/-/lodash._escapehtmlchar-2.4.1.tgz";
+        name = "lodash._escapehtmlchar-2.4.1.tgz";
+        sha1 = "df67c3bb6b7e8e1e831ab48bfa0795b92afe899d";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash._escapehtmlchar" or []);
+    deps = [
+      self.by-version."lodash._htmlescapes"."2.4.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash._escapehtmlchar" ];
+  };
+  by-spec."lodash._escapestringchar"."~2.4.1" =
+    self.by-version."lodash._escapestringchar"."2.4.1";
+  by-version."lodash._escapestringchar"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash._escapestringchar-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash._escapestringchar/-/lodash._escapestringchar-2.4.1.tgz";
+        name = "lodash._escapestringchar-2.4.1.tgz";
+        sha1 = "ecfe22618a2ade50bfeea43937e51df66f0edb72";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash._escapestringchar" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash._escapestringchar" ];
+  };
+  by-spec."lodash._getarray"."~2.4.1" =
+    self.by-version."lodash._getarray"."2.4.1";
+  by-version."lodash._getarray"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash._getarray-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash._getarray/-/lodash._getarray-2.4.1.tgz";
+        name = "lodash._getarray-2.4.1.tgz";
+        sha1 = "faf1f7f810fa985a251c2187404481094839e5ee";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash._getarray" or []);
+    deps = [
+      self.by-version."lodash._arraypool"."2.4.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash._getarray" ];
+  };
+  by-spec."lodash._htmlescapes"."~2.4.1" =
+    self.by-version."lodash._htmlescapes"."2.4.1";
+  by-version."lodash._htmlescapes"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash._htmlescapes-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash._htmlescapes/-/lodash._htmlescapes-2.4.1.tgz";
+        name = "lodash._htmlescapes-2.4.1.tgz";
+        sha1 = "32d14bf0844b6de6f8b62a051b4f67c228b624cb";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash._htmlescapes" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash._htmlescapes" ];
+  };
   by-spec."lodash._isnative"."~2.4.1" =
     self.by-version."lodash._isnative"."2.4.1";
   by-version."lodash._isnative"."2.4.1" = lib.makeOverridable self.buildNodePackage {
@@ -11377,6 +11926,25 @@
     peerDependencies = [
     ];
     passthru.names = [ "lodash._isnative" ];
+  };
+  by-spec."lodash._maxpoolsize"."~2.4.1" =
+    self.by-version."lodash._maxpoolsize"."2.4.1";
+  by-version."lodash._maxpoolsize"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash._maxpoolsize-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash._maxpoolsize/-/lodash._maxpoolsize-2.4.1.tgz";
+        name = "lodash._maxpoolsize-2.4.1.tgz";
+        sha1 = "9d482f463b8e66afbe59c2c14edb117060172334";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash._maxpoolsize" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash._maxpoolsize" ];
   };
   by-spec."lodash._objecttypes"."~2.4.1" =
     self.by-version."lodash._objecttypes"."2.4.1";
@@ -11397,6 +11965,90 @@
     ];
     passthru.names = [ "lodash._objecttypes" ];
   };
+  by-spec."lodash._reinterpolate"."^2.4.1" =
+    self.by-version."lodash._reinterpolate"."2.4.1";
+  by-version."lodash._reinterpolate"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash._reinterpolate-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash._reinterpolate/-/lodash._reinterpolate-2.4.1.tgz";
+        name = "lodash._reinterpolate-2.4.1.tgz";
+        sha1 = "4f1227aa5a8711fc632f5b07a1f4607aab8b3222";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash._reinterpolate" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash._reinterpolate" ];
+  };
+  by-spec."lodash._reinterpolate"."~2.4.1" =
+    self.by-version."lodash._reinterpolate"."2.4.1";
+  by-spec."lodash._releasearray"."~2.4.1" =
+    self.by-version."lodash._releasearray"."2.4.1";
+  by-version."lodash._releasearray"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash._releasearray-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash._releasearray/-/lodash._releasearray-2.4.1.tgz";
+        name = "lodash._releasearray-2.4.1.tgz";
+        sha1 = "a6139630d76d1536b07ddc80962889b082f6a641";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash._releasearray" or []);
+    deps = [
+      self.by-version."lodash._arraypool"."2.4.1"
+      self.by-version."lodash._maxpoolsize"."2.4.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash._releasearray" ];
+  };
+  by-spec."lodash._reunescapedhtml"."~2.4.1" =
+    self.by-version."lodash._reunescapedhtml"."2.4.1";
+  by-version."lodash._reunescapedhtml"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash._reunescapedhtml-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash._reunescapedhtml/-/lodash._reunescapedhtml-2.4.1.tgz";
+        name = "lodash._reunescapedhtml-2.4.1.tgz";
+        sha1 = "747c4fc40103eb3bb8a0976e571f7a2659e93ba7";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash._reunescapedhtml" or []);
+    deps = [
+      self.by-version."lodash._htmlescapes"."2.4.1"
+      self.by-version."lodash.keys"."2.4.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash._reunescapedhtml" ];
+  };
+  by-spec."lodash._setbinddata"."~2.4.1" =
+    self.by-version."lodash._setbinddata"."2.4.1";
+  by-version."lodash._setbinddata"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash._setbinddata-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash._setbinddata/-/lodash._setbinddata-2.4.1.tgz";
+        name = "lodash._setbinddata-2.4.1.tgz";
+        sha1 = "f7c200cd1b92ef236b399eecf73c648d17aa94d2";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash._setbinddata" or []);
+    deps = [
+      self.by-version."lodash._isnative"."2.4.1"
+      self.by-version."lodash.noop"."2.4.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash._setbinddata" ];
+  };
   by-spec."lodash._shimkeys"."~2.4.1" =
     self.by-version."lodash._shimkeys"."2.4.1";
   by-version."lodash._shimkeys"."2.4.1" = lib.makeOverridable self.buildNodePackage {
@@ -11416,6 +12068,70 @@
     peerDependencies = [
     ];
     passthru.names = [ "lodash._shimkeys" ];
+  };
+  by-spec."lodash._slice"."~2.4.1" =
+    self.by-version."lodash._slice"."2.4.1";
+  by-version."lodash._slice"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash._slice-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash._slice/-/lodash._slice-2.4.1.tgz";
+        name = "lodash._slice-2.4.1.tgz";
+        sha1 = "745cf41a53597b18f688898544405efa2b06d90f";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash._slice" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash._slice" ];
+  };
+  by-spec."lodash.bind"."~2.4.1" =
+    self.by-version."lodash.bind"."2.4.1";
+  by-version."lodash.bind"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash.bind-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash.bind/-/lodash.bind-2.4.1.tgz";
+        name = "lodash.bind-2.4.1.tgz";
+        sha1 = "5d19fa005c8c4d236faf4742c7b7a1fcabe29267";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash.bind" or []);
+    deps = [
+      self.by-version."lodash._createwrapper"."2.4.1"
+      self.by-version."lodash._slice"."2.4.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash.bind" ];
+  };
+  by-spec."lodash.createcallback"."~2.4.1" =
+    self.by-version."lodash.createcallback"."2.4.1";
+  by-version."lodash.createcallback"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash.createcallback-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash.createcallback/-/lodash.createcallback-2.4.1.tgz";
+        name = "lodash.createcallback-2.4.1.tgz";
+        sha1 = "c81645ac3a1d7f9dc6b36b8bc0d84c013c98ea95";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash.createcallback" or []);
+    deps = [
+      self.by-version."lodash._basecreatecallback"."2.4.1"
+      self.by-version."lodash._baseisequal"."2.4.1"
+      self.by-version."lodash.isobject"."2.4.1"
+      self.by-version."lodash.keys"."2.4.1"
+      self.by-version."lodash.property"."2.4.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash.createcallback" ];
   };
   by-spec."lodash.debounce"."~2.4.1" =
     self.by-version."lodash.debounce"."2.4.1";
@@ -11459,6 +12175,88 @@
     peerDependencies = [
     ];
     passthru.names = [ "lodash.defaults" ];
+  };
+  by-spec."lodash.escape"."~2.4.1" =
+    self.by-version."lodash.escape"."2.4.1";
+  by-version."lodash.escape"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash.escape-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash.escape/-/lodash.escape-2.4.1.tgz";
+        name = "lodash.escape-2.4.1.tgz";
+        sha1 = "2ce12c5e084db0a57dda5e5d1eeeb9f5d175a3b4";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash.escape" or []);
+    deps = [
+      self.by-version."lodash._escapehtmlchar"."2.4.1"
+      self.by-version."lodash.keys"."2.4.1"
+      self.by-version."lodash._reunescapedhtml"."2.4.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash.escape" ];
+  };
+  by-spec."lodash.findindex"."^2.4.1" =
+    self.by-version."lodash.findindex"."2.4.1";
+  by-version."lodash.findindex"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash.findindex-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash.findindex/-/lodash.findindex-2.4.1.tgz";
+        name = "lodash.findindex-2.4.1.tgz";
+        sha1 = "738d108641cf2ef087207f35f2c6a5eacf807caa";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash.findindex" or []);
+    deps = [
+      self.by-version."lodash.createcallback"."2.4.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash.findindex" ];
+  };
+  by-spec."lodash.forin"."~2.4.1" =
+    self.by-version."lodash.forin"."2.4.1";
+  by-version."lodash.forin"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash.forin-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash.forin/-/lodash.forin-2.4.1.tgz";
+        name = "lodash.forin-2.4.1.tgz";
+        sha1 = "8089eaed7d25b08672b7c66fd07ac55d062320eb";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash.forin" or []);
+    deps = [
+      self.by-version."lodash._basecreatecallback"."2.4.1"
+      self.by-version."lodash._objecttypes"."2.4.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash.forin" ];
+  };
+  by-spec."lodash.identity"."~2.4.1" =
+    self.by-version."lodash.identity"."2.4.1";
+  by-version."lodash.identity"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash.identity-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash.identity/-/lodash.identity-2.4.1.tgz";
+        name = "lodash.identity-2.4.1.tgz";
+        sha1 = "6694cffa65fef931f7c31ce86c74597cf560f4f1";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash.identity" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash.identity" ];
   };
   by-spec."lodash.isfunction"."~2.4.1" =
     self.by-version."lodash.isfunction"."2.4.1";
@@ -11521,6 +12319,25 @@
     ];
     passthru.names = [ "lodash.keys" ];
   };
+  by-spec."lodash.noop"."~2.4.1" =
+    self.by-version."lodash.noop"."2.4.1";
+  by-version."lodash.noop"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash.noop-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash.noop/-/lodash.noop-2.4.1.tgz";
+        name = "lodash.noop-2.4.1.tgz";
+        sha1 = "4fb54f816652e5ae10e8f72f717a388c7326538a";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash.noop" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash.noop" ];
+  };
   by-spec."lodash.now"."~2.4.1" =
     self.by-version."lodash.now"."2.4.1";
   by-version."lodash.now"."2.4.1" = lib.makeOverridable self.buildNodePackage {
@@ -11540,6 +12357,112 @@
     peerDependencies = [
     ];
     passthru.names = [ "lodash.now" ];
+  };
+  by-spec."lodash.property"."~2.4.1" =
+    self.by-version."lodash.property"."2.4.1";
+  by-version."lodash.property"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash.property-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash.property/-/lodash.property-2.4.1.tgz";
+        name = "lodash.property-2.4.1.tgz";
+        sha1 = "4049c0549daf5a7102bc5e93eeaebb379deb132f";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash.property" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash.property" ];
+  };
+  by-spec."lodash.support"."~2.4.1" =
+    self.by-version."lodash.support"."2.4.1";
+  by-version."lodash.support"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash.support-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash.support/-/lodash.support-2.4.1.tgz";
+        name = "lodash.support-2.4.1.tgz";
+        sha1 = "320e0b67031673c28d7a2bb5d9e0331a45240515";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash.support" or []);
+    deps = [
+      self.by-version."lodash._isnative"."2.4.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash.support" ];
+  };
+  by-spec."lodash.template"."^2.4.1" =
+    self.by-version."lodash.template"."2.4.1";
+  by-version."lodash.template"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash.template-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash.template/-/lodash.template-2.4.1.tgz";
+        name = "lodash.template-2.4.1.tgz";
+        sha1 = "9e611007edf629129a974ab3c48b817b3e1cf20d";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash.template" or []);
+    deps = [
+      self.by-version."lodash.defaults"."2.4.1"
+      self.by-version."lodash.escape"."2.4.1"
+      self.by-version."lodash._escapestringchar"."2.4.1"
+      self.by-version."lodash.keys"."2.4.1"
+      self.by-version."lodash._reinterpolate"."2.4.1"
+      self.by-version."lodash.templatesettings"."2.4.1"
+      self.by-version."lodash.values"."2.4.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash.template" ];
+  };
+  by-spec."lodash.templatesettings"."~2.4.1" =
+    self.by-version."lodash.templatesettings"."2.4.1";
+  by-version."lodash.templatesettings"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash.templatesettings-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash.templatesettings/-/lodash.templatesettings-2.4.1.tgz";
+        name = "lodash.templatesettings-2.4.1.tgz";
+        sha1 = "ea76c75d11eb86d4dbe89a83893bb861929ac699";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash.templatesettings" or []);
+    deps = [
+      self.by-version."lodash.escape"."2.4.1"
+      self.by-version."lodash._reinterpolate"."2.4.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash.templatesettings" ];
+  };
+  by-spec."lodash.values"."~2.4.1" =
+    self.by-version."lodash.values"."2.4.1";
+  by-version."lodash.values"."2.4.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-lodash.values-2.4.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/lodash.values/-/lodash.values-2.4.1.tgz";
+        name = "lodash.values-2.4.1.tgz";
+        sha1 = "abf514436b3cb705001627978cbcf30b1280eea4";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."lodash.values" or []);
+    deps = [
+      self.by-version."lodash.keys"."2.4.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "lodash.values" ];
   };
   by-spec."log-driver"."1.2.1" =
     self.by-version."log-driver"."1.2.1";
@@ -11822,6 +12745,25 @@
     peerDependencies = [
     ];
     passthru.names = [ "map-key" ];
+  };
+  by-spec."map-stream"."^0.1.0" =
+    self.by-version."map-stream"."0.1.0";
+  by-version."map-stream"."0.1.0" = lib.makeOverridable self.buildNodePackage {
+    name = "node-map-stream-0.1.0";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/map-stream/-/map-stream-0.1.0.tgz";
+        name = "map-stream-0.1.0.tgz";
+        sha1 = "e56aa94c4c8055a16404a0674b78f215f7c8e194";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."map-stream" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "map-stream" ];
   };
   by-spec."marked"."*" =
     self.by-version."marked"."0.3.2";
@@ -12166,6 +13108,25 @@
     self.by-version."mime"."1.2.11";
   by-spec."mime"."~1.2.9" =
     self.by-version."mime"."1.2.11";
+  by-spec."mime-types"."1.0.0" =
+    self.by-version."mime-types"."1.0.0";
+  by-version."mime-types"."1.0.0" = lib.makeOverridable self.buildNodePackage {
+    name = "node-mime-types-1.0.0";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/mime-types/-/mime-types-1.0.0.tgz";
+        name = "mime-types-1.0.0.tgz";
+        sha1 = "6a7b4a6af2e7d92f97afe03f047c7801e8f001d2";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."mime-types" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "mime-types" ];
+  };
   by-spec."mimelib"."~0.2.15" =
     self.by-version."mimelib"."0.2.16";
   by-version."mimelib"."0.2.16" = lib.makeOverridable self.buildNodePackage {
@@ -12351,6 +13312,8 @@
     self.by-version."minimist"."0.0.10";
   by-spec."minimist"."~0.0.9" =
     self.by-version."minimist"."0.0.10";
+  by-spec."minimist"."~0.1.0" =
+    self.by-version."minimist"."0.1.0";
   by-spec."ministyle"."~0.1.3" =
     self.by-version."ministyle"."0.1.4";
   by-version."ministyle"."0.1.4" = lib.makeOverridable self.buildNodePackage {
@@ -13233,6 +14196,26 @@
     peerDependencies = [
     ];
     passthru.names = [ "multiparty" ];
+  };
+  by-spec."multipipe"."^0.1.0" =
+    self.by-version."multipipe"."0.1.1";
+  by-version."multipipe"."0.1.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-multipipe-0.1.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/multipipe/-/multipipe-0.1.1.tgz";
+        name = "multipipe-0.1.1.tgz";
+        sha1 = "bc271fbb2bf3a5ed3e43cc6ba3d7dbc1c4eb07fb";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."multipipe" or []);
+    deps = [
+      self.by-version."duplexer2"."0.0.2"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "multipipe" ];
   };
   by-spec."muri"."0.3.1" =
     self.by-version."muri"."0.3.1";
@@ -15096,6 +16079,45 @@
   "optparse" = self.by-version."optparse"."1.0.5";
   by-spec."optparse".">= 1.0.3" =
     self.by-version."optparse"."1.0.5";
+  by-spec."orchestrator"."^0.3.0" =
+    self.by-version."orchestrator"."0.3.3";
+  by-version."orchestrator"."0.3.3" = lib.makeOverridable self.buildNodePackage {
+    name = "node-orchestrator-0.3.3";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/orchestrator/-/orchestrator-0.3.3.tgz";
+        name = "orchestrator-0.3.3.tgz";
+        sha1 = "308f80c6c956b3c27f6e4f98d28653fa872e6941";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."orchestrator" or []);
+    deps = [
+      self.by-version."sequencify"."0.0.7"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "orchestrator" ];
+  };
+  by-spec."ordered-read-streams"."^0.0.7" =
+    self.by-version."ordered-read-streams"."0.0.7";
+  by-version."ordered-read-streams"."0.0.7" = lib.makeOverridable self.buildNodePackage {
+    name = "node-ordered-read-streams-0.0.7";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/ordered-read-streams/-/ordered-read-streams-0.0.7.tgz";
+        name = "ordered-read-streams-0.0.7.tgz";
+        sha1 = "64fb9a2e15c6513a5508389bd6df6829fad91ce9";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."ordered-read-streams" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "ordered-read-streams" ];
+  };
   by-spec."os-browserify"."~0.1.1" =
     self.by-version."os-browserify"."0.1.2";
   by-version."os-browserify"."0.1.2" = lib.makeOverridable self.buildNodePackage {
@@ -15651,6 +16673,25 @@
     ];
     passthru.names = [ "pretty-bytes" ];
   };
+  by-spec."pretty-hrtime"."^0.2.0" =
+    self.by-version."pretty-hrtime"."0.2.1";
+  by-version."pretty-hrtime"."0.2.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-pretty-hrtime-0.2.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/pretty-hrtime/-/pretty-hrtime-0.2.1.tgz";
+        name = "pretty-hrtime-0.2.1.tgz";
+        sha1 = "f341d39215fa5f7bff50af7d8572f8d4ec9d12f6";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."pretty-hrtime" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "pretty-hrtime" ];
+  };
   by-spec."process"."^0.7.0" =
     self.by-version."process"."0.7.0";
   by-version."process"."0.7.0" = lib.makeOverridable self.buildNodePackage {
@@ -15831,26 +16872,6 @@
     peerDependencies = [
     ];
     passthru.names = [ "protobufjs" ];
-  };
-  by-spec."proxy-addr"."1.0.0" =
-    self.by-version."proxy-addr"."1.0.0";
-  by-version."proxy-addr"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "node-proxy-addr-1.0.0";
-    src = [
-      (fetchurl {
-        url = "http://registry.npmjs.org/proxy-addr/-/proxy-addr-1.0.0.tgz";
-        name = "proxy-addr-1.0.0.tgz";
-        sha1 = "478617ab0fba70e0c3dae9cf57469e36dd2febaf";
-      })
-    ];
-    buildInputs =
-      (self.nativeDeps."proxy-addr" or []);
-    deps = [
-      self.by-version."ipaddr.js"."0.1.2"
-    ];
-    peerDependencies = [
-    ];
-    passthru.names = [ "proxy-addr" ];
   };
   by-spec."proxy-addr"."1.0.1" =
     self.by-version."proxy-addr"."1.0.1";
@@ -17161,6 +18182,27 @@
     self.by-version."resolve"."0.6.3";
   by-spec."resolve"."~0.6.3" =
     self.by-version."resolve"."0.6.3";
+  by-spec."resolve"."~0.7.0" =
+    self.by-version."resolve"."0.7.1";
+  by-version."resolve"."0.7.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-resolve-0.7.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/resolve/-/resolve-0.7.1.tgz";
+        name = "resolve-0.7.1.tgz";
+        sha1 = "74c73ad05bb62da19391a79c3de63b5cf7aeba51";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."resolve" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "resolve" ];
+  };
+  by-spec."resolve"."~0.7.1" =
+    self.by-version."resolve"."0.7.1";
   by-spec."response-time"."2.0.0" =
     self.by-version."response-time"."2.0.0";
   by-version."response-time"."2.0.0" = lib.makeOverridable self.buildNodePackage {
@@ -17397,6 +18439,25 @@
     self.by-version."rimraf"."2.2.8";
   by-spec."rimraf"."~2.2.8" =
     self.by-version."rimraf"."2.2.8";
+  by-spec."rndm"."1" =
+    self.by-version."rndm"."1.0.0";
+  by-version."rndm"."1.0.0" = lib.makeOverridable self.buildNodePackage {
+    name = "node-rndm-1.0.0";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/rndm/-/rndm-1.0.0.tgz";
+        name = "rndm-1.0.0.tgz";
+        sha1 = "dcb6eb485b9b416d15e097f39c31458e4cfda2da";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."rndm" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "rndm" ];
+  };
   by-spec."ruglify"."~1.0.0" =
     self.by-version."ruglify"."1.0.0";
   by-version."ruglify"."1.0.0" = lib.makeOverridable self.buildNodePackage {
@@ -17654,6 +18715,8 @@
     self.by-version."semver"."2.3.0";
   by-spec."semver".">=2.2.1 <3" =
     self.by-version."semver"."2.3.0";
+  by-spec."semver"."^2.2.1" =
+    self.by-version."semver"."2.3.0";
   by-spec."semver"."^2.3.0" =
     self.by-version."semver"."2.3.0";
   by-spec."semver"."~1.1.0" =
@@ -17720,21 +18783,21 @@
   by-spec."semver"."~2.3.0" =
     self.by-version."semver"."2.3.0";
   by-spec."send"."*" =
-    self.by-version."send"."0.4.1";
-  by-version."send"."0.4.1" = lib.makeOverridable self.buildNodePackage {
-    name = "node-send-0.4.1";
+    self.by-version."send"."0.4.2";
+  by-version."send"."0.4.2" = lib.makeOverridable self.buildNodePackage {
+    name = "node-send-0.4.2";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/send/-/send-0.4.1.tgz";
-        name = "send-0.4.1.tgz";
-        sha1 = "6e9a5d41cb9c0fb3514226446fa319aed46d433d";
+        url = "http://registry.npmjs.org/send/-/send-0.4.2.tgz";
+        name = "send-0.4.2.tgz";
+        sha1 = "7641b23126fc54975d2be37674b36d6bb617b26c";
       })
     ];
     buildInputs =
       (self.nativeDeps."send" or []);
     deps = [
-      self.by-version."debug"."0.8.1"
-      self.by-version."finished"."1.1.4"
+      self.by-version."debug"."1.0.1"
+      self.by-version."finished"."1.2.1"
       self.by-version."fresh"."0.2.2"
       self.by-version."mime"."1.2.11"
       self.by-version."range-parser"."1.0.0"
@@ -17859,8 +18922,8 @@
     ];
     passthru.names = [ "send" ];
   };
-  by-spec."send"."0.4.1" =
-    self.by-version."send"."0.4.1";
+  by-spec."send"."0.4.2" =
+    self.by-version."send"."0.4.2";
   by-spec."sequence"."2.2.1" =
     self.by-version."sequence"."2.2.1";
   by-version."sequence"."2.2.1" = lib.makeOverridable self.buildNodePackage {
@@ -17882,6 +18945,25 @@
   };
   by-spec."sequence"."2.x" =
     self.by-version."sequence"."2.2.1";
+  by-spec."sequencify"."~0.0.7" =
+    self.by-version."sequencify"."0.0.7";
+  by-version."sequencify"."0.0.7" = lib.makeOverridable self.buildNodePackage {
+    name = "node-sequencify-0.0.7";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/sequencify/-/sequencify-0.0.7.tgz";
+        name = "sequencify-0.0.7.tgz";
+        sha1 = "90cff19d02e07027fd767f5ead3e7b95d1e7380c";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."sequencify" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "sequencify" ];
+  };
   by-spec."serve-favicon"."2.0.1" =
     self.by-version."serve-favicon"."2.0.1";
   by-version."serve-favicon"."2.0.1" = lib.makeOverridable self.buildNodePackage {
@@ -17964,15 +19046,15 @@
     ];
     passthru.names = [ "serve-static" ];
   };
-  by-spec."serve-static"."1.2.1" =
-    self.by-version."serve-static"."1.2.1";
-  by-version."serve-static"."1.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "node-serve-static-1.2.1";
+  by-spec."serve-static"."1.2.2" =
+    self.by-version."serve-static"."1.2.2";
+  by-version."serve-static"."1.2.2" = lib.makeOverridable self.buildNodePackage {
+    name = "node-serve-static-1.2.2";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/serve-static/-/serve-static-1.2.1.tgz";
-        name = "serve-static-1.2.1.tgz";
-        sha1 = "a800a9de23dbd1ffb1258edb986128ee4a4ea03d";
+        url = "http://registry.npmjs.org/serve-static/-/serve-static-1.2.2.tgz";
+        name = "serve-static-1.2.2.tgz";
+        sha1 = "6ffc6c23fad03bcd0710eceda844123bd71bc951";
       })
     ];
     buildInputs =
@@ -17980,7 +19062,7 @@
     deps = [
       self.by-version."escape-html"."1.0.1"
       self.by-version."parseurl"."1.0.1"
-      self.by-version."send"."0.4.1"
+      self.by-version."send"."0.4.2"
     ];
     peerDependencies = [
     ];
@@ -18133,14 +19215,14 @@
     passthru.names = [ "shelljs" ];
   };
   by-spec."should"."*" =
-    self.by-version."should"."4.0.3";
-  by-version."should"."4.0.3" = lib.makeOverridable self.buildNodePackage {
-    name = "node-should-4.0.3";
+    self.by-version."should"."4.0.4";
+  by-version."should"."4.0.4" = lib.makeOverridable self.buildNodePackage {
+    name = "node-should-4.0.4";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/should/-/should-4.0.3.tgz";
-        name = "should-4.0.3.tgz";
-        sha1 = "2711897494e7b0eb429aad16cc88c9594f9c230e";
+        url = "http://registry.npmjs.org/should/-/should-4.0.4.tgz";
+        name = "should-4.0.4.tgz";
+        sha1 = "8efaa304f1f148cf3d2e955862990f9ab9ea628f";
       })
     ];
     buildInputs =
@@ -18151,7 +19233,7 @@
     ];
     passthru.names = [ "should" ];
   };
-  "should" = self.by-version."should"."4.0.3";
+  "should" = self.by-version."should"."4.0.4";
   by-spec."sigmund"."~1.0.0" =
     self.by-version."sigmund"."1.0.0";
   by-version."sigmund"."1.0.0" = lib.makeOverridable self.buildNodePackage {
@@ -18583,14 +19665,14 @@
     passthru.names = [ "sorted-object" ];
   };
   by-spec."source-map"."*" =
-    self.by-version."source-map"."0.1.33";
-  by-version."source-map"."0.1.33" = lib.makeOverridable self.buildNodePackage {
-    name = "node-source-map-0.1.33";
+    self.by-version."source-map"."0.1.34";
+  by-version."source-map"."0.1.34" = lib.makeOverridable self.buildNodePackage {
+    name = "node-source-map-0.1.34";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/source-map/-/source-map-0.1.33.tgz";
-        name = "source-map-0.1.33.tgz";
-        sha1 = "c659297a73af18c073b0aa2e7cc91e316b5c570c";
+        url = "http://registry.npmjs.org/source-map/-/source-map-0.1.34.tgz";
+        name = "source-map-0.1.34.tgz";
+        sha1 = "a7cfe89aec7b1682c3b198d0acfb47d7d090566b";
       })
     ];
     buildInputs =
@@ -18602,7 +19684,7 @@
     ];
     passthru.names = [ "source-map" ];
   };
-  "source-map" = self.by-version."source-map"."0.1.33";
+  "source-map" = self.by-version."source-map"."0.1.34";
   by-spec."source-map"."0.1.11" =
     self.by-version."source-map"."0.1.11";
   by-version."source-map"."0.1.11" = lib.makeOverridable self.buildNodePackage {
@@ -18644,19 +19726,19 @@
     passthru.names = [ "source-map" ];
   };
   by-spec."source-map"."0.1.x" =
-    self.by-version."source-map"."0.1.33";
+    self.by-version."source-map"."0.1.34";
   by-spec."source-map".">= 0.1.2" =
-    self.by-version."source-map"."0.1.33";
+    self.by-version."source-map"."0.1.34";
   by-spec."source-map"."~ 0.1.8" =
-    self.by-version."source-map"."0.1.33";
+    self.by-version."source-map"."0.1.34";
   by-spec."source-map"."~0.1.30" =
-    self.by-version."source-map"."0.1.33";
+    self.by-version."source-map"."0.1.34";
   by-spec."source-map"."~0.1.31" =
-    self.by-version."source-map"."0.1.33";
+    self.by-version."source-map"."0.1.34";
   by-spec."source-map"."~0.1.33" =
-    self.by-version."source-map"."0.1.33";
+    self.by-version."source-map"."0.1.34";
   by-spec."source-map"."~0.1.7" =
-    self.by-version."source-map"."0.1.33";
+    self.by-version."source-map"."0.1.34";
   by-spec."spdy"."1.7.1" =
     self.by-version."spdy"."1.7.1";
   by-version."spdy"."1.7.1" = lib.makeOverridable self.buildNodePackage {
@@ -19079,6 +20161,27 @@
     ];
     passthru.names = [ "strip-ansi" ];
   };
+  by-spec."strip-bom"."^0.3.0" =
+    self.by-version."strip-bom"."0.3.1";
+  by-version."strip-bom"."0.3.1" = lib.makeOverridable self.buildNodePackage {
+    name = "strip-bom-0.3.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/strip-bom/-/strip-bom-0.3.1.tgz";
+        name = "strip-bom-0.3.1.tgz";
+        sha1 = "9e8a39eff456ff9abc2f059f5f2225bb0f3f7ca5";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."strip-bom" or []);
+    deps = [
+      self.by-version."first-chunk-stream"."0.1.0"
+      self.by-version."is-utf8"."0.2.0"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "strip-bom" ];
+  };
   by-spec."strip-json-comments"."0.1.x" =
     self.by-version."strip-json-comments"."0.1.3";
   by-version."strip-json-comments"."0.1.3" = lib.makeOverridable self.buildNodePackage {
@@ -19119,14 +20222,14 @@
     passthru.names = [ "strong-data-uri" ];
   };
   by-spec."stylus"."*" =
-    self.by-version."stylus"."0.46.2";
-  by-version."stylus"."0.46.2" = lib.makeOverridable self.buildNodePackage {
-    name = "stylus-0.46.2";
+    self.by-version."stylus"."0.46.3";
+  by-version."stylus"."0.46.3" = lib.makeOverridable self.buildNodePackage {
+    name = "stylus-0.46.3";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/stylus/-/stylus-0.46.2.tgz";
-        name = "stylus-0.46.2.tgz";
-        sha1 = "9e6723aac7b582a9de6a0d1eacef20967c02e70b";
+        url = "http://registry.npmjs.org/stylus/-/stylus-0.46.3.tgz";
+        name = "stylus-0.46.3.tgz";
+        sha1 = "0bb5d602f63fa8088ad3f8affba2c1eb925c4d70";
       })
     ];
     buildInputs =
@@ -19142,7 +20245,7 @@
     ];
     passthru.names = [ "stylus" ];
   };
-  "stylus" = self.by-version."stylus"."0.46.2";
+  "stylus" = self.by-version."stylus"."0.46.3";
   by-spec."stylus"."0.42.2" =
     self.by-version."stylus"."0.42.2";
   by-version."stylus"."0.42.2" = lib.makeOverridable self.buildNodePackage {
@@ -19628,6 +20731,8 @@
     ];
     passthru.names = [ "through" ];
   };
+  by-spec."through"."^2.3.4" =
+    self.by-version."through"."2.3.4";
   by-spec."through"."~2.2.7" =
     self.by-version."through"."2.2.7";
   by-version."through"."2.2.7" = lib.makeOverridable self.buildNodePackage {
@@ -19672,6 +20777,25 @@
   };
   by-spec."through2"."~0.4.1" =
     self.by-version."through2"."0.4.2";
+  by-spec."tildify"."^0.2.0" =
+    self.by-version."tildify"."0.2.0";
+  by-version."tildify"."0.2.0" = lib.makeOverridable self.buildNodePackage {
+    name = "node-tildify-0.2.0";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/tildify/-/tildify-0.2.0.tgz";
+        name = "tildify-0.2.0.tgz";
+        sha1 = "70e639947af67d6ab6b822bbed0a6806fd81e430";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."tildify" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "tildify" ];
+  };
   by-spec."timers-browserify"."~1.0.1" =
     self.by-version."timers-browserify"."1.0.1";
   by-version."timers-browserify"."1.0.1" = lib.makeOverridable self.buildNodePackage {
@@ -20119,6 +21243,26 @@
     ];
     passthru.names = [ "type-is" ];
   };
+  by-spec."type-is"."1.2.1" =
+    self.by-version."type-is"."1.2.1";
+  by-version."type-is"."1.2.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-type-is-1.2.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/type-is/-/type-is-1.2.1.tgz";
+        name = "type-is-1.2.1.tgz";
+        sha1 = "73d448080a4f1dd18acb1eefff62968c5b5d54a2";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."type-is" or []);
+    deps = [
+      self.by-version."mime-types"."1.0.0"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "type-is" ];
+  };
   by-spec."typechecker"."~2.0.1" =
     self.by-version."typechecker"."2.0.8";
   by-version."typechecker"."2.0.8" = lib.makeOverridable self.buildNodePackage {
@@ -20192,7 +21336,7 @@
       (self.nativeDeps."uglify-js" or []);
     deps = [
       self.by-version."async"."0.2.10"
-      self.by-version."source-map"."0.1.33"
+      self.by-version."source-map"."0.1.34"
       self.by-version."optimist"."0.3.7"
       self.by-version."uglify-to-browserify"."1.0.2"
     ];
@@ -20235,7 +21379,7 @@
       (self.nativeDeps."uglify-js" or []);
     deps = [
       self.by-version."async"."0.2.10"
-      self.by-version."source-map"."0.1.33"
+      self.by-version."source-map"."0.1.34"
       self.by-version."optimist"."0.3.7"
       self.by-version."uglify-to-browserify"."1.0.2"
     ];
@@ -20259,7 +21403,7 @@
     buildInputs =
       (self.nativeDeps."uglify-js" or []);
     deps = [
-      self.by-version."source-map"."0.1.33"
+      self.by-version."source-map"."0.1.34"
       self.by-version."optimist"."0.3.7"
     ];
     peerDependencies = [
@@ -20283,7 +21427,7 @@
       (self.nativeDeps."uglify-js" or []);
     deps = [
       self.by-version."async"."0.2.10"
-      self.by-version."source-map"."0.1.33"
+      self.by-version."source-map"."0.1.34"
       self.by-version."optimist"."0.3.7"
     ];
     peerDependencies = [
@@ -20596,6 +21740,25 @@
     passthru.names = [ "ungit" ];
   };
   "ungit" = self.by-version."ungit"."0.8.1";
+  by-spec."unique-stream"."^1.0.0" =
+    self.by-version."unique-stream"."1.0.0";
+  by-version."unique-stream"."1.0.0" = lib.makeOverridable self.buildNodePackage {
+    name = "node-unique-stream-1.0.0";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/unique-stream/-/unique-stream-1.0.0.tgz";
+        name = "unique-stream-1.0.0.tgz";
+        sha1 = "d59a4a75427447d9aa6c91e70263f8d26a4b104b";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."unique-stream" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "unique-stream" ];
+  };
   by-spec."update-notifier"."~0.1.3" =
     self.by-version."update-notifier"."0.1.10";
   by-version."update-notifier"."0.1.10" = lib.makeOverridable self.buildNodePackage {
@@ -21057,6 +22220,54 @@
     passthru.names = [ "view-helpers" ];
   };
   "view-helpers" = self.by-version."view-helpers"."0.1.4";
+  by-spec."vinyl"."^0.2.0" =
+    self.by-version."vinyl"."0.2.3";
+  by-version."vinyl"."0.2.3" = lib.makeOverridable self.buildNodePackage {
+    name = "node-vinyl-0.2.3";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/vinyl/-/vinyl-0.2.3.tgz";
+        name = "vinyl-0.2.3.tgz";
+        sha1 = "bca938209582ec5a49ad538a00fa1f125e513252";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."vinyl" or []);
+    deps = [
+      self.by-version."clone-stats"."0.0.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "vinyl" ];
+  };
+  by-spec."vinyl"."^0.2.1" =
+    self.by-version."vinyl"."0.2.3";
+  by-spec."vinyl-fs"."^0.2.0" =
+    self.by-version."vinyl-fs"."0.2.1";
+  by-version."vinyl-fs"."0.2.1" = lib.makeOverridable self.buildNodePackage {
+    name = "node-vinyl-fs-0.2.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/vinyl-fs/-/vinyl-fs-0.2.1.tgz";
+        name = "vinyl-fs-0.2.1.tgz";
+        sha1 = "d6374e16ab706da09ceb55befa468bba0128f938";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."vinyl-fs" or []);
+    deps = [
+      self.by-version."glob-stream"."3.1.11"
+      self.by-version."glob-watcher"."0.0.6"
+      self.by-version."graceful-fs"."3.0.1"
+      self.by-version."map-stream"."0.1.0"
+      self.by-version."mkdirp"."0.5.0"
+      self.by-version."strip-bom"."0.3.1"
+      self.by-version."vinyl"."0.2.3"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "vinyl-fs" ];
+  };
   by-spec."vm-browserify"."~0.0.1" =
     self.by-version."vm-browserify"."0.0.4";
   by-version."vm-browserify"."0.0.4" = lib.makeOverridable self.buildNodePackage {
