@@ -91,7 +91,7 @@ let
         # It disables creation of windows installers and the lib2to3 which
         # can rewrite python2-programs to python3.
         rm $out/lib/python${majorVersion}/distutils/command/wininst-*.exe
-        rm $out/lib/python${majorVersion}/lib2to3/Grammar2.7.6.final.0.pickle
+        rm $out/lib/python${majorVersion}/lib2to3/Grammar2.7.7.final.0.pickle
       '';
 
     passthru = rec {
