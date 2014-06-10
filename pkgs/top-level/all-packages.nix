@@ -11010,7 +11010,7 @@ let
   texFunctions = import ../tools/typesetting/tex/nix pkgs;
 
   texLive = builderDefsPackage (import ../tools/typesetting/tex/texlive) {
-    inherit builderDefs zlib bzip2 ncurses libpng ed lesstif ruby
+    inherit builderDefs zlib bzip2 ncurses libpng ed lesstif ruby potrace
       gd t1lib freetype icu perl expat curl xz pkgconfig zziplib texinfo
       libjpeg bison python fontconfig flex poppler libpaper graphite2
       makeWrapper;

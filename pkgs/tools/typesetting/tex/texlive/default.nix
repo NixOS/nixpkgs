@@ -112,7 +112,9 @@ rec {
     freetype t1lib gd libXaw icu ghostscript ed libXt libXpm libXmu libXext
     xextproto perl libSM ruby expat curl libjpeg python fontconfig xz pkgconfig
     poppler libpaper graphite2 lesstif zziplib harfbuzz texinfo ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ makeWrapper ];
+    ++ stdenv.lib.optionals (! stdenv.isDarwin) [ potrace ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ makeWrapper ]
+    ;
 
   configureFlags = [ "--with-x11" "--enable-ipc" "--with-mktexfmt"
     "--enable-shared" "--disable-native-texlive-build" "--with-system-zziplib"
