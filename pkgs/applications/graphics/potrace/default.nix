@@ -10,6 +10,8 @@ stdenv.mkDerivation {
     sha256 = "1bbyl7jgigawmwc8r14znv8lb6lrcxh8zpvynrl6s800dr4yp9as";
   };
 
+  configureFlags = ["--with-libpotrace"];
+
   buildInputs = [ zlib ];
 
   meta = {
