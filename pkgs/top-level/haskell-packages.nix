@@ -1236,6 +1236,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ioChoice = callPackage ../development/libraries/haskell/io-choice {};
 
+  ioMemoize = callPackage ../development/libraries/haskell/io-memoize {};
+
   IORefCAS = callPackage ../development/libraries/haskell/IORefCAS {};
 
   IOSpec = callPackage ../development/libraries/haskell/IOSpec {};
