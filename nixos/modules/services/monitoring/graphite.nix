@@ -37,6 +37,27 @@ in {
   ###### interface
 
   options.services.graphite = {
+
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to enable graphite, the highly scalable real-time graphing
+        system.
+
+        This option enables carbon-cache and the graphite web front-end.
+
+        carbon-cache runs on TCP port 2003 for plaintext data, TCP port 2004
+        for pickle/binary data and its query service is on TCP port 7002.
+        The graphite web front-end is on port 8080. All services listen (by
+        default) only to the localhost interface, for security reasons.
+
+        A supplement to graphite is statsd, which can aggregate metrics and
+        forward them to graphite in batches. See the option
+        <option>services.statsd.enable</option>.
+      '';
+    };
+
     dataDir = mkOption {
       type = types.path;
       default = "/var/db/graphite";
@@ -47,8 +68,11 @@ in {
 
     web = {
       enable = mkOption {
-        description = "Whether to enable graphite web frontend.";
-        default = false;
+        description = ''
+          Whether to enable graphite web frontend. It is automatically enabled
+          if <option>services.graphite.enabled</option> is true.
+        '';
+        default = cfg.enable;
         type = types.uniq types.bool;
       };
 
@@ -83,8 +107,12 @@ in {
       };
 
       enableCache = mkOption {
-        description = "Whether to enable carbon cache, the graphite storage daemon.";
-        default = false;
+        description = ''
+          Whether to enable carbon cache, the graphite storage daemon. It is
+          automatically enabled if <option>services.graphite.enable</option> is
+          true.
+        '';
+        default = cfg.enable;
         type = types.uniq types.bool;
       };
 
@@ -157,7 +185,12 @@ in {
       };
 
       enableAggregator = mkOption {
-        description = "Whether to enable carbon agregator, the carbon buffering service.";
+        description = ''
+          Whether to enable carbon agregator, the carbon buffering service.
+          This is strictly optional. Using
+          <option>services.statsd.enable</option> is another way to aggregate
+          metrics before they are sent to carbon-cache.py.
+        '';
         default = false;
         type = types.uniq types.bool;
       };
@@ -177,6 +210,24 @@ in {
   ###### implementation
 
   config = mkIf (cfg.carbon.enableAggregator || cfg.carbon.enableCache || cfg.carbon.enableRelay || cfg.web.enable) {
+
+    assertions = [
+      {
+        assertion = if cfg.carbon.enableAggregator then cfg.carbon.aggregationRules != null else true;
+        message = ''
+          services.graphite.carbon.aggregationRules cannot be null when
+          services.graphite.carbon.enableAggregator is true.
+        '';
+      }
+      {
+        assertion = if cfg.carbon.enableRelay then cfg.carbon.relayRules != null else true;
+        message = ''
+          services.graphite.carbon.relayRules cannot be null when
+          services.graphite.carbon.enableRelay is true.
+        '';
+      }
+    ];
+
     systemd.services.carbonCache = {
       enable = cfg.carbon.enableCache;
       description = "Graphite Data Storage Backend";
