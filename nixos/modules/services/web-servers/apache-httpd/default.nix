@@ -596,7 +596,7 @@ in
 
     users.extraUsers = optionalAttrs (mainCfg.user == "wwwrun") (singleton
       { name = "wwwrun";
-        group = "wwwrun";
+        group = mainCfg.group;
         description = "Apache httpd user";
         uid = config.ids.uids.wwwrun;
       });

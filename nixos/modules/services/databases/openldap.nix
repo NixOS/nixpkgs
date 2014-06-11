@@ -68,7 +68,7 @@ in
 
     users.extraUsers = optionalAttrs (cfg.user == "openldap") (singleton
       { name = "openldap";
-        group = "openldap";
+        group = cfg.group;
         uid = config.ids.uids.openldap;
       });
 

@@ -105,7 +105,7 @@ in
 
     users.extraUsers = optionalAttrs (cfg.user == "nginx") (singleton
       { name = "nginx";
-        group = "nginx";
+        group = cfg.group;
         uid = config.ids.uids.nginx;
       });
 
