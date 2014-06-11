@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hourglass";
-  version = "0.2.1";
-  sha256 = "0xb5g10mm427yagv5hzg5wgxpjjr6s9my675ik8rh5k1is4zr500";
+  version = "0.2.2";
+  sha256 = "015ipy9adi67nfddjsw9c0ihn0banghgawjli0lgrmiyjz01610c";
   buildDepends = [ deepseq ];
   testDepends = [
     deepseq mtl tasty tastyHunit tastyQuickcheck time
