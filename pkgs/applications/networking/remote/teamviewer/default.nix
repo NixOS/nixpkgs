@@ -11,7 +11,7 @@ in
 stdenv.mkDerivation {
   name = "teamviewer-7.0.9377";
   src = fetchurl {
-    url = "http://www.teamviewer.com/download/version_7x/teamviewer_linux.tar.gz";
+    url = "http://download.teamviewer.com/download/version_7x/teamviewer_linux.tar.gz";
     sha256 = "1f8934jqj093m1z56yl6k2ah6njkk6pz1rjvpqnryi29pp5piaiy";
   };
 
