@@ -8,6 +8,13 @@ stdenv.mkDerivation {
     sha256 = "0r946axzxs0czsmr7283w7vmk5jx3jnxxc32d2ncxsrsh2yli0ba";
   };
 
+  doDist = true;
+
+  distPhase = ''
+    touch $out/include/tds.h
+    touch $out/lib/libtds.a
+  '';
+
   meta = {
     description =
       "Libraries to natively talk to Microsoft SQL Server and Sybase databases";
