@@ -6114,6 +6114,8 @@ let
   tokyocabinet = callPackage ../development/libraries/tokyo-cabinet { };
   tokyotyrant = callPackage ../development/libraries/tokyo-tyrant { };
 
+  tox = callPackage ../development/libraries/tox { };
+
   tremor = callPackage ../development/libraries/tremor { };
 
   unicap = callPackage ../development/libraries/unicap {};
@@ -11164,6 +11166,8 @@ let
   };
 
   patoline = PatolineEnv ocamlPackages_4_00_1;
+
+  venom = callPackage ../applications/networking/venom { };
 
   znc = callPackage ../applications/networking/znc { };
 
