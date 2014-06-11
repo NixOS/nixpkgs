@@ -1,6 +1,5 @@
 source $stdenv/setup
 
-
 export NIX_FIXINC_DUMMY=$NIX_BUILD_TOP/dummy
 mkdir $NIX_FIXINC_DUMMY
 
@@ -52,7 +51,7 @@ fi
 
 
 preConfigure() {
-    
+
     # Determine the frontends to build.
     langs="c"
     if test -n "$langCC"; then
@@ -116,7 +115,7 @@ preConfigure() {
     cd ../build_libstdcxx
 
     ln -s ../build/gcc gcc
-    
+
     configureScript=../$sourceRoot/libstdcxx/configure
     configureFlags="--disable-libstdcxx-pch --disable-libstdcxx-debug --disable-multilib --with-gxx-include-dir=${STDCXX_INCDIR}"
 }

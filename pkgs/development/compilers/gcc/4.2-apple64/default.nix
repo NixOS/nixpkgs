@@ -2,6 +2,7 @@
 , langCC ? true, langObjC ? true, langF77 ? false
 , profiledCompiler ? false
 , gmp ? null, mpfr ? null, bison ? null, flex ? null
+, perl
 }:
 
 assert stdenv.isDarwin;
@@ -33,13 +34,15 @@ stdenv.mkDerivation {
 
   sourceRoot = "gcc-${revision}/";
 
-  patches =
-    [ ./pass-cxxcpp.patch ]
-    ++ stdenv.lib.optional noSysDirs ./no-sys-dirs.patch
+  patches = [
+    ./pass-cxxcpp.patch
+    ./gcc-apple-4.2.1-inline.patch
+    ./driverdriver-num_infiles.patch
+  ] ++ stdenv.lib.optional noSysDirs ./no-sys-dirs.patch
     ++ stdenv.lib.optional langCC ./fix-libstdc++-link.patch;
 
   inherit noSysDirs langCC langF77 langObjC;
   langC = true;
 
-  buildInputs = stdenv.lib.optionals langF77 [ gmp mpfr bison flex ];
+  buildInputs = [ perl bison flex ] ++ stdenv.lib.optionals langF77 [ gmp mpfr ];
 }

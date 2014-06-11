@@ -1,0 +1,11 @@
+--- gcc-5666.3/driverdriver.c.orig	2012-03-30 15:23:03.000000000 -0700
++++ gcc-5666.3/driverdriver.c	2012-03-30 15:43:40.000000000 -0700
+@@ -1599,7 +1599,7 @@ main (int argc, const char **argv)
+ 
+       /* If more than one input files are supplied but only one output filename
+ 	 is present then IMA will be used.  */
+-      if (num_infiles > 1 && !compile_only_request)
++      if (num_infiles != 1 && !compile_only_request)
+ 	ima_is_used = 1;
+ 
+       /* Linker wants to know this in case of multiple -arch.  */
