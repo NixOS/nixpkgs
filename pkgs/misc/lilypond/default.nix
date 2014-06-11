@@ -1,7 +1,8 @@
 { stdenv, fetchurl, ghostscript, texinfo, imagemagick, texi2html, guile
 , python, gettext, flex, perl, bison, pkgconfig, texLive, dblatex
 , fontconfig, freetype, pango, fontforge, help2man, zip, netpbm, groff
-, fetchsvn, makeWrapper }:
+, fetchsvn, makeWrapper, t1utils
+}:
 
 stdenv.mkDerivation rec{
   majorVersion="2.16";
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec{
   buildInputs =
     [ ghostscript texinfo imagemagick texi2html guile dblatex zip netpbm
       python gettext flex perl bison pkgconfig texLive fontconfig freetype pango
-      fontforge help2man groff makeWrapper
+      fontforge help2man groff makeWrapper t1utils
     ];
 
   meta = {
