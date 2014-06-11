@@ -2114,6 +2114,8 @@ let
 
   privoxy = callPackage ../tools/networking/privoxy { };
 
+  t1utils = callPackage ../tools/misc/t1utils { };
+
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };
