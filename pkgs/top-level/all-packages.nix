@@ -1862,7 +1862,10 @@ let
 
   pwnat = callPackage ../tools/networking/pwnat { };
 
-  pycangjie = callPackage ../development/python-modules/pycangjie { };
+  pycangjie = callPackage ../development/python-modules/pycangjie {
+    python = python3;
+    cython = cython3;
+  };
 
   pydb = callPackage ../development/tools/pydb { };
 
