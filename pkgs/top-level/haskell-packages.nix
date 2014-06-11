@@ -1156,6 +1156,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hspec = callPackage ../development/libraries/haskell/hspec {};
 
+  hspec2 = callPackage ../development/libraries/haskell/hspec2 {};
+
   hspecExpectations = callPackage ../development/libraries/haskell/hspec-expectations {};
 
   hspecExpectationsLens = callPackage ../development/libraries/haskell/hspec-expectations-lens {};
@@ -1235,6 +1237,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   IntervalMap = callPackage ../development/libraries/haskell/IntervalMap {};
 
   ioChoice = callPackage ../development/libraries/haskell/io-choice {};
+
+  ioMemoize = callPackage ../development/libraries/haskell/io-memoize {};
 
   IORefCAS = callPackage ../development/libraries/haskell/IORefCAS {};
 
@@ -1981,6 +1985,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   socks = callPackage ../development/libraries/haskell/socks {};
 
   sparse = callPackage ../development/libraries/haskell/sparse {};
+
+  spawn = callPackage ../development/libraries/haskell/spawn {};
 
   speculation = callPackage ../development/libraries/haskell/speculation {};
 
