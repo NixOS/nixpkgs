@@ -3672,6 +3672,8 @@ let
 
   ### DEVELOPMENT / TOOLS
 
+  ansible = callPackage ../tools/system/ansible { };
+
   antlr = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
 
   antlr3 = callPackage ../development/tools/parsing/antlr { };
