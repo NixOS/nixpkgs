@@ -1982,6 +1982,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   sparse = callPackage ../development/libraries/haskell/sparse {};
 
+  spawn = callPackage ../development/libraries/haskell/spawn {};
+
   speculation = callPackage ../development/libraries/haskell/speculation {};
 
   spoon = callPackage ../development/libraries/haskell/spoon {};
