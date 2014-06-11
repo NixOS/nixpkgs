@@ -106,7 +106,7 @@ rec {
 
   gucharmap = callPackage ./core/gucharmap { };
 
-  gvfs = pkgs.gvfs.override { gnome = pkgs.gnome3; };
+  gvfs = pkgs.gvfs.override { gnome = pkgs.gnome3; lightWeight = false; };
 
   eog = callPackage ./core/eog { };
 
