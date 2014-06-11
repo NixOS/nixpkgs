@@ -4073,7 +4073,7 @@ rec {
 
     src = fetchurl {
       url = "${meta.homepage}/download/${name}.tar.gz";
-      sha256 = "1ddqni6d4kc8ypl6yig4nc00izvbk359sz6hykb9g0lfcpfqlngj";
+      sha256 = "0mpyw8iw4l4jv175qlbn0rrlgiz1k79m44jncbdxfj8ddvvvyz2j";
     };
 
     buildInputs = [
@@ -4090,7 +4090,7 @@ rec {
     '';
 
     meta = {
-      version = "0.9";
+      version = "0.10.1";
       description = ''Man-in-the-middle proxy'';
       homepage = "http://mitmproxy.org/";
       license = licenses.mit;
