@@ -1156,6 +1156,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hspec = callPackage ../development/libraries/haskell/hspec {};
 
+  hspec2 = callPackage ../development/libraries/haskell/hspec2 {};
+
   hspecExpectations = callPackage ../development/libraries/haskell/hspec-expectations {};
 
   hspecExpectationsLens = callPackage ../development/libraries/haskell/hspec-expectations-lens {};
