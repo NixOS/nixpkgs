@@ -49,6 +49,10 @@ stdenv.mkDerivation {
     sed -i 's,/bin/pwd,'"`type -P pwd`", src/pkg/os/os_test.go
     # Disable the hostname test
     sed -i '/TestHostname/areturn' src/pkg/os/os_test.go
+    # Fix gcc 4.8 error: http://code.google.com/p/go/source/detail?r=419dcca62a3d
+    sed -i 's,for(o=0; o<sizeof(f->sym); o++),for(o=0; o<nelem(f->sym); o++),' src/cmd/cc/funct.c
+    # Fix gcc 4.8 error: https://code.google.com/p/go/source/detail?r=8b13b2ec6b18
+    sed -i 's/args := p.gccCmd()/args := append(p.gccCmd(), "-Wsystem-headers")/g' src/cmd/cgo/gcc.go
   '';
 
   patches = [ ./cacert.patch ];
