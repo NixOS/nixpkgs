@@ -11165,6 +11165,8 @@ let
 
   patoline = PatolineEnv ocamlPackages_4_00_1;
 
+  venom = callPackage ../applications/networking/venom { };
+
   znc = callPackage ../applications/networking/znc { };
 
   zncModules = recurseIntoAttrs (
