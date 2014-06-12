@@ -1156,6 +1156,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hspec = callPackage ../development/libraries/haskell/hspec {};
 
+  hspec2 = callPackage ../development/libraries/haskell/hspec2 {};
+
   hspecExpectations = callPackage ../development/libraries/haskell/hspec-expectations {};
 
   hspecExpectationsLens = callPackage ../development/libraries/haskell/hspec-expectations-lens {};
@@ -1235,6 +1237,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   IntervalMap = callPackage ../development/libraries/haskell/IntervalMap {};
 
   ioChoice = callPackage ../development/libraries/haskell/io-choice {};
+
+  ioMemoize = callPackage ../development/libraries/haskell/io-memoize {};
 
   IORefCAS = callPackage ../development/libraries/haskell/IORefCAS {};
 
@@ -1699,6 +1703,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   pipesSafe = callPackage ../development/libraries/haskell/pipes-safe {};
 
+  pipesText = callPackage ../development/libraries/haskell/pipes-text {};
+
   pipesZlib = callPackage ../development/libraries/haskell/pipes-zlib {};
 
   polyparse = callPackage ../development/libraries/haskell/polyparse {};
@@ -1982,6 +1988,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   sparse = callPackage ../development/libraries/haskell/sparse {};
 
+  spawn = callPackage ../development/libraries/haskell/spawn {};
+
   speculation = callPackage ../development/libraries/haskell/speculation {};
 
   spoon = callPackage ../development/libraries/haskell/spoon {};
@@ -2022,15 +2030,13 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   stylishHaskell = callPackage ../development/libraries/haskell/stylish-haskell {};
 
-  syb_0_2_2 = callPackage ../development/libraries/haskell/syb/0.2.2.nix {};
   syb_0_3 = callPackage ../development/libraries/haskell/syb/0.3.nix {};
   syb_0_3_3 = callPackage ../development/libraries/haskell/syb/0.3.3.nix {};
   syb_0_3_6_1 = callPackage ../development/libraries/haskell/syb/0.3.6.1.nix {};
-  syb_0_3_6_2 = callPackage ../development/libraries/haskell/syb/0.3.6.2.nix {};
   syb_0_3_7 = callPackage ../development/libraries/haskell/syb/0.3.7.nix {};
   syb_0_4_0 = callPackage ../development/libraries/haskell/syb/0.4.0.nix {};
-  syb_0_4_1 = callPackage ../development/libraries/haskell/syb/0.4.1.nix {};
-  syb = self.syb_0_4_1;
+  syb_0_4_2 = callPackage ../development/libraries/haskell/syb/0.4.2.nix {};
+  syb = self.syb_0_4_2;
 
   sybWithClass = callPackage ../development/libraries/haskell/syb/syb-with-class.nix {};
 

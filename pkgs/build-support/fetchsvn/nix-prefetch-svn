@@ -56,6 +56,7 @@ if test -z "$finalPath"; then
     fi
 
     echo p | svn "$command" --quiet -r "$rev" "$url" "$tmpFile" >&2
+    echo "svn revision is $(svn info -r "$rev" "$url" | grep "Revision: " | cut -d' ' -f2)"
 
     # Compute the hash.
     hash=$(nix-hash --type $hashType $hashFormat $tmpFile)

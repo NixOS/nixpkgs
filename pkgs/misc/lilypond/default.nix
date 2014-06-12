@@ -1,7 +1,8 @@
 { stdenv, fetchurl, ghostscript, texinfo, imagemagick, texi2html, guile
 , python, gettext, flex, perl, bison, pkgconfig, texLive, dblatex
-, fontconfig, freetype, pango, fontforge, help2man, zip, netpbm, groff 
-, fetchsvn, makeWrapper }:
+, fontconfig, freetype, pango, fontforge, help2man, zip, netpbm, groff
+, fetchsvn, makeWrapper, t1utils
+}:
 
 stdenv.mkDerivation rec{
   majorVersion="2.16";
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec{
   '';
 
   postInstall = ''
-    for f in "$out"/bin/*; do
+    for f in "$out/bin/"*; do
         wrapProgram "$f" --set GUILE_AUTO_COMPILE 0 \
                          --set PATH "${ghostscript}/bin"
     done
@@ -35,10 +36,10 @@ stdenv.mkDerivation rec{
   buildInputs =
     [ ghostscript texinfo imagemagick texi2html guile dblatex zip netpbm
       python gettext flex perl bison pkgconfig texLive fontconfig freetype pango
-      fontforge help2man groff makeWrapper
+      fontforge help2man groff makeWrapper t1utils
     ];
 
-  meta = { 
+  meta = {
     description = "Music typesetting system";
     homepage = http://lilypond.org/;
     license = "GPL";

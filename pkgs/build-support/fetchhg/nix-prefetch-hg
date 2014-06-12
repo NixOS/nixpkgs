@@ -51,6 +51,7 @@ if test -z "$finalPath"; then
     hg archive -q -y -r "$rev" --cwd $tmpClone $tmpArchive
     rm -f $tmpArchive/.hg_archival.txt
 
+    echo "hg revision is $(cd $tmpClone; hg id -r "$rev" -i)"
 
     # Compute the hash.
     hash=$(nix-hash --type $hashType $hashFormat $tmpArchive)

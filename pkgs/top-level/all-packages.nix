@@ -2114,6 +2114,8 @@ let
 
   privoxy = callPackage ../tools/networking/privoxy { };
 
+  t1utils = callPackage ../tools/misc/t1utils { };
+
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };
@@ -2939,11 +2941,8 @@ let
 
   haxe = callPackage ../development/compilers/haxe { };
 
-  hiphopvm = callPackage ../development/interpreters/hiphopvm {
-    libevent = libevent14;
-    boost = boost149;
-    stdenv = overrideGCC stdenv gcc48;
-  };
+  hhvm = callPackage ../development/compilers/hhvm { };
+  hiphopvm = hhvm; /* Compatibility alias */
 
   falcon = builderDefsPackage (import ../development/interpreters/falcon) {
     inherit cmake;
@@ -3552,6 +3551,8 @@ let
 
   racket = callPackage ../development/interpreters/racket { };
 
+  rakudo = callPackage ../development/interpreters/rakudo { };
+
   rascal = callPackage ../development/interpreters/rascal { };
 
   regina = callPackage ../development/interpreters/regina { };
@@ -3672,6 +3673,8 @@ let
 
 
   ### DEVELOPMENT / TOOLS
+
+  ansible = callPackage ../tools/system/ansible { };
 
   antlr = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
 
@@ -4635,7 +4638,7 @@ let
 
   gperftools = callPackage ../development/libraries/gperftools { };
 
-  gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer { 
+  gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer {
     callPackage = pkgs.newScope (pkgs // { libav = pkgs.libav_9; });
   });
 
@@ -4843,8 +4846,6 @@ let
   indilib = callPackage ../development/libraries/indilib { };
 
   iniparser = callPackage ../development/libraries/iniparser { };
-
-  inteltbb = callPackage ../development/libraries/intel-tbb { };
 
   intltool = callPackage ../development/tools/misc/intltool { };
 
@@ -7062,7 +7063,12 @@ let
 
   hostapd = callPackage ../os-specific/linux/hostapd { };
 
-  htop = callPackage ../os-specific/linux/htop { };
+  htop =
+    if stdenv.isLinux then
+      callPackage ../os-specific/linux/htop { }
+    else if stdenv.isDarwin then
+      callPackage ../os-specific/darwin/htop { }
+    else null;
 
   # GNU/Hurd core packages.
   gnu = recurseIntoAttrs (callPackage ../os-specific/gnu {
@@ -10669,7 +10675,7 @@ let
 
   tptp = callPackage ../applications/science/logic/tptp {};
 
-  verifast = callPackage_i686 ../applications/science/logic/verifast {};
+  verifast = callPackage ../applications/science/logic/verifast {};
 
   why3 = callPackage ../applications/science/logic/why3 {};
 
@@ -10901,7 +10907,7 @@ let
 
   nixops = callPackage ../tools/package-management/nixops { };
 
-  nix-prefetch-tools = callPackage ../build-support/nix-prefetch-tools {};
+  nix-prefetch-scripts = callPackage ../tools/package-management/nix-prefetch-scripts { };
 
   nix-repl = callPackage ../tools/package-management/nix-repl { };
 

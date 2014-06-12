@@ -1,6 +1,10 @@
 { stdenv, fetchurl
 , coreutils, gnused, getopt, pwgen, git, tree, gnupg
-, makeWrapper }:
+, makeWrapper
+, withX ? false, xclip ? null
+}:
+
+assert withX -> xclip != null;
 
 stdenv.mkDerivation rec {
   version = "1.6.2";
@@ -51,6 +55,6 @@ stdenv.mkDerivation rec {
 
     # Ensure all dependencies are in PATH
     wrapProgram $out/bin/pass \
-      --prefix PATH : "${coreutils}/bin:${gnused}/bin:${getopt}/bin:${gnupg}/bin:${git}/bin:${tree}/bin:${pwgen}/bin"
+      --prefix PATH : "${coreutils}/bin:${gnused}/bin:${getopt}/bin:${gnupg}/bin:${git}/bin:${tree}/bin:${pwgen}/bin${if withX then ":${xclip}/bin" else ""}"
   '';
 }

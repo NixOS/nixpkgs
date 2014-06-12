@@ -217,7 +217,7 @@ clone_user_rev() {
             fi;;
     esac
 
-    echo "git revision is $(cd $dir && git rev-parse $rev)"
+    echo "git revision is $(cd $dir && (git rev-parse $rev 2> /dev/null || git rev-parse refs/heads/fetchgit) | tail -n1)"
 
     # Allow doing additional processing before .git removal
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"

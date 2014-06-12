@@ -24,6 +24,11 @@ buildPythonPackage {
   checkPhase   = "python selftest.py";
   buildPhase   = "python setup.py build_ext -i";
 
+  postInstall = ''
+    cd "$out"/lib/python*/site-packages
+    ln -s $PWD PIL
+  '';
+
   meta = {
     homepage = http://www.pythonware.com/products/pil/;
     description = "The Python Imaging Library (PIL)";

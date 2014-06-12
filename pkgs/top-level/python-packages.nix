@@ -4073,7 +4073,7 @@ rec {
 
     src = fetchurl {
       url = "${meta.homepage}/download/${name}.tar.gz";
-      sha256 = "1ddqni6d4kc8ypl6yig4nc00izvbk359sz6hykb9g0lfcpfqlngj";
+      sha256 = "0mpyw8iw4l4jv175qlbn0rrlgiz1k79m44jncbdxfj8ddvvvyz2j";
     };
 
     buildInputs = [
@@ -4090,7 +4090,7 @@ rec {
     '';
 
     meta = {
-      version = "0.9";
+      version = "0.10.1";
       description = ''Man-in-the-middle proxy'';
       homepage = "http://mitmproxy.org/";
       license = licenses.mit;
@@ -4385,7 +4385,7 @@ rec {
     src = fetchurl {
       url = "https://github.com/cortesi/netlib/archive/v${meta.version}.tar.gz";
       name = "${name}.tar.gz";
-      sha256 = "1y8lx2j1jrr93mqfb06zg1x5jm9lllw744sb61ib8dagw43nnq3v";
+      sha256 = "1x2n126b7fal64fb5fzkp4by7ym0iswn3w9mh6pm4c1vjdpnk592";
     };
 
     buildInputs = [
@@ -4395,7 +4395,7 @@ rec {
     doCheck = false;
 
     meta = {
-      version = "0.9";
+      version = "0.10";
       description = ''Man-in-the-middle proxy'';
       homepage = "https://github.com/cortesi/netlib";
       license = licenses.mit;
