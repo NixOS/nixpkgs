@@ -286,6 +286,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   boundingboxes_0_2 = callPackage ../development/libraries/haskell/boundingboxes/0.2.nix {};
   boundingboxes = self.boundingboxes_0_2;
 
+  BoundedChan = callPackage ../development/libraries/haskell/BoundedChan {};
+
   brainfuck = callPackage ../development/libraries/haskell/brainfuck {};
 
   bson = callPackage ../development/libraries/haskell/bson {};
@@ -1001,6 +1003,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hastache = callPackage ../development/libraries/haskell/hastache {};
 
   hcltest = callPackage ../development/libraries/haskell/hcltest {};
+
+  hedis = callPackage ../development/libraries/haskell/hedis {};
 
   heredoc = callPackage ../development/libraries/haskell/heredoc {};
 
