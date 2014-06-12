@@ -7,6 +7,7 @@ with lib;
 let
 
   cfg = config.virtualisation.libvirtd;
+  vswitch = config.virtualisation.vswitch;
   configFile = pkgs.writeText "libvirtd.conf" ''
     unix_sock_group = "libvirtd"
     unix_sock_rw_perms = "0770"
@@ -75,10 +76,14 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "systemd-udev-settle.service" ];
 
-        path =
-          [ pkgs.bridge_utils pkgs.dmidecode pkgs.dnsmasq
+        path = [ 
+            pkgs.bridge_utils 
+            pkgs.dmidecode 
+            pkgs.dnsmasq
             pkgs.ebtables
-          ] ++ optional cfg.enableKVM pkgs.qemu_kvm;
+          ] 
+          ++ optional cfg.enableKVM pkgs.qemu_kvm
+          ++ optional vswitch.enable vswitch.package;
 
         preStart =
           ''
