@@ -1,12 +1,12 @@
 { cabal, fetchurl, filemanip, Agda }:
 
-cabal.mkDerivation (self: {
+cabal.mkDerivation (self: rec {
   pname = "Agda-stdlib";
-  version = "0.7";
+  version = "2.4.0";
 
   src = fetchurl {
-    url = "http://www.cse.chalmers.se/~nad/software/lib-0.7.tar.gz";
-    sha256 = "1ynjgqk8hhnm6rbngy8fjsrd6i4phj2hlan9bk435bbywbl366k3";
+    url = "https://github.com/agda/agda-stdlib/archive/v${version}.tar.gz";
+    sha256 = "1rz0jrkm1b8d8aj9hbj3yl2k219c57r0cizfx98qqf1b9mwixzbf";
   };
 
   buildDepends = [ filemanip Agda ];
