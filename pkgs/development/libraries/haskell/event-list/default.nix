@@ -3,8 +3,8 @@
 
 cabal.mkDerivation (self: {
   pname = "event-list";
-  version = "0.1.1";
-  sha256 = "1qv7a4np8cr0chbvlz0kmcrvc95w1z7fqs2pq0mkwx22hnslsh5l";
+  version = "0.1.1.1";
+  sha256 = "16qrjvn8z2nlpfp3xlgwsg2abn7b33n3z673qs5k6ashfbkdy5ja";
   buildDepends = [ nonNegative QuickCheck transformers utilityHt ];
   testDepends = [
     nonNegative QuickCheck random transformers utilityHt
