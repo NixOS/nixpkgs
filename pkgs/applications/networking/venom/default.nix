@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, cmake, vala, pkgconfig, gtk3, gnome3, sqlite, json_glib, libtoxcore }:
+{ stdenv, fetchurl, cmake, vala, pkgconfig, gtk3, gnome3, sqlite, json_glib, sodium, libtoxcore, libqrencode
+, qrcodeSupport ? true }:
+
+assert qrcodeSupport -> libqrencode != null;
 
 let
   date = "20140605";
@@ -13,7 +16,13 @@ stdenv.mkDerivation rec {
     sha256 = "1fsg6yqjnh199vqwipvcshr8wqw49xpc0l1ramhpf80xaci08v3b";
   };
 
-  buildInputs = [ cmake vala pkgconfig gtk3 gnome3.libgee sqlite json_glib libtoxcore ];
+  buildInputs = [
+    cmake vala pkgconfig gtk3 gnome3.libgee sqlite json_glib sodium libtoxcore 
+  ] ++ stdenv.lib.optional qrcodeSupport [ libqrencode ];
+
+  cmakeFlags = ''
+    ${stdenv.lib.optionalString qrcodeSupport "-DENABLE_QR_ENCODE=ON"}
+  '';
 
   meta = {
     description = "Vala/Gtk+ graphical user interface for Tox";
