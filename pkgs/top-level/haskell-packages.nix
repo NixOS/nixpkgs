@@ -1972,6 +1972,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   snapletAcidState = callPackage ../development/libraries/haskell/snaplet-acid-state {};
 
+  snapletRedis = callPackage ../development/libraries/haskell/snaplet-redis {};
+
   snapletStripe = callPackage ../development/libraries/haskell/snaplet-stripe {};
 
   snapBlaze = callPackage ../development/libraries/haskell/snap-blaze/default.nix {};
