@@ -1016,6 +1016,8 @@ let
     platformTools = androidenv.platformTools;
   };
 
+  flashrom = callPackage ../tools/misc/flashrom { };
+
   flpsed = callPackage ../applications/editors/flpsed { };
 
   flvstreamer = callPackage ../tools/networking/flvstreamer { };
