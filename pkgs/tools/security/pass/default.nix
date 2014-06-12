@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    mkdir -p "$out/share/bash-completion/completions"
     mkdir -p "$out/share/zsh/site-functions"
     mkdir -p "$out/share/fish/completions"
 
