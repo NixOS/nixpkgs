@@ -332,6 +332,7 @@
   ./virtualisation/containers.nix
   ./virtualisation/libvirtd.nix
   #./virtualisation/nova.nix
+  ./virtualisation/openvswitch.nix
   ./virtualisation/virtualbox-guest.nix
   #./virtualisation/xen-dom0.nix
 ]
