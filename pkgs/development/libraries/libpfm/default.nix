@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       events such as those provided by the Performance Monitoring Unit
       (PMU) of modern processors.
     '';
-    licence = stdenv.lib.licences.gpl2;
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.pierron ];
     platforms = stdenv.lib.platforms.all;
   };
