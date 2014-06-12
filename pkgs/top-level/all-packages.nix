@@ -5491,6 +5491,8 @@ let
 
   libxmlxx = callPackage ../development/libraries/libxmlxx { };
 
+  libxmp = callPackage ../development/libraries/libxmp { };
+
   libxslt = callPackage ../development/libraries/libxslt { };
 
   libixp_for_wmii = lowPrio (import ../development/libraries/libixp_for_wmii {
@@ -9890,6 +9892,8 @@ let
   xmacro = callPackage ../tools/X11/xmacro { };
 
   xmove = callPackage ../applications/misc/xmove { };
+
+  xmp = callPackage ../applications/audio/xmp { };
 
   xnee = callPackage ../tools/X11/xnee {
     # Work around "missing separator" error.
