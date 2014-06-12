@@ -7789,7 +7789,9 @@ let
 
   junicode = callPackage ../data/fonts/junicode { };
 
-  kochi-substitute = callPackage ../data/fonts/kochi-substitute {};
+  kochi-gothic = callPackage ../data/fonts/kochi-gothic {};
+
+  kochi-mincho = callPackage ../data/fonts/kochi-mincho {};
 
   liberation_ttf = callPackage ../data/fonts/redhat-liberation-fonts { };
 
