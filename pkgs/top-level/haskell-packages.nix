@@ -2598,7 +2598,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   # Compilers.
 
-  Agda = callPackage ../development/compilers/agda/agda.nix { QuickCheck = self.QuickCheck_2_6; };
+  Agda = callPackage ../development/compilers/agda/agda.nix {
+    binary = self.binary_0_7_2_1;
+  };
   AgdaStdlib = callPackage ../development/compilers/agda/stdlib.nix {};
 
   uhc = callPackage ../development/compilers/uhc {};
