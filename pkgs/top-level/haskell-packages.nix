@@ -2022,6 +2022,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   statvfs = callPackage ../development/libraries/haskell/statvfs {};
 
+  STMonadTrans = callPackage ../development/libraries/haskell/STMonadTrans {};
+
   StrafunskiStrategyLib = callPackage ../development/libraries/haskell/Strafunski-StrategyLib {};
 
   streamingCommons = callPackage ../development/libraries/haskell/streaming-commons {};
