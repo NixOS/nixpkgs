@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     byteable cryptoRandom HUnit QuickCheck testFramework
     testFrameworkHunit testFrameworkQuickcheck2 vector
   ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/vincenthz/hs-crypto-numbers";
     description = "Cryptographic numbers: functions and algorithms";
