@@ -1,12 +1,13 @@
-{ stdenv, fetchgit, emacs }:
+{ stdenv, fetchurl, emacs }:
 
 stdenv.mkDerivation rec {
-  name = "idris-mode-20140405";
+  name = "${pname}-${version}";
+  pname = "idris-mode";
+  version = "0.9.13.1";
 
-  src = fetchgit {
-    url = https://github.com/idris-hackers/idris-mode.git;
-    rev = "2e2d18fb757da4b42940ebe2a57d7a117175489f";
-    sha256 = "d4b52c6c43c038c94a7464cd9c849cd40c01696c440da8b057c00a9be22f9ac0";
+  src = fetchurl {
+    url = "https://github.com/idris-hackers/${pname}/archive/${version}.tar.gz";
+    sha256 = "0ymjbkwsq7qra691wyldw91xcdgrbx3468vvrha5jj92v7nwb8wx";
   };
 
   buildInputs = [ emacs ];
