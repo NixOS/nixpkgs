@@ -6681,6 +6681,8 @@ let
 
   ngircd = callPackage ../servers/irc/ngircd { };
 
+  nsd = callPackage ../servers/dns/nsd { };
+
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
 
   petidomo = callPackage ../servers/mail/petidomo { };
