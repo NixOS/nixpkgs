@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     description = "A tool for analyzing and editing NetImmerse/Gamebryo '*.nif' files";
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.linux;
-    licence = stdenv.lib.licenses.bsd3;
+    license = stdenv.lib.licenses.bsd3;
   };
 }
