@@ -18,11 +18,8 @@ stdenv.mkDerivation {
     cp ./kochi-mincho-subst.ttf $out/share/fonts/truetype/kochi-mincho-subst-naga10.ttf
   '';
 
-  unfreeRedistributable = "unfree-redistributable";
-
   meta = {
     description = "Japanese font, non-free replacement for MS Gothic and MS Mincho.";
-    homepage = http://sourceforge.jp/projects/efont/;
     longDescription = ''
       Kochi Gothic and Kochi Mincho were developed as free replacements for the
       MS Gothic and MS Mincho fonts from Microsoft. This version of the fonts
@@ -30,7 +27,8 @@ stdenv.mkDerivation {
       this font may not be sold commercially. See kochi-substitute for the free
       Debian version.
     '';
-    license = stdenv.lib.licenses.unfree;
+    homepage = http://sourceforge.jp/projects/efont/;
+    license = stdenv.lib.licenses.unfreeRedistributable;
     maintainers = [ stdenv.lib.maintainers.auntie ];
   };
 }
