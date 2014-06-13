@@ -1611,6 +1611,8 @@ let
 
   nilfs_utils = callPackage ../tools/filesystems/nilfs-utils {};
 
+  nitrogen = callPackage ../tools/X11/nitrogen {};
+
   nlopt = callPackage ../development/libraries/nlopt {};
 
   npapi_sdk = callPackage ../development/libraries/npapi-sdk {};
