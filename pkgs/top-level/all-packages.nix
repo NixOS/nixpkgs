@@ -7791,6 +7791,8 @@ let
 
   kochi-substitute = callPackage ../data/fonts/kochi-substitute {};
 
+  kochi-substitute-naga10 = callPackage ../data/fonts/kochi-substitute-naga10 {};
+
   liberation_ttf = callPackage ../data/fonts/redhat-liberation-fonts { };
 
   libertine = builderDefsPackage (import ../data/fonts/libertine) {
