@@ -2655,6 +2655,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hlint = callPackage ../development/tools/haskell/hlint {};
 
+  hp2anyManager = callPackage ../development/tools/haskell/hp2any-manager {};
+
   hscolour = callPackage ../development/tools/haskell/hscolour {};
   hscolourBootstrap = self.hscolour.override {
     cabal = self.cabal.override {
