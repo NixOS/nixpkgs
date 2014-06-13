@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, x11 }:
+{ stdenv, fetchurl, ncurses, buildEnv, libX11, xproto }:
 
 let
    useX11 = !stdenv.isArm && !stdenv.isMips;
@@ -8,6 +8,10 @@ in
 
 stdenv.mkDerivation rec {
 
+  x11env = buildEnv { name = "x11env"; paths = [libX11 xproto]; };
+  x11lib = x11env + "/lib";
+  x11inc = x11env + "/include";
+
   name = "ocaml-4.01.0";
 
   src = fetchurl {
@@ -16,9 +20,11 @@ stdenv.mkDerivation rec {
   };
 
   prefixKey = "-prefix ";
-  configureFlags = ["-no-tk"] ++ optionals useX11 [ "-x11lib" x11 ];
+  configureFlags = ["-no-tk"] ++ optionals useX11 [ "-x11lib" x11lib
+                                                    "-x11include" x11inc ];
+
   buildFlags = "world" + optionalString useNativeCompilers " bootstrap world.opt";
-  buildInputs = [ncurses] ++ optionals useX11 [ x11 ];
+  buildInputs = [ncurses] ++ optionals useX11 [ libX11 xproto ];
   installTargets = "install" + optionalString useNativeCompilers " installopt";
   preConfigure = ''
     CAT=$(type -tp cat)
