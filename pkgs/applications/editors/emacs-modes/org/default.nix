@@ -1,11 +1,11 @@
 { fetchurl, stdenv, emacs, texinfo, which, texLive }:
 
 stdenv.mkDerivation rec {
-  name = "org-8.2.6";
+  name = "org-8.2.7";
 
   src = fetchurl {
     url = "http://orgmode.org/${name}.tar.gz";
-    sha256 = "0f196r0n9m2np123sjabsqdw68h9qp6qr7l5v257am8qs7rj0jm1";
+    sha256 = "1n864hnjvx5n2gfi7n0xbwvb1k8l5rdh4a3vpbhw23hy8rx3bvaw";
   };
 
   buildInputs = [ emacs ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
     license = "GPLv3+";
 
-    maintainers = with stdenv.lib.maintainers; [ chaoflow ];
+    maintainers = with stdenv.lib.maintainers; [ chaoflow pSub ];
     platforms = stdenv.lib.platforms.gnu;
   };
 }
