@@ -125,13 +125,14 @@ in
           after = [ "dbus.service" ]
             ++ optional config.services.httpd.enable "httpd.service"
             ++ optional config.services.mysql.enable "mysql.service"
+            ++ optional config.services.postgresql.enable "postgresql.service"
             ++ optional config.services.tomcat.enable "tomcat.service"
             ++ optional config.services.svnserve.enable "svnserve.service"
             ++ optional config.services.mongodb.enable "mongodb.service";
 
           restartIfChanged = false;
           
-          path = [ pkgs.nix pkgs.disnix pkgs.dysnomia ];
+          path = [ pkgs.nix pkgs.disnix dysnomia ];
           
           environment = {
             HOME = "/root";

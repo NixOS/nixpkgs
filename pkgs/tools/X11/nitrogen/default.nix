@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A background browser and setter for X windows";
     homepage = http://projects.l3ib.org/nitrogen/;
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
+    maintainer = [ stdenv.lib.maintainers.auntie ];
   };
 }

@@ -1,21 +1,21 @@
 { cabal, aeson, async, attoparsec, blazeBuilder, caseInsensitive
 , conduit, conduitExtra, dataDefault, filepath, fsnotify, hspec
-, httpConduit, httpReverseProxy, httpTypes, liftedBase, mtl
-, network, networkConduitTls, random, regexTdfa, stm, systemFileio
-, systemFilepath, tar, text, time, transformers, unixCompat
-, unorderedContainers, vector, wai, waiAppStatic, waiExtra, warp
-, warpTls, yaml, zlib
+, httpClient, httpConduit, httpReverseProxy, httpTypes, liftedBase
+, mtl, network, networkConduitTls, random, regexTdfa, stm
+, systemFileio, systemFilepath, tar, text, time, transformers
+, unixCompat, unorderedContainers, vector, wai, waiAppStatic
+, waiExtra, warp, warpTls, yaml, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "keter";
-  version = "1.3.0";
-  sha256 = "1fvb93iga4c0kfv29ksrmn9bjznl7wfspg1v9a5d3svwrszl4is3";
+  version = "1.3.1";
+  sha256 = "19isyslrxbp430ira7v2d3r5f1j1526rg7v6lzzyl3dsyfpvxjg6";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     aeson async attoparsec blazeBuilder caseInsensitive conduit
-    conduitExtra dataDefault filepath fsnotify httpConduit
+    conduitExtra dataDefault filepath fsnotify httpClient httpConduit
     httpReverseProxy httpTypes liftedBase mtl network networkConduitTls
     random regexTdfa stm systemFileio systemFilepath tar text time
     transformers unixCompat unorderedContainers vector wai waiAppStatic

@@ -1,18 +1,18 @@
 { cabal, attoparsec, blazeBuilder, blazeHtml, blazeMarkup
 , caseInsensitive, cookie, hspec, htmlConduit, httpTypes, HUnit
 , monadControl, network, persistent, text, time, transformers, wai
-, waiTest, xmlConduit, xmlTypes, yesodCore, yesodForm
+, waiExtra, waiTest, xmlConduit, xmlTypes, yesodCore, yesodForm
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-test";
-  version = "1.2.1.5";
-  sha256 = "0ylm6zisz6l2rbn5dr8k0rxszgg1aa1w4ixpvai1xm6y8m17cy0i";
+  version = "1.2.3";
+  sha256 = "082zi53q1pw9xv4l6ld1y3xxnvq3iwgbrdnxjknhwsxph7glkn3p";
   buildDepends = [
     attoparsec blazeBuilder blazeHtml blazeMarkup caseInsensitive
     cookie hspec htmlConduit httpTypes HUnit monadControl network
-    persistent text time transformers wai waiTest xmlConduit xmlTypes
-    yesodCore
+    persistent text time transformers wai waiExtra waiTest xmlConduit
+    xmlTypes yesodCore
   ];
   testDepends = [
     hspec htmlConduit HUnit text wai xmlConduit yesodCore yesodForm

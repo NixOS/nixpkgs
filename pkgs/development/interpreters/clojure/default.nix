@@ -1,13 +1,13 @@
 { stdenv, fetchurl, unzip, ant, jdk, makeWrapper }:
 
-let version = "1.5.1"; in
+let version = "1.6.0"; in
 
 stdenv.mkDerivation {
   name = "clojure-${version}";
 
   src = fetchurl {
     url = "http://repo1.maven.org/maven2/org/clojure/clojure/${version}/clojure-${version}.zip";
-    sha256 = "1qgiji6ddvv40khp3qb3xfz09g7p4nnsh3pywqglb9f16v534yzy";
+    sha256 = "0yv67gackrzlwn9f8cnpw14y2hwspklxhy1450rl71vdrqjahlwq";
   };
 
   buildInputs = [ unzip ant jdk makeWrapper ];
@@ -43,5 +43,6 @@ stdenv.mkDerivation {
       offers a software transactional memory system and reactive Agent
       system that ensure clean, correct, multithreaded designs.
     '';
+    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };
 }

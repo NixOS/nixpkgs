@@ -1,14 +1,13 @@
-{ cabal, blazeBuilder, blazeBuilderConduit, conduit, conduitExtra
-, httpTypes, transformers, wai, warp, zlibConduit
+{ cabal, blazeBuilder, httpTypes, streamingCommons, transformers
+, wai, warp
 }:
 
 cabal.mkDerivation (self: {
   pname = "wai-handler-launch";
-  version = "2.0.1.3";
-  sha256 = "06im28x26jbzbdk9xz33kqvzblglk3b3b60qwal836hima69alsd";
+  version = "3.0.0";
+  sha256 = "1dv7w151szjkg9968v870abz11a440pdzy50zwm0xl6blk392nmk";
   buildDepends = [
-    blazeBuilder blazeBuilderConduit conduit conduitExtra httpTypes
-    transformers wai warp zlibConduit
+    blazeBuilder httpTypes streamingCommons transformers wai warp
   ];
   meta = {
     description = "Launch a web app in the default browser";

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "extensible-effects";
-  version = "1.6.0";
-  sha256 = "08g2py6iywwpsr09v6hfhq6ihjp1yq3aibz8jlqhsmagjjjxgfsq";
+  version = "1.7.1";
+  sha256 = "1i7bmyga63svnky03f5xvz63795pjsqp3x7rn9amj55yj11fmp05";
   buildDepends = [ transformers transformersBase ];
   testDepends = [
     HUnit QuickCheck testFramework testFrameworkHunit

@@ -1,15 +1,15 @@
-{ cabal, ansiTerminal, cmdargs, filepath, HTTP, network
+{ cabal, ansiTerminal, filepath, HTTP, network, optparseApplicative
 , stringsearch, terminalSize, time, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "sloane";
-  version = "1.7.1";
-  sha256 = "0d6k33rhp1ixrwdfwy31m39kbk8z81biwzwmkp01fvpgwm96p3va";
+  version = "1.8";
+  sha256 = "0c30slsswfqwzi39hk6jraxz1y1a2yn8g8nyjvlnggwajx2rlm6p";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    ansiTerminal cmdargs filepath HTTP network stringsearch
+    ansiTerminal filepath HTTP network optparseApplicative stringsearch
     terminalSize time zlib
   ];
   postInstall = ''

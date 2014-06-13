@@ -17,6 +17,7 @@
   arobyn = "Alexei Robyn <shados@shados.net>";
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
   aszlig = "aszlig <aszlig@redmoonstudios.org>";
+  auntie = "Jonathan Glines <auntieNeo@gmail.com>";
   bbenoist = "Baptist BENOIST <return_0@live.com>";
   bennofs = "Benno Fünfstück <benno.fuenfstueck@gmail.com>";
   berdario = "Dario Bertini <berdario@gmail.com>";
@@ -45,6 +46,7 @@
   iElectric = "Domen Kozar <domen@dev.si>";
   iyzsong = "Song Wenwu <iyzsong@gmail.com>";
   jcumming = "Jack Cummings <jack@mudshark.org>";
+  joamaki = "Jussi Maki <joamaki@gmail.com>";
   joelteon = "Joel Taylor <me@joelt.io>";
   jwiegley = "John Wiegley <johnw@newartisans.com>";
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";

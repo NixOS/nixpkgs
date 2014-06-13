@@ -14,12 +14,14 @@
   ./config/power-management.nix
   ./config/pulseaudio.nix
   ./config/shells-environment.nix
+  ./config/system-environment.nix
   ./config/swap.nix
   ./config/sysctl.nix
   ./config/system-path.nix
   ./config/timezone.nix
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
+  ./config/zram.nix
   ./hardware/all-firmware.nix
   ./hardware/cpu/intel-microcode.nix
   ./hardware/cpu/amd-microcode.nix
@@ -205,6 +207,7 @@
   ./services/networking/networkmanager.nix
   ./services/networking/ngircd.nix
   ./services/networking/notbit.nix
+  ./services/networking/nsd.nix
   ./services/networking/ntopng.nix
   ./services/networking/ntpd.nix
   ./services/networking/oidentd.nix
@@ -255,6 +258,7 @@
   ./services/ttys/agetty.nix
   ./services/ttys/kmscon.nix
   ./services/web-servers/apache-httpd/default.nix
+  ./services/web-servers/fcgiwrap.nix
   ./services/web-servers/jboss/default.nix
   ./services/web-servers/lighttpd/default.nix
   ./services/web-servers/lighttpd/cgit.nix
@@ -322,6 +326,7 @@
   ./tasks/network-interfaces.nix
   ./tasks/scsi-link-power-management.nix
   ./tasks/swraid.nix
+  ./tasks/trackpoint.nix
   ./testing/service-runner.nix
   ./virtualisation/container-config.nix
   ./virtualisation/containers.nix

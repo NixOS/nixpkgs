@@ -3,13 +3,13 @@
 , hspec, httpDate, httpTypes, mimeTypes, network
 , optparseApplicative, systemFileio, systemFilepath, text, time
 , transformers, unixCompat, unorderedContainers, wai, waiExtra
-, waiTest, warp, zlib
+, warp, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "wai-app-static";
-  version = "2.0.1";
-  sha256 = "1mygyp70rmhnkc0s8626cxrkvcbil92v4gnx70iz26gfb5q9lc7d";
+  version = "3.0.0";
+  sha256 = "117r2ps440i2i156k50b674fkny2ywwbbla6ry0km041604cl733";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -20,7 +20,7 @@ cabal.mkDerivation (self: {
   ];
   testDepends = [
     hspec httpDate httpTypes mimeTypes network text time transformers
-    unixCompat wai waiTest zlib
+    unixCompat wai waiExtra zlib
   ];
   meta = {
     homepage = "http://www.yesodweb.com/book/web-application-interface";

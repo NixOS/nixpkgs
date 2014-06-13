@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "sbt-${version}";
-  version = "0.13.0";
+  version = "0.13.5";
 
   src = fetchurl {
     url = "http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/${version}/sbt-launch.jar";
-    sha256 = "04s49v5mw4kwz1rmvbf07kq51i2m0lcv60c9i5y524gjj518pk1w";
+    sha256 = "05zvb3j7xxswpz7fz2nwbl4dwfdf0cyx5xzjis5fyi2dbzmfdrmp";
   };
 
   phases = [ "installPhase" ];
@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/sbt
   '';
 
-  meta = { 
+  meta = {
     homepage = http://www.scala-sbt.org/;
     license = stdenv.lib.licenses.bsd3;
     description = "A build tool for Scala, Java and more";
-    maintainers = [ stdenv.lib.maintainers.rickynils ];  
-  };  
+    maintainers = [ stdenv.lib.maintainers.rickynils ];
+  };
 }

@@ -186,6 +186,7 @@ let
               "password optional ${pkgs.samba}/lib/security/pam_smbpass.so nullok use_authtok try_first_pass"}
 
           # Session management.
+          session required pam_env.so envfile=${config.system.build.pamEnvironment}
           session required pam_unix.so
           ${optionalString cfg.setLoginUid
               "session required pam_loginuid.so"}

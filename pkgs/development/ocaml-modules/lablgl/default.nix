@@ -3,15 +3,15 @@
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
   pname = "lablgl";
-  version = "1.04-1";
+  version = "1.05";
 in
 
 stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl { 
-    url = "http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/dist/lablgl-20120306.tar.gz";
-    sha256 = "1w5di2n38h7fkrf668zphnramygwl7ybjhrmww3pi9jcf9apa09r";
+    url = "http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/dist/lablgl-${version}.tar.gz";
+    sha256 = "0qabydd219i4ak7hxgc67496qnnscpnydya2m4ijn3cpbgih7zyq";
   };
 
   buildInputs = [ocaml findlib lablgtk mesa freeglut ];
@@ -29,7 +29,6 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  #makeFlags = "BINDIR=$(out)/bin  MANDIR=$(out)/usr/share/man/man1 DYPGENLIBDIR=$(out)/lib/ocaml/${ocaml_version}/site-lib";
   buildFlags = "lib libopt glut glutopt";
 
   postInstall = ''
@@ -40,6 +39,6 @@ stdenv.mkDerivation {
     homepage = http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html;
     description = "OpenGL bindings for ocaml";
     license = "GnuGPLV2";
-#    maintainers = [ stdenv.lib.maintainers.roconnor ];
+    maintainers = [ stdenv.lib.maintainers.pSub ];
   };
 }

@@ -4073,7 +4073,7 @@ rec {
 
     src = fetchurl {
       url = "${meta.homepage}/download/${name}.tar.gz";
-      sha256 = "1ddqni6d4kc8ypl6yig4nc00izvbk359sz6hykb9g0lfcpfqlngj";
+      sha256 = "0mpyw8iw4l4jv175qlbn0rrlgiz1k79m44jncbdxfj8ddvvvyz2j";
     };
 
     buildInputs = [
@@ -4090,7 +4090,7 @@ rec {
     '';
 
     meta = {
-      version = "0.9";
+      version = "0.10.1";
       description = ''Man-in-the-middle proxy'';
       homepage = "http://mitmproxy.org/";
       license = licenses.mit;
@@ -4385,7 +4385,7 @@ rec {
     src = fetchurl {
       url = "https://github.com/cortesi/netlib/archive/v${meta.version}.tar.gz";
       name = "${name}.tar.gz";
-      sha256 = "1y8lx2j1jrr93mqfb06zg1x5jm9lllw744sb61ib8dagw43nnq3v";
+      sha256 = "1x2n126b7fal64fb5fzkp4by7ym0iswn3w9mh6pm4c1vjdpnk592";
     };
 
     buildInputs = [
@@ -4395,7 +4395,7 @@ rec {
     doCheck = false;
 
     meta = {
-      version = "0.9";
+      version = "0.10";
       description = ''Man-in-the-middle proxy'';
       homepage = "https://github.com/cortesi/netlib";
       license = licenses.mit;
@@ -4637,17 +4637,17 @@ rec {
     };
   };
 
-  livestreamer = if isPy34 then null else (buildPythonPackage {
-    #version = "1.8.0";
-    name = "livestreamer-1.8.0";
+  livestreamer = if isPy34 then null else (buildPythonPackage rec {
+    version = "1.8.2";
+    name = "livestreamer-${version}";
 
     src = fetchurl {
-      url = "https://github.com/chrippa/livestreamer/archive/v1.8.0.tar.gz";
-      sha256 = "0fzpznbnhzrqawxdljvyml5251wbr3nifdrvnmh2b8vz356js4l8";
+      url = "https://github.com/chrippa/livestreamer/archive/v${version}.tar.gz";
+      sha256 = "130h97qdb7qx8xg0gz54p5a6cb2zbffi5hsi305xf0ah9nf4rbrc";
     };
 
     buildInputs = [ pkgs.makeWrapper ];
-    propagatedBuildInputs = [ requests ];
+    propagatedBuildInputs = [ requests pkgs.rtmpdump pycrypto ];
     postInstall = ''
       wrapProgram $out/bin/livestreamer --prefix PATH : ${pkgs.rtmpdump}/bin
     '';
@@ -5507,11 +5507,11 @@ rec {
   };
 
   pygments = buildPythonPackage rec {
-    name = "Pygments-1.5";
+    name = "Pygments-1.6";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/P/Pygments/${name}.tar.gz";
-      md5 = "ef997066cc9ee7a47d01fb4f3da0b5ff";
+      md5 = "a18feedf6ffd0b0cc8c8b0fbdb2027b1";
     };
 
     meta = {
@@ -5800,11 +5800,11 @@ rec {
   });
 
   ldap = buildPythonPackage rec {
-    name = "ldap-2.4.10";
+    name = "ldap-2.4.15";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/p/python-ldap/${name}.tar.gz";
-      sha256 = "0m6fm2alcb5v9xdcjv2nw2lhz9nnd3mnr5lrmf397hi4pw0pik37";
+      url = "http://pypi.python.org/packages/source/p/python-ldap/python-${name}.tar.gz";
+      sha256 = "0w0nn5yj0nbbkvpbqgfni56v7sjx6jf6s6zvp9zmahyrvqrsrg1h";
     };
 
     NIX_CFLAGS_COMPILE = "-I${pkgs.cyrus_sasl}/include/sasl";
@@ -8919,7 +8919,7 @@ rec {
 
     preConfigure = ''
       substituteInPlace webapp/graphite/thirdparty/pytz/__init__.py --replace '/usr/share/zoneinfo' '/etc/zoneinfo'
-      substituteInPlace webapp/graphite/settings.py --replace "join(WEBAPP_DIR, 'content')" "join(WEBAPP_DIR, 'webapp', 'content')"
+      substituteInPlace webapp/graphite/settings.py --replace "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
       cp webapp/graphite/manage.py bin/manage-graphite.py
       substituteInPlace bin/manage-graphite.py --replace 'settings' 'graphite.settings'
     '';
@@ -9083,11 +9083,11 @@ rec {
 
   libvirt = pkgs.stdenv.mkDerivation rec {
     name = "libvirt-python-${version}";
-    version = "1.2.4";
+    version = "1.2.5";
 
     src = fetchurl {
       url = "http://libvirt.org/sources/python/${name}.tar.gz";
-      sha256 = "0zi1mxjcv9dz5hy54lwgk9j4i8r20hhijbxxn843h2w7p1ch1wx2";
+      sha256 = "0r0v48nkkxfagckizbcf67xkmyd1bnq36d30b58zmhvl0abryz7p";
     };
 
     buildInputs = [ python pkgs.pkgconfig pkgs.libvirt lxml ];
@@ -9282,5 +9282,34 @@ rec {
       license = licenses.mit;
     };
   };
+
+  pync = buildPythonPackage rec {
+    version  = "1.4";
+    baseName = "pync";
+    name     = "${baseName}-${version}";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/${baseName}/${name}.tar.gz";
+      md5 = "5cc79077f386a17b539f1e51c05a3650";
+    };
+
+    buildInputs = [ pkgs.coreutils ];
+
+    propagatedBuildInputs = [ dateutil ];
+
+    preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      sed -i 's|^\([ ]*\)self.bin_path.*$|\1self.bin_path = "${pkgs.rubyLibs.terminal_notifier}/bin/terminal-notifier"|' build/lib/pync/TerminalNotifier.py
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Python Wrapper for Mac OS 10.8 Notification Center";
+      homepage    = https://pypi.python.org/pypi/pync/1.4;
+      license     = licenses.mit;
+      platforms   = platforms.darwin;
+      maintainers = [ maintainers.lovek323 ];
+    };
+  };
+
+
 
 }); in pythonPackages

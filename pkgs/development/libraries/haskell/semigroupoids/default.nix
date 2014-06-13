@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "semigroupoids";
-  version = "4.0.2";
-  sha256 = "07xzqqdra2d5jr4wclislj1lhbb1nlry65m0y42hdxsjf3n05931";
+  version = "4.0.2.1";
+  sha256 = "00ga4spbnvwnk7j4h7zjw3bkd98glaganhcwq947ffadc0nansb1";
   buildDepends = [
     comonad contravariant distributive semigroups transformers
   ];

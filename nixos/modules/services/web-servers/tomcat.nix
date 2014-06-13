@@ -119,6 +119,8 @@ in
         startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
 
+        daemonType = "daemon";
+
         preStart =
           ''
             # Create the base directory
@@ -327,9 +329,11 @@ in
                 done
                 ''
             else ""}
-
-            ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c 'CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${pkgs.jdk} JAVA_OPTS="${cfg.javaOpts}" CATALINA_OPTS="${cfg.catalinaOpts}" ${tomcat}/bin/startup.sh'
           '';
+
+        script = ''
+            ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c 'CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${pkgs.jdk} JAVA_OPTS="${cfg.javaOpts}" CATALINA_OPTS="${cfg.catalinaOpts}" ${tomcat}/bin/startup.sh'
+        '';
 
         postStop =
           ''

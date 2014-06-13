@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     unixTime wai
   ];
   testDepends = [ doctest waiTest ];
+  doCheck = false;
   meta = {
     description = "A logging system for WAI";
     license = self.stdenv.lib.licenses.bsd3;

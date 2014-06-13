@@ -11,8 +11,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-core";
-  version = "1.2.15.1";
-  sha256 = "0xvfkplxsvacwkmplhzdyqk028yqkj1bql5x6qsizvj60fwsnnyk";
+  version = "1.2.16.1";
+  sha256 = "1wr5labhp3wc23ki2wvaypanm54qw9vz3v77rxyj1za1y2n1cprw";
   buildDepends = [
     aeson attoparsecConduit blazeBuilder blazeHtml blazeMarkup
     caseInsensitive cereal clientsession conduit conduitExtra cookie
@@ -26,7 +26,7 @@ cabal.mkDerivation (self: {
     async blazeBuilder conduit conduitExtra hamlet hspec httpTypes
     HUnit liftedBase network networkConduit QuickCheck random resourcet
     shakespeare shakespeareCss shakespeareJs streamingCommons text
-    transformers wai waiTest
+    transformers wai waiExtra waiTest
   ];
   jailbreak = true;
   meta = {

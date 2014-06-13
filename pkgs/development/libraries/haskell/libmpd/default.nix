@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "libmpd";
-  version = "0.8.0.3";
-  sha256 = "0xbbk2rg6awfz5ak20956nriifga81ndk7n58lbbf5i86380akwz";
+  version = "0.8.0.4";
+  sha256 = "0dk723zly9dkwpgp4157d3a559g9j0ndxfdyp85yqcsr987wplqb";
   buildDepends = [
     attoparsec dataDefault filepath mtl network text time utf8String
   ];
@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
     dataDefault hspec HUnit mtl network QuickCheck text time utf8String
   ];
   jailbreak = true;
+  doCheck = false;
   meta = {
     homepage = "http://github.com/joachifm/libmpd-haskell#readme";
     description = "An MPD client library";

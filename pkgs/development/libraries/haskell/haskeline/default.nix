@@ -2,10 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "haskeline";
-  version = "0.7.1.2";
-  sha256 = "178hzal5gqw3rmgijv9ph9xa6d4sld279z4a8cjyx3hv4azciwr4";
+  version = "0.7.1.3";
+  sha256 = "1bwyfn7y9mi18g7zxz8wxjkld51azlfbxypxbiqdinpm2fdl63mi";
   buildDepends = [ filepath terminfo transformers utf8String ];
   configureFlags = "-fterminfo";
+  jailbreak = true;
   meta = {
     homepage = "http://trac.haskell.org/haskeline";
     description = "A command-line interface for user input, written in Haskell";

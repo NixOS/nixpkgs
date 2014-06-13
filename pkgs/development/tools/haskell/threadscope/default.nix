@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "threadscope";
-  version = "0.2.3";
-  sha256 = "07kbkcckxfsb50zks8jgw2g0ary63hymicq5lqrm5jjaarjb80gr";
+  version = "0.2.4";
+  sha256 = "1208gp80vj3dngc4nrj1jk5y4h1181bgwq2qj764kcjvkaxch599";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [

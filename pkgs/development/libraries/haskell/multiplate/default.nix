@@ -5,6 +5,7 @@ cabal.mkDerivation (self: {
   version = "0.0.2";
   sha256 = "02pqfkdcv4fn0pmxphg19b3fiazn4hpphfj8xgp77vpy2lczndsw";
   buildDepends = [ transformers ];
+  jailbreak = true;
   meta = {
     homepage = "http://haskell.org/haskellwiki/Multiplate";
     description = "Lightweight generic library for mutually recursive data types";

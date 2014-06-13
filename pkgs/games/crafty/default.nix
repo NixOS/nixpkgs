@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, unzip, fullVariant }:
+{ stdenv, fetchurl, unzip, fullVariant ? false }:
 
 stdenv.mkDerivation rec {
-  name = "crafty-23.4";
+  name = "crafty-${version}";
+  version = "23.4";
   
   src = fetchurl {
-    url = http://www.craftychess.com/crafty-23.4.zip;
+    url = "http://www.craftychess.com/crafty-${version}.zip";
     sha256 = "0rhf4pfxcwj8hqd7bqj98fpdd80v6ss1jnc9kgwx2fw4ksdi37pl";
   };
 
@@ -660,6 +661,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.craftychess.com/;
     description = "Crafty is a free, open-source computer chess program developed by Dr. Robert M. Hyatt";
     license = stdenv.lib.licenses.unfree;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.jwiegley ];
   };
 }

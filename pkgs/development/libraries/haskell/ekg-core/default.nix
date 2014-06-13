@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ekg-core";
-  version = "0.1.0.0";
-  sha256 = "19ghqj9zbb198d45bw7k9mlf2z57yq74wgbkp62b9li2ndbcpdzh";
+  version = "0.1.0.1";
+  sha256 = "1zha9r43nalxdw22s79mf89fwfzi8lq0q9ldhw7f6c63dnwxyjja";
   buildDepends = [ text unorderedContainers ];
   meta = {
     homepage = "https://github.com/tibbe/ekg-core";

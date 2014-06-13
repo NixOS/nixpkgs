@@ -13,6 +13,7 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.isDarwin; # error: AF_UNIX path too long
 
+
   meta = {
     homepage = "http://www.pycrypto.org/";
     description = "Python Cryptography Toolkit";

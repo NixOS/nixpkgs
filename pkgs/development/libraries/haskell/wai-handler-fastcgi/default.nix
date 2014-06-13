@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wai-handler-fastcgi";
-  version = "2.0.0.1";
-  sha256 = "14jsibsqfj6z5yqgdrh43aiqps1yldxkgn6fkj4i80zxk099nbxp";
+  version = "3.0.0";
+  sha256 = "1cvy95qmbrhc1yjcral7f8y2929xp623abc9xasz7j28m4wwmynh";
   buildDepends = [ wai waiExtra ];
   extraLibraries = [ fcgi ];
   meta = {

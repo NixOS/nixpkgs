@@ -60,12 +60,12 @@ touch /etc/fstab # to shut up mount
 touch /etc/mtab # to shut up mke2fs
 touch /etc/initrd-release
 mkdir -p /proc
-mount -t proc none /proc
+mount -t proc proc /proc
 mkdir -p /sys
-mount -t sysfs none /sys
-mount -t devtmpfs -o "size=@devSize@" none /dev
+mount -t sysfs sysfs /sys
+mount -t devtmpfs -o "size=@devSize@" devtmpfs /dev
 mkdir -p /run
-mount -t tmpfs -o "mode=0755,size=@runSize@" none /run
+mount -t tmpfs -o "mode=0755,size=@runSize@" tmpfs /run
 
 
 # Process the kernel command line.

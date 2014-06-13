@@ -16,7 +16,7 @@ buildPerlPackage rec {
   name = "SpamAssassin-3.4.0";
 
   src = fetchurl {
-    url = "http://apache.imsam.info/spamassassin/source/Mail-${name}.tar.bz2";
+    url = "mirror://apache/spamassassin/source/Mail-${name}.tar.bz2";
     sha256 = "0527rv6m5qd41l756fqh9q7sm9m2xfhhy2jchlhbmd39x6x3jfsm";
   };
 

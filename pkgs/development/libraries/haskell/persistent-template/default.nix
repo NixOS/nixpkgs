@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "persistent-template";
-  version = "1.3.1.3";
-  sha256 = "0q5ysv1r6p4mg79waq2g6ql11rap6znawkplddblpaa8lq9qalj6";
+  version = "1.3.1.4";
+  sha256 = "1ys5s1vb9w3nrv9kwvzgjwfs2j09pslpplz05idpfn02xx03hcfk";
   buildDepends = [
     aeson monadControl monadLogger persistent text transformers
     unorderedContainers
@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     aeson hspec persistent QuickCheck text transformers
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.yesodweb.com/book/persistent";
     description = "Type-safe, non-relational, multi-backend persistence";

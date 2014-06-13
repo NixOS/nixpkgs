@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
     HUnit QuickCheck testFramework testFrameworkHunit
     testFrameworkQuickcheck2
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/bos/base64-bytestring";
     description = "Fast base64 encoding and decoding for ByteStrings";

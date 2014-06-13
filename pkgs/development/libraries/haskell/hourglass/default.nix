@@ -1,15 +1,12 @@
-{ cabal, deepseq, HUnit, mtl, QuickCheck, testFramework
-, testFrameworkHunit, testFrameworkQuickcheck2, time
-}:
+{ cabal, deepseq, mtl, tasty, tastyHunit, tastyQuickcheck, time }:
 
 cabal.mkDerivation (self: {
   pname = "hourglass";
-  version = "0.1.2";
-  sha256 = "18jvl4f8vfabvd9vlhxjjlswc80x8w4h6gdflvzdkjrknnyk118j";
+  version = "0.2.2";
+  sha256 = "015ipy9adi67nfddjsw9c0ihn0banghgawjli0lgrmiyjz01610c";
   buildDepends = [ deepseq ];
   testDepends = [
-    deepseq HUnit mtl QuickCheck testFramework testFrameworkHunit
-    testFrameworkQuickcheck2 time
+    deepseq mtl tasty tastyHunit tastyQuickcheck time
   ];
   meta = {
     homepage = "https://github.com/vincenthz/hs-hourglass";

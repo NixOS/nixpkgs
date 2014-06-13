@@ -1,24 +1,23 @@
 { cabal, ansiTerminal, base64Bytestring, blazeBuilder
-, blazeBuilderConduit, caseInsensitive, conduit, conduitExtra
-, dataDefault, fastLogger, hspec, httpTypes, HUnit, liftedBase
-, network, resourcet, stringsearch, text, time, transformers, void
-, wai, waiLogger, waiTest, word8, zlib, zlibBindings, zlibConduit
+, caseInsensitive, dataDefault, dataDefaultClass, deepseq
+, fastLogger, hspec, httpTypes, HUnit, liftedBase, network
+, resourcet, streamingCommons, stringsearch, text, time
+, transformers, void, wai, waiLogger, word8, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "wai-extra";
-  version = "2.1.1.2";
-  sha256 = "000ksma1jmi7rfg2ib94baj31mcwqj2xfhkyv7lai89di0m0v6s4";
+  version = "3.0.0";
+  sha256 = "0spjyimqfj7hx8zgmal4laqy8p1inj8hl2402b5s6zqdn36lldfs";
   buildDepends = [
-    ansiTerminal base64Bytestring blazeBuilder blazeBuilderConduit
-    caseInsensitive conduit conduitExtra dataDefault fastLogger
-    httpTypes liftedBase network resourcet stringsearch text time
-    transformers void wai waiLogger word8 zlibConduit
+    ansiTerminal base64Bytestring blazeBuilder caseInsensitive
+    dataDefaultClass deepseq fastLogger httpTypes liftedBase network
+    resourcet streamingCommons stringsearch text time transformers void
+    wai waiLogger word8
   ];
   testDepends = [
-    blazeBuilder conduit conduitExtra dataDefault fastLogger hspec
-    httpTypes HUnit resourcet text transformers wai waiTest zlib
-    zlibBindings
+    blazeBuilder dataDefault fastLogger hspec httpTypes HUnit resourcet
+    text transformers wai zlib
   ];
   jailbreak = true;
   meta = {
