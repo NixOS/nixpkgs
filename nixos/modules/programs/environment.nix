@@ -23,7 +23,7 @@ in
         EDITOR = "nano";
       };
 
-    environment.systemVariables =
+    environment.sessionVariables =
       { NIX_PATH =
           [ "/nix/var/nix/profiles/per-user/root/channels/nixos"
             "nixpkgs=/etc/nixos/nixpkgs"
