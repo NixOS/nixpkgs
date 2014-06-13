@@ -12,11 +12,11 @@ let
     declarations = map (fn: stripPrefix fn) opt.declarations;
   });
 
-  prefix = toString pkgs.path;
+  prefix = toString ../../..;
 
   stripPrefix = fn:
     if substring 0 (stringLength prefix) fn == prefix then
-      substring (add (stringLength prefix) 1) 1000 fn
+      substring (stringLength prefix + 1) 1000 fn
     else
       fn;
 
