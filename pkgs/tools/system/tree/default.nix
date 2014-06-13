@@ -1,7 +1,7 @@
 {stdenv, fetchurl}:
 
 let
-  version = "1.6.0";
+  version = "1.7.0";
 
   # These settings are found in the Makefile, but there seems to be no
   # way to select one ore the other setting other than editing the file
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://mama.indstate.edu/users/ice/tree/src/tree-${version}.tgz";
-    sha256 = "4dc470a74880338b01da41701d8db90d0fb178877e526d385931a007d68d7591";
+    sha256 = "04kviw799qxly08zb8n5mgxfd96gyis6x69q2qiw86jnh87c4mv9";
   };
 
   configurePhase = ''
