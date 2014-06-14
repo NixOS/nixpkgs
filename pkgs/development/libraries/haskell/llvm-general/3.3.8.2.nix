@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
   ];
   buildTools = [ llvmConfig ];
   doCheck = false;
+  noHaddock = true;
   meta = {
     description = "General purpose LLVM bindings";
     license = self.stdenv.lib.licenses.bsd3;

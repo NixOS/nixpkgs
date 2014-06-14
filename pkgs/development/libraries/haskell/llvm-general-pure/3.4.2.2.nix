@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     testFrameworkQuickcheck2
   ];
   doCheck = false;
+  noHaddock = true;
   meta = {
     description = "Pure Haskell LLVM functionality (no FFI)";
     license = self.stdenv.lib.licenses.bsd3;
