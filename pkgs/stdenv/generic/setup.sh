@@ -103,6 +103,7 @@ fi
 
 # Execute the pre-hook.
 export SHELL=@shell@
+export CONFIG_SHELL="$SHELL"
 if [ -z "$shell" ]; then export shell=@shell@; fi
 runHook preHook
 
