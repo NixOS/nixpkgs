@@ -5156,6 +5156,8 @@ let
 
   libnice = callPackage ../development/libraries/libnice { };
 
+  liboping = callPackage ../development/libraries/liboping { };
+
   libplist = callPackage ../development/libraries/libplist { };
 
   libQGLViewer = callPackage ../development/libraries/libqglviewer { };
