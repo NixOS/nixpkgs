@@ -10071,6 +10071,8 @@ let
 
   opentyrian = callPackage ../games/opentyrian { };
 
+  openxcom = callPackage ../games/openxcom { };
+
   pingus = callPackage ../games/pingus {};
 
   pioneers = callPackage ../games/pioneers { };
