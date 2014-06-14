@@ -146,6 +146,12 @@ rec {
     inherit python;
   };
 
+  tables = import ../development/python-modules/tables {
+    inherit (pkgs) stdenv fetchurl bzip2 lzo;
+    inherit python buildPythonPackage cython numpy numexpr;
+    hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
+  };
+
   # packages defined here
 
   aafigure = buildPythonPackage rec {
