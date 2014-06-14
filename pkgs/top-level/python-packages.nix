@@ -4601,6 +4601,43 @@ rec {
     };
   };
 
+  numexpr = buildPythonPackage rec {
+    version = "2.4";
+    name = "numexpr-${version}";
+
+    src = fetchgit {
+      url = https://github.com/pydata/numexpr.git;
+      rev = "606cc9a110711e947d35ac2770749c00dab184c8";
+      sha256 = "1gxgkg7ncgjhnifn444iha5nrjhyr8sr6w5yp204186a1ysz858g";
+    };
+
+    propagatedBuildInputs = with pkgs; [ numpy ];
+
+    # Run the test suite.
+    # It requires the build path to be in the python search path.
+    checkPhase = ''
+      ${python}/bin/${python.executable} <<EOF
+      import sysconfig
+      import sys
+      import os
+      f = "lib.{platform}-{version[0]}.{version[1]}"
+      lib = f.format(platform=sysconfig.get_platform(),
+                     version=sys.version_info)
+      build = os.path.join(os.getcwd(), 'build', lib)
+      sys.path.insert(0, build)
+      import numexpr
+      r = numexpr.test()
+      if not r.wasSuccessful():
+          sys.exit(1)
+      EOF
+    '';
+
+    meta = {
+      description = "Fast numerical array expression evaluator for NumPy";
+      homepage = "https://github.com/pydata/numexpr";
+    };
+  };
+
   numpy = buildPythonPackage ( rec {
     name = "numpy-1.7.1";
 
