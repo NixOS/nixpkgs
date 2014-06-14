@@ -5144,6 +5144,8 @@ let
 
   libmhash = callPackage ../development/libraries/libmhash {};
 
+  libmodbus = callPackage ../development/libraries/libmodbus {};
+
   libmtp = callPackage ../development/libraries/libmtp { };
 
   libmsgpack = callPackage ../development/libraries/libmsgpack { };
