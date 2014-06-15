@@ -53,7 +53,7 @@ in rec {
     version = "4.3.1";
     module = "SweetHome3D";
     name = stdenv.lib.toLower module + "-application-" + version;
-    description = "Design and visualize your future home.";
+    description = "Design and visualize your future home";
     license = stdenv.lib.licenses.gpl2Plus;
     src = fetchcvs {
       cvsRoot = ":pserver:anonymous@sweethome3d.cvs.sourceforge.net:/cvsroot/sweethome3d";
