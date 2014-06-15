@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lX11";
 
-  patches = [ ./nitrogen-env-bash.patch ];
+  patchPhase = "patchShebangs data/icon-theme-installer";
 
   meta = {
     description = "A wallpaper browser and setter for X11";
