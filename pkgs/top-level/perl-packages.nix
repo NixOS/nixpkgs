@@ -1787,6 +1787,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  CryptOpenSSLBignum = buildPerlPackage rec {
+    name = "Crypt-OpenSSL-Bignum-0.04";
+    src = fetchurl {
+      url    = "mirror://cpan/authors/id/I/IR/IROBERTS/${name}.tar.gz";
+      sha256 = "18vg2bqyhc0ahfdh5dkbgph5nh92qcz5vi99jq8aam4h86if78bk";
+    };
+    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.openssl}/lib -lcrypto";
+  };
+
   CryptOpenSSLRandom = buildPerlPackage rec {
     name = "Crypt-OpenSSL-Random-0.06";
     src = fetchurl {
