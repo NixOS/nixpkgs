@@ -101,7 +101,7 @@ in
         ''}
       '';
 
-    environment.systemVariables.LD_LIBRARY_PATH =
+    environment.sessionVariables.LD_LIBRARY_PATH =
       [ "/run/opengl-driver/lib" "/run/opengl-driver-32/lib" ];
 
     # FIXME: move this into card-specific modules.
