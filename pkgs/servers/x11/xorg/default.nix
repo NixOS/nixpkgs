@@ -530,11 +530,11 @@ let
   })) // {inherit xproto ;};
 
   inputproto = (stdenv.mkDerivation ((if overrides ? inputproto then overrides.inputproto else x: x) {
-    name = "inputproto-2.3";
+    name = "inputproto-2.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/proto/inputproto-2.3.tar.bz2;
-      sha256 = "0by3aa8i1gki6i904i34vlrymv5p8il05gr83sf8x7v9ys9v29kx";
+      url = mirror://xorg/individual/proto/inputproto-2.3.1.tar.bz2;
+      sha256 = "1lf1jlxp0fc8h6fjdffhd084dqab94966l1zm3rwwsis0mifwiss";
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
@@ -570,11 +570,11 @@ let
   })) // {inherit fontsproto xproto xtrans ;};
 
   libICE = (stdenv.mkDerivation ((if overrides ? libICE then overrides.libICE else x: x) {
-    name = "libICE-1.0.8";
+    name = "libICE-1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/libICE-1.0.8.tar.bz2;
-      sha256 = "07mp13pb3s73kj7y490gnx619znzwk91mlf8kdw0rzq29ll93a94";
+      url = mirror://xorg/individual/lib/libICE-1.0.9.tar.bz2;
+      sha256 = "00p2b6bsg6kcdbb39bv46339qcywxfl4hsrz8asm4hy6q7r34w4g";
     };
     buildInputs = [pkgconfig xproto xtrans ];
   })) // {inherit xproto xtrans ;};
@@ -710,11 +710,11 @@ let
   })) // {inherit libfontenc fontsproto freetype xproto xtrans zlib ;};
 
   libXft = (stdenv.mkDerivation ((if overrides ? libXft then overrides.libXft else x: x) {
-    name = "libXft-2.3.1";
+    name = "libXft-2.3.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/libXft-2.3.1.tar.bz2;
-      sha256 = "1gdv6559cdz1lfw73x7wsvax1fkvphmayrymprljhyyb5nwk5kkz";
+      url = mirror://xorg/individual/lib/libXft-2.3.2.tar.bz2;
+      sha256 = "0k6wzi5rzs0d0n338ms8n8lfyhq914hw4yl2j7553wqxfqjci8zm";
     };
     buildInputs = [pkgconfig fontconfig freetype libX11 xproto libXrender ];
   })) // {inherit fontconfig freetype libX11 xproto libXrender ;};
@@ -1210,11 +1210,11 @@ let
   })) // {inherit gperf m4 libxcb xproto ;};
 
   xcbutilrenderutil = (stdenv.mkDerivation ((if overrides ? xcbutilrenderutil then overrides.xcbutilrenderutil else x: x) {
-    name = "xcb-util-renderutil-0.3.8";
+    name = "xcb-util-renderutil-0.3.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/xcb-util-renderutil-0.3.8.tar.bz2;
-      sha256 = "0lkl9ij9b447c0br2qc5qsynjn09c4fdz7sd6yp7pyi8az2sb2cp";
+      url = http://xcb.freedesktop.org/dist/xcb-util-renderutil-0.3.9.tar.bz2;
+      sha256 = "0nza1csdvvxbmk8vgv8vpmq7q8h05xrw3cfx9lwxd1hjzd47xsf6";
     };
     buildInputs = [pkgconfig gperf m4 libxcb xproto ];
   })) // {inherit gperf m4 libxcb xproto ;};
@@ -1260,11 +1260,11 @@ let
   })) // {inherit libX11 ;};
 
   xcursorgen = (stdenv.mkDerivation ((if overrides ? xcursorgen then overrides.xcursorgen else x: x) {
-    name = "xcursorgen-1.0.5";
+    name = "xcursorgen-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xcursorgen-1.0.5.tar.bz2;
-      sha256 = "10f5wk1326mm45gvgpf4m2p0j80fcd0i4c52zikahb91zah72wdw";
+      url = mirror://xorg/individual/app/xcursorgen-1.0.6.tar.bz2;
+      sha256 = "0v7nncj3kaa8c0524j7ricdf4rvld5i7c3m6fj55l5zbah7r3j1i";
     };
     buildInputs = [pkgconfig libpng libX11 libXcursor ];
   })) // {inherit libpng libX11 libXcursor ;};
@@ -1960,11 +1960,11 @@ let
   })) // {inherit ;};
 
   xorgserver = (stdenv.mkDerivation ((if overrides ? xorgserver then overrides.xorgserver else x: x) {
-    name = "xorg-server-1.14.6";
+    name = "xorg-server-1.14.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/xserver/xorg-server-1.14.6.tar.bz2;
-      sha256 = "0c57vp1z0p38dj5gfipkmlw6bvbz1mrr0sb3sbghdxxdyq4kzcz8";
+      url = mirror://xorg/individual/xserver/xorg-server-1.14.7.tar.bz2;
+      sha256 = "07s54g9q1bry1050dsa7x6hy55yjvq9sxs6ks89pc8l6mnk6zxpw";
     };
     buildInputs = [pkgconfig renderproto libdrm openssl libX11 libXau libXaw libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt libXv ];
   })) // {inherit renderproto libdrm openssl libX11 libXau libXaw libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt libXv ;};
