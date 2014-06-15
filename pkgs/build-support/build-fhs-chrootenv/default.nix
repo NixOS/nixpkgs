@@ -141,10 +141,6 @@ let
 
     # copy content of targetPaths
     cp -rsf ${staticUsrProfileTarget}/lib/* lib/
-
-    # copy gcc libs
-    cp -rsf ${choosenGcc.gcc}/lib/* lib/
-
   '';
 
   # setup /lib, /lib32 and /lib64
