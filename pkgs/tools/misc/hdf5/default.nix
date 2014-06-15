@@ -2,6 +2,7 @@
 { stdenv
 , fetchurl
 , zlib ? null
+, szip ? null
 }:
 stdenv.mkDerivation {
   name = "hdf5-1.8.10-patch1";
@@ -11,7 +12,10 @@ stdenv.mkDerivation {
   };
 
   buildInputs = []
-    ++ stdenv.lib.optional (zlib != null) zlib;
+    ++ stdenv.lib.optional (zlib != null) zlib
+    ++ stdenv.lib.optional (szip != null) szip;
+
+  configureFlags = if szip != null then "--with-szlib=${szip}" else "";
   
   patches = [./bin-mv.patch];
   
