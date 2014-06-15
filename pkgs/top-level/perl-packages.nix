@@ -1659,6 +1659,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  CryptBlowfish = buildPerlPackage rec {
+    name = "Crypt-Blowfish-2.14";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DP/DPARIS/${name}.tar.gz";
+      sha256 = "1cb7g8cyfs9alrfdykxhs8m6azj091fmcycz6p5vkxbbzcgl7cs6";
+    };
+  };
+
   CryptCBC = buildPerlPackage rec {
     name = "Crypt-CBC-2.33";
     src = fetchurl {
