@@ -1,4 +1,4 @@
-{ buildFHSChrootEnv }:
+{ buildFHSChrootEnv, config }:
 
 buildFHSChrootEnv {
   name = "steam";
@@ -13,7 +13,9 @@ buildFHSChrootEnv {
       pkgs.python
       pkgs.gnome2.zenity
       pkgs.xdg_utils
-    ];
+    ]
+    ++ (if config.steam.java or false then [ pkgs.jdk ] else [ ])
+    ;
 
   multiPkgs = pkgs:
       [ pkgs.cairo
@@ -23,6 +25,7 @@ buildFHSChrootEnv {
         pkgs.pango
 
         pkgs.freetype
+        pkgs.fontconfig
         pkgs.xlibs.libICE
         pkgs.xlibs.libSM
         pkgs.xlibs.libX11
@@ -41,9 +44,11 @@ buildFHSChrootEnv {
         pkgs.xlibs.libXtst
         pkgs.xlibs.libXxf86vm
 
+        pkgs.ffmpeg
         pkgs.libpng12
         pkgs.mesa
         pkgs.SDL
+        pkgs.SDL2
 
         pkgs.libgcrypt
         pkgs.zlib
