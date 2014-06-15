@@ -213,7 +213,7 @@ in stdenv.mkDerivation {
     cd "$out/sw"
     ${extraBuildCommands}
     cd "$out/sw"
-    ${extraBuildCommandsMulti}
+    ${if isMultiBuild then extraBuildCommandsMulti else ""}
     cd ..
   '';
 }
