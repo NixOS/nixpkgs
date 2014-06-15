@@ -624,6 +624,9 @@ let
     flex = flex_2_5_35;
   };
 
+  consul = callPackage ../servers/consul { };
+  consul_ui = callPackage ../servers/consul/ui.nix { };
+
   ditaa = callPackage ../tools/graphics/ditaa { };
 
   direnv = callPackage ../tools/misc/direnv { };
