@@ -928,6 +928,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     libc = pkgs.stdenv.gcc.libc;
   };
 
+  gtkglext = callPackage ../development/libraries/haskell/gtkglext {};
+
   gtk2hsBuildtools = callPackage ../development/libraries/haskell/gtk2hs-buildtools {};
   gtk2hsC2hs = self.gtk2hsBuildtools;
 
@@ -2656,6 +2658,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hdevtools = callPackage ../development/tools/haskell/hdevtools {};
 
   hlint = callPackage ../development/tools/haskell/hlint {};
+
+  hp2anyManager = callPackage ../development/tools/haskell/hp2any-manager {};
 
   hscolour = callPackage ../development/tools/haskell/hscolour {};
   hscolourBootstrap = self.hscolour.override {
