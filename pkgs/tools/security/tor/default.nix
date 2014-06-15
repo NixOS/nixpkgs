@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libevent, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "tor-0.2.4.21";
+  name = "tor-0.2.4.22";
 
   src = fetchurl {
     url = "https://archive.torproject.org/tor-package-archive/${name}.tar.gz";
-    sha256 = "1kpijqapml7y4sl54qgyrzppxxhmy4xgk2y7wkqwjxn7q24g97d1";
+    sha256 = "0k39ppcvld6p08yaf4rpspb34z4f5863j0d605yrm4dqjcp99xvb";
   };
 
   buildInputs = [ libevent openssl zlib ];

@@ -98,6 +98,10 @@ import ./make-test.nix {
           $machine->succeed("touch /tmp2/x");
           $machine->succeed("grep '/tmp2 tmpfs' /proc/mounts");
       };
+
+      subtest "shell-vars", sub {
+          $machine->succeed('[ -n "$NIX_PATH" ]');
+      };
     '';
 
 }

@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="cl-launch";
-    version="4.0.4";
+    version="4.0.5";
     name="${baseName}-${version}";
-    hash="152m834myhcgi4iacfqn81fznlbqxn7pvdlxvk2lbba09h0slm56";
-    url="http://common-lisp.net/project/xcvb/cl-launch/cl-launch-4.0.4.tar.gz";
-    sha256="152m834myhcgi4iacfqn81fznlbqxn7pvdlxvk2lbba09h0slm56";
+    hash="00i11pkwsb9r9cjzxjmj0dsp369i0gpz04f447xss9a9v192dhlj";
+    url="http://common-lisp.net/project/xcvb/cl-launch/cl-launch-4.0.5.tar.gz";
+    sha256="00i11pkwsb9r9cjzxjmj0dsp369i0gpz04f447xss9a9v192dhlj";
   };
   buildInputs = [
   ];

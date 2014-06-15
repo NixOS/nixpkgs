@@ -3,14 +3,14 @@
 , cssText, dataDefault, fileEmbed, filepath, hashable, hjsmin
 , hspec, httpTypes, HUnit, mimeTypes, resourcet, shakespeareCss
 , systemFileio, systemFilepath, text, transformers, unixCompat
-, unorderedContainers, wai, waiAppStatic, waiTest, yesodCore
-, yesodTest
+, unorderedContainers, wai, waiAppStatic, waiExtra, waiTest
+, yesodCore, yesodTest
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-static";
-  version = "1.2.3";
-  sha256 = "093lvg7pl71dfnr7qyfmp9r1m3bs64849k0dw4w2qb618y8wb9jh";
+  version = "1.2.4";
+  sha256 = "0r5bz1jmgjd7cmvhkp3ahgl610bssvgxxsvb626dvqz2vqc0061z";
   buildDepends = [
     async attoparsec base64Bytestring blazeBuilder byteable conduit
     conduitExtra cryptohash cryptohashConduit cssText dataDefault
@@ -23,7 +23,7 @@ cabal.mkDerivation (self: {
     cryptohashConduit dataDefault fileEmbed filepath hjsmin hspec
     httpTypes HUnit mimeTypes resourcet shakespeareCss systemFileio
     systemFilepath text transformers unixCompat unorderedContainers wai
-    waiAppStatic waiTest yesodCore yesodTest
+    waiAppStatic waiExtra waiTest yesodCore yesodTest
   ];
   doCheck = false;
   meta = {

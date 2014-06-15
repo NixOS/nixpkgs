@@ -873,7 +873,7 @@ Any package in Nixpkgs that depends on <literal>emacs</literal> will
 be passed your customised instance.  (However, the value
 <literal>pkgs.emacs</literal> in
 <varname>nixpkgs.config.packageOverrides</varname> refers to the
-original rather than overriden instance, to prevent an infinite
+original rather than overridden instance, to prevent an infinite
 recursion.)</para>
 
 </section>

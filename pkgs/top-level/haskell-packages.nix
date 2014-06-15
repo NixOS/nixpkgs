@@ -193,8 +193,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   attoparsec_0_10_4_0 = callPackage ../development/libraries/haskell/attoparsec/0.10.4.0.nix {};
   attoparsec_0_11_3_1 = callPackage ../development/libraries/haskell/attoparsec/0.11.3.1.nix {};
   attoparsec_0_11_3_4 = callPackage ../development/libraries/haskell/attoparsec/0.11.3.4.nix {};
-  attoparsec_0_12_0_0 = callPackage ../development/libraries/haskell/attoparsec/0.12.0.0.nix {};
-  attoparsec = self.attoparsec_0_12_0_0;
+  attoparsec_0_12_1_0 = callPackage ../development/libraries/haskell/attoparsec/0.12.1.0.nix {};
+  attoparsec = self.attoparsec_0_12_1_0;
 
   attoparsecBinary = callPackage ../development/libraries/haskell/attoparsec-binary {};
 
@@ -285,6 +285,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   boundingboxes_0_1_1 = callPackage ../development/libraries/haskell/boundingboxes/0.1.1.nix {};
   boundingboxes_0_2 = callPackage ../development/libraries/haskell/boundingboxes/0.2.nix {};
   boundingboxes = self.boundingboxes_0_2;
+
+  BoundedChan = callPackage ../development/libraries/haskell/BoundedChan {};
 
   brainfuck = callPackage ../development/libraries/haskell/brainfuck {};
 
@@ -1002,6 +1004,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hcltest = callPackage ../development/libraries/haskell/hcltest {};
 
+  hedis = callPackage ../development/libraries/haskell/hedis {};
+
   heredoc = callPackage ../development/libraries/haskell/heredoc {};
 
   hexpat = callPackage ../development/libraries/haskell/hexpat {};
@@ -1155,6 +1159,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hsloggerTemplate = callPackage ../development/libraries/haskell/hslogger-template {};
 
   hspec = callPackage ../development/libraries/haskell/hspec {};
+
+  hspecWai = callPackage ../development/libraries/haskell/hspec-wai {};
 
   hspec2 = callPackage ../development/libraries/haskell/hspec2 {};
 
@@ -1968,6 +1974,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   snapletAcidState = callPackage ../development/libraries/haskell/snaplet-acid-state {};
 
+  snapletRedis = callPackage ../development/libraries/haskell/snaplet-redis {};
+
   snapletStripe = callPackage ../development/libraries/haskell/snaplet-stripe {};
 
   snapBlaze = callPackage ../development/libraries/haskell/snap-blaze/default.nix {};
@@ -2414,6 +2422,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   waiAppStatic = callPackage ../development/libraries/haskell/wai-app-static {};
 
+  waiConduit = callPackage ../development/libraries/haskell/wai-conduit {};
+
   waiExtra = callPackage ../development/libraries/haskell/wai-extra {};
 
   waiHandlerLaunch = callPackage ../development/libraries/haskell/wai-handler-launch {};
@@ -2655,6 +2665,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   };
 
   hslogger = callPackage ../development/tools/haskell/hslogger {};
+
+  ShellCheck = callPackage ../development/tools/misc/ShellCheck { };
 
   tar = callPackage ../development/libraries/haskell/tar {};
 

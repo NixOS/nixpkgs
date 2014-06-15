@@ -278,6 +278,8 @@ let
     dotnetfx = dotnetfx40;
   };
 
+  scatterOutputHook = makeSetupHook {} ../build-support/setup-hooks/scatter_output.sh;
+
   vsenv = callPackage ../build-support/vsenv {
     vs = vs90wrapper;
   };
@@ -1608,6 +1610,8 @@ let
   nifskope = callPackage ../tools/graphics/nifskope { };
 
   nilfs_utils = callPackage ../tools/filesystems/nilfs-utils {};
+
+  nitrogen = callPackage ../tools/X11/nitrogen {};
 
   nlopt = callPackage ../development/libraries/nlopt {};
 
@@ -5140,6 +5144,8 @@ let
 
   libmhash = callPackage ../development/libraries/libmhash {};
 
+  libmodbus = callPackage ../development/libraries/libmodbus {};
+
   libmtp = callPackage ../development/libraries/libmtp { };
 
   libmsgpack = callPackage ../development/libraries/libmsgpack { };
@@ -5149,6 +5155,8 @@ let
   libnfsidmap = callPackage ../development/libraries/libnfsidmap { };
 
   libnice = callPackage ../development/libraries/libnice { };
+
+  liboping = callPackage ../development/libraries/liboping { };
 
   libplist = callPackage ../development/libraries/libplist { };
 
@@ -5488,6 +5496,8 @@ let
   });
 
   libxmlxx = callPackage ../development/libraries/libxmlxx { };
+
+  libxmp = callPackage ../development/libraries/libxmp { };
 
   libxslt = callPackage ../development/libraries/libxslt { };
 
@@ -6685,6 +6695,8 @@ let
   };
 
   ngircd = callPackage ../servers/irc/ngircd { };
+
+  nsd = callPackage ../servers/dns/nsd { };
 
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
 
@@ -9408,6 +9420,12 @@ let
     conf = config.st.conf or null;
   };
 
+  sweethome3d = recurseIntoAttrs (  (callPackage ../applications/misc/sweethome3d { })
+                                 // (callPackage ../applications/misc/sweethome3d/editors.nix {
+                                      sweethome3dApp = sweethome3d.application;
+                                    })
+                                 );
+
   sxiv = callPackage ../applications/graphics/sxiv { };
 
   bittorrentSync = callPackage ../applications/networking/bittorrentsync { };
@@ -9893,6 +9911,8 @@ let
   xmacro = callPackage ../tools/X11/xmacro { };
 
   xmove = callPackage ../applications/misc/xmove { };
+
+  xmp = callPackage ../applications/audio/xmp { };
 
   xnee = callPackage ../tools/X11/xnee {
     # Work around "missing separator" error.

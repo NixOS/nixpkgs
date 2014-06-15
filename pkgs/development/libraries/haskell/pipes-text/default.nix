@@ -1,14 +1,14 @@
 { cabal, pipes, pipesBytestring, pipesGroup, pipesParse, pipesSafe
-, profunctors, text, textStreamDecode, transformers
+, profunctors, streamingCommons, text, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "pipes-text";
-  version = "0.0.0.10";
-  sha256 = "05lrxfy6cma7g5h41c74sc22p1y38kzbmiagr3grxk5a5110vhr1";
+  version = "0.0.0.11";
+  sha256 = "0c56gxm17bapdjgbp2f55z3f6vq8ryvsljqp3bcjjj18xv5pf1ls";
   buildDepends = [
     pipes pipesBytestring pipesGroup pipesParse pipesSafe profunctors
-    text textStreamDecode transformers
+    streamingCommons text transformers
   ];
   meta = {
     homepage = "https://github.com/michaelt/text-pipes";

@@ -14,7 +14,7 @@ in
 
   options = {
 
-    environment.systemVariables = mkOption {
+    environment.sessionVariables = mkOption {
       default = {};
       description = ''
         A set of environment variables used in the global environment.
@@ -48,7 +48,7 @@ in
        ''
          ${concatStringsSep "\n" (
            (mapAttrsToList (n: v: ''${n}="${concatStringsSep ":" v}"'')
-             (zipAttrsWith (const concatLists) ([ (mapAttrs (n: v: [ v ]) cfg.systemVariables) ]))))}
+             (zipAttrsWith (const concatLists) ([ (mapAttrs (n: v: [ v ]) cfg.sessionVariables) ]))))}
        '';
 
   };
