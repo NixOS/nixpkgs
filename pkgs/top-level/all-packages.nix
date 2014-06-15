@@ -7826,6 +7826,8 @@ let
 
   inconsolata = callPackage ../data/fonts/inconsolata {};
 
+  ipafont = callPackage ../data/fonts/ipafont {};
+
   junicode = callPackage ../data/fonts/junicode { };
 
   liberation_ttf = callPackage ../data/fonts/redhat-liberation-fonts { };
