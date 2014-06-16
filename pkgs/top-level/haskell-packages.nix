@@ -288,6 +288,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   BoundedChan = callPackage ../development/libraries/haskell/BoundedChan {};
 
+  boxes = callPackage ../development/libraries/haskell/boxes {};
+
   brainfuck = callPackage ../development/libraries/haskell/brainfuck {};
 
   bson = callPackage ../development/libraries/haskell/bson {};
