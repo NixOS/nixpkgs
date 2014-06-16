@@ -12,11 +12,11 @@ cabal.mkDerivation (self: {
     time vector
   ];
   testDepends = [ HUnit mtl testFramework testFrameworkHunit time ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/informatikr/hedis";
     description = "Client library for the Redis datastore: supports full command set, pipelining";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };
-  doCheck = false;
 })
