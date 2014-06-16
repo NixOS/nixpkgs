@@ -1,12 +1,12 @@
 { stdenv, fetchgit, unzip, xulrunner, makeWrapper }:
 
 stdenv.mkDerivation {
-  name = "conkeror-1.0pre-20140509";
+  name = "conkeror-1.0pre-20140616";
 
   src = fetchgit {
     url = git://repo.or.cz/conkeror.git;
-    rev = "eaf02dccf979d824667d177544103af000ae40bf";
-    sha256 = "1896db59d260f34a459402cb0c252b636aab9bf0378ae663a6d039f15af5b350";
+    rev = "8a26fff5896a3360549e2adfbf06b1d57e909266";
+    sha256 = "56f1c71ca1753a63d7599d3e8bf52277711b2693e7709ed7c146f34940441cb4";
   };
 
   buildInputs = [ unzip makeWrapper ];
