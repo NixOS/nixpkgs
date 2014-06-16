@@ -132,6 +132,8 @@ let
       find -iname '*.gyp*' \( -type f -o -type l \) \
         -exec sed -i -e 's|<(DEPTH)|'"$(pwd)"'|g' {} + \
         -exec chmod u+w {} +
+    '' + optionalString (!versionOlder source.version "37.0.0.0") ''
+      python third_party/libaddressinput/chromium/tools/update-strings.py
     '';
 
     postPatch = let
@@ -159,6 +161,9 @@ let
       use_cups = cupsSupport;
       linux_sandbox_chrome_path="${libExecPath}/${packageName}";
       werror = "";
+
+      # FIXME: In version 37, omnibox.mojom.js doesn't seem to be generated.
+      use_mojo = versionOlder source.version "37.0.0.0";
 
       # Google API keys, see:
       #   http://www.chromium.org/developers/how-tos/api-keys
