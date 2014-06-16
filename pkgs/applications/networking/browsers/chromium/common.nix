@@ -30,7 +30,6 @@
 
 , source
 , plugins
-, archInfo
 }:
 
 buildFun:
@@ -173,7 +172,13 @@ let
       # enable support for the H.264 codec
       proprietary_codecs = true;
       ffmpeg_branding = "Chrome";
-    } // archInfo // (extraAttrs.gypFlags or {}));
+    } // optionalAttrs (stdenv.system == "x86_64-linux") {
+      target_arch = "x64";
+      python_arch = "x86-64";
+    } // optionalAttrs (stdenv.system == "i686-linux") {
+      target_arch = "ia32";
+      python_arch = "ia32";
+    } // (extraAttrs.gypFlags or {}));
 
     configurePhase = ''
       # This is to ensure expansion of $out.
@@ -185,17 +190,20 @@ let
     buildPhase = let
       CC = "${gcc}/bin/gcc";
       CXX = "${gcc}/bin/g++";
-      buildCommand = target: ''
+      buildCommand = target: let
+        # XXX: Only needed for version 36 and older!
+        targetSuffix = optionalString
+          (versionOlder source.version "37.0.0.0" && target == "mksnapshot")
+          (if stdenv.is64bit then ".x64" else ".ia32");
+      in ''
         CC="${CC}" CC_host="${CC}"     \
         CXX="${CXX}" CXX_host="${CXX}" \
         LINK_host="${CXX}"             \
           "${ninja}/bin/ninja" -C "${buildPath}"  \
             -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES \
-            ${target}
-
-        if [[ "${target}" == mksnapshot.* || "${target}" == "chrome" ]]; then
-          paxmark m "${buildPath}/${target}"
-        fi
+            "${target}${targetSuffix}"
+      '' + optionalString (target == "mksnapshot" || target == "chrome") ''
+        paxmark m "${buildPath}/${target}${targetSuffix}"
       '';
       targets = extraAttrs.buildTargets or [];
       commands = map buildCommand targets;
