@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "compdata";
-  version = "0.8.1.0";
-  sha256 = "06bsdhf40b8111k0fmfc53i5kib9n431f07qyj83pq8isgkk33xc";
+  version = "0.8.1.2";
+  sha256 = "1jhfhinkn6klh68rzl5skh1rianjycc6cfkrglsi17j60a723v9x";
   buildDepends = [
     deepseq derive mtl QuickCheck thExpandSyns transformers treeView
   ];
