@@ -13,6 +13,7 @@
 }:
 
 let version = "17.0.11esr"; in
+let friendlyVersion = "17.0.11"; in
 
 stdenv.mkDerivation {
   name = "thunderbird-${version}";
@@ -75,7 +76,7 @@ stdenv.mkDerivation {
       [Desktop Entry]
       Type=Application
       Exec=$out/bin/thunderbird
-      Icon=$out/lib/thunderbird-${version}/chrome/icons/default/default256.png
+      Icon=$out/lib/thunderbird-${friendlyVersion}/chrome/icons/default/default256.png
       Name=Thunderbird
       GenericName=Mail Reader
       Categories=Application;Network;
