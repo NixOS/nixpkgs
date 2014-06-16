@@ -301,6 +301,10 @@ let
     inherit stdenv darcs nix;
   };
 
+  fetchdir = import ../build-support/fetchdir {
+    inherit stdenv nix;
+  };
+
   fetchgit = import ../build-support/fetchgit {
     inherit stdenv git cacert;
   };
