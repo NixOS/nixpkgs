@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, openssl, libsigcxx }:
+{ stdenv, fetchurl, pkgconfig, openssl, libsigcxx, zlib }:
 
 let
-  version = "0.13.3";
+  version = "0.13.4";
 in
 stdenv.mkDerivation {
   name = "libtorrent-${version}";
 
   src = fetchurl {
     url = "http://libtorrent.rakshasa.no/downloads/libtorrent-${version}.tar.gz";
-    sha256 = "0xsnyd1hnfvfq67y5s0ddhj2lhxmfms4djblaa0d1y5phdkpsc9l";
+    sha256 = "0ma910br5vxrfpm4f4w4942lpmhwvqjnnf9h8vpf52fw35qhjkkh";
   };
 
-  buildInputs = [ pkgconfig openssl libsigcxx ];
+  buildInputs = [ pkgconfig openssl libsigcxx zlib ];
 
   meta = {
     homepage = "http://libtorrent.rakshasa.no/";
