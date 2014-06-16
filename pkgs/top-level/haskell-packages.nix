@@ -2666,7 +2666,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hscolour = callPackage ../development/tools/haskell/hscolour {};
   hscolourBootstrap = self.hscolour.override {
     cabal = self.cabal.override {
-      extension = self : super : { hyperlinkSource = false; };
+      extension = self : super : {
+        hyperlinkSource = false;
+        configureFlags = super.configureFlags or "" + " --ghc-option=-rtsopts";
+      };
     };
   };
 
