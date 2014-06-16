@@ -700,6 +700,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   entropy = callPackage ../development/libraries/haskell/entropy {};
 
+  equivalence = callPackage ../development/libraries/haskell/equivalence {};
+
   erf = callPackage ../development/libraries/haskell/erf {};
 
   errorcallEqInstance = callPackage ../development/libraries/haskell/errorcall-eq-instance {};
