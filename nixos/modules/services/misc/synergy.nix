@@ -83,7 +83,8 @@ in
 
   config = {
 
-    systemd.services."synergy-client" = mkIf cfgC.enable {
+    systemd.services."synergy-client" = {
+      enable = cfgC.enable;
       after = [ "network.target" ];
       description = "Synergy client";
       wantedBy = optional cfgC.autoStart "multi-user.target";
@@ -91,7 +92,8 @@ in
       serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergyc -f ${optionalString (cfgC.screenName != "") "-n ${cfgC.screenName}"} ${cfgC.serverAddress}'';
     };
 
-    systemd.services."synergy-server" = mkIf cfgS.enable {
+    systemd.services."synergy-server" = {
+      enable = cfgS.enable;
       after = [ "network.target" ];
       description = "Synergy server";
       wantedBy = optional cfgS.autoStart "multi-user.target";
