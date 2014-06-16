@@ -9,11 +9,11 @@ cabal.mkDerivation (self: {
   buildDepends = [
     configurator hedis lens mtl network snap transformers
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/dzhus/snaplet-redis/";
     description = "Redis support for Snap Framework";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };
-  jailbreak = true;
 })
