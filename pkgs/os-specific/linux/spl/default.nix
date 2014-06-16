@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "196scl8q0bkkak6m0p1l1fz254cgsizqm73bf9wk3iynamq7qmrw";
   };
 
-  patches = [ ./install_prefix.patch ./3_12-compat.patch ./3_13-compat-1.patch ./3_13-compat-2.patch ];
+  patches = [ ./install_prefix.patch ./3_12-compat.patch ./3_13-compat-1.patch ./3_13-compat-2.patch ./const.patch ];
 
   buildInputs = [ perl autoconf automake libtool ];
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
     longDescription = ''
       This kernel module is a porting layer for ZFS to work inside the linux
-      kernel. 
+      kernel.
     '';
 
     homepage = http://zfsonlinux.org/;

@@ -80,6 +80,8 @@ let
         ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb
         ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb${majorVersion}
         ln -s $out/share/man/man1/{python2.7.1.gz,python.1.gz}
+
+        paxmark E $out/bin/python${majorVersion}
       '';
 
     passthru = {

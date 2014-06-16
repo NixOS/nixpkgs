@@ -1,5 +1,5 @@
 { stdenv, fetchurl, unzip, zip, procps, coreutils, alsaLib, ant, freetype, cups
-, which, jdk, nettools, xorg
+, which, jdk, nettools, xorg, file
 , fontconfig, cpio, cacert, perl, setJavaClassPath }:
 
 let
@@ -19,6 +19,9 @@ let
 
   build = "43";
 
+  # On x86 for heap sizes over 700MB disable SEGMEXEC and PAGEEXEC as well.
+  paxflags = if stdenv.isi686 then "msp" else "m";
+
 in
 
 stdenv.mkDerivation rec {
@@ -35,7 +38,7 @@ stdenv.mkDerivation rec {
     [ unzip procps ant which zip cpio nettools alsaLib
       xorg.libX11 xorg.libXt xorg.libXext xorg.libXrender xorg.libXtst
       xorg.libXi xorg.libXinerama xorg.libXcursor xorg.lndir
-      fontconfig perl
+      fontconfig perl file
     ];
 
   NIX_LDFLAGS = "-lfontconfig -lXcursor -lXinerama";
@@ -49,7 +52,7 @@ stdenv.mkDerivation rec {
       openjdk/{jdk,corba}/make/common/shared/Defs-utils.gmk
   '';
 
-  patches = [ ./cppflags-include-fix.patch ./fix-java-home.patch ];
+  patches = [ ./cppflags-include-fix.patch ./fix-java-home.patch ./paxctl.patch ];
 
   NIX_NO_SELF_RPATH = true;
 
@@ -71,6 +74,14 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = "true";
+
+  preBuild = ''
+    # We also need to PaX-mark in the middle of the build
+    substituteInPlace hotspot/make/linux/makefiles/launcher.make \
+       --replace XXX_PAXFLAGS_XXX ${paxflags}
+    substituteInPlace jdk/make/common/Program.gmk  \
+       --replace XXX_PAXFLAGS_XXX ${paxflags}
+  '';
 
   installPhase = ''
     mkdir -p $out/lib/openjdk $out/share $jre/lib/openjdk
@@ -97,6 +108,14 @@ stdenv.mkDerivation rec {
 
     rm -rf $out/lib/openjdk/jre/bin
     ln -s $out/lib/openjdk/bin $out/lib/openjdk/jre/bin
+
+    # Set PaX markings
+    exes=$(file $out/lib/openjdk/bin/* $jre/lib/openjdk/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
+    echo "to mark: *$exes*"
+    for file in $exes; do
+      echo "marking *$file*"
+      paxmark ${paxflags} "$file"
+    done
 
     # Remove duplicate binaries.
     for i in $(cd $out/lib/openjdk/bin && echo *); do

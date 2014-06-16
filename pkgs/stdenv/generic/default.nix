@@ -10,6 +10,8 @@ let lib = import ../../../lib; in lib.makeOverridable (
 , setupScript ? ./setup.sh
 
 , extraBuildInputs ? []
+
+, skipPaxMarking ? false
 }:
 
 let
@@ -38,10 +40,18 @@ let
       builder = shell;
 
       args = ["-e" ./builder.sh];
+      /* TODO: special-cased @var@ substitutions are ugly.
+          However, using substituteAll* from setup.sh seems difficult,
+          as setup.sh can't be directly sourced.
+          Suggestion: split similar utility functions into a separate script.
+      */
 
       setup = setupScript;
 
       inherit preHook initialPath gcc shell;
+
+      # Whether we should run paxctl to pax-mark binaries
+      needsPax = result.isLinux && !skipPaxMarking;
 
       propagatedUserEnvPkgs = [gcc] ++
         lib.filter lib.isDerivation initialPath;

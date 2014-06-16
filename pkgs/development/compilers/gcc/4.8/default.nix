@@ -54,7 +54,7 @@ assert langGo -> langCC;
 with stdenv.lib;
 with builtins;
 
-let version = "4.8.2";
+let version = "4.8.3";
 
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = cross != null && cross.config == "i586-pc-gnu";
@@ -64,7 +64,7 @@ let version = "4.8.2";
   */
     enableParallelBuilding = !profiledCompiler;
 
-    patches = [ ./bug-58800.patch ] # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58800
+    patches = []
       ++ optional enableParallelBuilding ./parallel-bconfig.patch
       ++ optional (cross != null) ./libstdc++-target.patch
       # ++ optional noSysDirs ./no-sys-dirs.patch
@@ -212,7 +212,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
-    sha256 = "1j6dwgby4g3p3lz7zkss32ghr45zpdidrg8xvazvn91lqxv25p09";
+    sha256 = "07hg10zs7gnqz58my10ch0zygizqh0z0bz6pv4pgxx45n48lz3ka";
   };
 
   inherit patches;

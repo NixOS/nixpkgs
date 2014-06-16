@@ -22,8 +22,12 @@ stdenv.mkDerivation rec {
     --disable-examples --enable-failing-tests --localstatedir=/var --disable-gtk-doc --disable-docbook
   '';
 
-  # Hm, apparently --disable-gtk-doc is ignored...
-  postInstall = "rm -rf $out/share/gtk-doc";
+  postInstall = ''
+    # Hm, apparently --disable-gtk-doc is ignored...
+    rm -rf $out/share/gtk-doc
+
+    paxmark m $out/bin/gst-launch* $out/libexec/gstreamer-*/gst-plugin-scanner
+  '';
 
   setupHook = ./setup-hook.sh;
 
