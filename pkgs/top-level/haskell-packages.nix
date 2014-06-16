@@ -1210,6 +1210,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hxtRegexXmlschema = callPackage ../development/libraries/haskell/hxt-regex-xmlschema {};
 
+  hxtTagsoup = callPackage ../development/libraries/haskell/hxt-tagsoup {};
+
   hxtUnicode = callPackage ../development/libraries/haskell/hxt-unicode {};
 
   hxtXpath = callPackage ../development/libraries/haskell/hxt-xpath {};
