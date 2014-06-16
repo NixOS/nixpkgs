@@ -2,16 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "spawn-fcgi-${version}";
-  version = "1.6.3";
+  version = "1.6.4";
 
   src = fetchsvn {
     url = "svn://svn.lighttpd.net/spawn-fcgi/tags/spawn-fcgi-${version}";
-    sha256 = "06f0zw3rja42d9vg8j68nqkm3mn5pfzzhwfadpvs4aidh6kz9p42";
+    sha256 = "07r6nwbg4881mdgp0hqh80c4x9wb7jg6cgc84ghwhfbd2abc2iq5";
   };
 
   buildInputs = [ automake autoconf ];
-
-  patches = [ ./show_version.patch ];
 
   preConfigure = ''
     ./autogen.sh
