@@ -99,7 +99,7 @@ in
       serviceConfig.RestartSec = 3;
       postStart =
         ''
-        ${cfg.package}/bin/ovs-vsctl --timeout 3 --retry --no-wait init
+		${cfg.package}/bin/ovs-vsctl --timeout 3 --retry --no-wait init
         '';
 
     };
