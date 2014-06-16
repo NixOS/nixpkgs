@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "recursion-schemes";
-  version = "4.0";
-  sha256 = "1xc1k04p3birxgv5h3ypw85w0cgq4d5rsmadx4pc3j409y6i5p06";
+  version = "4.1";
+  sha256 = "03rf65ak6bxsr204j6d8g5zyxva9vbmncycav3smqwfg5n3b3pwf";
   buildDepends = [ comonad free transformers ];
   meta = {
     homepage = "http://github.com/ekmett/recursion-schemes/";
