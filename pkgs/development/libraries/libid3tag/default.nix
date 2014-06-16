@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib}:
+{stdenv, fetchurl, zlib, gperf}:
 
 stdenv.mkDerivation {
   name = "libid3tag-0.15.1b";
@@ -7,11 +7,14 @@ stdenv.mkDerivation {
     sha256 = "63da4f6e7997278f8a3fef4c6a372d342f705051d1eeb6a46a86b03610e26151";
   };
 
-  propagatedBuildInputs = [zlib];
+  propagatedBuildInputs = [ zlib gperf ];
 
-  meta = {
+  patches = [ ./debian-patches.patch ];
+
+  meta = with stdenv.lib; {
     description = "ID3 tag manipulation library";
     homepage = http://mad.sourceforge.net/;
-    license = "GPL";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.fuuzetsu ];
   };
 }
