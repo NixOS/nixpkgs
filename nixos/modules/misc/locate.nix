@@ -3,12 +3,8 @@
 with lib;
 
 let
-
-  locatedb = "/var/cache/locatedb";
-
-in
-
-{
+  cfg = config.services.locate;
+in {
 
   ###### interface
 
@@ -35,6 +31,31 @@ in
         '';
       };
 
+      extraFlags = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = ''
+          Extra flags to append to <command>updatedb</command>.
+        '';
+      };
+
+      output = mkOption {
+        type = types.path;
+        default = /var/cache/locatedb;
+        description = ''
+          The database file to build.
+        '';
+      };
+
+      localuser = mkOption {
+        type = types.str;
+        default = "nobody";
+        description = ''
+          The user to search non-network directories as, using
+          <command>su</command>.
+        '';
+      };
+
     };
 
   };
@@ -48,8 +69,10 @@ in
         path  = [ pkgs.su ];
         script =
           ''
-            mkdir -m 0755 -p $(dirname ${locatedb})
-            exec updatedb --localuser=nobody --output=${locatedb} --prunepaths='/tmp /var/tmp /media /run'
+            mkdir -m 0755 -p $(dirname ${toString cfg.output})
+            exec updatedb \
+            --localuser=${cfg.localuser} \
+            --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
           '';
         serviceConfig.Nice = 19;
         serviceConfig.IOSchedulingClass = "idle";
