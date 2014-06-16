@@ -2668,7 +2668,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     cabal = self.cabal.override {
       extension = self : super : {
         hyperlinkSource = false;
-        configureFlags = super.configureFlags or "" + " --ghc-option=-rtsopts";
+        configureFlags = super.configureFlags or "" +
+          pkgs.lib.optionalString (pkgs.stdenv.lib.versionOlder "6.12" ghc.version) " --ghc-option=-rtsopts";
       };
     };
   };
