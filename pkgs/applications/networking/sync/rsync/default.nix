@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   srcs = [mainSrc] ++ stdenv.lib.optional enableCopyDevicesPatch patchesSrc;
   patches = [(fetchurl {
       url = "https://git.samba.org/?p=rsync.git;a=commitdiff_plain;h=0dedfbce2c1b851684ba658861fe9d620636c56a";
-      sha256 = "1jpwwdf07naqxc8fv1lspc95jgk50j5j3wvf037bjay2qzpwjmvf";
+      sha256 = "0j1pqmwsqc5mh815x28izi4baki2y2r5q8k7ma1sgs4xsgjc4rk8";
       name = "CVE-2014-2855.patch";
     })]
     ++ stdenv.lib.optional enableCopyDevicesPatch "./patches/copy-devices.diff";
