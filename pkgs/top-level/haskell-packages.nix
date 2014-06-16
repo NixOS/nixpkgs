@@ -2116,6 +2116,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   stmConduit = callPackage ../development/libraries/haskell/stm-conduit {};
 
+  STMonadTrans = callPackage ../development/libraries/haskell/STMonadTrans {};
+
   stmStats = callPackage ../development/libraries/haskell/stm-stats {};
 
   storableComplex = callPackage ../development/libraries/haskell/storable-complex {};
