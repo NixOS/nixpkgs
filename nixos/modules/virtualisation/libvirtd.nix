@@ -57,6 +57,20 @@ in
           '';
       };
 
+    virtualisation.libvirtd.onShutdown =
+      mkOption {
+        type = types.enum ["shutdown" "suspend" ];
+        default = "suspend";
+        description =
+          ''
+            When shutting down / restarting the host what method should
+            be used to gracefully halt the guests. Setting to "shutdown"
+            will cause an ACPI shutdown of each guest. "suspend" will
+            attempt to save the state of the guests ready to restore on boot.
+          '';
+      };
+
+
   };
 
 
@@ -74,7 +88,8 @@ in
       { description = "Libvirt Virtual Machine Management Daemon";
 
         wantedBy = [ "multi-user.target" ];
-        after = [ "systemd-udev-settle.service" ];
+        after = [ "systemd-udev-settle.service" ]
+                ++ optional vswitch.enable "vswitchd.service";
 
         path = [ 
             pkgs.bridge_utils 
@@ -157,7 +172,12 @@ in
             ${pkgs.libvirt}/etc/rc.d/init.d/libvirt-guests start || true
           '';
 
-        postStop = "${pkgs.libvirt}/etc/rc.d/init.d/libvirt-guests stop";
+        postStop = 
+            ''
+            export PATH=${pkgs.gettext}/bin:$PATH
+            export ON_SHUTDOWN=${cfg.onShutdown}
+            ${pkgs.libvirt}/etc/rc.d/init.d/libvirt-guests stop
+            '';
 
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
