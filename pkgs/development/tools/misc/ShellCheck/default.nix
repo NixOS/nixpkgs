@@ -10,7 +10,7 @@ cabal.mkDerivation (self: {
   meta = {
     homepage = "http://www.shellcheck.net/";
     description = "Shell script analysis tool";
-    license = self.stdenv.lib.licenses.agpl3Plus;
+    license = "unknown";
     platforms = self.ghc.meta.platforms;
   };
 })
