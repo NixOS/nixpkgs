@@ -2,10 +2,10 @@
 
 cabal.mkDerivation (self: {
   pname = "aeson-qq";
-  version = "0.7.1";
-  sha256 = "1b2ham1h6mlm49ax9k2agf8yymbgkk094nq2apn703i2d9v00im6";
+  version = "0.7.2";
+  sha256 = "1h4agwl8kr6qpy4775pxmaizhlzbwjqb23pxn2vvz9wbm2vnixwk";
   buildDepends = [ aeson haskellSrcMeta parsec text vector ];
-  testDepends = [ aeson hspec ];
+  testDepends = [ aeson haskellSrcMeta hspec parsec text vector ];
   meta = {
     homepage = "http://github.com/zalora/aeson-qq";
     description = "JSON quasiquoter for Haskell";
