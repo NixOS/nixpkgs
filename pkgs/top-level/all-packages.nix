@@ -1314,6 +1314,8 @@ let
 
   isync = callPackage ../tools/networking/isync { };
 
+  jd-gui = callPackage_i686 ../tools/security/jd-gui { };
+
   jdiskreport = callPackage ../tools/misc/jdiskreport { };
 
   jfsrec = callPackage ../tools/filesystems/jfsrec {
