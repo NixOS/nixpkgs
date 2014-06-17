@@ -1966,6 +1966,8 @@ let
 
   s3cmd = callPackage ../tools/networking/s3cmd { };
 
+  s3cmd_15_pre_81e3842f7a = lowPrio (callPackage ../tools/networking/s3cmd/git.nix { });
+
   s3sync = callPackage ../tools/networking/s3sync {
     ruby = ruby18;
   };
