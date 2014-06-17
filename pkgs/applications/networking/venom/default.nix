@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, cmake, vala, pkgconfig, gtk3, gnome3, sqlite, json_glib, sodium, libtoxcore, libqrencode
-, qrcodeSupport ? true }:
+{ stdenv, fetchurl, cmake, vala, pkgconfig, gtk3, gnome3, sqlite, json_glib, libtoxcore, libqrencode
+, qrcodeSupport ? false }:
 
 assert qrcodeSupport -> libqrencode != null;
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    cmake vala pkgconfig gtk3 gnome3.libgee sqlite json_glib sodium libtoxcore 
+    cmake vala pkgconfig gtk3 gnome3.libgee sqlite json_glib libtoxcore 
   ] ++ stdenv.lib.optional qrcodeSupport [ libqrencode ];
 
   cmakeFlags = ''

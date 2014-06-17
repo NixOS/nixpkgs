@@ -1,26 +1,28 @@
 { stdenv, fetchurl, autoconf, automake, libtool, libsodium, check
 , pkgconfig, libopus, libvpx
-, avSupport ? true }:
+, avSupport ? false }:
 
 assert avSupport -> pkgconfig != null && libopus != null && libvpx != null;
 
-let
-  version = "63f25f86d";
-  date = "20140611";
-in
 stdenv.mkDerivation rec {
-  name = "tox-core-${date}-${version}";
+  rev = "881b2d900d1998981fb6b9938ec66012d049635f";
+  date = "20140615";
+  name = "tox-core-${date}-${stdenv.lib.strings.substring 0 7 rev}";
 
   src = fetchurl {
-    url = "https://github.com/irungentoo/ProjectTox-Core/tarball/${version}";
+    url = "https://github.com/irungentoo/ProjectTox-Core/tarball/${rev}";
     name = "${name}.tar.gz";
-    sha256 = "194fddqpv40w4yk0sqh5wlpgrm06jmxvgk5530ziahjpf1m5gcw6";
+    sha256 = "186a4dkl3qgxnz51qny87xhyg75741idni3c96h3a44lwps1k913";
   };
 
   buildInputs = [
-    autoconf automake libtool libsodium 
+    autoconf automake libtool
   ] ++ stdenv.lib.optional avSupport [ pkgconfig libopus libvpx ]
     ++ stdenv.lib.optional doCheck [ check ];
+
+  propagatedBuildInputs = [
+    libsodium
+  ];
 
   preConfigure = "./autogen.sh";
 
