@@ -353,7 +353,7 @@ changes:
 
 <title xml:id="sec-booting-from-usb">Booting from a USB stick</title>
 
-<para>For systems withoua CD drive, the NixOS livecd can be booted from
+<para>For systems without CD drive, the NixOS livecd can be booted from
 a usb stick. For non-UEFI installations,
 <link xlink:href="http://unetbootin.sourceforge.net/">unetbootin</link>
 will work. For UEFI installations, you should mount the ISO, copy its contents
