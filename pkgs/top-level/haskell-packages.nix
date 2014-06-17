@@ -2607,7 +2607,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   AgdaStdlib_0_7 = callPackage ../development/compilers/agda/stdlib-0.7.nix {
     Agda = self.Agda_2_3_2_2;
   };
-  AgdaStdlib_2_4_0 = callPackage ../development/compilers/agda/stdlib-2.4.0.nix {
+  AgdaStdlib_0_8 = callPackage ../development/compilers/agda/stdlib-0.8.nix {
     Agda = self.Agda_2_4_0_1;
   };
   AgdaStdlib = self.AgdaStdlib_0_7;
