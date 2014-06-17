@@ -1398,6 +1398,8 @@ let
 
   libqmi = callPackage ../development/libraries/libqmi { };
 
+  libqrencode = callPackage ../development/libraries/libqrencode { };
+
   libmbim = callPackage ../development/libraries/libmbim { };
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
@@ -11199,6 +11201,8 @@ let
   };
 
   patoline = PatolineEnv ocamlPackages_4_00_1;
+
+  venom = callPackage ../applications/networking/venom { };
 
   znc = callPackage ../applications/networking/znc { };
 
