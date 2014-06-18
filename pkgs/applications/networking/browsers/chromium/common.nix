@@ -144,6 +144,10 @@ let
       sed -i -e '/base::FilePath exe_dir/,/^ *} *$/c \
         sandbox_binary = base::FilePath(getenv("CHROMIUM_SANDBOX_BINARY_PATH"));
       ' ${toPatch}
+    '' + optionalString (!versionOlder source.version "36.0.0.0") ''
+      sed -i -e '/module_path *=.*libexif.so/ {
+        s|= [^;]*|= base::FilePath().AppendASCII("${libexif}/lib/libexif.so")|
+      }' chrome/utility/media_galleries/image_metadata_extractor.cc
     '';
 
     gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {
