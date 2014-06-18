@@ -5688,6 +5688,8 @@ let
 
   ntrack = callPackage ../development/libraries/ntrack { };
 
+  nvidia-texture-tools = callPackage ../development/libraries/nvidia-texture-tools { };
+
   ode = builderDefsPackage (import ../development/libraries/ode) { };
 
   ogre = callPackage ../development/libraries/ogre {};
@@ -10317,7 +10319,6 @@ let
   zoom = callPackage ../games/zoom { };
 
   keen4 = callPackage ../games/keen4 { };
-
 
   ### DESKTOP ENVIRONMENTS
 
