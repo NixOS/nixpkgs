@@ -3507,7 +3507,9 @@ let
 
   php_xcache = callPackage ../development/libraries/php-xcache { };
 
-  picolisp = callPackage ../development/interpreters/picolisp {};
+  picolisp = if system == "x86_64-linux" then picolisp64 else picolisp32;
+  picolisp64 =  callPackage ../development/interpreters/picolisp/64.nix {};
+  picolisp32 =  callPackage_i686 ../development/interpreters/picolisp/32.nix {};
 
   pltScheme = racket; # just to be sure
 
