@@ -48,6 +48,7 @@ in
         Rather, it should be the path of a symlink that points to the
         actual shell in the Nix store.
       '';
+      example = "/run/current-system/sw/bin/zsh";
       type = types.path;
     };
 
