@@ -4619,6 +4619,8 @@ let
 
   glog = callPackage ../development/libraries/glog { };
 
+  gloox = callPackage ../development/libraries/gloox { };
+
   glpk = callPackage ../development/libraries/glpk { };
 
   glsurf = callPackage ../applications/science/math/glsurf {
