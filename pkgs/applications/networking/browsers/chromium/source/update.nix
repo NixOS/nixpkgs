@@ -99,7 +99,9 @@ in rec {
 
     prefetch_sha()
     {
-      echo "$(prefetch_main_sha "$@").$(prefetch_deb_sha "$@")";
+      main_sha="$(prefetch_main_sha "$@")" || return 1;
+      deb_sha="$(prefetch_deb_sha "$@")" || return 1;
+      echo "$main_sha.$deb_sha";
       return 0;
     }
 
