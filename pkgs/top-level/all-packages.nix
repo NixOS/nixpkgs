@@ -9728,7 +9728,24 @@ let
 
   virtualgl = callPackage ../tools/X11/virtualgl { };
 
-  bumblebee = callPackage ../tools/X11/bumblebee { };
+  primus = callPackage ../tools/X11/primus {
+    primusLib = callPackage ../tools/X11/primus/lib.nix {
+      nvidia = linuxPackages.nvidia_x11;
+    };
+
+    primusLib_i686 = if system == "x86_64-linux"
+      then callPackage_i686 ../tools/X11/primus/lib.nix {
+             nvidia = callPackage_i686 ../os-specific/linux/nvidia-x11 { libsOnly = true; };
+           }
+      else null;
+  };
+
+  bumblebee = callPackage ../tools/X11/bumblebee {
+    nvidia_x11_x64 = linuxPackages.nvidia_x11;
+    nvidia_x11_i686 = callPackage_i686 ../os-specific/linux/nvidia-x11 { libsOnly = true; };
+    virtualgl_x64 = virtualgl;
+    virtualgl_i686 = pkgsi686Linux.virtualgl;
+  };
 
   vkeybd = callPackage ../applications/audio/vkeybd {
     inherit (xlibs) libX11;
