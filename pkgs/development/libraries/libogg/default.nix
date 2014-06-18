@@ -1,16 +1,20 @@
-{ stdenv, fetchurl, xz }:
+{ stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
-  name = "libogg-1.3.1";
+let
+  name = "libogg-1.3.2";
+in
+stdenv.mkDerivation {
+  inherit name;
   
   src = fetchurl {
     url = "http://downloads.xiph.org/releases/ogg/${name}.tar.xz";
-    sha256 = "1ynwij1qdibwb2nvcl3ixri0c6pvq1higl96hf87iyqsv1wasnrs";
+    sha256 = "16z74q422jmprhyvy7c9x909li8cqzmvzyr8cgbm52xcsp6pqs1z";
   };
 
-  nativeBuildInputs = [ xz ];
-
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://xiph.org/ogg/;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.emery ];
+    platforms = platforms.all;
   };
 }
