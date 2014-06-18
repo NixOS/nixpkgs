@@ -1,4 +1,5 @@
-{ fetchurl, stdenv, emacs, texinfo, which, texLive }:
+{ fetchurl, stdenv, emacs, texinfo, which, texLive, texLiveCMSuper
+, texLiveAggregationFun }:
 
 stdenv.mkDerivation rec {
   name = "org-8.2.7";
@@ -9,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ emacs ];
-  nativeBuildInputs = [ texinfo texLive ];
+  nativeBuildInputs = [ (texLiveAggregationFun { paths=[ texinfo texLive texLiveCMSuper ]; }) ];
 
   configurePhase =
     '' sed -i mk/default.mk \
