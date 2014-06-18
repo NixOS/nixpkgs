@@ -26,6 +26,7 @@ cabal.mkDerivation (self: {
     cd ..
     ensureDir "$out/share/emacs"
     mv $pname-$version emacs/site-lisp
+
     mv $out/bin/ghc-mod $out/bin/.ghc-mod-wrapped
     cat - > $out/bin/ghc-mod <<EOF
     #! ${self.stdenv.shell}
@@ -34,6 +35,15 @@ cabal.mkDerivation (self: {
     eval exec $out/bin/.ghc-mod-wrapped \$COMMAND \$( ${self.ghc.GHCGetPackages} ${self.ghc.version} | tr " " "\n" | tail -n +2 | paste -d " " - - | sed 's/.*/-g "&"/' | tr "\n" " ") "\$@"
     EOF
     chmod +x $out/bin/ghc-mod
+
+    mv $out/bin/ghc-modi $out/bin/.ghc-modi-wrapped
+    cat - > $out/bin/ghc-modi <<EOF
+    #! ${self.stdenv.shell}
+    COMMAND=\$1
+    shift
+    eval exec $out/bin/.ghc-modi-wrapped \$COMMAND \$( ${self.ghc.GHCGetPackages} ${self.ghc.version} | tr " " "\n" | tail -n +2 | paste -d " " - - | sed 's/.*/-g "&"/' | tr "\n" " ") "\$@"
+    EOF
+    chmod +x $out/bin/ghc-modi
   '';
   meta = {
     homepage = "http://www.mew.org/~kazu/proj/ghc-mod/";
