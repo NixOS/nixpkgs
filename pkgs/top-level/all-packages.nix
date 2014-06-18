@@ -10322,6 +10322,8 @@ let
 
   keen4 = callPackage ../games/keen4 { };
 
+  zeroad = callPackage ../games/0ad { };
+
   ### DESKTOP ENVIRONMENTS
 
   cinnamon = recurseIntoAttrs rec {
