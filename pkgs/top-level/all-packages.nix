@@ -7780,6 +7780,8 @@ let
 
   arkpandora_ttf = builderDefsPackage (import ../data/fonts/arkpandora) { };
 
+  aurulent-sans = callPackage ../data/fonts/aurulent-sans { };
+
   bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
 
   cacert = callPackage ../data/misc/cacert { };
