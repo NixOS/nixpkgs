@@ -2082,8 +2082,6 @@ let
 
   sudo = callPackage ../tools/security/sudo { };
 
-  sudoWithVisudo = sudo.override { keepVisudo = true; };
-
   suidChroot = builderDefsPackage (import ../tools/system/suid-chroot) { };
 
   super = callPackage ../tools/security/super { };
