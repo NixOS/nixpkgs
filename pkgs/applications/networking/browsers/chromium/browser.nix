@@ -11,7 +11,7 @@ mkChromiumDerivation (base: rec {
     ensureDir "$libExecPath"
     cp -v "$buildPath/"*.pak "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
-    cp -vR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
+    cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
     cp -v $buildPath/libffmpegsumo.so "$libExecPath/"
 
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"
