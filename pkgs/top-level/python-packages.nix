@@ -3385,13 +3385,13 @@ rec {
 
 
   gyp = buildPythonPackage rec {
-    rev = "1738";
+    rev = "1944";
     name = "gyp-r${rev}";
 
     src = fetchsvn {
       url = "http://gyp.googlecode.com/svn/trunk";
       inherit rev;
-      sha256 = "155k7v6453j2kg02xqfqbkzkbaqc8aynxs2k462jmrp638vxia9s";
+      sha256 = "15k3ivk3jyhx4rwdf1mn6qpyrwixvy01jpkir8d14c4g9hax1dx1";
     };
 
     patches = optionals pkgs.stdenv.isDarwin [
