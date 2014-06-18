@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
     dataDefault hspec HUnit mtl network QuickCheck text time utf8String
   ];
   jailbreak = true;
+  doCheck = false;
   meta = {
     homepage = "http://github.com/joachifm/libmpd-haskell#readme";
     description = "An MPD client library";

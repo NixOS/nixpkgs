@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wai-middleware-static";
-  version = "0.5.0.1";
-  sha256 = "1pwyy6lsvi7kaxf6x3ghy5013yq4ryjp01c4rrd4isx4jh1ynl31";
+  version = "0.6.0";
+  sha256 = "1rsy8qkxcjqdpzqkar0smyy49p8vqapi47k8d24101lz3rym6018";
   buildDepends = [ filepath httpTypes mtl text wai ];
   jailbreak = true;
   meta = {

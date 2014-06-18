@@ -17,14 +17,14 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
 rec {
 
-  firefoxVersion = "29.0.1";
+  firefoxVersion = "30.0";
 
-  xulVersion = "29.0.1"; # this attribute is used by other packages
+  xulVersion = "30.0"; # this attribute is used by other packages
 
 
   src = fetchurl {
     url = "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha1 = "2819ef63403de2bcfff5496bd21a3b8cb5dfce82";
+    sha1 = "bll9hxf31gvg9db6gxgmq25qsjif3p11";
   };
 
   commonConfigureFlags =
@@ -91,6 +91,11 @@ rec {
 
     #installFlags = "SKIP_GRE_REGISTRATION=1";
 
+    preInstall = ''
+      # The following is needed for startup cache creation on grsecurity kernels
+      paxmark m ../objdir/dist/bin/xpcshell
+    '';
+
     postInstall = ''
       # Fix run-mozilla.sh search
       libDir=$(cd $out/lib && ls -d xulrunner-[0-9]*)
@@ -109,6 +114,10 @@ rec {
       for i in $out/lib/$libDir/*.so; do
           patchelf --set-rpath "$(patchelf --print-rpath "$i"):$out/lib/$libDir" $i || true
       done
+
+      # For grsecurity kernels
+      paxmark m $out/lib/$libDir/{plugin-container,xulrunner}
+
       for i in $out/lib/$libDir/{plugin-container,xulrunner,xulrunner-stub}; do
           wrapProgram $i --prefix LD_LIBRARY_PATH ':' "$out/lib/$libDir"
       done

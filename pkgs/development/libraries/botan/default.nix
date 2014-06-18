@@ -14,12 +14,12 @@ let
   sourceInfo = rec {
     baseName="botan";
     tarBaseName="Botan";
-    baseVersion="1.8";
-    revision="11";
+    baseVersion = "1.10";
+    revision = "8";
     version="${baseVersion}.${revision}";
     name="${baseName}-${version}";
     url="http://files.randombit.net/${baseName}/v${baseVersion}/${tarBaseName}-${version}.tbz";
-    hash="194vffc9gfb0912lzndn8nzblg2d2gjmk13fc8hppgpw7ln0mdn3";
+    hash = "182f316rbdd6jrqn92vjms3jyb9syn4ic0nzi3b7rfjbj3zdabxw";
   };
 in
 rec {
@@ -32,8 +32,13 @@ rec {
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
+  phaseNames = ["doConfigure" "doMakeInstall" "fixPkgConfig"];
   configureCommand = "python configure.py --with-gnump --with-bzip2 --with-zlib --with-openssl --with-tr1-implementation=boost";
+
+  fixPkgConfig = a.fullDepEntry ''
+    cd "$out"/lib/pkgconfig
+    ln -s botan-*.pc botan.pc || true
+  '' ["minInit" "doMakeInstall"];
       
   meta = {
     description = "Cryptographic algorithms library";
@@ -43,6 +48,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       unix;
+    inherit version;
   };
   passthru = {
     updateInfo = {

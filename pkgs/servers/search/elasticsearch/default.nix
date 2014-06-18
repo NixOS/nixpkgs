@@ -1,10 +1,10 @@
 { stdenv, fetchurl, makeWrapper, jre, utillinux }:
 stdenv.mkDerivation rec {
-  name = "elasticsearch-1.0.1";
+  name = "elasticsearch-1.2.1";
 
   src = fetchurl {
     url = "https://download.elasticsearch.org/elasticsearch/elasticsearch/${name}.tar.gz";
-    sha256 = "0nwv7llw7gk94alfcpxxy0lybhnw7fggv30v7ylsxn20id9g7kba";
+    sha256 = "11lirxl0hb0xfd57accsgldq1adrlv9pak2520jll2sj5gg71cmj";
   };
 
   patches = [ ./es-home.patch ];

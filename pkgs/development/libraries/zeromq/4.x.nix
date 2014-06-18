@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.zeromq.org/${name}.tar.gz";
-    sha256 = "1ef71d46e94f33e27dd5a1661ed626cd39be4d2d6967792a275040e34457d399";
+    sha256 = "16fkax2f6h2h4wm7jrv95m6vwffd4vb1wrm1smyy4csgx531vxqy";
   };
 
   buildInputs = [ libuuid ];

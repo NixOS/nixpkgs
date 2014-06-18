@@ -1,14 +1,16 @@
 {stdenv, fetchurl, automake, vanilla ? false}:
 
 stdenv.mkDerivation (rec {
-  name = "pkg-config-0.23";
+  name = "pkg-config-0.28";
   
   setupHook = ./setup-hook.sh;
   
   src = fetchurl {
     url = "http://pkgconfig.freedesktop.org/releases/${name}.tar.gz";
-    sha256 = "0lrvk17724mc2nzpaa0vwybarrl50r7qdnr4h6jijm50srrf1808";
+    sha256 = "0igqq5m204w71m11y0nipbdf5apx87hwfll6axs12hn4dqfb6vkb";
   };
+
+  configureFlags = [ "--with-internal-glib" ];
 
   patches = if vanilla then [] else [
     # Process Requires.private properly, see

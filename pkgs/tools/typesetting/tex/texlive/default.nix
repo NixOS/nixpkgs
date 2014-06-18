@@ -1,20 +1,20 @@
 args : with args;
 rec {
   src = fetchurl {
-    url = mirror://debian/pool/main/t/texlive-bin/texlive-bin_2013.20130729.30972.orig.tar.xz;
-    sha256 = "1idgyim6r4bi3id245k616qrdarfh65xv3gi2psarqqmsw504yhd";
+    url = mirror://debian/pool/main/t/texlive-bin/texlive-bin_2014.20140528.34243.orig.tar.xz;
+    sha256 = "0nh8hfayyf60nm4z8zyclrbc3792c62azgsvrwxnl28iq223200s";
   };
 
-  texmfVersion = "2013.20140408";
+  texmfVersion = "2014.20140528";
   texmfSrc = fetchurl {
     url = "mirror://debian/pool/main/t/texlive-base/texlive-base_${texmfVersion}.orig.tar.xz";
-    sha256 = "1pdbbp4sy6kypiqss9zfvr3m0agqzghagfr609pfjh9ka3ihv0kh";
+    sha256 = "09z3jp5if0llszm02x3f93izrspjh14g77034c677r0sj4xrb63w";
   };
 
-  langTexmfVersion = "2013.20140408";
+  langTexmfVersion = "2014.20140528";
   langTexmfSrc = fetchurl {
     url = "mirror://debian/pool/main/t/texlive-lang/texlive-lang_${langTexmfVersion}.orig.tar.xz";
-    sha256 = "05qyhcfdbrrc8mnps5sv3fggjbxdj3bp9jd12ldzkjxxdbzhp475";
+    sha256 = "0c7rppqya74g8fb431i3bbga88xzjiarj540fcn34plar5wz4k31";
   };
 
   passthru = { inherit texmfSrc langTexmfSrc; };
@@ -40,7 +40,7 @@ rec {
     sed -e '/ubidi_open/i#include <unicode/urename.h>' -i $(find . -name configure)
     sed -e 's/-lttf/-lfreetype/' -i $(find . -name configure)
 
-    sed -e s@ncurses/curses.h@curses.h@g -i $(grep ncurses/curses.h -rl . )
+    # sed -e s@ncurses/curses.h@curses.h@g -i $(grep ncurses/curses.h -rl . )
     sed -e '1i\#include <string.h>\n\#include <stdlib.h>' -i $( find libs/teckit -name '*.cpp' -o -name '*.c' )
 
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${icu}/include/layout";
@@ -111,8 +111,9 @@ rec {
   buildInputs = [ zlib bzip2 ncurses libpng flex bison libX11 libICE xproto
     freetype t1lib gd libXaw icu ghostscript ed libXt libXpm libXmu libXext
     xextproto perl libSM ruby expat curl libjpeg python fontconfig xz pkgconfig
-    poppler graphite2 lesstif zziplib harfbuzz texinfo ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ makeWrapper ];
+    poppler libpaper graphite2 lesstif zziplib harfbuzz texinfo potrace ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ makeWrapper ]
+    ;
 
   configureFlags = [ "--with-x11" "--enable-ipc" "--with-mktexfmt"
     "--enable-shared" "--disable-native-texlive-build" "--with-system-zziplib"
@@ -134,7 +135,7 @@ rec {
 
   phaseNames = [ "addInputs" "doMainBuild" "doMakeInstall" "doPostInstall" ];
 
-  name = "texlive-core-2013";
+  name = "texlive-core-2014";
 
   meta = with stdenv.lib; {
     description = "A TeX distribution";

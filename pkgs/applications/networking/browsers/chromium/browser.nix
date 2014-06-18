@@ -1,11 +1,11 @@
-{ stdenv, mkChromiumDerivation }:
+{ stdenv, mkChromiumDerivation, arch }:
 
 with stdenv.lib;
 
 mkChromiumDerivation (base: rec {
   name = "chromium-browser";
   packageName = "chromium";
-  buildTargets = [ "chrome" ];
+  buildTargets = [ "mksnapshot.${arch}" "chrome" ];
 
   installPhase = ''
     ensureDir "$libExecPath"

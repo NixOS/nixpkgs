@@ -1659,6 +1659,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  CryptBlowfish = buildPerlPackage rec {
+    name = "Crypt-Blowfish-2.14";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DP/DPARIS/${name}.tar.gz";
+      sha256 = "1cb7g8cyfs9alrfdykxhs8m6azj091fmcycz6p5vkxbbzcgl7cs6";
+    };
+  };
+
   CryptCBC = buildPerlPackage rec {
     name = "Crypt-CBC-2.33";
     src = fetchurl {
@@ -1674,6 +1682,15 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1rypxlhpd1jc0c327aghgl9y6ls47drmpvn0a40b4k3vhfsypc9d";
     };
     buildInputs = [CryptCBC];
+  };
+
+  CryptDH = buildPerlPackage rec {
+    name = "Crypt-DH-0.07";
+    src = fetchurl {
+      url    = "mirror://cpan/authors/id/M/MI/MITHALDU/${name}.tar.gz";
+      sha256 = "0pvzlgwpx8fzdy64ki15155vhsj30i9zxmw6i4p7irh17d1g7368";
+    };
+    buildInputs = [ MathBigInt MathBigIntGMP ];
   };
 
   CryptDHGMP = buildPerlPackage rec {
@@ -1768,6 +1785,16 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/B/BJ/BJKUIT/Crypt-SmbHash-0.12.tar.gz";
       sha256 = "0dxivcqmabkhpz5xzph6rzl8fvq9xjy26b2ci77pv5gsmdzari38";
     };
+  };
+
+  CryptOpenSSLBignum = buildPerlPackage rec {
+    name = "Crypt-OpenSSL-Bignum-0.04";
+    src = fetchurl {
+      url    = "mirror://cpan/authors/id/I/IR/IROBERTS/${name}.tar.gz";
+      sha256 = "18vg2bqyhc0ahfdh5dkbgph5nh92qcz5vi99jq8aam4h86if78bk";
+    };
+    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.openssl}/lib -lcrypto";
   };
 
   CryptOpenSSLRandom = buildPerlPackage rec {
@@ -5051,6 +5078,27 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0xn2a950mzzs5q1c4q98ckysn9dz20x7r35g02zvk35chgr0klxz";
     };
   };
+
+  MathBigInt = buildPerlPackage rec {
+    name ="Math-BigInt-1.9993";
+    src = fetchurl {
+      url    = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
+      sha256 = "0zmzd4d2sjnhg5cdnqvqj78w5dkickszlxv1csdxsgdvmz8w0dyr";
+    };
+  };
+
+  MathBigIntGMP = buildPerlPackage rec {
+    name = "Math-BigInt-GMP-1.38";
+    src = fetchurl {
+      url    = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
+      sha256 = "05bg10gg3ksn4h08yyyj7f31rqhdqap8d0jsbq61b3x0274wml0s";
+    };
+    buildInputs = [ pkgs.gmp ];
+    doCheck = false;
+    NIX_CFLAGS_COMPILE = "-I${pkgs.gmp}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.gmp}/lib -lgmp";
+  };
+
 
   MathClipper = buildPerlModule rec {
     name = "Math-Clipper-1.22";

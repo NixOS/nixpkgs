@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod";
-  version = "1.2.5.3";
-  sha256 = "1w9bbvinnbnhrajjqj6yhy9dgggdf6n98x04dys45anssiwrd2ss";
+  version = "1.2.6";
+  sha256 = "0rw46zznczdzg2wvbgp5kpq3yrl6w40vbbs7zyvqpcf6m82jsfz0";
   buildDepends = [
     aeson blazeHtml blazeMarkup conduitExtra dataDefault fastLogger
     hamlet monadControl monadLogger networkConduit safe shakespeare

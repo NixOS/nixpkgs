@@ -52,6 +52,8 @@ if test -z "$finalPath"; then
     # Perform the checkout.
     bzr -Ossl.cert_reqs=none export $revarg --format=dir "$tmpFile" "$url"
 
+    echo "bzr revision is $(bzr revno $revarg "$url")"
+
     # Compute the hash.
     hash=$(nix-hash --type $hashType $hashFormat $tmpFile)
     if ! test -n "$QUIET"; then echo "hash is $hash" >&2; fi

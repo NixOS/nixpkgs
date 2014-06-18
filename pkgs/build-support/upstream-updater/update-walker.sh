@@ -246,6 +246,12 @@ do_overwrite () {
   mv "$1.new.tmp" "$1"
 }
 
+do_overwrite_just_version () {
+  ensure_hash
+  set_var_value version $CURRENT_VERSION
+  set_var_value sha256 $CURRENT_HASH
+}
+
 process_config () {
   CONFIG_DIR="$(directory_of "$1")"
   CONFIG_NAME="$(basename "$1")"

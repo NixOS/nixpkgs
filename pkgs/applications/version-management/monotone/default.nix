@@ -1,8 +1,10 @@
 { stdenv, fetchurl, boost, zlib, botan, libidn
-, lua, pcre, sqlite, perl, pkgconfig, expect }:
+, lua, pcre, sqlite, perl, pkgconfig, expect
+, bzip2, gmp, openssl
+}:
 
 let
-  version = "1.0";
+  version = "1.1";
   perlVersion = (builtins.parseDrvName perl.name).version;
 in
 
@@ -13,12 +15,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://monotone.ca/downloads/${version}/monotone-${version}.tar.bz2";
-    sha256 = "5c530bc4652b2c08b5291659f0c130618a14780f075f981e947952dcaefc31dc";
+    sha256 = "124cwgi2q86hagslbk5idxbs9j896rfjzryhr6z63r6l485gcp7r";
   };
 
-  patches = [ ./glibc-file-handle.patch ];
+  patches = [ ];
 
-  buildInputs = [ boost zlib botan libidn lua pcre sqlite pkgconfig expect ];
+  buildInputs = [ boost zlib botan libidn lua pcre sqlite pkgconfig expect 
+    openssl gmp bzip2 ];
 
   postInstall = ''
     mkdir -p $out/share/${name}

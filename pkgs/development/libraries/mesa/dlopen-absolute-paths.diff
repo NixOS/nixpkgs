@@ -1,0 +1,13 @@
+diff --git a/src/loader/loader.c b/src/loader/loader.c
+index 666d015..4d7a9be 100644
+--- a/src/loader/loader.c
++++ b/src/loader/loader.c
+@@ -101,7 +101,7 @@ static void *
+ udev_dlopen_handle(void)
+ {
+    if (!udev_handle) {
+-      udev_handle = dlopen("libudev.so.1", RTLD_LOCAL | RTLD_LAZY);
++      udev_handle = dlopen("@udev@/lib/libudev.so.1", RTLD_LOCAL | RTLD_LAZY);
+ 
+       if (!udev_handle) {
+          /* libudev.so.1 changed the return types of the two unref functions

@@ -22,6 +22,7 @@ let
             isoImage.storeContents =
               [ pkgs.glibcLocales
                 pkgs.sudo
+                pkgs.sudoWithVisudo
                 pkgs.docbook5
                 pkgs.docbook5_xsl
                 pkgs.grub

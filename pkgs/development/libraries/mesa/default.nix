@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, intltool, flex, bison, autoreconfHook
+{ stdenv, fetchurl, pkgconfig, intltool, flex, bison, autoreconfHook, substituteAll
 , python, libxml2Python, file, expat, makedepend
 , libdrm, xorg, wayland, udev, llvm, libffi
 , libvdpau, libelf
+, grsecEnabled
 , enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
 , enableExtraFeatures ? false # not maintained
 }:
@@ -23,7 +24,7 @@ else
 */
 
 let
-  version = "10.1.4";
+  version = "10.1.5";
   # this is the default search path for DRI drivers
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
@@ -34,16 +35,21 @@ stdenv.mkDerivation {
 
   src =  fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    sha256 = "0g2j2zz7yq3i8k8dkji8h7iqfbcm8afb5lrb4dxrcyjl1bh6gibg";
+    sha256 = "1g2vy7zaamzs00xasiwg0d6cb5sclfd9v8jms14ll9bghg3mwv5w";
   };
 
   prePatch = "patchShebangs .";
 
   patches = [
     ./static-gallium.patch
+    ./glx_ro_text_segm.patch # fix for grsecurity/PaX
    # TODO: revive ./dricore-gallium.patch when it gets ported (from Ubuntu),
    #  as it saved ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
-  ];
+  ] ++ optional stdenv.isLinux
+      (substituteAll {
+        src = ./dlopen-absolute-paths.diff;
+        inherit udev;
+      });
 
   # Change the search path for EGL drivers from $drivers/* to driverLink
   postPatch = ''
@@ -79,7 +85,8 @@ stdenv.mkDerivation {
       "--enable-openvg" "--enable-gallium-egl" # not needed for EGL in Gallium, but OpenVG might be useful
       #"--enable-xvmc" # tests segfault with 9.1.{1,2,3}
       #"--enable-opencl" # ToDo: opencl seems to need libclc for clover
-    ];
+    ]
+    ++ optional grsecEnabled "--enable-glx-rts"; # slight performance degradation, enable only for grsec
 
   nativeBuildInputs = [ pkgconfig python makedepend file flex bison ];
 

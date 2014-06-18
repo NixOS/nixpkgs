@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "entropy";
-  version = "0.3";
-  sha256 = "0b1yx7409xw8jz2rj8695xscjnw4p7y80niq9cbkqrmnqbqnwj2q";
+  version = "0.3.2";
+  sha256 = "1kk0vmfmfqcsw0pzbii9rvz32fvhvxqpn6p6jw6q2x33z6gm5f9x";
   meta = {
     homepage = "https://github.com/TomMD/entropy";
     description = "A platform independent entropy source";

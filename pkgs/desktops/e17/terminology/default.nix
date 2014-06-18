@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "terminology-${version}";
-  version = "0.4.0";
+  version = "0.5.1";
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/terminology/${name}.tar.gz";
-    sha256 = "1ing9l19h7f1f843rcabbjaynps1as4mpc31xz2adkafb3xd3wk3";
+    sha256 = "1b8m6fhzx2fdr3m6ak2163v33zc4svmg2k875m0xppzifdd9xvyf";
   };
   buildInputs = [ pkgconfig elementary eina eet evas ecore edje emotion ecore ethumb efreet ];
 

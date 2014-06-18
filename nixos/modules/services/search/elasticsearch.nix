@@ -104,8 +104,9 @@ in {
       after = [ "network-interfaces.target" ];
       environment = { ES_HOME = cfg.dataDir; };
       serviceConfig = {
-        ExecStart = "${pkgs.elasticsearch}/bin/elasticsearch -f -Des.path.conf=${configDir}";
+        ExecStart = "${pkgs.elasticsearch}/bin/elasticsearch -Des.path.conf=${configDir}";
         User = "elasticsearch";
+        PermissionsStartOnly = true;
       };
       preStart = ''
         mkdir -m 0700 -p ${cfg.dataDir}

@@ -14,12 +14,14 @@
   ./config/power-management.nix
   ./config/pulseaudio.nix
   ./config/shells-environment.nix
+  ./config/system-environment.nix
   ./config/swap.nix
   ./config/sysctl.nix
   ./config/system-path.nix
   ./config/timezone.nix
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
+  ./config/zram.nix
   ./hardware/all-firmware.nix
   ./hardware/cpu/intel-microcode.nix
   ./hardware/cpu/amd-microcode.nix
@@ -205,6 +207,7 @@
   ./services/networking/networkmanager.nix
   ./services/networking/ngircd.nix
   ./services/networking/notbit.nix
+  ./services/networking/nsd.nix
   ./services/networking/ntopng.nix
   ./services/networking/ntpd.nix
   ./services/networking/oidentd.nix

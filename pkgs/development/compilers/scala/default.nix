@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out
-    rm bin/*.bat
+    rm "bin/"*.bat
     mv * $out
 
     for p in $(ls $out/bin/) ; do
