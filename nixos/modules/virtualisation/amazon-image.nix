@@ -26,7 +26,7 @@ in
               ''
                 mkdir $out
                 diskImage=$out/nixos.img
-                ${pkgs.vmTools.qemu}/bin/qemu-img create -f raw $diskImage "4G"
+                ${pkgs.vmTools.qemu}/bin/qemu-img create -f raw $diskImage "8G"
                 mv closure xchg/
               '';
             buildInputs = [ pkgs.utillinux pkgs.perl ];
@@ -34,16 +34,32 @@ in
               [ "closure" config.system.build.toplevel ];
           }
           ''
-            # Create an empty filesystem and mount it.
-            ${pkgs.e2fsprogs}/sbin/mkfs.ext4 -L nixos /dev/vda
-            ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda
-            mkdir /mnt
-            mount /dev/vda /mnt
+            ${if cfg.hvm then ''
+              # Create a single / partition.
+              ${pkgs.parted}/sbin/parted /dev/vda mklabel msdos
+              ${pkgs.parted}/sbin/parted /dev/vda -- mkpart primary ext2 1M -1s
+              . /sys/class/block/vda1/uevent
+              mknod /dev/vda1 b $MAJOR $MINOR
+
+              # Create an empty filesystem and mount it.
+              ${pkgs.e2fsprogs}/sbin/mkfs.ext4 -L nixos /dev/vda1
+              ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda1
+              mkdir /mnt
+              mount /dev/vda1 /mnt
+            '' else ''
+              # Create an empty filesystem and mount it.
+              ${pkgs.e2fsprogs}/sbin/mkfs.ext4 -L nixos /dev/vda
+              ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda
+              mkdir /mnt
+              mount /dev/vda /mnt
+            ''}
 
             # The initrd expects these directories to exist.
             mkdir /mnt/dev /mnt/proc /mnt/sys
 
             mount -o bind /proc /mnt/proc
+            mount -o bind /dev /mnt/dev
+            mount -o bind /sys /mnt/sys
 
             # Copy all paths in the closure to the filesystem.
             storePaths=$(perl ${pkgs.pathsFromGraph} /tmp/xchg/closure)
@@ -73,9 +89,10 @@ in
             cp ${./amazon-config.nix} /mnt/etc/nixos/configuration.nix
 
             # Generate the GRUB menu.
+            ln -s vda /dev/xvda
             chroot /mnt ${config.system.build.toplevel}/bin/switch-to-configuration boot
 
-            umount /mnt/proc
+            umount /mnt/proc /mnt/dev /mnt/sys
             umount /mnt
           ''
       );
@@ -86,7 +103,7 @@ in
     boot.kernelModules = [ "xen-netfront" ];
 
     # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
-    boot.loader.grub.version = 1;
+    boot.loader.grub.version = if cfg.hvm then 2 else 1;
     boot.loader.grub.device = if cfg.hvm then "/dev/xvda" else "nodev";
     boot.loader.grub.timeout = 0;
     boot.loader.grub.extraPerEntryConfig = "root (hd0${lib.optionalString cfg.hvm ",0"})";

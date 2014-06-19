@@ -2186,6 +2186,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   TCache = callPackage ../development/libraries/haskell/TCache {};
 
+  tcacheAWS = callPackage ../development/libraries/haskell/tcache-AWS {};
+
   templateDefault = callPackage ../development/libraries/haskell/template-default {};
 
   temporary = callPackage ../development/libraries/haskell/temporary {};
@@ -2462,6 +2464,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   websockets = callPackage ../development/libraries/haskell/websockets {
     testFrameworkQuickcheck2 = self.testFrameworkQuickcheck2.override { QuickCheck = self.QuickCheck_2_6; };
+    QuickCheck = self.QuickCheck_2_6;
   };
 
   websocketsSnap = callPackage ../development/libraries/haskell/websockets-snap {};
@@ -2601,16 +2604,18 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   # Compilers.
 
   Agda_2_3_2_2 = callPackage ../development/compilers/agda/2.3.2.2.nix {};
-  Agda_2_4_0_1 = callPackage ../development/compilers/agda/2.4.0.1.nix {};
-  Agda = self.Agda_2_3_2_2;
+  Agda_2_4_0_1 = callPackage ../development/compilers/agda/2.4.0.1.nix {
+    binary = self.binary_0_7_2_1;
+  };
+  Agda = self.Agda_2_4_0_1;
 
   AgdaStdlib_0_7 = callPackage ../development/compilers/agda/stdlib-0.7.nix {
     Agda = self.Agda_2_3_2_2;
   };
-  AgdaStdlib_2_4_0 = callPackage ../development/compilers/agda/stdlib-2.4.0.nix {
+  AgdaStdlib_0_8 = callPackage ../development/compilers/agda/stdlib-0.8.nix {
     Agda = self.Agda_2_4_0_1;
   };
-  AgdaStdlib = self.AgdaStdlib_0_7;
+  AgdaStdlib = self.AgdaStdlib_0_8;
 
   uhc = callPackage ../development/compilers/uhc {};
 
@@ -2716,6 +2721,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   darcs = callPackage ../applications/version-management/darcs {};
 
   idris_plain = callPackage ../development/compilers/idris {
+    parsers = self.parsers_0_10_3;
+    trifecta = self.trifecta.override {
+      parsers = self.parsers_0_10_3;
+    };
     llvmGeneral = self.llvmGeneral_3_3_8_2;
     llvmGeneralPure = self.llvmGeneralPure_3_3_8_2;
   };

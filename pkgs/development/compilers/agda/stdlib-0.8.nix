@@ -1,16 +1,15 @@
 { cabal, fetchurl, filemanip, Agda }:
 
-cabal.mkDerivation (self: {
-  pname = "Agda-lib-ffi";
-  version = "2.4.0";
+cabal.mkDerivation (self: rec {
+  pname = "Agda-stdlib";
+  version = "0.8";
 
   src = fetchurl {
-    url = "https://github.com/agda/agda-stdlib/archive/v2.4.0.tar.gz";
-    sha256 = "1rz0jrkm1b8d8aj9hbj3yl2k219c57r0cizfx98qqf1b9mwixzbf";
+    url = "https://github.com/agda/agda-stdlib/archive/v${version}.tar.gz";
+    sha256 = "03gdcy2gar46qlmd6w91y05cm1x304ig6bda90ryww9qn05kif78";
   };
 
   buildDepends = [ filemanip Agda ];
-  jailbreak = true;             # otherwise, it complains about base
 
   preConfigure = "cd ffi";
 
@@ -18,7 +17,7 @@ cabal.mkDerivation (self: {
       mkdir -p $out/share
       cd ..
       runhaskell GenerateEverything
-      ${Agda}/bin/agda -i . -i src Everything.agda
+      agda -i . -i src Everything.agda
       cp -pR src $out/share/agda
   '';
 

@@ -4,12 +4,12 @@
 , ffmpeg, x264, libvpx, pil, libwebp }:
 
 buildPythonPackage rec {
-  name = "xpra-0.12.5";
+  name = "xpra-0.11.6";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://xpra.org/src/${name}.tar.bz2";
-    sha256 = "1qr9gxmfnkays9hrw2qki1jdkyxhbbkjx71gy23x423cfsxsjmiw";
+    sha256 = "0n3lr8nrfmrll83lgi1nzalng902wv0dcmcyx4awnman848dxij0";
   };
 
   buildInputs = [

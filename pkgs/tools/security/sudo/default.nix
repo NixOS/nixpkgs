@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, coreutils, pam, groff, keepVisudo ? false }:
+{ stdenv, fetchurl, coreutils, pam, groff }:
 
 stdenv.mkDerivation rec {
-  name = "sudo-1.8.9p4";
+  name = "sudo-1.8.10p3";
 
   src = fetchurl {
     urls =
       [ "ftp://ftp.sudo.ws/pub/sudo/${name}.tar.gz"
         "ftp://ftp.sudo.ws/pub/sudo/OLD/${name}.tar.gz"
       ];
-    sha256 = "19y75bsh4z2kid5jk2r84z7rvmnh90n8cb9fbn9l4rcw83lzjhqr";
+    sha256 = "002l6h27pnhb77b65frhazbhknsxvrsnkpi43j7i0qw1lrgi7nkf";
   };
 
   postConfigure = ''
@@ -32,11 +32,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
-    # ‘visudo’ does not make sense on NixOS - except for checking sudoers
-    # file syntax
-    rm ${if keepVisudo then "" else "$out/sbin/visudo"} \
-        $out/share/man/man8/visudo.8
-
     rm $out/share/doc/sudo/ChangeLog
   '';
 

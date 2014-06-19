@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "json-assertions";
-  version = "1.0.2";
-  sha256 = "0ppj1xxbi0yrmv6vkmwkz91vvwzjd0ixj60432liwmd6h13apky0";
+  version = "1.0.3";
+  sha256 = "1iklsgzfxgiizqn90r9wfzfaz84fj8by4arppp139w6ybzh3b0r8";
   buildDepends = [ aeson indexed indexedFree lens text ];
   meta = {
     homepage = "http://github.com/ocharles/json-assertions.git";

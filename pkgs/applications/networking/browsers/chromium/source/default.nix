@@ -38,7 +38,8 @@ stdenv.mkDerivation {
       third_party/WebKit/Source/build/scripts/preprocessor.pm
   '' + optionalString useOpenSSL ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
-  '' + optionalString (!versionOlder version "34.0.0.0") ''
+  '' + optionalString (!versionOlder version "37.0.0.0") ''
+    patch -p1 -d third_party/angle < "${./angle_build_37.patch}"
   '';
 
   outputs = [ "out" "sandbox" "bundled" "main" ];

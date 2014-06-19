@@ -3,7 +3,10 @@
 , rtmp ? false
 , fullWebDAV ? false
 , syslog ? false
-, moreheaders ? false}:
+, moreheaders ? false
+, echo ? false }:
+
+with stdenv.lib;
 
 let
   version = "1.6.0";
@@ -35,6 +38,12 @@ let
     rev = "0c6e05d3125a97892a250e9ba8b7674163ba500b";
     sha256 = "e121d97fd3c81c64e6cbf6902bbcbdb01be9ac985c6832d40434379d5e998eaf";
   };
+
+  echo-ext = fetchgit {
+    url = https://github.com/openresty/echo-nginx-module.git;
+    rev = "refs/tags/v0.53";
+    sha256 = "90d4e3a49c678019f4f335bc18529aa108fcc9cfe0747ea4e2f6084a70da2868";
+  };
 in
 
 stdenv.mkDerivation rec {
@@ -43,7 +52,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ openssl zlib pcre libxml2 libxslt gd geoip
-    ] ++ stdenv.lib.optional fullWebDAV expat;
+    ] ++ optional fullWebDAV expat;
 
   patches = if syslog then [ "${syslog-ext}/syslog-1.5.6.patch" ] else [];
 
@@ -69,12 +78,15 @@ stdenv.mkDerivation rec {
     "--with-ipv6"
     # Install destination problems
     # "--with-http_perl_module"
-  ] ++ stdenv.lib.optional rtmp "--add-module=${rtmp-ext}"
-    ++ stdenv.lib.optional fullWebDAV "--add-module=${dav-ext}"
-    ++ stdenv.lib.optional syslog "--add-module=${syslog-ext}"
-    ++ stdenv.lib.optional moreheaders "--add-module=${moreheaders-ext}";
+  ] ++ optional rtmp "--add-module=${rtmp-ext}"
+    ++ optional fullWebDAV "--add-module=${dav-ext}"
+    ++ optional syslog "--add-module=${syslog-ext}"
+    ++ optional moreheaders "--add-module=${moreheaders-ext}"
+    ++ optional echo "--add-module=${echo-ext}"
+    ++ optional (elem stdenv.system (with platforms; linux ++ freebsd)) "--with-file-aio";
 
-  additionalFlags = stdenv.lib.optionalString stdenv.isDarwin "-Wno-error=deprecated-declarations";
+
+  additionalFlags = optionalString stdenv.isDarwin "-Wno-error=deprecated-declarations";
 
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2}/include/libxml2 $additionalFlags"
@@ -87,8 +99,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A reverse proxy and lightweight webserver";
     homepage    = http://nginx.org;
-    license     = stdenv.lib.licenses.bsd2;
-    platforms   = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice raskin ];
+    license     = licenses.bsd2;
+    platforms   = platforms.all;
+    maintainers = with maintainers; [ thoughtpolice raskin ];
   };
 }

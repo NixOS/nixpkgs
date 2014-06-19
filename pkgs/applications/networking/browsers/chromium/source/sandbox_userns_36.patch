@@ -1,4 +1,4 @@
-commit c66c07a2ebcd1b68f412a5a2945fef15b3ba567c
+commit 0fec7e4a742f001c9816a8b58a1120fb44230867
 Author: aszlig <aszlig@redmoonstudios.org>
 Date:   Thu May 16 14:17:56 2013 +0200
 
@@ -47,7 +47,7 @@ index 9e39fba..00e4c79 100644
  
  #if defined(OS_CHROMEOS)
 diff --git a/base/process/launch_posix.cc b/base/process/launch_posix.cc
-index fe4da1a..7f118b8 100644
+index 457234f..a99ce9b 100644
 --- a/base/process/launch_posix.cc
 +++ b/base/process/launch_posix.cc
 @@ -40,6 +40,10 @@
@@ -111,7 +111,7 @@ index fe4da1a..7f118b8 100644
      // DANGER: fork() rule: in the child, if you don't end up doing exec*(),
      // you call _exit() instead of exit(). This is because _exit() does not
      // call any previously-registered (in the parent) exit handlers, which
-@@ -451,6 +480,40 @@ bool LaunchProcess(const std::vector<std::string>& argv,
+@@ -452,6 +481,40 @@ bool LaunchProcess(const std::vector<std::string>& argv,
      _exit(127);
    } else {
      // Parent process
@@ -153,10 +153,10 @@ index fe4da1a..7f118b8 100644
        // While this isn't strictly disk IO, waiting for another process to
        // finish is the sort of thing ThreadRestrictions is trying to prevent.
 diff --git a/content/browser/zygote_host/zygote_host_impl_linux.cc b/content/browser/zygote_host/zygote_host_impl_linux.cc
-index 94bdc16..3398615 100644
+index 9d63ad9..0885705 100644
 --- a/content/browser/zygote_host/zygote_host_impl_linux.cc
 +++ b/content/browser/zygote_host/zygote_host_impl_linux.cc
-@@ -143,6 +143,9 @@ void ZygoteHostImpl::Init(const std::string& sandbox_cmd) {
+@@ -144,6 +144,9 @@ void ZygoteHostImpl::Init(const std::string& sandbox_cmd) {
    // A non empty sandbox_cmd means we want a SUID sandbox.
    using_suid_sandbox_ = !sandbox_cmd.empty();
  
@@ -166,10 +166,10 @@ index 94bdc16..3398615 100644
    // Start up the sandbox host process and get the file descriptor for the
    // renderers to talk to it.
    const int sfd = RenderSandboxHostLinux::GetInstance()->GetRendererSocket();
-@@ -162,11 +165,24 @@ void ZygoteHostImpl::Init(const std::string& sandbox_cmd) {
-     dummy_fd.reset(socket(AF_UNIX, SOCK_DGRAM, 0));
-     CHECK_GE(dummy_fd.get(), 0);
-     fds_to_map.push_back(std::make_pair(dummy_fd.get(), kZygoteIdFd));
+@@ -156,11 +159,24 @@ void ZygoteHostImpl::Init(const std::string& sandbox_cmd) {
+     sandbox_client->PrependWrapper(&cmd_line);
+     sandbox_client->SetupLaunchOptions(&options, &fds_to_map, &dummy_fd);
+     sandbox_client->SetupLaunchEnvironment();
 +    userns_sandbox = sandbox_client->IsNoSuid();
    }
  
@@ -192,7 +192,7 @@ index 94bdc16..3398615 100644
    dummy_fd.reset();
  
 diff --git a/content/zygote/zygote_main_linux.cc b/content/zygote/zygote_main_linux.cc
-index cc28a6f..e8f665a 100644
+index 11f0602..b7b8214 100644
 --- a/content/zygote/zygote_main_linux.cc
 +++ b/content/zygote/zygote_main_linux.cc
 @@ -389,6 +389,13 @@ static bool EnterSuidSandbox(sandbox::SetuidSandboxClient* setuid_sandbox) {
@@ -210,10 +210,10 @@ index cc28a6f..e8f665a 100644
    // Previously, we required that the binary be non-readable. This causes the
    // kernel to mark the process as non-dumpable at startup. The thinking was
 diff --git a/sandbox/linux/suid/client/setuid_sandbox_client.cc b/sandbox/linux/suid/client/setuid_sandbox_client.cc
-index 3300cb4..4bfa516 100644
+index fc03cdd..a972faa 100644
 --- a/sandbox/linux/suid/client/setuid_sandbox_client.cc
 +++ b/sandbox/linux/suid/client/setuid_sandbox_client.cc
-@@ -212,6 +212,10 @@ bool SetuidSandboxClient::IsInNewNETNamespace() const {
+@@ -229,6 +229,10 @@ bool SetuidSandboxClient::IsInNewNETNamespace() const {
    return env_->HasVar(kSandboxNETNSEnvironmentVarName);
  }
  
@@ -224,7 +224,7 @@ index 3300cb4..4bfa516 100644
  bool SetuidSandboxClient::IsSandboxed() const {
    return sandboxed_;
  }
-@@ -267,8 +271,7 @@ void SetuidSandboxClient::PrependWrapper(base::CommandLine* cmd_line,
+@@ -277,8 +281,7 @@ void SetuidSandboxClient::PrependWrapper(base::CommandLine* cmd_line) {
                                      "LinuxSUIDSandboxDevelopment.";
    }
  
@@ -234,10 +234,10 @@ index 3300cb4..4bfa516 100644
      LOG(FATAL) << "The SUID sandbox helper binary was found, but is not "
                    "configured correctly. Rather than run without sandboxing "
                    "I'm aborting now. You need to make sure that "
-@@ -284,6 +287,12 @@ void SetuidSandboxClient::PrependWrapper(base::CommandLine* cmd_line,
-     options->allow_new_privs = true;
-     UnsetExpectedEnvironmentVariables(&options->environ);
+@@ -286,6 +289,12 @@ void SetuidSandboxClient::PrependWrapper(base::CommandLine* cmd_line) {
    }
+ 
+   cmd_line->PrependWrapper(sandbox_binary);
 +
 +  if (!((st.st_uid == 0) &&
 +        (st.st_mode & S_ISUID) &&
@@ -246,12 +246,12 @@ index 3300cb4..4bfa516 100644
 +  }
  }
  
- void SetuidSandboxClient::SetupLaunchEnvironment() {
+ void SetuidSandboxClient::SetupLaunchOptions(
 diff --git a/sandbox/linux/suid/client/setuid_sandbox_client.h b/sandbox/linux/suid/client/setuid_sandbox_client.h
-index 332c63b..4f603f8 100644
+index 2bbad7a..8605475 100644
 --- a/sandbox/linux/suid/client/setuid_sandbox_client.h
 +++ b/sandbox/linux/suid/client/setuid_sandbox_client.h
-@@ -70,6 +70,8 @@ class SANDBOX_EXPORT SetuidSandboxClient {
+@@ -66,6 +66,8 @@ class SANDBOX_EXPORT SetuidSandboxClient {
    bool IsInNewPIDNamespace() const;
    // Did the setuid helper create a new network namespace ?
    bool IsInNewNETNamespace() const;

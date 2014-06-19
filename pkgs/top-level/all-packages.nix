@@ -821,9 +821,15 @@ let
 
   cron = callPackage ../tools/system/cron { };
 
-  cudatoolkit = callPackage ../development/compilers/cudatoolkit {
+  cudatoolkit5 = callPackage ../development/compilers/cudatoolkit/5.5.nix {
     python = python26;
   };
+
+  cudatoolkit6 = callPackage ../development/compilers/cudatoolkit/6.0.nix {
+    python = python26;
+  };
+
+  cudatoolkit = cudatoolkit5;
 
   curl = callPackage ../tools/networking/curl rec {
     fetchurl = fetchurlBoot;
@@ -1313,6 +1319,8 @@ let
   isl_0_12 = callPackage ../development/libraries/isl/0.12.2.nix { };
 
   isync = callPackage ../tools/networking/isync { };
+
+  jd-gui = callPackage_i686 ../tools/security/jd-gui { };
 
   jdiskreport = callPackage ../tools/misc/jdiskreport { };
 
@@ -1965,6 +1973,8 @@ let
   s3backer = callPackage ../tools/filesystems/s3backer { };
 
   s3cmd = callPackage ../tools/networking/s3cmd { };
+
+  s3cmd_15_pre_81e3842f7a = lowPrio (callPackage ../tools/networking/s3cmd/git.nix { });
 
   s3sync = callPackage ../tools/networking/s3sync {
     ruby = ruby18;
@@ -3521,7 +3531,7 @@ let
   python = python27;
   python3 = python3Packages.python;
 
-  pypy = callPackage ../development/interpreters/pypy/2.2 { };
+  pypy = callPackage ../development/interpreters/pypy/2.3 { };
 
   pythonFull = python27Full;
   python26Full = callPackage ../development/interpreters/python/wrapper.nix {
@@ -7776,6 +7786,8 @@ let
 
   arkpandora_ttf = builderDefsPackage (import ../data/fonts/arkpandora) { };
 
+  aurulent-sans = callPackage ../data/fonts/aurulent-sans { };
+
   bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
 
   cacert = callPackage ../data/misc/cacert { };
@@ -8352,6 +8364,8 @@ let
     magit = callPackage ../applications/editors/emacs-modes/magit { };
 
     maudeMode = callPackage ../applications/editors/emacs-modes/maude { };
+
+    metaweblog = callPackage ../applications/editors/emacs-modes/metaweblog { };
 
     notmuch = lowPrio (callPackage ../applications/networking/mailreaders/notmuch { });
 
@@ -10125,6 +10139,8 @@ let
   };
 
   opentyrian = callPackage ../games/opentyrian { };
+
+  openxcom = callPackage ../games/openxcom { };
 
   pingus = callPackage ../games/pingus {};
 
