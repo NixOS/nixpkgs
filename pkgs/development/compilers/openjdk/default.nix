@@ -165,7 +165,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://openjdk.java.net/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     description = "The open-source Java Development Kit";
     maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.shlevy ];
     platforms = stdenv.lib.platforms.linux;

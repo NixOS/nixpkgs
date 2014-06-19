@@ -50,7 +50,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Decentralised and censorship-resistant network";
     homepage = https://freenetproject.org/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     platforms = with stdenv.lib.platforms; linux;
   };
 }

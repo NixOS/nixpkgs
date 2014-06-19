@@ -14,6 +14,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Snort is an open source network intrusion prevention and detection system (IDS/IPS)";
     homepage = http://www.snort.org;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

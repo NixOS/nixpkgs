@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.pps.univ-paris-diderot.fr/~jch/software/babel/";
     description = "Loop-avoiding distance-vector routing protocol";
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
   };
 }

@@ -41,6 +41,6 @@ kde {
 
   meta = {
     description = "KDE workspace components such as Plasma, Kwin and System Settings";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

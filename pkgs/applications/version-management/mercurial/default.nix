@@ -55,7 +55,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A fast, lightweight SCM system for very large distributed projects";
     homepage = "http://www.selenic.com/mercurial/";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

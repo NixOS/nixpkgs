@@ -27,7 +27,7 @@ composableDerivation.composableDerivation {} (fixed: {
   meta = {
     description = "Translator library for raster geospatial data formats";
     homepage = http://www.gdal.org/;
-    license = "X/MIT";
+    license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };

@@ -6,6 +6,6 @@ kde {
 
   meta = {
     description = "Konsole, the KDE terminal emulator";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

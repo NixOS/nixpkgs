@@ -60,8 +60,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     homepage = "http://gap-system.org/";
   };
 }) x
-

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
          "macros", retype a file.
       '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     homepage = http://www.gnu.org/software/xnee/;
 

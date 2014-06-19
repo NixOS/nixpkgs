@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       navigation and overview.
     '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     homepage = http://ecb.sourceforge.net/;
 

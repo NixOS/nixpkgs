@@ -18,6 +18,6 @@ stdenv.mkDerivation {
       platforms.
     '';
     homepage = http://xiph.org/ao/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

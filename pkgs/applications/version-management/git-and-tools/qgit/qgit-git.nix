@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "qgit-git";
   meta =
   {
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     homepage = "http://digilander.libero.it/mcostalba/";
     description = "Graphical front-end to Git";
   };

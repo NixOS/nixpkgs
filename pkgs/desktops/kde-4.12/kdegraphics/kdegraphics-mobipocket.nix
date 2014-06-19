@@ -5,6 +5,6 @@ kde {
 
   meta = {
     description = "A collection of plugins to handle mobipocket files";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

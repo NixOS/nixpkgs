@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://viric.name/cgi-bin/storebrowse;
-    license = "AGPLv3+";
+    license = stdenv.lib.licenses.agpl3Plus;
   };
 }

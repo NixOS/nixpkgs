@@ -5,6 +5,6 @@ kde {
 
   meta = {
     description = "Exiv2 support library";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://code.google.com/p/udptunnel/;
     description = "Tunnels TCP over UDP packets";
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

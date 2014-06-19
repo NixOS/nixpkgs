@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Command line client for Mega.co.nz";
     homepage = http://megatools.megous.com/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.viric ];
     platforms = stdenv.lib.platforms.linux;
   };

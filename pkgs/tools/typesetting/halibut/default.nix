@@ -27,6 +27,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Documentation production system for software manuals";
     homepage = http://www.chiark.greenend.org.uk/~sgtatham/halibut/;
-    license = "free";
+    license = stdenv.lib.licenses.mit;
   };
 }

@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       into the traditional Unix man page format and the GNU Texinfo
       format.
     '';
-    license = "MIT-style";
+    license = stdenv.lib.licenses.mit;
     homepage = http://docbook2x.sourceforge.net/;
   };
 }

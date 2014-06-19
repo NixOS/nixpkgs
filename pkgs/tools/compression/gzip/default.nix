@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
         is just a bonus.
       '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
   };
 }
