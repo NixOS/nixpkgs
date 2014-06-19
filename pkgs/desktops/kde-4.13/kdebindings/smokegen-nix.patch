@@ -1,0 +1,13 @@
+diff -urN smokegen-4.10.5.orig/cmake/SmokeConfig.cmake.in smokegen-4.10.5/cmake/SmokeConfig.cmake.in
+--- smokegen-4.10.5.orig/cmake/SmokeConfig.cmake.in	2013-06-28 17:14:50.000000000 +0000
++++ smokegen-4.10.5/cmake/SmokeConfig.cmake.in	2013-07-30 21:26:33.000000000 +0000
+@@ -80,8 +80,7 @@
+ set(SMOKE_API_BIN "@SMOKE_API_BIN@")
+ 
+ find_library(SMOKE_BASE_LIBRARY smokebase 
+-              PATHS "@SMOKE_LIBRARY_PREFIX@"
+-              NO_DEFAULT_PATH)
++              PATHS "@SMOKE_LIBRARY_PREFIX@")
+ 
+ if (NOT SMOKE_BASE_LIBRARY)
+     if (Smoke_FIND_REQUIRED)
