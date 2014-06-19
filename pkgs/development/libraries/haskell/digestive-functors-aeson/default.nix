@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   version = "1.1.9";
   sha256 = "0lm6byv5vayzg2jp0fqkbi4wkbhvnjw5sl61qnvpa1pqk6p64mrm";
   buildDepends = [ aeson digestiveFunctors lens safe text vector ];
+  jailbreak = true;
   testDepends = [
     aeson digestiveFunctors HUnit mtl scientific tasty tastyHunit text
   ];
