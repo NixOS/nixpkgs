@@ -211,21 +211,18 @@ in
   };
 
 
-  config = mkIf (!config.boot.isContainer) {
+  config = mkIf (!config.boot.isContainer) (let
+  
+    unit = { 
 
-    systemd.services = mapAttrs (name: cfg: { 
+      description = "Container '%i'";
 
-      wantedBy = cfg.wantedBy;
-      wants = [ "network.target" ];
-      after = [ "network.target" ];
-    
-      description = "Container '${name}'";
-
-      unitConfig.RequiresMountsFor = [ "/var/lib/containers/${name}" ];
+      unitConfig.RequiresMountsFor = [ "/var/lib/containers/%i" ];
 
       path = [ pkgs.iproute ];
 
-      environment.root = "/var/lib/containers/${name}";
+      environment.INSTANCE = "%i";
+      environment.root = "/var/lib/containers/%i";
 
       preStart =
           ''
@@ -245,8 +242,8 @@ in
             fi
 
             mkdir -p -m 0755 \
-              "/nix/var/nix/profiles/per-container/${name}" \
-              "/nix/var/nix/gcroots/per-container/${name}"
+              "/nix/var/nix/profiles/per-container/$INSTANCE" \
+              "/nix/var/nix/gcroots/per-container/$INSTANCE"
 
             if [ "$PRIVATE_NETWORK" = 1 ]; then
               extraFlags+=" --private-network"
@@ -263,19 +260,19 @@ in
             # If the host is 64-bit and the container is 32-bit, add a
             # --personality flag.
             '' + optionalString (config.nixpkgs.system == "x86_64-linux") ''
-              if [ "$(< ''${SYSTEM_PATH:-/nix/var/nix/profiles/per-container/${name}/system}/system)" = i686-linux ]; then
+              if [ "$(< ''${SYSTEM_PATH:-/nix/var/nix/profiles/per-container/$INSTANCE/system}/system)" = i686-linux ]; then
                 extraFlags+=" --personality=x86"
               fi
             '' + ''
 
             exec ${config.systemd.package}/bin/systemd-nspawn \
               --keep-unit \
-              -M "${name}" -D "$root" $extraFlags \
+              -M "$INSTANCE" -D "$root" $extraFlags \
               --bind-ro=/nix/store \
               --bind-ro=/nix/var/nix/db \
               --bind-ro=/nix/var/nix/daemon-socket \
-              --bind="/nix/var/nix/profiles/per-container/${name}:/nix/var/nix/profiles" \
-              --bind="/nix/var/nix/gcroots/per-container/${name}:/nix/var/nix/gcroots" \
+              --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles" \
+              --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots" \
               --setenv PRIVATE_NETWORK="$PRIVATE_NETWORK" \
               --setenv HOST_ADDRESS="$HOST_ADDRESS" \
               --setenv LOCAL_ADDRESS="$LOCAL_ADDRESS" \
@@ -294,7 +291,7 @@ in
             rm -f $root/var/lib/startup-done
 
             if [ -n "$HOST_ADDRESS" ] || [ -n "$LOCAL_ADDRESS" ]; then
-              ifaceHost=ve-${name}
+              ifaceHost=ve-$INSTANCE
               ip link set dev $ifaceHost up
               if [ -n "$HOST_ADDRESS" ]; then
                 ip addr add $HOST_ADDRESS dev $ifaceHost
@@ -307,12 +304,10 @@ in
 
       preStop =
           ''
-            machinectl poweroff "${name}"
+            machinectl poweroff "%i"
           '';
 
       restartIfChanged = false;
-      reloadIfChanged = true;
-	  restartTriggers = [ cfg.path ];
 
       # TODO: If the network configuration has changed, then trigger a full reboot of the
       # container to setup the new interfaces, otherwise just rebuild the config
@@ -324,19 +319,36 @@ in
               ${pkgs.socat}/bin/socat unix:$root/var/lib/run-command.socket -
           '';
 
-      serviceConfig.SyslogIdentifier = "container ${name}";
+      serviceConfig.SyslogIdentifier = "container %i";
 
-      serviceConfig.EnvironmentFile = "-/etc/containers/${name}.conf";
+      serviceConfig.EnvironmentFile = "-/etc/containers/%i.conf";
 
-    }) config.containers;
+    };
+
+  in {
+
+    systemd.services = listToAttrs (
+      # The generic container template used by imperative containers
+      [{ name = "container@"; value = unit; }]
+      # declarative containers 
+      ++ (mapAttrsToList (name: cfg: nameValuePair "container@${name}" (
+        unit // {
+          wantedBy = cfg.wantedBy;
+          wants = [ "network.target" ];
+          after = [ "network.target" ];
+          restartTriggers = [ cfg.path ];
+          reloadIfChanged = true;
+        }
+      )) config.containers));
 
     # Generate a configuration file in /etc/containers for each
     # container so that container@.target can get the container
     # configuration.
     environment.etc = mapAttrs' (name: cfg: nameValuePair "containers/${name}.conf" { 
-      text = ''
-	  SYSTEM_PATH=${cfg.path}
-	  '' 
+      text = 
+      ''
+      SYSTEM_PATH=${cfg.path}
+      '' 
         + (optionalString ( cfg.privateNetwork 
                          || cfg.localAddress!=null
                          || cfg.hostAddress!=null
@@ -372,5 +384,5 @@ in
 
     environment.systemPackages = [ nixos-container ];
 
-  };
+  });
 }
