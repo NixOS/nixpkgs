@@ -10,7 +10,6 @@ cabal.mkDerivation (self: rec {
   };
 
   buildDepends = [ filemanip Agda ];
-  jailbreak = true;             # otherwise, it complains about base
 
   preConfigure = "cd ffi";
 
