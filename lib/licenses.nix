@@ -26,7 +26,7 @@
     shortName = "amd";
     fullName = "AMD License Agreement";
     url = http://developer.amd.com/amd-license-agreement/;
-  };#
+  };
 
   apsl20 = {
     shortName = "APSL 2.0";
@@ -44,6 +44,16 @@
     shortName = "boost";
     fullName = "Boost Software License";
     url = http://www.boost.org/LICENSE_1_0.txt;
+  };
+
+  bsd = {
+    # Licenses similar to the original BSD license with the
+    # advertising clause removed, i.e. permissive non-copyleft free
+    # software licenses. This includes the (“MIT”) License
+    # http://www.gnu.org/licenses/license-list.html#X11License X11
+    shortName = "BSD";
+    fullName = "Catch-all for licenses that are similar to the modified BSD license";
+    url = "http://www.gnu.org/licenses/license-list.html#ModifiedBSD";
   };
 
   bsd2 = {
@@ -86,6 +96,12 @@
     shortName = "EPL 1.0";
     fullName = "Eclipse Public License version 1.0";
     url = http://www.eclipse.org/legal/epl-v10.html;
+  };
+
+  gpl = {
+    shortName = "GPL";
+    fullName = "GNU General Public License version not specified";
+    url = http://www.gnu.org/licenses;
   };
 
   gpl2 = {
@@ -223,6 +239,11 @@
   publicDomain = {
     shortName = "Public Domain";
     fullname = "Public Domain";
+  };
+
+  perl5 = {
+    shortName = "perl5";
+    fullName = "The Perl 5 license (Artistic License, version 1 and GPL, version 1 or later).";
   };
 
   psfl = {
