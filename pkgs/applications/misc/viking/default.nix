@@ -38,6 +38,6 @@ stdenv.mkDerivation {
 
     homepage = http://viking.sourceforge.net/;
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

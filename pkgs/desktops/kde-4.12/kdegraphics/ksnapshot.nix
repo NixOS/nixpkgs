@@ -1,10 +1,10 @@
-{ kde, kdelibs, libkipi }:
+{ kde, kdelibs, libkipi, stdenv }:
 
 kde {
   buildInputs = [ kdelibs libkipi ];
 
   meta = {
     description = "KDE screenshot utility";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

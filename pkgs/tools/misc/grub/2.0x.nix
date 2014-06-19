@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/grub/;
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     platforms = if EFIsupport then
       [ "i686-linux" "x86_64-linux" ]

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.xfce.org/projects/xfdesktop;
     description = "Xfce desktop manager";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://github.com/dhewm/dhewm3;
     description = "Doom 3 port to SDL";
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3;
   };
 
 }

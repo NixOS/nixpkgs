@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A program to manage /etc/resolv.conf";
     homepage = http://roy.marples.name/projects/openresolv;
-    license = "bsd";
+    license = stdenv.lib.licenses.bsd2;
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.linux;
   };

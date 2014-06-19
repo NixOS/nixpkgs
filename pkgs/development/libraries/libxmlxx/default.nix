@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://libxmlplusplus.sourceforge.net/;
     description = "C++ wrapper for the libxml2 XML parser library";
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = [ stdenv.lib.maintainers.phreedom ];
   };
 }

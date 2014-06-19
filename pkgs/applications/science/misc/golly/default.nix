@@ -1,5 +1,5 @@
 x@{builderDefsPackage, 
-  wxGTK, perl, python, zlib
+  stdenv, wxGTK, perl, python, zlib
   , ...}:
 builderDefsPackage
 (a :  
@@ -35,7 +35,6 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }) x
-

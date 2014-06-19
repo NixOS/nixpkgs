@@ -24,6 +24,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Compact open source software speech synthesizer";
     homepage = http://espeak.sourceforge.net/;
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
   };
 }

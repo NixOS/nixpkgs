@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
         - observe as spectators
     '';
     homepage = http://www.openttd.org/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ jcumming the-kenny ];
   };

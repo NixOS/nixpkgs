@@ -14,6 +14,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Data AcQuisition library (DAQ), for packet I/O";
     homepage = http://www.snort.org;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

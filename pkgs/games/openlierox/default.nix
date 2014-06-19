@@ -34,6 +34,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://openlierox.net;
     description = "Real-time game with Worms-like shooting";
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
   };
 }

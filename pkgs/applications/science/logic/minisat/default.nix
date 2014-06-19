@@ -1,5 +1,5 @@
 x@{builderDefsPackage
-  , zlib
+  , stdenv, zlib
   , ...}:
 builderDefsPackage
 (a :  
@@ -45,7 +45,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
     homepage = "http://minisat.se/";
   };
   passthru = {
@@ -54,4 +54,3 @@ rec {
     };
   };
 }) x
-

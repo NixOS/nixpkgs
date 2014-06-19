@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = http://nongnu.org/libchop/;
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = with stdenv.lib.maintainers; [ ludo viric ];
     platforms = stdenv.lib.platforms.gnu;

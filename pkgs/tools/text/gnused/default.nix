@@ -21,7 +21,7 @@ stdenv.mkDerivation {
       multiple occurrences of a string within a file.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     platforms = stdenv.lib.platforms.all;
     maintainers = [ ];

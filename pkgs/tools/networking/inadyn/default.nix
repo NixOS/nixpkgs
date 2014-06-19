@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://inadyn.sourceforge.net/;
     description = "Free dynamic DNS client";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; all;
   };

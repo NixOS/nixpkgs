@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
       description = "Extremely fast and small background setter for X";
-      license = "MIT";
+      license = stdenv.lib.licenses.mit;
       hydraPlatforms = stdenv.lib.platforms.linux;
       maintainers = with stdenv.lib.maintainers; [pSub];
   };

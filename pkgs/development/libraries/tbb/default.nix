@@ -23,8 +23,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://threadingbuildingblocks.org/";
-    description = "Intel Thread Building Blocks C++ Library";
-    license = "LGPLv3+";
+    license = stdenv.lib.licenses.lgpl3Plus;
 
     longDescription = ''
       Intel Threading Building Blocks offers a rich and complete approach to

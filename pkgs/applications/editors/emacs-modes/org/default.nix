@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
          than that found in GNU Emacs.
       '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = with stdenv.lib.maintainers; [ chaoflow ];
     platforms = stdenv.lib.platforms.gnu;

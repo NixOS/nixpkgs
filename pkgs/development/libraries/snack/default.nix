@@ -26,6 +26,6 @@ stdenv.mkDerivation {
   meta = { 
     description = "The Snack Sound Toolkit (Tcl)";
     homepage = http://www.speech.kth.se/snack/;
-    license = "GPL-2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

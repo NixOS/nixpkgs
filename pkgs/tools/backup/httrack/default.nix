@@ -14,6 +14,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.httrack.com";
     description = "Easy-to-use offline browser utility";
-    license = "GPL";
+    license = stdenv.lib.licenses.gpl3;
   };
 }

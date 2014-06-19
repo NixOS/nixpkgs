@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.rsyslog.com/";
     description = "Enhanced syslog implementation";
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.nongnu.org/xbindkeys/xbindkeys.html;
     description = "Launch shell commands with your keyboard or your mouse under X Window";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

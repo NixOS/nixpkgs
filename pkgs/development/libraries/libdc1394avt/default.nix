@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.alliedvisiontec.com/us/products/software/linux/avt-fire4linux.html;
     description = "Capture and control API for IIDC cameras with AVT extensions";
-    license = "LGPLv2.1+";
+    license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [ stdenv.lib.maintainers.viric ];
     platforms = stdenv.lib.platforms.linux;
     broken = true;

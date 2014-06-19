@@ -1,7 +1,7 @@
 { kde, kdelibs, qimageblitz, libdbusmenu_qt, xorg, lm_sensors
 , pciutils, libraw1394, libusb1, python, libqalculate, akonadi
 , xkeyboard_config, kdepimlibs, pam, boost, gpsd, prison
-, libjpeg, pkgconfig, kactivities, qjson, udev, fetchurl
+, libjpeg, pkgconfig, kactivities, qjson, udev, fetchurl, stdenv
 }:
 
 kde {
@@ -41,6 +41,6 @@ kde {
 
   meta = {
     description = "KDE workspace components such as Plasma, Kwin and System Settings";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

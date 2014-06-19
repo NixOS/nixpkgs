@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://icculus.org/smpeg/;
     description = "MPEG decoding library";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

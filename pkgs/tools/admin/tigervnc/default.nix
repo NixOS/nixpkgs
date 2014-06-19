@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.tigervnc.org/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     description = "Fork of tightVNC, made in cooperation with VirtualGL";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;

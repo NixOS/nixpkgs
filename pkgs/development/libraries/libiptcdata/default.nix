@@ -11,6 +11,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Library for reading and writing the IPTC metadata in images and other files";
     homepage = http://libiptcdata.sourceforge.net/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

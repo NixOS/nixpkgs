@@ -154,6 +154,6 @@ stdenv.mkDerivation rec {
 
   passthru.mozillaPlugin = if installjdk then "/jre/lib/${architecture}/plugins" else "/lib/${architecture}/plugins";
 
-  meta.license = "unfree";
+  meta.license = stdenv.lib.licenses.unfree;
 }
 
