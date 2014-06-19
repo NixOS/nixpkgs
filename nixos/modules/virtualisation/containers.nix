@@ -312,6 +312,7 @@ in
 
       restartIfChanged = false;
       reloadIfChanged = true;
+	  restartTriggers = [ cfg.path ];
 
       # TODO: If the network configuration has changed, then trigger a full reboot of the
       # container to setup the new interfaces, otherwise just rebuild the config
@@ -333,7 +334,9 @@ in
     # container so that container@.target can get the container
     # configuration.
     environment.etc = mapAttrs' (name: cfg: nameValuePair "containers/${name}.conf" { 
-      text = ''SYSTEM_PATH=${cfg.path}'' 
+      text = ''
+	  SYSTEM_PATH=${cfg.path}
+	  '' 
         + (optionalString ( cfg.privateNetwork 
                          || cfg.localAddress!=null
                          || cfg.hostAddress!=null
