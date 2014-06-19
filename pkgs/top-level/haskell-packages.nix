@@ -1990,6 +1990,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   snapBlaze = callPackage ../development/libraries/haskell/snap-blaze/default.nix {};
 
+  snapWebRoutes = callPackage ../development/libraries/haskell/snap-web-routes/default.nix {};
+
   snapCore = callPackage ../development/libraries/haskell/snap/core.nix {};
 
   snapCORS = callPackage ../development/libraries/haskell/snap-cors {};
