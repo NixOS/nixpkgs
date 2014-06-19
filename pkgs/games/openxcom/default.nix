@@ -5,8 +5,8 @@ let version = "1.0.0"; in
 stdenv.mkDerivation {
   name = "openxcom-${version}";
   src = fetchurl {
-    url = http://openxcom.org/wp-content/plugins/download-monitor/download.php?id=31;
-    sha256 = "00pc6ncsjbvn6w8whpj0bk4hlh577wh40bkyv6lk0g5c901p732l";
+    url = http://openxcom.org/file/1726/;
+    sha256 = "1rmg10nklvf86ckbbssyvbg5cd4p7in5zq3mas2yyffdjk9i40v6";
     name = "openxcom-${version}.tar.gz";
   };
 
