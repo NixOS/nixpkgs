@@ -3531,7 +3531,7 @@ let
   python = python27;
   python3 = python3Packages.python;
 
-  pypy = callPackage ../development/interpreters/pypy/2.2 { };
+  pypy = callPackage ../development/interpreters/pypy/2.3 { };
 
   pythonFull = python27Full;
   python26Full = callPackage ../development/interpreters/python/wrapper.nix {
