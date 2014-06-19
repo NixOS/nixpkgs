@@ -1,27 +1,34 @@
-{ fetchurl, stdenv, zlib, docbook2x, pcre, curl, libxml2, libevent, perl
-, pkgconfig, protobuf, tokyocabinet, tokyotyrant, opencv
+{ fetchgit, stdenv, zlib, docbook2x, pcre, curl, libxml2, libevent, perl
+, pkgconfig, protobuf, tokyocabinet, tokyotyrant, opencv, autoconf, automake
+, libtool, seeks_confdir ? ""
 }:
 
-let version = "0.4.1"; in
+let
+  rev = "1168b3a2f3111c3fca31dd961135194c3e8df5fd";
+in
 stdenv.mkDerivation {
-  name = "seeks-${version}";
+  name = "seeks-${rev}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/seeks/hippy/seeks-${version}.tar.gz";
-    sha256 = "1ppbbjw1zffxxhyvy64xwsff9xlw9wigqb7qwq5iw5mhbblz545q";
+  src = fetchgit {
+    url = "git://github.com/beniz/seeks.git";
+    inherit rev;
+    sha256 = "159k9fk1ry8cybrq38jxm1qyxks9hlkfz624hzwxlzah6xb2j8a4";
   };
 
   buildInputs =
     [ zlib docbook2x pcre curl libxml2 libevent perl pkgconfig
-      protobuf tokyocabinet tokyotyrant opencv
+      protobuf tokyocabinet tokyotyrant opencv autoconf automake libtool
     ];
 
   configureFlags =
     [ # Enable the built-in web server providing a web search interface.
-      # See <http://www.seeks-project.info/wiki/index.php/Seeks_On_Web>.
       "--enable-httpserv-plugin=yes"
       "--with-libevent=${libevent}"
-    ];
+    ] ++ stdenv.lib.optional (seeks_confdir != "") "--sysconfdir=${seeks_confdir}";
+
+  preConfigure = ''
+    ./autogen.sh
+  '';
 
   # FIXME: Test suite needs <https://code.google.com/p/googletest/>.
   doCheck = false;
@@ -44,8 +51,10 @@ stdenv.mkDerivation {
 
     homepage = http://www.seeks-project.info/;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [
+      stdenv.lib.maintainers.ludo
+      stdenv.lib.maintainers.matejc
+    ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
-    hydraPlatforms = [];
   };
 }

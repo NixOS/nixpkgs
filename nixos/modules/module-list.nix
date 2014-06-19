@@ -223,6 +223,7 @@
   ./services/networking/rpcbind.nix
   ./services/networking/sabnzbd.nix
   ./services/networking/searx.nix
+  ./services/networking/seeks.nix
   ./services/networking/spiped.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
