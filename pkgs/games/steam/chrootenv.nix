@@ -25,7 +25,6 @@ buildFHSChrootEnv {
         pkgs.pango
 
         pkgs.freetype
-        pkgs.fontconfig
         pkgs.xlibs.libICE
         pkgs.xlibs.libSM
         pkgs.xlibs.libX11
