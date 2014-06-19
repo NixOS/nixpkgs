@@ -1,0 +1,13 @@
+--- smokegen-4.10.5.orig/CMakeLists.txt 2013-06-28 17:14:50.000000000 +0000
++++ smokegen-4.10.5/CMakeLists.txt 2013-07-31 19:15:17.000000000 +0000
+@@ -36,6 +36,10 @@
+ set (CMAKE_SKIP_BUILD_RPATH FALSE)
+ set (CMAKE_SKIP_RPATH FALSE)
+
++# add the automatically determined parts of the RPATH
++# which point to directories outside the build tree to the install RPATH
++SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
++
+ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config.h.in config.h @ONLY )
+
+ add_executable(smokegen ${generator_SRC})
