@@ -5,14 +5,20 @@
 
 dir="$1"
 
-# Detect release number & whether it is a stable release
-if [[ ! -d "${dir}" ]]; then
-  echo "${dir} is not a directory (or doesn't exist)!" >&2
+
+if [[ -z $(type -p xsltproc) ]]; then
+  echo "Please provide libxslt" >&2
   exit 1
 fi
 
 release=$(ls "${dir}"/kdelibs-*.tar.xz | \
   sed -e 's/.*kdelibs-//' -e 's/\.tar\.xz//')
+
+# Detect release number & whether it is a stable release
+if [[ $? -ne 0 || -z $release ]]; then
+  echo "'${dir}' is not a directory (or kdelibs...tar.xz doesn't exist)!" >&2
+  exit 1
+fi
 
 if [[ ${release##*.} -gt 50 ]]; then
   stable="false"
@@ -23,15 +29,19 @@ fi
 echo "Detected release ${release}" >&2
 
 declare -A hash
+declare -A version
 declare -A modules
 declare -a packages
 declare -a top_level
 
-# xsltproc output declares -A module
-if [[ ! -f kde_projects.xml ]]; then
-  curl -O -J http://projects.kde.org/kde_projects.xml
+if [[ ! -f ${dir}/kde_projects.xml ]]; then
+  if ! curl -o "${dir}/kde_projects.xml" -J http://projects.kde.org/kde_projects.xml; then
+    echo "Could not download http://projects.kde.org/kde_projects.xml to ${dir}/kde_projects.xml" >&2
+    exit 1
+  fi
 fi
-eval `xsltproc kde-submodules.xslt kde_projects.xml`
+# xsltproc output declares -A module
+eval `xsltproc kde-submodules.xslt ${dir}/kde_projects.xml`
 
 module[kde-baseapps]=kde-baseapps
 unset module[kactivities]
@@ -45,12 +55,16 @@ print_sane() {
   fi
 }
 
-for i in `cd "${dir}"; ls *-${release}.tar.xz`; do
-  package=${i%-${release}.tar.xz}
+for i in `cd "${dir}"; ls *.tar.xz`; do
+  package=${i%.tar.xz}
+  v=${package##*-}
+  package=${i%-*}
   packages+=( "$package" )
   echo -n "${package}.. " >&2
   hash[$package]=$(nix-hash --type sha256 --flat --base32 "${dir}/${i}")
   echo -n ${hash[$package]} >&2
+
+  version[$package]=$v
 
   if [ -n "${module[$package]}" ]; then
     m="${module[$package]}"
@@ -60,7 +74,7 @@ for i in `cd "${dir}"; ls *-${release}.tar.xz`; do
     top_level+=( "$package" )
     echo " (top-level)" >&2
   fi
-  #nix-store --add-fixed sha256 "${dir}/${i}" >&2
+  nix-store --add-fixed sha256 "${dir}/${i}" >&2
 done
 
 
@@ -68,9 +82,19 @@ print_pkg_hash() {
   echo "  {name=\"${1}\";value=\"${hash[$1]}\";}"
 }
 
+print_pkg_version() {
+  echo "  {name=\"${1}\";value=\"${version[$1]}\";}"
+}
+
 print_hashes(){
   echo "hashes=builtins.listToAttrs["
   for p in "${packages[@]}"; do print_pkg_hash "$p"; done
+  echo "];"
+}
+
+print_versions(){
+  echo "versions=builtins.listToAttrs["
+  for p in "${packages[@]}"; do print_pkg_version "$p"; done
   echo "];"
 }
 
@@ -97,9 +121,11 @@ print_mono_module(){
   echo -en "{ module=\"$1\"; "
   print_sane "$1"
   echo -n "$1 ... " >&2
+  pkg=$(cd "$dir"; echo "$1"-*.tar.xz)
+  pkg="${pkg%.tar.xz}"
   echo -n " split=false;"
-  cml="$1-$release/CMakeLists.txt"
-  tar -xf "${dir}/$1-${release}.tar.xz" "$cml"
+  cml="$pkg/CMakeLists.txt"
+  tar -xf "${dir}/$pkg.tar.xz" "$cml"
   if grep '^[^#]*add_subdirectory' $cml >/dev/null; then
     if grep '^[^#]*add_subdirectory' $cml | grep -v macro_optional_add_subdirectory >/dev/null; then
       echo " is monolithic (has unconditionally added subdirs)" >&2
@@ -124,7 +150,7 @@ print_mono_module(){
     echo " is monolithic (has no subdirs)" >&2
   fi
   rm $cml
-  rmdir $1-$release
+  rmdir "$pkg"
   echo "}"
 }
 
@@ -142,5 +168,6 @@ echo "Writing ${release}.nix" >&2
 exec > "${release}.nix"
 echo "{stable=${stable};"
 print_hashes
+print_versions
 print_modules
 echo "}"
