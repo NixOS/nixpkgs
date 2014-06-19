@@ -10,6 +10,6 @@ kde {
 
   meta = {
     description = "Gwenview, the KDE image viewer";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       generating Guile wrappers for C functions.
     '';
     homepage = http://www.nongnu.org/g-wrap/;
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }

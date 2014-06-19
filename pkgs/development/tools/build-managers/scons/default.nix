@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://scons.org/";
     description = "An improved, cross-platform substitute for Make";
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
     longDescription = ''
       SCons is an Open Source software construction tool. Think of
       SCons as an improved, cross-platform substitute for the classic

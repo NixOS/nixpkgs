@@ -55,10 +55,9 @@ in with stdenv; mkDerivation rec {
       combination of screen and a text-based IRC client such
       as WeeChat, but graphical (based on Qt4/KDE4).
     '';
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3;
     maintainers = [ maintainers.phreedom ];
     repositories.git = https://github.com/quassel/quassel.git;
     inherit (qt4.meta) platforms;
   };
 }
-

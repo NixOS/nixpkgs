@@ -6,6 +6,6 @@ kde {
 
   meta = {
     description = "Kate, the KDE Advanced Text Editor, as well as KWrite";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

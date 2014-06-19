@@ -5,6 +5,6 @@ kde {
 
   meta = {
     description = "Interface library to kipi-plugins";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

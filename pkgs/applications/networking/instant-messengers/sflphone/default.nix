@@ -14,7 +14,7 @@ let
 
   meta = {
     homepage = http://sflphone.org/;
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
     description = "Free software enterprise-class softphone for GNU/Linux";
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [viric];

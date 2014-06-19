@@ -11,6 +11,6 @@ stdenv.mkDerivation {
   meta = { 
     description = "Generic C++ template library for sparse, dense and skyline matrices";
     homepage = http://home.gna.org/getfem/gmm_intro.html;
-    license = "LGLP2.1"; # or later
+    license = stdenv.lib.licenses.lgpl21Plus;
   };
 }

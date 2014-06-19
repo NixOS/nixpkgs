@@ -30,7 +30,7 @@ stdenv.mkDerivation {
       interface for the Ghostscript interpreter.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };

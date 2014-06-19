@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       one takes the GPS data in a different format.
     '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     homepage = http://freefoote.dview.net/linux_gpscorr.html;
   };

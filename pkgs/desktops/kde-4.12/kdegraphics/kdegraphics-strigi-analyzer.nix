@@ -5,6 +5,6 @@ kde {
 
   meta = {
     description = "Strigi analyzers for various graphics file formats";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

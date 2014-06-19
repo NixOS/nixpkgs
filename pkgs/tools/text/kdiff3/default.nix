@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://kdiff3.sourceforge.net/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     description = "Compares and merges 2 or 3 files or directories";
     maintainers = with stdenv.lib.maintainers; [viric urkud];
     platforms = with stdenv.lib.platforms; linux;

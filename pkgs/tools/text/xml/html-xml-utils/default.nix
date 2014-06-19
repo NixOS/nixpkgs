@@ -14,6 +14,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Utilities for manipulating HTML and XML files";
     homepage = http://www.w3.org/Tools/HTML-XML-utils/;
-    license = "free-non-copyleft";
+    license = "free-non-copyleft"; #TODO W3C
   };
 }

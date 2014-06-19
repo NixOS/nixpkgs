@@ -5,6 +5,6 @@ kde {
 
   meta = {
     description = "KDE monitor calibration tool";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

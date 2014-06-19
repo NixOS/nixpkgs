@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.xfce.org/projects/terminal;
     description = "A modern terminal emulator primarily for the Xfce desktop environment";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://hatari.tuxfamily.org/";
     description = "Atari ST/STE/TT/Falcon emulator";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     platforms = with stdenv.lib.platforms; all;
   };
 }

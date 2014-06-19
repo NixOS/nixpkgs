@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   versionMajor = "0.36";
   versionMinor = "2";
   moduleName   = "vte";
-  
+
   name = "${moduleName}-${versionMajor}.${versionMinor}";
 
   src = fetchurl {

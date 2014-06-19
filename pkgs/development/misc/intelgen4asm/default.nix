@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://cgit.freedesktop.org/xorg/app/intel-gen4asm/;
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
     description = "Program to compile an assembly language for the Intel 965 Express Chipset";
   };
 }

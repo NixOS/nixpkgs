@@ -23,7 +23,7 @@ stdenv.mkDerivation {
       statistical capabilities.  It allows significant user control
       over colors, styles, options and details.'';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     homepage = http://ploticus.sourceforge.net/;
   };
 }

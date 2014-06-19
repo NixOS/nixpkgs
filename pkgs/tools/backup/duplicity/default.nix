@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
     homepage = "http://www.nongnu.org/duplicity";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric simons];
     platforms = with stdenv.lib.platforms; linux;
   };

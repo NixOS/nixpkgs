@@ -39,7 +39,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3;
     homepage = "http://code.google.com/p/opensmt/";
   };
   passthru = {
@@ -48,4 +48,3 @@ rec {
     };
   };
 }) x
-

@@ -5,6 +5,6 @@ kde {
 
   meta = {
     description = "SVG KPart";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }
