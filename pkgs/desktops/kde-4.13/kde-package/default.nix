@@ -10,9 +10,9 @@ rec {
   manifest = import (./. + "/${release}.nix");
 
   # src attribute for $name tarball
-  kdesrc = name: fetchurl {
+  kdesrc = name: version: fetchurl {
     url = "mirror://kde/" + (if manifest.stable then "" else "un")
-      + "stable/${release}/src/${name}-${release}.tar.xz";
+      + "stable/${release}/src/${name}-${version}.tar.xz";
     sha256 = getAttr name manifest.hashes;
   };
 
@@ -27,10 +27,12 @@ rec {
   # KDE package built from the whole tarball
   # This function is used both for monolithic modules and modules which are
   # released as individual tarballs
-  kdeMonoPkg = name: let n_ = name; in a@{meta, name ? n_, version ? release, ...}:
+  kdeMonoPkg = name:
+    let n_ = name; v_ = getAttr name manifest.versions; in
+    a@{meta, name ? n_, version ? v_, ...}:
     stdenv.mkDerivation ({
       name = "${name}-${version}";
-      src = kdesrc name;
+      src = kdesrc name version;
       meta = defMeta // meta;
       enableParallelBuilding = true;
     } // (removeAttrs a [ "meta" "name" ]));
@@ -42,11 +44,11 @@ rec {
   # Build subdirectory ${subdir} of tarball ${module}-${release}.tar.xz
   kdeSubdirPkg = module:
     {name, subdir ? name, sane ? name}:
-    let name_ = name; in
-    a@{cmakeFlags ? [], name ? name_, meta ? {}, ...}:
+    let name_ = name; version_ = getAttr name manifest.versions; in
+    a@{cmakeFlags ? [], name ? name_, version ? version_, meta ? {}, ...}:
     stdenv.mkDerivation ({
       name = "${name}-${release}";
-      src = kdesrc module;
+      src = kdesrc module version;
       cmakeFlags =
         [ "-DDISABLE_ALL_OPTIONAL_SUBDIRECTORIES=TRUE"
           "-DBUILD_doc=TRUE"
