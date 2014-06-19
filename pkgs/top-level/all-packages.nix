@@ -821,13 +821,15 @@ let
 
   cron = callPackage ../tools/system/cron { };
 
-  cudatoolkit = callPackage ../development/compilers/cudatoolkit/5.5.nix {
+  cudatoolkit5 = callPackage ../development/compilers/cudatoolkit/5.5.nix {
     python = python26;
   };
 
   cudatoolkit6 = callPackage ../development/compilers/cudatoolkit/6.0.nix {
     python = python26;
   };
+
+  cudatoolkit = cudatoolkit5;
 
   curl = callPackage ../tools/networking/curl rec {
     fetchurl = fetchurlBoot;
