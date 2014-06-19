@@ -16,12 +16,11 @@ let
   # The container's init script, a small wrapper around the regular
   # NixOS stage-2 init script.
   containerInit = pkgs.writeScript "container-init"
-    ''
-      #! ${pkgs.stdenv.shell} -e
+    ''#! ${pkgs.stdenv.shell} -e
       
       # Initialise the container side of the veth pair.
-	  if [ -n "$HOST_ADDRESS" ] || [ -n "$LOCAL_ADDRESS" ]; then
-		ip link set host0 name eth0
+      if [ -n "$HOST_ADDRESS" ] || [ -n "$LOCAL_ADDRESS" ]; then
+      ip link set host0 name eth0
         ip link set dev eth0 up
         if [ -n "$HOST_ADDRESS" ]; then
           ip route add $HOST_ADDRESS dev eth0
@@ -30,16 +29,16 @@ let
         if [ -n "$LOCAL_ADDRESS" ]; then
           ip addr add $LOCAL_ADDRESS dev eth0
         fi
-	  fi
+      fi
 
-	  # Initialise the container side of the macvlan interface.
-	  if [ -n "$MACVLANS" ]; then
-		ip link set mv-$MACVLANS name eth1
-	    ip link set dev eth1 up
-	    if [ -n "$MACVLAN_ADDRESS" ]; then
-	      ip addr add $MACVLAN_ADDRESS dev eth1
-	    fi
-	  fi
+      # Initialise the container side of the macvlan interface.
+      if [ -n "$MACVLANS" ]; then
+      ip link set mv-$MACVLANS name eth1
+        ip link set dev eth1 up
+        if [ -n "$MACVLAN_ADDRESS" ]; then
+          ip addr add $MACVLAN_ADDRESS dev eth1
+        fi
+      fi
 
       exec "$1"
     '';
@@ -89,10 +88,10 @@ in
               default = false;
               description = ''
                 Whether to give the container its own private network namespace.  
-				This option is implied if setting <option>hostAddress</option>,
-				<option>localAddress</option> or <option>macvlanInterface</option>
+                This option is implied if setting <option>hostAddress</option>,
+                <option>localAddress</option> or <option>macvlanInterface</option>
                 If this option is not set, then the container shares the network 
-				interfaces of the host, and can bind to any port on any interface.
+                interfaces of the host, and can bind to any port on any interface.
               '';
             };
 
@@ -102,10 +101,10 @@ in
               example = "10.231.136.1";
               description = ''
                 The IPv4 address assigned to the host-side of a veth pair.
-				Setting <option>hostAddress</option> or <option>localAddress</option>
-				will create a veth pair with one side in the container appearing as 
-				<literal>eth0</literal>, and the other side in the host as 
-				<literal>ve-<replaceable>container-name</replaceable></literal>.
+                Setting <option>hostAddress</option> or <option>localAddress</option>
+                will create a veth pair with one side in the container appearing as 
+                <literal>eth0</literal>, and the other side in the host as 
+                <literal>ve-<replaceable>container-name</replaceable></literal>.
               '';
             };
 
@@ -115,11 +114,11 @@ in
               example = "10.231.136.2";
               description = ''
                 The IPv4 address assigned to the container-side of a veth pair
-				(<literal>eth0</literal> in the container).
-				Setting <option>hostAddress</option> or <option>localAddress</option>
-				will create a veth pair with one side in the container appearing as 
-				<literal>eth0</literal>, and the other side in the host as 
-				<literal>ve-<replaceable>container-name</replaceable></literal>.
+                (<literal>eth0</literal> in the container).
+                Setting <option>hostAddress</option> or <option>localAddress</option>
+                will create a veth pair with one side in the container appearing as 
+                <literal>eth0</literal>, and the other side in the host as 
+                <literal>ve-<replaceable>container-name</replaceable></literal>.
               '';
             };
 
@@ -129,14 +128,14 @@ in
               example = "enp1s1";
               description = ''
                 When this option is set an <literal>eth1</literal> interface
-				will be available within the container that bridges to the host's
-				physical network using macvlan.
-				Note: while macvlan interfaces allow your containers to be accessable 
-				via the the same physical network as the specified host interface, you 
-				may not be able to communicate between the host itself and container.
+                will be available within the container that bridges to the host's
+                physical network using macvlan.
+                Note: while macvlan interfaces allow your containers to be accessable 
+                via the the same physical network as the specified host interface, you 
+                may not be able to communicate between the host itself and container.
               '';
             };
-			
+      
             macvlanAddress = mkOption {
               type = types.nullOr types.string;
               default = null;
@@ -152,7 +151,7 @@ in
               default = 32;
               example = 16;
               description = ''
-				The network prefix length for the macvlan interface.
+                The network prefix length for the macvlan interface.
               '';
             };
 
@@ -160,9 +159,9 @@ in
               type = types.listOf types.str;
               default = [ "multi-user.target" ];
               description = ''
-				List of systemd units/targets that should cause this
-				container to start. Set to <literal>[]</literal> if
-				you do not want this container to start.
+                List of systemd units/targets that should cause this
+                container to start. Set to <literal>[]</literal> if
+                you do not want this container to start.
               '';
             };
 
@@ -216,21 +215,19 @@ in
 
     systemd.services = mapAttrs (name: cfg: { 
 
-		wantedBy = cfg.wantedBy;
-		wants = [ "network.target" ];
-		after = [ "network.target" ];
-		
-		description = "Container '${name}'";
+      wantedBy = cfg.wantedBy;
+      wants = [ "network.target" ];
+      after = [ "network.target" ];
+    
+      description = "Container '${name}'";
 
-        unitConfig.RequiresMountsFor = [ "/var/lib/containers/${name}" ];
+      unitConfig.RequiresMountsFor = [ "/var/lib/containers/${name}" ];
 
-        path = [ pkgs.iproute ];
+      path = [ pkgs.iproute ];
 
-        environment = {
-			root = "/var/lib/containers/${name}";
-		};
+      environment.root = "/var/lib/containers/${name}";
 
-        preStart =
+      preStart =
           ''
             mkdir -p -m 0755 $root/var/lib
 
@@ -240,7 +237,7 @@ in
             mkfifo -m 0600 $root/var/lib/startup-done
          '';
 
-        script =
+      script =
           ''
             mkdir -p -m 0755 "$root/etc" "$root/var/lib"
             if ! [ -e "$root/etc/os-release" ]; then
@@ -269,7 +266,7 @@ in
               if [ "$(< ''${SYSTEM_PATH:-/nix/var/nix/profiles/per-container/${name}/system}/system)" = i686-linux ]; then
                 extraFlags+=" --personality=x86"
               fi
-			'' + ''
+            '' + ''
 
             exec ${config.systemd.package}/bin/systemd-nspawn \
               --keep-unit \
@@ -288,7 +285,7 @@ in
               ${containerInit} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
           '';
 
-        postStart =
+      postStart =
           ''
             # This blocks until the container-startup-done service
             # writes something to this pipe.  FIXME: it also hangs
@@ -308,62 +305,59 @@ in
             fi
           '';
 
-        preStop =
+      preStop =
           ''
             machinectl poweroff "${name}"
           '';
 
-        restartIfChanged = false;
-        reloadIfChanged = true;
+      restartIfChanged = false;
+      reloadIfChanged = true;
 
-		# If the network configuration has changed, then trigger a reboot of the
-		# container to setup the new interfaces, otherwise just rebuild the config
-		# within the container without restarting.
-        serviceConfig.ExecReload = pkgs.writeScript "reload-container"
+      # If the network configuration has changed, then trigger a reboot of the
+      # container to setup the new interfaces, otherwise just rebuild the config
+      # within the container without restarting.
+      serviceConfig.ExecReload = pkgs.writeScript "reload-container"
           ''#!${pkgs.stdenv.shell}
-			SYSTEM_PATH="''${SYSTEM_PATH:-/nix/var/nix/profiles/system}"
-			echo $SYSTEM_PATH/bin/switch-to-configuration test | \
-			  ${pkgs.socat}/bin/socat unix:$root/var/lib/run-command.socket -
+            SYSTEM_PATH="''${SYSTEM_PATH:-/nix/var/nix/profiles/system}"
+            echo $SYSTEM_PATH/bin/switch-to-configuration test | \
+              ${pkgs.socat}/bin/socat unix:$root/var/lib/run-command.socket -
           '';
 
-        serviceConfig.SyslogIdentifier = "container ${name}";
+      serviceConfig.SyslogIdentifier = "container ${name}";
 
-        serviceConfig.EnvironmentFile = "-/etc/containers/${name}.conf";
+      serviceConfig.EnvironmentFile = "-/etc/containers/${name}.conf";
 
     }) config.containers;
 
-	# Generate a configuration file in /etc/containers for each
+    # Generate a configuration file in /etc/containers for each
     # container so that container@.target can get the container
     # configuration.
     environment.etc = mapAttrs' (name: cfg: nameValuePair "containers/${name}.conf" { 
-		text = 
-			''
-			SYSTEM_PATH=${cfg.path}
-			'' 
-			+ (optionalString (  cfg.privateNetwork 
-							  || cfg.localAddress!=null
-							  || cfg.hostAddress!=null
-							  || cfg.macvlanInterface!=null)
-				''
-	            PRIVATE_NETWORK=1
-		        '')
-			+ (optionalString (cfg.hostAddress != null) 
-				''
-                HOST_ADDRESS=${cfg.hostAddress}
-				'')
-            + (optionalString (cfg.localAddress != null) 
-				''
-                LOCAL_ADDRESS=${cfg.localAddress}
-				'')
-            + (optionalString (cfg.macvlanInterface != null) 
-				''
-                MACVLANS=${cfg.macvlanInterface}
-				'')
-            + (optionalString (cfg.macvlanAddress != null) 
-				''
-                MACVLAN_ADDRESS=${cfg.macvlanAddress}/${toString cfg.macvlanPrefixLength}
-				'');
-      }) config.containers;
+      text = ''SYSTEM_PATH=${cfg.path}'' 
+        + (optionalString ( cfg.privateNetwork 
+                         || cfg.localAddress!=null
+                         || cfg.hostAddress!=null
+                         || cfg.macvlanInterface!=null)
+          ''
+          PRIVATE_NETWORK=1
+          '')
+        + (optionalString (cfg.hostAddress != null) 
+          ''
+          HOST_ADDRESS=${cfg.hostAddress}
+          '')
+        + (optionalString (cfg.localAddress != null) 
+          ''
+          LOCAL_ADDRESS=${cfg.localAddress}
+          '')
+        + (optionalString (cfg.macvlanInterface != null) 
+          ''
+          MACVLANS=${cfg.macvlanInterface}
+          '')
+        + (optionalString (cfg.macvlanAddress != null) 
+          ''
+          MACVLAN_ADDRESS=${cfg.macvlanAddress}/${toString cfg.macvlanPrefixLength}
+          '');
+    }) config.containers;
 
     # Generate /etc/hosts entries for the containers.
     networking.extraHosts = concatStrings (mapAttrsToList (name: cfg: optionalString (cfg.localAddress != null)
