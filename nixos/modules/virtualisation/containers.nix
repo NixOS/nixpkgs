@@ -313,7 +313,7 @@ in
       restartIfChanged = false;
       reloadIfChanged = true;
 
-      # If the network configuration has changed, then trigger a reboot of the
+      # TODO: If the network configuration has changed, then trigger a full reboot of the
       # container to setup the new interfaces, otherwise just rebuild the config
       # within the container without restarting.
       serviceConfig.ExecReload = pkgs.writeScript "reload-container"
