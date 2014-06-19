@@ -26,7 +26,7 @@ in
               ''
                 mkdir $out
                 diskImage=$out/nixos.img
-                ${pkgs.vmTools.qemu}/bin/qemu-img create -f raw $diskImage "4G"
+                ${pkgs.vmTools.qemu}/bin/qemu-img create -f raw $diskImage "8G"
                 mv closure xchg/
               '';
             buildInputs = [ pkgs.utillinux pkgs.perl ];
