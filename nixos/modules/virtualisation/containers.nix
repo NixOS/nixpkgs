@@ -304,7 +304,7 @@ in
 
       preStop =
           ''
-            machinectl poweroff "%i"
+            machinectl poweroff "$INSTANCE"
           '';
 
       restartIfChanged = false;
