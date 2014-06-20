@@ -111,6 +111,7 @@ in
   libXft = attrs: attrs // {
     propagatedBuildInputs = [ xorg.libXrender args.freetype args.fontconfig ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    patches = [ ./libXft_freetype_2.5.3.patch ];
   };
 
   libXext = attrs: attrs // {

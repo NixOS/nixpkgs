@@ -1,0 +1,19 @@
+From macports.  See http://trac.macports.org/ticket/41578
+
+--- a/src/xftglyphs.c.orig	2012-06-02 11:36:35.000000000 -0500
++++ b/src/xftglyphs.c	2013-11-28 01:39:49.000000000 -0600
+@@ -21,10 +21,10 @@
+  */
+ 
+ #include "xftint.h"
+-#include <freetype/ftoutln.h>
+-#include <freetype/ftlcdfil.h>
+-
+-#include <freetype/ftsynth.h>
++#include <ft2build.h>
++#include FT_OUTLINE_H
++#include FT_LCD_FILTER_H
++#include FT_SYNTHESIS_H
+ 
+ /*
+  * Validate the memory info for a font
