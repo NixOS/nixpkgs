@@ -11061,6 +11061,8 @@ let
 
   streamripper = callPackage ../applications/audio/streamripper { };
 
+  sqsh = callPackage ../development/tools/sqsh { };
+
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
   tex4ht = callPackage ../tools/typesetting/tex/tex4ht { };
