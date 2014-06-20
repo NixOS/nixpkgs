@@ -188,6 +188,15 @@ in
               '';
             };
 
+            grantCapabilities = mkOption {
+              type = types.listOf types.str;
+              default = [];
+			  example = [ "CAP_MKNOD" ];
+              description = ''
+				List of additional capabilities to grant the container.
+              '';
+            };
+
           };
 
           config = mkMerge
@@ -279,6 +288,10 @@ in
             for iface in $MACVLANS; do
               extraFlags+=" --network-macvlan=$iface"
             done
+
+			if [ -n "$GRANT_CAPS" ]; then
+			  extraFlags+=" --capability=$GRANT_CAPS"
+			fi
 
             # If the host is 64-bit and the container is 32-bit, add a
             # --personality flag.
@@ -399,6 +412,10 @@ in
       + (optionalString (cfg.linkJournal != null) 
         ''
         LINK_JOURNAL=${cfg.linkJournal}
+        '')
+      + (optionalString (length cfg.grantCapabilities > 0) 
+        ''
+        GRANT_CAPS=${concatStringsSep "," cfg.grantCapabilities}
         '');
     }) config.containers;
 
