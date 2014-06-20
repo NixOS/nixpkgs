@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cryptohash";
-  version = "0.11.5";
-  sha256 = "0vxnwnjch2r9d54q5f5bfz60npjc7s7x6a5233md7fa756822b9d";
+  version = "0.11.6";
+  sha256 = "0dyzcaxr8vhzqq9hj4240rxpi87h4ps87yz09klz723shls26f6s";
   buildDepends = [ byteable ];
   testDepends = [
     byteable HUnit QuickCheck tasty tastyHunit tastyQuickcheck
