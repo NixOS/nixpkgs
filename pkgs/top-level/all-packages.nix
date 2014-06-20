@@ -2789,14 +2789,18 @@ let
     binutilsCross = null;
   }));
 
+  gccAppleBootstrap =
+    assert stdenv.isDarwin;
+    wrapGCC (makeOverridable (import ../development/compilers/gcc/4.2-apple64/bootstrap.nix) {
+      inherit stdenv fetchurl;
+    });
+
   gccApple =
     assert stdenv.isDarwin;
     wrapGCC (makeOverridable (import ../development/compilers/gcc/4.2-apple64) {
-      inherit fetchurl noSysDirs;
+      inherit fetchurl noSysDirs flex bison perl;
       profiledCompiler = true;
-      # Since it fails to build with GCC 4.6, build it with the "native"
-      # Apple-GCC.
-      stdenv = allStdenvs.stdenvNative;
+      stdenv = stdenvAdapters.overrideGCC stdenv gccAppleBootstrap;
     });
 
   gfortran = gfortran48;
