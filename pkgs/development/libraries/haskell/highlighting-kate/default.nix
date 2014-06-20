@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "highlighting-kate";
-  version = "0.5.8.2";
-  sha256 = "1c85yfzi3ri3j1fmqvd4pc4pp95jpm62a2nbbibpybl2h88dsjsb";
+  version = "0.5.8.3";
+  sha256 = "03x9vp6mvk9hxs92cmy42aqiyh4prnh343xg36znyjii6xw2x3mf";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
