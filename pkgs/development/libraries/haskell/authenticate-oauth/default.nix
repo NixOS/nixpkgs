@@ -1,18 +1,15 @@
 { cabal, base64Bytestring, blazeBuilder, blazeBuilderConduit
-, conduit, cryptoPubkeyTypes, dataDefault, httpConduit, httpTypes
-, monadControl, random, resourcet, RSA, SHA, time, transformers
+, cryptoPubkeyTypes, dataDefault, httpClient, httpTypes, random
+, RSA, SHA, time, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "authenticate-oauth";
-  version = "1.4.0.8";
-  sha256 = "1mc36d6lkmqywzsxhzwv4445mmwdz0rr5ibd2a1nbgw5c5jw76fy";
-  patches = [ ./RSA2.patch ];
-  patchFlags = "-p2";
+  version = "1.5";
+  sha256 = "07y9zh4v9by588k86wlyj3czivj5jlb9jk6g4j9p8j1qgbv4hpk9";
   buildDepends = [
-    base64Bytestring blazeBuilder blazeBuilderConduit conduit
-    cryptoPubkeyTypes dataDefault httpConduit httpTypes monadControl
-    random resourcet RSA SHA time transformers
+    base64Bytestring blazeBuilder blazeBuilderConduit cryptoPubkeyTypes
+    dataDefault httpClient httpTypes random RSA SHA time transformers
   ];
   meta = {
     homepage = "http://github.com/yesodweb/authenticate";
