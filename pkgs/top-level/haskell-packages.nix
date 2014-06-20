@@ -1010,6 +1010,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hastache = callPackage ../development/libraries/haskell/hastache {};
 
+  hasteCompiler = callPackage ../development/libraries/haskell/haste-compiler {};
+
+  hastePerch = callPackage ../development/libraries/haskell/haste-perch {};
+
   hcltest = callPackage ../development/libraries/haskell/hcltest {};
 
   hedis = callPackage ../development/libraries/haskell/hedis {};
@@ -1963,6 +1967,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   shelly_0_15_4_1 = callPackage ../development/libraries/haskell/shelly/0.15.4.1.nix {};
   shelly_1_5_3_1 = callPackage ../development/libraries/haskell/shelly {};
   shelly = self.shelly_1_5_3_1;
+
+  shellmate = callPackage ../development/libraries/haskell/shellmate {};
 
   simpleReflect = callPackage ../development/libraries/haskell/simple-reflect {};
 
