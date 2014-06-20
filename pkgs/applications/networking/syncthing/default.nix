@@ -2,17 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "syncthing-${version}";
-  version = "0.8.11";
+  version = "0.8.15";
 
   src = fetchgit {
     url = "git://github.com/calmh/syncthing.git";
     rev = "refs/tags/v${version}";
-    sha256 = "16dl9sqwhv0n1602pmi10d5j7z2196ijhvz4rfx7732210qbkpnn";
+    sha256 = "0xv8kaji60zqxws72srh5hdi9fyvaipdcsawp6gcyahhr3cz0ddq";
   };
 
   buildInputs = [ go ];
-
-  patches = [ ./upnp.patch ];
 
   buildPhase = ''
     mkdir -p "./dependencies/src/github.com/calmh/syncthing"
