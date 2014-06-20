@@ -165,6 +165,29 @@ in
               '';
             };
 
+            linkJournal = mkOption {
+              type = types.enum [ "auto" "host" "guest" "no" ];
+              default = "auto";
+              description = ''
+                Control whether the container's journal shall be made 
+				visible to the host to allow viewing the container's 
+				journal files from the host (but not vice versa). 
+				Takes one of "no", "host", "guest", "auto". If "no", 
+				the journal is not linked. If "host", the journal files 
+				are stored on the host file system (beneath /var/log/journal/machine-id) 
+				and the subdirectory is bind-mounted into the container 
+				at the same location. If "guest", the journal files are 
+				stored on the guest file system (beneath /var/log/journal/machine-id) 
+				and the subdirectory is symlinked into the host at the 
+				same location. If "auto" (the default), and the subdirectory of 
+				/var/log/journal/machine-id exists, it will be bind mounted 
+				into the container. If the subdirectory does not exist, no 
+				linking is performed. Effectively, booting a container once 
+				with "guest" or "host" will link the journal persistently 
+				if further on the default of "auto" is used.
+              '';
+            };
+
           };
 
           config = mkMerge
@@ -268,6 +291,7 @@ in
             exec ${config.systemd.package}/bin/systemd-nspawn \
               --keep-unit \
               -M "$INSTANCE" -D "$root" $extraFlags \
+			  --link-journal=''${LINK_JOURNAL:-auto} \
               --bind-ro=/nix/store \
               --bind-ro=/nix/var/nix/db \
               --bind-ro=/nix/var/nix/daemon-socket \
@@ -349,29 +373,33 @@ in
       ''
       SYSTEM_PATH=${cfg.path}
       '' 
-        + (optionalString ( cfg.privateNetwork 
-                         || cfg.localAddress!=null
-                         || cfg.hostAddress!=null
-                         || cfg.macvlanInterface!=null)
-          ''
-          PRIVATE_NETWORK=1
-          '')
-        + (optionalString (cfg.hostAddress != null) 
-          ''
-          HOST_ADDRESS=${cfg.hostAddress}
-          '')
-        + (optionalString (cfg.localAddress != null) 
-          ''
-          LOCAL_ADDRESS=${cfg.localAddress}
-          '')
-        + (optionalString (cfg.macvlanInterface != null) 
-          ''
-          MACVLANS=${cfg.macvlanInterface}
-          '')
-        + (optionalString (cfg.macvlanAddress != null) 
-          ''
-          MACVLAN_ADDRESS=${cfg.macvlanAddress}/${toString cfg.macvlanPrefixLength}
-          '');
+      + (optionalString ( cfg.privateNetwork 
+                       || cfg.localAddress!=null
+                       || cfg.hostAddress!=null
+                       || cfg.macvlanInterface!=null)
+        ''
+        PRIVATE_NETWORK=1
+        '')
+      + (optionalString (cfg.hostAddress != null) 
+        ''
+        HOST_ADDRESS=${cfg.hostAddress}
+        '')
+      + (optionalString (cfg.localAddress != null) 
+        ''
+        LOCAL_ADDRESS=${cfg.localAddress}
+        '')
+      + (optionalString (cfg.macvlanInterface != null) 
+        ''
+        MACVLANS=${cfg.macvlanInterface}
+        '')
+      + (optionalString (cfg.macvlanAddress != null) 
+        ''
+        MACVLAN_ADDRESS=${cfg.macvlanAddress}/${toString cfg.macvlanPrefixLength}
+        '')
+      + (optionalString (cfg.linkJournal != null) 
+        ''
+        LINK_JOURNAL=${cfg.linkJournal}
+        '');
     }) config.containers;
 
     # Generate /etc/hosts entries for the containers.
