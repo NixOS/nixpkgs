@@ -1908,6 +1908,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   resourcePool = callPackage ../development/libraries/haskell/resource-pool {};
 
+  resourcePoolCatchio = callPackage ../development/libraries/haskell/resource-pool-catchio {};
+
   resourcet = callPackage ../development/libraries/haskell/resourcet {};
 
   retry = callPackage ../development/libraries/haskell/retry {};
@@ -1986,6 +1988,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   snapletRedis = callPackage ../development/libraries/haskell/snaplet-redis {};
 
+  snapletPostgreSqlSimple = callPackage ../development/libraries/haskell/snaplet-postgresql-simple {}; 
+
   snapletStripe = callPackage ../development/libraries/haskell/snaplet-stripe {};
 
   snapBlaze = callPackage ../development/libraries/haskell/snap-blaze/default.nix {};
@@ -1999,7 +2003,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   snapLoaderStatic = callPackage ../development/libraries/haskell/snap/loader-static.nix {};
 
   snapServer = callPackage ../development/libraries/haskell/snap/server.nix {};
-
+ 
+  snapWebRoutes = callPackage ../development/libraries/haskell/snap-web-routes/default.nix {};
+  
   snowball = callPackage ../development/libraries/haskell/snowball {};
 
   socks = callPackage ../development/libraries/haskell/socks {};
