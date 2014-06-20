@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "syntactic";
-  version = "1.12.1";
-  sha256 = "0p68jgfwzr9mvgrcjdj3235109nhpaichm5irj9m29076axrsb94";
+  version = "1.13";
+  sha256 = "1d5mb7ss6xr7rj93mwrdvkxkx1dlmywxx9sxsmqy7l6gaxs6gq8l";
   buildDepends = [
     constraints dataHash mtl transformers treeView tuple
   ];
