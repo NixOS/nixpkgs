@@ -1,5 +1,6 @@
 { stdenv, fetchurlGnome, pkgconfig, glib, popt, zlib, libcanberra
-, intltool, libbonobo, GConf, gnome_vfs, ORBit2, libtool}:
+, intltool, libbonobo, GConf, gnome_vfs, ORBit2, libtool, libogg
+}:
 
 stdenv.mkDerivation rec {
   name = src.pkgname;
@@ -13,6 +14,6 @@ stdenv.mkDerivation rec {
   patches = [ ./new-glib.patch ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ popt zlib intltool GConf gnome_vfs libcanberra libtool ];
+  buildInputs = [ popt zlib intltool GConf gnome_vfs libcanberra libtool libogg ];
   propagatedBuildInputs = [ glib libbonobo ];
 }
