@@ -14,6 +14,6 @@ stdenv.mkDerivation rec {
   patches = [ ./new-glib.patch ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ popt zlib intltool GConf gnome_vfs libcanberra libtool libogg ];
-  propagatedBuildInputs = [ glib libbonobo ];
+  buildInputs = [ popt zlib intltool GConf gnome_vfs libcanberra libtool ];
+  propagatedBuildInputs = [ glib libbonobo libogg ];
 }
