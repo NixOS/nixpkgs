@@ -46,6 +46,7 @@
     pipesBinary = super.pipesBinary.override { binary = self.binary_0_7_2_1; };
     rank1dynamic = super.rank1dynamic.override { binary = self.binary_0_7_2_1; };
     distributedStatic = super.distributedStatic.override { binary = self.binary_0_7_2_1; };
+    networkTransport = super.networkTransport.override { binary = self.binary_0_7_2_1; };
     distributedProcess = super.distributedProcess.override { binary = self.binary_0_7_2_1; };
     singletons = null;                  # requires base >= 4.7
     vty_5_1_0 = super.vty_5_1_0.override { cabal = self.cabal.override { Cabal = self.Cabal_1_18_1_3; }; };
