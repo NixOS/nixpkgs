@@ -58,6 +58,7 @@
   ./programs/ssmtp.nix
   ./programs/venus.nix
   ./programs/wvdial.nix
+  ./programs/freetds.nix
   ./programs/zsh/zsh.nix
   ./programs/screen.nix
   ./rename.nix
