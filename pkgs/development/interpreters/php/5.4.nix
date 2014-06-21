@@ -171,7 +171,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
         configureFlags = ["--enable-fpm"];
       };
 
-      mssql = {
+      mssql = stdenv.lib.optional (!stdenv.isDarwin) {
         configureFlags = ["--with-mssql=${freetds}"];
         buildInputs = [freetds];
       };
@@ -218,7 +218,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     zipSupport = config.php.zip or true;
     ftpSupport = config.php.ftp or true;
     fpmSupport = config.php.fpm or true;
-    mssqlSupport = config.php.mssql or true;
+    mssqlSupport = config.php.mssql or (!stdenv.isDarwin);
   };
 
   configurePhase = ''
