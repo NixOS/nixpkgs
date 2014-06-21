@@ -801,8 +801,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   free = callPackage ../development/libraries/haskell/free {};
 
-  freeOperational = callPackage ../development/libraries/haskell/free-operational {};
-
   freeGame_1_0_5 = callPackage ../development/libraries/haskell/free-game/1.0.5.nix {
     boundingboxes = self.boundingboxes_0_1_1;
   };
