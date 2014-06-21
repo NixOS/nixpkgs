@@ -18,7 +18,13 @@ stdenv.mkDerivation (rec {
     sha256 = "0fsn7xis81za62afan0vvm38bvgzg5wfmv1m86flqcj0nj7jjilh";
   };
 
-  patches = [ ./patch-ac ];
+  clangPatch = fetchurl {
+    # Patch referenced from https://github.com/Homebrew/homebrew-dupes/issues/43
+    url = "http://lists.gnu.org/archive/html/bug-ncurses/2011-04/txtkWQqiQvcZe.txt";
+    sha256 = "03lrwqvb0r2qgi8hz7ayd3g26d6xilr3c92j8li3b77kdc0w0rlv";
+  };
+
+  patches = [ ./patch-ac ] ++ stdenv.lib.optional stdenv.isDarwin clangPatch;
 
   configureFlags = ''
     --with-shared --without-debug --enable-pc-files --enable-symlinks
