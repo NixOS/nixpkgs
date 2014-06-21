@@ -10,17 +10,14 @@ stdenv.mkDerivation rec {
     sha256 = "1iz4kbi1pdkzb7hq7vfylpfrbvll06w2mrl3b35h26h3zx7hxa7g";
   };
 
-  phases = ["unpackPhase" "preBuild" "buildPhase" "installPhase"];
-
   buildInputs = [ makeWrapper go sqlite lxc iproute bridge_utils devicemapper btrfsProgs iptables ];
 
-  preBuild = ''
-    patchShebangs ./hack
-  '';
+  dontStrip = true;
 
   buildPhase = ''
+    patchShebangs ./hack
     export AUTO_GOPATH=1
-    export DOCKER_GITCOMMIT="990021ac2b4a4c8e6ae66dd331c372f70eec3b7a"
+    export DOCKER_GITCOMMIT="990021a"
     ./hack/make.sh dynbinary
   '';
 
