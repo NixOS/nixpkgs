@@ -635,13 +635,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
 
-  distributedStatic = callPackage ../development/libraries/haskell/distributed-static {
-    binary = self.binary_0_7_2_1;
-  };
+  distributedStatic = callPackage ../development/libraries/haskell/distributed-static {};
   
-  distributedProcess = callPackage ../development/libraries/haskell/distributed-process {
-    binary = self.binary_0_7_2_1;
-  };
+  distributedProcess = callPackage ../development/libraries/haskell/distributed-process {};
 
   distributive = callPackage ../development/libraries/haskell/distributive {};
 
@@ -1579,13 +1575,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   networkSimple = callPackage ../development/libraries/haskell/network-simple { };
 
-  networkTransport = callPackage ../development/libraries/haskell/network-transport {
-    binary = self.binary_0_7_2_1;
-  };
+  networkTransport = callPackage ../development/libraries/haskell/network-transport {};
 
-  networkTransportTcp = callPackage ../development/libraries/haskell/network-transport-tcp {
-    binary = self.binary_0_7_2_1;
-  };
+  networkTransportTcp = callPackage ../development/libraries/haskell/network-transport-tcp {};
 
   networkTransportTests = callPackage ../development/libraries/haskell/network-transport-tests {};
 
@@ -1844,9 +1836,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   randomShuffle = callPackage ../development/libraries/haskell/random-shuffle {};
 
-  rank1dynamic = callPackage ../development/libraries/haskell/rank1dynamic {
-    binary = self.binary_0_7_2_1;
-  };
+  rank1dynamic = callPackage ../development/libraries/haskell/rank1dynamic {};
 
   ranges = callPackage ../development/libraries/haskell/ranges {};
 
