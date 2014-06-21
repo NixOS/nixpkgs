@@ -635,6 +635,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
 
+  directory = callPackage ../development/libraries/haskell/directory {};
+
   distributedStatic = callPackage ../development/libraries/haskell/distributed-static {};
 
   distributive = callPackage ../development/libraries/haskell/distributive {};
