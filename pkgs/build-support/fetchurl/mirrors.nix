@@ -373,4 +373,10 @@ rec {
     http://lib.stat.cmu.edu/
   ];
 
+  # Hackage mirrors
+  hackage = [
+    http://hackage.haskell.org/package/
+    http://hdiff.luite.com/packages/archive/package/
+  ];
+
 }
