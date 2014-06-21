@@ -8383,12 +8383,19 @@ let
 
     prologMode = callPackage ../applications/editors/emacs-modes/prolog { };
 
-    proofgeneral = callPackage ../applications/editors/emacs-modes/proofgeneral {
+    proofgeneral_4_2 = callPackage ../applications/editors/emacs-modes/proofgeneral/4.2.nix {
       texinfo = texinfo4 ;
       texLive = pkgs.texLiveAggregationFun {
         paths = [ pkgs.texLive pkgs.texLiveCMSuper ];
       };
     };
+    proofgeneral_4_3_pre = callPackage ../applications/editors/emacs-modes/proofgeneral/4.3pre.nix {
+      texinfo = texinfo4 ;
+      texLive = pkgs.texLiveAggregationFun {
+        paths = [ pkgs.texLive pkgs.texLiveCMSuper ];
+      };
+    };
+    proofgeneral = self.proofgeneral_4_2;
 
     quack = callPackage ../applications/editors/emacs-modes/quack { };
 
