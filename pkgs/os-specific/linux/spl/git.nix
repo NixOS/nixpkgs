@@ -1,14 +1,14 @@
 { stdenv, fetchgit, kernel, perl, autoconf, automake, libtool, coreutils, gawk }:
 
 stdenv.mkDerivation {
-  name = "spl-0.6.3pre-${kernel.version}";
+  name = "spl-0.6.3-${kernel.version}";
   src = fetchgit {
     url = git://github.com/zfsonlinux/spl.git;
-    rev = "89aa97059d7ddad668a5118aef7914743162a5e8";
-    sha256 = "1x4pba26zbyly8xd9q8s4av9v88ck0n9szxx72wzcn0s25rsyanx";
+    rev = "31cb5383bff0fddc5058973e32a6f2c446d45e59";
+    sha256 = "0mcivbddms8kbapbs9x6achqyvh5i6h1rd2b3jm8g5yjn0flc5gl";
   };
 
-  patches = [ ./install_prefix.patch ];
+  patches = [ ./install_prefix.patch ./const.patch ];
 
   buildInputs = [ perl autoconf automake libtool ];
 
