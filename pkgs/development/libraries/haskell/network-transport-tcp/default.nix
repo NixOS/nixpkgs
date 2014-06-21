@@ -9,7 +9,9 @@ cabal.mkDerivation (self: {
   buildDepends = [ dataAccessor network networkTransport ];
   testDepends = [ network networkTransport networkTransportTests ];
   doCheck = false;
-  jailbreak = true;
+  patchPhase = ''
+    sed -i -e 's|network >=.*,|network,|' -e 's|network >=.*|network|' network-transport-tcp.cabal
+  '';
   meta = {
     homepage = "http://haskell-distributed.github.com";
     description = "TCP instantiation of Network.Transport";
