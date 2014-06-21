@@ -1104,7 +1104,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hmatrix = callPackage ../development/libraries/haskell/hmatrix {};
 
-  hmatrix-special = callPackage ../development/libraries/haskell/hmatrix-special {};
+  hmatrixSpecial = callPackage ../development/libraries/haskell/hmatrix-special {};
 
   hoauth = callPackage ../development/libraries/haskell/hoauth {};
 
