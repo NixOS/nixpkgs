@@ -49,6 +49,6 @@ stdenv.mkDerivation (rec {
     '';
     homepage = http://proofgeneral.inf.ed.ac.uk;
     license = "GPLv2+";
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.unix;  # arbitrary choice
   };
 })
