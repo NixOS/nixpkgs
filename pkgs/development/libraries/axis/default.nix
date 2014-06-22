@@ -9,4 +9,8 @@ stdenv.mkDerivation {
     md5 = "dd8203f08c37872f4fd2bfb45c4bfe04";
   };
   inherit stdenv;
+
+  meta = {
+    description = "Implementation of the SOAP (Simple Object Access Protocol) submission to W3C";
+  };
 }
