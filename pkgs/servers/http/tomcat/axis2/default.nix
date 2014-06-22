@@ -10,4 +10,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ unzip apacheAnt jdk ];
   builder = ./builder.sh;
+
+  meta = {
+    description = "Web Services / SOAP / WSDL engine, the successor to the widely used Apache Axis SOAP stack";
+  };
 }
