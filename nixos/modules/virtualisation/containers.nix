@@ -65,6 +65,20 @@ in
         {
           options = {
 
+            enable = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Enable the container as a systemd service. A "disabled"
+                container will still be built and can be started via 
+                the <literal>nixos-container</literal> command. An
+                "enabled" container will be managed by systemd and will
+                be automatically started on boot. See <option>wantedBy
+                </option> container option for altering when the container
+                should be started.
+              '';
+            };
+
             config = mkOption {
               description = ''
                 A specification of the desired configuration of this
@@ -289,9 +303,9 @@ in
               extraFlags+=" --network-macvlan=$iface"
             done
 
-			if [ -n "$GRANT_CAPS" ]; then
-			  extraFlags+=" --capability=$GRANT_CAPS"
-			fi
+			      if [ -n "$GRANT_CAPS" ]; then
+			        extraFlags+=" --capability=$GRANT_CAPS"
+			      fi
 
             # If the host is 64-bit and the container is 32-bit, add a
             # --personality flag.
@@ -301,10 +315,12 @@ in
               fi
             '' + ''
 
-            exec ${config.systemd.package}/bin/systemd-nspawn \
+
+
+            ${config.systemd.package}/bin/systemd-nspawn \
               --keep-unit \
               -M "$INSTANCE" -D "$root" $extraFlags \
-			  --link-journal=''${LINK_JOURNAL:-auto} \
+			        --link-journal=''${LINK_JOURNAL:-auto} \
               --bind-ro=/nix/store \
               --bind-ro=/nix/var/nix/db \
               --bind-ro=/nix/var/nix/daemon-socket \
@@ -339,12 +355,21 @@ in
             fi
           '';
 
-      preStop =
-          ''
-            machinectl poweroff "$INSTANCE"
-          '';
+      # Ask container to halt and wait until it has shutdown
+      preStop = 
+        ''
+        echo 'systemctl poweroff' | \
+          ${pkgs.socat}/bin/socat unix:$root/var/lib/run-command.socket -
+        while [[ "$(machinectl -p State show '$INSTANCE' 2>/dev/null)" == "State=running" ]]; do
+          sleep 0.2
+        done
+        '';
 
       restartIfChanged = false;
+
+      # Be graceful about killing off container processes.
+      serviceConfig.KillMode = "mixed";
+      serviceConfig.TimeoutStopSec = 60;
 
       # TODO: If the network configuration has changed, then trigger a full reboot of the
       # container to setup the new interfaces, otherwise just rebuild the config
@@ -364,19 +389,22 @@ in
 
   in {
 
-    systemd.services = listToAttrs (
+    systemd.services = listToAttrs (filter (x: x.value != null) (
       # The generic container template used by imperative containers
       [{ name = "container@"; value = unit; }]
       # declarative containers 
       ++ (mapAttrsToList (name: cfg: nameValuePair "container@${name}" (
-        unit // {
-          wantedBy = cfg.wantedBy;
-          wants = [ "network.target" ];
-          after = [ "network.target" ];
-          restartTriggers = [ cfg.path ];
-          reloadIfChanged = true;
-        }
-      )) config.containers));
+        if cfg.enable then
+          unit // {
+            wantedBy = cfg.wantedBy;
+            wants = [ "network.target" ];
+            after = [ "network.target" ];
+            restartTriggers = [ cfg.path ];
+            reloadIfChanged = true;
+          } 
+        else null
+      )) config.containers)
+    ));
 
     # Generate a configuration file in /etc/containers for each
     # container so that container@.target can get the container
