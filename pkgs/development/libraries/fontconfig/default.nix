@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # Don't try to write to /var/cache/fontconfig at install time.
-  installFlags = "fc_cachedir=$(TMPDIR)/dummy";
+  installFlags = "fc_cachedir=$(TMPDIR)/dummy RUN_FC_CACHE_TEST=false";
 
   postInstall = ''
     cd "$out/etc/fonts" && tar xvf ${infinality_patch}
