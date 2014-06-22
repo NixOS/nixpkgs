@@ -10433,6 +10433,8 @@ let
 
       kde_wacomtablet = callPackage ../applications/misc/kde-wacomtablet { };
 
+      kdeconnect = callPackage ../applications/misc/kdeconnect { };
+
       kdenlive = callPackage ../applications/video/kdenlive { };
 
       kdesvn = callPackage ../applications/version-management/kdesvn { };
