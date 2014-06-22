@@ -9611,6 +9611,8 @@ let
 
   toxic = callPackage ../applications/networking/instant-messengers/toxic { };
 
+  transcode = callPackage ../applications/audio/transcode { };
+
   transmission = callPackage ../applications/networking/p2p/transmission { };
   transmission_gtk = transmission.override { enableGTK3 = true; };
 
