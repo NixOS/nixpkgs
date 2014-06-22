@@ -1964,6 +1964,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   simpleSendfile = callPackage ../development/libraries/haskell/simple-sendfile {};
 
+  simpleSqlParser = callPackage ../development/libraries/haskell/simple-sql-parser {};
+
   silently = callPackage ../development/libraries/haskell/silently {};
 
   sizedTypes = callPackage ../development/libraries/haskell/sized-types {};
