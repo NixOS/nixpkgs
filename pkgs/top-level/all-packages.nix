@@ -4163,7 +4163,7 @@ let
 
   aalib = callPackage ../development/libraries/aalib { };
 
-  accountservice = callPackage ../development/libraries/accountservice { };
+  accountsservice = callPackage ../development/libraries/accountsservice { };
 
   acl = callPackage ../development/libraries/acl { };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, itstool, libxml2, intltool, accountservice, libX11
+{ stdenv, fetchurl, pkgconfig, glib, itstool, libxml2, intltool, accountsservice, libX11
 , gtk, libcanberra_gtk3, pam, libtool, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rva3djas48m8w1gyv3nds3jxfkirdfl0bk30x79mizrk80456jl";
   };
 
-  buildInputs = [ pkgconfig glib itstool libxml2 intltool accountservice
+  buildInputs = [ pkgconfig glib itstool libxml2 intltool accountsservice
                   gobjectIntrospection libX11 gtk libcanberra_gtk3 pam libtool ];
 
   meta = with stdenv.lib; {
