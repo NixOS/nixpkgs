@@ -1,10 +1,10 @@
-{ kde, kdelibs, eigen, xplanet, indilib, pkgconfig }:
+{ kde, kdelibs, eigen2, xplanet, indilib, pkgconfig }:
 
 kde {
 
 # TODO: wcslib, astrometry
 
-  buildInputs = [ kdelibs eigen xplanet indilib ];
+  buildInputs = [ kdelibs eigen2 xplanet indilib ];
 
   nativeBuildInputs = [ pkgconfig ];
 

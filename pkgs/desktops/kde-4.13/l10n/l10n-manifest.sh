@@ -22,6 +22,7 @@ for i in `cd "${dir}"; ls kde-l10n-*-${release}.tar.xz`; do
   lang=${lang#kde-l10n-}
   echo -n "${lang}.. " >&2
   hash=$(nix-hash --type sha256 --flat --base32 "${dir}/${i}")
+  nix-store --add-fixed sha256 "${dir}/${i}" >&2
   echo "{"
   echo "  lang = \"${lang}\";"
   echo "  saneName = \"$(echo $lang | sed s^@^_^g)\";"

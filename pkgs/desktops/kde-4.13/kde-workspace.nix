@@ -1,19 +1,11 @@
 { kde, kdelibs, qimageblitz, libdbusmenu_qt, xorg, lm_sensors
-, pciutils, libraw1394, libusb1, python, libqalculate, akonadi
+, pciutils, libraw1394, libusb, python, libqalculate, akonadi
 , xkeyboard_config, kdepimlibs, pam, boost, gpsd, prison
 , libjpeg, pkgconfig, kactivities, qjson, udev, fetchurl
 }:
 
 kde {
-
-  version = "4.11.6";
-
-  src = fetchurl {
-    url = "mirror://kde/stable/4.12.2/src/kde-workspace-4.11.6.tar.xz";
-    sha256 = "0lk3k9zl4x4il5dqpw7mf25gv8a3y48fd3jq3jvgmwwlviwcpcz1";
-  };
-
-#todo: wayland, xmms,   libusb isn't found
+#todo: wayland, xmms, ckconnector
   buildInputs =
     [ kdelibs qimageblitz libdbusmenu_qt xorg.libxcb xorg.xcbutilimage libjpeg 
       xorg.xcbutilrenderutil xorg.xcbutilkeysyms xorg.libpthreadstubs xorg.libXdmcp
@@ -21,7 +13,7 @@ kde {
       xorg.libXdamage
 
       python boost qjson lm_sensors gpsd libraw1394 pciutils udev
-      akonadi pam libusb1 libqalculate kdepimlibs  prison
+      akonadi pam libusb libqalculate kdepimlibs  prison
       kactivities
     ];
 

@@ -10371,8 +10371,6 @@ let
     }) ../desktops/kde-4.12;
 
   kde413 = kdePackagesFor (pkgs.kde413 // {
-      eigen = eigen2;
-      libusb = libusb1;
       libcanberra = libcanberra_kde;
     }) ../desktops/kde-4.13;
 
