@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-env-editor"
+    "--with-editor=/run/current-system/sw/bin/nano"
     "--with-rundir=/var/run"
     "--with-vardir=/var/db/sudo"
     "--with-logpath=/var/log/sudo.log"
