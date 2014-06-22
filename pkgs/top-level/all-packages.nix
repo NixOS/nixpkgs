@@ -661,7 +661,7 @@ let
     enableStandardFeatures = false;
   };
 
-  asciidocFull = appendToName "full" (asciidoc.override {
+  asciidoc-full = appendToName "full" (asciidoc.override {
     inherit (pythonPackages) pygments;
     enableStandardFeatures = true;
   });
@@ -11251,6 +11251,7 @@ let
 
   # Attributes for backward compatibility.
   adobeReader = adobe-reader;
+  asciidocFull = asciidoc-full;  # added 2014-06-22
 
 
 }; in self; in pkgs
