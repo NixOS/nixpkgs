@@ -13,12 +13,7 @@ let
   nagiosState = "/var/lib/nagios";
   nagiosLogDir = "/var/log/nagios";
 
-  nagiosObjectDefs =
-    [ ./timeperiods.cfg
-      ./host-templates.cfg
-      ./service-templates.cfg
-      ./commands.cfg
-    ] ++ cfg.objectDefs;
+  nagiosObjectDefs = cfg.objectDefs;
 
   nagiosObjectDefsDir = pkgs.runCommand "nagios-objects" {inherit nagiosObjectDefs;}
     "ensureDir $out; ln -s $nagiosObjectDefs $out/";
@@ -30,11 +25,12 @@ let
       log_archive_path=${nagiosLogDir}/archive
       status_file=${nagiosState}/status.dat
       object_cache_file=${nagiosState}/objects.cache
-      comment_file=${nagiosState}/comment.dat
-      downtime_file=${nagiosState}/downtime.dat
       temp_file=${nagiosState}/nagios.tmp
       lock_file=/var/run/nagios.lock # Not used I think.
       state_retention_file=${nagiosState}/retention.dat
+      query_socket=${nagiosState}/nagios.qh
+      check_result_path=${nagiosState}
+      command_file=${nagiosState}/nagios.cmd
 
       # Configuration files.
       #resource_file=resource.cfg

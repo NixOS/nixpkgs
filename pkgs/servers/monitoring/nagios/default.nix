@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, perl, gdSupport ? false
+{ stdenv, fetchurl, perl, php, gdSupport ? false
 , gd ? null, libpng ? null, zlib ? null
 }:
 
 stdenv.mkDerivation {
-  name = "nagios-2.10";
+  name = "nagios-4.0.7";
 
   src = fetchurl {
-    url = mirror://sourceforge/nagios/nagios-2.10.tar.gz;
-    md5 = "8c3a29e138f2ff8c8abbd3dd8a40c4b6";
+    url = mirror://sourceforge/nagios/nagios-4.x/nagios-4.0.7/nagios-4.0.7.tar.gz;
+    sha256 = "1687qnbsag84r57y9745g2klypacfixd6gkzaj42lmzn0v8y27gg";
   };
 
   patches = [./nagios.patch];
-  buildInputs = [perl] ++ (if gdSupport then [gd libpng zlib] else []);
+  buildInputs = [php perl] ++ (if gdSupport then [gd libpng zlib] else []);
   buildFlags = "all";
   installTargets = "install install-config";
 
