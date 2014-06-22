@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, gnome3, ibus, intltool, upower, makeWrapper
-, libcanberra, accountservice, libpwquality, pulseaudio, fontconfig
+, libcanberra, accountsservice, libpwquality, pulseaudio, fontconfig
 , gdk_pixbuf, hicolor_icon_theme, librsvg, libxkbfile, libnotify
 , libxml2, polkit, libxslt, libgtop, libsoup, colord, colord-gtk
 , cracklib, python, krb5, networkmanagerapplet, networkmanager
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     [ pkgconfig intltool ibus gtk glib upower libcanberra gsettings_desktop_schemas
       libxml2 gnome_desktop gnome_settings_daemon polkit libxslt libgtop gnome-menus
       gnome_online_accounts libsoup colord pulseaudio fontconfig colord-gtk libpwquality
-      accountservice krb5 networkmanagerapplet libwacom samba libnotify libxkbfile
+      accountsservice krb5 networkmanagerapplet libwacom samba libnotify libxkbfile
       shared_mime_info icu libtool docbook_xsl docbook_xsl_ns gnome3.grilo
       gdk_pixbuf gnome3.gnome_icon_theme librsvg clutter clutter_gtk
       hicolor_icon_theme gnome3.gnome_icon_theme_symbolic gnome3.vino

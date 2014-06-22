@@ -30,11 +30,11 @@ with lib;
 
   config = mkIf config.services.accounts-daemon.enable {
 
-    environment.systemPackages = [ pkgs.accountservice ];
+    environment.systemPackages = [ pkgs.accountsservice ];
 
-    services.dbus.packages = [ pkgs.accountservice ];
+    services.dbus.packages = [ pkgs.accountsservice ];
 
-    systemd.packages = [ pkgs.accountservice ];
+    systemd.packages = [ pkgs.accountsservice ];
   };
 
 }
