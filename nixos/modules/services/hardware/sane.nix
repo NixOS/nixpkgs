@@ -42,7 +42,7 @@ in
   config = mkIf config.hardware.sane.enable {
 
     environment.systemPackages = backends;
-    environment.variables = {
+    environment.sessionVariables = {
       SANE_CONFIG_DIR = mkDefault "${saneConfig}/etc/sane.d";
       LD_LIBRARY_PATH = [ "${saneConfig}/lib/sane" ];
     };
