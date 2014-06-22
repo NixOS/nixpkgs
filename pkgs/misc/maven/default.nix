@@ -15,4 +15,10 @@ stdenv.mkDerivation {
   buildInputs = [ makeWrapper ];
 
   inherit jdk;
+
+  meta = with stdenv.lib; {
+    description = "Build automation tool (used primarily for Java projects)";
+    homepage = http://maven.apache.org/;
+    license = licenses.asl20;
+  };
 }
