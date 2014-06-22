@@ -3395,7 +3395,6 @@ rec {
     };
 
     patches = optionals pkgs.stdenv.isDarwin [
-      ../development/python-modules/gyp/no-xcode.patch
       ../development/python-modules/gyp/no-darwin-cflags.patch
     ];
 
