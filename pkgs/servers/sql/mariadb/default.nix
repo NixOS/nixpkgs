@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "10.0.11";
 
   src = fetchurl {
-    url    = "https://fossies.org/linux/misc/${name}.tar.gz";
+    url    = "https://downloads.mariadb.org/interstitial/mariadb-${version}/source/mariadb-${version}.tar.gz";
     sha256 = "1p8h06kns30rlbnzw9ddmihs7r3jhp8xlrl4r6h5d107wkcw86v3";
   };
 
