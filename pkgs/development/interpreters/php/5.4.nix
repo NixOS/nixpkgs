@@ -242,12 +242,8 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
   '';
 
   src = fetchurl {
-    urls = [
-      "http://nl1.php.net/get/php-${version}.tar.bz2/from/this/mirror"
-      "http://se1.php.net/get/php-${version}.tar.bz2/from/this/mirror"
-    ];
+    url = "http://www.php.net/distributions/php-${version}.tar.bz2";
     sha256 = "19z2n6h1fvj30n6hl2mwhw2f4i1vwhbj3j7abq3gc16gcfh3rkk2";
-    name = "php-${version}.tar.bz2";
   };
 
   meta = {
