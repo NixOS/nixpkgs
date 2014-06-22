@@ -11,6 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "002l6h27pnhb77b65frhazbhknsxvrsnkpi43j7i0qw1lrgi7nkf";
   };
 
+  patches = [ ./sudo-mkdir.patch ];
+
+  configureFlags = [
+    "--with-rundir=/var/run/sudo"
+    "--with-vardir=/var/db/sudo"
+  ];
+
   postConfigure = ''
     cat >> pathnames.h <<EOF
     #undef  _PATH_SUDO_LOGFILE
