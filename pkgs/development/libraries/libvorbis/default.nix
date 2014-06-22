@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libogg }:
+{ stdenv, fetchurl, libogg, pkgconfig }:
 
 let
   name = "libvorbis-1.3.4";
@@ -10,6 +10,8 @@ stdenv.mkDerivation {
     url = "http://downloads.xiph.org/releases/vorbis/${name}.tar.xz";
     sha256 = "0wpk87jnhngcl3nc5i39flkycx1sjzilx8jjx4zc4p8r55ylj19g";
   };
+
+  buildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ libogg ];
 
