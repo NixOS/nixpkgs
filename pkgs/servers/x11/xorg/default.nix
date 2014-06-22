@@ -1869,6 +1869,16 @@ let
     buildInputs = [pkgconfig libX11 libxkbfile ];
   })) // {inherit libX11 libxkbfile ;};
 
+  xkbprint = (stdenv.mkDerivation ((if overrides ? xkbprint then overrides.xkbprint else x: x) {
+    name = "xkbprint-1.0.3";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/xkbprint-1.0.3.tar.bz2;
+      sha256 = "1h4jb3gjrbjp79h5gcgkjvdxykcy2bmq03smpls820c8wnw6v17s";
+    };
+    buildInputs = [pkgconfig libX11 libxkbfile ];
+  })) // {inherit libX11 libxkbfile ;};
+
   xkbutils = (stdenv.mkDerivation ((if overrides ? xkbutils then overrides.xkbutils else x: x) {
     name = "xkbutils-1.0.4";
     builder = ./builder.sh;
