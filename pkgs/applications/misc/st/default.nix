@@ -4,11 +4,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "st-0.4.1";
+  name = "st-0.5";
   
   src = fetchurl {
     url = "http://dl.suckless.org/st/${name}.tar.gz";
-    sha256 = "0cdzwbm5fxrwz8ryxkh90d3vwx54wjyywgj28ymsb5fdv3396bzf";
+    sha256 = "0knxpzaa86pprng6hak8hx8bw22yw22rpz1ffxjpcvqlz3xdv05f";
   };
 
   configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
