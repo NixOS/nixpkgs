@@ -873,6 +873,7 @@ rec {
   # A patched version of buildout, useful for buildout based development on Nix
   zc_buildout_nix = callPackage ../development/python-modules/buildout-nix { };
 
+  zc_recipe_egg = zc_recipe_egg_buildout171;
   zc_buildout = zc_buildout171;
   zc_buildout2 = zc_buildout221;
   zc_buildout221 = buildPythonPackage rec {
@@ -925,6 +926,29 @@ rec {
       license = licenses.zpt21;
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
+  };
+
+  zc_recipe_egg_fun = { buildout, version, md5 }: buildPythonPackage rec {
+    inherit version;
+    name = "zc.recipe.egg-${version}";
+
+    buildInputs = [ buildout ];
+    doCheck = false;
+
+    src = fetchurl {
+      inherit md5;
+      url = "https://pypi.python.org/packages/source/z/zc.recipe.egg/zc.recipe.egg-${version}.tar.gz";
+    };
+  };
+  zc_recipe_egg_buildout171 = zc_recipe_egg_fun {
+    buildout = zc_buildout171;
+    version = "1.3.2";
+    md5 = "1cb6af73f527490dde461d3614a36475";
+  };
+  zc_recipe_egg_buildout2 = zc_recipe_egg_fun {
+    buildout = zc_buildout2;
+    version = "2.0.1";
+    md5 = "5e81e9d4cc6200f5b1abcf7c653dd9e3";
   };
 
   bunch = buildPythonPackage (rec {
