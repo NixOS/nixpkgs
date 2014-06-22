@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   # 'make check' uses boost and tcl
   buildInputs = stdenv.lib.optionals doCheck [ boost tcl ];
 
+  configureFlags = stdenv.lib.optionalString stdenv.isDarwin "--disable-ccache";
+
   meta = {
     description = "SWIG, an interface compiler that connects C/C++ code to higher-level languages";
 
