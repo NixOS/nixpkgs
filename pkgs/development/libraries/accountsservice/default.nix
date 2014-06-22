@@ -24,4 +24,7 @@ stdenv.mkDerivation rec {
       --run "${coreutils}/bin/mkdir -p /var/lib/AccountsService/icons"
   '';
 
+  meta = {
+    description = "D-Bus interface for user account query and manipulation";
+  };
 }
