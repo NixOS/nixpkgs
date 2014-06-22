@@ -5926,11 +5926,11 @@ rec {
   };
 
   pyrax = buildPythonPackage rec {
-    name = "pyrax-1.7.3";
+    name = "pyrax-1.8.2";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyrax/${name}.tar.gz";
-      sha256 = "1br2kspw0sn7xgkk7z93h72s2v3qm88jvi4213zgz90jhzjj42bv";
+      sha256 = "0hvim60bhgfj91m7pp8jfmb49f087xqlgkqa505zw28r7yl0hcfp";
     };
 
     meta = {
