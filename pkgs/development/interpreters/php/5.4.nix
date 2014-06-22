@@ -171,7 +171,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
         configureFlags = ["--enable-fpm"];
       };
 
-      mssql = stdenv.lib.optional (!stdenv.isDarwin) {
+      mssql = stdenv.lib.optionalAttrs (!stdenv.isDarwin) {
         configureFlags = ["--with-mssql=${freetds}"];
         buildInputs = [freetds];
       };
