@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   configureFlags = "--disable-wordview";
 
   meta = with stdenv.lib; {
+    description = "MS-Word/Excel/PowerPoint to text converter";
     platforms = platforms.all;
     license = "GPL2";
     maintainers = [ maintainers.urkud ];
