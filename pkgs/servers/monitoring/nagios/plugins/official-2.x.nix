@@ -1,11 +1,12 @@
-{stdenv, fetchurl, openssh}:
+{ stdenv, fetchurl, openssh }:
 
-stdenv.mkDerivation {
-  name = "nagios-plugins-1.4.10";
+stdenv.mkDerivation rec {
+  name = "nagios-plugins-${version}";
+  version = "2.0";
 
   src = fetchurl {
-    url = https://www.monitoring-plugins.org/download/nagios-plugins-1.4.10.tar.gz;
-    sha256 = "0vm7sjiygxbfc5vbsi1g0dakpvynfzi86fhqx4yxd61brn0g8ghr";
+    url = "http://nagios-plugins.org/download/${name}.tar.gz";
+    sha256 = "113nv9jqpbqpdjqilqbj1iyshxyvcmq8w94bq5ajz4dxi9j8045s";
   };
 
   # !!! Awful hack. Grrr... this of course only works on NixOS.
@@ -22,11 +23,14 @@ stdenv.mkDerivation {
 
   postInstall = "ln -s libexec $out/bin";
 
-  buildInputs = [openssh]; # !!! make openssh a runtime dependency only
+  # !!! make openssh a runtime dependency only
+  buildInputs = [ openssh ];
 
   meta = {
-    description = "Plugins for Nagios";
-    homepage = http://www.monitoring-plugins.org;
-    license = "GPL";
+    description = "Official plugins for Nagios";
+    homepage    = http://www.nagios.org/download/plugins;
+    license     = stdenv.lib.licenses.gpl2;
+    platforms   = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ thoughtpolice relrod ];
   };
 }

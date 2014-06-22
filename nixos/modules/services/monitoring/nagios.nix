@@ -4,21 +4,12 @@
 with lib;
 
 let
-
   cfg = config.services.nagios;
-
-  nagiosUser = "nagios";
-  nagiosGroup = "nogroup";
 
   nagiosState = "/var/lib/nagios";
   nagiosLogDir = "/var/log/nagios";
 
-  nagiosObjectDefs =
-    [ ./timeperiods.cfg
-      ./host-templates.cfg
-      ./service-templates.cfg
-      ./commands.cfg
-    ] ++ cfg.objectDefs;
+  nagiosObjectDefs = cfg.objectDefs;
 
   nagiosObjectDefsDir = pkgs.runCommand "nagios-objects" {inherit nagiosObjectDefs;}
     "ensureDir $out; ln -s $nagiosObjectDefs $out/";
@@ -30,19 +21,20 @@ let
       log_archive_path=${nagiosLogDir}/archive
       status_file=${nagiosState}/status.dat
       object_cache_file=${nagiosState}/objects.cache
-      comment_file=${nagiosState}/comment.dat
-      downtime_file=${nagiosState}/downtime.dat
       temp_file=${nagiosState}/nagios.tmp
       lock_file=/var/run/nagios.lock # Not used I think.
       state_retention_file=${nagiosState}/retention.dat
+      query_socket=${nagiosState}/nagios.qh
+      check_result_path=${nagiosState}
+      command_file=${nagiosState}/nagios.cmd
 
       # Configuration files.
       #resource_file=resource.cfg
       cfg_dir=${nagiosObjectDefsDir}
 
       # Uid/gid that the daemon runs under.
-      nagios_user=${nagiosUser}
-      nagios_group=${nagiosGroup}
+      nagios_user=nagios
+      nagios_group=nogroup
 
       # Misc. options.
       illegal_macro_output_chars=`~$&|'"<>
@@ -53,26 +45,24 @@ let
   # authentication.
   nagiosCGICfgFile = pkgs.writeText "nagios.cgi.conf"
     ''
-      main_config_file=${nagiosCfgFile}
+      main_config_file=${cfg.mainConfigFile}
       use_authentication=0
-      url_html_path=/nagios
+      url_html_path=${cfg.urlPath}
     '';
-
-  urlPath = cfg.urlPath;
 
   extraHttpdConfig =
     ''
-      ScriptAlias ${urlPath}/cgi-bin ${pkgs.nagios}/sbin
+      ScriptAlias ${cfg.urlPath}/cgi-bin ${pkgs.nagios}/sbin
 
       <Directory "${pkgs.nagios}/sbin">
         Options ExecCGI
         AllowOverride None
         Order allow,deny
         Allow from all
-        SetEnv NAGIOS_CGI_CONFIG ${nagiosCGICfgFile}
+        SetEnv NAGIOS_CGI_CONFIG ${cfg.cgiConfigFile}
       </Directory>
 
-      Alias ${urlPath} ${pkgs.nagios}/share
+      Alias ${cfg.urlPath} ${pkgs.nagios}/share
 
       <Directory "${pkgs.nagios}/share">
         Options None
@@ -83,14 +73,9 @@ let
     '';
 
 in
-
 {
-  ###### interface
-
   options = {
-
     services.nagios = {
-
       enable = mkOption {
         default = false;
         description = "
@@ -116,6 +101,21 @@ in
         ";
       };
 
+      mainConfigFile = mkOption {
+        default = nagiosCfgFile;
+        description = "
+          Derivation for the main configuration file of Nagios.
+        ";
+      };
+
+      cgiConfigFile = mkOption {
+        default = nagiosCGICfgFile;
+        description = "
+          Derivation for the configuration file of Nagios CGI scripts
+          that can be used in web servers for running the Nagios web interface.
+        ";
+      };
+
       enableWebInterface = mkOption {
         default = false;
         description = "
@@ -132,55 +132,53 @@ in
           <literal>http://<replaceable>server</replaceable>/<replaceable>urlPath</replaceable></literal>.
         ";
       };
-
     };
-
   };
 
 
-  ###### implementation
-
   config = mkIf cfg.enable {
-
-    users.extraUsers = singleton
-      { name = nagiosUser;
-        uid = config.ids.uids.nagios;
-        description = "Nagios monitoring daemon";
-        home = nagiosState;
-      };
+    users.extraUsers.nagios = {
+      description = "Nagios user ";
+      uid         = config.ids.uids.nagios;
+      home        = nagiosState;
+      createHome  = true;
+    };
 
     # This isn't needed, it's just so that the user can type "nagiostats
     # -c /etc/nagios.cfg".
-    environment.etc = singleton
-      { source = nagiosCfgFile;
+    environment.etc = [
+      { source = cfg.mainConfigFile;
         target = "nagios.cfg";
-      };
+      }
+    ];
 
     environment.systemPackages = [ pkgs.nagios ];
+    systemd.services.nagios = {
+      description = "Nagios monitoring daemon";
+      path     = [ pkgs.nagios ];
+      wantedBy = [ "multi-user.target" ];
+      after    = [ "network-interfaces.target" ];
 
-    jobs.nagios =
-      { description = "Nagios monitoring daemon";
-
-        startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
-
-        preStart =
-          ''
-            mkdir -m 0755 -p ${nagiosState} ${nagiosLogDir}
-            chown ${nagiosUser} ${nagiosState} ${nagiosLogDir}
-          '';
-
-        script =
-          ''
-            for i in ${toString config.services.nagios.plugins}; do
-              export PATH=$i/bin:$i/sbin:$i/libexec:$PATH
-            done
-            exec ${pkgs.nagios}/bin/nagios ${nagiosCfgFile}
-          '';
+      serviceConfig = {
+        User = "nagios";
+        Restart = "always";
+        RestartSec = 2;
+        PermissionsStartOnly = true;
       };
 
+      preStart = ''
+        mkdir -m 0755 -p ${nagiosState} ${nagiosLogDir}
+        chown nagios ${nagiosState} ${nagiosLogDir}
+      '';
+
+      script = ''
+        for i in ${toString cfg.plugins}; do
+          export PATH=$i/bin:$i/sbin:$i/libexec:$PATH
+        done
+        exec ${pkgs.nagios}/bin/nagios ${cfg.mainConfigFile}
+      '';
+    };
+
     services.httpd.extraConfig = optionalString cfg.enableWebInterface extraHttpdConfig;
-
   };
-
 }
