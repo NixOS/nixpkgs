@@ -1,9 +1,10 @@
 { stdenv, fetchurl, fetchgit, telepathy_qt, kdelibs, kde_workspace, gettext, dbus_libs
-, pkgconfigUpstream , qt_gstreamer, telepathy_glib, telepathy_logger, qjson, flex, bison }:
+, pkgconfigUpstream , qt_gstreamer, telepathy_glib, telepathy_logger, qjson, flex, bison
+, farstream }:
 
 let
   pkgconfig = pkgconfigUpstream;
-  version = "0.5.3";
+  version = "0.8.1";
   manifest = import (./. + "/${version}.nix");
 
   overrides = {
@@ -14,7 +15,7 @@ let
 
   extraBuildInputs = {
     auth_handler = [ qjson ];
-    call_ui = [ qt_gstreamer telepathy_glib ];
+    call_ui = [ qt_gstreamer telepathy_glib farstream ];
     contact_applet = [ kde_workspace ];
     telepathy_logger_qt = [ telepathy_logger qt_gstreamer ];
     text_ui = [ ktp.telepathy_logger_qt qt_gstreamer telepathy_logger ];
@@ -33,7 +34,7 @@ let
         name = "${name}-${version}";
 
         src = fetchurl {
-          url = "mirror://kde/unstable/kde-telepathy/${version}/src/${name}-${version}.tar.bz2";
+          url = "mirror://kde/stable/kde-telepathy/${version}/src/${name}-${version}.tar.bz2";
           inherit sha256;
         };
 
