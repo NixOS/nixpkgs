@@ -12,6 +12,7 @@
 , stdenv
 , requireFile
 , unzip
+, file
 , xlibs ? null
 , installjdk ? true
 , pluginSupport ? true
@@ -79,13 +80,23 @@ stdenv.mkDerivation rec {
     else
       abort "jdk requires i686-linux or x86_64 linux";
 
-  buildInputs = if installjce then [ unzip ] else [];
+  nativeBuildInputs = [ file ]
+    ++ stdenv.lib.optional installjce unzip;
 
   # See: https://github.com/NixOS/patchelf/issues/10
   dontStrip = 1;
   
   installPhase = ''
     cd ..
+
+    # Set PaX markings
+    exes=$(file $sourceRoot/bin/* $sourceRoot/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
+    for file in $exes; do
+      paxmark m "$file"
+      # On x86 for heap sizes over 700MB disable SEGMEXEC and PAGEEXEC as well.
+      ${stdenv.lib.optionalString stdenv.isi686 ''paxmark msp "$file"''}
+    done
+
     if test -z "$installjdk"; then
       mv $sourceRoot/jre $out
     else
