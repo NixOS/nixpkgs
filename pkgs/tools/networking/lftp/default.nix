@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnutls, pkgconfig, readline, zlib, xz }:
+{ stdenv, fetchurl, gnutls, pkgconfig, readline, zlib }:
 
 stdenv.mkDerivation rec {
   name = "lftp-4.5.2";
