@@ -16,12 +16,6 @@ in
   linux_grsec_stable_server_xen =
     mkOpts "stable" "security" "server" "guest" "xen" true;
 
-  # Stable+vserver kernels - server versions only
-  linux_grsec_vserver_server  =
-    mkOpts "vserver" "security" "server" "host" "kvm" true;
-  linux_grsec_vserver_server_xen =
-    mkOpts "vserver" "security" "server" "guest" "xen" true;
-
   # Testing kernels
   linux_grsec_testing_desktop =
     mkOpts "testing" "performance" "desktop" "host" "kvm" true;
