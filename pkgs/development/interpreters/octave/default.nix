@@ -6,13 +6,13 @@ fftw, fftwSinglePrec, zlib, curl, qrupdate
 }:
 
 let
-  version = "3.8.0";
+  version = "3.8.1";
 in
 stdenv.mkDerivation rec {
   name = "octave-${version}";
   src = fetchurl {
     url = "mirror://gnu/octave/${name}.tar.bz2";
-    sha256 = "1yclb8p4mcx9xcjajyynxfnc5spw90lp44d84v56ksrlvp3314si";
+    sha256 = "1gcvzbgyz98mxzy3gjkdbdiirafkl73l9ywml11j412amp92wxnn";
   };
 
   buildInputs = [ gfortran readline ncurses perl flex texinfo qhull libX11
