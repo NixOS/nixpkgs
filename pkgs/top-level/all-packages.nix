@@ -7494,6 +7494,8 @@ let
 
   numactl = callPackage ../os-specific/linux/numactl { };
 
+  gocode = callPackage ../development/tools/gocode { };
+
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
