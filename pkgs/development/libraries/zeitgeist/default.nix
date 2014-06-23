@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
+    description = "A service which logs the users's activities and events";
     homepage = https://launchpad.net/zeitgeist;
-    description = "Zeitgeist is a service which logs the users's activities and events";
     maintainers = with maintainers; [ lethalman ];
     license = licenses.gpl2;
     platforms = platforms.linux;
