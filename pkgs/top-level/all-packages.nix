@@ -6715,6 +6715,8 @@ let
 
   nsd = callPackage ../servers/dns/nsd { };
 
+  nsq = callPackage ../servers/nsq { };
+
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
 
   petidomo = callPackage ../servers/mail/petidomo { };
