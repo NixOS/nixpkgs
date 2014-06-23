@@ -89,6 +89,6 @@ stdenv.mkDerivation {
     description = "The Go Programming language";
     license = "BSD";
     maintainers = with stdenv.lib.maintainers; [ cstrahan ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }
