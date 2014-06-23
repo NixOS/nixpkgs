@@ -44,4 +44,9 @@ stdenv.mkDerivation rec {
   cygwinConfigureEnableShared = true;
 
   passthru.version = version;
+
+  meta = with stdenv.lib; {
+    description = "Lossless data-compression library";
+    license = licenses.zlib;
+  };
 }
