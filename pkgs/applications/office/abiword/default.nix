@@ -28,6 +28,6 @@ stdenv.mkDerivation {
     ];
 
   meta = {
-    description = "Word processing program, similar to Microsof Word";
+    description = "Word processing program, similar to Microsoft Word";
   };
 }
