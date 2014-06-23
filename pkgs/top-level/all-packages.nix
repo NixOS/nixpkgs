@@ -1254,7 +1254,9 @@ let
 
   hddtemp = callPackage ../tools/misc/hddtemp { };
 
-  hdf5 = callPackage ../tools/misc/hdf5 { };
+  hdf5 = callPackage ../tools/misc/hdf5 {
+    szip = null;
+  };
 
   heimdall = callPackage ../tools/misc/heimdall { };
 
