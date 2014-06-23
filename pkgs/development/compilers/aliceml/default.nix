@@ -63,8 +63,13 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   meta = {
+    description = "Functional programming language based on Standard ML";
+    longDescription = ''
+      Alice ML is a functional programming language based on Standard ML,
+      extended with rich support for concurrent, distributed, and constraint
+      programming.
+    '';
     homepage = http://www.ps.uni-saarland.de/alice/;
-    description = "Alice ML is a functional programming language based on Standard ML, extended with rich support for concurrent, distributed, and constraint programming.";
     license = "BSD";
   };
 }
