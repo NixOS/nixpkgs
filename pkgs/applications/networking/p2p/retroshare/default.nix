@@ -17,6 +17,9 @@ stdenv.mkDerivation {
     # Extensions get installed 
     sed -i "s,/usr/lib/retroshare/extensions/,$out/share/retroshare," \
       libretroshare/src/rsserver/rsinit.cc
+    # For bdboot.txt
+    sed -i "s,/usr/share/RetroShare,$out/share/retroshare," \
+      libretroshare/src/rsserver/rsinit.cc
   '';
 
   buildInputs = [ speex qt libupnp gpgme gnome3.libgnome_keyring glib libssh pkgconfig
@@ -36,6 +39,9 @@ stdenv.mkDerivation {
     # plugins
     mkdir -p $out/share/retroshare
     mv $out/lib* $out/share/retroshare
+
+    # BT DHT bootstrap
+    cp libbitdht/src/bitdht/bdboot.txt $out/share/retroshare
   '';
 
   meta = with stdenv.lib; {
