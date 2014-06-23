@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "dnsmasq-2.69";
+  name = "dnsmasq-2.71";
 
   src = fetchurl {
     url = "http://www.thekelleys.org.uk/dnsmasq/${name}.tar.gz";
-    sha256 = "1zf4d6kjbsn6gwfwvmch1y84q67na1qhh0gyd50ip1vjsmw2l4i7";
+    sha256 = "1i1l2s2bcs6yx05wh1p2rf4bl0jfdgmg77b33gh44r1rdbv6933x";
   };
 
   makeFlags = "DESTDIR= BINDIR=$(out)/bin MANDIR=$(out)/man LOCALEDIR=$(out)/share/locale";
