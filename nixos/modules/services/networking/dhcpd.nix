@@ -13,7 +13,7 @@ let
       default-lease-time 600;
       max-lease-time 7200;
       authoritative;
-      ddns-update-style ad-hoc;
+      ddns-update-style interim;
       log-facility local1; # see dhcpd.nix
 
       ${cfg.extraConfig}
