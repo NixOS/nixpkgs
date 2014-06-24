@@ -2731,6 +2731,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     };
     llvmGeneral = self.llvmGeneral_3_3_8_2;
     llvmGeneralPure = self.llvmGeneralPure_3_3_8_2;
+    parsers = self.parsers_0_10_3;
+    trifecta = self.trifecta.override { parsers = self.parsers_0_10_3; };
   };
 
   idris = callPackage ../development/compilers/idris/wrapper.nix {};
