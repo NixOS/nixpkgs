@@ -8912,6 +8912,8 @@ let
     inherit (pythonPackages) pyopengl;
   };
 
+  inferno = callPackage_i686 ../applications/inferno { };
+
   inkscape = callPackage ../applications/graphics/inkscape {
     inherit (pythonPackages) lxml;
     lcms = lcms2;
