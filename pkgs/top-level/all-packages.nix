@@ -6652,6 +6652,8 @@ let
 
   elasticmq = callPackage ../servers/elasticmq { };
 
+  etcdctl = callPackage ../development/tools/etcdctl { };
+
   fcgiwrap = callPackage ../servers/fcgiwrap { };
 
   felix = callPackage ../servers/felix { };
