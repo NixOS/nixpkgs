@@ -66,6 +66,24 @@ in
         ";
       };
 
+      user = mkOption {
+        default = "nobody";
+        type = types.nullOr types.str;
+        description = ''
+          The user to drop privileges to after the daemon has started.
+          A value of null disables the user privilege change.
+        '';
+      };
+
+      group = mkOption {
+        default = "nogroup";
+        type = types.nullOr types.str;
+        description = ''
+          The group to drop privileges to after the daemon has started.
+          A value of null disables the group privilege change.
+        '';
+      };
+
       configFile = mkOption {
         default = null;
         description = "
@@ -120,8 +138,10 @@ in
 
             touch ${stateDir}/dhcpd.leases
 
-            exec ${pkgs.dhcp}/sbin/dhcpd -f -cf ${configFile} \
+            exec ${pkgs.dhcp}/sbin/dhcpd -f --no-pid -cf ${configFile} \
                 -lf ${stateDir}/dhcpd.leases \
+                ${optionalString (cfg.user != null) "-user ${cfg.user}"} \
+                ${optionalString (cfg.group != null) "-group ${cfg.group}"} \
                 ${toString cfg.interfaces}
           '';
       };
