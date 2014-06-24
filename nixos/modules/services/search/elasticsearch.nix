@@ -107,7 +107,7 @@ in {
 
   config = mkIf cfg.enable {
     systemd.services.elasticsearch = {
-      description = "Elasticsearch daemon";
+      description = "Elasticsearch Daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
       environment = { ES_HOME = cfg.dataDir; };
