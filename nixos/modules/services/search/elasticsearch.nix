@@ -93,6 +93,14 @@ in {
         Data directory for elasticsearch.
       '';
     };
+
+    extraCmdLineOptions = mkOption {
+      description = "Extra command line options for the elasticsearch launcher";
+      default = [];
+      type = types.listOf types.string;
+      example = [ "-Djava.net.preferIPv4Stack=true" ];
+    };
+
   };
 
   ###### implementation
@@ -104,7 +112,7 @@ in {
       after = [ "network-interfaces.target" ];
       environment = { ES_HOME = cfg.dataDir; };
       serviceConfig = {
-        ExecStart = "${pkgs.elasticsearch}/bin/elasticsearch -Des.path.conf=${configDir}";
+        ExecStart = "${pkgs.elasticsearch}/bin/elasticsearch -Des.path.conf=${configDir} ${toString cfg.extraCmdLineOptions}";
         User = "elasticsearch";
         PermissionsStartOnly = true;
       };
