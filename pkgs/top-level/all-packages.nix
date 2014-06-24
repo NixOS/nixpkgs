@@ -6644,6 +6644,8 @@ let
 
   dovecot_pigeonhole = callPackage ../servers/mail/dovecot-pigeonhole { };
 
+  etcd = callPackage ../servers/etcd { };
+
   ejabberd = callPackage ../servers/xmpp/ejabberd {
     erlang = erlangR16;
   };
