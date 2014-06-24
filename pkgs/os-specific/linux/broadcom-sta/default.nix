@@ -19,6 +19,7 @@ stdenv.mkDerivation {
   patches = [
     ./linux-recent.patch
     ./license.patch
+    ./cfg80211_ibss_joined-channel-parameter.patch
   ];
 
   makeFlags = "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}";
