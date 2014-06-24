@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, git, subversion, mercurial, bazaar, cvs }:
+{ stdenv, makeWrapper, git, subversion, mercurial, bazaar, cvs, unzip, curl, gnused }:
 
 stdenv.mkDerivation {
   name = "nix-prefetch-scripts";
@@ -11,9 +11,13 @@ stdenv.mkDerivation {
     function copyScript {
       local name=nix-prefetch-$1;
       local src=$2;
-      local exe=$3/bin;
+      local wrapArgs=""
       cp $src $out/bin/$name;
-      wrapProgram $out/bin/$name --suffix PATH : "$exe"
+      for dep in ''${@:3}; do
+        wrapArgs="$wrapArgs --prefix PATH : $dep/bin"
+      done
+      wrapArgs="$wrapArgs --prefix PATH : ${gnused}/bin"
+      wrapProgram $out/bin/$name $wrapArgs
     }
 
     copyScript "hg" ${../../../build-support/fetchhg/nix-prefetch-hg} ${mercurial}
@@ -21,6 +25,7 @@ stdenv.mkDerivation {
     copyScript "svn" ${../../../build-support/fetchsvn/nix-prefetch-svn} ${subversion}
     copyScript "bzr" ${../../../build-support/fetchbzr/nix-prefetch-bzr} ${bazaar}
     copyScript "cvs" ${../../../build-support/fetchcvs/nix-prefetch-cvs} ${cvs}
+    copyScript "zip" ${../../../build-support/fetchzip/nix-prefetch-zip} ${unzip} ${curl}
   '';
 
   meta = with stdenv.lib; {
