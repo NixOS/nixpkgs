@@ -3,24 +3,21 @@ btrfsProgs, iptables, bash}:
 
 stdenv.mkDerivation rec {
   name = "docker-${version}";
-  version = "0.10.0";
+  version = "1.0.0";
 
   src = fetchurl {
     url = "https://github.com/dotcloud/docker/archive/v${version}.tar.gz";
-    sha256 = "14gmx119hd3j0c6rbks2mm83hk46s5wnnyvj8rhn25h0yp39pm5q";
+    sha256 = "ae10d8262e531bb4b6cff37fd3ec491ba5a5273f472607df592918f796004865";
   };
-
-  phases = ["unpackPhase" "preBuild" "buildPhase" "installPhase"];
 
   buildInputs = [ makeWrapper go sqlite lxc iproute bridge_utils devicemapper btrfsProgs iptables ];
 
-  preBuild = ''
-    patchShebangs ./hack
-  '';
+  dontStrip = true;
 
   buildPhase = ''
+    patchShebangs ./hack
     export AUTO_GOPATH=1
-    export DOCKER_GITCOMMIT="867b2a90c228f62cdcd44907ceef279a2d8f1ac5"
+    export DOCKER_GITCOMMIT="63fe64c"
     ./hack/make.sh dynbinary
   '';
 
