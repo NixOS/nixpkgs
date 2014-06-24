@@ -8088,6 +8088,8 @@ let
 
   calibre = callPackage ../applications/misc/calibre { };
 
+  camlistore = callPackage ../applications/misc/camlistore { };
+
   carrier = builderDefsPackage (import ../applications/networking/instant-messengers/carrier/2.5.0.nix) {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss
       gtkspell aspell gettext ncurses avahi dbus dbus_glib python
