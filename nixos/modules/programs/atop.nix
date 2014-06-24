@@ -22,7 +22,7 @@ in
           interval = 5;
         };
         description = ''
-          Parameters to be written to <filename>/etc/atoprc</filename>
+          Parameters to be written to <filename>/etc/atoprc</filename>.
         '';
       };
 
