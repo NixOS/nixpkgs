@@ -37,7 +37,7 @@ rec {
   # `driver' is the script that runs the network.
   runTests = driver:
     stdenv.mkDerivation {
-      name = "vm-test-run" + "-" + driver.testName;
+      name = "vm-test-run-${driver.testName}";
 
       requiredSystemFeatures = [ "kvm" "nixos-test" ];
 
@@ -72,7 +72,7 @@ rec {
 
     let
       testName = t.name or "unnamed";
-      testDriverName = "nixos-test-driver" + "-" + testName;
+      testDriverName = "nixos-test-driver-${testName}";
 
       nodes = buildVirtualNetwork (
         t.nodes or (if t ? machine then { machine = t.machine; } else { }));
