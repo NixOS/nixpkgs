@@ -1,0 +1,12 @@
+diff -urN sudo-1.8.10p3.old/plugins/sudoers/Makefile.in sudo-1.8.10p3/plugins/sudoers/Makefile.in
+--- sudo-1.8.10p3.old/plugins/sudoers/Makefile.in	2014-06-22 09:52:22.927066257 +0200
++++ sudo-1.8.10p3/plugins/sudoers/Makefile.in	2014-06-22 09:55:03.951073442 +0200
+@@ -291,8 +291,6 @@
+ 	    $(DESTDIR)$(sudoersdir) $(DESTDIR)$(docdir) \
+ 	    `echo $(DESTDIR)$(rundir)|sed 's,/[^/]*$$,,'` \
+ 	    `echo $(DESTDIR)$(vardir)|sed 's,/[^/]*$$,,'`
+-	$(INSTALL) -d -O $(install_uid) -G $(install_gid) -m 0711 $(DESTDIR)$(rundir)
+-	$(INSTALL) -d -O $(install_uid) -G $(install_gid) -m 0711 $(DESTDIR)$(vardir)
+ 
+ install-binaries: visudo sudoreplay install-dirs
+ 	$(INSTALL) -b~ -O $(install_uid) -G $(install_gid) -m 0755 sudoreplay $(DESTDIR)$(replaydir)/sudoreplay
