@@ -1066,6 +1066,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   HaXml = callPackage ../development/libraries/haskell/HaXml {};
 
+  hdaemonize = callPackage ../development/libraries/haskell/hdaemonize {};
+
   HDBC = callPackage ../development/libraries/haskell/HDBC/HDBC.nix {};
 
   HDBCOdbc = callPackage ../development/libraries/haskell/HDBC/HDBC-odbc.nix {
@@ -1279,6 +1281,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   ixdopp = callPackage ../development/libraries/haskell/ixdopp {
     preprocessorTools = self.preprocessorTools_0_1_3;
   };
+
+  ixset = callPackage ../development/libraries/haskell/ixset {};
 
   ixShapable = callPackage ../development/libraries/haskell/ix-shapable {};
 
@@ -1960,6 +1964,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   setlocale = callPackage ../development/libraries/haskell/setlocale {};
 
+  shellmate = callPackage ../development/libraries/haskell/shellmate {};
+
   shelly_0_15_4_1 = callPackage ../development/libraries/haskell/shelly/0.15.4.1.nix {};
   shelly_1_5_3_1 = callPackage ../development/libraries/haskell/shelly {};
   shelly = self.shelly_1_5_3_1;
@@ -2159,6 +2165,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   systemTimeMonotonic = callPackage ../development/libraries/haskell/system-time-monotonic {};
 
   TableAlgebra = callPackage ../development/libraries/haskell/TableAlgebra {};
+
+  tables = callPackage ../development/libraries/haskell/tables {};
 
   tabular = callPackage ../development/libraries/haskell/tabular {};
 
@@ -2461,6 +2469,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   warpTls = callPackage ../development/libraries/haskell/warp-tls {};
 
   wcwidth = callPackage ../development/libraries/haskell/wcwidth {};
+
+  webdriver = callPackage ../development/libraries/haskell/webdriver {};
 
   webRoutes = callPackage ../development/libraries/haskell/web-routes {};
 
