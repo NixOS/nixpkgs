@@ -1,8 +1,38 @@
-# Run the named hook, either by calling the function with that name or
-# by evaluating the variable with that name.  This allows convenient
-# setting of hooks both from Nix expressions (as attributes /
-# environment variables) and from shell scripts (as functions).
+######################################################################
+# Hook handling.
+
+
+# Add the specified shell code to the named hook, e.g. ‘addHook
+# preConfigure "rm ./foo; touch ./bar"’.
+addHook() {
+    local hookName="$1"
+    local hookCode="$2"
+    eval "_${hookName}_hooks+=(\"\$hookCode\")"
+}
+
+
+# Run all hooks with the specified name in the order in which they
+# were added, stopping if any fails (returns a non-zero exit
+# code). Hooks are added using ‘addHooks <hookName> <code>’, or
+# implicitly by defining a shell function or variable <hookName>. Note
+# that the latter takes precedence over hooks added via ‘addHooks’.
 runHook() {
+    local hookName="$1"
+    local var="_${hookName}_hooks"
+    eval "local -a dummy=(\"\${_${hookName}_hooks[@]}\")"
+    for hook in "runSingleHook $hookName" "${dummy[@]}"; do
+        if ! _eval "$hook"; then return 1; fi
+    done
+    return 0
+}
+
+
+# Run the named hook, either by calling the function with that name or
+# by evaluating the variable with that name. This allows convenient
+# setting of hooks both from Nix expressions (as attributes /
+# environment variables) and from shell scripts (as functions). If you
+# want to allow multiple hooks, use runHook instead.
+runSingleHook() {
     local hookName="$1"
     case "$(type -t $hookName)" in
         (function|alias|builtin) $hookName;;
@@ -12,6 +42,17 @@ runHook() {
     esac
 }
 
+
+# A function wrapper around ‘eval’ that ensures that ‘return’ inside
+# hooks exits the hook, not the caller.
+_eval() {
+    local code="$1"
+    eval "$code"
+}
+
+
+######################################################################
+# Error handling.
 
 exitHandler() {
     exitCode=$?
@@ -467,7 +508,7 @@ unpackFile() {
                     echo "source archive $curSrc has unknown type"
                     exit 1
                 fi
-                runHook unpackCmd
+                runSingleHook unpackCmd
             fi
             ;;
     esac
@@ -505,7 +546,7 @@ unpackPhase() {
 
     # Find the source directory.
     if [ -n "$setSourceRoot" ]; then
-        runHook setSourceRoot
+        runSingleHook setSourceRoot
     elif [ -z "$sourceRoot" ]; then
         sourceRoot=
         for i in *; do
