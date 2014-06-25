@@ -4445,6 +4445,12 @@ let
 
   farsight2 = callPackage ../development/libraries/farsight2 { };
 
+  farstream_0_1 = callPackage ../development/libraries/farstream/0.1.nix {
+    inherit (gst_all_1)
+      gstreamer gst-plugins-base gst-python gst-plugins-good gst-plugins-bad
+      gst-ffmpeg;
+  };
+
   farstream = callPackage ../development/libraries/farstream {
     inherit (gst_all_1)
       gstreamer gst-plugins-base gst-python gst-plugins-good gst-plugins-bad
