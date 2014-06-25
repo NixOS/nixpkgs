@@ -3175,6 +3175,8 @@ let
 
     ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
 
+    cppo = callPackage ../development/tools/ocaml/cppo { };
+
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
 
     deriving = callPackage ../development/tools/ocaml/deriving { };
