@@ -1,3 +1,6 @@
+: ${outputs:=out}
+
+
 ######################################################################
 # Hook handling.
 
@@ -784,14 +787,16 @@ installPhase() {
 }
 
 
-# The fixup phase performs generic, package-independent, Nix-related
-# stuff, like running patchelf and setting the
-# propagated-build-inputs.  It should rarely be overriden.
+# The fixup phase performs generic, package-independent stuff, like
+# stripping binaries, running patchelf and setting
+# propagated-build-inputs.
 fixupPhase() {
-    runHook preFixup
-
     # Make sure everything is writable so "strip" et al. work.
-    if [ -e "$prefix" ]; then chmod -R u+w "$prefix"; fi
+    for output in $outputs; do
+        if [ -e "$output" ]; then chmod -R u+w "$output"; fi
+    done
+
+    runHook preFixup
 
     # Put man/doc/info under $out/share.
     forceShare=${forceShare:=man doc info}
@@ -812,10 +817,42 @@ fixupPhase() {
         done;
     fi
 
+    # Apply fixup to each output.
+    local output
+    for output in $outputs; do
+        prefix=${!output} runHook fixupOutput
+    done
+
+    if [ -n "$propagatedBuildInputs" ]; then
+        mkdir -p "$out/nix-support"
+        echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
+    fi
+
+    if [ -n "$propagatedNativeBuildInputs" ]; then
+        mkdir -p "$out/nix-support"
+        echo "$propagatedNativeBuildInputs" > "$out/nix-support/propagated-native-build-inputs"
+    fi
+
+    if [ -n "$propagatedUserEnvPkgs" ]; then
+        mkdir -p "$out/nix-support"
+        echo "$propagatedUserEnvPkgs" > "$out/nix-support/propagated-user-env-packages"
+    fi
+
+    if [ -n "$setupHook" ]; then
+        mkdir -p "$out/nix-support"
+        substituteAll "$setupHook" "$out/nix-support/setup-hook"
+    fi
+
+    runHook postFixup
+}
+
+
+addHook fixupOutput _defaultFixupOutput
+_defaultFixupOutput() {
     if [ -z "$dontGzipMan" ]; then
         echo "gzipping man pages"
         GLOBIGNORE=.:..:*.gz:*.bz2
-        for f in "$out"/share/man/*/* "$out"/share/man/*/*/*; do
+        for f in "$prefix"/share/man/*/* "$prefix"/share/man/*/*/*; do
             if [ -f "$f" -a ! -L "$f" ]; then
                 if gzip -c -n "$f" > "$f".gz; then
                     rm "$f"
@@ -824,7 +861,7 @@ fixupPhase() {
                 fi
             fi
         done
-        for f in "$out"/share/man/*/* "$out"/share/man/*/*/*; do
+        for f in "$prefix"/share/man/*/* "$prefix"/share/man/*/*/*; do
             if [ -L "$f" -a -f `readlink -f "$f"`.gz ]; then
                 ln -sf `readlink "$f"`.gz "$f".gz && rm "$f"
             fi
@@ -852,28 +889,6 @@ fixupPhase() {
     if [ -z "$dontPatchShebangs" ]; then
         patchShebangs "$prefix"
     fi
-
-    if [ -n "$propagatedBuildInputs" ]; then
-        mkdir -p "$out/nix-support"
-        echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
-    fi
-
-    if [ -n "$propagatedNativeBuildInputs" ]; then
-        mkdir -p "$out/nix-support"
-        echo "$propagatedNativeBuildInputs" > "$out/nix-support/propagated-native-build-inputs"
-    fi
-
-    if [ -n "$propagatedUserEnvPkgs" ]; then
-        mkdir -p "$out/nix-support"
-        echo "$propagatedUserEnvPkgs" > "$out/nix-support/propagated-user-env-packages"
-    fi
-
-    if [ -n "$setupHook" ]; then
-        mkdir -p "$out/nix-support"
-        substituteAll "$setupHook" "$out/nix-support/setup-hook"
-    fi
-
-    runHook postFixup
 }
 
 
