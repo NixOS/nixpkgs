@@ -37,7 +37,7 @@ let
            else
              "";
 
-  withToolset = stdenv.lib.optionalString (toolset != null) " --with-toolset=${toolset}";
+  withToolset = stdenv.lib.optionalString (toolset != null) " toolset=${toolset}";
 in
 
 stdenv.mkDerivation {
