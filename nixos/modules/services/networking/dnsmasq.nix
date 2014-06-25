@@ -9,6 +9,8 @@ let
   serversParam = concatMapStrings (s: "-S ${s} ") cfg.servers;
 
   dnsmasqConf = pkgs.writeText "dnsmasq.conf" ''
+    user=dnsmasq
+    group=nogroup
     ${cfg.extraConfig}
   '';
 
@@ -54,6 +56,13 @@ in
   ###### implementation
 
   config = mkIf config.services.dnsmasq.enable {
+
+    users = {
+      extraUsers.dnsmasq = {
+        uid = config.ids.uids.dnsmasq;
+        description = "Dnsmasq daemon user";
+      };
+    };
 
     jobs.dnsmasq =
       { description = "dnsmasq daemon";

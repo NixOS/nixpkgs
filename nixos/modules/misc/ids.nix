@@ -137,6 +137,7 @@
       gitolite = 127;
       znc = 128;
       polipo = 129;
+      dnsmasq = 130;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
