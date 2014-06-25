@@ -329,6 +329,8 @@ let
 
   fetchmtn = callPackage ../build-support/fetchmtn (config.fetchmtn or {});
 
+  packer = callPackage ../development/tools/packer { };
+
   fetchpatch = callPackage ../build-support/fetchpatch { };
 
   fetchsvn = import ../build-support/fetchsvn {
@@ -2979,6 +2981,8 @@ let
   go_1_3 = callPackage ../development/compilers/go/1.3.nix { };
 
   go = go_1_3;
+
+  gox = callPackage ../development/compilers/go/gox.nix { };
 
   gprolog = callPackage ../development/compilers/gprolog { };
 
@@ -6640,11 +6644,15 @@ let
 
   dovecot_pigeonhole = callPackage ../servers/mail/dovecot-pigeonhole { };
 
+  etcd = callPackage ../servers/etcd { };
+
   ejabberd = callPackage ../servers/xmpp/ejabberd {
     erlang = erlangR16;
   };
 
   elasticmq = callPackage ../servers/elasticmq { };
+
+  etcdctl = callPackage ../development/tools/etcdctl { };
 
   fcgiwrap = callPackage ../servers/fcgiwrap { };
 
@@ -6656,6 +6664,8 @@ let
 
   firebird = callPackage ../servers/firebird { icu = null; };
   firebirdSuper = callPackage ../servers/firebird { superServer = true; };
+
+  fleet = callPackage ../servers/fleet { };
 
   freepops = callPackage ../servers/mail/freepops { };
 
@@ -6718,6 +6728,8 @@ let
   ngircd = callPackage ../servers/irc/ngircd { };
 
   nsd = callPackage ../servers/dns/nsd { };
+
+  nsq = callPackage ../servers/nsq { };
 
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
 
@@ -7490,6 +7502,8 @@ let
 
   numactl = callPackage ../os-specific/linux/numactl { };
 
+  gocode = callPackage ../development/tools/gocode { };
+
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
@@ -8073,6 +8087,8 @@ let
   };
 
   calibre = callPackage ../applications/misc/calibre { };
+
+  camlistore = callPackage ../applications/misc/camlistore { };
 
   carrier = builderDefsPackage (import ../applications/networking/instant-messengers/carrier/2.5.0.nix) {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss

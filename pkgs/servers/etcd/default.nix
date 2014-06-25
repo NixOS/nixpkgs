@@ -1,8 +1,8 @@
 { stdenv, lib, go, fetchurl, fetchgit, fetchhg, fetchbzr, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.2";
-  name = "serfdom-${version}";
+  version = "0.4.3";
+  name = "etcd-${version}";
 
   src = import ./deps.nix {
     inherit stdenv lib fetchgit fetchhg fetchbzr fetchFromGitHub;
@@ -12,19 +12,19 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     export GOPATH=$src
-    go build -v -o serf github.com/hashicorp/serf
+    go build -v -o etcd github.com/coreos/etcd
   '';
 
   installPhase = ''
     ensureDir $out/bin
-    mv serf $out/bin/serf
+    mv etcd $out/bin/etcd
   '';
 
   meta = with stdenv.lib; {
-    description = "Serf is a service discovery and orchestration tool that is decentralized, highly available, and fault tolerant";
-    homepage = http://www.serfdom.io/;
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ msackman cstrahan ];
+    description = "A highly-available key value store for shared configuration and service discovery";
+    homepage = http://coreos.com/using-coreos/etcd/;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ cstrahan ];
     platforms = platforms.unix;
   };
 }

@@ -1,8 +1,8 @@
 { stdenv, lib, go, fetchurl, fetchgit, fetchhg, fetchbzr, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.2";
-  name = "serfdom-${version}";
+  version = "0.5.0";
+  name = "fleet-${version}";
 
   src = import ./deps.nix {
     inherit stdenv lib fetchgit fetchhg fetchbzr fetchFromGitHub;
@@ -12,19 +12,19 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     export GOPATH=$src
-    go build -v -o serf github.com/hashicorp/serf
+    go build -v -o fleet github.com/coreos/fleet
   '';
 
   installPhase = ''
     ensureDir $out/bin
-    mv serf $out/bin/serf
+    mv fleet $out/bin
   '';
 
   meta = with stdenv.lib; {
-    description = "Serf is a service discovery and orchestration tool that is decentralized, highly available, and fault tolerant";
-    homepage = http://www.serfdom.io/;
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ msackman cstrahan ];
+    description = "A distributed init system";
+    homepage = http://coreos.com/using-coreos/clustering/;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ cstrahan ];
     platforms = platforms.unix;
   };
 }
