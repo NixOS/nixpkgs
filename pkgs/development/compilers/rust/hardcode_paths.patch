@@ -1,41 +1,32 @@
 diff --git a/src/librustc/back/link.rs b/src/librustc/back/link.rs
-index f198a41..3a47e51 100644
+index 7a3e912..ced75fa 100644
 --- a/src/librustc/back/link.rs
 +++ b/src/librustc/back/link.rs
-@@ -730,7 +730,7 @@ pub fn get_cc_prog(sess: &Session) -> ~str {
-         _ => {},
+@@ -766,24 +766,15 @@ pub fn output_lib_filename(id: &CrateId) -> String {
+ 
+ pub fn get_cc_prog(sess: &Session) -> String {
+     match sess.opts.cg.linker {
+-        Some(ref linker) => return linker.to_string(),
+-        None => {}
++        Some(ref linker) => linker.to_string(),
++        None => "@ccPath@".to_string()
      }
- 
--    get_system_tool(sess, "cc")
-+    ~"@gccPath@"
- }
- 
- pub fn get_ar_prog(sess: &Session) -> ~str {
-@@ -739,26 +739,7 @@ pub fn get_ar_prog(sess: &Session) -> ~str {
-         None => {}
-     }
- 
--    get_system_tool(sess, "ar")
--}
 -
--fn get_system_tool(sess: &Session, tool: &str) -> ~str {
+-    // In the future, FreeBSD will use clang as default compiler.
+-    // It would be flexible to use cc (system's default C compiler)
+-    // instead of hard-coded gcc.
+-    // For win32, there is no cc command, so we add a condition to make it use gcc.
 -    match sess.targ_cfg.os {
--        abi::OsAndroid => match sess.opts.cg.android_cross_path {
--            Some(ref path) => {
--                let tool_str = match tool {
--                    "cc" => "gcc",
--                    _ => tool
--                };
--                format!("{}/bin/arm-linux-androideabi-{}", *path, tool_str)
--            }
--            None => {
--                sess.fatal(format!("need Android NDK path for the '{}' tool \
--                                    (-C android-cross-path)", tool))
--            }
--        },
--        _ => tool.to_owned(),
--    }
-+    ~"@binutilsPath@"
+-        abi::OsWin32 => "gcc",
+-        _ => "cc",
+-    }.to_string()
  }
  
- fn remove(sess: &Session, path: &Path) {
+ pub fn get_ar_prog(sess: &Session) -> String {
+     match sess.opts.cg.ar {
+         Some(ref ar) => (*ar).clone(),
+-        None => "ar".to_string()
++        None => "@arPath@".to_string()
+     }
+ }
+ 

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, which, file, perl, curl, python27, makeWrapper}:
+{stdenv, fetchurl, fetchgit, which, file, perl, curl, python27, makeWrapper}:
 
 /* Rust's build process has a few quirks :
 
@@ -16,28 +16,26 @@
 
 with if stdenv.system == "i686-linux" then {
   platform = "linux-i386";
-  snapshot = "3bef5684fd0582fbd4ddebd4514182d4f72924f7";
-  snapshot_sha = "1c72d65pcgm3z4sly7al09mjvpp8asxbbv7iyzzv5k8f66ny2agy";
+  snapshot = "84339ea0f796ae468ef86797ef4587274bec19ea";
   target = "i686-unknown-linux-gnu";
 } else if stdenv.system == "x86_64-linux" then {
   platform = "linux-x86_64";
-  snapshot = "a7b2af1076d48e4a687a71a21478293e834349bd";
-  snapshot_sha = "1c72d65pcgm3z4sly7al09mjvpp8asxbbv7iyzzv5k8f66ny2agy";
+  snapshot = "bd8a6bc1f28845b7f4b768f6bfa06e7fbdcfcaae";
   target = "x86_64-unknown-linux-gnu";
 } else if stdenv.system == "x86_64-darwin" then {
   platform = "macos-x86_64";
-  snapshot = "22b884a3876cb3e40ad942ad68a496b5f239fca5";
-  snapshot_sha = "0qabkvyryiwlqhzy1kscff27rx788bv7lh7d8m1hnsv38wqhwqqb";
+  snapshot = "4a8c2e1b7634d73406bac32a1a97893ec3ed818d";
 } else {};
-let snapshotDate = "2014-03-28";
-    snapshotRev = "b8601a3";
+let snapshotDate = "2014-06-21";
+    snapshotRev = "db9af1d";
     snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshot}.tar.bz2"; in
 stdenv.mkDerivation {
-  name = "rust-0.10";
+  name = "rust";
 
-  src = fetchurl {
-    url = http://static.rust-lang.org/dist/rust-0.10.tar.gz;
-    sha256 = "c72cfbbf03016804a81d7b68e8258ffaf018f8f5a25550ad64571ce6c2642cf9";
+  src = fetchgit {
+    url = https://github.com/rust-lang/rust;
+    rev = "bab614f5fa725d248afc5f0530c835f37998ce8f";
+    sha256 = "0q7l399z1hsfmprmz57v34f1y79d6da8dibd2pdn4k7yb84shrc7";
   };
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
@@ -45,15 +43,16 @@ stdenv.mkDerivation {
     name = "rust-stage0";
     src = fetchurl {
       url = "http://static.rust-lang.org/stage0-snapshots/${snapshotName}";
-      sha256 = snapshot_sha;
+      sha1 = snapshot;
     };
+    dontStrip = true;
     installPhase = ''
       mkdir -p "$out"
       cp -r bin "$out/bin"
     '' + (if stdenv.isLinux then ''
-      patchelf --interpreter ${stdenv.glibc}/lib/${stdenv.gcc.dynamicLinker} \
-               --set-rpath ${stdenv.gcc.gcc}/lib/:${stdenv.gcc.gcc}/lib64/ \
-               $out/bin/rustc
+      patchelf --interpreter "${stdenv.glibc}/lib/${stdenv.gcc.dynamicLinker}" \
+               --set-rpath "${stdenv.gcc.gcc}/lib/:${stdenv.gcc.gcc}/lib64/" \
+               "$out/bin/rustc"
     '' else "");
   };
 
@@ -63,8 +62,8 @@ stdenv.mkDerivation {
   patches = [ ./hardcode_paths.patch ./local_stage0.patch ];
   postPatch = ''
     substituteInPlace src/librustc/back/link.rs \
-      --subst-var-by "gccPath" ${stdenv.gcc}/bin/cc \
-      --subst-var-by "binutilsPath" ${stdenv.gcc.binutils}/bin/ar
+      --subst-var-by "ccPath" "${stdenv.gcc}/bin/cc" \
+      --subst-var-by "arPath" "${stdenv.gcc.binutils}/bin/ar"
   '';
 
   buildInputs = [ which file perl curl python27 makeWrapper ];
