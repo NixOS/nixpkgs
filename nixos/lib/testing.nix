@@ -68,11 +68,10 @@ rec {
 
 
   makeTest =
-    { testScript, makeCoverageReport ? false, ... } @ t:
+    { testScript, makeCoverageReport ? false, name ? "unnamed", ... } @ t:
 
     let
-      testName = t.name or "unnamed";
-      testDriverName = "nixos-test-driver-${testName}";
+      testDriverName = "nixos-test-driver-${name}";
 
       nodes = buildVirtualNetwork (
         t.nodes or (if t ? machine then { machine = t.machine; } else { }));
@@ -94,7 +93,7 @@ rec {
         { buildInputs = [ makeWrapper];
           testScript = testScript';
           preferLocalBuild = true;
-          inherit testName;
+          testName = name;
         }
         ''
           mkdir -p $out/bin
