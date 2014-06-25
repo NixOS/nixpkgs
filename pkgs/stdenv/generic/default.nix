@@ -23,7 +23,7 @@ let
   # {pkgs, ...}:
   # {
   #   allowUnfree = false;
-  #   allowUnfreePredicate = (x: pkgs.lib.hasPrefix "flashplayero-" x.name);
+  #   allowUnfreePredicate = (x: pkgs.lib.hasPrefix "flashplayer-" x.name);
   # }
   allowUnfreePredicate = config.allowUnfreePredicate or (x: false);
 
@@ -74,7 +74,9 @@ let
               unsafeGetAttrPos "name" attrs;
           pos' = if pos != null then "‘" + pos.file + ":" + toString pos.line + "’" else "«unknown-file»";
         in
-        if !allowUnfree && (let l = lib.lists.toList attrs.meta.license or []; in lib.lists.elem "unfree" l || lib.lists.elem "unfree-redistributable" l) && !(allowUnfreePredicate attrs) then
+        if !allowUnfree
+           && (let l = lib.lists.toList attrs.meta.license or []; in lib.lists.elem "unfree" l || lib.lists.elem "unfree-redistributable" l)
+           && !allowUnfreePredicate attrs then
           throw ''
             Package ‘${attrs.name}’ in ${pos'} has an unfree license, refusing to evaluate. You can set
               { nixpkgs.config.allowUnfree = true; }
