@@ -198,6 +198,10 @@ findInputs() {
 
     eval $var="'${!var} $pkg '"
 
+    if [ -f $pkg ]; then
+        source $pkg
+    fi
+
     if [ -f $pkg/nix-support/setup-hook ]; then
         source $pkg/nix-support/setup-hook
     fi
