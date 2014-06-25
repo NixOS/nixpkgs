@@ -8215,6 +8215,8 @@ let
 
   djvulibre = callPackage ../applications/misc/djvulibre { };
 
+  djvu2pdf = callPackage ../tools/typesetting/djvu2pdf { };
+
   djview = callPackage ../applications/graphics/djview { };
   djview4 = pkgs.djview;
 
