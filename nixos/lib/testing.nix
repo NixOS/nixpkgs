@@ -37,7 +37,7 @@ rec {
   # `driver' is the script that runs the network.
   runTests = driver:
     stdenv.mkDerivation {
-      name = "vm-test-run";
+      name = "vm-test-run" + "-" + driver.testName;
 
       requiredSystemFeatures = [ "kvm" "nixos-test" ];
 
@@ -71,6 +71,8 @@ rec {
     { testScript, makeCoverageReport ? false, ... } @ t:
 
     let
+      testName = t.name or "unnamed";
+      testDriverName = "nixos-test-driver" + "-" + testName;
 
       nodes = buildVirtualNetwork (
         t.nodes or (if t ? machine then { machine = t.machine; } else { }));
@@ -88,10 +90,11 @@ rec {
       # Generate onvenience wrappers for running the test driver
       # interactively with the specified network, and for starting the
       # VMs from the command line.
-      driver = runCommand "nixos-test-driver"
+      driver = runCommand testDriverName
         { buildInputs = [ makeWrapper];
           testScript = testScript';
           preferLocalBuild = true;
+          inherit testName;
         }
         ''
           mkdir -p $out/bin
