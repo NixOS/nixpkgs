@@ -17,7 +17,7 @@ meta = {
     It is fully customizable.
   '';
   homepage = http://www.gnu.org/software/hello/manual/;
-  license = "GPLv3+";
+  license = stdenv.lib.licenses.gpl3Plus;
 };
 </programlisting>
 
@@ -25,22 +25,32 @@ meta = {
 
 <para>Meta-attributes are not passed to the builder of the package.
 Thus, a change to a meta-attribute doesn’t trigger a recompilation of
-the package.  The value of a meta-attribute must a string.</para>
+the package. The value of a meta-attribute is usually a
+string. However, the license should ideally refer to an attribute from
+<link
+xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix"><filename>lib/licenses.nix</filename></link>.</para>
 
 <para>The meta-attributes of a package can be queried from the
 command-line using <command>nix-env</command>:
 
 <screen>
-$ nix-env -qa hello --meta --xml
-&lt;?xml version='1.0' encoding='utf-8'?>
-&lt;items>
-  &lt;item attrPath="hello" name="hello-2.3" system="i686-linux">
-    &lt;meta name="description" value="A program that produces a familiar, friendly greeting" />
-    &lt;meta name="homepage" value="http://www.gnu.org/software/hello/manual/" />
-    &lt;meta name="license" value="GPLv3+" />
-    &lt;meta name="longDescription" value="GNU Hello is a program that prints &amp;quot;Hello, world!&amp;quot; when you run it.&amp;#xA;It is fully customizable.&amp;#xA;" />
-  &lt;/item>
-&lt;/items>
+$ nix-env -qa hello --meta --json
+{
+    "nixpkgs.pkgs.hello": {
+        "name": "hello-2.9",
+        "system": "x86_64-linux"
+        "meta": {
+            "homepage": "http://www.gnu.org/software/hello/manual/",
+            "description": "A program that produces a familiar, friendly greeting",
+            "longDescription": "GNU Hello is a program that prints \"Hello, world!\" when you run it.\nIt is fully customizable.\n",
+            "license": {
+                "fullName": "GNU General Public License version 3 or later",
+                "shortName": "GPLv3+",
+                "url": "http://www.fsf.org/licensing/licenses/gpl.html"
+            },
+        },
+    }
+}
 </screen>
 
 <command>nix-env</command> knows about the
@@ -48,7 +58,7 @@ $ nix-env -qa hello --meta --xml
 
 <screen>
 $ nix-env -qa hello --description
-hello-2.3  A program that produces a familiar, friendly greeting
+hello-2.9  A program that produces a familiar, friendly greeting
 </screen>
 
 </para>
@@ -179,75 +189,29 @@ meta.hydraPlatforms = [];
 <note><para>This is just a first attempt at standardising the license
 attribute.</para></note>
 
-<para>The <varname>meta.license</varname> attribute must be one of the
-following:
+<para>The <varname>meta.license</varname> attribute should be an
+attribute from <link
+xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix"><filename>lib/licenses.nix</filename></link>
+although a plain string is valid. The following catch-all licenses may
+also be useful:
 
 <variablelist>
 
   <varlistentry>
-    <term><varname>GPL</varname></term>
-    <listitem><para>GNU General Public License; version not
-    specified.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>GPLv2</varname></term>
-    <listitem><para>GNU General Public License, version
-    2.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>GPLv2+</varname></term>
-    <listitem><para>GNU General Public License, version
-    2 or higher.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>GPLv3</varname></term>
-    <listitem><para>GNU General Public License, version
-    3.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>GPLv3+</varname></term>
-    <listitem><para>GNU General Public License, version
-    3 or higher.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>bsd</varname></term>
-    <listitem><para>Catch-all for licenses that are essentially
-    similar to <link
-    xlink:href="http://www.gnu.org/licenses/license-list.html#ModifiedBSD">the
-    original BSD license with the advertising clause removed</link>,
-    i.e. permissive non-copyleft free software licenses.  This
-    includes the <link
-    xlink:href="http://www.gnu.org/licenses/license-list.html#X11License">X11
-    (“MIT”) License</link>.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>perl5</varname></term>
-    <listitem><para>The Perl 5 license (Artistic License, version 1
-    and GPL, version 1 or later).</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
     <term><varname>free</varname></term>
-    <listitem><para>Catch-all for free software licenses not listed
-    above.</para></listitem>
+    <listitem><para>Catch-all for free software licenses.</para></listitem>
   </varlistentry>
 
   <varlistentry>
     <term><varname>free-copyleft</varname></term>
-    <listitem><para>Catch-all for free, copyleft software licenses not
-    listed above.</para></listitem>
+    <listitem><para>Catch-all for free, copyleft software
+    licenses.</para></listitem>
   </varlistentry>
 
   <varlistentry>
     <term><varname>free-non-copyleft</varname></term>
-    <listitem><para>Catch-all for free, non-copyleft software licenses
-    not listed above.</para></listitem>
+    <listitem><para>Catch-all for free, non-copyleft software
+    licenses.</para></listitem>
   </varlistentry>
 
   <varlistentry>
