@@ -3303,6 +3303,7 @@ let
 
   sdcc = callPackage ../development/compilers/sdcc { };
 
+  smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
   smlnj = callPackage_i686 ../development/compilers/smlnj { };
 
   stalin = callPackage ../development/compilers/stalin { };
