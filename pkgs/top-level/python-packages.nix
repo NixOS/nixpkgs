@@ -7752,7 +7752,6 @@ rec {
 
     doCheck = false;
     buildInputs = [ pythonPackages.pytz ];
-    propagatedBuildInputs = [ pythonPackages.pytz ];
 
     meta = {
       homepage = "https://github.com/regebro/tzlocal";
