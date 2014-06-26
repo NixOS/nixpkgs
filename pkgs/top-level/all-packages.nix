@@ -8893,6 +8893,8 @@ let
     inherit (pythonPackages) lxml;
   };
 
+  jrnl = callPackage ../applications/office/jrnl { };
+
   jwm = callPackage ../applications/window-managers/jwm { };
 
   k3d = callPackage ../applications/graphics/k3d {

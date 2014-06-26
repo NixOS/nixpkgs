@@ -5899,6 +5899,22 @@ rec {
   };
 
 
+  parsedatetime = buildPythonPackage rec {
+    name = "parsedatetime-1.2";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/parsedatetime/${name}.tar.gz";
+      sha256 = "1b6bc97867e52df7ea95122a25a788cb37daddbc95aba4aa9084deddff0592fd";
+    };
+
+    meta = {
+      homepage = "http://github.com/bear/parsedatetime/";
+      description = "Parse human-readable date/time text";
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
+
+
   pylibacl = buildPythonPackage (rec {
     name = "pylibacl-0.5.1";
 
@@ -7722,6 +7738,26 @@ rec {
       license = licenses.mit;
 
       maintainers = [ ];
+    };
+  };
+
+
+  tzlocal = buildPythonPackage rec {
+    name = "tzlocal-1.1.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/tzlocal/${name}.zip";
+      sha256 = "696bfd8d7c888de039af6c6fdf86fd52e32508277d89c75d200eb2c150487ed4";
+    };
+
+    doCheck = false;
+    buildInputs = [ pythonPackages.pytz ];
+    propagatedBuildInputs = [ pythonPackages.pytz ];
+
+    meta = {
+      homepage = "https://github.com/regebro/tzlocal";
+      description = "tzinfo object for the local timezone";
+      platforms = stdenv.lib.platforms.all;
     };
   };
 
