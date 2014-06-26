@@ -8636,6 +8636,8 @@ let
     python = python27;
   };
 
+  gitolite = callPackage ../applications/version-management/gitolite { };
+
   inherit (gnome3) gitg;
 
   giv = callPackage ../applications/graphics/giv {
