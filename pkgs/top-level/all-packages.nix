@@ -10732,6 +10732,12 @@ let
 
   tptp = callPackage ../applications/science/logic/tptp {};
 
+  twelf = callPackage ../applications/science/logic/twelf {
+    smlnj = if stdenv.isDarwin
+      then smlnjBootstrap
+      else smlnj;
+  };
+
   verifast = callPackage ../applications/science/logic/verifast {};
 
   why3 = callPackage ../applications/science/logic/why3 {};
