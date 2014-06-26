@@ -13,9 +13,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl git ];
   buildPhase = "true";
+
+  patchPhase = ''
+    substituteInPlace ./install --replace " 2>/dev/null" ""
+    substituteInPlace src/lib/Gitolite/Hooks/PostUpdate.pm \
+      --replace /usr/bin/perl "/usr/bin/env perl"
+    substituteInPlace src/lib/Gitolite/Hooks/Update.pm \
+      --replace /usr/bin/perl "/usr/bin/env perl"
+  '';
   installPhase = ''
     mkdir -p $out/bin
-    substituteInPlace ./install --replace " 2>/dev/null" ""
     git tag v${version} # Gitolite requires a tag for the version information :/
     perl ./install -to $out/bin
   '';
