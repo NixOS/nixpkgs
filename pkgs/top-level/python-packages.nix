@@ -3709,11 +3709,11 @@ rec {
   };
 
   keyring = buildPythonPackage rec {
-    name = "keyring-3.2";
+    name = "keyring-3.8";
 
     src = fetchurl {
       url    = "https://pypi.python.org/packages/source/k/keyring/${name}.zip";
-      sha256 = "1flccphpyrb8y8dra2fq2s2v3fg615d77kjjmzl0gmiidabkkdqf";
+      sha256 = "ef0b1a18aaf6792b73a6a6ce8c2f9c1a01dd27d4a5c0aab277fe3dce96fbaaef";
     };
 
     meta = with stdenv.lib; {
@@ -7067,11 +7067,11 @@ rec {
 
 
   six = buildPythonPackage rec {
-    name = "six-1.3.0";
+    name = "six-1.7.2";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/s/six/${name}.tar.gz";
-      md5 = "ec47fe6070a8a64c802363d2c2b1e2ee";
+      md5 = "4c26276583b01dfc73474cb32327af91";
     };
 
     # error: invalid command 'test'
