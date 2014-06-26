@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "bson";
-  version = "0.2.4";
-  sha256 = "1fr0xx9q2l3cb72j5lgrwdlr2gba7idh2v80s8d6dr69dhwaccd9";
+  version = "0.3";
+  sha256 = "0787z6970lf93mgrsyqcilnkx5bynny88ag15z2f07l1rhva6ac4";
   buildDepends = [
     binary cryptohash dataBinaryIeee754 mtl network text time
   ];

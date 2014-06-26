@@ -799,6 +799,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   foldl = callPackage ../development/libraries/haskell/foldl {};
 
+  folds = callPackage ../development/libraries/haskell/folds {};
+
   forceLayout = callPackage ../development/libraries/haskell/force-layout {};
 
   free = callPackage ../development/libraries/haskell/free {};

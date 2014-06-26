@@ -1,20 +1,18 @@
-{ stdenv, fetchurl, alsaLib, libXv, libXi, libXrender, libXrandr, zlib, glib
+{ stdenv, fetchurl, libXv, libXi, libXrender, libXrandr, zlib, glib
 , libXext, libX11, libXScrnSaver, libSM, qt4, libICE, freetype, fontconfig
-, pulseaudio, usePulseAudio, lib }:
+, pulseaudio, lib, ... }:
 
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation rec {
-  name = "skype-4.2.0.13";
+  name = "skype-4.3.0.37";
 
   src = fetchurl {
     url = "http://download.skype.com/linux/${name}.tar.bz2";
-    sha256 = "137kp6c0v4z7n7pp4hwrx4gjgk4knwj815dc6swh44lb5cj1c5m5";
+    sha256 = "0bc9kck99rcsqzxzw3j6vnw5byvr8c9wixrx609zp255g0wxr6cc";
   };
 
-  buildInputs =
-    lib.optional usePulseAudio pulseaudio ++ [
-    alsaLib
+  buildInputs = [
     stdenv.glibc
     stdenv.gcc.gcc
     libXv
@@ -27,6 +25,7 @@ stdenv.mkDerivation rec {
     libXi
     libXrender
     libXrandr
+    pulseaudio
     freetype
     fontconfig
     zlib
@@ -44,13 +43,13 @@ stdenv.mkDerivation rec {
       fullPath=$fullPath''${fullPath:+:}$i/lib
     done
 
-    dynlinker="$(cat $NIX_GCC/nix-support/dynamic-linker)"
+    patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+        --set-rpath "$fullPath" $out/libexec/skype/skype
 
     cat > $out/bin/skype << EOF
     #!${stdenv.shell}
     export PULSE_LATENCY_MSEC=60  # workaround for pulseaudio glitches
-    export LD_LIBRARY_PATH=$fullPath:$LD_LIBRARY_PATH
-    $dynlinker $out/libexec/skype/skype --resources=$out/libexec/skype "\$@"
+    $out/libexec/skype/skype --resources=$out/libexec/skype "\$@"
     EOF
 
     chmod +x $out/bin/skype
