@@ -18,7 +18,7 @@ in
           directory is <literal>/var/lib/gitolite</literal>. After
           switching to a configuration with Gitolite enabled, you can
           then run <literal>git clone
-          git@host:gitolite-admin.git</literal> to manage it further.
+          gitolite@host:gitolite-admin.git</literal> to manage it further.
         '';
       };
 
