@@ -1052,6 +1052,20 @@ rec {
   });
 
 
+  click = buildPythonPackage {
+    name = "click-2.1";
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/c/click/click-2.1.tar.gz;
+      md5 = "0ba97ba09af82c56e2d35f3412d0aa6e";
+    };
+    meta = {
+      homepage = "http://click.pocoo.org/";
+      description = "Click is a Python package for creating beautiful command line interfaces in a composable way with as little code as necessary.";
+      license = "bsd, 3-clause";
+    };
+  };
+
+
   clepy = buildPythonPackage rec {
     name = "clepy-0.3.20";
 
