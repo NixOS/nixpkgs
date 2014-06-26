@@ -1,4 +1,4 @@
-{ cabal, attoparsec_0_11_3_4, base64Bytestring, binary, blazeBuilder
+{ cabal, attoparsec, base64Bytestring, binary, blazeBuilder
 , caseInsensitive, entropy, HUnit, ioStreams, mtl, network
 , QuickCheck, random, SHA, testFramework, testFrameworkHunit
 , testFrameworkQuickcheck2, text
@@ -9,11 +9,11 @@ cabal.mkDerivation (self: {
   version = "0.8.2.4";
   sha256 = "09mq04vhi53isj8z5930ibyai7bv634lnmhl4xl2d3fzz2afvff0";
   buildDepends = [
-    attoparsec_0_11_3_4 base64Bytestring binary blazeBuilder caseInsensitive
+    attoparsec base64Bytestring binary blazeBuilder caseInsensitive
     entropy ioStreams mtl network random SHA text
   ];
   testDepends = [
-    attoparsec_0_11_3_4 base64Bytestring binary blazeBuilder caseInsensitive
+    attoparsec base64Bytestring binary blazeBuilder caseInsensitive
     entropy HUnit ioStreams mtl network QuickCheck random SHA
     testFramework testFrameworkHunit testFrameworkQuickcheck2 text
   ];
