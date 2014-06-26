@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ghc-mod";
-  version = "4.1.2";
-  sha256 = "0xdpy61dc56zvpgr2z9cdyd85d65l426vnbfgsw6w494w0bp3sh7";
+  version = "4.1.3";
+  sha256 = "0n7nbjbiiphlasqfcxx15fa8axwd9csq2nh3r0wvkrgpsazdlw8c";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -26,6 +26,7 @@ cabal.mkDerivation (self: {
     cd ..
     ensureDir "$out/share/emacs"
     mv $pname-$version emacs/site-lisp
+
     mv $out/bin/ghc-mod $out/bin/.ghc-mod-wrapped
     cat - > $out/bin/ghc-mod <<EOF
     #! ${self.stdenv.shell}
@@ -34,6 +35,15 @@ cabal.mkDerivation (self: {
     eval exec $out/bin/.ghc-mod-wrapped \$COMMAND \$( ${self.ghc.GHCGetPackages} ${self.ghc.version} | tr " " "\n" | tail -n +2 | paste -d " " - - | sed 's/.*/-g "&"/' | tr "\n" " ") "\$@"
     EOF
     chmod +x $out/bin/ghc-mod
+
+    mv $out/bin/ghc-modi $out/bin/.ghc-modi-wrapped
+    cat - > $out/bin/ghc-modi <<EOF
+    #! ${self.stdenv.shell}
+    COMMAND=\$1
+    shift
+    eval exec $out/bin/.ghc-modi-wrapped \$COMMAND \$( ${self.ghc.GHCGetPackages} ${self.ghc.version} | tr " " "\n" | tail -n +2 | paste -d " " - - | sed 's/.*/-g "&"/' | tr "\n" " ") "\$@"
+    EOF
+    chmod +x $out/bin/ghc-modi
   '';
   meta = {
     homepage = "http://www.mew.org/~kazu/proj/ghc-mod/";

@@ -34,6 +34,12 @@ in
       description = "Packages providing extra SANE backends to enable.";
     };
 
+    hardware.sane.configDir = mkOption {
+      type = types.string;
+      default = "${saneConfig}/etc/sane.d";
+      description = "The value of SANE_CONFIG_DIR.";
+    };
+
   };
 
 
@@ -42,8 +48,8 @@ in
   config = mkIf config.hardware.sane.enable {
 
     environment.systemPackages = backends;
-    environment.variables = {
-      SANE_CONFIG_DIR = mkDefault "${saneConfig}/etc/sane.d";
+    environment.sessionVariables = {
+      SANE_CONFIG_DIR = config.hardware.sane.configDir;
       LD_LIBRARY_PATH = [ "${saneConfig}/lib/sane" ];
     };
     services.udev.packages = backends;

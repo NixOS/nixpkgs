@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     license = "GPLv3+";
 
     maintainers = with stdenv.lib.maintainers; [ chaoflow pSub ];
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

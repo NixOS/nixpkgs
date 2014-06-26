@@ -82,10 +82,6 @@ stdenv.mkDerivation {
       # gitweb.cgi, need to patch so that it's found
       sed -i -e "s|'compressor' => \['gzip'|'compressor' => ['${gzip}/bin/gzip'|" \
           $out/share/gitweb/gitweb.cgi
-
-      wrapProgram $out/bin/git \
-          --set GIT_SSL_CAINFO "\$OPENSSL_X509_CERT_FILE"
-
     ''
 
    + (if svnSupport then

@@ -329,6 +329,8 @@ let
 
   fetchmtn = callPackage ../build-support/fetchmtn (config.fetchmtn or {});
 
+  packer = callPackage ../development/tools/packer { };
+
   fetchpatch = callPackage ../build-support/fetchpatch { };
 
   fetchsvn = import ../build-support/fetchsvn {
@@ -661,7 +663,7 @@ let
     enableStandardFeatures = false;
   };
 
-  asciidocFull = appendToName "full" (asciidoc.override {
+  asciidoc-full = appendToName "full" (asciidoc.override {
     inherit (pythonPackages) pygments;
     enableStandardFeatures = true;
   });
@@ -1254,7 +1256,9 @@ let
 
   hddtemp = callPackage ../tools/misc/hddtemp { };
 
-  hdf5 = callPackage ../tools/misc/hdf5 { };
+  hdf5 = callPackage ../tools/misc/hdf5 {
+    szip = null;
+  };
 
   heimdall = callPackage ../tools/misc/heimdall { };
 
@@ -2974,7 +2978,11 @@ let
 
   go_1_2 = callPackage ../development/compilers/go/1.2.nix { };
 
-  go = go_1_2;
+  go_1_3 = callPackage ../development/compilers/go/1.3.nix { };
+
+  go = go_1_3;
+
+  gox = callPackage ../development/compilers/go/gox.nix { };
 
   gprolog = callPackage ../development/compilers/gprolog { };
 
@@ -3017,7 +3025,7 @@ let
   jdk = if stdenv.isDarwin || stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
     then pkgs.openjdk
     else pkgs.oraclejdk;
-  jre = if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
+  jre = if stdenv.isDarwin || stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
     then pkgs.openjre
     else pkgs.oraclejre;
 
@@ -3283,8 +3291,8 @@ let
 
   rust = callPackage ../development/compilers/rust {};
 
-  sbcl = builderDefsPackage (import ../development/compilers/sbcl) {
-    inherit makeWrapper;
+  sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
+  sbcl = callPackage ../development/compilers/sbcl {
     clisp = clisp_2_44_1;
   };
 
@@ -3487,6 +3495,8 @@ let
   perl516 = callPackage ../development/interpreters/perl/5.16 {
     fetchurl = fetchurlBoot;
   };
+
+  perl520 = callPackage ../development/interpreters/perl/5.20 { };
 
   perl = if system != "i686-cygwin" then perl516 else sysPerl;
 
@@ -3789,6 +3799,8 @@ let
   cgdb = callPackage ../development/tools/misc/cgdb { };
 
   chromedriver = callPackage ../development/tools/selenium/chromedriver { gconf = gnome.GConf; };
+
+  chrpath = callPackage ../development/tools/misc/chrpath { };
 
   "cl-launch" = callPackage ../development/tools/misc/cl-launch {};
 
@@ -4161,7 +4173,7 @@ let
 
   aalib = callPackage ../development/libraries/aalib { };
 
-  accountservice = callPackage ../development/libraries/accountservice { };
+  accountsservice = callPackage ../development/libraries/accountsservice { };
 
   acl = callPackage ../development/libraries/acl { };
 
@@ -4762,7 +4774,12 @@ let
 
   pangox_compat = callPackage ../development/libraries/pangox-compat { };
 
-  gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf { };
+  gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf {
+    # workaround signal 10 in gdk_pixbuf tests
+    stdenv = if stdenv.isDarwin
+      then clangStdenv
+      else stdenv;
+  };
 
   gtk2 = callPackage ../development/libraries/gtk+/2.x.nix {
     cupsSupport = config.gtk2.cups or stdenv.isLinux;
@@ -6629,11 +6646,15 @@ let
 
   dovecot_pigeonhole = callPackage ../servers/mail/dovecot-pigeonhole { };
 
+  etcd = callPackage ../servers/etcd { };
+
   ejabberd = callPackage ../servers/xmpp/ejabberd {
     erlang = erlangR16;
   };
 
   elasticmq = callPackage ../servers/elasticmq { };
+
+  etcdctl = callPackage ../development/tools/etcdctl { };
 
   fcgiwrap = callPackage ../servers/fcgiwrap { };
 
@@ -6645,6 +6666,8 @@ let
 
   firebird = callPackage ../servers/firebird { icu = null; };
   firebirdSuper = callPackage ../servers/firebird { superServer = true; };
+
+  fleet = callPackage ../servers/fleet { };
 
   freepops = callPackage ../servers/mail/freepops { };
 
@@ -6708,6 +6731,8 @@ let
 
   nsd = callPackage ../servers/dns/nsd { };
 
+  nsq = callPackage ../servers/nsq { };
+
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
 
   petidomo = callPackage ../servers/mail/petidomo { };
@@ -6756,13 +6781,11 @@ let
 
   mysql_jdbc = callPackage ../servers/sql/mysql/jdbc { };
 
-  nagios = callPackage ../servers/monitoring/nagios {
-    gdSupport = true;
-  };
+  nagios = callPackage ../servers/monitoring/nagios { };
 
   munin = callPackage ../servers/monitoring/munin { };
 
-  nagiosPluginsOfficial = callPackage ../servers/monitoring/nagios/plugins/official { };
+  nagiosPluginsOfficial = callPackage ../servers/monitoring/nagios/plugins/official-2.x.nix { };
 
   net_snmp = callPackage ../servers/monitoring/net-snmp { };
 
@@ -7215,15 +7238,6 @@ let
       ];
   };
 
-  linux_3_13 = makeOverridable (import ../os-specific/linux/kernel/linux-3.13.nix) {
-    inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
   linux_3_14 = makeOverridable (import ../os-specific/linux/kernel/linux-3.14.nix) {
     inherit fetchurl stdenv perl buildLinux;
     kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
@@ -7279,10 +7293,6 @@ let
   linux_grsec_stable_desktop    = grKernel grFlavors.linux_grsec_stable_desktop;
   linux_grsec_stable_server     = grKernel grFlavors.linux_grsec_stable_server;
   linux_grsec_stable_server_xen = grKernel grFlavors.linux_grsec_stable_server_xen;
-
-  # Stable+vserver kernels - server versions only
-  #linux_grsec_vserver_server     = grKernel grFlavors.linux_grsec_vserver_server;
-  #linux_grsec_vserver_server_xen = grKernel grFlavors.linux_grsec_vserver_server_xen;
 
   # Testing kernels
   linux_grsec_testing_desktop = grKernel grFlavors.linux_grsec_testing_desktop;
@@ -7392,7 +7402,6 @@ let
   linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10 linuxPackages_3_10);
   linuxPackages_3_10_tuxonice = linuxPackagesFor pkgs.linux_3_10_tuxonice linuxPackages_3_10_tuxonice;
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
-  linuxPackages_3_13 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_13 linuxPackages_3_13);
   linuxPackages_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_14 linuxPackages_3_14);
   linuxPackages_3_15 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_15 linuxPackages_3_15);
   linuxPackages_testing = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing linuxPackages_testing);
@@ -7402,10 +7411,6 @@ let
   linuxPackages_grsec_stable_desktop    = grPackage grFlavors.linux_grsec_stable_desktop;
   linuxPackages_grsec_stable_server     = grPackage grFlavors.linux_grsec_stable_server;
   linuxPackages_grsec_stable_server_xen = grPackage grFlavors.linux_grsec_stable_server_xen;
-
-  # Stable+vserver kernels - server versions only
-  #linuxPackages_grsec_vserver_server     = grPackage grFlavors.linux_grsec_vserver_server;
-  #linuxPackages_grsec_vserver_server_xen = grPackage grFlavors.linux_grsec_vserver_server_xen;
 
   # Testing kernels
   linuxPackages_grsec_testing_desktop = grPackage grFlavors.linux_grsec_testing_desktop;
@@ -7488,6 +7493,8 @@ let
   };
 
   numactl = callPackage ../os-specific/linux/numactl { };
+
+  gocode = callPackage ../development/tools/gocode { };
 
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
@@ -8073,6 +8080,8 @@ let
 
   calibre = callPackage ../applications/misc/calibre { };
 
+  camlistore = callPackage ../applications/misc/camlistore { };
+
   carrier = builderDefsPackage (import ../applications/networking/instant-messengers/carrier/2.5.0.nix) {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss
       gtkspell aspell gettext ncurses avahi dbus dbus_glib python
@@ -8195,6 +8204,8 @@ let
   distrho = callPackage ../applications/audio/distrho {};
 
   djvulibre = callPackage ../applications/misc/djvulibre { };
+
+  djvu2pdf = callPackage ../tools/typesetting/djvu2pdf { };
 
   djview = callPackage ../applications/graphics/djview { };
   djview4 = pkgs.djview;
@@ -8383,12 +8394,19 @@ let
 
     prologMode = callPackage ../applications/editors/emacs-modes/prolog { };
 
-    proofgeneral = callPackage ../applications/editors/emacs-modes/proofgeneral {
+    proofgeneral_4_2 = callPackage ../applications/editors/emacs-modes/proofgeneral/4.2.nix {
       texinfo = texinfo4 ;
       texLive = pkgs.texLiveAggregationFun {
         paths = [ pkgs.texLive pkgs.texLiveCMSuper ];
       };
     };
+    proofgeneral_4_3_pre = callPackage ../applications/editors/emacs-modes/proofgeneral/4.3pre.nix {
+      texinfo = texinfo4 ;
+      texLive = pkgs.texLiveAggregationFun {
+        paths = [ pkgs.texLive pkgs.texLiveCMSuper ];
+      };
+    };
+    proofgeneral = self.proofgeneral_4_2;
 
     quack = callPackage ../applications/editors/emacs-modes/quack { };
 
@@ -8607,6 +8625,8 @@ let
   gitRepo = callPackage ../applications/version-management/git-repo {
     python = python27;
   };
+
+  gitolite = callPackage ../applications/version-management/gitolite { };
 
   inherit (gnome3) gitg;
 
@@ -10421,6 +10441,8 @@ let
 
       kde_wacomtablet = callPackage ../applications/misc/kde-wacomtablet { };
 
+      kdeconnect = callPackage ../applications/misc/kdeconnect { };
+
       kdenlive = callPackage ../applications/video/kdenlive { };
 
       kdesvn = callPackage ../applications/version-management/kdesvn { };
@@ -11047,6 +11069,8 @@ let
 
   streamripper = callPackage ../applications/audio/streamripper { };
 
+  sqsh = callPackage ../development/tools/sqsh { };
+
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
   tex4ht = callPackage ../tools/typesetting/tex/tex4ht { };
@@ -11233,6 +11257,7 @@ let
 
   # Attributes for backward compatibility.
   adobeReader = adobe-reader;
+  asciidocFull = asciidoc-full;  # added 2014-06-22
 
 
 }; in self; in pkgs

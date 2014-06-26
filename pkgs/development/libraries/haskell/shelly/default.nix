@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "shelly";
-  version = "1.5.4";
-  sha256 = "1jxw3c25n7azvfyj9vark9149sk36d01pfij6lgamhjs28mb860d";
+  version = "1.5.4.1";
+  sha256 = "0h38j6vkdgaddj7xardyywibdj5w0wryqxwwpc62idgzlp7mgpb2";
   buildDepends = [
     async enclosedExceptions exceptions liftedAsync liftedBase
     monadControl mtl systemFileio systemFilepath text time transformers

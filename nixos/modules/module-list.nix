@@ -101,7 +101,7 @@
   ./services/databases/virtuoso.nix
   ./services/databases/monetdb.nix
   ./services/databases/influxdb.nix
-  ./services/desktops/accountservice.nix
+  ./services/desktops/accountsservice.nix
   ./services/desktops/geoclue2.nix
   ./services/desktops/gnome3/at-spi2-core.nix
   ./services/desktops/gnome3/evolution-data-server.nix
@@ -147,6 +147,7 @@
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
   ./services/misc/gpsd.nix
+  ./services/misc/gitolite.nix
   ./services/misc/nix-daemon.nix
   ./services/misc/nix-gc.nix
   ./services/misc/nix-ssh-serve.nix
@@ -160,7 +161,7 @@
   ./services/monitoring/graphite.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
-  ./services/monitoring/nagios/default.nix
+  ./services/monitoring/nagios.nix
   ./services/monitoring/smartd.nix
   ./services/monitoring/statsd.nix
   ./services/monitoring/systemhealth.nix

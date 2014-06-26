@@ -6,12 +6,10 @@ let
   cfg = config.security.grsecurity;
 
   customGrsecPkg =
-    (import ../../../pkgs/build-support/grsecurity
-      {
-        inherit lib pkgs;
-        grsecOptions = cfg;
-      }
-    ).grsecPackage;
+    (import ../../../pkgs/build-support/grsecurity {
+      grsecOptions = cfg;
+      inherit pkgs lib;
+    }).grsecPackage;
 in
 {
   options = {
@@ -33,14 +31,6 @@ in
         default = false;
         description = ''
           Enable the stable grsecurity patch, based on Linux 3.2.
-        '';
-      };
-
-      vserver = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable the stable grsecurity/vserver patches, based on Linux 3.2.
         '';
       };
 
@@ -245,9 +235,6 @@ in
             You must select either the stable or testing patch, not
             both.
           '';
-        }
-        { assertion = (cfg.testing -> !cfg.vserver);
-          message   = "The vserver patches are only supported in the stable kernel.";
         }
         { assertion = (cfg.config.restrictProc -> !cfg.config.restrictProcWithGroup) ||
                       (cfg.config.restrictProcWithGroup -> !cfg.config.restrictProc);

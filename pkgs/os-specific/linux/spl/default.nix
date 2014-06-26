@@ -1,13 +1,13 @@
 { stdenv, fetchurl, kernel, perl, autoconf, automake, libtool, coreutils, gawk }:
 
 stdenv.mkDerivation {
-  name = "spl-0.6.2-${kernel.version}";
+  name = "spl-0.6.3-${kernel.version}";
   src = fetchurl {
-    url = http://archive.zfsonlinux.org/downloads/zfsonlinux/spl/spl-0.6.2.tar.gz;
-    sha256 = "196scl8q0bkkak6m0p1l1fz254cgsizqm73bf9wk3iynamq7qmrw";
+    url = http://archive.zfsonlinux.org/downloads/zfsonlinux/spl/spl-0.6.3.tar.gz;
+    sha256 = "1qqzyj2if5wai4jiwml4i8s6v8k7hbi7jmiph800lhkk5j8s72l9";
   };
 
-  patches = [ ./install_prefix.patch ./3_12-compat.patch ./3_13-compat-1.patch ./3_13-compat-2.patch ./const.patch ];
+  patches = [ ./install_prefix.patch ./const.patch ];
 
   buildInputs = [ perl autoconf automake libtool ];
 

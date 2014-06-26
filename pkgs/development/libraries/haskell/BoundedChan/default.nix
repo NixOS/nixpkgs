@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "BoundedChan";
-  version = "1.0.1.0";
-  sha256 = "1v4lmp3j8lzk1m2pv5l90j80y0c6yxm6gb1ww9ffsz2jxfzz8vd8";
+  version = "1.0.3.0";
+  sha256 = "0vf4mlw08n056g5256cf46m5xsijng5gvjx7ccm4r132gznyl72k";
   meta = {
     description = "Implementation of bounded channels";
     license = self.stdenv.lib.licenses.bsd3;

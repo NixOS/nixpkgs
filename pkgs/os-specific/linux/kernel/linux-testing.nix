@@ -2,13 +2,13 @@
 
 import ./generic.nix (args // rec {
   # Reason to add:  RTL8192EE
-  version = "3.16-rc1";
-  modDirVersion = "3.16.0-rc1";
+  version = "3.16-rc2";
+  modDirVersion = "3.16.0-rc2";
   extraMeta.branch = "3.16";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v3.x/testing/linux-${version}.tar.xz";
-    sha256 = "1y2ssifw6db40mr4j6k9c0kjwb4ssrrps74pc38krq4d6yzinhmq";
+    sha256 = "12bxf62qqsf471ak6rj4gbvvjsybsamgwj9p8bphr98dp14js27w";
   };
 
   features.iwlwifi = true;

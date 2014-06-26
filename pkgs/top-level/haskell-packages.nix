@@ -636,6 +636,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
 
   distributedStatic = callPackage ../development/libraries/haskell/distributed-static {};
+  
+  distributedProcess = callPackage ../development/libraries/haskell/distributed-process {};
 
   distributive = callPackage ../development/libraries/haskell/distributive {};
 
@@ -800,8 +802,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   forceLayout = callPackage ../development/libraries/haskell/force-layout {};
 
   free = callPackage ../development/libraries/haskell/free {};
-
-  freeOperational = callPackage ../development/libraries/haskell/free-operational {};
 
   freeGame_1_0_5 = callPackage ../development/libraries/haskell/free-game/1.0.5.nix {
     boundingboxes = self.boundingboxes_0_1_1;
@@ -1066,6 +1066,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   HaXml = callPackage ../development/libraries/haskell/HaXml {};
 
+  hdaemonize = callPackage ../development/libraries/haskell/hdaemonize {};
+
   HDBC = callPackage ../development/libraries/haskell/HDBC/HDBC.nix {};
 
   HDBCOdbc = callPackage ../development/libraries/haskell/HDBC/HDBC-odbc.nix {
@@ -1104,7 +1106,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hmatrix = callPackage ../development/libraries/haskell/hmatrix {};
 
-  hmatrix-special = callPackage ../development/libraries/haskell/hmatrix-special {};
+  hmatrixSpecial = callPackage ../development/libraries/haskell/hmatrix-special {};
 
   hoauth = callPackage ../development/libraries/haskell/hoauth {};
 
@@ -1208,6 +1210,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   HUnit_1_2_5_2 = callPackage ../development/libraries/haskell/HUnit/1.2.5.2.nix {};
   HUnit = self.HUnit_1_2_5_2;
 
+  hweblib = callPackage ../development/libraries/haskell/hweblib/default.nix {};
+
   hxt = callPackage ../development/libraries/haskell/hxt {};
 
   hxtCharproperties = callPackage ../development/libraries/haskell/hxt-charproperties {};
@@ -1277,6 +1281,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   ixdopp = callPackage ../development/libraries/haskell/ixdopp {
     preprocessorTools = self.preprocessorTools_0_1_3;
   };
+
+  ixset = callPackage ../development/libraries/haskell/ixset {};
 
   ixShapable = callPackage ../development/libraries/haskell/ix-shapable {};
 
@@ -1958,6 +1964,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   setlocale = callPackage ../development/libraries/haskell/setlocale {};
 
+  shellmate = callPackage ../development/libraries/haskell/shellmate {};
+
   shelly_0_15_4_1 = callPackage ../development/libraries/haskell/shelly/0.15.4.1.nix {};
   shelly_1_5_3_1 = callPackage ../development/libraries/haskell/shelly {};
   shelly = self.shelly_1_5_3_1;
@@ -1965,6 +1973,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   simpleReflect = callPackage ../development/libraries/haskell/simple-reflect {};
 
   simpleSendfile = callPackage ../development/libraries/haskell/simple-sendfile {};
+
+  simpleSqlParser = callPackage ../development/libraries/haskell/simple-sql-parser {};
 
   silently = callPackage ../development/libraries/haskell/silently {};
 
@@ -2155,6 +2165,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   systemTimeMonotonic = callPackage ../development/libraries/haskell/system-time-monotonic {};
 
   TableAlgebra = callPackage ../development/libraries/haskell/TableAlgebra {};
+
+  tables = callPackage ../development/libraries/haskell/tables {};
 
   tabular = callPackage ../development/libraries/haskell/tabular {};
 
@@ -2457,6 +2469,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   warpTls = callPackage ../development/libraries/haskell/warp-tls {};
 
   wcwidth = callPackage ../development/libraries/haskell/wcwidth {};
+
+  webdriver = callPackage ../development/libraries/haskell/webdriver {};
 
   webRoutes = callPackage ../development/libraries/haskell/web-routes {};
 

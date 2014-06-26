@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   preConfigure = "export gl_cv_func_fstatat_zero_flag=yes";
 
   meta = {
-    description = "GNU Zile, a lightweight Emacs clone";
+    description = "Lightweight Emacs clone";
 
     longDescription = ''
       GNU Zile, which is a lightweight Emacs clone.  Zile is short

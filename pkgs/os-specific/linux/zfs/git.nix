@@ -1,12 +1,12 @@
 { stdenv, fetchgit, kernel, spl_git, perl, autoconf, automake, libtool, zlib, libuuid, coreutils, utillinux }:
 
 stdenv.mkDerivation {
-  name = "zfs-0.6.3pre-${kernel.version}";
+  name = "zfs-0.6.3-${kernel.version}";
 
   src = fetchgit {
     url = git://github.com/zfsonlinux/zfs.git;
-    rev = "de39ec11b885f97e6256324ee89eaf75af9852f6";
-    sha256 = "02hrhka9hg0vn4z20x7xzwrkr340pv9qwvwj8phjdm5ln321jh33";
+    rev = "07dabd234dd51a1e5adc5bd21cddf5b5fdc70732";
+    sha256 = "1yqsfdhyzh33aisfvwqd692n5kfgnlz7yjixd2gqn8vx9bv0dz0b";
   };
 
   patches = [ ./mount_zfs_prefix.patch ./nix-build.patch ];
@@ -33,6 +33,8 @@ stdenv.mkDerivation {
     --with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source
     --with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build
     --with-spl=${spl_git}/libexec/spl
+    --with-dracutdir=$$out/lib/dracut
+    --with-udevdir=$$out/lib/udev
   '';
 
   enableParallelBuilding = true;

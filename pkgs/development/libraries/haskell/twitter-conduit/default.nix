@@ -1,23 +1,28 @@
-{ cabal, aeson, attoparsec, attoparsecConduit, authenticateOauth
-, conduit, dataDefault, doctest, failure, filepath, hlint
-, httpClient, httpConduit, httpTypes, lens, liftedBase
-, monadControl, monadLogger, resourcet, shakespeare, text, time
+{ cabal, aeson, attoparsec, authenticateOauth, caseInsensitive
+, conduit, conduitExtra, dataDefault, doctest, filepath, hlint
+, hspec, httpClient, httpConduit, httpTypes, lens, monadControl
+, monadLogger, network, resourcet, shakespeare, text, time
 , transformers, transformersBase, twitterTypes
 }:
 
 cabal.mkDerivation (self: {
   pname = "twitter-conduit";
-  version = "0.0.2.1";
-  sha256 = "1z0d8hwjrdw8gkww9zkn9cqv3g40my952li8pm3c164d7ywswszq";
+  version = "0.0.4";
+  sha256 = "0fv2m3sy1gklch4v3sarvq4xk9p7pdz1s3ssl52riy3mg076ab09";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    aeson attoparsec attoparsecConduit authenticateOauth conduit
-    dataDefault failure httpClient httpConduit httpTypes lens
-    liftedBase monadControl monadLogger resourcet shakespeare text time
-    transformers transformersBase twitterTypes
+    aeson attoparsec authenticateOauth conduit conduitExtra dataDefault
+    httpClient httpConduit httpTypes lens monadLogger resourcet
+    shakespeare text time transformers twitterTypes
   ];
-  testDepends = [ doctest filepath hlint ];
+  testDepends = [
+    aeson attoparsec authenticateOauth caseInsensitive conduit
+    conduitExtra dataDefault doctest filepath hlint hspec httpClient
+    httpConduit httpTypes lens monadControl monadLogger network
+    resourcet shakespeare text time transformers transformersBase
+    twitterTypes
+  ];
   meta = {
     homepage = "https://github.com/himura/twitter-conduit";
     description = "Twitter API package with conduit interface and Streaming API support";

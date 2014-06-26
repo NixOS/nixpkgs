@@ -27,6 +27,7 @@
 , cmdargs, conduit, deepseq, filepath, haskellSrcExts, httpTypes
 , parsec, QuickCheck, random, resourcet, safe, shake, tagsoup, text
 , time, transformers, uniplate, vector, vectorAlgorithms, wai, warp
+, fetchurl
 
 , parallel, perl, wget, rehoo, haskellPlatform
 , packages ? haskellPlatform.propagatedUserEnvPkgs
@@ -51,7 +52,10 @@ cabal.mkDerivation (self: rec {
 
   # The tests will fail because of the added documentation.
   doCheck = false;
-  patches = [ ./hoogle-local.diff ];
+  patches = [ ./hoogle-local.diff
+              (fetchurl { url = "https://github.com/ndmitchell/hoogle/commit/5fc294f2b5412fda107c7700f4d833b52f26184c.diff";
+                          sha256 = "1fn52g90p2jsy87gf5rqrcg49s8hfwway5hi4v9i2rpg5mzxaq3i"; })
+            ];
 
   docPackages = packages;
 

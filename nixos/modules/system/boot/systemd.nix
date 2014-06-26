@@ -683,6 +683,13 @@ in
       description = "Definition of systemd per-user service units.";
     };
 
+    systemd.user.sockets = mkOption {
+      default = {};
+      type = types.attrsOf types.optionSet;
+      options = [ socketOptions unitConfig ];
+      description = "Definition of systemd per-user socket units.";
+    };
+
   };
 
 
@@ -767,7 +774,8 @@ in
                        in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
 
     systemd.user.units =
-      mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.user.services;
+      mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.user.services
+      // mapAttrs' (n: v: nameValuePair "${n}.socket" (socketToUnit n v)) cfg.user.sockets;
 
     system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled
       [ "DEVTMPFS" "CGROUPS" "INOTIFY_USER" "SIGNALFD" "TIMERFD" "EPOLL" "NET"

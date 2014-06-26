@@ -9,7 +9,7 @@ in
 
 composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
-  version = "5.4.27";
+  version = "5.4.29";
 
   name = "php-${version}";
 
@@ -171,7 +171,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
         configureFlags = ["--enable-fpm"];
       };
 
-      mssql = {
+      mssql = stdenv.lib.optionalAttrs (!stdenv.isDarwin) {
         configureFlags = ["--with-mssql=${freetds}"];
         buildInputs = [freetds];
       };
@@ -218,7 +218,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     zipSupport = config.php.zip or true;
     ftpSupport = config.php.ftp or true;
     fpmSupport = config.php.fpm or true;
-    mssqlSupport = config.php.mssql or true;
+    mssqlSupport = config.php.mssql or (!stdenv.isDarwin);
   };
 
   configurePhase = ''
@@ -242,12 +242,8 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
   '';
 
   src = fetchurl {
-    urls = [
-      "http://nl1.php.net/get/php-${version}.tar.bz2/from/this/mirror"
-      "http://se1.php.net/get/php-${version}.tar.bz2/from/this/mirror"
-    ];
-    md5 = "1c6e99187d25023411b663ea09f145ee";
-    name = "php-${version}.tar.bz2";
+    url = "http://www.php.net/distributions/php-${version}.tar.bz2";
+    sha256 = "19z2n6h1fvj30n6hl2mwhw2f4i1vwhbj3j7abq3gc16gcfh3rkk2";
   };
 
   meta = {

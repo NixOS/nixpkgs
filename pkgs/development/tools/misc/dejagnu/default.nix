@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "The DejaGNU testing framework";
+    description = "Framework for testing other programs";
 
     longDescription = ''
       DejaGnu is a framework for testing other programs.  Its purpose

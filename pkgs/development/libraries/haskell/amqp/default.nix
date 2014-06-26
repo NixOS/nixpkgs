@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "amqp";
-  version = "0.8.3";
-  sha256 = "0gl5vdhbic8llhbqmhnwj0wvykhbrci6zz53v5cayqfcwi1v1dw2";
+  version = "0.9";
+  sha256 = "10yacflzvf7y21yi6frs88gdbhf5g4j99ag8mwv6jrwfzwqszs5j";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

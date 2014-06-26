@@ -20,6 +20,7 @@ cabal.mkDerivation (self: {
     aeson conduit dataDefault hspec httpConduit HUnit liftedBase
     monadControl QuickCheck resourcet text time transformers
   ];
+  jailbreak = true;
   doCheck = false;
   meta = {
     homepage = "https://github.com/meteficha/fb";
@@ -27,5 +28,4 @@ cabal.mkDerivation (self: {
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };
-  jailbreak = true;
 })

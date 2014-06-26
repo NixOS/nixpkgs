@@ -5,7 +5,6 @@ with lib;
 let
   cfg = {
     stable  = grsecOptions.stable  or false;
-    vserver = grsecOptions.vserver or false;
     testing = grsecOptions.testing or false;
     config = {
       mode = "auto";
@@ -29,12 +28,11 @@ let
         };
 
     test-patch = with pkgs.kernelPatches; grsecurity_unstable;
-    stable-patch = with pkgs.kernelPatches;
-      if cfg.vserver then grsecurity_vserver else grsecurity_stable;
+    stable-patch = with pkgs.kernelPatches; grsecurity_stable;
 
-    grKernel = if (cfg.stable || cfg.vserver)
-               then mkKernel pkgs.linux_3_2  stable-patch
-               else mkKernel pkgs.linux_3_14 test-patch;
+    grKernel = if cfg.stable
+               then mkKernel pkgs.linux_3_14 stable-patch
+               else mkKernel pkgs.linux_3_15 test-patch;
 
     ## -- grsecurity configuration ---------------------------------------------
 

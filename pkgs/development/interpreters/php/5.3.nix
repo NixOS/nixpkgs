@@ -228,7 +228,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
   '' );
 
   src = fetchurl {
-    url = "http://nl1.php.net/get/php-${version}.tar.bz2/from/this/mirror";
+    url = "http://www.php.net/distributions/php-${version}.tar.bz2";
     sha256 = "04w53nn6qacpkd1x381mzd41kqh6k8kjnbyg44yvnkqwcl69db0c";
     name = "php-${version}.tar.bz2";
   };

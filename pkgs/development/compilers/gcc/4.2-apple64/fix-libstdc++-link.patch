@@ -3,6 +3,9 @@ Prevent our libstdc++.dylib from having a runtime dependency on
 passed by g++ when it links libstdc++.dylib.  Adding "-nostdlib" to
 the g++ invocation prevents this.
 
+jww (2014-06-21): I've added several more patches to this, for building on
+Mavericks.
+
 diff -ru -x '*~' libstdcxx-39-orig/libstdcxx/libstdc++-v3/src/Makefile.in libstdcxx-39/libstdcxx/libstdc++-v3/src/Makefile.in
 --- x/libstdcxx/libstdc++-v3/src/Makefile.in	2006-10-16 21:08:22.000000000 +0200
 +++ y/libstdcxx/libstdc++-v3/src/Makefile.in	2012-02-17 18:44:05.210570590 +0100
@@ -15,3 +18,54 @@ diff -ru -x '*~' libstdcxx-39-orig/libstdcxx/libstdc++-v3/src/Makefile.in libstd
  
  
  # Use special rules for the deprecated source files so that they find
+--- x/libstdcxx/libstdc++-v3/libsupc++/unwind-cxx.h
++++ y/libstdcxx/libstdc++-v3/libsupc++/unwind-cxx.h
+@@ -38,7 +38,7 @@
+ #include <typeinfo>
+ #include <exception>
+ #include <cstddef>
+-#include "unwind.h"
++#include "unwind-generic.h"
+ 
+ #pragma GCC visibility push(default)
+ 
+@@ -133,7 +133,7 @@ extern "C" void __cxa_bad_typeid ();
+ // throws, and if bad_exception needs to be thrown.  Called from the
+ // compiler.
+ extern "C" void __cxa_call_unexpected (void *) __attribute__((noreturn));
+-extern "C" void __cxa_call_terminate (void*) __attribute__((noreturn));
++extern "C" void __cxa_call_terminate(_Unwind_Exception* ue_header);
+ 
+ #ifdef __ARM_EABI_UNWINDER__
+ // Arm EABI specified routines.
+--- x/libstdcxx/libstdc++-v3/include/ext/bitmap_allocator.h
++++ y/libstdcxx/libstdc++-v3/include/ext/bitmap_allocator.h
+@@ -549,6 +549,7 @@ _GLIBCXX_BEGIN_NAMESPACE(__gnu_cxx)
+    */
+   class free_list
+   {
++  public:
+     typedef size_t* 				value_type;
+     typedef __detail::__mini_vector<value_type> vector_type;
+     typedef vector_type::iterator 		iterator;
+--- x/libstdcxx/libstdc++-v3/include/ext/ropeimpl.h
++++ y/libstdcxx/libstdc++-v3/include/ext/ropeimpl.h
+@@ -433,7 +433,7 @@ _GLIBCXX_BEGIN_NAMESPACE(__gnu_cxx)
+     {
+       size_t __old_len = __r->_M_size;
+       _CharT* __new_data = (_CharT*)
+-	_Data_allocate(_S_rounded_up_size(__old_len + __len));
++	_Base::_Data_allocate(_S_rounded_up_size(__old_len + __len));
+       _RopeLeaf* __result;
+ 
+       uninitialized_copy_n(__r->_M_data, __old_len, __new_data);
+@@ -817,7 +817,7 @@ _GLIBCXX_BEGIN_NAMESPACE(__gnu_cxx)
+ 	    if (__result_len > __lazy_threshold)
+ 	      goto lazy;
+ 	    __section = (_CharT*)
+-	      _Data_allocate(_S_rounded_up_size(__result_len));
++	      _Base::_Data_allocate(_S_rounded_up_size(__result_len));
+ 	    try
+ 	      {	(*(__f->_M_fn))(__start, __result_len, __section); }
+ 	    catch(...)
+

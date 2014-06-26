@@ -244,7 +244,7 @@ stdenv.mkDerivation rec {
   preInstall = "mkdir -p $out/etc/vim";
 
   meta = with stdenv.lib; {
-    description = "Text-based document generation system";
+    description = "Text-based document generation system ${stdenv.lib.optionalString enableStandardFeatures "(full version)"}";
     longDescription = ''
       AsciiDoc is a text document format for writing notes, documentation,
       articles, books, ebooks, slideshows, web pages, man pages and blogs.

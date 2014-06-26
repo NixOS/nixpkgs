@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "i3-${version}";
-  version = "4.7.2";
+  version = "4.8";
 
   src = fetchurl {
     url = "http://i3wm.org/downloads/${name}.tar.bz2";
-    sha256 = "14zkn5jgm0b7ablvxcxh9gdzq6mjdd6i1kl9dbmifl2a6rg5dr3g";
+    sha256 = "0sqvd8yqf9vwqrrvbpbf8k93b3qfa3q9289m82xq15r31wlk8b2h";
   };
 
   buildInputs = [ which pkgconfig libxcb xcbutilkeysyms xcbutil xcbutilwm

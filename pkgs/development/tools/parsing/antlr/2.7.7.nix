@@ -8,4 +8,17 @@ stdenv.mkDerivation {
   };
   patches = [ ./2.7.7-fixes.patch ];
   buildInputs = [jdk python];
+
+  meta = with stdenv.lib; {
+    description = "Powerful parser generator";
+    longDescription = ''
+      ANTLR (ANother Tool for Language Recognition) is a powerful parser
+      generator for reading, processing, executing, or translating structured
+      text or binary files. It's widely used to build languages, tools, and
+      frameworks. From a grammar, ANTLR generates a parser that can build and
+      walk parse trees.
+    '';
+    homepage = http://www.antlr.org/;
+    platforms = platforms.linux;
+  };
 }

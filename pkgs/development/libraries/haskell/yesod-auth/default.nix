@@ -10,8 +10,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-auth";
-  version = "1.3.1";
-  sha256 = "1fv5z938rpiyhkl4zjb2ss496bgqvdvn7di5im089zmxvx1m81lz";
+  version = "1.3.1.1";
+  sha256 = "0mw04v8gnhv9gnv7kv2v1x5df63zjdmi52r5bv1fzqay1s5b83ir";
   buildDepends = [
     aeson attoparsecConduit authenticate base16Bytestring
     base64Bytestring binary blazeBuilder blazeHtml blazeMarkup byteable
