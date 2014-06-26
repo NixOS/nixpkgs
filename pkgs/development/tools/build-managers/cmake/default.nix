@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, replace, curl, expat, zlib, bzip2, libarchive
+{ stdenv, fetchurl, fetchpatch, replace, curl, expat, zlib, bzip2, libarchive
 , useNcurses ? false, ncurses, useQt4 ? false, qt4
 }:
 
@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patches =
+    [(fetchpatch { # see http://www.cmake.org/Bug/view.php?id=13959
+      name = "FindFreetype-2.5.patch";
+      url = "http://www.cmake.org/Bug/file_download.php?file_id=4660&type=bug";
+      sha256 = "136z63ff83hnwd247cq4m8m8164pklzyl5i2csf5h6wd8p01pdkj";
+    })] ++
     # Don't search in non-Nix locations such as /usr, but do search in
     # Nixpkgs' Glibc. 
     optional (stdenv ? glibc) ./search-path.patch ++
