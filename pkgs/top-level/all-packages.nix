@@ -7088,6 +7088,15 @@ let
       ];
   };
 
+  linux_3_15 = makeOverridable (import ../os-specific/linux/kernel/linux-3.15.nix) {
+    inherit fetchurl stdenv perl buildLinux;
+    kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
   linux_testing = makeOverridable (import ../os-specific/linux/kernel/linux-testing.nix) {
     inherit fetchurl stdenv perl buildLinux;
     kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
@@ -7184,6 +7193,14 @@ let
     zfs_git = callPackage ../os-specific/linux/zfs/git.nix { };
   };
 
+  # The current default kernel / kernel modules.
+  linux = linuxPackages.kernel;
+  linuxPackages = linuxPackages_3_12;
+
+  # Update this when adding the newest kernel major version!
+  linux_latest = pkgs.linux_3_15;
+  linuxPackages_latest = pkgs.linuxPackages_3_15;
+
   # Build the kernel modules for the some of the kernels.
   linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 linuxPackages_3_2);
   linuxPackages_3_2_apparmor = linuxPackagesFor pkgs.linux_3_2_apparmor linuxPackages_3_2_apparmor;
@@ -7196,14 +7213,8 @@ let
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
   linuxPackages_3_13 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_13 linuxPackages_3_13);
   linuxPackages_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_14 linuxPackages_3_14);
+  linuxPackages_3_15 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_15 linuxPackages_3_15);
   linuxPackages_testing = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing linuxPackages_testing);
-
-  # Update this when adding a new version!
-  linuxPackages_latest = pkgs.linuxPackages_3_14;
-
-  # The current default kernel / kernel modules.
-  linux = linuxPackages.kernel;
-  linuxPackages = linuxPackages_3_12;
 
   # A function to build a manually-configured kernel
   linuxManualConfig = pkgs.buildLinux;
