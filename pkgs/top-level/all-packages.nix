@@ -3291,8 +3291,8 @@ let
 
   rust = callPackage ../development/compilers/rust {};
 
-  sbcl = builderDefsPackage (import ../development/compilers/sbcl) {
-    inherit makeWrapper;
+  sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
+  sbcl = callPackage ../development/compilers/sbcl {
     clisp = clisp_2_44_1;
   };
 
