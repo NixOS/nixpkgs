@@ -1466,6 +1466,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   monadloc = callPackage ../development/libraries/haskell/monadloc {};
 
+  monadlocPp = callPackage ../development/libraries/haskell/monadloc-pp {};
+
   monadLoops = callPackage ../development/libraries/haskell/monad-loops {};
 
   monadLogger = callPackage ../development/libraries/haskell/monad-logger {};
