@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "bb47cc11d131ff337b5841952d71113291628efe3fbc00806f0bc58a9983fca8";
   };
 
-  propagatedBuildInputs = [
+  buildInputs = [
     pythonPackages.readline
     pythonPackages.parsedatetime
     pythonPackages.pytz
@@ -22,5 +22,7 @@ buildPythonPackage rec {
   meta = {
     description = "A command line journal application that stores your journal in a plain text file";
     homepage = "http://maebert.github.io/jrnl";
+    license = "MIT";
+    platforms = stdenv.lib.platforms.unix;
   };
 }
