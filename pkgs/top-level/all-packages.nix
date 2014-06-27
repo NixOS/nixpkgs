@@ -5764,6 +5764,8 @@ let
     ffmpeg = ffmpeg_0_10;
   };
 
+  openspades = callPackage ../games/openspades {};
+
   openssl = callPackage ../development/libraries/openssl {
     fetchurl = fetchurlBoot;
     cryptodevHeaders = linuxPackages.cryptodev.override {
