@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg = config.services.dnsmasq;
-  dnsmasq = pkgs.dnsmasq;
 
   serversParam = concatMapStrings (s: "-S ${s} ") cfg.servers;
 
@@ -48,6 +47,14 @@ in
         '';
       };
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.dnsmasq;
+        description = ''
+          The dnsmasq package used as the daemon.
+        '';
+      };
+
     };
 
   };
@@ -64,14 +71,19 @@ in
       };
     };
 
-    jobs.dnsmasq =
+    systemd.services.dnsmasq =
       { description = "dnsmasq daemon";
 
-        startOn = "ip-up";
+        wantedBy = [ "multi-user.target" ];
 
-        daemonType = "daemon";
+        path = [ cfg.package ];
 
-        exec = "${dnsmasq}/bin/dnsmasq -R ${serversParam} -o -C ${dnsmasqConf}";
+        serviceConfig =
+          { ExecStart = "@${cfg.package}/bin/dnsmasq dnsmasq"
+              + " -R ${serversParam} -o -C ${dnsmasqConf}";
+            Restart = "always";
+            Type = "forking";
+          };
       };
 
   };
