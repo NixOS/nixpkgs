@@ -702,19 +702,6 @@ checkPhase() {
 }
 
 
-patchELF() {
-    # Patch all ELF executables and shared libraries.
-    header "patching ELF executables and libraries"
-    if [ -e "$prefix" ]; then
-        find "$prefix" \( \
-            \( -type f -a -name "*.so*" \) -o \
-            \( -type f -a -perm +0100 \) \
-            \) -print -exec patchelf --shrink-rpath '{}' \;
-    fi
-    stopNest
-}
-
-
 patchShebangs() {
     # Rewrite all script interpreter file names (`#! /path') under the
     # specified  directory tree to paths found in $PATH.  E.g.,
@@ -884,10 +871,6 @@ _defaultFixupOutput() {
         if [ -n "$stripAllList" ]; then
             stripDirs "$stripAllList" "${stripAllFlags:--s}"
         fi
-    fi
-
-    if [ "$havePatchELF" = 1 -a -z "$dontPatchELF" ]; then
-        patchELF "$prefix"
     fi
 
     if [ -z "$dontPatchShebangs" ]; then

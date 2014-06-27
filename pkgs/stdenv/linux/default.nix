@@ -26,7 +26,6 @@ rec {
   commonPreHook =
     ''
       export NIX_ENFORCE_PURITY=1
-      havePatchELF=1
       ${if system == "x86_64-linux" then "NIX_LIB64_IN_SELF_RPATH=1" else ""}
       ${if system == "mips64el-linux" then "NIX_LIB32_IN_SELF_RPATH=1" else ""}
     '';
@@ -46,7 +45,7 @@ rec {
     builder = bootstrapFiles.sh;
 
     args =
-      if system == "armv5tel-linux" || system == "armv6l-linux" 
+      if system == "armv5tel-linux" || system == "armv6l-linux"
         || system == "armv7l-linux"
       then [ ./scripts/unpack-bootstrap-tools-arm.sh ]
       else [ ./scripts/unpack-bootstrap-tools.sh ];
@@ -69,10 +68,10 @@ rec {
   # This function builds the various standard environments used during
   # the bootstrap.
   stdenvBootFun =
-    {gcc, extraAttrs ? {}, overrides ? (pkgs: {}), extraPath ? [], fetchurl}:
+    { gcc, extraAttrs ? {}, overrides ? (pkgs: {}), extraBuildInputs ? [], fetchurl }:
 
     import ../generic {
-      inherit system config;
+      inherit system config extraBuildInputs;
       name = "stdenv-linux-boot";
       preHook =
         ''
@@ -82,7 +81,7 @@ rec {
           ${commonPreHook}
         '';
       shell = "${bootstrapTools}/bin/sh";
-      initialPath = [bootstrapTools] ++ extraPath;
+      initialPath = [ bootstrapTools ];
       fetchurlBoot = fetchurl;
       inherit gcc;
       # Having the proper 'platform' in all the stdenvs allows getting proper
@@ -208,9 +207,9 @@ rec {
       ppl = pkgs.ppl.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
     };
     extraAttrs = {
-      glibc = stdenvLinuxGlibc;   # Required by gcc47 build
+      glibc = stdenvLinuxGlibc; # Required by gcc47 build
     };
-    extraPath = [ stdenvLinuxBoot1Pkgs.paxctl ];
+    extraBuildInputs = [ stdenvLinuxBoot2Pkgs.patchelf stdenvLinuxBoot1Pkgs.paxctl ];
     inherit fetchurl;
   };
 
@@ -233,7 +232,7 @@ rec {
       gcc = stdenvLinuxBoot3Pkgs.gcc.gcc;
       name = "";
     };
-    extraPath = [ stdenvLinuxBoot3Pkgs.xz ];
+    extraBuildInputs = [ stdenvLinuxBoot2Pkgs.patchelf stdenvLinuxBoot3Pkgs.xz ];
     overrides = pkgs: {
       inherit (stdenvLinuxBoot1Pkgs) perl;
       inherit (stdenvLinuxBoot3Pkgs) gettext gnum4 gmp;
@@ -268,8 +267,10 @@ rec {
       '';
 
     initialPath =
-      ((import ../common-path.nix) {pkgs = stdenvLinuxBoot4Pkgs;})
-      ++ [stdenvLinuxBoot4Pkgs.patchelf stdenvLinuxBoot4Pkgs.paxctl ];
+      ((import ../common-path.nix) {pkgs = stdenvLinuxBoot4Pkgs;});
+
+    extraBuildInputs =
+      [ stdenvLinuxBoot4Pkgs.patchelf stdenvLinuxBoot4Pkgs.paxctl ];
 
     gcc = wrapGCC rec {
       inherit (stdenvLinuxBoot4Pkgs) binutils coreutils;
@@ -284,7 +285,7 @@ rec {
     fetchurlBoot = fetchurl;
 
     extraAttrs = {
-      inherit (stdenvLinuxBoot3Pkgs) glibc;
+      glibc = stdenvLinuxGlibc;
       inherit platform bootstrapTools;
       shellPackage = stdenvLinuxBoot4Pkgs.bash;
     };
