@@ -5099,6 +5099,9 @@ let
 
   liblscp = callPackage ../development/libraries/liblscp { };
 
+  libe-book = callPackage ../development/libraries/libe-book {};
+  libe-book_00 = callPackage ../development/libraries/libe-book/0.0.nix {};
+
   libev = builderDefsPackage ../development/libraries/libev { };
 
   libevent14 = callPackage ../development/libraries/libevent/1.4.nix { };
