@@ -5197,6 +5197,8 @@ let
 
   libresample = callPackage ../development/libraries/libresample {};
 
+  librevenge = callPackage ../development/libraries/librevenge {};
+
   librevisa = callPackage ../development/libraries/librevisa { };
 
   libsamplerate = callPackage ../development/libraries/libsamplerate {
