@@ -88,6 +88,8 @@
     url = http://www.eclipse.org/legal/epl-v10.html;
   };
 
+  free = "free";
+
   gpl2 = {
     shortName = "GPLv2";
     fullName = "GNU General Public License version 2";

@@ -1605,7 +1605,7 @@ let
 
   networkmanager_openconnect = callPackage ../tools/networking/network-manager/openconnect.nix { };
 
-  networkmanagerapplet = newScope gnome ../tools/networking/network-manager-applet { };
+  networkmanagerapplet = newScope gnome ../tools/networking/network-manager-applet { dconf = gnome3.dconf; };
 
   newsbeuter = callPackage ../applications/networking/feedreaders/newsbeuter { };
 
@@ -3303,6 +3303,7 @@ let
 
   sdcc = callPackage ../development/compilers/sdcc { };
 
+  smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
   smlnj = callPackage_i686 ../development/compilers/smlnj { };
 
   stalin = callPackage ../development/compilers/stalin { };
@@ -4964,6 +4965,8 @@ let
 
   libassuan2_1 = callPackage ../development/libraries/libassuan/git.nix { };
 
+  libatomic_ops = callPackage ../development/libraries/libatomic_ops {};
+
   libav = libav_10;
   libav_all = callPackage ../development/libraries/libav { };
   inherit (libav_all) libav_0_8 libav_9 libav_10;
@@ -5096,6 +5099,9 @@ let
 
   liblscp = callPackage ../development/libraries/liblscp { };
 
+  libe-book = callPackage ../development/libraries/libe-book {};
+  libe-book_00 = callPackage ../development/libraries/libe-book/0.0.nix {};
+
   libev = builderDefsPackage ../development/libraries/libev { };
 
   libevent14 = callPackage ../development/libraries/libevent/1.4.nix { };
@@ -5193,6 +5199,8 @@ let
   librem = callPackage ../development/libraries/librem {};
 
   libresample = callPackage ../development/libraries/libresample {};
+
+  librevenge = callPackage ../development/libraries/librevenge {};
 
   librevisa = callPackage ../development/libraries/librevisa { };
 
@@ -5302,6 +5310,9 @@ let
 
   libmusicbrainz = libmusicbrainz3;
 
+  libmwaw = callPackage ../development/libraries/libmwaw { };
+  libmwaw_02 = callPackage ../development/libraries/libmwaw/0.2.nix { };
+
   libmx = callPackage ../development/libraries/libmx { };
 
   libnet = callPackage ../development/libraries/libnet { };
@@ -5317,6 +5328,8 @@ let
   libnova = callPackage ../development/libraries/libnova { };
 
   libnxml = callPackage ../development/libraries/libnxml { };
+
+  libodfgen = callPackage ../development/libraries/libodfgen { };
 
   libofa = callPackage ../development/libraries/libofa { };
 
@@ -9637,6 +9650,8 @@ let
 
   toxic = callPackage ../applications/networking/instant-messengers/toxic { };
 
+  transcode = callPackage ../applications/audio/transcode { };
+
   transmission = callPackage ../applications/networking/p2p/transmission { };
   transmission_gtk = transmission.override { enableGTK3 = true; };
 
@@ -10730,6 +10745,12 @@ let
   };
 
   tptp = callPackage ../applications/science/logic/tptp {};
+
+  twelf = callPackage ../applications/science/logic/twelf {
+    smlnj = if stdenv.isDarwin
+      then smlnjBootstrap
+      else smlnj;
+  };
 
   verifast = callPackage ../applications/science/logic/verifast {};
 
