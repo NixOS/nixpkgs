@@ -5209,13 +5209,13 @@ rec {
   };
 
   plumbum = buildPythonPackage rec {
-    name = "plumbum-1.2.0";
+    name = "plumbum-1.4.2";
 
     buildInputs = [ pythonPackages.six ];
 
     src = fetchurl {
-      url = "https://pypi.python.org/packages/source/p/plumbum/plumbum-1.2.0.tar.gz";
-      md5 = "18b7f888dfaf62a48df937abffe07897";
+      url = "https://pypi.python.org/packages/source/p/plumbum/${name}.tar.gz";
+      md5 = "38b526af9012a5282ae91dfe372cefd3";
     };
   };
 
