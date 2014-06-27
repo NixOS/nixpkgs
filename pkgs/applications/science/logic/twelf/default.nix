@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.7.1";
 
   src = fetchurl {
-    url = "//twelf.plparty.org/releases/twelf-src-1.7.1.tar.gz";
+    url = "http://twelf.plparty.org/releases/twelf-src-${version}.tar.gz";
     sha256 = "0fi1kbs9hrdrm1x4k13angpjasxlyd1gc3ys8ah54i75qbcd9c4i";
   };
 
