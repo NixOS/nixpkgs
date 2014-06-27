@@ -167,15 +167,6 @@ let
       "emergency.service"
     ];
 
-  upstreamSystemWants =
-    [ #"basic.target.wants"
-      "sysinit.target.wants"
-      "sockets.target.wants"
-      "local-fs.target.wants"
-      "multi-user.target.wants"
-      "timers.target.wants"
-    ];
-
   upstreamUserUnits =
     [ "basic.target"
       "default.target"
@@ -567,6 +558,21 @@ in
       '';
     };
 
+    systemd.upstreamSystemWants = mkOption {
+      type = types.listOf types.str;
+      default = [
+        #"basic.target.wants"
+        "sysinit.target.wants"
+        "sockets.target.wants"
+        "local-fs.target.wants"
+        "multi-user.target.wants"
+        "timers.target.wants"
+      ];
+      description = ''
+        List of upstream system target units you want.
+      '';
+    };
+
     systemd.extraConfig = mkOption {
       default = "";
       type = types.lines;
@@ -706,7 +712,7 @@ in
     environment.systemPackages = [ systemd ];
 
     environment.etc."systemd/system".source =
-      generateUnits "system" cfg.units upstreamSystemUnits upstreamSystemWants;
+      generateUnits "system" cfg.units upstreamSystemUnits cfg.upstreamSystemWants;
 
     environment.etc."systemd/user".source =
       generateUnits "user" cfg.user.units upstreamUserUnits [];
