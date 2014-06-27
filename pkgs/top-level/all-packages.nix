@@ -5310,6 +5310,9 @@ let
 
   libmusicbrainz = libmusicbrainz3;
 
+  libmwaw = callPackage ../development/libraries/libmwaw { };
+  libmwaw_02 = callPackage ../development/libraries/libmwaw/0.2.nix { };
+
   libmx = callPackage ../development/libraries/libmx { };
 
   libnet = callPackage ../development/libraries/libnet { };
