@@ -115,22 +115,32 @@ in
       };
     };
 
-    jobs.dhcpd =
+    systemd.services.dhcpd =
       { description = "DHCP server";
 
-        startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
+        wantedBy = [ "multi-user.target" ];
 
-        script =
+        path = [ pkgs.dhcp ];
+
+        preStart =
           ''
             mkdir -m 755 -p ${stateDir}
 
             touch ${stateDir}/dhcpd.leases
 
-            exec ${pkgs.dhcp}/sbin/dhcpd -f --no-pid -cf ${configFile} \
-                -lf ${stateDir}/dhcpd.leases -user dhcpd -group nogroup \
-                ${toString cfg.interfaces}
+            mkdir -m 755 -p /run/dhcpd
+            chown dhcpd /run/dhcpd
           '';
+
+        serviceConfig =
+          { ExecStart = "@${pkgs.dhcp}/sbin/dhcpd dhcpd"
+              + " -pf /run/dhcpd/dhcpd.pid -cf ${configFile}"
+              + " -lf ${stateDir}/dhcpd.leases -user dhcpd -group nogroup"
+              + " ${toString cfg.interfaces}";
+            Restart = "always";
+            Type = "forking";
+            PIDFile = "/run/dhcpd/dhcpd.pid";
+          };
       };
 
   };
