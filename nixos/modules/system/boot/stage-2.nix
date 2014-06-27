@@ -17,7 +17,7 @@ let
     src = ./stage-2-init.sh;
     shellDebug = "${pkgs.bashInteractive}/bin/bash";
     isExecutable = true;
-    inherit (config.boot) devShmSize runSize cleanTmpDir;
+    inherit (config.boot) devShmSize runSize cleanTmpDir systemdFlags;
     inherit (config.nix) readOnlyStore;
     inherit (config.networking) useHostResolvConf;
     ttyGid = config.ids.gids.tty;
@@ -48,6 +48,15 @@ in
         type = types.lines;
         description = ''
           Shell commands to be executed just before systemd is started.
+        '';
+      };
+
+      systemdFlags = mkOption {
+        default = "--log-target=journal";
+        example = "--log-level=debug --log-target=console --crash-shell";
+        type = types.str;
+        description = ''
+          Flags passed to systemd command.
         '';
       };
 
