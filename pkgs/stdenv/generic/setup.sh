@@ -325,25 +325,6 @@ export NIX_BUILD_CORES
 # Misc. helper functions.
 
 
-stripDirs() {
-    local dirs="$1"
-    local stripFlags="$2"
-    local dirsNew=
-
-    for d in ${dirs}; do
-        if [ -d "$prefix/$d" ]; then
-            dirsNew="${dirsNew} $prefix/$d "
-        fi
-    done
-    dirs=${dirsNew}
-
-    if [ -n "${dirs}" ]; then
-        header "stripping (with flags $stripFlags) in $dirs"
-        find $dirs -type f -print0 | xargs -0 ${xargsFlags:--r} strip $commonStripFlags $stripFlags || true
-        stopNest
-    fi
-}
-
 # PaX-mark binaries
 paxmark() {
     local flags="$1"
@@ -356,6 +337,7 @@ paxmark() {
     paxctl -c "$@"
     paxctl -zex -${flags} "$@"
 }
+
 
 ######################################################################
 # Textual substitution functions.
@@ -702,67 +684,6 @@ checkPhase() {
 }
 
 
-patchShebangs() {
-    # Rewrite all script interpreter file names (`#! /path') under the
-    # specified  directory tree to paths found in $PATH.  E.g.,
-    # /bin/sh will be rewritten to /nix/store/<hash>-some-bash/bin/sh.
-    # /usr/bin/env gets special treatment so that ".../bin/env python" is
-    # rewritten to /nix/store/<hash>/bin/python.
-    # Interpreters that are already in the store are left untouched.
-    header "patching script interpreter paths"
-    local dir="$1"
-    local f
-    local oldPath
-    local newPath
-    local arg0
-    local args
-    local oldInterpreterLine
-    local newInterpreterLine
-
-    find "$dir" -type f -perm +0100 | while read f; do
-        if [ "$(head -1 "$f" | head -c +2)" != '#!' ]; then
-            # missing shebang => not a script
-            continue
-        fi
-
-        oldInterpreterLine=$(head -1 "$f" | tail -c +3)
-        read -r oldPath arg0 args <<< "$oldInterpreterLine"
-
-        if $(echo "$oldPath" | grep -q "/bin/env$"); then
-            # Check for unsupported 'env' functionality:
-            # - options: something starting with a '-'
-            # - environment variables: foo=bar
-            if $(echo "$arg0" | grep -q -- "^-.*\|.*=.*"); then
-                echo "unsupported interpreter directive \"$oldInterpreterLine\" (set dontPatchShebangs=1 and handle shebang patching yourself)"
-                exit 1
-            fi
-            newPath="$(command -v "$arg0" || true)"
-        else
-            if [ "$oldPath" = "" ]; then
-                # If no interpreter is specified linux will use /bin/sh. Set
-                # oldpath="/bin/sh" so that we get /nix/store/.../sh.
-                oldPath="/bin/sh"
-            fi
-            newPath="$(command -v "$(basename "$oldPath")" || true)"
-            args="$arg0 $args"
-        fi
-
-        newInterpreterLine="$newPath $args"
-
-        if [ -n "$oldPath" -a "${oldPath:0:${#NIX_STORE}}" != "$NIX_STORE" ]; then
-            if [ -n "$newPath" -a "$newPath" != "$oldPath" ]; then
-                echo "$f: interpreter directive changed from \"$oldInterpreterLine\" to \"$newInterpreterLine\""
-                # escape the escape chars so that sed doesn't interpret them
-                escapedInterpreterLine=$(echo "$newInterpreterLine" | sed 's|\\|\\\\|g')
-                sed -i -e "1 s|.*|#\!$escapedInterpreterLine|" "$f"
-            fi
-        fi
-    done
-
-    stopNest
-}
-
-
 installPhase() {
     runHook preInstall
 
@@ -835,47 +756,6 @@ fixupPhase() {
     fi
 
     runHook postFixup
-}
-
-
-addHook fixupOutput _defaultFixupOutput
-_defaultFixupOutput() {
-    if [ -z "$dontGzipMan" ]; then
-        echo "gzipping man pages"
-        GLOBIGNORE=.:..:*.gz:*.bz2
-        for f in "$prefix"/share/man/*/* "$prefix"/share/man/*/*/*; do
-            if [ -f "$f" -a ! -L "$f" ]; then
-                if gzip -c -n "$f" > "$f".gz; then
-                    rm "$f"
-                else
-                    rm "$f".gz
-                fi
-            fi
-        done
-        for f in "$prefix"/share/man/*/* "$prefix"/share/man/*/*/*; do
-            if [ -L "$f" -a -f `readlink -f "$f"`.gz ]; then
-                ln -sf `readlink "$f"`.gz "$f".gz && rm "$f"
-            fi
-        done
-        unset GLOBIGNORE
-    fi
-
-    # TODO: strip _only_ ELF executables, and return || fail here...
-    if [ -z "$dontStrip" ]; then
-        stripDebugList=${stripDebugList:-lib lib32 lib64 libexec bin sbin}
-        if [ -n "$stripDebugList" ]; then
-            stripDirs "$stripDebugList" "${stripDebugFlags:--S}"
-        fi
-
-        stripAllList=${stripAllList:-}
-        if [ -n "$stripAllList" ]; then
-            stripDirs "$stripAllList" "${stripAllFlags:--s}"
-        fi
-    fi
-
-    if [ -z "$dontPatchShebangs" ]; then
-        patchShebangs "$prefix"
-    fi
 }
 
 

@@ -31,6 +31,12 @@ let
 
   unsafeGetAttrPos = builtins.unsafeGetAttrPos or (n: as: null);
 
+  extraBuildInputs' = extraBuildInputs ++
+    [ ../../build-support/setup-hooks/compress-man-pages.sh
+      ../../build-support/setup-hooks/strip.sh
+      ../../build-support/setup-hooks/patch-shebangs.sh
+    ];
+
   # The stdenv that we are producing.
   result =
 
@@ -106,10 +112,10 @@ let
               __ignoreNulls = true;
 
               # Inputs built by the cross compiler.
-              buildInputs = lib.optionals (crossConfig != null) (buildInputs ++ extraBuildInputs);
+              buildInputs = lib.optionals (crossConfig != null) (buildInputs ++ extraBuildInputs');
               propagatedBuildInputs = lib.optionals (crossConfig != null) propagatedBuildInputs;
               # Inputs built by the usual native compiler.
-              nativeBuildInputs = nativeBuildInputs ++ lib.optionals (crossConfig == null) (buildInputs ++ extraBuildInputs);
+              nativeBuildInputs = nativeBuildInputs ++ lib.optionals (crossConfig == null) (buildInputs ++ extraBuildInputs');
               propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
                 lib.optionals (crossConfig == null) propagatedBuildInputs;
           }))) (
