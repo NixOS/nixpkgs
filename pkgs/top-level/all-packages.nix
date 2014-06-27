@@ -1541,7 +1541,7 @@ let
 
   networkmanager_openconnect = callPackage ../tools/networking/network-manager/openconnect.nix { gconf = gnome.GConf; };
 
-  networkmanagerapplet = newScope gnome ../tools/networking/network-manager-applet { };
+  networkmanagerapplet = newScope gnome ../tools/networking/network-manager-applet { dconf = gnome3.dconf; };
 
   newsbeuter = callPackage ../applications/networking/feedreaders/newsbeuter { };
 
