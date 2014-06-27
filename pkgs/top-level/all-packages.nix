@@ -4965,6 +4965,8 @@ let
 
   libassuan2_1 = callPackage ../development/libraries/libassuan/git.nix { };
 
+  libatomic_ops = callPackage ../development/libraries/libatomic_ops {};
+
   libav = libav_10;
   libav_all = callPackage ../development/libraries/libav { };
   inherit (libav_all) libav_0_8 libav_9 libav_10;
