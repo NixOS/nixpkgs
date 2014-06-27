@@ -6,15 +6,39 @@ cat <<EOF
 [
 EOF
 
-read file
-while read file; do
-  if [[ "$file" == @* ]]; then
-    break
-  fi
+write_entry(){
   echo '{'
-  echo "  name = \"${file:33}\";"
-  echo "  md5 = \"${file:0:32}\";"
+  echo "  name = \"${name}\";"
+  echo "  md5 = \"${md5}\";"
+  echo "  brief = ${brief};"
   echo '}'
+}
+
+while read line; do
+  case "$line" in
+    \#*)
+      echo Skipping comment: "$line" >&2;
+      ;;
+    *_MD5SUM\ :=*)
+      read tbline;
+      line=${line##* };
+      tbline=${tbline##* };
+      md5=$line
+      name=$tbline;
+      brief=true;
+      write_entry;
+      ;;
+    *_TARBALL\ :=*)
+      line=${line##* };
+      md5=${line:0:32};
+      name=${line:33};
+      brief=false;
+      write_entry;
+      ;;
+    *)
+      echo Skipping: "$line" >&2;
+      ;;
+  esac
 done
 
 echo ']'
