@@ -29,7 +29,7 @@ stripDirs() {
     dirs=${dirsNew}
 
     if [ -n "${dirs}" ]; then
-        header "stripping (with flags $stripFlags) in $dirs"
+        header "stripping (with flags $stripFlags) in$dirs"
         find $dirs -type f -print0 | xargs -0 ${xargsFlags:--r} strip $commonStripFlags $stripFlags || true
         stopNest
     fi
