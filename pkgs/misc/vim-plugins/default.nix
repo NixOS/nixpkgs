@@ -346,4 +346,69 @@ in rec
 
     path = "vimproc";
   };
+
+  colorsamplerpack = simpleDerivation rec {
+    version = "2012.10.28";
+    name    = "vim-colorsamplerpack-${version}";
+
+    setSourceRoot = "sourceRoot=.";
+    src = fetchurl {
+      url    = "http://www.vim.org/scripts/download_script.php?src_id=18915";
+      name   = "colorsamplerpack.zip";
+      sha256 = "1wsrb3vpqn9fncnalfpvc8r92wk1mcskm4shb3s2h9x5dyihf2rd";
+    };
+
+    buildInputs = [ unzip ];
+
+    path = "colorsamplerpack";
+  };
+
+  yankring = simpleDerivation rec {
+    version = "18.0";
+    name    = "vim-yankring-${version}";
+
+    setSourceRoot = "sourceRoot=.";
+    src = fetchurl {
+      url    = "http://www.vim.org/scripts/download_script.php?src_id=20842";
+      name   = "yankring_180.zip";
+      sha256 = "0bsq4pxagy12jqxzs7gcf25k5ahwif13ayb9k8clyhm0jjdkf0la";
+    };
+
+    buildInputs = [ unzip ];
+
+    path = "yankring";
+  };
+
+  ctrlp = simpleDerivation rec {
+    version = "1.79";
+    name    = "vim-ctrlp-${version}";
+
+    setSourceRoot = "sourceRoot=.";
+    src = fetchurl {
+      url    = "http://www.vim.org/scripts/download_script.php?src_id=19448";
+      name   = "ctrlp_180.zip";
+      sha256 = "1x9im8g0g27mxc3c9k7v0jg5bb1dmnbjygmqif5bizab5g69n2mi";
+    };
+
+    buildInputs = [ unzip ];
+
+    path = "ctrlp";
+  };
+
+  alternate = stdenv.mkDerivation rec {
+    version = "2.18";
+    name    = "vim-a-${version}";
+
+    src = fetchurl {
+      url    = "http://www.vim.org/scripts/download_script.php?src_id=7218";
+      name   = "a.vim";
+      sha256 = "1q22vfkv60sshp9yj3mmfc8azavgzz7rpmaf72iznzq4wccy6gac";
+    };
+    unpackPhase = ":";
+    installPhase = ''
+      ensureDir $out/share/vim-plugins/vim-a
+      cp ${src} $out/share/vim-plugins/vim-a/a.vim
+    '';
+  };
+
 }
