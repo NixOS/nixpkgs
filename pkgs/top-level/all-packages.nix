@@ -8078,6 +8078,8 @@ let
 
   bitcoin = callPackage ../applications/misc/bitcoin { };
 
+  bitmonero = callPackage ../applications/misc/bitmonero { };
+
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee {
     gnutls = gnutls;
     libotr = libotr_3_2;
