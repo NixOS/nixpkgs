@@ -9830,11 +9830,7 @@ let
 
   macvim = callPackage ../applications/editors/vim/macvim.nix { };
 
-  vimWrapper = wrapVim vim;
-
   vimHugeX = vim_configurable;
-
-  vimHugeXWrapper = wrapVim vimHugeX;
 
   vim_configurable = callPackage ../applications/editors/vim/configurable.nix {
     inherit (pkgs) fetchurl fetchhg stdenv ncurses pkgconfig gettext
@@ -9867,11 +9863,6 @@ let
     lua = pkgs.lua5;
     flags = [ "python" "X11" ]; # only flag "X11" by now
   });
-
-  wrapVim = vim: import ../applications/editors/vim/wrapper.nix {
-    inherit stdenv makeWrapper writeText vim;
-    vimrc = config.vim.vimrc or "";
-  };
 
   virtviewer = callPackage ../applications/virtualization/virt-viewer {
     gtkvnc = gtkvnc.override { enableGTK3 = true; };
