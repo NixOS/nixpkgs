@@ -2781,7 +2781,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   cabalBounds = callPackage ../development/tools/haskell/cabal-bounds {
     Cabal = if pkgs.stdenv.lib.versionOlder "7.7" ghc.version
               then null
-              else self.Cabal_1_18_1_3;
+              else self.Cabal_1_20_0_1;
+    cabalLenses = self.cabalLenses.override {
+      Cabal = self.Cabal_1_20_0_1;
+    };
   };
 
   cabalMeta = callPackage ../development/tools/haskell/cabal-meta {};
