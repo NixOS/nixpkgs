@@ -5708,6 +5708,10 @@ let
 
   newt = callPackage ../development/libraries/newt { };
 
+  nix-plugins = callPackage ../development/libraries/nix-plugins {
+    nix = pkgs.nixUnstable;
+  };
+
   nspr = callPackage ../development/libraries/nspr { };
 
   nss = lowPrio (callPackage ../development/libraries/nss { });

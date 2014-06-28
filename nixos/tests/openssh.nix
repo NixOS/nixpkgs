@@ -16,6 +16,7 @@ let
   ];
 
 in {
+  name = "openssh";
 
   nodes = {
 

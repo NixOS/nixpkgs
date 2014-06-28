@@ -7,6 +7,8 @@ let
   };
 in
 {
+  name = "mumble";
+
   nodes = {
     server = { config, pkgs, ... }: {
       services.murmur.enable       = true;
