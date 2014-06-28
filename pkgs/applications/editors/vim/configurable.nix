@@ -1,9 +1,26 @@
 # TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
 # but I have gvim with python support now :) - Marc
-args@{source ? "default", ...}: with args;
+args@{pkgs, source ? "default", ...}: with args;
 
 
-let inherit (args.composableDerivation) composableDerivation edf; in
+let inherit (args.composableDerivation) composableDerivation edf;
+  nixosRuntimepath = pkgs.writeText "runtimepath.vim" ''
+    function! NixosPluginPath()
+      let seen = {}
+      for p in reverse(split($NIX_PROFILES))
+        for d in split(glob(p . '/share/vim-plugins/*'))
+          let pluginname = substitute(d, ".*/", "", "")
+          if !has_key(seen, pluginname)
+            exec 'set runtimepath^='.d
+            let seen[pluginname] = 1
+          endif
+        endfor
+      endfor
+    endfunction
+
+    execute NixosPluginPath()
+  '';
+in
 composableDerivation {
   # use gccApple to compile on darwin
   mkDerivation = ( if stdenv.isDarwin
@@ -145,6 +162,8 @@ composableDerivation {
     echo $nativeBuildInputs
     echo $rpath
     patchelf --set-rpath $rpath $out/bin/{vim,gvim}
+
+    ln -sfn ${nixosRuntimepath} $out/share/vim/vimrc
   '';
 
   dontStrip = 1;
