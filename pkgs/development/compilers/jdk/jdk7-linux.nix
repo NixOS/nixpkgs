@@ -50,7 +50,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  patchversion = "55";
+  patchversion = "60";
 
   name =
     if installjdk then "jdk-1.7.0_${patchversion}" else "jre-1.7.0_${patchversion}";
@@ -60,14 +60,14 @@ stdenv.mkDerivation rec {
       requireFile {
         name = "jdk-7u${patchversion}-linux-i586.tar.gz";
         url = http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html;
-        sha256 = "0y0v5ilbkdmf14jrvwa23x91rfdw90jji4y7hq0l494iy4wjnyc1";
+        sha256 = "d736fb4fd7c8ef50b76411daa640c6feeb48a5c275d29a90ffeb916a78d47a48";
       }
     else if stdenv.system == "x86_64-linux" then
 
       requireFile {
         name = "jdk-7u${patchversion}-linux-x64.tar.gz";
         url = http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html;
-        sha256 = "15sncxhjasv5i6p7hfrr92xq5ph9g6g12i4m52vp45l031bw5y46";
+        sha256 = "c7232b717573b057dbe828d937ee406b7a75fbc6aba7f1de98a049cbd42c6ae8";
       }
     else
       abort "jdk requires i686-linux or x86_64 linux";
