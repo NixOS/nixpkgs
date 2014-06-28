@@ -1,6 +1,7 @@
 # Test for NixOS' container support.
 
 import ./make-test.nix {
+  name = "containers";
 
   machine =
     { config, pkgs, ... }:

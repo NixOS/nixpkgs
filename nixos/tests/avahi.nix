@@ -1,6 +1,7 @@
 # Test whether `avahi-daemon' and `libnss-mdns' work as expected.
 
 import ./make-test.nix {
+  name = "avahi";
 
   nodes = {
     one =
