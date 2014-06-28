@@ -88,8 +88,8 @@ let vimHelpTags = ''
     inherit buildPhase;
 
     installPhase = ''
-      target=$out/vim-plugins/$path
-      ensureDir $out/vim-plugins
+      target=$out/share/vim-plugins/${path}
+      ensureDir $out/share/vim-plugins
       cp -r . $target
       ${vimHelpTags}
       vimHelpTags $target
@@ -114,14 +114,14 @@ in rec
       rev = "abfc3ee36adab11c0c0b9d086a164a69006fec79";
       sha256 = "1d25dp5kgqickl06hqvx4j3z51zblhsn3q3by2hayyj3g2zps4gm";
      };
- 
+
     name = "youcompleteme-git-abfc3ee";
     buildInputs = [ python cmake clang.clang ];
 
     configurePhase = ":";
 
     buildPhase = ''
-      target=$out/vim-plugins/YouCompleteMe
+      target=$out/share/vim-plugins/YouCompleteMe
       mkdir -p $target
       cp -a ./ $target
 
@@ -311,7 +311,7 @@ in rec
 
     preBuild = ''
       sed -ie '1 i\
-      set runtimepath+=${vimproc}/vim-plugins/vimproc\
+      set runtimepath+=${vimproc}/share/vim-plugins/vimproc\
       ' autoload/vimshell.vim
     '';
 
