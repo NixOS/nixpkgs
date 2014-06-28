@@ -42,12 +42,24 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
           "isLibrary" "isExecutable" "testDepends"
         ];
 
+        # Directories and files that should be filtered out because they may interfere with the cabal build or are often
+        # very large and unnecessary.
+        directoriesToClean = [ ".cabal-sandbox" "dist" ];
+        filesToClean = [ "cabal.sandbox.config" ];
+
+        # Check if the given file should be filtered out.
+        shouldClean = path: type:
+          !( type == "directory" && builtins.elem (baseNameOf path) directoriesToClean
+          || type == "regular"   && builtins.elem (baseNameOf path) filesToClean
+          );
+
         # Stuff happening after the user preferences have been processed. We remove
         # internal attributes and strip null elements from the dependency lists, all
         # in the interest of keeping hashes stable.
         postprocess =
           x : (removeAttrs x internalAttrs) // {
                 buildInputs           = filter (y : ! (y == null)) x.buildInputs;
+                src                   = if builtins.typeOf x.src == "path" then builtins.filterSource shouldClean x.src else x.src;
                 propagatedBuildInputs = filter (y : ! (y == null)) x.propagatedBuildInputs;
                 propagatedUserEnvPkgs = filter (y : ! (y == null)) x.propagatedUserEnvPkgs;
                 doCheck               = enableCheckPhase && x.doCheck;
@@ -184,6 +196,11 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               for i in Setup.hs Setup.lhs; do
                 test -f $i && ghc --make $i
               done
+
+              # This should not be needed for packages from hackage, but
+              # it's needed for local packages that have a `dist` directory. See
+              # https://github.com/NixOS/nixpkgs/issues/3112.
+              ./Setup clean
 
               for p in $extraBuildInputs $propagatedNativeBuildInputs; do
                 if [ -d "$p/lib/ghc-${ghc.ghc.version}/package.conf.d" ]; then
