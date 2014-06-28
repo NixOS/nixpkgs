@@ -587,6 +587,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   deepseq_1_3_0_2 = callPackage ../development/libraries/haskell/deepseq/1.3.0.2.nix {};
   deepseq = null;               # core package since ghc >= 7.4.x
 
+  deepseqGenerics = callPackage ../development/libraries/haskell/deepseq-generics {};
+
   deepseqTh = callPackage ../development/libraries/haskell/deepseq-th {};
 
   derive = callPackage ../development/libraries/haskell/derive {};
