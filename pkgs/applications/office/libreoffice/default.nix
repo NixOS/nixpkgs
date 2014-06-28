@@ -28,34 +28,6 @@ let
   subdir = "${major}.${minor}.${patch}";
   version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
 
-  # configure phase dependency
-  liblangtag = stdenv.mkDerivation rec {
-     version = "0.4.0";
-     name = "liblangtag-${version}";
-
-     src = fetchurl {
-       url = "http://dev-www.libreoffice.org/src/54e578c91b1b68e69c72be22adcb2195-${name}.tar.bz2";
-       sha256 = "1bjb0fxjmvzxlhr5by9wgisf6w5yvy6wgfzfkjyw6igk39fivdyb";
-     };
-
-     buildInputs = [ libtool pkgconfig libxml2 ];
-  };
-
-  # doesn't work with srcs versioning
-  libmspub = stdenv.mkDerivation rec {
-     version = "0.0.6";
-     name = "libmspub-${version}";
-
-     src = fetchurl {
-       url = "http://dev-www.libreoffice.org/src/${name}.tar.gz";
-       sha256 = "1zdcvnm0dpac5yqdv34hq9j38cnhyqzyjgb19iyp54ajnwfjhmcq";
-     };
-
-     configureFlags = "--disable-werror";
-
-     buildInputs = [ zlib libwpd libwpg pkgconfig boost icu ];
-  };
-
   # doesn't exist in srcs
   libixion = stdenv.mkDerivation rec {
      version = "0.5.0";
@@ -138,6 +110,8 @@ stdenv.mkDerivation rec {
       -e 's,! */usr/bin/perl,!${perl}/bin/perl,' -e 's,! */usr/bin/env perl,!${perl}/bin/perl,' \
       -e 's,! */usr/bin/python,!${python3}/bin/${python3.executable},' -e 's,! */usr/bin/env python,!${python3}/bin/${python3.executable},'
     #sed -i 's,ANT_OPTS+="\(.*\)",ANT_OPTS+=\1,' apache-commons/java/*/makefile.mk
+
+    patch -Np1 -i ${./ooxmlexport.diff};
   '';
 
   QT4DIR = qt4;
@@ -227,12 +201,15 @@ stdenv.mkDerivation rec {
     "--without-system-lpsolve"
     "--without-system-npapi-headers"
     "--without-system-libcmis"
+
     "--without-system-libetonyek"
     "--without-system-libfreehand"
     "--without-system-libodfgen"
     "--without-system-libabw"
     "--without-system-firebird"
     "--without-system-orcus"
+    "--without-system-liblangtag"
+    "--without-system-libmspub"
   ];
 
   checkPhase = ''
@@ -250,7 +227,7 @@ stdenv.mkDerivation rec {
       libXdmcp libpthreadstubs mesa mythes
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfigUpstream poppler
       python3 sablotron saneBackends tcsh unzip vigra which zip zlib
-      mdds bluez5 glibc libmspub libixion liblangtag
+      mdds bluez5 glibc libixion
       libxshmfence libe-book_00 libmwaw_02 libatomic_ops graphite2 harfbuzz
     ];
 
