@@ -214,6 +214,10 @@
                };
              };
 
+  packages_ghcjs = packages_ghc782 // {
+    ghc = ../development/tools/haskell/ghcjs;
+  };
+
   packages_ghc782 =
     packages { ghcPath = ../development/compilers/ghc/7.8.2.nix;
                ghcBinary = ghc742Binary;

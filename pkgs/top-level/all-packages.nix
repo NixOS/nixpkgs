@@ -2956,6 +2956,7 @@ let
   # Reasonably current HEAD snapshot.
   haskellPackages_ghc782 = haskell.packages_ghc782;
   haskellPackages_ghcHEAD = haskell.packages_ghcHEAD;
+  haskellPackages_ghcjs = haskell.packages_ghcjs;
 
   haskellPlatformPackages = recurseIntoAttrs (import ../development/libraries/haskell/haskell-platform { inherit pkgs; });
 

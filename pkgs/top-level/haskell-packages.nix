@@ -843,6 +843,11 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     cabal = self.cabal.override { enableLibraryProfiling = false; }; # pkg cannot be built with profiling enabled
   };
 
+  ghcjs = callPackage ../development/tools/haskell/ghcjs {
+    Cabal = self.Cabal_1_18_1_3;
+    cabalInstall = self.cabalInstallGhcjs;
+  };
+
   ghcjsDom = callPackage ../development/libraries/haskell/ghcjs-codemirror {};
 
   ghcjsCodemirror = callPackage ../development/libraries/haskell/ghcjs-codemirror {};
@@ -2824,6 +2829,19 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   cabalInstall_1_18_0_3 = callPackage ../tools/package-management/cabal-install/1.18.0.3.nix { Cabal = self.Cabal_1_18_1_3; };
   cabalInstall_1_20_0_2 = callPackage ../tools/package-management/cabal-install/1.20.0.2.nix { Cabal = self.Cabal_1_20_0_1; };
   cabalInstall = self.cabalInstall_1_20_0_2;
+
+  CabalGhcjs = callPackage ../development/tools/haskell/Cabal-ghcjs {
+    QuickCheck = self.QuickCheck_2_6;
+    testFrameworkQuickcheck2 = self.testFrameworkQuickcheck2.override {
+      QuickCheck = self.QuickCheck_2_6;
+    };
+  };
+  cabalInstallGhcjs = callPackage ../development/tools/haskell/cabal-install-ghcjs {
+    QuickCheck = self.QuickCheck_2_6;
+    testFrameworkQuickcheck2 = self.testFrameworkQuickcheck2.override {
+      QuickCheck = self.QuickCheck_2_6;
+    };
+  };
 
   codex = callPackage ../development/tools/haskell/codex {};
 
