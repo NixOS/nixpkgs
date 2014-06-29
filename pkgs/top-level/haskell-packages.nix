@@ -2090,6 +2090,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   SHA = callPackage ../development/libraries/haskell/SHA {};
 
+  SHA2 = callPackage ../development/libraries/haskell/SHA2 {};
+
   shake = callPackage ../development/libraries/haskell/shake {};
 
   shakespeare = callPackage ../development/libraries/haskell/shakespeare {};
