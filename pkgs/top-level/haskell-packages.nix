@@ -2822,6 +2822,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   codex = callPackage ../development/tools/haskell/codex {};
 
+  commandQq = callPackage ../development/libraries/haskell/command-qq {};
+
   gitAnnex = callPackage ../applications/version-management/git-and-tools/git-annex {};
 
   githubBackup = callPackage ../applications/version-management/git-and-tools/github-backup {};
