@@ -6752,6 +6752,8 @@ let
 
   ngircd = callPackage ../servers/irc/ngircd { };
 
+  nix-binary-cache = callPackage ../servers/http/nix-binary-cache {};
+
   nsd = callPackage ../servers/dns/nsd { };
 
   nsq = callPackage ../servers/nsq { };
