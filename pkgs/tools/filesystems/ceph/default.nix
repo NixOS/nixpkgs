@@ -1,4 +1,4 @@
-{stdenv, fetchgit, atomicops, autoconf, automake, boost, btrfsProgs, cryptopp, curl, expat,
+{stdenv, fetchgit, atomicops ? null, autoconf, automake, boost, btrfsProgs, cryptopp, curl, expat,
  fcgi, fuse, gperftools, keyutils, leveldb, libaio, libedit, libtool,
  libuuid, linuxHeaders, openssl, pkgconfig, python, snappy, which, xfsprogs, xz}:
 
