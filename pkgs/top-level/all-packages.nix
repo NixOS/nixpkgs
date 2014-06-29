@@ -793,6 +793,8 @@ let
 
   cpuminer = callPackage ../tools/misc/cpuminer { };
 
+  cpuminer-multi = callPackage ../tools/misc/cpuminer-multi { };
+
   cuetools = callPackage ../tools/cd-dvd/cuetools { };
 
   unifdef = callPackage ../development/tools/misc/unifdef { };
