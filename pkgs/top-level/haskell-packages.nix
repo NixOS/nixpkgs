@@ -437,7 +437,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   compactStringFix = callPackage ../development/libraries/haskell/compact-string-fix {};
 
-  compdata = callPackage ../development/libraries/haskell/compdata {};
+  compdata = if (pkgs.stdenv.lib.versionOlder "7.8" ghc.version)
+               then callPackage ../development/libraries/haskell/compdata {}
+               else null;
 
   composition = callPackage ../development/libraries/haskell/composition {};
 
@@ -638,7 +640,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
 
   distributedStatic = callPackage ../development/libraries/haskell/distributed-static {};
-  
+
   distributedProcess = callPackage ../development/libraries/haskell/distributed-process {};
 
   distributive = callPackage ../development/libraries/haskell/distributive {};
