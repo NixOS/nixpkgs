@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchhg {
     url = "https://code.google.com/r/splintermind-attributes/";
-    tag = rev;
+    inherit rev;
     sha256 = "0a9m967q6p2q3plrl6qysg1xrdmg65jzil6awjh2wr3g10x2x15z";
   };
 

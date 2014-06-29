@@ -6,7 +6,7 @@ let
       root = "code.google.com/p/snappy-go";
       src = fetchhg {
         url = "http://code.google.com/p/snappy-go";
-        tag = "14";
+        rev = "14";
         sha256 = "0ywa52kcii8g2a9lbqcx8ghdf6y56lqq96sl5nl9p6h74rdvmjr7";
       };
     }

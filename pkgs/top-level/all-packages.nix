@@ -737,6 +737,8 @@ let
 
   cdrkit = callPackage ../tools/cd-dvd/cdrkit { };
 
+  ceph = callPackage ../tools/filesystems/ceph { };
+
   cfdg = builderDefsPackage ../tools/graphics/cfdg {
     inherit libpng bison flex ffmpeg;
   };
@@ -3174,6 +3176,8 @@ let
     };
 
     ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
+
+    cppo = callPackage ../development/tools/ocaml/cppo { };
 
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
 
@@ -5780,6 +5784,8 @@ let
     ffmpeg = ffmpeg_0_10;
   };
 
+  openspades = callPackage ../games/openspades {};
+
   openssl = callPackage ../development/libraries/openssl {
     fetchurl = fetchurlBoot;
     cryptodevHeaders = linuxPackages.cryptodev.override {
@@ -6745,6 +6751,8 @@ let
   };
 
   ngircd = callPackage ../servers/irc/ngircd { };
+
+  nix-binary-cache = callPackage ../servers/http/nix-binary-cache {};
 
   nsd = callPackage ../servers/dns/nsd { };
 

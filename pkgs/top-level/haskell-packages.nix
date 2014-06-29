@@ -587,6 +587,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   deepseq_1_3_0_2 = callPackage ../development/libraries/haskell/deepseq/1.3.0.2.nix {};
   deepseq = null;               # core package since ghc >= 7.4.x
 
+  deepseqGenerics = callPackage ../development/libraries/haskell/deepseq-generics {};
+
   deepseqTh = callPackage ../development/libraries/haskell/deepseq-th {};
 
   derive = callPackage ../development/libraries/haskell/derive {};
@@ -2090,6 +2092,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   SHA = callPackage ../development/libraries/haskell/SHA {};
 
+  SHA2 = callPackage ../development/libraries/haskell/SHA2 {};
+
   shake = callPackage ../development/libraries/haskell/shake {};
 
   shakespeare = callPackage ../development/libraries/haskell/shakespeare {};
@@ -2799,9 +2803,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   cabalDelete = callPackage ../development/tools/haskell/cabal-delete {};
 
   cabalBounds = callPackage ../development/tools/haskell/cabal-bounds {
-    Cabal = if pkgs.stdenv.lib.versionOlder "7.7" ghc.version
-              then null
-              else self.Cabal_1_18_1_3;
+    Cabal = self.Cabal_1_20_0_1;
+    cabalLenses = self.cabalLenses.override {
+      Cabal = self.Cabal_1_20_0_1;
+    };
   };
 
   cabalMeta = callPackage ../development/tools/haskell/cabal-meta {};
@@ -2821,6 +2826,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   cabalInstall = self.cabalInstall_1_20_0_2;
 
   codex = callPackage ../development/tools/haskell/codex {};
+
+  commandQq = callPackage ../development/libraries/haskell/command-qq {};
 
   gitAnnex = callPackage ../applications/version-management/git-and-tools/git-annex {};
 

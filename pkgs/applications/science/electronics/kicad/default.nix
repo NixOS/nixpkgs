@@ -5,13 +5,13 @@ stdenv.mkDerivation rec {
 
   src = fetchbzr {
     url = "https://code.launchpad.net/~kicad-stable-committers/kicad/stable";
-    revision = 4024;
+    rev = 4024;
     sha256 = "1sv1l2zpbn6439ccz50p05hvqg6j551aqra551wck9h3929ghly5";
   };
 
   srcLibrary = fetchbzr {
     url = "http://bazaar.launchpad.net/~kicad-lib-committers/kicad/library";
-    revision = 293;
+    rev = 293;
     sha256 = "1wn9a4nhqyjzzfkq6xm7ag8n5n10xy7gkq6i7yry7wxini7pzv1i";
   };
 
