@@ -2487,7 +2487,9 @@ let
 
   dash = callPackage ../shells/dash { };
 
-  fish = callPackage ../shells/fish { };
+  fish = callPackage ../shells/fish {
+    python = python27Full;
+  };
 
   tcsh = callPackage ../shells/tcsh { };
 
