@@ -8169,7 +8169,7 @@ let
 
   dvdauthor = callPackage ../applications/video/dvdauthor { };
 
-  dwb = callPackage ../applications/networking/browsers/dwb { };
+  dwb = callPackage ../applications/networking/browsers/dwb { dconf = gnome3.dconf; };
 
   dwm = callPackage ../applications/window-managers/dwm {
     patches = config.dwm.patches or [];
