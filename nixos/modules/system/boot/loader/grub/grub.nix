@@ -26,6 +26,7 @@ let
         version extraConfig extraPerEntryConfig extraEntries
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels timeout
         default devices explicitBootRoot;
+      inherit (config.lib.fileSystems) rootDirectory;
       path = (makeSearchPath "bin" [
         pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils
       ]) + ":" + (makeSearchPath "sbin" [

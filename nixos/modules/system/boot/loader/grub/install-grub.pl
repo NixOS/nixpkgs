@@ -5,6 +5,7 @@ use File::Basename;
 use File::Path;
 use File::stat;
 use File::Copy;
+use File::Spec;
 use POSIX;
 use Cwd;
 
@@ -40,6 +41,7 @@ my $copyKernels = get("copyKernels") eq "true";
 my $timeout = int(get("timeout"));
 my $defaultEntry = int(get("default"));
 my $explicitBootRoot = get("explicitBootRoot");
+my $rootDirectory = get("rootDirectory");
 $ENV{'PATH'} = get("path");
 
 die "unsupported GRUB version\n" if $grubVersion != 1 && $grubVersion != 2;
@@ -139,7 +141,7 @@ mkpath("/boot/kernels", 0, 0755) if $copyKernels;
 
 sub copyToKernelsDir {
     my ($path) = @_;
-    return $path unless $copyKernels;
+    return File::Spec->canonpath("$rootDirectory/$path") unless $copyKernels;
     $path =~ /\/nix\/store\/(.*)/ or die;
     my $name = $1; $name =~ s/\//-/g;
     my $dst = "/boot/kernels/$name";
@@ -152,7 +154,7 @@ sub copyToKernelsDir {
         rename $tmp, $dst or die "cannot rename $tmp to $dst\n";
     }
     $copied{$dst} = 1;
-    return "$bootRoot/kernels/$name";
+    return File::Spec->canonpath("$rootDirectory/$bootRoot/kernels/$name");
 }
 
 sub addEntry {
