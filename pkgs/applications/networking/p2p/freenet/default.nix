@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   buildPhase = "ant package-only";
 
   installPhase = ''
-    ensureDir $out/share/freenet $out/bin
+    mkdir -p $out/share/freenet $out/bin
     cp lib/bcprov.jar $out/share/freenet
     cp lib/freenet/freenet-ext.jar $out/share/freenet
     cp dist/freenet.jar $out/share/freenet

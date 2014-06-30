@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp storebrowse $out/bin
   '';
 

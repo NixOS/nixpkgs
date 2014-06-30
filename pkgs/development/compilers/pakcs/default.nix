@@ -54,13 +54,13 @@ stdenv.mkDerivation rec {
     export LC_ALL=en_US.UTF-8
 
     # Set up link to cymake, which has been built already.
-    ensureDir bin/.local
+    mkdir -p bin/.local
     ln -s ${curryFront}/bin/cymake bin/.local/
   '';
 
   installPhase = ''
     # Prepare PAKCSHOME directory.
-    ensureDir $out/pakcs
+    mkdir -p $out/pakcs
     for d in bin curry2prolog currytools lib tools cpns include www examples docs ; do
       cp -r $d $out/pakcs ;
     done
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     (cd $out/pakcs/www ; make)
 
     # Install bin.
-    ensureDir $out/bin
+    mkdir -p $out/bin
     for b in makecurrycgi .makesavedstate pakcs parsecurry cleancurry \
              addtypes cass currybrowse currycreatemake currydoc currytest \
              dataToXml erd2curry ; do
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     done
 
     # Place emacs lisp files in expected locations.
-    ensureDir $out/share/emacs/site-lisp/curry-pakcs
+    mkdir -p $out/share/emacs/site-lisp/curry-pakcs
     for e in "tools/emacs/"*.el ; do
       cp $e $out/share/emacs/site-lisp/curry-pakcs/ ;
     done

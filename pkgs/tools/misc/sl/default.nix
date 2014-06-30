@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   buildInputs = [ ncurses ];
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp sl $out/bin
   '';
 

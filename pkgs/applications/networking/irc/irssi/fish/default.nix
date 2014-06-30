@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/lib/irssi/modules
+    mkdir -p $out/lib/irssi/modules
     cp src/.libs/libfish.so $out/lib/irssi/modules
   '';
   

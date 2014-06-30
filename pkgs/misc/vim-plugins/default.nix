@@ -89,7 +89,7 @@ let vimHelpTags = ''
 
     installPhase = ''
       target=$out/vim-plugins/$path
-      ensureDir $out/vim-plugins
+      mkdir -p $out/vim-plugins
       cp -r . $target
       ${vimHelpTags}
       vimHelpTags $target

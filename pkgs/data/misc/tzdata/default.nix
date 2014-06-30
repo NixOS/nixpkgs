@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       ln -s . $out/share/zoneinfo/posix
       mv $out/share/zoneinfo-leaps $out/share/zoneinfo/right
 
-      ensureDir "$lib/include"
+      mkdir -p "$lib/include"
       cp tzfile.h "$lib/include/tzfile.h"
     '';
 

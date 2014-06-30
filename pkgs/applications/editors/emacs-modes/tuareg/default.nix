@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
   buildInputs = [ emacs ];
 
   installPhase = ''
-    ensureDir "$out/share/emacs/site-lisp"
+    mkdir -p "$out/share/emacs/site-lisp"
     cp *.el *.elc  "$out/share/emacs/site-lisp"
   '';
 

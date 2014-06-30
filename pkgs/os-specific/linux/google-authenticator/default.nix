@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin $out/lib/security
+    mkdir -p $out/bin $out/lib/security
     cp pam_google_authenticator.so $out/lib/security
     cp google-authenticator $out/bin
   '';

@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out/bin $out/share/OpenLieroX
+    mkdir -p $out/bin $out/share/OpenLieroX
     cp bin/* $out/bin
     cp -R ../share/gamedir/* $out/share/OpenLieroX
   '';

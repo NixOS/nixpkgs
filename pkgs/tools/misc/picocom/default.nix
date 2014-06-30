@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    ensureDir $out/bin $out/share/man/man8
+    mkdir -p $out/bin $out/share/man/man8
     cp picocom $out/bin
     cp picocom.8 $out/share/man/man8
   '';

@@ -140,7 +140,7 @@ let
   udevRules = pkgs.stdenv.mkDerivation {
     name = "udev-rules";
     buildCommand = ''
-      ensureDir $out
+      mkdir -p $out
 
       echo 'ENV{LD_LIBRARY_PATH}="${extraUtils}/lib"' > $out/00-env.rules
 

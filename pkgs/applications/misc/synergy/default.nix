@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   # http://synergy-foss.org/spit/issues/details/3317/
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp ../bin/synergyc $out/bin
     cp ../bin/synergys $out/bin
     cp ../bin/synergyd $out/bin

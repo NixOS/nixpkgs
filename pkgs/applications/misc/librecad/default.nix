@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   configurePhase = "qmake PREFIX=$out";
 
   installPhase = ''
-    ensureDir $out/bin $out/share
+    mkdir -p $out/bin $out/share
     cp -R unix/librecad $out/bin
     cp -R unix/resources $out/share/librecad
   '';

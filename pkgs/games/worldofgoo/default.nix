@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
     + ":" + stdenv.gcc.gcc + "/lib64";
 
   installPhase = ''
-    ensureDir $out/libexec/2dboy/WorldOfGoo/
-    ensureDir $out/bin
+    mkdir -p $out/libexec/2dboy/WorldOfGoo/
+    mkdir -p $out/bin
 
     patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" --set-rpath $libPath ./WorldOfGoo.bin64
 

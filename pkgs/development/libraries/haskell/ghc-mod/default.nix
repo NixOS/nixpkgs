@@ -24,7 +24,7 @@ cabal.mkDerivation (self: {
     make
     rm Makefile
     cd ..
-    ensureDir "$out/share/emacs"
+    mkdir -p "$out/share/emacs"
     mv $pname-$version emacs/site-lisp
 
     mv $out/bin/ghc-mod $out/bin/.ghc-mod-wrapped

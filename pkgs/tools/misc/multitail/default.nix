@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   makeFlags = stdenv.lib.optionalString stdenv.isDarwin "-f makefile.macosx";
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp multitail $out/bin
   '';
 

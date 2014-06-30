@@ -9,6 +9,6 @@ findTarballs() {
 }
 
 propagateImageName() {
-    ensureDir $out/nix-support
+    mkdir -p $out/nix-support
     cat "$diskImage"/nix-support/full-name > $out/nix-support/full-name
 }

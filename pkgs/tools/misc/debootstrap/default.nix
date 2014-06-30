@@ -20,7 +20,7 @@ let
     ];
     # TODO install man
     installPhase = ''
-      ensureDir $out/sbin
+      mkdir -p $out/sbin
       ls -l
       t=$out/sbin/MAKEDEV
       cp MAKEDEV $t
@@ -78,7 +78,7 @@ stdenv.mkDerivation {
       functions
 
     d=$out/share/debootstrap
-    ensureDir $out/{share/debootstrap,bin}
+    mkdir -p $out/{share/debootstrap,bin}
 
     ${fakeroot}/bin/fakeroot -- make devices.tar.gz MAKEDEV=${makedev}/sbin/MAKEDEV
 
@@ -94,7 +94,7 @@ stdenv.mkDerivation {
     EOF
     chmod +x $out/bin/debootstrap
 
-    ensureDir $out/man/man8
+    mkdir -p $out/man/man8
     mv debootstrap.8 $out/man/man8
   '';
 
