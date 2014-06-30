@@ -1,4 +1,4 @@
-{stdenv, fetchgit, atomicops ? null, autoconf, automake, boost, btrfsProgs, cryptopp, curl, expat,
+{stdenv, fetchgit, libatomic_ops, autoconf, automake, boost, btrfsProgs, cryptopp, curl, expat,
  fcgi, fuse, gperftools, keyutils, leveldb, libaio, libedit, libtool,
  libuuid, linuxHeaders, openssl, pkgconfig, python, snappy, which, xfsprogs, xz}:
 
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version="0.79";
   name="${baseName}-${version}";
   buildInputs = [
-    fuse linuxHeaders pkgconfig atomicops autoconf automake boost btrfsProgs cryptopp expat
+    fuse linuxHeaders pkgconfig libatomic_ops autoconf automake boost btrfsProgs cryptopp expat
     fcgi fuse gperftools keyutils leveldb libaio libedit libtool libuuid openssl pkgconfig
     python snappy which xfsprogs.lib xz
   ];
