@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
     tastySmallcheck transformers
   ];
   doCheck = false;
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/k0001/pipes-binary";
     description = "Encode and decode binary streams using the pipes and binary libraries";

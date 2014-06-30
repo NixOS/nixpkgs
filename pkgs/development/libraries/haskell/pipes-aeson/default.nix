@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
     aeson attoparsec pipes pipesAttoparsec pipesBytestring pipesParse
     transformers
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/k0001/pipes-aeson";
     description = "Encode and decode JSON streams using Aeson and Pipes";
