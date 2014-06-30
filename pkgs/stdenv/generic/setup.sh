@@ -475,32 +475,36 @@ unpackFile() {
 
     header "unpacking source archive $curSrc" 3
 
-    case "$curSrc" in
-        *.tar.xz | *.tar.lzma)
-            # Don't rely on tar knowing about .xz.
-            xz -d < $curSrc | tar xf -
-            ;;
-        *.tar | *.tar.* | *.tgz | *.tbz2)
-            # GNU tar can automatically select the decompression method
-            # (info "(tar) gzip").
-            tar xf $curSrc
-            ;;
-        *.zip)
-            unzip -qq $curSrc
-            ;;
-        *)
-            if [ -d "$curSrc" ]; then
-                stripHash $curSrc
-                cp -prd --no-preserve=timestamps $curSrc $strippedName
-            else
+    if [ -d "$curSrc" ]; then
+
+        stripHash $curSrc
+        cp -prd --no-preserve=timestamps $curSrc $strippedName
+
+    else
+
+        case "$curSrc" in
+            *.tar.xz | *.tar.lzma)
+                # Don't rely on tar knowing about .xz.
+                xz -d < $curSrc | tar xf -
+                ;;
+            *.tar | *.tar.* | *.tgz | *.tbz2)
+                # GNU tar can automatically select the decompression method
+                # (info "(tar) gzip").
+                tar xf $curSrc
+                ;;
+            *.zip)
+                unzip -qq $curSrc
+                ;;
+            *)
                 if [ -z "$unpackCmd" ]; then
                     echo "source archive $curSrc has unknown type"
                     exit 1
                 fi
                 runSingleHook unpackCmd
-            fi
-            ;;
-    esac
+                ;;
+        esac
+
+    fi
 
     stopNest
 }
