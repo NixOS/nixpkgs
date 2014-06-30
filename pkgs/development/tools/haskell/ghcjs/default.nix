@@ -4,9 +4,9 @@
 , haskellSrcExts, haskellSrcMeta, lens, optparseApplicative_0_7_0_2
 , parallel, safe, shelly, split, stringsearch, syb, systemFileio
 , systemFilepath, tar, terminfo, textBinary, unorderedContainers
-, vector, wlPprintText, yaml, fetchgit, Cabal, cabalInstall
+, vector, wlPprintText, yaml, fetchgit, Cabal, CabalGhcjs, cabalInstall
 , regexPosix, alex, happy, git, gnumake, gcc, autoconf, patch
-, automake, libtool
+, automake, libtool, cabalInstallGhcjs, gmp
 }:
 
 cabal.mkDerivation (self: rec {
@@ -22,6 +22,11 @@ cabal.mkDerivation (self: rec {
     rev = "2daaf8fc0efd5b5906a7157a172ce77ca3b28d81";
     sha256 = "0kwn3lh196rp02kz2vxd0mkqyix99xqzs4vsazv0s49ari0dc4w8";
   };
+  shims = fetchgit {
+    url = git://github.com/ghcjs/shims.git;
+    rev = "a6dd0202dcdb86ad63201495b8b5d9763483eb35";
+    sha256 = "07cd7ijw4i62iz1xjpwilriiybpqdx246w8d3j27ny1xfsj9wnax";
+  };
   isLibrary = true;
   isExecutable = true;
   jailbreak = true;
@@ -32,7 +37,7 @@ cabal.mkDerivation (self: rec {
     lens optparseApplicative_0_7_0_2 parallel safe shelly split
     stringsearch syb systemFileio systemFilepath tar terminfo textBinary
     unorderedContainers vector wlPprintText yaml
-    alex happy git gnumake gcc autoconf automake libtool patch
+    alex happy git gnumake gcc autoconf automake libtool patch gmp
   ];
   testDepends = [
     HUnit regexPosix testFramework testFrameworkHunit
@@ -45,12 +50,17 @@ cabal.mkDerivation (self: rec {
       src-bin/Boot.hs
   '';
   postInstall = ''
+    export HOME=$(pwd)
     cp -R ${bootSrc} ghcjs-boot
     cd ghcjs-boot
+    ( cd boot ; chmod u+w . ; ln -s .. ghcjs-boot )
     chmod -R u+w .              # because fetchgit made it read-only
-    ensureDir $out/share/ghcjs
-    PATH=$out/bin:${Cabal}/bin:$PATH \
-      $out/bin/ghcjs-boot --init --with-cabal ${cabalInstall}/bin/cabal-js
+    local GHCJS_LIBDIR=$out/share/ghcjs/x86_64-linux-0.1.0-7.8.2
+    ensureDir $GHCJS_LIBDIR
+    cp -R ${shims} $GHCJS_LIBDIR/shims
+    ${cabalInstallGhcjs}/bin/cabal-js update
+    PATH=$out/bin:${CabalGhcjs}/bin:$PATH LD_LIBRARY_PATH=${gmp}/lib:${gcc.gcc}/lib64:$LD_LIBRARY_PATH \
+      env -u GHC_PACKAGE_PATH $out/bin/ghcjs-boot --init --with-cabal ${cabalInstallGhcjs}/bin/cabal-js --with-gmp-includes ${gmp}/include --with-gmp-libraries ${gmp}/lib
   '';
   meta = {
     homepage = "https://github.com/ghcjs/ghcjs";

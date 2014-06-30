@@ -845,7 +845,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ghcjs = callPackage ../development/tools/haskell/ghcjs {
     Cabal = self.Cabal_1_18_1_3;
-    cabalInstall = self.cabalInstallGhcjs;
   };
 
   ghcjsDom = callPackage ../development/libraries/haskell/ghcjs-codemirror {};
