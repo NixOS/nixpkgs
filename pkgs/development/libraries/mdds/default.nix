@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "mdds-${version}";
 
   src = fetchurl {
-    url = "http://multidimalgorithm.googlecode.com/files/mdds_${version}.tar.bz2";
+    url = "http://kohei.us/files/mdds/src/mdds_${version}.tar.bz2";
     sha256 = "1hp0472mcsgzrz1v60jpywxrrqmpb8bchfsi7ydmp6vypqnr646v";
   };
 
