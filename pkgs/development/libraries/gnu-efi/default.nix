@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnu-efi_${version}";
-  version = "3.0v";
+  version = "3.0u";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnu-efi/${name}.orig.tar.gz";
-    sha256 = "1pqgpm999l7zb8gh3s0zd2ax6f0n2l4jip7h0d2y91hhcy6zjxn7";
+    sha256 = "0klkdxh1aqwwfm393q67nxww6liffyp2lfybbnh4q819b06la39w";
   };
 
   arch = with stdenv.lib; head (splitString "-" stdenv.system);
