@@ -32,6 +32,7 @@ let
   nixos-rebuild = makeProg {
     name = "nixos-rebuild";
     src = ./nixos-rebuild.sh;
+    nix = config.nix.package;
   };
 
   nixos-generate-config = makeProg {

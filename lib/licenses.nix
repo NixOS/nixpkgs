@@ -132,6 +132,12 @@
     url = http://www.opensource.org/licenses/ISC;
   };
 
+  ipa = {
+    shortName = "IPA 1.0";
+    fullName = "IPA Font License v1.0";
+    url = http://ipafont.ipa.go.jp/ipafont/;
+  };
+
   ipl10 = {
     shortName = "IPL 1.0";
     fullName = "IBM Public License Version 1.0";
@@ -244,6 +250,12 @@
   unfreeRedistributable = "unfree-redistributable";
 
   unfreeRedistributableFirmware = "unfree-redistributable-firmware";
+
+  wadalab = {
+    shortName = "wadalab";
+    fullName = "Wadalab Font License";
+    url = https://fedoraproject.org/wiki/Licensing:Wadalab?rd=Licensing/Wadalab;
+  };
 
   zlib = {
     shortName = "zlib";

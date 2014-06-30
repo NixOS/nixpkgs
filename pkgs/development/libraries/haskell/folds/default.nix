@@ -12,7 +12,6 @@ cabal.mkDerivation (self: {
     semigroupoids tagged transformers vector
   ];
   testDepends = [ deepseq doctest filepath hlint mtl semigroups ];
-  # The hlint tests presently fail
   doCheck = false;
   meta = {
     homepage = "http://github.com/ekmett/folds";

@@ -2487,7 +2487,9 @@ let
 
   dash = callPackage ../shells/dash { };
 
-  fish = callPackage ../shells/fish { };
+  fish = callPackage ../shells/fish {
+    python = python27Full;
+  };
 
   tcsh = callPackage ../shells/tcsh { };
 
@@ -3035,9 +3037,13 @@ let
 
   oraclejdk7 = pkgs.oraclejdk7distro true false;
 
+  oraclejdk8 = pkgs.oraclejdk8distro true false;
+
   oraclejre = lowPrio (pkgs.jdkdistro false false);
 
   oraclejre7 = lowPrio (pkgs.oraclejdk7distro false false);
+
+  oraclejre8 = lowPrio (pkgs.oraclejdk8distro false false);
 
   jrePlugin = lowPrio (pkgs.jdkdistro false true);
 
@@ -3054,6 +3060,11 @@ let
     assert supportsJDK;
     (if pluginSupport then appendToName "with-plugin" else x: x)
       (callPackage ../development/compilers/jdk/jdk7-linux.nix { inherit installjdk; });
+
+  oraclejdk8distro = installjdk: pluginSupport:
+    assert supportsJDK;
+    (if pluginSupport then appendToName "with-plugin" else x: x)
+      (callPackage ../development/compilers/jdk/jdk8-linux.nix { inherit installjdk; });
 
   jikes = callPackage ../development/compilers/jikes { };
 
@@ -4625,6 +4636,15 @@ let
         ln -s $glibc32/lib $out/lib/32
         ln -s lib $out/lib64
 
+        # fixing ldd RLTDLIST
+        rm $out/bin
+        cp -rs $glibc64/bin $out
+        chmod u+w $out/bin
+        rm $out/bin/ldd
+        sed -e "s|^RTLDLIST=.*$|RTLDLIST=\"$out/lib/ld-2.19.so $out/lib/32/ld-linux.so.2\"|g" \
+            $glibc64/bin/ldd > $out/bin/ldd
+        chmod 555 $out/bin/ldd
+
         rm $out/include
         cp -rs $glibc32/include $out
         chmod -R u+w $out/include
@@ -4635,6 +4655,8 @@ let
   glm = callPackage ../development/libraries/glm { };
 
   glog = callPackage ../development/libraries/glog { };
+
+  gloox = callPackage ../development/libraries/gloox { };
 
   glpk = callPackage ../development/libraries/glpk { };
 
@@ -5725,6 +5747,8 @@ let
   };
 
   ntrack = callPackage ../development/libraries/ntrack { };
+
+  nvidia-texture-tools = callPackage ../development/libraries/nvidia-texture-tools { };
 
   ode = builderDefsPackage (import ../development/libraries/ode) { };
 
@@ -7883,7 +7907,13 @@ let
 
   inconsolata = callPackage ../data/fonts/inconsolata {};
 
+  ipafont = callPackage ../data/fonts/ipafont {};
+
   junicode = callPackage ../data/fonts/junicode { };
+
+  kochi-substitute = callPackage ../data/fonts/kochi-substitute {};
+
+  kochi-substitute-naga10 = callPackage ../data/fonts/kochi-substitute-naga10 {};
 
   liberation_ttf = callPackage ../data/fonts/redhat-liberation-fonts { };
 
@@ -8586,6 +8616,13 @@ let
 
   firefoxWrapper = wrapFirefox { browser = firefoxPkgs.firefox; };
 
+  firefox-bin = callPackage ../applications/networking/browsers/firefox-bin {
+    gconf = pkgs.gnome.GConf;
+    inherit (pkgs.gnome) libgnome libgnomeui;
+    inherit (pkgs.xlibs) libX11 libXScrnSaver libXext
+      libXinerama libXrender libXt;
+  };
+
   flac = callPackage ../applications/audio/flac { };
 
   flashplayer = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-11 {
@@ -8970,7 +9007,7 @@ let
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2 gnome_vfs;
     zip = zip.override { enableNLS = false; };
-    boost = boost149;
+    boost = boost155;
     jdk = openjdk;
     fontsConf = makeFontsConf {
       fontDirectories = [
@@ -8979,7 +9016,9 @@ let
     };
     clucene_core = clucene_core_2;
     lcms = lcms2;
-    mdds = mdds_0_7_1;
+    harfbuzz = harfbuzz.override {
+      withIcu = true; withGraphite2 = true;
+    };
   };
 
   liferea = callPackage ../applications/networking/newsreaders/liferea { };
@@ -10363,6 +10402,7 @@ let
 
   keen4 = callPackage ../games/keen4 { };
 
+  zeroad = callPackage ../games/0ad { };
 
   ### DESKTOP ENVIRONMENTS
 

@@ -437,7 +437,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   compactStringFix = callPackage ../development/libraries/haskell/compact-string-fix {};
 
-  compdata = callPackage ../development/libraries/haskell/compdata {};
+  compdata = if (pkgs.stdenv.lib.versionOlder "7.8" ghc.version)
+               then callPackage ../development/libraries/haskell/compdata {}
+               else null;
 
   composition = callPackage ../development/libraries/haskell/composition {};
 
@@ -638,7 +640,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
 
   distributedStatic = callPackage ../development/libraries/haskell/distributed-static {};
-  
+
   distributedProcess = callPackage ../development/libraries/haskell/distributed-process {};
 
   distributive = callPackage ../development/libraries/haskell/distributive {};
@@ -2565,6 +2567,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   xssSanitize = callPackage ../development/libraries/haskell/xss-sanitize {};
 
+  Yampa = callPackage ../development/libraries/haskell/Yampa {};
+
   yaml = callPackage ../development/libraries/haskell/yaml {};
 
   yamlLight = callPackage ../development/libraries/haskell/yaml-light {};
@@ -2822,8 +2826,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   cabalInstall_0_14_0 = callPackage ../tools/package-management/cabal-install/0.14.0.nix {};
   cabalInstall_1_16_0_2 = callPackage ../tools/package-management/cabal-install/1.16.0.2.nix { Cabal = self.Cabal_1_16_0_3; };
   cabalInstall_1_18_0_3 = callPackage ../tools/package-management/cabal-install/1.18.0.3.nix { Cabal = self.Cabal_1_18_1_3; };
-  cabalInstall_1_20_0_2 = callPackage ../tools/package-management/cabal-install/1.20.0.2.nix { Cabal = self.Cabal_1_20_0_1; };
-  cabalInstall = self.cabalInstall_1_20_0_2;
+  cabalInstall_1_20_0_3 = callPackage ../tools/package-management/cabal-install/1.20.0.3.nix { Cabal = self.Cabal_1_20_0_1; };
+  cabalInstall = self.cabalInstall_1_20_0_3;
 
   codex = callPackage ../development/tools/haskell/codex {};
 

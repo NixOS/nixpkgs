@@ -13,8 +13,8 @@ cabal.mkDerivation (self: {
     binary lensFamilyCore pipes pipesParse smallcheck tasty tastyHunit
     tastySmallcheck transformers
   ];
-  doCheck = false;
   jailbreak = true;
+  doCheck = false;
   meta = {
     homepage = "https://github.com/k0001/pipes-binary";
     description = "Encode and decode binary streams using the pipes and binary libraries";
