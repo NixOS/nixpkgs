@@ -22,15 +22,3 @@ diff -ruN qt-everywhere-opensource-src-5.1.1-orig/qtbase/src/plugins/platforms/x
                  glXGetProcAddressARB = (qt_glXGetProcAddressARB) lib.resolve("glXGetProcAddressARB");
              }
          }
-diff -ruN qt-everywhere-opensource-src-5.1.1-orig/qtbase/src/printsupport/kernel/qcups.cpp qt-everywhere-opensource-src-5.1.1/qtbase/src/printsupport/kernel/qcups.cpp
---- qt-everywhere-opensource-src-5.1.1-orig/qtbase/src/printsupport/kernel/qcups.cpp	2013-08-25 20:03:36.000000000 +0200
-+++ qt-everywhere-opensource-src-5.1.1/qtbase/src/printsupport/kernel/qcups.cpp	2013-09-25 17:40:35.895942599 +0200
-@@ -91,7 +91,7 @@
- 
- static void resolveCups()
- {
--    QLibrary cupsLib(QLatin1String("cups"), 2);
-+    QLibrary cupsLib(QLatin1String("@cups@/lib/libcups"), 2);
-     if(cupsLib.load()) {
-         _cupsGetDests = (CupsGetDests) cupsLib.resolve("cupsGetDests");
-         _cupsFreeDests = (CupsFreeDests) cupsLib.resolve("cupsFreeDests");
