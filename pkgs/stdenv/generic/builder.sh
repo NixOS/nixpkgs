@@ -12,7 +12,6 @@ cat "$setup" >> $out/setup
 sed -e "s^@initialPath@^$initialPath^g" \
     -e "s^@gcc@^$gcc^g" \
     -e "s^@shell@^$shell^g" \
-    -e "s^@needsPax@^$needsPax^g" \
     < $out/setup > $out/setup.tmp
 mv $out/setup.tmp $out/setup
 

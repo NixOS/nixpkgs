@@ -337,22 +337,9 @@ fi
 export NIX_BUILD_CORES
 
 
-######################################################################
-# Misc. helper functions.
-
-
-# PaX-mark binaries
-paxmark() {
-    local flags="$1"
-    shift
-
-    if [ -z "@needsPax@" ]; then
-        return
-    fi
-
-    paxctl -c "$@"
-    paxctl -zex -${flags} "$@"
-}
+# Dummy implementation of the paxmark function. On Linux, this is
+# overwritten by paxctl's setup hook.
+paxmark() { true; }
 
 
 ######################################################################
