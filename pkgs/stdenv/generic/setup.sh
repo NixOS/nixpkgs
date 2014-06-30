@@ -120,6 +120,7 @@ fi
 
 # Ensure that the given directories exists.
 ensureDir() {
+    echo "warning: ‘ensureDir’ is deprecated; use ‘mkdir’ instead" >&2
     local dir
     for dir in "$@"; do
         if ! [ -x "$dir" ]; then mkdir -p "$dir"; fi
