@@ -23,10 +23,25 @@ runHook() {
     local hookName="$1"
     local var="_${hookName}_hooks"
     eval "local -a dummy=(\"\${_${hookName}_hooks[@]}\")"
-    for hook in "runSingleHook $hookName" "${dummy[@]}"; do
+    for hook in "_callImplicitHook 0 $hookName" "${dummy[@]}"; do
         if ! _eval "$hook"; then return 1; fi
     done
     return 0
+}
+
+
+# Run all hooks with the specified name, until one succeeds (returns a
+# zero exit code). If none succeed, return a non-zero exit code.
+runOneHook() {
+    local hookName="$1"
+    local var="_${hookName}_hooks"
+    eval "local -a dummy=(\"\${_${hookName}_hooks[@]}\")"
+    for hook in "_callImplicitHook 1 $hookName" "${dummy[@]}"; do
+        if _eval "$hook"; then
+            return 0
+        fi
+    done
+    return 1
 }
 
 
@@ -35,13 +50,14 @@ runHook() {
 # setting of hooks both from Nix expressions (as attributes /
 # environment variables) and from shell scripts (as functions). If you
 # want to allow multiple hooks, use runHook instead.
-runSingleHook() {
-    local hookName="$1"
+_callImplicitHook() {
+    local def="$1"
+    local hookName="$2"
     case "$(type -t $hookName)" in
         (function|alias|builtin) $hookName;;
         (file) source $hookName;;
         (keyword) :;;
-        (*) eval "${!hookName}";;
+        (*) if [ -z "${!hookName}" ]; then return "$def"; else eval "${!hookName}"; fi;;
     esac
 }
 
@@ -469,12 +485,8 @@ stripHash() {
 }
 
 
-unpackFile() {
-    curSrc="$1"
-    local cmd
-
-    header "unpacking source archive $curSrc" 3
-
+addHook unpackCmd _defaultUnpack
+_defaultUnpack() {
     if [ -d "$curSrc" ]; then
 
         stripHash $curSrc
@@ -496,16 +508,21 @@ unpackFile() {
                 unzip -qq $curSrc
                 ;;
             *)
-                if [ -z "$unpackCmd" ]; then
-                    echo "source archive $curSrc has unknown type"
-                    exit 1
-                fi
-                runSingleHook unpackCmd
+                return 1
                 ;;
         esac
 
     fi
+}
 
+
+unpackFile() {
+    curSrc="$1"
+    header "unpacking source archive $curSrc" 3
+    if ! runOneHook unpackCmd; then
+        echo "do not know how to unpack source archive $curSrc"
+        exit 1
+    fi
     stopNest
 }
 
@@ -539,7 +556,7 @@ unpackPhase() {
 
     # Find the source directory.
     if [ -n "$setSourceRoot" ]; then
-        runSingleHook setSourceRoot
+        runOneHook setSourceRoot
     elif [ -z "$sourceRoot" ]; then
         sourceRoot=
         for i in *; do
