@@ -489,23 +489,20 @@ addHook unpackCmd _defaultUnpack
 _defaultUnpack() {
     if [ -d "$curSrc" ]; then
 
-        stripHash $curSrc
-        cp -prd --no-preserve=timestamps $curSrc $strippedName
+        stripHash "$curSrc"
+        cp -prd --no-preserve=timestamps "$curSrc" $strippedName
 
     else
 
         case "$curSrc" in
             *.tar.xz | *.tar.lzma)
                 # Don't rely on tar knowing about .xz.
-                xz -d < $curSrc | tar xf -
+                xz -d < "$curSrc" | tar xf -
                 ;;
             *.tar | *.tar.* | *.tgz | *.tbz2)
                 # GNU tar can automatically select the decompression method
                 # (info "(tar) gzip").
-                tar xf $curSrc
-                ;;
-            *.zip)
-                unzip -qq $curSrc
+                tar xf "$curSrc"
                 ;;
             *)
                 return 1

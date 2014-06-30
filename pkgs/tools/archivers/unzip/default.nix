@@ -31,6 +31,8 @@ stdenv.mkDerivation {
 
   installFlags = "prefix=$(out)";
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     homepage = http://www.info-zip.org;
     description = "An extraction utility for archives compressed in .zip format";
