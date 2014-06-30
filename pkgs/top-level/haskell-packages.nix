@@ -2567,6 +2567,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   xssSanitize = callPackage ../development/libraries/haskell/xss-sanitize {};
 
+  Yampa = callPackage ../development/libraries/haskell/Yampa {};
+
   yaml = callPackage ../development/libraries/haskell/yaml {};
 
   yamlLight = callPackage ../development/libraries/haskell/yaml-light {};
