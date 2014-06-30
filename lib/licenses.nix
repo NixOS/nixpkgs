@@ -245,6 +245,12 @@
 
   unfreeRedistributableFirmware = "unfree-redistributable-firmware";
 
+  wadalab = {
+    shortName = "wadalab";
+    fullName = "Wadalab Font License";
+    url = https://fedoraproject.org/wiki/Licensing:Wadalab?rd=Licensing/Wadalab;
+  };
+
   zlib = {
     shortName = "zlib";
     fullName = "zlib license";
