@@ -9005,7 +9005,7 @@ let
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2 gnome_vfs;
     zip = zip.override { enableNLS = false; };
-    boost = boost149;
+    boost = boost155;
     jdk = openjdk;
     fontsConf = makeFontsConf {
       fontDirectories = [
@@ -9014,7 +9014,9 @@ let
     };
     clucene_core = clucene_core_2;
     lcms = lcms2;
-    mdds = mdds_0_7_1;
+    harfbuzz = harfbuzz.override {
+      withIcu = true; withGraphite2 = true;
+    };
   };
 
   liferea = callPackage ../applications/networking/newsreaders/liferea { };
