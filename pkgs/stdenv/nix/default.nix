@@ -16,7 +16,14 @@ import ../generic rec {
         stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
         xargsFlags=" "
       fi
-    '';
+    '' + (if stdenv.isDarwin then ''
+      export NIX_CFLAGS_COMPILE="--sysroot=/var/empty"
+      if xcodePath=$(/usr/bin/xcrun --show-sdk-path 2> /dev/null); then
+        NIX_CFLAGS_COMPILE+=" -idirafter $xcodePath/usr/include -F$xcodePath/System/Library/Frameworks"
+      else
+        NIX_CFLAGS_COMPILE+=" -idirafter /usr/include -F/System/Library/Frameworks"
+      fi
+    '' else "");
 
   initialPath = (import ../common-path.nix) {pkgs = pkgs;};
 

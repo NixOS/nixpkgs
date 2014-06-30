@@ -303,14 +303,21 @@ stdenv.mkDerivation ({
         "\"--with-host-libstdcxx=-Wl,-rpath,\$prefix/lib/amd64 -lstdc++\"
          \"--with-boot-ldflags=-L../prev-x86_64-pc-solaris2.11/libstdc++-v3/src/.libs\""}
     );
-    ${stdenv.lib.optionalString (stdenv.isSunOS && stdenv.is64bit)
-      ''
-        export NIX_LDFLAGS=`echo $NIX_LDFLAGS | sed -e s~$prefix/lib~$prefix/lib/amd64~g`
-        export LDFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $LDFLAGS_FOR_TARGET"
-        export CXXFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CXXFLAGS_FOR_TARGET"
-        export CFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CFLAGS_FOR_TARGET"
-      ''}
-    '';
+  '' + stdenv.lib.optionalString (stdenv.isSunOS && stdenv.is64bit) ''
+    export NIX_LDFLAGS=`echo $NIX_LDFLAGS | sed -e s~$prefix/lib~$prefix/lib/amd64~g`
+    export LDFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $LDFLAGS_FOR_TARGET"
+    export CXXFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CXXFLAGS_FOR_TARGET"
+    export CFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CFLAGS_FOR_TARGET"
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    if xcodePath=$(/usr/bin/xcrun --show-sdk-path); then
+      configureFlagsArray+=(--with-native-system-header-dir=$xcodePath/usr/include)
+      makeFlagsArray+=( \
+       CFLAGS_FOR_BUILD=-F$xcodePath/System/Library/Frameworks \
+       CFLAGS_FOR_TARGET=-F$xcodePath/System/Library/Frameworks \
+       FLAGS_FOR_TARGET=-F$xcodePath/System/Library/Frameworks \
+      )
+    fi
+  '';
 
   dontDisableStatic = true;
 
