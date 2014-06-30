@@ -8,15 +8,6 @@
 { # The system (e.g., `i686-linux') for which to build the packages.
   system ? builtins.currentSystem
 
-  # Usually, the system type uniquely determines the stdenv and thus
-  # how to build the packages.  But on some platforms we have
-  # different stdenvs, leading to different ways to build the
-  # packages.  For instance, on Windows we support both Cygwin and
-  # Mingw builds.  In both cases, `system' is `i686-cygwin'.  The
-  # attribute `stdenvType' is used to select the specific kind of
-  # stdenv to use, e.g., `i686-mingw'.
-, stdenvType ? system
-
 , # The standard environment to use.  Only used for bootstrapping.  If
   # null, the default standard environment is used.
   bootStdenv ? null
@@ -137,7 +128,7 @@ let
     self_ = with self; helperFunctions // {
 
   # Make some arguments passed to all-packages.nix available
-  inherit system stdenvType platform;
+  inherit system platform;
 
   # Allow callPackage to fill in the pkgs argument
   inherit pkgs;
@@ -213,7 +204,7 @@ let
 
 
   allStdenvs = import ../stdenv {
-    inherit system stdenvType platform config;
+    inherit system platform config;
     allPackages = args: import ./all-packages.nix ({ inherit config system; } // args);
   };
 
