@@ -4654,6 +4654,8 @@ let
 
   glog = callPackage ../development/libraries/glog { };
 
+  gloox = callPackage ../development/libraries/gloox { };
+
   glpk = callPackage ../development/libraries/glpk { };
 
   glsurf = callPackage ../applications/science/math/glsurf {
@@ -5743,6 +5745,8 @@ let
   };
 
   ntrack = callPackage ../development/libraries/ntrack { };
+
+  nvidia-texture-tools = callPackage ../development/libraries/nvidia-texture-tools { };
 
   ode = builderDefsPackage (import ../development/libraries/ode) { };
 
@@ -10387,6 +10391,7 @@ let
 
   keen4 = callPackage ../games/keen4 { };
 
+  zeroad = callPackage ../games/0ad { };
 
   ### DESKTOP ENVIRONMENTS
 
