@@ -7901,6 +7901,8 @@ let
 
   inconsolata = callPackage ../data/fonts/inconsolata {};
 
+  ipafont = callPackage ../data/fonts/ipafont {};
+
   junicode = callPackage ../data/fonts/junicode { };
 
   kochi-substitute = callPackage ../data/fonts/kochi-substitute {};
