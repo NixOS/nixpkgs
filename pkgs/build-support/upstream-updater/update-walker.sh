@@ -128,7 +128,7 @@ ensure_choice () {
   echo "CURRENT_URL: $CURRENT_URL" >&2
   [ -z "$URL_WAS_SET" ] && [ -z "$CURRENT_URL" ] && ensure_url
   [ -n "$NEED_TO_CHOOSE_URL" ] && {
-    version_link "${DL_URL_RE:-'[.]tar[.]([^./])+$'}"
+    version_link "${DL_URL_RE:-[.]tar[.]([^./])+\$}"
     unset NEED_TO_CHOOSE_URL
   }
   [ -z "$CURRENT_URL" ] && {
