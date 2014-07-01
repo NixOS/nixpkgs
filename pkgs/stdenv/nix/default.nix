@@ -1,4 +1,4 @@
-{ stdenv, pkgs, config }:
+{ stdenv, pkgs, config, lib }:
 
 import ../generic rec {
   inherit config;
@@ -7,7 +7,7 @@ import ../generic rec {
     ''
       export NIX_ENFORCE_PURITY=1
       export NIX_IGNORE_LD_THROUGH_GCC=1
-    '' + (if stdenv.isDarwin then ''
+    '' + lib.optionalString stdenv.isDarwin ''
       export NIX_ENFORCE_PURITY=
       export NIX_DONT_SET_RPATH=1
       export NIX_NO_SELF_RPATH=1
@@ -18,7 +18,7 @@ import ../generic rec {
       export SDKROOT=$(/usr/bin/xcrun --show-sdk-path 2> /dev/null || true)
       export NIX_CFLAGS_COMPILE+=" --sysroot=/var/empty -idirafter $SDKROOT/usr/include -F$SDKROOT/System/Library/Frameworks -Wno-multichar -Wno-deprecated-declarations"
       export NIX_LDFLAGS_AFTER+=" -L$SDKROOT/usr/lib"
-    '' else "");
+    '';
 
   initialPath = (import ../common-path.nix) {pkgs = pkgs;};
 
