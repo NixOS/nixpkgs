@@ -1,3 +1,5 @@
+set -e
+
 : ${outputs:=out}
 
 
@@ -115,7 +117,7 @@ trap "exitHandler" EXIT
 
 
 ######################################################################
-# Helper functions that might be useful in setup hooks.
+# Helper functions.
 
 
 addToSearchPathWithCustomDelimiter() {
@@ -134,12 +136,23 @@ addToSearchPath() {
 }
 
 
+ensureDir() {
+    echo "warning: ‘ensureDir’ is deprecated; use ‘mkdir’ instead" >&2
+    local dir
+    for dir in "$@"; do
+        if ! [ -x "$dir" ]; then mkdir -p "$dir"; fi
+    done
+}
+
+
+installBin() {
+    mkdir -p $out/bin
+    cp "$@" $out/bin
+}
+
+
 ######################################################################
 # Initialisation.
-
-set -e
-
-[ -z $NIX_GCC ] && NIX_GCC=@gcc@
 
 
 # Wildcard expansions that don't match should expand to an empty list.
@@ -150,7 +163,7 @@ shopt -s nullglob
 
 # Set up the initial path.
 PATH=
-for i in $NIX_GCC @initialPath@; do
+for i in @initialPath@; do
     if [ "$i" = / ]; then i=; fi
     addToSearchPath PATH $i/bin
     addToSearchPath PATH $i/sbin
@@ -171,27 +184,9 @@ runHook preHook
 # Check that the pre-hook initialised SHELL.
 if [ -z "$SHELL" ]; then echo "SHELL not set"; exit 1; fi
 
-# Hack: run gcc's setup hook.
+
 envHooks=()
 crossEnvHooks=()
-if [ -f $NIX_GCC/nix-support/setup-hook ]; then
-    source $NIX_GCC/nix-support/setup-hook
-fi
-
-
-# Ensure that the given directories exists.
-ensureDir() {
-    echo "warning: ‘ensureDir’ is deprecated; use ‘mkdir’ instead" >&2
-    local dir
-    for dir in "$@"; do
-        if ! [ -x "$dir" ]; then mkdir -p "$dir"; fi
-    done
-}
-
-installBin() {
-    mkdir -p $out/bin
-    cp "$@" $out/bin
-}
 
 
 # Allow the caller to augment buildInputs (it's not always possible to
@@ -242,7 +237,7 @@ done
 
 # Set the relevant environment variables to point to the build inputs
 # found above.
-addToNativeEnv() {
+_addToNativeEnv() {
     local pkg=$1
 
     if [ -d $1/bin ]; then
@@ -256,10 +251,10 @@ addToNativeEnv() {
 }
 
 for i in $nativePkgs; do
-    addToNativeEnv $i
+    _addToNativeEnv $i
 done
 
-addToCrossEnv() {
+_addToCrossEnv() {
     local pkg=$1
 
     # Some programs put important build scripts (freetype-config and similar)
@@ -276,7 +271,7 @@ addToCrossEnv() {
 }
 
 for i in $crossPkgs; do
-    addToCrossEnv $i
+    _addToCrossEnv $i
 done
 
 

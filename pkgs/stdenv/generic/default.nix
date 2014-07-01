@@ -33,6 +33,7 @@ let
     [ ../../build-support/setup-hooks/compress-man-pages.sh
       ../../build-support/setup-hooks/strip.sh
       ../../build-support/setup-hooks/patch-shebangs.sh
+      gcc
     ];
 
   # The stdenv that we are producing.
@@ -52,7 +53,7 @@ let
 
       setup = setupScript;
 
-      inherit preHook initialPath gcc shell;
+      inherit preHook initialPath shell;
 
       propagatedUserEnvPkgs = [gcc] ++
         lib.filter lib.isDerivation initialPath;
@@ -186,6 +187,8 @@ let
       inherit fetchurlBoot;
 
       inherit overrides;
+
+      inherit gcc;
     }
 
     # Propagate any extra attributes.  For instance, we use this to
