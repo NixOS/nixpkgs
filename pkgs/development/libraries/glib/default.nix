@@ -5,6 +5,8 @@
 , libxml2, tzdata, desktop_file_utils, shared_mime_info, doCheck ? false
 }:
 
+with stdenv.lib;
+
 # TODO:
 # * Add gio-module-fam
 #     Problem: cyclic dependency on gamin
@@ -38,7 +40,6 @@ let
   ver_maj = "2.40";
   ver_min = "0";
 in
-with { inherit (stdenv.lib) optional optionals optionalString; };
 
 stdenv.mkDerivation rec {
   name = "glib-${ver_maj}.${ver_min}";
