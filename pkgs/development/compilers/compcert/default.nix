@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     description = "Formally verified C compiler";
     homepage    = "http://compcert.inria.fr";
     license     = stdenv.lib.licenses.inria;
-    platforms   = [ stdenv.lib.platforms.linux
-                    stdenv.lib.platforms.darwin ];
+    platforms   = stdenv.lib.platforms.linux ++
+                  stdenv.lib.platforms.darwin;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice
                     stdenv.lib.maintainers.jwiegley ];
   };
