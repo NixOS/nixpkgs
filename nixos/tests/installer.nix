@@ -370,7 +370,7 @@ in {
   # Rebuild the CD configuration with a little modification.
   rebuildCD = makeTest
     { inherit iso;
-      name = "rebuild-CD";
+      name = "rebuild-cd";
       nodes = { };
       testScript =
         ''
