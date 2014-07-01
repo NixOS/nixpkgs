@@ -1,6 +1,7 @@
 import ./make-test.nix ({ pkgs, latestKernel ? false, ... }:
 
 {
+  name = "login";
 
   machine =
     { config, pkgs, lib, ... }:

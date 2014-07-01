@@ -50,7 +50,7 @@ in
 
       user = mkOption {
         default = "redis";
-        description = "User account under which Redis runs";
+        description = "User account under which Redis runs.";
       };
 
       pidFile = mkOption {
@@ -60,26 +60,26 @@ in
 
       port = mkOption {
         default = 6379;
-        description = "The port for Redis to listen to";
+        description = "The port for Redis to listen to.";
         type = with types; int;
       };
 
       bind = mkOption {
         default = null; # All interfaces
-        description = "The IP interface to bind to";
+        description = "The IP interface to bind to.";
         example = "127.0.0.1";
       };
 
       unixSocket = mkOption {
         default = null;
-        description = "The path to the socket to bind to";
+        description = "The path to the socket to bind to.";
         example = "/var/run/redis.sock";
       };
 
       logLevel = mkOption {
         default = "notice"; # debug, verbose, notice, warning
         example = "debug";
-        description = "Specify the server verbosity level, options: debug, verbose, notice, warning";
+        description = "Specify the server verbosity level, options: debug, verbose, notice, warning.";
         type = with types; string;
       };
 
@@ -110,19 +110,19 @@ in
 
       dbFilename = mkOption {
         default = "dump.rdb";
-        description = "The filename where to dump the DB";
+        description = "The filename where to dump the DB.";
         type = with types; string;
       };
 
       dbpath = mkOption {
         default = "/var/lib/redis";
-        description = "The DB will be written inside this directory, with the filename specified using the 'dbFilename' configuration";
+        description = "The DB will be written inside this directory, with the filename specified using the 'dbFilename' configuration.";
         type = with types; string;
       };
 
       slaveOf = mkOption {
         default = null; # { ip, port }
-        description = "An attribute set with two attributes: ip and port to which this redis instance acts as a slave";
+        description = "An attribute set with two attributes: ip and port to which this redis instance acts as a slave.";
         example = { ip = "192.168.1.100"; port = 6379; };
       };
 
@@ -154,26 +154,26 @@ in
 
       appendFsync = mkOption {
         default = "everysec"; # no, always, everysec
-        description = "How often to fsync the append-only log, options: no, always, everysec";
+        description = "How often to fsync the append-only log, options: no, always, everysec.";
         type = with types; string;
       };
 
       slowLogLogSlowerThan = mkOption {
         default = 10000;
-        description = "Log queries whose execution take longer than X in milliseconds";
+        description = "Log queries whose execution take longer than X in milliseconds.";
         example = 1000;
         type = with types; int;
       };
 
       slowLogMaxLen = mkOption {
         default = 128;
-        description = "Maximum number of items to keep in slow log";
+        description = "Maximum number of items to keep in slow log.";
         type = with types; int;
       };
 
       extraConfig = mkOption {
         default = "";
-        description = "Extra configuration options for redis.conf";
+        description = "Extra configuration options for redis.conf.";
         type = with types; string;
       };
     };

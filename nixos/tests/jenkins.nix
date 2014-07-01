@@ -4,6 +4,7 @@
 #   3. jenkins service not started on slave node
 
 import ./make-test.nix {
+  name = "jenkins";
 
   nodes = {
 

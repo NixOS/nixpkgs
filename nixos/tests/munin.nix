@@ -2,6 +2,7 @@
 # machine.
 
 import ./make-test.nix {
+  name = "munin";
 
   nodes = {
     one =

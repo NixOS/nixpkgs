@@ -13,6 +13,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig libxml2 glib ];
 
   meta = with stdenv.lib; {
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -40,6 +40,9 @@ rec {
     ];
     platforms = with a.lib.platforms;
       all;
+    license = with a.lib.licenses; ofl;
+    hydraPlatforms = [];
+    homepage = "http://www.marksimonson.com/fonts/view/anonymous-pro";
   };
   passthru = {
     updateInfo = {

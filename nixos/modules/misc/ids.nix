@@ -134,6 +134,7 @@
       teamspeak = 124;
       influxdb = 125;
       nsd = 126;
+      gitolite = 127;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 

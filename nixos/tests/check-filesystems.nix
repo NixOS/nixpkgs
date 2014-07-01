@@ -6,6 +6,8 @@
 with import ../lib/build-vms.nix { inherit nixos nixpkgs system; };
 
 rec {
+  name = "check-filesystems";
+
   nodes = {
     share = {pkgs, config, ...}: {
       services.nfs.server.enable = true;

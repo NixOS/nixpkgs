@@ -437,7 +437,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   compactStringFix = callPackage ../development/libraries/haskell/compact-string-fix {};
 
-  compdata = callPackage ../development/libraries/haskell/compdata {};
+  compdata = if (pkgs.stdenv.lib.versionOlder "7.8" ghc.version)
+               then callPackage ../development/libraries/haskell/compdata {}
+               else null;
 
   composition = callPackage ../development/libraries/haskell/composition {};
 
@@ -587,6 +589,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   deepseq_1_3_0_2 = callPackage ../development/libraries/haskell/deepseq/1.3.0.2.nix {};
   deepseq = null;               # core package since ghc >= 7.4.x
 
+  deepseqGenerics = callPackage ../development/libraries/haskell/deepseq-generics {};
+
   deepseqTh = callPackage ../development/libraries/haskell/deepseq-th {};
 
   derive = callPackage ../development/libraries/haskell/derive {};
@@ -636,7 +640,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
 
   distributedStatic = callPackage ../development/libraries/haskell/distributed-static {};
-  
+
   distributedProcess = callPackage ../development/libraries/haskell/distributed-process {};
 
   distributive = callPackage ../development/libraries/haskell/distributive {};
@@ -798,6 +802,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   fingertree = callPackage ../development/libraries/haskell/fingertree {};
 
   foldl = callPackage ../development/libraries/haskell/foldl {};
+
+  folds = callPackage ../development/libraries/haskell/folds {};
 
   forceLayout = callPackage ../development/libraries/haskell/force-layout {};
 
@@ -1066,6 +1072,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   HaXml = callPackage ../development/libraries/haskell/HaXml {};
 
+  hdaemonize = callPackage ../development/libraries/haskell/hdaemonize {};
+
   HDBC = callPackage ../development/libraries/haskell/HDBC/HDBC.nix {};
 
   HDBCOdbc = callPackage ../development/libraries/haskell/HDBC/HDBC-odbc.nix {
@@ -1280,6 +1288,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     preprocessorTools = self.preprocessorTools_0_1_3;
   };
 
+  ixset = callPackage ../development/libraries/haskell/ixset {};
+
   ixShapable = callPackage ../development/libraries/haskell/ix-shapable {};
 
   jack = callPackage ../development/libraries/haskell/jack {};
@@ -1465,6 +1475,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   monadLib = callPackage ../development/libraries/haskell/monadlib {};
 
   monadloc = callPackage ../development/libraries/haskell/monadloc {};
+
+  monadlocPp = callPackage ../development/libraries/haskell/monadloc-pp {};
 
   monadLoops = callPackage ../development/libraries/haskell/monad-loops {};
 
@@ -1960,6 +1972,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   setlocale = callPackage ../development/libraries/haskell/setlocale {};
 
+  shellmate = callPackage ../development/libraries/haskell/shellmate {};
+
   shelly_0_15_4_1 = callPackage ../development/libraries/haskell/shelly/0.15.4.1.nix {};
   shelly_1_5_3_1 = callPackage ../development/libraries/haskell/shelly {};
   shelly = self.shelly_1_5_3_1;
@@ -2080,6 +2094,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   SHA = callPackage ../development/libraries/haskell/SHA {};
 
+  SHA2 = callPackage ../development/libraries/haskell/SHA2 {};
+
   shake = callPackage ../development/libraries/haskell/shake {};
 
   shakespeare = callPackage ../development/libraries/haskell/shakespeare {};
@@ -2159,6 +2175,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   systemTimeMonotonic = callPackage ../development/libraries/haskell/system-time-monotonic {};
 
   TableAlgebra = callPackage ../development/libraries/haskell/TableAlgebra {};
+
+  tables = callPackage ../development/libraries/haskell/tables {};
 
   tabular = callPackage ../development/libraries/haskell/tabular {};
 
@@ -2462,6 +2480,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   wcwidth = callPackage ../development/libraries/haskell/wcwidth {};
 
+  webdriver = callPackage ../development/libraries/haskell/webdriver {};
+
   webRoutes = callPackage ../development/libraries/haskell/web-routes {};
 
   webRoutesBoomerang = callPackage ../development/libraries/haskell/web-routes-boomerang {};
@@ -2546,6 +2566,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   xtest = callPackage ../development/libraries/haskell/xtest {};
 
   xssSanitize = callPackage ../development/libraries/haskell/xss-sanitize {};
+
+  Yampa = callPackage ../development/libraries/haskell/Yampa {};
 
   yaml = callPackage ../development/libraries/haskell/yaml {};
 
@@ -2785,9 +2807,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   cabalDelete = callPackage ../development/tools/haskell/cabal-delete {};
 
   cabalBounds = callPackage ../development/tools/haskell/cabal-bounds {
-    Cabal = if pkgs.stdenv.lib.versionOlder "7.7" ghc.version
-              then null
-              else self.Cabal_1_18_1_3;
+    Cabal = self.Cabal_1_20_0_1;
+    cabalLenses = self.cabalLenses.override {
+      Cabal = self.Cabal_1_20_0_1;
+    };
   };
 
   cabalMeta = callPackage ../development/tools/haskell/cabal-meta {};
@@ -2803,10 +2826,12 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   cabalInstall_0_14_0 = callPackage ../tools/package-management/cabal-install/0.14.0.nix {};
   cabalInstall_1_16_0_2 = callPackage ../tools/package-management/cabal-install/1.16.0.2.nix { Cabal = self.Cabal_1_16_0_3; };
   cabalInstall_1_18_0_3 = callPackage ../tools/package-management/cabal-install/1.18.0.3.nix { Cabal = self.Cabal_1_18_1_3; };
-  cabalInstall_1_20_0_2 = callPackage ../tools/package-management/cabal-install/1.20.0.2.nix { Cabal = self.Cabal_1_20_0_1; };
-  cabalInstall = self.cabalInstall_1_20_0_2;
+  cabalInstall_1_20_0_3 = callPackage ../tools/package-management/cabal-install/1.20.0.3.nix { Cabal = self.Cabal_1_20_0_1; };
+  cabalInstall = self.cabalInstall_1_20_0_3;
 
   codex = callPackage ../development/tools/haskell/codex {};
+
+  commandQq = callPackage ../development/libraries/haskell/command-qq {};
 
   gitAnnex = callPackage ../applications/version-management/git-and-tools/git-annex {};
 

@@ -67,6 +67,28 @@ rec {
     inherit python;
   };
 
+  discid = buildPythonPackage rec {
+    name = "discid-1.1.0";
+
+    meta = with stdenv.lib; {
+      description = "Python binding of libdiscid";
+      homepage    = "https://python-discid.readthedocs.org/";
+      license     = licenses.lgpl3Plus;
+      platforms   = platforms.linux;
+      maintainer  = with maintainers; [ iyzsong ];
+    };
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/d/discid/${name}.tar.gz";
+      md5 = "2ad2141452dd10b03ad96ccdad075235";
+    };
+
+    patchPhase = ''
+      substituteInPlace discid/libdiscid.py \
+        --replace '_open_library(_LIB_NAME)' "_open_library('${pkgs.libdiscid}/lib/libdiscid.so.0')"
+    '';
+  };
+
   ipython = import ../shells/ipython {
     inherit (pkgs) stdenv fetchurl sip pyqt4;
     inherit buildPythonPackage pythonPackages;
@@ -2264,6 +2286,37 @@ rec {
     };
   };
 
+  radicale = buildPythonPackage rec {
+    name = "radicale-${version}";
+    namePrefix = "";
+    version = "0.9b1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/R/Radicale/Radicale-${version}.tar.gz";
+      sha256 = "3a8451909de849f173f577ddec0a085f19040dbb6aa13d5256208a0f8e11d88d";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [
+      flup
+      ldap
+      sqlalchemy
+    ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = "http://www.radicale.org/";
+      longDescription = ''
+        The Radicale Project is a complete CalDAV (calendar) and CardDAV
+        (contact) server solution. Calendars and address books are available for
+        both local and remote access, possibly limited through authentication
+        policies. They can be viewed and edited by calendar and contact clients
+        on mobile phones or computers.
+      '';
+      license = stdenv.lib.licenses.gpl3Plus;
+      maintainers = [ stdenv.lib.maintainers.edwtjo ];
+    };
+  };
 
   raven = buildPythonPackage rec {
     name = "raven-3.4.1";

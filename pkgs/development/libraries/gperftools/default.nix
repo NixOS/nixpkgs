@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ks9gsnhxrs2vccc6ha9m8xmj83lmw09xcws4zc0k57q4jcy5bgk";
   };
 
-  buildInputs = [ libunwind ];
+  buildInputs = stdenv.lib.optional stdenv.isLinux libunwind;
 
   # some packages want to link to the static tcmalloc_minimal
   # to drop the runtime dependency on gperftools
@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://code.google.com/p/gperftools/;
     description = "Fast, multi-threaded malloc() and nifty performance analysis tools";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }

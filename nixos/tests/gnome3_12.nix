@@ -1,4 +1,5 @@
 import ./make-test.nix {
+  name = "gnome3_12";
 
   machine =
     { config, pkgs, ... }:

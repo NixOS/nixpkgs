@@ -16,28 +16,28 @@ let
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = "The block device is backed by an encrypted one, adds this device as a initrd luks entry";
+        description = "The block device is backed by an encrypted one, adds this device as a initrd luks entry.";
       };
 
       blkDev = mkOption {
         default = null;
         example = "/dev/sda1";
         type = types.uniq (types.nullOr types.string);
-        description = "Location of the backing encrypted device";
+        description = "Location of the backing encrypted device.";
       };
 
       label = mkOption {
         default = null;
         example = "rootfs";
         type = types.uniq (types.nullOr types.string);
-        description = "Label of the backing encrypted device";
+        description = "Label of the backing encrypted device.";
       };
 
       keyFile = mkOption {
         default = null;
         example = "/root/.swapkey";
         type = types.uniq (types.nullOr types.string);
-        description = "File system location of keyfile";
+        description = "File system location of keyfile.";
       };
     };
   };

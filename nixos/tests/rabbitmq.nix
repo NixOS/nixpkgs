@@ -1,6 +1,7 @@
 # This test runs rabbitmq and checks if rabbitmq is up and running.
 
 import ./make-test.nix ({ pkgs, ... }: {
+  name = "rabbitmq";
 
   nodes = {
     one = { config, pkgs, ... }: {

@@ -13,6 +13,7 @@ let
 in
 
 rec {
+  name = "quake3";
 
   makeCoverageReport = true;
 

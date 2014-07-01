@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchhg {
     url = "https://opentyrian.googlecode.com/hg/";
-    tag = "13ef8ce47362";
+    rev = "13ef8ce47362";
     md5 = "95c8f9e7ff3d4207f1c692c7cec6c9b0";
   };
 
