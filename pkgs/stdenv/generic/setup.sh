@@ -163,7 +163,7 @@ shopt -s nullglob
 
 # Set up the initial path.
 PATH=
-for i in @initialPath@; do
+for i in $initialPath; do
     if [ "$i" = / ]; then i=; fi
     addToSearchPath PATH $i/bin
     addToSearchPath PATH $i/sbin
@@ -174,15 +174,13 @@ if [ "$NIX_DEBUG" = 1 ]; then
 fi
 
 
-# Execute the pre-hook.
-export SHELL=@shell@
-export CONFIG_SHELL="$SHELL"
-if [ -z "$shell" ]; then export shell=@shell@; fi
-runHook preHook
-
-
 # Check that the pre-hook initialised SHELL.
 if [ -z "$SHELL" ]; then echo "SHELL not set"; exit 1; fi
+
+
+# Execute the pre-hook.
+export CONFIG_SHELL="$SHELL"
+if [ -z "$shell" ]; then export shell=$SHELL; fi
 
 
 envHooks=()

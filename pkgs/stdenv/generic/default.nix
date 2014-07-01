@@ -112,11 +112,6 @@ let
       builder = shell;
 
       args = ["-e" ./builder.sh];
-      /* TODO: special-cased @var@ substitutions are ugly.
-          However, using substituteAll* from setup.sh seems difficult,
-          as setup.sh can't be directly sourced.
-          Suggestion: split similar utility functions into a separate script.
-      */
 
       setup = setupScript;
 
