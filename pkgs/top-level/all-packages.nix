@@ -3478,6 +3478,7 @@ let
   lua5_sockets = callPackage ../development/interpreters/lua-5/sockets.nix {};
   lua5_expat = callPackage ../development/interpreters/lua-5/expat.nix {};
   lua5_filesystem = callPackage ../development/interpreters/lua-5/filesystem.nix {};
+  lua5_sec = callPackage ../development/interpreters/lua-5/sec.nix {};
 
   luarocks = callPackage ../development/tools/misc/luarocks {
      lua = lua5;
