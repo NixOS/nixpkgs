@@ -48,8 +48,8 @@ extra=()
 extraBefore=()
 
 if test -z "$NIX_LDFLAGS_SET"; then
-    extra=(${extra[@]} $NIX_LDFLAGS)
-    extraBefore=(${extraBefore[@]} $NIX_LDFLAGS_BEFORE)
+    extra+=($NIX_LDFLAGS $NIX_LDFLAGS_AFTER)
+    extraBefore+=($NIX_LDFLAGS_BEFORE)
 fi
 
 

@@ -17,12 +17,10 @@ import ../generic rec {
         xargsFlags=" "
       fi
     '' + (if stdenv.isDarwin then ''
-      export NIX_CFLAGS_COMPILE="--sysroot=/var/empty"
-      if xcodePath=$(/usr/bin/xcrun --show-sdk-path 2> /dev/null); then
-        NIX_CFLAGS_COMPILE+=" -idirafter $xcodePath/usr/include -F$xcodePath/System/Library/Frameworks"
-      else
-        NIX_CFLAGS_COMPILE+=" -idirafter /usr/include -F/System/Library/Frameworks"
-      fi
+      export NIX_CFLAGS_COMPILE+=" --sysroot=/var/empty"
+      xcodePath=$(/usr/bin/xcrun --show-sdk-path 2> /dev/null || true)
+      export NIX_CFLAGS_COMPILE+=" -idirafter $xcodePath/usr/include -F$xcodePath/System/Library/Frameworks"
+      export NIX_LDFLAGS_AFTER+=" -L$xcodePath/usr/lib"
     '' else "");
 
   initialPath = (import ../common-path.nix) {pkgs = pkgs;};
