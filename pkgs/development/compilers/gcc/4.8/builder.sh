@@ -200,6 +200,15 @@ postConfigure() {
 }
 
 
+preInstall() {
+    # Make ‘lib64’ a symlink to ‘lib’.
+    if [ -n "$is64bit" -a -z "$enableMultilib" ]; then
+        mkdir -p $out/lib
+        ln -s lib $out/lib64
+    fi
+}
+
+
 postInstall() {
     # Remove precompiled headers for now.  They are very big and
     # probably not very useful yet.
