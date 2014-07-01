@@ -1,7 +1,9 @@
+
 x@{builderDefsPackage
   , texinfo, libXext, xextproto, libX11, xproto, libXpm, libXt, libXcursor
   , alsaLib, cmake, zlib, libpng, libvorbis, libXxf86dga, libXxf86misc
   , xf86dgaproto, xf86miscproto, xf86vidmodeproto, libXxf86vm, openal, mesa
+  , kbproto, libjpeg, flac
   , ...}:
 builderDefsPackage
 (a :
@@ -13,17 +15,17 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="allegro";
-    version="4.4.2";
+    version = "5.1.8";
     name="${baseName}-${version}";
     project="alleg";
     url="mirror://sourceforge/project/${project}/${baseName}/${version}/${name}.tar.gz";
-    hash="1p0ghkmpc4kwij1z9rzxfv7adnpy4ayi0ifahlns1bdzgmbyf88v";
+    hash="18fdppaqaf3g3rcqwhyvsmkzk3y14clz4l8cvmg4hvjgyf011f3i";
   };
 in
 rec {
   src = a.fetchurl {
     url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+    sha256 = "180mhlhgxqh3ynazf9bssnd3riw77fazjw65yr64w0av53y0h1lz";
   };
 
   inherit (sourceInfo) name version;
@@ -49,11 +51,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://sourceforge.net/projects/alleg/files/";
-    };
+    inherit version;
   };
 }) x
 
