@@ -3,6 +3,7 @@
 own_dir="$(cd "$(dirname "$0")"; pwd)"
 
 URL_WAS_SET=
+DL_URL_RE=
 CURRENT_URL=
 CURRENT_REV=
 PREFETCH_COMMAND=
@@ -11,6 +12,10 @@ NEED_TO_CHOOSE_URL=1
 url () {
   URL_WAS_SET=1
   CURRENT_URL="$1"
+}
+
+dl_url_re () {
+  DL_URL_RE="$1"
 }
 
 version_unpack () {
@@ -123,7 +128,7 @@ ensure_choice () {
   echo "CURRENT_URL: $CURRENT_URL" >&2
   [ -z "$URL_WAS_SET" ] && [ -z "$CURRENT_URL" ] && ensure_url
   [ -n "$NEED_TO_CHOOSE_URL" ] && {
-    version_link '[.]tar[.]([^./])+$'
+    version_link "${DL_URL_RE:-'[.]tar[.]([^./])+$'}"
     unset NEED_TO_CHOOSE_URL
   }
   [ -z "$CURRENT_URL" ] && {
@@ -172,6 +177,12 @@ retrieve_meta () {
 
 retrieve_version () {
   PACKAGED_VERSION="$(retrieve_meta version)"
+}
+
+ensure_dl_url_re () {
+  echo "Ensuring DL_URL_RE. DL_URL_RE: $DL_URL_RE" >&2
+  [ -z "$DL_URL_RE" ] && dl_url_re "$(retrieve_meta downloadURLRegexp)"
+  echo "DL_URL_RE: $DL_URL_RE" >&2
 }
 
 directory_of () {
@@ -291,9 +302,9 @@ process_config () {
       }
     "
   fi
-  ensure_name
   ensure_attribute_name
   retrieve_version
+  ensure_dl_url_re
   ensure_choice
   ensure_version
   ensure_target
