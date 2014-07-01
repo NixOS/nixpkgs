@@ -67,6 +67,28 @@ rec {
     inherit python;
   };
 
+  discid = buildPythonPackage rec {
+    name = "discid-1.1.0";
+
+    meta = with stdenv.lib; {
+      description = "Python binding of libdiscid";
+      homepage    = "https://python-discid.readthedocs.org/";
+      license     = licenses.lgpl3Plus;
+      platforms   = platforms.linux;
+      maintainer  = with maintainers; [ iyzsong ];
+    };
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/d/discid/${name}.tar.gz";
+      md5 = "2ad2141452dd10b03ad96ccdad075235";
+    };
+
+    patchPhase = ''
+      substituteInPlace discid/libdiscid.py \
+        --replace '_open_library(_LIB_NAME)' "_open_library('${pkgs.libdiscid}/lib/libdiscid.so.0')"
+    '';
+  };
+
   ipython = import ../shells/ipython {
     inherit (pkgs) stdenv fetchurl sip pyqt4;
     inherit buildPythonPackage pythonPackages;
