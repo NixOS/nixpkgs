@@ -5,7 +5,7 @@ usage() {
 }
 
 download() {
-  URL=ftp://ftp.kde.org/pub/kde/unstable/kde-telepathy/$1/src
+  URL=ftp://ftp.kde.org/pub/kde/stable/kde-telepathy/$1/src
   destdir=$2
   if test -n "$KDE_FULL_SESSION"; then
     kioclient copy $URL $destdir
