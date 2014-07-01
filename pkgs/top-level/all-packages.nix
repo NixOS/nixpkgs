@@ -7175,6 +7175,8 @@ let
 
   ifplugd = callPackage ../os-specific/linux/ifplugd { };
 
+  iomelt = callPackage ../os-specific/linux/iomelt { };
+
   iotop = callPackage ../os-specific/linux/iotop { };
 
   iproute = callPackage ../os-specific/linux/iproute { };
