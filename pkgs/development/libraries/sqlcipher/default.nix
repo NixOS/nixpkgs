@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   LDFLAGS = if readline != null then "-lncurses" else "";
 
   meta = {
-    homepage = http://sqlcipher.net/
+    homepage = http://sqlcipher.net/;
     description = "Full Database Encryption for SQLite";
     platforms = stdenv.lib.platforms.unix;
   };
