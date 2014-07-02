@@ -2288,6 +2288,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   threads = callPackage ../development/libraries/haskell/threads {};
 
+  Thrift = callPackage ../development/libraries/haskell/Thrift {};
+
   thyme = callPackage ../development/libraries/haskell/thyme {};
 
   threepennyGui = callPackage ../development/libraries/haskell/threepenny-gui {};
