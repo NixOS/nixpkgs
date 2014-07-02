@@ -8,11 +8,11 @@ with stdenv.lib;
 let
 
   majorVersion = "2.7";
-  version = "${majorVersion}.7";
+  version = "${majorVersion}.8";
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
-    sha256 = "0y6s12rdi89k24p8zarhy9fqmyy459yg0d125c7cac4v136y70r9";
+    sha256 = "0nh7d3dp75f1aj0pamn4hla8s0l7nbaq4a38brry453xrfh11ppd";
   };
 
   patches =
