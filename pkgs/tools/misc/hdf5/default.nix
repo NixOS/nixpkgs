@@ -4,6 +4,7 @@
 , zlib ? null
 , szip ? null
 , mpi ? null
+, enableShared ? true
 }:
 stdenv.mkDerivation rec {
   version = "1.8.13";
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
   configureFlags = "
     ${if szip != null then "--with-szlib=${szip}" else ""}
     ${if mpi != null then "--enable-parallel" else ""}
+    ${if enableShared then "--enable-shared" else ""}
   ";
   
   patches = [./bin-mv.patch];
