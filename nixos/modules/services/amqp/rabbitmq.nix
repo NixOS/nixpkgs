@@ -34,7 +34,7 @@ in {
 
       dataDir = mkOption {
         type = types.path;
-        default = "/var/lib/rabbitmq";
+        default = "${config.dataPrefix}/lib/rabbitmq";
         description = ''
           Data directory for rabbitmq.
         '';

@@ -65,7 +65,7 @@ in {
 
       databaseDir = mkOption {
         type = types.path;
-        default = "/var/lib/couchdb";
+        default = "${config.dataPrefix}/lib/couchdb";
         description = ''
           Specifies location of CouchDB database files (*.couch named). This
           location should be writable and readable for the user the CouchDB
@@ -75,7 +75,7 @@ in {
 
       uriFile = mkOption {
         type = types.path;
-        default = "/var/run/couchdb/couchdb.uri";
+        default = "${config.dataPrefix}/run/couchdb/couchdb.uri";
         description = ''
           This file contains the full URI that can be used to access this
           instance of CouchDB. It is used to help discover the port CouchDB is
@@ -87,7 +87,7 @@ in {
 
       viewIndexDir = mkOption {
         type = types.path;
-        default = "/var/lib/couchdb";
+        default = "${config.dataPrefix}/lib/couchdb";
         description = ''
           Specifies location of CouchDB view index files. This location should
           be writable and readable for the user that runs the CouchDB service
@@ -113,7 +113,7 @@ in {
 
       logFile = mkOption {
         type = types.path;
-        default = "/var/log/couchdb.log";
+        default = "${config.dataPrefix}/log/couchdb.log";
         description = ''
           Specifies the location of file for logging output.
         '';
