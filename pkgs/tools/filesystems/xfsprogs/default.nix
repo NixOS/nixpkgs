@@ -12,11 +12,26 @@ stdenv.mkDerivation rec {
     sed -i s,/bin/bash,`type -P bash`, install-sh
   '';
 
+  outputs = ["out" "lib"];
+
+  postInstall = ''
+    (cd include; make install-dev)
+    # The make install-dev target is broken when --disable-shared
+    mkdir -p $lib/lib $lib/include
+    cp ./libhandle/.libs/libhandle.a \
+       ./libxcmd/.libs/libxcmd.a \
+       ./libxlog/.libs/libxlog.a \
+       ./libxfs/.libs/libxfs.a $lib/lib
+    mv $out/include/* $lib/include
+  '';
+
+  enableParallelBuilding = true;
+
   buildInputs = [ libtool gettext libuuid ];
 
   configureFlags = "MAKE=make MSGFMT=msgfmt MSGMERGE=msgmerge XGETTEXT=xgettext ZIP=gzip AWK=gawk --disable-shared";
   preConfigure = ''
-    configureFlags="$configureFlags root_sbindir=$out/sbin root_libdir=$out/lib"
+    configureFlags="$configureFlags root_sbindir=$out/sbin root_libdir=$lib/lib"
   '';
   disableStatic = false;
 

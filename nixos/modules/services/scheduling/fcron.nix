@@ -17,7 +17,7 @@ let
         MAILTO="${config.services.cron.mailto}"
       ''}
       NIX_CONF_DIR=/etc/nix
-      ${pkgs.lib.concatStrings (map (job: job + "\n") config.services.cron.systemCronJobs)}
+      ${lib.concatStrings (map (job: job + "\n") config.services.cron.systemCronJobs)}
     '';
 
   allowdeny = target: users:

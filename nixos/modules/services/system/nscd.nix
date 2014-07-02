@@ -7,7 +7,7 @@ let
   nssModulesPath = config.system.nssModules.path;
   cfg = config.services.nscd;
 
-  inherit (pkgs.lib) singleton;
+  inherit (lib) singleton;
 
   cfgFile = pkgs.writeText "nscd.conf" cfg.config;
 

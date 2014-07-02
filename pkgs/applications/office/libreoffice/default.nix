@@ -14,61 +14,19 @@
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
 , libwpg, dbus_glib, glibc, qt4, kde4, clucene_core, libcdr, lcms, vigra
 , unixODBC, mdds, saneBackends, mythes, libexttextcat, libvisio
-, fontsConf, pkgconfig, libzip, bluez5, libtool, maven
+, fontsConf, pkgconfig, libzip, bluez5, libtool, maven, libe-book_00
+, libmwaw_02, libatomic_ops, graphite2, harfbuzz
 , langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" "sl" ]
 }:
 
 let
   langsSpaces = stdenv.lib.concatStringsSep " " langs;
   major = "4";
-  minor = "0";
+  minor = "2";
   patch = "5";
   tweak = "2";
   subdir = "${major}.${minor}.${patch}";
   version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
-
-  # configure phase dependency
-  liborcus = stdenv.mkDerivation rec {
-     version = "0.3.0";
-     name = "liborcus-${version}";
-
-     src = fetchurl {
-       url = "http://dev-www.libreoffice.org/src/8755aac23317494a9028569374dc87b2-liborcus_0.3.0.tar.bz2";
-       sha256 = "0xrw13s390mcpm50apclydl38sw2sdq27csrr1k0d39jna2990ih";
-     };
-
-     configureFlags = "--disable-werror";
-
-     buildInputs = [ zlib boost mdds pkgconfig libixion libzip ];
-  };
-
-  # configure phase dependency
-  liblangtag = stdenv.mkDerivation rec {
-     version = "0.4.0";
-     name = "liblangtag-${version}";
-
-     src = fetchurl {
-       url = "http://dev-www.libreoffice.org/src/54e578c91b1b68e69c72be22adcb2195-${name}.tar.bz2";
-       sha256 = "1bjb0fxjmvzxlhr5by9wgisf6w5yvy6wgfzfkjyw6igk39fivdyb";
-     };
-
-     buildInputs = [ libtool pkgconfig libxml2 ];
-  };
-
-  # doesn't work with srcs versioning
-  libmspub = stdenv.mkDerivation rec {
-     version = "0.0.6";
-     name = "libmspub-${version}";
-
-     src = fetchurl {
-       url = "http://dev-www.libreoffice.org/src/${name}.tar.gz";
-       sha256 = "1zdcvnm0dpac5yqdv34hq9j38cnhyqzyjgb19iyp54ajnwfjhmcq";
-     };
-
-     configureFlags = "--disable-werror";
-
-     buildInputs = [ zlib libwpd libwpg pkgconfig boost icu ];
-  };
 
   # doesn't exist in srcs
   libixion = stdenv.mkDerivation rec {
@@ -85,9 +43,12 @@ let
      buildInputs = [ boost mdds pkgconfig ];
   };
 
-  fetchThirdParty = {name, md5}: fetchurl {
+  fetchThirdParty = {name, md5, brief}: fetchurl {
     inherit name md5;
-    url = "http://dev-www.libreoffice.org/src/${md5}-${name}";
+    url = if brief then
+            "http://dev-www.libreoffice.org/src/${name}"
+          else
+            "http://dev-www.libreoffice.org/src/${md5}-${name}";
   };
 
   fetchSrc = {name, sha256}: fetchurl {
@@ -104,14 +65,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "0x96wlwr5m7w4k3ygydzak3ycq35hjq60vfi6nfxczlr8pfjyjxv";
+      sha256 = "0nv47r043w151687ks06w786h8azi8gylxma9c7qyjbdj6cdb2ly";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "0nab5jcgrrgn0v1yrm18nl9avp4vifbas48l1absz3jmzf9wka7b";
+      sha256 = "1kbkdngq39gfq2804v6vnllax4gqs25zlfk6y561iiipld1ncc5v";
     };
 
   };
@@ -121,7 +82,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";
-    sha256 = "195g1iab7j2x7sl326xbq7vya412ns57xrwpv9hqdrb7iiz2n8la";
+    sha256 = "4bf7898d7d0ba918a8f6668eff0904a549e5a2de837854716e6d996f121817d5";
   };
 
   # Openoffice will open libcups dynamically, so we link it directly
@@ -135,7 +96,7 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     mkdir -v $sourceRoot/src
-  '' + (stdenv.lib.concatMapStrings (f: "ln -sv ${f} $sourceRoot/src/${f.outputHash}-${f.name}\n") srcs.third_party)
+  '' + (stdenv.lib.concatMapStrings (f: "ln -sv ${f} $sourceRoot/src/${f.outputHash}-${f.name}\nln -sv ${f} $sourceRoot/src/${f.name}\n") srcs.third_party)
   + ''
     ln -sv ${srcs.help} $sourceRoot/src/${srcs.help.name}
     tar xf $sourceRoot/src/${srcs.help.name} -C $sourceRoot/../
@@ -149,6 +110,8 @@ stdenv.mkDerivation rec {
       -e 's,! */usr/bin/perl,!${perl}/bin/perl,' -e 's,! */usr/bin/env perl,!${perl}/bin/perl,' \
       -e 's,! */usr/bin/python,!${python3}/bin/${python3.executable},' -e 's,! */usr/bin/env python,!${python3}/bin/${python3.executable},'
     #sed -i 's,ANT_OPTS+="\(.*\)",ANT_OPTS+=\1,' apache-commons/java/*/makefile.mk
+
+    patch -Np1 -i ${./ooxmlexport.diff};
   '';
 
   QT4DIR = qt4;
@@ -162,6 +125,10 @@ stdenv.mkDerivation rec {
       "--with-parallelism=$NIX_BUILD_CORES"
       "--with-lang=${langsSpaces}"
     );
+
+    chmod a+x ./bin/unpack-sources
+    # It is used only as an indicator of the proper current directory
+    touch solenv/inc/target.mk
   '';
 
   makeFlags = "SHELL=${bash}/bin/bash";
@@ -171,9 +138,6 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     # This is required as some cppunittests require fontconfig configured
     export FONTCONFIG_FILE=${fontsConf}
-
-    # Fix sysui: wants to create a tar for root
-    sed -i -e 's,--own.*root,,' sysui/desktop/slackware/makefile.mk
 
     # This to aovid using /lib:/usr/lib at linking
     sed -i '/gb_LinkTarget_LDFLAGS/{ n; /rpath-link/d;}' solenv/gbuild/platform/unxgcc.mk
@@ -199,7 +163,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-vender=NixOS"
+    "--with-vendor=NixOS"
 
     # Without these, configure does not finish
     "--without-junit"
@@ -219,11 +183,11 @@ stdenv.mkDerivation rec {
     "--without-doxygen"
 
     # I imagine this helps. Copied from go-oo.
-    "--disable-epm"
-    "--disable-mathmldtd"
+    # Modified on every upgrade, though
     "--disable-kde"
     "--disable-postgresql-sdbc"
     "--with-package-format=native"
+    "--enable-epm"
     "--with-jdk-home=${jdk}/lib/openjdk"
     "--with-ant-home=${ant}/lib/ant"
     "--without-afms"
@@ -235,10 +199,17 @@ stdenv.mkDerivation rec {
     "--without-system-jars"
     "--without-system-altlinuxhyph"
     "--without-system-lpsolve"
-    "--without-system-graphite"
     "--without-system-npapi-headers"
     "--without-system-libcmis"
-    "--without-system-mozilla"
+
+    "--without-system-libetonyek"
+    "--without-system-libfreehand"
+    "--without-system-libodfgen"
+    "--without-system-libabw"
+    "--without-system-firebird"
+    "--without-system-orcus"
+    "--without-system-liblangtag"
+    "--without-system-libmspub"
   ];
 
   checkPhase = ''
@@ -253,11 +224,11 @@ stdenv.mkDerivation rec {
       hunspell icu jdk kde4.kdelibs lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
-      libXdmcp libpthreadstubs mdds mesa mythes
+      libXdmcp libpthreadstubs mesa mythes
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfigUpstream poppler
       python3 sablotron saneBackends tcsh unzip vigra which zip zlib
-      mdds bluez5 glibc libmspub libixion liborcus liblangtag
-      libxshmfence
+      mdds bluez5 glibc libixion
+      libxshmfence libe-book_00 libmwaw_02 libatomic_ops graphite2 harfbuzz
     ];
 
   meta = with stdenv.lib; {

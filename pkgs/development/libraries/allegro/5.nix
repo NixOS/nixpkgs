@@ -6,9 +6,9 @@ x@{builderDefsPackage
   , kbproto, libjpeg, flac
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     [];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -38,7 +38,7 @@ rec {
     export NIX_LDFLAGS="$NIX_LDFLAGS -lXext -lX11 -lXpm -lXcursor -lXxf86vm"
     cmake -D CMAKE_INSTALL_PREFIX=$out -D CMAKE_SKIP_RPATH=ON .
   '') ["minInit" "doUnpack" "addInputs"];
-      
+
   makeFlags = [
   ];
 
@@ -51,11 +51,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://sourceforge.net/projects/alleg/files/";
-    };
+    inherit version;
   };
 }) x
 

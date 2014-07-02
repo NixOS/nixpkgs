@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hcltest";
-  version = "0.3.1";
-  sha256 = "0qnf6ib01njcbjfbwxff8y4sqmrj6nyy9y9hb0l0kw21cxsgl7c9";
+  version = "0.3.2";
+  sha256 = "0q5b0v2gh0b3a15hg25bqj7scbckrkka2ckk49g2mrdz2gpr28bq";
   buildDepends = [
     dlist either filepath free lens mmorph monadControl mtl
     optparseApplicative randomShuffle split stm tagged tasty temporary

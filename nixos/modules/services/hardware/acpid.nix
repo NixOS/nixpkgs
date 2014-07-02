@@ -16,7 +16,7 @@ let
             echo "event=${event.event}" > $fn
             echo "action=${pkgs.writeScript "${event.name}.sh" event.action}" >> $fn
           '';
-        in pkgs.lib.concatMapStrings f events
+        in lib.concatMapStrings f events
       }
     '';
 

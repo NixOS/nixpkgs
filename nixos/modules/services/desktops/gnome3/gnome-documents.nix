@@ -1,8 +1,8 @@
 # GNOME Documents daemon.
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
   gnome3 = config.environment.gnome3.packageSet;

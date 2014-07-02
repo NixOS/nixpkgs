@@ -594,17 +594,17 @@ in
                      message = "SSL is enabled for HTTPD, but sslServerCert and/or sslServerKey haven't been specified."; }
                  ];
 
-    users.extraUsers = optional (mainCfg.user == "wwwrun")
+    users.extraUsers = optionalAttrs (mainCfg.user == "wwwrun") (singleton
       { name = "wwwrun";
-        group = "wwwrun";
+        group = mainCfg.group;
         description = "Apache httpd user";
         uid = config.ids.uids.wwwrun;
-      };
+      });
 
-    users.extraGroups = optional (mainCfg.group == "wwwrun")
+    users.extraGroups = optionalAttrs (mainCfg.group == "wwwrun") (singleton
       { name = "wwwrun";
         gid = config.ids.gids.wwwrun;
-      };
+      });
 
     environment.systemPackages = [httpd] ++ concatMap (svc: svc.extraPath) allSubservices;
 

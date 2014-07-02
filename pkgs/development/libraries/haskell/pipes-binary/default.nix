@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
     binary lensFamilyCore pipes pipesParse smallcheck tasty tastyHunit
     tastySmallcheck transformers
   ];
+  jailbreak = true;
   doCheck = false;
   meta = {
     homepage = "https://github.com/k0001/pipes-binary";

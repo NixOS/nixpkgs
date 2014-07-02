@@ -1,6 +1,7 @@
 # Miscellaneous small tests that don't warrant their own VM run.
 
 import ./make-test.nix {
+  name = "misc";
 
   machine =
     { config, lib, pkgs, ... }:

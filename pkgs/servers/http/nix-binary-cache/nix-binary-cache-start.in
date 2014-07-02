@@ -1,0 +1,105 @@
+#! @shell@
+
+parse_opts () {
+  while @coreutils@/test -n "$1" && @coreutils@/test "x$1" != x-- ; do 
+    case "$1" in
+      --store-dir)
+        shift;
+        echo "STORE_DIR='$1'"
+        shift;
+        ;;
+      --priority)
+        shift;
+        echo "PRIORITY=$1";
+        shift;
+        ;;
+      --compression)
+        shift;
+        echo "COMPRESSION=$1";
+        shift;
+        ;;
+      --key)
+        shift;
+        echo "KEY=${1#*:}"
+        echo "KEYNAME=${1%%:*}"
+        shift;
+        ;;
+      --nix-remote)
+        shift;
+        echo "NIX_REMOTE=$1"
+        shift;
+        ;;
+      --mass-query)
+        shift;
+        echo "MASS_QUERY=$1"
+        shift;
+        ;;
+      --port)
+        shift;
+        echo "PORT=$1"
+        shift;
+        ;;
+      --help)
+        cat <<EOF >&2
+"$0": start the Nix binary cache serving the Nix store dynamically.
+
+Recognized options:
+
+--port           server port
+--store-dir      served Nix store
+
+--priority       binary cache priority
+--mass-query     0 or 1 - whether binary cache expects queries for nix-env -qas
+
+--compression    compression to use: bzip2 or xz
+--key            name:/path/to/key - key to use for narinfo signing
+
+--nix-remote     'daemon' or empty string '' - whether to use daemon for store
+                   operations
+
+--help           show help and exit
+EOF
+	exit 1;
+        ;;
+      *) shift ;;
+    esac;
+  done
+}
+
+workingdir="$(@coreutils@/mktemp -d)"
+cd "$workingdir"
+
+PORT=8080
+(echo "STORE_DIR=${NIX_STORE_DIR:-/nix/store}"; parse_opts "$@" 
+  ) > nix-binary-cache.conf || exit
+. "$workingdir/nix-binary-cache.conf"
+
+echo "
+server.port = $PORT
+server.modules = ( \"mod_cgi\", \"mod_setenv\", )
+server.document-root = \"$workingdir\"
+cgi.assign = ( \".cgi\" => \"@shell@\" )
+setenv.add-request-header = ( \"NIX_BINARY_CACHE_CONFIG\" => \"$workingdir/nix-binary-cache.conf\" )
+" > lighttpd.conf
+
+cp @out@/nix-binary-cache.cgi . 
+cp @out@/nix-binary-cache.cgi ./nix-bc.cgi 
+
+ip="$(@iproute@/ip a | @gnugrep@/grep 'inet .* scope global' | @coreutils@/head -n 1)"
+ip="${ip%%/*}"
+ip="${ip##* }"
+
+url="http://$ip:$PORT/nix-bc.cgi?"
+
+echo "Working directory: $workingdir"
+echo
+echo "Address of the binary cache: $url"
+echo
+echo "Usage example: NIX_REMOTE= nix-store --option binary-caches '$url'"
+echo
+echo
+
+@lighttpd@/lighttpd -D -f "$workingdir/lighttpd.conf"
+
+cd /
+@coreutils@/rm -rf "$workingdir"

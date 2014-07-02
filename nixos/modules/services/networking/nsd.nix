@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
   cfg = config.services.nsd;

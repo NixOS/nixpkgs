@@ -20,6 +20,12 @@ rec {
     http://kent.dl.sourceforge.net/sourceforge/
   ];
 
+  # SourceForge.jp.
+  sourceforgejp = [
+    http://osdn.dl.sourceforge.jp/
+    http://jaist.dl.sourceforge.jp/
+  ];
+
   # GNU (http://www.gnu.org/prep/ftp.html).
   gnu = [
     # This one redirects to a (supposedly) nearby and (supposedly) up-to-date

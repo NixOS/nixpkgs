@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "quickcheck-property-monad";
-  version = "0.2.1";
-  sha256 = "1ln8bcsc8hd8jyhd9rp2j90p5h5nhmwidb5my91p09h43y4z9xds";
+  version = "0.2.2";
+  sha256 = "1liixl4xxpx9f3877sss16m67y5bkwhxdmr8h40rpqdi7dz9s0mj";
   buildDepends = [ either QuickCheck transformers ];
   testDepends = [ doctest filepath QuickCheck ];
   meta = {

@@ -2,8 +2,8 @@
 
 let
 
-  version = "0.8.8";
-  sha256 = "7ca3fb96f5ee6b76eb398d7ea45344ea24855344ced11632241a33353bba05d7";
+  version = "0.8.9";
+  sha256 = "0q942g9lyd8pjvqimv547n6vik5759r9npw3ws3bdj4ixxqhz59w";
 
   # fetches patches from a gentoo mirror
   fetchPatch =
@@ -25,19 +25,12 @@ in stdenv.mkDerivation {
 
   # includes an important security patch
   patches = map fetchPatch [
-    { file = "bip-0.8.8-configure.patch";
-      sha256 = "286e169745e6cd768f0cb95bbc9589ca2bda497eb06461174549b80a459d901c";
-    }
-    { file = "bip-CVE-2012-0806.patch";
-      sha256 = "e47523095ee1d717c762ca0195520026c6ea2c30d8adcf434d276d42f052d506";
-    }
     { file = "bip-freenode.patch";
       sha256 = "a67e582f89cc6a32d5bb48c7e8ceb647b889808c2c8798ae3eb27d88869b892f";
     }
   ];
 
   postPatch = ''
-    patch -p1 < ${./bip-0.8.8-yyparse.patch}
   '';
 
   configureFlags = [ "--disable-pie" ];
@@ -48,5 +41,7 @@ in stdenv.mkDerivation {
     description = "An IRC proxy (bouncer)";
     homepage = http://bip.milkypond.org/;
     license = stdenv.lib.licenses.gpl2;
+    downloadPage= "https://projects.duckcorp.org/projects/bip/files";
+    inherit version;
   };
 }

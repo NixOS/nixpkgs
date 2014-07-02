@@ -2,6 +2,7 @@
 # solicication/advertisement using radvd works.
 
 import ./make-test.nix {
+  name = "ipv6";
 
   nodes =
     { client = { config, pkgs, ... }: { };

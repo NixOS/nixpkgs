@@ -35,5 +35,8 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Atop is an ASCII full-screen performance monitor that is capable of reporting the activity of all processes (even if processes have finished during the interval), daily logging of system and process activity for long-term analysis, highlighting overloaded system resources by using colors, etc. At regular intervals, it shows system-level activity related to the CPU, memory, swap, disks and network layers, and for every active process it shows the CPU utilization, memory growth, disk utilization, priority, username, state, and exit code.
     '';
+    inherit version;
+    downloadPage = http://atoptool.nl/downloadatop.php;
+    updateWalker = true;
   };
 }

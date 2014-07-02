@@ -1,4 +1,5 @@
 import ./make-test.nix ({ pkgs, ... }: {
+  name = "kde4";
 
   machine =
     { config, pkgs, ... }:

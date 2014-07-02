@@ -1,15 +1,16 @@
-{ cabal, emacs, haskellSrcExts }:
+{ cabal, emacs, haskellMode, haskellSrcExts }:
 
 cabal.mkDerivation (self: {
   pname = "structured-haskell-mode";
-  version = "1.0.2";
-  sha256 = "1lwdhlr38y5hdr78nplplr3q0hrjhryw378f1857qh0lvp03gwl2";
+  version = "1.0.3";
+  sha256 = "0axmw8bj51q8v0wd4jp6giw9dnv0mp7kp8yd16s4nm4hcqgrh5h2";
   isLibrary = false;
   isExecutable = true;
-  buildDepends = [ haskellSrcExts ];
+  buildDepends = [ haskellSrcExts haskellMode ];
   buildTools = [ emacs ];
   postInstall = ''
-    emacs -L elisp --batch -f batch-byte-compile "elisp/"*.el
+    emacs -L elisp -L ${haskellMode}/share/emacs/site-lisp \
+      --batch -f batch-byte-compile "elisp/"*.el
     install -d $out/share/emacs/site-lisp
     install "elisp/"*.el "elisp/"*.elc  $out/share/emacs/site-lisp
   '';

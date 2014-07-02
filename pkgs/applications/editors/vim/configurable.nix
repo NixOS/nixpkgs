@@ -21,7 +21,7 @@ composableDerivation {
         # latest release
       args.fetchhg {
             url = "https://vim.googlecode.com/hg/";
-            tag = "v7-4-316";
+            rev = "v7-4-316";
             sha256 = "0scxx33p1ky0wihk04xqpd6rygp1crm0hx446zbjwbsjj6xxn7sx";
       };
 

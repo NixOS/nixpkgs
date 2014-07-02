@@ -1,7 +1,7 @@
-{ config, pkgs, serverInfo, ... }:
+{ config, pkgs, serverInfo, lib, ... }:
 
 let
-  extraWorkersProperties = pkgs.lib.optionalString (config ? extraWorkersProperties) config.extraWorkersProperties;
+  extraWorkersProperties = lib.optionalString (config ? extraWorkersProperties) config.extraWorkersProperties;
   
   workersProperties = pkgs.writeText "workers.properties" ''
 # Define list of workers that will be used

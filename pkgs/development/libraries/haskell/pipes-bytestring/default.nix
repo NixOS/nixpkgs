@@ -1,5 +1,4 @@
-{ cabal, pipes, pipesGroup, pipesParse, transformers
-}:
+{ cabal, pipes, pipesGroup, pipesParse, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "pipes-bytestring";

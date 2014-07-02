@@ -40,7 +40,7 @@ in
 
   options = {
 
-    users.defaultUserShell = pkgs.lib.mkOption {
+    users.defaultUserShell = lib.mkOption {
       description = ''
         This option defines the default shell assigned to user
         accounts.  This must not be a store path, since the path is
@@ -60,7 +60,7 @@ in
   config = {
 
     environment.systemPackages =
-      pkgs.lib.optional config.users.mutableUsers pkgs.shadow;
+      lib.optional config.users.mutableUsers pkgs.shadow;
 
     environment.etc =
       [ { # /etc/login.defs: global configuration for pwdutils.  You
