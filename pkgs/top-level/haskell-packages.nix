@@ -1723,6 +1723,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   pipesConcurrency = callPackage ../development/libraries/haskell/pipes-concurrency {};
 
+  pipesCsv = callPackage ../development/libraries/haskell/pipes-csv {};
+
+  pipesHttp = callPackage ../development/libraries/haskell/pipes-http {};
+
   pipesNetwork = callPackage ../development/libraries/haskell/pipes-network {};
 
   pipesGroup = callPackage ../development/libraries/haskell/pipes-group {};
