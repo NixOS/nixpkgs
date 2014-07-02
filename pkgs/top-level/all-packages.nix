@@ -6147,6 +6147,11 @@ let
     inherit readline ncurses;
   });
 
+  sqlcipher = lowPrio (callPackage ../development/libraries/sqlcipher {
+    readline = null;
+    ncurses = null;
+  });
+
   stfl = callPackage ../development/libraries/stfl {
     stdenv = if stdenv.isDarwin
       then overrideGCC stdenv gccApple
