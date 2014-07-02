@@ -1052,6 +1052,20 @@ rec {
   });
 
 
+  click = buildPythonPackage {
+    name = "click-2.1";
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/c/click/click-2.1.tar.gz;
+      md5 = "0ba97ba09af82c56e2d35f3412d0aa6e";
+    };
+    meta = {
+      homepage = "http://click.pocoo.org/";
+      description = "Click is a Python package for creating beautiful command line interfaces in a composable way with as little code as necessary.";
+      license = "bsd, 3-clause";
+    };
+  };
+
+
   clepy = buildPythonPackage rec {
     name = "clepy-0.3.20";
 
@@ -5132,11 +5146,11 @@ rec {
   };
 
   pip = buildPythonPackage rec {
-    version = "1.5";
+    version = "1.5.6";
     name = "pip-${version}";
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pip/pip-${version}.tar.gz";
-      sha256 = "0j700f70mj0brdlvs2cz4a7h4jwmzgymgp8qk1qb3lsm1qd1vy15";
+      md5 = "01026f87978932060cc86c1dc527903e";
     };
     buildInputs = [ mock scripttest virtualenv pytest ];
   };
@@ -5195,13 +5209,13 @@ rec {
   };
 
   plumbum = buildPythonPackage rec {
-    name = "plumbum-1.2.0";
+    name = "plumbum-1.4.2";
 
     buildInputs = [ pythonPackages.six ];
 
     src = fetchurl {
-      url = "https://pypi.python.org/packages/source/p/plumbum/plumbum-1.2.0.tar.gz";
-      md5 = "18b7f888dfaf62a48df937abffe07897";
+      url = "https://pypi.python.org/packages/source/p/plumbum/${name}.tar.gz";
+      md5 = "38b526af9012a5282ae91dfe372cefd3";
     };
   };
 
