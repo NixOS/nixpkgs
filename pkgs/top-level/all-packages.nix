@@ -3194,6 +3194,8 @@ let
 
     deriving = callPackage ../development/tools/ocaml/deriving { };
 
+    easy-format = callPackage ../development/ocaml-modules/easy-format { };
+
     findlib = callPackage ../development/tools/ocaml/findlib { };
 
     dypgen = callPackage ../development/ocaml-modules/dypgen { };
