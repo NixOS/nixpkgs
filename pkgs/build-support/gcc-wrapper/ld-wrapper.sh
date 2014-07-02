@@ -48,9 +48,11 @@ extra=()
 extraBefore=()
 
 if test -z "$NIX_LDFLAGS_SET"; then
-    extra+=($NIX_LDFLAGS $NIX_LDFLAGS_AFTER)
+    extra+=($NIX_LDFLAGS)
     extraBefore+=($NIX_LDFLAGS_BEFORE)
 fi
+
+extra+=($NIX_LDFLAGS_AFTER)
 
 
 # Add all used dynamic libraries to the rpath.
