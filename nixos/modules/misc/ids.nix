@@ -135,6 +135,7 @@
       influxdb = 125;
       nsd = 126;
       gitolite = 127;
+      dnsmasq = 128;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
