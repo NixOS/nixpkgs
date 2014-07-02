@@ -9751,6 +9751,8 @@ let
 
   vbindiff = callPackage ../applications/editors/vbindiff { };
 
+  vcprompt = callPackage ../applications/version-management/vcprompt { };
+
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
 
   veracity = callPackage ../applications/version-management/veracity {};
