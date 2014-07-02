@@ -5146,11 +5146,11 @@ rec {
   };
 
   pip = buildPythonPackage rec {
-    version = "1.5";
+    version = "1.5.6";
     name = "pip-${version}";
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pip/pip-${version}.tar.gz";
-      sha256 = "0j700f70mj0brdlvs2cz4a7h4jwmzgymgp8qk1qb3lsm1qd1vy15";
+      md5 = "01026f87978932060cc86c1dc527903e";
     };
     buildInputs = [ mock scripttest virtualenv pytest ];
   };
