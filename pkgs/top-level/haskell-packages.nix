@@ -2018,6 +2018,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   snapServer = callPackage ../development/libraries/haskell/snap/server.nix {};
 
+  snapWebRoutes = callPackage ../development/libraries/haskell/snap-web-routes {};
+
   snowball = callPackage ../development/libraries/haskell/snowball {};
 
   socks = callPackage ../development/libraries/haskell/socks {};
