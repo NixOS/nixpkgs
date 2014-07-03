@@ -1,0 +1,10 @@
+url https://code.google.com/p/multidimalgorithm/wiki/Downloads
+version_link '[.]tar[.][a-z0-9]+$'
+version '.*_([0-9.]+)[.]tar[.].*' '\1'
+
+do_overwrite(){
+  ensure_hash
+  ensure_version
+  set_var_value version $CURRENT_VERSION
+  set_var_value sha256 $CURRENT_HASH
+}

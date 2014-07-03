@@ -7,6 +7,8 @@ let
   };
 in
 {
+  name = "mumble";
+
   nodes = {
     server = { config, pkgs, ... }: {
       services.murmur.enable       = true;
@@ -28,21 +30,21 @@ in
     $client1->execute("mumble mumble://client1\@server/test &");
     $client2->execute("mumble mumble://client2\@server/test &");
 
-    $client1->waitForWindow(qr/Mumble/);
-    $client2->waitForWindow(qr/Mumble/);
-    $server->sleep(3); # Wait some more for the Mumble UI
-
     # cancel client audio configuration
+    $client1->waitForWindow(qr/Audio Tuning Wizard/);
+    $client2->waitForWindow(qr/Audio Tuning Wizard/);
     $client1->sendKeys("esc");
     $client2->sendKeys("esc");
-    $server->sleep(1);
 
     # cancel client cert configuration
+    $client1->waitForWindow(qr/Certificate Management/);
+    $client2->waitForWindow(qr/Certificate Management/);
     $client1->sendKeys("esc");
     $client2->sendKeys("esc");
-    $server->sleep(1);
 
     # accept server certificate
+    $client1->waitForWindow(qr/^Mumble$/);
+    $client2->waitForWindow(qr/^Mumble$/);
     $client1->sendChars("y");
     $client2->sendChars("y");
 

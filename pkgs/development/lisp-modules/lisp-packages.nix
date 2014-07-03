@@ -37,7 +37,7 @@ let lispPackages = rec {
     src = pkgs.fetchdarcs {
       url = "http://common-lisp.net/project/iterate/darcs/iterate";
       sha256 = "0m3q0s7h5s8varwx584m2akgdslj14df7kg4w1bj1fbgzsag5m1w";
-      tag=version;
+      rev = version;
     };
     overrides = x: {
       configurePhase="buildPhase(){ true; }";

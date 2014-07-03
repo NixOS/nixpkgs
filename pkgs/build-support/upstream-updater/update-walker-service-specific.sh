@@ -5,7 +5,7 @@ SF_redirect () {
 }
 
 SF_version_dir () {
-  version_link 'http://sourceforge.net/.+/[0-9.]+/$'
+  version_link 'http://sourceforge.net/.+/'"$1"'[0-9.]+/$'
 }
 
 GH_latest () {

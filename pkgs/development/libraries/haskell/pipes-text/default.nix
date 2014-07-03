@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
     pipes pipesBytestring pipesGroup pipesParse pipesSafe profunctors
     streamingCommons text transformers
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/michaelt/text-pipes";
     description = "Text pipes";

@@ -1,7 +1,7 @@
 # This module generates nixos-install, nixos-rebuild,
 # nixos-generate-config, etc.
 
-{ config, pkgs, modulesPath, ... }:
+{ config, pkgs, modulesPath, lib, ... }:
 
 let
 
@@ -32,6 +32,7 @@ let
   nixos-rebuild = makeProg {
     name = "nixos-rebuild";
     src = ./nixos-rebuild.sh;
+    nix = config.nix.package;
   };
 
   nixos-generate-config = makeProg {
@@ -64,7 +65,7 @@ let
         test -e "$out/chrome/content/jquery-1.5.2.js" ||
           cp -f "$jquery" "$out/chrome/content/jquery-1.5.2.js"
       '';
-      gui = pkgs.lib.cleanSource "${modulesPath}/../gui";
+      gui = lib.cleanSource "${modulesPath}/../gui";
       jquery = pkgs.fetchurl {
         url = http://code.jquery.com/jquery-1.5.2.min.js;
         sha256 = "8f0a19ee8c606b35a10904951e0a27da1896eafe33c6e88cb7bcbe455f05a24a";

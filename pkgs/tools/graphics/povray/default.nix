@@ -4,8 +4,8 @@ stdenv.mkDerivation {
   name = "povray-3.6";
 
   src = fetchurl {
-    url = http://www.povray.org/redirect/www.povray.org/ftp/pub/povray/Official/Unix/povray-3.6.tar.bz2;
-    sha256 = "0wvsfgkybx28mj2p76nnsq9rdq50192g5qb7d0xk81s8skn7z2jf";
+    url = http://www.povray.org/ftp/pub/povray/Old-Versions/Official-3.62/Unix/povray-3.6.tar.bz2;
+    sha256 = "4e8a7fecd44807343b6867e1f2440aa0e09613d6d69a7385ac48f4e5e7737a73";
   };
 
   # the installPhase wants to put files into $HOME. I let it put the files

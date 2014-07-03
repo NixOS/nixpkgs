@@ -1,6 +1,8 @@
 # This test runs influxdb and checks if influxdb is up and running
 
 import ./make-test.nix {
+  name = "influxdb";
+
   nodes = {
     one = { config, pkgs, ... }: {
       services.influxdb.enable = true;

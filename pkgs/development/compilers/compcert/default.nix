@@ -12,13 +12,16 @@ stdenv.mkDerivation rec {
   buildInputs = [ coq ocaml ocamlPackages.menhir ];
 
   enableParallelBuilding = true;
-  configurePhase = "./configure -prefix $out -toolprefix ${gcc}/bin/ ia32-linux";
+  configurePhase = "./configure -prefix $out -toolprefix ${gcc}/bin/ " +
+    (if stdenv.isDarwin then "ia32-macosx" else "ia32-linux");
 
   meta = {
     description = "Formally verified C compiler";
     homepage    = "http://compcert.inria.fr";
     license     = stdenv.lib.licenses.inria;
-    platforms   = [ "i686-linux" ];
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    platforms   = stdenv.lib.platforms.linux ++
+                  stdenv.lib.platforms.darwin;
+    maintainers = [ stdenv.lib.maintainers.thoughtpolice
+                    stdenv.lib.maintainers.jwiegley ];
   };
 }

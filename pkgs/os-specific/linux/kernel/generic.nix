@@ -95,6 +95,8 @@ let
     '';
 
     installPhase = "mv .config $out";
+
+    enableParallelBuilding = true;
   };
 
   kernel = buildLinux {
