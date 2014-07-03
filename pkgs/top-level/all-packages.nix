@@ -3540,8 +3540,6 @@ let
 
   php54 = callPackage ../development/interpreters/php/5.4.nix { };
 
-  php_apc = callPackage ../development/libraries/php-apc { };
-
   php_xcache = callPackage ../development/libraries/php-xcache { };
 
   picolisp = callPackage ../development/interpreters/picolisp {};
