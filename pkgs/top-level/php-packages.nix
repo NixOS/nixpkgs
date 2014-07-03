@@ -27,19 +27,19 @@ let self = with self; {
     buildInputs = [ pkgs.cyrus_sasl ];
   };
 
-  xdebug = buildPecl rec {
+  xdebug = buildPecl {
     name = "xdebug-2.2.5";
 
     sha256 = "0vss35da615709kdvqji8pblckfvmabmj2njjjz6h8zzvj9gximd";
   };
 
-  apc = buildPecl rec {
+  apc = buildPecl {
     name = "apc-3.1.13";
 
     sha256 = "1gcsh9iar5qa1yzpjki9bb5rivcb6yjp45lmjmp98wlyf83vmy2y";
   };
 
-  zmq = buildPecl rec {
+  zmq = buildPecl {
     name = "zmq-1.1.2";
 
     sha256 = "0ccz73p8pkda3y9p9qbr3m19m0yrf7k2bvqgbaly3ibgh9bazc69";
@@ -49,5 +49,27 @@ let self = with self; {
     ];
 
     buildInputs = [ pkgs.pkgconfig ];
+  };
+
+  xcache = buildPecl rec {
+    name = "xcache-${version}";
+
+    version = "3.1.0";
+
+    src = pkgs.fetchurl {
+      url = "http://xcache.lighttpd.net/pub/Releases/${version}/${name}.tar.bz2";
+      md5 = "e5816d47d52be200b959bf69a673ff74";
+    };
+
+    configureFlags = [
+      "--enable-xcache"
+      "--enable-xcache-coverager"
+      "--enable-xcache-optimizer"
+      "--enable-xcache-assembler"
+      "--enable-xcache-encoder"
+      "--enable-xcache-decoder"
+    ];
+
+    buildInputs = [ pkgs.m4 ];
   };
 }; in self
