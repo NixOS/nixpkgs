@@ -3464,6 +3464,7 @@ let
     compat = true;
   };
   lua5 = lua5_1;
+  lua = lua5;
 
   lua5_sockets = callPackage ../development/interpreters/lua-5/sockets.nix {};
   lua5_expat = callPackage ../development/interpreters/lua-5/expat.nix {};
