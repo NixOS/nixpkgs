@@ -3186,6 +3186,8 @@ let
       giflib = giflib_4_1;
     };
 
+    biniou = callPackage ../development/ocaml-modules/biniou { };
+
     ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
 
     cppo = callPackage ../development/tools/ocaml/cppo { };
