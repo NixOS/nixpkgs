@@ -137,7 +137,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   adjunctions = callPackage ../development/libraries/haskell/adjunctions {};
 
-  aes = callPackage ../development/libraries/haskell/aes {};
+  AES = callPackage ../development/libraries/haskell/AES {};
 
   aeson_0_7_0_4 = callPackage ../development/libraries/haskell/aeson/0.7.0.4.nix { blazeBuilder = null; };
   aeson_0_7_0_6 = callPackage ../development/libraries/haskell/aeson/0.7.0.6.nix { blazeBuilder = null; };
