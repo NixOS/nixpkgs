@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A binary data format designed for speed, safety, ease of use and backward compatibility as protocols evolve";
     homepage = "${webpage}";
-    license = "bsd";
+    license = stdenv.lib.licenses.bsd3;
+    platforms = ocaml.meta.platforms;
   };
 }
