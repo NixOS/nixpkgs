@@ -1926,6 +1926,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   resourcePool = callPackage ../development/libraries/haskell/resource-pool {};
 
+  resourcePoolCatchio = callPackage ../development/libraries/haskell/resource-pool-catchio {};
+
   resourcet = callPackage ../development/libraries/haskell/resourcet {};
 
   retry = callPackage ../development/libraries/haskell/retry {};
@@ -2005,6 +2007,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   snap = callPackage ../development/libraries/haskell/snap/snap.nix {};
 
   snapletAcidState = callPackage ../development/libraries/haskell/snaplet-acid-state {};
+
+  snapletPostgresqlSimple = callPackage ../development/libraries/haskell/snaplet-postgresql-simple {};
 
   snapletRedis = callPackage ../development/libraries/haskell/snaplet-redis {};
 
