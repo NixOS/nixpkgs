@@ -3523,9 +3523,9 @@ let
 
   php = php54;
 
-  phpPackages = import ./php-packages.nix {
+  phpPackages = recurseIntoAttrs (import ./php-packages.nix {
     inherit php pkgs;
-  };
+  });
 
   php53 = callPackage ../development/interpreters/php/5.3.nix { };
 
