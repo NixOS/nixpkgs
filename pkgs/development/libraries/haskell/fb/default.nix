@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "fb";
-  version = "1.0.1";
-  sha256 = "0xhwv8fmhb1an15fnfjxzq0ijnhxxmfjwzd99dq1lsm0f7gd4hfi";
+  version = "1.0.2";
+  sha256 = "1xgldk690dpbmhzmjlngpbalmbs0xrc7265zc7frphpsbbw3cnqc";
   buildDepends = [
     aeson attoparsec base16Bytestring base64Bytestring cereal conduit
     conduitExtra cryptoApi cryptohash cryptohashCryptoapi dataDefault
@@ -23,7 +23,7 @@ cabal.mkDerivation (self: {
   jailbreak = true;
   doCheck = false;
   meta = {
-    homepage = "https://github.com/meteficha/fb";
+    homepage = "https://github.com/prowdsponsor/fb";
     description = "Bindings to Facebook's API";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
