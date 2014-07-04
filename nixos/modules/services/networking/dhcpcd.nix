@@ -6,6 +6,8 @@ let
 
   dhcpcd = if !config.boot.isContainer then pkgs.dhcpcd else pkgs.dhcpcd.override { udev = null; };
 
+  cfg = config.networking.dhcpcd;
+
   # Don't start dhcpcd on explicitly configured interfaces or on
   # interfaces that are part of a bridge.
   ignoredInterfaces =
@@ -37,7 +39,10 @@ let
       # (Xen) and virbr* and vnet* (libvirt).
       denyinterfaces ${toString ignoredInterfaces} lo peth* vif* tap* tun* virbr* vnet* vboxnet*
 
-      ${config.networking.dhcpcd.extraConfig}
+      # Use the list of allowed interfaces if specified
+      ${optionalString (cfg.allowInterfaces != [ ]) "allowinterfaces ${toString cfg.allowInterfaces}"}
+
+      ${cfg.extraConfig}
     '';
 
   # Hook for emitting ip-up/ip-down events.
@@ -77,6 +82,17 @@ in
          any of the shell glob patterns in this list. The purpose of
          this option is to blacklist virtual interfaces such as those
          created by Xen, libvirt, LXC, etc.
+      '';
+    };
+
+    networking.dhcpcd.allowInterfaces = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = ''
+         Enable the DHCP client for any interface whose name matches
+         any of the shell glob patterns in this list. Any interface not
+         explicitly matched by this pattern will be denied. This pattern only
+         applies when the list is non-empty.
       '';
     };
 
