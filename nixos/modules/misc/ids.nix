@@ -244,6 +244,7 @@
       teamspeak = 124;
       influxdb = 125;
       nsd = 126;
+      firebird = 127;
       znc = 128;
 
       # When adding a gid, make sure it doesn't match an existing uid. And don't use gids above 399!
