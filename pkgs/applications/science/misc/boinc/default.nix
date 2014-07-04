@@ -1,14 +1,19 @@
+#TODO: build without GUI for headless operation.
+
 { fetchgit, stdenv, autoconf, automake, pkgconfig, m4, curl,
 mesa, libXmu, libXi, freeglut, libjpeg, libtool, wxGTK, xcbutil,
 sqlite, gtk, patchelf, libXScrnSaver, libnotify, libX11, libxcb }:
 
+let
+  version = "7.2.42";
+in
 stdenv.mkDerivation rec {
-  name = "boinc-7.0.44";
+  name = "boinc-${version}";
 
   src = fetchgit {
-    url = "git://boinc.berkeley.edu/boinc-v2.git";
-    rev = "7c449b1fb8a681ceb27d6895751b62a2b3adf0f2";
-    sha256 = "0hdramyl9nip3gadp7xiaz8ngyld15i93d8ai1nsd04bmrvdfqia";
+    url = git://boinc.berkeley.edu/boinc-v2.git;
+    rev = "refs/tags/client_release/7.2/${version}";
+    sha256 = "1zifpi3mjgaj68fba6kammp3x7z8n2x164zz6fj91xfiapnan56j";
   };
 
   buildInputs = [ libtool automake autoconf m4 pkgconfig curl mesa libXmu libXi
@@ -16,16 +21,11 @@ stdenv.mkDerivation rec {
     libxcb xcbutil
   ];
 
-  postConfigure = ''
-    sed -i -e s,/etc,$out/etc, client/scripts/Makefile
-  '';
+  patches = [ ./no-runscript.patch ];
 
   NIX_LDFLAGS = "-lX11";
 
-  preConfigure = ''
-    ./_autosetup
-    configureFlags="$configureFlags --sysconfdir=$out/etc"
-  '';
+  preConfigure = "./_autosetup";
 
   enableParallelBuilding = true;
 
@@ -33,11 +33,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Free software for distributed and grid computing";
-
     homepage = http://boinc.berkeley.edu/;
-
-    license = "LGPLv2+";
-
+    license = stdenv.lib.licenses.lgpl21Plus;
+    maintainers = [ stdenv.lib.maintainers.emery ];
     platforms = stdenv.lib.platforms.linux;  # arbitrary choice
   };
 }

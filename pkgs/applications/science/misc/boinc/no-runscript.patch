@@ -1,0 +1,13 @@
+diff --git a/Makefile.am b/Makefile.am
+index 6322db1..9820912 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -21,7 +21,7 @@ if ENABLE_SERVER
+ endif
+ 
+ if ENABLE_CLIENT
+-   CLIENT_SUBDIRS = client client/scripts
++   CLIENT_SUBDIRS = client
+ endif
+ 
+ if ENABLE_MANAGER
