@@ -548,9 +548,8 @@ let
 
   inherit (androidenv) androidsdk_4_1;
 
-  aria = builderDefsPackage (import ../tools/networking/aria) { };
-
   aria2 = callPackage ../tools/networking/aria2 { };
+  aria = aria2;
 
   at = callPackage ../tools/system/at { };
 
