@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "webdriver";
-  version = "0.5.4";
-  sha256 = "0839vw7drjn5iray4ma17f0pfgwx44q10ad8m564jvjgcml4yhvq";
+  version = "0.5.5";
+  sha256 = "1k656ghkaqlnp4a9dd99s3l2vm21zsqpqxwfg2lq5rx2yw402nga";
   buildDepends = [
     aeson attoparsec base64Bytestring cond dataDefault directoryTree
     exceptions filepath HTTP liftedBase monadControl mtl network

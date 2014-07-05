@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "binary-conduit";
-  version = "1.2.1.1";
-  sha256 = "0f6ki793fbgxpsqadfj796b4rbv6zhn4v4rrd48r48zzw9hmxmzd";
+  version = "1.2.2";
+  sha256 = "12dgqydc4zj1ffrcfqpd1dg40dc9hpynj1j69611kzpcqbj275pf";
   buildDepends = [ binary conduit resourcet vector ];
   testDepends = [
     binary conduit hspec QuickCheck quickcheckAssertions resourcet

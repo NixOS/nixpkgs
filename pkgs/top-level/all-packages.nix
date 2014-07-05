@@ -548,9 +548,8 @@ let
 
   inherit (androidenv) androidsdk_4_1;
 
-  aria = builderDefsPackage (import ../tools/networking/aria) { };
-
   aria2 = callPackage ../tools/networking/aria2 { };
+  aria = aria2;
 
   at = callPackage ../tools/system/at { };
 
@@ -3186,6 +3185,8 @@ let
       giflib = giflib_4_1;
     };
 
+    biniou = callPackage ../development/ocaml-modules/biniou { };
+
     ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
 
     cppo = callPackage ../development/tools/ocaml/cppo { };
@@ -3523,9 +3524,9 @@ let
 
   php = php54;
 
-  phpPackages = import ./php-packages.nix {
+  phpPackages = recurseIntoAttrs (import ./php-packages.nix {
     inherit php pkgs;
-  };
+  });
 
   php53 = callPackage ../development/interpreters/php/5.3.nix { };
 
@@ -3539,10 +3540,6 @@ let
   };
 
   php54 = callPackage ../development/interpreters/php/5.4.nix { };
-
-  php_apc = callPackage ../development/libraries/php-apc { };
-
-  php_xcache = callPackage ../development/libraries/php-xcache { };
 
   picolisp = callPackage ../development/interpreters/picolisp {};
 
@@ -4269,6 +4266,7 @@ let
   boostHeaders = callPackage ../development/libraries/boost/header-only-wrapper.nix { };
 
   botan = callPackage ../development/libraries/botan { };
+  botanUnstable = callPackage ../development/libraries/botan/unstable.nix { };
 
   box2d = callPackage ../development/libraries/box2d { };
   box2d_2_0_1 = callPackage ../development/libraries/box2d/2.0.1.nix { };

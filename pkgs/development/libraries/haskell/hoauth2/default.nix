@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hoauth2";
-  version = "0.4.0";
-  sha256 = "1499rgcn3h4921x21s6l0spnjf3wvmsaa07pimgjgb4rjib3z2d5";
+  version = "0.4.1";
+  sha256 = "145lgy9bxx1xdljbkvi6s97n2z1k5fd0idp415r71ydw8h3i8ppx";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Chart-cairo";
-  version = "1.2.2";
-  sha256 = "1bbi5bvrh8wmgzv5am5ndgdr68gd68ipparkkk9ld4majwf4vm6w";
+  version = "1.2.3";
+  sha256 = "1lbl1qvgm4yxslahlms6kzfrhh8s2fcdiwmvk1bs319k1fylia1b";
   buildDepends = [
     cairo Chart colour dataDefaultClass lens mtl operational time
   ];

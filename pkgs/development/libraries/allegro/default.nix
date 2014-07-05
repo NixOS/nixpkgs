@@ -41,6 +41,7 @@ rec {
   ];
 
   meta = {
+    branch = "4";
     description = "A game programming library";
     license = "free-noncopyleft"; # giftware
     maintainers = with a.lib.maintainers;

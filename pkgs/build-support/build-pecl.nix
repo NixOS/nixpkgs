@@ -1,9 +1,23 @@
-{ stdenv, php, autoreconfHook }:
+{ stdenv, php, autoreconfHook, fetchurl }:
 
-args: stdenv.mkDerivation (args // {
-  buildInputs = [ php autoreconfHook ] ++ args.buildInputs or [];
+{ name
+, buildInputs ? []
+, makeFlags ? []
+, src ? fetchurl {
+    url = "http://pecl.php.net/get/${name}.tgz";
+    inherit (args) sha256;
+  }
+, ...
+}@args:
 
-  makeFlags = [ "EXTENSION_DIR=$(out)/lib/php/extensions" ] ++ args.makeFlags or [];
+stdenv.mkDerivation (args // {
+  name = "php-${name}";
+
+  inherit src;
+
+  buildInputs = [ php autoreconfHook ] ++ buildInputs;
+
+  makeFlags = [ "EXTENSION_DIR=$(out)/lib/php/extensions" ] ++ makeFlags;
 
   autoreconfPhase = "phpize";
 })
