@@ -11,7 +11,7 @@
 
 cabal.mkDerivation (self: rec {
   pname = "ghcjs";
-  version = "c9ce6b9d";
+  version = "0.1.0";
   src = fetchgit {
     url = git://github.com/ghcjs/ghcjs.git;
     rev = "c9ce6b9d87296b1236d5ef0f7d5236b2cedcff84";
