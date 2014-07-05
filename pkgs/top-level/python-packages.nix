@@ -3776,11 +3776,11 @@ rec {
   };
 
   keyring = buildPythonPackage rec {
-    name = "keyring-3.2";
+    name = "keyring-3.8";
 
     src = fetchurl {
       url    = "https://pypi.python.org/packages/source/k/keyring/${name}.zip";
-      sha256 = "1flccphpyrb8y8dra2fq2s2v3fg615d77kjjmzl0gmiidabkkdqf";
+      sha256 = "ef0b1a18aaf6792b73a6a6ce8c2f9c1a01dd27d4a5c0aab277fe3dce96fbaaef";
     };
 
     meta = with stdenv.lib; {
@@ -5966,6 +5966,22 @@ rec {
   };
 
 
+  parsedatetime = buildPythonPackage rec {
+    name = "parsedatetime-1.2";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/parsedatetime/${name}.tar.gz";
+      sha256 = "1b6bc97867e52df7ea95122a25a788cb37daddbc95aba4aa9084deddff0592fd";
+    };
+
+    meta = {
+      homepage = "http://github.com/bear/parsedatetime/";
+      description = "Parse human-readable date/time text";
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
+
+
   pylibacl = buildPythonPackage (rec {
     name = "pylibacl-0.5.1";
 
@@ -7134,11 +7150,11 @@ rec {
 
 
   six = buildPythonPackage rec {
-    name = "six-1.3.0";
+    name = "six-1.7.2";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/s/six/${name}.tar.gz";
-      md5 = "ec47fe6070a8a64c802363d2c2b1e2ee";
+      md5 = "4c26276583b01dfc73474cb32327af91";
     };
 
     # error: invalid command 'test'
@@ -7789,6 +7805,25 @@ rec {
       license = licenses.mit;
 
       maintainers = [ ];
+    };
+  };
+
+
+  tzlocal = buildPythonPackage rec {
+    name = "tzlocal-1.1.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/tzlocal/${name}.zip";
+      sha256 = "696bfd8d7c888de039af6c6fdf86fd52e32508277d89c75d200eb2c150487ed4";
+    };
+
+    doCheck = false;
+    buildInputs = [ pythonPackages.pytz ];
+
+    meta = {
+      homepage = "https://github.com/regebro/tzlocal";
+      description = "tzinfo object for the local timezone";
+      platforms = stdenv.lib.platforms.all;
     };
   };
 
