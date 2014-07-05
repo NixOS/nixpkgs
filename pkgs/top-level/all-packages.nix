@@ -8106,8 +8106,6 @@ let
   };
   awesome = awesome-3-5;
 
-  banshee = callPackage ../applications/audio/banshee { };
-
   inherit (gnome3) baobab;
 
   baresip = callPackage ../applications/networking/instant-messengers/baresip {
