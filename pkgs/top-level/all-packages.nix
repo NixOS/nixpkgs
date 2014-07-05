@@ -3869,7 +3869,6 @@ let
 
   dfeet = callPackage ../development/tools/misc/d-feet {
     inherit (pythonPackages) pep8;
-    inherit (gnome3) gnome_icon_theme;
   };
 
   dfu-programmer = callPackage ../development/tools/misc/dfu-programmer { };
