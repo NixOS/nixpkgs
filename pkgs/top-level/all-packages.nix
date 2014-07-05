@@ -3279,6 +3279,8 @@ let
     opam_1_1 = callPackage ../development/tools/ocaml/opam/1.1.nix { };
     opam = opam_1_1;
 
+    yojson = callPackage ../development/ocaml-modules/yojson { };
+
     zarith = callPackage ../development/ocaml-modules/zarith { };
   };
 
