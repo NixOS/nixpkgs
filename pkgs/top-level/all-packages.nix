@@ -3217,6 +3217,8 @@ let
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
+    merlin = callPackage ../development/tools/ocaml/merlin { };
+
     mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
 
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
