@@ -873,6 +873,12 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   gitit = callPackage ../development/libraries/haskell/gitit {};
 
+  gitlib = callPackage ../development/libraries/haskell/gitlib {};
+
+  gitlibLibgit2 = callPackage ../development/libraries/haskell/gitlib-libgit2 {};
+
+  gitlibTest = callPackage ../development/libraries/haskell/gitlib-test {};
+
   glade = callPackage ../development/libraries/haskell/glade {
     inherit (pkgs.gnome) libglade;
     gtkC = pkgs.gtk;
@@ -1107,6 +1113,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hledgerInterest = callPackage ../applications/office/hledger-interest {};
   hledgerIrr = callPackage ../applications/office/hledger-irr {};
   hledgerWeb = callPackage ../development/libraries/haskell/hledger-web {};
+
+  hlibgit2 = callPackage ../development/libraries/haskell/hlibgit2 {};
 
   HList = callPackage ../development/libraries/haskell/HList {};
 
