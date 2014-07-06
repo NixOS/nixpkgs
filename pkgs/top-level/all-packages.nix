@@ -3201,6 +3201,10 @@ let
 
     findlib = callPackage ../development/tools/ocaml/findlib { };
 
+    javalib = callPackage ../development/ocaml-modules/javalib {
+      extlib = ocaml_extlib_maximal;
+    };
+
     dypgen = callPackage ../development/ocaml-modules/dypgen { };
 
     patoline = callPackage ../tools/typesetting/patoline { };
@@ -3274,12 +3278,17 @@ let
     ocaml_sexplib = callPackage ../development/ocaml-modules/sexplib { };
 
     ocaml_extlib = callPackage ../development/ocaml-modules/extlib { };
+    ocaml_extlib_maximal = callPackage ../development/ocaml-modules/extlib {
+      minimal = false;
+    };
 
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
 
     opam_1_0_0 = callPackage ../development/tools/ocaml/opam/1.0.0.nix { };
     opam_1_1 = callPackage ../development/tools/ocaml/opam/1.1.nix { };
     opam = opam_1_1;
+
+    sawja = callPackage ../development/ocaml-modules/sawja { };
 
     yojson = callPackage ../development/ocaml-modules/yojson { };
 
