@@ -2254,6 +2254,8 @@ let
 
   wal_e = callPackage ../tools/backup/wal-e { };
 
+  watchman = callPackage ../development/tools/watchman { };
+
   wbox = callPackage ../tools/networking/wbox {};
 
   welkin = callPackage ../tools/graphics/welkin {};
