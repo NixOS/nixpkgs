@@ -55,6 +55,8 @@ fi
 
 if [ -z "$name" ]; then
   name=$(basename "$url")
+  name=${name%.tar.gz}
+  name=${name%.zip}
 fi
 
 if test -z "$hashType"; then
@@ -67,8 +69,9 @@ tmp=$(mktemp -d 2>/dev/null || mktemp -d -t "$$")
 trap "rm -rf '$tmp'" EXIT
 
 unpackDir=$tmp/unpacked/$name
+downloadedFile=$tmp/downloaded/$(basename $url)
 mkdir -p $unpackDir
-downloadedFile=$tmp/$name
+mkdir -p $(dirname $downloadedFile)
 
 unpackFile() {
   local curSrc="$1"
