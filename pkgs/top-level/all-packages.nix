@@ -2933,7 +2933,10 @@ let
 
   # Import Haskell infrastructure.
 
-  haskell = callPackage ./haskell-defaults.nix { inherit pkgs; };
+  haskell = let pkgs_       = pkgs // { gmp = gmp.override { withStatic = true; }; };
+                callPackage = newScope pkgs_;
+                newScope    = extra: lib.callPackageWith (pkgs_ // pkgs_.xorg // extra);
+            in callPackage ./haskell-defaults.nix { pkgs = pkgs_; inherit callPackage newScope; };
 
   # Available GHC versions.
 
