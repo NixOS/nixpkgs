@@ -49,7 +49,7 @@
     networkTransport = super.networkTransport.override { binary = self.binary_0_7_2_1; };
     distributedProcess = super.distributedProcess.override { binary = self.binary_0_7_2_1; };
     singletons = null;                  # requires base >= 4.7
-    vty_5_1_0 = super.vty_5_1_0.override { cabal = self.cabal.override { Cabal = self.Cabal_1_18_1_3; }; };
+    vty_5_1_1 = super.vty_5_1_1.override { cabal = self.cabal.override { Cabal = self.Cabal_1_18_1_3; }; };
     transformers = self.transformers_0_3_0_0; # core packagen in ghc > 7.6.x
     zipArchive = super.zipArchive_0_2_2_1;    # works without binary 0.7.x
   };
