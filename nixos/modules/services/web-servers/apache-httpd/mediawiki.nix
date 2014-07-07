@@ -79,6 +79,8 @@ let
       sha256 = "07z5j8d988cdg4ml4n0vs9fwmj0p594ibbqdid16faxwqm52dkhl";
     };
 
+    patches = [ ./mediawiki-postgresql-fixes.patch ];
+
     skins = config.skins;
 
     buildPhase =
