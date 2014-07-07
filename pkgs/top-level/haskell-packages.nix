@@ -78,12 +78,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     ghc = ghc; # refers to ghcPlain
   };
 
-  # capable of creating static executables by adding -optl-static -optl-pthread
-  # see thread http://permalink.gmane.org/gmane.linux.distributions.nixos/13526
-  ghcForStatic = self.ghc.override {
-    ghc = ghc.override { gmp = pkgs.gmp.override { withStatic = true; }; };
-  };
-
   # An experimental wrapper around ghcPlain that does not automatically
   # pick up packages from the profile, but instead has a fixed set of packages
   # in its global database. The set of packages can be specified as an
