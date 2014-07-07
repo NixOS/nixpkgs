@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "libmpd";
-  version = "0.8.0.4";
-  sha256 = "0dk723zly9dkwpgp4157d3a559g9j0ndxfdyp85yqcsr987wplqb";
+  version = "0.8.0.5";
+  sha256 = "0jxd2xl9imfvb3dz7zqwzx392aw2cb2pl3drx5wkygbywbi5ijhh";
   buildDepends = [
     attoparsec dataDefault filepath mtl network text time utf8String
   ];
