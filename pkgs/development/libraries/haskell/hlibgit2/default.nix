@@ -1,4 +1,4 @@
-{ cabal, bindingsDSL, openssl, zlib, git }:
+{ cabal, bindingsDSL, git, openssl, zlib }:
 
 cabal.mkDerivation (self: {
   pname = "hlibgit2";
