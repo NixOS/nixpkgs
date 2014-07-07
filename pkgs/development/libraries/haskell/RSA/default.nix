@@ -5,10 +5,13 @@
 
 cabal.mkDerivation (self: {
   pname = "RSA";
-  version = "2.0";
-  sha256 = "170bjcqd6q8q0c0idjpm9vgn02ifwxz1xvwp1l30qdf56293p4bq";
+  version = "2.0.0";
+  sha256 = "1v2d6sxpqr0lmiqdr3ym5qzp3p1y57yj6939vdlsac6k6ifj6pwq";
+  isLibrary = true;
+  isExecutable = true;
   buildDepends = [
-    binary cryptoApi cryptoPubkeyTypes monadcryptorandom pureMD5 SHA
+    binary cryptoApi cryptoPubkeyTypes DRBG monadcryptorandom pureMD5
+    QuickCheck SHA tagged testFramework testFrameworkQuickcheck2
   ];
   testDepends = [
     binary cryptoApi cryptoPubkeyTypes DRBG pureMD5 QuickCheck SHA
