@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "crypto-conduit";
-  version = "0.5.3";
-  sha256 = "1xvjfkwd4rqlgyz172s2mihfqz1pac84qhc72c4zw1nwadsh6dgl";
+  version = "0.5.4";
+  sha256 = "1z628gj4sf50s7pd6p41c670rz98f8b6p3n2dvl93haczcg53l1n";
   buildDepends = [
     cereal conduit conduitExtra cryptoApi resourcet transformers
   ];
@@ -16,7 +16,7 @@ cabal.mkDerivation (self: {
   jailbreak = true;
   doCheck = false;
   meta = {
-    homepage = "https://github.com/meteficha/crypto-conduit";
+    homepage = "https://github.com/prowdsponsor/crypto-conduit";
     description = "Conduit interface for cryptographic operations (from crypto-api)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
