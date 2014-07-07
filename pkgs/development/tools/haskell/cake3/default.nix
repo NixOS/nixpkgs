@@ -1,18 +1,18 @@
 { cabal, attoparsec, deepseq, filepath, haskellSrcMeta
 , languageJavascript, mimeTypes, monadloc, mtl, optparseApplicative
-, syb, systemFilepath, text, textFormat
+, parsec, syb, systemFilepath, text, textFormat
 }:
 
 cabal.mkDerivation (self: {
   pname = "cake3";
-  version = "0.5.0.0";
-  sha256 = "0hfnda0xp8saav85pgqmcb6ib699gm6gy5f087nlrx7058f4n7ji";
+  version = "0.5.1.0";
+  sha256 = "0kqx8xr0ynbn7fhfz11is7lbi32dfladsx32bcpspykqj1bjv954";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     attoparsec deepseq filepath haskellSrcMeta languageJavascript
-    mimeTypes monadloc mtl optparseApplicative syb systemFilepath text
-    textFormat
+    mimeTypes monadloc mtl optparseApplicative parsec syb
+    systemFilepath text textFormat
   ];
   meta = {
     homepage = "https://github.com/grwlf/cake3";
