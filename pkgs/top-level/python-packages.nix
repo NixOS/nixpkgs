@@ -163,6 +163,14 @@ rec {
     pythonDBus = dbus;
   };
 
+  pyqt5 = import ../development/python-modules/pyqt/5.x.nix {
+    inherit (pkgs) stdenv fetchurl pkgconfig qt5 makeWrapper;
+    inherit (pkgs.xorg) lndir;
+    inherit python;
+    sip = sip_4_16;
+    pythonDBus = dbus;
+  };
+
   sip = import ../development/python-modules/sip {
     inherit (pkgs) stdenv fetchurl;
     inherit python;
