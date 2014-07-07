@@ -1920,6 +1920,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   regexTdfa = callPackage ../development/libraries/haskell/regex-tdfa {};
 
+  regexTdfaRc = callPackage ../development/libraries/haskell/regex-tdfa-rc {};
+
   regexTdfaText = callPackage ../development/libraries/haskell/regex-tdfa-text {};
 
   regexPcre = callPackage ../development/libraries/haskell/regex-pcre {};
