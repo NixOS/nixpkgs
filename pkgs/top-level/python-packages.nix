@@ -168,6 +168,11 @@ rec {
     inherit python;
   };
 
+  sip_4_16 = import ../development/python-modules/sip/4.16.nix {
+    inherit (pkgs) stdenv fetchurl;
+    inherit python;
+  };
+
   tables = import ../development/python-modules/tables {
     inherit (pkgs) stdenv fetchurl bzip2 lzo;
     inherit python buildPythonPackage cython numpy numexpr;
