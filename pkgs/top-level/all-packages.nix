@@ -5323,6 +5323,8 @@ let
 
   libmpcdec = callPackage ../development/libraries/libmpcdec { };
 
+  libmp3splt = callPackage ../development/libraries/libmp3splt { };
+
   libmrss = callPackage ../development/libraries/libmrss { };
 
   libmsn = callPackage ../development/libraries/libmsn { };
@@ -9158,6 +9160,8 @@ let
   easytag = callPackage ../applications/audio/easytag { };
 
   mp3info = callPackage ../applications/audio/mp3info { };
+
+  mp3splt = callPackage ../applications/audio/mp3splt { };
 
   mpc123 = callPackage ../applications/audio/mpc123 { };
 
