@@ -152,7 +152,7 @@ in
   # default root password is empty.
   services.openssh.enable = true;
 
-  jobs.openssh.startOn = pkgs.lib.mkOverride 50 "";
+  jobs.openssh.startOn = lib.mkOverride 50 "";
 
   boot.loader.grub.enable = false;
   boot.loader.generationsDir.enable = false;

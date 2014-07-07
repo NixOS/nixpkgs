@@ -84,7 +84,7 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = pkgs.lib.singleton {
+    assertions = lib.singleton {
       assertion = cfg.driSupport32Bit -> pkgs.stdenv.isx86_64;
       message = "Option driSupport32Bit only makes sense on a 64-bit system.";
     };

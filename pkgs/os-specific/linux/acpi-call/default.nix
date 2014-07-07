@@ -5,8 +5,8 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "git://github.com/mkottman/acpi_call.git";
-    rev = "46dd97e115ddc7219c88b0818c4d5b235162fe6e";
-    sha256 = "1bi0azd7xxhrivjhnmxllj2sfj12br56mxii20mnqdpqwyz0rhni";
+    rev = "ac67445bc75ec4fcf46ceb195fb84d74ad350d51";
+    sha256 = "0jl19irz9x9pxab2qp4z8c3jijv2m30zhmnzi6ygbrisqqlg4c75";
   };
   
   preBuild = ''

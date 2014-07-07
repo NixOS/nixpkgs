@@ -1,16 +1,16 @@
 { cabal, ansiTerminal, filepath, HTTP, network, optparseApplicative
-, stringsearch, terminalSize, time, zlib
+, terminalSize, text, time, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "sloane";
-  version = "1.8";
-  sha256 = "0c30slsswfqwzi39hk6jraxz1y1a2yn8g8nyjvlnggwajx2rlm6p";
+  version = "1.8.2";
+  sha256 = "0kdznrvyrax1gihqxxw36jfbmjri808ii827fa71v2ijlm416hk1";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    ansiTerminal filepath HTTP network optparseApplicative stringsearch
-    terminalSize time zlib
+    ansiTerminal filepath HTTP network optparseApplicative terminalSize
+    text time zlib
   ];
   postInstall = ''
     mkdir -p $out/share/man/man1

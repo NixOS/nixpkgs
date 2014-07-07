@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Chart-gtk";
-  version = "1.2.2";
-  sha256 = "1mg6nln0jwp6hals9vhhsfqiwix424fv1v1p4h99s0xwy5cna1z9";
+  version = "1.2.3";
+  sha256 = "0vl9nh48pa7sdrqh5a6smmfallf4mwzrvspc2v94cpnrcnickiyq";
   buildDepends = [ cairo Chart ChartCairo colour gtk mtl time ];
   jailbreak = true;
   meta = {

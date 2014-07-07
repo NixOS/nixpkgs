@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
                    ++ stdenv.lib.optional valaSupport "--enable-vala-bindings";
 
   preFixup = ''
-    for f in "$out/libexec/evolution-addressbook-factory" "$out/libexec/evolution-calendar-factory"; do
-      wrapProgram $f --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+    for f in "$out/libexec/"*; do
+      wrapProgram "$f" --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
     done
   '';
 

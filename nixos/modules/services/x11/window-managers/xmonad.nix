@@ -1,7 +1,7 @@
-{pkgs, config, ...}:
+{pkgs, lib, config, ...}:
 
 let
-  inherit (pkgs.lib) mkOption mkIf optionals literalExample;
+  inherit (lib) mkOption mkIf optionals literalExample;
   cfg = config.services.xserver.windowManager.xmonad;
   xmonadEnv = cfg.haskellPackages.ghcWithPackages(self: [
     self.xmonad
@@ -48,7 +48,7 @@ in
       enableContribAndExtras = mkOption {
         default = false;
         example = true;
-        type = pkgs.lib.types.bool;
+        type = lib.types.bool;
         description = "Enable xmonad-{contrib,extras} in Xmonad.";
       };
     };

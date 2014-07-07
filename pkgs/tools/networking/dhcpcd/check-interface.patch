@@ -1,24 +1,44 @@
-Index: dhcpcd.c
-==================================================================
---- a/dhcpcd.c
-+++ b/dhcpcd.c
-@@ -747,14 +747,14 @@
- 			if (ifp->hwlen != 0)
- 				memcpy(ifl->hwaddr, ifp->hwaddr, ifl->hwlen);
+Fix a segfault in handle_interface: if we're adding an interface that
+we already knew about (in particular due to a udev event), then
+calling init_state/start_interface on ifp is bad because we later free
+ifp. This leads to messages like:
+
+  dhcpcd[1342]: eth0: IAID conflicts with one assigned to eth0
+
+and then a crash:
+
+  Invalid read of size 8
+    at 0x41CD07: dhcp_handlepacket (dhcp.c:2555)
+    by 0x408A74: eloop_start (eloop.c:399)
+    by 0x4073B6: main (dhcpcd.c:1537)
+
+  Address 0x54573d8 is 200 bytes inside a block of size 232 free'd
+    at 0x4C27507: free (in /nix/store/jafbjc2y6izmh3sk78fl65n55jll4mj8-valgrind-3.9.0/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+    by 0x40F0A8: free_interface (net.c:153)
+    by 0x405443: handle_interface (dhcpcd.c:764) by 0x57E0F06: ??? (udev.c:97)
+    by 0x42EB62: dev_handle_data (dev.c:153)
+    by 0x408A74: eloop_start (eloop.c:399)
+    by 0x4073B6: main (dhcpcd.c:1537)
+
+So ignore interfaces that we already know about.
+
+diff -ru -x '*~' dhcpcd-6.4.0-orig/dhcpcd.c dhcpcd-6.4.0/dhcpcd.c
+--- dhcpcd-6.4.0-orig/dhcpcd.c	2014-06-14 22:13:12.000000000 +0200
++++ dhcpcd-6.4.0/dhcpcd.c	2014-07-03 11:13:39.133186533 +0200
+@@ -774,11 +774,11 @@
  		} else {
  			TAILQ_REMOVE(ifs, ifp, next);
  			TAILQ_INSERT_TAIL(ctx->ifaces, ifp, next);
 -		}
--		if (action == 1) {
+-		if (action > 0) {
 -			init_state(ifp, ctx->argc, ctx->argv);
--			start_interface(ifp);
-+			if (action == 1) {
+-			run_preinit(ifp);
+-			dhcpcd_startinterface(ifp);
++			if (action > 0) {
 +				init_state(ifp, ctx->argc, ctx->argv);
-+				start_interface(ifp);
++				run_preinit(ifp);
++				dhcpcd_startinterface(ifp);
 +			}
  		}
  	}
  
- 	/* Free our discovered list */
- 	while ((ifp = TAILQ_FIRST(ifs))) {
-

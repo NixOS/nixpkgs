@@ -1,4 +1,4 @@
-{pkgs, config, ...}:
+{lib, config, ...}:
 
 let kernel = config.boot.kernelPackages;
 in
@@ -9,9 +9,9 @@ in
 
   options = {
 
-    services.frandom.enable = pkgs.lib.mkOption {
+    services.frandom.enable = lib.mkOption {
       default = false;
-      type = pkgs.lib.types.bool;
+      type = lib.types.bool;
       description = ''
         enable the /dev/frandom device (a very fast random number generator)
       '';
@@ -22,7 +22,7 @@ in
 
   ###### implementation
 
-  config = pkgs.lib.mkIf config.services.frandom.enable {
+  config = lib.mkIf config.services.frandom.enable {
     boot.kernelModules = [ "frandom" ];
     boot.extraModulePackages = [ kernel.frandom ];
     services.udev.packages = [ kernel.frandom ];

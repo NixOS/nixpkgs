@@ -11,17 +11,17 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="atanks";
-    version="4.9";
+    version = "6.0";
     name="${baseName}-${version}";
     project="${baseName}";
     url="mirror://sourceforge/project/${project}/${baseName}/${name}/${name}.tar.gz";
-    hash="015nwh8jk4k24ci6ilihii8idkyf6g266r4vl50csvykc82slrvd";
+    sha256 = "0460zwzd800vcgsmd1dzb7j5wcy3lf9hsdw152f6p2mbd0nq5pds";
   };
 in
 rec {
   src = a.fetchurl {
     url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+    sha256 = sourceInfo.sha256;
   };
 
   inherit (sourceInfo) name version;
@@ -35,6 +35,7 @@ rec {
   fixInstall = a.fullDepEntry (''
     sed -e "s@INSTALL=.*bin/install @INSTALL=install @" -i Makefile
     sed -e "s@-g 0 -m ... -o 0@@" -i Makefile
+    sed -e 's@/usr/@'"$out"'@g' -i Makefile
   '') ["doUnpack" "minInit"];
       
   meta = {
@@ -45,11 +46,8 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://sourceforge.net/projects/atanks/files/atanks/";
-    };
+    downloadPage = "http://sourceforge.net/projects/atanks/files/atanks/";
+    inherit version;
   };
 }) x
 

@@ -1,14 +1,12 @@
 {stdenv, fetchurl, libX11, libXaw}:
 
-let
-  name = "autocutsel-0.9.0";
-in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  version = "0.10.0";
+  name = "autocutsel-${version}";
  
   src = fetchurl {
-    url = "mirror://savannah/autocutsel/${name}.tar.gz";
-    sha256 = "0hp335qq57l0kp58pfwb0bk930zx5497frq8y0lzr4icvk1fpw5y";
+    url = "https://github.com/sigmike/autocutsel/releases/download/${version}/${name}.tar.gz";
+    sha256 = "0gsys2dzh4az51ndcsabhlbbrjn2nm75lnjr45kg6r8sm8q66dx2";
   };
  
   buildInputs = [ libX11 libXaw ];
@@ -18,9 +16,11 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    inherit version;
     homepage = "http://www.nongnu.org/autocutsel/";
     description = "Tracks changes in the server's cutbuffer and CLIPBOARD selection";
     license = "GPLv2+";
     platforms = with stdenv.lib.platforms; all;
+    updateWalker = true;
   };
 }
