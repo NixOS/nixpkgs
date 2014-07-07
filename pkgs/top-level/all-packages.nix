@@ -647,6 +647,8 @@ let
 
   syslogng = callPackage ../tools/system/syslog-ng { };
 
+  syslogng_incubator = callPackage ../tools/system/syslog-ng-incubator { };
+
   rsyslog = callPackage ../tools/system/rsyslog { };
 
   mcrypt = callPackage ../tools/misc/mcrypt { };
@@ -5200,6 +5202,8 @@ let
   libiodbc = callPackage ../development/libraries/libiodbc {
     useGTK = config.libiodbc.gtk or false;
   };
+
+  libivykis = callPackage ../development/libraries/libivykis { };
 
   liblastfmSF = callPackage ../development/libraries/liblastfmSF { };
 
