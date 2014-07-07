@@ -1792,6 +1792,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   presburger = callPackage ../development/libraries/haskell/presburger {};
 
+  pretty = callPackage ../development/libraries/haskell/pretty {};
+
   prettyclass = callPackage ../development/libraries/haskell/prettyclass {};
 
   prettyShow = callPackage ../development/libraries/haskell/pretty-show {};
