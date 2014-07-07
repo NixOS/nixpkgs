@@ -5051,6 +5051,8 @@ let
 
   liblockfile = callPackage ../development/libraries/liblockfile { };
 
+  liblogging = callPackage ../development/libraries/liblogging { };
+
   libmcrypt = callPackage ../development/libraries/libmcrypt {};
 
   libmhash = callPackage ../development/libraries/libmhash {};
