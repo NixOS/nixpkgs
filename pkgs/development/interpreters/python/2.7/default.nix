@@ -85,10 +85,11 @@ let
         paxmark E $out/bin/python${majorVersion}
       '';
 
-    passthru = {
+    passthru = rec {
       inherit zlibSupport;
       libPrefix = "python${majorVersion}";
-      executable = "python2.7";
+      executable = libPrefix;
+      sitePackages = "lib/${libPrefix}/site-packages";
     };
 
     enableParallelBuilding = true;

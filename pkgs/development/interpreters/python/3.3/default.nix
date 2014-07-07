@@ -57,7 +57,7 @@ stdenv.mkDerivation {
     paxmark E $out/bin/python${majorVersion}
   '';
 
-  passthru = {
+  passthru = rec {
     zlibSupport = zlib != null;
     sqliteSupport = sqlite != null;
     dbSupport = db != null;
@@ -67,6 +67,7 @@ stdenv.mkDerivation {
     libPrefix = "python${majorVersion}";
     executable = "python3.3m";
     is_py3k = true;
+    sitePackages = "lib/${libPrefix}/site-packages";
   };
 
   enableParallelBuilding = true;

@@ -71,10 +71,11 @@ let
         ln -s $out/share/man/man1/{python2.6.1,python.1}
       '';
 
-    passthru = {
+    passthru = rec {
       inherit zlibSupport;
       libPrefix = "python${majorVersion}";
-      executable = "python2.6";
+      executable = libPrefix;
+      sitePackages = "lib/${libPrefix}/site-packages";
     };
 
     enableParallelBuilding = true;

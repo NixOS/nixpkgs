@@ -60,7 +60,7 @@ stdenv.mkDerivation {
     ln -s "$out/include/python${majorVersion}m" "$out/include/python${majorVersion}"
   '';
 
-  passthru = {
+  passthru = rec {
     zlibSupport = zlib != null;
     sqliteSupport = sqlite != null;
     dbSupport = db != null;
@@ -70,6 +70,7 @@ stdenv.mkDerivation {
     libPrefix = "python${majorVersion}";
     executable = "python3.2m";
     is_py3k = true;
+    sitePackages = "lib/${libPrefix}/site-packages";
   };
 
   enableParallelBuilding = true;
