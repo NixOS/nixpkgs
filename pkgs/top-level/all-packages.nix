@@ -1941,6 +1941,8 @@ let
 
   rdmd = callPackage ../development/compilers/rdmd { };
 
+  riemann_c_client = callPackage ../tools/misc/riemann-c-client { };
+
   ripmime = callPackage ../tools/networking/ripmime {};
 
   rkflashtool = callPackage ../tools/misc/rkflashtool { };
