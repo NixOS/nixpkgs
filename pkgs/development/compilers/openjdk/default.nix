@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     "ALSA_INCLUDE=${alsaLib}/include/alsa/version.h"
     "FREETYPE_HEADERS_PATH=${freetype}/include"
     "FREETYPE_LIB_PATH=${freetype}/lib"
-    "MILESTONE=release"
+    "MILESTONE=u${update}"
     "BUILD_NUMBER=b${build}"
     "USRBIN_PATH="
     "COMPILER_PATH="
@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
     "BOOTDIR=${jdk}"
     "STATIC_CXX=false"
     "UNLIMITED_CRYPTO=1"
+    "FULL_DEBUG_SYMBOLS=0"
   ];
 
   configurePhase = "true";
