@@ -295,7 +295,6 @@ let
       texLive = linux;
       texLiveBeamer = linux;
       texLiveExtra = linux;
-      texinfo = all;
       tightvnc = linux;
       time = linux;
       tinycc = linux;
