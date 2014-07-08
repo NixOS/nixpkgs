@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, zip, procps, coreutils, alsaLib, ant, freetype, cups
+{ stdenv, fetchurl, unzip, zip, procps, coreutils, alsaLib, ant, freetype
 , which, jdk, nettools, xorg
 , fontconfig, cpio, cacert, perl, setJavaClassPath }:
 
@@ -18,6 +18,11 @@ let
   update = "40";
 
   build = "43";
+
+  cupsSrc = fetchurl {
+    url = http://ftp.easysw.com/pub/cups/1.5.4/cups-1.5.4-source.tar.bz2;
+    md5 = "de3006e5cf1ee78a9c6145ce62c4e982";
+  };
 
 in
 
@@ -47,6 +52,10 @@ stdenv.mkDerivation rec {
 
     sed -i "s@/bin/echo -e@${coreutils}/bin/echo -e@" \
       openjdk/{jdk,corba}/make/common/shared/Defs-utils.gmk
+
+    tar xf ${cupsSrc}
+    cupsDir=$(echo $(pwd)/cups-*)
+    makeFlagsArray+=(CUPS_HEADERS_PATH=$cupsDir)
   '';
 
   patches = [ ./cppflags-include-fix.patch ./fix-java-home.patch ];
@@ -60,7 +69,6 @@ stdenv.mkDerivation rec {
     "FREETYPE_LIB_PATH=${freetype}/lib"
     "MILESTONE=release"
     "BUILD_NUMBER=b${build}"
-    "CUPS_HEADERS_PATH=${cups}/include"
     "USRBIN_PATH="
     "COMPILER_PATH="
     "DEVTOOLS_PATH="
@@ -139,7 +147,7 @@ stdenv.mkDerivation rec {
     homepage = http://openjdk.java.net/;
     license = "GPLv2";
     description = "The open-source Java Development Kit";
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
+    maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.shlevy ];
     platforms = stdenv.lib.platforms.linux;
   };
 
