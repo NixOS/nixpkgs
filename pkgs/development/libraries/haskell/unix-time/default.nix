@@ -1,9 +1,10 @@
-{ cabal, doctest, hspec, QuickCheck, time }:
+{ cabal, binary, doctest, hspec, QuickCheck, time }:
 
 cabal.mkDerivation (self: {
   pname = "unix-time";
-  version = "0.2.2";
-  sha256 = "0xnl12mscc5nwjl9s2lx4xr8q8agzcpxh3bmxxidfjrg19drfwrm";
+  version = "0.3.1";
+  sha256 = "1r7glbcr3108zrlpy2d09jyk1gv9k90d5saajipmb1f5l45rdhnj";
+  buildDepends = [ binary ];
   testDepends = [ doctest hspec QuickCheck time ];
   configureFlags = self.stdenv.lib.optionalString self.enableSharedLibraries "--ghc-option=-fPIC";
   meta = {
