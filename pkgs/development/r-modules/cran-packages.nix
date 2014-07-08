@@ -44,7 +44,10 @@ let
   derive = { name, version, sha256, depends ? [] }: buildRPackage {
     name = "${name}-${version}";
     src = fetchurl {
-      url = "mirror://cran/src/contrib/${name}_${version}.tar.gz";
+      urls = [
+        "mirror://cran/src/contrib/${name}_${version}.tar.gz"
+        "mirror://cran/src/contrib/Archive/${name}/${name}_${version}.tar.gz"
+      ];
       inherit sha256;
     };
     propagatedBuildInputs = depends;
