@@ -1,4 +1,4 @@
-addHook fixupOutput 'if [ -z "$dontGzipMan" ]; then compressManPages "$prefix"; fi'
+fixupOutputHooks+=('if [ -z "$dontGzipMan" ]; then compressManPages "$prefix"; fi')
 
 compressManPages() {
     local dir="$1"

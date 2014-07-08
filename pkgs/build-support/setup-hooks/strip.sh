@@ -1,6 +1,6 @@
 # This setup hook strips libraries and executables in the fixup phase.
 
-addHook fixupOutput _doStrip
+fixupOutputHooks+=(_doStrip)
 
 _doStrip() {
     if [ -z "$dontStrip" ]; then

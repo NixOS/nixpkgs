@@ -7,24 +7,15 @@ set -e
 # Hook handling.
 
 
-# Add the specified shell code to the named hook, e.g. ‘addHook
-# preConfigure "rm ./foo; touch ./bar"’.
-addHook() {
-    local hookName="$1"
-    local hookCode="$2"
-    eval "_${hookName}_hooks+=(\"\$hookCode\")"
-}
-
-
 # Run all hooks with the specified name in the order in which they
 # were added, stopping if any fails (returns a non-zero exit
-# code). Hooks are added using ‘addHooks <hookName> <code>’, or
-# implicitly by defining a shell function or variable <hookName>. Note
-# that the latter takes precedence over hooks added via ‘addHooks’.
+# code). The hooks for <hookName> are the shell function or variable
+# <hookName>, and the values of the shell array ‘<hookName>Hooks’.
 runHook() {
     local hookName="$1"
-    local var="_${hookName}_hooks"
-    eval "local -a dummy=(\"\${_${hookName}_hooks[@]}\")"
+    local var="$hookName"
+    if [[ "$hookName" =~ Hook$ ]]; then var+=s; else var+=Hooks; fi
+    eval "local -a dummy=(\"\${$var[@]}\")"
     for hook in "_callImplicitHook 0 $hookName" "${dummy[@]}"; do
         if ! _eval "$hook"; then return 1; fi
     done
@@ -36,8 +27,9 @@ runHook() {
 # zero exit code). If none succeed, return a non-zero exit code.
 runOneHook() {
     local hookName="$1"
-    local var="_${hookName}_hooks"
-    eval "local -a dummy=(\"\${_${hookName}_hooks[@]}\")"
+    local var="$hookName"
+    if [[ "$hookName" =~ Hook$ ]]; then var+=s; else var+=Hooks; fi
+    eval "local -a dummy=(\"\${$var[@]}\")"
     for hook in "_callImplicitHook 1 $hookName" "${dummy[@]}"; do
         if _eval "$hook"; then
             return 0
@@ -465,7 +457,7 @@ stripHash() {
 }
 
 
-addHook unpackCmd _defaultUnpack
+unpackCmdHooks+=(_defaultUnpack)
 _defaultUnpack() {
     if [ -d "$curSrc" ]; then
 
@@ -856,7 +848,6 @@ genericBuild() {
 
 
 # Execute the post-hooks.
-for i in "${postHooks[@]}"; do $i; done
 runHook postHook
 
 

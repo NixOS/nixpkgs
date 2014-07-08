@@ -2,7 +2,7 @@
 # directories from the RPATH of every library or executable in every
 # output.
 
-addHook fixupOutput 'if [ -z "$dontPatchELF" ]; then patchELF "$prefix"; fi'
+fixupOutputHooks+=('if [ -z "$dontPatchELF" ]; then patchELF "$prefix"; fi')
 
 patchELF() {
     header "patching ELF executables and libraries in $prefix"
