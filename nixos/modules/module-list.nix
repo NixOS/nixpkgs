@@ -137,6 +137,7 @@
   ./services/mail/dovecot.nix
   ./services/mail/freepops.nix
   ./services/mail/mail.nix
+  ./services/mail/mlmmj.nix
   ./services/mail/opensmtpd.nix
   ./services/mail/postfix.nix
   ./services/mail/spamassassin.nix
