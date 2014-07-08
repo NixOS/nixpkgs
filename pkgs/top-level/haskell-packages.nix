@@ -1095,6 +1095,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   HDBCSqlite3 = callPackage ../development/libraries/haskell/HDBC/HDBC-sqlite3.nix {};
 
+  HPDF = callPackage ../development/libraries/haskell/HPDF {};
+
   heist = callPackage ../development/libraries/haskell/heist {};
 
   hflags = callPackage ../development/libraries/haskell/hflags {};
