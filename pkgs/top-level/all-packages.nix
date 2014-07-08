@@ -698,6 +698,10 @@ let
 
   btar = callPackage ../tools/backup/btar { };
 
+  bud = callPackage ../tools/networking/bud {
+    inherit (pythonPackages) gyp;
+  };
+
   bup = callPackage ../tools/backup/bup {
     inherit (pythonPackages) pyxattr pylibacl setuptools fuse;
     inherit (haskellPackages) pandoc;
