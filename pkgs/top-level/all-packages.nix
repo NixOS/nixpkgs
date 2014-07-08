@@ -8314,6 +8314,10 @@ let
 
   dwb = callPackage ../applications/networking/browsers/dwb { dconf = gnome3.dconf; };
 
+  dwbWrapper = wrapFirefox
+    { browser = dwb; browserName = "dwb"; desktopName = "dwb";
+    };
+
   dwm = callPackage ../applications/window-managers/dwm {
     patches = config.dwm.patches or [];
   };
