@@ -9652,6 +9652,8 @@ let
     gpgSupport = true;
   };
 
+  symlinks = callPackage ../tools/system/symlinks { };
+
   syncthing = callPackage ../applications/networking/syncthing { };
 
   # linux only by now
