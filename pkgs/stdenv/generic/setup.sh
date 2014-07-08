@@ -13,11 +13,12 @@ set -e
 # <hookName>, and the values of the shell array ‘<hookName>Hooks’.
 runHook() {
     local hookName="$1"
+    shift
     local var="$hookName"
     if [[ "$hookName" =~ Hook$ ]]; then var+=s; else var+=Hooks; fi
     eval "local -a dummy=(\"\${$var[@]}\")"
     for hook in "_callImplicitHook 0 $hookName" "${dummy[@]}"; do
-        if ! _eval "$hook"; then return 1; fi
+        if ! _eval "$hook" "$@"; then return 1; fi
     done
     return 0
 }
@@ -27,11 +28,12 @@ runHook() {
 # zero exit code). If none succeed, return a non-zero exit code.
 runOneHook() {
     local hookName="$1"
+    shift
     local var="$hookName"
     if [[ "$hookName" =~ Hook$ ]]; then var+=s; else var+=Hooks; fi
     eval "local -a dummy=(\"\${$var[@]}\")"
     for hook in "_callImplicitHook 1 $hookName" "${dummy[@]}"; do
-        if _eval "$hook"; then
+        if _eval "$hook" "$@"; then
             return 0
         fi
     done
@@ -60,7 +62,12 @@ _callImplicitHook() {
 # hooks exits the hook, not the caller.
 _eval() {
     local code="$1"
-    eval "$code"
+    shift
+    if [ "$(type -t $code)" = function ]; then
+        eval "$code \"\$@\""
+    else
+        eval "$code"
+    fi
 }
 
 
@@ -175,10 +182,6 @@ export CONFIG_SHELL="$SHELL"
 if [ -z "$shell" ]; then export shell=$SHELL; fi
 
 
-envHooks=()
-crossEnvHooks=()
-
-
 # Allow the caller to augment buildInputs (it's not always possible to
 # do this before the call to setup.sh, since the PATH is empty at that
 # point; here we have a basic Unix environment).
@@ -235,9 +238,7 @@ _addToNativeEnv() {
     fi
 
     # Run the package-specific hooks set by the setup-hook scripts.
-    for i in "${envHooks[@]}"; do
-        $i $pkg
-    done
+    runHook envHook "$pkg"
 }
 
 for i in $nativePkgs; do
@@ -255,9 +256,7 @@ _addToCrossEnv() {
     fi
 
     # Run the package-specific hooks set by the setup-hook scripts.
-    for i in "${crossEnvHooks[@]}"; do
-        $i $pkg
-    done
+    runHook crossEnvHook "$pkg"
 }
 
 for i in $crossPkgs; do
@@ -459,22 +458,24 @@ stripHash() {
 
 unpackCmdHooks+=(_defaultUnpack)
 _defaultUnpack() {
-    if [ -d "$curSrc" ]; then
+    local fn="$1"
 
-        stripHash "$curSrc"
-        cp -prd --no-preserve=timestamps "$curSrc" $strippedName
+    if [ -d "$fn" ]; then
+
+        stripHash "$fn"
+        cp -prd --no-preserve=timestamps "$fn" $strippedName
 
     else
 
-        case "$curSrc" in
+        case "$fn" in
             *.tar.xz | *.tar.lzma)
                 # Don't rely on tar knowing about .xz.
-                xz -d < "$curSrc" | tar xf -
+                xz -d < "$fn" | tar xf -
                 ;;
             *.tar | *.tar.* | *.tgz | *.tbz2)
                 # GNU tar can automatically select the decompression method
                 # (info "(tar) gzip").
-                tar xf "$curSrc"
+                tar xf "$fn"
                 ;;
             *)
                 return 1
@@ -488,7 +489,7 @@ _defaultUnpack() {
 unpackFile() {
     curSrc="$1"
     header "unpacking source archive $curSrc" 3
-    if ! runOneHook unpackCmd; then
+    if ! runOneHook unpackCmd "$curSrc"; then
         echo "do not know how to unpack source archive $curSrc"
         exit 1
     fi
