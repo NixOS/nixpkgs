@@ -4230,6 +4230,10 @@ let
 
   attr = callPackage ../development/libraries/attr { };
 
+  at_spi2_core = callPackage ../development/libraries/at-spi2-core { };
+
+  at_spi2_atk = callPackage ../development/libraries/at-spi2-atk { };
+
   aqbanking = callPackage ../development/libraries/aqbanking { };
 
   aubio = callPackage ../development/libraries/aubio { };
@@ -4811,9 +4815,7 @@ let
     cupsSupport = config.gtk2.cups or stdenv.isLinux;
   };
 
-  gtk3 = callPackage ../development/libraries/gtk+/3.x.nix {
-    inherit (gnome3) at_spi2_atk;
-  };
+  gtk3 = callPackage ../development/libraries/gtk+/3.x.nix { };
 
   gtk = pkgs.gtk2;
 
@@ -9671,7 +9673,6 @@ let
 
   thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin {
     gconf = pkgs.gnome.GConf;
-    inherit (pkgs.gnome3) at_spi2_atk;
     inherit (pkgs.gnome) libgnome libgnomeui;
     inherit (pkgs.xlibs) libX11 libXScrnSaver libXext
       libXinerama libXrender libXt;
