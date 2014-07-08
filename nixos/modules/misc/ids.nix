@@ -142,6 +142,7 @@
       gdm = 132;
       dhcpd = 133;
       siproxd = 134;
+      mlmmj = 135;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -258,6 +259,7 @@
       gdm = 132;
       tss = 133;
       siproxd = 134;
+      mlmmj = 135;
 
       # When adding a gid, make sure it doesn't match an existing uid. And don't use gids above 399!
 
