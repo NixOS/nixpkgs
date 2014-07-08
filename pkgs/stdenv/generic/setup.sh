@@ -701,25 +701,6 @@ fixupPhase() {
 
     runHook preFixup
 
-    # Put man/doc/info under $out/share.
-    forceShare=${forceShare:=man doc info}
-    if [ -n "$forceShare" ]; then
-        for d in $forceShare; do
-            if [ -d "$prefix/$d" ]; then
-                if [ -d "$prefix/share/$d" ]; then
-                    echo "both $d/ and share/$d/ exists!"
-                else
-                    echo "fixing location of $d/ subdirectory"
-                    mkdir -p $prefix/share
-                    if [ -w $prefix/share ]; then
-                        mv -v $prefix/$d $prefix/share
-                        ln -sv share/$d $prefix
-                    fi
-                fi
-            fi
-        done;
-    fi
-
     # Apply fixup to each output.
     local output
     for output in $outputs; do
