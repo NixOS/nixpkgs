@@ -305,7 +305,6 @@ rec {
     http://dirichlet.mat.puc.cl/
     http://ftp.ctex.org/mirrors/CRAN/
     http://mirror.bjtu.edu.cn/cran
-    http://cran.dataguru.cn/
     http://mirrors.ustc.edu.cn/CRAN/
     http://mirrors.xmu.edu.cn/CRAN/
     http://www.laqee.unal.edu.co/CRAN/
