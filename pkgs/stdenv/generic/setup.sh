@@ -696,7 +696,7 @@ installPhase() {
 fixupPhase() {
     # Make sure everything is writable so "strip" et al. work.
     for output in $outputs; do
-        if [ -e "$output" ]; then chmod -R u+w "$output"; fi
+        if [ -e "${!output}" ]; then chmod -R u+w "${!output}"; fi
     done
 
     runHook preFixup
