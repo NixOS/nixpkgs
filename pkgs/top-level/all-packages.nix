@@ -593,6 +593,8 @@ let
 
   bfr = callPackage ../tools/misc/bfr { };
 
+  bitbucket-cli = pythonPackages.bitbucket-cli;
+
   blockdiag = pythonPackages.blockdiag;
 
   bmon = callPackage ../tools/misc/bmon { };
