@@ -6,7 +6,6 @@ cabal.mkDerivation (self: {
   sha256 = "1r7glbcr3108zrlpy2d09jyk1gv9k90d5saajipmb1f5l45rdhnj";
   buildDepends = [ binary ];
   testDepends = [ doctest hspec QuickCheck time ];
-  configureFlags = self.stdenv.lib.optionalString self.enableSharedLibraries "--ghc-option=-fPIC";
   meta = {
     description = "Unix time parser/formatter and utilities";
     license = self.stdenv.lib.licenses.bsd3;
