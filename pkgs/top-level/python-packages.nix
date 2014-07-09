@@ -793,7 +793,7 @@ rec {
     meta = with stdenv.lib; {
       description = "Bitbucket command line interface";
       homepage = "https://bitbucket.org/zhemao/bitbucket-cli";
-      mainteners = [ mainteners.refnil ];
+      maintainers = [ maintainers.refnil ];
     };
   };
 
