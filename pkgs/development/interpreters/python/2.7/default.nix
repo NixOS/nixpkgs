@@ -87,6 +87,8 @@ let
 
     passthru = rec {
       inherit zlibSupport;
+      isPy2 = true;
+      isPy27 = true;
       libPrefix = "python${majorVersion}";
       executable = libPrefix;
       sitePackages = "lib/${libPrefix}/site-packages";

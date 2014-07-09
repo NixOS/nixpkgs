@@ -67,7 +67,9 @@ stdenv.mkDerivation {
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
     libPrefix = "python${majorVersion}";
     executable = "python3.4m";
-    is_py3k = true;
+    isPy3 = true;
+    isPy34 = true;
+    is_py3k = true;  # deprecated
     sitePackages = "lib/${libPrefix}/site-packages";
   };
 
