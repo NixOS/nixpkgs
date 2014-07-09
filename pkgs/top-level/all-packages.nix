@@ -548,9 +548,8 @@ let
 
   inherit (androidenv) androidsdk_4_1;
 
-  aria = builderDefsPackage (import ../tools/networking/aria) { };
-
   aria2 = callPackage ../tools/networking/aria2 { };
+  aria = aria2;
 
   at = callPackage ../tools/system/at { };
 
@@ -2255,6 +2254,8 @@ let
 
   wal_e = callPackage ../tools/backup/wal-e { };
 
+  watchman = callPackage ../development/tools/watchman { };
+
   wbox = callPackage ../tools/networking/wbox {};
 
   welkin = callPackage ../tools/graphics/welkin {};
@@ -3186,6 +3187,8 @@ let
       giflib = giflib_4_1;
     };
 
+    biniou = callPackage ../development/ocaml-modules/biniou { };
+
     ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
 
     cppo = callPackage ../development/tools/ocaml/cppo { };
@@ -3277,6 +3280,8 @@ let
     opam_1_0_0 = callPackage ../development/tools/ocaml/opam/1.0.0.nix { };
     opam_1_1 = callPackage ../development/tools/ocaml/opam/1.1.nix { };
     opam = opam_1_1;
+
+    yojson = callPackage ../development/ocaml-modules/yojson { };
 
     zarith = callPackage ../development/ocaml-modules/zarith { };
   };
@@ -3464,6 +3469,7 @@ let
     compat = true;
   };
   lua5 = lua5_1;
+  lua = lua5;
 
   lua5_sockets = callPackage ../development/interpreters/lua-5/sockets.nix {};
   lua5_expat = callPackage ../development/interpreters/lua-5/expat.nix {};
@@ -3522,9 +3528,9 @@ let
 
   php = php54;
 
-  phpPackages = import ./php-packages.nix {
+  phpPackages = recurseIntoAttrs (import ./php-packages.nix {
     inherit php pkgs;
-  };
+  });
 
   php53 = callPackage ../development/interpreters/php/5.3.nix { };
 
@@ -3538,10 +3544,6 @@ let
   };
 
   php54 = callPackage ../development/interpreters/php/5.4.nix { };
-
-  php_apc = callPackage ../development/libraries/php-apc { };
-
-  php_xcache = callPackage ../development/libraries/php-xcache { };
 
   picolisp = callPackage ../development/interpreters/picolisp {};
 
@@ -3869,7 +3871,6 @@ let
 
   dfeet = callPackage ../development/tools/misc/d-feet {
     inherit (pythonPackages) pep8;
-    inherit (gnome3) gnome_icon_theme;
   };
 
   dfu-programmer = callPackage ../development/tools/misc/dfu-programmer { };
@@ -4268,6 +4269,7 @@ let
   boostHeaders = callPackage ../development/libraries/boost/header-only-wrapper.nix { };
 
   botan = callPackage ../development/libraries/botan { };
+  botanUnstable = callPackage ../development/libraries/botan/unstable.nix { };
 
   box2d = callPackage ../development/libraries/box2d { };
   box2d_2_0_1 = callPackage ../development/libraries/box2d/2.0.1.nix { };
@@ -7450,7 +7452,7 @@ let
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
-  linuxPackages = linuxPackages_3_12;
+  linuxPackages = linuxPackages_3_14;
 
   # Update this when adding the newest kernel major version!
   linux_latest = pkgs.linux_3_15;
@@ -9922,6 +9924,7 @@ let
           ++ lib.optional (supportsJDK && cfg.jre or false && jrePlugin ? mozillaPlugin) jrePlugin
           ++ lib.optional (cfg.enableGoogleTalkPlugin or false) google_talk_plugin
           ++ lib.optional (cfg.enableFriBIDPlugin or false) fribid
+          ++ lib.optional (cfg.enableGnomeExtensions or false) gnome3.gnome_shell
          );
       libs = [ gstreamer gst_plugins_base ] ++ lib.optionals (cfg.enableQuakeLive or false)
              (with xlibs; [ stdenv.gcc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ]);
@@ -10568,9 +10571,15 @@ let
 
       liblikeback = callPackage ../development/libraries/liblikeback { };
 
+      libmm-qt = callPackage ../development/libraries/libmm-qt { };
+
+      libnm-qt = callPackage ../development/libraries/libnm-qt { };
+
       networkmanagement = callPackage ../tools/networking/networkmanagement { };
 
       partitionManager = callPackage ../tools/misc/partition-manager { };
+
+      plasma-nm = callPackage ../tools/networking/plasma-nm { };
 
       polkit_kde_agent = callPackage ../tools/security/polkit-kde-agent { };
 

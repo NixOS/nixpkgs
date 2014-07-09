@@ -1,13 +1,16 @@
-{ cabal, attoparsec, hashable, text, unixCompat
-, unorderedContainers
+{ cabal, attoparsec, filepath, hashable, HUnit, testFramework
+, testFrameworkHunit, text, unixCompat, unorderedContainers
 }:
 
 cabal.mkDerivation (self: {
   pname = "configurator";
-  version = "0.2.0.2";
-  sha256 = "011rgd48gv4idkh2dwg4mlyx3s6pgm1263xq5ixsa4sg3jqh9d8b";
+  version = "0.3.0.0";
+  sha256 = "1d1iq1knwiq6ia5g64rw5hqm6dakz912qj13r89737rfcxmrkfbf";
   buildDepends = [
     attoparsec hashable text unixCompat unorderedContainers
+  ];
+  testDepends = [
+    filepath HUnit testFramework testFrameworkHunit text
   ];
   meta = {
     homepage = "http://github.com/bos/configurator";

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "lens-family-core";
-  version = "1.0.0";
-  sha256 = "149wfxddw58h5q42r3nknmac8wsc9c8xzsw6vrlfb4yasg7bhw53";
+  version = "1.1.0";
+  sha256 = "0pvc7iv7y5s3496w7ic9qzdw3l76ldnrg0my0jxi1dyn0vm9xwm3";
   buildDepends = [ transformers ];
   meta = {
     description = "Haskell 98 Lens Families";

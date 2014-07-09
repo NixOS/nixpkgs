@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "00ag32ccbj0hmy41rb0fg9gp40m7zbq45r4yijnyslk2mpkvg7c9";
   };
 
-  nativeBuildInputs = [pkgconfig libxslt];
+  nativeBuildInputs = [ pkgconfig libxslt ];
   buildInputs = [ libxml2 dbus_glib sqlite libsoup libnice telepathy_glib gnutls ]
     ++ stdenv.lib.optional doCheck dbus_daemon;
 
@@ -19,9 +19,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    description = "A Jabber/XMPP connection manager for the Telepathy framework";
     homepage = http://telepathy.freedesktop.org;
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    description = "Jabber/XMPP connection manager for the Telepathy framework";
+    platforms = stdenv.lib.platforms.gnu;
   };
 }
