@@ -9486,6 +9486,10 @@ let
     qt = qt4;
   };
 
+  retroshare06 = callPackage ../applications/networking/p2p/retroshare/0.6.nix {
+    qt = qt4;
+  };
+
   rsync = callPackage ../applications/networking/sync/rsync {
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD);
     enableCopyDevicesPatch = (config.rsync.enableCopyDevicesPatch or false);
