@@ -49,7 +49,7 @@ let
         --prefix IDEA_JDK : $jdk
 
         mkdir -p $out/share/applications
-        cp ${ideaItem}/share/applications/* $out/share/applications
+        cp "${ideaItem}/share/applications/"* $out/share/applications
         patchShebangs $out
     '';
 
