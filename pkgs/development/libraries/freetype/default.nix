@@ -2,6 +2,7 @@
   # FreeType supports sub-pixel rendering.  This is patented by
   # Microsoft, so it is disabled by default.  This option allows it to
   # be enabled.  See http://www.freetype.org/patents.html.
+, glib/*passthru only*/
 , useEncumberedCode ? true
 }:
 
@@ -46,7 +47,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall = ''ln -s freetype2 "$out"/include/freetype''; # compat hack
+  # compat hacks
+  postInstall = glib.flattenInclude + ''
+    ln -s . "$out"/include/freetype
+  '';
 
   crossAttrs = {
     # Somehow it calls the unwrapped gcc, "i686-pc-linux-gnu-gcc", instead
