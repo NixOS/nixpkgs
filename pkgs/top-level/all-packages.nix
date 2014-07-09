@@ -9242,6 +9242,8 @@ let
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
 
+  mutt_patched = callPackage ../applications/networking/mailreaders/mutt_patched { };
+
   pcmanfm = callPackage ../applications/misc/pcmanfm { };
 
   ruby_gpgme = callPackage ../development/libraries/ruby_gpgme {
