@@ -9805,6 +9805,10 @@ let
 
   vimWrapper = wrapVim vim;
 
+  vimHuge = vim_configurable.override { withGui = false; };
+
+  vimHugeWrapper = wrapVim vimHuge;
+
   vimHugeX = vim_configurable;
 
   vimHugeXWrapper = wrapVim vimHugeX;
@@ -9816,6 +9820,7 @@ let
       libICE;
 
     features = "huge"; # one of  tiny, small, normal, big or huge
+    withGui = true;
     lua = pkgs.lua5;
     gui = config.vim.gui or "auto";
 
