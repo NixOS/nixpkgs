@@ -64,7 +64,7 @@ let
 
 in {
 
-  idea_community_1313 = buildIdea rec {
+  idea_community = buildIdea rec {
     name = "idea-community-${version}";
     version = "13.1.3";
     build = "IC-135.909";
@@ -76,7 +76,7 @@ in {
     };
   };
 
-  idea_ultimate_1313 = buildIdea rec {
+  idea_ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
     version = "13.1.3";
     build = "IU-135.909";
