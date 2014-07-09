@@ -4,7 +4,7 @@ args@{pkgs, source ? "default", ...}: with args;
 
 
 let inherit (args.composableDerivation) composableDerivation edf;
-  nixosRuntimepath = pkgs.writeText "runtimepath.vim" ''
+  nixosRuntimepath = pkgs.writeText "nixos-vimrc" ''
     function! NixosPluginPath()
       let seen = {}
       for p in reverse(split($NIX_PROFILES))
@@ -19,6 +19,12 @@ let inherit (args.composableDerivation) composableDerivation edf;
     endfunction
 
     execute NixosPluginPath()
+
+    if filereadable("/etc/vimrc")
+      source /etc/vimrc
+    elseif filereadable("/etc/vim/vimrc")
+      source /etc/vim/vimrc
+    endif
   '';
 in
 composableDerivation {
