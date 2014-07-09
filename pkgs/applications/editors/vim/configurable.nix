@@ -34,18 +34,18 @@ composableDerivation {
                    else stdenv ).mkDerivation;
 } (fix: {
 
-    name = "vim_configurable-7.4.316";
+    name = "vim_configurable-7.4.335";
 
     enableParallelBuilding = true; # test this
 
-    src = 
+    src =
       builtins.getAttr source {
       "default" =
         # latest release
       args.fetchhg {
             url = "https://vim.googlecode.com/hg/";
-            rev = "v7-4-316";
-            sha256 = "0scxx33p1ky0wihk04xqpd6rygp1crm0hx446zbjwbsjj6xxn7sx";
+            rev = "v7-4-335";
+            sha256 = "0qnpzfcbi6fhz82pj68l4vrnigca1akq2ksrxz6krwlfhns6jhhj";
       };
 
       "vim-nox" =
@@ -62,7 +62,7 @@ composableDerivation {
 
     # if darwin support is enabled, we want to make sure we're not building with
     # OS-installed python framework
-    patches = stdenv.lib.optionals 
+    patches = stdenv.lib.optionals
       (stdenv.isDarwin && (config.vim.darwin or true))
       [ ./python_framework.patch ];
 
