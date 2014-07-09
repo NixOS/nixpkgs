@@ -1349,6 +1349,12 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   lambdabot = callPackage ../development/libraries/haskell/lambdabot {};
 
+  lambdabotWrapper = callPackage ../development/libraries/haskell/lambdabot/wrapper.nix {
+    mueval = self.muevalWrapper.override {
+      additionalPackages = [ self.lambdabot ];
+    };
+  };
+  
   lambdabotUtils = callPackage ../development/libraries/haskell/lambdabot-utils {};
 
   lambdacubeEngine = callPackage ../development/libraries/haskell/lambdacube-engine {};
@@ -1543,6 +1549,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   mtlparse = callPackage ../development/libraries/haskell/mtlparse {};
 
   mueval = callPackage ../development/libraries/haskell/mueval {};
+
+  muevalWrapper = callPackage ../development/libraries/haskell/mueval/wrapper.nix {};
 
   multiarg = callPackage ../development/libraries/haskell/multiarg {};
 
