@@ -18,47 +18,47 @@ buildFHSChrootEnv {
     ;
 
   multiPkgs = pkgs:
-      [ pkgs.cairo
-        pkgs.glib
-        pkgs.gtk
-        pkgs.gdk_pixbuf
-        pkgs.pango
+    [ pkgs.cairo
+      pkgs.glib
+      pkgs.gtk
+      pkgs.gdk_pixbuf
+      pkgs.pango
 
-        pkgs.freetype
-        pkgs.xlibs.libICE
-        pkgs.xlibs.libSM
-        pkgs.xlibs.libX11
-        pkgs.xlibs.libXau
-        pkgs.xlibs.libxcb
-        pkgs.xlibs.libXcursor
-        pkgs.xlibs.libXdamage
-        pkgs.xlibs.libXdmcp
-        pkgs.xlibs.libXext
-        pkgs.xlibs.libXfixes
-        pkgs.xlibs.libXi
-        pkgs.xlibs.libXinerama
-        pkgs.xlibs.libXrandr
-        pkgs.xlibs.libXrender
-        pkgs.xlibs.libXScrnSaver
-        pkgs.xlibs.libXtst
-        pkgs.xlibs.libXxf86vm
+      pkgs.freetype
+      pkgs.xlibs.libICE
+      pkgs.xlibs.libSM
+      pkgs.xlibs.libX11
+      pkgs.xlibs.libXau
+      pkgs.xlibs.libxcb
+      pkgs.xlibs.libXcursor
+      pkgs.xlibs.libXdamage
+      pkgs.xlibs.libXdmcp
+      pkgs.xlibs.libXext
+      pkgs.xlibs.libXfixes
+      pkgs.xlibs.libXi
+      pkgs.xlibs.libXinerama
+      pkgs.xlibs.libXrandr
+      pkgs.xlibs.libXrender
+      pkgs.xlibs.libXScrnSaver
+      pkgs.xlibs.libXtst
+      pkgs.xlibs.libXxf86vm
 
-        pkgs.ffmpeg
-        pkgs.libpng12
-        pkgs.mesa
-        pkgs.SDL
-        pkgs.SDL2
+      pkgs.ffmpeg
+      pkgs.libpng12
+      pkgs.mesa
+      pkgs.SDL
+      pkgs.SDL2
 
-        pkgs.libgcrypt
-        pkgs.zlib
+      pkgs.libgcrypt
+      pkgs.zlib
 
-        pkgs.alsaLib
-        pkgs.libvorbis
-        pkgs.openal
-        pkgs.pulseaudio
+      pkgs.alsaLib
+      pkgs.libvorbis
+      pkgs.openal
+      pkgs.pulseaudio
 
-        pkgs.flashplayer
-      ];
+      pkgs.flashplayer
+    ];
 
   extraBuildCommandsMulti = ''
     cd usr/lib
