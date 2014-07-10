@@ -1,10 +1,20 @@
-{stdenv, fetchurl, pkgconfig, curl, gpgme}:
+{ stdenv, fetchurl, pkgconfig, curl, gpgme }:
 
-stdenv.mkDerivation {
-  name = "opkg-0.1.8";
+stdenv.mkDerivation rec {
+  version = "0.2.2";
+  name = "opkg-${version}";
   src = fetchurl {
-    url = http://opkg.googlecode.com/files/opkg-0.1.8.tar.gz;
-    sha256 = "0q0w7hmc6zk7pnddamd5v8d76qnh3043lzh5np24jbb6plqbz57z";
+    url = "http://downloads.yoctoproject.org/releases/opkg/opkg-${version}.tar.gz";
+    sha256 = "0ax10crp2grrpl20gl5iqfw37d5qz6h790lyyv2ali45agklqmda";
   };
+
   buildInputs = [ pkgconfig curl gpgme ];
+
+  meta = with stdenv.lib; {
+    description = "A lightweight package management system based upon ipkg";
+    homepage = http://code.google.com/p/opkg/;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pSub ];
+  };
 }
