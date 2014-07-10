@@ -15,7 +15,7 @@ let
       fetchurl {
         name = "libqtwebkit4_2.3.2_i386.deb";
         url = http://ie.archive.ubuntu.com/ubuntu/pool/main/q/qtwebkit-source/libqtwebkit4_2.3.2-0ubuntu7_i386.deb;
-        sha256 = "0hi6cwx2b2cwa4nv5phqqw526lc8p9x7kjkcza9x47ny3npw2924";
+        sha256 = "0q4abhczx91ma57fjss0gn8j6nkfbfsbsh6kxhykzj88dih2s8rn";
       }
     else
       fetchurl {
