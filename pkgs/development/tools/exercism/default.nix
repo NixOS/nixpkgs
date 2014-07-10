@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     homepage    = http://exercism.io;
     license     = stdenv.lib.licenses.mit;
     platforms   = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.wjlroe ];
   };
 }
