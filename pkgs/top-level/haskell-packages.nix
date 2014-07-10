@@ -411,6 +411,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   classyPreludeConduit = callPackage ../development/libraries/haskell/classy-prelude-conduit {};
 
+  clay = callPackage ../development/libraries/haskell/clay {};
+
   clientsession = callPackage ../development/libraries/haskell/clientsession {};
 
   clock = callPackage ../development/libraries/haskell/clock {};
