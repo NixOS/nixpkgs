@@ -1066,6 +1066,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   haskellForMaths = callPackage ../development/libraries/haskell/HaskellForMaths {};
 
+  haxl = callPackage ../development/libraries/haskell/haxl {};
+
   haxr = callPackage ../development/libraries/haskell/haxr {};
 
   haxr_th = callPackage ../development/libraries/haskell/haxr-th {};
