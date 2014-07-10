@@ -1,4 +1,4 @@
-{ stdenv, lambdabot, mueval, makeWrapper }:
+{ stdenv, lambdabot, mueval, ghc, makeWrapper }:
 
 stdenv.mkDerivation {
   name = "lambdabot-wrapper";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
 
   buildCommand = ''
     makeWrapper "${lambdabot}/bin/lambdabot" "$out/bin/lambdabot" \
-      --prefix PATH : "${mueval}/bin"
+      --prefix PATH : "${ghc}/bin:${mueval}/bin"
   '';
 
   preferLocalBuild = true;
