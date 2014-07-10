@@ -10607,7 +10607,7 @@ let
 
       qtcurve = callPackage ../misc/themes/qtcurve { };
 
-      quassel = callPackage ../applications/networking/irc/quassel { };
+      quassel = callPackage ../applications/networking/irc/quassel { dconf = gnome3.dconf; };
 
       quasselDaemon = (self.quassel.override {
         monolithic = false;
