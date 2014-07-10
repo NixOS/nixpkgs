@@ -159,6 +159,7 @@
   ./services/misc/nix-ssh-serve.nix
   ./services/misc/rippled.nix
   ./services/misc/rogue.nix
+  ./services/misc/siproxd.nix
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
   ./services/monitoring/apcupsd.nix
