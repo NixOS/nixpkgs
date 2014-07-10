@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A Go based command line tool for exercism.io.";
+    description = "A Go based command line tool for exercism.io";
     homepage    = http://exercism.io;
     license     = stdenv.lib.licenses.mit;
     platforms   = stdenv.lib.platforms.unix;
