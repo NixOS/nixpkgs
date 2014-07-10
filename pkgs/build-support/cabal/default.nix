@@ -29,7 +29,7 @@ assert enableSharedExecutables -> versionOlder "7.4" ghc.version;
 # Our GHC 6.10.x builds do not provide sharable versions of their core libraries.
 assert enableSharedLibraries -> versionOlder "6.12" ghc.version;
 
-# Our GHC 6.10.x builds do not provide sharable versions of their core libraries.
+# Pure shared library builds don't work before GHC 7.8.x.
 assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
 
 {
