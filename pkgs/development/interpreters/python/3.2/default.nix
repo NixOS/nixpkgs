@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     configureFlagsArray=( --enable-shared --with-threads
                           CPPFLAGS="${concatStringsSep " " (map (p: "-I${p}/include") buildInputs)}"
                           LDFLAGS="${concatStringsSep " " (map (p: "-L${p}/lib") buildInputs)}"
-                          LIBS="-lcrypt ${optionalString (ncurses != null) "-lncurses"}"
+                          LIBS="${optionalString (!stdenv.isDarwin) "-lcrypt"} ${optionalString (ncurses != null) "-lncurses"}"
                         )
   '';
 
@@ -88,6 +88,6 @@ stdenv.mkDerivation {
     '';
     license = stdenv.lib.licenses.psfl;
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ simons chaoflow ];
+    maintainers = with stdenv.lib.maintainers; [ simons chaoflow cstrahan ];
   };
 }
