@@ -8270,10 +8270,11 @@ let
 
   d4x = callPackage ../applications/misc/d4x { };
 
-  darcs = haskellPackages.darcs.override {
+  darcs = haskellPackages_ghc763.darcs.override {
     # A variant of the Darcs derivation that containts only the executable and
-    # thus has no dependencies on other Haskell packages.
-    cabal = haskellPackages.cabal.override {
+    # thus has no dependencies on other Haskell packages. We have to use the older
+    # GHC 7.6.3 package set because darcs won't compile with 7.8.x.
+    cabal = haskellPackages_ghc763.cabal.override {
       extension = self : super : {
         isLibrary = false;
         configureFlags = "-f-library " + super.configureFlags or "";
