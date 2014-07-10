@@ -104,6 +104,7 @@
   vlstill = "Vladimír Štill <xstill@fi.muni.cz>";
   winden = "Antonio Vargas Gonzalez <windenntw@gmail.com>";
   wizeman = "Ricardo M. Correia <rcorreia@wizy.org>";
+  wjlroe = "William Roe <willroe@gmail.com>";
   wmertens = "Wout Mertens <Wout.Mertens@gmail.com>";
   z77z = "Marco Maggesi <maggesi@math.unifi.it>";
   zef = "Zef Hemel <zef@zef.me>";
