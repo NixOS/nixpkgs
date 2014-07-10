@@ -781,6 +781,22 @@ rec {
     };
   };
 
+  bitbucket-cli = buildPythonPackage rec {
+    name = "bitbucket-cli-0.4.1";
+    src = fetchurl {
+       url = "https://pypi.python.org/packages/source/b/bitbucket-cli/${name}.tar.gz";
+       md5 = "79cdbdc6c95dfa313d12cbdef406c9f2";
+    };
+
+    pythonPath = [ requests ];
+
+    meta = with stdenv.lib; {
+      description = "Bitbucket command line interface";
+      homepage = "https://bitbucket.org/zhemao/bitbucket-cli";
+      maintainers = [ maintainers.refnil ];
+    };
+  };
+
 
   bitstring = buildPythonPackage rec {
     name = "bitstring-3.1.2";
