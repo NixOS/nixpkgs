@@ -3709,6 +3709,38 @@ rec {
     };
   };
 
+  httpretty = buildPythonPackage rec {
+    name = "httpretty-${version}";
+    version = "0.8.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/h/httpretty/${name}.tar.gz";
+      md5 = "50b02560a49fe928c90c53a49791f621";
+    };
+
+    buildInputs = [ tornado requests httplib2 sure nose coverage ];
+
+    propagatedBuildInputs = [ urllib3 ];
+
+    postPatch = ''
+      sed -i -e 's/==.*$//' *requirements.txt
+      # XXX: Drop this after version 0.8.4 is released.
+      patch httpretty/core.py <<DIFF
+      ***************
+      *** 566 ****
+      !                 'content-length': len(self.body)
+      --- 566 ----
+      !                 'content-length': str(len(self.body))
+      DIFF
+    '';
+
+    meta = {
+      homepage = "http://falcao.it/HTTPretty/";
+      description = "HTTP client request mocking tool";
+      license = licenses.mit;
+    };
+  };
+
   importlib = if isPy26 then (buildPythonPackage {
     name = "importlib-1.0.2";
     src = fetchurl {
