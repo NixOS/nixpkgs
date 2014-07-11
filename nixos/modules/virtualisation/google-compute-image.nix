@@ -119,6 +119,8 @@ in
     169.254.169.254 metadata.google.internal metadata
   '';
 
+  networking.usePredictableInterfaceNames = false;
+
   systemd.services.fetch-root-authorized-keys =
     { description = "Fetch authorized_keys for root user";
 
