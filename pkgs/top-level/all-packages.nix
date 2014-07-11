@@ -5374,6 +5374,8 @@ let
 
   libopus = callPackage ../development/libraries/libopus { };
 
+  libosinfo = callPackage ../development/libraries/libosinfo {};
+
   libosip = callPackage ../development/libraries/osip {};
 
   libosip_3 = callPackage ../development/libraries/osip/3.nix {};
