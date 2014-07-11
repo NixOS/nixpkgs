@@ -2223,6 +2223,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   tagged = callPackage ../development/libraries/haskell/tagged {};
 
+  taggy = callPackage ../development/libraries/haskell/taggy {};
+
+  taggyLens = callPackage ../development/libraries/haskell/taggy-lens {};
+
   tagshare = callPackage ../development/libraries/haskell/tagshare {};
 
   tagsoup = callPackage ../development/libraries/haskell/tagsoup {};
