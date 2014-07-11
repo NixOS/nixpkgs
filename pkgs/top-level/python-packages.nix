@@ -7554,6 +7554,30 @@ rec {
     };
   };
 
+
+  sure = buildPythonPackage rec {
+    name = "sure-${version}";
+    version = "1.2.7";
+
+    # Not picking up from PyPI because it doesn't contain tests.
+    src = fetchgit {
+      url = "git://github.com/gabrielfalcao/sure.git";
+      rev = "86ab9faa97aa9c1720c7d090deac2be385ed3d7a";
+      sha256 = "02vffcdgr6vbj80lhl925w7zqy6cqnfvs088i0rbkjs5lxc511b3";
+    };
+
+    buildInputs = [ nose ];
+
+    propagatedBuildInputs = [ six mock ];
+
+    meta = {
+      description = "Utility belt for automated testing";
+      homepage = "http://falcao.it/sure/";
+      license = licenses.gpl3Plus;
+    };
+  };
+
+
   # XXX: ValueError: ZIP does not support timestamps before 1980
   # svneverever =  buildPythonPackage rec {
   #   name = "svneverever-778489a8";
