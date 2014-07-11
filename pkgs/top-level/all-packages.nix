@@ -2218,6 +2218,8 @@ let
 
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
 
+  volatility = callPackage ../tools/security/volatility { };
+
   vidalia = callPackage ../tools/security/vidalia { };
 
   vbetool = builderDefsPackage ../tools/system/vbetool {
