@@ -2009,6 +2009,8 @@ let
 
   sdcv = callPackage ../applications/misc/sdcv { };
 
+  sec = callPackage ../tools/admin/sec { };
+
   seccure = callPackage ../tools/security/seccure { };
 
   setserial = builderDefsPackage (import ../tools/system/setserial) {
