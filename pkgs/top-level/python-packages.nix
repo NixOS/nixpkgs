@@ -9269,26 +9269,21 @@ rec {
   pykka = buildPythonPackage rec {
     name = "pykka-${version}";
 
-    version = "1.1.0";
+    version = "1.2.0";
 
     src = fetchgit {
       url = "https://github.com/jodal/pykka.git";
       rev = "refs/tags/v${version}";
-      sha256 = "0w6bcaqkzwmd9habszlgjkp3kkhkna08s9aivnmna5hddsghfqmz";
+      sha256 = "17vv2q636zp2fvxrp7ckgnz1ifaffcj5vdxvfb4isd1d32c49amb";
     };
-
-    # python zip complains about old timestamps
-    preConfigure = ''
-      find -print0 | xargs -0 touch
-    '';
 
     # There are no tests
     doCheck = false;
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = http://www.pykka.org;
       description = "A Python implementation of the actor model";
-      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      maintainers = [ maintainers.rickynils ];
     };
   };
 
