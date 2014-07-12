@@ -7652,6 +7652,7 @@ rec {
     src = fetchgit {
       url = https://github.com/miracle2k/tarsnapper.git;
       rev = "620439bca68892f2ffaba1079a34b18496cc6596";
+      sha256 = "06pp499qm2dxpja2jgmmq2jrcx3m4nq52x5hhil9r1jxvyiq962p";
     };
 
     propagatedBuildInputs = [ argparse pyyaml ];
