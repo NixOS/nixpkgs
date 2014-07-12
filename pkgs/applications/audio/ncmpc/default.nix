@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, glib, ncurses, mpd_clientlib, libintlOrEmpty }:
 
 stdenv.mkDerivation rec {
-  version = "0.22";
+  version = "0.23";
   name = "ncmpc-${version}";
 
   src = fetchurl {
     url = "http://www.musicpd.org/download/ncmpc/0/ncmpc-${version}.tar.xz";
-    sha256 = "a8d65f12653d9ce8bc4493aa1c5de09359c25bf3a22498d2ae797e7d41422211";
+    sha256 = "d7b30cefaf5c74a5d8ab18ab8275e0102ae12e8ee6d6f8144f8e4cc9a97b5de4";
   };
 
   buildInputs = [ pkgconfig glib ncurses mpd_clientlib ]
