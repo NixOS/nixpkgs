@@ -40,7 +40,7 @@ let
       denyinterfaces ${toString ignoredInterfaces} lo peth* vif* tap* tun* virbr* vnet* vboxnet*
 
       # Use the list of allowed interfaces if specified
-      ${optionalString (cfg.allowInterfaces != [ ]) "allowinterfaces ${toString cfg.allowInterfaces}"}
+      ${optionalString (cfg.allowInterfaces != null) "allowinterfaces ${toString cfg.allowInterfaces}"}
 
       ${cfg.extraConfig}
     '';
@@ -86,13 +86,13 @@ in
     };
 
     networking.dhcpcd.allowInterfaces = mkOption {
-      type = types.listOf types.str;
-      default = [];
+      type = types.nullOr (types.listOf types.str);
+      default = null;
       description = ''
          Enable the DHCP client for any interface whose name matches
          any of the shell glob patterns in this list. Any interface not
          explicitly matched by this pattern will be denied. This pattern only
-         applies when the list is non-empty.
+         applies when non-null.
       '';
     };
 
