@@ -522,7 +522,7 @@ in
                   # interface (e.g. in a QEMU VM test).
                   if ! ip -6 -o a show dev "${i.name}" | grep "${i.ipv6Address}/${toString i.ipv6prefixLength}"; then
                     echo "configuring interface..."
-                    ip -6 addr flush dev "${i.name}"
+                    ip -6 addr flush scope global dev "${i.name}"
                     ip -6 addr add "${i.ipv6Address}/${toString i.ipv6prefixLength}" dev "${i.name}"
                     restart_network_setup=true
                   else
