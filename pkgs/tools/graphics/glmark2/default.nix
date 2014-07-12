@@ -29,5 +29,7 @@ stdenv.mkDerivation rec {
       glmark2 is a benchmark for OpenGL (ES) 2.0. It uses only the subset of
       the OpenGL 2.0 API that is compatible with OpenGL ES 2.0.
     '';
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = stdenv.lib.maintainers.wmertens;
   };
 }
