@@ -2957,6 +2957,7 @@ let
   haskellPackages_ghc763              = recurseIntoAttrs haskell.packages_ghc763.highPrio;
   # Reasonably current HEAD snapshot.
   haskellPackages_ghc782 = haskell.packages_ghc782;
+  haskellPackages_ghc783 = haskell.packages_ghc783;
   haskellPackages_ghcHEAD = haskell.packages_ghcHEAD;
 
   haskellPlatformPackages = recurseIntoAttrs (import ../development/libraries/haskell/haskell-platform { inherit pkgs; });
