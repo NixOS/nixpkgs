@@ -720,11 +720,11 @@ let
   })) // {inherit fontconfig freetype libX11 xproto libXrender ;};
 
   libXi = (stdenv.mkDerivation ((if overrides ? libXi then overrides.libXi else x: x) {
-    name = "libXi-1.7.2";
+    name = "libXi-1.7.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXi-1.7.2.tar.bz2;
-      sha256 = "03mj9i6h0n8icjkx5a16wh1gyyhfiayj02ydc6sy4i9nqqfph96z";
+      url = mirror://xorg/individual/lib/libXi-1.7.3.tar.bz2;
+      sha256 = "0g4md74h8vnvni8qmvvrr5q629ygasvlpblnrkicci3vymwvhgbn";
     };
     buildInputs = [pkgconfig inputproto libX11 libXext xextproto libXfixes xproto ];
   })) // {inherit inputproto libX11 libXext xextproto libXfixes xproto ;};
@@ -1470,11 +1470,11 @@ let
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
   xf86videoati = (stdenv.mkDerivation ((if overrides ? xf86videoati then overrides.xf86videoati else x: x) {
-    name = "xf86-video-ati-7.3.0";
+    name = "xf86-video-ati-7.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-ati-7.3.0.tar.bz2;
-      sha256 = "1zj6401km2zgc32vhw7jfkaklsllsm9xpbs79zh9da8r94n0fz0h";
+      url = mirror://xorg/individual/driver/xf86-video-ati-7.4.0.tar.bz2;
+      sha256 = "1nbnvxlyn75bcf23m39p7yw80kilgdxmjdvzgcs3walshnlhq8wn";
     };
     buildInputs = [pkgconfig fontsproto glamoregl libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
   })) // {inherit fontsproto glamoregl libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
@@ -1580,11 +1580,11 @@ let
   })) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
 
   xf86videomodesetting = (stdenv.mkDerivation ((if overrides ? xf86videomodesetting then overrides.xf86videomodesetting else x: x) {
-    name = "xf86-video-modesetting-0.8.1";
+    name = "xf86-video-modesetting-0.9.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-modesetting-0.8.1.tar.bz2;
-      sha256 = "1jhjhgji6169sj7489qahcnmi8cf7y22wvj8qsmrg537rgbxia1v";
+      url = mirror://xorg/individual/driver/xf86-video-modesetting-0.9.0.tar.bz2;
+      sha256 = "0p6pjn5bnd2wr3lmas4b12zcq12d9ilvssga93fzlg90fdahikwh";
     };
     buildInputs = [pkgconfig fontsproto libdrm udev libpciaccess randrproto libX11 xextproto xorgserver xproto ];
   })) // {inherit fontsproto libdrm udev libpciaccess randrproto libX11 xextproto xorgserver xproto ;};
