@@ -5,16 +5,16 @@ rec {
     sha256 = "0nh8hfayyf60nm4z8zyclrbc3792c62azgsvrwxnl28iq223200s";
   };
 
-  texmfVersion = "2014.20140528";
+  texmfVersion = "2014.20140626";
   texmfSrc = fetchurl {
     url = "mirror://debian/pool/main/t/texlive-base/texlive-base_${texmfVersion}.orig.tar.xz";
-    sha256 = "09z3jp5if0llszm02x3f93izrspjh14g77034c677r0sj4xrb63w";
+    sha256 = "1zimavr8nid6425i2k3i34a7xl45lskvsnp55q526i8y6f3zlw3g";
   };
 
-  langTexmfVersion = "2014.20140528";
+  langTexmfVersion = "2014.20140626";
   langTexmfSrc = fetchurl {
     url = "mirror://debian/pool/main/t/texlive-lang/texlive-lang_${langTexmfVersion}.orig.tar.xz";
-    sha256 = "0c7rppqya74g8fb431i3bbga88xzjiarj540fcn34plar5wz4k31";
+    sha256 = "0gwms9jj8x2hp8fbqx420lvzccx3s6wlif7afp176y7ja9i3s17r";
   };
 
   passthru = { inherit texmfSrc langTexmfSrc; };
@@ -32,6 +32,9 @@ rec {
     tar xf ${langTexmfSrc} -C $out --strip-components=1
 
     sed -e s@/usr/bin/@@g -i $(grep /usr/bin/ -rl . )
+
+    sed -e 's@dehypht-x-2013-05-26@dehypht-x-2014-05-21@' -i $(grep 'dehypht-x' -rl $out )
+    sed -e 's@dehyphn-x-2013-05-26@dehyphn-x-2014-05-21@' -i $(grep 'dehyphn-x' -rl $out )
 
     sed -e 's@\<env ruby@${ruby}/bin/ruby@' -i $(grep 'env ruby' -rl . )
     sed -e 's@\<env perl@${perl}/bin/perl@' -i $(grep 'env perl' -rl . )
