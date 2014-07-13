@@ -1100,6 +1100,10 @@ let
   gawkInteractive = appendToName "interactive"
     (gawk.override { readlineSupport = true; });
 
+  gbdfed = callPackage ../tools/misc/gbdfed {
+    gtk = gtk2;
+  };
+
   gdmap = callPackage ../tools/system/gdmap { };
 
   genext2fs = callPackage ../tools/filesystems/genext2fs { };
