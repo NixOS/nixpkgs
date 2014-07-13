@@ -2935,7 +2935,13 @@ let
 
   # Import Haskell infrastructure.
 
-  haskell = callPackage ./haskell-defaults.nix { inherit pkgs; };
+  haskell = callPackage ./haskell-defaults.nix {
+    pkgs = pkgs // {
+      # allow creating static executables by adding -optl-static -optl-pthread
+      # see thread http://permalink.gmane.org/gmane.linux.distributions.nixos/13526
+      gmp = gmp.override { withStatic = true; };
+    };
+  };
 
   # Available GHC versions.
 
