@@ -9782,6 +9782,8 @@ let
 
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
+  twister = callPackage ../applications/networking/p2p/twister { };
+
   twmn = callPackage ../applications/misc/twmn { };
 
   twinkle = callPackage ../applications/networking/instant-messengers/twinkle {
