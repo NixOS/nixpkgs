@@ -60,7 +60,7 @@ mkpath("/boot/grub", 0, 0700);
 # Discover whether /boot is on the same filesystem as / and
 # /nix/store.  If not, then all kernels and initrds must be copied to
 # /boot.
-if (stat("/boot")->dev != stat("/nix")->dev) {
+if (stat("/boot")->dev != stat("/nix/store")->dev) {
     $copyKernels = 1;
 }
 
