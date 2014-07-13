@@ -639,6 +639,19 @@ in
                 ''
                   echo 1 > /proc/sys/net/ipv6/conf/${i.name}/proxy_ndp
                 '';
+            preStop =
+              ''
+                echo "releasing configured ip's..."
+              ''
+              + flip concatMapStrings (i.ip4 ++ optionals cfg.enableIPv6 i.ip6) (ip:
+                let
+                  address = "${ip.address}/${toString ip.prefixLength}";
+                in
+                ''
+                  echo -n "Deleting ${address}..."
+                  ip addr del "${address}" dev "${i.name}" >/dev/null 2>&1 || echo -n " Failed"
+                  echo ""
+                '');
           };
 
         createTunDevice = i: nameValuePair "${i.name}"
