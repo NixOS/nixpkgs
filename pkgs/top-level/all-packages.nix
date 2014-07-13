@@ -2584,7 +2584,7 @@ let
   compcert = callPackage ../development/compilers/compcert {};
 
   cryptol1 = lowPrio (callPackage ../development/compilers/cryptol/1.8.x.nix {});
-  cryptol2 = haskellPackages.cryptol;
+  cryptol2 = haskellPackages_ghc763.cryptol; # doesn't compile with the lastest 7.8.3 release
 
   cython = pythonPackages.cython;
   cython3 = python3Packages.cython;
@@ -2935,7 +2935,10 @@ let
 
   # Import Haskell infrastructure.
 
-  haskell = callPackage ./haskell-defaults.nix { inherit pkgs; };
+  haskell = let pkgs_       = pkgs // { gmp = gmp.override { withStatic = true; }; };
+                callPackage = newScope pkgs_;
+                newScope    = extra: lib.callPackageWith (pkgs_ // pkgs_.xorg // extra);
+            in callPackage ./haskell-defaults.nix { pkgs = pkgs_; inherit callPackage newScope; };
 
   # Available GHC versions.
 
@@ -2953,7 +2956,7 @@ let
     builtins.substring 0 (builtins.stringLength "packages_") name == "packages_"
   ) haskell));
 
-  haskellPackages = haskellPackages_ghc763;
+  haskellPackages = haskellPackages_ghc783;
   haskellPlatform = haskellPlatformPackages."2013_2_0_0";
 
   haskellPackages_ghc6104 = haskell.packages_ghc6104;
@@ -2961,15 +2964,10 @@ let
   haskellPackages_ghc704  = haskell.packages_ghc704;
   haskellPackages_ghc722  = haskell.packages_ghc722;
   haskellPackages_ghc742  = haskell.packages_ghc742;
-  # For the default version, we build profiling versions of the libraries, too.
-  # The following three lines achieve that: the first two make Hydra build explicit
-  # profiling and non-profiling versions; the final respects the user-configured
-  # default setting.
-  haskellPackages_ghc763_no_profiling = recurseIntoAttrs haskell.packages_ghc763.noProfiling;
-  haskellPackages_ghc763_profiling    = recurseIntoAttrs haskell.packages_ghc763.profiling;
-  haskellPackages_ghc763              = recurseIntoAttrs haskell.packages_ghc763.highPrio;
-  # Reasonably current HEAD snapshot.
-  haskellPackages_ghc782 = haskell.packages_ghc782;
+  haskellPackages_ghc763  = haskell.packages_ghc763;
+  haskellPackages_ghc783_no_profiling = recurseIntoAttrs haskell.packages_ghc783.noProfiling;
+  haskellPackages_ghc783_profiling    = recurseIntoAttrs haskell.packages_ghc783.profiling;
+  haskellPackages_ghc783              = recurseIntoAttrs haskell.packages_ghc783.highPrio;
   haskellPackages_ghcHEAD = haskell.packages_ghcHEAD;
 
   haskellPlatformPackages = recurseIntoAttrs (import ../development/libraries/haskell/haskell-platform { inherit pkgs; });
@@ -8279,10 +8277,11 @@ let
 
   d4x = callPackage ../applications/misc/d4x { };
 
-  darcs = haskellPackages.darcs.override {
+  darcs = haskellPackages_ghc763.darcs.override {
     # A variant of the Darcs derivation that containts only the executable and
-    # thus has no dependencies on other Haskell packages.
-    cabal = haskellPackages.cabal.override {
+    # thus has no dependencies on other Haskell packages. We have to use the older
+    # GHC 7.6.3 package set because darcs won't compile with 7.8.x.
+    cabal = haskellPackages_ghc763.cabal.override {
       extension = self : super : {
         isLibrary = false;
         configureFlags = "-f-library " + super.configureFlags or "";
