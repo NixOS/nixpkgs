@@ -2582,6 +2582,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   X11Xft = callPackage ../development/libraries/haskell/X11-xft {};
 
+  X11rm = callPackage ../development/libraries/haskell/X11-rm {};
+
   xdgBasedir = callPackage ../development/libraries/haskell/xdg-basedir {};
 
   xdot = callPackage ../development/libraries/haskell/xdot {};
