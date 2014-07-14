@@ -1,7 +1,6 @@
 { stdenv, pkgconfig, fetchurl, itstool, intltool, libxml2, glib, gtk3
-, pango, gdk_pixbuf, atk, pep8, python, makeWrapper
-, pygobject3, gobjectIntrospection, libwnck3
-, gnome_icon_theme }:
+, pango, gdk_pixbuf, atk, pep8, python, makeWrapper, gnome3
+, pygobject3, gobjectIntrospection, libwnck3 }:
 
 let
   version = "${major}.8";
@@ -18,16 +17,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig libxml2 itstool intltool glib gtk3 pep8 python
+    gnome3.gnome_icon_theme gnome3.gnome_icon_theme_symbolic
     makeWrapper pygobject3 libwnck3
   ];
 
-  postInstall =
+  preFixup =
     ''
       wrapProgram $out/bin/d-feet \
         --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pygobject3})" \
         --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
         --prefix LD_LIBRARY_PATH : "${gtk3}/lib:${atk}/lib:${libwnck3}/lib" \
-        --prefix XDG_DATA_DIRS : "${gnome_icon_theme}/share:$out/share"
+        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$out/share"
+
+      rm $out/share/icons/hicolor/icon-theme.cache
     '';
 
   meta = {

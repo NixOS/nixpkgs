@@ -137,7 +137,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   adjunctions = callPackage ../development/libraries/haskell/adjunctions {};
 
-  aes = callPackage ../development/libraries/haskell/aes {};
+  AES = callPackage ../development/libraries/haskell/AES {};
 
   aeson_0_7_0_4 = callPackage ../development/libraries/haskell/aeson/0.7.0.4.nix { blazeBuilder = null; };
   aeson_0_7_0_6 = callPackage ../development/libraries/haskell/aeson/0.7.0.6.nix { blazeBuilder = null; };
@@ -1016,6 +1016,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hastache = callPackage ../development/libraries/haskell/hastache {};
 
+  hasteCompiler = callPackage ../development/libraries/haskell/haste-compiler {};
+
+  hastePerch = callPackage ../development/libraries/haskell/haste-perch {};
+
   hcltest = callPackage ../development/libraries/haskell/hcltest {};
 
   hedis = callPackage ../development/libraries/haskell/hedis {};
@@ -1723,6 +1727,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   pipesConcurrency = callPackage ../development/libraries/haskell/pipes-concurrency {};
 
+  pipesCsv = callPackage ../development/libraries/haskell/pipes-csv {};
+
+  pipesHttp = callPackage ../development/libraries/haskell/pipes-http {};
+
   pipesNetwork = callPackage ../development/libraries/haskell/pipes-network {};
 
   pipesGroup = callPackage ../development/libraries/haskell/pipes-group {};
@@ -1922,6 +1930,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   resourcePool = callPackage ../development/libraries/haskell/resource-pool {};
 
+  resourcePoolCatchio = callPackage ../development/libraries/haskell/resource-pool-catchio {};
+
   resourcet = callPackage ../development/libraries/haskell/resourcet {};
 
   retry = callPackage ../development/libraries/haskell/retry {};
@@ -2002,6 +2012,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   snapletAcidState = callPackage ../development/libraries/haskell/snaplet-acid-state {};
 
+  snapletPostgresqlSimple = callPackage ../development/libraries/haskell/snaplet-postgresql-simple {};
+
   snapletRedis = callPackage ../development/libraries/haskell/snaplet-redis {};
 
   snapletStripe = callPackage ../development/libraries/haskell/snaplet-stripe {};
@@ -2017,6 +2029,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   snapLoaderStatic = callPackage ../development/libraries/haskell/snap/loader-static.nix {};
 
   snapServer = callPackage ../development/libraries/haskell/snap/server.nix {};
+
+  snapWebRoutes = callPackage ../development/libraries/haskell/snap-web-routes {};
 
   snowball = callPackage ../development/libraries/haskell/snowball {};
 
@@ -2283,6 +2297,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   threadmanager = callPackage ../development/libraries/haskell/threadmanager {};
 
   threads = callPackage ../development/libraries/haskell/threads {};
+
+  Thrift = callPackage ../development/libraries/haskell/Thrift {};
 
   thyme = callPackage ../development/libraries/haskell/thyme {};
 

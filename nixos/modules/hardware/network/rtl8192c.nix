@@ -1,4 +1,4 @@
-{pkgs, config, ...}:
+{pkgs, config, lib, ...}:
 
 {
 
@@ -6,9 +6,9 @@
 
   options = {
 
-    networking.enableRTL8192cFirmware = pkgs.lib.mkOption {
+    networking.enableRTL8192cFirmware = lib.mkOption {
       default = false;
-      type = pkgs.lib.types.bool;
+      type = lib.types.bool;
       description = ''
         Turn on this option if you want firmware for the RTL8192c (and related) NICs.
       '';
@@ -19,7 +19,7 @@
 
   ###### implementation
 
-  config = pkgs.lib.mkIf config.networking.enableRTL8192cFirmware {
+  config = lib.mkIf config.networking.enableRTL8192cFirmware {
     hardware.enableAllFirmware = true;
   };
 

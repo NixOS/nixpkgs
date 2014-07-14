@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
 
@@ -6,9 +6,9 @@
 
   options = {
 
-    networking.enableIntel2100BGFirmware = pkgs.lib.mkOption {
+    networking.enableIntel2100BGFirmware = lib.mkOption {
       default = false;
-      type = pkgs.lib.types.bool;
+      type = lib.types.bool;
       description = ''
         Turn on this option if you want firmware for the Intel
         PRO/Wireless 2100BG to be loaded automatically.  This is
@@ -21,7 +21,7 @@
 
   ###### implementation
 
-  config = pkgs.lib.mkIf config.networking.enableIntel2100BGFirmware {
+  config = lib.mkIf config.networking.enableIntel2100BGFirmware {
 
     hardware.enableAllFirmware = true;
 

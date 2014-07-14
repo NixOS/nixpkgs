@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vty-ui";
-  version = "1.7";
-  sha256 = "1wd7ada3x7d5rhl4z3h29m9h42513vbz6dp49xhn4j806mi164nd";
+  version = "1.7.1";
+  sha256 = "1xgv2psbqcqpzgj1f1pis6hr7yvny8y9ajimllam7zsk6kbhngzz";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

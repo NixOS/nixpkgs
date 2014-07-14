@@ -1,4 +1,4 @@
-{pkgs, config, ...}:
+{pkgs, config, lib, ...}:
 
 {
 
@@ -6,9 +6,9 @@
 
   options = {
 
-    networking.enableRalinkFirmware = pkgs.lib.mkOption {
+    networking.enableRalinkFirmware = lib.mkOption {
       default = false;
-      type = pkgs.lib.types.bool;
+      type = lib.types.bool;
       description = ''
         Turn on this option if you want firmware for the RT73 NIC.
       '';
@@ -19,7 +19,7 @@
 
   ###### implementation
 
-  config = pkgs.lib.mkIf config.networking.enableRalinkFirmware {
+  config = lib.mkIf config.networking.enableRalinkFirmware {
     hardware.enableAllFirmware = true;
   };
 

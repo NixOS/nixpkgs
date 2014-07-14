@@ -11,11 +11,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./alt.patch
-    ( fetchurl { # CVE-2012-2738
-      url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-libs/"
-        + "vte/files/vte-0.28.2-limit-arguments.patch?revision=1.1";
-      sha256 = "1s8agx74wa7wlv9ybd5h3dp4hzf4ddg7piyan37g2ab3fnvg4jhn";
-    } )
+    # CVE-2012-2738
+    ./vte-0.28.2-limit-arguments.patch
   ];
 
   buildInputs = [ intltool pkgconfig glib gtk ncurses ] ++

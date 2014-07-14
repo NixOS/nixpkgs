@@ -10,16 +10,16 @@ let
   buildInputs = map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
-    version="1.002";
+    version = "1.002";
     name="anonymousPro";
     url="http://www.ms-studio.com/FontSales/AnonymousPro-${version}.zip";
-    hash="86665847a51cdfb58a1e1dfd8b1ba33f183485affe50b53e3304f63d3d3552ab";
+    sha256 = "1asj6lykvxh46czbal7ymy2k861zlcdqpz8x3s5bbpqwlm3mhrl6";
   };
 in
 rec {
   src = a.fetchurl {
     url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+    sha256 = sourceInfo.sha256;
   };
 
   name = "${sourceInfo.name}-${sourceInfo.version}";
@@ -40,11 +40,11 @@ rec {
     ];
     platforms = with a.lib.platforms;
       all;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://www.ms-studio.com/FontSales/anonymouspro.html";
-    };
+    license = with a.lib.licenses; ofl;
+    hydraPlatforms = [];
+    homepage = "http://www.marksimonson.com/fonts/view/anonymous-pro";
+    downloadPage = "http://www.ms-studio.com/FontSales/anonymouspro.html";
+    inherit (sourceInfo) version;
   };
 }) x
 

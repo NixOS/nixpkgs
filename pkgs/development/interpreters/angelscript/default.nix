@@ -11,16 +11,16 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="angelscript";
-    version="2.22.1";
+    version = "2.29.0";
     name="${baseName}-${version}";
     url="http://www.angelcode.com/angelscript/sdk/files/angelscript_${version}.zip";
-    hash="0fmw0cb7ymgyq31r4cfvsn4k86r20hj650fbzs9i7zl0p3lb6hpm";
+    sha256 = "1g0bi8dx832s3911rr3jymnffaz3q7cnbzl53nmi6hwsr2kpc6mx";
   };
 in
 rec {
   src = a.fetchurl {
     url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+    sha256 = sourceInfo.sha256;
   };
 
   inherit (sourceInfo) name version;
@@ -31,7 +31,7 @@ rec {
 
   prepareBuild = a.fullDepEntry ''
     cd angelscript/projects/gnuc
-    sed -i makefile -e "s@LOCAL = .*@LOCAL = $out@"
+    sed -i makefile -e "s@LOCAL [?]= .*@LOCAL = $out@"
     mkdir -p "$out/lib" "$out/bin" "$out/share" "$out/include"
     export SHARED=1 
     export VERSION="${version}"
@@ -55,11 +55,9 @@ rec {
     platforms = with a.lib.platforms;
       linux;
     license = a.lib.licenses.zlib;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://www.angelcode.com/angelscript/downloads.asp";
-    };
+    homepage="http://www.angelcode.com/angelscript/";
+    downloadPage = "http://www.angelcode.com/angelscript/downloads.html";
+    inherit version;
   };
 }) x
 

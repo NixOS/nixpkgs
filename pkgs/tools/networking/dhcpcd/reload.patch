@@ -1,3 +1,7 @@
+Fix segfault when reloading the configuration: free_globals() left the
+ifac/ifdc variables at -1 instead of 0, causing a crash later in
+splitv().
+
 --- a/dhcpcd.c
 +++ b/dhcpcd.c
 @@ -143,16 +143,18 @@
