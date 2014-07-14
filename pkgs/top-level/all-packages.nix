@@ -5073,6 +5073,8 @@ let
 
   libcangjie = callPackage ../development/libraries/libcangjie { };
 
+  libcredis = callPackage ../development/libraries/libcredis { };
+
   libctemplate = callPackage ../development/libraries/libctemplate { };
 
   libcue = callPackage ../development/libraries/libcue { };
