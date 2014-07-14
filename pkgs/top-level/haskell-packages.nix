@@ -755,6 +755,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   fmlist = callPackage ../development/libraries/haskell/fmlist {};
 
+  FTGL = callPackage ../development/libraries/haskell/FTGL {};
+
   ftphs = callPackage ../development/libraries/haskell/ftphs {};
 
   extensibleEffects = callPackage ../development/libraries/haskell/extensible-effects {};
