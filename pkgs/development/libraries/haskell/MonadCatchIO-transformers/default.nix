@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "MonadCatchIO-transformers";
-  version = "0.3.1.1";
-  sha256 = "1kfq9py053zic69f25gcsm802dhk7y5k01ipsf2jvl8d4r5iw5kk";
+  version = "0.3.1.2";
+  sha256 = "1r5c4qz6yp1qrsmk9di35d5kk2dcnaxh2mg3n5kdim991ydzsi1d";
   buildDepends = [ extensibleExceptions monadsTf transformers ];
   jailbreak = true;
   meta = {
