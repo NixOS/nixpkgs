@@ -659,6 +659,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   doctestProp = callPackage ../development/libraries/haskell/doctest-prop {};
 
+  domSelector = callPackage ../development/libraries/haskell/dom-selector {};
+
   dotgen = callPackage ../development/libraries/haskell/dotgen {};
 
   doubleConversion = callPackage ../development/libraries/haskell/double-conversion {};
