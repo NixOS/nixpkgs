@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.4.1.1";
   sha256 = "02wrm24dpcsdsjaic30416axad5s4y822si1am4smb2qvrhps9ix";
   buildDepends = [ mtl random ];
+  configureFlags = "-f-llvm";
   jailbreak = true;
   meta = {
     homepage = "https://bitbucket.org/dafis/arithmoi";
