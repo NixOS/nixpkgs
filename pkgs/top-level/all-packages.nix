@@ -1905,6 +1905,8 @@ let
 
   qshowdiff = callPackage ../tools/text/qshowdiff { };
 
+  quilt = callPackage ../development/tools/quilt { };
+
   radvd = callPackage ../tools/networking/radvd { };
 
   ranger = callPackage ../applications/misc/ranger { };
