@@ -16,6 +16,9 @@ cabal.mkDerivation (self: {
     network snapCore text time unixCompat
   ];
   configureFlags = "-fopenssl";
+  patchPhase = ''
+    sed -i -e 's|HsOpenSSL >= .*|HsOpenSSL|' snap-server.cabal
+  '';
   meta = {
     homepage = "http://snapframework.com/";
     description = "A fast, iteratee-based, epoll-enabled web server for the Snap Framework";
