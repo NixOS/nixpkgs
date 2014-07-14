@@ -12,9 +12,20 @@ stdenv.mkDerivation rec {
   dontBuild    = true;
   dontPatchELF = true;
   dontStrip    = true;
+  dontPatchShebangs = true;
 
   installPhase = ''
+    ensureDir $out/bin
+    ensureDir $out/vendor
+    ensureDir $out/lib
+    ensureDir $out/locales
+    ensureDir $out/patterns
     cp -a bin $out
+    cp -a vendor $out
+    cp -a lib $out
+    cp -a locales $out
+    cp -a patterns $out
+    patchShebangs $out/bin
   '';
 
   meta = {
