@@ -10,13 +10,12 @@ cabal.mkDerivation (self: {
   sha256 = "1dz3bi33s2s0glsw248dxh76yj6qqlq2v2z7rys5js1mi6dicwa3";
   isLibrary = true;
   isExecutable = true;
+  jailbreak = true;
   buildDepends = [
     Cabal cabalLenses cmdargs either lens strict transformers
     unorderedContainers
   ];
   testDepends = [ filepath tasty tastyGolden ];
-  jailbreak = true;
-  doCheck = false;
   meta = {
     description = "A command line program for managing the bounds/versions of the dependencies in a cabal file";
     license = self.stdenv.lib.licenses.bsd3;
