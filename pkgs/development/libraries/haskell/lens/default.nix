@@ -12,8 +12,9 @@
 
 cabal.mkDerivation (self: {
   pname = "lens";
-  version = "4.2";
-  sha256 = "0aqhr8akb7wg270jxi1ns3mrpv42cfssi3g2kzyhkjmb39qxpp2w";
+  version = "4.3";
+  sha256 = "0wvsf0vkqjmmgl3p5lxbypn4p126l927ip7l2iisqzwyk87zfqqy";
+  doCheck = false;
   buildDepends = [
     aeson attoparsec bifunctors comonad contravariant distributive
     exceptions filepath free hashable mtl parallel primitive
@@ -27,7 +28,6 @@ cabal.mkDerivation (self: {
     testFrameworkHunit testFrameworkQuickcheck2 testFrameworkTh text
     transformers unorderedContainers vector
   ];
-  doCheck = false;
   meta = {
     homepage = "http://github.com/ekmett/lens/";
     description = "Lenses, Folds and Traversals";
