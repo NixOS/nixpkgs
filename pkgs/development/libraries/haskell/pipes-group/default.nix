@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pipes-group";
-  version = "1.0.0";
-  sha256 = "1izc2z3cwz7dihhfrngjyiaxmcpp794ragbl6v17y8c2pj0s34kh";
+  version = "1.0.1";
+  sha256 = "19caih65hsvnvkwv8dlrrf961aw6k0zr9yx78cia1padslidxlbw";
   buildDepends = [ free pipes pipesParse transformers ];
   meta = {
     description = "Group streams into substreams";
