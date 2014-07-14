@@ -127,7 +127,7 @@ rec {
     ftp://mirror.csclub.uwaterloo.ca/nongnu/
     ftp://mirror.publicns.net/pub/nongnu/
     ftp://savannah.c3sl.ufpr.br/
-    http://download.savannah.gnu.org/
+    http://download.savannah.gnu.org/releases/
     http://ftp.cc.uoc.gr/mirrors/nongnu.org/
     http://ftp.twaren.net/Unix/NonGNU/
     http://mirror.csclub.uwaterloo.ca/nongnu/
