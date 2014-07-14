@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     blazeHtml htmlConduit parsec QuickCheck text thLift xmlConduit
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/nebuta/";
     description = "DOM traversal by CSS selectors for xml-conduit package";
