@@ -11,7 +11,6 @@ cabal.mkDerivation (self: {
   pname = "imm";
   version = "0.6.0.1";
   sha256 = "11m6937wafl6nic69mbibrjnxib503907y21n9zmsxc8vnjl3pps";
-  patches = [ ./latest-feed-http-conduit-tls.patch ];
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
