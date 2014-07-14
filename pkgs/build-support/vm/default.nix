@@ -1582,22 +1582,22 @@ rec {
     debian70x86_64 = debian7x86_64;
 
     debian7i386 = {
-      name = "debian-7.5-wheezy-i386";
-      fullName = "Debian 7.5 Wheezy (i386)";
+      name = "debian-7.6-wheezy-i386";
+      fullName = "Debian 7.6 Wheezy (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-i386/Packages.bz2;
-        sha256 = "c4896c30c9a483354714d50f19d0779b72a218ce4f817f9ec8554f9664137993";
+        sha256 = "773ba601513cd7ef1d5192ad8baa795fa050573d82568c577cdf79adade698a3";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian7x86_64 = {
-      name = "debian-7.5-wheezy-amd64";
-      fullName = "Debian 7.5 Wheezy (amd64)";
+      name = "debian-7.6-wheezy-amd64";
+      fullName = "Debian 7.6 Wheezy (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-amd64/Packages.bz2;
-        sha256 = "f3b78aac7d2bdfc3896fdd2087affd0e16bafbf35945106b196483f5fb303d52";
+        sha256 = "11a8bd3648d51f51e56c9f5382168cc47267d67ef6a050826e1cd358ed46cc17";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
