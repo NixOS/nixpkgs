@@ -15,9 +15,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cyrus_sasl libevent ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://libmemcached.org;
     description = "Open source C/C++ client library and tools for the memcached server";
-    license = "BSD";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
   };
 }
