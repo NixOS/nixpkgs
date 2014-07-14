@@ -2069,6 +2069,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   socks = callPackage ../development/libraries/haskell/socks {};
 
+  sophia = callPackage ../development/libraries/haskell/sophia {};
+
   sparse = callPackage ../development/libraries/haskell/sparse {};
 
   spawn = callPackage ../development/libraries/haskell/spawn {};
