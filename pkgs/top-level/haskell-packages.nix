@@ -2009,6 +2009,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   setlocale = callPackage ../development/libraries/haskell/setlocale {};
 
+
+  shellish = callPackage ../development/libraries/haskell/shellish {};
+
   shellmate = callPackage ../development/libraries/haskell/shellmate {};
 
   shelly_0_15_4_1 = callPackage ../development/libraries/haskell/shelly/0.15.4.1.nix {};
