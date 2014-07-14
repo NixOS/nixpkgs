@@ -248,6 +248,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   bindingsPosix = callPackage ../development/libraries/haskell/bindings-posix {};
 
+  bindingsSophia = callPackage ../development/libraries/haskell/bindings-sophia {};
+
   bitarray = callPackage ../development/libraries/haskell/bitarray {};
 
   bitmap = callPackage ../development/libraries/haskell/bitmap {};
