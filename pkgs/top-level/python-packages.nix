@@ -2114,6 +2114,16 @@ rec {
   };
 
 
+  logster = buildPythonPackage {
+    name = "logster-7475c53822";
+    src = fetchgit {
+      url = git://github.com/etsy/logster;
+      rev = "7475c53822";
+      sha256 = "1ls007qmziwb50c5iikxhqin0xbn673gbd25m5k09861435cknvr";
+    };
+  };
+
+
   paver = buildPythonPackage rec {
     version = "1.2.2";
     name    = "Paver-${version}";
