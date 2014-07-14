@@ -45,10 +45,11 @@ stdenv.mkDerivation rec {
   # for some reason libsigrok isn't auto-detected
   configureFlags = stdenv.lib.optional (libsigrok != null) "--with-libsigrok";
 
-  meta = {
+  meta = with stdenv.lib; {
+    description = "Daemon which collects system performance statistics periodically";
     homepage = http://collectd.org;
-    description = "collectd is a daemon which collects system performance statistics periodically";
-    platforms = stdenv.lib.platforms.linux;
-    license = "GPLv2";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
   };
 }
