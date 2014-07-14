@@ -1369,6 +1369,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   lambdacubeEngine = callPackage ../development/libraries/haskell/lambdacube-engine {};
 
+  lamdu = callPackage ../applications/editors/lamdu {};
+
   largeword = callPackage ../development/libraries/haskell/largeword {};
 
   lazysmallcheck = callPackage ../development/libraries/haskell/lazysmallcheck {};
