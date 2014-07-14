@@ -10,20 +10,20 @@
 , SHA, shakespeare, stm, tasty, tastyHunit, tastyQuickcheck
 , tastyRerun, text, time, transformers, unixCompat, utf8String
 , uuid, wai, waiExtra, warp, warpTls, which, xmlTypes, yesod
-, yesodCore, yesodDefault, yesodForm, yesodStatic, fsnotify
+, yesodCore, yesodDefault, yesodForm, yesodStatic
 }:
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "5.20140707";
-  sha256 = "1m78125w6mq532ngfksrwj3s43qj7wyp756f6qxcqg1cl71xh34k";
+  version = "5.20140709";
+  sha256 = "0n636b52199kj8w3awfvrabg6c76kb133gbfh9r8sp0xrg376z2s";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
     aeson async blazeBuilder bloomfilter byteable caseInsensitive
-    clientsession cryptoApi cryptohash dataDefault dataenc DAV
-    dlist dns editDistance exceptions extensibleExceptions
-    feed filepath gnutls hamlet hS3 hslogger HTTP httpClient
+    clientsession cryptoApi cryptohash dataDefault dataenc DAV dbus
+    dlist dns editDistance exceptions extensibleExceptions fdoNotify
+    feed filepath gnutls hamlet hinotify hS3 hslogger HTTP httpClient
     httpConduit httpTypes IfElse json liftedBase MissingH monadControl
     mtl network networkInfo networkMulticast networkProtocolXmpp
     optparseApplicative QuickCheck random regexTdfa SafeSemaphore
@@ -31,13 +31,19 @@ cabal.mkDerivation (self: {
     tastyRerun text time transformers unixCompat utf8String uuid wai
     waiExtra warp warpTls xmlTypes yesod yesodCore yesodDefault
     yesodForm yesodStatic
-  ] ++ (if (!self.stdenv.isDarwin) then [
-    dbus fdoNotify hinotify
-  ] else [
-    fsnotify
-  ]);
+  ];
   buildTools = [ bup curl git gnupg1 lsof openssh perl rsync which ];
-  configureFlags = "-fAssistant -fProduction";
+  configureFlags = "-fS3
+                    -fWebDAV
+                    -fInotify
+                    -fDbus
+                    -fAssistant
+                    -fWebapp
+                    -fPairing
+                    -fXMPP
+                    -fDNS
+                    -fProduction
+                    -fTDFA";
   preConfigure = ''
     export HOME="$NIX_BUILD_TOP/tmp"
     mkdir "$HOME"
