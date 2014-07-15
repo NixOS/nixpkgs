@@ -702,6 +702,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   encoding = callPackage ../development/libraries/haskell/encoding {};
 
+  engineIo = callPackage ../development/libraries/haskell/engine-io {};
+  engineIoSnap = callPackage ../development/libraries/haskell/engine-io-snap {};
+
   enumerator = callPackage ../development/libraries/haskell/enumerator {};
 
   enummapset = callPackage ../development/libraries/haskell/enummapset {};
@@ -2067,6 +2070,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   snowball = callPackage ../development/libraries/haskell/snowball {};
 
   socks = callPackage ../development/libraries/haskell/socks {};
+
+  socketIo = callPackage ../development/libraries/haskell/socket-io {};
 
   sparse = callPackage ../development/libraries/haskell/sparse {};
 
