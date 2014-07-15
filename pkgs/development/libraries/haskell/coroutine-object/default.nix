@@ -6,12 +6,11 @@
 
 cabal.mkDerivation (self: {
   pname = "coroutine-object";
-  version = "0.2.0.0";
-  sha256 = "1jl5glnk4ildjrxyxscxd0v7xfqbd9vpv5gaxygsfsbfr1zizp3s";
+  version = "0.3";
+  sha256 = "0q0rvcc7ipxwmikaxh0ymq1d65f2q1a2jrd1i553pdf8hwmv0k1r";
   buildDepends = [
     cereal either lens mtl safecopy transformers transformersFree uuid
   ];
-  jailbreak = true;
   meta = {
     description = "Object-oriented programming realization using coroutine";
     license = self.stdenv.lib.licenses.bsd3;
