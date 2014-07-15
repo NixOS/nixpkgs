@@ -7458,7 +7458,7 @@ let
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
-  linuxPackages = linuxPackages_3_14;
+  linuxPackages = linuxPackages_3_12;
 
   # Update this when adding the newest kernel major version!
   linux_latest = pkgs.linux_3_15;

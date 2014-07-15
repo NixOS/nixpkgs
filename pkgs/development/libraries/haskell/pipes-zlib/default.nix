@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pipes-zlib";
-  version = "0.4.0";
-  sha256 = "1xi8x7cfzr7042x5jq8b6xqdhffh1jgprk90yzsfjldllck9z5ia";
+  version = "0.4.0.1";
+  sha256 = "1k91q5hci4hk2kzaqfvg1nwbklqyg83wwhm3sdfhdn2famj0mls0";
   buildDepends = [ pipes transformers zlib zlibBindings ];
   meta = {
     homepage = "https://github.com/k0001/pipes-zlib";

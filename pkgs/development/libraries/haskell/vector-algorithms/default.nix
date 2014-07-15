@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vector-algorithms";
-  version = "0.6.0.1";
-  sha256 = "0dkiz0c5dmc3a15zz5pxv4rz4n0bw5irb5a148gccfrg5c80vzc5";
+  version = "0.6.0.2";
+  sha256 = "1gn2pvgvm9g0dajx2wv305fxwhkpdj9pybrwrm3j2frl4dnj7dcq";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ mtl mwcRandom primitive vector ];

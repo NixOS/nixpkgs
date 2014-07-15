@@ -209,8 +209,8 @@
                ghcBinary = pkgs.haskellPackages.ghcPlain;
                prefFun = ghcHEADPrefs;
                extraArgs = {
-                 happy = pkgs.haskellPackages.happy_1_19_2;
-                 alex = pkgs.haskellPackages.alex_3_1_3;
+                 happy = pkgs.haskellPackages.happy;
+                 alex = pkgs.haskellPackages.alex;
                };
              };
 
