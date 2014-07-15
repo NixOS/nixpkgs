@@ -1319,6 +1319,11 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   JuicyPixels = callPackage ../development/libraries/haskell/JuicyPixels {};
 
+  jmacro = callPackage ../development/libraries/haskell/jmacro {};
+  jmacroRpc = callPackage ../development/libraries/haskell/jmacro-rpc {};
+  jmacroRpcHappstack = callPackage ../development/libraries/haskell/jmacro-rpc-happstack {};
+  jmacroRpcSnap = callPackage ../development/libraries/haskell/jmacro-rpc-snap {};
+
   jpeg = callPackage ../development/libraries/haskell/jpeg {};
 
   json = callPackage ../development/libraries/haskell/json {};
