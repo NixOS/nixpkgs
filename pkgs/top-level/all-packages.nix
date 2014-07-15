@@ -8170,7 +8170,7 @@ let
   };
 
   blender = callPackage  ../applications/misc/blender {
-    python = python3;
+    python = python34;
   };
 
   bristol = callPackage ../applications/audio/bristol { };

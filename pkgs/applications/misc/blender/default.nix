@@ -6,11 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "blender-2.70a";
+  name = "blender-2.71";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "1rgkijn1nirj3jwh058zv6piw8q4j5wwjapgbvh2hh6fpbj84bgb";
+    sha256 = "18pzcnrs4rcb6mf6aqr9xj2r05v8aay8daj31395ljfzw667zakx";
   };
 
   buildInputs =
@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
       libjpeg libpng libsamplerate libsndfile libtiff mesa openal
       opencolorio openexr openimageio openjpeg python zlib
     ] ++ stdenv.lib.optional jackaudioSupport jackaudio;
+
+  postUnpack =
+    ''
+      substituteInPlace */doc/manpage/blender.1.py --replace /usr/bin/python ${python}/bin/python3
+    '';
 
   cmakeFlags =
     [ "-DOPENEXR_INC=${openexr}/include/OpenEXR"
