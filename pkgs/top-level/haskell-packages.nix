@@ -248,6 +248,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   bindingsPosix = callPackage ../development/libraries/haskell/bindings-posix {};
 
+  bindingsSophia = callPackage ../development/libraries/haskell/bindings-sophia {};
+
   bitarray = callPackage ../development/libraries/haskell/bitarray {};
 
   bitmap = callPackage ../development/libraries/haskell/bitmap {};
@@ -757,6 +759,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   fmlist = callPackage ../development/libraries/haskell/fmlist {};
 
+  FTGL = callPackage ../development/libraries/haskell/FTGL {};
+
   ftphs = callPackage ../development/libraries/haskell/ftphs {};
 
   extensibleEffects = callPackage ../development/libraries/haskell/extensible-effects {};
@@ -960,6 +964,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   };
 
   gtkTraymanager = callPackage ../development/libraries/haskell/gtk-traymanager {};
+
+  graphicsDrawingcombinators = callPackage ../development/libraries/haskell/graphics-drawingcombinators { };
 
   graphviz = callPackage ../development/libraries/haskell/graphviz {};
 
@@ -1364,6 +1370,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   lambdabotUtils = callPackage ../development/libraries/haskell/lambdabot-utils {};
 
   lambdacubeEngine = callPackage ../development/libraries/haskell/lambdacube-engine {};
+
+  lamdu = callPackage ../applications/editors/lamdu {};
 
   largeword = callPackage ../development/libraries/haskell/largeword {};
 
@@ -2068,6 +2076,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   socks = callPackage ../development/libraries/haskell/socks {};
 
+  sophia = callPackage ../development/libraries/haskell/sophia {};
+
   sparse = callPackage ../development/libraries/haskell/sparse {};
 
   spawn = callPackage ../development/libraries/haskell/spawn {};
@@ -2365,6 +2375,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   tlsExtra = callPackage ../development/libraries/haskell/tls-extra {
     tls = self.tls_1_1_5;
   };
+
+  TraceUtils = callPackage ../development/libraries/haskell/TraceUtils {};
 
   transformers_0_2_2_0 = callPackage ../development/libraries/haskell/transformers/0.2.2.0.nix {};
   transformers_0_3_0_0 = callPackage ../development/libraries/haskell/transformers/0.3.0.0.nix {};
