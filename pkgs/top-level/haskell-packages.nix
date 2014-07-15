@@ -425,6 +425,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   cmdtheline = callPackage ../development/libraries/haskell/cmdtheline {};
 
+  codeBuilder = callPackage ../development/libraries/haskell/code-builder {};
+
   CodecImageDevIL = callPackage ../development/libraries/haskell/codec-image-devil {};
 
   colorizeHaskell = callPackage ../development/libraries/haskell/colorize-haskell {};
@@ -1973,10 +1975,14 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   resourcet = callPackage ../development/libraries/haskell/resourcet {};
 
+  restClient = callPackage ../development/libraries/haskell/rest-client {};
   restCore = callPackage ../development/libraries/haskell/rest-core {};
+  restGen = callPackage ../development/libraries/haskell/rest-gen {};
+  restHappstack = callPackage ../development/libraries/haskell/rest-happstack {};
   restTypes = callPackage ../development/libraries/haskell/rest-types {};
   restStringmap = callPackage ../development/libraries/haskell/rest-stringmap {};
   restSnap = callPackage ../development/libraries/haskell/rest-snap {};
+  restWai = callPackage ../development/libraries/haskell/rest-wai {};
 
   retry = callPackage ../development/libraries/haskell/retry {};
 
