@@ -108,7 +108,7 @@ in
       };
 
       save = mkOption {
-        type = with types; listOf listOf int;
+        type = with types; listOf (listOf int);
         default = [ [900 1] [300 10] [60 10000] ];
         description = "The schedule in which data is persisted to disk, represented as a list of lists where the first element represent the amount of seconds and the second the number of changes.";
         example = [ [900 1] [300 10] [60 10000] ];
