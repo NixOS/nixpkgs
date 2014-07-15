@@ -7985,6 +7985,8 @@ let
 
   oldstandard = callPackage ../data/fonts/oldstandard { };
 
+  opensans = callPackage ../data/fonts/opensans { };
+
   poly = callPackage ../data/fonts/poly { };
 
   posix_man_pages = callPackage ../data/documentation/man-pages-posix { };
