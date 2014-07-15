@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/elasticsearch \
       --prefix ES_CLASSPATH : "$out/lib/${name}.jar":"$out/lib/*":"$out/lib/sigar/*" \
       ${optionalString (!stdenv.isDarwin) ''--prefix PATH : "${utillinux}/bin/"''} \
-      --set JAVA_HOME "${jre}"
+      --set JAVA_HOME "${jre}" \
+      --set ES_HOME "$out"
     wrapProgram $out/bin/elasticsearch-plugin \
       --prefix ES_CLASSPATH : "$out/lib/${name}.jar":"$out/lib/*":"$out/lib/sigar/*" --set JAVA_HOME "${jre}"
   '';
