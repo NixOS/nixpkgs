@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, SDL, libogg, libvorbis, enableNativeMidi ? false }:
+{ stdenv, fetchurl, SDL, libogg, libvorbis, enableNativeMidi ? false, enableFluidSynth ? false, fluidsynth ? null }:
+
+assert enableFluidSynth -> fluidsynth != null;
 
 stdenv.mkDerivation rec {
   pname   = "SDL_mixer";
@@ -10,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0alrhqgm40p4c92s26mimg9cm1y7rzr6m0p49687jxd9g6130i0n";
   };
 
-  buildInputs = [SDL libogg libvorbis];
+  buildInputs = [SDL libogg libvorbis]
+    ++ stdenv.lib.optional enableFluidSynth fluidsynth;
 
   configureFlags = "--disable-music-ogg-shared" + stdenv.lib.optionalString enableNativeMidi "--enable-music-native-midi-gpl";
 
