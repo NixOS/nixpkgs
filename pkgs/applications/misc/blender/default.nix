@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ SDL boost cmake ffmpeg gettext glew ilmbase libXi
       libjpeg libpng libsamplerate libsndfile libtiff mesa openal
-      opencolorio openexr openimageio openjpeg python zlib fftw
+      opencolorio openexr openimageio /* openjpeg */ python zlib fftw
     ] ++ optional jackaudioSupport jackaudio;
 
   postUnpack =
