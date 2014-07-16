@@ -9073,6 +9073,8 @@ let
   ledger = callPackage ../applications/office/ledger/2.6.3.nix { };
   ledger3 = callPackage ../applications/office/ledger/3.0.nix { };
 
+  lighttable = callPackage ../applications/editors/lighttable {};
+
   links2 = callPackage ../applications/networking/browsers/links2 { };
 
   linphone = callPackage ../applications/networking/instant-messengers/linphone rec {
