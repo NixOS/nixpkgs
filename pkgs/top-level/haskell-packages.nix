@@ -2265,6 +2265,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   tcacheAWS = callPackage ../development/libraries/haskell/tcache-AWS {};
 
+  template = callPackage ../development/libraries/haskell/template {};
+
   templateDefault = callPackage ../development/libraries/haskell/template-default {};
 
   temporary = callPackage ../development/libraries/haskell/temporary {};
