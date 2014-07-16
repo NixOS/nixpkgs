@@ -254,10 +254,10 @@ in
     networking.interfaces = mkOption {
       default = {};
       example =
-        { eth0 = {
-            ipAddress = "131.211.84.78";
-            subnetMask = "255.255.255.128";
-          };
+        { eth0.ip4 = [ {
+            address = "131.211.84.78";
+            prefixLength = 25;
+          } ];
         };
       description = ''
         The configuration for each network interface.  If
