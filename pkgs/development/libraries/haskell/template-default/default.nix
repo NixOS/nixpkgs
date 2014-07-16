@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.1.1";
   sha256 = "07b8j11v0247fwaf3mv72m7aaq3crbsyrxmxa352vn9h2g6l1jsd";
   buildDepends = [ dataDefault ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/haskell-pkg-janitors/template-default";
     description = "declaring Default instances just got even easier";
