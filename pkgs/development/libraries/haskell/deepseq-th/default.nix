@@ -9,8 +9,6 @@ cabal.mkDerivation (self: {
   buildDepends = [ deepseq ];
   testDepends = [ deepseq ];
   jailbreak = true;
-  # TH semantics is a little bit different in GHC 7.8
-  # tests needs updating, but the package is still working
   doCheck = false;
   meta = {
     description = "Template Haskell based deriver for optimised NFData instances";

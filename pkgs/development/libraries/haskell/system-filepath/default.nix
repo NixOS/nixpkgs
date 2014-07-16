@@ -8,7 +8,6 @@ cabal.mkDerivation (self: {
   sha256 = "0sfralwgd5b9hfqmp20v31sq96s0v7j9g920qdj3n9i5mhslhwd2";
   buildDepends = [ deepseq text ];
   testDepends = [ chell chellQuickcheck QuickCheck text ];
-  # tests fragile on 32-bits
   doCheck = false;
   meta = {
     homepage = "https://john-millikin.com/software/haskell-filesystem/";
