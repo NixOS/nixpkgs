@@ -262,6 +262,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   blazeBuilderEnumerator = callPackage ../development/libraries/haskell/blaze-builder-enumerator {};
 
+  blazeFromHtml = callPackage ../development/libraries/haskell/blaze-from-html {};
+
   blazeHtml = callPackage ../development/libraries/haskell/blaze-html {};
 
   blazeMarkup = callPackage ../development/libraries/haskell/blaze-markup {};
