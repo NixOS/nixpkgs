@@ -61,7 +61,7 @@ in
 
 stdenv.mkDerivation rec {
   name =
-    if installjdk then "jdk-1.${productVersion}.0_${patchVersion}" else "jre-1.${productVersion}.0_${patchVersion}";
+    if installjdk then "oraclejdk-1.${productVersion}.0_${patchVersion}" else "oraclejre-1.${productVersion}.0_${patchVersion}";
 
   src =
     if stdenv.system == "i686-linux" then
