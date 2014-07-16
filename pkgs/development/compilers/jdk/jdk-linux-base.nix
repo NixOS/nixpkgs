@@ -30,6 +30,7 @@
 , alsaLib
 , atk
 , gdk_pixbuf
+, setJavaClassPath
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -59,7 +60,7 @@ let
       "";
 in
 
-stdenv.mkDerivation rec {
+let result = stdenv.mkDerivation rec {
   name =
     if installjdk then "oraclejdk-${productVersion}u${patchVersion}" else "oraclejre-${productVersion}u${patchVersion}";
 
@@ -156,6 +157,14 @@ stdenv.mkDerivation rec {
 
     mkdir $jrePath/lib/${architecture}/plugins
     ln -s $jrePath/lib/${architecture}/libnpjp2.so $jrePath/lib/${architecture}/plugins
+
+    mkdir -p $out/nix-support
+    echo -n "${setJavaClassPath}" > $out/nix-support/propagated-native-build-inputs
+
+    # Set JAVA_HOME automatically.
+    cat <<EOF >> $out/nix-support/setup-hook
+    if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
+    EOF
   '';
 
   inherit installjdk pluginSupport;
@@ -169,5 +178,8 @@ stdenv.mkDerivation rec {
 
   passthru.mozillaPlugin = if installjdk then "/jre/lib/${architecture}/plugins" else "/lib/${architecture}/plugins";
 
+  passthru.jre = result; # FIXME: use multiple outputs or return actual JRE package
+
   meta.license = "unfree";
-}
+
+}; in result
