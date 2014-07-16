@@ -9,6 +9,9 @@ cabal.mkDerivation (self: {
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ haskeline mtl ];
+  preConfigure = self.stdenv.lib.optionalString self.stdenv.isDarwin ''
+    sed -i 's/-Wall -optl-Wl/-Wall/' djinn.cabal
+  '';
   meta = {
     homepage = "http://www.augustsson.net/Darcs/Djinn/";
     description = "Generate Haskell code from a type";
