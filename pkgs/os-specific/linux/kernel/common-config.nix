@@ -157,7 +157,9 @@ with stdenv.lib;
   BTRFS_FS_POSIX_ACL y
   UBIFS_FS_XATTR? y
   UBIFS_FS_ADVANCED_COMPR? y
-  NFS_SWAP y
+  ${optionalString (versionAtLeast version "3.6") ''
+    NFS_SWAP y
+  ''}
   ${optionalString (versionAtLeast version "3.11") ''
     NFS_V4_1 y  # NFSv4.1 client support
     NFS_V4_2 y
