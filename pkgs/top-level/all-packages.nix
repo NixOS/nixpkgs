@@ -8025,6 +8025,11 @@ let
 
   sourceCodePro = callPackage ../data/fonts/source-code-pro {};
 
+  source-han-sans-japanese = callPackage ../data/fonts/source-han-sans/japanese.nix {};
+  source-han-sans-korean = callPackage ../data/fonts/source-han-sans/korean.nix {};
+  source-han-sans-simplified-chinese = callPackage ../data/fonts/source-han-sans/simplified-chinese.nix {};
+  source-han-sans-traditional-chinese = callPackage ../data/fonts/source-han-sans/traditional-chinese.nix {};
+
   tango-icon-theme = callPackage ../data/icons/tango-icon-theme { };
 
   themes = name: import (../data/misc/themes + ("/" + name + ".nix")) {
