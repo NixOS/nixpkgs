@@ -1119,6 +1119,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hinotify = callPackage ../development/libraries/haskell/hinotify {};
 
+  hi = callPackage ../development/libraries/haskell/hi {};
+
   hint = callPackage ../development/libraries/haskell/hint {};
 
   hit = callPackage ../development/libraries/haskell/hit {};
@@ -2269,6 +2271,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   TCache = callPackage ../development/libraries/haskell/TCache {};
 
   tcacheAWS = callPackage ../development/libraries/haskell/tcache-AWS {};
+
+  template = callPackage ../development/libraries/haskell/template {};
 
   templateDefault = callPackage ../development/libraries/haskell/template-default {};
 
