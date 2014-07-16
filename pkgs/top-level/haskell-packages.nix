@@ -1118,6 +1118,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hinotify = callPackage ../development/libraries/haskell/hinotify {};
 
+  hi = callPackage ../development/libraries/haskell/hi {};
+
   hint = callPackage ../development/libraries/haskell/hint {};
 
   hit = callPackage ../development/libraries/haskell/hit {};
