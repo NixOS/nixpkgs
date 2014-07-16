@@ -4,11 +4,12 @@ with lib;
 
 let
   cfg = config.services.dnsmasq;
-  dnsmasq = pkgs.dnsmasq;
 
   serversParam = concatMapStrings (s: "-S ${s} ") cfg.servers;
 
   dnsmasqConf = pkgs.writeText "dnsmasq.conf" ''
+    user=dnsmasq
+    group=nogroup
     ${cfg.extraConfig}
   '';
 
@@ -46,6 +47,14 @@ in
         '';
       };
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.dnsmasq;
+        description = ''
+          The dnsmasq package used as the daemon.
+        '';
+      };
+
     };
 
   };
@@ -55,14 +64,26 @@ in
 
   config = mkIf config.services.dnsmasq.enable {
 
-    jobs.dnsmasq =
+    users = {
+      extraUsers.dnsmasq = {
+        uid = config.ids.uids.dnsmasq;
+        description = "Dnsmasq daemon user";
+      };
+    };
+
+    systemd.services.dnsmasq =
       { description = "dnsmasq daemon";
 
-        startOn = "ip-up";
+        wantedBy = [ "multi-user.target" ];
 
-        daemonType = "daemon";
+        path = [ cfg.package ];
 
-        exec = "${dnsmasq}/bin/dnsmasq -R ${serversParam} -o -C ${dnsmasqConf}";
+        serviceConfig =
+          { ExecStart = "@${cfg.package}/bin/dnsmasq dnsmasq"
+              + " -R ${serversParam} -o -C ${dnsmasqConf}";
+            Restart = "always";
+            Type = "forking";
+          };
       };
 
   };
