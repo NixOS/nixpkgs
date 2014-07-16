@@ -7985,7 +7985,7 @@ let
 
   oldstandard = callPackage ../data/fonts/oldstandard { };
 
-  opensans = callPackage ../data/fonts/opensans { };
+  opensans_ttf = callPackage ../data/fonts/opensans-ttf { };
 
   poly = callPackage ../data/fonts/poly { };
 
