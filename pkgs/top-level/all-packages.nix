@@ -2327,6 +2327,13 @@ let
 
   ttmkfdir = callPackage ../tools/misc/ttmkfdir { };
 
+  uim = callPackage ../tools/inputmethods/uim {
+    inherit (pkgs.kde4) kdelibs;
+    gtk2 = pkgs.gtk2.override { extraImModules = []; };
+    gtk3 = pkgs.gtk3.override { extraImModules = []; };
+    qt4 = pkgs.qt48.override { extraImModules = []; };
+  };
+
   unclutter = callPackage ../tools/misc/unclutter { };
 
   unbound = callPackage ../tools/networking/unbound { };
@@ -4840,10 +4847,12 @@ let
 
   gtk2 = callPackage ../development/libraries/gtk+/2.x.nix {
     cupsSupport = config.gtk2.cups or stdenv.isLinux;
+    extraImModules = config.gtk2ImModules or [];
   };
 
   gtk3 = callPackage ../development/libraries/gtk+/3.x.nix {
     inherit (gnome3) at_spi2_atk;
+    extraImModules = config.gtk3ImModules or [];
   };
 
   gtk = pkgs.gtk2;
@@ -5966,6 +5975,8 @@ let
     stdenv = if stdenv.isDarwin
       then clangStdenv
       else stdenv;
+
+    extraImModules = config.qtImModules or [];
   };
 
   qt48Full = qt48.override {

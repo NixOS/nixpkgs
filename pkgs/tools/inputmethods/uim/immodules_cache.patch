@@ -1,0 +1,105 @@
+diff -ru -x '*~' uim-1.8.6.orig/gtk3/immodule/Makefile.am uim-1.8.6/gtk3/immodule/Makefile.am
+--- uim-1.8.6.orig/gtk3/immodule/Makefile.am	2013-06-30 13:26:20.000000000 +0900
++++ uim-1.8.6/gtk3/immodule/Makefile.am	2014-03-02 12:34:25.744133423 +0900
+@@ -45,42 +45,11 @@
+ 
+ install-data-hook: gtk3-rc-get-immodule-file
+ 	if test -z $(DESTDIR); then \
+-	  if test $(libdir) = $(GTK3_LIBDIR); then \
+-	    if type $(QUERY_COMMAND) > /dev/null 2>&1; then \
+-	      $(QUERY_COMMAND) --update-cache; \
+-	      echo "*** \"`$(GTK3_RC_GET_IMMODULE_FILE)`\" is updated. ***";  \
+-	    else \
+-	      echo "********************** Warning ***********************"; \
+-	      echo " $(QUERY_COMMAND) not found"; \
+-	      echo " Please make sure to update"; \
+-	      echo " \"`$(GTK3_RC_GET_IMMODULE_FILE)`\""; \
+-	      echo " manually."; \
+-	      echo "******************************************************"; \
+-	    fi \
+-	  else \
+-	    if type $(QUERY_COMMAND) > /dev/null 2>&1; then \
+-	      GTK_PATH=$(uim_gtk3_im_module_path) $(QUERY_COMMAND) --update-cache; \
+-	    else \
+-	      echo "********************** Warning ***********************"; \
+-	      echo " $(QUERY_COMMAND) not found"; \
+-	      echo " Please make sure to update"; \
+-	      echo " immodules.cache"; \
+-	      echo " manually, and set"; \
+-	      echo " GTK_IM_MODULE_FILE=PATH_TO/immodule.cache"; \
+-	      echo " environment variable to use this module."; \
+-	      echo "******************************************************"; \
+-	    fi \
+-	  fi \
++    GTK_PATH=$(uim_gtk3_im_module_path) $(QUERY_COMMAND) > $(uim_gtk3_im_module_path)/@GTK3_BINARY_VERSION@/immodules.cache ; \
+ 	fi
+ uninstall-hook:
+ 	if test -z $(DESTDIR); then \
+-	  if type $(QUERY_COMMAND) > /dev/null 2>&1; then \
+-	    if test $(libdir) = $(GTK3_LIBDIR); then \
+-	      $(QUERY_COMMAND) --update-cache; \
+-	    else \
+-	      GTK_PATH=$(uim_gtk3_im_module_path) $(QUERY_COMMAND) --update-cache; \
+-	    fi \
+-	  fi \
++    GTK_PATH=$(uim_gtk3_im_module_path) $(QUERY_COMMAND) > $(uim_gtk3_im_module_path)/@GTK3_BINARY_VERSION@/immodules.cache ; \
+ 	fi
+ else
+ install-data-hook:
+diff -ru -x '*~' uim-1.8.6.orig/gtk3/immodule/Makefile.in uim-1.8.6/gtk3/immodule/Makefile.in
+--- uim-1.8.6.orig/gtk3/immodule/Makefile.in	2013-06-30 13:27:08.000000000 +0900
++++ uim-1.8.6/gtk3/immodule/Makefile.in	2014-03-02 12:34:46.858108103 +0900
+@@ -893,42 +893,11 @@
+ 
+ @GTK3_TRUE@install-data-hook: gtk3-rc-get-immodule-file
+ @GTK3_TRUE@	if test -z $(DESTDIR); then \
+-@GTK3_TRUE@	  if test $(libdir) = $(GTK3_LIBDIR); then \
+-@GTK3_TRUE@	    if type $(QUERY_COMMAND) > /dev/null 2>&1; then \
+-@GTK3_TRUE@	      $(QUERY_COMMAND) --update-cache; \
+-@GTK3_TRUE@	      echo "*** \"`$(GTK3_RC_GET_IMMODULE_FILE)`\" is updated. ***";  \
+-@GTK3_TRUE@	    else \
+-@GTK3_TRUE@	      echo "********************** Warning ***********************"; \
+-@GTK3_TRUE@	      echo " $(QUERY_COMMAND) not found"; \
+-@GTK3_TRUE@	      echo " Please make sure to update"; \
+-@GTK3_TRUE@	      echo " \"`$(GTK3_RC_GET_IMMODULE_FILE)`\""; \
+-@GTK3_TRUE@	      echo " manually."; \
+-@GTK3_TRUE@	      echo "******************************************************"; \
+-@GTK3_TRUE@	    fi \
+-@GTK3_TRUE@	  else \
+-@GTK3_TRUE@	    if type $(QUERY_COMMAND) > /dev/null 2>&1; then \
+-@GTK3_TRUE@	      GTK_PATH=$(uim_gtk3_im_module_path) $(QUERY_COMMAND) --update-cache; \
+-@GTK3_TRUE@	    else \
+-@GTK3_TRUE@	      echo "********************** Warning ***********************"; \
+-@GTK3_TRUE@	      echo " $(QUERY_COMMAND) not found"; \
+-@GTK3_TRUE@	      echo " Please make sure to update"; \
+-@GTK3_TRUE@	      echo " immodules.cache"; \
+-@GTK3_TRUE@	      echo " manually, and set"; \
+-@GTK3_TRUE@	      echo " GTK_IM_MODULE_FILE=PATH_TO/immodule.cache"; \
+-@GTK3_TRUE@	      echo " environment variable to use this module."; \
+-@GTK3_TRUE@	      echo "******************************************************"; \
+-@GTK3_TRUE@	    fi \
+-@GTK3_TRUE@	  fi \
++@GTK3_TRUE@   GTK_PATH=$(uim_gtk3_im_module_path) $(QUERY_COMMAND) > $(uim_gtk3_im_module_path)/@GTK3_BINARY_VERSION@/immodules.cache ; \
+ @GTK3_TRUE@	fi
+ @GTK3_TRUE@uninstall-hook:
+ @GTK3_TRUE@	if test -z $(DESTDIR); then \
+-@GTK3_TRUE@	  if type $(QUERY_COMMAND) > /dev/null 2>&1; then \
+-@GTK3_TRUE@	    if test $(libdir) = $(GTK3_LIBDIR); then \
+-@GTK3_TRUE@	      $(QUERY_COMMAND) --update-cache; \
+-@GTK3_TRUE@	    else \
+-@GTK3_TRUE@	      GTK_PATH=$(uim_gtk3_im_module_path) $(QUERY_COMMAND) --update-cache; \
+-@GTK3_TRUE@	    fi \
+-@GTK3_TRUE@	  fi \
++@GTK3_TRUE@   GTK_PATH=$(uim_gtk3_im_module_path) $(QUERY_COMMAND) > $(uim_gtk3_im_module_path)/@GTK3_BINARY_VERSION@/immodules.cache ; \
+ @GTK3_TRUE@	fi
+ @GTK3_FALSE@install-data-hook:
+ 
+diff -ru -x '*~' uim-1.8.6.orig/qt4/immodule/quiminputcontextplugin.pro.in uim-1.8.6/qt4/immodule/quiminputcontextplugin.pro.in
+--- uim-1.8.6.orig/qt4/immodule/quiminputcontextplugin.pro.in	2013-06-30 13:26:20.000000000 +0900
++++ uim-1.8.6/qt4/immodule/quiminputcontextplugin.pro.in	2014-03-09 11:31:19.388085048 +0900
+@@ -35,4 +35,4 @@
+ 
+ TARGET = uiminputcontextplugin
+ 
+-target.path += @DESTDIR@$$[QT_INSTALL_PLUGINS]/inputmethods
++target.path += @DESTDIR@@exec_prefix@/lib/qt4/plugins/inputmethods

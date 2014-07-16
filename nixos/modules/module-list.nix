@@ -6,6 +6,7 @@
   ./config/fonts/ghostscript.nix
   ./config/gnu.nix
   ./config/i18n.nix
+  ./config/immodules.nix
   ./config/krb5.nix
   ./config/ldap.nix
   ./config/networking.nix
@@ -60,6 +61,7 @@
   ./programs/wvdial.nix
   ./programs/zsh/zsh.nix
   ./programs/screen.nix
+  ./programs/uim.nix
   ./rename.nix
   ./security/apparmor.nix
   ./security/apparmor-suid.nix

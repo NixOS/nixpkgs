@@ -1,8 +1,9 @@
 { stdenv, fetchurl, pkgconfig, gettext, perl
 , expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, gobjectIntrospection
-, xlibs, x11, wayland, libxkbcommon
+, xlibs, x11, wayland, libxkbcommon, config
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux, cups ? null
+, extraImModules ? []
 }:
 
 assert xineramaSupport -> xlibs.libXinerama != null;
@@ -36,7 +37,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall = "rm -rf $out/share/gtk-doc";
+  immodules = [ "$out/lib/gtk-3.0/3.0.0/immodules/*.so" ] ++ extraImModules;
+
+  postInstall =
+    ''
+      rm -rf $out/share/gtk-doc
+      $out/bin/gtk-query-immodules-3.0 --update-cache ${stdenv.lib.concatStringsSep " " immodules}
+    '';
 
   meta = {
     description = "A multi-platform toolkit for creating graphical user interfaces";
