@@ -71,7 +71,6 @@ stdenv.mkDerivation rec {
         sha256 = sha256_i686;
       }
     else if stdenv.system == "x86_64-linux" then
-
       requireFile {
         name = "jdk-${productVersion}u${patchVersion}-linux-x64.tar.gz";
         url = downloadUrl;
@@ -85,7 +84,7 @@ stdenv.mkDerivation rec {
 
   # See: https://github.com/NixOS/patchelf/issues/10
   dontStrip = 1;
-  
+
   installPhase = ''
     cd ..
 
@@ -140,7 +139,7 @@ stdenv.mkDerivation rec {
     rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}/server
     rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}/xawt
     rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}
-    
+
     # set all the dynamic linkers
     find $out -type f -perm +100 \
         -exec patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
@@ -172,4 +171,3 @@ stdenv.mkDerivation rec {
 
   meta.license = "unfree";
 }
-
