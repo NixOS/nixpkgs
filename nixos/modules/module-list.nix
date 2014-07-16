@@ -215,6 +215,7 @@
   ./services/networking/openfire.nix
   ./services/networking/openvpn.nix
   ./services/networking/prayer.nix
+  ./services/networking/polipo.nix
   ./services/networking/privoxy.nix
   ./services/networking/quassel.nix
   ./services/networking/radicale.nix
