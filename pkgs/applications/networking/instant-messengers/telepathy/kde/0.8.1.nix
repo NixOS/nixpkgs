@@ -1,0 +1,15 @@
+[
+{name="ktp-accounts-kcm";key="accounts_kcm";sha256="0zz6gwv0ikb6kbx975bibbjiy20hd4xlkshrbq7xrjxhryr75kki";}
+{name="ktp-approver";key="approver";sha256="0ljrs3yz4jsi9dm3d2a4chbvj98bqmia6khzx1bjd5v04hlix0i8";}
+{name="ktp-auth-handler";key="auth_handler";sha256="14lv1nk98nz00pcklmigiqyb2p2gfvc3nrnb3xwf6c1lla4fjsil";}
+{name="ktp-call-ui";key="call_ui";sha256="02dcac0kw4j5vf82m67h6zjhdvcbcz3hcw4wi3v4ghgq3xiyf3pa";}
+{name="ktp-common-internals";key="common_internals";sha256="16h9d8yjjf1yh8n9d89b2fqmr7xvmg3wqrfr194fc1cmsvqaq6ba";}
+{name="ktp-contact-list";key="contact_list";sha256="09cfc7zg9wx8nyi7gczq0z9k43k60dqx70i1xc8944npr5da4fsm";}
+{name="ktp-contact-runner";key="contact_runner";sha256="04m0zfff6535r62a1hczywizv2p9barh7br81a1ghqr5hp17g842";}
+{name="ktp-desktop-applets";key="desktop_applets";sha256="1k7qqkf73lbqhsplvlybcprw7mwiyjqhhw29rgc4ds61mnj5qsqw";}
+{name="ktp-filetransfer-handler";key="filetransfer_handler";sha256="06sk56dpzi3jk1xsdqv66bkd1s1xvd9ivpsg8ffijp7l7jxg8745";}
+{name="ktp-kded-integration-module";key="kded_integration_module";sha256="1vmvfcxd3mbhlwacy23p735ih8ry1iil03bii8g74lnfzx6qssf4";}
+{name="ktp-send-file";key="send_file";sha256="1gqrypw75728jxx3cf29ps63mpxl9p4paa2faj4374j3fphfax68";}
+{name="ktp-text-ui";key="text_ui";sha256="1hn6lw3k8wzpzv5g0h1cmpkjvl11cxwpkgpcxdaz5dpbzgaa1ldg";}
+{name="telepathy-logger-qt";key="telepathy_logger_qt";sha256="17bfkbxc7gfcspmjd5w6vn9a75f36qinj7illqafb7k0jqqz2nq6";}
+]

@@ -4463,6 +4463,12 @@ let
 
   farsight2 = callPackage ../development/libraries/farsight2 { };
 
+  farstream_0_1 = callPackage ../development/libraries/farstream/0.1.nix {
+    inherit (gst_all_1)
+      gstreamer gst-plugins-base gst-python gst-plugins-good gst-plugins-bad
+      gst-ffmpeg;
+  };
+
   farstream = callPackage ../development/libraries/farstream {
     inherit (gst_all_1)
       gstreamer gst-plugins-base gst-python gst-plugins-good gst-plugins-bad
@@ -10506,13 +10512,17 @@ let
 
   kde4 = recurseIntoAttrs pkgs.kde412;
 
-  kde4_next = recurseIntoAttrs( lib.lowPrioSet pkgs.kde412 );
+  kde4_next = recurseIntoAttrs( lib.lowPrioSet pkgs.kde413 );
 
   kde412 = kdePackagesFor (pkgs.kde412 // {
       eigen = eigen2;
       libusb = libusb1;
       libcanberra = libcanberra_kde;
     }) ../desktops/kde-4.12;
+
+  kde413 = kdePackagesFor (pkgs.kde413 // {
+      libcanberra = libcanberra_kde;
+    }) ../desktops/kde-4.13;
 
   kdePackagesFor = self: dir:
     let callPackageOrig = callPackage; in
@@ -10549,7 +10559,8 @@ let
 
       k3b = callPackage ../applications/misc/k3b { };
 
-      kadu = callPackage ../applications/networking/instant-messengers/kadu { };
+      # Broken phonon
+      #kadu = callPackage ../applications/networking/instant-messengers/kadu { };
 
       kbibtex = callPackage ../applications/office/kbibtex { };
 
