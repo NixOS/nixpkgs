@@ -10243,6 +10243,8 @@ let
 
   gtypist = callPackage ../games/gtypist { };
 
+  heroesofnewerth = callPackage ../games/heroesofnewerth { };
+
   hexen = callPackage ../games/hexen { };
 
   icbm3d = callPackage ../games/icbm3d { };
