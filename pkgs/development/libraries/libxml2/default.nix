@@ -4,8 +4,12 @@ assert pythonSupport -> python != null;
 
 #TODO: share most stuff between python and non-python builds, perhaps via multiple-output
 
+let
+  version = "2.9.1";
+in
+
 stdenv.mkDerivation (rec {
-  name = "libxml2-2.9.1";
+  name = "libxml2-${version}";
 
   src = fetchurl {
     url = "ftp://xmlsoft.org/libxml2/${name}.tar.gz";
@@ -22,7 +26,7 @@ stdenv.mkDerivation (rec {
 
   setupHook = ./setup-hook.sh;
 
-  passthru = { inherit pythonSupport; };
+  passthru = { inherit pythonSupport version; };
 
   enableParallelBuilding = true;
 

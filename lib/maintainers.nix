@@ -26,6 +26,7 @@
   bjornfor = "Bjørn Forsman <bjorn.forsman@gmail.com>";
   bluescreen303 = "Mathijs Kwik <mathijs@bluescreen303.nl>";
   bodil = "Bodil Stokke <nix@bodil.org>";
+  bosu = "Boris Sukholitko <boriss@gmail.com>";
   calrama = "Moritz Maxeiner <moritz@ucworks.org>";
   cfouche = "Chaddaï Fouché <chaddai.fouche@gmail.com>";
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
@@ -77,6 +78,7 @@
   qknight = "Joachim Schiele <js@lastlog.de>";
   raskin = "Michael Raskin <7c6f434c@mail.ru>";
   redbaron = "Maxim Ivanov <ivanov.maxim@gmail.com>";
+  refnil = "Martin Lavoie <broemartino@gmail.com>";
   relrod = "Ricky Elrod <ricky@elrod.me>";
   rickynils = "Rickard Nilsson <rickynils@gmail.com>";
   rob = "Rob Vermaas <rob.vermaas@gmail.com>";
@@ -94,6 +96,7 @@
   thoughtpolice = "Austin Seipp <aseipp@pobox.com>";
   tomberek = "Thomas Bereknyei <tomberek@gmail.com>";
   ttuegel = "Thomas Tuegel <ttuegel@gmail.com>";
+  tv = "Tomislav Viljetić <tv@shackspace.de>";
   urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>";
   vbmithr = "Vincent Bernardoff <vb@luminar.eu.org>";
   vcunat = "Vladimír Čunát <vcunat@gmail.com>";
@@ -102,6 +105,7 @@
   vlstill = "Vladimír Štill <xstill@fi.muni.cz>";
   winden = "Antonio Vargas Gonzalez <windenntw@gmail.com>";
   wizeman = "Ricardo M. Correia <rcorreia@wizy.org>";
+  wjlroe = "William Roe <willroe@gmail.com>";
   wmertens = "Wout Mertens <Wout.Mertens@gmail.com>";
   z77z = "Marco Maggesi <maggesi@math.unifi.it>";
   zef = "Zef Hemel <zef@zef.me>";

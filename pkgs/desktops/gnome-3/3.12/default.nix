@@ -195,6 +195,11 @@ rec {
 
   glade = callPackage ./apps/glade { };
 
+  gnome-boxes = callPackage ./apps/gnome-boxes {
+    gtkvnc = pkgs.gtkvnc.override { enableGTK3 = true; };
+    spice_gtk = pkgs.spice_gtk.override { enableGTK3 = true; };
+  };
+
   gnome-clocks = callPackage ./apps/gnome-clocks { };
 
   gnome-documents = callPackage ./apps/gnome-documents { };

@@ -678,11 +678,11 @@ rec {
   };
 
   beets = buildPythonPackage rec {
-    name = "beets-1.0.0";
+    name = "beets-1.3.6";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/b/beets/${name}.tar.gz";
-      md5 = "88ad09a93aa0d69ce813205cf23b2a6c";
+      md5 = "59615a54b3ac3983159e77ff9dda373e";
     };
 
     # tests depend on $HOME setting
@@ -694,15 +694,70 @@ rec {
         pythonPackages.mutagen
         pythonPackages.munkres
         pythonPackages.musicbrainzngs
+        pythonPackages.enum34
+        pythonPackages.pylast
+        pythonPackages.rarfile
+        pythonPackages.flask
         modules.sqlite3
         modules.readline
       ];
+      
+    buildInputs = with pythonPackages; [ mock pyechonest six responses nose ];
+    
+    # 10 tests are failing
+    doCheck = false;
 
     meta = {
       homepage = http://beets.radbox.org;
       description = "Music tagger and library organizer";
       license = licenses.mit;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  };
+  
+  responses = pythonPackages.buildPythonPackage rec {
+    name = "responses-0.2.2";
+
+    propagatedBuildInputs = with pythonPackages; [ requests mock six pytest flake8 ];
+    
+    doCheck = false;
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/r/responses/responses-0.2.2.tar.gz";
+      md5 = "5d79fd425cf8d858dfc8afa6475395d3";
+    };
+
+  };
+ 
+  rarfile = pythonPackages.buildPythonPackage rec {
+    name = "rarfile-2.6";
+
+    propagatedBuildInputs = with pythonPackages; [  ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/r/rarfile/rarfile-2.6.tar.gz";
+      md5 = "50ce3f3fdb9196a00059a5ea7b3739fd";
+    };
+
+    meta = with stdenv.lib; {
+      description = "rarfile - RAR archive reader for Python";
+      homepage = https://github.com/markokr/rarfile;
+    };
+  };
+  
+  pyechonest = pythonPackages.buildPythonPackage rec {
+    name = "pyechonest-8.0.2";
+
+    propagatedBuildInputs = with pythonPackages; [  ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyechonest/pyechonest-8.0.2.tar.gz";
+      md5 = "5586fe8ece7af4e24f71ea740185127e";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Tap into The Echo Nest's Musical Brain for the best music search, information, recommendations and remix tools on the web";
+      homepage = https://github.com/echonest/pyechonest;
     };
   };
 
@@ -723,6 +778,22 @@ rec {
       homepage = https://github.com/Sheeprider/BitBucket-api;
       description = "Python library to interact with BitBucket REST API";
       license = licenses.mit;
+    };
+  };
+
+  bitbucket-cli = buildPythonPackage rec {
+    name = "bitbucket-cli-0.4.1";
+    src = fetchurl {
+       url = "https://pypi.python.org/packages/source/b/bitbucket-cli/${name}.tar.gz";
+       md5 = "79cdbdc6c95dfa313d12cbdef406c9f2";
+    };
+
+    pythonPath = [ requests ];
+
+    meta = with stdenv.lib; {
+      description = "Bitbucket command line interface";
+      homepage = "https://bitbucket.org/zhemao/bitbucket-cli";
+      maintainers = [ maintainers.refnil ];
     };
   };
 
@@ -2043,6 +2114,16 @@ rec {
   };
 
 
+  logster = buildPythonPackage {
+    name = "logster-7475c53822";
+    src = fetchgit {
+      url = git://github.com/etsy/logster;
+      rev = "7475c53822";
+      sha256 = "1ls007qmziwb50c5iikxhqin0xbn673gbd25m5k09861435cknvr";
+    };
+  };
+
+
   paver = buildPythonPackage rec {
     version = "1.2.2";
     name    = "Paver-${version}";
@@ -2997,6 +3078,15 @@ rec {
     };
   };
 
+  enum34 = buildPythonPackage rec {
+    name = "enum34-1.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/e/enum34/${name}.tar.gz";
+      md5 = "9d57f5454c70c11707998ea26c1b0a7c";
+    };
+
+  };
 
   epc = buildPythonPackage rec {
     name = "epc-0.0.3";
@@ -3626,6 +3716,38 @@ rec {
       description = "A comprehensive HTTP client library";
       license = licenses.mit;
       maintainers = [ stdenv.lib.maintainers.garbas ];
+    };
+  };
+
+  httpretty = buildPythonPackage rec {
+    name = "httpretty-${version}";
+    version = "0.8.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/h/httpretty/${name}.tar.gz";
+      md5 = "50b02560a49fe928c90c53a49791f621";
+    };
+
+    buildInputs = [ tornado requests httplib2 sure nose coverage ];
+
+    propagatedBuildInputs = [ urllib3 ];
+
+    postPatch = ''
+      sed -i -e 's/==.*$//' *requirements.txt
+      # XXX: Drop this after version 0.8.4 is released.
+      patch httpretty/core.py <<DIFF
+      ***************
+      *** 566 ****
+      !                 'content-length': len(self.body)
+      --- 566 ----
+      !                 'content-length': str(len(self.body))
+      DIFF
+    '';
+
+    meta = {
+      homepage = "http://falcao.it/HTTPretty/";
+      description = "HTTP client request mocking tool";
+      license = licenses.mit;
     };
   };
 
@@ -4336,11 +4458,11 @@ rec {
 
 
   musicbrainzngs = buildPythonPackage rec {
-    name = "musicbrainzngs-0.2";
+    name = "musicbrainzngs-0.5";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/m/musicbrainzngs/${name}.tar.gz";
-      md5 = "bc32aa1cf121f29c3ca1c06e9668865f";
+      md5 = "9e17a181af72d04a291c9a960bc73d44";
     };
 
     meta = {
@@ -4353,12 +4475,15 @@ rec {
 
 
   mutagen = buildPythonPackage (rec {
-    name = "mutagen-1.20";
+    name = "mutagen-1.23";
 
     src = fetchurl {
-      url = "http://mutagen.googlecode.com/files/${name}.tar.gz";
-      sha256 = "1rz63nh7r6qj3zsidf8d3a7ih647prvvqzi51p8dqkqmvrwc8mky";
+      url = "http://pypi.python.org/packages/source/m/mutagen/${name}.tar.gz";
+      sha256 = "12f70aaf5ggdzll76bhhkn64b27xy9s1acx417dbsaqnnbis8s76";
     };
+    
+    # one unicode test fails
+    doCheck = false;
 
     meta = {
       description = "Python multimedia tagging library";
@@ -7135,11 +7260,11 @@ rec {
 
 
   six = buildPythonPackage rec {
-    name = "six-1.3.0";
+    name = "six-1.7.3";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/s/six/${name}.tar.gz";
-      md5 = "ec47fe6070a8a64c802363d2c2b1e2ee";
+      md5 = "784c6e5541c3c4952de9c0a966a0a80b";
     };
 
     # error: invalid command 'test'
@@ -7471,6 +7596,30 @@ rec {
     };
   };
 
+
+  sure = buildPythonPackage rec {
+    name = "sure-${version}";
+    version = "1.2.7";
+
+    # Not picking up from PyPI because it doesn't contain tests.
+    src = fetchgit {
+      url = "git://github.com/gabrielfalcao/sure.git";
+      rev = "86ab9faa97aa9c1720c7d090deac2be385ed3d7a";
+      sha256 = "02vffcdgr6vbj80lhl925w7zqy6cqnfvs088i0rbkjs5lxc511b3";
+    };
+
+    buildInputs = [ nose ];
+
+    propagatedBuildInputs = [ six mock ];
+
+    meta = {
+      description = "Utility belt for automated testing";
+      homepage = "http://falcao.it/sure/";
+      license = licenses.gpl3Plus;
+    };
+  };
+
+
   # XXX: ValueError: ZIP does not support timestamps before 1980
   # svneverever =  buildPythonPackage rec {
   #   name = "svneverever-778489a8";
@@ -7513,6 +7662,7 @@ rec {
     src = fetchgit {
       url = https://github.com/miracle2k/tarsnapper.git;
       rev = "620439bca68892f2ffaba1079a34b18496cc6596";
+      sha256 = "06pp499qm2dxpja2jgmmq2jrcx3m4nq52x5hhil9r1jxvyiq962p";
     };
 
     propagatedBuildInputs = [ argparse pyyaml ];
@@ -9130,26 +9280,21 @@ rec {
   pykka = buildPythonPackage rec {
     name = "pykka-${version}";
 
-    version = "1.1.0";
+    version = "1.2.0";
 
     src = fetchgit {
       url = "https://github.com/jodal/pykka.git";
       rev = "refs/tags/v${version}";
-      sha256 = "0w6bcaqkzwmd9habszlgjkp3kkhkna08s9aivnmna5hddsghfqmz";
+      sha256 = "17vv2q636zp2fvxrp7ckgnz1ifaffcj5vdxvfb4isd1d32c49amb";
     };
-
-    # python zip complains about old timestamps
-    preConfigure = ''
-      find -print0 | xargs -0 touch
-    '';
 
     # There are no tests
     doCheck = false;
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = http://www.pykka.org;
       description = "A Python implementation of the actor model";
-      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      maintainers = [ maintainers.rickynils ];
     };
   };
 

@@ -305,25 +305,9 @@ let
     inherit stdenv git cacert;
   };
 
-  fetchgitPrivate = args: derivation ((fetchgit args).drvAttrs // {
-    SSH_AUTH_SOCK = if (builtins.tryEval <ssh-auth-sock>).success
-      then builtins.toString <ssh-auth-sock>
-      else null;
-    GIT_SSH = pkgs.writeScript "fetchgit-ssh" ''
-      #! ${pkgs.stdenv.shell}
-      exec -a ssh ${pkgs.openssh}/bin/ssh -F ${let
-        sshConfigFile = if (builtins.tryEval <ssh-config-file>).success
-          then <ssh-config-file>
-          else builtins.trace ''
-            Please set your nix-path such that ssh-config-file points to a file that will allow ssh to access private repositories. The builder will not be able to see any running ssh agent sessions unless ssh-auth-sock is also set in the nix-path.
-
-            Note that the config file and any keys it points to must be readable by the build user, which depending on your nix configuration means making it readable by the build-users-group, the user of the running nix-daemon, or the user calling the nix command which started the build. Similarly, if using an ssh agent ssh-auth-sock must point to a socket the build user can access.
-
-            You may need StrictHostKeyChecking=no in the config file. Since ssh will refuse to use a group-readable private key, if using build-users you will likely want to use something like IdentityFile /some/directory/%u/key and have a directory for each build user accessible to that user.
-          '' "/var/lib/empty/config";
-      in builtins.toString sshConfigFile} "$@"
-    '';
-  });
+  fetchgitPrivate = import ../build-support/fetchgit/private.nix {
+    inherit fetchgit writeScript openssh stdenv;
+  };
 
   fetchgitrevision = import ../build-support/fetchgitrevision runCommand git;
 
@@ -593,6 +577,8 @@ let
 
   bfr = callPackage ../tools/misc/bfr { };
 
+  bitbucket-cli = pythonPackages.bitbucket-cli;
+
   blockdiag = pythonPackages.blockdiag;
 
   bmon = callPackage ../tools/misc/bmon { };
@@ -646,6 +632,8 @@ let
   mpdcron = callPackage ../tools/audio/mpdcron { };
 
   syslogng = callPackage ../tools/system/syslog-ng { };
+
+  syslogng_incubator = callPackage ../tools/system/syslog-ng-incubator { };
 
   rsyslog = callPackage ../tools/system/rsyslog { };
 
@@ -958,6 +946,8 @@ let
 
   efibootmgr = callPackage ../tools/system/efibootmgr { };
 
+  efivar = callPackage ../tools/system/efivar { };
+
   elasticsearch = callPackage ../servers/search/elasticsearch { };
 
   enblendenfuse = callPackage ../tools/graphics/enblend-enfuse {
@@ -982,6 +972,8 @@ let
   evtest = callPackage ../applications/misc/evtest { };
 
   exempi = callPackage ../development/libraries/exempi { };
+
+  exercism = callPackage ../development/tools/exercism { };
 
   exif = callPackage ../tools/graphics/exif { };
 
@@ -1903,6 +1895,8 @@ let
 
   qshowdiff = callPackage ../tools/text/qshowdiff { };
 
+  quilt = callPackage ../development/tools/quilt { };
+
   radvd = callPackage ../tools/networking/radvd { };
 
   ranger = callPackage ../applications/misc/ranger { };
@@ -1940,6 +1934,8 @@ let
   rdiff_backup = callPackage ../tools/backup/rdiff-backup { };
 
   rdmd = callPackage ../development/compilers/rdmd { };
+
+  riemann_c_client = callPackage ../tools/misc/riemann-c-client { };
 
   ripmime = callPackage ../tools/networking/ripmime {};
 
@@ -2000,6 +1996,8 @@ let
   scrypt = callPackage ../tools/security/scrypt { };
 
   sdcv = callPackage ../applications/misc/sdcv { };
+
+  sec = callPackage ../tools/admin/sec { };
 
   seccure = callPackage ../tools/security/seccure { };
 
@@ -2209,6 +2207,8 @@ let
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
 
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
+
+  volatility = callPackage ../tools/security/volatility { };
 
   vidalia = callPackage ../tools/security/vidalia { };
 
@@ -2572,7 +2572,7 @@ let
   compcert = callPackage ../development/compilers/compcert {};
 
   cryptol1 = lowPrio (callPackage ../development/compilers/cryptol/1.8.x.nix {});
-  cryptol2 = haskellPackages.cryptol;
+  cryptol2 = haskellPackages_ghc763.cryptol; # doesn't compile with the lastest 7.8.3 release
 
   cython = pythonPackages.cython;
   cython3 = python3Packages.cython;
@@ -2923,7 +2923,10 @@ let
 
   # Import Haskell infrastructure.
 
-  haskell = callPackage ./haskell-defaults.nix { inherit pkgs; };
+  haskell = let pkgs_       = pkgs // { gmp = gmp.override { withStatic = true; }; };
+                callPackage = newScope pkgs_;
+                newScope    = extra: lib.callPackageWith (pkgs_ // pkgs_.xorg // extra);
+            in callPackage ./haskell-defaults.nix { pkgs = pkgs_; inherit callPackage newScope; };
 
   # Available GHC versions.
 
@@ -2941,7 +2944,7 @@ let
     builtins.substring 0 (builtins.stringLength "packages_") name == "packages_"
   ) haskell));
 
-  haskellPackages = haskellPackages_ghc763;
+  haskellPackages = haskellPackages_ghc783;
   haskellPlatform = haskellPlatformPackages."2013_2_0_0";
 
   haskellPackages_ghc6104 = haskell.packages_ghc6104;
@@ -2949,15 +2952,10 @@ let
   haskellPackages_ghc704  = haskell.packages_ghc704;
   haskellPackages_ghc722  = haskell.packages_ghc722;
   haskellPackages_ghc742  = haskell.packages_ghc742;
-  # For the default version, we build profiling versions of the libraries, too.
-  # The following three lines achieve that: the first two make Hydra build explicit
-  # profiling and non-profiling versions; the final respects the user-configured
-  # default setting.
-  haskellPackages_ghc763_no_profiling = recurseIntoAttrs haskell.packages_ghc763.noProfiling;
-  haskellPackages_ghc763_profiling    = recurseIntoAttrs haskell.packages_ghc763.profiling;
-  haskellPackages_ghc763              = recurseIntoAttrs haskell.packages_ghc763.highPrio;
-  # Reasonably current HEAD snapshot.
-  haskellPackages_ghc782 = haskell.packages_ghc782;
+  haskellPackages_ghc763  = haskell.packages_ghc763;
+  haskellPackages_ghc783_no_profiling = recurseIntoAttrs haskell.packages_ghc783.noProfiling;
+  haskellPackages_ghc783_profiling    = recurseIntoAttrs haskell.packages_ghc783.profiling;
+  haskellPackages_ghc783              = recurseIntoAttrs haskell.packages_ghc783.highPrio;
   haskellPackages_ghcHEAD = haskell.packages_ghcHEAD;
 
   haskellPlatformPackages = recurseIntoAttrs (import ../development/libraries/haskell/haskell-platform { inherit pkgs; });
@@ -3055,17 +3053,17 @@ let
   jdkdistro = installjdk: pluginSupport:
     assert supportsJDK;
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/jdk/jdk6-linux.nix { });
+      (callPackage ../development/compilers/oraclejdk/jdk6-linux.nix { });
 
   oraclejdk7distro = installjdk: pluginSupport:
     assert supportsJDK;
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/jdk/jdk7-linux.nix { inherit installjdk; });
+      (callPackage ../development/compilers/oraclejdk/jdk7-linux.nix { inherit installjdk; });
 
   oraclejdk8distro = installjdk: pluginSupport:
     assert supportsJDK;
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/jdk/jdk8-linux.nix { inherit installjdk; });
+      (callPackage ../development/compilers/oraclejdk/jdk8-linux.nix { inherit installjdk; });
 
   jikes = callPackage ../development/compilers/jikes { };
 
@@ -3474,6 +3472,7 @@ let
   lua5_sockets = callPackage ../development/interpreters/lua-5/sockets.nix {};
   lua5_expat = callPackage ../development/interpreters/lua-5/expat.nix {};
   lua5_filesystem = callPackage ../development/interpreters/lua-5/filesystem.nix {};
+  lua5_sec = callPackage ../development/interpreters/lua-5/sec.nix {};
 
   luarocks = callPackage ../development/tools/misc/luarocks {
      lua = lua5;
@@ -3555,17 +3554,26 @@ let
     llvm = llvm_33 ;
   };
 
+  python = python2;
+  python2 = python27;
+  python3 = python34;
+
+  # pythonPackages further below, but assigned here because they need to be in sync
+  pythonPackages = python2Packages;
+  python2Packages = python27Packages;
+  python3Packages = python34Packages;
+
+  pythonFull = python2Full;
+  python2Full = python27Full;
+
   python26 = callPackage ../development/interpreters/python/2.6 { db = db47; };
-  python27 = callPackage ../development/interpreters/python/2.7 { libX11 = xlibs.libX11; };
+  python27 = callPackage ../development/interpreters/python/2.7 { };
   python32 = callPackage ../development/interpreters/python/3.2 { };
   python33 = callPackage ../development/interpreters/python/3.3 { };
   python34 = hiPrio (callPackage ../development/interpreters/python/3.4 { });
-  python = python27;
-  python3 = python3Packages.python;
 
   pypy = callPackage ../development/interpreters/pypy/2.3 { };
 
-  pythonFull = python27Full;
   python26Full = callPackage ../development/interpreters/python/wrapper.nix {
     extraLibs = [];
     postBuild = "";
@@ -4953,6 +4961,11 @@ let
     lua = lua5_1;
   };
 
+  keybinder3 = callPackage ../development/libraries/keybinder3 {
+    automake = automake111x;
+    lua = lua5_1;
+  };
+
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix { };
 
   lcms = lcms1;
@@ -5045,6 +5058,8 @@ let
   inherit (gnome3) libcroco;
 
   libcangjie = callPackage ../development/libraries/libcangjie { };
+
+  libcredis = callPackage ../development/libraries/libcredis { };
 
   libctemplate = callPackage ../development/libraries/libctemplate { };
 
@@ -5199,6 +5214,8 @@ let
     useGTK = config.libiodbc.gtk or false;
   };
 
+  libivykis = callPackage ../development/libraries/libivykis { };
+
   liblastfmSF = callPackage ../development/libraries/liblastfmSF { };
 
   liblastfm = callPackage ../development/libraries/liblastfm { };
@@ -5206,6 +5223,8 @@ let
   liblqr1 = callPackage ../development/libraries/liblqr-1 { };
 
   liblockfile = callPackage ../development/libraries/liblockfile { };
+
+  liblogging = callPackage ../development/libraries/liblogging { };
 
   libmcrypt = callPackage ../development/libraries/libmcrypt {};
 
@@ -5328,6 +5347,8 @@ let
 
   libmpcdec = callPackage ../development/libraries/libmpcdec { };
 
+  libmp3splt = callPackage ../development/libraries/libmp3splt { };
+
   libmrss = callPackage ../development/libraries/libmrss { };
 
   libmsn = callPackage ../development/libraries/libmsn { };
@@ -5378,6 +5399,8 @@ let
   liboop = callPackage ../development/libraries/liboop { };
 
   libopus = callPackage ../development/libraries/libopus { };
+
+  libosinfo = callPackage ../development/libraries/libosinfo {};
 
   libosip = callPackage ../development/libraries/osip {};
 
@@ -6514,8 +6537,6 @@ let
   # python function with default python interpreter
   buildPythonPackage = pythonPackages.buildPythonPackage;
 
-  pythonPackages = python27Packages;
-
   # `nix-env -i python-nose` installs for 2.7, the default python.
   # Therefore we do not recurse into attributes here, in contrast to
   # python27Packages. `nix-env -iA python26Packages.nose` works
@@ -6525,7 +6546,15 @@ let
     python = python26;
   };
 
-  python3Packages = python34Packages;
+  python27Packages = lib.hiPrioSet (recurseIntoAttrs (import ./python-packages.nix {
+    inherit pkgs;
+    python = python27;
+  }));
+
+  python32Packages = import ./python-packages.nix {
+    inherit pkgs;
+    python = python32;
+  };
 
   python33Packages = recurseIntoAttrs (import ./python-packages.nix {
     inherit pkgs;
@@ -6536,16 +6565,6 @@ let
     inherit pkgs;
     python = python34;
   });
-
-  python32Packages = import ./python-packages.nix {
-    inherit pkgs;
-    python = python32;
-  };
-
-  python27Packages = lib.hiPrioSet (recurseIntoAttrs (import ./python-packages.nix {
-    inherit pkgs;
-    python = python27;
-  }));
 
   pypyPackages = recurseIntoAttrs (import ./python-packages.nix {
     inherit pkgs;
@@ -7452,7 +7471,7 @@ let
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
-  linuxPackages = linuxPackages_3_14;
+  linuxPackages = linuxPackages_3_12;
 
   # Update this when adding the newest kernel major version!
   linux_latest = pkgs.linux_3_15;
@@ -8137,7 +8156,7 @@ let
   };
 
   blender = callPackage  ../applications/misc/blender {
-    python = python3;
+    python = python34;
   };
 
   bristol = callPackage ../applications/audio/bristol { };
@@ -8248,10 +8267,11 @@ let
 
   d4x = callPackage ../applications/misc/d4x { };
 
-  darcs = haskellPackages.darcs.override {
+  darcs = haskellPackages_ghc763.darcs.override {
     # A variant of the Darcs derivation that containts only the executable and
-    # thus has no dependencies on other Haskell packages.
-    cabal = haskellPackages.cabal.override {
+    # thus has no dependencies on other Haskell packages. We have to use the older
+    # GHC 7.6.3 package set because darcs won't compile with 7.8.x.
+    cabal = haskellPackages_ghc763.cabal.override {
       extension = self : super : {
         isLibrary = false;
         configureFlags = "-f-library " + super.configureFlags or "";
@@ -8302,6 +8322,10 @@ let
   dvdauthor = callPackage ../applications/video/dvdauthor { };
 
   dwb = callPackage ../applications/networking/browsers/dwb { dconf = gnome3.dconf; };
+
+  dwbWrapper = wrapFirefox
+    { browser = dwb; browserName = "dwb"; desktopName = "dwb";
+    };
 
   dwm = callPackage ../applications/window-managers/dwm {
     patches = config.dwm.patches or [];
@@ -9049,6 +9073,8 @@ let
   ledger = callPackage ../applications/office/ledger/2.6.3.nix { };
   ledger3 = callPackage ../applications/office/ledger/3.0.nix { };
 
+  lighttable = callPackage ../applications/editors/lighttable {};
+
   links2 = callPackage ../applications/networking/browsers/links2 { };
 
   linphone = callPackage ../applications/networking/instant-messengers/linphone rec {
@@ -9153,6 +9179,8 @@ let
 
   mopidy = callPackage ../applications/audio/mopidy { };
 
+  mopidy-spotify = callPackage ../applications/audio/mopidy-spotify { };
+
   mozilla = callPackage ../applications/networking/browsers/mozilla {
     inherit (gnome) libIDL;
   };
@@ -9165,6 +9193,8 @@ let
   easytag = callPackage ../applications/audio/easytag { };
 
   mp3info = callPackage ../applications/audio/mp3info { };
+
+  mp3splt = callPackage ../applications/audio/mp3splt { };
 
   mpc123 = callPackage ../applications/audio/mpc123 { };
 
@@ -9469,6 +9499,10 @@ let
     qt = qt4;
   };
 
+  retroshare06 = callPackage ../applications/networking/p2p/retroshare/0.6.nix {
+    qt = qt4;
+  };
+
   rsync = callPackage ../applications/networking/sync/rsync {
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD);
     enableCopyDevicesPatch = (config.rsync.enableCopyDevicesPatch or false);
@@ -9635,6 +9669,8 @@ let
     gpgSupport = true;
   };
 
+  symlinks = callPackage ../tools/system/symlinks { };
+
   syncthing = callPackage ../applications/networking/syncthing { };
 
   # linux only by now
@@ -9735,6 +9771,8 @@ let
 
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
+  twister = callPackage ../applications/networking/p2p/twister { };
+
   twmn = callPackage ../applications/misc/twmn { };
 
   twinkle = callPackage ../applications/networking/instant-messengers/twinkle {
@@ -9778,11 +9816,7 @@ let
 
   macvim = callPackage ../applications/editors/vim/macvim.nix { };
 
-  vimWrapper = wrapVim vim;
-
   vimHugeX = vim_configurable;
-
-  vimHugeXWrapper = wrapVim vimHugeX;
 
   vim_configurable = callPackage ../applications/editors/vim/configurable.nix {
     inherit (pkgs) fetchurl fetchhg stdenv ncurses pkgconfig gettext
@@ -9815,11 +9849,6 @@ let
     lua = pkgs.lua5;
     flags = [ "python" "X11" ]; # only flag "X11" by now
   });
-
-  wrapVim = vim: import ../applications/editors/vim/wrapper.nix {
-    inherit stdenv makeWrapper writeText vim;
-    vimrc = config.vim.vimrc or "";
-  };
 
   virtviewer = callPackage ../applications/virtualization/virt-viewer {
     gtkvnc = gtkvnc.override { enableGTK3 = true; };
@@ -10019,6 +10048,8 @@ let
   xsynth_dssi = callPackage ../applications/audio/xsynth-dssi { };
 
   xterm = callPackage ../applications/misc/xterm { };
+
+  finalterm = callPackage ../applications/misc/finalterm { };
 
   xtrace = callPackage ../tools/X11/xtrace { };
 
@@ -10587,7 +10618,7 @@ let
 
       qtcurve = callPackage ../misc/themes/qtcurve { };
 
-      quassel = callPackage ../applications/networking/irc/quassel { };
+      quassel = callPackage ../applications/networking/irc/quassel { dconf = gnome3.dconf; };
 
       quasselDaemon = (self.quassel.override {
         monolithic = false;
@@ -11255,7 +11286,7 @@ let
 
   viewnior = callPackage ../applications/graphics/viewnior { };
 
-  vimPlugins = callPackage ../misc/vim-plugins { };
+  vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins { });
 
   vimprobable2 = callPackage ../applications/networking/browsers/vimprobable2 {
     webkit = webkitgtk2;

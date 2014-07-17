@@ -1,26 +1,20 @@
-{stdenv, fetchurl, flex, yacc, tk }:
+{stdenv, fetchurl, yacc }:
 
-stdenv.mkDerivation {
-  name = "spin-5.1.7";
+stdenv.mkDerivation rec {
+  version = "6.3.2";
+  name = "spin-${version}";
 
   src = fetchurl {
-    url = http://spinroot.com/spin/Src/spin517.tar.gz;
-    sha256 = "03c6bmar4z13jx7dddb029f0qnmgl8x4hyfwn3qijjyd4dbliiw6";
+    url = http://spinroot.com/spin/Src/spin632.tar.gz;
+    curlOpts = "--user-agent 'Mozilla/5.0'";
+    sha256 = "1llsv1mnwr99hvsm052i3wwpa3dm5j12s5p10hizi6i9hlp00b5y";
   };
 
-  buildInputs = [ flex yacc tk ];
+  buildInputs = [ yacc ];
 
-  patchPhase = ''
-    cd Src*
-    sed -i -e 's/-DNXT/-DNXT -DCPP="\\"gcc -E -x c\\""/' makefile
-  '';
-  installPhase = ''
-    mkdir -p $out/bin
-    cp ../Xspin*/xsp* $out/bin/xspin
-    sed -i -e '1s@^#!/bin/sh@#!${tk}/bin/wish@' \
-      -e '/exec wish/d' $out/bin/xspin
-    cp spin $out/bin
-  '';
+  sourceRoot = "Spin/Src${version}";
+
+  installPhase = "install -D spin $out/bin/spin";
 
   meta = {
     description = "Formal verification tool for distributed software systems";
