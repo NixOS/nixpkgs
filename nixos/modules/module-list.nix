@@ -152,6 +152,7 @@
   ./services/misc/nix-gc.nix
   ./services/misc/nixos-manual.nix
   ./services/misc/nix-ssh-serve.nix
+  ./services/misc/phd.nix
   ./services/misc/rippled.nix
   ./services/misc/rogue.nix
   ./services/misc/svnserve.nix
