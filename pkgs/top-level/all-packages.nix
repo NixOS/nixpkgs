@@ -305,25 +305,9 @@ let
     inherit stdenv git cacert;
   };
 
-  fetchgitPrivate = args: derivation ((fetchgit args).drvAttrs // {
-    SSH_AUTH_SOCK = if (builtins.tryEval <ssh-auth-sock>).success
-      then builtins.toString <ssh-auth-sock>
-      else null;
-    GIT_SSH = pkgs.writeScript "fetchgit-ssh" ''
-      #! ${pkgs.stdenv.shell}
-      exec -a ssh ${pkgs.openssh}/bin/ssh -F ${let
-        sshConfigFile = if (builtins.tryEval <ssh-config-file>).success
-          then <ssh-config-file>
-          else builtins.trace ''
-            Please set your nix-path such that ssh-config-file points to a file that will allow ssh to access private repositories. The builder will not be able to see any running ssh agent sessions unless ssh-auth-sock is also set in the nix-path.
-
-            Note that the config file and any keys it points to must be readable by the build user, which depending on your nix configuration means making it readable by the build-users-group, the user of the running nix-daemon, or the user calling the nix command which started the build. Similarly, if using an ssh agent ssh-auth-sock must point to a socket the build user can access.
-
-            You may need StrictHostKeyChecking=no in the config file. Since ssh will refuse to use a group-readable private key, if using build-users you will likely want to use something like IdentityFile /some/directory/%u/key and have a directory for each build user accessible to that user.
-          '' "/var/lib/empty/config";
-      in builtins.toString sshConfigFile} "$@"
-    '';
-  });
+  fetchgitPrivate = import ../build-support/fetchgit/private.nix {
+    inherit fetchgit writeScript openssh stdenv;
+  };
 
   fetchgitrevision = import ../build-support/fetchgitrevision runCommand git;
 
@@ -961,6 +945,8 @@ let
   edk2 = callPackage ../development/compilers/edk2 { };
 
   efibootmgr = callPackage ../tools/system/efibootmgr { };
+
+  efivar = callPackage ../tools/system/efivar { };
 
   elasticsearch = callPackage ../servers/search/elasticsearch { };
 
@@ -1908,6 +1894,8 @@ let
   qjoypad = callPackage ../tools/misc/qjoypad { };
 
   qshowdiff = callPackage ../tools/text/qshowdiff { };
+
+  quilt = callPackage ../development/tools/quilt { };
 
   radvd = callPackage ../tools/networking/radvd { };
 
@@ -3065,17 +3053,17 @@ let
   jdkdistro = installjdk: pluginSupport:
     assert supportsJDK;
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/jdk/jdk6-linux.nix { });
+      (callPackage ../development/compilers/oraclejdk/jdk6-linux.nix { });
 
   oraclejdk7distro = installjdk: pluginSupport:
     assert supportsJDK;
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/jdk/jdk7-linux.nix { inherit installjdk; });
+      (callPackage ../development/compilers/oraclejdk/jdk7-linux.nix { inherit installjdk; });
 
   oraclejdk8distro = installjdk: pluginSupport:
     assert supportsJDK;
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/jdk/jdk8-linux.nix { inherit installjdk; });
+      (callPackage ../development/compilers/oraclejdk/jdk8-linux.nix { inherit installjdk; });
 
   jikes = callPackage ../development/compilers/jikes { };
 
@@ -5070,6 +5058,8 @@ let
   inherit (gnome3) libcroco;
 
   libcangjie = callPackage ../development/libraries/libcangjie { };
+
+  libcredis = callPackage ../development/libraries/libcredis { };
 
   libctemplate = callPackage ../development/libraries/libctemplate { };
 
@@ -7481,7 +7471,7 @@ let
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
-  linuxPackages = linuxPackages_3_14;
+  linuxPackages = linuxPackages_3_12;
 
   # Update this when adding the newest kernel major version!
   linux_latest = pkgs.linux_3_15;
@@ -8166,7 +8156,7 @@ let
   };
 
   blender = callPackage  ../applications/misc/blender {
-    python = python3;
+    python = python34;
   };
 
   bristol = callPackage ../applications/audio/bristol { };
@@ -9083,6 +9073,8 @@ let
   ledger = callPackage ../applications/office/ledger/2.6.3.nix { };
   ledger3 = callPackage ../applications/office/ledger/3.0.nix { };
 
+  lighttable = callPackage ../applications/editors/lighttable {};
+
   links2 = callPackage ../applications/networking/browsers/links2 { };
 
   linphone = callPackage ../applications/networking/instant-messengers/linphone rec {
@@ -9826,11 +9818,7 @@ let
 
   macvim = callPackage ../applications/editors/vim/macvim.nix { };
 
-  vimWrapper = wrapVim vim;
-
   vimHugeX = vim_configurable;
-
-  vimHugeXWrapper = wrapVim vimHugeX;
 
   vim_configurable = callPackage ../applications/editors/vim/configurable.nix {
     inherit (pkgs) fetchurl fetchhg stdenv ncurses pkgconfig gettext
@@ -9863,11 +9851,6 @@ let
     lua = pkgs.lua5;
     flags = [ "python" "X11" ]; # only flag "X11" by now
   });
-
-  wrapVim = vim: import ../applications/editors/vim/wrapper.nix {
-    inherit stdenv makeWrapper writeText vim;
-    vimrc = config.vim.vimrc or "";
-  };
 
   virtviewer = callPackage ../applications/virtualization/virt-viewer {
     gtkvnc = gtkvnc.override { enableGTK3 = true; };
@@ -10067,6 +10050,8 @@ let
   xsynth_dssi = callPackage ../applications/audio/xsynth-dssi { };
 
   xterm = callPackage ../applications/misc/xterm { };
+
+  finalterm = callPackage ../applications/misc/finalterm { };
 
   xtrace = callPackage ../tools/X11/xtrace { };
 
@@ -11298,7 +11283,7 @@ let
 
   viewnior = callPackage ../applications/graphics/viewnior { };
 
-  vimPlugins = callPackage ../misc/vim-plugins { };
+  vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins { });
 
   vimprobable2 = callPackage ../applications/networking/browsers/vimprobable2 {
     webkit = webkitgtk2;
