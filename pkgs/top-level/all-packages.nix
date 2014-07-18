@@ -2407,6 +2407,8 @@ let
     inherit (pkgs.kde4) kdelibs;
   };
 
+  uhub = callPackage ../servers/uhub { };
+
   unclutter = callPackage ../tools/misc/unclutter { };
 
   unbound = callPackage ../tools/networking/unbound { };
