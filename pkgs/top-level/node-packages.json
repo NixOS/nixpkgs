@@ -116,7 +116,7 @@
 , "rethinkdb"
 , "bower2nix"
 , "fetch-bower"
-, { "titanium": "3.3.0" }
+, { "titanium": "3.2.1" }
 , "gh"
 , "deepmerge"
 , "slasp"
