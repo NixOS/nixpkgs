@@ -9,8 +9,8 @@
 
 cabal.mkDerivation (self: {
   pname = "HaRe";
-  version = "0.7.2.4";
-  sha256 = "1ljyvs3mdgxzyvss071yvgnrnmhdyp9a10cmvij1d47li1wbj1j1";
+  version = "0.7.2.5";
+  sha256 = "09v0z1r03bzazgjf26fv54q1jpmv14zyl6w9083xcf2cs3yy6vfh";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
