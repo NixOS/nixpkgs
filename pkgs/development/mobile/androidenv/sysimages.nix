@@ -56,8 +56,8 @@ in
   sysimg_armeabi-v7a_19 = buildSystemImage {
     name = "armeabi-v7a-19";
     src = fetchurl {
-      url = https://dl-ssl.google.com/android/repository/sysimg_armv7a-19_r01.zip;
-      sha1 = "12dd1187dfd953b1ffcef5067d94578590f9e600";
+      url = https://dl-ssl.google.com/android/repository/sysimg_armv7a-19_r02.zip;
+      sha1 = "e0d375397e28e3d5d9577a00132463a4696248e5";
     };
   };
     

@@ -9,16 +9,16 @@
 
 stdenv.mkDerivation rec {
   name = "android-sdk-${version}";
-  version = "22.6.2";
+  version = "23.0.2";
   
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
       url = "http://dl.google.com/android/android-sdk_r${version}-linux.tgz";
-      md5 = "ff1541418a44d894bedc5cef10622220";
+      md5 = "94a8c62086a7398cc0e73e1c8e65f71e";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
       url = "http://dl.google.com/android/android-sdk_r${version}-macosx.zip";
-      md5 = "2a319c862dd1dcf450bfe2a6b3d9c608";
+      md5 = "322787b0e6c629d926c28690c79ac0d8";
     }
     else throw "platform not ${stdenv.system} supported!";
   
@@ -33,28 +33,10 @@ stdenv.mkDerivation rec {
     ''
       # There are a number of native binaries. We must patch them to let them find the interpreter and libstdc++
     
-      for i in dmtracedump emulator emulator-arm emulator-mips emulator-x86 hprof-conv mksdcard sqlite3
+      for i in emulator* mksdcard
       do
           patchelf --set-interpreter ${stdenv_32bit.gcc.libc}/lib/ld-linux.so.2 $i
           patchelf --set-rpath ${stdenv_32bit.gcc.gcc}/lib $i
-      done
-    
-      ${stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
-        # We must also patch the 64-bit emulator instances, if needed
-        
-        for i in emulator64-arm emulator64-mips emulator64-x86
-        do
-            patchelf --set-interpreter ${stdenv.gcc.libc}/lib/ld-linux-x86-64.so.2 $i
-            patchelf --set-rpath ${stdenv.gcc.gcc}/lib64 $i
-        done
-      ''}
-      
-      # These tools also need zlib in addition to libstdc++
-    
-      for i in etc1tool zipalign
-      do
-          patchelf --set-interpreter ${stdenv_32bit.gcc.libc}/lib/ld-linux.so.2 $i
-          patchelf --set-rpath ${stdenv_32bit.gcc.gcc}/lib:${zlib_32bit}/lib $i
       done
     
       # The android script has a hardcoded reference to /bin/ls that must be patched

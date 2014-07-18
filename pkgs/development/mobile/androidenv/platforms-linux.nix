@@ -221,8 +221,8 @@ in
   platform_19 = buildPlatform {
     name = "android-platform-4.4";
     src = fetchurl {
-      url = https://dl-ssl.google.com/android/repository/android-19_r01.zip;
-      sha1 = "96281811998272dce46e8285d15fce444a3d5a96";
+      url = https://dl-ssl.google.com/android/repository/android-19_r03.zip;
+      sha1 = "5f33d8fd36a384fe2b170035e04a29c274a9ef95";
     };
     meta = {
       description = "Android SDK Platform 4.4";
@@ -231,4 +231,3 @@ in
   };
     
 }
-  
