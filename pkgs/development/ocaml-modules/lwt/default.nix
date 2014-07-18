@@ -15,7 +15,9 @@ stdenv.mkDerivation {
     sha256 = "2bbf4f216dd62eeb765a89413f3b2b6d417a9c289ca49d595bb4d7a0545e343e";
   };
 
-  buildInputs = [ocaml_oasis pkgconfig which cryptopp ocaml findlib ocaml_react ocaml_ssl libev ncurses ocaml_text glib];
+  buildInputs = [ocaml_oasis pkgconfig which cryptopp ocaml findlib glib libev ncurses];
+
+  propagatedBuildInputs = [ ocaml_react ocaml_ssl ocaml_text ];
 
   configureFlags = [ "--enable-all" ];
 
