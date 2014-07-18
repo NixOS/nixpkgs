@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./configure-python-libs.patch ];
 
+  postPatch = stdenv.lib.optionalString doCheck
+    ''sed -i 's:#include "../../src:#include "src:' src/cxxtests.cpp'';
+
   propagatedBuildInputs = [
     # Python is used at run-time to execute scripts, e.g., those from
     # the "Effects" menu.
@@ -27,6 +30,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--with-python";
 
+  enableParallelBuilding = true;
+  doCheck = true;
+  checkFlags = "-j1";
+
   postInstall = ''
     # Make sure PyXML modules can be found at run-time.
     for i in "$out/bin/"*
@@ -40,9 +47,11 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lX11";
 
-  meta = {
+  meta = with stdenv.lib; {
     license = "GPL";
     homepage = http://www.inkscape.org;
+    description = "Vector graphics editor";
+    platforms = platforms.all;
     longDescription = ''
       Inkscape is a feature-rich vector graphics editor that edits
       files in the W3C SVG (Scalable Vector Graphics) file format.
