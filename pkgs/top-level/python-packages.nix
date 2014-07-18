@@ -5199,6 +5199,28 @@ rec {
     };
   };
 
+  pbr = buildPythonPackage rec {
+    name = "pbr-0.9.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pbr/${name}.tar.gz";
+      sha256 = "e5a57c434b1faa509a00bf458d2c7af965199d9cced3d05a547bff9880f7e8cb";
+    };
+
+    # pip depend on $HOME setting
+    preConfigure = "export HOME=$TMPDIR";
+
+    doCheck = false;
+
+    buildInputs = [ pip ];
+
+    meta = {
+      description = "Python Build Reasonableness";
+      homepage = "http://docs.openstack.org/developer/pbr/";
+      license = licenses.asl20;
+    };
+  };
+
   pep8 = buildPythonPackage rec {
     name = "pep8-${version}";
     version = "1.5.7";
@@ -7100,6 +7122,23 @@ rec {
     };
   };
 
+  stevedore = buildPythonPackage rec {
+    name = "stevedore-0.15";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/s/stevedore/${name}.tar.gz";
+      sha256 = "bec9269cbfa58de4f0849ec79bb7d54eeeed9df8b5fbfa1637fbc68062822847";
+    };
+
+    buildInputs = [ pbr pip ];
+
+    meta = {
+      description = "Manage dynamic plugins for Python applications";
+      homepage = "https://pypi.python.org/pypi/stevedore";
+      license = licenses.asl20;
+    };
+  };
+
   pydns = buildPythonPackage rec {
     name = "pydns-2.3.6";
 
@@ -8057,6 +8096,26 @@ rec {
       platforms = platforms.all;
     };
   };
+
+  virtualenvwrapper = buildPythonPackage (rec {
+    name = "virtualenvwrapper-4.3";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/v/virtualenvwrapper/${name}.tar.gz";
+      sha256 = "514cbc22218347bf7b54bdbe49e1a5f550d2d53b1ad2491c10e91ddf48fb528f";
+    };
+
+    # pip depend on $HOME setting
+    preConfigure = "export HOME=$TMPDIR";
+
+    buildInputs = [ pbr pip stevedore virtualenv virtualenv-clone ];
+
+    meta = {
+      description = "Enhancements to virtualenv";
+      homepage = "https://pypi.python.org/pypi/virtualenvwrapper";
+      license = licenses.mit;
+    };
+  });
 
   waitress = buildPythonPackage rec {
     name = "waitress-0.8.7";
