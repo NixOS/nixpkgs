@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
   sha256 = "0dsc5dx5zcxf5wd2qf6gqzr8d613z1gkllmzzkbny3lxa512crsw";
   isLibrary = true;
   isExecutable = true;
+  jailbreak = true;
   buildDepends = [
     Cabal downloadCurl either filepath hackageDb MissingH monadLoops
     tar text transformers yaml zlib
