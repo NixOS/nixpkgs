@@ -1878,6 +1878,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   QuickCheck_2_4_2 = callPackage ../development/libraries/haskell/QuickCheck/2.4.2.nix {};
   QuickCheck_2_5_1_1 = callPackage ../development/libraries/haskell/QuickCheck/2.5.1.1.nix {};
   QuickCheck_2_6 = callPackage ../development/libraries/haskell/QuickCheck/2.6.nix {};
+  QuickCheck_2_7_5 = callPackage ../development/libraries/haskell/QuickCheck/2.7.5.nix {};
   QuickCheck_2_7_6 = callPackage ../development/libraries/haskell/QuickCheck/2.7.6.nix {};
   QuickCheck = self.QuickCheck_2_7_6;
 
@@ -2712,6 +2713,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   Agda_2_3_2_2 = callPackage ../development/compilers/agda/2.3.2.2.nix {};
   Agda_2_4_0_1 = callPackage ../development/compilers/agda/2.4.0.1.nix {
     binary = self.binary_0_7_2_1;
+    QuickCheck = self.QuickCheck_2_7_5;
   };
   Agda = self.Agda_2_4_0_1;
 
