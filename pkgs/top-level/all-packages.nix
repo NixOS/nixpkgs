@@ -778,6 +778,8 @@ let
 
   cpuminer = callPackage ../tools/misc/cpuminer { };
 
+  cpuminer-multi = callPackage ../tools/misc/cpuminer-multi { };
+
   cuetools = callPackage ../tools/cd-dvd/cuetools { };
 
   unifdef = callPackage ../development/tools/misc/unifdef { };
@@ -8149,6 +8151,8 @@ let
   bibletime = callPackage ../applications/misc/bibletime { };
 
   bitcoin = callPackage ../applications/misc/bitcoin { };
+
+  bitmonero = callPackage ../applications/misc/bitmonero { };
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee {
     gnutls = gnutls;
