@@ -2350,6 +2350,8 @@ let
 
   ttmkfdir = callPackage ../tools/misc/ttmkfdir { };
 
+  uhub = callPackage ../servers/uhub { };
+
   unclutter = callPackage ../tools/misc/unclutter { };
 
   unbound = callPackage ../tools/networking/unbound { };
