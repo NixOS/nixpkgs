@@ -13,6 +13,7 @@
 , tastyQuickcheck, tastyRerun, text, time, transformers, unixCompat
 , utf8String, uuid, wai, waiExtra, warp, warpTls, which, xmlTypes
 , yesod, yesodCore, yesodDefault, yesodForm, yesodStatic
+, fsnotify
 }:
 
 cabal.mkDerivation (self: {
@@ -23,9 +24,9 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [
     aeson async blazeBuilder bloomfilter byteable caseInsensitive
-    clientsession cryptoApi cryptohash dataDefault dataenc DAV dbus
-    dlist dns editDistance exceptions extensibleExceptions fdoNotify
-    feed filepath gnutls hamlet hinotify hS3 hslogger HTTP httpClient
+    clientsession cryptoApi cryptohash dataDefault dataenc DAV
+    dlist dns editDistance exceptions extensibleExceptions
+    feed filepath gnutls hamlet hS3 hslogger HTTP httpClient
     httpConduit httpTypes IfElse json liftedBase MissingH monadControl
     mtl network networkInfo networkMulticast networkProtocolXmpp
     optparseApplicative pathPieces QuickCheck random regexTdfa
@@ -33,19 +34,14 @@ cabal.mkDerivation (self: {
     tastyQuickcheck tastyRerun text time transformers unixCompat
     utf8String uuid wai waiExtra warp warpTls xmlTypes yesod yesodCore
     yesodDefault yesodForm yesodStatic
-  ];
+  ] ++ (if self.stdenv.isDarwin then [
+    fsnotify
+  ] else [
+    dbus fdoNotify hinotify
+  ]);
   buildTools = [ bup curl git gnupg1 lsof openssh perl rsync which ];
-  configureFlags = "-fS3
-                    -fWebDAV
-                    -fInotify
-                    -fDbus
-                    -fAssistant
-                    -fWebapp
-                    -fPairing
-                    -fXMPP
-                    -fDNS
-                    -fProduction
-                    -fTDFA";
+  configureFlags = "-fAssistant
+                    -fProduction";
   preConfigure = ''
     export HOME="$NIX_BUILD_TOP/tmp"
     mkdir "$HOME"
