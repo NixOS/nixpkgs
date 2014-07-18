@@ -163,6 +163,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ansiWlPprint = callPackage ../development/libraries/haskell/ansi-wl-pprint {};
 
+  applicativeQuoters = callPackage ../development/libraries/haskell/applicative-quoters {};
+
   ariadne = callPackage ../development/libraries/haskell/ariadne {};
 
   arithmoi = callPackage ../development/libraries/haskell/arithmoi {};
