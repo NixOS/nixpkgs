@@ -141,7 +141,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   aeson_0_7_0_4 = callPackage ../development/libraries/haskell/aeson/0.7.0.4.nix { blazeBuilder = null; };
   aeson_0_7_0_6 = callPackage ../development/libraries/haskell/aeson/0.7.0.6.nix { blazeBuilder = null; };
-  aeson = self.aeson_0_7_0_6;
+  aeson_0_8_0_0 = callPackage ../development/libraries/haskell/aeson/0.8.0.0.nix { blazeBuilder = null; };
+  aeson = self.aeson_0_7_0_6;   # 0.8.0.0 breaks too many packages at the moment
 
   aesonPretty = callPackage ../development/libraries/haskell/aeson-pretty {};
 
@@ -1727,7 +1728,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   parsers_0_10_3 = callPackage ../development/libraries/haskell/parsers/0.10.3.nix {};
   parsers_0_11_0_3 = callPackage ../development/libraries/haskell/parsers/0.11.0.3.nix {};
-  parsers = self.parsers_0_11_0_3;
+  parsers_0_12 = callPackage ../development/libraries/haskell/parsers/0.12.nix {};
+  parsers = self.parsers_0_11_0_3; # the new version breaks trifecta
 
   parsimony = callPackage ../development/libraries/haskell/parsimony {};
 
@@ -1876,8 +1878,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   QuickCheck_2_4_2 = callPackage ../development/libraries/haskell/QuickCheck/2.4.2.nix {};
   QuickCheck_2_5_1_1 = callPackage ../development/libraries/haskell/QuickCheck/2.5.1.1.nix {};
   QuickCheck_2_6 = callPackage ../development/libraries/haskell/QuickCheck/2.6.nix {};
-  QuickCheck_2_7_5 = callPackage ../development/libraries/haskell/QuickCheck/2.7.5.nix {};
-  QuickCheck = self.QuickCheck_2_7_5;
+  QuickCheck_2_7_6 = callPackage ../development/libraries/haskell/QuickCheck/2.7.6.nix {};
+  QuickCheck = self.QuickCheck_2_7_6;
 
   quickcheckAssertions = callPackage ../development/libraries/haskell/quickcheck-assertions {};
 
@@ -2760,7 +2762,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   haddock_2_12_0 = callPackage ../development/tools/documentation/haddock/2.12.0.nix {};
   haddock_2_13_2 = callPackage ../development/tools/documentation/haddock/2.13.2.nix {};
   haddock_2_14_2 = callPackage ../development/tools/documentation/haddock/2.14.2.nix {};
-  haddock = self.haddock_2_14_2;
+  haddock_2_14_3 = callPackage ../development/tools/documentation/haddock/2.14.3.nix {};
+  haddock = self.haddock_2_14_3;
 
   HandsomeSoup = callPackage ../development/libraries/haskell/HandsomeSoup {};
 
