@@ -60,7 +60,7 @@ stdenv.mkDerivation {
         security import ${certificateFile} -k $keychainName -P "${certificatePassword}" -A 
 
         # Determine provisioning ID
-        PROVISIONING_PROFILE=$(grep UUID -A1 -a ${provisioningProfile} | grep -o "[-A-Z0-9]\{36\}")
+        PROVISIONING_PROFILE=$(grep UUID -A1 -a ${provisioningProfile} | grep -o "[-A-Za-z0-9]\{36\}")
 
         if [ ! -f "$HOME/Library/MobileDevice/Provisioning Profiles/$PROVISIONING_PROFILE.mobileprovision" ]
         then
