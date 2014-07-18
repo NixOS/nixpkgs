@@ -4156,7 +4156,9 @@ let
 
   uncrustify = callPackage ../development/tools/misc/uncrustify { };
 
-  vagrant = callPackage ../development/tools/vagrant { };
+  vagrant = callPackage ../development/tools/vagrant {
+    ruby = ruby2;
+  };
 
   gdb = callPackage ../development/tools/misc/gdb {
     hurd = gnu.hurdCross;
