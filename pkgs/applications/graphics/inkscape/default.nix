@@ -4,18 +4,14 @@
 , gsl, python, pyxml, lxml, poppler, imagemagick, libwpg }:
 
 stdenv.mkDerivation rec {
-  name = "inkscape-0.48.4";
+  name = "inkscape-0.48.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/inkscape/${name}.tar.bz2";
-    sha256 = "17aiibgdwjqpjc38f0yr2sdlgwngg5ac9srlybjcx9aspf6ashc7";
+    sha256 = "0sfr7a1vr1066rrkkqbqvcqs3gawalj68ralnhd6k87jz62fcv1b";
   };
 
   patches = [ ./configure-python-libs.patch ];
-
-  postPatch = ''
-    patch -p0 < ${./spuriouscomma.patch}
-  '';
 
   propagatedBuildInputs = [
     # Python is used at run-time to execute scripts, e.g., those from
