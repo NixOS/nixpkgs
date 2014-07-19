@@ -1,0 +1,84 @@
+From: Doug Porter <dsp@debian.org>
+Date: Tue, 22 Jan 2002 10:28:44 -0500
+Subject: 0011 Missing prototypes
+
+Fixing implicit declarations (Closes: #130405).
+---
+ correct.c |    1 +
+ ijoin.c   |    2 +-
+ ispell.c  |    2 ++
+ lookup.c  |    2 ++
+ tree.c    |    1 +
+ 5 files changed, 7 insertions(+), 1 deletions(-)
+
+diff --git a/correct.c b/correct.c
+index e2b63c8..661bf57 100644
+--- a/correct.c
++++ b/correct.c
+@@ -201,6 +201,7 @@ static char Rcs_Id[] =
+  */
+ 
+ #include <ctype.h>
++#include <unistd.h>
+ #include "config.h"
+ #include "ispell.h"
+ #include "proto.h"
+diff --git a/ijoin.c b/ijoin.c
+index edb18d1..5da039a 100644
+--- a/ijoin.c
++++ b/ijoin.c
+@@ -115,6 +115,7 @@ static char Rcs_Id[] =
+  */
+ 
+ #include <stdio.h>
++#include <string.h>
+ #include "config.h"
+ #include "ispell.h"
+ #include "proto.h"
+@@ -169,7 +170,6 @@ static char *		tabchar = " \t"; /* Field separator character(s) */
+ static int		unpairable1 = 0; /* NZ if -a1 */
+ static int		unpairable2 = 0; /* NZ if -a2 */
+ 
+-extern int	strcmp ();
+ 
+ int main (argc, argv)			/* Join files */
+     int			argc;		/* Argument count */
+diff --git a/ispell.c b/ispell.c
+index 9b509d0..59fe358 100644
+--- a/ispell.c
++++ b/ispell.c
+@@ -235,6 +235,8 @@ static char Rcs_Id[] =
+ #include <fcntl.h>
+ #endif /* NO_FCNTL_H */
+ #include <sys/stat.h>
++#include <ctype.h>
++#include <unistd.h>
+ 
+ static void	usage P ((void));
+ int		main P ((int argc, char * argv[]));
+diff --git a/lookup.c b/lookup.c
+index 648f9c8..8bf1f6c 100644
+--- a/lookup.c
++++ b/lookup.c
+@@ -87,6 +87,8 @@ static char Rcs_Id[] =
+ 
+ #include <fcntl.h>
+ 
++#include <sys/types.h>
++#include <unistd.h>
+ #include "config.h"
+ #include "ispell.h"
+ #include "proto.h"
+diff --git a/tree.c b/tree.c
+index 073a6a6..c26f635 100644
+--- a/tree.c
++++ b/tree.c
+@@ -94,6 +94,7 @@ static char Rcs_Id[] =
+ 
+ #include <ctype.h>
+ #include <errno.h>
++#include <unistd.h>
+ #include "config.h"
+ #include "ispell.h"
+ #include "proto.h"
+-- 
