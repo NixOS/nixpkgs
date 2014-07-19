@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "calibre-1.35.0";
+  name = "calibre-1.44.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/calibre/${name}.tar.xz";
-    sha256 = "0pzxp1f9d4pw7vksdfkdz6fdgrb8jfwgh4fckjfrarqs039422bi";
+    sha256 = "14k9rzp4rphls4zkzrdq8kk0mgzsh5sdmngxklb58r71xj2r995j";
   };
 
   inherit python;

@@ -5,7 +5,7 @@
 , ssl ? true # enable SSL support
 , previews ? false # enable webpage previews on hovering over URLs
 , tag ? "" # tag added to the package name
-, stdenv, fetchurl, cmake, qt4, kdelibs, automoc4, phonon }:
+, stdenv, fetchurl, cmake, makeWrapper, qt4, kdelibs, automoc4, phonon, dconf }:
 
 let
   edf = flag: feature: [("-D" + feature + (if flag then "=ON" else "=OFF"))];
@@ -22,7 +22,7 @@ in with stdenv; mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake qt4 ]
+  buildInputs = [ cmake makeWrapper qt4 ]
     ++ lib.optional withKDE kdelibs
     ++ lib.optional withKDE automoc4
     ++ lib.optional withKDE phonon;
@@ -39,6 +39,11 @@ in with stdenv; mkDerivation rec {
     ++ edf withKDE "WITH_KDE"
     ++ edf ssl "WITH_OPENSSL"
     ++ edf previews "WITH_WEBKIT"  ;
+
+  preFixup = ''
+    wrapProgram "$out/bin/quasselclient" \
+      --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://quassel-irc.org/;

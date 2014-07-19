@@ -50,7 +50,7 @@ stdenv.mkDerivation {
           ${if release then
             ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target dist-playstore --keystore ${androidKeyStore} --alias ${androidKeyAlias} --password ${androidKeyStorePassword} --output-dir $out''
           else
-            ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target emulator --build-only --output $out''}
+            ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target emulator --build-only -B foo --output $out''}
         ''
       else if target == "iphone" then
         ''

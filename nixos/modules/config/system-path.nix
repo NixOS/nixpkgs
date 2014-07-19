@@ -110,6 +110,7 @@ in
         "/man"
         "/sbin"
         "/share/emacs"
+        "/share/vim-plugins"
         "/share/org"
         "/share/info"
         "/share/terminfo"

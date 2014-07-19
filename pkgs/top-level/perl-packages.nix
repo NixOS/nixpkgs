@@ -4784,6 +4784,14 @@ let self = _self // overrides; _self = with self; {
       platforms   = stdenv.lib.platforms.unix;
     };
   };
+  
+  ListBinarySearch = pkgs.buildPerlPackage {
+    name = "List-BinarySearch-0.20";
+    src = pkgs.fetchurl {
+      url = mirror://cpan/authors/id/D/DA/DAVIDO/List-BinarySearch-0.20.tar.gz;
+      sha256 = "1piyl65m38bwqaap13wkgs033wiwb6m5zmr5va86ya4696cir7wd";
+    };
+  };
 
   ListMoreUtils = buildPerlPackage {
     name = "List-MoreUtils-0.33";

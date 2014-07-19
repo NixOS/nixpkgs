@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, m4, cxx ? true }:
+{ stdenv, fetchurl, m4, cxx ? true, withStatic ? false }:
 
 with { inherit (stdenv.lib) optional; };
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "gmp-5.1.3";
 
   src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://gmplib.org/";
     description = "GMP, the GNU multiple precision arithmetic library";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
 
     longDescription =
       '' GMP is a free library for arbitrary precision arithmetic, operating
@@ -54,7 +54,10 @@ stdenv.mkDerivation rec {
          asymptotically faster algorithms.
       '';
 
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    platforms = platforms.all;
+    maintainers = [ maintainers.simons ];
   };
 }
+  // stdenv.lib.optionalAttrs withStatic { dontDisableStatic = true; }
+)
+

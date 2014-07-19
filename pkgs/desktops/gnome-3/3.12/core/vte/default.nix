@@ -15,9 +15,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gobjectIntrospection intltool pkgconfig gnome3.glib gnome3.gtk3 ncurses ];
 
-  configureFlags = ''--enable-introspection'';
+  configureFlags = [ "--enable-introspection" ];
 
-  meta = {
+  enableParallelBuilding = true;
+
+  postInstall = ''
+    substituteInPlace $out/lib/libvte2_90.la --replace "-lncurses" "-L${ncurses}/lib -lncurses"
+  '';
+
+  meta = with stdenv.lib; {
     homepage = http://www.gnome.org/;
     description = "A library implementing a terminal emulator widget for GTK+";
     longDescription = ''
@@ -28,8 +34,8 @@ stdenv.mkDerivation rec {
       character set conversion, as well as emulating any terminal known to
       the system's terminfo database.
     '';
-    license = "LGPLv2";
-    maintainers = with stdenv.lib.maintainers; [ astsmtl antono ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.lgpl2;
+    maintainers = with maintainers; [ astsmtl antono lethalman ];
+    platforms = platforms.linux;
   };
 }

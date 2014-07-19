@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, cairo, libxml2, gnome3, pango
 , gnome_doc_utils, intltool, libX11, which, libuuid
-, desktop_file_utils, itstool, ncurses, makeWrapper, appdata-tools }:
+, desktop_file_utils, itstool, makeWrapper, appdata-tools }:
 
 stdenv.mkDerivation rec {
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gnome3.gtk gnome3.gsettings_desktop_schemas gnome3.vte appdata-tools
-                  gnome3.dconf itstool ncurses makeWrapper gnome3.nautilus ];
+                  gnome3.dconf itstool makeWrapper gnome3.nautilus ];
 
   nativeBuildInputs = [ pkgconfig intltool gnome_doc_utils which libuuid libxml2 desktop_file_utils ];
 
