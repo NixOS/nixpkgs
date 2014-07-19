@@ -3301,6 +3301,8 @@ with pkgs;
     boost = boost165;
   };
 
+  ispell = callPackage ../tools/text/ispell {};
+
   kindlegen = callPackage ../tools/typesetting/kindlegen { };
 
   latex2html = callPackage ../tools/misc/latex2html { };
