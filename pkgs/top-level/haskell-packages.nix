@@ -820,6 +820,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   fingertree = callPackage ../development/libraries/haskell/fingertree {};
 
+  focus = callPackage ../development/libraries/haskell/focus {};
+
   foldl = callPackage ../development/libraries/haskell/foldl {};
 
   folds = callPackage ../development/libraries/haskell/folds {};
@@ -1457,6 +1459,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   lrucache = callPackage ../development/libraries/haskell/lrucache {};
 
+  lochTh = callPackage ../development/libraries/haskell/loch-th {};
+
   lockfreeQueue = callPackage ../development/libraries/haskell/lockfree-queue {};
 
   logfloat = callPackage ../development/libraries/haskell/logfloat {};
@@ -1804,6 +1808,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   pipesText = callPackage ../development/libraries/haskell/pipes-text {};
 
   pipesZlib = callPackage ../development/libraries/haskell/pipes-zlib {};
+
+  placeholders = callPackage ../development/libraries/haskell/placeholders {};
 
   polyparse = callPackage ../development/libraries/haskell/polyparse {};
 
@@ -2243,6 +2249,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   stmChans = callPackage ../development/libraries/haskell/stm-chans {};
 
   stmConduit = callPackage ../development/libraries/haskell/stm-conduit {};
+
+  stmContainers = callPackage ../development/libraries/haskell/stm-containers {};
 
   STMonadTrans = callPackage ../development/libraries/haskell/STMonadTrans {};
 
