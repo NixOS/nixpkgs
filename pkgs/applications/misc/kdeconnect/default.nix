@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "kdeconnect-${version}";
-  version = "0.7";
+  version = "0.7.2";
 
   src = fetchurl {
     url = "http://download.kde.org/unstable/kdeconnect/${version}/src/kdeconnect-kde-${version}.tar.xz";
-    sha256 = "0a8g3avg9x5j07cf3c16i4w65q3fn1cbs8zxgq0vl14rzdy09q2j";
+    sha256 = "1v7sicgy39n8pn7nzq9f7lkmwbcvavhy3b66agyhxwmyzz6mcd4g";
   };
 
   buildInputs = [ gettext kdelibs libXtst makeWrapper qca2 qca2_ossl qjson ];
