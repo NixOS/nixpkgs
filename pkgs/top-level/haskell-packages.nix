@@ -1998,12 +1998,19 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   resourcet = callPackage ../development/libraries/haskell/resourcet {};
 
   restClient = callPackage ../development/libraries/haskell/rest-client {};
+
   restCore = callPackage ../development/libraries/haskell/rest-core {};
+
   restGen = callPackage ../development/libraries/haskell/rest-gen {};
+
   restHappstack = callPackage ../development/libraries/haskell/rest-happstack {};
-  restTypes = callPackage ../development/libraries/haskell/rest-types {};
-  restStringmap = callPackage ../development/libraries/haskell/rest-stringmap {};
+
   restSnap = callPackage ../development/libraries/haskell/rest-snap {};
+
+  restStringmap = callPackage ../development/libraries/haskell/rest-stringmap {};
+
+  restTypes = callPackage ../development/libraries/haskell/rest-types {};
+
   restWai = callPackage ../development/libraries/haskell/rest-wai {};
 
   retry = callPackage ../development/libraries/haskell/retry {};
