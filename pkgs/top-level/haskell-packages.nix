@@ -379,6 +379,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   cgi_3001_1_8_5 = callPackage ../development/libraries/haskell/cgi/3001.1.8.5.nix {};
   cgi = self.cgi_3001_1_8_5;
 
+  cgrep = callPackage ../development/libraries/haskell/cgrep {};
+
   charset = callPackage ../development/libraries/haskell/charset {};
 
   Chart = callPackage ../development/libraries/haskell/Chart {};
