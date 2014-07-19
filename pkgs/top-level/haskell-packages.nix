@@ -148,6 +148,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   aesonQq = callPackage ../development/libraries/haskell/aeson-qq {};
 
+  aesonUtils = callPackage ../development/libraries/haskell/aeson-utils {};
+
   alsaCore = callPackage ../development/libraries/haskell/alsa-core {};
 
   alsaMixer = callPackage ../development/libraries/haskell/alsa-mixer {};
@@ -427,6 +429,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   cmdlib = callPackage ../development/libraries/haskell/cmdlib {};
 
   cmdtheline = callPackage ../development/libraries/haskell/cmdtheline {};
+
+  codeBuilder = callPackage ../development/libraries/haskell/code-builder {};
 
   CodecImageDevIL = callPackage ../development/libraries/haskell/codec-image-devil {};
 
@@ -844,6 +848,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   gdiff = callPackage ../development/libraries/haskell/gdiff {};
 
+  genericAeson = callPackage ../development/libraries/haskell/generic-aeson {};
+
   genericDeriving = callPackage ../development/libraries/haskell/generic-deriving {};
 
   ghcCore = callPackage ../development/libraries/haskell/ghc-core {};
@@ -1258,6 +1264,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hxtHttp = callPackage ../development/libraries/haskell/hxt-http {};
 
+  hxtPickleUtils = callPackage ../development/libraries/haskell/hxt-pickle-utils {};
+
   hxtRegexXmlschema = callPackage ../development/libraries/haskell/hxt-regex-xmlschema {};
 
   hxtTagsoup = callPackage ../development/libraries/haskell/hxt-tagsoup {};
@@ -1340,6 +1348,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   json = callPackage ../development/libraries/haskell/json {};
 
   jsonAssertions = callPackage ../development/libraries/haskell/json-assertions {};
+
+  jsonSchema = callPackage ../development/libraries/haskell/json-schema {};
 
   jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
 
@@ -1577,6 +1587,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   multiarg = callPackage ../development/libraries/haskell/multiarg {};
 
   multimap = callPackage ../development/libraries/haskell/multimap {};
+
+  multipart = callPackage ../development/libraries/haskell/multipart {};
 
   multiplate = callPackage ../development/libraries/haskell/multiplate {};
 
@@ -1966,6 +1978,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   regular = callPackage ../development/libraries/haskell/regular {};
 
+  regularXmlpickler = callPackage ../development/libraries/haskell/regular-xmlpickler {};
+
   remote = callPackage ../development/libraries/haskell/remote {};
 
   repa = callPackage ../development/libraries/haskell/repa {};
@@ -1982,6 +1996,15 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   resourcePoolCatchio = callPackage ../development/libraries/haskell/resource-pool-catchio {};
 
   resourcet = callPackage ../development/libraries/haskell/resourcet {};
+
+  restClient = callPackage ../development/libraries/haskell/rest-client {};
+  restCore = callPackage ../development/libraries/haskell/rest-core {};
+  restGen = callPackage ../development/libraries/haskell/rest-gen {};
+  restHappstack = callPackage ../development/libraries/haskell/rest-happstack {};
+  restTypes = callPackage ../development/libraries/haskell/rest-types {};
+  restStringmap = callPackage ../development/libraries/haskell/rest-stringmap {};
+  restSnap = callPackage ../development/libraries/haskell/rest-snap {};
+  restWai = callPackage ../development/libraries/haskell/rest-wai {};
 
   retry = callPackage ../development/libraries/haskell/retry {};
 
@@ -2392,6 +2415,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     tls = self.tls_1_1_5;
   };
 
+  tostring = callPackage ../development/libraries/haskell/tostring {};
+
   transformers_0_2_2_0 = callPackage ../development/libraries/haskell/transformers/0.2.2.0.nix {};
   transformers_0_3_0_0 = callPackage ../development/libraries/haskell/transformers/0.3.0.0.nix {};
   transformers_0_4_1_0 = callPackage ../development/libraries/haskell/transformers/0.4.1.0.nix {};
@@ -2463,6 +2488,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   unorderedContainers = self.unorderedContainers_0_2_5_0;
 
   uri = callPackage ../development/libraries/haskell/uri {};
+
+  uriEncode = callPackage ../development/libraries/haskell/uri-encode {};
 
   url = callPackage ../development/libraries/haskell/url {};
 
