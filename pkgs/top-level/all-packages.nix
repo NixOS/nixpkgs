@@ -4156,7 +4156,9 @@ let
 
   uncrustify = callPackage ../development/tools/misc/uncrustify { };
 
-  vagrant = callPackage ../development/tools/vagrant { };
+  vagrant = callPackage ../development/tools/vagrant {
+    ruby = ruby2;
+  };
 
   gdb = callPackage ../development/tools/misc/gdb {
     hurd = gnu.hurdCross;
@@ -10479,6 +10481,11 @@ let
   e17 = recurseIntoAttrs (
     let callPackage = newScope pkgs.e17; in
     import ../desktops/e17 { inherit callPackage pkgs; }
+  );
+
+  e18 = recurseIntoAttrs (
+    let callPackage = newScope pkgs.e18; in
+    import ../desktops/e18 { inherit callPackage pkgs; }
   );
 
   gnome2 = callPackage ../desktops/gnome-2 {
