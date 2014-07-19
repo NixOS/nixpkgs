@@ -1315,6 +1315,8 @@ let
   isl = callPackage ../development/libraries/isl { };
   isl_0_12 = callPackage ../development/libraries/isl/0.12.2.nix { };
 
+  ispell = callPackage ../tools/text/ispell {};
+
   isync = callPackage ../tools/networking/isync { };
 
   jd-gui = callPackage_i686 ../tools/security/jd-gui { };
