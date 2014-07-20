@@ -2,7 +2,7 @@
 , libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php, re2c
 , expat, libcap, oniguruma, libdwarf, libmcrypt, tbb, gperftools, glog
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam, libpng
-, libxslt, ocaml, bash
+, libxslt, ocaml
 }:
 
 stdenv.mkDerivation rec {
