@@ -2,7 +2,7 @@
 , libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php, re2c
 , expat, libcap, oniguruma, libdwarf, libmcrypt, tbb, gperftools, glog
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam, libpng
-, libxslt, ocaml
+, libxslt, ocaml, bash
 }:
 
 stdenv.mkDerivation rec {
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     substituteInPlace hphp/util/generate-buildinfo.sh \
       --replace /bin/bash ${stdenv.shell}
+    substituteInPlace ./configure \
+      --replace "/usr/bin/env bash" ${stdenv.shell}
   '';
   installPhase = ''
     mkdir -p $out/bin $out/lib
