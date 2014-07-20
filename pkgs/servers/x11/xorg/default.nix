@@ -720,11 +720,11 @@ let
   })) // {inherit fontconfig freetype libX11 xproto libXrender ;};
 
   libXi = (stdenv.mkDerivation ((if overrides ? libXi then overrides.libXi else x: x) {
-    name = "libXi-1.7.3";
+    name = "libXi-1.7.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXi-1.7.3.tar.bz2;
-      sha256 = "0g4md74h8vnvni8qmvvrr5q629ygasvlpblnrkicci3vymwvhgbn";
+      url = mirror://xorg/individual/lib/libXi-1.7.4.tar.bz2;
+      sha256 = "0i12lj973grlp9fa79v0vh9cahk3nf9csdjnf81iip0qcrlc5zrc";
     };
     buildInputs = [pkgconfig inputproto libX11 libXext xextproto libXfixes xproto ];
   })) // {inherit inputproto libX11 libXext xextproto libXfixes xproto ;};
