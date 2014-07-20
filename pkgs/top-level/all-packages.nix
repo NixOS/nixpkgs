@@ -1165,6 +1165,8 @@ let
 
   gource = callPackage ../applications/version-management/gource {};
 
+  gpodder = callPackage ../applications/audio/gpodder { };
+
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
   grafana = callPackage ../development/tools/misc/grafana { };
@@ -5736,6 +5738,8 @@ let
   };
 
   muparser = callPackage ../development/libraries/muparser { };
+
+  mygpoclient = callPackage ../development/python-modules/mygpoclient { };
 
   mygui = callPackage ../development/libraries/mygui {};
 
