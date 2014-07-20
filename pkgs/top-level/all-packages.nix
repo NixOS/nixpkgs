@@ -11206,6 +11206,8 @@ let
 
   zsnes = callPackage_i686 ../misc/emulators/zsnes { };
 
+  snes9x-gtk = callPackage ../misc/emulators/snes9x-gtk { };
+
   misc = import ../misc/misc.nix { inherit pkgs stdenv; };
 
   bullet = callPackage ../development/libraries/bullet {};
