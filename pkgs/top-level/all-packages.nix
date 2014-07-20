@@ -3289,6 +3289,8 @@ let
       gtkmathview = callPackage ../development/libraries/gtkmathview { };
     };
 
+    lambdaTerm = callPackage ../development/ocaml-modules/lambda-term { };
+
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
     merlin = callPackage ../development/tools/ocaml/merlin { };
