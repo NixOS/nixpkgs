@@ -31,5 +31,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Open Source, Distributed, RESTful Search Engine";
     homepage    = http://www.elasticsearch.org;
+    license     = stdenv.lib.licenses.asl20;
+    platforms   = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.wjlroe ];
   };
 }
