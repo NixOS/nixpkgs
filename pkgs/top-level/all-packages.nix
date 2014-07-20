@@ -609,6 +609,8 @@ let
     flex = flex_2_5_35;
   };
 
+  cv = callPackage ../tools/misc/cv { };
+
   ditaa = callPackage ../tools/graphics/ditaa { };
 
   direnv = callPackage ../tools/misc/direnv { };
