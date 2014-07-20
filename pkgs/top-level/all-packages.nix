@@ -3370,6 +3370,9 @@ let
     yojson = callPackage ../development/ocaml-modules/yojson { };
 
     zarith = callPackage ../development/ocaml-modules/zarith { };
+
+    zed = callPackage ../development/ocaml-modules/zed { };
+
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
