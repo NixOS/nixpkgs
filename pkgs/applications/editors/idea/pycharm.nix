@@ -5,11 +5,11 @@
 let
 
   buildPycharm =
-  { name, dirName, version, build, src, description, license }:
+  { name, version, build, src, description, license }:
 
   stdenv.mkDerivation rec {
-    inherit name dirName build src license;
-    pycharmItem = makeDesktopItem {
+    inherit name build src license;
+    desktopItem = makeDesktopItem {
       name = "pycharm";
       exec = "pycharm";
       comment = "Powerful Python and Django IDE";
@@ -20,40 +20,38 @@ let
 
     buildInputs = [ makeWrapper patchelf p7zip ];
 
-    buildCommand = ''
-      tar xvzf $src
-      mkdir -p $out
-      cp -a $dirName $out
+    propagatedUserEnvPkgs = [ python ];
 
-      interpreter=$(echo ${stdenv.glibc}/lib/ld-linux*.so.2)
+    phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
 
-      7z x $out/$dirName/lib/snappy-java-1.0.5.jar
-      rm $out/$dirName/lib/snappy-java-1.0.5.jar
-      if [ "${stdenv.system}" == "x86_64-linux" ];then
-        patchelf --set-interpreter $interpreter $out/$dirName/bin/fsnotifier64
-        patchelf --set-rpath ${stdenv.gcc.gcc}/lib64/ org/xerial/snappy/native/Linux/amd64/libsnappyjava.so
+    patchPhase = ''
+      interpreter="$(echo ${stdenv.glibc}/lib/ld-linux*.so.2)"
+      snappyPath="lib/snappy-java-1.0.5"
+
+      7z x -o"$snappyPath" "$snappyPath.jar"
+      if [ "${stdenv.system}" == "x86_64-linux" ]; then
+        patchelf --set-interpreter "$interpreter" bin/fsnotifier64
+        patchelf --set-rpath ${stdenv.gcc.gcc}/lib64/ "$snappyPath/org/xerial/snappy/native/Linux/amd64/libsnappyjava.so"
       else
-        patchelf --set-interpreter $interpreter $out/$dirName/bin/fsnotifier
-        patchelf --set-rpath ${stdenv.gcc.gcc}/lib/ org/xerial/snappy/native/Linux/i386/libsnappyjava.so
+        patchelf --set-interpreter "$interpreter" bin/fsnotifier
+        patchelf --set-rpath ${stdenv.gcc.gcc}/lib/ "$snappyPath/org/xerial/snappy/native/Linux/i386/libsnappyjava.so"
       fi
-      7z a -tzip $out/$dirName/lib/snappy-java-1.0.5.jar .
+      7z a -tzip "$snappyPath.jar" ./"$snappyPath"/*
+      rm -vr "$snappyPath"
+    '';
 
-      mkdir -p $out/bin
+    installPhase = ''
+      mkdir -vp "$out/bin" "$out/$name"
+      cp -va . "$out/$name"
 
-      jdk=${jdk}/lib/openjdk
+      jdk="${jdk}/lib/openjdk"
+      makeWrapper "$out/$name/bin/pycharm.sh" "$out/bin/pycharm" \
+        --prefix PATH : "${jdk}/bin:${coreutils}/bin:${gnugrep}/bin:${which}/bin:${git}/bin" \
+        --prefix LD_RUN_PATH : "${stdenv.gcc.gcc}/lib/" \
+        --prefix JDK_HOME : "$jdk" \
+        --prefix PYCHARM_JDK : "$jdk"
 
-      makeWrapper $out/$dirName/bin/pycharm.sh $out/bin/pycharm \
-        --prefix PATH : ${jdk}/bin:${coreutils}/bin:${gnugrep}/bin:${which}/bin:${git}/bin \
-        --prefix LD_RUN_PATH : ${stdenv.gcc.gcc}/lib/ \
-        --prefix JDK_HOME : $jdk \
-        --prefix PYCHARM_JDK : $jdk
-
-        mkdir -p $out/share/applications
-        cp ${pycharmItem}/share/applications/* $out/share/applications
-        patchShebangs $out
-
-      mkdir "$out"/nix-support
-      echo ${python} >> "$out"/nix-support/propagated-user-env-packages
+      cp -a "${desktopItem}"/* "$out"
     '';
 
     meta = {
@@ -69,7 +67,6 @@ in {
 
   pycharm_community_313 = buildPycharm rec {
     name = "pycharm-community-${version}";
-    dirName = "${name}";
     version = "3.1.3";
     build = "133.1347";
     description = "PyCharm 3.1 Community Edition";
@@ -82,7 +79,6 @@ in {
 
   pycharm_community_341 = buildPycharm rec {
     name = "pycharm-community-${version}";
-    dirName = "${name}";
     version = "3.4.1";
     build = "135.1057";
     description = "PyCharm 3.4 Community Edition";
@@ -95,7 +91,6 @@ in {
 
   pycharm_professional_313 = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    dirName = "pycharm-${version}";
     version = "3.1.3";
     build = "133.1347";
     description = "PyCharm 3.1 Professional Edition";
@@ -108,7 +103,6 @@ in {
 
   pycharm_professional_341 = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    dirName = "pycharm-${version}";
     version = "3.4.1";
     build = "135.1057";
     description = "PyCharm 3.4 Professional Edition";
