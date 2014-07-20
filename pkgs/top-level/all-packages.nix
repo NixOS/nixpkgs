@@ -3217,6 +3217,8 @@ let
       gtkmathview = callPackage ../development/libraries/gtkmathview { };
     };
 
+    lambdaTerm = callPackage ../development/ocaml-modules/lambda-term { };
+
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
     mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
