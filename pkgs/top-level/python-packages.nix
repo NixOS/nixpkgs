@@ -4305,6 +4305,19 @@ rec {
     };
   };
 
+  minimock = buildPythonPackage rec {
+    version = "1.2.8";
+    name = "minimock-${version}";
+
+    src = fetchurl {
+      url = "https://bitbucket.org/jab/minimock/get/${version}.zip";
+      sha256 = "c88fa8a7120623f23990a7f086a9657f6ced09025a55e3be8649a30b4945441a";
+    };
+
+    buildInputs = [ nose ];
+
+    checkPhase = "./test";
+  };
 
   mitmproxy = buildPythonPackage rec {
     baseName = "mitmproxy";
