@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, SDL, boost, cmake, ffmpeg, gettext, glew
+{ stdenv, lib, fetchurl, fetchpatch, SDL, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, mesa, openal, opencolorio, openexr, openimageio, openjpeg, python
 , zlib, fftw
@@ -25,6 +25,12 @@ stdenv.mkDerivation rec {
     ''
       substituteInPlace */doc/manpage/blender.1.py --replace /usr/bin/python ${python}/bin/python3
     '';
+
+  patches = [(fetchpatch {
+    url = https://developer.blender.org/file/data/vqqwcycgo66w3y3dm4zk/PHID-FILE-ijyw5kteba6nzpcbhv7a/D619.diff;
+    sha256 = "18h4fqsbpwxzqz7qby18lrrbzqnyd5xnann3xcac5wddwv5wjb0f";
+  })];
+  patchFlags = "-p0";
 
   cmakeFlags =
     [ "-DOPENEXR_INC=${openexr}/include/OpenEXR"
