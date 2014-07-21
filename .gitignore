@@ -9,3 +9,7 @@ result-*
 /doc/manual.html
 /doc/manual.pdf
 .version-suffix
+/nixos/doc/manual/manual.html
+/nixos/doc/manual/manual.pdf
+/nixos/doc/manual/options-db.xml
+/nixos/doc/manual/version
