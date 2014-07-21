@@ -23,8 +23,9 @@ in buildPythonPackage rec {
 
   checkPhase = "make unittest";
 
-  installPhase = ''
-    DESTDIR=/ PREFIX=$out make install
+  makeFlags = [ "DESTDIR=/" "PREFIX=$out" ];
+
+  preFixup = ''
     wrapProgram $out/bin/gpodder \
       ${optionalString (gpodderHome != "") "--set GPODDER_HOME ${gpodderHome}"} \
       ${optionalString (gpodderDownloadDir != "") "--set GPODDER_DOWNLOAD_DIR ${gpodderDownloadDir}"}
