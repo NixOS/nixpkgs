@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "path-pieces";
-  version = "0.1.3.1";
-  sha256 = "140pkci5k6aa9ncxa29fn2p0g6lb79zci0k02nblv59qmj5hj8ic";
+  version = "0.1.4";
+  sha256 = "1fxhp4bk88km7z1rdpify7l38li5k21qxw3vgcmq9b6bblvz6y2v";
   buildDepends = [ text time ];
   testDepends = [ hspec HUnit QuickCheck text ];
   meta = {

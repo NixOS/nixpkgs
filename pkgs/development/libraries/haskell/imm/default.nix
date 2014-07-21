@@ -23,6 +23,5 @@ cabal.mkDerivation (self: {
     description = "Retrieve RSS/Atom feeds and write one mail per new item in a maildir";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ "Daniel Bergey <bergey@teallabs.org>" ];
   };
 })

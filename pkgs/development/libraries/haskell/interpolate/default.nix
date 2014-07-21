@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "interpolate";
-  version = "0.0.2";
-  sha256 = "0l9hrgwmvp7h2mgw90gk45zgp0yy00201ki9hwg26sh2wd0sj6f8";
+  version = "0.0.3";
+  sha256 = "05aksslx7mvic3cgw9ixwjp0r759a4gf7m178pbp8xm8dpdksjjw";
   buildDepends = [ haskellSrcMeta ];
   testDepends = [
     doctest haskellSrcMeta hspec QuickCheck quickcheckInstances text

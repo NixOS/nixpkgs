@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
     ++ opt mpg123Support mpg123
     ++ opt aacSupport faad2
     ++ opt zipSupport zziplib
-    ++ opt zipSupport pulseaudio;
+    ++ opt pulseaudioSupport pulseaudio;
 
   configureFlags =
     [ (mkFlag (!stdenv.isDarwin && alsaSupport) "alsa")

@@ -67,7 +67,7 @@ stdenv.mkDerivation {
               security unlock-keychain -p "" $keychainName
               security import ${iosCertificate} -k $keychainName -P "${iosCertificatePassword}" -A
 
-              provisioningId=$(grep UUID -A1 -a ${iosMobileProvisioningProfile} | grep -o "[-A-Z0-9]\{36\}")
+              provisioningId=$(grep UUID -A1 -a ${iosMobileProvisioningProfile} | grep -o "[-A-Za-z0-9]\{36\}")
    
               # Ensure that the requested provisioning profile can be found
         
