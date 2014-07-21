@@ -31,4 +31,14 @@ in buildPythonPackage rec {
 
   installPhase = "DESTDIR=/ PREFIX=$out make install";
 
+  meta = {
+    description = "A podcatcher written in python";
+    longDescription = ''
+      gPodder downloads and manages free audio and video content (podcasts)
+      for you. Listen directly on your computer or on your mobile devices.
+    '';
+    homepage = "http://gpodder.org/";
+    license = "GPLv3";
+    maintainers = [ stdenv.lib.maintainers.skeidel ];
+  };
 }

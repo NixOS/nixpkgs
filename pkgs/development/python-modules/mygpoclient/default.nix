@@ -11,4 +11,15 @@ buildPythonPackage rec {
   buildInputs = [ pythonPackages.nose pythonPackages.minimock ];
 
   checkPhase = "make test";
+
+  meta = {
+    description = "A gpodder.net client library";
+    longDescription = ''
+      The mygpoclient library allows developers to utilize a Pythonic interface
+      to the gpodder.net web services.
+    '';
+    homepage = "https://thp.io/2010/mygpoclient/";
+    license = "GPLv3";
+    maintainers = [ stdenv.lib.maintainers.skeidel ];
+  };
 }

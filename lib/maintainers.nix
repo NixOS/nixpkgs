@@ -89,6 +89,7 @@
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
   shlevy = "Shea Levy <shea@shealevy.com>";
   simons = "Peter Simons <simons@cryp.to>";
+  skeidel = "Sven Keidel <svenkeidel@gmail.com>";
   smironov = "Sergey Mironov <ierton@gmail.com>";
   sprock = "Roger Mason <rmason@mun.ca>";
   thammers = "Tobias Hammerschmidt <jawr@gmx.de>";
