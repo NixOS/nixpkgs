@@ -1,9 +1,12 @@
-{ stdenv, fetchurl, ncurses, buildEnv, libX11, xproto }:
+{ stdenv, fetchurl, ncurses, buildEnv, libX11, xproto,
+  useX11 ? (!stdenv.isArm && !stdenv.isMips) }:
 
 let
-   useX11 = !stdenv.isArm && !stdenv.isMips;
    useNativeCompilers = !stdenv.isMips;
    inherit (stdenv.lib) optionals optionalString;
+   x11Ok = if useX11 && (!stdenv.isArm && !stdenv.isMips)
+           then throw "x11 not available in ocaml with arm or mips arch"
+           else true;
 in
 
 stdenv.mkDerivation rec {
