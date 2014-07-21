@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "word8";
-  version = "0.1.0";
-  sha256 = "1729ip83wyw8w3v8mzmazaw5b9l81zg95hrkmfq3qjk5gz1s75s0";
+  version = "0.1.1";
+  sha256 = "1xpa0haacimrblxg3x3n5vdcnkg3ff5zqamppdarv0zvkcdj139r";
   testDepends = [ hspec ];
   meta = {
     description = "Word8 library";

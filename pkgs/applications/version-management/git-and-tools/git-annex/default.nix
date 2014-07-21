@@ -7,19 +7,19 @@
 , gnupg1, gnutls, hamlet, hinotify, hS3, hslogger, HTTP, httpClient
 , httpConduit, httpTypes, IfElse, json, liftedBase, lsof, MissingH
 , monadControl, mtl, network, networkInfo, networkMulticast
-, networkProtocolXmpp, openssh, optparseApplicative, perl
-, QuickCheck, random, regexTdfa, rsync, SafeSemaphore, securemem
-, SHA, shakespeare, stm, tasty, tastyHunit, tastyQuickcheck
-, tastyRerun, text, time, transformers, unixCompat, utf8String
-, uuid, wai, waiExtra, warp, warpTls, which, xmlTypes, yesod
-, yesodCore, yesodDefault, yesodForm, yesodStatic
+, networkProtocolXmpp, openssh, optparseApplicative, pathPieces
+, perl, QuickCheck, random, regexTdfa, rsync, SafeSemaphore
+, securemem, SHA, shakespeare, stm, tasty, tastyHunit
+, tastyQuickcheck, tastyRerun, text, time, transformers, unixCompat
+, utf8String, uuid, wai, waiExtra, warp, warpTls, which, xmlTypes
+, yesod, yesodCore, yesodDefault, yesodForm, yesodStatic
 , fsnotify
 }:
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "5.20140709";
-  sha256 = "0n636b52199kj8w3awfvrabg6c76kb133gbfh9r8sp0xrg376z2s";
+  version = "5.20140717";
+  sha256 = "199gqp85f6xnyg3svs23n3r6q4pflvz4zy5y376klay9mzzp0rbl";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -29,11 +29,11 @@ cabal.mkDerivation (self: {
     feed filepath gnutls hamlet hS3 hslogger HTTP httpClient
     httpConduit httpTypes IfElse json liftedBase MissingH monadControl
     mtl network networkInfo networkMulticast networkProtocolXmpp
-    optparseApplicative QuickCheck random regexTdfa SafeSemaphore
-    securemem SHA shakespeare stm tasty tastyHunit tastyQuickcheck
-    tastyRerun text time transformers unixCompat utf8String uuid wai
-    waiExtra warp warpTls xmlTypes yesod yesodCore yesodDefault
-    yesodForm yesodStatic
+    optparseApplicative pathPieces QuickCheck random regexTdfa
+    SafeSemaphore securemem SHA shakespeare stm tasty tastyHunit
+    tastyQuickcheck tastyRerun text time transformers unixCompat
+    utf8String uuid wai waiExtra warp warpTls xmlTypes yesod yesodCore
+    yesodDefault yesodForm yesodStatic
   ] ++ (if self.stdenv.isDarwin then [
     fsnotify
   ] else [
