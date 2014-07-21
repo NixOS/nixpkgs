@@ -1811,6 +1811,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   placeholders = callPackage ../development/libraries/haskell/placeholders {};
 
+  plugins= callPackage ../development/libraries/haskell/plugins {};
+
   polyparse = callPackage ../development/libraries/haskell/polyparse {};
 
   pointed = callPackage ../development/libraries/haskell/pointed {};
