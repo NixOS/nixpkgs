@@ -4612,7 +4612,7 @@ rec {
     src = fetchurl {
       name = "${name}.tar.gz";
       url = "https://python-nbxmpp.gajim.org/downloads/5";
-      sha256 = "073qhz6vgsym4rkgwj801girl8xqhlbr37xn5lg0za9c61vmwayh";
+      sha256 = "0y270c9v4i9n58p4ghlm18h50qcfichmfkgcpqd3bypx4fkmdx90";
     };
 
     meta = {
