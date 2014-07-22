@@ -13,7 +13,9 @@ stdenv.mkDerivation (rec {
   patchFlags = "-p0";
 
   patches =
-    [ ./link-against-ncurses.patch ];
+    [ ./link-against-ncurses.patch
+      ./no-arch_only-6.3.patch
+    ];
 
   meta = {
     description = "GNU Readline, a library for interactive line editing";
