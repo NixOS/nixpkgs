@@ -69,9 +69,9 @@ in
     systemd.services.logstash = with pkgs; {
       description = "Logstash Daemon";
       wantedBy = [ "multi-user.target" ];
-
+      environment = { JAVA_HOME = jre; };
       serviceConfig = {
-        ExecStart = "${jre}/bin/java -jar ${logstash} agent -f ${writeText "logstash.conf" ''
+        ExecStart = "${logstash}/bin/logstash agent -f ${writeText "logstash.conf" ''
           input {
             ${cfg.inputConfig}
           }

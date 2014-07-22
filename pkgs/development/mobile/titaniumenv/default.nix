@@ -1,4 +1,4 @@
-{pkgs, pkgs_i686, xcodeVersion ? "5.0", tiVersion ? "3.2.1.GA"}:
+{pkgs, pkgs_i686, xcodeVersion ? "5.0", tiVersion ? "3.2.3.GA"}:
 
 let
   # We have to use Oracle's JDK. On Darwin, just simply expose the host system's
@@ -29,7 +29,8 @@ rec {
   
   titaniumsdk = let
     titaniumSdkFile = if tiVersion == "3.1.4.GA" then ./titaniumsdk-3.1.nix
-      else if tiVersion == "3.2.2.GA" then ./titaniumsdk-3.2.nix
+      else if tiVersion == "3.2.3.GA" then ./titaniumsdk-3.2.nix
+      else if tiVersion == "3.3.0.GA" then ./titaniumsdk-3.3.nix
       else throw "Titanium version not supported: "+tiVersion;
     in
     import titaniumSdkFile {

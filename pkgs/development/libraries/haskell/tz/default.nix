@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tz";
-  version = "0.0.0.5";
-  sha256 = "03s5vs08dj3r7rq78ncya6x6dazvr93gfylyynwybpai09l2y89v";
+  version = "0.0.0.6";
+  sha256 = "0yn2c016fzqwbgdrqp5hjn95gzp4w3gqjgax1w6wkg97bksdlq27";
   buildDepends = [ binary deepseq time tzdata vector ];
   testDepends = [
     bindingsPosix HUnit QuickCheck testFramework testFrameworkHunit

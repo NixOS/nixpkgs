@@ -121,12 +121,26 @@ in
 
   networking.usePredictableInterfaceNames = false;
 
+  systemd.services.wait-metadata-online = {
+    description = "Wait for GCE metadata server to become reachable";
+    wantedBy = [ "network-online.target" ];
+    before = [ "network-online.target" ];
+    path = [ pkgs.netcat ];
+    script = ''
+      # wait for the metadata server to become available for up to 60 seconds
+      for counter in {1..30}; do sleep 2 && nc -vzw 2 metadata 80 && break; done
+    '';
+    serviceConfig.Type = "oneshot";
+    serviceConfig.RemainAfterExit = true;
+  };
+
   systemd.services.fetch-ssh-keys =
     { description = "Fetch host keys and authorized_keys for root user";
 
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "sshd.service" ];
       before = [ "sshd.service" ];
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
 
       path  = [ pkgs.curl ];
       script =
@@ -148,7 +162,7 @@ in
           fi
 
           echo "obtaining SSH private host key..."
-          curl -o /root/ssh_host_ecdsa_key http://metadata/0.1/meta-data/attributes/ssh_host_ecdsa_key
+          curl -o /root/ssh_host_ecdsa_key  --retry-max-time 60 http://metadata/0.1/meta-data/attributes/ssh_host_ecdsa_key
           if [ $? -eq 0 -a -e /root/ssh_host_ecdsa_key ]; then
               mv -f /root/ssh_host_ecdsa_key /etc/ssh/ssh_host_ecdsa_key
               echo "downloaded ssh_host_ecdsa_key"
@@ -156,7 +170,7 @@ in
           fi
 
           echo "obtaining SSH public host key..."
-          curl -o /root/ssh_host_ecdsa_key.pub http://metadata/0.1/meta-data/attributes/ssh_host_ecdsa_key_pub
+          curl -o /root/ssh_host_ecdsa_key.pub --retry-max-time 60 http://metadata/0.1/meta-data/attributes/ssh_host_ecdsa_key_pub
           if [ $? -eq 0 -a -e /root/ssh_host_ecdsa_key.pub ]; then
               mv -f /root/ssh_host_ecdsa_key.pub /etc/ssh/ssh_host_ecdsa_key.pub
               echo "downloaded ssh_host_ecdsa_key.pub"

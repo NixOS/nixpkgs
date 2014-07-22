@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "taggy-lens";
-  version = "0.1.1";
-  sha256 = "1c4xp8h47vxcy6lvldb73185z26fmgsjakml9b3zjnlfjihgl6kz";
+  version = "0.1.2";
+  sha256 = "05m2c9q0rz4y0zz6n3dqf0hhzfvk0mp1692jxykg86c802d7pkib";
   buildDepends = [ lens taggy text unorderedContainers ];
   testDepends = [
     doctest hspec lens taggy text unorderedContainers

@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   name    = "hhvm-${version}";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchgit {
     url    = "https://github.com/facebook/hhvm.git";
-    rev    = "71ecbd8fb5e94b2a008387a2b5e9a8df5c6f5c7b";
-    sha256 = "1zv3k3bxahwyna2jgicwxm9lxs11jddpc9v41488rmzvfhdmzzkn";
+    rev    = "01228273b8cf709aacbd3df1c51b1e690ecebac8";
+    sha256 = "418d5a55ac4ba5335a42329ebfb7dd96fdb8d5edbc2700251c86e9fa2ae4a967";
     fetchSubmodules = true;
   };
 
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     substituteInPlace hphp/util/generate-buildinfo.sh \
       --replace /bin/bash ${stdenv.shell}
+    substituteInPlace ./configure \
+      --replace "/usr/bin/env bash" ${stdenv.shell}
   '';
   installPhase = ''
     mkdir -p $out/bin $out/lib

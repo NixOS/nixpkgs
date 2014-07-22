@@ -296,25 +296,9 @@ let
     inherit stdenv git cacert;
   };
 
-  fetchgitPrivate = args: derivation ((fetchgit args).drvAttrs // {
-    SSH_AUTH_SOCK = if (builtins.tryEval <ssh-auth-sock>).success
-      then builtins.toString <ssh-auth-sock>
-      else null;
-    GIT_SSH = pkgs.writeScript "fetchgit-ssh" ''
-      #! ${pkgs.stdenv.shell}
-      exec -a ssh ${pkgs.openssh}/bin/ssh -F ${let
-        sshConfigFile = if (builtins.tryEval <ssh-config-file>).success
-          then <ssh-config-file>
-          else builtins.trace ''
-            Please set your nix-path such that ssh-config-file points to a file that will allow ssh to access private repositories. The builder will not be able to see any running ssh agent sessions unless ssh-auth-sock is also set in the nix-path.
-
-            Note that the config file and any keys it points to must be readable by the build user, which depending on your nix configuration means making it readable by the build-users-group, the user of the running nix-daemon, or the user calling the nix command which started the build. Similarly, if using an ssh agent ssh-auth-sock must point to a socket the build user can access.
-
-            You may need StrictHostKeyChecking=no in the config file. Since ssh will refuse to use a group-readable private key, if using build-users you will likely want to use something like IdentityFile /some/directory/%u/key and have a directory for each build user accessible to that user.
-          '' "/var/lib/empty/config";
-      in builtins.toString sshConfigFile} "$@"
-    '';
-  });
+  fetchgitPrivate = import ../build-support/fetchgit/private.nix {
+    inherit fetchgit writeScript openssh stdenv;
+  };
 
   fetchgitrevision = import ../build-support/fetchgitrevision runCommand git;
 
@@ -615,6 +599,8 @@ let
   coprthr = callPackage ../development/libraries/coprthr {
     flex = flex_2_5_35;
   };
+
+  cv = callPackage ../tools/misc/cv { };
 
   ditaa = callPackage ../tools/graphics/ditaa { };
 
@@ -953,6 +939,8 @@ let
 
   efibootmgr = callPackage ../tools/system/efibootmgr { };
 
+  efivar = callPackage ../tools/system/efivar { };
+
   elasticsearch = callPackage ../servers/search/elasticsearch { };
 
   enblendenfuse = callPackage ../tools/graphics/enblend-enfuse {
@@ -1091,6 +1079,10 @@ let
   gawkInteractive = appendToName "interactive"
     (gawk.override { readlineSupport = true; });
 
+  gbdfed = callPackage ../tools/misc/gbdfed {
+    gtk = gtk2;
+  };
+
   gdmap = callPackage ../tools/system/gdmap { };
 
   genext2fs = callPackage ../tools/filesystems/genext2fs { };
@@ -1167,6 +1159,8 @@ let
   googleAuthenticator = callPackage ../os-specific/linux/google-authenticator { };
 
   gource = callPackage ../applications/version-management/gource {};
+
+  gpodder = callPackage ../applications/audio/gpodder { };
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
@@ -1694,6 +1688,12 @@ let
   };
 
   openobex = callPackage ../tools/bluetooth/openobex { };
+
+  openopc = callPackage ../tools/misc/openopc {
+    pythonFull = python27Full.override {
+      extraLibs = [ python27Packages.pyro3 ];
+    };
+  };
 
   openresolv = callPackage ../tools/networking/openresolv { };
 
@@ -3058,17 +3058,17 @@ let
   jdkdistro = installjdk: pluginSupport:
     assert supportsJDK;
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/jdk/jdk6-linux.nix { });
+      (callPackage ../development/compilers/oraclejdk/jdk6-linux.nix { });
 
   oraclejdk7distro = installjdk: pluginSupport:
     assert supportsJDK;
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/jdk/jdk7-linux.nix { inherit installjdk; });
+      (callPackage ../development/compilers/oraclejdk/jdk7-linux.nix { inherit installjdk; });
 
   oraclejdk8distro = installjdk: pluginSupport:
     assert supportsJDK;
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/jdk/jdk8-linux.nix { inherit installjdk; });
+      (callPackage ../development/compilers/oraclejdk/jdk8-linux.nix { inherit installjdk; });
 
   jikes = callPackage ../development/compilers/jikes { };
 
@@ -4068,6 +4068,8 @@ let
   pkgconfig = forceNativeDrv (callPackage ../development/tools/misc/pkgconfig { });
   pkgconfigUpstream = lowPrio (pkgconfig.override { vanilla = true; });
 
+  prelink = callPackage ../development/tools/misc/prelink { };
+
   premake3 = callPackage ../development/tools/misc/premake/3.nix { };
 
   premake4 = callPackage ../development/tools/misc/premake { };
@@ -4161,7 +4163,9 @@ let
 
   uncrustify = callPackage ../development/tools/misc/uncrustify { };
 
-  vagrant = callPackage ../development/tools/vagrant { };
+  vagrant = callPackage ../development/tools/vagrant {
+    ruby = ruby2;
+  };
 
   gdb = callPackage ../development/tools/misc/gdb {
     hurd = gnu.hurdCross;
@@ -5062,6 +5066,8 @@ let
 
   libcangjie = callPackage ../development/libraries/libcangjie { };
 
+  libcredis = callPackage ../development/libraries/libcredis { };
+
   libctemplate = callPackage ../development/libraries/libctemplate { };
 
   libcue = callPackage ../development/libraries/libcue { };
@@ -5731,6 +5737,8 @@ let
   };
 
   muparser = callPackage ../development/libraries/muparser { };
+
+  mygpoclient = callPackage ../development/python-modules/mygpoclient { };
 
   mygui = callPackage ../development/libraries/mygui {};
 
@@ -8143,7 +8151,7 @@ let
   };
 
   blender = callPackage  ../applications/misc/blender {
-    python = python3;
+    python = python34;
   };
 
   bristol = callPackage ../applications/audio/bristol { };
@@ -9060,6 +9068,8 @@ let
   ledger = callPackage ../applications/office/ledger/2.6.3.nix { };
   ledger3 = callPackage ../applications/office/ledger/3.0.nix { };
 
+  lighttable = callPackage ../applications/editors/lighttable {};
+
   links2 = callPackage ../applications/networking/browsers/links2 { };
 
   linphone = callPackage ../applications/networking/instant-messengers/linphone rec {
@@ -9802,11 +9812,7 @@ let
 
   macvim = callPackage ../applications/editors/vim/macvim.nix { };
 
-  vimWrapper = wrapVim vim;
-
   vimHugeX = vim_configurable;
-
-  vimHugeXWrapper = wrapVim vimHugeX;
 
   vim_configurable = callPackage ../applications/editors/vim/configurable.nix {
     inherit (pkgs) fetchurl fetchhg stdenv ncurses pkgconfig gettext
@@ -9839,11 +9845,6 @@ let
     lua = pkgs.lua5;
     flags = [ "python" "X11" ]; # only flag "X11" by now
   });
-
-  wrapVim = vim: import ../applications/editors/vim/wrapper.nix {
-    inherit stdenv makeWrapper writeText vim;
-    vimrc = config.vim.vimrc or "";
-  };
 
   virtviewer = callPackage ../applications/virtualization/virt-viewer {
     gtkvnc = gtkvnc.override { enableGTK3 = true; };
@@ -10043,6 +10044,8 @@ let
   xsynth_dssi = callPackage ../applications/audio/xsynth-dssi { };
 
   xterm = callPackage ../applications/misc/xterm { };
+
+  finalterm = callPackage ../applications/misc/finalterm { };
 
   xtrace = callPackage ../tools/X11/xtrace { };
 
@@ -10470,6 +10473,11 @@ let
   e17 = recurseIntoAttrs (
     let callPackage = newScope pkgs.e17; in
     import ../desktops/e17 { inherit callPackage pkgs; }
+  );
+
+  e18 = recurseIntoAttrs (
+    let callPackage = newScope pkgs.e18; in
+    import ../desktops/e18 { inherit callPackage pkgs; }
   );
 
   gnome2 = callPackage ../desktops/gnome-2 {
@@ -11274,7 +11282,7 @@ let
 
   viewnior = callPackage ../applications/graphics/viewnior { };
 
-  vimPlugins = callPackage ../misc/vim-plugins { };
+  vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins { });
 
   vimprobable2 = callPackage ../applications/networking/browsers/vimprobable2 {
     webkit = webkitgtk2;

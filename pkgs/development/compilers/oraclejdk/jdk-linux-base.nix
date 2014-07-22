@@ -30,6 +30,7 @@
 , alsaLib
 , atk
 , gdk_pixbuf
+, setJavaClassPath
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -59,9 +60,9 @@ let
       "";
 in
 
-stdenv.mkDerivation rec {
+let result = stdenv.mkDerivation rec {
   name =
-    if installjdk then "jdk-1.${productVersion}.0_${patchVersion}" else "jre-1.${productVersion}.0_${patchVersion}";
+    if installjdk then "oraclejdk-${productVersion}u${patchVersion}" else "oraclejre-${productVersion}u${patchVersion}";
 
   src =
     if stdenv.system == "i686-linux" then
@@ -71,7 +72,6 @@ stdenv.mkDerivation rec {
         sha256 = sha256_i686;
       }
     else if stdenv.system == "x86_64-linux" then
-
       requireFile {
         name = "jdk-${productVersion}u${patchVersion}-linux-x64.tar.gz";
         url = downloadUrl;
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   # See: https://github.com/NixOS/patchelf/issues/10
   dontStrip = 1;
-  
+
   installPhase = ''
     cd ..
 
@@ -140,7 +140,7 @@ stdenv.mkDerivation rec {
     rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}/server
     rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}/xawt
     rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}
-    
+
     # set all the dynamic linkers
     find $out -type f -perm +100 \
         -exec patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
@@ -157,6 +157,14 @@ stdenv.mkDerivation rec {
 
     mkdir $jrePath/lib/${architecture}/plugins
     ln -s $jrePath/lib/${architecture}/libnpjp2.so $jrePath/lib/${architecture}/plugins
+
+    mkdir -p $out/nix-support
+    echo -n "${setJavaClassPath}" > $out/nix-support/propagated-native-build-inputs
+
+    # Set JAVA_HOME automatically.
+    cat <<EOF >> $out/nix-support/setup-hook
+    if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
+    EOF
   '';
 
   inherit installjdk pluginSupport;
@@ -170,6 +178,8 @@ stdenv.mkDerivation rec {
 
   passthru.mozillaPlugin = if installjdk then "/jre/lib/${architecture}/plugins" else "/lib/${architecture}/plugins";
 
-  meta.license = "unfree";
-}
+  passthru.jre = result; # FIXME: use multiple outputs or return actual JRE package
 
+  meta.license = "unfree";
+
+}; in result

@@ -4305,6 +4305,24 @@ rec {
     };
   };
 
+  minimock = buildPythonPackage rec {
+    version = "1.2.8";
+    name = "minimock-${version}";
+
+    src = fetchurl {
+      url = "https://bitbucket.org/jab/minimock/get/${version}.zip";
+      sha256 = "c88fa8a7120623f23990a7f086a9657f6ced09025a55e3be8649a30b4945441a";
+    };
+
+    buildInputs = [ nose ];
+
+    checkPhase = "./test";
+
+    meta = {
+      description = "A minimalistic mocking library for python";
+      homepage = https://pypi.python.org/pypi/MiniMock;
+    };
+  };
 
   mitmproxy = buildPythonPackage rec {
     baseName = "mitmproxy";
@@ -5968,6 +5986,23 @@ rec {
     meta = {
       description = "A python implementation of the Pluggable Transports for Circumvention specification for Tor";
       license = stdenv.lib.licenses.bsd2;
+    };
+  });
+
+  pyro3 = buildPythonPackage (rec {
+    name = "Pyro-3.16";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/P/Pyro/${name}.tar.gz";
+      md5 = "59d4d3f4a8786776c9d7f9051b8f1a69";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Distributed object middleware for Python (IPC/RPC)";
+      homepage = http://pythonhosted.org/Pyro/;
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = [ maintainers.bjornfor ];
     };
   });
 
@@ -9510,6 +9545,27 @@ rec {
       homepage = https://github.com/coldfix/udiskie;
     };
   };
+
+  pythonefl = buildPythonPackage rec {
+    name = "python-efl-${version}";
+    version = "1.10.0";
+    src = fetchurl {
+      url = "http://download.enlightenment.org/rel/bindings/python/${name}.tar.gz";
+      sha256 = "1inv2qalnm9paifdwyh9q3ffxcp9bjj92phvfw1rgkaildvfji5i";
+    };
+    preConfigure = ''
+      export NIX_CFLAGS_COMPILE="-I${pkgs.e18.efl}/include/eo-1 -I${pkgs.e18.efl}/include/eina-1 -I${pkgs.e18.efl}/include/eina-1/eina -I${pkgs.e18.efl}/include/evas-1 -I${dbus}/include/dbus-1.0 -I${pkgs.e18.efl}/include/efl-1 -I${pkgs.e18.efl}/include/eet-1 -I${pkgs.e18.efl}/include/ecore-1 -I${pkgs.e18.efl}/include/ecore-evas-1 -I${pkgs.e18.efl}/include/ecore-file-1 -I${pkgs.e18.efl}/include/ecore-input-1 -I${pkgs.e18.efl}/include/ecore-imf-1 -I${pkgs.e18.efl}/include/ecore-con-1 -I${pkgs.e18.efl}/include/edje-1 -I${pkgs.e18.efl}/include/eldbus-1 -I${pkgs.e18.efl}/include/efreet-1 -I${pkgs.e18.efl}/include/ethumb-client-1 -I${pkgs.e18.efl}/include/ethumb-1 -I${pkgs.e18.efl}/include/ecore-x-1 $NIX_CFLAGS_COMPILE"
+    '';
+    buildInputs = [ pkgs.pkgconfig pkgs.e18.efl pkgs.e18.elementary ];
+    meta = {
+      description = "Python bindings for EFL and Elementary.";
+      homepage = http://enlightenment.org/;
+      maintainers = [ stdenv.lib.maintainers.matejc ];
+      platforms = stdenv.lib.platforms.linux;
+      license = stdenv.lib.licenses.gpl3;
+    };
+  };
+
 
 # python2.7 specific packages
 } // optionalAttrs isPy27 (

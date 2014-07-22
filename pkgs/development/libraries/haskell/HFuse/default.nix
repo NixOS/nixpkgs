@@ -9,11 +9,6 @@ cabal.mkDerivation (self: {
   extraLibraries = [ fuse ];
   preConfigure = ''
     sed -i -e "s@  Extra-Lib-Dirs:         /usr/local/lib@  Extra-Lib-Dirs:         ${fuse}/lib@" HFuse.cabal
-    sed -i -e "s/LANGUAGE FlexibleContexts/LANGUAGE FlexibleContexts, RankNTypes/" System/Fuse.hsc
-    sed -i -e "s/E(Exception/E(catch, Exception, IOException/" System/Fuse.hsc
-    sed -i -e "s/IO(catch,/IO(/" System/Fuse.hsc
-    sed -i -e "s/IO.catch/ E.catch/" System/Fuse.hsc
-    sed -i -e "s/const exitFailure/\\\\(_ :: IOException) -> exitFailure/" System/Fuse.hsc
   '';
   meta = {
     homepage = "https://github.com/m15k/hfuse";

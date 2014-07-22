@@ -50,7 +50,7 @@ stdenv.mkDerivation {
           ${if release then
             ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target dist-playstore --keystore ${androidKeyStore} --alias ${androidKeyAlias} --password ${androidKeyStorePassword} --output-dir $out''
           else
-            ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target emulator --build-only --output $out''}
+            ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target emulator --build-only -B foo --output $out''}
         ''
       else if target == "iphone" then
         ''
@@ -67,7 +67,7 @@ stdenv.mkDerivation {
               security unlock-keychain -p "" $keychainName
               security import ${iosCertificate} -k $keychainName -P "${iosCertificatePassword}" -A
 
-              provisioningId=$(grep UUID -A1 -a ${iosMobileProvisioningProfile} | grep -o "[-A-Z0-9]\{36\}")
+              provisioningId=$(grep UUID -A1 -a ${iosMobileProvisioningProfile} | grep -o "[-A-Za-z0-9]\{36\}")
    
               # Ensure that the requested provisioning profile can be found
         

@@ -26,8 +26,7 @@ let
       echo -n "${setJavaClassPath}" > $out/nix-support/propagated-native-build-inputs
 
       # Set JAVA_HOME automatically.
-      mkdir -p $out/nix-support
-      cat <<EOF > $out/nix-support/setup-hook
+      cat <<EOF >> $out/nix-support/setup-hook
       if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
       EOF
     '';
