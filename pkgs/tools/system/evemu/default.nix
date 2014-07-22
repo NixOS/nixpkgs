@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.freedesktop.org/wiki/Evemu/;
     repositories.git = git://git.freedesktop.org/git/evemu;
     license = licenses.gpl2;
-    maintainer = [ maintainers.amorsillo ];
+    maintainers = [ maintainers.amorsillo ];
   };
 }
