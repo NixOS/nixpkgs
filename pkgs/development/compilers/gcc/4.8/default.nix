@@ -500,9 +500,9 @@ stdenv.mkDerivation ({
     else null;
 
   passthru =
-    { inherit langC langCC langObjC langObjCpp langAda langFortran langVhdl langGo enableMultilib version; };
+    { inherit langC langCC langObjC langObjCpp langAda langFortran langVhdl langGo version; };
 
-  inherit enableParallelBuilding;
+  inherit enableParallelBuilding enableMultilib;
 
   inherit (stdenv) is64bit;
 
