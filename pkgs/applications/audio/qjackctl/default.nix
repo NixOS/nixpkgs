@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, alsaLib, jackaudio, dbus }:
+{ stdenv, fetchurl, qt4, alsaLib, jack2, dbus }:
 
 stdenv.mkDerivation rec {
   version = "0.3.10";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ch14y3p0x5ss28cpnqcxp42zb2w07d3l1n2sbrkgiz58iy97paw";
   };
 
-  buildInputs = [ qt4 alsaLib jackaudio dbus ];
+  buildInputs = [ qt4 alsaLib jack2 dbus ];
 
   configureFlags = "--enable-jack-version";
 

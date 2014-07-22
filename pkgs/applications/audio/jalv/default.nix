@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk, jackaudio, lilv, lv2, pkgconfig, python
+{ stdenv, fetchurl, gtk, jack2, lilv, lv2, pkgconfig, python
 , serd, sord , sratom, suil }:
 
 stdenv.mkDerivation  rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation  rec {
   };
 
   buildInputs = [
-    gtk jackaudio lilv lv2 pkgconfig python serd sord sratom suil
+    gtk jack2 lilv lv2 pkgconfig python serd sord sratom suil
   ];
 
   configurePhase = "python waf configure --prefix=$out";
