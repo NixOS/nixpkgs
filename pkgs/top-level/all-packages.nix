@@ -8369,24 +8369,6 @@ let
 
   emacs = emacs24;
 
-  emacs23 = callPackage ../applications/editors/emacs-23 {
-    stdenv =
-      if stdenv.isDarwin
-      /* On Darwin, use Apple-GCC, otherwise:
-           configure: error: C preprocessor "cc -E -no-cpp-precomp" fails sanity check */
-      then overrideGCC stdenv gccApple
-      else stdenv;
-
-    # use override to select the appropriate gui toolkit
-    libXaw = if stdenv.isDarwin then xlibs.libXaw else null;
-    Xaw3d = null;
-    gtk = if stdenv.isDarwin then null else gtk;
-    # TODO: these packages don't build on Darwin.
-    gconf = null /* if stdenv.isDarwin then null else gnome.GConf */;
-    librsvg = null /* if stdenv.isDarwin then null else librsvg */;
-    texinfo = texinfo4;
-  };
-
   emacs24 = callPackage ../applications/editors/emacs-24 {
     # use override to enable additional features
     libXaw = xlibs.libXaw;
@@ -8542,7 +8524,6 @@ let
     xmlRpc = callPackage ../applications/editors/emacs-modes/xml-rpc { };
   };
 
-  emacs23Packages = emacsPackages emacs23 pkgs.emacs23Packages;
   emacs24Packages = recurseIntoAttrs (emacsPackages emacs24 pkgs.emacs24Packages);
 
   inherit (gnome3) empathy;

@@ -98,7 +98,6 @@ let
       drgeo = linux;
       ejabberd = linux;
       elinks = linux;
-      emacs23 = gtkSupported;
       enscript = all;
       eprover = linux;
       evince = linux;
@@ -341,14 +340,6 @@ let
       zip = all;
       zsh = linux;
       zsnes = ["i686-linux"];
-
-      emacs23Packages = {
-        bbdb = linux;
-        cedet = linux;
-        emacsw3m = linux;
-        emms = linux;
-        jdee = linux;
-      };
 
       firefox36Pkgs.firefox = linux;
       firefoxPkgs.firefox = linux;
