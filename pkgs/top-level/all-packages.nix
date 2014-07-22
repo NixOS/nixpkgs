@@ -950,6 +950,8 @@ let
 
   efivar = callPackage ../tools/system/efivar { };
 
+  evemu = callPackage ../tools/system/evemu { };
+
   elasticsearch = callPackage ../servers/search/elasticsearch { };
 
   enblendenfuse = callPackage ../tools/graphics/enblend-enfuse {
@@ -1402,6 +1404,8 @@ let
   libee = callPackage ../development/libraries/libee { };
 
   libestr = callPackage ../development/libraries/libestr { };
+
+  libevdev = callPackage ../development/libraries/libevdev { };
 
   liboauth = callPackage ../development/libraries/liboauth { };
 
