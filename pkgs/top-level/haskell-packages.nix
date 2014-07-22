@@ -1260,6 +1260,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   HUnit_1_2_5_2 = callPackage ../development/libraries/haskell/HUnit/1.2.5.2.nix {};
   HUnit = self.HUnit_1_2_5_2;
 
+  HUnitApprox = callPackage ../development/libraries/haskell/HUnit-approx {};
+
   hweblib = callPackage ../development/libraries/haskell/hweblib/default.nix {};
 
   hxt = callPackage ../development/libraries/haskell/hxt {};
