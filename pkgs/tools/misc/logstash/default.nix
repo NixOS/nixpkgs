@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
   dontPatchShebangs = true;
 
   installPhase = ''
-    ensureDir $out/bin
-    ensureDir $out/vendor
-    ensureDir $out/lib
-    ensureDir $out/locales
-    ensureDir $out/patterns
+    mkdir -p $out/bin
+    mkdir -p $out/vendor
+    mkdir -p $out/lib
+    mkdir -p $out/locales
+    mkdir -p $out/patterns
     cp -a bin $out
     cp -a vendor $out
     cp -a lib $out

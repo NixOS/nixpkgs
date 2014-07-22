@@ -406,7 +406,7 @@ in rec
     };
     unpackPhase = ":";
     installPhase = ''
-      ensureDir $out/share/vim-plugins/vim-a
+      mkdir -p $out/share/vim-plugins/vim-a
       cp ${src} $out/share/vim-plugins/vim-a/a.vim
     '';
   };

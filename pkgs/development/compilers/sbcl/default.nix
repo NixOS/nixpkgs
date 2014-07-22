@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     export INSTALL_ROOT=$out
-    ensureDir test-home
+    mkdir -p test-home
     export HOME=$PWD/test-home
   '';
 
