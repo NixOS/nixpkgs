@@ -3308,10 +3308,6 @@ let
 
   ocamlnat = let callPackage = newScope pkgs.ocamlPackages_3_12_1; in callPackage ../development/ocaml-modules/ocamlnat { };
 
-  opencxx = callPackage ../development/compilers/opencxx {
-    gcc = gcc33;
-  };
-
   qcmm = callPackage ../development/compilers/qcmm {
     lua   = lua4;
     ocaml = ocaml_3_08_0;
