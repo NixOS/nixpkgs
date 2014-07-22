@@ -4317,6 +4317,11 @@ rec {
     buildInputs = [ nose ];
 
     checkPhase = "./test";
+
+    meta = {
+      description = "A minimalistic mocking library for python";
+      homepage = https://pypi.python.org/pypi/MiniMock;
+    };
   };
 
   mitmproxy = buildPythonPackage rec {
