@@ -8108,7 +8108,12 @@ rec {
     # pip depend on $HOME setting
     preConfigure = "export HOME=$TMPDIR";
 
-    buildInputs = [ pbr pip stevedore virtualenv virtualenv-clone ];
+    buildInputs = [ pbr pip stevedore virtualenv virtualenv-clone pkgs.which ];
+
+    patchPhase = ''
+      substituteInPlace "virtualenvwrapper.sh" --replace "which" "${pkgs.which}/bin/which"
+      substituteInPlace "virtualenvwrapper_lazy.sh" --replace "which" "${pkgs.which}/bin/which"
+    '';
 
     meta = {
       description = "Enhancements to virtualenv";
