@@ -26,9 +26,10 @@ stdenv.mkDerivation rec {
       substituteInPlace */doc/manpage/blender.1.py --replace /usr/bin/python ${python}/bin/python3
     '';
 
-  patches = [(fetchpatch {
-    url = https://developer.blender.org/file/data/vqqwcycgo66w3y3dm4zk/PHID-FILE-ijyw5kteba6nzpcbhv7a/D619.diff;
+  patches = [(fetchpatch { # fix parallel builds
+    url = "https://developer.blender.org/D619?download=true";
     sha256 = "18h4fqsbpwxzqz7qby18lrrbzqnyd5xnann3xcac5wddwv5wjb0f";
+    name = "D619.diff";
   })];
   patchFlags = "-p0";
 
