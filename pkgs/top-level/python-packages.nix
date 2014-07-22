@@ -2654,7 +2654,7 @@ rec {
       sed -i "/use_setuptools/d" setup.py
     '';
 
-    buildInputs = [ pkgs.alsaLib pkgs.jackaudio ];
+    buildInputs = [ pkgs.alsaLib pkgs.jack2 ];
 
     meta = with stdenv.lib; {
       description = "A Python wrapper for the RtMidi C++ library written with Cython";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, ffmpeg, jackaudio, libX11, libXext
+{ stdenv, fetchurl, alsaLib, ffmpeg, jack2, libX11, libXext
 , libXfixes, mesa, pkgconfig, pulseaudio, qt4
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib ffmpeg jackaudio libX11 libXext libXfixes mesa pkgconfig
+    alsaLib ffmpeg jack2 libX11 libXext libXfixes mesa pkgconfig
     pulseaudio qt4
   ];
 

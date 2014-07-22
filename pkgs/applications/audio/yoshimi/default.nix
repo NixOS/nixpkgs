@@ -1,5 +1,5 @@
 { stdenv, fetchurl, alsaLib, boost, cairo, cmake, fftwSinglePrec, fltk
-, jackaudio, libsndfile, mesa, minixml, pkgconfig, zlib
+, jack2, libsndfile, mesa, minixml, pkgconfig, zlib
 }:
 
 assert stdenv ? glibc;
@@ -14,7 +14,7 @@ stdenv.mkDerivation  rec {
   };
 
   buildInputs = [
-    alsaLib boost cairo fftwSinglePrec fltk jackaudio libsndfile mesa
+    alsaLib boost cairo fftwSinglePrec fltk jack2 libsndfile mesa
     minixml zlib
   ];
 

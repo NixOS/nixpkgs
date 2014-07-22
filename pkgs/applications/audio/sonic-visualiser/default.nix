@@ -1,6 +1,6 @@
 # TODO add plugins having various licenses, see http://www.vamp-plugins.org/download.html
 
-{ stdenv, fetchurl, alsaLib, bzip2, fftw, jackaudio, libX11, liblo
+{ stdenv, fetchurl, alsaLib, bzip2, fftw, jack2, libX11, liblo
 , libmad, libogg, librdf, librdf_raptor, librdf_rasqal, libsamplerate
 , libsndfile, pkgconfig, pulseaudio, qt5, redland
 , rubberband, serd, sord, vampSDK
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       sord
       pkgconfig
       # optional
-      jackaudio
+      jack2
       # portaudio
       pulseaudio
       libmad

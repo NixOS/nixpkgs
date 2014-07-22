@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, gnum4, gdbm, libtool, glib, dbus, avahi
 , gconf, gtk, intltool, gettext, alsaLib, libsamplerate, libsndfile, speex
 , bluez, sbc, udev, libcap, json_c
-, jackaudioSupport ? false, jackaudio ? null
+, jackaudioSupport ? false, jack2 ? null
 , x11Support ? false, xlibs
 , useSystemd ? false, systemd ? null }:
 
-assert jackaudioSupport -> jackaudio != null;
+assert jackaudioSupport -> jack2 != null;
 
 stdenv.mkDerivation rec {
   name = "pulseaudio-5.0";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig gnum4 libtool intltool glib dbus avahi libsamplerate libsndfile
       speex json_c ]
-    ++ stdenv.lib.optional jackaudioSupport jackaudio
+    ++ stdenv.lib.optional jackaudioSupport jack2
     ++ stdenv.lib.optionals x11Support [ xlibs.xlibs xlibs.libXtst xlibs.libXi ]
     ++ stdenv.lib.optional useSystemd systemd
     ++ stdenv.lib.optionals stdenv.isLinux [ alsaLib bluez sbc udev ];
