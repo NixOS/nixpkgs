@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "focus";
-  version = "0.1.1";
-  sha256 = "0x158zqxgm8ys4mxs94zl811qfdcb06jqy5h99qc63r7snwnixmd";
+  version = "0.1.2";
+  sha256 = "0j157nv668621i94iqg923bfg7594bpfn0q9scb62cik2yikc1p0";
   buildDepends = [ lochTh placeholders ];
   meta = {
     homepage = "https://github.com/nikita-volkov/focus";
