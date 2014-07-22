@@ -39,6 +39,7 @@ in buildPythonPackage rec {
     '';
     homepage = "http://gpodder.org/";
     license = "GPLv3";
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = [ stdenv.lib.maintainers.skeidel ];
   };
 }
