@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     ./64bits.patch
   ];
 
-  buildInputs = [SDL SDL_mixer zlib libpng unzip];
+  buildInputs = [libpng SDL SDL_mixer zlib unzip];
   
   NIX_CFLAGS_COMPILE = "-I${SDL_mixer}/include/SDL";
 

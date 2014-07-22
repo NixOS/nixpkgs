@@ -9210,7 +9210,9 @@ let
     vdpauSupport = config.mplayer.vdpauSupport or false;
   };
 
-  mplayer2 = callPackage ../applications/video/mplayer2 { };
+  mplayer2 = callPackage ../applications/video/mplayer2 {
+    ffmpeg = libav_9; # see https://trac.macports.org/ticket/44386
+  };
 
   MPlayerPlugin = browser:
     import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
@@ -9696,9 +9698,7 @@ let
 
   telegram-cli = callPackage ../applications/networking/instant-messengers/telegram-cli/default.nix { };
 
-  telepathy_gabble = callPackage ../applications/networking/instant-messengers/telepathy/gabble {
-    inherit (pkgs.gnome) libsoup;
-  };
+  telepathy_gabble = callPackage ../applications/networking/instant-messengers/telepathy/gabble { };
 
   telepathy_haze = callPackage ../applications/networking/instant-messengers/telepathy/haze {};
 
@@ -9721,6 +9721,8 @@ let
 
   thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
     inherit (gnome) libIDL;
+    inherit (pythonPackages) pysqlite;
+    libpng = libpng_apng;
   };
 
   thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin {
