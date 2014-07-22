@@ -130,19 +130,11 @@ let
     in pkgs;
 
 
-  # The package compositions.
+  # The package compositions.  Yes, this isn't properly indented.
   pkgsFun = pkgs: overrides:
-    let
-      defaultScope = pkgs // pkgs.xorg;
-      autoPackages = lib.listToAttrs
-        (map (fn: { name = baseNameOf (toString fn); value = pkgs.callPackage fn { }; })
-        (import ../auto-packages.nix));
-      self = self_ // autoPackages // overrides;
-      self_ = with self; helperFunctions //
-
-
-# Yes, this isn't properly indented.
-{
+    with helperFunctions;
+    let defaultScope = pkgs // pkgs.xorg; self = self_ // overrides;
+    self_ = with self; helperFunctions // {
 
   # Make some arguments passed to all-packages.nix available
   inherit system stdenvType platform;
@@ -369,6 +361,8 @@ let
     inherit url;
   };
 
+  libredirect = callPackage ../build-support/libredirect { };
+
   makeDesktopItem = import ../build-support/make-desktopitem {
     inherit stdenv;
   };
@@ -432,6 +426,8 @@ let
 
 
   ### TOOLS
+
+  acct = callPackage ../tools/system/acct { };
 
   acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter {
     ffmpeg = ffmpeg_1;
@@ -1162,6 +1158,8 @@ let
   gnuplot_aquaterm = gnuplot.override { aquaterm = true; };
 
   gnused = callPackage ../tools/text/gnused { };
+
+  gnutar = callPackage ../tools/archivers/gnutar { };
 
   gnuvd = callPackage ../tools/misc/gnuvd { };
 
@@ -5368,6 +5366,8 @@ let
 
   libofx = callPackage ../development/libraries/libofx { };
 
+  libogg = callPackage ../development/libraries/libogg { };
+
   liboggz = callPackage ../development/libraries/liboggz { };
 
   liboil = callPackage ../development/libraries/liboil { };
@@ -5533,6 +5533,8 @@ let
   libvpx = callPackage ../development/libraries/libvpx { };
 
   libvterm = callPackage ../development/libraries/libvterm { };
+
+  libvorbis = callPackage ../development/libraries/libvorbis { };
 
   libwebp = callPackage ../development/libraries/libwebp { };
 
@@ -10415,13 +10417,13 @@ let
     callPackage = newScope pkgs.cinnamon;
     inherit (gnome3) gnome_common libgnomekbd gnome-menus zenity;
 
-    muffin = callPackage ../desktops/cinnamon/muffin.nix { };
+    muffin = callPackage ../desktops/cinnamon/muffin.nix { } ;
 
-    cinnamon-control-center = callPackage ../desktops/cinnamon/cinnamon-control-center.nix { };
+    cinnamon-control-center = callPackage ../desktops/cinnamon/cinnamon-control-center.nix{ };
 
-    cinnamon-settings-daemon = callPackage ../desktops/cinnamon/cinnamon-settings-daemon.nix { };
+    cinnamon-settings-daemon = callPackage ../desktops/cinnamon/cinnamon-settings-daemon.nix{ };
 
-    cinnamon-session = callPackage ../desktops/cinnamon/cinnamon-session.nix { };
+    cinnamon-session = callPackage ../desktops/cinnamon/cinnamon-session.nix{ } ;
 
     cinnamon-desktop = callPackage ../desktops/cinnamon/cinnamon-desktop.nix { };
 
