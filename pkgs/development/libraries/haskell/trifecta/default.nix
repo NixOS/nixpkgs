@@ -2,20 +2,20 @@
 
 { cabal, ansiTerminal, ansiWlPprint, blazeBuilder, blazeHtml
 , blazeMarkup, charset, comonad, deepseq, doctest, filepath
-, fingertree, hashable, lens, mtl, parsers, reducers, semigroups
-, transformers, unorderedContainers, utf8String
+, fingertree, hashable, lens, mtl, parsers, QuickCheck, reducers
+, semigroups, transformers, unorderedContainers, utf8String
 }:
 
 cabal.mkDerivation (self: {
   pname = "trifecta";
-  version = "1.4.2";
-  sha256 = "13kj1xz2bxixsqsrywdx3snl1hjkyv437ifwfrys1m4hnkv4aqai";
+  version = "1.4.3";
+  sha256 = "0kc8ykvh8m9yhyrkd9kx5xkv5ag99384k06xdi6ynjqv9wj6gfzg";
   buildDepends = [
     ansiTerminal ansiWlPprint blazeBuilder blazeHtml blazeMarkup
     charset comonad deepseq fingertree hashable lens mtl parsers
     reducers semigroups transformers unorderedContainers utf8String
   ];
-  testDepends = [ doctest filepath ];
+  testDepends = [ doctest filepath parsers QuickCheck ];
   meta = {
     homepage = "http://github.com/ekmett/trifecta/";
     description = "A modern parser combinator library with convenient diagnostics";
