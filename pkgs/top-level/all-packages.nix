@@ -10184,10 +10184,7 @@ let
 
   egoboo = callPackage ../games/egoboo { };
 
-  exult = callPackage ../games/exult {
-    stdenv = overrideGCC stdenv gcc42;
-    libpng = libpng12;
-  };
+  exult = callPackage ../games/exult { };
 
   flightgear = callPackage ../games/flightgear { };
 
