@@ -9732,6 +9732,8 @@ let
 
   thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
     inherit (gnome) libIDL;
+    inherit (pythonPackages) pysqlite;
+    libpng = libpng_apng;
   };
 
   thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin {
