@@ -5,12 +5,6 @@
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, gstreamer, gst_plugins_base, icu
 , debugBuild ? false
-, # If you want the resulting program to call itself "Firefox" instead
-  # of "Shiretoko" or whatever, enable this option.  However, those
-  # binaries may not be distributed without permission from the
-  # Mozilla Foundation, see
-  # http://www.mozilla.org/foundation/trademarks/.
-  enableOfficialBranding ? false
 }:
 
 assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
@@ -18,7 +12,7 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 let version = "31.0"; in
 
 stdenv.mkDerivation rec {
-  name = "firefox-${version}";
+  name = "xulrunner-${version}";
 
   src = fetchurl {
     url = "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${version}/source/firefox-${version}.source.tar.bz2";
@@ -37,7 +31,7 @@ stdenv.mkDerivation rec {
     ];
 
   configureFlags =
-    [ "--enable-application=browser"
+    [ "--enable-application=xulrunner"
       "--disable-javaxpcom"
       "--with-system-jpeg"
       "--with-system-zlib"
@@ -66,8 +60,7 @@ stdenv.mkDerivation rec {
     ]
     ++ (if debugBuild then [ "--enable-debug" "--enable-profiling"]
                       else [ "--disable-debug" "--enable-release"
-                             "--enable-optimize" "--enable-strip" ])
-    ++ lib.optional enableOfficialBranding "--enable-official-branding";
+                             "--enable-optimize" "--enable-strip" ]);
 
   enableParallelBuilding = true;
 
@@ -78,21 +71,12 @@ stdenv.mkDerivation rec {
       configureScript=../mozilla-release/configure
     '';
 
-  postInstall =
-    ''
-      # Remove SDK cruft. FIXME: move to a separate output?
-      rm -rf $out/share/idl $out/include $out/lib/firefox-devel-*
-    '';
-
   meta = {
-    description = "Mozilla Firefox - the browser, reloaded";
+    description = "Mozilla Firefox XUL runner";
     homepage = http://www.mozilla.com/en-US/firefox/;
-    maintainers = with lib.maintainers; [ eelco wizeman ];
+    maintainers = [ lib.maintainers.eelco ];
     platforms = lib.platforms.linux;
   };
 
-  passthru = {
-    inherit gtk nspr version;
-    isFirefox3Like = true;
-  };
+  passthru = { inherit gtk version; };
 }
