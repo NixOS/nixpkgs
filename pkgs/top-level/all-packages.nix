@@ -9043,6 +9043,8 @@ let
 
   lmms = callPackage ../applications/audio/lmms { };
 
+  lrzsz = callPackage ../tools/misc/lrzsz { };
+
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
   handbrake = callPackage ../applications/video/handbrake { };

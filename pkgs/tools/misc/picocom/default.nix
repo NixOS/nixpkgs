@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, makeWrapper, lrzsz }:
 
 stdenv.mkDerivation rec {
   name = "picocom-1.7";
@@ -8,10 +8,15 @@ stdenv.mkDerivation rec {
     sha256 = "17hjq713naq02xar711aw24qqd52p591mj1h5n97cni1ga7irwyh";
   };
 
+  buildInputs = [ makeWrapper ];
+
   installPhase = ''
     ensureDir $out/bin $out/share/man/man8
     cp picocom $out/bin
     cp picocom.8 $out/share/man/man8
+
+    wrapProgram $out/bin/picocom \
+      --prefix PATH ":" "${lrzsz}/bin"
   '';
 
   meta = {
