@@ -23,13 +23,16 @@ stdenv.mkDerivation rec {
     7z x ${src}
     cd Box2D_v${version}
   '';
+  sourceRoot = "Box2D";
 
-  preConfigurePhase = ''
+  preConfigurePhases = "preConfigure";
+
+  preConfigure = ''
     sed -i Box2D/Common/b2Settings.h -e 's@b2_maxPolygonVertices .*@b2_maxPolygonVertices 15@'
   '';
       
   configurePhase = ''
-    cd Box2D/Build; 
+    cd Build; 
     cmake -DBOX2D_INSTALL=ON -DBOX2D_BUILD_SHARED=ON -DCMAKE_INSTALL_PREFIX=$out ..
   '';
 
