@@ -17,14 +17,14 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
 rec {
 
-  firefoxVersion = "30.0";
+  firefoxVersion = "31.0";
 
-  xulVersion = "30.0"; # this attribute is used by other packages
+  xulVersion = "31.0"; # this attribute is used by other packages
 
 
   src = fetchurl {
     url = "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha1 = "bll9hxf31gvg9db6gxgmq25qsjif3p11";
+    sha1 = "a6c3e25ee3aeb7da42db2aaeb50a385d63532beb";
   };
 
   commonConfigureFlags =
@@ -78,7 +78,7 @@ rec {
         "--disable-javaxpcom"
       ] ++ commonConfigureFlags;
 
-    #enableParallelBuilding = true; # cf. https://github.com/NixOS/nixpkgs/pull/1699#issuecomment-35196282
+    enableParallelBuilding = true;
 
     preConfigure =
       ''
