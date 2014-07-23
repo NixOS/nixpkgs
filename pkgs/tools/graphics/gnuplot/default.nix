@@ -13,11 +13,13 @@
 , pkgconfig ? null
 , fontconfig ? null
 , gnused ? null
-, coreutils ? null }:
+, coreutils ? null
+, qt ? null }:
 
 assert libX11 != null -> (fontconfig != null && gnused != null && coreutils != null);
 let
   withX = libX11 != null && !aquaterm;
+  withQt = qt != null;
 in
 stdenv.mkDerivation rec {
   name = "gnuplot-4.6.5";
@@ -31,11 +33,13 @@ stdenv.mkDerivation rec {
     [ zlib gd texinfo readline emacs lua texLive
       pango cairo pkgconfig makeWrapper ]
     ++ stdenv.lib.optionals withX              [ libX11 libXpm libXt libXaw ]
+    ++ stdenv.lib.optional withQt [ qt ]
     # compiling with wxGTK causes a malloc (double free) error on darwin
     ++ stdenv.lib.optional (!stdenv.isDarwin) wxGTK;
 
   configureFlags =
     (if withX then ["--with-x"] else ["--without-x"])
+    ++ (if withQt then ["--enable-qt"] else ["--disable-qt"])
     ++ (if aquaterm then ["--with-aquaterm"] else ["--without-aquaterm"])
     ;
 

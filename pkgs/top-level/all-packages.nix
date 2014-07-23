@@ -1156,6 +1156,8 @@ let
       else stdenv;
   };
 
+  gnuplot_qt = gnuplot.override { qt = qt4; };
+
   # must have AquaTerm installed separately
   gnuplot_aquaterm = gnuplot.override { aquaterm = true; };
 
