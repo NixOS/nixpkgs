@@ -1,59 +1,55 @@
-x@{builderDefsPackage
-  , unzip, cmake, mesa, freeglut, libX11, xproto
-  , inputproto, libXi
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, requireFile, p7zip, cmake, mesa, libX11, libXi, ... }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
+let 
   sourceInfo = rec {
     baseName="box2d";
-    version="2.1.2";
+    version="2.3.0";
     name="${baseName}-${version}";
-    url="http://box2d.googlecode.com/files/Box2D_v${version}.zip";
-    hash="0m5szd74ig8yqazwk2g3zl4z7wwp08k52awawk1pigy6a4z1qd9v";
+    url="http://box2d.googlecode.com/files/Box2D_v${version}.7z";
+    hash="2ebdb30863b7f5478e99b4425af210f8c32ef62faf1e0d2414c653072fff403d";
   };
 in
-rec {
-  src = a.fetchurl {
+stdenv.mkDerivation rec {
+  src = requireFile {
     url = sourceInfo.url;
     sha256 = sourceInfo.hash;
+    name = "Box2D_v${version}.7z";
   };
 
   inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [ p7zip cmake mesa libX11 libXi ];
 
-  phaseNames = ["changeSettings" "doCmake" "doMakeInstall"];
+  unpackPhase = ''
+    7z x ${src}
+    cd Box2D_v${version}
+  '';
 
-  changeSettings = a.fullDepEntry ''
+  preConfigurePhase = ''
     sed -i Box2D/Common/b2Settings.h -e 's@b2_maxPolygonVertices .*@b2_maxPolygonVertices 15@'
-  '' ["minInit" "addInputs" "doUnpack"];
+  '';
       
-  goSrcDir = ''cd Box2D'';
-
-  doCmake = a.fullDepEntry ''
-    cd Build; 
+  configurePhase = ''
+    cd Box2D/Build; 
     cmake -DBOX2D_INSTALL=ON -DBOX2D_BUILD_SHARED=ON -DCMAKE_INSTALL_PREFIX=$out ..
-  '' ["minInit" "addInputs" "doUnpack"];
-      
+  '';
+
   meta = {
     description = "2D physics engine";
-    maintainers = with a.lib.maintainers;
+    maintainers = with stdenv.lib.maintainers;
     [
-      raskin
+      raskin 
+      qknight
     ];
-    platforms = with a.lib.platforms;
+    platforms = with stdenv.lib.platforms;
       linux;
     license = "bsd";
+    #homepage = http://code.google.com/p/box2d/downloads/list;
   };
   passthru = {
     updateInfo = {
       downloadPage = "http://code.google.com/p/box2d/downloads/list";
     };
   };
-}) x
+
+}
 
