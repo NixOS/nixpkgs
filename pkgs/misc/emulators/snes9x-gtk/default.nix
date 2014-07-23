@@ -10,9 +10,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ nasm SDL zlib libpng ncurses mesa intltool gtk pkgconfig libxml2 x11 pulseaudio];
 
-  preConfigure = ''
-    cd gtk
-  '';
+  sourceRoot = "snes9x-1.53-src/gtk";
 
   configureFlags = "--prefix=$out/ --with-opengl";
 
@@ -22,7 +20,8 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Snes9x is a portable, freeware Super Nintendo Entertainment System (SNES) emulator. It basically allows you to play most games designed for the SNES and Super Famicom Nintendo game systems on your PC or Workstation; which includes some real gems that were only ever released in Japan.";
+    description = "a portable, freeware Super Nintendo Entertainment System (SNES) emulator";
+    longDescription = "Snes9x is a portable, freeware Super Nintendo Entertainment System (SNES) emulator. It basically allows you to play most games designed for the SNES and Super Famicom Nintendo game systems on your PC or Workstation; which includes some real gems that were only ever released in Japan.";
     license = "LGPL";
     maintainers = [ stdenv.lib.maintainers.qknight ];
     homepage = http://www.snes9x.com/;
