@@ -15,7 +15,7 @@
 stdenv.mkDerivation {
   name = "lldb-${version}";
 
-  src = fetch "lldb" "0h8cmjrhjhigk7k2qll1pcf6jfgmbdzkzfz2i048pkfg851s0x4g";
+  src = fetch "lldb" "8f74a04341cfcd8b0888e2bb3f7f5bf539691cbb81522ce6992f4209b3ac0c41";
 
   patchPhase = ''
     sed -i 's|/usr/bin/env||' \

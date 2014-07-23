@@ -10,18 +10,18 @@ let
     inherit sha256;
   };
 
-  compiler-rt_src = fetch "compiler-rt" "0p5b6varxdqn7q3n77xym63hhq4qqxd2981pfpa65r1w72qqjz7k";
-  clang-tools-extra_src = fetch "clang-tools-extra" "1d1822mwxxl9agmyacqjw800kzz5x8xr0sdmi8fgx5xfa5sii1ds";
+  compiler-rt_src = fetch "compiler-rt" "f37c89b1383ce462d47537a0245ac798600887a9be9f63073e16b79ed536ab5c";
+  clang-tools-extra_src = fetch "clang-tools-extra" "ba85187551ae97fe1c8ab569903beae5ff0900e21233e5eb5389f6ceab1028b4";
 
   self = {
     llvm = callPackage ./llvm.nix rec {
-      version = "3.4.1";
+      version = "3.4.2";
       fetch = fetch_v version;
       inherit compiler-rt_src;
     };
 
     clang = callPackage ./clang.nix rec {
-      version = "3.4.1";
+      version = "3.4.2";
       fetch = fetch_v version;
       inherit clang-tools-extra_src;
     };
