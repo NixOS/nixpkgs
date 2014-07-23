@@ -3633,11 +3633,6 @@ let
 
   tcl = callPackage ../development/interpreters/tcl { };
 
-  xulrunnerWrapper = {application, launcher}:
-    import ../development/interpreters/xulrunner/wrapper {
-      inherit stdenv application launcher xulrunner;
-    };
-
   xulrunner = pkgs.firefoxPkgs.xulrunner;
 
 
