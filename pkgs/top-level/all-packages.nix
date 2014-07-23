@@ -7003,7 +7003,7 @@ let
 
   nix-binary-cache = callPackage ../servers/http/nix-binary-cache {};
 
-  nsd = callPackage ../servers/dns/nsd { };
+  nsd = callPackage ../servers/dns/nsd (config.nsd or {});
 
   nsq = callPackage ../servers/nsq { };
 
