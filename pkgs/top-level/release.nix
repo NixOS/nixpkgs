@@ -341,9 +341,6 @@ let
       zsh = linux;
       zsnes = ["i686-linux"];
 
-      firefox36Pkgs.firefox = linux;
-      firefoxPkgs.firefox = linux;
-
       gnome = {
         gnome_panel = linux;
         metacity = linux;
