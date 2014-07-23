@@ -10,16 +10,16 @@ let
   pidFile  = stateDir + "/var/nsd.pid";
 
   zoneFiles = pkgs.stdenv.mkDerivation {
-      preferLocalBuild = true;
-      name = "nsd-env";
-      buildCommand = concatStringsSep "\n"
-        [ "mkdir -p $out"
-          (concatStrings (mapAttrsToList (zoneName: zoneOptions: ''
-            cat > "$out/${zoneName}" <<_EOF_
-            ${zoneOptions.data}
-            _EOF_
-          '') zoneConfigs))
-        ];
+    preferLocalBuild = true;
+    name = "nsd-env";
+    buildCommand = concatStringsSep "\n"
+      [ "mkdir -p $out"
+        (concatStrings (mapAttrsToList (zoneName: zoneOptions: ''
+          cat > "$out/${zoneName}" <<_EOF_
+          ${zoneOptions.data}
+          _EOF_
+        '') zoneConfigs))
+      ];
   };
 
   configFile = pkgs.writeText "nsd.conf" ''
@@ -105,21 +105,20 @@ let
 
 
   zoneConfigFile = name: zone: ''
-        zone:
-          name:         "${name}"
-          zonefile:     "${stateDir}/zones/${name}"
-          ${maybeString "outgoing-interface: " zone.outgoingInterface}
-        ${forEach     "  rrl-whitelist: "      zone.rrlWhitelist}
+    zone:
+      name:         "${name}"
+      zonefile:     "${stateDir}/zones/${name}"
+      ${maybeString "outgoing-interface: " zone.outgoingInterface}
+    ${forEach     "  rrl-whitelist: "      zone.rrlWhitelist}
 
-        ${forEach     "  allow-notify: "       zone.allowNotify}
-        ${forEach     "  request-xfr: "        zone.requestXFR}
-          allow-axfr-fallback: ${yesOrNo       zone.allowAXFRFallback}
+    ${forEach     "  allow-notify: "       zone.allowNotify}
+    ${forEach     "  request-xfr: "        zone.requestXFR}
+      allow-axfr-fallback: ${yesOrNo       zone.allowAXFRFallback}
 
-        ${forEach     "  notify: "             zone.notify}
-          notify-retry:                        ${toString zone.notifyRetry}
-        ${forEach     "  provide-xfr: "        zone.provideXFR}
-
-    '';
+    ${forEach     "  notify: "             zone.notify}
+      notify-retry:                        ${toString zone.notifyRetry}
+    ${forEach     "  provide-xfr: "        zone.provideXFR}
+  '';
 
   zoneConfigs = zoneConfigs' {} "" { children = cfg.zones; };
 
@@ -130,8 +129,8 @@ let
 
       # fork -> pattern
       else zipAttrsWith (name: head) (
-          mapAttrsToList (name: child: zoneConfigs' (parent // zone // { children = {}; }) name child)
-                         zone.children
+        mapAttrsToList (name: child: zoneConfigs' (parent // zone // { children = {}; }) name child)
+                       zone.children
       );
 
   # fighting infinite recursion
@@ -145,138 +144,135 @@ let
 
   childConfig = x: v: { options.children = { type = types.attrsOf x; visible = v; }; };
 
-  zoneOptionsRaw = types.submodule (
-    { options, ... }:
-    { options = {
-        children = mkOption {
-            default     = {};
-            description = ''
-              Children zones inherit all options of their parents. Attributes
-              defined in a child will overwrite the ones of its parent. Only
-              leaf zones will be actually served. This way it's possible to
-              define maybe zones which share most attributes without
-              duplicating everything. This mechanism replaces nsd's patterns
-              in a save and functional way.
-            '';
-        };
-
-        allowNotify = mkOption {
-          type        = types.listOf types.str;
-          default     = [ ];
-          example     = [ "192.0.2.0/24 NOKEY" "10.0.0.1-10.0.0.5 my_tsig_key_name"
-                           "10.0.3.4&255.255.0.0 BLOCKED"
-                        ];
-          description = ''
-            Listed primary servers are allowed to notify this secondary server.
-            <screen><![CDATA[
-            Format: <ip> <key-name | NOKEY | BLOCKED>
-
-            <ip> either a plain IPv4/IPv6 address or range. Valid patters for ranges:
-            * 10.0.0.0/24            # via subnet size
-            * 10.0.0.0&255.255.255.0 # via subnet mask
-            * 10.0.0.1-10.0.0.254    # via range
-
-            A optional port number could be added with a '@':
-            * 2001:1234::1@1234
-
-            <key-name | NOKEY | BLOCKED>
-            * <key-name> will use the specified TSIG key
-            * NOKEY      no TSIG signature is required
-            * BLOCKED    notifies from non-listed or blocked IPs will be ignored
-            * ]]></screen>
-          '';
-        };
-
-        requestXFR = mkOption {
-          type        = types.listOf types.str;
-          default     = [];
-          example     = [];
-          description = ''
-            Format: <code>[AXFR|UDP] &lt;ip-address&gt; &lt;key-name | NOKEY&gt;</code>
-          '';
-        };
-
-        allowAXFRFallback = mkOption {
-          type        = types.bool;
-          default     = true;
-          description = ''
-            If NSD as secondary server should be allowed to AXFR if the primary
-            server does not allow IXFR.
-          '';
-        };
-
-        notify = mkOption {
-          type        = types.listOf types.str;
-          default     = [];
-          example     = [ "10.0.0.1@3721 my_key" "::5 NOKEY" ];
-          description = ''
-            This primary server will notify all given secondary servers about
-            zone changes.
-            <screen><![CDATA[
-            Format: <ip> <key-name | NOKEY>
-
-            <ip> a plain IPv4/IPv6 address with on optional port number (ip@port)
-
-            <key-name | NOKEY>
-            * <key-name> sign notifies with the specified key
-            * NOKEY      don't sign notifies
-            ]]></screen>
-          '';
-        };
-
-        notifyRetry = mkOption {
-          type        = types.int;
-          default     = 5;
-          description = ''
-            Specifies the number of retries for failed notifies. Set this along with notify.
-          '';
-        };
-
-        provideXFR = mkOption {
-          type        = types.listOf types.str;
-          default     = [];
-          example     = [ "192.0.2.0/24 NOKEY" "192.0.2.0/24 my_tsig_key_name" ];
-          description = ''
-            Allow these IPs and TSIG to transfer zones, addr TSIG|NOKEY|BLOCKED
-            address range 192.0.2.0/24, 1.2.3.4&amp;255.255.0.0, 3.0.2.20-3.0.2.40
-          '';
-        };
-
-        outgoingInterface = mkOption {
-          type        = types.nullOr types.str;
-          default     = null;
-          example     = "2000::1@1234";
-          description = ''
-            This address will be used for zone-transfere requests if configured
-            as a secondary server or notifications in case of a primary server.
-            Supply either a plain IPv4 or IPv6 address with an optional port
-            number (ip@port).
-          '';
-        };
-
-        rrlWhitelist = mkOption {
-          type        = types.listOf types.str;
-          default     = [];
-          description = ''
-            Whitelists the given rrl-types.
-            The RRL classification types are:  nxdomain,  error, referral, any,
-            rrsig, wildcard, nodata, dnskey, positive, all
-          '';
-        };
-
-        data = mkOption {
-          type        = types.str;
-          default     = "";
-          example     = "";
-          description = ''
-            The actual zone data. This is the content of your zone file.
-            Use imports or pkgs.lib.readFile if you don't want this data in your config file.
-          '';
-        };
-
+  zoneOptionsRaw = types.submodule {
+    options = {
+      children = mkOption {
+        default     = {};
+        description = ''
+          Children zones inherit all options of their parents. Attributes
+          defined in a child will overwrite the ones of its parent. Only
+          leaf zones will be actually served. This way it's possible to
+          define maybe zones which share most attributes without
+          duplicating everything. This mechanism replaces nsd's patterns
+          in a save and functional way.
+        '';
       };
-    }
-  );
+
+      allowNotify = mkOption {
+        type        = types.listOf types.str;
+        default     = [ ];
+        example     = [ "192.0.2.0/24 NOKEY" "10.0.0.1-10.0.0.5 my_tsig_key_name"
+                        "10.0.3.4&255.255.0.0 BLOCKED"
+                      ];
+        description = ''
+          Listed primary servers are allowed to notify this secondary server.
+          <screen><![CDATA[
+          Format: <ip> <key-name | NOKEY | BLOCKED>
+
+          <ip> either a plain IPv4/IPv6 address or range. Valid patters for ranges:
+          * 10.0.0.0/24            # via subnet size
+          * 10.0.0.0&255.255.255.0 # via subnet mask
+          * 10.0.0.1-10.0.0.254    # via range
+
+          A optional port number could be added with a '@':
+          * 2001:1234::1@1234
+
+          <key-name | NOKEY | BLOCKED>
+          * <key-name> will use the specified TSIG key
+          * NOKEY      no TSIG signature is required
+          * BLOCKED    notifies from non-listed or blocked IPs will be ignored
+          * ]]></screen>
+        '';
+      };
+
+      requestXFR = mkOption {
+        type        = types.listOf types.str;
+        default     = [];
+        example     = [];
+        description = ''
+          Format: <code>[AXFR|UDP] &lt;ip-address&gt; &lt;key-name | NOKEY&gt;</code>
+        '';
+      };
+
+      allowAXFRFallback = mkOption {
+        type        = types.bool;
+        default     = true;
+        description = ''
+          If NSD as secondary server should be allowed to AXFR if the primary
+          server does not allow IXFR.
+        '';
+      };
+
+      notify = mkOption {
+        type        = types.listOf types.str;
+        default     = [];
+        example     = [ "10.0.0.1@3721 my_key" "::5 NOKEY" ];
+        description = ''
+          This primary server will notify all given secondary servers about
+          zone changes.
+          <screen><![CDATA[
+          Format: <ip> <key-name | NOKEY>
+
+          <ip> a plain IPv4/IPv6 address with on optional port number (ip@port)
+
+          <key-name | NOKEY>
+          * <key-name> sign notifies with the specified key
+          * NOKEY      don't sign notifies
+          ]]></screen>
+        '';
+      };
+
+      notifyRetry = mkOption {
+        type        = types.int;
+        default     = 5;
+        description = ''
+          Specifies the number of retries for failed notifies. Set this along with notify.
+        '';
+      };
+
+      provideXFR = mkOption {
+        type        = types.listOf types.str;
+        default     = [];
+        example     = [ "192.0.2.0/24 NOKEY" "192.0.2.0/24 my_tsig_key_name" ];
+        description = ''
+          Allow these IPs and TSIG to transfer zones, addr TSIG|NOKEY|BLOCKED
+          address range 192.0.2.0/24, 1.2.3.4&amp;255.255.0.0, 3.0.2.20-3.0.2.40
+        '';
+      };
+
+      outgoingInterface = mkOption {
+        type        = types.nullOr types.str;
+        default     = null;
+        example     = "2000::1@1234";
+        description = ''
+          This address will be used for zone-transfere requests if configured
+          as a secondary server or notifications in case of a primary server.
+          Supply either a plain IPv4 or IPv6 address with an optional port
+          number (ip@port).
+        '';
+      };
+
+      rrlWhitelist = mkOption {
+        type        = types.listOf types.str;
+        default     = [];
+        description = ''
+          Whitelists the given rrl-types.
+          The RRL classification types are:  nxdomain,  error, referral, any,
+          rrsig, wildcard, nodata, dnskey, positive, all
+        '';
+      };
+
+      data = mkOption {
+        type        = types.str;
+        default     = "";
+        example     = "";
+        description = ''
+          The actual zone data. This is the content of your zone file.
+          Use imports or pkgs.lib.readFile if you don't want this data in your config file.
+        '';
+      };
+    };
+  };
 
 in
 {
@@ -585,37 +581,33 @@ in
 
 
       keys = mkOption {
-        type = types.attrsOf (types.submodule (
-          { options, ... }:
-          { options = {
-
-              algorithm = mkOption {
-                type        = types.str;
-                default     = "hmac-sha256";
-                description = ''
-                  Authentication algorithm for this key.
-                '';
-              };
-
-              keyFile = mkOption {
-                type        = types.path;
-                description = ''
-                  Path to the file which contains the actual base64 encoded
-                  key. The key will be copied into "${stateDir}/private" before
-                  NSD starts. The copied file is only accessibly by the NSD
-                  user.
-                '';
-              };
-
+        type = types.attrsOf (types.submodule {
+          options = {
+            algorithm = mkOption {
+              type        = types.str;
+              default     = "hmac-sha256";
+              description = ''
+                Authentication algorithm for this key.
+              '';
             };
-          }));
-        default = {
-        };
+
+            keyFile = mkOption {
+              type        = types.path;
+              description = ''
+                Path to the file which contains the actual base64 encoded
+                key. The key will be copied into "${stateDir}/private" before
+                NSD starts. The copied file is only accessibly by the NSD
+                user.
+              '';
+            };
+          };
+        });
+        default = {};
         example = {
-            "tsig.example.org" = {
-              algorithm = "hmac-md5";
-              secret    = "aaaaaabbbbbbccccccdddddd";
-            };
+          "tsig.example.org" = {
+            algorithm = "hmac-md5";
+            secret    = "aaaaaabbbbbbccccccdddddd";
+          };
         };
         description = ''
           Define your TSIG keys here.
@@ -626,32 +618,32 @@ in
         type        = types.attrsOf zoneOptions;
         default     = {};
         example     = {
-            "serverGroup1" = {
-                provideXFR = [ "10.1.2.3 NOKEY" ];
-                children = {
-                    "example.com." = {
-                        data = ''
-                          $ORIGIN example.com.
-                          $TTL    86400
-                          @ IN SOA a.ns.example.com. admin.example.com. (
-                          ...
-                        '';
-                    };
-                    "example.org." = {
-                        data = ''
-                          $ORIGIN example.org.
-                          $TTL    86400
-                          @ IN SOA a.ns.example.com. admin.example.com. (
-                          ...
-                        '';
-                    };
-                };
+          "serverGroup1" = {
+            provideXFR = [ "10.1.2.3 NOKEY" ];
+            children = {
+              "example.com." = {
+                data = ''
+                  $ORIGIN example.com.
+                  $TTL    86400
+                  @ IN SOA a.ns.example.com. admin.example.com. (
+                  ...
+                '';
+              };
+              "example.org." = {
+                data = ''
+                  $ORIGIN example.org.
+                  $TTL    86400
+                  @ IN SOA a.ns.example.com. admin.example.com. (
+                  ...
+                '';
+              };
             };
+          };
 
-            "example.net." = {
-                provideXFR = [ "10.3.2.1 NOKEY" ];
-                data = ''...'';
-            };
+          "example.net." = {
+            provideXFR = [ "10.3.2.1 NOKEY" ];
+            data = ''...'';
+          };
         };
         description = ''
           Define your zones here. Zones can cascade other zones and therefore
@@ -670,23 +662,23 @@ in
 
     # this is not working :(
     nixpkgs.config.nsd = {
-        ipv6       = cfg.ipv6;
-        ratelimit  = cfg.ratelimit.enable;
-        rootServer = cfg.rootServer;
+      ipv6       = cfg.ipv6;
+      ratelimit  = cfg.ratelimit.enable;
+      rootServer = cfg.rootServer;
     };
 
     users.extraGroups = singleton {
-        name = username;
-        gid  = config.ids.gids.nsd;
+      name = username;
+      gid  = config.ids.gids.nsd;
     };
 
     users.extraUsers = singleton {
-        name        = username;
-        description = "NSD service user";
-        home        = stateDir;
-        createHome  = true;
-        uid         = config.ids.uids.nsd;
-        group       = username;
+      name        = username;
+      description = "NSD service user";
+      home        = stateDir;
+      createHome  = true;
+      uid         = config.ids.uids.nsd;
+      group       = username;
     };
 
     systemd.services.nsd = {
