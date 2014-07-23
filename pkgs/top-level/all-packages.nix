@@ -4259,11 +4259,7 @@ let
 
   aubio = callPackage ../development/libraries/aubio { };
 
-  audiofile = callPackage ../development/libraries/audiofile {
-    stdenv = if stdenv.isDarwin
-      then overrideGCC stdenv gccApple
-      else stdenv;
-  };
+  audiofile = callPackage ../development/libraries/audiofile { };
 
   axis = callPackage ../development/libraries/axis { };
 
