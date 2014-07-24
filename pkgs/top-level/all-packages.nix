@@ -5527,6 +5527,8 @@ let
 
   lirc = callPackage ../development/libraries/lirc { };
 
+  liquidfun = callPackage ../development/libraries/liquidfun { };
+
   liquidwar = builderDefsPackage ../games/liquidwar {
     inherit (xlibs) xproto libX11 libXrender;
     inherit gmp mesa libjpeg
