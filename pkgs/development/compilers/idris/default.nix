@@ -26,6 +26,7 @@ cabal.mkDerivation (self: {
   buildTools = [ happy ];
   extraLibraries = [ boehmgc gmp ];
   configureFlags = "-fllvm -fgmp -fffi";
+  patches = [ ./trifecta-fix.patch ];
   meta = {
     homepage = "http://www.idris-lang.org/";
     description = "Functional Programming Language with Dependent Types";

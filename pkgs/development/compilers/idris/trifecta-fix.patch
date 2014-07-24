@@ -1,0 +1,15 @@
+diff --git a/src/Idris/AbsSyntaxTree.hs b/src/Idris/AbsSyntaxTree.hs
+index 76df969..076f1ff 100644
+--- a/src/Idris/AbsSyntaxTree.hs
++++ b/src/Idris/AbsSyntaxTree.hs
+@@ -194,6 +194,10 @@ data IState = IState {
+     idris_callswho :: Maybe (M.Map Name [Name])
+    }
+
++-- Required for parsers library, and therefore trifecta
++instance Show IState where
++  show = const "{internal state}"
++
+ data SizeChange = Smaller | Same | Bigger | Unknown
+     deriving (Show, Eq)
+ {-!
