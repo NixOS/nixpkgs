@@ -309,12 +309,12 @@ stdenv.mkDerivation ({
     export CXXFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CXXFLAGS_FOR_TARGET"
     export CFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CFLAGS_FOR_TARGET"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    if xcodePath=$(/usr/bin/xcrun --show-sdk-path); then
-      configureFlagsArray+=(--with-native-system-header-dir=$xcodePath/usr/include)
+    if SDKROOT=$(/usr/bin/xcrun --show-sdk-path); then
+      configureFlagsArray+=(--with-native-system-header-dir=$SDKROOT/usr/include)
       makeFlagsArray+=( \
-       CFLAGS_FOR_BUILD=-F$xcodePath/System/Library/Frameworks \
-       CFLAGS_FOR_TARGET=-F$xcodePath/System/Library/Frameworks \
-       FLAGS_FOR_TARGET=-F$xcodePath/System/Library/Frameworks \
+       CFLAGS_FOR_BUILD=-F$SDKROOT/System/Library/Frameworks \
+       CFLAGS_FOR_TARGET=-F$SDKROOT/System/Library/Frameworks \
+       FLAGS_FOR_TARGET=-F$SDKROOT/System/Library/Frameworks \
       )
     fi
   '';

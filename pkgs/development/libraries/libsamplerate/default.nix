@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     ''
       # need headers from the Carbon.framework in /System/Library/Frameworks to
       # compile this on darwin -- not sure how to handle
-      NIX_CFLAGS_COMPILE+=" -I$xcodePath/System/Library/Frameworks/Carbon.framework/Versions/A/Headers"
+      NIX_CFLAGS_COMPILE+=" -I$SDKROOT/System/Library/Frameworks/Carbon.framework/Versions/A/Headers"
 
       substituteInPlace examples/Makefile --replace "-fpascal-strings" ""
     '';
