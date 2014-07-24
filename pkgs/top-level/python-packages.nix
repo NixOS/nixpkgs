@@ -8108,7 +8108,8 @@ rec {
     # pip depend on $HOME setting
     preConfigure = "export HOME=$TMPDIR";
 
-    buildInputs = [ pbr pip stevedore virtualenv virtualenv-clone pkgs.which ];
+    buildInputs = [ pbr pip pkgs.which ];
+    propagatedBuildInputs = [ stevedore virtualenv virtualenv-clone ];
 
     patchPhase = ''
       substituteInPlace "virtualenvwrapper.sh" --replace "which" "${pkgs.which}/bin/which"
