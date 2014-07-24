@@ -55,7 +55,9 @@ stdenv.mkDerivation rec {
 
   # As binutils takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  NIX_CFLAGS_COMPILE = "-static-libgcc";
+  NIX_CFLAGS_COMPILE = "-static-libgcc" +
+    # sbrk is deprecated in OSX >= 10.9
+    stdenv.lib.optionalString stdenv.isDarwin " -Wno-error=deprecated-declarations";
 
   configureFlags =
     [ "--enable-shared" "--enable-deterministic-archives" ]
