@@ -8,6 +8,7 @@ cabal.mkDerivation (self: {
   sha256 = "16l0khjx2wppnm9spp6mg659m95hxjkzfv3pjw5ays3z6clhx8b9";
   buildDepends = [ mtl syb ];
   testDepends = [ hspec HUnit mtl syb ];
+  doCheck = false;
   meta = {
     homepage = "http://www.cis.upenn.edu/~eir/packages/th-desugar";
     description = "Functions to desugar Template Haskell";
