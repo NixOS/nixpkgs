@@ -643,6 +643,8 @@ let
 
   mcelog = callPackage ../os-specific/linux/mcelog { };
 
+  ag = callPackage ../tools/misc/ag { };
+
   apparix = callPackage ../tools/misc/apparix { };
 
   appdata-tools = callPackage ../tools/misc/appdata-tools { };
