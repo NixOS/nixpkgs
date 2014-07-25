@@ -162,10 +162,7 @@ let
       "systemd-sysctl.service"
     ]
 
-    ++ optionals cfg.enableEmergencyMode [
-      "emergency.target"
-      "emergency.service"
-    ];
+    ++ cfg.additionalUpstreamSystemUnits;
 
   upstreamSystemWants =
     [ #"basic.target.wants"
@@ -637,19 +634,6 @@ in
       '';
     };
 
-    systemd.enableEmergencyMode = mkOption {
-      default = true;
-      type = types.bool;
-      description = ''
-        Whether to enable emergency mode, which is an
-        <command>sulogin</command> shell started on the console if
-        mounting a filesystem fails.  Since some machines (like EC2
-        instances) have no console of any kind, emergency mode doesn't
-        make sense, and it's better to continue with the boot insofar
-        as possible.
-      '';
-    };
-
     systemd.tmpfiles.rules = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -690,6 +674,15 @@ in
       type = types.attrsOf types.optionSet;
       options = [ socketOptions unitConfig ];
       description = "Definition of systemd per-user socket units.";
+    };
+
+    systemd.additionalUpstreamSystemUnits = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      example = [ "debug-shell.service" "systemd-quotacheck.service" ];
+      description = ''
+        Additional units shipped with systemd that shall be enabled.
+      '';
     };
 
   };

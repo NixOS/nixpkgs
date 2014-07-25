@@ -98,12 +98,6 @@ mkdir -m 0755 -p /etc/nixos
 rm -rf /var/run /var/lock
 rm -f /etc/{group,passwd,shadow}.lock
 
-if test -n "@cleanTmpDir@"; then
-    echo -n "cleaning \`/tmp'..."
-    find /tmp -maxdepth 1 -mindepth 1 -print0 | xargs -0r rm -rf --one-file-system
-    echo " done"
-fi
-
 
 # Also get rid of temporary GC roots.
 rm -rf /nix/var/nix/gcroots/tmp /nix/var/nix/temproots
