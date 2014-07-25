@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   configureScript="./build.sh";
 
+  buildPhase=""; # is already triggered by ./build.sh in configurePhase
+
   meta = {
     homepage = "https://github.com/ggreer/the_silver_searcher";
     description = "The Silver Searcher is a highspeed replacement for 'ack' (which is a replacement for grep)";
