@@ -9810,6 +9810,8 @@ let
     flags = [ "python" "X11" ]; # only flag "X11" by now
   });
 
+  vimpc = callPackage ../applications/audio/vimpc { };
+
   virtviewer = callPackage ../applications/virtualization/virt-viewer {
     gtkvnc = gtkvnc.override { enableGTK3 = true; };
     spice_gtk = spice_gtk.override { enableGTK3 = true; };
