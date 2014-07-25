@@ -1,10 +1,8 @@
-{ stdenv, fetchurl, perl }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "emv-${version}";
   version = "1.95";
-
-  buildDepends = [ perl ];
 
   src = fetchurl {
     url = "http://www.i0i0.de/toolchest/emv";
