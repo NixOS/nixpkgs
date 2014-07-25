@@ -954,6 +954,8 @@ let
 
   elasticsearch = callPackage ../servers/search/elasticsearch { };
 
+  emv = callPackage ../tools/misc/emv { };
+
   enblendenfuse = callPackage ../tools/graphics/enblend-enfuse {
     boost = boost149;
   };
