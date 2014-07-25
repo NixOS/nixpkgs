@@ -29,7 +29,7 @@ with lib;
     users.extraUsers.nix-ssh = {
       description = "Nix SSH substituter user";
       uid = config.ids.uids.nix-ssh;
-      shell = pkgs.stdenv.shell;
+      useDefaultShell = true;
     };
 
     services.openssh.enable = true;
