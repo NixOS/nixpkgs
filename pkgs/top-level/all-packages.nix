@@ -6005,6 +6005,8 @@ let
 
   rabbitmq-c = callPackage ../development/libraries/rabbitmq-c {};
 
+  rabbitmq-java-client = callPackage ../development/libraries/rabbitmq-java-client {};
+
   raul = callPackage ../development/libraries/audio/raul { };
 
   readline = readline6; # 6.2 works, 6.3 breaks python, parted
