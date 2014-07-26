@@ -9521,6 +9521,8 @@ let
 
   slrn = callPackage ../applications/networking/newsreaders/slrn { };
 
+  spideroak = callPackage ../applications/networking/spideroak { };
+
   ssvnc = callPackage ../applications/networking/remote/ssvnc { };
 
   st = callPackage ../applications/misc/st {
