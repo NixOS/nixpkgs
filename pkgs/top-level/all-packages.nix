@@ -827,6 +827,7 @@ let
   curl = callPackage ../tools/networking/curl rec {
     fetchurl = fetchurlBoot;
     zlibSupport = true;
+    withCacert = true;
     sslSupport = zlibSupport;
     scpSupport = zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin;
   };
@@ -7887,7 +7888,13 @@ let
 
   bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
 
-  cacert = callPackage ../data/misc/cacert { };
+  cacert =
+    let
+      fetchurl = import ../build-support/fetchurl {
+        inherit stdenv;
+        curl = curl.override { withCacert = false; };
+      };
+    in callPackage ../data/misc/cacert { inherit fetchurl; };
 
   cantarell_fonts = callPackage ../data/fonts/cantarell-fonts { };
 
