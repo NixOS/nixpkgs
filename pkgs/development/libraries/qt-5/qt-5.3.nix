@@ -17,8 +17,8 @@
 with stdenv.lib;
 
 let
-  v_maj = "5.2";
-  v_min = "1";
+  v_maj = "5.3";
+  v_min = "0";
   ver = "${v_maj}.${v_min}";
 in
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/qt/"
       + "${v_maj}/${ver}/single/qt-everywhere-opensource-src-${ver}.tar.gz";
-    sha256 = "18bxrnyis7xbhpxpf7w42i54hs4qr062b1wx4c0dpmja3lc29sc4";
+    sha256 = "09gp19377zpqyfzk063b3pjz8gjm2x7xsj71bdpmnhs1scz0khcj";
   };
 
   # The version property must be kept because it will be included into the QtSDK package name
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   patches =
     [ ./glib-2.32.patch
       (substituteAll {
-        src = ./qt-5.2-dlopen-absolute-paths.patch;
+        src = ./qt-5.3-dlopen-absolute-paths.patch;
         inherit cups icu libXfixes;
         glibc = stdenv.gcc.libc;
         openglDriver = if mesaSupported then mesa.driverLink else "/no-such-path";
@@ -89,7 +89,6 @@ stdenv.mkDerivation rec {
     -gui
     -widgets
     -opengl desktop
-    -javascript-jit
     -qml-debug
     -nis
     -iconv
@@ -157,7 +156,7 @@ stdenv.mkDerivation rec {
     homepage = http://qt-project.org;
     description = "A cross-platform application framework for C++";
     license = "GPL/LGPL";
-    maintainers = [ maintainers.bbenoist ];
+    maintainers = [ maintainers.bbenoist maintainers.qknight ];
     platforms = platforms.linux;
   };
 }
