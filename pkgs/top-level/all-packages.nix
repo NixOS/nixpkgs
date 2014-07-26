@@ -10080,6 +10080,8 @@ let
 
   zathura = zathuraCollection.zathuraWrapper;
 
+  zed = callPackage ../applications/editors/zed { };
+
   zeroc_ice = callPackage ../development/libraries/zeroc-ice { };
 
   girara = callPackage ../applications/misc/girara {
