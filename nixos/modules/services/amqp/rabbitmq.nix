@@ -4,6 +4,8 @@ with lib;
 
 let
   cfg = config.services.rabbitmq;
+  config_file = pkgs.writeText "rabbitmq.config" cfg.config;
+  config_file_wo_suffix = builtins.substring 0 ((builtins.stringLength config_file) - 7) config_file;
 
 in {
   ###### interface
@@ -31,7 +33,6 @@ in {
         '';
       };
 
-
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/rabbitmq";
@@ -40,6 +41,30 @@ in {
         '';
       };
 
+      cookie = mkOption {
+        default = "";
+        type = types.str;
+        description = ''
+          Erlang cookie is a string of arbitrary length which must
+          be the same for several nodes to be allowed to communicate.
+          Leave empty to generate automatically.
+        '';
+      };
+
+      config = mkOption {
+        default = "";
+        type = types.str;
+        description = ''
+          Verbatim configuration file contents.
+          See http://www.rabbitmq.com/configure.htm
+        '';
+      };
+
+      plugins = mkOption {
+        default = [];
+        type = types.listOf types.str;
+        description = "The names of plugins to enable";
+      };
     };
   };
 
@@ -69,7 +94,10 @@ in {
         RABBITMQ_NODE_IP_ADDRESS = cfg.listenAddress;
         RABBITMQ_SERVER_START_ARGS = "-rabbit error_logger tty -rabbit sasl_error_logger false";
         SYS_PREFIX = "";
-      };
+        RABBITMQ_ENABLED_PLUGINS_FILE = pkgs.writeText "enabled_plugins" ''
+          [ ${concatStringsSep "," cfg.plugins} ].
+        '';
+      } //  optionalAttrs (cfg.config != "") { RABBITMQ_CONFIG_FILE = config_file_wo_suffix; };
 
       serviceConfig = {
         ExecStart = "${pkgs.rabbitmq_server}/sbin/rabbitmq-server";
@@ -81,6 +109,15 @@ in {
       preStart = ''
         mkdir -p ${cfg.dataDir} && chmod 0700 ${cfg.dataDir}
         if [ "$(id -u)" = 0 ]; then chown rabbitmq:rabbitmq ${cfg.dataDir}; fi
+        
+        ${optionalString (cfg.cookie != "") ''
+            echo -n ${cfg.cookie} > ${cfg.dataDir}/.erlang.cookie
+            chmod 400 ${cfg.dataDir}/.erlang.cookie
+            chown rabbitmq:rabbitmq ${cfg.dataDir}/.erlang.cookie
+        ''}
+
+        mkdir -p /var/log/rabbitmq && chmod 0700 /var/log/rabbitmq
+        chown rabbitmq:rabbitmq /var/log/rabbitmq
       '';
     };
 
