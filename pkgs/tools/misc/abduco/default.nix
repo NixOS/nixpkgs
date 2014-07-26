@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
     meta = {
         homepage = http://brain-dump.org/projects/abduco;
-        license = "bsd";
+        license = licenses.isc;
         description = "Allows programs to be run independently from its controlling terminal";
         platforms = with platforms; linux;
     };
