@@ -954,6 +954,10 @@ let
 
   elasticsearch = callPackage ../servers/search/elasticsearch { };
 
+  elasticsearchPlugins = recurseIntoAttrs (
+    callPackage ../servers/search/elasticsearch/plugins.nix { }
+  );
+
   emv = callPackage ../tools/misc/emv { };
 
   enblendenfuse = callPackage ../tools/graphics/enblend-enfuse {
