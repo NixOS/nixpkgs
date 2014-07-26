@@ -81,6 +81,13 @@ with lib;
           '';
         target = "modprobe.d/nixos.conf";
       }
+      { source = pkgs.writeText "modprobe-ehci.conf"
+	  ''
+	    softdep uhci_hcd pre: ehci_hcd
+	    softdep ohci_hcd pre: ehci_hcd
+	  '';
+        target = "modprobe.d/usb-load-ehci-first.conf";
+      }
     ];
 
     environment.systemPackages = [ config.system.sbin.modprobe pkgs.kmod ];
