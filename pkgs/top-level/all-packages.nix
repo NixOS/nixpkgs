@@ -9232,6 +9232,8 @@ let
 
   ruby_ncursesw_sup = callPackage ../development/libraries/ruby_ncursesw_sup { };
 
+  shotcut = callPackage ../applications/video/shotcut { mlt = mlt-qt5; };
+
   smplayer = callPackage ../applications/video/smplayer { };
 
   sup = with rubyLibs; callPackage ../applications/networking/mailreaders/sup {
