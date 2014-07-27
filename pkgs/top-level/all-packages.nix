@@ -8391,6 +8391,8 @@ let
 
     bbdb = callPackage ../applications/editors/emacs-modes/bbdb { };
 
+    bbdb3 = callPackage ../applications/editors/emacs-modes/bbdb/3.nix {};
+
     cedet = callPackage ../applications/editors/emacs-modes/cedet { };
 
     calfw = callPackage ../applications/editors/emacs-modes/calfw { };
