@@ -4421,6 +4421,10 @@ let
 
   enginepkcs11 = callPackage ../development/libraries/enginepkcs11 { };
 
+  epoxy = callPackage ../development/libraries/epoxy {
+    inherit (xorg) utilmacros libX11;
+  };
+
   esdl = callPackage ../development/libraries/esdl { };
 
   exiv2 = callPackage ../development/libraries/exiv2 { };
