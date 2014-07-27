@@ -4517,6 +4517,8 @@ let
 
   freetype = callPackage ../development/libraries/freetype { };
 
+  frei0r = callPackage ../development/libraries/frei0r { };
+
   fribidi = callPackage ../development/libraries/fribidi { };
 
   funambol = callPackage ../development/libraries/funambol { };
