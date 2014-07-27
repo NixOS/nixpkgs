@@ -143,7 +143,9 @@ interpretation:</para>
   <varlistentry>
     <term><varname>platforms</varname></term>
     <listitem><para>The list of Nix platform types on which the
-    package is supported. An example is:
+    package is supported. Hydra builds packages according to the
+    platform specified. If no platform is specified, the package does
+    not have prebuilt binaries. An example is:
 
 <programlisting>
 meta.platforms = stdenv.lib.platforms.linux;
