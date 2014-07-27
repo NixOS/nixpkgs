@@ -17,7 +17,9 @@ meta = {
     It is fully customizable.
   '';
   homepage = http://www.gnu.org/software/hello/manual/;
-  license = "GPLv3+";
+  license = stdenv.lib.licenses.gpl3Plus;
+  maintainers = [ stdenv.lib.maintainers.eelco ];
+  platforms = stdenv.lib.platforms.all;
 };
 </programlisting>
 
@@ -32,15 +34,33 @@ command-line using <command>nix-env</command>:
 
 <screen>
 $ nix-env -qa hello --meta --xml
-&lt;?xml version='1.0' encoding='utf-8'?>
-&lt;items>
-  &lt;item attrPath="hello" name="hello-2.3" system="i686-linux">
-    &lt;meta name="description" value="A program that produces a familiar, friendly greeting" />
-    &lt;meta name="homepage" value="http://www.gnu.org/software/hello/manual/" />
-    &lt;meta name="license" value="GPLv3+" />
-    &lt;meta name="longDescription" value="GNU Hello is a program that prints &amp;quot;Hello, world!&amp;quot; when you run it.&amp;#xA;It is fully customizable.&amp;#xA;" />
-  &lt;/item>
-&lt;/items>
+&lt;?xml version=&apos;1.0&apos; encoding=&apos;utf-8&apos;?&gt;
+&lt;items&gt;
+  &lt;item attrPath=&quot;nixos.pkgs.hello&quot; name=&quot;hello-2.9&quot; system=&quot;x86_64-linux&quot;&gt;
+    &lt;meta name=&quot;description&quot; type=&quot;string&quot; value=&quot;A program that produces a familiar, friendly greeting&quot; /&gt;
+    &lt;meta name=&quot;homepage&quot; type=&quot;string&quot; value=&quot;http://www.gnu.org/software/hello/manual/&quot; /&gt;
+    &lt;meta name=&quot;license&quot; type=&quot;string&quot; value=&quot;GPLv3+&quot; /&gt;
+    &lt;meta name=&quot;longDescription&quot; type=&quot;string&quot; value=&quot;GNU Hello is a program that prints &amp;quot;Hello, world!&amp;quot; when you run it.&amp;#xA;It is fully customizable.&amp;#xA;&quot; /&gt;
+    &lt;meta name=&quot;maintainers&quot; type=&quot;strings&quot;&gt;
+      &lt;string value=&quot;Ludovic Courtès &amp;lt;ludo@gnu.org&amp;gt;&quot; /&gt;
+    &lt;/meta&gt;
+    &lt;meta name=&quot;platforms&quot; type=&quot;strings&quot;&gt;
+      &lt;string value=&quot;i686-linux&quot; /&gt;
+      &lt;string value=&quot;x86_64-linux&quot; /&gt;
+      &lt;string value=&quot;armv5tel-linux&quot; /&gt;
+      &lt;string value=&quot;armv7l-linux&quot; /&gt;
+      &lt;string value=&quot;mips64el-linux&quot; /&gt;
+      &lt;string value=&quot;x86_64-darwin&quot; /&gt;
+      &lt;string value=&quot;i686-cygwin&quot; /&gt;
+      &lt;string value=&quot;i686-freebsd&quot; /&gt;
+      &lt;string value=&quot;x86_64-freebsd&quot; /&gt;
+      &lt;string value=&quot;i686-openbsd&quot; /&gt;
+      &lt;string value=&quot;x86_64-openbsd&quot; /&gt;
+    &lt;/meta&gt;
+    &lt;meta name=&quot;position&quot; type=&quot;string&quot; value=&quot;/nix/store/cn8zjjdd9kvmp1p5d21h7ya0cr1jhkk3-nixos-14.10pre44264.12f06b3/nixos/nixpkgs/pkgs/applications/misc/hello/ex-2/default.nix:14&quot; /&gt;
+  &lt;/item&gt;
+&lt;/items&gt;
+
 </screen>
 
 <command>nix-env</command> knows about the
@@ -92,20 +112,22 @@ interpretation:</para>
 
   <varlistentry>
     <term><varname>license</varname></term>
-    <listitem><para>The license for the package.  See below for the
-    allowed values.</para></listitem>
+    <listitem><para>The license for the package. One from attribute set defined in
+      <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/lib/licenses.nix">
+      <filename>nixpkgs/lib/licenses.nix</filename></link>.
+      Example:
+      <literal>stdenv.lib.licenses.gpl3</literal>.</para></listitem>
   </varlistentry>
 
   <varlistentry>
     <term><varname>maintainers</varname></term>
     <listitem><para>A list of names and e-mail addresses of the
-    maintainers of this Nix expression, e.g. <literal>["Alice
-    &lt;alice@example.org>" "Bob &lt;bob@example.com>"]</literal>.  If
-    you are the maintainer of multiple packages, you may want to add
+    maintainers of this Nix expression. If
+    you would like to be a maintainer of a package, you may want to add
     yourself to <link
-    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/lib/maintainers.nix"><filename>pkgs/lib/maintainers.nix</filename></link>
-    and write something like <literal>[stdenv.lib.maintainers.alice
-    stdenv.lib.maintainers.bob]</literal>.</para></listitem>
+    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/lib/maintainers.nix"><filename>nixpkgs/lib/maintainers.nix</filename></link>
+    and write something like <literal>[ stdenv.lib.maintainers.alice
+    stdenv.lib.maintainers.bob ]</literal>.</para></listitem>
   </varlistentry>
 
   <varlistentry>
@@ -121,29 +143,23 @@ interpretation:</para>
   <varlistentry>
     <term><varname>platforms</varname></term>
     <listitem><para>The list of Nix platform types on which the
-    package is supported.  If this attribute is set, the package will
-    refuse to build, and won’t show up in <literal>nix-env
-    -qa</literal> output, on any platform not listed
-    here.  An example is:
+    package is supported. An example is:
 
 <programlisting>
-meta.platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
+meta.platforms = stdenv.lib.platforms.linux;
 </programlisting>
 
-    The set <varname>lib.platforms</varname> defines various common
-    lists of platforms types, so it’s more typical to write:
-
-<programlisting>
-meta.platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-</programlisting>
-
+    Attribute Set <varname>stdenv.lib.platforms</varname> in 
+    <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/lib/platforms.nix">
+    <filename>nixpkgs/lib/platforms.nix</filename></link> defines various common
+    lists of platforms types.
     </para></listitem>
   </varlistentry>
 
   <varlistentry>
     <term><varname>hydraPlatforms</varname></term>
     <listitem><para>The list of Nix platform types for which the Hydra
-    instance at <literal>hydra.nixos.org</literal> should build the
+    instance at <literal>hydra.nixos.org</literal> will build the
     package.  (Hydra is the Nix-based continuous build system.)  It
     defaults to the value of <varname>meta.platforms</varname>.  Thus,
     the only reason to set <varname>meta.hydraPlatforms</varname> is
