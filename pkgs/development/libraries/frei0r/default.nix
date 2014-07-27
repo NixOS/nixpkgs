@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ autoconf cairo opencv pkgconfig ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://frei0r.dyne.org;
     description = "Minimalist, cross-platform, shared video plugins";
     license = licenses.gpl2;
