@@ -5693,11 +5693,13 @@ let
 
   mkvtoolnix = callPackage ../applications/video/mkvtoolnix { };
 
-  mlt = callPackage ../development/libraries/mlt { };
+  mlt-qt4 = callPackage ../development/libraries/mlt { qt = qt4; };
 
-  mps = callPackage ../development/libraries/mps { };
+  mlt-qt5 = callPackage ../development/libraries/mlt { qt = qt5; };
 
   movit = callPackage ../development/libraries/movit { };
+
+  mps = callPackage ../development/libraries/mps { };
 
   libmpeg2 = callPackage ../development/libraries/libmpeg2 { };
 
@@ -10527,7 +10529,7 @@ let
 
       kdeconnect = callPackage ../applications/misc/kdeconnect { };
 
-      kdenlive = callPackage ../applications/video/kdenlive { };
+      kdenlive = callPackage ../applications/video/kdenlive { mlt = mlt-qt4; };
 
       kdesvn = callPackage ../applications/version-management/kdesvn { };
 
