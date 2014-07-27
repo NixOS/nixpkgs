@@ -192,78 +192,15 @@ meta.hydraPlatforms = [];
 
 <section xml:id="sec-meta-license"><title>Licenses</title>
 
-<note><para>This is just a first attempt at standardising the license
-attribute.</para></note>
-
-<para>The <varname>meta.license</varname> attribute must be one of the
+<para>The <varname>meta.license</varname> attribute could be one of the
 following:
 
 <variablelist>
 
   <varlistentry>
-    <term><varname>GPL</varname></term>
-    <listitem><para>GNU General Public License; version not
-    specified.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>GPLv2</varname></term>
-    <listitem><para>GNU General Public License, version
-    2.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>GPLv2+</varname></term>
-    <listitem><para>GNU General Public License, version
-    2 or higher.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>GPLv3</varname></term>
-    <listitem><para>GNU General Public License, version
-    3.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>GPLv3+</varname></term>
-    <listitem><para>GNU General Public License, version
-    3 or higher.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>bsd</varname></term>
-    <listitem><para>Catch-all for licenses that are essentially
-    similar to <link
-    xlink:href="http://www.gnu.org/licenses/license-list.html#ModifiedBSD">the
-    original BSD license with the advertising clause removed</link>,
-    i.e. permissive non-copyleft free software licenses.  This
-    includes the <link
-    xlink:href="http://www.gnu.org/licenses/license-list.html#X11License">X11
-    (“MIT”) License</link>.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>perl5</varname></term>
-    <listitem><para>The Perl 5 license (Artistic License, version 1
-    and GPL, version 1 or later).</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
     <term><varname>free</varname></term>
     <listitem><para>Catch-all for free software licenses not listed
     above.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>free-copyleft</varname></term>
-    <listitem><para>Catch-all for free, copyleft software licenses not
-    listed above.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>free-non-copyleft</varname></term>
-    <listitem><para>Catch-all for free, non-copyleft software licenses
-    not listed above.</para></listitem>
   </varlistentry>
 
   <varlistentry>
