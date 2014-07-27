@@ -25,7 +25,8 @@ wrapPythonProgramsIn() {
         if head -n1 "$i" | grep -q '/python\|/pypy'; then
             # dont wrap EGG-INFO scripts since they are called from python
             if echo "$i" | grep -v EGG-INFO/scripts; then
-                echo "wrapping \`$i'..."
+                echo "wrapping \`$i'... asdf"
+                sed -i "$i" -e "/^#\!/a import sys; sys.argv[0] = '$(basename $i)'"
                 wrapProgram "$i" \
                     --prefix PYTHONPATH ":" $program_PYTHONPATH \
                     --prefix PATH ":" $program_PATH
