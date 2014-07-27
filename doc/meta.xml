@@ -33,33 +33,41 @@ the package.  The value of a meta-attribute must a string.</para>
 command-line using <command>nix-env</command>:
 
 <screen>
-$ nix-env -qa hello --meta --xml
-&lt;?xml version=&apos;1.0&apos; encoding=&apos;utf-8&apos;?&gt;
-&lt;items&gt;
-  &lt;item attrPath=&quot;nixos.pkgs.hello&quot; name=&quot;hello-2.9&quot; system=&quot;x86_64-linux&quot;&gt;
-    &lt;meta name=&quot;description&quot; type=&quot;string&quot; value=&quot;A program that produces a familiar, friendly greeting&quot; /&gt;
-    &lt;meta name=&quot;homepage&quot; type=&quot;string&quot; value=&quot;http://www.gnu.org/software/hello/manual/&quot; /&gt;
-    &lt;meta name=&quot;license&quot; type=&quot;string&quot; value=&quot;GPLv3+&quot; /&gt;
-    &lt;meta name=&quot;longDescription&quot; type=&quot;string&quot; value=&quot;GNU Hello is a program that prints &amp;quot;Hello, world!&amp;quot; when you run it.&amp;#xA;It is fully customizable.&amp;#xA;&quot; /&gt;
-    &lt;meta name=&quot;maintainers&quot; type=&quot;strings&quot;&gt;
-      &lt;string value=&quot;Ludovic Courtès &amp;lt;ludo@gnu.org&amp;gt;&quot; /&gt;
-    &lt;/meta&gt;
-    &lt;meta name=&quot;platforms&quot; type=&quot;strings&quot;&gt;
-      &lt;string value=&quot;i686-linux&quot; /&gt;
-      &lt;string value=&quot;x86_64-linux&quot; /&gt;
-      &lt;string value=&quot;armv5tel-linux&quot; /&gt;
-      &lt;string value=&quot;armv7l-linux&quot; /&gt;
-      &lt;string value=&quot;mips64el-linux&quot; /&gt;
-      &lt;string value=&quot;x86_64-darwin&quot; /&gt;
-      &lt;string value=&quot;i686-cygwin&quot; /&gt;
-      &lt;string value=&quot;i686-freebsd&quot; /&gt;
-      &lt;string value=&quot;x86_64-freebsd&quot; /&gt;
-      &lt;string value=&quot;i686-openbsd&quot; /&gt;
-      &lt;string value=&quot;x86_64-openbsd&quot; /&gt;
-    &lt;/meta&gt;
-    &lt;meta name=&quot;position&quot; type=&quot;string&quot; value=&quot;/nix/store/cn8zjjdd9kvmp1p5d21h7ya0cr1jhkk3-nixos-14.10pre44264.12f06b3/nixos/nixpkgs/pkgs/applications/misc/hello/ex-2/default.nix:14&quot; /&gt;
-  &lt;/item&gt;
-&lt;/items&gt;
+$ nix-env -qa hello --meta --json
+{
+    "hello": {
+        "meta": {
+            "description": "A program that produces a familiar, friendly greeting",
+            "homepage": "http://www.gnu.org/software/hello/manual/",
+            "license": {
+                "fullName": "GNU General Public License version 3 or later",
+                "shortName": "GPLv3+",
+                "url": "http://www.fsf.org/licensing/licenses/gpl.html"
+            },
+            "longDescription": "GNU Hello is a program that prints \"Hello, world!\" when you run it.\nIt is fully customizable.\n",
+            "maintainers": [
+                "Ludovic Court\u00e8s <ludo@gnu.org>"
+            ],
+            "platforms": [
+                "i686-linux",
+                "x86_64-linux",
+                "armv5tel-linux",
+                "armv7l-linux",
+                "mips64el-linux",
+                "x86_64-darwin",
+                "i686-cygwin",
+                "i686-freebsd",
+                "x86_64-freebsd",
+                "i686-openbsd",
+                "x86_64-openbsd"
+            ],
+            "position": "/home/ielectric/dev/nixpkgs/pkgs/applications/misc/hello/ex-2/default.nix:14"
+        },
+        "name": "hello-2.9",
+        "system": "x86_64-linux"
+    }
+}
+
 
 </screen>
 
