@@ -5964,6 +5964,8 @@ let
 
   physfs = callPackage ../development/libraries/physfs { };
 
+  pipelight = callPackage ../tools/misc/pipelight { };
+
   pkcs11helper = callPackage ../development/libraries/pkcs11helper { };
 
   plib = callPackage ../development/libraries/plib { };
