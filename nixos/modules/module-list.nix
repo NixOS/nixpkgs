@@ -335,6 +335,7 @@
   ./testing/service-runner.nix
   ./virtualisation/container-config.nix
   ./virtualisation/containers.nix
+  ./virtualisation/docker.nix
   ./virtualisation/libvirtd.nix
   #./virtualisation/nova.nix
   ./virtualisation/virtualbox-guest.nix

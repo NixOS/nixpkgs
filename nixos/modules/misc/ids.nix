@@ -250,6 +250,7 @@
       znc = 128;
       polipo = 129;
       mopidy = 130;
+      docker = 131;
 
       # When adding a gid, make sure it doesn't match an existing uid. And don't use gids above 399!
 
