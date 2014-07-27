@@ -155,9 +155,10 @@ $ git add pkgs/development/libraries/libfoo/default.nix</screen>
         </listitem>
 
         <listitem>
-          <para>You can use <command>nix-prefetch-url</command>
+          <para>You can use <command>nix-prefetch-url</command> (or similar nix-prefetch-git, etc)
           <replaceable>url</replaceable> to get the SHA-256 hash of
-          source distributions.</para>
+          source distributions. There are similar commands as <command>nix-prefetch-git</command> and
+          <command>nix-prefetch-hg</command> available in <literal>nix-prefetch-scripts</literal> package.</para>
         </listitem>
 
         <listitem>
