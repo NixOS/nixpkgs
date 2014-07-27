@@ -5695,6 +5695,8 @@ let
 
   mps = callPackage ../development/libraries/mps { };
 
+  movit = callPackage ../development/libraries/movit { };
+
   libmpeg2 = callPackage ../development/libraries/libmpeg2 { };
 
   mpeg2dec = libmpeg2;
