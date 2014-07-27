@@ -298,4 +298,8 @@
     fullName  = "INRIA Non-Commercial License Agreement";
     url       = "http://compcert.inria.fr/doc/LICENSE";
   };
+
+  # Common name for short, unnamed, included in each source code file
+  # licenses that grant everyone the four freedoms and that's it.
+  freeOther = "free-other";
 }
