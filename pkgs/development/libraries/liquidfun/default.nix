@@ -1,15 +1,13 @@
-{ stdenv, requireFile, cmake, mesa, libX11, libXi, ... }:
+{ stdenv, requireFile, cmake, mesa, libX11, libXi }:
 
 let 
   sourceInfo = rec {
     version="1.1.0";
     name="liquidfun-${version}";
-    url="http://github.com/foo/${name}.tar.gz";
+    url="https://github.com/google/liquidfun/releases/download/v${version}/${name}";
     hash="5011a000eacd6202a47317c489e44aa753a833fb562d970e7b8c0da9de01df86";
   };
-
 in
-
 stdenv.mkDerivation rec {
   src = requireFile {
     url = sourceInfo.url;
@@ -43,7 +41,7 @@ stdenv.mkDerivation rec {
     ];
     platforms = with stdenv.lib.platforms;
       linux;
-    license = "bsd";
+    license = stdenv.lib.licenses.bsd2;
     homepage = https://google.github.io/liquidfun/;
   };
 }
