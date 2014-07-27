@@ -17,7 +17,7 @@ let
       buildInputs = [ unzip ];
       meta = a.meta // {
         platforms = elasticsearch.meta.platforms;
-        maintainers = a.maintainers ++ [ maintainers.offline ];
+        maintainers = (a.meta.maintainers or []) ++ [ maintainers.offline ];
       };
     });
 in {
