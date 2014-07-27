@@ -7324,15 +7324,6 @@ let
       ];
   };
 
-  linux_3_10_tuxonice = linux_3_10.override (attrs: {
-    kernelPatches = attrs.kernelPatches ++ [
-      kernelPatches.tuxonice_3_10
-    ];
-    extraConfig = ''
-      TOI_CORE y
-    '';
-  });
-
   linux_3_12 = makeOverridable (import ../os-specific/linux/kernel/linux-3.12.nix) {
     inherit fetchurl stdenv perl buildLinux;
     kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
