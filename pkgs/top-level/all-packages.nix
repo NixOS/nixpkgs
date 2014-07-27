@@ -5703,9 +5703,15 @@ let
 
   mkvtoolnix = callPackage ../applications/video/mkvtoolnix { };
 
-  mlt-qt4 = callPackage ../development/libraries/mlt { qt = qt4; };
+  mlt-qt4 = callPackage ../development/libraries/mlt {
+    qt = qt4;
+    SDL = SDL_pulseaudio;
+  };
 
-  mlt-qt5 = callPackage ../development/libraries/mlt { qt = qt5; };
+  mlt-qt5 = callPackage ../development/libraries/mlt {
+    qt = qt5;
+    SDL = SDL_pulseaudio;
+  };
 
   movit = callPackage ../development/libraries/movit { };
 
@@ -6094,6 +6100,9 @@ let
       then clangStdenv
       else stdenv;
   };
+
+  # Fixes major problems with choppy sound in MLT / Kdenlive / Shotcut
+  SDL_pulseaudio = SDL.override { pulseaudioSupport = true; };
 
   SDL_gfx = callPackage ../development/libraries/SDL_gfx { };
 
