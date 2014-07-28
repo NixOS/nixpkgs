@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "classy-prelude-conduit";
-  version = "0.9.2";
-  sha256 = "07qdhha58yl1dq4mpbyrpjwzk2yhn8dbkg2qg2yaq1j780a6dwcv";
+  version = "0.9.3";
+  sha256 = "0wsl3mhczinxl6ij8dpv5001db740z4jq43l2gpzdylv6pmpldzr";
   buildDepends = [
     classyPrelude conduit conduitCombinators monadControl resourcet
     systemFileio transformers void
