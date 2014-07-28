@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, boost, glib, jackaudio, ladspaPlugins
+{ stdenv, fetchurl, alsaLib, boost, glib, jack2, ladspaPlugins
 , libarchive, liblrdf , libsndfile, pkgconfig, qt4, scons, subversion }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ 
-    alsaLib boost glib jackaudio ladspaPlugins libarchive liblrdf
+    alsaLib boost glib jack2 ladspaPlugins libarchive liblrdf
     libsndfile pkgconfig qt4 scons subversion
   ];
 

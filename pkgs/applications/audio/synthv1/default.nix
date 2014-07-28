@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, jackaudio, lv2 }:
+{ stdenv, fetchurl, qt4, jack2, lv2 }:
 
 stdenv.mkDerivation rec {
   name = "synthv1-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1r4fszbzwd0yfcch0mcsmh7781zw1317hiljn85w79721fs2m8hc";
   };
 
-  buildInputs = [ qt4 jackaudio lv2 ];
+  buildInputs = [ qt4 jack2 lv2 ];
 
   meta = with stdenv.lib; {
     description = "An old-school 4-oscillator subtractive polyphonic synthesizer with stereo fx";

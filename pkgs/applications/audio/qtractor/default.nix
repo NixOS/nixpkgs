@@ -1,4 +1,4 @@
-{ alsaLib, autoconf, automake, dssi, fetchurl, gtk, jackaudio
+{ alsaLib, autoconf, automake, dssi, fetchurl, gtk, jack2
 , ladspaH, ladspaPlugins, liblo, libmad, libsamplerate, libsndfile
 , libtool, libvorbis, pkgconfig, qt4, rubberband, stdenv }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ alsaLib autoconf automake dssi gtk jackaudio ladspaH
+    [ alsaLib autoconf automake dssi gtk jack2 ladspaH
       ladspaPlugins liblo libmad libsamplerate libsndfile libtool
       libvorbis pkgconfig qt4 rubberband
     ];

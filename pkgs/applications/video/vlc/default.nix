@@ -3,7 +3,7 @@
 , pkgconfig, dbus, fribidi, qt4, freefont_ttf, libebml, libmatroska
 , libvorbis, libtheora, speex, lua5, libgcrypt, libupnp
 , libcaca, pulseaudio, flac, schroedinger, libxml2, librsvg
-, mpeg2dec, udev, gnutls, avahi, libcddb, jackaudio, SDL, SDL_image
+, mpeg2dec, udev, gnutls, avahi, libcddb, jack2, SDL, SDL_image
 , libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, liboggz
 , libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
 , libvdpau
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     [ xz bzip2 perl zlib a52dec libmad faad2 ffmpeg alsaLib libdvdnav libdvdnav.libdvdread
       libbluray dbus fribidi qt4 libvorbis libtheora speex lua5 libgcrypt
       libupnp libcaca pulseaudio flac schroedinger libxml2 librsvg mpeg2dec
-      udev gnutls avahi libcddb jackaudio SDL SDL_image libmtp unzip taglib
+      udev gnutls avahi libcddb jack2 SDL SDL_image libmtp unzip taglib
       libkate libtiger libv4l samba liboggz libass libdvbpsi libva
       xlibs.xlibs xlibs.libXv xlibs.libXvMC xlibs.libXpm xlibs.xcbutilkeysyms
       libdc1394 libraw1394 libopus libebml libmatroska libvdpau

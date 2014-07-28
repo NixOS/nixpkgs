@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   patches =
     [ ./glib-2.32.patch
       (substituteAll {
-        src = ./dlopen-absolute-paths.patch;
+        src = ./qt-5.2-dlopen-absolute-paths.patch;
         inherit cups icu libXfixes;
         glibc = stdenv.gcc.libc;
         openglDriver = if mesaSupported then mesa.driverLink else "/no-such-path";

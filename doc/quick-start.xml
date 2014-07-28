@@ -155,9 +155,10 @@ $ git add pkgs/development/libraries/libfoo/default.nix</screen>
         </listitem>
 
         <listitem>
-          <para>You can use <command>nix-prefetch-url</command>
+          <para>You can use <command>nix-prefetch-url</command> (or similar nix-prefetch-git, etc)
           <replaceable>url</replaceable> to get the SHA-256 hash of
-          source distributions.</para>
+          source distributions. There are similar commands as <command>nix-prefetch-git</command> and
+          <command>nix-prefetch-hg</command> available in <literal>nix-prefetch-scripts</literal> package.</para>
         </listitem>
 
         <listitem>
@@ -221,17 +222,10 @@ $ nix-env -f . -iA libfoo</screen>
   </listitem>
 
   <listitem>
-    <para>Optionally commit the new package, or send a patch to
+    <para>Optionally commit the new package and open a pull request, or send a patch to
     <literal>nix-dev@cs.uu.nl</literal>.</para>
   </listitem>
 
-  <listitem>
-    <para>If you want the TU Delft build farm to build binaries of the
-    package and make them available in the <link
-    xlink:href="http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable/"><literal>nixpkgs</literal>
-    channel</link>, add it to <link
-    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/release.nix"><filename>pkgs/top-level/release.nix</filename></link>.</para>
-  </listitem>
 
 </orderedlist>
 

@@ -17,8 +17,7 @@ stdenv.mkDerivation rec {
       It is fully customizable.
     '';
     homepage = http://www.gnu.org/software/hello/manual/;
-    license = "GPLv3+";
-
+    license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.all;
   };

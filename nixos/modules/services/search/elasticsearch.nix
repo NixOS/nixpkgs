@@ -21,6 +21,11 @@ let
     ];
   };
 
+  esPlugins = pkgs.buildEnv {
+    name = "elasticsearch-plugins";
+    paths = cfg.plugins;
+  };
+
 in {
 
   ###### interface
@@ -101,6 +106,12 @@ in {
       example = [ "-Djava.net.preferIPv4Stack=true" ];
     };
 
+    plugins = mkOption {
+      description = "Extra elasticsearch plugins";
+      default = [];
+      type = types.listOf types.package;
+    };
+
   };
 
   ###### implementation
@@ -111,14 +122,19 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
       environment = { ES_HOME = cfg.dataDir; };
+      path = [ pkgs.elasticsearch ];
       serviceConfig = {
-        ExecStart = "${pkgs.elasticsearch}/bin/elasticsearch -Des.path.conf=${configDir} ${toString cfg.extraCmdLineOptions}";
+        ExecStart = "elasticsearch -Des.path.conf=${configDir} ${toString cfg.extraCmdLineOptions}";
         User = "elasticsearch";
         PermissionsStartOnly = true;
       };
       preStart = ''
         mkdir -m 0700 -p ${cfg.dataDir}
         if [ "$(id -u)" = 0 ]; then chown -R elasticsearch ${cfg.dataDir}; fi
+
+        # Install plugins
+        rm ${cfg.dataDir}/plugins || true
+        ln -s ${esPlugins}/plugins ${cfg.dataDir}/plugins
       '';
     };
 

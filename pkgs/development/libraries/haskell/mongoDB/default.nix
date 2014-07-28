@@ -7,14 +7,14 @@
 
 cabal.mkDerivation (self: {
   pname = "mongoDB";
-  version = "2.0";
-  sha256 = "1dspx1x20903i44i825ziwmvaax75m8g08kz97cv34077bdir80h";
+  version = "2.0.2";
+  sha256 = "02xq80jcrrp41gzzg7008spw3npj6iz3gcf1bkj4cf8vjs44nplf";
   buildDepends = [
     binary bson cryptohash hashtables liftedBase monadControl mtl
     network parsec random randomShuffle text transformersBase
   ];
   meta = {
-    homepage = "http://github.com/selectel/mongodb-haskell";
+    homepage = "https://github.com/mongodb-haskell/mongodb";
     description = "Driver (client) for MongoDB, a free, scalable, fast, document DBMS";
     license = "unknown";
     platforms = self.ghc.meta.platforms;

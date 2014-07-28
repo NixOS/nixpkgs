@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, dbus, jackaudio, pkgconfig, python }:
+{ stdenv, fetchurl, alsaLib, dbus, jack2, pkgconfig, python }:
 
 stdenv.mkDerivation rec {
   name = "a2jmidid-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0pzm0qk5ilqhwz74pydg1jwrds27vm47185dakdrxidb5bv3b5ia";
   };
 
-  buildInputs = [ alsaLib dbus jackaudio pkgconfig python ];
+  buildInputs = [ alsaLib dbus jack2 pkgconfig python ];
 
   configurePhase = "python waf configure --prefix=$out";
 

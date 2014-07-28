@@ -1048,8 +1048,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hasteCompiler = callPackage ../development/libraries/haskell/haste-compiler {};
 
-  hastePerch = callPackage ../development/libraries/haskell/haste-perch {};
-
   hcltest = callPackage ../development/libraries/haskell/hcltest {};
 
   hedis = callPackage ../development/libraries/haskell/hedis {};
@@ -1259,6 +1257,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   HUnit_1_2_5_1 = callPackage ../development/libraries/haskell/HUnit/1.2.5.1.nix {};
   HUnit_1_2_5_2 = callPackage ../development/libraries/haskell/HUnit/1.2.5.2.nix {};
   HUnit = self.HUnit_1_2_5_2;
+
+  HUnitApprox = callPackage ../development/libraries/haskell/HUnit-approx {};
 
   hweblib = callPackage ../development/libraries/haskell/hweblib/default.nix {};
 
@@ -1745,9 +1745,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   parsec = self.parsec_3_1_5;
 
   parsers_0_10_3 = callPackage ../development/libraries/haskell/parsers/0.10.3.nix {};
-  parsers_0_11_0_3 = callPackage ../development/libraries/haskell/parsers/0.11.0.3.nix {};
   parsers_0_12 = callPackage ../development/libraries/haskell/parsers/0.12.nix {};
-  parsers = self.parsers_0_11_0_3; # the new version breaks trifecta
+  parsers = self.parsers_0_12;
 
   parsimony = callPackage ../development/libraries/haskell/parsimony {};
 
