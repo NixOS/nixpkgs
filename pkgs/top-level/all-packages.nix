@@ -8508,6 +8508,8 @@ let
 
     colorTheme = callPackage ../applications/editors/emacs-modes/color-theme { };
 
+    colorThemeSolarized = callPackage ../applications/editors/emacs-modes/color-theme-solarized { };
+
     cryptol = callPackage ../applications/editors/emacs-modes/cryptol { };
 
     cua = callPackage ../applications/editors/emacs-modes/cua { };
