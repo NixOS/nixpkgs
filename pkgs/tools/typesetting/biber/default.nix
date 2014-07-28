@@ -33,7 +33,7 @@ buildPerlPackage {
 
   meta = {
     description = "Backend for BibLaTeX";
-    license = stdenv.lib.licenses.perl5;
+    license = "perl";
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.ttuegel ];
   };

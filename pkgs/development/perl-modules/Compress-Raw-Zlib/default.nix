@@ -21,6 +21,6 @@ buildPerlPackage rec {
   doCheck = !stdenv.isDarwin;
 
   meta = {
-    license = stdenv.lib.licenses.perl5;
+    license = "perl";
   };
 }
