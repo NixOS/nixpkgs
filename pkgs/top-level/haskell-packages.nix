@@ -1743,8 +1743,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   parsec = self.parsec_3_1_5;
 
   parsers_0_10_3 = callPackage ../development/libraries/haskell/parsers/0.10.3.nix {};
-  parsers_0_12 = callPackage ../development/libraries/haskell/parsers/0.12.nix {};
-  parsers = self.parsers_0_12;
+  parsers_0_12_1 = callPackage ../development/libraries/haskell/parsers/0.12.1.nix {};
+  parsers = self.parsers_0_12_1;
 
   parsimony = callPackage ../development/libraries/haskell/parsimony {};
 
