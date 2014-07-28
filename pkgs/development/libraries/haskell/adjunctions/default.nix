@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "adjunctions";
-  version = "4.1.0.1";
-  sha256 = "18p2pabid7dx96qcpd2ywv5mhjp55srhm5g013pn697jcxyq2xiv";
+  version = "4.2";
+  sha256 = "07r56r6kyd6wlcxxnsnnyv59pyc8s1gsy54kzwmk9yknks5rij9i";
   buildDepends = [
     comonad contravariant distributive free mtl profunctors
     semigroupoids semigroups tagged transformers void
