@@ -79,6 +79,7 @@
   ./services/audio/alsa.nix
   ./services/audio/fuppes.nix
   ./services/audio/mpd.nix
+  ./services/audio/mopidy.nix
   ./services/backup/almir.nix
   ./services/backup/bacula.nix
   ./services/backup/mysql-backup.nix
