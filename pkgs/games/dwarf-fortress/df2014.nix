@@ -4,11 +4,11 @@
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation rec {
-  name = "dwarf-fortress-0.40.04";
+  name = "dwarf-fortress-0.40.05";
 
   src = fetchurl {
-    url = "http://www.bay12games.com/dwarves/df_40_04_linux.tar.bz2";
-    sha256 = "0kzkq42mpih5lsv8bv98j8ls26a8sbb1amp8bnf04k63ai99b9zx";
+    url = "http://www.bay12games.com/dwarves/df_40_05_linux.tar.bz2";
+    sha256 = "1b9nd33yz5a945v9jyqii1k4s71i701m2d0h7fw6f5g9p6nvx43s";
   };
 
   phases = "unpackPhase patchPhase installPhase";
