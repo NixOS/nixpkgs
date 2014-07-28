@@ -21,8 +21,8 @@
   };
 
   ghc783Prefs = self : super : ghcHEADPrefs self super // {
-    cabalInstall_1_20_0_3 = super.cabalInstall_1_20_0_3.override { Cabal = self.Cabal_1_20_0_1; };
-    codex = super.codex.override { hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_20_0_1; }; };
+    cabalInstall_1_20_0_3 = super.cabalInstall_1_20_0_3.override { Cabal = self.Cabal_1_20_0_2; };
+    codex = super.codex.override { hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_20_0_2; }; };
     mtl = self.mtl_2_1_2;
   };
 
