@@ -313,6 +313,13 @@ in
       example = "xz";
     };
 
+    boot.initrd.supportedFilesystems = mkOption {
+      default = [ ];
+      example = [ "btrfs" ];
+      type = types.listOf types.string;
+      description = "Names of supported filesystem types in the initial ramdisk.";
+    };
+
     fileSystems = mkOption {
       options.neededForBoot = mkOption {
         default = false;
@@ -346,6 +353,10 @@ in
 
     # Prevent systemd from waiting for the /dev/root symlink.
     systemd.units."dev-root.device".text = "";
+
+    boot.initrd.supportedFilesystems =
+      map (fs: fs.fsType)
+        (filter (fs: fs.mountPoint == "/" || fs.neededForBoot) fileSystems);
 
   };
 }
