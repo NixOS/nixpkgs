@@ -248,6 +248,7 @@
       firebird = 127;
       znc = 128;
       polipo = 129;
+      docker = 130;
 
       # When adding a gid, make sure it doesn't match an existing uid. And don't use gids above 399!
 
