@@ -19,6 +19,6 @@ stdenv.mkDerivation {
   meta = { 
     description = "Graphical download manager";
     homepage = http://www.krasu.ru/soft/chuchelo/;
-    license = stdenv.lib.licenses.perl5;
+    license = "perl";
   };
 }
