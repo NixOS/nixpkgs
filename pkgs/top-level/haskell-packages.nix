@@ -692,6 +692,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   dyre = callPackage ../development/libraries/haskell/dyre {};
 
+  easyFile = callPackage ../development/libraries/haskell/easy-file {};
+
   editDistance = callPackage ../development/libraries/haskell/edit-distance {};
 
   editline_0_2_1_0 = callPackage ../development/libraries/haskell/editline/0.2.1.0.nix {};
