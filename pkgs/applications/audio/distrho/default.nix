@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, alsaLib, fftwSinglePrec, freetype, jack2
+{ stdenv, fetchgit, alsaLib, fftwSinglePrec, freetype, jackaudio
 , libxslt, lv2, pkgconfig, premake3, xlibs }:
 
 let
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    alsaLib fftwSinglePrec freetype jack2 pkgconfig premake3
+    alsaLib fftwSinglePrec freetype jackaudio pkgconfig premake3
     xlibs.libX11 xlibs.libXcomposite xlibs.libXcursor xlibs.libXext
     xlibs.libXinerama xlibs.libXrender
   ];

@@ -5,7 +5,7 @@
 assert firewireSupport -> ffado != null;
 
 stdenv.mkDerivation rec {
-  name = "jack2-${version}";
+  name = "jackaudio-${version}";
   version = "1.9.9.5";
 
   src = fetchurl {

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, qt4, boost, protobuf, libsndfile
 , speex, libopus, avahi, pkgconfig
 , jackSupport ? false
-, jack2 ? null
+, jackaudio ? null
 , speechdSupport ? false
 , speechd ? null
 }:
 
-assert jackSupport -> jack2 != null;
+assert jackSupport -> jackaudio != null;
 assert speechdSupport -> speechd != null;
 
 let
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 boost protobuf libsndfile speex
     libopus avahi pkgconfig ]
-    ++ (optional jackSupport jack2)
+    ++ (optional jackSupport jackaudio)
     ++ (optional speechdSupport speechd);
 
   installPhase = ''

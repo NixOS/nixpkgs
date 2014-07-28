@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, glib, jack2, libsndfile, pkgconfig
+{ stdenv, fetchurl, alsaLib, glib, jackaudio, libsndfile, pkgconfig
 , pulseaudio }:
 
 stdenv.mkDerivation  rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation  rec {
     "-framework CoreAudio";
 
   buildInputs = [ glib libsndfile pkgconfig ]
-    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ alsaLib pulseaudio jack2 ];
+    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ alsaLib pulseaudio jackaudio ];
 
   meta = with stdenv.lib; {
     description = "Real-time software synthesizer based on the SoundFont 2 specifications";

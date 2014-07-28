@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, pkgconfig
-, qt4, jack2
+, qt4, jackaudio
 }:
 
 let
@@ -22,5 +22,5 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ qt4 jack2 ];
+  buildInputs = [ qt4 jackaudio ];
 }
