@@ -38,7 +38,7 @@ rec {
     rm -rf "$out/LIB"
     cp -r Singular/LIB "$out"
     mkdir -p "$out/bin"
-    ln -s "$out"/*/Singular "$out/bin"
+    ln -s "$out/"*/Singular "$out/bin"
   '') ["minInit" "defEnsureDir"];
       
   meta = {
