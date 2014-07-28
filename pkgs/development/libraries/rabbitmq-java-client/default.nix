@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ant, jdk, python }:
+{ fetchurl, stdenv, ant, jdk, jre, python, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "rabbitmq-java-client-3.3.4";
@@ -8,21 +8,17 @@ stdenv.mkDerivation rec {
     sha256 = "03kspkgzzjsbq6f8yl2zj5m30qwgxv3l58hrbf6gcgxb5rpfk6sh";
   };
 
-  buildInputs = [ ant jdk python ];
+  buildInputs = [ ant jdk python makeWrapper ];
 
   buildPhase = "ant dist";
 
   installPhase = ''
-    mkdir -p $out/bin $out/lib
-    cp build/lib/*.jar lib/*.jar $out/lib/
+    mkdir -p $out/bin $out/share/java
+    cp build/lib/*.jar lib/*.jar $out/share/java
 
     # There is a script in the source archive, but ours is cleaner
-    cat > "$out/bin/PerfTest" <<EOF
-    #!${stdenv.shell}
-    java_exec_args="-Djava.awt.headless=true"
-    exec ${jdk.jre}/bin/java \$java_exec_args -classpath "$out/lib/*" com.rabbitmq.examples.PerfTest "\$@"
-    EOF
-    chmod a+x $out/bin/PerfTest
+    makeWrapper ${jre}/bin/java $out/bin/PerfTest \
+      --add-flags "-Djava.awt.headless=true -cp $out/share/java/\* com.rabbitmq.examples.PerfTest"
   '';
 
   meta = with stdenv.lib; {
