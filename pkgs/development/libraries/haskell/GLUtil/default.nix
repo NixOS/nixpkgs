@@ -1,11 +1,13 @@
-{ cabal, cpphs, JuicyPixels, linear, OpenGL, OpenGLRaw, vector }:
+{ cabal, cpphs, JuicyPixels, linear, OpenGL, OpenGLRaw
+, transformers, vector
+}:
 
 cabal.mkDerivation (self: {
   pname = "GLUtil";
-  version = "0.7.4";
-  sha256 = "0l1w0k3q5g22y90w5frljqh1v4jb7gjzb3scg79zp42pc9v3h4l5";
+  version = "0.7.5";
+  sha256 = "1rbnq1nrs2b06ph60lh0yvygk82vvnm8c4d0anhjrqw9i58nd3iz";
   buildDepends = [
-    cpphs JuicyPixels linear OpenGL OpenGLRaw vector
+    cpphs JuicyPixels linear OpenGL OpenGLRaw transformers vector
   ];
   buildTools = [ cpphs ];
   meta = {

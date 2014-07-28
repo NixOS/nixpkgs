@@ -72,12 +72,14 @@ let
 
   # Unpack Mediawiki and put the config file in its root directory.
   mediawikiRoot = pkgs.stdenv.mkDerivation rec {
-    name= "mediawiki-1.20.8";
+    name= "mediawiki-1.23.1";
 
     src = pkgs.fetchurl {
-      url = "http://download.wikimedia.org/mediawiki/1.20/${name}.tar.gz";
-      sha256 = "0yfmh5vnfbgpvicfqh7nh4hwdk4qbc6gfniv02vchkg5al0nn7ag";
+      url = "http://download.wikimedia.org/mediawiki/1.23/${name}.tar.gz";
+      sha256 = "07z5j8d988cdg4ml4n0vs9fwmj0p594ibbqdid16faxwqm52dkhl";
     };
+
+    patches = [ ./mediawiki-postgresql-fixes.patch ];
 
     skins = config.skins;
 
@@ -93,9 +95,10 @@ let
         ensureDir $out
         cp -r * $out
         cp ${mediawikiConfig} $out/LocalSettings.php
-        sed -i 's|/bin/bash|${pkgs.stdenv.shell}|' \
-          $out/maintenance/fuzz-tester.php \
-          $out/bin/ulimit.sh \
+        sed -i \
+        -e 's|/bin/bash|${pkgs.bash}/bin/bash|g' \
+        -e 's|/usr/bin/timeout|${pkgs.coreutils}/bin/timeout|g' \
+          $out/includes/limit.sh \
           $out/includes/GlobalFunctions.php
       '';
   };

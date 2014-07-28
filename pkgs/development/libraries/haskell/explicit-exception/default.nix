@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "explicit-exception";
-  version = "0.1.7.2";
-  sha256 = "0zncj57mpngszl7jz3khhd4dajzis7aag0ad62hc8rkrv2j8f5q4";
+  version = "0.1.7.3";
+  sha256 = "0f1p1llz6z4ag1wnf57mgm861cbw7va0g0m8klp6f6pnirdhlwz1";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ transformers ];

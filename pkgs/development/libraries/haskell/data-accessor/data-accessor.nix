@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "data-accessor";
-  version = "0.2.2.5";
-  sha256 = "0z63fv41cnpk3h404gprk2f5jl7rrpyv97xmsgac9zgdm5zkkhm6";
+  version = "0.2.2.6";
+  sha256 = "0668qgllmp2911ppsb0g9z95nq2x0h2cvzyyjlb6iwhnjzyyg7gf";
   buildDepends = [ transformers ];
   jailbreak = true;
   meta = {

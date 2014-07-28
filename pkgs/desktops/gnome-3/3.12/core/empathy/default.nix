@@ -19,9 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard
-                            gnome3.gnome_icon_theme hicolor_icon_theme
-                            gnome_online_accounts shared_mime_info
-                            gnome3.gnome_icon_theme_symbolic ];
+                            gnome_online_accounts shared_mime_info ];
   propagatedBuildInputs = [ folks telepathy_logger evolution_data_server
                             telepathy_mission_control ];
   buildInputs = [ pkgconfig gtk3 glib webkitgtk intltool itstool
@@ -31,6 +29,7 @@ stdenv.mkDerivation rec {
                   gcr libsecret pulseaudio gnome3.yelp_xsl gdk_pixbuf
                   libnotify clutter libsoup gnutls libgee p11_kit
                   libcanberra_gtk3 telepathy_farstream farstream
+                  gnome3.gnome_icon_theme hicolor_icon_theme gnome3.gnome_icon_theme_symbolic
                   gnome3.gsettings_desktop_schemas file libtool librsvg ];
 
   NIX_CFLAGS_COMPILE = [ "-I${dbus_glib}/include/dbus-1.0"
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
     for f in $out/bin/* $out/libexec/*; do
       wrapProgram $f \
         --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.gnome_themes_standard}/:${gnome3.gnome_themes_standard}/share:${hicolor_icon_theme}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
+        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.gnome_themes_standard}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
     done
     rm $out/share/icons/hicolor/icon-theme.cache
   '';

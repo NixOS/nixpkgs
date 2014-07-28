@@ -137,7 +137,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   adjunctions = callPackage ../development/libraries/haskell/adjunctions {};
 
-  aes = callPackage ../development/libraries/haskell/aes {};
+  AES = callPackage ../development/libraries/haskell/AES {};
 
   aeson_0_7_0_4 = callPackage ../development/libraries/haskell/aeson/0.7.0.4.nix { blazeBuilder = null; };
   aeson_0_7_0_6 = callPackage ../development/libraries/haskell/aeson/0.7.0.6.nix { blazeBuilder = null; };
@@ -873,6 +873,12 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   gitit = callPackage ../development/libraries/haskell/gitit {};
 
+  gitlib = callPackage ../development/libraries/haskell/gitlib {};
+
+  gitlibLibgit2 = callPackage ../development/libraries/haskell/gitlib-libgit2 {};
+
+  gitlibTest = callPackage ../development/libraries/haskell/gitlib-test {};
+
   glade = callPackage ../development/libraries/haskell/glade {
     inherit (pkgs.gnome) libglade;
     gtkC = pkgs.gtk;
@@ -940,10 +946,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     libc = pkgs.stdenv.gcc.libc;
   };
 
-  gtkglext = callPackage ../development/libraries/haskell/gtkglext {};
+  gtkglext = callPackage ../development/libraries/haskell/gtkglext { gtkglext = pkgs.gnome2.gtkglext; };
 
   gtk2hsBuildtools = callPackage ../development/libraries/haskell/gtk2hs-buildtools {};
-  gtk2hsC2hs = self.gtk2hsBuildtools;
 
   gtksourceview2 = callPackage ../development/libraries/haskell/gtksourceview2 {
     inherit (pkgs.gnome) gtksourceview;
@@ -1015,6 +1020,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   haskore = callPackage ../development/libraries/haskell/haskore {};
 
   hastache = callPackage ../development/libraries/haskell/hastache {};
+
+  hasteCompiler = callPackage ../development/libraries/haskell/haste-compiler {};
+
+  hastePerch = callPackage ../development/libraries/haskell/haste-perch {};
 
   hcltest = callPackage ../development/libraries/haskell/hcltest {};
 
@@ -1108,6 +1117,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hledgerIrr = callPackage ../applications/office/hledger-irr {};
   hledgerWeb = callPackage ../development/libraries/haskell/hledger-web {};
 
+  hlibgit2 = callPackage ../development/libraries/haskell/hlibgit2 {};
+
   HList = callPackage ../development/libraries/haskell/HList {};
 
   hmatrix = callPackage ../development/libraries/haskell/hmatrix {};
@@ -1175,6 +1186,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hsloggerTemplate = callPackage ../development/libraries/haskell/hslogger-template {};
 
   hspec = callPackage ../development/libraries/haskell/hspec {};
+
+  hspecAttoparsec = callPackage ../development/libraries/haskell/hspec-attoparsec {};
 
   hspecWai = callPackage ../development/libraries/haskell/hspec-wai {};
 
@@ -1926,6 +1939,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   resourcePool = callPackage ../development/libraries/haskell/resource-pool {};
 
+  resourcePoolCatchio = callPackage ../development/libraries/haskell/resource-pool-catchio {};
+
   resourcet = callPackage ../development/libraries/haskell/resourcet {};
 
   retry = callPackage ../development/libraries/haskell/retry {};
@@ -2006,6 +2021,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   snapletAcidState = callPackage ../development/libraries/haskell/snaplet-acid-state {};
 
+  snapletPostgresqlSimple = callPackage ../development/libraries/haskell/snaplet-postgresql-simple {};
+
   snapletRedis = callPackage ../development/libraries/haskell/snaplet-redis {};
 
   snapletStripe = callPackage ../development/libraries/haskell/snaplet-stripe {};
@@ -2021,6 +2038,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   snapLoaderStatic = callPackage ../development/libraries/haskell/snap/loader-static.nix {};
 
   snapServer = callPackage ../development/libraries/haskell/snap/server.nix {};
+
+  snapWebRoutes = callPackage ../development/libraries/haskell/snap-web-routes {};
 
   snowball = callPackage ../development/libraries/haskell/snowball {};
 

@@ -1,4 +1,7 @@
 { stdenv, fetchurl, makeWrapper, jre, utillinux }:
+
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
   name = "elasticsearch-1.2.1";
 
@@ -9,7 +12,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./es-home.patch ];
 
-  buildInputs = [ makeWrapper jre utillinux ];
+  buildInputs = [ makeWrapper jre ] ++ optional (!stdenv.isDarwin) utillinux;
 
   installPhase = ''
     mkdir -p $out
@@ -21,7 +24,7 @@ stdenv.mkDerivation rec {
     # set ES_CLASSPATH and JAVA_HOME
     wrapProgram $out/bin/elasticsearch \
       --prefix ES_CLASSPATH : "$out/lib/${name}.jar":"$out/lib/*":"$out/lib/sigar/*" \
-      --prefix PATH : "${utillinux}/bin/" \
+      ${optionalString (!stdenv.isDarwin) ''--prefix PATH : "${utillinux}/bin/"''} \
       --set JAVA_HOME "${jre}"
     wrapProgram $out/bin/elasticsearch-plugin \
       --prefix ES_CLASSPATH : "$out/lib/${name}.jar":"$out/lib/*":"$out/lib/sigar/*" --set JAVA_HOME "${jre}"

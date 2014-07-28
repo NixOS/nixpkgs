@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "dlist";
-  version = "0.7.0.1";
-  sha256 = "197k608ja69xc531r7h3gmy1mf6dsk27b3mkpgp4zdw46z6lcb5l";
+  version = "0.7.1";
+  sha256 = "13ka30bn742ldacfgj2lhxvhwf769d0ziy2358vmd5xaq6fn1xfr";
   buildDepends = [ deepseq ];
   testDepends = [ Cabal QuickCheck ];
   meta = {

@@ -18,7 +18,7 @@ cabal.mkDerivation (self: {
   extraLibraries = [ libXrandr wirelesstools ];
   configureFlags = "-fall_extensions";
   meta = {
-    homepage = "http://projects.haskell.org/xmobar/";
+    homepage = "http://xmobar.org";
     description = "A Minimalistic Text Based Status Bar";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
