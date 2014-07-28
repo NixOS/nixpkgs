@@ -40,10 +40,15 @@ in with stdenv; mkDerivation rec {
     ++ edf ssl "WITH_OPENSSL"
     ++ edf previews "WITH_WEBKIT"  ;
 
-  preFixup = ''
-    wrapProgram "$out/bin/quasselclient" \
-      --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
-  '';
+  preFixup =
+    lib.optionalString client ''
+        wrapProgram "$out/bin/quasselclient" \
+          --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
+    '' +
+    lib.optionalString monolithic ''
+        wrapProgram "$out/bin/quassel" \
+          --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
+    '';
 
   meta = with stdenv.lib; {
     homepage = http://quassel-irc.org/;
