@@ -1,4 +1,4 @@
-{ kde, kdelibs, pkgconfig, libraw, lcms2 }:
+{ stdenv, kde, kdelibs, pkgconfig, libraw, lcms2 }:
 
 kde {
 

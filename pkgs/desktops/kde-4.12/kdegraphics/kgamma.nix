@@ -1,4 +1,4 @@
-{ kde, kdelibs, libXxf86vm }:
+{ stdenv, kde, kdelibs, libXxf86vm }:
 
 kde {
   buildInputs = [ kdelibs libXxf86vm ];

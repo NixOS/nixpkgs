@@ -1,4 +1,4 @@
-{ kde, kdelibs, libkipi }:
+{ stdenv, kde, kdelibs, libkipi }:
 
 kde {
   buildInputs = [ kdelibs libkipi ];

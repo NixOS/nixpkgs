@@ -1,4 +1,4 @@
-{ kde, kdelibs, htmlTidy, kactivities
+{ stdenv, kde, kdelibs, htmlTidy, kactivities
 , nepomuk_core, nepomuk_widgets, libXt }:
 
 kde {

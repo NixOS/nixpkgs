@@ -1,4 +1,4 @@
-{ kde, kdelibs, nepomuk_core }:
+{ stdenv, kde, kdelibs, nepomuk_core }:
 
 kde {
 

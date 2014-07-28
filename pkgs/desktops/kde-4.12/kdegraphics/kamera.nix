@@ -1,4 +1,4 @@
-{ kde, kdelibs, libgphoto2 }:
+{ stdenv, kde, kdelibs, libgphoto2 }:
 
 kde {
   buildInputs = [ kdelibs libgphoto2 ];

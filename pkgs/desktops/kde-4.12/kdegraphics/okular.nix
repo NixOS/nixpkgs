@@ -1,4 +1,4 @@
-{ chmlib, djvulibre, ebook_tools, kde, kdelibs, libspectre, popplerQt4, qca2
+{ stdenv, chmlib, djvulibre, ebook_tools, kde, kdelibs, libspectre, popplerQt4, qca2
 , qimageblitz, libtiff, kactivities, pkgconfig, libkexiv2 }:
 
 kde {

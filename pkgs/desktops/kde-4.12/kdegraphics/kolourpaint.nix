@@ -1,4 +1,4 @@
-{ kde, kdelibs, qimageblitz }:
+{ stdenv, kde, kdelibs, qimageblitz }:
 
 kde {
   buildInputs = [ kdelibs qimageblitz ];

@@ -1,4 +1,4 @@
-{ kde, kdelibs, okular }:
+{ stdenv, kde, kdelibs, okular }:
 
 kde {
   buildInputs = [ kdelibs okular ];

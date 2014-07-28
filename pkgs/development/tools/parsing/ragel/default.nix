@@ -1,4 +1,4 @@
-{composableDerivation, fetchurl, transfig, texLive}:
+{stdenv, composableDerivation, fetchurl, transfig, texLive}:
 
 let
   version = "6.3";

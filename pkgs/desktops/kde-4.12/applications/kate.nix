@@ -1,4 +1,4 @@
-{ kde, kdelibs, kactivities, qjson, pyqt4, sip, python, pykde4}:
+{ stdenv, kde, kdelibs, kactivities, qjson, pyqt4, sip, python, pykde4}:
 
 kde {
 

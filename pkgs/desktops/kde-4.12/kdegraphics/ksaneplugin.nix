@@ -1,4 +1,4 @@
-{ kde, kdelibs, libksane }:
+{ stdenv, kde, kdelibs, libksane }:
 
 kde {
   buildInputs = [ kdelibs libksane ];

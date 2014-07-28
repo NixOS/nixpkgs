@@ -1,4 +1,4 @@
-{ kde, qt4, cmake }:
+{ stdenv, kde, qt4, cmake }:
 
 kde {
   buildInputs = [ qt4 ];

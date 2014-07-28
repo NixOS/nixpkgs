@@ -1,4 +1,4 @@
-{ kde, kdelibs, kde_baseapps }:
+{ stdenv, kde, kdelibs, kde_baseapps }:
 
 kde {
 

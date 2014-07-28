@@ -1,4 +1,4 @@
-{ kde, qt4, cmake, phonon, qimageblitz, smokegen }:
+{ stdenv, kde, qt4, cmake, phonon, qimageblitz, smokegen }:
 
 kde {
 

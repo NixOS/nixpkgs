@@ -1,4 +1,4 @@
-{ kde, kdelibs, exiv2 }:
+{ stdenv, kde, kdelibs, exiv2 }:
 
 kde {
   buildInputs = [ kdelibs exiv2 ];

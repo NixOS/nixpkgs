@@ -1,4 +1,4 @@
-{ kde, kdelibs, libtiff }:
+{ stdenv, kde, kdelibs, libtiff }:
 
 kde {
   buildInputs = [ kdelibs libtiff ];

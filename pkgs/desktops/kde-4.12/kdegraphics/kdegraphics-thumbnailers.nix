@@ -1,4 +1,4 @@
-{ kde, kdelibs, libkexiv2, libkdcraw, pkgconfig }:
+{ stdenv, kde, kdelibs, libkexiv2, libkdcraw, pkgconfig }:
 
 kde {
 
