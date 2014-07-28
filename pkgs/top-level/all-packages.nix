@@ -9178,6 +9178,8 @@ let
 
   mopidy-spotify = callPackage ../applications/audio/mopidy-spotify { };
 
+  mopidy-moped = callPackage ../applications/audio/mopidy-moped { };
+
   mozilla = callPackage ../applications/networking/browsers/mozilla {
     inherit (gnome) libIDL;
   };
