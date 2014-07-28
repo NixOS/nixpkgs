@@ -50,6 +50,11 @@ with lib;
     ''
       ACTION=="add|change", SUBSYSTEM=="input", ATTR{name}=="TPPS/2 IBM TrackPoint", ATTR{device/speed}="${toString config.hardware.trackpoint.speed}", ATTR{device/sensitivity}="${toString config.hardware.trackpoint.sensitivity}"
     '';
+
+    system.activationScripts.trackpoint =
+      ''
+        ${config.systemd.package}/bin/udevadm trigger --attr-match=name="TPPS/2 IBM TrackPoint"
+      '';
   };
 
 }
