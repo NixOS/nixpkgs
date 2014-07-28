@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "equivalence";
-  version = "0.2.3";
-  sha256 = "0dd986y0sn89fparyz6kz9yhzysbqjcp8s99r81ihghg7s9yc743";
+  version = "0.2.5";
+  sha256 = "014r9v81r7nj5pynfk3wa4lm4hk04123fgxkhb9a945wi6d9m5h3";
   buildDepends = [ mtl STMonadTrans ];
   testDepends = [
     mtl QuickCheck STMonadTrans testFramework testFrameworkQuickcheck2
