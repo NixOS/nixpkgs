@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoconf, libtool, automake, libsodium, ncurses, libopus
-, libvpx, libconfig, pkgconfig }:
+, libvpx, check, libconfig, pkgconfig }:
 
 let
   version = "e1158be5a6";
@@ -14,6 +14,17 @@ stdenv.mkDerivation rec {
     sha256 = "1rsh1pbwvngsx5slmd6608b1zqs3jvq70bjr9zyziap9vxka3z1v";
   };
 
+  NIX_LDFLAGS = "-lgcc_s";
+
+  postPatch = ''
+    # within Nix chroot builds, localhost is unresolvable
+    sed -i -e '/DEFTESTCASE(addr_resolv_localhost)/d' \
+      auto_tests/network_test.c
+    # takes WAAAY too long (~10 minutes) and would timeout
+    sed -i -e '/DEFTESTCASE[^(]*(many_clients\>/d' \
+      auto_tests/tox_test.c
+  '';
+
   preConfigure = ''
     autoreconf -i
   '';
@@ -26,7 +37,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     autoconf libtool automake libsodium ncurses libopus
-    libvpx libconfig pkgconfig
+    libvpx check libconfig pkgconfig
   ];
 
   doCheck = true;
