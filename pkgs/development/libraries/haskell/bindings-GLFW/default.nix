@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "bindings-GLFW";
-  version = "3.0.3.2";
-  sha256 = "1w4y2ha5x678fiyan79jd59mjrkf4q25v8049sj20fbmabgdqla9";
+  version = "3.0.3.3";
+  sha256 = "0w6vqshlk0c4k4q81xw7kg4j62h3wpccpy8qbiq5ks69w7z13fy4";
   buildDepends = [ bindingsDSL ];
   testDepends = [ HUnit testFramework testFrameworkHunit ];
   extraLibraries = [
