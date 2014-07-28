@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.cl.cam.ac.uk/~mgk25/otpw.html;
     description = "A one-time password login package";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

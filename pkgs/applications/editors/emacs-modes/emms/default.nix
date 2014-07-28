@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/emms/;
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.unix;

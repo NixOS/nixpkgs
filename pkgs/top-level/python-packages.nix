@@ -474,7 +474,7 @@ rec {
     meta = {
       homepage = http://code.google.com/p/argparse/;
 
-      license = "Apache License 2.0";
+      license = stdenv.lib.licenses.asl20;
 
       description = "argparse: Python command line parser";
 
@@ -577,7 +577,7 @@ rec {
 
     meta = {
       homepage = https://github.com/botocore/bcdoc;
-      license = "Apache License 2.0";
+      license = stdenv.lib.licenses.asl20;
       description = "ReST document generation tools for botocore";
     };
   };
@@ -1582,7 +1582,7 @@ rec {
 
       homepage = http://code.google.com/p/cssutils/;
 
-      license = "LGPLv3+";
+      license = stdenv.lib.licenses.lgpl3Plus;
     };
   });
 
@@ -2785,7 +2785,7 @@ rec {
     meta = {
       homepage = http://freedesktop.org/wiki/Software/pyxdg;
       description = "Contains implementations of freedesktop.org standards";
-      license = "LGPLv2";
+      license = stdenv.lib.licenses.lgpl2;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
@@ -2801,7 +2801,7 @@ rec {
     meta = {
       homepage = https://github.com/erikrose/chardet;
       description = "Universal encoding detector";
-      license = "LGPLv2";
+      license = stdenv.lib.licenses.lgpl2;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
@@ -3288,7 +3288,7 @@ rec {
       '';
 
       # See http://foolscap.lothar.com/trac/browser/LICENSE.
-      license = "MIT";
+      license = stdenv.lib.licenses.mit;
 
       maintainers = [ ];
     };
@@ -4134,7 +4134,7 @@ rec {
     meta = {
       description = "Super-fast templating language.";
       homepage = http://www.makotemplates.org;
-      license = "MIT";
+      license = stdenv.lib.licenses.mit;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
@@ -4386,7 +4386,7 @@ rec {
 
       homepage = http://moinmo.in/;
 
-      license = "GPLv2+";
+      license = stdenv.lib.licenses.gpl2Plus;
     };
   });
 
@@ -4506,7 +4506,7 @@ rec {
     meta = {
       description = "Python multimedia tagging library";
       homepage = http://code.google.com/p/mutagen;
-      license = "LGPLv2";
+      license = stdenv.lib.licenses.lgpl2;
     };
   });
 
@@ -4525,7 +4525,7 @@ rec {
     meta = {
       description = "Utilities for use with console mail clients, like mutt";
       homepage = http://www.blacktrash.org/hg/muttils;
-      license = "GPLv2+";
+      license = stdenv.lib.licenses.gpl2Plus;
     };
   });
 
@@ -5288,7 +5288,7 @@ rec {
     meta = {
       homepage = "http://www.noah.org/wiki/Pexpect";
       description = "Automate interactive console applications such as ssh, ftp, etc.";
-      license = "MIT";
+      license = stdenv.lib.licenses.mit;
 
       longDescription = ''
         Pexpect is similar to the Don Libes "Expect" system, but Pexpect
@@ -5715,7 +5715,7 @@ rec {
 
       description = "Python wrappers for the Crypto++ library";
 
-      license = "GPLv2+";
+      license = stdenv.lib.licenses.gpl2Plus;
 
       maintainers = [ ];
       platforms = stdenv.lib.platforms.linux;
@@ -6471,7 +6471,7 @@ rec {
 
       homepage = http://allmydata.org/trac/pyutil;
 
-      license = "GPLv2+";
+      license = stdenv.lib.licenses.gpl2Plus;
     };
   });
 
@@ -6920,7 +6920,7 @@ rec {
 
     meta = {
       homepage = http://stuvel.eu/rsa;
-      license = "Apache License 2.0";
+      license = stdenv.lib.licenses.asl20;
       description = "A pure-Python RSA implementation";
     };
   };
@@ -7108,7 +7108,7 @@ rec {
 
       homepage = http://code.google.com/p/simplejson/;
 
-      license = "MIT";
+      license = stdenv.lib.licenses.mit;
     };
   });
 
@@ -7790,7 +7790,7 @@ rec {
     meta = {
       homepage = http://taskcoach.org/;
       description = "Todo manager to keep track of personal tasks and todo lists";
-      license = "GPLv3+";
+      license = stdenv.lib.licenses.gpl3Plus;
     };
   };
 
@@ -8075,7 +8075,7 @@ rec {
 
     meta = {
       homepage = "urlgrabber.baseurl.org";
-      license = "LGPLv2+";
+      license = stdenv.lib.licenses.lgpl2Plus;
       description = "Python module for downloading files";
       maintainers = [ stdenv.lib.maintainers.qknight ];
     };
@@ -8413,7 +8413,7 @@ rec {
 
       homepage = http://python-xlib.sourceforge.net/;
 
-      license = "GPLv2+";
+      license = stdenv.lib.licenses.gpl2Plus;
     };
   });
 
@@ -8523,7 +8523,7 @@ rec {
         and Haskell API.
       '';
 
-      license = "GPLv2+";
+      license = stdenv.lib.licenses.gpl2Plus;
     };
   });
 
@@ -9604,7 +9604,7 @@ rec {
     meta = {
       description = "Cross-platform system power status information";
       homepage = https://github.com/Kentzo/Power;
-      license = "mit";
+      license = stdenv.lib.licenses.mit;
     };
   };
 

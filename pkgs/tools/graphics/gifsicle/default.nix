@@ -17,6 +17,6 @@ stdenv.mkDerivation {
   meta = { 
     description = "Command-line tool for creating, editing, and getting information about GIF images and animations";
     homepage = http://www.lcdf.org/gifsicle/;
-    license = "GPL2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

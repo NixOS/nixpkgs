@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Network monitoring module for atop";
     homepage = http://www.atoptool.nl/downloadnetatop.php;
-    license = "GPL2";
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [viric];
   };

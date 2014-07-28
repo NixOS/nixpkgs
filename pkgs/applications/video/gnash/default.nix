@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
       supports most SWF v7 features and some SWF v8 and v9.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.gnu;

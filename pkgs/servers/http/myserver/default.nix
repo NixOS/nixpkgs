@@ -35,7 +35,7 @@ let version = "0.11"; in
 
       homepage = http://www.gnu.org/software/myserver/;
 
-      license = "GPLv3+";
+      license = stdenv.lib.licenses.gpl3Plus;
 
       maintainers = [ ];
 

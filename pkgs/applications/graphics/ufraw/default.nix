@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
          the camera's tone curves.
       '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;  # needs GTK+

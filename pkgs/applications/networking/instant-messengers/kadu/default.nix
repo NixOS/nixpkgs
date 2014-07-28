@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   meta = {
     description = "An instant-messenger client for the gadu-gadu network (most popular polish IM network)";
     homepage = http://www.kadu.net/w/English:Main_Page;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.piotr ];
   };

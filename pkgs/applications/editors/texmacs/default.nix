@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
          collaborative authoring are planned for later.
       '';
     homepage = http://texmacs.org/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.roconnor ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };

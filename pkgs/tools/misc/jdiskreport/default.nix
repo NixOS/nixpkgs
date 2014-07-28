@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.jgoodies.com/freeware/jdiskreport/;
     description = "A graphical utility to visualize disk usage";
-    license = "unfree-redistributable";
+    license = "unfree-redistributable"; #TODO freedist, libs under BSD-3
   };
 }

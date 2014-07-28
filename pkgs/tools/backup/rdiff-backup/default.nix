@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   meta = {
     description = "backup system trying to combine best a mirror and an incremental backup system";
     homepage = http://rdiff-backup.nongnu.org/;
-    license = "GPL-2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };
 }

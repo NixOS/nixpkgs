@@ -16,6 +16,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://tunctl.sourceforge.net/;
     description = "Utility to set up and maintain TUN/TAP network interfaces";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Client library for MPD (music player daemon)";
     homepage = http://mpd.wikia.com/wiki/Music_Player_Daemon_Wiki;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     platforms = with stdenv.lib.platforms; unix;
     maintainers = [ stdenv.lib.maintainers.mornfall ];
   };

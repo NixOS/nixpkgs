@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Reference CLI for Tox";
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [ viric ];
     platforms = stdenv.lib.platforms.all;
   };

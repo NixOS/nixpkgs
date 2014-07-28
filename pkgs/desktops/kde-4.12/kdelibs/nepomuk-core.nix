@@ -15,6 +15,6 @@ kde {
 
   meta = {
     description = "NEPOMUK core";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

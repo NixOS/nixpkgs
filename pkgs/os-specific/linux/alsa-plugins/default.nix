@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = { 
     description = "Various plugins for ALSA";
     homepage = http://alsa-project.org/;
-    license = "GPL2.1";
+    license = stdenv.lib.licenses.lgpl21;
     maintainers = [lib.maintainers.marcweber];
     platforms = lib.platforms.linux;
   };

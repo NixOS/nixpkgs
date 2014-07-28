@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.freedesktop.org/wiki/Software/vaapi;
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
     description = "VAAPI library: Video Acceleration API";
   };
 }

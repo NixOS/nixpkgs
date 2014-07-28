@@ -12,6 +12,6 @@ kde {
 
   meta = {
     description = "Okular, the KDE document viewer";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

@@ -67,7 +67,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Hydra, the Nix-based continuous integration system";
     homepage = http://nixos.org/hydra/;
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.linux;
   };
 }

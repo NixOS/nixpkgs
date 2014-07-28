@@ -21,6 +21,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Download utility that can fetch files from several sources simultaneously";
     homepage = http://atterer.net/jigdo/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

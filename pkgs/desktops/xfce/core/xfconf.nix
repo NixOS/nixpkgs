@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://docs.xfce.org/xfce/xfconf/start;
     description = "Simple client-server configuration storage and query system for Xfce";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

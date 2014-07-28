@@ -11,6 +11,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://rzip.samba.org/;
     description = "The RZIP compression program";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

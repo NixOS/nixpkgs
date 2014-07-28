@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://cunit.sourceforge.net/;
 
-    license = "lgpl";
+    license = stdenv.lib.licenses.lgpl2;
   };
 }
-

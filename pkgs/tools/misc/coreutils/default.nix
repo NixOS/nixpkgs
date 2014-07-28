@@ -75,7 +75,7 @@ let
         operating system.
       '';
 
-      license = "GPLv3+";
+      license = stdenv.lib.licenses.gpl3Plus;
 
       maintainers = [ ];
     };

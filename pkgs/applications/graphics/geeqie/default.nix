@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
         initially based on GQview.
       '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     homepage = http://geeqie.sourceforge.net;
 

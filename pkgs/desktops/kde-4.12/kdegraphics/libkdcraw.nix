@@ -8,6 +8,6 @@ kde {
 
   meta = {
     description = "Library for decoding RAW images";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

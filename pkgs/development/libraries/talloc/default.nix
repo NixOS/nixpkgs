@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "talloc is a hierarchical pool based memory allocator with destructors";
     homepage = http://tdb.samba.org/;
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.all;
   };
 }

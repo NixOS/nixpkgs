@@ -5,6 +5,6 @@ kde {
 
   meta = {
     description = "KDE camera interface library";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }
