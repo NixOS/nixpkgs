@@ -9,8 +9,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vty";
-  version = "5.1.1";
-  sha256 = "043vrazb8w6ljq14i390cwcmavgmbnjbs6sl6w0yx8cwb4f7djr5";
+  version = "5.1.3";
+  sha256 = "0li20ypydal2xab5hpcwi2az78j2hsdwfx3cv7hinsc55w08wchj";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
