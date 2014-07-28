@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, autoconf, libtool, automake, libsodium, ncurses
-, libconfig, pkgconfig }:
+{ stdenv, fetchurl, autoconf, libtool, automake, libsodium, ncurses, libopus
+, libvpx, libconfig, pkgconfig }:
 
 let
   version = "e1158be5a6";
@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    autoconf libtool automake libsodium ncurses libconfig pkgconfig
+    autoconf libtool automake libsodium ncurses libopus
+    libvpx libconfig pkgconfig
   ];
 
   doCheck = true;
