@@ -22,6 +22,20 @@ stdenv.mkDerivation {
 
   configureFlags = "--with-ssl=${openssl}";
 
+  postInstall = let
+    manpages = fetchurl {
+      url = "http://www.erlang.org/download/otp_doc_man_R${version}.tar.gz";
+      sha256 = "1nh7l7wilyyaxvlwkjxgm3cq7wpd90sk6vxhgpvg7hwai8g52545";
+    };
+  in ''
+    tar xf "${manpages}" -C "$out/lib/erlang"
+    for i in "$out"/lib/erlang/man/man[0-9]/*.[0-9]; do
+      prefix="''${i%/*}"
+      ensureDir "$out/share/man/''${prefix##*/}"
+      ln -s "$i" "$out/share/man/''${prefix##*/}/''${i##*/}erl"
+    done
+  '';
+
   # Some erlang bin/ scripts run sed and awk
   postFixup = ''
     wrapProgram $out/lib/erlang/bin/erl --prefix PATH ":" "${gnused}/bin/"
