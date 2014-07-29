@@ -8,7 +8,7 @@ assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 let
   version = if stdenv.system == "i686-linux"
     then "0.9.4.183.g644e24e.428"
-    else "0.9.10.17.g4129e1c.78";
+    else "0.9.11.27.g2b1a638.81";
 
   qt4webkit =
     if stdenv.system == "i686-linux" then
@@ -73,7 +73,7 @@ stdenv.mkDerivation {
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}-1_amd64.deb";
-        sha256 = "1a4vn2ij3nghnc0fq3nsyb95gwhaw4zabdq6jd52hxz8iv31pn1z";
+        sha256 = "0yfljiw01kssj3qaz8m0ppgrpjs6xrhzlr2wccp64bsnmin7g4sg";
       }
     else throw "Spotify not supported on this platform.";
 
