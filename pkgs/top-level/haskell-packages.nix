@@ -225,6 +225,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   baseUnicodeSymbols = callPackage ../development/libraries/haskell/base-unicode-symbols {};
 
+  basePrelude = callPackage ../development/libraries/haskell/base-prelude {};
+
   basicPrelude = callPackage ../development/libraries/haskell/basic-prelude {};
 
   benchpress = callPackage ../development/libraries/haskell/benchpress {};
