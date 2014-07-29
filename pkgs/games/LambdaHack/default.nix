@@ -22,7 +22,7 @@ cabal.mkDerivation (self: {
     hsini keys miniutter mtl prettyShow random stm text transformers
     unorderedContainers vector vectorBinaryInstances zlib
   ];
-  jailbreak = true;
+  doCheck = false;
   meta = {
     homepage = "http://github.com/LambdaHack/LambdaHack";
     description = "A roguelike game engine in early development";
