@@ -612,6 +612,8 @@ let
 
   cv = callPackage ../tools/misc/cv { };
 
+  crawl = callPackage ../games/crawl { lua = lua5; };
+
   ditaa = callPackage ../tools/graphics/ditaa { };
 
   direnv = callPackage ../tools/misc/direnv { };
