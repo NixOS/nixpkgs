@@ -2437,6 +2437,8 @@ let
 
   uptimed = callPackage ../tools/system/uptimed { };
 
+  urlwatch = callPackage ../tools/networking/urlwatch { };
+
   varnish = callPackage ../servers/varnish { };
 
   varnish2 = callPackage ../servers/varnish/2.1.nix { };
