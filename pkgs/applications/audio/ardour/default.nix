@@ -47,6 +47,21 @@ stdenv.mkDerivation rec {
     mkdir -pv $out/gtk2/engines
     cp build/libs/clearlooks-newer/libclearlooks.so $out/gtk2/engines/
     wrapProgram $out/bin/ardour3 --prefix GTK_PATH : $out/gtk2
+
+    # Install desktop file
+    mkdir -p "$out/share/applications"
+    cat > "$out/share/applications/ardour.desktop" << EOF
+    [Desktop Entry]
+    Name=Ardour 3
+    GenericName=Digital Audio Workstation
+    Comment=Multitrack harddisk recorder
+    Exec=$out/bin/ardour3
+    Icon=$out/share/ardour3/icons/ardour_icon_256px.png
+    Terminal=false
+    Type=Application
+    X-MultipleArgs=false
+    Categories=GTK;Audio;AudioVideoEditing;AudioVideo;Video;
+    EOF
   '';
 
   meta = with stdenv.lib; {
