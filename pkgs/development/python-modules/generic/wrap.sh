@@ -28,7 +28,7 @@ wrapPythonProgramsIn() {
                 echo "wrapping \`$i'..."
                 sed -i "$i" -re '1 {
                     /^#!/!b; :r
-                    /\\$/{n;n;n;b r}
+                    /\\$/{N;b r}
                     /__future__|^ *(#.*)?$/{n;b r}
                     /^ *[^# ]/i import sys; sys.argv[0] = '"'$(basename "$i")'"'
                 }'
