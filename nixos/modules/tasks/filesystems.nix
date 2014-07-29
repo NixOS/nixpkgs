@@ -202,6 +202,48 @@ in
 
       in listToAttrs (map formatDevice (filter (fs: fs.autoFormat) fileSystems));
 
+    lib.fileSystems = let
+      # The initrd only has to mount / or any FS marked as necessary for
+      # booting (such as the FS containing /nix/store, or an FS needed for
+      # mounting /, like / on a loopback).
+      fsList = filter (fs: fs.neededForBoot || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ]) (attrValues config.fileSystems);
+
+      # Returns the file system to be mounted in order to access the given path.
+      # Heuristic: we find the file system with the mount point having the longest prefix for the given path.
+      # If the given path has prefix /dev/* then it returns null.
+      # Example: for mount points /, /a, /a/b, it returns /a/b in order to access the path /a/b/c.
+      requiredForPath = fileSystems: path:
+        if path == null || hasPrefix "/dev/" path
+          then null
+          else fold (fs: best: if (hasPrefix fs.mountPoint path &&
+                                   (best == null || stringLength fs.mountPoint > stringLength best.mountPoint)) then fs else best)
+                    null fileSystems;
+
+      in {
+        # Detect bind mount in case of NixOS installation in a subdirectory of the device.
+        # If /dev/x is mounted to /mnt/root, and /mnt/root/nixos is bind mounted to /, then rootDirectory is /nixos.
+        rootDirectory =
+          let 
+            optList = splitString "," config.fileSystems."/".options;
+            path = config.fileSystems."/".device;
+            dep = requiredForPath fsList path;
+          in if elem "bind" optList && dep != null
+            then substring (stringLength dep.mountPoint) (stringLength path) path
+            else "/";
+
+        # Returns a the list of file systems in the right order for mount at boot time, to be used in the initrd.
+        orderedForBoot = 
+          let
+            # Returns the closure of dependencies of the given file system.
+            # If the file system / has device /mnt/a/b, and there's a mount point /mnt/a, then it returns [ /mnt/a / ]
+            # 'visited' is the list of file systems already taken into account, to avoid cycles and duplicates.
+            fsClosure = fs: visited:
+              let dep = requiredForPath fsList fs.device;
+                  depClosure = optionals (dep != null) (fsClosure dep (visited ++ [ fs ]));
+              in if elem fs visited then [ ] else depClosure ++ [ fs ];
+          in fold (fs: list: list ++ (fsClosure fs list)) [ ] fsList;
+      };
+
   };
 
 }

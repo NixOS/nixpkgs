@@ -22,11 +22,10 @@ let
     allowMissing = true;
   };
 
-
   needsCifsUtils = kernelPackages.kernel ? features
                 && kernelPackages.kernel.features ? needsCifsUtils
                 && kernelPackages.kernel.features.needsCifsUtils
-                && any (fs: fs.fsType == "cifs") fileSystems;
+                && any (fs: fs.fsType == "cifs") config.lib.fileSystems.orderedForBoot;
 
   busybox =
     if needsCifsUtils
@@ -128,15 +127,6 @@ let
       ${config.boot.initrd.extraUtilsCommandsTest}
     ''; # */
 
-
-  # The initrd only has to mount / or any FS marked as necessary for
-  # booting (such as the FS containing /nix/store, or an FS needed for
-  # mounting /, like / on a loopback).
-  fileSystems = filter
-    (fs: fs.neededForBoot || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ])
-    (attrValues config.fileSystems);
-
-
   udevRules = pkgs.stdenv.mkDerivation {
     name = "udev-rules";
     buildCommand = ''
@@ -204,7 +194,7 @@ let
 
     fsInfo =
       let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType fs.options ];
-      in pkgs.writeText "initrd-fsinfo" (concatStringsSep "\n" (concatMap f fileSystems));
+      in pkgs.writeText "initrd-fsinfo" (concatStringsSep "\n" (concatMap f config.lib.fileSystems.orderedForBoot));
   };
 
 
