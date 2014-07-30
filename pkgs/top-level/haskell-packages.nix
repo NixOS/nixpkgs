@@ -731,7 +731,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   entropy = callPackage ../development/libraries/haskell/entropy {};
 
-  equivalence = callPackage ../development/libraries/haskell/equivalence {};
+  equivalence_0_2_3 = callPackage ../development/libraries/haskell/equivalence/0.2.3.nix {};
+  equivalence_0_2_5 = callPackage ../development/libraries/haskell/equivalence/0.2.5.nix {};
+  equivalence = self.equivalence_0_2_5;
 
   erf = callPackage ../development/libraries/haskell/erf {};
 
@@ -2759,6 +2761,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   Agda_2_4_0_1 = callPackage ../development/compilers/agda/2.4.0.1.nix {
     binary = self.binary_0_7_2_1;
     QuickCheck = self.QuickCheck_2_7_5;
+    equivalence = self.equivalence_0_2_3;
   };
   Agda = self.Agda_2_4_0_1;
 
