@@ -35,6 +35,7 @@ let
     }
     ''
       mkdir -p $out/bin $out/lib
+      ln -s $out/bin $out/sbin
 
       # Copy what we need from Glibc.
       cp -pv ${pkgs.glibc}/lib/ld*.so.? $out/lib
@@ -46,11 +47,10 @@ let
       cp -pv ${pkgs.gcc.gcc}/lib*/libgcc_s.so.* $out/lib
 
       # Copy BusyBox.
-      cp -rvd ${pkgs.busybox}/{bin,sbin} $out/
-      chmod -R u+w $out
+      cp -pvd ${pkgs.busybox}/bin/* ${pkgs.busybox}/sbin/* $out/bin/
 
       # Copy some utillinux stuff.
-      cp -v ${pkgs.utillinux}/sbin/blkid $out/bin
+      cp -vf ${pkgs.utillinux}/sbin/blkid $out/bin
       cp -pdv ${pkgs.utillinux}/lib/libblkid*.so.* $out/lib
       cp -pdv ${pkgs.utillinux}/lib/libuuid*.so.* $out/lib
 
@@ -73,7 +73,7 @@ let
 
       # Copy modprobe.
       cp -v ${pkgs.kmod}/bin/kmod $out/bin/
-      ln -s kmod $out/bin/modprobe
+      ln -sf kmod $out/bin/modprobe
 
       ${config.boot.initrd.extraUtilsCommands}
 

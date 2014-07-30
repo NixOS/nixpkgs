@@ -68,7 +68,7 @@ let
 
     config = {
       mountPoint = mkDefault name;
-      device = mkIf (config.fsType == "tmpfs") config.fsType;
+      device = mkIf (config.fsType == "tmpfs") (mkDefault config.fsType);
     };
 
   };
