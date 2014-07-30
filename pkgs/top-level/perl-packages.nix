@@ -116,6 +116,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  AnyEventI3 = buildPerlPackage rec {
+    name = "AnyEvent-I3-0.15";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MS/MSTPLBG/${name}.tar.gz";
+      sha256 = "0x8zi06667bdgaxn7driqx0d71mp6021r51hdzmj5m5qbhi2hvqi";
+    };
+    propagatedBuildInputs = [ AnyEvent JSONXS ];
+    meta = {
+      description = "Communicate with the i3 window manager";
+      license = "perl";
+    };
+  };
+
   AnyEventRabbitMQ = buildPerlPackage {
     name = "AnyEvent-RabbitMQ-1.15";
     src = fetchurl {
