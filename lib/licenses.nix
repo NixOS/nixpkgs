@@ -10,11 +10,6 @@ rec {
    * add it to this list. The URL mentioned above is a good source for inspiration.
    */
 
-  artistic2 = spdx {
-    shortName = "Artistic-2.0";
-    fullName = "Artistic License 2.0";
-  };
-
   agpl3 = spdx {
     shortName = "AGPL-3.0";
     fullName = "GNU Affero General Public License v3.0";
@@ -35,6 +30,11 @@ rec {
   apsl20 = spdx {
     shortName = "APSL-2.0";
     fullName = "Apple Public Source License 2.0";
+  };
+
+  artistic2 = spdx {
+    shortName = "Artistic-2.0";
+    fullName = "Artistic License 2.0";
   };
 
   asl20 = spdx {
@@ -70,6 +70,11 @@ rec {
   cddl = spdx {
     shortName = "CDDL-1.0";
     fullName = "Common Development and Distribution License 1.0";
+  };
+
+  cecill-c = spdx {
+    shortName = "CECILL-C";
+    fullName  = "CeCILL-C Free Software License Agreement";
   };
 
   cpl10 = spdx {
@@ -116,9 +121,10 @@ rec {
     url = https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception;
   };
 
-  isc = spdx {
-    shortName = "ISC";
-    fullName = "ISC License";
+  inria = {
+    shortName = "INRIA-NCLA";
+    fullName  = "INRIA Non-Commercial License Agreement";
+    url       = "http://compcert.inria.fr/doc/LICENSE";
   };
 
   ipa = spdx {
@@ -131,10 +137,9 @@ rec {
     fullName = "IBM Public License v1.0";
   };
 
-  libtiff = {
-    shortName = "libtiff";
-    fullName = "libtiff license";
-    url = https://fedoraproject.org/wiki/Licensing/libtiff;
+  isc = spdx {
+    shortName = "ISC";
+    fullName = "ISC License";
   };
 
   lgpl2 = spdx {
@@ -157,12 +162,6 @@ rec {
     fullName = "GNU Library General Public License v2.1 or later";
   };
 
-  llgpl21 = {
-    shortName = "LLGPL-2.1";
-    fullName = "Lisp LGPL; GNU Lesser General Public License version 2.1 with Franz Inc. preamble for clarification of LGPL terms in context of Lisp";
-    url = http://opensource.franz.com/preamble.html;
-  };
-
   lgpl3 = spdx {
     shortName = "LGPL-3.0";
     fullName = "GNU Lesser General Public License v3.0 only";
@@ -171,6 +170,18 @@ rec {
   lgpl3Plus = spdx {
     shortName = "LGPL-3.0+";
     fullName = "GNU Lesser General Public License v3.0 or later";
+  };
+
+  libtiff = {
+    shortName = "libtiff";
+    fullName = "libtiff license";
+    url = https://fedoraproject.org/wiki/Licensing/libtiff;
+  };
+
+  llgpl21 = {
+    shortName = "LLGPL-2.1";
+    fullName = "Lisp LGPL; GNU Lesser General Public License version 2.1 with Franz Inc. preamble for clarification of LGPL terms in context of Lisp";
+    url = http://opensource.franz.com/preamble.html;
   };
 
   mit = spdx {
@@ -188,6 +199,12 @@ rec {
     fullName = "Mozilla Public License 2.0";
   };
 
+  msrla = {
+    shortName = "MSR-LA";
+    fullName  = "Microsoft Research License Agreement";
+    url       = "http://research.microsoft.com/en-us/projects/pex/msr-la.txt";
+  };
+
   ofl = spdx {
     shortName = "OFL-1.1";
     fullName = "SIL Open Font License 1.1";
@@ -198,15 +215,20 @@ rec {
     fullName = "OpenSSL License";
   };
 
+  psfl = spdx {
+    shortName = "Python-2.0";
+    fullName = "Python Software Foundation License version 2";
+    #url = http://docs.python.org/license.html;
+  };
+
   publicDomain = {
     shortName = "Public Domain";
     fullname = "Public Domain";
   };
 
-  psfl = spdx {
-    shortName = "Python-2.0";
-    fullName = "Python Software Foundation License version 2";
-    #url = http://docs.python.org/license.html;
+  sleepycat = spdx {
+    shortName = "Sleepycat";
+    fullName  = "Sleepycat License";
   };
 
   tcltk = {
@@ -242,25 +264,5 @@ rec {
     fullName = "Zope Public License 2.1";
   };
 
-  sleepycat = spdx {
-    shortName = "Sleepycat";
-    fullName  = "Sleepycat License";
-  };
-
-  cecill-c = spdx {
-    shortName = "CECILL-C";
-    fullName  = "CeCILL-C Free Software License Agreement";
-  };
-
-  msrla = {
-    shortName = "MSR-LA";
-    fullName  = "Microsoft Research License Agreement";
-    url       = "http://research.microsoft.com/en-us/projects/pex/msr-la.txt";
-  };
-
-  inria = {
-    shortName = "INRIA-NCLA";
-    fullName  = "INRIA Non-Commercial License Agreement";
-    url       = "http://compcert.inria.fr/doc/LICENSE";
-  };
 }
+
