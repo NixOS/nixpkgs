@@ -146,7 +146,9 @@ in
 
         # Filesystems.
         ${flip concatMapStrings fileSystems (fs:
-            (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}")
+            (if fs.device != null then fs.device
+             else if fs.label != null then "/dev/disk/by-label/${fs.label}"
+             else throw "No device specified for mount point ‘${fs.mountPoint}’.")
             + " " + fs.mountPoint
             + " " + fs.fsType
             + " " + fs.options
