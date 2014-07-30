@@ -11,10 +11,11 @@
 
 cabal.mkDerivation (self: {
   pname = "idris";
-  version = "0.9.14";
-  sha256 = "0kfzp89sass93p9zsxq616zfix7ipi1rmjqmcjixihi01k7c0b8b";
+  version = "0.9.14.1";
+  sha256 = "11x4f0hvd51m9rlf9r0i5xsjmc73kjsayny4xyv0wgb88v9v737b";
   isLibrary = true;
   isExecutable = true;
+  jailbreak = true;
   buildDepends = [
     annotatedWlPprint ansiTerminal ansiWlPprint base64Bytestring binary
     blazeHtml blazeMarkup Cabal cheapskate deepseq filepath fingertree
@@ -26,7 +27,6 @@ cabal.mkDerivation (self: {
   buildTools = [ happy ];
   extraLibraries = [ boehmgc gmp ];
   configureFlags = "-fllvm -fgmp -fffi";
-  patches = [ ./trifecta-fix.patch ];
   meta = {
     homepage = "http://www.idris-lang.org/";
     description = "Functional Programming Language with Dependent Types";
