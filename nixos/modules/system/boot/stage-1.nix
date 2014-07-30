@@ -333,9 +333,7 @@ in
     # Prevent systemd from waiting for the /dev/root symlink.
     systemd.units."dev-root.device".text = "";
 
-    boot.initrd.supportedFilesystems =
-      map (fs: fs.fsType)
-        (filter (fs: fs.mountPoint == "/" || fs.neededForBoot) fileSystems);
+    boot.initrd.supportedFilesystems = map (fs: fs.fsType) fileSystems;
 
   };
 }
