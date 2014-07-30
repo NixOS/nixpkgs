@@ -8,10 +8,10 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "erlang-" + version;
-  version = "R16B03-1";
+  version = "16B03-1";
 
   src = fetchurl {
-    url = "http://www.erlang.org/download/otp_src_${version}.tar.gz";
+    url = "http://www.erlang.org/download/otp_src_R${version}.tar.gz";
     sha256 = "1rvyfh22g1fir1i4xn7v2md868wcmhajwhfsq97v7kn5kd2m7khp";
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   postInstall = let
     manpages = fetchurl {
-      url = "http://www.erlang.org/download/otp_doc_man_${version}.tar.gz";
+      url = "http://www.erlang.org/download/otp_doc_man_R${version}.tar.gz";
       sha256 = "17f3k5j17rdsah18gywjngip6cbfgp6nb9di6il4pahmf9yvqc8g";
     };
   in ''
