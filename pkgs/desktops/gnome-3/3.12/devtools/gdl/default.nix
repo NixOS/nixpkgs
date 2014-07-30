@@ -14,4 +14,11 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig libxml2 gtk3 intltool ];
+
+  meta = with stdenv.lib; {
+    description = "Gnome docking library";
+    homepage = https://developer.gnome.org/gdl/;
+    license = [ licenses.gpl2 ];
+    platforms = platforms.linux;
+  };
 }

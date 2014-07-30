@@ -33,10 +33,11 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "GTK Manager for an Apple ipod";
     homepage = http://gtkpod.sourceforge.net;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.skeidel ];
   };
 }

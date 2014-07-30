@@ -18,4 +18,11 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig flex bison gtk3 libxml2 gnome3.gjs gnome3.gdl
     gnome3.libgda gnome3.gtksourceview intltool itstool python ];
+
+  meta = with stdenv.lib; {
+    description = "Software development studio";
+    homepage = http://anjuta.org/;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+  };
 }

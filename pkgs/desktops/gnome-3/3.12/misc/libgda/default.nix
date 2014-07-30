@@ -20,4 +20,11 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs = [ pkgconfig intltool itstool libxml2 gtk3 ];
+
+  meta = with stdenv.lib; {
+    description = "Database access library";
+    homepage = http://www.gnome-db.org/;
+    license = [ licenses.lgpl2 licenses.gpl2 ];
+    platforms = platforms.linux;
+  };
 }
