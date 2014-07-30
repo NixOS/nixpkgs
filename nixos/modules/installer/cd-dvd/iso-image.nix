@@ -179,7 +179,6 @@ in
 
     fileSystems."/" =
       { fsType = "tmpfs";
-        device = "none";
         options = "mode=0755";
       };
 
@@ -201,7 +200,6 @@ in
 
     fileSystems."/nix/.rw-store" =
       { fsType = "tmpfs";
-        device = "none";
         options = "mode=0755";
         neededForBoot = true;
       };

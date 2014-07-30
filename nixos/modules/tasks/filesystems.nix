@@ -9,7 +9,7 @@ let
 
   prioOption = prio: optionalString (prio !=null) " pri=${toString prio}";
 
-  fileSystemOpts = { name, ... }: {
+  fileSystemOpts = { name, config, ... }: {
 
     options = {
 
@@ -68,6 +68,7 @@ let
 
     config = {
       mountPoint = mkDefault name;
+      device = mkIf (config.fsType == "tmpfs") config.fsType;
     };
 
   };
