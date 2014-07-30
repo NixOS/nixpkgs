@@ -20,6 +20,8 @@ let snapshot = if stdenv.system == "i686-linux"
       then "84339ea0f796ae468ef86797ef4587274bec19ea"
       else if stdenv.system == "x86_64-linux"
       then "bd8a6bc1f28845b7f4b768f6bfa06e7fbdcfcaae"
+      else if stdenv.system == "i686-darwin"
+      then "3f25b2680efbab16ad074477a19d49dcce475977"
       else if stdenv.system == "x86_64-darwin"
       then "4a8c2e1b7634d73406bac32a1a97893ec3ed818d"
       else abort "no-snapshot for platform ${stdenv.system}";
