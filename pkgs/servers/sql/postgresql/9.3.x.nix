@@ -2,14 +2,14 @@
 
 with stdenv.lib;
 
-let version = "9.3.4"; in
+let version = "9.3.5"; in
 
 stdenv.mkDerivation rec {
   name = "postgresql-${version}";
 
   src = fetchurl {
     url = "mirror://postgresql/source/v${version}/${name}.tar.bz2";
-    sha256 = "9ee819574dfc8798a448dc23a99510d2d8924c2f8b49f8228cd77e4efc8a6621";
+    sha256 = "14176ffb1f90a189e7626214365be08ea2bfc26f26994bafb4235be314b9b4b0";
   };
 
   buildInputs = [ zlib readline ] ++ optionals (!stdenv.isDarwin) [ libossp_uuid ];
