@@ -23,22 +23,6 @@ let
   };
 
 
-  needsCifsUtils = kernelPackages.kernel ? features
-                && kernelPackages.kernel.features ? needsCifsUtils
-                && kernelPackages.kernel.features.needsCifsUtils
-                && any (fs: fs.fsType == "cifs") fileSystems;
-
-  busybox =
-    if needsCifsUtils
-    then pkgs.busybox.override {
-           extraConfig = ''
-             CONFIG_FEATURE_MOUNT_CIFS n
-             CONFIG_FEATURE_MOUNT_HELPERS y
-           '';
-         }
-    else pkgs.busybox;
-
-
   # Some additional utilities needed in stage 1, like mount, lvm, fsck
   # etc.  We don't want to bring in all of those packages, so we just
   # copy what we need.  Instead of using statically linked binaries,
@@ -62,7 +46,7 @@ let
       cp -pv ${pkgs.gcc.gcc}/lib*/libgcc_s.so.* $out/lib
 
       # Copy BusyBox.
-      cp -rvd ${busybox}/{bin,sbin} $out/
+      cp -rvd ${pkgs.busybox}/{bin,sbin} $out/
       chmod -R u+w $out
 
       # Copy some utillinux stuff.
@@ -90,11 +74,6 @@ let
       # Copy modprobe.
       cp -v ${pkgs.kmod}/bin/kmod $out/bin/
       ln -s kmod $out/bin/modprobe
-
-      # Maybe copy cifs utils
-      ${optionalString needsCifsUtils ''
-        cp -v ${pkgs.cifs_utils}/sbin/mount.cifs $out/bin
-      ''}
 
       ${config.boot.initrd.extraUtilsCommands}
 

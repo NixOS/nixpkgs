@@ -28,6 +28,10 @@ let
   nixConfig = ''
     CONFIG_PREFIX "$out"
     CONFIG_INSTALL_NO_USR y
+
+    # Use the external mount.cifs program.
+    CONFIG_FEATURE_MOUNT_CIFS n
+    CONFIG_FEATURE_MOUNT_HELPERS y
   '';
 
   staticConfig = stdenv.lib.optionalString enableStatic ''
@@ -49,8 +53,8 @@ stdenv.mkDerivation rec {
     ${configParser}
     cat << EOF | parseconfig
     ${staticConfig}
-    ${extraConfig}
     ${nixConfig}
+    ${extraConfig}
     $extraCrossConfig
     EOF
     make oldconfig

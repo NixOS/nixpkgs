@@ -316,11 +316,12 @@
   ./system/upstart/upstart.nix
   ./tasks/cpu-freq.nix
   ./tasks/encrypted-devices.nix
+  ./tasks/filesystems.nix
   ./tasks/filesystems/btrfs.nix
+  ./tasks/filesystems/cifs.nix
   ./tasks/filesystems/ext.nix
   ./tasks/filesystems/f2fs.nix
   ./tasks/filesystems/nfs.nix
-  ./tasks/filesystems.nix
   ./tasks/filesystems/reiserfs.nix
   ./tasks/filesystems/unionfs-fuse.nix
   ./tasks/filesystems/vfat.nix

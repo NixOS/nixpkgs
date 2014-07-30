@@ -137,7 +137,7 @@ in
     system.fsPackages = [ pkgs.dosfstools ];
 
     environment.systemPackages =
-      [ pkgs.ntfs3g pkgs.cifs_utils pkgs.fuse ]
+      [ pkgs.ntfs3g pkgs.fuse ]
       ++ config.system.fsPackages;
 
     environment.etc.fstab.text =
