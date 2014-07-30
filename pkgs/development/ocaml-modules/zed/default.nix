@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.3";
-  name = "zed-${version}";
+  name = "ocaml-zed-${version}";
   
   src = fetchurl {
     url = https://github.com/diml/zed/archive/1.3.tar.gz;
