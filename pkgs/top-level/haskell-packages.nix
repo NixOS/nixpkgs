@@ -2758,18 +2758,14 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   # Compilers.
 
   Agda_2_3_2_2 = callPackage ../development/compilers/agda/2.3.2.2.nix {};
-  Agda_2_4_0_1 = callPackage ../development/compilers/agda/2.4.0.1.nix {
-    binary = self.binary_0_7_2_1;
-    QuickCheck = self.QuickCheck_2_7_5;
-    equivalence = self.equivalence_0_2_3;
-  };
-  Agda = self.Agda_2_4_0_1;
+  Agda_2_4_0_2 = callPackage ../development/compilers/agda/2.4.0.2.nix {};
+  Agda = self.Agda_2_4_0_2;
 
   AgdaStdlib_0_7 = callPackage ../development/compilers/agda/stdlib-0.7.nix {
     Agda = self.Agda_2_3_2_2;
   };
   AgdaStdlib_0_8 = callPackage ../development/compilers/agda/stdlib-0.8.nix {
-    Agda = self.Agda_2_4_0_1;
+    Agda = self.Agda_2_4_0_2;
   };
   AgdaStdlib = self.AgdaStdlib_0_8;
 
