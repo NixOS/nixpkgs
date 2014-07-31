@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
     description = "A command-line WebDAV client for Unix";
     homepage    = http://www.webdav.org/cadaver;
     maintainers = with maintainers; [ ianwookim ];
-    platforms   = platforms.all;
+    license     = licenses.gpl2;
+    platforms   = platforms.unix;
   };
 }
