@@ -13,7 +13,6 @@ for p in $patches; do
   patch -p1 < $p
 done
 
-./INSTALL -b
 ./INSTALL -r $out/plan9
 
 export PLAN9=$out/plan9
