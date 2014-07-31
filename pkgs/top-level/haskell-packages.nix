@@ -231,6 +231,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   benchpress = callPackage ../development/libraries/haskell/benchpress {};
 
+  bencoding = callPackage ../development/libraries/haskell/bencoding {};
+
   bert = callPackage ../development/libraries/haskell/bert {};
 
   bifunctors = callPackage ../development/libraries/haskell/bifunctors {};
