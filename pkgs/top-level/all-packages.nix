@@ -4006,9 +4006,9 @@ let
 
   ltrace = callPackage ../development/tools/misc/ltrace { };
 
-  lttngTools = callPackage ../development/tools/misc/lttng-tools { };
+  lttng-tools = callPackage ../development/tools/misc/lttng-tools { };
 
-  lttngUst = callPackage ../development/tools/misc/lttng-ust { };
+  lttng-ust = callPackage ../development/tools/misc/lttng-ust { };
 
   lttv = callPackage ../development/tools/misc/lttv { };
 
@@ -7439,7 +7439,7 @@ let
 
     ktap = callPackage ../os-specific/linux/ktap { };
 
-    lttngModules = callPackage ../os-specific/linux/lttng-modules { };
+    lttng-modules = callPackage ../os-specific/linux/lttng-modules { };
 
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
 
@@ -11418,6 +11418,9 @@ let
   # Attributes for backward compatibility.
   adobeReader = adobe-reader;
   asciidocFull = asciidoc-full;  # added 2014-06-22
+  lttngModules = lttng-modules;  # added 2014-07-31
+  lttngTools = lttng-tools;  # added 2014-07-31
+  lttngUst = lttng-ust;  # added 2014-07-31
 
 
 }; in self; in pkgs
