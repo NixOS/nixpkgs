@@ -719,6 +719,8 @@ let
 
   cabextract = callPackage ../tools/archivers/cabextract { };
 
+  cadaver = callPackage ../tools/networking/cadaver { };
+
   cantata = callPackage ../applications/audio/cantata { };
 
   can-utils = callPackage ../os-specific/linux/can-utils { };
