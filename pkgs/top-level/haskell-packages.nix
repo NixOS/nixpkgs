@@ -2575,8 +2575,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   void = callPackage ../development/libraries/haskell/void {};
 
   vty_4_7_5 = callPackage ../development/libraries/haskell/vty/4.7.5.nix {};
-  vty_5_1_3 = callPackage ../development/libraries/haskell/vty/5.1.3.nix {};
-  vty = self.vty_5_1_3;
+  vty_5_1_4 = callPackage ../development/libraries/haskell/vty/5.1.4.nix {};
+  vty = self.vty_5_1_4;
 
   vtyUi = callPackage ../development/libraries/haskell/vty-ui {};
 
