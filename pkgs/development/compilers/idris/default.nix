@@ -15,7 +15,6 @@ cabal.mkDerivation (self: {
   sha256 = "11x4f0hvd51m9rlf9r0i5xsjmc73kjsayny4xyv0wgb88v9v737b";
   isLibrary = true;
   isExecutable = true;
-  jailbreak = true;
   buildDepends = [
     annotatedWlPprint ansiTerminal ansiWlPprint base64Bytestring binary
     blazeHtml blazeMarkup Cabal cheapskate deepseq filepath fingertree
@@ -27,6 +26,7 @@ cabal.mkDerivation (self: {
   buildTools = [ happy ];
   extraLibraries = [ boehmgc gmp ];
   configureFlags = "-fllvm -fgmp -fffi";
+  jailbreak = true;
   meta = {
     homepage = "http://www.idris-lang.org/";
     description = "Functional Programming Language with Dependent Types";
