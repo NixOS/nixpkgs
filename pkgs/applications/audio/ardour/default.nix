@@ -1,5 +1,5 @@
 { stdenv, fetchgit, alsaLib, aubio, boost, cairomm, curl, fftw
-, fftwSinglePrec, flac, glibc, glibmm, gtk, gtkmm, jackaudio
+, fftwSinglePrec, flac, glibc, glibmm, gtk, gtkmm, jack2
 , libgnomecanvas, libgnomecanvasmm, liblo, libmad, libogg, librdf
 , librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile
 , libusb, libuuid, libxml2, libxslt, lilv, lv2, makeWrapper, pango
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = 
     [ alsaLib aubio boost cairomm curl fftw fftwSinglePrec flac glibc
-      glibmm gtk gtkmm jackaudio libgnomecanvas libgnomecanvasmm liblo
+      glibmm gtk gtkmm jack2 libgnomecanvas libgnomecanvasmm liblo
       libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
       libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv lv2
       makeWrapper pango perl pkgconfig python serd sord sratom suil

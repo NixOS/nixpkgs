@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig
 , libX11, mesa, freeglut
-, jackaudio, libcdio, libsndfile, libsamplerate
+, jack2, libcdio, libsndfile, libsamplerate
 , SDL, SDL_net, zlib
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with stdenv.lib;
-  [ libX11 mesa freeglut jackaudio libcdio libsndfile libsamplerate SDL SDL_net zlib ];
+  [ libX11 mesa freeglut jack2 libcdio libsndfile libsamplerate SDL SDL_net zlib ];
   
   nativeBuildInputs = [ pkgconfig ];
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL, frei0r, jackaudio, libav, libdv, libsamplerate
+{ stdenv, fetchurl, SDL, frei0r, jack2, libav, libdv, libsamplerate
 , libvorbis, libxml2, makeWrapper, movit, pkgconfig, qt, sox
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    SDL frei0r jackaudio libav libdv libsamplerate libvorbis libxml2
+    SDL frei0r jack2 libav libdv libsamplerate libvorbis libxml2
     makeWrapper movit pkgconfig qt sox
   ];
 

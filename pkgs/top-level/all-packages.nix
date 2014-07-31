@@ -7062,7 +7062,7 @@ let
   alsaLib = callPackage ../os-specific/linux/alsa-lib { };
 
   alsaPlugins = callPackage ../os-specific/linux/alsa-plugins {
-    jackaudio = null;
+    jack2 = null;
   };
 
   alsaPluginWrapper = callPackage ../os-specific/linux/alsa-plugins/wrapper.nix { };
@@ -11076,7 +11076,10 @@ let
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
 
-  jackaudio = callPackage ../misc/jackaudio { };
+  # using the new configuration style proposal which is unstable
+  jack1 = callPackage ../misc/jackaudio/jack1.nix { };
+
+  jack2 = callPackage ../misc/jackaudio { };
 
   keynav = callPackage ../tools/X11/keynav { };
 

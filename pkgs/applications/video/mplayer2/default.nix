@@ -10,7 +10,7 @@
 , bluraySupport ? true, libbluray ? null
 , speexSupport ? true, speex ? null
 , theoraSupport ? true, libtheora ? null
-, jackaudioSupport ? false, jackaudio ? null
+, jackaudioSupport ? false, jack2 ? null
 , pulseSupport ? true, pulseaudio ? null
 , bs2bSupport ? false, libbs2b ? null
 # For screenshots
@@ -28,7 +28,7 @@ assert dvdnavSupport -> libdvdnav != null;
 assert bluraySupport -> libbluray != null;
 assert speexSupport -> speex != null;
 assert theoraSupport -> libtheora != null;
-assert jackaudioSupport -> jackaudio != null;
+assert jackaudioSupport -> jack2 != null;
 assert pulseSupport -> pulseaudio != null;
 assert bs2bSupport -> libbs2b != null;
 assert libpngSupport -> libpng != null;
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     ++ optional xineramaSupport libXinerama
     ++ optionals dvdnavSupport [ libdvdnav libdvdnav.libdvdread ]
     ++ optional bluraySupport libbluray
-    ++ optional jackaudioSupport jackaudio
+    ++ optional jackaudioSupport jack2
     ++ optional pulseSupport pulseaudio
     ++ optional screenSaverSupport libXScrnSaver
     ++ optional vdpauSupport libvdpau
