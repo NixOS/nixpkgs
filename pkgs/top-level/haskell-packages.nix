@@ -2681,6 +2681,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   xmlhtml = callPackage ../development/libraries/haskell/xmlhtml {};
 
+  xmlHtmlConduitLens = callPackage ../development/libraries/haskell/xml-html-conduit-lens {};
+
   xmlLens = callPackage ../development/libraries/haskell/xml-lens {};
 
   xmlTypes = callPackage ../development/libraries/haskell/xml-types {};
