@@ -215,6 +215,11 @@ rec {
 
   seahorse = callPackage ./apps/seahorse { };
 
+#### Dev http://ftp.gnome.org/pub/GNOME/devtools/
+
+  anjuta = callPackage ./devtools/anjuta { };
+
+  gdl = callPackage ./devtools/gdl { };
 
 #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
 
@@ -225,6 +230,8 @@ rec {
   goffice = callPackage ./misc/goffice { };
 
   gitg = callPackage ./misc/gitg { };
+
+  libgda = callPackage ./misc/libgda { };
 
   libgit2-glib = callPackage ./misc/libgit2-glib { };
 
