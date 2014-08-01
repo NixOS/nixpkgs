@@ -9026,6 +9026,24 @@ rec {
   };
 
 
+  tornadokick = buildPythonPackage rec {
+    name = "tornadokick-2014.07.23";
+
+    propagatedBuildInputs = [ tornado ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/tornadokick/${name}.tar.gz";
+      md5 = "201d26de2993a554b16140af3b4ee1b6";
+    };
+
+    meta = {
+      description = "The TornadoKick Web Toolkit for Tornado Web Framework.";
+      homepage = http://github.com/multoncore/tornadokick;
+      license = stdenv.lib.licenses.asl20;
+    };
+  };
+
+
   tarman = buildPythonPackage rec {
     version = "0.1.3";
     name = "tarman-${version}";
