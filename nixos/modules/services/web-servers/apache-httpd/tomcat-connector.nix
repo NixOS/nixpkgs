@@ -31,7 +31,7 @@ in
 {
 
   options = {
-    extraWorkersProperties = pkgs.lib.mkOption {
+    extraWorkersProperties = lib.mkOption {
       default = "";
       description = "Additional configuration for the workers.properties file.";
     };
