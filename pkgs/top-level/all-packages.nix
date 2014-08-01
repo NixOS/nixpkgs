@@ -10033,7 +10033,9 @@ let
 
   xdotool = callPackage ../tools/X11/xdotool { };
 
-  xen = callPackage ../applications/virtualization/xen { };
+  xen = callPackage ../applications/virtualization/xen {
+    stdenv = overrideGCC stdenv gcc45;
+  };
 
   xfe = callPackage ../applications/misc/xfe {
     fox = fox_1_6;
