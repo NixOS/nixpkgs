@@ -9694,7 +9694,7 @@ let self = _self // overrides; _self = with self; {
       XMLSimple XMLDescent TestDeep TestException
       pkgs.xorg.libxcb pkgs.xorg.xcbproto pkgs.xorg.xcbutil pkgs.xorg.xcbutilwm
     ];
-    propagatedBuildInputs = [ XSObjectMagic Mouse TryTiny ];
+    propagatedBuildInputs = [ XSObjectMagic Mouse MouseXNativeTraits TryTiny ];
     NIX_CFLAGS_LINK = [ "-lxcb" "-lxcb-util" "-lxcb-xinerama" "-lxcb-icccm" ];
     doCheck = false; # requires an X server
     meta = {
