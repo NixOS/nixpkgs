@@ -2575,8 +2575,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   void = callPackage ../development/libraries/haskell/void {};
 
   vty_4_7_5 = callPackage ../development/libraries/haskell/vty/4.7.5.nix {};
-  vty_5_1_3 = callPackage ../development/libraries/haskell/vty/5.1.3.nix {};
-  vty = self.vty_5_1_3;
+  vty_5_1_4 = callPackage ../development/libraries/haskell/vty/5.1.4.nix {};
+  vty = self.vty_5_1_4;
 
   vtyUi = callPackage ../development/libraries/haskell/vty-ui {};
 
@@ -2681,6 +2681,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   xmlhtml = callPackage ../development/libraries/haskell/xmlhtml {};
 
+  xmlHtmlConduitLens = callPackage ../development/libraries/haskell/xml-html-conduit-lens {};
+
   xmlLens = callPackage ../development/libraries/haskell/xml-lens {};
 
   xmlTypes = callPackage ../development/libraries/haskell/xml-types {};
@@ -2758,18 +2760,14 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   # Compilers.
 
   Agda_2_3_2_2 = callPackage ../development/compilers/agda/2.3.2.2.nix {};
-  Agda_2_4_0_1 = callPackage ../development/compilers/agda/2.4.0.1.nix {
-    binary = self.binary_0_7_2_1;
-    QuickCheck = self.QuickCheck_2_7_5;
-    equivalence = self.equivalence_0_2_3;
-  };
-  Agda = self.Agda_2_4_0_1;
+  Agda_2_4_0_2 = callPackage ../development/compilers/agda/2.4.0.2.nix {};
+  Agda = self.Agda_2_4_0_2;
 
   AgdaStdlib_0_7 = callPackage ../development/compilers/agda/stdlib-0.7.nix {
     Agda = self.Agda_2_3_2_2;
   };
   AgdaStdlib_0_8 = callPackage ../development/compilers/agda/stdlib-0.8.nix {
-    Agda = self.Agda_2_4_0_1;
+    Agda = self.Agda_2_4_0_2;
   };
   AgdaStdlib = self.AgdaStdlib_0_8;
 

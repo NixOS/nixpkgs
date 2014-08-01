@@ -719,6 +719,8 @@ let
 
   cabextract = callPackage ../tools/archivers/cabextract { };
 
+  cadaver = callPackage ../tools/networking/cadaver { };
+
   cantata = callPackage ../applications/audio/cantata { };
 
   can-utils = callPackage ../os-specific/linux/can-utils { };
@@ -4004,9 +4006,9 @@ let
 
   ltrace = callPackage ../development/tools/misc/ltrace { };
 
-  lttngTools = callPackage ../development/tools/misc/lttng-tools { };
+  lttng-tools = callPackage ../development/tools/misc/lttng-tools { };
 
-  lttngUst = callPackage ../development/tools/misc/lttng-ust { };
+  lttng-ust = callPackage ../development/tools/misc/lttng-ust { };
 
   lttv = callPackage ../development/tools/misc/lttv { };
 
@@ -7062,7 +7064,7 @@ let
   alsaLib = callPackage ../os-specific/linux/alsa-lib { };
 
   alsaPlugins = callPackage ../os-specific/linux/alsa-plugins {
-    jackaudio = null;
+    jack2 = null;
   };
 
   alsaPluginWrapper = callPackage ../os-specific/linux/alsa-plugins/wrapper.nix { };
@@ -7437,7 +7439,7 @@ let
 
     ktap = callPackage ../os-specific/linux/ktap { };
 
-    lttngModules = callPackage ../os-specific/linux/lttng-modules { };
+    lttng-modules = callPackage ../os-specific/linux/lttng-modules { };
 
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
 
@@ -9508,9 +9510,9 @@ let
     qt = qt4;
   };
 
-  retroshare06 = callPackage ../applications/networking/p2p/retroshare/0.6.nix {
+  retroshare06 = lowPrio (callPackage ../applications/networking/p2p/retroshare/0.6.nix {
     qt = qt4;
-  };
+  });
 
   rsync = callPackage ../applications/networking/sync/rsync {
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD);
@@ -9737,6 +9739,8 @@ let
 
   thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
     inherit (gnome) libIDL;
+    inherit (pythonPackages) pysqlite;
+    libpng = libpng_apng;
   };
 
   thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin {
@@ -9807,6 +9811,8 @@ let
   uzbl = callPackage ../applications/networking/browsers/uzbl {
     webkit = webkitgtk2;
   };
+  
+  uTox = callPackage ../applications/networking/instant-messengers/utox { };
 
   vanitygen = callPackage ../applications/misc/vanitygen { };
 
@@ -11076,7 +11082,10 @@ let
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
 
-  jackaudio = callPackage ../misc/jackaudio { };
+  # using the new configuration style proposal which is unstable
+  jack1 = callPackage ../misc/jackaudio/jack1.nix { };
+
+  jack2 = callPackage ../misc/jackaudio { };
 
   keynav = callPackage ../tools/X11/keynav { };
 
@@ -11411,6 +11420,8 @@ let
   # Attributes for backward compatibility.
   adobeReader = adobe-reader;
   asciidocFull = asciidoc-full;  # added 2014-06-22
+  lttngTools = lttng-tools;  # added 2014-07-31
+  lttngUst = lttng-ust;  # added 2014-07-31
 
 
 }; in self; in pkgs
