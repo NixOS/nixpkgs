@@ -569,6 +569,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  CarpAlways = buildPerlPackage rec {
+    name = "Carp-Always-0.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FE/FERREIRA/${name}.tar.gz";
+      sha256 = "0i2rifkr7ybfcdsqana52487z7vxp2l5qdra0f6ik0ddhn6rzii1";
+    };
+    meta = {
+      description = "Warns and dies noisily with stack backtraces";
+      license = "perl";
+    };
+  };
+
   CarpAssert = buildPerlPackage {
     name = "Carp-Assert-0.20";
     src = fetchurl {
