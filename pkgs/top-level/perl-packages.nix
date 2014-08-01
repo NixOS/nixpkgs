@@ -3436,7 +3436,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ pkgs.pkgconfig ];
     meta = {
       description = "Simplistic interface to pkg-config";
-      license = licenses.lgpl21Plus;
+      license = stdenv.lib.licenses.lgpl21Plus;
     };
   };
 
