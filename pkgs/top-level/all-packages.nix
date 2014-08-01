@@ -3289,7 +3289,7 @@ let
 
   roadsend = callPackage ../development/compilers/roadsend { };
 
-  rust       = callPackage ../development/compilers/rust {};
+  rust       = callPackage ../development/compilers/rust/0.11.nix {};
   rustMaster = callPackage ../development/compilers/rust/head.nix {};
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
