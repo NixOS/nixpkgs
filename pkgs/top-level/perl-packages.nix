@@ -146,12 +146,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   AnyMoose = buildPerlPackage rec {
-    name = "Any-Moose-0.10";
+    name = "Any-Moose-0.24";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SA/SARTAK/${name}.tar.gz";
-      sha256 = "1kgksln1vykh0xynawv3pc3nw1yp7kjwbxbb5lh2hm21a4l4h61x";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "0g4w11chpnspnksw80jbdn5wp2m5hqzcyjzcy2hsjz9rkk2ncdbk";
     };
-    propagatedBuildInputs = [Mouse];
+    propagatedBuildInputs = [ Mouse ];
   };
 
   ApacheLogFormatCompiler = buildPerlModule {
@@ -1838,6 +1838,18 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1f0i5y99ly39vf86jpzwqz8mkz1460vryv85jgqmfx007p781s0l";
     };
     makeMakerFlags = "--lib=${pkgs.openssl}/lib";
+  };
+
+  CwdGuard = buildPerlModule rec {
+    name = "Cwd-Guard-0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KA/KAZEBURO/${name}.tar.gz";
+      sha256 = "071k50n1yr48122jjjg50i1s2kwp06dmrisv35f3wjry8m6cqchm";
+    };
+    meta = {
+      description = "Temporary changing working directory (chdir)";
+      license = "perl";
+    };
   };
 
   DataClone = buildPerlPackage {
@@ -5377,6 +5389,19 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ ExtUtilsXSpp ExtUtilsCppGuess ];
   };
 
+  ModuleBuildXSUtil = buildPerlModule rec {
+    name = "Module-Build-XSUtil-0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HI/HIDEAKIO/${name}.tar.gz";
+      sha256 = "1323vxp8vf5xdz66lbc1wfciaks93mrbqfsjgb9nz1w9bb21xj36";
+    };
+    buildInputs = [ FileCopyRecursive CwdGuard CaptureTiny ];
+    meta = {
+      description = "A Module::Build class for building XS modules";
+      license = "perl";
+    };
+  };
+
   ModuleCoreList = buildPerlPackage {
     name = "Module-CoreList-3.01";
     src = fetchurl {
@@ -6183,14 +6208,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Mouse = buildPerlPackage rec {
-    name = "Mouse-0.26";
+  Mouse = buildPerlModule rec {
+    name = "Mouse-2.3.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
-      sha256 = "0dpf5qmf1vc8dq5nj6yiriz8v4wl8s9g519v1hnz4yf11n2lnr4x";
+      url = "mirror://cpan/authors/id/G/GF/GFUJI/${name}.tar.gz";
+      sha256 = "0ycl521mmc5989934502730rzsi9xqihdpnjihrkhflqmrzmaqwq";
     };
-    propagatedBuildInputs = [TestException];
-    doCheck = false; # check can't find its own Mouse::Tiny module
+    buildInputs = [
+      ModuleBuildXSUtil TestException TestLeakTrace TestRequires TestOutput
+      TestFatal
+    ];
   };
 
   MozillaCA = buildPerlPackage {
@@ -8449,6 +8476,18 @@ let self = _self // overrides; _self = with self; {
     meta = {
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
+    };
+  };
+
+  TestLeakTrace = buildPerlPackage rec {
+    name = "Test-LeakTrace-0.14";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GF/GFUJI/${name}.tar.gz";
+      sha256 = "06cn4g35l2gi9vbsdi2j49cxsji9fvfi7xp4xgdyxxds9vrxydia";
+    };
+    meta = {
+      description = "Traces memory leaks";
+      license = "perl";
     };
   };
 
