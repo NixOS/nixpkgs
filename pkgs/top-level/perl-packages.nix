@@ -6232,6 +6232,20 @@ let self = _self // overrides; _self = with self; {
     ];
   };
 
+  MouseXNativeTraits = buildPerlPackage rec {
+    name = "MouseX-NativeTraits-1.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GF/GFUJI/${name}.tar.gz";
+      sha256 = "0pnbchkxfz9fwa8sniyjqp0mz75b3k2fafq9r09znbbh51dbz9gq";
+    };
+    buildInputs = [ TestFatal ];
+    propagatedBuildInputs = [ AnyMoose ];
+    meta = {
+      description = "Extend attribute interfaces for Mouse";
+      license = "perl";
+    };
+  };
+
   MozillaCA = buildPerlPackage {
     name = "Mozilla-CA-20130114";
     src = fetchurl {
