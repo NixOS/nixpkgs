@@ -1,19 +1,19 @@
 { stdenv, fetchurl, cmake, coin3d, xercesc, ode, eigen, qt4, opencascade, gts
 , boost, zlib, python, swig, gfortran, soqt, libf2c , pyqt4, makeWrapper
-, matplotlib, pycollada }:
+, matplotlib, pycollada, pyside, pysideShiboken }:
 
 stdenv.mkDerivation rec {
   name = "freecad-${version}";
-  version = "0.13.1830";
+  version = "0.14.3702";
 
   src = fetchurl {
     url = "mirror://sourceforge/free-cad/${name}.tar.gz";
-    sha256 = "04rgww5y32asn4sx5j4wh79ggvb479pq56xfcfj6gkg44mid23jm";
+    sha256 = "1jcx7d3mp2wxkd20qdvr4vlf7h5wb0jgab9dl63sicdz88swy97f";
   };
 
   buildInputs = [ cmake coin3d xercesc ode eigen qt4 opencascade gts boost
     zlib python swig gfortran soqt libf2c pyqt4 makeWrapper matplotlib
-    pycollada
+    pycollada pyside pysideShiboken
   ];
 
   enableParallelBuilding = true;
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       --set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1
   '';
 
-  patches = [ ./pythonpath.patch ./cmake.patch ];
+  patches = [ ./pythonpath.patch ];
 
   meta = {
     homepage = http://free-cad.sourceforge.net/;
