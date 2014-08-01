@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
     libstartup_notification libX11 pcre libev yajl xcb-util-cursor perl pango
     perlPackages.AnyEventI3 perlPackages.X11XCB perlPackages.IPCRun
     perlPackages.ExtUtilsPkgConfig perlPackages.TestMore perlPackages.InlineC
-    perlPackages.CarpAlways
   ];
 
   patchPhase = ''
