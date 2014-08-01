@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  doCheck = true;
+  doCheck = stdenv.system == "x86_64-linux";
 
   checkPhase = ''
     ln -sf "${xdummy}/bin/xdummy" testcases/Xdummy
