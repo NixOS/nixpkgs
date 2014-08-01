@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   # releases of SWT.  So we just grab a binary release and extract
   # "src.zip" from that.
   src = fetchurl {
-    url = "http://eclipse.ialto.com/eclipse/downloads/drops/R-3.7.2-201202080800/swt-3.7.2-gtk-linux-x86.zip";
+    url = "http://archive.eclipse.org/eclipse/downloads/drops/R-3.7.2-201202080800/swt-3.7.2-gtk-linux-x86.zip";
     sha256 = "10si8kmc7c9qmbpzs76609wkfb784pln3qpmra73gb3fbk7z8caf";
   };
 
