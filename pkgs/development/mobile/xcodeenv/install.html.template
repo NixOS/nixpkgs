@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Install IPA</title>
+        <meta http-equiv="refresh" content="1; url=@INSTALL_URL@">
+    </head>
+    
+    <body>
+    </body>
+</html>
