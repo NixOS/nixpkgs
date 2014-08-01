@@ -13,6 +13,8 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [ ncurses gettext ];
 
+  configureFlags = "sysconfdir=/etc";
+
   meta = {
     homepage = http://www.nano-editor.org/;
     description = "A small, user-friendly console text editor";
