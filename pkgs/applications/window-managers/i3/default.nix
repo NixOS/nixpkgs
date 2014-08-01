@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     ln -sf "${xdummy}/bin/xdummy" testcases/Xdummy
     (cd testcases && perl complete-run.pl)
+    ! grep -q '^not ok' testcases/latest/complete-run.log
   '';
 
   configurePhase = "makeFlags=PREFIX=$out";
