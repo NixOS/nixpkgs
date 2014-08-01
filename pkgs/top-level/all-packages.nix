@@ -2454,6 +2454,8 @@ let
 
   xdelta = callPackage ../tools/compression/xdelta { };
 
+  xdummy = callPackage ../tools/misc/xdummy { };
+
   xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
 
   xmlroff = callPackage ../tools/typesetting/xmlroff {
