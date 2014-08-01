@@ -637,6 +637,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Automated REST Method Dispatching";
       license = "perl";
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -804,6 +805,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Request logging from within Catalyst";
       license = "perl";
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -841,6 +843,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Role based authorization for Catalyst based on Catalyst::Plugin::Authentication";
       license = "perl";
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -885,6 +888,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ CatalystRuntime CatalystPluginSession GDSecurityImage HTTPDate ];
     meta = {
       description = "Create and validate Captcha for Catalyst";
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -944,6 +948,9 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ TestMockObject ];
     propagatedBuildInputs = [ CatalystRuntime CatalystPluginSession ];
+    meta = {
+      platforms = stdenv.lib.platforms.linux;
+    };
   };
 
   CatalystPluginSessionStoreFastMmap = buildPerlPackage rec {
@@ -954,6 +961,9 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs =
       [ PathClass CatalystPluginSession CacheFastMmap MROCompat ];
+    meta = {
+      platforms = stdenv.lib.platforms.linux;
+    };
   };
 
   CatalystPluginStackTrace = buildPerlPackage {
@@ -1004,6 +1014,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "JSON view for your data";
       license = "perl";
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -1017,6 +1028,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Template View Class";
       license = "perl";
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -3114,6 +3126,9 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0ffmpqys7yph5lb28m2xan0zd837vywg8c6gjjd9p80dahpqknyx";
     };
     propagatedBuildInputs = [EmailSimple EmailAddress ModulePluggable ReturnValue];
+    meta = {
+      platforms = stdenv.lib.platforms.linux;
+    };
   };
 
   EmailSender = buildPerlPackage {
@@ -3755,6 +3770,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Simple and Efficient Reading/Writing/Modifying of Complete Files";
       license = "perl";
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -4426,6 +4442,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       description = "IO Interface to compressed data files/buffers";
       license = "perl5";
+      platforms = stdenv.lib.platforms.linux;
     };
     doCheck = !stdenv.isDarwin;
   };
@@ -4557,6 +4574,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       description = "System() and background procs w/ piping, redirs, ptys (Unix, Win32)";
       license = "perl5";
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -4755,6 +4773,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ CommonSense ];
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -5035,6 +5054,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "The World-Wide Web library for Perl";
       license = "perl";
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -5064,6 +5084,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Provide https support for LWP::UserAgent";
       license = "perl5";
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -7270,6 +7291,9 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/R/RO/ROODE/${name}.tar.gz";
       sha256 = "1shkyxajh6l87nif47ygnfxjwvqf3d3kjpdvxaff4957vqanii2k";
     };
+    meta = {
+      platforms = stdenv.lib.platforms.linux;
+    };
   };
 
   ReadonlyXS = buildPerlPackage rec {
@@ -7606,6 +7630,9 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ ClassAccessor ListMoreUtils RegexpCommon SQLTokenizer ];
+    meta = {
+      platforms = stdenv.lib.platforms.linux;
+    };
   };
 
   SQLTokenizer = buildPerlPackage rec {
@@ -8097,6 +8124,9 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0hy1225zg2yg11xhgj0wbiapzjyf6slx17ln36zqvfm07k6widlx";
     };
     doCheck = false; # no `hostname' in stdenv
+    meta = {
+      platforms = stdenv.lib.platforms.linux;
+    };
   };
 
   TAPParserSourceHandlerpgTAP = buildPerlModule {
@@ -9159,6 +9189,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://www.shlomifish.org/open-source/projects/docmake/;
       description = "Organize Data in Tables";
       license = "bsd";
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
