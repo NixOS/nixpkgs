@@ -32,5 +32,5 @@
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
   };
 
-  name = "rust-${version}";
+  name = "rustc-${version}";
 }
