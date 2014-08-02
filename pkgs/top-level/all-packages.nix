@@ -10152,6 +10152,8 @@ let
     libsigcxx = libsigcxx12;
   };
 
+  astromenace = callPackage ../games/astromenace { };
+
   atanks = callPackage ../games/atanks {};
 
   ballAndPaddle = callPackage ../games/ball-and-paddle {
