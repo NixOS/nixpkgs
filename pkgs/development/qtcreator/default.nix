@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qtLib, sdkBuild ? false }:
+{ stdenv, fetchurl, qtLib, sdkBuild ? false, withDocumentation ? true }:
 
 with stdenv.lib;
 
@@ -36,7 +36,10 @@ stdenv.mkDerivation rec {
     qmake -spec linux-g++ "QT_PRIVATE_HEADERS=${qtLib}/include" qtcreator.pro
   '';
 
-  installFlags = "INSTALL_ROOT=$(out)";
+  buildFlags = optionalString withDocumentation " docs";
+
+  installFlags = "INSTALL_ROOT=$(out)"
+    + optionalString withDocumentation " install_docs";
 
   meta = {
     description = "Cross-platform IDE tailored to the needs of Qt developers";
