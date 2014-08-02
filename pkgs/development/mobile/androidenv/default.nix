@@ -16,6 +16,10 @@ rec {
     inherit (pkgs) stdenv fetchurl unzip;
   };
   
+  supportRepository = import ./support-repository.nix {
+    inherit (pkgs) stdenv fetchurl unzip;
+  };
+
   platforms = if (pkgs.stdenv.system == "i686-linux" || pkgs.stdenv.system == "x86_64-linux")
     then import ./platforms-linux.nix {
       inherit (pkgs) stdenv fetchurl unzip;
@@ -39,7 +43,7 @@ rec {
     inherit (pkgs) freetype fontconfig glib gtk atk mesa file alsaLib jdk;
     inherit (pkgs.xorg) libX11 libXext libXrender libxcb libXau libXdmcp libXtst;
     
-    inherit platformTools buildTools support platforms sysimages addons;
+    inherit platformTools buildTools support supportRepository platforms sysimages addons;
     
     stdenv_32bit = pkgs_i686.stdenv;
     zlib_32bit = pkgs_i686.zlib;
