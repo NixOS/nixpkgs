@@ -1,4 +1,4 @@
-{ kde, qt4, cmake }:
+{ stdenv, kde, qt4, cmake }:
 
 kde {
   buildInputs = [ qt4 ];
@@ -8,6 +8,6 @@ kde {
 
   meta = {
     description = "C++ parser used to generate language bindings for Qt/KDE";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gobjectIntrospection
 , python, gtk, pygtk, gnutls, cairo, libtool, glib, pkgconfig, libtasn1
-, libffi, cyrus_sasl, intltool, perl, perlPackages, firefoxPkgs, pulseaudio
+, libffi, cyrus_sasl, intltool, perl, perlPackages, pulseaudio
 , kbproto, libX11, libXext, xextproto, pygobject, libgcrypt, gtk3, vala
 , pygobject3, libogg, enableGTK3 ? false }:
 

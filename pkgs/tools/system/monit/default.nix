@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = http://mmonit.com/monit/;
     description = "Monitoring system";
     license = stdenv.lib.licenses.agpl3;
-    maintainer = with stdenv.lib.maintainers; [ raskin wmertens ];
+    maintainers = with stdenv.lib.maintainers; [ raskin wmertens ];
   };
 }

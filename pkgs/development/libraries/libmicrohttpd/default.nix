@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       it easy to run an HTTP server as part of another application.
     '';
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     homepage = http://www.gnu.org/software/libmicrohttpd/;
 

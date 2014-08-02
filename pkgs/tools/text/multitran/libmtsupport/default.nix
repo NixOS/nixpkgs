@@ -13,6 +13,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://multitran.sourceforge.net/;
     description = "Multitran lib: basic useful functions";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

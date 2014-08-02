@@ -79,6 +79,7 @@
   ./services/audio/alsa.nix
   ./services/audio/fuppes.nix
   ./services/audio/mpd.nix
+  ./services/audio/mopidy.nix
   ./services/backup/almir.nix
   ./services/backup/bacula.nix
   ./services/backup/mysql-backup.nix
@@ -296,6 +297,7 @@
   ./services/x11/xserver.nix
   ./system/activation/activation-script.nix
   ./system/activation/top-level.nix
+  ./system/boot/emergency-mode.nix
   ./system/boot/kernel.nix
   ./system/boot/kexec.nix
   ./system/boot/loader/efi.nix
@@ -311,15 +313,17 @@
   ./system/boot/stage-1.nix
   ./system/boot/stage-2.nix
   ./system/boot/systemd.nix
+  ./system/boot/tmp.nix
   ./system/etc/etc.nix
   ./system/upstart/upstart.nix
   ./tasks/cpu-freq.nix
   ./tasks/encrypted-devices.nix
+  ./tasks/filesystems.nix
   ./tasks/filesystems/btrfs.nix
+  ./tasks/filesystems/cifs.nix
   ./tasks/filesystems/ext.nix
   ./tasks/filesystems/f2fs.nix
   ./tasks/filesystems/nfs.nix
-  ./tasks/filesystems.nix
   ./tasks/filesystems/reiserfs.nix
   ./tasks/filesystems/unionfs-fuse.nix
   ./tasks/filesystems/vfat.nix
@@ -334,6 +338,7 @@
   ./testing/service-runner.nix
   ./virtualisation/container-config.nix
   ./virtualisation/containers.nix
+  ./virtualisation/docker.nix
   ./virtualisation/libvirtd.nix
   #./virtualisation/nova.nix
   ./virtualisation/virtualbox-guest.nix

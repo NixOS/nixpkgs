@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.mcternan.me.uk/mscgen/;
     description = "Convert Message Sequence Chart descriptions into PNG, SVG, or EPS images";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
 
     longDescription = ''
       Mscgen is a small program that parses Message Sequence Chart

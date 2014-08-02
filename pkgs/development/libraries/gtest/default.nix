@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
     cp -v libgtest.a libgtest_main.a $out/lib
     cp -v -r ../include $out
+    cp -v -r ../src $out
   '';
 
   meta = {

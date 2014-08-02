@@ -4,7 +4,8 @@ targetRoot=/mnt-root
 console=tty1
 
 export LD_LIBRARY_PATH=@extraUtils@/lib
-export PATH=@extraUtils@/bin:@extraUtils@/sbin
+export PATH=@extraUtils@/bin
+ln -s @extraUtils@/bin /bin
 
 
 fail() {
@@ -261,6 +262,13 @@ mountFS() {
     echo "$device /mnt-root$mountPoint $fsType $options" >> /etc/fstab
 
     checkFS "$device" "$fsType"
+
+    # Create backing directories for unionfs-fuse.
+    if [ "$fsType" = unionfs-fuse ]; then
+        for i in $(IFS=:; echo ${options##*,dirs=}); do
+            mkdir -m 0700 -p /mnt-root"${i%=*}"
+        done
+    fi
 
     echo "mounting $device on $mountPoint..."
 

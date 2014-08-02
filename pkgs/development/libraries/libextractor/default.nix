@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
          additional MIME types are detected.
       '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = [ ];
   };

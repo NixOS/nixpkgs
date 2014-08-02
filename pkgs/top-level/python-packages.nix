@@ -474,7 +474,7 @@ rec {
     meta = {
       homepage = http://code.google.com/p/argparse/;
 
-      license = "Apache License 2.0";
+      license = stdenv.lib.licenses.asl20;
 
       description = "argparse: Python command line parser";
 
@@ -577,7 +577,7 @@ rec {
 
     meta = {
       homepage = https://github.com/botocore/bcdoc;
-      license = "Apache License 2.0";
+      license = stdenv.lib.licenses.asl20;
       description = "ReST document generation tools for botocore";
     };
   };
@@ -1582,7 +1582,7 @@ rec {
 
       homepage = http://code.google.com/p/cssutils/;
 
-      license = "LGPLv3+";
+      license = stdenv.lib.licenses.lgpl3Plus;
     };
   });
 
@@ -2654,7 +2654,7 @@ rec {
       sed -i "/use_setuptools/d" setup.py
     '';
 
-    buildInputs = [ pkgs.alsaLib pkgs.jackaudio ];
+    buildInputs = [ pkgs.alsaLib pkgs.jack2 ];
 
     meta = with stdenv.lib; {
       description = "A Python wrapper for the RtMidi C++ library written with Cython";
@@ -2785,7 +2785,7 @@ rec {
     meta = {
       homepage = http://freedesktop.org/wiki/Software/pyxdg;
       description = "Contains implementations of freedesktop.org standards";
-      license = "LGPLv2";
+      license = stdenv.lib.licenses.lgpl2;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
@@ -2801,7 +2801,7 @@ rec {
     meta = {
       homepage = https://github.com/erikrose/chardet;
       description = "Universal encoding detector";
-      license = "LGPLv2";
+      license = stdenv.lib.licenses.lgpl2;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
@@ -3288,7 +3288,7 @@ rec {
       '';
 
       # See http://foolscap.lothar.com/trac/browser/LICENSE.
-      license = "MIT";
+      license = stdenv.lib.licenses.mit;
 
       maintainers = [ ];
     };
@@ -4134,7 +4134,7 @@ rec {
     meta = {
       description = "Super-fast templating language.";
       homepage = http://www.makotemplates.org;
-      license = "MIT";
+      license = stdenv.lib.licenses.mit;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
@@ -4305,6 +4305,24 @@ rec {
     };
   };
 
+  minimock = buildPythonPackage rec {
+    version = "1.2.8";
+    name = "minimock-${version}";
+
+    src = fetchurl {
+      url = "https://bitbucket.org/jab/minimock/get/${version}.zip";
+      sha256 = "c88fa8a7120623f23990a7f086a9657f6ced09025a55e3be8649a30b4945441a";
+    };
+
+    buildInputs = [ nose ];
+
+    checkPhase = "./test";
+
+    meta = {
+      description = "A minimalistic mocking library for python";
+      homepage = https://pypi.python.org/pypi/MiniMock;
+    };
+  };
 
   mitmproxy = buildPythonPackage rec {
     baseName = "mitmproxy";
@@ -4368,7 +4386,7 @@ rec {
 
       homepage = http://moinmo.in/;
 
-      license = "GPLv2+";
+      license = stdenv.lib.licenses.gpl2Plus;
     };
   });
 
@@ -4488,7 +4506,7 @@ rec {
     meta = {
       description = "Python multimedia tagging library";
       homepage = http://code.google.com/p/mutagen;
-      license = "LGPLv2";
+      license = stdenv.lib.licenses.lgpl2;
     };
   });
 
@@ -4507,7 +4525,7 @@ rec {
     meta = {
       description = "Utilities for use with console mail clients, like mutt";
       homepage = http://www.blacktrash.org/hg/muttils;
-      license = "GPLv2+";
+      license = stdenv.lib.licenses.gpl2Plus;
     };
   });
 
@@ -4586,6 +4604,23 @@ rec {
       '';
     };
   });
+
+
+  nbxmpp = buildPythonPackage rec {
+    name = "nbxmpp-0.5";
+
+    src = fetchurl {
+      name = "${name}.tar.gz";
+      url = "https://python-nbxmpp.gajim.org/downloads/5";
+      sha256 = "0y270c9v4i9n58p4ghlm18h50qcfichmfkgcpqd3bypx4fkmdx90";
+    };
+
+    meta = {
+      homepage = "https://python-nbxmpp.gajim.org/";
+      description = "Non-blocking Jabber/XMPP module";
+      license = stdenv.lib.licenses.gpl3;
+    };
+  };
 
 
   netaddr = buildPythonPackage rec {
@@ -5199,6 +5234,28 @@ rec {
     };
   };
 
+  pbr = buildPythonPackage rec {
+    name = "pbr-0.9.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pbr/${name}.tar.gz";
+      sha256 = "e5a57c434b1faa509a00bf458d2c7af965199d9cced3d05a547bff9880f7e8cb";
+    };
+
+    # pip depend on $HOME setting
+    preConfigure = "export HOME=$TMPDIR";
+
+    doCheck = false;
+
+    buildInputs = [ pip ];
+
+    meta = {
+      description = "Python Build Reasonableness";
+      homepage = "http://docs.openstack.org/developer/pbr/";
+      license = licenses.asl20;
+    };
+  };
+
   pep8 = buildPythonPackage rec {
     name = "pep8-${version}";
     version = "1.5.7";
@@ -5231,7 +5288,7 @@ rec {
     meta = {
       homepage = "http://www.noah.org/wiki/Pexpect";
       description = "Automate interactive console applications such as ssh, ftp, etc.";
-      license = "MIT";
+      license = stdenv.lib.licenses.mit;
 
       longDescription = ''
         Pexpect is similar to the Don Libes "Expect" system, but Pexpect
@@ -5658,7 +5715,7 @@ rec {
 
       description = "Python wrappers for the Crypto++ library";
 
-      license = "GPLv2+";
+      license = stdenv.lib.licenses.gpl2Plus;
 
       maintainers = [ ];
       platforms = stdenv.lib.platforms.linux;
@@ -5968,6 +6025,23 @@ rec {
     meta = {
       description = "A python implementation of the Pluggable Transports for Circumvention specification for Tor";
       license = stdenv.lib.licenses.bsd2;
+    };
+  });
+
+  pyro3 = buildPythonPackage (rec {
+    name = "Pyro-3.16";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/P/Pyro/${name}.tar.gz";
+      md5 = "59d4d3f4a8786776c9d7f9051b8f1a69";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Distributed object middleware for Python (IPC/RPC)";
+      homepage = http://pythonhosted.org/Pyro/;
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = [ maintainers.bjornfor ];
     };
   });
 
@@ -6397,7 +6471,7 @@ rec {
 
       homepage = http://allmydata.org/trac/pyutil;
 
-      license = "GPLv2+";
+      license = stdenv.lib.licenses.gpl2Plus;
     };
   });
 
@@ -6846,7 +6920,7 @@ rec {
 
     meta = {
       homepage = http://stuvel.eu/rsa;
-      license = "Apache License 2.0";
+      license = stdenv.lib.licenses.asl20;
       description = "A pure-Python RSA implementation";
     };
   };
@@ -7034,7 +7108,7 @@ rec {
 
       homepage = http://code.google.com/p/simplejson/;
 
-      license = "MIT";
+      license = stdenv.lib.licenses.mit;
     };
   });
 
@@ -7097,6 +7171,23 @@ rec {
     meta = with stdenv.lib; {
       description = "Geometric objects, predicates, and operations";
       homepage = "https://pypi.python.org/pypi/Shapely/";
+    };
+  };
+
+  stevedore = buildPythonPackage rec {
+    name = "stevedore-0.15";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/s/stevedore/${name}.tar.gz";
+      sha256 = "bec9269cbfa58de4f0849ec79bb7d54eeeed9df8b5fbfa1637fbc68062822847";
+    };
+
+    buildInputs = [ pbr pip ];
+
+    meta = {
+      description = "Manage dynamic plugins for Python applications";
+      homepage = "https://pypi.python.org/pypi/stevedore";
+      license = licenses.asl20;
     };
   };
 
@@ -7699,7 +7790,7 @@ rec {
     meta = {
       homepage = http://taskcoach.org/;
       description = "Todo manager to keep track of personal tasks and todo lists";
-      license = "GPLv3+";
+      license = stdenv.lib.licenses.gpl3Plus;
     };
   };
 
@@ -7984,7 +8075,7 @@ rec {
 
     meta = {
       homepage = "urlgrabber.baseurl.org";
-      license = "LGPLv2+";
+      license = stdenv.lib.licenses.lgpl2Plus;
       description = "Python module for downloading files";
       maintainers = [ stdenv.lib.maintainers.qknight ];
     };
@@ -8057,6 +8148,32 @@ rec {
       platforms = platforms.all;
     };
   };
+
+  virtualenvwrapper = buildPythonPackage (rec {
+    name = "virtualenvwrapper-4.3";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/v/virtualenvwrapper/${name}.tar.gz";
+      sha256 = "514cbc22218347bf7b54bdbe49e1a5f550d2d53b1ad2491c10e91ddf48fb528f";
+    };
+
+    # pip depend on $HOME setting
+    preConfigure = "export HOME=$TMPDIR";
+
+    buildInputs = [ pbr pip pkgs.which ];
+    propagatedBuildInputs = [ stevedore virtualenv virtualenv-clone ];
+
+    patchPhase = ''
+      substituteInPlace "virtualenvwrapper.sh" --replace "which" "${pkgs.which}/bin/which"
+      substituteInPlace "virtualenvwrapper_lazy.sh" --replace "which" "${pkgs.which}/bin/which"
+    '';
+
+    meta = {
+      description = "Enhancements to virtualenv";
+      homepage = "https://pypi.python.org/pypi/virtualenvwrapper";
+      license = licenses.mit;
+    };
+  });
 
   waitress = buildPythonPackage rec {
     name = "waitress-0.8.7";
@@ -8296,7 +8413,7 @@ rec {
 
       homepage = http://python-xlib.sourceforge.net/;
 
-      license = "GPLv2+";
+      license = stdenv.lib.licenses.gpl2Plus;
     };
   });
 
@@ -8406,7 +8523,7 @@ rec {
         and Haskell API.
       '';
 
-      license = "GPLv2+";
+      license = stdenv.lib.licenses.gpl2Plus;
     };
   });
 
@@ -8906,6 +9023,24 @@ rec {
     };
 
     doCheck = false;
+  };
+
+
+  tornadokick = buildPythonPackage rec {
+    name = "tornadokick-2014.07.23";
+
+    propagatedBuildInputs = [ tornado ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/tornadokick/${name}.tar.gz";
+      md5 = "201d26de2993a554b16140af3b4ee1b6";
+    };
+
+    meta = {
+      description = "The TornadoKick Web Toolkit for Tornado Web Framework.";
+      homepage = http://github.com/multoncore/tornadokick;
+      license = stdenv.lib.licenses.asl20;
+    };
   };
 
 
@@ -9487,7 +9622,7 @@ rec {
     meta = {
       description = "Cross-platform system power status information";
       homepage = https://github.com/Kentzo/Power;
-      license = "mit";
+      license = stdenv.lib.licenses.mit;
     };
   };
 

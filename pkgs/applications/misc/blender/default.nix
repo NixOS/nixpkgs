@@ -2,7 +2,7 @@
 , ilmbase, libXi, libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, mesa, openal, opencolorio, openexr, openimageio, openjpeg, python
 , zlib, fftw
-, jackaudioSupport ? false, jackaudio
+, jackaudioSupport ? false, jack2
 }:
 
 with lib;
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     [ SDL boost cmake ffmpeg gettext glew ilmbase libXi
       libjpeg libpng libsamplerate libsndfile libtiff mesa openal
       opencolorio openexr openimageio /* openjpeg */ python zlib fftw
-    ] ++ optional jackaudioSupport jackaudio;
+    ] ++ optional jackaudioSupport jack2;
 
   postUnpack =
     ''

@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     repositories.git = https://github.com/SupSuper/OpenXcom.git;
     maintainers = [ stdenv.lib.maintainers.page ];
     platforms = stdenv.lib.platforms.linux;
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3;
   };
 
 }

@@ -1,4 +1,4 @@
-{ chmlib, djvulibre, ebook_tools, kde, kdelibs, libspectre, popplerQt4, qca2
+{ stdenv, chmlib, djvulibre, ebook_tools, kde, kdelibs, libspectre, popplerQt4, qca2
 , qimageblitz, libtiff, kactivities, pkgconfig, libkexiv2 }:
 
 kde {
@@ -12,6 +12,6 @@ kde {
 
   meta = {
     description = "Okular, the KDE document viewer";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

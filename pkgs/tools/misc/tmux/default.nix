@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "tmux";
-  version = "1.9";
+  version = "1.9a";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${name}.tar.gz";
-    sha256 = "09qykbcyvsspg6bfsdx2lp9b32dbybwn5k6kx4baib0k6l4wmriy";
+    sha256 = "1x9k4wfd4l5jg6fh7xkr3yyilizha6ka8m5b1nr0kw8wj0mv5qy5";
   };
 
   nativeBuildInputs = [ pkgconfig ];

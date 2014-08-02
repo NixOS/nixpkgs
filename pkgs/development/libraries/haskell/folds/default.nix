@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "folds";
-  version = "0.6.1";
-  sha256 = "13p4kyr48g917ib87n14qpqaka6isp73cwy7mvvsqgprj1fghyj1";
+  version = "0.6.2";
+  sha256 = "13zdmf7szdy9ka5dw0vgzbfmndm7w8fz7ryz5h2z5hsqg9am2qqa";
   buildDepends = [
     comonad contravariant lens pointed profunctors reflection
     semigroupoids tagged transformers vector

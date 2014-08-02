@@ -2,20 +2,21 @@
 
 { cabal, Diff, dualTree, ghcMod, ghcPaths, ghcSybUtils
 , haskellSrcExts, hspec, HUnit, monoidExtras, mtl, QuickCheck
-, rosezipper, semigroups, syb
+, rosezipper, semigroups, syb, uniplate
 }:
 
 cabal.mkDerivation (self: {
   pname = "haskell-token-utils";
-  version = "0.0.0.3";
-  sha256 = "1qfb0gzi8mvraflk7l8wckkaa2gfdq5wqk7ax3v4i4f1mrd7zr4f";
+  version = "0.0.0.5";
+  sha256 = "01kyghzbs8w8ds0aczcdg2ib5b919r5vxgwg8iifbf220vlhd8mn";
   buildDepends = [
-    dualTree ghcSybUtils haskellSrcExts monoidExtras mtl rosezipper
-    semigroups syb
+    dualTree ghcPaths ghcSybUtils haskellSrcExts monoidExtras mtl
+    rosezipper semigroups syb
   ];
   testDepends = [
     Diff dualTree ghcMod ghcPaths ghcSybUtils haskellSrcExts hspec
     HUnit monoidExtras mtl QuickCheck rosezipper semigroups syb
+    uniplate
   ];
   meta = {
     homepage = "https://github.com/alanz/haskell-token-utils";

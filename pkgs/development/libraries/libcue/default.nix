@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
       available.
     '';
     homepage = http://sourceforge.net/projects/libcue/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
     platforms = with stdenv.lib.platforms; linux;
   };

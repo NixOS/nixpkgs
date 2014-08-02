@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://bugseng.com/products/ppl/;
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ ];
   };

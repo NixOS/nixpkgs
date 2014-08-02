@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://pamusb.org/;
     description = "Authentication using USB Flash Drives";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

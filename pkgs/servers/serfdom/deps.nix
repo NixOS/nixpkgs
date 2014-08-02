@@ -77,8 +77,8 @@ let
       src = fetchFromGitHub {
         owner = "hashicorp";
         repo = "serf";
-        rev = "4232a3f7b52f755084caf6b2cc2789efa2948555";
-        sha256 = "1hxxqrjz08882d205ylakhvvwciahiqdzkwi2a7zwrmx6sxna7sr";
+        rev = "5e0771b8d61bee28986087a246f7611d6bd4a87a";
+        sha256 = "0ck77ji28bvm4ahzxyyi4sm17c3fxc16k0k5mihl1nlkgdd73m8y";
       };
     }
     {

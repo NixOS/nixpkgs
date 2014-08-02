@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cgrep";
-  version = "6.4.3.1";
-  sha256 = "0pqifapjgazz7wiydc775i4f6iixq8v87rzjgvvymdbdsn0sfa0r";
+  version = "6.4.5";
+  sha256 = "0pp3gfy8dvdbv40vfy3dhqymjp0knnbzv9hmbc18f3s8zpy4lis0";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [

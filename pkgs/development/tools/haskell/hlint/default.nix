@@ -6,15 +6,14 @@
 
 cabal.mkDerivation (self: {
   pname = "hlint";
-  version = "1.9";
-  sha256 = "1c8qpfrivsxx6raqnrz40li73hng4z0ygc1hl70qixbmsmv2a830";
+  version = "1.9.3";
+  sha256 = "1sdz981yq0amsw9q6hx0aqkd0ayrax5p77s3n3gz4bphpk37n09b";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     cmdargs cpphs filepath haskellSrcExts hscolour transformers
     uniplate
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://community.haskell.org/~ndm/hlint/";
     description = "Source code suggestions";

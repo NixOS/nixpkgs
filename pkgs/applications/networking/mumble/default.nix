@@ -1,12 +1,12 @@
 { stdenv, fetchurl, qt4, boost, protobuf, libsndfile
 , speex, libopus, avahi, pkgconfig
 , jackSupport ? false
-, jackaudio ? null
+, jack2 ? null
 , speechdSupport ? false
 , speechd ? null
 }:
 
-assert jackSupport -> jackaudio != null;
+assert jackSupport -> jack2 != null;
 assert speechdSupport -> speechd != null;
 
 let
@@ -15,11 +15,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "mumble-" + version;
-  version = "1.2.6";
+  version = "1.2.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/mumble/${name}.tar.gz";
-    sha256 = "1zxnbwbd81p7lvscghlpkad8kynh9gbf1nhc092sp64pp37xwv47";
+    sha256 = "0zjqkkdkcvgmqic6np87hj6b6f851lkzyd6y3cqj6zzacjvps31d";
   };
 
   patches = optional jackSupport ./mumble-jack-support.patch;
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 boost protobuf libsndfile speex
     libopus avahi pkgconfig ]
-    ++ (optional jackSupport jackaudio)
+    ++ (optional jackSupport jack2)
     ++ (optional speechdSupport speechd);
 
   installPhase = ''

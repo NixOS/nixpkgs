@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, freetype, ftgl, jackaudio, libX11, lv2
+{ stdenv, fetchurl, alsaLib, freetype, ftgl, jack2, libX11, lv2
 , mesa, pkgconfig, ttf_bitstream_vera
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation  rec {
   '';
 
   buildInputs = [
-    alsaLib freetype ftgl jackaudio libX11 lv2 mesa pkgconfig
+    alsaLib freetype ftgl jack2 libX11 lv2 mesa pkgconfig
     ttf_bitstream_vera
   ];
 

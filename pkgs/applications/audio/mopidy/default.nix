@@ -5,15 +5,15 @@
 pythonPackages.buildPythonPackage rec {
   name = "mopidy-${version}";
 
-  version = "0.18.3";
+  version = "0.19.0";
 
   src = fetchurl {
     url = "https://github.com/mopidy/mopidy/archive/v${version}.tar.gz";
-    sha256 = "0b8ss6qjzj1pawd8469i5310ily3rad0ashfy87vdyj6xdyfyp0q";
+    sha256 = "10cnc1bipr0brk7478201cgm71lp5bci3qiaadyxv9hhcn0nmn9b";
   };
 
   propagatedBuildInputs = with pythonPackages; [
-    gst_python pygobject pykka cherrypy ws4py gst_plugins_base gst_plugins_good
+    gst_python pygobject pykka tornado gst_plugins_base gst_plugins_good
   ];
 
   # There are no tests

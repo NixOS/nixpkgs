@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.gnu.org/software/miscfiles/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     description = "Collection of files not of crucial importance for sysadmins";
   };
 }

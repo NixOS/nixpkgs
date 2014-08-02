@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   meta = { 
     description="Kernel based automounter";
     homepage="http://www.linux-consulting.com/Amd_AutoFS/autofs.html";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     executables = [ "automount" ];
   };
 }

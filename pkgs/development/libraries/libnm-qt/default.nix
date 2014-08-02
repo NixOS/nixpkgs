@@ -27,6 +27,6 @@ stdenv.mkDerivation {
     description = "Qt wrapper for NetworkManager DBus API";
     license = licenses.lgpl21;
     platforms = platforms.linux;
-    maintainer = [ maintainers.jgeerds ];
+    maintainers = [ maintainers.jgeerds ];
   };
 }

@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     description = "use socks-friendly applications with Tor";
     homepage = http://code.google.com/p/torsocks/;
     repositories.git = https://git.torproject.org/torsocks.git;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

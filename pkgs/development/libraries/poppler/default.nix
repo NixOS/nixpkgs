@@ -49,7 +49,7 @@ let
         Poppler is a PDF rendering library based on the xpdf-3.0 code base.
       '';
 
-      license = "GPLv2";
+      license = stdenv.lib.licenses.gpl2;
       platforms = stdenv.lib.platforms.all;
     };
   } merge ]); # poppler_drv

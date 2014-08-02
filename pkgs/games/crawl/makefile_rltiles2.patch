@@ -1,0 +1,10 @@
+--- old/source/rltiles/Makefile	2014-05-05 23:22:48.054952469 +0200
++++ new/source/rltiles/Makefile	2014-05-05 22:45:07.742667726 +0200
+@@ -142,6 +128,6 @@
+ 	$(QUIET_HOSTCXX)$(HOSTCXX) $(CFLAGS) -MMD -c $< -o $@
+ 
+ $(TILEGEN): $(OBJECTS)
+-	$(QUIET_HOSTLINK)$(HOSTCXX) $(OBJECTS) -o $@ $(LDFLAGS)
++	g++ $(OBJECTS) -o $@ $(LDFLAGS)
+ 
+ .PHONY: all clean distclean

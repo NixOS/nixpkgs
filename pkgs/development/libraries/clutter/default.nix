@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
          specific needs.
       '';
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
     homepage = http://www.clutter-project.org/;
 
     maintainers = with stdenv.lib.maintainers; [ urkud ];

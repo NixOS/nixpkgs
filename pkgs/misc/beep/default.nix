@@ -19,6 +19,6 @@ stdenv.mkDerivation {
   meta = {
     description = "The advanced PC speaker beeper";
     homepage = http://www.johnath.com/beep/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

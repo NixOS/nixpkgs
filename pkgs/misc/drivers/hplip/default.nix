@@ -56,11 +56,9 @@ stdenv.mkDerivation rec {
     ''
     + (stdenv.lib.optionalString withPlugin
     (let hplip_arch =
-          if builtins.currentSystem == "i686-linux"
-            then "x86_32"
-            else if builtins.currentSystem == "x86_64-linux"
-              then "x86_64"
-              else abort "Platform must be i686-linux or x86_64-linux!";
+          if stdenv.system == "i686-linux" then "x86_32"
+          else if stdenv.system == "x86_64-linux" then "x86_64"
+          else abort "Platform must be i686-linux or x86_64-linux!";
     in
     ''
     sh ${plugin} --noexec --keep

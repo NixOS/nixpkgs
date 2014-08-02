@@ -1,0 +1,21 @@
+--- old/source/rltiles/Makefile	2014-04-17 10:17:31.596400123 +0000
++++ new/source/rltiles/Makefile	2014-04-17 14:36:07.263108690 +0000
+@@ -20,7 +20,8 @@
+ 
+ ifdef TILES
+   ifndef CONTRIB_SDL
+-    SDL_CFLAGS := $(shell sdl-config --cflags 2> /dev/null || echo "-I../contrib/install/$(ARCH)/include/SDL")
++    SDL_CFLAGS := $(shell sdl-config --cflags 2> /dev/null)
++    SDL_IMG_CFLAGS := $(shell pkg-config --cflags-only-I SDL_image 2> /dev/null)
+     SDL_LDFLAGS := $(shell sdl-config --libs 2> /dev/null && echo "-lSDL_image" || echo "../contrib/install/$(ARCH)/lib/libSDL.a ../contrib/install/$(ARCH)/lib/libSDLmain.a ../contrib/install/$(ARCH)/lib/libSDL_image.a")
+   else
+     SDL_CFLAGS := -I../contrib/install/$(ARCH)/include/SDL
+@@ -35,7 +36,7 @@
+     PNG_LIB := ../contrib/install/$(ARCH)/lib/libpng.a ../contrib/install/$(ARCH)/lib/libz.a
+   endif
+ 
+-  CFLAGS += $(SDL_CFLAGS) $(PNG_INCLUDE)
++  CFLAGS += $(SDL_CFLAGS) $(SDL_IMG_CFLAGS) $(PNG_INCLUDE) -I$(SDL_image)/include -I$(SDL)/include
+   LDFLAGS += $(SDL_LDFLAGS) $(PNG_LIB)
+ 
+   CFLAGS += -DUSE_TILE
