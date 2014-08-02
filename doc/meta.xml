@@ -121,7 +121,7 @@ interpretation:</para>
   <varlistentry>
     <term><varname>license</varname></term>
     <listitem><para>The license for the package. One from attribute set defined in
-      <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/lib/licenses.nix">
+      <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix">
       <filename>nixpkgs/lib/licenses.nix</filename></link>.
       Example:
       <literal>stdenv.lib.licenses.gpl3</literal>.</para></listitem>
@@ -202,19 +202,26 @@ meta.hydraPlatforms = [];
 
 <section xml:id="sec-meta-license"><title>Licenses</title>
 
-<para>The <varname>meta.license</varname> attribute could be one of the
-following:
+<para>The <varname>meta.license</varname> attribute should be
+set to one of the values found in <varname>stdenv.lib.licenses</varname>.
+If the license does not exist in that set, you may either choose
+a similar license or add one to the set defined in
+<link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix">
+<filename>nixpkgs/lib/licenses.nix</filename></link>.
+</para>
+
+<para>There are a few special values that the license field may take.
 
 <variablelist>
 
   <varlistentry>
-    <term><varname>free</varname></term>
-    <listitem><para>Catch-all for free software licenses not listed
-    above.</para></listitem>
+    <term><varname>stdenv.lib.licenses.free</varname></term>
+    <listitem><para>Catch-all for free software licenses not already
+    in <varname>stdenv.lib.licenses</varname>.</para></listitem>
   </varlistentry>
 
   <varlistentry>
-    <term><varname>unfree-redistributable</varname></term>
+    <term><varname>stdenv.lib.licenses.unfree-redistributable</varname></term>
     <listitem><para>Unfree package that can be redistributed in binary
     form.  That is, it’s legal to redistribute the
     <emphasis>output</emphasis> of the derivation.  This means that
@@ -231,7 +238,7 @@ following:
   </varlistentry>
 
   <varlistentry>
-    <term><varname>unfree</varname></term>
+    <term><varname>stdenv.lib.licenses.unfree</varname></term>
     <listitem><para>Unfree package that cannot be redistributed.  You
     can build it yourself, but you cannot redistribute the output of
     the derivation.  Thus it cannot be included in the Nixpkgs
@@ -239,7 +246,7 @@ following:
   </varlistentry>
 
   <varlistentry>
-    <term><varname>unfree-redistributable-firmware</varname></term>
+    <term><varname>stdenv.lib.licenses.unfree-redistributable-firmware</varname></term>
     <listitem><para>This package supplies unfree, redistributable
     firmware.  This is a separate value from
     <varname>unfree-redistributable</varname> because not everybody
