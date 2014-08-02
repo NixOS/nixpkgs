@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Hardcore 3D space shooter with spaceship upgrade possibilities.";
     homepage = http://www.viewizard.com/;
-    license = stdenv.lib.licenses.gpl3
+    license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
   };
 }
