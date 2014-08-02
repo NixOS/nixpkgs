@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pythonPackages, unzip, gamin }:
+{ stdenv, fetchurl, pythonPackages, unzip, python27Full, systemd }:
 
-let version = "0.8.13"; in
+let version = "0.9"; in
 
 pythonPackages.buildPythonPackage {
   name = "fail2ban-${version}";
@@ -9,12 +9,12 @@ pythonPackages.buildPythonPackage {
   src = fetchurl {
     url    = "https://github.com/fail2ban/fail2ban/zipball/${version}";
     name   = "fail2ban-${version}.zip";
-    sha256 = "0c63i5jsn2n6hv6fb6q922ksxfpppah9415vpydiv0vpf23pq0cb";
+    sha256 = "0dawl0vvdvpnkg1hc4l0c8sj8ikcr2l48d6khfx0174nq8yfcg93";
   };
 
   buildInputs = [ unzip ];
 
-  pythonPath = [ gamin ];
+  pythonPath = [ systemd python27Full ];
 
   preConfigure = ''
     substituteInPlace setup.cfg \
