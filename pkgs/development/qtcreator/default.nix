@@ -41,6 +41,21 @@ stdenv.mkDerivation rec {
   installFlags = "INSTALL_ROOT=$(out)"
     + optionalString withDocumentation " install_docs";
 
+  postInstall = ''
+    # Install desktop file
+    mkdir -p "$out/share/applications"
+    cat > "$out/share/applications/qtcreator.desktop" << __EOF__
+    [Desktop Entry]
+    Exec=$out/bin/qtcreator
+    Name=Qt Creator
+    GenericName=Cross-platform IDE for Qt
+    Icon=QtProject-qtcreator.png
+    Terminal=false
+    Type=Application
+    Categories=Qt;Development;IDE;
+    __EOF__
+  '';
+
   meta = {
     description = "Cross-platform IDE tailored to the needs of Qt developers";
     longDescription = ''
