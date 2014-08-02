@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     perlPackages.ExtUtilsPkgConfig perlPackages.TestMore perlPackages.InlineC
   ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs .
   '';
 
