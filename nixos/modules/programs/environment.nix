@@ -14,6 +14,20 @@ in
 
 {
 
+  options = {
+    environment.nix-path = mkOption {
+      default =
+        [ "/nix/var/nix/profiles/per-user/root/channels/nixos"
+          "nixpkgs=/etc/nixos/nixpkgs"
+          "nixos-config=/etc/nixos/configuration.nix"
+        ];
+      description = ''
+        The contents of the NIX_PATH environment variable.
+      '';
+      type = types.listOf types.str;
+    };
+  };
+
   config = {
 
     environment.variables =
@@ -24,12 +38,7 @@ in
       };
 
     environment.sessionVariables =
-      { NIX_PATH =
-          [ "/nix/var/nix/profiles/per-user/root/channels/nixos"
-            "nixpkgs=/etc/nixos/nixpkgs"
-            "nixos-config=/etc/nixos/configuration.nix"
-          ];
-      };
+      { NIX_PATH = cfg.nix-path; };
 
     environment.profiles =
       [ "$HOME/.nix-profile"
