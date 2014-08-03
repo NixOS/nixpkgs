@@ -2,14 +2,17 @@
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchurl {
-    url    = mirror://sourceforge/project/sbcl/sbcl/1.2.0/sbcl-1.2.0-source.tar.bz2;
-    sha256 = "13k20sys1v4lvgis8cnbczww6zs93rw176vz07g4jx06418k53x2";
+    url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
+    sha256 = "08jk1bjk7087gq4ibzs1d27r0c6pigbvmff351j9a03kvl652b2v";
   };
 
-  buildInputs = [ sbclBootstrap ] ++ stdenv.lib.optional stdenv.isLinux clisp;
+  buildInputs = [ ]
+    ++ (stdenv.lib.optional stdenv.isDarwin sbclBootstrap)
+    ++ (stdenv.lib.optional stdenv.isLinux clisp)
+    ;
 
   patchPhase = ''
     echo '"${version}.nixos"' > version.lisp-expr
@@ -70,5 +73,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd3;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.all;
+    inherit version;
+    updateWalker = true;
   };
 }
