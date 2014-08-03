@@ -1831,6 +1831,8 @@ let
 
   pdnsd = callPackage ../tools/networking/pdnsd { };
 
+  peco = callPackage ../tools/text/peco { };
+
   pg_top = callPackage ../tools/misc/pg_top { };
 
   pdsh = callPackage ../tools/networking/pdsh {
