@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, coin3d, xercesc, ode, eigen, qt4, opencascade, gts
-, boost, zlib, python, swig, gfortran, soqt, libf2c , pyqt4, makeWrapper
+, boost, zlib, python, swig, gfortran, soqt, libf2c, makeWrapper
 , matplotlib, pycollada, pyside, pysideShiboken }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cmake coin3d xercesc ode eigen qt4 opencascade gts boost
-    zlib python swig gfortran soqt libf2c pyqt4 makeWrapper matplotlib
+    zlib python swig gfortran soqt libf2c makeWrapper matplotlib
     pycollada pyside pysideShiboken
   ];
 
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./pythonpath.patch ];
 
-  meta = {
-    homepage = http://free-cad.sourceforge.net/;
-    license = [ "GPLv2+" "LGPLv2+" ];
+  meta = with stdenv.lib; {
     description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = http://www.freecadweb.org/;
+    license = licenses.lgpl2Plus;
+    maintainers = [ maintainers.viric ];
+    platforms = platforms.linux;
   };
 }
