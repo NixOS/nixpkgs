@@ -5,7 +5,6 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "git://github.com/mooz/js2-mode.git";
-    rev = "f0xbdwk973vz6sy413wjjpd0ac9465nh";
     sha256 = "dbdc07b864a9506a21af445c7fb1c75fbffadaac980ee7bbf752470d8054bd65";
   };
 
