@@ -1,5 +1,5 @@
 { stdenv, fetchurl, SDL, alsaLib, cmake, fftwSinglePrec, jack2, libogg
-, libsamplerate, libsndfile, pkgconfig, pulseaudio, qt4
+, libsamplerate, libsndfile, pkgconfig, pulseaudio, qt4, freetype
 }:
 
 stdenv.mkDerivation  rec {
@@ -15,6 +15,11 @@ stdenv.mkDerivation  rec {
     SDL alsaLib cmake fftwSinglePrec jack2 libogg libsamplerate
     libsndfile pkgconfig pulseaudio qt4
   ];
+
+  # work around broken build system of 0.4.*
+  NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2";
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Linux MultiMedia Studio";

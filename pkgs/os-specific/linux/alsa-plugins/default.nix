@@ -11,16 +11,17 @@ stdenv.mkDerivation rec {
     sha256 = "081is33afhykb4ysll8s6gh0d6nm1cglslj9ck0disbyl3qqlvs2";
   };
 
+  # ToDo: a52, etc.?
   buildInputs =
     [ pkgconfig alsaLib libogg ]
-    ++ stdenv.lib.optional (pulseaudio != null) pulseaudio
-    ++ stdenv.lib.optional (jack2 != null) jack2;
+    ++ lib.optional (pulseaudio != null) pulseaudio
+    ++ lib.optional (jack2 != null) jack2;
 
-  meta = { 
+  meta = with lib; {
     description = "Various plugins for ALSA";
     homepage = http://alsa-project.org/;
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [lib.maintainers.marcweber];
-    platforms = lib.platforms.linux;
+    license = licenses.lgpl21;
+    maintainers = [maintainers.marcweber];
+    platforms = platforms.linux;
   };
 }

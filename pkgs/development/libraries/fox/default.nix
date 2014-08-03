@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     md5 = "b5897e9c664967f5042e57070037ff18";
   };
 
-  buildInputs = [ x11 libpng libjpeg libtiff zlib bzip2 libXcursor libXrandr libXft ];
+  buildInputs = [ libpng x11 libjpeg libtiff zlib bzip2 libXcursor libXrandr libXft ];
 
   doCheck = true;
 

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "19hdgdmv20y56xvbj4vk0zdmyaa8kv7df85advkchw7cdsgwlcga";
   };
 
-  buildInputs = [ SDL mesa libpng libjpeg SDL_ttf libvorbis gettext physfs];
+  buildInputs = [ libpng SDL mesa libjpeg SDL_ttf libvorbis gettext physfs];
 
   dontPatchElf = true;
 
