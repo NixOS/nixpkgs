@@ -11,9 +11,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL frei0r gettext makeWrapper mlt pkgconfig qt5 ];
 
-  # Fixed in git and can be removed for the next release
-  patches = [ ./CuteLogger.patch ];
-
   configurePhase = "qmake PREFIX=$out";
 
   postInstall = ''
