@@ -5641,7 +5641,7 @@ let
       expat gettext perl
       SDL SDL_image SDL_mixer SDL_ttf
       curl sqlite
-      libogg libvorbis
+      libogg libvorbis libcaca csound cunit
       ;
     guile = guile_1_8;
     libpng = libpng15; # 0.0.13 needs libpng 1.2--1.5
