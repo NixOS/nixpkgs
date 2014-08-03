@@ -72,6 +72,7 @@
   mornfall = "Petr Ročkai <me@mornfall.net>";
   msackman = "Matthew Sackman <matthew@wellquite.org>";
   nathan-gs = "Nathan Bijnens <nathan@nathan.gs>";
+  MP2E = "Cray Elliott <MP2E@archlinux.us>";
   notthemessiah = "Brian Cohen <brian.cohen.88@gmail.com>";
   ocharles = "Oliver Charles <ollie@ocharles.org.uk>";
   offline = "Jaka Hudoklin <jakahudoklin@gmail.com>";

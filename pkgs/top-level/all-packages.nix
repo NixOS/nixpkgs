@@ -6179,6 +6179,8 @@ let
 
   SDL2_mixer = callPackage ../development/libraries/SDL2_mixer { };
 
+  SDL2_net = callPackage ../development/libraries/SDL2_net { };
+
   SDL2_gfx = callPackage ../development/libraries/SDL2_gfx { };
 
   serd = callPackage ../development/libraries/serd {};
