@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, ruby }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "yajl-2.0.4";
 
   src = fetchurl {
