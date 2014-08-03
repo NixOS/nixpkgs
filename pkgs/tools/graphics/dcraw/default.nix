@@ -1,14 +1,14 @@
-{stdenv, fetchurl, libjpeg, lcms, gettext, jasper }:
+{stdenv, fetchurl, libjpeg, lcms2, gettext, jasper }:
 
 stdenv.mkDerivation rec {
   name = "dcraw-9.22";
 
   src = fetchurl {
     url = "http://www.cybercom.net/~dcoffin/dcraw/archive/${name}.tar.gz";
-    sha256 = "0wjs90xdzdxi51qikbvc66gb912k2ay7jn9b31wv4rxxzgnbk4cs";
+    sha256 = "00dz85fr5r9k3nlwdbdi30fpqr8wihamzpyair7l7zk0vkrax402";
   };
 
-  buildInputs = [ libjpeg lcms gettext jasper ];
+  buildInputs = [ libjpeg lcms2 gettext jasper ];
 
   patchPhase = ''
     sed -i -e s@/usr/local@$out@ install
