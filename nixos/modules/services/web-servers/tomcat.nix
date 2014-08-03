@@ -79,8 +79,8 @@ in
 
       jdk = mkOption {
         default = pkgs.jdk;
-        description "Which JDK to use.";
-      }
+        description = "Which JDK to use.";
+      };
 
       axis2 = {
 
