@@ -895,11 +895,11 @@ rec {
 
   boto = buildPythonPackage rec {
     name = "boto-${version}";
-    version = "2.9.9";
+    version = "2.32.0";
 
     src = fetchurl {
       url = "https://github.com/boto/boto/archive/${version}.tar.gz";
-      sha256 = "18wqpzd1zf8nivcn2rl1wnladf7hhyy5p75b5l6kafynm4l9j6jq";
+      sha256 = "0bl5y7m0m84rz4q7hx783kxpj1n9wcm7dhv54bnx8cnanyd13cxn";
     };
 
     # The tests seem to require AWS credentials.
