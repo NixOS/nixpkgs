@@ -2887,7 +2887,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   taffybar = callPackage ../applications/misc/taffybar {};
 
-  yi = callPackage ../applications/editors/yi/yi.nix {};
+  yi = callPackage ../applications/editors/yi/yi.nix {
+    vty = self.vty_4_7_5;
+  };
 
   yiContrib = callPackage ../applications/editors/yi/yi-contrib.nix {};
 
