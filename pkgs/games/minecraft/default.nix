@@ -2,11 +2,11 @@
 , mesa, openal, alsaOss }:
 
 stdenv.mkDerivation {
-  name = "minecraft-2013.07.01";
+  name = "minecraft-2014.08.03";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/Minecraft.Download/launcher/Minecraft.jar";
-    sha256 = "04pj4l5q0a64jncm2kk45r7nxnxa2z9n110dcxbbahdi6wk0png8";
+    sha256 = "e8d90b2637b141b556670d8460d317aadb6e4f2e644e519995c428800b25f212";
   };
 
   phases = "installPhase";
