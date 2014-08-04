@@ -3994,6 +3994,9 @@ let
 
   inotifyTools = callPackage ../development/tools/misc/inotify-tools { };
 
+  intel-gpu-tools = callPackage ../development/tools/misc/intel-gpu-tools {
+    inherit (xorg) libpciaccess dri2proto libX11 libXext libXv libXrandr;
+  };
 
   ired = callPackage ../development/tools/analysis/radare/ired.nix { };
 
