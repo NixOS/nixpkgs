@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pipes-aeson";
-  version = "0.4.1.1";
-  sha256 = "1z520c9l2wqjcv5lb997n3zfks7p0z7dlwgqm74dcwnnfy3mfp9j";
+  version = "0.4.1.2";
+  sha256 = "0wacib0wf40bkm6rp2qcsrahc43g89l3icclbrshk8r54dhbazl7";
   buildDepends = [
     aeson attoparsec pipes pipesAttoparsec pipesBytestring pipesParse
     transformers
