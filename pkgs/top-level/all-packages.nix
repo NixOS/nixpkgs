@@ -3994,7 +3994,6 @@ let
 
   inotifyTools = callPackage ../development/tools/misc/inotify-tools { };
 
-  intelgen4asm = callPackage ../development/misc/intelgen4asm { };
 
   ired = callPackage ../development/tools/analysis/radare/ired.nix { };
 
