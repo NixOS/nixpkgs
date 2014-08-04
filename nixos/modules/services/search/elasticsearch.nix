@@ -122,9 +122,8 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
       environment = { ES_HOME = cfg.dataDir; };
-      path = [ pkgs.elasticsearch ];
       serviceConfig = {
-        ExecStart = "elasticsearch -Des.path.conf=${configDir} ${toString cfg.extraCmdLineOptions}";
+        ExecStart = "${pkgs.elasticsearch}/bin/elasticsearch -Des.path.conf=${configDir} ${toString cfg.extraCmdLineOptions}";
         User = "elasticsearch";
         PermissionsStartOnly = true;
       };

@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tzdata";
-  version = "0.1.20140324.0";
-  sha256 = "19cw8wag2d5jx9dxia3gr8qjr3bh77a2kp7ksyqp58xxmvmsqdn4";
+  version = "0.1.20140612.0";
+  sha256 = "03fd3jiw89c8zf2jdz0qps8sb8ipgmjqbbaq4y2aqczv36ha74gh";
   buildDepends = [ vector ];
   testDepends = [
     filemanip filepath HUnit MissingH testFramework testFrameworkHunit

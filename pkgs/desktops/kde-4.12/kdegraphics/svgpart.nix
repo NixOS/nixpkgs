@@ -1,10 +1,10 @@
-{ kde, kdelibs }:
+{ stdenv, kde, kdelibs }:
 
 kde {
   buildInputs = [ kdelibs ];
 
   meta = {
     description = "SVG KPart";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

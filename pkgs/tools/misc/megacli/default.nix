@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "CLI program for LSI MegaRAID cards, which also works with some Dell PERC RAID cards";
-    license = "unfree";
+    license = stdenv.lib.licenses.unfree;
   };
 }

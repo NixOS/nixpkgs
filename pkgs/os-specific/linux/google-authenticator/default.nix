@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://code.google.com/p/google-authenticator/;
     description = "Two-step verification, with pam module";
-    license = "ASL2.0";
+    license = stdenv.lib.licenses.asl20;
   };
 }

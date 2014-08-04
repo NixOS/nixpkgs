@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
   meta = { 
     description = "trackball-based 3D viewer qt widget including many useful features";
     homepage = http://artis.imag.fr/Members/Gilles.Debunne/QGLViewer/installUnix.html;
-    license = "GPL2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

@@ -680,11 +680,11 @@ let
   })) // {inherit xproto ;};
 
   libXext = (stdenv.mkDerivation ((if overrides ? libXext then overrides.libXext else x: x) {
-    name = "libXext-1.3.2";
+    name = "libXext-1.3.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXext-1.3.2.tar.bz2;
-      sha256 = "1q1j0kjyhmy24wqr6mdkrrciffyqhmc8vn95za2w1ka6qrdhfagq";
+      url = mirror://xorg/individual/lib/libXext-1.3.3.tar.bz2;
+      sha256 = "0dbfn5bznnrhqzvkrcmw4c44yvvpwdcsrvzxf4rk27r36b9x865m";
     };
     buildInputs = [pkgconfig libX11 xextproto xproto ];
   })) // {inherit libX11 xextproto xproto ;};

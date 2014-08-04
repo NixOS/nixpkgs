@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haskell-token-utils";
-  version = "0.0.0.4";
-  sha256 = "0bb47g58m76293dw4h349j3fmajmw62rqna2kcgx681a1rsbpb4i";
+  version = "0.0.0.5";
+  sha256 = "01kyghzbs8w8ds0aczcdg2ib5b919r5vxgwg8iifbf220vlhd8mn";
   buildDepends = [
     dualTree ghcPaths ghcSybUtils haskellSrcExts monoidExtras mtl
     rosezipper semigroups syb

@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.namesys.com/;
     description = "ReiserFS utilities";
-    license = "GPL-2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

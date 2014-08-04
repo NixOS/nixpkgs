@@ -6,16 +6,16 @@ let
     expat gettext perl
     SDL SDL_image SDL_mixer SDL_ttf
     curl sqlite 
-    libogg libvorbis
-    libXrender
+    libogg libvorbis csound
+    libXrender libcaca cunit
   ];
 in
 rec {
-  name = "liquidwar6-0.0.13beta";
+  name = "liquidwar6-${meta.version}";
 
   src = a.fetchurl {
     url = "mirror://gnu/liquidwar6/${name}.tar.gz";
-    sha256 = "1jjf7wzb8jf02hl3473vz1q74fhmxn0szbishgi1f1j6a7234wx2";
+    sha256 = "1q58liqm5cgp494yjj6rfc2xj5b4gm8r8yvi46jzwqll353mabwl";
   };
 
   inherit buildInputs;
@@ -35,5 +35,8 @@ rec {
     ];
     platforms = with a.lib.platforms; 
       linux;
+  homepage = "http://www.gnu.org/software/liquidwar6/";
+  version = "0.4.3681";
+  updateWalker=true;
   };
 }

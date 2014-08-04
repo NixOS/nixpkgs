@@ -9,7 +9,7 @@ let
 
   prioOption = prio: optionalString (prio !=null) " pri=${toString prio}";
 
-  fileSystemOpts = { name, ... }: {
+  fileSystemOpts = { name, config, ... }: {
 
     options = {
 
@@ -68,6 +68,7 @@ let
 
     config = {
       mountPoint = mkDefault name;
+      device = mkIf (config.fsType == "tmpfs") (mkDefault config.fsType);
     };
 
   };
@@ -124,13 +125,6 @@ in
       description = "Names of supported filesystem types.";
     };
 
-    boot.initrd.supportedFilesystems = mkOption {
-      default = [ ];
-      example = [ "btrfs" ];
-      type = types.listOf types.string;
-      description = "Names of supported filesystem types in the initial ramdisk.";
-    };
-
   };
 
 
@@ -140,15 +134,11 @@ in
 
     boot.supportedFilesystems = map (fs: fs.fsType) fileSystems;
 
-    boot.initrd.supportedFilesystems =
-      map (fs: fs.fsType)
-        (filter (fs: fs.mountPoint == "/" || fs.neededForBoot) fileSystems);
-
     # Add the mount helpers to the system path so that `mount' can find them.
     system.fsPackages = [ pkgs.dosfstools ];
 
     environment.systemPackages =
-      [ pkgs.ntfs3g pkgs.cifs_utils pkgs.fuse ]
+      [ pkgs.ntfs3g pkgs.fuse ]
       ++ config.system.fsPackages;
 
     environment.etc.fstab.text =
@@ -157,7 +147,9 @@ in
 
         # Filesystems.
         ${flip concatMapStrings fileSystems (fs:
-            (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}")
+            (if fs.device != null then fs.device
+             else if fs.label != null then "/dev/disk/by-label/${fs.label}"
+             else throw "No device specified for mount point ‘${fs.mountPoint}’.")
             + " " + fs.mountPoint
             + " " + fs.fsType
             + " " + fs.options

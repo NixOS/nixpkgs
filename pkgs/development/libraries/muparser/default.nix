@@ -12,6 +12,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://muparser.sourceforge.net;
     description = "An extensible high performance math expression parser library written in C++";
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
   };
 }

@@ -1,10 +1,10 @@
-{ kde, kdelibs, okular }:
+{ stdenv, kde, kdelibs, okular }:
 
 kde {
   buildInputs = [ kdelibs okular ];
 
   meta = {
     description = "A collection of plugins to handle mobipocket files";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

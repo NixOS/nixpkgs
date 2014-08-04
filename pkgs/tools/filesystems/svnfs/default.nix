@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   meta = {
     description = "SvnFs is a filesystem written using FUSE for accessing Subversion repositories";
     homepage = http://www.jmadden.eu/index.php/svnfs/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = stdenv.lib.platforms.linux;
   };

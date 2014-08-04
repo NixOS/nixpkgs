@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "lightning-2.0.4";
 
   src = fetchurl {
-    url = "ftp://alpha.gnu.org/gnu/lightning/${name}.tar.gz";
+    url = "ftp://ftp.gnu.org/gnu/lightning/${name}.tar.gz";
     sha256 = "1lrckrx51d5hrv66bc99fd4b7g2wwn4vr304hwq3glfzhb8jqcdy";
   };
 
@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
       the MIPS and SPARC chips.
     '';
 
-    license = "LGPLv3+";
+    license = stdenv.lib.licenses.lgpl3Plus;
   };
 }

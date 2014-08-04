@@ -82,7 +82,7 @@ let
     mig = callPackage ./mig {
       # Build natively, but force use of a 32-bit environment because we're
       # targeting `i586-pc-gnu'.
-      stdenv = (forceSystem "i686-linux").stdenv;
+      stdenv = (forceSystem "i686-linux" "i386").stdenv;
     };
 
     # XXX: Use this one for its `.crossDrv'.  Using the one above from

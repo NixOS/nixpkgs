@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://nbd.sourceforge.net";
     description = "map arbitrary files as block devices over the network";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.unix;
   };

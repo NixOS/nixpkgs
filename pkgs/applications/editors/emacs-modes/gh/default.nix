@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A (very early) GitHub client library for Emacs";
     homepage = https://github.com/sigma/gh.el;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     platforms = stdenv.lib.platforms.all;
   };

@@ -1,10 +1,10 @@
-a :  
-let 
+a :
+let
   fetchurl = a.fetchurl;
 
-  version = a.lib.attrByPath ["version"] "3.6" a; 
+  version = a.lib.attrByPath ["version"] "3.6" a;
   buildInputs = with a; [
-    aalib gsl libpng libX11 xproto libXext xextproto 
+    aalib gsl libpng libX11 xproto libXext xextproto
     libXt zlib gettext intltool perl
   ];
 in
@@ -24,11 +24,11 @@ rec {
     sed -e s@/usr/@"$out/"@g -i configure $(find . -name 'Makefile*')
     mkdir -p $out/share/locale
   '') ["doUnpack" "minInit" "defEnsureDir"];
-      
+
   name = "xaos-" + version;
   meta = {
     homepage = http://xaos.sourceforge.net/;
     description = "XaoS - fractal viewer";
-    license = "GPLv2+";
+    license = a.stdenv.lib.licenses.gpl2Plus;
   };
 }

@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.andyetitmoves.net/;
 
-    license = "unfree";
+    license = stdenv.lib.licenses.unfree;
 
     maintainers = with stdenv.lib.maintainers; [bluescreen303];
   };

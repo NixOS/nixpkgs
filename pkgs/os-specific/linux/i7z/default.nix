@@ -29,8 +29,7 @@ stdenv.mkDerivation rec {
     description = "A better i7 (and now i3, i5) reporting tool for Linux";
     homepage = http://code.google.com/p/i7z;
     repositories.git = https://github.com/ajaiantilal/i7z.git;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
   };
 }
-

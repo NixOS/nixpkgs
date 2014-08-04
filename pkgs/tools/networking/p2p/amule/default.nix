@@ -61,7 +61,7 @@ mkDerivation rec {
       applications.
     '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
     maintainers = [ stdenv.lib.maintainers.phreedom ];

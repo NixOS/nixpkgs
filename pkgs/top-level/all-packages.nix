@@ -144,15 +144,16 @@ let
 
 
   # Override system. This is useful to build i686 packages on x86_64-linux.
-  forceSystem = system: (import ./all-packages.nix) {
+  forceSystem = system: kernel: (import ./all-packages.nix) {
     inherit system;
+    platform = platform // { kernelArch = kernel; };
     inherit bootStdenv noSysDirs gccWithCC gccWithProfiling config
-      crossSystem platform;
+      crossSystem;
   };
 
 
   # Used by wine, firefox with debugging version of Flash, ...
-  pkgsi686Linux = forceSystem "i686-linux";
+  pkgsi686Linux = forceSystem "i686-linux" "i386";
 
   callPackage_i686 = lib.callPackageWith (pkgsi686Linux // pkgsi686Linux.xorg);
 
@@ -602,6 +603,8 @@ let
 
   cv = callPackage ../tools/misc/cv { };
 
+  crawl = callPackage ../games/crawl { lua = lua5; };
+
   ditaa = callPackage ../tools/graphics/ditaa { };
 
   direnv = callPackage ../tools/misc/direnv { };
@@ -706,6 +709,8 @@ let
   bzip2 = callPackage ../tools/compression/bzip2 { };
 
   cabextract = callPackage ../tools/archivers/cabextract { };
+
+  cadaver = callPackage ../tools/networking/cadaver { };
 
   cantata = callPackage ../applications/audio/cantata { };
 
@@ -2439,6 +2444,8 @@ let
 
   xdelta = callPackage ../tools/compression/xdelta { };
 
+  xdummy = callPackage ../tools/misc/xdummy { };
+
   xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
 
   xmlroff = callPackage ../tools/typesetting/xmlroff {
@@ -3197,6 +3204,8 @@ let
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
+    merlin = callPackage ../development/tools/ocaml/merlin { };
+
     mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
 
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
@@ -3285,7 +3294,11 @@ let
 
   roadsend = callPackage ../development/compilers/roadsend { };
 
-  rust = callPackage ../development/compilers/rust {};
+  rustc       = callPackage ../development/compilers/rustc/0.11.nix {};
+  rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
+
+  rust = rustc;
+
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
   sbcl = callPackage ../development/compilers/sbcl {
@@ -3987,9 +4000,9 @@ let
 
   ltrace = callPackage ../development/tools/misc/ltrace { };
 
-  lttngTools = callPackage ../development/tools/misc/lttng-tools { };
+  lttng-tools = callPackage ../development/tools/misc/lttng-tools { };
 
-  lttngUst = callPackage ../development/tools/misc/lttng-ust { };
+  lttng-ust = callPackage ../development/tools/misc/lttng-ust { };
 
   lttv = callPackage ../development/tools/misc/lttv { };
 
@@ -5600,7 +5613,7 @@ let
       expat gettext perl
       SDL SDL_image SDL_mixer SDL_ttf
       curl sqlite
-      libogg libvorbis
+      libogg libvorbis libcaca csound cunit
       ;
     guile = guile_1_8;
     libpng = libpng15; # 0.0.13 needs libpng 1.2--1.5
@@ -5836,6 +5849,8 @@ let
   };
 
   p11_kit = callPackage ../development/libraries/p11-kit { };
+
+  paperkey = callPackage ../tools/security/paperkey { };
 
   pangoxsl = callPackage ../development/libraries/pangoxsl { };
 
@@ -7318,6 +7333,15 @@ let
       ];
   };
 
+  linux_3_16 = makeOverridable (import ../os-specific/linux/kernel/linux-3.16.nix) {
+    inherit fetchurl stdenv perl buildLinux;
+    kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
   linux_testing = makeOverridable (import ../os-specific/linux/kernel/linux-testing.nix) {
     inherit fetchurl stdenv perl buildLinux;
     kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
@@ -7392,7 +7416,7 @@ let
 
     ktap = callPackage ../os-specific/linux/ktap { };
 
-    lttngModules = callPackage ../os-specific/linux/lttng-modules { };
+    lttng-modules = callPackage ../os-specific/linux/lttng-modules { };
 
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
 
@@ -7453,8 +7477,8 @@ let
   linuxPackages = linuxPackages_3_12;
 
   # Update this when adding the newest kernel major version!
-  linux_latest = pkgs.linux_3_15;
-  linuxPackages_latest = pkgs.linuxPackages_3_15;
+  linux_latest = pkgs.linux_3_16;
+  linuxPackages_latest = pkgs.linuxPackages_3_16;
 
   # Build the kernel modules for the some of the kernels.
   linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 linuxPackages_3_2);
@@ -7466,6 +7490,7 @@ let
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
   linuxPackages_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_14 linuxPackages_3_14);
   linuxPackages_3_15 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_15 linuxPackages_3_15);
+  linuxPackages_3_16 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_16 linuxPackages_3_16);
   linuxPackages_testing = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing linuxPackages_testing);
 
   # grsecurity flavors
@@ -7979,6 +8004,11 @@ let
   r5rs = callPackage ../data/documentation/rnrs/r5rs.nix { };
 
   sourceCodePro = callPackage ../data/fonts/source-code-pro {};
+
+  source-han-sans-japanese = callPackage ../data/fonts/source-han-sans/japanese.nix {};
+  source-han-sans-korean = callPackage ../data/fonts/source-han-sans/korean.nix {};
+  source-han-sans-simplified-chinese = callPackage ../data/fonts/source-han-sans/simplified-chinese.nix {};
+  source-han-sans-traditional-chinese = callPackage ../data/fonts/source-han-sans/traditional-chinese.nix {};
 
   tango-icon-theme = callPackage ../data/icons/tango-icon-theme { };
 
@@ -9136,6 +9166,8 @@ let
 
   mopidy-spotify = callPackage ../applications/audio/mopidy-spotify { };
 
+  mopidy-moped = callPackage ../applications/audio/mopidy-moped { };
+
   mozilla = callPackage ../applications/networking/browsers/mozilla {
     inherit (gnome) libIDL;
   };
@@ -9458,9 +9490,9 @@ let
     qt = qt4;
   };
 
-  retroshare06 = callPackage ../applications/networking/p2p/retroshare/0.6.nix {
+  retroshare06 = lowPrio (callPackage ../applications/networking/p2p/retroshare/0.6.nix {
     qt = qt4;
-  };
+  });
 
   rsync = callPackage ../applications/networking/sync/rsync {
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD);
@@ -9756,6 +9788,8 @@ let
   uzbl = callPackage ../applications/networking/browsers/uzbl {
     webkit = webkitgtk2;
   };
+  
+  uTox = callPackage ../applications/networking/instant-messengers/utox { };
 
   vanitygen = callPackage ../applications/misc/vanitygen { };
 
@@ -9968,7 +10002,9 @@ let
 
   xdotool = callPackage ../tools/X11/xdotool { };
 
-  xen = callPackage ../applications/virtualization/xen { };
+  xen = callPackage ../applications/virtualization/xen {
+    stdenv = overrideGCC stdenv gcc45;
+  };
 
   xfe = callPackage ../applications/misc/xfe {
     fox = fox_1_6;
@@ -10137,7 +10173,17 @@ let
     };
   };
 
+  dwarf_fortress_2014 = callPackage_i686 ../games/dwarf-fortress/df2014.nix {
+    SDL_image = pkgsi686Linux.SDL_image.override {
+      libpng = pkgsi686Linux.libpng12;
+    };
+  };
+
   dwarf_fortress_modable = appendToName "moddable" (dwarf_fortress.override {
+    copyDataDirectory = true;
+  });
+
+  dwarf_fortress_2014_modable = appendToName "moddable" (dwarf_fortress_2014.override {
     copyDataDirectory = true;
   });
 
@@ -11353,6 +11399,8 @@ let
   # Attributes for backward compatibility.
   adobeReader = adobe-reader;
   asciidocFull = asciidoc-full;  # added 2014-06-22
+  lttngTools = lttng-tools;  # added 2014-07-31
+  lttngUst = lttng-ust;  # added 2014-07-31
 
 
 }; in self; in pkgs

@@ -387,7 +387,7 @@ let
   '';
 
 
-  enablePHP = any (svc: svc.enablePHP) allSubservices;
+  enablePHP = mainCfg.enablePHP || any (svc: svc.enablePHP) allSubservices;
 
 
   # Generate the PHP configuration file.  Should probably be factored
@@ -529,6 +529,12 @@ in
           configuration of the virtual host.  The available options
           are the non-global options permissible for the main host.
         '';
+      };
+
+      enablePHP = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable the PHP module.";
       };
 
       phpOptions = mkOption {

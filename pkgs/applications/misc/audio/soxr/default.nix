@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An audio resampling library";
     homepage = http://soxr.sourceforge.net;
-    license = "LGPLv2.1+";
+    license = stdenv.lib.licenses.lgpl21Plus;
   };
 }

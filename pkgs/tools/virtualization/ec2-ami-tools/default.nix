@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://developer.amazonwebservices.com/connect/entry.jspa?externalID=368&categoryID=88;
     description = "Command-line tools to create and manage Amazon EC2 virtual machine images";
-    license = "unfree-redistributable";
+    license = "unfree-redistributable"; # Amazon || (Ruby GPL-2)
   };
 
 }

@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "free-game";
-  version = "1.0.5";
-  sha256 = "048hmb4zbn67ycdwy7alhfakdyv405ck79bzrxv2ra6w1v5b3yvf";
+  version = "1.1.78";
+  sha256 = "11f3ib4nx0madbx58gscaqwc1k5mxw70klrq7z7lac9w61phkws6";
   buildDepends = [
     boundingboxes colors controlBool filepath free freetype2 GLFWB
     hashable JuicyPixels JuicyPixelsUtil lens linear mtl OpenGL

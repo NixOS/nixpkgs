@@ -1,0 +1,19 @@
+--- old/source/Makefile	2014-04-14 13:00:22.331058910 +0000
++++ new/source/Makefile	2014-04-14 13:02:11.102204544 +0000
+@@ -672,6 +672,7 @@
+ FREETYPE_LDFLAGS := $(shell $(PKGCONFIG) freetype2 --libs-only-L) $(shell $(PKGCONFIG) freetype2 --libs-only-l)
+ 
+ SDL_INCLUDE := $(shell $(PKGCONFIG) sdl --cflags-only-I)
++SDL_IMG_INCLUDE := $(shell $(PKGCONFIG) SDL_image --cflags-only-I)
+ SDL_CFLAGS  := $(shell $(PKGCONFIG) sdl --cflags-only-other)
+ SDL_LDFLAGS := $(shell $(PKGCONFIG) sdl --libs-only-L) $(shell $(PKGCONFIG) sdl --libs-only-l)
+ 
+@@ -694,7 +695,7 @@
+ endif
+ 
+ DEFINES_L += $(PNG_CFLAGS) $(FREETYPE_CFLAGS) $(SDL_CFLAGS)
+-INCLUDES_L += $(PNG_INCLUDE) $(FREETYPE_INCLUDE) $(SDL_INCLUDE)
++INCLUDES_L += $(PNG_INCLUDE) $(FREETYPE_INCLUDE) $(SDL_INCLUDE) $(SDL_IMG_INCLUDE)
+ 
+ endif # TILES
+ 

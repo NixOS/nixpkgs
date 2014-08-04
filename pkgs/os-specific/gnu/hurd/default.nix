@@ -65,7 +65,7 @@ stdenv.mkDerivation ({
          kernels (such as Linux).
       '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     homepage = http://www.gnu.org/software/hurd/;
 

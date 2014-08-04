@@ -13,6 +13,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://code.google.com/p/s3backer/;
     description = "FUSE-based single file backing store via Amazon S3";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

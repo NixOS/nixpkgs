@@ -5,7 +5,7 @@ cabal.mkDerivation (self : {
   version = "2.9.2"; # Haskell Platform 2011.2.0.0
   name = self.fname;
   sha256 = "189vvp173pqc69zgzqqx6vyhvsc13p1s86ql60rs1j5qlhh8ajg8";
-  extraBuildInputs = [alex happy makeWrapper];
+  buildTools = [alex happy makeWrapper];
   propagatedBuildInputs = [ghcPaths xhtml];
   doCheck = false;
 

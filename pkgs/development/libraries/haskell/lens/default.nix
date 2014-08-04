@@ -12,8 +12,8 @@
 
 cabal.mkDerivation (self: {
   pname = "lens";
-  version = "4.3";
-  sha256 = "0wvsf0vkqjmmgl3p5lxbypn4p126l927ip7l2iisqzwyk87zfqqy";
+  version = "4.3.3";
+  sha256 = "0k7qslnh15xnrj86wwsp0mvz6g363ma4g0dxkmvvg4sa1bxljr1f";
   buildDepends = [
     aeson attoparsec bifunctors comonad contravariant distributive
     exceptions filepath free hashable mtl parallel primitive

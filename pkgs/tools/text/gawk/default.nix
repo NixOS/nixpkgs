@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       lines of code.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };

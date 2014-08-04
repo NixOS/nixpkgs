@@ -1,0 +1,20 @@
+--- old/source/Makefile	2013-11-28 01:03:54.000000000 +0000
++++ new/source/Makefile	2014-02-05 14:04:32.531838188 +0000
+@@ -880,7 +880,7 @@
+     INSTALL_FONTS += $(PROPORTIONAL_FONT)
+   endif
+ else
+-  SYS_PROPORTIONAL_FONT = $(shell dir=/usr/share/fonts; [ -d $$dir ] && find $$dir -iname $(OUR_PROPORTIONAL_FONT)|head -n 1)
++  SYS_PROPORTIONAL_FONT = $(shell dir=${dejavu_fonts}/share/fonts; [ -d $$dir ] && find $$dir -iname $(OUR_PROPORTIONAL_FONT)|head -n 1)
+   ifeq (,$(SYS_PROPORTIONAL_FONT))
+     SYS_PROPORTIONAL_FONT = $(shell dir=/usr/local/share/fonts ; [ -d $$dir ] && find $$dir -iname $(OUR_PROPORTIONAL_FONT)|head -n 1)
+   endif
+@@ -903,7 +903,7 @@
+     INSTALL_FONTS += $(MONOSPACED_FONT)
+   endif
+ else
+-  SYS_MONOSPACED_FONT = $(shell dir=/usr/share/fonts; [ -d $$dir ] && find $$dir -iname $(OUR_MONOSPACED_FONT)|head -n 1)
++  SYS_MONOSPACED_FONT = $(shell dir=${dejavu_fonts}/share/fonts; [ -d $$dir ] && find $$dir -iname $(OUR_MONOSPACED_FONT)|head -n 1)
+   ifeq (,$(SYS_MONOSPACED_FONT))
+     SYS_MONOSPACED_FONT = $(shell dir=/usr/local/share/fonts; [ -d $$dir ] && find $$dir -iname $(OUR_MONOSPACED_FONT)|head -n 1)
+   endif

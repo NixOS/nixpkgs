@@ -14,23 +14,25 @@
 
 */
 
-with if stdenv.system == "i686-linux" then {
-  platform = "linux-i386";
-  snapshot = "84339ea0f796ae468ef86797ef4587274bec19ea";
-  target = "i686-unknown-linux-gnu";
-} else if stdenv.system == "x86_64-linux" then {
-  platform = "linux-x86_64";
-  snapshot = "bd8a6bc1f28845b7f4b768f6bfa06e7fbdcfcaae";
-  target = "x86_64-unknown-linux-gnu";
-} else if stdenv.system == "x86_64-darwin" then {
-  platform = "macos-x86_64";
-  snapshot = "4a8c2e1b7634d73406bac32a1a97893ec3ed818d";
-} else {};
-let snapshotDate = "2014-06-21";
+with ((import ./common.nix) {inherit stdenv; version = "0.11.0"; });
+
+let snapshot = if stdenv.system == "i686-linux"
+      then "84339ea0f796ae468ef86797ef4587274bec19ea"
+      else if stdenv.system == "x86_64-linux"
+      then "bd8a6bc1f28845b7f4b768f6bfa06e7fbdcfcaae"
+      else if stdenv.system == "i686-darwin"
+      then "3f25b2680efbab16ad074477a19d49dcce475977"
+      else if stdenv.system == "x86_64-darwin"
+      then "4a8c2e1b7634d73406bac32a1a97893ec3ed818d"
+      else abort "no-snapshot for platform ${stdenv.system}";
+    snapshotDate = "2014-06-21";
     snapshotRev = "db9af1d";
-    snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshot}.tar.bz2"; in
-stdenv.mkDerivation {
-  name = "rust-0.11.0";
+    snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshot}.tar.bz2";
+
+in stdenv.mkDerivation {
+  inherit name;
+  inherit version;
+  inherit meta;
 
   src = fetchurl {
     url = http://static.rust-lang.org/dist/rust-0.11.0.tar.gz;
@@ -67,14 +69,4 @@ stdenv.mkDerivation {
 
   buildInputs = [ which file perl curl python27 makeWrapper ];
   enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
-    homepage = http://www.rust-lang.org/;
-    description = "A safe, concurrent, practical language";
-    maintainers = with maintainers; [ madjar cstrahan ];
-    license = map (builtins.getAttr "shortName") [ licenses.mit licenses.asl20 ];
-    # platforms as per http://static.rust-lang.org/doc/master/tutorial.html#getting-started
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
-  };
 }
-

@@ -24,6 +24,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://s3sync.net/;
     description = "Command-line tools to manipulate Amazon S3 buckets";
-    license = "free-non-copyleft";
+    license = "free-non-copyleft"; # some custom as-is in file headers
   };
 }

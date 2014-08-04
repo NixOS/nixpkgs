@@ -4,8 +4,8 @@
 }:
 
 let
-  version = "0.26.2"; # even major numbers are stable
-  sha256 = "09lm1mfpf0p6vzayl2nbwvsj5gl7sz8sfmwziix0p87bh8x9dn8x";
+  version = "0.26.3"; # even major numbers are stable
+  sha256 = "1ca2lrwvhxzq0g4blbvq099vyydfjyz839jki301p1jgazrimjw8";
 
   qtcairo_patches =
     let qtcairo = fetchgit { # the version for poppler-0.24
@@ -49,7 +49,7 @@ let
         Poppler is a PDF rendering library based on the xpdf-3.0 code base.
       '';
 
-      license = "GPLv2";
+      license = stdenv.lib.licenses.gpl2;
       platforms = stdenv.lib.platforms.all;
     };
   } merge ]); # poppler_drv

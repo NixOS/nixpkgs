@@ -43,8 +43,6 @@ stdenv.mkDerivation rec {
     echo "${unzip}/bin" > $out/${passthru.mozillaPlugin}/extra-bin-path
   '';
 
-  enableParallelBuilding = true;
-
   passthru = {
     mozillaPlugin = "/lib/mozilla/plugins";
   };

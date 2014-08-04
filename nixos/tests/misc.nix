@@ -12,8 +12,7 @@ import ./make-test.nix {
       services.nixosManual.enable = mkOverride 0 true;
       systemd.tmpfiles.rules = [ "d /tmp 1777 root root 10d" ];
       fileSystems = mkVMOverride { "/tmp2" =
-        { device = "none";
-          fsType = "tmpfs";
+        { fsType = "tmpfs";
           options = "mode=1777,noauto";
         };
       };

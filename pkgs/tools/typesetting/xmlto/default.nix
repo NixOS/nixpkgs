@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       necessary post-processing.
     '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     homepage = https://fedorahosted.org/xmlto/;
   };
 }

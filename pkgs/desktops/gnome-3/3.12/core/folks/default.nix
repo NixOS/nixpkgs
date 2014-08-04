@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
     homepage = https://wiki.gnome.org/Projects/Folks;
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = with stdenv.lib.maintainers; [ lethalman ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice

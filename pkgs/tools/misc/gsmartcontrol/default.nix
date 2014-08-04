@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       as well as run various tests on it.
     '';
     homepage = http://gsmartcontrol.sourceforge.net/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [qknight];
     platforms = with stdenv.lib.platforms; linux;
   };

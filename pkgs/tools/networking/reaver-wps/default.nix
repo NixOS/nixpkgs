@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Brute force attack against Wifi Protected Setup";
     homepage = http://code.google.com/p/reaver-wps;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

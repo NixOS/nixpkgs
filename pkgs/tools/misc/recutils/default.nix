@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/recutils/;
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     platforms = stdenv.lib.platforms.all;
     maintainers = [ ];

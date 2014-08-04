@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Quality Tetrahedral Mesh Generator and 3D Delaunay Triangulator";
     homepage = "http://tetgen.org/";
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
   };
 }
