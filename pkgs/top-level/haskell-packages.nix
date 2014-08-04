@@ -1867,6 +1867,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   primitive_0_5_3_0 = callPackage ../development/libraries/haskell/primitive/0.5.3.0.nix {};
   primitive = self.primitive_0_5_3_0;
 
+  probability = callPackage ../development/libraries/haskell/probability {};
+
   profunctors = callPackage ../development/libraries/haskell/profunctors {};
 
   profunctorExtras = callPackage ../development/libraries/haskell/profunctor-extras {};
