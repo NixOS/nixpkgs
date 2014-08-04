@@ -135,6 +135,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   abstractPar = callPackage ../development/libraries/haskell/abstract-par {};
 
+  ad = callPackage ../development/libraries/haskell/ad {};
+
   adjunctions = callPackage ../development/libraries/haskell/adjunctions {};
 
   AES = callPackage ../development/libraries/haskell/AES {};
