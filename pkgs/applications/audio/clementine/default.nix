@@ -6,11 +6,11 @@
 let withSpotify = config.clementine.spotify or false;
 in
 stdenv.mkDerivation {
-  name = "clementine-1.2.1";
+  name = "clementine-1.2.3";
 
   src = fetchurl {
-    url = http://clementine-player.googlecode.com/files/clementine-1.2.1.tar.gz;
-    sha256 = "0kk5cjmb8nirx0im3c0z91af2k72zxi6lwzm6rb57qihya5nwmfv";
+    url = https://github.com/clementine-player/Clementine/archive/1.2.3.tar.gz;
+    sha256 = "1gx1109i4pylz6x7gvp4rdzc6dvh0w6in6hfbygw01d08l26bxbx";
   };
 
   patches = [ ./clementine-1.2.1-include-paths.patch ];
