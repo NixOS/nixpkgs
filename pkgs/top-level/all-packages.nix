@@ -3665,6 +3665,8 @@ let
     inherit (pythonPackages) pysqlite;
   };
 
+  xulrunner_30 = firefox30Pkgs.xulrunner;
+
 
   ### DEVELOPMENT / MISC
 
@@ -8663,6 +8665,12 @@ let
 
   firefox13Wrapper = wrapFirefox { browser = firefox13Pkgs.firefox; };
 
+  firefox30Pkgs = callPackage ../applications/networking/browsers/firefox/30.nix {
+    inherit (gnome) libIDL;
+    inherit (pythonPackages) pysqlite;
+    libpng = libpng_apng;
+  };
+
   firefox = callPackage ../applications/networking/browsers/firefox {
     inherit (gnome) libIDL;
     inherit (pythonPackages) pysqlite;
@@ -10134,7 +10142,9 @@ let
 
   zgrviewer = callPackage ../applications/graphics/zgrviewer {};
 
-  zotero = callPackage ../applications/office/zotero { };
+  zotero = callPackage ../applications/office/zotero {
+    xulrunner = xulrunner_30;
+  };
 
   zynaddsubfx = callPackage ../applications/audio/zynaddsubfx { };
 
