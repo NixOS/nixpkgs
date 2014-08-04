@@ -5878,6 +5878,8 @@ let
 
   p11_kit = callPackage ../development/libraries/p11-kit { };
 
+  paperkey = callPackage ../tools/security/paperkey { };
+
   pangoxsl = callPackage ../development/libraries/pangoxsl { };
 
   pcl = callPackage ../development/libraries/pcl {
