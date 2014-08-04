@@ -98,7 +98,6 @@ let
       drgeo = linux;
       ejabberd = linux;
       elinks = linux;
-      emacs23 = gtkSupported;
       enscript = all;
       eprover = linux;
       evince = linux;
@@ -116,7 +115,6 @@ let
       gcc = linux;
       gcc33 = linux;
       gcc34 = linux;
-      gcc42 = linux;
       gcc44 = linux;
       gcj = linux;
       ghdl = linux;
@@ -295,7 +293,6 @@ let
       texLive = linux;
       texLiveBeamer = linux;
       texLiveExtra = linux;
-      texinfo = all;
       tightvnc = linux;
       time = linux;
       tinycc = linux;
@@ -342,17 +339,6 @@ let
       zip = all;
       zsh = linux;
       zsnes = ["i686-linux"];
-
-      emacs23Packages = {
-        bbdb = linux;
-        cedet = linux;
-        emacsw3m = linux;
-        emms = linux;
-        jdee = linux;
-      };
-
-      firefox36Pkgs.firefox = linux;
-      firefoxPkgs.firefox = linux;
 
       gnome = {
         gnome_panel = linux;

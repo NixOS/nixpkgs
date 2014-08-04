@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Netkit TFTP client and server";
     homepage = "ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/";
-    license = "BSD";
+    license = "BSD-Original";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

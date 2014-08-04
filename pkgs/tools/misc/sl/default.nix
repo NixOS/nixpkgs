@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://www.tkl.iis.u-tokyo.ac.jp/~toyoda/index_e.html;
-    license = "unfree"; # I couldn't find its license, only a copyright.
+    license = stdenv.lib.licenses.unfree; # I couldn't find its license, only a copyright.
     description = "Steam Locomotive runs across your terminal when you type 'sl'";
     platforms = with stdenv.lib.platforms; linux;
   };

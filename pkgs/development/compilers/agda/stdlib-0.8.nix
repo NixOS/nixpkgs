@@ -16,8 +16,8 @@ cabal.mkDerivation (self: rec {
   postInstall = ''
       mkdir -p $out/share
       cd ..
-      runhaskell GenerateEverything
-      agda -i . -i src Everything.agda
+      ${self.ghc.ghc}/bin/runhaskell GenerateEverything
+      ${Agda}/bin/agda -i . -i src Everything.agda
       cp -pR src $out/share/agda
   '';
 

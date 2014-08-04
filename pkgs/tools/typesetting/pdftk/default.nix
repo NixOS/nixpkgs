@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Simple tool for doing everyday things with PDF documents";
     homepage = http://www.accesspdf.com/pdftk/;
-    license = "free";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

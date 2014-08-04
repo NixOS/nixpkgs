@@ -1,0 +1,12 @@
+https://code.google.com/p/go-wiki/wiki/OlderVersions
+--- a/src/cmd/cc/funct.c	2014-07-02 11:54:42.230663598 +0200
++++ b/src/cmd/cc/funct.c	2014-07-02 11:55:01.653790128 +0200
+@@ -269,7 +269,7 @@
+ 		goto bad;
+ 
+ 	f = alloc(sizeof(*f));
+-	for(o=0; o<sizeof(f->sym); o++)
++	for(o=0; o<nelem(f->sym); o++)
+ 		f->sym[o] = S;
+ 
+ 	t->funct = f;

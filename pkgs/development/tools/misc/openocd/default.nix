@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p "$out/etc/udev/rules.d"
-    ln -s "$out/share/openocd/contrib/99-openocd.udev" "$out/etc/udev/rules.d/99-openocd.rules"
+    ln -s "$out/share/openocd/contrib/99-openocd.rules" "$out/etc/udev/rules.d/99-openocd.rules"
   '';
 
   meta = with stdenv.lib; {

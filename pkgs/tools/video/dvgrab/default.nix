@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://kinodv.org/;
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.gnu;
     maintainers = [ ];
   };

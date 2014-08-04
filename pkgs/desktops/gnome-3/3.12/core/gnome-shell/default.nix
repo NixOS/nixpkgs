@@ -39,7 +39,13 @@ stdenv.mkDerivation rec {
 
     wrapProgram "$out/libexec/gnome-shell-calendar-server" \
       --prefix XDG_DATA_DIRS : "${evolution_data_server}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+
+    echo "${unzip}/bin" > $out/${passthru.mozillaPlugin}/extra-bin-path
   '';
+
+  passthru = {
+    mozillaPlugin = "/lib/mozilla/plugins";
+  };
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

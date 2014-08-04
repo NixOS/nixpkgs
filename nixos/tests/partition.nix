@@ -63,6 +63,8 @@ let
     logvol / --size=1000 --grow --fstype=ext4 --name=root --vgname=nixos
   '';
 in {
+  name = "partitiion";
+
   machine = { config, pkgs, ... }: {
     environment.systemPackages = [
       pkgs.pythonPackages.nixpart

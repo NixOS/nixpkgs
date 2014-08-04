@@ -51,6 +51,9 @@ with lib;
           set -f
           cp -prd $storePaths /mnt/nix/store/
 
+          mkdir -p /mnt/etc/nix
+          echo 'build-users-group = ' > /mnt/etc/nix/nix.conf
+
           # Register the paths in the Nix database.
           printRegistration=1 perl ${pkgs.pathsFromGraph} /tmp/xchg/closure | \
               chroot /mnt ${config.nix.package}/bin/nix-store --load-db

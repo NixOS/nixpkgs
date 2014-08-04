@@ -47,7 +47,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Automated deployment of mutable components and services for Disnix";
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.sander ];
   };
 }

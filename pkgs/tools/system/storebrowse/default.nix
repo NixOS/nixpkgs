@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   # This source has license BSD
   srcGoSqlite = fetchhg {
     url = "https://code.google.com/p/gosqlite/";
-    tag = "5baefb109e18";
+    rev = "5baefb109e18";
     sha256 = "0mqfnx06jj15cs8pq9msny2z18x99hgk6mchnaxpg343nzdiz4zk";
   };
 
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://viric.name/cgi-bin/storebrowse;
-    license = "AGPLv3+";
+    license = stdenv.lib.licenses.agpl3Plus;
   };
 }

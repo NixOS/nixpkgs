@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A calendar framework for Emacs";
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = with stdenv.lib.maintainers; [ chaoflow ];
     platforms = stdenv.lib.platforms.gnu;

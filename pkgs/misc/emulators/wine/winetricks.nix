@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A script to install DLLs needed to work around problems in Wine";
-    license = "LGPLv2.1";
+    license = stdenv.lib.licenses.lgpl21;
     homepage = http://code.google.com/p/winetricks/;
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };

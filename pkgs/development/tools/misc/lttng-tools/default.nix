@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, popt, libuuid, liburcu, lttngUst, kmod }:
+{ stdenv, fetchurl, popt, libuuid, liburcu, lttng-ust, kmod }:
 
 stdenv.mkDerivation rec {
   name = "lttng-tools-2.4.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1v9f7a3c2shwgn4g759bblgr27h9ql9sfq71r1mbkf8rd235g2jr";
   };
 
-  buildInputs = [ popt libuuid liburcu lttngUst ];
+  buildInputs = [ popt libuuid liburcu lttng-ust ];
 
   prePatch = ''
     sed -e "s|/sbin/modprobe|${kmod}/sbin/modprobe|g" \

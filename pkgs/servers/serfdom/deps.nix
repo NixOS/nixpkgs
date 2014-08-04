@@ -6,7 +6,7 @@ let
       root = "code.google.com/p/go.net";
       src = fetchhg {
         url = "http://code.google.com/p/go.net";
-        tag = "134";
+        rev = "134";
         sha256 = "1jycpgrfwgkfac60zjbx6babcz7sgyn9xgy6cr3l811j6k8r2pbv";
       };
     }
@@ -14,7 +14,7 @@ let
       root = "code.google.com/p/go.text";
       src = fetchhg {
         url = "http://code.google.com/p/go.text";
-        tag = "85";
+        rev = "85";
         sha256 = "1x8h6vq9g5gbi7iiwla6dkaaqqf7wmkdm4szj7wvzlsijf2x8dwr";
       };
     }
@@ -77,8 +77,8 @@ let
       src = fetchFromGitHub {
         owner = "hashicorp";
         repo = "serf";
-        rev = "4232a3f7b52f755084caf6b2cc2789efa2948555";
-        sha256 = "1hxxqrjz08882d205ylakhvvwciahiqdzkwi2a7zwrmx6sxna7sr";
+        rev = "5e0771b8d61bee28986087a246f7611d6bd4a87a";
+        sha256 = "0ck77ji28bvm4ahzxyyi4sm17c3fxc16k0k5mihl1nlkgdd73m8y";
       };
     }
     {
@@ -157,7 +157,7 @@ let
       root = "launchpad.net/gocheck";
       src = fetchbzr {
         url = "https://launchpad.net/gocheck";
-        revision = "87";
+        rev = "87";
         sha256 = "1y9fa2mv61if51gpik9isls48idsdz87zkm1p3my7swjdix7fcl0";
       };
     }
@@ -165,7 +165,7 @@ let
       root = "launchpad.net/mgo";
       src = fetchbzr {
         url = "https://launchpad.net/mgo";
-        revision = "2";
+        rev = "2";
         sha256 = "0h1dxzyx5c4r4gfnmjxv92hlhjxrgx9p4g53p4fhmz6x2fdglb0x";
       };
     }

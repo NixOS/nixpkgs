@@ -1,0 +1,19 @@
+http://code.google.com/p/go/source/detail?r=8b13b2ec6b18
+--- a/src/cmd/cgo/gcc.go	2014-07-02 12:00:12.171796197 +0200
++++ b/src/cmd/cgo/gcc.go	2014-07-02 12:01:57.844472754 +0200
+@@ -840,6 +840,15 @@
+ func (p *Package) gccErrors(stdin []byte) string {
+ 	// TODO(rsc): require failure
+ 	args := p.gccCmd()
++
++	// GCC 4.8.0 has a bug: it sometimes does not apply
++	// -Wunused-value to values that are macros defined in system
++	// headers.  See issue 5118.  Adding -Wsystem-headers avoids
++	// that problem.  This will produce additional errors, but it
++	// doesn't matter because we will ignore all errors that are
++	// not marked for the cgo-test file.
++	args = append(args, "-Wsystem-headers")
++
+ 	if *debugGcc {
+ 		fmt.Fprintf(os.Stderr, "$ %s <<EOF\n", strings.Join(args, " "))
+ 		os.Stderr.Write(stdin)

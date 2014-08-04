@@ -79,7 +79,7 @@ let
   };
 
   opusWithCustomModes = libopus.override {
-    withCustomModes = !versionOlder source.version "35.0.0.0";
+    withCustomModes = true;
   };
 
   defaultDependencies = [
@@ -132,19 +132,13 @@ let
       find -iname '*.gyp*' \( -type f -o -type l \) \
         -exec sed -i -e 's|<(DEPTH)|'"$(pwd)"'|g' {} + \
         -exec chmod u+w {} +
-    '' + optionalString (!versionOlder source.version "37.0.0.0") ''
-      python third_party/libaddressinput/chromium/tools/update-strings.py
     '';
 
-    postPatch = let
-      toPatch = if versionOlder source.version "36.0.0.0"
-                then "content/browser/browser_main_loop.cc"
-                else "sandbox/linux/suid/client/setuid_sandbox_client.cc";
-    in ''
+    postPatch = ''
       sed -i -e '/base::FilePath exe_dir/,/^ *} *$/c \
         sandbox_binary = base::FilePath(getenv("CHROMIUM_SANDBOX_BINARY_PATH"));
-      ' ${toPatch}
-    '' + optionalString (!versionOlder source.version "36.0.0.0") ''
+      ' sandbox/linux/suid/client/setuid_sandbox_client.cc
+
       sed -i -e '/module_path *=.*libexif.so/ {
         s|= [^;]*|= base::FilePath().AppendASCII("${libexif}/lib/libexif.so")|
       }' chrome/utility/media_galleries/image_metadata_extractor.cc
@@ -165,6 +159,7 @@ let
       use_cups = cupsSupport;
       linux_sandbox_chrome_path="${libExecPath}/${packageName}";
       werror = "";
+      clang = false;
 
       # FIXME: In version 37, omnibox.mojom.js doesn't seem to be generated.
       use_mojo = versionOlder source.version "37.0.0.0";

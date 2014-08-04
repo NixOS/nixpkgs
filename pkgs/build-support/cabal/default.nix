@@ -29,7 +29,7 @@ assert enableSharedExecutables -> versionOlder "7.4" ghc.version;
 # Our GHC 6.10.x builds do not provide sharable versions of their core libraries.
 assert enableSharedLibraries -> versionOlder "6.12" ghc.version;
 
-# Our GHC 6.10.x builds do not provide sharable versions of their core libraries.
+# Pure shared library builds don't work before GHC 7.8.x.
 assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
 
 {
@@ -82,9 +82,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
             # the default download location for Cabal packages is Hackage,
             # you still have to specify the checksum
             src = fetchurl {
-              # cannot use mirrors system because of subtly different directory structures
-              urls = ["http://hackage.haskell.org/packages/archive/${self.pname}/${self.version}/${self.fname}.tar.gz"
-                      "http://hdiff.luite.com/packages/archive/${self.pname}/${self.fname}.tar.gz"];
+              url = "mirror://hackage/${self.pname}/${self.fname}.tar.gz";
               inherit (self) sha256;
             };
 

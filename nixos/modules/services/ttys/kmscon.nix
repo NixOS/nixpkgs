@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 let
-  inherit (pkgs.lib) mkOption types mkIf optionalString;
+  inherit (lib) mkOption types mkIf optionalString;
 
   cfg = config.services.kmscon;
 

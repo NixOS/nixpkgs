@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Full-featured text-mode web browser";
     homepage = http://elinks.or.cz;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

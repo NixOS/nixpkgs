@@ -1,4 +1,4 @@
-{stdenv, mercurial, nix}: {name ? null, url, tag ? null, md5 ? null, sha256 ? null}:
+{stdenv, mercurial, nix}: {name ? null, url, rev ? null, md5 ? null, sha256 ? null}:
 
 # TODO: statically check if mercurial as the https support if the url starts woth https.
 stdenv.mkDerivation {
@@ -13,6 +13,6 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = if md5 != null then md5 else sha256;
   
-  inherit url tag;
+  inherit url rev;
   preferLocalBuild = true;
 }

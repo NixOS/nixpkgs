@@ -1,8 +1,8 @@
-{ config, pkgs, serverInfo, ... }:
+{ config, pkgs, serverInfo, lib, ... }:
 
 let
   inherit (pkgs) mercurial;
-  inherit (pkgs.lib) mkOption;
+  inherit (lib) mkOption;
 
   urlPrefix = config.urlPrefix;
 

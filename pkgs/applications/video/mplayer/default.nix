@@ -15,7 +15,7 @@
 , speexSupport ? true, speex ? null
 , theoraSupport ? true, libtheora ? null
 , x264Support ? false, x264 ? null
-, jackaudioSupport ? false, jackaudio ? null
+, jackaudioSupport ? false, jack2 ? null
 , pulseSupport ? false, pulseaudio ? null
 , bs2bSupport ? false, libbs2b ? null
 # For screenshots
@@ -40,7 +40,7 @@ assert lameSupport -> lame != null;
 assert speexSupport -> speex != null;
 assert theoraSupport -> libtheora != null;
 assert x264Support -> x264 != null;
-assert jackaudioSupport -> jackaudio != null;
+assert jackaudioSupport -> jack2 != null;
 assert pulseSupport -> pulseaudio != null;
 assert bs2bSupport -> libbs2b != null;
 assert libpngSupport -> libpng != null;
@@ -72,7 +72,7 @@ let
       cp -prv * $out
     '';
 
-    meta.license = "unfree";
+    meta.license = stdenv.lib.licenses.unfree;
   } else null;
 
 in
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
     ++ optional dvdnavSupport libdvdnav
     ++ optional bluraySupport libbluray
     ++ optional cddaSupport cdparanoia
-    ++ optional jackaudioSupport jackaudio
+    ++ optional jackaudioSupport jack2
     ++ optionals amrSupport [ amrnb amrwb ]
     ++ optional x264Support x264
     ++ optional pulseSupport pulseaudio

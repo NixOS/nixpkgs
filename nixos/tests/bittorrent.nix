@@ -23,6 +23,7 @@ let
 in
 
 {
+  name = "bittorrent";
 
   nodes =
     { tracker =

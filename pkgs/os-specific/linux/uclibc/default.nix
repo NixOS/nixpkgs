@@ -96,6 +96,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.uclibc.org/;
     description = "A small implementation of the C library";
-    license = "LGPLv2";
+    license = stdenv.lib.licenses.lgpl2;
   };
 }

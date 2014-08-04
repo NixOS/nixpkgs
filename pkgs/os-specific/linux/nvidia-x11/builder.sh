@@ -104,7 +104,6 @@ installPhase() {
 
         # Test a bit.
         $out/bin/nvidia-settings --version
-        $out/bin/nvidia-smi --help > /dev/null
     fi
 }
 

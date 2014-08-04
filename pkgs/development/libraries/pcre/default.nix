@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.pcre.org/";
     description = "A library for Perl Compatible Regular Expressions";
-    license = "BSD-3";
+    license = stdenv.lib.licenses.bsd3;
 
     longDescription = ''
       The PCRE library is a set of functions that implement regular

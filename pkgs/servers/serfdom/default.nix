@@ -1,7 +1,7 @@
 { stdenv, lib, go, fetchurl, fetchgit, fetchhg, fetchbzr, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.2";
+  version = "0.6.3";
   name = "serfdom-${version}";
 
   src = import ./deps.nix {

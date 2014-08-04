@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Transparent SOCKS v4 proxying library";
     homepage = http://tsocks.sourceforge.net/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ maintainers.phreedom ];
     platforms = platforms.linux;
   };

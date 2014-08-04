@@ -6,6 +6,8 @@ let
 in
 
 {
+  name = "mysql-replication";
+
   nodes = {
     master =
       { pkgs, config, ... }:

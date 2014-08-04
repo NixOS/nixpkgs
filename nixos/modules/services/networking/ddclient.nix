@@ -1,8 +1,8 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
 
-  inherit (pkgs.lib) mkOption mkIf singleton;
+  inherit (lib) mkOption mkIf singleton;
 
   inherit (pkgs) ddclient;
 

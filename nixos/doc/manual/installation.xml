@@ -320,7 +320,10 @@ changes:
 <itemizedlist>
   <listitem>
     <para>You should boot the live CD in UEFI mode (consult your
-    specific hardware's documentation for instructions).</para>
+    specific hardware's documentation for instructions). You may find
+    the <link
+    xlink:href="http://www.rodsbooks.com/refind">rEFInd
+    boot manager</link> useful.</para>
   </listitem>
   <listitem>
     <para>Instead of <command>fdisk</command>, you should use
@@ -334,6 +337,11 @@ changes:
     <literal>true</literal>. <command>nixos-generate-config</command>
     should do this automatically for new configurations when booted in
     UEFI mode.</para>
+  </listitem>
+  <listitem>
+    <para>After having mounted your installation partition to
+    <code>/mnt</code>, you must mount the <code>boot</code> partition
+    to <code>/mnt/boot</code>.</para>
   </listitem>
   <listitem>
     <para>You may want to look at the options starting with

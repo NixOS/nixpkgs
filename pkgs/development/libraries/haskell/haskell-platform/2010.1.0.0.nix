@@ -22,5 +22,6 @@ cabal.mkDerivation (self : {
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [andres simons];
+    broken = true;              # The source code is no longer available from haskell.org.
   };
 })

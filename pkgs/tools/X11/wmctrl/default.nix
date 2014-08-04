@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
  
   buildInputs = [ libX11 libXmu glib pkgconfig ];
 
+  patches = [ ./64-bit-data.patch ];
+
   meta = {
     homepage = http://tomas.styblo.name/wmctrl/;
     description = "wmctrl is a UNIX/Linux command line tool to interact with an EWMH/NetWM compatible X Window Manager";

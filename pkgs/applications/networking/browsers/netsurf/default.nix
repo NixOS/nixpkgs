@@ -42,7 +42,7 @@ rec {
     meta = { 
       description = "HTML5 compliant parsing library, written in C";
       homepage = http://www.netsurf-browser.org/projects/hubbub/;
-      license = "MIT";
+      license = stdenv.lib.licenses.mit;
       maintainers = [lib.maintainers.marcweber];
       platforms = lib.platforms.linux;
     };
@@ -63,7 +63,7 @@ rec {
     meta = { 
       description = "implementation of the W3C DOM, written in C";
       homepage = http://www.netsurf-browser.org/projects/hubbub/;
-      license = "MIT";
+      license = stdenv.lib.licenses.mit;
       maintainers = [lib.maintainers.marcweber];
       platforms = lib.platforms.linux;
     };

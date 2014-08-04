@@ -39,8 +39,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "stardict";
     homepage = "A international dictionary supporting fuzzy and glob style matching";
-    license = "LGPL3";
+    license = stdenv.lib.licenses.lgpl3;
     maintainers = with stdenv.lib.maintainers; [qknight];
   };
 }
-

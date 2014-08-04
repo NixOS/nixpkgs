@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
     sha256 = "0vxvjmi3cdvnp994sv5zcdyncfn0mlxa71p2wm9zpyrmy58bbwds";
   };
 
+  NIX_LDFLAGS = "-lgcc_s";
+
   buildInputs = [ pkgconfig glib ncurses ]
     ++ optional  luaSupport   lua5
     ++ optional  wireless     wirelesstools

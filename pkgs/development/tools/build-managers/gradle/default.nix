@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
       build-by-convention behavior.
     '';
     homepage = http://www.gradle.org/;
-    license = "ASL2.0";
+    license = stdenv.lib.licenses.asl20;
   };
 }

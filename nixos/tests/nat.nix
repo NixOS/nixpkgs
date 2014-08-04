@@ -5,6 +5,7 @@
 # for the client.
 
 import ./make-test.nix {
+  name = "nat";
 
   nodes =
     { client =

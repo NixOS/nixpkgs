@@ -11,6 +11,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Library of Limited-memory Broyden-Fletcher-Goldfarb-Shanno (L-BFGS)";
     homepage = http://www.chokkan.org/software/liblbfgs/;
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
   };
 }

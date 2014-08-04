@@ -195,6 +195,11 @@ rec {
 
   glade = callPackage ./apps/glade { };
 
+  gnome-boxes = callPackage ./apps/gnome-boxes {
+    gtkvnc = pkgs.gtkvnc.override { enableGTK3 = true; };
+    spice_gtk = pkgs.spice_gtk.override { enableGTK3 = true; };
+  };
+
   gnome-clocks = callPackage ./apps/gnome-clocks { };
 
   gnome-documents = callPackage ./apps/gnome-documents { };
@@ -210,6 +215,11 @@ rec {
 
   seahorse = callPackage ./apps/seahorse { };
 
+#### Dev http://ftp.gnome.org/pub/GNOME/devtools/
+
+  anjuta = callPackage ./devtools/anjuta { };
+
+  gdl = callPackage ./devtools/gdl { };
 
 #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
 
@@ -220,6 +230,8 @@ rec {
   goffice = callPackage ./misc/goffice { };
 
   gitg = callPackage ./misc/gitg { };
+
+  libgda = callPackage ./misc/libgda { };
 
   libgit2-glib = callPackage ./misc/libgit2-glib { };
 

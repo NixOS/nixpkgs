@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.roaringpenguin.com/products/remind;
     description = "Sophisticated calendar and alarm program for the console";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

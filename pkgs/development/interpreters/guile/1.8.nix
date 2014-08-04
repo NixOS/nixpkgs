@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.gnu.org/software/guile/;
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };

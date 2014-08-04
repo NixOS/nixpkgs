@@ -4,7 +4,7 @@ let
     name = "openjdk6-b16-24_apr_2009-r1";
 
     src = fetchurl {
-      url = http://hg.bikemonkey.org/archive/openjdk6_darwin/openjdk6-b16-24_apr_2009-r1.tar.bz2;
+      url = http://landonf.bikemonkey.org/static/soylatte/bsd-dist/openjdk6_darwin/openjdk6-b16-24_apr_2009-r1.tar.bz2;
       sha256 = "14pbv6jjk95k7hbgiwyvjdjv8pccm7m8a130k0q7mjssf4qmpx1v";
     };
 
@@ -24,8 +24,7 @@ let
       echo -n "${setJavaClassPath}" > $out/nix-support/propagated-native-build-inputs
 
       # Set JAVA_HOME automatically.
-      mkdir -p $out/nix-support
-      cat <<EOF > $out/nix-support/setup-hook
+      cat <<EOF >> $out/nix-support/setup-hook
       if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
       EOF
     '';

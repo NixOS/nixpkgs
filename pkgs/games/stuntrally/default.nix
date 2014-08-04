@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Stunt Rally game with Track Editor, based on VDrift and OGRE";
     homepage = http://code.google.com/p/vdrift-ogre/;
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
   };
 }

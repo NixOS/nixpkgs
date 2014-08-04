@@ -1,4 +1,4 @@
-{composableDerivation, fetchurl, transfig, texLive}:
+{stdenv, composableDerivation, fetchurl, transfig, texLive}:
 
 let
   version = "6.3";
@@ -37,6 +37,6 @@ composableDerivation.composableDerivation {} {
   meta = {
     homepage = http://www.complang.org/ragel;
     description = "State machine compiler";
-    license = "GPL-2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

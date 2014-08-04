@@ -32,6 +32,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Python library for games";
     homepage = "http://www.pygame.org/";
-    license = "LGPLv2.1+";
+    license = stdenv.lib.licenses.lgpl21Plus;
   };
 }

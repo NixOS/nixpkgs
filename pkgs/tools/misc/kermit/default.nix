@@ -30,6 +30,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.columbia.edu/kermit/ck80.html";
     description = "Portable Scriptable Network and Serial Communication Software";
-    license = "free";
+    license = "free non-commercial"; #Kermit http://www.columbia.edu/kermit/ckfaq.html#license
   };
 }

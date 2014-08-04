@@ -6,13 +6,13 @@ let inherit (stdenvAdapters.overrideGCC stdenv gccApple) mkDerivation;
 in mkDerivation rec {
   name = "macvim-${version}";
 
-  version = "7.4-73";
+  version = "7.4.355";
 
   src = fetchFromGitHub {
-    owner = "b4winckler";
+    owner = "genoma";
     repo = "macvim";
-    rev = "snapshot-73";
-    sha256 = "0zv82y2wz8b482khkgbl08cnxq3pv5bm37c71wgfa0fzy3h12gcj";
+    rev = "c18a61f9723565664ffc2eda9179e96c95860e25";
+    sha256 = "190bngg8m4bwqcia7w24gn7mmqkhk0mavxy81ziwysam1f652ymf";
   };
 
   enableParallelBuilding = true;
