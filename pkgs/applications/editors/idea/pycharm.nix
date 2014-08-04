@@ -22,8 +22,6 @@ let
 
     propagatedUserEnvPkgs = [ python ];
 
-    phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
-
     patchPhase = ''
       interpreter="$(echo ${stdenv.glibc}/lib/ld-linux*.so.2)"
       snappyPath="lib/snappy-java-1.0.5"
@@ -65,31 +63,31 @@ let
 
 in {
 
-  pycharm_community_313 = buildPycharm rec {
+  pycharm-community-313 = buildPycharm rec {
     name = "pycharm-community-${version}";
     version = "3.1.3";
     build = "133.1347";
     description = "PyCharm 3.1 Community Edition";
-    license = stdenv.lib.licenses.asl20.shortName;
+    license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "http://download.jetbrains.com/python/${name}.tar.gz";
       sha256 = "f671ee4c99207c179f168b5b98fa23afe90a94c3a3914367b95a46b0c2881b23";
     };
   };
 
-  pycharm_community_341 = buildPycharm rec {
+  pycharm-community-341 = buildPycharm rec {
     name = "pycharm-community-${version}";
     version = "3.4.1";
     build = "135.1057";
     description = "PyCharm 3.4 Community Edition";
-    license = stdenv.lib.licenses.asl20.shortName;
+    license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "http://download.jetbrains.com/python/${name}.tar.gz";
       sha256 = "96427b1e842e7c09141ec4d3ede627c5ca7d821c0d6c98169b56a34f9035ef64";
     };
   };
 
-  pycharm_professional_313 = buildPycharm rec {
+  pycharm-professional-313 = buildPycharm rec {
     name = "pycharm-professional-${version}";
     version = "3.1.3";
     build = "133.1347";
@@ -101,7 +99,7 @@ in {
     };
   };
 
-  pycharm_professional_341 = buildPycharm rec {
+  pycharm-professional-341 = buildPycharm rec {
     name = "pycharm-professional-${version}";
     version = "3.4.1";
     build = "135.1057";
