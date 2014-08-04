@@ -3593,11 +3593,11 @@ rec {
   };
 
   gunicorn = buildPythonPackage rec {
-    name = "gunicorn-18.0";
+    name = "gunicorn-19.1.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/g/gunicorn/${name}.tar.gz";
-      md5 = "c7138b9ac7515a42066922d2b6120fbe";
+      md5 = "3d759bec3c46a680ff010775258c4c56";
     };
 
     buildInputs = [ pytest ];
