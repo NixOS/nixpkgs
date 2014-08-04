@@ -209,6 +209,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   attoparsecEnumerator = callPackage ../development/libraries/haskell/attoparsec-enumerator {};
 
+  autoUpdate = callPackage ../development/libraries/haskell/auto-update {};
+
   aws = callPackage ../development/libraries/haskell/aws {};
 
   authenticate = callPackage ../development/libraries/haskell/authenticate {};
