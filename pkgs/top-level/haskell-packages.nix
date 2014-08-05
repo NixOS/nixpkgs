@@ -1858,6 +1858,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   preludeExtras = callPackage ../development/libraries/haskell/prelude-extras {};
 
+  preludeSafeenum = callPackage ../development/libraries/haskell/prelude-safeenum {};
+
   preprocessorTools_0_1_3 = callPackage ../development/libraries/haskell/preprocessor-tools/0.1.3.nix {};
   preprocessorTools_1_0_1 = callPackage ../development/libraries/haskell/preprocessor-tools/1.0.1.nix {};
   preprocessorTools = self.preprocessorTools_1_0_1;
