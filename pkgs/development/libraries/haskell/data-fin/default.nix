@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     lazysmallcheck preludeSafeenum QuickCheck reflection smallcheck
     tagged
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://code.haskell.org/~wren/";
     description = "Finite totally ordered sets";
