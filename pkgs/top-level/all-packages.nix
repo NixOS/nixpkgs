@@ -8727,6 +8727,8 @@ let
 
   fuze = callPackage ../applications/networking/instant-messengers/fuze {};
 
+  gcolor2 = callPackage ../applications/graphics/gcolor2 { };
+
   get_iplayer = callPackage ../applications/misc/get_iplayer {};
 
   gimp_2_8 = callPackage ../applications/graphics/gimp/2.8.nix {
