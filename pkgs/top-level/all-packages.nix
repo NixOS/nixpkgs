@@ -578,6 +578,8 @@ let
 
   bfr = callPackage ../tools/misc/bfr { };
 
+  bindfs = callPackage ../tools/filesystems/bindfs { };
+
   bitbucket-cli = pythonPackages.bitbucket-cli;
 
   blockdiag = pythonPackages.blockdiag;
