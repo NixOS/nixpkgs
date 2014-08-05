@@ -3719,6 +3719,8 @@ let
 
   guile-xcb = callPackage ../development/guile-modules/guile-xcb { };
 
+  pharo-vm = callPackage_i686 ../development/pharo/vm { };
+
   srecord = callPackage ../development/tools/misc/srecord { };
 
   windowssdk = (
