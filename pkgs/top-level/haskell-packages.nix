@@ -574,6 +574,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
 
+  dataFin = callPackage ../development/libraries/haskell/data-fin {};
+
   dataFix = callPackage ../development/libraries/haskell/data-fix {};
 
   dataHash = callPackage ../development/libraries/haskell/data-hash {};
