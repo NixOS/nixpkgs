@@ -233,6 +233,7 @@
   ./services/networking/teamspeak3.nix
   ./services/networking/tftpd.nix
   ./services/networking/unbound.nix
+  ./services/networking/unifi.nix
   ./services/networking/vsftpd.nix
   ./services/networking/wakeonlan.nix
   ./services/networking/websockify.nix
