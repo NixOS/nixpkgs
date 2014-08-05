@@ -5207,6 +5207,8 @@ let
 
   libgdiplus = callPackage ../development/libraries/libgdiplus { };
 
+  libgksu = callPackage ../development/libraries/libgksu { };
+
   libgpgerror = callPackage ../development/libraries/libgpg-error { };
 
   libgphoto2 = callPackage ../development/libraries/libgphoto2 { };
@@ -8616,6 +8618,8 @@ let
   fvwm = callPackage ../applications/window-managers/fvwm { };
 
   geany = callPackage ../applications/editors/geany { };
+
+  gksu = callPackage ../applications/misc/gksu { };
 
   gnuradio = callPackage ../applications/misc/gnuradio {
     inherit (pythonPackages) lxml numpy scipy matplotlib pyopengl;
