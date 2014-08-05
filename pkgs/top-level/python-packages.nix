@@ -6720,12 +6720,12 @@ rec {
 
 
   robotframework = buildPythonPackage rec {
-    version = "2.8.4";
+    version = "2.8.5";
     name = "robotframework-${version}";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/r/robotframework/${name}.tar.gz";
-      sha256 = "0rxk135c1051cwv45219ib3faqvi5rl50l98ncb83c7qxy92jg2n";
+      sha256 = "0rzdn2gvmcrxs2fvxm11h55w4j5pv0lf443fc4hl8kzwjwgjckga";
     };
 
     # error: invalid command 'test'
