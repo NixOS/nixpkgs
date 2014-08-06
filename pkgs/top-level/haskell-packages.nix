@@ -2149,6 +2149,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   socketIo = callPackage ../development/libraries/haskell/socket-io {};
 
+  sodium = callPackage ../development/libraries/haskell/sodium {};
+
   sparse = callPackage ../development/libraries/haskell/sparse {};
 
   spawn = callPackage ../development/libraries/haskell/spawn {};
