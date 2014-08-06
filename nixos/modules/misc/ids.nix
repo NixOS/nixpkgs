@@ -138,6 +138,7 @@
       znc = 128;
       polipo = 129;
       mopidy = 130;
+      uhub = 132;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -251,6 +252,7 @@
       polipo = 129;
       mopidy = 130;
       docker = 131;
+      uhub = 132;
 
       # When adding a gid, make sure it doesn't match an existing uid. And don't use gids above 399!
 
