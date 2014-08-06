@@ -29,22 +29,25 @@ in
 
     systemd.mounts = [
       {
-        unitConfig.StopWhenUnneeded = true;
+        bindsTo = [ "unifi.service" ];
         requiredBy = [ "unifi.service" ];
+        before = [ "unifi.service" ];
         what = "${pkgs.unifi}/dl";
         where = "${stateDir}/dl";
         options = "bind";
       }
       {
-        unitConfig.StopWhenUnneeded = true;
+        bindsTo = [ "unifi.service" ];
         requiredBy = [ "unifi.service" ];
+        before = [ "unifi.service" ];
         what = "${pkgs.unifi}/lib";
         where = "${stateDir}/lib";
         options = "bind";
       }
       {
-        unitConfig.StopWhenUnneeded = true;
+        bindsTo = [ "unifi.service" ];
         requiredBy = [ "unifi.service" ];
+        before = [ "unifi.service" ];
         what = "${pkgs.mongodb}/bin";
         where = "${stateDir}/bin";
         options = "bind";
