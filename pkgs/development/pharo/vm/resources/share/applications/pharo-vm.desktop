@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Pharo VM
+GenericName=Pharo Virtual Machine
+Exec=pharo-vm-x %F
+Icon=pharo
+Terminal=false
+Type=Application
+StartupNotify=false
+Categories=Development;
+MimeType=application/x-pharo-image;
+NoDisplay=true

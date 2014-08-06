@@ -3719,6 +3719,8 @@ let
 
   guile-xcb = callPackage ../development/guile-modules/guile-xcb { };
 
+  pharo-vm = callPackage_i686 ../development/pharo/vm { };
+
   srecord = callPackage ../development/tools/misc/srecord { };
 
   windowssdk = (
@@ -7016,6 +7018,8 @@ let
   tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
 
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
+
+  unifi = callPackage ../servers/unifi { };
 
   virtuoso6 = callPackage ../servers/sql/virtuoso/6.x.nix { };
 

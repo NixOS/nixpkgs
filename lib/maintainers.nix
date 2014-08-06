@@ -108,6 +108,7 @@
   winden = "Antonio Vargas Gonzalez <windenntw@gmail.com>";
   wizeman = "Ricardo M. Correia <rcorreia@wizy.org>";
   wjlroe = "William Roe <willroe@gmail.com>";
+  wkennington = "William A. Kennington III <william@wkennington.com>";
   wmertens = "Wout Mertens <Wout.Mertens@gmail.com>";
   z77z = "Marco Maggesi <maggesi@math.unifi.it>";
   zef = "Zef Hemel <zef@zef.me>";

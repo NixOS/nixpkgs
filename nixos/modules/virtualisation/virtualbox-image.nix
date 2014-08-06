@@ -12,7 +12,7 @@ in {
     virtualbox = {
       baseImageSize = mkOption {
         type = types.str;
-        default = 10G;
+        default = "10G";
         description = ''
           The size of the VirtualBox base image. The size string should be on
           a format the qemu-img command accepts.
