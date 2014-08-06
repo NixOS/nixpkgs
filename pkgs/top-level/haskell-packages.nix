@@ -994,6 +994,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   gtkTraymanager = callPackage ../development/libraries/haskell/gtk-traymanager {};
 
+  Graphalyze = callPackage ../development/libraries/haskell/Graphalyze {};
+
   graphviz = callPackage ../development/libraries/haskell/graphviz {};
 
   graphSCC = callPackage ../development/libraries/haskell/graphscc {};
