@@ -27,32 +27,30 @@ in
       home = "${stateDir}";
     };
 
-    systemd.mounts = [
-      {
+    # We must create the binary directories as bind mounts instead of symlinks
+    # This is because the controller resolves all symlinks to absolute paths
+    # to be used as the working directory.
+    systemd.mounts = map ({ what, where }: {
         bindsTo = [ "unifi.service" ];
         requiredBy = [ "unifi.service" ];
         before = [ "unifi.service" ];
-        what = "${pkgs.unifi}/dl";
-        where = "${stateDir}/dl";
         options = "bind";
-      }
-      {
-        bindsTo = [ "unifi.service" ];
-        requiredBy = [ "unifi.service" ];
-        before = [ "unifi.service" ];
-        what = "${pkgs.unifi}/lib";
-        where = "${stateDir}/lib";
-        options = "bind";
-      }
-      {
-        bindsTo = [ "unifi.service" ];
-        requiredBy = [ "unifi.service" ];
-        before = [ "unifi.service" ];
-        what = "${pkgs.mongodb}/bin";
-        where = "${stateDir}/bin";
-        options = "bind";
-      }
-    ];
+        what = what;
+        where = where;
+      }) [
+        {
+          what = "${pkgs.unifi}/dl";
+          where = "${stateDir}/dl";
+        }
+        {
+          what = "${pkgs.unifi}/lib";
+          where = "${stateDir}/lib";
+        }
+        {
+          what = "${pkgs.mongodb}/bin";
+          where = "${stateDir}/bin";
+        }
+      ];
 
     systemd.services.unifi = {
       description = "UniFi controller daemon";
