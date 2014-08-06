@@ -7184,6 +7184,8 @@ rec {
 
     buildInputs = [ pbr pip ];
 
+    propagatedBuildInputs = [ setuptools ];
+
     meta = {
       description = "Manage dynamic plugins for Python applications";
       homepage = "https://pypi.python.org/pypi/stevedore";
