@@ -2875,6 +2875,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ShellCheck = callPackage ../development/tools/misc/ShellCheck { };
 
+  SourceGraph = callPackage ../development/tools/haskell/SourceGraph {};
+
   tar = callPackage ../development/libraries/haskell/tar {};
 
   threadscope = callPackage ../development/tools/haskell/threadscope {};
