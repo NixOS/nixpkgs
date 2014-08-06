@@ -14,24 +14,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./debian-patches.patch ];
 
-  postInstall = let pkgconfigFile = writeText "id3tag.pc" ''
-    prefix=@out@
-    exec_prefix=''${prefix}
-    libdir=''${exec_prefix}/lib
-    includedir=''${exec_prefix}/include
-
-    Name: libid3tag
-    Description: ID3 tag manipulation library
-    Version: ${version}
-
-    Libs: -L''${libdir} -lid3tag
-    Cflags: -I''${includedir}
-    '';
-  in ''
-      ensureDir $out/share/pkgconfig
-      cp ${pkgconfigFile} $out/share/pkgconfig/id3tag.pc
-      substituteInPlace $out/share/pkgconfig/id3tag.pc \
-        --subst-var-by out $out
+  postInstall = ''
+    mkdir -p $out/lib/pkgconfig
+    cp ${./id3tag.pc} $out/lib/pkgconfig/id3tag.pc
+    substituteInPlace $out/lib/pkgconfig/id3tag.pc \
+      --subst-var-by out $out \
+      --subst-var-by version "${version}"
   '';
 
   meta = with stdenv.lib; {

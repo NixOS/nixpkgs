@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
   buildTools = [ gtk2hsBuildtools ];
   extraLibraries = [ libc pkgconfig ];
   pkgconfigDepends = [ gtkC libglade ];
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/gtk2hs/";
     description = "Binding to the glade library";

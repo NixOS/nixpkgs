@@ -3,20 +3,20 @@
 { cabal, aeson, base16Bytestring, base64Bytestring, blazeBuilder
 , byteable, caseInsensitive, cereal, conduit, conduitExtra
 , cryptohash, dataDefault, filepath, httpConduit, httpTypes
-, liftedBase, monadControl, mtl, resourcet, text, time
+, liftedBase, monadControl, mtl, network, resourcet, text, time
 , transformers, unorderedContainers, utf8String, vector, xmlConduit
 }:
 
 cabal.mkDerivation (self: {
   pname = "aws";
-  version = "0.9.1";
-  sha256 = "1fp18j8my9v7d6z0d28bc1hjzrs9znf3c986950pfpv2bsiw7m6d";
+  version = "0.9.2";
+  sha256 = "1jmvf1x3vamcjb89mk52l1iikdchab8pm23iw9y1d4zm4636czxm";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     aeson base16Bytestring base64Bytestring blazeBuilder byteable
     caseInsensitive cereal conduit conduitExtra cryptohash dataDefault
-    filepath httpConduit httpTypes liftedBase monadControl mtl
+    filepath httpConduit httpTypes liftedBase monadControl mtl network
     resourcet text time transformers unorderedContainers utf8String
     vector xmlConduit
   ];

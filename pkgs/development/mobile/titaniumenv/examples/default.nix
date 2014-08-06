@@ -5,6 +5,7 @@
 , rename ? false
 , newBundleId ? "com.example.kitchensink", iosMobileProvisioningProfile ? null, iosCertificate ? null, iosCertificateName ? "Example", iosCertificatePassword ? ""
 , allowUnfree ? false
+, enableWirelessDistribution ? false, installURL ? null
 }:
 
 let
@@ -90,6 +91,7 @@ rec {
       release = true;
       rename = true;
       inherit newBundleId iosMobileProvisioningProfile iosCertificate iosCertificateName iosCertificatePassword;
+      inherit enableWirelessDistribution installURL;
     };
   }
   

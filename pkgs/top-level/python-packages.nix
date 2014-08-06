@@ -3593,11 +3593,11 @@ rec {
   };
 
   gunicorn = buildPythonPackage rec {
-    name = "gunicorn-18.0";
+    name = "gunicorn-19.1.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/g/gunicorn/${name}.tar.gz";
-      md5 = "c7138b9ac7515a42066922d2b6120fbe";
+      md5 = "3d759bec3c46a680ff010775258c4c56";
     };
 
     buildInputs = [ pytest ];
@@ -6720,12 +6720,12 @@ rec {
 
 
   robotframework = buildPythonPackage rec {
-    version = "2.8.4";
+    version = "2.8.5";
     name = "robotframework-${version}";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/r/robotframework/${name}.tar.gz";
-      sha256 = "0rxk135c1051cwv45219ib3faqvi5rl50l98ncb83c7qxy92jg2n";
+      sha256 = "0rzdn2gvmcrxs2fvxm11h55w4j5pv0lf443fc4hl8kzwjwgjckga";
     };
 
     # error: invalid command 'test'

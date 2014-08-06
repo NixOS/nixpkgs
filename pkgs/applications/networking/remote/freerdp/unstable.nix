@@ -70,6 +70,8 @@ stdenv.mkDerivation rec {
     homepage = http://www.freerdp.com/;
 
     license = "free-non-copyleft";
+
+    broken = true;  # fails to build
   };
 }
 

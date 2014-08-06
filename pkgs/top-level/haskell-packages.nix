@@ -135,6 +135,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   abstractPar = callPackage ../development/libraries/haskell/abstract-par {};
 
+  ad = callPackage ../development/libraries/haskell/ad {};
+
   adjunctions = callPackage ../development/libraries/haskell/adjunctions {};
 
   AES = callPackage ../development/libraries/haskell/AES {};
@@ -206,6 +208,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   attoparsecConduit = callPackage ../development/libraries/haskell/attoparsec-conduit {};
 
   attoparsecEnumerator = callPackage ../development/libraries/haskell/attoparsec-enumerator {};
+
+  autoUpdate = callPackage ../development/libraries/haskell/auto-update {};
 
   aws = callPackage ../development/libraries/haskell/aws {};
 
@@ -570,6 +574,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
 
+  dataFin = callPackage ../development/libraries/haskell/data-fin {};
+
   dataFix = callPackage ../development/libraries/haskell/data-fix {};
 
   dataHash = callPackage ../development/libraries/haskell/data-hash {};
@@ -675,6 +681,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   doctest = callPackage ../development/libraries/haskell/doctest {};
 
   doctestProp = callPackage ../development/libraries/haskell/doctest-prop {};
+
+  domSelector = callPackage ../development/libraries/haskell/dom-selector {};
 
   dotgen = callPackage ../development/libraries/haskell/dotgen {};
 
@@ -859,6 +867,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   genericAeson = callPackage ../development/libraries/haskell/generic-aeson {};
 
   genericDeriving = callPackage ../development/libraries/haskell/generic-deriving {};
+
+  genericsSop = callPackage ../development/libraries/haskell/generics-sop {};
 
   ghcCore = callPackage ../development/libraries/haskell/ghc-core {};
 
@@ -1850,6 +1860,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   preludeExtras = callPackage ../development/libraries/haskell/prelude-extras {};
 
+  preludeSafeenum = callPackage ../development/libraries/haskell/prelude-safeenum {};
+
   preprocessorTools_0_1_3 = callPackage ../development/libraries/haskell/preprocessor-tools/0.1.3.nix {};
   preprocessorTools_1_0_1 = callPackage ../development/libraries/haskell/preprocessor-tools/1.0.1.nix {};
   preprocessorTools = self.preprocessorTools_1_0_1;
@@ -1866,6 +1878,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   primitive_0_5_2_1 = callPackage ../development/libraries/haskell/primitive/0.5.2.1.nix {};
   primitive_0_5_3_0 = callPackage ../development/libraries/haskell/primitive/0.5.3.0.nix {};
   primitive = self.primitive_0_5_3_0;
+
+  probability = callPackage ../development/libraries/haskell/probability {};
 
   profunctors = callPackage ../development/libraries/haskell/profunctors {};
 
@@ -2887,7 +2901,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   taffybar = callPackage ../applications/misc/taffybar {};
 
-  yi = callPackage ../applications/editors/yi/yi.nix {};
+  yi = callPackage ../applications/editors/yi/yi.nix {
+    vty = self.vty_4_7_5;
+  };
 
   yiContrib = callPackage ../applications/editors/yi/yi-contrib.nix {};
 

@@ -3316,7 +3316,7 @@ let
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
   sbcl = callPackage ../development/compilers/sbcl {
-    clisp = clisp_2_44_1;
+    clisp = clisp;
   };
 
   scala_2_9 = callPackage ../development/compilers/scala/2.9.nix { };
@@ -5878,6 +5878,8 @@ let
 
   p11_kit = callPackage ../development/libraries/p11-kit { };
 
+  paperkey = callPackage ../tools/security/paperkey { };
+
   pangoxsl = callPackage ../development/libraries/pangoxsl { };
 
   pcl = callPackage ../development/libraries/pcl {
@@ -7373,6 +7375,15 @@ let
       ];
   };
 
+  linux_3_16 = makeOverridable (import ../os-specific/linux/kernel/linux-3.16.nix) {
+    inherit fetchurl stdenv perl buildLinux;
+    kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
   linux_testing = makeOverridable (import ../os-specific/linux/kernel/linux-testing.nix) {
     inherit fetchurl stdenv perl buildLinux;
     kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
@@ -7508,8 +7519,8 @@ let
   linuxPackages = linuxPackages_3_12;
 
   # Update this when adding the newest kernel major version!
-  linux_latest = pkgs.linux_3_15;
-  linuxPackages_latest = pkgs.linuxPackages_3_15;
+  linux_latest = pkgs.linux_3_16;
+  linuxPackages_latest = pkgs.linuxPackages_3_16;
 
   # Build the kernel modules for the some of the kernels.
   linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 linuxPackages_3_2);
@@ -7521,6 +7532,7 @@ let
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
   linuxPackages_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_14 linuxPackages_3_14);
   linuxPackages_3_15 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_15 linuxPackages_3_15);
+  linuxPackages_3_16 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_16 linuxPackages_3_16);
   linuxPackages_testing = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing linuxPackages_testing);
 
   # grsecurity flavors
@@ -8765,7 +8777,8 @@ let
     libart = gnome2.libart_lgpl;
   }; # latest version: gnome3.goffice
 
-  ideas = recurseIntoAttrs (callPackage ../applications/editors/idea { });
+  ideas = recurseIntoAttrs (  (callPackage ../applications/editors/idea { })
+                           // (callPackage ../applications/editors/idea/pycharm.nix { }));
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 

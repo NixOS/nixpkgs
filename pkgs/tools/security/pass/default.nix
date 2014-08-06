@@ -7,12 +7,12 @@
 assert withX -> xclip != null;
 
 stdenv.mkDerivation rec {
-  version = "1.6.2";
+  version = "1.6.3";
   name    = "password-store-${version}";
 
   src = fetchurl {
     url    = "http://git.zx2c4.com/password-store/snapshot/${name}.tar.xz";
-    sha256 = "1d32y6k625pv704icmhg46zg02kw5zcyxscgljxgy8bb5wv4lv2j";
+    sha256 = "1xs00c7ffqd0093i452kryw9sjip6dkp1pclx69zihb5l45d86fl";
   };
 
   patches = [ ./darwin-getopt.patch ];
