@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 OLDPATH="$PATH"
 OLDTZ="$TZ"
