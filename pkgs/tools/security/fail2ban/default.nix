@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, pythonPackages, unzip, systemd }:
+{ stdenv, fetchurl, python, pythonPackages, unzip, systemd, gamin }:
 
 let version = "0.9"; in
 
@@ -14,7 +14,7 @@ pythonPackages.buildPythonPackage {
 
   buildInputs = [ unzip ];
 
-  pythonPath = [ systemd python.modules.sqlite3 ];
+  pythonPath = [ systemd python.modules.sqlite3 gamin ];
 
   preConfigure = ''
     substituteInPlace setup.cfg \
