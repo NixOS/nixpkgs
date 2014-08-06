@@ -9825,6 +9825,8 @@ let
 
   tree = callPackage ../tools/system/tree {};
 
+  trezor-bridge = callPackage ../applications/networking/browsers/mozilla-plugins/trezor { };
+
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
   twister = callPackage ../applications/networking/p2p/twister { };
@@ -10014,6 +10016,7 @@ let
           ++ lib.optional (cfg.enableGoogleTalkPlugin or false) google_talk_plugin
           ++ lib.optional (cfg.enableFriBIDPlugin or false) fribid
           ++ lib.optional (cfg.enableGnomeExtensions or false) gnome3.gnome_shell
+          ++ lib.optional (cfg.enableTrezor or false) trezor-bridge
          );
       libs = [ gstreamer gst_plugins_base ] ++ lib.optionals (cfg.enableQuakeLive or false)
              (with xlibs; [ stdenv.gcc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ]);
