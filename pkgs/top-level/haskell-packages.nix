@@ -200,8 +200,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   attoparsec_0_10_4_0 = callPackage ../development/libraries/haskell/attoparsec/0.10.4.0.nix {};
   attoparsec_0_11_3_1 = callPackage ../development/libraries/haskell/attoparsec/0.11.3.1.nix {};
   attoparsec_0_11_3_4 = callPackage ../development/libraries/haskell/attoparsec/0.11.3.4.nix {};
-  attoparsec_0_12_1_0 = callPackage ../development/libraries/haskell/attoparsec/0.12.1.0.nix {};
-  attoparsec = self.attoparsec_0_12_1_0;
+  attoparsec_0_12_1_1 = callPackage ../development/libraries/haskell/attoparsec/0.12.1.1.nix {};
+  attoparsec = self.attoparsec_0_12_1_1;
 
   attoparsecBinary = callPackage ../development/libraries/haskell/attoparsec-binary {};
 
