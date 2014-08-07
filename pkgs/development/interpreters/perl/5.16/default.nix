@@ -54,6 +54,12 @@ stdenv.mkDerivation rec {
       ${optionalString stdenv.isArm ''
         configureFlagsArray=(-Dldflags="-lm -lrt")
       ''}
+      
+      ${optionalString stdenv.isCygwin ''
+        cp cygwin/cygwin.c{,.bak}
+        echo "#define PERLIO_NOT_STDIO 0" > tmp
+        cat tmp cygwin/cygwin.c.bak > cygwin/cygwin.c
+      ''}
     '';
 
   preBuild = optionalString (!(stdenv ? gcc && stdenv.gcc.nativeTools))
@@ -64,7 +70,7 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = stdenv.isLinux;
 
   # some network-related tests don't work, mostly probably due to our sandboxing
   testsToSkip = ''
