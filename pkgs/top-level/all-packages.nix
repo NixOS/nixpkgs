@@ -2217,6 +2217,8 @@ let
 
   ucl = callPackage ../development/libraries/ucl { };
 
+  ucspi-tcp = callPackage ../tools/networking/ucspi-tcp { };
+
   udftools = callPackage ../tools/filesystems/udftools {};
 
   udptunnel = callPackage ../tools/networking/udptunnel { };
