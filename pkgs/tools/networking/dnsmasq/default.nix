@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     description = "An integrated DNS, DHCP and TFTP server for small networks";
     homepage = http://www.thekelleys.org.uk/dnsmasq/doc.html;
     license = "GPL";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }
