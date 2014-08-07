@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 	-"es|^ *#define \+_PATH_DHCLIENT_SCRIPT.*$|#define _PATH_DHCLIENT_SCRIPT \"$out/sbin/dhclient-script\"|g"
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Dynamic Host Configuration Protocol (DHCP) tools";
 
     longDescription = ''
@@ -61,6 +61,8 @@ stdenv.mkDerivation rec {
    '';
 
     homepage = http://www.isc.org/products/DHCP/;
-    license = "http://www.isc.org/sw/dhcp/dhcp-copyright.php";
+    license = licenses.isc;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ wkennington ];
   };
 }
