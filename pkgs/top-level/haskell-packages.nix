@@ -200,8 +200,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   attoparsec_0_10_4_0 = callPackage ../development/libraries/haskell/attoparsec/0.10.4.0.nix {};
   attoparsec_0_11_3_1 = callPackage ../development/libraries/haskell/attoparsec/0.11.3.1.nix {};
   attoparsec_0_11_3_4 = callPackage ../development/libraries/haskell/attoparsec/0.11.3.4.nix {};
-  attoparsec_0_12_1_0 = callPackage ../development/libraries/haskell/attoparsec/0.12.1.0.nix {};
-  attoparsec = self.attoparsec_0_12_1_0;
+  attoparsec_0_12_1_1 = callPackage ../development/libraries/haskell/attoparsec/0.12.1.1.nix {};
+  attoparsec = self.attoparsec_0_12_1_1;
 
   attoparsecBinary = callPackage ../development/libraries/haskell/attoparsec-binary {};
 
@@ -2775,17 +2775,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   # Compilers.
 
-  Agda_2_3_2_2 = callPackage ../development/compilers/agda/2.3.2.2.nix {};
-  Agda_2_4_0_2 = callPackage ../development/compilers/agda/2.4.0.2.nix {};
-  Agda = self.Agda_2_4_0_2;
-
-  AgdaStdlib_0_7 = callPackage ../development/compilers/agda/stdlib-0.7.nix {
-    Agda = self.Agda_2_3_2_2;
-  };
-  AgdaStdlib_0_8 = callPackage ../development/compilers/agda/stdlib-0.8.nix {
-    Agda = self.Agda_2_4_0_2;
-  };
-  AgdaStdlib = self.AgdaStdlib_0_8;
+  Agda = callPackage ../development/compilers/agda {};
+  AgdaStdlib = callPackage ../development/compilers/agda/stdlib.nix {};
 
   uhc = callPackage ../development/compilers/uhc {};
 
