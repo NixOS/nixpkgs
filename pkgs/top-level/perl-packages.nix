@@ -5054,7 +5054,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "The World-Wide Web library for Perl";
       license = "perl";
-      platforms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     };
   };
 
