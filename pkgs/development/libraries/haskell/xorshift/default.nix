@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ random time ];
   meta = {
     description = "Haskell implementation of the xorshift random generator";
-    license = self.stdenv.lib.licenses.lgpl2;
+    license = "LGPL";
     platforms = self.ghc.meta.platforms;
   };
 })
