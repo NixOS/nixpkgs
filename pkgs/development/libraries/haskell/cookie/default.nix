@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
     blazeBuilder HUnit QuickCheck testFramework testFrameworkHunit
     testFrameworkQuickcheck2 text time
   ];
+  doCheck = self.stdenv.lib.versionOlder "7.8" self.ghc.version;
   meta = {
     homepage = "http://github.com/snoyberg/cookie";
     description = "HTTP cookie parsing and rendering";
