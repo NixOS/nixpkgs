@@ -2149,6 +2149,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   socketIo = callPackage ../development/libraries/haskell/socket-io {};
 
+  sodium = callPackage ../development/libraries/haskell/sodium {};
+
   sparse = callPackage ../development/libraries/haskell/sparse {};
 
   spawn = callPackage ../development/libraries/haskell/spawn {};
@@ -2702,6 +2704,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   xmlLens = callPackage ../development/libraries/haskell/xml-lens {};
 
   xmlTypes = callPackage ../development/libraries/haskell/xml-types {};
+
+  xorshift = callPackage ../development/libraries/haskell/xorshift {};
 
   xournalParser = callPackage ../development/libraries/haskell/xournal-parser {};
 
