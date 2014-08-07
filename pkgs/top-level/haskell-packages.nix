@@ -2705,6 +2705,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   xmlTypes = callPackage ../development/libraries/haskell/xml-types {};
 
+  xorshift = callPackage ../development/libraries/haskell/xorshift {};
+
   xournalParser = callPackage ../development/libraries/haskell/xournal-parser {};
 
   xournalTypes = callPackage ../development/libraries/haskell/xournal-types {};
