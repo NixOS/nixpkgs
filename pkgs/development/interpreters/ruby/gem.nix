@@ -1,62 +1,93 @@
-{stdenv, fetchurl, ruby, rubygems, makeWrapper, patches, overrides}:
+{ ruby, fetchurl, rake, rubygemsFun, makeWrapper, lib, git }:
+
+{ name
+, namePrefix ? "ruby${ruby.majorVersion}" + "-"
+, buildInputs ? []
+, doCheck ? true
+, doGitPrecheckHack ? false
+, meta ? {}
+, gemPath ? []
+, testTask ? "test"
+, preCheck ? ""
+, postCheck ? ""
+, ...} @ attrs:
 
 let
-  gemDefaults = { name, basename, requiredGems, sha256, meta }:
-  {
-    buildInputs = [rubygems ruby makeWrapper];
-    unpackPhase = ":";
-    configurePhase=":";
-    bulidPhase=":";
+  rubygems = rubygemsFun ruby;
+  depsPath = lib.concatStringsSep ":" (map (g: "${g}/${ruby.gemPath}") gemPath);
 
-    src = fetchurl {
-      url = "http://rubygems.org/downloads/${name}.gem";
-      inherit sha256;
+in ruby.stdenv.mkDerivation (attrs // {
+  inherit doCheck;
+
+  buildInputs = [ rubygems makeWrapper git ] ++ buildInputs;
+
+  name = namePrefix + name;
+
+  src = if attrs ? src
+    then attrs.src
+    else fetchurl {
+      url = "http://rubygems.org/downloads/${attrs.name}.gem";
+      inherit (attrs) sha256;
     };
 
-    name = "ruby-${name}";
+  unpackPhase = ''
+    gem unpack $src --target=gem-build
+  '';
 
-    propagatedBuildInputs = requiredGems;
-    inherit meta;
+  dontBuild = true;
 
-    installPhase = ''
-      export HOME=$TMP/home; mkdir -pv "$HOME"
+  preCheckGit = ruby.stdenv.lib.optionalString doGitPrecheckHack ''
+    ${git}/bin/git init
+    ${git}/bin/git add .
+  '';
 
-      gem install -V --ignore-dependencies \
-      -i "$out/${ruby.gemPath}" -n "$out/bin" "$src" $gemFlags -- $buildFlags
-      rm -frv $out/${ruby.gemPath}/cache # don't keep the .gem file here
+  preCheck = ''
+    cd gem-build/*
+    OLD_PATH="$GEM_PATH"
+    export GEM_PATH="${depsPath}"
+  '' + preCheck;
 
-      addToSearchPath GEM_PATH $out/${ruby.gemPath}
+  postCheck = ''
+    GEM_PATH="$OLD_PATH"
+  '' + postCheck;
 
-      for prog in $out/bin/*; do
-        wrapProgram "$prog" \
-          --prefix GEM_PATH : "$GEM_PATH" \
-          --prefix RUBYLIB : "${rubygems}/lib" \
-          --set RUBYOPT rubygems \
-          $extraWrapperFlags ''${extraWrapperFlagsArray[@]}
-      done
-
-      for prog in $out/gems/*/bin/*; do
-        [[ -e "$out/bin/$(basename $prog)" ]]
-      done
-
-      # looks like useless files which break build repeatability and consume space
-      rm $out/${ruby.gemPath}/doc/*/*/created.rid || true
-      rm $out/${ruby.gemPath}/gems/*/ext/*/mkmf.log || true
-
-      runHook postInstall
+  checkPhase =
+    if attrs ? checkPhase then attrs.checkPhase
+    else ''
+      runHook preCheckGit
+      runHook preCheck
+      test -f Rakefile && ${rake}/bin/rake ${testTask} -v
+      runHook postCheck
     '';
 
-    propagatedUserEnvPkgs = requiredGems;
+  installPhase = ''
+    GEM_PATH="${depsPath}" GEM_HOME=$out/${ruby.gemPath} \
+      gem install -p http://nodtd.invalid \
+      --build-root / -n "$out/bin" "$src" $gemFlags -- $buildFlags
+    rm -frv $out/${ruby.gemPath}/cache # don't keep the .gem file here
 
-    passthru.isRubyGem = true;
+    for prog in $out/bin/*; do
+      wrapProgram "$prog" \
+        --prefix GEM_PATH : "$out/${ruby.gemPath}:${depsPath}" \
+        --prefix RUBYLIB : "${rubygems}/lib" \
+        --set RUBYOPT rubygems \
+        $extraWrapperFlags ''${extraWrapperFlagsArray[@]}
+    done
 
-  };
-  mb = stdenv.lib.maybeAttr;
-  patchedGem = a: stdenv.mkDerivation (removeAttrs (stdenv.lib.mergeAttrsByFuncDefaults
-      ([ (gemDefaults a) ]
-      ++ (stdenv.lib.concatMap (p: [(mb a.basename {} p) (mb a.name {} p)] )
-      patches)))
-    [ "mergeAttrBy" ]);
-in
-aName: a@{ name, basename, requiredGems, sha256, meta }:
-  stdenv.lib.foldl (d: o: mb name (mb basename d o) o) (patchedGem a) overrides
+    for prog in $out/gems/*/bin/*; do
+      [[ -e "$out/bin/$(basename $prog)" ]]
+    done
+
+    # looks like useless files which break build repeatability and consume space
+    rm $out/${ruby.gemPath}/doc/*/*/created.rid || true
+    rm $out/${ruby.gemPath}/gems/*/ext/*/mkmf.log || true
+
+    runHook postInstall
+  '';
+
+  propagatedBuildInputs = gemPath;
+  propagatedUserEnvPkgs = gemPath;
+
+  passthru.isRubyGem = true;
+  inherit meta;
+})

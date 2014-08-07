@@ -4045,7 +4045,19 @@ let
   ruby_2_0 = ruby_2_0_0;
   ruby_2_1 = ruby_2_1_3;
 
-  rubyLibs = recurseIntoAttrs (callPackage ../development/interpreters/ruby/libs.nix { });
+  ruby18Libs = callPackage ../development/interpreters/ruby/gems.nix {
+    ruby = ruby18;
+  };
+
+  ruby19Libs = callPackage ../development/interpreters/ruby/gems.nix {
+    ruby = ruby19;
+  };
+
+  ruby2Libs = callPackage ../development/interpreters/ruby/gems.nix {
+    ruby = ruby2;
+  };
+
+  rubyLibs = ruby19Libs;
 
   rake = rubyLibs.rake;
 
