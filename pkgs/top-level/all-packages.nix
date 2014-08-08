@@ -569,6 +569,8 @@ let
 
   bfr = callPackage ../tools/misc/bfr { };
 
+  bindfs = callPackage ../tools/filesystems/bindfs { };
+
   bitbucket-cli = pythonPackages.bitbucket-cli;
 
   blockdiag = pythonPackages.blockdiag;
@@ -992,7 +994,11 @@ let
 
   fabric = pythonPackages.fabric;
 
-  fail2ban = callPackage ../tools/security/fail2ban { };
+  fail2ban = callPackage ../tools/security/fail2ban {
+    systemd = systemd.override {
+      pythonSupport = true;
+    };
+  };
 
   fakeroot = callPackage ../tools/system/fakeroot { };
 
@@ -1815,6 +1821,8 @@ let
 
   pdnsd = callPackage ../tools/networking/pdnsd { };
 
+  peco = callPackage ../tools/text/peco { };
+
   pg_top = callPackage ../tools/misc/pg_top { };
 
   pdsh = callPackage ../tools/networking/pdsh {
@@ -2347,6 +2355,8 @@ let
   xarchive = callPackage ../tools/archivers/xarchive { };
 
   xarchiver = callPackage ../tools/archivers/xarchiver { };
+
+  xcruiser = callPackage ../applications/misc/xcruiser { };
 
   unarj = callPackage ../tools/archivers/unarj { };
 
@@ -3302,7 +3312,7 @@ let
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
   sbcl = callPackage ../development/compilers/sbcl {
-    clisp = clisp_2_44_1;
+    clisp = clisp;
   };
 
   scala_2_9 = callPackage ../development/compilers/scala/2.9.nix { };
@@ -3705,6 +3715,8 @@ let
 
   guile-xcb = callPackage ../development/guile-modules/guile-xcb { };
 
+  pharo-vm = callPackage_i686 ../development/pharo/vm { };
+
   srecord = callPackage ../development/tools/misc/srecord { };
 
   windowssdk = (
@@ -3974,7 +3986,9 @@ let
 
   inotifyTools = callPackage ../development/tools/misc/inotify-tools { };
 
-  intelgen4asm = callPackage ../development/misc/intelgen4asm { };
+  intel-gpu-tools = callPackage ../development/tools/misc/intel-gpu-tools {
+    inherit (xorg) libpciaccess dri2proto libX11 libXext libXv libXrandr;
+  };
 
   ired = callPackage ../development/tools/analysis/radare/ired.nix { };
 
@@ -5182,6 +5196,8 @@ let
   libgcrypt_1_6 = lowPrio (callPackage ../development/libraries/libgcrypt/1.6.nix { });
 
   libgdiplus = callPackage ../development/libraries/libgdiplus { };
+
+  libgksu = callPackage ../development/libraries/libgksu { };
 
   libgpgerror = callPackage ../development/libraries/libgpg-error { };
 
@@ -6973,6 +6989,8 @@ let
 
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 
+  unifi = callPackage ../servers/unifi { };
+
   virtuoso6 = callPackage ../servers/sql/virtuoso/6.x.nix { };
 
   virtuoso7 = callPackage ../servers/sql/virtuoso/7.x.nix { };
@@ -8569,6 +8587,8 @@ let
 
   geany = callPackage ../applications/editors/geany { };
 
+  gksu = callPackage ../applications/misc/gksu { };
+
   gnuradio = callPackage ../applications/misc/gnuradio {
     inherit (pythonPackages) lxml numpy scipy matplotlib pyopengl;
     fftw = fftwFloat;
@@ -8685,6 +8705,8 @@ let
 
   fuze = callPackage ../applications/networking/instant-messengers/fuze {};
 
+  gcolor2 = callPackage ../applications/graphics/gcolor2 { };
+
   get_iplayer = callPackage ../applications/misc/get_iplayer {};
 
   gimp_2_8 = callPackage ../applications/graphics/gimp/2.8.nix {
@@ -8735,7 +8757,8 @@ let
     libart = gnome2.libart_lgpl;
   }; # latest version: gnome3.goffice
 
-  ideas = recurseIntoAttrs (callPackage ../applications/editors/idea { });
+  ideas = recurseIntoAttrs (  (callPackage ../applications/editors/idea { })
+                           // (callPackage ../applications/editors/idea/pycharm.nix { }));
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
@@ -10120,6 +10143,8 @@ let
     lua = lua5;
     libsigcxx = libsigcxx12;
   };
+
+  astromenace = callPackage ../games/astromenace { };
 
   atanks = callPackage ../games/atanks {};
 

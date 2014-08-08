@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   name = "riemann-c-client-${version}";
 
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchurl {
     url = "https://github.com/algernon/riemann-c-client/archive/${name}.tar.gz";
-    sha256 = "10nz20svf1nb6kymwp0x49nvwnxakby33r6jsadish1fjcvzki88";
+    sha256 = "1w3rx0hva605d5vzlhhm4pb43ady0m3s4mz8ix1ycn4b8cq9jsjs";
   };
 
   buildInputs = [ autoconf automake libtool pkgconfig file protobufc ];

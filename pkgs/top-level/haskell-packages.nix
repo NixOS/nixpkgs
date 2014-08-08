@@ -200,14 +200,16 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   attoparsec_0_10_4_0 = callPackage ../development/libraries/haskell/attoparsec/0.10.4.0.nix {};
   attoparsec_0_11_3_1 = callPackage ../development/libraries/haskell/attoparsec/0.11.3.1.nix {};
   attoparsec_0_11_3_4 = callPackage ../development/libraries/haskell/attoparsec/0.11.3.4.nix {};
-  attoparsec_0_12_1_0 = callPackage ../development/libraries/haskell/attoparsec/0.12.1.0.nix {};
-  attoparsec = self.attoparsec_0_12_1_0;
+  attoparsec_0_12_1_1 = callPackage ../development/libraries/haskell/attoparsec/0.12.1.1.nix {};
+  attoparsec = self.attoparsec_0_12_1_1;
 
   attoparsecBinary = callPackage ../development/libraries/haskell/attoparsec-binary {};
 
   attoparsecConduit = callPackage ../development/libraries/haskell/attoparsec-conduit {};
 
   attoparsecEnumerator = callPackage ../development/libraries/haskell/attoparsec-enumerator {};
+
+  autoUpdate = callPackage ../development/libraries/haskell/auto-update {};
 
   aws = callPackage ../development/libraries/haskell/aws {};
 
@@ -572,6 +574,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
 
+  dataFin = callPackage ../development/libraries/haskell/data-fin {};
+
   dataFix = callPackage ../development/libraries/haskell/data-fix {};
 
   dataHash = callPackage ../development/libraries/haskell/data-hash {};
@@ -677,6 +681,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   doctest = callPackage ../development/libraries/haskell/doctest {};
 
   doctestProp = callPackage ../development/libraries/haskell/doctest-prop {};
+
+  domSelector = callPackage ../development/libraries/haskell/dom-selector {};
 
   dotgen = callPackage ../development/libraries/haskell/dotgen {};
 
@@ -861,6 +867,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   genericAeson = callPackage ../development/libraries/haskell/generic-aeson {};
 
   genericDeriving = callPackage ../development/libraries/haskell/generic-deriving {};
+
+  genericsSop = callPackage ../development/libraries/haskell/generics-sop {};
 
   ghcCore = callPackage ../development/libraries/haskell/ghc-core {};
 
@@ -1852,6 +1860,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   preludeExtras = callPackage ../development/libraries/haskell/prelude-extras {};
 
+  preludeSafeenum = callPackage ../development/libraries/haskell/prelude-safeenum {};
+
   preprocessorTools_0_1_3 = callPackage ../development/libraries/haskell/preprocessor-tools/0.1.3.nix {};
   preprocessorTools_1_0_1 = callPackage ../development/libraries/haskell/preprocessor-tools/1.0.1.nix {};
   preprocessorTools = self.preprocessorTools_1_0_1;
@@ -2138,6 +2148,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   socks = callPackage ../development/libraries/haskell/socks {};
 
   socketIo = callPackage ../development/libraries/haskell/socket-io {};
+
+  sodium = callPackage ../development/libraries/haskell/sodium {};
 
   sparse = callPackage ../development/libraries/haskell/sparse {};
 
@@ -2614,6 +2626,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   webdriver = callPackage ../development/libraries/haskell/webdriver {};
 
+  webkit = callPackage ../development/libraries/haskell/webkit {
+    webkit = pkgs.webkitgtk2;
+  };
+
   webRoutes = callPackage ../development/libraries/haskell/web-routes {};
 
   webRoutesBoomerang = callPackage ../development/libraries/haskell/web-routes-boomerang {};
@@ -2693,6 +2709,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   xmlTypes = callPackage ../development/libraries/haskell/xml-types {};
 
+  xorshift = callPackage ../development/libraries/haskell/xorshift {};
+
   xournalParser = callPackage ../development/libraries/haskell/xournal-parser {};
 
   xournalTypes = callPackage ../development/libraries/haskell/xournal-types {};
@@ -2765,17 +2783,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   # Compilers.
 
-  Agda_2_3_2_2 = callPackage ../development/compilers/agda/2.3.2.2.nix {};
-  Agda_2_4_0_2 = callPackage ../development/compilers/agda/2.4.0.2.nix {};
-  Agda = self.Agda_2_4_0_2;
-
-  AgdaStdlib_0_7 = callPackage ../development/compilers/agda/stdlib-0.7.nix {
-    Agda = self.Agda_2_3_2_2;
-  };
-  AgdaStdlib_0_8 = callPackage ../development/compilers/agda/stdlib-0.8.nix {
-    Agda = self.Agda_2_4_0_2;
-  };
-  AgdaStdlib = self.AgdaStdlib_0_8;
+  Agda = callPackage ../development/compilers/agda {};
+  AgdaStdlib = callPackage ../development/compilers/agda/stdlib.nix {};
 
   uhc = callPackage ../development/compilers/uhc {};
 

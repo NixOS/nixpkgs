@@ -194,6 +194,9 @@ checkFS() {
     # Don't check ROM filesystems.
     if [ "$fsType" = iso9660 -o "$fsType" = udf ]; then return 0; fi
 
+    # Don't check resilient COWs as they validate the fs structures at mount time
+    if [ "$fsType" = btrfs -o "$fsType" = zfs ]; then return 0; fi
+
     # If we couldn't figure out the FS type, then skip fsck.
     if [ "$fsType" = auto ]; then
         echo 'cannot check filesystem with type "auto"!'

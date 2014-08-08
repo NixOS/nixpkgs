@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "graph-wrapper";
-  version = "0.2.4.2";
-  sha256 = "0cf70xvmzn4w5pg1bxizajqgcbjwwk6jrd7hnb3kfqy1v3apifyf";
+  version = "0.2.4.3";
+  sha256 = "1wfazkczc9m1r0snzv5b4ax315g93qgrnqc2wnrqqnzhcfy1symg";
   meta = {
     homepage = "http://www.github.com/batterseapower/graph-wrapper";
     description = "A wrapper around the standard Data.Graph with a less awkward interface";

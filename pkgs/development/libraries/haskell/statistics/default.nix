@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "statistics";
-  version = "0.13.1.1";
-  sha256 = "1ghb2snbacbfzxqcrvdiihvw2iip1m8rq9y62x1ayg6k13agm7r5";
+  version = "0.13.2.1";
+  sha256 = "0giibqpnjndnhvxqsr8ikcxxfhz3ws0mk3ckykq2sfwz7gkipvva";
   buildDepends = [
     aeson binary deepseq erf mathFunctions monadPar mwcRandom primitive
     vector vectorAlgorithms vectorBinaryInstances

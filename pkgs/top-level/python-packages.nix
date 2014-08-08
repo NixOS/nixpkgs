@@ -895,11 +895,11 @@ rec {
 
   boto = buildPythonPackage rec {
     name = "boto-${version}";
-    version = "2.9.9";
+    version = "2.32.0";
 
     src = fetchurl {
       url = "https://github.com/boto/boto/archive/${version}.tar.gz";
-      sha256 = "18wqpzd1zf8nivcn2rl1wnladf7hhyy5p75b5l6kafynm4l9j6jq";
+      sha256 = "0bl5y7m0m84rz4q7hx783kxpj1n9wcm7dhv54bnx8cnanyd13cxn";
     };
 
     # The tests seem to require AWS credentials.
@@ -4256,11 +4256,11 @@ rec {
 
 
   meld3 = buildPythonPackage rec {
-    name = "meld3-0.6.10";
+    name = "meld3-1.0.0";
 
     src = fetchurl {
-      url = https://pypi.python.org/packages/source/m/meld3/meld3-0.6.10.tar.gz;
-      md5 = "42e58624e9d427be7659d7a28e2b0b6f";
+      url = https://pypi.python.org/packages/source/m/meld3/meld3-1.0.0.tar.gz;
+      md5 = "ca270506dd4ecb20ae26fa72fbd9b0be";
     };
 
     doCheck = false;
@@ -4268,7 +4268,7 @@ rec {
     meta = {
       description = "An HTML/XML templating engine used by supervisor";
       homepage = https://github.com/supervisor/meld3;
-      license = "ZPL";
+      license = "free-non-copyleft";
     };
   };
 
@@ -6720,12 +6720,12 @@ rec {
 
 
   robotframework = buildPythonPackage rec {
-    version = "2.8.4";
+    version = "2.8.5";
     name = "robotframework-${version}";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/r/robotframework/${name}.tar.gz";
-      sha256 = "0rxk135c1051cwv45219ib3faqvi5rl50l98ncb83c7qxy92jg2n";
+      sha256 = "0rzdn2gvmcrxs2fvxm11h55w4j5pv0lf443fc4hl8kzwjwgjckga";
     };
 
     # error: invalid command 'test'
@@ -7183,6 +7183,8 @@ rec {
     };
 
     buildInputs = [ pbr pip ];
+
+    propagatedBuildInputs = [ setuptools ];
 
     meta = {
       description = "Manage dynamic plugins for Python applications";
