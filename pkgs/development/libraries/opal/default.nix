@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig ptlib srtp libtheora speex
                   ffmpeg x264 cyrus_sasl openldap openssl expat unixODBC ];
+  propagatedBuildInputs = [ speex ]; 
 
   configureFlags = [ "--enable-h323" ];
 
