@@ -61,14 +61,14 @@ in ruby.stdenv.mkDerivation (attrs // {
     '';
 
   installPhase = ''
-    GEM_PATH="${depsPath}" GEM_HOME=$out/${ruby.gemPath} \
+    GEM_HOME=$out/${ruby.gemPath} \
       gem install -p http://nodtd.invalid \
       --build-root / -n "$out/bin" "$src" $gemFlags -- $buildFlags
     rm -frv $out/${ruby.gemPath}/cache # don't keep the .gem file here
 
     for prog in $out/bin/*; do
       wrapProgram "$prog" \
-        --prefix GEM_PATH : "$out/${ruby.gemPath}:${depsPath}" \
+        --prefix GEM_PATH : "$out/${ruby.gemPath}" \
         --prefix RUBYLIB : "${rubygems}/lib" \
         --set RUBYOPT rubygems \
         $extraWrapperFlags ''${extraWrapperFlagsArray[@]}
