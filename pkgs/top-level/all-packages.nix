@@ -4045,19 +4045,14 @@ let
   ruby_2_0 = ruby_2_0_0;
   ruby_2_1 = ruby_2_1_3;
 
-  ruby18Libs = callPackage ../development/interpreters/ruby/gems.nix {
-    ruby = ruby18;
+  rubyLibsWith = ruby: callPackage ../development/interpreters/ruby/gems.nix {
+    inherit ruby;
   };
 
-  ruby19Libs = callPackage ../development/interpreters/ruby/gems.nix {
-    ruby = ruby19;
-  };
-
-  ruby2Libs = callPackage ../development/interpreters/ruby/gems.nix {
-    ruby = ruby2;
-  };
-
-  rubyLibs = ruby19Libs;
+  ruby18Libs = rubyLibsWith ruby18;
+  ruby19Libs = rubyLibsWith ruby19;
+  ruby2Libs = rubyLibsWith ruby2;
+  rubyLibs = recurseIntoAttrs ruby19Libs;
 
   rake = rubyLibs.rake;
 
