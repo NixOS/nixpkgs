@@ -4256,11 +4256,11 @@ rec {
 
 
   meld3 = buildPythonPackage rec {
-    name = "meld3-0.6.10";
+    name = "meld3-1.0.0";
 
     src = fetchurl {
-      url = https://pypi.python.org/packages/source/m/meld3/meld3-0.6.10.tar.gz;
-      md5 = "42e58624e9d427be7659d7a28e2b0b6f";
+      url = https://pypi.python.org/packages/source/m/meld3/meld3-1.0.0.tar.gz;
+      md5 = "ca270506dd4ecb20ae26fa72fbd9b0be";
     };
 
     doCheck = false;
@@ -4268,7 +4268,7 @@ rec {
     meta = {
       description = "An HTML/XML templating engine used by supervisor";
       homepage = https://github.com/supervisor/meld3;
-      license = "ZPL";
+      license = "free-non-copyleft";
     };
   };
 

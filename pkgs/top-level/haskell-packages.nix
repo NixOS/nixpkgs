@@ -200,8 +200,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   attoparsec_0_10_4_0 = callPackage ../development/libraries/haskell/attoparsec/0.10.4.0.nix {};
   attoparsec_0_11_3_1 = callPackage ../development/libraries/haskell/attoparsec/0.11.3.1.nix {};
   attoparsec_0_11_3_4 = callPackage ../development/libraries/haskell/attoparsec/0.11.3.4.nix {};
-  attoparsec_0_12_1_0 = callPackage ../development/libraries/haskell/attoparsec/0.12.1.0.nix {};
-  attoparsec = self.attoparsec_0_12_1_0;
+  attoparsec_0_12_1_1 = callPackage ../development/libraries/haskell/attoparsec/0.12.1.1.nix {};
+  attoparsec = self.attoparsec_0_12_1_1;
 
   attoparsecBinary = callPackage ../development/libraries/haskell/attoparsec-binary {};
 
@@ -2149,6 +2149,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   socketIo = callPackage ../development/libraries/haskell/socket-io {};
 
+  sodium = callPackage ../development/libraries/haskell/sodium {};
+
   sparse = callPackage ../development/libraries/haskell/sparse {};
 
   spawn = callPackage ../development/libraries/haskell/spawn {};
@@ -2624,6 +2626,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   webdriver = callPackage ../development/libraries/haskell/webdriver {};
 
+  webkit = callPackage ../development/libraries/haskell/webkit {
+    webkit = pkgs.webkitgtk2;
+  };
+
   webRoutes = callPackage ../development/libraries/haskell/web-routes {};
 
   webRoutesBoomerang = callPackage ../development/libraries/haskell/web-routes-boomerang {};
@@ -2702,6 +2708,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   xmlLens = callPackage ../development/libraries/haskell/xml-lens {};
 
   xmlTypes = callPackage ../development/libraries/haskell/xml-types {};
+
+  xorshift = callPackage ../development/libraries/haskell/xorshift {};
 
   xournalParser = callPackage ../development/libraries/haskell/xournal-parser {};
 
