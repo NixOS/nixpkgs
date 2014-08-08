@@ -8014,7 +8014,11 @@ let
 
   r5rs = callPackage ../data/documentation/rnrs/r5rs.nix { };
 
-  sourceCodePro = callPackage ../data/fonts/source-code-pro {};
+  source-code-pro = callPackage ../data/fonts/source-code-pro {};
+
+  source-sans-pro = callPackage ../data/fonts/source-sans-pro { };
+
+  source-serif-pro = callPackage ../data/fonts/source-serif-pro { };
 
   source-han-sans-japanese = callPackage ../data/fonts/source-han-sans/japanese.nix {};
   source-han-sans-korean = callPackage ../data/fonts/source-han-sans/korean.nix {};
