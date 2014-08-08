@@ -40,14 +40,11 @@ rec {
       
   meta = {
     description = "A 3D RTS - fork of inactive Glest project";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
+    maintainers = [ a.lib.maintainers.raskin ];
+    platforms = a.lib.platforms.linux;
     # Note that some data seems to be under separate redistributable licenses
     license = a.lib.licenses.gpl2Plus;
+    broken = true;
   };
   passthru = {
     updateInfo = {

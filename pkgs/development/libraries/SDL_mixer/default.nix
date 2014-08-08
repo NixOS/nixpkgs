@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     description = "SDL multi-channel audio mixer library";
     homepage    = http://www.libsdl.org/projects/SDL_mixer/;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms   = platforms.linux;
   };
 }

@@ -54,6 +54,7 @@ rec {
   '');
 
   meta = {
+    broken = true;
     description = "Ekiga SIP client";
     maintainers = with a.lib.maintainers;
     [

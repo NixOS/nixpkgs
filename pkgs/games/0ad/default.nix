@@ -116,5 +116,6 @@ stdenv.mkDerivation rec {
     homepage = "http://wildfiregames.com/0ad/";
     license = [ "GPLv2" "LGPLv2.1" "MIT" "CC BY-SA 3.0" "zlib" ];
     platforms = [ "x86_64-linux" "i686-linux" ];
+    broken = true;
   };
 }

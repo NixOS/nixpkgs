@@ -34,12 +34,9 @@ rec {
       
   meta = {
     description = "Portable Tools from OPAL VoIP";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
+    maintainers = [ a.lib.maintainers.raskin ];
+    platforms = a.lib.platforms.linux;
+    broken = true;
   };
   passthru = {
     updateInfo = {

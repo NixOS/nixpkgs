@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     description = "Reference implementation of the wayland protocol";
     homepage = http://wayland.freedesktop.org/;
     license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

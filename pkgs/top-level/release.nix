@@ -183,7 +183,6 @@ let
       libtool = all;
       libtool_2 = all;
       lout = linux;
-      lsh = linux;
       lsof = linux;
       ltrace = linux;
       lvm2 = linux;
