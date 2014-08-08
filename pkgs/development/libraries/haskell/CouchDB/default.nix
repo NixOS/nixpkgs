@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ HTTP json mtl network utf8String ];
   testDepends = [ HTTP HUnit json mtl network utf8String ];
   doCheck = false;
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/arjunguha/haskell-couchdb/";
     description = "CouchDB interface";
