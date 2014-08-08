@@ -17,8 +17,9 @@ let
 self = rec {
   inherit buildRubyGem;
 
-  # import an attrset full of gems, then override necessary gems
-  importGems = file: (callPackage file { inherit buildRubyGem; rubyLibs = self; });
+  # import an attrset full of gems, then override badly behaved ones
+  importGems = file: args:
+    (callPackage file ({ inherit buildRubyGem; rubyLibs = self; } // args));
 
   ##################################################################
   # stuff EVERYONE needs
