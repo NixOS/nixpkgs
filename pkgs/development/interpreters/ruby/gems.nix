@@ -1,57 +1,34 @@
-{ ruby, callPackage }:
+# is a pretty good interface for calling rubygems
+#
+# since there are so many rubygems, and we don't want to manage them all,
+# proposed design pattern is keep your gem dependencies in a local file
+# (hopefully managed with nix-bundle)
+#
+# use rubyLibs.importGems to call the local file, which has access to all
+# the stuff in here
+#
+# gems here are either super common (rspec) or require patches to work
+# properly (libv8)
+
+{ ruby, callPackage, pkgs }:
 
 let
-  buildRubyGem = callPackage ./gem.nix { inherit ruby; };
-in rec {
+  buildRubyGem = callPackage ./gem.nix {};
+self = rec {
   inherit buildRubyGem;
 
-  builder = buildRubyGem {
-    name = "builder-3.2.2";
-    sha256 = "14fii7ab8qszrvsvhz6z2z3i4dw0h41a62fjr2h1j8m41vbrmyv2";
-    doCheck = false;
-  };
+  # import an attrset full of gems, then override necessary gems
+  importGems = file: (callPackage file { inherit buildRubyGem; rubyLibs = self; });
+
+  ##################################################################
+  # stuff EVERYONE needs
+  ##################################################################
 
   bundler = buildRubyGem {
     name = "bundler-1.6.5";
     sha256 = "1s4x0f5by9xs2y24jk6krq5ky7ffkzmxgr4z1nhdykdmpsi2zd0l";
     dontPatchShebangs = 1;
     checkPhase = ":";
-  };
-
-  capistrano = buildRubyGem {
-    name = "capistrano-3.2.1";
-    sha256 = "0jcx8jijbvl05pjd7jrzb1sf968vjzpvb190d1kfa968hfc92lm0";
-    gemPath = [ colorize i18n net_scp net_ssh rake sshkit ];
-    doCheck = false;
-  };
-
-  colorize = buildRubyGem {
-    name = "colorize-0.7.3";
-    sha256 = "0hccxpn0gryhdpyymkr7fnv2khz051f5rpw4xyrp9dr53b7yv3v2";
-  };
-
-  i18n = buildRubyGem {
-    name = "i18n-0.6.11";
-    sha256 = "0fwjlgmgry2blf8zlxn9c555cf4a16p287l599kz5104ncjxlzdk";
-  };
-
-  json = buildRubyGem {
-    name = "json-1.8.1";
-    sha256 = "0002bsycvizvkmk1jyv8px1hskk6wrjfk4f7x5byi8gxm6zzn6wn";
-    doCheck = false;
-  };
-
-  net_scp = buildRubyGem {
-    name = "net-scp-1.2.1";
-    sha256 = "0b0jqrcsp4bbi4n4mzyf70cp2ysyp6x07j8k8cqgxnvb4i3a134j";
-    gemPath = [ net_ssh ];
-    doCheck = false;
-  };
-
-  net_ssh = buildRubyGem {
-    name = "net-ssh-2.9.1";
-    sha256 = "1vscp4r58jisiigqc6d6752w19m1m6hmi3jkzmp3ydxai7h3jb2j";
-    doCheck = false;
   };
 
   rake = buildRubyGem {
@@ -61,10 +38,50 @@ in rec {
     checkPhase = ":";
   };
 
-  sshkit = buildRubyGem {
-    name = "sshkit-1.5.1";
-    sha256 = "0lyd77b43dh897lx8iqdm9284ara7076nahmlis33qkfjfs105dy";
-    gemPath = [ bundler colorize net_scp net_ssh ];
-    doGitPrecheckHack = true;
+
+  ##################################################################
+  # common dependencies
+  ##################################################################
+
+  diff_lcs = buildRubyGem {
+    name = "diff-lcs-1.2.5";
+    sha256 = "1vf9civd41bnqi6brr5d9jifdw73j9khc6fkhfl1f8r9cpkdvlx1";
+    doCheck = false; # check depends on rspec!
   };
-}
+
+  rspec = rspec_3_0;
+
+  rspec_3_0 = buildRubyGem {
+    name = "rspec-3.0.0";
+    sha256 = "1x94vk8dlk57clqlyb741y5bsmidp8131wyrb1vh00hi5mdb5szy";
+    gemPath = [ diff_lcs rspec_core rspec_expectations rspec_mocks rspec_support ];
+  };
+
+  rspec_2_14 = buildRubyGem {
+    name = "rspec-2.14.1";
+    sha256 = "134y4wzk1prninb5a0bhxgm30kqfzl8dg06af4js5ylnhv2wd7sg";
+  };
+
+  rspec_core = buildRubyGem {
+    name = "rspec-core-3.0.3";
+    sha256 = "0395m5rfpbh87wm3mx549zvm190gikpzyld0xhlr55qwzp6ny97m";
+    gemPath = [ rspec_support ];
+  };
+
+  rspec_expectations = buildRubyGem {
+    name = "rspec-expectations-3.0.3";
+    sha256 = "1mzp3v5r7qy28q8x6dkdib9ymwrxxz81jiq9vfr94jxbmy8rkhn0";
+    gemPath = [ diff_lcs rspec_support ];
+  };
+
+  rspec_mocks = buildRubyGem {
+    name = "rspec-mocks-3.0.3";
+    sha256 = "0svc5wq8k4w8iamj2r7xw4xwhfczcj09s0ps9wz1mmgy9cvn1lj6";
+    gemPath = [ rspec_support ];
+  };
+
+  rspec_support = buildRubyGem {
+    name = "rspec-support-3.0.3";
+    sha256 = "06lxzc4i3cbkm3qc5sdqcg665cyq9hnmmy0qkn355vy4s4vch94l";
+  };
+}; in self

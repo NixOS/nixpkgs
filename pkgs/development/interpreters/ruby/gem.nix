@@ -3,7 +3,7 @@
 { name
 , namePrefix ? "ruby${ruby.majorVersion}" + "-"
 , buildInputs ? []
-, doCheck ? true
+, doCheck ? false
 , doGitPrecheckHack ? false
 , meta ? {}
 , gemPath ? []
