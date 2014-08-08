@@ -14,12 +14,21 @@
 
 let
   buildRubyGem = callPackage ./gem.nix {};
+  patches = callPackage ./patches.nix { gems = self; };
+  lib = ruby.stdenv.lib;
 self = rec {
   inherit buildRubyGem;
 
   # import an attrset full of gems, then override badly behaved ones
   importGems = file: args:
-    (callPackage file ({ inherit buildRubyGem; rubyLibs = self; } // args));
+    let
+      builtGems = callPackage file ({ inherit buildRubyGem; rubyLibs = self; } // args);
+    in lib.mapAttrs (gem: deriv:
+      if patches ? "${gem}"
+        then lib.overrideDerivation deriv (oldAttrs:
+          if oldAttrs ? dontPatch && oldAttrs.dontPatch == 1 then {}
+          else patches."${gem}")
+      else deriv) builtGems;
 
   ##################################################################
   # stuff EVERYONE needs
