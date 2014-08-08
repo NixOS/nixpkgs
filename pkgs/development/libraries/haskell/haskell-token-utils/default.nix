@@ -23,5 +23,7 @@ cabal.mkDerivation (self: {
     description = "Utilities to tie up tokens to an AST";
     license = self.stdenv.lib.licenses.publicDomain;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })
