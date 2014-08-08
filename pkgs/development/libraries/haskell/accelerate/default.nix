@@ -15,6 +15,8 @@ cabal.mkDerivation (self: {
     description = "An embedded language for accelerated array processing";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })
