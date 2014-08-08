@@ -22,5 +22,7 @@ cabal.mkDerivation (self: {
     description = "A tool for posting Haskelly articles to blogs";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })
