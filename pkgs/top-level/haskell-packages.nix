@@ -2810,11 +2810,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   alex_3_1_3 = callPackage ../development/tools/parsing/alex/3.1.3.nix {};
   alex = self.alex_3_1_3;
 
-  alexMeta = callPackage ../development/tools/haskell/alex-meta {};
-
   BNFC = callPackage ../development/tools/haskell/BNFC {};
-
-  BNFCMeta = callPackage ../development/tools/haskell/BNFC-meta {};
 
   cake3 = callPackage ../development/tools/haskell/cake3 {};
 
