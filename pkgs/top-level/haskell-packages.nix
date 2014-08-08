@@ -1499,6 +1499,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   markovChain = callPackage ../development/libraries/haskell/markov-chain {};
 
+  matrix = callPackage ../development/libraries/haskell/matrix {};
+
   maude = callPackage ../development/libraries/haskell/maude {};
 
   MaybeT = callPackage ../development/libraries/haskell/MaybeT {};
