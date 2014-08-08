@@ -82,6 +82,12 @@ in ruby.stdenv.mkDerivation (attrs // {
     rm $out/${ruby.gemPath}/doc/*/*/created.rid || true
     rm $out/${ruby.gemPath}/gems/*/ext/*/mkmf.log || true
 
+    mkdir -p $out/nix-support
+
+    cat > $out/nix-support/setup-hook <<EOF
+    addToSearchPath GEM_PATH $out/${ruby.gemPath}
+    EOF
+
     runHook postInstall
   '';
 
