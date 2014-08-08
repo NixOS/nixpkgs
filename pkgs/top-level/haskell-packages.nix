@@ -1056,6 +1056,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   haskellTokenUtils = callPackage ../development/libraries/haskell/haskell-token-utils {};
 
+  haskintex = callPackage ../development/libraries/haskell/haskintex {};
+
   haskore = callPackage ../development/libraries/haskell/haskore {};
 
   hastache = callPackage ../development/libraries/haskell/hastache {};
