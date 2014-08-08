@@ -8168,6 +8168,15 @@ rec {
     patchPhase = ''
       substituteInPlace "virtualenvwrapper.sh" --replace "which" "${pkgs.which}/bin/which"
       substituteInPlace "virtualenvwrapper_lazy.sh" --replace "which" "${pkgs.which}/bin/which"
+
+      # This might look like a dirty hack but we can't use the makeWrapper function because
+      # the wrapped file were then called via "exec". The virtualenvwrapper shell scripts
+      # aren't normal executables. Instead, the user has to evaluate them.
+      for file in "virtualenvwrapper.sh" "virtualenvwrapper_lazy.sh"; do
+        # Insert the required PATH & PYTHONPATH variables right on the top
+        sed -i "2iexport PATH=$PATH:\$PATH" "$file"
+        sed -i "3iexport PYTHONPATH=$PYTHONPATH:$(toPythonPath $out):\$PYTHONPATH" "$file"
+      done
     '';
 
     meta = {
