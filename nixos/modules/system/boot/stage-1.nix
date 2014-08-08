@@ -199,6 +199,21 @@ let
         { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
           symlink = "/etc/mdadm.conf";
         }
+        { object = config.environment.etc."modprobe.d/nixos.conf".source;
+          symlink = "/etc/modprobe.d/nixos.conf";
+        }
+        { object = pkgs.stdenv.mkDerivation {
+            name = "initrd-kmod-blacklist-ubuntu";
+            builder = pkgs.writeText "builder.sh" ''
+              source $stdenv/setup
+              target=$out
+
+              ${pkgs.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
+            '';
+            src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
+          };
+          symlink = "/etc/modprobe.d/ubuntu.conf";
+        }
       ];
   };
 
