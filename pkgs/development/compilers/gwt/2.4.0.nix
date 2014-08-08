@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   buildInputs = [ unzip ];
 
   installPhase = ''
-    ensureDir $out
+    mkdir -p $out
     unzip $src
     mv gwt-2.4.0 $out/bin
   '';

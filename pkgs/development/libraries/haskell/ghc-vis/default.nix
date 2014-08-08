@@ -14,7 +14,7 @@ cabal.mkDerivation (self: {
   ];
   jailbreak = true;
   postInstall = ''
-    ensureDir "$out/share/ghci"
+    mkdir -p "$out/share/ghci"
     ln -s "$out/share/$pname-$version/ghci" "$out/share/ghci/$pname"
   '';
   meta = {

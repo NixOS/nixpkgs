@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp tools/{meo,p11} $out/bin
     cp meo-gui/meo-gui $out/bin
     cp meo-gui/meo-gui $out/bin

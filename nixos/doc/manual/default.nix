@@ -67,7 +67,7 @@ in rec {
 
       # Generate the HTML manual.
       dst=$out/share/doc/nixos
-      ensureDir $dst
+      mkdir -p $dst
       xsltproc $xsltFlags --nonet --xinclude \
         --output $dst/manual.html \
         ${pkgs.docbook5_xsl}/xml/xsl/docbook/xhtml/docbook.xsl \

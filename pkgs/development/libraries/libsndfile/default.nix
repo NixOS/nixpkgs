@@ -12,8 +12,13 @@ stdenv.mkDerivation rec {
 
   # need headers from the Carbon.framework in /System/Library/Frameworks to
   # compile this on darwin -- not sure how to handle
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin
-    "-I/System/Library/Frameworks/Carbon.framework/Versions/A/Headers";
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin
+    ''
+      NIX_CFLAGS_COMPILE+=" -I$SDKROOT/System/Library/Frameworks/Carbon.framework/Versions/A/Headers"
+    '';
+
+  # Needed on Darwin.
+  NIX_CFLAGS_LINK = "-logg -lvorbis";
 
   meta = with stdenv.lib; {
     description = "A C library for reading and writing files containing sampled sound";

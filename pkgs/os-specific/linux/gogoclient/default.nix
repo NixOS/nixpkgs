@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [openssl];
 
   preFixup = ''
-    ensureDir $out/share/${name}
+    mkdir -p $out/share/${name}
     chmod 444 $out/bin/gogoc.conf
     mv $out/bin/gogoc.conf $out/share/${name}/gogoc.conf.sample
     rm $out/bin/gogoc.conf.sample

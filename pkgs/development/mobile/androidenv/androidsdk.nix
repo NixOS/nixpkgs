@@ -178,7 +178,7 @@ stdenv.mkDerivation rec {
     
     # Create wrappers to the most important tools and platform tools so that we can run them if the SDK is in our PATH
     
-    ensureDir $out/bin
+    mkdir -p $out/bin
 
     for i in $out/libexec/android-sdk-*/tools/*
     do

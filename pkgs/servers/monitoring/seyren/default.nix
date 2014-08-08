@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper jre src ];
 
   installPhase = ''
-    ensureDir "$out"/bin
+    mkdir -p "$out"/bin
     makeWrapper "${jre}/bin/java" "$out"/bin/seyren --add-flags "-jar $src"
   '';
 

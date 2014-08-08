@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     patch -p0 < ${./mips64.patch}
   '';
   postBuild = ''
-    ensureDir $out/include
+    mkdir -p $out/include
     ln -sv $out/lib/ocaml/caml $out/include/caml
   '';
 

@@ -78,7 +78,7 @@ done
 cat pathlist | sed -e 's/=\(.*\)=\(.*\)=/\\=\1=\2\\=/' | tee pathlist.safer
 
 
-ensureDir $out/iso
+mkdir -p $out/iso
 genCommand="genisoimage -iso-level 4 -r -J $bootFlags -hide-rr-moved -graft-points -path-list pathlist.safer ${volumeID:+-V $volumeID}"
 if test -z "$compressImage"; then
     $genCommand -o $out/iso/$isoName
@@ -87,5 +87,5 @@ else
 fi
 
 
-ensureDir $out/nix-support
+mkdir -p $out/nix-support
 echo $system > $out/nix-support/system

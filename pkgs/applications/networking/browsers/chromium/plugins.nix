@@ -22,7 +22,7 @@ let
         else if source.channel == "stable" then "chrome"
         else "chrome-${source.channel}";
     in ''
-      ensureDir plugins
+      mkdir -p plugins
       ar p "$src" data.tar.lzma | tar xJ -C plugins --strip-components=4 \
         ./opt/google/${chan}/PepperFlash \
         ./opt/google/${chan}/libpdf.so
@@ -53,7 +53,7 @@ let
       pdfInfo = "#${pdfName}#${pdfDescription};${pdfMimeTypes}";
     in ''
       install -vD libpdf.so "$pdf/lib/libpdf.so"
-      ensureDir "$pdf/nix-support"
+      mkdir -p "$pdf/nix-support"
       echo "--register-pepper-plugins='$pdf/lib/libpdf.so${pdfInfo}'" \
         > "$pdf/nix-support/chromium-flags"
 
@@ -63,7 +63,7 @@ let
 
       install -vD PepperFlash/libpepflashplayer.so \
         "$flash/lib/libpepflashplayer.so"
-      ensureDir "$flash/nix-support"
+      mkdir -p "$flash/nix-support"
       echo "--ppapi-flash-path='$flash/lib/libpepflashplayer.so'" \
            "--ppapi-flash-version=$flashVersion" \
            > "$flash/nix-support/chromium-flags"
