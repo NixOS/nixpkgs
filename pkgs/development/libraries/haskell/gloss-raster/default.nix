@@ -8,6 +8,7 @@ cabal.mkDerivation (self: {
   sha256 = "0ls8rlwrbpisrmq2xigf9926pak028dmld6shrblcmdbykaz55ha";
   buildDepends = [ gloss repa ];
   extraLibraries = [ llvm ];
+  jailbreak = true;
   meta = {
     homepage = "http://gloss.ouroborus.net";
     description = "Parallel rendering of raster images";
