@@ -4,12 +4,10 @@
 , namePrefix ? "ruby${ruby.majorVersion}" + "-"
 , buildInputs ? []
 , doCheck ? false
-, doGitPrecheckHack ? false
+, dontBuild ? true
 , meta ? {}
 , gemPath ? []
 , testTask ? "test"
-, preCheck ? ""
-, postCheck ? ""
 , ...} @ attrs:
 
 let
@@ -32,35 +30,23 @@ in ruby.stdenv.mkDerivation (attrs // {
 
   unpackPhase = ''
     gem unpack $src --target=gem-build
+    cd gem-build/*
   '';
 
-  dontBuild = true;
-
-  preCheckGit = ruby.stdenv.lib.optionalString doGitPrecheckHack ''
+  buildPhase = ''
+    runHook preBuild
     ${git}/bin/git init
     ${git}/bin/git add .
+    if gem build *.gemspec; then
+      export src=*.gem
+    else
+      echo >&2 "gemspec missing, not rebuilding gem"
+    fi
+    runHook postBuild
   '';
 
-  preCheck = ''
-    cd gem-build/*
-    OLD_PATH="$GEM_PATH"
-    export GEM_PATH="${depsPath}"
-  '' + preCheck;
-
-  postCheck = ''
-    GEM_PATH="$OLD_PATH"
-  '' + postCheck;
-
-  checkPhase =
-    if attrs ? checkPhase then attrs.checkPhase
-    else ''
-      runHook preCheckGit
-      runHook preCheck
-      test -f Rakefile && ${rake}/bin/rake ${testTask} -v
-      runHook postCheck
-    '';
-
   installPhase = ''
+    runHook preInstall
     GEM_HOME=$out/${ruby.gemPath} \
       gem install -p http://nodtd.invalid \
       --build-root / -n "$out/bin" "$src" $gemFlags -- $buildFlags
@@ -85,7 +71,9 @@ in ruby.stdenv.mkDerivation (attrs // {
     mkdir -p $out/nix-support
 
     cat > $out/nix-support/setup-hook <<EOF
-    addToSearchPath GEM_PATH $out/${ruby.gemPath}
+    if [[ "$GEM_PATH" != *$out/${ruby.gemPath}* ]]; then
+      addToSearchPath GEM_PATH $out/${ruby.gemPath}
+    fi
     EOF
 
     runHook postInstall
