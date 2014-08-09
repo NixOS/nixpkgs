@@ -231,6 +231,8 @@ let
       else
         defaultStdenv;
 
+  stdenvApple = stdenvAdapters.overrideGCC allStdenvs.stdenvNative gccApple;
+
   forceNativeDrv = drv : if crossSystem == null then drv else
     (drv // { crossDrv = drv.nativeDrv; });
 
@@ -2578,10 +2580,8 @@ let
   };
 
   clangUnwrapped = llvm: pkg: callPackage pkg {
-      stdenv = if stdenv.isDarwin
-         then stdenvAdapters.overrideGCC stdenv gccApple
-         else stdenv;
-      llvm = llvm;
+    stdenv = if stdenv.isDarwin then stdenvApple else stdenv;
+    inherit llvm;
   };
 
   clangSelf = clangWrapSelf llvmPackagesSelf.clang;
@@ -3095,9 +3095,7 @@ let
   llvm_33 = llvm_v ../development/compilers/llvm/3.3/llvm.nix;
 
   llvm_v = path: callPackage path {
-    stdenv = if stdenv.isDarwin
-      then stdenvAdapters.overrideGCC stdenv gccApple
-      else stdenv;
+    stdenv = if stdenv.isDarwin then stdenvApple else stdenv;
   };
 
   llvmPackages = if !stdenv.isDarwin then llvmPackages_34 else llvmPackages_34 // {
