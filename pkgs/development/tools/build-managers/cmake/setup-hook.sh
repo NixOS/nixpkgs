@@ -47,9 +47,10 @@ cmakeConfigurePhase() {
     eval "$postConfigure"
 }
 
-if [ -z "$dontUseCmakeConfigure" -a ! -v configurePhase ]; then
-    configurePhase=cmakeConfigurePhase
-fi
+# Set `configurePhase` to `cmakeConfigurePhase`
+# if `dontUseCmakeConfigure` is empty, and `configurePhase` is unset.
+# Note, that _unset_ is not the same as _empty_!
+[ -z "$dontUseCmakeConfigure" ] && : ${configurePhase=cmakeConfigurePhase}
 
 if [ -n "$crossConfig" ]; then
     crossEnvHooks+=(addCMakeParams)
