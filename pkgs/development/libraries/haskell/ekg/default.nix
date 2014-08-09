@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     aeson ekgCore filepath network snapCore snapServer text time
     transformers unorderedContainers
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/tibbe/ekg";
     description = "Remote monitoring of processes";
