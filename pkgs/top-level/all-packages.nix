@@ -3820,12 +3820,19 @@ let
     wrapPython = pythonPackages.wrapPython;
   };
 
-  ruby18 = callPackage ../development/interpreters/ruby/ruby-18.nix { };
-  ruby19 = callPackage ../development/interpreters/ruby/ruby-19.nix { };
-  ruby2 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.0.nix { });
-  ruby21 = callPackage ../development/interpreters/ruby/ruby-2.1.2.nix { };
+  ruby_1_8_7 = callPackage ../development/interpreters/ruby/ruby-1.8.7.nix { };
+  ruby_1_9_3 = callPackage ../development/interpreters/ruby/ruby-1.9.3.nix { };
+  ruby_2_0_0 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.0.0.nix { });
+  ruby_2_1_0 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.1.0.nix { });
+  ruby_2_1_1 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.1.1.nix { });
+  ruby_2_1_2 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.1.2.nix { });
 
-  ruby = ruby19;
+  # Ruby aliases
+  ruby = ruby_1_9;
+  ruby_1_8 = ruby_1_8_7;
+  ruby_1_9 = ruby_1_9_3;
+  ruby_2_0 = ruby_2_0_0;
+  ruby_2_1 = ruby_2_1_2;
 
   rubyLibs = recurseIntoAttrs (callPackage ../development/interpreters/ruby/libs.nix { });
 
@@ -4391,7 +4398,7 @@ let
   uncrustify = callPackage ../development/tools/misc/uncrustify { };
 
   vagrant = callPackage ../development/tools/vagrant {
-    ruby = ruby2;
+    ruby = ruby_2_0_0;
   };
 
   gdb = callPackage ../development/tools/misc/gdb {
@@ -9574,7 +9581,7 @@ let
   pcmanfm = callPackage ../applications/misc/pcmanfm { };
 
   ruby_gpgme = callPackage ../development/libraries/ruby_gpgme {
-    ruby = ruby19;
+    ruby = ruby_1_9_3;
     hoe = rubyLibs.hoe;
   };
 
@@ -9585,7 +9592,7 @@ let
   smplayer = callPackage ../applications/video/smplayer { };
 
   sup = with rubyLibs; callPackage ../applications/networking/mailreaders/sup {
-    ruby = ruby19.override {
+    ruby = ruby_1_9_3.override {
       cursesSupport = true;
     };
 
