@@ -1,8 +1,9 @@
 { fetchurl, writeScript, ruby, ncurses, sqlite, libxml2, libxslt, libffi
 , zlib, libuuid, gems, jdk, python, stdenv, libiconvOrEmpty, imagemagick
-, pkgconfig, libiconv }:
+, gnumake, pkgconfig, which, postgresql, v8_3_16_14, clang }:
 
 let
+  v8 = v8_3_16_14;
 
   patchUsrBinEnv = writeScript "path-usr-bin-env" ''
     #!/bin/sh
@@ -14,111 +15,47 @@ let
 in
 
 {
-  buildr = {
-    # Many Buildfiles rely on RUBYLIB containing the current directory
-    # (as was the default in Ruby < 1.9.2).
-    extraWrapperFlags = "--prefix RUBYLIB : .";
-  };
-
-  barber = { gemFlags = "--ignore-dependencies"; };
+  barber = { gemFlags = "--ignore-dependencies"; dontBuild = 1; };
   ember_data_source = { gemFlags = "--ignore-dependencies"; };
   ember_rails = { gemFlags = "--ignore-dependencies"; };
 
-  fakes3 = {
-    postInstall = ''
-      cd $out/${ruby.gemPath}/gems/*
-      patch -Np1 -i ${../../ruby-modules/fake-s3-list-bucket.patch}
-    '';
-  };
+  rbtrace = { dontBuild = 1; };
+  method_source = { dontBuild = 1; };
 
-  ffi = {
-    postUnpack = "onetuh";
-    buildFlags = ["--with-ffi-dir=${libffi}"];
-    NIX_POST_EXTRACT_FILES_HOOK = patchUsrBinEnv;
-  };
-
-  iconv = { buildInputs = [ libiconvOrEmpty ]; };
-
-  libv8 = {
-    # This fix is needed to fool scons, which clears the environment by default.
-    # It's ugly, but it works.
-    #
-    # We create a gcc wrapper wrapper, which reexposes the environment variables
-    # that scons hides. Furthermore, they treat warnings as errors causing the
-    # build to fail, due to an unused variable.
-    #
-    # Finally, we must set CC and AR explicitly to allow scons to find the
-    # compiler and archiver
-
-    preBuild = ''
-      cat > $TMPDIR/g++ <<EOF
-      #! ${stdenv.shell}
-      $(export)
-
-      g++ \$(echo \$@ | sed 's/-Werror//g')
-      EOF
-      chmod +x $TMPDIR/g++
-
-      export CXX=$TMPDIR/g++
-      export AR=$(type -p ar)
-    '';
-    buildInputs = [ python ];
-    NIX_POST_EXTRACT_FILES_HOOK = writeScript "patch-scons" ''
-      #!/bin/sh
-      for i in `find "$1" -name scons`
-      do
-          sed -i -e "s@/usr/bin/env@$(type -p env)@g" $i
-      done
-    '';
-  };
-
-  ncurses = { propagatedBuildInputs = [ ncurses ]; };
-
-  ncursesw = { propagatedBuildInputs = [ ncurses ]; };
-
-  nix = {
-    postInstall = ''
-      cd $out/${ruby.gemPath}/gems/nix*
-      patch -Np1 -i ${./fix-gem-nix-versions.patch}
-    '';
-  };
+  pg = { buildInputs = [ postgresql ]; };
 
   nokogiri = {
     buildInputs = [ libxml2 ];
     buildFlags =
       [ "--with-xml2-dir=${libxml2} --with-xml2-include=${libxml2}/include/libxml2"
-        "--with-xslt-dir=${libxslt} --with-iconv-dir=${libiconv} --use-system-libraries"
+        "--with-xslt-dir=${libxslt}" "--use-system-libraries"
       ];
   };
 
-  pry = { gemFlags = "--no-ri --no-rdoc"; };
+  therubyracer = {
+    preBuild = ''
+      addToSearchPath RUBYLIB "${gems.libv8}/${ruby.gemPath}/gems/libv8-3.16.14.3/lib"
+      addToSearchPath RUBYLIB "${gems.libv8}/${ruby.gemPath}/gems/libv8-3.16.14.3/ext"
+      ln -s ${clang}/bin/clang $TMPDIR/gcc
+      ln -s ${clang}/bin/clang++ $TMPDIR/g++
+      export PATH=$TMPDIR:$PATH
+    '';
 
-  rails = { gemFlags = "--no-ri --no-rdoc"; };
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      cat >> $out/nix-support/setup-hook <<EOF
+        addToSearchPath DYLD_INSERT_LIBRARIES "${v8}/lib/libv8.dylib"
+      EOF
+    '';
 
-  rjb = {
-    buildInputs = [ jdk ];
-    JAVA_HOME = jdk;
+    buildFlags = [
+      "--with-v8-dir=${v8}" "--with-v8-include=${v8}/include"
+      "--with-v8-lib=${v8}/lib"
+    ];
   };
 
-  rmagick = {
-    buildInputs = [ imagemagick pkgconfig ];
-
-    NIX_CFLAGS_COMPILE = "-I${imagemagick}/include/ImageMagick-6";
-  };
-
-  sqlite3 = { propagatedBuildInputs = [ sqlite ]; };
-
-  xapian_full = {
-    buildInputs = [ gems.rake zlib libuuid ];
-    gemFlags = "--no-rdoc --no-ri";
-  };
-
-  xapian_full_alaveteli = {
-    buildInputs = [ zlib libuuid ];
-  };
-
-  xapian_ruby = {
-    buildInputs = [ zlib libuuid ];
+  libv8 = {
+    dontBuild = true;
+    buildFlags = [ "--with-system-v8" ];
   };
 
   xrefresh_server =

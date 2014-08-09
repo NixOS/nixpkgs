@@ -14,7 +14,6 @@
 
 let
   buildRubyGem = callPackage ./gem.nix {};
-  patches = callPackage ./patches.nix { gems = self; };
   lib = ruby.stdenv.lib;
 self = rec {
   inherit buildRubyGem;
@@ -22,6 +21,7 @@ self = rec {
   # import an attrset full of gems, then override badly behaved ones
   importGems = file: args:
     let
+      patches = callPackage ./patches.nix { gems = builtGems; };
       preBuilt = callPackage file ({ inherit buildRubyGem; self = builtGems; } // args);
       builtGems = self // (lib.mapAttrs (gem: deriv:
         if patches ? "${gem}"

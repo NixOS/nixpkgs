@@ -6790,6 +6790,10 @@ let
 
   ucommon = callPackage ../development/libraries/ucommon { };
 
+  v8_3_16_14 = callPackage ../development/libraries/v8/3.16.14.nix {
+    inherit (pythonPackages) gyp;
+  };
+
   v8 = callPackage ../development/libraries/v8 {
     inherit (pythonPackages) gyp;
   };
