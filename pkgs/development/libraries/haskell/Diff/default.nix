@@ -10,6 +10,5 @@ cabal.mkDerivation (self: {
     description = "O(ND) diff algorithm in haskell";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

@@ -33,14 +33,11 @@ rec {
 
   meta = {
     description = "A satisfiability modulo theory (SMT) solver";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
+    maintainers = [ a.lib.maintainers.raskin ];
+    platforms = a.lib.platforms.linux;
     license = a.stdenv.lib.licenses.gpl3;
     homepage = "http://code.google.com/p/opensmt/";
+    broken = true;
   };
   passthru = {
     updateInfo = {

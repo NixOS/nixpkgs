@@ -28,8 +28,7 @@
     description = "A safe, concurrent, practical language";
     maintainers = with maintainers; [ madjar cstrahan ];
     license = map (builtins.getAttr "shortName") [ licenses.mit licenses.asl20 ];
-    # platforms as per http://static.rust-lang.org/doc/master/tutorial.html#getting-started
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    platforms = platforms.linux;
   };
 
   name = "rustc-${version}";

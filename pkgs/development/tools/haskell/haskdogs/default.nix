@@ -14,6 +14,5 @@ cabal.mkDerivation (self: {
     description = "Generate ctags file for haskell project directory and it's deps";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

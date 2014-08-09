@@ -18,6 +18,5 @@ cabal.mkDerivation (self: {
     description = "Validating an email address string against RFC 5322";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

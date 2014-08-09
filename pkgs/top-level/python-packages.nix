@@ -1753,6 +1753,42 @@ rec {
     };
   };
 
+  dogpile_cache = buildPythonPackage rec {
+    name = "dogpile.cache-0.5.4";
+
+    propagatedBuildInputs = [ dogpile_core ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/d/dogpile.cache/dogpile.cache-0.5.4.tar.gz";
+      md5 = "513b77ba1bd0c31bb15dd9dd0d8471af";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "A caching front-end based on the Dogpile lock.";
+      homepage = http://bitbucket.org/zzzeek/dogpile.cache;
+      license = licenses.bsd3;
+    };
+  };
+
+  dogpile_core = buildPythonPackage rec {
+    name = "dogpile.core-0.4.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/d/dogpile.core/dogpile.core-0.4.1.tar.gz";
+      md5 = "01cb19f52bba3e95c9b560f39341f045";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "A 'dogpile' lock, typically used as a component of a larger caching solution";
+      homepage = http://bitbucket.org/zzzeek/dogpile.core;
+      license = licenses.bsd3;
+    };
+  };
+
   dpkt = buildPythonPackage rec {
     name = "dpkt-1.8";
 
@@ -5482,7 +5518,7 @@ rec {
   protobuf = buildPythonPackage rec {
     inherit (pkgs.protobuf) name src;
 
-    propagatedBuildInputs = [pkgs.protobuf];
+    propagatedBuildInputs = [ pkgs.protobuf setuptools ];
     sourceRoot = "${name}/python";
 
     meta = {
@@ -8168,6 +8204,27 @@ rec {
     patchPhase = ''
       substituteInPlace "virtualenvwrapper.sh" --replace "which" "${pkgs.which}/bin/which"
       substituteInPlace "virtualenvwrapper_lazy.sh" --replace "which" "${pkgs.which}/bin/which"
+    '';
+
+    postInstall = ''
+      # This might look like a dirty hack but we can't use the makeWrapper function because
+      # the wrapped file were then called via "exec". The virtualenvwrapper shell scripts
+      # aren't normal executables. Instead, the user has to evaluate them.
+
+      for file in "virtualenvwrapper.sh" "virtualenvwrapper_lazy.sh"; do
+        local wrapper="$out/bin/$file"
+        local wrapped="$out/bin/.$file-wrapped"
+        mv "$wrapper" "$wrapped"
+
+        cat > "$wrapper" <<- EOF
+	export PATH=$PATH:\$PATH
+	export PYTHONPATH=$PYTHONPATH:$(toPythonPath $out):\$PYTHONPATH
+	source "$wrapped"
+	EOF
+
+        chmod -x "$wrapped"
+        chmod +x "$wrapper"
+      done
     '';
 
     meta = {

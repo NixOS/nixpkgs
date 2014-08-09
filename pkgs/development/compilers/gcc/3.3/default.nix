@@ -27,5 +27,6 @@ stdenv.mkDerivation {
     homepage = "http://gcc.gnu.org/";
     license = "GPL/LGPL";
     description = "GNU Compiler Collection, 3.3.x";
+    broken = true;
   };
 }

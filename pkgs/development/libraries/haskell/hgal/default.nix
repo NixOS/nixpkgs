@@ -11,6 +11,6 @@ cabal.mkDerivation (self: {
     description = "library for computation automorphism group and canonical labelling of a graph";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ianwookim ];
+    maintainers = with self.stdenv.lib.maintainers; [ ianwookim ];
   };
 })

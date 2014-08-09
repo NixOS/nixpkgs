@@ -13,6 +13,5 @@ cabal.mkDerivation (self: {
     description = "A Haskell binding to a subset of the GD graphics library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

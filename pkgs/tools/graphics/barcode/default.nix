@@ -34,8 +34,7 @@ rec {
     [
       raskin
     ];
-    platforms = with a.lib.platforms;
-      all;
+    platforms = with a.lib.platforms; allBut darwin;
   };
   passthru = {
     updateInfo = {

@@ -11,6 +11,5 @@ cabal.mkDerivation (self: {
     description = "A library for handling and manipulating bitmaps (rectangular pixel arrays)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

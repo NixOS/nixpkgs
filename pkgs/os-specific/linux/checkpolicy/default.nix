@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     description = "SELinux policy compiler";
     license = licenses.gpl2;
     inherit (libsepol.meta) homepage platforms maintainers;
+    broken = true;
   };
 }

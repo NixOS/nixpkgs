@@ -33,8 +33,8 @@ in stdenv.mkDerivation rec {
   installPhase = let
     LD_LIBRARY_PATH = "${nwEnv}/lib:${nwEnv}/lib64:$out/share/node-webkit";
   in ''
-    ensureDir $out/bin
-    ensureDir $out/share/node-webkit
+    mkdir -p $out/bin
+    mkdir -p $out/share/node-webkit
     cp -R * $out/share/node-webkit
 
     ln -s ${udev}/lib/libudev.so $out/share/node-webkit/libudev.so.0

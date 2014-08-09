@@ -11,6 +11,5 @@ cabal.mkDerivation (self: {
     description = "Data and Typeable instances for the GHC API";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

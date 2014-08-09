@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   # This must be done in preConfigure because the build process removes
   # helper from the source directory during the build.
   preConfigure = ''
-    ensureDir $out/sbin
+    mkdir -p $out/sbin
     cp -a mount.unionfs $out/sbin/mount.unionfs-fuse
     substituteInPlace $out/sbin/mount.unionfs-fuse --replace mount.fuse ${fuse}/sbin/mount.fuse
     substituteInPlace $out/sbin/mount.unionfs-fuse --replace unionfs $out/bin/unionfs

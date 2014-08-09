@@ -12,6 +12,6 @@ cabal.mkDerivation (self: {
     description = "A Haskell library for writing FastCGI programs";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.tomberek ];
+    maintainers = with self.stdenv.lib.maintainers; [ tomberek ];
   };
 })

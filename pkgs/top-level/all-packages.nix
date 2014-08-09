@@ -8,15 +8,6 @@
 { # The system (e.g., `i686-linux') for which to build the packages.
   system ? builtins.currentSystem
 
-  # Usually, the system type uniquely determines the stdenv and thus
-  # how to build the packages.  But on some platforms we have
-  # different stdenvs, leading to different ways to build the
-  # packages.  For instance, on Windows we support both Cygwin and
-  # Mingw builds.  In both cases, `system' is `i686-cygwin'.  The
-  # attribute `stdenvType' is used to select the specific kind of
-  # stdenv to use, e.g., `i686-mingw'.
-, stdenvType ? system
-
 , # The standard environment to use.  Only used for bootstrapping.  If
   # null, the default standard environment is used.
   bootStdenv ? null
@@ -137,7 +128,7 @@ let
     self_ = with self; helperFunctions // {
 
   # Make some arguments passed to all-packages.nix available
-  inherit system stdenvType platform;
+  inherit system platform;
 
   # Allow callPackage to fill in the pkgs argument
   inherit pkgs;
@@ -214,7 +205,7 @@ let
 
 
   allStdenvs = import ../stdenv {
-    inherit system stdenvType platform config;
+    inherit system platform config;
     allPackages = args: import ./all-packages.nix ({ inherit config system; } // args);
   };
 
@@ -977,12 +968,7 @@ let
 
   encfs = callPackage ../tools/filesystems/encfs { };
 
-  enscript = callPackage ../tools/text/enscript {
-    # fix syntax errors
-    stdenv = if stdenv.isDarwin
-      then clangStdenv
-      else stdenv;
-  };
+  enscript = callPackage ../tools/text/enscript { };
 
   ethtool = callPackage ../tools/misc/ethtool { };
 
@@ -1166,18 +1152,9 @@ let
     libassuan = libassuan2_1;
   });
 
-  gnuplot = callPackage ../tools/graphics/gnuplot {
-    texLive = null;
-    lua = null;
-    texinfo = texinfo4; # build errors with gnuplot-4.6.3
+  gnuplot = callPackage ../tools/graphics/gnuplot { };
 
-    # use gccApple to compile on darwin, seems to resolve a malloc error
-    stdenv = if stdenv.isDarwin
-      then stdenvAdapters.overrideGCC stdenv gccApple
-      else stdenv;
-  };
-
-  gnuplot_qt = gnuplot.override { qt = qt4; };
+  gnuplot_qt = gnuplot.override { withQt = true; };
 
   # must have AquaTerm installed separately
   gnuplot_aquaterm = gnuplot.override { aquaterm = true; };
@@ -1669,6 +1646,11 @@ let
   };
 
   notbit = callPackage ../applications/networking/notbit { };
+
+  nox = callPackage ../tools/package-management/nox {
+    pythonPackages = python3Packages;
+    nix = nixUnstable;
+  };
 
   nss_pam_ldapd = callPackage ../tools/networking/nss-pam-ldapd {};
 
@@ -3500,6 +3482,13 @@ let
     flex = flex_2_5_35;
   };
 
+  mesos = callPackage ../applications/networking/cluster/mesos {
+    sasl = cyrus_sasl;
+    automake = automake114x;
+    inherit (pythonPackages) python boto setuptools distutils-cfg wrapPython;
+    pythonProtobuf = pythonPackages.protobuf;
+  };
+
   octave = callPackage ../development/interpreters/octave {
     fltk = fltk13;
     qt = null;
@@ -4266,15 +4255,15 @@ let
 
   attr = callPackage ../development/libraries/attr { };
 
+  at_spi2_core = callPackage ../development/libraries/at-spi2-core { };
+
+  at_spi2_atk = callPackage ../development/libraries/at-spi2-atk { };
+
   aqbanking = callPackage ../development/libraries/aqbanking { };
 
   aubio = callPackage ../development/libraries/aubio { };
 
-  audiofile = callPackage ../development/libraries/audiofile {
-    stdenv = if stdenv.isDarwin
-      then overrideGCC stdenv gccApple
-      else stdenv;
-  };
+  audiofile = callPackage ../development/libraries/audiofile { };
 
   axis = callPackage ../development/libraries/axis { };
 
@@ -4816,11 +4805,7 @@ let
       gtkmm;
   };
 
-  glib = callPackage ../development/libraries/glib {
-    stdenv = if stdenv.isDarwin
-      then overrideGCC stdenv gccApple
-      else stdenv;
-  };
+  glib = callPackage ../development/libraries/glib { };
   glib-tested = glib.override { doCheck = true; }; # checked version separate to break cycles
   glibmm = callPackage ../development/libraries/glibmm { };
 
@@ -4853,9 +4838,7 @@ let
     cupsSupport = config.gtk2.cups or stdenv.isLinux;
   };
 
-  gtk3 = callPackage ../development/libraries/gtk+/3.x.nix {
-    inherit (gnome3) at_spi2_atk;
-  };
+  gtk3 = callPackage ../development/libraries/gtk+/3.x.nix { };
 
   gtk = pkgs.gtk2;
 
@@ -5284,11 +5267,7 @@ let
 
   librevisa = callPackage ../development/libraries/librevisa { };
 
-  libsamplerate = callPackage ../development/libraries/libsamplerate {
-    stdenv = if stdenv.isDarwin
-      then overrideGCC stdenv gccApple
-      else stdenv;
-  };
+  libsamplerate = callPackage ../development/libraries/libsamplerate { };
 
   libspectre = callPackage ../development/libraries/libspectre { };
 
@@ -5483,11 +5462,7 @@ let
   # To bootstrap SBCL, I need CLisp 2.44.1; it needs libsigsegv 2.5
   libsigsegv_25 = callPackage ../development/libraries/libsigsegv/2.5.nix { };
 
-  libsndfile = callPackage ../development/libraries/libsndfile {
-    stdenv = if stdenv.isDarwin
-      then overrideGCC stdenv gccApple
-      else stdenv;
-  };
+  libsndfile = callPackage ../development/libraries/libsndfile { };
 
   libsodium = callPackage ../development/libraries/libsodium { };
 
@@ -5560,6 +5535,8 @@ let
   };
 
   libunwind = callPackage ../development/libraries/libunwind { };
+
+  libuvVersions = callPackage ../development/libraries/libuv { };
 
   libv4l = lowPrio (v4l_utils.override {
     withQt4 = false;
@@ -5782,13 +5759,6 @@ let
 
   ncurses = callPackage ../development/libraries/ncurses {
     unicode = system != "i686-cygwin";
-    stdenv =
-      # On Darwin, NCurses uses `-no-cpp-precomp', which is specific to
-      # Apple-GCC.  Since NCurses is part of stdenv, always use
-      # `stdenvNative' to build it.
-      if stdenv.isDarwin
-      then allStdenvs.stdenvNative
-      else stdenv;
   };
 
   neon = callPackage ../development/libraries/neon {
@@ -6066,23 +6036,9 @@ let
 
   readline5 = callPackage ../development/libraries/readline/readline5.nix { };
 
-  readline6 = callPackage ../development/libraries/readline/readline6.nix {
-    stdenv =
-      # On Darwin, Readline uses `-arch_only', which is specific to
-      # Apple-GCC.  So give it what it expects.
-      if stdenv.isDarwin
-      then overrideGCC stdenv gccApple
-      else stdenv;
-  };
+  readline6 = callPackage ../development/libraries/readline/readline6.nix { };
 
-  readline63 = callPackage ../development/libraries/readline/readline6.3.nix {
-    stdenv =
-      # On Darwin, Readline uses `-arch_only', which is specific to
-      # Apple-GCC.  So give it what it expects.
-      if stdenv.isDarwin
-      then overrideGCC stdenv gccApple
-      else stdenv;
-  };
+  readline63 = callPackage ../development/libraries/readline/readline6.3.nix { };
 
   librdf_raptor = callPackage ../development/libraries/librdf/raptor.nix { };
 
@@ -6969,12 +6925,7 @@ let
 
   radius = callPackage ../servers/radius { };
 
-  redis = callPackage ../servers/nosql/redis {
-    stdenv =
-      if stdenv.isDarwin
-      then overrideGCC stdenv gccApple
-      else stdenv;
-  };
+  redis = callPackage ../servers/nosql/redis { };
 
   redstore = callPackage ../servers/http/redstore { };
 
@@ -8063,7 +8014,11 @@ let
 
   r5rs = callPackage ../data/documentation/rnrs/r5rs.nix { };
 
-  sourceCodePro = callPackage ../data/fonts/source-code-pro {};
+  source-code-pro = callPackage ../data/fonts/source-code-pro {};
+
+  source-sans-pro = callPackage ../data/fonts/source-sans-pro { };
+
+  source-serif-pro = callPackage ../data/fonts/source-serif-pro { };
 
   source-han-sans-japanese = callPackage ../data/fonts/source-han-sans/japanese.nix {};
   source-han-sans-korean = callPackage ../data/fonts/source-han-sans/korean.nix {};
@@ -8428,11 +8383,6 @@ let
     librsvg = null;
     alsaLib = null;
     imagemagick = null;
-
-    # resolve unrecognized section __static_data in __DATA segment
-    stdenv = if stdenv.isDarwin
-      then clangStdenv
-      else stdenv;
   };
 
   emacs24-nox = lowPrio (appendToName "nox" (emacs24.override {
@@ -9788,7 +9738,6 @@ let
 
   thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin {
     gconf = pkgs.gnome.GConf;
-    inherit (pkgs.gnome3) at_spi2_atk;
     inherit (pkgs.gnome) libgnome libgnomeui;
     inherit (pkgs.xlibs) libX11 libXScrnSaver libXext
       libXinerama libXrender libXt;
@@ -10852,6 +10801,11 @@ let
   alt-ergo = callPackage ../applications/science/logic/alt-ergo {};
 
   coq = callPackage ../applications/science/logic/coq {
+    inherit (ocamlPackages) findlib lablgtk;
+    camlp5 = ocamlPackages.camlp5_transitional;
+  };
+
+  coq_HEAD = callPackage ../applications/science/logic/coq/HEAD.nix {
     inherit (ocamlPackages) findlib lablgtk;
     camlp5 = ocamlPackages.camlp5_transitional;
   };

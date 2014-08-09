@@ -12,6 +12,6 @@ cabal.mkDerivation (self: {
     description = "Send metrics to Ganglia, Graphite, and statsd";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })

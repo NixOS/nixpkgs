@@ -11,6 +11,5 @@ cabal.mkDerivation (self: {
     description = "mmap support for strict ByteStrings";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

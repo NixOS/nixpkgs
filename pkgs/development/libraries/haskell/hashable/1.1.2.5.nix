@@ -17,6 +17,6 @@ cabal.mkDerivation (self: {
     description = "A class for types that can be converted to a hash value";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

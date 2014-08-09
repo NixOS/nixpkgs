@@ -10,6 +10,6 @@ cabal.mkDerivation (self: {
     description = "A library for working with the SMTLIB format";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.thoughtpolice ];
+    maintainers = with self.stdenv.lib.maintainers; [ thoughtpolice ];
   };
 })

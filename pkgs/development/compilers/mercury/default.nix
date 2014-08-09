@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    ensureDir $out/lib/mercury/cgi-bin ;
+    mkdir -p $out/lib/mercury/cgi-bin ;
     configureFlags="--enable-deep-profiler=$out/lib/mercury/cgi-bin";
   '';
 

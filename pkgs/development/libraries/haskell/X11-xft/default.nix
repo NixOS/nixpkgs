@@ -15,6 +15,5 @@ cabal.mkDerivation (self: {
     description = "Bindings to the Xft, X Free Type interface library, and some Xrender parts";
     license = "LGPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

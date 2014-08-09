@@ -22,7 +22,7 @@ rec {
     sha256 = sourceInfo.hash;
   };
 
-  name = "${sourceInfo.name}-${sourceInfo.version}";
+  name = "source-code-pro-${sourceInfo.version}";
   inherit buildInputs;
 
   phaseNames = ["doUnpack" "installFonts"];

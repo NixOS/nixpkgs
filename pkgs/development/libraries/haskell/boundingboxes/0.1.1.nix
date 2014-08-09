@@ -19,5 +19,6 @@ cabal.mkDerivation (self: {
     description = "The type for 2D bounding box";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

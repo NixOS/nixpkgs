@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
     + ":" + stdenv.gcc.gcc + "/lib64";
 
   installPhase = ''
-    ensureDir $out/libexec/positech/GSB/
-    ensureDir $out/bin
+    mkdir -p $out/libexec/positech/GSB/
+    mkdir -p $out/bin
 
     patchelf \
       --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \

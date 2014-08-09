@@ -1,6 +1,6 @@
 findGdkPixbufLoaders() {
 
-	if [ -z "$IN_NIX_SHELL" ]; then
+	if [ -n "$out" ] && [ -z "$IN_NIX_SHELL" ]; then
 
 		# set pixbuf loaders.cache for this package
 

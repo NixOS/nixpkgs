@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     runHook preBuild
-    ensureDir "$out"
+    mkdir -p "$out"
     scons \
       -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES \
       $sconsFlags "prefix=$out"

@@ -142,9 +142,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   AES = callPackage ../development/libraries/haskell/AES {};
 
   aeson_0_7_0_4 = callPackage ../development/libraries/haskell/aeson/0.7.0.4.nix { blazeBuilder = null; };
-  aeson_0_7_0_6 = callPackage ../development/libraries/haskell/aeson/0.7.0.6.nix { blazeBuilder = null; };
   aeson_0_8_0_0 = callPackage ../development/libraries/haskell/aeson/0.8.0.0.nix { blazeBuilder = null; };
-  aeson = self.aeson_0_7_0_6;   # 0.8.0.0 breaks too many packages at the moment
+  aeson = self.aeson_0_8_0_0;
 
   aesonPretty = callPackage ../development/libraries/haskell/aeson-pretty {};
 
@@ -773,7 +772,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   Extra = callPackage ../development/libraries/haskell/Extra {};
 
-  fay = callPackage ../development/libraries/haskell/fay {};
+  fay = callPackage ../development/libraries/haskell/fay { aeson = self.aeson_0_7_0_4; };
 
   fayBase = callPackage ../development/libraries/haskell/fay-base {};
 
@@ -781,7 +780,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   fdoNotify = callPackage ../development/libraries/haskell/fdo-notify {};
 
-  filepath_1_3_0_2 = callPackage ../development/libraries/haskell/filepath/1.3.0.2.nix {};
   filepath = null;              # core package since forever
 
   fileLocation = callPackage ../development/libraries/haskell/file-location {};
@@ -1054,13 +1052,15 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   haskellSrcMeta = callPackage ../development/libraries/haskell/haskell-src-meta {};
 
-  haskellTokenUtils = callPackage ../development/libraries/haskell/haskell-token-utils {};
+  haskintex = callPackage ../development/libraries/haskell/haskintex {};
 
   haskore = callPackage ../development/libraries/haskell/haskore {};
 
   hastache = callPackage ../development/libraries/haskell/hastache {};
 
   hasteCompiler = callPackage ../development/libraries/haskell/haste-compiler {};
+
+  HaTeX = callPackage ../development/libraries/haskell/HaTeX {};
 
   hcltest = callPackage ../development/libraries/haskell/hcltest {};
 
@@ -1498,6 +1498,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   mainlandPretty = callPackage ../development/libraries/haskell/mainland-pretty {};
 
   markovChain = callPackage ../development/libraries/haskell/markov-chain {};
+
+  matrix = callPackage ../development/libraries/haskell/matrix {};
 
   maude = callPackage ../development/libraries/haskell/maude {};
 
@@ -2804,11 +2806,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   alex_3_1_3 = callPackage ../development/tools/parsing/alex/3.1.3.nix {};
   alex = self.alex_3_1_3;
 
-  alexMeta = callPackage ../development/tools/haskell/alex-meta {};
-
   BNFC = callPackage ../development/tools/haskell/BNFC {};
-
-  BNFCMeta = callPackage ../development/tools/haskell/BNFC-meta {};
 
   cake3 = callPackage ../development/tools/haskell/cake3 {};
 
@@ -2839,8 +2837,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   happy = self.happy_1_19_4;
 
   happyMeta = callPackage ../development/tools/haskell/happy-meta {};
-
-  HaRe = callPackage ../development/tools/haskell/HaRe {};
 
   haskdogs = callPackage ../development/tools/haskell/haskdogs {};
 

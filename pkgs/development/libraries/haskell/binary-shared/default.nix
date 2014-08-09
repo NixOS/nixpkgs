@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Sharing for the binary package";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

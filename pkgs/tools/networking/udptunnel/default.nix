@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
-    ensureDir $out/bin $out/share/udptunnel
+    mkdir -p $out/bin $out/share/udptunnel
     cp udptunnel $out/bin
     cp README COPYING* $out/share/udptunnel
   '';

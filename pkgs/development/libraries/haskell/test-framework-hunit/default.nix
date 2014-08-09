@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "HUnit support for the test-framework package";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

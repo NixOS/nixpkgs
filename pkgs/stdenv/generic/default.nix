@@ -55,8 +55,6 @@ let
 
       propagatedUserEnvPkgs = [gcc] ++
         lib.filter lib.isDerivation initialPath;
-
-      __ignoreNulls = true;
     }
 
     // rec {
@@ -103,6 +101,7 @@ let
               stdenv = result;
               system = result.system;
               userHook = config.stdenv.userHook or null;
+              __ignoreNulls = true;
 
               # Inputs built by the cross compiler.
               buildInputs = lib.optionals (crossConfig != null) (buildInputs ++ extraBuildInputs);

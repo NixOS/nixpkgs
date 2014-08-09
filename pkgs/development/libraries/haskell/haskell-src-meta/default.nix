@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Parse source to template-haskell abstract syntax";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

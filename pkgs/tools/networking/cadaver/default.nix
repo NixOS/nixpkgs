@@ -13,6 +13,6 @@ stdenv.mkDerivation rec {
     homepage    = http://www.webdav.org/cadaver;
     maintainers = with maintainers; [ ianwookim ];
     license     = licenses.gpl2;
-    platforms   = platforms.unix;
+    platforms   = with platforms; linux ++ freebsd ++ openbsd;
   };
 }

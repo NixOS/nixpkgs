@@ -13,6 +13,6 @@ cabal.mkDerivation (self: {
     description = "Maps from Intervals to values, with efficient search";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })
