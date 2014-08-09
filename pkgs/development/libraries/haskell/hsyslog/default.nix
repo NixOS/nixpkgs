@@ -12,6 +12,6 @@ cabal.mkDerivation (self: {
     description = "FFI interface to syslog(3) from POSIX.1-2001";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
+    maintainers = with self.stdenv.lib.maintainers; [ simons ];
   };
 })

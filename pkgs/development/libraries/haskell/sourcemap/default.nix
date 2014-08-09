@@ -14,6 +14,6 @@ cabal.mkDerivation (self: {
     description = "Implementation of source maps as proposed by Google and Mozilla";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })

@@ -15,6 +15,6 @@ cabal.mkDerivation (self: {
     description = "text builder for hoodle file format";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ianwookim ];
+    maintainers = with self.stdenv.lib.maintainers; [ ianwookim ];
   };
 })

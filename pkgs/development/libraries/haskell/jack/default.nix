@@ -19,6 +19,6 @@ cabal.mkDerivation (self: {
     description = "Bindings for the JACK Audio Connection Kit";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ertes ];
+    maintainers = with self.stdenv.lib.maintainers; [ ertes ];
   };
 })

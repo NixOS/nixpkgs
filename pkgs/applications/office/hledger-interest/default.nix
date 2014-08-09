@@ -14,6 +14,6 @@ cabal.mkDerivation (self: {
     description = "computes interest for a given account";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
+    maintainers = with self.stdenv.lib.maintainers; [ simons ];
   };
 })

@@ -18,6 +18,6 @@ cabal.mkDerivation (self: {
     description = "Run digestive-functors forms against JSON";
     license = self.stdenv.lib.licenses.gpl3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })

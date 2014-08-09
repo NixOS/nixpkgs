@@ -11,6 +11,6 @@ cabal.mkDerivation (self: {
     description = "Happstack extension for use with FastCGI";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.tomberek ];
+    maintainers = with self.stdenv.lib.maintainers; [ tomberek ];
   };
 })

@@ -17,6 +17,6 @@ cabal.mkDerivation (self: {
     description = "Run tests by filtering the test tree depending on the result of previous test runs";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })
