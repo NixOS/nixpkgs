@@ -780,7 +780,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   fdoNotify = callPackage ../development/libraries/haskell/fdo-notify {};
 
-  filepath_1_3_0_2 = callPackage ../development/libraries/haskell/filepath/1.3.0.2.nix {};
   filepath = null;              # core package since forever
 
   fileLocation = callPackage ../development/libraries/haskell/file-location {};
