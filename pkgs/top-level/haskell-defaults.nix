@@ -49,6 +49,7 @@
     distributedStatic = super.distributedStatic.override { binary = self.binary_0_7_2_1; };
     networkTransport = super.networkTransport.override { binary = self.binary_0_7_2_1; };
     distributedProcess = super.distributedProcess.override { binary = self.binary_0_7_2_1; };
+    scientific = self.scientific_0_2_0_2;
     singletons = null;                  # requires base >= 4.7
     transformers = self.transformers_0_3_0_0; # core packagen in ghc > 7.6.x
     zipArchive = super.zipArchive_0_2_2_1;    # works without binary 0.7.x
