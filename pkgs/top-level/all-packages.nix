@@ -10708,6 +10708,11 @@ let
 
       quassel = callPackage ../applications/networking/irc/quassel { dconf = gnome3.dconf; };
 
+      quasselWithoutKDE = (self.quassel.override {
+        withKDE = false;
+        tag = "-without-kde";
+      });
+
       quasselDaemon = (self.quassel.override {
         monolithic = false;
         daemon = true;
@@ -10718,6 +10723,11 @@ let
         monolithic = false;
         client = true;
         tag = "-client";
+      });
+
+      quasselClientWithoutKDE = (self.quasselClient.override {
+        withKDE = false;
+        tag = "-client-without-kde";
       });
 
       rekonq = callPackage ../applications/networking/browsers/rekonq { };
