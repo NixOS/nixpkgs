@@ -19,6 +19,7 @@ cabal.mkDerivation (self: {
     time transformers unorderedContainers utf8String vault websockets
     websocketsSnap
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Threepenny-gui";
     description = "GUI framework that uses the web browser as a display";
