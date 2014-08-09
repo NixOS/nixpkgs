@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Template Haskell expressions for reading fields from a project's cabal file";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

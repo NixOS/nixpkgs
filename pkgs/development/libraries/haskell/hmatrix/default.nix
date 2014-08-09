@@ -15,9 +15,6 @@ cabal.mkDerivation (self: {
     description = "Linear algebra and numerical computation";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.guibert
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.guibert ];
   };
 })

@@ -12,9 +12,6 @@ cabal.mkDerivation (self: {
     description = "A property-based testing library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.ocharles
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
   };
 })

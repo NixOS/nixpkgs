@@ -14,6 +14,5 @@ cabal.mkDerivation (self: {
     description = "Parsing and extracting information from (possibly malformed) HTML/XML documents";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

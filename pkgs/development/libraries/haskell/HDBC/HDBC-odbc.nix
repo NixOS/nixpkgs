@@ -16,9 +16,6 @@ cabal.mkDerivation (self: {
     description = "ODBC driver for HDBC";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.ocharles
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
   };
 })

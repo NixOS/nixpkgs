@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "A Prolog interpreter written in Haskell";
     license = self.stdenv.lib.licenses.publicDomain;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

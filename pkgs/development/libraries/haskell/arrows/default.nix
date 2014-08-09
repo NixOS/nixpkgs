@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Arrow classes and transformers";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })
