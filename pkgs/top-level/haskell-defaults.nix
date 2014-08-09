@@ -27,6 +27,7 @@
   };
 
   ghc763Prefs = self : super : ghc783Prefs self super // {
+    aeson = self.aeson_0_7_0_4;
     ariadne = super.ariadne.override {
       haskellNames = self.haskellNames.override {
         haskellPackages = self.haskellPackages.override { Cabal = self.Cabal_1_18_1_3; };
