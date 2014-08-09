@@ -8206,6 +8206,27 @@ rec {
       substituteInPlace "virtualenvwrapper_lazy.sh" --replace "which" "${pkgs.which}/bin/which"
     '';
 
+    postInstall = ''
+      # This might look like a dirty hack but we can't use the makeWrapper function because
+      # the wrapped file were then called via "exec". The virtualenvwrapper shell scripts
+      # aren't normal executables. Instead, the user has to evaluate them.
+
+      for file in "virtualenvwrapper.sh" "virtualenvwrapper_lazy.sh"; do
+        local wrapper="$out/bin/$file"
+        local wrapped="$out/bin/.$file-wrapped"
+        mv "$wrapper" "$wrapped"
+
+        cat > "$wrapper" <<- EOF
+	export PATH=$PATH:\$PATH
+	export PYTHONPATH=$PYTHONPATH:$(toPythonPath $out):\$PYTHONPATH
+	source "$wrapped"
+	EOF
+
+        chmod -x "$wrapped"
+        chmod +x "$wrapper"
+      done
+    '';
+
     meta = {
       description = "Enhancements to virtualenv";
       homepage = "https://pypi.python.org/pypi/virtualenvwrapper";
