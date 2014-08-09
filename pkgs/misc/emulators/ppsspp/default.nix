@@ -3,20 +3,17 @@
 }:
 
 let
-  version = "0.9.8";
+  version = "0.9.9";
   fstat = x: fn: "-D" + fn + "=" + (if x then "ON" else "OFF");
 in stdenv.mkDerivation {
   name = "PPSSPP-${version}";
 
   src = fetchgit {
     url = "https://github.com/hrydgard/ppsspp.git";
-    sha256 = "11sqhb2m3502dzbizahh1w2dl7jv3fipwxyrmryj8fyaqqw0i36q";
-    rev = "cbc46be3f91cb8558fbb4b175b14e8e16cbf0243";
+    sha256 = "1m7awac87wrwys22qwbr0589im1ilm0dv30wp945xg30793rivvj";
+    rev = "b421e29391b34d997b2c99ce2bdc74a0df5bb472";
     fetchSubmodules = true;
   };
-
-  # Upstream forgot to bump a version in one file.
-  patches = [ ./bump-version-to-0.9.8.patch ];
 
   buildInputs = [ zlib libpng pkgconfig qt4 ]
                 ++ (if withGamepads then [ SDL ] else [ ]);
