@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
     aeson async attoparsec base64Bytestring either monadLoops mwcRandom
     stm text transformers unorderedContainers vector websockets
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/ocharles/engine.io";
     description = "A Haskell implementation of Engine.IO";
