@@ -8187,6 +8187,8 @@ let
 
   bristol = callPackage ../applications/audio/bristol { };
 
+  bspwm = callPackage ../applications/window-managers/bspwm { };
+
   bvi = callPackage ../applications/editors/bvi { };
 
   calf = callPackage ../applications/audio/calf {
@@ -9296,6 +9298,8 @@ let
   };
 
   synfigstudio = callPackage ../applications/graphics/synfigstudio { };
+ 
+  sxhkd = callPackage ../applications/window-managers/sxhkd { };
 
   msmtp = callPackage ../applications/networking/msmtp { };
 
