@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     aeson httpConduit httpTypes mtl text time unorderedContainers
     utf8String
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/michaelschade/hs-stripe";
     description = "A Haskell implementation of the Stripe API";
