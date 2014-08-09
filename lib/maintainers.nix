@@ -64,6 +64,7 @@
   madjar = "Georges Dubus <georges.dubus@compiletoi.net>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
   matejc = "Matej Cotman <cotman.matej@gmail.com>";
+  meisternu = "Matt Miemiec <meister@krutt.org>";
   modulistic = "Pablo Costa <modulistic@gmail.com>";
   mornfall = "Petr Ročkai <me@mornfall.net>";
   msackman = "Matthew Sackman <matthew@wellquite.org>";
