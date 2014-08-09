@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
     aeson bytestringShow httpConduit httpTypes monadControl mtl random
     text transformers
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/freizl/hoauth2";
     description = "hoauth2";
