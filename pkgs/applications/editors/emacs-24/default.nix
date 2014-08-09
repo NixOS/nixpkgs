@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "1385qzs3bsa52s5rcncbrkxlydkw0ajzrvfxgv8rws5fx512kakh";
   };
 
+  patches = [ ./darwin-new-sections.patch ];
+
   buildInputs =
     [ ncurses gconf libxml2 gnutls alsaLib pkgconfig texinfo ]
     ++ stdenv.lib.optional stdenv.isLinux dbus
