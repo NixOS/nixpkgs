@@ -4300,6 +4300,8 @@ let
 
   capnproto = callPackage ../development/libraries/capnproto { };
 
+  cimg = callPackage  ../development/libraries/cimg { };
+
   scmccid = callPackage ../development/libraries/scmccid { };
 
   ccrtp = callPackage ../development/libraries/ccrtp { };
@@ -9970,6 +9972,13 @@ let
              (with xlibs; [ stdenv.gcc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ]);
       gtk_modules = [ libcanberra ];
     };
+
+  wxcam = callPackage ../applications/video/wxcam {
+    inherit (gnome) libglade;
+    inherit intltool;
+    wxGTK = wxGTK28;
+    gtk = gtk2;
+  };    
 
   x11vnc = callPackage ../tools/X11/x11vnc { };
 
