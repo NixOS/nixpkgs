@@ -20,6 +20,10 @@ in
     extraWrapperFlags = "--prefix RUBYLIB : .";
   };
 
+  barber = { gemFlags = "--ignore-dependencies"; };
+  ember_data_source = { gemFlags = "--ignore-dependencies"; };
+  ember_rails = { gemFlags = "--ignore-dependencies"; };
+
   fakes3 = {
     postInstall = ''
       cd $out/${ruby.gemPath}/gems/*

@@ -22,13 +22,14 @@ self = rec {
   # import an attrset full of gems, then override badly behaved ones
   importGems = file: args:
     let
-      builtGems = callPackage file ({ inherit buildRubyGem; rubyLibs = self; } // args);
-    in lib.mapAttrs (gem: deriv:
-      if patches ? "${gem}"
-        then lib.overrideDerivation deriv (oldAttrs:
-          if oldAttrs ? dontPatch && oldAttrs.dontPatch == 1 then {}
-          else patches."${gem}")
-      else deriv) builtGems;
+      preBuilt = callPackage file ({ inherit buildRubyGem; self = builtGems; } // args);
+      builtGems = self // (lib.mapAttrs (gem: deriv:
+        if patches ? "${gem}"
+          then lib.overrideDerivation deriv (oldAttrs:
+              if oldAttrs ? dontPatch && oldAttrs.dontPatch == 1 then {}
+              else patches."${gem}")
+        else deriv) preBuilt);
+    in builtGems;
 
   ##################################################################
   # stuff EVERYONE needs
