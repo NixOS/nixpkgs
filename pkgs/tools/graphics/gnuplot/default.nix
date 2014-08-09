@@ -18,7 +18,7 @@
 
 assert libX11 != null -> (fontconfig != null && gnused != null && coreutils != null);
 let
-  withX = libX11 != null && !aquaterm;
+  withX = libX11 != null && !aquaterm && !stdenv.isDarwin;
 in
 stdenv.mkDerivation rec {
   name = "gnuplot-4.6.5";
@@ -29,8 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ zlib gd texinfo4 readline
-      pango cairo pkgconfig makeWrapper ]
+    [ zlib gd texinfo4 readline pango cairo pkgconfig makeWrapper ]
     ++ lib.optional withTeXLive texLive
     ++ lib.optional withLua lua
     ++ lib.optionals withX [ libX11 libXpm libXt libXaw ]
