@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
     description = "Arbitrary-precision floating-point numbers represented using scientific notation";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
     maintainers = [ self.stdenv.lib.maintainers.ocharles ];
   };
 })

@@ -18,5 +18,6 @@ cabal.mkDerivation (self: {
     description = "Maintaining an equivalence relation implemented as union-find using STT";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })
