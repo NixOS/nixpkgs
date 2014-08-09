@@ -2448,6 +2448,8 @@ let
 
   xclip = callPackage ../tools/misc/xclip { };
 
+  xtitle = callPackage ../tools/misc/xtitle { };
+
   xdelta = callPackage ../tools/compression/xdelta { };
 
   xdummy = callPackage ../tools/misc/xdummy { };
@@ -6219,6 +6221,8 @@ let
 
   suitesparse = callPackage ../development/libraries/suitesparse { };
 
+  sutils = callPackage ../tools/misc/sutils { };
+
   sword = callPackage ../development/libraries/sword { };
 
   szip = callPackage ../development/libraries/szip { };
@@ -6381,6 +6385,8 @@ let
   xbase = callPackage ../development/libraries/xbase { };
 
   xcb-util-cursor = callPackage ../development/libraries/xcb-util-cursor { };
+ 
+  xdo = callPackage ../tools/misc/xdo { };
 
   xineLib = callPackage ../development/libraries/xine-lib {
     ffmpeg = ffmpeg_1;
@@ -8154,6 +8160,8 @@ let
   awesome = awesome-3-5;
 
   inherit (gnome3) baobab;
+
+  bar = callPackage ../applications/window-managers/bar { };
 
   baresip = callPackage ../applications/networking/instant-messengers/baresip {
     ffmpeg = ffmpeg_1;
