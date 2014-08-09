@@ -5482,7 +5482,7 @@ rec {
   protobuf = buildPythonPackage rec {
     inherit (pkgs.protobuf) name src;
 
-    propagatedBuildInputs = [pkgs.protobuf];
+    propagatedBuildInputs = [ pkgs.protobuf setuptools ];
     sourceRoot = "${name}/python";
 
     meta = {
