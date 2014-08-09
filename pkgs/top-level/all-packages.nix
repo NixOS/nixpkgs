@@ -1153,17 +1153,13 @@ let
   });
 
   gnuplot = callPackage ../tools/graphics/gnuplot {
-    texLive = null;
-    lua = null;
-    texinfo = texinfo4; # build errors with gnuplot-4.6.3
-
     # use gccApple to compile on darwin, seems to resolve a malloc error
     stdenv = if stdenv.isDarwin
       then stdenvAdapters.overrideGCC stdenv gccApple
       else stdenv;
   };
 
-  gnuplot_qt = gnuplot.override { qt = qt4; };
+  gnuplot_qt = gnuplot.override { withQt = true; };
 
   # must have AquaTerm installed separately
   gnuplot_aquaterm = gnuplot.override { aquaterm = true; };
