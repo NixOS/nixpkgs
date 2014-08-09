@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     aeson digestiveFunctors HUnit mtl scientific tasty tastyHunit text
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/ocharles/digestive-functors-aeson";
     description = "Run digestive-functors forms against JSON";
