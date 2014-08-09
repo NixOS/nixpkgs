@@ -53,7 +53,7 @@ let
       audacious = linux;
       autoconf = all;
       automake = all;
-      avahi = allBut "i686-cygwin";  # Cygwin builds fail
+      avahi = allBut cygwin;  # Cygwin builds fail
       bash = all;
       bashInteractive = all;
       bazaar = linux; # first let sqlite3 work on darwin
@@ -133,7 +133,7 @@ let
       gnumake = all;
       gnupatch = all;
       gnupg = linux;
-      gnuplot = allBut "i686-cygwin";
+      gnuplot = allBut cygwin;
       gnused = all;
       gnutar = all;
       gnutls = linux;
@@ -211,7 +211,7 @@ let
       mysql = linux;
       mysql51 = linux;
       mysql55 = linux;
-      nano = allBut "i686-cygwin";
+      nano = allBut cygwin;
       ncat = linux;
       netcat = all;
       nfsUtils = linux;
@@ -244,7 +244,7 @@ let
       pthreadmanpages = linux;
       pygtk = linux;
       pyqt4 = linux;
-      python = allBut "i686-cygwin";
+      python = allBut cygwin;
       pythonFull = linux;
       sbcl = linux;
       qt3 = linux;
@@ -255,7 +255,7 @@ let
       rogue = all;
       rpm = linux;
       rsync = linux;
-      rubber = allBut "i686-cygwin";
+      rubber = allBut cygwin;
       ruby = all;
       rxvt_unicode = linux;
       screen = linux ++ darwin;
@@ -265,10 +265,10 @@ let
       sgtpuzzles = linux;
       sharutils = all;
       slim = linux;
-      sloccount = allBut "i686-cygwin";
+      sloccount = allBut cygwin;
       smartmontools = linux;
       spidermonkey = linux;
-      sqlite = allBut "i686-cygwin";
+      sqlite = allBut cygwin;
       squid = linux;
       ssmtp = linux;
       stdenv = prio 175 all;
