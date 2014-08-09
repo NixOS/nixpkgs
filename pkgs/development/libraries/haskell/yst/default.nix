@@ -15,6 +15,7 @@ cabal.mkDerivation (self: {
     aeson csv filepath HDBC HDBCSqlite3 HStringTemplate pandoc parsec
     scientific split text time unorderedContainers xhtml yaml
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/jgm/yst";
     description = "Builds a static website from templates and data in YAML or CSV files";
