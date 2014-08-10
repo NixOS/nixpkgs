@@ -992,6 +992,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   gtkTraymanager = callPackage ../development/libraries/haskell/gtk-traymanager {};
 
+  Graphalyze = callPackage ../development/libraries/haskell/Graphalyze {};
+
   graphviz = callPackage ../development/libraries/haskell/graphviz {};
 
   graphSCC = callPackage ../development/libraries/haskell/graphscc {};
@@ -2862,6 +2864,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hslogger = callPackage ../development/tools/haskell/hslogger {};
 
   ShellCheck = callPackage ../development/tools/misc/ShellCheck { };
+
+  SourceGraph = callPackage ../development/tools/haskell/SourceGraph {};
 
   tar = callPackage ../development/libraries/haskell/tar {};
 
