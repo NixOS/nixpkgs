@@ -1556,22 +1556,22 @@ rec {
     };
 
     debian60i386 = {
-      name = "debian-6.0.9-squeeze-i386";
-      fullName = "Debian 6.0.9 Squeeze (i386)";
+      name = "debian-6.0.10-squeeze-i386";
+      fullName = "Debian 6.0.10 Squeeze (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/squeeze/main/binary-i386/Packages.bz2;
-        sha256 = "1fb9afa9b2d007939e066c031fc60f6626b78105ce42fe8cdeab7124a0dbf477";
+        sha256 = "c08899011a7a2b0df4da08f91eef3a80d112a247df988b1c966c9fb64c812392";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian60x86_64 = {
-      name = "debian-6.0.9-squeeze-amd64";
-      fullName = "Debian 6.0.9 Squeeze (amd64)";
+      name = "debian-6.0.10-squeeze-amd64";
+      fullName = "Debian 6.0.10 Squeeze (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/squeeze/main/binary-amd64/Packages.bz2;
-        sha256 = "cee46e56f35342c17795d1923b6c7e545f626e8d568fd48f91d5e0eb92ea329e";
+        sha256 = "3f2ebd5221b9a4bdf7224acf728a51a987c63d32df1bbc20a97f177d2f184045";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
