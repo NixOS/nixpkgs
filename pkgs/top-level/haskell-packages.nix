@@ -1883,8 +1883,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   profunctors = callPackage ../development/libraries/haskell/profunctors {};
 
-  profunctorExtras = callPackage ../development/libraries/haskell/profunctor-extras {};
-
   projectTemplate = callPackage ../development/libraries/haskell/project-template {};
 
   processConduit = callPackage ../development/libraries/haskell/process-conduit {};
