@@ -6,6 +6,14 @@ runCommand "fonts.conf"
     inherit fontDirectories;
   }
   ''
+    for fd in $fontDirectories;
+    do
+      if [ ! -d "$fd/share/fonts" ]; then
+        echo "ERROR: '$fd/share/fonts/' doesn't exist"
+        false
+      fi
+    done
+
     xsltproc --stringparam fontDirectories "$fontDirectories" \
       --stringparam fontconfig "${fontconfig}" \
       --path ${fontconfig}/share/xml/fontconfig \
