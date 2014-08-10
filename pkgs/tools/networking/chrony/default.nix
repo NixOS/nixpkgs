@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = http://chrony.tuxfamily.org/;
     repository.git = git://git.tuxfamily.org/gitroot/chrony/chrony.git;
     license = licenses.gpl2;
-    platforms = platforms.unix;
+    platforms = with platforms; linux ++ freebsd ++ openbsd;
     maintainers = [ maintainers.rickynils ];
 
     longDescription = ''
