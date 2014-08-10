@@ -19,5 +19,7 @@ cabal.mkDerivation (self: {
     description = "A graphical tool for profiling parallel Haskell programs";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })
