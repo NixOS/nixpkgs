@@ -1,9 +1,7 @@
-{ stdenv, fetchurl, zlib, glib, libpng, freetype, xorg, fontconfig, alsaLib,
-  qt4, pulseaudio ? null }:
+{ stdenv, fetchurl, zlib, glib, libpng, freetype, xorg, fontconfig, alsaLib, makeWrapper, xlibs
+,  qt5, pulseaudio ? null, qt4, xkeyboard_config, libredirect }:
 
 let
-
-  version = "3.0.13.1";
 
   arch = if stdenv.is64bit then "amd64" else "x86";
  
@@ -11,29 +9,48 @@ let
 
   deps =
     [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender
-      xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
-      fontconfig xorg.libXext xorg.libX11 alsaLib qt4 pulseaudio
+      xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama xlibs.libxcb
+      fontconfig xorg.libXext xorg.libX11 alsaLib qt5 pulseaudio quazip
     ];
+
+  quazip = stdenv.mkDerivation {
+    name = "quazip-0.7";
+
+    src = fetchurl {
+      url = "mirror://sourceforge/project/quazip/quazip/0.7/quazip-0.7.tar.gz";
+      sha256 = "193lfvhcpqgl2jmxxa4q3asc4xh1mqp2j2l0h8lmm2zrpzwygxca";
+    };
+
+    buildInputs = [ qt4 ];
+
+    preBuild = ''
+      qmake PREFIX="$out"
+    '';
+  };
 
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "teamspeak-client-${version}";
+
+  version = "3.0.16";
 
   src = fetchurl {
     urls = [
-       "http://dl.4players.de/ts/releases/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run"
+      "http://dl.4players.de/ts/releases/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run"
       "http://teamspeak.gameserver.gamed.de/ts3/releases/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run"
       "http://files.teamspeak-services.com/releases/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run"
     ];
     sha256 = if stdenv.is64bit 
-		then "0mj8vpsnv906n3wgjwhiby5gk26jr5jbd94swmsf0s9kqwhsj6i1"
-                else "1hlw7lc0nl1mrsyd052s6ws64q5aabnw6qpv8mrdxb3hyp7g2qh1";
+                then "0gvphrmrkyy1g2nprvdk7cvawznzlv4smw0mlvzd4b9mvynln0v2"
+                else "1b3nbvfpd8lx3dig8z5yk6zjkbmsy6y938dhj1f562wc8adixciz";
   };
+
+  buildInputs = [ makeWrapper ];
 
   unpackPhase =
     ''
-      yes yes | sh $src
+      yes | sh $src
       cd TeamSpeak*
     '';
 
@@ -60,6 +77,11 @@ stdenv.mkDerivation {
       # Make a symlink to the binary from bin.
       mkdir -p $out/bin/
       ln -s $out/lib/teamspeak/ts3client $out/bin/ts3client
+
+      wrapProgram $out/bin/ts3client \
+        --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+        --set QT_PLUGIN_PATH "$out/lib/teamspeak/platforms" \
+        --set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb
     '';
 
   dontStrip = true;
