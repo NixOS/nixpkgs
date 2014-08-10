@@ -54,7 +54,7 @@ in ruby.stdenv.mkDerivation (attrs // {
 
     for prog in $out/bin/*; do
       wrapProgram "$prog" \
-        --prefix GEM_PATH : "$out/${ruby.gemPath}" \
+        --prefix GEM_PATH : "$out/${ruby.gemPath}:$GEM_PATH" \
         --prefix RUBYLIB : "${rubygems}/lib" \
         --set RUBYOPT rubygems \
         $extraWrapperFlags ''${extraWrapperFlagsArray[@]}
