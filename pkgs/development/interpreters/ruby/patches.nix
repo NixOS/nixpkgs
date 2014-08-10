@@ -43,7 +43,7 @@ in
 
     postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
       cat >> $out/nix-support/setup-hook <<EOF
-        addToSearchPath DYLD_INSERT_LIBRARIES "${v8}/lib/libv8.dylib"
+        export DYLD_INSERT_LIBRARIES="$DYLD_INSERT_LIBRARIES''${!DYLD_INSERT_LIBRARIES:+:}${v8}/lib/libv8.dylib"
       EOF
     '';
 
