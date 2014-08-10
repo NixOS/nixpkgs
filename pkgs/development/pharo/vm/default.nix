@@ -76,4 +76,25 @@ stdenv.mkDerivation rec {
   patches = [ patches/pharo-is-not-squeak.patch patches/fix-executable-name.patch patches/fix-cmake-root-directory.patch ];
  
   buildInputs = [ bash unzip cmake glibc openssl gcc mesa freetype xlibs.libX11 xlibs.libICE xlibs.libSM alsaLib ];
+
+  meta = {
+    description = "Clean and innovative Smalltalk-inspired environment";
+    longDescription = ''
+      Pharo's goal is to deliver a clean, innovative, free open-source
+      Smalltalk-inspired environment. By providing a stable and small core
+      system, excellent dev tools, and maintained releases, Pharo is an
+      attractive platform to build and deploy mission critical applications.
+
+      This package provides the executable VM. You should probably not care
+      about this package (which represents a packaging detail) and have a
+      look at the pharo-vm-core package instead.
+
+      Please fill bug reports on http://bugs.pharo.org under the 'Ubuntu
+      packaging (ppa:pharo/stable)' project.
+    '';
+    homepage = http://pharo.org;
+    license = stdenv.lib.licenses.mit;
+    maintainers = [ "Damien Cassou <damien.cassou@gmail.com>" ];
+    platforms = stdenv.lib.platforms.mesaPlatforms;
+  };
 }
