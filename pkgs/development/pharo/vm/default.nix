@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://pharo.org;
     license = stdenv.lib.licenses.mit;
-    maintainers = [ "Damien Cassou <damien.cassou@gmail.com>" ];
+    maintainers = [ stdenv.lib.maintainers.DamienCassou ];
     platforms = stdenv.lib.platforms.mesaPlatforms;
   };
 }

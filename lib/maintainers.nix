@@ -33,6 +33,7 @@
   coconnor = "Corey O'Connor <coreyoconnor@gmail.com>";
   coroa = "Jonas Hörsch <jonas@chaoflow.net>";
   cstrahan = "Charles Strahan <charles.c.strahan@gmail.com>";
+  DamienCassou = "Damien Cassou <damien.cassou@gmail.com>";
   ederoyd46 = "Matthew Brown <matt@ederoyd.co.uk>";
   edwtjo = "Edward Tjörnhammar <ed@cflags.cc>";
   eelco = "Eelco Dolstra <eelco.dolstra@logicblox.com>";
