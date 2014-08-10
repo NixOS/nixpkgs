@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, protobuf, protobufc, asciidoc, xmlto, utillinux }:
+{ stdenv, fetchurl, protobuf, protobufc, asciidoc
+, xmlto, utillinux, docbook_xsl, libpaper }:
 
 stdenv.mkDerivation rec {
   name    = "criu-${version}";
@@ -10,12 +11,13 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-  buildInputs = [ protobuf protobufc asciidoc xmlto ];
+  buildInputs = [ protobuf protobufc asciidoc xmlto libpaper ];
 
   patchPhase = ''
     chmod +w ./scripts/gen-offsets.sh
     substituteInPlace ./scripts/gen-offsets.sh --replace hexdump ${utillinux}/bin/hexdump
     substituteInPlace ./Documentation/Makefile --replace "2>/dev/null" ""
+    substituteInPlace ./Documentation/Makefile --replace "--skip-validation" "--skip-validation -x ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
   '';
 
   configurePhase = "make config PREFIX=$out";
