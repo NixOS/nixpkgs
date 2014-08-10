@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
     cp * "$prefix/lib/pharo-vm"
 
-    cp -R "$resources"/* "$prefix/"
+    cp -R "$resources/"* "$prefix/"
 
     mkdir $prefix/bin
 
