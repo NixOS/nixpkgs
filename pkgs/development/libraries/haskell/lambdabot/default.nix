@@ -30,5 +30,7 @@ cabal.mkDerivation (self: {
     description = "Lambdabot is a development tool and advanced IRC bot";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })
