@@ -6461,7 +6461,7 @@ let
     stdenv = overrideInStdenv stdenv [gnumake380];
   };
 
-  junit = callPackage ../development/libraries/java/junit { };
+  junit = callPackage ../development/libraries/java/junit { antBuild = releaseTools.antBuild; };
 
   junixsocket = callPackage ../development/libraries/java/junixsocket { };
 
