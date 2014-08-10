@@ -2701,6 +2701,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   xmlConduit = callPackage ../development/libraries/haskell/xml-conduit {};
 
+  xmlConduitWriter = callPackage ../development/libraries/haskell/xml-conduit-writer {};
+
   xmlgen = callPackage ../development/libraries/haskell/xmlgen {};
 
   xmlHamlet = callPackage ../development/libraries/haskell/xml-hamlet {};
