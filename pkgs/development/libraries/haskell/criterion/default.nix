@@ -23,6 +23,7 @@ cabal.mkDerivation (self: {
     HUnit QuickCheck statistics testFramework testFrameworkHunit
     testFrameworkQuickcheck2 vector
   ];
+  doCheck = false;
   meta = {
     homepage = "http://www.serpentine.com/criterion";
     description = "Robust, reliable performance measurement and analysis";
