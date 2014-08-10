@@ -223,8 +223,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   base64Bytestring = callPackage ../development/libraries/haskell/base64-bytestring {};
 
-  base64Conduit = callPackage ../development/libraries/haskell/base64-conduit {};
-
   baseCompat = callPackage ../development/libraries/haskell/base-compat {};
 
   baseUnicodeSymbols = callPackage ../development/libraries/haskell/base-unicode-symbols {};
