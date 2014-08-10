@@ -9,8 +9,8 @@
 
 cabal.mkDerivation (self: {
   pname = "twitter-conduit";
-  version = "0.0.5.4";
-  sha256 = "1dpblbf05yv3p03mxawvljm7kba0fk7nn6vviafqbb9lg2f1zpw3";
+  version = "0.0.5.5";
+  sha256 = "13wk863xjlg8g62yhbq4aar7z77n0awh500l6v41fam99lihzxab";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
