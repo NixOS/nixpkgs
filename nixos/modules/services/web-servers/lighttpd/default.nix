@@ -9,9 +9,9 @@ let
   cfg = config.services.lighttpd;
 
   needModRedirect = cfg.gitweb.enable;
-  needModAlias = cfg.cgit.enable or cfg.gitweb.enable;
-  needModSetenv = cfg.cgit.enable or cfg.gitweb.enable;
-  needModCgi = cfg.cgit.enable or cfg.gitweb.enable;
+  needModAlias = cfg.cgit.enable || cfg.gitweb.enable;
+  needModSetenv = cfg.cgit.enable || cfg.gitweb.enable;
+  needModCgi = cfg.cgit.enable || cfg.gitweb.enable;
   needModStatus = cfg.mod_status;
   needModUserdir = cfg.mod_userdir;
 
