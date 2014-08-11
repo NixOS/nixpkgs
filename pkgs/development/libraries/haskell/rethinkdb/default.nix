@@ -19,5 +19,6 @@ cabal.mkDerivation (self: {
     description = "RethinkDB driver for Haskell";
     license = self.stdenv.lib.licenses.asl20;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })
