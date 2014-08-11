@@ -12,8 +12,5 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  meta = {
-    description = lambdabot.meta.description;
-  };
+  meta = lambdabot.meta;
 }
-
