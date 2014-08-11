@@ -5525,7 +5525,9 @@ let
   libusb = callPackage ../development/libraries/libusb {};
 
   libusb1 = callPackage ../development/libraries/libusb1 {
-    stdenv = pkgs.clangStdenv;
+    stdenv = if stdenv.isDarwin
+      then clangStdenv
+      else stdenv;
   };
 
   libunwind = callPackage ../development/libraries/libunwind { };
