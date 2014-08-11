@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
   sha256 = "1r30vcrplilj3silnrmn0r5m0df27icdsgd5hx35li9yrs862n95";
   isLibrary = true;
   isExecutable = true;
+  doCheck = false;
   buildDepends = [
     aeson ansiWlPprint binary cassava deepseq either filepath Glob
     hastache mtl mwcRandom optparseApplicative parsec statistics text

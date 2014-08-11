@@ -8390,10 +8390,7 @@ let
   }));
 
   emacs24Macport = lowPrio (callPackage ../applications/editors/emacs-24/macport.nix {
-    # resolve unrecognised flag '-fconstant-cfstrings' errors
-    stdenv = if stdenv.isDarwin
-      then clangStdenv
-      else stdenv;
+    stdenv = pkgs.clangStdenv;
   });
 
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
@@ -9770,13 +9767,7 @@ let
 
   trayer = callPackage ../applications/window-managers/trayer { };
 
-  tree = callPackage ../tools/system/tree {
-    # use gccApple to compile on darwin as the configure script adds a
-    # -no-cpp-precomp flag, which is not compatible with the default gcc
-    stdenv = if stdenv.isDarwin
-      then stdenvAdapters.overrideGCC stdenv gccApple
-      else stdenv;
-  };
+  tree = callPackage ../tools/system/tree {};
 
   tribler = callPackage ../applications/networking/p2p/tribler { };
 

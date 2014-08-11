@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     description = "Library and utilities for working with the TIFF image file format";
     homepage = http://www.remotesensing.org/libtiff/;
     license = "bsd";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
