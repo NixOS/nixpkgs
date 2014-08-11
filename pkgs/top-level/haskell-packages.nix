@@ -2508,6 +2508,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   uniqueid = callPackage ../development/libraries/haskell/uniqueid {};
 
+  unix = callPackage ../development/libraries/haskell/unix {};
+
   unixBytestring = callPackage ../development/libraries/haskell/unix-bytestring {};
 
   unixCompat = callPackage ../development/libraries/haskell/unix-compat {};
