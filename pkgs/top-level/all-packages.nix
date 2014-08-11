@@ -9994,7 +9994,7 @@ let
 
   wrapFirefox =
     { browser, browserName ? "firefox", desktopName ? "Firefox", nameSuffix ? ""
-    , icon ? "${browser}/lib/${browser.name}/icons/mozicon128.png" }:
+    , icon ? "${browser}/lib/${browser.name}/browser/icons/mozicon128.png" }:
     let
       cfg = stdenv.lib.attrByPath [ browserName ] {} config;
       enableAdobeFlash = cfg.enableAdobeFlash or false;
