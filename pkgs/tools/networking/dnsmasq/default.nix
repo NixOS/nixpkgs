@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig dbus_libs nettle ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An integrated DNS, DHCP and TFTP server for small networks";
     homepage = http://www.thekelleys.org.uk/dnsmasq/doc.html;
-    license = "GPL";
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    license = licenses.gpl2;
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [ eelco ];
   };
 }
