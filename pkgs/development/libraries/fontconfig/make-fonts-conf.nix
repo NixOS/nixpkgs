@@ -8,8 +8,8 @@ runCommand "fonts.conf"
   ''
     for fd in $fontDirectories;
     do
-      if [ ! -d "$fd/share/fonts" ]; then
-        echo "ERROR: '$fd/share/fonts/' doesn't exist"
+      if [ ! -d "$fd/share/fonts" ] && [ ! -d "$fd/lib/X11/fonts" ]; then
+        echo "ERROR: '$fd/' contains neither 'share/fonts/' nor 'lib/X11/fonts/'"
         false
       fi
     done
