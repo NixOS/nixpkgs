@@ -1,82 +1,17 @@
 [
 {
-  name = "libabw-0.0.2.tar.bz2";
-  md5 = "40fa48e03b1e28ae0325cc34b35bc46d";
+  name = "libabw-0.1.0.tar.bz2";
+  md5 = "9317e967c8fa8ff50e049744c4b33c87";
   brief = true;
-}
-{
-  name = "libcdr-0.0.15.tar.bz2";
-  md5 = "fbcd8619fc6646f41d527c1329102998";
-  brief = true;
-}
-{
-  name = "libe-book-0.0.3.tar.bz2";
-  md5 = "2f1ceaf2ac8752ed278e175447d9b978";
-  brief = true;
-}
-{
-  name = "libetonyek-0.0.4.tar.bz2";
-  md5 = "3c50bc60394d1f2675fbf9bd22581363";
-  brief = true;
-}
-{
-  name = "libfreehand-0.0.0.tar.bz2";
-  md5 = "496dd00028afcc19f896b01394769043";
-  brief = true;
-}
-{
-  name = "libmspub-0.0.6.tar.bz2";
-  md5 = "1120705cd0f0d9bd5506360bf57b6c2e";
-  brief = true;
-}
-{
-  name = "libmwaw-0.2.0.tar.bz2";
-  md5 = "d794625f156a9fb1c53b3f8a8aa13b5e";
-  brief = true;
-}
-{
-  name = "libodfgen-0.0.4.tar.bz2";
-  md5 = "e5483d1f0b71e64c367c1194b54b0f53";
-  brief = true;
-}
-{
-  name = "libvisio-0.0.31.tar.bz2";
-  md5 = "82628333418f101a20cd21f980cf9f40";
-  brief = true;
-}
-{
-  name = "Firebird-2.5.2.26540-0.tar.bz2";
-  md5 = "21154d2004e025c8a3666625b0357bb5";
-  brief = true;
-}
-{
-  name = "harfbuzz-0.9.23.tar.bz2";
-  md5 = "a4a9b548577e2ee22f0887937da5fd6c";
-  brief = true;
-}
-{
-  name = "libatomic_ops-7_2d.zip";
-  md5 = "c0b86562d5aa40761a87134f83e6adcf";
-  brief = true;
-}
-{
-  name = "libeot-0.01.tar.bz2";
-  md5 = "aa24f5dd2a2992f4a116aa72af817548";
-  brief = true;
-}
-{
-  name = "language-subtag-registry-2014-03-27.tar.bz2";
-  md5 = "504af523f5d1a5590bbeb6a4b55e8a97";
-  brief = true;
-}
-{
-  name = "Adobe-Core35_AFMs-314.tar.gz";
-  md5 = "1756c4fa6c616ae15973c104cd8cb256";
-  brief = false;
 }
 {
   name = "commons-codec-1.6-src.tar.gz";
   md5 = "2e482c7567908d334785ce7d69ddfff7";
+  brief = false;
+}
+{
+  name = "commons-codec-1.9-src.zip";
+  md5 = "048751f3271906db5126ab76870444c4";
   brief = false;
 }
 {
@@ -90,13 +25,28 @@
   brief = false;
 }
 {
-  name = "commons-logging-1.1.1-src.tar.gz";
-  md5 = "3c219630e4302863a9a83d0efde889db";
+  name = "commons-lang3-3.3.1-src.tar.gz";
+  md5 = "8ab049135b2d15313da5d9f0656894a1";
   brief = false;
 }
 {
-  name = "boost_1_54_0.tar.bz2";
-  md5 = "15cb8c0803064faef0c4ddf5bc5ca279";
+  name = "commons-logging-1.1.3-src.tar.gz";
+  md5 = "e8e197d628436490886d17cffa108fe3";
+  brief = false;
+}
+{
+  name = "apr-1.4.8.tar.gz";
+  md5 = "eff9d741b0999a9bbab96862dd2a2a3d";
+  brief = true;
+}
+{
+  name = "apr-util-1.5.3.tar.gz";
+  md5 = "71a11d037240b292f824ba1eb537b4e3";
+  brief = true;
+}
+{
+  name = "boost_1_55_0.tar.bz2";
+  md5 = "d6eef4b4cacb2183f2bf265a5a03a354";
   brief = false;
 }
 {
@@ -110,6 +60,11 @@
   brief = false;
 }
 {
+  name = "libcdr-0.1.0.tar.bz2";
+  md5 = "0e2f56934c8872ec4a254cd4bb1d7cf6";
+  brief = true;
+}
+{
   name = "clucene-core-2.3.3.4.tar.gz";
   md5 = "48d647fbd8ef8889e5a7f422c1bfda94";
   brief = false;
@@ -117,6 +72,16 @@
 {
   name = "libcmis-0.4.1.tar.gz";
   md5 = "22f8a85daf4a012180322e1f52a7563b";
+  brief = false;
+}
+{
+  name = "CoinMP-1.7.6.tgz";
+  md5 = "1cce53bf4b40ae29790d2c5c9f8b1129";
+  brief = true;
+}
+{
+  name = "collada2gltf-master-cb1d97788a.tar.bz2";
+  md5 = "4b87018f7fff1d054939d19920b751a0";
   brief = false;
 }
 {
@@ -130,9 +95,14 @@
   brief = false;
 }
 {
-  name = "curl-7.33.0.tar.bz2";
-  md5 = "57409d6bf0bd97053b8378dbe0cadcef";
-  brief = false;
+  name = "curl-7.36.0.tar.bz2";
+  md5 = "e6d1f9d1b59da5062109ffe14e0569a4";
+  brief = true;
+}
+{
+  name = "libe-book-0.1.1.tar.bz2";
+  md5 = "c25a881d21abc5b4da19205db513cc22";
+  brief = true;
 }
 {
   name = "epm-3.7.tar.gz";
@@ -140,9 +110,19 @@
   brief = false;
 }
 {
+  name = "libetonyek-0.1.1.tar.bz2";
+  md5 = "805f941b06448212a988cb65f0691a7a";
+  brief = true;
+}
+{
   name = "expat-2.1.0.tar.gz";
   md5 = "dd7dab7a5fea97d2a6a43f511449b7cd";
   brief = false;
+}
+{
+  name = "Firebird-2.5.2.26540-0.tar.bz2";
+  md5 = "21154d2004e025c8a3666625b0357bb5";
+  brief = true;
 }
 {
   name = "fontconfig-2.8.0.tar.gz";
@@ -160,8 +140,8 @@
   brief = false;
 }
 {
-  name = "dejavu-fonts-ttf-2.33.zip";
-  md5 = "f872f4ac066433d8ff92f5e316b36ff9";
+  name = "dejavu-fonts-ttf-2.34.zip";
+  md5 = "a4e565e220b5de082c23995e256e3c12";
   brief = false;
 }
 {
@@ -170,8 +150,8 @@
   brief = false;
 }
 {
-  name = "liberation-fonts-ttf-1.07.3.tar.gz";
-  md5 = "b3174b11c2b6a341f5c99b31088bd67b";
+  name = "liberation-fonts-ttf-1.07.4.tar.gz";
+  md5 = "134d8262145fc793c6af494dcace3e71";
   brief = false;
 }
 {
@@ -205,14 +185,34 @@
   brief = false;
 }
 {
+  name = "libfreehand-0.1.0.tar.bz2";
+  md5 = "5f029fef73e42a2c2ae4524a7513f97d";
+  brief = true;
+}
+{
   name = "freetype-2.4.8.tar.bz2";
   md5 = "dbf2caca1d3afd410a29217a9809d397";
   brief = false;
 }
 {
-  name = "graphite2-1.2.3.tgz";
-  md5 = "7042305e4208af4c2d5249d814ccce58";
+  name = "glew-1.10.0.zip";
+  md5 = "594eb47b4b1210e25438d51825404d5a";
   brief = false;
+}
+{
+  name = "glm-0.9.4.6-libreoffice.zip";
+  md5 = "bae83fa5dc7f081768daace6e199adc3";
+  brief = false;
+}
+{
+  name = "graphite2-1.2.4.tgz";
+  md5 = "2ef839348fe28e3b923bf8cced440227";
+  brief = true;
+}
+{
+  name = "harfbuzz-0.9.23.tar.bz2";
+  md5 = "a4a9b548577e2ee22f0887937da5fd6c";
+  brief = true;
 }
 {
   name = "hsqldb_1_8_0.zip";
@@ -230,8 +230,8 @@
   brief = false;
 }
 {
-  name = "icu4c-52_1-src.tgz";
-  md5 = "9e96ed4c1d99c0d14ac03c140f9f346c";
+  name = "icu4c-53_1-src.tgz";
+  md5 = "b73baa6fbdfef197608d1f69300919b9";
   brief = false;
 }
 {
@@ -290,9 +290,14 @@
   brief = false;
 }
 {
-  name = "jpegsrc.v8d.tar.gz";
-  md5 = "52654eb3b2e60c35731ea8fc87f1bd29";
-  brief = false;
+  name = "jpegsrc.v9a.tar.gz";
+  md5 = "3353992aecaee1805ef4109aadd433e7";
+  brief = true;
+}
+{
+  name = "language-subtag-registry-2014-04-10.tar.bz2";
+  md5 = "49c94710f7858b1969d74ff72e6aac84";
+  brief = true;
 }
 {
   name = "JLanguageTool-1.7.0.tar.bz2";
@@ -300,14 +305,30 @@
   brief = false;
 }
 {
-  name = "lcms2-2.4.tar.gz";
-  md5 = "861ef15fa0bc018f9ddc932c4ad8b6dd";
-  brief = false;
+  name = "lcms2-2.6.tar.gz";
+  md5 = "f4c08d38ceade4a664ebff7228910a33";
+  brief = true;
+}
+{
+  name = "libatomic_ops-7_2d.zip";
+  md5 = "c0b86562d5aa40761a87134f83e6adcf";
+  brief = true;
+}
+{
+  name = "libeot-0.01.tar.bz2";
+  md5 = "aa24f5dd2a2992f4a116aa72af817548";
+  brief = true;
 }
 {
   name = "libexttextcat-3.4.3.tar.bz2";
   md5 = "ae330b9493bd4503ac390106ff6060d7";
   brief = false;
+}
+{
+  name = "libgltf-0.0.0.tar.bz2";
+  md5 = "3d9ea1f2828c46f8ba94b88a87b3326d";
+  brief = false;
+  subDir = "libgltf/";
 }
 {
   name = "liblangtag-0.5.1.tar.bz2";
@@ -345,6 +366,16 @@
   brief = false;
 }
 {
+  name = "libmspub-0.1.1.tar.bz2";
+  md5 = "1d489c4932109e72495b1df8b69e5f11";
+  brief = true;
+}
+{
+  name = "libmwaw-0.3.1.tar.bz2";
+  md5 = "6f1ac4a0e24131c422e1e91f07718fb6";
+  brief = true;
+}
+{
   name = "mysql-connector-c++-1.1.0.tar.gz";
   md5 = "0981bda6548a8c8233ffce2b6e4b2a23";
   brief = false;
@@ -365,18 +396,28 @@
   brief = false;
 }
 {
+  name = "libodfgen-0.1.1.tar.bz2";
+  md5 = "c22c83c17cda0754382ada4e116594b7";
+  brief = true;
+}
+{
+  name = "OpenCOLLADA-master-6509aa13af.tar.bz2";
+  md5 = "4ca8a6ef0afeefc864e9ef21b9f14bd6";
+  brief = true;
+}
+{
   name = "openldap-2.4.31.tgz";
   md5 = "804c6cb5698db30b75ad0ff1c25baefd";
   brief = false;
 }
 {
-  name = "openssl-1.0.1e.tar.gz";
-  md5 = "66bf6f10f060d561929de96f9dfe5b8c";
+  name = "openssl-1.0.1h.tar.gz";
+  md5 = "8d6d684a9430d5cc98a62a5d8fbda8cf";
   brief = false;
 }
 {
-  name = "liborcus-0.5.1.tar.bz2";
-  md5 = "ea2acaf140ae40a87a952caa75184f4d";
+  name = "liborcus-0.7.0.tar.bz2";
+  md5 = "7681383be6ce489d84c1c74f4e7f9643";
   brief = false;
 }
 {
@@ -385,9 +426,9 @@
   brief = false;
 }
 {
-  name = "libpng-1.5.10.tar.gz";
-  md5 = "9e5d864bce8f06751bbd99962ecf4aad";
-  brief = false;
+  name = "libpng-1.5.18.tar.gz";
+  md5 = "5266905cef49d1224437465ad4d67fd9";
+  brief = true;
 }
 {
   name = "poppler-0.22.5.tar.gz";
@@ -400,9 +441,9 @@
   brief = false;
 }
 {
-  name = "Python-3.3.3.tar.bz2";
-  md5 = "f3ebe34d4d8695bf889279b54673e10c";
-  brief = false;
+  name = "Python-3.3.5.tgz";
+  md5 = "803a75927f8f241ca78633890c798021";
+  brief = true;
 }
 {
   name = "raptor2-2.0.9.tar.gz";
@@ -420,9 +461,19 @@
   brief = false;
 }
 {
+  name = "librevenge-0.0.1.tar.bz2";
+  md5 = "69c367c6b0a360411965a1c409a0b6c1";
+  brief = true;
+}
+{
   name = "rhino1_5R5.zip";
   md5 = "798b2ffdc8bcfe7bca2cf92b62caf685";
   brief = false;
+}
+{
+  name = "serf-1.2.1.tar.bz2";
+  md5 = "4f8e76c9c6567aee1d66aba49f76a58b";
+  brief = true;
 }
 {
   name = "swingExSrc.zip";
@@ -440,19 +491,24 @@
   brief = false;
 }
 {
-  name = "libwpd-0.9.9.tar.bz2";
-  md5 = "a3dcac551fae5ebbec16e844810828c4";
-  brief = false;
+  name = "libvisio-0.1.0.tar.bz2";
+  md5 = "931588332ba44682c9cd5eefbd358ab4";
+  brief = true;
 }
 {
-  name = "libwpg-0.2.2.tar.bz2";
-  md5 = "b85436266b2ac91d351ab5684b181151";
-  brief = false;
+  name = "libwpd-0.10.0.tar.bz2";
+  md5 = "0773d79a1f240ef9f4f20242b13c5bb7";
+  brief = true;
 }
 {
-  name = "libwps-0.2.9.tar.bz2";
-  md5 = "46eb0e7f213ad61bd5dee0c494132cb0";
-  brief = false;
+  name = "libwpg-0.3.0.tar.bz2";
+  md5 = "17da9770cb8b317b7633f9807b32b71a";
+  brief = true;
+}
+{
+  name = "libwps-0.3.0.tar.bz2";
+  md5 = "d4d77d08b9048bae3b8ec8df11f80efd";
+  brief = true;
 }
 {
   name = "xsltml_2.1.2.zip";
@@ -460,8 +516,8 @@
   brief = false;
 }
 {
-  name = "zlib-1.2.7.tar.bz2";
-  md5 = "2ab442d169156f34c379c968f3f482dd";
-  brief = false;
+  name = "zlib-1.2.8.tar.gz";
+  md5 = "44d667c142d7cda120332623eab69f40";
+  brief = true;
 }
 ]
