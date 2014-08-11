@@ -2,12 +2,7 @@ args@{...}: with args;
 
 
 let inherit (args.composableDerivation) composableDerivation edf; in
-composableDerivation {
-  # use gccApple to compile on darwin
-  mkDerivation = ( if stdenv.isDarwin
-                   then stdenvAdapters.overrideGCC stdenv gccApple
-                   else stdenv ).mkDerivation;
-} (fix: {
+composableDerivation { mkDerivation = stdenv.mkDerivation; } (fix: {
 
     name = "qvim-7.4";
 

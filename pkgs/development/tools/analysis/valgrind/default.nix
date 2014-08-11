@@ -17,17 +17,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postPatch =
-    # Apple's GCC doesn't recognize `-arch' (as of version 4.2.1, build 5666).
-    ''
-      echo "getting rid of the \`-arch' GCC option..."
-      find -name Makefile\* -exec \
-        sed -i {} -e's/DARWIN\(.*\)-arch [^ ]\+/DARWIN\1/g' \;
-
-      sed -i coregrind/link_tool_exe_darwin.in \
-          -e 's/^my \$archstr = .*/my $archstr = "x86_64";/g'
-    '';
-
   configureFlags =
     stdenv.lib.optional (stdenv.system == "x86_64-linux" || stdenv.system == "x86_64-darwin") "--enable-only64bit";
 
