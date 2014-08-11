@@ -16,10 +16,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://qtpfsgui.sourceforge.net/;
     description = "A complete open source solution for HDR photography";
     license = "GPLv2";
     platforms = with stdenv.lib.platforms; linux;
+    maintainers = [ maintainers.hrdinka ];
   };
 }
