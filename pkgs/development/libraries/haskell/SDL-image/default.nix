@@ -12,5 +12,6 @@ cabal.mkDerivation (self: {
     description = "Binding to libSDL_image";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })
