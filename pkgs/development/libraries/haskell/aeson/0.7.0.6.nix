@@ -23,5 +23,6 @@ cabal.mkDerivation (self: {
     description = "Fast JSON parsing and encoding";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })
