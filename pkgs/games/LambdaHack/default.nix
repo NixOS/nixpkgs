@@ -33,5 +33,6 @@ cabal.mkDerivation (self: {
     platforms = self.ghc.meta.platforms;
     hydraPlatforms = self.stdenv.lib.platforms.none;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
+    broken = true;
   };
 })
