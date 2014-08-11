@@ -12,5 +12,7 @@ cabal.mkDerivation (self: {
     description = "Interface to GSL special functions";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })
