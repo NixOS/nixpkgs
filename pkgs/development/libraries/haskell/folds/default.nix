@@ -14,13 +14,11 @@ cabal.mkDerivation (self: {
     semigroupoids tagged transformers vector
   ];
   testDepends = [ deepseq doctest filepath hlint mtl semigroups ];
-  doCheck = false;
+  enableSplitObjs = false;
   meta = {
     homepage = "http://github.com/ekmett/folds";
     description = "Beautiful Folding";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
-    broken = true;
   };
 })
