@@ -1769,6 +1769,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   parsimony = callPackage ../development/libraries/haskell/parsimony {};
 
+  PastePipe = callPackage ../development/tools/haskell/PastePipe {};
+
   pathtype = callPackage ../development/libraries/haskell/pathtype {};
 
   patternArrows = callPackage ../development/libraries/haskell/pattern-arrows {};
