@@ -1,12 +1,12 @@
 { fetchurl, stdenv, bison, flex, pam, ssmtp }:
 
 stdenv.mkDerivation {
-  name = "at-3.1.12";
+  name = "at-3.1.14";
 
   src = fetchurl {
     # Debian is apparently the last location where it can be found.
-    url = mirror://debian/pool/main/a/at/at_3.1.12.orig.tar.gz;
-    sha256 = "1wqqrj4lg2ix79ib5kz7lk4hbs1zpw72n6zkd2gdv2my9ymwcmbw";
+    url = mirror://debian/pool/main/a/at/at_3.1.14.orig.tar.gz;
+    sha256 = "cd092bf05d29c25b286f55a960ce8b8c3c5beb571d86ed8eb1dfb3b61291b3ae";
   };
 
   patches = [ ./install.patch ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = ''The classical Unix `at' job scheduling command'';
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     homepage = http://packages.qa.debian.org/at;
   };
 }

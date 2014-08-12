@@ -25,7 +25,7 @@ in
 
     projectroot = mkOption {
       default = "/srv/git";
-      type = types.str;
+      type = types.path;
       description = ''
         Path to git projects (bare repositories) that should be served by
         gitweb. Must not end with a slash.
@@ -34,7 +34,7 @@ in
 
     extraConfig = mkOption {
       default = "";
-      type = types.str;
+      type = types.lines;
       description = ''
         Verbatim configuration text appended to the generated gitweb.conf file.
       '';

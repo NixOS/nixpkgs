@@ -5,14 +5,7 @@
 # Posix utilities, the GNU C compiler, and so on.  On other systems,
 # we use the native C library.
 
-
-# stdenvType exists to support multiple kinds of stdenvs on the same
-# system, e.g., cygwin and mingw builds on i686-cygwin.  Most people
-# can ignore it.
-
-{ system, stdenvType ? system, allPackages ? import ../.., platform, config }:
-
-assert system != "i686-cygwin" -> system == stdenvType;
+{ system, allPackages ? import ../.., platform, config }:
 
 
 rec {
@@ -45,23 +38,16 @@ rec {
   stdenvLinux = (import ./linux { inherit system allPackages platform config;}).stdenvLinux;
 
 
-  # MinGW/MSYS standard environment.
-  stdenvMinGW = import ./mingw {
-    inherit system;
-  };
-
-
   # Select the appropriate stdenv for the platform `system'.
   stdenv =
-    if stdenvType == "i686-linux" then stdenvLinux else
-    if stdenvType == "x86_64-linux" then stdenvLinux else
-    if stdenvType == "armv5tel-linux" then stdenvLinux else
-    if stdenvType == "armv6l-linux" then stdenvLinux else
-    if stdenvType == "armv7l-linux" then stdenvLinux else
-    if stdenvType == "mips64el-linux" then stdenvLinux else
-    if stdenvType == "powerpc-linux" then /* stdenvLinux */ stdenvNative else
-    if stdenvType == "i686-mingw" then stdenvMinGW else
-    if stdenvType == "x86_64-darwin" then stdenvNix else
-    if stdenvType == "x86_64-solaris" then stdenvNix else
+    if system == "i686-linux" then stdenvLinux else
+    if system == "x86_64-linux" then stdenvLinux else
+    if system == "armv5tel-linux" then stdenvLinux else
+    if system == "armv6l-linux" then stdenvLinux else
+    if system == "armv7l-linux" then stdenvLinux else
+    if system == "mips64el-linux" then stdenvLinux else
+    if system == "powerpc-linux" then /* stdenvLinux */ stdenvNative else
+    if system == "x86_64-darwin" then stdenvNix else
+    if system == "x86_64-solaris" then stdenvNix else
     stdenvNative;
 }

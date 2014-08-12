@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://matthewwild.co.uk/projects/luaexpat";
-    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.flosse ];
   };
 }

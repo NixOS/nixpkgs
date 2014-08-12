@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tool to manage dwarves in in a running game of Dwarf Fortress";
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
     hydraPlatforms = [];
     homepage = https://code.google.com/r/splintermind-attributes/;

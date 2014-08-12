@@ -20,11 +20,11 @@ stdenv.mkDerivation {
     ccopt="-O"
     ccopt="$ccopt -I ${jbig2dec}/include"
     ccopt="$ccopt -I ${libjpeg}/include"
-    ccopt="$ccopt -I ${freetype}/include"
+    ccopt="$ccopt -I ${freetype}/include/freetype2"
     ccopt="$ccopt -I ${openjpeg}/include"
     ccopt="$ccopt -I ${zlib}/include"
     ccopt="$ccopt -I ${mupdf}/include"
-    ccopt="$ccopt -include ${freetype}/include/ft2build.h"
+    ccopt="$ccopt -include ft2build.h"
     ccopt="$ccopt -D_GNU_SOURCE"
 
     cclib="$cclib -lmupdf"

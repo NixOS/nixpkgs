@@ -3,8 +3,8 @@
 , libX11, libICE, libSM, useX11 ? (stdenv.isLinux || stdenv.isDarwin) }:
 
 let
-  version = "1.8.4";
-  sha256 = "1y0zcmd4jsf2gq5yymz9gcnwxijh0vxbmxz73q3l440is343vxiy";
+  version = "1.8.6";
+  sha256 = "0gyjxd0gfpjs3fq5bx6aljb5f3zxky5zsq0yfqr9ywbv03587vgd";
 
   inherit (stdenv) lib;
 
@@ -91,7 +91,7 @@ let
       stdenv.lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed "
       + "-ldbus-1";
 
-    meta.platforms = stdenv.lib.platforms.all;
+    meta.platforms = with stdenv.lib.platforms; allBut darwin;
   };
 
   daemon = tools;

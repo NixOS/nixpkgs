@@ -80,7 +80,7 @@ let
 
   # !!! should be in lib
   writeTextInDir = name: text:
-    pkgs.runCommand name {inherit text;} "ensureDir $out; echo -n \"$text\" > $out/$name";
+    pkgs.runCommand name {inherit text;} "mkdir -p $out; echo -n \"$text\" > $out/$name";
 
 
   enableSSL = any (vhost: vhost.enableSSL) allHosts;
@@ -194,7 +194,7 @@ let
     ) null ([ cfg ] ++ subservices);
 
     documentRoot = if maybeDocumentRoot != null then maybeDocumentRoot else
-      pkgs.runCommand "empty" {} "ensureDir $out";
+      pkgs.runCommand "empty" {} "mkdir -p $out";
 
     documentRootConf = ''
       DocumentRoot "${documentRoot}"
@@ -387,7 +387,7 @@ let
   '';
 
 
-  enablePHP = any (svc: svc.enablePHP) allSubservices;
+  enablePHP = mainCfg.enablePHP || any (svc: svc.enablePHP) allSubservices;
 
 
   # Generate the PHP configuration file.  Should probably be factored
@@ -529,6 +529,12 @@ in
           configuration of the virtual host.  The available options
           are the non-global options permissible for the main host.
         '';
+      };
+
+      enablePHP = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable the PHP module.";
       };
 
       phpOptions = mkOption {

@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, gnome3, clutter, dbus, pythonPackages, libxml2
-, libxklavier, libXtst, gtk2, intltool, libxslt }:
+, libxklavier, libXtst, gtk2, intltool, libxslt, at_spi2_core }:
 
 
 stdenv.mkDerivation rec {

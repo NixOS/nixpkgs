@@ -78,12 +78,14 @@ stdenv.mkDerivation {
 
     homepage = http://www.gnu.org/software/mit-scheme/;
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
 
     # Build fails on Cygwin and Darwin:
     # <http://article.gmane.org/gmane.lisp.scheme.mit-scheme.devel/489>.
     platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.freebsd;
+
+    broken = true;
   };
 }

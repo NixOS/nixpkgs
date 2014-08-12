@@ -1,9 +1,35 @@
 # TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
 # but I have gvim with python support now :) - Marc
-args@{source ? "default", ...}: with args;
+args@{pkgs, source ? "default", ...}: with args;
 
 
-let inherit (args.composableDerivation) composableDerivation edf; in
+let inherit (args.composableDerivation) composableDerivation edf;
+  nixosRuntimepath = pkgs.writeText "nixos-vimrc" ''
+    set nocompatible
+    syntax on
+
+    function! NixosPluginPath()
+      let seen = {}
+      for p in reverse(split($NIX_PROFILES))
+        for d in split(glob(p . '/share/vim-plugins/*'))
+          let pluginname = substitute(d, ".*/", "", "")
+          if !has_key(seen, pluginname)
+            exec 'set runtimepath^='.d
+            let seen[pluginname] = 1
+          endif
+        endfor
+      endfor
+    endfunction
+
+    execute NixosPluginPath()
+
+    if filereadable("/etc/vimrc")
+      source /etc/vimrc
+    elseif filereadable("/etc/vim/vimrc")
+      source /etc/vim/vimrc
+    endif
+  '';
+in
 composableDerivation {
   # use gccApple to compile on darwin
   mkDerivation = ( if stdenv.isDarwin
@@ -11,18 +37,18 @@ composableDerivation {
                    else stdenv ).mkDerivation;
 } (fix: {
 
-    name = "vim_configurable-7.4.316";
+    name = "vim_configurable-7.4.335";
 
     enableParallelBuilding = true; # test this
 
-    src = 
+    src =
       builtins.getAttr source {
       "default" =
         # latest release
       args.fetchhg {
             url = "https://vim.googlecode.com/hg/";
-            rev = "v7-4-316";
-            sha256 = "0scxx33p1ky0wihk04xqpd6rygp1crm0hx446zbjwbsjj6xxn7sx";
+            rev = "v7-4-335";
+            sha256 = "0qnpzfcbi6fhz82pj68l4vrnigca1akq2ksrxz6krwlfhns6jhhj";
       };
 
       "vim-nox" =
@@ -39,7 +65,7 @@ composableDerivation {
 
     # if darwin support is enabled, we want to make sure we're not building with
     # OS-installed python framework
-    patches = stdenv.lib.optionals 
+    patches = stdenv.lib.optionals
       (stdenv.isDarwin && (config.vim.darwin or true))
       [ ./python_framework.patch ];
 
@@ -145,6 +171,8 @@ composableDerivation {
     echo $nativeBuildInputs
     echo $rpath
     patchelf --set-rpath $rpath $out/bin/{vim,gvim}
+
+    ln -sfn ${nixosRuntimepath} $out/share/vim/vimrc
   '';
 
   dontStrip = 1;

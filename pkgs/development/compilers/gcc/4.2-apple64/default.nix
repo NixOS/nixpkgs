@@ -44,4 +44,6 @@ stdenv.mkDerivation rec {
   langC = true;
 
   buildInputs = stdenv.lib.optionals langF77 [ gmp mpfr bison flex ];
+
+  #meta.broken = true;
 }

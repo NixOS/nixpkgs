@@ -1,5 +1,6 @@
 { pkgs, options, version, revision }:
 
+with pkgs;
 with pkgs.lib;
 
 let
@@ -22,7 +23,7 @@ let
 
   optionsXML = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext (builtins.toXML options''));
 
-  optionsDocBook = pkgs.runCommand "options-db.xml" {} ''
+  optionsDocBook = runCommand "options-db.xml" {} ''
     if grep /nixpkgs/nixos/modules ${optionsXML}; then
       echo "The manual appears to depend on the location of Nixpkgs, which is bad"
       echo "since this prevents sharing via the NixOS channel.  This is typically"
@@ -30,7 +31,7 @@ let
       echo "for hints about the offending path)."
       exit 1
     fi
-    ${pkgs.libxslt}/bin/xsltproc \
+    ${libxslt}/bin/xsltproc \
       --stringparam revision '${revision}' \
       -o $out ${./options-to-docbook.xsl} ${optionsXML}
   '';
@@ -38,12 +39,12 @@ let
 in rec {
 
   # Generate the NixOS manual.
-  manual = pkgs.stdenv.mkDerivation {
+  manual = stdenv.mkDerivation {
     name = "nixos-manual";
 
     sources = sourceFilesBySuffices ./. [".xml"];
 
-    buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
+    buildInputs = [ libxml2 libxslt ];
 
     xsltFlags = ''
       --param section.autolabel 1
@@ -62,19 +63,19 @@ in rec {
 
       # Check the validity of the manual sources.
       xmllint --noout --nonet --xinclude --noxincludenode \
-        --relaxng ${pkgs.docbook5}/xml/rng/docbook/docbook.rng \
+        --relaxng ${docbook5}/xml/rng/docbook/docbook.rng \
         manual.xml
 
       # Generate the HTML manual.
       dst=$out/share/doc/nixos
-      ensureDir $dst
+      mkdir -p $dst
       xsltproc $xsltFlags --nonet --xinclude \
         --output $dst/manual.html \
-        ${pkgs.docbook5_xsl}/xml/xsl/docbook/xhtml/docbook.xsl \
+        ${docbook5_xsl}/xml/xsl/docbook/xhtml/docbook.xsl \
         ./manual.xml
 
       mkdir -p $dst/images/callouts
-      cp ${pkgs.docbook5_xsl}/xml/xsl/docbook/images/callouts/*.gif $dst/images/callouts/
+      cp ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.gif $dst/images/callouts/
 
       cp ${./style.css} $dst/style.css
 
@@ -86,13 +87,39 @@ in rec {
     meta.description = "The NixOS manual in HTML format";
   };
 
+  manualPDF = stdenv.mkDerivation {
+    name = "nixos-manual-pdf";
+
+    sources = sourceFilesBySuffices ./. [".xml"];
+
+    buildInputs = [ libxml2 libxslt dblatex tetex ];
+
+    buildCommand = ''
+      # TeX needs a writable font cache.
+      export VARTEXFONTS=$TMPDIR/texfonts
+
+      ln -s $sources/*.xml . # */
+      ln -s ${optionsDocBook} options-db.xml
+      echo "${version}" > version
+
+      dst=$out/share/doc/nixos
+      mkdir -p $dst
+      xmllint --xinclude manual.xml | dblatex -o $dst/manual.pdf - \
+        -P doc.collab.show=0 \
+        -P latex.output.revhistory=0
+
+      mkdir -p $out/nix-support
+      echo "doc-pdf manual $dst/manual.pdf" >> $out/nix-support/hydra-build-products
+    ''; # */
+  };
+
   # Generate the NixOS manpages.
-  manpages = pkgs.stdenv.mkDerivation {
+  manpages = stdenv.mkDerivation {
     name = "nixos-manpages";
 
     sources = sourceFilesBySuffices ./. [".xml"];
 
-    buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
+    buildInputs = [ libxml2 libxslt ];
 
     buildCommand = ''
       ln -s $sources/*.xml . # */
@@ -100,7 +127,7 @@ in rec {
 
       # Check the validity of the manual sources.
       xmllint --noout --nonet --xinclude --noxincludenode \
-        --relaxng ${pkgs.docbook5}/xml/rng/docbook/docbook.rng \
+        --relaxng ${docbook5}/xml/rng/docbook/docbook.rng \
         ./man-pages.xml
 
       # Generate manpages.
@@ -109,7 +136,7 @@ in rec {
         --param man.output.in.separate.dir 1 \
         --param man.output.base.dir "'$out/share/man/'" \
         --param man.endnotes.are.numbered 0 \
-        ${pkgs.docbook5_xsl}/xml/xsl/docbook/manpages/docbook.xsl \
+        ${docbook5_xsl}/xml/xsl/docbook/manpages/docbook.xsl \
         ./man-pages.xml
     '';
   };

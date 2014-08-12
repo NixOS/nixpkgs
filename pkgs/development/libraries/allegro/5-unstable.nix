@@ -15,10 +15,11 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="allegro";
+    folderSuffix = "-unstable";
     version = "5.1.8";
     name="${baseName}-${version}";
     project="alleg";
-    url="mirror://sourceforge/project/${project}/${baseName}/${version}/${name}.tar.gz";
+    url="mirror://sourceforge/project/${project}/${baseName}${folderSuffix}/${version}/${name}.tar.gz";
     hash="18fdppaqaf3g3rcqwhyvsmkzk3y14clz4l8cvmg4hvjgyf011f3i";
   };
 in

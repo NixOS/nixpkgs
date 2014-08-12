@@ -8,7 +8,7 @@ mkChromiumDerivation (base: rec {
   buildTargets = [ "mksnapshot" "chrome" ];
 
   installPhase = ''
-    ensureDir "$libExecPath"
+    mkdir -p "$libExecPath"
     cp -v "$buildPath/"*.pak "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"

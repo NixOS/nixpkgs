@@ -25,12 +25,17 @@ in
   options = {
 
     services.fail2ban = {
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = "Whether to enable the fail2ban service.";
+      };
 
       daemonConfig = mkOption {
         default =
           ''
             [Definition]
-            loglevel  = 3
+            loglevel  = INFO
             logtarget = SYSLOG
             socket    = /run/fail2ban/fail2ban.sock
             pidfile   = /run/fail2ban/fail2ban.pid
@@ -80,7 +85,7 @@ in
 
   ###### implementation
 
-  config = {
+  config = mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.fail2ban ];
 
@@ -101,12 +106,13 @@ in
         preStart =
           ''
             mkdir -p /run/fail2ban -m 0755
+            mkdir -p /var/lib/fail2ban
           '';
 
         serviceConfig =
           { ExecStart = "${pkgs.fail2ban}/bin/fail2ban-server -f";
             ReadOnlyDirectories = "/";
-            ReadWriteDirectories = "/run /var/tmp";
+            ReadWriteDirectories = "/run /var/tmp /var/lib";
             CapabilityBoundingSet = "CAP_DAC_READ_SEARCH CAP_NET_ADMIN CAP_NET_RAW";
           };
 
@@ -131,15 +137,14 @@ in
         bantime  = 600
         findtime = 600
         maxretry = 3
-        backend  = auto
-      '';
+        backend  = systemd
+       '';
 
     # Block SSH if there are too many failing connection attempts.
     services.fail2ban.jails.ssh-iptables =
       ''
         filter   = sshd
         action   = iptables[name=SSH, port=ssh, protocol=tcp]
-        logpath  = /var/log/warn
         maxretry = 5
       '';
 

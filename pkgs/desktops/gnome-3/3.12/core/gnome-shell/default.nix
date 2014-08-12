@@ -1,6 +1,7 @@
 { fetchurl, stdenv, pkgconfig, gnome3, json_glib, libcroco, intltool, libsecret
-, python, libsoup, polkit, clutter, networkmanager, docbook_xsl, docbook_xsl_ns
+, python, libsoup, polkit, clutter, networkmanager, docbook_xsl, docbook_xsl_ns, at_spi2_core
 , libstartup_notification, telepathy_glib, telepathy_logger, libXtst, p11_kit, unzip
+, hicolor_icon_theme
 , pulseaudio, libical, libtool, nss, gobjectIntrospection, gstreamer, makeWrapper
 , accountsservice, gdk_pixbuf, gdm, upower, ibus, networkmanagerapplet, librsvg }:
 
@@ -20,6 +21,7 @@ stdenv.mkDerivation rec {
       clutter networkmanager libstartup_notification telepathy_glib docbook_xsl docbook_xsl_ns
       libXtst p11_kit networkmanagerapplet gjs mutter pulseaudio caribou evolution_data_server
       libical libtool nss gobjectIntrospection gtk gstreamer makeWrapper gdm gnome_control_center
+      hicolor_icon_theme gnome_icon_theme gnome_icon_theme_symbolic
       at_spi2_core upower ibus gnome_session gnome_desktop telepathy_logger gnome3.gnome_settings_daemon ];
 
   installFlags = [ "keysdir=$(out)/share/gnome-control-center/keybindings" ];
@@ -42,8 +44,6 @@ stdenv.mkDerivation rec {
 
     echo "${unzip}/bin" > $out/${passthru.mozillaPlugin}/extra-bin-path
   '';
-
-  enableParallelBuilding = true;
 
   passthru = {
     mozillaPlugin = "/lib/mozilla/plugins";

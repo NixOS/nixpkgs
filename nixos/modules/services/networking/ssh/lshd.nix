@@ -99,7 +99,6 @@ in
       };
 
       subsystems = mkOption {
-        default = [ ["sftp" "${pkgs.lsh}/sbin/sftp-server"] ];
         description = ''
           List of subsystem-path pairs, where the head of the pair
           denotes the subsystem name, and the tail denotes the path to
@@ -115,6 +114,8 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+
+    services.lshd.subsystems = [ ["sftp" "${pkgs.lsh}/sbin/sftp-server"] ];
 
     jobs.lshd =
       { description = "GNU lshd SSH2 daemon";

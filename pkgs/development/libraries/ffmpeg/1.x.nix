@@ -31,11 +31,11 @@ assert playSupport -> SDL != null;
 assert freetypeSupport -> freetype != null;
 
 stdenv.mkDerivation rec {
-  name = "ffmpeg-1.2.6";
+  name = "ffmpeg-1.2.7";
 
   src = fetchurl {
     url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
-    sha256 = "174rf3g2pqaxa8rzg03qmy4cn2gsy0p2mk26y9yk5ksq6kg59m19";
+    sha256 = "13nj5q5ad0kcrid8r5x6x8lqfhk8kms14pmncf6vbdbk6x45k6v6";
   };
 
   # `--enable-gpl' (as well as the `postproc' and `swscale') mean that

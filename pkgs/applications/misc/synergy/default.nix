@@ -6,11 +6,11 @@ assert stdenv.isLinux -> cryptopp != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "synergy-1.4.17";
+  name = "synergy-1.5.0";
 
   src = fetchurl {
-    url = "http://fossfiles.com/synergy/${name}-r2055-Source.tar.gz";
-    sha256 = "1mwaapvq9vsm0rdpq99fyzcw6wbp83rg6cylcqcgjjd21c6y9iwm";
+    url = "http://synergy-project.org/files/packages/synergy-1.5.0-r2278-Source.tar.gz";
+    sha256 = "097hk9v01lwzs7ly6ynadxmjh7ad68l5si7w4qmjn6z7l8b61gv6";
   };
 
   patches = optional stdenv.isLinux ./cryptopp.patch;
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   # http://synergy-foss.org/spit/issues/details/3317/
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp ../bin/synergyc $out/bin
     cp ../bin/synergys $out/bin
     cp ../bin/synergyd $out/bin

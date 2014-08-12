@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://gravit.slowchop.com";
     description = "A beautiful OpenGL-based gravity simulator";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
 
     longDescription = ''
       Gravit is a gravity simulator which runs under Linux, Windows and

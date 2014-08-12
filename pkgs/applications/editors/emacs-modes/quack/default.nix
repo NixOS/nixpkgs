@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Enhanced Emacs support for editing and running Scheme code";
     homepage = http://www.neilvandyke.org/quack/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
 }

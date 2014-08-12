@@ -3,12 +3,12 @@
 stdenv.mkDerivation rec {
   name = "vim-${version}";
 
-  version = "7.4.316";
+  version = "7.4.335";
 
   src = fetchhg {
     url = "https://vim.googlecode.com/hg/";
-    rev = "v7-4-316";
-    sha256 = "0scxx33p1ky0wihk04xqpd6rygp1crm0hx446zbjwbsjj6xxn7sx";
+    rev = "v7-4-335";
+    sha256 = "0qnpzfcbi6fhz82pj68l4vrnigca1akq2ksrxz6krwlfhns6jhhj";
   };
 
   enableParallelBuilding = true;

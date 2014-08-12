@@ -72,6 +72,6 @@ stdenv.mkDerivation rec {
     description = "A cross-platform multimedia library";
     homepage    = http://www.libsdl.org/;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms   = platforms.linux;
   };
 }

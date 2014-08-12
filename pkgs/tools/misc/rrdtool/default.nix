@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://oss.oetiker.ch/rrdtool/;
     description = "High performance logging in Round Robin Databases";
-    license = "GPL";
-    platforms = stdenv.lib.platforms.all;
+    license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

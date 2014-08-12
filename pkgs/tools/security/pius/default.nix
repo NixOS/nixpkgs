@@ -38,7 +38,7 @@ stdenv.mkDerivation {
          to the process.
       '';
 
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
 
     platforms = stdenv.lib.platforms.gnu;
     maintainers = [ ];

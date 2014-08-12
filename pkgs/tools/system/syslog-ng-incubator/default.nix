@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
   name = "syslog-ng-incubator-${version}";
 
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchurl {
     url = "https://github.com/balabit/syslog-ng-incubator/archive/${name}.tar.gz";
-    sha256 = "0zr0vlp7cq3qfhqhalf7rdyd54skswxnc9j9wi8sfmz3psy3vd4y";
+    sha256 = "1yx2gdq1vhrcp113hxgl66z5df4ya9nznvq00nvy4v9yn8wf9fb8";
   };
 
   buildInputs = [

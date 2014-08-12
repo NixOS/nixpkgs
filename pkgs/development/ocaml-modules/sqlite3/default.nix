@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = https://bitbucket.org/mmottl/sqlite3-ocaml;
     description = "OCaml bindings to the SQLite 3 database access library";
-    license = "MIT/X11";
+    license = stdenv.lib.licenses.mit;
     platforms = ocaml.meta.platforms;
     maintainers = [
       stdenv.lib.maintainers.z77z

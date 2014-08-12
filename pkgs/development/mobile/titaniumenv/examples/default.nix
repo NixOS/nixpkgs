@@ -1,10 +1,11 @@
 { nixpkgs ? <nixpkgs>
 , systems ? [ "x86_64-linux" "x86_64-darwin" ]
 , xcodeVersion ? "5.0"
-, tiVersion ? "3.2.2.GA"
+, tiVersion ? "3.2.3.GA"
 , rename ? false
 , newBundleId ? "com.example.kitchensink", iosMobileProvisioningProfile ? null, iosCertificate ? null, iosCertificateName ? "Example", iosCertificatePassword ? ""
 , allowUnfree ? false
+, enableWirelessDistribution ? false, installURL ? null
 }:
 
 let
@@ -90,6 +91,7 @@ rec {
       release = true;
       rename = true;
       inherit newBundleId iosMobileProvisioningProfile iosCertificate iosCertificateName iosCertificatePassword;
+      inherit enableWirelessDistribution installURL;
     };
   }
   

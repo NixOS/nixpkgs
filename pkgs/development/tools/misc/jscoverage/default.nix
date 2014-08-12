@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://siliconforks.com/jscoverage/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

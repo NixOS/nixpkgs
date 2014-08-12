@@ -15,9 +15,9 @@ let
     else
       throw "openjdk requires i686-linux or x86_64 linux";
 
-  update = "60";
+  update = "65";
 
-  build = "30";
+  build = "32";
 
   # On x86 for heap sizes over 700MB disable SEGMEXEC and PAGEEXEC as well.
   paxflags = if stdenv.isi686 then "msp" else "m";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://tarballs.nixos.org/openjdk-7u${update}-b${build}.tar.xz";
-    sha256 = "08rp3bbbzk0p6226qayr1vmahhp41phm5g56dlb7d2hfp2cfpd81";
+    sha256 = "0lyp75sl5w4b9azphb2nq5cwzli85inpksq4943q4j349rkmdprx";
   };
 
   outputs = [ "out" "jre" ];
@@ -165,7 +165,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://openjdk.java.net/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     description = "The open-source Java Development Kit";
     maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.shlevy ];
     platforms = stdenv.lib.platforms.linux;

@@ -47,7 +47,7 @@ stdenv.mkDerivation (rec {
         I/O.
      '';
 
-     license = "GPLv2+";
+     license = stdenv.lib.licenses.gpl2Plus;
 
      homepage = http://www.lysator.liu.se/~nisse/nettle/;
 

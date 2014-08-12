@@ -20,7 +20,6 @@ clangStdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/Golevka/emacs-clang-complete-async";
     description = "An emacs plugin to complete C and C++ code using libclang";
-    license = "GPLv3+";
+    license = clangStdenv.lib.licenses.gpl3Plus;
   };
 }
-

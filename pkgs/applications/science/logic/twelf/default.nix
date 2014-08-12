@@ -17,15 +17,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     rsync -av bin/* $out/bin/
 
-    ensureDir $out/share/emacs/site-lisp/twelf/
+    mkdir -p $out/share/emacs/site-lisp/twelf/
     rsync -av emacs/ $out/share/emacs/site-lisp/twelf/
 
-    ensureDir $out/share/twelf/examples
+    mkdir -p $out/share/twelf/examples
     rsync -av examples/ $out/share/twelf/examples/
-    ensureDir $out/share/twelf/vim
+    mkdir -p $out/share/twelf/vim
     rsync -av vim/ $out/share/twelf/vim/
   '';
 

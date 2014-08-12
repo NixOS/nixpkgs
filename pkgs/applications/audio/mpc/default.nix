@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A minimalist command line interface to MPD";
     homepage = http://www.musicpd.org/clients/mpc/;
-    license = "GPL2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.algorith ];
     platforms = stdenv.lib.platforms.linux;
   };

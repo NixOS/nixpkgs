@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   builder = writeScript "wiktionary-builder.sh" ''
     source $stdenv/setup
 
-    ensureDir $out/share/dictd/
+    mkdir -p $out/share/dictd/
     cd $out/share/dictd
 
     export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive

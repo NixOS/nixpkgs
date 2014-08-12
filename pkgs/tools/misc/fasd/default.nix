@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/clvv/fasd";
     description = "quick command-line access to files and directories for POSIX shells";
-    license = "free";
+    license = "free"; # https://github.com/clvv/fasd/blob/master/LICENSE
 
     longDescription = ''
       Fasd is a command-line productivity booster.
@@ -33,5 +33,3 @@ stdenv.mkDerivation {
     platforms = stdenv.lib.platforms.all;
   };
 }
-
-

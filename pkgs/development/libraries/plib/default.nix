@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       GLUT, or FLTK instead of PLIB's 'PW' windowing library, you can.
     '';
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     homepage = http://plib.sourceforge.net/;
   };

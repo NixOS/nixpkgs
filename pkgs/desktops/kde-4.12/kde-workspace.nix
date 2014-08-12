@@ -1,4 +1,4 @@
-{ kde, kdelibs, qimageblitz, libdbusmenu_qt, xorg, lm_sensors
+{ stdenv, kde, kdelibs, qimageblitz, libdbusmenu_qt, xorg, lm_sensors
 , pciutils, libraw1394, libusb1, python, libqalculate, akonadi
 , xkeyboard_config, kdepimlibs, pam, boost, gpsd, prison
 , libjpeg, pkgconfig, kactivities, qjson, udev, fetchurl
@@ -15,7 +15,7 @@ kde {
 
 #todo: wayland, xmms,   libusb isn't found
   buildInputs =
-    [ kdelibs qimageblitz libdbusmenu_qt xorg.libxcb xorg.xcbutilimage libjpeg 
+    [ kdelibs qimageblitz libdbusmenu_qt xorg.libxcb xorg.xcbutilimage libjpeg
       xorg.xcbutilrenderutil xorg.xcbutilkeysyms xorg.libpthreadstubs xorg.libXdmcp
       xorg.libxkbfile xorg.libXcomposite  xorg.libXtst
       xorg.libXdamage
@@ -41,6 +41,6 @@ kde {
 
   meta = {
     description = "KDE workspace components such as Plasma, Kwin and System Settings";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

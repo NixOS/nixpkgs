@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     homepage = http://megastep.org/makeself;
     description = "Utility to create self-extracting packages";
     license = licenses.gpl2;
-    maintainer = maintainers.wmertens;
+    maintainers = [ maintainers.wmertens ];
     platforms = platforms.all;
   };
 }

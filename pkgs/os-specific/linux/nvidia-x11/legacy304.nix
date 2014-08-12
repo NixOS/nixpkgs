@@ -8,7 +8,7 @@
 
 with stdenv.lib;
 
-let versionNumber = "304.117"; in
+let versionNumber = "304.123"; in
 
 stdenv.mkDerivation {
   name = "nvidia-x11-${versionNumber}${optionalString (!libsOnly) "-${kernel.version}"}";
@@ -19,12 +19,12 @@ stdenv.mkDerivation {
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}.run";
-        sha256 = "16a09iinz3zgrvj8cywyxsy7i8kpan28b814xhfbl88zadyj0hy3";
+        sha256 = "09gljwxw14img7hw0xdxd24cvpvlymdxssmxa9gikdrw2w04j0ym";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-no-compat32.run";
-        sha256 = "0kzcxfwnp4aw4q53vl57ypc9yck4yj1hfhy8v9wfjlxvi6w6cp0v";
+        sha256 = "0vxw4gp78g06h5inwkhl989p9mq0m8rqipz9a67rdc4s364r243s";
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
@@ -46,6 +46,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.nvidia.com/object/unix.html;
     description = "X.org driver and kernel module for NVIDIA graphics cards";
-    license = "unfree";
+    license = stdenv.lib.licenses.unfree;
   };
 }

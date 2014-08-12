@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://gnunet.org/;
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = with stdenv.lib.maintainers; [ ludo viric ];
     platforms = stdenv.lib.platforms.gnu;

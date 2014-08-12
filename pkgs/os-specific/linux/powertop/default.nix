@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Analyze power consumption on Intel-based laptops";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.chaoflow ];
     platforms = stdenv.lib.platforms.linux;
   };

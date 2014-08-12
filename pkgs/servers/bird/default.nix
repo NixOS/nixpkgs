@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "";
     homepage = http://bird.network.cz;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
   };
 }

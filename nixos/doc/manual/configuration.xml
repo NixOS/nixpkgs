@@ -1036,21 +1036,22 @@ users.extraUsers.alice =
   { createHome = true;
     home = "/home/alice";
     description = "Alice Foobar";
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "networkmanager" ];
     useDefaultShell = true;
     openssh.authorizedKeys.keys = [ "ssh-dss AAAAB3Nza... alice@foobar" ];
   };
 </programlisting>
 
 Note that <literal>alice</literal> is a member of the
-<literal>wheel</literal> group, which allows her to use
-<command>sudo</command> to execute commands as
-<literal>root</literal>.  Also note the SSH public key that allows
-remote logins with the corresponding private key.  Users created in
-this way do not have a password by default, so they cannot log in via
-mechanisms that require a password.  However, you can use the
-<command>passwd</command> program to set a password, which is retained
-across invocations of <command>nixos-rebuild</command>.</para>
+<literal>wheel</literal> and <literal>networkmanager</literal> groups,
+which allows her to use <command>sudo</command> to execute commands as
+<literal>root</literal> and to configure the network, respectively.
+Also note the SSH public key that allows remote logins with the
+corresponding private key. Users created in this way do not have a
+password by default, so they cannot log in via mechanisms that require
+a password. However, you can use the <command>passwd</command> program
+to set a password, which is retained across invocations of
+<command>nixos-rebuild</command>.</para>
 
 <para>A user ID (uid) is assigned automatically.  You can also specify
 a uid manually by adding
@@ -1277,6 +1278,28 @@ services.xserver.synaptics.twoFingerScroll = true;
 
 <section xml:id="sec-networking"><title>Networking</title>
 
+<section xml:id="sec-networkmanager"><title>NetworkManager</title>
+
+<para>To facilitate network configuration, some desktop environments
+use NetworkManager. You can enable NetworkManager by setting:
+
+<programlisting>
+services.networkmanager.enable = true;
+</programlisting>
+
+Some desktop managers (e.g., GNOME) enable NetworkManager
+automatically for you.</para>
+
+<para>All users that should have permission to change network settings
+must belong to the <code>networkmanager</code> group.</para>
+
+<note><para><code>services.networkmanager</code> and
+<code>services.wireless</code> can not be enabled at the same time:
+you can still connect to the wireless networks using
+NetworkManager.</para></note>
+
+</section>
+
 <section xml:id="sec-ssh"><title>Secure shell access</title>
 
 <para>Secure shell (SSH) access to your machine can be enabled by
@@ -1398,6 +1421,11 @@ always allowed.)</para>
 
 
 <section xml:id="sec-wireless"><title>Wireless networks</title>
+
+<para>For a desktop installation using NetworkManager (e.g., GNOME),
+you just have to make sure the user is in the
+<code>networkmanager</code> group and you can skip the rest of this
+section on wireless networks.</para>
 
 <para>
 NixOS will start wpa_supplicant for you if you enable this setting:

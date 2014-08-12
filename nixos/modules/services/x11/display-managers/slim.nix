@@ -27,7 +27,7 @@ let
       unpackedTheme = pkgs.stdenv.mkDerivation {
         name = "slim-theme";
         buildCommand = ''
-          ensureDir $out
+          mkdir -p $out
           cd $out
           unpackFile ${cfg.theme}
           ln -s * default

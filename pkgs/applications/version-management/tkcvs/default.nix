@@ -22,6 +22,6 @@ stdenv.mkDerivation
   meta = {
     homepage = http://www.twobarleycorns.net/tkcvs.html;
     description = "TCL/TK GUI for cvs and subversion";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

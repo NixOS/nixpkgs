@@ -29,7 +29,7 @@ assert enableSharedExecutables -> versionOlder "7.4" ghc.version;
 # Our GHC 6.10.x builds do not provide sharable versions of their core libraries.
 assert enableSharedLibraries -> versionOlder "6.12" ghc.version;
 
-# Our GHC 6.10.x builds do not provide sharable versions of their core libraries.
+# Pure shared library builds don't work before GHC 7.8.x.
 assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
 
 {
@@ -248,12 +248,12 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
 
               ./Setup copy
 
-              ensureDir $out/bin # necessary to get it added to PATH
+              mkdir -p $out/bin # necessary to get it added to PATH
 
               local confDir=$out/lib/ghc-${ghc.ghc.version}/package.conf.d
               local installedPkgConf=$confDir/${self.fname}.installedconf
               local pkgConf=$confDir/${self.fname}.conf
-              ensureDir $confDir
+              mkdir -p $confDir
               ./Setup register --gen-pkg-config=$pkgConf
               if test -f $pkgConf; then
                 echo '[]' > $installedPkgConf
@@ -265,7 +265,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               fi
 
               ${optionalString (self.enableSharedExecutables && self.isExecutable && self.stdenv.isDarwin) ''
-                for exe in $out/bin/* ; do
+                for exe in "$out/bin/"* ; do
                   install_name_tool -add_rpath \
                     $out/lib/${ghc.ghc.name}/${self.pname}-${self.version} $exe
                 done

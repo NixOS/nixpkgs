@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper ];
 
   installPhase = ''
-    ensureDir $out
+    mkdir -p $out
     cp -a * $out/
     substituteInPlace $out/bin/OpenGrok --replace /bin/uname ${coreutils}/bin/uname
     wrapProgram $out/bin/OpenGrok \

@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     description = "A compact distributed operating system for building cross-platform distributed systems";
     homepage = "http://inferno-os.org/";
     license = stdenv.lib.licenses.gpl2;
-    maintainer = [ "Chris Double <chris.double@double.co.nz>" ];
+    maintainers = [ "Chris Double <chris.double@double.co.nz>" ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

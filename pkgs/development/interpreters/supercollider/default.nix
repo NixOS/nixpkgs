@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, pkgconfig
-, jackaudio, libsndfile, fftw, curl
+, jack2, libsndfile, fftw, curl
 , libXt, qt, readline
 , useSCEL ? false, emacs
 }:
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [ 
-    jackaudio libsndfile fftw curl libXt qt readline ] 
+    jack2 libsndfile fftw curl libXt qt readline ]
     ++ optional useSCEL emacs;
 }

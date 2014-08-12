@@ -189,18 +189,17 @@ in
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.munin ];
       environment.MUNIN_PLUGSTATE = "/var/run/munin";
+      preStart = ''
+        echo "updating munin plugins..."
+
+        mkdir -p /etc/munin/plugins
+        rm -rf /etc/munin/plugins/*
+        PATH="/run/current-system/sw/bin:/run/current-system/sw/sbin" ${pkgs.munin}/sbin/munin-node-configure --shell --families contrib,auto,manual --config ${nodeConf} --libdir=${muninPlugins} --servicedir=/etc/munin/plugins 2>/dev/null | ${pkgs.bash}/bin/bash
+      '';
       serviceConfig = {
         ExecStart = "${pkgs.munin}/sbin/munin-node --config ${nodeConf} --servicedir /etc/munin/plugins/";
       };
     };
-
-    system.activationScripts.munin-node = ''
-      echo "updating munin plugins..."
-
-      mkdir -p /etc/munin/plugins
-      rm -rf /etc/munin/plugins/*
-      PATH="/run/current-system/sw/bin:/run/current-system/sw/sbin" ${pkgs.munin}/sbin/munin-node-configure --shell --families contrib,auto,manual --config ${nodeConf} --libdir=${muninPlugins} --servicedir=/etc/munin/plugins 2>/dev/null | ${pkgs.bash}/bin/bash
-    '';
 
   }) (mkIf cronCfg.enable {
 

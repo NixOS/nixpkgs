@@ -107,7 +107,7 @@ let
     meta = {
       description = "Geographic Objects for PostgreSQL";
       homepage = "http://postgis.refractions.net";
-      license = "GPLv2";
+      license = stdenv.lib.licenses.gpl2;
       maintainers = [stdenv.lib.maintainers.marcweber];
       platforms = stdenv.lib.platforms.linux;
     };
@@ -148,4 +148,3 @@ in rec {
   });
 
 }
-

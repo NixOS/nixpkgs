@@ -162,10 +162,7 @@ let
       "systemd-sysctl.service"
     ]
 
-    ++ optionals cfg.enableEmergencyMode [
-      "emergency.target"
-      "emergency.service"
-    ];
+    ++ cfg.additionalUpstreamSystemUnits;
 
   upstreamSystemWants =
     [ #"basic.target.wants"
@@ -317,7 +314,9 @@ let
         ''
           [Service]
           ${let env = cfg.globalEnvironment // def.environment;
-            in concatMapStrings (n: "Environment=\"${n}=${getAttr n env}\"\n") (attrNames env)}
+            in concatMapStrings (n:
+              let s = "Environment=\"${n}=${getAttr n env}\"\n";
+              in if stringLength s >= 2048 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env)}
           ${if def.reloadIfChanged then ''
             X-ReloadIfChanged=true
           '' else if !def.restartIfChanged then ''
@@ -635,19 +634,6 @@ in
       '';
     };
 
-    systemd.enableEmergencyMode = mkOption {
-      default = true;
-      type = types.bool;
-      description = ''
-        Whether to enable emergency mode, which is an
-        <command>sulogin</command> shell started on the console if
-        mounting a filesystem fails.  Since some machines (like EC2
-        instances) have no console of any kind, emergency mode doesn't
-        make sense, and it's better to continue with the boot insofar
-        as possible.
-      '';
-    };
-
     systemd.tmpfiles.rules = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -688,6 +674,15 @@ in
       type = types.attrsOf types.optionSet;
       options = [ socketOptions unitConfig ];
       description = "Definition of systemd per-user socket units.";
+    };
+
+    systemd.additionalUpstreamSystemUnits = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      example = [ "debug-shell.service" "systemd-quotacheck.service" ];
+      description = ''
+        Additional units shipped with systemd that shall be enabled.
+      '';
     };
 
   };
@@ -825,6 +820,7 @@ in
     systemd.services."user@".restartIfChanged = false;
 
     systemd.services.systemd-remount-fs.restartIfChanged = false;
+    systemd.services.systemd-journal-flush.restartIfChanged = false;
 
   };
 }

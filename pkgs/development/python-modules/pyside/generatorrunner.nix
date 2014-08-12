@@ -1,12 +1,11 @@
-{ stdenv, fetchgit, cmake, pysideApiextractor, python27Packages, qt4 }:
+{ stdenv, fetchurl, cmake, pysideApiextractor, python27Packages, qt4 }:
 
 stdenv.mkDerivation {
-  name = "pyside-generatorrunner-0.6.15";
+  name = "pyside-generatorrunner-0.6.16";
 
-  src = fetchgit {
-    url = "git://github.com/PySide/Generatorrunner.git";
-    rev = "567ca6effaecdf97b33d1d13eada23bafe0f7535";
-    sha256 = "182aba79af9fc865337f4befc96faf3eaca1ab9bcb902a57e0a68af49f071c74";
+  src = fetchurl {
+    url = "https://github.com/PySide/Generatorrunner/archive/0.6.16.tar.gz";
+    sha256 = "0vzk3cp0pfbhd921r8f1xkcz96znla39dhj074k623x9k26lj2sj";
   };
 
   enableParallelBuilding = true;
