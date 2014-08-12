@@ -4732,7 +4732,7 @@ let
   gperftools = callPackage ../development/libraries/gperftools { };
 
   gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer {
-    callPackage = pkgs.newScope (pkgs // { libav = pkgs.libav_9; });
+    callPackage = pkgs.newScope (pkgs // { libav = pkgs.libav_10; });
   });
 
   gst_all = {

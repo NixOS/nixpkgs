@@ -10,7 +10,7 @@
 assert faacSupport -> faac != null;
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-bad-1.2.4";
+  name = "gst-plugins-bad-1.4.0";
 
   meta = with stdenv.lib; {
     description = "Gstreamer Bad Plugins";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-bad/${name}.tar.xz";
-    sha256 = "1jifzrgr4y3566d2lq30fibcd4rb8z8vpqnr2gihbmymr4z16k4q";
+    sha256 = "1y821785rvr6s79cmdll66hg6h740qa2n036xid20nvjyxabfb7z";
   };
 
   nativeBuildInputs = [ pkgconfig python ];
