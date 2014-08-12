@@ -95,4 +95,9 @@ self = rec {
     name = "rspec-support-3.0.3";
     sha256 = "06lxzc4i3cbkm3qc5sdqcg665cyq9hnmmy0qkn355vy4s4vch94l";
   };
+
+  terminal_notifier = buildRubyGem {
+    name = "terminal-notifier-1.6.1";
+    sha256 = "0j14sblviiypzc9vb508ldd78winba4vhnm9nhg3zpq07p3528g7";
+  };
 }; in self
