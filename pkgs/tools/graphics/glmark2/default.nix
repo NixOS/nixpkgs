@@ -21,15 +21,16 @@ stdenv.mkDerivation rec {
     python2 ./waf install --destdir="$pkgdir/"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "OpenGL (ES) 2.0 benchmark";
     homepage = https://launchpad.net/glmark2;
-    license = "GPLv3+";
+    license = licenses.gpl3Plus;
     longDescription = ''
       glmark2 is a benchmark for OpenGL (ES) 2.0. It uses only the subset of
       the OpenGL 2.0 API that is compatible with OpenGL ES 2.0.
     '';
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = stdenv.lib.maintainers.wmertens;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.wmertens ];
   };
 }
+
