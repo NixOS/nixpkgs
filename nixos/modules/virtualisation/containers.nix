@@ -168,8 +168,12 @@ in
 
         preStart =
           ''
-            # Clean up existing machined registration.
+            # Clean up existing machined registration and interfaces.
             machinectl terminate "$INSTANCE" 2> /dev/null || true
+
+            if [ "$PRIVATE_NETWORK" = 1 ]; then
+              ip link del dev "ve-$INSTANCE" 2> /dev/null || true
+            fi
 
             mkdir -p -m 0755 $root/var/lib
 
