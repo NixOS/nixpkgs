@@ -1,11 +1,12 @@
-{ fetchurl, stdenv, cmake, perl, ruby }:
+{ fetchurl, stdenv, cmake, perl, ruby, boost }:
 
 stdenv.mkDerivation rec {
-  name = "simgrid-3.5";
+  version = "3.11.1";
+  name = "simgrid-${version}";
 
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/28017/${name}.tar.gz";
-    sha256 = "1vd4pvrcyii1nfwyca3kpbwshbc965lfpn083zd8rigg6ydchq8y";
+    url = "https://gforge.inria.fr/frs/download.php/33686/${name}.tar.gz";
+    sha256 = "0mkrzxpf42lmn96khfl1791vram67r2nqsgmppd2yil889nyz5kp";
   };
 
   /* FIXME: Ruby currently disabled because of this:
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
      ld: cannot find -lruby-1.8.7-p72
 
    */
-  buildInputs = [ cmake perl /* ruby */ ];
+  buildInputs = [ cmake perl /* ruby */ boost ];
 
   preConfigure =
     # Make it so that libsimgrid.so will be found when running programs from
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
   patchPhase =
     '' for i in "src/smpi/"*
        do
+         test -f "$i" &&
          sed -i "$i" -e's|/bin/bash|/bin/sh|g'
        done
 
