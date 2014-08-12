@@ -1164,7 +1164,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   HList = callPackage ../development/libraries/haskell/HList {};
 
-  hmatrix = callPackage ../development/libraries/haskell/hmatrix {};
+  hmatrix = callPackage ../development/libraries/haskell/hmatrix {
+    liblapack = pkgs.liblapack.override { shared = true; };
+  };
 
   hmatrixSpecial = callPackage ../development/libraries/haskell/hmatrix-special {};
 
