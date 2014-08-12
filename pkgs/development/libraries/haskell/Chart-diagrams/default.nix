@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Chart-diagrams";
-  version = "1.2.3";
-  sha256 = "08ps30vn9ljiyhgakwdbixn4csy504bsw3h5z9w1dxhn27wij772";
+  version = "1.2.4";
+  sha256 = "099frqvfjqqc7h3zr52saqyg37di0klr0y649afzxd7lj3d67mvw";
   buildDepends = [
     blazeSvg Chart colour dataDefaultClass diagramsCore diagramsLib
     diagramsPostscript diagramsSvg lens mtl operational SVGFonts text
