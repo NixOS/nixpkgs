@@ -1,0 +1,26 @@
+--- a/daemon/gdm-launch-environment.c	2014-08-03 12:05:39.380178964 +0200
++++ b/daemon/gdm-launch-environment.c	2014-08-03 12:08:26.570182517 +0200
+@@ -224,6 +224,7 @@
+                 NULL
+         };
+         char *system_data_dirs;
++        char *system_config_dirs;
+         int i;
+ 
+         load_lang_config_file (LANG_CONFIG_FILE,
+@@ -251,6 +252,15 @@
+                                               system_data_dirs));
+         g_free (system_data_dirs);
+ 
++        system_config_dirs = g_strjoinv (":", (char **) g_get_system_config_dirs ());
++
++        g_hash_table_insert (hash,
++                             g_strdup ("XDG_CONFIG_DIRS"),
++                             g_strdup_printf ("%s",
++                                              system_config_dirs));
++        g_free (system_config_dirs);
++
++
+         g_hash_table_insert (hash, g_strdup ("XAUTHORITY"), g_strdup (launch_environment->priv->x11_authority_file));
+ 
+         g_hash_table_insert (hash, g_strdup ("LOGNAME"), g_strdup (launch_environment->priv->user_name));
