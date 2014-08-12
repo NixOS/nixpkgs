@@ -3289,7 +3289,7 @@ let
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
-  opa = let callPackage = newScope pkgs.ocamlPackages_3_12_1; in callPackage ../development/compilers/opa { };
+  opa = let callPackage = newScope pkgs.ocamlPackages_4_00_1; in callPackage ../development/compilers/opa { };
 
   ocamlnat = let callPackage = newScope pkgs.ocamlPackages_3_12_1; in callPackage ../development/ocaml-modules/ocamlnat { };
 
