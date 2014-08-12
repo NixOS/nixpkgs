@@ -18,7 +18,7 @@ cabal.mkDerivation (self: {
     homepage = "http://www.haskell.org/haskellwiki/JACK";
     description = "Bindings for the JACK Audio Connection Kit";
     license = "GPL";
-    platforms = self.ghc.meta.platforms;
+    platforms = self.stdenv.lib.platforms.linux;
     maintainers = with self.stdenv.lib.maintainers; [ ertes ];
   };
 })
