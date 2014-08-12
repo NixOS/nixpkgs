@@ -254,6 +254,7 @@
       mopidy = 130;
       docker = 131;
       gdm = 132;
+      tss = 133;
 
       # When adding a gid, make sure it doesn't match an existing uid. And don't use gids above 399!
 
