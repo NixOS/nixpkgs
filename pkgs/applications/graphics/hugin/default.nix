@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
+  enableParallelBuilding = true;
+
   # commandline tools needed by the hugin batch processor
   # you may have to tell hugin (in the preferences) where these binaries reside
   propagatedUserEnvPackages = [ autopanosiftc enblendenfuse gnumake
@@ -42,6 +44,5 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
-    broken = true;
   };
 }

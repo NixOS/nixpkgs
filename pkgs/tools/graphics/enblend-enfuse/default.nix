@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl pkgconfig ];
 
+  enableParallelBuilding = true;
+
   meta = {
     homepage = http://enblend.sourceforge.net/;
     description = "Blends away the seams in a panoramic image mosaic using a multiresolution spline";
