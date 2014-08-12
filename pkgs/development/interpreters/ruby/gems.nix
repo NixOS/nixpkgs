@@ -100,4 +100,15 @@ self = rec {
     name = "terminal-notifier-1.6.1";
     sha256 = "0j14sblviiypzc9vb508ldd78winba4vhnm9nhg3zpq07p3528g7";
   };
+
+  dotenv_deployment = buildRubyGem {
+    name = "dotenv-deployment-0.0.2";
+    sha256 = "1ad66jq9a09qq1js8wsyil97018s7y6x0vzji0dy34gh65sbjz8c";
+  };
+
+  dotenv = buildRubyGem {
+    name = "dotenv-0.11.1";
+    gemPath = [ dotenv_deployment ];
+    sha256 = "09z0y0d6bks7i0sqvd8szfqj9i1kkj01anzly7shi83b3gxhrq9m";
+  };
 }; in self
