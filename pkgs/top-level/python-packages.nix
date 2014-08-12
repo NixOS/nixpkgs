@@ -8141,10 +8141,10 @@ rec {
   });
 
   virtualenv = buildPythonPackage rec {
-    name = "virtualenv-1.11.4";
+    name = "virtualenv-1.11.6";
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/v/virtualenv/${name}.tar.gz";
-      md5 = "9accc2d3f0ec1da479ce2c3d1fdff06e";
+      md5 = "f61cdd983d2c4e6aeabb70b1060d6f49";
     };
 
     inherit recursivePthLoader;
