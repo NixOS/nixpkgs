@@ -1,7 +1,14 @@
-{ stdenv, fetchurl, ncurses, buildEnv, libX11, xproto }:
+let
+  safeX11 = stdenv: !(stdenv.isArm || stdenv.isMips);
+in
+
+{ stdenv, fetchurl, ncurses, buildEnv, libX11, xproto, useX11 ? safeX11 stdenv }:
+
+if useX11 && !(safeX11 stdenv)
+  then throw "x11 not available in ocaml with arm or mips arch"
+  else # let the indentation flow
 
 let
-   useX11 = !stdenv.isArm && !stdenv.isMips;
    useNativeCompilers = !stdenv.isMips;
    inherit (stdenv.lib) optionals optionalString;
 in
