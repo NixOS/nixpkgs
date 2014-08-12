@@ -228,12 +228,6 @@ in
 
         postStart =
           ''
-            # This blocks until the container-startup-done service
-            # writes something to this pipe.  FIXME: it also hangs
-            # until the start timeout expires if systemd-nspawn exits.
-            read x < $root/var/lib/startup-done
-            rm -f $root/var/lib/startup-done
-
             if [ "$PRIVATE_NETWORK" = 1 ]; then
               ifaceHost=ve-$INSTANCE
               ip link set dev $ifaceHost up
@@ -244,6 +238,12 @@ in
                 ip route add $LOCAL_ADDRESS dev $ifaceHost
               fi
             fi
+
+            # This blocks until the container-startup-done service
+            # writes something to this pipe.  FIXME: it also hangs
+            # until the start timeout expires if systemd-nspawn exits.
+            read x < $root/var/lib/startup-done
+            rm -f $root/var/lib/startup-done
           '';
 
         preStop =
@@ -266,6 +266,8 @@ in
           SyslogIdentifier = "container %i";
 
           EnvironmentFile = "-/etc/containers/%i.conf";
+
+          Type = "notify";
 
           # Note that on reboot, systemd-nspawn returns 10, so this
           # unit will be restarted. On poweroff, it returns 0, so the
