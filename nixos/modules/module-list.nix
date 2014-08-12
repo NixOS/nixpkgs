@@ -292,6 +292,7 @@
   #./services/x11/window-managers/compiz.nix
   ./services/x11/window-managers/default.nix
   ./services/x11/window-managers/icewm.nix
+  ./services/x11/window-managers/bspwm.nix
   ./services/x11/window-managers/metacity.nix
   ./services/x11/window-managers/none.nix
   ./services/x11/window-managers/twm.nix
