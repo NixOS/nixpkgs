@@ -15,6 +15,10 @@ stdenv.mkDerivation {
 
   configureFlags = "CPPFLAGS=-DQT_NO_DEBUG";
 
+  preConfigure = ''
+    export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:${phonon}/lib64/pkgconfig:${phonon}/lib32/pkgconfig"
+  '';
+
   cmakeFlags = "-DENABLE_AUTODOWNLOAD=OFF -DBUILD_DESCRIPTION='NixOS' -DCMAKE_BUILD_TYPE=Release";
 
   prePatch = ''
