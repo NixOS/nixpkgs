@@ -4,7 +4,7 @@ let
     };
 in
 
-let licenses = rec {
+rec {
   /* License identifiers from spdx.org where possible.
    * If you cannot find your license here, then look for a similar license or
    * add it to this list. The URL mentioned above is a good source for inspiration.
@@ -87,7 +87,7 @@ let licenses = rec {
     fullName = "Eclipse Public License 1.0";
   };
 
-  free.shortName = "free";
+  free = "free";
 
   gpl2 = spdx {
     shortName = "GPL-2.0";
@@ -237,11 +237,11 @@ let licenses = rec {
     url = http://www.tcl.tk/software/tcltk/license.html;
   };
 
-  unfree.shortName = "unfree";
+  unfree = "unfree";
 
-  unfreeRedistributable.shortName = "unfree-redistributable";
+  unfreeRedistributable = "unfree-redistributable";
 
-  unfreeRedistributableFirmware.shortName = "unfree-redistributable-firmware";
+  unfreeRedistributableFirmware = "unfree-redistributable-firmware";
 
   wadalab = {
     shortName = "wadalab";
@@ -264,8 +264,5 @@ let licenses = rec {
     fullName = "Zope Public License 2.1";
   };
 
-}; in
-  # add the same attrmaps, but named by their shortNames (creating e.g. licenses."GPL-2.0+")
-  with { inherit (import ./attrsets.nix) mapAttrs' nameValuePair; };
-  licenses // (mapAttrs' (_: value: nameValuePair value.shortName value) licenses)
+}
 
