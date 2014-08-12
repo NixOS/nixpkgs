@@ -1,30 +1,23 @@
-{ stdenv, fetchurl }:
+{ stdenv, antBuild, fetchgit, perl }:
 
 let
+  version = "4.11";
+in antBuild {
+  name = "junit-${version}";
 
-  junit = fetchurl {
-    url = http://search.maven.org/remotecontent?filepath=junit/junit/4.11/junit-4.11.jar;
-    sha256 = "1zh6klzv8w30dx7jg6pkhllk4587av4znflzhxz8x97c7rhf3a4h";
+  # I think this is only used to generate the docs, and will likely disappear
+  # with the next release of junit since its build system completely changes.
+  buildInputs = [perl];
+
+  src = fetchgit {
+    url = "https://github.com/junit-team/junit.git";
+    sha256 = "019azv0cfy2zs45c7g3r952gvjmikkq76p2ydr4q5252r0pzy9dr";
+    rev = "c2e4d911fadfbd64444fb285342a8f1b72336169";
   };
 
-  hamcrest = fetchurl {
-    url = http://search.maven.org/remotecontent?filepath=org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar;
-    sha256 = "1sfqqi8p5957hs9yik44an3lwpv8ln2a6sh9gbgli4vkx68yzzb6";
-  };
-
-in
-
-stdenv.mkDerivation {
-  name = "junit-4.11";
-
-  unpackPhase = "true";
-
-  installPhase =
-    ''
-      mkdir -p $out/share/java
-      ln -s ${junit} $out/share/java/junit.jar
-      ln -s ${hamcrest} $out/share/java/hamcrest-core.jar
-    '';
+  antProperties = [
+    { name = "version"; value = version; }
+  ];
 
   meta = {
     homepage = http://www.junit.org/;

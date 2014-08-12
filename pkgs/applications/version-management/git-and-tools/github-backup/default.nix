@@ -21,5 +21,7 @@ cabal.mkDerivation (self: {
     description = "backs up everything github knows about a repository, to the repository";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

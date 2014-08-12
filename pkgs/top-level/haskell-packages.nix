@@ -222,8 +222,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   base64Bytestring = callPackage ../development/libraries/haskell/base64-bytestring {};
 
-  base64Conduit = callPackage ../development/libraries/haskell/base64-conduit {};
-
   baseCompat = callPackage ../development/libraries/haskell/base-compat {};
 
   baseUnicodeSymbols = callPackage ../development/libraries/haskell/base-unicode-symbols {};
@@ -992,6 +990,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   gtkTraymanager = callPackage ../development/libraries/haskell/gtk-traymanager {};
 
+  Graphalyze = callPackage ../development/libraries/haskell/Graphalyze {};
+
   graphviz = callPackage ../development/libraries/haskell/graphviz {};
 
   graphSCC = callPackage ../development/libraries/haskell/graphscc {};
@@ -1164,7 +1164,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   HList = callPackage ../development/libraries/haskell/HList {};
 
-  hmatrix = callPackage ../development/libraries/haskell/hmatrix {};
+  hmatrix = callPackage ../development/libraries/haskell/hmatrix {
+    liblapack = pkgs.liblapack.override { shared = true; };
+  };
 
   hmatrixSpecial = callPackage ../development/libraries/haskell/hmatrix-special {};
 
@@ -1766,6 +1768,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   parsimony = callPackage ../development/libraries/haskell/parsimony {};
 
+  PastePipe = callPackage ../development/tools/haskell/PastePipe {};
+
   pathtype = callPackage ../development/libraries/haskell/pathtype {};
 
   patternArrows = callPackage ../development/libraries/haskell/pattern-arrows {};
@@ -1884,8 +1888,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   probability = callPackage ../development/libraries/haskell/probability {};
 
   profunctors = callPackage ../development/libraries/haskell/profunctors {};
-
-  profunctorExtras = callPackage ../development/libraries/haskell/profunctor-extras {};
 
   projectTemplate = callPackage ../development/libraries/haskell/project-template {};
 
@@ -2598,7 +2600,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   vty_5_1_4 = callPackage ../development/libraries/haskell/vty/5.1.4.nix {};
   vty = self.vty_5_1_4;
 
-  vtyUi = callPackage ../development/libraries/haskell/vty-ui {};
+  vtyUi = callPackage ../development/libraries/haskell/vty-ui {
+    vty = self.vty_4_7_5;
+  };
 
   wai = callPackage ../development/libraries/haskell/wai {};
 
@@ -2699,6 +2703,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   xmlConduit = callPackage ../development/libraries/haskell/xml-conduit {};
 
+  xmlConduitWriter = callPackage ../development/libraries/haskell/xml-conduit-writer {};
+
   xmlgen = callPackage ../development/libraries/haskell/xmlgen {};
 
   xmlHamlet = callPackage ../development/libraries/haskell/xml-hamlet {};
@@ -2762,8 +2768,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   zeromq4Haskell = callPackage ../development/libraries/haskell/zeromq4-haskell { zeromq = pkgs.zeromq4; };
 
   zipArchive_0_2_2_1 = callPackage ../development/libraries/haskell/zip-archive/0.2.2.1.nix {};
-  zipArchive_0_2_3_2 = callPackage ../development/libraries/haskell/zip-archive/0.2.3.2.nix {};
-  zipArchive = self.zipArchive_0_2_3_2;
+  zipArchive_0_2_3_4 = callPackage ../development/libraries/haskell/zip-archive/0.2.3.4.nix {};
+  zipArchive = self.zipArchive_0_2_3_4;
 
   zipper = callPackage ../development/libraries/haskell/zipper {};
 
@@ -2862,6 +2868,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hslogger = callPackage ../development/tools/haskell/hslogger {};
 
   ShellCheck = callPackage ../development/tools/misc/ShellCheck { };
+
+  SourceGraph = callPackage ../development/tools/haskell/SourceGraph {};
 
   tar = callPackage ../development/libraries/haskell/tar {};
 
@@ -2999,6 +3007,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
       binary = self.binary_0_7_2_1; # the miniutter build input requires this version
     };
   };
+
+  Allure = callPackage ../games/Allure {};
 
 # End of the main part of the file.
 

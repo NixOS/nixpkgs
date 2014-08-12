@@ -227,8 +227,9 @@ clone_user_rev() {
 	echo "removing \`.git'..." >&2
         find $dir -name .git\* | xargs rm -rf
     else
-        # The logs and index contain timestamps
-        find $dir -name .git | xargs -I {} rm -rf {}/logs {}/index
+        # The logs and index contain timestamps, and the hooks contain
+        # the nix path of git's bash
+        find $dir -name .git | xargs -I {} rm -rf {}/logs {}/index {}/hooks
     fi
 }
 

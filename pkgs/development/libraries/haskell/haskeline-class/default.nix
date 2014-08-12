@@ -12,5 +12,7 @@ cabal.mkDerivation (self: {
     description = "Class interface for working with Haskeline";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

@@ -231,6 +231,8 @@ let
       else
         defaultStdenv;
 
+  stdenvApple = stdenvAdapters.overrideGCC allStdenvs.stdenvNative gccApple;
+
   forceNativeDrv = drv : if crossSystem == null then drv else
     (drv // { crossDrv = drv.nativeDrv; });
 
@@ -2215,6 +2217,8 @@ let
 
   ucl = callPackage ../development/libraries/ucl { };
 
+  ucspi-tcp = callPackage ../tools/networking/ucspi-tcp { };
+
   udftools = callPackage ../tools/filesystems/udftools {};
 
   udptunnel = callPackage ../tools/networking/udptunnel { };
@@ -2569,10 +2573,8 @@ let
   };
 
   clangUnwrapped = llvm: pkg: callPackage pkg {
-      stdenv = if stdenv.isDarwin
-         then stdenvAdapters.overrideGCC stdenv gccApple
-         else stdenv;
-      llvm = llvm;
+    stdenv = if stdenv.isDarwin then stdenvApple else stdenv;
+    inherit llvm;
   };
 
   clangSelf = clangWrapSelf llvmPackagesSelf.clang;
@@ -3086,9 +3088,7 @@ let
   llvm_33 = llvm_v ../development/compilers/llvm/3.3/llvm.nix;
 
   llvm_v = path: callPackage path {
-    stdenv = if stdenv.isDarwin
-      then stdenvAdapters.overrideGCC stdenv gccApple
-      else stdenv;
+    stdenv = if stdenv.isDarwin then stdenvApple else stdenv;
   };
 
   llvmPackages = if !stdenv.isDarwin then llvmPackages_34 else llvmPackages_34 // {
@@ -5522,15 +5522,11 @@ let
 
   liburcu = callPackage ../development/libraries/liburcu { };
 
-  libusb = callPackage ../development/libraries/libusb {
-    stdenv = if stdenv.isDarwin
-      then overrideGCC stdenv gccApple
-      else stdenv;
-  };
+  libusb = callPackage ../development/libraries/libusb {};
 
   libusb1 = callPackage ../development/libraries/libusb1 {
-    stdenv = if stdenv.isDarwin # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=50909
-      then overrideGCC stdenv gccApple
+    stdenv = if stdenv.isDarwin
+      then clangStdenv
       else stdenv;
   };
 
@@ -6463,7 +6459,7 @@ let
     stdenv = overrideInStdenv stdenv [gnumake380];
   };
 
-  junit = callPackage ../development/libraries/java/junit { };
+  junit = callPackage ../development/libraries/java/junit { antBuild = releaseTools.antBuild; };
 
   junixsocket = callPackage ../development/libraries/java/junixsocket { };
 
@@ -6848,6 +6844,12 @@ let
     # server.
     bluez = null;
     avahi = null;
+  };
+  pulseaudioFull = pulseaudio.override {
+    bluez = bluez5;
+    avahi = avahi;
+    jackaudioSupport = true;
+    x11Support = true;
   };
 
   tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
@@ -8390,10 +8392,7 @@ let
   }));
 
   emacs24Macport = lowPrio (callPackage ../applications/editors/emacs-24/macport.nix {
-    # resolve unrecognised flag '-fconstant-cfstrings' errors
-    stdenv = if stdenv.isDarwin
-      then clangStdenv
-      else stdenv;
+    stdenv = pkgs.clangStdenv;
   });
 
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
@@ -9091,6 +9090,8 @@ let
 
   lrzsz = callPackage ../tools/misc/lrzsz { };
 
+  luminanceHDR = callPackage ../applications/graphics/luminance-hdr { };
+
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
   handbrake = callPackage ../applications/video/handbrake { };
@@ -9770,13 +9771,7 @@ let
 
   trayer = callPackage ../applications/window-managers/trayer { };
 
-  tree = callPackage ../tools/system/tree {
-    # use gccApple to compile on darwin as the configure script adds a
-    # -no-cpp-precomp flag, which is not compatible with the default gcc
-    stdenv = if stdenv.isDarwin
-      then stdenvAdapters.overrideGCC stdenv gccApple
-      else stdenv;
-  };
+  tree = callPackage ../tools/system/tree {};
 
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
