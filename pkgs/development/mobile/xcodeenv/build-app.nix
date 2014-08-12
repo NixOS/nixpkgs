@@ -15,9 +15,15 @@
 , provisioningProfile ? null
 , generateIPA ? false
 , generateXCArchive ? false
+, enableWirelessDistribution ? false
+, installURL ? null
+, bundleId ? null
+, version ? null
+, title ? null
 }:
 
 assert release -> codeSignIdentity != null && certificateFile != null && certificatePassword != null && provisioningProfile != null;
+assert enableWirelessDistribution -> installURL != null && bundleId != null && version != null && title != null;
 
 let
   # Set some default values here
@@ -84,6 +90,12 @@ stdenv.mkDerivation {
         # Add IPA to Hydra build products
         mkdir -p $out/nix-support
         echo "file binary-dist \"$(echo $out/*.ipa)\"" > $out/nix-support/hydra-build-products
+        
+        ${stdenv.lib.optionalString enableWirelessDistribution ''
+          appname=$(basename $out/*.ipa .ipa)
+          sed -e "s|@INSTALL_URL@|${installURL}?bundleId=${bundleId}\&amp;version=${version}\&amp;title=$appname|" ${./install.html.template} > $out/$appname.html
+          echo "doc install \"$out/$appname.html\"" >> $out/nix-support/hydra-build-products
+        ''}
       ''}
       
       # Delete our temp keychain

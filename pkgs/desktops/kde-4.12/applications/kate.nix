@@ -1,4 +1,4 @@
-{ kde, kdelibs, kactivities, qjson, pyqt4, sip, python, pykde4}:
+{ stdenv, kde, kdelibs, kactivities, qjson, pyqt4, sip, python, pykde4}:
 
 kde {
 
@@ -6,6 +6,6 @@ kde {
 
   meta = {
     description = "Kate, the KDE Advanced Text Editor, as well as KWrite";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

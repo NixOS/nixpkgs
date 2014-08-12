@@ -13,6 +13,6 @@ cabal.mkDerivation (self: {
     description = "A binding for the OpenGL graphics system";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

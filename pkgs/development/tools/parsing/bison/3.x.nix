@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.gnu.org/software/bison/";
     description = "GNU Bison, a Yacc-compatible parser generator";
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     longDescription = ''
       Bison is a general-purpose parser generator that converts an

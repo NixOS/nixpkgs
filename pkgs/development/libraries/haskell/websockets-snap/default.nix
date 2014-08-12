@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "websockets-snap";
-  version = "0.8.2.1";
-  sha256 = "13q1vrrcka91w9yad3jw1w68hp59n851hkn9a3hylw0cqs7008az";
+  version = "0.8.2.2";
+  sha256 = "1r5y5czpxrc06i7w3y3fa4dlqmxdypcc8yplg28cv4k3mkfa1hf4";
   buildDepends = [
     blazeBuilder enumerator ioStreams mtl snapCore snapServer
     websockets
@@ -16,6 +16,6 @@ cabal.mkDerivation (self: {
     description = "Snap integration for the websockets library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })

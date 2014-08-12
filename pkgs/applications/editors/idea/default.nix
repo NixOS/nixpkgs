@@ -8,7 +8,7 @@ let
   { name, version, build, src, description, license }:
 
   stdenv.mkDerivation rec {
-    inherit name build src license;
+    inherit name build src;
     ideaItem = makeDesktopItem {
       name = "IDEA";
       exec = "idea";
@@ -69,7 +69,7 @@ in {
     version = "13.1.3";
     build = "IC-135.909";
     description = "IntelliJ IDEA 13 Community Edition";
-    license = stdenv.lib.licenses.asl20.shortName;
+    license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "http://download-ln.jetbrains.com/idea/ideaIC-${version}.tar.gz";
       sha256 = "62ed937ef68df16eef4d32772b6510835527f95020db1c76643f17ed2c067b51";

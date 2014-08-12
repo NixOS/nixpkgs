@@ -54,6 +54,6 @@ stdenv.mkDerivation rec {
     # http://www.eclipse.org/legal/epl-v10.html (free software, copyleft)
     license = "EPLv1.0";
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }

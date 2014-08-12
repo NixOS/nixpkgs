@@ -275,12 +275,10 @@ in
 
     boot.loader.grub.device = mkVMOverride "/dev/vda";
 
-    boot.initrd.supportedFilesystems = optional cfg.writableStore "unionfs-fuse";
-
     boot.initrd.extraUtilsCommands =
       ''
         # We need mke2fs in the initrd.
-        cp ${pkgs.e2fsprogs}/sbin/mke2fs $out/bin
+        cp -f ${pkgs.e2fsprogs}/sbin/mke2fs $out/bin
       '';
 
     boot.initrd.postDeviceCommands =
@@ -303,20 +301,6 @@ in
         chmod 1777 $targetRoot/tmp
 
         mkdir -p $targetRoot/boot
-        ${optionalString cfg.writableStore ''
-          mkdir -p /unionfs-chroot/ro-store
-          mount --rbind $targetRoot/nix/store /unionfs-chroot/ro-store
-
-          mkdir /unionfs-chroot/rw-store
-          ${if cfg.writableStoreUseTmpfs then ''
-          mount -t tmpfs -o "mode=755" none /unionfs-chroot/rw-store
-          '' else ''
-          mkdir $targetRoot/.nix-rw-store
-          mount --bind $targetRoot/.nix-rw-store /unionfs-chroot/rw-store
-          ''}
-
-          unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot,max_files=32768,hide_meta_files /rw-store=RW:/ro-store=RO $targetRoot/nix/store
-        ''}
       '';
 
     # After booting, register the closure of the paths in
@@ -343,12 +327,13 @@ in
     # configuration, where the regular value for the `fileSystems'
     # attribute should be disregarded for the purpose of building a VM
     # test image (since those filesystems don't exist in the VM).
-    fileSystems = mkVMOverride
+    fileSystems = mkVMOverride (
       { "/".device = "/dev/vda";
-        "/nix/store" =
+        ${if cfg.writableStore then "/nix/.ro-store" else "/nix/store"} =
           { device = "store";
             fsType = "9p";
             options = "trans=virtio,version=9p2000.L,msize=1048576,cache=loose";
+            neededForBoot = true;
           };
         "/tmp/xchg" =
           { device = "xchg";
@@ -362,6 +347,18 @@ in
             options = "trans=virtio,version=9p2000.L,msize=1048576";
             neededForBoot = true;
           };
+      } // optionalAttrs cfg.writableStore
+      { "/nix/store" =
+          { fsType = "unionfs-fuse";
+            device = "unionfs";
+            options = "allow_other,cow,nonempty,chroot=/mnt-root,max_files=32768,hide_meta_files,dirs=/nix/.rw-store=rw:/nix/.ro-store=ro";
+          };
+      } // optionalAttrs (cfg.writableStore && cfg.writableStoreUseTmpfs)
+      { "/nix/.rw-store" =
+          { fsType = "tmpfs";
+            options = "mode=0755";
+            neededForBoot = true;
+          };
       } // optionalAttrs cfg.useBootLoader
       { "/boot" =
           { device = "/dev/disk/by-label/boot";
@@ -369,7 +366,7 @@ in
             options = "ro";
             noCheck = true; # fsck fails on a r/o filesystem
           };
-      };
+      });
 
     swapDevices = mkVMOverride [ ];
     boot.initrd.luks.devices = mkVMOverride [];
@@ -379,7 +376,7 @@ in
 
     system.build.vm = pkgs.runCommand "nixos-vm" { preferLocalBuild = true; }
       ''
-        ensureDir $out/bin
+        mkdir -p $out/bin
         ln -s ${config.system.build.toplevel} $out/system
         ln -s ${pkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-${vmName}-vm
       '';

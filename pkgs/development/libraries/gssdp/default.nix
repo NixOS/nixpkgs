@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   meta = {
     description = "GObject-based API for handling resource discovery and announcement over SSDP";
     homepage = http://www.gupnp.org/;
-    license = "LGPL v2";
+    license = stdenv.lib.licenses.lgpl2;
     platforms = stdenv.lib.platforms.all;
   };
 }

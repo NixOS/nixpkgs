@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://atdot.ch/scr/;
     description = "Open source tool to record your Skype calls on Linux";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [viric];
   };

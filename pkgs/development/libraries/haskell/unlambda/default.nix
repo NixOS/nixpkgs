@@ -14,6 +14,5 @@ cabal.mkDerivation (self: {
     description = "Unlambda interpreter";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

@@ -58,6 +58,8 @@ stdenv.mkDerivation ({
       ./fix_path_attribute_in_getconf.patch
 
       ./fix-math.patch
+
+      ./cve-2014-0475.patch
     ];
 
   postPatch = ''
@@ -179,7 +181,7 @@ stdenv.mkDerivation ({
          most systems with the Linux kernel.
       '';
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     #platforms = stdenv.lib.platforms.linux;

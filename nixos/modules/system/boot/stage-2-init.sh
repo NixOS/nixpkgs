@@ -29,7 +29,7 @@ setPath "@path@"
 # Normally, stage 1 mounts the root filesystem read/writable.
 # However, in some environments, stage 2 is executed directly, and the
 # root is read-only.  So make it writable here.
-mount -n -o remount,rw /
+mount -n -o remount,rw none /
 
 
 # Likewise, stage 1 mounts /proc, /dev and /sys, so if we don't have a
@@ -97,12 +97,6 @@ mkdir -m 0755 -p /etc/nixos
 # Miscellaneous boot time cleanup.
 rm -rf /var/run /var/lock
 rm -f /etc/{group,passwd,shadow}.lock
-
-if test -n "@cleanTmpDir@"; then
-    echo -n "cleaning \`/tmp'..."
-    find /tmp -maxdepth 1 -mindepth 1 -print0 | xargs -0r rm -rf --one-file-system
-    echo " done"
-fi
 
 
 # Also get rid of temporary GC roots.
@@ -186,4 +180,4 @@ echo "starting systemd..."
 PATH=/run/current-system/systemd/lib/systemd \
     MODULE_DIR=/run/booted-system/kernel-modules/lib/modules \
     LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive \
-    exec systemd --log-target=journal # --log-level=debug --log-target=console --crash-shell
+    exec systemd

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://pmount.alioth.debian.org/;
     description = "Mount removable devices as normal user";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };
 }

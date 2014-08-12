@@ -5,7 +5,7 @@ cabal.mkDerivation (self : {
   version = "2.7.2"; # Haskell Platform 2010.1.0.0 and 2010.2.0.0
   name = self.fname;
   sha256 = "4eaaaf62785f0ba3d37ba356cfac4679faef91c0902d8cdbf42837cbe5daab82";
-  extraBuildInputs = [alex happy makeWrapper];
+  buildTools = [alex happy makeWrapper];
   propagatedBuildInputs = [ghcPaths];
   doCheck = false;
 
@@ -18,6 +18,7 @@ cabal.mkDerivation (self : {
     description = "A documentation-generation tool for Haskell libraries";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vector-algorithms";
-  version = "0.6.0.2";
-  sha256 = "1gn2pvgvm9g0dajx2wv305fxwhkpdj9pybrwrm3j2frl4dnj7dcq";
+  version = "0.6.0.3";
+  sha256 = "1kz4b41y7swad6mbx0g3adc8lqma8pl3rnzah71cfdvb87gssbn4";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ mtl mwcRandom primitive vector ];
@@ -15,6 +15,5 @@ cabal.mkDerivation (self: {
     description = "Efficient algorithms for vector arrays";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

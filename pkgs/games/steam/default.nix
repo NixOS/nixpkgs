@@ -94,31 +94,28 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A digital distribution platform";
     homepage = http://store.steampowered.com/;
-    license = "unfree";
+    license = stdenv.lib.licenses.unfree;
   };
 }
 */
 
-{stdenv, fetchurl, dpkg}:
+{stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "steam-1.0.0.42";
+  name = "steam-1.0.0.48";
   src = fetchurl {
-    url = http://repo.steampowered.com/steam/pool/steam/s/steam/steam-launcher_1.0.0.42_all.deb;
-    sha256 = "1jyvk0h1z78sdpvl4hs1kdvr6z2kwamf09vjgjx1f6j04kgqrfbw";
+    url = http://repo.steampowered.com/steam/pool/steam/s/steam/steam_1.0.0.48.tar.gz;
+    sha256 = "08y5qf75ssk4fnazyv2yz1c5zs7gjiwigaibv8yz1gbr290r0b52";
   };
-  buildInputs = [ dpkg ];
-  unpackPhase = "true";
   installPhase = ''
-    mkdir -p $out
-    dpkg -x $src $out
-    cp -av $out/usr/* $out
-    rm -Rf $out/usr
+    make DESTDIR=$out install
+    mv $out/usr/* $out #*/
+    rmdir $out/usr
   '';
   
   meta = {
     description = "A digital distribution platform";
     homepage = http://store.steampowered.com/;
-    license = "unfree";
+    license = stdenv.lib.licenses.unfree;
   };
 }

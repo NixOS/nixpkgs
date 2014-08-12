@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = https://code.google.com/p/shellinabox;
     description = "Web based AJAX terminal emulator";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [stdenv.lib.maintainers.tomberek];
     platforms = stdenv.lib.platforms.linux;
   };

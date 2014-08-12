@@ -11,6 +11,6 @@ cabal.mkDerivation (self: {
     description = "A Transactional cache with user-defined persistence";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.tomberek ];
+    maintainers = with self.stdenv.lib.maintainers; [ tomberek ];
   };
 })

@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
       execution statistics.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     homepage = http://www.gnu.org/software/acct/;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.allBut "i686-cygwin";
+    platforms = with stdenv.lib.platforms; allBut cygwin;
   };
 }

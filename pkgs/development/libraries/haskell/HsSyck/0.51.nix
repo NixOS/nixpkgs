@@ -11,5 +11,6 @@ cabal.mkDerivation (self: {
     description = "Fast, lightweight YAML loader and dumper";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

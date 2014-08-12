@@ -23,10 +23,10 @@ stdenv.mkDerivation {
 
   inherit bash xulrunner;
   installPhase = ''
-    ensureDir "$out/libexec/zotero"
+    mkdir -p "$out/libexec/zotero"
     cp -vR * "$out/libexec/zotero/"
 
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     substituteAll "${./zotero.sh}" "$out/bin/zotero"
     chmod +x "$out/bin/zotero"
   '';

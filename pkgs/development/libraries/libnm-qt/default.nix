@@ -2,7 +2,7 @@
 
 let
   pname = "libnm-qt";
-  version = "0.9.8.1";
+  version = "0.9.8.2";
   name = "${pname}-${version}";
 in
 stdenv.mkDerivation {
@@ -15,11 +15,13 @@ stdenv.mkDerivation {
     networkmanager
   ];
 
+  cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ];
+
   propagatedBuildInputs = [ libmm-qt ];
 
   src = fetchurl {
     url = "mirror://kde/unstable/networkmanager-qt/${version}/src/${name}.tar.xz";
-    sha256 = "cde8bed2beb57015cb5f6772c1fe0843aab299b9529578c5406ba7fe614af23d";
+    sha256 = "118fa4732536677f889b2776ec45bd0c726f26abcb8e8b6f8dfcaee265475f33";
   };
 
   meta = with stdenv.lib; {
@@ -27,6 +29,6 @@ stdenv.mkDerivation {
     description = "Qt wrapper for NetworkManager DBus API";
     license = licenses.lgpl21;
     platforms = platforms.linux;
-    maintainer = [ maintainers.jgeerds ];
+    maintainers = [ maintainers.jgeerds ];
   };
 }

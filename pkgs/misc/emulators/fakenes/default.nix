@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://fakenes.sourceforge.net/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     description = "Portable Open Source NES Emulator";
   };
 }

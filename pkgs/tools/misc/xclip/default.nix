@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = { 
     description = "Tool to access the X clipboard from a console application";
-    homepage = http://people.debian.org/~kims/xclip/;
-    license = "GPL-2";
+    homepage = http://sourceforge.net/projects/xclip/;
+    license = stdenv.lib.licenses.gpl2;
   };
 }

@@ -5,16 +5,16 @@ rec {
     sha256 = "0nh8hfayyf60nm4z8zyclrbc3792c62azgsvrwxnl28iq223200s";
   };
 
-  texmfVersion = "2014.20140626";
+  texmfVersion = "2014.20140717";
   texmfSrc = fetchurl {
     url = "mirror://debian/pool/main/t/texlive-base/texlive-base_${texmfVersion}.orig.tar.xz";
-    sha256 = "1zimavr8nid6425i2k3i34a7xl45lskvsnp55q526i8y6f3zlw3g";
+    sha256 = "08vhl6x742r8fl0gags2r6yspz8ynvz26vdjrqb4vyz5h7h3rzc9";
   };
 
-  langTexmfVersion = "2014.20140626";
+  langTexmfVersion = "2014.20140717";
   langTexmfSrc = fetchurl {
     url = "mirror://debian/pool/main/t/texlive-lang/texlive-lang_${langTexmfVersion}.orig.tar.xz";
-    sha256 = "0gwms9jj8x2hp8fbqx420lvzccx3s6wlif7afp176y7ja9i3s17r";
+    sha256 = "1x9aa3v2cg4lcb58lwksnfdsgrhi0sg968pjqsbndmbxhr1msbp7";
   };
 
   passthru = { inherit texmfSrc langTexmfSrc; };
@@ -120,7 +120,7 @@ rec {
 
   configureFlags = [ "--with-x11" "--enable-ipc" "--with-mktexfmt"
     "--enable-shared" "--disable-native-texlive-build" "--with-system-zziplib"
-    "--with-system-libgs" "--with-system-t1lib" "--with-system-freetype2" 
+    "--with-system-libgs" "--with-system-t1lib" "--with-system-freetype2"
     "--with-system-freetype=no" "--disable-ttf2pk" "--enable-ttf2pk2" ]
     ++ stdenv.lib.optionals stdenv.isDarwin [
       # TODO: We should be able to fix these tests

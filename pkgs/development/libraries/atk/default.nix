@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://library.gnome.org/devel/atk/;
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = with stdenv.lib.maintainers; [ raskin urkud ];
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;

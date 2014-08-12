@@ -16,6 +16,5 @@ cabal.mkDerivation (self: {
     description = "Generic finger-tree structure, with example instances";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

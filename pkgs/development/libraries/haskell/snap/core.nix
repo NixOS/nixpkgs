@@ -22,6 +22,5 @@ cabal.mkDerivation (self: {
     description = "Snap: A Haskell Web Framework (core interfaces and types)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

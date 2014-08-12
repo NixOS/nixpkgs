@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
        [ stdenv.gcc.gcc stdenv.gcc.libc ncurses ];
 
   buildCommand = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cd $out
     unzip ${src}
     rpm2cpio linux/MegaCli-8.07.07-1.noarch.rpm | cpio -idmv
@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "CLI program for LSI MegaRAID cards, which also works with some Dell PERC RAID cards";
-    license = "unfree";
+    license = stdenv.lib.licenses.unfree;
   };
 }

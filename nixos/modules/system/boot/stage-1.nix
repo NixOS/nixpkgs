@@ -23,22 +23,6 @@ let
   };
 
 
-  needsCifsUtils = kernelPackages.kernel ? features
-                && kernelPackages.kernel.features ? needsCifsUtils
-                && kernelPackages.kernel.features.needsCifsUtils
-                && any (fs: fs.fsType == "cifs") fileSystems;
-
-  busybox =
-    if needsCifsUtils
-    then pkgs.busybox.override {
-           extraConfig = ''
-             CONFIG_FEATURE_MOUNT_CIFS n
-             CONFIG_FEATURE_MOUNT_HELPERS y
-           '';
-         }
-    else pkgs.busybox;
-
-
   # Some additional utilities needed in stage 1, like mount, lvm, fsck
   # etc.  We don't want to bring in all of those packages, so we just
   # copy what we need.  Instead of using statically linked binaries,
@@ -51,6 +35,7 @@ let
     }
     ''
       mkdir -p $out/bin $out/lib
+      ln -s $out/bin $out/sbin
 
       # Copy what we need from Glibc.
       cp -pv ${pkgs.glibc}/lib/ld*.so.? $out/lib
@@ -62,11 +47,10 @@ let
       cp -pv ${pkgs.gcc.gcc}/lib*/libgcc_s.so.* $out/lib
 
       # Copy BusyBox.
-      cp -rvd ${busybox}/{bin,sbin} $out/
-      chmod -R u+w $out
+      cp -pvd ${pkgs.busybox}/bin/* ${pkgs.busybox}/sbin/* $out/bin/
 
       # Copy some utillinux stuff.
-      cp -v ${pkgs.utillinux}/sbin/blkid $out/bin
+      cp -vf ${pkgs.utillinux}/sbin/blkid $out/bin
       cp -pdv ${pkgs.utillinux}/lib/libblkid*.so.* $out/lib
       cp -pdv ${pkgs.utillinux}/lib/libuuid*.so.* $out/lib
 
@@ -89,12 +73,7 @@ let
 
       # Copy modprobe.
       cp -v ${pkgs.kmod}/bin/kmod $out/bin/
-      ln -s kmod $out/bin/modprobe
-
-      # Maybe copy cifs utils
-      ${optionalString needsCifsUtils ''
-        cp -v ${pkgs.cifs_utils}/sbin/mount.cifs $out/bin
-      ''}
+      ln -sf kmod $out/bin/modprobe
 
       ${config.boot.initrd.extraUtilsCommands}
 
@@ -140,7 +119,7 @@ let
   udevRules = pkgs.stdenv.mkDerivation {
     name = "udev-rules";
     buildCommand = ''
-      ensureDir $out
+      mkdir -p $out
 
       echo 'ENV{LD_LIBRARY_PATH}="${extraUtils}/lib"' > $out/00-env.rules
 
@@ -313,6 +292,13 @@ in
       example = "xz";
     };
 
+    boot.initrd.supportedFilesystems = mkOption {
+      default = [ ];
+      example = [ "btrfs" ];
+      type = types.listOf types.string;
+      description = "Names of supported filesystem types in the initial ramdisk.";
+    };
+
     fileSystems = mkOption {
       options.neededForBoot = mkOption {
         default = false;
@@ -346,6 +332,8 @@ in
 
     # Prevent systemd from waiting for the /dev/root symlink.
     systemd.units."dev-root.device".text = "";
+
+    boot.initrd.supportedFilesystems = map (fs: fs.fsType) fileSystems;
 
   };
 }

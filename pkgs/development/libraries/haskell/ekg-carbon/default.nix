@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ekg-carbon";
-  version = "1.0.0";
-  sha256 = "0zcnh74z0n0xxxr6r0j3kgpbfwli58y714k0mwwc2wxjgcv6xiyc";
+  version = "1.0.1";
+  sha256 = "1slaykn1a6f09dzn78v2aqw8snmidycvaw5cfyr4f0ndd88vi77d";
   buildDepends = [
     ekgCore network networkCarbon text time unorderedContainers vector
   ];
@@ -16,6 +16,6 @@ cabal.mkDerivation (self: {
     description = "An EKG backend to send statistics to Carbon (part of Graphite monitoring tools)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })

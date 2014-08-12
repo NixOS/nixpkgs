@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "An interface to the Maude rewriting system";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

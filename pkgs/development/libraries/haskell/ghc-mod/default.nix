@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ghc-mod";
-  version = "4.1.5";
-  sha256 = "192v0h9nhi7xgvidyisn3rpr6kjpkibrm2b859b6a92gp0h37nnn";
+  version = "4.1.6";
+  sha256 = "093wafaizr2xf7vmzj6f3vs8ch0vpcmwlrja6af6hshgaj2d80qs";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -26,7 +26,7 @@ cabal.mkDerivation (self: {
     make
     rm Makefile
     cd ..
-    ensureDir "$out/share/emacs"
+    mkdir -p "$out/share/emacs"
     mv $pname-$version emacs/site-lisp
     mv $out/bin/ghc-mod $out/bin/.ghc-mod-wrapped
     cat - > $out/bin/ghc-mod <<EOF

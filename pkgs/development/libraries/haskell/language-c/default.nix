@@ -13,6 +13,5 @@ cabal.mkDerivation (self: {
     description = "Analysis and generation of C code";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

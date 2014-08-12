@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "engine-io-snap";
-  version = "1.0.0";
-  sha256 = "152hz2b9zbmjpp517g6kp7fs7kbvyil28dp6djqjlmp9fqkgckap";
+  version = "1.0.1";
+  sha256 = "1hw3gmi23fdcgvz817b95bf23wa7qyg10axsnvan5qxr73pwp5iv";
   buildDepends = [
     attoparsecEnumerator engineIo snapCore unorderedContainers
     websockets websocketsSnap
@@ -15,6 +15,6 @@ cabal.mkDerivation (self: {
   meta = {
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })

@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Generate content for Yesod using the aeson package. (deprecated)";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

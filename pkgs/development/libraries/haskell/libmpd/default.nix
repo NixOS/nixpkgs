@@ -21,6 +21,5 @@ cabal.mkDerivation (self: {
     description = "An MPD client library";
     license = "LGPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

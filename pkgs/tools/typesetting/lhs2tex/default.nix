@@ -18,7 +18,7 @@ cabal.mkDerivation (self: {
   meta = {
     homepage = "http://www.andres-loeh.de/lhs2tex/";
     description = "Preprocessor for typesetting Haskell sources with LaTeX";
-    license = "GPL";
+    license = self.stdenv.lib.licenses.gpl2;
     platforms = self.ghc.meta.platforms;
     hydraPlatforms = self.stdenv.lib.platforms.linux;
     maintainers = [ self.stdenv.lib.maintainers.andres ];

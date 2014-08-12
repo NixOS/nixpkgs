@@ -29,8 +29,8 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   setupHook = ./setup-hook.sh;
   clangWrapper = ./clang-wrapper.sh;
-  ldWrapper = ./ld-wrapper.sh;
-  utils = ./utils.sh;
+  ldWrapper = ../gcc-wrapper/ld-wrapper.sh;
+  utils = ../gcc-wrapper/utils.sh;
   addFlags = ./add-flags;
 
   inherit nativeTools nativeLibc nativePrefix clang clangVersion libcxx;

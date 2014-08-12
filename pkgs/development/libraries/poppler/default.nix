@@ -4,14 +4,14 @@
 }:
 
 let
-  version = "0.24.5"; # even major numbers are stable
-  sha256 = "114zfm4771iq25wa4bsg4nc2gnr6waaj8936wd23r4hc2084jrd2";
+  version = "0.26.3"; # even major numbers are stable
+  sha256 = "1ca2lrwvhxzq0g4blbvq099vyydfjyz839jki301p1jgazrimjw8";
 
   qtcairo_patches =
     let qtcairo = fetchgit { # the version for poppler-0.24
       url = "git://github.com/giddie/poppler-qt4-cairo-backend.git";
-      rev = "c4578cde09834e0d70873f63b1c2a410f66bb4f9";
-      sha256 = "07bs2phmp7f4mqrwqz2bgyw2gw7s00mwsm548bsikyz1cbj7fl93";
+      rev = "7b9e1ea763b579e635ee7614b10970b9635841cf";
+      sha256 = "0cdq0qw1sm6mxnrhmah4lfsd9wjlcdx86iyikwmjpwdmrkjk85r2";
     }; in
       [ "${qtcairo}/0001-Cairo-backend-added-to-Qt4-wrapper.patch"
         "${qtcairo}/0002-Setting-default-Qt4-backend-to-Cairo.patch"
@@ -49,7 +49,7 @@ let
         Poppler is a PDF rendering library based on the xpdf-3.0 code base.
       '';
 
-      license = "GPLv2";
+      license = stdenv.lib.licenses.gpl2;
       platforms = stdenv.lib.platforms.all;
     };
   } merge ]); # poppler_drv

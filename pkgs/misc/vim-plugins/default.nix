@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, python, cmake, vim, perl, ruby, unzip, which, fetchgit, clang }:
+{ fetchurl, bash, stdenv, python, cmake, vim, perl, ruby, unzip, which, fetchgit, clang }:
 
 /*
 About Vim and plugins
@@ -89,7 +89,7 @@ let vimHelpTags = ''
 
     installPhase = ''
       target=$out/share/vim-plugins/${path}
-      ensureDir $out/share/vim-plugins
+      mkdir -p $out/share/vim-plugins
       cp -r . $target
       ${vimHelpTags}
       vimHelpTags $target
@@ -111,11 +111,11 @@ in rec
   YouCompleteMe = stdenv.mkDerivation {
     src = fetchgit {
       url = "https://github.com/Valloric/YouCompleteMe.git";
-      rev = "abfc3ee36adab11c0c0b9d086a164a69006fec79";
-      sha256 = "1d25dp5kgqickl06hqvx4j3z51zblhsn3q3by2hayyj3g2zps4gm";
+      rev = "67288080ea7057ea3111cb4c863484e3b150e738";
+      sha256 = "1a3rwdl458z1yrp50jdwp629j4al0zld21n15sad28g51m8gw5ka";
      };
 
-    name = "youcompleteme-git-abfc3ee";
+    name = "youcompleteme-git-6728808";
     buildInputs = [ python cmake clang.clang ];
 
     configurePhase = ":";
@@ -125,10 +125,12 @@ in rec
       mkdir -p $target
       cp -a ./ $target
 
+
       mkdir $target/build
       cd $target/build
-      cmake -G "Unix Makefiles" . $target/cpp -DPYTHON_LIBRARIES:PATH=${python}/lib/libpython2.7.so -DPYTHON_INCLUDE_DIR:PATH=${python}/include/python2.7 -DUSE_CLANG_COMPLETER=ON -DUSE_SYSTEM_LIBCLANG=ON
-      make -j -j''${NIX_BUILD_CORES} -l''${NIX_BUILD_CORES}}
+      cmake -G "Unix Makefiles" . $target/third_party/ycmd/cpp -DPYTHON_LIBRARIES:PATH=${python}/lib/libpython2.7.so -DPYTHON_INCLUDE_DIR:PATH=${python}/include/python2.7 -DUSE_CLANG_COMPLETER=ON -DUSE_SYSTEM_LIBCLANG=ON
+      make ycm_support_libs -j''${NIX_BUILD_CORES} -l''${NIX_BUILD_CORES}}
+      ${bash}/bin/bash $target/install.sh --clang-completer
 
       ${vimHelpTags}
       vimHelpTags $target
@@ -406,7 +408,7 @@ in rec
     };
     unpackPhase = ":";
     installPhase = ''
-      ensureDir $out/share/vim-plugins/vim-a
+      mkdir -p $out/share/vim-plugins/vim-a
       cp ${src} $out/share/vim-plugins/vim-a/a.vim
     '';
   };

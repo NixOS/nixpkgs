@@ -18,7 +18,6 @@ in stdenv.mkDerivation {
   meta = { 
     description = "Common functions found on BSD systems";
     homepage = http://libbsd.freedesktop.org/;
-    license = "BSD3";
+    license = stdenv.lib.licenses.bsd3;
   };
 }
-

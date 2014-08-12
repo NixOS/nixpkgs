@@ -3,7 +3,7 @@ source $stdenv/setup
 ttys=($ttys)
 themes=($themes)
 
-ensureDir $out
+mkdir -p $out
 
 defaultName=$(cd $default && ls | grep -v default)
 echo $defaultName

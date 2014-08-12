@@ -48,14 +48,14 @@ mirror://xorg/X11R7.7/src/everything/font-winitzki-cyrillic-1.0.3.tar.bz2
 mirror://xorg/X11R7.7/src/everything/font-xfree86-type1-1.0.4.tar.bz2
 mirror://xorg/individual/proto/glproto-1.4.17.tar.bz2
 mirror://xorg/individual/app/iceauth-1.0.6.tar.bz2
-mirror://xorg/individual/proto/inputproto-2.3.tar.bz2
+mirror://xorg/individual/proto/inputproto-2.3.1.tar.bz2
 mirror://xorg/X11R7.7/src/everything/kbproto-1.0.6.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libAppleWM-1.4.1.tar.bz2
 mirror://xorg/individual/lib/libdmx-1.1.3.tar.bz2
 mirror://xorg/individual/lib/libxshmfence-1.1.tar.bz2
 mirror://xorg/individual/lib/libfontenc-1.1.2.tar.bz2
 mirror://xorg/individual/lib/libFS-1.0.6.tar.bz2
-mirror://xorg/X11R7.7/src/everything/libICE-1.0.8.tar.bz2
+mirror://xorg/individual/lib/libICE-1.0.9.tar.bz2
 mirror://xorg/individual/lib/libpciaccess-0.13.2.tar.bz2
 mirror://xorg/individual/lib/libSM-1.2.2.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libWindowsWM-1.0.1.tar.bz2
@@ -66,11 +66,11 @@ mirror://xorg/individual/lib/libXcomposite-0.4.4.tar.bz2
 mirror://xorg/individual/lib/libXcursor-1.1.14.tar.bz2
 mirror://xorg/individual/lib/libXdamage-1.1.4.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libXdmcp-1.1.1.tar.bz2
-mirror://xorg/individual/lib/libXext-1.3.2.tar.bz2
+mirror://xorg/individual/lib/libXext-1.3.3.tar.bz2
 mirror://xorg/individual/lib/libXfixes-5.0.1.tar.bz2
 mirror://xorg/individual/lib/libXfont-1.4.8.tar.bz2
-mirror://xorg/X11R7.7/src/everything/libXft-2.3.1.tar.bz2
-mirror://xorg/individual/lib/libXi-1.7.2.tar.bz2
+mirror://xorg/individual/lib/libXft-2.3.2.tar.bz2
+mirror://xorg/individual/lib/libXi-1.7.4.tar.bz2
 mirror://xorg/individual/lib/libXinerama-1.1.3.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libxkbfile-1.0.8.tar.bz2
 mirror://xorg/individual/lib/libXmu-1.1.2.tar.bz2
@@ -106,7 +106,7 @@ mirror://xorg/individual/app/xbacklight-1.2.1.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xbitmaps-1.1.1.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xcmiscproto-1.2.2.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xcmsdb-1.0.4.tar.bz2
-mirror://xorg/X11R7.7/src/everything/xcursorgen-1.0.5.tar.bz2
+mirror://xorg/individual/app/xcursorgen-1.0.6.tar.bz2
 mirror://xorg/individual/data/xcursor-themes-1.0.4.tar.bz2
 mirror://xorg/individual/app/xdpyinfo-1.3.1.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xdriinfo-1.0.4.tar.bz2
@@ -124,7 +124,7 @@ mirror://xorg/individual/driver/xf86-input-vmmouse-13.0.0.tar.bz2
 mirror://xorg/individual/driver/xf86-input-void-1.4.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-ark-0.7.5.tar.bz2
 mirror://xorg/individual/driver/xf86-video-ast-0.98.0.tar.bz2
-mirror://xorg/individual/driver/xf86-video-ati-7.3.0.tar.bz2
+mirror://xorg/individual/driver/xf86-video-ati-7.4.0.tar.bz2
 mirror://xorg/individual/driver/glamor-egl-0.6.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-nouveau-1.0.10.tar.bz2
 mirror://xorg/individual/driver/xf86-video-cirrus-1.5.2.tar.bz2
@@ -137,7 +137,7 @@ mirror://xorg/individual/driver/xf86-video-i128-1.3.6.tar.bz2
 mirror://xorg/individual/driver/xf86-video-intel-2.21.15.tar.bz2
 mirror://xorg/individual/driver/xf86-video-mach64-6.9.4.tar.bz2
 mirror://xorg/individual/driver/xf86-video-mga-1.6.3.tar.bz2
-mirror://xorg/individual/driver/xf86-video-modesetting-0.8.1.tar.bz2
+mirror://xorg/individual/driver/xf86-video-modesetting-0.9.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-neomagic-1.2.8.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86-video-newport-0.2.4.tar.bz2
 mirror://xorg/individual/driver/xf86-video-nv-2.1.20.tar.bz2
@@ -170,7 +170,7 @@ mirror://xorg/X11R7.7/src/everything/xlsatoms-1.1.1.tar.bz2
 mirror://xorg/individual/app/xlsclients-1.1.3.tar.bz2
 mirror://xorg/individual/app/xmodmap-1.0.8.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xorg-docs-1.7.tar.bz2
-mirror://xorg/individual/xserver/xorg-server-1.14.6.tar.bz2
+mirror://xorg/individual/xserver/xorg-server-1.14.7.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xorg-sgml-doctools-1.11.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xpr-1.0.4.tar.bz2
 mirror://xorg/individual/app/xprop-1.2.2.tar.bz2

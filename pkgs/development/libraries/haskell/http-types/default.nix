@@ -18,6 +18,5 @@ cabal.mkDerivation (self: {
     description = "Generic HTTP types for Haskell (for both client and server code)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

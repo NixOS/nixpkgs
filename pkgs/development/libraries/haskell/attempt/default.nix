@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Concrete data type for handling extensible exceptions as failures. (deprecated)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

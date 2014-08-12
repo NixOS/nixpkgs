@@ -19,5 +19,6 @@ cabal.mkDerivation (self: {
     description = "shell-like (systems) programming in Haskell";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

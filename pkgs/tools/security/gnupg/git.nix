@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://gnupg.org/;
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
   };
 }

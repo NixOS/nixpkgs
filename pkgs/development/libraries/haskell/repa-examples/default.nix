@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "repa-examples";
-  version = "3.2.5.1";
-  sha256 = "0xrjfmwbq8mhcim261da7i68mp5jxkqiwjy2mhd1lgkr63m6x18j";
+  version = "3.3.1.1";
+  sha256 = "0gdkwmdnmvq82zglryxx2ic1nm4g2r4a0bwndiwbj670w03p712p";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -20,6 +20,5 @@ cabal.mkDerivation (self: {
     description = "Examples using the Repa array library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Functions for using the reCAPTCHA service in web applications";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "network-simple";
-  version = "0.4";
-  sha256 = "1jw0xd53c0mydh6jm6627c0d8w014r1s46fycdhavnimh7bb77cp";
+  version = "0.4.0.1";
+  sha256 = "113vaxgsfny9iv6hnbywk97qr1y6qkap49p803anakamss4bdmyj";
   buildDepends = [ exceptions network transformers ];
   jailbreak = true;
   meta = {
@@ -13,6 +13,6 @@ cabal.mkDerivation (self: {
     description = "Simple network sockets usage patterns";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })

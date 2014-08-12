@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "filestore";
-  version = "0.6.0.2";
-  sha256 = "0dbn358gxg13lxlpqyczcn5g5kvzrz7lv17qsmr53hvmxz8mricr";
+  version = "0.6.0.3";
+  sha256 = "03qmv3cqp1fv7b7pdjdx12cb27bfjbwwjdhkcvkfq89qwk9wh1h0";
   buildDepends = [ Diff filepath parsec split time utf8String xml ];
   testDepends = [ Diff filepath HUnit mtl time ];
   jailbreak = true;
@@ -15,6 +15,5 @@ cabal.mkDerivation (self: {
     description = "Interface for versioning file stores";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

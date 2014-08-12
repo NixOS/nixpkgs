@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "shakespeare";
-  version = "2.0.1";
-  sha256 = "1h1b7p4czdzrxb77515vqnck3rj3yw35h2ds6gzxzp7pdxprds27";
+  version = "2.0.1.1";
+  sha256 = "0xddm8xby19323d9bcd196b1ninlvfkv5b93w1da23m7w0hy509p";
   buildDepends = [
     aeson blazeHtml blazeMarkup exceptions parsec systemFileio
     systemFilepath text time transformers
@@ -21,6 +21,5 @@ cabal.mkDerivation (self: {
     description = "A toolkit for making compile-time interpolated templates";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

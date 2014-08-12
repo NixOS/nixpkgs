@@ -12,7 +12,9 @@ stdenv.mkDerivation (rec {
 
   patchFlags = "-p0";
   patches =
-    [ ./link-against-ncurses.patch ]
+    [ ./link-against-ncurses.patch
+      ./no-arch_only.patch
+    ]
     ++
     (let
        patch = nr: sha256:
@@ -43,7 +45,7 @@ stdenv.mkDerivation (rec {
 
     homepage = http://savannah.gnu.org/projects/readline/;
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };

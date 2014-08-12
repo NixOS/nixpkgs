@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
       Xfe aims to be the filemanager of choice for all the Unix addicts!
     '';
     homepage = "http://sourceforge.net/projects/xfe/";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.bbenoist ];
-    platforms = stdenv.lib.platforms.mesaPlatforms;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

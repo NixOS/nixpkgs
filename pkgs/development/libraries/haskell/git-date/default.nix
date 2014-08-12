@@ -17,5 +17,7 @@ cabal.mkDerivation (self: {
     description = "Bindings to the date parsing from Git";
     license = self.stdenv.lib.licenses.gpl2;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

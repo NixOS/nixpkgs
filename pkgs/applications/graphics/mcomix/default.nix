@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, pygtk, pil }:
+{ stdenv, fetchurl, buildPythonPackage, pygtk, pil, python27Packages }:
 
 buildPythonPackage rec {
     namePrefix = "";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
     doCheck = false;
 
-    pythonPath = [ pygtk pil ];
+    pythonPath = [ pygtk pil python27Packages.sqlite3 ];
 
     meta = {
       description = "Image viewer designed to handle comic books";
@@ -29,6 +29,6 @@ buildPythonPackage rec {
 
       homepage = http://mcomix.sourceforge.net/;
 
-      license = "GPLv2";
+      license = stdenv.lib.licenses.gpl2;
     };
 }

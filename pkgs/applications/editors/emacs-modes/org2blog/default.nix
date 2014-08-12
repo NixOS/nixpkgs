@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Publish directly from Emacs’ org-mode to WordPress blogs";
     homepage = https://github.com/punchagan/org2blog;
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     platforms = stdenv.lib.platforms.all;
   };

@@ -30,9 +30,9 @@ for i in ${bin} ; do
     ${i}
 done 
 
-ensureDir $out/bin
-ensureDir $out/lib
-ensureDir $out/share/MakeMKV
+mkdir -p $out/bin
+mkdir -p $out/lib
+mkdir -p $out/share/MakeMKV
 cp ${lib} ${out}/lib
 cp ${bin} ${out}/bin
 cp makemkv-bin-${ver}/src/share/* $out/share/MakeMKV

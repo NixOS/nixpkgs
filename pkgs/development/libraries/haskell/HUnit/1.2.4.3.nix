@@ -14,6 +14,6 @@ cabal.mkDerivation (self: {
     description = "A unit testing framework for Haskell";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     aeson filepath hashable HUnit text time unorderedContainers vector
   ];
   testDepends = [ aeson hashable HUnit text unorderedContainers ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/facebook/Haxl";
     description = "A Haskell library for efficient, concurrent, and concise data access";

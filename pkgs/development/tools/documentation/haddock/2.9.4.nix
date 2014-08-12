@@ -18,6 +18,6 @@ cabal.mkDerivation (self: {
     description = "A documentation-generation tool for Haskell libraries";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

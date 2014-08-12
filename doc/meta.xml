@@ -17,7 +17,9 @@ meta = {
     It is fully customizable.
   '';
   homepage = http://www.gnu.org/software/hello/manual/;
-  license = "GPLv3+";
+  license = stdenv.lib.licenses.gpl3Plus;
+  maintainers = [ stdenv.lib.maintainers.eelco ];
+  platforms = stdenv.lib.platforms.all;
 };
 </programlisting>
 
@@ -31,16 +33,42 @@ the package.  The value of a meta-attribute must a string.</para>
 command-line using <command>nix-env</command>:
 
 <screen>
-$ nix-env -qa hello --meta --xml
-&lt;?xml version='1.0' encoding='utf-8'?>
-&lt;items>
-  &lt;item attrPath="hello" name="hello-2.3" system="i686-linux">
-    &lt;meta name="description" value="A program that produces a familiar, friendly greeting" />
-    &lt;meta name="homepage" value="http://www.gnu.org/software/hello/manual/" />
-    &lt;meta name="license" value="GPLv3+" />
-    &lt;meta name="longDescription" value="GNU Hello is a program that prints &amp;quot;Hello, world!&amp;quot; when you run it.&amp;#xA;It is fully customizable.&amp;#xA;" />
-  &lt;/item>
-&lt;/items>
+$ nix-env -qa hello --meta --json
+{
+    "hello": {
+        "meta": {
+            "description": "A program that produces a familiar, friendly greeting",
+            "homepage": "http://www.gnu.org/software/hello/manual/",
+            "license": {
+                "fullName": "GNU General Public License version 3 or later",
+                "shortName": "GPLv3+",
+                "url": "http://www.fsf.org/licensing/licenses/gpl.html"
+            },
+            "longDescription": "GNU Hello is a program that prints \"Hello, world!\" when you run it.\nIt is fully customizable.\n",
+            "maintainers": [
+                "Ludovic Court\u00e8s &lt;ludo@gnu.org>"
+            ],
+            "platforms": [
+                "i686-linux",
+                "x86_64-linux",
+                "armv5tel-linux",
+                "armv7l-linux",
+                "mips64el-linux",
+                "x86_64-darwin",
+                "i686-cygwin",
+                "i686-freebsd",
+                "x86_64-freebsd",
+                "i686-openbsd",
+                "x86_64-openbsd"
+            ],
+            "position": "/home/user/dev/nixpkgs/pkgs/applications/misc/hello/ex-2/default.nix:14"
+        },
+        "name": "hello-2.9",
+        "system": "x86_64-linux"
+    }
+}
+
+
 </screen>
 
 <command>nix-env</command> knows about the
@@ -92,20 +120,23 @@ interpretation:</para>
 
   <varlistentry>
     <term><varname>license</varname></term>
-    <listitem><para>The license for the package.  See below for the
-    allowed values.</para></listitem>
+    <listitem><para>The license for the package. One from attribute set defined in
+      <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix">
+      <filename>nixpkgs/lib/licenses.nix</filename></link>.
+      Example:
+      <literal>stdenv.lib.licenses.gpl3</literal>.</para></listitem>
+      See details in <xref linkend='sec-meta-license'/>,
   </varlistentry>
 
   <varlistentry>
     <term><varname>maintainers</varname></term>
     <listitem><para>A list of names and e-mail addresses of the
-    maintainers of this Nix expression, e.g. <literal>["Alice
-    &lt;alice@example.org>" "Bob &lt;bob@example.com>"]</literal>.  If
-    you are the maintainer of multiple packages, you may want to add
+    maintainers of this Nix expression. If
+    you would like to be a maintainer of a package, you may want to add
     yourself to <link
-    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/lib/maintainers.nix"><filename>pkgs/lib/maintainers.nix</filename></link>
-    and write something like <literal>[stdenv.lib.maintainers.alice
-    stdenv.lib.maintainers.bob]</literal>.</para></listitem>
+    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/maintainers.nix"><filename>nixpkgs/lib/maintainers.nix</filename></link>
+    and write something like <literal>[ stdenv.lib.maintainers.alice
+    stdenv.lib.maintainers.bob ]</literal>.</para></listitem>
   </varlistentry>
 
   <varlistentry>
@@ -121,29 +152,25 @@ interpretation:</para>
   <varlistentry>
     <term><varname>platforms</varname></term>
     <listitem><para>The list of Nix platform types on which the
-    package is supported.  If this attribute is set, the package will
-    refuse to build, and won’t show up in <literal>nix-env
-    -qa</literal> output, on any platform not listed
-    here.  An example is:
+    package is supported. Hydra builds packages according to the
+    platform specified. If no platform is specified, the package does
+    not have prebuilt binaries. An example is:
 
 <programlisting>
-meta.platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
+meta.platforms = stdenv.lib.platforms.linux;
 </programlisting>
 
-    The set <varname>lib.platforms</varname> defines various common
-    lists of platforms types, so it’s more typical to write:
-
-<programlisting>
-meta.platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-</programlisting>
-
+    Attribute Set <varname>stdenv.lib.platforms</varname> in
+    <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/platforms.nix">
+    <filename>nixpkgs/lib/platforms.nix</filename></link> defines various common
+    lists of platforms types.
     </para></listitem>
   </varlistentry>
 
   <varlistentry>
     <term><varname>hydraPlatforms</varname></term>
     <listitem><para>The list of Nix platform types for which the Hydra
-    instance at <literal>hydra.nixos.org</literal> should build the
+    instance at <literal>hydra.nixos.org</literal> will build the
     package.  (Hydra is the Nix-based continuous build system.)  It
     defaults to the value of <varname>meta.platforms</varname>.  Thus,
     the only reason to set <varname>meta.hydraPlatforms</varname> is
@@ -176,78 +203,21 @@ meta.hydraPlatforms = [];
 
 <section xml:id="sec-meta-license"><title>Licenses</title>
 
-<note><para>This is just a first attempt at standardising the license
-attribute.</para></note>
+<para>The <varname>meta.license</varname> attribute should preferrably contain
+a value from <varname>stdenv.lib.licenses</varname> defined in
+<link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix">
+<filename>nixpkgs/lib/licenses.nix</filename></link>,
+or in-place license description of the same format if the license is
+unlikely to be useful in another expression.
 
-<para>The <varname>meta.license</varname> attribute must be one of the
-following:
-
+A few generic options are available, although it's typically better
+to indicate the specific license:
 <variablelist>
-
-  <varlistentry>
-    <term><varname>GPL</varname></term>
-    <listitem><para>GNU General Public License; version not
-    specified.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>GPLv2</varname></term>
-    <listitem><para>GNU General Public License, version
-    2.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>GPLv2+</varname></term>
-    <listitem><para>GNU General Public License, version
-    2 or higher.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>GPLv3</varname></term>
-    <listitem><para>GNU General Public License, version
-    3.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>GPLv3+</varname></term>
-    <listitem><para>GNU General Public License, version
-    3 or higher.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>bsd</varname></term>
-    <listitem><para>Catch-all for licenses that are essentially
-    similar to <link
-    xlink:href="http://www.gnu.org/licenses/license-list.html#ModifiedBSD">the
-    original BSD license with the advertising clause removed</link>,
-    i.e. permissive non-copyleft free software licenses.  This
-    includes the <link
-    xlink:href="http://www.gnu.org/licenses/license-list.html#X11License">X11
-    (“MIT”) License</link>.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>perl5</varname></term>
-    <listitem><para>The Perl 5 license (Artistic License, version 1
-    and GPL, version 1 or later).</para></listitem>
-  </varlistentry>
 
   <varlistentry>
     <term><varname>free</varname></term>
     <listitem><para>Catch-all for free software licenses not listed
     above.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>free-copyleft</varname></term>
-    <listitem><para>Catch-all for free, copyleft software licenses not
-    listed above.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>free-non-copyleft</varname></term>
-    <listitem><para>Catch-all for free, non-copyleft software licenses
-    not listed above.</para></listitem>
   </varlistentry>
 
   <varlistentry>

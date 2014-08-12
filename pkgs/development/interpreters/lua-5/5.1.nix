@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, readline, makeWrapper }:
+{ stdenv, fetchurl, readline }:
 
 let
   dsoPatch = fetchurl {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "2640fc56a795f29d28ef15e13c34a47e223960b0240e8cb0a82d9b0738695333";
   };
 
-  buildInputs = [ readline makeWrapper ];
+  buildInputs = [ readline ];
 
   patches = if stdenv.isDarwin then [ ./5.1.darwin.patch ] else [ dsoPatch ];
 
@@ -35,9 +35,6 @@ stdenv.mkDerivation rec {
     sed <"etc/lua.pc" >"$out/lib/pkgconfig/lua.pc" -e "s|^prefix=.*|prefix=$out|"
     mv "doc/"*.{gif,png,css,html} "$out/share/doc/lua/"
     rmdir $out/{share,lib}/lua/5.1 $out/{share,lib}/lua
-    wrapProgram $out/bin/lua \
-      --set LUA_PATH  '"$HOME/.nix-profile/lib/lua/5.1/?.lua;$HOME/.nix-profile/share/lua/5.1/?.lua"' \
-      --set LUA_CPATH '"$HOME/.nix-profile/lib/lua/5.1/?.so;$HOME/.nix-profile/share/lua/5.1/?.so"'
   '';
 
   meta = {
@@ -51,8 +48,8 @@ stdenv.mkDerivation rec {
       management with incremental garbage collection, making it ideal
       for configuration, scripting, and rapid prototyping.
     '';
-    license = "MIT";
-    platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.mit;
+    hydraPlatforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

@@ -1,8 +1,8 @@
-{ stdenv, fetchgit, cmake, boost, libunwind, mariadb, libmemcached, pcre
+{ stdenv, fetchgit, cmake, pkgconfig, boost, libunwind, mariadb, libmemcached, pcre
 , libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php, re2c
 , expat, libcap, oniguruma, libdwarf, libmcrypt, tbb, gperftools, glog
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam, libpng
-, libxslt, ocaml
+, libxslt, ocaml, freetype
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ cmake boost libunwind mariadb libmemcached pcre libevent gd curl
+    [ cmake pkgconfig boost libunwind mariadb libmemcached pcre libevent gd curl
       libxml2 icu flex bison openssl zlib php expat libcap oniguruma
       libdwarf libmcrypt tbb gperftools bzip2 openldap readline
       libelf uwimap binutils cyrus_sasl pam glog libpng libxslt ocaml
@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
   USE_HHVM=1;
   MYSQL_INCLUDE_DIR="${mariadb}/include/mysql";
   MYSQL_DIR=mariadb;
+
+  # work around broken build system
+  NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2";
 
   patchPhase = ''
     substituteInPlace hphp/util/generate-buildinfo.sh \

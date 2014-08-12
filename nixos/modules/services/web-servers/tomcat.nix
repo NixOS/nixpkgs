@@ -77,6 +77,11 @@ in
         description = "Whether to enable logging per virtual host.";
       };
 
+      jdk = mkOption {
+        default = pkgs.jdk;
+        description = "Which JDK to use.";
+      };
+
       axis2 = {
 
         enable = mkOption {
@@ -332,13 +337,13 @@ in
           '';
 
         script = ''
-            ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c 'CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${pkgs.jdk} JAVA_OPTS="${cfg.javaOpts}" CATALINA_OPTS="${cfg.catalinaOpts}" ${tomcat}/bin/startup.sh'
+            ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c 'CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${cfg.jdk} JAVA_OPTS="${cfg.javaOpts}" CATALINA_OPTS="${cfg.catalinaOpts}" ${tomcat}/bin/startup.sh'
         '';
 
         postStop =
           ''
             echo "Stopping tomcat..."
-            CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${pkgs.jdk} ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c ${tomcat}/bin/shutdown.sh
+            CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${cfg.jdk} ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c ${tomcat}/bin/shutdown.sh
           '';
 
       };

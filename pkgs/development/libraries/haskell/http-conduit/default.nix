@@ -9,8 +9,8 @@
 
 cabal.mkDerivation (self: {
   pname = "http-conduit";
-  version = "2.1.3";
-  sha256 = "1z9i0b9kl1kqh3nvbhh5vmqyg19pkdpj4cbkfhj0r47rbcynhwlb";
+  version = "2.1.4";
+  sha256 = "14xfd25y7r2lhg7dx9hfniihgyzhkz4c6642k5pr27fqjjlr6ijb";
   buildDepends = [
     conduit httpClient httpClientTls httpTypes liftedBase monadControl
     mtl resourcet transformers
@@ -27,6 +27,5 @@ cabal.mkDerivation (self: {
     description = "HTTP client package with conduit interface and HTTPS support";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

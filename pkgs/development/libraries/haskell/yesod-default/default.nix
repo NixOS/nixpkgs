@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Default config and main functions for your yesod application (deprecated)";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

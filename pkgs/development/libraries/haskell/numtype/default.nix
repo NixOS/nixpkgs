@@ -11,6 +11,5 @@ cabal.mkDerivation (self: {
     description = "Type-level (low cardinality) integers";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

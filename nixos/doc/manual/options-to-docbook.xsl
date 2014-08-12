@@ -202,4 +202,10 @@
     </simplelist>
   </xsl:template>
 
+
+  <xsl:template match="function">
+    <xsl:text>λ</xsl:text>
+  </xsl:template>
+
+
 </xsl:stylesheet>

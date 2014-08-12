@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xml-conduit";
-  version = "1.2.0.3";
-  sha256 = "0bb4nc9nwq4z6vdsiqs0zk8k8yvmyxdrya5fz2h8z8ng66xaq4k1";
+  version = "1.2.1";
+  sha256 = "1bh0d2fqcdbx2dq5ybipf7ws59blrb8yd98z1rnbvv1fj9r0xw10";
   buildDepends = [
     attoparsec attoparsecConduit blazeBuilder blazeBuilderConduit
     blazeHtml blazeMarkup conduit conduitExtra dataDefault deepseq
@@ -24,6 +24,5 @@ cabal.mkDerivation (self: {
     description = "Pure-Haskell utilities for dealing with XML with the conduit package";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

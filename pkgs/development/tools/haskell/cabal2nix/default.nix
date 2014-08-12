@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cabal2nix";
-  version = "1.66";
-  sha256 = "1is72jfv6snz59jpmg7dfcinpi3q4kdiqchd7zf45rqrszd5h43p";
+  version = "1.68";
+  sha256 = "0w9ayvr3ljfxgi17yaayqvyxflbgf7b5245pc3m011lp3cfnj849";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ Cabal filepath hackageDb HTTP mtl regexPosix ];
@@ -17,9 +17,6 @@ cabal.mkDerivation (self: {
     description = "Convert Cabal files into Nix build instructions";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = with self.stdenv.lib.maintainers; [ simons ];
   };
 })

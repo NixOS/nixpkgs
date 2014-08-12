@@ -13,6 +13,5 @@ cabal.mkDerivation (self: {
     description = "Haml-like template files that are compile-time checked (deprecated)";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

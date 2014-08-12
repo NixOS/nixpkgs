@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.isc;
 
     maintainers = with stdenv.lib.maintainers; [viric simons];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

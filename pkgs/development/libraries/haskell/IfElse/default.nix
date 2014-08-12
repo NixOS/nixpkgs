@@ -11,6 +11,5 @@ cabal.mkDerivation (self: {
     description = "Anaphoric and miscellaneous useful control-flow";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

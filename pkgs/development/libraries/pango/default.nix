@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.pango.org/;
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = with stdenv.lib.maintainers; [ raskin urkud ];
     hydraPlatforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;

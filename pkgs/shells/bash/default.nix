@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
       Bash without modification.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.simons ];
   };

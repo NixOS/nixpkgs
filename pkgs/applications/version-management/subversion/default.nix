@@ -17,13 +17,13 @@ assert javahlBindings -> jdk != null && perl != null;
 
 stdenv.mkDerivation rec {
 
-  version = "1.8.8";
+  version = "1.8.9";
 
   name = "subversion-${version}";
 
   src = fetchurl {
     url = "mirror://apache/subversion/${name}.tar.bz2";
-    sha256 = "1cqxwydjidyf59y4lgkxl7bra1sy28abqm2mi5971qjsv0f96s8m";
+    sha1 = "424ee12708f39a126efd905886666083dcc4eeaf";
   };
 
   buildInputs = [ zlib apr aprutil sqlite ]
@@ -72,6 +72,10 @@ stdenv.mkDerivation rec {
   inherit perlBindings pythonBindings;
 
   enableParallelBuilding = true;
+
+  # Hack to build on Mac OS X. The system header files use C99-style
+  # comments, but Subversion passes -std=c90.
+  NIX_CFLAGS_COMPILE = "-std=c99";
 
   meta = {
     description = "A version control system intended to be a compelling replacement for CVS in the open source community";

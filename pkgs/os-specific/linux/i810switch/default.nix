@@ -20,6 +20,6 @@ stdenv.mkDerivation {
   meta = {
     description = "A utility for switching between the LCD and external VGA display on Intel graphics cards";
     homepage = "http://www16.plala.or.jp/mano-a-mano/i810switch.html";
-    license = "GPL2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }
