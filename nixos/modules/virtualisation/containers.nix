@@ -168,6 +168,9 @@ in
 
         preStart =
           ''
+            # Clean up existing machined registration.
+            machinectl terminate "$INSTANCE" 2> /dev/null || true
+
             mkdir -p -m 0755 $root/var/lib
 
             # Create a named pipe to get a signal when the container
@@ -203,6 +206,7 @@ in
               fi
             ''}
 
+            EXIT_ON_REBOOT=1 \
             exec ${config.systemd.package}/bin/systemd-nspawn \
               --keep-unit \
               -M "$INSTANCE" -D "$root" $extraFlags \
@@ -240,23 +244,38 @@ in
 
         preStop =
           ''
-            machinectl poweroff "$INSTANCE"
+            machinectl poweroff "$INSTANCE" || true
           '';
 
         restartIfChanged = false;
         #reloadIfChanged = true; # FIXME
 
-        serviceConfig.ExecReload = pkgs.writeScript "reload-container"
-          ''
-            #! ${pkgs.stdenv.shell} -e
-            SYSTEM_PATH=/nix/var/nix/profiles/system
-            echo $SYSTEM_PATH/bin/switch-to-configuration test | \
-              ${pkgs.socat}/bin/socat unix:$root/var/lib/run-command.socket -
-          '';
+        serviceConfig = {
+          ExecReload = pkgs.writeScript "reload-container"
+            ''
+              #! ${pkgs.stdenv.shell} -e
+              SYSTEM_PATH=/nix/var/nix/profiles/system
+              echo $SYSTEM_PATH/bin/switch-to-configuration test | \
+                ${pkgs.socat}/bin/socat unix:$root/var/lib/run-command.socket -
+            '';
 
-        serviceConfig.SyslogIdentifier = "container %i";
+          SyslogIdentifier = "container %i";
 
-        serviceConfig.EnvironmentFile = "-/etc/containers/%i.conf";
+          EnvironmentFile = "-/etc/containers/%i.conf";
+
+          # Note that on reboot, systemd-nspawn returns 10, so this
+          # unit will be restarted. On poweroff, it returns 0, so the
+          # unit won't be restarted.
+          Restart = "on-failure";
+
+          # Hack: we don't want to kill systemd-nspawn, since we call
+          # "machinectl poweroff" in preStop to shut down the
+          # container cleanly. But systemd requires sending a signal
+          # (at least if we want remaining processes to be killed
+          # after the timeout). So send an ignored signal.
+          KillMode = "mixed";
+          KillSignal = "WINCH";
+        };
       };
 
     # Generate a configuration file in /etc/containers for each
