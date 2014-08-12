@@ -17,5 +17,7 @@ cabal.mkDerivation (self: {
     description = "Generate Haskell code from a type";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

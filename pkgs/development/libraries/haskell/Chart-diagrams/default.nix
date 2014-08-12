@@ -20,5 +20,6 @@ cabal.mkDerivation (self: {
     description = "Diagrams backend for Charts";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

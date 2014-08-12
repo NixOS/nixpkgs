@@ -118,5 +118,7 @@ stdenv.mkDerivation rec {
 
     maintainers = [ stdenv.lib.maintainers.kkallio ];
     platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = stdenv.lib.platforms.none;
+    broken = true;
   };
 }

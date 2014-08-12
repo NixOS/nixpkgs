@@ -22,5 +22,6 @@ cabal.mkDerivation (self: {
     description = "PureScript Programming Language Compiler";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })
