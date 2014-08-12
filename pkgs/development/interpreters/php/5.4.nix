@@ -77,6 +77,11 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
         buildInputs = [ postgresql ];
       };
 
+      pdo_pgsql = {
+        configureFlags = ["--with-pdo-pgsql=${postgresql}"];
+        buildInputs = [ postgresql ];
+      };
+
       mysql = {
         configureFlags = ["--with-mysql=${mysql}"];
         buildInputs = [ mysql ];
@@ -203,6 +208,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     gettextSupport = config.php.gettext or true;
     pcntlSupport = config.php.pcntl or true;
     postgresqlSupport = config.php.postgresql or true;
+    pdo_pgsqlSupport = config.php.pdo_pgsql or true;
     readlineSupport = config.php.readline or true;
     sqliteSupport = config.php.sqlite or true;
     soapSupport = config.php.soap or true;
