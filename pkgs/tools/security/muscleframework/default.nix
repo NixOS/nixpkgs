@@ -25,6 +25,7 @@ stdenv.mkDerivation {
     homepage = http://muscleplugins.alioth.debian.org/;
     license = "BSD";
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    # XXX: don't build before libmusclecard is fixed
+    # platforms = with stdenv.lib.platforms; linux;
   };
 }
