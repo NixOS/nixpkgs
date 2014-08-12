@@ -1,14 +1,14 @@
 {stdenv, fetchurl}:
 
 let
-  version = "5.1.2";
+  version = "5.1.5";
 in
 stdenv.mkDerivation {
   name = "unrar-${version}";
 
   src = fetchurl {
     url = "http://www.rarlab.com/rar/unrarsrc-${version}.tar.gz";
-    sha256 = "0344cn4w3lw2111m3g431khiyndx9ibbp952bli1inx2fixps9cq";
+    sha256 = "1jrla255911rbl953br2xbgvyw15kpi11r4lpqm3jlw553ccw912";
   };
 
   patchPhase = ''

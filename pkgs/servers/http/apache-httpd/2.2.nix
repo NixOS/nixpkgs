@@ -12,12 +12,12 @@ assert ldapSupport -> aprutil.ldapSupport && openldap != null;
 assert mpm == "prefork" || mpm == "worker" || mpm == "event";
 
 stdenv.mkDerivation rec {
-  version = "2.2.26";
+  version = "2.2.27";
   name = "apache-httpd-${version}";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "1dj29cl2bsk8ir8hxw0ajhbpbrrmsh8mwqfc1ipiqgv7slyqx45g";
+    sha256 = "0iw19y6knijinqwvv4q16fgq5xq8nwxdg14wrrbc0mfasvg76n90";
   };
 
   buildInputs = [perl apr aprutil pcre] ++
@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
     homepage    = http://httpd.apache.org/;
     license     = stdenv.lib.licenses.asl20;
     platforms   = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    maintainers = with stdenv.lib.maintainers; [ simons lovek323 ];
+    maintainers = with stdenv.lib.maintainers; [ eelco simons lovek323 ];
   };
 }

@@ -14,6 +14,7 @@ let
 in
 
 {
+  name = "proxy";
 
   nodes =
     { proxy =

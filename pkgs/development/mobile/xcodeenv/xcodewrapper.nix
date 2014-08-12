@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "xcode-wrapper-"+version;
   buildCommand = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cd $out/bin
     ln -s /usr/bin/xcode-select
     ln -s /usr/bin/xcodebuild

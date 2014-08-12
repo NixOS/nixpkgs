@@ -1,4 +1,4 @@
- 
+
 { stdenv, fetchurl, pkgconfig, autoreconfHook, glib, gettext, gnome_common, gtk3,intltool,
 cinnamon-desktop, clutter, cogl, zenity, python, gnome_doc_utils, makeWrapper}:
 
@@ -29,8 +29,8 @@ stdenv.mkDerivation {
 
 
   postFixup  = ''
-    
-    for f in "$out"/bin/*; do
+
+    for f in "$out/bin/"*; do
       wrapProgram "$f" --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
     done
   '';
@@ -41,6 +41,7 @@ stdenv.mkDerivation {
 
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.roelof ];
+
+    broken = true;
   };
 }
-

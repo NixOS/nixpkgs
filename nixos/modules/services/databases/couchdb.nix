@@ -126,6 +126,16 @@ in {
           Extra configuration. Overrides any other cofiguration.
         '';
       };
+
+      configFile = mkOption {
+        type = types.string;
+        default = "/var/lib/couchdb/couchdb.ini";
+        description = ''
+          Custom configuration file. File needs to be readable and writable
+          from couchdb user/group.
+        '';
+      };
+
     };
 
   };
@@ -146,11 +156,13 @@ in {
         mkdir -p `dirname ${cfg.logFile}`;
         mkdir -p ${cfg.databaseDir};
         mkdir -p ${cfg.viewIndexDir};
+        touch ${cfg.configFile}
 
         if [ "$(id -u)" = 0 ]; then
-          chown ${cfg.user}:${cfg.group} `dirname ${cfg.uriFile}`
+          chown ${cfg.user}:${cfg.group} ${cfg.uriFile}
           chown ${cfg.user}:${cfg.group} ${cfg.databaseDir}
           chown ${cfg.user}:${cfg.group} ${cfg.viewIndexDir}
+          chown ${cfg.user}:${cfg.group} ${cfg.configFile}
         fi
         '';
 
@@ -158,7 +170,7 @@ in {
         PermissionsStartOnly = true;
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${cfg.package}/bin/couchdb -a ${configFile} -a ${pkgs.writeText "couchdb-extra.ini" cfg.extraConfig}";
+        ExecStart = "${cfg.package}/bin/couchdb -a ${configFile} -a ${pkgs.writeText "couchdb-extra.ini" cfg.extraConfig} -a ${cfg.configFile}";
       };
     };
 

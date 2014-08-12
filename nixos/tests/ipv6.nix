@@ -2,6 +2,7 @@
 # solicication/advertisement using radvd works.
 
 import ./make-test.nix {
+  name = "ipv6";
 
   nodes =
     { client = { config, pkgs, ... }: { };
@@ -36,6 +37,7 @@ import ./make-test.nix {
 
       $client->waitForUnit("network.target");
       $server->waitForUnit("network.target");
+      $server->waitForUnit("httpd.service");
 
       # Wait until the given interface has a non-tentative address of
       # the desired scope (i.e. has completed Duplicate Address

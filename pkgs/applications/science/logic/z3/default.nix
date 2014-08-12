@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Z3 is a high-performance theorem prover and SMT solver";
     homepage    = "http://z3.codeplex.com";
-    license     = stdenv.lib.licenses.unfreeRedistributable;
+    license     = stdenv.lib.licenses.msrla;
     platforms   = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };

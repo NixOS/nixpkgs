@@ -1,0 +1,84 @@
+From: Damien Cassou <damien.cassou@gmail.com>
+Subject: Fix use of absolute paths in cmake files
+
+* build/directories.cmake
+* build/CMakeLists.txt
+* build/vm-sound-ALSA/CMakeLists.txt
+* build/vm-sound-null/CMakeLists.txt
+* build/vm-display-null/CMakeLists.txt
+* build/vm-display-X11/CMakeLists.txt
+--- a/build/CMakeLists.txt
++++ b/build/CMakeLists.txt
+@@ -71,7 +71,7 @@
+ list(APPEND LINKLIBS m)
+ list(APPEND LINKLIBS dl)
+ list(APPEND LINKLIBS pthread)
+-set(EXECUTABLE_OUTPUT_PATH "/builds/workspace/Pharo-vm-unix-sources/cog/results")
++set(EXECUTABLE_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/../results")
+ add_subdirectory("vm-display-null")
+ add_subdirectory("vm-display-X11")
+ add_subdirectory("vm-sound-ALSA")
+--- a/build/directories.cmake
++++ b/build/directories.cmake
+@@ -1,12 +1,12 @@
+-set(topDir "/builds/workspace/Pharo-vm-unix-sources/cog")
+-set(buildDir "/builds/workspace/Pharo-vm-unix-sources/cog/build")
++set(topDir "${CMAKE_SOURCE_DIR}/..")
++set(buildDir "${CMAKE_SOURCE_DIR}/../build")
+ set(thirdpartyDir "${buildDir}/thirdParty")
+-set(platformsDir "/builds/workspace/Pharo-vm-unix-sources/cog/platforms")
+-set(srcDir "/builds/workspace/Pharo-vm-unix-sources/cog/src")
++set(platformsDir "${CMAKE_SOURCE_DIR}/../platforms")
++set(srcDir "${CMAKE_SOURCE_DIR}/../src")
+ set(srcPluginsDir "${srcDir}/plugins")
+ set(srcVMDir "${srcDir}/vm")
+ set(platformName "unix")
+ set(targetPlatform ${platformsDir}/${platformName})
+ set(crossDir "${platformsDir}/Cross")
+ set(platformVMDir "${targetPlatform}/vm")
+-set(outputDir "/builds/workspace/Pharo-vm-unix-sources/cog/results")
++set(outputDir "${CMAKE_SOURCE_DIR}/../results")
+--- a/build/vm-display-X11/CMakeLists.txt
++++ b/build/vm-display-X11/CMakeLists.txt
+@@ -11,7 +11,7 @@
+ include_directories(${crossDir}/plugins/FilePlugin)
+ include_directories(${targetPlatform}/plugins/B3DAcceleratorPlugin)
+ include_directories(${crossDir}/plugins/B3DAcceleratorPlugin)
+-set(LIBRARY_OUTPUT_PATH "/builds/workspace/Pharo-vm-unix-sources/cog/results")
++set(LIBRARY_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/../results")
+ list(APPEND LINKLIBS SM)
+ list(APPEND LINKLIBS ICE)
+ list(APPEND LINKLIBS GL)
+--- a/build/vm-display-null/CMakeLists.txt
++++ b/build/vm-display-null/CMakeLists.txt
+@@ -11,7 +11,7 @@
+ include_directories(${crossDir}/plugins/FilePlugin)
+ include_directories(${targetPlatform}/plugins/B3DAcceleratorPlugin)
+ include_directories(${crossDir}/plugins/B3DAcceleratorPlugin)
+-set(LIBRARY_OUTPUT_PATH "/builds/workspace/Pharo-vm-unix-sources/cog/results")
++set(LIBRARY_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/../results")
+ target_link_libraries(vm-display-null ${LINKLIBS})
+ set_target_properties(vm-display-null PROPERTIES PREFIX "" SUFFIX "" 
+ 			LINK_FLAGS -m32)
+--- a/build/vm-sound-ALSA/CMakeLists.txt
++++ b/build/vm-sound-ALSA/CMakeLists.txt
+@@ -11,7 +11,7 @@
+ include_directories(${crossDir}/plugins/FilePlugin)
+ include_directories(${targetPlatform}/plugins/B3DAcceleratorPlugin)
+ include_directories(${crossDir}/plugins/B3DAcceleratorPlugin)
+-set(LIBRARY_OUTPUT_PATH "/builds/workspace/Pharo-vm-unix-sources/cog/results")
++set(LIBRARY_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/../results")
+ target_link_libraries(vm-sound-ALSA ${LINKLIBS})
+ set_target_properties(vm-sound-ALSA PROPERTIES PREFIX "" SUFFIX "" 
+ 			LINK_FLAGS -m32)
+--- a/build/vm-sound-null/CMakeLists.txt
++++ b/build/vm-sound-null/CMakeLists.txt
+@@ -11,7 +11,7 @@
+ include_directories(${crossDir}/plugins/FilePlugin)
+ include_directories(${targetPlatform}/plugins/B3DAcceleratorPlugin)
+ include_directories(${crossDir}/plugins/B3DAcceleratorPlugin)
+-set(LIBRARY_OUTPUT_PATH "/builds/workspace/Pharo-vm-unix-sources/cog/results")
++set(LIBRARY_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/../results")
+ target_link_libraries(vm-sound-null ${LINKLIBS})
+ set_target_properties(vm-sound-null PROPERTIES PREFIX "" SUFFIX "" 
+ 			LINK_FLAGS -m32)

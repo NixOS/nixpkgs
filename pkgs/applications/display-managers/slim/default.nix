@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "slim-1.3.6";
 
   src = fetchurl {
-    url = "http://download.berlios.de/slim/${name}.tar.gz";
+    url = "mirror://sourceforge/slim.berlios/${name}.tar.gz";
     sha256 = "1pqhk22jb4aja4hkrm7rjgbgzjyh7i4zswdgf5nw862l2znzxpi1";
   };
 
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DUSE_PAM=1" ];
 
+  NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype";
+
   enableParallelBuilding = true;
 
   buildInputs =
@@ -35,7 +37,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_LINK = "-lXmu";
 
   meta = {
-    homepage = http://slim.berlios.de;
+    homepage = http://sourceforge.net/projects/slim.berlios/; # berlios shut down; I found no replacement yet
     platforms = stdenv.lib.platforms.linux;
   };
 }

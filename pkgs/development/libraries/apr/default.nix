@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "apr-1.5.0";
+  name = "apr-1.5.1";
 
   src = fetchurl {
     url = "mirror://apache/apr/${name}.tar.bz2";
-    md5 = "cc93bd2c12d0d037f68e21cc6385dc31";
+    sha256 = "1b4qw686bwjn19iyb0lg918q23xxd6s2gnyczhjq992d3m1vwjp9";
   };
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin_fix_configure.patch ];

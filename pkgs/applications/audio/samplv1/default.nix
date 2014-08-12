@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, jackaudio, libsndfile, lv2, qt4 }:
+{ stdenv, fetchurl, jack2, libsndfile, lv2, qt4 }:
 
 stdenv.mkDerivation rec {
   name = "samplv1-${version}";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/samplv1/${name}.tar.gz";
-    sha256 = "1cx3qs9vrdwmym2qsghqq53bshnjqgpqypsilr1m2i1cpfnfrr6x";
+    sha256 = "02mm5y1yzklvs5bpxl86y3dqcg7migfybmin8llk91pws6rl9b41";
   };
 
-  buildInputs = [ jackaudio libsndfile lv2 qt4 ];
+  buildInputs = [ jack2 libsndfile lv2 qt4 ];
 
   meta = with stdenv.lib; {
     description = "An old-school all-digital polyphonic sampler synthesizer with stereo fx";

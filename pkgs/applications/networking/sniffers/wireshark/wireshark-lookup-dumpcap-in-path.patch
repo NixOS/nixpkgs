@@ -1,0 +1,62 @@
+From 188e8858243b2278239261aaaaea7ad07476d561 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
+Date: Sun, 13 Apr 2014 15:17:24 +0200
+Subject: [PATCH] Lookup dumpcap in PATH
+
+NixOS patch: Look for dumpcap in PATH first, because there may be a
+dumpcap setuid-wrapper that we want to use instead of the default
+non-setuid dumpcap binary.
+
+Also change execv() to execvp() because we've set argv[0] to "dumpcap"
+and have to enable PATH lookup. Wireshark is not a setuid program, so
+looking in PATH is not a security issue.
+---
+ capture_sync.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
+
+diff --git a/capture_sync.c b/capture_sync.c
+index eb05fae..efb5675 100644
+--- a/capture_sync.c
++++ b/capture_sync.c
+@@ -326,8 +326,18 @@ init_pipe_args(int *argc) {
+     argv = (char **)g_malloc(sizeof (char *));
+     *argv = NULL;
+ 
+-    /* take Wireshark's absolute program path and replace "Wireshark" with "dumpcap" */
+-    exename = g_strdup_printf("%s" G_DIR_SEPARATOR_S "dumpcap", progfile_dir);
++    /*
++     * NixOS patch: Look for dumpcap in PATH first, because there may be a
++     * dumpcap setuid-wrapper that we want to use instead of the default
++     * non-setuid dumpcap binary.
++     */
++    if (system("command -v dumpcap >/dev/null") == 0) {
++        /* Found working dumpcap */
++        exename = g_strdup_printf("dumpcap");
++    } else {
++        /* take Wireshark's absolute program path and replace "Wireshark" with "dumpcap" */
++        exename = g_strdup_printf("%s" G_DIR_SEPARATOR_S "dumpcap", progfile_dir);
++    }
+ 
+     /* Make that the first argument in the argument list (argv[0]). */
+     argv = sync_pipe_add_arg(argv, argc, exename);
+@@ -649,7 +659,7 @@ sync_pipe_start(capture_options *capture_opts, capture_session *cap_session, voi
+          */
+         dup2(sync_pipe[PIPE_WRITE], 2);
+         ws_close(sync_pipe[PIPE_READ]);
+-        execv(argv[0], argv);
++        execvp(argv[0], argv);
+         g_snprintf(errmsg, sizeof errmsg, "Couldn't run %s in child process: %s",
+                    argv[0], g_strerror(errno));
+         sync_pipe_errmsg_to_parent(2, errmsg, "");
+@@ -879,7 +889,7 @@ sync_pipe_open_command(char** argv, int *data_read_fd,
+         dup2(sync_pipe[PIPE_WRITE], 2);
+         ws_close(sync_pipe[PIPE_READ]);
+         ws_close(sync_pipe[PIPE_WRITE]);
+-        execv(argv[0], argv);
++        execvp(argv[0], argv);
+         g_snprintf(errmsg, sizeof errmsg, "Couldn't run %s in child process: %s",
+                    argv[0], g_strerror(errno));
+         sync_pipe_errmsg_to_parent(2, errmsg, "");
+-- 
+1.9.0
+

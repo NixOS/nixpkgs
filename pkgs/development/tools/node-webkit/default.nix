@@ -16,13 +16,13 @@ let
 
 in stdenv.mkDerivation rec {
   name = "node-webkit-${version}";
-  version = "0.8.4";
+  version = "0.9.2";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/node-webkit/v${version}/node-webkit-v${version}-linux-${bits}.tar.gz";
     sha256 = if bits == "x64" then
-      "91229edfb03349306c5ce101fdab2de55f7473cc7c36367e9611a0527d2ef591" else
-      "12axppynangh0q72swzqcmz2blncgm2dw9n489313ybnp2p42hnp";
+      "04b9hgrxxnvrzyc7kmlabvrfbzj9d6lif7z69zgsbn3x25nxxd2n" else
+      "0icwdl564sbx27124js1l4whfld0n6nbysdd522frzk1759dzgri";
   };
 
   patchPhase = ''
@@ -33,8 +33,8 @@ in stdenv.mkDerivation rec {
   installPhase = let
     LD_LIBRARY_PATH = "${nwEnv}/lib:${nwEnv}/lib64:$out/share/node-webkit";
   in ''
-    ensureDir $out/bin
-    ensureDir $out/share/node-webkit
+    mkdir -p $out/bin
+    mkdir -p $out/share/node-webkit
     cp -R * $out/share/node-webkit
 
     ln -s ${udev}/lib/libudev.so $out/share/node-webkit/libudev.so.0

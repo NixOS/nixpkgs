@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, gnutls, pkgconfig, readline, zlib, xz }:
+{ stdenv, fetchurl, gnutls, pkgconfig, readline, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "lftp-4.4.15";
+  name = "lftp-4.5.2";
 
   src = fetchurl {
     url = "http://lftp.yar.ru/ftp/${name}.tar.gz";
-    sha256 = "1iw0xvvi9wr7grm6dwbxgm8ms98pg5skj44q477gxzrrff9dvvvp";
+    sha256 = "106llhq9lgvdxlf4r1p94r66fcy5ywfdfvins4dfn9irg0k5gzyv";
   };
 
   patches = [ ./no-gets.patch ];

@@ -10,7 +10,7 @@
 
 let
 
-  version = "1.9.2";
+  version = "2.0.2";
 
   svn = subversionClient.override { perlBindings = true; };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "1x4rb06vw4ckdflmn01r5l9spvn7cng4i5mm3sbd0n8cz0n6xz13";
+    sha256 = "1hk9xxnqiyxii4cfl0j88kws5h1w8xavmfp8a2qb3as5jwnc5y5w";
   };
 
   patches = [ ./docbook2texi.patch ./symlinks-in-bin.patch ./cert-path.patch ];

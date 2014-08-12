@@ -53,7 +53,7 @@ let
       audacious = linux;
       autoconf = all;
       automake = all;
-      avahi = allBut "i686-cygwin";  # Cygwin builds fail
+      avahi = allBut cygwin;  # Cygwin builds fail
       bash = all;
       bashInteractive = all;
       bazaar = linux; # first let sqlite3 work on darwin
@@ -98,7 +98,6 @@ let
       drgeo = linux;
       ejabberd = linux;
       elinks = linux;
-      emacs23 = gtkSupported;
       enscript = all;
       eprover = linux;
       evince = linux;
@@ -116,7 +115,6 @@ let
       gcc = linux;
       gcc33 = linux;
       gcc34 = linux;
-      gcc42 = linux;
       gcc44 = linux;
       gcj = linux;
       ghdl = linux;
@@ -135,7 +133,7 @@ let
       gnumake = all;
       gnupatch = all;
       gnupg = linux;
-      gnuplot = allBut "i686-cygwin";
+      gnuplot = allBut cygwin;
       gnused = all;
       gnutar = all;
       gnutls = linux;
@@ -185,7 +183,6 @@ let
       libtool = all;
       libtool_2 = all;
       lout = linux;
-      lsh = linux;
       lsof = linux;
       ltrace = linux;
       lvm2 = linux;
@@ -214,7 +211,7 @@ let
       mysql = linux;
       mysql51 = linux;
       mysql55 = linux;
-      nano = allBut "i686-cygwin";
+      nano = allBut cygwin;
       ncat = linux;
       netcat = all;
       nfsUtils = linux;
@@ -247,7 +244,7 @@ let
       pthreadmanpages = linux;
       pygtk = linux;
       pyqt4 = linux;
-      python = allBut "i686-cygwin";
+      python = allBut cygwin;
       pythonFull = linux;
       sbcl = linux;
       qt3 = linux;
@@ -258,7 +255,7 @@ let
       rogue = all;
       rpm = linux;
       rsync = linux;
-      rubber = allBut "i686-cygwin";
+      rubber = allBut cygwin;
       ruby = all;
       rxvt_unicode = linux;
       screen = linux ++ darwin;
@@ -268,10 +265,10 @@ let
       sgtpuzzles = linux;
       sharutils = all;
       slim = linux;
-      sloccount = allBut "i686-cygwin";
+      sloccount = allBut cygwin;
       smartmontools = linux;
       spidermonkey = linux;
-      sqlite = allBut "i686-cygwin";
+      sqlite = allBut cygwin;
       squid = linux;
       ssmtp = linux;
       stdenv = prio 175 all;
@@ -295,7 +292,6 @@ let
       texLive = linux;
       texLiveBeamer = linux;
       texLiveExtra = linux;
-      texinfo = all;
       tightvnc = linux;
       time = linux;
       tinycc = linux;
@@ -311,7 +307,6 @@ let
       vice = linux;
       vim = linux;
       vimHugeX = linux;
-      VisualBoyAdvance = linux;
       vncrec = linux;
       vorbisTools = linux;
       vpnc = linux;
@@ -333,7 +328,6 @@ let
       xineUI = linux;
       xkeyboard_config = linux;
       xlockmore = linux;
-      xmltv = linux;
       xpdf = linux;
       xscreensaver = linux;
       xsel = linux;
@@ -344,17 +338,6 @@ let
       zip = all;
       zsh = linux;
       zsnes = ["i686-linux"];
-
-      emacs23Packages = {
-        bbdb = linux;
-        cedet = linux;
-        emacsw3m = linux;
-        emms = linux;
-        jdee = linux;
-      };
-
-      firefox36Pkgs.firefox = linux;
-      firefoxPkgs.firefox = linux;
 
       gnome = {
         gnome_panel = linux;
@@ -423,7 +406,10 @@ let
         xf86videointel = linux;
         xf86videonv = linux;
         xf86videovesa = linux;
+        xf86videovmware = linux;
+        xf86videomodesetting = linux;
         xfs = linux;
+        xinput = linux;
         xkbcomp = linux;
         xlsclients = linux;
         xmessage = linux;

@@ -73,6 +73,10 @@ in
       '';
   };
 
+  libXfont = attrs: attrs // {
+    propagatedBuildInputs = [ args.freetype ]; # propagate link reqs. like bzip2
+  };
+
   libXxf86vm = attrs: attrs // {
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
@@ -111,6 +115,10 @@ in
   libXft = attrs: attrs // {
     propagatedBuildInputs = [ xorg.libXrender args.freetype args.fontconfig ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    # the include files need ft2build.h, and Requires.private isn't enough for us
+    postInstall = ''
+      sed "/^Requires:/s/$/, freetype2/" -i "$out/lib/pkgconfig/xft.pc"
+    '';
   };
 
   libXext = attrs: attrs // {
@@ -178,9 +186,9 @@ in
   };
 
   xf86videonv = attrs: attrs // {
-    patches = [( args.fetchurl {
+    patches = [( args.fetchpatch {
       url = http://cgit.freedesktop.org/xorg/driver/xf86-video-nv/patch/?id=fc78fe98222b0204b8a2872a529763d6fe5048da;
-      sha256 = "0ikbnz6048ygs1qahb6ylnxkyjhfjcqr2gm9bk95ca90v57j7i0f";
+      sha256 = "0i2ddgqwj6cfnk8f4r73kkq3cna7hfnz7k3xj3ifx5v8mfiva6gw";
     })];
   };
 

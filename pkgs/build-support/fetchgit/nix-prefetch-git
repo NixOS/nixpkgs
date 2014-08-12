@@ -217,11 +217,19 @@ clone_user_rev() {
             fi;;
     esac
 
+    local full_revision=$(cd $dir && (git rev-parse $rev 2> /dev/null || git rev-parse refs/heads/fetchgit) | tail -n1)
+    echo "git revision is $full_revision"
+    echo "git human-readable version is $(cd $dir && (git describe $full_revision 2> /dev/null || git describe --tags $full_revision 2> /dev/null || echo -- none --))"
+
     # Allow doing additional processing before .git removal
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
     if test -z "$leaveDotGit"; then
 	echo "removing \`.git'..." >&2
         find $dir -name .git\* | xargs rm -rf
+    else
+        # The logs and index contain timestamps, and the hooks contain
+        # the nix path of git's bash
+        find $dir -name .git | xargs -I {} rm -rf {}/logs {}/index {}/hooks
     fi
 }
 

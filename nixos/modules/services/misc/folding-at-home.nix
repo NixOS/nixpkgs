@@ -44,7 +44,7 @@ in {
 
     users.extraUsers = singleton
       { name = fahUser;
-        uid = config.ids.uids.foldingAtHome;
+        uid = config.ids.uids.foldingathome;
         description = "Folding@Home user";
         home = stateDir;
       };

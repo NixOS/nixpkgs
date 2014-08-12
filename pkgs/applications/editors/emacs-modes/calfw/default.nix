@@ -16,17 +16,17 @@ stdenv.mkDerivation rec {
 
   installPhase =
     ''
-       ensureDir "$out/share/doc/${name}"
+       mkdir -p "$out/share/doc/${name}"
        cp -v readme.md "$out/share/doc/${name}"
 
-       ensureDir "$out/share/emacs/site-lisp/"
+       mkdir -p "$out/share/emacs/site-lisp/"
        cp *.el "$out/share/emacs/site-lisp/"
     '';
 
   meta = {
     description = "A calendar framework for Emacs";
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = with stdenv.lib.maintainers; [ chaoflow ];
     platforms = stdenv.lib.platforms.gnu;

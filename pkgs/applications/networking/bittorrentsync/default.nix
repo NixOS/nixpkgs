@@ -5,15 +5,15 @@ let
     else if stdenv.system == "i686-linux" then "i386"
     else throw "Bittorrent Sync for: ${stdenv.system} not supported!";
 
-  sha256 = if stdenv.system == "x86_64-linux" then "16jdnip51fsnc2g0vib2zb4f06z5p1myzv9brrp42lq63l4skylj"
-    else if stdenv.system == "i686-linux" then "15bspn9frm2n7bzj7pdgbpd7gjjcxp0yx2sksa4ly6wmlv9lvf1j"
+  sha256 = if stdenv.system == "x86_64-linux" then "1xba0wv45w4kg84i5sywkfk44vj9wxkr7f1vga2mpz86j8vq25iy"
+    else if stdenv.system == "i686-linux" then "10ml1wclix9236zcb4mh60hdm9vvfaarlb62z7fdrwk6ikqbm7fk"
     else throw "Bittorrent Sync for: ${stdenv.system} not supported!";
 
   libPath = stdenv.lib.makeLibraryPath [ stdenv.gcc.libc ];
 in
 stdenv.mkDerivation rec {
   name = "btsync-${version}";
-  version = "1.3.87";
+  version = "1.3.94";
 
   src  = fetchurl {
     url  = "http://syncapp.bittorrent.com/${version}/btsync_${arch}-${version}.tar.gz";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ patchelf ];
 
   installPhase = ''
-    ensureDir "$out/bin/"
+    mkdir -p "$out/bin/"
     cp -r "btsync" "$out/bin/"
 
     patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \

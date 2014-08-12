@@ -4,16 +4,16 @@
 
 stdenv.mkDerivation rec {
   name = "vimb-${version}";
-  version = "2.2";
+  version = "2.4";
 
   src = fetchurl {
     url = "https://github.com/fanglingsu/vimb/archive/${version}.tar.gz";
-    sha256 = "18gig6rcxv0i4a8mz3jv29zpj0323zw45jsg1ycx61a08rzag60m";
+    sha256 = "167ilbsd4y4zl493k6g4j5v85y784qz8z7qflzd1ccsjjznv7fm8";
   };
 
   # Nixos default ca bundle
   patchPhase = ''
-    sed -i s,/etc/ssl/certs/ca-certificates.crt,/etc/ssl/certs/ca-bundle.crt, src/default.h
+    sed -i s,/etc/ssl/certs/ca-certificates.crt,/etc/ssl/certs/ca-bundle.crt, src/setting.c
   '';
 
   buildInputs = [ makeWrapper gtk libsoup pkgconfig webkit gsettings_desktop_schemas ];

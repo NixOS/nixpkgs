@@ -1,3 +1,18 @@
+diff --git a/Makefile.am b/Makefile.am
+index 3d9e5c1..4d43cb4 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1707,7 +1707,9 @@ dist_tmpfiles_DATA += \
+ endif
+ 
+ SYSINIT_TARGET_WANTS += \
+-	systemd-tmpfiles-setup-dev.service \
++	systemd-tmpfiles-setup-dev.service
++
++MULTI_USER_TARGET_WANTS += \
+ 	systemd-tmpfiles-setup.service
+ 
+ dist_zshcompletion_DATA += \
 diff --git a/rules/99-systemd.rules.in b/rules/99-systemd.rules.in
 index db72373..2fc12ca 100644
 --- a/rules/99-systemd.rules.in
@@ -26,6 +41,22 @@ index 41605ee..8517369 100644
                          if (switch_root_dir)
                                  args[i++] = "--switched-root";
                          args[i++] = arg_running_as == SYSTEMD_SYSTEM ? "--system" : "--user";
+diff --git a/src/core/service.c b/src/core/service.c
+index ae3695a..6b3aa45 100644
+--- a/src/core/service.c
++++ b/src/core/service.c
+@@ -1096,11 +1096,6 @@ static int service_verify(Service *s) {
+                 return -EINVAL;
+         }
+ 
+-        if (s->type == SERVICE_ONESHOT && s->restart != SERVICE_RESTART_NO) {
+-                log_error_unit(UNIT(s)->id, "%s has Restart setting other than no, which isn't allowed for Type=oneshot services. Refusing.", UNIT(s)->id);
+-                return -EINVAL;
+-        }
+-
+         if (s->type == SERVICE_DBUS && !s->bus_name) {
+                 log_error_unit(UNIT(s)->id, "%s is of type D-Bus but no D-Bus service name has been specified. Refusing.", UNIT(s)->id);
+                 return -EINVAL;
 diff --git a/src/core/socket.c b/src/core/socket.c
 index 7c18a2b..eba67d5 100644
 --- a/src/core/socket.c
@@ -78,6 +109,28 @@ index d1258f0..0311812 100644
  #ifndef HAVE_SPLIT_USR
                      || path_equal(m->path, "/usr")
  #endif
+diff --git a/src/fsck/fsck.c b/src/fsck/fsck.c
+index 18f2aca..2a2b1ea 100644
+--- a/src/fsck/fsck.c
++++ b/src/fsck/fsck.c
+@@ -285,7 +285,7 @@ int main(int argc, char *argv[]) {
+ 
+         type = udev_device_get_property_value(udev_device, "ID_FS_TYPE");
+         if (type) {
+-                const char *checker = strappenda("/sbin/fsck.", type);
++                const char *checker = strappenda("/run/current-system/sw/sbin/fsck.", type);
+                 r = access(checker, X_OK);
+                 if (r < 0) {
+                         if (errno == ENOENT) {
+@@ -302,7 +302,7 @@ int main(int argc, char *argv[]) {
+                         return EXIT_FAILURE;
+                 }
+ 
+-        cmdline[i++] = "/sbin/fsck";
++        cmdline[i++] = "/run/current-system/sw/sbin/fsck";
+         cmdline[i++] = "-a";
+         cmdline[i++] = "-T";
+         cmdline[i++] = "-l";
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
 index 9a9ed9d..9e46e18 100644
 --- a/src/nspawn/nspawn.c
@@ -113,6 +166,19 @@ index d61ecdf..228a3a4 100644
                  if (ifaddrmsg->ifa_flags & IFA_F_DEPRECATED)
                          continue;
  
+diff --git a/src/shared/generator.c b/src/shared/generator.c
+index 6110303..e679cb1 100644
+--- a/src/shared/generator.c
++++ b/src/shared/generator.c
+@@ -48,7 +48,7 @@ int generator_write_fsck_deps(
+                 const char *checker;
+                 int r;
+ 
+-                checker = strappenda("/sbin/fsck.", fstype);
++                checker = strappenda("/run/current-system/sw/sbin/fsck.", fstype);
+                 r = access(checker, X_OK);
+                 if (r < 0) {
+                         log_warning("Checking was requested for %s, but %s cannot be used: %m", what, checker);
 diff --git a/src/systemctl/systemctl.c b/src/systemctl/systemctl.c
 index 0887bc3..6b502ce 100644
 --- a/src/systemctl/systemctl.c
@@ -260,6 +326,21 @@ index e945d87..77728f2 100644
  ExecStart=@rootlibexecdir@/systemd-backlight load %i
  ExecStop=@rootlibexecdir@/systemd-backlight save %i
 +X-RestartIfChanged=false
+diff --git a/units/systemd-journal-flush.service.in b/units/systemd-journal-flush.service.in
+index 503e8a6..fe23b8b 100644
+--- a/units/systemd-journal-flush.service.in
++++ b/units/systemd-journal-flush.service.in
+@@ -10,8 +10,9 @@ Description=Trigger Flushing of Journal to Persistent Storage
+ Documentation=man:systemd-journald.service(8) man:journald.conf(5)
+ DefaultDependencies=no
+ Requires=systemd-journald.service
+-After=systemd-journald.service local-fs.target remote-fs.target
++After=systemd-journald.service
+ Before=systemd-user-sessions.service
++RequiresMountsFor=/var/log/journal
+ 
+ [Service]
+ ExecStart=@rootbindir@/systemctl kill --kill-who=main --signal=SIGUSR1 systemd-journald.service
 diff --git a/units/systemd-journald.service.in b/units/systemd-journald.service.in
 index de93879..c9a49f3 100644
 --- a/units/systemd-journald.service.in
@@ -291,10 +372,32 @@ index 9d264a2..c505535 100644
  ExecStart=@rootlibexecdir@/systemd-rfkill load %I
  ExecStop=@rootlibexecdir@/systemd-rfkill save %I
 +X-RestartIfChanged=false
+diff --git a/units/systemd-tmpfiles-setup.service.in b/units/systemd-tmpfiles-setup.service.in
+index 01043b7..507f820 100644
+--- a/units/systemd-tmpfiles-setup.service.in
++++ b/units/systemd-tmpfiles-setup.service.in
+@@ -12,7 +12,7 @@ DefaultDependencies=no
+ Wants=local-fs.target
+ Conflicts=shutdown.target
+ After=systemd-readahead-collect.service systemd-readahead-replay.service local-fs.target
+-Before=sysinit.target shutdown.target
++Before=shutdown.target
+ ConditionDirectoryNotEmpty=|/usr/lib/tmpfiles.d
+ ConditionDirectoryNotEmpty=|/lib/tmpfiles.d
+ ConditionDirectoryNotEmpty=|/usr/local/lib/tmpfiles.d
 diff --git a/units/systemd-update-utmp.service.in b/units/systemd-update-utmp.service.in
-index da7dda7..4cc550d 100644
+index da7dda7..e638145 100644
 --- a/units/systemd-update-utmp.service.in
 +++ b/units/systemd-update-utmp.service.in
+@@ -11,7 +11,7 @@ Documentation=man:systemd-update-utmp.service(8) man:utmp(5)
+ DefaultDependencies=no
+ RequiresMountsFor=/var/log/wtmp
+ Conflicts=shutdown.target
+-After=systemd-readahead-collect.service systemd-readahead-replay.service systemd-remount-fs.service systemd-tmpfiles-setup.service auditd.service
++After=systemd-readahead-collect.service systemd-readahead-replay.service systemd-remount-fs.service auditd.service
+ Before=sysinit.target shutdown.target
+ 
+ [Service]
 @@ -19,3 +19,4 @@ Type=oneshot
  RemainAfterExit=yes
  ExecStart=@rootlibexecdir@/systemd-update-utmp reboot

@@ -5,128 +5,11 @@ with lib;
 let
   cfg = config.security.grsecurity;
 
-  mkKernel = kernel: patch:
-    assert patch.kversion == kernel.version;
-      { inherit kernel patch;
-        inherit (patch) grversion revision;
-      };
-
-  stable-patch = with pkgs.kernelPatches;
-    if cfg.vserver then grsecurity_vserver else grsecurity_stable;
-  stableKernel = mkKernel pkgs.linux_3_2  stable-patch;
-  testKernel   = mkKernel pkgs.linux_3_14 pkgs.kernelPatches.grsecurity_unstable;
-
-  ## -- grsecurity configuration -----------------------------------------------
-
-  grsecPrioCfg =
-    if cfg.config.priority == "security" then
-      "GRKERNSEC_CONFIG_PRIORITY_SECURITY y"
-    else
-      "GRKERNSEC_CONFIG_PRIORITY_PERF y";
-
-  grsecSystemCfg =
-    if cfg.config.system == "desktop" then
-      "GRKERNSEC_CONFIG_DESKTOP y"
-    else
-      "GRKERNSEC_CONFIG_SERVER y";
-
-  grsecVirtCfg =
-    if cfg.config.virtualisationConfig == "none" then
-      "GRKERNSEC_CONFIG_VIRT_NONE y"
-    else if cfg.config.virtualisationConfig == "host" then
-      "GRKERNSEC_CONFIG_VIRT_HOST y"
-    else
-      "GRKERNSEC_CONFIG_VIRT_GUEST y";
-
-  grsecHwvirtCfg = if cfg.config.virtualisationConfig == "none" then "" else
-    if cfg.config.hardwareVirtualisation == true then
-      "GRKERNSEC_CONFIG_VIRT_EPT y"
-    else
-      "GRKERNSEC_CONFIG_VIRT_SOFT y";
-
-  grsecVirtswCfg =
-    let virtCfg = opt: "GRKERNSEC_CONFIG_VIRT_"+opt+" y";
-    in
-      if cfg.config.virtualisationConfig == "none" then ""
-      else if cfg.config.virtualisationSoftware == "xen"    then virtCfg "XEN"
-      else if cfg.config.virtualisationSoftware == "kvm"    then virtCfg "KVM"
-      else if cfg.config.virtualisationSoftware == "vmware" then virtCfg "VMWARE"
-      else                                                       virtCfg "VIRTUALBOX";
-
-  grsecMainConfig = if cfg.config.mode == "custom" then "" else ''
-    GRKERNSEC_CONFIG_AUTO y
-    ${grsecPrioCfg}
-    ${grsecSystemCfg}
-    ${grsecVirtCfg}
-    ${grsecHwvirtCfg}
-    ${grsecVirtswCfg}
-  '';
-
-  grsecConfig =
-    let boolToKernOpt = b: if b then "y" else "n";
-        # Disable RANDSTRUCT under virtualbox, as it has some kind of
-        # breakage with the vbox guest drivers
-        randstruct = optionalString config.services.virtualbox.enable
-          "GRKERNSEC_RANDSTRUCT n";
-        # Disable restricting links under the testing kernel, as something
-        # has changed causing it to fail miserably during boot.
-        restrictLinks = optionalString cfg.testing
-          "GRKERNSEC_LINK n";
-    in ''
-      SECURITY_APPARMOR y
-      DEFAULT_SECURITY_APPARMOR y
-      GRKERNSEC y
-      ${grsecMainConfig}
-
-      ${if cfg.config.restrictProc then
-          "GRKERNSEC_PROC_USER y"
-        else
-          optionalString cfg.config.restrictProcWithGroup ''
-            GRKERNSEC_PROC_USERGROUP y
-            GRKERNSEC_PROC_GID ${toString cfg.config.unrestrictProcGid}
-          ''
-      }
-
-      GRKERNSEC_SYSCTL ${boolToKernOpt cfg.config.sysctl}
-      GRKERNSEC_CHROOT_CHMOD ${boolToKernOpt cfg.config.denyChrootChmod}
-      GRKERNSEC_NO_RBAC ${boolToKernOpt cfg.config.disableRBAC}
-      ${randstruct}
-      ${restrictLinks}
-
-      ${cfg.config.kernelExtraConfig}
-    '';
-
-  ## -- grsecurity kernel packages ---------------------------------------------
-
-  localver = grkern:
-    "-grsec" + optionalString cfg.config.verboseVersion
-       "-${grkern.grversion}-${grkern.revision}";
-
-  grsecurityOverrider = args: grkern: {
-    # Apparently as of gcc 4.6, gcc-plugin headers (which are needed by PaX plugins)
-    # include libgmp headers, so we need these extra tweaks
-    buildInputs = args.buildInputs ++ [ pkgs.gmp ];
-    preConfigure = ''
-      ${args.preConfigure or ""}
-      sed -i 's|-I|-I${pkgs.gmp}/include -I|' scripts/gcc-plugin.sh
-      sed -i 's|HOST_EXTRACFLAGS +=|HOST_EXTRACFLAGS += -I${pkgs.gmp}/include|' tools/gcc/Makefile
-      sed -i 's|HOST_EXTRACXXFLAGS +=|HOST_EXTRACXXFLAGS += -I${pkgs.gmp}/include|' tools/gcc/Makefile
-      rm localversion-grsec
-      echo ${localver grkern} > localversion-grsec
-    '';
-  };
-
-  mkGrsecPkg = grkern:
-    let kernelPkg = lowPrio (overrideDerivation (grkern.kernel.override (args: {
-          kernelPatches = args.kernelPatches ++ [ grkern.patch pkgs.kernelPatches.grsec_fix_path ];
-          argsOverride = {
-            modDirVersion = "${grkern.kernel.modDirVersion}${localver grkern}";
-          };
-          extraConfig = grsecConfig;
-        })) (args: grsecurityOverrider args grkern));
-    in pkgs.linuxPackagesFor kernelPkg (mkGrsecPkg grkern);
-
-  grsecPackage = mkGrsecPkg (if cfg.stable then stableKernel else testKernel);
+  customGrsecPkg =
+    (import ../../../pkgs/build-support/grsecurity {
+      grsecOptions = cfg;
+      inherit pkgs lib;
+    }).grsecPackage;
 in
 {
   options = {
@@ -151,14 +34,6 @@ in
         '';
       };
 
-      vserver = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable the stable grsecurity/vserver patches, based on Linux 3.2.
-        '';
-      };
-
       testing = mkOption {
         type = types.bool;
         default = false;
@@ -175,7 +50,7 @@ in
           description = ''
             grsecurity configuration mode. This specifies whether
             grsecurity is auto-configured or otherwise completely
-            manually configured. Can either by
+            manually configured. Can either be
             <literal>custom</literal> or <literal>auto</literal>.
 
             <literal>auto</literal> is recommended.
@@ -189,7 +64,7 @@ in
           description = ''
             grsecurity configuration priority. This specifies whether
             the kernel configuration should emphasize speed or
-            security. Can either by <literal>security</literal> or
+            security. Can either be <literal>security</literal> or
             <literal>performance</literal>.
           '';
         };
@@ -201,7 +76,7 @@ in
           description = ''
             grsecurity system configuration. This specifies whether
             the kernel configuration should be suitable for a Desktop
-            or a Server. Can either by <literal>server</literal> or
+            or a Server. Can either be <literal>server</literal> or
             <literal>desktop</literal>.
           '';
         };
@@ -361,9 +236,6 @@ in
             both.
           '';
         }
-        { assertion = (cfg.testing -> !cfg.vserver);
-          message   = "The vserver patches are only supported in the stable kernel.";
-        }
         { assertion = (cfg.config.restrictProc -> !cfg.config.restrictProcWithGroup) ||
                       (cfg.config.restrictProcWithGroup -> !cfg.config.restrictProc);
           message   = "You cannot enable both restrictProc and restrictProcWithGroup";
@@ -434,9 +306,9 @@ in
         chmod -R 0600 /etc/grsec
       '';
 
-    # Enable apparmor support, gradm udev rules, and utilities
+    # Enable AppArmor, gradm udev rules, and utilities
     security.apparmor.enable   = true;
-    boot.kernelPackages        = grsecPackage;
+    boot.kernelPackages        = customGrsecPkg;
     services.udev.packages     = [ pkgs.gradm ];
     environment.systemPackages = [ pkgs.gradm pkgs.paxctl pkgs.pax-utils ];
   };

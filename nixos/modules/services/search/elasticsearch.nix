@@ -21,43 +21,48 @@ let
     ];
   };
 
+  esPlugins = pkgs.buildEnv {
+    name = "elasticsearch-plugins";
+    paths = cfg.plugins;
+  };
+
 in {
 
   ###### interface
 
   options.services.elasticsearch = {
     enable = mkOption {
-      description = "Whether to enable elasticsearch";
+      description = "Whether to enable elasticsearch.";
       default = false;
       type = types.uniq types.bool;
     };
 
     host = mkOption {
-      description = "Elasticsearch listen address";
+      description = "Elasticsearch listen address.";
       default = "127.0.0.1";
       type = types.str;
     };
 
     port = mkOption {
-      description = "Elasticsearch port to listen for HTTP traffic";
+      description = "Elasticsearch port to listen for HTTP traffic.";
       default = 9200;
       type = types.int;
     };
 
     tcp_port = mkOption {
-      description = "Elasticsearch port for the node to node communication";
+      description = "Elasticsearch port for the node to node communication.";
       default = 9300;
       type = types.int;
     };
 
     cluster_name = mkOption {
-      description = "Elasticsearch name that identifies your cluster for auto-discovery";
+      description = "Elasticsearch name that identifies your cluster for auto-discovery.";
       default = "elasticsearch";
       type = types.str;
     };
 
     extraConf = mkOption {
-      description = "Extra configuration for elasticsearch";
+      description = "Extra configuration for elasticsearch.";
       default = "";
       type = types.str;
       example = ''
@@ -70,7 +75,7 @@ in {
     };
 
     logging = mkOption {
-      description = "Elasticsearch logging configuration";
+      description = "Elasticsearch logging configuration.";
       default = ''
         rootLogger: INFO, console
         logger:
@@ -93,23 +98,42 @@ in {
         Data directory for elasticsearch.
       '';
     };
+
+    extraCmdLineOptions = mkOption {
+      description = "Extra command line options for the elasticsearch launcher.";
+      default = [];
+      type = types.listOf types.string;
+      example = [ "-Djava.net.preferIPv4Stack=true" ];
+    };
+
+    plugins = mkOption {
+      description = "Extra elasticsearch plugins";
+      default = [];
+      type = types.listOf types.package;
+    };
+
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
     systemd.services.elasticsearch = {
-      description = "Elasticsearch daemon";
+      description = "Elasticsearch Daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
       environment = { ES_HOME = cfg.dataDir; };
       serviceConfig = {
-        ExecStart = "${pkgs.elasticsearch}/bin/elasticsearch -f -Des.path.conf=${configDir}";
+        ExecStart = "${pkgs.elasticsearch}/bin/elasticsearch -Des.path.conf=${configDir} ${toString cfg.extraCmdLineOptions}";
         User = "elasticsearch";
+        PermissionsStartOnly = true;
       };
       preStart = ''
         mkdir -m 0700 -p ${cfg.dataDir}
         if [ "$(id -u)" = 0 ]; then chown -R elasticsearch ${cfg.dataDir}; fi
+
+        # Install plugins
+        rm ${cfg.dataDir}/plugins || true
+        ln -s ${esPlugins}/plugins ${cfg.dataDir}/plugins
       '';
     };
 

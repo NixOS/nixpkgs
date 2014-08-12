@@ -8,8 +8,6 @@ let
   subversion = pkgs.subversion.override (origArgs: {
     bdbSupport = true;
     httpServer = true;
-    sslSupport = true;
-    compressionSupport = true;
     pythonBindings = true;
   });
 

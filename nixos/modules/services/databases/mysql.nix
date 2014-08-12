@@ -21,6 +21,7 @@ let
   myCnf = pkgs.writeText "my.cnf"
   ''
     [mysqld]
+    port = ${toString cfg.port}
     ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "log-bin=mysql-bin"}
     ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "server-id = ${toString cfg.replication.serverId}"}
     ${optionalString (cfg.replication.role == "slave" && !is55)

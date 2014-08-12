@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   installPhase =
     ''
       mkdir -pv $out/share/cinnamon/locale
-      cp -av mo-export/* $out/share/cinnamon/locale/
+      cp -av "mo-export/"* $out/share/cinnamon/locale/
     '';
 
   meta = {
@@ -22,6 +22,7 @@ stdenv.mkDerivation {
 
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.roelof ];
+
+    broken = true;
   };
 }
-

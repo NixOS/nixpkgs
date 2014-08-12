@@ -42,6 +42,12 @@ in {
         '';
       };
 
+      phpIni = mkOption {
+        type = types.path;
+        default = "${cfg.phpPackage}/etc/php-recommended.ini";
+        description = "php.ini file to use.";
+      };
+
       poolConfigs = mkOption {
         type = types.attrsOf types.lines;
         default = {};
@@ -75,7 +81,7 @@ in {
         mkdir -p "${stateDir}"
       '';
       serviceConfig = {
-        ExecStart = "${cfg.phpPackage}/sbin/php-fpm -y ${cfgFile}";
+        ExecStart = "${cfg.phpPackage}/sbin/php-fpm -y ${cfgFile} -c ${cfg.phpIni}";
         PIDFile = pidFile;
       };
     };

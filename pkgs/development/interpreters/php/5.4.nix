@@ -1,7 +1,7 @@
 { stdenv, fetchurl, composableDerivation, autoconf, automake, flex, bison
 , apacheHttpd, mysql, libxml2, readline, zlib, curl, gd, postgresql, gettext
 , openssl, pkgconfig, sqlite, config, libiconv, libjpeg, libpng, freetype
-, libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash }:
+, libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, freetds }:
 
 let
   libmcryptOverride = libmcrypt.override { disablePosixThreads = true; };
@@ -9,7 +9,7 @@ in
 
 composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
-  version = "5.4.23";
+  version = "5.4.31";
 
   name = "php-${version}";
 
@@ -171,6 +171,11 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
         configureFlags = ["--enable-fpm"];
       };
 
+      mssql = stdenv.lib.optionalAttrs (!stdenv.isDarwin) {
+        configureFlags = ["--with-mssql=${freetds}"];
+        buildInputs = [freetds];
+      };
+
       /*
          php is build within this derivation in order to add the xdebug lines to the php.ini.
          So both Apache and command line php both use xdebug without having to configure anything.
@@ -213,6 +218,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     zipSupport = config.php.zip or true;
     ftpSupport = config.php.ftp or true;
     fpmSupport = config.php.fpm or true;
+    mssqlSupport = config.php.mssql or (!stdenv.isDarwin);
   };
 
   configurePhase = ''
@@ -236,12 +242,8 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
   '';
 
   src = fetchurl {
-    urls = [
-      "http://nl1.php.net/get/php-${version}.tar.bz2/from/this/mirror"
-      "http://se1.php.net/get/php-${version}.tar.bz2/from/this/mirror"
-    ];
-    sha256 = "1k4iplqqcaqkmyq10h6a5qcpkfpkd05r2kclxw9n9qdrm47hfz5f";
-    name = "php-${version}.tar.bz2";
+    url = "http://www.php.net/distributions/php-${version}.tar.bz2";
+    sha256 = "0kci0yir923fc7dv7j9qrc10pj05v82jnxjxjbgrj7gx64a4k3jy";
   };
 
   meta = {

@@ -1,0 +1,22 @@
+diff --git a/includes/specials/SpecialActiveusers.php b/includes/specials/SpecialActiveusers.php
+index f739d3b..fdd8db3 100644
+--- a/includes/specials/SpecialActiveusers.php
++++ b/includes/specials/SpecialActiveusers.php
+@@ -112,7 +112,7 @@ class ActiveUsersPager extends UsersPager {
+ 		return array(
+ 			'tables' => array( 'querycachetwo', 'user', 'recentchanges' ),
+ 			'fields' => array( 'user_name', 'user_id', 'recentedits' => 'COUNT(*)', 'qcc_title' ),
+-			'options' => array( 'GROUP BY' => array( 'qcc_title' ) ),
++			'options' => array( 'GROUP BY' => array( 'qcc_title', 'user_name', 'user_id' ) ),
+ 			'conds' => $conds
+ 		);
+ 	}
+@@ -349,7 +349,7 @@ class SpecialActiveUsers extends SpecialPage {
+ 			__METHOD__,
+ 			array(
+ 				'GROUP BY' => array( 'rc_user_text' ),
+-				'ORDER BY' => 'NULL' // avoid filesort
++				'ORDER BY' => 'lastedittime DESC'
+ 			)
+ 		);
+ 		$names = array();

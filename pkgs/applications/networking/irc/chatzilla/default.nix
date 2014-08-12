@@ -1,12 +1,12 @@
 { stdenv, fetchurl, unzip, xulrunner, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "chatzilla-0.9.88";
-  
+  name = "chatzilla-0.9.90.1";
+
   src = fetchurl {
     # Obtained from http://chatzilla.rdmsoft.com/xulrunner/.
-    url = "http://chatzilla.rdmsoft.com/xulrunner/download/${name}-xr.zip";
-    sha256 = "041jpjl7wnbhqm2f8bf2pwp6igjapmy74swac94h54n644wl5nz0";
+    url = "http://chatzilla.rdmsoft.com/xulrunner/download/${name}.en-US.xulapp";
+    sha256 = "0z38jig91h10cb14rvs30rpg2pgn3v890nyxyy8lxzbv5ncxmngw";
   };
 
   buildInputs = [ unzip makeWrapper ];
@@ -17,10 +17,14 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${xulrunner}/bin/xulrunner $out/bin/chatzilla \
       --add-flags $out/libexec/chatzilla/application.ini
+
+    sed -i $out/libexec/chatzilla/application.ini -e 's/.*MaxVersion.*/MaxVersion=99.*/'
   '';
 
   meta = {
     homepage = http://chatzilla.hacksrus.com/;
     description = "Stand-alone version of Chatzilla, an IRC client";
+    maintainers = [ stdenv.lib.maintainers.eelco ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -56,7 +56,7 @@ details.)</para>
 <para>Often it is necessary to override or modify some aspect of the
 build.  To make this easier, the standard environment breaks the
 package build into a number of <emphasis>phases</emphasis>, all of
-which can be overriden or modified individually: unpacking the
+which can be overridden or modified individually: unpacking the
 sources, applying patches, configuring, building, and installing.
 (There are some others; see <xref linkend="ssec-stdenv-phases"/>.)
 For instance, a package that doesn’t supply a makefile but instead has
@@ -233,7 +233,7 @@ specific parts of the build (e.g., unpacking the sources or installing
 the binaries).  Furthermore, it allows a nicer presentation of build
 logs in the Nix build farm.</para>
 
-<para>Each phase can be overriden in its entirety either by setting
+<para>Each phase can be overridden in its entirety either by setting
 the environment variable
 <varname><replaceable>name</replaceable>Phase</varname> to a string
 containing some shell commands to be executed, or by redefining the

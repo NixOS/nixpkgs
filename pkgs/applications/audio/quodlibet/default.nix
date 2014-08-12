@@ -75,7 +75,7 @@ buildPythonPackage {
       & internet radio, and all major audio formats.
     '';
 
-    maintainer = [ stdenv.lib.maintainers.coroa ];
+    maintainers = [ stdenv.lib.maintainers.coroa ];
     homepage = http://code.google.com/p/quodlibet/;
   };
 }

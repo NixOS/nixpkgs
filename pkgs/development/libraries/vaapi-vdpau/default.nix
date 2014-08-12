@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://cgit.freedesktop.org/vaapi/vdpau-driver/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     description = "VDPAU driver for the VAAPI library";
   };
 }

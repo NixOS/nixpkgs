@@ -36,7 +36,7 @@
 
 let
   # -> http://get.adobe.com/flashplayer/
-  version = "11.2.202.350";
+  version = "11.2.202.394";
 
   src =
     if stdenv.system == "x86_64-linux" then
@@ -47,7 +47,7 @@ let
       else rec {
         inherit version;
         url = "http://fpdownload.macromedia.com/get/flashplayer/pdc/${version}/install_flash_player_11_linux.x86_64.tar.gz";
-        sha256 = "0f5y05c0acvdzd7a7qi93kd17byazf9swm6gml5rph5bc25aw77l";
+        sha256 = "1w82kmda91xdsrqpkrbcbrzswnbfszy0x9hvf9wf2h14isimdknx";
       }
     else if stdenv.system == "i686-linux" then
       if debug then {
@@ -58,7 +58,7 @@ let
       } else rec {
         inherit version;
         url = "http://fpdownload.macromedia.com/get/flashplayer/pdc/${version}/install_flash_player_11_linux.i386.tar.gz";
-        sha256 = "0nsrj56xbpn8r4365zby8qbc38cl2anb5ky0h7jwyh7xyrs9xmml";
+        sha256 = "0c8wp4qn6k224krihxb08g7727wlklk9bl4h7nqp3cpp85x9hg97";
       }
     else throw "Flash Player is not supported on this platform";
 
@@ -88,7 +88,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Adobe Flash Player browser plugin";
     homepage = http://www.adobe.com/products/flashplayer/;
-    maintainer = with stdenv.lib.maintainers; [ wizeman ];
-    license = "unfree";
+    maintainers = with stdenv.lib.maintainers; [ wizeman ];
+    license = stdenv.lib.licenses.unfree;
   };
 }

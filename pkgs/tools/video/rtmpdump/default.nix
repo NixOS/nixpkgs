@@ -4,8 +4,8 @@ stdenv.mkDerivation {
   name = "rtmpdump-2.4";
   src = fetchgit {
     url = git://git.ffmpeg.org/rtmpdump;
-    rev = "c28f1bab7822de97353849e7787b59e50bbb1428";
-    sha256 = "927e7ea7a686adb7cbce9d0a0c710de1e0921bbb1f0c1b35d17bdb816e6c73d8";
+    rev = "79459a2b43f41ac44a2ec001139bcb7b1b8f7497";
+    sha256 = "5af22362004566794035f989879b13d721f85d313d752abd10a7e45806e3944c";
   };
 
   buildInputs = [ zlib gnutls libgcrypt ];
@@ -19,8 +19,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://rtmpdump.mplayerhq.hu/;
     description = "Toolkit for RTMP streams";
-    license = "GPLv2+";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; all;
+    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = [ stdenv.lib.maintainers. viric ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

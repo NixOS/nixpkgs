@@ -97,6 +97,16 @@ if [ -n "$upgrade" -a -z "$_NIXOS_REBUILD_REEXEC" ]; then
     nix-channel --update nixos
 fi
 
+# Make sure that we use the Nix package we depend on, not something
+# else from the PATH for nix-{env,instantiate,build}.  This is
+# important, because NixOS defaults the architecture of the rebuilt
+# system to the architecture of the nix-* binaries used.  So if on an
+# amd64 system the user has an i686 Nix package in her PATH, then we
+# would silently downgrade the whole system to be i686 NixOS on the
+# next reboot.
+if [ -z "$_NIXOS_REBUILD_REEXEC" ]; then
+    export PATH=@nix@/bin:$PATH
+fi
 
 # Re-execute nixos-rebuild from the Nixpkgs tree.
 if [ -z "$_NIXOS_REBUILD_REEXEC" -a -n "$canRun" ]; then

@@ -213,8 +213,8 @@ $ ping -c1 10.233.4.2
 <para>Networking is implemented using a pair of virtual Ethernet
 devices. The network interface in the container is called
 <literal>eth0</literal>, while the matching interface in the host is
-called <literal>c-<replaceable>container-name</replaceable></literal>
-(e.g., <literal>c-foo</literal>).  The container has its own network
+called <literal>ve-<replaceable>container-name</replaceable></literal>
+(e.g., <literal>ve-foo</literal>).  The container has its own network
 namespace and the <literal>CAP_NET_ADMIN</literal> capability, so it
 can perform arbitrary network configuration such as setting up
 firewall rules, without affecting or having access to the host’s
@@ -228,11 +228,11 @@ on the host:
 
 <programlisting>
 networking.nat.enable = true;
-networking.nat.internalInterfaces = ["c-+"];
+networking.nat.internalInterfaces = ["ve-+"];
 networking.nat.externalInterface = "eth0";
 </programlisting>
 where <literal>eth0</literal> should be replaced with the desired
-external interface. Note that <literal>c-+</literal> is a wildcard
+external interface. Note that <literal>ve-+</literal> is a wildcard
 that matches all container interfaces.</para>
 
 </section>

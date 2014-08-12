@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "openldap-2.4.39";
 
   src = fetchurl {
-    url = "ftp://ftp.nl.uu.net/pub/unix/db/openldap/openldap-release/${name}.tgz";
+    url = "http://www.openldap.org/software/download/OpenLDAP/openldap-release/${name}.tgz";
     sha256 = "19zq9dc7dl03wmqd11fbsdii1npyq1vlicl3nxbfygqh8xrwhrw2";
   };
 

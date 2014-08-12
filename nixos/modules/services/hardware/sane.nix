@@ -5,6 +5,8 @@ with lib;
 let
 
   pkg = if config.hardware.sane.snapshot then pkgs.saneBackendsGit else pkgs.saneBackends;
+  backends = [ pkg ] ++ config.hardware.sane.extraBackends;
+  saneConfig = pkgs.mkSaneConfig { paths = backends; };
 
 in
 
@@ -26,6 +28,18 @@ in
       description = "Use a development snapshot of SANE scanner drivers.";
     };
 
+    hardware.sane.extraBackends = mkOption {
+      type = types.listOf types.path;
+      default = [];
+      description = "Packages providing extra SANE backends to enable.";
+    };
+
+    hardware.sane.configDir = mkOption {
+      type = types.string;
+      default = "${saneConfig}/etc/sane.d";
+      description = "The value of SANE_CONFIG_DIR.";
+    };
+
   };
 
 
@@ -33,8 +47,12 @@ in
 
   config = mkIf config.hardware.sane.enable {
 
-    environment.systemPackages = [ pkg ];
-    services.udev.packages = [ pkg ];
+    environment.systemPackages = backends;
+    environment.sessionVariables = {
+      SANE_CONFIG_DIR = config.hardware.sane.configDir;
+      LD_LIBRARY_PATH = [ "${saneConfig}/lib/sane" ];
+    };
+    services.udev.packages = backends;
 
     users.extraGroups."scanner".gid = config.ids.gids.scanner;
 

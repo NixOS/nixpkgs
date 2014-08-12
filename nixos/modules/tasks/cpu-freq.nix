@@ -41,13 +41,12 @@ in
       after = [ "systemd-modules-load.service" ];
       wantedBy = [ "multi-user.target" ];
       path = [ cpupower ];
-      script = ''
-        cpupower frequency-set -g ${cfg.cpuFreqGovernor}
-      '';
       unitConfig.ConditionVirtualization = false;
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = "yes";
+        ExecStart = "${cpupower}/bin/cpupower frequency-set -g ${cfg.cpuFreqGovernor}";
+        SuccessExitStatus = "0 237";
       };
     };
 

@@ -11,7 +11,6 @@ let
 
 in
 
-optionalAttrs (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) # ugly...
 {
 
   ###### interface
@@ -33,6 +32,10 @@ optionalAttrs (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) # ugly...
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [ {
+      assertion = pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64;
+      message = "Virtualbox not currently supported on ${pkgs.stdenv.system}";
+    } ];
 
     environment.systemPackages = [ kernel.virtualboxGuestAdditions ];
 
@@ -54,7 +57,7 @@ optionalAttrs (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) # ugly...
         serviceConfig.ExecStart = "@${kernel.virtualboxGuestAdditions}/sbin/VBoxService VBoxService --foreground";
       };
 
-    hardware.opengl.videoDrivers = mkOverride 50 [ "virtualbox" ];
+    services.xserver.videoDrivers = mkOverride 50 [ "virtualbox" ];
 
     services.xserver.config =
       ''

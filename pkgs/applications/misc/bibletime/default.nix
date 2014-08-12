@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
 
-  version = "2.9.2";
+  version = "2.10.1";
 
   name = "bibletime-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bibletime/${name}.tar.bz2";
-    sha256 = "1j4kc24qvhqlbqspczmkxvw09mnvgg9m4zs1y9f68505kd0pfg1r";
+    url = "mirror://sourceforge/bibletime/${name}.tar.xz";
+    sha256 = "14fayy5h1ffjxin669q56fflxn4ij1irgn60cygwx2y02cwxbll6";
   };
 
   prePatch = ''
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "A Qt4 Bible study tool";
     homepage = http://www.bibletime.info/;
     platforms = stdenv.lib.platforms.linux;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.piotr ];
   };
 }

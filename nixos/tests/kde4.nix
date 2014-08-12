@@ -1,11 +1,12 @@
 import ./make-test.nix ({ pkgs, ... }: {
+  name = "kde4";
 
   machine =
     { config, pkgs, ... }:
 
     { imports = [ ./common/user-account.nix ];
 
-      virtualisation.memorySize = 768;
+      virtualisation.memorySize = 1024;
 
       services.xserver.enable = true;
 

@@ -2,9 +2,6 @@
  wpa_supplicant, dhcp, dhcpcd, wirelesstools, nettools, openresolv, iproute, iputils,
  pythonPackages, locale ? "C" }:
 
-# Wicd has a ncurses interface that we do not build because it depends
-# on urwid which has not been packaged at this time (2009-12-27).
-
 stdenv.mkDerivation rec {
   name = "wicd-${version}";
   version = "1.7.2.4";
@@ -14,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "15ywgh60xzmp5z8l1kzics7yi95isrjg1paz42dvp7dlpdfzpzfw";
   };
 
-  buildInputs = [ python pythonPackages.Babel ];
+  buildInputs = [ python pythonPackages.Babel pythonPackages.urwid ];
 
   patches = [
     ./no-var-install.patch
@@ -83,7 +80,6 @@ stdenv.mkDerivation rec {
     --no-install-kde \
     --no-install-acpi \
     --no-install-pmutils \
-    --no-install-ncurses \
   '';
 
   installPhase = ''

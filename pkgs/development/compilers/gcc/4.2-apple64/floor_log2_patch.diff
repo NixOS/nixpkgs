@@ -1,0 +1,62 @@
+--- gcc-5666.3/gcc/toplev.h
++++ gcc-5666.3/gcc/toplev.h
+@@ -151,6 +151,8 @@ 
+ /* Return true iff flags are set as if -ffast-math.  */
+ extern bool fast_math_flags_set_p	(void);
+ 
++#if GCC_VERSION < 3004
++
+ /* Return log2, or -1 if not exact.  */
+ extern int exact_log2                  (unsigned HOST_WIDE_INT);
+ 
+@@ -158,7 +160,7 @@ 
+ extern int floor_log2                  (unsigned HOST_WIDE_INT);
+ 
+ /* Inline versions of the above for speed.  */
+-#if GCC_VERSION >= 3004
++#else /* GCC_VERSION < 3004 */
+ # if HOST_BITS_PER_WIDE_INT == HOST_BITS_PER_LONG
+ #  define CLZ_HWI __builtin_clzl
+ #  define CTZ_HWI __builtin_ctzl
+@@ -172,18 +172,18 @@ 
+ #  define CTZ_HWI __builtin_ctz
+ # endif
+ 
+-extern inline int
++static inline int
+ floor_log2 (unsigned HOST_WIDE_INT x)
+ {
+   return x ? HOST_BITS_PER_WIDE_INT - 1 - (int) CLZ_HWI (x) : -1;
+ }
+ 
+-extern inline int
++static inline int
+ exact_log2 (unsigned HOST_WIDE_INT x)
+ {
+   return x == (x & -x) && x ? (int) CTZ_HWI (x) : -1;
+ }
+-#endif /* GCC_VERSION >= 3004 */
++#endif /* GCC_VERSION < 3004 */
+ 
+ /* Functions used to get and set GCC's notion of in what directory
+    compilation was started.  */
+--- gcc-5666.3/gcc/toplev.c
++++ gcc-5666.3/gcc/toplev.c
+@@ -555,7 +555,7 @@ 
+    for floor_log2 and exact_log2; see toplev.h.  That construct, however,
+    conflicts with the ISO C++ One Definition Rule.   */
+ 
+-#if GCC_VERSION < 3004 || !defined (__cplusplus)
++#if GCC_VERSION < 3004
+ 
+ /* Given X, an unsigned number, return the largest int Y such that 2**Y <= X.
+    If X is 0, return -1.  */
+@@ -607,7 +607,7 @@ 
+ #endif
+ }
+ 
+-#endif /*  GCC_VERSION < 3004 || !defined (__cplusplus)  */
++#endif /*  GCC_VERSION < 3004 */
+ 
+ /* Handler for fatal signals, such as SIGSEGV.  These are transformed
+    into ICE messages, which is much more user friendly.  In case the

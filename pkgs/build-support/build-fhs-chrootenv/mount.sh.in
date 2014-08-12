@@ -17,7 +17,7 @@ mount --bind /home $chrootenvDest/home
 
 # Bind mount state directories
 mount --bind /var $chrootenvDest/var
-mount --bind /run $chrootenvDest/run
+mount --rbind /run $chrootenvDest/run
 
 # Bind mount the host system's /etc
 mount --bind /etc $chrootenvDest/host-etc

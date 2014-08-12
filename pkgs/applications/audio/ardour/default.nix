@@ -1,12 +1,12 @@
 { stdenv, fetchgit, alsaLib, aubio, boost, cairomm, curl, fftw
-, fftwSinglePrec, flac, glibc, glibmm, gtk, gtkmm, jackaudio
+, fftwSinglePrec, flac, glibc, glibmm, gtk, gtkmm, jack2
 , libgnomecanvas, libgnomecanvasmm, liblo, libmad, libogg, librdf
 , librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile
 , libusb, libuuid, libxml2, libxslt, lilv, lv2, makeWrapper, pango
 , perl, pkgconfig, python, serd, sord, sratom, suil }:
 
 let
-  tag = "3.5.357";
+  tag = "3.5.380";
 in
 
 stdenv.mkDerivation rec {
@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = git://git.ardour.org/ardour/ardour.git;
     rev = "refs/tags/${tag}";
-    sha256 = "1e026fb9a6ad4179d52c4b578cc3861bdfd3629b9e7b7a7341d431c7d3692c42";
+    sha256 = "dbcbb2d9143e196d079c27b15266e47d24b81cb7591fe64b717f3485965ded7b";
   };
 
   buildInputs = 
     [ alsaLib aubio boost cairomm curl fftw fftwSinglePrec flac glibc
-      glibmm gtk gtkmm jackaudio libgnomecanvas libgnomecanvasmm liblo
+      glibmm gtk gtkmm jack2 libgnomecanvas libgnomecanvasmm liblo
       libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
       libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv lv2
       makeWrapper pango perl pkgconfig python serd sord sratom suil
@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     # The funny revision number is from `git describe rev`
-    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = \"${tag}-gce4d125\"; }\n' > libs/ardour/revision.cc
+    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = \"${tag}-g2f6065b\"; }\n' > libs/ardour/revision.cc
     # Note the different version number
-    sed -i '33i rev = \"3.5-357-gce4d125\"' wscript
+    sed -i '33i rev = \"3.5-380-g2f6065b\"' wscript
     sed 's|/usr/include/libintl.h|${glibc}/include/libintl.h|' -i wscript
     sed -e 's|^#!/usr/bin/perl.*$|#!${perl}/bin/perl|g' -i tools/fmt-bindings
     sed -e 's|^#!/usr/bin/env.*$|#!${perl}/bin/perl|g' -i tools/*.pl
@@ -47,6 +47,21 @@ stdenv.mkDerivation rec {
     mkdir -pv $out/gtk2/engines
     cp build/libs/clearlooks-newer/libclearlooks.so $out/gtk2/engines/
     wrapProgram $out/bin/ardour3 --prefix GTK_PATH : $out/gtk2
+
+    # Install desktop file
+    mkdir -p "$out/share/applications"
+    cat > "$out/share/applications/ardour.desktop" << EOF
+    [Desktop Entry]
+    Name=Ardour 3
+    GenericName=Digital Audio Workstation
+    Comment=Multitrack harddisk recorder
+    Exec=$out/bin/ardour3
+    Icon=$out/share/ardour3/icons/ardour_icon_256px.png
+    Terminal=false
+    Type=Application
+    X-MultipleArgs=false
+    Categories=GTK;Audio;AudioVideoEditing;AudioVideo;Video;
+    EOF
   '';
 
   meta = with stdenv.lib; {

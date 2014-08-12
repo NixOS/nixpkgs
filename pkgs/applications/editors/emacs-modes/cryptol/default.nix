@@ -1,13 +1,12 @@
-{ stdenv, fetchgit, emacs }:
+{ stdenv, fetchurl, emacs }:
 
 stdenv.mkDerivation rec {
   name    = "cryptol-mode-${version}";
-  version = "20141010";
+  version = "0.1.0";
 
-  src = fetchgit {
-    url    = "https://github.com/thoughtpolice/cryptol-mode.git";
-    rev    = "50075d49d7c4ec4b03ce31b634424410262c1ad4";
-    sha256 = "6ecd4904b7f3b1cd0721591ce45f16fe11cd1dd5fd7af8110d1f84b133ed4aec";
+  src = fetchurl {
+    url    = "https://github.com/thoughtpolice/cryptol-mode/archive/v${version}.tar.gz";
+    sha256 = "1qyrqvfgpg1nyk1clv7v94r3amm02613hrak5732xzn6iak81cc0";
   };
 
   buildInputs = [ emacs ];

@@ -3,8 +3,8 @@
 , libX11, libICE, libSM, useX11 ? (stdenv.isLinux || stdenv.isDarwin) }:
 
 let
-  version = "1.8.0";
-  sha256 = "04qbsyw92279hfkwic5h6jc5999p87qsaqqgc6zcqddmh9r8r7vn";
+  version = "1.8.6";
+  sha256 = "0gyjxd0gfpjs3fq5bx6aljb5f3zxky5zsq0yfqr9ywbv03587vgd";
 
   inherit (stdenv) lib;
 
@@ -84,20 +84,17 @@ let
 
   inherit libs;
 
-  tools = dbus_drv "tools" "tools" {
-    configureFlags = [ "--with-dbus-daemondir=${daemon}/bin" ];
-    buildInputs = buildInputsX ++ systemdOrEmpty ++ [ libs daemon ];
+  tools = dbus_drv "tools" "tools bus" {
+    preBuild = makeInternalLib;
+    buildInputs = buildInputsX ++ systemdOrEmpty ++ [ libs ];
     NIX_CFLAGS_LINK =
       stdenv.lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed "
       + "-ldbus-1";
 
-    meta.platforms = stdenv.lib.platforms.all;
+    meta.platforms = with stdenv.lib.platforms; allBut darwin;
   };
 
-  daemon = dbus_drv "daemon" "bus" {
-    preBuild = makeInternalLib;
-    buildInputs = systemdOrEmpty;
-  };
+  daemon = tools;
 
   docs = dbus_drv "docs" "doc" {
     postInstall = ''rm -r "$out/lib"'';

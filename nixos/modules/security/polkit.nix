@@ -98,10 +98,6 @@ in
       ''
         # Probably no more needed, clean up
         rm -rf /var/lib/{polkit-1,PolicyKit}
-
-        # Force polkitd to be restarted so that it reloads its
-        # configuration.
-        ${pkgs.procps}/bin/pkill -INT -u root -x polkitd
       '';
 
     users.extraUsers.polkituser = {

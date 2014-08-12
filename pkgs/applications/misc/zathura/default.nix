@@ -1,4 +1,4 @@
-{ callPackage, pkgs, fetchurl }:
+{ callPackage, pkgs, fetchurl, useMupdf }:
 
 rec {
   inherit (pkgs) stdenv;
@@ -11,6 +11,10 @@ rec {
   };
 
   zathura_pdf_poppler = callPackage ./pdf-poppler { };
+
+  zathura_pdf_mupdf = callPackage ./pdf-mupdf {
+    gtk = pkgs.gtk3;
+  };
 
   zathura_djvu = callPackage ./djvu {
     gtk = pkgs.gtk3;
@@ -27,9 +31,9 @@ rec {
     name = "zathura-${zathura_core.version}";
 
     plugins_path = stdenv.lib.makeSearchPath "lib" [
-      zathura_pdf_poppler
       zathura_djvu
       zathura_ps
+      (if useMupdf then zathura_pdf_mupdf else zathura_pdf_poppler)
     ];
 
     builder = ./builder.sh;

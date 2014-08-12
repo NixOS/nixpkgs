@@ -99,7 +99,7 @@ let version = "4.6.3";
         withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
         withFpu = if gccFpu != null then " --with-fpu=${gccFpu}" else "";
         withFloat = if gccFloat != null then " --with-float=${gccFloat}" else "";
-      in 
+      in
         (withArch +
         withCpu +
         withAbi +
@@ -438,7 +438,7 @@ stdenv.mkDerivation ({
 
   meta = {
     homepage = http://gcc.gnu.org/;
-    license = "GPLv3+";  # runtime support libraries are typically LGPLv3+
+    license = stdenv.lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
     description = "GNU Compiler Collection, version ${version}"
       + (if stripped then "" else " (with debugging info)");
 
@@ -501,7 +501,7 @@ stdenv.mkDerivation ({
 
   meta = {
     homepage = "http://ghdl.free.fr/";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     description = "Complete VHDL simulator, using the GCC technology (gcc ${version})";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;

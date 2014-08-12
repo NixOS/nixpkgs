@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, alsaLib
+{ stdenv, fetchurl, pkgconfig, alsaLib, db, libuuid
 , firewireSupport ? false, ffado ? null }:
 
 assert firewireSupport -> ffado != null;
 
 stdenv.mkDerivation rec {
-  name = "jack-${version}";
-  version = "0.121.3";
+  name = "jack1-${version}";
+  version = "0.124.1";
 
   src = fetchurl {
     url = "http://jackaudio.org/downloads/jack-audio-connection-kit-${version}.tar.gz";
-    sha256 = "1ypa3gjwy4vmaskin0vczmmdwybckkl42wmkfabx3v5yx8yms2dp";
+    sha256 = "1mk1wnx33anp6haxfjjkfhwbaknfblsvj35nxvz0hvspcmhdyhpb";
   };
   
   preBuild = "echo ok";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = 
-    [ pkgconfig alsaLib
+    [ pkgconfig alsaLib db libuuid
     ] ++ (stdenv.lib.optional firewireSupport ffado);
   
   meta = {

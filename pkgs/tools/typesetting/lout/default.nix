@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     # Wiki: http://lout.wiki.sourceforge.net/
     homepage = http://savannah.nongnu.org/projects/lout/;
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.ludo ];

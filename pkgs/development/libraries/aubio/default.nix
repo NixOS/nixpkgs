@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, alsaLib, fftw, jackaudio, libsamplerate
+{ stdenv, fetchurl, alsaLib, fftw, jack2, libsamplerate
 , libsndfile, pkgconfig, python
 }:
 
 stdenv.mkDerivation rec {
-  name = "aubio-0.4.0";
+  name = "aubio-0.4.1";
 
   src = fetchurl {
     url = "http://aubio.org/pub/${name}.tar.bz2";
-    sha256 = "18ik5nn8n984f0wnrwdfhc06b8blqgm9b2hrm7hc9m0rr039mpj9";
+    sha256 = "15f6nf76y7iyl2kl4ny7ky0zpxfxr8j3902afvd6ydnnkh5dzmr5";
   };
 
   buildInputs = [
-    alsaLib fftw jackaudio libsamplerate libsndfile pkgconfig python
+    alsaLib fftw jack2 libsamplerate libsndfile pkgconfig python
   ];
 
   configurePhase = "python waf configure --prefix=$out";

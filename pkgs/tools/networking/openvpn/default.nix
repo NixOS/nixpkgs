@@ -1,14 +1,18 @@
-{ stdenv, fetchurl, iproute, lzo, openssl, pam }:
+{ stdenv, fetchurl, iproute, lzo, openssl, pam, systemd }:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "openvpn-2.3.1";
+  name = "openvpn-2.3.4";
 
   src = fetchurl {
     url = "http://swupdate.openvpn.net/community/releases/${name}.tar.gz";
-    sha256 = "0g7vf3f6z0h4kdqlqr8jd0gapi0ains6xcvlvfy8cicxnf2psbdx";
+    sha256 = "0nn8rrh6jadsydnym69r4s7rm6jzsgxb6p23yb9ai3sn91gnsl5g";
   };
 
-  buildInputs = [ iproute lzo openssl pam ];
+  patches = optional stdenv.isLinux ./systemd-notify.patch;
+
+  buildInputs = [ iproute lzo openssl pam ] ++ optional stdenv.isLinux systemd;
 
   configureFlags = ''
     --enable-password-save
@@ -31,10 +35,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  NIX_LDFLAGS = optionalString stdenv.isLinux "-lsystemd-daemon"; # hacky
+
   meta = {
     description = "A robust and highly flexible tunneling application";
     homepage = http://openvpn.net/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.viric ];
     platforms = stdenv.lib.platforms.linux;
   };

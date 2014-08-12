@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "dvtm-0.10";
+  name = "dvtm-0.12";
 
   meta = {
     description = "Dynamic virtual terminal manager";
-    homepage = "http://www.brain-dump.org/projects/dvtm";
+    homepage = http://www.brain-dump.org/projects/dvtm;
     license = stdenv.lib.licenses.mit;
     platfroms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ iyzsong ];
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/${name}.tar.gz";
-    sha256 = "0lb6p06jfaz1z07k0v2gipzx67swf7rijz17g5ndhng2g0jqfl3p";
+    sha256 = "0qcwsxhg738rq3bh4yid15nz2rrjc9k7ay6c1qv15c3gkw86zc3f";
   };
 
   buildInputs = [ ncurses ];

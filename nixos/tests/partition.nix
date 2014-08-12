@@ -24,6 +24,14 @@ let
     btrfs / --data=0 --metadata=1 --label=root btrfs.1 btrfs.2
   '';
 
+  ksF2fs = pkgs.writeText "ks-f2fs" ''
+    clearpart --all --initlabel --drives=vdb
+
+    part swap  --recommended --label=swap --fstype=swap --ondisk=vdb
+    part /boot --recommended --label=boot --fstype=f2fs --ondisk=vdb
+    part /     --recommended --label=root --fstype=f2fs --ondisk=vdb
+  '';
+
   ksRaid = pkgs.writeText "ks-raid" ''
     clearpart --all --initlabel --drives=vdb,vdc
 
@@ -55,6 +63,8 @@ let
     logvol / --size=1000 --grow --fstype=ext4 --name=root --vgname=nixos
   '';
 in {
+  name = "partitiion";
+
   machine = { config, pkgs, ... }: {
     environment.systemPackages = [
       pkgs.pythonPackages.nixpart
@@ -191,6 +201,16 @@ in {
       ensureNoPartition("vdb3");
       ensureNoPartition("vdc3");
       remountAndCheck;
+    };
+
+    parttest "f2fs filesystem", sub {
+      $machine->succeed("modprobe f2fs");
+      kickstart("${ksF2fs}");
+      ensurePartition("swap", "swap");
+      ensurePartition("boot", "f2fs");
+      ensurePartition("root", "f2fs");
+      remoteAndCheck;
+      ensureMountPoint("/mnt/boot", "f2fs");
     };
 
     parttest "RAID1 with XFS", sub {

@@ -30,6 +30,6 @@ stdenv.mkDerivation {
     homepage = http://www.fbreader.org/;
     license = licenses.gpl3;
     platforms = platforms.linux; # possibly also on unix general
-    maintainer = [ maintainers.coroa ];
+    maintainers = [ maintainers.coroa ];
   }; 
 }

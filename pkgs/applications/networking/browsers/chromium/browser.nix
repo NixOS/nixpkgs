@@ -5,13 +5,13 @@ with stdenv.lib;
 mkChromiumDerivation (base: rec {
   name = "chromium-browser";
   packageName = "chromium";
-  buildTargets = [ "chrome" ];
+  buildTargets = [ "mksnapshot" "chrome" ];
 
   installPhase = ''
-    ensureDir "$libExecPath"
+    mkdir -p "$libExecPath"
     cp -v "$buildPath/"*.pak "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
-    cp -vR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
+    cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
     cp -v $buildPath/libffmpegsumo.so "$libExecPath/"
 
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"

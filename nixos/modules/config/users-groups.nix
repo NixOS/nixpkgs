@@ -55,10 +55,24 @@ let
         type = with types; nullOr int;
         default = null;
         description = ''
-          The account UID. If the <literal>mutableUsers</literal> option
+          The account UID. If the <option>mutableUsers</option> option
           is false, the UID cannot be null. Otherwise, the UID might be
           null, in which case a free UID is picked on activation (by the
           useradd command).
+        '';
+      };
+
+      isSystemUser = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Indicates if the user is a system user or not. This option
+          only has an effect if <option>mutableUsers</option> is
+          <literal>true</literal> and <option>uid</option> is
+          <option>null</option>, in which case it determines whether
+          the user's UID is allocated in the range for system users
+          (below 500) or in the range for normal users (starting at
+          1000).
         '';
       };
 
@@ -360,8 +374,8 @@ in {
 
     security.initialRootPassword = mkOption {
       type = types.str;
-      default = "";
-      example = "!";
+      default = "!";
+      example = "";
       description = ''
         The (hashed) password for the root account set on initial
         installation. The empty string denotes that root can login
@@ -369,9 +383,9 @@ in {
         as SSH, or indirectly via <command>su</command> or
         <command>sudo</command>). The string <literal>!</literal>
         prevents root from logging in using a password.
-        Note, setting this option sets
+        Note that setting this option sets
         <literal>users.extraUsers.root.hashedPassword</literal>.
-        Note, if <literal>users.mutableUsers</literal> is false
+        Also, if <literal>users.mutableUsers</literal> is false
         you cannot change the root password manually, so in that case
         the name of this option is a bit misleading, since it will define
         the root password beyond the user initialisation phase.
@@ -459,17 +473,17 @@ in {
         '';
         groupadd = n: g: ''
           if [ -z "$(getent group "${g.name}")" ]; then
-            echo "Adding group ${g.name}"
             ${pkgs.shadow}/sbin/groupadd "${g.name}"
           fi
         '';
         useradd = n: u: ''
           if ! id "${u.name}" &>/dev/null; then
-            echo "Adding user ${u.name}"
             ${pkgs.shadow}/sbin/useradd \
               -g "${u.group}" \
+              -G "${concatStringsSep "," u.extraGroups}" \
               -s "${u.shell}" \
               -d "${u.home}" \
+              ${optionalString u.isSystemUser "--system"} \
               "${u.name}"
             echo "${u.name}:x" | ${pkgs.shadow}/sbin/chpasswd -e
           fi
@@ -495,7 +509,7 @@ in {
         message = "uids and gids must be unique!";
       }
       { assertion = cfg.mutableUsers || (nonUidUsers == {});
-        message = "When mutableUsers is false, no uid can be null";
+        message = "When mutableUsers is false, no uid can be null: ${toString (attrNames nonUidUsers)}";
       }
       { assertion = cfg.mutableUsers || (nonGidGroups == {});
         message = "When mutableUsers is false, no gid can be null";

@@ -26,7 +26,7 @@ let
     buildInputs = [ pkgs.makeWrapper ];
 
     buildCommand = ''
-      ensureDir $out/gtk-3.0/
+      mkdir -p $out/gtk-3.0/
 
       # This wrapper ensures that we actually get fonts
       makeWrapper ${pkgs.lightdm_gtk_greeter}/sbin/lightdm-gtk-greeter \

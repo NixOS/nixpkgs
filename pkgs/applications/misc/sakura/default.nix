@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       terminals in one window and adds a contextual menu with some basic
       options. No more no less.
     '';
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
     platforms = with stdenv.lib.platforms; linux;
   };

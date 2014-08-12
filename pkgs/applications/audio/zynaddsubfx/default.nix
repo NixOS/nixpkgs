@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, cmake, jackaudio, fftw, fltk13, minixml
+{ stdenv, fetchurl, alsaLib, cmake, jack2, fftw, fltk13, minixml
 , pkgconfig, zlib
 }:
 
@@ -11,11 +11,11 @@ stdenv.mkDerivation  rec {
     sha256 = "0kgmwyh4rhyqdfrdzhbzjjk2hzggkp9c4aac6sy3xv6cc1b5jjxq";
   };
 
-  buildInputs = [ alsaLib jackaudio fftw fltk13 minixml zlib ];
+  buildInputs = [ alsaLib jack2 fftw fltk13 minixml zlib ];
   nativeBuildInputs = [ cmake pkgconfig ];
 
   meta = with stdenv.lib; {
-    description = "high quality software synthesizer";
+    description = "High quality software synthesizer";
     homepage = http://zynaddsubfx.sourceforge.net;
     license = licenses.gpl2;
     platforms = platforms.linux;

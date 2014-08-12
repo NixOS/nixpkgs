@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, intltool, flex, bison, autoreconfHook
+{ stdenv, fetchurl, pkgconfig, intltool, flex, bison, autoreconfHook, substituteAll
 , python, libxml2Python, file, expat, makedepend
 , libdrm, xorg, wayland, udev, llvm, libffi
 , libvdpau, libelf
+, grsecEnabled
 , enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
 , enableExtraFeatures ? false # not maintained
 }:
@@ -23,7 +24,7 @@ else
 */
 
 let
-  version = "10.0.4";
+  version = "10.2.5";
   # this is the default search path for DRI drivers
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
@@ -34,16 +35,21 @@ stdenv.mkDerivation {
 
   src =  fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    sha256 = "0h2sq8h0l7415vsqfkb7mn1rxm62m2anpi9swlca69fbpr9bavpz";
+    sha256 = "039is15p8pkhf8m0yiyb72zybl63xb9ckqzcg3xwi8zlyw5ryidl";
   };
 
   prePatch = "patchShebangs .";
 
   patches = [
     ./static-gallium.patch
+    ./glx_ro_text_segm.patch # fix for grsecurity/PaX
    # TODO: revive ./dricore-gallium.patch when it gets ported (from Ubuntu),
    #  as it saved ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
-  ];
+  ] ++ optional stdenv.isLinux
+      (substituteAll {
+        src = ./dlopen-absolute-paths.diff;
+        inherit udev;
+      });
 
   # Change the search path for EGL drivers from $drivers/* to driverLink
   postPatch = ''
@@ -64,7 +70,7 @@ stdenv.mkDerivation {
     "--enable-glx-tls"
     "--enable-shared-glapi" "--enable-shared-gallium"
     "--enable-driglx-direct" # seems enabled anyway
-    "--enable-gallium-llvm" "--with-llvm-shared-libs"
+    "--enable-gallium-llvm" "--enable-llvm-shared-libs"
     "--enable-xa" # used in vmware driver
     "--enable-gles1" "--enable-gles2"
     "--enable-vdpau"
@@ -79,7 +85,8 @@ stdenv.mkDerivation {
       "--enable-openvg" "--enable-gallium-egl" # not needed for EGL in Gallium, but OpenVG might be useful
       #"--enable-xvmc" # tests segfault with 9.1.{1,2,3}
       #"--enable-opencl" # ToDo: opencl seems to need libclc for clover
-    ];
+    ]
+    ++ optional grsecEnabled "--enable-glx-rts"; # slight performance degradation, enable only for grsec
 
   nativeBuildInputs = [ pkgconfig python makedepend file flex bison ];
 
@@ -88,7 +95,8 @@ stdenv.mkDerivation {
     ;
   buildInputs = with xorg; [
     autoreconfHook intltool expat libxml2Python llvm
-    libXfixes glproto dri2proto libX11 libXext libxcb libXt
+    glproto dri2proto dri3proto presentproto
+    libX11 libXext libxcb libXt libXfixes libxshmfence
     libffi wayland libvdpau libelf
   ] ++ optionals enableExtraFeatures [ /*libXvMC*/ ]
     ++ optional stdenv.isLinux udev

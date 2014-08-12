@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   name    = "spark-${version}";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchurl {
-    url    = "http://d3kbcqa49mib13.cloudfront.net/${name}-incubating-bin-cdh4.tgz";
-    sha256 = "0dgirq2ws25accijijanqij6d1mwxkrcqkmq1xsslfpz26svs1w1";
+    url    = "http://d3kbcqa49mib13.cloudfront.net/${name}-bin-cdh4.tgz";
+    sha256 = "1k3954srx3km3ckmfi6wn8rldrljxc039g0pf5m3azgkmaz0gld5";
   };
 
   unpackPhase = ''tar zxf $src'';
 
-  untarDir = "spark-${version}-incubating-bin-cdh4";
+  untarDir = "${name}-bin-cdh4";
   installPhase = ''
     set -x
     mkdir -p $out/lib $out/bin
@@ -118,10 +118,11 @@ stdenv.mkDerivation rec {
   phases = "unpackPhase installPhase";
 
   meta = {
-    description = "Spark cluster computing";
-    homepage    = "http://spark.incubator.apache.org";
-    license     = stdenv.lib.licenses.asl20;
-    platforms   = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    description      = "Lightning-fast cluster computing";
+    homepage         = "http://spark.apache.org";
+    license          = stdenv.lib.licenses.asl20;
+    platforms        = stdenv.lib.platforms.all;
+    maintainers      = [ stdenv.lib.maintainers.thoughtpolice ];
+    repositories.git = git://git.apache.org/spark.git;
   };
 }

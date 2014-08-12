@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "rtorrent-0.9.3";
+  name = "rtorrent-0.9.4";
 
   src = fetchurl {
     url = "http://libtorrent.rakshasa.no/downloads/${name}.tar.gz";
-    sha256 = "043krhsiawigf8yjd5qfkdn5iqrssph1705dsx5fgbxipr0wm4wy";
+    sha256 = "113yrrac75vqi4g8r6bgs0ggjllj9bkg9shv08vqzdhkwqg2q2mw";
   };
 
   buildInputs = [ libtorrent ncurses pkgconfig libsigcxx curl zlib openssl ];

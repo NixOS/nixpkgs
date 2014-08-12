@@ -9,6 +9,9 @@ use Getopt::Long qw(:config gnu_getopt);
 
 my $socat = '@socat@/bin/socat';
 
+# Ensure a consistent umask.
+umask 0022;
+
 # Parse the command line.
 
 sub showHelp {
@@ -28,7 +31,7 @@ EOF
 }
 
 my $ensureUniqueName = 0;
-my $extraConfig = "";
+my $extraConfig;
 
 GetOptions(
     "help" => sub { showHelp() },
@@ -64,7 +67,6 @@ sub writeNixOSConfig {
 with lib;
 
 { boot.isContainer = true;
-  security.initialRootPassword = mkDefault "!";
   networking.hostName = mkDefault "$containerName";
   networking.useDHCP = false;
   $extraConfig
@@ -188,7 +190,7 @@ elsif ($action eq "update") {
 
     # FIXME: may want to be more careful about clobbering the existing
     # configuration.nix.
-    writeNixOSConfig $nixosConfigFile if defined $extraConfig;
+    writeNixOSConfig $nixosConfigFile if (defined $extraConfig && $extraConfig ne "");
 
     system("nix-env", "-p", "$profileDir/system",
            "-I", "nixos-config=$nixosConfigFile", "-f", "<nixpkgs/nixos>",
@@ -212,18 +214,22 @@ elsif ($action eq "root-login") {
 
 elsif ($action eq "run") {
     shift @ARGV; shift @ARGV;
-    open(SOCAT, "|-", $socat, "unix:$root/var/lib/run-command.socket", "-");
+    my $pid = open(SOCAT, "|-", $socat, "-t0", "-", "unix:$root/var/lib/run-command.socket") or die "$0: cannot start $socat: $!\n";
     print SOCAT join(' ', map { "'$_'" } @ARGV), "\n";
+    flush SOCAT;
+    waitpid($pid, 0);
     close(SOCAT);
 }
 
 elsif ($action eq "set-root-password") {
     # FIXME: don't get password from the command line.
     my $password = $ARGV[2] or die "$0: no password given\n";
-    open(SOCAT, "|-", $socat, "unix:$root/var/lib/run-command.socket", "-");
+    my $pid = open(SOCAT, "|-", $socat, "-t0", "-", "unix:$root/var/lib/run-command.socket") or die "$0: cannot start $socat: $!\n";
     print SOCAT "passwd\n";
     print SOCAT "$password\n";
     print SOCAT "$password\n";
+    flush SOCAT;
+    waitpid($pid, 0);
     close(SOCAT);
 }
 

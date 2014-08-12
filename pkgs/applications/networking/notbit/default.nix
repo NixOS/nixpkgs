@@ -1,12 +1,12 @@
 { stdenv, fetchgit, autoconf, automake, pkgconfig, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "notbit-0.2-28-g06f9160";
+  name = "notbit-git-faf0930";
 
   src = fetchgit {
-    url = "git://git.busydoingnothing.co.uk/notbit";
-    rev = "06f916081836de12f8e57a9f50c95d4d1b51627f";
-    sha256 = "d5c38eea1d9ca213bfbea5c88350478a5088b5532e939de9680d72e60aa65288";
+    url = "git://github.com/bpeel/notbit";
+    rev = "faf09304bf723e75f3d98cca93cf45236ee9d6b6";
+    sha256 = "b229f87c4c5e901bfd8b13dffe31157126d98ed02118fff6553e8b58eb9ed030";
   };
 
   buildInputs = [ autoconf automake pkgconfig openssl ];

@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
       classifications and corrections.  It is based on a Bayesian
       filter.
     '';
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

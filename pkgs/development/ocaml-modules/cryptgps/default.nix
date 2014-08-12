@@ -28,7 +28,7 @@ stdenv.mkDerivation {
       i.e. this is not a binding to some C library, but the implementation
       itself.
     '';
-    license = "MIT/X11";
+    license = stdenv.lib.licenses.mit;
     platforms = ocaml.meta.platforms;
     maintainers = [
       stdenv.lib.maintainers.z77z

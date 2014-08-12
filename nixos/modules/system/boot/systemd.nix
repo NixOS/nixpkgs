@@ -15,13 +15,13 @@ let
       pkgs.runCommand "unit" { preferLocalBuild = true; inherit (unit) text; }
         ''
           mkdir -p $out
-          echo -n "$text" > $out/${name}
+          echo -n "$text" > $out/${shellEscape name}
         ''
     else
       pkgs.runCommand "unit" { preferLocalBuild = true; }
         ''
           mkdir -p $out
-          ln -s /dev/null $out/${name}
+          ln -s /dev/null $out/${shellEscape name}
         '';
 
   upstreamSystemUnits =
@@ -162,10 +162,7 @@ let
       "systemd-sysctl.service"
     ]
 
-    ++ optionals cfg.enableEmergencyMode [
-      "emergency.target"
-      "emergency.service"
-    ];
+    ++ cfg.additionalUpstreamSystemUnits;
 
   upstreamSystemWants =
     [ #"basic.target.wants"
@@ -187,9 +184,11 @@ let
       "timers.target"
     ];
 
+  shellEscape = s: (replaceChars [ "\\" ] [ "\\\\" ] s);
+
   makeJobScript = name: text:
-    let x = pkgs.writeTextFile { name = "unit-script"; executable = true; destination = "/bin/${name}"; inherit text; };
-    in "${x}/bin/${name}";
+    let x = pkgs.writeTextFile { name = "unit-script"; executable = true; destination = "/bin/${shellEscape name}"; inherit text; };
+    in "${x}/bin/${shellEscape name}";
 
   unitConfig = { name, config, ... }: {
     config = {
@@ -315,7 +314,9 @@ let
         ''
           [Service]
           ${let env = cfg.globalEnvironment // def.environment;
-            in concatMapStrings (n: "Environment=\"${n}=${getAttr n env}\"\n") (attrNames env)}
+            in concatMapStrings (n:
+              let s = "Environment=\"${n}=${getAttr n env}\"\n";
+              in if stringLength s >= 2048 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env)}
           ${if def.reloadIfChanged then ''
             X-ReloadIfChanged=true
           '' else if !def.restartIfChanged then ''
@@ -408,10 +409,11 @@ let
 
       # Symlink all units provided listed in systemd.packages.
       for i in ${toString cfg.packages}; do
-        files=$(echo $i/etc/systemd/${type}/* $i/lib/systemd/${type}/*)
-        if [ -n "$files" ]; then
-          ln -s $files $out/
-        fi
+        for fn in $i/etc/systemd/${type}/* $i/lib/systemd/${type}/*; do
+          if ! [[ "$fn" =~ .wants$ ]]; then
+            ln -s $fn $out/
+          fi
+        done
       done
 
       # Symlink all units defined by systemd.units. If these are also
@@ -632,19 +634,6 @@ in
       '';
     };
 
-    systemd.enableEmergencyMode = mkOption {
-      default = true;
-      type = types.bool;
-      description = ''
-        Whether to enable emergency mode, which is an
-        <command>sulogin</command> shell started on the console if
-        mounting a filesystem fails.  Since some machines (like EC2
-        instances) have no console of any kind, emergency mode doesn't
-        make sense, and it's better to continue with the boot insofar
-        as possible.
-      '';
-    };
-
     systemd.tmpfiles.rules = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -680,6 +669,22 @@ in
       description = "Definition of systemd per-user service units.";
     };
 
+    systemd.user.sockets = mkOption {
+      default = {};
+      type = types.attrsOf types.optionSet;
+      options = [ socketOptions unitConfig ];
+      description = "Definition of systemd per-user socket units.";
+    };
+
+    systemd.additionalUpstreamSystemUnits = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      example = [ "debug-shell.service" "systemd-quotacheck.service" ];
+      description = ''
+        Additional units shipped with systemd that shall be enabled.
+      '';
+    };
+
   };
 
 
@@ -687,10 +692,9 @@ in
 
   config = {
 
-    assertions = mapAttrsToList (name: service: {
-      assertion = service.serviceConfig.Type or "" == "oneshot" -> service.serviceConfig.Restart or "no" == "no";
-      message = "${name}: Type=oneshot services must have Restart=no";
-    }) cfg.services;
+    warnings = concatLists (mapAttrsToList (name: service:
+      optional (service.serviceConfig.Type or "" == "oneshot" && service.serviceConfig.Restart or "no" != "no")
+        "Service ‘${name}.service’ with ‘Type=oneshot’ must have ‘Restart=no’") cfg.services);
 
     system.build.units = cfg.units;
 
@@ -765,11 +769,14 @@ in
                        in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
 
     systemd.user.units =
-      mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.user.services;
+      mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.user.services
+      // mapAttrs' (n: v: nameValuePair "${n}.socket" (socketToUnit n v)) cfg.user.sockets;
 
-    system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled [
-      "CGROUPS" "AUTOFS4_FS" "DEVTMPFS"
-    ];
+    system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled
+      [ "DEVTMPFS" "CGROUPS" "INOTIFY_USER" "SIGNALFD" "TIMERFD" "EPOLL" "NET"
+        "SYSFS" "PROC_FS" "FHANDLE" "DMIID" "AUTOFS4_FS" "TMPFS_POSIX_ACL"
+        "TMPFS_XATTR" "SECCOMP"
+      ];
 
     environment.shellAliases =
       { start = "systemctl start";
@@ -809,6 +816,11 @@ in
         # Please change the option ‘systemd.tmpfiles.rules’ instead.
         ${concatStringsSep "\n" cfg.tmpfiles.rules}
       '';
+
+    systemd.services."user@".restartIfChanged = false;
+
+    systemd.services.systemd-remount-fs.restartIfChanged = false;
+    systemd.services.systemd-journal-flush.restartIfChanged = false;
 
   };
 }

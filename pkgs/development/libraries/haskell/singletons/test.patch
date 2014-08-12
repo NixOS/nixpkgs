@@ -1,0 +1,12 @@
+--- a/tests/SingletonsTestSuiteUtils.hs
++++ b/tests/SingletonsTestSuiteUtils.hs
+@@ -201,7 +201,7 @@ testCompileAndDumpGroup testDir tests =
+ filterWithSed :: FilePath -> IO ()
+ filterWithSed file = runProcessWithOpts CreatePipe "sed"
+ #ifdef darwin_HOST_OS
+-  [ "-i", "''"
++  [ "-i"
+ #else
+   [ "-i"
+ #endif
+

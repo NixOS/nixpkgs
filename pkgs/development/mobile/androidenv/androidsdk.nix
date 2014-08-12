@@ -7,17 +7,18 @@
 }:
 {platformVersions, abiVersions, useGoogleAPIs}:
 
-stdenv.mkDerivation {
-  name = "android-sdk-22.3";
+stdenv.mkDerivation rec {
+  name = "android-sdk-${version}";
+  version = "22.6.2";
   
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
-      url = http://dl.google.com/android/android-sdk_r22.3-linux.tgz;
-      md5 = "6ae581a906d6420ad67176dff25a31cc";
+      url = "http://dl.google.com/android/android-sdk_r${version}-linux.tgz";
+      md5 = "ff1541418a44d894bedc5cef10622220";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
-      url = http://dl.google.com/android/android-sdk_r22.3-macosx.zip;
-      md5 = "ecde88ca1f05955826697848fcb4a9e7";
+      url = "http://dl.google.com/android/android-sdk_r${version}-macosx.zip";
+      md5 = "2a319c862dd1dcf450bfe2a6b3d9c608";
     }
     else throw "platform not ${stdenv.system} supported!";
   
@@ -177,7 +178,7 @@ stdenv.mkDerivation {
     
     # Create wrappers to the most important tools and platform tools so that we can run them if the SDK is in our PATH
     
-    ensureDir $out/bin
+    mkdir -p $out/bin
 
     for i in $out/libexec/android-sdk-*/tools/*
     do

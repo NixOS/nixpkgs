@@ -34,9 +34,8 @@ let
 
       # Ignore peth* devices; on Xen, they're renamed physical
       # Ethernet cards used for bridging.  Likewise for vif* and tap*
-      # (Xen) and virbr* and vnet* (libvirt) and c-* and ctmp-* (NixOS
-      # containers).
-      denyinterfaces ${toString ignoredInterfaces} peth* vif* tap* tun* virbr* vnet* vboxnet* c-* ctmp-*
+      # (Xen) and virbr* and vnet* (libvirt).
+      denyinterfaces ${toString ignoredInterfaces} lo peth* vif* tap* tun* virbr* vnet* vboxnet*
 
       ${config.networking.dhcpcd.extraConfig}
     '';
@@ -44,17 +43,6 @@ let
   # Hook for emitting ip-up/ip-down events.
   exitHook = pkgs.writeText "dhcpcd.exit-hook"
     ''
-      #exec >> /var/log/dhcpcd 2>&1
-      #set -x
-
-      params="IFACE=$interface REASON=$reason"
-
-      # only works when interface is wireless and wpa_supplicant has a control socket
-      # but we allow it to fail silently
-      ${optionalString config.networking.wireless.enable ''
-        params+=" $(${pkgs.wpa_supplicant}/sbin/wpa_cli -i$interface status 2>/dev/null | grep ssid | sed 's|^b|B|;s|ssid|SSID|' | xargs)"
-      ''}
-
       if [ "$reason" = BOUND -o "$reason" = REBOOT ]; then
           # Restart ntpd.  We need to restart it to make sure that it
           # will actually do something: if ntpd cannot resolve the
@@ -69,6 +57,8 @@ let
       #if [ "$reason" = EXPIRE -o "$reason" = RELEASE -o "$reason" = NOCARRIER ] ; then
       #    ${config.systemd.package}/bin/systemctl start ip-down.target
       #fi
+
+      ${config.networking.dhcpcd.runHook}
     '';
 
 in
@@ -98,6 +88,16 @@ in
       '';
     };
 
+    networking.dhcpcd.runHook = mkOption {
+      type = types.lines;
+      default = "";
+      example = "if [[ $reason =~ BOUND ]]; then echo $interface: Routers are $new_routers - were $old_routers; fi";
+      description = ''
+         Shell code that will be run after all other hooks. See
+         `man dhcpcd-run-hooks` for details on what is possible.
+      '';
+    };
+
   };
 
 
@@ -109,7 +109,6 @@ in
       { description = "DHCP Client";
 
         wantedBy = [ "network.target" ];
-        after = [ "systemd-udev-settle.service" ]; # FIXME
 
         # Stopping dhcpcd during a reconfiguration is undesirable
         # because it brings down the network interfaces configured by
@@ -123,9 +122,8 @@ in
         serviceConfig =
           { Type = "forking";
             PIDFile = "/run/dhcpcd.pid";
-            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --config ${dhcpcdConf}";
+            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --quiet --config ${dhcpcdConf}";
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
-            StandardError = "null";
             Restart = "always";
           };
       };

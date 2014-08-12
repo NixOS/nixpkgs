@@ -11,6 +11,7 @@ with lib;
 let
 
   cfgSpl = config.boot.spl;
+  cfgZfs = config.boot.zfs;
   cfgSnapshots = config.services.zfs.autoSnapshot;
 
   inInitrd = any (fs: fs == "zfs") config.boot.initrd.supportedFilesystems;
@@ -21,8 +22,11 @@ let
 
   kernel = config.boot.kernelPackages;
 
+  splPkg = if cfgZfs.useGit then kernel.spl_git else kernel.spl;
+  zfsPkg = if cfgZfs.useGit then kernel.zfs_git else kernel.zfs;
+
   autosnapPkg = pkgs.zfstools.override {
-    zfs = config.boot.kernelPackages.zfs;
+    zfs = zfsPkg;
   };
 
   zfsAutoSnap = "${autosnapPkg}/bin/zfs-auto-snapshot";
@@ -44,6 +48,17 @@ in
         changing network adapters, for instance). Specify a unique 32 bit hostid in
         hex here for zfs to prevent getting a random hostid between boots and having to
         manually import pools.
+      '';
+    };
+
+    boot.zfs.useGit = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Use the git version of the SPL and ZFS packages.
+        Note that these are unreleased versions, with less testing, and therefore
+        may be more unstable.
       '';
     };
 
@@ -111,7 +126,7 @@ in
     (mkIf enableZfs {
       boot = {
         kernelModules = [ "spl" "zfs" ] ;
-        extraModulePackages = [ kernel.zfs kernel.spl ];
+        extraModulePackages = [ splPkg zfsPkg ];
         extraModprobeConfig = mkIf (cfgSpl.hostid != "") ''
           options spl spl_hostid=${cfgSpl.hostid}
         '';
@@ -121,10 +136,10 @@ in
         kernelModules = [ "spl" "zfs" ] ;
         extraUtilsCommands =
           ''
-            cp -v ${kernel.zfs}/sbin/zfs $out/bin
-            cp -v ${kernel.zfs}/sbin/zdb $out/bin
-            cp -v ${kernel.zfs}/sbin/zpool $out/bin
-            cp -pdv ${kernel.zfs}/lib/lib*.so* $out/lib
+            cp -v ${zfsPkg}/sbin/zfs $out/bin
+            cp -v ${zfsPkg}/sbin/zdb $out/bin
+            cp -v ${zfsPkg}/sbin/zpool $out/bin
+            cp -pdv ${zfsPkg}/lib/lib*.so* $out/lib
             cp -pdv ${pkgs.zlib}/lib/lib*.so* $out/lib
           '';
         postDeviceCommands =
@@ -139,7 +154,7 @@ in
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
-          ExecStart = "${kernel.zfs}/sbin/zpool import -f -a";
+          ExecStart = "${zfsPkg}/sbin/zpool import -f -a";
         };
         restartIfChanged = false;
       };
@@ -151,15 +166,15 @@ in
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
-          ExecStart = "${kernel.zfs}/sbin/zfs mount -a";
-          ExecStop = "${kernel.zfs}/sbin/zfs umount -a";
+          ExecStart = "${zfsPkg}/sbin/zfs mount -a";
+          ExecStop = "${zfsPkg}/sbin/zfs umount -a";
         };
         restartIfChanged = false;
       };
 
-      system.fsPackages = [ kernel.zfs ];                  # XXX: needed? zfs doesn't have (need) a fsck
-      environment.systemPackages = [ kernel.zfs ];
-      services.udev.packages = [ kernel.zfs ];             # to hook zvol naming, etc.
+      system.fsPackages = [ zfsPkg ];                  # XXX: needed? zfs doesn't have (need) a fsck
+      environment.systemPackages = [ zfsPkg ];
+      services.udev.packages = [ zfsPkg ];             # to hook zvol naming, etc.
     })
 
     (mkIf enableAutoSnapshots {

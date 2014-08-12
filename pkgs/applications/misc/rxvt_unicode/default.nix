@@ -1,19 +1,20 @@
 { stdenv, fetchurl, perlSupport, libX11, libXt, libXft, ncurses, perl,
-  fontconfig, freetype, pkgconfig, libXrender, gdkPixbufSupport, gdk_pixbuf }:
+  fontconfig, freetype, pkgconfig, libXrender, gdkPixbufSupport, gdk_pixbuf,
+  unicode3Support }:
 
 let
   name = "rxvt-unicode";
-  version = "9.16";
+  version = "9.20";
   n = "${name}-${version}";
 in
 
 stdenv.mkDerivation (rec {
 
-  name = "${n}${if perlSupport then "-with-perl" else ""}";
+  name = "${n}${if perlSupport then "-with-perl" else ""}${if unicode3Support then "-with-unicode3" else ""}";
 
   src = fetchurl {
     url = "http://dist.schmorp.de/rxvt-unicode/Attic/rxvt-unicode-${version}.tar.bz2";
-    sha256 = "0x28wyslqnhn2q11y4hncqdl07wgh5ypywl92fq0jxycr36ibfvn";
+    sha256 = "e73e13fe64b59fd3c8e6e20c00f149d388741f141b8155e4700d3ed40aa94b4e";
   };
 
   buildInputs =
@@ -24,12 +25,15 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "terminfo" ];
 
-  patches = [ ./rxvt-unicode-9.06-font-width.patch ];
+  patches = [
+    ./rxvt-unicode-9.06-font-width.patch
+    ./rxvt-unicode-256-color-resources.patch
+  ];
 
   preConfigure =
     ''
       mkdir -p $terminfo/share/terminfo
-      configureFlags="--with-terminfo=$terminfo/share/terminfo --enable-256-color ${if perlSupport then "--enable-perl" else "--disable-perl"}";
+      configureFlags="--with-terminfo=$terminfo/share/terminfo --enable-256-color ${if perlSupport then "--enable-perl" else "--disable-perl"} ${if unicode3Support then "--enable-unicode3" else "--disable-unicode3"}";
       export TERMINFO=$terminfo/share/terminfo # without this the terminfo won't be compiled by tic, see man tic
       NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${freetype}/include/freetype2"
       NIX_LDFLAGS="$NIX_LDFLAGS -lfontconfig -lXrender "

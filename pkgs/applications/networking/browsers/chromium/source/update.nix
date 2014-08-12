@@ -1,7 +1,9 @@
 { system ? builtins.currentSystem }:
 
 let
-  inherit (import <nixpkgs> {}) lib writeText stdenv;
+  inherit (import <nixpkgs> {
+    inherit system;
+  }) lib writeText stdenv;
 
   sources = if builtins.pathExists ./sources.nix
             then import ./sources.nix
@@ -97,7 +99,9 @@ in rec {
 
     prefetch_sha()
     {
-      echo "$(prefetch_main_sha "$@").$(prefetch_deb_sha "$@")";
+      main_sha="$(prefetch_main_sha "$@")" || return 1;
+      deb_sha="$(prefetch_deb_sha "$@")" || return 1;
+      echo "$main_sha.$deb_sha";
       return 0;
     }
 

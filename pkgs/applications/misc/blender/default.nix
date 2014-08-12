@@ -1,35 +1,55 @@
-{ stdenv, fetchurl, SDL, boost, cmake, ffmpeg, gettext, glew
-, ilmbase, jackaudio, libXi, libjpeg, libpng, libsamplerate, libsndfile
+{ stdenv, lib, fetchurl, fetchpatch, SDL, boost, cmake, ffmpeg, gettext, glew
+, ilmbase, libXi, libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, mesa, openal, opencolorio, openexr, openimageio, openjpeg, python
-, zlib
+, zlib, fftw
+, jackaudioSupport ? false, jack2
+, cudaSupport ? false, cudatoolkit6
 }:
 
+with lib;
+
 stdenv.mkDerivation rec {
-  name = "blender-2.70";
+  name = "blender-2.71";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "0j73yfpavcrzg5v54kcha7sig6179g5ykrlhih8d288pnb5c7596";
+    sha256 = "12aqdrpl86xjk2xdwj2nbfcmdzyv61n443gw6j2japffm1kmlz8x";
   };
 
-  buildInputs = [
-    SDL boost cmake ffmpeg gettext glew ilmbase jackaudio libXi
-    libjpeg libpng libsamplerate libsndfile libtiff mesa openal
-    opencolorio openexr openimageio openjpeg python zlib
-  ];
+  buildInputs =
+    [ SDL boost cmake ffmpeg gettext glew ilmbase libXi
+      libjpeg libpng libsamplerate libsndfile libtiff mesa openal
+      opencolorio openexr openimageio /* openjpeg */ python zlib fftw
+    ]
+    ++ optional jackaudioSupport jack2
+    ++ optional cudaSupport cudatoolkit6;
 
+  postUnpack =
+    ''
+      substituteInPlace */doc/manpage/blender.1.py --replace /usr/bin/python ${python}/bin/python3
+    '';
 
-  cmakeFlags = [
-    "-DOPENEXR_INC=${openexr}/include/OpenEXR"
-    "-DWITH_OPENCOLLADA=OFF"
-    "-DWITH_CODEC_FFMPEG=ON"
-    "-DWITH_CODEC_SNDFILE=ON"
-    "-DWITH_JACK=ON"
-    "-DWITH_INSTALL_PORTABLE=OFF"
-    "-DPYTHON_LIBRARY=python${python.majorVersion}m"    
-    "-DPYTHON_LIBPATH=${python}/lib"
-    "-DPYTHON_INCLUDE_DIR=${python}/include/python${python.majorVersion}m"
-  ];
+  patches = [(fetchpatch { # fix parallel builds
+    url = "https://developer.blender.org/D619?download=true";
+    sha256 = "18h4fqsbpwxzqz7qby18lrrbzqnyd5xnann3xcac5wddwv5wjb0f";
+    name = "D619.diff";
+  })];
+  patchFlags = "-p0";
+
+  cmakeFlags =
+    [ "-DOPENEXR_INC=${openexr}/include/OpenEXR"
+      "-DWITH_OPENCOLLADA=OFF"
+      "-DWITH_MOD_OCEANSIM=ON"
+      "-DWITH_CODEC_FFMPEG=ON"
+      "-DWITH_CODEC_SNDFILE=ON"
+      "-DWITH_INSTALL_PORTABLE=OFF"
+      "-DPYTHON_LIBRARY=python${python.majorVersion}m"
+      "-DPYTHON_LIBPATH=${python}/lib"
+      "-DPYTHON_INCLUDE_DIR=${python}/include/python${python.majorVersion}m"
+      "-DPYTHON_VERSION=${python.majorVersion}"
+    ]
+    ++ optional jackaudioSupport "-DWITH_JACK=ON"
+    ++ optional cudaSupport "-DWITH_CYCLES_CUDA_BINARIES=ON";
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR -I${python}/include/${python.libPrefix}m";
 
@@ -43,6 +63,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];
-
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, openconnect, intltool, pkgconfig, networkmanager
-, withGnome ? true, gtk2, gconf, libgnome_keyring, procps, module_init_tools }:
+, withGnome ? true, gnome3, procps, module_init_tools }:
 
 stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ openconnect networkmanager ]
-    ++ stdenv.lib.optionals withGnome [ gtk2 libgnome_keyring gconf ];
+    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome_keyring gnome3.gconf ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
 
   configureFlags = [
-    "${if withGnome then "--with-gnome --with-gtkver=2" else "--without-gnome"}"
+    "${if withGnome then "--with-gnome --with-gtkver=3" else "--without-gnome"}"
     "--disable-static"
   ];
 

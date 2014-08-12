@@ -18,7 +18,7 @@ let
 
       ${cfg.extraConfig}
 
-      ${pkgs.lib.concatMapStrings
+      ${lib.concatMapStrings
           (machine: ''
             host ${machine.hostName} {
               hardware ethernet ${machine.ethernetAddress};

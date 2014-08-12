@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, m4, cxx ? true }:
+{ stdenv, fetchurl, m4, cxx ? true, withStatic ? false }:
 
-stdenv.mkDerivation rec {
+with { inherit (stdenv.lib) optional; };
+
+stdenv.mkDerivation (rec {
   name = "gmp-5.1.3";
 
   src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
@@ -14,18 +16,21 @@ stdenv.mkDerivation rec {
     # Build a "fat binary", with routines for several sub-architectures
     # (x86), except on Solaris where some tests crash with "Memory fault".
     # See <http://hydra.nixos.org/build/2760931>, for instance.
-    (stdenv.lib.optional (!stdenv.isSunOS) "--enable-fat")
-    ++ (if cxx then [ "--enable-cxx" ] else [ "--disable-cxx" ])
-    ++ (if stdenv.is64bit then [ "--with-pic" ] else []);
+    optional (!stdenv.isSunOS) "--enable-fat"
+    ++ (if cxx then [ "--enable-cxx"  ]
+               else [ "--disable-cxx" ])
+    ++ optional (cxx && stdenv.isDarwin) "CPPFLAGS=-fexceptions"
+    ++ optional stdenv.is64bit "--with-pic"
+    ;
 
   doCheck = true;
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://gmplib.org/";
     description = "GMP, the GNU multiple precision arithmetic library";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
 
     longDescription =
       '' GMP is a free library for arbitrary precision arithmetic, operating
@@ -49,7 +54,10 @@ stdenv.mkDerivation rec {
          asymptotically faster algorithms.
       '';
 
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    platforms = platforms.all;
+    maintainers = [ maintainers.simons ];
   };
 }
+  // stdenv.lib.optionalAttrs withStatic { dontDisableStatic = true; }
+)
+

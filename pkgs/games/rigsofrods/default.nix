@@ -52,8 +52,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "3D simulator game where you can drive, fly and sail various vehicles";
     homepage = http://rigsofrods.sourceforge.net/;
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [viric raskin];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = [];
   };
 }

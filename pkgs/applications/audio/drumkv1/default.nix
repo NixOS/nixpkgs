@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, jackaudio, libsndfile, lv2, qt4 }:
+{ stdenv, fetchurl, jack2, libsndfile, lv2, qt4 }:
 
 stdenv.mkDerivation rec {
   name = "drumkv1-${version}";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/drumkv1/${name}.tar.gz";
-    sha256 = "0wxbn5qm3dn9spwbm618flgrwvls7bipg0nhgn0lv4za2g823g56";
+    sha256 = "16bjkp22hfpmzj5di98dddzslavgvhw5z7pgjzmjqz9dxvbqwq1k";
   };
 
-  buildInputs = [ jackaudio libsndfile lv2 qt4 ];
+  buildInputs = [ jack2 libsndfile lv2 qt4 ];
 
   meta = with stdenv.lib; {
     description = "An old-school drum-kit sampler synthesizer with stereo fx";

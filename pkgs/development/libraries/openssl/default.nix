@@ -2,7 +2,7 @@
 , withCryptodev ? false, cryptodevHeaders }:
 
 let
-  name = "openssl-1.0.1g";
+  name = "openssl-1.0.1i";
 
   opensslCrossSystem = stdenv.lib.attrByPath [ "openssl" "system" ]
     (throw "openssl needs its platform name cross building" null)
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
       "http://www.openssl.org/source/${name}.tar.gz"
       "http://openssl.linux-mirror.org/source/${name}.tar.gz"
     ];
-    sha256 = "0a70qdqccg16nw4bbawa6pjvzn05vfp5wkwg6jl0grch7f683jsk";
+    sha256 = "1izwv1wzqdw8aqnvb70jcqpqp0rvkcm22w5c1dm9l1kpr939y5rw";
   };
 
   patches = patchesCross false;
@@ -65,7 +65,7 @@ stdenv.mkDerivation {
   makeFlags = "MANDIR=$(out)/share/man";
 
   # Parallel building is broken in OpenSSL.
-  #enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   postInstall =
     ''

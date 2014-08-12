@@ -12,6 +12,9 @@ with lib;
 
     networking.useHostResolvConf = true;
 
+    # Containers should be light-weight, so start sshd on demand.
+    services.openssh.startWhenNeeded = mkDefault true;
+
     # Shut up warnings about not having a boot loader.
     system.build.installBootLoader = "${pkgs.coreutils}/bin/true";
 

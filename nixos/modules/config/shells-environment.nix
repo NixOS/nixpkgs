@@ -19,6 +19,7 @@ in
       default = {};
       description = ''
         A set of environment variables used in the global environment.
+        These variables will be set on shell initialisation.
         The value of each variable can be either a string or a list of
         strings.  The latter is concatenated, interspersed with colon
         characters.
@@ -147,6 +148,12 @@ in
   config = {
 
     system.build.binsh = pkgs.bashInteractive;
+
+    # Set session variables in the shell as well. This is usually
+    # unnecessary, but it allows changes to session variables to take
+    # effect without restarting the session (e.g. by opening a new
+    # terminal instead of logging out of X11).
+    environment.variables = config.environment.sessionVariables;
 
     environment.etc."shells".text =
       ''

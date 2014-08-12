@@ -56,12 +56,15 @@ rec {
   optionalString = cond: string: if cond then string else "";
 
 
-  # Determine whether a filename ends in the given suffix.
-  hasSuffix = ext: fileName:
-    let lenFileName = stringLength fileName;
-        lenExt = stringLength ext;
-    in !(lessThan lenFileName lenExt) &&
-       substring (sub lenFileName lenExt) lenFileName fileName == ext;
+  # Determine whether a string has given prefix/suffix.
+  hasPrefix = pref: str:
+    eqStrings (substring 0 (stringLength pref) str) pref;
+  hasSuffix = suff: str:
+    let
+      lenStr = stringLength str;
+      lenSuff = stringLength suff;
+    in lenStr >= lenSuff &&
+       eqStrings (substring (lenStr - lenSuff) lenStr str) suff;
 
 
   # Convert a string to a list of characters (i.e. singleton strings).
@@ -116,17 +119,21 @@ rec {
   toLower = replaceChars upperChars lowerChars;
   toUpper = replaceChars lowerChars upperChars;
 
+  # Appends string context from another string
+  addContextFrom = a: b: (substring 0 0 a)+b;
 
   # Compares strings not requiring context equality
   # Obviously, a workaround but works on all Nix versions
-  eqStrings = a: b: (a+(substring 0 0 b)) == ((substring 0 0 a)+b);
+  eqStrings = a: b: addContextFrom b a == addContextFrom a b;
 
 
   # Cut a string with a separator and produces a list of strings which were
   # separated by this separator. e.g.,
   # `splitString "." "foo.bar.baz"' returns ["foo" "bar" "baz"].
-  splitString = sep: s:
+  splitString = _sep: _s:
     let
+      sep = addContextFrom _s _sep;
+      s = addContextFrom _sep _s;
       sepLen = stringLength sep;
       sLen = stringLength s;
       lastSearch = sub sLen sepLen;
@@ -155,8 +162,18 @@ rec {
       preLen = stringLength pre;
       sLen = stringLength s;
     in
-      if pre == substring 0 preLen s then
-        substring preLen (sub sLen preLen) s
+      if hasPrefix pre s then
+        substring preLen (sLen - preLen) s
+      else
+        s;
+
+  removeSuffix = suf: s:
+    let
+      sufLen = stringLength suf;
+      sLen = stringLength s;
+    in
+      if sufLen <= sLen && eqStrings suf (substring (sLen - sufLen) sufLen s) then
+        substring 0 (sLen - sufLen) s
       else
         s;
 

@@ -52,7 +52,7 @@ buildPythonPackage (rec {
   meta = with stdenv.lib; {
     homepage = http://buildbot.net/;
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     # Of course, we don't really need that on NixOS.  :-)
     description = "Continuous integration system that automates the build/test cycle";

@@ -1,17 +1,15 @@
-{stdenv, fetchurl, pciutils, perl, zlib}:
+{ stdenv, fetchgit, perl, efivar, pciutils, zlib }:
 
-let version = "0.5.4"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "efibootmgr-${version}";
+  version = "0.7.0";
 
-  buildInputs = [ pciutils zlib perl ];
+  buildInputs = [ perl efivar pciutils zlib ];
 
-  patches = [ ./arbitrary-filenames.patch ];
-  
-  src = fetchurl {
-    url = "http://linux.dell.com/efibootmgr/permalink/efibootmgr-${version}.tar.gz";
-    sha256 = "0wcfgf8x4p4xfh38m9x3njwsxibm9bhnmvpjj94lj9sk9xxa8qmm";
+  src = fetchgit {
+    url = "git://github.com/vathpela/efibootmgr.git";
+    rev = "refs/tags/${name}";
+    sha256 = "1nazmqxppx2xa8clv4bjdb1b6gyyimgjdj85n2hmf1smqr8krrmz";
   };
 
   postPatch = ''
@@ -19,16 +17,13 @@ stdenv.mkDerivation {
       --replace "/usr/bin/perl" "${perl}/bin/perl"
   '';
 
-  preBuild = ''
-    export makeFlags="BINDIR=$out/sbin"
-  '';
+  installFlags = [ "BINDIR=$(out)/sbin" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A Linux user-space application to modify the Intel Extensible Firmware Interface (EFI) Boot Manager";
     homepage = http://linux.dell.com/efibootmgr/;
-    license = "GPLv2";
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ shlevy ];
+    platforms = platforms.linux;
   };
 }
-

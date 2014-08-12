@@ -65,12 +65,12 @@ $SIG{PIPE} = "IGNORE";
 sub getActiveUnits {
     # FIXME: use D-Bus or whatever to query this, since parsing the
     # output of list-units is likely to break.
-    my $lines = `LANG= @systemd@/bin/systemctl list-units --full`;
+    my $lines = `LANG= systemctl list-units --full --no-legend`;
     my $res = {};
     foreach my $line (split '\n', $lines) {
         chomp $line;
         last if $line eq "";
-        $line =~ /^\*?\s*(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s/ or next;
+        $line =~ /^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s/ or next;
         next if $1 eq "UNIT";
         $res->{$1} = { load => $2, state => $3, substate => $4 };
     }
@@ -188,7 +188,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
                 if (boolIsTrue($unitInfo->{'X-ReloadIfChanged'} // "no")) {
                     write_file($reloadListFile, { append => 1 }, "$unit\n");
                 }
-                elsif (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "yes")) {
+                elsif (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "yes") || boolIsTrue($unitInfo->{'RefuseManualStop'} // "no") ) {
                     push @unitsToSkip, $unit;
                 } else {
                     # If this unit is socket-activated, then stop the
@@ -297,7 +297,7 @@ foreach my $device (keys %$prevSwaps) {
 if (scalar @unitsToStop > 0) {
     @unitsToStop = unique(@unitsToStop);
     print STDERR "stopping the following units: ", join(", ", sort(@unitsToStop)), "\n";
-    system("@systemd@/bin/systemctl", "stop", "--", @unitsToStop); # FIXME: ignore errors?
+    system("systemctl", "stop", "--", @unitsToStop); # FIXME: ignore errors?
 }
 
 print STDERR "NOT restarting the following units: ", join(", ", sort(@unitsToSkip)), "\n"

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, lzma, boost, libdevil, zlib, p7zip
 , openal, libvorbis, glew, freetype, xlibs, SDL, mesa, binutils
 , asciidoc, libxslt, docbook_xsl, docbook_xsl_ns, curl, makeWrapper
-, jdk ? null, python ? null
+, jdk ? null, python ? null, systemd
 , withAI ? true # support for AI Interfaces and Skirmish AIs
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake lzma boost libdevil zlib p7zip openal libvorbis freetype SDL 
     xlibs.libX11 xlibs.libXcursor mesa glew asciidoc libxslt docbook_xsl curl makeWrapper
-    docbook_xsl_ns ]
+    docbook_xsl_ns systemd ]
     ++ stdenv.lib.optional withAI jdk
     ++ stdenv.lib.optional withAI python;
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/bin/spring" \
-      --prefix LD_LIBRARY_PATH : "${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib"
+      --prefix LD_LIBRARY_PATH : "${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib::${systemd}/lib"
   '';
 
   meta = with stdenv.lib; {

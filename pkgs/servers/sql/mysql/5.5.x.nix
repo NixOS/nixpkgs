@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
     md5 = "bf1d80c66d4822ec6036300399a33c03";
   };
 
+  preConfigure = stdenv.lib.optional stdenv.isDarwin ''
+    ln -s /bin/ps $TMPDIR/ps
+    export PATH=$PATH:$TMPDIR
+  '';
+
   buildInputs = [ cmake bison ncurses openssl readline zlib ]
      ++ stdenv.lib.optional stdenv.isDarwin perl;
 

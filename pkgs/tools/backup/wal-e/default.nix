@@ -26,7 +26,7 @@ pythonPackages.buildPythonPackage rec {
     description = "A Postgres WAL-shipping disaster recovery and replication toolkit";
     homepage = https://github.com/wal-e/wal-e;
     maintainers = [ stdenv.lib.maintainers.rickynils ];
-    licenses = stdenv.lib.licenses.bsd3;
+    license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.linux;
   };
 }

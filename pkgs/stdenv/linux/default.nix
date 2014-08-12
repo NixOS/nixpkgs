@@ -210,6 +210,7 @@ rec {
     extraAttrs = {
       glibc = stdenvLinuxGlibc;   # Required by gcc47 build
     };
+    extraPath = [ stdenvLinuxBoot1Pkgs.paxctl ];
     inherit fetchurl;
   };
 
@@ -268,7 +269,7 @@ rec {
 
     initialPath =
       ((import ../common-path.nix) {pkgs = stdenvLinuxBoot4Pkgs;})
-      ++ [stdenvLinuxBoot4Pkgs.patchelf];
+      ++ [stdenvLinuxBoot4Pkgs.patchelf stdenvLinuxBoot4Pkgs.paxctl ];
 
     gcc = wrapGCC rec {
       inherit (stdenvLinuxBoot4Pkgs) binutils coreutils;
@@ -295,7 +296,7 @@ rec {
       inherit (stdenvLinuxBoot4Pkgs)
         gzip bzip2 xz bash coreutils diffutils findutils gawk
         gnumake gnused gnutar gnugrep gnupatch patchelf
-        attr acl;
+        attr acl paxctl;
     };
   };
 

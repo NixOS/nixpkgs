@@ -43,6 +43,6 @@ in stdenv.mkDerivation {
 
     license = stdenv.lib.licenses.mit;
 
-    maintainer = [ stdenv.lib.maintainers.shlevy ];
+    maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
 }

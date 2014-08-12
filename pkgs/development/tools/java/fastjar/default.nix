@@ -24,7 +24,7 @@ let version = "0.94"; in
 
       homepage = http://fastjar.sourceforge.net/;
 
-      license = "GPLv2+";
+      license = stdenv.lib.licenses.gpl2Plus;
 
       maintainers = [ ];
     };

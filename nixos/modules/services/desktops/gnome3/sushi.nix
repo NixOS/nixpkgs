@@ -4,6 +4,9 @@
 
 with lib;
 
+let
+  gnome3 = config.environment.gnome3.packageSet;
+in
 {
 
   ###### interface
@@ -29,9 +32,9 @@ with lib;
 
   config = mkIf config.services.gnome3.sushi.enable {
 
-    environment.systemPackages = [ pkgs.gnome3.sushi ];
+    environment.systemPackages = [ gnome3.sushi ];
 
-    services.dbus.packages = [ pkgs.gnome3.sushi ];
+    services.dbus.packages = [ gnome3.sushi ];
 
   };
 

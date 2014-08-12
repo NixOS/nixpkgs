@@ -8,11 +8,11 @@ with stdenv.lib;
 let
 
   majorVersion = "2.7";
-  version = "${majorVersion}.6";
+  version = "${majorVersion}.8";
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
-    sha256 = "18gnpyh071dxa0rv3silrz92jw9qpblswzwv4gzqcwxzz20qxmhz";
+    sha256 = "0nh7d3dp75f1aj0pamn4hla8s0l7nbaq4a38brry453xrfh11ppd";
   };
 
   patches =
@@ -28,10 +28,6 @@ let
       # patch python to put zero timestamp into pyc
       # if DETERMINISTIC_BUILD env var is set
       ./deterministic-build.patch
-
-      # See http://bugs.python.org/issue20246
-      # This will be fixed in 2.7.7.
-      ./CVE-2014-1912.patch
     ];
 
   postPatch = stdenv.lib.optionalString (stdenv.gcc.libc != null) ''
@@ -60,6 +56,7 @@ let
 
     inherit majorVersion version src patches postPatch buildInputs;
 
+    LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
     C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
     LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
 
@@ -84,12 +81,17 @@ let
         ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb
         ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb${majorVersion}
         ln -s $out/share/man/man1/{python2.7.1.gz,python.1.gz}
+
+        paxmark E $out/bin/python${majorVersion}
       '';
 
-    passthru = {
+    passthru = rec {
       inherit zlibSupport;
+      isPy2 = true;
+      isPy27 = true;
       libPrefix = "python${majorVersion}";
-      executable = "python2.7";
+      executable = libPrefix;
+      sitePackages = "lib/${libPrefix}/site-packages";
     };
 
     enableParallelBuilding = true;

@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "0.5.7";
+  version = "0.5.8";
 in
 stdenv.mkDerivation rec {
   name = "midori-${version}";
@@ -19,8 +19,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/downloads/midori_${version}_all_.tar.bz2";
-    sha256 = "0k8bppicgzm97g5x8ahvpw9wvg2f1mq093qp8biwr858m0mbnx98";
+    sha256 = "10ckm98rfqfbwr84b8mc1ssgj84wjgkr4dadvx2l7c64sigi66dg";
   };
+
+  sourceRoot = ".";
 
   buildInputs = [
     cmake pkgconfig intltool vala makeWrapper

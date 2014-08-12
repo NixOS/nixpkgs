@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0m8ygb40l1c13nsd4hkj1yh4p1ldawhhg8pyjqj9w5kd4cxg5cf4";
   };
 
+  patches = [ ./CVE-2014-2583.patch ];
+
   nativeBuildInputs = [ flex ];
 
   buildInputs = [ cracklib ];

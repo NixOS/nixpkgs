@@ -12,10 +12,10 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="sauerbraten";
-    version="3331";
+    version="5000";
     name="${baseName}-r${version}";
     url="https://svn.code.sf.net/p/sauerbraten/code";
-    hash="0904hk9rz2x941c9587bfxa4rca81260j3m2hjjrp984w67x2w7y";
+    hash="17libj7dslprlwppdk3vyxdcigbsa4czln8gdyz9j264m11z1cbh";
   };
 in
 rec {

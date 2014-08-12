@@ -4,16 +4,6 @@ with lib;
 
 let
 
-  runInNetns = pkgs.stdenv.mkDerivation {
-    name = "run-in-netns";
-    unpackPhase = "true";
-    buildPhase = ''
-      mkdir -p $out/bin
-      gcc ${./run-in-netns.c} -o $out/bin/run-in-netns
-    '';
-    installPhase = "true";
-  };
-
   nixos-container = pkgs.substituteAll {
     name = "nixos-container";
     dir = "bin";
@@ -22,6 +12,28 @@ let
     perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
     inherit (pkgs) socat;
   };
+
+  # The container's init script, a small wrapper around the regular
+  # NixOS stage-2 init script.
+  containerInit = pkgs.writeScript "container-init"
+    ''
+      #! ${pkgs.stdenv.shell} -e
+
+      # Initialise the container side of the veth pair.
+      if [ "$PRIVATE_NETWORK" = 1 ]; then
+        ip link set host0 name eth0
+        ip link set dev eth0 up
+        if [ -n "$HOST_ADDRESS" ]; then
+          ip route add $HOST_ADDRESS dev eth0
+          ip route add default via $HOST_ADDRESS
+        fi
+        if [ -n "$LOCAL_ADDRESS" ]; then
+          ip addr add $LOCAL_ADDRESS dev eth0
+        fi
+      fi
+
+      exec "$1"
+    '';
 
   system = config.nixpkgs.system;
 
@@ -70,7 +82,7 @@ in
                 Whether to give the container its own private virtual
                 Ethernet interface.  The interface is called
                 <literal>eth0</literal>, and is hooked up to the interface
-                <literal>c-<replaceable>container-name</replaceable></literal>
+                <literal>ve-<replaceable>container-name</replaceable></literal>
                 on the host.  If this option is not set, then the
                 container shares the network interfaces of the host,
                 and can bind to any port on any interface.
@@ -105,7 +117,6 @@ in
                   modules =
                     let extraConfig =
                       { boot.isContainer = true;
-                        security.initialRootPassword = mkDefault "!";
                         networking.hostName = mkDefault name;
                         networking.useDHCP = false;
                       };
@@ -176,40 +187,13 @@ in
               "/nix/var/nix/profiles/per-container/$INSTANCE" \
               "/nix/var/nix/gcroots/per-container/$INSTANCE"
 
-            if [ -f "/etc/containers/$INSTANCE.conf" ]; then
-              . "/etc/containers/$INSTANCE.conf"
-            fi
-
-            # Cleanup from last time.
-            ifaceHost=c-$INSTANCE
-            ifaceCont=ctmp-$INSTANCE
-            ns=net-$INSTANCE
-            ip netns del $ns 2> /dev/null || true
-            ip link del $ifaceHost 2> /dev/null || true
-            ip link del $ifaceCont 2> /dev/null || true
-
             if [ "$PRIVATE_NETWORK" = 1 ]; then
-              # Create a pair of virtual ethernet devices.  On the host,
-              # we get ‘c-<container-name’, and on the guest, we get
-              # ‘eth0’.
-              ip link add $ifaceHost type veth peer name $ifaceCont
-              ip netns add $ns
-              ip link set $ifaceCont netns $ns
-              ip netns exec $ns ip link set $ifaceCont name eth0
-              ip netns exec $ns ip link set dev eth0 up
-              ip link set dev $ifaceHost up
-              if [ -n "$HOST_ADDRESS" ]; then
-                ip addr add $HOST_ADDRESS dev $ifaceHost
-                ip netns exec $ns ip route add $HOST_ADDRESS dev eth0
-                ip netns exec $ns ip route add default via $HOST_ADDRESS
-              fi
-              if [ -n "$LOCAL_ADDRESS" ]; then
-                ip netns exec $ns ip addr add $LOCAL_ADDRESS dev eth0
-                ip route add $LOCAL_ADDRESS dev $ifaceHost
-              fi
-              runInNetNs="${runInNetns}/bin/run-in-netns $ns"
-              extraFlags="--capability=CAP_NET_ADMIN"
+              extraFlags+=" --network-veth"
             fi
+
+            for iface in $MACVLANS; do
+              extraFlags+=" --network-macvlan=$iface"
+            done
 
             # If the host is 64-bit and the container is 32-bit, add a
             # --personality flag.
@@ -219,14 +203,19 @@ in
               fi
             ''}
 
-            exec $runInNetNs ${config.systemd.package}/bin/systemd-nspawn \
+            exec ${config.systemd.package}/bin/systemd-nspawn \
+              --keep-unit \
               -M "$INSTANCE" -D "$root" $extraFlags \
               --bind-ro=/nix/store \
               --bind-ro=/nix/var/nix/db \
               --bind-ro=/nix/var/nix/daemon-socket \
               --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles" \
               --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots" \
-              "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
+              --setenv PRIVATE_NETWORK="$PRIVATE_NETWORK" \
+              --setenv HOST_ADDRESS="$HOST_ADDRESS" \
+              --setenv LOCAL_ADDRESS="$LOCAL_ADDRESS" \
+              --setenv PATH="$PATH" \
+              ${containerInit} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
           '';
 
         postStart =
@@ -236,6 +225,17 @@ in
             # until the start timeout expires if systemd-nspawn exits.
             read x < $root/var/lib/startup-done
             rm -f $root/var/lib/startup-done
+
+            if [ "$PRIVATE_NETWORK" = 1 ]; then
+              ifaceHost=ve-$INSTANCE
+              ip link set dev $ifaceHost up
+              if [ -n "$HOST_ADDRESS" ]; then
+                ip addr add $HOST_ADDRESS dev $ifaceHost
+              fi
+              if [ -n "$LOCAL_ADDRESS" ]; then
+                ip route add $LOCAL_ADDRESS dev $ifaceHost
+              fi
+            fi
           '';
 
         preStop =
@@ -250,14 +250,13 @@ in
           ''
             #! ${pkgs.stdenv.shell} -e
             SYSTEM_PATH=/nix/var/nix/profiles/system
-            if [ -f "/etc/containers/$INSTANCE.conf" ]; then
-              . "/etc/containers/$INSTANCE.conf"
-            fi
             echo $SYSTEM_PATH/bin/switch-to-configuration test | \
               ${pkgs.socat}/bin/socat unix:$root/var/lib/run-command.socket -
           '';
 
         serviceConfig.SyslogIdentifier = "container %i";
+
+        serviceConfig.EnvironmentFile = "-/etc/containers/%i.conf";
       };
 
     # Generate a configuration file in /etc/containers for each
@@ -286,6 +285,8 @@ in
       ''
         ${cfg.localAddress} ${name}.containers
       '') config.containers);
+
+    networking.dhcpcd.denyInterfaces = [ "ve-*" ];
 
     environment.systemPackages = [ nixos-container ];
 

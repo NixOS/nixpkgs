@@ -16,7 +16,10 @@ stdenv.mkDerivation {
 
   buildInputs = [ pam ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Virtual console locking program";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.lethalman ];
+    platforms = platforms.linux;
   };
 }

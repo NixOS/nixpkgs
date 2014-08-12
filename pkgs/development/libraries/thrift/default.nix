@@ -15,6 +15,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  # Fixes build error: <flex>/lib/libfl.so: undefined reference to `yylex'.
+  # Patch exists in upstream git repo, so it can be removed on the next version
+  # bump.
+  patches = [ ./yylex.patch ];
+
   # Workaround to make the python wrapper not drop this package:
   # pythonFull.override { extraLibs = [ thrift ]; }
   pythonPath = [];

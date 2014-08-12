@@ -220,7 +220,7 @@ modules=[
   pkgs=[
     { name="kdenetwork-filesharing"; sane="kdenetwork_filesharing"; }
     { name="kdenetwork-strigi-analyzers"; sane="kdenetwork_strigi_analyzers"; }
-    { name="kdnssd";  }
+    { name="zeroconf-ioslave";  }
     { name="kget";  }
     { name="kopete";  }
     { name="kppp";  }
@@ -241,7 +241,7 @@ modules=[
     { name="kgpg";  }
     { name="kremotecontrol";  }
     { name="ktimer";  }
-    { name="kwallet";  }
+    { name="kwalletmanager";  }
     { name="print-manager"; sane="print_manager"; }
     { name="superkaramba";  }
     { name="sweeper";  }

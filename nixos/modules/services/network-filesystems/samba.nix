@@ -59,7 +59,7 @@ let
   daemonService = appName: args:
     { description = "Samba Service Daemon ${appName}";
 
-      wantedBy = [ "samba.target" ];
+      requiredBy = [ "samba.target" ];
       partOf = [ "samba.target" ];
 
       environment = {

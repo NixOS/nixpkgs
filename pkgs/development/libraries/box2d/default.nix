@@ -1,6 +1,6 @@
 x@{builderDefsPackage
   , unzip, cmake, mesa, freeglut, libX11, xproto
-  , inputproto, libXi
+  , inputproto, libXi, fetchsvn, pkgconfig
   , ...}:
 builderDefsPackage
 (a :  
@@ -10,21 +10,17 @@ let
 
   buildInputs = map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="box2d";
-    version="2.1.2";
-    name="${baseName}-${version}";
-    url="http://box2d.googlecode.com/files/Box2D_v${version}.zip";
-    hash="0m5szd74ig8yqazwk2g3zl4z7wwp08k52awawk1pigy6a4z1qd9v";
-  };
 in
 rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+  version = "2.3.0";
+  name = "box2d-${version}";
+  srcDrv = a.fetchsvn {
+    url = "http://box2d.googlecode.com/svn/trunk";
+    rev = "277";
+    sha256 = "1xp93yw2zcqhmh999v7cwqaqxq1glgyg5r8kfm4yabc1ypba3in4";
   };
+  src = srcDrv + "/";
 
-  inherit (sourceInfo) name version;
   inherit buildInputs;
 
   phaseNames = ["changeSettings" "doCmake" "doMakeInstall"];
@@ -49,11 +45,7 @@ rec {
     platforms = with a.lib.platforms;
       linux;
     license = "bsd";
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://code.google.com/p/box2d/downloads/list";
-    };
+    inherit version;
   };
 }) x
 

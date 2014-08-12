@@ -22,8 +22,9 @@ stdenv.mkDerivation {
   buildInputs = if enableNLS then [ libnatspec ] else [];
 
   meta = {
+    description = "Compressor/archiver for creating and modifying zipfiles";
     homepage = http://www.info-zip.org;
     platforms = stdenv.lib.platforms.all;
-    maintainer = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ stdenv.lib.maintainers.urkud ];
   };
 }

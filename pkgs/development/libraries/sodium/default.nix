@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="sodium";
-    version="0.4.5";
+    version="0.6.1";
     name="${baseName}-${version}";
-    hash="0cmcw479p866r6cjh20wzjr84pdn0mfswr5h57mw1siyylnj1mbs";
-    url="http://download.dnscrypt.org/libsodium/releases/libsodium-0.4.5.tar.gz";
-    sha256="0cmcw479p866r6cjh20wzjr84pdn0mfswr5h57mw1siyylnj1mbs";
+    hash="151nril3kzkpmy6khvqphk4zk15ri0dqv0isyyhz6n9nsbmzxk04";
+    url="http://download.dnscrypt.org/libsodium/releases/libsodium-0.6.1.tar.gz";
+    sha256="151nril3kzkpmy6khvqphk4zk15ri0dqv0isyyhz6n9nsbmzxk04";
   };
   buildInputs = [
   ];

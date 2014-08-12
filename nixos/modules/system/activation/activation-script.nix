@@ -109,12 +109,12 @@ in
       ''
         # Various log/runtime directories.
 
-        touch /var/run/utmp # must exist
-        chgrp ${toString config.ids.gids.utmp} /var/run/utmp
-        chmod 664 /var/run/utmp
+        touch /run/utmp # must exist
+        chgrp ${toString config.ids.gids.utmp} /run/utmp
+        chmod 664 /run/utmp
 
-        mkdir -m 0755 -p /var/run/nix/current-load # for distributed builds
-        mkdir -m 0700 -p /var/run/nix/remote-stores
+        mkdir -m 0755 -p /run/nix/current-load # for distributed builds
+        mkdir -m 0700 -p /run/nix/remote-stores
 
         mkdir -m 0755 -p /var/log
 
@@ -125,11 +125,6 @@ in
 
         # Empty, read-only home directory of many system accounts.
         mkdir -m 0555 -p /var/empty
-      '';
-
-    system.activationScripts.media =
-      ''
-        mkdir -m 0755 -p /media
       '';
 
     system.activationScripts.usrbinenv =

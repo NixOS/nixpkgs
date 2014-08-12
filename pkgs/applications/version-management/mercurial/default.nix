@@ -2,7 +2,8 @@
 , guiSupport ? false, tk ? null, curses }:
 
 let
-  name = "mercurial-2.9.2";
+  version = "3.1";
+  name = "mercurial-${version}";
 in
 
 stdenv.mkDerivation {
@@ -10,7 +11,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://mercurial.selenic.com/release/${name}.tar.gz";
-    sha256 = "0lwgncim4cy91ly8389h2bbhl4nbi8xjgp0kx37kgq8q2lx2nil6";
+    sha256 = "1r6hdxka867lpsq2jq3vz662m3ywflg4yylayc9g0s9gmiww5pgi";
   };
 
   inherit python; # pass it so that the same version can be used in hg2git
@@ -53,9 +54,11 @@ stdenv.mkDerivation {
     '';
 
   meta = {
+    inherit version;
     description = "A fast, lightweight SCM system for very large distributed projects";
-    homepage = "http://www.selenic.com/mercurial/";
-    license = "GPLv2";
+    homepage = "http://mercurial.selenic.com/";
+    downloadPage = "http://mercurial.selenic.com/release/";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     description = "Icarus Verilog compiler";
     repositories.git = https://github.com/steveicarus/iverilog.git;
     homepage = http://www.icarus.com;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [winden];
     platforms = with stdenv.lib.platforms; linux;
   };

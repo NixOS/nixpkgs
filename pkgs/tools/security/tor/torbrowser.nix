@@ -20,13 +20,13 @@ let
 
 in stdenv.mkDerivation rec {
   name = "tor-browser-${version}";
-  version = "3.5";
+  version = "3.6.2";
 
   src = fetchurl {
-    url = "https://www.torproject.org/dist/torbrowser/${version}/tor-browser-linux${bits}-${version}_en-US.tar.xz";
+    url = "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux${bits}-${version}_en-US.tar.xz";
     sha256 = if bits == "64" then
-      "e448dc90365a88d73a6ff85347adbe763ef0f800d0cb2e7b7165d7f0646f7c41" else
-      "b0b29b4e75cd4a1aaecf7f4716216edcfc5947516744e2eaeae38bec1d03cea1";
+      "1rfv59k9mia6hr1z1k4im20dy59ir7i054cgf78sfj1zsh08q7hf" else
+      "1klkk1k5r51pcx44r1z3sw08fqcl2f2v5iblf4yh83js482c37r8";
   };
 
   patchPhase = ''
@@ -45,8 +45,8 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/share/tor-browser
-    ensureDir $out/bin
+    mkdir -p $out/share/tor-browser
+    mkdir -p $out/bin
     cp -R * $out/share/tor-browser
 
     cat > "$out/bin/tor-browser" << EOF

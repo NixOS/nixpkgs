@@ -13,11 +13,11 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="simgear";
-    version="2.12.1";
+    version="3.0.0";
     name="${baseName}-${version}";
     extension="tar.bz2";
     url="http://mirrors.ibiblio.org/pub/mirrors/simgear/ftp/Source/${name}.${extension}";
-    hash="0w8drzglgp01019frx96062qcigzfflsyq59f8shpwmzjb2hzli4";
+    hash="05l0wvi0s4a98ihmjbpcc66rj6qy3hrsqkjs388bddf2ws3qyi09";
   };
 in
 rec {

@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     gtk3 dbus_glib upower json_glib
     intltool systemd xorg.xtrans
     makeWrapper
-    cinnamon-desktop/*gschemas*/
+    cinnamon-desktop /*gschemas*/
    ];
 
   preBuild = "patchShebangs ./scripts";
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   postFixup  = ''
     rm $out/share/icons/hicolor/icon-theme.cache
 
-    for f in "$out"/bin/*; do
+    for f in "$out/bin/"*; do
       wrapProgram "$f" --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
     done
   '';
@@ -43,6 +43,7 @@ stdenv.mkDerivation {
 
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.roelof ];
+
+    broken = true;
   };
 }
-

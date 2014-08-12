@@ -31,15 +31,15 @@ let dotInstall4j = path: writeTextFile { name = "dot-install4j"; text = ''
     ''; };
 
 in stdenv.mkDerivation rec {
-  name = "neoload-4.1.3";
+  name = "neoload-4.1.4";
 
   src = fetchurl (
     if stdenv.system == "x86_64-linux" then
-      { url = http://www.neotys.com/documents/download/neoload/v4.1/neoload_4_1_3_linux_x64.sh;
-        sha256 = "0qqp7iy6xpaqg535hk21yqmxi0inin5v160sa7nwxh41dq0li5xx"; }
+      { url = http://neoload.installers.neotys.com/documents/download/neoload/v4.1/neoload_4_1_4_linux_x64.sh;
+        sha256 = "199jcf5a0nwfm8wfld2rcjgq64g91vvz2bkmki8dxfzf1yasifcd"; }
     else
-      { url = http://www.neotys.com/documents/download/neoload/v4.1/neoload_4_1_3_linux_x86.sh;
-        sha256 = "0rvy6l9znha3wf8cn406lwvv2qshqnls9kasi68r4wgysr1hh662"; } );
+      { url = http://neoload.installers.neotys.com/documents/download/neoload/v4.1/neoload_4_1_4_linux_x86.sh;
+        sha256 = "1z66jiwcxixsqqwa0f4q8m2p5kna4knq6lic8y8l74dgv25mw912"; } );
 
   buildInputs = [ makeWrapper ];
   phases = [ "installPhase" ];
@@ -63,6 +63,8 @@ in stdenv.mkDerivation rec {
     export HOME=`pwd`
     export INSTALL4J_JAVA_HOME=${jre}
     bash -ic './installer -q -varfile response.varfile'
+
+    sed -i 's/Xmx450m/Xmx900m/;s/Xss192k/Xss384k/' $out/lib/neoload/conf/agent.properties
 
     for i in $out/bin/*; do
       wrapProgram $i --run 'cp ${dotInstall4j "/lib/openjdk/jre"} ~/.install4j' \

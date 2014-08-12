@@ -194,7 +194,7 @@ rec {
 
      is transformed into
 
-       [ { boot = set1; } { boot = mkIf cond set2; services mkIf cond set3; } ].
+       [ { boot = set1; } { boot = mkIf cond set2; services = mkIf cond set3; } ].
 
      This transform is the critical step that allows mkIf conditions
      to refer to the full configuration without creating an infinite
@@ -318,6 +318,8 @@ rec {
   mkDefault = mkOverride 1000; # used in config sections of non-user modules to set a default
   mkForce = mkOverride 50;
   mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
+
+  mkStrict = builtins.trace "`mkStrict' is obsolete; use `mkOverride 0' instead." (mkOverride 0);
 
   mkFixStrictness = id; # obsolete, no-op
 

@@ -1,50 +1,40 @@
-x@{builderDefsPackage
-  , gnome, gtk, glib, libxml2, pkgconfig, libvirt, gtkvnc, cyrus_sasl, libtasn1
-  , gnupg, libgcrypt, perl, nettle, yajl, libcap_ng
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    ["gnome"];
+{ stdenv, fetchurl, pkgconfig, intltool, glib, libxml2, gtk3, gtkvnc, gmp
+, libgcrypt, gnupg, cyrus_sasl, spiceSupport ? true, spice_gtk, shared_mime_info
+, libvirt, libcap_ng, yajl
+}:
 
-  buildInputs = (map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames)))
-    ++ [gnome.libglade];
-  sourceInfo = rec {
+with stdenv.lib;
+
+let sourceInfo = rec {
     baseName="virt-viewer";
-    version="0.2.0";
+    version="0.6.0";
     name="${baseName}-${version}";
     url="http://virt-manager.org/download/sources/${baseName}/${name}.tar.gz";
-    hash="0lhkmp4kn0s2z8241lqf2fdi55jg9iclr5hjw3m4wzaznpiajwlp";
-  };
-in
-rec {
-  src = a.fetchurl {
+    hash="0svalnr6k8rjadysnxixygk3bdx04asmwx75bhrbljyicba216v6";
+}; in
+
+stdenv.mkDerivation  {
+  inherit (sourceInfo) name version;
+
+  src = fetchurl {
     url = sourceInfo.url;
     sha256 = sourceInfo.hash;
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [ 
+    pkgconfig intltool glib libxml2 gtk3 gtkvnc gmp libgcrypt gnupg cyrus_sasl
+    shared_mime_info libvirt libcap_ng yajl
+  ] ++ optional spiceSupport spice_gtk;
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
   meta = {
     description = "A viewer for remote virtual machines";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.gpl2;
+    maintainers = maintainers.raskin;
+    platforms = platforms.linux;
+    license = licenses.gpl2;
   };
   passthru = {
     updateInfo = {
       downloadPage = "http://virt-manager.org/download.html";
     };
   };
-}) x
-
+}

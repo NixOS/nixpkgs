@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    ensureDir "$out/lib/${passthru.libPrefix}"
+    mkdir -p "$out/lib/${passthru.libPrefix}"
     cp -R *.tcl lang images "$out/lib/${passthru.libPrefix}"
   '';
 

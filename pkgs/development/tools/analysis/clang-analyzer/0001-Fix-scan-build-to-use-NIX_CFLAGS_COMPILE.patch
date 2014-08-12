@@ -1,0 +1,33 @@
+From 6ab08bc1c889e4fb9a39432b1a654eaa19ee65eb Mon Sep 17 00:00:00 2001
+From: Austin Seipp <aseipp@pobox.com>
+Date: Fri, 2 May 2014 12:28:23 -0500
+Subject: [PATCH] Fix scan-build to use NIX_CFLAGS_COMPILE
+
+Signed-off-by: Austin Seipp <aseipp@pobox.com>
+---
+ tools/scan-build/ccc-analyzer | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/tools/scan-build/ccc-analyzer b/tools/scan-build/ccc-analyzer
+index b463ec0..9d39dd0 100755
+--- a/tools/scan-build/ccc-analyzer
++++ b/tools/scan-build/ccc-analyzer
+@@ -207,6 +207,15 @@ sub Analyze {
+       push @Args, "-Xclang", "-analyzer-viz-egraph-ubigraph";
+     }
+ 
++
++    # Add Nix flags to analysis
++    if (defined $ENV{'NIX_CFLAGS_COMPILE'}) {
++      my @nixArgs = split(/\s+/, $ENV{'NIX_CFLAGS_COMPILE'});
++      foreach my $nixArg (@nixArgs) {
++        push @Args, $nixArg;
++      }
++    }
++
+     my $AnalysisArgs = GetCCArgs("--analyze", \@Args);
+     @CmdArgs = @$AnalysisArgs;
+   }
+-- 
+1.8.3.2
+

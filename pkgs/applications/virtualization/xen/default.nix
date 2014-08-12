@@ -30,7 +30,7 @@ let
       }
     ];
 
-in 
+in
 
 stdenv.mkDerivation {
   name = "xen-${version}";

@@ -82,7 +82,7 @@
     }
   },
   { "name": "Plone",
-    "extends": "http://dist.plone.org/release/4.3.2/versions.cfg",
+    "extends": "http://dist.plone.org/release/4.3.3/versions.cfg",
     "doCheck": false,
     "installCommand": "easy_install --always-unzip --no-deps --prefix=\"$out\" .",
     "override": {
@@ -124,11 +124,11 @@
     }
   },
   { "name": "plone.recipe.zope2instance",
-    "extends": "http://dist.plone.org/release/4.3.2/versions.cfg",
+    "extends": "http://dist.plone.org/release/4.3.3/versions.cfg",
     "doCheck": false
   },
   { "name": "RelStorage",
-    "extends": "http://dist.plone.org/release/4.3.2/versions.cfg",
+    "extends": "http://dist.plone.org/release/4.3.3/versions.cfg",
     "doCheck": false
   },
   { "name": "psycopg2",

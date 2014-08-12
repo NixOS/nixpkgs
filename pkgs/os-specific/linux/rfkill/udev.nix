@@ -31,12 +31,12 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
-    ensureDir "$out/etc/udev/rules.d/";
+    mkdir -p "$out/etc/udev/rules.d/";
     cat > "$out/etc/udev/rules.d/90-rfkill.rules" << EOF
       SUBSYSTEM=="rfkill", ATTR{type}=="wlan", RUN+="$out/bin/rfkill-hook.sh" 
     EOF
 
-    ensureDir "$out/bin/";
+    mkdir -p "$out/bin/";
     cp ${./rfkill-hook.sh} "$out/bin/rfkill-hook.sh"
     chmod +x "$out/bin/rfkill-hook.sh";
   '';

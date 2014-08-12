@@ -18,7 +18,7 @@ with stdenv.lib;
 
 let
   majorVersion = "3.4";
-  version = "${majorVersion}.0";
+  version = "${majorVersion}.1";
   fullVersion = "${version}";
 
   buildInputs = filter (p: p != null) [
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${fullVersion}.tar.xz";
-    sha256 = "1gjcn5c3zqg161vwzh43ciha15w0plf5v7cyfm372pnllb08cdpi";
+    sha256 = "1i7dgbzyvj24i6gfhb5q2zwr9nn1ni6w1ig1rcgh96a321is35f5";
   };
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     configureFlagsArray=( --enable-shared --with-threads
                           CPPFLAGS="${concatStringsSep " " (map (p: "-I${p}/include") buildInputs)}"
                           LDFLAGS="${concatStringsSep " " (map (p: "-L${p}/lib") buildInputs)}"
-                          LIBS="-lcrypt ${optionalString (ncurses != null) "-lncurses"}"
+                          LIBS="${optionalString (!stdenv.isDarwin) "-lcrypt"} ${optionalString (ncurses != null) "-lncurses"}"
                         )
   '';
 
@@ -54,9 +54,11 @@ stdenv.mkDerivation {
   postInstall = ''
     rm -rf "$out/lib/python${majorVersion}/test"
     ln -s "$out/include/python${majorVersion}m" "$out/include/python${majorVersion}"
+
+    paxmark E $out/bin/python${majorVersion}
   '';
 
-  passthru = {
+  passthru = rec {
     zlibSupport = zlib != null;
     sqliteSupport = sqlite != null;
     dbSupport = db != null;
@@ -65,7 +67,10 @@ stdenv.mkDerivation {
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
     libPrefix = "python${majorVersion}";
     executable = "python3.4m";
-    is_py3k = true;
+    isPy3 = true;
+    isPy34 = true;
+    is_py3k = true;  # deprecated
+    sitePackages = "lib/${libPrefix}/site-packages";
   };
 
   enableParallelBuilding = true;
@@ -83,7 +88,7 @@ stdenv.mkDerivation {
       high level dynamic data types.
     '';
     license = stdenv.lib.licenses.psfl;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ simons chaoflow iElectric ];
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    maintainers = with stdenv.lib.maintainers; [ simons chaoflow iElectric cstrahan ];
   };
 }

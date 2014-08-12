@@ -3,7 +3,7 @@
 assert (stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux");
 
 let
-  version = "4.0.19";
+  version = "4.0.21.1";
   arch = if stdenv.system == "x86_64-linux"
            then "linux-x86_64"
            else "linux-i686";
@@ -14,8 +14,8 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "https://download.zotero.org/standalone/${version}/Zotero-${version}_${arch}.tar.bz2";
     sha256 = if stdenv.system == "x86_64-linux"
-               then "0xihvk7ms1vvzmxvpw8hs15pl1vvmf3zd72nwyaqhg469kwcz9s1"
-               else "1z4q8nzl90snb03ywk0cp64nv3cgasj9fvbcw2d4bgl2zlgwzpy9";
+               then "1d6ih9q0daxxqqbr134la5y39648hpd53srf43lljjs8wr71wbn8"
+               else "121myzwxw3frps77lpzza82glyz9qgwbl5bh3zngfx9vwx3n8q0v";
   };
 
   # Strip the bundled xulrunner
@@ -23,10 +23,10 @@ stdenv.mkDerivation {
 
   inherit bash xulrunner;
   installPhase = ''
-    ensureDir "$out/libexec/zotero"
+    mkdir -p "$out/libexec/zotero"
     cp -vR * "$out/libexec/zotero/"
 
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     substituteAll "${./zotero.sh}" "$out/bin/zotero"
     chmod +x "$out/bin/zotero"
   '';

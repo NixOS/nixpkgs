@@ -19,7 +19,10 @@ stdenv.mkDerivation rec {
     libnotify isocodes gobjectIntrospection
   ];
 
-  preBuild = "patchShebangs ./scripts";
+  preBuild = ''
+    patchShebangs ./scripts
+    substituteInPlace data/dconf/Makefile --replace "dconf update" "echo"
+  '';
 
   preFixup = ''
     for f in "$out"/bin/*; do

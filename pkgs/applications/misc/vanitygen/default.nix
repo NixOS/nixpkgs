@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl pcre ];
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp vanitygen $out/bin
     cp keyconv $out/bin/vanitygen-keyconv
   '';
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
         and will run about 30% faster.
       '';
       homepage = "https://github.com/samr7/vanitygen";
-      license = "AGPLv3";
+      license = stdenv.lib.licenses.agpl3;
       platforms = stdenv.lib.platforms.all;
   };
 }

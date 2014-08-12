@@ -10,7 +10,7 @@ assert cupsSupport -> cups != null;
 
 let
   ver_maj = "3.12";
-  ver_min = "1";
+  ver_min = "2";
   version = "${ver_maj}.${ver_min}";
 in
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${ver_maj}/gtk+-${version}.tar.xz";
-    sha256 = "1kbp0bmyzh7lbxv9y349vrj3d0n0hn68r5kyvg5683snvdgsx6ki";
+    sha256 = "1l45nd7ln2pnrf99vdki3l7an5wrzkbak11hnnj1w6r3fkm4xmv1";
   };
 
   nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gtk.org/;
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = with stdenv.lib.maintainers; [ urkud raskin vcunat];
     platforms = stdenv.lib.platforms.all;

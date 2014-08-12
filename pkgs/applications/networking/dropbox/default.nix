@@ -70,9 +70,9 @@ in stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir "$out/${appdir}"
+    mkdir -p "$out/${appdir}"
     cp -r ".dropbox-dist/"* "$out/${appdir}/"
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     ln -s "$out/${appdir}/dropbox" "$out/bin/dropbox"
 
     patchelf --set-interpreter ${stdenv.glibc}/lib/${interpreter} \
@@ -83,7 +83,7 @@ in stdenv.mkDerivation {
     find "$out/${appdir}" -type f -a -perm +0100 \
       -print -exec patchelf --force-rpath --set-rpath "$RPATH" {} \;
 
-    ensureDir "$out/share/applications"
+    mkdir -p "$out/share/applications"
     cp "${desktopItem}/share/applications/"* $out/share/applications
   '';
 

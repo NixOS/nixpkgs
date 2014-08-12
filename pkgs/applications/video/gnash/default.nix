@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, fetchpatch
 , SDL, SDL_mixer, gstreamer, gst_plugins_base, gst_plugins_good
 , gst_ffmpeg, speex
 , libogg, libxml2, libjpeg, mesa, libpng, libungif, libtool
@@ -11,9 +11,9 @@
 assert stdenv ? glibc;
 
 let version = "0.8.10";
-    patch_CVE = fetchurl {
+    patch_CVE = fetchpatch {
       url = "http://git.savannah.gnu.org/cgit/gnash.git/patch/?id=bb4dc77eecb6ed1b967e3ecbce3dac6c5e6f1527";
-      sha256 = "1g7ymbq9vxi0mwcgs2dpyd2sf30gaam7blza0ywiwj32f5wk62v1";
+      sha256 = "0ghnki5w7xf3qwfl1x6vhijpd6q608niyxrvh0g8dw5xavkvallk";
       name = "CVE-2012-1175.patch";
     };
 in
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
       supports most SWF v7 features and some SWF v8 and v9.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.gnu;

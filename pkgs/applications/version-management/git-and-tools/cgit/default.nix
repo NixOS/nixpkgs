@@ -12,10 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "0bci1p9spf79wirc4lk36cndcx2b9wj0fq1l58rlp6r563is77l3";
   };
 
-  # cgit is is tightly coupled with git and needs a git source tree to build.
-  # The cgit-0.10 Makefile has GIT_VER = 1.8.5, so use that version.
+  # cgit is tightly coupled with git and needs a git source tree to build.
   # IMPORTANT: Remember to check which git version cgit needs on every version
-  # bump.
+  # bump (look in the Makefile).
   # NOTE: as of 0.10.1, the git version is compatible from 1.9.0 to
   # 1.9.2 (see the repository history)
   gitSrc = fetchurl {

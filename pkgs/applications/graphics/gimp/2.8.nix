@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "gimp-2.8.10";
 
   src = fetchurl {
-    url = "ftp://ftp.gimp.org/pub/gimp/v2.8/${name}.tar.bz2";
+    url = "http://download.gimp.org/pub/gimp/v2.8/${name}.tar.bz2";
     sha256 = "1rha8yx0pplfjziqczjrxxp16vsvpmb5ziq3c218s4w9z4cqpzg7";
   };
 

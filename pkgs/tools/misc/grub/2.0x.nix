@@ -68,6 +68,10 @@ stdenv.mkDerivation rec {
   doCheck = false;
   enableParallelBuilding = true;
 
+  postInstall = ''
+    paxmark pms $out/sbin/grub-{probe,bios-setup}
+  '';
+
   meta = {
     description = "GNU GRUB, the Grand Unified Boot Loader (2.x beta)";
 
@@ -85,7 +89,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/grub/;
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     platforms = if EFIsupport then
       [ "i686-linux" "x86_64-linux" ]

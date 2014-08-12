@@ -11,6 +11,7 @@ stdenv.mkDerivation {
   };
 
   preConfigure = ''
+    rm BUILD # otherwise `mkdir build` fails on case insensitive file systems
     sed -r -i \
       -e 's/(install.*TARGET.*DESTINATION )\.\)/\1bin)/' \
       -e 's!(install.*(FILE|DIR).*DESTINATION )([^)]*)!\1share/xpwn/\3!' \

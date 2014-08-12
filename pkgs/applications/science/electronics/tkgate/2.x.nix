@@ -1,7 +1,9 @@
-{ stdenv, fetchurl, tcl, tk, libX11, libiconvOrLibc }:
+{ stdenv, fetchurl, tcl, tk, libX11, glibc }:
 
-assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
-
+let
+  libiconvInc = stdenv.lib.optionalString stdenv.isLinux "${glibc}/include";
+  libiconvLib = stdenv.lib.optionalString stdenv.isLinux "${glibc}/lib";
+in
 stdenv.mkDerivation rec {
   name = "tkgate-2.0-b10";
 
@@ -16,8 +18,8 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     sed -i configure \
-      -e 's|TKGATE_INCDIRS=.*|TKGATE_INCDIRS="${tcl}/include ${tk}/include ${libiconvOrLibc}/include"|' \
-      -e 's|TKGATE_LIBDIRS=.*|TKGATE_LIBDIRS="${tcl}/lib ${tk}/lib ${libiconvOrLibc}/lib"|'
+      -e 's|TKGATE_INCDIRS=.*|TKGATE_INCDIRS="${tcl}/include ${tk}/include ${libiconvInc}"|' \
+      -e 's|TKGATE_LIBDIRS=.*|TKGATE_LIBDIRS="${tcl}/lib ${tk}/lib ${libiconvLib}"|'
     sed -i options.h \
       -e 's|.* #define TCL_LIBRARY .*|#define TCL_LIBRARY "${tcl}/${tcl.libdir}"|' \
       -e 's|.* #define TK_LIBRARY .*|#define TK_LIBRARY "${tk}/lib/${tk.libPrefix}"|'
@@ -26,8 +28,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Event driven digital circuit simulator with a TCL/TK-based graphical editor";
     homepage = "http://www.tkgate.org/";
-    license = "GPLv2+";
-    maintainers = [ stdenv.lib.maintainers.simons ];
-    platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl2Plus;
+    broken = true;
   };
 }

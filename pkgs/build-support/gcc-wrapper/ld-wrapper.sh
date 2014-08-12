@@ -32,6 +32,9 @@ if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE" \
             # We cannot skip this; barf.
             echo "impure path \`$p' used in link" >&2
             exit 1
+        elif test "${p:0:9}" = "--sysroot"; then
+            # Our ld is not built with sysroot support (Can we fix that?)
+            :
         else
             rest=("${rest[@]}" "$p")
         fi
@@ -45,9 +48,11 @@ extra=()
 extraBefore=()
 
 if test -z "$NIX_LDFLAGS_SET"; then
-    extra=(${extra[@]} $NIX_LDFLAGS)
-    extraBefore=(${extraBefore[@]} $NIX_LDFLAGS_BEFORE)
+    extra+=($NIX_LDFLAGS)
+    extraBefore+=($NIX_LDFLAGS_BEFORE)
 fi
+
+extra+=($NIX_LDFLAGS_AFTER)
 
 
 # Add all used dynamic libraries to the rpath.

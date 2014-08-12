@@ -1,0 +1,17 @@
+The `jvgenmain' executable must be linked against `vec.o', among others,
+since it uses its vector API.
+
+--- gcc-4.3.3/gcc/java/Make-lang.in	2008-12-05 00:00:19.000000000 +0100
++++ gcc-4.3.3/gcc/java/Make-lang.in	2009-07-03 16:11:41.000000000 +0200
+@@ -109,9 +109,9 @@ jcf-dump$(exeext): $(JCFDUMP_OBJS) $(LIB
+ 	$(CC) $(ALL_CFLAGS) $(LDFLAGS) -o $@ $(JCFDUMP_OBJS) \
+ 		$(CPPLIBS) $(ZLIB) $(LDEXP_LIB) $(LIBS)
+ 
+-jvgenmain$(exeext): $(JVGENMAIN_OBJS) $(LIBDEPS)
++jvgenmain$(exeext): $(JVGENMAIN_OBJS) $(LIBDEPS) $(BUILD_RTL)
+ 	rm -f $@
+-	$(CC) $(ALL_CFLAGS) $(LDFLAGS) -o $@ $(JVGENMAIN_OBJS) $(LIBS)
++	$(CC) $(ALL_CFLAGS) $(LDFLAGS) -o $@ $(JVGENMAIN_OBJS) $(BUILD_RTL) $(LIBS)
+ 
+ #
+ # Build hooks:

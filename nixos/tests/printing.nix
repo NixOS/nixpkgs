@@ -1,15 +1,16 @@
 # Test printing via CUPS.
 
 import ./make-test.nix ({pkgs, ... }: {
+  name = "printing";
 
   nodes = {
 
     server =
       { config, pkgs, ... }:
       { services.printing.enable = true;
+        services.printing.listenAddresses = [ "*:631" ];
         services.printing.cupsdConf =
           ''
-            Listen server:631
             <Location />
               Order allow,deny
               Allow from all
@@ -31,9 +32,7 @@ import ./make-test.nix ({pkgs, ... }: {
 
       # Make sure that cups is up on both sides.
       $server->waitForUnit("cupsd.service");
-      $server->waitForUnit("network.target");
       $client->waitForUnit("cupsd.service");
-      $client->waitForUnit("network.target");
       $client->succeed("lpstat -r") =~ /scheduler is running/ or die;
       $client->succeed("lpstat -H") =~ "/var/run/cups/cups.sock" or die;
       $client->succeed("curl --fail http://localhost:631/");

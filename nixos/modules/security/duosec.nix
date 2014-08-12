@@ -165,6 +165,17 @@ in
           whitelist.
         '';
       };
+
+      allowTcpForwarding = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          By default, when SSH forwarding, enabling Duo Security will
+          disable TCP forwarding. By enabling this, you potentially
+          undermine some of the SSH based login security. Note this is
+          not needed if you use PAM.
+        '';
+      };
     };
   };
 
@@ -192,7 +203,9 @@ in
        # Duo Security configuration
        ForceCommand ${config.security.wrapperDir}/login_duo
        PermitTunnel no
-       AllowTcpForwarding no
+       ${optionalString (!cfg.allowTcpForwarding) ''
+         AllowTcpForwarding no
+       ''}
      '');
   };
 }

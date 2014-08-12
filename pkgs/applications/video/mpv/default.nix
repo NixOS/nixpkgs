@@ -14,7 +14,7 @@
 , bluraySupport ? true, libbluray ? null
 , speexSupport ? true, speex ? null
 , theoraSupport ? true, libtheora ? null
-, jackaudioSupport ? true, jackaudio ? null
+, jackaudioSupport ? true, jack2 ? null
 , pulseSupport ? true, pulseaudio ? null
 , bs2bSupport ? false, libbs2b ? null
 # For screenshots
@@ -36,7 +36,7 @@ assert dvdnavSupport -> libdvdnav != null;
 assert bluraySupport -> libbluray != null;
 assert speexSupport -> speex != null;
 assert theoraSupport -> libtheora != null;
-assert jackaudioSupport -> jackaudio != null;
+assert jackaudioSupport -> jack2 != null;
 assert pulseSupport -> pulseaudio != null;
 assert bs2bSupport -> libbs2b != null;
 assert libpngSupport -> libpng != null;
@@ -57,11 +57,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.3.7";
+  version = "0.4.1";
 
   src = fetchurl {
     url = "https://github.com/mpv-player/mpv/archive/v${version}.tar.gz";
-    sha256 = "1qmwmjvgdwh88l2caw2xy1d2h1cdg2w1hl4q5iwx2c0q7a99h41m";
+    sha256 = "0wqjyzw3kk854zj263k7jyykzfaz1g27z50aqrd26hylg8k135cn";
   };
 
   buildInputs = with stdenv.lib;
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     ++ optional dvdreadSupport libdvdread
     ++ optionals dvdnavSupport [ libdvdnav libdvdnav.libdvdread ]
     ++ optional bluraySupport libbluray
-    ++ optional jackaudioSupport jackaudio
+    ++ optional jackaudioSupport jack2
     ++ optional pulseSupport pulseaudio
     ++ optional screenSaverSupport libXScrnSaver
     ++ optional vdpauSupport libvdpau

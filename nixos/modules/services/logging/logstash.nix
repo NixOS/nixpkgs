@@ -17,6 +17,11 @@ in
         description = "Enable logstash";
       };
 
+      enableWeb = mkOption {
+        default = false;
+        description = "Enable logstash web interface";
+      };
+
       inputConfig = mkOption {
         default = ''stdin { type => "example" }'';
         description = "Logstash input configuration";
@@ -62,11 +67,11 @@ in
 
   config = mkIf cfg.enable {
     systemd.services.logstash = with pkgs; {
-      description = "Logstash daemon";
+      description = "Logstash Daemon";
       wantedBy = [ "multi-user.target" ];
-
+      environment = { JAVA_HOME = jre; };
       serviceConfig = {
-        ExecStart = "${jre}/bin/java -jar ${logstash} agent -f ${writeText "logstash.conf" ''
+        ExecStart = "${logstash}/bin/logstash agent -f ${writeText "logstash.conf" ''
           input {
             ${cfg.inputConfig}
           }
@@ -78,7 +83,7 @@ in
           output {
             ${cfg.outputConfig}
           }
-        ''}";
+        ''} ${optionalString cfg.enableWeb "-- web"}";
       };
     };
   };

@@ -130,4 +130,5 @@
 , "phantomjs"
 , "sinon"
 , "shelljs"
+, "typescript"
 ]

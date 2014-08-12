@@ -74,6 +74,7 @@ in zipModules ([]
 ++ obsolete [ "environment" "x11Packages" ] [ "environment" "systemPackages" ]
 ++ obsolete [ "environment" "enableBashCompletion" ] [ "programs" "bash" "enableCompletion" ]
 ++ obsolete [ "environment" "nix" ] [ "nix" "package" ]
+++ obsolete [ "fonts" "extraFonts" ] [ "fonts" "fonts" ]
 
 ++ obsolete [ "security" "extraSetuidPrograms" ] [ "security" "setuidPrograms" ]
 ++ obsolete [ "networking" "enableWLAN" ] [ "networking" "wireless" "enable" ]
@@ -120,12 +121,13 @@ in zipModules ([]
 ++ obsolete [ "services" "xserver" "driSupport" ] [ "hardware" "opengl" "driSupport" ]
 ++ obsolete [ "services" "xserver" "driSupport32Bit" ] [ "hardware" "opengl" "driSupport32Bit" ]
 ++ obsolete [ "services" "xserver" "s3tcSupport" ] [ "hardware" "opengl" "s3tcSupport" ]
-++ obsolete [ "services" "xserver" "videoDrivers" ] [ "hardware" "opengl" "videoDrivers" ]
+++ obsolete [ "hardware" "opengl" "videoDrivers" ] [ "services" "xserver" "videoDrivers" ]
 
 ++ obsolete [ "services" "mysql55" ] [ "services" "mysql" ]
 
 # Options that are obsolete and have no replacement.
 ++ obsolete' [ "boot" "loader" "grub" "bootDevice" ]
 ++ obsolete' [ "boot" "initrd" "luks" "enable" ]
+++ obsolete' [ "programs" "bash" "enable" ]
 
 )
