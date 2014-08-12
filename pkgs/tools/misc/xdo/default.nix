@@ -1,10 +1,11 @@
 { stdenv, fetchurl, libxcb, xcbutilwm }:
 
 stdenv.mkDerivation rec {
-   name = "xdo-0.3";
+   name = "xdo";
+   version = "0.3";
 
    src = fetchurl {
-     url = "https://github.com/baskerville/xdo/archive/0.3.tar.gz";
+     url = "https://github.com/baskerville/${name}/archive/${version}.tar.gz";
      sha256 = "128flaydag9ixsai87p85r84arg2pn1j9h3zgdjwlmbcpb8d4ia8";
    };
 

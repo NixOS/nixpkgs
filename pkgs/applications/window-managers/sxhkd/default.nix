@@ -1,10 +1,11 @@
 { stdenv, fetchurl, asciidoc, libxcb, xcbutil, xcbutilkeysyms, xcbutilwm }:
 
 stdenv.mkDerivation rec {
-  name = "sxhkd-0.5.4";
+  name = "sxhkd";
+  version = "0.5.4";
  
   src = fetchurl {
-    url = "https://github.com/baskerville/sxhkd/archive/0.5.4.tar.gz";
+    url = "https://github.com/baskerville/${name}/archive/${version}.tar.gz";
     sha256 = "de95f97155319ded41ece9403ac9e9f18bfdd914a09f553ab09b331bbfe5d332";
   };
   

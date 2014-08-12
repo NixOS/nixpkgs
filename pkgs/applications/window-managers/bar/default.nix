@@ -1,11 +1,11 @@
 { stdenv, fetchurl, git, perl, libxcb, libXinerama, xcbutil, xcbutilwm, xcbutilkeysyms }:
 
 stdenv.mkDerivation rec {
-  name = "bar-1.0";
-
+  name = "bar";
+  version = "1.0";
   
   src = fetchurl {
-    url = "https://github.com/LemonBoy/bar/archive/v1.0.tar.gz";
+    url = "https://github.com/LemonBoy/${name}/archive/v${version}.tar.gz";
     sha256 = "1n2vak2acs37sslxl250cnz9c3irif5z4s54wi9qjyxbfzr2h2nc";
   };
 
