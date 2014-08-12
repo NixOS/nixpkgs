@@ -1119,6 +1119,8 @@ let
 
   glusterfs = callPackage ../tools/filesystems/glusterfs { };
 
+  glmark2 = callPackage ../tools/graphics/glmark2 { };
+
   glxinfo = callPackage ../tools/graphics/glxinfo { };
 
   gmvault = callPackage ../tools/networking/gmvault { };
