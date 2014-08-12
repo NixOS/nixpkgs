@@ -1427,7 +1427,7 @@ index 9473105..154a335 100644
          if (!isempty(service)) {
                  m->service = strdup(service);
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index 9a9ed9d..4efa5b7 100644
+index 9a9ed9d..c3e6d23 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
 @@ -769,6 +769,15 @@ static int setup_resolv_conf(const char *dest) {
@@ -1483,7 +1483,16 @@ index 9a9ed9d..4efa5b7 100644
                  }
          } else {
                  char template[] = "/tmp/nspawn-root-XXXXXX";
-@@ -2966,7 +2974,9 @@ int main(int argc, char *argv[]) {
+@@ -2748,8 +2756,6 @@ int main(int argc, char *argv[]) {
+                 goto finish;
+         }
+ 
+-        sd_notify(0, "READY=1");
+-
+         assert_se(sigemptyset(&mask) == 0);
+         sigset_add_many(&mask, SIGCHLD, SIGWINCH, SIGTERM, SIGINT, -1);
+         assert_se(sigprocmask(SIG_BLOCK, &mask, NULL) == 0);
+@@ -2966,7 +2972,9 @@ int main(int argc, char *argv[]) {
                          }
  
                          if (!sd_id128_equal(arg_uuid, SD_ID128_NULL)) {
@@ -1494,6 +1503,15 @@ index 9a9ed9d..4efa5b7 100644
                                          log_oom();
                                          goto child_fail;
                                  }
+@@ -3086,6 +3094,8 @@ int main(int argc, char *argv[]) {
+                 if (r < 0)
+                         goto finish;
+ 
++                sd_notify(0, "READY=1");
++
+                 /* Notify the child that the parent is ready with all
+                  * its setup, and thtat the child can now hand over
+                  * control to the code to run inside the container. */
 @@ -3136,6 +3146,10 @@ int main(int argc, char *argv[]) {
  
                          if (!arg_quiet)
