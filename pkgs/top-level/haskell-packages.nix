@@ -3008,6 +3008,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     };
   };
 
+  Allure = callPackage ../games/Allure {};
+
 # End of the main part of the file.
 
 }
