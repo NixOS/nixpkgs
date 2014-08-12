@@ -9084,6 +9084,8 @@ let
 
   lrzsz = callPackage ../tools/misc/lrzsz { };
 
+  luminanceHDR = callPackage ../applications/graphics/luminance-hdr { };
+
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
   handbrake = callPackage ../applications/video/handbrake { };
