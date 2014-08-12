@@ -1,10 +1,10 @@
-{stdenv, fetchurl, autoconf, automake, trousers, openssl, zlib}:
+{ stdenv, fetchurl, trousers, openssl, zlib }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "tboot-1.8.0";
 
   src = fetchurl {
-    url = https://sourceforge.net/projects/tboot/files/tboot/tboot-1.8.0.tar.gz;
+    url = "mirror://sourceforge/tboot/${name}.tar.gz";
     sha256 = "04z1maryqnr714f3rcynqrpmlx76lxr6bb543xwj5rdl1yvdw2xr";
   };
 
@@ -30,3 +30,4 @@ stdenv.mkDerivation {
     platforms   = platforms.linux;
   };
 }
+

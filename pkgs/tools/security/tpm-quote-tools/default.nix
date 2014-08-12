@@ -1,4 +1,4 @@
-{stdenv, fetchurl, autoconf, automake, trousers, openssl}:
+{ stdenv, fetchurl, trousers, openssl }:
 
 stdenv.mkDerivation {
   name = "tpm-quote-tools-1.0.2";

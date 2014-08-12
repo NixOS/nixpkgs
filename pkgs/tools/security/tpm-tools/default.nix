@@ -1,10 +1,13 @@
-{stdenv, fetchurl, autoconf, automake, trousers, openssl}:
+{ stdenv, fetchurl, trousers, openssl }:
 
-stdenv.mkDerivation {
-  name = "tpm-tools-1.3.8";
+let
+  version = "1.3.8";
+in
+stdenv.mkDerivation rec {
+  name = "tpm-tools-${version}";
 
   src = fetchurl {
-    url = https://sourceforge.net/projects/trousers/files/tpm-tools/1.3.8/tpm-tools-1.3.8.tar.gz;
+    url = "mirror://sourceforge/trousers/tpm-tools/${version}/${name}.tar.gz";
     sha256 = "10za1gi89vi9m2lmm7jfzs281h55x1sbbm2bdgdh692ljpq4zsv6";
   };
 
@@ -20,3 +23,4 @@ stdenv.mkDerivation {
     platforms   = platforms.unix;
   };
 }
+

@@ -1,11 +1,15 @@
-{stdenv, fetchurl, autoconf, automake, openssl}:
+{ stdenv, fetchurl, openssl }:
 
-stdenv.mkDerivation {
-  name = "trousers-0.3.11.2";
+let
+  ver_maj = "0.3.11";
+  ver_min = "2";
+in
+stdenv.mkDerivation rec {
+  name = "trousers-${ver_maj}.${ver_min}";
 
   src = fetchurl {
-    url = https://sourceforge.net/projects/trousers/files/trousers/0.3.11/trousers-0.3.11.2.tar.gz;
-    sha256 = "03c71szmij1nx3jicacmazh0yan3qm00k0ahmh4mq88fw00k1p4v";
+    url = "mirror://sourceforge/trousers/trousers/${ver_maj}/${name}.tar.gz";
+    sha256 = "1m9qi4452jr5yy4y9zyfi5ndwam5krq7ny8z2q3f91v1hcjgk5la";
   };
 
   buildInputs = [ openssl ];
@@ -26,3 +30,4 @@ stdenv.mkDerivation {
     platforms   = platforms.unix;
   };
 }
+
