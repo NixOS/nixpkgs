@@ -9051,11 +9051,11 @@ rec {
 
   cliapp = buildPythonPackage rec {
     name = "cliapp-${version}";
-    version = "1.20130808";
+    version = "1.20140719";
 
     src = fetchurl rec {
       url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_${version}.orig.tar.gz";
-      sha256 = "0i9fqkahrc16mnxjw8fcr4hwrq3ibfrj2lzzbzzb7v5yk5dlr532";
+      sha256 = "0kxl2q85n4ggvbw2m8crl11x8n637mx6y3a3b5ydw8nhlsiqijgp";
     };
 
     buildInputs = [ sphinx ];
