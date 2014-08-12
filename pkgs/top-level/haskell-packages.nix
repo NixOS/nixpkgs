@@ -308,6 +308,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   boomerang = callPackage ../development/libraries/haskell/boomerang {};
 
+  bound = callPackage ../development/libraries/haskell/bound {};
+
   bv = callPackage ../development/libraries/haskell/bv {};
 
   byteable = callPackage ../development/libraries/haskell/byteable {};
@@ -1019,6 +1021,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hashable_1_1_2_5 = callPackage ../development/libraries/haskell/hashable/1.1.2.5.nix {};
   hashable_1_2_2_0 = callPackage ../development/libraries/haskell/hashable/1.2.2.0.nix {};
   hashable = self.hashable_1_2_2_0;
+
+  hashableExtras = callPackage ../development/libraries/haskell/hashable-extras {};
 
   hashedStorage = callPackage ../development/libraries/haskell/hashed-storage {};
 
