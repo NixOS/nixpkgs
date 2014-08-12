@@ -29,4 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [ gstreamer ];
+
+  enableParallelBuilding = true;
 }
+
