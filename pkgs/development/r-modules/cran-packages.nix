@@ -71,6 +71,10 @@ let self = _self // overrides; _self = with self; {
     meta.hydraPlatforms = R.meta.hydraPlatforms;
   };
 
+  /* Needed to add one more entry to depends: */
+  dplyr = derive { name="dplyr"; version="0.2"; sha256="04kby4n2qvngfdmpqarhizavpy9mr99zpwfxpknqbnbpbya5px1q"; depends=[assertthat Rcpp magrittr Lahman hflights BH]; };
+  png = derive { name="png"; version="0.1-7"; sha256="0g2mcp55lvvpx4kd3mn225mpbxqcq73wy5qx8b4lyf04iybgysg2"; depends=[ pkgs.libpng ]; };
+
 /* not sure if the above customization is needed, or if the
    generated RccArmadillo below will work too:
 
@@ -1275,7 +1279,6 @@ let self = _self // overrides; _self = with self; {
   dpcR = derive { name="dpcR"; version="0.1.2-1"; sha256="1czkwyqnly7lwn00mifm0apnh8ahfv4v9iwzvfwcamfl7qkwbvx6"; depends=[qpcR binom chipPCR e1071 dgof pracma rateratio_test signal shiny spatstat]; };
   dpglasso = derive { name="dpglasso"; version="1.0"; sha256="1mx28xbm2z2bxyp33wv2v6vgn1yfsdsa0bzjjdxasgd6lvr51myf"; depends=[]; };
   dplR = derive { name="dplR"; version="1.6.0"; sha256="1rjb10adhycp16xav7z5c93jfcjwpcrp8cdiyab8skrijgzbp0vx"; depends=[gmp digest lattice stringr XML]; };
-  dplyr = derive { name="dplyr"; version="0.2"; sha256="04kby4n2qvngfdmpqarhizavpy9mr99zpwfxpknqbnbpbya5px1q"; depends=[assertthat Rcpp magrittr Lahman hflights]; };
   dpmixsim = derive { name="dpmixsim"; version="0.0-8"; sha256="0paa2hmpd6bqf0m7p9j7l2h3j18lm64ya6ya8zvp55wm8pf7xgqg"; depends=[oro_nifti cluster]; };
   DPpackage = derive { name="DPpackage"; version="1.1-6"; sha256="01qdl6cp6wkddl9fwwpxwvyhb7lpjxis6wnbm2s288y2n9wi4j24"; depends=[MASS nlme survival]; };
   DPw = derive { name="DPw"; version="1.1.2"; sha256="0waprp6xql67ijwwsy0z8f0fnazkzci0nzwiajwkvy7vbwcch5bx"; depends=[]; };
@@ -3829,7 +3832,6 @@ let self = _self // overrides; _self = with self; {
   pmml = derive { name="pmml"; version="1.4.2"; sha256="0588sph67zs58knf4g3fd7c84i2yag81igr882jgbaxhfhxrpk6n"; depends=[XML survival]; };
   pmmlTransformations = derive { name="pmmlTransformations"; version="1.2.2"; sha256="1p31lakhqwk0qhb565j2sjcfsjsx0i5v8kj8779ryjyvy7717m6m"; depends=[]; };
   pmr = derive { name="pmr"; version="1.2.4"; sha256="15yrh533rj5i728nvcpjj3m5wa3jbspnfj941px3mf11h14npxpp"; depends=[]; };
-  png = derive { name="png"; version="0.1-7"; sha256="0g2mcp55lvvpx4kd3mn225mpbxqcq73wy5qx8b4lyf04iybgysg2"; depends=[]; };
   pnmtrem = derive { name="pnmtrem"; version="1.3"; sha256="0053gg368sdpcw2qzydpq0c5v2cxdlwgf5k68cbw0yx41csjgvz0"; depends=[MASS]; };
   pnn = derive { name="pnn"; version="1.0.1"; sha256="1s6ib60sbdas4720hrsr5lsszsa474kfblqcalsb56c84gkl42ka"; depends=[]; };
   pocrm = derive { name="pocrm"; version="0.8"; sha256="04i9slfb9hmhhhq6m2iz7p3cm3v1v6nsvnr117dp55cxanfymd6f"; depends=[dfcrm nnet]; };
