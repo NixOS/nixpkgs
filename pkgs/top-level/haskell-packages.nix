@@ -1848,6 +1848,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   pointedlist = callPackage ../development/libraries/haskell/pointedlist {};
 
+  pointful = callPackage ../development/libraries/haskell/pointful {};
+
   poolConduit = callPackage ../development/libraries/haskell/pool-conduit {};
 
   pop3client = callPackage ../development/libraries/haskell/pop3-client {};
