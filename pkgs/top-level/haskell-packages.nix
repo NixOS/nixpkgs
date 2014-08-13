@@ -842,6 +842,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   forceLayout = callPackage ../development/libraries/haskell/force-layout {};
 
+  formatting = callPackage ../development/libraries/haskell/formatting {};
+
   free = callPackage ../development/libraries/haskell/free {};
 
   freeGame = callPackage ../development/libraries/haskell/free-game {};
