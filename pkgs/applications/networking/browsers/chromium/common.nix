@@ -10,7 +10,7 @@
 , python, pythonPackages, perl, pkgconfig
 , nspr, udev, krb5
 , utillinux, alsaLib
-, gcc, bison, gperf
+, bison, gperf
 , glib, gtk, dbus_glib
 , libXScrnSaver, libXcursor, libXtst, mesa
 , protobuf, speechd, libXdamage
@@ -145,6 +145,8 @@ let
     '';
 
     gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {
+      linux_use_bundled_binutils = false;
+      linux_use_bundled_gold = false;
       linux_use_gold_binary = false;
       linux_use_gold_flags = false;
       proprietary_codecs = false;
@@ -192,20 +194,15 @@ let
     '';
 
     buildPhase = let
-      CC = "${gcc}/bin/gcc";
-      CXX = "${gcc}/bin/g++";
       buildCommand = target: let
         # XXX: Only needed for version 36 and older!
         targetSuffix = optionalString
           (versionOlder source.version "37.0.0.0" && target == "mksnapshot")
           (if stdenv.is64bit then ".x64" else ".ia32");
       in ''
-        CC="${CC}" CC_host="${CC}"     \
-        CXX="${CXX}" CXX_host="${CXX}" \
-        LINK_host="${CXX}"             \
-          "${ninja}/bin/ninja" -C "${buildPath}"  \
-            -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES \
-            "${target}${targetSuffix}"
+        "${ninja}/bin/ninja" -C "${buildPath}"  \
+          -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES \
+          "${target}${targetSuffix}"
       '' + optionalString (target == "mksnapshot" || target == "chrome") ''
         paxmark m "${buildPath}/${target}${targetSuffix}"
       '';
