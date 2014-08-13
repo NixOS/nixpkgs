@@ -29,14 +29,21 @@ in ruby.stdenv.mkDerivation (attrs // {
     };
 
   unpackPhase = ''
-    gem unpack $src --target=gem-build
-    cd gem-build/*
+    if test -d $src; then
+      cd $src
+    else
+      gem unpack $src --target=gem-build
+      cd gem-build/*
+    fi
   '';
 
   buildPhase = ''
     runHook preBuild
-    ${git}/bin/git init
-    ${git}/bin/git add .
+    test -d .git || {
+      chmod 755 .
+      ${git}/bin/git init
+      ${git}/bin/git add .
+    }
     if gem build *.gemspec; then
       export src=*.gem
     else
