@@ -163,9 +163,6 @@ let
       werror = "";
       clang = false;
 
-      # FIXME: In version 37, omnibox.mojom.js doesn't seem to be generated.
-      use_mojo = versionOlder source.version "37.0.0.0";
-
       # Google API keys, see:
       #   http://www.chromium.org/developers/how-tos/api-keys
       # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
@@ -194,17 +191,12 @@ let
     '';
 
     buildPhase = let
-      buildCommand = target: let
-        # XXX: Only needed for version 36 and older!
-        targetSuffix = optionalString
-          (versionOlder source.version "37.0.0.0" && target == "mksnapshot")
-          (if stdenv.is64bit then ".x64" else ".ia32");
-      in ''
+      buildCommand = target: ''
         "${ninja}/bin/ninja" -C "${buildPath}"  \
           -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES \
-          "${target}${targetSuffix}"
+          "${target}"
       '' + optionalString (target == "mksnapshot" || target == "chrome") ''
-        paxmark m "${buildPath}/${target}${targetSuffix}"
+        paxmark m "${buildPath}/${target}"
       '';
       targets = extraAttrs.buildTargets or [];
       commands = map buildCommand targets;
