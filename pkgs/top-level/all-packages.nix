@@ -164,7 +164,7 @@ let
 
   ### Symbolic names.
 
-  x11 = if stdenv.isDarwin then darwinX11AndOpenGL else xlibsWrapper;
+  x11 = xlibsWrapper;
 
   # `xlibs' is the set of X library components.  This used to be the
   # old modular X llibraries project (called `xlibs') but now it's just
@@ -4548,8 +4548,7 @@ let
 
   freealut = callPackage ../development/libraries/freealut { };
 
-  freeglut = if stdenv.isDarwin then darwinX11AndOpenGL else
-    callPackage ../development/libraries/freeglut { };
+  freeglut = callPackage ../development/libraries/freeglut { };
 
   freetype = callPackage ../development/libraries/freetype { };
 
@@ -5666,25 +5665,22 @@ let
 
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
-  mesa_original = callPackage ../development/libraries/mesa {
+  mesaDarwinOr = alternative: if stdenv.isDarwin
+    then callPackage ../development/libraries/mesa-darwin { }
+    else alternative;
+  mesa_noglu = mesaDarwinOr (callPackage ../development/libraries/mesa {
     # makes it slower, but during runtime we link against just mesa_drivers
     # through /run/opengl-driver*, which is overriden according to config.grsecurity
     grsecEnabled = true;
-  };
-
-  mesa_noglu = if stdenv.isDarwin
-    then darwinX11AndOpenGL // { driverLink = mesa_noglu; }
-    else mesa_original;
+  });
+  mesa_glu =  mesaDarwinOr (callPackage ../development/libraries/mesa-glu { });
   mesa_drivers = let
-      mo = mesa_original.override { grsecEnabled = config.grsecurity or false; };
+      mo = mesa_noglu.override { grsecEnabled = config.grsecurity or false; };
     in mo.drivers;
-  mesa_glu = callPackage ../development/libraries/mesa-glu { };
-  mesa = if stdenv.isDarwin then darwinX11AndOpenGL
-    else buildEnv {
-      name = "mesa-${mesa_noglu.version}";
-      paths = [ mesa_glu mesa_noglu ];
-    };
-  darwinX11AndOpenGL = callPackage ../os-specific/darwin/native-x11-and-opengl { };
+  mesa = mesaDarwinOr (buildEnv {
+    name = "mesa-${mesa_noglu.version}";
+    paths = [ mesa_noglu mesa_glu ];
+  });
 
   metaEnvironment = recurseIntoAttrs (let callPackage = newScope pkgs.metaEnvironment; in rec {
     sdfLibrary    = callPackage ../development/libraries/sdf-library { aterm = aterm28; };
@@ -7012,12 +7008,17 @@ let
 
   xinetd = callPackage ../servers/xinetd { };
 
+  xquartz = callPackage ../servers/x11/xquartz { };
+  quartz-wm = callPackage ../servers/x11/quartz-wm { stdenv = clangStdenv; };
+
   xorg = recurseIntoAttrs (import ../servers/x11/xorg/default.nix {
-    inherit fetchurl fetchgit fetchpatch stdenv pkgconfig intltool freetype fontconfig
-      libxslt expat libdrm libpng zlib perl mesa_drivers
+    inherit clangStdenv fetchurl fetchgit fetchpatch stdenv pkgconfig intltool freetype fontconfig
+      libxslt expat libpng zlib perl mesa_drivers
       dbus libuuid openssl gperf m4
-      autoconf automake libtool xmlto asciidoc udev flex bison python mtdev pixman;
+      autoconf automake libtool xmlto asciidoc flex bison python mtdev pixman;
     mesa = mesa_noglu;
+    udev = if stdenv.isLinux then udev else null;
+    libdrm = if stdenv.isLinux then libdrm else null;
   } // {
     xf86videointel-testing = callPackage ../servers/x11/xorg/xf86-video-intel-testing.nix { };
   });
