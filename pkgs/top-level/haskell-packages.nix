@@ -1066,6 +1066,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hasteCompiler = callPackage ../development/libraries/haskell/haste-compiler {};
 
+  hastePerch = callPackage ../development/libraries/haskell/haste-perch {};
+
   HaTeX = callPackage ../development/libraries/haskell/HaTeX {};
 
   hcltest = callPackage ../development/libraries/haskell/hcltest {};
@@ -1079,6 +1081,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hgal = callPackage ../development/libraries/haskell/hgal {};
 
   hourglass = callPackage ../development/libraries/haskell/hourglass {};
+
+  hplayground = callPackage ../development/libraries/haskell/hplayground {};
 
   hseCpp = callPackage ../development/libraries/haskell/hse-cpp {};
 
