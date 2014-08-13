@@ -10996,6 +10996,8 @@ let
     inherit (pkgs.gnome) gtkglext;
   };
 
+  fityk = callPackage ../applications/science/misc/fityk { };
+
   gravit = callPackage ../applications/science/astronomy/gravit { };
 
   golly = callPackage ../applications/science/misc/golly { };
