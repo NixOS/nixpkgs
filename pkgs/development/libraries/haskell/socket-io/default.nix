@@ -8,11 +8,11 @@ cabal.mkDerivation (self: {
   pname = "socket-io";
   version = "1.0.1";
   sha256 = "0257c5wf6b9rmprqq5q5d7fih4s2szwv98w16ggl61p8khf5d2qs";
-  jailbreak = true;
   buildDepends = [
     aeson attoparsec engineIo mtl stm text transformers
     unorderedContainers vector
   ];
+  jailbreak = true;
   meta = {
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
