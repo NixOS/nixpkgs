@@ -5674,9 +5674,12 @@ let
     grsecEnabled = true;
   });
   mesa_glu =  mesaDarwinOr (callPackage ../development/libraries/mesa-glu { });
-  mesa_drivers = let
-      mo = mesa_noglu.override { grsecEnabled = config.grsecurity or false; };
-    in mo.drivers;
+  mesa_drivers = mesaDarwinOr (
+    let mo = mesa_noglu.override {
+      grsecEnabled = config.grsecurity or false;
+    };
+    in mo.drivers
+  );
   mesa = mesaDarwinOr (buildEnv {
     name = "mesa-${mesa_noglu.version}";
     paths = [ mesa_noglu mesa_glu ];
