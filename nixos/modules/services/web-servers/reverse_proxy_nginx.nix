@@ -140,7 +140,6 @@ in
       };
 
       defaultCertificate = mkOption {
-        #default = { certificate = "/root/ssl/default.crt"; key = "/root/ssl/private/default.key"; };
         default = { certificate = ""; key = ""; };
         example = { certificate = "/file/bar.cert"; key = "/file/bar.key"; };
         type = types.attrsOf types.str;
