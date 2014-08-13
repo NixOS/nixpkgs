@@ -1077,6 +1077,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hourglass = callPackage ../development/libraries/haskell/hourglass {};
 
+  hplayground = callPackage ../development/libraries/haskell/hplayground {};
+
   hseCpp = callPackage ../development/libraries/haskell/hse-cpp {};
 
   hsimport = callPackage ../development/libraries/haskell/hsimport {};
