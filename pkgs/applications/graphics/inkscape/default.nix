@@ -39,7 +39,8 @@ stdenv.mkDerivation rec {
     for i in "$out/bin/"*
     do
       wrapProgram "$i" --prefix PYTHONPATH :      \
-       "$(toPythonPath ${pyxml}):$(toPythonPath ${lxml})" ||  \
+       "$(toPythonPath ${pyxml}):$(toPythonPath ${lxml})"  \
+       --prefix PATH : ${python}/bin ||  \
         exit 2
     done
     rm $out/share/icons/hicolor/icon-theme.cache

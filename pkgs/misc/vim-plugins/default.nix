@@ -89,7 +89,7 @@ let vimHelpTags = ''
 
     installPhase = ''
       target=$out/share/vim-plugins/${path}
-      ensureDir $out/share/vim-plugins
+      mkdir -p $out/share/vim-plugins
       cp -r . $target
       ${vimHelpTags}
       vimHelpTags $target
@@ -408,7 +408,7 @@ in rec
     };
     unpackPhase = ":";
     installPhase = ''
-      ensureDir $out/share/vim-plugins/vim-a
+      mkdir -p $out/share/vim-plugins/vim-a
       cp ${src} $out/share/vim-plugins/vim-a/a.vim
     '';
   };

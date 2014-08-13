@@ -93,5 +93,7 @@ in
 
       maintainers = [ ];
       platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+
+      broken = true;
     };
   }

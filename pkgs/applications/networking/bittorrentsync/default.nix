@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ patchelf ];
 
   installPhase = ''
-    ensureDir "$out/bin/"
+    mkdir -p "$out/bin/"
     cp -r "btsync" "$out/bin/"
 
     patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \

@@ -11,6 +11,5 @@ cabal.mkDerivation (self: {
     description = "CSV loader and dumper";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

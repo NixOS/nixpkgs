@@ -12,7 +12,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libsepol libselinux bison flex ];
 
-  preBuild = '' makeFlags="$makeFlags LEX=flex LIBDIR=${libsepol}/lib PREFIX=$out" '';
+  preBuild = ''
+    makeFlags="$makeFlags LEX=flex LIBDIR=${libsepol}/lib PREFIX=$out"
+    sed -e 's@[.]o$@& ../lex.yy.o@' -i test/Makefile
+  '';
 
   meta = with stdenv.lib; {
     description = "SELinux policy compiler";

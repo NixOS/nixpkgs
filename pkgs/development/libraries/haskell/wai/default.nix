@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wai";
-  version = "3.0.1";
-  sha256 = "1889l6fbgvxn13yaskcvjrq07vs62ayvq8q5rn9cpq0yqyc6llcw";
+  version = "3.0.1.1";
+  sha256 = "04dka0mgqckzhvmz8m9gqvk5qq79g23q8wx40v42fwhkwwy7f8i0";
   buildDepends = [ blazeBuilder httpTypes network text vault ];
   testDepends = [ blazeBuilder hspec ];
   meta = {
@@ -13,6 +13,5 @@ cabal.mkDerivation (self: {
     description = "Web Application Interface";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

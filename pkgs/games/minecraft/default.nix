@@ -1,5 +1,7 @@
-{stdenv, fetchurl, jre, libX11, libXext, libXcursor, libXrandr, libXxf86vm
+{ stdenv, fetchurl, jre, libX11, libXext, libXcursor, libXrandr, libXxf86vm
 , mesa, openal, alsaOss }:
+
+assert jre ? architecture;
 
 stdenv.mkDerivation {
   name = "minecraft-2013.07.01";

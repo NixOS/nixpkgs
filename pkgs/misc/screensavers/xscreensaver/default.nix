@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.jwz.org/xscreensaver/";
     description = "A set of screensavers";
     maintainers = with stdenv.lib.maintainers; [ raskin urkud ];
-    platforms = stdenv.lib.platforms.allBut "i686-cygwin";
+    platforms = with stdenv.lib.platforms; allBut cygwin;
   };
 }

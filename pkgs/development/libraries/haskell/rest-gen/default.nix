@@ -20,6 +20,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     haskellSrcExts HUnit restCore testFramework testFrameworkHunit
   ];
+  jailbreak = true;
   meta = {
     description = "Documentation and client generation from rest definition";
     license = self.stdenv.lib.licenses.bsd3;

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pciutils python ];
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp x86info lsmsr $out/bin
   '';
 

@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Theorem proving library based on dependent type theory";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

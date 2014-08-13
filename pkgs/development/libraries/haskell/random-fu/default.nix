@@ -17,6 +17,5 @@ cabal.mkDerivation (self: {
     description = "Random number generation";
     license = self.stdenv.lib.licenses.publicDomain;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

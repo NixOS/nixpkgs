@@ -1,71 +1,55 @@
-x@{builderDefsPackage
-  , cyrus_sasl, gettext, openldap, ptlib, opal, GConf, libXv, rarian, intltool
-  , perl, perlXMLParser, evolution_data_server, gnome_doc_utils, avahi
-  , libsigcxx, gtk, dbus_glib, libnotify, libXext, xextproto, automake
-  , autoconf, pkgconfig, libxml2, videoproto, unixODBC, db, nspr, nss, zlib
-  , libXrandr, randrproto, which, libxslt, libtasn1, gmp, nettle
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, cyrus_sasl, gettext, openldap, ptlib, opal, libXv, rarian, intltool
+, perl, perlXMLParser, evolution_data_server, gnome_doc_utils, avahi, autoreconfHook
+, libsigcxx, gtk, dbus_glib, libnotify, libXext, xextproto, gnome3, boost, libsecret
+, pkgconfig, libxml2, videoproto, unixODBC, db, nspr, nss, zlib, hicolor_icon_theme
+, libXrandr, randrproto, which, libxslt, libtasn1, gmp, nettle, sqlite, makeWrapper }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="ekiga";
-    baseVersion="3.2";
-    patchlevel="7";
-    version="${baseVersion}.${patchlevel}";
-    name="${baseName}-${version}";
-    url="mirror://gnome/sources/${baseName}/${baseVersion}/${name}.tar.bz2";
-    hash="13zxwfqhp7pisadx0hq50qwnj6d8r4dldvbs1ngydbwfnq4i6npj";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  name = "ekiga-4.0.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/ekiga/4.0/${name}.tar.xz";
+    sha256 = "5f4f491c9496cf65ba057a9345d6bb0278f4eca07bcda5baeecf50bfcd9a4a3b";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [ cyrus_sasl gettext openldap ptlib opal libXv rarian intltool
+                  perl perlXMLParser evolution_data_server gnome_doc_utils avahi
+                  libsigcxx gtk dbus_glib libnotify libXext xextproto sqlite
+                  gnome3.libsoup
+                  hicolor_icon_theme gnome3.gnome_icon_theme boost autoreconfHook
+                  pkgconfig libxml2 videoproto unixODBC db nspr nss zlib libsecret
+                  libXrandr randrproto which libxslt libtasn1 gmp nettle makeWrapper ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["setVars" "doConfigure" "doMakeInstall"];
+  preAutoreconf = ''
+    substituteInPlace configure.ac --replace AM_GCONF_SOURCE_2 ""
+  '';
+
   configureFlags = [
     "--with-ldap-dir=${openldap}"
     "--with-libsasl2-dir=${cyrus_sasl}"
+    "--with-boost-libdir=${boost}/lib"
+    "--disable-gconf"
   ];
 
-  setVars = a.noDepEntry (''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${opal}/include/opal"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$(echo ${evolution_data_server}/include/evolution-*)"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2}/include/libxml2"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${GConf}/include/gconf/2"
+  enableParallelBuilding = true;
 
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lopal"
-    for i in ${evolution_data_server}/lib/lib*.so; do
-      file="$(basename "$i" .so)"
-      bn="''${file#lib}"
-      export NIX_LDFLAGS="$NIX_LDFLAGS -l$bn"
-    done
-  '');
+  patches = [ ./autofoo.patch ./boost.patch ];
 
-  meta = {
+  postInstall = ''
+    wrapProgram "$out"/bin/ekiga \
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+  '';
+
+  meta = with stdenv.lib; {
     description = "Ekiga SIP client";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
   };
+
   passthru = {
     updateInfo = {
       downloadPage = "mirror://gnome/sources/ekiga";
     };
   };
-}) x
+}
 

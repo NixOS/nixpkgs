@@ -18,5 +18,7 @@ cabal.mkDerivation (self: {
     description = "Extra concurrency primitives";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

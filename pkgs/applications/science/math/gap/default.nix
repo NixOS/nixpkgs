@@ -38,7 +38,7 @@ rec {
   phaseNames = ["doConfigure" "doMake" "doDeploy"];
 
   doDeploy = a.fullDepEntry ''
-    ensureDir "$out/bin" "$out/share/gap/"
+    mkdir -p "$out/bin" "$out/share/gap/"
 
     cp -r . "$out/share/gap/build-dir"
 

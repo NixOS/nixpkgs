@@ -15,6 +15,5 @@ cabal.mkDerivation (self: {
     description = "Tools for working with derived `Show` instances and generic inspection of values";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

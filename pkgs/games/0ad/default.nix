@@ -1,4 +1,4 @@
-{ stdenv, stdenvType, callPackage, fetchurl, python27
+{ stdenv, callPackage, fetchurl, python27
 , pkgconfig, spidermonkey_24, boost, icu, libxml2, libpng
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
 , openalSoft, mesa, xproto, libX11, libXcursor, nspr, SDL
@@ -16,8 +16,8 @@ let
   zeroadData = callPackage ./data.nix { inherit version releaseType; };
 
   archForPremake =
-    if stdenv.lib.hasPrefix "x86_64-" stdenvType then "x64" else
-    if stdenv.lib.hasPrefix "i686-" stdenvType then "x32" else "ERROR";
+    if stdenv.lib.hasPrefix "x86_64-" stdenv.system then "x64" else
+    if stdenv.lib.hasPrefix "i686-" stdenv.system then "x32" else "ERROR";
 
 in
 stdenv.mkDerivation rec {
@@ -116,5 +116,6 @@ stdenv.mkDerivation rec {
     homepage = "http://wildfiregames.com/0ad/";
     license = [ "GPLv2" "LGPLv2.1" "MIT" "CC BY-SA 3.0" "zlib" ];
     platforms = [ "x86_64-linux" "i686-linux" ];
+    broken = true;
   };
 }

@@ -13,6 +13,5 @@ cabal.mkDerivation (self: {
     description = "Stick your haskell variables into css at compile time. (deprecated)";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

@@ -3,6 +3,7 @@
 , libtiff, mesa, openal, opencolorio, openexr, openimageio, openjpeg, python
 , zlib, fftw
 , jackaudioSupport ? false, jack2
+, cudaSupport ? false, cudatoolkit6
 }:
 
 with lib;
@@ -12,14 +13,16 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "18pzcnrs4rcb6mf6aqr9xj2r05v8aay8daj31395ljfzw667zakx";
+    sha256 = "12aqdrpl86xjk2xdwj2nbfcmdzyv61n443gw6j2japffm1kmlz8x";
   };
 
   buildInputs =
     [ SDL boost cmake ffmpeg gettext glew ilmbase libXi
       libjpeg libpng libsamplerate libsndfile libtiff mesa openal
       opencolorio openexr openimageio /* openjpeg */ python zlib fftw
-    ] ++ optional jackaudioSupport jack2;
+    ]
+    ++ optional jackaudioSupport jack2
+    ++ optional cudaSupport cudatoolkit6;
 
   postUnpack =
     ''
@@ -45,7 +48,8 @@ stdenv.mkDerivation rec {
       "-DPYTHON_INCLUDE_DIR=${python}/include/python${python.majorVersion}m"
       "-DPYTHON_VERSION=${python.majorVersion}"
     ]
-    ++ optional jackaudioSupport "-DWITH_JACK=ON";
+    ++ optional jackaudioSupport "-DWITH_JACK=ON"
+    ++ optional cudaSupport "-DWITH_CYCLES_CUDA_BINARIES=ON";
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR -I${python}/include/${python.libPrefix}m";
 

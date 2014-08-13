@@ -13,6 +13,5 @@ cabal.mkDerivation (self: {
     description = "Convert streams of builders to streams of bytestrings. (deprecated)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

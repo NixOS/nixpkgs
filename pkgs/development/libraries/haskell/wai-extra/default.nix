@@ -9,8 +9,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wai-extra";
-  version = "3.0.1.1";
-  sha256 = "099pxahczai6ychsm04bwcvvd9m6lan5nqg159ny4jakpyk67zs8";
+  version = "3.0.1.2";
+  sha256 = "15v3mk7kbinvynsfxb95lwvg52wkpm3q9k5an8ak936ll3j2s14z";
   buildDepends = [
     ansiTerminal base64Bytestring blazeBuilder caseInsensitive
     dataDefaultClass deepseq fastLogger httpTypes liftedBase network
@@ -27,6 +27,5 @@ cabal.mkDerivation (self: {
     description = "Provides some basic WAI handlers and middleware";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

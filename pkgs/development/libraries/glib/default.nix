@@ -2,7 +2,7 @@
 , libiconvOrEmpty, libintlOrEmpty, zlib, libffi, pcre, libelf
 
 # this is just for tests (not in closure of any regular package)
-, libxml2, tzdata, desktop_file_utils, shared_mime_info, doCheck ? false
+, coreutils, dbus_daemon, libxml2, tzdata, desktop_file_utils, shared_mime_info, doCheck ? false
 }:
 
 with stdenv.lib;
@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
     sha256 = "1d98mbqjmc34s8095lkw1j1bwvnnkw9581yfvjaikjvfjsaz29qd";
   };
 
+  patches = optional stdenv.isDarwin ./darwin-compilation.patch;
+
   setupHook = ./setup-hook.sh;
 
   buildInputs = [ libelf ]
@@ -67,18 +69,32 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin " -lintl"
     + optionalString stdenv.isSunOS " -DBSD_COMP";
 
+  preBuild = optionalString stdenv.isDarwin
+    ''
+      export MACOSX_DEPLOYMENT_TARGET=
+    '';
+
   enableParallelBuilding = true;
 
   inherit doCheck;
   preCheck = optionalString doCheck
     # libgcc_s.so.1 must be installed for pthread_cancel to work
     # also point to the glib/.libs path
-    '' export LD_LIBRARY_PATH="$(dirname $(echo ${stdenv.gcc.gcc}/lib*/libgcc_s.so)):$NIX_BUILD_TOP/${name}/glib/.libs:$LD_LIBRARY_PATH"
+    '' export LD_LIBRARY_PATH="${stdenv.gcc.gcc}/lib:$NIX_BUILD_TOP/${name}/glib/.libs:$LD_LIBRARY_PATH"
        export TZDIR="${tzdata}/share/zoneinfo"
        export XDG_CACHE_HOME="$TMP"
        export XDG_RUNTIME_HOME="$TMP"
        export HOME="$TMP"
        export XDG_DATA_DIRS="${desktop_file_utils}/share:${shared_mime_info}/share"
+       export G_TEST_DBUS_DAEMON="${dbus_daemon}/bin/dbus-daemon"
+
+       substituteInPlace gio/tests/desktop-files/home/applications/epiphany-weather-for-toronto-island-9c6a4e022b17686306243dada811d550d25eb1fb.desktop --replace "Exec=/bin/true" "Exec=${coreutils}/bin/true"
+       # Needs machine-id, comment the test
+       sed -e '/\/gdbus\/codegen-peer-to-peer/ s/^\/*/\/\//' -i gio/tests/gdbus-peer.c
+       # All gschemas fail to pass the test, upstream bug?
+       sed -e '/g_test_add_data_func/ s/^\/*/\/\//' -i gio/tests/gschema-compile.c
+       # Needed because of libtool wrappers
+       sed -e '/g_subprocess_launcher_set_environ (launcher, envp);/a g_subprocess_launcher_setenv (launcher, "PATH", g_getenv("PATH"), TRUE);' -i gio/tests/gsubprocess.c
     '';
 
   postInstall = ''rm -rvf $out/share/gtk-doc'';

@@ -10,6 +10,5 @@ cabal.mkDerivation (self: {
     description = "Derive Template Haskell's Lift class for datatypes";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

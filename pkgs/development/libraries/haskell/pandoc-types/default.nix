@@ -4,14 +4,13 @@
 
 cabal.mkDerivation (self: {
   pname = "pandoc-types";
-  version = "1.12.4";
-  sha256 = "10vlw8iabaay0xqlshagl45ksawlanlg6fyqwv9d448qm32ngvdn";
+  version = "1.12.4.1";
+  sha256 = "1wbgm0s45smi8gix0byapkiarbb416fv765fc329qsvl295xlyqq";
   buildDepends = [ aeson deepseqGenerics syb ];
   meta = {
     homepage = "http://johnmacfarlane.net/pandoc";
     description = "Types for representing a structured document";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

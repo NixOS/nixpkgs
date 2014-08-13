@@ -1,4 +1,5 @@
 { stdenv, fetchurl, pkgconfig, e18, xlibs, libffi, pam, alsaLib, luajit, bzip2, set_freqset_setuid ? false }:
+
 stdenv.mkDerivation rec {
   name = "enlightenment-${version}";
   version = "0.18.8";

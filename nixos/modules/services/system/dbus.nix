@@ -14,7 +14,7 @@ let
     name = "dbus-conf";
     preferLocalBuild = true;
     buildCommand = ''
-      ensureDir $out
+      mkdir -p $out
 
       cp -v ${pkgs.dbus.daemon}/etc/dbus-1/system.conf $out/system.conf
 

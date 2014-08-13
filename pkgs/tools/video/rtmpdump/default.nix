@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     homepage = http://rtmpdump.mplayerhq.hu/;
     description = "Toolkit for RTMP streams";
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; all;
+    maintainers = [ stdenv.lib.maintainers. viric ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

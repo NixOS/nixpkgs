@@ -4,8 +4,10 @@
 
 cabal.mkDerivation (self: {
   pname = "HFuse";
-  version = "0.2.4.2";
-  sha256 = "043f5x807h1dajd0bvmhln9pjkviszx1279m298w711mrszapqrq";
+  version = "0.2.4.3";
+  sha256 = "1daka673mx0gsnsa04pxani7n4wp93hflzxs3imzy4sgb30p7l01";
+  isLibrary = true;
+  isExecutable = true;
   extraLibraries = [ fuse ];
   preConfigure = ''
     sed -i -e "s@  Extra-Lib-Dirs:         /usr/local/lib@  Extra-Lib-Dirs:         ${fuse}/lib@" HFuse.cabal
