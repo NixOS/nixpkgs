@@ -14,11 +14,11 @@ let
 in stdenv.mkDerivation rec {
   name = "remarkjs-${version}";
 
-  version = "0.6.4";
+  version = "0.6.5";
 
   src = fetchurl {
     url = "https://github.com/gnab/remark/archive/v${version}.tar.gz";
-    sha256 = "0sdhpn91b05qdqfqbfrhkfx8rkqrgm9pqg4bgjhxf9prfjhvmlrn";
+    sha256 = "1bh3hmhq99qqd3qg747xwjqkyppc9vf3b5nhi56556rwc02cn17p";
   };
 
   buildInputs = with nodePackages; [
