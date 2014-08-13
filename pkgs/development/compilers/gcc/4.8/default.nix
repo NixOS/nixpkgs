@@ -59,10 +59,7 @@ let version = "4.8.3";
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = cross != null && cross.config == "i586-pc-gnu";
 
-  /* gccinstall.info says that "parallel make is currently not supported since
-     collisions in profile collecting may occur".
-  */
-    enableParallelBuilding = !profiledCompiler;
+    enableParallelBuilding = true;
 
     patches = []
       ++ optional enableParallelBuilding ./parallel-bconfig.patch
