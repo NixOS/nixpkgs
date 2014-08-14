@@ -30,8 +30,7 @@ stdenv.mkDerivation rec {
       for i in $out/libexec/gpaste/*; do
         wrapProgram $i \
           --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-          --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-          --prefix LD_LIBRARY_PATH : "${libPath}"
+          --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
       done
     '';
 
