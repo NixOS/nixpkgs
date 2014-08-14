@@ -17,7 +17,7 @@ import ../generic rec {
       export MACOSX_DEPLOYMENT_TARGET=10.6
       export SDKROOT=$(/usr/bin/xcrun --show-sdk-path 2> /dev/null || true)
       export NIX_CFLAGS_COMPILE+=" --sysroot=/var/empty -idirafter $SDKROOT/usr/include -F$SDKROOT/System/Library/Frameworks -Wno-multichar -Wno-deprecated-declarations"
-      export NIX_LDFLAGS_AFTER+=" -L$SDKROOT/usr/lib"
+      export NIX_LDFLAGS_AFTER+=" -L$SDKROOT/usr/lib -L$SDKROOT/usr/lib/system"
     '' else "");
 
   initialPath = (import ../common-path.nix) {pkgs = pkgs;};
