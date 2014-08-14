@@ -9491,6 +9491,8 @@ let
 
   qbittorrent = callPackage ../applications/networking/p2p/qbittorrent { };
 
+  eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp { };
+
   qemu = callPackage ../applications/virtualization/qemu { };
 
   qmmp = callPackage ../applications/audio/qmmp { };
