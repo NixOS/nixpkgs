@@ -62,11 +62,11 @@ stdenv.mkDerivation rec {
 
   passthru.infinality.useInfinality = useInfinality; # for fontconfig
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A font rendering engine";
     homepage = http://www.freetype.org/;
-    license = if useEncumberedCode then "unfree"
-      else "GPLv2+"; # or the FreeType License (BSD + advertising clause)
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
+    #ToDo: encumbered = useEncumberedCode;
+    platforms = platforms.all;
   };
 }

@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = stdenv.lib.optional stdenv.isDarwin [ "--build=x86_64" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://people.freedesktop.org/~aplattner/vdpau/;
     description = "Library to use the Video Decode and Presentation API for Unix (VDPAU)";
-    license = "bsd";
+    license = licenses.mit;
   };
 }

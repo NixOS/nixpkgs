@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "Library for accessing the kernel's Direct Rendering Manager";
     license = "bsd";
     maintainers = [ stdenv.lib.maintainers.urkud ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

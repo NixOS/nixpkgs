@@ -15,10 +15,14 @@ stdenv.mkDerivation rec {
   #--disable-fftw          disable usage of FFTW
   #--disable-cpu-clip      disable tricky cpu specific clipper
 
-  # need headers from the Carbon.framework in /System/Library/Frameworks to
-  # compile this on darwin -- not sure how to handle
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin
-    "-I/System/Library/Frameworks/Carbon.framework/Versions/A/Headers";
+  postConfigure = stdenv.lib.optionalString stdenv.isDarwin
+    ''
+      # need headers from the Carbon.framework in /System/Library/Frameworks to
+      # compile this on darwin -- not sure how to handle
+      NIX_CFLAGS_COMPILE+=" -I$SDKROOT/System/Library/Frameworks/Carbon.framework/Versions/A/Headers"
+
+      substituteInPlace examples/Makefile --replace "-fpascal-strings" ""
+    '';
 
   meta = with stdenv.lib; {
     description = "Sample Rate Converter for audio";

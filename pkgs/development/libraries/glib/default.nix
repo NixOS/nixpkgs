@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
     sha256 = "1d98mbqjmc34s8095lkw1j1bwvnnkw9581yfvjaikjvfjsaz29qd";
   };
 
+  patches = optional stdenv.isDarwin ./darwin-compilation.patch;
+
   setupHook = ./setup-hook.sh;
 
   buildInputs = [ libelf ]
@@ -55,7 +57,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig gettext perl python ];
 
-  propagatedBuildInputs = [ pcre zlib libffi ] ++ libiconvOrEmpty ++ libintlOrEmpty;
+  propagatedBuildInputs = [ pcre zlib libffi ]
+    ++ optional (!stdenv.isDarwin) libiconvOrEmpty
+    ++ libintlOrEmpty;
 
   configureFlags =
     optional stdenv.isDarwin "--disable-compile-warnings"
@@ -63,6 +67,11 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin " -lintl"
     + optionalString stdenv.isSunOS " -DBSD_COMP";
+
+  preBuild = optionalString stdenv.isDarwin
+    ''
+      export MACOSX_DEPLOYMENT_TARGET=
+    '';
 
   enableParallelBuilding = true;
 

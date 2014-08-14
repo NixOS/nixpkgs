@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   # As zlib takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  NIX_CFLAGS_COMPILE = "-static-libgcc";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!stdenv.isDarwin) "-static-libgcc";
 
   crossAttrs = {
     dontStrip = static;
@@ -44,4 +44,9 @@ stdenv.mkDerivation rec {
   cygwinConfigureEnableShared = true;
 
   passthru.version = version;
+
+  meta = with stdenv.lib; {
+    description = "Lossless data-compression library";
+    license = licenses.zlib;
+  };
 }

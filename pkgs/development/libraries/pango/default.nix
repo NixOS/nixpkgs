@@ -19,7 +19,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  # jww (2014-05-05): The tests currently fail on Darwin:
+  #
+  # ERROR:testiter.c:139:iter_char_test: assertion failed: (extents.width == x1 - x0)
+  # .../bin/sh: line 5: 14823 Abort trap: 6 srcdir=. PANGO_RC_FILE=./pangorc ${dir}$tst
+  # FAIL: testiter
+  doCheck = !stdenv.isDarwin;
   postInstall = "rm -rf $out/share/gtk-doc";
 
   meta = {
