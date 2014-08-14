@@ -7945,16 +7945,19 @@ rec {
   # cmd.run("tox", "-h")
   # also, buildPythonPackage needs to supply the tox.ini correctly for projects that use tox for their tests
   #
-  # tox = buildPythonPackage rec {
-  #   name = "tox-1.7.0";
-  #
-  #   propagatedBuildInputs = [ py virtualenv ];
-  #
-  #   src = fetchurl {
-  #     url = "https://pypi.python.org/packages/source/t/tox/${name}.tar.gz";
-  #     md5 = "5314ceca2b179ad4a9c79f4d817b8a99";
-  #   };
-  # };
+
+  tox = buildPythonPackage rec {
+    name = "tox-1.7.2";
+  
+    propagatedBuildInputs = [ py virtualenv ];
+
+    doCheck = false;
+  
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/tox/${name}.tar.gz";
+      md5 = "0d9b3acb1a9252659d753b0ae6b9b264";
+    };
+  };
 
   smmap = buildPythonPackage rec {
     name = "smmap-0.8.2";
