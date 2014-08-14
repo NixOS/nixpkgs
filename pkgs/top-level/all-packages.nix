@@ -1377,6 +1377,8 @@ let
   kippo = callPackage ../servers/kippo { };
 
   klavaro = callPackage ../games/klavaro {};
+  
+  kzipmix = callPackage_i686 ../tools/compression/kzipmix { };
 
   minidlna = callPackage ../tools/networking/minidlna {
     ffmpeg = ffmpeg_0_10;
