@@ -595,26 +595,26 @@ let
 
   byobu = callPackage ../tools/misc/byobu { };
 
+  capstone = callPackage ../development/libraries/capstone { };
+
   catdoc = callPackage ../tools/text/catdoc { };
 
   ccnet = callPackage ../tools/networking/ccnet { };
 
-  capstone = callPackage ../development/libraries/capstone { };
+  consul = callPackage ../servers/consul { };
+  consul_ui = callPackage ../servers/consul/ui.nix { };
 
   coprthr = callPackage ../development/libraries/coprthr {
     flex = flex_2_5_35;
   };
 
-  consul = callPackage ../servers/consul { };
-  consul_ui = callPackage ../servers/consul/ui.nix { };
+  crawl = callPackage ../games/crawl { lua = lua5; };
 
   cv = callPackage ../tools/misc/cv { };
 
-  crawl = callPackage ../games/crawl { lua = lua5; };
+  direnv = callPackage ../tools/misc/direnv { };
 
   ditaa = callPackage ../tools/graphics/ditaa { };
-
-  direnv = callPackage ../tools/misc/direnv { };
 
   dlx = callPackage ../misc/emulators/dlx { };
 
