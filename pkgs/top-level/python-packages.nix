@@ -1433,6 +1433,23 @@ rec {
     };
   };
 
+  detox = pythonPackages.buildPythonPackage rec {
+    name = "detox-0.9.3";
+
+    propagatedBuildInputs = with pythonPackages; [ tox py eventlet ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/d/detox/detox-0.9.3.tar.gz";
+      md5 = "b52588ec61cd4c2d33e419677a5eac8c";
+    };
+
+    meta = with stdenv.lib; {
+      description = "What is detox?";
+      homepage = http://bitbucket.org/hpk42/detox;
+    };
+  };
+
+
   pbkdf2 = buildPythonPackage rec {
     name = "pbkdf2-1.3";
 
