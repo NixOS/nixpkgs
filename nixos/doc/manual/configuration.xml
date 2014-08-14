@@ -1072,11 +1072,6 @@ users.extraGroups.students.gid = 1000;
 As with users, the group ID (gid) is optional and will be assigned
 automatically if it’s missing.</para>
 
-<warning><para>Currently declarative user management is not perfect:
-<command>nixos-rebuild</command> does not know how to realise certain
-configuration changes.  This includes removing a user or group, and
-removing group membership from a user.</para></warning>
-
 <para>In the imperative style, users and groups are managed by
 commands such as <command>useradd</command>,
 <command>groupmod</command> and so on.  For instance, to create a user

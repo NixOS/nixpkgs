@@ -7,9 +7,6 @@ let
   ids = config.ids;
   cfg = config.users;
 
-  nonUidUsers = filterAttrs (n: u: u.createUser && u.uid == null) cfg.extraUsers;
-  nonGidGroups = filterAttrs (n: g: g.gid == null) cfg.extraGroups;
-
   passwordDescription = ''
     The options <literal>hashedPassword</literal>,
     <literal>password</literal> and <literal>passwordFile</literal>
@@ -55,10 +52,8 @@ let
         type = with types; nullOr int;
         default = null;
         description = ''
-          The account UID. If the <option>mutableUsers</option> option
-          is false, the UID cannot be null. Otherwise, the UID might be
-          null, in which case a free UID is picked on activation (by the
-          useradd command).
+          The account UID. If the UID is null, a free UID is picked on
+          activation.
         '';
       };
 
@@ -67,8 +62,7 @@ let
         default = false;
         description = ''
           Indicates if the user is a system user or not. This option
-          only has an effect if <option>mutableUsers</option> is
-          <literal>true</literal> and <option>uid</option> is
+          only has an effect if <option>uid</option> is
           <option>null</option>, in which case it determines whether
           the user's UID is allocated in the range for system users
           (below 500) or in the range for normal users (starting at
@@ -152,16 +146,6 @@ let
           ${passwordDescription}
         '';
       };
-
-      createUser = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Indicates if the user should be created automatically as a local user.
-          Set this to false if the user for instance is an LDAP user. NixOS will
-          then not modify any of the basic properties for the user account.
-        '';
-      };
     };
 
     config = {
@@ -187,10 +171,8 @@ let
         type = with types; nullOr int;
         default = null;
         description = ''
-          The group GID. If the <literal>mutableUsers</literal> option
-          is false, the GID cannot be null. Otherwise, the GID might be
-          null, in which case a free GID is picked on activation (by the
-          groupadd command).
+          The group GID. If the GID is null, a free GID is picked on
+          activation.
         '';
       };
 
@@ -211,84 +193,6 @@ let
 
   };
 
-  getGroup = gname:
-    let
-      groups = mapAttrsToList (n: g: g) (
-        filterAttrs (n: g: g.name == gname) cfg.extraGroups
-      );
-    in
-      if length groups == 1 then head groups
-      else if groups == [] then throw "Group ${gname} not defined"
-      else throw "Group ${gname} has multiple definitions";
-
-  getUser = uname:
-    let
-      users = mapAttrsToList (n: u: u) (
-        filterAttrs (n: u: u.name == uname) cfg.extraUsers
-      );
-    in
-      if length users == 1 then head users
-      else if users == [] then throw "User ${uname} not defined"
-      else throw "User ${uname} has multiple definitions";
-
-  mkGroupEntry = gname:
-    let
-      g = getGroup gname;
-      users = mapAttrsToList (n: u: u.name) (
-        filterAttrs (n: u: elem g.name u.extraGroups) cfg.extraUsers
-      );
-    in concatStringsSep ":" [
-      g.name "x" (toString g.gid)
-      (concatStringsSep "," (users ++ (filter (u: !(elem u users)) g.members)))
-    ];
-
-  mkPasswdEntry = uname: let u = getUser uname; in
-    concatStringsSep ":" [
-      u.name "x" (toString u.uid)
-      (toString (getGroup u.group).gid)
-      u.description u.home u.shell
-    ];
-
-  sortOn = a: sort (as1: as2: lessThan (getAttr a as1) (getAttr a as2));
-
-  groupFile = pkgs.writeText "group" (
-    concatStringsSep "\n" (map (g: mkGroupEntry g.name) (
-      let f = g: g.gid != null; in
-        sortOn "gid" (filter f (attrValues cfg.extraGroups))
-    ))
-  );
-
-  passwdFile = pkgs.writeText "passwd" (
-    concatStringsSep "\n" (map (u: mkPasswdEntry u.name) (
-      let f = u: u.createUser && (u.uid != null); in
-        sortOn "uid" (filter f (attrValues cfg.extraUsers))
-    ))
-  );
-
-  # If mutableUsers is true, this script adds all users/groups defined in
-  # users.extra{Users,Groups} to /etc/{passwd,group} iff there isn't any
-  # existing user/group with the same name in those files.
-  # If mutableUsers is false, the /etc/{passwd,group} files will simply be
-  # replaced with the users/groups defined in the NixOS configuration.
-  # The merging procedure could certainly be improved, and instead of just
-  # keeping the lines as-is from /etc/{passwd,group} they could be combined
-  # in some way with the generated content from the NixOS configuration.
-  merger = src: pkgs.writeScript "merger" ''
-    #!${pkgs.bash}/bin/bash
-
-    PATH=${pkgs.gawk}/bin:${pkgs.gnugrep}/bin:$PATH
-
-    ${if !cfg.mutableUsers
-      then ''cp ${src} $1.tmp''
-      else ''awk -F: '{ print "^"$1":.*" }' $1 | egrep -vf - ${src} | cat $1 - > $1.tmp''
-    }
-
-    # set mtime to +1, otherwise change might go unnoticed (vipw/vigr only looks at mtime)
-    touch -m -t $(date -d @$(($(stat -c %Y $1)+1)) +%Y%m%d%H%M.%S) $1.tmp
-
-    mv -f $1.tmp $1
-  '';
-
   idsAreUnique = set: idAttr: !(fold (name: args@{ dup, acc }:
     let
       id = builtins.toString (builtins.getAttr idAttr (builtins.getAttr name set));
@@ -301,6 +205,21 @@ let
 
   uidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) cfg.extraUsers) "uid";
   gidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) cfg.extraGroups) "gid";
+
+  spec = builtins.toFile "users-groups.json" (builtins.toJSON {
+    inherit (cfg) mutableUsers;
+    users = mapAttrsToList (n: u:
+      { inherit (u)
+          name uid group description home shell createHome isSystemUser
+          password passwordFile hashedPassword;
+      }) cfg.extraUsers;
+    groups = mapAttrsToList (n: g:
+      { inherit (g) name gid;
+        members = mapAttrsToList (n: u: u.name) (
+          filterAttrs (n: u: elem g.name u.extraGroups) cfg.extraUsers
+        );
+      }) cfg.extraGroups;
+  });
 
 in {
 
@@ -438,67 +357,12 @@ in {
       grsecurity.gid = ids.gids.grsecurity;
     };
 
-    system.activationScripts.users =
-      let
-        mkhomeUsers = filterAttrs (n: u: u.createHome) cfg.extraUsers;
-        setpwUsers = filterAttrs (n: u: u.createUser) cfg.extraUsers;
-        pwFile = u: if !(isNull u.hashedPassword)
-          then pkgs.writeTextFile { name = "password-file"; text = u.hashedPassword; }
-          else if !(isNull u.password)
-          then pkgs.runCommand "password-file" { pw = u.password; } ''
-            echo -n "$pw" | ${pkgs.mkpasswd}/bin/mkpasswd -s > $out
-          '' else u.passwordFile;
-        setpw = n: u: ''
-          setpw=yes
-          ${optionalString cfg.mutableUsers ''
-            test "$(getent shadow '${u.name}' | cut -d: -f2)" != "x" && setpw=no
-          ''}
-          if [ "$setpw" == "yes" ]; then
-            ${if !(isNull (pwFile u))
-              then ''
-                echo -n "${u.name}:" | cat - "${pwFile u}" | \
-                  ${pkgs.shadow}/sbin/chpasswd -e
-              ''
-              else "passwd -l '${u.name}' &>/dev/null"
-            }
-          fi
-        '';
-        mkhome = n: u: ''
-          uid="$(id -u ${u.name})"
-          gid="$(id -g ${u.name})"
-          h="${u.home}"
-          test -a "$h" || mkdir -p "$h" || true
-          test "$(stat -c %u "$h")" = $uid || chown $uid "$h" || true
-          test "$(stat -c %g "$h")" = $gid || chgrp $gid "$h" || true
-        '';
-        groupadd = n: g: ''
-          if [ -z "$(getent group "${g.name}")" ]; then
-            ${pkgs.shadow}/sbin/groupadd "${g.name}"
-          fi
-        '';
-        useradd = n: u: ''
-          if ! id "${u.name}" &>/dev/null; then
-            ${pkgs.shadow}/sbin/useradd \
-              -g "${u.group}" \
-              -G "${concatStringsSep "," u.extraGroups}" \
-              -s "${u.shell}" \
-              -d "${u.home}" \
-              ${optionalString u.isSystemUser "--system"} \
-              "${u.name}"
-            echo "${u.name}:x" | ${pkgs.shadow}/sbin/chpasswd -e
-          fi
-        '';
-      in stringAfter [ "etc" ] ''
-        touch /etc/group
-        touch /etc/passwd
-        VISUAL=${merger groupFile} ${pkgs.shadow}/sbin/vigr &>/dev/null
-        VISUAL=${merger passwdFile} ${pkgs.shadow}/sbin/vipw &>/dev/null
-        ${pkgs.shadow}/sbin/grpconv
-        ${pkgs.shadow}/sbin/pwconv
-        ${concatStrings (mapAttrsToList groupadd nonGidGroups)}
-        ${concatStrings (mapAttrsToList useradd nonUidUsers)}
-        ${concatStrings (mapAttrsToList mkhome mkhomeUsers)}
-        ${concatStrings (mapAttrsToList setpw setpwUsers)}
+    system.activationScripts.users = stringAfter [ "etc" ]
+      ''
+        ${pkgs.perl}/bin/perl -w \
+          -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl \
+          -I${pkgs.perlPackages.JSON}/lib/perl5/site_perl \
+          ${./update-users-groups.pl} ${spec}
       '';
 
     # for backwards compatibility
@@ -506,13 +370,7 @@ in {
 
     assertions = [
       { assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
-        message = "uids and gids must be unique!";
-      }
-      { assertion = cfg.mutableUsers || (nonUidUsers == {});
-        message = "When mutableUsers is false, no uid can be null: ${toString (attrNames nonUidUsers)}";
-      }
-      { assertion = cfg.mutableUsers || (nonGidGroups == {});
-        message = "When mutableUsers is false, no gid can be null";
+        message = "UIDs and GIDs must be unique!";
       }
     ];
 
