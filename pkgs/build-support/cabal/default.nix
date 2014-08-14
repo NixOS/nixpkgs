@@ -182,6 +182,12 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               for i in Setup.hs Setup.lhs; do
                 test -f $i && ghc --make $i
               done
+              if [ ! -f Setup ]; then
+                  ghc --make ${builtins.toFile "Setup.hs" ''
+                    import Distribution.Simple
+                    main = defaultMain
+                  ''} -o Setup -odir $TMPDIR
+              fi
 
               for p in $extraBuildInputs $propagatedNativeBuildInputs; do
                 if [ -d "$p/lib/ghc-${ghc.ghc.version}/package.conf.d" ]; then
