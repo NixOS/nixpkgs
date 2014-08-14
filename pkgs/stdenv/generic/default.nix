@@ -143,7 +143,8 @@ let
              || system == "x86_64-kfreebsd-gnu";
       isSunOS = system == "i686-solaris"
              || system == "x86_64-solaris";
-      isCygwin = system == "i686-cygwin";
+      isCygwin = system == "i686-cygwin"
+              || system == "x86_64-cygwin";
       isFreeBSD = system == "i686-freebsd"
               || system == "x86_64-freebsd";
       isOpenBSD = system == "i686-openbsd"
