@@ -1779,6 +1779,8 @@ let
   };
 
   p0f = callPackage ../tools/security/p0f { };
+  
+  pngout = callPackage ../tools/graphics/pngout { };
 
   hurdPartedCross =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
