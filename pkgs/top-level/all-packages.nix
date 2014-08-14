@@ -10279,6 +10279,10 @@ let
 
   zgrviewer = callPackage ../applications/graphics/zgrviewer {};
 
+  zim = callPackage ../applications/office/zim {
+    pygtk = pyGtkGlade;
+  };
+  
   zotero = callPackage ../applications/office/zotero {
     xulrunner = xulrunner_30;
   };
