@@ -6,7 +6,7 @@ let
       root = "code.google.com/p/go.net";
       src = fetchhg {
         url = "http://code.google.com/p/go.net";
-        tag = "134";
+        rev = "134";
         sha256 = "1jycpgrfwgkfac60zjbx6babcz7sgyn9xgy6cr3l811j6k8r2pbv";
       };
     }
@@ -14,7 +14,7 @@ let
       root = "code.google.com/p/go.text";
       src = fetchhg {
         url = "http://code.google.com/p/go.text";
-        tag = "85";
+        rev = "85";
         sha256 = "1x8h6vq9g5gbi7iiwla6dkaaqqf7wmkdm4szj7wvzlsijf2x8dwr";
       };
     }
@@ -211,7 +211,7 @@ let
       root = "launchpad.net/gocheck";
       src = fetchbzr {
         url = "https://launchpad.net/gocheck";
-        revision = "87";
+        rev = "87";
         sha256 = "1y9fa2mv61if51gpik9isls48idsdz87zkm1p3my7swjdix7fcl0";
       };
     }
@@ -219,7 +219,7 @@ let
       root = "launchpad.net/mgo";
       src = fetchbzr {
         url = "https://launchpad.net/mgo";
-        revision = "2";
+        rev = "2";
         sha256 = "0h1dxzyx5c4r4gfnmjxv92hlhjxrgx9p4g53p4fhmz6x2fdglb0x";
       };
     }
