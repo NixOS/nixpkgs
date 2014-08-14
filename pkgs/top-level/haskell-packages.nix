@@ -308,6 +308,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   boomerang = callPackage ../development/libraries/haskell/boomerang {};
 
+  bound = callPackage ../development/libraries/haskell/bound {};
+
   bv = callPackage ../development/libraries/haskell/bv {};
 
   byteable = callPackage ../development/libraries/haskell/byteable {};
@@ -840,6 +842,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   forceLayout = callPackage ../development/libraries/haskell/force-layout {};
 
+  formatting = callPackage ../development/libraries/haskell/formatting {};
+
   free = callPackage ../development/libraries/haskell/free {};
 
   freeGame = callPackage ../development/libraries/haskell/free-game {};
@@ -1020,6 +1024,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hashable_1_2_2_0 = callPackage ../development/libraries/haskell/hashable/1.2.2.0.nix {};
   hashable = self.hashable_1_2_2_0;
 
+  hashableExtras = callPackage ../development/libraries/haskell/hashable-extras {};
+
   hashedStorage = callPackage ../development/libraries/haskell/hashed-storage {};
 
   hashtables = callPackage ../development/libraries/haskell/hashtables {};
@@ -1039,6 +1045,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   };
 
   haskellNames = callPackage ../development/libraries/haskell/haskell-names {};
+
+  HaskellNet = callPackage ../development/libraries/haskell/HaskellNet {};
 
   haskellPackages = callPackage ../development/libraries/haskell/haskell-packages {};
 
@@ -1060,6 +1068,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hasteCompiler = callPackage ../development/libraries/haskell/haste-compiler {};
 
+  hastePerch = callPackage ../development/libraries/haskell/haste-perch {};
+
   HaTeX = callPackage ../development/libraries/haskell/HaTeX {};
 
   hcltest = callPackage ../development/libraries/haskell/hcltest {};
@@ -1073,6 +1083,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hgal = callPackage ../development/libraries/haskell/hgal {};
 
   hourglass = callPackage ../development/libraries/haskell/hourglass {};
+
+  hplayground = callPackage ../development/libraries/haskell/hplayground {};
 
   hseCpp = callPackage ../development/libraries/haskell/hse-cpp {};
 
@@ -1164,7 +1176,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   HList = callPackage ../development/libraries/haskell/HList {};
 
-  hmatrix = callPackage ../development/libraries/haskell/hmatrix {};
+  hmatrix = callPackage ../development/libraries/haskell/hmatrix {
+    liblapack = pkgs.liblapack.override { shared = true; };
+  };
 
   hmatrixSpecial = callPackage ../development/libraries/haskell/hmatrix-special {};
 
@@ -1877,6 +1891,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   prettyShow = callPackage ../development/libraries/haskell/pretty-show {};
 
   punycode = callPackage ../development/libraries/haskell/punycode {};
+
+  pureCdb = callPackage ../development/libraries/haskell/pure-cdb { testSimple = null; };
 
   primitive_0_5_0_1 = callPackage ../development/libraries/haskell/primitive/0.5.0.1.nix {};
   primitive_0_5_2_1 = callPackage ../development/libraries/haskell/primitive/0.5.2.1.nix {};
@@ -2766,8 +2782,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   zeromq4Haskell = callPackage ../development/libraries/haskell/zeromq4-haskell { zeromq = pkgs.zeromq4; };
 
   zipArchive_0_2_2_1 = callPackage ../development/libraries/haskell/zip-archive/0.2.2.1.nix {};
-  zipArchive_0_2_3_2 = callPackage ../development/libraries/haskell/zip-archive/0.2.3.2.nix {};
-  zipArchive = self.zipArchive_0_2_3_2;
+  zipArchive_0_2_3_4 = callPackage ../development/libraries/haskell/zip-archive/0.2.3.4.nix {};
+  zipArchive = self.zipArchive_0_2_3_4;
 
   zipper = callPackage ../development/libraries/haskell/zipper {};
 
@@ -2842,6 +2858,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   happyMeta = callPackage ../development/tools/haskell/happy-meta {};
 
+  haskellDocs = callPackage ../development/tools/haskell/haskell-docs {};
+
   haskdogs = callPackage ../development/tools/haskell/haskdogs {};
 
   hasktags = callPackage ../development/tools/haskell/hasktags {};
@@ -2863,7 +2881,13 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     };
   };
 
+  hscope = callPackage ../development/tools/haskell/hscope { testSimple = null; };
+
   hslogger = callPackage ../development/tools/haskell/hslogger {};
+
+  pointfree = callPackage ../development/tools/haskell/pointfree {};
+
+  pointful = callPackage ../development/tools/haskell/pointful {};
 
   ShellCheck = callPackage ../development/tools/misc/ShellCheck { };
 
@@ -3005,6 +3029,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
       binary = self.binary_0_7_2_1; # the miniutter build input requires this version
     };
   };
+
+  Allure = callPackage ../games/Allure {};
 
 # End of the main part of the file.
 

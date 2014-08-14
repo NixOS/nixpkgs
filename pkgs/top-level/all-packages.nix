@@ -595,23 +595,26 @@ let
 
   byobu = callPackage ../tools/misc/byobu { };
 
+  capstone = callPackage ../development/libraries/capstone { };
+
   catdoc = callPackage ../tools/text/catdoc { };
 
   ccnet = callPackage ../tools/networking/ccnet { };
 
-  capstone = callPackage ../development/libraries/capstone { };
+  consul = callPackage ../servers/consul { };
+  consul_ui = callPackage ../servers/consul/ui.nix { };
 
   coprthr = callPackage ../development/libraries/coprthr {
     flex = flex_2_5_35;
   };
 
-  cv = callPackage ../tools/misc/cv { };
-
   crawl = callPackage ../games/crawl { lua = lua5; };
 
-  ditaa = callPackage ../tools/graphics/ditaa { };
+  cv = callPackage ../tools/misc/cv { };
 
   direnv = callPackage ../tools/misc/direnv { };
+
+  ditaa = callPackage ../tools/graphics/ditaa { };
 
   dlx = callPackage ../misc/emulators/dlx { };
 
@@ -964,9 +967,7 @@ let
 
   emv = callPackage ../tools/misc/emv { };
 
-  enblendenfuse = callPackage ../tools/graphics/enblend-enfuse {
-    boost = boost149;
-  };
+  enblendenfuse = callPackage ../tools/graphics/enblend-enfuse { };
 
   encfs = callPackage ../tools/filesystems/encfs { };
 
@@ -1118,6 +1119,8 @@ let
   gifsicle = callPackage ../tools/graphics/gifsicle { };
 
   glusterfs = callPackage ../tools/filesystems/glusterfs { };
+
+  glmark2 = callPackage ../tools/graphics/glmark2 { };
 
   glxinfo = callPackage ../tools/graphics/glxinfo { };
 
@@ -1374,6 +1377,8 @@ let
   kippo = callPackage ../servers/kippo { };
 
   klavaro = callPackage ../games/klavaro {};
+  
+  kzipmix = callPackage_i686 ../tools/compression/kzipmix { };
 
   minidlna = callPackage ../tools/networking/minidlna {
     ffmpeg = ffmpeg_0_10;
@@ -1776,6 +1781,8 @@ let
   };
 
   p0f = callPackage ../tools/security/p0f { };
+  
+  pngout = callPackage ../tools/graphics/pngout { };
 
   hurdPartedCross =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
@@ -2166,6 +2173,8 @@ let
 
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };
 
+  tboot = callPackage ../tools/security/tboot { };
+
   tcpdump = callPackage ../tools/networking/tcpdump { };
 
   tcpflow = callPackage ../tools/networking/tcpflow { };
@@ -2205,7 +2214,13 @@ let
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
 
+  tpm-quote-tools = callPackage ../tools/security/tpm-quote-tools { };
+
+  tpm-tools = callPackage ../tools/security/tpm-tools { };
+
   trickle = callPackage ../tools/networking/trickle {};
+
+  trousers = callPackage ../tools/security/trousers { };
 
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
 
@@ -2451,6 +2466,8 @@ let
   };
 
   xclip = callPackage ../tools/misc/xclip { };
+
+  xtitle = callPackage ../tools/misc/xtitle { };
 
   xdelta = callPackage ../tools/compression/xdelta { };
 
@@ -3289,7 +3306,7 @@ let
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
-  opa = let callPackage = newScope pkgs.ocamlPackages_3_12_1; in callPackage ../development/compilers/opa { };
+  opa = let callPackage = newScope pkgs.ocamlPackages_4_00_1; in callPackage ../development/compilers/opa { };
 
   ocamlnat = let callPackage = newScope pkgs.ocamlPackages_3_12_1; in callPackage ../development/ocaml-modules/ocamlnat { };
 
@@ -4124,7 +4141,9 @@ let
 
   spin = callPackage ../development/tools/analysis/spin { };
 
-  splint = callPackage ../development/tools/analysis/splint { };
+  splint = callPackage ../development/tools/analysis/splint {
+    flex = flex_2_5_35;
+  };
 
   stm32flash = callPackage ../development/tools/misc/stm32flash { };
 
@@ -4722,7 +4741,7 @@ let
   gperftools = callPackage ../development/libraries/gperftools { };
 
   gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer {
-    callPackage = pkgs.newScope (pkgs // { libav = pkgs.libav_9; });
+    callPackage = pkgs.newScope (pkgs // { libav = pkgs.libav_10; });
   });
 
   gst_all = {
@@ -6215,6 +6234,8 @@ let
 
   suitesparse = callPackage ../development/libraries/suitesparse { };
 
+  sutils = callPackage ../tools/misc/sutils { };
+
   sword = callPackage ../development/libraries/sword { };
 
   szip = callPackage ../development/libraries/szip { };
@@ -6377,6 +6398,8 @@ let
   xbase = callPackage ../development/libraries/xbase { };
 
   xcb-util-cursor = callPackage ../development/libraries/xcb-util-cursor { };
+ 
+  xdo = callPackage ../tools/misc/xdo { };
 
   xineLib = callPackage ../development/libraries/xine-lib {
     ffmpeg = ffmpeg_1;
@@ -6399,6 +6422,8 @@ let
   xmlsec = callPackage ../development/libraries/xmlsec { };
 
   xvidcore = callPackage ../development/libraries/xvidcore { };
+
+  xylib = callPackage ../development/libraries/xylib { };
 
   yajl = callPackage ../development/libraries/yajl { };
 
@@ -6844,6 +6869,12 @@ let
     # server.
     bluez = null;
     avahi = null;
+  };
+  pulseaudioFull = pulseaudio.override {
+    bluez = bluez5;
+    avahi = avahi;
+    jackaudioSupport = true;
+    x11Support = true;
   };
 
   tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
@@ -8151,6 +8182,8 @@ let
 
   inherit (gnome3) baobab;
 
+  bar = callPackage ../applications/window-managers/bar { };
+
   baresip = callPackage ../applications/networking/instant-messengers/baresip {
     ffmpeg = ffmpeg_1;
   };
@@ -8182,6 +8215,8 @@ let
   };
 
   bristol = callPackage ../applications/audio/bristol { };
+
+  bspwm = callPackage ../applications/window-managers/bspwm { };
 
   bvi = callPackage ../applications/editors/bvi { };
 
@@ -9084,6 +9119,8 @@ let
 
   lrzsz = callPackage ../tools/misc/lrzsz { };
 
+  luminanceHDR = callPackage ../applications/graphics/luminance-hdr { };
+
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
   handbrake = callPackage ../applications/video/handbrake { };
@@ -9289,6 +9326,8 @@ let
   };
 
   synfigstudio = callPackage ../applications/graphics/synfigstudio { };
+ 
+  sxhkd = callPackage ../applications/window-managers/sxhkd { };
 
   msmtp = callPackage ../applications/networking/msmtp { };
 
@@ -9385,6 +9424,7 @@ let
   };
 
   pdftk = callPackage ../tools/typesetting/pdftk { };
+  pdfgrep  = callPackage ../tools/typesetting/pdfgrep { };
 
   pianobar = callPackage ../applications/audio/pianobar { };
 
@@ -9450,6 +9490,8 @@ let
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
   qbittorrent = callPackage ../applications/networking/p2p/qbittorrent { };
+
+  eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp { };
 
   qemu = callPackage ../applications/virtualization/qemu { };
 
@@ -10967,6 +11009,8 @@ let
     inherit (xlibs) libXmu;
     inherit (pkgs.gnome) gtkglext;
   };
+
+  fityk = callPackage ../applications/science/misc/fityk { };
 
   gravit = callPackage ../applications/science/astronomy/gravit { };
 

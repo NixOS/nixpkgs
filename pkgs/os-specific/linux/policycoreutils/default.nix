@@ -4,12 +4,12 @@
 stdenv.mkDerivation rec {
 
   name = "policycoreutils-${version}";
-  version = "2.2.5";
+  version = "2.3";
   inherit (libsepol) se_release se_url;
 
   src = fetchurl {
     url = "${se_url}/${se_release}/policycoreutils-${version}.tar.gz";
-    sha256 = "1i0chc3km3wdgzrd556mmhvsglydxrimclnn77s73wy2qfl51y5v";
+    sha256 = "1lpwxr5hw3dwhlp2p7y8jcr18mvfcrclwd8c2idz3lmmb3pglk46";
   };
 
   patchPhase = ''

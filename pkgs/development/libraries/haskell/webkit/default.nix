@@ -15,6 +15,6 @@ cabal.mkDerivation (self: {
     homepage = "http://projects.haskell.org/gtk2hs/";
     description = "Binding to the Webkit library";
     license = self.stdenv.lib.licenses.lgpl21;
-    platforms = self.ghc.meta.platforms;
+    platforms = self.stdenv.lib.platforms.linux;
   };
 })

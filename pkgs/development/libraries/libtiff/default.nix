@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Library and utilities for working with the TIFF image file format";
     homepage = http://www.remotesensing.org/libtiff/;
-    license = "bsd";
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.libtiff;
+    platforms = platforms.unix;
   };
 }

@@ -1,0 +1,18 @@
+diff --git a/daemon/gdm-slave.c b/daemon/gdm-slave.c
+index 1afe48e..e3d1ec2 100644
+--- a/daemon/gdm-slave.c
++++ b/daemon/gdm-slave.c
+@@ -291,9 +291,10 @@ gdm_slave_connect_to_x11_display (GdmSlave *slave)
+
+                 gdm_error_trap_push ();
+
+-                for (i = 0; i < G_N_ELEMENTS (host_entries); i++) {
++                /*for (i = 0; i < G_N_ELEMENTS (host_entries); i++) {
+                         XAddHost (slave->priv->server_display, &host_entries[i]);
+-                }
++                }*/
++               XDisableAccessControl(slave->priv->server_display);
+
+                 XSync (slave->priv->server_display, False);
+                 if (gdm_error_trap_pop ()) {
+

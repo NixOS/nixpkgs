@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     aeson attoparsec engineIo mtl stm text transformers
     unorderedContainers vector
   ];
+  jailbreak = true;
   meta = {
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

@@ -13,5 +13,7 @@ cabal.mkDerivation (self: {
     description = "IntMap and IntSet with Enum keys/elements";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

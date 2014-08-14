@@ -50,6 +50,7 @@
   ./programs/bash/bash.nix
   ./programs/bash/command-not-found.nix
   ./programs/blcr.nix
+  ./programs/dconf.nix
   ./programs/environment.nix
   ./programs/info.nix
   ./programs/screen.nix
@@ -125,6 +126,7 @@
   ./services/hardware/pcscd.nix
   ./services/hardware/pommed.nix
   ./services/hardware/sane.nix
+  ./services/hardware/tcsd.nix
   ./services/hardware/thinkfan.nix
   ./services/hardware/udev.nix
   ./services/hardware/udisks2.nix
@@ -279,6 +281,7 @@
   ./services/x11/desktop-managers/default.nix
   ./services/x11/display-managers/auto.nix
   ./services/x11/display-managers/default.nix
+  ./services/x11/display-managers/gdm.nix
   ./services/x11/display-managers/kdm.nix
   ./services/x11/display-managers/lightdm.nix
   ./services/x11/display-managers/slim.nix
@@ -290,6 +293,7 @@
   #./services/x11/window-managers/compiz.nix
   ./services/x11/window-managers/default.nix
   ./services/x11/window-managers/icewm.nix
+  ./services/x11/window-managers/bspwm.nix
   ./services/x11/window-managers/metacity.nix
   ./services/x11/window-managers/none.nix
   ./services/x11/window-managers/twm.nix
