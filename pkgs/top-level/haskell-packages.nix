@@ -2858,6 +2858,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   happyMeta = callPackage ../development/tools/haskell/happy-meta {};
 
+  haskellDocs = callPackage ../development/tools/haskell/haskell-docs {};
+
   haskdogs = callPackage ../development/tools/haskell/haskdogs {};
 
   hasktags = callPackage ../development/tools/haskell/hasktags {};
