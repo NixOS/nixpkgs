@@ -3,7 +3,7 @@
 assert (stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux");
 
 let
-  version = "4.0.21.1";
+  version = "4.0.21.2";
   arch = if stdenv.system == "x86_64-linux"
            then "linux-x86_64"
            else "linux-i686";
@@ -14,8 +14,8 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "https://download.zotero.org/standalone/${version}/Zotero-${version}_${arch}.tar.bz2";
     sha256 = if stdenv.system == "x86_64-linux"
-               then "1d6ih9q0daxxqqbr134la5y39648hpd53srf43lljjs8wr71wbn8"
-               else "121myzwxw3frps77lpzza82glyz9qgwbl5bh3zngfx9vwx3n8q0v";
+               then "1df101j2qwdp001m8x3ihbzz2j23x43804k8ww749y09d1ydb4dx"
+               else "1bcrpl6gdxlygd5ppyrhw42q24kjcakma3qv6mpzgp91phkf6g30";
   };
 
   # Strip the bundled xulrunner
