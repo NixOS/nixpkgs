@@ -6414,6 +6414,8 @@ let
 
   xvidcore = callPackage ../development/libraries/xvidcore { };
 
+  xylib = callPackage ../development/libraries/xylib { };
+
   yajl = callPackage ../development/libraries/yajl { };
 
   zangband = builderDefsPackage (import ../games/zangband) {
