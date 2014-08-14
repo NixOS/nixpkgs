@@ -2879,6 +2879,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hslogger = callPackage ../development/tools/haskell/hslogger {};
 
+  pointfree = callPackage ../development/tools/haskell/pointfree {};
+
   ShellCheck = callPackage ../development/tools/misc/ShellCheck { };
 
   SourceGraph = callPackage ../development/tools/haskell/SourceGraph {};
