@@ -184,6 +184,11 @@ rec {
     url = http://opensource.franz.com/preamble.html;
   };
 
+  lpl-102 = spdx {
+    shortName = "LPL-1.02";
+    fullName = "Lucent Public License v1.02";
+  };
+
   mit = spdx {
     shortName = "MIT";
     fullName = "MIT License";
