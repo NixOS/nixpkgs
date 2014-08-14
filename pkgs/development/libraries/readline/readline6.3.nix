@@ -13,7 +13,9 @@ stdenv.mkDerivation (rec {
   patchFlags = "-p0";
 
   patches =
-    [ ./link-against-ncurses.patch ];
+    [ ./link-against-ncurses.patch
+      ./no-arch_only-6.3.patch
+    ];
 
   meta = {
     description = "GNU Readline, a library for interactive line editing";
@@ -35,7 +37,7 @@ stdenv.mkDerivation (rec {
 
     homepage = http://savannah.gnu.org/projects/readline/;
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };

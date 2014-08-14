@@ -1,0 +1,23 @@
+pharo --help must talk about Pharo and not about Squeak
+--- a/platforms/unix/vm-display-X11/sqUnixX11.c
++++ b/platforms/unix/vm-display-X11/sqUnixX11.c
+@@ -7075,8 +7075,8 @@
+   printf("  -lazy                 go to sleep when main window unmapped\n");
+   printf("  -mapdelbs             map Delete key onto Backspace\n");
+   printf("  -nointl               disable international keyboard support\n");
+-  printf("  -notitle              disable the Squeak window title bar\n");
+-  printf("  -title <t>            use t as the Squeak window title instead of the image name\n");
++  printf("  -notitle              disable the Pharo window title bar\n");
++  printf("  -title <t>            use t as the Pharo window title instead of the image name\n");
+   printf("  -ldtoms <n>           launch drop timeout milliseconds\n");
+   printf("  -noxdnd               disable X drag-and-drop protocol support\n");
+   printf("  -optmod <n>           map Mod<n> to the Option key\n");
+@@ -7095,7 +7095,7 @@
+ static void display_printUsageNotes(void)
+ {
+   printf("  Using `unix:0' for <dpy> may improve local display performance.\n");
+-  printf("  -xshm only works when Squeak is running on the X server host.\n");
++  printf("  -xshm only works when Pharo is running on the X server host.\n");
+ }
+ 
+ 

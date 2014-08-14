@@ -6,7 +6,7 @@ let
 
   acpiConfDir = pkgs.runCommand "acpi-events" {}
     ''
-      ensureDir $out
+      mkdir -p $out
       ${
         # Generate a configuration file for each event. (You can't have
         # multiple events in one config file...)
@@ -16,7 +16,7 @@ let
             echo "event=${event.event}" > $fn
             echo "action=${pkgs.writeScript "${event.name}.sh" event.action}" >> $fn
           '';
-        in pkgs.lib.concatMapStrings f events
+        in lib.concatMapStrings f events
       }
     '';
 

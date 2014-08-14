@@ -1,5 +1,6 @@
 { stdenv, fetchurl
 , sqlite, expat, spidermonkey, taglib, libexif, curl, ffmpeg, file }:
+
 stdenv.mkDerivation rec {
 
   name = "mediatomb-${version}";
@@ -18,9 +19,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://mediatomb.cc;
-    description = "UPnP MediaServer with a web user interface,";
+    description = "UPnP MediaServer with a web user interface";
     license = licenses.gpl2;
     maintainers = [ maintainers.phreedom ];
     platforms = platforms.linux;
+    broken = true;
   };
 }

@@ -1,10 +1,10 @@
-{ kde, kdelibs, qimageblitz }:
+{ stdenv, kde, kdelibs, qimageblitz }:
 
 kde {
   buildInputs = [ kdelibs qimageblitz ];
 
   meta = {
     description = "KDE paint program";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

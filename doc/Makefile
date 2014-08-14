@@ -21,18 +21,18 @@ all: NEWS.html NEWS.txt manual.html manual.pdf
 
 NEWS.html: release-notes.xml
 	$(XSLTPROC) --nonet --xinclude --output $@ $(NEWS_OPTS) \
-	  $(docbookxsl)/html/docbook.xsl release-notes.xml
+	  $(docbookxsl)/xhtml/docbook.xsl release-notes.xml
 
 NEWS.txt: release-notes.xml
 	$(XSLTPROC) --nonet --xinclude quote-literals.xsl release-notes.xml | \
 	  $(XSLTPROC) --nonet --output $@.tmp.html $(NEWS_OPTS) \
-	  $(docbookxsl)/html/docbook.xsl -
+	  $(docbookxsl)/xhtml/docbook.xsl -
 	LANG=en_US w3m -dump $@.tmp.html > $@
 	rm $@.tmp.html
 
 manual.html: *.xml
 	$(XSLTPROC) --nonet --xinclude --output manual.html \
-	  $(docbookxsl)/html/docbook.xsl manual.xml
+	  $(docbookxsl)/xhtml/docbook.xsl manual.xml
 
 manual.pdf: *.xml
 	$(dblatex) \

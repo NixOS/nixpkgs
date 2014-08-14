@@ -42,11 +42,9 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://www.pldaniels.com/altermime/";
-    };
+    downloadPage = "http://www.pldaniels.com/altermime/";
+    inherit version;
+    updateWalker = true;
   };
 }) x
 

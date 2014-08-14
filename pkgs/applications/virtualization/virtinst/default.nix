@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://virt-manager.org;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [qknight];
     description = "Command line tool which provides an easy way to provision operating systems into virtual machines";
   };

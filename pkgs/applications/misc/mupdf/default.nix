@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     homepage = http://mupdf.com/;
     repositories.git = git://git.ghostscript.com/mupdf.git;
     description = "Lightweight PDF viewer and toolkit written in portable C";
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [ viric ];
     platforms = with stdenv.lib.platforms; linux;
     inherit version;

@@ -17,6 +17,7 @@ let
 in
 
 {
+  name = "nfs";
 
   nodes =
     { client1 = client;

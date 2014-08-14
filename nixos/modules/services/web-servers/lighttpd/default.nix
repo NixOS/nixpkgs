@@ -9,9 +9,9 @@ let
   cfg = config.services.lighttpd;
 
   needModRedirect = cfg.gitweb.enable;
-  needModAlias = cfg.cgit.enable or cfg.gitweb.enable;
-  needModSetenv = cfg.cgit.enable or cfg.gitweb.enable;
-  needModCgi = cfg.cgit.enable or cfg.gitweb.enable;
+  needModAlias = cfg.cgit.enable || cfg.gitweb.enable;
+  needModSetenv = cfg.cgit.enable || cfg.gitweb.enable;
+  needModCgi = cfg.cgit.enable || cfg.gitweb.enable;
   needModStatus = cfg.mod_status;
   needModUserdir = cfg.mod_userdir;
 
@@ -102,7 +102,7 @@ in
 
       document-root = mkOption {
         default = "/srv/www";
-        type = types.str;
+        type = types.path;
         description = ''
           Document-root of the web server. Must be readable by the "lighttpd" user.
         '';
@@ -128,7 +128,7 @@ in
 
       configText = mkOption {
         default = "";
-        type = types.string;
+        type = types.lines;
 	example = ''...verbatim config file contents...'';
         description = ''
           Overridable config file contents to use for lighttpd. By default, use
@@ -138,7 +138,7 @@ in
 
       extraConfig = mkOption {
         default = "";
-        type = types.string;
+        type = types.lines;
         description = ''
           These configuration lines will be appended to the generated lighttpd
           config file. Note that this mechanism does not work when the manual

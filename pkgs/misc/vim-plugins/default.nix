@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, python, cmake, vim, perl, ruby, unzip, which, fetchgit, clang }:
+{ fetchurl, bash, stdenv, python, cmake, vim, perl, ruby, unzip, which, fetchgit, clang }:
 
 /*
 About Vim and plugins
@@ -88,8 +88,8 @@ let vimHelpTags = ''
     inherit buildPhase;
 
     installPhase = ''
-      target=$out/vim-plugins/$path
-      ensureDir $out/vim-plugins
+      target=$out/share/vim-plugins/${path}
+      mkdir -p $out/share/vim-plugins
       cp -r . $target
       ${vimHelpTags}
       vimHelpTags $target
@@ -111,24 +111,26 @@ in rec
   YouCompleteMe = stdenv.mkDerivation {
     src = fetchgit {
       url = "https://github.com/Valloric/YouCompleteMe.git";
-      rev = "abfc3ee36adab11c0c0b9d086a164a69006fec79";
-      sha256 = "1d25dp5kgqickl06hqvx4j3z51zblhsn3q3by2hayyj3g2zps4gm";
+      rev = "67288080ea7057ea3111cb4c863484e3b150e738";
+      sha256 = "1a3rwdl458z1yrp50jdwp629j4al0zld21n15sad28g51m8gw5ka";
      };
- 
-    name = "youcompleteme-git-abfc3ee";
+
+    name = "youcompleteme-git-6728808";
     buildInputs = [ python cmake clang.clang ];
 
     configurePhase = ":";
 
     buildPhase = ''
-      target=$out/vim-plugins/YouCompleteMe
+      target=$out/share/vim-plugins/YouCompleteMe
       mkdir -p $target
       cp -a ./ $target
 
+
       mkdir $target/build
       cd $target/build
-      cmake -G "Unix Makefiles" . $target/cpp -DPYTHON_LIBRARIES:PATH=${python}/lib/libpython2.7.so -DPYTHON_INCLUDE_DIR:PATH=${python}/include/python2.7 -DUSE_CLANG_COMPLETER=ON -DUSE_SYSTEM_LIBCLANG=ON
-      make -j -j''${NIX_BUILD_CORES} -l''${NIX_BUILD_CORES}}
+      cmake -G "Unix Makefiles" . $target/third_party/ycmd/cpp -DPYTHON_LIBRARIES:PATH=${python}/lib/libpython2.7.so -DPYTHON_INCLUDE_DIR:PATH=${python}/include/python2.7 -DUSE_CLANG_COMPLETER=ON -DUSE_SYSTEM_LIBCLANG=ON
+      make ycm_support_libs -j''${NIX_BUILD_CORES} -l''${NIX_BUILD_CORES}}
+      ${bash}/bin/bash $target/install.sh --clang-completer
 
       ${vimHelpTags}
       vimHelpTags $target
@@ -311,7 +313,7 @@ in rec
 
     preBuild = ''
       sed -ie '1 i\
-      set runtimepath+=${vimproc}/vim-plugins/vimproc\
+      set runtimepath+=${vimproc}/share/vim-plugins/vimproc\
       ' autoload/vimshell.vim
     '';
 
@@ -346,4 +348,69 @@ in rec
 
     path = "vimproc";
   };
+
+  colorsamplerpack = simpleDerivation rec {
+    version = "2012.10.28";
+    name    = "vim-colorsamplerpack-${version}";
+
+    setSourceRoot = "sourceRoot=.";
+    src = fetchurl {
+      url    = "http://www.vim.org/scripts/download_script.php?src_id=18915";
+      name   = "colorsamplerpack.zip";
+      sha256 = "1wsrb3vpqn9fncnalfpvc8r92wk1mcskm4shb3s2h9x5dyihf2rd";
+    };
+
+    buildInputs = [ unzip ];
+
+    path = "colorsamplerpack";
+  };
+
+  yankring = simpleDerivation rec {
+    version = "18.0";
+    name    = "vim-yankring-${version}";
+
+    setSourceRoot = "sourceRoot=.";
+    src = fetchurl {
+      url    = "http://www.vim.org/scripts/download_script.php?src_id=20842";
+      name   = "yankring_180.zip";
+      sha256 = "0bsq4pxagy12jqxzs7gcf25k5ahwif13ayb9k8clyhm0jjdkf0la";
+    };
+
+    buildInputs = [ unzip ];
+
+    path = "yankring";
+  };
+
+  ctrlp = simpleDerivation rec {
+    version = "1.79";
+    name    = "vim-ctrlp-${version}";
+
+    setSourceRoot = "sourceRoot=.";
+    src = fetchurl {
+      url    = "http://www.vim.org/scripts/download_script.php?src_id=19448";
+      name   = "ctrlp_180.zip";
+      sha256 = "1x9im8g0g27mxc3c9k7v0jg5bb1dmnbjygmqif5bizab5g69n2mi";
+    };
+
+    buildInputs = [ unzip ];
+
+    path = "ctrlp";
+  };
+
+  alternate = stdenv.mkDerivation rec {
+    version = "2.18";
+    name    = "vim-a-${version}";
+
+    src = fetchurl {
+      url    = "http://www.vim.org/scripts/download_script.php?src_id=7218";
+      name   = "a.vim";
+      sha256 = "1q22vfkv60sshp9yj3mmfc8azavgzz7rpmaf72iznzq4wccy6gac";
+    };
+    unpackPhase = ":";
+    installPhase = ''
+      mkdir -p $out/share/vim-plugins/vim-a
+      cp ${src} $out/share/vim-plugins/vim-a/a.vim
+    '';
+  };
+
 }

@@ -1,53 +1,50 @@
-{ fetchurl, stdenv, libgcrypt, libevent, libidn, gnutls
+{ lib, fetchurl, stdenv, libgcrypt, libevent, libidn, gnutls
 , libxml2, zlib, guile, texinfo, cppunit, psmisc }:
 
 let version = "0.11"; in
-  stdenv.mkDerivation (rec {
-    name = "myserver-${version}";
 
-    src = fetchurl {
-      url = "mirror://gnu/myserver/${version}/${name}.tar.xz";
-      sha256 = "02y3vv4hxpy5h710y79s8ipzshhc370gbz1wm85x0lnq5nqxj2ax";
-    };
+stdenv.mkDerivation rec {
+  name = "myserver-${version}";
 
-    patches =
-      [ ./disable-dns-lookup-in-chroot.patch ];
+  src = fetchurl {
+    url = "mirror://gnu/myserver/${version}/${name}.tar.xz";
+    sha256 = "02y3vv4hxpy5h710y79s8ipzshhc370gbz1wm85x0lnq5nqxj2ax";
+  };
 
-    buildInputs =
-      [ libgcrypt libevent libidn gnutls libxml2 zlib guile texinfo ]
-      ++ stdenv.lib.optional doCheck cppunit;
+  patches =
+    [ ./disable-dns-lookup-in-chroot.patch ];
 
-    makeFlags = [ "V=1" ];
+  buildInputs =
+    [ libgcrypt libevent libidn gnutls libxml2 zlib guile texinfo ]
+    ++ lib.optional doCheck cppunit;
 
-    doCheck = true;
+  makeFlags = [ "V=1" ];
 
-    enableParallelBuilding = true;
+  doCheck = true;
 
-    meta = {
-      description = "GNU MyServer, a powerful and easy to configure web server";
-
-      longDescription = ''
-        GNU MyServer is a powerful and easy to configure web server.  Its
-        multi-threaded architecture makes it extremely scalable and usable in
-        large scale sites as well as in small networks, it has a lot of
-        built-in features.  Share your files in minutes!
-      '';
-
-      homepage = http://www.gnu.org/software/myserver/;
-
-      license = "GPLv3+";
-
-      maintainers = [ ];
-
-      # libevent fails to build on Cygwin and Guile has troubles on Darwin.
-      platforms = stdenv.lib.platforms.gnu;
-    };
-  }
-
-  //
+  enableParallelBuilding = true;
 
   # On GNU/Linux the `test_suite' process sometimes stays around, so
   # forcefully terminate it.
-  (if stdenv.isLinux
-   then { postCheck = "${psmisc}/bin/killall test_suite || true"; }
-   else { }))
+  postCheck = lib.optionalString stdenv.isLinux "${psmisc}/bin/killall test_suite || true";
+
+  meta = {
+    description = "GNU MyServer, a powerful and easy to configure web server";
+
+    longDescription = ''
+      GNU MyServer is a powerful and easy to configure web server.  Its
+      multi-threaded architecture makes it extremely scalable and usable in
+      large scale sites as well as in small networks, it has a lot of
+      built-in features.  Share your files in minutes!
+    '';
+
+    homepage = http://www.gnu.org/software/myserver/;
+
+    license = lib.licenses.gpl3Plus;
+
+    # libevent fails to build on Cygwin and Guile has troubles on Darwin.
+    platforms = lib.platforms.gnu;
+
+    broken = true; # needs patch for gets()
+  };
+}

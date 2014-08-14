@@ -24,7 +24,7 @@ else
 */
 
 let
-  version = "10.1.5";
+  version = "10.2.5";
   # this is the default search path for DRI drivers
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   src =  fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    sha256 = "1g2vy7zaamzs00xasiwg0d6cb5sclfd9v8jms14ll9bghg3mwv5w";
+    sha256 = "039is15p8pkhf8m0yiyb72zybl63xb9ckqzcg3xwi8zlyw5ryidl";
   };
 
   prePatch = "patchShebangs .";
@@ -70,7 +70,7 @@ stdenv.mkDerivation {
     "--enable-glx-tls"
     "--enable-shared-glapi" "--enable-shared-gallium"
     "--enable-driglx-direct" # seems enabled anyway
-    "--enable-gallium-llvm" "--with-llvm-shared-libs"
+    "--enable-gallium-llvm" "--enable-llvm-shared-libs"
     "--enable-xa" # used in vmware driver
     "--enable-gles1" "--enable-gles2"
     "--enable-vdpau"

@@ -26,9 +26,9 @@ with { inherit (stdenv.lib) optional optionals; };
 
 let
   result = {
-    libav_0_8 = libavFun "0.8.12" "0069zv9s0f4silzdyjac87g7a89jhh27sadd1zcr9xngxbvd93fr";
-    libav_9   = libavFun   "9.13" "1jp6vlza5srks1scgl000x9y1y0l88inrcby4yxv6n92rpv5vw1g";
-    libav_10  = libavFun  "10.1"  "05cy1yq9rxarajs9gfdhkji8gmcpar125xi8lrx4cfplmp4lvq6m";
+    libav_0_8 = libavFun "0.8.13" "1fr3rzykrlm1cla0csm9hqa3gcqp19hf5rgn70nyb9w92r67v685";
+    libav_9   = libavFun   "9.16" "18378gdgzqsxaacc9vl7ligwndbdvy95wbn50hs8xvdqn1rn916a";
+    libav_10  = libavFun  "10.3"  "1fq83rc5534fjqjlhkw5i9k54dmyqn2pgvyillm6pws8rkn9yb5r";
   };
 
   libavFun = version : sha256 : stdenv.mkDerivation rec {
@@ -105,7 +105,7 @@ let
       description = "A complete, cross-platform solution to record, convert and stream audio and video (fork of ffmpeg)";
       license = with licenses; if enableUnfree then unfree #ToDo: redistributable or not?
         else if enableGPL then gpl2Plus else lgpl21Plus;
-      platforms = platforms.all;
+      platforms = platforms.linux;
       maintainers = [ maintainers.vcunat ];
     };
   }; # libavFun

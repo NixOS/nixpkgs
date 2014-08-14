@@ -56,6 +56,6 @@ stdenv.mkDerivation {
 
     homepage = http://sourceware.org/pthreads-win32/;
 
-    license = "LGPLv2.1+";
+    license = stdenv.lib.licenses.lgpl21Plus;
   };
 }

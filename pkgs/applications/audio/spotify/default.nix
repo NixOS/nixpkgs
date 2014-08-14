@@ -8,14 +8,14 @@ assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 let
   version = if stdenv.system == "i686-linux"
     then "0.9.4.183.g644e24e.428"
-    else "0.9.10.17.g4129e1c.78";
+    else "0.9.11.27.g2b1a638.81";
 
   qt4webkit =
     if stdenv.system == "i686-linux" then
       fetchurl {
         name = "libqtwebkit4_2.3.2_i386.deb";
         url = http://ie.archive.ubuntu.com/ubuntu/pool/main/q/qtwebkit-source/libqtwebkit4_2.3.2-0ubuntu7_i386.deb;
-        sha256 = "0hi6cwx2b2cwa4nv5phqqw526lc8p9x7kjkcza9x47ny3npw2924";
+        sha256 = "0q4abhczx91ma57fjss0gn8j6nkfbfsbsh6kxhykzj88dih2s8rn";
       }
     else
       fetchurl {
@@ -73,7 +73,7 @@ stdenv.mkDerivation {
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}-1_amd64.deb";
-        sha256 = "1a4vn2ij3nghnc0fq3nsyb95gwhaw4zabdq6jd52hxz8iv31pn1z";
+        sha256 = "0yfljiw01kssj3qaz8m0ppgrpjs6xrhzlr2wccp64bsnmin7g4sg";
       }
     else throw "Spotify not supported on this platform.";
 
@@ -149,7 +149,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = https://www.spotify.com/;
     description = "Spotify for Linux allows you to play music from the Spotify music service";
-    license = "unfree";
+    license = stdenv.lib.licenses.unfree;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

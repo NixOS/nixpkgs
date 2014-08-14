@@ -8,7 +8,7 @@ let
   # manually, so we have to duplicate the know how here.
   systemFlags =
     if stdenv.isDarwin then ''
-      CFLAGS="-O2 -Wall -fomit-frame-pointer -no-cpp-precomp"
+      CFLAGS="-O2 -Wall -fomit-frame-pointer"
       LDFLAGS=
       EXTRA_OBJS=strverscmp.o
     '' else if stdenv.isCygwin then ''
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://mama.indstate.edu/users/ice/tree/";
     description = "command to produce a depth indented directory listing";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
 
     longDescription = ''
       Tree is a recursive directory listing command that produces a

@@ -44,7 +44,7 @@ stdenv.mkDerivation (rec {
       strings as internal in-memory representation.
     '';
 
-    license = "LGPLv3+";
+    license = stdenv.lib.licenses.lgpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.all;

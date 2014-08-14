@@ -1556,22 +1556,22 @@ rec {
     };
 
     debian60i386 = {
-      name = "debian-6.0.9-squeeze-i386";
-      fullName = "Debian 6.0.9 Squeeze (i386)";
+      name = "debian-6.0.10-squeeze-i386";
+      fullName = "Debian 6.0.10 Squeeze (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/squeeze/main/binary-i386/Packages.bz2;
-        sha256 = "1fb9afa9b2d007939e066c031fc60f6626b78105ce42fe8cdeab7124a0dbf477";
+        sha256 = "c08899011a7a2b0df4da08f91eef3a80d112a247df988b1c966c9fb64c812392";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian60x86_64 = {
-      name = "debian-6.0.9-squeeze-amd64";
-      fullName = "Debian 6.0.9 Squeeze (amd64)";
+      name = "debian-6.0.10-squeeze-amd64";
+      fullName = "Debian 6.0.10 Squeeze (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/squeeze/main/binary-amd64/Packages.bz2;
-        sha256 = "cee46e56f35342c17795d1923b6c7e545f626e8d568fd48f91d5e0eb92ea329e";
+        sha256 = "3f2ebd5221b9a4bdf7224acf728a51a987c63d32df1bbc20a97f177d2f184045";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
@@ -1582,22 +1582,22 @@ rec {
     debian70x86_64 = debian7x86_64;
 
     debian7i386 = {
-      name = "debian-7.5-wheezy-i386";
-      fullName = "Debian 7.5 Wheezy (i386)";
+      name = "debian-7.6-wheezy-i386";
+      fullName = "Debian 7.6 Wheezy (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-i386/Packages.bz2;
-        sha256 = "c4896c30c9a483354714d50f19d0779b72a218ce4f817f9ec8554f9664137993";
+        sha256 = "773ba601513cd7ef1d5192ad8baa795fa050573d82568c577cdf79adade698a3";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian7x86_64 = {
-      name = "debian-7.5-wheezy-amd64";
-      fullName = "Debian 7.5 Wheezy (amd64)";
+      name = "debian-7.6-wheezy-amd64";
+      fullName = "Debian 7.6 Wheezy (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-amd64/Packages.bz2;
-        sha256 = "f3b78aac7d2bdfc3896fdd2087affd0e16bafbf35945106b196483f5fb303d52";
+        sha256 = "11a8bd3648d51f51e56c9f5382168cc47267d67ef6a050826e1cd358ed46cc17";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;

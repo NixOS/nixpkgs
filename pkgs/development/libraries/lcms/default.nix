@@ -11,6 +11,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Color management engine";
     homepage = http://www.littlecms.com/;
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
   };
 }

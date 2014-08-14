@@ -111,5 +111,7 @@ stdenv.mkDerivation rec {
     license     = stdenv.lib.licenses.unfree;
     platforms   = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    hydraPlatforms = stdenv.lib.platforms.none;
+    broken = true;
   };
 }

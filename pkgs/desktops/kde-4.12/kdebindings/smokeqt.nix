@@ -1,4 +1,4 @@
-{ kde, qt4, cmake, phonon, qimageblitz, smokegen }:
+{ stdenv, kde, qt4, cmake, phonon, qimageblitz, smokegen }:
 
 kde {
 
@@ -10,6 +10,6 @@ kde {
 
   meta = {
     description = "C++ parser used to generate language bindings for Qt/KDE";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

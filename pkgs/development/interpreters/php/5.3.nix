@@ -104,7 +104,6 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       gd = {
         configureFlags = [
           "--with-gd=${gd}"
-          "--with-freetype-dir=${freetype}"
           "--with-png-dir=${libpng}"
           "--with-jpeg-dir=${libjpeg}"
         ];
@@ -241,6 +240,6 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     platforms   = stdenv.lib.platforms.unix;
   };
 
-  patches = [./fix.patch];
+  patches = [ ./fix.patch ./5.3-freetype-dirs.patch ];
 
 })

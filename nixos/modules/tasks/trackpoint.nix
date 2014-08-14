@@ -46,21 +46,15 @@ with lib;
 
   config = mkIf config.hardware.trackpoint.enable {
 
-    jobs.trackpoint =
-      { description = "Initialize trackpoint";
+    services.udev.extraRules =
+    ''
+      ACTION=="add|change", SUBSYSTEM=="input", ATTR{name}=="TPPS/2 IBM TrackPoint", ATTR{device/speed}="${toString config.hardware.trackpoint.speed}", ATTR{device/sensitivity}="${toString config.hardware.trackpoint.sensitivity}"
+    '';
 
-        startOn = "started udev";
-
-        task = true;
-
-        script = ''
-          echo -n ${toString config.hardware.trackpoint.sensitivity} \
-            > /sys/devices/platform/i8042/serio1/sensitivity
-          echo -n ${toString config.hardware.trackpoint.speed} \
-            > /sys/devices/platform/i8042/serio1/speed
-        '';
-      };
-         
+    system.activationScripts.trackpoint =
+      ''
+        ${config.systemd.package}/bin/udevadm trigger --attr-match=name="TPPS/2 IBM TrackPoint"
+      '';
   };
 
 }

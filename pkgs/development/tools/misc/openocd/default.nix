@@ -30,25 +30,23 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p "$out/etc/udev/rules.d"
-    ln -s "$out/share/openocd/contrib/99-openocd.udev" "$out/etc/udev/rules.d/99-openocd.rules"
+    ln -s "$out/share/openocd/contrib/99-openocd.rules" "$out/etc/udev/rules.d/99-openocd.rules"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
+    description = "Free and Open On-Chip Debugging, In-System Programming and Boundary-Scan Testing";
+    longDescription = ''
+      OpenOCD provides on-chip programming and debugging support with a layered
+      architecture of JTAG interface and TAP support, debug target support
+      (e.g. ARM, MIPS), and flash chip drivers (e.g. CFI, NAND, etc.).  Several
+      network interfaces are available for interactiving with OpenOCD: HTTP,
+      telnet, TCL, and GDB.  The GDB server enables OpenOCD to function as a
+      "remote target" for source-level debugging of embedded systems using the
+      GNU GDB program.
+    '';
     homepage = http://openocd.sourceforge.net/;
-    description = "OpenOCD, an on-chip debugger";
-
-    longDescription =
-      '' OpenOCD provides on-chip programming and debugging support with a
-         layered architecture of JTAG interface and TAP support, debug target
-         support (e.g. ARM, MIPS), and flash chip drivers (e.g. CFI, NAND,
-         etc.).  Several network interfaces are available for interactiving
-         with OpenOCD: HTTP, telnet, TCL, and GDB.  The GDB server enables
-         OpenOCD to function as a "remote target" for source-level debugging
-         of embedded systems using the GNU GDB program.
-      '';
-
-    license = "GPLv2+";
-    maintainers = with stdenv.lib.maintainers; [ viric bjornfor ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ viric bjornfor ];
+    platforms = platforms.linux;
   };
 }

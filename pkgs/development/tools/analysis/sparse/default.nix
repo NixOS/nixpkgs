@@ -1,38 +1,25 @@
-{ fetchurl, stdenv, pkgconfig }:
+{ fetchurl, stdenv, pkgconfig, libxml2, llvm }:
 
 stdenv.mkDerivation rec {
-  name = "sparse-0.4.4";
+  name = "sparse-0.5.0";
 
   src = fetchurl {
-    url = "mirror://kernel/software/devel/sparse/dist/${name}.tar.gz";
-    sha256 = "5ad02110130fd8f8d82f2b030de5f2db6f924fd805593a5b8be8072a620414c6";
+    url = "mirror://kernel/software/devel/sparse/dist/${name}.tar.xz";
+    sha256 = "1mc86jc5xdrdmv17nqj2cam2yqygnj6ar1iqkwsx2y37ij8wy7wj";
   };
 
   preConfigure = ''
-    sed -i "Makefile" \
-        -e "s|^PREFIX *=.*$|PREFIX = $out|g"
+    sed -i Makefile -e "s|^PREFIX=.*$|PREFIX=$out|g"
   '';
 
-  buildInputs = [ pkgconfig ];
-
+  buildInputs = [ pkgconfig libxml2 llvm ];
   doCheck = true;
 
   meta = {
     description = "Sparse, a semantic parser for C";
-
-    longDescription = ''
-      Sparse, the semantic parser, provides a compiler frontend
-      capable of parsing most of ANSI C as well as many GCC
-      extensions, and a collection of sample compiler backends,
-      including a static analyzer also called "sparse".  Sparse
-      provides a set of annotations designed to convey semantic
-      information about types, such as what address space pointers
-      point to, or what locks a function acquires or releases.
-    '';
-
-    homepage = http://www.kernel.org/pub/software/devel/sparse/;
-
-    # See http://www.opensource.org/licenses/osl.php .
-    license = "Open Software License v1.1";
+    homepage    = "https://git.kernel.org/cgit/devel/sparse/sparse.git/";
+    license     = stdenv.lib.licenses.mit;
+    platforms   = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }

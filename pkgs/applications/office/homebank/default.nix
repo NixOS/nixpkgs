@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Free, easy, personal accounting for everyone";
     homepage = http://homebank.free.fr/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

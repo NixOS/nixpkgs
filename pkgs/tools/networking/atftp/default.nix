@@ -1,5 +1,5 @@
 x@{builderDefsPackage
-  , readline, tcp_wrappers, pcre
+  , readline, tcp_wrappers, pcre, runCommand
   , ...}:
 builderDefsPackage
 (a :  
@@ -29,10 +29,14 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = ["doPatch" "doConfigure" "doMakeInstall"];
       
-  debianPatch = a.fetchurl {
-    url = http://patch-tracker.debian.org/patch/nondebian/dl/atftp/0.7.dfsg-10;
-    sha256 = "0vannjp0wxvk10xxlr3hirgf0g57n9dr4vhmsyfd8x4cwgxwfgsa";
+  debianPatchGz = a.fetchurl {
+    url = ftp://ftp.ru.debian.org/pub/debian/pool/main/a/atftp/atftp_0.7.dfsg-11.diff.gz;
+    sha256 = "07g4qbmp0lnscg2dkj6nsj657jaghibvfysdm1cdxcn215n3zwqd";
   };
+
+  debianPatch = a.runCommand "atftp-0.7.dfsg-11" {} ''
+    gunzip < "${debianPatchGz}" > "$out"
+  '';
 
   patches = [debianPatch];
 

@@ -3,10 +3,10 @@ let
   inherit (stdenv.lib) optional optionalString;
   s = rec {
     baseName="sysdig";
-    version="0.1.83";
+    version="0.1.87";
     name="${baseName}-${version}";
     url="https://github.com/draios/sysdig/archive/${version}.tar.gz";
-    sha256="0d4fw6vba78hqy8plhcq8lkdcxy1fizrr5aiszdsap7cvd0gls6r";
+    sha256="0xfildaj8kzbngpza47zqm363i6q87m97a18qlmdisrxmz11s32b";
   };
   buildInputs = [
     cmake zlib luajit
@@ -38,5 +38,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2;
     maintainers = [maintainers.raskin];
     platforms = platforms.linux ++ platforms.darwin;
+    downloadPage = "https://github.com/draios/sysdig/releases";
   };
 }

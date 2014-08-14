@@ -65,7 +65,7 @@ cabal.mkDerivation (self: rec {
         exit 1
     fi
 
-    ensureDir $out/share/hoogle/doc
+    mkdir -p $out/share/hoogle/doc
     export HOOGLE_DOC_PATH=$out/share/hoogle/doc
 
     cd $out/share/hoogle

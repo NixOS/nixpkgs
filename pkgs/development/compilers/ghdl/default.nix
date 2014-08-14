@@ -34,14 +34,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp ghdl_mcode $out/bin
 
-    ensureDir $out/share/ghdl_mcode/translate
+    mkdir -p $out/share/ghdl_mcode/translate
     cp -R ../lib $out/share/ghdl_mcode/translate
     cp -R ../../libraries $out/share/ghdl_mcode
 
-    ensureDir $out/share/man/man1
+    mkdir -p $out/share/man/man1
     cp ../../doc/ghdl.1 $out/share/man/man1/ghdl_mcode.1
 
     # Ghdl has some timestamps checks, storing file timestamps in '.cf' files.
@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
     description = "Free VHDL simulator, mcode flavour";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

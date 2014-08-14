@@ -33,11 +33,9 @@ installPhase() {
     # Install libGL and friends.
     mkdir -p $out/lib/vendors
 
-    for f in \
-      libcuda libGL libnvcuvid libnvidia-cfg libnvidia-compiler \
-      libnvidia-encode libnvidia-glcore libnvidia-ml libnvidia-opencl \
-      libnvidia-tls libOpenCL libnvidia-tls libvdpau_nvidia
+    for g in *.so.$versionNumber;
     do
+      f=$(basename $g .so.$versionNumber)
       cp -prd $f.* $out/lib/
       ln -snf $f.so.$versionNumber $out/lib/$f.so
       ln -snf $f.so.$versionNumber $out/lib/$f.so.1
@@ -104,7 +102,6 @@ installPhase() {
 
         # Test a bit.
         $out/bin/nvidia-settings --version
-        $out/bin/nvidia-smi --help > /dev/null
     fi
 }
 

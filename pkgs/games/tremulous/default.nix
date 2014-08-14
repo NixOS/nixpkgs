@@ -73,5 +73,6 @@ stdenv.mkDerivation rec {
     license = [ "GPLv2" ];  # media under cc by-sa 2.5
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
     platforms = with stdenv.lib.platforms; linux;
+    broken = true;
   };
 }

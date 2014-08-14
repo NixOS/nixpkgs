@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   buildPhase = "ant package-only";
 
   installPhase = ''
-    ensureDir $out/share/freenet $out/bin
+    mkdir -p $out/share/freenet $out/bin
     cp lib/bcprov.jar $out/share/freenet
     cp lib/freenet/freenet-ext.jar $out/share/freenet
     cp dist/freenet.jar $out/share/freenet
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Decentralised and censorship-resistant network";
     homepage = https://freenetproject.org/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     platforms = with stdenv.lib.platforms; linux;
   };
 }

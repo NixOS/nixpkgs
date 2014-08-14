@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       Logcheck was part of the Abacus Project of security tools, but this version has been rewritten.
     '';
     homepage = http://logcheck.org;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
 
     maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
     platforms = stdenv.lib.platforms.all;

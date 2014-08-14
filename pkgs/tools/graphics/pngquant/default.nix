@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     description = "pngquant converts 24/32-bit RGBA PNGs to 8-bit palette with alpha channel preserved";
     platforms = platforms.all;
     license = licenses.bsd2; # Not exactly bsd2, but alike
+    broken = true;
   };
 }

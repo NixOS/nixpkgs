@@ -4,9 +4,6 @@
 
 with lib;
 
-let
-  gnome3 = config.environment.gnome3.packageSet;
-in
 {
 
   ###### interface
@@ -33,9 +30,9 @@ in
 
   config = mkIf config.services.gnome3.at-spi2-core.enable {
 
-    environment.systemPackages = [ gnome3.at_spi2_core ];
+    environment.systemPackages = [ pkgs.at_spi2_core ];
 
-    services.dbus.packages = [ gnome3.at_spi2_core ];
+    services.dbus.packages = [ pkgs.at_spi2_core ];
 
   };
 

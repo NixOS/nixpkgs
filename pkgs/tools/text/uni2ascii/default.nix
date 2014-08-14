@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3;
     homepage = http://billposer.org/Software/uni2ascii.html;
     description = "Converts between UTF-8 and many 7-bit ASCII equivalents and back";
 

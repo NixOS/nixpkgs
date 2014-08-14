@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ djvulibre ghostscript ];
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp -p djvu2pdf $out/bin
-    ensureDir $out/man/man1
+    mkdir -p $out/man/man1
     cp -p djvu2pdf.1.gz $out/man/man1
   '';
 

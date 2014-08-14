@@ -1,11 +1,11 @@
-x@{builderDefsPackage, 
+x@{builderDefsPackage,
   wxGTK, perl, python, zlib
   , ...}:
 builderDefsPackage
-(a :  
-let 
+(a :
+let
   s = import ./src-for-default.nix;
-  helperArgNames = ["builderDefsPackage"] ++ 
+  helperArgNames = ["builderDefsPackage"] ++
     [];
   buildInputs = map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
@@ -26,7 +26,7 @@ rec {
     export NIX_LDFLAGS="$NIX_LDFLAGS -l$pythonLib"
     echo "Flags: $NIX_LDFLAGS"
   '';
-      
+
   meta = {
     description = "Cellular automata simulation program";
     maintainers = with a.lib.maintainers;
@@ -35,7 +35,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = "GPLv2";
+    license = with a.lib.licenses;
+      gpl2;
   };
 }) x
-

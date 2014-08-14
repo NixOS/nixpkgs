@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.gnu.org/software/idutils/;
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;

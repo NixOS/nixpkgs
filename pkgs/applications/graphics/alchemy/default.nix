@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
-    ensureDir $out/bin $out/share
+    mkdir -p $out/bin $out/share
     cp -a . $out/share/alchemy
     cat >> $out/bin/alchemy << EOF
     #!/bin/sh

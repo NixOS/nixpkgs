@@ -25,9 +25,9 @@ let
     else if stdenv.system == "i686-linux" then "ld-linux.so.2"
     else throw "Dropbox client for: ${stdenv.system} not supported!";
 
-  version = "2.6.2";
-  sha256 = if stdenv.system == "x86_64-linux" then "0j511nglqg2xngyl78ww7xk09v8yzhghk5cnj6slr9sldy83n7g9"
-    else if stdenv.system == "i686-linux" then "0n0y0wf313yjas4b89ag613jb80skby1qmfkyy1aazgjancf7v5i"
+  version = "2.10.27";
+  sha256 = if stdenv.system == "x86_64-linux" then "0l5fkmcr5jc0sm9xm4gshhdn3a7c9ff8qf60vjbiz3gn3n7asjvv"
+    else if stdenv.system == "i686-linux" then "0gn1lx97z4wr1clyjd3y8r6bvwni47rc84zl20s3lsalmm25srh7"
     else throw "Dropbox client for: ${stdenv.system} not supported!";
 
   # relative location where the dropbox libraries are stored
@@ -56,10 +56,9 @@ in stdenv.mkDerivation {
   name = "dropbox-${version}-bin";
   src = fetchurl {
     name = "dropbox-${version}.tar.gz";
-    # using version-specific URL so if the version is no longer available,
-    # build will fail without having to finish downloading first
-    # url = "http://www.dropbox.com/download?plat=lnx.${arch}";
-    url = "http://dl-web.dropbox.com/u/17/dropbox-lnx.${arch}-${version}.tar.gz";
+    
+    # I found the URLs here: https://forums.dropbox.com/topic.php?id=118678
+    url = "https://d1ilhw0800yew8.cloudfront.net/client/dropbox-lnx.${arch}-${version}.tar.gz";
     inherit sha256;
   };
 
@@ -70,24 +69,22 @@ in stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir "$out/${appdir}"
-    cp -r ".dropbox-dist/"* "$out/${appdir}/"
-    ensureDir "$out/bin"
+    mkdir -p "$out/${appdir}"
+    cp -r ".dropbox-dist/dropbox-lnx.${arch}-${version}"/* "$out/${appdir}/"
+    mkdir -p "$out/bin"
     ln -s "$out/${appdir}/dropbox" "$out/bin/dropbox"
 
     patchelf --set-interpreter ${stdenv.glibc}/lib/${interpreter} \
       "$out/${appdir}/dropbox"
-
+    
     RPATH=${ldpath}:${gcc.gcc}/lib:$out/${appdir}
     echo "updating rpaths to: $RPATH"
     find "$out/${appdir}" -type f -a -perm +0100 \
       -print -exec patchelf --force-rpath --set-rpath "$RPATH" {} \;
 
-    ensureDir "$out/share/applications"
+    mkdir -p "$out/share/applications"
     cp "${desktopItem}/share/applications/"* $out/share/applications
   '';
-
-  buildInputs = [ patchelf ];
 
   meta = {
     homepage = "http://www.dropbox.com";

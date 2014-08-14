@@ -1,15 +1,15 @@
-{ config, pkgs, serverInfo, ... }:
+{ config, pkgs, serverInfo, lib, ... }:
 
 let
   inherit (pkgs) mercurial;
-  inherit (pkgs.lib) mkOption;
+  inherit (lib) mkOption;
 
   urlPrefix = config.urlPrefix;
 
   cgi = pkgs.stdenv.mkDerivation {
     name = "mercurial-cgi";
     buildCommand = ''
-      ensureDir $out
+      mkdir -p $out
       cp -v ${mercurial}/share/cgi-bin/hgweb.cgi $out
       sed -i "s|/path/to/repo/or/config|$out/hgweb.config|" $out/hgweb.cgi
       echo "
