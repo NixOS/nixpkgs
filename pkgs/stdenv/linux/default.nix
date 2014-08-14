@@ -248,6 +248,9 @@ rec {
     bootStdenv = stdenvLinuxBoot4;
   };
 
+  finalZlib = stdenvLinuxBoot3Pkgs.zlib;
+  finalBinutils = stdenvLinuxBoot4Pkgs.binutils.override { zlib = finalZlib; };
+  finalGCC = stdenvLinuxBoot4.gcc.gcc.override { zlib = finalZlib; };
 
   # 10) Construct the final stdenv.  It uses the Glibc and GCC, and
   #     adds in a new binutils that doesn't depend on bootstrap-tools,
@@ -272,9 +275,10 @@ rec {
       ++ [stdenvLinuxBoot4Pkgs.patchelf stdenvLinuxBoot4Pkgs.paxctl ];
 
     gcc = wrapGCC rec {
-      inherit (stdenvLinuxBoot4Pkgs) binutils coreutils;
+      inherit (stdenvLinuxBoot4Pkgs) coreutils;
+      binutils = finalBinutils;
       libc = stdenvLinuxGlibc;
-      gcc = stdenvLinuxBoot4.gcc.gcc;
+      gcc = finalGCC;
       shell = stdenvLinuxBoot4Pkgs.bash + "/bin/bash";
       name = "";
     };
@@ -292,7 +296,8 @@ rec {
     overrides = pkgs: {
       inherit gcc;
       inherit (stdenvLinuxBoot3Pkgs) glibc;
-      inherit (stdenvLinuxBoot4Pkgs) binutils;
+      binutils = finalBinutils;
+      zlib = finalZlib;
       inherit (stdenvLinuxBoot4Pkgs)
         gzip bzip2 xz bash coreutils diffutils findutils gawk
         gnumake gnused gnutar gnugrep gnupatch patchelf
