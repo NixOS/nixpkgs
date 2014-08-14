@@ -13,7 +13,7 @@
 { ruby, callPackage, pkgs }:
 
 let
-  buildRubyGem = callPackage ./gem.nix {};
+  buildRubyGem = callPackage ./gem.nix { inherit ruby; };
   lib = ruby.stdenv.lib;
 self = rec {
   inherit buildRubyGem;
