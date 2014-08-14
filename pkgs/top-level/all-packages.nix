@@ -10134,6 +10134,10 @@ let
 
   zgrviewer = callPackage ../applications/graphics/zgrviewer {};
 
+  zim = callPackage ../applications/office/zim {
+    pygtk = pyGtkGlade;
+  };
+  
   zotero = callPackage ../applications/office/zotero { };
 
   zynaddsubfx = callPackage ../applications/audio/zynaddsubfx { };
