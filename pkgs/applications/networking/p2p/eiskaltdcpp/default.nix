@@ -26,9 +26,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
-    description = "EiskaltDC++ is a cross-platform program that uses the Direct Connect and ADC protocols";
+  meta = with stdenv.lib; {
+    description = "A cross-platform program that uses the Direct Connect and ADC protocols";
     homepage = https://code.google.com/p/eiskaltdc/;
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
   };
 }
