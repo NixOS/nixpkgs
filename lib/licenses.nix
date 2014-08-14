@@ -121,12 +121,6 @@ rec {
     url = https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception;
   };
 
-  isc = {
-    shortName = "ISC License";
-    fullName = "Internet Systems Consortium License";
-    url = http://www.isc.org/downloads/software-support-policy/isc-license/;
-  };
-
   inria = {
     shortName = "INRIA-NCLA";
     fullName  = "INRIA Non-Commercial License Agreement";
