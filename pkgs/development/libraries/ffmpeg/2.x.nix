@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
-    sha256 = "053kfk8rzrfxx930rrk417b2m695dvy47v4hci3nd49iggx9jzz1";
+    sha256 = "19yqiv7dmncm5ffy9p2fg4ng103vvj0v48c0q275vw45px8cc7g0";
   };
 
   subtitleSupport = config.ffmpeg.subtitle or true;
