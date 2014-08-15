@@ -209,6 +209,7 @@ in rec
     src = fetchgit {
       url = "https://github.com/jnwhiteh/vim-golang.git";
       rev = "832d64e5a813511ed52217aa24f0255c49671bab";
+      sha256 = "6858eb674be132477c5dc7f7d3cbe550371f90d1aba480547a614965412a7b3c";
     };
     path = "golang";
     meta = with stdenv.lib; {
