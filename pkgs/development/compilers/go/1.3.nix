@@ -61,7 +61,6 @@ stdenv.mkDerivation {
            else throw "Unsupported system";
   GOARM = stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "5";
   GO386 = 387; # from Arch: don't assume sse2 on i686
-  CGO_ENABLED = 1;
 
   installPhase = ''
     export CC=cc
@@ -76,7 +75,17 @@ stdenv.mkDerivation {
     export GOBIN="$out/bin"
     export PATH="$GOBIN:$PATH"
     cd ./src
-    ./all.bash
+    header "Building native Go compiler"
+    CGO_ENABLED=1 ./all.bash
+    stopNest
+    PLATFORMS="darwin/386 darwin/amd64 freebsd/386 freebsd/amd64 freebsd/arm linux/386 linux/amd64 linux/arm windows/386 windows/amd64"
+    for PLATFORM in $PLATFORMS; do
+      GOOS=''${PLATFORM%/*}
+      GOARCH=''${PLATFORM#*/}
+      header "Building Go cross-compiler for $PLATFORM"
+      GOOS=''${GOOS} GOARCH=''${GOARCH} ./make.bash --no-clean
+      stopNest
+    done
     cd -
 
     # Copy the emacs configuration for Go files.
