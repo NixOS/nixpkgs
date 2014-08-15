@@ -97,8 +97,7 @@ in
           }:
 
           ''
-            source=${if source != "" then source else "$(PATH=$SETUID_PATH type -tP ${program})"}
-            if test -z "$source"; then
+            if ! source=${if source != "" then source else "$(PATH=$SETUID_PATH type -tP ${program})"}; then
                 # If we can't find the program, fall back to the
                 # system profile.
                 source=/nix/var/nix/profiles/default/bin/${program}

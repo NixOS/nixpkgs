@@ -53,6 +53,7 @@
   ./programs/dconf.nix
   ./programs/environment.nix
   ./programs/info.nix
+  ./programs/nano.nix
   ./programs/screen.nix
   ./programs/shadow.nix
   ./programs/shell.nix

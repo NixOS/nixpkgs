@@ -1,0 +1,33 @@
+From db8cb2250335a93cad6e877e634116e5cd6b42fc Mon Sep 17 00:00:00 2001
+From: Dave Airlie <airlied@redhat.com>
+Date: Tue, 13 Mar 2012 14:53:25 +0000
+Subject: [PATCH 08/13] glsl: initialise const force glsl extension warning in
+ fake ctx
+
+valgrind complained about an uninitialised value being used in
+glsl_parser_extras.cpp, and this was the one it was giving out about.
+
+Just initialise the value in the fakectx.
+
+Signed-off-by: Dave Airlie <airlied@redhat.com>
+Bugzilla: https://bugs.freedesktop.org/show_bug.cgi?id=48057
+(cherry picked from commit b78a77f979b21a84aecb6fa4f19a2ed51a48c306)
+---
+ src/glsl/builtins/tools/generate_builtins.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/glsl/builtins/tools/generate_builtins.py b/src/glsl/builtins/tools/generate_builtins.py
+index 72d12bb..bd15c4d 100755
+--- a/src/glsl/builtins/tools/generate_builtins.py
++++ b/src/glsl/builtins/tools/generate_builtins.py
+@@ -156,6 +156,7 @@ read_builtins(GLenum target, const char *protos, const char **functions, unsigne
+    fakeCtx.API = API_OPENGL;
+    fakeCtx.Const.GLSLVersion = 130;
+    fakeCtx.Extensions.ARB_ES2_compatibility = true;
++   fakeCtx.Const.ForceGLSLExtensionsWarn = false;
+    gl_shader *sh = _mesa_new_shader(NULL, 0, target);
+    struct _mesa_glsl_parse_state *st =
+       new(sh) _mesa_glsl_parse_state(&fakeCtx, target, sh);
+-- 
+1.9.2
+
