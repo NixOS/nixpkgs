@@ -1079,6 +1079,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   heredoc = callPackage ../development/libraries/haskell/heredoc {};
 
   hexpat = callPackage ../development/libraries/haskell/hexpat {};
+  
+  hex = callPackage ../development/libraries/haskell/hex {};
 
   hgal = callPackage ../development/libraries/haskell/hgal {};
 
@@ -1913,6 +1915,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   prologGraphLib = callPackage ../development/libraries/haskell/prolog-graph-lib {};
   prologGraph = callPackage ../development/libraries/haskell/prolog-graph {};
 
+  protobuf = callPackage ../development/libraries/haskell/protobuf {};
+  
   protocolBuffers = callPackage ../development/libraries/haskell/protocol-buffers {};
 
   protocolBuffersDescriptor = callPackage ../development/libraries/haskell/protocol-buffers-descriptor {};
