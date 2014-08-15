@@ -1047,6 +1047,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   haskellNames = callPackage ../development/libraries/haskell/haskell-names {};
 
   HaskellNet = callPackage ../development/libraries/haskell/HaskellNet {};
+  HaskellNetSSL = callPackage ../development/libraries/haskell/HaskellNet-SSL {};
 
   haskellPackages = callPackage ../development/libraries/haskell/haskell-packages {};
 
