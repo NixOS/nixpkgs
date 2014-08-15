@@ -1,5 +1,5 @@
 { fetchurl, stdenv, gettext, gdbm, libtool, pam, readline
-, ncurses, gnutls, texinfo, gnum4, dejagnu, postfix }:
+, ncurses, gnutls, texinfo, gnum4, dejagnu }:
 
 /* TODO: Add GNU SASL, GNU GSSAPI, and FreeBidi.  */
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
      --disable-build-mimeview 
      --disable-build-mh
      --disable-virtual-domains
-     --with-path-sendmail=${postfix}/bin/sendmail
+     --with-path-sendmail=/var/setuid-wrappers/sendmail
   '';
   
   
