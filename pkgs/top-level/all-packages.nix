@@ -1459,6 +1459,8 @@ let
     guile = guile_1_8;
   };
 
+  mailutils-minimal = callPackage ../tools/networking/mailutils-minimal { };
+
   mairix = callPackage ../tools/text/mairix { };
 
   makemkv = callPackage ../applications/video/makemkv { };

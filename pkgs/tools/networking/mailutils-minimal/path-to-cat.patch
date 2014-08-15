@@ -1,0 +1,13 @@
+Fix absolute path to `cat'.
+
+--- mailutils-2.2/testsuite/lib/mailutils.exp	2010-09-10 13:39:58.000000000 +0200
++++ mailutils-2.2/testsuite/lib/mailutils.exp	2010-09-10 13:40:00.000000000 +0200
+@@ -719,7 +719,7 @@ proc mu_test_file {args} {
+         set pattern [lrange $args 1 end]
+     }
+     
+-    set res [remote_spawn host "/bin/cat $filename"]
++    set res [remote_spawn host "cat $filename"]
+     if { $res < 0 || $res == "" } {
+ 	perror "Reading $filename failed."
+ 	return 1;
