@@ -21,7 +21,7 @@ self = rec {
   # import an attrset full of gems, then override badly behaved ones
   importGems = file: args:
     let
-      patches = callPackage ./patches.nix { gems = builtGems; };
+      patches = callPackage ./patches.nix { inherit ruby; gems = builtGems; };
       preBuilt = callPackage file ({ inherit buildRubyGem; self = builtGems; } // args);
       builtGems = self // (lib.mapAttrs (gem: deriv:
         if patches ? "${gem}"
@@ -58,6 +58,11 @@ self = rec {
     name = "diff-lcs-1.2.5";
     sha256 = "1vf9civd41bnqi6brr5d9jifdw73j9khc6fkhfl1f8r9cpkdvlx1";
     doCheck = false; # check depends on rspec!
+  };
+
+  json = buildRubyGem {
+    name = "json-1.8.1";
+    sha256 = "0002bsycvizvkmk1jyv8px1hskk6wrjfk4f7x5byi8gxm6zzn6wn";
   };
 
   rspec = rspec_3_0;
