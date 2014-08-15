@@ -1033,11 +1033,9 @@ states that a user account named <literal>alice</literal> shall exist:
 
 <programlisting>
 users.extraUsers.alice =
-  { createHome = true;
-    home = "/home/alice";
+  { isNormalUser = true;
     description = "Alice Foobar";
     extraGroups = [ "wheel" "networkmanager" ];
-    useDefaultShell = true;
     openssh.authorizedKeys.keys = [ "ssh-dss AAAAB3Nza... alice@foobar" ];
   };
 </programlisting>

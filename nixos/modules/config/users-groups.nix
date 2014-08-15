@@ -70,6 +70,21 @@ let
         '';
       };
 
+      isNormalUser = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Indicates whether this is an account for a “real” user. This
+          automatically sets <option>group</option> to
+          <literal>users</literal>, <option>createHome</option> to
+          <literal>true</literal>, <option>home</option> to
+          <filename>/home/<replaceable>username</replaceable></filename>,
+          <option>useDefaultShell</option> to <literal>true</literal>,
+          and <option>isSystemUser</option> to
+          <literal>false</literal>.
+        '';
+      };
+
       group = mkOption {
         type = types.str;
         default = "nogroup";
@@ -148,10 +163,18 @@ let
       };
     };
 
-    config = {
-      name = mkDefault name;
-      shell = mkIf config.useDefaultShell (mkDefault cfg.defaultUserShell);
-    };
+    config = mkMerge
+      [ { name = mkDefault name;
+          shell = mkIf config.useDefaultShell (mkDefault cfg.defaultUserShell);
+        }
+        (mkIf config.isNormalUser {
+          group = mkDefault "users";
+          createHome = mkDefault true;
+          home = mkDefault "/home/${name}";
+          useDefaultShell = mkDefault true;
+          isSystemUser = mkDefault false;
+        })
+      ];
 
   };
 
