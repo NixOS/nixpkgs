@@ -4475,7 +4475,7 @@ let self = _self // overrides; _self = with self; {
   rLindo = derive { name="rLindo"; version="8.0.1"; sha256="05qyc4wvpjgw8jxmwn2nwybi695fjn0cdilkprwmjg07c82f0q5n"; depends=[]; };
   rlist = derive { name="rlist"; version="0.3"; sha256="1l9iypqzdj8j6zg9a55xc6l31sp2lznyx17a1jsl6717bbh5bpmg"; depends=[stringdist data_table yaml jsonlite]; };
   rlme = derive { name="rlme"; version="0.4"; sha256="02683sklihj3726a90jryybf855rvbz9v3dm9z9yhb32q9bfmy34"; depends=[MASS quantreg nlme mgcv stringr magic robustbase Rcpp]; };
-  RLRsim = derive { name="RLRsim"; version="3.0"; sha256=""; depends=[Rcpp mgcv]; };
+  RLRsim = derive { name="RLRsim"; version="3.0"; sha256="16bqsp15b8ikgix18p63k6sf81d1al4djbb51r08imjs4z9jppg4"; depends=[Rcpp mgcv]; };
   RM2 = derive { name="RM2"; version="0.0"; sha256="1v57nhwg8jrpv4zi22fhrphw0p0haynq13pg9k992sb0c72dx70a"; depends=[msm]; };
   rmaf = derive { name="rmaf"; version="2.0"; sha256="00qhdfzbjvmz83nicl73yhx7w8sv6j7x928j4vd6ll79098x4y84"; depends=[]; };
   RMallow = derive { name="RMallow"; version="1.0"; sha256="0prd5fc98mlxnwjhscmghw62jhq9rj5jk8qf4fnaa2a718yxf9b5"; depends=[combinat]; };
@@ -4710,7 +4710,7 @@ let self = _self // overrides; _self = with self; {
   RunuranGUI = derive { name="RunuranGUI"; version="0.1"; sha256="0wm91mzgd01qjinj94fr53m0gkxjvx7yjhmwbkrxsjn6mjklq72l"; depends=[Runuran rvgtest gWidgets gWidgetsRGtk2 cairoDevice]; };
   R_utils = derive { name="R.utils"; version="1.32.4"; sha256="12ypy8sxk5w1a3mpg4hi6k5db7ydrlj7qmp2lzh1rzcpbdg3wgka"; depends=[R_oo R_methodsS3]; };
   rv = derive { name="rv"; version="2.3.1"; sha256="0bjqwk7djl625fws3jlzr1naanwmrfb37hzkyy5szai52nqr2xij"; depends=[]; };
-  RVAideMemoire = derive { name="RVAideMemoire"; version="0.9-38"; sha256=""; depends=[ade4 boot car lme4 lsmeans MASS mixOmics multcomp statmod]; };
+  RVAideMemoire = derive { name="RVAideMemoire"; version="0.9-38"; sha256="02683sklihj3726a90jryybf855rvbz9v3dm9z9yhb32q9bfmy34"; depends=[ade4 boot car lme4 lsmeans MASS mixOmics multcomp statmod]; };
   rvalues = derive { name="rvalues"; version="0.2"; sha256="1zc4irq0s9mm7yz8pc3n9il0z508wwf2a2j741wyyw90f35fasi0"; depends=[]; };
   Rvcg = derive { name="Rvcg"; version="0.8"; sha256="086r4vvqidwzikdmvij52nqgb1ka5z5f0k9c9qi6izn450lpf34y"; depends=[Rcpp]; };
   rvertnet = derive { name="rvertnet"; version="0.0-5"; sha256="1rj6csx2qb094wgkablrpzlbqb0hpzg5d29xrar2cy39gjmz40cj"; depends=[RCurl plyr RJSONIO httr ggplot2 maps]; };
