@@ -1,4 +1,4 @@
-{ stdenv, lib, go, fetchFromGitHub }:
+{ stdenv, lib, go, fetchFromGitHub, makeWrapper }:
 
 let
   goDeps = [
@@ -37,12 +37,20 @@ stdenv.mkDerivation rec {
 
   src = sources;
 
-  propagatedBuildInputs = [ go ];
+  buildInputs = [ go makeWrapper ];
+
 
   installPhase = ''
     mkdir -p $out/bin
     export GOPATH=$src
     go build -v -o $out/bin/gox github.com/mitchellh/gox
+    
+    # create a cross-compiler version of go and wrap gox to use it
+    cp -r ${go}/share/go $out/go
+    chmod -R +w $out/go
+    export GOROOT=$out/go
+    $out/bin/gox -build-toolchain
+    wrapProgram $out/bin/gox --set GOROOT $out/go
   '';
 
   meta = with lib; {
