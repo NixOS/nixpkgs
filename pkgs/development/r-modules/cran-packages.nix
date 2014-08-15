@@ -61,10 +61,10 @@ in
 let self = _self // overrides; _self = with self; {
 
   RcppArmadillo = buildRPackage {
-    name="RcppArmadillo-0.4.300.0";
+    name = "RcppArmadillo-0.4.320.0";
     src = fetchurl {
-      url = "mirror://cran/src/contrib/RcppArmadillo_0.4.300.0.tar.gz";
-      sha256="01xsj98sgidlv47bswwaa41kqaz6k6yy57pssr1rkicnf5xg7abj";
+      url = "mirror://cran/src/contrib/RcppArmadillo_0.4.320.0.tar.gz";
+      sha256 ="0cicjn63w9awr9cd5wj09s2rsr83j7rn45cnqlflgx5wmh512jwm";
     };
     propagatedBuildInputs = [Rcpp];
     patchPhase = "patchShebangs configure";
@@ -74,12 +74,6 @@ let self = _self // overrides; _self = with self; {
   /* Needed to add one more entry to depends: */
   dplyr = derive { name="dplyr"; version="0.2"; sha256="04kby4n2qvngfdmpqarhizavpy9mr99zpwfxpknqbnbpbya5px1q"; depends=[assertthat Rcpp magrittr Lahman hflights BH]; };
   png = derive { name="png"; version="0.1-7"; sha256="0g2mcp55lvvpx4kd3mn225mpbxqcq73wy5qx8b4lyf04iybgysg2"; depends=[ pkgs.libpng ]; };
-
-/* not sure if the above customization is needed, or if the
-   generated RccArmadillo below will work too:
-
-  RcppArmadillo = derive { name="RcppArmadillo"; version="0.4.320.0"; sha256="0cicjn63w9awr9cd5wj09s2rsr83j7rn45cnqlflgx5wmh512jwm"; depends=[Rcpp]; };
-*/
 
   A3 = derive { name="A3"; version="0.9.2"; sha256="01s7znhph2mr3snpscci3y7nbcisa6kg6hy7im3742r6ah0z3jv7"; depends=[xtable pbapply]; };
   abc = derive { name="abc"; version="2.0"; sha256="0fs6hxyk95c61mn3p642xs3ib9wfjii2v9a74pf488iaywc1kd7d"; depends=[nnet quantreg MASS locfit]; };
