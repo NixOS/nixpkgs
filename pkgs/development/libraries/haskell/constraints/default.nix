@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "constraints";
-  version = "0.3.5";
-  sha256 = "01xrk0xqkfwzzr5jwkadkyjgrdcpslwiqfqdb7mci688xp2isi3i";
+  version = "0.4";
+  sha256 = "0nnplylzbcw884jgsd4i46z75dkiyx4166j5fym5zdnwhyj75sp5";
   buildDepends = [ newtype ];
   meta = {
     homepage = "http://github.com/ekmett/constraints/";
