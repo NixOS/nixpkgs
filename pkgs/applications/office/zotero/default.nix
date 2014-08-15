@@ -31,6 +31,9 @@ stdenv.mkDerivation {
     chmod +x "$out/bin/zotero"
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = "$out/bin/zotero --version";
+
   meta = with stdenv.lib; {
     homepage = "https://www.zotero.org";
     description = "Collect, organize, cite, and share your research sources";
