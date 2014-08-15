@@ -4,12 +4,12 @@ let
   arch = if stdenv.system == "x86_64-linux" then "x86_64"
     else if stdenv.system == "i686-linux" then "x86"
     else if stdenv.system == "armv6-linux" then "armv6h"
-    else throw "Dropbox client for: ${stdenv.system} not supported!";
+    else throw "Copy.com client for: ${stdenv.system} not supported!";
 
   interpreter = if stdenv.system == "x86_64-linux" then "ld-linux-x86-64.so.2"
     else if stdenv.system == "i686-linux" then "ld-linux.so.2"
     else if stdenv.system == "armv6-linux" then "ld-linux.so.2"
-    else throw "Dropbox client for: ${stdenv.system} not supported!";
+    else throw "Copy.com client for: ${stdenv.system} not supported!";
 
   appdir = "opt/copy";
   
@@ -50,7 +50,7 @@ in stdenv.mkDerivation {
     homepage = http://copy.com;
     description = "Copy.com Client";
     # Closed Source unfortunately.
-    # license = stdenv.lib.licenses.gpl3;
+    license = stdenv.lib.licenses.unfree;
     maintainers = with stdenv.lib.maintainers; [ nathan-gs ];
     # NOTE: Copy.com itself only works on linux, so this is ok.
     platforms = stdenv.lib.platforms.linux;
