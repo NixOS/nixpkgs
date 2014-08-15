@@ -5880,6 +5880,6 @@ let self = _self // overrides; _self = with self; {
   zoo = derive { name="zoo"; version="1.7-11"; sha256="0fp726rp9mqsfmm391bmckk76lqsvzwd39ffvb355wf2spl8nzvf"; depends=[lattice]; };
   zooimage = derive { name="zooimage"; version="3.0-5"; sha256="1r3slmyw0dyqfa40dr5xga814z09ibhmmby8p1cii5lh61xm4c39"; depends=[svMisc svDialogs mlearning filehash jpeg png]; };
   zoom = derive { name="zoom"; version="2.0.4"; sha256="03f5rxfr6ncf1j6vpn7pip21q7ylj4bx0a5xphqb6x6i33lxf1g5"; depends=[]; };
-  zyp = derive { name="zyp"; version="0.10-1"; sha256="0f1fqqxysf3psnvn08s5qly2c958h1hhznjjj8mvpjr5g6hqlr1k"; depends=[Kendall]; }; 
+  zyp = derive { name="zyp"; version="0.10-1"; sha256="0f1fqqxysf3psnvn08s5qly2c958h1hhznjjj8mvpjr5g6hqlr1k"; depends=[Kendall]; };
 
 }; in self
