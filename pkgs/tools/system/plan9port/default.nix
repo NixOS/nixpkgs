@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "http://swtch.com/plan9port/";
     description = "Plan 9 from User Space";
-    license = licenses.lpl102;
+    license = licenses.lpl-102;
     platforms = platforms.unix;
   };
 
