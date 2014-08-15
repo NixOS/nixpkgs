@@ -187,6 +187,8 @@ in
               "/nix/var/nix/profiles/per-container/$INSTANCE" \
               "/nix/var/nix/gcroots/per-container/$INSTANCE"
 
+            cp -f /etc/resolv.conf "$root/etc/resolv.conf"
+
             if [ "$PRIVATE_NETWORK" = 1 ]; then
               extraFlags+=" --network-veth"
             fi
