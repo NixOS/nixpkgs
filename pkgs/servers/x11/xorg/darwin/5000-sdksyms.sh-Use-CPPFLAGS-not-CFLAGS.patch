@@ -1,0 +1,40 @@
+From d36a301fb3d0f2c7a3d81cbda3fd21d8d36038e5 Mon Sep 17 00:00:00 2001
+From: Jeremy Huddleston <jeremyhu@apple.com>
+Date: Fri, 13 Jan 2012 12:00:57 -0800
+Subject: [PATCH 5000/5004] sdksyms.sh: Use CPPFLAGS, not CFLAGS
+
+CFLAGS can include flags which are not useful to the preprocessor
+or can even cause it to fail.  This fixes a build issue on darwin
+when building for more than one architecture.
+
+Signed-off-by: Jeremy Huddleston <jeremyhu@apple.com>
+Reviewed-by: Keith Packard <keithp@keithp.com>
+---
+ hw/xfree86/Makefile.am | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/hw/xfree86/Makefile.am b/hw/xfree86/Makefile.am
+index c3899b5..4f48b85 100644
+--- a/hw/xfree86/Makefile.am
++++ b/hw/xfree86/Makefile.am
+@@ -38,7 +38,7 @@ DIST_SUBDIRS = common ddc i2c x86emu int10 fbdevhw os-support \
+ bin_PROGRAMS = Xorg
+ nodist_Xorg_SOURCES = sdksyms.c
+ 
+-AM_CFLAGS = $(DIX_CFLAGS) @XORG_CFLAGS@
++AM_CPPFLAGS = $(DIX_CFLAGS) @XORG_CFLAGS@
+ INCLUDES = $(XORG_INCS) -I$(srcdir)/parser -I$(top_srcdir)/miext/cw \
+ 	-I$(srcdir)/ddc -I$(srcdir)/i2c -I$(srcdir)/modes -I$(srcdir)/ramdac \
+ 	-I$(srcdir)/dri -I$(srcdir)/dri2
+@@ -115,7 +115,7 @@ CLEANFILES = sdksyms.c sdksyms.dep
+ EXTRA_DIST += sdksyms.sh
+ 
+ sdksyms.dep sdksyms.c: sdksyms.sh
+-	$(AM_V_GEN)CPP='$(CPP)' AWK='$(AWK)' $(SHELL) $(srcdir)/sdksyms.sh $(top_srcdir) $(CFLAGS) $(AM_CFLAGS) $(INCLUDES)
++	$(AM_V_GEN)CPP='$(CPP)' AWK='$(AWK)' $(SHELL) $(srcdir)/sdksyms.sh $(top_srcdir) $(CPPFLAGS) $(AM_CPPFLAGS) $(INCLUDES)
+ 
+ SDKSYMS_DEP = sdksyms.dep
+ include $(SDKSYMS_DEP)
+-- 
+1.8.4.1
+

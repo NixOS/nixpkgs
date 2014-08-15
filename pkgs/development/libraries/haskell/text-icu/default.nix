@@ -14,11 +14,12 @@ cabal.mkDerivation (self: {
     testFrameworkQuickcheck2 text
   ];
   extraLibraries = [ icu ];
-  doCheck = !self.stdenv.isDarwin;
   meta = {
     homepage = "https://github.com/bos/text-icu";
     description = "Bindings to the ICU library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.linux;
+    broken = self.stdenv.isDarwin;     # https://github.com/bos/text-icu/issues/6
   };
 })

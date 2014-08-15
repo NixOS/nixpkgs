@@ -164,7 +164,7 @@ let
 
   ### Symbolic names.
 
-  x11 = if stdenv.isDarwin then darwinX11AndOpenGL else xlibsWrapper;
+  x11 = xlibsWrapper;
 
   # `xlibs' is the set of X library components.  This used to be the
   # old modular X llibraries project (called `xlibs') but now it's just
@@ -595,23 +595,26 @@ let
 
   byobu = callPackage ../tools/misc/byobu { };
 
+  capstone = callPackage ../development/libraries/capstone { };
+
   catdoc = callPackage ../tools/text/catdoc { };
 
   ccnet = callPackage ../tools/networking/ccnet { };
 
-  capstone = callPackage ../development/libraries/capstone { };
+  consul = callPackage ../servers/consul { };
+  consul_ui = callPackage ../servers/consul/ui.nix { };
 
   coprthr = callPackage ../development/libraries/coprthr {
     flex = flex_2_5_35;
   };
 
-  cv = callPackage ../tools/misc/cv { };
-
   crawl = callPackage ../games/crawl { lua = lua5; };
 
-  ditaa = callPackage ../tools/graphics/ditaa { };
+  cv = callPackage ../tools/misc/cv { };
 
   direnv = callPackage ../tools/misc/direnv { };
+
+  ditaa = callPackage ../tools/graphics/ditaa { };
 
   dlx = callPackage ../misc/emulators/dlx { };
 
@@ -1374,6 +1377,8 @@ let
   kippo = callPackage ../servers/kippo { };
 
   klavaro = callPackage ../games/klavaro {};
+  
+  kzipmix = callPackage_i686 ../tools/compression/kzipmix { };
 
   minidlna = callPackage ../tools/networking/minidlna {
     ffmpeg = ffmpeg_0_10;
@@ -1776,6 +1781,8 @@ let
   };
 
   p0f = callPackage ../tools/security/p0f { };
+  
+  pngout = callPackage ../tools/graphics/pngout { };
 
   hurdPartedCross =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
@@ -3674,6 +3681,8 @@ let
     inherit (pythonPackages) pysqlite;
   };
 
+  xulrunner_30 = firefox30Pkgs.xulrunner;
+
 
   ### DEVELOPMENT / MISC
 
@@ -4134,7 +4143,9 @@ let
 
   spin = callPackage ../development/tools/analysis/spin { };
 
-  splint = callPackage ../development/tools/analysis/splint { };
+  splint = callPackage ../development/tools/analysis/splint {
+    flex = flex_2_5_35;
+  };
 
   stm32flash = callPackage ../development/tools/misc/stm32flash { };
 
@@ -4548,8 +4559,7 @@ let
 
   freealut = callPackage ../development/libraries/freealut { };
 
-  freeglut = if stdenv.isDarwin then darwinX11AndOpenGL else
-    callPackage ../development/libraries/freeglut { };
+  freeglut = callPackage ../development/libraries/freeglut { };
 
   freetype = callPackage ../development/libraries/freetype { };
 
@@ -5666,25 +5676,25 @@ let
 
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
-  mesa_original = callPackage ../development/libraries/mesa {
+  mesaDarwinOr = alternative: if stdenv.isDarwin
+    then callPackage ../development/libraries/mesa-darwin { }
+    else alternative;
+  mesa_noglu = mesaDarwinOr (callPackage ../development/libraries/mesa {
     # makes it slower, but during runtime we link against just mesa_drivers
     # through /run/opengl-driver*, which is overriden according to config.grsecurity
     grsecEnabled = true;
-  };
-
-  mesa_noglu = if stdenv.isDarwin
-    then darwinX11AndOpenGL // { driverLink = mesa_noglu; }
-    else mesa_original;
-  mesa_drivers = let
-      mo = mesa_original.override { grsecEnabled = config.grsecurity or false; };
-    in mo.drivers;
-  mesa_glu = callPackage ../development/libraries/mesa-glu { };
-  mesa = if stdenv.isDarwin then darwinX11AndOpenGL
-    else buildEnv {
-      name = "mesa-${mesa_noglu.version}";
-      paths = [ mesa_glu mesa_noglu ];
+  });
+  mesa_glu =  mesaDarwinOr (callPackage ../development/libraries/mesa-glu { });
+  mesa_drivers = mesaDarwinOr (
+    let mo = mesa_noglu.override {
+      grsecEnabled = config.grsecurity or false;
     };
-  darwinX11AndOpenGL = callPackage ../os-specific/darwin/native-x11-and-opengl { };
+    in mo.drivers
+  );
+  mesa = mesaDarwinOr (buildEnv {
+    name = "mesa-${mesa_noglu.version}";
+    paths = [ mesa_noglu mesa_glu ];
+  });
 
   metaEnvironment = recurseIntoAttrs (let callPackage = newScope pkgs.metaEnvironment; in rec {
     sdfLibrary    = callPackage ../development/libraries/sdf-library { aterm = aterm28; };
@@ -7014,12 +7024,17 @@ let
 
   xinetd = callPackage ../servers/xinetd { };
 
+  xquartz = callPackage ../servers/x11/xquartz { };
+  quartz-wm = callPackage ../servers/x11/quartz-wm { stdenv = clangStdenv; };
+
   xorg = recurseIntoAttrs (import ../servers/x11/xorg/default.nix {
-    inherit fetchurl fetchgit fetchpatch stdenv pkgconfig intltool freetype fontconfig
-      libxslt expat libdrm libpng zlib perl mesa_drivers
+    inherit clangStdenv fetchurl fetchgit fetchpatch stdenv pkgconfig intltool freetype fontconfig
+      libxslt expat libpng zlib perl mesa_drivers
       dbus libuuid openssl gperf m4
-      autoconf automake libtool xmlto asciidoc udev flex bison python mtdev pixman;
+      autoconf automake libtool xmlto asciidoc flex bison python mtdev pixman;
     mesa = mesa_noglu;
+    udev = if stdenv.isLinux then udev else null;
+    libdrm = if stdenv.isLinux then libdrm else null;
   } // {
     xf86videointel-testing = callPackage ../servers/x11/xorg/xf86-video-intel-testing.nix { };
   });
@@ -8664,6 +8679,12 @@ let
 
   firefox13Wrapper = wrapFirefox { browser = firefox13Pkgs.firefox; };
 
+  firefox30Pkgs = callPackage ../applications/networking/browsers/firefox/30.nix {
+    inherit (gnome) libIDL;
+    inherit (pythonPackages) pysqlite;
+    libpng = libpng_apng;
+  };
+
   firefox = callPackage ../applications/networking/browsers/firefox {
     inherit (gnome) libIDL;
     inherit (pythonPackages) pysqlite;
@@ -9482,6 +9503,8 @@ let
 
   qbittorrent = callPackage ../applications/networking/p2p/qbittorrent { };
 
+  eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp { };
+
   qemu = callPackage ../applications/virtualization/qemu { };
 
   qmmp = callPackage ../applications/audio/qmmp { };
@@ -9732,6 +9755,8 @@ let
   taskjuggler = callPackage ../applications/misc/taskjuggler { };
 
   taskwarrior = callPackage ../applications/misc/taskwarrior { };
+
+  taskserver = callPackage ../servers/misc/taskserver { };
 
   telegram-cli = callPackage ../applications/networking/instant-messengers/telegram-cli/default.nix { };
 
@@ -10138,7 +10163,9 @@ let
 
   zgrviewer = callPackage ../applications/graphics/zgrviewer {};
 
-  zotero = callPackage ../applications/office/zotero { };
+  zotero = callPackage ../applications/office/zotero {
+    xulrunner = xulrunner_30;
+  };
 
   zynaddsubfx = callPackage ../applications/audio/zynaddsubfx { };
 

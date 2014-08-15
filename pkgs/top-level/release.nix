@@ -382,21 +382,21 @@ let
       };
 
       xorg = {
-        fontadobe100dpi = linux;
-        fontadobe75dpi = linux;
-        fontbh100dpi = linux;
-        fontbhlucidatypewriter100dpi = linux;
-        fontbhlucidatypewriter75dpi = linux;
-        fontbhttf = linux;
-        fontcursormisc = linux;
-        fontmiscmisc = linux;
-        iceauth = linux;
-        libX11 = linux;
-        lndir = all;
-        setxkbmap = linux;
-        xauth = linux;
-        xbitmaps = linux;
-        xev = linux;
+        fontadobe100dpi = linux ++ darwin;
+        fontadobe75dpi = linux ++ darwin;
+        fontbh100dpi = linux ++ darwin;
+        fontbhlucidatypewriter100dpi = linux ++ darwin;
+        fontbhlucidatypewriter75dpi = linux ++ darwin;
+        fontbhttf = linux ++ darwin;
+        fontcursormisc = linux ++ darwin;
+        fontmiscmisc = linux ++ darwin;
+        iceauth = linux ++ darwin;
+        libX11 = linux ++ darwin;
+        lndir = all ++ darwin;
+        setxkbmap = linux ++ darwin;
+        xauth = linux ++ darwin;
+        xbitmaps = linux ++ darwin;
+        xev = linux ++ darwin;
         xf86inputevdev = linux;
         xf86inputkeyboard = linux;
         xf86inputmouse = linux;
@@ -408,18 +408,18 @@ let
         xf86videovesa = linux;
         xf86videovmware = linux;
         xf86videomodesetting = linux;
-        xfs = linux;
-        xinput = linux;
-        xkbcomp = linux;
-        xlsclients = linux;
-        xmessage = linux;
-        xorgserver = linux;
-        xprop = linux;
-        xrandr = linux;
-        xrdb = linux;
-        xset = linux;
-        xsetroot = linux;
-        xwininfo = linux;
+        xfs = linux ++ darwin;
+        xinput = linux ++ darwin;
+        xkbcomp = linux ++ darwin;
+        xlsclients = linux ++ darwin;
+        xmessage = linux ++ darwin;
+        xorgserver = linux ++ darwin;
+        xprop = linux ++ darwin;
+        xrandr = linux ++ darwin;
+        xrdb = linux ++ darwin;
+        xset = linux ++ darwin;
+        xsetroot = linux ++ darwin;
+        xwininfo = linux ++ darwin;
       };
 
       xfce = {

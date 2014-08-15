@@ -1047,6 +1047,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   haskellNames = callPackage ../development/libraries/haskell/haskell-names {};
 
   HaskellNet = callPackage ../development/libraries/haskell/HaskellNet {};
+  HaskellNetSSL = callPackage ../development/libraries/haskell/HaskellNet-SSL {};
 
   haskellPackages = callPackage ../development/libraries/haskell/haskell-packages {};
 
@@ -1079,6 +1080,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   heredoc = callPackage ../development/libraries/haskell/heredoc {};
 
   hexpat = callPackage ../development/libraries/haskell/hexpat {};
+  
+  hex = callPackage ../development/libraries/haskell/hex {};
 
   hgal = callPackage ../development/libraries/haskell/hgal {};
 
@@ -1892,7 +1895,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   punycode = callPackage ../development/libraries/haskell/punycode {};
 
-  pureCdb = callPackage ../development/libraries/haskell/pure-cdb {};
+  pureCdb = callPackage ../development/libraries/haskell/pure-cdb { testSimple = null; };
 
   primitive_0_5_0_1 = callPackage ../development/libraries/haskell/primitive/0.5.0.1.nix {};
   primitive_0_5_2_1 = callPackage ../development/libraries/haskell/primitive/0.5.2.1.nix {};
@@ -1913,6 +1916,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   prologGraphLib = callPackage ../development/libraries/haskell/prolog-graph-lib {};
   prologGraph = callPackage ../development/libraries/haskell/prolog-graph {};
 
+  protobuf = callPackage ../development/libraries/haskell/protobuf {};
+  
   protocolBuffers = callPackage ../development/libraries/haskell/protocol-buffers {};
 
   protocolBuffersDescriptor = callPackage ../development/libraries/haskell/protocol-buffers-descriptor {};
@@ -2881,9 +2886,11 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     };
   };
 
-  hscope = callPackage ../development/tools/haskell/hscope {};
+  hscope = callPackage ../development/tools/haskell/hscope { testSimple = null; };
 
   hslogger = callPackage ../development/tools/haskell/hslogger {};
+
+  pointfree = callPackage ../development/tools/haskell/pointfree {};
 
   pointful = callPackage ../development/tools/haskell/pointful {};
 

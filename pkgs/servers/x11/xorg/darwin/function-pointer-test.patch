@@ -1,0 +1,46 @@
+These are functions, not function pointers, so they always evaluate to true.
+
+diff --git a/hw/xquartz/X11Controller.m b/hw/xquartz/X11Controller.m
+index 5445c6f..8574bf1 100644
+--- a/hw/xquartz/X11Controller.m
++++ b/hw/xquartz/X11Controller.m
+@@ -364,7 +364,6 @@ extern char *bundle_id_prefix;
+     }
+ 
+ #if MAC_OS_X_VERSION_MAX_ALLOWED >= 1080
+-    if (asl_log_descriptor) {
+         char *asl_sender;
+         aslmsg amsg = asl_new(ASL_TYPE_MSG);
+         assert(amsg);
+@@ -394,7 +393,6 @@ extern char *bundle_id_prefix;
+         asl_log_descriptor(aslc, amsg, ASL_LEVEL_NOTICE, stderr_pipe[0], ASL_LOG_DESCRIPTOR_READ);
+ 
+         asl_free(amsg);
+-    }
+ #endif
+ 
+     /* Do the fork-twice trick to avoid having to reap zombies */
+@@ -414,11 +412,9 @@ extern char *bundle_id_prefix;
+ 
+         case 0:                                     /* child2 */
+ #if MAC_OS_X_VERSION_MAX_ALLOWED >= 1080
+-            if (asl_log_descriptor) {
+                 /* Replace our stdout/stderr */
+                 dup2(stdout_pipe[1], STDOUT_FILENO);
+                 dup2(stderr_pipe[1], STDERR_FILENO);
+-            }
+ #endif
+ 
+             /* close all open files except for standard streams */
+@@ -443,11 +439,9 @@ extern char *bundle_id_prefix;
+     }
+ 
+ #if MAC_OS_X_VERSION_MAX_ALLOWED >= 1080
+-    if (asl_log_descriptor) {
+         /* Close the write ends of the pipe */
+         close(stdout_pipe[1]);
+         close(stderr_pipe[1]);
+-    }
+ #endif
+ }
+ 
