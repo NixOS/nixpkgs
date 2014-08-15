@@ -57,7 +57,12 @@ stdenv.mkDerivation rec {
       patch -p1 < $a
     done
     autoreconf -vfi
-    ./configure $configureFlags --disable-xinerama --disable-xvfb --disable-xnest --disable-xorg --disable-dmx --disable-dri --disable-dri2 --disable-glx --prefix="$out" --disable-unit-tests
+    ./configure $configureFlags --disable-xinerama --disable-xvfb --disable-xnest \
+        --disable-xorg --disable-dmx --disable-dri --disable-dri2 --disable-glx \
+        --prefix="$out" --disable-unit-tests \
+        --with-xkb-path=${xkeyboard_config}/share/X11/xkb \
+        --with-xkb-bin-directory=${xkbcomp}/bin \
+        --with-xkb-output=$out/share/X11/xkb/compiled
     make TIGERVNC_SRCDIR=`pwd`/../..
     popd
   '';
