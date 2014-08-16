@@ -10,23 +10,8 @@ let
   deps =
     [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender
       xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama xlibs.libxcb
-      fontconfig xorg.libXext xorg.libX11 alsaLib qt5 pulseaudio quazip
+      fontconfig xorg.libXext xorg.libX11 alsaLib qt5 pulseaudio
     ];
-
-  quazip = stdenv.mkDerivation {
-    name = "quazip-0.7";
-
-    src = fetchurl {
-      url = "mirror://sourceforge/project/quazip/quazip/0.7/quazip-0.7.tar.gz";
-      sha256 = "193lfvhcpqgl2jmxxa4q3asc4xh1mqp2j2l0h8lmm2zrpzwygxca";
-    };
-
-    buildInputs = [ qt4 ];
-
-    preBuild = ''
-      qmake PREFIX="$out"
-    '';
-  };
 
 in
 
@@ -68,7 +53,8 @@ stdenv.mkDerivation rec {
   installPhase =
     ''
       # Delete unecessary libraries - these are provided by nixos.
-      rm *.so.*
+      rm libQt*.so.*
+      rm qt.conf
 
       # Install files.
       mkdir -p $out/lib/teamspeak
@@ -79,7 +65,7 @@ stdenv.mkDerivation rec {
       ln -s $out/lib/teamspeak/ts3client $out/bin/ts3client
 
       wrapProgram $out/bin/ts3client \
-        --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+        --set LD_PRELOAD "${libredirect}/lib/libredirect.so:$out/lib/teamspeak/libquazip.so.1" \
         --set QT_PLUGIN_PATH "$out/lib/teamspeak/platforms" \
         --set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb
     '';
