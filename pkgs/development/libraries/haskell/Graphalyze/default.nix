@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     bktrees fgl filepath graphviz pandoc random text time
   ];
+  jailbreak = true;
   meta = {
     description = "Graph-Theoretic Analysis library";
     license = "unknown";
