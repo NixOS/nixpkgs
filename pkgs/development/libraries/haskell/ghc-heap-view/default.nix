@@ -8,13 +8,16 @@ cabal.mkDerivation (self: {
   sha256 = "1qi7f3phj2j63x1wd2cvk36945cxd84s12zs03hlrn49wzx2pf1n";
   buildDepends = [ binary transformers ];
   postInstall = ''
-    mkdir -p "$out/share/ghci"
+    ensureDir "$out/share/ghci"
     ln -s "$out/share/$pname-$version/ghci" "$out/share/ghci/$pname"
   '';
   meta = {
     description = "Extract the heap representation of Haskell values and thunks";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = with self.stdenv.lib.maintainers; [ andres ];
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = self.stdenv.lib.versionOlder "7.7" self.ghc.version;
+
   };
 })
