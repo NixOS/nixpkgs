@@ -1,5 +1,5 @@
 { fetchurl, stdenv, gettext, gdbm, libtool, pam, readline
-, ncurses, gnutls, mysql, guile, texinfo, gnum4, dejagnu }:
+, ncurses, gnutls, mysql, guile, texinfo, gnum4, dejagnu, sendmailPath ? "/var/setuid-wrappers/sendmail" }:
 
 /* TODO: Add GNU SASL, GNU GSSAPI, and FreeBidi.  */
 
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./path-to-cat.patch ./no-gets.patch ];
+
+  configureFlags = "--with-path-sendmail=${sendmailPath}";
 
   buildInputs =
    [ gettext gdbm libtool pam readline ncurses
