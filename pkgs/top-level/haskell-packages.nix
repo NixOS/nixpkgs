@@ -221,6 +221,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   base16Bytestring = callPackage ../development/libraries/haskell/base16-bytestring {};
 
+  base32Bytestring = callPackage ../development/libraries/haskell/base32-bytestring {};
+
   base64String = callPackage ../development/libraries/haskell/base64-string {};
 
   base64Bytestring = callPackage ../development/libraries/haskell/base64-bytestring {};
