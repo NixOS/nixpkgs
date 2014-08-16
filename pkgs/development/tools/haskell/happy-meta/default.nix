@@ -4,14 +4,12 @@
 
 cabal.mkDerivation (self: {
   pname = "happy-meta";
-  version = "0.2.0.5";
-  sha256 = "103hi87azqv11l8lq1rv0v9v88sl227g31snvkn8db6b4cfrwrxk";
+  version = "0.2.0.6";
+  sha256 = "1q6sd5zaxzx85z3zcy99b6qrf8fj93ryy33y1g6rdzfw07dwf4lh";
   buildDepends = [ haskellSrcMeta mtl ];
   meta = {
     description = "Quasi-quoter for Happy parsers";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
-    broken = true;
   };
 })
