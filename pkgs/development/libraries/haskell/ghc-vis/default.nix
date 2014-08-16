@@ -12,9 +12,8 @@ cabal.mkDerivation (self: {
     cairo deepseq fgl ghcHeapView graphviz gtk mtl svgcairo text
     transformers xdot
   ];
-  jailbreak = true;
   postInstall = ''
-    mkdir -p "$out/share/ghci"
+    ensureDir "$out/share/ghci"
     ln -s "$out/share/$pname-$version/ghci" "$out/share/ghci/$pname"
   '';
   meta = {
@@ -22,6 +21,7 @@ cabal.mkDerivation (self: {
     description = "Live visualization of data structures in GHCi";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = with self.stdenv.lib.maintainers; [ andres ];
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })
