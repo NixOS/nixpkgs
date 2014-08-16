@@ -221,6 +221,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   base16Bytestring = callPackage ../development/libraries/haskell/base16-bytestring {};
 
+  base32Bytestring = callPackage ../development/libraries/haskell/base32-bytestring {};
+
   base64String = callPackage ../development/libraries/haskell/base64-string {};
 
   base64Bytestring = callPackage ../development/libraries/haskell/base64-bytestring {};
@@ -266,6 +268,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   bitmap = callPackage ../development/libraries/haskell/bitmap {};
 
   bitsAtomic = callPackage ../development/libraries/haskell/bits-atomic {};
+
+  bitsExtras = callPackage ../development/libraries/haskell/bits-extras {};
 
   bktrees = callPackage ../development/libraries/haskell/bktrees {};
 
