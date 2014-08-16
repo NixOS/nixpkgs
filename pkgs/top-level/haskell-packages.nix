@@ -267,6 +267,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   bitsAtomic = callPackage ../development/libraries/haskell/bits-atomic {};
 
+  bitsExtras = callPackage ../development/libraries/haskell/bits-extras {};
+
   bktrees = callPackage ../development/libraries/haskell/bktrees {};
 
   blazeBuilder = callPackage ../development/libraries/haskell/blaze-builder {};
