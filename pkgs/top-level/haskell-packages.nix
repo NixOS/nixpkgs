@@ -1321,6 +1321,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   imm = callPackage ../development/libraries/haskell/imm {};
 
+  implicit = callPackage ../development/libraries/haskell/implicit {};
+
   indents = callPackage ../development/libraries/haskell/indents {};
 
   indexed = callPackage ../development/libraries/haskell/indexed {};
@@ -2301,6 +2303,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   stmStats = callPackage ../development/libraries/haskell/stm-stats {};
 
   storableComplex = callPackage ../development/libraries/haskell/storable-complex {};
+
+  storableEndian = callPackage ../development/libraries/haskell/storable-endian {};
 
   storableRecord = callPackage ../development/libraries/haskell/storable-record {};
 
