@@ -635,4 +635,14 @@ in rec
     path = "tmux-navigator";
   };
 
+  pathogen = simpleDerivation {
+    name = "vim-pathogen-git-3de98bfc";
+    src = fetchgit {
+      url = "https://github.com/tpope/vim-pathogen.git";
+      rev = "91e6378908721d20514bbe5d18d292a0a15faf0c";
+      sha256 = "24c1897d6b58576b2189c90050a7f8ede72a51343c752e9d030e833dbe5cac6f";
+     };
+    path = "pathogen";
+  };
+
 }
