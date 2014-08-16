@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "data-fin";
-  version = "0.1.1.2";
-  sha256 = "13qgqx3b01a8bm7jw7fkv7nyyzg2jkgg27zv2wp57g0nd5aw5hpn";
+  version = "0.1.1.3";
+  sha256 = "02n3dr4gj73z549vwq5h7h1kvmx2j8vaxjcggpdlppps9wl6flry";
   buildDepends = [
     lazysmallcheck preludeSafeenum QuickCheck reflection smallcheck
     tagged
