@@ -2864,6 +2864,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   haddock_2_14_3 = callPackage ../development/tools/documentation/haddock/2.14.3.nix {};
   haddock = self.haddock_2_14_3;
 
+  haddockLibrary = callPackage ../development/libraries/haskell/haddock-library {};
+
   HandsomeSoup = callPackage ../development/libraries/haskell/HandsomeSoup {};
 
   happy_1_18_4 = callPackage ../development/tools/parsing/happy/1.18.4.nix {};
