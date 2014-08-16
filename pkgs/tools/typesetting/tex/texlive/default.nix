@@ -22,6 +22,7 @@ rec {
   setupHook = ./setup-hook.sh;
 
   doMainBuild = fullDepEntry ( stdenv.lib.optionalString stdenv.isDarwin ''
+    export MACOSX_DEPLOYMENT_TARGET=10.9
     export DYLD_LIBRARY_PATH="${poppler}/lib"
   '' + ''
     mkdir -p $out
