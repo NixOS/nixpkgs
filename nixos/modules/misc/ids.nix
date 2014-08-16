@@ -143,6 +143,7 @@
       dhcpd = 133;
       siproxd = 134;
       mlmmj = 135;
+      neo4j = 136;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
