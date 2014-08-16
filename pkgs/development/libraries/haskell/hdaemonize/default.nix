@@ -14,4 +14,3 @@ cabal.mkDerivation (self: {
     platforms = self.ghc.meta.platforms;
   };
 })
-
