@@ -6952,6 +6952,8 @@ let
 
   nagiosPluginsOfficial = callPackage ../servers/monitoring/nagios/plugins/official-2.x.nix { };
 
+  neo4j = callPackage ../servers/nosql/neo4j { };
+
   net_snmp = callPackage ../servers/monitoring/net-snmp { };
 
   oidentd = callPackage ../servers/identd/oidentd { };
