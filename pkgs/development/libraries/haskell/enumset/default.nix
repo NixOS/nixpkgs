@@ -11,6 +11,6 @@ cabal.mkDerivation (self: {
     description = "Sets of enumeration values represented by machine words";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ertes ];
+    maintainers = with self.stdenv.lib.maintainers; [ ertes ];
   };
 })

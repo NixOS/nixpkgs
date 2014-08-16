@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin $out/lib/security $out/share/man/man{1,8}
+    mkdir -p $out/bin $out/lib/security $out/share/man/man{1,8}
     cp pam_*.so $out/lib/security
     cp otpw-gen $out/bin
     cp *.1 $out/share/man/man1

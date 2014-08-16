@@ -85,5 +85,7 @@ stdenv.mkDerivation {
     # Build fails on Cygwin and Darwin:
     # <http://article.gmane.org/gmane.lisp.scheme.mit-scheme.devel/489>.
     platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.freebsd;
+
+    broken = true;
   };
 }

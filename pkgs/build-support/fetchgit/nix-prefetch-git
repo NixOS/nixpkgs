@@ -226,6 +226,10 @@ clone_user_rev() {
     if test -z "$leaveDotGit"; then
 	echo "removing \`.git'..." >&2
         find $dir -name .git\* | xargs rm -rf
+    else
+        # The logs and index contain timestamps, and the hooks contain
+        # the nix path of git's bash
+        find $dir -name .git | xargs -I {} rm -rf {}/logs {}/index {}/hooks
     fi
 }
 

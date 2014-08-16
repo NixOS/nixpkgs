@@ -21,6 +21,6 @@ cabal.mkDerivation (self: {
     description = "A command line program for extracting compiler arguments from a cabal file";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.tomberek ];
+    maintainers = with self.stdenv.lib.maintainers; [ tomberek ];
   };
 })

@@ -152,8 +152,12 @@ if ($action eq "create") {
 
 my $root = "/var/lib/containers/$containerName";
 my $profileDir = "/nix/var/nix/profiles/per-container/$containerName";
+my $gcRootsDir = "/nix/var/nix/gcroots/per-container/$containerName";
 my $confFile = "/etc/containers/$containerName.conf";
-die "$0: container ‘$containerName’ does not exist\n" if !-e $confFile;
+if (!-e $confFile) {
+    exit 0 if $action eq "destroy";
+    die "$0: container ‘$containerName’ does not exist\n" ;
+}
 
 sub isContainerRunning {
     my $status = `systemctl show 'container\@$containerName'`;
@@ -172,6 +176,7 @@ if ($action eq "destroy") {
     stopContainer if isContainerRunning;
 
     rmtree($profileDir) if -e $profileDir;
+    rmtree($gcRootsDir) if -e $gcRootsDir;
     rmtree($root) if -e $root;
     unlink($confFile) or die;
 }

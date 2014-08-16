@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     mv build/* $out/bin
   '';
 

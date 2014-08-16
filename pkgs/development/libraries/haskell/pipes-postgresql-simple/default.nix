@@ -16,6 +16,6 @@ cabal.mkDerivation (self: {
     description = "Convert various postgresql-simple calls to work with pipes";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })

@@ -41,7 +41,7 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "sandbox" "bundled" "main" ];
   installPhase = ''
-    ensureDir "$out" "$sandbox" "$bundled" "$main"
+    mkdir -p "$out" "$sandbox" "$bundled" "$main"
 
     header "copying browser main sources to $main"
     find . -mindepth 1 -maxdepth 1 \

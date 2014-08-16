@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
        [ stdenv.gcc.gcc stdenv.gcc.libc ncurses ];
 
   buildCommand = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cd $out
     unzip ${src}
     rpm2cpio linux/MegaCli-8.07.07-1.noarch.rpm | cpio -idmv

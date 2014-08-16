@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -D apktool.jar "$out/libexec/apktool/apktool.jar"
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     makeWrapper "${jre}/bin/java" "$out/bin/apktool" \
         --add-flags "-jar $out/libexec/apktool/apktool.jar" \
         --prefix PATH : "${buildTools}/build-tools/android-4.3/"

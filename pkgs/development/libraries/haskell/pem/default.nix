@@ -18,6 +18,5 @@ cabal.mkDerivation (self: {
     description = "Privacy Enhanced Mail (PEM) format reader and writer";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

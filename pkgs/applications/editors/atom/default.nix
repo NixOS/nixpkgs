@@ -43,8 +43,8 @@ in stdenv.mkDerivation rec {
   phases = [ "installPhase" ];
 
   installPhase = ''
-    ensureDir $out/share/atom
-    ensureDir $out/bin
+    mkdir -p $out/share/atom
+    mkdir -p $out/bin
     tar -C $out/share/atom -xvf $src
     patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
       $out/share/atom/atom

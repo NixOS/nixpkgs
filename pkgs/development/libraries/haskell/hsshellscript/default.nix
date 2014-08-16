@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hsshellscript";
-  version = "3.3.1";
-  sha256 = "0z3afp3r1j1in03fv2yb5sfbzgcrhdig6gay683bzgh85glwxhlp";
+  version = "3.3.2";
+  sha256 = "0rc78yx82gy7a3dxl1mn9hrj1cqhq51zq6w4nf11rzgn6106zdln";
   buildDepends = [ parsec random ];
   buildTools = [ c2hs ];
   meta = {

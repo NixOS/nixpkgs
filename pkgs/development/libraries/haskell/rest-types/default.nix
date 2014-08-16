@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     aeson genericAeson hxt jsonSchema mtl regular regularXmlpickler
     restStringmap text uuid
   ];
+  jailbreak = true;
   meta = {
     description = "Silk Rest Framework Types";
     license = self.stdenv.lib.licenses.bsd3;

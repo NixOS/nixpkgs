@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
     + ":" + stdenv.lib.makeLibraryPath [ SDL pulseaudio alsaLib ] ;
 
   installPhase = ''
-    ensureDir $out/libexec/strangeloop/vessel/
-    ensureDir $out/bin
+    mkdir -p $out/libexec/strangeloop/vessel/
+    mkdir -p $out/bin
 
     # allow scripting of the mojoinstaller
     gcc -fPIC -shared -o isatty.so $ld_preload

@@ -21,6 +21,5 @@ cabal.mkDerivation (self: {
     description = "A toolkit for making compile-time interpolated templates";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

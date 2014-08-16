@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Strafunski-StrategyLib";
-  version = "5.0.0.3";
-  sha256 = "1s7410dfzkqd9j8n5g92pvh9rwglngj3ca9ipcr6xsq0n6yhs51y";
+  version = "5.0.0.4";
+  sha256 = "0miffjc8li5l1jarmz8l34z5mx3q68pyxghsi1lbda51bzz3wy1g";
   buildDepends = [ mtl syb ];
   jailbreak = true;
   meta = {

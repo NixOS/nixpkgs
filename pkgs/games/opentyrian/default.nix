@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
   ";
   buildPhase = "make release";
   installPhase = "
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp ./opentyrian $out/bin
-    ensureDir $out/share/opentyrian/data
+    mkdir -p $out/share/opentyrian/data
     unzip -j $data -d $out/share/opentyrian/data
   ";
 

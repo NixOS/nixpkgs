@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/dejagnu/;
     license = stdenv.lib.licenses.gpl2Plus;
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }

@@ -12,5 +12,7 @@ cabal.mkDerivation (self: {
     description = "Parse Google Protocol Buffer specifications";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = self.stdenv.lib.versionOlder "7.7" self.ghc.version;
   };
 })

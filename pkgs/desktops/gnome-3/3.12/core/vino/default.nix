@@ -1,4 +1,5 @@
 { stdenv, intltool, fetchurl, gtk3, glib, libsoup, pkgconfig, makeWrapper
+, hicolor_icon_theme, gnome3
 , libnotify, file, telepathy_glib, dbus_glib }:
 
 stdenv.mkDerivation rec {
@@ -14,11 +15,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   buildInputs = [ gtk3 intltool glib libsoup pkgconfig libnotify
+                  hicolor_icon_theme gnome3.gnome_icon_theme gnome3.gnome_icon_theme_symbolic
                   dbus_glib telepathy_glib file makeWrapper ];
 
   preFixup = ''
     wrapProgram "$out/libexec/vino-server" \
-      --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH"
+      --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {

@@ -16,10 +16,6 @@ rec {
 
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
-  at_spi2_atk = callPackage ./core/at-spi2-atk { };
-
-  at_spi2_core = callPackage ./core/at-spi2-core { };
-
   baobab = callPackage ./core/baobab { };
 
   caribou = callPackage ./core/caribou { };
@@ -240,6 +236,8 @@ rec {
   gexiv2 = callPackage ./misc/gexiv2 { };
 
   gnome-tweak-tool = callPackage ./misc/gnome-tweak-tool { };
+
+  gpaste = callPackage ./misc/gpaste { };
 
   gtkhtml = callPackage ./misc/gtkhtml { };
 }

@@ -6,7 +6,7 @@ let
 
   acpiConfDir = pkgs.runCommand "acpi-events" {}
     ''
-      ensureDir $out
+      mkdir -p $out
       ${
         # Generate a configuration file for each event. (You can't have
         # multiple events in one config file...)

@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "A Haskell 98 logically uninhabited data type";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

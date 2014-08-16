@@ -23,11 +23,11 @@ stdenv.mkDerivation {
      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://portix.bitbucket.org/dwb/;
     description = "A lightweight web browser based on the webkit web browser engine and the gtk toolkit";
-    platforms = stdenv.lib.platforms.mesaPlatforms;
-    maintainers = [ stdenv.lib.maintainers.pSub ];
-    license = "GPL";
+    platforms = platforms.mesaPlatforms;
+    maintainers = with maintainers;[ pSub ];
+    license = licenses.gpl3;
   };
 }

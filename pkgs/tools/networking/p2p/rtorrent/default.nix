@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libtorrent, ncurses, pkgconfig, libsigcxx, curl
-, zlib, openssl
+, zlib, openssl, xmlrpc_c
 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "113yrrac75vqi4g8r6bgs0ggjllj9bkg9shv08vqzdhkwqg2q2mw";
   };
 
-  buildInputs = [ libtorrent ncurses pkgconfig libsigcxx curl zlib openssl ];
+  buildInputs = [ libtorrent ncurses pkgconfig libsigcxx curl zlib openssl xmlrpc_c ];
+  configureFlags = "--with-xmlrpc-c";
 
   # postInstall = ''
   #   mkdir -p $out/share/man/man1 $out/share/rtorrent

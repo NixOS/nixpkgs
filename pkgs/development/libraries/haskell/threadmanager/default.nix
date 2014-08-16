@@ -10,6 +10,5 @@ cabal.mkDerivation (self: {
     description = "(deprecated in favor of 'threads') Simple thread management";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

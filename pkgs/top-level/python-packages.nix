@@ -163,7 +163,20 @@ rec {
     pythonDBus = dbus;
   };
 
+  pyqt5 = import ../development/python-modules/pyqt/5.x.nix {
+    inherit (pkgs) stdenv fetchurl pkgconfig qt5 makeWrapper;
+    inherit (pkgs.xorg) lndir;
+    inherit python;
+    sip = sip_4_16;
+    pythonDBus = dbus;
+  };
+
   sip = import ../development/python-modules/sip {
+    inherit (pkgs) stdenv fetchurl;
+    inherit python;
+  };
+
+  sip_4_16 = import ../development/python-modules/sip/4.16.nix {
     inherit (pkgs) stdenv fetchurl;
     inherit python;
   };
@@ -895,11 +908,11 @@ rec {
 
   boto = buildPythonPackage rec {
     name = "boto-${version}";
-    version = "2.9.9";
+    version = "2.32.0";
 
     src = fetchurl {
       url = "https://github.com/boto/boto/archive/${version}.tar.gz";
-      sha256 = "18wqpzd1zf8nivcn2rl1wnladf7hhyy5p75b5l6kafynm4l9j6jq";
+      sha256 = "0bl5y7m0m84rz4q7hx783kxpj1n9wcm7dhv54bnx8cnanyd13cxn";
     };
 
     # The tests seem to require AWS credentials.
@@ -1420,6 +1433,23 @@ rec {
     };
   };
 
+  detox = pythonPackages.buildPythonPackage rec {
+    name = "detox-0.9.3";
+
+    propagatedBuildInputs = with pythonPackages; [ tox py eventlet ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/d/detox/detox-0.9.3.tar.gz";
+      md5 = "b52588ec61cd4c2d33e419677a5eac8c";
+    };
+
+    meta = with stdenv.lib; {
+      description = "What is detox?";
+      homepage = http://bitbucket.org/hpk42/detox;
+    };
+  };
+
+
   pbkdf2 = buildPythonPackage rec {
     name = "pbkdf2-1.3";
 
@@ -1750,6 +1780,42 @@ rec {
       description = "derpconf abstracts loading configuration files for your app";
       homepage = https://github.com/globocom/derpconf;
       license = licenses.mit;
+    };
+  };
+
+  dogpile_cache = buildPythonPackage rec {
+    name = "dogpile.cache-0.5.4";
+
+    propagatedBuildInputs = [ dogpile_core ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/d/dogpile.cache/dogpile.cache-0.5.4.tar.gz";
+      md5 = "513b77ba1bd0c31bb15dd9dd0d8471af";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "A caching front-end based on the Dogpile lock.";
+      homepage = http://bitbucket.org/zzzeek/dogpile.cache;
+      license = licenses.bsd3;
+    };
+  };
+
+  dogpile_core = buildPythonPackage rec {
+    name = "dogpile.core-0.4.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/d/dogpile.core/dogpile.core-0.4.1.tar.gz";
+      md5 = "01cb19f52bba3e95c9b560f39341f045";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "A 'dogpile' lock, typically used as a component of a larger caching solution";
+      homepage = http://bitbucket.org/zzzeek/dogpile.core;
+      license = licenses.bsd3;
     };
   };
 
@@ -3703,6 +3769,24 @@ rec {
     };
   });
 
+  httpbin = buildPythonPackage rec {
+    name = "httpbin-0.2.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/h/httpbin/${name}.tar.gz";
+      md5 = "9b2bb2fab45f5fa839e9a776a64d6089";
+    };
+
+    propagatedBuildInputs = [ flask markupsafe decorator itsdangerous six ];
+
+    meta = {
+      homepage = https://github.com/kennethreitz/httpbin;
+      description = "HTTP Request & Response Service";
+      license = licenses.mit;
+    };
+
+  };
+
   httplib2 = buildPythonPackage rec {
     name = "httplib2-0.9";
 
@@ -4256,11 +4340,11 @@ rec {
 
 
   meld3 = buildPythonPackage rec {
-    name = "meld3-0.6.10";
+    name = "meld3-1.0.0";
 
     src = fetchurl {
-      url = https://pypi.python.org/packages/source/m/meld3/meld3-0.6.10.tar.gz;
-      md5 = "42e58624e9d427be7659d7a28e2b0b6f";
+      url = https://pypi.python.org/packages/source/m/meld3/meld3-1.0.0.tar.gz;
+      md5 = "ca270506dd4ecb20ae26fa72fbd9b0be";
     };
 
     doCheck = false;
@@ -4268,7 +4352,7 @@ rec {
     meta = {
       description = "An HTML/XML templating engine used by supervisor";
       homepage = https://github.com/supervisor/meld3;
-      license = "ZPL";
+      license = "free-non-copyleft";
     };
   };
 
@@ -5482,7 +5566,7 @@ rec {
   protobuf = buildPythonPackage rec {
     inherit (pkgs.protobuf) name src;
 
-    propagatedBuildInputs = [pkgs.protobuf];
+    propagatedBuildInputs = [ pkgs.protobuf setuptools ];
     sourceRoot = "${name}/python";
 
     meta = {
@@ -6720,12 +6804,12 @@ rec {
 
 
   robotframework = buildPythonPackage rec {
-    version = "2.8.4";
+    version = "2.8.5";
     name = "robotframework-${version}";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/r/robotframework/${name}.tar.gz";
-      sha256 = "0rxk135c1051cwv45219ib3faqvi5rl50l98ncb83c7qxy92jg2n";
+      sha256 = "0rzdn2gvmcrxs2fvxm11h55w4j5pv0lf443fc4hl8kzwjwgjckga";
     };
 
     # error: invalid command 'test'
@@ -7183,6 +7267,8 @@ rec {
     };
 
     buildInputs = [ pbr pip ];
+
+    propagatedBuildInputs = [ setuptools ];
 
     meta = {
       description = "Manage dynamic plugins for Python applications";
@@ -7876,16 +7962,19 @@ rec {
   # cmd.run("tox", "-h")
   # also, buildPythonPackage needs to supply the tox.ini correctly for projects that use tox for their tests
   #
-  # tox = buildPythonPackage rec {
-  #   name = "tox-1.7.0";
-  #
-  #   propagatedBuildInputs = [ py virtualenv ];
-  #
-  #   src = fetchurl {
-  #     url = "https://pypi.python.org/packages/source/t/tox/${name}.tar.gz";
-  #     md5 = "5314ceca2b179ad4a9c79f4d817b8a99";
-  #   };
-  # };
+
+  tox = buildPythonPackage rec {
+    name = "tox-1.7.2";
+  
+    propagatedBuildInputs = [ py virtualenv ];
+
+    doCheck = false;
+  
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/tox/${name}.tar.gz";
+      md5 = "0d9b3acb1a9252659d753b0ae6b9b264";
+    };
+  };
 
   smmap = buildPythonPackage rec {
     name = "smmap-0.8.2";
@@ -8103,10 +8192,10 @@ rec {
   });
 
   virtualenv = buildPythonPackage rec {
-    name = "virtualenv-1.11.4";
+    name = "virtualenv-1.11.6";
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/v/virtualenv/${name}.tar.gz";
-      md5 = "9accc2d3f0ec1da479ce2c3d1fdff06e";
+      md5 = "f61cdd983d2c4e6aeabb70b1060d6f49";
     };
 
     inherit recursivePthLoader;
@@ -8166,6 +8255,27 @@ rec {
     patchPhase = ''
       substituteInPlace "virtualenvwrapper.sh" --replace "which" "${pkgs.which}/bin/which"
       substituteInPlace "virtualenvwrapper_lazy.sh" --replace "which" "${pkgs.which}/bin/which"
+    '';
+
+    postInstall = ''
+      # This might look like a dirty hack but we can't use the makeWrapper function because
+      # the wrapped file were then called via "exec". The virtualenvwrapper shell scripts
+      # aren't normal executables. Instead, the user has to evaluate them.
+
+      for file in "virtualenvwrapper.sh" "virtualenvwrapper_lazy.sh"; do
+        local wrapper="$out/bin/$file"
+        local wrapped="$out/bin/.$file-wrapped"
+        mv "$wrapper" "$wrapped"
+
+        cat > "$wrapper" <<- EOF
+	export PATH=$PATH:\$PATH
+	export PYTHONPATH=$PYTHONPATH:$(toPythonPath $out):\$PYTHONPATH
+	source "$wrapped"
+	EOF
+
+        chmod -x "$wrapped"
+        chmod +x "$wrapper"
+      done
     '';
 
     meta = {
@@ -8992,11 +9102,11 @@ rec {
 
   cliapp = buildPythonPackage rec {
     name = "cliapp-${version}";
-    version = "1.20130808";
+    version = "1.20140719";
 
     src = fetchurl rec {
       url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_${version}.orig.tar.gz";
-      sha256 = "0i9fqkahrc16mnxjw8fcr4hwrq3ibfrj2lzzbzzb7v5yk5dlr532";
+      sha256 = "0kxl2q85n4ggvbw2m8crl11x8n637mx6y3a3b5ydw8nhlsiqijgp";
     };
 
     buildInputs = [ sphinx ];

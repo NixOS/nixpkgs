@@ -8,7 +8,7 @@ cabal.mkDerivation (self: {
   sha256 = "1qi7f3phj2j63x1wd2cvk36945cxd84s12zs03hlrn49wzx2pf1n";
   buildDepends = [ binary transformers ];
   postInstall = ''
-    ensureDir "$out/share/ghci"
+    mkdir -p "$out/share/ghci"
     ln -s "$out/share/$pname-$version/ghci" "$out/share/ghci/$pname"
   '';
   meta = {

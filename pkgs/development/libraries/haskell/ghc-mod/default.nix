@@ -23,11 +23,10 @@ cabal.mkDerivation (self: {
   configureFlags = "--datasubdir=${self.pname}-${self.version}";
   postInstall = ''
     cd $out/share/$pname-$version
-    sed -i -e 's/"-b" "\\n" "-l"/"-l" "-b" "\\"\\\\n\\""/' ghc-process.el
     make
     rm Makefile
     cd ..
-    ensureDir "$out/share/emacs"
+    mkdir -p "$out/share/emacs"
     mv $pname-$version emacs/site-lisp
     mv $out/bin/ghc-mod $out/bin/.ghc-mod-wrapped
     cat - > $out/bin/ghc-mod <<EOF

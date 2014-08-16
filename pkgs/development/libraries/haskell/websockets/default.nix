@@ -25,6 +25,6 @@ cabal.mkDerivation (self: {
     description = "A sensible and clean way to write WebSocket-capable servers in Haskell";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })

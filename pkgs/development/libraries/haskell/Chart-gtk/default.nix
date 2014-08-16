@@ -4,10 +4,9 @@
 
 cabal.mkDerivation (self: {
   pname = "Chart-gtk";
-  version = "1.2.3";
-  sha256 = "0vl9nh48pa7sdrqh5a6smmfallf4mwzrvspc2v94cpnrcnickiyq";
+  version = "1.2.4";
+  sha256 = "16dfmkls341cmk13j1z3rw2wxdvxr5rqsv1ff4qjhjak9j7hkqjq";
   buildDepends = [ cairo Chart ChartCairo colour gtk mtl time ];
-  jailbreak = true;
   meta = {
     homepage = "https://github.com/timbod7/haskell-chart/wiki";
     description = "Utility functions for using the chart library with GTK";

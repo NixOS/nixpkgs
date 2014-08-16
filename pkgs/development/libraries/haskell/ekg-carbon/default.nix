@@ -16,6 +16,6 @@ cabal.mkDerivation (self: {
     description = "An EKG backend to send statistics to Carbon (part of Graphite monitoring tools)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })

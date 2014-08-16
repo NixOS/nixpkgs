@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "bson";
-  version = "0.3";
-  sha256 = "0787z6970lf93mgrsyqcilnkx5bynny88ag15z2f07l1rhva6ac4";
+  version = "0.3.1";
+  sha256 = "1kihsjws8sqb44gvilh1zxrqn2bml8gxq2bbanxqb7nr4ymwfkiv";
   buildDepends = [
     binary cryptohash dataBinaryIeee754 mtl network text time
   ];
@@ -17,10 +17,9 @@ cabal.mkDerivation (self: {
   ];
   doCheck = false;
   meta = {
-    homepage = "http://github.com/selectel/bson-haskell";
+    homepage = "http://github.com/mongodb-haskell/bson";
     description = "BSON documents are JSON-like objects with a standard binary encoding";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

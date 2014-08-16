@@ -7,18 +7,18 @@
 
 cabal.mkDerivation (self: {
   pname = "cookie";
-  version = "0.4.1.2";
-  sha256 = "1dxga56m4mza3annhb48ryb31kf0kxr3w99c4mwh9w9l77xhcq3i";
+  version = "0.4.1.3";
+  sha256 = "184ymp1pbi49fm4jl9s04dfyrgdbc9vlmqahqha4yncppr5s1sdw";
   buildDepends = [ blazeBuilder dataDefault deepseq text time ];
   testDepends = [
     blazeBuilder HUnit QuickCheck testFramework testFrameworkHunit
     testFrameworkQuickcheck2 text time
   ];
+  doCheck = self.stdenv.lib.versionOlder "7.8" self.ghc.version;
   meta = {
     homepage = "http://github.com/snoyberg/cookie";
     description = "HTTP cookie parsing and rendering";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

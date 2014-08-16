@@ -25,6 +25,5 @@ cabal.mkDerivation (self: {
     description = "A library for parallel programming based on a monad";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })
