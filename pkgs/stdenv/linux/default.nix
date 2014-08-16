@@ -218,7 +218,7 @@ rec {
     };
     extraPath = [ stage3.pkgs.xz ];
     overrides = pkgs: {
-      inherit (stage3.pkgs) gettext gnum4 gmp perl glibc;
+      inherit (stage3.pkgs) gettext gnum4 gmp perl glibc zlib;
     };
   };
 
@@ -267,7 +267,7 @@ rec {
       inherit gcc;
       inherit (stage4.pkgs)
         gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
-        glibc gnumake gnused gnutar gnugrep gnupatch patchelf
+        glibc zlib gnumake gnused gnutar gnugrep gnupatch patchelf
         attr acl paxctl;
     };
   };
