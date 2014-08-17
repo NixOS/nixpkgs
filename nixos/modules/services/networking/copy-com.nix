@@ -17,6 +17,9 @@ in
           default = false;
           description = "
             Enable the copy.com client.
+
+            The first time copy.com is run, it needs to be configured. Before enabling run 
+            copy_console manually.
           ";
       };
 
