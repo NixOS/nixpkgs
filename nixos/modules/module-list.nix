@@ -186,10 +186,9 @@
   ./services/networking/btsync.nix
   ./services/networking/chrony.nix
   ./services/networking/cjdns.nix
-  ./services/networking/connman.nix
-  ./services/networking/copy-com.nix
   ./services/networking/cntlm.nix
   ./services/networking/connman.nix
+  ./services/networking/copy-com.nix
   ./services/networking/ddclient.nix
   ./services/networking/dhcpcd.nix
   ./services/networking/dhcpd.nix
