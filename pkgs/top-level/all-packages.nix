@@ -7218,6 +7218,8 @@ let
 
   fbterm = callPackage ../os-specific/linux/fbterm { };
 
+  firejail = callPackage ../os-specific/linux/firejail {};
+
   fuse = callPackage ../os-specific/linux/fuse { };
 
   fxload = callPackage ../os-specific/linux/fxload { };
