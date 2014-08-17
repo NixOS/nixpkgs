@@ -142,6 +142,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   AES = callPackage ../development/libraries/haskell/AES {};
 
   aeson_0_7_0_4 = callPackage ../development/libraries/haskell/aeson/0.7.0.4.nix { blazeBuilder = null; };
+  aeson_0_7_0_6 = callPackage ../development/libraries/haskell/aeson/0.7.0.6.nix { blazeBuilder = null; };
   aeson_0_8_0_0 = callPackage ../development/libraries/haskell/aeson/0.8.0.0.nix { blazeBuilder = null; };
   aeson = self.aeson_0_8_0_0;
 
@@ -150,6 +151,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   aesonQq = callPackage ../development/libraries/haskell/aeson-qq {};
 
   aesonUtils = callPackage ../development/libraries/haskell/aeson-utils {};
+
+  algebra = callPackage ../development/libraries/haskell/algebra {};
 
   alsaCore = callPackage ../development/libraries/haskell/alsa-core {};
 
@@ -218,6 +221,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   base16Bytestring = callPackage ../development/libraries/haskell/base16-bytestring {};
 
+  base32Bytestring = callPackage ../development/libraries/haskell/base32-bytestring {};
+
   base64String = callPackage ../development/libraries/haskell/base64-string {};
 
   base64Bytestring = callPackage ../development/libraries/haskell/base64-bytestring {};
@@ -263,6 +268,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   bitmap = callPackage ../development/libraries/haskell/bitmap {};
 
   bitsAtomic = callPackage ../development/libraries/haskell/bits-atomic {};
+
+  bitsExtras = callPackage ../development/libraries/haskell/bits-extras {};
 
   bktrees = callPackage ../development/libraries/haskell/bktrees {};
 
@@ -1080,7 +1087,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   heredoc = callPackage ../development/libraries/haskell/heredoc {};
 
   hexpat = callPackage ../development/libraries/haskell/hexpat {};
-  
+
   hex = callPackage ../development/libraries/haskell/hex {};
 
   hgal = callPackage ../development/libraries/haskell/hgal {};
@@ -1321,6 +1328,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   imm = callPackage ../development/libraries/haskell/imm {};
 
+  implicit = callPackage ../development/libraries/haskell/implicit {};
+
   indents = callPackage ../development/libraries/haskell/indents {};
 
   indexed = callPackage ../development/libraries/haskell/indexed {};
@@ -1499,6 +1508,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   logging = callPackage ../development/libraries/haskell/logging {};
 
   logict = callPackage ../development/libraries/haskell/logict {};
+
+  loop = callPackage ../development/libraries/haskell/loop {};
 
   lushtags = callPackage ../development/libraries/haskell/lushtags {};
 
@@ -1917,7 +1928,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   prologGraph = callPackage ../development/libraries/haskell/prolog-graph {};
 
   protobuf = callPackage ../development/libraries/haskell/protobuf {};
-  
+
   protocolBuffers = callPackage ../development/libraries/haskell/protocol-buffers {};
 
   protocolBuffersDescriptor = callPackage ../development/libraries/haskell/protocol-buffers-descriptor {};
@@ -2301,6 +2312,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   stmStats = callPackage ../development/libraries/haskell/stm-stats {};
 
   storableComplex = callPackage ../development/libraries/haskell/storable-complex {};
+
+  storableEndian = callPackage ../development/libraries/haskell/storable-endian {};
 
   storableRecord = callPackage ../development/libraries/haskell/storable-record {};
 
@@ -2850,6 +2863,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   haddock_2_14_2 = callPackage ../development/tools/documentation/haddock/2.14.2.nix {};
   haddock_2_14_3 = callPackage ../development/tools/documentation/haddock/2.14.3.nix {};
   haddock = self.haddock_2_14_3;
+
+  haddockLibrary = callPackage ../development/libraries/haskell/haddock-library {};
 
   HandsomeSoup = callPackage ../development/libraries/haskell/HandsomeSoup {};
 
