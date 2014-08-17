@@ -24,7 +24,11 @@ in
         description = "The user for which copy should run.";
       };
 
-	};
+      debug = mkOption {
+        default = false;
+        description = "Output more.";
+      };
+	  };
   };
 
   config = mkIf cfg.enable {
@@ -35,7 +39,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.copy-com}/bin/copy_console";
+        ExecStart = "${pkgs.copy-com}/bin/copy_console ${if cfg.debug then "-consoleOutput -debugToConsole=dirwatch,path-watch,csm_path,csm -debug -console" else ""}";
         User = "${cfg.user}";
       };
 
