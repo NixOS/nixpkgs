@@ -9630,6 +9630,8 @@ let
     conf = config.st.conf or null;
   };
 
+  linuxstopmotion = callPackage ../applications/video/linuxstopmotion { };
+
   sweethome3d = recurseIntoAttrs (  (callPackage ../applications/misc/sweethome3d { })
                                  // (callPackage ../applications/misc/sweethome3d/editors.nix {
                                       sweethome3dApp = sweethome3d.application;
