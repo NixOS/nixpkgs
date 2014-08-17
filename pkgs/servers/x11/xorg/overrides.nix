@@ -75,6 +75,7 @@ in
         # Remove useless DocBook XML files.
         rm -rf $out/share/doc
       '';
+    CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
   };
 
   libXfont = attrs: attrs // {

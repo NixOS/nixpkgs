@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   NROFF = "${groff}/bin/nroff";
 
   postInstall = ''
-    sed -i s/-lncurses/-lncursesw/g $out/lib/pkgconfig/libedit.pc
+    sed -i ${stdenv.lib.optionalString (stdenv.isDarwin && stdenv.gcc.nativeTools) "''"} s/-lncurses/-lncursesw/g $out/lib/pkgconfig/libedit.pc
   '';
 
   # taken from gentoo http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-libs/libedit/files/

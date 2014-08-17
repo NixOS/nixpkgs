@@ -7,4 +7,6 @@ stdenv.mkDerivation {
     url = http://tarballs.nixos.org/getopt-1.1.4.tar.gz;
     md5 = "02188ca68da27c4175d6e9f3da732101";
   };
+
+  buildFlags = stdenv.lib.optional stdenv.isDarwin [ "CC=clang" ];
 }

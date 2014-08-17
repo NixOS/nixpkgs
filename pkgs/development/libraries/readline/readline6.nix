@@ -10,10 +10,15 @@ stdenv.mkDerivation (rec {
 
   propagatedBuildInputs = [ncurses];
 
+  preConfigure = ''
+    export CC=clang
+  '';
+
   patchFlags = "-p0";
   patches =
     [ ./link-against-ncurses.patch
       ./no-arch_only.patch
+      ./clang.patch
     ]
     ++
     (let
