@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       ${optionalString stdenv.isArm ''
         configureFlagsArray=(-Dldflags="-lm -lrt")
       ''}
-      
+
       ${optionalString stdenv.isCygwin ''
         cp cygwin/cygwin.c{,.bak}
         echo "#define PERLIO_NOT_STDIO 0" > tmp
@@ -70,6 +70,5 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  doCheck = stdenv.isLinux;
   passthru.libPrefix = "lib/perl5/site_perl";
 }
