@@ -9847,6 +9847,8 @@ let
 
   uucp = callPackage ../tools/misc/uucp { };
 
+  uvccapture = callPackage ../applications/video/uvccapture { };
+
   uwimap = callPackage ../tools/networking/uwimap { };
 
   uzbl = callPackage ../applications/networking/browsers/uzbl {
