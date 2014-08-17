@@ -5502,6 +5502,8 @@ let
 
   libspatialite = callPackage ../development/libraries/libspatialite { };
 
+  libtar = callPackage ../development/libraries/libtar { };
+
   libtasn1 = callPackage ../development/libraries/libtasn1 { };
 
   libtheora = callPackage ../development/libraries/libtheora { };
