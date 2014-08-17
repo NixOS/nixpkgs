@@ -57,7 +57,7 @@ let
       "--sysconfdir=/etc"
       "--with-session-socket-dir=/tmp"
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-    ];
+    ] ++ lib.optional (!useX11) "--without-x";
 
     enableParallelBuilding = true;
 
