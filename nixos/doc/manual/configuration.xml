@@ -1499,10 +1499,11 @@ are specific to the kernel version, such as the NVIDIA video drivers.
 This ensures that driver packages are consistent with the
 kernel.</para>
 
-<para>The default Linux kernel configuration should be fine for most
-users.  You can see the configuration of your current kernel in
-<filename>/run/booted-system/kernel-modules/config</filename>.  If you
-want to change the kernel configuration, you can use the
+<para>The default Linux kernel configuration should be fine for most users. You can see the configuration of your current kernel with the following command:
+<programlisting>
+cat /proc/config.gz | gunzip
+</programlisting>
+If you want to change the kernel configuration, you can use the
 <option>packageOverrides</option> feature (see <xref
 linkend="sec-customising-packages" />).  For instance, to enable
 support for the kernel debugger KGDB:
