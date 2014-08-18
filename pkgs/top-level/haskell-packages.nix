@@ -2952,6 +2952,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   yiContrib = callPackage ../applications/editors/yi/yi-contrib.nix {};
 
+  xlsx = callPackage ../development/libraries/haskell/xlsx {};
+
   xmobar = callPackage ../applications/misc/xmobar {};
 
   xmonad = callPackage ../applications/window-managers/xmonad {};
