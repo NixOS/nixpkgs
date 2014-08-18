@@ -1,5 +1,5 @@
-{stdenv, patchelf, zlib, libmad, libpng12, libcaca, mesa, alsaLib, pulseaudio,
-xlibs, plowshare}:
+{ stdenv, patchelf, zlib, libmad, libpng12, libcaca, mesa, alsaLib, pulseaudio
+, xlibs, plowshare }:
 
 let
 
@@ -8,25 +8,22 @@ let
   lpath = "${stdenv.gcc.gcc}/lib64:" + stdenv.lib.makeSearchPath "lib" [
       zlib libmad libpng12 libcaca libXext libX11 mesa alsaLib pulseaudio];
 
-in 
+in
 assert stdenv.is64bit;
 stdenv.mkDerivation rec {
 
-  name = "adom-1.20-noteye";
+  name = "adom-1.2.0-noteye";
 
+  # couldn't make fetchurl appear non-robot, even with --user-agent
   src = stdenv.mkDerivation {
-    name = "adom-1.20-noteye.tar.gz";
+    name = "adom-1.2.0-noteye.tar.gz";
     buildCommand = ''
       ${plowshare}/bin/plowdown "http://www30.zippyshare.com/v/39200582/file.html"
-      ls -lh
       F=`ls *tar.gz`
-      echo "Checking $F"
-      sha256sum -c <<EOF
-      1f825845d5007e676a4d1a3ccd887904b959bdddbcb9f241c42c2dac34037669 $F
-      EOF
-      echo "Moving $F into $out..."
       mv $F $out
     '';
+    outputHashAlgo = "sha256";
+    outputHash = "1f825845d5007e676a4d1a3ccd887904b959bdddbcb9f241c42c2dac34037669";
   };
 
   buildCommand = ''
@@ -52,16 +49,17 @@ stdenv.mkDerivation rec {
 
     mkdir $out/bin
     cat >$out/bin/adom <<EOF
+    #! ${stdenv.shell}
     (cd $out; $out/adom ; )
     EOF
     chmod +x $out/bin/adom
   '';
 
-  meta = {
-    description = "Adom (Ancient Domains Of Mystery) is a rogue-like game with nice graphical interface";
+  meta = with stdenv.lib; {
+    description = "A rogue-like game with nice graphical interface";
     homepage = http://adom.de/;
-    license = "unfree-redistributable";
-    maintainers = [stdenv.lib.maintainers.smironov];
+    license = licenses.unfreeRedistributable;
+    maintainers = [maintainers.smironov];
 
     # Please, notify me (smironov) if you need the x86 version
     platforms = ["x86_64-linux"];
