@@ -72,6 +72,13 @@ else
     else
       ldPath="$binutils/bin"
     fi;
+
+    if test -n "$expandResponseFiles"; then
+        $gccPath/gcc -Wall $(< "$out/nix-support/libc-cflags") \
+            $expandResponseFiles \
+            -I $gcc/lib/*/*/*/plugin/include -liberty \
+            -o $out/nix-support/expand-response-files
+    fi
 fi
 
 

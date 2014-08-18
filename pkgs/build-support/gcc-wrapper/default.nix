@@ -40,6 +40,11 @@ stdenv.mkDerivation {
   utils = ./utils.sh;
   addFlags = ./add-flags;
 
+  expandResponseFiles =
+    if builtins.compareVersions gccVersion "4.0.0" == 1
+    then ./expand-response-files.c
+    else null;
+
   inherit nativeTools nativeLibc nativePrefix gcc;
   libc = if nativeLibc then null else libc;
   binutils = if nativeTools then null else binutils;
