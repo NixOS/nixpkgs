@@ -32,7 +32,10 @@ let
         fi
       fi
 
-      exec "$1"
+      # Start the regular stage 1 script, passing the bind-mounted
+      # notification socket from the host to allow the container
+      # systemd to signal readiness to the host systemd.
+      NOTIFY_SOCKET=/var/lib/private/host-notify exec "$1"
     '';
 
   system = config.nixpkgs.system;
@@ -174,18 +177,12 @@ in
             if [ "$PRIVATE_NETWORK" = 1 ]; then
               ip link del dev "ve-$INSTANCE" 2> /dev/null || true
             fi
-
-            mkdir -p -m 0755 $root/var/lib
-
-            # Create a named pipe to get a signal when the container
-            # has finished booting.
-            rm -f $root/var/lib/startup-done
-            mkfifo -m 0600 $root/var/lib/startup-done
          '';
 
         script =
           ''
             mkdir -p -m 0755 "$root/etc" "$root/var/lib"
+            mkdir -p -m 0700 "$root/var/lib/private"
             if ! [ -e "$root/etc/os-release" ]; then
               touch "$root/etc/os-release"
             fi
@@ -212,13 +209,16 @@ in
               fi
             ''}
 
-            EXIT_ON_REBOOT=1 \
+            # Run systemd-nspawn without startup notification (we'll
+            # wait for the container systemd to signal readiness).
+            EXIT_ON_REBOOT=1 NOTIFY_SOCKET= \
             exec ${config.systemd.package}/bin/systemd-nspawn \
               --keep-unit \
               -M "$INSTANCE" -D "$root" $extraFlags \
               --bind-ro=/nix/store \
               --bind-ro=/nix/var/nix/db \
               --bind-ro=/nix/var/nix/daemon-socket \
+              --bind=/run/systemd/notify:/var/lib/private/host-notify \
               --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles" \
               --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots" \
               --setenv PRIVATE_NETWORK="$PRIVATE_NETWORK" \
@@ -240,12 +240,6 @@ in
                 ip route add $LOCAL_ADDRESS dev $ifaceHost
               fi
             fi
-
-            # This blocks until the container-startup-done service
-            # writes something to this pipe.  FIXME: it also hangs
-            # until the start timeout expires if systemd-nspawn exits.
-            read x < $root/var/lib/startup-done
-            rm -f $root/var/lib/startup-done
           '';
 
         preStop =
@@ -270,6 +264,8 @@ in
           EnvironmentFile = "-/etc/containers/%i.conf";
 
           Type = "notify";
+
+          NotifyAccess = "all";
 
           # Note that on reboot, systemd-nspawn returns 10, so this
           # unit will be restarted. On poweroff, it returns 0, so the
