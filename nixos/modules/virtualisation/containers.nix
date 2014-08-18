@@ -292,5 +292,27 @@ in
 
     environment.systemPackages = [ nixos-container ];
 
+    # Start containers at boot time.
+    systemd.services.all-containers =
+      { description = "All Containers";
+
+        wantedBy = [ "multi-user.target" ];
+
+        serviceConfig.Type = "oneshot";
+
+        script =
+          ''
+            res=0
+            for i in /etc/containers/*.conf; do
+              AUTO_START=
+              source "$i"
+              if [ "$AUTO_START" = 1 ]; then
+                systemctl start "container@$(basename "$i" .conf).service" || res=1
+              fi
+            done
+            exit $res
+          ''; # */
+      };
+
   };
 }
