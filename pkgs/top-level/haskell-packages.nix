@@ -1706,6 +1706,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   networkTransportTests = callPackage ../development/libraries/haskell/network-transport-tests {};
 
+  networkUri = callPackage ../development/libraries/haskell/network-uri {};
+
   newtype = callPackage ../development/libraries/haskell/newtype {};
 
   nonNegative = callPackage ../development/libraries/haskell/non-negative {};
