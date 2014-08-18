@@ -1393,6 +1393,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   jsonAssertions = callPackage ../development/libraries/haskell/json-assertions {};
 
+  jsonRpc = callPackage ../development/libraries/haskell/json-rpc {};
+
   jsonSchema = callPackage ../development/libraries/haskell/json-schema {};
 
   jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
