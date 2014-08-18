@@ -1070,6 +1070,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   haskintex = callPackage ../development/libraries/haskell/haskintex {};
 
+  haskoin = callPackage ../development/libraries/haskell/haskoin {};
+
   haskore = callPackage ../development/libraries/haskell/haskore {};
 
   hastache = callPackage ../development/libraries/haskell/hastache {};
@@ -1392,6 +1394,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   json = callPackage ../development/libraries/haskell/json {};
 
   jsonAssertions = callPackage ../development/libraries/haskell/json-assertions {};
+
+  jsonRpc = callPackage ../development/libraries/haskell/json-rpc {};
 
   jsonSchema = callPackage ../development/libraries/haskell/json-schema {};
 
