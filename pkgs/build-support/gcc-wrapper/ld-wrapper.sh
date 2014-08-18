@@ -32,9 +32,6 @@ if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE" \
             # We cannot skip this; barf.
             echo "impure path \`$p' used in link" >&2
             exit 1
-        elif test "${p:0:9}" = "--sysroot"; then
-            # Our ld is not built with sysroot support (Can we fix that?)
-            :
         else
             rest=("${rest[@]}" "$p")
         fi
