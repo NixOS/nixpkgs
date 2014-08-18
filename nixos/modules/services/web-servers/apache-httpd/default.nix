@@ -14,6 +14,8 @@ let
 
   php = pkgs.php.override { apacheHttpd = httpd; };
 
+  mod_perl = pkgs.mod_perl.override { apacheHttpd = httpd; };
+
   getPort = cfg: if cfg.port != 0 then cfg.port else if cfg.enableSSL then 443 else 80;
 
   extraModules = attrByPath ["extraModules"] [] mainCfg;
@@ -61,6 +63,7 @@ let
           robotsEntries = "";
           startupScript = "";
           enablePHP = false;
+          enablePerl = false;
           phpOptions = "";
           options = {};
           documentRoot = null;
@@ -331,6 +334,7 @@ let
           concatMap (svc: svc.extraModulesPre) allSubservices
           ++ map (name: {inherit name; path = "${httpd}/modules/mod_${name}.so";}) apacheModules
           ++ optional enablePHP { name = "php5"; path = "${php}/modules/libphp5.so"; }
+          ++ optional enablePerl { name = "perl"; path = "${mod_perl}/modules/mod_perl.so"; }
           ++ concatMap (svc: svc.extraModules) allSubservices
           ++ extraForeignModules;
       in concatMapStrings load allModules
@@ -390,6 +394,8 @@ let
 
 
   enablePHP = mainCfg.enablePHP || any (svc: svc.enablePHP) allSubservices;
+
+  enablePerl = mainCfg.enablePerl || any (svc: svc.enablePerl) allSubservices;
 
 
   # Generate the PHP configuration file.  Should probably be factored
@@ -537,6 +543,12 @@ in
         type = types.bool;
         default = false;
         description = "Whether to enable the PHP module.";
+      };
+
+      enablePerl = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable the Perl module.";
       };
 
       phpOptions = mkOption {
