@@ -10,8 +10,7 @@ fi
 
 source @out@/nix-support/utils.sh
 
-argsExpanded=1
-expandResponseFileArgs "$@" || argsExpanded=0
+expandResponseFileArgs "$@"
 
 # Optionally filter out paths not refering to the store.
 if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE" \

@@ -17,8 +17,7 @@ dontLink=0
 getVersion=0
 nonFlagArgs=0
 
-argsExpanded=1
-expandResponseFileArgs "$@" || argsExpanded=0
+expandResponseFileArgs "$@"
 
 for i in "${params[@]}"; do
     if test "$i" = "-c"; then

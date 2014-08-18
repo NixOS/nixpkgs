@@ -24,22 +24,24 @@ badPath() {
 }
 
 
-# Iterates through the passed array, looking for @file arguments and return a
+# Iterates through the passed array, looking for @file arguments and create a
 # new array containing the arguments from @file if the file exists.
 #
-# NOTE: This function has a side-effect of writing to the $params array, and
-# returns 0 if expansion was needed and 1 if it wasn't necessary.
+# NOTE: This function has a side-effect of writing the global variable $params,
+# which holds the newly built array and $responseFileArgsExpanded which is set
+# to 1 if expansion was necessary and 0 if not.
 expandResponseFileArgs() {
     if test -e "@out@/nix-support/expand-response-files"; then
         for arg in "$@"; do
             if test "${arg:0:1}" = "@" -a -e "${arg:1}"; then
                 eval "$("@out@/nix-support/expand-response-files" "$@")"
-                return 0
+                responseFileArgsExpanded=1
+                return
             fi
         done
     fi
     params=("$@")
-    return 1
+    responseFileArgsExpanded=0
 }
 
 # Poor man's character escaping of ' and \, because we don't have sed available.
@@ -65,10 +67,16 @@ escapeResponseFileArg() {
 # Run command (passed as the first argument) with the arguments afterwards put
 # into a temporary file which then is appended with @tempfale to the command and
 # remove the temporary file afterwards.
+#
+# NOTE: This uses the global $responseFileArgsExpanded set by the function
+# expandResponseFileArgs() to determine if it's really necessary to create a
+# temporary response file.
 runWithExpandedArgs() {
     local program="$1"
     shift
-    if local response="$(mktemp --tmpdir build-response.XXXXXXXXXX)"; then
+    if test $responseFileArgsExpanded -eq 1 &&
+       local response="$(mktemp --tmpdir build-response.XXXXXXXXXX)"
+    then
         trap "@coreutils@/bin/rm -f '$response'" EXIT
         for arg in "$@"; do
             echo -E "'$(escapeResponseFileArg "$arg")'" >> "$response"
