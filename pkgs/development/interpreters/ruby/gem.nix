@@ -3,7 +3,7 @@
 { name
 , namePrefix ? "ruby${ruby.majorVersion}" + "-"
 , buildInputs ? []
-, doCheck ? false
+, doCheck ? false # TODO: fix this
 , dontBuild ? true
 , meta ? {}
 , gemPath ? []
@@ -37,19 +37,10 @@ in ruby.stdenv.mkDerivation (attrs // {
     fi
   '';
 
-  buildPhase = ''
-    runHook preBuild
-    test -d .git || {
-      chmod 755 .
-      ${git}/bin/git init
-      ${git}/bin/git add .
-    }
-    if gem build *.gemspec; then
-      export src=*.gem
-    else
-      echo >&2 "gemspec missing, not rebuilding gem"
-    fi
-    runHook postBuild
+  checkPhase = ''
+    runHook preCheck
+    ${attrs.checkPhase or "${rake}/bin/rake spec"}
+    runHook postCheck
   '';
 
   installPhase = ''
