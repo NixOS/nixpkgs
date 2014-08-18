@@ -744,7 +744,7 @@ in
         # Make all journals readable to users in the wheel and adm
         # groups, in addition to those in the systemd-journal group.
         # Users can always read their own journals.
-        ${pkgs.acl}/bin/setfacl -nm g:wheel:rx,d:g:wheel:rx,g:adm:rx,d:g:adm:rx /var/log/journal
+        ${pkgs.acl}/bin/setfacl -nm g:wheel:rx,d:g:wheel:rx,g:adm:rx,d:g:adm:rx /var/log/journal || true
       '';
 
     # Target for ‘charon send-keys’ to hook into.
