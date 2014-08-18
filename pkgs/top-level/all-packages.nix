@@ -8707,6 +8707,8 @@ let
     debug = config.flashplayer.debug or false;
   };
 
+  fluxbox = callPackage ../applications/window-managers/fluxbox { };
+
   freecad = callPackage ../applications/graphics/freecad {
     opencascade = opencascade_6_5;
     inherit (pythonPackages) matplotlib pycollada;
