@@ -12,7 +12,6 @@
 
 let
   rubygems = rubygemsFun ruby;
-  depsPath = lib.concatStringsSep ":" (map (g: "${g}/${ruby.gemPath}") gemPath);
 
 in ruby.stdenv.mkDerivation (attrs // {
   inherit doCheck;
