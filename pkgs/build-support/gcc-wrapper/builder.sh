@@ -210,7 +210,7 @@ doSubstitute "$addFlags" "$out/nix-support/add-flags.sh"
 
 doSubstitute "$setupHook" "$out/nix-support/setup-hook"
 
-cp -p $utils $out/nix-support/utils.sh
+doSubstitute "$utils" "$out/nix-support/utils.sh"
 
 
 # Propagate the wrapped gcc so that if you install the wrapper, you get

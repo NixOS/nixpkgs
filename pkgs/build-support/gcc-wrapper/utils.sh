@@ -22,3 +22,22 @@ badPath() {
         "${p:0:4}" != "/tmp" -a \
         "${p:0:${#NIX_BUILD_TOP}}" != "$NIX_BUILD_TOP"
 }
+
+
+# Iterates through the passed array, looking for @file arguments and return a
+# new array containing the arguments from @file if the file exists.
+#
+# NOTE: This function has a side-effect of writing to the $params array, and
+# returns 0 if expansion was needed and 1 if it wasn't necessary.
+expandResponseFileArgs() {
+    if test -e "@out@/nix-support/expand-response-files"; then
+        for arg in "$@"; do
+            if test "${arg:0:1}" = "@" -a -e "${arg:1}"; then
+                eval "$("@out@/nix-support/expand-response-files" "$@")"
+                return 0
+            fi
+        done
+    fi
+    params=("$@")
+    return 1
+}

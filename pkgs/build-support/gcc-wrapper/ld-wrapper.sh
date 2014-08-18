@@ -10,9 +10,10 @@ fi
 
 source @out@/nix-support/utils.sh
 
+argsExpanded=1
+expandResponseFileArgs "$@" || argsExpanded=0
 
 # Optionally filter out paths not refering to the store.
-params=("$@")
 if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE" \
         -a \( -z "$NIX_IGNORE_LD_THROUGH_GCC" -o -z "$NIX_LDFLAGS_SET" \); then
     rest=()
