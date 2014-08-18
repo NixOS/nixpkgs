@@ -164,4 +164,5 @@ if test -n "$NIX_LD_WRAPPER_EXEC_HOOK"; then
     source "$NIX_LD_WRAPPER_EXEC_HOOK"
 fi
 
-exec @ld@ ${extraBefore[@]} "${params[@]}" ${extra[@]}
+runWithExpandedArgs @ld@ ${extraBefore[@]} "${params[@]}" ${extra[@]}
+exit $?

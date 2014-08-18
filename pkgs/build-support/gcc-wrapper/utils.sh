@@ -41,3 +41,45 @@ expandResponseFileArgs() {
     params=("$@")
     return 1
 }
+
+# Poor man's character escaping of ' and \, because we don't have sed available.
+# Roughly does the same as sed -e 's/[\\'\'']/\\&/g'.
+escapeResponseFileArg() {
+    local input="$1"
+    local output=""
+    local i=0
+
+    while [ $i -lt ${#input} ]; do
+        if [[ ${input:$i} =~ ([^\\\']*)([\\\']) ]]; then #'])]]# Vim workaround
+            output="$output${BASH_REMATCH[1]}\\${BASH_REMATCH[2]}"
+            i=$(($i + ${#BASH_REMATCH}))
+        else
+            output="$output${input:$i}"
+            break
+        fi
+    done
+
+    echo "$output"
+}
+
+# Run command (passed as the first argument) with the arguments afterwards put
+# into a temporary file which then is appended with @tempfale to the command and
+# remove the temporary file afterwards.
+runWithExpandedArgs() {
+    local program="$1"
+    shift
+    if local response="$(mktemp --tmpdir build-response.XXXXXXXXXX)"; then
+        trap "@coreutils@/bin/rm -f '$response'" EXIT
+        for arg in "$@"; do
+            echo -E "'$(escapeResponseFileArg "$arg")'" >> "$response"
+        done
+        "$program" "@$response"
+        ret=$?
+        @coreutils@/bin/rm -f "$response"
+        trap - EXIT
+    else
+        "$program" "$@"
+        ret=$?
+    fi
+    return $ret
+}
