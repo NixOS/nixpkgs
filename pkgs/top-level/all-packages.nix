@@ -2885,9 +2885,13 @@ let
     then pkgs.openjre
     else pkgs.oraclejre;
 
-  oraclejdk = pkgs.jdkdistro true false;
+  oraclejdk = if !stdenv.isSunOS
+    then pkgs.jdkdistro true false
+    else pkgs.oraclejdk7;
 
-  oraclejdk7 = pkgs.oraclejdk7distro true false;
+  oraclejdk7 = if !stdenv.isSunOS
+    then pkgs.oraclejdk7distro true false
+    else (callPackage ../development/compilers/jdk/jdk7-solaris.nix { });
 
   oraclejre = lowPrio (pkgs.jdkdistro false false);
 
