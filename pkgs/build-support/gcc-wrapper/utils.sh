@@ -71,7 +71,7 @@ escapeResponseFileArg() {
 # NOTE: This uses the global $responseFileArgsExpanded set by the function
 # expandResponseFileArgs() to determine if it's really necessary to create a
 # temporary response file.
-runWithExpandedArgs() {
+runWithUnexpandedArgs() {
     local program="$1"
     shift
     if test $responseFileArgsExpanded -eq 1 &&
