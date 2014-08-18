@@ -1070,6 +1070,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   haskintex = callPackage ../development/libraries/haskell/haskintex {};
 
+  haskoin = callPackage ../development/libraries/haskell/haskoin {};
+
   haskore = callPackage ../development/libraries/haskell/haskore {};
 
   hastache = callPackage ../development/libraries/haskell/hastache {};
