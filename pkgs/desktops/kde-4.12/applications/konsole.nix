@@ -1,4 +1,4 @@
-{ kde, kdelibs, kde_baseapps }:
+{ kde, kdelibs, kde_baseapps, stdenv }:
 
 kde {
 
@@ -6,6 +6,6 @@ kde {
 
   meta = {
     description = "Konsole, the KDE terminal emulator";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

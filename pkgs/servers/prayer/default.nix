@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www-uxsup.csx.cam.ac.uk/~dpc22/prayer/;
     description = "Yet another Webmail interface for IMAP servers on Unix systems written in C";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

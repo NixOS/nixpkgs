@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://boinc.berkeley.edu/;
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     platforms = stdenv.lib.platforms.linux;  # arbitrary choice
   };

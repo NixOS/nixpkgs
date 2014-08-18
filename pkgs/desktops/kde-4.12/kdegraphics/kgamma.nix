@@ -1,10 +1,10 @@
-{ kde, kdelibs, libXxf86vm }:
+{ kde, kdelibs, libXxf86vm, stdenv }:
 
 kde {
   buildInputs = [ kdelibs libXxf86vm ];
 
   meta = {
     description = "KDE monitor calibration tool";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

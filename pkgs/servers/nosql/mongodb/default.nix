@@ -29,7 +29,7 @@ let version = "2.4.8"; in stdenv.mkDerivation rec {
   meta = {
     description = "a scalable, high-performance, open source NoSQL database";
     homepage = http://www.mongodb.org;
-    license = "AGPLv3";
+    license = stdenv.lib.licenses.agpl3;
 
     maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
     platforms = stdenv.lib.platforms.linux;

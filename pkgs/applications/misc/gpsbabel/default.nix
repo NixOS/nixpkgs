@@ -50,7 +50,7 @@ stdenv.mkDerivation {
 
     homepage = http://www.gpsbabel.org/;
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.gnu;         # arbitrary choice

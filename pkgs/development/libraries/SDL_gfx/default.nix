@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
        '';
 
     homepage = https://sourceforge.net/projects/sdlgfx/;
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = [ stdenv.lib.maintainers.bjg ];
     platforms = stdenv.lib.platforms.linux;

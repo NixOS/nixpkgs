@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Free Software EDA Suite";
     homepage = "http://www.kicad-pcb.org/";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

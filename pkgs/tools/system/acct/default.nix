@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       execution statistics.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     homepage = http://www.gnu.org/software/acct/;
 

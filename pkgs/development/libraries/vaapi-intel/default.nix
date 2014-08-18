@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://cgit.freedesktop.org/vaapi/intel-driver/;
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
     description = "Intel driver for the VAAPI library";
   };
 }

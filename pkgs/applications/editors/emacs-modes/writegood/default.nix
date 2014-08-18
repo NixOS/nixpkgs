@@ -25,6 +25,6 @@ in stdenv.mkDerivation {
     homepage = https://github.com/bnbeckwith/writegood-mode;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.pSub ];
-    license = "GPL3";
+    license = stdenv.lib.licenses.gpl3;
   };
 }

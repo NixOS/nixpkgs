@@ -37,7 +37,7 @@ mkDerivation "banner-1.3.2" "0dc0ac0667b2e884a7f5ad3e467af68cd0fd5917f8c9aa19188
   meta = {
     homepage = "http://shh.thathost.com/pub-unix/";
     description = "print large banners to ASCII terminals";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
 
     longDescription = ''
       An implementation of the traditional Unix-program used to display

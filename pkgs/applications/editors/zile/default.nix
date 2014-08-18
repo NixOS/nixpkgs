@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/zile/;
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ ];
   };

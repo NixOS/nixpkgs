@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
           * xargs - build and execute command lines from standard input.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
   };
 }

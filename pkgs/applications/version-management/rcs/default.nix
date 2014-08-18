@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
          documentation, graphics, papers, and form letters.
       '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [ eelco simons ];
     platforms = stdenv.lib.platforms.all;
   };

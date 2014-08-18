@@ -1,10 +1,10 @@
-{ kde, kdelibs, libgphoto2 }:
+{ kde, kdelibs, libgphoto2, stdenv }:
 
 kde {
   buildInputs = [ kdelibs libgphoto2 ];
 
   meta = {
     description = "KDE camera interface library";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

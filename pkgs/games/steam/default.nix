@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A digital distribution platform";
     homepage = http://store.steampowered.com/;
-    license = "unfree";
+    license = stdenv.lib.licenses.unfree;
   };
 }
 */
@@ -119,6 +119,6 @@ stdenv.mkDerivation {
   meta = {
     description = "A digital distribution platform";
     homepage = http://store.steampowered.com/;
-    license = "unfree";
+    license = stdenv.lib.licenses.unfree;
   };
 }

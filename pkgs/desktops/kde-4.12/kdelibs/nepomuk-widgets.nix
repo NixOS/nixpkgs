@@ -1,4 +1,4 @@
-{ kde, kdelibs, nepomuk_core }:
+{ kde, kdelibs, nepomuk_core, stdenv }:
 
 kde {
 
@@ -6,6 +6,6 @@ kde {
 
   meta = {
     description = "NEPOMUK Widgets";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

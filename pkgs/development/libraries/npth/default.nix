@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       that this is a solid way to provide a co-routine based framework.
     '';
     homepage = http://www.gnupg.org;
-    license = "LGPLv3";
+    license = stdenv.lib.licenses.lgpl3;
     platforms = stdenv.lib.platforms.all;
   };
 }

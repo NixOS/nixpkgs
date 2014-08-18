@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Library implementing attempt to create a tiff based interchange format for georeferenced raster imagery";
     homepage = http://www.remotesensing.org/geotiff/geotiff.html;
-    license = "X11";
+    license = stdenv.lib.licenses.mit;
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = stdenv.lib.platforms.linux;
   };

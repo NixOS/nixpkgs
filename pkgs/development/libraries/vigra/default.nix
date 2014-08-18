@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Novel computer vision C++ library with customizable algorithms and data structures";
     homepage = http://hci.iwr.uni-heidelberg.de/vigra;
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };
