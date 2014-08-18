@@ -17,7 +17,8 @@ dontLink=0
 getVersion=0
 nonFlagArgs=0
 
-for i in "$@"; do
+params=("$@")
+for i in "${params[@]}"; do
     if test "$i" = "-c"; then
         dontLink=1
     elif test "$i" = "-S"; then
@@ -54,7 +55,6 @@ fi
 
 
 # Optionally filter out paths not refering to the store.
-params=("$@")
 if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE"; then
     rest=()
     n=0
