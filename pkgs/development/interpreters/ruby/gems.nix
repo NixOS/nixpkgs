@@ -26,7 +26,7 @@ self = rec {
       builtGems = self // (lib.mapAttrs (gem: deriv:
         if patches ? "${gem}"
           then lib.overrideDerivation deriv (oldAttrs:
-              if oldAttrs ? dontPatch && oldAttrs.dontPatch == 1 then {}
+              if oldAttrs ? dontPatch && !(oldAttrs.dontPatch == false || oldAttrs.dontPatch == null) then {}
               else patches."${gem}")
         else deriv) preBuilt);
     in builtGems;
