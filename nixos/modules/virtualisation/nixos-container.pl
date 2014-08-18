@@ -17,7 +17,7 @@ umask 0022;
 sub showHelp {
     print <<EOF;
 Usage: nixos-container list
-       nixos-container create <container-name> [--config <string>] [--ensure-unique-name]
+       nixos-container create <container-name> [--config <string>] [--ensure-unique-name] [--auto-start]
        nixos-container destroy <container-name>
        nixos-container start <container-name>
        nixos-container stop <container-name>
@@ -32,11 +32,13 @@ EOF
 }
 
 my $ensureUniqueName = 0;
+my $autoStart = 0;
 my $extraConfig;
 
 GetOptions(
     "help" => sub { showHelp() },
     "ensure-unique-name" => \$ensureUniqueName,
+    "auto-start" => \$autoStart,
     "config=s" => \$extraConfig
     ) or exit 1;
 
@@ -123,6 +125,7 @@ if ($action eq "create") {
     push @conf, "PRIVATE_NETWORK=1\n";
     push @conf, "HOST_ADDRESS=$hostAddress\n";
     push @conf, "LOCAL_ADDRESS=$localAddress\n";
+    push @conf, "AUTO_START=$autoStart\n";
     write_file($confFile, \@conf);
 
     close($lock);
