@@ -6,9 +6,6 @@
 #
 # use rubyLibs.importGems to call the local file, which has access to all
 # the stuff in here
-#
-# gems here are either super common (rspec) or require patches to work
-# properly (libv8)
 
 { ruby, callPackage, pkgs }:
 
