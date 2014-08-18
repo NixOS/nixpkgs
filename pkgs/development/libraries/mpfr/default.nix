@@ -39,9 +39,10 @@ stdenv.mkDerivation rec {
       floating-point arithmetic (53-bit mantissa).
     '';
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.all;
   };
 }
+

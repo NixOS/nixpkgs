@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://imapproxy.org/;
     description = "It proxies IMAP transactions caching server connections";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
   };
 }

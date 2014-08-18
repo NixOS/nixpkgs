@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://iptraf.seul.org/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     description = "Console-based network statistics utility for Linux";
   };
 }

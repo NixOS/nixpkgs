@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://leafnode.sourceforge.net/";
     description = "Leafnode implements a store & forward NNTP proxy";
-    license = stdenv.lib.licenses.mit;
+    license = "X11";
     platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
          it has many options that can be used to customize printouts.
       '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     homepage = http://www.gnu.org/software/enscript/;
 

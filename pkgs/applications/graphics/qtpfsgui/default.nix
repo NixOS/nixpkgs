@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
          aims to provide a workflow for high dynamic range (HDR) imaging.
       '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.gnu;

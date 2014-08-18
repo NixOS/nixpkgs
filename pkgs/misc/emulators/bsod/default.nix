@@ -23,7 +23,7 @@ stdenv.mkDerivation {
       blue screen of death on the console.  Errors and drivers causing the
       error are selected randomly from a large set of examples.";
     homepage = "http://www.vanheusden.com/bsod/";
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.antono ];
   };

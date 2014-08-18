@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       the Perl CPAN library using this tool suite.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     homepage = http://www.dwheeler.com/sloccount/;
 

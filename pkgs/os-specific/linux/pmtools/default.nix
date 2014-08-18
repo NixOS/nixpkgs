@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.lesswatts.org/projects/acpi/utilities.php;
     description = "Linux ACPI utilities";
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
 
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];

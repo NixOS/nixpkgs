@@ -18,6 +18,6 @@ stdenv.mkDerivation {
     description = "Linux DVB API applications and utilities";
     homepage = http://linuxtv.org/;
     platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
   };
 }

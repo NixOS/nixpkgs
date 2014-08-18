@@ -63,8 +63,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.gnu.org/software/gnutls/;
-    license = stdenv.lib.licenses.lgpl21Plus;
+    license = "LGPLv2.1+";
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.all;
   };
 }
+

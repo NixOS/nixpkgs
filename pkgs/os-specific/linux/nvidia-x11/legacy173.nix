@@ -39,6 +39,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.nvidia.com/object/unix.html;
     description = "X.org driver and kernel module for Legacy NVIDIA graphics cards";
-    license = stdenv.lib.licenses.unfree;
+    license = "unfree";
   };
 }

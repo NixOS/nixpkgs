@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://code.google.com/p/pdsh/";
     description = "High-performance, parallel remote shell utility";
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
 
     longDescription = ''
       Pdsh is a high-performance, parallel remote shell utility. It has

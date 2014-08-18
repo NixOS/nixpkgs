@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.htmldoc.org/;
     description = "Converts HTML files to indexed HTML, PS or PDF";
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     maintainers = with stdenv.lib.maintainers; [ viric ];
     platforms = with stdenv.lib.platforms; linux;
   };

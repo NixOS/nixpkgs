@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
       See the kernel documentation for further details. 
     '';
 
-    license = stdenv.lib.licenses.mit;
+    license = "MIT/X11";
   };
 }
+

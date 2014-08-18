@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Console MSN Messenger client for Linux and other unix systems";
     homepage = http://gtmess.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     platforms = with stdenv.lib.platforms; linux;
   };
 }

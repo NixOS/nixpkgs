@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     description = "File Manager and User Shell for the GNU Project";
     homepage = http://www.midnight-commander.org;
     repositories.git = git://github.com/MidnightCommander/mc.git;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     maintainers = [ stdenv.lib.maintainers.sander ];
   };
 }

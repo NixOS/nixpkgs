@@ -8,7 +8,7 @@ cabal.mkDerivation (self: {
   meta = {
     homepage = "http://github.com/errge/hflags";
     description = "Command line flag parser, very similar to Google's gflags";
-    license = self.stdenv.lib.licenses.asl20;
+    license = "Apache-2.0";
     platforms = self.ghc.meta.platforms;
   };
 })

@@ -13,8 +13,9 @@ stdenv.mkDerivation {
   meta = { 
     description = "Automounter in userspace";
     homepage = http://sourceforge.net/projects/afuse;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPL-v2";
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
+

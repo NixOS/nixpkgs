@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://cairographics.org/cairo-ocaml;
     description = "ocaml bindings for cairo library";
-    license = stdenv.lib.licenses.gpl2;
+    license = "GnuGPLV2";
 #    maintainers = [ stdenv.lib.maintainers.roconnor ];
   };
 }

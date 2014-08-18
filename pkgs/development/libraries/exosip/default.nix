@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libosip openssl pkgconfig ];
       
   meta = {
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     description = "Library that hides the complexity of using the SIP protocol";
   };
 }

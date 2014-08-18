@@ -30,6 +30,6 @@ stdenv.mkDerivation {
   meta = { 
     description = "Keychain management tool";
     homepage = "http://www.gentoo.org/proj/en/keychain/";
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPL2";
   };
 }

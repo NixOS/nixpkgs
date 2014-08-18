@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.xs4all.nl/~mmzeeman/ocaml/;
     description = "An ocaml wrapper for the Expat XML parsing library";
-    license = stdenv.lib.licenses.mit;
+    license = "MIT/X11";
     maintainers = [ stdenv.lib.maintainers.roconnor ];
   };
 }

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.flamingspork.com/projects/libeatmydata/;
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
     description = "Small LD_PRELOAD library to disable fsync and friends";
   };
 }

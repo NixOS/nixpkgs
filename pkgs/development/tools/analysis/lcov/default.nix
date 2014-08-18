@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = http://ltp.sourceforge.net/coverage/lcov.php;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     maintainers = [ maintainers.mornfall ];
     platforms = platforms.all;

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://tulip.labri.fr/;
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice

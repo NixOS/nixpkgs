@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://www.cgsecurity.org/wiki/TestDisk;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.eelco ];
     longDescription = ''

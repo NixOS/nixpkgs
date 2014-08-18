@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "an open source (experimental) Linux client for Google Drive";
     homepage = https://github.com/Grive/grive;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
 
     platforms = stdenv.lib.platforms.all;
   };

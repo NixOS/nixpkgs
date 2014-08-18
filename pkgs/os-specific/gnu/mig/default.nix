@@ -42,7 +42,7 @@ stdenv.mkDerivation {
          Mach-based inter-process communication.
       '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     homepage = http://www.gnu.org/software/hurd/microkernel/mach/mig/gnu_mig.html;
 

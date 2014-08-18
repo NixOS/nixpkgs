@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.linux;
     description = "Desktop Publishing (DTP) and Layout program for Linux";
     homepage = http://www.scribus.net;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
   };
 }

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.clutter-project.org/;
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice

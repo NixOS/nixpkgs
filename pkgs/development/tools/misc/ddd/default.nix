@@ -13,6 +13,6 @@ stdenv.mkDerivation rec {
 	meta = {
 	  homepage = http://www.gnu.org/software/ddd;
 		description = "Graphical front-end for command-line debuggers";
-		license = stdenv.lib.licenses.gpl2;
+		license = "GPLv2";
 	};
 }

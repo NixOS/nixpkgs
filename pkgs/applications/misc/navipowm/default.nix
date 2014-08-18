@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://navipowm.sourceforge.net/;
     description = "Car navigation system";
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     maintainers = with stdenv.lib.maintainers; [ viric ];
     platforms = with stdenv.lib.platforms; linux;
   };

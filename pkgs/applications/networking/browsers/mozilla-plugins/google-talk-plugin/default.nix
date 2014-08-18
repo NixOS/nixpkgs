@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.google.com/chat/video/;
-    license = stdenv.lib.licenses.unfree;
+    license = "unfree";
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

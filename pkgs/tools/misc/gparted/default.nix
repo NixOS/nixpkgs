@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Graphical disk partitioning tool";
     homepage = http://gparted.sourceforge.net;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     platforms = with stdenv.lib.platforms; linux;
   };
 }

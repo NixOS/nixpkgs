@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
          filesystems.
       '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     homepage = http://www.gnu.org/software/xorriso/;
 

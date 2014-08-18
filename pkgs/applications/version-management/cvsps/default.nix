@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
       same time (using a single "cvs commit" command).
     '';
     homepage = http://www.cobite.com/cvsps/;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
   };
 }

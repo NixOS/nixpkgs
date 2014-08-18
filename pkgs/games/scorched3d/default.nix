@@ -33,6 +33,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://scorched3d.co.uk/;
     description = "3D Clone of the classic Scorched Earth";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
   };
 }

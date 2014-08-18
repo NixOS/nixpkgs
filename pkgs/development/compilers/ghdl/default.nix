@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
     description = "Free VHDL simulator, mcode flavour";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
   };
 }

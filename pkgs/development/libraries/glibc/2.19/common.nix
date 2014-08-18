@@ -181,7 +181,7 @@ stdenv.mkDerivation ({
          most systems with the Linux kernel.
       '';
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     #platforms = stdenv.lib.platforms.linux;

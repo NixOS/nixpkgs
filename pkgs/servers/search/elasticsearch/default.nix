@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open Source, Distributed, RESTful Search Engine";
-    license = stdenv.lib.licenses.asl20;
+    license = "ASL2.0";
   };
 }

@@ -19,6 +19,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.cs.wisc.edu/condor/classad/;
     description = "The Classified Advertisements library provides a generic means for matching resources";
-    license = stdenv.lib.licenses.asl20;
+    license = "Apache-2.0";
   };
 }

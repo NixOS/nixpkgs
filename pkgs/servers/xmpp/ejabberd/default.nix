@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open-source XMPP application server written in Erlang";
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     homepage = http://www.ejabberd.im;
     maintainers = [ lib.maintainers.sander ];
   };

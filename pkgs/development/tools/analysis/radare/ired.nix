@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Interactive Raw Editor";
     homepage = http://radare.org/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; all;
   };

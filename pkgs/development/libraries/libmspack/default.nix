@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A de/compression library for various Microsoft formats";
     homepage = http://www.cabextract.org.uk/libmspack;
-    license = stdenv.lib.licenses.lgpl2;
+    license = "LGPL2";
   };
 
 }

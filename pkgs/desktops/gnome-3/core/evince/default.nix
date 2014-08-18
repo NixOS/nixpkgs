@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       on the GNOME Desktop with a single simple application.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     platforms = platforms.linux;
     maintainers = [ maintainers.vcunat ];
   };

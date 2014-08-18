@@ -29,6 +29,6 @@ rec {
   meta = {
     homepage = http://xaos.sourceforge.net/;
     description = "XaoS - fractal viewer";
-    license = a.stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
   };
 }

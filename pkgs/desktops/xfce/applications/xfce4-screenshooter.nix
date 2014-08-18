@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://goodies.xfce.org/projects/applications/xfce4-screenshooter;
     description = "Xfce screenshooter";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     platforms = stdenv.lib.platforms.linux;
   };
 }

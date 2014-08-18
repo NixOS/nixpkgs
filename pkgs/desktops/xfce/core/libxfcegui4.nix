@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.xfce.org/;
     description = "Basic GUI library for Xfce";
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
   };
 }

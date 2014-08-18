@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "A software framework that allows research manipulation of Biblical texts";
     homepage = http://www.crosswire.org/sword/;
     platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     maintainers = [ stdenv.lib.maintainers.piotr ];
   };
 

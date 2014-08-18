@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://code.google.com/p/ffmpegsource/;
     description = "Libav/ffmpeg based source library for easy frame accurate access";
-    license = stdenv.lib.licenses.mit;
+    license = "MIT";
   };
 }

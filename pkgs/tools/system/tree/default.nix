@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://mama.indstate.edu/users/ice/tree/";
     description = "command to produce a depth indented directory listing";
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
 
     longDescription = ''
       Tree is a recursive directory listing command that produces a

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Gtk+ widget for displaying large amounts of numerical data";
 
-    license = stdenv.lib.licenses.lgpl2;
+    license = "LGPLv2";
 
     platforms = stdenv.lib.platforms.linux;
   };

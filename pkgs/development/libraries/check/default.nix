@@ -26,6 +26,6 @@ stdenv.mkDerivation {
 
     homepage = http://check.sourceforge.net/;
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
   };
 }

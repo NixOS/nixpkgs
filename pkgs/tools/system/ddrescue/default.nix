@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/ddrescue/ddrescue.html;
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     platforms = stdenv.lib.platforms.all;
     maintainers = with stdenv.lib.maintainers; [ iElectric ];

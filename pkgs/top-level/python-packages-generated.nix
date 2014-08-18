@@ -142,7 +142,7 @@ in
         BTree-based folder implementation with order support
         '';
       homepage = "http://pypi.python.org/pypi/plone.folder";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -162,7 +162,7 @@ in
         plone.z3cform is a library that allows use of z3c.form with Zope 2 and the CMF.
         '';
       homepage = "http://pypi.python.org/pypi/plone.z3cform";
-      license = stdenv.lib.licenses.gpl2;
+      license = "ZPL 2.1";
     };
   };
 
@@ -182,7 +182,7 @@ in
         Python 2 and 3 compatibility utilities
         '';
       homepage = "http://pypi.python.org/pypi/six/";
-      license = stdenv.lib.licenses.zpt21;
+      license = "UNKNOWN";
     };
   };
 
@@ -222,7 +222,7 @@ in
         zope.deferredimport allows you to perform imports names that will only be resolved when used in the code.
         '';
       homepage = "http://pypi.python.org/pypi/zope.deferredimport";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -242,7 +242,7 @@ in
         A super-fast templating language that borrows the  best ideas from the existing templating languages.
         '';
       homepage = "http://www.makotemplates.org/";
-      license = stdenv.lib.licenses.mit;
+      license = "MIT";
     };
   };
 
@@ -262,7 +262,7 @@ in
         Waitress WSGI server
         '';
       homepage = "https://github.com/Pylons/waitress";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -302,7 +302,7 @@ in
         Uid product for the Zope Content Management Framework
         '';
       homepage = "http://pypi.python.org/pypi/Products.CMFUid";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)";
     };
   };
 
@@ -347,7 +347,6 @@ in
   };
 
 
-      license = stdenv.lib.licenses.zpt21;
   "plone.fieldsets-2.0.2" = self.buildPythonPackage {
     name = "plone.fieldsets-2.0.2";
     src = fetchurl {
@@ -363,7 +362,7 @@ in
         An extension to zope.formlib, which allows to group fields into different fieldsets.
         '';
       homepage = "http://pypi.python.org/pypi/plone.fieldsets";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -383,7 +382,7 @@ in
         redirection tool
         '';
       homepage = "http://pypi.python.org/pypi/plone.app.redirector";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -403,7 +402,7 @@ in
         ZODB blob support for Plone
         '';
       homepage = "http://plone.org/products/plone.app.blob";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -443,7 +442,7 @@ in
         Programmable browser for functional black-box tests
         '';
       homepage = "http://pypi.python.org/pypi/zope.testbrowser";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -463,7 +462,7 @@ in
         Tools for managing themes in CMF and Plone sites
         '';
       homepage = "http://pypi.python.org/pypi/plone.theme";
-      license = stdenv.lib.licenses.zpt21;
+      license = "GPL version 2";
     };
   };
 
@@ -483,7 +482,7 @@ in
         Local registries for zope component architecture
         '';
       homepage = "http://pypi.python.org/pypi/zope.site";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -503,7 +502,7 @@ in
         Batching facilities used in Plone.
         '';
       homepage = "http://pypi.python.org/pypi/plone.batching";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL";
     };
   };
 
@@ -571,7 +570,7 @@ in
         Structured Configuration Library
         '';
       homepage = "http://www.zope.org/Members/fdrake/zconfig/";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -591,7 +590,7 @@ in
         Zope Deprecation Infrastructure
         '';
       homepage = "http://pypi.python.org/pypi/zope.deprecation";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -651,7 +650,7 @@ in
         Very basic event publishing system
         '';
       homepage = "http://pypi.python.org/pypi/zope.event";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -691,7 +690,7 @@ in
         Generic Transparent Proxies
         '';
       homepage = "http://pypi.python.org/pypi/zope.proxy";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -711,7 +710,7 @@ in
         Component vocabularies
         '';
       homepage = "http://pypi.python.org/pypi/zope.componentvocabulary";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -731,7 +730,7 @@ in
         Zope Content Management Framework core components
         '';
       homepage = "http://pypi.python.org/pypi/Products.CMFCore";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)";
     };
   };
 
@@ -811,7 +810,7 @@ in
         Special MultiMapping objects used in Zope2.
         '';
       homepage = "http://pypi.python.org/pypi/MultiMapping";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -831,7 +830,7 @@ in
         SQL method support for Zope 2.
         '';
       homepage = "http://pypi.python.org/pypi/Products.ZSQLMethods";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -893,7 +892,7 @@ in
         CMFQuickInstallerTool is a facility for comfortable activation/deactivation of CMF compliant products.
         '';
       homepage = "http://pypi.python.org/pypi/Products.CMFQuickInstallerTool";
-      license = stdenv.lib.licenses.zpt21;
+      license = "GPL";
     };
   };
 
@@ -913,7 +912,7 @@ in
         Zope Deprecation Infrastructure
         '';
       homepage = "http://pypi.python.org/pypi/zope.deprecation";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -953,7 +952,7 @@ in
         zope.formlib integration for Plone
         '';
       homepage = "http://pypi.python.org/pypi/plone.app.form";
-      license = stdenv.lib.licenses.zpt21;
+      license = "GPL version 2";
     };
   };
 
@@ -973,7 +972,7 @@ in
         Default product for the Zope Content Management Framework
         '';
       homepage = "http://pypi.python.org/pypi/Products.CMFDefault";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)";
     };
   };
 
@@ -993,7 +992,7 @@ in
         Zope process lifetime events
         '';
       homepage = "http://pypi.python.org/pypi/zope.processlifetime";
-      license = stdenv.lib.licenses.gpl2;
+      license = "ZPL 2.1";
     };
   };
 
@@ -1084,7 +1083,6 @@ in
         url = "https://pypi.python.org/packages/source/p/plonetheme.sunburst/plonetheme.sunburst-1.4.5.zip";
         md5 = "a8438d6f4a27ad6c10dc3554a9145705";
     };
-      license = stdenv.lib.licenses.mit;
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
@@ -1094,7 +1092,7 @@ in
         The default theme for Plone 4.
         '';
       homepage = "http://pypi.python.org/pypi/plonetheme.sunburst";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -1134,7 +1132,7 @@ in
         Sequence Sorting
         '';
       homepage = "http://cheeseshop.python.org/pypi/zope.sequencesort";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -1174,7 +1172,7 @@ in
         UNKNOWN
         '';
       homepage = "https://github.com/plone/plone.resourceeditor";
-      license = stdenv.lib.licenses.zpt21;
+      license = "GPL";
     };
   };
 
@@ -1194,7 +1192,7 @@ in
         Zope publication
         '';
       homepage = "http://pypi.python.org/pypi/zope.app.publication";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -1214,7 +1212,7 @@ in
         zope.interface extension for defining data schemas
         '';
       homepage = "http://pypi.python.org/pypi/zope.schema";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -1234,7 +1232,7 @@ in
         Content Views for Plone
         '';
       homepage = "http://pypi.python.org/pypi/plone.app.content";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -1314,7 +1312,7 @@ in
         Flexible CMF content
         '';
       homepage = "http://code.google.com/p/dexterity";
-      license = stdenv.lib.licenses.zpt21;
+      license = "GPL version 2";
     };
   };
 
@@ -1378,7 +1376,7 @@ in
         Basic inter-process locks
         '';
       homepage = "http://www.python.org/pypi/zc.lockfile";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -1418,7 +1416,7 @@ in
         This package provides a DateTime data type, as known from Zope 2.Unless you need to communicate with Zope 2 APIs, you're probablybetter off using Python's built-in datetime module.
         '';
       homepage = "http://pypi.python.org/pypi/DateTime";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -1431,7 +1429,6 @@ in
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-      license = stdenv.lib.licenses.zpt21;
     propagatedBuildInputs = [ self.setuptools self."zc.buildout-1.7.1" self."zope.configuration-3.7.4" self."zope.dottedname-3.4.6" self."zope.interface-3.6.7" self."zope.schema-4.2.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
@@ -1459,7 +1456,7 @@ in
         World timezone definitions, modern and historical
         '';
       homepage = "http://pytz.sourceforge.net";
-      license = stdenv.lib.licenses.mit;
+      license = "MIT";
     };
   };
 
@@ -1479,7 +1476,7 @@ in
         Zope Configuration Markup Language (ZCML)
         '';
       homepage = "http://pypi.python.org/pypi/zope.configuration";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -1499,7 +1496,7 @@ in
         check-out/check-in staging for Plone
         '';
       homepage = "http://pypi.python.org/pypi/plone.app.iterate";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -1539,7 +1536,7 @@ in
         zope.sendmail integration for Zope 2.
         '';
       homepage = "http://pypi.python.org/pypi/Products.MailHost";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -1559,7 +1556,7 @@ in
         Zope Broken Object Interfaces
         '';
       homepage = "http://pypi.python.org/pypi/zope.broken";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -1579,7 +1576,7 @@ in
         Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API.
         '';
       homepage = "http://lxml.de/";
-      license = stdenv.lib.licenses.zpt21;
+      license = "UNKNOWN";
     };
   };
 
@@ -1599,7 +1596,7 @@ in
         Provides support for restricted execution of Python scripts in Zope 2.
         '';
       homepage = "http://pypi.python.org/pypi/Products.PythonScripts";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -1679,7 +1676,7 @@ in
         Screen-scraping library
         '';
       homepage = "http://www.crummy.com/software/BeautifulSoup/bs4/";
-      license = stdenv.lib.licenses.mit;
+      license = "MIT";
     };
   };
 
@@ -1719,7 +1716,7 @@ in
         nose extends unittest to make testing easier
         '';
       homepage = "http://readthedocs.org/docs/nose/";
-      license = stdenv.lib.licenses.mit;
+      license = "GNU LGPL";
     };
   };
 
@@ -1739,7 +1736,7 @@ in
         An error reporting utility for Zope3
         '';
       homepage = "http://pypi.python.org/pypi/zope.error";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -1759,7 +1756,7 @@ in
         Plone OpenID authentication support
         '';
       homepage = "http://pypi.python.org/pypi/plone.app.openid";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -1799,7 +1796,7 @@ in
         zope.interface extension for defining data schemas
         '';
       homepage = "http://pypi.python.org/pypi/zope.schema";
-      license = stdenv.lib.licenses.gpl2;
+      license = "ZPL 2.1";
     };
   };
 
@@ -1861,7 +1858,7 @@ in
         The Plone Content Management System
         '';
       homepage = "http://plone.org/";
-      license = stdenv.lib.licenses.zpt21;
+      license = "GPL version 2";
     };
   };
 
@@ -1901,7 +1898,7 @@ in
         
         '';
       homepage = "https://code.google.com/p/feedparser/";
-      license = stdenv.lib.licenses.gpl2;
+      license = "";
     };
   };
 
@@ -1921,7 +1918,7 @@ in
         Recipe for installing Python package distributions as eggs
         '';
       homepage = "http://cheeseshop.python.org/pypi/zc.recipe.egg";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -1941,7 +1938,7 @@ in
         Enhanced emailing handlers for the python logging package.
         '';
       homepage = "http://www.simplistix.co.uk/software/python/mailinglogger";
-      license = stdenv.lib.licenses.mit;
+      license = "MIT";
     };
   };
 
@@ -1981,7 +1978,7 @@ in
         A BTree based implementation for Zope 2's OFS.
         '';
       homepage = "http://pypi.python.org/pypi/Products.BTreeFolder2";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -2001,7 +1998,7 @@ in
         webdav locking support
         '';
       homepage = "http://pypi.python.org/pypi/plone.locking";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -2021,7 +2018,7 @@ in
         Image widget for z3c.form and Plone
         '';
       homepage = "http://pypi.python.org/pypi/plone.formwidget.namedfile";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL";
     };
   };
 
@@ -2041,7 +2038,7 @@ in
         Zope testing framework, including the testrunner script.
         '';
       homepage = "http://pypi.python.org/pypi/zope.testing";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -2061,7 +2058,7 @@ in
         Object life-cycle events
         '';
       homepage = "http://pypi.python.org/pypi/zope.lifecycleevent";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -2081,7 +2078,7 @@ in
         Metaclass for subclassable extension types
         '';
       homepage = "http://pypi.python.org/pypi/ExtensionClass";
-      license = stdenv.lib.licenses.gpl2;
+      license = "ZPL 2.1";
     };
   };
 
@@ -2101,7 +2098,7 @@ in
         Plone integration for plone.contentrules
         '';
       homepage = "http://pypi.python.org/pypi/plone.app.contentrules";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -2161,7 +2158,7 @@ in
         Zope Page Templates
         '';
       homepage = "http://pypi.python.org/pypi/zope.pagetemplate";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -2181,7 +2178,7 @@ in
         Python Gettext po to mo file compiler.
         '';
       homepage = "http://pypi.python.org/pypi/python-gettext";
-      license = stdenv.lib.licenses.gpl2;
+      license = "BSD";
     };
   };
 
@@ -2201,7 +2198,7 @@ in
         System for managing development buildouts
         '';
       homepage = "http://pypi.python.org/pypi/zc.buildout";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -2241,7 +2238,7 @@ in
         Zope 3 Template Application Languate (TAL)
         '';
       homepage = "http://pypi.python.org/pypi/zope.tal";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -2261,7 +2258,7 @@ in
         General Zope 2 help screens.
         '';
       homepage = "http://pypi.python.org/pypi/Products.OFSP";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -2321,7 +2318,7 @@ in
         Zope Container
         '';
       homepage = "http://pypi.python.org/pypi/zope.container";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -2361,7 +2358,7 @@ in
         The new features in unittest for Python 2.7 backported to Python 2.3+.
         '';
       homepage = "http://pypi.python.org/pypi/unittest2";
-      license = stdenv.lib.licenses.zpt21;
+      license = "UNKNOWN";
     };
   };
 
@@ -2381,7 +2378,7 @@ in
         zExceptions contains common exceptions used in Zope2.
         '';
       homepage = "http://pypi.python.org/pypi/zExceptions";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -2421,7 +2418,7 @@ in
         The Zope publisher publishes Python objects on the web.
         '';
       homepage = "http://pypi.python.org/pypi/zope.publisher";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -2441,7 +2438,7 @@ in
         Zope External Editor
         '';
       homepage = "http://pypi.python.org/pypi/Products.ExternalEditor";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -2461,7 +2458,7 @@ in
         Plone specific i18n extensions.
         '';
       homepage = "http://pypi.python.org/pypi/plone.app.i18n";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -2481,7 +2478,7 @@ in
         Zope Security Framework
         '';
       homepage = "http://pypi.python.org/pypi/zope.security";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -2501,7 +2498,7 @@ in
         Cache purging support for Zope 2 applications
         '';
       homepage = "http://pypi.python.org/pypi/plone.cachepurging";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -2541,10 +2538,12 @@ in
         Zope Component Architecture
         '';
       homepage = "http://pypi.python.org/pypi/zope.component";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
+
+  "psycopg2" = self."psycopg2-2.5.1";
 
   "psycopg2-2.5.1" = self.buildPythonPackage {
     name = "psycopg2-2.5.1";
@@ -2601,7 +2600,7 @@ in
         Zope Viewlets
         '';
       homepage = "http://pypi.python.org/pypi/zope.viewlet";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -2661,7 +2660,7 @@ in
         UNKNOWN
         '';
       homepage = "https://github.com/gawel/WSGIProxy2/";
-      license = stdenv.lib.licenses.zpt21;
+      license = "MIT";
     };
   };
 
@@ -2703,7 +2702,7 @@ in
         A backend for ZODB that stores pickles in a relational database.
         '';
       homepage = "http://pypi.python.org/pypi/RelStorage";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -2723,7 +2722,7 @@ in
         Registry for managing CSS and JS
         '';
       homepage = "http://pypi.python.org/pypi/Products.ResourceRegistries";
-      license = stdenv.lib.licenses.zpt21;
+      license = "GPL version 2";
     };
   };
 
@@ -2845,7 +2844,7 @@ in
         Extensions to the standard python 2.3+ datetime module
         '';
       homepage = "http://labix.org/python-dateutil";
-      license = stdenv.lib.licenses.gpl2;
+      license = "PSF License";
     };
   };
 
@@ -2885,7 +2884,7 @@ in
         Provides transforms from text/x-web-intelligent to text/html and vice versa.
         '';
       homepage = "http://pypi.python.org/pypi/plone.intelligenttext";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -2925,7 +2924,7 @@ in
         Zope contenttype
         '';
       homepage = "http://pypi.python.org/pypi/zope.contenttype";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -2945,7 +2944,7 @@ in
         Generic Transparent Proxies
         '';
       homepage = "http://pypi.python.org/pypi/zope.proxy";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -2985,7 +2984,7 @@ in
         Zope sendmail
         '';
       homepage = "http://pypi.python.org/pypi/zope.sendmail";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -3025,7 +3024,7 @@ in
         Object annotation mechanism
         '';
       homepage = "http://pypi.python.org/pypi/zope.annotation";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -3045,7 +3044,7 @@ in
         Integrate five.customerize into Plone.
         '';
       homepage = "http://pypi.python.org/pypi/plone.app.customerize/";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -3145,7 +3144,7 @@ in
         File-system Representation Interfaces
         '';
       homepage = "http://pypi.python.org/pypi/zope.filerepresentation";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -3165,7 +3164,7 @@ in
         Decorators for caching the values of functions and methods
         '';
       homepage = "http://pypi.python.org/pypi/plone.memoize";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -3185,7 +3184,7 @@ in
         Interfaces for Python
         '';
       homepage = "http://pypi.python.org/pypi/zope.interface";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -3205,7 +3204,7 @@ in
         Interfaces and simple adapter that give the size of an object
         '';
       homepage = "http://pypi.python.org/pypi/zope.size";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -3245,7 +3244,7 @@ in
         TTW customization of template-based Zope views
         '';
       homepage = "http://pypi.python.org/pypi/five.customerize";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -3265,7 +3264,7 @@ in
         Resolver for Python dotted names.
         '';
       homepage = "http://pypi.python.org/pypi/zope.dottedname";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -3305,7 +3304,7 @@ in
         DCWorkflow product for the Zope Content Management Framework
         '';
       homepage = "http://pypi.python.org/pypi/Products.DCWorkflow";
-      license = stdenv.lib.licenses.gpl2;
+      license = "ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)";
     };
   };
 
@@ -3325,7 +3324,7 @@ in
         Translation files for Plone
         '';
       homepage = "http://pypi.python.org/pypi/plone.app.locales";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -3345,7 +3344,7 @@ in
         z3c.form date and datetime widgets
         '';
       homepage = "https://github.com/collective/collective.z3cform.datetimewidget";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -3365,7 +3364,7 @@ in
         Zope2 application server / web framework
         '';
       homepage = "http://zope2.zope.org";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -3385,7 +3384,7 @@ in
         This package provides support for external Python methods within a Zope 2 environment.
         '';
       homepage = "http://pypi.python.org/pypi/Products.ExternalMethod";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -3405,7 +3404,7 @@ in
         workflow and security settings for Plone
         '';
       homepage = "http://pypi.python.org/pypi/plone.app.workflow";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -3425,7 +3424,7 @@ in
         Browser layer management for Zope 2 applications
         '';
       homepage = "http://pypi.python.org/pypi/plone.browserlayer";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -3445,7 +3444,7 @@ in
         Integration package for `plone.folder` into Plone
         '';
       homepage = "http://pypi.python.org/pypi/plone.app.folder/";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -3465,7 +3464,7 @@ in
         Fast HTML/XML Template Compiler.
         '';
       homepage = "http://www.pagetemplates.org/";
-      license = stdenv.lib.licenses.zpt21;
+      license = "BSD-like (http://repoze.org/license.html)";
     };
   };
 
@@ -3485,7 +3484,7 @@ in
         Cache managers for Zope 2.
         '';
       homepage = "http://pypi.python.org/pypi/Products.StandardCacheManagers";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -3505,7 +3504,7 @@ in
         RestrictedPython provides a restricted execution environment for Python, e.g. for running untrusted code.
         '';
       homepage = "http://pypi.python.org/pypi/RestrictedPython";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -3525,7 +3524,7 @@ in
         A RAM-based storage for ZODB
         '';
       homepage = "http://pypi.python.org/pypi/tempstorage";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -3585,7 +3584,7 @@ in
         Zope datetime
         '';
       homepage = "http://pypi.python.org/pypi/zope.datetime";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -3625,7 +3624,7 @@ in
         Dexterity is a content type framework for CMF applications, with particular emphasis on Plone. It can be viewed as an alternative to Archetypes that is more light-weight and modular.
         '';
       homepage = "http://plone.org/products/dexterity";
-      license = stdenv.lib.licenses.zpt21;
+      license = "GPL";
     };
   };
 
@@ -3645,7 +3644,7 @@ in
         Zope Location
         '';
       homepage = "http://pypi.python.org/pypi/zope.location/";
-      license = stdenv.lib.licenses.mit;
+      license = "ZPL 2.1";
     };
   };
 
@@ -3665,7 +3664,7 @@ in
         Zope locale extraction and management utilities
         '';
       homepage = "http://pypi.python.org/pypi/zope.app.locales";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -3745,7 +3744,7 @@ in
         Zope Content Type
         '';
       homepage = "http://cheeseshop.python.org/pypi/zope.app.content";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -3845,7 +3844,7 @@ in
         Interfaces for Python
         '';
       homepage = "http://pypi.python.org/pypi/zope.interface";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -3905,7 +3904,7 @@ in
         Advanced i18n/l10n features
         '';
       homepage = "http://pypi.python.org/pypi/plone.i18n";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -3985,7 +3984,7 @@ in
         A referencebrowser implementation for Archetypes
         '';
       homepage = "http://pypi.python.org/pypi/archetypes.referencebrowserwidget";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -4005,7 +4004,7 @@ in
         jQuery integration for Plone
         '';
       homepage = "http://pypi.python.org/pypi/plone.app.jquery";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -4065,7 +4064,7 @@ in
         Plone's content menu implementation
         '';
       homepage = "http://pypi.python.org/pypi/plone.app.contentmenu";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -4105,7 +4104,7 @@ in
         Security for browser forms
         '';
       homepage = "http://pypi.python.org/pypi/plone.protect";
-      license = stdenv.lib.licenses.zpt21;
+      license = "BSD";
     };
   };
 
@@ -4125,7 +4124,7 @@ in
         Transaction management for Python
         '';
       homepage = "http://www.zope.org/Products/ZODB";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -4145,7 +4144,7 @@ in
         Integrates the Diazo theming engine with Plone
         '';
       homepage = "http://pypi.python.org/pypi/plone.app.theming";
-      license = stdenv.lib.licenses.zpt21;
+      license = "GPL";
     };
   };
 
@@ -4185,7 +4184,7 @@ in
         Zope 2's indexing and search solution.
         '';
       homepage = "http://pypi.python.org/pypi/Products.ZCatalog";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -4225,7 +4224,7 @@ in
         Adds support for TinyMCE, a platform independent web based Javascript HTML WYSIWYG editor, to Plone.
         '';
       homepage = "http://plone.org/products/tinymce";
-      license = stdenv.lib.licenses.gpl2;
+      license = "LGPL";
     };
   };
 
@@ -4265,7 +4264,7 @@ in
         Zope Exceptions
         '';
       homepage = "http://cheeseshop.python.org/pypi/zope.exceptions";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -4285,7 +4284,7 @@ in
         A package for all things users and groups related (specific to plone)
         '';
       homepage = "http://pypi.python.org/pypi/plone.app.users";
-      license = stdenv.lib.licenses.zpt21;
+      license = "GPL version 2";
     };
   };
 
@@ -4325,7 +4324,7 @@ in
         Security framework for Zope2.
         '';
       homepage = "http://pypi.python.org/pypi/AccessControl";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -4345,7 +4344,7 @@ in
         Special Record objects used in Zope2.
         '';
       homepage = "http://pypi.python.org/pypi/Record";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -4405,7 +4404,7 @@ in
         Text field with MIME type support
         '';
       homepage = "http://pypi.python.org/pypi/plone.app.textfield";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL";
     };
   };
 
@@ -4465,7 +4464,7 @@ in
         Convenience uid/gid helper function used in Zope2.
         '';
       homepage = "http://pypi.python.org/pypi/initgroups";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -4485,7 +4484,7 @@ in
         Daemon process control library and tools for Unix-based systems
         '';
       homepage = "http://www.python.org/pypi/zdaemon";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -4505,7 +4504,7 @@ in
         Low level support for dynamic modules
         '';
       homepage = "http://code.google.com/p/dexterity";
-      license = stdenv.lib.licenses.gpl2;
+      license = "LGPL";
     };
   };
 
@@ -4545,7 +4544,7 @@ in
         Definition of authentication basics for the Zope Framework
         '';
       homepage = "http://pypi.python.org/pypi/zope.authentication";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -4585,7 +4584,7 @@ in
         A portlet that fetches results from a collection
         '';
       homepage = "http://pypi.python.org/pypi/plone.portlet.collection";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -4605,7 +4604,7 @@ in
         Shared Zope Toolkit browser components
         '';
       homepage = "http://pypi.python.org/pypi/zope.browser";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -4625,7 +4624,7 @@ in
         This package adds 'saved search' functionality to Plone.
         '';
       homepage = "http://pypi.python.org/pypi/plone.app.collection";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -4645,7 +4644,7 @@ in
         Calendar product for the Zope Content Management Framework
         '';
       homepage = "http://pypi.python.org/pypi/Products.CMFCalendar";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)";
     };
   };
 
@@ -4665,7 +4664,7 @@ in
         Pluggable Zope2 authentication / authorization framework
         '';
       homepage = "http://pypi.python.org/pypi/Products.PluggableAuthService";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)";
     };
   };
 
@@ -4705,7 +4704,7 @@ in
         Read Zope configuration state from profile dirs / tarballs
         '';
       homepage = "http://pypi.python.org/pypi/Products.GenericSetup";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)";
     };
   };
 
@@ -4725,7 +4724,7 @@ in
         configurable viewlet manager
         '';
       homepage = "http://pypi.python.org/pypi/plone.app.viewletmanager";
-      license = stdenv.lib.licenses.zpt21;
+      license = "GPL version 2";
     };
   };
 
@@ -4765,7 +4764,7 @@ in
         StructuredText parser
         '';
       homepage = "http://pypi.python.org/pypi/zope.structuredtext";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -4785,7 +4784,7 @@ in
         Zope RAM Cache
         '';
       homepage = "http://pypi.python.org/pypi/zope.ramcache";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -4825,7 +4824,7 @@ in
         Resolving paths in the object hierarchy
         '';
       homepage = "http://pypi.python.org/pypi/zope.traversing";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -4845,7 +4844,7 @@ in
         Content Provider Framework for Zope Templates
         '';
       homepage = "http://pypi.python.org/pypi/zope.contentprovider";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -4865,7 +4864,7 @@ in
         The classic Plone 3 default theme.
         '';
       homepage = "http://pypi.python.org/pypi/plonetheme.classic";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -4925,7 +4924,7 @@ in
         User-configurable, blob-aware image scaling for Plone.
         '';
       homepage = "http://pypi.python.org/pypi/plone.app.imaging";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -4965,7 +4964,7 @@ in
         An extension of zope.viewlet to support dynamic portlets
         '';
       homepage = "http://pypi.python.org/pypi/plone.portlets";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -5005,7 +5004,7 @@ in
         Configure application plugins based on interfaces
         '';
       homepage = "http://pypi.python.org/pypi/Products.PluginRegistry";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)";
     };
   };
 
@@ -5045,7 +5044,7 @@ in
         A general logging facility
         '';
       homepage = "http://cheeseshop.python.org/pypi/zLOG";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -5065,7 +5064,7 @@ in
         Zope Location
         '';
       homepage = "http://pypi.python.org/pypi/zope.location/";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -5105,7 +5104,7 @@ in
         Form generation and validation library for Zope
         '';
       homepage = "http://pypi.python.org/pypi/zope.formlib";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -5125,7 +5124,7 @@ in
         Pluggable object copying mechanism
         '';
       homepage = "http://pypi.python.org/pypi/zope.copy";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1";
     };
   };
 
@@ -5165,7 +5164,7 @@ in
         A collection of generally useful vocabularies.
         '';
       homepage = "https://github.com/plone/plone.app.vocabularies";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -5185,7 +5184,7 @@ in
         Document Templating Markup Language (DTML)
         '';
       homepage = "http://pypi.python.org/pypi/DocumentTemplate";
-      license = stdenv.lib.licenses.gpl2;
+      license = "ZPL 2.1";
     };
   };
 
@@ -5225,7 +5224,7 @@ in
         Zope catalog index for paths
         '';
       homepage = "http://pypi.python.org/pypi/Products.ExtendedPathIndex";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL version 2";
     };
   };
 
@@ -5245,7 +5244,7 @@ in
         Message Identifiers for internationalization
         '';
       homepage = "http://pypi.python.org/pypi/zope.i18nmessageid";
-      license = stdenv.lib.licenses.gpl2;
+      license = "ZPL 2.1";
     };
   };
 
@@ -5265,7 +5264,7 @@ in
         Manage link integrity in Plone.
         '';
       homepage = "http://pypi.python.org/pypi/plone.app.linkintegrity";
-      license = stdenv.lib.licenses.zpt21;
+      license = "GPL version 2";
     };
   };
 
@@ -5285,7 +5284,7 @@ in
         Action icons product for the Zope Content Management Framework
         '';
       homepage = "http://pypi.python.org/pypi/Products.CMFActionIcons";
-      license = stdenv.lib.licenses.zpt21;
+      license = "ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)";
     };
   };
 
@@ -5305,7 +5304,7 @@ in
         The Original Zope 3 Form Framework
         '';
       homepage = "http://pypi.python.org/pypi/zope.app.form";
-      license = stdenv.lib.licenses.mit;
+      license = "ZPL 2.1";
     };
   };
 
@@ -5325,7 +5324,7 @@ in
         Local site manager implementation for Zope 2
         '';
       homepage = "http://pypi.python.org/pypi/five.localsitemanager";
-      license = stdenv.lib.licenses.gpl2;
+      license = "ZPL 2.1";
     };
   };
 
@@ -5345,7 +5344,7 @@ in
         Transformations applied to HTML in Plone text fields as they are rendered
         '';
       homepage = "http://github.com/plone/plone.outputfilters";
-      license = stdenv.lib.licenses.zpt21;
+      license = "GPL";
     };
   };
 
@@ -5367,7 +5366,7 @@ in
         Library for developers to extract data from Microsoft Excel (tm) spreadsheet files
         '';
       homepage = "http://www.python-excel.org/";
-      license = stdenv.lib.licenses.zpt21;
+      license = "BSD";
     };
   };
 
@@ -5394,3 +5393,4 @@ in
   };
 
 }
+

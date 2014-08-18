@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
     description = "mpc123, a Musepack (.mpc) audio player";
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu; # arbitrary choice

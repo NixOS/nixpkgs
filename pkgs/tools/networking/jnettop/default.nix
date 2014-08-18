@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://jnettop.kubs.info/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
   };
 }

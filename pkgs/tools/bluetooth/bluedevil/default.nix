@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Bluetooth manager for KDE";
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     inherit (kdelibs.meta) platforms;
     maintainers = [ maintainers.phreedom ];
   };

@@ -15,7 +15,7 @@ stdenv.mkDerivation (rec {
 
     homepage = http://www.mr511.de/software/english.html;
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
 
     platforms = stdenv.lib.platforms.all;
     maintainers = [ ];

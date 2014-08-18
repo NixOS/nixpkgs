@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.nongnu.org/hurdextras/;
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };

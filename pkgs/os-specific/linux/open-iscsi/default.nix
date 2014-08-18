@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
   
   meta = {
     description = "A high performance, transport independent, multi-platform implementation of RFC3720";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     homepage = http://www.open-iscsi.org;
     broken = true;
   };

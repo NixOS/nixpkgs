@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.cypherpunks.ca/otr/";
     repositories.git = git://git.code.sf.net/p/otr/libotr;
-    license = stdenv.lib.licenses.lgpl21;
+    license = "LGPLv2.1";
     description = "Library for Off-The-Record Messaging";
   };
 }

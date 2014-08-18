@@ -1,5 +1,5 @@
 { kde, kdelibs, soprano, shared_desktop_ontologies, exiv2, ffmpeg, taglib, popplerQt4
-, pkgconfig, doxygen, ebook_tools, stdenv
+, pkgconfig, doxygen, ebook_tools
 }:
 
 kde {
@@ -15,6 +15,6 @@ kde {
 
   meta = {
     description = "NEPOMUK core";
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
   };
 }

@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "OpenAL alternative";
     homepage = http://kcat.strangesoft.net/openal.html;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPL2";
   };
 }

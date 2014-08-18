@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/ncurses/;
 
-    license = lib.licenses.mit;
+    license = "X11";
 
     maintainers = [ lib.maintainers.ludo ];
     platforms = lib.platforms.all;

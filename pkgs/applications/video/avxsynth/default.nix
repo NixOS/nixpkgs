@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = https://github.com/avxsynth/avxsynth/wiki;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

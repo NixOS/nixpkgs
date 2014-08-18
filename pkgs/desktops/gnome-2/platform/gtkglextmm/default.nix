@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "C++ wrappers for GtkGLExt";
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
 
     platforms = stdenv.lib.platforms.linux;
   };

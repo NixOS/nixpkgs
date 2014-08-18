@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   meta = {
     description = "ALPS dlkm driver with all known touchpads";
     homepage = http://www.dahetral.com/public-download/alps-psmouse-dlkm-for-3-2-and-3-5/view;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [viric];
   };

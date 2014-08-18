@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
          native utilities).  Finally, it can replace the inetd utility!
       '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     homepage = http://www.gnu.org/software/pies/;
 

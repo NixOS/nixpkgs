@@ -11,6 +11,6 @@ stdenv.mkDerivation {
   meta = { 
     description = "Cartographic Projections Library";
     homepage = http://proj.maptools.org;
-    license = stdenv.lib.licenses.mit;
+    license = "MIT";
   };
 }

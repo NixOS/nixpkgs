@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   meta = {
     description = "GTK Manager for an Apple ipod";
     homepage = http://gtkpod.sourceforge.net;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     platforms = with stdenv.lib.platforms; linux;
   };
 }

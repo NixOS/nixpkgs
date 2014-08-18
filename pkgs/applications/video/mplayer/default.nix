@@ -72,7 +72,7 @@ let
       cp -prv * $out
     '';
 
-    meta.license = stdenv.lib.licenses.unfree;
+    meta.license = "unfree";
   } else null;
 
 in

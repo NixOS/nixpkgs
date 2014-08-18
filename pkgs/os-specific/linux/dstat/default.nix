@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://dag.wieers.com/home-made/dstat/;
     description = "Versatile resource statistics tool";
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ ];
   };

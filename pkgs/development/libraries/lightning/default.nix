@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
       the MIPS and SPARC chips.
     '';
 
-    license = stdenv.lib.licenses.lgpl3Plus;
+    license = "LGPLv3+";
   };
 }

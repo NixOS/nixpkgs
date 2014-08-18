@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Emacs major mode for jade and stylus";
     homepage = https://github.com/brianc/jade-mode;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     platforms = stdenv.lib.platforms.all;
   };

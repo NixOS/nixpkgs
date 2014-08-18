@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       media collection management, playlists and statistics.
     '';
     homepage = http://bangarangkde.wordpress.com/;
-    license = stdenv.lib.licenses.gpl3;
+    license = "GPLv3";
     maintainers = [ maintainers.phreedom maintainers.urkud ];
     platforms = platforms.linux;
   };

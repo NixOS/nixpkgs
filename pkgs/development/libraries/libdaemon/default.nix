@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://0pointer.de/lennart/projects/libdaemon/;
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
 
     hydraPlatforms = stdenv.lib.platforms.linux;
     maintainers = [ ];

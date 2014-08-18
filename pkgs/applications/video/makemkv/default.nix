@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       can always download the latest version from makemkv.com that will reset the
       expiration date.
     '';
-    license = stdenv.lib.licenses.unfree;
+    license = "unfree";
     homepage = http://makemkv.com;
   };
 }

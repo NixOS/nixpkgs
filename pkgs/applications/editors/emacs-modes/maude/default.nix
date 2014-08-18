@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Emacs mode for the programming language Maude";
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };

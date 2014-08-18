@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
        '';
 
     homepage = http://www.gnu.org/software/gsasl/;
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     maintainers = with stdenv.lib.maintainers; [ ];
     platforms = stdenv.lib.platforms.all;

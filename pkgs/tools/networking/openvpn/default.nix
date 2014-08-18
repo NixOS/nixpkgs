@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A robust and highly flexible tunneling application";
     homepage = http://openvpn.net/;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     maintainers = [ stdenv.lib.maintainers.viric ];
     platforms = stdenv.lib.platforms.linux;
   };

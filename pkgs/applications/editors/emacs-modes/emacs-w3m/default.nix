@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       developed a simple Emacs interface to w3m.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     homepage = http://emacs-w3m.namazu.org/;
 

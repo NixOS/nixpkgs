@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       plots in publication-ready quality are built out of these
       primitives.
     '';
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     homepage = http://pyx.sourceforge.net/;
   };
 }

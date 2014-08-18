@@ -1,5 +1,5 @@
 { kde, kdelibs, exiv2, kde_baseapps, libkipi, nepomuk_core
-, libjpeg, pkgconfig, kactivities, lcms2, stdenv }:
+, libjpeg, pkgconfig, kactivities, lcms2 }:
 
 kde {
 
@@ -10,6 +10,6 @@ kde {
 
   meta = {
     description = "Gwenview, the KDE image viewer";
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
   };
 }

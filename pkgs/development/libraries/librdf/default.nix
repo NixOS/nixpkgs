@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Lightweight RDF library with special support for LADSPA plugins";
     homepage = http://sourceforge.net/projects/lrdf/;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };

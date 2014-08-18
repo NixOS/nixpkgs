@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://helm.cs.unibo.it/mml-widget/;
     description = "OCaml bindings for gtkmathview";
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
     maintainers = [ stdenv.lib.maintainers.roconnor ];
   };
 }

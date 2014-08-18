@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Minimal dumb-terminal emulation program";
     homepage = http://code.google.com/p/picocom/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

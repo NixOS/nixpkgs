@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://pixman.org;
     description = "A low-level library for pixel manipulation";
-    license = stdenv.lib.licenses.mit;
+    license = "MIT";
   };
 }

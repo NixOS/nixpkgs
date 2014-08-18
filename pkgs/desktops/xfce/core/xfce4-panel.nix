@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.xfce.org/projects/xfce4-panel;
     description = "Xfce panel";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };

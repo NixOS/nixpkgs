@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     platforms = platforms.all;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPL2";
     maintainers = [ maintainers.urkud ];
   };
 }

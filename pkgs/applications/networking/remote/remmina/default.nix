@@ -42,7 +42,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     homepage = "http://remmina.sourceforge.net/";
     description = "Remmina is a remote desktop client written in GTK+";
     maintainers = [];

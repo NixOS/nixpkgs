@@ -40,7 +40,7 @@ stdenv.mkDerivation {
          web indexes as users can push content directly to search groups.
       '';
 
-    license = stdenv.lib.licenses.agpl3Plus;
+    license = "AGPLv3+";
 
     homepage = http://www.seeks-project.info/;
 

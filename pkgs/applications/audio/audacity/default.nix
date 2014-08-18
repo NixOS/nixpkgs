@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Sound editor with graphical UI";
     homepage = http://audacity.sourceforge.net;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };

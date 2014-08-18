@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://unetbootin.sourceforge.net/;
     description = "A tool to create bootable live USB drives from ISO images";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     platforms = stdenv.lib.platforms.linux;
   };
 }

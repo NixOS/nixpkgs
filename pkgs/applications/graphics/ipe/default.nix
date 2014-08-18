@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An editor for drawing figures";
     homepage = http://ipe7.sourceforge.net;
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
     longDescription = ''
       Ipe is an extensible drawing editor for creating figures in PDF and Postscript format.
       It supports making small figures for inclusion into LaTeX-documents

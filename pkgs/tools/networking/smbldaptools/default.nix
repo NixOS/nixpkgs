@@ -26,6 +26,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://gna.org/projects/smbldap-tools/;
     description = "SAMBA LDAP tools";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
   };
 }

@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
       '';
       homepage = "http://www.bitcoin.org/";
       maintainers = [ stdenv.lib.maintainers.roconnor ];
-      license = stdenv.lib.licenses.mit;
+      license = "MIT";
   };
 }

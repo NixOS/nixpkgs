@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://code.google.com/p/cryptsetup/;
     description = "LUKS for dm-crypt";
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     maintainers = with stdenv.lib.maintainers; [ viric chaoflow ];
     platforms = with stdenv.lib.platforms; linux;
   };

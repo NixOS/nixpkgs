@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Visual diff and merge tool";
     homepage = http://meld.sourceforge.net;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     platforms = platforms.linux;
   };
 }

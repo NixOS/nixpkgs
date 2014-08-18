@@ -26,6 +26,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Phoneme editor for espeak";
     homepage = http://espeak.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
   };
 }

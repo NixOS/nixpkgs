@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
       can use, in the form of M4 macro calls.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
   };
 }

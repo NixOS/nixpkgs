@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gtk.org/;
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
 
     maintainers = with stdenv.lib.maintainers; [ urkud raskin vcunat];
     platforms = stdenv.lib.platforms.all;

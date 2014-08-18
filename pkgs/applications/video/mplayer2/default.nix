@@ -60,7 +60,7 @@ let
       cp -prv * $out
     '';
 
-    meta.license = stdenv.lib.licenses.unfree;
+    meta.license = "unfree";
   } else null;
 
 in
@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A movie player that supports many video formats (MPlayer fork)";
     homepage = "http://mplayer2.org";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
     maintainers = [ stdenv.lib.maintainers.viric ];
     platforms = stdenv.lib.platforms.linux;
   };

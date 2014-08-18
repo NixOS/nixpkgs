@@ -18,7 +18,7 @@ stdenv.mkDerivation (rec {
                s|/sbin/install-info|install-info|g"
 
 
-       # Workaround for bug #458
+       # Workaround for bug #458 
        # ProofGeneral 4.2 byte-compilation fails with Emacs 24.2.90
        # http://proofgeneral.inf.ed.ac.uk/trac/ticket/458
        sed -i "Makefile" \
@@ -48,7 +48,7 @@ stdenv.mkDerivation (rec {
       interactive theorem provers), based on the customizable text editor Emacs.
     '';
     homepage = http://proofgeneral.inf.ed.ac.uk;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 })

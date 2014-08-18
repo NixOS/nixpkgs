@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "C++ wrappers for GConf";
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
 
     platforms = stdenv.lib.platforms.linux;
   };

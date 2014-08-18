@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.bitlbee.org/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice

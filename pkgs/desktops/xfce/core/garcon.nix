@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.xfce.org/;
     description = "Xfce menu support library";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
   };
 }

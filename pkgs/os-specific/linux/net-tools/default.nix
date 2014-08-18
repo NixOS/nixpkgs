@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.tazenda.demon.co.uk/phil/net-tools/;
     description = "A set of tools for controlling the network subsystem in Linux";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     platforms = stdenv.lib.platforms.linux;
   };
 }

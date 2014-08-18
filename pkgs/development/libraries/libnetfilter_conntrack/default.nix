@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       by conntrack-tools among many other applications
     '';
     homepage = http://netfilter.org/projects/libnetfilter_conntrack/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     platforms = stdenv.lib.platforms.linux;
   };

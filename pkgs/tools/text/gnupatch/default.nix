@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://savannah.gnu.org/projects/patch;
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;

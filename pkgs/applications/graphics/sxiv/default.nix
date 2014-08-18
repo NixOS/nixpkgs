@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Simple X Image Viewer";
     homepage = "https://github.com/muennich/sxiv";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     platforms = stdenv.lib.platforms.linux;
   };
 }

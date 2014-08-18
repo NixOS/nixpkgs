@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     platforms = platforms.all;
     maintainers = [ maintainers.urkud ];
-    license = stdenv.lib.licenses.lgpl3;
+    license = "LGPL3";
     description = "An opensource database of photographic lenses and their characteristics";
     homepage = http://lensfun.sourceforge.net/;
   };

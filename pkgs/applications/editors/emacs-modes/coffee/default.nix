@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Emacs major mode for CoffeeScript, unfancy JavaScript";
     homepage = https://github.com/defunkt/coffee-mode;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     platforms = stdenv.lib.platforms.all;
   };

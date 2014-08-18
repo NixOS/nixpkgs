@@ -1,5 +1,5 @@
 x@{builderDefsPackage
-  , stdenv, gmp, bison, perl, autoconf, ncurses, readline
+  , gmp, bison, perl, autoconf, ncurses, readline
   , coreutils
   , ...}:
 builderDefsPackage
@@ -49,7 +49,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = stdenv.lib.licenses.gpl3; # Or GPLv2 at your option - but not GPLv4
+    license = "GPLv3"; # Or GPLv2 at your option - but not GPLv4
     homepage = "http://www.singular.uni-kl.de/index.php";
   };
   passthru = {
@@ -58,3 +58,4 @@ rec {
     };
   };
 }) x
+

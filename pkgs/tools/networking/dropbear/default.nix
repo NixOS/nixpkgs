@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://matt.ucc.asn.au/dropbear/dropbear.html;
     description = "An small footprint implementation of the SSH 2 protocol";
-    license = stdenv.lib.licenses.mit;
+    license = "mit";
   };
 }

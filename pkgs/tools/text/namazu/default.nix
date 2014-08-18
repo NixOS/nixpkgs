@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       but also as a personal search system for email or other files.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     homepage = http://namazu.org/;
 
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice

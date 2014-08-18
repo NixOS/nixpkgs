@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       produced flowcharts in Emacs.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     homepage = http://www.gnu.org/software/cflow/;
 

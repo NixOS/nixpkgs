@@ -19,7 +19,7 @@ in
 
     meta = {
       homepage = http://lly.org/~rcw/cd-discid/;
-      license = stdenv.lib.licenses.gpl2Plus;
+      license = "GPLv2+";
       description = "cd-discid, a command-line utility to retrieve a disc's CDDB ID";
 
       longDescription = ''

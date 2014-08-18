@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tcl/Tk GUI front-end to cscope";
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     homepage = http://sourceforge.net/projects/cbrowser/;
 

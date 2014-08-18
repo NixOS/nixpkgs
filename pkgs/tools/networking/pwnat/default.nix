@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://samy.pl/pwnat/;
     description = "ICMP NAT to NAT client-server communication";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

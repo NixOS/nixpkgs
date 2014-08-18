@@ -78,7 +78,7 @@ stdenv.mkDerivation {
 
     homepage = http://www.gnu.org/software/mit-scheme/;
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
 

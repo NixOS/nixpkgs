@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     # CLooG-PPL is actually a port of GLooG from PolyLib to PPL.
     homepage = http://www.cloog.org/;
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     maintainers = [ ];
 

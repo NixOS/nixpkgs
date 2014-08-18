@@ -1,4 +1,4 @@
-{ clangStdenv, fetchgit, llvm, clang, stdenv }:
+{ clangStdenv, fetchgit, llvm, clang }:
 
 clangStdenv.mkDerivation {
   name = "emacs-clang-complete-async-20130218";
@@ -20,6 +20,7 @@ clangStdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/Golevka/emacs-clang-complete-async";
     description = "An emacs plugin to complete C and C++ code using libclang";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
   };
 }
+

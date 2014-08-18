@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     homepage = "http://doxygen.org/";
     description = "Doxygen, a source code documentation generator tool";
 

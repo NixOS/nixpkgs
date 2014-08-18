@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = http://mpc.multiprecision.org/;
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
 
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.ludo ];

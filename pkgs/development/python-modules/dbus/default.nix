@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Python DBus bindings";
-    license = stdenv.lib.licenses.mit;
+    license = "MIT";
   };
 }

@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = http://busybox.net/;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

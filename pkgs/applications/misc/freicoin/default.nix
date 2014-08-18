@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Peer-to-peer currency with demurrage fee";
     homepage = "http://freicoi.in/";
-    license = stdenv.lib.licenses.mit;
+    license = "MIT";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

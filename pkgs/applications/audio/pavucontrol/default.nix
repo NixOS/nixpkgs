@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://freedesktop.org/software/pulseaudio/pavucontrol/ ;
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice

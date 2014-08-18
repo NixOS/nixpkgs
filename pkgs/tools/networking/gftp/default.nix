@@ -13,6 +13,6 @@ stdenv.mkDerivation {
   meta = { 
     description = "GTK+-based FTP client";
     homepage = http://www.gftp.org;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
   };
 }

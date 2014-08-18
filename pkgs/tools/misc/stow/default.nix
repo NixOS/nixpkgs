@@ -25,7 +25,7 @@ stdenv.mkDerivation {
       as .../share, .../man, and so on.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
     homepage = http://www.gnu.org/software/stow/;
 
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];

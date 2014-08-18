@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://sourceware.org/systemtap/;
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.linux;

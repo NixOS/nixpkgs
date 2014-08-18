@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
          addresses several issues not considered in that scoring scheme.
       '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     homepage = http://www.gnu.org/software/complexity/;
 

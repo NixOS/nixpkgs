@@ -13,6 +13,6 @@ stdenv.mkDerivation {
   meta = { 
     description = "Hex editor with vim style keybindings";
     homepage = http://bvi.sourceforge.net/download.html;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPL2";
   };
 }

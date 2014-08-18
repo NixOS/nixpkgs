@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = http://www.gnu.org/software/inetutils/;
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.gnu;

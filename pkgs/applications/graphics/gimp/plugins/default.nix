@@ -221,7 +221,7 @@ rec {
 
       homepage = http://lensfun.sebastiankraft.net/;
 
-      license = stdenv.lib.licenses.gpl3Plus;
+      license = "GPLv3+";
       maintainers = [ stdenv.lib.maintainers.ludo ];
       platforms = stdenv.lib.platforms.gnu;
     };

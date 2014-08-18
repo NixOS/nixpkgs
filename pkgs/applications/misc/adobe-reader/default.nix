@@ -25,6 +25,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Adobe Reader, a viewer for PDF documents";
     homepage = http://www.adobe.com/products/reader;
-    license = stdenv.lib.licenses.unfree;
+    license = "unfree";
   };
 }

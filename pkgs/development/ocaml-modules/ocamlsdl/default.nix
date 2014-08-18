@@ -22,6 +22,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://ocamlsdl.sourceforge.net/;
     description = "OCaml bindings for SDL 1.2";
-    license = stdenv.lib.licenses.lgpl21;
+    license = "LGPL 2.1";
   };
 }

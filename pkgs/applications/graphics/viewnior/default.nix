@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
          in mind (follows Gnome HIG2).
       '';
 
-    license = stdenv.lib.licenses.gpl3;
+    license = "GPLv3";
 
     homepage = http://xsisqox.github.com/Viewnior;
 

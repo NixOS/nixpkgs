@@ -13,6 +13,6 @@ stdenv.mkDerivation {
   meta = {
     description = "general-purpose command-line pipe buffer";
     homepage = http://www.glines.org/wiki/bfr;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPL2";
   };
 }

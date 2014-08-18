@@ -9,7 +9,7 @@ stdenv.mkDerivation ({
   meta = { 
       description = "High-level interactive language for numerical computations";
       homepage = http://www.octave.org;
-      license = stdenv.lib.licenses.gpl3;
+      license = "GPL-3";
     };
 } // (
   if config.octave.devVersion or false then {

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       battery and thermal information.
     '';
     homepage = http://sourceforge.net/projects/acpiclient/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     platforms = platforms.linux;
     maintainers = maintainers.mornfall;
   };

@@ -55,8 +55,9 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A small but very powerful text-based mail client";
     homepage = http://www.mutt.org;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     platforms = platforms.unix;
     maintainers = with maintainers; [ the-kenny ];
   };
 }
+

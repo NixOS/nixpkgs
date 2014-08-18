@@ -31,7 +31,7 @@ stdenv.mkDerivation ({
   meta = {
     description = "GNU Hurd's libpthread";
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };

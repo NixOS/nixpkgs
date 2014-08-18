@@ -83,7 +83,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Wiki compiler, storing pages and history in a RCS";
     homepage = "http://ikiwiki.info/";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];

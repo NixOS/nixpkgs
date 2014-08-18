@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   meta = { 
     description = "translates PostScript and PDF graphics into other vector formats";
     homepage = http://www.helga-glunz.homepage.t-online.de/pstoedit;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };

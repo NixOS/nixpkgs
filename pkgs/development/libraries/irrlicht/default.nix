@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://irrlicht.sourceforge.net/;
-    license = stdenv.lib.licenses.zlib;
+    license = "zlib";
     description = "Open source high performance realtime 3D engine written in C++";
   };
 }

@@ -23,7 +23,7 @@ args : with args;
       meta = {
           description = "unix odbc driver for postgresql";
           homepage = https://projects.commandprompt.com/public/odbcng;
-          license = stdenv.lib.licenses.gpl2;
+          license = "GPL2";
       };
     };
     ini = "";

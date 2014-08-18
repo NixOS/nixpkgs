@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://librsync.sourceforge.net/;
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
     description = "Implementation of the rsync remote-delta algorithm";
   };
 }

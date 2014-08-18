@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://supertuxkart.sourceforge.net/;
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
   };
 }

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       more.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };

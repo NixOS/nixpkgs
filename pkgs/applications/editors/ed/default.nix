@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       full-screen editors such as GNU Emacs or GNU Moe.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     homepage = http://www.gnu.org/software/ed/;
 

@@ -89,7 +89,7 @@ in
         * Java source interpreter (Pat Neimeyer's BeanShell)
       '';
 
-      license = stdenv.lib.licenses.gpl2Plus;
+      license = "GPLv2+";
 
       maintainers = [ ];
       platforms = stdenv.lib.platforms.gnu;  # arbitrary choice

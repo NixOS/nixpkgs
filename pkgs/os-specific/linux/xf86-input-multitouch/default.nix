@@ -45,6 +45,7 @@ stdenv.mkDerivation {
 
     description = "Brings multitouch gestures to the Linux desktop";
 
-    license = stdenv.lib.licenses.gpl2;
+    license = "gplv2";
   };
 }
+

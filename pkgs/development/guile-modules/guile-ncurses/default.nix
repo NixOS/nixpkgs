@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
          form, panel, and menu.
       '';
 
-    license = stdenv.lib.licenses.lgpl3Plus;
+    license = "LGPLv3+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice

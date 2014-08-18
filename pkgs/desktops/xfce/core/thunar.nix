@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://thunar.xfce.org/;
     description = "Xfce file manager";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };

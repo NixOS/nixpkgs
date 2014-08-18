@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
          interpolation; GIF animation support.
        '';
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
 
     maintainers = [ ];
   };

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
         Unicode variants, independently on language.
     '';
 
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
 
     platforms = stdenv.lib.platforms.all;
   };

@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       Valgrind to build new tools.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;

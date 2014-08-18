@@ -18,6 +18,6 @@ stdenv.mkDerivation {
   meta = { 
     description = "screencast video catpuring tool";
     homepage = http://xvidcap.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
   };
 }

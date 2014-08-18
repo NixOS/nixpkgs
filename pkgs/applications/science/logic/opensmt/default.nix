@@ -1,5 +1,5 @@
 x@{builderDefsPackage
-  , stdenv, automake, libtool, autoconf, intltool, perl
+  , automake, libtool, autoconf, intltool, perl
   , gmpxx, flex, bison
   , ...}:
 builderDefsPackage
@@ -39,7 +39,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = stdenv.lib.licenses.gpl3;
+    license = "GPLv3";
     homepage = "http://code.google.com/p/opensmt/";
   };
   passthru = {
@@ -48,3 +48,4 @@ rec {
     };
   };
 }) x
+

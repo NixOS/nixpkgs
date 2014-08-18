@@ -35,6 +35,6 @@ in stdenv.mkDerivation {
   meta = {
     homepage = "http://minetest.net/";
     description = "Infinite-world block sandbox game";
-    license = stdenv.lib.licenses.lgpl21Plus;
+    license = "LGPLv2.1+";
   };
 }

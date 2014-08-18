@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   
   meta = {
     homepage = http://ri-li.sourceforge.net;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPL2+";
     description = "A children's train game";
     longDescription = ''
      Ri-li is an arcade game licensed under the GPL (General Public License).

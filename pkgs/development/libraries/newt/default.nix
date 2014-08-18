@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     homepage = https://fedorahosted.org/newt/;
     description = "Library for color text mode, widget based user interfaces";
 
-    license = stdenv.lib.licenses.lgpl2;
+    license = "LGPLv2";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.viric ];
   };

@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://josefsson.org/autobuild/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
   };
 }

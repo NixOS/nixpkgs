@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = http://www.gnu.org/software/rush/;
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     maintainers = [ stdenv.lib.maintainers.bjg ];
     platforms = stdenv.lib.platforms.all;

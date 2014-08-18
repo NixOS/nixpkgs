@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.ultimatestunts.nl/;
     description = "Remake of the popular racing DOS-game Stunts";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

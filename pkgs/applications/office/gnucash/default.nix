@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       accounting principles to ensure balanced books and accurate reports.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     homepage = http://www.gnucash.org/;
 

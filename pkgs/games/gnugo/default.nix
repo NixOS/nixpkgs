@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   meta = {
     description = "GNU Go - A computer go player";
     homepage = "http://http://www.gnu.org/software/gnugo/";
-    license = stdenv.lib.licenses.gpl3;
+    license = "GPLv3";
   };
 
 }

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Wave viewer for Unix and Win32";
     homepage = http://gtkwave.sourceforge.net;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

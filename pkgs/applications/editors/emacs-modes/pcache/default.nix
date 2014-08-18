@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Persistent caching for Emacs";
     homepage = https://github.com/sigma/pcache.el;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     platforms = stdenv.lib.platforms.all;
   };

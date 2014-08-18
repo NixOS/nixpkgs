@@ -24,6 +24,6 @@ buildPythonPackage rec {
 
       homepage = http://mirageiv.sourceforge.net/;
 
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPLv2";
     };
 }

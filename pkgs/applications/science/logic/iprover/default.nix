@@ -1,5 +1,5 @@
 x@{builderDefsPackage
-  , stdenv, ocaml, eprover
+  , ocaml, eprover
   , ...}:
 builderDefsPackage
 (a :  
@@ -47,7 +47,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = stdenv.lib.licenses.gpl3;
+    license = "GPLv3";
   };
   passthru = {
     updateInfo = {
@@ -55,3 +55,4 @@ rec {
     };
   };
 }) x
+

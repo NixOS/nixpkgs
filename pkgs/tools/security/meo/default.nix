@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://oss.stamfest.net/wordpress/meo-multiple-eyepairs-only;
     description = "Tools to use cryptography for things like four-eyes principles";
-    license = stdenv.lib.licenses.agpl3Plus;
+    license = "AGPLv3+";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

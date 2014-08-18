@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An xml2swf and swf2xml processor with import functionalities";
     homepage = "http://swfmill.org";
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
   };
 }
+

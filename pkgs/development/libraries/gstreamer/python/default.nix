@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
     description = "Python bindings for GStreamer";
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
   };
 }
+

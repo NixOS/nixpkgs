@@ -47,7 +47,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://www.teamviewer.com";
-    license = stdenv.lib.licenses.unfree;
+    license = "unfree";
     description = "Desktop sharing application, providing remote support and online meetings";
   };
 }

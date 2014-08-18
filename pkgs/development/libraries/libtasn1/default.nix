@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
          portable, and only require an ANSI C89 platform.
       '';
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;

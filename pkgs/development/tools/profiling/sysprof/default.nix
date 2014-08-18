@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://sysprof.com/;
     description = "Sysprof, a system-wide profiler for Linux";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     longDescription = ''
       Sysprof is a sampling CPU profiler for Linux that uses the perf_event_open

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       character set conversion, as well as emulating any terminal known to
       the system's terminfo database.
     '';
-    license = stdenv.lib.licenses.lgpl2;
+    license = "LGPLv2";
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
     platforms = with stdenv.lib.platforms; linux;
   };

@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://gna.org/projects/remember-el/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
   };
 }

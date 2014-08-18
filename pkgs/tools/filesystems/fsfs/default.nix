@@ -25,6 +25,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://fsfs.sourceforge.net/;
     description = "Secure distributed file system in user space";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
   };
 }

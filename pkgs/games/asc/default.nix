@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.asc-hq.org/;
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;

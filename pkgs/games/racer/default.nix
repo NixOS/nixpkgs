@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Car racing game";
     homepage = http://hippo.nipax.cz/download.en.php;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
   };
 }

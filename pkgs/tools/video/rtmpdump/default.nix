@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://rtmpdump.mplayerhq.hu/;
     description = "Toolkit for RTMP streams";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; all;
   };

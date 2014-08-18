@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.aleksey.com/xmlsec;
     description = "XML Security Library in C based on libxml2";
-    license = stdenv.lib.licenses.mit;
+    license = "MIT";
     platforms = stdenv.lib.platforms.linux;
   };
 }

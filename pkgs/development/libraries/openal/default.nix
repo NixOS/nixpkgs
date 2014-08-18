@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.openal.org/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
   };
 }

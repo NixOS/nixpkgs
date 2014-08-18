@@ -32,7 +32,7 @@ stdenv.mkDerivation (rec {
   meta = {
     homepage = http://www.cis.upenn.edu/~bcpierce/unison/;
     description = "Bidirectional file synchronizer";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

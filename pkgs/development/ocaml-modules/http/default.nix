@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://upsilon.cc/~zack/hacking/software/ocaml-http/";
     description = "do it yourself (OCaml) HTTP daemon";
-    license = stdenv.lib.licenses.lgpl2;
+    license = "LGPLv2";
     maintainers = [ stdenv.lib.maintainers.roconnor ];
   };
 }

@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A 2D CAD package based upon Qt";
     homepage = http://librecad.org;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

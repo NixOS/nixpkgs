@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       archives).
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;

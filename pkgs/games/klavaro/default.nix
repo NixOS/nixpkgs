@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Just another free touch typing tutor program";
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     platforms = stdenv.lib.platforms.linux;
   };

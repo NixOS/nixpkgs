@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Audit Library";
     homepage = "http://people.redhat.com/sgrubb/audit/";
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     platforms = stdenv.lib.platforms.linux;
   };
 }

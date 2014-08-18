@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
   meta = { 
     description = "Command line tool to make a copy from a video DVD for private use";
     homepage = http://sourceforge.net/projects/lxdvdrip;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
   };
 }

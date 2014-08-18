@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
           offline, so they can be retried when it comes back online.
     '';
     homepage = http://joeyh.name/code/mr/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.antono ];
   };

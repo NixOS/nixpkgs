@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
       interface.
     '';
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
   };
 }

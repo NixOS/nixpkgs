@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A Game Boy/Game Boy Color/Game Boy Advance Emulator";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     maintainers = [ stdenv.lib.maintainers.sander ];
     homepage = http://vba.ngemu.com;
     broken = true;

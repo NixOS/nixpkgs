@@ -43,7 +43,7 @@ stdenv.mkDerivation (rec {
 
     homepage = http://savannah.gnu.org/projects/readline/;
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };

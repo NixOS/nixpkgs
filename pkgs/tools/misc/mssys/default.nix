@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://ms-sys.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPL";
     description = "A program for writing Microsoft compatible boot records";
   };
 }

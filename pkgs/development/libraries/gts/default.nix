@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://gts.sourceforge.net/;
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
     description = "GNU Triangulated Surface Library";
 
     longDescription = ''

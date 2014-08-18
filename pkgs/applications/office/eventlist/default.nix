@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       Incidences can be filtered, added, edited, deleted via context menu.
     '';
     homepage = "http://kde-look.org/content/show.php/Eventlist?content=107779";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
 	  };
 }

@@ -14,6 +14,6 @@ stdenv.mkDerivation {
   meta = {
     description = "hsetroot allows you to compose wallpapers ('root pixmaps') for X";
     homepage = http://thegraveyard.org/hsetroot.html;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
   };
 }

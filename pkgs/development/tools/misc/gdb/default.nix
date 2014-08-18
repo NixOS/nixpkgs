@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/gdb/;
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     platforms = with platforms; linux ++ cygwin ++ darwin;
     maintainers = with maintainers; [ pierron ];

@@ -29,6 +29,6 @@ buildPythonPackage rec {
 
       homepage = http://mcomix.sourceforge.net/;
 
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPLv2";
     };
 }

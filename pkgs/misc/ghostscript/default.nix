@@ -23,7 +23,7 @@ let
       of output drivers for various file formats and printers.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.viric ];

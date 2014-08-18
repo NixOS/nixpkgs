@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.coin3d.org/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     description = "Glue between Coin high-level 3D visualization library and Qt";
 
     maintainers = [ stdenv.lib.maintainers.viric ];

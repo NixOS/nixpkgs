@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://sourceforge.net/projects/inotify-tools/;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };

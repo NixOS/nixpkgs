@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/help2man/;
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
     platforms = stdenv.lib.platforms.gnu;         # arbitrary choice
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };

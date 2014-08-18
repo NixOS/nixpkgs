@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://tox.dhs.org/;
     description = "Tox plugin for Pidgin / libpurple";
-    license = stdenv.lib.licenses.gpl3;
+    license = "GPLv3";
   };
 }

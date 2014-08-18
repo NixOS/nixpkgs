@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Multiplayer remake of ZED";
     homepage = http://zod.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl3Plus; /* Says the web */
+    license = "GPLv3+"; /* Says the web */
   };
 }

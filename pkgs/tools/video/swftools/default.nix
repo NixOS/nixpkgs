@@ -13,6 +13,6 @@ stdenv.mkDerivation {
   meta = { 
     description = "Collection of SWF manipulation and creation utilities";
     homepage = http://www.swftools.org/about.html;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
   };
 }

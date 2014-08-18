@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   
   meta = {
     description = "A SOAP interface and client for Disnix";
-    license = stdenv.lib.licenses.mit;
+    license = "MIT";
     maintainers = [ stdenv.lib.maintainers.sander ];
   };
 }

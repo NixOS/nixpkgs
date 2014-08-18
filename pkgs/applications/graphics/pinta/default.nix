@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.pinta-project.com/;
     description = "Drawing/editing program modeled after Paint.NET";
-    license = stdenv.lib.licenses.mit;
+    license = "MIT";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

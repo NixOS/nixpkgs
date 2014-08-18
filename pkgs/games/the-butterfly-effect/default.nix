@@ -1,5 +1,5 @@
 x@{builderDefsPackage
-  , stdenv, qt4, box2d, which
+  , qt4, box2d, which
   ,fetchsvn
   , ...}:
 builderDefsPackage
@@ -54,7 +54,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
   };
   passthru = {
     inherit srcDrv;
@@ -63,3 +63,4 @@ rec {
     };
   };
 }) x
+

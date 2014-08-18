@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://waterlan.home.xs4all.nl/dos2unix.html;
     description = "Tools to transform text files from dos to unix formats and vicervesa";
-    license = stdenv.lib.licenses.bsd2;
+    license = "BSD";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; all;
   };

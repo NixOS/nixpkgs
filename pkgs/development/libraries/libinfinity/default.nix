@@ -37,8 +37,9 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = http://gobby.0x539.de/;
     description = "An implementation of the Infinote protocol written in GObject-based C";
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
     maintainers = [ stdenv.lib.maintainers.phreedom ];
   };
 
 }
+

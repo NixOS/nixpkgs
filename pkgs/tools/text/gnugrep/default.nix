@@ -35,7 +35,7 @@ stdenv.mkDerivation {
       prints the matching lines.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;

@@ -45,7 +45,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux ++ freebsd;
-    license = "free"; #TODO BSD on Gentoo, looks like MIT
+    license = "free";
   };
   passthru = {
     updateInfo = {
@@ -53,3 +53,4 @@ rec {
     };
   };
 }) x
+

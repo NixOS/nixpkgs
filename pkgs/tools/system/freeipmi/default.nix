@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/freeipmi/;
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     maintainers = with stdenv.lib.maintainers; [ raskin ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice

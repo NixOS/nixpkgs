@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An openstreetmap editor";
     homepage = http://merkaartor.org/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     maintainers = with stdenv.lib.maintainers; [viric urkud];
     inherit (qt4.meta) platforms;
   };

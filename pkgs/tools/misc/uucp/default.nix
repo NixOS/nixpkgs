@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/uucp/uucp.html;
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     platforms = stdenv.lib.platforms.all;
     maintainers = [ ];

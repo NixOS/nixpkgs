@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://nzbget.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     description = "A command line tool for downloading files from news servers";
   };
 }

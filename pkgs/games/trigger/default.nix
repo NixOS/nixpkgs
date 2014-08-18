@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Rally";
     homepage = http://trigger-rally.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

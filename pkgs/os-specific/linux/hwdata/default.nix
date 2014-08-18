@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://fedorahosted.org/hwdata/";
     description = "Hardware Database, including Monitors, pci.ids, usb.ids, and video cards";
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     platforms = stdenv.lib.platforms.linux;
   };
 }

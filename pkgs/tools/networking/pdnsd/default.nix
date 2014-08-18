@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = { 
     description = "Permanent DNS caching";
     homepage = http://www.phys.uu.nl/~rombouts/pdnsd.html;
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [viric];
   };

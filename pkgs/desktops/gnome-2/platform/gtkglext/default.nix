@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
          OpenGL drawing for standard and custom GTK+ widgets.
       '';
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
 
     maintainers = [ ];
   };

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.nongnu.org/fileschanged/";
     description = "A command-line utility that reports when files have been altered";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     longDescription = ''
       This utility is a client to FAM (File Alteration Monitor) servers

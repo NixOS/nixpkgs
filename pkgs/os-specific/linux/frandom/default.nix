@@ -40,7 +40,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A very fast random number generator kernel module";
     homepage = http://frandom.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
   };
 }
+

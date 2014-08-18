@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
         * mastering long poems
         * even practicing guitar chords!
       '';
-      license = stdenv.lib.licenses.gpl3;
+      license = "GPLv3";
       maintainers = with stdenv.lib.maintainers; [ the-kenny ];
       platforms = stdenv.lib.platforms.mesaPlatforms;
     };

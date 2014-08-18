@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   name = "libosip2-${version}";
 
   meta = {
-    license = stdenv.lib.licenses.lgpl21Plus;
+    license = "LGPLv2.1+";
     homepage = http://www.gnu.org/software/osip/;
     description = "The GNU oSIP library, an implementation of the Session Initiation Protocol (SIP)";
     maintainers = with stdenv.lib.maintainers; [ raskin ];

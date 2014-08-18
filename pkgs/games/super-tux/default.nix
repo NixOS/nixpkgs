@@ -23,6 +23,6 @@ stdenv.mkDerivation {
 
     homepage = http://supertux.lethargik.org/index.html;
 
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
   };
 }

@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     description = "Library for working with POSIX capabilities";
     homepage = http://people.redhat.com/sgrubb/libcap-ng/;
     platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.lgpl21;
+    license = "LGPLv2.1";
   };
 }

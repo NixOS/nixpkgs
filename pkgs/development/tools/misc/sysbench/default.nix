@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Modular, cross-platform and multi-threaded benchmark tool";
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     platforms = stdenv.lib.platforms.linux;
   };
 }

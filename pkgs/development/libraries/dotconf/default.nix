@@ -13,6 +13,6 @@ stdenv.mkDerivation rec {
     description = "A configuration parser library";
 
     homepage = http://www.azzit.de/dotconf/;
-    license = stdenv.lib.licenses.lgpl21Plus;
+    license = "LGPLv21+";
   };
 }

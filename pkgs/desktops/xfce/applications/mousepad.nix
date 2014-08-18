@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.xfce.org/;
     description = "A simple text editor for Xfce";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
   };
 }

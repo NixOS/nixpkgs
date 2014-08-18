@@ -1,5 +1,5 @@
 x@{builderDefsPackage
-  , stdenv, pari ? null 
+  , pari ? null 
   , ...}:
 builderDefsPackage
 (a :  
@@ -60,7 +60,8 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     homepage = "http://gap-system.org/";
   };
 }) x
+

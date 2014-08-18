@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       Standards.  Automake requires the use of Autoconf.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };

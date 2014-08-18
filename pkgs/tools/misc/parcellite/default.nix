@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Lightweight GTK+ clipboard manager";
     homepage = "http://parcellite.sourceforge.net";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ iyzsong ];
   };

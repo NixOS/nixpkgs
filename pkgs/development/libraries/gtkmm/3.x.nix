@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://gtkmm.org/;
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
 
     maintainers = with stdenv.lib.maintainers; [ raskin urkud vcunat ];
     platforms = stdenv.lib.platforms.linux;

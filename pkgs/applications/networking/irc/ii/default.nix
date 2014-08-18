@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://tools.suckless.org/ii/;
-    license = stdenv.lib.licenses.mit;
+    license = "MIT";
     description = "Irc it, simple FIFO based irc client";
   };
 }

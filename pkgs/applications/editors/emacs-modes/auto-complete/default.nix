@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Auto-complete extension for Emacs";
     homepage = http://cx4a.org/software/auto-complete/;
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     platforms = stdenv.lib.platforms.all;
   };

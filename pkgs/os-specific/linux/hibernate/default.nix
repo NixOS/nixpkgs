@@ -38,7 +38,7 @@ in
 	it into "hibernation".  It works both with Linux swsusp and Tux-on-Ice.
       '';
 
-      license = stdenv.lib.licenses.gpl2Plus;
+      license = "GPLv2+";
       homepage = http://www.tuxonice.net/;
     };
   }

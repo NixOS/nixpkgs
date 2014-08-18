@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   
   meta = {
     description = "A Nintendo 64 Emulator";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     homepage = http://code.google.com/p/mupen64plus;
     maintainers = [ stdenv.lib.maintainers.sander ];
   };

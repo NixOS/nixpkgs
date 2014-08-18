@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     '';
   meta = {
     description = "GeoIP Java API";
-    license = stdenv.lib.licenses.lgpl21Plus;
+    license = "LGPL2.1+";
     maintainers = [ stdenv.lib.maintainers.sander ];
   };
 }

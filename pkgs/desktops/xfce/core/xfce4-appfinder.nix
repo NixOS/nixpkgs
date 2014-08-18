@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://docs.xfce.org/xfce/xfce4-appfinder/;
     description = "Xfce application finder, a tool to locate and launch programs on your system";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };

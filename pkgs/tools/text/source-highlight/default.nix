@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Source code renderer with syntax highlighting";
     homepage = http://www.gnu.org/software/src-highlite/;
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
     platforms = stdenv.lib.platforms.linux;
     longDescription =
       ''

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://abook.sourceforge.net/";
     description = "Text-based addressbook program designed to use with mutt mail client";
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     maintainers = [ stdenv.lib.maintainers.edwtjo ];
     platforms = with stdenv.lib.platforms; linux;
   };

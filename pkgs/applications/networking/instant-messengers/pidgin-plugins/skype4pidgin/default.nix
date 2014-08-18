@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = https://github.com/novas0x2a/skype4pidgin;
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
     description = "Plugin to use a running skype account through pidgin";
   };
 }

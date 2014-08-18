@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://helm.cs.unibo.it/mml-widget/;
     description = "GtkMathView is a C++ rendering engine for MathML documents";
-    license = stdenv.lib.licenses.lgpl3Plus;
+    license = "LGPLv3+";
     maintainers = [ stdenv.lib.maintainers.roconnor ];
   };
 }

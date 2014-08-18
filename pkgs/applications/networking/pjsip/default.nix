@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "SIP stack and media stack for presence, im, and multimedia communication";
     homepage = http://pjsip.org/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

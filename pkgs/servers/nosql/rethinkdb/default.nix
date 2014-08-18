@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       and group by, and is easy to setup and learn.
     '';
     homepage = http://www.rethinkdb.com;
-    license = stdenv.lib.licenses.agpl3;
+    license = "AGPLv3";
 
     maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
     platforms = stdenv.lib.platforms.all;

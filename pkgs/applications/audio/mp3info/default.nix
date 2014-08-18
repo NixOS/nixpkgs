@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.ibiblio.org/mp3info/;
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.unix;

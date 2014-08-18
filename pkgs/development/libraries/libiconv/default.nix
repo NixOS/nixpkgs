@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.gnu.org/software/libiconv/;
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
 
     maintainers = [ ];
 

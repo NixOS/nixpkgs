@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.sane-project.org/";
     description = "Scanner Access Now Easy";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.linux;

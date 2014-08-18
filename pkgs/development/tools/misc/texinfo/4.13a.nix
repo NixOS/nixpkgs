@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       well-integrated with GNU Emacs.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     homepage = http://www.gnu.org/software/texinfo/;
   };

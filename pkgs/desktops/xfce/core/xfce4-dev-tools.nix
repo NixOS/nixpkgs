@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://foo-projects.org/~benny/projects/xfce4-dev-tools/;
     description = "Tools and M4 macros for Xfce4 developers";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
   };
 }

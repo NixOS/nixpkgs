@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
     repositories.git = git://github.com/cgdb/cgdb.git;
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     platforms = with stdenv.lib.platforms; linux ++ cygwin;
     maintainers = with stdenv.lib.maintainers; [ viric ];

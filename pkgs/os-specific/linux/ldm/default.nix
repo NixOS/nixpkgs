@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A lightweight device mounter, with libudev as only dependency";
-    license = stdenv.lib.licenses.mit;
+    license = "MIT";
 
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.the-kenny ];

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
         and will run about 30% faster.
       '';
       homepage = "https://github.com/samr7/vanitygen";
-      license = stdenv.lib.licenses.agpl3;
+      license = "AGPLv3";
       platforms = stdenv.lib.platforms.all;
   };
 }

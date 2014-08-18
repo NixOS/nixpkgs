@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
          robustness, supports 64-bit architecture.
       '';
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = "LGPLv2+";
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.unix;

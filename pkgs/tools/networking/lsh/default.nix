@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.lysator.liu.se/~nisse/lsh/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };

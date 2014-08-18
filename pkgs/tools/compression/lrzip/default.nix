@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://ck.kolivas.org/apps/lrzip/;
     description = "The CK LRZIP compression program (LZMA + RZIP)";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     inherit version;
   };
 }

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = http://members.dslextreme.com/users/billw/gkrellm/gkrellm.html;
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.unix;

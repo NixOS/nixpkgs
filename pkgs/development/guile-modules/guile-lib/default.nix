@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = http://www.nongnu.org/guile-lib/;
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = "GPLv3+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice

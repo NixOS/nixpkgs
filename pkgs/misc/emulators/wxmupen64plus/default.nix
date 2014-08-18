@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   
   meta = {
     description = "GUI for the Mupen64Plus 2.0 emulator";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     homepage = https://bitbucket.org/auria/wxmupen64plus/wiki/Home;
   };
 }

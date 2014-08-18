@@ -16,7 +16,7 @@ rec {
     meta = {
       description = "http-proxy";
       homepage = "http://www.squid-cache.org";
-      license = stdenv.lib.licenses.gpl2;
+      license = "GPL2";
     };
 
   };

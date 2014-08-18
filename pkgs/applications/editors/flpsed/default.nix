@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   meta = {
     description = "WYSIWYG PostScript annotator";
     homepage = "http://http://flpsed.org/flpsed.html";
-    license = stdenv.lib.licenses.gpl3;
+    license = "GPLv3";
     platforms = stdenv.lib.platforms.mesaPlatforms;
   };
 }

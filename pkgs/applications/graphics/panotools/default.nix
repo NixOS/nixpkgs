@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://panotools.sourceforge.net/;
     description = "Free software suite for authoring and displaying virtual reality panoramas";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };

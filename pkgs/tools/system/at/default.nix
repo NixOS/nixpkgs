@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = ''The classical Unix `at' job scheduling command'';
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
     homepage = http://packages.qa.debian.org/at;
   };
 }

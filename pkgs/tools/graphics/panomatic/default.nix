@@ -13,6 +13,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://aorlinsk2.free.fr/panomatic/;
     description = "Tool that automates the creation of control points in Hugin";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
   };
 }

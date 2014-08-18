@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://cristal.inria.fr/camlimages;
     description = "Image manipulation library";
-    license = stdenv.lib.licenses.gpl2;
+    license = "GnuGPLV2";
 #    maintainers = [ stdenv.lib.maintainers.roconnor ];
   };
 }

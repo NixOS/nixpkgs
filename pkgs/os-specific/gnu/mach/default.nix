@@ -41,7 +41,7 @@ stdenv.mkDerivation ({
          were added using glue code, i.e., a Linux emulation layer in Mach.
       '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = "GPLv2+";
 
     homepage = http://www.gnu.org/software/hurd/microkernel/mach/gnumach.html;
 

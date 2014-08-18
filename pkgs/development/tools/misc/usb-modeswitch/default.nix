@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   buildInputs = [ libusb ];
 
   meta = {
-    license = stdenv.lib.licenses.gpl2;
+    license = "GPLv2";
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };
