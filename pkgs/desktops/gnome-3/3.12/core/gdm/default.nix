@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
                   gobjectIntrospection libX11 gtk
                   libcanberra_gtk3 pam libtool ];
 
-  enableParallelBuilding = true;
+  #enableParallelBuilding = true; # problems compiling
 
   preBuild = ''
     substituteInPlace daemon/gdm-simple-slave.c --replace 'BINDIR "/gnome-session' '"${gnome_session}/bin/gnome-session'
