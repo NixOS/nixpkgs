@@ -811,6 +811,8 @@ let
 
   convmv = callPackage ../tools/misc/convmv { };
 
+  cool-old-term = callPackage ../applications/misc/cool-old-term { };
+
   coreutils = callPackage ../tools/misc/coreutils
     {
       # TODO: Add ACL support for cross-Linux.
