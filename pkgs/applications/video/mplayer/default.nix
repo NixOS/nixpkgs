@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, freetype, yasm
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
+, fribidiSupport ? true, fribidi ? null
 , x11Support ? true, libX11 ? null, libXext ? null, mesa ? null
 , xineramaSupport ? true, libXinerama ? null
 , xvSupport ? true, libXv ? null
@@ -25,6 +26,7 @@
 
 assert fontconfigSupport -> (fontconfig != null);
 assert (!fontconfigSupport) -> (freefont_ttf != null);
+assert fribidiSupport -> (fribidi != null);
 assert x11Support -> (libX11 != null && libXext != null && mesa != null);
 assert xineramaSupport -> (libXinerama != null && x11Support);
 assert xvSupport -> (libXv != null && x11Support);
@@ -100,6 +102,7 @@ stdenv.mkDerivation rec {
   buildInputs = with stdenv.lib;
     [ pkgconfig freetype ]
     ++ optional fontconfigSupport fontconfig
+    ++ optional fribidiSupport fribidi
     ++ optionals x11Support [ libX11 libXext mesa ]
     ++ optional alsaSupport alsaLib
     ++ optional xvSupport libXv
@@ -150,6 +153,7 @@ stdenv.mkDerivation rec {
       ${if pulseSupport then "--enable-pulse" else "--disable-pulse"}
       ${optionalString (useUnfreeCodecs && codecs != null) "--codecsdir=${codecs}"}
       ${optionalString (stdenv.isi686 || stdenv.isx86_64) "--enable-runtime-cpudetection"}
+      ${optionalString fribidiSupport "--enable-fribidi"}
       --disable-xanim
       --disable-ivtv
       --disable-xvid --disable-xvid-lavc
@@ -160,6 +164,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = with stdenv.lib;
        optional  fontconfigSupport "-lfontconfig"
+    ++ optional  fribidiSupport "-lfribidi"
     ++ optionals x11Support [ "-lX11" "-lXext" ]
     ;
 
