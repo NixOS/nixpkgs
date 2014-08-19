@@ -10,13 +10,7 @@ stdenv.mkDerivation rec {
   name = "fluxbox-${version}";
   version = "1.3.5";
 
-  buildInputs = [
-    pkgconfig
-    freetype fribidi
-    libXext libXft libXpm libXrandr libXrender xextproto
-    libXinerama
-    imlib2
-  ];
+  buildInputs = [ pkgconfig freetype fribidi libXext libXft libXpm libXrandr libXrender xextproto libXinerama imlib2 ];
 
   src = fetchurl {
     url = "mirror://sourceforge/fluxbox/${name}.tar.bz2";
@@ -24,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "Full-featured, light-resource X window manager.";
+    description = "Full-featured, light-resource X window manager";
     longDescription = ''
       Fluxbox is a X window manager based on Blackbox 0.61.1 window manager sources.
       It is very light on resources and easy to handle but yet full of features to make an easy,
