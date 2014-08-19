@@ -27,6 +27,7 @@ Usage: nixos-container list
        nixos-container run <container-name> -- args...
        nixos-container set-root-password <container-name> <password>
        nixos-container show-ip <container-name>
+       nixos-container show-host-key <container-name>
 EOF
     exit 0;
 }
@@ -169,7 +170,7 @@ my $confFile = "/etc/containers/$containerName.conf";
 if (!-e $confFile) {
     if ($action eq "destroy") {
         exit 0;
-    } else {
+    } elsif ($action eq "status") {
         print "gone\n";
     }
     die "$0: container ‘$containerName’ does not exist\n" ;
@@ -262,6 +263,12 @@ elsif ($action eq "show-ip") {
     my $s = read_file($confFile) or die;
     $s =~ /^LOCAL_ADDRESS=([0-9\.]+)$/m or die "$0: cannot get IP address\n";
     print "$1\n";
+}
+
+elsif ($action eq "show-host-key") {
+    my $fn = "$root/etc/ssh/ssh_host_ecdsa_key.pub";
+    exit 1 if ! -f $fn;
+    print read_file($fn);
 }
 
 else {
