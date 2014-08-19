@@ -2,19 +2,19 @@
 
 { cabal, aeson, aesonPretty, attoparsec, filepath, hexpat
 , hsBibutils, mtl, pandoc, pandocTypes, parsec, rfc5051, split, syb
-, tagsoup, temporary, texmath, text, time, vector, yaml
+, tagsoup, temporary, text, time, vector, yaml
 }:
 
 cabal.mkDerivation (self: {
   pname = "pandoc-citeproc";
-  version = "0.4";
-  sha256 = "11syrig4qbc88ddjbb5qc4c9yf5rzq0gyjz42dis8j4gf5hyg4f0";
+  version = "0.4.0.1";
+  sha256 = "1z21mdxa2hrwqdclriyn3s1qqij3ccbkg7hb0acxrk3pzgidcinx";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     aeson aesonPretty attoparsec filepath hexpat hsBibutils mtl pandoc
-    pandocTypes parsec rfc5051 split syb tagsoup temporary texmath text
-    time vector yaml
+    pandocTypes parsec rfc5051 split syb tagsoup temporary text time
+    vector yaml
   ];
   testDepends = [
     aeson filepath pandoc pandocTypes temporary text yaml
