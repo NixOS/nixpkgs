@@ -7,14 +7,14 @@
 , httpTypes, HUnit, JuicyPixels, mtl, network, pandocTypes, parsec
 , QuickCheck, random, scientific, SHA, syb, tagsoup, temporary
 , testFramework, testFrameworkHunit, testFrameworkQuickcheck2
-, texmath, text, time, unorderedContainers, vector, xml, yaml
-, zipArchive, zlib
+, texmath, text, time, unorderedContainers, vector, wai, waiExtra
+, xml, yaml, zipArchive, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "pandoc";
-  version = "1.13";
-  sha256 = "09zmh7yvasxybcr4rnnqf9bx8njhi8hwgzsik6db691j5j5yxg6l";
+  version = "1.13.0.1";
+  sha256 = "0pjyxsr93gv0vrdxlr5i0c56mg6rf21qxf1141cb8l0hl0b416d6";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -23,7 +23,7 @@ cabal.mkDerivation (self: {
     haddockLibrary happy highlightingKate hslua HTTP httpClient
     httpClientTls httpTypes JuicyPixels mtl network pandocTypes parsec
     random scientific SHA syb tagsoup temporary texmath text time
-    unorderedContainers vector xml yaml zipArchive zlib
+    unorderedContainers vector wai waiExtra xml yaml zipArchive zlib
   ];
   testDepends = [
     ansiTerminal Diff executablePath filepath highlightingKate HUnit
