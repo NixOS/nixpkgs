@@ -1,14 +1,14 @@
-{stdenv, fetchurl, ocaml, findlib, easy-format, biniou, yojson, menhir}:
+{stdenv, fetchurl, ocaml, findlib, yojson, menhir}:
 stdenv.mkDerivation {
 
-  name = "merlin-1.6";
+  name = "merlin-1.7";
 
   src = fetchurl {
-    url = "https://github.com/the-lambda-church/merlin/archive/v1.6.tar.gz";
-    sha256 = "0wq75hgffaszazrhkl0nfjxgx8bvazi2sjannd8q64hvax8hxzcy";
+    url = "https://github.com/the-lambda-church/merlin/archive/v1.7.tar.gz";
+    sha256 = "0grprrykah02g8va63lidbcb6n8sd18l2k9spb5rwlcs3xhfw42b";
   };
 
-  buildInputs = [ ocaml findlib biniou yojson menhir easy-format ];
+  buildInputs = [ ocaml findlib yojson menhir ];
 
   prefixKey = "--prefix ";
 
