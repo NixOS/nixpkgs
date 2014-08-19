@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
 
     # Make binutils output deterministic by default.
     ./deterministic.patch
+
+    # Always add PaX flags section to ELF files.
+    # This is needed, for instance, so that running "ldd" on a binary that is
+    # PaX-marked to disable mprotect doesn't fail with permission denied.
+    ./pt-pax-flags-20121023.patch
   ];
 
   buildInputs =
@@ -73,7 +78,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/binutils/;
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     /* Give binutils a lower priority than gcc-wrapper to prevent a
        collision due to the ld/as wrappers/symlinks in the latter. */

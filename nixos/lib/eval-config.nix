@@ -58,7 +58,7 @@ rec {
           inherit system extraArgs modules prefix;
           # For efficiency, leave out most NixOS modules; they don't
           # define nixpkgs.config, so it's pointless to evaluate them.
-          baseModules = [ ../modules/misc/nixpkgs.nix ];
+          baseModules = [ ../modules/misc/nixpkgs.nix ../modules/config/no-x-libs.nix ];
           pkgs = import ./nixpkgs.nix { system = system_; config = {}; };
           check = false;
         }).config.nixpkgs;

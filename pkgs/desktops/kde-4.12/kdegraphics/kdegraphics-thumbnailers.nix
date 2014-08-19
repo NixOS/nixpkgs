@@ -1,4 +1,4 @@
-{ kde, kdelibs, libkexiv2, libkdcraw, pkgconfig }:
+{ stdenv, kde, kdelibs, libkexiv2, libkdcraw, pkgconfig }:
 
 kde {
 
@@ -8,6 +8,6 @@ kde {
 
   meta = {
     description = "Thumbnailers for various graphics file formats";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

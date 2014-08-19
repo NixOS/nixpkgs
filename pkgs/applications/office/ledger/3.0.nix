@@ -1,28 +1,28 @@
-{ stdenv, fetchgit, cmake, boost, gmp, mpfr, libedit, python, texinfo }:
+{ stdenv, fetchgit, cmake, boost, gmp, mpfr, libedit, python
+, texinfo, gnused }:
 
 let
-  rev = "3b5f496536";
+  rev = "a0c5addbbd";
 in
+
 stdenv.mkDerivation {
-  name = "ledger3-2013.12.${rev}";
+  name = "ledger-3.0.2.${rev}";
 
   src = fetchgit {
-    url = "https://github.com/ledger/ledger.git";
+    url = "git://github.com/ledger/ledger.git";
     inherit rev;
-    sha256 = "0r36zsdsyy6aylfcwyqra4796y4abi3b27wv5fvk3g2bmyzqzx4j";
+    sha256 = "1yr4i8gpby67j4vl7xk109dwb14z8a424nwgva8rbms8115w4ps5";
   };
 
-  buildInputs = [ cmake boost gmp mpfr libedit python texinfo ];
+  buildInputs = [ cmake boost gmp mpfr libedit python texinfo gnused ];
 
-  # Tests on Darwin are failing
-  doCheck = !stdenv.isDarwin;
   enableParallelBuilding = true;
 
   # Skip byte-compiling of emacs-lisp files because this is currently
   # broken in ledger...
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp/
-    cp -v $src/lisp/*.el $out/share/emacs/site-lisp/
+    cp -v "$src/lisp/"*.el $out/share/emacs/site-lisp/
   '';
 
   meta = {
@@ -38,6 +38,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ simons the-kenny ];
+    maintainers = with stdenv.lib.maintainers; [ simons the-kenny jwiegley ];
   };
 }

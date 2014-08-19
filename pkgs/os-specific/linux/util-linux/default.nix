@@ -1,13 +1,11 @@
 { stdenv, fetchurl, zlib, ncurses ? null, perl ? null, pam }:
-let
-  ver = "2.24";
-in
+
 stdenv.mkDerivation rec {
-  name = "util-linux-${ver}";
+  name = "util-linux-2.24.2";
 
   src = fetchurl {
-    url = "http://www.kernel.org/pub/linux/utils/util-linux/v${ver}/${name}.tar.bz2";
-    sha256 = "1nfnymj03rdcxjb677a9qq1zirppr8csh32cb85qm23x5xndi6v3";
+    url = "http://www.kernel.org/pub/linux/utils/util-linux/v2.24/${name}.tar.xz";
+    sha256 = "1w0g8q5aj5pjdf8l52g0mxyvlk62f4dch51q9jm3hnqwgz0dchqj";
   };
 
   crossAttrs = {
@@ -19,8 +17,6 @@ stdenv.mkDerivation rec {
   # (/sbin/mount.*) through an environment variable, but that's
   # somewhat risky because we have to consider that mount can setuid
   # root...
-  # --enable-libmount-mount  fixes the behaviour being /etc/mtab a symlink to /proc/monunts
-  #     http://pl.digipedia.org/usenet/thread/19513/1924/
   configureFlags = ''
     --enable-write
     --enable-last

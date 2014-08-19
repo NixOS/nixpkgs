@@ -10,7 +10,7 @@ in
 stdenv.mkDerivation {
   name = "teamviewer-8.0.17147";
   src = fetchurl {
-    url = "http://download.teamviewer.com/download/teamviewer_linux_x64.deb";
+    url = "http://download.teamviewer.com/download/version_8x/teamviewer_linux_x64.deb";
     sha256 = "0s5m15f99rdmspzwx3gb9mqd6jx1bgfm0d6rfd01k9rf7gi7qk0k";
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://www.teamviewer.com";
-    license = "unfree";
+    license = stdenv.lib.licenses.unfree;
     description = "Desktop sharing application, providing remote support and online meetings";
   };
 }

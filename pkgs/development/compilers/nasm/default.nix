@@ -1,16 +1,17 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "nasm-2.11.01";
+  name = "nasm-${version}";
+  version = "2.11.05";
   
   src = fetchurl {
-    url = "http://www.nasm.us/pub/nasm/releasebuilds/2.11.01/${name}.tar.bz2";
-    sha256 = "0p0rhq18in2hyv3gircgxj72n2b1mvr8bvjlqscpaz8m62cyvam7";
+    url = "http://www.nasm.us/pub/nasm/releasebuilds/${version}/${name}.tar.bz2";
+    sha256 = "1sgspnascc0asmwlv3jm1mq4vzx653sa7vlg48z20pfybk7pnhaa";
   };
 
   meta = {
     homepage = http://www.nasm.us/;
     description = "An 80x86 and x86-64 assembler designed for portability and modularity";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

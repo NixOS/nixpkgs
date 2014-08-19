@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+import ./make-test.nix (
 
 let
   client = { config, pkgs, ... }: {
@@ -7,10 +7,13 @@ let
   };
 in
 {
+  name = "mumble";
+
   nodes = {
     server = { config, pkgs, ... }: {
       services.murmur.enable       = true;
       services.murmur.registerName = "NixOS tests";
+      networking.firewall.allowedTCPPorts = [ config.services.murmur.port ];
     };
 
     client1 = client;
@@ -27,19 +30,21 @@ in
     $client1->execute("mumble mumble://client1\@server/test &");
     $client2->execute("mumble mumble://client2\@server/test &");
 
-    $server->sleep(10); # Wait for Mumble UI to pop up
-
     # cancel client audio configuration
+    $client1->waitForWindow(qr/Audio Tuning Wizard/);
+    $client2->waitForWindow(qr/Audio Tuning Wizard/);
     $client1->sendKeys("esc");
     $client2->sendKeys("esc");
-    $server->sleep(1);
 
     # cancel client cert configuration
+    $client1->waitForWindow(qr/Certificate Management/);
+    $client2->waitForWindow(qr/Certificate Management/);
     $client1->sendKeys("esc");
     $client2->sendKeys("esc");
-    $server->sleep(1);
 
     # accept server certificate
+    $client1->waitForWindow(qr/^Mumble$/);
+    $client2->waitForWindow(qr/^Mumble$/);
     $client1->sendChars("y");
     $client2->sendChars("y");
 
@@ -51,4 +56,4 @@ in
     $client1->screenshot("screen1");
     $client2->screenshot("screen2");
   '';
-}
+})

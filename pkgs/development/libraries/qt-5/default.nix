@@ -10,14 +10,14 @@
 , gtkStyle ? false, libgnomeui, gtk, GConf, gnome_vfs
 , buildDocs ? false
 , buildExamples ? false
-, buildTests ? true
+, buildTests ? false
 , developerBuild ? false
 }:
 
 with stdenv.lib;
 
 let
-  v_maj = "5.1";
+  v_maj = "5.2";
   v_min = "1";
   ver = "${v_maj}.${v_min}";
 in
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/qt/"
       + "${v_maj}/${ver}/single/qt-everywhere-opensource-src-${ver}.tar.gz";
-    sha256 = "4c05742db52325e96b1d610a2388140dcc1e3d03d93faea2b2d3791015b186f6";
+    sha256 = "18bxrnyis7xbhpxpf7w42i54hs4qr062b1wx4c0dpmja3lc29sc4";
   };
 
   # The version property must be kept because it will be included into the QtSDK package name
@@ -38,13 +38,16 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace /bin/pwd pwd
     substituteInPlace qtbase/configure --replace /bin/pwd pwd
     substituteInPlace qtbase/src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
+    substituteInPlace qtbase/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp \
+        --replace /usr/share/X11/locale ${libX11}/share/X11/locale \
+        --replace /usr/lib/X11/locale ${libX11}/share/X11/locale
     sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i config.tests/*/*.test -i qtbase/mkspecs/*/*.conf
   '';
 
   patches =
     [ ./glib-2.32.patch
       (substituteAll {
-        src = ./dlopen-absolute-paths.patch;
+        src = ./qt-5.2-dlopen-absolute-paths.patch;
         inherit cups icu libXfixes;
         glibc = stdenv.gcc.libc;
         openglDriver = if mesaSupported then mesa.driverLink else "/no-such-path";
@@ -84,8 +87,6 @@ stdenv.mkDerivation rec {
     -optimized-qmake
     -strip
     -reduce-relocations
-    -force-debug-info
-    -no-separate-debug-info
     -system-proxies
 
     -gui
@@ -143,9 +144,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python perl pkgconfig ];
 
-  postInstall = if buildDocs then "make docs&&make install_docs" else "";
+  postInstall =
+    ''
+      ${optionalString buildDocs ''
+        make docs && make install_docs
+      ''}
 
-  #enableParallelBuilding = true; # often fails on Hydra, as well as qt4
+      # Don't retain build-time dependencies like gdb and ruby.
+      sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $out/mkspecs/qconfig.pri
+    '';
+
+  enableParallelBuilding = true; # often fails on Hydra, as well as qt4
 
   meta = {
     homepage = http://qt-project.org;

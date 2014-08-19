@@ -1,15 +1,16 @@
-{ fetchurl, stdenv, emacs, texinfo, which, texLive }:
+{ fetchurl, stdenv, emacs, texinfo, which, texLive, texLiveCMSuper
+, texLiveAggregationFun }:
 
 stdenv.mkDerivation rec {
-  name = "org-8.2.1";
+  name = "org-8.2.7c";
 
   src = fetchurl {
     url = "http://orgmode.org/${name}.tar.gz";
-    sha256 = "625e2b6786158bcf6c43194075f7638ab8048c68a60025289a051c407e467823";
+    sha256 = "0qqf58xqw1kkgjxm9z40s6h7xd209rx3933klla22lryv3yclc1k";
   };
 
   buildInputs = [ emacs ];
-  nativeBuildInputs = [ texinfo texLive ];
+  nativeBuildInputs = [ (texLiveAggregationFun { paths=[ texinfo texLive texLiveCMSuper ]; }) ];
 
   configurePhase =
     '' sed -i mk/default.mk \
@@ -41,9 +42,9 @@ stdenv.mkDerivation rec {
          than that found in GNU Emacs.
       '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ chaoflow ];
-    platforms = stdenv.lib.platforms.gnu;
+    maintainers = with stdenv.lib.maintainers; [ chaoflow pSub ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -1,6 +1,6 @@
 { stdenv, runCommand, nodejs, neededNatives}:
 
-args @ { name, src, deps ? [], peerDependencies ? [], flags ? [], ... }:
+args @ { name, src, deps ? [], peerDependencies ? [], flags ? [], preShellHook ? "",  postShellHook ? "", ... }:
 
 with stdenv.lib;
 
@@ -8,7 +8,7 @@ let
   npmFlags = concatStringsSep " " (map (v: "--${v}") flags);
 
   sources = runCommand "node-sources" {} ''
-    tar xf ${nodejs.src}
+    tar --no-same-owner -xf ${nodejs.src}
     mv *node* $out
   '';
 
@@ -80,6 +80,16 @@ stdenv.mkDerivation ({
   preFixup = concatStringsSep "\n" (map (src: ''
     find $out -type f -print0 | xargs -0 sed -i 's|${src}|${src.name}|g'
   '') src);
+
+  shellHook = ''
+    ${preShellHook}
+    export PATH=${nodejs}/bin:$(pwd)/node_modules/.bin:$PATH
+    mkdir -p node_modules
+    ${concatStrings (concatMap (dep: map (name: ''
+      ln -sfv ${dep}/lib/node_modules/${name} node_modules/
+    '') dep.names) deps)}
+    ${postShellHook}
+  '';
 } // args // {
   # Run the node setup hook when this package is a build input
   propagatedNativeBuildInputs = (args.propagatedNativeBuildInputs or []) ++ [ nodejs ];

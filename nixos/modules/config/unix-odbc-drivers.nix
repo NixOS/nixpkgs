@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 # unixODBC drivers (this solution is not perfect.. Because the user has to
 # ask the admin to add a driver.. but it's simple and works
@@ -27,7 +27,7 @@ with pkgs.lib;
 
     environment.etc."odbcinst.ini".text =
       let inis = config.environment.unixODBCDrivers;
-      in pkgs.lib.concatStringsSep "\n" inis;
+      in lib.concatStringsSep "\n" inis;
 
   };
 

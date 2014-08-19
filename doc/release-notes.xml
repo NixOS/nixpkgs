@@ -446,7 +446,7 @@ xlink:href='http://nixos.org/releases/nix/nix-0.10/'>Nix
   <literal>stdenv</literal>; the formed changes the C compiler, and
   the latter adds additional packages to the front of
   <literal>stdenv</literal>’s initial <envar>PATH</envar>, allowing
-  tools to be overriden.</para>
+  tools to be overridden.</para>
 
   <para>For instance, the package <varname>strategoxt</varname>
   doesn’t build with the GNU Make in <literal>stdenv</literal>

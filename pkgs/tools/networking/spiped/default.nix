@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl }:
+{ stdenv, fetchurl, openssl, coreutils }:
 
 stdenv.mkDerivation rec {
   name    = "spiped-${version}";
@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ];
   patches = [ ./no-dev-stderr.patch ];
+
+  postPatch = ''
+    substituteInPlace POSIX/posix-l.sh --replace "rm" "${coreutils}/bin/rm"
+  '';
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1

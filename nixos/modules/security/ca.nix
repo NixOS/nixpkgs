@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
 
@@ -12,9 +12,12 @@ with pkgs.lib;
         }
       ];
 
-    environment.variables.OPENSSL_X509_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
-    environment.variables.CURL_CA_BUNDLE = "/etc/ssl/certs/ca-bundle.crt";
-    environment.variables.GIT_SSL_CAINFO = "/etc/ssl/certs/ca-bundle.crt";
+    environment.sessionVariables =
+      { SSL_CERT_FILE          = "/etc/ssl/certs/ca-bundle.crt";
+        # FIXME: unneeded - remove eventually.
+        OPENSSL_X509_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
+        GIT_SSL_CAINFO         = "/etc/ssl/certs/ca-bundle.crt";
+      };
 
   };
 

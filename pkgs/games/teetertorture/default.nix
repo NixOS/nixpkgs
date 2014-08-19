@@ -26,6 +26,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.newbreedsoftware.com/teetertorture/;
     description = "Simple shooting game with your cannon is sitting atop a teeter totter";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

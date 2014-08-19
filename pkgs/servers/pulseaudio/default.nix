@@ -1,19 +1,26 @@
-{ stdenv, fetchurl, pkgconfig, gnum4, gdbm, libtool, glib, dbus, avahi
+{ stdenv, fetchurl, fetchpatch, pkgconfig, gnum4, gdbm, libtool, glib, dbus, avahi
 , gconf, gtk, intltool, gettext, alsaLib, libsamplerate, libsndfile, speex
 , bluez, sbc, udev, libcap, json_c
-, jackaudioSupport ? false, jackaudio ? null
+, jackaudioSupport ? false, jack2 ? null
 , x11Support ? false, xlibs
 , useSystemd ? false, systemd ? null }:
 
-assert jackaudioSupport -> jackaudio != null;
+assert jackaudioSupport -> jack2 != null;
 
 stdenv.mkDerivation rec {
-  name = "pulseaudio-4.0";
+  name = "pulseaudio-5.0";
 
   src = fetchurl {
-    url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-4.0.tar.xz";
-    sha256 = "1bndz4l8jxyq3zq128gzp3gryxl6yjs66j2y1d7yabw2n5mv7kim";
+    url = "http://freedesktop.org/software/pulseaudio/releases/${name}.tar.xz";
+    sha256 = "0fgrr8v7yfh0byhzdv4c87v9lkj8g7gpjm8r9xrbvpa92a5kmhcr";
   };
+
+  patches = [(fetchpatch {
+    name = "CVE-2014-3970.patch";
+    url = "http://cgit.freedesktop.org/pulseaudio/pulseaudio/patch/"
+      + "?id=26b9d22dd24c17eb118d0205bf7b02b75d435e3c";
+    sha256 = "13vxp6520djgfrfxkzy5qvabl94sga3yl5pj93xawbkgwzqymdyq";
+  })];
 
   # Since `libpulse*.la' contain `-lgdbm' and `-lcap', it must be propagated.
   propagatedBuildInputs
@@ -22,7 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig gnum4 libtool intltool glib dbus avahi libsamplerate libsndfile
       speex json_c ]
-    ++ stdenv.lib.optional jackaudioSupport jackaudio
+    ++ stdenv.lib.optional jackaudioSupport jack2
     ++ stdenv.lib.optionals x11Support [ xlibs.xlibs xlibs.libXtst xlibs.libXi ]
     ++ stdenv.lib.optional useSystemd systemd
     ++ stdenv.lib.optionals stdenv.isLinux [ alsaLib bluez sbc udev ];

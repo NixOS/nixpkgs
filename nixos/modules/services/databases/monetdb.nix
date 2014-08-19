@@ -1,9 +1,9 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.services.monetdb;
   monetdbUser = "monetdb";
 in
-with pkgs.lib;
+with lib;
 {
 
   ###### interface

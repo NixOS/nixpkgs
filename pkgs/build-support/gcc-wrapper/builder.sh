@@ -78,10 +78,12 @@ fi
 doSubstitute() {
     local src=$1
     local dst=$2
+    local sysroot='NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE --sysroot=/var/empty"'
     local ld="$ldPath/ld"
     if $ld -V 2>&1 |grep Solaris; then
       # Use Solaris specific linker wrapper
       ld="$out/bin/ld-solaris"
+      sysroot=""
     fi
     # Can't use substitute() here, because replace may not have been
     # built yet (in the bootstrap).
@@ -96,6 +98,7 @@ doSubstitute() {
         -e "s^@coreutils@^$coreutils^g" \
         -e "s^@libc@^$libc^g" \
         -e "s^@ld@^$ld^g" \
+        -e "s^@sysroot@^$sysroot^g" \
         < "$src" > "$dst" 
 }
 

@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, perl, flex, bison, libpcap, libnl, c-ares
 , gnutls, libgcrypt, geoip, heimdal, lua5, gtk, makeDesktopItem, python
+, libcap
 }:
 
 let version = "1.11.2"; in
@@ -14,8 +15,10 @@ stdenv.mkDerivation {
 
   buildInputs = [
     bison flex perl pkgconfig libpcap lua5 heimdal libgcrypt gnutls
-    geoip libnl c-ares gtk python
+    geoip libnl c-ares gtk python libcap
   ];
+
+  patches = [ ./wireshark-lookup-dumpcap-in-path.patch ];
 
   preConfigure = ''
     sed -re 's/g_memmove/memmove/' -i $(grep -rl g_memmove .)
@@ -54,6 +57,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = with stdenv.lib.maintainers; [ simons bjornfor ];
   };
 }

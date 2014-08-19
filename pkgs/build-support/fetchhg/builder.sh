@@ -1,9 +1,9 @@
 source $stdenv/setup
+header "getting $url${rev:+ ($rev)} into $out"
 
-header "getting $url${tag:+ ($tag)} into $out"
+hg clone --insecure "$url" hg-clone
 
-hg clone --insecure ${tag:+-r "$tag"} "$url" "$out"
-
-rm -rf "$out/.hg"
+hg archive -q -y ${rev:+-r "$rev"} --cwd hg-clone $out
+rm -f $out/.hg_archival.txt
 
 stopNest

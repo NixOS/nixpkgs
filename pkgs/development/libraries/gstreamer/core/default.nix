@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gstreamer-1.2.3";
+  name = "gstreamer-1.4.0";
 
   meta = {
     description = "Open source multimedia framework";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gstreamer/${name}.tar.xz";
-    sha256 = "1syqn0kki5disx01q3y0z6p5qhr2a5g388wc6s649cw4lcbri6hg";
+    sha256 = "15f68pn2b47x543ih7hj59czgzl4af14j15bgjq8ky145gf9zhr3";
   };
 
   nativeBuildInputs = [

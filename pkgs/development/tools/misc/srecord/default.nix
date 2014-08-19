@@ -1,11 +1,11 @@
 { stdenv, fetchurl, boost, libtool, groff, ghostscript }:
 
 stdenv.mkDerivation rec {
-  name = "srecord-1.62";
+  name = "srecord-1.63";
 
   src = fetchurl {
     url = "mirror://sourceforge/srecord/${name}.tar.gz";
-    sha256 = "0bfbmhsm9mbwiik3yrhm95q8bgx1k4mh2ai412k8zjyi8f5f3904";
+    sha256 = "06mzj9lrk8lzfzhnfyh8xm4p92j242jik6zm37ihcia20inwgzkq";
   };
 
   buildInputs = [ boost libtool groff ghostscript ];

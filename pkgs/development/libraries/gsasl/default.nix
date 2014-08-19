@@ -8,7 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "1rci64cxvcfr8xcjpqc4inpfq7aw4snnsbf5xz7d30nhvv8n40ii";
   };
 
-  buildInputs = [ gss libidn ];
+  buildInputs = [ libidn ]
+    ++ stdenv.lib.optional (!stdenv.isDarwin) gss;
+
+  configureFlags = stdenv.lib.optionalString stdenv.isDarwin "--with-gssapi-impl=mit";
 
   doCheck = true;
 
@@ -23,7 +26,7 @@ stdenv.mkDerivation rec {
        '';
 
     homepage = http://www.gnu.org/software/gsasl/;
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = with stdenv.lib.maintainers; [ ];
     platforms = stdenv.lib.platforms.all;

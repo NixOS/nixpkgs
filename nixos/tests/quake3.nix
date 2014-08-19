@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+import ./make-test.nix (
 
 let
 
@@ -13,6 +13,7 @@ let
 in
 
 rec {
+  name = "quake3";
 
   makeCoverageReport = true;
 
@@ -37,6 +38,7 @@ rec {
                 "'+map q3dm7' '+addbot grunt' '+addbot daemia' 2> /tmp/log";
             };
           nixpkgs.config.packageOverrides = overrides;
+          networking.firewall.allowedUDPPorts = [ 27960 ];
         };
 
       client1 = client;
@@ -78,4 +80,4 @@ rec {
       $server->stopJob("quake3-server");
     '';
 
-}
+})

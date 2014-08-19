@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -191,6 +191,7 @@ in
         "ehci_hcd"
         "ehci_pci"
         "ohci_hcd"
+        "ohci_pci"
         "xhci_hcd"
         "usbhid"
         "hid_generic"
@@ -218,37 +219,26 @@ in
 
     # Create /etc/modules-load.d/nixos.conf, which is read by
     # systemd-modules-load.service to load required kernel modules.
-    # FIXME: ensure that systemd-modules-load.service is restarted if
-    # this file changes.
     environment.etc = singleton
       { target = "modules-load.d/nixos.conf";
         source = kernelModulesConf;
       };
 
-    # Sigh.  This overrides systemd's systemd-modules-load.service
-    # just so we can set a restart trigger.  Also make
-    # multi-user.target pull it in so that it gets started if it
-    # failed earlier.
     systemd.services."systemd-modules-load" =
-      { description = "Load Kernel Modules";
-        wantedBy = [ "sysinit.target" "multi-user.target" ];
-        before = [ "sysinit.target" "shutdown.target" ];
-        conflicts = [ "shutdown.target" ];
-        unitConfig =
-          { DefaultDependencies = false;
-            ConditionCapability = "CAP_SYS_MODULE";
-          };
+      { wantedBy = [ "multi-user.target" ];
+        restartTriggers = [ kernelModulesConf ];
+        environment.MODULE_DIR = "/run/booted-system/kernel-modules/lib/modules";
         serviceConfig =
-          { Type = "oneshot";
-            RemainAfterExit = true;
-            ExecStart = "${config.systemd.package}/lib/systemd/systemd-modules-load";
-            # Ignore failed module loads.  Typically some of the
+          { # Ignore failed module loads.  Typically some of the
             # modules in ‘boot.kernelModules’ are "nice to have but
             # not required" (e.g. acpi-cpufreq), so we don't want to
             # barf on those.
             SuccessExitStatus = "0 1";
           };
-        restartTriggers = [ kernelModulesConf ];
+      };
+
+    systemd.services.kmod-static-nodes =
+      { environment.MODULE_DIR = "/run/booted-system/kernel-modules/lib/modules";
       };
 
     lib.kernelConfig = {

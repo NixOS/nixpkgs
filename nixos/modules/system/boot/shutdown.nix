@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
 
@@ -13,7 +13,7 @@ with pkgs.lib;
 
       unitConfig = {
         DefaultDependencies = false;
-        ConditionVirtualization = "!systemd-nspawn";
+        ConditionPathExists = "/dev/rtc";
       };
 
       serviceConfig = {

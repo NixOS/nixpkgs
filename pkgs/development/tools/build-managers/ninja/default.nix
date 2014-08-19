@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://martine.github.io/ninja/;
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }

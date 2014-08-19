@@ -1,20 +1,23 @@
 {stdenv, fetchurl, cmake, pkgconfig, libxml2, qt4, gtk, gettext, SDL,
 libXv, pixman, libpthreadstubs, libXau, libXdmcp, libxslt, x264,
-alsaLib, lame, faac, faad2, libvorbis, yasm, libvpx, xvidcore, libva }:
+alsaLib, lame, faad2, libvorbis, yasm, libvpx, xvidcore, libva,
+faac ? null, faacSupport ? false }:
 
 assert stdenv ? glibc;
+assert faacSupport -> faac != null;
 
 stdenv.mkDerivation {
   name = "avidemux-2.5.6";
-  
+
   src = fetchurl {
     url = mirror://sourceforge/avidemux/avidemux_2.5.6.tar.gz;
     sha256 = "12wvxz0n2g85f079d8mdkkp2zm279d34m9v7qgcqndh48cn7znnn";
   };
-  
+
   buildInputs = [ cmake pkgconfig libxml2 qt4 gtk gettext SDL libXv
-    pixman libpthreadstubs libXau libXdmcp libxslt x264 alsaLib 
-    lame faac faad2 libvorbis yasm libvpx xvidcore libva ];
+    pixman libpthreadstubs libXau libXdmcp libxslt x264 alsaLib
+    lame faad2 libvorbis yasm libvpx xvidcore libva
+  ] ++ stdenv.lib.optional faacSupport faac;
 
   cmakeFlags = "-DPTHREAD_INCLUDE_DIR=${stdenv.glibc}/include" +
     " -DGETTEXT_INCLUDE_DIR=${gettext}/include" +
@@ -34,7 +37,7 @@ stdenv.mkDerivation {
     make install
   '';
 
-  meta = { 
+  meta = {
     homepage = http://fixounet.free.fr/avidemux/;
     description = "Free video editor designed for simple video editing tasks";
     maintainers = with stdenv.lib.maintainers; [viric];

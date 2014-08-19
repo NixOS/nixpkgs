@@ -7,9 +7,9 @@
 # (e.g., KDE, Gnome or a plain xterm), and optionally the *window
 # manager* (e.g. kwin or twm).
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -49,17 +49,6 @@ let
           fi
         fi
 
-      ''}
-
-      ${optionalString cfg.startOpenSSHAgent ''
-        if test -z "$SSH_AUTH_SOCK"; then
-            # Restart this script as a child of the SSH agent.  (It is
-            # also possible to start the agent as a child that prints
-            # the required environment variabled on stdout, but in
-            # that mode ssh-agent is not terminated when we log out.)
-            export SSH_ASKPASS=${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass
-            exec ${pkgs.openssh}/bin/ssh-agent "$0" "$sessionType"
-        fi
       ''}
 
       ${optionalString cfg.startGnuPGAgent ''

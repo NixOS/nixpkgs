@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Simple wrapper around make to colorize the output";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

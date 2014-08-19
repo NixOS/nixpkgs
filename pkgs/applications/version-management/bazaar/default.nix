@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://bazaar-vcs.org/;
     description = "A distributed version control system that Just Works";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

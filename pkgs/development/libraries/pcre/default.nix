@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, unicodeSupport ? true, cplusplusSupport ? true }:
+{ stdenv, fetchurl, unicodeSupport ? true, cplusplusSupport ? true
+, windows ? null
+}:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "pcre-8.34";
@@ -16,16 +20,20 @@ stdenv.mkDerivation rec {
     --enable-jit
     ${if unicodeSupport then "--enable-unicode-properties" else ""}
     ${if !cplusplusSupport then "--disable-cpp" else ""}
-  '' + stdenv.lib.optionalString stdenv.isDarwin "CXXFLAGS=-O0";
+  '' + optionalString stdenv.isDarwin "CXXFLAGS=-O0";
 
   doCheck = with stdenv; !(isCygwin || isFreeBSD);
     # XXX: test failure on Cygwin
     # we are running out of stack on both freeBSDs on Hydra
 
+  crossAttrs = optionalAttrs (stdenv.cross.libc == "msvcrt") {
+    buildInputs = [ windows.mingw_w64_pthreads.crossDrv ];
+  };
+
   meta = {
     homepage = "http://www.pcre.org/";
     description = "A library for Perl Compatible Regular Expressions";
-    license = "BSD-3";
+    license = stdenv.lib.licenses.bsd3;
 
     longDescription = ''
       The PCRE library is a set of functions that implement regular
@@ -35,7 +43,7 @@ stdenv.mkDerivation rec {
       PCRE library is free, even for building proprietary software.
     '';
 
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    platforms = platforms.all;
+    maintainers = [ maintainers.simons ];
   };
 }

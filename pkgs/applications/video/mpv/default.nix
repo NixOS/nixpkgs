@@ -1,5 +1,6 @@
 { stdenv, fetchurl, fetchgit, freetype, pkgconfig, freefont_ttf, ffmpeg, libass
-, lua5, perl, libpthreadstubs
+, lua, perl, libpthreadstubs
+, lua5_sockets
 , python3, docutils, which
 , x11Support ? true, libX11 ? null, libXext ? null, mesa ? null, libXxf86vm ? null
 , xineramaSupport ? true, libXinerama ? null
@@ -13,7 +14,7 @@
 , bluraySupport ? true, libbluray ? null
 , speexSupport ? true, speex ? null
 , theoraSupport ? true, libtheora ? null
-, jackaudioSupport ? true, jackaudio ? null
+, jackaudioSupport ? true, jack2 ? null
 , pulseSupport ? true, pulseaudio ? null
 , bs2bSupport ? false, libbs2b ? null
 # For screenshots
@@ -35,7 +36,7 @@ assert dvdnavSupport -> libdvdnav != null;
 assert bluraySupport -> libbluray != null;
 assert speexSupport -> speex != null;
 assert theoraSupport -> libtheora != null;
-assert jackaudioSupport -> jackaudio != null;
+assert jackaudioSupport -> jack2 != null;
 assert pulseSupport -> pulseaudio != null;
 assert bs2bSupport -> libbs2b != null;
 assert libpngSupport -> libpng != null;
@@ -48,24 +49,23 @@ assert cacaSupport -> libcaca != null;
 
 let
   waf = fetchurl {
-    url = https://waf.googlecode.com/files/waf-1.7.13;
-    sha256 = "03cc750049350ee01cdbc584b70924e333fcc17ba4a2d04648dab1535538a873";
+    url = https://waf.googlecode.com/files/waf-1.7.15;
+    sha256 = "e5ae7028f9b2d8ce1acb9fe1092e8010a90ba764d3ac065ea4e846743290b1d6";
   };
-
-  version = "0.3.7";
 
 in
 
 stdenv.mkDerivation rec {
   name = "mpv-${version}";
+  version = "0.4.1";
 
   src = fetchurl {
     url = "https://github.com/mpv-player/mpv/archive/v${version}.tar.gz";
-    sha256 = "1qmwmjvgdwh88l2caw2xy1d2h1cdg2w1hl4q5iwx2c0q7a99h41m";
+    sha256 = "0wqjyzw3kk854zj263k7jyykzfaz1g27z50aqrd26hylg8k135cn";
   };
 
   buildInputs = with stdenv.lib;
-    [ waf freetype pkgconfig ffmpeg libass docutils which libpthreadstubs ]
+    [ waf freetype pkgconfig ffmpeg libass docutils which libpthreadstubs lua5_sockets ]
     ++ optionals x11Support [ libX11 libXext mesa libXxf86vm ]
     ++ optional alsaSupport alsaLib
     ++ optional xvSupport libXv
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     ++ optional dvdreadSupport libdvdread
     ++ optionals dvdnavSupport [ libdvdnav libdvdnav.libdvdread ]
     ++ optional bluraySupport libbluray
-    ++ optional jackaudioSupport jackaudio
+    ++ optional jackaudioSupport jack2
     ++ optional pulseSupport pulseaudio
     ++ optional screenSaverSupport libXScrnSaver
     ++ optional vdpauSupport libvdpau
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     ++ optional cacaSupport libcaca
     ;
 
-  nativeBuildInputs = [ python3 lua5 perl ];
+  nativeBuildInputs = [ python3 lua perl ];
 
 
 # There are almost no need of "configure flags", but some libraries
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
     python3 ${waf} install
     # Maybe not needed, but it doesn't hurt anyway: a standard font
     mkdir -p $out/share/mpv
-    ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf  $out/share/mpv/subfont.ttf
+    ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
     '';
 
   meta = {
@@ -127,6 +127,6 @@ stdenv.mkDerivation rec {
 # Heavily based on mplayer2 expression
 
 # TODO: Wayland support
-# TODO: investigate libquvi support: it isn't detected by Waf script!
-# TODO: investigate caca support: it isn't detected by Waf script!
-# TODO: a more systematic way to test this package
+# TODO: investigate libquvi support
+# TODO: investigate caca support
+# TODO: investigate lua5_sockets bug

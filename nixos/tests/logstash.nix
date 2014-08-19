@@ -1,9 +1,9 @@
-{ pkgs, ... }:
+# This test runs logstash and checks if messages flows and
+# elasticsearch is started.
 
-# This test runs logstash and checks if messages flows and elasticsearch is
-# started
+import ./make-test.nix {
+  name = "logstash";
 
-{
   nodes = {
     one =
       { config, pkgs, ... }:
@@ -28,10 +28,10 @@
           };
         };
     };
-  
+
   testScript = ''
     startAll;
-  
+
     $one->waitForUnit("logstash.service");
     $one->waitUntilSucceeds("journalctl -n 20 _SYSTEMD_UNIT=logstash.service | grep flowers");
     $one->fail("journalctl -n 20 _SYSTEMD_UNIT=logstash.service | grep dragons");

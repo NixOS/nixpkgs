@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, getopt }:
+{ stdenv, fetchurl, getopt, bash }:
 
 stdenv.mkDerivation rec {
   name    = "libseccomp-${version}";
@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   # for talking to the seccomp filter - we opt to always use the
   # inline copy
   patchPhase = ''
+    substituteInPlace ./configure --replace "/bin/bash" "${bash}/bin/bash"
     substituteInPlace ./configure --replace "verify_deps getopt" ""
     substituteInPlace ./configure --replace getopt ${getopt}/bin/getopt
     substituteInPlace ./configure --replace 'opt_sysinc_seccomp="yes"' 'opt_sysinc_seccomp="no"'

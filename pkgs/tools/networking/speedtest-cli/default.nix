@@ -2,11 +2,11 @@
 
 pythonPackages.buildPythonPackage rec {
   name = "speedtest-cli-${version}";
-  version = "0.2.5";
+  version = "0.3.1";
   
   src = fetchurl {
     url = "https://pypi.python.org/packages/source/s/speedtest-cli/speedtest-cli-${version}.tar.gz";
-    sha256 = "0a19kyn6064jbxda4yq1rfrlqlh8ha40fgwkj4rckdzk9bnxkhdn";
+    sha256 = "0ln2grbskh39ph79lhcim2axm7hp4xhzbrag8xfqbfihq7jdm6ya";
   };
 
   meta = with stdenv.lib; {

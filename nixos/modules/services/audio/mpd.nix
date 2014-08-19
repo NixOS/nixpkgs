@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -52,7 +52,7 @@ in {
       };  
 
       dataDir = mkOption {
-        default = "/var/lib/mpd/";
+        default = "/var/lib/mpd";
         description = ''
           The directory where MPD stores its state, tag cache,
           playlists etc.

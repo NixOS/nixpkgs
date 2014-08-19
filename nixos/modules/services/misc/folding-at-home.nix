@@ -1,5 +1,5 @@
-{ config, pkgs, ... }:
-with pkgs.lib;
+{ config, lib, pkgs, ... }:
+with lib;
 let
   stateDir = "/var/lib/foldingathome";
   cfg = config.services.foldingAtHome;
@@ -44,7 +44,7 @@ in {
 
     users.extraUsers = singleton
       { name = fahUser;
-        uid = config.ids.uids.foldingAtHome;
+        uid = config.ids.uids.foldingathome;
         description = "Folding@Home user";
         home = stateDir;
       };

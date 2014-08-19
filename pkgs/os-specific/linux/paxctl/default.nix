@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "paxctl-${version}";
-  version = "0.7";
+  version = "0.8";
 
   src = fetchurl {
-    url = "http://pax.grsecurity.net/${name}.tar.bz2";
-    sha256 = "1j6dg6wd1v7na5i4xj8zmbff0mdqdnw6cvqy0rsbz5anra27f1zp";
+    url = "http://pax.grsecurity.net/${name}.tar.gz";
+    sha256 = "107gmriq5icsk9yni5q949rnjapjkcs0823pw6zra6h1xml2f0mm";
   };
 
   preBuild = ''

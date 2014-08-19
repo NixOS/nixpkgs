@@ -1,8 +1,11 @@
-{ callPackage, self, stdenv, gettext, gvfs, libunique, bison2, overrides ? {} }:
+{ callPackage, self, stdenv, gettext, gvfs, libunique, bison2
+, libstartup_notification, overrides ? {} }:
+
 let overridden = set // overrides; set = with overridden; {
   # Backward compatibility.
   gtkdoc = self.gtk_doc;
-  startupnotification = self.startup_notification;
+  startup_notification = libstartup_notification;
+  startupnotification = libstartup_notification;
   gnomedocutils = self.gnome_doc_utils;
   gnomeicontheme = self.gnome_icon_theme;
   gnomepanel = self.gnome_panel;
@@ -61,10 +64,6 @@ let overridden = set // overrides; set = with overridden; {
   at_spi = callPackage ./platform/at-spi { };
 
   gtkhtml = callPackage ./platform/gtkhtml { };
-
-
-  # Freedesktop library
-  startup_notification = callPackage ./platform/startup-notification { };
 
   # Required for nautilus
   inherit (libunique);

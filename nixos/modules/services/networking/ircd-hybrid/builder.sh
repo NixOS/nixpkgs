@@ -3,7 +3,7 @@ source $stdenv/setup
 doSub() {
     local src=$1
     local dst=$2
-    ensureDir $(dirname $dst)
+    mkdir -p $(dirname $dst)
     substituteAll $src $dst
 }
 
@@ -28,4 +28,4 @@ for i in $substFiles; do
     fi
 done
 
-ensureDir $out/bin
+mkdir -p $out/bin

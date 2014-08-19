@@ -1,9 +1,35 @@
 # TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
 # but I have gvim with python support now :) - Marc
-args@{source ? "default", ...}: with args;
+args@{pkgs, source ? "default", ...}: with args;
 
 
-let inherit (args.composableDerivation) composableDerivation edf; in
+let inherit (args.composableDerivation) composableDerivation edf;
+  nixosRuntimepath = pkgs.writeText "nixos-vimrc" ''
+    set nocompatible
+    syntax on
+
+    function! NixosPluginPath()
+      let seen = {}
+      for p in reverse(split($NIX_PROFILES))
+        for d in split(glob(p . '/share/vim-plugins/*'))
+          let pluginname = substitute(d, ".*/", "", "")
+          if !has_key(seen, pluginname)
+            exec 'set runtimepath^='.d
+            let seen[pluginname] = 1
+          endif
+        endfor
+      endfor
+    endfunction
+
+    execute NixosPluginPath()
+
+    if filereadable("/etc/vimrc")
+      source /etc/vimrc
+    elseif filereadable("/etc/vim/vimrc")
+      source /etc/vim/vimrc
+    endif
+  '';
+in
 composableDerivation {
   # use gccApple to compile on darwin
   mkDerivation = ( if stdenv.isDarwin
@@ -11,18 +37,18 @@ composableDerivation {
                    else stdenv ).mkDerivation;
 } (fix: {
 
-    name = "vim_configurable-7.4.23";
+    name = "vim_configurable-7.4.335";
 
     enableParallelBuilding = true; # test this
 
-    src = 
+    src =
       builtins.getAttr source {
       "default" =
         # latest release
       args.fetchhg {
             url = "https://vim.googlecode.com/hg/";
-            tag = "v7-4-131";
-            sha256 = "1akr0i4pykbrkqwrglm0dfn5nwpncb9pgg4h7fl6a8likbr5f3wb";
+            rev = "v7-4-335";
+            sha256 = "0qnpzfcbi6fhz82pj68l4vrnigca1akq2ksrxz6krwlfhns6jhhj";
       };
 
       "vim-nox" =
@@ -35,16 +61,13 @@ composableDerivation {
           }.src;
       };
 
+    prePatch = "cd src";
+
     # if darwin support is enabled, we want to make sure we're not building with
     # OS-installed python framework
-    preConfigure
-      = stdenv.lib.optionalString
-        (stdenv.isDarwin && (config.vim.darwin or true)) ''
-          # TODO: we should find a better way of doing this as, if the configure
-          # file changes, we need to change these line numbers
-          sed -i "5641,5644d" src/auto/configure
-          sed -i "5648d" src/auto/configure
-        '';
+    patches = stdenv.lib.optionals
+      (stdenv.isDarwin && (config.vim.darwin or true))
+      [ ./python_framework.patch ];
 
     configureFlags
       = [ "--enable-gui=${args.gui}" "--with-features=${args.features}" ];
@@ -53,8 +76,6 @@ composableDerivation {
       = [ ncurses pkgconfig gtk libX11 libXext libSM libXpm libXt libXaw libXau
           libXmu glib libICE ];
 
-    prePatch = "cd src";
-    
     # most interpreters aren't tested yet.. (see python for example how to do it)
     flags = {
         ftNix = {
@@ -150,6 +171,8 @@ composableDerivation {
     echo $nativeBuildInputs
     echo $rpath
     patchelf --set-rpath $rpath $out/bin/{vim,gvim}
+
+    ln -sfn ${nixosRuntimepath} $out/share/vim/vimrc
   '';
 
   dontStrip = 1;

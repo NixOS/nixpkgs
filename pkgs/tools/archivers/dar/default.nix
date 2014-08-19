@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0psahvnrkljqg9507dk0vq05w8vilpm98igjrcjkqdirqcfd2py1";
   };
 
-  buildInputs = [ zlib bzip2 openssl attr lzo libgcrypt e2fsprogs ];
+  buildInputs = [ zlib bzip2 openssl lzo libgcrypt ]
+    ++ stdenv.lib.optional stdenv.isLinux [ attr e2fsprogs ];
 
   configureFlags = "--disable-dar-static";
 
@@ -16,6 +17,6 @@ stdenv.mkDerivation rec {
     homepage = http://dar.linux.free.fr/;
     description = "Disk ARchiver, allows backing up files into indexed archives";
     maintainers = [ stdenv.lib.maintainers.viric ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

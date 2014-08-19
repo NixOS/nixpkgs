@@ -1,12 +1,11 @@
 { stdenv, fetchgit, emacs }:
 
 stdenv.mkDerivation {
-  name = "js2-mode-0-20120712";
+  name = "js2-mode-0-20140114";
 
   src = fetchgit {
     url = "git://github.com/mooz/js2-mode.git";
-    rev = "f8cb9c52614e0a8e477f1ac557585ed950246c9b";
-    sha256 = "37055b7e8c1d9eee6b86f6b9b9d74ad196cc43701bc2263ffd539a3e44025047";
+    sha256 = "dbdc07b864a9506a21af445c7fb1c75fbffadaac980ee7bbf752470d8054bd65";
   };
 
   buildInputs = [ emacs ];

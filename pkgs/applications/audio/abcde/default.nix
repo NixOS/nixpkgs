@@ -61,7 +61,7 @@ in
 
     meta = {
       homepage = "http://lly.org/~rcw/abcde/page/";
-      license = "GPLv2+";
+      license = stdenv.lib.licenses.gpl2Plus;
       description = "Command-line audio CD ripper";
 
       longDescription = ''

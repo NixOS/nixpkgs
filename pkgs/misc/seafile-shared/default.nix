@@ -2,16 +2,14 @@
 
 stdenv.mkDerivation rec
 {
-  version = "2.1.1";
+  version = "3.0.4";
   name = "seafile-shared-${version}";
 
   src = fetchurl
   {
     url = "https://github.com/haiwen/seafile/archive/v${version}.tar.gz";
-    sha256 = "f07b09ab1eb1cb33f92cee74e499d0350941624396910a4c1a7d79abb45acaa6";
+    sha256 = "0a0yj9k2rr3q42swwzn1js3r8bld9wcysw6p9415rw5jabcm1af0";
   };
-
-  patches = [ ./0003-Add-autoconfiguration-for-libjansson.patch ];
 
   buildInputs = [ which automake autoconf pkgconfig libtool vala python intltool fuse ];
   propagatedBuildInputs = [ ccnet ];

@@ -1,8 +1,8 @@
 # at-spi2-core daemon.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
 
@@ -30,9 +30,9 @@ with pkgs.lib;
 
   config = mkIf config.services.gnome3.at-spi2-core.enable {
 
-    environment.systemPackages = [ pkgs.gnome3.at_spi2_core ];
+    environment.systemPackages = [ pkgs.at_spi2_core ];
 
-    services.dbus.packages = [ pkgs.gnome3.at_spi2_core ];
+    services.dbus.packages = [ pkgs.at_spi2_core ];
 
   };
 

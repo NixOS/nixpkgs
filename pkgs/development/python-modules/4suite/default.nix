@@ -10,4 +10,9 @@ stdenv.mkDerivation rec {
   buildInputs = [python];
   buildPhase = "true";
   installPhase = "python ./setup.py install --prefix=$out";
+
+  # None of the tools installed to bin/ work. They all throw an exception
+  # similar to this:
+  #   ImportError: No module named Ft.Xml.XPath._4xpath
+  meta.broken = true;
 }

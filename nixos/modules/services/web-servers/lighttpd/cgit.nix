@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
   cfg = config.services.lighttpd.cgit;
@@ -29,7 +29,7 @@ in
         cache-size=1000
         scan-path=/srv/git
       '';
-      type = types.string;
+      type = types.lines;
       description = ''
         Verbatim contents of the cgit runtime configuration file. Documentation
         (with cgitrc example file) is available in "man cgitrc". Or online:

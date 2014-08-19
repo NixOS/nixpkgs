@@ -11,7 +11,7 @@ let baseName = "libbluray";
 in
 
 stdenv.mkDerivation {
-  name = "${baseName}-${version}";
+  name = "${baseName}-${version}p1";
 
   src = fetchgit {
     url = git://git.videolan.org/libbluray.git;
@@ -25,6 +25,9 @@ stdenv.mkDerivation {
 
   preConfigure = "./bootstrap";
   configureFlags = ["--disable-static"] ++ stdenv.lib.optionals withAACS ["--enable-bdjava" "--with-jdk=${jdk}"];
+
+  # From Handbrake
+  patches = [ ./A01-filter-dup.patch ];
 
   meta = {
     homepage = http://www.videolan.org/developers/libbluray.html;

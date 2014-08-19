@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fixedPoint ? false }:
+{ stdenv, fetchurl, fixedPoint ? false, withCustomModes ? false }:
 
 let
   version = "1.1";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "158xprn2086arvdib3vbbygz7z6jqkw2nci7nlywzzwallap0wmr";
   };
 
-  configureFlags = stdenv.lib.optionalString fixedPoint "--enable-fixed-point";
+  configureFlags = stdenv.lib.optional fixedPoint "--enable-fixed-point"
+                ++ stdenv.lib.optional withCustomModes "--enable-custom-modes";
 
   doCheck = true;
 

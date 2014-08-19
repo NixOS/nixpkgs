@@ -9,7 +9,7 @@ kde {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "19d2ly05hv2x1kkzgdgvkcpjypp2nk4q9bffv17lz2q5pzhjhsa4";
+  outputHash = "1yg9c780xdxa60bw832cqj60v87cbvjxp27k6gacj2lwk7rm5hwg";
 
   meta = {
     description = "Wallpapers for KDE";

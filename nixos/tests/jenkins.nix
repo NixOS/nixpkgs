@@ -2,22 +2,29 @@
 #   1. jenkins service starts on master node
 #   2. jenkins user can be extended on both master and slave
 #   3. jenkins service not started on slave node
-{ pkgs, ... }:
-{
+
+import ./make-test.nix {
+  name = "jenkins";
+
   nodes = {
-    master = { pkgs, config, ... }: {
-        services.jenkins.enable = true;
+
+    master =
+      { config, pkgs, ... }:
+      { services.jenkins.enable = true;
 
         # should have no effect
         services.jenkinsSlave.enable = true;
 
         users.extraUsers.jenkins.extraGroups = [ "users" ];
       };
-    slave = { pkgs, config, ... }: {
-        services.jenkinsSlave.enable = true;
+
+    slave =
+      { config, pkgs, ... }:
+      { services.jenkinsSlave.enable = true;
 
         users.extraUsers.jenkins.extraGroups = [ "users" ];
       };
+
   };
 
   testScript = ''
@@ -30,6 +37,6 @@
     print $slave->execute("sudo -u jenkins groups");
     $slave->mustSucceed("sudo -u jenkins groups | grep jenkins | grep users");
 
-    $slave->mustFail("systemctl status jenkins.service");
+    $slave->mustFail("systemctl is-enabled jenkins.service");
   '';
 }

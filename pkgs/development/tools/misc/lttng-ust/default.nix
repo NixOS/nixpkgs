@@ -12,11 +12,11 @@
 # Debian builds with std.h (systemtap).
 
 stdenv.mkDerivation rec {
-  name = "lttng-ust-2.3.0";
+  name = "lttng-ust-2.4.1";
 
   src = fetchurl {
     url = "https://lttng.org/files/lttng-ust/${name}.tar.bz2";
-    sha256 = "1hazjybrppyaakvfp1bs92vx0n2sgcsw0m6i5hwq7xq8vij7cj4q";
+    sha256 = "1nx9b1haiylajzjy03wgfcy85nwg578c6gy8ip55y8cabjrw0hp1";
   };
 
   buildInputs = [ liburcu ];

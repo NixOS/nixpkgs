@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     configureFlagsArray=( --enable-shared --with-threads
                           CPPFLAGS="${concatStringsSep " " (map (p: "-I${p}/include") buildInputs)}"
                           LDFLAGS="${concatStringsSep " " (map (p: "-L${p}/lib") buildInputs)}"
-                          LIBS="-lcrypt ${optionalString (ncurses != null) "-lncurses"}"
+                          LIBS="${optionalString (!stdenv.isDarwin) "-lcrypt"} ${optionalString (ncurses != null) "-lncurses"}"
                         )
   '';
 
@@ -53,9 +53,11 @@ stdenv.mkDerivation {
   postInstall = ''
     rm -rf "$out/lib/python${majorVersion}/test"
     ln -s "$out/include/python${majorVersion}m" "$out/include/python${majorVersion}"
+
+    paxmark E $out/bin/python${majorVersion}
   '';
 
-  passthru = {
+  passthru = rec {
     zlibSupport = zlib != null;
     sqliteSupport = sqlite != null;
     dbSupport = db != null;
@@ -64,7 +66,10 @@ stdenv.mkDerivation {
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
     libPrefix = "python${majorVersion}";
     executable = "python3.3m";
-    is_py3k = true;
+    isPy3 = true;
+    isPy33 = true;
+    is_py3k = true;  # deprecated
+    sitePackages = "lib/${libPrefix}/site-packages";
   };
 
   enableParallelBuilding = true;
@@ -82,7 +87,7 @@ stdenv.mkDerivation {
       high level dynamic data types.
     '';
     license = stdenv.lib.licenses.psfl;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ simons chaoflow ];
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    maintainers = with stdenv.lib.maintainers; [ simons chaoflow cstrahan ];
   };
 }

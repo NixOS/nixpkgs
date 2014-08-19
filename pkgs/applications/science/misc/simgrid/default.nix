@@ -1,20 +1,19 @@
-{ fetchurl, stdenv, cmake, perl, ruby }:
+{ fetchurl, stdenv, cmake, perl, ruby, boost, lua5_1, graphviz, libsigcxx
+, libunwind, elfutils
+}:
 
 stdenv.mkDerivation rec {
-  name = "simgrid-3.5";
+  version = "3.11.1";
+  name = "simgrid-${version}";
 
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/28017/${name}.tar.gz";
-    sha256 = "1vd4pvrcyii1nfwyca3kpbwshbc965lfpn083zd8rigg6ydchq8y";
+    url = "https://gforge.inria.fr/frs/download.php/33686/${name}.tar.gz";
+    sha256 = "0mkrzxpf42lmn96khfl1791vram67r2nqsgmppd2yil889nyz5kp";
   };
 
-  /* FIXME: Ruby currently disabled because of this:
-
-     Linking C shared library ../src/.libs/libsimgrid.so
-     ld: cannot find -lruby-1.8.7-p72
-
-   */
-  buildInputs = [ cmake perl /* ruby */ ];
+  buildInputs = [ cmake perl ruby boost lua5_1 graphviz libsigcxx libunwind
+    elfutils
+    ];
 
   preConfigure =
     # Make it so that libsimgrid.so will be found when running programs from
@@ -22,8 +21,17 @@ stdenv.mkDerivation rec {
     '' export LD_LIBRARY_PATH="$PWD/src/.libs"
        export cmakeFlags="-Dprefix=$out"
 
-       # Enable tracing.
-       export cmakeFlags="$cmakeFlags -Denable_tracing=on"
+       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE
+         -isystem $(echo "${libsigcxx}/lib/"sigc++*/include)
+	 -isystem $(echo "${libsigcxx}/include"/sigc++* )
+	 "
+       export CMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH:$(echo "${libsigcxx}/lib/"sigc++*)"
+
+       # Enable more functionality.
+       export cmakeFlags="$cmakeFlags -Denable_tracing=on -Denable_jedule=on
+         -Denable_latency_bound_tracking=on -Denable_lua=on
+	 -Denable_ns3=on -Denable_gtnets=on
+	 "
     '';
 
   makeFlags = "VERBOSE=1";
@@ -45,6 +53,7 @@ stdenv.mkDerivation rec {
   patchPhase =
     '' for i in "src/smpi/"*
        do
+         test -f "$i" &&
          sed -i "$i" -e's|/bin/bash|/bin/sh|g'
        done
 
@@ -71,7 +80,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://simgrid.gforge.inria.fr/;
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice

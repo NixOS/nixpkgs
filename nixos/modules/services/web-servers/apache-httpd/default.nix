@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -65,7 +65,7 @@ let
           options = {};
           documentRoot = null;
         };
-        res = defaults // svcFunction { inherit config pkgs serverInfo php; };
+        res = defaults // svcFunction { inherit config lib pkgs serverInfo php; };
       in res;
     in map f defs;
 
@@ -80,7 +80,7 @@ let
 
   # !!! should be in lib
   writeTextInDir = name: text:
-    pkgs.runCommand name {inherit text;} "ensureDir $out; echo -n \"$text\" > $out/$name";
+    pkgs.runCommand name {inherit text;} "mkdir -p $out; echo -n \"$text\" > $out/$name";
 
 
   enableSSL = any (vhost: vhost.enableSSL) allHosts;
@@ -194,7 +194,7 @@ let
     ) null ([ cfg ] ++ subservices);
 
     documentRoot = if maybeDocumentRoot != null then maybeDocumentRoot else
-      pkgs.runCommand "empty" {} "ensureDir $out";
+      pkgs.runCommand "empty" {} "mkdir -p $out";
 
     documentRootConf = ''
       DocumentRoot "${documentRoot}"
@@ -387,7 +387,7 @@ let
   '';
 
 
-  enablePHP = any (svc: svc.enablePHP) allSubservices;
+  enablePHP = mainCfg.enablePHP || any (svc: svc.enablePHP) allSubservices;
 
 
   # Generate the PHP configuration file.  Should probably be factored
@@ -450,7 +450,7 @@ in
       extraModules = mkOption {
         type = types.listOf types.unspecified;
         default = [];
-        example = literalExample ''[ "proxy_connect" { name = "php5"; path = "''${php}/modules/libphp5.so"; } ]'';
+        example = literalExample ''[ "proxy_connect" { name = "php5"; path = "''${pkgs.php}/modules/libphp5.so"; } ]'';
         description = ''
           Additional Apache modules to be used.  These can be
           specified as a string in the case of modules distributed
@@ -510,7 +510,7 @@ in
       virtualHosts = mkOption {
         type = types.listOf (types.submodule (
           { options = import ./per-server-options.nix {
-              inherit pkgs;
+              inherit lib;
               forMainServer = false;
             };
           }));
@@ -529,6 +529,12 @@ in
           configuration of the virtual host.  The available options
           are the non-global options permissible for the main host.
         '';
+      };
+
+      enablePHP = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable the PHP module.";
       };
 
       phpOptions = mkOption {
@@ -577,7 +583,7 @@ in
 
     # Include the options shared between the main server and virtual hosts.
     // (import ./per-server-options.nix {
-      inherit pkgs;
+      inherit lib;
       forMainServer = true;
     });
 
@@ -594,17 +600,17 @@ in
                      message = "SSL is enabled for HTTPD, but sslServerCert and/or sslServerKey haven't been specified."; }
                  ];
 
-    users.extraUsers = optionalAttrs (mainCfg.user == "wwwrun") singleton
+    users.extraUsers = optionalAttrs (mainCfg.user == "wwwrun") (singleton
       { name = "wwwrun";
-        group = "wwwrun";
+        group = mainCfg.group;
         description = "Apache httpd user";
         uid = config.ids.uids.wwwrun;
-      };
+      });
 
-    users.extraGroups = optionalAttrs (mainCfg.group == "wwwrun") singleton
+    users.extraGroups = optionalAttrs (mainCfg.group == "wwwrun") (singleton
       { name = "wwwrun";
         gid = config.ids.gids.wwwrun;
-      };
+      });
 
     environment.systemPackages = [httpd] ++ concatMap (svc: svc.extraPath) allSubservices;
 
@@ -621,7 +627,7 @@ in
       { description = "Apache HTTPD";
 
         wantedBy = [ "multi-user.target" ];
-        requires = [ "keys.target" ];
+        wants = [ "keys.target" ];
         after = [ "network.target" "fs.target" "postgresql.service" "keys.target" ];
 
         path =

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "bcache-tools-${version}";
-  version = "1.0.5";
+  version = "1.0.7";
 
   src = fetchurl {
     url = "https://github.com/g2p/bcache-tools/archive/v${version}.tar.gz";
-    sha256 = "1abf86xcnj601lddig3kmn26jrf8q8xhcyszf5pxrcs5ym72jj8l";
+    sha256 = "1gbsh2qw0a7kgck6w0apydiy37nnz5xvdgipa0yqrfmghl86vmv4";
   };
 
   buildInputs = [ pkgconfig utillinux ];

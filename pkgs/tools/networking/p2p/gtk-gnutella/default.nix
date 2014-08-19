@@ -23,7 +23,6 @@ stdenv.mkDerivation {
     homepage = "http://gtk-gnutella.sourceforge.net/";
     description = "a server/client for Gnutella";
     license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    broken = true;
   };
 }

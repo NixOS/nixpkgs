@@ -8,7 +8,7 @@ let
   { name, version, build, src, description, license }:
 
   stdenv.mkDerivation rec {
-    inherit name build src license;
+    inherit name build src;
     ideaItem = makeDesktopItem {
       name = "IDEA";
       exec = "idea";
@@ -49,7 +49,7 @@ let
         --prefix IDEA_JDK : $jdk
 
         mkdir -p $out/share/applications
-        cp ${ideaItem}/share/applications/* $out/share/applications
+        cp "${ideaItem}/share/applications/"* $out/share/applications
         patchShebangs $out
     '';
 
@@ -64,27 +64,27 @@ let
 
 in {
 
-  idea_community_1311 = buildIdea rec {
+  idea_community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "13.1.1";
-    build = "IC-135.480";
+    version = "13.1.3";
+    build = "IC-135.909";
     description = "IntelliJ IDEA 13 Community Edition";
-    license = stdenv.lib.licenses.asl20.shortName;
+    license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "http://download-ln.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "9e28d3e5682b037c9d6190622ab2a47112fa792539083cc7a4cb24f3f7bf7d22";
+      sha256 = "62ed937ef68df16eef4d32772b6510835527f95020db1c76643f17ed2c067b51";
     };
   };
 
-  idea_ultimate_1311 = buildIdea rec {
+  idea_ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "13.1.1";
-    build = "IU-135.480";
+    version = "13.1.3";
+    build = "IU-135.909";
     description = "IntelliJ IDEA 13 Ultimate Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "http://download-ln.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "d699abcdcace387105a465049e015c1367dedf42f7a5f5a1f7b3d840e98b2658";
+      sha256 = "6d99e49a63a197e19381a85535ab424a7832653db8cceb3bca7d53615ec7a53d";
     };
   };
 

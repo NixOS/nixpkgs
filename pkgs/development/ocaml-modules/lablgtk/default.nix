@@ -15,8 +15,6 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [ocaml findlib pkgconfig gtk libgnomecanvas libglade gtksourceview];
 
-  # patches = [ ./META.patch ];
-
   configureFlags = "--with-libdir=$(out)/lib/ocaml/${ocaml_version}/site-lib";
   buildFlags = "world";
 
@@ -33,6 +31,6 @@ stdenv.mkDerivation (rec {
     ];
     homepage = http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgtk.html;
     description = "LablGTK is is an Objective Caml interface to gtk+";
-    license = "LGPLv2.1+";
+    license = stdenv.lib.licenses.lgpl21Plus;
   };
 })

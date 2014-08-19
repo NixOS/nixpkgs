@@ -6,7 +6,7 @@
 # which only works if the first client successfully uses the UPnP-IGD
 # protocol to poke a hole in the NAT.
 
-{ pkgs, ... }:
+import ./make-test.nix ({ pkgs, ... }:
 
 let
 
@@ -23,6 +23,7 @@ let
 in
 
 {
+  name = "bittorrent";
 
   nodes =
     { tracker =
@@ -33,6 +34,8 @@ in
           services.httpd.enable = true;
           services.httpd.adminAddr = "foo@example.org";
           services.httpd.documentRoot = "/tmp";
+
+          networking.firewall.enable = false; # FIXME: figure out what ports we actually need
         };
 
       router =
@@ -40,8 +43,9 @@ in
         { environment.systemPackages = [ pkgs.miniupnpd ];
           virtualisation.vlans = [ 1 2 ];
           networking.nat.enable = true;
-          networking.nat.internalIPs = [ "192.168.2.0/24" ];
+          networking.nat.internalInterfaces = [ "eth2" ];
           networking.nat.externalInterface = "eth1";
+          networking.firewall.enable = false;
         };
 
       client1 =
@@ -50,11 +54,13 @@ in
           virtualisation.vlans = [ 2 ];
           networking.defaultGateway =
             nodes.router.config.networking.interfaces.eth2.ipAddress;
+          networking.firewall.enable = false;
         };
 
       client2 =
         { config, pkgs, ... }:
         { environment.systemPackages = [ pkgs.transmission ];
+          networking.firewall.enable = false;
         };
     };
 
@@ -66,8 +72,8 @@ in
       # Enable NAT on the router and start miniupnpd.
       $router->waitForUnit("nat");
       $router->succeed(
-          "iptables -t nat -N MINIUPNPD",
-          "iptables -t nat -A PREROUTING -i eth1 -j MINIUPNPD",
+          "iptables -w -t nat -N MINIUPNPD",
+          "iptables -w -t nat -A PREROUTING -i eth1 -j MINIUPNPD",
           "echo 1 > /proc/sys/net/ipv4/ip_forward",
           "miniupnpd -f ${miniupnpdConf nodes}"
       );
@@ -75,7 +81,7 @@ in
       # Create the torrent.
       $tracker->succeed("mkdir /tmp/data");
       $tracker->succeed("cp ${file} /tmp/data/test.tar.bz2");
-      $tracker->succeed("transmission-create /tmp/data/test.tar.bz2 -t http://tracker:6969/announce -o /tmp/test.torrent");
+      $tracker->succeed("transmission-create /tmp/data/test.tar.bz2 -t http://${nodes.tracker.config.networking.interfaces.eth1.ipAddress}:6969/announce -o /tmp/test.torrent");
       $tracker->succeed("chmod 644 /tmp/test.torrent");
 
       # Start the tracker.  !!! use a less crappy tracker
@@ -104,4 +110,4 @@ in
       $client2->succeed("cmp /tmp/test.tar.bz2 ${file}");
     '';
 
-}
+})

@@ -8,7 +8,9 @@ let s = # Generated upstream information
     version="2.0";
     name="lincity-2.0";
     hash="01k6n304qj0z5zmqr49gqirp0jmx2b0cpisgkxk1ga67vyjhdcm6";
-    url="http://download.berlios.de/lincity-ng/lincity-ng-2.0.tar.bz2";
+    url="http://pkgs.fedoraproject.org/repo/pkgs/lincity-ng/lincity-ng-2.0.tar.bz2"
+      + "/1bd0f58e0f2b131d70044f4230600ed1/lincity-ng-2.0.tar.bz2";
+      # berlios shut down; I found no better mirror
     sha256="01k6n304qj0z5zmqr49gqirp0jmx2b0cpisgkxk1ga67vyjhdcm6";
   };
   buildInputs = [zlib jam pkgconfig gettext libxml2 libxslt xproto libX11 mesa 

@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   meta = with stdenv.lib; {
+    description = "Converts filenames from one encoding to another";
     platforms = platforms.linux ++ platforms.freebsd ++ platforms.cygwin;
     maintainers = [ maintainers.urkud ];
   };

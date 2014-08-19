@@ -3,9 +3,9 @@ x@{builderDefsPackage
   ,fetchsvn
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     ["fetchsvn"];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -54,7 +54,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = "GPLv2";
+    license = a.stdenv.lib.licenses.gpl2;
   };
   passthru = {
     inherit srcDrv;
@@ -63,4 +63,3 @@ rec {
     };
   };
 }) x
-

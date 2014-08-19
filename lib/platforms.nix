@@ -12,6 +12,6 @@ rec {
   unix = linux ++ darwin ++ freebsd ++ openbsd ++ netbsd ++ illumos;
   all = linux ++ darwin ++ cygwin ++ freebsd ++ openbsd ++ netbsd ++ illumos;
   none = [];
-  allBut = platform: lists.filter (x: platform != x) all;
+  allBut = platforms: lists.filter (x: !(builtins.elem x platforms)) all;
   mesaPlatforms = ["i686-linux" "x86_64-linux" "x86_64-darwin" "armv5tel-linux" "armv6l-linux"];
 }

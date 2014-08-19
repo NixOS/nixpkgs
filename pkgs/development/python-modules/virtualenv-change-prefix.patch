@@ -1,8 +1,23 @@
-Without this patch `virtualenv --python=python2.7 .` fails with an error because it notices that the python readline.so is not in the same path as python2.7. I assume this is to avoid copying the wrong file on systems where it is possible to find incompatible libraries by accident. Adding "/nix/store" to the prefix fixes this problem. Unfortunately readline is still not available if you just run `virtualenv .`.
+Without this patch `virtualenv --python=python2.7 .` fails with an
+error because it notices that the python readline.so is not in the
+same path as python2.7. I assume this is to avoid copying the wrong
+file on systems where it is possible to find incompatible libraries by
+accident. Adding "/nix/store" to the prefix fixes this problem.
 
---- virtualenv-1.8.4/virtualenv.py        2013-01-16 23:43:37.583615220 +0100
-+++ virtualenv-1.8.4/virtualenv.py        2013-01-16 23:44:47.885973431 +0100
-@@ -1135,17 +1135,7 @@
+A sitecustomize.py is created in the virtualenv which makes libraries
+from the python specified by the --python argument available to the
+virtualenv. For example, this makes readline and sqlite3 available
+when a wrapped python is specified. If no --python argument is passed,
+it will only add the path to the python used when building
+`virtualenv`, which is the unwrapped python, so sqlite3 won't be
+available.
+
+
+diff --git a/virtualenv.py b/virtualenv.py
+index d3e76a7..cb307fa 100755
+--- a/virtualenv.py
++++ b/virtualenv.py
+@@ -1051,17 +1051,7 @@ def path_locations(home_dir):
  
  
  def change_prefix(filename, dst_prefix):
@@ -21,7 +36,7 @@ Without this patch `virtualenv --python=python2.7 .` fails with an error because
  
      if hasattr(sys, 'real_prefix'):
          prefixes.append(sys.real_prefix)
-@@ -1162,6 +1152,8 @@
+@@ -1078,6 +1068,8 @@ def change_prefix(filename, dst_prefix):
              if src_prefix != os.sep: # sys.prefix == "/"
                  assert relpath[0] == os.sep
                  relpath = relpath[1:]
@@ -30,3 +45,15 @@ Without this patch `virtualenv --python=python2.7 .` fails with an error because
              return join(dst_prefix, relpath)
      assert False, "Filename %s does not start with any of these prefixes: %s" % \
          (filename, prefixes)
+@@ -1190,6 +1182,11 @@ def install_python(home_dir, lib_dir, inc_dir, bin_dir, site_packages, clear, sy
+     site_filename_dst = change_prefix(site_filename, home_dir)
+     site_dir = os.path.dirname(site_filename_dst)
+     writefile(site_filename_dst, SITE_PY)
++    wrapper_path = join(prefix, "lib", py_version, "site-packages")
++    writefile(
++        join(site_dir, 'sitecustomize.py',),
++        "import sys; sys.path.append('%s')" % wrapper_path
++    )
+     writefile(join(site_dir, 'orig-prefix.txt'), prefix)
+     site_packages_filename = join(site_dir, 'no-global-site-packages.txt')
+     if not site_packages:

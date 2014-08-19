@@ -1,9 +1,8 @@
 # Test of IPv6 functionality in NixOS, including whether router
 # solicication/advertisement using radvd works.
 
-{ pkgs, ... }:
-
-{
+import ./make-test.nix {
+  name = "ipv6";
 
   nodes =
     { client = { config, pkgs, ... }: { };
@@ -12,6 +11,7 @@
         { config, pkgs, ... }:
         { services.httpd.enable = true;
           services.httpd.adminAddr = "foo@example.org";
+          networking.firewall.allowedTCPPorts = [ 80 ];
         };
 
       router =
@@ -37,6 +37,7 @@
 
       $client->waitForUnit("network.target");
       $server->waitForUnit("network.target");
+      $server->waitForUnit("httpd.service");
 
       # Wait until the given interface has a non-tentative address of
       # the desired scope (i.e. has completed Duplicate Address

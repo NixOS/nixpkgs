@@ -1,22 +1,25 @@
 { stdenv, fetchurl, fetchgit, glib, readline, bison, flex, pkgconfig,
-  libiconv, autoconf, automake, libtool }:
+  libiconv, autoconf, automake, libtool, which, txt2man, gnome_doc_utils,
+  scrollkeeper}:
 
 stdenv.mkDerivation {
   name = "mdbtools-git";
 
   src = fetchgit {
     url = "http://github.com/brianb/mdbtools.git";
-    rev = "5ac44b69d9375cca3e1055b70fd22abf7fbf17ab";
-    sha256 = "094e6b480c6fda3a000d0d8539b209d2d7c204a440660a21c11f2e1c9b3aa345";
+    rev = "dfd752ec022097ee1e0999173aa604d8a0c0ca8b";
+    sha256 = "0ibj36yxlhwjgi7cj170lwpbzdbgidkq5p8raa59v76bdrxwmb0n";
   };
 
   buildInputs = [glib readline bison flex pkgconfig libiconv autoconf automake
-    libtool];
+    libtool which txt2man gnome_doc_utils scrollkeeper ];
 
   preConfigure = ''
     sed -e 's@static \(GHashTable [*]mdb_backends;\)@\1@' -i src/libmdb/backend.c
-    export NIX_LDFLAGS="$NIX_LDFLAGS -liconv"
-    ./autogen.sh
+    sed -e '/ENABLE_GTK_DOC/aAM_CONDITIONAL(HAVE_GNOME_DOC_UTILS, test x$enable_gtk_doc = xyes)' \
+    -e  '/ENABLE_GTK_DOC/aAM_CONDITIONAL(ENABLE_SK, test x$enable_scrollkeeper = xyes)'          \
+    -i configure.ac
+    autoreconf -i -f
   '';
 
   meta = {

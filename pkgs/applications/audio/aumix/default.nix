@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       the command line or a script.
     '';
     homepage = http://www.jpj.net/~trevor/aumix.html;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.linux;

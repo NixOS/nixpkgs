@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -77,6 +77,11 @@ in
         description = "Whether to enable logging per virtual host.";
       };
 
+      jdk = mkOption {
+        default = pkgs.jdk;
+        description = "Which JDK to use.";
+      };
+
       axis2 = {
 
         enable = mkOption {
@@ -118,6 +123,8 @@ in
 
         startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
+
+        daemonType = "daemon";
 
         preStart =
           ''
@@ -327,14 +334,16 @@ in
                 done
                 ''
             else ""}
-
-            ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c 'CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${pkgs.jdk} JAVA_OPTS="${cfg.javaOpts}" CATALINA_OPTS="${cfg.catalinaOpts}" ${tomcat}/bin/startup.sh'
           '';
+
+        script = ''
+            ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c 'CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${cfg.jdk} JAVA_OPTS="${cfg.javaOpts}" CATALINA_OPTS="${cfg.catalinaOpts}" ${tomcat}/bin/startup.sh'
+        '';
 
         postStop =
           ''
             echo "Stopping tomcat..."
-            CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${pkgs.jdk} ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c ${tomcat}/bin/shutdown.sh
+            CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${cfg.jdk} ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c ${tomcat}/bin/shutdown.sh
           '';
 
       };

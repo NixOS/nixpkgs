@@ -58,6 +58,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0 INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0";
 
+  # The following is required on grsecurity/PaX due to spidermonkey's JIT
+  postBuild = ''
+    paxmark mr src/polkitbackend/.libs/polkitd
+    paxmark mr test/polkitbackend/.libs/polkitbackendjsauthoritytest
+  '';
+
   #doCheck = true; # some /bin/bash problem that isn't auto-solved by patchShebangs
 
   meta = with stdenv.lib; {

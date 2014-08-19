@@ -31,8 +31,7 @@ GetOptions("package|p=s" => \$filter,
            "maintainer|m=s" => \$maintainer,
            "file|f=s" => \$path,
            "help" => sub { showHelp() }
-    )
-    or die("syntax: $0 ...\n");
+    ) or exit 1;
 
 # Evaluate Nixpkgs into an XML representation.
 my $xml = `nix-env -f '$path' -qa '$filter' --xml --meta --drv-path`;

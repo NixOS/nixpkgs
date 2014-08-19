@@ -1,19 +1,19 @@
 { stdenv, fetchurl, unzip, SDL, mesa, openal, curl }:
 stdenv.mkDerivation rec {
   name = "urbanterror-${version}";
-  version = "4.2.009";
+  version = "4.2.018";
   srcs =
     [ (fetchurl {
-         url = "http://download.urbanterror.info/urt/42/zips/UrbanTerror42_full_009.zip";
-         sha256 = "0m423zy6l1z4kxz55knlh1ypnqq58ghh08i8ziv4lm00ygm6mx2i";
+         url = "http://mirror.urtstats.net/urbanterror/UrbanTerror42_full018.zip";
+         sha256 = "10710c5b762687a75a7abd3cc56de005ce12dcb7ac14c08f40bcb4e9d96f4e83";
        })
       (fetchurl {
-         url = "https://github.com/Barbatos/ioq3-for-UrbanTerror-4/archive/release-4.2.007.tar.gz";
-         sha256 = "1299j0i94697m2bbcgraxfbb7q1g6nc43l1xqlgqvcsjp799mwwn";
+         url = "https://github.com/Barbatos/ioq3-for-UrbanTerror-4/archive/release-4.2.018.tar.gz";
+         sha256 = "c1fb3eb3a1e526247352b1c6abb5432b8a9b8730731ef917e4e5d21a152fb494";
        })
     ];
   buildInputs = [ unzip SDL mesa openal curl ];
-  sourceRoot = "ioq3-for-UrbanTerror-4-release-4.2.007";
+  sourceRoot = "ioq3-for-UrbanTerror-4-release-4.2.018";
   configurePhase = ''
     echo "USE_OPENAL = 1" > Makefile.local
     echo "USE_OPENAL_DLOPEN = 0" >> Makefile.local

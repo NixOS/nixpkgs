@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+import ./make-test.nix (
 
 let
 
@@ -32,6 +32,7 @@ let
 in
 
 {
+  name = "subversion";
 
   nodes =
     { webserver =
@@ -114,4 +115,4 @@ in
       $webserver->stopJob("httpd");
     '';
 
-}
+})

@@ -4,22 +4,18 @@
 , fixesproto, damageproto, xcmiscproto, bigreqsproto, randrproto, renderproto
 , fontsproto, videoproto, compositeproto, scrnsaverproto, resourceproto
 , libxkbfile, libXfont, libpciaccess, cmake, libjpeg_turbo, libXft, fltk, libXinerama
-, xineramaproto, libXcursor, fetchsvn
+, xineramaproto, libXcursor
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  # Release version = "1.3.0";
-  revision = 5129;
-  version = "r${toString revision}";
+  version = "1.3.1";
   name = "tigervnc-${version}";
 
-  src = fetchsvn {
-    # Release url = "mirror://sourceforge/tigervnc/${version}/${name}.tar.gz";
-    url = "https://tigervnc.svn.sourceforge.net/svnroot/tigervnc/trunk";
-    rev = revision;
-    sha256 = "1qszlqr8z16iqkm05gbs0knj4fxc3bb6gjayky1abmf8pjazi0j8";
+  src = fetchurl {
+    url = "https://github.com/TigerVNC/tigervnc/archive/v${version}.tar.gz";
+    sha256 = "161bhibic777g47lbjgdnvjhkkdzxrzmxz9rw9sim3q0gcbp0vz3";
   };
 
   inherit fontDirectories;
@@ -91,7 +87,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.tigervnc.org/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     description = "Fork of tightVNC, made in cooperation with VirtualGL";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;

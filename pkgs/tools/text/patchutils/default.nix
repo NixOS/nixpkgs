@@ -1,17 +1,20 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "patchutils-0.3.0";
+stdenv.mkDerivation rec {
+  name = "patchutils-0.3.3";
 
   src = fetchurl {
-    url = http://cyberelk.net/tim/data/patchutils/stable/patchutils-0.3.0.tar.bz2;
-    sha256 = "08jzvprhpcgwvx0xlkwc8dbdd9ilvwyr3cwnq96xmbfipch69yi7";
+    url = "http://cyberelk.net/tim/data/patchutils/stable/${name}.tar.xz";
+    sha256 = "0g5df00cj4nczrmr4k791l7la0sq2wnf8rn981fsrz1f3d2yix4i";
   };
 
-  meta = { 
+  patches = [ ./drop-comments.patch ]; # we would get into a cycle when using fetchpatch on this one
+
+  meta = with stdenv.lib; {
     description = "Tools to manipulate patch files";
     homepage = http://cyberelk.net/tim/software/patchutils;
-    license = "GPLv2";
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
     executables = [ "combinediff" "dehtmldiff" "editdiff" "espdiff"
       "filterdiff" "fixcvsdiff" "flipdiff" "grepdiff" "interdiff" "lsdiff"
       "recountdiff" "rediff" "splitdiff" "unwrapdiff" ];

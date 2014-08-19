@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A sentence based license detector";
     homepage = "http://ninka.turingmachine.org/";
-    license = "AGPLv3+";
+    license = stdenv.lib.licenses.agpl3Plus;
   };
 }

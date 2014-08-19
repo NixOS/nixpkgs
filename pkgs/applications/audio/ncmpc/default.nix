@@ -1,15 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, glib, ncurses, mpd_clientlib }:
+{ stdenv, fetchurl, pkgconfig, glib, ncurses, mpd_clientlib, libintlOrEmpty }:
 
 stdenv.mkDerivation rec {
-  version = "0.21";
+  version = "0.23";
   name = "ncmpc-${version}";
 
   src = fetchurl {
-    url = "http://www.musicpd.org/download/ncmpc/0/ncmpc-${version}.tar.bz2";
-    sha256 = "648e846e305c867cb937dcb467393c2f5a30bf460bdf77b63de7af69fba1fd07";
+    url = "http://www.musicpd.org/download/ncmpc/0/ncmpc-${version}.tar.xz";
+    sha256 = "d7b30cefaf5c74a5d8ab18ab8275e0102ae12e8ee6d6f8144f8e4cc9a97b5de4";
   };
 
-  buildInputs = [ pkgconfig glib ncurses mpd_clientlib ];
+  buildInputs = [ pkgconfig glib ncurses mpd_clientlib ]
+    ++ libintlOrEmpty;
+
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   meta = with stdenv.lib; {
     description = "Curses-based interface for MPD (music player daemon)";

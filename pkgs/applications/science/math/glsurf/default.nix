@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   src = fetchdarcs {
     url = "http://lama.univ-savoie.fr/~raffalli/GlSurf";
-    tag = "3.3";
+    rev = "3.3";
     sha256 = ""; md5="";
   };
 

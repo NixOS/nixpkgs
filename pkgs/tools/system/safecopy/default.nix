@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://safecopy.sourceforge.net;
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.bluescreen303 ];

@@ -2,13 +2,15 @@
 , withCryptodev ? false, cryptodevHeaders }:
 
 let
-  name = "openssl-1.0.1g";
+  name = "openssl-1.0.1i";
 
   opensslCrossSystem = stdenv.lib.attrByPath [ "openssl" "system" ]
     (throw "openssl needs its platform name cross building" null)
     stdenv.cross;
 
-  patchesCross = isCross:
+  patchesCross = isCross: let
+    isDarwin = stdenv.isDarwin || (isCross && stdenv.cross.libc == "libSystem");
+  in
     [ # Allow the location of the X509 certificate file (the CA
       # bundle) to be set through the environment variable
       # ‘OPENSSL_X509_CERT_FILE’.  This is necessary because the
@@ -29,7 +31,7 @@ let
           ./kfreebsd-gnu.patch
         ]
 
-    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
+    ++ stdenv.lib.optional isDarwin ./darwin-arch.patch;
 
 in
 
@@ -41,7 +43,7 @@ stdenv.mkDerivation {
       "http://www.openssl.org/source/${name}.tar.gz"
       "http://openssl.linux-mirror.org/source/${name}.tar.gz"
     ];
-    sha256 = "0a70qdqccg16nw4bbawa6pjvzn05vfp5wkwg6jl0grch7f683jsk";
+    sha256 = "1izwv1wzqdw8aqnvb70jcqpqp0rvkcm22w5c1dm9l1kpr939y5rw";
   };
 
   patches = patchesCross false;
@@ -63,7 +65,7 @@ stdenv.mkDerivation {
   makeFlags = "MANDIR=$(out)/share/man";
 
   # Parallel building is broken in OpenSSL.
-  #enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   postInstall =
     ''
@@ -91,6 +93,8 @@ stdenv.mkDerivation {
       rm $out/bin/c_rehash $out/ssl/misc/CA.pl $out/ssl/misc/tsget
     '';
     configureScript = "./Configure";
+  } // stdenv.lib.optionalAttrs (opensslCrossSystem == "darwin64-x86_64-cc") {
+    CC = "gcc";
   };
 
   meta = {

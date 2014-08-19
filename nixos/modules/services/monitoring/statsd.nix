@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -69,8 +69,8 @@ in
     };
 
     graphitePort = mkOption {
-      description = "Port of Graphite server";
-      default = config.services.graphite.web.port;
+      description = "Port of Graphite server (i.e. carbon-cache).";
+      default = 2003;
       type = types.uniq types.int;
     };
 

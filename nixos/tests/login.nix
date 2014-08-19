@@ -1,12 +1,17 @@
-config: { pkgs, ... }:
+import ./make-test.nix ({ pkgs, latestKernel ? false, ... }:
 
 {
+  name = "login";
 
-  machine = config;
+  machine =
+    { config, pkgs, lib, ... }:
+    { boot.kernelPackages = lib.mkIf latestKernel pkgs.linuxPackages_latest;
+    };
 
   testScript =
     ''
-      $machine->waitForUnit("default.target");
+      $machine->waitForUnit('multi-user.target');
+      $machine->waitUntilSucceeds("pgrep -f 'agetty.*tty1'");
       $machine->screenshot("postboot");
 
       subtest "create user", sub {
@@ -16,9 +21,11 @@ config: { pkgs, ... }:
 
       # Check whether switching VTs works.
       subtest "virtual console switching", sub {
+          $machine->fail("pgrep -f 'agetty.*tty2'");
           $machine->sendKeys("alt-f2");
           $machine->waitUntilSucceeds("[ \$(fgconsole) = 2 ]");
           $machine->waitForUnit('getty@tty2.service');
+          $machine->waitUntilSucceeds("pgrep -f 'agetty.*tty2'");
       };
 
       # Log in as alice on a virtual console.
@@ -58,4 +65,4 @@ config: { pkgs, ... }:
       };
     '';
 
-}
+})

@@ -77,6 +77,7 @@ if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE"; then
         n=$((n + 1))
     done
     params=("${rest[@]}")
+    @sysroot@
 fi
 
 

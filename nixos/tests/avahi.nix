@@ -1,8 +1,8 @@
-{ pkgs, ... }:
+# Test whether `avahi-daemon' and `libnss-mdns' work as expected.
 
-with pkgs;
+import ./make-test.nix {
+  name = "avahi";
 
-{
   nodes = {
     one =
       { config, pkgs, ... }: {
@@ -17,18 +17,18 @@ with pkgs;
       };
   };
 
-  # Test whether `avahi-daemon' and `libnss-mdns' work as expected.
   testScript =
     '' startAll;
 
        # mDNS.
        $one->waitForUnit("network.target");
+       $two->waitForUnit("network.target");
+
        $one->succeed("avahi-resolve-host-name one.local | tee out >&2");
        $one->succeed("test \"`cut -f1 < out`\" = one.local");
        $one->succeed("avahi-resolve-host-name two.local | tee out >&2");
        $one->succeed("test \"`cut -f1 < out`\" = two.local");
 
-       $two->waitForUnit("network.target");
        $two->succeed("avahi-resolve-host-name one.local | tee out >&2");
        $two->succeed("test \"`cut -f1 < out`\" = one.local");
        $two->succeed("avahi-resolve-host-name two.local | tee out >&2");

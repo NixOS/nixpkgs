@@ -16,7 +16,7 @@ rec {
     meta = {
       description = "http-proxy";
       homepage = "http://www.squid-cache.org";
-      license = "GPL2";
+      license = stdenv.lib.licenses.gpl2;
     };
 
   };
@@ -39,5 +39,16 @@ rec {
       libtool openssl];
   };
 
-  latest = squid32;
+  squid34 = squid30.merge rec {
+    name = "squid-3.4.5";
+    src = args.fetchurl {
+      url = "http://www.squid-cache.org/Versions/v3/3.4/${name}.tar.bz2";
+      sha256 = "1d17l27bszdxnvdr78l7yry8ka38cq7g4774m5876q25ny1q1bmr";
+    };
+    buildInputs = [openldap pam db cyrus_sasl libcap expat libxml2
+      libtool openssl];
+    configureFlags = ["--enable-ssl" "--enable-ssl-crtd"];
+  };
+
+  latest = squid34;
 }

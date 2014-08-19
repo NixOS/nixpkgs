@@ -1,8 +1,8 @@
-{pkgs, config, ...}:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.security.apparmor;
 in
-with pkgs.lib;
+with lib;
 {
 
   options.security.apparmor.confineSUIDApplications = mkOption {

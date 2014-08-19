@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -183,11 +183,29 @@ in
       '';
     };
 
+    networking.search = mkOption {
+      default = [];
+      example = [ "example.com" "local.domain" ];
+      type = types.listOf types.str;
+      description = ''
+        The list of search paths used when resolving domain names.
+      '';
+    };
+
     networking.domain = mkOption {
       default = "";
       example = "home";
       description = ''
         The domain.  It can be left empty if it is auto-detected through DHCP.
+      '';
+    };
+
+    networking.useHostResolvConf = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        In containers, whether to use the
+        <filename>resolv.conf</filename> supplied by the host.
       '';
     };
 
@@ -415,6 +433,7 @@ in
                 ${optionalString (cfg.nameservers != [] && cfg.domain != "") ''
                   domain ${cfg.domain}
                 ''}
+                ${optionalString (cfg.search != []) ("search " + concatStringsSep " " cfg.search)}
                 ${flip concatMapStrings cfg.nameservers (ns: ''
                   nameserver ${ns}
                 '')}

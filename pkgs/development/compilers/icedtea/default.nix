@@ -43,8 +43,6 @@ with srcInfo; stdenv.mkDerivation {
     inherit url sha256;
   };
 
-  patches = [ ./build-fix-2.4.6.patch ];
-
   outputs = [ "out" "jre" ];
 
   # TODO: Probably some more dependencies should be on this list but are being
@@ -61,7 +59,7 @@ with srcInfo; stdenv.mkDerivation {
     "--disable-downloading"
 
     "--without-rhino"
-    # Uncomment this when paxctl lands in stdenv: "--with-pax=paxctl"
+    "--with-pax=paxctl"
     "--with-jdk-home=${jdkPath}"
   ];
 

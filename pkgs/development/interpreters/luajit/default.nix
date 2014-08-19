@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patchPhase = stdenv.lib.optionalString (stdenv.gcc.libc != null)
+  patchPhase = ''
+    substituteInPlace Makefile \
+      --replace /usr/local $out
+  '' + stdenv.lib.optionalString (stdenv.gcc.libc != null)
   ''
     substituteInPlace Makefile \
       --replace ldconfig ${stdenv.gcc.libc}/sbin/ldconfig
@@ -21,11 +24,11 @@ stdenv.mkDerivation rec {
   buildFlags     = [ "amalg" ]; # Build highly optimized version
   installPhase   = "make install PREFIX=$out";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "high-performance JIT compiler for Lua 5.1";
     homepage    = http://luajit.org;
-    license     = stdenv.lib.licenses.mit;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = licenses.mit;
+    platforms   = platforms.linux ++ platforms.darwin;
+    maintainers = [ maintainers.thoughtpolice ];
   };
 }

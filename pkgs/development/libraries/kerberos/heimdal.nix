@@ -24,4 +24,8 @@ stdenv.mkDerivation rec {
   '';
 
   propagatedBuildInputs = [ readline db openssl openldap cyrus_sasl sqlite];
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

@@ -29,16 +29,18 @@ setPath "@path@"
 # Normally, stage 1 mounts the root filesystem read/writable.
 # However, in some environments, stage 2 is executed directly, and the
 # root is read-only.  So make it writable here.
-mount -n -o remount,rw /
+if [ "$container" != systemd-nspawn ]; then
+    mount -n -o remount,rw none /
+fi
 
 
 # Likewise, stage 1 mounts /proc, /dev and /sys, so if we don't have a
 # stage 1, we need to do that here.
 if [ ! -e /proc/1 ]; then
     mkdir -m 0755 -p /proc
-    mount -n -t proc none /proc
+    mount -n -t proc proc /proc
     mkdir -m 0755 -p /dev
-    mount -t devtmpfs none /dev
+    mount -t devtmpfs devtmpfs /dev
 fi
 
 
@@ -84,7 +86,7 @@ done
 mkdir -m 0755 /dev/shm
 mount -t tmpfs -o "rw,nosuid,nodev,size=@devShmSize@" tmpfs /dev/shm
 mkdir -m 0755 -p /dev/pts
-[ -e /proc/bus/usb ] && mount -t usbfs none /proc/bus/usb # UML doesn't have USB by default
+[ -e /proc/bus/usb ] && mount -t usbfs usbfs /proc/bus/usb # UML doesn't have USB by default
 mkdir -m 01777 -p /tmp
 mkdir -m 0755 -p /var /var/log /var/lib /var/db
 mkdir -m 0755 -p /nix/var
@@ -96,27 +98,7 @@ mkdir -m 0755 -p /etc/nixos
 
 # Miscellaneous boot time cleanup.
 rm -rf /var/run /var/lock
-rm -f /etc/resolv.conf
-touch /etc/resolv.conf
 rm -f /etc/{group,passwd,shadow}.lock
-
-if test -n "@cleanTmpDir@"; then
-    echo -n "cleaning \`/tmp'..."
-    find /tmp -maxdepth 1 -mindepth 1 -print0 | xargs -0r rm -rf --one-file-system
-    echo " done"
-else
-    # Get rid of ICE locks...
-    rm -rf /tmp/.ICE-unix
-fi
-
-# ... and ensure that it's owned by root.
-mkdir -m 1777 /tmp/.ICE-unix
-
-# This is a good time to clean up /nix/var/nix/chroots.  Doing an `rm
-# -rf' on it isn't safe in general because it can contain bind mounts
-# to /nix/store and other places.  But after rebooting these are all
-# gone, of course.
-rm -rf /nix/var/nix/chroots # recreated in activate-configuration.sh
 
 
 # Also get rid of temporary GC roots.
@@ -128,16 +110,17 @@ rm -rf /nix/var/nix/gcroots/tmp /nix/var/nix/temproots
 if ! mountpoint -q /run; then
     rm -rf /run
     mkdir -m 0755 -p /run
-    mount -t tmpfs -o "mode=0755,size=@runSize@" none /run
+    mount -t tmpfs -o "mode=0755,size=@runSize@" tmpfs /run
 fi
 
 # Create a ramfs on /run/keys to hold secrets that shouldn't be
 # written to disk (generally used for NixOps, harmless elsewhere).
 if ! mountpoint -q /run/keys; then
     rm -rf /run/keys
-    mkdir -m 0750 /run/keys
+    mkdir /run/keys
+    mount -t ramfs ramfs /run/keys
     chown 0:96 /run/keys
-    mount -t ramfs none /run/keys
+    chmod 0750 /run/keys
 fi
 
 mkdir -m 0755 -p /run/lock
@@ -153,6 +136,20 @@ ln -s /run/lock /var/lock
 if test -n "$resumeDevice"; then
     mkswap "$resumeDevice" || echo 'Failed to clear saved image.'
 fi
+
+
+# Use /etc/resolv.conf supplied by systemd-nspawn, if applicable.
+if [ -n "@useHostResolvConf@" -a -e /etc/resolv.conf ]; then
+    cat /etc/resolv.conf | resolvconf -m 1000 -a host
+else
+    touch /etc/resolv.conf
+fi
+
+
+# Create /var/setuid-wrappers as a tmpfs.
+rm -rf /var/setuid-wrappers
+mkdir -m 0755 -p /var/setuid-wrappers
+mount -t tmpfs -o "mode=0755" tmpfs /var/setuid-wrappers
 
 
 # Run the script that performs all configuration activation that does
@@ -185,4 +182,4 @@ echo "starting systemd..."
 PATH=/run/current-system/systemd/lib/systemd \
     MODULE_DIR=/run/booted-system/kernel-modules/lib/modules \
     LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive \
-    exec systemd --log-target=journal # --log-level=debug --log-target=console --crash-shell
+    exec systemd

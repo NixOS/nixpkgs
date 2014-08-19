@@ -18,11 +18,9 @@
 
 */
 
+{ config, lib, pkgs, ... }:
 
-
-{ config, pkgs, ... }:
-
-with pkgs.lib;
+with lib;
 
 let
 
@@ -32,9 +30,9 @@ let
     ''
       # Helper command to manipulate both the IPv4 and IPv6 tables.
       ip46tables() {
-        iptables "$@"
+        iptables -w "$@"
         ${optionalString config.networking.enableIPv6 ''
-          ip6tables "$@"
+          ip6tables -w "$@"
         ''}
       }
     '';
@@ -266,14 +264,23 @@ in
                      message = "This kernel does not support disabling conntrack helpers"; }
                  ];
 
-    jobs.firewall =
+    systemd.services.firewall =
       { description = "Firewall";
 
-        startOn = "started network-interfaces";
+        wantedBy = [ "network.target" ];
+        after = [ "network-interfaces.target" "systemd-modules-load.service" ];
 
         path = [ pkgs.iptables ];
 
-        preStart =
+        # FIXME: this module may also try to load kernel modules, but
+        # containers don't have CAP_SYS_MODULE. So the host system had
+        # better have all necessary modules already loaded.
+        unitConfig.ConditionCapability = "CAP_NET_ADMIN";
+
+        serviceConfig.Type = "oneshot";
+        serviceConfig.RemainAfterExit = true;
+
+        script =
           ''
             ${helpers}
 
@@ -386,7 +393,7 @@ in
 
             # Optionally respond to ICMPv4 pings.
             ${optionalString cfg.allowPing ''
-              iptables -A nixos-fw -p icmp --icmp-type echo-request ${optionalString (cfg.pingLimit != null)
+              iptables -w -A nixos-fw -p icmp --icmp-type echo-request ${optionalString (cfg.pingLimit != null)
                 "-m limit ${cfg.pingLimit} "
               }-j nixos-fw-accept
             ''}

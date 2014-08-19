@@ -1,9 +1,17 @@
 { stdenv, fetchurl }:
     
 stdenv.mkDerivation {
-    name = "szip-2.1";
-    src = fetchurl {
-        url = ftp://ftp.hdfgroup.org/lib-external/szip/2.1/src/szip-2.1.tar.gz;
-        sha256 = "05707lrdhwp8mv0dgzh2b6m2mwamv1z6k29m2v1v7pz0c1w2gb6z";
-    };
+  name = "szip-2.1";
+  src = fetchurl {
+    url = ftp://ftp.hdfgroup.org/lib-external/szip/2.1/src/szip-2.1.tar.gz;
+    sha256 = "1vym7r4by02m0yqj10023xyps5b21ryymnxb4nb2gs32arfxj5m8";
+  };
+
+  meta = {
+    description = "
+      Szip is a compression library that can be used with the hdf5 library.
+    ";
+    homepage = http://www.hdfgroup.org/doc_resource/SZIP/;
+    license = stdenv.lib.licenses.unfree;
+  };
 }

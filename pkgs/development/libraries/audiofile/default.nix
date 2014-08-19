@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "audiofile-0.3.6";
 
-  buildInputs = stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
+  nativeBuildInputs = stdenv.lib.optional stdenv.isLinux alsaLib;
 
   src = fetchurl {
     url = "http://audiofile.68k.org/${name}.tar.gz";

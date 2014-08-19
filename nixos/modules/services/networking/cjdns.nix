@@ -8,9 +8,9 @@
 # (without too much shell hackery), a skeleton of the
 # configuration building lies commented out.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

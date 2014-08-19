@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   name="fetchmail-${version}";
 
   src = fetchurl {
-    url = "http://download.berlios.de/fetchmail/fetchmail-${version}.tar.bz2";
+    url = "mirror://sourceforge/fetchmail.berlios/fetchmail-${version}.tar.bz2";
     sha256 = "08rafrs1dlr11myr0p99kg4k80qyy0fa63gg3ac88zn49174lwhw";
   };
 

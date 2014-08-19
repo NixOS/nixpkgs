@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
 		(textClosure localDefs [allBuild doForceShare doPropagate]);
 	meta = {
 		description = "Qi - next generation on top of Common Lisp";
-		inherit src;
 	};
 }

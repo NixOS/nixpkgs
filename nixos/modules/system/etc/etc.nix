@@ -1,8 +1,8 @@
 # Management of static files in /etc.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -132,7 +132,7 @@ in
       ''
         # Set up the statically computed bits of /etc.
         echo "setting up /etc..."
-        ${pkgs.perl}/bin/perl ${./setup-etc.pl} ${etc}/etc
+        ${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl ${./setup-etc.pl} ${etc}/etc
       '';
 
   };

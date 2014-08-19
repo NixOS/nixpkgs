@@ -1,28 +1,26 @@
-{ pkgs, ... }:
+import ./make-test.nix (
 
 let
 
   backend =
     { config, pkgs, ... }:
 
-    {
-      services.openssh.enable = true;
-
-      services.httpd.enable = true;
+    { services.httpd.enable = true;
       services.httpd.adminAddr = "foo@example.org";
       services.httpd.documentRoot = "${pkgs.valgrind}/share/doc/valgrind/html";
+      networking.firewall.allowedTCPPorts = [ 80 ];
     };
 
 in
 
 {
+  name = "proxy";
 
   nodes =
     { proxy =
         { config, pkgs, nodes, ... }:
 
-        {
-          services.httpd.enable = true;
+        { services.httpd.enable = true;
           services.httpd.adminAddr = "bar@example.org";
           services.httpd.extraModules = ["proxy_balancer"];
 
@@ -50,6 +48,8 @@ in
               # For testing; don't want to wait forever for dead backend servers.
               ProxyTimeout      5
             '';
+
+          networking.firewall.allowedTCPPorts = [ 80 ];
         };
 
       backend1 = backend;
@@ -91,4 +91,4 @@ in
       $client->succeed("curl --fail http://proxy/");
     '';
 
-}
+})

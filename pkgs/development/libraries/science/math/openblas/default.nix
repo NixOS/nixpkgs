@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     description = "Basic Linear Algebra Subprograms";
     license = stdenv.lib.licenses.bsd3;
     homepage = "https://github.com/xianyi/OpenBLAS";
+    platforms = [ "x86_64-linux" ];
   };
 }

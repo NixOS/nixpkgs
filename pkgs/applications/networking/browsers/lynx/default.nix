@@ -5,11 +5,11 @@
 assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation {
-  name = "lynx-2.8.7";
+  name = "lynx-2.8.8";
   
   src = fetchurl {
-    url = http://lynx.isc.org/lynx2.8.7/lynx2.8.7.tar.bz2;
-    sha256 = "1baxwpdvak6nalr943g22z67r1d3fbibbkqvkvvar9xlvrs9gv20";
+    url = http://lynx.isc.org/lynx2.8.8/lynx2.8.8.tar.bz2;
+    sha256 = "1rxysl08acqll5b87368f04kckl8sggy1qhnq59gsxyny1ffg039";
   };
   
   configureFlags = if sslSupport then "--with-ssl=${openssl}" else "";

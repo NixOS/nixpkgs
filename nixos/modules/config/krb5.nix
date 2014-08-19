@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -32,12 +32,12 @@ in
 
       kdc = mkOption {
         default = "kerberos.mit.edu";
-        description = "Kerberos Domain Controller";
+        description = "Kerberos Domain Controller.";
       };
 
       kerberosAdminServer = mkOption {
         default = "kerberos.mit.edu";
-        description = "Kerberos Admin Server";
+        description = "Kerberos Admin Server.";
       };
 
     };

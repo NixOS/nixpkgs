@@ -10,13 +10,34 @@ let lib = import ../../../lib; in lib.makeOverridable (
 , setupScript ? ./setup.sh
 
 , extraBuildInputs ? []
+
+, skipPaxMarking ? false
 }:
 
 let
 
   allowUnfree = config.allowUnfree or false || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
+  # Alow granular checks to allow only some unfree packages
+  # Example:
+  # {pkgs, ...}:
+  # {
+  #   allowUnfree = false;
+  #   allowUnfreePredicate = (x: pkgs.lib.hasPrefix "flashplayero-" x.name);
+  # }
+  allowUnfreePredicate = config.allowUnfreePredicate or (x: false);
+
   allowBroken = config.allowBroken or false || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
+
+  forceEvalHelp = unfreeOrBroken:
+    assert (unfreeOrBroken == "Unfree" || unfreeOrBroken == "Broken");
+    ''
+      You can set
+        { nixpkgs.config.allow${unfreeOrBroken} = true; }
+      in configuration.nix to override this. If you use Nix standalone, you can add
+        { allow${unfreeOrBroken} = true; }
+      to ~/.nixpkgs/config.nix.
+    '';
 
   unsafeGetAttrPos = builtins.unsafeGetAttrPos or (n: as: null);
 
@@ -29,15 +50,21 @@ let
       builder = shell;
 
       args = ["-e" ./builder.sh];
+      /* TODO: special-cased @var@ substitutions are ugly.
+          However, using substituteAll* from setup.sh seems difficult,
+          as setup.sh can't be directly sourced.
+          Suggestion: split similar utility functions into a separate script.
+      */
 
       setup = setupScript;
 
       inherit preHook initialPath gcc shell;
 
+      # Whether we should run paxctl to pax-mark binaries
+      needsPax = result.isLinux && !skipPaxMarking;
+
       propagatedUserEnvPkgs = [gcc] ++
         lib.filter lib.isDerivation initialPath;
-
-      __ignoreNulls = true;
     }
 
     // rec {
@@ -57,12 +84,18 @@ let
               unsafeGetAttrPos "name" attrs;
           pos' = if pos != null then "‘" + pos.file + ":" + toString pos.line + "’" else "«unknown-file»";
         in
-        if !allowUnfree && (let l = lib.lists.toList attrs.meta.license or []; in lib.lists.elem "unfree" l || lib.lists.elem "unfree-redistributable" l) then
-          throw "package ‘${attrs.name}’ in ${pos'} has an unfree license, refusing to evaluate"
+        if !allowUnfree && (let l = lib.lists.toList attrs.meta.license or []; in lib.lists.elem "unfree" l || lib.lists.elem "unfree-redistributable" l) && !(allowUnfreePredicate attrs) then
+          throw ''
+            Package ‘${attrs.name}’ in ${pos'} has an unfree license, refusing to evaluate.
+            ${forceEvalHelp "Unfree"}''
         else if !allowBroken && attrs.meta.broken or false then
-          throw "you can't use package ‘${attrs.name}’ in ${pos'} because it has been marked as broken"
+          throw ''
+            Package ‘${attrs.name}’ in ${pos'} is marked as broken, refusing to evaluate.
+            ${forceEvalHelp "Broken"}''
         else if !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem result.system attrs.meta.platforms then
-          throw "the package ‘${attrs.name}’ in ${pos'} is not supported on ‘${result.system}’"
+          throw ''
+            Package ‘${attrs.name}’ in ${pos'} is not supported on ‘${result.system}’, refusing to evaluate.
+            ${forceEvalHelp "Broken"}''
         else
           lib.addPassthru (derivation (
             (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
@@ -79,6 +112,7 @@ let
               stdenv = result;
               system = result.system;
               userHook = config.stdenv.userHook or null;
+              __ignoreNulls = true;
 
               # Inputs built by the cross compiler.
               buildInputs = lib.optionals (crossConfig != null) (buildInputs ++ extraBuildInputs);

@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     md5 = "a8e65f1400c90818ff324dc4fd67eba2";
   };
 
-  buildInputs = [ perl finger_bsd ];
+  buildInputs = [ perl ] ++ stdenv.lib.optional (!stdenv.isDarwin) finger_bsd;
 
   meta = {
     homepage = "http://www.spinnaker.de/lbdb/";

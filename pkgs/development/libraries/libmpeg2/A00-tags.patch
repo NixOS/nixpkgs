@@ -1,0 +1,27 @@
+diff -ru mpeg2dec.orig/libmpeg2/decode.c mpeg2dec/libmpeg2/decode.c
+--- mpeg2dec.orig/libmpeg2/decode.c	2008-07-09 12:16:05.000000000 -0700
++++ mpeg2dec/libmpeg2/decode.c	2009-07-03 16:29:48.000000000 -0700
+@@ -212,7 +212,7 @@
+ 
+ mpeg2_state_t mpeg2_parse_header (mpeg2dec_t * mpeg2dec)
+ {
+-    static int (* process_header[]) (mpeg2dec_t * mpeg2dec) = {
++    static int (* process_header[]) (mpeg2dec_t *) = {
+ 	mpeg2_header_picture, mpeg2_header_extension, mpeg2_header_user_data,
+ 	mpeg2_header_sequence, NULL, NULL, NULL, NULL, mpeg2_header_gop
+     };
+@@ -368,6 +368,14 @@
+ 
+ void mpeg2_tag_picture (mpeg2dec_t * mpeg2dec, uint32_t tag, uint32_t tag2)
+ {
++    if (mpeg2dec->num_tags == 0 && mpeg2dec->state == STATE_PICTURE && mpeg2dec->picture) {
++        // since tags got processed when we entered this state we
++        // have to set them directly or they'll end up on the next frame.
++        mpeg2dec->picture->tag = tag;
++        mpeg2dec->picture->tag2 = tag2;
++        mpeg2dec->picture->flags |= PIC_FLAG_TAGS;
++        return;
++    }
+     mpeg2dec->tag_previous = mpeg2dec->tag_current;
+     mpeg2dec->tag2_previous = mpeg2dec->tag2_current;
+     mpeg2dec->tag_current = tag;

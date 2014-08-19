@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
   inherit (pkgs) sitecopy;
@@ -73,7 +73,7 @@ in
         touch ${stateDir}/sitecopy.secrets
         chown root ${stateDir}/sitecopy.secrets
 
-        ${pkgs.lib.concatStrings (map ( b: ''
+        ${lib.concatStrings (map ( b: ''
             unset secrets
             unset secret
             secrets=`grep '^${b.server}' ${stateDir}/sitecopy.secrets | head -1`

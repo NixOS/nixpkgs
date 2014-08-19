@@ -61,7 +61,17 @@ composableDerivation {
 
       // edf { name = "tcl"; enable = { nativeBuildInputs = [tcl]; }; } #Include Tcl interpreter.
       // edf { name = "ruby"; feat = "rubyinterp"; enable = { nativeBuildInputs = [ruby]; };} #Include Ruby interpreter.
-      // edf { name = "lua" ; feat = "luainterp"; enable = { nativeBuildInputs = [lua]; configureFlags = ["--with-lua-prefix=${args.lua}"];};}
+      // edf {
+        name = "lua";
+        feat = "luainterp";
+        enable = {
+          nativeBuildInputs = [lua];
+          configureFlags = [
+            "--with-lua-prefix=${args.lua}"
+            "--enable-luainterp"
+          ];
+        };
+      }
       // edf { name = "cscope"; } #Include cscope interface.
       // edf { name = "workshop"; } #Include Sun Visual Workshop support.
       // edf { name = "netbeans"; } #Disable NetBeans integration support.
@@ -76,6 +86,7 @@ composableDerivation {
       ;
 
   cfg = {
+    luaSupport       = config.vim.lua or true;
     pythonSupport    = config.vim.python or true;
     rubySupport      = config.vim.ruby or true;
     nlsSupport       = config.vim.nls or false;

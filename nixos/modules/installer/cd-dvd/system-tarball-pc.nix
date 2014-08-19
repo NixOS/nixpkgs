@@ -1,9 +1,9 @@
 # This module contains the basic configuration for building a NixOS
 # tarball, that can directly boot, maybe using PXE or unpacking on a fs.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -109,7 +109,7 @@ in
   # not be started by default on the installation CD because the
   # default root password is empty.
   services.openssh.enable = true;
-  jobs.openssh.startOn = pkgs.lib.mkOverride 50 "";
+  jobs.openssh.startOn = lib.mkOverride 50 "";
 
   # To be able to use the systemTarball to catch troubles.
   boot.crashDump = {

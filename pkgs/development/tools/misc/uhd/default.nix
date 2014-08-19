@@ -8,15 +8,15 @@
 
 stdenv.mkDerivation rec {
   name = "uhd-${version}";
-  version = "3.5.4";
+  version = "3.7.0";
 
   # UHD seems to use three different version number styles: x.y.z, xxx_yyy_zzz
   # and xxx.yyy.zzz. Hrmpf...
 
   src = fetchurl {
     name = "${name}.tar.gz";
-    url = "https://github.com/EttusResearch/uhd/archive/release_003_005_004.tar.gz";
-    sha256 = "1l11dv72r4ynfpw58aacq0kjylzw85yapv3kzc76lg6qgdb0pqrd";
+    url = "https://github.com/EttusResearch/uhd/archive/release_003_007_000.tar.gz";
+    sha256 = "0x9imfy63s6wlbilr2n82c15nd33ix0mbap0q1xwh2pj1mk4d5jk";
   };
 
   cmakeFlags = "-DLIBUSB_INCLUDE_DIRS=${libusb1}/include/libusb-1.0";
@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
   preConfigure = "cd host";
 
   # Firmware images are downloaded (pre-built)
-  uhdImagesName = "uhd-images_003.005.004-release";
+  uhdImagesName = "uhd-images_003.007.000-release";
   uhdImagesSrc = fetchurl {
     url = "http://files.ettus.com/binaries/maint_images/archive/${uhdImagesName}.tar.gz";
-    sha256 = "0lgy9076vshlaq7l4n3q1hka3q4xxzdz7mqh7kawg4dziq7j8nl6";
+    sha256 = "0vb0rc5ji8n6l6ycvd7pbazxzm0ihvkmqm77jflqrd3kky8r722d";
   };
 
   postPhases = [ "installFirmware" ];

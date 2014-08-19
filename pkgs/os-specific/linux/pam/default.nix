@@ -1,12 +1,14 @@
 { stdenv, fetchurl, flex, cracklib }:
 
 stdenv.mkDerivation rec {
-  name = "linux-pam-1.1.6";
+  name = "linux-pam-1.1.8";
 
   src = fetchurl {
-    url = https://fedorahosted.org/releases/l/i/linux-pam/Linux-PAM-1.1.6.tar.bz2;
-    sha256 = "1hlz2kqvbjisvwyicdincq7nz897b9rrafyzccwzqiqg53b8gf5s";
+    url = http://www.linux-pam.org/library/Linux-PAM-1.1.8.tar.bz2;
+    sha256 = "0m8ygb40l1c13nsd4hkj1yh4p1ldawhhg8pyjqj9w5kd4cxg5cf4";
   };
+
+  patches = [ ./CVE-2014-2583.patch ];
 
   nativeBuildInputs = [ flex ];
 

@@ -1,0 +1,4 @@
+url http://sourceforge.net/projects/libebook/files/
+SF_version_dir libe-book-0.0.
+version_link '[.]tar.xz/download$'
+SF_redirect

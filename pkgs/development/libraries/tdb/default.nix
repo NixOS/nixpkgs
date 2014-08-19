@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = http://tdb.samba.org/;
-    license = "LGPLv3+";
+    license = stdenv.lib.licenses.lgpl3Plus;
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;

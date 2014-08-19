@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "pdnsd-1.2.8-par";
+  name = "pdnsd-1.2.9a-par";
 
   src = fetchurl {
-    url = http://www.phys.uu.nl/~rombouts/pdnsd/releases/pdnsd-1.2.8-par.tar.gz;
-    sha256 = "0ki4xkklc5lqs2qfmww63dc2zax48x8acfw661206ps4kvhasg2z";
+    url = http://members.home.nl/p.a.rombouts/pdnsd/releases/pdnsd-1.2.9a-par.tar.gz;
+    sha256 = "0yragv5zk77a1hfkpnsh17vvsw8b14d6mzfng4bb7i58rb83an5v";
   };
 
   patchPhase = ''
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   meta = { 
     description = "Permanent DNS caching";
     homepage = http://www.phys.uu.nl/~rombouts/pdnsd.html;
-    license = "GPLv3+";
-    platforms = with stdenv.lib.platforms; linux;
+    license = stdenv.lib.licenses.gpl3Plus;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [viric];
   };
 }

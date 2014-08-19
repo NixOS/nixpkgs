@@ -1,15 +1,12 @@
-{stdenv, fetchsvn}:
+{ stdenv, fetchsvn }:
 
-let
-  revision = "73";
-in
-
-stdenv.mkDerivation {
-  name = "hol_light_mode-${revision}";
+stdenv.mkDerivation rec {
+  name    = "hol_light-mode-${version}";
+  version = "73";
 
   src = fetchsvn {
     url = http://seanmcl-ocaml-lib.googlecode.com/svn/trunk/workshop/software/emacs;
-    rev = revision;
+    rev = version;
     sha256 = "3ca83098960439da149a47e1caff32536601559a77f04822be742a390c67feb7";
   };
 
@@ -20,6 +17,10 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "A HOL Light mode for emacs";
+    description = "A HOL Light mode for Emacs";
+    homepage    = http://www.cl.cam.ac.uk/~jrh13/hol-light/;
+    license     = stdenv.lib.licenses.gpl2Plus;
+    platforms   = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }

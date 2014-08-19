@@ -1,14 +1,16 @@
 { stdenv, fetchurl, boost, cmake, gettext, gstreamer, gst_plugins_base
 , liblastfm, qt4, taglib, fftw, glew, qjson, sqlite, libgpod, libplist
 , usbmuxd, libmtp, gvfs, libcdio, protobuf, libspotify, qca2, pkgconfig
-, sparsehash }:
+, sparsehash, config }:
 
+let withSpotify = config.clementine.spotify or false;
+in
 stdenv.mkDerivation {
-  name = "clementine-1.2.1";
+  name = "clementine-1.2.3";
 
   src = fetchurl {
-    url = http://clementine-player.googlecode.com/files/clementine-1.2.1.tar.gz;
-    sha256 = "0kk5cjmb8nirx0im3c0z91af2k72zxi6lwzm6rb57qihya5nwmfv";
+    url = https://github.com/clementine-player/Clementine/archive/1.2.3.tar.gz;
+    sha256 = "1gx1109i4pylz6x7gvp4rdzc6dvh0w6in6hfbygw01d08l26bxbx";
   };
 
   patches = [ ./clementine-1.2.1-include-paths.patch ];
@@ -27,7 +29,6 @@ stdenv.mkDerivation {
     liblastfm
     libmtp
     libplist
-    libspotify
     pkgconfig
     protobuf
     qca2
@@ -37,7 +38,9 @@ stdenv.mkDerivation {
     sqlite
     taglib
     usbmuxd
-  ];
+  ] ++ stdenv.lib.optional withSpotify libspotify;
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = "http://www.clementine-player.org";
@@ -45,5 +48,7 @@ stdenv.mkDerivation {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.ttuegel ];
+    # libspotify is unfree
+    hydraPlatforms = optionals (!withSpotify) platforms.linux;
   };
 }

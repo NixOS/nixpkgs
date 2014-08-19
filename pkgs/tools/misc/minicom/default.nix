@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "minicom-2.6.2";
+  name = "minicom-2.7";
 
   src = fetchurl {
-    url = "http://alioth.debian.org/frs/download.php/file/3869/${name}.tar.gz";
-    sha256 = "0s4ibk8scspm8a0raf5s4zgp9b82c4bn529rir9abzqlg5gj3kzk";
+    url = "http://alioth.debian.org/frs/download.php/file/3977/${name}.tar.gz";
+    sha256 = "1x04m4k7c71j5cnhzpjrbz43dd96k4mpkd0l87v5skrgp1isdhws";
   };
 
   buildInputs = [ncurses];

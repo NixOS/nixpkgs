@@ -3,9 +3,9 @@
 # directly to an SMTP server defined in its configuration file, wihout
 # queueing mail locally.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

@@ -2,48 +2,19 @@ source $stdenv/setup
 
 tar xvfz $src
 
-cd plan9
+cd plan9port
 
-export PLAN9=`pwd`
-export X11=/tmp
+cflags="echo \"CFLAGS='-I${libXt}/include'\" >> \$PLAN9/config"
 
-# Patch for the installation
-sed -i -e 's@`which echo`@echo@' lib/moveplan9.sh
+sed -i "43i\\${cflags}" INSTALL
 
-OLDPATH=$PATH
-PATH=`pwd`/bin:$PATH
+for p in $patches; do
+  echo "applying patch $p"
+  patch -p1 < $p
+done
 
-gcc lib/linux-isnptl.c -lpthread
-set +e 
-if ./a.out > /dev/null
-then
-  echo "SYSVERSION=2.6.x" >config
-else
-  echo "SYSVERSION=2.4.x" >config
-fi
-rm -f ./a.out
-set -e
+./INSTALL -r $out/plan9
 
-pushd src
-
-# Build mk
-../dist/buildmk 2>&1 | sed 's/^[+] //'
-
-# Build everything
-
-mk clean
-mk libs-nuke
-mk all || exit 1
-mk install || exit 1
-
-popd
-
-# Installation
-export PLAN9=$out
+export PLAN9=$out/plan9
 mkdir -p $PLAN9
-GLOBIGNORE='src:.*'
 cp -R * $PLAN9
-GLOBIGNORE=
-
-cd $PLAN9
-sh lib/moveplan9.sh `pwd`

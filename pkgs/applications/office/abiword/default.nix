@@ -27,7 +27,10 @@ stdenv.mkDerivation {
       libgsf enchant wv libjpeg
     ];
 
-  meta = {
-    description = "Word processing program, similar to Microsof Word";
+  meta = with stdenv.lib; {
+    description = "Word processing program, similar to Microsoft Word";
+    homepage = http://www.abisource.com/;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
   };
 }

@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
 
@@ -25,7 +25,7 @@ with pkgs.lib;
 
   config = mkIf config.fonts.enableGhostscriptFonts {
 
-    fonts.extraFonts = [ "${pkgs.ghostscript}/share/ghostscript/fonts" ];
+    fonts.fonts = [ "${pkgs.ghostscript}/share/ghostscript/fonts" ];
 
   };
 

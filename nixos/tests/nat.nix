@@ -4,14 +4,14 @@
 # router connected to both that performs Network Address Translation
 # for the client.
 
-{ pkgs, ... }:
-
-{
+import ./make-test.nix {
+  name = "nat";
 
   nodes =
     { client =
         { config, pkgs, nodes, ... }:
         { virtualisation.vlans = [ 1 ];
+          networking.firewall.allowPing = true;
           networking.defaultGateway =
             nodes.router.config.networking.interfaces.eth2.ipAddress;
         };
@@ -19,6 +19,7 @@
       router =
         { config, pkgs, ... }:
         { virtualisation.vlans = [ 2 1 ];
+          networking.firewall.allowPing = true;
           networking.nat.enable = true;
           networking.nat.internalIPs = [ "192.168.1.0/24" ];
           networking.nat.externalInterface = "eth1";
@@ -27,6 +28,7 @@
       server =
         { config, pkgs, ... }:
         { virtualisation.vlans = [ 2 ];
+          networking.firewall.enable = false;
           services.httpd.enable = true;
           services.httpd.adminAddr = "foo@example.org";
           services.vsftpd.enable = true;

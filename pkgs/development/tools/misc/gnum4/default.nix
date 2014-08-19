@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       compiler or as a macro processor in its own right.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
   };
 
 }

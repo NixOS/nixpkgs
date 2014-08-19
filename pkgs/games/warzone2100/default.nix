@@ -1,23 +1,35 @@
-{ stdenv, fetchurl, bison, flex, gettext, pkgconfig, SDL, libpng, libtheora
-, openal, popt, physfs, mesa, quesoglc, zip, unzip, which
+{ stdenv, fetchurl, bison, flex, gettext, pkgconfig, libpng
+, libtheora, openalSoft, physfs, mesa, fribidi, fontconfig
+, freetype, qt4, glew, libogg, libvorbis, zlib, libX11
+, libXrandr, zip, unzip, which
+, withVideos ? false
 }:
 stdenv.mkDerivation rec {
   pname = "warzone2100";
-  version = "2.3.9";
+  version = "3.1.1";
   name = "${pname}-${version}";
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${name}.tar.gz";
-    sha256 = "1nvs4slnl75b64pf9gwcpbra56jzcbxyv83fis5pki69aavkp14y";
+    url = "mirror://sourceforge/${pname}/releases/${version}/${name}.tar.xz";
+    sha256 = "c937a2e2c7afdad00b00767636234bbec4d8b18efb008073445439d32edb76cf";
   };
-  buildInputs = [ bison flex gettext pkgconfig SDL libpng libtheora openal
-                  popt physfs mesa quesoglc zip unzip
+  sequences_src = fetchurl {
+    url = "mirror://sourceforge/${pname}/warzone2100/Videos/high-quality-en/sequences.wz";
+    sha256 = "90ff552ca4a70e2537e027e22c5098ea4ed1bc11bb7fc94138c6c941a73d29fa";
+  };
+  buildInputs = [ bison flex gettext pkgconfig libpng libtheora openalSoft
+                  physfs mesa fribidi fontconfig freetype qt4
+                  glew libogg libvorbis zlib libX11 libXrandr zip
+                  unzip
                 ];
   patchPhase = ''
     substituteInPlace lib/exceptionhandler/dumpinfo.cpp \
                       --replace "which %s" "${which}/bin/which %s"
-    substituteInPlace lib/exceptionhandler/exceptionhandler.c \
+    substituteInPlace lib/exceptionhandler/exceptionhandler.cpp \
                       --replace "which %s" "${which}/bin/which %s"
   '';
+  configureFlags = "--with-backend=qt --with-distributor=NixOS";
+  postInstall = []
+    ++ stdenv.lib.optional withVideos "cp ${sequences_src} $out/share/warzone2100/sequences.wz";
   meta = {
     description = "A free RTS game, originally developed by Pumpkin Studios";
     longDescription = ''

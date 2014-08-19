@@ -1,8 +1,7 @@
 # Test the firewall module.
 
-{ pkgs, ... }:
-
-{
+import ./make-test.nix {
+  name = "firewall";
 
   nodes =
     { walled =
@@ -17,6 +16,7 @@
         { config, pkgs, ... }:
         { services.httpd.enable = true;
           services.httpd.adminAddr = "foo@example.org";
+          networking.firewall.enable = false;
         };
     };
 
@@ -33,7 +33,7 @@
       $walled->succeed("curl -v http://localhost/ >&2");
 
       # Connections to the firewalled machine should fail.
-      $attacker->fail("curl -v http://walled/ >&2");
+      $attacker->fail("curl --fail --connect-timeout 2 http://walled/ >&2");
       $attacker->fail("ping -c 1 walled >&2");
 
       # Outgoing connections/pings should still work.

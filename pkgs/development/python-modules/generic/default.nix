@@ -135,8 +135,7 @@ python.stdenv.mkDerivation (attrs // {
     runHook postInstall
   '';
 
-  postFixup =
-    ''
+  postFixup = attrs.postFixup or ''
       wrapPythonPrograms
 
       # If a user installs a Python package, they probably also wants its
@@ -157,12 +156,14 @@ python.stdenv.mkDerivation (attrs // {
     '';
 
   shellHook = attrs.shellHook or ''
-    mkdir -p /tmp/$name/lib/${python.libPrefix}/site-packages
-    ${preShellHook}
-    export PATH="/tmp/$name/bin:$PATH"
-    export PYTHONPATH="/tmp/$name/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-    python setup.py develop --prefix /tmp/$name
-    ${postShellHook}
+    if test -e setup.py; then
+       mkdir -p /tmp/$name/lib/${python.libPrefix}/site-packages
+       ${preShellHook}
+       export PATH="/tmp/$name/bin:$PATH"
+       export PYTHONPATH="/tmp/$name/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+       ${python}/bin/${python.executable} setup.py develop --prefix /tmp/$name
+       ${postShellHook}
+    fi
   '';
 
   meta = with lib.maintainers; {

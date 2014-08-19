@@ -1,6 +1,46 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
+
+let
+
+  nixos-container = pkgs.substituteAll {
+    name = "nixos-container";
+    dir = "bin";
+    isExecutable = true;
+    src = ./nixos-container.pl;
+    perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
+    inherit (pkgs) socat;
+  };
+
+  # The container's init script, a small wrapper around the regular
+  # NixOS stage-2 init script.
+  containerInit = pkgs.writeScript "container-init"
+    ''
+      #! ${pkgs.stdenv.shell} -e
+
+      # Initialise the container side of the veth pair.
+      if [ "$PRIVATE_NETWORK" = 1 ]; then
+        ip link set host0 name eth0
+        ip link set dev eth0 up
+        if [ -n "$HOST_ADDRESS" ]; then
+          ip route add $HOST_ADDRESS dev eth0
+          ip route add default via $HOST_ADDRESS
+        fi
+        if [ -n "$LOCAL_ADDRESS" ]; then
+          ip addr add $LOCAL_ADDRESS dev eth0
+        fi
+      fi
+
+      # Start the regular stage 1 script, passing the bind-mounted
+      # notification socket from the host to allow the container
+      # systemd to signal readiness to the host systemd.
+      NOTIFY_SOCKET=/var/lib/private/host-notify exec "$1"
+    '';
+
+  system = config.nixpkgs.system;
+
+in
 
 {
   options = {
@@ -14,18 +54,11 @@ with pkgs.lib;
       '';
     };
 
-    systemd.containers = mkOption {
+    containers = mkOption {
       type = types.attrsOf (types.submodule (
         { config, options, name, ... }:
         {
           options = {
-
-            root = mkOption {
-              type = types.path;
-              description = ''
-                The root directory of the container.
-              '';
-            };
 
             config = mkOption {
               description = ''
@@ -45,21 +78,53 @@ with pkgs.lib;
               '';
             };
 
+            privateNetwork = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Whether to give the container its own private virtual
+                Ethernet interface.  The interface is called
+                <literal>eth0</literal>, and is hooked up to the interface
+                <literal>ve-<replaceable>container-name</replaceable></literal>
+                on the host.  If this option is not set, then the
+                container shares the network interfaces of the host,
+                and can bind to any port on any interface.
+              '';
+            };
+
+            hostAddress = mkOption {
+              type = types.nullOr types.string;
+              default = null;
+              example = "10.231.136.1";
+              description = ''
+                The IPv4 address assigned to the host interface.
+              '';
+            };
+
+            localAddress = mkOption {
+              type = types.nullOr types.string;
+              default = null;
+              example = "10.231.136.2";
+              description = ''
+                The IPv4 address assigned to <literal>eth0</literal>
+                in the container.
+              '';
+            };
+
           };
 
           config = mkMerge
-            [ { root = mkDefault "/var/lib/containers/${name}";
-              }
-              (mkIf options.config.isDefined {
+            [ (mkIf options.config.isDefined {
                 path = (import ../../lib/eval-config.nix {
+                  inherit system;
                   modules =
                     let extraConfig =
                       { boot.isContainer = true;
-                        security.initialRootPassword = mkDefault "!";
                         networking.hostName = mkDefault name;
+                        networking.useDHCP = false;
                       };
                     in [ extraConfig config.config ];
-                  prefix = [ "systemd" "containers" name ];
+                  prefix = [ "containers" name ];
                 }).config.system.build.toplevel;
               })
             ];
@@ -69,12 +134,10 @@ with pkgs.lib;
       example = literalExample
         ''
           { webserver =
-              { root = "/containers/webserver";
-                path = "/nix/var/nix/profiles/webserver";
+              { path = "/nix/var/nix/profiles/webserver";
               };
             database =
-              { root = "/containers/database";
-                config =
+              { config =
                   { config, pkgs, ... }:
                   { services.postgresql.enable = true;
                     services.postgresql.package = pkgs.postgresql92;
@@ -94,44 +157,183 @@ with pkgs.lib;
   };
 
 
-  config = {
+  config = mkIf (!config.boot.isContainer) {
 
-    systemd.services = mapAttrs' (name: container: nameValuePair "container-${name}"
-      { description = "Container '${name}'";
+    systemd.services."container@" =
+      { description = "Container '%i'";
 
-        wantedBy = [ "multi-user.target" ];
+        unitConfig.RequiresMountsFor = [ "/var/lib/containers/%i" ];
 
-        unitConfig.RequiresMountsFor = [ container.root ];
+        path = [ pkgs.iproute ];
+
+        environment.INSTANCE = "%i";
+        environment.root = "/var/lib/containers/%i";
 
         preStart =
           ''
-            mkdir -p -m 0755 ${container.root}/etc
-            if ! [ -e ${container.root}/etc/os-release ]; then
-              touch ${container.root}/etc/os-release
+            # Clean up existing machined registration and interfaces.
+            machinectl terminate "$INSTANCE" 2> /dev/null || true
+
+            if [ "$PRIVATE_NETWORK" = 1 ]; then
+              ip link del dev "ve-$INSTANCE" 2> /dev/null || true
             fi
+         '';
+
+        script =
+          ''
+            mkdir -p -m 0755 "$root/etc" "$root/var/lib"
+            mkdir -p -m 0700 "$root/var/lib/private"
+            if ! [ -e "$root/etc/os-release" ]; then
+              touch "$root/etc/os-release"
+            fi
+
+            mkdir -p -m 0755 \
+              "/nix/var/nix/profiles/per-container/$INSTANCE" \
+              "/nix/var/nix/gcroots/per-container/$INSTANCE"
+
+            cp -f /etc/resolv.conf "$root/etc/resolv.conf"
+
+            if [ "$PRIVATE_NETWORK" = 1 ]; then
+              extraFlags+=" --network-veth"
+            fi
+
+            for iface in $MACVLANS; do
+              extraFlags+=" --network-macvlan=$iface"
+            done
+
+            # If the host is 64-bit and the container is 32-bit, add a
+            # --personality flag.
+            ${optionalString (config.nixpkgs.system == "x86_64-linux") ''
+              if [ "$(< ''${SYSTEM_PATH:-/nix/var/nix/profiles/per-container/$INSTANCE/system}/system)" = i686-linux ]; then
+                extraFlags+=" --personality=x86"
+              fi
+            ''}
+
+            # Run systemd-nspawn without startup notification (we'll
+            # wait for the container systemd to signal readiness).
+            EXIT_ON_REBOOT=1 NOTIFY_SOCKET= \
+            exec ${config.systemd.package}/bin/systemd-nspawn \
+              --keep-unit \
+              -M "$INSTANCE" -D "$root" $extraFlags \
+              --bind-ro=/nix/store \
+              --bind-ro=/nix/var/nix/db \
+              --bind-ro=/nix/var/nix/daemon-socket \
+              --bind=/run/systemd/notify:/var/lib/private/host-notify \
+              --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles" \
+              --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots" \
+              --setenv PRIVATE_NETWORK="$PRIVATE_NETWORK" \
+              --setenv HOST_ADDRESS="$HOST_ADDRESS" \
+              --setenv LOCAL_ADDRESS="$LOCAL_ADDRESS" \
+              --setenv PATH="$PATH" \
+              ${containerInit} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
           '';
 
-        serviceConfig.ExecStart =
-          "${config.systemd.package}/bin/systemd-nspawn -M ${name} -D ${container.root} --bind-ro=/nix ${container.path}/init";
+        postStart =
+          ''
+            if [ "$PRIVATE_NETWORK" = 1 ]; then
+              ifaceHost=ve-$INSTANCE
+              ip link set dev $ifaceHost up
+              if [ -n "$HOST_ADDRESS" ]; then
+                ip addr add $HOST_ADDRESS dev $ifaceHost
+              fi
+              if [ -n "$LOCAL_ADDRESS" ]; then
+                ip route add $LOCAL_ADDRESS dev $ifaceHost
+              fi
+            fi
+          '';
 
         preStop =
           ''
-            pid="$(cat /sys/fs/cgroup/systemd/machine/${name}.nspawn/system/tasks 2> /dev/null)"
-            if [ -n "$pid" ]; then
-              # Send the RTMIN+3 signal, which causes the container
-              # systemd to start halt.target.
-              echo "killing container systemd, PID = $pid"
-              kill -RTMIN+3 $pid
-              # Wait for the container to exit.  We can't let systemd
-              # do this because it will send a signal to the entire
-              # cgroup.
-              for ((n = 0; n < 180; n++)); do
-                if ! kill -0 $pid 2> /dev/null; then break; fi
-                sleep 1
-              done
-            fi
+            machinectl poweroff "$INSTANCE" || true
           '';
-      }) config.systemd.containers;
+
+        restartIfChanged = false;
+        #reloadIfChanged = true; # FIXME
+
+        serviceConfig = {
+          ExecReload = pkgs.writeScript "reload-container"
+            ''
+              #! ${pkgs.stdenv.shell} -e
+              SYSTEM_PATH=/nix/var/nix/profiles/system
+              echo $SYSTEM_PATH/bin/switch-to-configuration test | \
+                ${pkgs.socat}/bin/socat unix:$root/var/lib/run-command.socket -
+            '';
+
+          SyslogIdentifier = "container %i";
+
+          EnvironmentFile = "-/etc/containers/%i.conf";
+
+          Type = "notify";
+
+          NotifyAccess = "all";
+
+          # Note that on reboot, systemd-nspawn returns 10, so this
+          # unit will be restarted. On poweroff, it returns 0, so the
+          # unit won't be restarted.
+          Restart = "on-failure";
+
+          # Hack: we don't want to kill systemd-nspawn, since we call
+          # "machinectl poweroff" in preStop to shut down the
+          # container cleanly. But systemd requires sending a signal
+          # (at least if we want remaining processes to be killed
+          # after the timeout). So send an ignored signal.
+          KillMode = "mixed";
+          KillSignal = "WINCH";
+        };
+      };
+
+    # Generate a configuration file in /etc/containers for each
+    # container so that container@.target can get the container
+    # configuration.
+    environment.etc = mapAttrs' (name: cfg: nameValuePair "containers/${name}.conf"
+      { text =
+          ''
+            SYSTEM_PATH=${cfg.path}
+            ${optionalString cfg.privateNetwork ''
+              PRIVATE_NETWORK=1
+              ${optionalString (cfg.hostAddress != null) ''
+                HOST_ADDRESS=${cfg.hostAddress}
+              ''}
+              ${optionalString (cfg.localAddress != null) ''
+                LOCAL_ADDRESS=${cfg.localAddress}
+              ''}
+            ''}
+          '';
+      }) config.containers;
+
+    # FIXME: auto-start containers.
+
+    # Generate /etc/hosts entries for the containers.
+    networking.extraHosts = concatStrings (mapAttrsToList (name: cfg: optionalString (cfg.localAddress != null)
+      ''
+        ${cfg.localAddress} ${name}.containers
+      '') config.containers);
+
+    networking.dhcpcd.denyInterfaces = [ "ve-*" ];
+
+    environment.systemPackages = [ nixos-container ];
+
+    # Start containers at boot time.
+    systemd.services.all-containers =
+      { description = "All Containers";
+
+        wantedBy = [ "multi-user.target" ];
+
+        serviceConfig.Type = "oneshot";
+
+        script =
+          ''
+            res=0
+            for i in /etc/containers/*.conf; do
+              AUTO_START=
+              source "$i"
+              if [ "$AUTO_START" = 1 ]; then
+                systemctl start "container@$(basename "$i" .conf).service" || res=1
+              fi
+            done
+            exit $res
+          ''; # */
+      };
 
   };
 }

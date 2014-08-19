@@ -12,7 +12,9 @@ stdenv.mkDerivation {
   
   preBuild = "sed -i Makefile -e 's/^CFGF=/&	-DHASIPv6=1/;';";
   
-  configurePhase = "./Configure -n linux;";
+  configurePhase = if stdenv.isDarwin
+    then "./Configure -n darwin;"
+    else "./Configure -n linux;";
   
   installPhase = ''
     mkdir -p $out/bin $out/man/man8

@@ -5,7 +5,7 @@
 , ssl ? true # enable SSL support
 , previews ? false # enable webpage previews on hovering over URLs
 , tag ? "" # tag added to the package name
-, stdenv, fetchurl, cmake, qt4, kdelibs, automoc4, phonon }:
+, stdenv, fetchurl, cmake, makeWrapper, qt4, kdelibs, automoc4, phonon, dconf }:
 
 let
   edf = flag: feature: [("-D" + feature + (if flag then "=ON" else "=OFF"))];
@@ -22,7 +22,7 @@ in with stdenv; mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake qt4 ]
+  buildInputs = [ cmake makeWrapper qt4 ]
     ++ lib.optional withKDE kdelibs
     ++ lib.optional withKDE automoc4
     ++ lib.optional withKDE phonon;
@@ -40,6 +40,16 @@ in with stdenv; mkDerivation rec {
     ++ edf ssl "WITH_OPENSSL"
     ++ edf previews "WITH_WEBKIT"  ;
 
+  preFixup =
+    lib.optionalString client ''
+        wrapProgram "$out/bin/quasselclient" \
+          --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
+    '' +
+    lib.optionalString monolithic ''
+        wrapProgram "$out/bin/quassel" \
+          --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
+    '';
+
   meta = with stdenv.lib; {
     homepage = http://quassel-irc.org/;
     description = "Qt4/KDE4 distributed IRC client suppporting a remote daemon";
@@ -50,10 +60,9 @@ in with stdenv; mkDerivation rec {
       combination of screen and a text-based IRC client such
       as WeeChat, but graphical (based on Qt4/KDE4).
     '';
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3;
     maintainers = [ maintainers.phreedom ];
     repositories.git = https://github.com/quassel/quassel.git;
     inherit (qt4.meta) platforms;
   };
 }
-

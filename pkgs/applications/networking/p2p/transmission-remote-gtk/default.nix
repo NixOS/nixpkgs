@@ -11,9 +11,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper pkgconfig intltool gtk3 json_glib curl ];
 
-  postInstall = ''
+  preFixup = ''
     wrapProgram "$out/bin/transmission-remote-gtk" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share"
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   meta = {

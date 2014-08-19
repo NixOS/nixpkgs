@@ -2,16 +2,17 @@
 , cairo, libxcb, libXcursor, x11, udev, libdrm, mtdev
 , libjpeg, pam, autoconf, automake, libtool, dbus }:
 
-let version = "1.4.0"; in
+let version = "1.5.0"; in
 
 stdenv.mkDerivation rec {
   name = "weston-${version}";
 
   src = fetchurl {
     url = "http://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "0r7dz72ys9p3f697ajgmihkar2da36bnjna6yanb3kg9k2fk38kl";
+    sha256 = "113nig2dmbgrjhi79k0zw77vicnx8vkaihawd0nsg6n79ah8nf06";
   };
 
+  #ToDo: libinput can be split away
   buildInputs = [
     pkgconfig wayland mesa libxkbcommon
     cairo libxcb libXcursor x11 udev libdrm mtdev libjpeg pam dbus.libs

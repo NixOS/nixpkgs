@@ -30,16 +30,16 @@ let
     url = "https://launchpad.net/goyaml";
     sha256 = "03is37cgw62cha316xrs5h7q97im46ry5qldkfvbhimjq3ww0swj";
     # Branch: "branch:lp:goyaml"
-    revision = 47;
+    rev = 47;
   };
   log4go = fetchhg {
     url = "https://code.google.com/p/log4go/";
-    tag = "c3294304d93f";
+    rev = "c3294304d93f";
     sha256 = "0q906sxrmwir295virfibqvdzlaj340qh2r4ysx1ccjrjazc0q5p";
   };
   osext = fetchhg {
     url = "https://bitbucket.org/kardianos/osext";
-    tag = "364fb57";
+    rev = "364fb57";
     sha256 = "1w9x2zj716agfd5x5497ajb9nz3ljar74768vjidsyly143vzjws";
   };
 in stdenv.mkDerivation rec {

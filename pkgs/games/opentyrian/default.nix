@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchhg {
     url = "https://opentyrian.googlecode.com/hg/";
-    tag = "13ef8ce47362";
+    rev = "13ef8ce47362";
     md5 = "95c8f9e7ff3d4207f1c692c7cec6c9b0";
   };
 
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
   ";
   buildPhase = "make release";
   installPhase = "
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp ./opentyrian $out/bin
-    ensureDir $out/share/opentyrian/data
+    mkdir -p $out/share/opentyrian/data
     unzip -j $data -d $out/share/opentyrian/data
   ";
 

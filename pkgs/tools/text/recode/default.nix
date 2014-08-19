@@ -1,14 +1,15 @@
 # XXX: this may need -liconv on non-glibc systems.. 
 
-{ stdenv, fetchgit, python, perl, autoconf, automake, libtool, intltool, flex }:
+{ stdenv, fetchFromGitHub, python, perl, autoconf, automake, libtool, intltool, flex }:
 
 stdenv.mkDerivation rec {
-  name = "recode-3.7-pff85fdbd";
+  name = "recode-3.7-2fd838565";
 
-  src = fetchgit {
-    url = https://github.com/pinard/Recode.git;
+  src = fetchFromGitHub {
+    owner = "pinard";
+    repo = "Recode";
     rev = "2fd8385658e5a08700e3b916053f6680ff85fdbd";
-    sha256 = "1xhlfmqld6af16l444jli9crj9brym2jihg1n6lkxh2gar68f5l7";
+    sha256 = "06vyjqaraamcc5vka66mlvxj27ihccqc74aymv2wn8nphr2rhh03";
   };
 
   buildInputs = [ python perl autoconf automake libtool intltool flex ];
@@ -21,6 +22,9 @@ stdenv.mkDerivation rec {
     substituteInPlace src/Makefile.am --replace "ansi2knr" ""
 
     autoreconf -fi
+  ''
+  + stdenv.lib.optionalString stdenv.isDarwin ''
+    export LDFLAGS=-lintl
   '';
 
   #doCheck = true; # doesn't work yet

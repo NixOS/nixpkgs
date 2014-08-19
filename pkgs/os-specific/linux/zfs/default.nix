@@ -1,14 +1,14 @@
 { stdenv, fetchurl, kernel, spl, perl, autoconf, automake, libtool, zlib, libuuid, coreutils, utillinux }:
 
 stdenv.mkDerivation {
-  name = "zfs-0.6.2-${kernel.version}";
+  name = "zfs-0.6.3-${kernel.version}";
 
   src = fetchurl {
-    url = http://archive.zfsonlinux.org/downloads/zfsonlinux/zfs/zfs-0.6.2.tar.gz;
-    sha256 = "18b5f18k8mwb17r5ippsilmp1a2sqjw9fwn0z82159dkhsadg33b";
+    url = http://archive.zfsonlinux.org/downloads/zfsonlinux/zfs/zfs-0.6.3.tar.gz;
+    sha256 = "06rrip9fxn13x6qnyp6br68r9pcygb95lld25hnnj88m2vagvg19";
   };
 
-  patches = [ ./mount_zfs_prefix.patch ./nix-build.patch ./libblkid-1db7b9b.patch ./gcc-4.8.patch ./3.13-compat.patch ];
+  patches = [ ./mount_zfs_prefix.patch ./nix-build.patch ];
 
   buildInputs = [ spl perl autoconf automake libtool zlib libuuid coreutils ];
 
@@ -27,11 +27,14 @@ stdenv.mkDerivation {
     substituteInPlace ./cmd/ztest/ztest.c          --replace "/usr/sbin/zdb"     "$out/sbin/zdb"
   '';
 
-  configureFlags = ''
-    --with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source
-    --with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build
-    --with-spl=${spl}/libexec/spl
-  '';
+  configureFlags = [
+    "--disable-systemd"
+    "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
+    "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "--with-spl=${spl}/libexec/spl"
+    "--with-dracutdir=$(out)/lib/dracut"
+    "--with-udevdir=$(out)/lib/udev"
+  ];
 
   enableParallelBuilding = true;
 

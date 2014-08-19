@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/magit/magit";
     description = "Magit, an Emacs interface to Git";
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     longDescription = ''
       With Magit, you can inspect and modify your Git repositories with

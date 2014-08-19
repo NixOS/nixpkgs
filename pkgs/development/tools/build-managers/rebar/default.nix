@@ -2,14 +2,14 @@
 
 
 let
-  version = "2.2.0";
+  version = "2.5.1";
 in
 stdenv.mkDerivation {
   name = "rebar-${version}";
 
   src = fetchurl {
     url = "https://github.com/rebar/rebar/archive/${version}.tar.gz";
-    sha256 = "0wprgzin09286v583jmlc385jqpi2lcpdql9srm4c7g39122dg43";
+    sha256 = "1y9b0smw0g5q197xf4iklzmcf8ad6w52p6mwzpf7b0ib1nd89jw6";
   };
 
   buildInputs = [ erlang ];

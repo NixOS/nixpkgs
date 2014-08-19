@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+import ./make-test.nix {
+  name = "mysql";
 
-{
   nodes = {
     master =
       { pkgs, config, ... }:

@@ -3,24 +3,21 @@ btrfsProgs, iptables, bash}:
 
 stdenv.mkDerivation rec {
   name = "docker-${version}";
-  version = "0.9.1";
+  version = "1.1.2";
 
   src = fetchurl {
     url = "https://github.com/dotcloud/docker/archive/v${version}.tar.gz";
-    sha256 = "0m4s21dxd1bj08xrmi7iw77djj3cpxvjsin12p6v6v1qnigm18ww";
+    sha256 = "1pa6k3gx940ap3r96xdry6apzkm0ymqra92b2mrp25b25264cqcy";
   };
-
-  phases = ["unpackPhase" "preBuild" "buildPhase" "installPhase"];
 
   buildInputs = [ makeWrapper go sqlite lxc iproute bridge_utils devicemapper btrfsProgs iptables ];
 
-  preBuild = ''
-    patchShebangs ./hack
-  '';
+  dontStrip = true;
 
   buildPhase = ''
+    patchShebangs ./hack
     export AUTO_GOPATH=1
-    export DOCKER_GITCOMMIT="867b2a90c228f62cdcd44907ceef279a2d8f1ac5"
+    export DOCKER_GITCOMMIT="d84a070"
     ./hack/make.sh dynbinary
   '';
 
@@ -41,7 +38,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.docker.io/;
     description = "An open source project to pack, ship and run any application as a lightweight container";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline ];
+    maintainers = with maintainers; [ offline tailhook ];
     platforms = platforms.linux;
   };
 }

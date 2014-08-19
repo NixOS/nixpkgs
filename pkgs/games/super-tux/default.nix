@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   name = "supertux-${version}";
 
   src = fetchurl {
-    url = "http://download.berlios.de/supertux/supertux-${version}.tar.bz2";
+    url = "mirror://sourceforge/supertux.berlios/supertux-${version}.tar.bz2";
     sha256 = "15xdq99jy4hayr96jpqcp15rbr9cs5iamjirafajcrkpa61mi4h0";
   };
 
@@ -23,6 +23,6 @@ stdenv.mkDerivation {
 
     homepage = http://supertux.lethargik.org/index.html;
 
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

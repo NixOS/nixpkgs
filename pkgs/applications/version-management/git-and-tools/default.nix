@@ -69,7 +69,7 @@ rec {
   };
 
   tig = import ./tig {
-    inherit stdenv fetchurl ncurses asciidoc xmlto docbook_xsl docbook_xml_dtd_45;
+    inherit stdenv fetchurl ncurses asciidoc xmlto docbook_xsl docbook_xml_dtd_45 readline;
   };
 
   hub = import ./hub {
@@ -95,4 +95,7 @@ rec {
   darcsToGit = callPackage ./darcs-to-git { };
 
   gitflow = callPackage ./gitflow { };
+
+  git-remote-hg = callPackage ./git-remote-hg { };
+
 }

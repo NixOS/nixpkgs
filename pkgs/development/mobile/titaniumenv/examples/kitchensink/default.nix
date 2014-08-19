@@ -1,5 +1,6 @@
-{ titaniumenv, fetchgit, target, androidPlatformVersions ? [ "11" ], tiVersion ? "3.2.1.GA", release ? false
+{ titaniumenv, fetchgit, target, androidPlatformVersions ? [ "14" ], tiVersion ? "3.2.3.GA", release ? false
 , rename ? false, stdenv ? null, newBundleId ? null, iosMobileProvisioningProfile ? null, iosCertificate ? null, iosCertificateName ? null, iosCertificatePassword ? null
+, enableWirelessDistribution ? false, installURL ? null
 }:
 
 assert rename -> (stdenv != null && newBundleId != null && iosMobileProvisioningProfile != null && iosCertificate != null && iosCertificateName != null && iosCertificatePassword != null);
@@ -7,8 +8,8 @@ assert rename -> (stdenv != null && newBundleId != null && iosMobileProvisioning
 let
   src = fetchgit {
     url = https://github.com/appcelerator/KitchenSink.git;
-    rev = "0b8175f20f0aa71f93921025dec5d0f3299960ae";
-    sha256 = "0b2p4wbnlp46wpanqj5h3yfb2hdbh20nxbis8zscj4qlgrnyjdjz";
+    rev = "37d766ef9cba6a2d0b22634d3edc1fa8402109a0";
+    sha256 = "1d4x9zwq92p1krds52bd41qqsnsnb3a7x74bysbiphrvrphz80kk";
   };
   
   # Rename the bundle id to something else
@@ -37,4 +38,5 @@ titaniumenv.buildApp {
   androidKeyStorePassword = "mykeystore";
   
   inherit iosMobileProvisioningProfile iosCertificate iosCertificateName iosCertificatePassword;
+  inherit enableWirelessDistribution installURL;
 }

@@ -48,7 +48,6 @@ stdenv.mkDerivation rec {
 		(textClosure localDefs ["build" "doMakeInstall" "doForceShare" "doPropagate"]);
 	meta = {
 		description = "A relational filesystem on top of FUSE";
-		inherit src;
     		maintainers = [stdenv.lib.maintainers.raskin];
 		platforms = stdenv.lib.platforms.linux;
 	};

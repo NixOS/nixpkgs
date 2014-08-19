@@ -1,17 +1,17 @@
 { stdenv, fetchurl, which, ocaml, perl, jdk
 , findlib, ocaml_ssl, openssl, cryptokit, camlzip, ulex
 , ocamlgraph, coreutils, zlib, ncurses, makeWrapper
-, gcc, binutils, gnumake } :
+, gcc, binutils, gnumake, nodejs, git } :
 
 stdenv.mkDerivation rec {
   pname = "opa";
-  version = "962";
+  version = "4308";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/MLstate/opalang/tarball/v${version}";
     name = "opa-${version}.tar.gz";
-    sha256 = "0g4kq2kxbld0iqlzb076b7g43d8fh4sfxam615z15mbk1jcvpf9l";
+    sha256 = "1farii9474i14ack6bpqm1jihs6i8pvwky3a7q8v8pbnl4i6lb5g";
   };
 
   # Paths so the opa compiler code generation will use the same programs as were
@@ -23,18 +23,27 @@ stdenv.mkDerivation rec {
     find . -type f -exec sed -i 's@/usr/bin/perl@${perl}/bin/perl@' {} \;
   '';
 
-  patches = [ ./locate.patch ./libdir.patch ];
+  patches = [];
 
   preConfigure = ''
     configureFlags="$configureFlags -prefix $out"
+    (
+    cat ./compiler/buildinfos/buildInfos.ml.pre
+    ./compiler/buildinfos/generate_buildinfos.sh . --release --version ./compiler/buildinfos/version_major.txt 
+    echo let opa_git_version = ${version}
+    echo 'let opa_git_sha = "xxxx"'
+    cat ./compiler/buildinfos/buildInfos.ml.post
+    )> ./compiler/buildinfos/buildInfos.ml
   '';
 
   dontAddPrefix = true;
 
-  configureFlags = "-ocamlfind ${findlib}/bin/ocamlfind -openssl ${openssl}/lib";
+  configureFlags = "-ocamlfind ${findlib}/bin/ocamlfind ";
 
   buildInputs = [ which ocaml perl jdk findlib ocaml_ssl openssl cryptokit camlzip ulex
-                  ocamlgraph coreutils zlib ncurses makeWrapper gcc binutils gnumake ];
+                  ocamlgraph coreutils zlib ncurses makeWrapper gcc binutils gnumake
+		  nodejs git
+		  ];
 
   postInstall = ''
     # Have compiler use same tools for code generation as used to build it.
@@ -58,5 +67,14 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.kkallio ];
     platforms = [ "x86_64-linux" ];
+    # File "compiler/libqmlcompil/dbGen/schema_io.ml", line 199, characters 3-53:
+    # Error: Signature mismatch:
+    #        ...
+    #     The field `remove_edge_e' is required but not provided
+    #     The field `remove_edge' is required but not provided
+    #     The field `remove_vertex' is required but not provided
+    # Command exited with code 2.
+    # make: *** [node] Error 10
+    broken = true;
   };
 }

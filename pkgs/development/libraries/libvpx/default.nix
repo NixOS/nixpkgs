@@ -1,4 +1,4 @@
-{stdenv, fetchurl, bash, yasm, which, perl}:
+{stdenv, fetchurl, bash, yasm, which, perl, binutils}:
 
 let version = "1.3.0";
 in
@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     sed -e '/enable linux/d' -i configure
   '';
 
-  buildInputs = [ yasm which perl ];
+  buildInputs = [ yasm which perl ]
+    ++ stdenv.lib.optional stdenv.isDarwin binutils; # new asm opcode support
 
   preConfigure = ''
     mkdir -p build

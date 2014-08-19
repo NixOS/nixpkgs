@@ -1,8 +1,8 @@
 # Systemd services for libvirtd.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

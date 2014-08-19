@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -36,7 +36,7 @@ in
     services.ntp = {
 
       enable = mkOption {
-        default = true;
+        default = !config.boot.isContainer;
         description = ''
           Whether to synchronise your machine's time using the NTP
           protocol.

@@ -1,8 +1,8 @@
-{config, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
 # TODO: This is not secure, have a look at the file docs/security.txt inside
 # the project sources.
-with pkgs.lib;
+with lib;
 
 let
   cfg = config.power.ups;

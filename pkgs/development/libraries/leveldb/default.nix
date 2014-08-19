@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "leveldb-1.9.0";
+  name = "leveldb-1.15.0";
 
   src = fetchurl {
     url = "https://leveldb.googlecode.com/files/${name}.tar.gz";
-    sha256 = "b2699b04e5aba8e98382c4955b94725d1f76bd0b5decd60c5628205b717a1d4f";
+    sha256 = "10363j8qmlyh971ipb7fmgk9b97bl5267c0xyccrgvpj3rbyri6p";
   };
 
   buildPhase = "make all db_bench";

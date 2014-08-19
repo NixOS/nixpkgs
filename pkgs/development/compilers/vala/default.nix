@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     homepage = "http://live.gnome.org/Vala";
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ antono iyzsong ];
+    maintainers = with stdenv.lib.maintainers; [ antono ];
   };
 
   src = fetchurl {
