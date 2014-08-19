@@ -319,11 +319,14 @@ in
 
         wantedBy = [ "multi-user.target" ];
 
+        unitConfig.ConditionDirectoryNotEmpty = "/etc/containers";
+
         serviceConfig.Type = "oneshot";
 
         script =
           ''
             res=0
+            shopt -s nullglob
             for i in /etc/containers/*.conf; do
               AUTO_START=
               source "$i"
