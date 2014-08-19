@@ -6,7 +6,7 @@
 
 let
   pname = "ssreflect";
-  version = "1.4";
+  version = "1.5";
   name = "${pname}-${version}";
   webpage = http://www.msr-inria.inria.fr/Projects/math-components;
 in
@@ -15,8 +15,8 @@ stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url = "http://ssr.msr-inria.inria.fr/FTP/${name}-coq8.4.tar.gz";
-    sha256 = "1ysx29xw09i86lq0d92z9cnyx133jfgq4qddy3501000fn7xwi7h";
+    url = "http://ssr.msr-inria.inria.fr/FTP/${name}.tar.gz";
+    sha256 = "0hm1ha7sxqfqhc7iwhx6zdz3nki4rj5nfd3ab24hmz8v7mlpinds";
   };
 
   buildInputs = [ ocaml camlp5 coq makeWrapper ];
