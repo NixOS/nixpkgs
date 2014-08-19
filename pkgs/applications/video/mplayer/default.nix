@@ -78,7 +78,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "mplayer-1.1";
+  name = "mplayer-1.1.1";
 
   src = fetchurl {
     # Old kind of URL:
@@ -89,8 +89,8 @@ stdenv.mkDerivation rec {
     #url = http://www.mplayerhq.hu/MPlayer/releases/mplayer-export-snapshot.tar.bz2;
     #sha256 = "cc1b3fda75b172f02c3f46581cfb2c17f4090997fe9314ad046e464a76b858bb";
 
-    url = "http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.1.tar.xz";
-    sha256 = "173cmsfz7ckzy1hay9mpnc5as51127cfnxl20b521d2jvgm4gjvn";
+    url = "http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.1.1.tar.xz";
+    sha256 = "ce8fc7c3179e6a57eb3a58cb7d1604388756b8a61764cc93e095e7aff3798c76";
   };
 
   prePatch = ''
