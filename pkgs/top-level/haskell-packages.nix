@@ -1015,7 +1015,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   groupoids = callPackage ../development/libraries/haskell/groupoids {};
 
-  hakyll = callPackage ../development/libraries/haskell/hakyll {};
+  hakyll = callPackage ../development/libraries/haskell/hakyll {
+    pandoc = self.pandoc_1_12_4_2;
+    pandocCiteproc = self.pandocCiteproc_0_3_1;
+  };
 
   hamlet = callPackage ../development/libraries/haskell/hamlet {};
 
@@ -1764,9 +1767,19 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   patience = callPackage ../development/libraries/haskell/patience {};
 
-  pandoc = callPackage ../development/libraries/haskell/pandoc {};
+  pandoc_1_12_4_2 = callPackage ../development/libraries/haskell/pandoc/1.12.4.2.nix {
+    scientific = self.scientific_0_2_0_2;
+    texmath = self.texmath_0_6_6_3;
+  };
+  pandoc_1_13 = callPackage ../development/libraries/haskell/pandoc/1.13.nix {};
+  pandoc = self.pandoc_1_13;
 
-  pandocCiteproc = callPackage ../development/libraries/haskell/pandoc-citeproc {};
+  pandocCiteproc_0_3_1 = callPackage ../development/libraries/haskell/pandoc-citeproc/0.3.1.nix {
+    pandoc = self.pandoc_1_12_4_2;
+    texmath = self.texmath_0_6_6_3;
+  };
+  pandocCiteproc_0_4 = callPackage ../development/libraries/haskell/pandoc-citeproc/0.4.nix {};
+  pandocCiteproc = self.pandocCiteproc_0_4;
 
   pandocTypes = callPackage ../development/libraries/haskell/pandoc-types {};
 
@@ -2423,7 +2436,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   testingFeat = callPackage ../development/libraries/haskell/testing-feat {};
 
-  texmath = callPackage ../development/libraries/haskell/texmath {};
+  texmath_0_6_6_3 = callPackage ../development/libraries/haskell/texmath/0.6.6.3.nix {};
+  texmath_0_8 = callPackage ../development/libraries/haskell/texmath/0.8.nix {};
+  texmath = self.texmath_0_8;
 
   text_0_11_0_5 = callPackage ../development/libraries/haskell/text/0.11.0.5.nix {};
   text_0_11_0_6 = callPackage ../development/libraries/haskell/text/0.11.0.6.nix {};
