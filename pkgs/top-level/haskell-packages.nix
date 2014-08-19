@@ -1611,6 +1611,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   monadStm = callPackage ../development/libraries/haskell/monad-stm {};
 
+  monadSupply = callPackage ../development/libraries/haskell/monad-supply {};
+
   monadsTf = callPackage ../development/libraries/haskell/monads-tf {};
 
   monadUnify = callPackage ../development/libraries/haskell/monad-unify {};
