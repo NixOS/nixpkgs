@@ -3122,6 +3122,8 @@ let
   });
   llvmPackagesSelf = import ../development/compilers/llvm/3.4 { inherit newScope fetchurl; isl = isl_0_12; stdenv = libcxxStdenv; };
 
+  manticore = callPackage ../development/compilers/manticore { };
+
   mentorToolchains = recurseIntoAttrs (
     callPackage_i686 ../development/compilers/mentor {}
   );
