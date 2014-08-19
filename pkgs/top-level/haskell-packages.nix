@@ -779,7 +779,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   Extra = callPackage ../development/libraries/haskell/Extra {};
 
-  fay = callPackage ../development/libraries/haskell/fay { aeson = self.aeson_0_7_0_4; };
+  fay = callPackage ../development/libraries/haskell/fay {};
 
   fayBase = callPackage ../development/libraries/haskell/fay-base {};
 
