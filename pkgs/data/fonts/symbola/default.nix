@@ -1,30 +1,32 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation rec {
-  name = "symbola-7.12";
+  name = "symbola-7.17";
+  buildInputs = [unzip];
 
-  ttf = fetchurl {
-    url = "http://users.teilar.gr/~g1951d/Symbola.ttf";
-    sha256 = "7acc058bd4e56cc986b2a46420520f59be402c3565c202b5dcebca7f3bfd8b5a";
+  src = fetchurl {
+    url = "http://users.teilar.gr/~g1951d/Symbola.zip";
+    sha256 = "549511f216536f6846435587f3d3d151a16ea2caa1ef2d8fbee8e73031e305a7";
   };
   docs_pdf = fetchurl {
     url = "http://users.teilar.gr/~g1951d/Symbola.pdf";
-    sha256 = "11bb082ba5c2780a6f94a9bcddf4f314a54e2650bb63ce3081d1dc867c5e6843";
-  };
-  docs_docx = fetchurl {
-    url = "http://users.teilar.gr/~g1951d/Symbola.docx";
-    sha256 = "4f0ab494e1e5a7aac147aa7bb8b8bdba7278aee2da942a35f995feb9051515b9";
+    sha256 = "7728bae6543f3e1fe2aa57ea32aab8619033792013d5b22db996dc7005100286";
   };
 
-  phases = [ "installPhase" ];
+  phases = [ "unpackPhase" "installPhase" ];
+
+  unpackPhase = ''
+    unzip "$src"
+  '';
 
   installPhase = ''
     mkdir -p $out/share/fonts/truetype
-    cp -v "$ttf" $out/share/fonts/truetype/"${ttf.name}"
+    cp -v *.ttf $out/share/fonts/truetype
 
     mkdir -p "$out/doc/${name}"
     cp -v "$docs_pdf" "$out/doc/${name}/${docs_pdf.name}"
-    cp -v "$docs_docx" "$out/doc/${name}/${docs_docx.name}"
+    cp -v *.docx "$out/doc/${name}"
+    cp -v *.htm "$out/doc/${name}"
   '';
 
   meta = {
