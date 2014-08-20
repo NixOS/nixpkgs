@@ -1973,6 +1973,8 @@ let
 
   rdmd = callPackage ../development/compilers/rdmd { };
 
+  rhash = callPackage ../tools/security/rhash { };
+
   riemann_c_client = callPackage ../tools/misc/riemann-c-client { };
 
   ripmime = callPackage ../tools/networking/ripmime {};
