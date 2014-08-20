@@ -2493,9 +2493,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   timerep = callPackage ../development/libraries/haskell/timerep {};
 
-  timeparsers = callPackage ../development/libraries/haskell/timeparsers {
-    convertible = self.convertible_1_0_11_1;
-  };
+  timeparsers = callPackage ../development/libraries/haskell/timeparsers {};
 
   timeRecurrence = callPackage ../development/libraries/haskell/time-recurrence {};
 
