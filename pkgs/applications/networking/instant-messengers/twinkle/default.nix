@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://www.twinklephone.com/;
     license = licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = [ maintainers.marcweber ];
     platforms = platforms.linux;
   };
 }
