@@ -18,5 +18,7 @@ cabal.mkDerivation (self: {
     description = "Analyze and visualize event logs";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

@@ -2343,7 +2343,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   Stream = callPackage ../development/libraries/haskell/Stream {};
 
-  strictConcurrency = callPackage ../development/libraries/haskell/strictConcurrency {};
+  strictConcurrency = callPackage ../development/libraries/haskell/strict-concurrency {};
 
   stringbuilder = callPackage ../development/libraries/haskell/stringbuilder {};
 
