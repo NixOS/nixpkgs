@@ -8248,6 +8248,26 @@ rec {
     };
   });
 
+  pyuv = buildPythonPackage rec {
+    name = "pyuv-0.11.5";
+
+    src = fetchurl {
+      url = "https://github.com/saghul/pyuv/archive/${name}.tar.gz";
+      sha256 = "c251952cb4e54c92ab0e871decd13cf73d11ca5dba9f92962de51d12e3a310a9";
+    };
+
+    patches = [ ../development/python-modules/pyuv-external-libuv.patch ];
+
+    buildInputs = [ pkgs.libuvVersions.v0_11_29 ];
+
+    meta = {
+      description = "Python interface for libuv";
+      homepage = https://github.com/saghul/pyuv;
+      repositories.git = git://github.com/saghul/pyuv.git;
+      license = licenses.mit;
+    };
+  };
+
   virtualenv = buildPythonPackage rec {
     name = "virtualenv-1.11.6";
     src = fetchurl {
