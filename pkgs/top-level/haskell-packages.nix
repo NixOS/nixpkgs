@@ -678,6 +678,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   djinn = callPackage ../development/libraries/haskell/djinn {};
 
+  djinnGhc = callPackage ../development/libraries/haskell/djinn-ghc {};
+
+  djinnLib = callPackage ../development/libraries/haskell/djinn-lib {};
+
   dlist = callPackage ../development/libraries/haskell/dlist {};
 
   dlistInstances = callPackage ../development/libraries/haskell/dlist-instances {};
@@ -893,9 +897,15 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ghcjsCodemirror = callPackage ../development/libraries/haskell/ghcjs-codemirror {};
 
-  ghcMod = callPackage ../development/libraries/haskell/ghc-mod {
+  ghcMod_4_1_6 = callPackage ../development/libraries/haskell/ghc-mod/4.1.6.nix {
     inherit (pkgs) emacs;
   };
+
+  ghcMod_5_0_1 = callPackage ../development/libraries/haskell/ghc-mod/5.0.1.nix {
+    inherit (pkgs) emacs;
+  };
+
+  ghcMod = self.ghcMod_4_1_6;
 
   ghcMtl = callPackage ../development/libraries/haskell/ghc-mtl {};
 
@@ -1584,6 +1594,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   monadcryptorandom = callPackage ../development/libraries/haskell/monadcryptorandom {};
 
   monadExtras = callPackage ../development/libraries/haskell/monad-extras {};
+
+  monadJournal = callPackage ../development/libraries/haskell/monad-journal {};
 
   monadLib = callPackage ../development/libraries/haskell/monadlib {};
 
