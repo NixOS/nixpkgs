@@ -34,7 +34,7 @@ installPhase() {
     mkdir -p $out/lib/vendors
 
     for f in \
-      libcuda libGL libnvcuvid libnvidia-cfg libnvidia-compiler \
+      libcuda libGL libnvcuvid libnvidia-cfg libnvidia-compiler libnvidia-glsi \
       libnvidia-encode libnvidia-glcore libnvidia-ml libnvidia-opencl \
       libnvidia-tls libOpenCL libnvidia-tls libvdpau_nvidia libEGL libGLESv2
     do
