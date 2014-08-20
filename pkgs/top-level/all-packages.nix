@@ -10625,6 +10625,8 @@ let
 
       calligra = callPackage ../applications/office/calligra { };
 
+      colord-kde = callPackage ../tools/misc/colord-kde { };
+
       digikam = if builtins.compareVersions "4.9" kde4.release == 1 then
           callPackage ../applications/graphics/digikam/2.nix { }
         else
