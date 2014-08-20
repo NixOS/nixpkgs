@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tool for writing very fast and very flexible scanners";
     homepage    = "http://re2c.org";
-    license     = stdenv.lib.license.publicDomain;
+    license     = stdenv.lib.licenses.publicDomain;
     platforms   = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
