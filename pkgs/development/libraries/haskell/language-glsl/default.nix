@@ -6,15 +6,14 @@
 
 cabal.mkDerivation (self: {
   pname = "language-glsl";
-  version = "0.1.0";
-  sha256 = "0jr6jwxsfpmnjrnaary37s2i47akq665fnyvv37cp6j928srjizf";
+  version = "0.1.1";
+  sha256 = "06dc339a2cddzgjda3nzprgr0v2clbhlpl8j81m04i66bbj2l15y";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ parsec prettyclass ];
   testDepends = [
     HUnit parsec prettyclass testFramework testFrameworkHunit
   ];
-  doCheck = false;
   meta = {
     description = "GLSL abstract syntax tree, parser, and pretty-printer";
     license = self.stdenv.lib.licenses.bsd3;
