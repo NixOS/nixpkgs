@@ -1379,7 +1379,7 @@ let
   kippo = callPackage ../servers/kippo { };
 
   klavaro = callPackage ../games/klavaro {};
-  
+
   kzipmix = callPackage_i686 ../tools/compression/kzipmix { };
 
   minidlna = callPackage ../tools/networking/minidlna {
@@ -1783,7 +1783,7 @@ let
   };
 
   p0f = callPackage ../tools/security/p0f { };
-  
+
   pngout = callPackage ../tools/graphics/pngout { };
 
   hurdPartedCross =
@@ -6411,7 +6411,7 @@ let
   xbase = callPackage ../development/libraries/xbase { };
 
   xcb-util-cursor = callPackage ../development/libraries/xcb-util-cursor { };
- 
+
   xdo = callPackage ../tools/misc/xdo { };
 
   xineLib = callPackage ../development/libraries/xine-lib {
@@ -9351,7 +9351,7 @@ let
   };
 
   synfigstudio = callPackage ../applications/graphics/synfigstudio { };
- 
+
   sxhkd = callPackage ../applications/window-managers/sxhkd { };
 
   msmtp = callPackage ../applications/networking/msmtp { };
@@ -9859,7 +9859,7 @@ let
   uzbl = callPackage ../applications/networking/browsers/uzbl {
     webkit = webkitgtk2;
   };
-  
+
   uTox = callPackage ../applications/networking/instant-messengers/utox { };
 
   vanitygen = callPackage ../applications/misc/vanitygen { };
