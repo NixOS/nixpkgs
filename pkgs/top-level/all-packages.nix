@@ -6857,6 +6857,8 @@ let
 
   nsq = callPackage ../servers/nsq { };
 
+  openresty = callPackage ../servers/http/openresty { };
+
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
 
   petidomo = callPackage ../servers/mail/petidomo { };
