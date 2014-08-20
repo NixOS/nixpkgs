@@ -5872,6 +5872,8 @@ let
 
   libressl = callPackage ../development/libraries/libressl { };
 
+  boringssl = callPackage ../development/libraries/boringssl { };
+
   openssl = callPackage ../development/libraries/openssl {
     fetchurl = fetchurlBoot;
     cryptodevHeaders = linuxPackages.cryptodev.override {
