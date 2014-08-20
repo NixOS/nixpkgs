@@ -2937,14 +2937,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   arbtt = callPackage ../applications/misc/arbtt {};
 
-  cryptol = callPackage ../development/compilers/cryptol/2.0.x.nix {
-    Cabal = self.Cabal_1_18_1_3;
-    cabalInstall = self.cabalInstall_1_18_0_3;
-    process = self.process_1_2_0_0;
-  };
-
-  darcs = callPackage ../applications/version-management/darcs {};
-
   idris_plain = callPackage ../development/compilers/idris {
     llvmGeneral = self.llvmGeneral_3_3_8_2;
     llvmGeneralPure = self.llvmGeneralPure_3_3_8_2;

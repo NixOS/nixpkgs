@@ -2622,7 +2622,11 @@ let
   compcert = callPackage ../development/compilers/compcert {};
 
   cryptol1 = lowPrio (callPackage ../development/compilers/cryptol/1.8.x.nix {});
-  cryptol2 = haskellPackages_ghc763.cryptol; # doesn't compile with the lastest 7.8.3 release
+  cryptol2 = with haskellPackages_ghc763; callPackage ../development/compilers/cryptol/2.0.x.nix {
+    Cabal = Cabal_1_18_1_3;
+    cabalInstall = cabalInstall_1_18_0_3;
+    process = process_1_2_0_0;
+  };
 
   cython = pythonPackages.cython;
   cython3 = python3Packages.cython;
@@ -8342,11 +8346,8 @@ let
 
   d4x = callPackage ../applications/misc/d4x { };
 
-  darcs = haskellPackages_ghc763.darcs.override {
-    # A variant of the Darcs derivation that containts only the executable and
-    # thus has no dependencies on other Haskell packages. We have to use the older
-    # GHC 7.6.3 package set because darcs won't compile with 7.8.x.
-    cabal = haskellPackages_ghc763.cabal.override {
+  darcs = with haskellPackages_ghc763; callPackage ../applications/version-management/darcs {
+    cabal = cabal.override {
       extension = self : super : {
         isLibrary = false;
         configureFlags = "-f-library " + super.configureFlags or "";
