@@ -9655,9 +9655,7 @@ let
 
   # slic3r 0.9.10b says: "Running Slic3r under Perl >= 5.16 is not supported nor recommended"
   slic3r = callPackage ../applications/misc/slic3r {
-    inherit (perl514Packages) EncodeLocale MathClipper ExtUtilsXSpp
-            BoostGeometryUtils MathConvexHullMonotoneChain MathGeometryVoronoi
-            MathPlanePath Moo IOStringy ClassXSAccessor Wx GrowlGNTP NetDBus;
+    perlPackages = perl514Packages;
     perl = perl514;
   };
 
