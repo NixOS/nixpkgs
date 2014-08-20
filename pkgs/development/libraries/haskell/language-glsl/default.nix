@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     HUnit parsec prettyclass testFramework testFrameworkHunit
   ];
+  doCheck = false;
   meta = {
     description = "GLSL abstract syntax tree, parser, and pretty-printer";
     license = self.stdenv.lib.licenses.bsd3;
