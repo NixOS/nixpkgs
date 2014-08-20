@@ -5870,6 +5870,8 @@ let
 
   openspades = callPackage ../games/openspades {};
 
+  libressl = callPackage ../development/libraries/libressl { };
+
   openssl = callPackage ../development/libraries/openssl {
     fetchurl = fetchurlBoot;
     cryptodevHeaders = linuxPackages.cryptodev.override {
