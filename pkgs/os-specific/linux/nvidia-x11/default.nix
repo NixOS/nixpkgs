@@ -14,6 +14,7 @@ let
 
   versionNumber = "340.32";
 
+  inherit (stdenv.lib) makeLibraryPath;
 in
 
 stdenv.mkDerivation {
@@ -40,13 +41,12 @@ stdenv.mkDerivation {
 
   dontStrip = true;
 
-  glPath = stdenv.lib.makeLibraryPath [xlibs.libXext xlibs.libX11 xlibs.libXrandr];
+  glPath      = makeLibraryPath [xlibs.libXext xlibs.libX11 xlibs.libXrandr];
+  cudaPath    = makeLibraryPath [zlib stdenv.gcc.gcc];
+  openclPath  = makeLibraryPath [zlib];
+  allLibPath  = makeLibraryPath [xlibs.libXext xlibs.libX11 xlibs.libXrandr zlib stdenv.gcc.gcc];
 
-  cudaPath = stdenv.lib.makeLibraryPath [zlib stdenv.gcc.gcc];
-
-  openclPath = stdenv.lib.makeLibraryPath [zlib];
-
-  programPath = optionalString (!libsOnly) (stdenv.lib.makeLibraryPath
+  programPath = optionalString (!libsOnly) (makeLibraryPath
     [ gtk atk pango glib gdk_pixbuf xlibs.libXv ] );
 
   buildInputs = [ perl ];
