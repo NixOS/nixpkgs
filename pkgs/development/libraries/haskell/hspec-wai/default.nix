@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hspec-wai";
-  version = "0.2.0";
-  sha256 = "1hykc6k3kkjzz0x16i6ijcavsxfc003sp7fwvg2v9pzpmf9rfhhd";
+  version = "0.3.0";
+  sha256 = "0wkzv406jiyi8ais3g0addm66274y1pvy55gypmnhwx5rp2kr6fb";
   buildDepends = [
     aeson aesonQq caseInsensitive hspec2 httpTypes text transformers
     wai waiExtra
