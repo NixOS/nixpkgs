@@ -6,6 +6,7 @@ stdenv.mkDerivation {
   unpackPhase = ":";
   dontBuild = true;
 
+  # TODO: figure out if these are different in Mavericks + older
   installPhase = ''
     mkdir -p $out/lib
     cat ${/usr/lib/system/libunwind.dylib} > $out/lib/libunwind.dylib
@@ -19,4 +20,6 @@ stdenv.mkDerivation {
       -change /usr/lib/system/libkeymgr.dylib ${/usr/lib/system/libkeymgr.dylib} \
       $out/lib/libunwind.dylib
   '';
+
+  meta.platforms = stdenv.lib.platforms.darwin;
 }
