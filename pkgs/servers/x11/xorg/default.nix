@@ -1405,11 +1405,11 @@ let
   }) // {inherit inputproto xorgserver xproto ;};
 
   xf86inputmouse = (mkDerivation "xf86inputmouse" {
-    name = "xf86-input-mouse-1.9.0";
+    name = "xf86-input-mouse-1.9.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-mouse-1.9.0.tar.bz2;
-      sha256 = "12344w0cxac1ld54qqwynxwazbmmpvqh1mzcskmfkmakmr5iwq2x";
+      url = mirror://xorg/individual/driver/xf86-input-mouse-1.9.1.tar.bz2;
+      sha256 = "1kn5kx3qyn9qqvd6s24a2l1wfgck2pgfvzl90xpl024wfxsx719l";
     };
     buildInputs = [pkgconfig inputproto xorgserver xproto ];
   }) // {inherit inputproto xorgserver xproto ;};
@@ -1515,11 +1515,11 @@ let
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xorgserver xproto ;};
 
   xf86videogeode = (mkDerivation "xf86videogeode" {
-    name = "xf86-video-geode-2.11.15";
+    name = "xf86-video-geode-2.11.16";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-geode-2.11.15.tar.bz2;
-      sha256 = "1w4ghr2a41kaw4g9na8ws5fjbmy8zkbxpxa21vmqc8mkjzb3pnq0";
+      url = mirror://xorg/individual/driver/xf86-video-geode-2.11.16.tar.bz2;
+      sha256 = "19y13xl7yfrgyis92rmxi0ld95ajgr5il0n9j1dridwzw9aizz1q";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
