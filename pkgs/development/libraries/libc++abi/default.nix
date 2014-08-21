@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
   postUnpack = ''
     unpackFile ${libcxx.src}
     export NIX_CFLAGS_COMPILE="-I${libunwind}/include -I$PWD/include -I$(readlink -f libcxx-*)/include"
-  '' + stdenv.lib.optionalString ''
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
   '';
 
