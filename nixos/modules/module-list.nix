@@ -21,6 +21,7 @@
   ./config/system-environment.nix
   ./config/system-path.nix
   ./config/timezone.nix
+  ./config/vpnc.nix
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
   ./config/zram.nix
