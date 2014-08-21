@@ -1,4 +1,4 @@
-{ cabal, filepath, haskellSrcExts, syb, transformers, uniplate }:
+{ cabal, process, filepath, haskellSrcExts, syb, transformers, uniplate }:
 
 cabal.mkDerivation (self: {
   pname = "derive";
@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    filepath haskellSrcExts syb transformers uniplate
+    process filepath haskellSrcExts syb transformers uniplate
   ];
   meta = {
     homepage = "http://community.haskell.org/~ndm/derive/";

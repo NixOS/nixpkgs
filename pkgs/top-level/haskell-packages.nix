@@ -43,7 +43,7 @@
 #
 # For most packages, however, we keep only one version, and use default.nix.
 
-{ pkgs, newScope, ghc, modifyPrio ? (x : x)
+{ pkgs, newScope, ghc, cabalPackage, ghcWrapperPackage, modifyPrio ? (x : x)
 , enableLibraryProfiling ? false
 , enableSharedLibraries ? pkgs.stdenv.lib.versionOlder "7.7" ghc.version
 , enableSharedExecutables ? pkgs.stdenv.lib.versionOlder "7.7" ghc.version
@@ -74,7 +74,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
                                # refers to the function argument at the
                                # top of this file.
 
-  ghc = callPackage ../development/compilers/ghc/wrapper.nix {
+  ghc = callPackage ghcWrapperPackage {
     ghc = ghc; # refers to ghcPlain
   };
 
@@ -94,7 +94,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   # This is the Cabal builder, the function we use to build most Haskell
   # packages. It isn't the Cabal library, which is spelled "Cabal".
 
-  cabal = callPackage ../build-support/cabal {
+  cabal = callPackage cabalPackage {
     Cabal = null;               # prefer the Cabal version shipped with the compiler
     hscolour = self.hscolourBootstrap;
     inherit enableLibraryProfiling enableCheckPhase
@@ -2673,6 +2673,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   cake3 = callPackage ../development/tools/haskell/cake3 {};
 
+  oldTime_1_1_0_2 = callPackage ../development/libraries/haskell/old-time/1.1.0.2.nix {};
+  oldTime = null; # By default, use the built-in old-time library
   cpphs = callPackage ../development/tools/misc/cpphs {};
 
   DrIFT = callPackage ../development/tools/haskell/DrIFT {};

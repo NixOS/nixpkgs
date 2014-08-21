@@ -135,20 +135,23 @@
 
   # Abstraction for Haskell packages collections
   packagesFun = makeOverridable
-   ({ ghcPath
+   ({ ghcPath ? null
+    , ghc ? callPackage ghcPath ({ ghc = ghcBinary; } // extraArgs)
     , ghcBinary ? ghc6101Binary
     , prefFun
     , extension ? (self : super : {})
     , profExplicit ? false, profDefault ? false
     , modifyPrio ? lowPrio
     , extraArgs ? {}
+    , cabalPackage ? import ../build-support/cabal
+    , ghcWrapperPackage ? import ../development/compilers/ghc/wrapper.nix
     } :
     let haskellPackagesClass = import ./haskell-packages.nix {
-          inherit pkgs newScope modifyPrio;
+          inherit pkgs newScope modifyPrio cabalPackage ghcWrapperPackage;
           enableLibraryProfiling =
             if profExplicit then profDefault
                             else config.cabal.libraryProfiling or profDefault;
-          ghc = callPackage ghcPath ({ ghc = ghcBinary; } // extraArgs);
+          inherit ghc;
         };
         haskellPackagesPrefsClass = self : let super = haskellPackagesClass self; in super // prefFun self super;
         haskellPackagesExtensionClass = self : let super = haskellPackagesPrefsClass self; in super // extension self super;
@@ -214,9 +217,85 @@
                };
              };
 
-  packages_ghcjs = packages_ghc782 // {
-    ghc = ../development/tools/haskell/ghcjs;
-  };
+  packages_ghcjs =
+    let parent = packages_ghc782.override {
+          extension = self: super: {
+            Cabal = packages_ghc782.CabalGhcjs;
+          };
+        };
+    in packages {
+      ghc = parent.ghcjs // { inherit parent; };
+      cabalPackage = import ../build-support/cabal/ghcjs.nix;
+      ghcWrapperPackage = import ../development/compilers/ghcjs/wrapper.nix;
+      prefFun = self : super : super // {
+        # This is the list of packages that are built into a booted ghcjs installation
+#        Cabal_1_19_2 = null;
+#        Cabal = self.Cabal_1_19_2;
+        Cabal = packages_ghc782.CabalGhcjs;
+        aeson_0_7_0_4 = null;
+        aeson = self.aeson_0_7_0_4;
+        array_0_5_0_0 = null;
+        array = self.array_0_5_0_0;
+        attoparsec_0_11_3_1 = null;
+        attoparsec = self.attoparsec_0_11_3_1;
+        base_4_7_0_0 = null;
+        base = self.base_4_7_0_0;
+        bytestring_0_10_4_0 = null;
+        bytestring = self.bytestring_0_10_4_0;
+        containers_0_5_5_1 = null;
+        containers = self.containers_0_5_5_1;
+        deepseq_1_3_0_2 = null;
+        deepseq = self.deepseq_1_3_0_2;
+        directory_1_2_1_0 = null;
+        directory = self.directory_1_2_1_0;
+        dlist_0_7_1 = null;
+        dlist = self.dlist_0_7_1;
+        filepath_1_3_0_2 = null;
+        filepath = self.filepath_1_3_0_2;
+        ghcPrim_0_3_1_0 = null;
+        ghcPrim = self.ghcPrim_0_3_1_0;
+        ghcjsBase_0_1_0_0 = null;
+        ghcjsBase = self.ghcjsBase_0_1_0_0;
+        ghcjsPrim_0_1_0_0 = null;
+        ghcjsPrim = self.ghcjsPrim_0_1_0_0;
+        hashable_1_2_1_0 = null;
+        hashable = self.hashable_1_2_1_0;
+        integerGmp_0_5_1_0 = null;
+        integerGmp = self.integerGmp_0_5_1_0;
+        mtl_2_1_3_1 = null;
+        mtl = self.mtl_2_1_3_1;
+        oldLocale_1_0_0_6 = null;
+        oldLocale = self.oldLocale_1_0_0_6;
+        pretty_1_1_1_1 = null;
+        pretty = self.pretty_1_1_1_1;
+        primitive_0_5_3_0 = null;
+        primitive = self.primitive_0_5_3_0;
+        # process_1_2_0_0 = null;
+        # process = self.process_1_2_0_0;
+        scientific_0_2_0_2 = null;
+        scientific = self.scientific_0_2_0_2;
+        syb_0_4_2 = null;
+        syb = self.syb_0_4_2;
+        templateHaskell_2_9_0_0 = null;
+        templateHaskell = self.templateHaskell_2_9_0_0;
+        text_1_1_1_3 = null;
+        text = self.text_1_1_1_3;
+        time_1_4_2 = null;
+        time = self.time_1_4_2;
+        transformers_0_3_0_0 = null;
+        transformers = self.transformers_0_3_0_0;
+        unix_2_7_0_1 = null;
+        unix = self.unix_2_7_0_1;
+        unorderedContainers_0_2_5_0 = null;
+        unorderedContainers = self.unorderedContainers_0_2_5_0;
+        vector_0_10_11_0 = null;
+        vector = self.vector_0_10_11_0;
+        # These are necessary for compatibility with ghcjs's default libs
+        transformersCompat = self.transformersCompat_0_3_3;
+        oldTime = self.oldTime_1_1_0_2;
+        process = self.process_1_2_0_0; # ghcjs-boot seems to install process incorrectly, for some reason, so reinstall it
+      };
+    };
 
   packages_ghc782 =
     packages { ghcPath = ../development/compilers/ghc/7.8.2.nix;

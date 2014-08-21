@@ -4,7 +4,7 @@
 }:
 
 cabal.mkDerivation (self: {
-  pname = "Cabal-ghcjs";
+  pname = "Cabal";
   version = "9e87d6a3";
   src = fetchgit {
     url = git://github.com/ghcjs/cabal.git;
