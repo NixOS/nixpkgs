@@ -3538,10 +3538,6 @@ let
 
   ocropus = callPackage ../applications/misc/ocropus { };
 
-  perl58 = callPackage ../development/interpreters/perl/5.8 {
-    impureLibcPath = if stdenv.isLinux then null else "/usr";
-  };
-
   perl514 = callPackage ../development/interpreters/perl/5.14 { };
 
   perl516 = callPackage ../development/interpreters/perl/5.16 {
