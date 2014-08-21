@@ -12,5 +12,7 @@ cabal.mkDerivation (self: {
     description = "Strict concurrency abstractions";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

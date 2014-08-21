@@ -1433,6 +1433,23 @@ rec {
     };
   };
 
+  detox = pythonPackages.buildPythonPackage rec {
+    name = "detox-0.9.3";
+
+    propagatedBuildInputs = with pythonPackages; [ tox py eventlet ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/d/detox/detox-0.9.3.tar.gz";
+      md5 = "b52588ec61cd4c2d33e419677a5eac8c";
+    };
+
+    meta = with stdenv.lib; {
+      description = "What is detox?";
+      homepage = http://bitbucket.org/hpk42/detox;
+    };
+  };
+
+
   pbkdf2 = buildPythonPackage rec {
     name = "pbkdf2-1.3";
 
@@ -3235,17 +3252,24 @@ rec {
   };
 
   flexget = buildPythonPackage rec {
-    name = "FlexGet-1.1.121";
+    name = "FlexGet-1.2.161";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/F/FlexGet/${name}.tar.gz";
-      md5 = "44521bcbc2c1e941b656ecfa358adcaa";
+      md5 = "f7533e7b1df49cc8027fc4a2cde0290d";
     };
 
     buildInputs = [ nose ];
-    propagatedBuildInputs = [ beautifulsoup4 pyrss2gen feedparser pynzb html5lib dateutil
-        beautifulsoup flask jinja2 requests sqlalchemy pyyaml cherrypy progressbar deluge
-        python_tvrage jsonschema ];
+    # dateutil dependancy: requirement is dateutil !=2.0 and != 2.2,
+    # dateutil_1_5 is used as it's supported, but a newer version could be used
+    propagatedBuildInputs = [ paver feedparser sqlalchemy pyyaml rpyc
+	    beautifulsoup4 html5lib pyrss2gen pynzb progressbar jinja2 flask
+	    cherrypy requests dateutil_1_5 jsonschema python_tvrage tmdb3 ]
+	# enable deluge and transmission plugin support, if they're installed
+	++ stdenv.lib.optional (pkgs.config.pythonPackages.deluge or false)
+	    pythonpackages.deluge
+	++ stdenv.lib.optional (pkgs.transmission != null)
+	    pythonPackages.transmissionrpc;
 
     meta = {
       homepage = http://flexget.com/;
@@ -6975,6 +6999,24 @@ rec {
 
   });
 
+  rpyc = buildPythonPackage rec {
+    name = "rpyc-${version}";
+    version = "3.3.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/r/rpyc/${name}.tar.gz";
+      md5 = "6931cb92c41f547591b525142ccaeef1";
+    };
+
+    propagatedBuildInputs = [ nose plumbum ];
+
+    meta = {
+      description = "Remote Python Call (RPyC), a transparent and symmetric RPC library";
+      homepage = http://rpyc.readthedocs.org;
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   rsa = buildPythonPackage rec {
     name = "rsa-3.1.2";
 
@@ -7939,6 +7981,21 @@ rec {
     };
   };
 
+  tmdb3 = buildPythonPackage rec {
+    name = "tmdb3-${version}";
+    version = "0.6.17";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/tmdb3/${name}.zip";
+      md5 = "cd259427454472164c9a2479504c9cbb";
+    };
+
+    meta = {
+      description = "Python implementation of the v3 API for TheMovieDB.org, allowing access to movie and cast information.";
+      homepage = http://pypi.python.org/pypi/tmdb3;
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
 
   # TODO
   # Installs correctly but fails tests that involve simple things like:
@@ -8010,6 +8067,23 @@ rec {
     };
   };
 
+  transmissionrpc = buildPythonPackage rec {
+    name = "transmissionrpc-${version}";
+    version = "0.11";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/transmissionrpc/${name}.tar.gz";
+      md5 = "b2f918593e509f0e66e2e643291b436d";
+    };
+
+    propagatedBuildInputs = [ six ];
+
+    meta = {
+      description = "Python implementation of the Transmission bittorent client RPC protocol.";
+      homepage = http://pypi.python.org/pypi/transmissionrpc/;
+      license = stdenv.lib.licenses.mit;
+    };
+  };
 
   eggdeps  = buildPythonPackage rec {
      name = "eggdeps-${version}";

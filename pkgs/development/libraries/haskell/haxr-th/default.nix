@@ -12,5 +12,7 @@ cabal.mkDerivation (self: {
     description = "Automatic deriving of XML-RPC structs for Haskell records";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

@@ -6,9 +6,9 @@
 
 cabal.mkDerivation (self: {
   pname = "text-icu";
-  version = "0.6.3.7";
-  sha256 = "0mzzjamcxfrld9xwgdww3890zzkgmi1qb83v5z9zrixmdgwkvhf4";
-  buildDepends = [ text ];
+  version = "0.7.0.0";
+  sha256 = "1fvq6qi9kvw722v2m9d40vwwa2irswfapqfjcrym9c2swdagxnry";
+  buildDepends = [ deepseq text ];
   testDepends = [
     deepseq HUnit QuickCheck random testFramework testFrameworkHunit
     testFrameworkQuickcheck2 text
@@ -19,7 +19,5 @@ cabal.mkDerivation (self: {
     description = "Bindings to the ICU library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.linux;
-    broken = self.stdenv.isDarwin;     # https://github.com/bos/text-icu/issues/6
   };
 })

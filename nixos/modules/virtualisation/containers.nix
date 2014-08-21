@@ -32,7 +32,10 @@ let
         fi
       fi
 
-      exec "$1"
+      # Start the regular stage 1 script, passing the bind-mounted
+      # notification socket from the host to allow the container
+      # systemd to signal readiness to the host systemd.
+      NOTIFY_SOCKET=/var/lib/private/host-notify exec "$1"
     '';
 
   system = config.nixpkgs.system;
@@ -175,17 +178,16 @@ in
               ip link del dev "ve-$INSTANCE" 2> /dev/null || true
             fi
 
-            mkdir -p -m 0755 $root/var/lib
 
-            # Create a named pipe to get a signal when the container
-            # has finished booting.
-            rm -f $root/var/lib/startup-done
-            mkfifo -m 0600 $root/var/lib/startup-done
+            if [ "$PRIVATE_NETWORK" = 1 ]; then
+              ip link del dev "ve-$INSTANCE" 2> /dev/null || true
+            fi
          '';
 
         script =
           ''
             mkdir -p -m 0755 "$root/etc" "$root/var/lib"
+            mkdir -p -m 0700 "$root/var/lib/private"
             if ! [ -e "$root/etc/os-release" ]; then
               touch "$root/etc/os-release"
             fi
@@ -193,6 +195,8 @@ in
             mkdir -p -m 0755 \
               "/nix/var/nix/profiles/per-container/$INSTANCE" \
               "/nix/var/nix/gcroots/per-container/$INSTANCE"
+
+            cp -f /etc/resolv.conf "$root/etc/resolv.conf"
 
             if [ "$PRIVATE_NETWORK" = 1 ]; then
               extraFlags+=" --network-veth"
@@ -210,13 +214,16 @@ in
               fi
             ''}
 
-            EXIT_ON_REBOOT=1 \
+            # Run systemd-nspawn without startup notification (we'll
+            # wait for the container systemd to signal readiness).
+            EXIT_ON_REBOOT=1 NOTIFY_SOCKET= \
             exec ${config.systemd.package}/bin/systemd-nspawn \
               --keep-unit \
               -M "$INSTANCE" -D "$root" $extraFlags \
               --bind-ro=/nix/store \
               --bind-ro=/nix/var/nix/db \
               --bind-ro=/nix/var/nix/daemon-socket \
+              --bind=/run/systemd/notify:/var/lib/private/host-notify \
               --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles" \
               --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots" \
               --setenv PRIVATE_NETWORK="$PRIVATE_NETWORK" \
@@ -269,6 +276,8 @@ in
 
           Type = "notify";
 
+          NotifyAccess = "all";
+
           # Note that on reboot, systemd-nspawn returns 10, so this
           # unit will be restarted. On poweroff, it returns 0, so the
           # unit won't be restarted.
@@ -314,6 +323,31 @@ in
     networking.dhcpcd.denyInterfaces = [ "ve-*" ];
 
     environment.systemPackages = [ nixos-container ];
+
+    # Start containers at boot time.
+    systemd.services.all-containers =
+      { description = "All Containers";
+
+        wantedBy = [ "multi-user.target" ];
+
+        unitConfig.ConditionDirectoryNotEmpty = "/etc/containers";
+
+        serviceConfig.Type = "oneshot";
+
+        script =
+          ''
+            res=0
+            shopt -s nullglob
+            for i in /etc/containers/*.conf; do
+              AUTO_START=
+              source "$i"
+              if [ "$AUTO_START" = 1 ]; then
+                systemctl start "container@$(basename "$i" .conf).service" || res=1
+              fi
+            done
+            exit $res
+          ''; # */
+      };
 
   };
 }

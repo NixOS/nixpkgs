@@ -2,20 +2,20 @@
 
 { cabal, base64Bytestring, blazeHtml, extensibleExceptions
 , filepath, hslogger, html, HUnit, monadControl, mtl, network
-, parsec, sendfile, syb, systemFilepath, text, threads, time
-, timeCompat, transformers, transformersBase, utf8String, xhtml
-, zlib
+, networkUri, parsec, sendfile, syb, systemFilepath, text, threads
+, time, timeCompat, transformers, transformersBase, utf8String
+, xhtml, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "happstack-server";
-  version = "7.3.7";
-  sha256 = "1phw3hpnklcdav3wv10kwjsmrg8gshnsgd564p459pc4k2zffgh1";
+  version = "7.3.8";
+  sha256 = "11jy4r4ih6sndyga3fjg298f5ww8806180dm3fgzsm0xfsjw1ac2";
   buildDepends = [
     base64Bytestring blazeHtml extensibleExceptions filepath hslogger
-    html monadControl mtl network parsec sendfile syb systemFilepath
-    text threads time timeCompat transformers transformersBase
-    utf8String xhtml zlib
+    html monadControl mtl network networkUri parsec sendfile syb
+    systemFilepath text threads time timeCompat transformers
+    transformersBase utf8String xhtml zlib
   ];
   testDepends = [ HUnit parsec zlib ];
   jailbreak = true;

@@ -26,5 +26,7 @@ cabal.mkDerivation (self: {
     description = "Wiki using happstack, git or darcs, and pandoc";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

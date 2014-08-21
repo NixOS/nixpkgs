@@ -14,5 +14,6 @@ cabal.mkDerivation (self: {
     description = "Native wcwidth";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

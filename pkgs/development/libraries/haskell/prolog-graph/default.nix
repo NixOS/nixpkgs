@@ -17,5 +17,6 @@ cabal.mkDerivation (self: {
     description = "A command line tool to visualize query resolution in Prolog";
     license = self.stdenv.lib.licenses.publicDomain;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

@@ -14,6 +14,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses libevent ];
 
+  postInstall =
+    ''
+      mkdir -p $out/etc/bash_completion.d
+      cp -v examples/bash_completion_tmux.sh $out/etc/bash_completion.d/tmux
+    '';
+
   meta = {
     homepage = http://tmux.sourceforge.net/;
     description = "tmux is a terminal multiplexer";

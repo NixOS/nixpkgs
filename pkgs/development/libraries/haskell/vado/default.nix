@@ -15,5 +15,7 @@ cabal.mkDerivation (self: {
     description = "Runs commands on remote machines using ssh";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })
