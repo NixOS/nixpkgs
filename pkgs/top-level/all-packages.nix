@@ -8240,6 +8240,8 @@ let
 
   cinelerra = callPackage ../applications/video/cinelerra { };
 
+  clipit = callPackage ../applications/misc/clipit { };
+
   cmus = callPackage ../applications/audio/cmus { };
 
   compiz = callPackage ../applications/window-managers/compiz {
