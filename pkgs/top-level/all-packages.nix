@@ -2169,6 +2169,8 @@ let
 
   sitecopy = callPackage ../tools/networking/sitecopy { };
 
+  stricat = callPackage ../tools/security/stricat { };
+
   privoxy = callPackage ../tools/networking/privoxy { };
 
   t1utils = callPackage ../tools/misc/t1utils { };
