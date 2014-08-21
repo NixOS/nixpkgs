@@ -16,6 +16,6 @@ cabal.mkDerivation (self: {
     description = "Render tasty output to XML for Jenkins";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })

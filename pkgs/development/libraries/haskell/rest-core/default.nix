@@ -18,6 +18,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     HUnit mtl testFramework testFrameworkHunit unorderedContainers
   ];
+  jailbreak = true;
   meta = {
     description = "Rest API library";
     license = self.stdenv.lib.licenses.bsd3;

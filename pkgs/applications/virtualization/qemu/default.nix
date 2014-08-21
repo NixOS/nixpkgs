@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
       p="$out/bin/qemu-system-${if stdenv.system == "x86_64-linux" then "x86_64" else "i386"}"
       if [ -e "$p" ]; then
-        makeWrapper "$p" $out/bin/qemu-kvm --add-flags "-enable-kvm"
+        makeWrapper "$p" $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"
       fi
     '';
 

@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Painless 2D vector graphics, animations and simulations";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

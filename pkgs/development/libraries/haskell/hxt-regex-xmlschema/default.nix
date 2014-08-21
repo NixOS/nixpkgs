@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "A regular expression library for W3C XML Schema regular expressions";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

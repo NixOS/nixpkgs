@@ -18,6 +18,6 @@ cabal.mkDerivation (self: {
     description = "Encode and decode JSON streams using Aeson and Pipes";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })

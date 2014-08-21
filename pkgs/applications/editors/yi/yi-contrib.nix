@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yi-contrib";
-  version = "0.8.1";
-  sha256 = "0jsbga30x302mr708vj5y7cpc961vh85dshpq2zlrf44dh0kmpvf";
+  version = "0.8.2";
+  sha256 = "17rbgrra1ghlywiraadf16n7igxp1k8jqqmb0iw8sc15y7825qqm";
   buildDepends = [
     filepath lens mtl split time transformersBase yi
   ];
@@ -14,5 +14,6 @@ cabal.mkDerivation (self: {
     description = "Add-ons to Yi, the Haskell-Scriptable Editor";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ fuuzetsu ];
   };
 })

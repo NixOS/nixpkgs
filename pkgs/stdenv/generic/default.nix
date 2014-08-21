@@ -27,6 +27,16 @@ let
 
   allowBroken = config.allowBroken or false || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
 
+  forceEvalHelp = unfreeOrBroken:
+    assert (unfreeOrBroken == "Unfree" || unfreeOrBroken == "Broken");
+    ''
+      You can set
+        { nixpkgs.config.allow${unfreeOrBroken} = true; }
+      in configuration.nix to override this. If you use Nix standalone, you can add
+        { allow${unfreeOrBroken} = true; }
+      to ~/.nixpkgs/config.nix.
+    '';
+
   unsafeGetAttrPos = builtins.unsafeGetAttrPos or (n: as: null);
 
   extraBuildInputs' = extraBuildInputs ++
@@ -58,9 +68,19 @@ let
           { allowUnfree = true; }
         to ~/.nixpkgs/config.nix.''
     else if !allowBroken && attrs.meta.broken or false then
-      throw "you can't use package ‘${attrs.name}’ in ${pos'} because it has been marked as broken"
+      throw ''
+        Package ‘${attrs.name}’ in ${pos'} is marked as broken, refusing to evaluate. You can set
+          { nixpkgs.config.allowBroken = true; }
+        in configuration.nix to override this. If you use Nix standalone, you can add
+          { allowBroken = true; }
+        to ~/.nixpkgs/config.nix.''
     else if !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem result.system attrs.meta.platforms then
-      throw "the package ‘${attrs.name}’ in ${pos'} is not supported on ‘${result.system}’"
+      throw ''
+        Package ‘${attrs.name}’ in ${pos'} is not supported on ‘${result.system}’, refusing to evaluate. You can set
+          { nixpkgs.config.allowBroken = true; }
+        in configuration.nix to override this. If you use Nix standalone, you can add
+          { allowBroken = true; }
+        to ~/.nixpkgs/config.nix.''
     else
       lib.addPassthru (derivation (
         (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
@@ -141,7 +161,8 @@ let
              || system == "x86_64-kfreebsd-gnu";
       isSunOS = system == "i686-solaris"
              || system == "x86_64-solaris";
-      isCygwin = system == "i686-cygwin";
+      isCygwin = system == "i686-cygwin"
+              || system == "x86_64-cygwin";
       isFreeBSD = system == "i686-freebsd"
               || system == "x86_64-freebsd";
       isOpenBSD = system == "i686-openbsd"

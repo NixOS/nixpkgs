@@ -12,5 +12,6 @@ cabal.mkDerivation (self: {
     description = "A framework for extending Haskell's syntax via quick-and-dirty preprocessors";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

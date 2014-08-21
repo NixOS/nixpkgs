@@ -17,5 +17,7 @@ cabal.mkDerivation (self: {
     description = "Declarative command-line option parsing and documentation library";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

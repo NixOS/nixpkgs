@@ -7,25 +7,6 @@
     <title>NixOS Manual</title>
     <subtitle>Version <xi:include href="version" parse="text" /></subtitle>
 
-    <author>
-      <personname>
-        <firstname>Eelco</firstname>
-        <surname>Dolstra</surname>
-      </personname>
-    </author>
-
-    <author>
-      <personname>
-        <firstname>Nicolas</firstname>
-        <surname>Pierron</surname>
-      </personname>
-    </author>
-
-    <copyright>
-      <year>2007-2013</year>
-      <holder>Eelco Dolstra</holder>
-    </copyright>
-
   </info>
 
 

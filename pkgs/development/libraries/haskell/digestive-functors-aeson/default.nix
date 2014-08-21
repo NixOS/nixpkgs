@@ -12,11 +12,12 @@ cabal.mkDerivation (self: {
   testDepends = [
     aeson digestiveFunctors HUnit mtl scientific tasty tastyHunit text
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/ocharles/digestive-functors-aeson";
     description = "Run digestive-functors forms against JSON";
     license = self.stdenv.lib.licenses.gpl3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })

@@ -15,6 +15,5 @@ cabal.mkDerivation (self: {
     description = "Visualize live Haskell data structures using vacuum, graphviz and cairo";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

@@ -29,13 +29,6 @@ stdenv.mkDerivation rec {
       substituteInPlace */doc/manpage/blender.1.py --replace /usr/bin/python ${python}/bin/python3
     '';
 
-  patches = [(fetchpatch { # fix parallel builds
-    url = "https://developer.blender.org/D619?download=true";
-    sha256 = "18h4fqsbpwxzqz7qby18lrrbzqnyd5xnann3xcac5wddwv5wjb0f";
-    name = "D619.diff";
-  })];
-  patchFlags = "-p0";
-
   cmakeFlags =
     [ "-DOPENEXR_INC=${openexr}/include/OpenEXR"
       "-DWITH_OPENCOLLADA=OFF"

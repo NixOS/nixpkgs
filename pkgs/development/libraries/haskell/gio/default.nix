@@ -14,6 +14,5 @@ cabal.mkDerivation (self: {
     description = "Binding to the GIO";
     license = self.stdenv.lib.licenses.lgpl21;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

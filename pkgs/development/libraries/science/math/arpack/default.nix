@@ -23,7 +23,9 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://forge.scilab.org/index.php/p/arpack-ng/";
     description = "A collection of Fortran77 subroutines to solve large scale eigenvalue problems";
-    platforms = stdenv.lib.platforms.all;
+    # Looks like OpenBLAS is not that easy to build
+    # there is a sgemm_itcopy undefined reference on 32-bit, for example
+    platforms = ["x86_64-linux"];
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.ttuegel ];
   };

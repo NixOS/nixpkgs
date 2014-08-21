@@ -15,6 +15,5 @@ cabal.mkDerivation (self: {
     description = "Tools to build the Gtk2Hs suite of User Interface libraries";
     license = self.stdenv.lib.licenses.gpl2;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

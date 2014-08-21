@@ -18,6 +18,6 @@ cabal.mkDerivation (self: {
     description = "Fast combinator parsing for bytestrings and text";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

@@ -12,9 +12,6 @@ cabal.mkDerivation (self: {
     description = "Functional MetaPost";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = with self.stdenv.lib.maintainers; [ simons ];
   };
 })

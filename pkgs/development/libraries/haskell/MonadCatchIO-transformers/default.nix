@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Monad-transformer compatible version of the Control.Exception module";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

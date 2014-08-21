@@ -11,5 +11,7 @@ cabal.mkDerivation (self: {
     description = "An FFI interface to the DevIL library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

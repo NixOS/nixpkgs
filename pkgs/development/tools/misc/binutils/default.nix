@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--enable-shared" "--enable-deterministic-archives" ]
+    ++ optional noSysDirs "--with-sysroot=/var/empty"
     ++ optional (stdenv.system == "mips64el-linux") "--enable-fix-loongson2f-nop"
     ++ optional (cross != null) "--target=${cross.config}"
     ++ optionals gold [ "--enable-gold" "--enable-plugins" ]

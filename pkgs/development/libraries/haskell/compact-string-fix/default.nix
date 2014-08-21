@@ -11,6 +11,5 @@ cabal.mkDerivation (self: {
     description = "Same as compact-string except with a small fix so it builds on ghc-6.12";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

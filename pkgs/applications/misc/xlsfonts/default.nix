@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.x.org/;
     description = "Lists the fonts available in the X server";
-    licesnse = "free";
+    license = "free";
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }
