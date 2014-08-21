@@ -663,16 +663,16 @@ rec {
 
 
   bedup = buildPythonPackage rec {
-    name = "bedup-20140206";
+    name = "bedup-20140413";
 
     src = fetchgit {
       url = "https://github.com/g2p/bedup.git";
-      rev = "80cb217d4819a03e159e42850a9a3f14e2b278a3";
-      sha256 = "1rik7a62v708ivfcy0pawhfnrb84b7gm3qr54x6jsxl0iqz078h6";
+      rev = "5189e166145b8954ac41883f81ef3c3b50dc96ab";
+      sha256 = "e61768fa19934bd176799f90bda3ea9f49a5def21fa2523a8e47df8a48e730e9";
     };
 
     buildInputs = [ pkgs.btrfsProgs ];
-    propagatedBuildInputs = with pkgs; [ contextlib2 sqlalchemy pyxdg pycparser cffi alembic ];
+    propagatedBuildInputs = with pkgs; [ contextlib2 sqlalchemy8 pyxdg pycparser cffi alembic ];
 
     meta = {
       description = "Deduplication for Btrfs";
