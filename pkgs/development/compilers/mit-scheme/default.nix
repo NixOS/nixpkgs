@@ -29,6 +29,9 @@ stdenv.mkDerivation {
       sha256 = "0pclakzwxbqgy6wqwvs6ml62wgby8ba8xzmwzdwhx1v8wv05yw1j";
     };
 
+  # http://savannah.gnu.org/bugs/?38845
+  patches = [ ./make-doc-make.patch ];
+
   configurePhase =
     '' (cd src && ./configure)
        (cd doc && ./configure)
@@ -84,8 +87,7 @@ stdenv.mkDerivation {
 
     # Build fails on Cygwin and Darwin:
     # <http://article.gmane.org/gmane.lisp.scheme.mit-scheme.devel/489>.
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.freebsd;
-
-    broken = true;
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.freebsd
+      ++ stdenv.lib.platforms.linux;
   };
 }
