@@ -3099,6 +3099,15 @@ let
     liblapack = liblapack.override {shared = true;};
     llvm = llvm_33;
   };
+  julia030 = let
+    liblapack = liblapack_3_5_0.override {shared = true;};
+  in callPackage ../development/compilers/julia/0.3.0.nix {
+    inherit liblapack;
+    suitesparse = suitesparse.override {
+      inherit liblapack;
+    };
+    llvm = llvm_34;
+  };
   julia = julia021;
 
   lazarus = builderDefsPackage (import ../development/compilers/fpc/lazarus.nix) {
@@ -10823,6 +10832,7 @@ let
   jags = callPackage ../applications/science/math/jags { };
 
   liblapack = callPackage ../development/libraries/science/math/liblapack { };
+  liblapack_3_5_0 = callPackage ../development/libraries/science/math/liblapack/3.5.0.nix { };
 
   liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
 
