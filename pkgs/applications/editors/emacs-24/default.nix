@@ -1,6 +1,6 @@
 { stdenv, fetchurl, ncurses, x11, libXaw, libXpm, Xaw3d
 , pkgconfig, gtk, libXft, dbus, libpng, libjpeg, libungif
-, libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, openssl
+, libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, gnutls
 , alsaLib, cairo
 , withX ? !stdenv.isDarwin, withGTK ? true
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   patches = [ ./darwin-new-sections.patch ];
 
   buildInputs =
-    [ ncurses gconf libxml2 openssl alsaLib pkgconfig texinfo ]
+    [ ncurses gconf libxml2 gnutls alsaLib pkgconfig texinfo ]
     ++ stdenv.lib.optional stdenv.isLinux dbus
     ++ stdenv.lib.optionals withX
       [ x11 libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
