@@ -46,8 +46,6 @@ stdenv.mkDerivation (rec {
 
   preBuild = ''
     makeFlagsArray=(APACHE_LIBEXECDIR=$out/modules)
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure --replace "-no-cpp-precomp" ""
   '';
 
   postInstall = ''

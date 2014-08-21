@@ -27,6 +27,11 @@ import ../generic rec {
     nativePrefix = stdenv.lib.optionalString stdenv.isSunOS "/usr";
     nativeLibc = true;
     inherit stdenv;
+    libcxx = pkgs.libcxx.override {
+      libcxxabi = pkgs.libcxxabi.override {
+        libunwind = pkgs.libunwindNative;
+      };
+    };
     binutils = import ../../build-support/native-darwin-cctools-wrapper {inherit stdenv;};
     clang = pkgs.clang_34;
     coreutils = pkgs.coreutils;

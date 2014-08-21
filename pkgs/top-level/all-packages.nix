@@ -5699,6 +5699,8 @@ let
 
   libunwind = callPackage ../development/libraries/libunwind { };
 
+  libunwindNative = callPackage ../development/libraries/libunwind/native.nix {};
+
   libuvVersions = callPackage ../development/libraries/libuv { };
 
   libv4l = lowPrio (v4l_utils.override {
