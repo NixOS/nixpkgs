@@ -1,11 +1,11 @@
 { stdenv, fetchurl, apr, scons, openssl, aprutil, zlib, krb5, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "serf-1.3.6";
+  name = "serf-1.3.7";
 
   src = fetchurl {
     url = "http://serf.googlecode.com/svn/src_releases/${name}.tar.bz2";
-    sha256 = "1wk3cplazs8jznjc9ylpd63rrk9k2y05xa7zqx7psycr0gmpnqya";
+    sha1 = "db9ae339dba10a2b47f9bdacf30a58fd8e36683a";
   };
 
   buildInputs = [ apr scons openssl aprutil zlib krb5 pkgconfig ];
