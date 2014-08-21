@@ -7023,6 +7023,8 @@ let
   tomcat6 = callPackage ../servers/http/tomcat/6.0.nix { };
 
   tomcat7 = callPackage ../servers/http/tomcat/7.0.nix { };
+	
+  tomcat8 = callPackage ../servers/http/tomcat/8.0.nix { };
 
   tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
 
