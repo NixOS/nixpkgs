@@ -2006,6 +2006,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ranges = callPackage ../development/libraries/haskell/ranges {};
 
+  reserve = callPackage ../development/libraries/haskell/reserve {};
+
   rvar = callPackage ../development/libraries/haskell/rvar {};
 
   reactiveBanana = callPackage ../development/libraries/haskell/reactive-banana {};
