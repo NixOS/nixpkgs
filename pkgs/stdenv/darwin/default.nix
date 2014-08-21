@@ -1,4 +1,4 @@
-{ stdenv, pkgs, config }:
+{ stdenv, pkgs, config, haveLibCxx }:
 
 import ../generic rec {
   inherit config;
@@ -27,11 +27,11 @@ import ../generic rec {
     nativePrefix = stdenv.lib.optionalString stdenv.isSunOS "/usr";
     nativeLibc = true;
     inherit stdenv;
-    libcxx = pkgs.libcxx.override {
+    libcxx = if haveLibCxx then pkgs.libcxx.override {
       libcxxabi = pkgs.libcxxabi.override {
         libunwind = pkgs.libunwindNative;
       };
-    };
+    } else null;
     binutils = import ../../build-support/native-darwin-cctools-wrapper {inherit stdenv;};
     clang = pkgs.clang_34;
     coreutils = pkgs.coreutils;

@@ -33,6 +33,6 @@ in stdenv.mkDerivation {
     description = "A new implementation of low level support for a standard C++ library";
     license = "BSD";
     maintainers = stdenv.lib.maintainers.shlevy;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

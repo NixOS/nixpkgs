@@ -37,6 +37,14 @@ rec {
     inherit config;
     stdenv = stdenvNative;
     pkgs = stdenvNativePkgs;
+    haveLibCxx = true;
+  };
+
+  stdenvDarwinNaked = import ./darwin {
+    inherit config;
+    stdenv = stdenvNative;
+    pkgs = stdenvNativePkgs;
+    haveLibCxx = false;
   };
 
 
