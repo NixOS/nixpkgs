@@ -3542,8 +3542,6 @@ let
     impureLibcPath = if stdenv.isLinux then null else "/usr";
   };
 
-  perl510 = callPackage ../development/interpreters/perl/5.10 { };
-
   perl514 = callPackage ../development/interpreters/perl/5.14 { };
 
   perl516 = callPackage ../development/interpreters/perl/5.16 {
@@ -6559,14 +6557,6 @@ let
     inherit pkgs;
     overrides = (config.perlPackageOverrides or (p: {})) pkgs;
   });
-
-  perl510Packages = import ./perl-packages.nix {
-    pkgs = pkgs // {
-      perl = perl510;
-      buildPerlPackage = import ../development/perl-modules/generic perl510;
-    };
-    overrides = (config.perl510PackageOverrides or (p: {})) pkgs;
-  };
 
   perl514Packages = import ./perl-packages.nix {
     pkgs = pkgs // {
