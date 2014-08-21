@@ -915,11 +915,11 @@ let
   }) // {inherit ;};
 
   libxcb = (mkDerivation "libxcb" {
-    name = "libxcb-1.10";
+    name = "libxcb-1.11";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/libxcb-1.10.tar.bz2;
-      sha256 = "1dfmyb1zjx6n0zhr4y40mc1crlmj3bfjjhmn0f30ip9nnq2spncq";
+      url = http://xcb.freedesktop.org/dist/libxcb-1.11.tar.bz2;
+      sha256 = "1xqgc81krx14f2c8yl5chzg5g2l26mhm2rwffy8dx7jv0iq5sqq3";
     };
     buildInputs = [pkgconfig libxslt libpthreadstubs python libXau xcbproto libXdmcp ];
   }) // {inherit libxslt libpthreadstubs python libXau xcbproto libXdmcp ;};
@@ -1175,11 +1175,11 @@ let
   }) // {inherit ;};
 
   xcbproto = (mkDerivation "xcbproto" {
-    name = "xcb-proto-1.10";
+    name = "xcb-proto-1.11";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/xcb-proto-1.10.tar.bz2;
-      sha256 = "01dgp802i4ic9wkmpa7g1wm50pp547d3b96jjz2hnxavhpfhvx3y";
+      url = http://xcb.freedesktop.org/dist/xcb-proto-1.11.tar.bz2;
+      sha256 = "0bp3f53l9fy5x3mn1rkj1g81aiyzl90wacwvqdgy831aa3kfxb5l";
     };
     buildInputs = [pkgconfig python ];
   }) // {inherit python ;};
