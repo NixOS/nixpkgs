@@ -69,7 +69,9 @@ in
   };
 
   libX11 = attrs: attrs // {
-    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    preConfigure = setMalloc0ReturnsNullCrossCompiling + ''
+      sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
+    '';
     postInstall =
       ''
         # Remove useless DocBook XML files.
