@@ -15,14 +15,23 @@ in stdenv.mkDerivation {
   postUnpack = ''
     unpackFile ${libcxx.src}
     export NIX_CFLAGS_COMPILE="-I${libunwind}/include -I$PWD/include -I$(readlink -f libcxx-*)/include"
+  '' + stdenv.lib.optionalString ''
     export TRIPLE=x86_64-apple-darwin
   '';
 
-  installPhase = ''
-    install -d -m 755 $out/include $out/lib
-    install -m 644 lib/libc++abi.dylib $out/lib
-    install -m 644 include/cxxabi.h $out/include
-  '';
+  installPhase = if stdenv.isDarwin
+    then ''
+      install -d -m 755 $out/include $out/lib
+      install -m 644 lib/libc++abi.dylib $out/lib
+      install -m 644 include/cxxabi.h $out/include
+    ''
+    else ''
+      install -d -m 755 $out/include $out/lib
+      install -m 644 lib/libc++abi.so.1.0 $out/lib
+      install -m 644 include/cxxabi.h $out/include
+      ln -s libc++abi.so.1.0 $out/lib/libc++abi.so
+      ln -s libc++abi.so.1.0 $out/lib/libc++abi.so.1
+    '';
 
   patchPhase = "${gnused}/bin/sed -e s,-lstdc++,, -i lib/buildit";
 
