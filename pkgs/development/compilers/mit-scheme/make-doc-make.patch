@@ -1,0 +1,61 @@
+diff --git a/doc/ffi/ffi.texinfo b/doc/ffi/ffi.texinfo
+index da6c87e..066501a 100644
+--- a/doc/ffi/ffi.texinfo
++++ b/doc/ffi/ffi.texinfo
+@@ -6,13 +6,13 @@
+ @settitle FFI @value{VERSION}
+ @comment %**end of header
+ 
+-@macro myresult{}
+ @ifhtml
++@macro myresult{}
+  =>
++@end macro
+ @end ifhtml
+ @ifnothtml
+- @result{}
++@alias myresult = result
+ @end ifnothtml
+-@end macro
+ 
+ @copying
+ This manual documents @acronym{FFI} @value{VERSION}.
+diff --git a/doc/imail/imail.texinfo b/doc/imail/imail.texinfo
+index 11088b1..1059401 100644
+--- a/doc/imail/imail.texinfo
++++ b/doc/imail/imail.texinfo
+@@ -36,7 +36,7 @@ Documentation License.''
+ @end direntry
+ 
+ @titlepage
+-@title{IMAIL User's Manual}
++@title IMAIL User's Manual
+ @subtitle Edition @value{EDITION} for IMAIL @value{VERSION}
+ @subtitle @value{UPDATED}
+ @author by Chris Hanson
+diff --git a/doc/ref-manual/scheme.texinfo b/doc/ref-manual/scheme.texinfo
+index 864d708..ccfb7cb 100644
+--- a/doc/ref-manual/scheme.texinfo
++++ b/doc/ref-manual/scheme.texinfo
+@@ -44,7 +44,7 @@ Documentation License.''
+ @end direntry
+ 
+ @titlepage
+-@title{MIT/GNU Scheme Reference Manual}
++@title MIT/GNU Scheme Reference Manual
+ @subtitle Edition @value{EDITION} for release @value{VERSION}
+ @subtitle @value{UPDATED}
+ @author by Chris Hanson
+diff --git a/doc/user-manual/user.texinfo b/doc/user-manual/user.texinfo
+index e6942de..4366525 100644
+--- a/doc/user-manual/user.texinfo
++++ b/doc/user-manual/user.texinfo
+@@ -44,7 +44,7 @@ Documentation License.''
+ @end direntry
+ 
+ @titlepage
+-@title{MIT/GNU Scheme User's Manual}
++@title MIT/GNU Scheme User's Manual
+ @subtitle Edition @value{EDITION} for MIT/GNU Scheme @value{VERSION}
+ @subtitle @value{UPDATED}
+ @author by Stephen Adams
