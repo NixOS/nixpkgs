@@ -5510,6 +5510,8 @@ let
 
   libspatialite = callPackage ../development/libraries/libspatialite { };
 
+  libtar = callPackage ../development/libraries/libtar { };
+
   libtasn1 = callPackage ../development/libraries/libtasn1 { };
 
   libtheora = callPackage ../development/libraries/libtheora { };
@@ -9639,6 +9641,8 @@ let
     conf = config.st.conf or null;
   };
 
+  linuxstopmotion = callPackage ../applications/video/linuxstopmotion { };
+
   sweethome3d = recurseIntoAttrs (  (callPackage ../applications/misc/sweethome3d { })
                                  // (callPackage ../applications/misc/sweethome3d/editors.nix {
                                       sweethome3dApp = sweethome3d.application;
@@ -9852,6 +9856,8 @@ let
   };
 
   uucp = callPackage ../tools/misc/uucp { };
+
+  uvccapture = callPackage ../applications/video/uvccapture { };
 
   uwimap = callPackage ../tools/networking/uwimap { };
 
