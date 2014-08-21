@@ -10825,7 +10825,11 @@ let
     geoclue = geoclue2;
   };
 
-  oxygen_gtk = callPackage ../misc/themes/gtk2/oxygen-gtk { };
+  oxygen-gtk2 = callPackage ../misc/themes/gtk2/oxygen-gtk { };
+
+  oxygen-gtk3 = callPackage ../misc/themes/gtk3/oxygen-gtk3 { };
+
+  oxygen_gtk = oxygen-gtk2; # backwards compatibility
 
   gtk_engines = callPackage ../misc/themes/gtk2/gtk-engines { };
 
