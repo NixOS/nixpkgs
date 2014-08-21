@@ -1,17 +1,41 @@
-{ stdenv, fetchurl, SDL, SDL_image, SDL_ttf, gtk, glib, mesa, openal, glibc, libsndfile
-, copyDataDirectory ? false }:
+{ stdenv, fetchgit, fetchurl, cmake, glew, ncurses, SDL, SDL_image, SDL_ttf, gtk2, glib, mesa, openal, pango, atk, gdk_pixbuf, glibc, libsndfile
+  , copyDataDirectory ? true }:
+
+/* set copyDataDirectory as true by default since df 40 does not seem to run without it */
+
+let
+
+  srcs = {
+    df_unfuck = fetchgit {
+      url = "https://github.com/svenstaro/dwarf_fortress_unfuck";
+      rev = "4681508dd799aaf20b47c2ac0e9da18fa4876993";
+      sha256 = "16495214a19742cb97351109b124ad9d691ee52bbb1b86c9c1907978734b5ca0";
+    };
+
+    df = fetchurl {
+      url = "http://www.bay12games.com/dwarves/df_40_09_linux.tar.bz2";
+      sha256 = "1aka2vblhip4sjkcpkxfra1fa9z4hzlj0sdl6rh2qda0l7q7i0ki";
+    };
+  };
+
+in
 
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation rec {
-  name = "dwarf-fortress-0.40.05";
+  name = "dwarf-fortress-0.40.09";
 
-  src = fetchurl {
-    url = "http://www.bay12games.com/dwarves/df_40_05_linux.tar.bz2";
-    sha256 = "1b9nd33yz5a945v9jyqii1k4s71i701m2d0h7fw6f5g9p6nvx43s";
-  };
 
-  phases = "unpackPhase patchPhase installPhase";
+  buildInputs = [ SDL SDL_image SDL_ttf gtk2 glib glew mesa ncurses openal glibc libsndfile pango atk cmake gdk_pixbuf];
+  src = "${srcs.df_unfuck} ${srcs.df}";
+  phases = "unpackPhase patchPhase configurePhase buildPhase installPhase";
+
+  sourceRoot = "git-export";
+
+  cmakeFlags = [
+    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib}/lib/glib-2.0/include"
+    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2}/lib/gtk-2.0/include"
+  ];
 
   /* :TODO: Game options should be configurable by patching the default configuration files */
 
@@ -21,11 +45,15 @@ stdenv.mkDerivation rec {
     set -x
     mkdir -p $out/bin
     mkdir -p $out/share/df_linux
-    cp -r * $out/share/df_linux
+    cd ../../
+    cp -r ./df_linux/* $out/share/df_linux
+    rm $out/share/df_linux/libs/lib*
+    patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.gcc.gcc stdenv.glibc ]}:$out/share/df_linux/libs"  $out/share/df_linux/libs/Dwarf_Fortress
+    cp -f ./git-export/build/libgraphics.so $out/share/df_linux/libs/libgraphics.so
+
     cp $permission $out/share/df_linux/nix_permission
 
     patchelf --set-interpreter ${glibc}/lib/ld-linux.so.2 $out/share/df_linux/libs/Dwarf_Fortress
-    ln -s ${libsndfile}/lib/libsndfile.so $out/share/df_linux/libs/
 
     cat > $out/bin/dwarf-fortress << EOF
     #!${stdenv.shell}
@@ -66,7 +94,7 @@ stdenv.mkDerivation rec {
     ''}
 
     # now run Dwarf Fortress!
-    export LD_LIBRARY_PATH=\$DF_DIR/df_linux/libs/:${SDL}/lib:${SDL_image}/lib/:${SDL_ttf}/lib/:${gtk}/lib/:${glib}/lib/:${mesa}/lib/:${openal}/lib/
+    export LD_LIBRARY_PATH=\${stdenv.gcc}/lib:${SDL}/lib:${SDL_image}/lib/:${SDL_ttf}/lib/:${gtk2}/lib/:${glib}/lib/:${mesa}/lib/:${openal}/lib/:${libsndfile}/lib:$DF_DIR/df_linux/libs/
     \$DF_DIR/df "\$@"
     EOF
 
