@@ -1712,9 +1712,7 @@ let
 
   opendylan_bin = callPackage ../development/compilers/opendylan/bin.nix { };
 
-  openjade = callPackage ../tools/text/sgml/openjade {
-    perl = perl510;
-  };
+  openjade = callPackage ../tools/text/sgml/openjade { };
 
   openobex = callPackage ../tools/bluetooth/openobex { };
 
