@@ -8721,6 +8721,11 @@ let
     debug = config.flashplayer.debug or false;
   };
 
+  fme = callPackage ../tools/X11/fme {
+    inherit (gnome) libglademm;
+    inherit pkgconfig autoconf automake gettext;
+  };
+
   freecad = callPackage ../applications/graphics/freecad {
     opencascade = opencascade_6_5;
     inherit (pythonPackages) matplotlib pycollada;
