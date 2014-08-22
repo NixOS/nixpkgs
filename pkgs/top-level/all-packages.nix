@@ -9650,6 +9650,8 @@ let
 
   bittorrentSync = callPackage ../applications/networking/bittorrentsync { };
 
+  copy-com = callPackage ../applications/networking/copy-com { };
+
   dropbox = callPackage ../applications/networking/dropbox { };
 
   dropbox-cli = callPackage ../applications/networking/dropbox-cli { };
