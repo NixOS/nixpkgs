@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, libcxx, libunwind, gnused }:
+{ stdenv, coreutils, fetchsvn, libcxx, libunwind, gnused }:
 let
   rev = "199626";
 in stdenv.mkDerivation {
@@ -11,6 +11,8 @@ in stdenv.mkDerivation {
   };
 
   NIX_CFLAGS_LINK="-L${libunwind}/lib -lunwind";
+
+  buildInputs = [ coreutils ];
 
   postUnpack = ''
     unpackFile ${libcxx.src}
