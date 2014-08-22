@@ -2,6 +2,8 @@
 , coreutils, gnugrep, which, git
 }:
 
+assert stdenv.isLinux;
+
 let
 
   buildIdea =
