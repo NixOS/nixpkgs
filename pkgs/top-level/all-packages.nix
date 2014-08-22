@@ -9957,6 +9957,8 @@ let
 
   vwm = callPackage ../applications/window-managers/vwm { };
 
+  vym = callPackage ../applications/misc/vym { };
+
   w3m = callPackage ../applications/networking/browsers/w3m {
     graphicsSupport = false;
   };
