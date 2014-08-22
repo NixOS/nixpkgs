@@ -78,6 +78,16 @@ let
         };
 
 
+  makeClosure = module: forAllSystems (system: (import ./lib/eval-config.nix {
+    inherit system;
+    modules = [ module ] ++ lib.singleton
+      ({ config, lib, ... }:
+      { fileSystems."/".device  = lib.mkDefault "/dev/sda1";
+        boot.loader.grub.device = lib.mkDefault "/dev/sda";
+      });
+  }).config.system.build.toplevel);
+
+
 in rec {
 
   channel =
@@ -241,5 +251,47 @@ in rec {
   tests.tomcat = callTest tests/tomcat.nix {};
   tests.udisks2 = callTest tests/udisks2.nix {};
   tests.xfce = callTest tests/xfce.nix {};
+
+
+  /* Build a bunch of typical closures so that Hydra can keep track of
+     the evolution of closure sizes. */
+
+  closures = {
+
+    smallContainer = makeClosure ({ pkgs, ... }:
+      { boot.isContainer = true;
+        services.openssh.enable = true;
+      });
+
+    tinyContainer = makeClosure ({ pkgs, ... }:
+      { boot.isContainer = true;
+        imports = [ modules/profiles/minimal.nix ];
+      });
+
+    ec2 = makeClosure ({ pkgs, ... }:
+      { imports = [ modules/virtualisation/amazon-image.nix ];
+      });
+
+    kde = makeClosure ({ pkgs, ... }:
+      { services.xserver.enable = true;
+        services.xserver.displayManager.kdm.enable = true;
+        services.xserver.desktopManager.kde4.enable = true;
+      });
+
+    xfce = makeClosure ({ pkgs, ... }:
+      { services.xserver.enable = true;
+        services.xserver.desktopManager.xfce.enable = true;
+      });
+
+    # Linux/Apache/PostgreSQL/PHP stack.
+    lapp = makeClosure ({ pkgs, ... }:
+      { services.httpd.enable = true;
+        services.httpd.adminAddr = "foo@example.org";
+        services.postgresql.enable = true;
+        services.postgresql.package = pkgs.postgresql93;
+        environment.systemPackages = [ pkgs.php ];
+      });
+
+  };
 
 }
