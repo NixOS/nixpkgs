@@ -141,6 +141,7 @@
       unifi = 131;
       gdm = 132;
       dhcpd = 133;
+      neo4j = 134;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
