@@ -3246,6 +3246,8 @@ let
       gtkmathview = callPackage ../development/libraries/gtkmathview { };
     };
 
+    lambdaTerm = callPackage ../development/ocaml-modules/lambda-term { };
+
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
     merlin = callPackage ../development/tools/ocaml/merlin { };
@@ -3290,6 +3292,8 @@ let
 
     ocaml_ssl = callPackage ../development/ocaml-modules/ssl { };
 
+    ocaml_text = callPackage ../development/ocaml-modules/ocaml-text { };
+
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
     ulex = callPackage ../development/ocaml-modules/ulex { };
@@ -3312,9 +3316,14 @@ let
     opam_1_1 = callPackage ../development/tools/ocaml/opam/1.1.nix { };
     opam = opam_1_1;
 
+    utop = callPackage ../development/tools/ocaml/utop { };
+
     yojson = callPackage ../development/ocaml-modules/yojson { };
 
     zarith = callPackage ../development/ocaml-modules/zarith { };
+
+    zed = callPackage ../development/ocaml-modules/zed { };
+
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
