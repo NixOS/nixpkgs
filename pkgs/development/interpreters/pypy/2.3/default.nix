@@ -81,6 +81,7 @@ let
     passthru = {
       inherit zlibSupport libPrefix;
       executable = "pypy";
+      isPypy = true;
     };
 
     enableParallelBuilding = true;
