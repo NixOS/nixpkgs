@@ -987,6 +987,8 @@ let
 
   exempi = callPackage ../development/libraries/exempi { };
 
+  execline = callPackage ../tools/misc/execline { };
+
   exercism = callPackage ../development/tools/exercism { };
 
   exif = callPackage ../tools/graphics/exif { };
