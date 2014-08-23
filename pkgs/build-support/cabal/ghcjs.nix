@@ -189,7 +189,7 @@ builtins.trace (ghc.parent.CabalGhcjs.version or null) {
                 done
               done
 
-              configureFlags+=" --package-db=/nix/store/a68nrd3slc39pgl4s3n485s6nfk3mnbi-haskell-ghcjs-ghc7.8.2-0.1.0-shared/share/ghcjs/x86_64-linux-0.1.0-7.8.2/package.conf.d"
+              configureFlags+=" --package-db=${ghc.ghc}/share/ghcjs/x86_64-linux-0.1.0-7.8.2/ghcjs/package.conf.d"
 
               ${optionalString (self.enableSharedExecutables && self.stdenv.isLinux) ''
                 configureFlags+=" --ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.ghc.name}/${self.pname}-${self.version}";

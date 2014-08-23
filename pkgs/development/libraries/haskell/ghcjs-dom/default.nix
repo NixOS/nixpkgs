@@ -1,9 +1,14 @@
-{ cabal, ghcjsBase, mtl }:
+{ cabal, fetchgit, ghcjsBase, mtl }:
 
 cabal.mkDerivation (self: {
   pname = "ghcjs-dom";
-  version = "0.0.10";
-  sha256 = "0xffr197m6qam4q7ckgcwl0v9kwrxa5fm894c9vyxdmlcjyn38rm";
+  version = "0.1.0.0";
+  src = fetchgit {
+    url = git://github.com/ghcjs/ghcjs-dom.git;
+    rev = "81805e75ccd41501774b90c04efd9e00d52e9798";
+    sha256 = "3aa56fb81974533661aa056ed080edab29bef8ab26dae61999de4452f95949f6";
+  };
+
   buildDepends = [ ghcjsBase mtl ];
   meta = {
     description = "DOM library that supports both GHCJS and WebKitGTK";

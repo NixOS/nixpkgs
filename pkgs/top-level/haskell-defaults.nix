@@ -221,6 +221,10 @@
     let parent = packages_ghc782.override {
           extension = self: super: {
             Cabal = packages_ghc782.CabalGhcjs;
+            transformersCompat = super.transformersCompat_0_3_3_3;
+            haddock = super.haddock.override {
+              Cabal = null;
+            };
           };
         };
     in packages {
@@ -229,27 +233,38 @@
       ghcWrapperPackage = import ../development/compilers/ghcjs/wrapper.nix;
       prefFun = self : super : super // {
         # This is the list of packages that are built into a booted ghcjs installation
-#        Cabal_1_19_2 = null;
-#        Cabal = self.Cabal_1_19_2;
-        Cabal = packages_ghc782.CabalGhcjs;
-        aeson_0_7_0_4 = null;
-        aeson = self.aeson_0_7_0_4;
+        # It can be generated with the command:
+        # nix-shell '<nixpkgs>' -A pkgs.haskellPackages_ghcjs.ghc --command "ghcjs-pkg list | sed -n 's/^    \(.*\)-\([0-9.]*\)$/\1_\2/ p' | sed 's/\./_/g' | sed 's/-\(.\)/\U\1/' | sed 's/^\([^_]*\)\(.*\)$/\1\2 = null;\n\1 = self.\1\2;/'"
+        Cabal_1_21_0_0 = null;
+        Cabal = self.Cabal_1_21_0_0;
+        aeson_0_8_0_0 = null;
+        aeson = self.aeson_0_8_0_0;
         array_0_5_0_0 = null;
         array = self.array_0_5_0_0;
-        attoparsec_0_11_3_1 = null;
-        attoparsec = self.attoparsec_0_11_3_1;
-        base_4_7_0_0 = null;
-        base = self.base_4_7_0_0;
-        bytestring_0_10_4_0 = null;
-        bytestring = self.bytestring_0_10_4_0;
+        async_2_0_1_5 = null;
+        async = self.async_2_0_1_5;
+        attoparsec_0_12_1_0 = null;
+        attoparsec = self.attoparsec_0_12_1_0;
+        base_4_7_0_1 = null;
+        base = self.base_4_7_0_1;
+        binary_0_7_2_1 = null;
+        binary = self.binary_0_7_2_1;
+        rts_1_0 = null;
+        rts = self.rts_1_0;
+        # bytestring_0_10_4_1 = null;
+        # bytestring = self.bytestring_0_10_4_1;
+        caseInsensitive_1_2_0_0 = null;
+        caseInsensitive = self.caseInsensitive_1_2_0_0;
         containers_0_5_5_1 = null;
         containers = self.containers_0_5_5_1;
         deepseq_1_3_0_2 = null;
         deepseq = self.deepseq_1_3_0_2;
         directory_1_2_1_0 = null;
         directory = self.directory_1_2_1_0;
-        dlist_0_7_1 = null;
-        dlist = self.dlist_0_7_1;
+        dlist_0_7_0_1 = null;
+        dlist = self.dlist_0_7_0_1;
+        extensibleExceptions_0_1_1_3 = null;
+        extensibleExceptions = self.extensibleExceptions_0_1_1_3;
         filepath_1_3_0_2 = null;
         filepath = self.filepath_1_3_0_2;
         ghcPrim_0_3_1_0 = null;
@@ -258,42 +273,75 @@
         ghcjsBase = self.ghcjsBase_0_1_0_0;
         ghcjsPrim_0_1_0_0 = null;
         ghcjsPrim = self.ghcjsPrim_0_1_0_0;
-        hashable_1_2_1_0 = null;
-        hashable = self.hashable_1_2_1_0;
+        hashable_1_2_2_0 = null;
+        hashable = self.hashable_1_2_2_0;
         integerGmp_0_5_1_0 = null;
         integerGmp = self.integerGmp_0_5_1_0;
-        mtl_2_1_3_1 = null;
-        mtl = self.mtl_2_1_3_1;
+        mtl_2_2_1 = null;
+        mtl = self.mtl_2_2_1;
         oldLocale_1_0_0_6 = null;
         oldLocale = self.oldLocale_1_0_0_6;
+        oldTime_1_1_0_2 = null;
+        oldTime = self.oldTime_1_1_0_2;
+        parallel_3_2_0_4 = null;
+        parallel = self.parallel_3_2_0_4;
         pretty_1_1_1_1 = null;
         pretty = self.pretty_1_1_1_1;
         primitive_0_5_3_0 = null;
         primitive = self.primitive_0_5_3_0;
-        # process_1_2_0_0 = null;
-        # process = self.process_1_2_0_0;
-        scientific_0_2_0_2 = null;
-        scientific = self.scientific_0_2_0_2;
+        process_1_2_0_0 = null;
+        process = self.process_1_2_0_0;
+        scientific_0_3_3_0 = null;
+        scientific = self.scientific_0_3_3_0;
+        stm_2_4_3 = null;
+        stm = self.stm_2_4_3;
         syb_0_4_2 = null;
         syb = self.syb_0_4_2;
-        templateHaskell_2_9_0_0 = null;
-        templateHaskell = self.templateHaskell_2_9_0_0;
+        # templateHaskell_2_9_0_0 = null;
+        # templateHaskell = self.templateHaskell_2_9_0_0;
         text_1_1_1_3 = null;
         text = self.text_1_1_1_3;
         time_1_4_2 = null;
         time = self.time_1_4_2;
-        transformers_0_3_0_0 = null;
-        transformers = self.transformers_0_3_0_0;
+        transformers_0_4_1_0 = null;
+        transformers = self.transformers_0_4_1_0;
         unix_2_7_0_1 = null;
         unix = self.unix_2_7_0_1;
         unorderedContainers_0_2_5_0 = null;
         unorderedContainers = self.unorderedContainers_0_2_5_0;
         vector_0_10_11_0 = null;
         vector = self.vector_0_10_11_0;
-        # These are necessary for compatibility with ghcjs's default libs
-        transformersCompat = self.transformersCompat_0_3_3;
-        oldTime = self.oldTime_1_1_0_2;
-        process = self.process_1_2_0_0; # ghcjs-boot seems to install process incorrectly, for some reason, so reinstall it
+
+        # This is necessary because haskell-packages will refuse to generate tfRandom for this version of ghc (0.1.0)
+        #TODO: haskell-packages shouldn't use the ghcjs version as the ghc version
+        tfRandom = self.callPackage ../development/libraries/haskell/tf-random {};
+
+/*
+        buildLocalCabalWithArgs = { src, name, args ? {}, cabalDrvArgs ? { jailbreak = true; }, cabal2nix ? packages_ghc782.cabal2nix }: let
+          cabalExpr = pkgs.stdenv.mkDerivation ({
+            name = "${name}.nix";
+
+            buildCommand = ''
+            ${cabal2nix}/bin/cabal2nix ${src + "/${name}.cabal"} --sha256=FILTERME \
+                | grep -v FILTERME | sed \
+                  -e 's/licenses.proprietary/licenses.unfree/' \
+                  -e 's/{ cabal/{ cabal, cabalInstall, cabalDrvArgs ? {}, src/' \
+                  -e 's/cabal.mkDerivation (self: {/cabal.mkDerivation (self: cabalDrvArgs \/\/ {/' \
+                  -e 's/buildDepends = \[/buildDepends = \[ cabalInstall/' \
+                  -e 's/pname = \([^\n]*\)/pname = \1\n  inherit src;\n/'  > $out
+            '';
+
+          } // pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
+            LANG = "en_US.UTF-8";
+            LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
+          });
+        in self.callPackage cabalExpr ({ inherit src cabalDrvArgs; } // args);
+*/
+      };
+      extension = self: super: {
+        buildLocalCabalWithArgs = args: super.buildLocalCabalWithArgs (args // {
+          cabal2nix = packages_ghc782.cabal2nix;
+        });
       };
     };
 

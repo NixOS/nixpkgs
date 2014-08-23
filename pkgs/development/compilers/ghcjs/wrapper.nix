@@ -18,7 +18,7 @@ let
     PATH="$PATH:$2"
     IFS=":"
     for p in $PATH; do
-      for i in "$p/../share/ghcjs/$system-${ghcjs.version}-${ghcjs.ghc.version}"{,/lib}"/package.conf.d" "$p/../lib/ghcjs-${ghc.version}_ghc-${ghc.ghc.version}/package.conf.d" ; do
+      for i in "$p/../share/ghcjs/$system-${ghcjs.version}-${ghcjs.ghc.version}"{,/lib,/ghcjs}"/package.conf.d" "$p/../lib/ghcjs-${ghc.version}_ghc-${ghc.ghc.version}/package.conf.d" ; do
         # output takes place here
         test -f $i/package.cache && echo -n " $prefix$i"
       done

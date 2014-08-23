@@ -847,7 +847,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     Cabal = self.Cabal_1_18_1_3;
   };
 
-  ghcjsDom = callPackage ../development/libraries/haskell/ghcjs-codemirror {};
+  ghcjsDom = callPackage ../development/libraries/haskell/ghcjs-dom {};
 
   ghcjsCodemirror = callPackage ../development/libraries/haskell/ghcjs-codemirror {};
 
@@ -1342,7 +1342,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   lazysmallcheck = callPackage ../development/libraries/haskell/lazysmallcheck {};
 
-  lens = callPackage ../development/libraries/haskell/lens {};
+  lens_4_2 = callPackage ../development/libraries/haskell/lens/4.2.nix {};
+  lens_4_4 = callPackage ../development/libraries/haskell/lens/4.4.nix {};
+  lens = self.lens_4_4;
 
   lensDatetime = callPackage ../development/libraries/haskell/lens-datetime {};
 
@@ -2328,6 +2330,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   transformersBase = callPackage ../development/libraries/haskell/transformers-base {};
 
   transformersCompat_0_3_3 = callPackage ../development/libraries/haskell/transformers-compat/0.3.3.nix {};
+  transformersCompat_0_3_3_3 = callPackage ../development/libraries/haskell/transformers-compat/0.3.3.3.nix {};
   transformersCompat_0_3_3_4 = callPackage ../development/libraries/haskell/transformers-compat/0.3.3.4.nix {};
   transformersCompat = self.transformersCompat_0_3_3_4;
 
@@ -2788,12 +2791,12 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   cabal2nix = callPackage ../development/tools/haskell/cabal2nix {};
 
   # Build a cabal package given a local .cabal file
-  buildLocalCabalWithArgs = { src, name, args ? {}, cabalDrvArgs ? { jailbreak = true; } }: let
+  buildLocalCabalWithArgs = { src, name, args ? {}, cabalDrvArgs ? { jailbreak = true; }, cabal2nix }: let
     cabalExpr = pkgs.stdenv.mkDerivation ({
       name = "${name}.nix";
 
       buildCommand = ''
-      ${self.cabal2nix}/bin/cabal2nix ${src + "/${name}.cabal"} --sha256=FILTERME \
+      ${cabal2nix}/bin/cabal2nix ${src + "/${name}.cabal"} --sha256=FILTERME \
           | grep -v FILTERME | sed \
             -e 's/licenses.proprietary/licenses.unfree/' \
             -e 's/{ cabal/{ cabal, cabalInstall, cabalDrvArgs ? {}, src/' \
