@@ -1,11 +1,11 @@
 { fetchurl, stdenv, libcddb, pkgconfig, ncurses, help2man }:
 
 stdenv.mkDerivation rec {
-  name = "libcdio-0.82";
+  name = "libcdio-0.92";
   
   src = fetchurl {
     url = "mirror://gnu/libcdio/${name}.tar.gz";
-    sha256 = "0fax1dzy84dzs20bmpq2gfw6hc1x2x9mhk53wynhcycjw3l3vjqs";
+    sha256 = "1b9zngn8nnxb1yyngi1kwi73nahp4lsx59j17q1bahzz58svydik";
   };
 
   buildInputs = [ libcddb pkgconfig ncurses help2man ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       ISO-9660 filesystems (libiso9660), as well as utility
       programs such as an audio CD player and an extractor.
     '';
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     homepage = http://www.gnu.org/software/libcdio/;
   };
 }

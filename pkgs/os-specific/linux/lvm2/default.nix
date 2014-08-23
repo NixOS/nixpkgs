@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, udev, utillinux, coreutils }:
 
 let
-  v = "2.02.100";
+  v = "2.02.106";
 in
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "ftp://sources.redhat.com/pub/lvm2/releases/LVM2.${v}.tgz";
-    md5 = "9629cf5728544d7e637cafde1f73d777";
+    sha256 = "0nr833bl0q4zq52drjxmmpf7bs6kqxwa5kahwwxm9411khkxz0vc";
   };
 
   configureFlags =
@@ -28,6 +28,8 @@ stdenv.mkDerivation {
       sed -i /DEFAULT_SYS_DIR/d Makefile.in
       sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in
     '';
+
+  enableParallelBuilding = true;
 
   #patches = [ ./purity.patch ];
 

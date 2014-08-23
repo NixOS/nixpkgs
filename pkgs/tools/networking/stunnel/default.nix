@@ -1,22 +1,22 @@
 { stdenv, fetchurl, openssl }:
 
-stdenv.mkDerivation {
-  name = "stunnel-4.56";
-  
+stdenv.mkDerivation rec {
+  name    = "stunnel-${version}";
+  version = "5.03";
+
   src = fetchurl {
-    url = http://www.stunnel.org/downloads/stunnel-4.56.tar.gz;
-    sha256 = "14qjhwfa0y17ipnd5mc970vfmralvgaxfl6fk0rl91vdwbxjrblw";
+    url    = "http://www.stunnel.org/downloads/${name}.tar.gz";
+    sha256 = "00yx7r46rad3yhdqfwk4grqs87wc6fiq055i91pnwxgscsa3c7ls";
   };
 
-  buildInputs = [openssl];
+  buildInputs = [ openssl ];
+  configureFlags = [ "--with-ssl=${openssl}" ];
 
-  configureFlags = [
-    "--with-ssl=${openssl}"
-  ];
-  
   meta = {
-    description = "Stunnel - Universal SSL wrapper";
-    homepage = http://www.stunnel.org/;
-    license = "GPLv2";
+    description = "universal tls/ssl wrapper";
+    homepage    = "http://www.stunnel.org/";
+    license     = stdenv.lib.licenses.gpl2Plus;
+    platforms   = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }

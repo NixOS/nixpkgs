@@ -1,10 +1,10 @@
 #! @shell@ -e
 
-if test -n "$NIX_CLANG_WRAPPER_START_HOOK"; then
-    source "$NIX_CLANG_WRAPPER_START_HOOK"
+if test -n "$NIX_GCC_WRAPPER_START_HOOK"; then
+    source "$NIX_GCC_WRAPPER_START_HOOK"
 fi
 
-if test -z "$NIX_CLANG_WRAPPER_FLAGS_SET"; then
+if test -z "$NIX_GCC_WRAPPER_FLAGS_SET"; then
     source @out@/nix-support/add-flags.sh
 fi
 
@@ -52,7 +52,6 @@ if test "$nonFlagArgs" = "0"; then
     dontLink=1
 fi
 
-
 # Optionally filter out paths not refering to the store.
 params=("$@")
 if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE"; then
@@ -77,8 +76,13 @@ if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE"; then
         n=$((n + 1))
     done
     params=("${rest[@]}")
+    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE --sysroot=/var/empty"
 fi
 
+if test -n "@libcxx@"; then
+    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem@libcxx@/include/c++/v1 -stdlib=libc++"
+    NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -L@libcxx@/lib -stdlib=libc++ -L@libcxxabi@/lib -lc++abi"
+fi
 
 # Add the flags for the C compiler proper.
 extraAfter=($NIX_CFLAGS_COMPILE)
@@ -133,7 +137,6 @@ fi
 if test -n "$NIX_CLANG_WRAPPER_EXEC_HOOK"; then
     source "$NIX_CLANG_WRAPPER_EXEC_HOOK"
 fi
-
 
 # Call the real `clang'.  Filter out warnings from stderr about unused
 # `-B' flags, since they confuse some programs.  Deep bash magic to

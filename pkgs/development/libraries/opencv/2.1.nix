@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = "BSD";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
+    broken = true;
   };
 }

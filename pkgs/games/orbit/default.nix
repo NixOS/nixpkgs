@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
 			[ customBuild doForceShare doPropagate]);
 	meta = {
 		description = "Orbit space flight simulator";
-		inherit src;
 	};
 }
 

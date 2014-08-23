@@ -37,7 +37,7 @@ rec {
   # `driver' is the script that runs the network.
   runTests = driver:
     stdenv.mkDerivation {
-      name = "vm-test-run";
+      name = "vm-test-run-${driver.testName}";
 
       requiredSystemFeatures = [ "kvm" "nixos-test" ];
 
@@ -67,103 +67,57 @@ rec {
     };
 
 
-  # Generate a coverage report from the coverage data produced by
-  # runTests.
-  makeReport = x: runCommand "report" { buildInputs = [rsync]; }
-    ''
-      mkdir -p $TMPDIR/gcov/
+  makeTest =
+    { testScript, makeCoverageReport ? false, name ? "unnamed", ... } @ t:
 
-      for d in ${x}/coverage-data/*; do
-          echo "doing $d"
-          [ -n "$(ls -A "$d")" ] || continue
+    let
+      testDriverName = "nixos-test-driver-${name}";
 
-          for i in $(cd $d/nix/store && ls); do
-              if ! test -e $TMPDIR/gcov/nix/store/$i; then
-                  echo "copying $i"
-                  mkdir -p $TMPDIR/gcov/$(echo $i | cut -c34-)
-                  rsync -rv /nix/store/$i/.build/* $TMPDIR/gcov/
-              fi
-          done
+      nodes = buildVirtualNetwork (
+        t.nodes or (if t ? machine then { machine = t.machine; } else { }));
 
-          chmod -R u+w $TMPDIR/gcov
+      testScript' =
+        # Call the test script with the computed nodes.
+        if builtins.isFunction testScript
+        then testScript { inherit nodes; }
+        else testScript;
 
-          find $TMPDIR/gcov -name "*.gcda" -exec rm {} \;
+      vlans = map (m: m.config.virtualisation.vlans) (lib.attrValues nodes);
 
-          for i in $(cd $d/nix/store && ls); do
-              rsync -rv $d/nix/store/$i/.build/* $TMPDIR/gcov/
-          done
+      vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
 
-          find $TMPDIR/gcov -name "*.gcda" -exec chmod 644 {} \;
+      # Generate onvenience wrappers for running the test driver
+      # interactively with the specified network, and for starting the
+      # VMs from the command line.
+      driver = runCommand testDriverName
+        { buildInputs = [ makeWrapper];
+          testScript = testScript';
+          preferLocalBuild = true;
+          testName = name;
+        }
+        ''
+          mkdir -p $out/bin
+          echo "$testScript" > $out/test-script
+          ln -s ${testDriver}/bin/nixos-test-driver $out/bin/
+          vms="$(for i in ${toString vms}; do echo $i/bin/run-*-vm; done)"
+          wrapProgram $out/bin/nixos-test-driver \
+            --add-flags "$vms" \
+            --run "testScript=\"\$(cat $out/test-script)\"" \
+            --set testScript '"$testScript"' \
+            --set VLANS '"${toString vlans}"'
+          ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
+          wrapProgram $out/bin/nixos-run-vms \
+            --add-flags "$vms" \
+            --set tests '"startAll; joinAll;"' \
+            --set VLANS '"${toString vlans}"' \
+            ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}
+        ''; # "
 
-          echo "producing info..."
-          ${pkgs.lcov}/bin/geninfo --ignore-errors source,gcov $TMPDIR/gcov --output-file $TMPDIR/app.info
-          cat $TMPDIR/app.info >> $TMPDIR/full.info
-      done
+      test = runTests driver;
 
-      echo "making report..."
-      mkdir -p $out/coverage
-      ${pkgs.lcov}/bin/genhtml --show-details $TMPDIR/full.info -o $out/coverage
-      cp $TMPDIR/full.info $out/coverage/
+      report = releaseTools.gcovReport { coverageRuns = [ test ]; };
 
-      mkdir -p $out/nix-support
-      cat ${x}/nix-support/hydra-build-products >> $out/nix-support/hydra-build-products
-      echo "report coverage $out/coverage" >> $out/nix-support/hydra-build-products
-      [ ! -e ${x}/nix-support/failed ] || touch $out/nix-support/failed
-    ''; # */
-
-
-  makeTest = testFun: complete (call testFun);
-  makeTests = testsFun: lib.mapAttrs (name: complete) (call testsFun);
-
-  apply = makeTest; # compatibility
-  call = f: f { inherit pkgs system; };
-
-  complete = t: t // rec {
-    nodes = buildVirtualNetwork (
-      if t ? nodes then t.nodes else
-      if t ? machine then { machine = t.machine; }
-      else { } );
-
-    testScript =
-      # Call the test script with the computed nodes.
-      if builtins.isFunction t.testScript
-      then t.testScript { inherit nodes; }
-      else t.testScript;
-
-    vlans = map (m: m.config.virtualisation.vlans) (lib.attrValues nodes);
-
-    vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
-
-    # Generate onvenience wrappers for running the test driver
-    # interactively with the specified network, and for starting the
-    # VMs from the command line.
-    driver = runCommand "nixos-test-driver"
-      { buildInputs = [ makeWrapper];
-        inherit testScript;
-        preferLocalBuild = true;
-      }
-      ''
-        mkdir -p $out/bin
-        echo "$testScript" > $out/test-script
-        ln -s ${testDriver}/bin/nixos-test-driver $out/bin/
-        vms="$(for i in ${toString vms}; do echo $i/bin/run-*-vm; done)"
-        wrapProgram $out/bin/nixos-test-driver \
-          --add-flags "$vms" \
-          --run "testScript=\"\$(cat $out/test-script)\"" \
-          --set testScript '"$testScript"' \
-          --set VLANS '"${toString vlans}"'
-        ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
-        wrapProgram $out/bin/nixos-run-vms \
-          --add-flags "$vms" \
-          --set tests '"startAll; joinAll;"' \
-          --set VLANS '"${toString vlans}"' \
-          ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}
-      ''; # "
-
-    test = runTests driver;
-
-    report = makeReport test;
-  };
+    in (if makeCoverageReport then report else test) // { inherit nodes driver test; };
 
 
   runInMachine =
@@ -193,7 +147,7 @@ rec {
         exit $?
       '';
 
-      testscript = ''
+      testScript = ''
         startAll;
         $client->waitForUnit("multi-user.target");
         ${preBuild}
@@ -206,7 +160,7 @@ rec {
         ${coreutils}/bin/mkdir $out
         ${coreutils}/bin/mkdir -p vm-state-client/xchg
         export > vm-state-client/xchg/saved-env
-        export tests='${testscript}'
+        export tests='${testScript}'
         ${testDriver}/bin/nixos-test-driver ${vm.config.system.build.vm}/bin/run-*-vm
       ''; # */
 
@@ -244,6 +198,6 @@ rec {
       } // args);
 
 
-  simpleTest = as: (makeTest ({ ... }: as)).test;
+  simpleTest = as: (makeTest as).test;
 
 }

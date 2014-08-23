@@ -3,17 +3,17 @@
 assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
 
 stdenv.mkDerivation rec {
-  version = "0.150.u0-1";
+  version = "0.151.u0-1";
   name    = "sdlmame-${version}";
 
   src = if stdenv.system == "x86_64-linux"
     then fetchurl {
       url    = "ftp://ftp.archlinux.org/community/os/x86_64/${name}-x86_64.pkg.tar.xz";
-      sha256 = "0393xnzrzq53szmicn96lvapm66wmlykdxaa1n7smx8a0mcz0kah";
+      sha256 = "1j9vjxhrhsskrlk5wr7al4wk2hh3983kcva42mqal09bmc8qg3m9";
     }
     else fetchurl {
       url    = "ftp://ftp.archlinux.org/community/os/i686/${name}-i686.pkg.tar.xz";
-      sha256 = "0js67w2szd0qs7ycgxb3bbmcdziv1fywyd9ihra2f6bq5rhcs2jp";
+      sha256 = "1i38j9ml66pyxzm0zzf1fv4lb40f6w47cdgaw846q91pzakkkqn7";
     };
 
   buildPhase = ''

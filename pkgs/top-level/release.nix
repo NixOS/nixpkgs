@@ -12,7 +12,7 @@
 { nixpkgs ? { outPath = (import ./all-packages.nix {}).lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
 , officialRelease ? false
 , # The platforms for which we build Nixpkgs.
-  supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" "x86_64-freebsd" "i686-freebsd" ]
+  supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" ]
 }:
 
 with import ./release-lib.nix { inherit supportedSystems; };
@@ -35,6 +35,10 @@ let
               # Ensure that X11/GTK+ are in order.
               jobs.thunderbird.x86_64-linux
               jobs.thunderbird.i686-linux
+              /* not ready yet
+              jobs.glib-tested.x86_64-linux # standard glib doesn't do checks
+              jobs.glib-tested.i686-linux
+              */
             ];
         };
 
@@ -48,9 +52,8 @@ let
       atlas = linux;
       audacious = linux;
       autoconf = all;
-      automake110x = all;
-      automake111x = all;
-      avahi = allBut "i686-cygwin";  # Cygwin builds fail
+      automake = all;
+      avahi = allBut cygwin;  # Cygwin builds fail
       bash = all;
       bashInteractive = all;
       bazaar = linux; # first let sqlite3 work on darwin
@@ -95,7 +98,6 @@ let
       drgeo = linux;
       ejabberd = linux;
       elinks = linux;
-      emacs23 = gtkSupported;
       enscript = all;
       eprover = linux;
       evince = linux;
@@ -106,7 +108,6 @@ let
       file = all;
       findutils = all;
       flex = all;
-      flex2535 = all;
       fontforge = linux;
       fuse = linux;
       gajim = linux;
@@ -114,9 +115,8 @@ let
       gcc = linux;
       gcc33 = linux;
       gcc34 = linux;
-      gcc42 = linux;
       gcc44 = linux;
-      gcj44 = linux;
+      gcj = linux;
       ghdl = linux;
       ghostscript = linux;
       ghostscriptX = linux;
@@ -127,13 +127,13 @@ let
       glibcLocales = linux;
       glxinfo = linux;
       gnash = linux;
-      gnat44 = linux;
+      gnat = linux;
       gnugrep = all;
       gnum4 = all;
       gnumake = all;
       gnupatch = all;
       gnupg = linux;
-      gnuplot = allBut "i686-cygwin";
+      gnuplot = allBut cygwin;
       gnused = all;
       gnutar = all;
       gnutls = linux;
@@ -141,7 +141,6 @@ let
       gphoto2 = linux;
       gpm = linux;
       gprolog = linux;
-      gpsbabel = all;
       gpscorrelate = linux;
       gpsd = linux;
       gqview = gtkSupported;
@@ -184,7 +183,6 @@ let
       libtool = all;
       libtool_2 = all;
       lout = linux;
-      lsh = linux;
       lsof = linux;
       ltrace = linux;
       lvm2 = linux;
@@ -213,8 +211,7 @@ let
       mysql = linux;
       mysql51 = linux;
       mysql55 = linux;
-      namazu = all;
-      nano = allBut "i686-cygwin";
+      nano = allBut cygwin;
       ncat = linux;
       netcat = all;
       nfsUtils = linux;
@@ -247,7 +244,7 @@ let
       pthreadmanpages = linux;
       pygtk = linux;
       pyqt4 = linux;
-      python = allBut "i686-cygwin";
+      python = allBut cygwin;
       pythonFull = linux;
       sbcl = linux;
       qt3 = linux;
@@ -258,7 +255,7 @@ let
       rogue = all;
       rpm = linux;
       rsync = linux;
-      rubber = allBut "i686-cygwin";
+      rubber = allBut cygwin;
       ruby = all;
       rxvt_unicode = linux;
       screen = linux ++ darwin;
@@ -268,10 +265,10 @@ let
       sgtpuzzles = linux;
       sharutils = all;
       slim = linux;
-      sloccount = allBut "i686-cygwin";
+      sloccount = allBut cygwin;
       smartmontools = linux;
       spidermonkey = linux;
-      sqlite = allBut "i686-cygwin";
+      sqlite = allBut cygwin;
       squid = linux;
       ssmtp = linux;
       stdenv = prio 175 all;
@@ -295,7 +292,6 @@ let
       texLive = linux;
       texLiveBeamer = linux;
       texLiveExtra = linux;
-      texinfo = all;
       tightvnc = linux;
       time = linux;
       tinycc = linux;
@@ -311,8 +307,6 @@ let
       vice = linux;
       vim = linux;
       vimHugeX = linux;
-      VisualBoyAdvance = linux;
-      vlc = linux;
       vncrec = linux;
       vorbisTools = linux;
       vpnc = linux;
@@ -334,7 +328,6 @@ let
       xineUI = linux;
       xkeyboard_config = linux;
       xlockmore = linux;
-      xmltv = linux;
       xpdf = linux;
       xscreensaver = linux;
       xsel = linux;
@@ -345,17 +338,6 @@ let
       zip = all;
       zsh = linux;
       zsnes = ["i686-linux"];
-
-      emacs23Packages = {
-        bbdb = linux;
-        cedet = linux;
-        emacsw3m = linux;
-        emms = linux;
-        jdee = linux;
-      };
-
-      firefox36Pkgs.firefox = linux;
-      firefoxPkgs.firefox = linux;
 
       gnome = {
         gnome_panel = linux;
@@ -372,6 +354,10 @@ let
       };
 
       haskellPackages_ghc704 = {
+        ghc = ghcSupported;
+      };
+
+      haskellPackages_ghc722 = {
         ghc = ghcSupported;
       };
 
@@ -396,21 +382,21 @@ let
       };
 
       xorg = {
-        fontadobe100dpi = linux;
-        fontadobe75dpi = linux;
-        fontbh100dpi = linux;
-        fontbhlucidatypewriter100dpi = linux;
-        fontbhlucidatypewriter75dpi = linux;
-        fontbhttf = linux;
-        fontcursormisc = linux;
-        fontmiscmisc = linux;
-        iceauth = linux;
-        libX11 = linux;
-        lndir = all;
-        setxkbmap = linux;
-        xauth = linux;
-        xbitmaps = linux;
-        xev = linux;
+        fontadobe100dpi = linux ++ darwin;
+        fontadobe75dpi = linux ++ darwin;
+        fontbh100dpi = linux ++ darwin;
+        fontbhlucidatypewriter100dpi = linux ++ darwin;
+        fontbhlucidatypewriter75dpi = linux ++ darwin;
+        fontbhttf = linux ++ darwin;
+        fontcursormisc = linux ++ darwin;
+        fontmiscmisc = linux ++ darwin;
+        iceauth = linux ++ darwin;
+        libX11 = linux ++ darwin;
+        lndir = all ++ darwin;
+        setxkbmap = linux ++ darwin;
+        xauth = linux ++ darwin;
+        xbitmaps = linux ++ darwin;
+        xev = linux ++ darwin;
         xf86inputevdev = linux;
         xf86inputkeyboard = linux;
         xf86inputmouse = linux;
@@ -420,17 +406,20 @@ let
         xf86videointel = linux;
         xf86videonv = linux;
         xf86videovesa = linux;
-        xfs = linux;
-        xkbcomp = linux;
-        xlsclients = linux;
-        xmessage = linux;
-        xorgserver = linux;
-        xprop = linux;
-        xrandr = linux;
-        xrdb = linux;
-        xset = linux;
-        xsetroot = linux;
-        xwininfo = linux;
+        xf86videovmware = linux;
+        xf86videomodesetting = linux;
+        xfs = linux ++ darwin;
+        xinput = linux ++ darwin;
+        xkbcomp = linux ++ darwin;
+        xlsclients = linux ++ darwin;
+        xmessage = linux ++ darwin;
+        xorgserver = linux ++ darwin;
+        xprop = linux ++ darwin;
+        xrandr = linux ++ darwin;
+        xrdb = linux ++ darwin;
+        xset = linux ++ darwin;
+        xsetroot = linux ++ darwin;
+        xwininfo = linux ++ darwin;
       };
 
       xfce = {

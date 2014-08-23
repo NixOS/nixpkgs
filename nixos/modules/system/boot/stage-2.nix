@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -17,15 +17,16 @@ let
     src = ./stage-2-init.sh;
     shellDebug = "${pkgs.bashInteractive}/bin/bash";
     isExecutable = true;
-    inherit (config.boot) devShmSize runSize cleanTmpDir;
+    inherit (config.boot) devShmSize runSize;
     inherit (config.nix) readOnlyStore;
+    inherit (config.networking) useHostResolvConf;
     ttyGid = config.ids.gids.tty;
     path =
       [ pkgs.coreutils
         pkgs.utillinux
         pkgs.sysvtools
-      ] ++ (optional config.boot.cleanTmpDir pkgs.findutils)
-      ++ optional config.nix.readOnlyStore readonlyMountpoint;
+        pkgs.openresolv
+      ] ++ optional config.nix.readOnlyStore readonlyMountpoint;
     postBootCommands = pkgs.writeText "local-cmds"
       ''
         ${config.boot.postBootCommands}
@@ -76,14 +77,6 @@ in
         description = ''
           Size limit for the /run tmpfs. Look at mount(8), tmpfs size option,
           for the accepted syntax.
-        '';
-      };
-
-      cleanTmpDir = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to delete all files in <filename>/tmp</filename> during boot.
         '';
       };
 

@@ -1,0 +1,69 @@
+From 9d6e12eb6b06202519e48a7321f32944d7a34b0f Mon Sep 17 00:00:00 2001
+From: Jeremy Huddleston Sequoia <jeremyhu@apple.com>
+Date: Sat, 24 May 2014 14:08:16 -0700
+Subject: [PATCH 1003/1003] darwin: Guard Core Profile usage behind a testing
+ envvar
+
+Signed-off-by: Jeremy Huddleston Sequoia <jeremyhu@apple.com>
+(cherry picked from commit 04ce3be4010305902cc5ae81e8e0c8550d043a1e)
+---
+ src/glx/apple/apple_visual.c | 30 ++++++++++++++++++++----------
+ 1 file changed, 20 insertions(+), 10 deletions(-)
+
+diff --git a/src/glx/apple/apple_visual.c b/src/glx/apple/apple_visual.c
+index 951b213..046581b 100644
+--- a/src/glx/apple/apple_visual.c
++++ b/src/glx/apple/apple_visual.c
+@@ -82,16 +82,7 @@ apple_visual_create_pfobj(CGLPixelFormatObj * pfobj, const struct glx_config * m
+    int numattr = 0;
+    GLint vsref = 0;
+    CGLError error = 0;
+-
+-   /* Request an OpenGL 3.2 profile if one is available and supported */
+-   attr[numattr++] = kCGLPFAOpenGLProfile;
+-   attr[numattr++] = kCGLOGLPVersion_3_2_Core;
+-
+-   /* Test for kCGLPFAOpenGLProfile support at runtime and roll it out if not supported */
+-   attr[numattr] = 0;
+-   error = apple_cgl.choose_pixel_format(attr, pfobj, &vsref);
+-   if (error == kCGLBadAttribute)
+-      numattr -= 2;
++   bool use_core_profile = getenv("LIBGL_PROFILE_CORE");
+ 
+    if (offscreen) {
+       apple_glx_diagnostic
+@@ -167,12 +158,31 @@ apple_visual_create_pfobj(CGLPixelFormatObj * pfobj, const struct glx_config * m
+       attr[numattr++] = mode->samples;
+    }
+ 
++   /* Debugging support for Core profiles to support newer versions of OpenGL */
++   if (use_core_profile) {
++      attr[numattr++] = kCGLPFAOpenGLProfile;
++      attr[numattr++] = kCGLOGLPVersion_3_2_Core;
++   }
++
+    attr[numattr++] = 0;
+ 
+    assert(numattr < MAX_ATTR);
+ 
+    error = apple_cgl.choose_pixel_format(attr, pfobj, &vsref);
+ 
++   if ((error == kCGLBadAttribute || vsref == 0) && use_core_profile) {
++      apple_glx_diagnostic
++         ("Trying again without CoreProfile: error=%s, vsref=%d\n", apple_cgl.error_string(error), vsref);
++
++      if (!error)
++         apple_cgl.destroy_pixel_format(*pfobj);
++
++      numattr -= 3;
++      attr[numattr++] = 0;
++
++      error = apple_cgl.choose_pixel_format(attr, pfobj, &vsref);
++   }
++
+    if (error) {
+       snprintf(__crashreporter_info_buff__, sizeof(__crashreporter_info_buff__),
+                "CGLChoosePixelFormat error: %s\n", apple_cgl.error_string(error));
+-- 
+1.9.2 (Apple Git-49)
+

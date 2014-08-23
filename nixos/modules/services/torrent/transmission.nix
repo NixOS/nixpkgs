@@ -1,13 +1,14 @@
-# NixOS module for Transmission BitTorrent daemon
+{ config, lib, pkgs, ... }:
 
-{ config, pkgs, ... }:
-
-with pkgs.lib;
+with lib;
 
 let
-
   cfg = config.services.transmission;
+  apparmor = config.security.apparmor.enable;
+
   homeDir = "/var/lib/transmission";
+  downloadDir = "${homeDir}/Downloads";
+  incompleteDir = "${homeDir}/.incomplete";
   settingsDir = "${homeDir}/.config/transmission-daemon";
   settingsFile = "${settingsDir}/settings.json";
 
@@ -15,7 +16,7 @@ let
   toOption = x:
     if x == true then "true"
     else if x == false then "false"
-    else if builtins.isInt x then toString x
+    else if isInt x then toString x
     else toString ''\"${x}\"'';
 
   # All lines in settings.json end with a ',' (comma), except for the last
@@ -31,16 +32,12 @@ let
         (if isList value then value else [value]))
         as));
 
+  # for users in group "transmission" to have access to torrents
+  fullSettings = cfg.settings // { umask = 2; };
 in
-
 {
-
-  ### configuration
-
   options = {
-
     services.transmission = {
-
       enable = mkOption {
         type = types.uniq types.bool;
         default = false;
@@ -59,65 +56,48 @@ in
         type = types.attrs;
         default =
           {
-            # for users in group "transmission" to have access to torrents
-            umask = 2;
-          }
-        ;
+            download-dir = downloadDir;
+            incomplete-dir = incompleteDir;
+            incomplete-dir-enabled = true;
+          };
         example =
           {
             download-dir = "/srv/torrents/";
             incomplete-dir = "/srv/torrents/.incomplete/";
             incomplete-dir-enabled = true;
             rpc-whitelist = "127.0.0.1,192.168.*.*";
-            # for users in group "transmission" to have access to torrents
-            umask = 2;
-          }
-        ;
+          };
         description = ''
           Attribute set whos fields overwrites fields in settings.json (each
           time the service starts). String values must be quoted, integer and
           boolean values must not.
 
-          See https://trac.transmissionbt.com/wiki/EditConfigFiles for documentation
-          and/or look at ${settingsFile}."
+          See https://trac.transmissionbt.com/wiki/EditConfigFiles for
+          documentation and/or look at ${settingsFile}.
         '';
       };
 
-      rpc_port = mkOption {
+      port = mkOption {
         type = types.uniq types.int;
         default = 9091;
         description = "TCP port number to run the RPC/web interface.";
       };
-
-      apparmor = mkOption {
-        type = types.uniq types.bool;
-        default = true;
-        description = "Generate apparmor profile for transmission-daemon.";
-      };
     };
-
   };
 
-  ### implementation
-
   config = mkIf cfg.enable {
-
     systemd.services.transmission = {
-      description = "Transmission BitTorrent Daemon";
-      after = [ "network.target" ] ++ optional (config.security.apparmor.enable && cfg.apparmor) "apparmor.service";
-      requires = mkIf (config.security.apparmor.enable && cfg.apparmor) [ "apparmor.service" ];
+      description = "Transmission BitTorrent Service";
+      after = [ "network.target" ] ++ optional apparmor "apparmor.service";
+      requires = mkIf apparmor [ "apparmor.service" ];
       wantedBy = [ "multi-user.target" ];
 
       # 1) Only the "transmission" user and group have access to torrents.
       # 2) Optionally update/force specific fields into the configuration file.
-      serviceConfig.ExecStartPre =
-        if cfg.settings != {} then ''
-          ${pkgs.stdenv.shell} -c "chmod 770 ${homeDir} && mkdir -p ${settingsDir} && ${pkgs.transmission}/bin/transmission-daemon -d |& sed ${attrsToSedArgs cfg.settings} > ${settingsFile}.tmp && mv ${settingsFile}.tmp ${settingsFile}"
-        ''
-        else ''
-          ${pkgs.stdenv.shell} -c "chmod 770 ${homeDir}"
-        '';
-      serviceConfig.ExecStart = "${pkgs.transmission}/bin/transmission-daemon -f --port ${toString config.services.transmission.rpc_port}";
+      serviceConfig.ExecStartPre = ''
+          ${pkgs.stdenv.shell} -c "chmod 770 ${homeDir} && mkdir -p ${settingsDir} ${downloadDir} ${incompleteDir} && ${pkgs.transmission}/bin/transmission-daemon -d |& sed ${attrsToSedArgs fullSettings} > ${settingsFile}.tmp && mv ${settingsFile}.tmp ${settingsFile}"
+      '';
+      serviceConfig.ExecStart = "${pkgs.transmission}/bin/transmission-daemon -f --port ${toString config.services.transmission.port}";
       serviceConfig.ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       serviceConfig.User = "transmission";
       # NOTE: transmission has an internal umask that also must be set (in settings.json)
@@ -127,6 +107,7 @@ in
     # It's useful to have transmission in path, e.g. for remote control
     environment.systemPackages = [ pkgs.transmission ];
 
+    users.extraGroups.transmission.gid = config.ids.gids.transmission;
     users.extraUsers.transmission = {
       group = "transmission";
       uid = config.ids.uids.transmission;
@@ -135,10 +116,8 @@ in
       createHome = true;
     };
 
-    users.extraGroups.transmission.gid = config.ids.gids.transmission;
-
     # AppArmor profile
-    security.apparmor.profiles = mkIf (config.security.apparmor.enable && cfg.apparmor) [
+    security.apparmor.profiles = mkIf apparmor [
       (pkgs.writeText "apparmor-transmission-daemon" ''
         #include <tunables/global>
 
@@ -146,13 +125,17 @@ in
           #include <abstractions/base>
           #include <abstractions/nameservice>
 
-          ${pkgs.glibc}/lib/*.so             mr,
-          ${pkgs.libevent}/lib/libevent*.so* mr,
-          ${pkgs.curl}/lib/libcurl*.so*      mr,
-          ${pkgs.openssl}/lib/libssl*.so*    mr,
-          ${pkgs.openssl}/lib/libcrypto*.so* mr,
-          ${pkgs.zlib}/lib/libz*.so*         mr,
-          ${pkgs.libssh2}/lib/libssh2*.so*   mr,
+          ${pkgs.glibc}/lib/*.so               mr,
+          ${pkgs.libevent}/lib/libevent*.so*   mr,
+          ${pkgs.curl}/lib/libcurl*.so*        mr,
+          ${pkgs.openssl}/lib/libssl*.so*      mr,
+          ${pkgs.openssl}/lib/libcrypto*.so*   mr,
+          ${pkgs.zlib}/lib/libz*.so*           mr,
+          ${pkgs.libssh2}/lib/libssh2*.so*     mr,
+          ${pkgs.systemd}/lib/libsystemd*.so*  mr,
+          ${pkgs.xz}/lib/liblzma*.so*          mr,
+          ${pkgs.libgcrypt}/lib/libgcrypt*.so* mr,
+          ${pkgs.libgpgerror}/lib/libgpg-error*.so* mr,
 
           @{PROC}/sys/kernel/random/uuid   r,
           @{PROC}/sys/vm/overcommit_memory r,
@@ -161,9 +144,9 @@ in
 
           owner ${settingsDir}/** rw,
 
-          ${cfg.settings.download-dir}/** rw,
-          ${optionalString cfg.settings.incomplete-dir-enabled ''
-            ${cfg.settings.incomplete-dir}/** rw,
+          ${fullSettings.download-dir}/** rw,
+          ${optionalString fullSettings.incomplete-dir-enabled ''
+            ${fullSettings.incomplete-dir}/** rw,
           ''}
         }
       '')

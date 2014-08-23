@@ -1,21 +1,21 @@
-{ stdenv, fetchurl, fetchbzr, unzip, cmake, mesa, gtk, wxGTK, zlib, libX11, 
-gettext, cups } : 
+{ stdenv, fetchurl, fetchbzr, cmake, mesa, wxGTK, zlib, libX11, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "kicad-20130325";
+  name = "kicad-20131025";
 
-  src = fetchurl {
-    url = "http://iut-tice.ujf-grenoble.fr/cao/kicad-sources-stable_2013-03-25_BZR4005.zip";
-    sha256 = "0hg2aiis14am7mmpimcxnxvhy7c7fr5rgzlk6rjv44d9m0f9957m";
+  src = fetchbzr {
+    url = "https://code.launchpad.net/~kicad-stable-committers/kicad/stable";
+    rev = 4024;
+    sha256 = "1sv1l2zpbn6439ccz50p05hvqg6j551aqra551wck9h3929ghly5";
   };
 
   srcLibrary = fetchbzr {
     url = "http://bazaar.launchpad.net/~kicad-lib-committers/kicad/library";
-    revision = 220;
-    sha256 = "0l2lblgnm51n2w1p4ifpwdvq04rxgq73zrfxlhqa9zdlyh4rcddb";
+    rev = 293;
+    sha256 = "1wn9a4nhqyjzzfkq6xm7ag8n5n10xy7gkq6i7yry7wxini7pzv1i";
   };
 
-  cmakeFlags = "-DKICAD_TESTING_VERSION=ON";
+  cmakeFlags = "-DKICAD_STABLE_VERSION=ON";
 
   # They say they only support installs to /usr or /usr/local,
   # so we have to handle this.
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
     sed -i -e 's,/usr/local/kicad,'$out,g common/gestfich.cpp
   '';
 
-  enableParallelBuilding = true;
+  #enableParallelBuilding = true; # often fails on Hydra: fatal error: pcb_plot_params_lexer.h: No such file or directory
 
-  buildInputs = [ unzip cmake mesa wxGTK zlib libX11 gettext ];
+  buildInputs = [ cmake mesa wxGTK zlib libX11 gettext ];
 
   postInstall = ''
     mkdir library
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Free Software EDA Suite";
     homepage = "http://www.kicad-pcb.org/";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

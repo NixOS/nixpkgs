@@ -5,14 +5,14 @@
 , unrar, p7zip, par2cmdline, coreutils
 }:
 
-let version = "0.8.1";
+let version = "0.8.4";
     name = "kwooty-${version}";
 in stdenv.mkDerivation {
   inherit name;
   
   src = fetchurl {
     url = "mirror://sourceforge/kwooty/${name}.tar.gz";
-    sha256 = "746ed50ec3c067711932c89dc3ee5527c126f37c6922b3eda49535eb83c245e4";
+    sha256 = "0i3zmh7y52n5k0yn3xc6zjpjz75f48nly40n394i6sxy89psgfc2";
   };
 
   patches = [ ./searchPath.patch ];

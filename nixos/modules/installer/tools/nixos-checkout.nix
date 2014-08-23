@@ -1,9 +1,9 @@
 # This module generates the nixos-checkout script, which replaces the
 # Nixpkgs source trees in /etc/nixos/nixpkgs with a Git checkout.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

@@ -13,11 +13,11 @@ assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.30.0";
+  name = "curl-7.36.0";
 
   src = fetchurl {
     url = "http://curl.haxx.se/download/${name}.tar.bz2";
-    sha256 = "04dgm9aqvplsx43n8xin5rkr8mwmc6mdd1gcp80jda5yhw1l273b";
+    sha256 = "1kfgygvmxgaakxl2f3h3jlar23n6xmvg03ybm36pqsydkfw85ghz";
   };
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
@@ -27,11 +27,15 @@ stdenv.mkDerivation rec {
     optional zlibSupport zlib ++
     optional gssSupport gss ++
     optional c-aresSupport c-ares ++
-    optional sslSupport openssl;
+    optional sslSupport openssl ++
+    optional scpSupport libssh2;
 
+  # for the second line see http://curl.haxx.se/mail/tracker-2014-03/0087.html
   preConfigure = ''
     sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
+    rm src/tool_hugehelp.c
   '';
+
   configureFlags = [
       ( if sslSupport then "--with-ssl=${openssl}" else "--without-ssl" )
       ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
@@ -67,9 +71,10 @@ stdenv.mkDerivation rec {
     inherit sslSupport openssl;
   };
 
-  meta = {
-    homepage = "http://curl.haxx.se/";
+  meta = with stdenv.lib; {
     description = "A command line tool for transferring files with URL syntax";
-    platforms = stdenv.lib.platforms.all;
+    homepage    = http://curl.haxx.se/;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms   = platforms.all;
   };
 }

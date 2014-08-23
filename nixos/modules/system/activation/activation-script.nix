@@ -1,7 +1,7 @@
 # generate the script used to activate the configuration.
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -66,12 +66,15 @@ in
                 PATH=$PATH:$i/bin:$i/sbin
             done
 
+            _status=0
+            trap "_status=1" ERR
+
             # Ensure a consistent umask.
             umask 0022
 
             ${
               let
-                set' = mapAttrs (n: v: if builtins.isString v then noDepEntry v else v) set;
+                set' = mapAttrs (n: v: if isString v then noDepEntry v else v) set;
                 withHeadlines = addAttributeName set';
               in textClosureMap id (withHeadlines) (attrNames withHeadlines)
             }
@@ -84,6 +87,8 @@ in
 
             # Prevent the current configuration from being garbage-collected.
             ln -sfn /run/current-system /nix/var/nix/gcroots/current-system
+
+            exit $_status
           '';
       };
 
@@ -109,12 +114,12 @@ in
       ''
         # Various log/runtime directories.
 
-        touch /var/run/utmp # must exist
-        chgrp ${toString config.ids.gids.utmp} /var/run/utmp
-        chmod 664 /var/run/utmp
+        touch /run/utmp # must exist
+        chgrp ${toString config.ids.gids.utmp} /run/utmp
+        chmod 664 /run/utmp
 
-        mkdir -m 0755 -p /var/run/nix/current-load # for distributed builds
-        mkdir -m 0700 -p /var/run/nix/remote-stores
+        mkdir -m 0755 -p /run/nix/current-load # for distributed builds
+        mkdir -m 0700 -p /run/nix/remote-stores
 
         mkdir -m 0755 -p /var/log
 
@@ -125,11 +130,6 @@ in
 
         # Empty, read-only home directory of many system accounts.
         mkdir -m 0555 -p /var/empty
-      '';
-
-    system.activationScripts.media =
-      ''
-        mkdir -m 0755 -p /media
       '';
 
     system.activationScripts.usrbinenv =

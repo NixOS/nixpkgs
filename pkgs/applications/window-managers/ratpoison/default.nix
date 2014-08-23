@@ -2,11 +2,11 @@
 , libXtst, xextproto, readline, libXi, pkgconfig, perl, autoconf, automake }:
 
 stdenv.mkDerivation rec {
-  name = "ratpoison-1.4.5";
+  name = "ratpoison-1.4.6";
 
   src = fetchurl {
     url = "mirror://savannah/ratpoison/${name}.tar.gz";
-    sha256 = "7391079db20b8613eecfd81d64d243edc9d3c586750c8f2da2bb9db14d260f03";
+    sha256 = "1y1b38bng0naxfy50asshzg5xr1b2rn88mcgbds42y72d7y9d0za";
   };
 
   buildInputs =
@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
 
   preConfigure = "autoreconf -vf";      # needed because of the patch above
 
-  patches = [ ./glibc-fix.patch ];
-
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp
     mv "$out/share/ratpoison/"*.el $out/share/emacs/site-lisp/
@@ -28,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.nongnu.org/ratpoison/";
     description = "Ratpoison, a simple mouse-free tiling window manager";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     longDescription = ''
        Ratpoison is a simple window manager with no fat library
@@ -45,7 +43,7 @@ stdenv.mkDerivation rec {
        cripples Emacs and other quality pieces of software.
     '';
 
-    maintainers = [ stdenv.lib.maintainers.simons ];
-    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = stdenv.lib.platforms.linux;
+    maintainers = [ ];
   };
 }

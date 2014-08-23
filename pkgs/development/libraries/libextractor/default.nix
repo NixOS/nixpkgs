@@ -7,11 +7,11 @@ assert gtkSupport -> glib != null && gtk3 != null;
 assert videoSupport -> ffmpeg != null && libmpeg2 != null;
 
 stdenv.mkDerivation rec {
-  name = "libextractor-1.0.1";
+  name = "libextractor-1.2";
 
   src = fetchurl {
     url = "mirror://gnu/libextractor/${name}.tar.gz";
-    sha256 = "1khy9s86vq6667h02zp2fvb16sqm27xlmr0xchgfxvsd6ascnl9j";
+    sha256 = "1n7z6s5ils6xmf6b0z1xda41maxj94c1n6wlyyxmacs5lrkh2a96";
   };
 
   preConfigure =
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
          additional MIME types are detected.
       '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = [ ];
   };

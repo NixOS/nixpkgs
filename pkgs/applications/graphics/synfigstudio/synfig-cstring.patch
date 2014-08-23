@@ -1,0 +1,12 @@
+http://www.synfig.org/issues/thebuggenie/synfig/issues/438
+--- a/src/modules/mod_png/trgt_png.cpp
++++ b/src/modules/mod_png/trgt_png.cpp
+@@ -39,6 +39,7 @@
+ #include <algorithm>
+ #include <functional>
+ #include <ETL/misc>
++#include <cstring>
+ 
+ #endif
+ 
+

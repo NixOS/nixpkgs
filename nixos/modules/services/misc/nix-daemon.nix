@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -22,14 +22,11 @@ let
 
   nixConf =
     let
-      # Tricky: if we're using a chroot for builds, then we need
-      # /bin/sh in the chroot (our own compromise to purity).
-      # However, since /bin/sh is a symlink to some path in the
-      # Nix store, which furthermore has runtime dependencies on
-      # other paths in the store, we need the closure of /bin/sh
-      # in `build-chroot-dirs' - otherwise any builder that uses
-      # /bin/sh won't work.
-      binshDeps = pkgs.writeReferencesToFile config.system.build.binsh;
+      # If we're using a chroot for builds, then provide /bin/sh in
+      # the chroot as a bind-mount to bash. This means we also need to
+      # include the entire closure of bash.
+      sh = pkgs.stdenv.shell;
+      binshDeps = pkgs.writeReferencesToFile sh;
     in
       pkgs.runCommand "nix.conf" {extraOptions = cfg.extraOptions; } ''
         extraPaths=$(for i in $(cat ${binshDeps}); do if test -d $i; then echo $i; fi; done)
@@ -40,7 +37,7 @@ let
         build-users-group = nixbld
         build-max-jobs = ${toString (cfg.maxJobs)}
         build-use-chroot = ${if cfg.useChroot then "true" else "false"}
-        build-chroot-dirs = ${toString cfg.chrootDirs} $(echo $extraPaths)
+        build-chroot-dirs = ${toString cfg.chrootDirs} /bin/sh=${sh} $(echo $extraPaths)
         binary-caches = ${toString cfg.binaryCaches}
         trusted-binary-caches = ${toString cfg.trustedBinaryCaches}
         $extraOptions
@@ -58,7 +55,7 @@ in
     nix = {
 
       package = mkOption {
-        type = types.path;
+        type = types.package;
         default = pkgs.nix;
         description = ''
           This option specifies the Nix package instance to use throughout the system.
@@ -253,8 +250,6 @@ in
 
   config = {
 
-    nix.chrootDirs = [ "/dev" "/dev/pts" "/proc" "/bin" ];
-
     environment.etc."nix/nix.conf".source = nixConf;
 
     # List of machines for distributed Nix builds in the format
@@ -275,25 +270,18 @@ in
           ) cfg.buildMachines;
       };
 
-    systemd.sockets."nix-daemon" =
-      { description = "Nix Daemon Socket";
-        wantedBy = [ "sockets.target" ];
-        before = [ "multi-user.target" ];
-        socketConfig.ListenStream = "/nix/var/nix/daemon-socket/socket";
-      };
+    systemd.packages = [ nix ];
 
-    systemd.services."nix-daemon" =
-      { description = "Nix Daemon";
+    systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 
-        path = [ nix pkgs.openssl pkgs.utillinux ]
-          ++ optionals cfg.distributedBuilds [ pkgs.openssh pkgs.gzip ];
+    systemd.services.nix-daemon =
+      { path = [ nix pkgs.openssl pkgs.utillinux pkgs.openssh ]
+          ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
 
         environment = cfg.envVars // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-bundle.crt"; };
 
         serviceConfig =
-          { ExecStart = "@${nix}/bin/nix-daemon nix-daemon --daemon";
-            KillMode = "process";
-            Nice = cfg.daemonNiceLevel;
+          { Nice = cfg.daemonNiceLevel;
             IOSchedulingPriority = cfg.daemonIONiceLevel;
             LimitNOFILE = 4096;
           };
@@ -325,16 +313,14 @@ in
       };
 
     # Set up the environment variables for running Nix.
-    environment.variables = cfg.envVars;
+    environment.sessionVariables = cfg.envVars;
 
     environment.extraInit =
       ''
         # Set up secure multi-user builds: non-root users build through the
         # Nix daemon.
-        if test "$USER" != root; then
+        if [ "$USER" != root -o ! -w /nix/var/nix/db ]; then
             export NIX_REMOTE=daemon
-        else
-            export NIX_REMOTE=
         fi
       '';
 
@@ -351,8 +337,7 @@ in
           /nix/var/nix/profiles \
           /nix/var/nix/db \
           /nix/var/log/nix/drvs \
-          /nix/var/nix/channel-cache \
-          /nix/var/nix/chroots
+          /nix/var/nix/channel-cache
         mkdir -m 1777 -p \
           /nix/var/nix/gcroots/per-user \
           /nix/var/nix/profiles/per-user \

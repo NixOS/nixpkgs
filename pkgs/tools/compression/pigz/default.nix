@@ -1,14 +1,14 @@
 { stdenv, fetchurl, zlib, utillinux }:
 
 let name = "pigz";
-    version = "2.2.4";
+    version = "2.3.1";
 in
 stdenv.mkDerivation {
   name = name + "-" + version;
 
   src = fetchurl {
     url = "http://www.zlib.net/${name}/${name}-${version}.tar.gz";
-    sha256 = "7e7967c47f66c07be97cbfa25c8816b72f9d35258466ea31eddc7666c914160e";
+    sha256 = "0m5gw134wfqy1wwqzla0f6c88bxys1sq5gs22zrphf9a8bjhr6v2";
   };
 
   buildInputs = [zlib] ++ stdenv.lib.optional stdenv.isLinux utillinux;
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     homepage = "http://www.zlib.net/pigz/";
     description = "A parallel implementation of gzip for multi-core machines";
 
-    platforms = stdenv.lib.platforms.unix;
+    hydraPlatforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

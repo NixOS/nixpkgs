@@ -52,6 +52,18 @@ rec {
     alsaLib_32bit = pkgs_i686.alsaLib;
   };
   
+  androidsdk_2_2 = androidsdk {
+    platformVersions = [ "8" ];
+    abiVersions = [ "armeabi-v7a" ];
+    useGoogleAPIs = true;
+  };
+  
+  androidsdk_4_0 = androidsdk {
+    platformVersions = [ "15" ];
+    abiVersions = [ "armeabi-v7a" ];
+    useGoogleAPIs = true;
+  };
+  
   androidsdk_4_1 = androidsdk {
     platformVersions = [ "16" ];
     abiVersions = [ "armeabi-v7a" ];
@@ -69,10 +81,14 @@ rec {
     abiVersions = [ "armeabi-v7a" "x86" ];
     useGoogleAPIs = true;
   };
+
+  androidndk = import ./androidndk.nix {
+    inherit (pkgs) stdenv fetchurl zlib ncurses;
+  };
   
   buildApp = import ./build-app.nix {
-    inherit (pkgs) stdenv jdk ant;
-    inherit androidsdk;
+    inherit (pkgs) stdenv jdk ant gnumake gawk file which;
+    inherit androidsdk androidndk;
   };
   
   emulateApp = import ./emulate-app.nix {

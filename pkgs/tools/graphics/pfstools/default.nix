@@ -2,11 +2,11 @@
 freeglut, bzip2, libX11, libpng, expat, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "pfstools-1.8.3";
+  name = "pfstools-1.8.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/pfstools/${name}.tar.gz";
-    sha256 = "1j3pzwpxvsx9220176bfjallc73jyda61xqkvnmlxqfd3n7ycgx1";
+    sha256 = "01kk2r8afrb3vrhm8abfjdhhan97lzpapc4n8w1mpdp3kv9miy9c";
   };
 
   configureFlags = "--with-moc=${qt4}/bin/moc";

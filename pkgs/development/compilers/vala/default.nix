@@ -1,31 +1,31 @@
-{ stdenv, fetchurl, yacc, flex, pkgconfig, glib, dbus, dbus_tools
-, libiconvOrEmpty, libintlOrEmpty }:
+{ stdenv, fetchurl, pkgconfig, flex, bison, libxslt
+, glib, libiconvOrEmpty, libintlOrEmpty
+}:
 
+let
+  major = "0.23";
+  minor = "2";
+  sha256 = "0g22ss9qbm3fqhx4fxhsyfmdc5g1hgdw4dz9d37f4489kl0qf8pl";
+in
 stdenv.mkDerivation rec {
-  p_name  = "vala";
-  ver_maj = "0.19";
-  ver_min = "0";
-
-  src = fetchurl {
-    url = "mirror://gnome/sources/${p_name}/${ver_maj}/${name}.tar.xz";
-    sha256 = "1vn524hcnaggz8zx49mvf7p4z1mscrlj2syg7jjhph8nak5wi0bp";
-  };
-  name = "${p_name}-${ver_maj}.${ver_min}";
-
-  postPatch = "patchShebangs .";
-
-  nativeBuildInputs = [ yacc flex pkgconfig ];
-
-  buildInputs = [ glib ] ++ libiconvOrEmpty ++ libintlOrEmpty
-    ++ stdenv.lib.optional doCheck [ dbus dbus_tools ];
-
-  doCheck = false; # problems when launching dbus tests
+  name = "vala-${major}.${minor}";
 
   meta = {
-    description = "Compiler for the GObject type system";
+    description = "Compiler for GObject type system";
     homepage = "http://live.gnome.org/Vala";
-    license = "free-copyleft";
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.antono ];
+    license = stdenv.lib.licenses.lgpl21Plus;
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.lib.maintainers; [ antono ];
   };
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/vala/${major}/${name}.tar.xz";
+    inherit sha256;
+  };
+
+  nativeBuildInputs = [ pkgconfig flex bison libxslt ];
+
+  buildInputs = [ glib ]
+    ++ libiconvOrEmpty
+    ++ libintlOrEmpty;
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, cmake, qt4 }:
+{ stdenv, fetchurl, alsaLib, cmake, mesa, makeWrapper, qt4 }:
 
 stdenv.mkDerivation  rec {
   name = "pianobooster-${version}";
@@ -9,14 +9,25 @@ stdenv.mkDerivation  rec {
     sha256 = "1xwyap0288xcl0ihjv52vv4ijsjl0yq67scc509aia4plmlm6l35";
   };
 
+  patches = [
+    ./pianobooster-0.6.4b-cmake.patch
+    ./pianobooster-0.6.4b-cmake-gcc4.7.patch
+  ];
+
   preConfigure = "cd src";
 
-  buildInputs = [ alsaLib cmake qt4 ];
+  buildInputs = [ alsaLib cmake makeWrapper mesa qt4 ];
+
+  postInstall = ''
+    wrapProgram $out/bin/pianobooster \
+      --prefix LD_LIBRARY_PATH : ${mesa}/lib
+  '';
 
   meta = with stdenv.lib; {
     description = "A MIDI file player that teaches you how to play the piano";
     homepage = http://pianobooster.sourceforge.net;
     license = licenses.gpl3;
+    platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];
   };
 }

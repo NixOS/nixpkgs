@@ -1,21 +1,21 @@
-{ stdenv, fetchurl, libnice, pkgconfig, python, gstreamer, gst_plugins_base
-, pygobject, gst_python, gupnp_igd
-, gst_plugins_good, gst_plugins_bad, gst_ffmpeg
+{ stdenv, fetchurl, libnice, pkgconfig, python, gstreamer, gst-plugins-base
+, pygobject, gst-python, gupnp_igd
+, gst-plugins-good, gst-plugins-bad, gst-libav
 }:
 
 stdenv.mkDerivation rec {
-  name = "farstream-0.1.2";
+  name = "farstream-0.2.4";
   src = fetchurl {
     url = "http://www.freedesktop.org/software/farstream/releases/farstream/${name}.tar.gz";
-    sha256 = "1nbkbvq959f70zhr03fwdibhs0sbf1k7zmbz9w99vda7gdcl0nps";
+    sha256 = "0c5vlyiwb799wpby4g9vffiy0nf09gy2cr84ksfy3jwzsxf5n38j";
   };
 
   buildInputs = [ libnice python pygobject gupnp_igd libnice ];
 
   nativeBuildInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ gstreamer gst_plugins_base gst_python
-    gst_plugins_good gst_plugins_bad gst_ffmpeg
+  propagatedBuildInputs = [ gstreamer gst-plugins-base gst-python
+    gst-plugins-good gst-plugins-bad gst-libav
     ];
 
   meta = {

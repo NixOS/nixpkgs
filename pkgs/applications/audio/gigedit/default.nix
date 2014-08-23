@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     description = "Gigasampler file access library";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux;
   };
 }

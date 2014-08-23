@@ -1,14 +1,14 @@
-{ fetchurl, stdenv, guile, ncurses }:
+{ fetchurl, stdenv, guile, ncurses, libffi }:
 
 stdenv.mkDerivation rec {
-  name = "guile-ncurses-1.3";
+  name = "guile-ncurses-1.4";
 
   src = fetchurl {
     url = "mirror://gnu/guile-ncurses/${name}.tar.gz";
-    sha256 = "0chvfjrlmg99db98ra9vzwjmbypqx7d4ssm8q0kvzi0n0p9irszi";
+    sha256 = "070wl664lsm14hb6y9ch97x9q6cns4k6nxgdzbdzi5byixn74899";
   };
 
-  buildInputs = [ guile ncurses ];
+  buildInputs = [ guile ncurses libffi ];
 
   preConfigure =
     '' configureFlags="$configureFlags --with-guilesitedir=$out/share/guile/site" '';
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
          form, panel, and menu.
       '';
 
-    license = "LGPLv3+";
+    license = stdenv.lib.licenses.lgpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice

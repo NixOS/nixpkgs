@@ -1,12 +1,14 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, perl, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "libtasn1-2.13";
+  name = "libtasn1-3.6";
 
   src = fetchurl {
     url = "mirror://gnu/libtasn1/${name}.tar.gz";
-    sha256 = "14asfhi35pwc67v7abbwim344h444237bjaqp92gwhhx7m44cvm5";
+    sha256 = "0c547qa1vfk1x2jzgjhf65izf4sfi86c6g46q7779g4aldk4gqqr";
   };
+
+  buildInputs = [ perl texinfo ];
 
   doCheck = true;
 
@@ -20,7 +22,7 @@ stdenv.mkDerivation rec {
          portable, and only require an ANSI C89 platform.
       '';
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;

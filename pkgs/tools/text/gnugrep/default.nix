@@ -13,6 +13,8 @@ stdenv.mkDerivation {
   buildInputs = [ pcre ]
     ++ stdenv.lib.optional (libiconv != null) libiconv;
 
+  patches = [ ./test-localeconv.patch ];
+
   NIX_LDFLAGS = stdenv.lib.optionalString (libiconv != null) "-L${libiconv}/lib -liconv";
 
   doCheck = !stdenv.isDarwin;
@@ -33,7 +35,7 @@ stdenv.mkDerivation {
       prints the matching lines.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;

@@ -1,19 +1,18 @@
 /* A small release file, with few packages to be built.  The aim is to reduce
-   the load on Hydra when testing the `stdenv-updates' branch.
+   the load on Hydra when testing the `stdenv-updates' branch. */
 
+{ nixpkgs ? { outPath = (import ./all-packages.nix {}).lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
+, supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" ]
+}:
 
-   This file will be evaluated by hydra with a call like this:
-   hydra_eval_jobs --gc-roots-dir \
-     /nix/var/nix/gcroots/per-user/hydra/hydra-roots --argstr \
-     system i686-linux --argstr system x86_64-linux --arg \
-     nixpkgs "{outPath = ./}" .... release.nix
-
-   Hydra can be installed with "nix-env -i hydra".  */
-with import ./release-lib.nix { supportedSystems = [ "x86_64-linux" ]; };
+with import ./release-lib.nix { inherit supportedSystems; };
 
 {
 
-  tarball = import ./make-tarball.nix;
+  tarball = import ./make-tarball.nix {
+    inherit nixpkgs;
+    officialRelease = false;
+  };
 
 } // (mapTestOn (rec {
 
@@ -23,9 +22,8 @@ with import ./release-lib.nix { supportedSystems = [ "x86_64-linux" ]; };
   aterm25 = all;
   aterm28 = all;
   autoconf = all;
-  automake110x = all;
-  automake111x = all;
-  avahi = allBut "i686-cygwin";  # Cygwin builds fail
+  automake = all;
+  avahi = allBut cygwin;  # Cygwin builds fail
   bash = all;
   bashInteractive = all;
   bc = all;
@@ -47,23 +45,21 @@ with import ./release-lib.nix { supportedSystems = [ "x86_64-linux" ]; };
   file = all;
   findutils = all;
   flex = all;
-  flex2535 = all;
   gcc = all;
   gcc33 = linux;
   gcc34 = linux;
-  gcc42 = linux;
   gcc44 = linux;
-  gcj44 = linux;
+  gcj = linux;
   ghdl = linux;
   glibc = linux;
   glibcLocales = linux;
-  gnat44 = linux;
+  gnat = linux;
   gnugrep = all;
   gnum4 = all;
   gnumake = all;
   gnupatch = all;
   gnupg = linux;
-  gnuplot = allBut "i686-cygwin";
+  gnuplot = allBut cygwin;
   gnused = all;
   gnutar = all;
   gnutls = linux;
@@ -146,7 +142,7 @@ with import ./release-lib.nix { supportedSystems = [ "x86_64-linux" ]; };
   policykit = linux;
   portmap = linux;
   procps = linux;
-  python = allBut "i686-cygwin";
+  python = allBut cygwin;
   pythonFull = linux;
   readline = all;
   rlwrap = all;
@@ -156,9 +152,9 @@ with import ./release-lib.nix { supportedSystems = [ "x86_64-linux" ]; };
   scrot = linux;
   sdparm = linux;
   sharutils = all;
-  sloccount = allBut "i686-cygwin";
+  sloccount = allBut cygwin;
   smartmontools = all;
-  sqlite = allBut "i686-cygwin";
+  sqlite = allBut cygwin;
   squid = linux;
   ssmtp = linux;
   stdenv = prio 175 all;
@@ -198,7 +194,7 @@ with import ./release-lib.nix { supportedSystems = [ "x86_64-linux" ]; };
   zile = linux;
   zip = all;
 
-  dbus_all = {
+  dbus = {
     libs = linux;
     daemon = linux;
     tools = linux;

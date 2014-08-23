@@ -1,6 +1,6 @@
 addCVars () {
     if test -d $1/include; then
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$1/include"
+        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem $1/include"
     fi
 
     if test -d $1/lib64; then

@@ -1,11 +1,14 @@
 { stdenv, fetchurl, cmake, libtiff, libpng, libjpeg, doxygen, python,
   fftw, fftwSinglePrec, hdf5, boost, numpy }:
 stdenv.mkDerivation rec {
-  name = "vigra-1.8.0";
+  name = "vigra-1.9.0";
 
   src = fetchurl {
-    url = "${meta.homepage}/${name}-src.tar.gz";
-    sha256 = "0542qy1bqaq73l7i8aqdhwdbhd6m1wldsn1w2sfyf8yf4398ffpw";
+    urls = [
+      "${meta.homepage}/${name}-src.tar.gz"
+      "${meta.homepage}-old-versions/${name}-src.tar.gz"
+      ];
+    sha256 = "00fg64da6dj9k42d90dz6y7x91xw1xqppcla14im74m4afswrgcg";
   };
 
   buildInputs = [ cmake fftw fftwSinglePrec libtiff libpng libjpeg python boost
@@ -17,8 +20,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Novel computer vision C++ library with customizable algorithms and data structures";
-    homepage = http://hci.iwr.uni-heidelberg.de/vigra/;
-    license = "MIT";
+    homepage = http://hci.iwr.uni-heidelberg.de/vigra;
+    license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   _name   = "lockfile-progs";
-  version = "0.1.16";
+  version = "0.1.17";
   name    = "${_name}-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/l/${_name}/${_name}_${version}.tar.gz";
-    sha256 = "0sca19mg0lk68ms6idy4vfp8dyjpcbq9f143v9qzjyk86bb34lgr";
+    sha256 = "04f5cvhrld15w58wkg6k2azywszsc5xp9cbmfx4jylwrak90byq3";
   };
 
   buildInputs = [ liblockfile ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Programs for locking and unlocking files and mailboxes";
     homepage = http://packages.debian.org/sid/lockfile-progs;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
 
     maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
     platforms = stdenv.lib.platforms.all;

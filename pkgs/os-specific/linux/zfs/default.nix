@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, kernelDev, spl, perl, autoconf, automake, libtool, zlib, libuuid, coreutils, utillinux }:
+{ stdenv, fetchurl, kernel, spl, perl, autoconf, automake, libtool, zlib, libuuid, coreutils, utillinux }:
 
 stdenv.mkDerivation {
-  name = "zfs-0.6.2-${kernelDev.version}";
+  name = "zfs-0.6.3-${kernel.version}";
 
   src = fetchurl {
-    url = http://archive.zfsonlinux.org/downloads/zfsonlinux/zfs/zfs-0.6.2.tar.gz;
-    sha256 = "18b5f18k8mwb17r5ippsilmp1a2sqjw9fwn0z82159dkhsadg33b";
+    url = http://archive.zfsonlinux.org/downloads/zfsonlinux/zfs/zfs-0.6.3.tar.gz;
+    sha256 = "06rrip9fxn13x6qnyp6br68r9pcygb95lld25hnnj88m2vagvg19";
   };
 
   patches = [ ./mount_zfs_prefix.patch ./nix-build.patch ];
 
-  buildInputs = [ kernelDev spl perl autoconf automake libtool zlib libuuid coreutils ];
+  buildInputs = [ spl perl autoconf automake libtool zlib libuuid coreutils ];
 
   # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
   NIX_CFLAGS_LINK = "-lgcc_s";
@@ -27,11 +27,14 @@ stdenv.mkDerivation {
     substituteInPlace ./cmd/ztest/ztest.c          --replace "/usr/sbin/zdb"     "$out/sbin/zdb"
   '';
 
-  configureFlags = ''
-    --with-linux=${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build 
-    --with-linux-obj=${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build 
-    --with-spl=${spl}/libexec/spl
-  '';
+  configureFlags = [
+    "--disable-systemd"
+    "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
+    "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "--with-spl=${spl}/libexec/spl"
+    "--with-dracutdir=$(out)/lib/dracut"
+    "--with-udevdir=$(out)/lib/udev"
+  ];
 
   enableParallelBuilding = true;
 
@@ -45,6 +48,6 @@ stdenv.mkDerivation {
     homepage = http://zfsonlinux.org/;
     license = stdenv.lib.licenses.cddl;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
+    maintainers = with stdenv.lib.maintainers; [ jcumming wizeman ];
   };
 }

@@ -46,8 +46,7 @@ rec {
     [
       raskin
     ];
-    platforms = with a.lib.platforms;
-      [];
+    hydraPlatforms = [];
     license = "free-noncopyleft";
   };
   passthru = {

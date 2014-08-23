@@ -1,17 +1,27 @@
-{stdenv, fetchurl, unzip} :
+{ stdenv, antBuild, fetchgit, perl }:
 
-stdenv.mkDerivation {
-  name = "junit-4.8.2";
-  builder = ./builder.sh;
+let
+  version = "4.11";
+in antBuild {
+  name = "junit-${version}";
 
-  src = fetchurl {
-    url = https://github.com/downloads/junit-team/junit/junit4.8.2.zip;
-    sha256 = "01simvc3pmgp27p7vzavmsx5rphm6hqzwrqfkwllhf3812dcqxy6";
+  # I think this is only used to generate the docs, and will likely disappear
+  # with the next release of junit since its build system completely changes.
+  buildInputs = [perl];
+
+  src = fetchgit {
+    url = "https://github.com/junit-team/junit.git";
+    sha256 = "019azv0cfy2zs45c7g3r952gvjmikkq76p2ydr4q5252r0pzy9dr";
+    rev = "c2e4d911fadfbd64444fb285342a8f1b72336169";
   };
 
-  inherit unzip;
+  antProperties = [
+    { name = "version"; value = version; }
+  ];
 
   meta = {
     homepage = http://www.junit.org/;
+    description = "A framework for repeatable tests in Java";
+    license = stdenv.lib.licenses.epl10;
   };
 }

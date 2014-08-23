@@ -62,4 +62,10 @@ stdenv.mkDerivation {
       ln -s asm $out/include/asm-x86
     fi
   '';
+
+  meta = with stdenv.lib; {
+    description = "Header files and scripts for Linux kernel";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+  };
 }

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, pkgconfig, xorg, libjpeg, libpng
-, fontconfig, freetype, pam, dbus_libs }:
+, fontconfig, freetype, pam, dbus_libs, makeWrapper, pkgs }:
 
 stdenv.mkDerivation rec {
   name = "slim-1.3.6";
 
   src = fetchurl {
-    url = "http://download.berlios.de/slim/${name}.tar.gz";
+    url = "mirror://sourceforge/slim.berlios/${name}.tar.gz";
     sha256 = "1pqhk22jb4aja4hkrm7rjgbgzjyh7i4zswdgf5nw862l2znzxpi1";
   };
 
@@ -20,22 +20,24 @@ stdenv.mkDerivation rec {
       ./run-once.patch
     ];
 
-  preConfigure = "substituteInPlace CMakeLists.txt --replace /etc $out/etc --replace /lib $out/lib";
+  preConfigure = "substituteInPlace CMakeLists.txt --replace /lib $out/lib";
 
   cmakeFlags = [ "-DUSE_PAM=1" ];
+
+  NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype";
 
   enableParallelBuilding = true;
 
   buildInputs =
     [ cmake pkgconfig libjpeg libpng fontconfig freetype
       pam dbus_libs
-      xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXmu xorg.libXft
+      xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXmu xorg.libXft makeWrapper
     ];
 
   NIX_CFLAGS_LINK = "-lXmu";
 
   meta = {
-    homepage = http://slim.berlios.de;
+    homepage = http://sourceforge.net/projects/slim.berlios/; # berlios shut down; I found no replacement yet
     platforms = stdenv.lib.platforms.linux;
   };
 }

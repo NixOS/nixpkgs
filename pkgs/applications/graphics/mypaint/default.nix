@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, gettext, glib, gtk, json_c, lcms2, libpng
-, makeWrapper, pkgconfig, pygtk, python, pythonPackages, scons, swig
+{ stdenv, fetchurl, gettext, glib, gtk, hicolor_icon_theme, json_c
+, lcms2, libpng , makeWrapper, pkgconfig, pygtk, python, pythonPackages
+, scons, swig
 }:
 
 stdenv.mkDerivation rec {
@@ -11,18 +12,21 @@ stdenv.mkDerivation rec {
     sha256 = "0f7848hr65h909c0jkcx616flc0r4qh53g3kd1cgs2nr1pjmf3bq";
   };
 
-  buildInputs = [ 
+  buildInputs = [
     gettext glib gtk json_c lcms2 libpng makeWrapper pkgconfig pygtk
     python scons swig
   ];
- 
-  propagatedBuildInputs = [ pythonPackages.numpy ];
+
+  propagatedBuildInputs = [ hicolor_icon_theme pythonPackages.numpy ];
 
   buildPhase = "scons prefix=$out";
 
   installPhase = ''
     scons prefix=$out install
-    wrapProgram $out/bin/mypaint --prefix PYTHONPATH : $PYTHONPATH
+    sed -i -e 's|/usr/bin/env python2.7|${python}/bin/python|' $out/bin/mypaint
+    wrapProgram $out/bin/mypaint \
+      --prefix PYTHONPATH : $PYTHONPATH \
+      --prefix XDG_DATA_DIRS ":" "${hicolor_icon_theme}/share"
   '';
 
   meta = with stdenv.lib; {

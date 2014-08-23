@@ -1,11 +1,11 @@
-{stdenv, fetchgit}:
+{ stdenv, fetchurl }:
+
 stdenv.mkDerivation rec {
-  version = "0.4";
+  version = "0.5";
   name = "reptyr-${version}";
-  src = fetchgit {
-    url = "https://github.com/nelhage/reptyr.git";
-    rev = "refs/tags/${name}";
-    sha256 = "2d2814c210e4bde6f9bcf3aa20477287d7e4a5aa7ee09110b37d2eaaf7e5ecae";
+  src = fetchurl {
+    url = "https://github.com/nelhage/reptyr/archive/reptyr-${version}.tar.gz";
+    sha256 = "077cvjjf534nxh7qqisw27a0wa61mdgyik43k50f8v090rggz2xm";
   };
   makeFlags = ["PREFIX=$(out)"];
   meta = {

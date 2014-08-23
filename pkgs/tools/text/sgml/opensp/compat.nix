@@ -1,9 +1,9 @@
 { stdenv, opensp }:
 
 stdenv.mkDerivation {
-  name = "sp-compat-${builtins.substring 7 100 opensp.name}";
+  name = "sp-compat-${stdenv.lib.getVersion opensp}";
 
-  phases = [ "fixupPhase" "installPhase" ];
+  phases = [ "installPhase" "fixupPhase" ];
 
   installPhase = ''
     mkdir -pv $out/bin

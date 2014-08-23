@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   cpu = builtins.head (stdenv.lib.splitString "-" stdenv.system);
 
-  target = if cpu == "i686" then "P6" else 
+  target = if cpu == "i686" then "P2" else 
     if cpu == "x86_64" then "CORE2" else
      # allow autodetect
       "";
@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     description = "Basic Linear Algebra Subprograms";
     license = stdenv.lib.licenses.bsd3;
     homepage = "https://github.com/xianyi/OpenBLAS";
+    platforms = [ "x86_64-linux" ];
   };
 }

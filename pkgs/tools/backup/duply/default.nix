@@ -1,12 +1,13 @@
 { stdenv, fetchurl, coreutils, python, duplicity, gawk, gnupg1, bash
-, gnugrep, txt2man, makeWrapper }:
+, gnugrep, txt2man, makeWrapper
+}:
 
 stdenv.mkDerivation {
-  name = "duply-1.5.11";
+  name = "duply-1.7.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/ftplicity/duply%20%28simple%20duplicity%29/1.5.x/duply_1.5.11.tgz";
-    sha256 = "07z4wl75z227v8y9xwc2pfdp307a5jzx4sif598vprqync0g6mmk";
+    url = "mirror://sourceforge/project/ftplicity/duply%20%28simple%20duplicity%29/1.7.x/duply_1.7.3.tgz";
+    sha256 = "1lq5gwz69l8g4ki4anvmjdngbs9nin124j1zb9kbcnqj0s5jkbp0";
   };
 
   buildInputs = [ txt2man makeWrapper ];

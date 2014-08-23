@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -52,19 +52,7 @@ in
     # /dev/tty0 to prevent putting the X server in non-raw mode, and
     # it has a restart trigger.
     systemd.services."systemd-vconsole-setup" =
-      { description = "Setup Virtual Console";
-        wantedBy = [ "sysinit.target" "multi-user.target" ];
-        before = [ "sysinit.target" "shutdown.target" ];
-        unitConfig =
-          { DefaultDependencies = "no";
-            Conflicts = "shutdown.target";
-            ConditionPathExists = "/dev/tty1";
-          };
-        serviceConfig =
-          { Type = "oneshot";
-            RemainAfterExit = true;
-            ExecStart = "${config.systemd.package}/lib/systemd/systemd-vconsole-setup /dev/tty1";
-          };
+      { wantedBy = [ "multi-user.target" ];
         restartTriggers = [ vconsoleConf ];
       };
 

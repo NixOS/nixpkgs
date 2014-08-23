@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "patchelf-0.6";
+  name = "patchelf-0.8";
 
   src = fetchurl {
     url = "http://nixos.org/releases/patchelf/${name}/${name}.tar.bz2";
-    sha256 = "fc7e7fa95f282fc37a591a802629e0e1ed07bc2a8bf162228d9a69dd76127c01";
+    sha256 = "c99f84d124347340c36707089ec8f70530abd56e7827c54d506eb4cc097a17e7";
   };
 
   doCheck = true;
@@ -14,5 +14,7 @@ stdenv.mkDerivation rec {
     homepage = http://nixos.org/patchelf.html;
     license = "GPL";
     description = "A small utility to modify the dynamic linker and RPATH of ELF executables";
+    maintainers = [ stdenv.lib.maintainers.eelco ];
+    platforms = stdenv.lib.platforms.all;
   };
 }

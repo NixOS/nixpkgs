@@ -1,33 +1,38 @@
 { stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux
 , glib, kbd, libxslt, coreutils, libgcrypt, sysvtools, docbook_xsl
-, kexectools
+, kexectools, libmicrohttpd, linuxHeaders
+, pythonPackages ? null, pythonSupport ? false
+, autoreconfHook
 }:
 
 assert stdenv.isLinux;
 
+assert pythonSupport -> pythonPackages != null;
+
 stdenv.mkDerivation rec {
-  version = "203";
+  version = "212";
   name = "systemd-${version}";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "07gvn3rpski8sh1nz16npjf2bvj0spsjdwc5px9685g2pi6kxcb1";
+    sha256 = "1hpjcc42svrs06q3isjm3m5aphgkpfdylmvpnif71zh46ys0cab5";
   };
 
   outputs = [ "out" "man" "libudev" ];
 
   patches =
     [ # These are all changes between upstream and
-      # https://github.com/edolstra/systemd/tree/nixos-v203.
+      # https://github.com/edolstra/systemd/tree/nixos-v212.
       ./fixes.patch
-    ]
-    ++ stdenv.lib.optional stdenv.isArm ./libc-bug-accept4-arm.patch;
+    ];
 
   buildInputs =
-    [ pkgconfig intltool gperf libcap dbus.libs kmod xz pam acl
+    [ pkgconfig intltool gperf libcap kmod xz pam acl
       /* cryptsetup */ libuuid m4 glib libxslt libgcrypt docbook_xsl
-    ];
+      libmicrohttpd linuxHeaders
+      autoreconfHook
+    ] ++ stdenv.lib.optionals pythonSupport [pythonPackages.python pythonPackages.lxml];
 
   configureFlags =
     [ "--localstatedir=/var"
@@ -42,15 +47,19 @@ stdenv.mkDerivation rec {
       "--with-dbussessionservicedir=$(out)/share/dbus-1/services"
       "--with-firmware-path=/root/test-firmware:/run/current-system/firmware"
       "--with-tty-gid=3" # tty in NixOS has gid 3
+      "--disable-networkd" # enable/use eventually
+      "--enable-compat-libs" # get rid of this eventually
+      "--disable-tests"
     ];
 
   preConfigure =
     ''
       # FIXME: patch this in systemd properly (and send upstream).
       # FIXME: use sulogin from util-linux once updated.
-      for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.m4.in src/journal/cat.c src/core/shutdown.c; do
+      for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.m4.in src/journal/cat.c src/core/shutdown.c src/nspawn/nspawn.c; do
         test -e $i
         substituteInPlace $i \
+          --replace /usr/bin/getent ${stdenv.glibc.bin}/bin/getent \
           --replace /bin/mount ${utillinux.bin}/bin/mount \
           --replace /bin/umount ${utillinux.bin}/bin/umount \
           --replace /sbin/swapon ${utillinux.bin}/sbin/swapon \
@@ -68,6 +77,10 @@ stdenv.mkDerivation rec {
       export NIX_CFLAGS_LINK+=" -Wl,-rpath,$libudev/lib"
     '';
 
+  # This is needed because systemd uses the gold linker, which doesn't
+  # yet have the wrapper script to add rpath flags automatically.
+  NIX_LDFLAGS = "-rpath ${pam}/lib -rpath ${libcap}/lib -rpath ${acl}/lib -rpath ${stdenv.gcc.gcc}/lib";
+
   PYTHON_BINARY = "${coreutils}/bin/env python"; # don't want a build time dependency on Python
 
   NIX_CFLAGS_COMPILE =
@@ -75,10 +88,6 @@ stdenv.mkDerivation rec {
       # lead to a cyclic dependency.
       "-UPOLKIT_AGENT_BINARY_PATH" "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
       "-fno-stack-protector"
-
-      # Work around our kernel headers being too old.  FIXME: remove
-      # this after the next stdenv update.
-      "-DFS_NOCOW_FL=0x00800000"
 
       # Set the release_agent on /sys/fs/cgroup/systemd to the
       # currently running systemd (/run/current-system/systemd) so
@@ -93,7 +102,12 @@ stdenv.mkDerivation rec {
   # /var is mounted.
   makeFlags = "hwdb_bin=/var/lib/udev/hwdb.bin";
 
-  installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc sysvinitdir=$(TMPDIR)/etc/init.d";
+  installFlags =
+    [ "localstatedir=$(TMPDIR)/var"
+      "sysconfdir=$(out)/etc"
+      "sysvinitdir=$(TMPDIR)/etc/init.d"
+      "pamconfdir=$(out)/etc/pam.d"
+    ];
 
   # Get rid of configuration-specific data.
   postInstall =
@@ -101,6 +115,8 @@ stdenv.mkDerivation rec {
       mkdir -p $out/example/systemd
       mv $out/lib/{modules-load.d,binfmt.d,sysctl.d,tmpfiles.d} $out/example
       mv $out/lib/systemd/{system,user} $out/example/systemd
+
+      rm -rf $out/etc/systemd/system
 
       # Install SysV compatibility commands.
       mkdir -p $out/sbin
@@ -136,19 +152,6 @@ stdenv.mkDerivation rec {
   # systemd builds is the same, then we can switch between them at
   # runtime; otherwise we can't and we need to reboot.
   passthru.interfaceVersion = 2;
-
-  passthru.headers = stdenv.mkDerivation {
-    name = "systemd-headers-${version}";
-    inherit src;
-
-    phases = [ "unpackPhase" "installPhase" ];
-
-    # some are needed by dbus.libs, which is needed for systemd :-)
-    installPhase = ''
-      mkdir -p "$out/include/systemd"
-      mv src/systemd/*.h "$out/include/systemd"
-    '';
-  };
 
   meta = {
     homepage = "http://www.freedesktop.org/wiki/Software/systemd";

@@ -3,11 +3,11 @@
 assert stdenv ? gcc && stdenv.gcc ? gcc && stdenv.gcc.gcc != null;
 
 stdenv.mkDerivation rec {
-  name = "guile-lib-0.2.1";
+  name = "guile-lib-0.2.2";
 
   src = fetchurl {
     url = "mirror://savannah/guile-lib/${name}.tar.gz";
-    sha256 = "0ag18l7f9cpv4l577ln3f106xiggl7ndxhrqqiz7cg0w38s3cjvl";
+    sha256 = "1f9n2b5b5r75lzjinyk6zp6g20g60msa0jpfrk5hhg4j8cy0ih4b";
   };
 
   buildInputs = [guile texinfo];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = http://www.nongnu.org/guile-lib/;
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice

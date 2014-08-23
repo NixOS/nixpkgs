@@ -1,14 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "cifs-utils-5.6";
+  name = "cifs-utils-6.3";
 
   src = fetchurl {
     url = "ftp://ftp.samba.org/pub/linux-cifs/cifs-utils/${name}.tar.bz2";
-    sha256 = "0f619nw1163bcmfc83mmqj31qdkl68wfm81vynx3d8q0m0k1ll7i";
+    sha256 = "0nrpd3ibzfhdxgq1pw0jhzx163z5jvq4qcjxl35qlqj74lm3pxzz";
   };
-
-  patches = [ ./find-systemd-ask-password-via-path.patch ];
 
   makeFlags = "root_sbindir=$(out)/sbin";
 

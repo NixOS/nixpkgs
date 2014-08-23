@@ -1,11 +1,11 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
-  configfile = builtins.storePath (builtins.toFile "config" (pkgs.lib.concatStringsSep "\n"
+  configfile = builtins.storePath (builtins.toFile "config" (lib.concatStringsSep "\n"
     (map (builtins.getAttr "configLine") config.system.requiredKernelConfig))
   );
 
-  origKernel = pkgs.linuxManualConfig {
+  origKernel = pkgs.buildLinux {
     inherit (pkgs.linux) src version;
     inherit configfile;
     allowImportFromDerivation = true;

@@ -1,31 +1,30 @@
-{ stdenv, coreutils, fetchurl, python, dropbox }:
-
+{ stdenv, pkgconfig, fetchurl, python, dropbox }:
+let
+  version = "1.6.2";
+in
 stdenv.mkDerivation {
-  # 1.6.0 because it's the only version mentioned in the script
-  name = "dropbox-cli-1.6.0";
+  name = "dropbox-cli-${version}";
 
   src = fetchurl {
-    # Note: dropbox doesn't version this file. Annoying.
-    url = "https://linux.dropbox.com/packages/dropbox.py";
-    sha256 = "0p1pg8bw6mlhqi5k8y3pgs7byg0kfvq57s53sh188lb5sxvlg7yz";
+    url = "https://linux.dropbox.com/packages/nautilus-dropbox-${version}.tar.bz2";
+    sha256 = "1r1kqvnf5a0skby6rr8bmxg128z97fz4gb1n7zlc1vyhqw4k3mb3";
   };
 
-  buildInputs = [ coreutils python ];
+  buildInputs = [ pkgconfig python ];
 
-  phases = "installPhase fixupPhase";
+  phases = "unpackPhase installPhase";
 
   installPhase = ''
-    mkdir -pv $out/bin/
-    cp $src $out/bin/dropbox-cli
-  '';
+    mkdir -p "$out/bin/" "$out/share/applications"
+    cp data/dropbox.desktop "$out/share/applications"
+    substitute "dropbox.in" "$out/bin/dropbox" \
+      --replace '@PACKAGE_VERSION@' ${version} \
+      --replace '@DESKTOP_FILE_DIR@' "$out/share/applications" \
+      --replace '@IMAGEDATA16@' '"too-lazy-to-fix"' \
+      --replace '@IMAGEDATA64@' '"too-lazy-to-fix"'
 
-  fixupPhase = ''
-    substituteInPlace $out/bin/dropbox-cli \
-      --replace "/usr/bin/python" ${python}/bin/python \
-      --replace "use dropbox help" "use dropbox-cli help" \
-      --replace "~/.dropbox-dist/dropboxd" ${dropbox}/bin/dropbox
-
-    chmod +x $out/bin/dropbox-cli
+    chmod +x "$out/bin/"*
+    patchShebangs "$out/bin"
   '';
 
   meta = {

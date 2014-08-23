@@ -12,7 +12,9 @@ stdenv.mkDerivation {
   
   preBuild = "sed -i Makefile -e 's/^CFGF=/&	-DHASIPv6=1/;';";
   
-  configurePhase = "./Configure -n linux;";
+  configurePhase = if stdenv.isDarwin
+    then "./Configure -n darwin;"
+    else "./Configure -n linux;";
   
   installPhase = ''
     mkdir -p $out/bin $out/man/man8
@@ -28,5 +30,6 @@ stdenv.mkDerivation {
       socket (IPv6/IPv4/UNIX local), or partition (by opening a file
       from it).
     '';
+    maintainers = stdenv.lib.maintainers.mornfall;
   };
 }

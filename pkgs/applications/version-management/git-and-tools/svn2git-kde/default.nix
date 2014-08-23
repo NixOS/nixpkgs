@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp svn-all-fast-export $out/bin
   '';
 

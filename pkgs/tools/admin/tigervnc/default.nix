@@ -4,22 +4,18 @@
 , fixesproto, damageproto, xcmiscproto, bigreqsproto, randrproto, renderproto
 , fontsproto, videoproto, compositeproto, scrnsaverproto, resourceproto
 , libxkbfile, libXfont, libpciaccess, cmake, libjpeg_turbo, libXft, fltk, libXinerama
-, xineramaproto, libXcursor, fetchsvn
+, xineramaproto, libXcursor
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  # Release version = "1.2.0";
-  revision = 5005;
-  version = "r${toString revision}";
+  version = "1.3.1";
   name = "tigervnc-${version}";
 
-  src = fetchsvn {
-    # Release url = "mirror://sourceforge/tigervnc/${version}/${name}.tar.gz";
-    url = "https://tigervnc.svn.sourceforge.net/svnroot/tigervnc/trunk";
-    rev = revision;
-    sha256 = "2401e0ede9a2d50a37caeb094e5e832d24878749239578f44ae2acd42de01b43";
+  src = fetchurl {
+    url = "https://github.com/TigerVNC/tigervnc/archive/v${version}.tar.gz";
+    sha256 = "161bhibic777g47lbjgdnvjhkkdzxrzmxz9rw9sim3q0gcbp0vz3";
   };
 
   inherit fontDirectories;
@@ -52,13 +48,12 @@ stdenv.mkDerivation rec {
     tar xf ${xorgserver.src}
     cp -R xorg*/* unix/xserver
     pushd unix/xserver
-    for a in $xorgPatches
+    for a in $xorgPatches ../xserver114.patch
     do
       patch -p1 < $a
     done
-    patch -p1 < ../xserver113.patch
     autoreconf -vfi
-    ./configure $configureFlags --disable-xinerama --disable-xvfb --disable-xnest --disable-xorg --disable-dmx --disable-dri --disable-dri2 --disable-glx --prefix="$out"
+    ./configure $configureFlags --disable-xinerama --disable-xvfb --disable-xnest --disable-xorg --disable-dmx --disable-dri --disable-dri2 --disable-glx --prefix="$out" --disable-unit-tests
     make TIGERVNC_SRCDIR=`pwd`/../..
     popd
   '';
@@ -92,7 +87,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.tigervnc.org/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     description = "Fork of tightVNC, made in cooperation with VirtualGL";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;

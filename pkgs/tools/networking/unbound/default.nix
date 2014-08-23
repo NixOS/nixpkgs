@@ -1,22 +1,23 @@
-{ stdenv, fetchurl, openssl, expat, libevent, ldns }:
+{ stdenv, fetchurl, openssl, expat, libevent }:
 
 stdenv.mkDerivation rec {
-  name = "unbound-1.4.13";
+  name = "unbound-1.4.22";
 
   src = fetchurl {
     url = "http://unbound.net/downloads/${name}.tar.gz";
-    sha256 = "04r379gma1ghr9zjc1fmncpw8kka4f0mpcmrzidsp264aqkxriw3";
+    sha256 = "17yjly9c00zfgbzvllqzjh668a4yk6vrinf47yrcs3hrna0m1bqw";
   };
  
-  buildInputs = [openssl expat libevent ldns];
+  buildInputs = [openssl expat libevent];
 
   configureFlags = [ "--with-ssl=${openssl}" "--with-libexpat=${expat}"
     "--localstatedir=/var" ];
 
   meta = {
     description = "Validating, recursive, and caching DNS resolver";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
     homepage = http://www.unbound.net;
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = [ stdenv.lib.maintainers.emery ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

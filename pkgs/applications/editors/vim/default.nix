@@ -1,16 +1,18 @@
-{ stdenv, fetchurl, ncurses, gettext, pkgconfig }:
+{ stdenv, fetchhg, ncurses, gettext, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  patchLevel = "23";
-  name       = "vim-7.4.${patchLevel}";
- 
-  src = fetchurl {
-    url    = "ftp://ftp.vim.org/pub/vim/unix/${name}.tar.bz2";
-    sha256 = "1pjaffap91l2rb9pjnlbrpvb3ay5yhhr3g91zabjvw1rqk9adxfh";
+  name = "vim-${version}";
+
+  version = "7.4.335";
+
+  src = fetchhg {
+    url = "https://vim.googlecode.com/hg/";
+    rev = "v7-4-335";
+    sha256 = "0qnpzfcbi6fhz82pj68l4vrnigca1akq2ksrxz6krwlfhns6jhhj";
   };
 
   enableParallelBuilding = true;
- 
+
   buildInputs = [ ncurses pkgconfig ];
   nativeBuildInputs = [ gettext ];
 
@@ -43,16 +45,6 @@ stdenv.mkDerivation rec {
   # patchPhase = ''
   #   sed -i -e 's/as_fn_error.*int32.*/:/' src/auto/configure
   # '';
-
-  prePatch = "cd src";
-  
-  patches =
-    [ ./patches/7.4.001 ./patches/7.4.002 ./patches/7.4.003 ./patches/7.4.004
-      ./patches/7.4.005 ./patches/7.4.006 ./patches/7.4.007 ./patches/7.4.008
-      ./patches/7.4.009 ./patches/7.4.010 ./patches/7.4.011 ./patches/7.4.012
-      ./patches/7.4.013 ./patches/7.4.014 ./patches/7.4.015 ./patches/7.4.016
-      ./patches/7.4.017 ./patches/7.4.018 ./patches/7.4.019 ./patches/7.4.020
-      ./patches/7.4.021 ./patches/7.4.022 ./patches/7.4.023 ];
 
   meta = with stdenv.lib; {
     description = "The most popular clone of the VI editor";

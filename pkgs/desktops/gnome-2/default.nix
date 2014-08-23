@@ -1,10 +1,11 @@
-{ callPackage, self, stdenv, gettext, overrides ? {} }:
-{
-  __overrides = overrides;
+{ callPackage, self, stdenv, gettext, gvfs, libunique, bison2
+, libstartup_notification, overrides ? {} }:
 
+let overridden = set // overrides; set = with overridden; {
   # Backward compatibility.
   gtkdoc = self.gtk_doc;
-  startupnotification = self.startup_notification;
+  startup_notification = libstartup_notification;
+  startupnotification = libstartup_notification;
   gnomedocutils = self.gnome_doc_utils;
   gnomeicontheme = self.gnome_icon_theme;
   gnomepanel = self.gnome_panel;
@@ -21,7 +22,9 @@
 
   libglade = callPackage ./platform/libglade { };
 
-  libgnomeprint = callPackage ./platform/libgnomeprint { };
+  libgnomeprint = callPackage ./platform/libgnomeprint {
+    bison = bison2;
+  };
 
   libgnomeprintui = callPackage ./platform/libgnomeprintui { };
 
@@ -62,12 +65,8 @@
 
   gtkhtml = callPackage ./platform/gtkhtml { };
 
-
-  # Freedesktop library
-  startup_notification = callPackage ./platform/startup-notification { };
-
   # Required for nautilus
-  libunique = callPackage ./platform/libunique { };
+  inherit (libunique);
 
   gtkglext = callPackage ./platform/gtkglext { };
 
@@ -79,7 +78,7 @@
 
   libgweather = callPackage ./desktop/libgweather { };
 
-  gvfs = callPackage ./desktop/gvfs { };
+  gvfs = gvfs.override { gnome = self; };
 
   libgnomekbd = callPackage ./desktop/libgnomekbd { };
 
@@ -107,8 +106,6 @@
 
   gtksourceview = callPackage ./desktop/gtksourceview { };
 
-  nautilus = callPackage ./desktop/nautilus { };
-
   gnome_icon_theme = callPackage ./desktop/gnome-icon-theme { };
 
   vte = callPackage ./desktop/vte { };
@@ -117,4 +114,4 @@
 
   libglademm = callPackage ./bindings/libglademm { };
 
-}
+}; in overridden

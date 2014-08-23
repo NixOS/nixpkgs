@@ -1,50 +1,31 @@
-x@{builderDefsPackage
-  , autoconf, automake, libtool, doxygen, pkgconfig, bison, flex, unixODBC
-  , openssl, openldap, cyrus_sasl, krb5, expat, SDL, libdv, libv4l, alsaLib
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, pkgconfig, bison, flex, unixODBC
+, openssl, openldap, cyrus_sasl, krb5, expat, SDL, libdv, libv4l, alsaLib }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="ptlib";
-    baseVersion="2.6";
-    patchlevel="7";
-    version="${baseVersion}.${patchlevel}";
-    name="${baseName}-${version}";
-    url="mirror://gnome/sources/${baseName}/${baseVersion}/${name}.tar.bz2";
-    hash="0zxrygl2ivbciqf97yd9n67ch9vd9gp236w96i6ia8fxzqjq5lkx";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  name = "ptlib-2.10.10";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/ptlib/2.10/${name}.tar.xz";
+    sha256 = "7fcaabe194cbd3bc0b370b951dffd19cfe7ea0298bfff6aecee948e97f3207e4";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [ pkgconfig bison flex unixODBC openssl openldap 
+                  cyrus_sasl krb5 expat SDL libdv libv4l alsaLib ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
+  enableParallelBuilding = true;
+
+  patches = [ ./bison.patch ];
       
-  meta = {
+  meta = with stdenv.lib; {
     description = "Portable Tools from OPAL VoIP";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
   };
+
   passthru = {
     updateInfo = {
       downloadPage = "http://ftp.gnome.org/sources/ptlib/";
     };
   };
-}) x
+}
 

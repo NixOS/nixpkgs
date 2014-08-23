@@ -73,6 +73,8 @@
 , "generator-webapp"
 , "generator-angular"
 , "statsd"
+, "statsd-librato-backend"
+, "stackdriver-statsd-backend"
 , "ungit"
 , { "node-uptime": "https://github.com/fzaninotto/uptime/tarball/1c65756575f90f563a752e2a22892ba2981c79b7" }
 , { "guifi-earth": "https://github.com/jmendeth/guifi-earth/tarball/f3ee96835fd4fb0e3e12fadbd2cb782770d64854 " }
@@ -84,6 +86,7 @@
 , "grunt-contrib-cssmin"
 , "grunt-contrib-uglify"
 , "grunt-karma"
+, "grunt-bower-task"
 , "grunt-sed"
 , "karma"
 , "karma-mocha"
@@ -107,4 +110,25 @@
 , "x509"
 , "owl-deepcopy"
 , "meat"
+, "hipache"
+, "posix"
+, "node-protobuf"
+, "rethinkdb"
+, "bower2nix"
+, "fetch-bower"
+, { "titanium": "3.2.1" }
+, "gh"
+, "deepmerge"
+, "slasp"
+, "react"
+, { "pure-css": "git://github.com/yui/pure.git#v0.5.0-rc-1" }
+, "marked"
+, "browserify"
+, "uglify-js"
+, "less"
+, "mocha-phantomjs"
+, "phantomjs"
+, "sinon"
+, "shelljs"
+, "typescript"
 ]

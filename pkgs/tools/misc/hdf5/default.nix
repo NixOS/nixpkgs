@@ -1,14 +1,22 @@
 
 { stdenv
 , fetchurl
+, zlib ? null
+, szip ? null
 }:
-stdenv.mkDerivation {
-  name = "hdf5-1.8.10-patch1";
+stdenv.mkDerivation rec {
+  version = "1.8.13";
+  name = "hdf5-${version}-patch1";
   src = fetchurl {
-    url = http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.10-patch1.tar.gz;
-    sha256 = "08ad32fhnci6rdfn6mn3w9v1wcaxdcd326n3ljwkcq4dzhkh28qz";  			
+    url = "http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-${version}.tar.gz";
+    sha256 = "1h9qdl321gzm3ihdhlijbl9sh9qcdrw94j7izg64yfqhxj7b7xl2";  			
   };
-  buildInputs = [] ;
+
+  buildInputs = []
+    ++ stdenv.lib.optional (zlib != null) zlib
+    ++ stdenv.lib.optional (szip != null) szip;
+
+  configureFlags = if szip != null then "--with-szlib=${szip}" else "";
   
   patches = [./bin-mv.patch];
   

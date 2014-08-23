@@ -8,19 +8,7 @@
 
 # To test: make sure that the 'bbswitch' kernel module is installed,
 # then run 'bumblebeed' as root and 'optirun glxgears' as user.
-# To use at startup, add e.g. to configuration.nix:
-# jobs = {
-#   bumblebeed = {
-#     name = "bumblebeed";
-#     description = "Manages the Optimus video card";
-#     startOn = "started udev and started syslogd";
-#     stopOn = "starting shutdown";
-#     exec = "bumblebeed --use-syslog";
-#     path = [ pkgs.bumblebee ];
-#     environment = { MODULE_DIR = "${config.system.modulesTree}/lib/modules"; };
-#     respawn = true;
-#   };
-# };
+# To use at startup, see hardware.bumblebee options.
 
 # This nix expression supports for now only the native nvidia driver.
 # It should not be hard to generalize this approach to support the
@@ -34,7 +22,7 @@
 }:
 
 let
-  version = "3.0";
+  version = "3.2.1";
   name = "bumblebee-${version}";
 
   # isolated X11 environment with the nvidia module
@@ -61,22 +49,15 @@ let
     ignoreCollisions = true;
   };
 
-  # Custom X11 configuration for the additional xserver instance.
-  xorgConf = ./xorg.conf.nvidia;
-
 in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url = "http://github.com/downloads/Bumblebee-Project/Bumblebee/${name}.tar.gz";
-    sha256 = "a27ddb77b282ac8b972857fdb0dc5061cf0a0982b7ac3e1cfa698b4f786e49a1";
+    url = "http://bumblebee-project.org/${name}.tar.gz";
+    sha256 = "03p3gvx99lwlavznrpg9l7jnl1yfg2adcj8jcjj0gxp20wxp060h";
   };
 
-  # 'config.patch' makes bumblebee read the active module and the nvidia configuration
-  # from the environment variables instead of the config file:
-  #   BUMBLEBEE_DRIVER, BUMBLEBEE_LDPATH_NVIDIA, BUMBLEBEE_MODPATH_NVIDIA
-  # These variables must be set when bumblebeed and optirun are executed.
-  patches = [ ./config.patch ./xopts.patch ];
+  patches = [ ./xopts.patch ];
 
   preConfigure = ''
     # Substitute the path to the actual modinfo program in module.c.
@@ -88,32 +69,25 @@ in stdenv.mkDerivation {
     # Don't use a special group, just reuse wheel.
     substituteInPlace configure \
       --replace 'CONF_GID="bumblebee"' 'CONF_GID="wheel"'
-
-    # Ensures that the config file ends up with a nonempty
-    # name of the nvidia module. This is needed, because the
-    # configuration handling code otherwise resets the
-    # data that we obtained from the environment (see config.patch)
-    export CONF_DRIVER_MODULE_NVIDIA=nvidia
   '';
 
   # Build-time dependencies of bumblebeed and optirun.
   # Note that it has several runtime dependencies.
   buildInputs = [ stdenv makeWrapper pkgconfig help2man libX11 glib libbsd ];
 
+  configureFlags = [
+    "--with-udev-rules=$out/lib/udev/rules.d"
+    "CONF_DRIVER=nvidia"
+    "CONF_DRIVER_MODULE_NVIDIA=nvidia"
+    "CONF_LDPATH_NVIDIA=${commonEnv}/lib"
+    "CONF_MODPATH_NVIDIA=${commonEnv}/lib/xorg/modules"
+  ];
+
   # create a wrapper environment for bumblebeed and optirun
   postInstall = ''
-    # remove some entries from the configuration file that would otherwise
-    # cause our environment variables to be ignored.
-    substituteInPlace "$out/etc/bumblebee/bumblebee.conf" \
-      --replace "LibraryPath=" "" \
-      --replace "XorgModulePath=" ""
-
     wrapProgram "$out/sbin/bumblebeed" \
       --prefix PATH : "${commonEnv}/sbin:${commonEnv}/bin:\$PATH" \
       --prefix LD_LIBRARY_PATH : "${commonEnv}/lib:\$LD_LIBRARY_PATH" \
-      --set BUMBLEBEE_DRIVER "nvidia" \
-      --set BUMBLEBEE_LDPATH_NVIDIA "${commonEnv}/lib" \
-      --set BUMBLEBEE_MODPATH_NVIDIA "${commonEnv}/lib/xorg/modules" \
       --set FONTCONFIG_FILE "/etc/fonts/fonts.conf" \
       --set XKB_BINDIR "${xorg.xkbcomp}/bin" \
       --set XKB_DIR "${xkeyboard_config}/etc/X11/xkb"
@@ -121,16 +95,11 @@ in stdenv.mkDerivation {
     wrapProgram "$out/bin/optirun" \
       --prefix PATH : "${commonEnv}/sbin:${commonEnv}/bin" \
       --prefix LD_LIBRARY_PATH : "${commonEnv}/lib" \
-      --set BUMBLEBEE_DRIVER "nvidia" \
-      --set BUMBLEBEE_LDPATH_NVIDIA "${commonEnv}/lib" \
-      --set BUMBLEBEE_MODPATH_NVIDIA "${commonEnv}/lib/xorg/modules"
-
-    cp ${xorgConf} "$out/etc/bumblebee/xorg.conf.nvidia"
   '';
 
   meta = {
     homepage = http://github.com/Bumblebee-Project/Bumblebee;
     description = "Daemon for managing Optimus videocards (power-on/off, spawns xservers)";
-    license = "free";
+    license = stdenv.lib.licenses.gpl3;
   };
 }

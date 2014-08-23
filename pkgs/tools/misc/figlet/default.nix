@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "figlet-2.2.4";
+  name = "figlet-2.2.5";
 
   # some tools can be found here ftp://ftp.figlet.org/pub/figlet/util/
   src = fetchurl {
-    url = ftp://ftp.figlet.org/pub/figlet/program/unix/figlet-2.2.4.tar.gz;
-    sha256 = "19qcmm9cmf78w1z7gbpyj9wmrfjzjl25sax9f2j37sijznrh263f";
+    url = ftp://ftp.figlet.org/pub/figlet/program/unix/figlet-2.2.5.tar.gz;
+    sha256 = "0za1ax15x7myjl8jz271ybly8ln9kb9zhm1gf6rdlxzhs07w925z";
   };
 
   installPhase = "make prefix=$out install";

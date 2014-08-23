@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libusb1 }:
 
 stdenv.mkDerivation rec {
-  name = "libmtp-1.1.5";
+  name = "libmtp-1.1.6";
 
   propagatedBuildInputs = [ libusb1 ];
   buildInputs = [ pkgconfig ];
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/libmtp/${name}.tar.gz";
-    sha256 = "0fn6y7kirgln6sfizmwvjsy7qkdb0p3rccf0zkr3r2xg3cbpjxkq";
+    sha256 = "02nbf1cigxmv9sak201f4m5c1d21q6avgzjlxd941plimy1iq71s";
   };
 
   meta = {

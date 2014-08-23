@@ -1,0 +1,17 @@
+http://code.google.com/p/ocropus/issues/detail?id=365
+
+diff --git a/setup.py b/setup.py
+index c6ade25..a2ad6bf 100644
+--- a/setup.py
++++ b/setup.py
+@@ -8,7 +8,10 @@ assert sys.version_info[0]==2 and sys.version_info[1]>=7,\
+ from distutils.core import setup, Extension, Command
+ from distutils.command.install_data import install_data
+ 
++import matplotlib
++matplotlib.use('Agg')
+ from ocrolib import default
++
+ modeldir = "models/"
+ modelfiles = default.installable
+ modelprefix = "http://iupr1.cs.uni-kl.de/~tmb/ocropus-models/"

@@ -1,8 +1,8 @@
 # Management of static files in /etc.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -19,6 +19,8 @@ let
     sources = map (x: x.source) etc';
     targets = map (x: x.target) etc';
     modes = map (x: x.mode) etc';
+    uids  = map (x: x.uid) etc';
+    gids  = map (x: x.gid) etc';
   };
 
 in
@@ -87,6 +89,24 @@ in
               '';
             };
 
+            uid = mkOption {
+              default = 0;
+              type = types.int;
+              description = ''
+                UID of created file. Only takes affect when the file is
+                copied (that is, the mode is not 'symlink').
+                '';
+            };
+
+            gid = mkOption {
+              default = 0;
+              type = types.int;
+              description = ''
+                GID of created file. Only takes affect when the file is
+                copied (that is, the mode is not 'symlink').
+              '';
+            };
+
           };
 
           config = {
@@ -112,7 +132,7 @@ in
       ''
         # Set up the statically computed bits of /etc.
         echo "setting up /etc..."
-        ${pkgs.perl}/bin/perl ${./setup-etc.pl} ${etc}/etc
+        ${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl ${./setup-etc.pl} ${etc}/etc
       '';
 
   };

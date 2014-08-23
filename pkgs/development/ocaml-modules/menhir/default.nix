@@ -2,14 +2,13 @@
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "20120123";
 in
 
 stdenv.mkDerivation {
-  name = "menhir-${version}";
+  name = "menhir-20130116";
 
   src = fetchurl {
-    url = "http://pauillac.inria.fr/~fpottier/menhir/menhir-${version}.tar.gz";
+    url = http://pauillac.inria.fr/~fpottier/menhir/menhir-20130116.tar.gz;
     sha256 = "65cd9e4f813c62697c60c344963ca11bd461169f574ba3a866c2691541cb4682";
   };
 
@@ -42,7 +41,7 @@ stdenv.mkDerivation {
       to OCaml code.  Menhir was designed and implemented by François Pottier
       and Yann Régis-Gianas.
     '';
-    license = "QPL,LGPL+linking exceptions";
+    license = [ "QPL" /* generator */ "LGPLv2" /* library */ ];
     platforms = ocaml.meta.platforms;
     maintainers = [
       stdenv.lib.maintainers.z77z

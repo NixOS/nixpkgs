@@ -27,6 +27,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.cs.waikato.ac.nz/ml/weka/";
     description = "Collection of machine learning algorithms for data mining tasks";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

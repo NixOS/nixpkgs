@@ -68,6 +68,8 @@ rec {
     done
   '' ) [ "minInit" "defEnsureDir" "addInputs" ];
 
+  preferLocalBuild = true;
+
   meta = {
     description = "TeX distribution directory";
     longDescription = ''

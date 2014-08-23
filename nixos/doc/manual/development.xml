@@ -1,5 +1,6 @@
 <chapter xmlns="http://docbook.org/ns/docbook"
-         xmlns:xlink="http://www.w3.org/1999/xlink">
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="ch-development">
 
 <title>Development</title>
 
@@ -9,7 +10,7 @@ NixOS.</para>
 
 <!--===============================================================-->
 
-<section>
+<section xml:id="sec-getting-sources">
 
 <title>Getting the sources</title>
 
@@ -38,7 +39,37 @@ This will check out the latest NixOS sources to
 and the Nixpkgs sources to
 <filename><replaceable>/my/sources</replaceable>/nixpkgs</filename>.
 (The NixOS source tree lives in a subdirectory of the Nixpkgs
-repository.)  If you want to rebuild your system using your (modified)
+repository.)</para>
+
+<para>It’s often inconvenient to develop directly on the master
+branch, since if somebody has just committed (say) a change to GCC,
+then the binary cache may not have caught up yet and you’ll have to
+rebuild everything from source. So you may want to create a local
+branch based on your current NixOS version:
+
+<screen>
+$ nixos-version
+14.04.273.ea1952b (Baboon)
+
+$ git checkout -b local ea1952b
+</screen>
+
+Or, to base your local branch on the latest version available in the
+NixOS channel:
+
+<screen>
+$ curl -sI http://nixos.org/channels/nixos-unstable/ | grep Location
+Location: http://releases.nixos.org/nixos/unstable/nixos-14.10pre43986.acaf4a6/
+
+$ git checkout -b local acaf4a6
+</screen>
+
+You can then use <command>git rebase</command> to sync your local
+branch with the upstream branch, and use <command>git
+cherry-pick</command> to copy commits from your local branch to the
+upstream branch.</para>
+
+<para>If you want to rebuild your system using your (modified)
 sources, you need to tell <command>nixos-rebuild</command> about them
 using the <option>-I</option> flag:
 
@@ -74,7 +105,7 @@ in <filename>nixos/</filename> as packages.</para>
 
 <!--===============================================================-->
 
-<section>
+<section xml:id="sec-writing-modules">
 
 <title>Writing NixOS modules</title>
 
@@ -188,9 +219,9 @@ commands to be executed periodically by <command>cron</command>).</para>
 
 <example xml:id='locate-example'><title>NixOS module for the “locate” service</title>
 <programlisting>
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let locatedb = "/var/cache/locatedb"; in
 
@@ -494,7 +525,7 @@ module writers.</para>
 <variablelist>
 
   <varlistentry>
-    <term><option>etc.environment</option></term>
+    <term><option>environment.etc</option></term>
     <listitem>
       <para>This set defines files in <filename>/etc</filename>.  A
       typical use is:
@@ -579,7 +610,7 @@ systemd.services.dhcpcd =
 
 <!--===============================================================-->
 
-<section>
+<section xml:id="sec-building-parts">
 
 <title>Building specific parts of NixOS</title>
 
@@ -652,6 +683,37 @@ $ qemu-system-x86_64 -kernel ./kernel/bzImage -initrd ./initrd/initrd -hda /dev/
     </listitem>
   </varlistentry>
 
+  <varlistentry>
+    <term><varname>systemd.units.<replaceable>unit-name</replaceable>.unit</varname></term>
+    <listitem>
+      <para>This builds the unit with the specified name.  Note that
+      since unit names contain dots
+      (e.g. <literal>httpd.service</literal>), you need to put them
+      between quotes, like this:
+
+<screen>
+$ nix-build -A 'config.systemd.units."httpd.service".unit'
+</screen>
+
+      You can also test individual units, without rebuilding the whole
+      system, by putting them in
+      <filename>/run/systemd/system</filename>:
+
+<screen>
+$ cp $(nix-build -A 'config.systemd.units."httpd.service".unit')/httpd.service \
+    /run/systemd/system/tmp-httpd.service
+$ systemctl daemon-reload
+$ systemctl start tmp-httpd.service
+</screen>
+
+      Note that the unit must not have the same name as any unit in
+      <filename>/etc/systemd/system</filename> since those take
+      precedence over <filename>/run/systemd/system</filename>.
+      That’s why the unit is installed as
+      <filename>tmp-httpd.service</filename> here.</para>
+    </listitem>
+  </varlistentry>
+
 </variablelist>
 
 </para>
@@ -661,7 +723,7 @@ $ qemu-system-x86_64 -kernel ./kernel/bzImage -initrd ./initrd/initrd -hda /dev/
 
 <!--===============================================================-->
 
-<section>
+<section xml:id="sec-building-cd">
 
 <title>Building your own NixOS CD</title>
 
@@ -697,17 +759,21 @@ $ mount -o loop -t iso9660 ./result/iso/cd.iso /mnt/iso</screen>
 
 <title>Testing the installer</title>
 
-<para>Building, burning, and
-booting from an installation CD is rather
+<para>Building, burning, and booting from an installation CD is rather
 tedious, so here is a quick way to see if the installer works
 properly:
 
 <screen>
 $ nix-build -A config.system.build.nixos-install
-$ dd if=/dev/zero of=diskimage seek=2G count=0 bs=1
-$ yes | mke2fs -j diskimage
-$ mount -o loop diskimage /mnt
+$ mount -t tmpfs none /mnt
 $ ./result/bin/nixos-install</screen>
+
+To start a login shell in the new NixOS installation in
+<filename>/mnt</filename>:
+
+<screen>
+$ ./result/bin/nixos-install --chroot
+</screen>
 
 </para>
 
@@ -717,57 +783,310 @@ $ ./result/bin/nixos-install</screen>
 
 <!--===============================================================-->
 
-<section><title>Whole-system testing using virtual machines</title>
+<section xml:id="sec-nixos-tests">
 
-<para>Complete NixOS GNU/Linux systems can be tested in virtual
-machines (VMs).  This makes it possible to test a system upgrade or
-configuration change before rebooting into it, using the
-<command>nixos-rebuild build-vm</command> or <command>nixos-rebuild
-build-vm-with-bootloader</command> command.</para>
+<title>NixOS tests</title>
 
-<!-- The following is adapted from
-     http://wiki.nixos.org/wiki/NixOS_VM_tests, by Eelco Dolstra. -->
-<para>The <filename>tests/</filename> directory in the NixOS source
-tree contains several <emphasis>whole-system unit tests</emphasis>.
-These tests can be run<footnote><para>NixOS tests can be run both from
-NixOS and from a non-NixOS GNU/Linux distribution, provided the Nix
-package manager is installed.</para></footnote> from the NixOS source
-tree as follows:
+<para>When you add some feature to NixOS, you should write a test for
+it. NixOS tests are kept in the directory <filename
+xlink:href="https://github.com/NixOS/nixpkgs/tree/master/nixos/tests">nixos/tests</filename>,
+and are executed (using Nix) by a testing framework that automatically
+starts one or more virtual machines containing the NixOS system(s)
+required for the test.</para>
+
+<simplesect><title>Writing tests</title>
+
+<para>A NixOS test is a Nix expression that has the following structure:
+
+<programlisting>
+import ./make-test.nix {
+
+  # Either the configuration of a single machine:
+  machine =
+    { config, pkgs, ... }:
+    { <replaceable>configuration…</replaceable>
+    };
+
+  # Or a set of machines:
+  nodes =
+    { <replaceable>machine1</replaceable> =
+        { config, pkgs, ... }: { <replaceable>…</replaceable> };
+      <replaceable>machine2</replaceable> =
+        { config, pkgs, ... }: { <replaceable>…</replaceable> };
+      …
+    };
+
+  testScript =
+    ''
+      <replaceable>Perl code…</replaceable>
+    '';
+}
+</programlisting>
+
+The attribute <literal>testScript</literal> is a bit of Perl code that
+executes the test (described below). During the test, it will start
+one or more virtual machines, the configuration of which is described
+by the attribute <literal>machine</literal> (if you need only one
+machine in your test) or by the attribute <literal>nodes</literal> (if
+you need multiple machines). For instance, <filename
+xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/login.nix">login.nix</filename>
+only needs a single machine to test whether users can log in on the
+virtual console, whether device ownership is correctly maintained when
+switching between consoles, and so on. On the other hand, <filename
+xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nfs.nix">nfs.nix</filename>,
+which tests NFS client and server functionality in the Linux kernel
+(including whether locks are maintained across server crashes),
+requires three machines: a server and two clients.</para>
+
+<para>There are a few special NixOS configuration options for test
+VMs:
+
+<!-- FIXME: would be nice to generate this automatically. -->
+
+<variablelist>
+
+  <varlistentry>
+    <term><option>virtualisation.memorySize</option></term>
+    <listitem><para>The memory of the VM in
+    megabytes.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>virtualisation.vlans</option></term>
+    <listitem><para>The virtual networks to which the VM is
+    connected. See <filename
+    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nat.nix">nat.nix</filename>
+    for an example.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>virtualisation.writableStore</option></term>
+    <listitem><para>By default, the Nix store in the VM is not
+    writable. If you enable this option, a writable union file system
+    is mounted on top of the Nix store to make it appear
+    writable. This is necessary for tests that run Nix operations that
+    modify the store.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+For more options, see the module <filename
+xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/virtualisation/qemu-vm.nix">qemu-vm.nix</filename>.</para>
+
+<para>The test script is a sequence of Perl statements that perform
+various actions, such as starting VMs, executing commands in the VMs,
+and so on. Each virtual machine is represented as an object stored in
+the variable <literal>$<replaceable>name</replaceable></literal>,
+where <replaceable>name</replaceable> is the identifier of the machine
+(which is just <literal>machine</literal> if you didn’t specify
+multiple machines using the <literal>nodes</literal> attribute). For
+instance, the following starts the machine, waits until it has
+finished booting, then executes a command and checks that the output
+is more-or-less correct:
+
+<programlisting>
+$machine->start;
+$machine->waitForUnit("default.target");
+$machine->succeed("uname") =~ /Linux/;
+</programlisting>
+
+The first line is actually unnecessary; machines are implicitly
+started when you first execute an action on them (such as
+<literal>waitForUnit</literal> or <literal>succeed</literal>). If you
+have multiple machines, you can speed up the test by starting them in
+parallel:
+
+<programlisting>
+startAll;
+</programlisting>
+
+</para>
+
+<para>The following methods are available on machine objects:
+
+<variablelist>
+
+  <varlistentry>
+    <term><methodname>start</methodname></term>
+    <listitem><para>Start the virtual machine. This method is
+    asynchronous — it does not wait for the machine to finish
+    booting.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><methodname>shutdown</methodname></term>
+    <listitem><para>Shut down the machine, waiting for the VM to
+    exit.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><methodname>crash</methodname></term>
+    <listitem><para>Simulate a sudden power failure, by telling the VM
+    to exit immediately.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><methodname>block</methodname></term>
+    <listitem><para>Simulate unplugging the Ethernet cable that
+    connects the machine to the other machines.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><methodname>unblock</methodname></term>
+    <listitem><para>Undo the effect of
+    <methodname>block</methodname>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><methodname>screenshot</methodname></term>
+    <listitem><para>Take a picture of the display of the virtual
+    machine, in PNG format. The screenshot is linked from the HTML
+    log.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><methodname>sendMonitorCommand</methodname></term>
+    <listitem><para>Send a command to the QEMU monitor. This is rarely
+    used, but allows doing stuff such as attaching virtual USB disks
+    to a running machine.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><methodname>sendKeys</methodname></term>
+    <listitem><para>Simulate pressing keys on the virtual keyboard,
+    e.g., <literal>sendKeys("ctrl-alt-delete")</literal>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><methodname>sendChars</methodname></term>
+    <listitem><para>Simulate typing a sequence of characters on the
+    virtual keyboard, e.g., <literal>sendKeys("foobar\n")</literal>
+    will type the string <literal>foobar</literal> followed by the
+    Enter key.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><methodname>execute</methodname></term>
+    <listitem><para>Execute a shell command, returning a list
+    <literal>(<replaceable>status</replaceable>,
+    <replaceable>stdout</replaceable>)</literal>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><methodname>succeed</methodname></term>
+    <listitem><para>Execute a shell command, raising an exception if
+    the exit status is not zero, otherwise returning the standard
+    output.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><methodname>fail</methodname></term>
+    <listitem><para>Like <methodname>succeed</methodname>, but raising
+    an exception if the command returns a zero status.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><methodname>waitUntilSucceeds</methodname></term>
+    <listitem><para>Repeat a shell command with 1-second intervals
+    until it succeeds.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><methodname>waitUntilFails</methodname></term>
+    <listitem><para>Repeat a shell command with 1-second intervals
+    until it fails.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><methodname>waitForUnit</methodname></term>
+    <listitem><para>Wait until the specified systemd unit has reached
+    the “active” state.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><methodname>waitForFile</methodname></term>
+    <listitem><para>Wait until the specified file
+    exists.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><methodname>waitForOpenPort</methodname></term>
+    <listitem><para>Wait until a process is listening on the given TCP
+    port (on <literal>localhost</literal>, at least).</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><methodname>waitForClosedPort</methodname></term>
+    <listitem><para>Wait until nobody is listening on the given TCP
+    port.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><methodname>waitForX</methodname></term>
+    <listitem><para>Wait until the X11 server is accepting
+    connections.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><methodname>waitForWindow</methodname></term>
+    <listitem><para>Wait until an X11 window has appeared whose name
+    matches the given regular expression, e.g.,
+    <literal>waitForWindow(qr/Terminal/)</literal>.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+</para>
+
+</simplesect>
+
+
+<simplesect><title>Running tests</title>
+
+<para>You can run tests using <command>nix-build</command>. For
+example, to run the test <filename
+xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/login.nix">login.nix</filename>,
+you just do:
 
 <screen>
-$ nix-build tests/ -A nfs.test
+$ nix-build '&lt;nixpkgs/nixos/tests/login.nix>'
 </screen>
 
-This performs an automated test of the NFS client and server
-functionality in the Linux kernel, including file locking semantics
-(e.g., whether locks are maintained across server crashes).  It will
-first build or download all the dependencies of the test (e.g., all
-packages needed to run a NixOS VM). The test is defined in <link
-xlink:href="https://nixos.org/repos/nix/nixos/trunk/tests/nfs.nix">
-<filename>tests/nfs.nix</filename></link>.  If the test succeeds,
-<command>nix-build</command> will place a symlink
-<filename>./result</filename> in the current directory pointing at the
-location in the Nix store of the test results (e.g., screenshots, test
-reports, and so on).  In particular, a pretty-printed log of the test
-is written to <filename>log.html</filename>, which can be viewed using
-a web browser like this:
+or, if you don’t want to rely on <envar>NIX_PATH</envar>:
+
+<screen>
+$ cd /my/nixpkgs/nixos/tests
+$ nix-build login.nix
+…
+running the VM test script
+machine: QEMU running (pid 8841)
+…
+6 out of 6 tests succeeded
+</screen>
+
+After building/downloading all required dependencies, this will
+perform a build that starts a QEMU/KVM virtual machine containing a
+NixOS system. The virtual machine mounts the Nix store of the host;
+this makes VM creation very fast, as no disk image needs to be
+created. Afterwards, you can view a pretty-printed log of the test:
 
 <screen>
 $ firefox result/log.html
 </screen>
+
 </para>
 
 <para>It is also possible to run the test environment interactively,
 allowing you to experiment with the VMs.  For example:
 
 <screen>
-$ nix-build tests/ -A nfs.driver
+$ nix-build login.nix -A driver
 $ ./result/bin/nixos-run-vms
 </screen>
 
-The script <command>nixos-run-vms</command> starts the three virtual
-machines defined in the NFS test using QEMU/KVM.  The root file system
-of the VMs is created on the fly and kept across VM restarts in
+The script <command>nixos-run-vms</command> starts the virtual
+machines defined by test.  The root file system of the VMs is created
+on the fly and kept across VM restarts in
 <filename>./</filename><varname>hostname</varname><filename>.qcow2</filename>.</para>
 
 <para>Finally, the test itself can be run interactively.  This is
@@ -780,17 +1099,11 @@ starting VDE switch for network 1
 &gt;
 </screen>
 
-Perl statements can now be typed in to start or manipulate the VMs:
+You can then take any Perl statement, e.g.
 
 <screen>
-&gt; startAll;
-(the VMs start booting)
-&gt; $server-&gt;waitForJob("nfs-kernel-nfsd");
-&gt; $client1-&gt;succeed("flock -x /data/lock -c 'sleep 100000' &amp;");
-&gt; $client2-&gt;fail("flock -n -s /data/lock true");
-&gt; $client1-&gt;shutdown;
-(this releases client1's lock)
-&gt; $client2-&gt;succeed("flock -n -s /data/lock true");
+&gt; startAll
+&gt; $machine->succeed("touch /tmp/foo")
 </screen>
 
 The function <command>testScript</command> executes the entire test
@@ -798,54 +1111,7 @@ script and drops you back into the test driver command line upon its
 completion.  This allows you to inspect the state of the VMs after the
 test (e.g. to debug the test script).</para>
 
-<para>This and other tests are continuously run on <link
-xlink:href="http://hydra.nixos.org/jobset/nixos/trunk">the Hydra
-instance at <literal>nixos.org</literal></link>, which allows
-developers to be notified of any regressions introduced by a NixOS or
-Nixpkgs change.</para>
-
-<para>The actual Nix programming interface to VM testing is in NixOS,
-under <link
-xlink:href="https://nixos.org/repos/nix/nixos/trunk/lib/testing.nix">
-<filename>lib/testing.nix</filename></link>.  This file defines a
-function which takes an attribute set containing a
-<literal>nixpkgs</literal> attribute (the path to a Nixpkgs checkout),
-and a <literal>system</literal> attribute (the system type).  It
-returns an attribute set containing several utility functions, among
-which the main entry point is <literal>makeTest</literal>.
-</para>
-
-<para>The <literal>makeTest</literal> function takes a function
-similar to that found in <link
-xlink:href="https://nixos.org/repos/nix/nixos/trunk/tests/nfs.nix">
-<filename>tests/nfs.nix</filename></link> (discussed above).  It
-returns an attribute set containing (among others):
-
-<variablelist>
-
-  <varlistentry>
-    <term><varname>test</varname></term>
-    <listitem><para>A derivation containing the test log as an HTML
-    file, as seen above, suitable for presentation in the Hydra
-    continuous build system.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>report</varname></term>
-    <listitem><para>A derivation containing a code coverage report, with
-    meta-data suitable for Hydra.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>driver</varname></term>
-    <listitem><para>A derivation containing scripts to run the VM test or
-    interact with the VM network interactively, as seen above.</para>
-    </listitem>
-  </varlistentry>
-
-</variablelist>
-
-</para>
+</simplesect>
 
 </section>
 

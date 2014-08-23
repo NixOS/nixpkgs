@@ -1,12 +1,13 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
   cfg = config.networking;
   interfaces = attrValues cfg.interfaces;
   hasVirtuals = any (i: i.virtual) interfaces;
+  hasBonds = cfg.bonds != { };
 
   interfaceOpts = { name, ... }: {
 
@@ -49,12 +50,41 @@ let
         '';
       };
 
+      ipv6Address = mkOption {
+        default = null;
+        example = "2001:1470:fffd:2098::e006";
+        type = types.nullOr types.string;
+        description = ''
+          IPv6 address of the interface.  Leave empty to configure the
+          interface using NDP.
+        '';
+      };
+
+      ipv6prefixLength = mkOption {
+        default = 64;
+        example = 64;
+        type = types.int;
+        description = ''
+          Subnet mask of the interface, specified as the number of
+          bits in the prefix (<literal>64</literal>).
+        '';
+      };
+
       macAddress = mkOption {
         default = null;
         example = "00:11:22:33:44:55";
         type = types.nullOr (types.str);
         description = ''
           MAC address of the interface. Leave empty to use the default.
+        '';
+      };
+
+      mtu = mkOption {
+        default = null;
+        example = 9000;
+        type = types.nullOr types.int;
+        description = ''
+          MTU size for packets leaving the interface. Leave empty to use the default.
         '';
       };
 
@@ -153,11 +183,29 @@ in
       '';
     };
 
+    networking.search = mkOption {
+      default = [];
+      example = [ "example.com" "local.domain" ];
+      type = types.listOf types.str;
+      description = ''
+        The list of search paths used when resolving domain names.
+      '';
+    };
+
     networking.domain = mkOption {
       default = "";
       example = "home";
       description = ''
         The domain.  It can be left empty if it is auto-detected through DHCP.
+      '';
+    };
+
+    networking.useHostResolvConf = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        In containers, whether to use the
+        <filename>resolv.conf</filename> supplied by the host.
       '';
     };
 
@@ -219,6 +267,99 @@ in
 
     };
 
+    networking.bonds = mkOption {
+      default = { };
+      example = {
+        bond0 = {
+          interfaces = [ "eth0" "wlan0" ];
+          miimon = 100;
+          mode = "active-backup";
+        };
+        fatpipe.interfaces = [ "enp4s0f0" "enp4s0f1" "enp5s0f0" "enp5s0f1" ];
+      };
+      description = ''
+        This option allows you to define bond devices that aggregate multiple,
+        underlying networking interfaces together. The value of this option is
+        an attribute set. Each attribute specifies a bond, with the attribute
+        name specifying the name of the bond's network interface
+      '';
+
+      type = types.attrsOf types.optionSet;
+
+      options = {
+
+        interfaces = mkOption {
+          example = [ "enp4s0f0" "enp4s0f1" "wlan0" ];
+          type = types.listOf types.string;
+          description = "The interfaces to bond together";
+        };
+
+        miimon = mkOption {
+          default = null;
+          example = 100;
+          type = types.nullOr types.int;
+          description = ''
+            Miimon is the number of millisecond in between each round of polling
+            by the device driver for failed links. By default polling is not
+            enabled and the driver is trusted to properly detect and handle
+            failure scenarios.
+          '';
+        };
+
+        mode = mkOption {
+          default = null;
+          example = "active-backup";
+          type = types.nullOr types.string;
+          description = ''
+            The mode which the bond will be running. The default mode for
+            the bonding driver is balance-rr, optimizing for throughput.
+            More information about valid modes can be found at
+            https://www.kernel.org/doc/Documentation/networking/bonding.txt
+          '';
+        };
+
+      };
+    };
+
+    networking.vlans = mkOption {
+      default = { };
+      example = {
+        vlan0 = {
+          id = 3;
+          interface = "enp3s0";
+        };
+        vlan1 = {
+          id = 1;
+          interface = "wlan0";
+        };
+      };
+      description =
+        ''
+          This option allows you to define vlan devices that tag packets
+          on top of a physical interface. The value of this option is an
+          attribute set. Each attribute specifies a vlan, with the name
+          specifying the name of the vlan interface.
+        '';
+
+      type = types.attrsOf types.optionSet;
+
+      options = {
+
+        id = mkOption {
+          example = 1;
+          type = types.int;
+          description = "The vlan identifier";
+        };
+
+        interface = mkOption {
+          example = "enp4s0";
+          type = types.string;
+          description = "The interface the vlan will transmit packets through.";
+        };
+
+      };
+    };
+
     networking.useDHCP = mkOption {
       type = types.bool;
       default = true;
@@ -236,7 +377,15 @@ in
 
   config = {
 
-    boot.kernelModules = optional cfg.enableIPv6 "ipv6" ++ optional hasVirtuals "tun";
+    boot.kernelModules = [ ]
+      ++ optional cfg.enableIPv6 "ipv6"
+      ++ optional hasVirtuals "tun"
+      ++ optional hasBonds "bonding";
+
+    boot.extraModprobeConfig =
+      # This setting is intentional as it prevents default bond devices
+      # from being created.
+      optionalString hasBonds "options bonding max_bonds=0";
 
     environment.systemPackages =
       [ pkgs.host
@@ -270,6 +419,8 @@ in
             before = [ "network.target" ];
             wantedBy = [ "network.target" ];
 
+            unitConfig.ConditionCapability = "CAP_NET_ADMIN";
+
             path = [ pkgs.iproute ];
 
             serviceConfig.Type = "oneshot";
@@ -282,15 +433,18 @@ in
                 ${optionalString (cfg.nameservers != [] && cfg.domain != "") ''
                   domain ${cfg.domain}
                 ''}
+                ${optionalString (cfg.search != []) ("search " + concatStringsSep " " cfg.search)}
                 ${flip concatMapStrings cfg.nameservers (ns: ''
                   nameserver ${ns}
                 '')}
                 EOF
 
                 # Disable or enable IPv6.
-                if [ -e /proc/sys/net/ipv6/conf/all/disable_ipv6 ]; then
-                  echo ${if cfg.enableIPv6 then "0" else "1"} > /proc/sys/net/ipv6/conf/all/disable_ipv6
-                fi
+                ${optionalString (!config.boot.isContainer) ''
+                  if [ -e /proc/sys/net/ipv6/conf/all/disable_ipv6 ]; then
+                    echo ${if cfg.enableIPv6 then "0" else "1"} > /proc/sys/net/ipv6/conf/all/disable_ipv6
+                  fi
+                ''}
 
                 # Set the default gateway.
                 ${optionalString (cfg.defaultGateway != "") ''
@@ -322,6 +476,7 @@ in
           (let mask =
                 if i.prefixLength != null then toString i.prefixLength else
                 if i.subnetMask != "" then i.subnetMask else "32";
+               staticIPv6 = cfg.enableIPv6 && i.ipv6Address != null;
           in
           { description = "Configuration of ${i.name}";
             wantedBy = [ "network-interfaces.target" ];
@@ -340,6 +495,11 @@ in
                   echo "setting MAC address to ${i.macAddress}..."
                   ip link set "${i.name}" address "${i.macAddress}"
                 ''
+              + optionalString (i.mtu != null)
+                ''
+                  echo "setting MTU to ${toString i.mtu}..."
+                  ip link set "${i.name}" mtu "${toString i.mtu}"
+                ''
               + optionalString (i.ipAddress != null)
                 ''
                   cur=$(ip -4 -o a show dev "${i.name}" | awk '{print $4}')
@@ -350,11 +510,31 @@ in
                     echo "configuring interface..."
                     ip -4 addr flush dev "${i.name}"
                     ip -4 addr add "${i.ipAddress}/${mask}" dev "${i.name}"
+                    restart_network_setup=true
+                  else
+                    echo "skipping configuring interface"
+                  fi
+                ''
+              + optionalString (staticIPv6)
+                ''
+                  # Only do a flush/add if it's necessary.  This is
+                  # useful when the Nix store is accessed via this
+                  # interface (e.g. in a QEMU VM test).
+                  if ! ip -6 -o a show dev "${i.name}" | grep "${i.ipv6Address}/${toString i.ipv6prefixLength}"; then
+                    echo "configuring interface..."
+                    ip -6 addr flush dev "${i.name}"
+                    ip -6 addr add "${i.ipv6Address}/${toString i.ipv6prefixLength}" dev "${i.name}"
+                    restart_network_setup=true
+                  else
+                    echo "skipping configuring interface"
+                  fi
+                ''
+              + optionalString (i.ipAddress != null || staticIPv6)
+                ''
+                  if [ restart_network_setup = true ]; then
                     # Ensure that the default gateway remains set.
                     # (Flushing this interface may have removed it.)
                     ${config.systemd.package}/bin/systemctl try-restart --no-block network-setup.service
-                  else
-                    echo "skipping configuring interface"
                   fi
                   ${config.systemd.package}/bin/systemctl start ip-up.target
                 ''
@@ -395,6 +575,9 @@ in
             path = [ pkgs.bridge_utils pkgs.iproute ];
             script =
               ''
+                # Remove Dead Interfaces
+                ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+
                 brctl addbr "${n}"
 
                 # Set bridge's hello time to 0 to avoid startup delays.
@@ -419,10 +602,73 @@ in
               '';
           };
 
+        createBondDevice = n: v:
+          let
+            deps = map (i: "sys-subsystem-net-devices-${i}.device") v.interfaces;
+          in
+          { description = "Bond Interface ${n}";
+            wantedBy = [ "network.target" "sys-subsystem-net-devices-${n}.device" ];
+            bindsTo = deps;
+            after = deps;
+            serviceConfig.Type = "oneshot";
+            serviceConfig.RemainAfterExit = true;
+            path = [ pkgs.ifenslave pkgs.iproute ];
+            script = ''
+              # Remove Dead Interfaces
+              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+
+              ip link add "${n}" type bond
+
+              # !!! There must be a better way to wait for the interface
+              while [ ! -d /sys/class/net/${n} ]; do sleep 0.1; done;
+
+              # Set the miimon and mode options
+              ${optionalString (v.miimon != null)
+                "echo ${toString v.miimon} > /sys/class/net/${n}/bonding/miimon"}
+              ${optionalString (v.mode != null)
+                "echo \"${v.mode}\" > /sys/class/net/${n}/bonding/mode"}
+
+              # Bring up the bridge and enslave the specified interfaces
+              ip link set "${n}" up
+              ${flip concatMapStrings v.interfaces (i: ''
+                ifenslave "${n}" "${i}"
+              '')}
+            '';
+            postStop = ''
+              ip link set "${n}" down
+              ifenslave -d "${n}"
+              ip link delete "${n}"
+            '';
+          };
+
+        createVlanDevice = n: v:
+          let
+            deps = [ "sys-subsystem-net-devices-${v.interface}.device" ];
+          in
+          { description = "Vlan Interface ${n}";
+            wantedBy = [ "network.target" "sys-subsystem-net-devices-${n}.device" ];
+            bindsTo = deps;
+            after = deps;
+            serviceConfig.Type = "oneshot";
+            serviceConfig.RemainAfterExit = true;
+            path = [ pkgs.iproute ];
+            script = ''
+              # Remove Dead Interfaces
+              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+              ip link add link "${v.interface}" "${n}" type vlan id "${toString v.id}"
+              ip link set "${n}" up
+            '';
+            postStop = ''
+              ip link delete "${n}"
+            '';
+          };
+
       in listToAttrs (
            map configureInterface interfaces ++
            map createTunDevice (filter (i: i.virtual) interfaces))
          // mapAttrs createBridgeDevice cfg.bridges
+         // mapAttrs createBondDevice cfg.bonds
+         // mapAttrs createVlanDevice cfg.vlans
          // { "network-setup" = networkSetup; };
 
     # Set the host and domain names in the activation script.  Don't

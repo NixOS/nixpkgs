@@ -56,7 +56,7 @@ details.)</para>
 <para>Often it is necessary to override or modify some aspect of the
 build.  To make this easier, the standard environment breaks the
 package build into a number of <emphasis>phases</emphasis>, all of
-which can be overriden or modified individually: unpacking the
+which can be overridden or modified individually: unpacking the
 sources, applying patches, configuring, building, and installing.
 (There are some others; see <xref linkend="ssec-stdenv-phases"/>.)
 For instance, a package that doesn’t supply a makefile but instead has
@@ -233,7 +233,7 @@ specific parts of the build (e.g., unpacking the sources or installing
 the binaries).  Furthermore, it allows a nicer presentation of build
 logs in the Nix build farm.</para>
 
-<para>Each phase can be overriden in its entirety either by setting
+<para>Each phase can be overridden in its entirety either by setting
 the environment variable
 <varname><replaceable>name</replaceable>Phase</varname> to a string
 containing some shell commands to be executed, or by redefining the
@@ -295,6 +295,13 @@ executed and in what order:
     <term><varname>preInstallPhases</varname></term>
     <listitem>
       <para>Additional phases executed just before the install phase.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preFixupPhases</varname></term>
+    <listitem>
+      <para>Additional phases executed just before the fixup phase.</para>
     </listitem>
   </varlistentry>
 
@@ -1157,9 +1164,24 @@ echo @foo@
   </varlistentry>
 
   <varlistentry>
+    <term>gdk-pixbuf</term>
+    <listitem><para>Exports <envar>GDK_PIXBUF_MODULE_FILE</envar>
+    environment variable the the builder. Add librsvg package
+    to <varname>buildInputs</varname> to get svg support.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term>GHC</term>
     <listitem><para>Creates a temporary package database and registers
     every Haskell build input in it (TODO: how?).</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>GStreamer</term>
+    <listitem><para>Adds the
+    GStreamer plugins subdirectory of
+    each build input to the <envar>GST_PLUGIN_SYSTEM_PATH_1_0</envar> or
+    <envar>GST_PLUGIN_SYSTEM_PATH</envar> environment variable.</para></listitem>
   </varlistentry>
 
 </variablelist>

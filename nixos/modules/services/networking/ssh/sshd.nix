@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -18,9 +18,9 @@ let
   knownHosts = map (h: getAttr h cfg.knownHosts) (attrNames cfg.knownHosts);
 
   knownHostsFile = pkgs.writeText "ssh_known_hosts" (
-    flip concatMapStrings knownHosts (h:
-      "${concatStringsSep "," h.hostNames} ${builtins.readFile h.publicKeyFile}"
-    )
+    flip concatMapStrings knownHosts (h: ''
+      ${concatStringsSep "," h.hostNames} ${if h.publicKey != null then h.publicKey else readFile h.publicKeyFile}
+    '')
   );
 
   userOptions = {
@@ -39,7 +39,7 @@ let
       };
 
       keyFiles = mkOption {
-        type = types.listOf types.unspecified;
+        type = types.listOf types.path;
         default = [];
         description = ''
           A list of files each containing one OpenSSH public key that should be
@@ -59,7 +59,7 @@ let
       mode = "0444";
       source = pkgs.writeText "${u.name}-authorized_keys" ''
         ${concatStringsSep "\n" u.openssh.authorizedKeys.keys}
-        ${concatMapStrings (f: builtins.readFile f + "\n") u.openssh.authorizedKeys.keyFiles}
+        ${concatMapStrings (f: readFile f + "\n") u.openssh.authorizedKeys.keyFiles}
       '';
     };
     usersWithKeys = attrValues (flip filterAttrs config.users.extraUsers (n: u:
@@ -83,6 +83,16 @@ in
         description = ''
           Whether to enable the OpenSSH secure shell daemon, which
           allows secure remote logins.
+        '';
+      };
+
+      startWhenNeeded = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If set, <command>sshd</command> is socket-activated; that
+          is, instead of having it permanently running as a daemon,
+          systemd will start an instance for each incoming connection.
         '';
       };
 
@@ -172,7 +182,7 @@ in
       };
 
       authorizedKeysFiles = mkOption {
-        type = types.listOf types.unspecified;
+        type = types.listOf types.str;
         default = [];
         description = "Files from with authorized keys are read.";
       };
@@ -208,7 +218,18 @@ in
               the host's ssh service.
             '';
           };
+          publicKey = mkOption {
+            default = null;
+            type = types.nullOr types.str;
+            description = ''
+              The public key data for the host. You can fetch a public key
+              from a running SSH server with the <command>ssh-keyscan</command>
+              command.
+            '';
+          };
           publicKeyFile = mkOption {
+            default = null;
+            type = types.nullOr types.path;
             description = ''
               The path to the public key file for the host. The public
               key file is read at build time and saved in the Nix store.
@@ -248,38 +269,60 @@ in
       }
     ];
 
-    systemd.services.sshd =
-      { description = "SSH Daemon";
+    systemd =
+      let
+        service =
+          { description = "SSH Daemon";
 
-        wantedBy = [ "multi-user.target" ];
+            wantedBy = optional (!cfg.startWhenNeeded) "multi-user.target";
 
-        stopIfChanged = false;
+            stopIfChanged = false;
 
-        path = [ pkgs.openssh pkgs.gawk ];
+            path = [ pkgs.openssh pkgs.gawk ];
 
-        environment.LD_LIBRARY_PATH = nssModulesPath;
-        environment.LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
+            environment.LD_LIBRARY_PATH = nssModulesPath;
 
-        preStart =
-          ''
-            mkdir -m 0755 -p /etc/ssh
+            preStart =
+              ''
+                mkdir -m 0755 -p /etc/ssh
 
-            ${flip concatMapStrings cfg.hostKeys (k: ''
-              if ! [ -f "${k.path}" ]; then
-                  ssh-keygen -t "${k.type}" -b "${toString k.bits}" -f "${k.path}" -N ""
-              fi
-            '')}
-          '';
+                ${flip concatMapStrings cfg.hostKeys (k: ''
+                  if ! [ -f "${k.path}" ]; then
+                      ssh-keygen -t "${k.type}" -b "${toString k.bits}" -f "${k.path}" -N ""
+                  fi
+                '')}
+              '';
 
-        serviceConfig =
-          { ExecStart =
-              "${pkgs.openssh}/sbin/sshd " +
-              "-f ${pkgs.writeText "sshd_config" cfg.extraConfig}";
-            Restart = "always";
-            Type = "forking";
-            KillMode = "process";
-            PIDFile = "/run/sshd.pid";
+            serviceConfig =
+              { ExecStart =
+                  "${pkgs.openssh}/sbin/sshd " + (optionalString cfg.startWhenNeeded "-i ") +
+                  "-f ${pkgs.writeText "sshd_config" cfg.extraConfig}";
+                KillMode = "process";
+              } // (if cfg.startWhenNeeded then {
+                StandardInput = "socket";
+              } else {
+                Restart = "always";
+                Type = "forking";
+                PIDFile = "/run/sshd.pid";
+              });
           };
+      in
+
+      if cfg.startWhenNeeded then {
+
+        sockets.sshd =
+          { description = "SSH Socket";
+            wantedBy = [ "sockets.target" ];
+            socketConfig.ListenStream = cfg.ports;
+            socketConfig.Accept = true;
+          };
+
+        services."sshd@" = service;
+
+      } else {
+
+        services.sshd = service;
+
       };
 
     networking.firewall.allowedTCPPorts = cfg.ports;
@@ -335,7 +378,12 @@ in
       '';
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;
-                    message = "cannot enable X11 forwarding without setting xauth location";}];
+                    message = "cannot enable X11 forwarding without setting xauth location";}]
+      ++ flip mapAttrsToList cfg.knownHosts (name: data: {
+        assertion = (data.publicKey == null && data.publicKeyFile != null) ||
+                    (data.publicKey != null && data.publicKeyFile == null);
+        message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
+      });
 
   };
 

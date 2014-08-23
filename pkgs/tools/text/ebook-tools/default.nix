@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, pkgconfig, libxml2, libzip }:
 
 stdenv.mkDerivation rec {
-  name = "ebook-tools-0.2.1";
+  name = "ebook-tools-0.2.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/ebook-tools/${name}.tar.gz";
-    sha256 = "0wgwdsd3jwwfg36jyr5j0wayqjli3ia80lxzk10byd4cmkywnhy2";
+    sha256 = "1bi7wsz3p5slb43kj7lgb3r6lb91lvb6ldi556k4y50ix6b5khyb";
   };
 
   buildInputs = [ cmake pkgconfig libxml2 libzip ];

@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, alsaLib, glib, jackaudio, libsndfile, pkgconfig
+{ stdenv, fetchurl, alsaLib, glib, jack2, libsndfile, pkgconfig
 , pulseaudio }:
 
 stdenv.mkDerivation  rec {
   name = "fluidsynth-${version}";
-  version = "1.1.5";
+  version = "1.1.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/fluidsynth/${name}.tar.bz2";
-    sha256 = "1x73a5rsyvfmh1j0484kzgnk251q61g1g2jdja673l8fizi0xd24";
+    sha256 = "00gn93bx4cz9bfwf3a8xyj2by7w23nca4zxf09ll53kzpzglg2yj";
   };
 
   preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -21,7 +21,7 @@ stdenv.mkDerivation  rec {
     "-framework CoreAudio";
 
   buildInputs = [ glib libsndfile pkgconfig ]
-    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ alsaLib pulseaudio jackaudio ];
+    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ alsaLib pulseaudio jack2 ];
 
   meta = with stdenv.lib; {
     description = "Real-time software synthesizer based on the SoundFont 2 specifications";

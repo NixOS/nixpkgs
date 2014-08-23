@@ -1,11 +1,13 @@
-{stdenv, androidsdk, titaniumsdk, xcodewrapper}:
-{ appId, name, appName ? null, src, target, androidPlatformVersions ? [ "8" ], androidAbiVersions ? [ "armeabi" "armeabi-v7a" ]
+{stdenv, androidsdk, titaniumsdk, titanium, xcodewrapper, jdk, python, which}:
+{ name, src, target, androidPlatformVersions ? [ "8" ], androidAbiVersions ? [ "armeabi" "armeabi-v7a" ], tiVersion ? null
 , release ? false, androidKeyStore ? null, androidKeyAlias ? null, androidKeyStorePassword ? null
-, iosKeyFile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosDistribute ? false
+, iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null
+, enableWirelessDistribution ? false, installURL ? null
 }:
 
 assert (release && target == "android") -> androidKeyStore != null && androidKeyAlias != null && androidKeyStorePassword != null;
-assert (release && target == "iphone") -> iosKeyFile != null && iosCertificateName != null && iosCertificate != null && iosCertificatePassword != null;
+assert (release && target == "iphone") -> iosMobileProvisioningProfile != null && iosCertificateName != null && iosCertificate != null && iosCertificatePassword != null;
+assert enableWirelessDistribution -> installURL != null;
 
 let
   androidsdkComposition = androidsdk {
@@ -15,92 +17,107 @@ let
   };
   
   deleteKeychain = "security delete-keychain $keychainName";
-  
-  _appName = if appName == null then name else appName;
 in
 stdenv.mkDerivation {
   name = stdenv.lib.replaceChars [" "] [""] name;
   inherit src;
   
-  buildInputs = [] ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") xcodewrapper;
-
+  buildInputs = [ titanium jdk python which ] ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") xcodewrapper;
+  
   buildPhase = ''
     export HOME=$TMPDIR
-
+    
+    ${stdenv.lib.optionalString (tiVersion != null) ''
+      # Replace titanium version by the provided one
+      sed -i -e "s|<sdk-version>[0-9a-zA-Z\.]*</sdk-version>|<sdk-version>${tiVersion}</sdk-version>|" tiapp.xml
+    ''}
+    
+    # Simulate a login
+    mkdir -p $HOME/.titanium
+    cat > $HOME/.titanium/auth_session.json <<EOF
+    { "loggedIn": true }
+    EOF
+    
+    echo "{}" > $TMPDIR/config.json
+    titanium --config-file $TMPDIR/config.json --no-colors config sdk.defaultInstallLocation ${titaniumsdk}
+    
+    titanium --config-file $TMPDIR/config.json --no-colors config paths.modules ${titaniumsdk}
+    
     mkdir -p $out
     
     ${if target == "android" then
-        if release then
-          ''${titaniumsdk}/mobilesdk/*/*/android/builder.py distribute "${_appName}" ${androidsdkComposition}/libexec/android-sdk-* $(pwd) ${appId} ${androidKeyStore} ${androidKeyStorePassword} ${androidKeyAlias} $out''
-        else
-          ''${titaniumsdk}/mobilesdk/*/*/android/builder.py build "${_appName}" ${androidsdkComposition}/libexec/android-sdk-* $(pwd) ${appId}''
-
+        ''
+          titanium config --config-file $TMPDIR/config.json --no-colors android.sdkPath ${androidsdkComposition}/libexec/android-sdk-*
+          
+          ${if release then
+            ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target dist-playstore --keystore ${androidKeyStore} --alias ${androidKeyAlias} --password ${androidKeyStorePassword} --output-dir $out''
+          else
+            ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target emulator --build-only -B foo --output $out''}
+        ''
       else if target == "iphone" then
-        if iosDistribute then ''
-            export HOME=/Users/$(whoami)
-            export keychainName=$(basename $out)
+        ''
+          export NIX_TITANIUM_WORKAROUND="--config-file $TMPDIR/config.json"
+          
+          ${if release then
+            ''
+              export HOME=/Users/$(whoami)
+              export keychainName=$(basename $out)
             
-            # Create a keychain with the component hash name (should always be unique)
-            security create-keychain -p "" $keychainName
-            security default-keychain -s $keychainName
-            security unlock-keychain -p "" $keychainName
-            security import ${iosCertificate} -k $keychainName -P "${iosCertificatePassword}" -A
+              # Create a keychain with the component hash name (should always be unique)
+              security create-keychain -p "" $keychainName
+              security default-keychain -s $keychainName
+              security unlock-keychain -p "" $keychainName
+              security import ${iosCertificate} -k $keychainName -P "${iosCertificatePassword}" -A
 
-            provisioningId=$(grep UUID -A1 -a ${iosKeyFile} | grep -o "[-A-Z0-9]\{36\}")
+              provisioningId=$(grep UUID -A1 -a ${iosMobileProvisioningProfile} | grep -o "[-A-Za-z0-9]\{36\}")
    
-            # Ensure that the requested provisioning profile can be found
+              # Ensure that the requested provisioning profile can be found
+        
+              if [ ! -f "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision" ]
+              then
+                  mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+                  cp ${iosMobileProvisioningProfile} "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision"
+              fi
             
-            if [ ! -f "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision" ]
-            then
-                mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
-                cp ${iosKeyFile} "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision"
-            fi
+              # Make a copy of the Titanium SDK and fix its permissions. Without it,
+              # builds using the facebook module fail, because it needs to be writable
             
-            ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py distribute 6.0 $(pwd) ${appId} "${_appName}" "$provisioningId" "${iosCertificateName}" $out universal "$HOME/Library/Keychains/$keychainName"
+              cp -av ${titaniumsdk} $TMPDIR/titaniumsdk
             
-            # Remove our generated keychain
+              find $TMPDIR/titaniumsdk | while read i
+              do
+                  chmod 755 "$i"
+              done
+              
+              # Simulate a login
+              mkdir -p $HOME/.titanium
+              cat > $HOME/.titanium/auth_session.json <<EOF
+              { "loggedIn": true }
+              EOF
             
-            ${deleteKeychain}
-          ''
-        else
-            if release then
-              ''
-                export HOME=/Users/$(whoami)
-                export keychainName=$(basename $out)
+              # Set the SDK to our copy
+              titanium --config-file $TMPDIR/config.json --no-colors config sdk.defaultInstallLocation $TMPDIR/titaniumsdk
             
-                # Create a keychain with the component hash name (should always be unique)
-                security create-keychain -p "" $keychainName
-                security default-keychain -s $keychainName
-                security unlock-keychain -p "" $keychainName
-                security import ${iosCertificate} -k $keychainName -P "${iosCertificatePassword}" -A
-
-                provisioningId=$(grep UUID -A1 -a ${iosKeyFile} | grep -o "[-A-Z0-9]\{36\}")
-   
-                # Ensure that the requested provisioning profile can be found
+              # Do the actual build
+              titanium build --config-file $TMPDIR/config.json --force --no-colors --platform ios --target dist-adhoc --pp-uuid $provisioningId --distribution-name "${iosCertificateName}" --keychain $HOME/Library/Keychains/$keychainName --device-family universal --output-dir $out
             
-                if [ ! -f "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision" ]
-                then
-                    mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
-                    cp ${iosKeyFile} "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision"
-                fi
+              # Remove our generated keychain
             
-                ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py adhoc 6.0 $(pwd) ${appId} "${_appName}" "$provisioningId" "${iosCertificateName}" universal "$HOME/Library/Keychains/$keychainName"
+              ${deleteKeychain}
+            ''
+          else
+            ''
+              # Copy all sources to the output store directory.
+              # Why? Debug application include *.js files, which are symlinked into their
+              # sources. If they are not copied, we have dangling references to the
+              # temp folder.
             
-                # Remove our generated keychain
+              cp -av * $out
+              cd $out
             
-                ${deleteKeychain}
-          ''
-        else
-          ''
-            # Copy all sources to the output store directory.
-            # Why? Debug application include *.js files, which are symlinked into their
-            # sources. If they are not copied, we have dangling references to the
-            # temp folder.
-            
-            cp -av * $out
-            cd $out
-            ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py build 6.0 $(pwd) ${appId} "${_appName}" universal
-          ''
+              titanium build --config-file $TMPDIR/config.json --force --no-colors --platform ios --target simulator --build-only --device-family universal --output-dir $out
+          ''}
+        ''
 
       else throw "Target: ${target} is not supported!"}
   '';
@@ -111,12 +128,21 @@ stdenv.mkDerivation {
     ${if target == "android" && release then ""
       else
         if target == "android" then
-          ''cp $(ls build/android/bin/*.apk | grep -v '\-unsigned.apk') $out''
+          ''cp "$(ls build/android/bin/*.apk | grep -v '\-unsigned.apk')" $out''
         else if target == "iphone" && release then
            ''
              cp -av build/iphone/build/* $out
              mkdir -p $out/nix-support
              echo "file binary-dist \"$(echo $out/Release-iphoneos/*.ipa)\"" > $out/nix-support/hydra-build-products
+             
+             ${stdenv.lib.optionalString enableWirelessDistribution ''
+               appname=$(basename $out/Release-iphoneos/*.ipa .ipa)
+               bundleId=$(grep '<id>[a-zA-Z0-9.]*</id>' tiapp.xml | sed -e 's|<id>||' -e 's|</id>||' -e 's/ //g')
+               version=$(grep '<version>[a-zA-Z0-9.]*</version>' tiapp.xml | sed -e 's|<version>||' -e 's|</version>||' -e 's/ //g')
+               
+               sed -e "s|@INSTALL_URL@|${installURL}?bundleId=$bundleId\&amp;version=$version\&amp;title=$appname|" ${../xcodeenv/install.html.template} > $out/$appname.html
+               echo "doc install \"$out/$appname.html\"" >> $out/nix-support/hydra-build-products
+             ''}
            ''
         else if target == "iphone" then ""
         else throw "Target: ${target} is not supported!"}

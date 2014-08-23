@@ -1,22 +1,17 @@
-{ stdenv, fetchurl, cmake, python, boost, libuuid }:
+{ stdenv, fetchurl, cmake, python, boost, libuuid, ruby }:
 
 stdenv.mkDerivation rec {
   name = "${project}-cpp-${version}";
 
   project = "qpid";
-  version = "0.24";
+  version = "0.26";
 
   src = fetchurl {
     url = "mirror://apache/${project}/${version}/${name}.tar.gz";
-    sha256 = "08nfks5jjipy5i4b6mz62ijrz5ryq32c478ix7l3fzmaim3cy8b8";
+    sha256 = "1c03yi19d5h5h78h37add9csmy0mzvvmvn7zkcalwszabdhsb5yk";
   };
 
-  buildInputs = [ cmake python boost libuuid ];
-
-  # workaround this
-  #/nix/store/n38ns73bm4iv62fihd9ih5b39w54yyaf-boost-1.54.0/include/boost/ptr_container/detail/map_iterator.hpp:52:48:
-  #error: type qualifiers ignored on function return type [-Werror=ignored-qualifiers]
-  cmakeFlags = "-DENABLE_WARNINGS=OFF";
+  buildInputs = [ cmake python boost libuuid ruby ];
 
   # the subdir managementgen wants to install python stuff in ${python} and
   # the installation tries to create some folders in /var

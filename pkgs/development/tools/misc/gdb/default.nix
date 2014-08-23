@@ -8,7 +8,7 @@
 
 let
 
-  basename = "gdb-7.6";
+  basename = "gdb-7.7";
 
   # Whether (cross-)building for GNU/Hurd.  This is an approximation since
   # having `stdenv ? cross' doesn't tell us if we're building `crossDrv' and
@@ -27,8 +27,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.bz2";
-    md5 = "fda57170e4d11cdde74259ca575412a8";
+    sha256 = "08vcb97j1b7vxwq6088wb6s3g3bm8iwikd922y0xsgbbxv3d2104";
   };
+
+  patches = [ ./edit-signals.patch ];
 
   # I think python is not a native input, but I leave it
   # here while I will not need it cross building
@@ -76,9 +78,9 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/gdb/;
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
-    platforms = with platforms; linux ++ cygwin;
+    platforms = with platforms; linux ++ cygwin ++ darwin;
     maintainers = with maintainers; [ pierron ];
   };
 }

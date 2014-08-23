@@ -1,12 +1,16 @@
-{ stdenv, fetchurl, bash }:
+{ stdenv, fetchurl, bash, gettext }:
 
 stdenv.mkDerivation (rec {
-  name = "libgpg-error-1.11";
+  name = "libgpg-error-1.12";
 
   src = fetchurl {
     url = "mirror://gnupg/libgpg-error/${name}.tar.bz2";
-    sha256 = "1h0ql8j65ns2rmhj9wnc9035026crzkg226xg8614fq71947ccxf";
+    sha256 = "0pz58vr12qihq2f0bypjxsb6cf6ajq5258fmfm8s6lvwm3b9xz6a";
   };
+
+  # If architecture-dependant MO files aren't available, they're generated
+  # during build, so we need gettext for cross-builds.
+  crossAttrs.buildInputs = [ gettext ];
 
   doCheck = true;
 
@@ -22,7 +26,7 @@ stdenv.mkDerivation (rec {
 
     homepage = http://gnupg.org;
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
     platforms = stdenv.lib.platforms.all;
   };
 }

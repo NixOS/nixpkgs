@@ -1,9 +1,9 @@
 # This module allows the test driver to connect to the virtual machine
 # via a root shell attached to port 514.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let kernel = config.boot.kernelPackages.kernel; in
 
@@ -66,13 +66,22 @@ let kernel = config.boot.kernelPackages.kernel; in
     # Panic if an error occurs in stage 1 (rather than waiting for
     # user intervention).
     boot.kernelParams =
-      [ "console=tty1" "console=ttyS0" "panic=1" "boot.panic_on_fail" ];
+      [ "console=ttyS0" "panic=1" "boot.panic_on_fail" ];
 
     # `xwininfo' is used by the test driver to query open windows.
     environment.systemPackages = [ pkgs.xorg.xwininfo ];
 
     # Log everything to the serial console.
-    services.journald.console = "/dev/console";
+    services.journald.extraConfig =
+      ''
+        ForwardToConsole=yes
+        MaxLevelConsole=debug
+      '';
+
+    # Don't clobber the console with duplicate systemd messages.
+    systemd.extraConfig = "ShowStatus=no";
+
+    boot.consoleLogLevel = 7;
 
     # Prevent tests from accessing the Internet.
     networking.defaultGateway = mkOverride 150 "";
@@ -85,6 +94,11 @@ let kernel = config.boot.kernelPackages.kernel; in
       (isYes "SERIAL_8250")
       (isEnabled "VIRTIO_CONSOLE")
     ];
+
+    networking.usePredictableInterfaceNames = false;
+
+    # Make it easy to log in as root when running the test interactively.
+    security.initialRootPassword = mkDefault "";
 
   };
 

@@ -1,0 +1,19 @@
+diff -rupN a/poppler-glib.pc.cmake b/poppler-glib.pc.cmake
+--- a/poppler-glib.pc.cmake	2013-08-17 01:20:41.000000001 +0200
++++ b/poppler-glib.pc.cmake	2014-01-01 09:30:50.000000001 +0100
+@@ -10,4 +10,4 @@ Requires: glib-2.0 >= @GLIB_REQUIRED@ go
+ @PC_REQUIRES_PRIVATE@
+ 
+ Libs: -L${libdir} -lpoppler-glib
+-Cflags: -I${includedir}/poppler/glib
++Cflags: -I${includedir}/poppler/glib -I${includedir}/poppler
+diff -rupN a/poppler-glib.pc.in b/poppler-glib.pc.in
+--- a/poppler-glib.pc.in	2013-08-17 01:20:41.000000001 +0200
++++ b/poppler-glib.pc.in	2014-01-01 09:27:17.000000001 +0100
+@@ -10,4 +10,5 @@ Requires: glib-2.0 >= @GLIB_REQUIRED@ go
+ @PC_REQUIRES_PRIVATE@
+ 
+ Libs: -L${libdir} -lpoppler-glib
+-Cflags: -I${includedir}/poppler/glib
++Cflags: -I${includedir}/poppler/glib -I${includedir}/poppler
++

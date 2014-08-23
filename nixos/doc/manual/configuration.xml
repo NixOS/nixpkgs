@@ -237,7 +237,7 @@ postgresql.package = pkgs.postgresql90;
 </section>
 
 
-<section><title>Abstractions</title>
+<section xml:id="sec-module-abstractions"><title>Abstractions</title>
 
 <para>If you find yourself repeating yourself over and over, it’s time
 to abstract.  Take, for instance, this Apache HTTP Server configuration:
@@ -399,7 +399,7 @@ of an expression to be spliced into a string.</para>
 </section>
 
 
-<section><title>Modularity</title>
+<section xml:id="sec-modularity"><title>Modularity</title>
 
 <para>The NixOS configuration mechanism is modular.  If your
 <filename>configuration.nix</filename> becomes too big, you can split
@@ -443,8 +443,20 @@ Note that both <filename>configuration.nix</filename> and
 define an option, NixOS will try to <emphasis>merge</emphasis> the
 definitions.  In the case of
 <option>environment.systemPackages</option>, that’s easy: the lists of
-packages can simply be concatenated.  For other types of options, a
-merge may not be possible: for instance, if two modules define
+packages can simply be concatenated.  The value in
+<filename>configuration.nix</filename> is merged last, so for
+list-type options, it will appear at the end of the merged list. If
+you want it to appear first, you can use <varname>mkBefore</varname>:
+
+<programlisting>
+boot.kernelModules = mkBefore [ "kvm-intel" ];
+</programlisting>
+
+This causes the <literal>kvm-intel</literal> kernel module to be
+loaded before any other kernel modules.</para>
+
+<para>For other types of options, a merge may not be possible. For
+instance, if two modules define
 <option>services.httpd.adminAddr</option>,
 <command>nixos-rebuild</command> will give an error:
 
@@ -526,7 +538,7 @@ nix-repl> map (x: x.hostName) config.services.httpd.virtualHosts
 </section>
 
 
-<section><title>Syntax summary</title>
+<section xml:id="sec-nix-syntax-summary"><title>Syntax summary</title>
 
 <para>Below is a summary of the most important syntactic constructs in
 the Nix expression language.  It’s not complete.  In particular, there
@@ -718,7 +730,7 @@ manual</link> for the rest.</para>
 
 <!--===============================================================-->
 
-<section><title>Package management</title>
+<section xml:id="sec-package-management"><title>Package management</title>
 
 <para>This section describes how to add additional packages to your
 system.  NixOS has two distinct styles of package management:
@@ -861,7 +873,7 @@ Any package in Nixpkgs that depends on <literal>emacs</literal> will
 be passed your customised instance.  (However, the value
 <literal>pkgs.emacs</literal> in
 <varname>nixpkgs.config.packageOverrides</varname> refers to the
-original rather than overriden instance, to prevent an infinite
+original rather than overridden instance, to prevent an infinite
 recursion.)</para>
 
 </section>
@@ -923,7 +935,7 @@ environment.systemPackages = [ (import ./my-hello.nix) ];
 </programlisting>
 where <filename>my-hello.nix</filename> contains:
 <programlisting>
-with &lt;nixpkgs> {}; # bring all of Nixpkgs into scope
+with import &lt;nixpkgs> {}; # bring all of Nixpkgs into scope
 
 stdenv.mkDerivation rec {
   name = "hello-2.8";
@@ -1021,25 +1033,23 @@ states that a user account named <literal>alice</literal> shall exist:
 
 <programlisting>
 users.extraUsers.alice =
-  { createHome = true;
-    home = "/home/alice";
+  { isNormalUser = true;
     description = "Alice Foobar";
-    extraGroups = [ "wheel" ];
-    isSystemUser = false;
-    useDefaultShell = true;
+    extraGroups = [ "wheel" "networkmanager" ];
     openssh.authorizedKeys.keys = [ "ssh-dss AAAAB3Nza... alice@foobar" ];
   };
 </programlisting>
 
 Note that <literal>alice</literal> is a member of the
-<literal>wheel</literal> group, which allows her to use
-<command>sudo</command> to execute commands as
-<literal>root</literal>.  Also note the SSH public key that allows
-remote logins with the corresponding private key.  Users created in
-this way do not have a password by default, so they cannot log in via
-mechanisms that require a password.  However, you can use the
-<command>passwd</command> program to set a password, which is retained
-across invocations of <command>nixos-rebuild</command>.</para>
+<literal>wheel</literal> and <literal>networkmanager</literal> groups,
+which allows her to use <command>sudo</command> to execute commands as
+<literal>root</literal> and to configure the network, respectively.
+Also note the SSH public key that allows remote logins with the
+corresponding private key. Users created in this way do not have a
+password by default, so they cannot log in via mechanisms that require
+a password. However, you can use the <command>passwd</command> program
+to set a password, which is retained across invocations of
+<command>nixos-rebuild</command>.</para>
 
 <para>A user ID (uid) is assigned automatically.  You can also specify
 a uid manually by adding
@@ -1059,11 +1069,6 @@ users.extraGroups.students.gid = 1000;
 
 As with users, the group ID (gid) is optional and will be assigned
 automatically if it’s missing.</para>
-
-<warning><para>Currently declarative user management is not perfect:
-<command>nixos-rebuild</command> does not know how to realise certain
-configuration changes.  This includes removing a user or group, and
-removing group membership from a user.</para></warning>
 
 <para>In the imperative style, users and groups are managed by
 commands such as <command>useradd</command>,
@@ -1172,7 +1177,7 @@ fileSystems."/".device = "/dev/mapper/crypted";
 
 <!--===============================================================-->
 
-<section><title>X Window System</title>
+<section xml:id="sec-x11"><title>X Window System</title>
 
 <para>The X Window System (X11) provides the basis of NixOS’ graphical
 user interface.  It can be enabled as follows:
@@ -1235,7 +1240,7 @@ with other kernel modules.</para>
 <para>On 64-bit systems, if you want full acceleration for 32-bit
 programs such as Wine, you should also set the following:
 <programlisting>
-service.xserver.driSupport32Bit = true;
+services.xserver.driSupport32Bit = true;
 </programlisting>
 </para>
 
@@ -1264,9 +1269,31 @@ services.xserver.synaptics.twoFingerScroll = true;
 
 <!--===============================================================-->
 
-<section><title>Networking</title>
+<section xml:id="sec-networking"><title>Networking</title>
 
-<section><title>Secure shell access</title>
+<section xml:id="sec-networkmanager"><title>NetworkManager</title>
+
+<para>To facilitate network configuration, some desktop environments
+use NetworkManager. You can enable NetworkManager by setting:
+
+<programlisting>
+services.networkmanager.enable = true;
+</programlisting>
+
+Some desktop managers (e.g., GNOME) enable NetworkManager
+automatically for you.</para>
+
+<para>All users that should have permission to change network settings
+must belong to the <code>networkmanager</code> group.</para>
+
+<note><para><code>services.networkmanager</code> and
+<code>services.wireless</code> can not be enabled at the same time:
+you can still connect to the wireless networks using
+NetworkManager.</para></note>
+
+</section>
+
+<section xml:id="sec-ssh"><title>Secure shell access</title>
 
 <para>Secure shell (SSH) access to your machine can be enabled by
 setting:
@@ -1294,7 +1321,7 @@ users.extraUsers.alice.openssh.authorizedKeys.keys =
 </section>
 
 
-<section><title>IPv4 configuration</title>
+<section xml:id="sec-ipv4"><title>IPv4 configuration</title>
 
 <para>By default, NixOS uses DHCP (specifically,
 <command>dhcpcd</command>) to automatically configure network
@@ -1337,7 +1364,7 @@ provide the host name.</para>
 </section>
 
 
-<section><title>IPv6 configuration</title>
+<section xml:id="sec-ipv6"><title>IPv6 configuration</title>
 
 <para>IPv6 is enabled by default.  Stateless address autoconfiguration
 is used to automatically assign IPv6 addresses to all interfaces.  You
@@ -1352,17 +1379,19 @@ networking.enableIPv6 = false;
 </section>
 
 
-<section><title>Firewall</title>
+<section xml:id="sec-firewall"><title>Firewall</title>
 
 <para>NixOS has a simple stateful firewall that blocks incoming
 connections and other unexpected packets.  The firewall applies to
-both IPv4 and IPv6 traffic.  It can be enabled as follows:
+both IPv4 and IPv6 traffic. It is enabled by default. It can be
+disabled as follows:
 
 <programlisting>
-networking.firewall.enable = true;
+networking.firewall.enable = false;
 </programlisting>
 
-You can open specific TCP ports to the outside world:
+If the firewall is enabled, you can open specific TCP ports to the
+outside world:
 
 <programlisting>
 networking.firewall.allowedTCPPorts = [ 80 443 ];
@@ -1384,7 +1413,12 @@ always allowed.)</para>
 </section>
 
 
-<section><title>Wireless networks</title>
+<section xml:id="sec-wireless"><title>Wireless networks</title>
+
+<para>For a desktop installation using NetworkManager (e.g., GNOME),
+you just have to make sure the user is in the
+<code>networkmanager</code> group and you can skip the rest of this
+section on wireless networks.</para>
 
 <para>
 NixOS will start wpa_supplicant for you if you enable this setting:
@@ -1445,7 +1479,7 @@ networking.localCommands =
 
 <!--===============================================================-->
 
-<section><title>Linux kernel</title>
+<section xml:id="sec-kernel-config"><title>Linux kernel</title>
 
 <para>You can override the Linux kernel and associated packages using
 the option <option>boot.kernelPackages</option>.  For instance, this
@@ -1458,10 +1492,11 @@ are specific to the kernel version, such as the NVIDIA video drivers.
 This ensures that driver packages are consistent with the
 kernel.</para>
 
-<para>The default Linux kernel configuration should be fine for most
-users.  You can see the configuration of your current kernel in
-<filename>/run/booted-system/kernel-modules/config</filename>.  If you
-want to change the kernel configuration, you can use the
+<para>The default Linux kernel configuration should be fine for most users. You can see the configuration of your current kernel with the following command:
+<programlisting>
+cat /proc/config.gz | gunzip
+</programlisting>
+If you want to change the kernel configuration, you can use the
 <option>packageOverrides</option> feature (see <xref
 linkend="sec-customising-packages" />).  For instance, to enable
 support for the kernel debugger KGDB:

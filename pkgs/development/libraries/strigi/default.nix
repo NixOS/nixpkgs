@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig perl ];
 
+  patches = [ ./export_bufferedstream.patch ];
+
   enableParallelBuilding = true;
 
   meta = {

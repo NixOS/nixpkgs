@@ -1,12 +1,12 @@
 { stdenv, fetchurl, bison, flex, boost, gputils ? null }:
 
 stdenv.mkDerivation rec {
-  version = "3.2.0";
+  version = "3.4.0";
   name = "sdcc-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/sdcc/sdcc-src-${version}.tar.bz2";
-    sha256 = "15gdl04kqpvmwvvplss5nmp3bz8rhz48dhb0wmb2v9v9sn7qj01d";
+    sha256 = "1yavxffqdfhdyabdza936xxh9wq4cfwa385g26gjapsdp5ighsng";
   };
 
   # TODO: remove this comment when gputils != null is tested
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = http://sdcc.sourceforge.net/;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [maintainers.bjornfor];
+    maintainers = [ maintainers.bjornfor ];
   };
 }

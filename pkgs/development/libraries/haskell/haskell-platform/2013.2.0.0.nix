@@ -3,7 +3,7 @@
 , hashable, html, HTTP, HUnit, mtl, network, OpenGL, OpenGLRaw, parallel
 , parsec, QuickCheck, random, regexBase, regexCompat, regexPosix, split, stm
 , syb, text, transformers, unorderedContainers, vector, xhtml, zlib
-, cabalInstall, alex, haddock, happy, primitive, ghc
+, cabalInstall, alex, happy, primitive, ghc
 }:
 
 # This is just a meta-package. Because upstream fails to provide proper versioned
@@ -17,12 +17,13 @@ cabal.mkDerivation (self : {
   cabalFile = ./haskell-platform-2013.2.0.0.cabal;
   setupFile = ./Setup.hs;
   src = null;
+  isLibrary = false;
   propagatedBuildInputs = [
     async attoparsec caseInsensitive cgi fgl GLUT GLURaw haskellSrc
     hashable html HTTP HUnit mtl network OpenGL OpenGLRaw parallel
     parsec QuickCheck random regexBase regexCompat regexPosix split stm
     syb text transformers unorderedContainers vector xhtml zlib
-    cabalInstall alex haddock happy primitive ghc
+    cabalInstall alex happy primitive ghc
   ];
   unpackPhase = ''
     sourceRoot=haskell-platform
@@ -37,9 +38,6 @@ cabal.mkDerivation (self : {
     description = "Haskell Platform meta package";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = with self.stdenv.lib.maintainers; [andres simons];
   };
 })

@@ -4,34 +4,28 @@ stdenv.mkDerivation rec {
   name = "fop-1.1";
 
   src = fetchurl {
-    url = "http://apache.uib.no/xmlgraphics/fop/source/${name}-src.tar.gz";
+    url = "mirror://apache/xmlgraphics/fop/source/${name}-src.tar.gz";
     sha256 = "08i56d57w5dl5bqchr34x9165hvi5h4bhiflxhi0a4wd56rlq5jq";
   };
 
   buildInputs = [ ant jdk ];
 
-  buildPhase = ''
-    ant
-  '';
+  buildPhase = "ant";
 
   installPhase = ''
-    mkdir -p "$out/bin"
-    mkdir -p "$out/lib"
-    mkdir -p "$out/share/doc/fop"
+    mkdir -p $out/bin $out/lib $out/share/doc/fop
 
-    cp build/*.jar lib/*.jar "$out/lib/"
-    cp -r README examples/ "$out/share/doc/fop/"
+    cp build/*.jar lib/*.jar $out/lib/
+    cp -r README examples/ $out/share/doc/fop/
 
     # There is a fop script in the source archive, but it has many impurities.
     # Instead of patching out 90 % of the script, we write our own.
     cat > "$out/bin/fop" <<EOF
     #!${stdenv.shell}
     java_exec_args="-Djava.awt.headless=true"
-    # Note the wildcard; it will be passed to java and java will expand it
-    LOCALCLASSPATH="$out/lib/*"
-    exec "${jdk}/bin/java" \$java_exec_args -classpath "\$LOCALCLASSPATH" org.apache.fop.cli.Main "\$@"
+    exec ${jdk.jre}/bin/java \$java_exec_args -classpath "$out/lib/*" org.apache.fop.cli.Main "\$@"
     EOF
-    chmod a+x "$out/bin/fop"
+    chmod a+x $out/bin/fop
   '';
 
   meta = with stdenv.lib; {

@@ -15,6 +15,10 @@ stdenv.mkDerivation {
 
   configureFlags = "CPPFLAGS=-DQT_NO_DEBUG";
 
+  preConfigure = ''
+    export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:${phonon}/lib64/pkgconfig:${phonon}/lib32/pkgconfig"
+  '';
+
   cmakeFlags = "-DENABLE_AUTODOWNLOAD=OFF -DBUILD_DESCRIPTION='NixOS' -DCMAKE_BUILD_TYPE=Release";
 
   prePatch = ''
@@ -26,6 +30,7 @@ stdenv.mkDerivation {
     sed -i -e '/mpd_mediaplayer/d' \
            -e '/encryption_ng/d'   \
            -e '/encryption_ng_simlite/d' Plugins.cmake
+    patch -p1 < ${./cmake.patch}
   '';
 
   NIX_LDFLAGS="-lX11";
@@ -33,7 +38,7 @@ stdenv.mkDerivation {
   meta = {
     description = "An instant-messenger client for the gadu-gadu network (most popular polish IM network)";
     homepage = http://www.kadu.net/w/English:Main_Page;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.piotr ];
   };

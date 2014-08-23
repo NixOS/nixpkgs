@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, ghc, perl, gmp, ncurses }:
+{ stdenv, fetchurl, ghc, perl, gmp, ncurses, happy, alex }:
 
 stdenv.mkDerivation rec {
-  version = "7.7.20130828";
+  version = "7.9.20140814";
   name = "ghc-${version}";
 
   src = fetchurl {
-    url = "http://darcs.haskell.org/ghcBuilder/uploads/tn23/${name}-src.tar.bz2";
-    sha256 = "180nkd77kz3mv4g7yq8ipx34p5q8k714l0z2527y49lghy118jzv";
+    url = "http://deb.haskell.org/dailies/2014-08-14/ghc_${version}.orig.tar.bz2";
+    sha256 = "05vmlbzbfv72z570xmlh8n003z9xc4l5hixjqvczyyyisdvmyaa3";
   };
 
-  buildInputs = [ ghc perl gmp ncurses ];
+  buildInputs = [ ghc perl gmp ncurses happy alex ];
 
   enableParallelBuilding = true;
 
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     echo "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
   '';
 

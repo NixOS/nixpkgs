@@ -1,0 +1,33 @@
+From ec6007e6f7772a90713c9c51c64359229961ce27 Mon Sep 17 00:00:00 2001
+From: Jeremy Huddleston Sequoia <jeremyhu@apple.com>
+Date: Sun, 6 Apr 2014 05:32:00 -0700
+Subject: [PATCH] XQuartz: Ensure we wait for the server thread to terminate
+
+AKA: XQuartz 2.7.5 doesn't delete its /tmp/.X$d-lock
+
+http://xquartz.macosforge.org/trac/ticket/823
+
+Signed-off-by: Jeremy Huddleston Sequoia <jeremyhu@apple.com>
+---
+ hw/xquartz/X11Controller.m | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/hw/xquartz/X11Controller.m b/hw/xquartz/X11Controller.m
+index 5445c6f..022e832 100644
+--- a/hw/xquartz/X11Controller.m
++++ b/hw/xquartz/X11Controller.m
+@@ -942,9 +942,8 @@ extern char *bundle_id_prefix;
+     /* shutdown the X server, it will exit () for us. */
+     DarwinSendDDXEvent(kXquartzQuit, 0);
+ 
+-    /* In case it doesn't, exit anyway after a while. */
+-    remain = 10000000;
+-    while ((remain = usleep(remain)) > 0) ;
++    /* In case it doesn't, exit anyway after 5s. */
++    [NSThread sleepForTimeInterval:5.0];
+ 
+     exit(1);
+ }
+-- 
+1.9.1
+

@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, kernelDev, perl, makeWrapper }:
+{ stdenv, fetchurl, kernel, perl, makeWrapper }:
 
 # BLCR 0.8.4 works for kernel version up to 2.6.38 (including 2.6.38.x)
 # BLCR 0.8.5 should works for kernel version up to 3.7.1
 
 assert stdenv.isLinux;
-assert builtins.compareVersions "3.7.2" kernelDev.version == 1;
+assert builtins.compareVersions "3.7.2" kernel.version == 1;
 
 stdenv.mkDerivation {
-  name = "blcr_${kernelDev.version}-0.8.5";
+  name = "blcr_${kernel.version}-0.8.5";
 
   src = fetchurl {
     url = http://crd.lbl.gov/assets/Uploads/FTG/Projects/CheckpointRestart/downloads/blcr-0.8.5.tar.gz;
@@ -18,9 +18,9 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     configureFlagsArray=(
-      --with-linux=${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build
-      --with-kmod-dir=$out/lib/modules/${kernelDev.modDirVersion}
-      --with-system-map=${kernelDev}/System.map
+      --with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build
+      --with-kmod-dir=$out/lib/modules/${kernel.modDirVersion}
+      --with-system-map=${kernel}/System.map
     )
   '';
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Berkeley Lab Checkpoint/Restart for Linux (BLCR)";
     homepage = https://ftg.lbl.gov/projects/CheckpointRestart/;
-    license = "GPL2";
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [
       z77z

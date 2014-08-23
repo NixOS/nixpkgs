@@ -105,8 +105,7 @@ rec {
     [
       raskin
     ];
-    platforms = with a.lib.platforms;
-      []; # Builder is just unpacking/mixing what is needed
+    hydraPlatforms = []; # Builder is just unpacking/mixing what is needed
     license = "free"; # mix of packages under different licenses
     homepage = "http://openjena.org/";
   };

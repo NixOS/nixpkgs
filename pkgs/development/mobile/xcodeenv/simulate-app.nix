@@ -1,7 +1,7 @@
 {stdenv, xcodewrapper}:
 { name, appName ? null, app
 , device ? "iPhone", baseDir ? ""
-, sdkVersion ? "6.1"
+, sdkVersion ? "7.0"
 }:
 
 let
@@ -10,7 +10,7 @@ in
 stdenv.mkDerivation {
   name = stdenv.lib.replaceChars [" "] [""] name;
   buildCommand = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cat > $out/bin/run-test-simulator << "EOF"
     #! ${stdenv.shell} -e
 

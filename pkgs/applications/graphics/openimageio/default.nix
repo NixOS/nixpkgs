@@ -4,25 +4,25 @@
 
 stdenv.mkDerivation rec {
   name = "oiio-${version}";
-  version = "1.1.12";
+  version = "1.4";
 
   src = fetchurl {
-    url = "https://github.com/OpenImageIO/oiio/archive/Release-${version}.zip";
-    sha256 = "196iq15waa2yyryiwhf6ynlpqnpknm4cc4azakg01xs70yiphsfl";
+    url = "https://github.com/OpenImageIO/oiio/archive/RB-${version}.zip";
+    sha256 = "0ldj3hwpz363l1zyzf6c62wc5d2cpbiszlpjvv5w6rrsx2ddbbn1";
   };
 
-  buildInputs = [ 
+  buildInputs = [
     boost cmake ilmbase libjpeg libpng libtiff opencolorio openexr unzip
   ];
 
-  configurePhase = "";
+  cmakeFlags = [
+    "-DUSE_PYTHON=OFF"
+  ];
 
   buildPhase = ''
     make ILMBASE_HOME=${ilmbase} OPENEXR_HOME=${openexr} USE_PYTHON=0 \
       INSTALLDIR=$out dist_dir=
   '';
-
-  installPhase = ":";
 
   meta = with stdenv.lib; {
     homepage = http://www.openimageio.org;

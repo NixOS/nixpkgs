@@ -1,16 +1,16 @@
-{ fetchurl, stdenv, libcdio, zlib, bzip2, readline, acl }:
+{ fetchurl, stdenv, libcdio, zlib, bzip2, readline, acl, attr }:
 
 stdenv.mkDerivation rec {
-  name = "xorriso-1.2.2";
+  name = "xorriso-1.3.4";
 
   src = fetchurl {
     url = "mirror://gnu/xorriso/${name}.tar.gz";
-    sha256 = "0kw4fiqn24vya3zhay6minzrbz10zlxm8sjs272z7l5s2kwcjypx";
+    sha256 = "0wvxbvkpdydcbmqi9xz7nv8cna6vp9726ahmmxxyx56cz4xifr4x";
   };
 
   doCheck = true;
 
-  buildInputs = [ libcdio zlib bzip2 readline ]
+  buildInputs = [ libcdio zlib bzip2 readline attr ]
     ++ stdenv.lib.optional stdenv.isLinux acl;
 
   meta = {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
          filesystems.
       '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     homepage = http://www.gnu.org/software/xorriso/;
 

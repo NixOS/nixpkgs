@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "cminpack-1.1.2";
+  name = "cminpack-1.3.2";
   
   src = fetchurl {
-    url = http://devernay.free.fr/hacks/cminpack/cminpack-1.1.2.tar.gz;
-    sha256 = "0sd8gqk7npyiiiz2jym8q89d9gqx8fig0mnx63swkwmp4lqmmxww";
+    url = http://devernay.free.fr/hacks/cminpack/cminpack-1.3.2.tar.gz;
+    sha256 = "09bqr44wqancbdsc39lvhdz7rci3hknmlrrrzv46skvwx6rgk9x0";
   };
 
   patchPhase = ''

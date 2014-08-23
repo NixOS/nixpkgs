@@ -1,8 +1,10 @@
-args : with args; 
+args : with args;
+let version = "1.5.0";
+in
 rec {
   src = fetchurl {
-    url = mirror://sourceforge/pidgin-latex/pidgin-latex-1.2.1.tar.bz2;
-    sha256 = "19h76fwsx5y30l5wda2930k10r385aipngfljz5bdi7b9y52lii7";
+    url = "mirror://sourceforge/pidgin-latex/pidgin-latex_${version}.tar.bz2";
+    sha256 = "9c850aee90d7e59de834f83e09fa6e3e51b123f06e265ead70957608ada95441";
   };
 
   buildInputs = [texLive pkgconfig gtk imagemagick glib pidgin which];
@@ -33,8 +35,8 @@ rec {
 
   /* doConfigure should be specified separately */
   phaseNames = [ "preBuild" "doMakeInstall" "postInstall"];
-      
-  name = "pidgin-latex-1.2.1";
+
+  name = "pidgin-latex-${version}";
   meta = {
     description = "LaTeX rendering plugin for Pidgin IM";
     priority = "10";

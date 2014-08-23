@@ -1,37 +1,30 @@
-{stdenv, fetchurl, ocaml}:
-
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "0.9.2";
-in
+{stdenv, fetchurl, ocaml, findlib, opam}:
 
 stdenv.mkDerivation {
-  name = "ocaml-react-${version}";
+  name = "ocaml-react-1.0.1";
 
   src = fetchurl {
-    url = "http://erratique.ch/software/react/releases/react-${version}.tbz";
-    sha256 = "0fiaxzfxv8pc82d31jz85zryz06k84is0l3sn5g0di5mpc5falxr";
+    url = "http://erratique.ch/software/react/releases/react-1.0.1.tbz";
+    sha256 = "007c9kzl0i6xvxnqj9jny4hgm28v9a1i079q53vl5hfb5f7h1mda";
   };
 
-  buildInputs = [ocaml];
+  unpackCmd = "tar xjf $src";
+  buildInputs = [ocaml findlib opam];
 
-  buildCommand = ''
-    export INSTALLDIR=$out/lib/ocaml/${ocaml_version}/site-lib/react
-    tar xjf $src
-    cd react-*
-    substituteInPlace src/META --replace '+react' $INSTALLDIR
-    chmod +x build
-    ./build 
-    ./build install
+  createFindlibDestdir = true;
+
+  configurePhase = "ocaml pkg/git.ml";
+  buildPhase     = "ocaml pkg/build.ml native=true native-dynlink=true";
+  installPhase   = ''
+    opam-installer --script --prefix=$out react.install > install.sh
+    sh install.sh
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://erratique.ch/software/react;
     description = "Applicative events and signals for OCaml";
-    license = "BSD";
+    license = licenses.bsd3;
     platforms = ocaml.meta.platforms;
-    maintainers = [
-      stdenv.lib.maintainers.z77z
-    ];
+    maintainers = with maintainers; [ z77z vbmithr ];
   };
 }

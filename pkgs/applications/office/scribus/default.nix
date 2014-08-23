@@ -3,11 +3,11 @@
 , zlib, libpng, xorg, cairo, podofo, aspell, boostHeaders, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "scribus-1.4.1";
+  name = "scribus-1.4.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/scribus/scribus/${name}.tar.xz";
-    sha256 = "1n67z2bk5ca2sxvv43jvj7yygfr4d2x5yc69zk70v38prm0gqlv8";
+    sha256 = "1zxgl2g299rllfy5ihs5skicpv7zcmz149ahraami69gqcag6bn7";
   };
 
   enableParallelBuilding = true;
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.linux;
     description = "Desktop Publishing (DTP) and Layout program for Linux";
     homepage = http://www.scribus.net;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

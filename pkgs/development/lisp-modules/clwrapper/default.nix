@@ -17,6 +17,8 @@ stdenv.mkDerivation {
 
   phases="installPhase fixupPhase";
 
+  preferLocalBuild = true;
+
   passthru = {
     inherit lisp;
   };

@@ -1,11 +1,11 @@
 {stdenv, fetchurl, pcre, ocaml, findlib}:
 
 stdenv.mkDerivation {
-  name = "ocaml-pcre-6.2.5";
+  name = "ocaml-pcre-7.1.1";
 
   src = fetchurl {
-    url = https://bitbucket.org/mmottl/pcre-ocaml/downloads/pcre-ocaml-6.2.5.tar.gz;
-    sha256 = "0iwfi0wmw3xbx31ri96pmrsmmn4r3h9f0k6gyk8j4pajlhl40xzi";
+    url = https://github.com/mmottl/pcre-ocaml/releases/download/v7.1.1/pcre-ocaml-7.1.1.tar.gz;
+    sha256 = "0nj4gb6hjjjmz5gnl9cjrh4w82rw8cvbwnk0hxhfgfd25p9k50n3";
   };
 
   buildInputs = [ocaml findlib];
@@ -15,13 +15,11 @@ stdenv.mkDerivation {
 
   configurePhase = "true";	# Skip configure phase
 
-  meta = {
-    homepage = "http://www.ocaml.info/home/ocaml_sources.html";
+  meta = with stdenv.lib; {
+    homepage = "https://bitbucket.org/mmottl/pcre-ocaml";
     description = "An efficient C-library for pattern matching with Perl-style regular expressions in OCaml";
-    license = "LGPL";
+    license = licenses.lgpl21;
     platforms = ocaml.meta.platforms;
-    maintainers = [
-      stdenv.lib.maintainers.z77z
-    ];
+    maintainers = with maintainers; [ z77z vbmithr ];
   };
 }

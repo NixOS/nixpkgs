@@ -19,7 +19,6 @@ stdenv.mkDerivation (rec {
     description = "Support Library for Pocketsphinx";
     homepage = http://cmusphinx.sourceforge.net;
     license = "free-non-copyleft";
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
 } // (stdenv.lib.optionalAttrs multipleOutputs {
   outputs = [ "out" "lib" "headers" ];

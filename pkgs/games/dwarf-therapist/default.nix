@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchhg {
     url = "https://code.google.com/r/splintermind-attributes/";
-    tag = rev;
+    inherit rev;
     sha256 = "0a9m967q6p2q3plrl6qysg1xrdmg65jzil6awjh2wr3g10x2x15z";
   };
 
@@ -53,8 +53,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tool to manage dwarves in in a running game of Dwarf Fortress";
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
-    license = "MIT";
-    platforms = stdenv.lib.platforms.none;
+    license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = [];
     homepage = https://code.google.com/r/splintermind-attributes/;
   };
 }

@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, SDL , alsaLib, gtk, jackaudio, ladspaH
+{ stdenv, fetchurl, SDL , alsaLib, gtk, jack2, ladspaH
 , ladspaPlugins, libsamplerate, libsndfile, pkgconfig, pulseaudio }:
 
 stdenv.mkDerivation  rec {
   name = "mhwaveedit-${version}";
-  version = "1.4.21";
+  version = "1.4.23";
 
   src = fetchurl {
     url = "http://download.gna.org/mhwaveedit/${name}.tar.bz2";
-    sha256 = "0jl7gvhwsz4fcn5d146h4m6i3hlxdsw4mmj280cv9g70p6zqi1w7";
+    sha256 = "010rk4mr631s440q9cfgdxx2avgzysr9aq52diwdlbq9cddifli3";
   };
 
   buildInputs =
-   [ SDL alsaLib gtk jackaudio ladspaH libsamplerate libsndfile
+   [ SDL alsaLib gtk jack2 ladspaH libsamplerate libsndfile
      pkgconfig pulseaudio
    ];
 

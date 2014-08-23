@@ -1,0 +1,26 @@
+diff -u -r cinnamon-session-3.4.2/cinnamon-session/csm-session-fill.c cinnamon-session-3.4.2-timeout/cinnamon-session/csm-session-fill.c
+--- cinnamon-session-3.4.2/cinnamon-session/csm-session-fill.c	2012-02-02 15:33:01.000000000 +0100
++++ cinnamon-session-3.4.2-timeout/cinnamon-session/csm-session-fill.c	2012-06-10 02:39:46.184348462 +0200
+@@ -36,7 +36,7 @@
+ #define CSM_KEYFILE_DEFAULT_PROVIDER_PREFIX "DefaultProvider"
+ 
+ /* See https://bugzilla.gnome.org/show_bug.cgi?id=641992 for discussion */
+-#define CSM_RUNNABLE_HELPER_TIMEOUT 3000 /* ms */
++#define CSM_RUNNABLE_HELPER_TIMEOUT 10000 /* ms */
+ 
+ typedef void (*GsmFillHandleProvider) (const char *provides,
+                                        const char *default_provider,
+diff -u -r cinnamon-session-3.4.2/tools/cinnamon-session-check-accelerated.c 
+cinnamon-session-3.4.2-timeout/tools/cinnamon-session-check-accelerated.c
+--- cinnamon-session-3.4.2/tools/cinnamon-session-check-accelerated.c	2011-03-22 21:31:43.000000000 +0100
++++ cinnamon-session-3.4.2-timeout/tools/cinnamon-session-check-accelerated.c	2012-06-10 02:42:08.013218006 +0200
+@@ -30,7 +30,7 @@
+ #include <X11/Xatom.h>
+ 
+ /* Wait up to this long for a running check to finish */
+-#define PROPERTY_CHANGE_TIMEOUT 5000
++#define PROPERTY_CHANGE_TIMEOUT 12000
+ 
+ /* Values used for the _GNOME_SESSION_ACCELERATED root window property */
+ #define NO_ACCEL            0
+

@@ -1,4 +1,4 @@
-{ clangStdenv, fetchgit, llvm, clangUnwrapped }:
+{ clangStdenv, fetchgit, llvm, clang }:
 
 clangStdenv.mkDerivation {
   name = "emacs-clang-complete-async-20130218";
@@ -8,7 +8,7 @@ clangStdenv.mkDerivation {
     sha256 = "1c8zqi6axbsb951azz9iqx3j52j30nd9ypv396hvids3g02cirrf";
   };
 
-  buildInputs = [ llvm clangUnwrapped ];
+  buildInputs = [ llvm clang.clang ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -20,7 +20,6 @@ clangStdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/Golevka/emacs-clang-complete-async";
     description = "An emacs plugin to complete C and C++ code using libclang";
-    license = "GPLv3+";
+    license = clangStdenv.lib.licenses.gpl3Plus;
   };
 }
-

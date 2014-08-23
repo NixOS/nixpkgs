@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
   cfg = config.boot.loader.gummiboot;
@@ -14,7 +14,7 @@ let
 
     inherit (pkgs) python gummiboot;
 
-    inherit (config.environment) nix;
+    nix = config.nix.package;
 
     inherit (cfg) timeout;
 
@@ -53,6 +53,8 @@ in {
         message = "This kernel does not support the EFI boot stub";
       }
     ];
+
+    boot.loader.grub.enable = mkDefault false;
 
     system = {
       build.installBootLoader = gummibootBuilder;

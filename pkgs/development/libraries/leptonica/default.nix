@@ -1,11 +1,11 @@
 {stdenv, fetchurl, libpng, libtiff, libjpeg, zlib}:
 
 stdenv.mkDerivation {
-  name = "leptonica-1.68";
+  name = "leptonica-1.69";
 
   src = fetchurl {
-    url = http://www.leptonica.org/source/leptonica-1.68.tar.gz;
-    sha256 = "13qzm24zy46bj9b476jxzbw9qh7p96jikfzxg88kz4dj1p2vdvxc";
+    url = http://www.leptonica.org/source/leptonica-1.69.tar.gz;
+    sha256 = "0bd7w0zpmwwfn1cnrlyzjw3jf8x59r0rhdmvk7rigr57rnfnddry";
   };
 
   buildInputs = [ libpng libtiff libjpeg zlib ];

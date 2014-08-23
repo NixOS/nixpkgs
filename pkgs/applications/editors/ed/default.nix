@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "ed-1.7";
+  name = "ed-1.9";
 
   src = fetchurl {
     url = "mirror://gnu/ed/${name}.tar.gz";
-    sha256 = "0c908wb5pm48rjrrfbm5dhrqzys8f1dbvi90dn0vgwjzk80l2hl9";
+    sha256 = "122syihsx2hwzj75mkf5a9ssiky2xby748kp4cc00wzhmp7p5cym";
   };
 
   /* FIXME: Tests currently fail on Darwin:
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       full-screen editors such as GNU Emacs or GNU Moe.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     homepage = http://www.gnu.org/software/ed/;
 

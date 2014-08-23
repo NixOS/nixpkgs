@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pam }:
+{ stdenv, fetchurl, pam, qrencode }:
 
 stdenv.mkDerivation rec {
   name = "google-authenticator-1.0";
@@ -10,8 +10,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pam ];
 
+  preConfigure = ''
+    sed -i 's|libqrencode.so.3|${qrencode}/lib/libqrencode.so.3|' google-authenticator.c
+  '';
+
   installPhase = ''
-    ensureDir $out/bin $out/lib/security
+    mkdir -p $out/bin $out/lib/security
     cp pam_google_authenticator.so $out/lib/security
     cp google-authenticator $out/bin
   '';
@@ -19,6 +23,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://code.google.com/p/google-authenticator/;
     description = "Two-step verification, with pam module";
-    license = "ASL2.0";
+    license = stdenv.lib.licenses.asl20;
   };
 }

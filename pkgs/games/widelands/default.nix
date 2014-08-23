@@ -1,76 +1,46 @@
-x@{builderDefsPackage
-  , libjpeg, boost, SDL, SDL_gfx, SDL_image, SDL_net, SDL_ttf, SDL_sound
-  , gettext, zlib, libiconv, libpng, python, expat, lua5, glew, doxygen
-  , cmake, ggz_base_libs, mesa, SDL_mixer
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, cmake, python, gettext
+, boost, libpng, zlib, glew, lua
+, SDL, SDL_image, SDL_mixer, SDL_net, SDL_ttf, SDL_gfx
+}:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="widelands";
-    version="build17";
-    name="${baseName}-${version}";
-    project="${baseName}";
-    url="https://launchpadlibrarian.net/102893896/widelands-build17-src.tar.bz2";
-    hash="be48b3b8f342a537b39a3aec2f7702250a6a47e427188ba3bece67d7d90f3cc5";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
-  };
+stdenv.mkDerivation {
+  name = "widelands-18";
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["killBuildDir" "doPatch"  "doCmake" "doMakeInstall" "createScript"];
-
-  patches = [ ./boost_and_cmake_die_die_die.patch ]; 
-      
-  killBuildDir = a.fullDepEntry ''
-    rm -r build
-  '' ["minInit" "doUnpack"];
-
-  cmakeFlags = [
-    "-DLUA_LIBRARIES=-llua"
-    "-DWL_PORTABLE=true"
-  ];
-
-  createScript = a.fullDepEntry ''
-    mkdir -p "$out/bin"
-    echo '#! ${a.stdenv.shell}' >> "$out/bin/widelands"
-    echo "cd \"$out/share/games/widelands\"" >> "$out/bin/widelands"
-    echo "\"$out/games/widelands\" \"\$@\"" >> "$out/bin/widelands"
-    chmod a+x "$out/bin/widelands"
-  '' ["minInit"];
-
-  meta = {
-    description = "Widelands RTS with multiple-goods economy";
+  meta = with stdenv.lib; {
+    description = "RTS with multiple-goods economy";
+    homepage    = "http://widelands.org/";
     longDescription = ''
       Widelands is a real time strategy game based on "The Settlers" and "The
       Settlers II". It has a single player campaign mode, as well as a networked
-      multiplayer mode. 
+      multiplayer mode.
     '';
-
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-      jcumming
-    ];
-    #platforms = a.lib.platforms.linux;
-    license = a.lib.licenses.gpl2Plus;
+    license        = licenses.gpl2Plus;
+    platforms      = platforms.linux;
+    maintainers    = with maintainers; [ raskin jcumming ];
+    hydraPlatforms = [];
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "https://launchpad.net/widelands/+download";
-    };
-  };
-}) x
 
+
+  src = fetchurl {
+    url = "https://launchpad.net/widelands/build18/build-18/+download/"
+        + "widelands-build18-src.tar.bz2";
+    sha256 = "1qvx1cwkf61iwq0qkngvg460dsxqsfvk36qc7jf7mzwkiwbxkzvd";
+  };
+
+  preConfigure = ''
+    cmakeFlags="
+      -DWL_INSTALL_PREFIX=$out
+      -DWL_INSTALL_BINDIR=bin
+      -DWL_INSTALL_DATADIR=share/widelands
+    "
+  '';
+
+  nativeBuildInputs = [ cmake python gettext ];
+
+  buildInputs = [
+    boost libpng zlib glew lua
+    SDL SDL_image SDL_mixer SDL_net SDL_ttf SDL_gfx
+  ];
+
+  enableParallelBuilding = true;
+}

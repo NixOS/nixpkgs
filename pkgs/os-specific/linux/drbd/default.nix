@@ -3,11 +3,11 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "drbd-8.4.0";
+  name = "drbd-8.4.4";
 
   src = fetchurl {
     url = "http://oss.linbit.com/drbd/8.4/${name}.tar.gz";
-    sha256 = "096njwxjpwvnl259gxq6cr6n0r6ba0h5aryvgk05hqi95jx927vg";
+    sha256 = "0hm1cnd7vsccyc22sg85f9aj48nijl2f1kgbvl5crv414ihv5giq";
   };
 
   patches = [ ./pass-force.patch ];

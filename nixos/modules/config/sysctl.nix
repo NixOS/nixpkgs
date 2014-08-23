@@ -1,13 +1,17 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
   sysctlOption = mkOptionType {
     name = "sysctl option value";
-    check = x: builtins.isBool x || builtins.isString x || builtins.isInt x;
-    merge = args: defs: (last defs).value; # FIXME: hacky way to allow overriding in configuration.nix.
+    check = val:
+      let
+        checkType = x: isBool x || isString x || isInt x || isNull x;
+      in
+        checkType val || (val._type or "" == "override" && checkType val.content);
+    merge = loc: defs: mergeOneOption loc (filterOverrides defs);
   };
 
 in
@@ -29,8 +33,9 @@ in
         <manvolnum>8</manvolnum></citerefentry>.  Note that sysctl
         parameters names must be enclosed in quotes
         (e.g. <literal>"vm.swappiness"</literal> instead of
-        <literal>vm.swappiness</literal>).  The value of each parameter
-        may be a string, integer or Boolean.
+        <literal>vm.swappiness</literal>).  The value of each
+        parameter may be a string, integer, boolean, or null
+        (signifying the option will not appear at all).
       '';
     };
 
@@ -39,19 +44,13 @@ in
   config = {
 
     environment.etc."sysctl.d/nixos.conf".text =
-      concatStrings (mapAttrsToList (n: v: "${n}=${if v == false then "0" else toString v}\n") config.boot.kernel.sysctl);
+      concatStrings (mapAttrsToList (n: v:
+        optionalString (v != null) "${n}=${if v == false then "0" else toString v}\n"
+      ) config.boot.kernel.sysctl);
 
     systemd.services.systemd-sysctl =
-      { description = "Apply Kernel Variables";
-        before = [ "sysinit.target" "shutdown.target" ];
-        wantedBy = [ "sysinit.target" "multi-user.target" ];
+      { wantedBy = [ "multi-user.target" ];
         restartTriggers = [ config.environment.etc."sysctl.d/nixos.conf".source ];
-        unitConfig.DefaultDependencies = false; # needed to prevent a cycle
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = "${config.systemd.package}/lib/systemd/systemd-sysctl";
-        };
       };
 
     # Enable hardlink and symlink restrictions.  See
@@ -62,8 +61,9 @@ in
 
     # Hide kernel pointers (e.g. in /proc/modules) for unprivileged
     # users as these make it easier to exploit kernel vulnerabilities.
-    boot.kernel.sysctl."kernel.kptr_restrict" = 1;
-
+    #
+    # Removed under grsecurity.
+    boot.kernel.sysctl."kernel.kptr_restrict" =
+      if config.security.grsecurity.enable then null else 1;
   };
-
 }

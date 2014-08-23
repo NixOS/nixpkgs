@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, udev }:
 
 stdenv.mkDerivation rec {
-  name = "libatasmart-0.17";
+  name = "libatasmart-0.19";
 
   src = fetchurl {
-    url = "http://0pointer.de/public/${name}.tar.gz";
-    sha256 = "1zazxnqsirlv9gkzij6z31b21gv2nv7gkpja0wpxwb7kfh9a2qid";
+    url = "http://0pointer.de/public/${name}.tar.xz";
+    sha256 = "138gvgdwk6h4ljrjsr09pxk1nrki4b155hqdzyr8mlk3bwsfmw31";
   };
 
   buildInputs = [ pkgconfig udev ];

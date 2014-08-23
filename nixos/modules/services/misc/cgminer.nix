@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
   cfg = config.services.cgminer;
@@ -42,6 +42,7 @@ in
       package = mkOption {
         default = pkgs.cgminer;
         description = "Which cgminer derivation to use.";
+        type = types.package;
       };
 
       user = mkOption {
@@ -108,20 +109,21 @@ in
 
   config = mkIf config.services.cgminer.enable {
 
-    users.extraUsers = singleton
-      { name = cfg.user;
+    users.extraUsers = optionalAttrs (cfg.user == "cgminer") (singleton
+      { name = "cgminer";
+        uid = config.ids.uids.cgminer;
         description = "Cgminer user";
-      };
+      });
 
     environment.systemPackages = [ cfg.package ];
 
     systemd.services.cgminer = {
       path = [ pkgs.cgminer ];
 
-      after = [ "display-manager.target" "network.target" ];
+      after = [ "network.target" "display-manager.service" ];
       wantedBy = [ "multi-user.target" ];
 
-      environment = { 
+      environment = {
         LD_LIBRARY_PATH = ''/run/opengl-driver/lib:/run/opengl-driver-32/lib'';
         DISPLAY = ":0";
         GPU_MAX_ALLOC_PERCENT = "100";
@@ -129,9 +131,11 @@ in
       };
 
       serviceConfig = {
-        ExecStart = "${pkgs.cgminer}/bin/cgminer -T -c ${cgminerConfig}";
+        ExecStart = "${pkgs.cgminer}/bin/cgminer --syslog --text-only --config ${cgminerConfig}";
         User = cfg.user;
-        RestartSec = 10;
+        RestartSec = "30s";
+        Restart = "always";
+        StartLimitInterval = "1m";
       };
     };
 

@@ -1,4 +1,4 @@
-{ cabal, mtl, fetchurl }:
+{ cabal, mtl, fetchpatch, alex, happy }:
 
 cabal.mkDerivation (self: {
   pname = "BNFC";
@@ -7,8 +7,10 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ mtl ];
-  patches = [ (fetchurl { url = "https://github.com/BNFC/bnfc/pull/3.patch"; sha256 = "103l04ylzswgxrmpv5zy6dd0jyr96z21mdkpgk1z4prvn8wjl624"; }) ];
+  buildTools = [ alex happy ];
+  patches = [ (fetchpatch { url = "https://github.com/BNFC/bnfc/pull/3.patch"; sha256 = "1i87crwva5m3v095lv3zxs38pr6nmly58krlr6sxpwnakpr0pxsp"; }) ];
   patchFlags = "-p2";
+  preConfigure = "runhaskell Setup.lhs clean";
   meta = {
     homepage = "http://bnfc.digitalgrammars.com/";
     description = "A compiler front-end generator";

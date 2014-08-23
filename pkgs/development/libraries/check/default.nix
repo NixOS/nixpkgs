@@ -1,15 +1,16 @@
 { fetchurl, stdenv }:
 
-let version = "0.9.8"; in
+let version = "0.9.12"; in
 stdenv.mkDerivation {
   name = "check-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/check/${version}/check-${version}.tar.gz";
-    sha256 = "0zvak7vx0zq344x174yg9vkw6fg9kycda15zlbz4yn07pdbgkb42";
+    sha256 = "18qybf3s25s1gydp2lwbc4icnmdc6f9sj21fllcwm81kw5apxm67";
   };
 
-  doCheck = true;
+  # Test can randomly fail: http://hydra.nixos.org/build/7243912
+  doCheck = false;
 
   meta = {
     description = "Check, a unit testing framework for C";
@@ -25,6 +26,6 @@ stdenv.mkDerivation {
 
     homepage = http://check.sourceforge.net/;
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
   };
 }

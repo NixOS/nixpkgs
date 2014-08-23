@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -39,6 +39,7 @@ in
 
       package = mkOption {
         default = pkgs.mongodb;
+        type = types.package;
         description = "
           Which MongoDB derivation to use.
         ";
@@ -90,8 +91,9 @@ in
 
   config = mkIf config.services.mongodb.enable {
 
-    users.extraUsers = singleton
-      { name = cfg.user;
+    users.extraUsers.mongodb = mkIf (cfg.user == "mongodb")
+      { name = "mongodb";
+        uid = config.ids.uids.mongodb;
         description = "MongoDB server user";
       };
 

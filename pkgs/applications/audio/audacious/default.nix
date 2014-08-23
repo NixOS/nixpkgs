@@ -4,19 +4,19 @@
 }:
 
 let
-  version = "3.4.1";
+  version = "3.4.3";
 in
 stdenv.mkDerivation {
   name = "audacious-${version}";
 
   src = fetchurl {
     url = "http://distfiles.audacious-media-player.org/audacious-${version}.tar.bz2";
-    sha256 = "0wf99b0nrk90fyak4gpwi076qnsrmv1j8958cvi57rxig21lvvap";
+    sha256 = "04lzwdr1lx6ghbfxzygvnbmdl420w6rm453ds5lyb0hlvzs58d0q";
   };
 
   pluginsSrc = fetchurl {
     url = "http://distfiles.audacious-media-player.org/audacious-plugins-${version}.tar.bz2";
-    sha256 = "02ivrxs6109nmmz9pkbf9dkm36s2lyp9vfv59sm0acxxd4db71md";
+    sha256 = "00r88q9fs9a0gicdmk2svcans7igcqgacrw303a5bn44is7pmrmy";
   };
 
   buildInputs =
@@ -48,8 +48,8 @@ stdenv.mkDerivation {
       (
         source $stdenv/setup
         # gsettings schemas for file dialogues
-        for file in "$out"/bin/*; do
-          wrapProgram "$file" --prefix XDG_DATA_DIRS : "$XDG_ADD"
+        for file in "$out/bin/"*; do
+          wrapProgram "$file" --prefix XDG_DATA_DIRS : "$XDG_ADD:$GSETTINGS_SCHEMAS_PATH"
         done
       )
     '';

@@ -10,6 +10,11 @@ stdenv.mkDerivation {
     sha256 = "0csx6g0ci66nx1a6z0a9dkpfp66mdvcpp5r7g6zrx4jp18r9hzb2";
   };
 
+  postPatch = /* CVE-2005-2471, from Arch */ ''
+    substituteInPlace converter/other/pstopnm.c \
+      --replace '"-DSAFER"' '"-DPARANOIDSAFER"'
+  '';
+
   NIX_CFLAGS_COMPILE = "-fPIC"; # Gentoo adds this on every platform
 
   buildInputs = [ pkgconfig flex zlib perl libpng libjpeg libxml2 makeWrapper libX11 libtiff ];
@@ -18,9 +23,7 @@ stdenv.mkDerivation {
     cp config.mk.in config.mk
     substituteInPlace "config.mk" \
         --replace "TIFFLIB = NONE" "TIFFLIB = ${libtiff}/lib/libtiff.so" \
-        --replace "TIFFHDR_DIR =" "TIFFHDR_DIR = ${libtiff}/include" \
-        --replace "TIFFLIB_NEEDS_JPEG = Y" "TIFFLIB_NEEDS_JPEG = N" \
-        --replace "TIFFLIB_NEEDS_Z = Y" "TIFFLIB_NEEDS_Z = N"
+        --replace "TIFFHDR_DIR =" "TIFFHDR_DIR = ${libtiff}/include"
   '';
 
   preBuild = ''

@@ -1,51 +1,42 @@
-args :  
-let 
-  lib = args.lib;
-  fetchurl = args.fetchurl;
-  doPatchShebangs = args.doPatchShebangs;
-  makeManyWrappers = args.makeManyWrappers;
+{ stdenv, fetchurl, cmake, pkgconfig, intltool, vala, makeWrapper
+, gtk3, webkitgtk, librsvg, libnotify
+, glib_networking, gsettings_desktop_schemas
+}:
 
-  version = "0.4"; 
-  release = "4";
-  buildInputs = with args; [
-    intltool python imagemagick gtk3 glib webkit libxml2 
-    gtksourceview pkgconfig which gettext makeWrapper 
-    file libidn sqlite docutils libnotify libsoup vala
-    kbproto xproto scrnsaverproto libXScrnSaver dbus_glib
-    glib_networking
-  ];
+let
+  version = "0.5.8";
 in
-rec {
-  src = fetchurl {
-    url = "http://archive.xfce.org/src/apps/midori/${version}/midori-${version}.${release}.tar.bz2";
-    sha256 = "fadd43f76c1c9f6a16483e60a804e58fb6817c6a595b1acdd59bcbdd7b35bca2";
-  };
+stdenv.mkDerivation rec {
+  name = "midori-${version}";
 
-  inherit buildInputs;
-  configureFlags = ["--enable-gtk3"];
-
-  /* doConfigure should be specified separately */
-  phaseNames = ["doUnpack" "setVars" "shebangsHere" "doConfigure" 
-    "doMakeInstall" "shebangsInstalled" "wrapWK"
-    ];
-
-  setVars = args.fullDepEntry ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lnotify"
-  '' [];
-      
-  shebangsHere = (doPatchShebangs ".");
-  shebangsInstalled = (doPatchShebangs "$out/bin");
-  wrapWK = (makeManyWrappers "$out/bin/*" 
-  ''
-    --set WEBKIT_IGNORE_SSL_ERRORS 1 \
-    --prefix GIO_EXTRA_MODULES : "${args.glib_networking}/lib/gio/modules" 
-  '');
-
-  name = "midori-${version}.${release}";
   meta = {
-    description = "Light WebKit-based web browser with GTK GUI";
-    maintainers = [args.lib.maintainers.raskin];
-    platforms = with args.lib.platforms;
-      linux;
+    description = "Lightweight WebKitGTK+ web browser";
+    homepage = "http://www.midori-browser.org";
+    license = stdenv.lib.licenses.lgpl21Plus;
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ raskin iyzsong ];
   };
+
+  src = fetchurl {
+    url = "${meta.homepage}/downloads/midori_${version}_all_.tar.bz2";
+    sha256 = "10ckm98rfqfbwr84b8mc1ssgj84wjgkr4dadvx2l7c64sigi66dg";
+  };
+
+  sourceRoot = ".";
+
+  buildInputs = [
+    cmake pkgconfig intltool vala makeWrapper
+    webkitgtk librsvg libnotify
+  ];
+
+  cmakeFlags = ''
+    -DHALF_BRO_INCOM_WEBKIT2=ON
+    -DUSE_ZEITGEIST=OFF
+  '';
+
+  preFixup = ''
+    wrapProgram $out/bin/midori \
+      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+  '';
 }

@@ -1,18 +1,20 @@
 { stdenv, fetchurl, zlib, readline }:
 
-let version = "9.0.14"; in
+let version = "9.0.18"; in
 
 stdenv.mkDerivation rec {
   name = "postgresql-${version}";
 
   src = fetchurl {
     url = "mirror://postgresql/source/v${version}/${name}.tar.bz2";
-    sha256 = "de42b669cb891fc9b925406e71d1669ed5c856aae6d552ac6f14bf6dec0b79f1";
+    sha256 = "7c8a07d0ab78fe39522c6bb268a7b357f456d9d4796f57d7b43a004e4a9d3003";
   };
 
   buildInputs = [ zlib readline ];
 
   LC_ALL = "C";
+
+  patches = [ ./less-is-more.patch ];
 
   passthru = {
     inherit readline;
@@ -23,5 +25,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.postgresql.org/;
     description = "A powerful, open source object-relational database system";
     license = "bsd";
+    maintainers = [ stdenv.lib.maintainers.ocharles ];
+    hydraPlatforms = stdenv.lib.platforms.linux;
   };
 }

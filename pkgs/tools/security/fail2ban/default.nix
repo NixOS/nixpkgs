@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pythonPackages, unzip, gamin }:
+{ stdenv, fetchurl, python, pythonPackages, unzip, systemd, gamin }:
 
-let version = "0.8.10"; in
+let version = "0.9"; in
 
 pythonPackages.buildPythonPackage {
   name = "fail2ban-${version}";
@@ -9,12 +9,12 @@ pythonPackages.buildPythonPackage {
   src = fetchurl {
     url    = "https://github.com/fail2ban/fail2ban/zipball/${version}";
     name   = "fail2ban-${version}.zip";
-    sha256 = "0zbjwnghpdnzan7hn40cjjh2r06p2ph5kblpm0w1r72djwsk67x9";
+    sha256 = "0dawl0vvdvpnkg1hc4l0c8sj8ikcr2l48d6khfx0174nq8yfcg93";
   };
 
   buildInputs = [ unzip ];
 
-  pythonPath = [ gamin ];
+  pythonPath = [ systemd python.modules.sqlite3 gamin ];
 
   preConfigure = ''
     substituteInPlace setup.cfg \
@@ -39,15 +39,11 @@ pythonPackages.buildPythonPackage {
 
   doCheck = false;
 
-  installCommand = ''
-    python setup.py install --prefix=$out
-  '';
-
   meta = with stdenv.lib; {
     homepage    = http://www.fail2ban.org/;
     description = "A program that scans log files for repeated failing login attempts and bans IP addresses";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ eelco lovek323 ];
-    platforms   = platforms.unix;
+    platforms   = platforms.linux ++ platforms.darwin;
   };
 }

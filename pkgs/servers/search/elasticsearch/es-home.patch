@@ -1,59 +1,38 @@
-diff -rc elasticsearch-0.90.3/bin/elasticsearch elasticsearch-0.90.3-new/bin/elasticsearch
-*** elasticsearch-0.90.3/bin/elasticsearch	2013-08-06 15:19:22.000000000 +0200
---- elasticsearch-0.90.3-new/bin/elasticsearch	2013-08-27 16:42:00.935880011 +0200
-***************
-*** 62,68 ****
-  done
-  
-  # determine elasticsearch home
-! ES_HOME=`dirname "$SCRIPT"`/..
-  
-  # make ELASTICSEARCH_HOME absolute
-  ES_HOME=`cd "$ES_HOME"; pwd`
---- 62,71 ----
-  done
-  
-  # determine elasticsearch home
-! if [ -z "$ES_HOME" ]; then
-!     echo "You must set the ES_HOME var" >&2
-!     exit 1
-! fi
-  
-  # make ELASTICSEARCH_HOME absolute
-  ES_HOME=`cd "$ES_HOME"; pwd`
-diff -rc elasticsearch-0.90.3/bin/plugin elasticsearch-0.90.3-new/bin/plugin
-*** elasticsearch-0.90.3/bin/plugin	2013-08-06 15:19:22.000000000 +0200
---- elasticsearch-0.90.3-new/bin/plugin	2013-08-27 16:49:01.024160295 +0200
-***************
-*** 16,22 ****
-  done
-  
-  # determine elasticsearch home
-! ES_HOME=`dirname "$SCRIPT"`/..
-  
-  # make ELASTICSEARCH_HOME absolute
-  ES_HOME=`cd "$ES_HOME"; pwd`
---- 16,25 ----
-  done
-  
-  # determine elasticsearch home
-! if [ -z "$ES_HOME" ]; then
-!     echo "You must set the ES_HOME var" >&2
-!     exit 1
-! fi
-  
-  # make ELASTICSEARCH_HOME absolute
-  ES_HOME=`cd "$ES_HOME"; pwd`
-***************
-*** 46,50 ****
-    shift
-  done
-  
-! exec $JAVA $JAVA_OPTS -Xmx64m -Xms16m -Delasticsearch -Des.path.home="$ES_HOME" $properties -cp "$ES_HOME/lib/*" org.elasticsearch.plugins.PluginManager $args
-  
---- 49,53 ----
-    shift
-  done
-  
-! exec $JAVA $JAVA_OPTS -Xmx64m -Xms16m -Delasticsearch -Des.path.home="$ES_HOME" $properties -cp "$ES_CLASSPATH/lib/*" org.elasticsearch.plugins.PluginManager $args
-  
+diff --git a/bin/elasticsearch b/bin/elasticsearch
+index c7c9263..0fcecf6 100755
+--- a/bin/elasticsearch
++++ b/bin/elasticsearch
+@@ -76,7 +76,10 @@ while [ -h "$SCRIPT" ] ; do
+ done
+ 
+ # determine elasticsearch home
+-ES_HOME=`dirname "$SCRIPT"`/..
++if [ -z "$ES_HOME" ]; then
++    echo "You must set the ES_HOME var" >&2
++    exit 1
++fi
+ 
+ # make ELASTICSEARCH_HOME absolute
+ ES_HOME=`cd "$ES_HOME"; pwd`
+diff --git a/bin/plugin b/bin/plugin
+index a8c796a..daf7b99 100755
+--- a/bin/plugin
++++ b/bin/plugin
+@@ -16,7 +16,10 @@ while [ -h "$SCRIPT" ] ; do
+ done
+ 
+ # determine elasticsearch home
+-ES_HOME=`dirname "$SCRIPT"`/..
++if [ -z "$ES_HOME" ]; then
++    echo "You must set the ES_HOME var" >&2
++    exit 1
++fi
+ 
+ # make ELASTICSEARCH_HOME absolute
+ ES_HOME=`cd "$ES_HOME"; pwd`
+@@ -45,4 +48,4 @@ while [ $# -gt 0 ]; do
+   shift
+ done
+ 
+-exec $JAVA $JAVA_OPTS -Xmx64m -Xms16m -Delasticsearch -Des.path.home="$ES_HOME" $properties -cp "$ES_HOME/lib/*" org.elasticsearch.plugins.PluginManager $args
++exec $JAVA $JAVA_OPTS -Xmx64m -Xms16m -Delasticsearch -Des.path.home="$ES_HOME" $properties -cp "$ES_CLASSPATH/lib/*" org.elasticsearch.plugins.PluginManager $args

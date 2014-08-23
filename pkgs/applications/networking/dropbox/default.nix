@@ -25,9 +25,9 @@ let
     else if stdenv.system == "i686-linux" then "ld-linux.so.2"
     else throw "Dropbox client for: ${stdenv.system} not supported!";
 
-  version = "2.4.3";
-  sha256 = if stdenv.system == "x86_64-linux" then "0g8iqgc18qbw8fvdjf0fhbal34rvwr5izrf5acfzqjg99dgih81r"
-    else if stdenv.system == "i686-linux" then "1nhmk319whj6cil6wg9hrfln9bxin3fnf6sxb0zg2ycfpnnqi0la"
+  version = "2.10.28";
+  sha256 = if stdenv.system == "x86_64-linux" then "0jrg9xy03yc7npjhng9wiyzidbq7s5n8g4fwynnm1yqfd69r3yac"
+    else if stdenv.system == "i686-linux" then "17vbikhdp5l2s8cnqmk8dln4dfzvrvgqls7av3ngf71bx3bj0fij"
     else throw "Dropbox client for: ${stdenv.system} not supported!";
 
   # relative location where the dropbox libraries are stored
@@ -56,10 +56,8 @@ in stdenv.mkDerivation {
   name = "dropbox-${version}-bin";
   src = fetchurl {
     name = "dropbox-${version}.tar.gz";
-    # using version-specific URL so if the version is no longer available,
-    # build will fail without having to finish downloading first
-    # url = "http://www.dropbox.com/download?plat=lnx.${arch}";
-    url = "http://dl-web.dropbox.com/u/17/dropbox-lnx.${arch}-${version}.tar.gz";
+    
+    url = "https://dl-web.dropbox.com/u/17/dropbox-lnx.${arch}-${version}.tar.gz";
     inherit sha256;
   };
 
@@ -70,24 +68,22 @@ in stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir "$out/${appdir}"
-    cp -r ".dropbox-dist/"* "$out/${appdir}/"
-    ensureDir "$out/bin"
+    mkdir -p "$out/${appdir}"
+    cp -r ".dropbox-dist/dropbox-lnx.${arch}-${version}"/* "$out/${appdir}/"
+    mkdir -p "$out/bin"
     ln -s "$out/${appdir}/dropbox" "$out/bin/dropbox"
 
     patchelf --set-interpreter ${stdenv.glibc}/lib/${interpreter} \
       "$out/${appdir}/dropbox"
-
+    
     RPATH=${ldpath}:${gcc.gcc}/lib:$out/${appdir}
     echo "updating rpaths to: $RPATH"
     find "$out/${appdir}" -type f -a -perm +0100 \
       -print -exec patchelf --force-rpath --set-rpath "$RPATH" {} \;
 
-    ensureDir "$out/share/applications"
+    mkdir -p "$out/share/applications"
     cp "${desktopItem}/share/applications/"* $out/share/applications
   '';
-
-  buildInputs = [ patchelf ];
 
   meta = {
     homepage = "http://www.dropbox.com";

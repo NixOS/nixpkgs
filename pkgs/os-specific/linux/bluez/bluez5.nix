@@ -1,22 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, dbus, glib, libusb, alsaLib, python,
+{ stdenv, fetchurl, pkgconfig, dbus, glib, alsaLib, python,
   pythonPackages, pythonDBus, readline, libsndfile, udev, libical,
   systemd }:
 
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "bluez-5.8";
+  name = "bluez-5.22";
    
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${name}.tar.xz";
-    sha256 = "1l33lq1lpg7hy26138ir5dj4gl3mql2qxpj20rjnnwyckc3jk700";
+    sha256 = "10h8p89jnhxhjw4x53j4r53i999qjaz82l5591q6q48qb98ndf78";
   };
 
   pythonPath = with pythonPackages;
-    [ pythonDBus pygobject3 recursivePthLoader ];
+    [ pythonDBus pygobject pygobject3 recursivePthLoader ];
 
   buildInputs =
-    [ pkgconfig dbus.libs glib libusb alsaLib python pythonPackages.wrapPython
+    [ pkgconfig dbus.libs glib alsaLib python pythonPackages.wrapPython
       readline libsndfile udev libical
       # Disables GStreamer; not clear what it gains us other than a
       # zillion extra dependencies.
@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://www.bluez.org/;
+    repositories.git = https://git.kernel.org/pub/scm/bluetooth/bluez.git;
     description = "Bluetooth support for Linux";
     platforms = platforms.linux;
   };

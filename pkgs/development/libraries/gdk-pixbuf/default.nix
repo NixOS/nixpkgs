@@ -1,15 +1,21 @@
-{ stdenv, fetchurl, pkgconfig, glib, libtiff, libjpeg, libpng, libX11, xz
+{ stdenv, fetchurl, pkgconfig, glib, libtiff, libjpeg, libpng, libX11
 , jasper, libintlOrEmpty, gobjectIntrospection }:
 
+let
+  ver_maj = "2.30";
+  ver_min = "8";
+in
 stdenv.mkDerivation rec {
-  name = "gdk-pixbuf-2.28.2";
+  name = "gdk-pixbuf-${ver_maj}.${ver_min}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gdk-pixbuf/2.28/${name}.tar.xz";
-    sha256 = "05s6ksvy1yan6h6zny9n3bmvygcnzma6ljl6i0z9cci2xg116c8q";
+    url = "mirror://gnome/sources/gdk-pixbuf/${ver_maj}/${name}.tar.xz";
+    sha256 = "1gpqpskp4zzf7h35bp247jcvnk6rxc52r69pb11v8g8i2q386ls8";
   };
 
   outputs = [ "dev" "out" "bin" "doc" ];
+
+  setupHook = ./setup-hook.sh;
 
   enableParallelBuilding = true;
 
@@ -24,12 +30,12 @@ stdenv.mkDerivation rec {
     + stdenv.lib.optionalString (gobjectIntrospection != null) " --enable-introspection=yes"
     ;
 
+  doCheck = true;
+
   meta = {
     description = "A library for image loading and manipulation";
-
     homepage = http://library.gnome.org/devel/gdk-pixbuf/;
-
     maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

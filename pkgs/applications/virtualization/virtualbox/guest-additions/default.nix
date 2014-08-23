@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, patchelf, cdrkit, kernelDev, which, makeWrapper
+{ stdenv, fetchurl, lib, patchelf, cdrkit, kernel, which, makeWrapper
 , xorg, dbus, virtualbox }:
 
 let
@@ -8,14 +8,14 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "VirtualBox-GuestAdditions-${version}-${kernelDev.version}";
+  name = "VirtualBox-GuestAdditions-${version}-${kernel.version}";
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "f11a7f13dfe7bf9f246fb877144bb467fe6deadcd876568ec79b6ccd3b59d767";
+    sha256 = "c76dd5ec86f61ad72263ab6d2405723b06badfc2fae57f83ffa5de96f553400d";
   };
 
-  KERN_DIR = "${kernelDev}/lib/modules/*/build";
+  KERN_DIR = "${kernel.dev}/lib/modules/*/build";
 
   buildInputs = [ patchelf cdrkit makeWrapper dbus ];
 
@@ -115,7 +115,7 @@ stdenv.mkDerivation {
     for i in *
     do
         cd $i
-        kernelVersion=$(cd ${kernelDev}/lib/modules; ls)
+        kernelVersion=$(cd ${kernel.dev}/lib/modules; ls)
         export MODULE_DIR=$out/lib/modules/$kernelVersion/misc
         find . -type f | xargs sed -i -e "s|-o root||g" \
                                       -e "s|-g root||g"

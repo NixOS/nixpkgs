@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libuuid }:
 
 stdenv.mkDerivation rec {
-  name = "e2fsprogs-1.42.8";
+  name = "e2fsprogs-1.42.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/e2fsprogs/${name}.tar.gz";
-    sha256 = "b984aaf1fe888d6a4cf8c2e8d397207879599b5368f1d33232c1ec9d68d00c97";
+    sha256 = "00i83w22sbyq849as9vmaf2xcx1d06npvriyv8m0z81gx43ar4ig";
   };
 
   buildInputs = [ pkgconfig libuuid ];
@@ -17,15 +17,13 @@ stdenv.mkDerivation rec {
   };
 
   # libuuid, libblkid, uuidd and fsck are in util-linux-ng (the "libuuid" dependency).
-  configureFlags = "--enable-elf-shlibs --disable-libuuid --disable-libblkid --disable-uuidd --disable-fsck";
+  configureFlags = "--enable-elf-shlibs --disable-libuuid --disable-libblkid --disable-uuidd --disable-fsck --enable-symlink-install";
 
   enableParallelBuilding = true;
 
   preInstall = "installFlagsArray=('LN=ln -s')";
 
   postInstall = "make install-libs";
-
-  dontGzipMan = true; # See issue #523
 
   meta = {
     homepage = http://e2fsprogs.sourceforge.net/;

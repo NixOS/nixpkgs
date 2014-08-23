@@ -2,17 +2,16 @@
 
 let
   name = "vifm-${version}";
-  version = "0.7.5";
+  version = "0.7.7";
 
 in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url="mirror://sourceforge/project/vifm/vifm/${name}.tar.bz2";
-    sha256 ="1r1d92zrff94rfx011dw2qsgdwd2ksqlz15la74d6h7sfcsnyd01";
+    url = "mirror://sourceforge/project/vifm/vifm/${name}.tar.bz2";
+    sha256 = "1lflmkd5q7qqi9d44py0y41pcx5bsadkihn3gc0x5cka04f2gh0d";
   };
 
-  #phaseNames = ["doConfigure" "doMakeInstall"];
   buildInputs = [ utillinux ncurses file libX11 ];
 
   meta = {

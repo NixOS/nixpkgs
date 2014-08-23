@@ -1,6 +1,6 @@
-{pkgs, ...}:
+{ lib, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
   boot.loader.grub.device = mkOverride 0 "nodev";

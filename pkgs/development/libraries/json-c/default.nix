@@ -1,14 +1,32 @@
-{ stdenv, fetchurl}:
+{ stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "json-c-0.9";
+  name = "json-c-0.12";
   src = fetchurl {
-    url = "http://oss.metaparadigm.com/json-c/json-c-0.9.tar.gz";
-    sha256 = "0xcl8cwzm860f8m0cdzyw6slwcddni4mraw4shvr3qgqkdn4hakh";
+    url    = "https://s3.amazonaws.com/json-c_releases/releases/${name}-nodoc.tar.gz";
+    sha256 = "0dgvjjyb9xva63l6sy70sdch2w4ryvacdmfd3fg2f2v13lqx5mkg";
   };
-  meta = {
-    homepage = "http://oss.metaparadigm.com/json-c/";
+
+  patches = [ ./unused-variable.patch ];
+
+  buildInputs = [ autoreconfHook ]; # won't configure without it, no idea why
+
+  # compatibility hack (for mypaint at least)
+  postInstall = ''
+    ln -s json-c.pc "$out/lib/pkgconfig/json.pc"
+  '';
+
+  meta = with stdenv.lib; {
     description = "A JSON implementation in C";
-    longDescription = "JSON-C implements a reference counting object model that allows you to easily construct JSON objects in C, output them as JSON formatted strings and parse JSON formatted strings back into the C representation of JSON objects.";
+    homepage    = https://github.com/json-c/json-c/wiki;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms   = platforms.unix;
+
+    longDescription = ''
+      JSON-C implements a reference counting object model that allows you to
+      easily construct JSON objects in C, output them as JSON formatted strings
+      and parse JSON formatted strings back into the C representation of JSON
+      objects.
+    '';
   };
 }

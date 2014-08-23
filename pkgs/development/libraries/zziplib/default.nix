@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "Zziplib, a library to extract data from files archived in a zip file";
+    description = "Library to extract data from files archived in a zip file";
 
     longDescription = ''
       The zziplib library is intentionally lightweight, it offers the ability
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       zip/unzip tools.
     '';
 
-    licenses = [ "LGPLv2+" "MPLv1.1" ];
+    license = [ "LGPLv2+" "MPLv1.1" ];
 
     homepage = http://zziplib.sourceforge.net/;
 

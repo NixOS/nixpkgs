@@ -8,11 +8,13 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildTools = [ perl ];
   doCheck = false;
+  patches = [ ./adapt-crazy-perl-regex-for-cpp-4.8.0.patch ];
   meta = {
     homepage = "http://www.haskell.org/alex/";
     description = "Alex is a tool for generating lexical analysers in Haskell";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

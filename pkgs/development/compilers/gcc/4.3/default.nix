@@ -29,7 +29,7 @@ assert langVhdl -> gnat != null;
 with stdenv.lib;
 
 let
-  version = "4.3.4";
+  version = "4.3.6";
 
   crossConfigureFlags =
     "--target=${cross.config}" +
@@ -54,27 +54,27 @@ in
 
 stdenv.mkDerivation ({
   name = "${name}-${version}" + crossNameAddon;
-  
+
   builder = ./builder.sh;
-  
+
   src =
     optional /*langC*/ true (fetchurl {
       url = "mirror://gcc/releases/gcc-${version}/gcc-core-${version}.tar.bz2";
-      sha256 = "1yk80nwyw8vkpw8d3x7lkg3zrv3ngjqlvj0i8zslzgj7a27q729i";
+      sha256 = "0ygrfw3hgp48hkqipbl9lw38f27npigc2sm6f01g9iswpq1igbw6";
     }) ++
     optional langCC (fetchurl {
       url = "mirror://gcc/releases/gcc-${version}/gcc-g++-${version}.tar.bz2";
-      sha256 = "0d8pyk5c9zmph25f4fl63vd8vhljj6ildbxpz2hr594g5i6pplpq";
+      sha256 = "105xz3991b57zx3146xwlpchdb2sjmlknclvi1iac2gawm4mhxhf";
     }) ++
     optional langFortran (fetchurl {
       url = "mirror://gcc/releases/gcc-${version}/gcc-fortran-${version}.tar.bz2";
-      sha256 = "1xf2njykv1qcgxiqwj693dxjf77ss1rcxirylvnsp5hs89mdlj12";
+      sha256 = "12bqvf53hvhrwjnh101vn9frb5g8cr98cra4f11dzhzs4ppydpi1";
     }) ++
     optional langJava (fetchurl {
       url = "mirror://gcc/releases/gcc-${version}/gcc-java-${version}.tar.bz2";
-      sha256 = "1v3krhxi3zyaqfj0x8dbxvg67fjp29cr1psyf71r9zf757p3vqsw";
+      sha256 = "03w6jln9gmdv149s774rlw4rzi2zhbqna54r86cd6mql8flmy7fs";
     });
-    
+
   patches =
     [ ./pass-cxxcpp.patch ./libmudflap-cpp.patch ./siginfo_t_fix.patch ]
     ++ optional noSysDirs ./no-sys-dirs.patch
@@ -173,7 +173,7 @@ stdenv.mkDerivation ({
 
   meta = {
     homepage = "http://ghdl.free.fr/";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     description = "Complete VHDL simulator, using the GCC technology";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;

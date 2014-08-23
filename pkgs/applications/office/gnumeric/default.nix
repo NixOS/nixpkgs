@@ -1,26 +1,38 @@
-{ stdenv, fetchurl
-, bzip2, glib, goffice, gtk3, intltool, libglade, libgsf, libxml2
-, pango, pkgconfig, scrollkeeper, zlib
+{ stdenv, fetchurl, pkgconfig, intltool, perl, perlXMLParser
+, goffice, makeWrapper, gtk3, gnome_icon_theme
 }:
 
 stdenv.mkDerivation rec {
-  name = "gnumeric-1.12.0";
+  name = "gnumeric-1.12.12";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnumeric/1.12/${name}.tar.xz";
-    sha256 = "037b53d909e5d1454b2afda8c4fb1e7838e260343e36d4e36245f4a5d0e04111";
+    sha256 = "096i9x6b4i6x24vc4lsxx8fg2n2pjs2jb6x3bkg3ppa2c60w1jq0";
   };
+
+  preConfigure = ''sed -i 's/\(SUBDIRS.*\) doc/\1/' Makefile.in''; # fails when installing docs
 
   configureFlags = "--disable-component";
 
+  # ToDo: optional libgda, python, introspection?
   buildInputs = [
-    bzip2 glib goffice gtk3 intltool libglade libgsf libxml2
-    pango pkgconfig scrollkeeper zlib
+    pkgconfig intltool perl perlXMLParser
+    goffice gtk3 makeWrapper
   ];
 
-  meta = {
+  preFixup = ''
+    for f in "$out"/bin/gnumeric-*; do
+      wrapProgram $f \
+        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+    done
+    rm $out/share/icons/hicolor/icon-theme.cache
+  '';
+
+  meta = with stdenv.lib; {
     description = "The GNOME Office Spreadsheet";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     homepage = http://projects.gnome.org/gnumeric/;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.vcunat ];
   };
 }

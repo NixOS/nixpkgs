@@ -56,8 +56,13 @@ args: with args; {
                  tagCmd = "
                    srcs=\"`find . -type f -name \"*.*hs\"; find . -type f -name \"*.*hs*\";`\"
                    [ -z \"$srcs\" ] || {
-                    ${toString hasktags}/bin/hasktags-modified --ignore-close-implementation --ctags $srcs
-                    sort tags > \$TAG_FILE
+                    # without this creating tag files for lifted-base fails
+                    export LC_ALL=en_US.UTF-8
+                    export LANG=en_US.UTF-8
+                    ${if args.stdenv.isLinux then "export LOCALE_ARCHIVE=${args.pkgs.glibcLocales}/lib/locale/locale-archive;" else ""}
+ 
+                    ${toString hasktags}/bin/hasktags --ignore-close-implementation --ctags .
+                    mv tags \$TAG_FILE
                    }";
               }
           ];

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libsndfile }:
 
 stdenv.mkDerivation rec {
-  name = "libsamplerate-0.1.7";
+  name = "libsamplerate-0.1.8";
 
   src = fetchurl {
     url = "http://www.mega-nerd.com/SRC/${name}.tar.gz";
-    sha256 = "1k3z09b13c0z10mqfn6w48pxsdx569s3wslg0x52q5mzy6gmvvbq";
+    sha256 = "01hw5xjbjavh412y63brcslj5hi9wdgkjd3h9csx5rnm8vglpdck";
   };
 
   buildInputs = [ pkgconfig ];
@@ -17,10 +17,14 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "bin" "out" ];
 
-  # need headers from the Carbon.framework in /System/Library/Frameworks to
-  # compile this on darwin -- not sure how to handle
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin
-    "-I/System/Library/Frameworks/Carbon.framework/Versions/A/Headers";
+  postConfigure = stdenv.lib.optionalString stdenv.isDarwin
+    ''
+      # need headers from the Carbon.framework in /System/Library/Frameworks to
+      # compile this on darwin -- not sure how to handle
+      NIX_CFLAGS_COMPILE+=" -I$SDKROOT/System/Library/Frameworks/Carbon.framework/Versions/A/Headers"
+
+      substituteInPlace examples/Makefile --replace "-fpascal-strings" ""
+    '';
 
   meta = with stdenv.lib; {
     description = "Sample Rate Converter for audio";

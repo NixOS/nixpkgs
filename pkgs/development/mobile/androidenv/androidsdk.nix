@@ -7,17 +7,18 @@
 }:
 {platformVersions, abiVersions, useGoogleAPIs}:
 
-stdenv.mkDerivation {
-  name = "android-sdk-22.2";
+stdenv.mkDerivation rec {
+  name = "android-sdk-${version}";
+  version = "22.6.2";
   
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
-      url = http://dl.google.com/android/android-sdk_r22.2-linux.tgz;
-      md5 = "2a3776839e823ba9acb7a87a3fe26e02";
+      url = "http://dl.google.com/android/android-sdk_r${version}-linux.tgz";
+      md5 = "ff1541418a44d894bedc5cef10622220";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
-      url = http://dl.google.com/android/android-sdk_r22.2-macosx.zip;
-      md5 = "9dfef6404e2f842c433073796aed8b7d";
+      url = "http://dl.google.com/android/android-sdk_r${version}-macosx.zip";
+      md5 = "2a319c862dd1dcf450bfe2a6b3d9c608";
     }
     else throw "platform not ${stdenv.system} supported!";
   
@@ -132,7 +133,7 @@ stdenv.mkDerivation {
           let
             googleApis = builtins.getAttr ("google_apis_"+platformVersion) addons;
           in
-          "ln -s ${googleApis}/* addon-google_apis-${platformVersion}"
+          "ln -s ${googleApis}/* addon-google_apis-${platformVersion}\n"
         else "") platformVersions
       else ""}
       
@@ -148,7 +149,7 @@ stdenv.mkDerivation {
         let
           platform = builtins.getAttr ("platform_"+platformVersion) platforms;
         in
-        "ln -s ${platform}/* android-${platformVersion}"
+        "ln -s ${platform}/* android-${platformVersion}\n"
       else ""
     ) platformVersions}
     
@@ -177,7 +178,7 @@ stdenv.mkDerivation {
     
     # Create wrappers to the most important tools and platform tools so that we can run them if the SDK is in our PATH
     
-    ensureDir $out/bin
+    mkdir -p $out/bin
 
     for i in $out/libexec/android-sdk-*/tools/*
     do

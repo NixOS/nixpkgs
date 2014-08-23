@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="gnuchess";
-    version="6.0.3";
+    version="6.1.2";
     name="${baseName}-${version}";
-    hash="01ff8qd8pk39c6pv24wbcqkx78kvay8rxvgxqq9cqp9gqv39jfkw";
-    url="mirror://gnu/chess/gnuchess-6.0.3.tar.gz";
-    sha256="01ff8qd8pk39c6pv24wbcqkx78kvay8rxvgxqq9cqp9gqv39jfkw";
+    hash="15k6w9gycp566i0pa7ccajj9v3pw1mz1v62g1ni7czgs3j7i588l";
+    url="http://ftp.gnu.org/gnu/chess/gnuchess-6.1.2.tar.gz";
+    sha256="15k6w9gycp566i0pa7ccajj9v3pw1mz1v62g1ni7czgs3j7i588l";
   };
   buildInputs = [
     flex

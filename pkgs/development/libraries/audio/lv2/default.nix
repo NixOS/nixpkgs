@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "lv2-${version}";
-  version = "1.4.0";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "http://lv2plug.in/spec/${name}.tar.bz2";
-    sha256 = "035hlfva2mij698nj3z1mz9g4mj4z5jx9axs6ww47jgyjcq38asz";
+    sha256 = "1mxkp7gajh1alw6s358cqwf3qkpr1ld9wfxwswnqrxcd9a7hxjd4";
   };
 
   buildInputs = [ gtk libsndfile pkgconfig python ];
@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "A plugin standard for audio systems";
     license = licenses.mit;
     maintainers = [ maintainers.goibhniu ];
-
+    platforms = platforms.linux;
   };
 }

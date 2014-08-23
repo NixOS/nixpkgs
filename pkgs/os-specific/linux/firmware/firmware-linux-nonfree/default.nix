@@ -6,26 +6,27 @@
 { stdenv, fetchurl, dpkg }:
 
 let
-  version = "0.40";
+  version = "0.43";
 
   packages = [
-    { name = "adi"; sha256 = "0wwks9ff4n772435s57z1fjrffi4xl9nxnfn3v7xfcwdjb395d88"; }
-    { name = "atheros"; sha256 = "1gj7hfnyclzgyq06scynaclnfajhs6lw5i51j1w1hikv4yh20djz"; }
-    { name = "bnx2"; sha256 = "15qjj0sfjin5cbkpby29r5czn11xyiyyc4fmhwlqvgfgrnbp0aqk"; }
-    { name = "bnx2x"; sha256 = "08nvbln94ff47b2q0avxj1aa2wx4qih8sq8knbq54lp46kjf3k0h"; }
-    { name = "brcm80211"; sha256 = "1ndsw3s6xkr1n39nf9ig1xhnaglx5qvvvm8rh6ah41v644lzha79"; }
-    { name = "intelwimax"; sha256 = "1qwxmykh90v92asn4ivq0fak761hs7hd2zmz1dpkjidwsycrfyqn"; }
-    { name = "ipw2x00"; sha256 = "0a2nb17b5n3k1b6y4dbi5i8k1fm19ba2abq2jh2hjjmyyl3y388m"; }
-    { name = "ivtv"; sha256 = "1239gsjq16f4kd1yn77iq3ar8ndx3pzd16kpqafr1h2y0zwh452r"; }
-    { name = "iwlwifi"; sha256 = "03kmh5szd02pkbm1nlyz99fr2njhg88wiv73f1fz485m9rvgga43"; }
-    { name = "libertas"; sha256 = "0qjziwmwqbp83hxrjw7x3ralxg4ib9y23bcbn1g8yb5b6m84ca6b"; }
-    { name = "linux"; sha256 = "0ypidsrrfx4kvbfisdpgx2fzbil7g2jixgqhnv960iy5l348amrl"; }
-    { name = "linux-nonfree"; sha256 = "0p9ql3cdxljflh48r6z40kpyisbzp3s3g1qjb9f64n6cppllwjfr"; }
-    { name = "myricom"; sha256 = "12spfaq7z2bb93cy15zldlic1wx2v6h9sn7ny09nkzy4m26zds4q"; }
-    { name = "netxen"; sha256 = "03gmda16bdqw8a4x8x11ph41ksjh48hxydv0f0z3gi3czgbh7sn3"; }
-    { name = "qlogic"; sha256 = "1ah8rrwzi44p1l4q8qkql18djmn5kihsiinpy204xklm1csf3vs1"; }
-    { name = "ralink"; sha256 = "005549jk0wnyfnb247awv2wncsx5is05m1hdwcd33iq0dlbmm39b"; }
-    { name = "realtek"; sha256 = "1ai1klzrql8qxmb7945xiqlkfkyz8admrpb10b3r4ixvclkrvfi2"; }
+    { name = "adi"; sha256 = "13cwnbispivpd73k928l1i818ylhpahp6xh7d6pw59sswrsx6inw"; }
+    { name = "atheros"; sha256 = "0sw9d52k3ynx1cxg7cq49pmm8y6vlqyhb9843hbyf6nbmjqj72bx"; }
+    { name = "bnx2"; sha256 = "1r8scys27qj5shdbgl8ag9vi4hiidx4bp8yw4n4dcp288d9x7bbh"; }
+    { name = "bnx2x"; sha256 = "03jx4vnn8irlwswydf4h3ya1kf064jkaj67jry2hr6qwpd4l8pgq"; }
+    { name = "brcm80211"; sha256 = "01mkmjkg16kdd26pwlg4a1s1717fh0j602mwqhwh46k8zakg2lkh"; }
+    { name = "intelwimax"; sha256 = "1avls6sx0pbsffrcs267r2r2rqlx2xrv8j9znc7ix1bi8g4fx91v"; }
+    { name = "ipw2x00"; sha256 = "19zqc30hsz7snw020izm81qbap3xsygggnmbspxndw7jihz0amjs"; }
+    { name = "ivtv"; sha256 = "1f2004lpw5nr9rxj3cl4ba0jdm51wkvsrbiy4drakawpjwh5y4qw"; }
+    { name = "iwlwifi"; sha256 = "1538r751mx8nhg3xibnnrhnflvf3kl5y9rnm7rpl4wyrfgx61amd"; }
+    { name = "libertas"; sha256 = "0svkqlsiqgmh970r38nh0c1pjx41zdfql2k2k5djw99fscjklacd"; }
+    { name = "linux"; sha256 = "0j62v6vbh2287j3x5c9i0xspmhyh5k1z8dyajgix7k37xi4jvpy2"; }
+    { name = "linux-nonfree"; sha256 = "1f5x72rzicivwm0sn9l6wjkx7z9a0b8n6c9m60xrqg36ly7mizzp"; }
+    { name = "myricom"; sha256 = "17cdl885jlnja5m60l35xr2f84hv8z4cvg3d25vpp171s1vf1ks1"; }
+    { name = "netxen"; sha256 = "122nava9ld1v8gcnqbdpx0kffv0rxm9glp4xg09ssvldy4myfgl7"; }
+    { name = "qlogic"; sha256 = "02pgmprz1qwij7lw1lgmb8clgxj8v3mx0fyy1l4z7bffnpvip863"; }
+    { name = "ralink"; sha256 = "0yw9gf9gm3jxmsndr8kcsf6829smm88kshfb4c8jn0n6f4yy9l7x"; }
+    { name = "realtek"; sha256 = "0gay9x47pimdqj665sr1416l3bdyca9grsqpj0s9n6k1lmywrqx1"; }
+    { name = "ti-connectivity"; sha256 = "1m6yk0827991hs46l8pp8iiwh1ms0rwlmwn64k2wr725k5yzg29b"; }
   ];
 
   fetchPackage =

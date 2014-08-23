@@ -1,15 +1,15 @@
-{buildPerlPackage, fetchurl, db4}:
+{buildPerlPackage, fetchurl, db}:
 
 buildPerlPackage rec {
-  name = "BerkeleyDB-0.36";
+  name = "BerkeleyDB-0.54";
   
   src = fetchurl {
     url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
-    sha256 = "07xf50riarb60l1h6m2dqmql8q5dij619712fsgw7ach04d8g3z1";
+    sha256 = "010e66d0034b93a8397c600da320611149aef7861eaf1f93b95e49ae37b825b8";
   };
 
   preConfigure = ''
-    echo "LIB = ${db4}/lib" > config.in
-    echo "INCLUDE = ${db4}/include" >> config.in
+    echo "LIB = ${db}/lib" > config.in
+    echo "INCLUDE = ${db}/include" >> config.in
   '';
 }

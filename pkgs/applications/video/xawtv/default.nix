@@ -1,15 +1,31 @@
-{stdenv, fetchurl, ncurses, libjpeg, libX11, libXt, libXft, xproto, libFS, fontsproto, libXaw, libXpm, libXext, libSM, libICE, perl, xextproto, linux}:
+{stdenv, fetchurl, ncurses, libjpeg, libX11, libXt, alsaLib, aalib, libXft, xproto, libv4l
+, libFS, fontsproto, libXaw, libXpm, libXext, libSM, libICE, perl, xextproto, linux}:
 
-stdenv.mkDerivation {
-  name = "xawtv-3.95";
+stdenv.mkDerivation rec {
+  name = "xawtv-3.103";
   src = fetchurl {
-    url = http://dl.bytesex.org/releases/xawtv/xawtv-3.95.tar.gz;
-    md5 = "ad25e03f7e128b318e392cb09f52207d";
+    url = "http://linuxtv.org/downloads/xawtv/${name}.tar.bz2";
+    sha256 = "0lnxr3xip80g0rz7h6n14n9d1qy0cm56h0g1hsyr982rbldskwrc";
   };
+
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$(echo ${linux}/lib/modules/*/build/include)"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${linux}/lib/modules/${linux.modDirVersion}/build"
   '';
-  buildInputs = [ncurses libjpeg libX11 libXt libXft xproto libFS fontsproto libXaw libXpm libXext libSM libICE perl xextproto];
-  patches = [./xawtv-3.95-libfs.patch ./xawtv-3.95-makefile.patch ./xawtv-3.95-page-mask.patch ];
+
+  configureFlags="--prefix=";
+  NIX_LDFLAGS="-lgcc_s";
+
+  makeFlags = "SUID_ROOT= DESTDIR=\$(out) PREFIX=";
+
+  buildInputs = [ncurses libjpeg libX11 libXt libXft xproto libFS perl alsaLib aalib
+                 fontsproto libXaw libXpm libXext libSM libICE xextproto libv4l];
+
+  meta = {
+    description = "TV application for Linux with apps and tools such as a teletext browser";
+    license = stdenv.lib.licenses.gpl2;
+    homePage = https://www.kraxel.org/blog/linux/xawtv/;
+    maintainers = with stdenv.lib.maintainers; [ iElectric ];
+    platforms = stdenv.lib.platforms.linux;
+  };
   
 }

@@ -4,7 +4,7 @@ xextproto, xf86driproto, xorgserver, xproto, libXvMC, glproto, mesa, automake,
 autoconf, libtool, libXext, utilmacros, pixman}:
 
 stdenv.mkDerivation {
-  name = "xf86-video-unichrome-git";
+  name = "xf86-video-unichrome";
   src = fetchgit {
     url = "git://people.freedesktop.org/~libv/xf86-video-unichrome";
     md5 = "6e5e0f8ee204af2385a02e502d1ca8f1";
@@ -27,5 +27,6 @@ stdenv.mkDerivation {
     license = "free";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
+    broken = true;
   };
 }

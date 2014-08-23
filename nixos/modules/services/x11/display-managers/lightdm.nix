@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -26,7 +26,7 @@ let
     buildInputs = [ pkgs.makeWrapper ];
 
     buildCommand = ''
-      ensureDir $out/gtk-3.0/
+      mkdir -p $out/gtk-3.0/
 
       # This wrapper ensures that we actually get fonts
       makeWrapper ${pkgs.lightdm_gtk_greeter}/sbin/lightdm-gtk-greeter \
@@ -55,8 +55,8 @@ let
     ''
       [LightDM]
       greeter-user = ${config.users.extraUsers.lightdm.name}
-      xgreeters-directory = ${cfg.greeter.package}
-      xsessions-directory = ${dmcfg.session.desktops}
+      greeters-directory = ${cfg.greeter.package}
+      sessions-directory = ${dmcfg.session.desktops}
 
       [SeatDefaults]
       xserver-command = ${xserverWrapper}

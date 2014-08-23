@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
     description = "A system call tracer for Linux";
     license = licenses.bsd3;
     platforms = platforms.linux;
+    maintainers = maintainers.mornfall;
   };
 }

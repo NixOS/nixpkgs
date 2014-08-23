@@ -13,9 +13,9 @@ if !licenseAccepted then throw ''
 else assert licenseAccepted;
 
 # the installer is very picky and demands 1.7.0.07
-let dotInstall4j = writeTextFile { name = "dot-install4j"; text = ''
-      JRE_VERSION	${jre}	1	7	0	7
-      JRE_INFO	${jre}	94
+let dotInstall4j = path: writeTextFile { name = "dot-install4j"; text = ''
+      JRE_VERSION	${jre}${path}	1	7	0	7
+      JRE_INFO	${jre}${path}	94
     ''; };
 
     responseVarfile = writeTextFile { name = "response.varfile"; text = ''
@@ -31,15 +31,15 @@ let dotInstall4j = writeTextFile { name = "dot-install4j"; text = ''
     ''; };
 
 in stdenv.mkDerivation rec {
-  name = "neoload-4.1.3";
+  name = "neoload-4.1.4";
 
   src = fetchurl (
     if stdenv.system == "x86_64-linux" then
-      { url = http://www.neotys.com/documents/download/neoload/v4.1/neoload_4_1_3_linux_x64.sh;
-        sha256 = "0qqp7iy6xpaqg535hk21yqmxi0inin5v160sa7nwxh41dq0li5xx"; }
+      { url = http://neoload.installers.neotys.com/documents/download/neoload/v4.1/neoload_4_1_4_linux_x64.sh;
+        sha256 = "199jcf5a0nwfm8wfld2rcjgq64g91vvz2bkmki8dxfzf1yasifcd"; }
     else
-      { url = http://www.neotys.com/documents/download/neoload/v4.1/neoload_4_1_3_linux_x86.sh;
-        sha256 = "0rvy6l9znha3wf8cn406lwvv2qshqnls9kasi68r4wgysr1hh662"; } );
+      { url = http://neoload.installers.neotys.com/documents/download/neoload/v4.1/neoload_4_1_4_linux_x86.sh;
+        sha256 = "1z66jiwcxixsqqwa0f4q8m2p5kna4knq6lic8y8l74dgv25mw912"; } );
 
   buildInputs = [ makeWrapper ];
   phases = [ "installPhase" ];
@@ -48,7 +48,6 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/lib/neoload
-    ln -s ${jre} $out/lib/neoload/jre
 
     # the installer wants to use its internal JRE
     # disable this. The extra spaces are needed because the installer carries
@@ -56,7 +55,7 @@ in stdenv.mkDerivation rec {
     sed -e 's/^if \[ -f jre.tar.gz/if false          /' $src > installer
     chmod a+x installer
 
-    cp ${dotInstall4j} .install4j
+    cp ${dotInstall4j ""} .install4j
     chmod u+w .install4j
 
     sed -e "s|INSTALLDIR|$out|" ${responseVarfile} > response.varfile
@@ -65,8 +64,10 @@ in stdenv.mkDerivation rec {
     export INSTALL4J_JAVA_HOME=${jre}
     bash -ic './installer -q -varfile response.varfile'
 
+    sed -i 's/Xmx450m/Xmx900m/;s/Xss192k/Xss384k/' $out/lib/neoload/conf/agent.properties
+
     for i in $out/bin/*; do
-      wrapProgram $i --run 'cp ${dotInstall4j} ~/.install4j' \
+      wrapProgram $i --run 'cp ${dotInstall4j "/lib/openjdk/jre"} ~/.install4j' \
                      --run 'chmod u+w ~/.install4j'
     done
 
@@ -75,7 +76,7 @@ in stdenv.mkDerivation rec {
       name=$(basename "$i")
       sed -e 's|/lib/neoload/bin|/bin|' "$i" > "$out/share/applications/$name"
     done
-    rm $out/lib/neoload/*.desktop $out/lib/neoload/uninstall
+    rm -r $out/lib/neoload/*.desktop $out/lib/neoload/uninstall
 
   '';
 

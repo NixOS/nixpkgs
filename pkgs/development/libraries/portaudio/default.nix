@@ -1,11 +1,11 @@
 { stdenv, fetchurl, alsaLib, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "portaudio-19-20111121";
+  name = "portaudio-19-20140130";
   
   src = fetchurl {
-    url = http://www.portaudio.com/archives/pa_stable_v19_20111121.tgz;
-    sha256 = "168vmcag3c5y3zwf7h5298ydh83g72q5bznskrw9cr2h1lrx29lw";
+    url = http://www.portaudio.com/archives/pa_stable_v19_20140130.tgz;
+    sha256 = "0mwddk4qzybaf85wqfhxqlf0c5im9il8z03rd4n127k8y2jj9q4g";
   };
 
   buildInputs = [ pkgconfig ]
@@ -33,6 +33,9 @@ stdenv.mkDerivation rec {
     cp -r lib "$out"
   '' else ''
     make install
+
+    # fixup .pc file to find alsa library
+    sed -i "s|-lasound|-L${alsaLib}/lib -lasound|" "$out/lib/pkgconfig/"*.pc
   '';
 
   meta = with stdenv.lib; {

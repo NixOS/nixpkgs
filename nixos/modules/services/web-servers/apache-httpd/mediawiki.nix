@@ -1,6 +1,6 @@
-{ config, pkgs, serverInfo, php, ... }:
+{ config, lib, pkgs, serverInfo, php, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -72,12 +72,14 @@ let
 
   # Unpack Mediawiki and put the config file in its root directory.
   mediawikiRoot = pkgs.stdenv.mkDerivation rec {
-    name= "mediawiki-1.20.5";
+    name= "mediawiki-1.23.1";
 
     src = pkgs.fetchurl {
-      url = "http://download.wikimedia.org/mediawiki/1.20/${name}.tar.gz";
-      sha256 = "0ix6khrilfdncjqnh41xjs0bd49i1q0rywycjaixjfpwj6vjbqbl";
+      url = "http://download.wikimedia.org/mediawiki/1.23/${name}.tar.gz";
+      sha256 = "07z5j8d988cdg4ml4n0vs9fwmj0p594ibbqdid16faxwqm52dkhl";
     };
+
+    patches = [ ./mediawiki-postgresql-fixes.patch ];
 
     skins = config.skins;
 
@@ -90,16 +92,21 @@ let
 
     installPhase =
       ''
-        ensureDir $out
+        mkdir -p $out
         cp -r * $out
         cp ${mediawikiConfig} $out/LocalSettings.php
+        sed -i \
+        -e 's|/bin/bash|${pkgs.bash}/bin/bash|g' \
+        -e 's|/usr/bin/timeout|${pkgs.coreutils}/bin/timeout|g' \
+          $out/includes/limit.sh \
+          $out/includes/GlobalFunctions.php
       '';
   };
 
   mediawikiScripts = pkgs.runCommand "mediawiki-${config.id}-scripts"
     { buildInputs = [ pkgs.makeWrapper ]; }
     ''
-      ensureDir $out/bin
+      mkdir -p $out/bin
       for i in changePassword.php createAndPromote.php userOptions.php edit.php nukePage.php update.php; do
         makeWrapper ${php}/bin/php $out/bin/mediawiki-${config.id}-$(basename $i .php) \
           --add-flags ${mediawikiRoot}/maintenance/$i
@@ -122,7 +129,18 @@ in
         </Directory>
       ''}
 
-      Alias ${config.urlPrefix} ${mediawikiRoot}
+      ${if config.urlPrefix != "" then "Alias ${config.urlPrefix} ${mediawikiRoot}" else ''
+        RewriteEngine On
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-d
+        RewriteRule ${if config.enableUploads
+          then "!^/images"
+          else "^.*\$"
+        } %{DOCUMENT_ROOT}/${if config.articleUrlPrefix == ""
+          then ""
+          else "${config.articleUrlPrefix}/"
+        }index.php [L]
+      ''}
 
       <Directory ${mediawikiRoot}>
           Order allow,deny
@@ -134,6 +152,8 @@ in
         Alias ${config.articleUrlPrefix} ${mediawikiRoot}/index.php
       ''}
     '';
+
+  documentRoot = if config.urlPrefix == "" then mediawikiRoot else null;
 
   enablePHP = true;
 
@@ -290,6 +310,7 @@ in
             echo COMMIT
           ) | ${pkgs.postgresql}/bin/psql -U "${config.dbUser}" "${config.dbName}"
       fi
+      ${php}/bin/php ${mediawikiRoot}/maintenance/update.php
     '');
 
   robotsEntries = optionalString (config.articleUrlPrefix != "")

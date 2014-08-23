@@ -1,14 +1,23 @@
-{stdenv, fetchurl, gmp}:
+{ stdenv, fetchurl, gmp }:
 
-stdenv.mkDerivation (rec {
-  name = "mpfr-3.1.0";
+stdenv.mkDerivation rec {
+  name = "mpfr-3.1.2";
 
   src = fetchurl {
     url = "mirror://gnu/mpfr/${name}.tar.bz2";
-    sha256 = "105nx8qqx5x8f4rlplr2wk4cyv61iw5j3jgi2k21rpb8s6xbp9vl";
+    sha256 = "0sqvpfkzamxdr87anzakf9dhkfh15lfmm5bsqajk02h1mxh3zivr";
   };
 
   buildInputs = [ gmp ];
+
+  configureFlags =
+    /* Work around a FreeBSD bug that otherwise leads to segfaults in the test suite:
+          http://hydra.bordeaux.inria.fr/build/34862
+          http://websympa.loria.fr/wwsympa/arc/mpfr/2011-10/msg00015.html
+          http://www.freebsd.org/cgi/query-pr.cgi?pr=161344
+      */
+    stdenv.lib.optional (stdenv.isSunOS or stdenv.isFreeBSD) "--disable-thread-safe" ++
+    stdenv.lib.optional stdenv.is64bit "--with-pic";
 
   doCheck = true;
 
@@ -30,21 +39,9 @@ stdenv.mkDerivation (rec {
       floating-point arithmetic (53-bit mantissa).
     '';
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.all;
   };
 }
-
-//
-
-(stdenv.lib.optionalAttrs stdenv.isFreeBSD {
-   /* Work around a FreeBSD bug that otherwise leads to segfaults in
-      the test suite:
-        http://hydra.bordeaux.inria.fr/build/34862
-        http://websympa.loria.fr/wwsympa/arc/mpfr/2011-10/msg00015.html
-        http://www.freebsd.org/cgi/query-pr.cgi?pr=161344
-    */
-   configureFlags = [ "--disable-thread-safe" ];
- }))

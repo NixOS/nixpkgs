@@ -1,20 +1,22 @@
-{ stdenv, fetchurl, gnutls, pkgconfig, readline, zlib, xz }:
+{ stdenv, fetchurl, gnutls, pkgconfig, readline, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "lftp-4.4.5";
+  name = "lftp-4.5.2";
 
   src = fetchurl {
-    url = "ftp://ftp.tuwien.ac.at/infosys/browsers/ftp/lftp/${name}.tar.xz";
-    sha256 = "1p3nxsd2an9pdwc3vgwxy8p5nnjrc7mhilikjaddy62cyvxdbpxq";
+    url = "http://lftp.yar.ru/ftp/${name}.tar.gz";
+    sha256 = "106llhq9lgvdxlf4r1p94r66fcy5ywfdfvins4dfn9irg0k5gzyv";
   };
 
   patches = [ ./no-gets.patch ];
 
   buildInputs = [ gnutls pkgconfig readline zlib ];
 
-  meta = {
-    homepage = http://lftp.yar.ru/;
+  meta = with stdenv.lib; {
     description = "A file transfer program supporting a number of network protocols";
-    license = "GPL";
+    homepage = http://lftp.yar.ru/;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
   };
 }

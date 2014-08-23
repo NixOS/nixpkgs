@@ -72,5 +72,6 @@ stdenv.mkDerivation {
     license = "w3c"; # http://www.w3.org/Consortium/Legal/ 
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
+    broken = true;
   };
 }

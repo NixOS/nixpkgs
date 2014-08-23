@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libevent, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "tor-0.2.3.25";
+  name = "tor-0.2.4.23";
 
   src = fetchurl {
-    url = "http://www.torproject.org/dist/${name}.tar.gz";
-    sha256 = "bb2d6f1136f33e11d37e6e34184143bf191e59501613daf33ae3d6f78f3176a0";
+    url = "https://archive.torproject.org/tor-package-archive/${name}.tar.gz";
+    sha256 = "0a8l6d82hk4wbn7nlphd3c1maxhgdli8338wbg5r9dk6zcy7k8q5";
   };
 
   buildInputs = [ libevent openssl zlib ];
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.torproject.org/;
+    repositories.git = https://git.torproject.org/git/tor;
     description = "Tor, an anonymous network router to improve privacy on the Internet";
 
     longDescription=''
@@ -30,10 +31,7 @@ stdenv.mkDerivation rec {
 
     license="mBSD";
 
-    maintainers =
-      [ # Russell O’Connor <roconnor@theorem.ca> ?
-        stdenv.lib.maintainers.ludo
-      ];
+    maintainers = with stdenv.lib.maintainers; [ phreedom ludo ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

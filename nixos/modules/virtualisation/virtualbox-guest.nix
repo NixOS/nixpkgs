@@ -1,8 +1,8 @@
 # Module for VirtualBox guests.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -11,7 +11,6 @@ let
 
 in
 
-optionalAttrs (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) # ugly...
 {
 
   ###### interface
@@ -33,10 +32,16 @@ optionalAttrs (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) # ugly...
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [ {
+      assertion = pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64;
+      message = "Virtualbox not currently supported on ${pkgs.stdenv.system}";
+    } ];
 
     environment.systemPackages = [ kernel.virtualboxGuestAdditions ];
 
     boot.extraModulePackages = [ kernel.virtualboxGuestAdditions ];
+
+    boot.kernelModules = [ "vboxsf" ];
 
     users.extraGroups.vboxsf.gid = config.ids.gids.vboxsf;
 

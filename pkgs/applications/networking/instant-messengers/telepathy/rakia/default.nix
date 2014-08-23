@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "telepathy-rakia";
-  name = "${pname}-0.7.4";
+  name = "${pname}-0.8.0";
 
   src = fetchurl {
     url = "${meta.homepage}/releases/${pname}/${name}.tar.gz";
-    sha256 = "11cmmdq31kivm6nsv61hxy3hxnnmbd8sj55xqwx9hyqzybh70dyf";
+    sha256 = "18dxffa8hhjyvqkhhac05rrkx81vnncjrakg5ygikfp0j79vrbhv";
   };
 
   nativeBuildInputs = [pkgconfigUpstream libxslt python];

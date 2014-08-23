@@ -1,15 +1,15 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager;
 
-  # Whether desktop manager `d' is capable of setting a background.
-  # If it isn't, the `feh' program is used as a fallback.
-  needBGCond = d: ! (d ? bgSupport && d.bgSupport);
+  # If desktop manager `d' isn't capable of setting a background and
+  # the xserver is enabled, the `feh' program is used as a fallback.
+  needBGCond = d: ! (d ? bgSupport && d.bgSupport) && xcfg.enable;
 
 in
 
@@ -17,7 +17,10 @@ in
   # Note: the order in which desktop manager modules are imported here
   # determines the default: later modules (if enabled) are preferred.
   # E.g., if KDE is enabled, it supersedes xterm.
-  imports = [ ./none.nix ./xterm.nix ./xfce.nix ./gnome.nix ./kde4.nix ./e17.nix ];
+  imports = [
+    ./none.nix ./xterm.nix ./xfce.nix ./kde4.nix
+    ./e17.nix ./e18.nix ./gnome3.nix ./xbmc.nix
+  ];
 
   options = {
 

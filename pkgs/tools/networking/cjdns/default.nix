@@ -1,31 +1,27 @@
-{ stdenv, fetchgit, cmake }:
+{ stdenv, fetchgit, nodejs, which, python27 }:
 
 let
-  rev = "f7b02ac0cc";
+  date = "20140303";
+  rev = "f11ce1fd4795b0173ac0ef18c8a6f752aa824adb";
 in
 stdenv.mkDerivation {
-  name = "cjdns-git-20130620-${rev}";
+  name = "cjdns-${date}-${stdenv.lib.strings.substring 0 7 rev}";
 
   src = fetchgit {
-    url = "https://github.com/cjdelisle/cjdns.git";
+    url = "git://github.com/cjdelisle/cjdns.git";
     inherit rev;
-    sha256 = "1580a62yhph62nv7q2jdqrbkyk9a9g5i17snibkxyykc7rili5zq";
+    sha256 = "1bxhf9f1v0slf9mz3ll6jf45mkwvwxlf3yqxx9k23kjyr1nsc8s8";
   };
 
-  preConfigure = ''
-    sed -i -e '/toolchain.*CACHE/d' CMakeLists.txt
-  '';
+  buildInputs = [ which python27 nodejs];
 
-  doCheck = true;
-  checkPhase = "ctest";
-
-  buildInputs = [ cmake ];
+  builder = ./builder.sh;
 
   meta = {
     homepage = https://github.com/cjdelisle/cjdns;
     description = "Encrypted networking for regular people";
-    license = "GPLv3+";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = stdenv.lib.licenses.gpl3;
+    maintainers = with stdenv.lib.maintainers; [ viric emery ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

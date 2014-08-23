@@ -1,21 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, gst_plugins_base, gstreamer }:
+{ stdenv, fetchurl, pkgconfig
+, gst-plugins-base
+}:
 
 stdenv.mkDerivation rec {
-  name = "gnonlin-0.10.15";
+  name = "gnonlin-1.2.1";
+
+  meta = with stdenv.lib; {
+    description = "Gstreamer Non-Linear Multimedia Editing Plugins";
+    homepage    = "http://gstreamer.freedesktop.org";
+    longDescription = ''
+      Gnonlin is a library built on top of GStreamer which provides 
+      support for writing non-linear audio and video editing
+      applications. It introduces the concept of a timeline.
+    '';
+    license     = licenses.lgpl2Plus;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ iyzsong ];
+  };
 
   src = fetchurl {
-    urls = [
-      "http://gstreamer.freedesktop.org/src/gnonlin/${name}.tar.bz2"
-      "mirror://gentoo/distfiles/${name}.tar.bz2"
-      ];
-    sha256 = "1yz0i3vzpadz5axwdb310bypl4rm1xy2n6mgajja0w2z6afnrfv0";
+    url = "${meta.homepage}/src/gnonlin/${name}.tar.xz";
+    sha256 = "14zb3bz3xn40a2kns719amrr77cp6wyxddml621kyxc424ihcw3q";
   };
 
-  buildInputs = [ gst_plugins_base gstreamer pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
-  meta = {
-    homepage = "http://gstreamer.freedesktop.org/modules/gnonlin.html";
-    description = "http://gstreamer.freedesktop.org/modules/gnonlin.html";
-    license = "GPLv2+";
-  };
+  propagatedBuildInputs = [ gst-plugins-base ];
 }

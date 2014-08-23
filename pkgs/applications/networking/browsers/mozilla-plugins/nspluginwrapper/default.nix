@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [which pkgconfig file glib gtk2 gtk3 curl];
 
+  preferLocalBuild = true;
+
   meta = {
     description = ''A wrapper to run browser plugins out-of-process'';
     homepage = "http://nspluginwrapper.org/";

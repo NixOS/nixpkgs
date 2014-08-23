@@ -1,34 +1,23 @@
-{ stdenv, fetchgit, zlib, libuuid, acl, attr, e2fsprogs, lzo }:
+{ stdenv, fetchurl, attr, acl, zlib, libuuid, e2fsprogs, lzo
+, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt }:
 
-let version = "0.20pre20130705"; in
+let version = "3.14.2"; in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "btrfs-progs-${version}";
 
-  src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/linux/kernel/git/mason/btrfs-progs.git";
-    rev = "194aa4a1bd6447bb545286d0bcb0b0be8204d79f";
-    sha256 = "07c6762c9873cdcc1b9b3be0b412ba14b83457d8f5608d3dd945953b5e06f0f2";
+  src = fetchurl {
+    url = "mirror://kernel/linux/kernel/people/mason/btrfs-progs/btrfs-progs-v${version}.tar.xz";
+    sha256 = "14vpj6f2v076v9zabgrz8l4dp6n1ar2mvk3lvii51ykvi35d1qbh";
   };
 
-  buildInputs = [ zlib libuuid acl attr e2fsprogs lzo ];
+  buildInputs = [
+    attr acl zlib libuuid e2fsprogs lzo
+    asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt
+  ];
 
   # for btrfs to get the rpath to libgcc_s, needed for pthread_cancel to work
   NIX_CFLAGS_LINK = "-lgcc_s";
-
-  postPatch = ''
-    cp ${./btrfs-set-received-uuid.c} btrfs-set-received-uuid.c
-  '';
-
-  postBuild = ''
-    gcc -Wall -D_FILE_OFFSET_BITS=64 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -DBTRFS_FLAT_INCLUDES \
-        -fPIC -g -O1 -luuid -o btrfs-set-received-uuid rbtree.o send-utils.o btrfs-list.o \
-        btrfs-set-received-uuid.c
-  '';
-
-  postInstall = ''
-    cp btrfs-set-received-uuid $out/bin
-  '';
 
   makeFlags = "prefix=$(out)";
 

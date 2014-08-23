@@ -5,23 +5,17 @@
 let
 
   nssPEM = fetchurl {
-    url = http://dev.gentoo.org/~anarchy/patches/nss-3.15-pem-support-20130617.patch.xz;
-    sha256 = "1k1m8lsgqwxx251943hks1dd13hz1adpqqb0hxwn011by5vmi201";
-  };
-
-  secLoadPatch = fetchurl {
-    name = "security_load.patch";
-    urls = http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.1-1/85_security_load.patch;
-    sha256 = "041c6v4cxwsy14qr5m9qs0gkv3w24g632cwpz27kacxpa886r1ds";
+    url = http://dev.gentoo.org/~polynomial-c/mozilla/nss-3.15.4-pem-support-20140109.patch.xz;
+    sha256 = "10ibz6y0hknac15zr6dw4gv9nb5r5z9ym6gq18j3xqx7v7n3vpdw";
   };
 
 in stdenv.mkDerivation rec {
   name = "nss-${version}";
-  version = "3.15.2";
+  version = "3.16.3";
 
   src = fetchurl {
-    url = "http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_15_2_RTM/src/${name}.tar.gz";
-    sha1 = "2d900c296bf11deabbf833ebd6ecdea549c97a5f";
+    url = "http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_16_3_RTM/src/${name}.tar.gz";
+    sha256 = "657711ff7a4058043b69019a66f44101d0234eae2b6b80ab900439dbf02add60";
   };
 
   buildInputs = [ nspr perl zlib sqlite ];
@@ -32,8 +26,8 @@ in stdenv.mkDerivation rec {
 
   patches =
     [ ./nss-3.15-gentoo-fixups.patch
-      secLoadPatch
-      ./nix_secload_fixup.patch
+      # Based on http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.4-1/85_security_load.patch
+      ./85_security_load.patch
     ];
 
   postPatch = ''

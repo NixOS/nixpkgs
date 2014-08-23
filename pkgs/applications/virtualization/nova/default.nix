@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
       paste_deploy m2crypto ipy boto_1_9 twisted sqlalchemy_migrate
       distutils_extra simplejson readline glance cheetah lockfile httplib2
       # !!! should libvirt be a build-time dependency?  Note that
-      # libxml2Python is a dependency of libvirt.py. 
+      # libxml2Python is a dependency of libvirt.py.
       libvirt libxml2Python
       novaclient
     ];
 
   buildInputs =
-    [ pythonPackages.python 
+    [ pythonPackages.python
       pythonPackages.wrapPython
       pythonPackages.mox
       intltool
@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
       substituteInPlace nova/api/ec2/cloud.py \
         --replace 'sh genrootca.sh' $out/libexec/nova/genrootca.sh
     '';
-  
+
   buildPhase = "python setup.py build";
 
   installPhase =
-    ''    
+    ''
       p=$(toPythonPath $out)
       export PYTHONPATH=$p:$PYTHONPATH
       mkdir -p $p
@@ -59,14 +59,14 @@ stdenv.mkDerivation rec {
       # computes some stuff from its own argv[0].  So put the wrapped
       # programs in $out/libexec under their original names.
       mkdir -p $out/libexec/nova
-      
+
       wrapProgram() {
           local prog="$1"
           local hidden=$out/libexec/nova/$(basename "$prog")
           mv $prog $hidden
           makeWrapper $hidden $prog "$@"
       }
-      
+
       wrapPythonPrograms
 
       cp -prvd etc $out/etc
@@ -86,9 +86,10 @@ stdenv.mkDerivation rec {
   doCheck = false; # !!! fix
 
   checkPhase = "python setup.py test";
-    
+
   meta = {
     homepage = http://nova.openstack.org/;
     description = "OpenStack Compute (a.k.a. Nova), a cloud computing fabric controller";
+    broken = true;
   };
 }

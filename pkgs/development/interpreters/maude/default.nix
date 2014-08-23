@@ -9,27 +9,32 @@ stdenv.mkDerivation rec {
   };
 
   fullMaude = fetchurl {
-    url = "http://maude.cs.uiuc.edu/download/current/FM2.6/full-maude26.maude";
-    sha256 = "1382hjwwrsdgd5yjn3ph1b5i1bhrhzvqx0v369bmcjkly9k96v6q";
+    url = "https://full-maude.googlecode.com/git/full-maude261h.maude";
+    sha256 = "0xx8bfn6arsa75m5vhp5lmpazgfw230ssq33h9vifswlvzzc81ha";
   };
 
   buildInputs = [flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper];
 
-  configurePhase = ''./configure --disable-dependency-tracking --prefix=$out --datadir=$out/share/maude TECLA_LIBS="-ltecla -lncursesw" CFLAGS="-O3" CXXFLAGS="-O3"'';
+  preConfigure = ''
+    configureFlagsArray=(
+      --datadir=$out/share/maude
+      TECLA_LIBS="-ltecla -lncursesw"
+      CFLAGS="-O3" CXXFLAGS="-O3"
+    )
+  '';
 
   doCheck = true;
 
-  postInstall =
-  ''
+  postInstall = ''
     for n in "$out/bin/"*; do wrapProgram "$n" --suffix MAUDE_LIB ':' "$out/share/maude"; done
     mkdir -p $out/share/maude
-    cp ${fullMaude} $out/share/maude/full-maude.maude
+    cp ${fullMaude} -d $out/share/maude/full-maude.maude
   '';
 
   meta = {
     homepage = "http://maude.cs.uiuc.edu/";
     description = "Maude -- a high-level specification language";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
 
     longDescription = ''
       Maude is a high-performance reflective language and system
@@ -41,7 +46,7 @@ stdenv.mkDerivation rec {
       rewriting logic computation.
     '';
 
-    platforms = stdenv.lib.platforms.all;
+    hydraPlatforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

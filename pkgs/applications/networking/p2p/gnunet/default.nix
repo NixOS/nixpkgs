@@ -1,20 +1,19 @@
-{ stdenv, fetchurl, libextractor, libmicrohttpd, libgcrypt
-, zlib, gmp, curl, libtool, adns, sqlite, pkgconfig
-, libxml2, ncurses, gettext, libunistring, libidn
-, makeWrapper }:
+{ stdenv, fetchurl, adns, curl, gettext, gmp, gnutls, libextractor
+, libgcrypt, libgnurl, libidn, libmicrohttpd, libtool, libunistring
+, makeWrapper, ncurses, pkgconfig, libxml2, sqlite, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "gnunet-0.9.5a";
+  name = "gnunet-0.10.1";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/${name}.tar.gz";
-    sha256 = "1mxy1ikv44fia3cybpmiw298x5371a2qh8hr7pi55yg1xqbhfq0x";
+    sha256 = "04wxzm3wkgqbn42b8ksr4cx6m5cckyig5cls1adh0nwdczwvnp7n";
   };
 
   buildInputs = [
-    libextractor libmicrohttpd libgcrypt gmp curl libtool
-    zlib adns sqlite libxml2 ncurses libidn
-    pkgconfig gettext libunistring makeWrapper
+    adns curl gettext gmp gnutls libextractor libgcrypt libgnurl libidn
+    libmicrohttpd libtool libunistring libxml2 makeWrapper ncurses
+    pkgconfig sqlite zlib
   ];
 
   preConfigure = ''
@@ -74,7 +73,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://gnunet.org/;
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = with stdenv.lib.maintainers; [ ludo viric ];
     platforms = stdenv.lib.platforms.gnu;

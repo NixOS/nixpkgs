@@ -10,7 +10,7 @@
 
 let
 
-  version = "1.8.4";
+  version = "2.1.0";
 
   svn = subversionClient.override { perlBindings = true; };
 
@@ -20,11 +20,11 @@ stdenv.mkDerivation {
   name = "git-${version}";
 
   src = fetchurl {
-    url = "http://git-core.googlecode.com/files/git-${version}.tar.gz";
-    sha256 = "156bwqqgaw65rsvbb4wih5jfg94bxyf6p16mdwf0ky3f4ln55s2i";
+    url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
+    sha256 = "19q1as2bjh4yifmgw6cciwfw0dswxppaf5iq8h8934i33bf15mwd";
   };
 
-  patches = [ ./docbook2texi.patch ./symlinks-in-bin.patch ];
+  patches = [ ./docbook2texi.patch ./symlinks-in-bin.patch ./cert-path.patch ];
 
   buildInputs = [curl openssl zlib expat gettext cpio makeWrapper]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
@@ -35,7 +35,10 @@ stdenv.mkDerivation {
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
   makeFlags = "prefix=\${out} sysconfdir=/etc/ PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell} "
-      + (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1");
+      + (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1")
+      + (if stdenv.isSunOS then " INSTALL=install NO_INET_NTOP= NO_INET_PTON=" else "")
+      + (if stdenv.isDarwin then " NO_APPLE_COMMON_CRYPTO=1" else "");
+
 
   # FIXME: "make check" requires Sparse; the Makefile must be tweaked
   # so that `SPARSE_FLAGS' corresponds to the current architecture...
@@ -46,8 +49,7 @@ stdenv.mkDerivation {
   postInstall =
     ''
       notSupported() {
-        echo -e "#\!/bin/sh\necho '`basename $1` not supported, $2'\nexit 1" > "$1"
-        chmod +x $1
+        unlink $1 || true
       }
 
       # Install git-subtree.
@@ -64,8 +66,9 @@ stdenv.mkDerivation {
       ln -s "$out/share/git/contrib/emacs/"*.el $out/share/emacs/site-lisp/
       mkdir -p $out/etc/bash_completion.d
       ln -s $out/share/git/contrib/completion/git-completion.bash $out/etc/bash_completion.d/
+      ln -s $out/share/git/contrib/completion/git-prompt.sh $out/etc/bash_completion.d/
 
-      # grep is a runtime dependence, need to patch so that it's found
+      # grep is a runtime dependency, need to patch so that it's found
       substituteInPlace $out/libexec/git-core/git-sh-setup \
           --replace ' grep' ' ${gnugrep}/bin/grep' \
           --replace ' egrep' ' ${gnugrep}/bin/egrep'
@@ -76,7 +79,7 @@ stdenv.mkDerivation {
              -e 's|	perl -e|	${perl}/bin/perl -e|g' \
              $out/libexec/git-core/{git-am,git-submodule}
 
-      # gzip (and optionally bzip2, xz, zip) are a runtime dependencies for
+      # gzip (and optionally bzip2, xz, zip) are runtime dependencies for
       # gitweb.cgi, need to patch so that it's found
       sed -i -e "s|'compressor' => \['gzip'|'compressor' => ['${gzip}/bin/gzip'|" \
           $out/share/gitweb/gitweb.cgi
@@ -93,7 +96,7 @@ stdenv.mkDerivation {
                      --set GITPERLLIB "$gitperllib"   \
                      --prefix PATH : "${svn}/bin" ''
        else '' # replace git-svn by notification script
-        notSupported $out/libexec/git-core/git-svn "reinstall with config git = { svnSupport = true } set"
+        notSupported $out/libexec/git-core/git-svn
        '')
 
    + (if sendEmailSupport then
@@ -105,7 +108,7 @@ stdenv.mkDerivation {
         wrapProgram $out/libexec/git-core/git-send-email \
                      --set GITPERLLIB "$gitperllib" ''
        else '' # replace git-send-email by notification script
-        notSupported $out/libexec/git-core/git-send-email "reinstall with config git = { sendEmailSupport = true } set"
+        notSupported $out/libexec/git-core/git-send-email
        '')
 
    + stdenv.lib.optionalString withManual ''# Install man pages and Info manual
@@ -122,8 +125,7 @@ stdenv.mkDerivation {
      '' else ''
        # Don't wrap Tcl/Tk, replace them by notification scripts
        for prog in bin/gitk libexec/git-core/git-gui; do
-         notSupported "$out/$prog" \
-                      "reinstall with config git = { guiSupport = true; } set"
+         notSupported "$out/$prog"
        done
      '');
 
@@ -140,6 +142,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = with stdenv.lib.maintainers; [ simons the-kenny ];
   };
 }

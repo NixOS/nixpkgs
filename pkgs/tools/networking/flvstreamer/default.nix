@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
          stream audio or video content from all types of flash or rtmp servers.
       '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     homepage = http://savannah.nongnu.org/projects/flvstreamer;
 

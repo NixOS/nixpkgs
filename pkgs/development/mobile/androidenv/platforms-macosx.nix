@@ -218,5 +218,17 @@ in
     };
   };
     
+  platform_19 = buildPlatform {
+    name = "android-platform-4.4";
+    src = fetchurl {
+      url = https://dl-ssl.google.com/android/repository/android-19_r01.zip;
+      sha1 = "96281811998272dce46e8285d15fce444a3d5a96";
+    };
+    meta = {
+      description = "Android SDK Platform 4.4";
+      
+    };
+  };
+    
 }
   

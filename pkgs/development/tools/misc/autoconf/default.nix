@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   # http://thread.gmane.org/gmane.comp.sysutils.autoconf.bugs/6822 for
   # details.
   # There are many test failures on `i386-pc-solaris2.11'.
-  doCheck = ((!stdenv.isCygwin) && (!stdenv.isSunOS));
+  #doCheck = ((!stdenv.isCygwin) && (!stdenv.isSunOS));
+  doCheck = false;
 
   # Don't fixup "#! /bin/sh" in Autoconf, otherwise it will use the
   # "fixed" path in generated files!
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
       can use, in the form of M4 macro calls.
     '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };

@@ -1,18 +1,14 @@
 { stdenv, fetchurl }:
 
-let
-   inherit (stdenv.lib) optionals;
-in
-
 stdenv.mkDerivation rec {
-  name = "apr-1.4.8";
+  name = "apr-1.5.1";
 
   src = fetchurl {
     url = "mirror://apache/apr/${name}.tar.bz2";
-    md5 = "ce2ab01a0c3cdb71cf0a6326b8654f41";
+    sha256 = "1b4qw686bwjn19iyb0lg918q23xxd6s2gnyczhjq992d3m1vwjp9";
   };
 
-  patches = optionals stdenv.isDarwin [ ./darwin_fix_configure.patch ];
+  patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin_fix_configure.patch ];
 
   outputs = [ "dev" "out" ];
 
@@ -38,5 +34,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://apr.apache.org/;
     description = "The Apache Portable Runtime library";
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

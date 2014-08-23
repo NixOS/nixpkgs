@@ -8,9 +8,11 @@
 , antProperties ? []
 , antBuildInputs ? []
 , buildfile ? "build.xml"
-, ant ? pkgs.apacheAntOpenJDK
+, ant ? pkgs.ant
 , jre ? pkgs.openjdk
 , hydraAntLogger ? pkgs.hydraAntLogger
+, zip ? pkgs.zip
+, unzip ? pkgs.unzip
 , ... } @ args:
 
 let
@@ -31,7 +33,7 @@ stdenv.mkDerivation (
 
     antSetupPhase = with stdenv.lib; ''
       if test "$hydraAntLogger" != "" ; then
-        export ANT_ARGS="-logger org.hydra.ant.HydraLogger -lib `ls $hydraAntLogger/lib/java/*.jar | head -1`"
+        export ANT_ARGS="-logger org.hydra.ant.HydraLogger -lib `ls $hydraAntLogger/share/java/*.jar | head -1`"
       fi
       for abi in ${concatStringsSep " " (map (f: "`find ${f} -name '*.jar'`") antBuildInputs)}; do
         export ANT_ARGS="$ANT_ARGS -lib $abi"
@@ -39,20 +41,23 @@ stdenv.mkDerivation (
     '';
 
     installPhase = ''
-      mkdir -p $out/lib/java
+      mkdir -p $out/share/java
       ${ if jars == [] then '' 
-           find . -name "*.jar" | xargs -I{} cp -v {} $out/lib/java
+           find . -name "*.jar" | xargs -I{} cp -v {} $out/share/java
          '' else stdenv.lib.concatMapStrings (j: ''
-           cp -v ${j} $out/lib/java
+           cp -v ${j} $out/share/java
          '') jars }
-      for j in $out/lib/java/*.jar ; do
+
+      . ${./functions.sh}
+      for j in $out/share/java/*.jar ; do
+        canonicalizeJar $j
         echo file jar $j >> $out/nix-support/hydra-build-products
       done
     '';
 
     generateWrappersPhase = 
       let 
-        cp = w: "-cp '${lib.optionalString (w ? classPath) w.classPath}${lib.optionalString (w ? mainClass) ":$out/lib/java/*"}'";
+        cp = w: "-cp '${lib.optionalString (w ? classPath) w.classPath}${lib.optionalString (w ? mainClass) ":$out/share/java/*"}'";
       in
       '' 
       header "Generating jar wrappers"
@@ -95,7 +100,7 @@ stdenv.mkDerivation (
   {
     name = name + (if src ? version then "-" + src.version else "");
   
-    buildInputs = [ant jre] ++ stdenv.lib.optional (args ? buildInputs) args.buildInputs ;
+    buildInputs = [ant jre zip unzip] ++ stdenv.lib.optional (args ? buildInputs) args.buildInputs ;
 
     postHook = ''
       mkdir -p $out/nix-support

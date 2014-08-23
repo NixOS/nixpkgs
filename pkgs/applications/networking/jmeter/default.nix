@@ -1,10 +1,10 @@
 { fetchurl, stdenv, ant }:
 
 stdenv.mkDerivation rec {
-  name = "jmeter-2.9";
+  name = "jmeter-2.11";
   src = fetchurl {
-    url = "http://ftp.unicamp.br/pub/apache//jmeter/binaries/apache-jmeter-2.9.tgz";
-    sha256 = "14r3zn910m97jqrf6k5c4lwy214snaap2242qg76h65zk9qr20ni";
+    url = "http://ftp.unicamp.br/pub/apache//jmeter/binaries/apache-${name}.tgz";
+    sha256 = "1fr3sw06qncb6yygcf2lbnkxma4v1dbigpf39ajrm0isxbpyv944";
   };
 
   installPhase = ''

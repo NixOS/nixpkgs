@@ -1,11 +1,12 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchgit }:
 
 stdenv.mkDerivation rec {
   name = "libaio-0.3.109";
 
-  src = fetchurl {
-    url = "mirror://kernel/linux/libs/aio/${name}.tar.bz2";
-    sha256 = "15772ki2wckf2mj4gm1vhrsmpd6rq20983nhlkfghjfblghgrkmm";
+  src = fetchgit {
+    url = https://git.fedorahosted.org/git/libaio.git;
+    rev = "refs/tags/${name}";
+    sha256 = "1wbziq0hqvnbckpxrz1cgr8dlw3mifs4xpy3qhnagbrrsmrq2rhi";
   };
 
   makeFlags = "prefix=$(out)";

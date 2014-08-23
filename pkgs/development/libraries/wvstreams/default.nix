@@ -12,6 +12,8 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     find -type f | xargs sed -i 's@/bin/bash@bash@g'
+
+    sed -e '1i#include <unistd.h>' -i $(find . -name '*.c' -o -name '*.cc')
   '';
 
   buildInputs = [ qt4 dbus zlib openssl readline perl ];

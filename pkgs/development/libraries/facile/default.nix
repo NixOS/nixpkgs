@@ -9,9 +9,11 @@ stdenv.mkDerivation rec {
   };
   
   dontAddPrefix = 1;
-        
-  patchPhase = "sed -e 's@mkdir@mkdir -p@' -i Makefile";
-  
+
+  patches = [ ./ocaml_4.xx.patch ];
+
+  postPatch = "sed -e 's@mkdir@mkdir -p@' -i Makefile";
+
   postConfigure = "make -C src .depend";
   
   makeFlags = "FACILEDIR=\${out}/lib/ocaml/facile";

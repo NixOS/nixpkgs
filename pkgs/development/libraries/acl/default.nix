@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gettext, attr }:
 
 stdenv.mkDerivation rec {
-  name = "acl-2.2.51";
+  name = "acl-2.2.52";
 
   src = fetchurl {
     url = "mirror://savannah/acl/${name}.src.tar.gz";
-    sha256 = "09aj30m49ivycl3irram8c3givc0crivjm3ymw0nhfaxrwhlb186";
+    sha256 = "08qd9s3wfhv0ajswsylnfwr5h0d7j9d4rgip855nrh400nxp940p";
   };
 
   outputs = [ "dev" "out" "bin" "doc" ];

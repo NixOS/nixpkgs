@@ -27,7 +27,7 @@ stdenv.mkDerivation {
       `time' reports unavailable information as zero values.
     '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     homepage = http://www.gnu.org/software/time/;
   };
 }

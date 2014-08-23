@@ -41,7 +41,7 @@ diff -Naur lablGL.ori/Makefile.config lablGL/Makefile.config
 +
 +##### Uncomment these for windows
 +#TKLIBS = tk83.lib tcl83.lib gdi32.lib user32.lib
-+#GLLIBS = opengl32.lib glu32.lib 
++#GLLIBS = opengl32.lib glu32.lib
 +#TOOLCHAIN = msvc
 +#XA = .lib
 +#XB = .bat
@@ -65,53 +65,3 @@ diff -Naur lablGL.ori/Makefile.config lablGL/Makefile.config
 +
 +# C Compiler options
 +#COPTS = -c -O
-diff -Naur lablGL.ori/META lablGL/META
---- lablGL.ori/META	1970-01-01 01:00:00.000000000 +0100
-+++ lablGL/META	2013-06-02 22:00:59.000000000 +0200
-@@ -0,0 +1,21 @@
-+description = "Bindings for OpenGL graphics engines"
-+version = "1.04-1"
-+archive(byte) = "lablgl.cma"
-+archive(native) = "lablgl.cmxa"
-+
-+#package "togl" (
-+#	description = "OpenGL widget for labltk"
-+#	version = "1.01"
-+#	requires = "lablgl, labltk"
-+#	archive(byte) = "togl.cma"
-+#	archive(native) = "togl.cmxa"
-+#)
-+
-+package "glut" (
-+	description = "Platform-independent OpenGL window"
-+	version = "1.01"
-+	requires = "lablgl"
-+	archive(byte) = "lablglut.cma"
-+	archive(native) = "lablglut.cmxa"
-+)
-+
-diff -Naur lablGL.ori/META~ lablGL/META~
---- lablGL.ori/META~	1970-01-01 01:00:00.000000000 +0100
-+++ lablGL/META~	2013-06-02 21:59:17.000000000 +0200
-@@ -0,0 +1,21 @@
-+description = "Bindings for OpenGL graphics engines"
-+version = "1.04-1"
-+archive(byte) = "lablgl.cma"
-+archive(native) = "lablgl.cmxa"
-+
-+#package "togl" (
-+#	description = "OpenGL widget for labltk"
-+#	version = "1.01"
-+#	requires = "lablGL, labltk"
-+#	archive(byte) = "togl.cma"
-+#	archive(native) = "togl.cmxa"
-+#)
-+
-+package "glut" (
-+	description = "Platform-independent OpenGL window"
-+	version = "1.01"
-+	requires = "lablGL"
-+	archive(byte) = "lablglut.cma"
-+	archive(native) = "lablglut.cmxa"
-+)
-+

@@ -14,5 +14,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Elektronische aangifte IB 2006";
     url = "http://www.belastingdienst.nl/download/1341.html";
+    license = stdenv.lib.licenses.unfree;
+    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = [];
   };
 }

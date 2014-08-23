@@ -99,7 +99,7 @@ let version = "4.6.3";
         withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
         withFpu = if gccFpu != null then " --with-fpu=${gccFpu}" else "";
         withFloat = if gccFloat != null then " --with-float=${gccFloat}" else "";
-      in 
+      in
         (withArch +
         withCpu +
         withAbi +
@@ -159,10 +159,8 @@ let version = "4.6.3";
             # In any case, mingw32 g++ linking is broken by default with shared libs,
             # unless adding "-lsupc++" to any linking command. I don't know why.
             " --disable-shared" +
-            (if cross.config == "x86_64-w64-mingw32" then
-              # To keep ABI compatibility with upstream mingw-w64
-              " --enable-fully-dynamic-string"
-              else "")
+            # To keep ABI compatibility with upstream mingw-w64
+            " --enable-fully-dynamic-string"
             else (if cross.libc == "uclibc" then
               # In uclibc cases, libgomp needs an additional '-ldl'
               # and as I don't know how to pass it, I disable libgomp.
@@ -440,13 +438,13 @@ stdenv.mkDerivation ({
   passthru = { inherit langC langCC langAda langFortran langVhdl
       langGo version; };
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   inherit (stdenv) is64bit;
 
   meta = {
     homepage = http://gcc.gnu.org/;
-    license = "GPLv3+";  # runtime support libraries are typically LGPLv3+
+    license = stdenv.lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
     description = "GNU Compiler Collection, version ${version}"
       + (if stripped then "" else " (with debugging info)");
 
@@ -462,13 +460,15 @@ stdenv.mkDerivation ({
     maintainers = [
       stdenv.lib.maintainers.ludo
       stdenv.lib.maintainers.viric
-      stdenv.lib.maintainers.shlevy
     ];
 
     # Volunteers needed for the {Cyg,Dar}win ports of *PPL.
     # gnatboot is not available out of linux platforms, so we disable the darwin build
     # for the gnat (ada compiler).
-    platforms = stdenv.lib.platforms.linux ++ optionals (langAda == false && libelf == null) [ "i686-darwin" ];
+    platforms =
+      stdenv.lib.platforms.linux ++
+      stdenv.lib.platforms.freebsd ++
+      optionals (langAda == false) stdenv.lib.platforms.darwin;
   };
 }
 
@@ -507,7 +507,7 @@ stdenv.mkDerivation ({
 
   meta = {
     homepage = "http://ghdl.free.fr/";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     description = "Complete VHDL simulator, using the GCC technology (gcc ${version})";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;

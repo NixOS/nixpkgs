@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
   cfg = config.services.apcupsd;
@@ -148,7 +148,7 @@ in
     #   wall: cannot get tty name: Inappropriate ioctl for device
     # The message still gets through.
     systemd.services.apcupsd = {
-      description = "APC UPS daemon";
+      description = "APC UPS Daemon";
       wantedBy = [ "multi-user.target" ];
       preStart = "mkdir -p /run/apcupsd/";
       serviceConfig = {
@@ -168,11 +168,11 @@ in
     # shuts off power.) Copied from here:
     # http://forums.opensuse.org/english/get-technical-help-here/applications/479499-apcupsd-systemd-killpower-issues.html
     systemd.services.apcupsd-killpower = {
+      description = "APC UPS Kill Power";
       after = [ "shutdown.target" ]; # append umount.target?
       before = [ "final.target" ];
       wantedBy = [ "shutdown.target" ];
       unitConfig = {
-        Description = "APC UPS killpower";
         ConditionPathExists = "/run/apcupsd/powerfail";
         DefaultDependencies = "no";
       };

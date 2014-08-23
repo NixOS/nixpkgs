@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "chromaprint-${version}";
-  version = "0.7";
+  version = "1.1";
 
   src = fetchurl {
     url = "http://bitbucket.org/acoustid/chromaprint/downloads/${name}.tar.gz";
-    sha256 = "00amjzrr4230v3014141hg8k379zpba56xsm572ab49w8kyw6ljf";
+    sha256 = "04nd8xmy4kgnpfffj6hw893f80bwhp43i01zpmrinn3497mdf53b";
   };
 
   buildInputs = [ cmake fftw boost ];

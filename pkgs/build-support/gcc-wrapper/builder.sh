@@ -66,13 +66,23 @@ else
     echo "$gccCFlags" > $out/nix-support/gcc-cflags
     
     gccPath="$gcc/bin"
-    ldPath="$binutils/bin"
+    # On Illumos/Solaris we might prefer native ld
+    if test -n "$nativePrefix"; then
+      ldPath="$nativePrefix/bin"
+    else
+      ldPath="$binutils/bin"
+    fi;
 fi
 
 
 doSubstitute() {
     local src=$1
     local dst=$2
+    local ld="$ldPath/ld"
+    if $ld -V 2>&1 |grep Solaris; then
+      # Use Solaris specific linker wrapper
+      ld="$out/bin/ld-solaris"
+    fi
     # Can't use substitute() here, because replace may not have been
     # built yet (in the bootstrap).
     sed \
@@ -86,7 +96,7 @@ doSubstitute() {
         -e "s^@coreutils@^$coreutils^g" \
         -e "s^@libc@^$libc^g" \
         -e "s^@libc_bin@^$libc_bin^g" \
-        -e "s^@ld@^$ldPath/ld^g" \
+        -e "s^@ld@^$ld^g" \
         < "$src" > "$dst" 
 }
 
@@ -145,6 +155,8 @@ then
     ln -sv g++ $out/bin/c++
 fi
 
+mkGccWrapper $out/bin/cpp $gccPath/cpp || true
+
 if mkGccWrapper $out/bin/gfortran $gccPath/gfortran
 then
     ln -sv gfortran $out/bin/g77
@@ -174,6 +186,13 @@ ln -s $ldPath/as $out/bin/as
 # Make a wrapper around the linker.
 doSubstitute "$ldWrapper" "$out/bin/ld"
 chmod +x "$out/bin/ld"
+
+# Copy solaris ld wrapper if needed
+if $ldPath/ld -V 2>&1 |grep Solaris; then
+  # Use Solaris specific linker wrapper
+  sed -e "s^@ld@^$ldPath/ld^g" < "$ldSolarisWrapper" > "$out/bin/ld-solaris"
+  chmod +x "$out/bin/ld-solaris"
+fi
 
 
 # Emit a setup hook.  Also store the path to the original GCC and

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, XMLSimple}:
+{stdenv, fetchurl, perl, XMLSimple, librsvg}:
 
 stdenv.mkDerivation rec {
   name = "icon-naming-utils-0.8.90";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "071fj2jm5kydlz02ic5sylhmw6h2p3cgrm3gwdfabinqkqcv4jh4";
   };
   
-  buildInputs = [perl XMLSimple];
+  buildInputs = [perl XMLSimple librsvg];
 
   postInstall =
     ''
@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
           --replace '/bin/perl' '/bin/perl -I${XMLSimple}/lib/perl5/site_perl'
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://tango.freedesktop.org/Standard_Icon_Naming_Specification;
+    platforms = platforms.linux;
   };
 }

@@ -11,10 +11,10 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "libinfinity-0.5.3";
+  name = "libinfinity-0.5.5";
   src = fetchurl {
     url = "http://releases.0x539.de/libinfinity/${name}.tar.gz";
-    sha256 = "04qa3ky2skhc9b5f9i9sc8hci3ykklqznmgy616yzs3n22bmax9j";
+    sha256 = "1i4cnwbvfv56m7zyyf9wki2bj000r8md414yv3cf1jdz4jbyxij7";
   };
 
   buildInputs = [ pkgconfig glib libxml2 gsasl libidn gss ]
@@ -37,9 +37,8 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = http://gobby.0x539.de/;
     description = "An implementation of the Infinote protocol written in GObject-based C";
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = [ stdenv.lib.maintainers.phreedom ];
   };
 
 }
-

@@ -140,6 +140,24 @@ in {
     };
   };
 
+  pt_BR = buildDict {
+    shortName = "pt_BR-20090702";
+    fullName = "Brazilian Portuguese";
+    src = fetchurl {
+      url = mirror://gnu/aspell/dict/pt_BR/aspell6-pt_BR-20090702-0.tar.bz2;
+      sha256 = "1y09lx9zf2rnp55r16b2vgj953l3538z1vaqgflg9mdvm555bz3p";
+    };
+  };
+
+  pt_PT = buildDict {
+    shortName = "pt_PT-20070510";
+    fullName = "Portuguese";
+    src = fetchurl {
+      url = mirror://gnu/aspell/dict/pt_PT/aspell6-pt_PT-20070510-0.tar.bz2;
+      sha256 = "1mnr994cwlag6shy8865ky99lymysiln07mbldcncahg90dagdxq";
+    };
+  };
+
   ru = buildDict {
     shortName = "ru-0.99f7-1";
     fullName = "Russian";

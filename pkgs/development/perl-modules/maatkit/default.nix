@@ -1,11 +1,11 @@
 {buildPerlPackage, stdenv, fetchurl, DBDmysql}:
 
 buildPerlPackage rec {
-  name = "maatkit-4790";
+  name = "maatkit-7540";
 
   src = fetchurl {
     url = "http://maatkit.googlecode.com/files/${name}.tar.gz" ;
-    sha256 = "0lf6dgh1w96m234hrkhagyyvv1m1ldchpzsg6iswvkj6sbvv7d7h";
+    sha256 = "1a7rxrddkrsfxb2wj01ha91ld0vapfkqcy8j9p08l76zz2l8p2v1";
   };
 
   buildInputs = [ DBDmysql ] ;
@@ -34,7 +34,7 @@ buildPerlPackage rec {
       In addition to MySQL, there is support for PostgreSQL, Memcached, and a
       growing variety of other databases and technologies.
     '';
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     homepage = http://www.maatkit.org/;
   };
 }

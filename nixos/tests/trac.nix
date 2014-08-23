@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+import ./make-test.nix ({ pkgs, ... }: {
+  name = "trac";
 
-{
   nodes = {
     storage =
       { config, pkgs, ... }:
@@ -68,4 +68,4 @@
 
       $client->screenshot("screen");
     '';
-}
+})

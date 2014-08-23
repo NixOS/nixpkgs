@@ -1,6 +1,4 @@
-{ version }:
-
-{ pkgs, ... }:
+import ./make-test.nix ({ version, ... }:
 
 let
 
@@ -13,11 +11,13 @@ let
             options = "vers=${toString version}";
           }
         ];
+      networking.firewall.enable = false; # FIXME: only open statd
     };
 
 in
 
 {
+  name = "nfs";
 
   nodes =
     { client1 = client;
@@ -31,6 +31,7 @@ in
               /data 192.168.1.0/255.255.255.0(rw,no_root_squash,no_subtree_check,fsid=0)
             '';
           services.nfs.server.createMountPoints = true;
+          networking.firewall.enable = false; # FIXME: figure out what ports need to be allowed
         };
     };
 
@@ -82,4 +83,4 @@ in
       die "shutdown took too long ($duration seconds)" if $duration > 30;
     '';
 
-}
+})

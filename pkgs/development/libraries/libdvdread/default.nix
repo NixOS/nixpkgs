@@ -1,29 +1,25 @@
 {stdenv, fetchurl, libdvdcss}:
 
 stdenv.mkDerivation {
-  name = "libdvdread-4.1.3";
+  name = "libdvdread-4.9.9";
   
   src = fetchurl {
-    url = http://www.mplayerhq.hu/MPlayer/releases/dvdnav/libdvdread-4.1.3.tar.bz2;
-    sha1 = "fc4c7ba3e49929191e057b435bc4f867583ea8d5";
+    url = http://dvdnav.mplayerhq.hu/releases/libdvdread-4.9.9.tar.xz;
+    sha256 = "d91275471ef69d488b05cf15c60e1cd65e17648bfc692b405787419f47ca424a";
   };
 
   buildInputs = [libdvdcss];
 
   NIX_LDFLAGS = "-ldvdcss";
 
-  configureScript = "./configure2"; # wtf?
-
-  preConfigure = ''
-    mkdir -p $out
-  '';
-
   postInstall = ''
     ln -s dvdread $out/include/libdvdread
   '';
 
   meta = {
-    homepage = http://www.mplayerhq.hu/;
+    homepage = http://dvdnav.mplayerhq.hu/;
     description = "A library for reading DVDs";
+    license = stdenv.lib.licenses.gpl2;
+    maintainers = [ stdenv.lib.maintainers.wmertens ];
   };
 }

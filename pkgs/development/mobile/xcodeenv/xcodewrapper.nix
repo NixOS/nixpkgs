@@ -1,9 +1,9 @@
-{stdenv, version ? "5.0"}:
+{stdenv, version}:
 
 stdenv.mkDerivation {
   name = "xcode-wrapper-"+version;
   buildCommand = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cd $out/bin
     ln -s /usr/bin/xcode-select
     ln -s /usr/bin/xcodebuild
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     ln -s "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs"
 
     # Check if we have the xcodebuild version that we want
-    if [ -z "$($out/bin/xcodebuild -version | grep ${version})" ]
+    if [ -z "$($out/bin/xcodebuild -version | grep -x 'Xcode ${version}')" ]
     then
         echo "We require xcodebuild version: ${version}"
         exit 1

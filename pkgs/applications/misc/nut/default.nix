@@ -1,17 +1,17 @@
 { stdenv, fetchurl, pkgconfig, neon, libusb, openssl, udev, avahi, freeipmi
-, libtool }:
+, libtool, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "nut-2.6.5";
+  name = "nut-2.7.1";
 
   src = fetchurl {
-    url = "http://www.networkupstools.org/source/2.6/${name}.tar.gz";
-    sha256 = "0gxrzsblx0jc4g9w0903ybwqbv1d79vq5hnks403fvnay4fgg3b1";
+    url = "http://www.networkupstools.org/source/2.7/${name}.tar.gz";
+    sha256 = "1667n9h8jcz7k6h24fn615khqahlq5z22zxs4s0q046rsqxdg9ki";
   };
 
   buildInputs = [ neon libusb openssl udev avahi freeipmi libtool ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
 
   configureFlags =
     [ "--with-all"
@@ -20,10 +20,17 @@ stdenv.mkDerivation rec {
       "--without-powerman" # Until we have it ...
       "--without-cgi"
       "--without-hal"
-      "--with-systemdsystemunitdir=$(out)/etc/systemd/systemd"
+      "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+      "--with-udev-dir=$(out)/etc/udev"
     ];
 
   enableParallelBuilding = true;
+
+  
+  postInstall = ''
+    wrapProgram $out/bin/nut-scanner --prefix LD_LIBRARY_PATH : \
+      "$out/lib:${neon}/lib:${libusb}/lib:${avahi}/lib:${freeipmi}/lib"
+  '';
 
   meta = {
     description = "Network UPS Tools";
@@ -33,6 +40,7 @@ stdenv.mkDerivation rec {
       It uses a layered approach to connect all of the parts.
     '';
     homepage = http://www.networkupstools.org/;
+    repositories.git = https://github.com/networkupstools/nut.git;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [ pierron ];
     priority = 10;

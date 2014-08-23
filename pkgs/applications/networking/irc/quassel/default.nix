@@ -4,21 +4,25 @@
 , withKDE ? stdenv.isLinux # enable KDE integration
 , ssl ? true # enable SSL support
 , previews ? false # enable webpage previews on hovering over URLs
-, stdenv, fetchurl, cmake, qt4, kdelibs, automoc4, phonon }:
+, tag ? "" # tag added to the package name
+, stdenv, fetchurl, cmake, makeWrapper, qt4, kdelibs, automoc4, phonon, dconf }:
 
 let
   edf = flag: feature: [("-D" + feature + (if flag then "=ON" else "=OFF"))];
 
 in with stdenv; mkDerivation rec {
 
-  name = "quassel-0.9.0";
+  version = "0.10.0";
+  name = "quassel${tag}-${version}";
 
   src = fetchurl {
-    url = "http://quassel-irc.org/pub/${name}.tar.bz2";
-    sha256 = "09v0igjkzan3hllk47w39hkav6v1419vpxn2lfd8473kwdmf0grf";
+    url = "http://quassel-irc.org/pub/quassel-${version}.tar.bz2";
+    sha256 = "08vwxkwnzlgnxn0wi6ga9fk8qgc6nklb236hsfnr5ad37bi8q8k8";
   };
 
-  buildInputs = [ cmake qt4 ]
+  enableParallelBuilding = true;
+
+  buildInputs = [ cmake makeWrapper qt4 ]
     ++ lib.optional withKDE kdelibs
     ++ lib.optional withKDE automoc4
     ++ lib.optional withKDE phonon;
@@ -36,6 +40,16 @@ in with stdenv; mkDerivation rec {
     ++ edf ssl "WITH_OPENSSL"
     ++ edf previews "WITH_WEBKIT"  ;
 
+  preFixup =
+    lib.optionalString client ''
+        wrapProgram "$out/bin/quasselclient" \
+          --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
+    '' +
+    lib.optionalString monolithic ''
+        wrapProgram "$out/bin/quassel" \
+          --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
+    '';
+
   meta = with stdenv.lib; {
     homepage = http://quassel-irc.org/;
     description = "Qt4/KDE4 distributed IRC client suppporting a remote daemon";
@@ -46,10 +60,9 @@ in with stdenv; mkDerivation rec {
       combination of screen and a text-based IRC client such
       as WeeChat, but graphical (based on Qt4/KDE4).
     '';
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3;
     maintainers = [ maintainers.phreedom ];
     repositories.git = https://github.com/quassel/quassel.git;
     inherit (qt4.meta) platforms;
   };
 }
-

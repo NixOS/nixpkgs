@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unicode ? true}:
+{ lib, stdenv, fetchurl, unicode ? true }:
 
 let
   /* C++ bindings fail to build on `i386-pc-solaris2.11' with GCC 3.4.3:
@@ -8,9 +8,9 @@ let
      <http://mail.python.org/pipermail/python-bugs-list/2006-September/035362.html>,
      but this is left as an exercise to the reader.
      So disable them for now.  */
-  cxx = stdenv.system != "i686-solaris";
+  cxx = !stdenv.isSunOS;
 in
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   name = "ncurses-5.9";
 
   src = fetchurl {
@@ -18,9 +18,25 @@ stdenv.mkDerivation (rec {
     sha256 = "0fsn7xis81za62afan0vvm38bvgzg5wfmv1m86flqcj0nj7jjilh";
   };
 
+  patches = [ ./patch-ac ];
+
   configureFlags = ''
-    --with-shared --includedir=''${out}/include --without-debug
+    --with-shared --without-debug --enable-pc-files --enable-symlinks
     ${if unicode then "--enable-widec" else ""}${if cxx then "" else "--without-cxx-binding"}
+  '';
+
+  # PKG_CONFIG_LIBDIR is where the *.pc files will be installed. If this
+  # directory doesn't exist, the configure script will disable installation of
+  # *.pc files. The configure script usually (on LSB distros) pick $(path of
+  # pkg-config)/../lib/pkgconfig. On NixOS that path doesn't exist and is not
+  # the place we want to put *.pc files from other packages anyway. So we must
+  # tell it explicitly where to install with PKG_CONFIG_LIBDIR.
+  preConfigure = ''
+    export configureFlags="$configureFlags --includedir=$out/include"
+    export PKG_CONFIG_LIBDIR="$out/lib/pkgconfig"
+    mkdir -p "$PKG_CONFIG_LIBDIR"
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure --replace -no-cpp-precomp ""
   '';
 
   selfNativeBuildInput = true;
@@ -30,8 +46,8 @@ stdenv.mkDerivation (rec {
   preBuild =
     # On Darwin, we end up using the native `sed' during bootstrap, and it
     # fails to run this command, which isn't needed anyway.
-    stdenv.lib.optionalString (!stdenv.isDarwin)
-    ''sed -e "s@\([[:space:]]\)sh @\1''${SHELL} @" -i */Makefile Makefile'';
+    lib.optionalString (!stdenv.isDarwin)
+      ''sed -e "s@\([[:space:]]\)sh @\1''${SHELL} @" -i */Makefile Makefile'';
 
   # When building a wide-character (Unicode) build, create backward
   # compatibility links from the the "normal" libraries to the
@@ -44,9 +60,14 @@ stdenv.mkDerivation (rec {
         echo "INPUT(-l''${lib}w)" > $out/lib/lib$lib.so
         ln -svf lib''${lib}w.a $out/lib/lib$lib.a
         ln -svf lib''${lib}w.so.5 $out/lib/lib$lib.so.5
+        ln -svf ''${lib}w.pc $out/lib/pkgconfig/$lib.pc
       fi
     done;
+    ln -svf . $out/include/ncursesw
+    ln -svf ncursesw5-config $out/bin/ncurses5-config
   '' else "";
+
+  postFixup = lib.optionalString stdenv.isDarwin "rm $out/lib/*.so";
 
   meta = {
     description = "GNU Ncurses, a free software emulation of curses in SVR4 and more";
@@ -67,9 +88,9 @@ stdenv.mkDerivation (rec {
 
     homepage = http://www.gnu.org/software/ncurses/;
 
-    license = "X11";
+    license = lib.licenses.mit;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ lib.maintainers.ludo ];
+    platforms = lib.platforms.all;
   };
-} // ( if stdenv.isDarwin then { postFixup = "rm $out/lib/*.so"; } else { } ) )
+}

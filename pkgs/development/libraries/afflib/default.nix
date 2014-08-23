@@ -1,48 +1,24 @@
-x@{builderDefsPackage
-  , libewf, zlib, curl, expat, fuse, openssl
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, zlib, curl, expat, fuse, openssl }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="afflib";
-    version="3.6.12";
-    name="${baseName}-${version}";
-    url="http://afflib.org/downloads/${name}.tar.gz";
-    hash="1l13nrqjlvad112543qbyvrzai5by43zl96d3miklrhn26q9rs07";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  version = "3.7.4";
+  name = "afflib-${version}";
+
+  src = fetchurl {
+    url = "http://digitalcorpora.org/downloads/afflib/${name}.tar.gz";
+    sha256 = "18j1gjb31qjcmz6lry4m2d933w2a80iagg9g5vrpw5ig80lv10f8";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [ zlib curl expat fuse openssl ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
   meta = {
+    homepage = http://afflib.sourceforge.net/;
     description = "Advanced forensic format library";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.bsdOriginal;
+    platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.bsdOriginal;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
+    inherit version;
+    downloadPage = "http://digitalcorpora.org/downloads/afflib/";
+    updateWalker = true;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://afflib.org/";
-    };
-  };
-}) x
-
+}

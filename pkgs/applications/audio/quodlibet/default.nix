@@ -1,48 +1,61 @@
-{ stdenv, fetchurl, python, buildPythonPackage, mutagen, pygtk, pygobject
-, pythonDBus, gst_python, gst_plugins_base, gst_plugins_good, gst_plugins_ugly }:
+{ stdenv, fetchurl, python, buildPythonPackage, mutagen, pygtk, pygobject, intltool
+, pythonDBus, gst_python, withGstPlugins ? false, gst_plugins_base ? null
+, gst_plugins_good ? null, gst_plugins_ugly ? null, gst_plugins_bad ? null }:
 
-let version = "2.5"; in
+assert withGstPlugins -> gst_plugins_base != null
+                         || gst_plugins_good != null
+                         || gst_plugins_ugly != null
+                         || gst_plugins_bad != null;
+
+let version = "2.6.3"; in
 
 buildPythonPackage {
   # call the package quodlibet and just quodlibet
-  name = "quodlibet-${version}";
+  name = "quodlibet-${version}"
+         + stdenv.lib.optionalString withGstPlugins "-with-gst-plugins";
   namePrefix = "";
 
   # XXX, tests fail
   doCheck = false;
 
-  src = [
+  srcs = [
     (fetchurl {
-      url = "https://quodlibet.googlecode.com/files/quodlibet-${version}.tar.gz";
-      sha256 = "0qrmlz7m1jpmriy8bgycjiwzbf3annznkn4x5k32yy9bylxa7lwb";
+      url = "https://bitbucket.org/lazka/quodlibet-files/raw/default/releases/quodlibet-${version}.tar.gz";
+      sha256 = "0ilasi4b0ay8r6v6ba209wsm80fq2nmzigzc5kvphrk71jwypx6z";
      })
     (fetchurl {
-      url = "https://quodlibet.googlecode.com/files/quodlibet-plugins-${version}.tar.gz";
-      sha256 = "0kf2mkq2zk38626bn48gscvy6ir04f5b2z57ahlxlqy8imv2cjff";
+      url = "https://bitbucket.org/lazka/quodlibet-files/raw/default/releases/quodlibet-plugins-${version}.tar.gz";
+      sha256 = "1rv08rhdjad8sjhplqsspcf4vkazgkxyshsqmbfbrrk5kvv57ybc";
      })
-  ];       
+  ];
+
+  preConfigure = ''
+    # TODO: for now don't a apply gdist overrides, will be needed for shipping icons, gtk, etc
+    sed -i /distclass/d setup.py
+  '';
 
   sourceRoot = "quodlibet-${version}";
+
   postUnpack = ''
     # the patch searches for plugins in directory ../plugins
     # so link the appropriate directory there
     ln -sf quodlibet-plugins-${version} plugins
   '';
+
   patches = [ ./quodlibet-package-plugins.patch ];
 
-  buildInputs = [
-    gst_plugins_base gst_plugins_good gst_plugins_ugly
+  buildInputs = stdenv.lib.optionals withGstPlugins [
+    gst_plugins_base gst_plugins_good gst_plugins_ugly gst_plugins_bad
   ];
 
   propagatedBuildInputs = [
-    mutagen pygtk pygobject pythonDBus gst_python
+    mutagen pygtk pygobject pythonDBus gst_python intltool
   ];
 
-  postInstall = ''
+  postInstall = stdenv.lib.optionalString withGstPlugins ''
     # Wrap quodlibet so it finds the GStreamer plug-ins
-    wrapProgram "$out/bin/quodlibet" --prefix                                 \
-      GST_PLUGIN_PATH ":"                                                     \
-      "${gst_plugins_base}/lib/gstreamer-0.10:${gst_plugins_good}/lib/gstreamer-0.10:${gst_plugins_ugly}/lib/gstreamer-0.10"
+    wrapProgram "$out/bin/quodlibet" --prefix \
+      GST_PLUGIN_SYSTEM_PATH ":" "$GST_PLUGIN_SYSTEM_PATH"                                                     \
   '';
 
   meta = {
@@ -62,6 +75,7 @@ buildPythonPackage {
       & internet radio, and all major audio formats.
     '';
 
+    maintainers = [ stdenv.lib.maintainers.coroa ];
     homepage = http://code.google.com/p/quodlibet/;
   };
 }

@@ -1,14 +1,14 @@
-{ fetchurl, stdenv, flex, bison, db4, iptables, pkgconfig }:
+{ fetchurl, stdenv, flex, bison, db, iptables, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "iproute2-3.8.0";
+  name = "iproute2-3.12.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/iproute2/${name}.tar.xz";
-    sha256 = "0kqy30wz2krbg4y7750hjq5218hgy2vj9pm5qzkn1bqskxs4b4ap";
+    sha256 = "04gi11gh087bg2nlxhj0lxrk8l9qxkpr88nsiil23917bm3h1xj4";
   };
 
-  patches = [ ./vpnc.patch ./no-werror.patch ];
+  patch = [ "vpnc.patch" ];
 
   preConfigure =
     ''
@@ -16,13 +16,11 @@ stdenv.mkDerivation rec {
       sed -e '/ARPDDIR/d' -i Makefile
     '';
 
-  postConfigure = "cat Config";
-
   makeFlags = "DESTDIR= LIBDIR=$(out)/lib SBINDIR=$(out)/sbin"
     + " CONFDIR=$(out)/etc DOCDIR=$(out)/share/doc/${name}"
     + " MANDIR=$(out)/share/man";
 
-  buildInputs = [ db4 iptables ];
+  buildInputs = [ db iptables ];
   nativeBuildInputs = [ bison flex pkgconfig ];
 
   enableParallelBuilding = true;

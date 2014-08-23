@@ -1,14 +1,15 @@
-{ stdenv, fetchurl
-}:
-  
+{ stdenv, fetchFromGitHub }:
+
 stdenv.mkDerivation rec {
   name = "mkpasswd-${version}";
 
-  version = "5.0.26";
+  version = "5.1.1";
 
-  src = fetchurl {
-    url = "http://ftp.debian.org/debian/pool/main/w/whois/whois_${version}.tar.xz";
-    sha256 = "729625ef81425f4771e06492bb4f3e9f24bff75b8176044ce8d2f605f7ad6af5";
+  src = fetchFromGitHub {
+    owner = "rfc1036";
+    repo = "whois";
+    rev = "v${version}";
+    sha256 = "026x8byx8pcpkdxca64368p0nlspk4phw18jg4p04di6cg6nc1m5";
   };
 
   preConfigure = ''
@@ -19,10 +20,11 @@ stdenv.mkDerivation rec {
 
   installPhase = "make install-mkpasswd";
 
-  meta = {
-    homepage = http://ftp.debian.org/debian/pool/main/w/whois/;
-    description = ''
-      Overfeatured front end to crypt, from the Debian whois package.
-    '';
+  meta = with stdenv.lib; {
+    homepage = http://packages.qa.debian.org/w/whois.html;
+    description = "Overfeatured front-end to crypt, from the Debian whois package";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.cstrahan ];
+    platforms = platforms.linux;
   };
 }

@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -25,7 +25,7 @@ let
       inherit (cfg)
         version extraConfig extraPerEntryConfig extraEntries
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels timeout
-        default devices;
+        default devices explicitBootRoot;
       path = (makeSearchPath "bin" [
         pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils
       ]) + ":" + (makeSearchPath "sbin" [
@@ -44,7 +44,7 @@ in
     boot.loader.grub = {
 
       enable = mkOption {
-        default = true;
+        default = !config.boot.isContainer;
         type = types.bool;
         description = ''
           Whether to enable the GNU GRUB boot loader.
@@ -133,11 +133,8 @@ in
             chainloader (hd0,1)+1
 
           # GRUB 2 example
-          menuentry "Windows7" {
-            title Windows7
-            insmod ntfs
-            set root='(hd1,1)'
-            chainloader +1
+          menuentry "Windows 7" {
+            chainloader (hd0,4)+1
           }
         '';
         description = ''
@@ -209,6 +206,15 @@ in
         type = types.int;
         description = ''
           Index of the default menu item to be booted.
+        '';
+      };
+
+      explicitBootRoot = mkOption {
+        default = "";
+        type = types.str;
+        description = ''
+          The relative path of /boot within the parent volume. Leave empty
+          if /boot is not a btrfs subvolume.
         '';
       };
 

@@ -1,23 +1,37 @@
-{ stdenv, fetchurl, openssl, zlib, asciidoc, libxml2, libxslt, docbook_xml_xslt }:
+{ stdenv, fetchurl, openssl, zlib, asciidoc, libxml2, libxslt
+, docbook_xml_xslt, pkgconfig, luajit
+, gzip, bzip2, xz
+}:
 
 stdenv.mkDerivation rec {
-  name = "cgit-0.9.2";
+  name = "cgit-${version}";
+  version = "0.10.1";
 
   src = fetchurl {
     url = "http://git.zx2c4.com/cgit/snapshot/${name}.tar.xz";
-    sha256 = "0q177q1r7ssna32c760l4dx6p4aaz6kdv27zn2jb34bx98045h08";
+    sha256 = "0bci1p9spf79wirc4lk36cndcx2b9wj0fq1l58rlp6r563is77l3";
   };
 
-  # cgit is is tightly coupled with git and needs a git source tree to build.
-  # The cgit-0.9.2 Makefile has GIT_VER = 1.8.3, so use that version.
+  # cgit is tightly coupled with git and needs a git source tree to build.
   # IMPORTANT: Remember to check which git version cgit needs on every version
-  # bump.
+  # bump (look in the Makefile).
+  # NOTE: as of 0.10.1, the git version is compatible from 1.9.0 to
+  # 1.9.2 (see the repository history)
   gitSrc = fetchurl {
-    url = https://git-core.googlecode.com/files/git-1.8.3.tar.gz;
-    sha256 = "0fn5xdx30dl8dl1cdpqif5hgc3qnxlqfpwyhm0sm1wgqhgbcdlzi";
+    url    = "https://www.kernel.org/pub/software/scm/git/git-1.9.2.tar.xz";
+    sha256 = "1x4rb06vw4ckdflmn01r5l9spvn7cng4i5mm3sbd0n8cz0n6xz13";
   };
 
-  buildInputs = [ openssl zlib asciidoc libxml2 libxslt docbook_xml_xslt ];
+  buildInputs = [
+    openssl zlib asciidoc libxml2 libxslt docbook_xml_xslt pkgconfig luajit
+  ];
+
+  postPatch = ''
+    sed -e 's|"gzip"|"${gzip}/bin/gzip"|' \
+        -e 's|"bzip2"|"${bzip2}/bin/bzip2"|' \
+        -e 's|"xz"|"${xz}/bin/xz"|' \
+        -i ui-snapshot.c
+  '';
 
   # Give cgit a git source tree and pass configuration parameters (as make
   # variables).
@@ -41,6 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://git.zx2c4.com/cgit/about/;
+    repositories.git = git://git.zx2c4.com/cgit;
     description = "Web frontend for git repositories";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

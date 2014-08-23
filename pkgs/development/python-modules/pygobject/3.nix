@@ -1,14 +1,12 @@
 { stdenv, fetchurl, python, pkgconfig, glib, gobjectIntrospection, pycairo, cairo }:
- 
-stdenv.mkDerivation rec {
-  name = "pygobject-3.0.4";
-   
-  src = fetchurl {
-    url = "mirror://gnome/sources/pygobject/3.0/${name}.tar.xz";
-    sha256 = "f457b1d7f6b8bfa727593c3696d2b405da66b4a8d34cd7d3362ebda1221f0661";
-  };
 
-  configureFlags = "--disable-introspection";
+stdenv.mkDerivation rec {
+  name = "pygobject-3.12.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/pygobject/3.12/${name}.tar.xz";
+    sha256 = "0dfsjsa95ix8bx3h8w4bhnz7rymgl2paclvbn93x6qp8b53y0pys";
+  };
 
   buildInputs = [ python pkgconfig glib gobjectIntrospection pycairo cairo ];
 

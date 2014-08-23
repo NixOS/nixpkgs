@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, db4, glibc, openssl, cyrus_sasl
+{ stdenv, fetchurl, db, glibc, openssl, cyrus_sasl
 , coreutils, findutils, gnused, gnugrep, bison, perl
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "11z07mjy53l1fnl7k4101yk4ilibgqr1164628mqcbmmr8bh2szl";
   };
 
-  buildInputs = [db4 openssl cyrus_sasl bison perl];
+  buildInputs = [db openssl cyrus_sasl bison perl];
 
   patches = [ ./postfix-2.2.9-db.patch  ./postfix-2.2.9-lib.patch ./db-linux3.patch ];
 

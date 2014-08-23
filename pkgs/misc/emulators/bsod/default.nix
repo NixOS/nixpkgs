@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   buildInputs = [ ncurses ];
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp bsod $out/bin
   '';
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
       blue screen of death on the console.  Errors and drivers causing the
       error are selected randomly from a large set of examples.";
     homepage = "http://www.vanheusden.com/bsod/";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.antono ];
   };

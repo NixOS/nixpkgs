@@ -1,0 +1,48 @@
+Remove check for QT_NO_STYLE_GTK to avoid building with QCleanlooksStyle which results in error due to missing QCleanlooksStyle
+Ensure environment is preserved for scons build -- scons clears the env but we want to keep the nix build environment
+Fix typo in cmakelists
+diff -rupN robomongo-0.8.3/CMakeLists.txt robomongo-0.8.3-patched/CMakeLists.txt
+--- robomongo-0.8.3/CMakeLists.txt	2013-10-01 10:55:00.000000000 -0400
++++ robomongo-0.8.3-patched/CMakeLists.txt	2013-12-06 12:22:06.070659856 -0500
+@@ -133,7 +133,7 @@ ELSE()
+ ENDIF()
+ 
+ ##################################DEFAULT VALUES##########################################
+-IF(NOT CMAKE_INSTALL_PREFIX})
++IF(NOT CMAKE_INSTALL_PREFIX)
+     SET(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install")
+ ENDIF()
+ 
+diff -rupN robomongo-0.8.3/src/robomongo/gui/AppStyle.h robomongo-0.8.3-patched/src/robomongo/gui/AppStyle.h
+--- robomongo-0.8.3/src/robomongo/gui/AppStyle.h	2013-10-01 10:55:00.000000000 -0400
++++ robomongo-0.8.3-patched/src/robomongo/gui/AppStyle.h	2013-12-06 12:20:57.417297186 -0500
+@@ -8,13 +8,8 @@
+     #include <QProxyStyle>
+     typedef QProxyStyle OsStyle;
+ #elif defined OS_LINUX
+-    #if !defined(QT_NO_STYLE_GTK)
+-        #include <QProxyStyle>
+-        typedef QProxyStyle OsStyle;
+-    #else
+-        #include <QCleanlooksStyle>
+-        typedef QCleanlooksStyle OsStyle;
+-    #endif
++    #include <QProxyStyle>
++    typedef QProxyStyle OsStyle;
+ #endif
+ 
+ namespace Robomongo
+
+diff -rupN robomongo-0.8.3/src/third-party/mongodb/SConstruct robomongo-0.8.3-patched/src/third-party/mongodb/SConstruct
+--- robomongo-0.8.3/src/third-party/mongodb/SConstruct	2013-10-01 10:55:00.000000000 -0400
++++ robomongo-0.8.3-patched/src/third-party/mongodb/SConstruct	2013-12-06 12:21:45.705255731 -0500
+@@ -283,7 +283,8 @@ usePCH = has_option( "usePCH" )
+ 
+ justClientLib = (COMMAND_LINE_TARGETS == ['mongoclient'])
+ 
+-env = Environment( BUILD_DIR=variantDir,
++env = Environment( ENV=os.environ,
++                   BUILD_DIR=variantDir,
+                    CLIENT_ARCHIVE='${CLIENT_DIST_BASENAME}${DIST_ARCHIVE_SUFFIX}',
+                    CLIENT_DIST_BASENAME=get_option('client-dist-basename'),
+                    CLIENT_LICENSE='#distsrc/client/LICENSE.txt',

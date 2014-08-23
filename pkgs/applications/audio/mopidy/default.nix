@@ -5,40 +5,33 @@
 pythonPackages.buildPythonPackage rec {
   name = "mopidy-${version}";
 
-  version = "0.15.0";
+  version = "0.19.3";
 
   src = fetchurl {
     url = "https://github.com/mopidy/mopidy/archive/v${version}.tar.gz";
-    sha256 = "1fpnddcx6343wgxzh10s035w21g8jmfh2kzgx32w0xsshpra3gn1";
+    sha256 = "0rjq69vqak1d6fhvih259wmwp50xgr6x0x5nd0hl6hlkbbysc8dp";
   };
 
   propagatedBuildInputs = with pythonPackages; [
-   gst_python pygobject pykka pyspotify pylast cherrypy ws4py
+    gst_python pygobject pykka tornado gst_plugins_base gst_plugins_good
   ];
-
-  # python zip complains about old timestamps
-  preConfigure = ''
-    find -print0 | xargs -0 touch
-  '';
 
   # There are no tests
   doCheck = false;
 
   postInstall = ''
-    for p in $out/bin/mopidy $out/bin/mopidy-scan; do
-      wrapProgram $p \
-        --prefix GST_PLUGIN_PATH : ${gst_plugins_good}/lib/gstreamer-0.10 \
-        --prefix GST_PLUGIN_PATH : ${gst_plugins_base}/lib/gstreamer-0.10
-    done
+    wrapProgram $out/bin/mopidy \
+      --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.mopidy.com/;
     description = ''
-      A music server which can play music from Spotify and from your
-      local hard drive.
+      An extensible music server that plays music from local disk, Spotify,
+      SoundCloud, Google Play Music, and more.
     '';
-    maintainers = [ stdenv.lib.maintainers.rickynils ];
-    platforms = [];
+    license = licenses.asl20;
+    maintainers = [ maintainers.rickynils ];
+    hydraPlatforms = [];
   };
 }

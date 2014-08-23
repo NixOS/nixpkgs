@@ -44,5 +44,7 @@ stdenv.mkDerivation {
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+
+    broken = true;
   };
 }

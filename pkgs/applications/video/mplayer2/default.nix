@@ -10,7 +10,7 @@
 , bluraySupport ? true, libbluray ? null
 , speexSupport ? true, speex ? null
 , theoraSupport ? true, libtheora ? null
-, jackaudioSupport ? false, jackaudio ? null
+, jackaudioSupport ? false, jack2 ? null
 , pulseSupport ? true, pulseaudio ? null
 , bs2bSupport ? false, libbs2b ? null
 # For screenshots
@@ -28,7 +28,7 @@ assert dvdnavSupport -> libdvdnav != null;
 assert bluraySupport -> libbluray != null;
 assert speexSupport -> speex != null;
 assert theoraSupport -> libtheora != null;
-assert jackaudioSupport -> jackaudio != null;
+assert jackaudioSupport -> jack2 != null;
 assert pulseSupport -> pulseaudio != null;
 assert bs2bSupport -> libbs2b != null;
 assert libpngSupport -> libpng != null;
@@ -60,18 +60,18 @@ let
       cp -prv * $out
     '';
 
-    meta.license = "unfree";
+    meta.license = stdenv.lib.licenses.unfree;
   } else null;
 
 in
 
 stdenv.mkDerivation rec {
-  name = "mplayer2-20130130";
+  name = "mplayer2-20130428";
 
   src = fetchgit {
     url = "git://git.mplayer2.org/mplayer2.git";
-    rev = "d3c580156c0b8777ff082426ebd61bb7ffe0c225";
-    sha256 = "1akf2mb2zklz609ks555vjvcs1gw8nwg5kbb9jwra8c4v1dfyhys";
+    rev = "6c87a981baa4972fd71c25dfddea017b5a972e89";
+    sha256 = "b09c1331141dd0939dfa424ae14dc0bdf82c8a72bb32c78e3ad15e3ee1d2c851";
   };
 
   prePatch = ''
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     ++ optional xineramaSupport libXinerama
     ++ optionals dvdnavSupport [ libdvdnav libdvdnav.libdvdread ]
     ++ optional bluraySupport libbluray
-    ++ optional jackaudioSupport jackaudio
+    ++ optional jackaudioSupport jack2
     ++ optional pulseSupport pulseaudio
     ++ optional screenSaverSupport libXScrnSaver
     ++ optional vdpauSupport libvdpau
@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A movie player that supports many video formats (MPlayer fork)";
     homepage = "http://mplayer2.org";
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.viric ];
     platforms = stdenv.lib.platforms.linux;
   };

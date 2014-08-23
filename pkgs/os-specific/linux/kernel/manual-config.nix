@@ -1,45 +1,16 @@
-{ stdenv, runCommand, nettools, bc, perl, kmod, writeTextFile }:
-
-with stdenv.lib;
+{ stdenv, runCommand, nettools, bc, perl, kmod, writeTextFile, ubootChooser }:
 
 let
-
-  # Function to parse the config file into a nix expression
-  readConfig = configFile:
-    let
-      configAttrs = import "${runCommand "config.nix" {} ''
-        echo "{" > "$out"
-        while IFS='=' read key val; do
-          [ "x''${key#CONFIG_}" != "x$key" ] || continue
-          no_firstquote="''${val#\"}";
-          echo '  "'"$key"'" = "'"''${no_firstquote%\"}"'";' >> "$out"
-        done < "${configFile}"
-        echo "}" >> $out
-      ''}";
-
-      config = configAttrs // rec {
-        attrName = attr: "CONFIG_" + attr;
-
-        isSet = attr: hasAttr (attrName attr) config;
-
-        getValue = attr: if isSet attr then getAttr (attrName attr) config else null;
-
-        isYes = attr: (isSet attr) && ((getValue attr) == "y");
-
-        isNo = attr: (isSet attr) && ((getValue attr) == "n");
-
-        isModule = attr: (isSet attr) && ((getValue attr) == "m");
-
-        isEnabled = attr: (isModule attr) || (isYes attr);
-
-        isDisabled = attr: (!(isSet attr)) || (isNo attr);
-      };
-    in
-      config;
-
-in
-
-{
+  readConfig = configfile: import (runCommand "config.nix" {} ''
+    echo "{" > "$out"
+    while IFS='=' read key val; do
+      [ "x''${key#CONFIG_}" != "x$key" ] || continue
+      no_firstquote="''${val#\"}";
+      echo '  "'"$key"'" = "'"''${no_firstquote%\"}"'";' >> "$out"
+    done < "${configfile}"
+    echo "}" >> $out
+  '').outPath;
+in {
   # The kernel version
   version,
   # The version of the kernel module directory
@@ -48,127 +19,220 @@ in
   src,
   # Any patches
   kernelPatches ? [],
-  # The kernel .config file
+  # Patches for native compiling only
+  nativeKernelPatches ? [],
+  # Patches for cross compiling only
+  crossKernelPatches ? [],
+  # The native kernel .config file
   configfile,
+  # The cross kernel .config file
+  crossConfigfile ? configfile,
   # Manually specified nixexpr representing the config
   # If unspecified, this will be autodetected from the .config
-  config ? optionalAttrs allowImportFromDerivation (readConfig configfile),
+  config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
+  # Cross-compiling config
+  crossConfig ? if allowImportFromDerivation then (readConfig crossConfigfile) else config,
   # Whether to utilize the controversial import-from-derivation feature to parse the config
   allowImportFromDerivation ? false
 }:
 
 let
-  installkernel = name: writeTextFile { name = "installkernel"; executable=true; text = ''
-    #!/bin/sh
-    mkdir $4
-    cp -av $2 $4/${name}
+  inherit (stdenv.lib)
+    hasAttr getAttr optional optionalString optionalAttrs maintainers platforms;
+
+  installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
+    #!${stdenv.shell} -e
+    mkdir -p $4
+    cp -av $2 $4
     cp -av $3 $4
-  '';};
-
-  isModular = config.isYes "MODULES";
-
-  installsFirmware = (config.isEnabled "FW_LOADER") &&
-    (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
+  ''; };
 
   commonMakeFlags = [
     "O=$(buildRoot)"
-    "INSTALL_PATH=$(out)"
-  ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
-  ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
+  ];
 
-  sourceRoot = stdenv.mkDerivation {
-    name = "linux-${version}-source";
+  drvAttrs = config_: platform: kernelPatches: configfile:
+    let
+      config = let attrName = attr: "CONFIG_" + attr; in {
+        isSet = attr: hasAttr (attrName attr) config;
 
-    inherit src;
+        getValue = attr: if config.isSet attr then getAttr (attrName attr) config else null;
 
-    patches = map (p: p.patch) kernelPatches;
+        isYes = attr: (config.getValue attr) == "y";
 
-    phases = [ "unpackPhase" "patchPhase" "installPhase" ]; 
+        isNo = attr: (config.getValue attr) == "n";
 
-    prePatch = ''
-      for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
-          echo "stripping FHS paths in \`$mf'..."
-          sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
-      done
-      sed -i Makefile -e 's|= depmod|= ${kmod}/sbin/depmod|'
-    '';
+        isModule = attr: (config.getValue attr) == "m";
 
-    installPhase = ''
-      cd ..
-      mv $sourceRoot $out
-    '';
-  };
+        isEnabled = attr: (config.isModule attr) || (config.isYes attr);
+
+        isDisabled = attr: (!(config.isSet attr)) || (config.isNo attr);
+      } // config_;
+
+      isModular = config.isYes "MODULES";
+
+      installsFirmware = (config.isEnabled "FW_LOADER") &&
+        (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
+    in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
+      passthru = {
+        inherit version modDirVersion config kernelPatches;
+      };
+
+      inherit src;
+
+      preUnpack = ''
+        mkdir build
+        export buildRoot="$(pwd)/build"
+      '';
+
+      patches = map (p: p.patch) kernelPatches;
+
+      prePatch = ''
+        for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
+            echo "stripping FHS paths in \`$mf'..."
+            sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
+        done
+        sed -i Makefile -e 's|= depmod|= ${kmod}/sbin/depmod|'
+      '';
+
+      configurePhase = ''
+        runHook preConfigure
+        ln -sv ${configfile} $buildRoot/.config
+        make $makeFlags "''${makeFlagsArray[@]}" oldconfig
+        runHook postConfigure
+
+        buildFlagsArray+=("KBUILD_BUILD_TIMESTAMP=Thu Jan 1 00:00:01 UTC 1970")
+      '';
+
+      buildFlags = [
+        "KBUILD_BUILD_VERSION=1-NixOS"
+        platform.kernelTarget
+      ] ++ optional isModular "modules";
+
+      installFlags = [
+        "INSTALLKERNEL=${installkernel}"
+        "INSTALL_PATH=$(out)"
+      ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
+      ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
+
+      # Some image types need special install targets (e.g. uImage is installed with make uinstall)
+      installTargets = [ (if platform.kernelTarget == "uImage" then "uinstall" else "install") ];
+
+      postInstall = optionalString installsFirmware ''
+        mkdir -p $out/lib/firmware
+      '' + (if isModular then ''
+        make modules_install $makeFlags "''${makeFlagsArray[@]}" \
+          $installFlags "''${installFlagsArray[@]}"
+        unlink $out/lib/modules/${modDirVersion}/build
+        unlink $out/lib/modules/${modDirVersion}/source
+
+        mkdir -p $dev/lib/modules/${modDirVersion}
+        cd ..
+        mv $sourceRoot $dev/lib/modules/${modDirVersion}/source
+        cd $dev/lib/modules/${modDirVersion}/source
+
+        mv $buildRoot/.config $buildRoot/Module.symvers $TMPDIR
+        rm -fR $buildRoot
+        mkdir $buildRoot
+        mv $TMPDIR/.config $TMPDIR/Module.symvers $buildRoot
+        make modules_prepare $makeFlags "''${makeFlagsArray[@]}"
+        mv $buildRoot $dev/lib/modules/${modDirVersion}/build
+
+        # !!! No documentation on how much of the source tree must be kept
+        # If/when kernel builds fail due to missing files, you can add
+        # them here. Note that we may see packages requiring headers
+        # from drivers/ in the future; it adds 50M to keep all of its
+        # headers on 3.10 though.
+
+        chmod +w -R ../source
+        arch=`cd $dev/lib/modules/${modDirVersion}/build/arch; ls`
+
+        # Remove unusued arches
+        mv arch/$arch .
+        rm -fR arch
+        mkdir arch
+        mv $arch arch
+
+        # Remove all driver-specific code (50M of which is headers)
+        rm -fR drivers
+
+        # Keep all headers
+        find .  -type f -name '*.h' -print0 | xargs -0 chmod -w
+
+        # Keep root and arch-specific Makefiles
+        chmod -w Makefile
+        chmod -w arch/$arch/Makefile*
+
+        # Keep whole scripts dir
+        chmod -w -R scripts
+
+        # Delete everything not kept
+        find . -type f -perm -u=w -print0 | xargs -0 rm
+
+        # Delete empty directories
+        find -empty -type d -delete
+
+        # Remove reference to kmod
+        sed -i Makefile -e 's|= ${kmod}/sbin/depmod|= depmod|'
+      '' else optionalString installsFirmware ''
+        make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
+          $installFlags "''${installFlagsArray[@]}"
+      '');
+
+      # !!! This leaves references to gcc in $dev
+      # that we might be able to avoid
+      postFixup = if isModular then ''
+        if [ -z "$dontStrip" ]; then
+            find $out -name "*.ko" -print0 | xargs -0 -r ''${crossConfig+$crossConfig-}strip -S
+        fi
+        # !!! Should this be part of stdenv? Also patchELF should take an argument...
+        prefix=$dev
+        patchELF
+        prefix=$out
+      '' else null;
+
+      meta = {
+        description =
+          "The Linux kernel" +
+          (if kernelPatches == [] then "" else
+            " (with patches: "
+            + stdenv.lib.concatStrings (stdenv.lib.intersperse ", " (map (x: x.name) kernelPatches))
+            + ")");
+        license = stdenv.lib.licenses.gpl2;
+        homepage = http://www.kernel.org/;
+        repositories.git = https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;
+        maintainers = [
+          maintainers.shlevy
+          maintainers.thoughtpolice
+        ];
+        platforms = platforms.linux;
+      };
+    };
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKernelPatches) configfile) // {
   name = "linux-${version}";
 
   enableParallelBuilding = true;
 
-  outputs = if isModular then [ "out" "dev" ] else null;
-
-  passthru = {
-    inherit version modDirVersion config kernelPatches src;
-  };
-
-  inherit sourceRoot;
-
-  unpackPhase = ''
-    mkdir build
-    export buildRoot="$(pwd)/build"
-    cd ${sourceRoot}
-  '';
-
-  configurePhase = ''
-    runHook preConfigure
-    ln -sv ${configfile} $buildRoot/.config
-    make $makeFlags "''${makeFlagsArray[@]}" oldconfig
-    runHook postConfigure
-  '';
-
-  nativeBuildInputs = [ perl bc nettools ];
+  nativeBuildInputs = [ perl bc nettools ] ++ optional (stdenv.platform.uboot != null)
+    (ubootChooser stdenv.platform.uboot);
 
   makeFlags = commonMakeFlags ++ [
-   "INSTALLKERNEL=${installkernel stdenv.platform.kernelTarget}"
+    "ARCH=${stdenv.platform.kernelArch}"
   ];
 
-  crossAttrs = {
-    makeFlags = commonMakeFlags ++ [
-     "INSTALLKERNEL=${installkernel stdenv.cross.platform.kernelTarget}"
-    ];
+  crossAttrs = let cp = stdenv.cross.platform; in
+    (drvAttrs crossConfig cp (kernelPatches ++ crossKernelPatches) crossConfigfile) // {
+      makeFlags = commonMakeFlags ++ [
+        "ARCH=${cp.kernelArch}"
+        "CROSS_COMPILE=$(crossConfig)-"
+      ];
+
+      # !!! uboot has messed up cross-compiling, nativeDrv builds arm tools on x86,
+      # crossDrv builds x86 tools on x86 (but arm uboot). If this is fixed, uboot
+      # can just go into buildInputs (but not nativeBuildInputs since cp.uboot
+      # may be different from stdenv.platform.uboot)
+      buildInputs = optional (cp.uboot != null) (ubootChooser cp.uboot).crossDrv;
   };
-
-  postInstall = optionalString installsFirmware ''
-    mkdir -p $out/lib/firmware
-  '' + (if isModular then ''
-    make modules_install $makeFlags "''${makeFlagsArray[@]}" \
-      $installFlags "''${installFlagsArray[@]}"
-    rm -f $out/lib/modules/${modDirVersion}/build
-    mkdir -p $dev/lib/modules/${modDirVersion}
-    mv $out/lib/modules/${modDirVersion}/source $dev/lib/modules/${modDirVersion}/source
-    mv $buildRoot $dev/lib/modules/${modDirVersion}/build
-  '' else optionalString installsFirmware ''
-    make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
-      $installFlags "''${installFlagsArray[@]}"
-  '');
-
-  postFixup = if isModular then ''
-    if [ -z "$dontStrip" ]; then
-        find $out -name "*.ko" -print0 | xargs -0 -r strip -S
-        # Remove all references to the source directory to avoid unneeded
-        # runtime dependencies
-        find $out -name "*.ko" -print0 | xargs -0 -r sed -i \
-          "s|${sourceRoot}|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${sourceRoot.name}|g"
-    fi
-  '' else null;
-
-  meta = {
-    description = "The Linux kernel";
-    license = "GPLv2";
-    homepage = http://www.kernel.org/;
-    maintainers = [
-      maintainers.shlevy
-    ];
-    platforms = lib.platforms.linux;
-  };
-}
+})

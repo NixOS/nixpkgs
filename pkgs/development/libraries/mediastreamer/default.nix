@@ -3,11 +3,11 @@ libv4l, libtheora, intltool, libvpx, gsm, mesa, libX11, libXv, libXext,
 glew, libopus, libupnp, vim }:
 
 stdenv.mkDerivation rec {
-  name = "mediastreamer-2.9.0";
+  name = "mediastreamer-2.10.0";
 
   src = fetchurl {
     url = "mirror://savannah/linphone/mediastreamer/${name}.tar.gz";
-    sha256 = "1mdcaqkcdwzlj7hy3bz0ipkrrqiw1cgy01in8f24rfra9i2bjif2";
+    sha256 = "1sp1vjcz0rx518l7cfmkb4802xa5wyylr2b5hxlpjk3ygg28g3c0";
   };
 
 # TODO: make it load plugins from *_PLUGIN_PATH

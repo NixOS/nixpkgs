@@ -24,11 +24,13 @@ stdenv.mkDerivation rec {
       libstartup_notification
     ];
 
+  preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
+
   enableParallelBuilding = true;
 
   meta = {
     homepage = http://www.xfce.org/;
     description = "Basic GUI library for Xfce";
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
   };
 }

@@ -1,10 +1,10 @@
 { stdenv, fetchurl, blas, liblapack, gfortran } :
 stdenv.mkDerivation rec {
-  version = "4.2.0";
+  version = "4.2.1";
   name = "suitesparse-${version}";
   src = fetchurl {
     url = "http://www.cise.ufl.edu/research/sparse/SuiteSparse/SuiteSparse-${version}.tar.gz" ;
-    sha256 = "0i0ivsc5sr3jdz6nqq4wz5lwxc8rpnkqgddyhqqgfhwzgrcqh9v6";  			
+    sha256 = "1ga69637x7kdkiy3w3lq9dvva7220bdangv2lch2wx1hpi83h0p8";  			
   };
   buildInputs = [blas liblapack gfortran] ;
   patches = [./disable-metis.patch];

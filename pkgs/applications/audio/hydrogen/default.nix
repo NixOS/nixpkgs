@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, alsaLib, boost, glib, jackaudio, ladspaPlugins
+{ stdenv, fetchurl, alsaLib, boost, glib, jack2, ladspaPlugins
 , libarchive, liblrdf , libsndfile, pkgconfig, qt4, scons, subversion }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.5";
+  version = "0.9.5.1";
   name = "hydrogen-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/hydrogen/hydrogen-${version}.tar.gz";
-    sha256 = "1hyri49va2ss26skd6p9swkx0kbr7ggifbahkrcfgj8yj7pp6g4n";
+    sha256 = "1fvyp6gfzcqcc90dmaqbm11p272zczz5pfz1z4lj33nfr7z0bqgb";
   };
 
   buildInputs = [ 
-    alsaLib boost glib jackaudio ladspaPlugins libarchive liblrdf
+    alsaLib boost glib jack2 ladspaPlugins libarchive liblrdf
     libsndfile pkgconfig qt4 scons subversion
   ];
 

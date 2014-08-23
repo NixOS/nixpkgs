@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "hicolor-icon-theme-0.12";
+  name = "hicolor-icon-theme-0.13";
 
   src = fetchurl {
     url = "http://icon-theme.freedesktop.org/releases/${name}.tar.gz";
-    sha256 = "0wzc7g4ldb2l8zc0x2785ck808c03i857jji942ikakyc68adp4y";
+    sha256 = "01ilkizzal3wq2naaj84rqmd850aari1ahiw9vfis3a82n4h72x3";
   };
 
   meta = {

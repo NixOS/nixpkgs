@@ -17,11 +17,13 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
+  # work around a problem related to gtk3 updates
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   postInstall = ''
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://projects.gnome.org/NetworkManager/;
     description = "";
     license = licenses.gpl2;
     maintainers = with maintainers; [ iElectric ];

@@ -235,12 +235,7 @@ Most of the time, these are the same.  For instance, the package
 bound to the variable name <varname>e2fsprogs</varname> in
 <filename>all-packages.nix</filename>, and the Nix expression is in
 <filename>pkgs/os-specific/linux/e2fsprogs/default.nix</filename>.
-However, identifiers in the Nix language don’t allow certain
-characters (e.g. dashes), so sometimes a different variable name
-should be used.  For instance, the
-<literal>module-init-tools</literal> package is bound to the
-<literal>module_init_tools</literal> variable in
-<filename>all-packages.nix</filename>.</para>
+</para>
 
 <para>There are a few naming guidelines:
 
@@ -261,17 +256,20 @@ should be used.  For instance, the
   a package named <literal>hello-svn</literal> by
   <command>nix-env</command>.</para></listitem>
 
-  <listitem><para>Dashes in the package name should be changed to
-  underscores in variable names, rather than to camel case — e.g.,
-  <varname>module_init_tools</varname> instead of
-  <varname>moduleInitTools</varname>.</para></listitem>
+  <listitem><para>Dashes in the package name should be preserved
+  in new variable names, rather than converted to underscores
+  (which was convention up to around 2013 and most names
+   still have underscores instead of dashes) — e.g.,
+  <varname>http-parser</varname> instead of
+  <varname>http_parser</varname>.</para></listitem>
 
   <listitem><para>If there are multiple versions of a package, this
   should be reflected in the variable names in
   <filename>all-packages.nix</filename>,
-  e.g. <varname>hello_0_3</varname> and <varname>hello_0_4</varname>.
+  e.g. <varname>json-c-0-9</varname> and <varname>json-c-0-11</varname>.
   If there is an obvious “default” version, make an attribute like
-  <literal>hello = hello_0_4;</literal>.</para></listitem>
+  <literal>json-c = json-c-0-9;</literal>.
+  See also <xref linkend="sec-versioning" /></para></listitem>
 
 </itemizedlist>
 
@@ -288,7 +286,7 @@ dashes between words — not in camel case.  For instance, it should be
 <filename>allPackages.nix</filename> or
 <filename>AllPackages.nix</filename>.</para>
 
-<section><title>Hierachy</title>
+<section><title>Hierarchy</title>
 
 <para>Each package should be stored in its own directory somewhere in
 the <filename>pkgs/</filename> tree, i.e. in
@@ -567,7 +565,7 @@ splitting up an existing category.</para>
 
 </section>
 
-<section><title>Versioning</title>
+<section xml:id="sec-versioning"><title>Versioning</title>
 
 <para>Because every version of a package in Nixpkgs creates a
 potential maintenance burden, old versions of a package should not be

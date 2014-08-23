@@ -6,6 +6,7 @@ expHash=
 hashType=$NIX_HASH_ALGO
 deepClone=$NIX_PREFETCH_GIT_DEEP_CLONE
 leaveDotGit=$NIX_PREFETCH_GIT_LEAVE_DOT_GIT
+fetchSubmodules=
 builder=
 
 if test -n "$deepClone"; then
@@ -33,6 +34,7 @@ for arg; do
       --deepClone) deepClone=true;;
       --no-deepClone) deepClone=false;;
       --leave-dotGit) leaveDotGit=true;;
+      --fetch-submodules) fetchSubmodules=true;;
       --builder) builder=true;;
       *)
           argi=$(($argi + 1))
@@ -66,6 +68,7 @@ Options:
       --deepClone     Clone submodules recursively.
       --no-deepClone  Do not clone submodules.
       --leave-dotGit  Keep the .git directories.
+      --fetch-submodules Fetch submodules.
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
 "
     exit 1
@@ -142,9 +145,17 @@ init_submodules(){
     git submodule status |
     while read l; do
         # checkout each submodule
-        local hash=$(echo $l | sed 's,^-\([0-9a-f]*\) \(.*\)$,\1,');
-        local dir=$(echo $l | sed 's,^-\([0-9a-f]*\) \(.*\)$,\2,');
-        local url=$(sed -n "\,$dir, { :loop; n; s,^.*url = ,,; T loop; p; q }" .git/config);
+        local hash=$(echo $l | awk '{print substr($1,2)}');
+        local dir=$(echo $l | awk '{print $2}');
+        local name=$(
+            git config -f .gitmodules --get-regexp submodule\.[^.]*\.path |
+            sed -n "s,^\(.*\)\.path $dir\$,\\1,p")
+        local url=$(git config -f .gitmodules --get ${name}.url);
+
+        # Get Absolute URL if we have a relative URL
+        if ! echo "$url" | grep '^[a-zA-Z]\+://' >/dev/null 2>&1; then
+          url="$(git config --get remote.origin.url)/$url"
+        fi
 
         clone "$dir" "$url" "$hash" "";
     done;
@@ -170,7 +181,9 @@ clone(){
     )
 
     # Checkout linked sources.
-    init_submodules;
+    if test -n "$fetchSubmodules"; then
+        init_submodules;
+    fi
 
     if [ -z "$builder" -a -f .topdeps ]; then
 	if tg help 2>&1 > /dev/null
@@ -204,11 +217,19 @@ clone_user_rev() {
             fi;;
     esac
 
+    local full_revision=$(cd $dir && (git rev-parse $rev 2> /dev/null || git rev-parse refs/heads/fetchgit) | tail -n1)
+    echo "git revision is $full_revision"
+    echo "git human-readable version is $(cd $dir && (git describe $full_revision 2> /dev/null || git describe --tags $full_revision 2> /dev/null || echo -- none --))"
+
     # Allow doing additional processing before .git removal
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
     if test -z "$leaveDotGit"; then
 	echo "removing \`.git'..." >&2
         find $dir -name .git\* | xargs rm -rf
+    else
+        # The logs and index contain timestamps, and the hooks contain
+        # the nix path of git's bash
+        find $dir -name .git | xargs -I {} rm -rf {}/logs {}/index {}/hooks
     fi
 }
 

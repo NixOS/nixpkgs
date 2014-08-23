@@ -8,10 +8,11 @@
 assert stdenv.lib.hasSuffix "/" mediaDir;
 
 stdenv.mkDerivation rec {
-  name = "pmount-0.9.23";
+  name = "pmount-${version}";
+  version = "0.9.23";
 
   src = fetchurl {
-    url = "https://alioth.debian.org/frs/download.php/3310/${name}.tar.gz";
+    url = "mirror://debian/pool/main/p/pmount/pmount_${version}.orig.tar.bz2";
     sha256 = "db38fc290b710e8e9e9d442da2fb627d41e13b3ee80326c15cc2595ba00ea036";
   };
 
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://pmount.alioth.debian.org/;
     description = "Mount removable devices as normal user";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

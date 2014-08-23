@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "openttd-${version}";
-  version = "1.3.2";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "http://binaries.openttd.org/releases/${version}/${name}-source.tar.xz";
-    sha256 = "02r7xfq9a5x1y2wpdhqyczaj48z0qan33hs4i2liahsg1k6w1vzn";
+    sha256 = "0gkmf2jj1rab81y10dp8cirr90kv9dpr3ww4wb06j8cvgapy7b0z";
   };
 
   buildInputs = [ SDL libpng pkgconfig xz zlib freetype fontconfig ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
         - observe as spectators
     '';
     homepage = http://www.openttd.org/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ jcumming the-kenny ];
   };

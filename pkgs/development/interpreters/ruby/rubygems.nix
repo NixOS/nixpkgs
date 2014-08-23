@@ -1,10 +1,10 @@
 args : with args; 
 rec {
 
-  version = "1.8.17";
+  version = "1.8.25";
   src = fetchurl {
     url = "http://production.cf.rubygems.org/rubygems/${name}.tgz";
-    sha256 = "068sr55r8wiw55bpf93pp07871cbqhxk9cxma6arhd04j7n8ppph";
+    sha256 = "1j0wiy829nsfrpdzr9xzs39jf1lga3f5b7773vxqfs3lz3fli4v4";
   };
 
   buildInputs = [ruby makeWrapper];
@@ -18,12 +18,6 @@ rec {
     cat > $out/nix-support/setup-hook <<EOF
     export RUBYOPT=rubygems
     addToSearchPath RUBYLIB $out/lib
-
-    addGemPath() {
-      addToSearchPath GEM_PATH \$1/${ruby.gemPath}
-    }
-
-    envHooks+=(addGemPath)
     EOF'') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
 
   /* doConfigure should be specified separately */

@@ -1,8 +1,8 @@
 # /etc files related to networking, such as /etc/services.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -14,7 +14,7 @@ in
 
   options = {
 
-    networking.extraHosts = pkgs.lib.mkOption {
+    networking.extraHosts = lib.mkOption {
       type = types.lines;
       default = "";
       example = "192.168.0.1 lanlocalhost";
@@ -23,7 +23,7 @@ in
       '';
     };
 
-    networking.dnsSingleRequest = pkgs.lib.mkOption {
+    networking.dnsSingleRequest = lib.mkOption {
       type = types.bool;
       default = false;
       description = ''

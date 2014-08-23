@@ -2,7 +2,7 @@
 
 let
   name    = "maxima";
-  version = "5.31.2";
+  version = "5.33.0";
 
   searchPath =
     stdenv.lib.makeSearchPath "bin"
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/${name}-${version}.tar.gz";
-    sha256 = "12j5irwfckl5583h7lwh0wrp0c65q7mqzcsri2v086j50xvvv398";
+    sha256 = "13axm11xw0f3frx5b0qdidi7igkn1524fzz77s9rbpl2yy2nrbz2";
   };
 
   buildInputs = [sbcl texinfo perl makeWrapper];
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Maxima computer algebra system";
     homepage = "http://maxima.sourceforge.net";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
 
     longDescription = ''
       Maxima is a fairly complete computer algebra system written in

@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -30,6 +30,7 @@ let
       hba_file = '${pkgs.writeText "pg_hba.conf" cfg.authentication}'
       ident_file = '${pkgs.writeText "pg_ident.conf" cfg.identMap}'
       log_destination = 'stderr'
+      port = ${toString cfg.port}
       ${cfg.extraConfig}
     '';
 
@@ -54,7 +55,7 @@ in
       };
 
       package = mkOption {
-        type = types.path;
+        type = types.package;
         example = literalExample "pkgs.postgresql92";
         description = ''
           PostgreSQL package to use.
@@ -63,9 +64,9 @@ in
 
       port = mkOption {
         type = types.int;
-        default = "5432";
+        default = 5432;
         description = ''
-          Port for PostgreSQL.
+          The port on which PostgreSQL listens.
         '';
       };
 
@@ -81,7 +82,11 @@ in
         type = types.lines;
         default = "";
         description = ''
-          Defines how users authenticate themselves to the server.
+          Defines how users authenticate themselves to the server. By
+          default, "trust" access to local users will always be granted
+          along with any other custom options. If you do not want this,
+          set this option using "lib.mkForce" to override this
+          behaviour.
         '';
       };
 
@@ -105,7 +110,9 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Whether to run PostgreSQL with -i flag to enable TCP/IP connections.
+          Whether PostgreSQL should listen on all network interfaces.
+          If disabled, the database can only be accessed via its Unix
+          domain socket or via TCP connections to localhost.
         '';
       };
 
@@ -181,8 +188,13 @@ in
             # Initialise the database.
             if ! test -e ${cfg.dataDir}; then
                 mkdir -m 0700 -p ${cfg.dataDir}
-                chown -R postgres ${cfg.dataDir}
-                su -s ${pkgs.stdenv.shell} postgres -c 'initdb -U root'
+                if [ "$(id -u)" = 0 ]; then
+                  chown -R postgres ${cfg.dataDir}
+                  su -s ${pkgs.stdenv.shell} postgres -c 'initdb -U root'
+                else
+                  # For non-root operation.
+                  initdb
+                fi
                 rm -f ${cfg.dataDir}/*.conf
                 touch "${cfg.dataDir}/.first_startup"
             fi
@@ -203,6 +215,7 @@ in
             # Shut down Postgres using SIGINT ("Fast Shutdown mode").  See
             # http://www.postgresql.org/docs/current/static/server-shutdown.html
             KillSignal = "SIGINT";
+            KillMode = "mixed";
 
             # Give Postgres a decent amount of time to clean up after
             # receiving systemd's SIGINT.

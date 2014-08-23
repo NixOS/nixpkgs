@@ -40,11 +40,12 @@ stdenv.mkDerivation {
          web indexes as users can push content directly to search groups.
       '';
 
-    license = "AGPLv3+";
+    license = stdenv.lib.licenses.agpl3Plus;
 
     homepage = http://www.seeks-project.info/;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    hydraPlatforms = [];
   };
 }

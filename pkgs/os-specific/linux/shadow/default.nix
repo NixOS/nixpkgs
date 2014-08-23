@@ -26,19 +26,28 @@ stdenv.mkDerivation rec {
 
   patches = [ ./keep-path.patch dots_in_usernames ];
 
+  outputs = [ "out" "su" ];
+
   # Assume System V `setpgrp (void)', which is the default on GNU variants
   # (`AC_FUNC_SETPGRP' is not cross-compilation capable.)
-  preConfigure = "export ac_cv_func_setpgrp_void=yes";
+  preConfigure = ''
+    export ac_cv_func_setpgrp_void=yes
+    export shadow_cv_logdir=/var/log
+  '';
 
   preBuild = assert glibc != null;
     ''
       substituteInPlace lib/nscd.c --replace /usr/sbin/nscd ${glibc}/sbin/nscd
     '';
 
-  # Don't install ‘groups’, since coreutils already provides it.
   postInstall =
     ''
+      # Don't install ‘groups’, since coreutils already provides it.
       rm $out/bin/groups $out/share/man/man1/groups.*
+
+      # Move the su binary into the su package
+      mkdir -p $su/bin
+      mv $out/bin/su $su/bin
     '';
 
   meta = {

@@ -1,7 +1,7 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "a52dec-0.7.4";
+  name = "a52dec-0.7.4p4";
   
   src = fetchurl {
     url = "${meta.homepage}/files/a52dec-0.7.4.tar.gz";
@@ -9,6 +9,14 @@ stdenv.mkDerivation rec {
   };
 
   NIX_CFLAGS_COMPILE = "-fpic";
+
+  # From Handbrake
+  patches = [
+    ./A00-a52-state-t-public.patch
+    ./A01-thread-safe.patch
+    ./A02-imdct-shutup.patch
+    ./A03-automake.patch
+  ];
 
   meta = {
     description = "ATSC A/52 stream decoder";

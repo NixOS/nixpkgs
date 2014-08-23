@@ -1,9 +1,9 @@
 # This module defines a NixOS installation CD that contains X11 and
 # KDE 4.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
   imports = [ ./installation-cd-base.nix ../../profiles/graphical.nix ];

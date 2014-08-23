@@ -10,10 +10,10 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="ised";
-    version="2.2.2";
+    version="2.5.0";
     name="${baseName}-${version}";
     url="mirror://sourceforge/project/ised/${name}.tar.bz2";
-    hash="1nb1cnsbs2k3j9cy2kc2kg01rd7wf3jwxm62rwn1rjlc46nwdlmn";
+    hash="1avfb4ivq6iz50rraci0pcxl0w94899sz6icdqc0l4954y4zs8qd";
   };
 in
 rec {

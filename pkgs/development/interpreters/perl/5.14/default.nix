@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
   patches = 
     [ # Do not look in /usr etc. for dependencies.
       ./no-sys-dirs.patch
-    ] 
+    ]
+    ++ stdenv.lib.optional stdenv.isSunOS  ./ld-shared.patch
     ++ stdenv.lib.optional stdenv.isDarwin ./no-libutil.patch;
 
   # Build a thread-safe Perl with a dynamic libperls.o.  We need the

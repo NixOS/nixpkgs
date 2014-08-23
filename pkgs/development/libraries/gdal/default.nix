@@ -9,7 +9,7 @@ composableDerivation.composableDerivation {} (fixed: {
     md5 = "f5592cff69b239166c9b64ff81943b1a";
   };
 
-  buildInputs = [ unzip libjpeg ];
+  buildInputs = [ unzip libjpeg libtiff ];
 
   # don't use optimization for gcc >= 4.3. That's said to be causeing segfaults
   preConfigure = "export CFLAGS=-O0; export CXXFLAGS=-O0";
@@ -27,7 +27,7 @@ composableDerivation.composableDerivation {} (fixed: {
   meta = {
     description = "Translator library for raster geospatial data formats";
     homepage = http://www.gdal.org/;
-    license = "X/MIT";
+    license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };

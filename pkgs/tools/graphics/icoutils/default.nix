@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libpng }:
 
 stdenv.mkDerivation rec {
-  name = "icoutils-0.29.1";
+  name = "icoutils-0.31.0";
 
   src = fetchurl {
     url = "mirror://savannah/icoutils/${name}.tar.bz2";
-    sha256 = "180yqv41yc3fi6ggx7azhmaciqzadj0ir87wajigmcpgxkjk6v34";
+    sha256 = "0wdgyfb1clrn3maq84vi4vkwjydy72p5hzk6kb9nb3a19bbxk5d8";
   };
 
   buildInputs = [ libpng ];
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.nongnu.org/icoutils/;
     description = "Set of  programs to deal with Microsoft Windows(R) icon and cursor files";
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
     platforms = with stdenv.lib.platforms; linux;
   };
 }

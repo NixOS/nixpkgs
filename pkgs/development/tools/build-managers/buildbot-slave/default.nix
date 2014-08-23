@@ -1,12 +1,12 @@
 { stdenv, buildPythonPackage, fetchurl, coreutils, twisted }:
 
 buildPythonPackage (rec {
-  name = "buildbot-slave-0.8.7p1";
+  name = "buildbot-slave-0.8.8";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://buildbot.googlecode.com/files/${name}.tar.gz";
-    sha256 = "1p7a0srab6ifljh9vi25awvxfrxljj9s0hi1jipiiykyhjihgnxv";
+    sha256 = "1k1pk3y0rk6j01wc491jblryr4ajqg1ing9m3sjaw9s5sga34xcb";
   };
 
   patchPhase = ''
@@ -34,7 +34,7 @@ buildPythonPackage (rec {
   meta = with stdenv.lib; {
     homepage = http://buildbot.net/;
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     description = "Continuous integration system that automates the build/test cycle";
 

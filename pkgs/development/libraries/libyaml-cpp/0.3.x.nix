@@ -13,6 +13,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://code.google.com/p/yaml-cpp/;
     description = "A YAML parser and emitter for C++";
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
   };
 }

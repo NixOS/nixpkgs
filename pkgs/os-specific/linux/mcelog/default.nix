@@ -10,7 +10,7 @@
 let
 
   rev = "7fa99818367a6d17014b36d6f918ad848cbe7ce2";
-  version = "1.0pre-${rev}"; 
+  version = "1.0pre-${stdenv.lib.strings.substring 0 7 rev}"; 
   sha256 = "15eea3acd76190c7922c71028b31963221a2eefd8afa713879e191a26bc22ae7";
 
 in stdenv.mkDerivation {
@@ -26,7 +26,7 @@ in stdenv.mkDerivation {
   makeFlags = "prefix=$(out) etcprefix=$(out) DOCDIR=$(out)/share/doc";
 
   preInstall = ''
-    ensureDir $out/share/doc
+    mkdir -p $out/share/doc
   '';
 
   meta = {

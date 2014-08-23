@@ -1,4 +1,4 @@
-{ runCommand, glibc, fetchurl }:
+{ stdenv, runCommand, glibc, fetchurl, file }:
 
 let
   # !!! These should be on nixos.org
@@ -18,4 +18,12 @@ in
 runCommand "openjdk-bootstrap" {} ''
   xz -dc ${src} | sed "s/e*-glibc-[^/]*/$(basename ${glibc})/g" | tar xv
   mv openjdk-bootstrap $out
+
+  # Temporarily, while NixOS's OpenJDK bootstrap tarball doesn't have PaX markings:
+  exes=$(${file}/bin/file $out/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
+  for file in $exes; do
+    paxmark m "$file"
+    # On x86 for heap sizes over 700MB disable SEGMEXEC and PAGEEXEC as well.
+    ${stdenv.lib.optionalString stdenv.isi686 ''paxmark msp "$file"''}
+  done
 ''

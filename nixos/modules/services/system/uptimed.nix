@@ -1,8 +1,8 @@
-{pkgs, config, ...}:
+{pkgs, config, lib, ...}:
 
 let
 
-  inherit (pkgs.lib) mkOption mkIf singleton;
+  inherit (lib) mkOption mkIf singleton;
 
   inherit (pkgs) uptimed;
 

@@ -1,6 +1,6 @@
-{ config, pkgs, utils, ... }:
+{ config, lib, pkgs, utils, ... }:
 
-with pkgs.lib;
+with lib;
 with utils;
 
 let
@@ -9,7 +9,7 @@ let
 
   prioOption = prio: optionalString (prio !=null) " pri=${toString prio}";
 
-  fileSystemOpts = { name, ... }: {
+  fileSystemOpts = { name, config, ... }: {
 
     options = {
 
@@ -68,6 +68,7 @@ let
 
     config = {
       mountPoint = mkDefault name;
+      device = mkIf (config.fsType == "tmpfs") (mkDefault config.fsType);
     };
 
   };
@@ -81,6 +82,7 @@ in
   options = {
 
     fileSystems = mkOption {
+      default = {};
       example = {
         "/".device = "/dev/hda1";
         "/data" = {
@@ -123,13 +125,6 @@ in
       description = "Names of supported filesystem types.";
     };
 
-    boot.initrd.supportedFilesystems = mkOption {
-      default = [ ];
-      example = [ "btrfs" ];
-      type = types.listOf types.string;
-      description = "Names of supported filesystem types in the initial ramdisk.";
-    };
-
   };
 
 
@@ -139,15 +134,11 @@ in
 
     boot.supportedFilesystems = map (fs: fs.fsType) fileSystems;
 
-    boot.initrd.supportedFilesystems =
-      map (fs: fs.fsType)
-        (filter (fs: fs.mountPoint == "/" || fs.neededForBoot) fileSystems);
-
     # Add the mount helpers to the system path so that `mount' can find them.
     system.fsPackages = [ pkgs.dosfstools ];
 
     environment.systemPackages =
-      [ pkgs.ntfs3g pkgs.cifs_utils ]
+      [ pkgs.ntfs3g pkgs.fuse ]
       ++ config.system.fsPackages;
 
     environment.etc.fstab.text =
@@ -156,7 +147,9 @@ in
 
         # Filesystems.
         ${flip concatMapStrings fileSystems (fs:
-            (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}")
+            (if fs.device != null then fs.device
+             else if fs.label != null then "/dev/disk/by-label/${fs.label}"
+             else throw "No device specified for mount point ‘${fs.mountPoint}’.")
             + " " + fs.mountPoint
             + " " + fs.fsType
             + " " + fs.options
@@ -186,6 +179,8 @@ in
           let
             mountPoint' = escapeSystemdPath fs.mountPoint;
             device' = escapeSystemdPath fs.device;
+            # -F needed to allow bare block device without partitions
+            mkfsOpts = optional ((builtins.substring 0 3 fs.fsType) == "ext") "-F";
           in nameValuePair "mkfs-${device'}"
           { description = "Initialisation of Filesystem ${fs.device}";
             wantedBy = [ "${mountPoint'}.mount" ];
@@ -200,7 +195,7 @@ in
                 type=$(blkid -p -s TYPE -o value "${fs.device}" || true)
                 if [ -z "$type" ]; then
                   echo "creating ${fs.fsType} filesystem on ${fs.device}..."
-                  mkfs.${fs.fsType} "${fs.device}"
+                  mkfs.${fs.fsType} ${concatStringsSep " " mkfsOpts} "${fs.device}"
                 fi
               '';
             unitConfig.RequiresMountsFor = [ "${dirOf fs.device}" ];

@@ -1,0 +1,12 @@
+diff -rupN dhcpcd-6.1.0-old/if-linux.c dhcpcd-6.1.0/if-linux.c
+--- dhcpcd-6.1.0-old/if-linux.c	2013-09-20 12:27:24.000000000 +0200
++++ dhcpcd-6.1.0/if-linux.c	2013-12-13 09:50:24.183694744 +0100
+@@ -86,7 +86,7 @@ if_init(struct interface *iface)
+ 
+ 	fp = fopen(path, "w");
+ 	if (fp == NULL)
+-		return errno == ENOENT ? 0 : -1;
++		return (errno == ENOENT || errno == EROFS) ? 0 : -1;
+ 	n = fprintf(fp, "1");
+ 	fclose(fp);
+ 	return n == -1 ? -1 : 0;

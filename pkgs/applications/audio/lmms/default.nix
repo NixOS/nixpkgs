@@ -1,17 +1,25 @@
-{ stdenv, fetchurl, SDL, alsaLib, cmake, fftw, jackaudio, libogg,
-libsamplerate, libsndfile, pkgconfig, pulseaudio, qt4 }:
+{ stdenv, fetchurl, SDL, alsaLib, cmake, fftwSinglePrec, jack2, libogg
+, libsamplerate, libsndfile, pkgconfig, pulseaudio, qt4, freetype
+}:
 
 stdenv.mkDerivation  rec {
   name = "lmms-${version}";
-  version = "0.4.10";
+  version = "0.4.15";
 
   src = fetchurl {
     url = "mirror://sourceforge/lmms/${name}.tar.bz2";
-    sha256 = "035cqmxcbr9ipnicdv5l7h05q2hqbavxkbaxyq06ppnv2y7fxwrb";
+    sha256 = "02q2gbsqwk3hf9kvzz58a5bxmlb4cfr2mzy41wdvbxxdm2pcl101";
   };
 
-  buildInputs = [ SDL alsaLib cmake fftw jackaudio libogg
-    libsamplerate libsndfile pkgconfig pulseaudio qt4 ];
+  buildInputs = [
+    SDL alsaLib cmake fftwSinglePrec jack2 libogg libsamplerate
+    libsndfile pkgconfig pulseaudio qt4
+  ];
+
+  # work around broken build system of 0.4.*
+  NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2";
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Linux MultiMedia Studio";

@@ -15,13 +15,17 @@ stdenv.mkDerivation {
   buildInputs = [ ncurses ];
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp sl $out/bin
   '';
 
   meta = {
     homepage = http://www.tkl.iis.u-tokyo.ac.jp/~toyoda/index_e.html;
-    license = "unfree"; # I couldn't find its license, only a copyright.
+    license = rec {
+      shortName = "Toyoda Masashi's free software license";
+      fullName = shortName;
+      url = https://github.com/mtoyoda/sl/blob/master/LICENSE;
+    };
     description = "Steam Locomotive runs across your terminal when you type 'sl'";
     platforms = with stdenv.lib.platforms; linux;
   };

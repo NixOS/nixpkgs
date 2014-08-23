@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://biolib.open-bio.org/";
     description = "BioLib";
-    license = "GPL2";
+    license = stdenv.lib.licenses.gpl2;
     longDescription = ''
       BioLib brings together a set of opensource libraries written
       in C/C++ and makes them available for major Bio* languages:

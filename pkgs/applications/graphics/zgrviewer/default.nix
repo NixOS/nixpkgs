@@ -10,19 +10,19 @@ stdenv.mkDerivation rec {
   buildInputs = [jre unzip];
   buildPhase = "";
   installPhase = ''
-    mkdir -p "$out"/{bin,lib/java/zvtm/plugins,share/doc/zvtm}
+    mkdir -p "$out"/{bin,share/java/zvtm/plugins,share/doc/zvtm}
 
     cp overview.html *.license.* "$out/share/doc/zvtm"
 
-    cp -r target/* "$out/lib/java/zvtm/"
+    cp -r target/* "$out/share/java/zvtm/"
 
     echo '#!/bin/sh' > "$out/bin/zgrviewer"
-    echo "java -jar '$out/lib/java/zvtm/zgrviewer-${version}.jar'" >> "$out/bin/zgrviewer"
+    echo "java -jar '$out/share/java/zvtm/zgrviewer-${version}.jar'" >> "$out/bin/zgrviewer"
     chmod a+x "$out/bin/zgrviewer"
   '';
   meta = {
     # Quicker to unpack locally than load Hydra
-    platforms = [];
+    hydraPlatforms = [];
     maintainers = with stdenv.lib.maintainers; [raskin];
     license = with stdenv.lib.licenses; lgpl21Plus;
     description = "GraphViz graph viewer/navigator";

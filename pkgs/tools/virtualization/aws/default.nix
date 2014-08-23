@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl }:
+{ stdenv, fetchurl, perl, curl }:
 
 stdenv.mkDerivation {
   name = "aws-1.75";
@@ -15,13 +15,13 @@ stdenv.mkDerivation {
   installPhase =
     ''
       mkdir -p $out/bin
-      cp $src $out/bin/aws
+      sed 's|\[curl|[${curl}/bin/curl|g' $src > $out/bin/aws
       chmod +x $out/bin/aws
     '';
 
   meta = {
     homepage = http://www.timkay.com/aws/;
     description = "Command-line utility for working with Amazon EC2, S3, SQS, ELB, IAM and SDB";
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
   };
 }

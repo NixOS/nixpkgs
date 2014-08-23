@@ -1,0 +1,36 @@
+diff -ruN qt-everywhere-opensource-src-5.1.1-orig/qtbase/src/widgets/styles/qgtkstyle_p.cpp qt-everywhere-opensource-src-5.1.1/qtbase/src/widgets/styles/qgtkstyle_p.cpp
+--- qt-everywhere-opensource-src-5.1.1-orig/qtbase/src/widgets/styles/qgtkstyle_p.cpp	2013-08-25 20:03:30.000000000 +0200
++++ qt-everywhere-opensource-src-5.1.1/qtbase/src/widgets/styles/qgtkstyle_p.cpp	2013-09-25 17:58:04.229373681 +0200
+@@ -348,7 +348,7 @@
+ void QGtkStylePrivate::resolveGtk() const
+ {
+     // enforce the "0" suffix, so we'll open libgtk-x11-2.0.so.0
+-    QLibrary libgtk(QLS("gtk-x11-2.0"), 0, 0);
++    QLibrary libgtk(QLS("@gtk@/lib/libgtk-x11-2.0"), 0, 0);
+ 
+     gtk_init = (Ptr_gtk_init)libgtk.resolve("gtk_init");
+     gtk_window_new = (Ptr_gtk_window_new)libgtk.resolve("gtk_window_new");
+@@ -461,8 +461,8 @@
+     pango_font_description_get_family = (Ptr_pango_font_description_get_family)libgtk.resolve("pango_font_description_get_family");
+     pango_font_description_get_style = (Ptr_pango_font_description_get_style)libgtk.resolve("pango_font_description_get_style");
+ 
+-    gnome_icon_lookup_sync = (Ptr_gnome_icon_lookup_sync)QLibrary::resolve(QLS("gnomeui-2"), 0, "gnome_icon_lookup_sync");
+-    gnome_vfs_init= (Ptr_gnome_vfs_init)QLibrary::resolve(QLS("gnomevfs-2"), 0, "gnome_vfs_init");
++    gnome_icon_lookup_sync = (Ptr_gnome_icon_lookup_sync)QLibrary::resolve(QLS("@libgnomeui@/lib/libgnomeui-2"), 0, "gnome_icon_lookup_sync");
++    gnome_vfs_init= (Ptr_gnome_vfs_init)QLibrary::resolve(QLS("@gnome_vfs@/lib/libgnomevfs-2"), 0, "gnome_vfs_init");
+ }
+ 
+ /* \internal
+@@ -630,9 +630,9 @@
+ static bool resolveGConf()
+ {
+     if (!QGtkStylePrivate::gconf_client_get_default) {
+-        QGtkStylePrivate::gconf_client_get_default = (Ptr_gconf_client_get_default)QLibrary::resolve(QLS("gconf-2"), 4, "gconf_client_get_default");
+-        QGtkStylePrivate::gconf_client_get_string =  (Ptr_gconf_client_get_string)QLibrary::resolve(QLS("gconf-2"), 4, "gconf_client_get_string");
+-        QGtkStylePrivate::gconf_client_get_bool =  (Ptr_gconf_client_get_bool)QLibrary::resolve(QLS("gconf-2"), 4, "gconf_client_get_bool");
++        QGtkStylePrivate::gconf_client_get_default = (Ptr_gconf_client_get_default)QLibrary::resolve(QLS("@gconf@/lib/libgconf-2"), 4, "gconf_client_get_default");
++        QGtkStylePrivate::gconf_client_get_string =  (Ptr_gconf_client_get_string)QLibrary::resolve(QLS("@gconf@/lib/libgconf-2"), 4, "gconf_client_get_string");
++        QGtkStylePrivate::gconf_client_get_bool =  (Ptr_gconf_client_get_bool)QLibrary::resolve(QLS("@gconf@/lib/libgconf-2"), 4, "gconf_client_get_bool");
+     }
+     return (QGtkStylePrivate::gconf_client_get_default !=0);
+ }

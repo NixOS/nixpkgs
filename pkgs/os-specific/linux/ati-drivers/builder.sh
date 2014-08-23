@@ -8,7 +8,7 @@ die(){ echo $@; exit 1; }
 
 # custom unpack:
 unzip $src
-run_file=$(echo amd-driver-installer-*)
+run_file=$(echo amd-catalyst-*)
 sh $run_file --extract .
 
 eval "$patchPhase"
@@ -181,6 +181,8 @@ GCC_MAJOR="`gcc --version | grep -o -e ") ." | head -1 | cut -d " " -f 2`"
   # make xorg use the ati version
   ln -s $out/lib/xorg/modules/extensions/{fglrx/fglrx-libglx.so,libglx.so}
 
+  # libstdc++ and gcc are needed by some libs
+  patchelf --set-rpath $gcc/$lib_arch $out/lib/libatiadlxx.so
 }
 
 { # build samples
@@ -190,6 +192,7 @@ GCC_MAJOR="`gcc --version | grep -o -e ") ." | head -1 | cut -d " " -f 2`"
   cd samples
   tar xfz ../common/usr/src/ati/fglrx_sample_source.tgz
 
+  eval "$patchPhaseSamples"
 
   ( # build and install fgl_glxgears
     cd fgl_glxgears; 

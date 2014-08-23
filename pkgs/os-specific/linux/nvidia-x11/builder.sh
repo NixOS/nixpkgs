@@ -16,11 +16,13 @@ buildPhase() {
         echo "Building linux driver against kernel: $kernel";
         cd kernel
         kernelVersion=$(cd $kernel/lib/modules && ls)
-        sysSrc=$(echo $kernel/lib/modules/$kernelVersion/build/)
+        sysSrc=$(echo $kernel/lib/modules/$kernelVersion/source)
+        sysOut=$(echo $kernel/lib/modules/$kernelVersion/build)
         unset src # used by the nv makefile
-        # Hack necessary to compile on 2.6.28.
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$sysSrc/include/asm/mach-default -I$sysSrc/include/generated"
-        make SYSSRC=$sysSrc module
+        make SYSSRC=$sysSrc SYSOUT=$sysOut module
+        cd uvm
+        make SYSSRC=$sysSrc SYSOUT=$sysOut module
+        cd ..
         cd ..
     fi
 }
@@ -28,35 +30,11 @@ buildPhase() {
 
 installPhase() {
 
-    # Install libGL and friends.
-    mkdir -p $out/lib/vendors
-
-    for f in \
-      libcuda libGL libnvcuvid libnvidia-cfg libnvidia-compiler \
-      libnvidia-encode libnvidia-glcore libnvidia-ml libnvidia-opencl \
-      libnvidia-tls libOpenCL libnvidia-tls libvdpau_nvidia
-    do
-      cp -prd $f.* $out/lib/
-      ln -snf $f.so.$versionNumber $out/lib/$f.so
-      ln -snf $f.so.$versionNumber $out/lib/$f.so.1
-    done
-
-    cp -p nvidia.icd $out/lib/vendors/
-    cp -prd tls $out/lib/
-    cp -prd libOpenCL.so.1.0.0 $out/lib/
-    ln -snf libOpenCL.so.1.0.0 $out/lib/libOpenCL.so
-    ln -snf libOpenCL.so.1.0.0 $out/lib/libOpenCL.so.1
-
-    patchelf --set-rpath $out/lib:$glPath $out/lib/libGL.so.*.*
-    patchelf --set-rpath $out/lib:$glPath $out/lib/libvdpau_nvidia.so.*.*
-    patchelf --set-rpath $cudaPath $out/lib/libcuda.so.*.*
-    patchelf --set-rpath $openclPath $out/lib/libnvidia-opencl.so.*.*
-
     if test -z "$libsOnly"; then
-
         # Install the kernel module.
         mkdir -p $out/lib/modules/$kernelVersion/misc
         cp kernel/nvidia.ko $out/lib/modules/$kernelVersion/misc
+        cp kernel/uvm/nvidia-uvm.ko $out/lib/modules/$kernelVersion/misc
 
         # Install the X driver.
         mkdir -p $out/lib/xorg/modules
@@ -66,18 +44,15 @@ installPhase() {
         mkdir -p $out/lib/xorg/modules/extensions
         cp -p libglx.so.* $out/lib/xorg/modules/extensions
 
-        ln -snf libnvidia-wfb.so.$versionNumber $out/lib/xorg/modules/libnvidia-wfb.so.1
-        ln -snf libglx.so.$versionNumber $out/lib/xorg/modules/extensions/libglx.so
-
-        patchelf --set-rpath $out/lib $out/lib/xorg/modules/extensions/libglx.so.*.*
+        #patchelf --set-rpath $out/lib $out/lib/xorg/modules/extensions/libglx.so.*.*
 
         # Install the programs.
         mkdir -p $out/bin
 
-        for i in nvidia-settings nvidia-smi nvidia-xconfig; do
-	    cp $i $out/bin/$i
-	    patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-	        --set-rpath $out/lib:$programPath:$glPath $out/bin/$i
+        for i in nvidia-settings nvidia-smi; do
+            cp $i $out/bin/$i
+            patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+                --set-rpath $out/lib:$programPath:$glPath $out/bin/$i
         done
 
         # Header files etc.
@@ -86,6 +61,7 @@ installPhase() {
 
         mkdir -p $out/share/man/man1
         cp -p *.1.gz $out/share/man/man1
+        rm $out/share/man/man1/nvidia-xconfig.1.gz
 
         mkdir -p $out/share/applications
         cp -p *.desktop $out/share/applications
@@ -97,7 +73,34 @@ installPhase() {
         substituteInPlace $out/share/applications/nvidia-settings.desktop \
             --replace '__UTILS_PATH__' $out/bin \
             --replace '__PIXMAP_PATH__' $out/share/pixmaps
+
+        # Test a bit.
+        $out/bin/nvidia-settings --version
     fi
+
+
+    # Install libGL and friends.
+    mkdir -p "$out/lib/vendors"
+    cp -p nvidia.icd $out/lib/vendors/
+
+    cp -prd *.so.* tls "$out/lib/"
+    rm "$out"/lib/lib{glx,nvidia-wfb}.so.* # handled separately
+
+    for libname in `find "$out/lib/" -name '*.so.*'`
+    do
+      # I'm lazy to differentiate needed libs per-library, as the closure is the same.
+      # Unfortunately --shrink-rpath would strip too much.
+      patchelf --set-rpath "$out/lib:$allLibPath" "$libname"
+
+      libname_short=`echo -n "$libname" | sed 's/so\..*/so/'`
+      ln -srnf "$libname" "$libname_short"
+      ln -srnf "$libname" "$libname_short.1"
+    done
+
+    #patchelf --set-rpath $out/lib:$glPath $out/lib/libGL.so.*.*
+    #patchelf --set-rpath $out/lib:$glPath $out/lib/libvdpau_nvidia.so.*.*
+    #patchelf --set-rpath $cudaPath $out/lib/libcuda.so.*.*
+    #patchelf --set-rpath $openclPath $out/lib/libnvidia-opencl.so.*.*
 }
 
 

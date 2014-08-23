@@ -4,11 +4,11 @@
 
 {stdenv, fetchurl, makeWrapper, libX11, pkgconfig, libXaw}:
 stdenv.mkDerivation rec {
-  name = "xfontsel-1.0.2";
+  name = "xfontsel-1.0.5";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/${name}.tar.bz2";
-    sha256 = "1a86a08sf0wjrki9ydh7hr5qf6hrixc4ljlxizakjzmx20wvlrks";
+    sha256 = "1grir464hy52a71r3mpm9mzvkf7nwr3vk0b1vc27pd3gp588a38p";
   };
 
   buildInputs = [libX11 makeWrapper pkgconfig libXaw];
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.x.org/;
     description = "Allows testing the fonts available in an X server";
-    licesnse = "free";
+    license = "free";
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

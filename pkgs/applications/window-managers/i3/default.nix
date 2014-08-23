@@ -1,21 +1,33 @@
 { fetchurl, stdenv, which, pkgconfig, libxcb, xcbutilkeysyms, xcbutil,
   xcbutilwm, libstartup_notification, libX11, pcre, libev, yajl,
-  libXcursor, coreutils, perl, pango }:
+  xcb-util-cursor, coreutils, perl, pango, perlPackages, xdummy }:
 
 stdenv.mkDerivation rec {
   name = "i3-${version}";
-  version = "4.6";
+  version = "4.8";
 
   src = fetchurl {
     url = "http://i3wm.org/downloads/${name}.tar.bz2";
-    sha256 = "1qand44hjqz84f2xzd0mmyk9vpsm7iwz6446s4ivdj6f86213lpm";
+    sha256 = "0sqvd8yqf9vwqrrvbpbf8k93b3qfa3q9289m82xq15r31wlk8b2h";
   };
 
-  buildInputs = [ which pkgconfig libxcb xcbutilkeysyms xcbutil xcbutilwm
-    libstartup_notification libX11 pcre libev yajl libXcursor perl pango ];
+  buildInputs = [
+    which pkgconfig libxcb xcbutilkeysyms xcbutil xcbutilwm
+    libstartup_notification libX11 pcre libev yajl xcb-util-cursor perl pango
+    perlPackages.AnyEventI3 perlPackages.X11XCB perlPackages.IPCRun
+    perlPackages.ExtUtilsPkgConfig perlPackages.TestMore perlPackages.InlineC
+  ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs .
+  '';
+
+  doCheck = stdenv.system == "x86_64-linux";
+
+  checkPhase = ''
+    ln -sf "${xdummy}/bin/xdummy" testcases/Xdummy
+    (cd testcases && perl complete-run.pl -p 1)
+    ! grep -q '^not ok' testcases/latest/complete-run.log
   '';
 
   configurePhase = "makeFlags=PREFIX=$out";

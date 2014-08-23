@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "suil-${version}";
-  version = "0.6.10";
+  version = "0.8.0";
 
   src = fetchurl {
     url = "http://download.drobilla.net/${name}.tar.bz2";
-    sha256 = "1y7zgfciphr3icamikdfv2gh8xwix5blpq4npl426399i8f4ya5y";
+    sha256 = "0y5sbgaivb03vmr3jcpzj16wqxa5h744ml4w3ylzglbxs2bqgl7n";
   };
 
   buildInputs = [ gtk lv2 pkgconfig python qt4 serd sord sratom ];
@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "A lightweight C library for loading and wrapping LV2 plugin UIs";
     license = licenses.mit;
     maintainers = [ maintainers.goibhniu ];
-
+    platforms = platforms.linux;
   };
 }

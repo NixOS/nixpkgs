@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig glib gtk dbus_glib ];
 
   # don't make deprecated usages hard errors
-  preBuildPhases = "preBuild";
   preBuild = ''substituteInPlace unique/dbus/Makefile --replace -Werror ""'';
 
   doCheck = true;
@@ -26,6 +25,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://live.gnome.org/LibUnique;
     description = "A library for writing single instance applications";
-    license = "LGPLv2.1";
+    license = stdenv.lib.licenses.lgpl21;
   };
 }

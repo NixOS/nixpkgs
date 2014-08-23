@@ -1,23 +1,28 @@
-{ stdenv, fetchurl, alsaLib, autoconf, automake, fftw, gettext, glib
-, jackaudio, libX11, libtool, makeWrapper, pkgconfig, tcl, tk
+{ stdenv, fetchurl, autoreconfHook, gettext, makeWrapper
+, alsaLib, jack2, tk
 }:
 
 stdenv.mkDerivation  rec {
   name = "puredata-${version}";
-  version = "0.44-0";
+  version = "0.45-4";
 
   src = fetchurl {
     url = "mirror://sourceforge/pure-data/pd-${version}.src.tar.gz";
-    sha256 = "031bvqfnlpfx0y5n0l5rmslziqc6jgmk99x1prgh1rmhjhjdnijw";
+    sha256 = "1ls2ap5yi2zxvmr247621g4jx0hhfds4j5704a050bn2n3l0va2p";
   };
 
-  buildInputs = [
-    alsaLib autoconf automake fftw gettext glib jackaudio libX11
-    libtool makeWrapper pkgconfig tcl tk
-  ];
+  patchPhase = ''
+    rm portaudio/configure.in
+  '';
 
-  preConfigure = ''
-    ./autogen.sh
+  nativeBuildInputs = [ autoreconfHook gettext makeWrapper ];
+
+  buildInputs = [ alsaLib jack2 ];
+
+  configureFlags = ''
+    --enable-alsa
+    --enable-jack
+    --disable-portaudio
   '';
 
   postInstall = ''

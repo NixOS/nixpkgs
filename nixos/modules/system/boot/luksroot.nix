@@ -1,11 +1,11 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
   luks = config.boot.initrd.luks;
 
-  openCommand = { name, device, keyFile, keyFileSize, allowDiscards, ... }: ''
+  openCommand = { name, device, keyFile, keyFileSize, allowDiscards, yubikey, ... }: ''
     # Wait for luksRoot to appear, e.g. if on a usb drive.
     # XXX: copied and adapted from stage-1-init.sh - should be
     # available as a function.
@@ -31,9 +31,161 @@ let
     fi
     ''}
 
+    open_normally() {
+        cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} \
+          ${optionalString (keyFile != null) "--key-file=${keyFile} ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"}"}
+    }
+
+    ${optionalString (luks.yubikeySupport && (yubikey != null)) ''
+
+    rbtohex() {
+        ( od -An -vtx1 | tr -d ' \n' )
+    }
+
+    hextorb() {
+        ( tr '[:lower:]' '[:upper:]' | sed -e 's/\([0-9A-F]\{2\}\)/\\\\\\x\1/gI' | xargs printf )
+    }
+
+    open_yubikey() {
+
+        # Make all of these local to this function
+        # to prevent their values being leaked
+        local salt
+        local iterations
+        local k_user
+        local challenge
+        local response
+        local k_luks
+        local opened
+        local new_salt
+        local new_iterations
+        local new_challenge
+        local new_response
+        local new_k_luks
+
+        mkdir -p ${yubikey.storage.mountPoint}
+        mount -t ${yubikey.storage.fsType} ${toString yubikey.storage.device} ${yubikey.storage.mountPoint}
+
+        salt="$(cat ${yubikey.storage.mountPoint}${yubikey.storage.path} | sed -n 1p | tr -d '\n')"
+        iterations="$(cat ${yubikey.storage.mountPoint}${yubikey.storage.path} | sed -n 2p | tr -d '\n')"
+        challenge="$(echo -n $salt | openssl-wrap dgst -binary -sha512 | rbtohex)"
+        response="$(ykchalresp -${toString yubikey.slot} -x $challenge 2>/dev/null)"
+
+        for try in $(seq 3); do
+
+            ${optionalString yubikey.twoFactor ''
+            echo -n "Enter two-factor passphrase: "
+            read -s k_user
+            echo
+            ''}
+
+            if [ ! -z "$k_user" ]; then
+                k_luks="$(echo -n $k_user | pbkdf2-sha512 ${toString yubikey.keyLength} $iterations $response | rbtohex)"
+            else
+                k_luks="$(echo | pbkdf2-sha512 ${toString yubikey.keyLength} $iterations $response | rbtohex)"
+            fi
+
+            echo -n "$k_luks" | hextorb | cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} --key-file=-
+
+            if [ $? == "0" ]; then
+                opened=true
+                break
+            else
+                opened=false
+                echo "Authentication failed!"
+            fi
+        done
+
+        if [ "$opened" == false ]; then
+            umount ${yubikey.storage.mountPoint}
+            echo "Maximum authentication errors reached"
+            exit 1
+        fi
+
+        echo -n "Gathering entropy for new salt (please enter random keys to generate entropy if this blocks for long)..."
+        for i in $(seq ${toString yubikey.saltLength}); do
+            byte="$(dd if=/dev/random bs=1 count=1 2>/dev/null | rbtohex)";
+            new_salt="$new_salt$byte";
+            echo -n .
+        done;
+        echo "ok"
+
+        new_iterations="$iterations"
+        ${optionalString (yubikey.iterationStep > 0) ''
+        new_iterations="$(($new_iterations + ${toString yubikey.iterationStep}))"
+        ''}
+
+        new_challenge="$(echo -n $new_salt | openssl-wrap dgst -binary -sha512 | rbtohex)"
+
+        new_response="$(ykchalresp -${toString yubikey.slot} -x $new_challenge 2>/dev/null)"
+
+        if [ ! -z "$k_user" ]; then
+            new_k_luks="$(echo -n $k_user | pbkdf2-sha512 ${toString yubikey.keyLength} $new_iterations $new_response | rbtohex)"
+        else
+            new_k_luks="$(echo | pbkdf2-sha512 ${toString yubikey.keyLength} $new_iterations $new_response | rbtohex)"
+        fi
+
+        mkdir -p ${yubikey.ramfsMountPoint}
+        # A ramfs is used here to ensure that the file used to update
+        # the key slot with cryptsetup will never get swapped out.
+        # Warning: Do NOT replace with tmpfs!
+        mount -t ramfs none ${yubikey.ramfsMountPoint}
+
+        echo -n "$new_k_luks" | hextorb > ${yubikey.ramfsMountPoint}/new_key
+        echo -n "$k_luks" | hextorb | cryptsetup luksChangeKey ${device} --key-file=- ${yubikey.ramfsMountPoint}/new_key
+
+        if [ $? == "0" ]; then
+            echo -ne "$new_salt\n$new_iterations" > ${yubikey.storage.mountPoint}${yubikey.storage.path}
+        else
+            echo "Warning: Could not update LUKS key, current challenge persists!"
+        fi
+
+        rm -f ${yubikey.ramfsMountPoint}/new_key
+        umount ${yubikey.ramfsMountPoint}
+        rm -rf ${yubikey.ramfsMountPoint}
+
+        umount ${yubikey.storage.mountPoint}
+    }
+
+    ${optionalString (yubikey.gracePeriod > 0) ''
+    echo -n "Waiting ${toString yubikey.gracePeriod} seconds as grace..."
+    for i in $(seq ${toString yubikey.gracePeriod}); do
+        sleep 1
+        echo -n .
+    done
+    echo "ok"
+    ''}
+
+    yubikey_missing=true
+    ykinfo -v 1>/dev/null 2>&1
+    if [ $? != "0" ]; then
+        echo -n "waiting 10 seconds for yubikey to appear..."
+        for try in $(seq 10); do
+            sleep 1
+            ykinfo -v 1>/dev/null 2>&1
+            if [ $? == "0" ]; then
+                yubikey_missing=false
+                break
+            fi
+            echo -n .
+        done
+        echo "ok"
+    else
+        yubikey_missing=false
+    fi
+
+    if [ "$yubikey_missing" == true ]; then
+        echo "no yubikey found, falling back to non-yubikey open procedure"
+        open_normally
+    else
+        open_yubikey
+    fi
+    ''}
+
     # open luksRoot and scan for logical volumes
-    cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} \
-      ${optionalString (keyFile != null) "--key-file=${keyFile} ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"}"}
+    ${optionalString ((!luks.yubikeySupport) || (yubikey == null)) ''
+    open_normally
+    ''}
   '';
 
   isPreLVM = f: f.preLVM;
@@ -139,10 +291,108 @@ in
           '';
         };
 
-      };
+        yubikey = mkOption {
+          default = null;
+          type = types.nullOr types.optionSet;
+          description = ''
+            The options to use for this LUKS device in Yubikey-PBA.
+            If null (the default), Yubikey-PBA will be disabled for this device.
+          '';
 
+          options = {
+            twoFactor = mkOption {
+              default = true;
+              type = types.bool;
+              description = "Whether to use a passphrase and a Yubikey (true), or only a Yubikey (false)";
+            };
+
+            slot = mkOption {
+              default = 2;
+              type = types.int;
+              description = "Which slot on the Yubikey to challenge";
+            };
+
+            saltLength = mkOption {
+              default = 16;
+              type = types.int;
+              description = "Length of the new salt in byte (64 is the effective maximum)";
+            };
+
+            keyLength = mkOption {
+              default = 64;
+              type = types.int;
+              description = "Length of the LUKS slot key derived with PBKDF2 in byte";
+            };
+
+            iterationStep = mkOption {
+              default = 0;
+              type = types.int;
+              description = "How much the iteration count for PBKDF2 is increased at each successful authentication";
+            };
+
+            gracePeriod = mkOption {
+              default = 2;
+              type = types.int;
+              description = "Time in seconds to wait before attempting to find the Yubikey";
+            };
+
+            ramfsMountPoint = mkOption {
+              default = "/crypt-ramfs";
+              type = types.string;
+              description = "Path where the ramfs used to update the LUKS key will be mounted in stage-1";
+            };
+
+            storage = mkOption {
+              type = types.optionSet;
+              description = "Options related to the storing the salt";
+
+              options = {
+                device = mkOption {
+                  default = /dev/sda1;
+                  type = types.path;
+                  description = ''
+                    An unencrypted device that will temporarily be mounted in stage-1.
+                    Must contain the current salt to create the challenge for this LUKS device.
+                  '';
+                };
+
+                fsType = mkOption {
+                  default = "vfat";
+                  type = types.string;
+                  description = "The filesystem of the unencrypted device";
+                };
+
+                mountPoint = mkOption {
+                  default = "/crypt-storage";
+                  type = types.string;
+                  description = "Path where the unencrypted device will be mounted in stage-1";
+                };
+
+                path = mkOption {
+                  default = "/crypt-storage/default";
+                  type = types.string;
+                  description = ''
+                    Absolute path of the salt on the unencrypted device with
+                    that device's root directory as "/".
+                  '';
+                };
+              };
+            };
+          };
+        };
+
+      };
     };
 
+    boot.initrd.luks.yubikeySupport = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+            Enables support for authenticating with a Yubikey on LUKS devices.
+            See the NixOS wiki for information on how to properly setup a LUKS device
+            and a Yubikey to work with this feature.
+          '';
+    };
   };
 
   config = mkIf (luks.devices != []) {
@@ -157,15 +407,48 @@ in
     # copy the cryptsetup binary and it's dependencies
     boot.initrd.extraUtilsCommands = ''
       cp -pdv ${pkgs.cryptsetup}/sbin/cryptsetup $out/bin
-      # XXX: do we have a function that does this?
-      for lib in $(ldd $out/bin/cryptsetup |grep '=>' |grep /nix/store/ |cut -d' ' -f3); do
-        cp -pdvn $lib $out/lib
-        cp -pvn $(readlink -f $lib) $out/lib
-      done
+
+      cp -pdv ${pkgs.libgcrypt}/lib/libgcrypt*.so.* $out/lib
+      cp -pdv ${pkgs.libgpgerror}/lib/libgpg-error*.so.* $out/lib
+      cp -pdv ${pkgs.cryptsetup}/lib/libcryptsetup*.so.* $out/lib
+      cp -pdv ${pkgs.popt}/lib/libpopt*.so.* $out/lib
+
+      ${optionalString luks.yubikeySupport ''
+      cp -pdv ${pkgs.ykpers}/bin/ykchalresp $out/bin
+      cp -pdv ${pkgs.ykpers}/bin/ykinfo $out/bin
+      cp -pdv ${pkgs.openssl}/bin/openssl $out/bin
+
+      cc -O3 -I${pkgs.openssl}/include -L${pkgs.openssl}/lib ${./pbkdf2-sha512.c} -o $out/bin/pbkdf2-sha512 -lcrypto
+      strip -s $out/bin/pbkdf2-sha512
+
+      cp -pdv ${pkgs.libusb1}/lib/libusb*.so.* $out/lib
+      cp -pdv ${pkgs.ykpers}/lib/libykpers*.so.* $out/lib
+      cp -pdv ${pkgs.libyubikey}/lib/libyubikey*.so.* $out/lib
+      cp -pdv ${pkgs.openssl}/lib/libssl*.so.* $out/lib
+      cp -pdv ${pkgs.openssl}/lib/libcrypto*.so.* $out/lib
+
+      mkdir -p $out/etc/ssl
+      cp -pdv ${pkgs.openssl}/etc/ssl/openssl.cnf $out/etc/ssl
+
+      cat > $out/bin/openssl-wrap <<EOF
+#!$out/bin/sh
+EOF
+      chmod +x $out/bin/openssl-wrap
+      ''}
     '';
 
     boot.initrd.extraUtilsCommandsTest = ''
       $out/bin/cryptsetup --version
+      ${optionalString luks.yubikeySupport ''
+        $out/bin/ykchalresp -V
+        $out/bin/ykinfo -V
+        cat > $out/bin/openssl-wrap <<EOF
+#!$out/bin/sh
+export OPENSSL_CONF=$out/etc/ssl/openssl.cnf
+$out/bin/openssl "\$@"
+EOF
+        $out/bin/openssl-wrap version
+      ''}
     '';
 
     boot.initrd.preLVMCommands = concatMapStrings openCommand preLVM;

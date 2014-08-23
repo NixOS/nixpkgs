@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 # TODO: support munin-async
 # TODO: LWP/Pg perl libs aren't recognized
@@ -11,7 +11,7 @@
 # nginx http://munin.readthedocs.org/en/latest/example/webserver/nginx.html
 
 
-with pkgs.lib;
+with lib;
 
 let
   nodeCfg = config.services.munin-node;
@@ -173,32 +173,33 @@ in
       name = "munin";
       description = "Munin monitoring user";
       group = "munin";
+      uid = config.ids.uids.munin;
     }];
 
     users.extraGroups = [{
       name = "munin";
+      gid = config.ids.gids.munin;
     }];
 
   }) (mkIf nodeCfg.enable {
 
     systemd.services.munin-node = {
-      description = "Munin node, the agent process";
+      description = "Munin Node";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.munin ];
       environment.MUNIN_PLUGSTATE = "/var/run/munin";
+      preStart = ''
+        echo "updating munin plugins..."
+
+        mkdir -p /etc/munin/plugins
+        rm -rf /etc/munin/plugins/*
+        PATH="/run/current-system/sw/bin:/run/current-system/sw/sbin" ${pkgs.munin}/sbin/munin-node-configure --shell --families contrib,auto,manual --config ${nodeConf} --libdir=${muninPlugins} --servicedir=/etc/munin/plugins 2>/dev/null | ${pkgs.bash}/bin/bash
+      '';
       serviceConfig = {
         ExecStart = "${pkgs.munin}/sbin/munin-node --config ${nodeConf} --servicedir /etc/munin/plugins/";
       };
     };
-
-    system.activationScripts.munin-node = ''
-      echo "updating munin plugins..."
-
-      mkdir -p /etc/munin/plugins
-      rm -rf /etc/munin/plugins/*
-      PATH="/run/current-system/sw/bin:/run/current-system/sw/sbin" ${pkgs.munin}/sbin/munin-node-configure --shell --families contrib,auto,manual --config ${nodeConf} --libdir=${muninPlugins} --servicedir=/etc/munin/plugins 2>/dev/null | ${pkgs.bash}/bin/bash
-    '';
 
   }) (mkIf cronCfg.enable {
 

@@ -1,29 +1,31 @@
 { stdenv, fetchurl, python, zlib, pkgconfig, glib, ncurses, perl, pixman
-, attr, libcap, vde2, alsaLib, texinfo, libuuid
+, attr, libcap, vde2, alsaLib, texinfo, libuuid, flex, bison
 , makeWrapper
 , sdlSupport ? true, SDL
 , vncSupport ? true, libjpeg, libpng
-, spiceSupport ? true, spice, spice_protocol
+, spiceSupport ? true, spice, spice_protocol, usbredir
 , x86Only ? false
 }:
 
-let n = "qemu-1.5.2"; in
+let n = "qemu-2.0.0"; in
 
 stdenv.mkDerivation rec {
   name = n + (if x86Only then "-x86-only" else "");
 
   src = fetchurl {
     url = "http://wiki.qemu.org/download/${n}.tar.bz2";
-    sha256 = "0l52jwlxmwp9g3jpq0g7ix9dq4qgh46nd2h58lh47f0a35yi8qgn";
+    sha256 = "0frsahiw56jr4cqr9m6s383lyj4ar9hfs2wp3y4yr76krah1mk30";
   };
+
+  patches = [ ./cve-2014-0150.patch ];
 
   buildInputs =
     [ python zlib pkgconfig glib ncurses perl pixman attr libcap
-      vde2 alsaLib texinfo libuuid makeWrapper
+      vde2 alsaLib texinfo libuuid flex bison makeWrapper
     ]
     ++ stdenv.lib.optionals sdlSupport [ SDL ]
     ++ stdenv.lib.optionals vncSupport [ libjpeg libpng ]
-    ++ stdenv.lib.optionals spiceSupport [ spice_protocol spice ];
+    ++ stdenv.lib.optionals spiceSupport [ spice_protocol spice usbredir ];
 
   enableParallelBuilding = true;
 
@@ -39,15 +41,15 @@ stdenv.mkDerivation rec {
       # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
       p="$out/bin/qemu-system-${if stdenv.system == "x86_64-linux" then "x86_64" else "i386"}"
       if [ -e "$p" ]; then
-        makeWrapper "$p" $out/bin/qemu-kvm --add-flags "-enable-kvm"
+        makeWrapper "$p" $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"
       fi
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.qemu.org/;
     description = "A generic and open source machine emulator and virtualizer";
-    license = "GPLv2+";
-    maintainers = with stdenv.lib.maintainers; [ viric shlevy eelco ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ viric shlevy eelco ];
+    platforms = platforms.linux;
   };
 }

@@ -1,23 +1,28 @@
-{ pkgs, ... }:
+import ./make-test.nix (
 
 let
   replicateUser = "replicate";
   replicatePassword = "secret";
 in
+
 {
+  name = "mysql-replication";
+
   nodes = {
     master =
       { pkgs, config, ... }:
 
       {
         services.mysql.enable = true;
-	services.mysql.replication.role = "master";
-	services.mysql.initialDatabases = [ { name = "testdb"; schema = ./testdb.sql; } ];
-	services.mysql.initialScript = pkgs.writeText "initmysql"
-        ''
-	  create user '${replicateUser}'@'%' identified by '${replicatePassword}';
-          grant replication slave on *.* to '${replicateUser}'@'%';
-        '';
+        services.mysql.package = pkgs.mysql;
+        services.mysql.replication.role = "master";
+        services.mysql.initialDatabases = [ { name = "testdb"; schema = ./testdb.sql; } ];
+        services.mysql.initialScript = pkgs.writeText "initmysql"
+          ''
+            create user '${replicateUser}'@'%' identified by '${replicatePassword}';
+            grant replication slave on *.* to '${replicateUser}'@'%';
+          '';
+        networking.firewall.allowedTCPPorts = [ 3306 ];
       };
 
     slave1 =
@@ -25,11 +30,12 @@ in
 
       {
         services.mysql.enable = true;
-	services.mysql.replication.role = "slave";
-	services.mysql.replication.serverId = 2;
-	services.mysql.replication.masterHost = nodes.master.config.networking.hostName;
-	services.mysql.replication.masterUser = replicateUser;
-	services.mysql.replication.masterPassword = replicatePassword;
+        services.mysql.package = pkgs.mysql;
+        services.mysql.replication.role = "slave";
+        services.mysql.replication.serverId = 2;
+        services.mysql.replication.masterHost = nodes.master.config.networking.hostName;
+        services.mysql.replication.masterUser = replicateUser;
+        services.mysql.replication.masterPassword = replicatePassword;
       };
 
     slave2 =
@@ -37,11 +43,12 @@ in
 
       {
         services.mysql.enable = true;
-	services.mysql.replication.role = "slave";
-	services.mysql.replication.serverId = 3;
-	services.mysql.replication.masterHost = nodes.master.config.networking.hostName;
-	services.mysql.replication.masterUser = replicateUser;
-	services.mysql.replication.masterPassword = replicatePassword;
+        services.mysql.package = pkgs.mysql;
+        services.mysql.replication.role = "slave";
+        services.mysql.replication.serverId = 3;
+        services.mysql.replication.masterHost = nodes.master.config.networking.hostName;
+        services.mysql.replication.masterUser = replicateUser;
+        services.mysql.replication.masterPassword = replicatePassword;
       };
   };
 
@@ -54,4 +61,4 @@ in
     $slave2->sleep(100); # Hopefully this is long enough!!
     $slave2->succeed("echo 'use testdb; select * from tests' | mysql -u root -N | grep 4");
   '';
-}
+})

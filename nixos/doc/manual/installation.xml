@@ -1,12 +1,13 @@
 <chapter xmlns="http://docbook.org/ns/docbook"
-         xmlns:xlink="http://www.w3.org/1999/xlink">
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="ch-installation">
 
 <title>Installing NixOS</title>
 
 
 <!--===============================================================-->
 
-<section>
+<section xml:id="sec-obtaining">
 
 <title>Obtaining NixOS</title>
 
@@ -50,7 +51,7 @@ running NixOS system through several other means:
 
 <!--===============================================================-->
 
-<section>
+<section xml:id="sec-installation">
 
 <title>Installation</title>
 
@@ -208,7 +209,20 @@ $ nixos-install</screen>
     a network issue while downloading binaries from the NixOS binary
     cache), you can just re-run <command>nixos-install</command>.
     Otherwise, fix your <filename>configuration.nix</filename> and
-    then re-run <command>nixos-install</command>.</para></listitem>
+    then re-run <command>nixos-install</command>.</para>
+
+    <para>As the last step, <command>nixos-install</command> will ask
+    you to set the password for the <literal>root</literal> user, e.g.
+
+<screen>
+setting root password...
+Enter new UNIX password: ***
+Retype new UNIX password: ***
+</screen>
+
+    </para>
+
+  </listitem>
 
   <listitem><para>If everything went well:
 
@@ -295,8 +309,81 @@ $ reboot</screen>
 }</screen>
 </example>
 
+<section xml:id="sec-uefi-installation">
+
+<title>UEFI Installation</title>
+
+<para>NixOS can also be installed on UEFI systems.  The procedure
+is by and large the same as a BIOS installation, with the following
+changes:
+
+<itemizedlist>
+  <listitem>
+    <para>You should boot the live CD in UEFI mode (consult your
+    specific hardware's documentation for instructions). You may find
+    the <link
+    xlink:href="http://www.rodsbooks.com/refind">rEFInd
+    boot manager</link> useful.</para>
+  </listitem>
+  <listitem>
+    <para>Instead of <command>fdisk</command>, you should use
+    <command>gdisk</command> to partition your disks. You will need to
+    have a separate partition for <filename>/boot</filename> with
+    partition code EF00, and it should be formatted as a
+    <literal>vfat</literal> filesystem.</para>
+  </listitem>
+  <listitem>
+    <para>You must set <option>boot.loader.gummiboot.enable</option> to
+    <literal>true</literal>. <command>nixos-generate-config</command>
+    should do this automatically for new configurations when booted in
+    UEFI mode.</para>
+  </listitem>
+  <listitem>
+    <para>After having mounted your installation partition to
+    <code>/mnt</code>, you must mount the <code>boot</code> partition
+    to <code>/mnt/boot</code>.</para>
+  </listitem>
+  <listitem>
+    <para>You may want to look at the options starting with
+    <option>boot.loader.efi</option> and <option>boot.loader.gummiboot</option>
+    as well.</para>
+  </listitem>
+  <listitem>
+    <para>To see console messages during early boot, add <literal>"fbcon"</literal>
+    to your <option>boot.initrd.kernelModules</option>.</para>
+  </listitem>
+</itemizedlist>
+</para>
+
 </section>
 
+<section>
+
+<title xml:id="sec-booting-from-usb">Booting from a USB stick</title>
+
+<para>For systems without CD drive, the NixOS livecd can be booted from
+a usb stick. For non-UEFI installations,
+<link xlink:href="http://unetbootin.sourceforge.net/">unetbootin</link>
+will work. For UEFI installations, you should mount the ISO, copy its contents
+verbatim to your drive, then either:
+
+<itemizedlist>
+  <listitem>
+    <para>Change the label of the disk partition to the label of the ISO
+    (visible with the blkid command), or</para>
+  </listitem>
+  <listitem>
+    <para>Edit <filename>loader/entries/nixos-livecd.conf</filename> on the drive
+    and change the <literal>root=</literal> field in the <literal>options</literal>
+    line to point to your drive (see the documentation on <literal>root=</literal>
+    in <link xlink:href="https://www.kernel.org/doc/Documentation/kernel-parameters.txt">
+    the kernel documentation</link> for more details).</para>
+  </listitem>
+</itemizedlist>
+</para>
+</section>
+
+</section>
 
 
 <!--===============================================================-->
@@ -369,9 +456,23 @@ $ nixos-rebuild build-vm
 $ ./result/bin/run-*-vm
 </screen>
 
-The VM does not have use any data from your host system, so your
-existing user accounts and home directories will not be
-available.</para>
+The VM does not have any data from your host system, so your existing
+user accounts and home directories will not be available.  You can
+forward ports on the host to the guest.  For instance, the following
+will forward host port 2222 to guest port 22 (SSH):
+
+<screen>
+$ QEMU_NET_OPTS="hostfwd=tcp::2222-:22" ./result/bin/run-*-vm
+</screen>
+
+allowing you to log in via SSH (assuming you have set the appropriate
+passwords or SSH authorized keys):
+
+<screen>
+$ ssh -p 2222 localhost
+</screen>
+
+</para>
 
 </section>
 
@@ -392,7 +493,7 @@ been built.  These channels are:
 <itemizedlist>
   <listitem>
     <para>Stable channels, such as <literal
-    xlink:href="http://nixos.org/channels/nixos-13.10">nixos-13.10</literal>.
+    xlink:href="http://nixos.org/channels/nixos-14.04">nixos-14.04</literal>.
     These only get conservative bug fixes and package upgrades.  For
     instance, a channel update may cause the Linux kernel on your
     system to be upgraded from 3.4.66 to 3.4.67 (a minor bug fix), but
@@ -418,8 +519,8 @@ appliances.)</para>
 
 <para>When you first install NixOS, you’re automatically subscribed to
 the NixOS channel that corresponds to your installation source.   For
-instance, if you installed from a 13.10 ISO, you will be subscribed to
-the <literal>nixos-13.10</literal> channel.  To see which NixOS
+instance, if you installed from a 14.04 ISO, you will be subscribed to
+the <literal>nixos-14.04</literal> channel.  To see which NixOS
 channel you’re subscribed to, run the following as root:
 
 <screen>
@@ -434,10 +535,10 @@ $ nix-channel --add http://nixos.org/channels/<replaceable>channel-name</replace
 </screen>
 
 (Be sure to include the <literal>nixos</literal> parameter at the
-end.)  For instance, to use the NixOS 13.10 stable channel:
+end.)  For instance, to use the NixOS 14.04 stable channel:
 
 <screen>
-$ nix-channel --add http://nixos.org/channels/nixos-13.10 nixos
+$ nix-channel --add http://nixos.org/channels/nixos-14.04 nixos
 </screen>
 
 But it you want to live on the bleeding edge:

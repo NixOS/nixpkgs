@@ -2,5 +2,5 @@
 
 chrootenvDest=/run/chrootenv/@name@
 
-# Unmount all bind mounts
-umount $chrootenvDest/{dev/pts,dev/shm,dev,nix/store,proc,sys,host-etc,home,var,run}
+# Unmount all (r)bind mounts
+umount -l $chrootenvDest/{dev/pts,dev/shm,dev,nix/store,proc,sys,host-etc,home,var,run}

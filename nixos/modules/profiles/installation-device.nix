@@ -1,7 +1,7 @@
 # Provide a basic configuration for installation devices like CDs.
-{ config, pkgs, modules, ... }:
+{ config, lib, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
   imports =
@@ -45,7 +45,7 @@ with pkgs.lib;
 
     # Enable wpa_supplicant, but don't start it by default.
     networking.wireless.enable = true;
-    jobs.wpa_supplicant.startOn = pkgs.lib.mkOverride 50 "";
+    jobs.wpa_supplicant.startOn = mkOverride 50 "";
 
     # Tell the Nix evaluator to garbage collect more aggressively.
     # This is desirable in memory-constrained environments that don't

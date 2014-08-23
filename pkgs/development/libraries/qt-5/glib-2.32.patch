@@ -1,0 +1,12 @@
+diff -ruN qt-everywhere-opensource-src-5.1.1-orig/qtscript/src/3rdparty/javascriptcore/JavaScriptCore/wtf/Threading.h qt-everywhere-opensource-src-5.1.1/qtscript/src/3rdparty/javascriptcore/JavaScriptCore/wtf/Threading.h
+--- qt-everywhere-opensource-src-5.1.1-orig/qtscript/src/3rdparty/javascriptcore/JavaScriptCore/wtf/Threading.h	2013-08-25 20:04:35.000000000 +0200
++++ qt-everywhere-opensource-src-5.1.1/qtscript/src/3rdparty/javascriptcore/JavaScriptCore/wtf/Threading.h	2013-09-25 18:09:22.154639482 +0200
+@@ -81,7 +81,7 @@
+ #include <pthread.h>
+ #elif PLATFORM(GTK)
+ #include <wtf/gtk/GOwnPtr.h>
+-typedef struct _GMutex GMutex;
++typedef union _GMutex GMutex;
+ typedef struct _GCond GCond;
+ #endif
+ 

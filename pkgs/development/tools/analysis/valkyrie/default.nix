@@ -15,9 +15,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.valgrind.org/;
     description = "Qt4-based GUI for the Valgrind 3.6.x series";
-
-    license = "GPLv2";
-
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
+    broken = true;
   };
 }

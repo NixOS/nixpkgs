@@ -1,62 +1,66 @@
-{ stdenv, fetchsvn, gyp, readline, python, which }:
+{ stdenv, fetchurl, gyp, readline, python, which, icu }:
 
 assert readline != null;
 
 let
-  system = stdenv.system;
-  arch = if system == "i686-linux" then "ia32" else if system == "x86_64-linux" || system == "x86_64-darwin" then "x64" else "";
-  version = "3.14.5.9";
+  arch = if stdenv.is64bit then "x64" else "ia32";
 in
 
-assert arch != "";
+stdenv.mkDerivation rec {
+  name = "v8-${version}";
+  version = "3.26.8";
 
-stdenv.mkDerivation {
-    name = "v8-${version}";
+  src = fetchurl {
+    url = "https://commondatastorage.googleapis.com/chromium-browser-official/"
+        + "${name}.tar.bz2";
+    sha256 = "0w8mfy8jlqvp958c0zhsfwf0s3m6kw53jhcyg6aiwh877g6s21iz";
+  };
 
-    src = fetchsvn {
-      url = "http://v8.googlecode.com/svn/tags/${version}";
-      sha256 = "18qp5qp5xrb6f00w01cklz358yrl54pks963f5rwvwz82d8sfyqr";
-      name = "v8-${version}-src";
-    };
+  configurePhase = ''
+    PYTHONPATH="tools/generate_shim_headers:$PYTHONPATH" \
+      ${gyp}/bin/gyp \
+        -f make \
+        --generator-output="out" \
+        -Dflock_index=0 \
+        -Dv8_enable_i18n_support=1 \
+        -Duse_system_icu=1 \
+        -Dconsole=readline \
+        -Dcomponent=shared_library \
+        -Dv8_target_arch=${arch} \
+        --depth=. -Ibuild/standalone.gypi \
+        build/all.gyp
+  '';
 
-    patches = [ ./fix-GetLocalizedMessage-usage.patch ];
+  nativeBuildInputs = [ which ];
+  buildInputs = [ readline python icu ];
 
-    configurePhase = ''
-      mkdir build/gyp
-      ln -sv ${gyp}/bin/gyp build/gyp/gyp
-    '';
+  buildFlags = [
+    "LINK=g++"
+    "-C out"
+    "builddir=$(CURDIR)/Release"
+    "BUILDTYPE=Release"
+  ];
 
-    nativeBuildInputs = stdenv.lib.optional (system == "i686-linux") which;
-    buildInputs = [ readline python ];
+  enableParallelBuilding = true;
 
-    buildFlags = [
-      "library=shared"
-      "console=readline"
-      "${arch}.release"
-    ];
+  installPhase = ''
+    install -vD out/Release/d8 "$out/bin/d8"
+    ${if stdenv.system == "x86_64-darwin" then ''
+    install -vD out/Release/lib.target/libv8.dylib "$out/lib/libv8.dylib"
+    '' else ''
+    install -vD out/Release/lib.target/libv8.so "$out/lib/libv8.so"
+    ''}
+    cp -vr include "$out/"
+  '';
 
-    enableParallelBuilding = true;
+  postFixup = if stdenv.isDarwin then ''
+    install_name_tool -change /usr/local/lib/libv8.dylib $out/lib/libv8.dylib -change /usr/lib/libgcc_s.1.dylib ${stdenv.gcc.gcc}/lib/libgcc_s.1.dylib $out/bin/d8
+    install_name_tool -id $out/lib/libv8.dylib -change /usr/lib/libgcc_s.1.dylib ${stdenv.gcc.gcc}/lib/libgcc_s.1.dylib $out/lib/libv8.dylib
+  '' else null;
 
-    installPhase = ''
-      mkdir -p $out/bin
-      mkdir -p $out/lib
-      mv -v out/${arch}.release/d8 $out/bin
-
-      ${if stdenv.system == "x86_64-darwin" then
-        "mv -v out/${arch}.release/libv8.dylib $out/lib"
-      else
-        "mv -v out/${arch}.release/lib.target/libv8.so $out/lib"}
-      mv -v include $out/
-    '';
-
-    postFixup = if stdenv.isDarwin then ''
-      install_name_tool -change /usr/local/lib/libv8.dylib $out/lib/libv8.dylib -change /usr/lib/libgcc_s.1.dylib ${stdenv.gcc.gcc}/lib/libgcc_s.1.dylib $out/bin/d8
-      install_name_tool -id $out/lib/libv8.dylib -change /usr/lib/libgcc_s.1.dylib ${stdenv.gcc.gcc}/lib/libgcc_s.1.dylib $out/lib/libv8.dylib
-    '' else null;
-
-    meta = with stdenv.lib; {
-      description = "V8 is Google's open source JavaScript engine";
-      platforms = platforms.linux ++ platforms.darwin;
-      license = licenses.bsd3;
-    };
+  meta = with stdenv.lib; {
+    description = "V8 is Google's open source JavaScript engine";
+    platforms = platforms.linux ++ platforms.darwin;
+    license = licenses.bsd3;
+  };
 }

@@ -2,14 +2,15 @@
 , libjpeg, libpng, libtiff, ncurses, pango, pcre, perl, readline, tcl
 , texLive, tk, xz, zlib, less, texinfo, graphviz, icu, pkgconfig, bison
 , imake, which, jdk, atlas
+, withRecommendedPackages ? true
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.0.2";
+  name = "R-3.1.0";
 
   src = fetchurl {
     url = "http://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "0jq2vk6bgksbvgmdjvv7vfj6llp091d0nhl5j825aya4c2nhavlm";
+    sha256 = "1qjzbw341bvi1h4jwbvdkvq8j0z9l3m85mpgrlfw0n2cz2806s4a";
   };
 
   buildInputs = [ blas bzip2 gfortran liblapack libX11 libXmu libXt
@@ -23,6 +24,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     configureFlagsArray=(
       --disable-lto
+      --with${stdenv.lib.optionalString (!withRecommendedPackages) "out"}-recommended-packages
       --with-blas="-L${atlas}/lib -lf77blas -latlas"
       --with-lapack="-L${liblapack}/lib -llapack"
       --with-readline
@@ -36,6 +38,7 @@ stdenv.mkDerivation rec {
       --with-system-pcre
       --with-system-xz
       --with-ICU
+      --enable-R-shlib
       AR=$(type -p ar)
       AWK=$(type -p gawk)
       CC=$(type -p gcc)
@@ -81,7 +84,7 @@ stdenv.mkDerivation rec {
       user-defined recursive functions and input and output facilities.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

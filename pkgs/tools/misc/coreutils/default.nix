@@ -18,6 +18,8 @@ let
       sha256 = "064f512185iysqqcvhnhaf3bfmzrvcgs7n405qsyp99zmfyl9amd";
     };
 
+    patches = [ ./help2man.patch ];
+
     nativeBuildInputs = [ perl ];
     buildInputs = [ gmp ]
       ++ optional aclSupport acl
@@ -36,7 +38,7 @@ let
           for a in *.x; do
             touch `basename $a .x`.1
           done
-          popd; make ) 
+          popd; make )
       '';
 
       postInstall = ''
@@ -56,7 +58,9 @@ let
     # and {Open,Free}BSD.
     doCheck = stdenv ? glibc;
 
-    enableParallelBuilding = true;
+    # Saw random failures like ‘help2man: can't get '--help' info from
+    # man/sha512sum.td/sha512sum’.
+    enableParallelBuilding = false;
 
     NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
 
@@ -71,7 +75,7 @@ let
         operating system.
       '';
 
-      license = "GPLv3+";
+      license = stdenv.lib.licenses.gpl3Plus;
 
       maintainers = [ ];
     };
@@ -80,3 +84,6 @@ let
   });
 in
   self
+  // stdenv.lib.optionalAttrs (stdenv.system == "armv7l-linux" || stdenv.isSunOS) {
+    FORCE_UNSAFE_CONFIGURE = 1;
+  }

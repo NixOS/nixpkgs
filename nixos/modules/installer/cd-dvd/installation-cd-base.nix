@@ -1,9 +1,9 @@
 # This module contains the basic configuration for building a NixOS
 # installation CD.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
   imports =
@@ -19,7 +19,7 @@ with pkgs.lib;
   # ISO naming.
   isoImage.isoName = "${config.isoImage.isoBaseName}-${config.system.nixosVersion}-${pkgs.stdenv.system}.iso";
 
-  isoImage.volumeID = substring 0 32 "NIXOS_${config.system.nixosVersion}";
+  isoImage.volumeID = substring 0 11 "NIXOS_ISO";
 
   # Make the installer more likely to succeed in low memory
   # environments.  The kernel's overcommit heustistics bite us
@@ -29,9 +29,19 @@ with pkgs.lib;
   boot.kernel.sysctl."vm.overcommit_memory" = "1";
 
   # To speed up installation a little bit, include the complete stdenv
-  # in the Nix store on the CD.
-  isoImage.storeContents = [ pkgs.stdenv pkgs.busybox ];
+  # in the Nix store on the CD.  Archive::Cpio is needed for the
+  # initrd builder.
+  isoImage.storeContents = [ pkgs.stdenv pkgs.busybox pkgs.perlPackages.ArchiveCpio ];
+
+  # EFI booting
+  isoImage.makeEfiBootable = true;
 
   # Add Memtest86+ to the CD.
-  boot.loader.grub.memtest86 = true;
+  boot.loader.grub.memtest86.enable = true;
+
+  # Get a console as soon as the initrd loads fbcon on EFI boot.
+  boot.initrd.kernelModules = [ "fbcon" ];
+
+  # Allow the user to log in as root without a password.
+  security.initialRootPassword = "";
 }

@@ -1,5 +1,5 @@
-{ config, pkgs, ... }:
-with pkgs.lib;
+{ config, lib, pkgs, ... }:
+with lib;
 let
   fprotUser = "fprot";
   stateDir = "/var/lib/fprot";
@@ -10,33 +10,31 @@ in {
 
     services.fprot = {
       updater = {
-	enable = mkOption {
-	  default = false;
-	  description = ''
-	    Whether to enable automatic F-Prot virus definitions database updates.
-	  '';
-	};
+        enable = mkOption {
+          default = false;
+          description = ''
+            Whether to enable automatic F-Prot virus definitions database updates.
+          '';
+        };
 
-	productData = mkOption {
-	  default = "${pkgs.fprot}/opt/f-prot/product.data";
-	  description = ''
-	    product.data file. Defaults to the one supplied with installation package.
-	  '';
-	};
+        productData = mkOption {
+          description = ''
+            product.data file. Defaults to the one supplied with installation package.
+          '';
+        };
 
-	frequency = mkOption {
-	  default = 30;
-	  description = ''
-	    Update virus definitions every X minutes.
-	  '';
-	};
+        frequency = mkOption {
+          default = 30;
+          description = ''
+            Update virus definitions every X minutes.
+          '';
+        };
 
-	licenseKeyfile = mkOption {
-	  default = "${pkgs.fprot}/opt/f-prot/license.key";
-	  description = ''
-	    License keyfile. Defaults to the one supplied with installation package.
-	  '';
-	};
+        licenseKeyfile = mkOption {
+          description = ''
+            License keyfile. Defaults to the one supplied with installation package.
+          '';
+        };
 
       };
     };
@@ -45,6 +43,10 @@ in {
   ###### implementation
 
   config = mkIf cfg.updater.enable {
+
+    services.fprot.updater.productData = mkDefault "${pkgs.fprot}/opt/f-prot/product.data";
+    services.fprot.updater.licenseKeyfile = mkDefault "${pkgs.fprot}/opt/f-prot/license.key";
+
     environment.systemPackages = [ pkgs.fprot ];
     environment.etc = singleton {
       source = "${pkgs.fprot}/opt/f-prot/f-prot.conf";
@@ -67,20 +69,20 @@ in {
 
     jobs = {
       fprot_updater = {
-	name = "fprot-updater";
-	  task = true;
+        name = "fprot-updater";
+          task = true;
 
-	  # have to copy fpupdate executable because it insists on storing the virus database in the same dir
+          # have to copy fpupdate executable because it insists on storing the virus database in the same dir
           preStart = ''
             mkdir -m 0755 -p ${stateDir}
             chown ${fprotUser}:${fprotGroup} ${stateDir}
-	    cp ${pkgs.fprot}/opt/f-prot/fpupdate ${stateDir}
-	    ln -sf ${cfg.updater.productData} ${stateDir}/product.data
+            cp ${pkgs.fprot}/opt/f-prot/fpupdate ${stateDir}
+            ln -sf ${cfg.updater.productData} ${stateDir}/product.data
           '';
-	  #setuid = fprotUser;
-	  #setgid = fprotGroup;
+          #setuid = fprotUser;
+          #setgid = fprotGroup;
           exec = "/var/lib/fprot/fpupdate --keyfile ${cfg.updater.licenseKeyfile}";
-      }; 
+      };
     };
 
  };

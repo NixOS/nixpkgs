@@ -1,6 +1,6 @@
 {fetchurl, stdenv, fontforge, perl, fontconfig, FontTTF}:
 
-let version = "2.33" ; in
+let version = "2.34" ; in
 
 stdenv.mkDerivation rec {
   name = "dejavu-fonts-${version}";
@@ -8,17 +8,17 @@ stdenv.mkDerivation rec {
   buildInputs = [fontforge perl FontTTF];
 
   unicodeData = fetchurl {
-    url = http://www.unicode.org/Public/6.1.0/ucd/UnicodeData.txt ; 
+    url = http://www.unicode.org/Public/6.1.0/ucd/UnicodeData.txt ;
     sha256 = "1bd6zkzvxfnifrn5nh171ywk7q56sgk8gdvdn43z9i53hljjcrih";
   };
   blocks = fetchurl {
-    url = http://www.unicode.org/Public/6.1.0/ucd/Blocks.txt; 
+    url = http://www.unicode.org/Public/6.1.0/ucd/Blocks.txt;
     sha256 = "0w0vkb09nrlc6mrhqyl9npszdi828afgvhvlb1vs5smjv3h8y3dz";
   };
 
   src = fetchurl {
     url = "mirror://sourceforge/dejavu/dejavu-fonts-${version}.tar.bz2";
-    sha256 = "10m0rds36yyaznfqaa9msayv6f0v1h50zbikja6qdy5dwwxi8q5w";
+    sha256 = "09wh9c9kk82i4kwy73fcqa0779bvf0ncikciqw2gxa9m2rkrxjmm";
   };
   buildFlags = "full-ttf";
   preBuild = ''

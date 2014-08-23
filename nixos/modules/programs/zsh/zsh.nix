@@ -1,8 +1,8 @@
 # This module defines global configuration for the zshell.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -26,11 +26,6 @@ in
         default = false;
         description = ''
           Whenever to configure Zsh as an interactive shell.
-          Note that this tries to make Zsh the default
-          <option>users.defaultUserShell</option>,
-          which in turn means that you might need to explicitly
-          set this variable if you have another shell configured
-          with NixOS.
         '';
         type = types.bool;
       };
@@ -116,8 +111,9 @@ in
         # This file is read for all shells.
 
         # Only execute this file once per shell.
+        # But don't clobber the environment of interactive non-login children!
         if [ -n "$__ETC_ZSHENV_SOURCED" ]; then return; fi
-        __ETC_ZSHENV_SOURCED=1
+        export __ETC_ZSHENV_SOURCED=1
 
         ${cfg.shellInit}
 
@@ -167,7 +163,7 @@ in
 
     environment.systemPackages = [ pkgs.zsh ];
 
-    users.defaultUserShell = mkDefault "/run/current-system/sw/bin/zsh";
+    #users.defaultUserShell = mkDefault "/run/current-system/sw/bin/zsh";
 
     environment.shells =
       [ "/run/current-system/sw/bin/zsh"

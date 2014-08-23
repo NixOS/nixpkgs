@@ -1,7 +1,7 @@
 { stdenv, fetchurl, gnu-efi, unzip, pkgconfig, utillinux, libxslt, docbook_xsl, docbook_xml_dtd_42 }:
 
 stdenv.mkDerivation rec {
-  name = "gummiboot-38";
+  name = "gummiboot-45";
 
   buildInputs = [ gnu-efi pkgconfig libxslt utillinux ];
 
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = http://pkgs.fedoraproject.org/repo/pkgs/gummiboot/gummiboot-38.tar.xz/0504791387e1998bf2075728c237f27e/gummiboot-38.tar.xz;
-    sha256 = "1aid2a29ym8dqldxpcihnrls7vrr9ijbla3dad0r8qwkca43d4lm";
+    url = http://pkgs.fedoraproject.org/repo/pkgs/gummiboot/gummiboot-45.tar.xz/5d4957390e959cb9f325b87712ddd3f1/gummiboot-45.tar.xz;
+    md5 = "5d4957390e959cb9f325b87712ddd3f1";
   };
 
   meta = {

@@ -1,0 +1,17 @@
+--- zathura-pdf-mupdf-0.2.6/config.mk
++++ zathura-pdf-mupdf-0.2.6/config.mk
+@@ -32,10 +32,11 @@
+ OPENSSL_INC ?= $(shell pkg-config --cflags libcrypto)
+ OPENSSL_LIB ?= $(shell pkg-config --libs libcrypto)
+ 
+-MUPDF_LIB ?= -lmupdf -lmupdf-js-none
++MUPDF_INC ?= $(shell pkg-config --cflags mupdf)
++MUPDF_LIB ?= $(shell pkg-config --libs mupdf)
+ 
+-INCS = ${GTK_INC} ${GIRARA_INC} ${OPENSSL_INC} ${ZATHURA_INC}
+-LIBS = ${GTK_LIB} ${GIRARA_LIB} ${MUPDF_LIB} ${OPENSSL_LIB} -ljbig2dec -lopenjp2 -ljpeg
++INCS = ${GTK_INC} ${GIRARA_INC} ${OPENSSL_INC} ${ZATHURA_INC} ${MUPDF_INC}
++LIBS = ${GTK_LIB} ${GIRARA_LIB} ${OPENSSL_LIB} ${MUPDF_LIB} -ljbig2dec -ljpeg
+ 
+ # flags
+ CFLAGS += -std=c99 -fPIC -pedantic -Wall -Wno-format-zero-length $(INCS)

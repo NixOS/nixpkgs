@@ -8,6 +8,8 @@
 { buildOutOfSourceTree ? false
 , preConfigure ? null
 , doCoverageAnalysis ? false
+, doClangAnalysis ? false
+, doCoverityAnalysis ? false
 , lcovFilter ? []
 , lcovExtraTraceFiles ? []
 , src, stdenv
@@ -15,8 +17,12 @@
 , failureHook ? null
 , prePhases ? []
 , postPhases ? []
+, buildInputs ? []
 , ... } @ args:
 
+let
+  doingAnalysis = doCoverageAnalysis || doClangAnalysis || doCoverityAnalysis;
+in
 stdenv.mkDerivation (
 
   {
@@ -24,8 +30,8 @@ stdenv.mkDerivation (
     doCheck = true;
 
     # When doing coverage analysis, we don't care about the result.
-    dontInstall = doCoverageAnalysis;
-    useTempPrefix = doCoverageAnalysis;
+    dontInstall = doingAnalysis;
+    useTempPrefix = doingAnalysis;
 
     showBuildStats = true;
 
@@ -35,6 +41,29 @@ stdenv.mkDerivation (
         # to get nice package names in channels.
         if test -e $origSrc/nix-support/hydra-release-name; then
           cp $origSrc/nix-support/hydra-release-name $out/nix-support/hydra-release-name
+        fi
+
+        # Package up Coverity analysis results
+        if [ ! -z "${toString doCoverityAnalysis}" ]; then
+          if [ -d "_coverity_$name/cov-int" ]; then
+            mkdir -p $out/tarballs
+            NAME=`cat $out/nix-support/hydra-release-name`
+            cd _coverity_$name
+            tar caf $out/tarballs/$NAME-coverity-int.xz cov-int
+            echo "file cov-build $out/tarballs/$NAME-coverity-int.xz" >> $out/nix-support/hydra-build-products
+          fi
+        fi
+
+        # Package up Clang analysis results
+        if [ ! -z "${toString doClangAnalysis}" ]; then
+          if [ ! -z "`ls _clang_analyze_$name`" ]; then
+            cd  _clang_analyze_$name && mv * $out/analysis
+          else
+            mkdir -p $out/analysis
+            echo "No bugs found." >> $out/analysis/index.html
+          fi
+
+          echo "report analysis $out/analysis" >> $out/nix-support/hydra-build-products
         fi
       '';
 
@@ -61,12 +90,27 @@ stdenv.mkDerivation (
       . ${./functions.sh}
       origSrc=$src
       src=$(findTarballs $src | head -1)
+    '';
 
-      # Set GCC flags for coverage analysis, if desired.
-      if test -n "${toString doCoverageAnalysis}"; then
-          export NIX_CFLAGS_COMPILE="-O0 --coverage $NIX_CFLAGS_COMPILE"
-          export CFLAGS="-O0"
-          export CXXFLAGS="-O0"
+    preHook = ''
+      # Perform Coverity Analysis
+      if [ ! -z "${toString doCoverityAnalysis}" ]; then
+        shopt -s expand_aliases
+        mkdir _coverity_$name
+        alias make="cov-build --dir _coverity_$name/cov-int make"
+      fi
+
+      # Perform Clang Analysis
+      if [ ! -z "${toString doClangAnalysis}" ]; then
+        shopt -s expand_aliases
+        alias make="scan-build -o _clang_analyze_$name --html-title='Scan results for $name' make"
+      fi
+    '';
+
+    # Clean up after analysis
+    postBuild = ''
+      if [ ! -z "${toString (doCoverityAnalysis || doClangAnalysis)}" ]; then
+        unalias make
       fi
     '';
 
@@ -74,7 +118,7 @@ stdenv.mkDerivation (
       mkdir -p $out/nix-support
       echo "$system" > $out/nix-support/system
 
-      if [ -z "${toString doCoverageAnalysis}" ]; then
+      if [ -z "${toString doingAnalysis}" ]; then
           for i in $outputs; do
               if [ "$i" = out ]; then j=none; else j="$i"; fi
               mkdir -p ''${!i}/nix-support
@@ -85,30 +129,18 @@ stdenv.mkDerivation (
 
     prePhases = ["initPhase"] ++ prePhases;
 
-    # In the report phase, create a coverage analysis report.
-    coverageReportPhase = if doCoverageAnalysis then ''
-      ${args.lcov}/bin/lcov --directory . --capture --output-file app.info
-      set -o noglob
-      ${args.lcov}/bin/lcov --remove app.info $lcovFilter > app2.info
-      set +o noglob
-      mv app2.info app.info
-
-      mkdir $out/coverage
-      ${args.lcov}/bin/genhtml app.info $lcovExtraTraceFiles -o $out/coverage > log
-
-      # Grab the overall coverage percentage for use in release overviews.
-      grep "Overall coverage rate" log | sed 's/^.*(\(.*\)%).*$/\1/' > $out/nix-support/coverage-rate
-
-      echo "report coverage $out/coverage" >> $out/nix-support/hydra-build-products
-    '' else "";
-
+    buildInputs =
+      buildInputs ++
+      (stdenv.lib.optional doCoverageAnalysis args.makeGCOVReport) ++
+      (stdenv.lib.optional doClangAnalysis args.clangAnalyzer) ++
+      (stdenv.lib.optional doCoverityAnalysis args.cov-build) ++
+      (stdenv.lib.optional doCoverityAnalysis args.xz);
 
     lcovFilter = ["/nix/store/*"] ++ lcovFilter;
 
     inherit lcovExtraTraceFiles;
 
-    postPhases = postPhases ++
-      (stdenv.lib.optional doCoverageAnalysis "coverageReportPhase") ++ ["finalPhase"];
+    postPhases = postPhases ++ ["finalPhase"];
 
     meta = (if args ? meta then args.meta else {}) // {
       description = if doCoverageAnalysis then "Coverage analysis" else "Nix package for ${stdenv.system}";

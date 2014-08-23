@@ -1,8 +1,9 @@
-{ stdenv, fetchurl, imake, zlib, openjdk, libX11, libXt, libXmu, libXaw, libXext, libXpm, openjpeg, openssl }:
+{ stdenv, fetchurl, imake, zlib, openjdk, libX11, libXt, libXmu
+, libXaw, libXext, libXpm, openjpeg, openssl, tcl, tk }:
 
-let version = "1.0.29"; in
 stdenv.mkDerivation rec {
   name = "ssvnc-${version}";
+  version = "1.0.29";
 
   src = fetchurl {
     url = "mirror://sourceforge/ssvnc/${name}.src.tar.gz";
@@ -13,10 +14,14 @@ stdenv.mkDerivation rec {
 
   configurePhase = "makeFlags=PREFIX=$out";
 
+  postInstall = ''
+    sed -i -e 's|exec wish|exec ${tk}/bin/wish|' $out/lib/ssvnc/util/ssvnc.tcl
+  '';
+
   meta = {
     description = "VNC viewer that adds encryption security to VNC connections";
     homepage = "http://www.karlrunge.com/x11vnc/ssvnc.html";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.edwtjo ];
     platforms = with stdenv.lib.platforms; linux;
   };

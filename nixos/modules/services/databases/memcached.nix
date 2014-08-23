@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -68,8 +68,9 @@ in
 
   config = mkIf config.services.memcached.enable {
 
-    users.extraUsers = singleton
+    users.extraUsers.memcached =
       { name = cfg.user;
+        uid = config.ids.uids.memcached;
         description = "Memcached server user";
       };
 

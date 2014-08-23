@@ -1,11 +1,11 @@
 { stdenv, fetchurl, curl }:
 
 stdenv.mkDerivation rec {
-  name = "xmlrpc-c-1.25.25";
+  name = "xmlrpc-c-1.25.27";
 
   src = fetchurl {
     url = "mirror://sourceforge/xmlrpc-c/${name}.tgz";
-    sha256 = "1sk33q4c6liza920rp4w803cfq0a79saq7fg1yjsp8hks7q011ml";
+    sha256 = "0g9m9n258lpbs42a2lagd4h7qim1g34gkaqyx8h50qrsk49ipspn";
   };
 
   buildInputs = [ curl ];

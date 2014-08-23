@@ -1,17 +1,25 @@
-{ stdenv, fetchurl, python, pkgconfig, wrapPython
+{ stdenv, fetchurl, python, cython, pkgconfig, wrapPython
 , pygame, SDL, libpng, ffmpeg, freetype, glew, mesa, fribidi, zlib
 }:
 
 stdenv.mkDerivation {
-  name = "renpy-6.15.5";
+  name = "renpy-6.17.6";
+
+  meta = {
+    description = "Ren'Py Visual Novel Engine";
+    homepage = "http://renpy.org/";
+    license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ iyzsong ];
+  };
 
   src = fetchurl {
-    url = "http://www.renpy.org/dl/6.15.5/renpy-6.15.5-source.tar.bz2";
-    sha256 = "1k57dak1yk5iyxripqn2syhwwkh70y00pnnb9i1qf19lmiirxa60";
+    url = "http://www.renpy.org/dl/6.17.6/renpy-6.17.6-source.tar.bz2";
+    sha256 = "0rkynw9cnr1zqdinz037d9zig6grhp2ca2pyxk80vhdpjb0xrkic";
   };
 
   buildInputs = [
-    python pkgconfig wrapPython
+    python cython pkgconfig wrapPython
     SDL libpng ffmpeg freetype glew mesa fribidi zlib pygame
   ];
 
@@ -34,16 +42,8 @@ stdenv.mkDerivation {
     makeWrapper ${python}/bin/python $out/bin/renpy \
       --set PYTHONPATH $program_PYTHONPATH \
       --set RENPY_BASE $out/share/renpy \
-      --set RENPY_LESS_UPDATES 1 \
       --add-flags "-O $out/share/renpy/renpy.py"
   '';
 
   NIX_CFLAGS_COMPILE = "-I${pygame}/include/${python.libPrefix}";
-
-  meta = {
-    description = "Ren'Py Visual Novel Engine";
-    homepage = "http://renpy.org/";
-    license = "MIT";
-    platforms = stdenv.lib.platforms.linux;
-  };
 }

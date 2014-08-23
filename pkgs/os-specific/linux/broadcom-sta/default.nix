@@ -1,38 +1,38 @@
-{ stdenv, fetchurl, kernelDev }:
-
-let version = "5_100_82_112";
-    bits = if stdenv.system == "i686-linux" then "32" else
-      assert stdenv.system == "x86_64-linux"; "64";
+{ stdenv, fetchurl, kernel }:
+let
+  version = "6_30_223_141";
 in
-
 stdenv.mkDerivation {
-  name = "broadcom-sta-${version}-${kernelDev.version}";
+  name = "broadcom-sta-${version}-${kernel.version}";
 
-  src = fetchurl {
-    url = "http://www.broadcom.com/docs/linux_sta/hybrid-portsrc_x86_${bits}-v${version}.tar.gz";
-    sha256 = if bits == "32"
-      then "1rvhw9ngw0djxyyjx5m01c0js89zs3xiwmra03al6f9q7cbf7d45"
-      else "1qsarnry10f5m8a73wbr9cg2ifs00sqg6x0ay59l72vl9hb2zlww";
-  };
+  src = if stdenv.system == "i686-linux" then (
+    fetchurl {
+      url = "http://www.broadcom.com/docs/linux_sta/hybrid-v35-nodebug-pcoem-${version}.tar.gz";
+      sha256 = "19wra62dpm0x0byksh871yxr128b4v13kzkzqv56igjfpzv36z6m";
+    } ) else (
+    fetchurl {
+      url = "http://www.broadcom.com/docs/linux_sta/hybrid-v35_64-nodebug-pcoem-${version}.tar.gz";
+      sha256 = "0jlvch7d3khmmg5kp80x4ka33hidj8yykqjcqq6j56z2g6wb4dsz";
+    }
+  );
 
-  buildInputs = [ kernelDev ];
-  patches =
-    [ ./makefile.patch ./linux-2.6.39.patch ./linux-3.2.patch
-      ./linux-3.4.patch ./license.patch
-    ];
+  patches = [
+    ./linux-recent.patch
+    ./license.patch
+    ./cfg80211_ibss_joined-channel-parameter.patch
+  ];
 
-  makeFlags = "KDIR=${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build";
+  makeFlags = "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}";
 
-  unpackPhase =
-    ''
+  unpackPhase = ''
       sourceRoot=broadcom-sta
       mkdir "$sourceRoot"
       tar xvf "$src" -C "$sourceRoot"
-    '';
+  '';
 
   installPhase =
     ''
-      binDir="$out/lib/modules/${kernelDev.modDirVersion}/kernel/net/wireless/"
+      binDir="$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
       docDir="$out/share/doc/broadcom-sta/"
       mkdir -p "$binDir" "$docDir"
       cp wl.ko "$binDir"
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
     description = "Kernel module driver for some Broadcom's wireless cards";
     homepage = http://www.broadcom.com/support/802.11/linux_sta.php;
     license = "unfree-redistributable";
-    maintainers = [ stdenv.lib.maintainers.vcunat ];
+    maintainers = with stdenv.lib.maintainers; [ phreedom vcunat ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

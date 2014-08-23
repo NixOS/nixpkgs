@@ -1,12 +1,12 @@
 {stdenv, fetchurl, unzip} :
 
 stdenv.mkDerivation {
-  name = "httpunit-1.6";
+  name = "httpunit-1.7";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = mirror://sourceforge/httpunit/httpunit-1.6.zip;
-    md5 = "e94b53b9f4d7bdb706e4baac95b6e424";
+    url = mirror://sourceforge/httpunit/httpunit-1.7.zip;
+    sha256 = "09gnayqgizd8cjqayvdpkxrc69ipyxawc96aznfrgdhdiwv8l5zf";
   };
 
   inherit unzip;

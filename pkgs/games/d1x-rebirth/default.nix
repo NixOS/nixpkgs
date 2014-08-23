@@ -1,10 +1,10 @@
 {stdenv, fetchurl, scons, pkgconfig, SDL, mesa, physfs, SDL_mixer }:
 
 stdenv.mkDerivation rec {
-  name = "d1x-rebirth-0.57.3";
+  name = "d1x-rebirth-0.58.1";
   src = fetchurl {
-    url = "http://www.dxx-rebirth.com/download/dxx/d1x-rebirth_v0.57.3-src.tar.gz";
-    sha256 = "07dbjza5flsczdsas0adb5xhn13gmhlpixa8ycp8hjm20y9kw1za";
+    url = "http://www.dxx-rebirth.com/download/dxx/d1x-rebirth_v0.58.1-src.tar.gz";
+    sha256 = "13p3nfqaa78h6bl0k8mdsn90ai99wbqaj6qlsjsgsn8imficivsv";
   };
 
   buildInputs = [ scons pkgconfig SDL mesa physfs SDL_mixer ];

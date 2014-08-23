@@ -45,6 +45,11 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p "$out/bin"
+
+    # CGO is broken on Maverick. See: http://code.google.com/p/go/issues/detail?id=5926
+    # Reevaluate once go 1.1.3 is out
+    export CGO_ENABLED=0
+
     export GOROOT="$(pwd)/"
     export GOBIN="$out/bin"
     export PATH="$GOBIN:$PATH"

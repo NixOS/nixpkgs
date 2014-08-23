@@ -10,12 +10,12 @@ else
   throw "Unsupported architecture";
 
 edk2 = stdenv.mkDerivation {
-  name = "edk2-2013-10-09";
+  name = "edk2-2014-02-01";
   
   src = fetchgit {
     url = git://github.com/tianocore/edk2;
-    rev = "5bcb62a4098c9bde9be6af0833a025adc768e08d";
-    sha256 = "3e2958877061bf6bbfb28b150743d7244486929c1c320bdb1ff2586774aa042a";
+    rev = "2818c158de6a164d012e6afb0fc145656aed4e4b";
+    sha256 = "a756b5de3a3e71d82ce1de8c7832bc69d2affb98d704894b26540571f9f5e214";
   };
 
   buildInputs = [ libuuid pythonFull ];
@@ -47,10 +47,10 @@ edk2 = stdenv.mkDerivation {
       configurePhase = ''
         mkdir -v Conf
         sed -e 's|Nt32Pkg/Nt32Pkg.dsc|${projectDscPath}|' -e \
-          's|MYTOOLS|GCC46|' -e 's|IA32|${targetArch}|' -e 's|DEBUG|RELEASE|'\
+          's|MYTOOLS|GCC48|' -e 's|IA32|${targetArch}|' -e 's|DEBUG|RELEASE|'\
           < ${edk2}/BaseTools/Conf/target.template > Conf/target.txt
-        sed -e 's|DEFINE GCC46_IA32_PREFIX       = /usr/bin/|DEFINE GCC46_IA32_PREFIX       = ""|' \
-          -e 's|DEFINE GCC46_X64_PREFIX        = /usr/bin/|DEFINE GCC46_X64_PREFIX        = ""|' \
+        sed -e 's|DEFINE GCC48_IA32_PREFIX       = /usr/bin/|DEFINE GCC48_IA32_PREFIX       = ""|' \
+          -e 's|DEFINE GCC48_X64_PREFIX        = /usr/bin/|DEFINE GCC48_X64_PREFIX        = ""|' \
           -e 's|DEFINE UNIX_IASL_BIN           = /usr/bin/iasl|DEFINE UNIX_IASL_BIN           = ${iasl}/bin/iasl|' \
           < ${edk2}/BaseTools/Conf/tools_def.template > Conf/tools_def.txt
         export WORKSPACE="$PWD"

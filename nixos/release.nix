@@ -1,18 +1,17 @@
-{ nixpkgs ? { outPath = ./..; revCount = 5678; shortRev = "gfedcba"; }
-, officialRelease ? false
+{ nixpkgs ? { outPath = ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
+, supportedSystems ? [ "x86_64-linux" "i686-linux" ]
 }:
 
 let
 
   version = builtins.readFile ../.version;
   versionSuffix =
-    if officialRelease then ""
-    else (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
+    (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
-  systems = [ "x86_64-linux" "i686-linux" ];
+  forAllSystems = pkgs.lib.genAttrs supportedSystems;
 
-  forAllSystems = pkgs.lib.genAttrs systems;
+  callTest = fn: args: forAllSystems (system: import fn ({ inherit system; } // args));
 
   pkgs = import nixpkgs { system = "x86_64-linux"; };
 
@@ -114,18 +113,13 @@ in rec {
 
 
   manual = forAllSystems (system: (builtins.getAttr system iso_minimal).config.system.build.manual.manual);
+  manualPDF = iso_minimal.x86_64-linux.config.system.build.manual.manualPDF;
   manpages = forAllSystems (system: (builtins.getAttr system iso_minimal).config.system.build.manual.manpages);
 
 
   iso_minimal = forAllSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal.nix;
     type = "minimal";
-    inherit system;
-  });
-
-  iso_minimal_new_kernel = forAllSystems (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel.nix;
-    type = "minimal-new-kernel";
     inherit system;
   });
 
@@ -137,18 +131,15 @@ in rec {
 
   # A variant with a more recent (but possibly less stable) kernel
   # that might support more hardware.
-  iso_new_kernel = forAllSystems (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-new-kernel.nix;
-    type = "new-kernel";
+  iso_minimal_new_kernel = forAllSystems (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel.nix;
+    type = "minimal-new-kernel";
     inherit system;
   });
 
-  # A variant with efi booting support. Once cd-minimal has a newer kernel,
-  # this should be enabled by default.
-  iso_efi = forAllSystems (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-efi.nix;
-    type = "efi";
-    maintainers = [ "shlevy" ];
+  iso_graphical_new_kernel = forAllSystems (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-new-kernel.nix;
+    type = "graphical-new-kernel";
     inherit system;
   });
 
@@ -212,13 +203,43 @@ in rec {
   */
 
 
-  # Run the tests in ./tests/default.nix for each platform.  You can
-  # run a test by doing e.g. "nix-build -A tests.login.x86_64-linux".
-  tests =
-    with lib;
-    let
-      testsFor = system:
-        mapAttrsRecursiveCond (x: !x ? test) (n: v: listToAttrs [(nameValuePair system v.test)])
-          (import ./tests { inherit nixpkgs system; });
-    in fold recursiveUpdate {} (map testsFor systems);
+  # Run the tests for each platform.  You can run a test by doing
+  # e.g. ‘nix-build -A tests.login.x86_64-linux’, or equivalently,
+  # ‘nix-build tests/login.nix -A result’.
+  tests.avahi = callTest tests/avahi.nix {};
+  tests.bittorrent = callTest tests/bittorrent.nix {};
+  tests.containers = callTest tests/containers.nix {};
+  tests.firefox = callTest tests/firefox.nix {};
+  tests.firewall = callTest tests/firewall.nix {};
+  tests.gnome3 = callTest tests/gnome3.nix {};
+  tests.installer.efi = forAllSystems (system: (import tests/installer.nix { inherit system; }).efi.test);
+  tests.installer.grub1 = forAllSystems (system: (import tests/installer.nix { inherit system; }).grub1.test);
+  tests.installer.lvm = forAllSystems (system: (import tests/installer.nix { inherit system; }).lvm.test);
+  tests.installer.rebuildCD = forAllSystems (system: (import tests/installer.nix { inherit system; }).rebuildCD.test);
+  tests.installer.separateBoot = forAllSystems (system: (import tests/installer.nix { inherit system; }).separateBoot.test);
+  tests.installer.simple = forAllSystems (system: (import tests/installer.nix { inherit system; }).simple.test);
+  tests.influxdb = callTest tests/influxdb.nix {};
+  tests.ipv6 = callTest tests/ipv6.nix {};
+  tests.jenkins = callTest tests/jenkins.nix {};
+  tests.kde4 = callTest tests/kde4.nix {};
+  tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
+  tests.login = callTest tests/login.nix {};
+  tests.logstash = callTest tests/logstash.nix {};
+  tests.misc = callTest tests/misc.nix {};
+  tests.mumble = callTest tests/mumble.nix {};
+  tests.munin = callTest tests/munin.nix {};
+  tests.mysql = callTest tests/mysql.nix {};
+  tests.mysqlReplication = callTest tests/mysql-replication.nix {};
+  tests.nat = callTest tests/nat.nix {};
+  tests.nfs3 = callTest tests/nfs.nix { version = 3; };
+  tests.openssh = callTest tests/openssh.nix {};
+  tests.printing = callTest tests/printing.nix {};
+  tests.proxy = callTest tests/proxy.nix {};
+  tests.quake3 = callTest tests/quake3.nix {};
+  tests.runInMachine = callTest tests/run-in-machine.nix {};
+  tests.simple = callTest tests/simple.nix {};
+  tests.tomcat = callTest tests/tomcat.nix {};
+  tests.udisks2 = callTest tests/udisks2.nix {};
+  tests.xfce = callTest tests/xfce.nix {};
+
 }

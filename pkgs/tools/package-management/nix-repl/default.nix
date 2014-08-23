@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = https://github.com/edolstra/nix-repl.git;
-    rev = "81d658fe4afda234028cd4551e12491db4303957";
-    sha256 = "067mj8as99n0hkrr2qss3y3hnr8c5zy4n8bqx3z900n3j43cwzyc";
+    rev = "1734e8a1491ef831c83c2620b6b0f4a590b67c1f";
+    sha256 = "12fld2780jh3ww2n59s9z7afwjkmfhwh4dqn3wjva4ff8fx3n0mf";
   };
 
   buildInputs = [ nix readline boehmgc ];
@@ -21,8 +21,9 @@ stdenv.mkDerivation rec {
       mkdir -p $out/bin
       g++ -O3 -Wall -std=c++0x \
         -o $out/bin/nix-repl nix-repl.cc \
-        -I${nix}/include/nix -L${nix}/lib/nix \
-        -lformat -lutil -lstore -lexpr -lmain -lreadline -lgc
+        -I${nix}/include/nix \
+        -lnixformat -lnixutil -lnixstore -lnixexpr -lnixmain -lreadline -lgc \
+        -DNIX_VERSION=${(builtins.parseDrvName nix.name).version}
     '';
 
   meta = {

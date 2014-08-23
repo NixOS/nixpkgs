@@ -1,9 +1,9 @@
 # Provide an initial copy of the NixOS channel so that the user
 # doesn't need to run "nix-channel --update" first.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -11,7 +11,7 @@ let
   # CD.  These are installed into the "nixos" channel of the root
   # user, as expected by nixos-rebuild/nixos-install.
   channelSources = pkgs.runCommand "nixos-${config.system.nixosVersion}"
-    { expr = builtins.readFile ../../../lib/channel-expr.nix; }
+    { expr = readFile ../../../lib/channel-expr.nix; }
     ''
       mkdir -p $out/nixos
       cp -prd ${pkgs.path} $out/nixos/nixpkgs
@@ -28,7 +28,7 @@ in
 {
   # Provide the NixOS/Nixpkgs sources in /etc/nixos.  This is required
   # for nixos-install.
-  boot.postBootCommands =
+  boot.postBootCommands = mkAfter
     ''
       if ! [ -e /var/lib/nixos/did-channel-init ]; then
         echo "unpacking the NixOS/Nixpkgs sources..."

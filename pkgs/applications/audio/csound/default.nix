@@ -12,13 +12,13 @@
 }:
 
 stdenv.mkDerivation {
-  name = "csound-5.18.02";
+  name = "csound-5.19.01";
 
   enableParallelBuilding = true;
 
   src = fetchurl {
-    url = mirror://sourceforge/csound/Csound5.18.02.tar.gz;
-    sha256 = "4c461cf3bf60b83671224949dd33805379b7121bf2c0ad6af5e191e7f6f8adc8";
+    url = mirror://sourceforge/csound/Csound5.19.01.tar.gz;
+    sha256 = "078i69jwgadmxwa5ffn8h1py7cmd9asa8swnh38fyp56lzgzn669";
   };
 
   buildInputs = [ cmake libsndfile flex bison alsaLib pulseaudio tcltk ];

@@ -1,10 +1,8 @@
 # Simple example to showcase distributed tests using NixOS VMs.
 
-{ pkgs, ... }:
+import ./make-test.nix {
+  name = "mpich";
 
-with pkgs;
-
-{
   nodes = {
     master =
       { config, pkgs, ... }: {

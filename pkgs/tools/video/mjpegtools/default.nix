@@ -6,10 +6,10 @@
 # - libXxf86dga support? checking for XF86DGAQueryExtension in -lXxf86dga... no
 
 stdenv.mkDerivation rec {
-  name = "mjpegtools-2.0.0";
+  name = "mjpegtools-2.1.0";
   src = fetchurl {
     url = "mirror://sourceforge/mjpeg/${name}.tar.gz";
-    sha256 = "bf3541593e71602f7b440c2e7d81b433f53d0511e74642f35bea9b3feded7a97";
+    sha256 = "01y4xpfdvd4zgv6fmcjny9mr1gbfd4y2i4adp657ydw6fqyi8kw6";
   };
   buildInputs = [ gtk libdv libjpeg libpng libX11 pkgconfig SDL SDL_gfx ];
 }

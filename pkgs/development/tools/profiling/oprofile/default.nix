@@ -6,11 +6,11 @@
 assert withGUI -> qt4 != null;
 
 stdenv.mkDerivation rec {
-  name = "oprofile-0.9.8";
+  name = "oprofile-0.9.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/oprofile/${name}.tar.gz";
-    sha256 = "1g31lwgpacql6w5z1z2f31pgwzn14rgsbh7kmmdmsgm2l47r0idb";
+    sha256 = "15vm24jhw4xfd55pfw1rlpzfsh4bl1vyjsajs78bi9xbv8038lhy";
   };
 
   patchPhase = ''
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       is profiled: hardware and software interrupt handlers, kernel
       modules, the kernel, shared libraries, and applications.
     '';
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     homepage = http://oprofile.sourceforge.net/;
 
     platforms = stdenv.lib.platforms.linux;

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, xlibs, libvdpau }:
 
 stdenv.mkDerivation rec {
-  name = "vdpauinfo-0.0.6";
-  
+  name = "vdpauinfo-0.1";
+
   src = fetchurl {
     url = "http://people.freedesktop.org/~aplattner/vdpau/${name}.tar.gz";
-    sha256 = "0m2llqjnwh3x6y56hik3znym2mfk1haq81a15p54m60ngf0mvfsj";
+    sha256 = "17q1spsrd5i4jzhpacbs0bb4blf74j8s45rpg0znyc1yjfk5dj5h";
   };
 
   buildInputs = [ pkgconfig xlibs.libX11 libvdpau ];

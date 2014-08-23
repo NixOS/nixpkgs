@@ -13,6 +13,7 @@
 , dc1394Support ? false, libdc1394 ? null
 , x11grabSupport ? false, libXext ? null, libXfixes ? null
 , playSupport ? true, SDL ? null
+, freetypeSupport ? true, freetype ? null, fontconfig ? null
 }:
 
 assert speexSupport -> speex != null;
@@ -27,13 +28,14 @@ assert vaapiSupport -> libva != null;
 assert faacSupport -> faac != null;
 assert x11grabSupport -> libXext != null && libXfixes != null;
 assert playSupport -> SDL != null;
+assert freetypeSupport -> freetype != null;
 
 stdenv.mkDerivation rec {
-  name = "ffmpeg-1.2.3";
+  name = "ffmpeg-1.2.8";
 
   src = fetchurl {
     url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
-    sha256 = "0nvilgwaivzvikgp9lpvrwi4p1clxl4w8j961599bg0r2v7n4x6r";
+    sha256 = "0n9fklr8zqkd60dc5ai161l6k4dbiac5hqy0pi1w82yamc25k6s2";
   };
 
   # `--enable-gpl' (as well as the `postproc' and `swscale') mean that
@@ -59,7 +61,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional faacSupport "--enable-libfaac --enable-nonfree"
     ++ stdenv.lib.optional dc1394Support "--enable-libdc1394"
     ++ stdenv.lib.optional x11grabSupport "--enable-x11grab"
-    ++ stdenv.lib.optional playSupport "--enable-ffplay";
+    ++ stdenv.lib.optional playSupport "--enable-ffplay"
+    ++ stdenv.lib.optional freetypeSupport "--enable-libfreetype --enable-fontconfig";
 
   buildInputs = [ pkgconfig lame yasm zlib bzip2 alsaLib texinfo perl ]
     ++ stdenv.lib.optional mp3Support lame
@@ -75,7 +78,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional faacSupport faac
     ++ stdenv.lib.optional dc1394Support libdc1394
     ++ stdenv.lib.optionals x11grabSupport [ libXext libXfixes ]
-    ++ stdenv.lib.optional playSupport SDL;
+    ++ stdenv.lib.optional playSupport SDL
+    ++ stdenv.lib.optionals freetypeSupport [ freetype fontconfig ];
 
   enableParallelBuilding = true;
 

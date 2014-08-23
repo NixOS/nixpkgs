@@ -30,9 +30,11 @@ rec {
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
+  phaseNames = ["doPatch" "doConfigure" "doMakeInstall"];
 
   configureFlags = "CFLAGS=\"-include ${zlib}/include/zlib.h\"";
+
+  patches = [ ./gcc-fix.patch ];
 
   meta = {
     description = "Ballistics turn-based battle game between teams";

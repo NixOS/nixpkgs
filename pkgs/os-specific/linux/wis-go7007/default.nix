@@ -1,4 +1,4 @@
-{stdenv, fetchurl, kernelDev, ncurses, fxload}:
+{stdenv, fetchurl, kernel, ncurses, fxload}:
 
 let
 
@@ -12,7 +12,7 @@ let
 in   
 
 stdenv.mkDerivation {
-  name = "wis-go7007-0.9.8-${kernelDev.version}";
+  name = "wis-go7007-0.9.8-${kernel.version}";
 
   src = fetchurl {
     url = http://gentoo.osuosl.org/distfiles/wis-go7007-linux-0.9.8.tar.bz2;
@@ -47,16 +47,6 @@ stdenv.mkDerivation {
   '';
 
   preBuild = ''
-    # Urgh, we need the complete kernel sources for some header
-    # files.  So unpack the original kernel source tarball and copy
-    # the configured include directory etc. on top of it.
-    kernelVersion=$(cd ${kernelDev}/lib/modules && ls)
-    kernelBuild=$(echo ${kernelDev}/lib/modules/$kernelVersion/source)
-    tar xvfj ${kernelDev.src}
-    kernelSource=$(echo $(pwd)/linux-*)
-    cp -prd $kernelBuild/* $kernelSource
-
-    #includeDir=$out/lib/modules/$kernelVersion/source/include/linux
     includeDir=$TMPDIR/scratch
     substituteInPlace Makefile \
         --replace '$(DESTDIR)$(KSRC)/include/linux' $includeDir \
@@ -65,7 +55,7 @@ stdenv.mkDerivation {
     mkdir -p $out/etc/hotplug/usb
     mkdir -p $out/etc/udev/rules.d
  
-    makeFlagsArray=(KERNELSRC=$kernelSource \
+    makeFlagsArray=(KERNELSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source \
         FIRMWARE_DIR=$out/firmware FXLOAD=${fxload}/sbin/fxload \
         DESTDIR=$out SKIP_DEPMOD=1 \
         USE_UDEV=y)
@@ -79,5 +69,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Kernel module for the Micronas GO7007, used in a number of USB TV devices";
     homepage = http://oss.wischip.com/;
+    broken = true;
   };
 }

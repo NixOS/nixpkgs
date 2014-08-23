@@ -20,6 +20,12 @@ rec {
     http://kent.dl.sourceforge.net/sourceforge/
   ];
 
+  # SourceForge.jp.
+  sourceforgejp = [
+    http://osdn.dl.sourceforge.jp/
+    http://jaist.dl.sourceforge.jp/
+  ];
+
   # GNU (http://www.gnu.org/prep/ftp.html).
   gnu = [
     # This one redirects to a (supposedly) nearby and (supposedly) up-to-date
@@ -121,7 +127,7 @@ rec {
     ftp://mirror.csclub.uwaterloo.ca/nongnu/
     ftp://mirror.publicns.net/pub/nongnu/
     ftp://savannah.c3sl.ufpr.br/
-    http://download.savannah.gnu.org/
+    http://download.savannah.gnu.org/releases/
     http://ftp.cc.uoc.gr/mirrors/nongnu.org/
     http://ftp.twaren.net/Unix/NonGNU/
     http://mirror.csclub.uwaterloo.ca/nongnu/
@@ -159,7 +165,7 @@ rec {
 
   # Debian.
   debian = [
-    #ftp://ftp.au.debian.org/debian/
+    ftp://ftp.au.debian.org/debian/
     ftp://ftp.de.debian.org/debian/
     ftp://ftp.es.debian.org/debian/
     ftp://ftp.fr.debian.org/debian/
@@ -180,11 +186,17 @@ rec {
   ];
 
   # Fedora (please only add full mirrors that carry old Fedora distributions as well).
+  # See: https://mirrors.fedoraproject.org/publiclist (but not all carry old content).
   fedora = [
+    http://archives.fedoraproject.org/pub/archive/fedora/
+    http://fedora.osuosl.org/
     http://ftp.nluug.nl/pub/os/Linux/distr/fedora/
     http://ftp.funet.fi/pub/mirrors/ftp.redhat.com/pub/fedora/
-    http://download.fedora.redhat.com/pub/fedora/
-    http://archives.fedoraproject.org/pub/archive/fedora/
+    http://fedora.bhs.mirrors.ovh.net/
+    http://mirror.csclub.uwaterloo.ca/fedora/
+    http://ftp.linux.cz/pub/linux/fedora/
+    http://ftp.heanet.ie/pub/fedora/
+    http://mirror.1000mbps.com/fedora/
   ];
 
   # Old SUSE distributions.  Unfortunately there is no master site,
@@ -263,6 +275,7 @@ rec {
   postgresql = [
     ftp://ftp.postgresql.org/pub/
     ftp://ftp-archives.postgresql.org/pub/
+    http://ftp.postgresql.org/pub/
   ];
 
   metalab = [
@@ -293,7 +306,6 @@ rec {
     http://dirichlet.mat.puc.cl/
     http://ftp.ctex.org/mirrors/CRAN/
     http://mirror.bjtu.edu.cn/cran
-    http://cran.dataguru.cn/
     http://mirrors.ustc.edu.cn/CRAN/
     http://mirrors.xmu.edu.cn/CRAN/
     http://www.laqee.unal.edu.co/CRAN/
@@ -365,6 +377,12 @@ rec {
     http://camoruco.ing.uc.edu.ve/cran/
     http://cran.vinastat.com/
     http://lib.stat.cmu.edu/
+  ];
+
+  # Hackage mirrors
+  hackage = [
+    http://hackage.haskell.org/package/
+    http://hdiff.luite.com/packages/archive/package/
   ];
 
 }

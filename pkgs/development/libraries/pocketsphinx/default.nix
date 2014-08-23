@@ -16,6 +16,5 @@ stdenv.mkDerivation rec {
     description = "Voice recognition library written in C";
     homepage = http://cmusphinx.sourceforge.net;
     license = "free-non-copyleft";
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
 }

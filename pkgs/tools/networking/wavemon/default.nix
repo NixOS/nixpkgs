@@ -11,10 +11,10 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="wavemon";
-    version="0.7.2";
+    version="0.7.5";
     name="${baseName}-${version}";
     url="http://eden-feed.erg.abdn.ac.uk/wavemon/stable-releases/${name}.tar.bz2";
-    hash="1w1nq082mpjkcj7q6qs80104vki9kddwqv1wch6nmwwh0l72dgma";
+    hash="0b1fx00aar2fsw49a10w5bpiyjpz8h8f4nrlwb1acfw36yi1pfkd";
   };
 in
 rec {

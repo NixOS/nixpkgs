@@ -14,7 +14,7 @@ Tell the elisp code about the right Java directory.
 -    (oset this bsh-cmd-dir (expand-file-name "bsh-commands" jde-java-directory))
 -    (oset this checkstyle-jar  (expand-file-name "lib/checkstyle-all.jar" jde-java-directory))
 -    (oset this regexp-jar (expand-file-name "lib/jakarta-regexp.jar" jde-java-directory))
-+  (let ((jde-java-directory "@out@/lib/java"))
++  (let ((jde-java-directory "@out@/share/java"))
 +
 +    (oset this bsh-cmd-dir "@datadir@/bsh-commands")
 +    (oset this checkstyle-jar  (expand-file-name "checkstyle-all.jar" jde-java-directory))
@@ -38,7 +38,7 @@ Tell the elisp code about the right Java directory.
 -	  (concat
 -	   (jde-find-jde-data-directory)
 -	   "java/"))
-+	 (jde-java-directory "@out@/lib/java")
++	 (jde-java-directory "@out@/share/java")
  	 (args (append
  		(unless jde-checkstyle-expanded-properties-file
  		  (jde-checkstyle-get-property-args this))
@@ -67,7 +67,7 @@ Tell the elisp code about the right Java directory.
 -	     (jde-java-directory
 -	      (expand-file-name "java"
 -	       (jde-find-jde-data-directory)))
-+	     (jde-java-directory "@out@/lib/java")
++	     (jde-java-directory "@out@/share/java")
  	     (vm-args 
  		(let (args)
  		  (setq args 

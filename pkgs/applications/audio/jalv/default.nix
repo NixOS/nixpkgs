@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, gtk, jackaudio, lilv, lv2, pkgconfig, python
+{ stdenv, fetchurl, gtk, jack2, lilv, lv2, pkgconfig, python
 , serd, sord , sratom, suil }:
 
 stdenv.mkDerivation  rec {
   name = "jalv-${version}";
-  version = "1.4.0";
+  version = "1.4.4";
 
   src = fetchurl {
     url = "http://download.drobilla.net/${name}.tar.bz2";
-    sha256 = "1hq968fhiz86428krqhjl3vlw71bigc9bsfcv97zgvsjh0fh6qa0";
+    sha256 = "1iql1r52rmf87q6jkxhcxa3lpq7idzzg55ma91wphywyvh29q7lf";
   };
 
   buildInputs = [
-    gtk jackaudio lilv lv2 pkgconfig python serd sord sratom suil
+    gtk jack2 lilv lv2 pkgconfig python serd sord sratom suil
   ];
 
   configurePhase = "python waf configure --prefix=$out";
@@ -25,5 +25,6 @@ stdenv.mkDerivation  rec {
     homepage = http://drobilla.net/software/jalv;
     license = licenses.isc;
     maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux;
   };
 }

@@ -12,17 +12,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ghc perl gmp ncurses ];
 
-  # My attempts to compile GHC with parallel build support enabled, failed
-  # 4 consecutive times with the following error:
-  #
-  #    building rts/dist/build/AutoApply.debug_o
-  #    building rts/dist/build/AutoApply.thr_o
-  #      rts_dist_HC rts/dist/build/AutoApply.debug_o
-  #    /nix/store/1iigiim5855m8j7pmwf5xrnpf705s4dh-binutils-2.21.1a/bin/ld: cannot find libraries/integer-gmp/dist-install/build/cbits/gmp-wrappers_o_split/gmp-wrappers__1.o
-  #    collect2: ld returned 1 exit status
-  #    make[1]: *** [libraries/integer-gmp/dist-install/build/cbits/gmp-wrappers.p_o] Error 1
-  enableParallelBuilding = false;
-
   buildMK = ''
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp}/lib"
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp}/include"

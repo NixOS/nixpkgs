@@ -1,16 +1,17 @@
 { stdenv, fetchurl, openssl, curl, coreutils, gawk, bash, which }:
 
 stdenv.mkDerivation {
-  name = "esniper-2.28.0";
+  name = "esniper-2.31.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/esniper/esniper-2-28-0.tgz";
-    sha256 = "c2b0ccb757616b32f2d6cf54a4a5e367405fa7bcd6e6ed11835fe4f8a06a016b";
+    url    = "mirror://sourceforge/esniper/esniper-2-31-0.tgz";
+    sha256 = "0xn6gdyr0c18khwcsi2brp49wkancrsrxxca7hvbawhbf263glih";
   };
 
-  buildInputs = [openssl curl];
+  buildInputs = [ openssl curl ];
 
   # Add support for CURL_CA_BUNDLE variable.
+  # Fix <http://sourceforge.net/p/esniper/bugs/648/>.
   patches = [ ./find-ca-bundle.patch ];
 
   postInstall = ''
@@ -19,12 +20,11 @@ stdenv.mkDerivation {
     chmod 555 "$out/bin/snipe"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Simple, lightweight tool for sniping eBay auctions";
-    homepage = "http://esnipe.rsourceforge.net";
-    license = "GPLv2";
-
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    homepage    = http://esnipe.rsourceforge.net;
+    license     = licenses.gpl2;
+    maintainers = with maintainers; [ lovek323 simons ];
+    platforms   = platforms.all;
   };
 }

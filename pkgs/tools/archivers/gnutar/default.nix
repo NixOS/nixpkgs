@@ -1,18 +1,17 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gnutar-1.26";
+  name = "gnutar-${version}";
+  version = "1.27.1";
 
   src = fetchurl {
-    url = "mirror://gnu/tar/tar-1.26.tar.bz2";
-    sha256 = "0hbdkzmchq9ycr2x1pxqdcgdbaxksh8c6ac0jf75jajhcks6jlss";
+    url = "mirror://gnu/tar/tar-${version}.tar.bz2";
+    sha256 = "1iip0fk0wqhxb0jcwphz43r4fxkx1y7mznnhmlvr618jhp7b63wv";
   };
-
-  patches = [ ./gets-undeclared.patch ];
 
   # May have some issues with root compilation because the bootstrap tool
   # cannot be used as a login shell for now.
-  FORCE_UNSAFE_CONFIGURE = stdenv.lib.optionalString (stdenv.system == "armv7l-linux") "1";
+  FORCE_UNSAFE_CONFIGURE = stdenv.lib.optionalString (stdenv.system == "armv7l-linux" || stdenv.isSunOS) "1";
 
   meta = {
     homepage = http://www.gnu.org/software/tar/;
@@ -33,7 +32,7 @@ stdenv.mkDerivation rec {
       archives).
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;

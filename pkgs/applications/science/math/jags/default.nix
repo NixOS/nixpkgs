@@ -1,10 +1,10 @@
 {stdenv, fetchurl, gfortran, liblapack, blas}:
 
 stdenv.mkDerivation rec {
-  name = "JAGS-2.2.0";
+  name = "JAGS-3.4.0";
   src = fetchurl {
     url = "mirror://sourceforge/mcmc-jags/${name}.tar.gz";
-    sha256 = "016xml4k99lmdwwjiabxin95k9p3q2zh4pcci8wwcqwlq5y205b6";
+    sha256 = "0ayqsz9kkmbss7mxlwr34ch2z1vsb65lryjzqpprab1ccyiaksib";
   };
   buildInputs = [gfortran liblapack blas];
 

@@ -1,7 +1,7 @@
-diff -Naur kmod-7-orig/libkmod/libkmod.c kmod-7/libkmod/libkmod.c
---- kmod-7-orig/libkmod/libkmod.c	2012-03-15 08:19:16.750010226 -0400
-+++ kmod-7/libkmod/libkmod.c	2012-04-04 15:21:29.532074313 -0400
-@@ -200,7 +200,7 @@
+diff -ru -x '*~' kmod-17-orig/libkmod/libkmod.c kmod-17/libkmod/libkmod.c
+--- kmod-17-orig/libkmod/libkmod.c	2014-04-01 12:40:37.161940089 +0200
++++ kmod-17/libkmod/libkmod.c	2014-04-17 13:47:15.871441987 +0200
+@@ -201,7 +201,7 @@
  static char *get_kernel_release(const char *dirname)
  {
  	struct utsname u;
@@ -10,7 +10,7 @@ diff -Naur kmod-7-orig/libkmod/libkmod.c kmod-7/libkmod/libkmod.c
  
  	if (dirname != NULL)
  		return path_make_absolute_cwd(dirname);
-@@ -208,7 +208,10 @@
+@@ -209,7 +209,10 @@
  	if (uname(&u) < 0)
  		return NULL;
  
@@ -22,3 +22,39 @@ diff -Naur kmod-7-orig/libkmod/libkmod.c kmod-7/libkmod/libkmod.c
  		return NULL;
  
  	return p;
+diff -ru -x '*~' kmod-17-orig/tools/static-nodes.c kmod-17/tools/static-nodes.c
+--- kmod-17-orig/tools/static-nodes.c	2013-12-17 22:05:42.159047316 +0100
++++ kmod-17/tools/static-nodes.c	2014-04-17 13:51:17.945974320 +0200
+@@ -159,6 +159,7 @@
+ 	FILE *in = NULL, *out = NULL;
+ 	const struct static_nodes_format *format = &static_nodes_format_human;
+ 	int r, ret = EXIT_SUCCESS;
++	char *dirname_prefix;
+ 
+ 	for (;;) {
+ 		int c, idx = 0, valid;
+@@ -211,16 +212,19 @@
+ 		goto finish;
+ 	}
+ 
+-	snprintf(modules, sizeof(modules), "/lib/modules/%s/modules.devname", kernel.release);
++	if ((dirname_prefix = getenv("MODULE_DIR")) == NULL)
++		dirname_prefix = "/lib/modules";
++
++	snprintf(modules, sizeof(modules), "%s/%s/modules.devname", dirname_prefix, kernel.release);
+ 	in = fopen(modules, "re");
+ 	if (in == NULL) {
+ 		if (errno == ENOENT) {
+-			fprintf(stderr, "Warning: /lib/modules/%s/modules.devname not found - ignoring\n",
+-				kernel.release);
++			fprintf(stderr, "Warning: %s/%s/modules.devname not found - ignoring\n",
++				dirname_prefix, kernel.release);
+ 			ret = EXIT_SUCCESS;
+ 		} else {
+-			fprintf(stderr, "Error: could not open /lib/modules/%s/modules.devname - %m\n",
+-				kernel.release);
++			fprintf(stderr, "Error: could not open %s/%s/modules.devname - %m\n",
++				dirname_prefix, kernel.release);
+ 			ret = EXIT_FAILURE;
+ 		}
+ 		goto finish;

@@ -1,10 +1,10 @@
 { stdenv, fetchurl, openvpn, intltool, pkgconfig, networkmanager
-, withGnome ? true, gtk2, libgnome_keyring, procps, module_init_tools }:
+, withGnome ? true, gnome3, procps, module_init_tools }:
 
 stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
   pname = "NetworkManager-openvpn";
-  version = networkmanager.version;
+  version = "0.9.8.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/0.9/${pname}-${version}.tar.xz";
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ openvpn networkmanager ]
-    ++ stdenv.lib.optionals withGnome [ gtk2 libgnome_keyring ];
+    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome_keyring ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
 
   configureFlags = [
-    "${if withGnome then "--with-gnome --with-gtkver=2" else "--without-gnome"}"
+    "${if withGnome then "--with-gnome --with-gtkver=3" else "--without-gnome"}"
     "--disable-static"
   ];
 

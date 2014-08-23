@@ -5,13 +5,13 @@
 assert readlineSupport -> readline != null;
 
 stdenv.mkDerivation rec {
-  version = "2.0";
+  version = "2.2";
 
   name = "wpa_supplicant-${version}";
 
   src = fetchurl {
     url = "http://hostap.epitest.fi/releases/${name}.tar.gz";
-    sha256 = "02cy6wrs4nzm7wbq9mc1vby8lnj58k4sb10h718ks8mmzc4mc49c";
+    sha256 = "1vf8jc4yyksbxf86narvsli3vxfbm8nbnim2mdp66nd6d3yvin70";
   };
 
   extraConfig =
@@ -42,14 +42,14 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p $out/share/man/man5 $out/share/man/man8
-    cp -v doc/docbook/*.5 $out/share/man/man5/
-    cp -v doc/docbook/*.8 $out/share/man/man8/
+    cp -v "doc/docbook/"*.5 $out/share/man/man5/
+    cp -v "doc/docbook/"*.8 $out/share/man/man8/
     mkdir -p $out/etc/dbus-1/system.d $out/share/dbus-1/system-services $out/etc/systemd/system
-    cp -v dbus/*service $out/share/dbus-1/system-services
-    sed -e "s@/sbin/wpa_supplicant@$out&@" -i $out/share/dbus-1/system-services/*
+    cp -v "dbus/"*service $out/share/dbus-1/system-services
+    sed -e "s@/sbin/wpa_supplicant@$out&@" -i "$out/share/dbus-1/system-services/"*
     cp -v dbus/dbus-wpa_supplicant.conf $out/etc/dbus-1/system.d
-    cp -v systemd/*.service $out/etc/systemd/system
-  ''; # */
+    cp -v "systemd/"*.service $out/etc/systemd/system
+  '';
 
   meta = {
     homepage = http://hostap.epitest.fi/wpa_supplicant/;

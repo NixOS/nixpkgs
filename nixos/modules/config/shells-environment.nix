@@ -1,9 +1,9 @@
 # This module defines a global environment configuration and
 # a common configuration for all shells.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -19,6 +19,7 @@ in
       default = {};
       description = ''
         A set of environment variables used in the global environment.
+        These variables will be set on shell initialisation.
         The value of each variable can be either a string or a list of
         strings.  The latter is concatenated, interspersed with colon
         characters.
@@ -31,9 +32,9 @@ in
             res = (head defs').value;
           in
           if isList res then concatLists (getValues defs')
-          else if builtins.lessThan 1 (length defs') then
+          else if lessThan 1 (length defs') then
             throw "The option `${showOption loc}' is defined multiple times, in ${showFiles (getFiles defs)}."
-          else if !builtins.isString res then
+          else if !isString res then
             throw "The option `${showOption loc}' does not have a string value, in ${showFiles (getFiles defs)}."
           else res;
       });
@@ -147,6 +148,12 @@ in
   config = {
 
     system.build.binsh = pkgs.bashInteractive;
+
+    # Set session variables in the shell as well. This is usually
+    # unnecessary, but it allows changes to session variables to take
+    # effect without restarting the session (e.g. by opening a new
+    # terminal instead of logging out of X11).
+    environment.variables = config.environment.sessionVariables;
 
     environment.etc."shells".text =
       ''

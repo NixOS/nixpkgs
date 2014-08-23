@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, xlibs, flex, bison, mesa, alsaLib
-, ncurses, libpng, libjpeg, lcms, freetype, fontconfig, fontforge
+{ stdenv, fetchurl, pkgconfig, xlibs, flex, bison, mesa, mesa_noglu, alsaLib
+, ncurses, libpng, libjpeg, lcms2, freetype, fontconfig, fontforge
 , libxml2, libxslt, openssl, gnutls, cups, libdrm, makeWrapper
 }:
 
 assert stdenv.isLinux;
 assert stdenv.gcc.gcc != null;
 
-let 
-    version = "1.6";
+let
+    version = "1.6.2";
     name = "wine-${version}";
 
     src = fetchurl {
       url = "mirror://sourceforge/wine/${name}.tar.bz2";
-      sha256 = "1bj21d94i0mqvkmzxd4971232yniribk7q3fllf23ynbpppk1wg1";
+      sha256 = "1gmc0ljgfz3qy50mdxcwwjcr2yrpz54jcs2hdszsrk50wpnrxazh";
     };
 
     gecko = fetchurl {
@@ -34,10 +34,11 @@ in stdenv.mkDerivation rec {
   inherit version name src;
 
   buildInputs = [
-    xlibs.xlibs flex bison xlibs.libXi mesa
+    pkgconfig
+    xlibs.xlibs flex bison xlibs.libXi mesa mesa_noglu.osmesa
     xlibs.libXcursor xlibs.libXinerama xlibs.libXrandr
     xlibs.libXrender xlibs.libXxf86vm xlibs.libXcomposite
-    alsaLib ncurses libpng libjpeg lcms fontforge
+    alsaLib ncurses libpng libjpeg lcms2 fontforge
     libxml2 libxslt openssl gnutls cups makeWrapper
   ];
 
@@ -45,7 +46,7 @@ in stdenv.mkDerivation rec {
   # them to the RPATH so that the user doesn't have to set them in
   # LD_LIBRARY_PATH.
   NIX_LDFLAGS = map (path: "-rpath ${path}/lib ") [
-    freetype fontconfig stdenv.gcc.gcc mesa libdrm
+    freetype fontconfig stdenv.gcc.gcc mesa mesa_noglu.osmesa libdrm
     xlibs.libXinerama xlibs.libXrender xlibs.libXrandr
     xlibs.libXcursor xlibs.libXcomposite libpng libjpeg
     openssl gnutls cups
@@ -61,6 +62,9 @@ in stdenv.mkDerivation rec {
     install -D ${gecko} $out/share/wine/gecko/${gecko64.name}
   '' + ''
     install -D ${mono} $out/share/wine/mono/${mono.name}
+
+    paxmark psmr $out/bin/wine{,-preloader}
+
     wrapProgram $out/bin/wine --prefix LD_LIBRARY_PATH : ${stdenv.gcc.gcc}/lib
   '';
 
@@ -71,7 +75,7 @@ in stdenv.mkDerivation rec {
     license = "LGPL";
     inherit version;
     description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
-    maintainers = [stdenv.lib.maintainers.raskin stdenv.lib.maintainers.simons];
+    maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
   };
 }

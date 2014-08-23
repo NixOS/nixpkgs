@@ -19,11 +19,10 @@ pythonPackages.buildPythonPackage rec {
 
   propagatedBuildInputs = pythonPath;
 
-  installCommand = "python setup.py install --prefix=$out";
-
   meta = {
     homepage = "https://github.com/aszlig/LastWatch";
     description = "An inotify-based last.fm audio scrobbler";
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

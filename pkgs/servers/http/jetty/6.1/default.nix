@@ -1,13 +1,13 @@
 {stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation {
-  name = "jetty-6.1.21";
+  name = "jetty-6.1.26";
 
   builder = ./bin-builder.sh;
   buildInputs = [unzip];
 
   src = fetchurl {
-    url = http://dist.codehaus.org/jetty/jetty-6.1.21/jetty-6.1.21.zip;
-    sha256 = "1nrjglrmf29m1j1c80nskngmlqmc5vc7c48fggczn605l722cwaw";
+    url = http://dist.codehaus.org/jetty/jetty-6.1.26/jetty-6.1.26.zip;
+    sha256 = "11w1ciayv8zvxjg45xzs0kwc7k45x97sbnxkqb62sxy3gsw8xh4n";
   };
 }

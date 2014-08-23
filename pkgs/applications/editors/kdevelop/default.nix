@@ -1,27 +1,19 @@
 { stdenv, fetchurl, kdevplatform, cmake, pkgconfig, automoc4, shared_mime_info,
-  kdebase_workspace, gettext, perl, okteta }:
+  kdebase_workspace, gettext, perl, okteta, qjson }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "4.3.1";
+  version = "4.6.0";
   pname = "kdevelop";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.bz2";
-    sha256 = "0015hv39rqhyq1w6jw65lx7ls4l5pc3a2asvd5zsd65831vrfxxs";
+    url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
+    sha256 = "1ee9e7b8c46f575dd29d920cfd6284130f2e738a2e1f52dfd97b075fab2e4c73";
   };
 
-  buildInputs = [ kdevplatform kdebase_workspace okteta ];
+  buildInputs = [ kdevplatform kdebase_workspace okteta qjson ];
 
   nativeBuildInputs = [ cmake pkgconfig automoc4 shared_mime_info gettext perl ];
-
-  patches =
-    [ ( fetchurl {
-        url = https://git.reviewboard.kde.org/r/105211/diff/raw/;
-        name = "okteta-0.9.patch"; # fixes build with KDE-4.9.x
-        sha256 = "1mvqhw7jr1vi66l3jgam3slyfafcvwy4g3iapfi69dpfnzhmcxl0";
-      } )
-    ];
 
   NIX_CFLAGS_COMPILE = "-I${okteta}/include/KDE";
 

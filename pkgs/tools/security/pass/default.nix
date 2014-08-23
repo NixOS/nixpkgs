@@ -1,15 +1,21 @@
 { stdenv, fetchurl
 , coreutils, gnused, getopt, pwgen, git, tree, gnupg
-, makeWrapper }:
+, makeWrapper
+, withX ? false, xclip ? null
+}:
+
+assert withX -> xclip != null;
 
 stdenv.mkDerivation rec {
-  version = "1.4.2";
+  version = "1.6.3";
   name    = "password-store-${version}";
 
   src = fetchurl {
     url    = "http://git.zx2c4.com/password-store/snapshot/${name}.tar.xz";
-    sha256 = "00m3q6dihrhw8cxsrham3bdqg5841an8ch4s3a4k5fynlcb802m1";
+    sha256 = "1xs00c7ffqd0093i452kryw9sjip6dkp1pclx69zihb5l45d86fl";
   };
+
+  patches = [ ./darwin-getopt.patch ];
 
   buildInputs = [ makeWrapper ];
 
@@ -30,21 +36,17 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    # link zsh and fish completions
-    sed -ie '22s/^#//' Makefile
-    sed -ie '25s/^#//' Makefile
-    sed -i 's/find /find -L /' contrib/pass.zsh-completion
+    mkdir -p "$out/share/bash-completion/completions"
     mkdir -p "$out/share/zsh/site-functions"
     mkdir -p "$out/share/fish/completions"
 
-    # use gnused
-    sed -i 's/sed -i ""/sed -i /' Makefile
+    # Install Emacs Mode. NOTE: We can't install the necessary
+    # dependencies (s.el and f.el) here. The user has to do this
+    # himself.
+    mkdir -p "$out/share/emacs/site-lisp"
+    cp "contrib/emacs/password-store.el" "$out/share/emacs/site-lisp/"
 
-    SYSCONFDIR="$out/etc" PREFIX="$out" make install
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    # use nix-supplied getopt
-    sed -ie '34c GETOPT="${getopt}/bin/getopt"' \
-      "$out/lib/password-store.platform.sh"
+    PREFIX="$out" make install
   '';
 
   postFixup = ''
@@ -54,6 +56,6 @@ stdenv.mkDerivation rec {
 
     # Ensure all dependencies are in PATH
     wrapProgram $out/bin/pass \
-      --prefix PATH : "${coreutils}/bin:${gnused}/bin:${getopt}/bin:${gnupg}/bin:${git}/bin:${tree}/bin:${pwgen}/bin"
+      --prefix PATH : "${coreutils}/bin:${gnused}/bin:${getopt}/bin:${gnupg}/bin:${git}/bin:${tree}/bin:${pwgen}/bin${if withX then ":${xclip}/bin" else ""}"
   '';
 }

@@ -3,9 +3,9 @@
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
 
-{ forMainServer, pkgs }:
+{ forMainServer, lib }:
 
-with pkgs.lib;
+with lib;
 
 {
 

@@ -16,6 +16,7 @@ in
     src = fetchgit {
       inherit rev;
       url = "https://github.com/wertarbyte/autorandr.git";
+      sha256 = "1x8agg6mf5jr0imw7dznr8kxyw970bf252bda9q7b0z4yksya2zd"; 
     };
 
     patchPhase = ''
@@ -35,6 +36,6 @@ in
     meta = {
       description = "Automatic display configuration selector based on connected devices";
       homepage = https://github.com/wertarbyte/autorandr;
-      maintainer = [ stdenv.lib.maintainers.coroa ];
+      maintainers = [ stdenv.lib.maintainers.coroa ];
     };
   }

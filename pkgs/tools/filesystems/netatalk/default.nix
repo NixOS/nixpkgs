@@ -1,17 +1,17 @@
-{ fetchurl, stdenv, pkgconfig, db48, libgcrypt, avahi, libiconv, pam, openssl }:
+{ fetchurl, stdenv, pkgconfig, db, libgcrypt, avahi, libiconv, pam, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "netatalk-3.0.5";
+  name = "netatalk-3.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/netatalk/netatalk/${name}.tar.bz2";
-    sha256 = "1adlcj509czxsx60r1s96qlznspp5nz7dxc5fws11danidr4fhl8";
+    sha256 = "1d8dc8ysslkis4yl1xab1w9p0pz7a1kg0i6fds4wxsp4fhb6wqhq";
   };
 
-  buildInputs = [ pkgconfig db48 libgcrypt avahi libiconv pam openssl ];
+  buildInputs = [ pkgconfig db libgcrypt avahi libiconv pam openssl ];
 
   configureFlags = [
-    "--with-bdb=${db48}"
+    "--with-bdb=${db}"
     "--with-openssl=${openssl}"
   ];
 

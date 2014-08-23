@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.gnu.org/software/parted/;
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [
       # Add your name here!

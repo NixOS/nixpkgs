@@ -197,8 +197,20 @@ in
   google_apis_18 = buildGoogleApis {
     name = "google_apis-18";
       src = fetchurl {
-        url = https://dl-ssl.google.com/android/repository/google_apis-18_r02.zip;
-        sha1 = "40f2a6a6d6227dadd82cfe0f9783bd4c6bdb29c2";
+        url = https://dl-ssl.google.com/android/repository/google_apis-18_r03.zip;
+        sha1 = "147bce09c1163edc17194f3db496ec1086fcf965";
+      };
+      meta = {
+        description = "Android + Google APIs";
+        
+      };
+    };
+    
+  google_apis_19 = buildGoogleApis {
+    name = "google_apis-19";
+      src = fetchurl {
+        url = https://dl-ssl.google.com/android/repository/google_apis-19_r01.zip;
+        sha1 = "6c530a8318446e4da1e3ab7d2abd154bc493bc5a";
       };
       meta = {
         description = "Android + Google APIs";

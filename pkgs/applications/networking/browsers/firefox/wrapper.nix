@@ -2,8 +2,10 @@
 , browserName, desktopName, nameSuffix, icon
 }:
 
+let p = builtins.parseDrvName browser.name; in
+
 stdenv.mkDerivation {
-  name = browser.name + "-with-plugins";
+  name = "${p.name}-with-plugins-${p.version}";
 
   desktopItem = makeDesktopItem {
     name = browserName;
@@ -39,6 +41,8 @@ stdenv.mkDerivation {
     mkdir -p $out/nix-support
     echo ${browser} > $out/nix-support/propagated-user-env-packages
   '';
+
+  preferLocalBuild = true;
 
   # Let each plugin tell us (through its `mozillaPlugin') attribute
   # where to find the plugin in its tree.

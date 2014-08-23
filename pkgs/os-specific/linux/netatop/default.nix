@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, kernelDev, zlib }:
+{ stdenv, fetchurl, kernel, zlib }:
 
 stdenv.mkDerivation {
-  name = "netatop-${kernelDev.version}-0.3";
+  name = "netatop-${kernel.version}-0.3";
 
   src = fetchurl {
     url = http://www.atoptool.nl/download/netatop-0.3.tar.gz;
@@ -12,9 +12,9 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     patchShebangs mkversion
-    sed -i -e 's,^KERNDIR.*,KERNDIR=${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build,' \
+    sed -i -e 's,^KERNDIR.*,KERNDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build,' \
         */Makefile
-    sed -i -e 's,/lib/modules.*extra,'$out'/lib/modules/${kernelDev.modDirVersion}/extra,' \
+    sed -i -e 's,/lib/modules.*extra,'$out'/lib/modules/${kernel.modDirVersion}/extra,' \
         -e s,/usr,$out, \
         -e /init.d/d \
         -e /depmod/d \
@@ -22,14 +22,14 @@ stdenv.mkDerivation {
   '';
 
   preInstall = ''
-    ensureDir $out/bin $out/sbin $out/share/man/man{4,8}
-    ensureDir $out/lib/modules/${kernelDev.modDirVersion}/extra
+    mkdir -p $out/bin $out/sbin $out/share/man/man{4,8}
+    mkdir -p $out/lib/modules/${kernel.modDirVersion}/extra
   '';
       
   meta = {
     description = "Network monitoring module for atop";
     homepage = http://www.atoptool.nl/downloadnetatop.php;
-    license = "GPL2";
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [viric];
   };

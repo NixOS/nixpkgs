@@ -1,14 +1,14 @@
 {stdenv, fetchurl, perl, readline, rsh, ssh, pam}:
 
 let
-  name = "pdsh-2.26";
+  name = "pdsh-2.29";
 in
 stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "http://pdsh.googlecode.com/files/${name}.tar.bz2";
-    sha256 = "ada2f35509064bf9cd0fd5ca39a351108cdd6f5155b05f39f1711a271298469a";
+    sha256 = "1kvzz01fyaxfqmbh53f4ljfsgvxdykh5jyr6fh4f1bw2ywxr1w2p";
   };
 
   buildInputs = [perl readline ssh pam];
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://code.google.com/p/pdsh/";
     description = "High-performance, parallel remote shell utility";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
 
     longDescription = ''
       Pdsh is a high-performance, parallel remote shell utility. It has
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
       while timeouts occur on some connections.
     '';
 
-    platforms = stdenv.lib.platforms.unix;
+    hydraPlatforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

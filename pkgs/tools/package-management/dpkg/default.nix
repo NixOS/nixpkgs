@@ -39,9 +39,10 @@ stdenv.mkDerivation {
       done # */
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "The Debian package manager";
     homepage = http://wiki.debian.org/Teams/Dpkg;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    maintainers = maintainers.mornfall;
   };
 }

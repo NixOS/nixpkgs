@@ -1,7 +1,7 @@
 # Disnix server
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -15,6 +15,7 @@ let
     enablePostgreSQLDatabase = config.services.postgresql.enable;
     enableSubversionRepository = config.services.svnserve.enable;
     enableTomcatWebApplication = config.services.tomcat.enable;
+    enableMongoDatabase = config.services.mongodb.enable;
   });
 in
 
@@ -110,7 +111,7 @@ in
         // optionalAttrs (config.services.tomcat.enable) { tomcatPort = 8080; }
         // optionalAttrs (config.services.svnserve.enable) { svnBaseDir = config.services.svnserve.svnBaseDir; }
         // optionalAttrs (cfg.publishInfrastructure.enableAuthentication) (
-          optionalAttrs (config.services.mysql.enable) { mysqlUsername = "root"; mysqlPassword = builtins.readFile config.services.mysql.rootPassword; })
+          optionalAttrs (config.services.mysql.enable) { mysqlUsername = "root"; mysqlPassword = readFile config.services.mysql.rootPassword; })
         )
     ;
 
@@ -124,18 +125,20 @@ in
           after = [ "dbus.service" ]
             ++ optional config.services.httpd.enable "httpd.service"
             ++ optional config.services.mysql.enable "mysql.service"
+            ++ optional config.services.postgresql.enable "postgresql.service"
             ++ optional config.services.tomcat.enable "tomcat.service"
-            ++ optional config.services.svnserve.enable "svnserve.service";
+            ++ optional config.services.svnserve.enable "svnserve.service"
+            ++ optional config.services.mongodb.enable "mongodb.service";
 
           restartIfChanged = false;
           
-          path = [ pkgs.nix pkgs.disnix ];
-        
-          script =
-          ''
-            export HOME=/root
-            disnix-service --dysnomia-modules-dir=${dysnomia}/libexec/dysnomia
-          '';
+          path = [ pkgs.nix pkgs.disnix dysnomia ];
+          
+          environment = {
+            HOME = "/root";
+          };
+
+          exec = "disnix-service";
         };
     } // optionalAttrs cfg.publishAvahi {
       disnixAvahi =
@@ -150,7 +153,7 @@ in
               ${concatMapStrings (infrastructureAttrName:
                 let infrastructureAttrValue = getAttr infrastructureAttrName (cfg.infrastructure);
                 in
-                if builtins.isInt infrastructureAttrValue then
+                if isInt infrastructureAttrValue then
                 ''${infrastructureAttrName}=${toString infrastructureAttrValue} \
                 ''
                 else

@@ -23,11 +23,13 @@ stdenv.mkDerivation (rec {
     cd ${name}/src
   '';
 
+  #doCheck = true; # report: No suitable file for testing purposes
+
   enableParallelBuilding = true;
 
   meta = {
-      description = "MIT Kerberos 5";
-      homepage = webpage;
-      license = "MPL";
+    description = "MIT Kerberos 5";
+    homepage = webpage;
+    license = "MPL";
   };
 })

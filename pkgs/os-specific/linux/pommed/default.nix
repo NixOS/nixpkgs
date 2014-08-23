@@ -74,7 +74,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A tool to handle hotkeys on Apple laptop keyboards";
     homepage = http://www.technologeek.org/projects/pommed/index.html;
-    license = "gplv2";
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
+    license = stdenv.lib.licenses.gpl2;
   };
 }

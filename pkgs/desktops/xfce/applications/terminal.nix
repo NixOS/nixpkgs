@@ -5,11 +5,11 @@
 stdenv.mkDerivation rec {
   p_name  = "xfce4-terminal";
   ver_maj = "0.6";
-  ver_min = "2";
+  ver_min = "3";
 
   src = fetchurl {
     url = "mirror://xfce/src/apps/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "0d9vbkvbxxhv022mwyihrabmj8y9097bp57n1a412qyji0i454ix";
+    sha256 = "023y0lkfijifh05yz8grimxadqpi98mrivr00sl18nirq8b4fbwi";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.xfce.org/projects/terminal;
     description = "A modern terminal emulator primarily for the Xfce desktop environment";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

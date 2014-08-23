@@ -1,12 +1,15 @@
-{pkgs, config, ...}:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
   nssModulesPath = config.system.nssModules.path;
+  cfg = config.services.nscd;
 
-  inherit (pkgs.lib) singleton;
+  inherit (lib) singleton;
+
+  cfgFile = pkgs.writeText "nscd.conf" cfg.config;
 
 in
 
@@ -24,6 +27,12 @@ in
         description = "Whether to enable the Name Service Cache Daemon.";
       };
 
+      config = mkOption {
+        type = types.lines;
+        default = builtins.readFile ./nscd.conf;
+        description = "Configuration to use for Name Service Cache Daemon.";
+      };
+
     };
 
   };
@@ -31,7 +40,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.nscd.enable {
+  config = mkIf cfg.enable {
 
     users.extraUsers = singleton
       { name = "nscd";
@@ -56,7 +65,7 @@ in
         restartTriggers = [ config.environment.etc.hosts.source ];
 
         serviceConfig =
-          { ExecStart = "@${pkgs.glibc}/sbin/nscd nscd -f ${./nscd.conf}";
+          { ExecStart = "@${pkgs.glibc}/sbin/nscd nscd -f ${cfgFile}";
             Type = "forking";
             PIDFile = "/run/nscd/nscd.pid";
             Restart = "always";
@@ -66,6 +75,15 @@ in
                 "${pkgs.glibc}/sbin/nscd --invalidate hosts"
               ];
           };
+
+        # Urgggggh... Nscd forks before opening its socket and writing
+        # its pid. So wait until it's ready.
+        postStart =
+          ''
+            while ! ${pkgs.glibc}/sbin/nscd -g -f ${cfgFile} > /dev/null; do
+              sleep 0.2
+            done
+          '';
       };
 
   };

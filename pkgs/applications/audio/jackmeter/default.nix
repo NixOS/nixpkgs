@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, jackaudio, pkgconfig }:
+{ stdenv, fetchurl, jack2, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "jackmeter-0.3";
+  name = "jackmeter-0.4";
 
   src = fetchurl {
     url = "http://www.aelius.com/njh/jackmeter/${name}.tar.gz";
-    sha256 = "03siznnq3f0nnqyighgw9qdq1y4bfrrxs0mk6394pza3sz4b6sgp";
+    sha256 = "1cnvgx3jv0yvxlqy0l9k285zgvazmh5k8m4l7lxckjfm5bn6hm1r";
   };
 
-  buildInputs = [ jackaudio pkgconfig ];
+  buildInputs = [ jack2 pkgconfig ];
 
   meta = { 
     description = "Console jack loudness meter";
     homepage = http://www.aelius.com/njh/jackmeter/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };

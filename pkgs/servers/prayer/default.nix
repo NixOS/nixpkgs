@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, openssl, db4, zlib, uwimap, htmlTidy, pam}:
+{ stdenv, fetchurl, perl, openssl, db, zlib, uwimap, htmlTidy, pam}:
 
 let
   ssl = stdenv.lib.optionals uwimap.withSSL
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "135fjbxjn385b6cjys6qhbwfw61mdcl2akkll4jfpdzfvhbxlyda";
   };
 
-  buildInputs = [ openssl db4 zlib uwimap htmlTidy pam ];
+  buildInputs = [ openssl db zlib uwimap htmlTidy pam ];
   nativeBuildInputs = [ perl ];
 
   NIX_LDFLAGS = "-lpam";
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www-uxsup.csx.cam.ac.uk/~dpc22/prayer/;
     description = "Yet another Webmail interface for IMAP servers on Unix systems written in C";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

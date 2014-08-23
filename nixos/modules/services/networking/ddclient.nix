@@ -1,8 +1,8 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
 
-  inherit (pkgs.lib) mkOption mkIf singleton;
+  inherit (lib) mkOption mkIf singleton;
 
   inherit (pkgs) ddclient;
 
@@ -86,7 +86,7 @@ in
       };
 
       web = mkOption {
-        default = "web, web=checkip.dyndns.com/, web-skip='IP Address'" ;
+        default = "web, web=checkip.dyndns.com/, web-skip='Current IP Address: '" ;
         description = "";
       };
 

@@ -1,20 +1,24 @@
-{ stdenv, fetchurl, libsigsegv }:
+{ stdenv, fetchurl, libsigsegv, readline, readlineSupport ? false }:
 
 stdenv.mkDerivation rec {
-  name = "gawk-4.0.2";
+  name = "gawk-4.1.0";
 
   src = fetchurl {
     url = "mirror://gnu/gawk/${name}.tar.xz";
-    sha256 = "04vd0axif762mf781pj3days6ilv2333b9zi9c50y5mma66g5q91";
+    sha256 = "0hin2hswbbd6kd6i4zzvgciwpl5fba8d2s524z8y5qagyz3x010q";
   };
-
-  patches = [];
 
   doCheck = !stdenv.isCygwin; # XXX: `test-dup2' segfaults on Cygwin 6.1
 
-  buildInputs = [ libsigsegv ];
+  buildInputs = [ libsigsegv ]
+    ++ stdenv.lib.optional readlineSupport readline;
 
-  configureFlags = [ "--with-libsigsegv-prefix=${libsigsegv}" ];
+  configureFlags = [ "--with-libsigsegv-prefix=${libsigsegv}" ]
+    ++ stdenv.lib.optional readlineSupport "--with-readline=${readline}"
+      # only darwin where reported, seems OK on non-chrooted Fedora (don't rebuild stdenv)
+    ++ stdenv.lib.optional (!readlineSupport && stdenv.isDarwin) "--without-readline";
+
+  postInstall = "rm $out/bin/gawk-*";
 
   meta = {
     homepage = http://www.gnu.org/software/gawk/;
@@ -34,7 +38,7 @@ stdenv.mkDerivation rec {
       lines of code.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };

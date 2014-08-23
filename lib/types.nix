@@ -10,7 +10,6 @@ with import ./strings.nix;
 rec {
 
   isType = type: x: (x._type or "") == type;
-  typeOf = x: x._type or "";
 
   setType = typeName: value: value // {
     _type = typeName;
@@ -48,19 +47,19 @@ rec {
 
     bool = mkOptionType {
       name = "boolean";
-      check = builtins.isBool;
+      check = isBool;
       merge = loc: fold (x: y: x.value || y) false;
     };
 
     int = mkOptionType {
       name = "integer";
-      check = builtins.isInt;
+      check = isInt;
       merge = mergeOneOption;
     };
 
     str = mkOptionType {
       name = "string";
-      check = builtins.isString;
+      check = isString;
       merge = mergeOneOption;
     };
 
@@ -68,7 +67,7 @@ rec {
     # separator between the values).
     separatedString = sep: mkOptionType {
       name = "string";
-      check = builtins.isString;
+      check = isString;
       merge = loc: defs: concatStringsSep sep (getValues defs);
     };
 
@@ -132,7 +131,7 @@ rec {
             { inherit (def) file;
               value = listToAttrs (
                 imap (elemIdx: elem:
-                  { name = "unnamed-${toString defIdx}.${toString elemIdx}";
+                  { name = elem.name or "unnamed-${toString defIdx}.${toString elemIdx}";
                     value = elem;
                   }) def.value);
             }
@@ -170,7 +169,7 @@ rec {
 
     functionTo = elemType: mkOptionType {
       name = "function that evaluates to a(n) ${elemType.name}";
-      check = builtins.isFunction;
+      check = isFunction;
       merge = loc: defs:
         fnArgs: elemType.merge loc (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs);
       getSubOptions = elemType.getSubOptions;
@@ -183,10 +182,10 @@ rec {
       in
       mkOptionType rec {
         name = "submodule";
-        check = x: isAttrs x || builtins.isFunction x;
+        check = x: isAttrs x || isFunction x;
         merge = loc: defs:
           let
-            coerce = def: if builtins.isFunction def then def else { config = def; };
+            coerce = def: if isFunction def then def else { config = def; };
             modules = opts' ++ map (def: { _file = def.file; imports = [(coerce def.value)]; }) defs;
           in (evalModules { inherit modules; args.name = last loc; prefix = loc; }).config;
         getSubOptions = prefix: (evalModules
@@ -194,6 +193,18 @@ rec {
             # FIXME: hack to get shit to evaluate.
             args = { name = ""; }; }).options;
       };
+
+    enum = values: mkOptionType {
+      name = "one of ${concatStringsSep ", " values}";
+      check = flip elem values;
+      merge = mergeOneOption;
+    };
+
+    either = t1: t2: mkOptionType {
+      name = "${t1.name} or ${t2.name}";
+      check = x: t1.check x || t2.check x;
+      merge = mergeOneOption;
+    };
 
     # Obsolete alternative to configOf.  It takes its option
     # declarations from the ‘options’ attribute of containing option

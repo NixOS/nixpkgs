@@ -1,11 +1,12 @@
 { stdenv, fetchurl, zlib, ffmpeg, pkgconfig }:
 
-stdenv.mkDerivation {
-  name = "ffms-2.17";
-  
+stdenv.mkDerivation rec {
+  name = "ffms-2.19";
+
   src = fetchurl {
-    url = http://ffmpegsource.googlecode.com/files/ffms-2.17-src.tar.bz2;
-    sha256 = "0gb42hrwnldz3zjlk4llx85dvxysxlfrdf5yy3fay8r8k1vpl7wr";
+    url = https://codeload.github.com/FFMS/ffms2/tar.gz/2.19;
+    name = "${name}.tar.gz";
+    sha256 = "0498si8bzwyxxq0f1yc6invzb1lv1ab436gwzn9418839x8pj4vg";
   };
 
   NIX_CFLAGS_COMPILE = "-fPIC";
@@ -15,6 +16,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://code.google.com/p/ffmpegsource/;
     description = "Libav/ffmpeg based source library for easy frame accurate access";
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
   };
 }

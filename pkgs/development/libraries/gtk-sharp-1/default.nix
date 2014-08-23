@@ -23,7 +23,10 @@ stdenv.mkDerivation {
     md5 = "2651d14fe77174ab20b8af53d150ee11";
   };
 
-  patches = [ ./dllmap-glue.patch ];
+  patches = [
+    ./dllmap-glue.patch
+    ./glib-include.patch
+  ];
 
   buildInputs = [
     pkgconfig mono glib pango gtk GConf libglade libgnomecanvas

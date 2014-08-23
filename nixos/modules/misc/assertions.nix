@@ -1,14 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
-
-let
-
-  failed = map (x: x.message) (filter (x: !x.assertion) config.assertions);
-
-  showWarnings = res: fold (w: x: builtins.trace "[1;31mwarning: ${w}[0m" x) res config.warnings;
-
-in
+with lib;
 
 {
 
@@ -38,15 +30,5 @@ in
     };
 
   };
-
-  config = {
-
-    # This option is evaluated always. Thus the assertions are checked
-    # as well. Hacky!
-    environment.systemPackages = showWarnings (
-      if [] == failed then []
-      else throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failed)}");
-
-  };
-
+  # impl of assertions is in <nixos/modules/system/activation/top-level.nix>
 }

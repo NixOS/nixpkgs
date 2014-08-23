@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -65,14 +65,7 @@ in
 
   config = mkIf cfg.enable {
 
-    # Enable the ACPI daemon.  Not sure whether this is essential.
-    services.acpid.enable = true;
-
-    boot.kernelModules =
-      [ "acpi_cpufreq" "powernow-k8" "cpufreq_performance" "cpufreq_powersave" "cpufreq_ondemand"
-        "cpufreq_conservative"
-      ];
-
+    # FIXME: Implement powersave governor for sandy bridge or later Intel CPUs
     powerManagement.cpuFreqGovernor = mkDefault "ondemand";
     powerManagement.scsiLinkPolicy = mkDefault "min_power";
 

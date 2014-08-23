@@ -2,16 +2,14 @@
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "0.8.3";
 in
 
 stdenv.mkDerivation {
-  name = "camomile-${version}";
+  name = "camomile-0.8.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/camomile/camomile-${version}.tar.bz2";
-    #sha256 = "0x43pjxx70kgip86mmdn08s97k4qzdqc8i79xfyyx28smy1bsa00";
-    sha256 = "0yzj6j88aqrkbcynqh1d7r54670m1sqf889vdcgk143w85fxdj4l";
+    url = https://github.com/yoriyuki/Camomile/releases/download/rel-0.8.5/camomile-0.8.5.tar.bz2;
+    sha256 = "003ikpvpaliy5hblhckfmln34zqz0mk3y2m1fqvbjngh3h2np045";
   };
 
   buildInputs = [ocaml findlib];
@@ -19,9 +17,9 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = http://camomile.sourceforge.net/;
+    homepage = https://github.com/yoriyuki/Camomile/tree/master/Camomile;
     description = "A comprehensive Unicode library for OCaml";
-    license = "LGPL";
+    license = stdenv.lib.licenses.lgpl21;
     platforms = ocaml.meta.platforms;
     maintainers = [
       stdenv.lib.maintainers.z77z

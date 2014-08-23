@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
   ###### interface
@@ -31,6 +31,8 @@ with pkgs.lib;
         wantedBy = [ "multi-user.target" ];
 
         path = [ pkgs.sysklogd ];
+
+        unitConfig.ConditionVirtualization = "!systemd-nspawn";
 
         exec =
           "klogd -c 1 -2 -n " +

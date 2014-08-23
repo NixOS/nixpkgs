@@ -1,36 +1,30 @@
-{ stdenv, fetchurl, python, wrapPython }:
+{ stdenv, fetchurl, python, wrapPython, distutils-cfg }:
 
 stdenv.mkDerivation rec {
   shortName = "setuptools-${version}";
   name = "${python.executable}-${shortName}";
 
-  version = "0.9.8";
+  version = "2.1";
 
   src = fetchurl {
     url = "http://pypi.python.org/packages/source/s/setuptools/${shortName}.tar.gz";
-    sha256 = "037b8x3fdhx8s6xafqndi3yr8x2vr42n1kzs7jxk6j9s9fd65gs2";
+    sha256 = "1m8qjvj5bfbphdags5s6pgmvk3xnw509lgdlq9whkq5a9mgxf8m7";
   };
 
-  patches = [
-    # https://bitbucket.org/pypa/setuptools/issue/55/1-failure-lc_all-c-python33m-setuppy-test
-    ./distribute-skip-sdist_with_utf8_encoded_filename.patch
-  ];
+  buildInputs = [ python wrapPython distutils-cfg ];
 
-  buildInputs = [ python wrapPython ];
-
-  buildPhase = "${python}/bin/${python.executable} setup.py build --build-base $out";
+  buildPhase = "${python}/bin/${python.executable} setup.py build";
 
   installPhase =
     ''
       dst=$out/lib/${python.libPrefix}/site-packages
       mkdir -p $dst
       PYTHONPATH="$dst:$PYTHONPATH"
-      ${python}/bin/${python.executable} setup.py install --prefix=$out
+      ${python}/bin/${python.executable} setup.py install --prefix=$out --install-lib=$out/lib/${python.libPrefix}/site-packages
       wrapPythonPrograms
     '';
 
-  # tests fail on darwin, see http://bitbucket.org/pypa/setuptools/issue/55/1-failure-lc_all-c-python33m-setuppy-test 
-  doCheck = (!stdenv.isDarwin);
+  doCheck = stdenv.system != "x86_64-darwin";
 
   checkPhase = ''
     ${python}/bin/${python.executable} setup.py test
@@ -39,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Utilities to facilitate the installation of Python packages";
     homepage = http://pypi.python.org/pypi/setuptools;
-    licenses = [ "PSF" "ZPL" ];
+    license = [ "PSF" "ZPL" ];
     platforms = platforms.all;
   };    
 }

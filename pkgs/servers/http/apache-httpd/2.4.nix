@@ -14,12 +14,12 @@ assert sslSupport -> aprutil.sslSupport && openssl != null;
 assert ldapSupport -> aprutil.ldapSupport && openldap != null;
 
 stdenv.mkDerivation rec {
-  version = "2.4.4";
+  version = "2.4.10";
   name = "apache-httpd-${version}";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "0p35jy6mkb1q48bia719qxs5bwxv0wadyhxi61rsr93nrbgbvalj";
+    sha256 = "0slwcqw9f7fnb3kyz27hlsgh8j4wiza4yzqyp6vhfpvl3an4sv0p";
   };
 
   buildInputs = [perl] ++
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     description = "Apache HTTPD, the world's most popular web server";
     homepage    = http://httpd.apache.org/;
     license     = licenses.asl20;
-    platforms   = stdenv.lib.platforms.unix;
+    platforms   = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = with maintainers; [ lovek323 simons ];
   };
 }

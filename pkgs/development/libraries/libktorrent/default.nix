@@ -2,8 +2,8 @@
 , phonon, libgcrypt }:
 
 let
-  mp_ = "2.1";
-  version = "1.${mp_}-2";
+  mp_ = "3.1";
+  version = "1.${mp_}";
   version4 = "4.${mp_}";
 in
 stdenv.mkDerivation rec {
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   pname = "libktorrent";
 
   src = fetchurl {
-    url = "http://ktorrent.org/downloads/${version4}/${name}.tar.bz2";
-    sha256 = "1b4ibkba27ivvjsh5s93xwlcgzvvwsgl6mcd8g96d1al05n2ccw9";
+    url = "${meta.homepage}/downloads/${version4}/${name}.tar.bz2";
+    sha256 = "2fe11ccb4bf2028c3da11e52cde890f1b3a90560e548eac89a4f8e1558b09725";
   };
 
   nativeBuildInputs = [ cmake automoc4 gettext ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A BiTtorrent library used by KTorrent";
-    homepage = http://ktorrent.org;
+    homepage = http://ktorrent.pwsp.net;
     inherit (kdelibs.meta) platforms;
   };
 }

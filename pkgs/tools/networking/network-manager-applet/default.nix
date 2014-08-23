@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gtk, libglade, networkmanager, GConf
-, libnotify, libsecret, dbus_glib, polkit, isocodes, libgnome_keyring, gnome_keyring
+{ stdenv, fetchurl, intltool, pkgconfig, libglade, networkmanager, gnome3
+, libnotify, libsecret, dbus_glib, polkit, isocodes, libgnome_keyring 
 , mobile_broadband_provider_info, glib_networking, gsettings_desktop_schemas
 , makeWrapper, networkmanager_openvpn, networkmanager_vpnc
-, networkmanager_openconnect, udev, hicolor_icon_theme }:
+, networkmanager_openconnect, networkmanager_pptp, udev, hicolor_icon_theme, dconf }:
 
 let
   pn = "network-manager-applet";
@@ -15,19 +15,17 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pn}/${major}/${name}.tar.xz";
-    sha256 = "130rdin3wh9vlwhscbgh3lsssi89p5n4maws4y3l9ja720llk27n";
+    sha256 = "1sx97cp9nb5p82kg2dl6dmqri7wichpjqchhx7bk77limngby7jq";
   };
 
   buildInputs = [
-    gtk libglade networkmanager libnotify libsecret dbus_glib
-    polkit isocodes makeWrapper udev GConf libgnome_keyring
+    gnome3.gtk libglade networkmanager libnotify libsecret dbus_glib gsettings_desktop_schemas
+    polkit isocodes makeWrapper udev gnome3.gconf gnome3.libgnome_keyring
   ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
 
-  propagatedUserEnvPkgs = [ GConf gnome_keyring hicolor_icon_theme ];
-
-  configureFlags = [ "--disable-introspection" ]; # not needed anywhere AFAIK
+  propagatedUserEnvPkgs = [ gnome3.gconf gnome3.gnome_keyring hicolor_icon_theme ];
 
   makeFlags = [
     ''CFLAGS=-DMOBILE_BROADBAND_PROVIDER_INFO=\"${mobile_broadband_provider_info}/share/mobile-broadband-provider-info/serviceproviders.xml\"''
@@ -38,19 +36,27 @@ stdenv.mkDerivation rec {
     ln -s ${networkmanager_openvpn}/etc/NetworkManager/VPN/nm-openvpn-service.name $out/etc/NetworkManager/VPN/nm-openvpn-service.name
     ln -s ${networkmanager_vpnc}/etc/NetworkManager/VPN/nm-vpnc-service.name $out/etc/NetworkManager/VPN/nm-vpnc-service.name
     ln -s ${networkmanager_openconnect}/etc/NetworkManager/VPN/nm-openconnect-service.name $out/etc/NetworkManager/VPN/nm-openconnect-service.name
+    ln -s ${networkmanager_pptp}/etc/NetworkManager/VPN/nm-pptp-service.name $out/etc/NetworkManager/VPN/nm-pptp-service.name
     mkdir -p $out/lib/NetworkManager
     ln -s ${networkmanager_openvpn}/lib/NetworkManager/* $out/lib/NetworkManager/
     ln -s ${networkmanager_vpnc}/lib/NetworkManager/* $out/lib/NetworkManager/
     ln -s ${networkmanager_openconnect}/lib/NetworkManager/* $out/lib/NetworkManager/
+    ln -s ${networkmanager_pptp}/lib/NetworkManager/* $out/lib/NetworkManager/
     mkdir -p $out/libexec
     ln -s ${networkmanager_openvpn}/libexec/* $out/libexec/
     ln -s ${networkmanager_vpnc}/libexec/* $out/libexec/
     ln -s ${networkmanager_openconnect}/libexec/* $out/libexec/
+    ln -s ${networkmanager_pptp}/libexec/* $out/libexec/
+  '';
+
+  preFixup = ''
     wrapProgram "$out/bin/nm-applet" \
-      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
-      --prefix XDG_DATA_DIRS : "${gsettings_desktop_schemas}/share:$out/share" \
+      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules:${dconf}/lib/gio/modules" \
+      --prefix XDG_DATA_DIRS : "${gnome3.gtk}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
       --set GCONF_CONFIG_SOURCE "xml::~/.gconf" \
-      --prefix PATH ":" "${GConf}/bin"
+      --prefix PATH ":" "${gnome3.gconf}/bin"
+    wrapProgram "$out/bin/nm-connection-editor" \
+      --prefix XDG_DATA_DIRS : "${gnome3.gtk}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {

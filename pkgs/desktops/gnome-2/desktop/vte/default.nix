@@ -9,7 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "00zrip28issgmz2cqk5k824cbqpbixi5x7k88zxksdqpnq1f414d";
   };
 
-  patches = [ ./alt.patch ];
+  patches = [
+    ./alt.patch
+    # CVE-2012-2738
+    ./vte-0.28.2-limit-arguments.patch
+  ];
 
   buildInputs = [ intltool pkgconfig glib gtk ncurses ] ++
                 stdenv.lib.optionals pythonSupport [python pygtk];
@@ -36,7 +40,7 @@ stdenv.mkDerivation rec {
       character set conversion, as well as emulating any terminal known to
       the system's terminfo database.
     '';
-    license = "LGPLv2";
+    license = stdenv.lib.licenses.lgpl2;
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
     platforms = with stdenv.lib.platforms; linux;
   };

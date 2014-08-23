@@ -26,8 +26,8 @@ in
       mkdir -p "dist"
       cat > build.properties <<EOF
         dist.lisp.dir = dist/share/emacs/site-lisp
-        dist.java.lib.dir = dist/lib/java
-        dist.jar.jde.file = dist/lib/java/jde.jar
+        dist.java.lib.dir = dist/share/java
+        dist.jar.jde.file = dist/share/java/jde.jar
         dist.java.src.dir = dist/src/${name}/java
         dist.doc.dir  dist/doc/${name}
         prefix.dir = $out
@@ -40,7 +40,7 @@ in
       for i in "lisp/"*.el
       do
         sed -i "$i" -e "s|@out@|$out|g ;
-                        s|@javadir@|$out/lib/java|g ;
+                        s|@javadir@|$out/share/java|g ;
                         s|@datadir@|$out/share/${name}|g"
       done
     '';
@@ -55,7 +55,7 @@ in
 
       # Move everything that's not a JAR to $datadir.  This includes
       # `sun_checks.xml', license files, etc.
-      cd "$out/lib/java"
+      cd "$out/share/java"
       for i in *
       do
         if echo $i | grep -qv '\.jar''$'
@@ -89,9 +89,11 @@ in
         * Java source interpreter (Pat Neimeyer's BeanShell)
       '';
 
-      license = "GPLv2+";
+      license = stdenv.lib.licenses.gpl2Plus;
 
       maintainers = [ ];
       platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+
+      broken = true;
     };
   }

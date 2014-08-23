@@ -1,11 +1,11 @@
 { stdenv, fetchurl, zlib, ncurses ? null, perl ? null, pam }:
 
 stdenv.mkDerivation rec {
-  name = "util-linux-2.22.2";
+  name = "util-linux-2.24.2";
 
   src = fetchurl {
-    url = "http://www.kernel.org/pub/linux/utils/util-linux/v2.22/${name}.tar.bz2";
-    sha256 = "0vf3ifb45gr4cd27pmmxk8y5b3r0920mv16fv0vfwz5705xa2qvl";
+    url = "http://www.kernel.org/pub/linux/utils/util-linux/v2.24/${name}.tar.xz";
+    sha256 = "1w0g8q5aj5pjdf8l52g0mxyvlk62f4dch51q9jm3hnqwgz0dchqj";
   };
 
   outputs = [ "dev" "out" "bin" ];
@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
   # (/sbin/mount.*) through an environment variable, but that's
   # somewhat risky because we have to consider that mount can setuid
   # root...
-  # --enable-libmount-mount  fixes the behaviour being /etc/mtab a symlink to /proc/monunts
-  #     http://pl.digipedia.org/usenet/thread/19513/1924/
   configureFlags = ''
     --enable-write
     --enable-last
@@ -37,6 +35,10 @@ stdenv.mkDerivation rec {
     [ zlib pam ]
     ++ stdenv.lib.optional (ncurses != null) ncurses
     ++ stdenv.lib.optional (perl != null) perl;
+
+  postInstall = ''
+    rm $out/bin/su # su should be supplied by the su package (shadow)
+  '';
 
   enableParallelBuilding = true;
 

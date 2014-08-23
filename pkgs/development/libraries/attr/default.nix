@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "attr-2.4.46";
+  name = "attr-2.4.47";
 
   src = fetchurl {
     url = "mirror://savannah/attr/${name}.src.tar.gz";
-    sha256 = "07qf6kb2zk512az481bbnsk9jycn477xpva1a726n5pzlzf9pmnw";
+    sha256 = "0nd8y0m6awc9ahv0ciiwf8gy54c8d3j51pw9xg7f7cn579jjyxr5";
   };
 
   outputs = [ "dev" "out" "bin" "doc" ];

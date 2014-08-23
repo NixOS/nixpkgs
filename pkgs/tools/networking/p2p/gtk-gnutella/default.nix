@@ -2,14 +2,14 @@
 
 let
   name = "gtk-gnutella";
-  version = "0.97";
+  version = "1.0.1";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/${name}-${version}.tar.bz2";
-    sha256 = "0l2gdzp517hjk31318djq0sww6kzckzl9rfqvhgspihn874lm9hb";
+    sha256 = "010gzk2xqqkm309qnj5k28ghh9i92vvpnn8ly9apzb5gh8bqfm0g";
   };
 
   buildInputs = [pkgconfig glib gtk libxml2 bison gettext zlib];
@@ -23,7 +23,6 @@ stdenv.mkDerivation {
     homepage = "http://gtk-gnutella.sourceforge.net/";
     description = "a server/client for Gnutella";
     license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    broken = true;
   };
 }

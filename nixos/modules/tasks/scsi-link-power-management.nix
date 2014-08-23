@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
   ###### interface
@@ -30,6 +30,8 @@ with pkgs.lib;
         startOn = "stopped udevtrigger";
 
         task = true;
+
+        unitConfig.ConditionPathIsReadWrite = "/sys/class/scsi_host";
 
         script = ''
           shopt -s nullglob

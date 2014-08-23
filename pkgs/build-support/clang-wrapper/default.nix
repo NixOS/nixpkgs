@@ -7,7 +7,7 @@
 
 { name ? "", stdenv, nativeTools, nativeLibc, nativePrefix ? ""
 , clang ? null, libc ? null, binutils ? null, coreutils ? null, shell ? ""
-, zlib ? null
+, zlib ? null, libcxx ? null
 }:
 
 assert nativeTools -> nativePrefix != "";
@@ -18,28 +18,31 @@ let
 
   clangVersion = (builtins.parseDrvName clang.name).version;
   clangName = (builtins.parseDrvName clang.name).name;
-  
+
 in
 
 stdenv.mkDerivation {
   name =
     (if name != "" then name else clangName + "-wrapper") +
     (if clang != null && clangVersion != "" then "-" + clangVersion else "");
-  
+
   builder = ./builder.sh;
   setupHook = ./setup-hook.sh;
   clangWrapper = ./clang-wrapper.sh;
-  ldWrapper = ./ld-wrapper.sh;
-  utils = ./utils.sh;
+  ldWrapper = ../gcc-wrapper/ld-wrapper.sh;
+  utils = ../gcc-wrapper/utils.sh;
   addFlags = ./add-flags;
-  
-  inherit nativeTools nativeLibc nativePrefix clang clangVersion;
+
+  inherit nativeTools nativeLibc nativePrefix clang clangVersion libcxx;
+
+  libcxxabi = libcxx.abi or null;
+
   gcc = clang.gcc;
   libc = if nativeLibc then null else libc;
   binutils = if nativeTools then null else binutils;
   # The wrapper scripts use 'cat', so we may need coreutils
   coreutils = if nativeTools then null else coreutils;
-  
+
   langC = true;
   langCC = true;
   shell = if shell == "" then stdenv.shell else
@@ -62,7 +65,7 @@ stdenv.mkDerivation {
        if stdenv.lib.hasSuffix "pc-gnu" stdenv.cross.config then "ld.so.1" else
        abort "don't know the name of the dynamic linker for this platform");
   };
-  
+
   meta =
     let clang_ = if clang != null then clang else {}; in
     (if clang_ ? meta then removeAttrs clang.meta ["priority"] else {}) //
@@ -81,4 +84,6 @@ stdenv.mkDerivation {
        if stdenv.system == "mips64el-linux" then "ld.so.1" else
        abort "don't know the name of the dynamic linker for this platform")
     else "";
+
+  preferLocalBuild = true;
 }

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, buildPerlPackage, DBI, sqlite }:
 
 buildPerlPackage rec {
-  name = "DBD-SQLite-1.37";
+  name = "DBD-SQLite-1.42";
 
   src = fetchurl {
-    url = "mirror://cpan/authors/id/A/AD/ADAMK/${name}.tar.gz";
-    sha256 = "0197kvlziaj2wfdbzlhdlqmzvb29fmfyy6y2isbbwlg0b0f7ccd1";
+    url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/${name}.tar.gz";
+    sha256 = "14x9cjsc8dz8ad1nad0bqiq9cbk1rjfb8h5y0rpk3pdl38y6afxb";
   };
 
   propagatedBuildInputs = [ DBI ];
@@ -35,5 +35,5 @@ buildPerlPackage rec {
   # (e.g. "database is locked(5) at dbdimp.c line 402 at t/07busy.t").
   doCheck = false;
 
-  meta.platforms = stdenv.lib.platforms.linux;
+  meta.platforms = stdenv.lib.platforms.unix;
 }

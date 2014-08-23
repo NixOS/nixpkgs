@@ -11,12 +11,6 @@ buildPythonPackage rec {
 
   pythonPath = [ pythonPackages.curses ];
 
-  postInstall =
-    ''
-      # Put the man page in the right place.
-      mv $out/lib/python*/site-packages/iotop-*/share $out
-    '';
-
   doCheck = false;
 
   meta = {

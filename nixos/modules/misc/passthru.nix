@@ -1,11 +1,11 @@
 # This module allows you to export something from configuration
 # Use case: export kernel source expression for ease of configuring
 
-{ config, pkgs, ... }:
+{ config, lib, ... }:
 
 {
   options = {
-    passthru = pkgs.lib.mkOption {
+    passthru = lib.mkOption {
       visible = false;
       description = ''
         This attribute set will be exported as a system attribute.

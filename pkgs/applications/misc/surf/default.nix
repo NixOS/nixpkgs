@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "01b8hq8z2wd7ssym5bypx2b15mrs1lhgkrcgxf700kswxvxcrhgx";
   };
 
-  buildInputs = [ gtk makeWrapper webkit pkgconfig glib libsoup ];
+  buildInputs = [ gtk makeWrapper webkit gsettings_desktop_schemas pkgconfig glib libsoup ];
 
   # Allow users set their own list of patches
   inherit patches;
@@ -21,9 +21,12 @@ stdenv.mkDerivation rec {
   preConfigure = [ ''sed -i "s@PREFIX = /usr/local@PREFIX = $out@g" config.mk'' ];
   installPhase = ''
     make PREFIX=/ DESTDIR=$out install
+  '';
+
+  preFixup = ''
     wrapProgram "$out/bin/surf" \
       --prefix GIO_EXTRA_MODULES : ${glib_networking}/lib/gio/modules \
-      --prefix XDG_DATA_DIRS : "${gsettings_desktop_schemas}/share"
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = {
@@ -35,7 +38,7 @@ stdenv.mkDerivation rec {
       surf to another URI by setting its XProperties.
       '';
     homepage = http://surf.suckless.org;
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
   };
 }

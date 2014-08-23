@@ -61,7 +61,5 @@ stdenv.mkDerivation rec {
     homepage = http://www.freerdp.com/;
 
     license = "free-non-copyleft";
-
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
 }

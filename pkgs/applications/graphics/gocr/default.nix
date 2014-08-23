@@ -1,11 +1,11 @@
 { stdenv, fetchurl, tk }:
 
 stdenv.mkDerivation rec {
-  name = "gocr-0.49";
+  name = "gocr-0.50";
 
   src = fetchurl {
-    url = http://www-e.uni-magdeburg.de/jschulen/ocr/gocr-0.49.tar.gz;
-    sha256 = "06hpzp7rkkwfr1fvmc8kcfz9v490i9yir7f7imh13gmka0fr6afc";
+    url = "http://www-e.uni-magdeburg.de/jschulen/ocr/${name}.tar.gz";
+    sha256 = "1dgmcpapy7h68d53q2c5d0bpgzgfb2nw2blndnx9qhc7z12149mw";
   };
 
   postInstall = ''
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://jocr.sourceforge.net/";
     description = "GPL Optical Character Recognition";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
 
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];

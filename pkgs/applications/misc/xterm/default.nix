@@ -1,11 +1,11 @@
 { stdenv, fetchurl, xorg, ncurses, freetype, fontconfig, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "xterm-281";
+  name = "xterm-303";
 
   src = fetchurl {
     url = "ftp://invisible-island.net/xterm/${name}.tgz";
-    sha256 = "1yrjjya7z5s3fi0iiaxgna35jh0ib2zx1yafyng35jma6qbwhxx7";
+    sha256 = "0n7hay16aam9kfn642ri0wj5yzilbjm3l8znxc2p5dx9pn3rkwla";
   };
 
   buildInputs =
@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = http://invisible-island.net/xterm;
     license = "BSD";
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

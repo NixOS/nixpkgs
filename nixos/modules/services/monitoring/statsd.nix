@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -64,12 +64,12 @@ in
 
     graphiteHost = mkOption {
       description = "Hostname or IP of Graphite server";
-      default = "127.0.0.1";
+      default = config.services.graphite.web.host;
       type = types.str;
     };
 
     graphitePort = mkOption {
-      description = "Port of Graphite server";
+      description = "Port of Graphite server (i.e. carbon-cache).";
       default = 2003;
       type = types.uniq types.int;
     };

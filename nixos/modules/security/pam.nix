@@ -1,9 +1,9 @@
 # This module provides configuration for the PAM (Pluggable
 # Authentication Modules) system.
 
-{config, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -186,7 +186,12 @@ let
               "password optional ${pkgs.samba}/lib/security/pam_smbpass.so nullok use_authtok try_first_pass"}
 
           # Session management.
+          session required pam_env.so envfile=${config.system.build.pamEnvironment}
           session required pam_unix.so
+          ${optionalString cfg.setLoginUid
+              "session ${
+                if config.boot.isContainer then "optional" else "required"
+              } pam_loginuid.so"}
           ${optionalString cfg.updateWtmp
               "session required ${pkgs.pam}/lib/security/pam_lastlog.so silent"}
           ${optionalString config.users.ldap.enable
@@ -197,8 +202,6 @@ let
               "session optional ${pkgs.otpw}/lib/security/pam_otpw.so"}
           ${optionalString cfg.startSession
               "session optional ${pkgs.systemd}/lib/security/pam_systemd.so"}
-          ${optionalString cfg.setLoginUid
-              "session required pam_loginuid.so"}
           ${optionalString cfg.forwardXAuth
               "session optional pam_xauth.so xauthpath=${pkgs.xorg.xauth}/bin/xauth systemuser=99"}
           ${optionalString (cfg.limits != [])

@@ -2,16 +2,14 @@
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "1.7";
 in
 
 stdenv.mkDerivation {
-  name = "cryptokit-${version}";
+  name = "cryptokit-1.9";
 
   src = fetchurl {
-    url = "http://forge.ocamlcore.org/frs/download.php/1166/" +
-          "cryptokit-${version}.tar.gz";
-    sha256 = "56a8c0339c47ca3cf43c8881d5b519d3bff68bc8a53267e9c5c9cbc9239600ca";
+    url = http://forge.ocamlcore.org/frs/download.php/1166/cryptokit-1.9.tar.gz;
+    sha256 = "1jh0jqiwkjy9qplnfcm5r25zdgyk36sxb0c87ks3rjj7khrw1a2n";
   };
 
   buildInputs = [zlib ocaml findlib ncurses];

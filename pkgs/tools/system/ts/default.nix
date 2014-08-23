@@ -1,8 +1,9 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl,
+sendmailPath ? "/var/setuid-wrappers/sendmail" }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
 
-  name = "ts-0.7.3";
+  name = "ts-0.7.4";
 
   installPhase=''make install "PREFIX=$out"'';
 
@@ -10,9 +11,13 @@ stdenv.mkDerivation {
     makeFlags = "CC=${stdenv.cross.config}-gcc";
   };
 
+  patchPhase = ''
+    sed -i s,/usr/sbin/sendmail,${sendmailPath}, mail.c ts.1
+  '';
+
   src = fetchurl {
-    url = http://vicerveza.homeunix.net/~viric/soft/ts/ts-0.7.3.tar.gz;
-    sha256 = "1ajgk6y9y9bng5ssdqxwpzw44pmib30vn5284rgga6vr04ppakdy";
+    url = "http://viric.name/~viric/soft/ts/${name}.tar.gz";
+    sha256 = "042r9a09300v4fdrw4r60g5xi25v5m6g12kvvr6pcsm9qnfqyqqs";
   };
 
   meta = {

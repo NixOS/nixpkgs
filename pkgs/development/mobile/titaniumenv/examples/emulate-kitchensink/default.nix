@@ -6,5 +6,5 @@ androidenv.emulateApp {
   platformVersion = "16";
   useGoogleAPIs = true;
   package = "com.appcelerator.kitchensink";
-  activity = "KitchensinkActivity";
+  activity = ".KitchensinkActivity";
 }

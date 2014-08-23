@@ -1,19 +1,19 @@
 { stdenv, fetchurl, cairo, file, pango, glib, gtk
 , which, libtool, makeWrapper, libjpeg, libpng
-, fontconfig, liberation_ttf, sqlite } :
+, fontconfig, liberation_ttf, sqlite, openssl } :
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "5.3.6";
+  version = "6.0.1";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://download.racket-lang.org/installers/${version}/${pname}/${name}-src-unix.tgz";
-    sha256 = "12pvgidaym1rwyyi69bd2gfmfwi1y0lf8xgih7a8r20z4g0zzq3z";
+    url = "http://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
+    sha256 = "e2bc0d4d0fcdfc3327a58c931f203c07a06d4724703f9708ba2e4c8ea0f9694d";
   };
 
   # Various racket executables do run-time searches for these.
-  ffiSharedLibs = "${glib}/lib:${cairo}/lib:${pango}/lib:${gtk}/lib:${libjpeg}/lib:${libpng}/lib:${sqlite}/lib";
+  ffiSharedLibs = "${glib}/lib:${cairo}/lib:${pango}/lib:${gtk}/lib:${libjpeg}/lib:${libpng}/lib:${sqlite}/lib:${openssl}/lib";
 
   buildInputs = [ file libtool which makeWrapper fontconfig liberation_ttf sqlite ];
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     sed -e 's@</fontconfig>@@' -i chroot-fontconfig/fonts.conf
     echo "<dir>${liberation_ttf}</dir>" >> chroot-fontconfig/fonts.conf
     echo "</fontconfig>" >> chroot-fontconfig/fonts.conf
-   
+
     export FONTCONFIG_FILE=$(pwd)/chroot-fontconfig/fonts.conf
 
     cd src
@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [ "--enable-shared" "--enable-lt=${libtool}/bin/libtool" ];
+
+  NIX_LDFLAGS = "-lgcc_s";
 
   postInstall = ''
     for p in $(ls $out/bin/) ; do

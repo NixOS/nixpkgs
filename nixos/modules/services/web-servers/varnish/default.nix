@@ -1,9 +1,9 @@
-{ config, pkgs, ...}:
+{ config, lib, pkgs, ...}:
 let
   cfg = config.services.varnish;
 
 in
-with pkgs.lib;
+with lib;
 {
   options = {
     services.varnish = {

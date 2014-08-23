@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
 
@@ -25,7 +25,7 @@ with pkgs.lib;
 
   config = mkIf config.fonts.enableCoreFonts {
 
-    fonts.extraFonts = [ pkgs.corefonts ];
+    fonts.fonts = [ pkgs.corefonts ];
 
   };
 

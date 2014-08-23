@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Offline Wikipedia Viewer";
     homepage = http://www.evopedia.info;
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

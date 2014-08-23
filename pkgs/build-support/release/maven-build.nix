@@ -70,7 +70,7 @@ stdenv.mkDerivation ( rec {
   '';  
 
   mvnAssembly = ''
-    mvn assembly:assembly -Dmaven.test.skip.exec=true ${mvnFlags}
+    mvn assembly:assembly -Dmaven.test.skip=true ${mvnFlags}
   '';
 
   mvnRelease = ''
@@ -78,7 +78,7 @@ stdenv.mkDerivation ( rec {
 
     zip=$(ls target/*.zip| head -1)
     releaseName=$(basename $zip .zip)
-    releaseName="$releaseName-r${toString src.rev}"
+    releaseName="$releaseName-r${toString src.rev or "0"}"
     cp $zip $out/release/$releaseName.zip
     
     echo "$releaseName" > $out/nix-support/hydra-release-name

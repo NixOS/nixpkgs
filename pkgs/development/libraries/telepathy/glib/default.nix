@@ -1,16 +1,19 @@
-{ stdenv, fetchurl, dbus_glib, glib, python, pkgconfig, libxslt }:
+{ stdenv, fetchurl, dbus_glib, glib, python, pkgconfig, libxslt
+, gobjectIntrospection, valaSupport ? true, vala }:
 
 stdenv.mkDerivation rec {
-  name = "telepathy-glib-0.20.1";
+  name = "telepathy-glib-0.24.0";
 
   src = fetchurl {
     url = "${meta.homepage}/releases/telepathy-glib/${name}.tar.gz";
-    sha256 = "1dk1s977zv8c935jsiv7ll51a52rlwd7a6f8v7z8klzvc4zk9801";
+    sha256 = "ae0002134991217f42e503c43dea7817853afc18863b913744d51ffa029818cf";
   };
 
-  propagatedBuildInputs = [dbus_glib glib python];
+  configureFlags = stdenv.lib.optional valaSupport "--enable-vala-bindings";
 
-  buildInputs = [pkgconfig libxslt];
+  propagatedBuildInputs = [dbus_glib glib python gobjectIntrospection];
+
+  buildInputs = [pkgconfig libxslt] ++ stdenv.lib.optional valaSupport vala;
 
   meta = {
     homepage = http://telepathy.freedesktop.org;

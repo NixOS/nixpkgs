@@ -1,17 +1,19 @@
 { stdenv, fetchurl, ncurses }:
 
-stdenv.mkDerivation {
-  name = "multitail-5.2.12";
+stdenv.mkDerivation rec {
+  name = "multitail-6.2.1";
 
   src = fetchurl {
-    url = http://www.vanheusden.com/multitail/multitail-5.2.12.tgz;
-    sha256 = "681d87cd49e11aab1d82ad7818ee639c88a3d305db8accf0859977beda6c493c";
+    url = "http://www.vanheusden.com/multitail/${name}.tgz";
+    sha256 = "049fv5cyl5f7vcc8n2q3z3i5k0sqv2k715ic0s4q1nrw5kb6qn0y";
   };
 
   buildInputs = [ ncurses ];
 
+  makeFlags = stdenv.lib.optionalString stdenv.isDarwin "-f makefile.macosx";
+
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp multitail $out/bin
   '';
 

@@ -1,9 +1,9 @@
 # This module contains the basic configuration for building a NixOS
 # tarball for the sheevaplug.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -138,8 +138,8 @@ in
   };
 
   # Setting vesa, we don't get the nvidia driver, which can't work in arm.
-  services.xserver.videoDriver = "vesa";
-  services.xserver.videoDrivers = [];
+  services.xserver.videoDrivers = [ "vesa" ];
+
   services.nixosManual.enable = false;
 
   # Include the firmware for various wireless cards.
@@ -165,7 +165,7 @@ in
   # not be started by default on the installation CD because the
   # default root password is empty.
   services.openssh.enable = true;
-  jobs.openssh.startOn = pkgs.lib.mkOverride 50 "";
+  jobs.openssh.startOn = lib.mkOverride 50 "";
 
   # cpufrequtils fails to build on non-pc
   powerManagement.enable = false;

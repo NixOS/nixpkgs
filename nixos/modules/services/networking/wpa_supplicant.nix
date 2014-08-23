@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -46,9 +46,7 @@ in
         example = [ "wlan0" "wlan1" ];
         description = ''
           The interfaces <command>wpa_supplicant</command> will use.  If empty, it will
-          automatically use all wireless interfaces. (Note that auto-detection is currently
-          broken on Linux 3.4.x kernels. See http://github.com/NixOS/nixos/issues/10 for
-          further details.)
+          automatically use all wireless interfaces.
         '';
       };
 
@@ -92,11 +90,11 @@ in
 
     services.dbus.packages = [ pkgs.wpa_supplicant ];
 
+    # FIXME: start a separate wpa_supplicant instance per interface.
     jobs.wpa_supplicant =
       { description = "WPA Supplicant";
 
         wantedBy = [ "network.target" ];
-        after = [ "systemd-udev-settle.service" ];
 
         path = [ pkgs.wpa_supplicant ];
 
@@ -134,6 +132,12 @@ in
 
     assertions = [{ assertion = !cfg.userControlled.enable || cfg.interfaces != [];
                     message = "user controlled wpa_supplicant needs explicit networking.wireless.interfaces";}];
+
+    # Restart wpa_supplicant when a wlan device appears or disappears.
+    services.udev.extraRules =
+      ''
+        ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", RUN+="${config.systemd.package}/bin/systemctl try-restart wpa_supplicant.service"
+      '';
 
   };
 

@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mv Sublime* $out/sublime
     ln -s $out/sublime/sublime_text $out/bin/sublime
+    ln -s $out/sublime/sublime_text $out/bin/sublime2
 
     echo ${libPath}
     patchelf \
@@ -34,6 +35,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Sophisticated text editor for code, markup and prose";
-    license = "unfree";
+    license = stdenv.lib.licenses.unfree;
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2
-, sqlite, tcl, tk, x11, openssl, readline, db4, ncurses, gdbm, libX11 }:
+, sqlite, tcl, tk, x11, openssl, readline, db, ncurses, gdbm, libX11 }:
 
 assert zlibSupport -> zlib != null;
 
@@ -8,11 +8,11 @@ with stdenv.lib;
 let
 
   majorVersion = "2.7";
-  version = "${majorVersion}.5";
+  version = "${majorVersion}.8";
 
   src = fetchurl {
-    url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.bz2";
-    sha256 = "0nc091f19sllibvxm6n3qw5pflcphkwwxmz43q26lqafhra7airv";
+    url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
+    sha256 = "0nh7d3dp75f1aj0pamn4hla8s0l7nbaq4a38brry453xrfh11ppd";
   };
 
   patches =
@@ -56,10 +56,11 @@ let
 
     inherit majorVersion version src patches postPatch buildInputs;
 
+    LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
     C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
     LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
 
-    configureFlags = "--enable-shared --with-threads --enable-unicode --with-wctype-functions";
+    configureFlags = "--enable-shared --with-threads --enable-unicode";
 
     preConfigure = "${ensurePurity}" + optionalString stdenv.isCygwin
       ''
@@ -80,12 +81,17 @@ let
         ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb
         ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb${majorVersion}
         ln -s $out/share/man/man1/{python2.7.1.gz,python.1.gz}
+
+        paxmark E $out/bin/python${majorVersion}
       '';
 
-    passthru = {
+    passthru = rec {
       inherit zlibSupport;
+      isPy2 = true;
+      isPy27 = true;
       libPrefix = "python${majorVersion}";
-      executable = "python2.7";
+      executable = libPrefix;
+      sitePackages = "lib/${libPrefix}/site-packages";
     };
 
     enableParallelBuilding = true;
@@ -156,7 +162,7 @@ let
 
     bsddb = buildInternalPythonModule {
       moduleName = "bsddb";
-      deps = [ db4 ];
+      deps = [ db ];
     };
 
     curses = buildInternalPythonModule {

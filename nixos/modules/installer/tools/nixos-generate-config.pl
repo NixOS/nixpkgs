@@ -1,9 +1,11 @@
 #! @perl@
 
+use Cwd 'abs_path';
 use File::Spec;
 use File::Path;
 use File::Basename;
 use File::Slurp;
+use File::stat;
 
 
 sub uniq {
@@ -61,7 +63,7 @@ my @attrs = ();
 my @kernelModules = ();
 my @initrdKernelModules = ();
 my @modulePackages = ();
-my @imports = ("<nixos/modules/installer/scan/not-detected.nix>");
+my @imports = ("<nixpkgs/nixos/modules/installer/scan/not-detected.nix>");
 
 
 sub debug {
@@ -96,9 +98,9 @@ my $videoDriver;
 
 sub pciCheck {
     my $path = shift;
-    my $vendor = read_file "$path/vendor";
-    my $device = read_file "$path/device";
-    my $class = read_file "$path/class";
+    my $vendor = read_file "$path/vendor"; chomp $vendor;
+    my $device = read_file "$path/device"; chomp $device;
+    my $class = read_file "$path/class"; chomp $class;
 
     my $module;
     if (-e "$path/driver/module") {
@@ -135,7 +137,9 @@ sub pciCheck {
          $device eq "0x4315" || $device eq "0x4327" || $device eq "0x4328" ||
          $device eq "0x4329" || $device eq "0x432a" || $device eq "0x432b" ||
          $device eq "0x432c" || $device eq "0x432d" || $device eq "0x4353" ||
-         $device eq "0x4357" || $device eq "0x4358" || $device eq "0x4359" ) )
+         $device eq "0x4357" || $device eq "0x4358" || $device eq "0x4359" ||
+         $device eq "0x4331" || $device eq "0x43a0" || $device eq "0x43b1"
+        ) )
      {
         push @modulePackages, "config.boot.kernelPackages.broadcom_sta";
         push @kernelModules, "wl";
@@ -156,7 +160,8 @@ sub pciCheck {
 
     # Assume that all NVIDIA cards are supported by the NVIDIA driver.
     # There may be exceptions (e.g. old cards).
-    $videoDriver = "nvidia" if $vendor eq "0x10de" && $class =~ /^0x03/;
+    # FIXME: do we want to enable an unfree driver here?
+    #$videoDriver = "nvidia" if $vendor eq "0x10de" && $class =~ /^0x03/;
 }
 
 foreach my $path (glob "/sys/bus/pci/devices/*") {
@@ -170,9 +175,9 @@ push @attrs, "services.xserver.videoDrivers = [ \"$videoDriver\" ];" if $videoDr
 
 sub usbCheck {
     my $path = shift;
-    my $class = read_file "$path/bInterfaceClass";
-    my $subclass = read_file "$path/bInterfaceSubClass";
-    my $protocol = read_file "$path/bInterfaceProtocol";
+    my $class = read_file "$path/bInterfaceClass"; chomp $class;
+    my $subclass = read_file "$path/bInterfaceSubClass"; chomp $subclass;
+    my $protocol = read_file "$path/bInterfaceProtocol"; chomp $protocol;
 
     my $module;
     if (-e "$path/driver/module") {
@@ -216,11 +221,38 @@ foreach my $path (glob "/sys/class/block/*") {
 }
 
 
+my $virt = `systemd-detect-virt`;
+chomp $virt;
+
+
 # Check if we're a VirtualBox guest.  If so, enable the guest
 # additions.
-my $dmi = `@dmidecode@/sbin/dmidecode`;
-if ($dmi =~ /Manufacturer: innotek/) {
+if ($virt eq "oracle") {
     push @attrs, "services.virtualbox.enable = true;"
+}
+
+
+# Likewise for QEMU.
+if ($virt eq "qemu" || $virt eq "kvm" || $virt eq "bochs") {
+    push @imports, "<nixpkgs/nixos/modules/profiles/qemu-guest.nix>";
+}
+
+
+# For a device name like /dev/sda1, find a more stable path like
+# /dev/disk/by-uuid/X or /dev/disk/by-label/Y.
+sub findStableDevPath {
+    my ($dev) = @_;
+    return $dev if substr($dev, 0, 1) ne "/";
+    return $dev unless -e $dev;
+
+    my $st = stat($dev) or return $dev;
+
+    foreach my $dev2 (glob("/dev/disk/by-uuid/*"), glob("/dev/mapper/*"), glob("/dev/disk/by-label/*")) {
+        my $st2 = stat($dev2) or next;
+        return $dev2 if $st->rdev == $st2->rdev;
+    }
+
+    return $dev;
 }
 
 
@@ -231,7 +263,9 @@ shift @swaps;
 my @swapDevices;
 foreach my $swap (@swaps) {
     $swap =~ /^(\S+)\s/;
-    push @swapDevices, "{ device = \"$1\"; }";
+    next unless -e $1;
+    my $dev = findStableDevPath $1;
+    push @swapDevices, "{ device = \"$dev\"; }";
 }
 
 
@@ -256,7 +290,8 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
     $mountPoint = "/" if $mountPoint eq "";
 
     # Skip special filesystems.
-    next if in($mountPoint, "/proc") || in($mountPoint, "/dev") || in($mountPoint, "/sys") || in($mountPoint, "/run");
+    next if in($mountPoint, "/proc") || in($mountPoint, "/dev") || in($mountPoint, "/sys") || in($mountPoint, "/run") || $mountPoint eq "/var/lib/nfs/rpc_pipefs";
+    next if $mountPoint eq "/var/setuid-wrappers";
 
     # Skip the optional fields.
     my $n = 6; $n++ while $fields[$n] ne "-"; $n++;
@@ -270,9 +305,11 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
     # Maybe this is a bind-mount of a filesystem we saw earlier?
     if (defined $fsByDev{$fields[2]}) {
         my $path = $fields[3]; $path = "" if $path eq "/";
+        my $base = $fsByDev{$fields[2]};
+        $base = "" if $base eq "/";
         $fileSystems .= <<EOF;
   fileSystems.\"$mountPoint\" =
-    { device = \"$fsByDev{$fields[2]}$path\";
+    { device = \"$base$path\";
       fsType = \"none\";
       options = \"bind\";
     };
@@ -303,9 +340,17 @@ EOF
     # Emit the filesystem.
     $fileSystems .= <<EOF;
   fileSystems.\"$mountPoint\" =
-    { device = \"$device\";
+    { device = \"${\(findStableDevPath $device)}\";
       fsType = \"$fsType\";
-      options = \"${\join ",", uniq(@extraOptions, @superOptions, @mountOptions)}\";
+EOF
+
+    if (scalar @extraOptions > 0) {
+      $fileSystems .= <<EOF;
+      options = \"${\join ",", uniq(@extraOptions)}\";
+EOF
+    }
+
+    $fileSystems .= <<EOF;
     };
 
 EOF
@@ -324,7 +369,7 @@ sub toNixExpr {
 
 sub multiLineList {
     my $indent = shift;
-    return "[ ]" if !@_;
+    return " [ ]" if !@_;
     $res = "\n${indent}[ ";
     my $first = 1;
     foreach my $s (@_) {
@@ -383,12 +428,8 @@ if ($showHardwareConfig) {
         if (-e "/sys/firmware/efi/efivars") {
             $bootLoaderConfig = <<EOF;
   # Use the gummiboot efi boot loader.
-  boot.loader.grub.enable = false;
   boot.loader.gummiboot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  # !!! Remove this when nixos is on 3.10 or greater by default
-  # EFI booting requires kernel >= 3.10
-  boot.kernelPackages = pkgs.linuxPackages_3_10;
 EOF
         } else {
             $bootLoaderConfig = <<EOF;
@@ -424,6 +465,12 @@ $bootLoaderConfig
   #   defaultLocale = "en_US.UTF-8";
   # };
 
+  # List packages installed in system profile. To search by name, run:
+  # \$ nix-env -qaP | grep wget
+  # environment.systemPackages = with pkgs; [
+  #   wget
+  # ];
+
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
@@ -440,6 +487,13 @@ $bootLoaderConfig
   # Enable the KDE Desktop Environment.
   # services.xserver.displayManager.kdm.enable = true;
   # services.xserver.desktopManager.kde4.enable = true;
+
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # users.extraUsers.guest = {
+  #   isNormalUser = true;
+  #   uid = 1000;
+  # };
+
 }
 EOF
     } else {

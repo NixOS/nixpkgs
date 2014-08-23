@@ -1,8 +1,8 @@
 # NixOS module for iodine, ip over dns daemon
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
   cfg = config.services.iodined;

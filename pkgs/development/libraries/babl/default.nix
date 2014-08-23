@@ -11,6 +11,6 @@ stdenv.mkDerivation rec {
   meta = { 
     description = "Image pixel format conversion library";
     homepage = http://gegl.org/babl/;
-    license = "GPL3";
+    license = stdenv.lib.licenses.gpl3;
   };
 }

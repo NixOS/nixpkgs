@@ -1,17 +1,24 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "alsa-lib-1.0.26";
+  name = "alsa-lib-1.0.28";
 
   src = fetchurl {
     urls = [
      "ftp://ftp.alsa-project.org/pub/lib/${name}.tar.bz2"
      "http://alsa.cybermirror.org/lib/${name}.tar.bz2"
     ];
-    sha256 = "0zbfkwqn7ixa71lsna9llq6i2gic540h8r8r0rjdphrwc1hq37wc";
+    sha256 = "0vaafg5q1q1mqcsgin5v7xlmngl3cnbmg5a9xxw0xcz1vn2ln1rw";
   };
 
-  configureFlags = "--disable-xmlto";
+  patches = [
+    /* allow specifying alternatives alsa plugin locations using
+       export ALSA_PLUGIN_DIRS=$(nix-build -A alsaPlugins)/lib/alsa-lib
+       This patch should be improved:
+       See http://thread.gmane.org/gmane.linux.distributions.nixos/3435
+    */
+    ./alsa-plugin-dirs.patch
+  ];
 
   # Fix pcm.h file in order to prevent some compilation bugs
   # 2: see http://stackoverflow.com/questions/3103400/how-to-overcome-u-int8-t-vs-uint8-t-issue-efficiently
@@ -29,7 +36,8 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = {
+  meta = with stdenv.lib; {
+    homepage = http://www.alsa-project.org/;
     description = "ALSA, the Advanced Linux Sound Architecture libraries";
 
     longDescription = ''
@@ -37,20 +45,7 @@ stdenv.mkDerivation rec {
       MIDI functionality to the Linux-based operating system.
     '';
 
-    homepage = http://www.alsa-project.org/;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
   };
-
-  patches = [
-    /* allow specifying alternatives alsa plugin locations using
-       export ALSA_PLUGIN_DIRS=$(nix-build -A alsaPlugins)/lib/alsa-lib
-       This patch should be improved:
-       See http://thread.gmane.org/gmane.linux.distributions.nixos/3435
-    */
-    ./alsa-plugin-dirs.patch
-
-    /* patch provided by larsc on irc.
-       it may be a compiler problem on mips; without this, alsa does not build
-       on mips, because lacks some symbols atomic_add/atomic_sub  */
-    ./mips-atomic.patch
-  ];
 }

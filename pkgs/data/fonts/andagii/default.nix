@@ -19,6 +19,7 @@ in
 rec {
   src = a.fetchurl {
     url = sourceInfo.url;
+    curlOpts = "--user-agent 'Mozilla/5.0'";
     sha256 = sourceInfo.hash;
   };
 
@@ -43,8 +44,7 @@ rec {
     [
       raskin
     ];
-    platforms = with a.lib.platforms;
-      [];
+    hydraPlatforms = [];
     # There are multiple claims that the font is GPL, 
     # so I include the package; but I cannot find the
     # original source, so use it on your own risk

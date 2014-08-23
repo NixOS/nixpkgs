@@ -1,16 +1,19 @@
 { stdenv, fetchurl, cmake, wxGTK, openal, pkgconfig, curl, libtorrentRasterbar, libpng, libX11
-, gettext, bash, gawk, boost}:
+, gettext, bash, gawk, boost, libnotify, gtk, doxygen, spring, makeWrapper }:
 stdenv.mkDerivation rec {
 
   name = "springlobby-${version}";
-  version = "0.169";
+  version = "0.195";
 
   src = fetchurl {
     url = "http://www.springlobby.info/tarballs/springlobby-${version}.tar.bz2";
-    sha256 = "1wr8q2ha3wh718rr5rg7l6v404nf1rgkg4wkja77rfqy7r18zn7g";
+    sha256 = "0hxxm97c74rvm78vlfn2byn0zjlrhankxdrs2hz73rdq6451h10b";
   };
 
-  buildInputs = [ cmake wxGTK openal pkgconfig curl gettext libtorrentRasterbar boost libpng libX11 ];
+  buildInputs = [
+    cmake wxGTK openal pkgconfig curl gettext libtorrentRasterbar boost libpng libX11
+    libnotify gtk doxygen makeWrapper
+  ];
 
   prePatch = ''
     substituteInPlace tools/regen_config_header.sh --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
@@ -23,13 +26,18 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  #buildPhase = "make VERBOSE=1";
+  postInstall = ''
+    wrapProgram $out/bin/springlobby \
+      --prefix PATH : "${spring}/bin" \
+      --set SPRING_BUNDLE_DIR "${spring}/lib"
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://springlobby.info/;
+    repositories.git = git://github.com/springlobby/springlobby.git;
     description = "Cross-platform lobby client for the Spring RTS project";
     license = licenses.gpl2;
-    maintainers = [ maintainers.phreedom maintainers.qknight];
+    maintainers = with maintainers; [ phreedom qknight iElectric ];
     platforms = platforms.linux;
   };
 }

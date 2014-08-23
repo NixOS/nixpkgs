@@ -1,24 +1,20 @@
-{ stdenv, fetchurl, zlib, libpng, libjpeg, lcms, automake110x, autoconf, libtool }:
+{ stdenv, fetchurl, zlib, libpng, libjpeg, lcms2 }:
 
 stdenv.mkDerivation rec {
-  name = "libmng-1.0.10";
+  name = "libmng-2.0.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libmng/${name}.tar.bz2";
-    sha256 = "06415s40gz833s1v1q7c04c0m49p4sc87ich0vpdid2ldj0pf53v";
+    url = "mirror://sourceforge/libmng/${name}.tar.xz";
+    sha256 = "0l5wa3b9rr4zl49zbbjpapqyccqjwzkzw1ph3p4pk9p5h73h9317";
   };
 
-  preConfigure = "unmaintained/autogen.sh";
-
-  nativeBuildInputs = [ automake110x autoconf libtool ];
-
-  propagatedBuildInputs = [ zlib libpng libjpeg lcms ];
+  propagatedBuildInputs = [ zlib libpng libjpeg lcms2 ];
 
   meta = {
     description = "Reference library for reading, displaying, writing and examining Multiple-Image Network Graphics";
     homepage = http://www.libmng.com;
     license = "zlib/libpng";
     maintainers = with stdenv.lib.maintainers; [ marcweber urkud ];
-    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = stdenv.lib.platforms.linux;
   };
 }

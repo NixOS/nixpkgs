@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
       handling and rendering Postscript documents.
     '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

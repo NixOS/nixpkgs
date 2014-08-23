@@ -11,10 +11,10 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="stalonetray";
-    version="0.8.0";
+    version="0.8.1";
     name="${baseName}-${version}";
     url="mirror://sourceforge/${baseName}/${name}.tar.bz2";
-    hash="0ccllmpsmilns6xxl174vgcjf8kfakcrhg3psc4cg0yynqbi2mka";
+    hash="1wp8pnlv34w7xizj1vivnc3fkwqq4qgb9dbrsg15598iw85gi8ll";
   };
 in
 rec {

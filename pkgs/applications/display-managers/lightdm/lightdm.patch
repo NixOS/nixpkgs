@@ -1,7 +1,8 @@
-=== modified file 'liblightdm-gobject/greeter.c'
---- liblightdm-gobject/greeter.c	2013-01-31 20:56:09 +0000
-+++ liblightdm-gobject/greeter.c	2013-03-29 14:15:58 +0000
-@@ -567,6 +567,21 @@
+diff --git a/liblightdm-gobject/greeter.c b/liblightdm-gobject/greeter.c
+index 9387118..635cea0 100644
+--- a/liblightdm-gobject/greeter.c
++++ b/liblightdm-gobject/greeter.c
+@@ -567,6 +567,21 @@ lightdm_greeter_get_default_session_hint (LightDMGreeter *greeter)
  }
  
  /**
@@ -23,11 +24,11 @@
   * lightdm_greeter_get_hide_users_hint:
   * @greeter: A #LightDMGreeter
   *
-
-=== modified file 'liblightdm-gobject/lightdm/greeter.h'
---- liblightdm-gobject/lightdm/greeter.h	2013-01-31 20:56:09 +0000
-+++ liblightdm-gobject/lightdm/greeter.h	2013-03-29 11:56:11 +0000
-@@ -93,6 +93,8 @@
+diff --git a/liblightdm-gobject/lightdm/greeter.h b/liblightdm-gobject/lightdm/greeter.h
+index 7d8988f..2b54909 100644
+--- a/liblightdm-gobject/lightdm/greeter.h
++++ b/liblightdm-gobject/lightdm/greeter.h
+@@ -93,6 +93,8 @@ gboolean lightdm_greeter_get_select_guest_hint (LightDMGreeter *greeter);
  
  const gchar *lightdm_greeter_get_autologin_user_hint (LightDMGreeter *greeter);
  
@@ -36,19 +37,19 @@
  gboolean lightdm_greeter_get_autologin_guest_hint (LightDMGreeter *greeter);
  
  gint lightdm_greeter_get_autologin_timeout_hint (LightDMGreeter *greeter);
-
-=== modified file 'liblightdm-gobject/lightdm/session.h'
---- liblightdm-gobject/lightdm/session.h	2013-01-31 20:56:09 +0000
-+++ liblightdm-gobject/lightdm/session.h	2013-03-29 11:59:16 +0000
+diff --git a/liblightdm-gobject/lightdm/session.h b/liblightdm-gobject/lightdm/session.h
+index 13ddcd9..cdb2fd6 100644
+--- a/liblightdm-gobject/lightdm/session.h
++++ b/liblightdm-gobject/lightdm/session.h
 @@ -12,6 +12,7 @@
- #define _LIGHTDM_SESSION_H_
+ #define LIGHTDM_SESSION_H_
  
  #include <glib-object.h>
 +#include "greeter.h"
  
  G_BEGIN_DECLS
  
-@@ -42,9 +43,9 @@
+@@ -42,9 +43,9 @@ typedef struct
  
  GType lightdm_session_get_type (void);
  
@@ -60,10 +61,10 @@
  
  const gchar *lightdm_session_get_key (LightDMSession *session);
  
-
-=== modified file 'liblightdm-gobject/session.c'
---- liblightdm-gobject/session.c	2013-01-31 20:56:09 +0000
-+++ liblightdm-gobject/session.c	2013-03-29 14:16:48 +0000
+diff --git a/liblightdm-gobject/session.c b/liblightdm-gobject/session.c
+index 949778f..db5e18a 100644
+--- a/liblightdm-gobject/session.c
++++ b/liblightdm-gobject/session.c
 @@ -11,6 +11,7 @@
  #include <string.h>
  #include <gio/gdesktopappinfo.h>
@@ -72,7 +73,7 @@
  #include "lightdm/session.h"
  
  enum {
-@@ -167,7 +168,7 @@
+@@ -189,7 +190,7 @@ load_sessions (const gchar *sessions_dir)
  }
  
  static void
@@ -81,18 +82,17 @@
  {
      GKeyFile *config_key_file = NULL;
      gchar *config_path = NULL;
-@@ -183,8 +184,8 @@
+@@ -205,8 +206,7 @@ update_sessions (void)
      remote_sessions_dir = g_strdup (REMOTE_SESSIONS_DIR);
  
      /* Use session directory from configuration */
 -    /* FIXME: This should be sent in the greeter connection */
 -    config_path = g_build_filename (CONFIG_DIR, "lightdm.conf", NULL);
 +    config_path = g_strdup (lightdm_greeter_get_config_path (greeter));
-+
      config_key_file = g_key_file_new ();
      result = g_key_file_load_from_file (config_key_file, config_path, G_KEY_FILE_NONE, &error);
-     if (error)
-@@ -228,9 +229,9 @@
+     if (error && !g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+@@ -250,9 +250,9 @@ update_sessions (void)
   * Return value: (element-type LightDMSession) (transfer none): A list of #LightDMSession
   **/
  GList *
@@ -104,7 +104,7 @@
      return local_sessions;
  }
  
-@@ -242,9 +243,9 @@
+@@ -264,9 +264,9 @@ lightdm_get_sessions (void)
   * Return value: (element-type LightDMSession) (transfer none): A list of #LightDMSession
   **/
  GList *
@@ -116,78 +116,29 @@
      return remote_sessions;
  }
  
-
-=== modified file 'src/display.c'
---- src/display.c	2013-03-26 22:22:49 +0000
-+++ src/display.c	2013-03-29 12:12:43 +0000
-@@ -62,6 +62,9 @@
-     /* Program to run sessions through */
-     gchar *session_wrapper;
- 
-+    /* Path to the configuration file that lightdm is running under */
-+    gchar *config_path;
+diff --git a/src/lightdm.c b/src/lightdm.c
+index 7d35034..910164c 100644
+--- a/src/lightdm.c
++++ b/src/lightdm.c
+@@ -1142,6 +1142,9 @@ main (int argc, char **argv)
+         }
+     }
+     g_clear_error (&error);
 +
-     /* TRUE if in a user session */
-     gboolean in_user_session;
- 
-@@ -213,6 +216,14 @@
- }
- 
- void
-+display_set_config_path (Display *display, const gchar *config_path)
-+{
-+    g_return_if_fail (display != NULL);
-+    g_free (display->priv->config_path);
-+    display->priv->config_path = g_strdup (config_path);
-+}
++    config_set_string (config_get_instance (), "SeatDefaults", "config-path", config_path);
 +
-+void
- display_set_show_remote_login_hint (Display *display, gboolean show_remote_login)
- {
-     g_return_if_fail (display != NULL);
-@@ -436,6 +447,7 @@
-     greeter_set_hint (display->priv->greeter, "show-remote-login", display->priv->greeter_show_remote_login ? "true" : "false");
-     if (display->priv->greeter_is_lock)
-         greeter_set_hint (display->priv->greeter, "lock-screen", "true");
-+    greeter_set_hint (display->priv->greeter, "config-path", display->priv->config_path);
- 
-     /* Run greeter as unprivileged user */
-     if (getuid () != 0)
-
-=== modified file 'src/display.h'
---- src/display.h	2013-03-26 22:22:49 +0000
-+++ src/display.h	2013-03-29 12:12:37 +0000
-@@ -80,6 +80,8 @@
- 
- void display_set_user_session (Display *display, SessionType type, const gchar *session_name);
- 
-+void display_set_config_path (Display *display, const gchar *config_path);
-+
- gboolean display_start (Display *display);
- 
- gboolean display_get_is_ready (Display *display);
-
-=== modified file 'src/lightdm.c'
---- src/lightdm.c	2013-03-07 21:40:31 +0000
-+++ src/lightdm.c	2013-03-29 11:48:45 +0000
-@@ -1050,6 +1050,7 @@
-     g_debug ("Starting Light Display Manager %s, UID=%i PID=%i", VERSION, getuid (), getpid ());
- 
-     g_debug ("Loaded configuration from %s", config_path);
-+    config_set_string (config_get_instance (), "LightDM", "config-path", config_path);
      g_free (config_path);
  
-     g_debug ("Using D-Bus name %s", LIGHTDM_BUS_NAME);
-
-=== modified file 'src/seat.c'
---- src/seat.c	2013-03-26 22:22:49 +0000
-+++ src/seat.c	2013-03-29 12:13:00 +0000
-@@ -536,6 +536,7 @@
-     if (!session_name)
-         session_name = seat_get_string_property (seat, "user-session");
-     display_set_user_session (display, SESSION_TYPE_LOCAL, session_name);
-+    display_set_config_path (display, config_get_string (config_get_instance (), "LightDM", "config-path"));
+     /* Set default values */
+diff --git a/src/seat.c b/src/seat.c
+index e2b9c2c..a950ea2 100644
+--- a/src/seat.c
++++ b/src/seat.c
+@@ -1137,6 +1137,7 @@ create_greeter_session (Seat *seat)
+     greeter_set_hint (greeter_session, "show-manual-login", seat_get_boolean_property (seat, "greeter-show-manual-login") ? "true" : "false");
+     greeter_set_hint (greeter_session, "show-remote-login", seat_get_boolean_property (seat, "greeter-show-remote-login") ? "true" : "false");
+     greeter_set_hint (greeter_session, "has-guest-account", seat_get_allow_guest (seat) && seat_get_boolean_property (seat, "greeter-allow-guest") ? "true" : "false");
++    greeter_set_hint (greeter_session, "config-path", seat_get_string_property (seat, "config-path"));
  
-     seat->priv->displays = g_list_append (seat->priv->displays, display);
-     g_signal_emit (seat, signals[DISPLAY_ADDED], 0, display);
-
+     g_object_unref (session_config);
+ 

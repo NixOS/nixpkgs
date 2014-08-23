@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, kernelDev }:
+{ stdenv, fetchurl, kernel }:
 
 stdenv.mkDerivation rec {
-  pname = "lttng-modules-2.3.0";
-  name = "${pname}-${kernelDev.version}";
+  pname = "lttng-modules-2.4.1";
+  name = "${pname}-${kernel.version}";
 
   src = fetchurl {
     url = "https://lttng.org/files/lttng-modules/${pname}.tar.bz2";
-    sha256 = "0l9fbmpsjvm5pbrc6axy8chdp21j4b8fm0hmjhpk658ll0iixmpb";
+    sha256 = "1qn1qm8lwqw9ri9wfkf6k3d58gl9rwffmpbpkwx21v1fw95zi92k";
   };
 
   patches = [ ./lttng-fix-build-error-on-linux-3.2.patch ];
 
   preConfigure = ''
-    export KERNELDIR="${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build"
+    export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     export INSTALL_MOD_PATH="$out"
   '';
 
@@ -23,9 +23,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Linux kernel modules for LTTng tracing";
     homepage = http://lttng.org/;
-    # TODO: Add "mit" to the license list once the license attr set vs string
-    # decision has been made. (Having "mit" there breaks hydra evaluation.)
-    license = with licenses; [ lgpl21 gpl2 ];
+    # TODO license = with licenses; [ lgpl21 gpl2 mit ];
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };

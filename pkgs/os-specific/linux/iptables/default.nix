@@ -1,24 +1,17 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "iptables-1.4.16.2";
+  name = "iptables-1.4.21";
 
   src = fetchurl {
     url = "http://www.netfilter.org/projects/iptables/files/${name}.tar.bz2";
-    md5 = "57220bb26866a713073e5614f88071fc";
+    sha256 = "1q6kg7sf0pgpq0qhab6sywl23cngxxfzc9zdzscsba8x09l4q02j";
   };
 
-  # Install header files required by miniupnpd.
-  postInstall =
-    ''
-      cp include/iptables.h $out/include
-      cp include/libiptc/libiptc.h include/libiptc/ipt_kernel_headers.h $out/include/libiptc
-      mkdir $out/include/iptables
-      cp include/iptables/internal.h $out/include/iptables
-      mkdir $out/include/net
-      cp -prd include/net/netfilter $out/include/net/netfilter
-      mkdir $out/include/linux
-    '';
+  configureFlags = ''
+    --enable-devel
+    --enable-shared
+  '';
 
   meta = {
     description = "A program to configure the Linux IP packet filtering ruleset";

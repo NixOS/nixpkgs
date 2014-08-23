@@ -1,12 +1,14 @@
-{stdenv, fetchurl, jre, libX11, libXext, libXcursor, libXrandr, libXxf86vm
+{ stdenv, fetchurl, jre, libX11, libXext, libXcursor, libXrandr, libXxf86vm
 , mesa, openal, alsaOss }:
 
+assert jre ? architecture;
+
 stdenv.mkDerivation {
-  name = "minecraft-1.4.7";
+  name = "minecraft-2013.07.01";
 
   src = fetchurl {
-    url = "https://s3.amazonaws.com/MinecraftDownload/launcher/minecraft.jar";
-    sha256 = "92db974aa759a3f17f3cd61550fa5010e335c57dd813dad9e39b9cc013420a49";
+    url = "https://s3.amazonaws.com/Minecraft.Download/launcher/Minecraft.jar";
+    sha256 = "04pj4l5q0a64jncm2kk45r7nxnxa2z9n110dcxbbahdi6wk0png8";
   };
 
   phases = "installPhase";
@@ -30,7 +32,7 @@ stdenv.mkDerivation {
   meta = {
       description = "A sandbox-building game";
       homepage = http://www.minecraft.net;
-      maintainers = [ stdenv.lib.maintainers.page stdenv.lib.maintainers.shlevy ];
+      maintainers = [ stdenv.lib.maintainers.page ];
       license = "unfree-redistributable";
   };
 }

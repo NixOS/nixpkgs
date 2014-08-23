@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
 
   name = "lshw-${version}";
-  version = "02.15b";
+  version = "02.17b";
 
   src = fetchurl {
-    url = http://ezix.org/software/files/lshw-B.02.15.tar.gz;
-    sha256 = "19im6yj1pmsbrwkvdmgshllhiw7jh6nzhr6dc777q1n99g3cw0gv";
+    url = http://ezix.org/software/files/lshw-B.02.17.tar.gz;
+    sha256 = "1728b96gyjmrp31knzips9azn6wkfdp5k5dnbil7h7hgz99w177b";
   };
 
   buildInputs = [] ++ stdenv.lib.optional withGUI [ gtk pkgconfig sqlite ];

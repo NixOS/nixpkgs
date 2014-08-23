@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "xine-lib-1.2.2";
+  name = "xine-lib-1.2.4";
   
   src = fetchurl {
     url = "mirror://sourceforge/xine/${name}.tar.xz";
-    sha256 = "1mjk686h1qzqj51h4xs4xvagfgnnhm8czbzzjvr5w034pr8n8rg1";
+    sha256 = "1pdv7bs683ily548arv4wsxabslyf3x3laij5jb921dxyx71nnww";
   };
 
   nativeBuildInputs = [ pkgconfig perl ];

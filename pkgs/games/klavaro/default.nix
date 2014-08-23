@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, intltool, curl, gtk, gtkdatabox }:
 
 stdenv.mkDerivation rec {
-  name = "klavaro-1.9.5";
+  name = "klavaro-2.00";
 
   src = fetchurl {
     url = "mirror://sourceforge/klavaro/${name}.tar.bz2";
-    sha256 = "06c35247866fb74f7c1a52a2350b352fdb44dace7216fdbebc1fa54990d14fc9";
+    sha256 = "1w94r7r132sg7554xhcgvymxxxgfas99lkgv6j3nmxa8m2fzhwlq";
   };
 
   buildInputs = [ pkgconfig intltool curl gtk gtkdatabox ];
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Just another free touch typing tutor program";
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     platforms = stdenv.lib.platforms.linux;
   };

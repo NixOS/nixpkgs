@@ -1,0 +1,254 @@
+From: Mehdi Dogguy <mehdi@debian.org>
+Date: Sun, 27 Apr 2014 13:46:16 +0200
+Subject: Port to OCamlgraph 1.8.5
+
+---
+ src/impact/reason_graph.ml          |    2 +-
+ src/kernel/stmts_graph.ml           |   10 +++++-----
+ src/logic/property_status.ml        |    8 ++++----
+ src/misc/service_graph.ml           |    4 ++--
+ src/pdg_types/pdgTypes.ml           |    6 +++---
+ src/postdominators/print.ml         |    2 +-
+ src/semantic_callgraph/register.ml  |    4 ++--
+ src/slicing/printSlice.ml           |   10 +++++-----
+ src/syntactic_callgraph/register.ml |    4 ++--
+ src/wp/cil2cfg.ml                   |   12 ++++++------
+ 10 files changed, 31 insertions(+), 31 deletions(-)
+
+diff --git a/src/impact/reason_graph.ml b/src/impact/reason_graph.ml
+index eabacb0..ce19b4a 100644
+--- a/src/impact/reason_graph.ml
++++ b/src/impact/reason_graph.ml
+@@ -139,7 +139,7 @@ module Printer (X: AdditionalInfo) = struct
+ 
+   let graph_attributes _ = [`Label "Impact graph"]
+ 
+-  let default_vertex_attributes _g = [`Style [`Filled]; `Shape `Box]
++  let default_vertex_attributes _g = [`Style `Filled; `Shape `Box]
+   let default_edge_attributes _g = []
+ 
+   let vertex_attributes v =
+diff --git a/src/kernel/stmts_graph.ml b/src/kernel/stmts_graph.ml
+index a8fe121..16059c3 100644
+--- a/src/kernel/stmts_graph.ml
++++ b/src/kernel/stmts_graph.ml
+@@ -157,12 +157,12 @@ module TP = struct
+ 
+   let vertex_attributes s =
+     match s.skind with
+-    | Loop _ -> [`Color 0xFF0000; `Style [`Filled]]
+-    | If _ -> [`Color 0x00FF00; `Style [`Filled]; `Shape `Diamond]
+-    | Return _ -> [`Color 0x0000FF; `Style [`Filled]]
++    | Loop _ -> [`Color 0xFF0000; `Style `Filled]
++    | If _ -> [`Color 0x00FF00; `Style `Filled; `Shape `Diamond]
++    | Return _ -> [`Color 0x0000FF; `Style `Filled]
+     | Block _ -> [`Shape `Box; `Fontsize 8]
+-    | Goto _ -> [`Shape `Diamond; `Color 0x00FFFF ; `Style [`Filled]]
+-    | Instr (Skip _) -> [`Color 0x00FFFF ; `Style [`Filled]]
++    | Goto _ -> [`Shape `Diamond; `Color 0x00FFFF ; `Style `Filled]
++    | Instr (Skip _) -> [`Color 0x00FFFF ; `Style `Filled]
+     | _ -> []
+   let default_vertex_attributes _ = []
+ 
+diff --git a/src/logic/property_status.ml b/src/logic/property_status.ml
+index f7c278d..47485f6 100644
+--- a/src/logic/property_status.ml
++++ b/src/logic/property_status.ml
+@@ -1481,12 +1481,12 @@ module Consolidation_graph = struct
+                 let s = get_status p in
+ 		let color = status_color p s in
+                 let style = match s with
+-                  | Never_tried -> [`Style [`Bold]; `Width 0.8 ]
+-                  | _ -> [`Style [`Filled]]
++                  | Never_tried -> [`Style `Bold; `Width 0.8 ]
++                  | _ -> [`Style `Filled]
+                 in
+ 		style @ [ label v; `Color color; `Shape `Box ]
+               | Emitter _ as v -> 
+-		[ label v; `Shape `Diamond; `Color 0xb0c4de; `Style [`Filled] ]
++		[ label v; `Shape `Diamond; `Color 0xb0c4de; `Style `Filled ]
+               | Tuning_parameter _ as v ->
+ 		[ label v; (*`Style `Dotted;*) `Color 0xb0c4de;  ]
+ 	      (*| Correctness_parameter _ (*as v*) -> assert false (*[ label v; `Color 0xb0c4de ]*)*)
+@@ -1495,7 +1495,7 @@ module Consolidation_graph = struct
+ 	      | None -> []
+ 	      | Some s ->
+ 		let c = emitted_status_color s in
+-		[ `Color c; `Fontcolor c; `Style [`Bold] ]
++		[ `Color c; `Fontcolor c; `Style `Bold ]
+ 
+         let default_vertex_attributes _ = []
+         let default_edge_attributes _ = []
+diff --git a/src/misc/service_graph.ml b/src/misc/service_graph.ml
+index 4f866c5..d158028 100644
+--- a/src/misc/service_graph.ml
++++ b/src/misc/service_graph.ml
+@@ -289,7 +289,7 @@ Src root:%s in %s (is_root:%b) Dst:%s in %s (is_root:%b) [2d case]"
+         color e
+       else
+         match CallG.E.label e with
+-        | Inter_services -> [ `Style [`Invis] ]
++        | Inter_services -> [ `Style `Invis ]
+         | Inter_functions | Both -> color e
+ 
+     let default_edge_attributes _ = []
+@@ -303,7 +303,7 @@ Src root:%s in %s (is_root:%b) Dst:%s in %s (is_root:%b) [2d case]"
+           sg_attributes =
+             [ `Label ("S " ^ cs);
+               `Color (Extlib.number_to_color id);
+-              `Style [`Bold] ] }
++              `Style `Bold ] }
+ 
+   end
+ 
+diff --git a/src/pdg_types/pdgTypes.ml b/src/pdg_types/pdgTypes.ml
+index 05754e4..74cdebf 100644
+--- a/src/pdg_types/pdgTypes.ml
++++ b/src/pdg_types/pdgTypes.ml
+@@ -626,7 +626,7 @@ module Pdg = struct
+ 
+     let graph_attributes _ = [`Rankdir `TopToBottom ]
+ 
+-    let default_vertex_attributes _ = [`Style [`Filled]]
++    let default_vertex_attributes _ = [`Style `Filled]
+     let vertex_name v = string_of_int (Node.id v)
+ 
+     let vertex_attributes v =
+@@ -711,13 +711,13 @@ module Pdg = struct
+         if Dpd.is_ctrl d then (`Arrowtail `Odot)::attrib else attrib
+       in
+       let attrib =
+-        if Dpd.is_addr d then (`Style [`Dotted])::attrib else attrib
++        if Dpd.is_addr d then (`Style `Dotted)::attrib else attrib
+       in
+         attrib
+ 
+     let get_subgraph v =
+       let mk_subgraph name attrib =
+-        let attrib = (`Style [`Filled]) :: attrib in
++        let attrib = (`Style `Filled) :: attrib in
+         Some { Graph.Graphviz.DotAttributes.sg_name= name;
+                sg_parent = None;
+                sg_attributes = attrib }
+diff --git a/src/postdominators/print.ml b/src/postdominators/print.ml
+index f2e3a25..15f4ff2 100644
+--- a/src/postdominators/print.ml
++++ b/src/postdominators/print.ml
+@@ -63,7 +63,7 @@ module Printer = struct
+ 
+   let graph_attributes (title, _) = [`Label title]
+ 
+-  let default_vertex_attributes _g = [`Style [`Filled]]
++  let default_vertex_attributes _g = [`Style `Filled]
+   let default_edge_attributes _g = []
+ 
+   let vertex_attributes (s, has_postdom) =
+diff --git a/src/semantic_callgraph/register.ml b/src/semantic_callgraph/register.ml
+index 1c79dcc..071f061 100644
+--- a/src/semantic_callgraph/register.ml
++++ b/src/semantic_callgraph/register.ml
+@@ -102,8 +102,8 @@ module Service =
+          let name = Kernel_function.get_name
+          let attributes v =
+            [ `Style
+-               [if Kernel_function.is_definition v then `Bold
+-                else `Dotted] ]
++               (if Kernel_function.is_definition v then `Bold
++                else `Dotted) ]
+          let entry_point () =
+            try Some (fst (Globals.entry_point ()))
+            with Globals.No_such_entry_point _ -> None
+diff --git a/src/slicing/printSlice.ml b/src/slicing/printSlice.ml
+index c5363f9..211e0bb 100644
+--- a/src/slicing/printSlice.ml
++++ b/src/slicing/printSlice.ml
+@@ -227,7 +227,7 @@ module PrintProject = struct
+ 
+   let graph_attributes (name, _) = [`Label name]
+ 
+-  let default_vertex_attributes _ = [`Style [`Filled]]
++  let default_vertex_attributes _ = [`Style `Filled]
+ 
+   let vertex_name v = match v with
+     | Src fi -> SlicingMacros.fi_name fi
+@@ -280,16 +280,16 @@ module PrintProject = struct
+ 
+   let edge_attributes (e, call) =
+     let attrib = match e with
+-    | (Src _, Src _) -> [`Style [`Invis]]
+-    | (OptSliceCallers _, _) -> [`Style [`Invis]]
+-    | (_, OptSliceCallers _) -> [`Style [`Invis]]
++    | (Src _, Src _) -> [`Style `Invis]
++    | (OptSliceCallers _, _) -> [`Style `Invis]
++    | (_, OptSliceCallers _) -> [`Style `Invis]
+     | _ -> []
+     in match call with None -> attrib
+       | Some call -> (`Label (string_of_int call.sid)):: attrib
+ 
+   let get_subgraph v =
+     let mk_subgraph name attrib =
+-      let attrib = (*(`Label name) ::*) (`Style [`Filled]) :: attrib in
++      let attrib = (*(`Label name) ::*) (`Style `Filled) :: attrib in
+           Some { Graph.Graphviz.DotAttributes.sg_name= name;
+                  sg_parent = None;
+                  sg_attributes = attrib }
+diff --git a/src/syntactic_callgraph/register.ml b/src/syntactic_callgraph/register.ml
+index d4669c4..d41980e 100644
+--- a/src/syntactic_callgraph/register.ml
++++ b/src/syntactic_callgraph/register.ml
+@@ -37,8 +37,8 @@ module Service =
+          let name v = nodeName v.cnInfo
+          let attributes v =
+            [ match v.cnInfo with
+-             | NIVar (_,b) when not !b -> `Style [`Dotted]
+-             | _ -> `Style [`Bold] ]
++             | NIVar (_,b) when not !b -> `Style `Dotted
++             | _ -> `Style `Bold ]
+          let equal v1 v2 = id v1 = id v2
+ 	 let compare v1 v2 = 
+ 	   let i1 = id v1 in
+diff --git a/src/wp/cil2cfg.ml b/src/wp/cil2cfg.ml
+index 6d8cf09..ba5f410 100644
+--- a/src/wp/cil2cfg.ml
++++ b/src/wp/cil2cfg.ml
+@@ -1278,9 +1278,9 @@ module Printer (PE : sig val edge_txt : edge -> string end) = struct
+       | Vstart | Vend | Vexit -> [`Color 0x0000FF; `Shape `Doublecircle]
+       | VfctIn | VfctOut -> [`Color 0x0000FF; `Shape `Box]
+       | VblkIn _ | VblkOut _ -> [`Shape `Box]
+-      | Vloop _ | Vloop2 _ -> [`Color 0xFF0000; `Style [`Filled]]
++      | Vloop _ | Vloop2 _ -> [`Color 0xFF0000; `Style `Filled]
+       | Vtest _ | Vswitch _ ->
+-        [`Color 0x00FF00; `Style [`Filled]; `Shape `Diamond]
++        [`Color 0x00FF00; `Style `Filled; `Shape `Diamond]
+       | Vcall _ | Vstmt _ -> []
+     in (`Label (String.escaped label))::attr
+ 
+@@ -1290,15 +1290,15 @@ module Printer (PE : sig val edge_txt : edge -> string end) = struct
+     let attr = [] in
+     let attr = (`Label (String.escaped (PE.edge_txt e)))::attr in
+     let attr =
+-      if is_back_edge e then (`Constraint false)::(`Style [`Bold])::attr
++      if is_back_edge e then (`Constraint false)::(`Style `Bold)::attr
+       else attr
+     in
+     let attr = match (edge_type e) with
+       | Ethen | EbackThen -> (`Color 0x00FF00)::attr
+       | Eelse | EbackElse -> (`Color 0xFF0000)::attr
+-      | Ecase [] -> (`Color 0x0000FF)::(`Style [`Dashed])::attr
++      | Ecase [] -> (`Color 0x0000FF)::(`Style `Dashed)::attr
+       | Ecase _ -> (`Color 0x0000FF)::attr
+-      | Enext -> (`Style [`Dotted])::attr
++      | Enext -> (`Style `Dotted)::attr
+       | Eback -> attr (* see is_back_edge above *)
+       | Enone -> attr
+     in
+@@ -1308,7 +1308,7 @@ module Printer (PE : sig val edge_txt : edge -> string end) = struct
+ 
+   let get_subgraph v =
+      let mk_subgraph name attrib =
+-      let attrib = (`Style [`Filled]) :: attrib in
++      let attrib = (`Style `Filled) :: attrib in
+           Some { Graph.Graphviz.DotAttributes.sg_name= name;
+                  sg_parent = None;
+                  sg_attributes = attrib }
+-- 

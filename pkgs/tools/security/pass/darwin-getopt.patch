@@ -1,0 +1,11 @@
+diff --git a/src/platform/darwin.sh b/src/platform/darwin.sh
+index 1b76c33..fa40104 100644
+--- a/src/platform/darwin.sh
++++ b/src/platform/darwin.sh
+@@ -31,5 +31,5 @@ tmpdir() {
+ 	mount -t hfs -o noatime -o nobrowse "$ramdisk_dev" "$SECURE_TMPDIR" || exit 1
+ }
+ 
+-GETOPT="$(brew --prefix gnu-getopt 2>/dev/null || echo /usr/local)/bin/getopt"
++GETOPT="getopt"
+ SHRED="srm -f -z"

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   meta = { 
     description = "Xapian Probabilistic Information Retrieval library";
     homepage = "http://xapian.org";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.chaoflow ];
   };
 }

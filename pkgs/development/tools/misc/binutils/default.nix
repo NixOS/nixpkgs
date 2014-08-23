@@ -1,10 +1,13 @@
 { stdenv, fetchurl, noSysDirs, zlib
-, cross ? null, gold ? false, bison ? null, flex2535 ? null, bc ? null, dejagnu ? null
-, deterministic ? false }:
+, cross ? null, gold ? true, bison ? null
+}:
 
 let basename = "binutils-2.23.1"; in
+
+with { inherit (stdenv.lib) optional optionals optionalString; };
+
 stdenv.mkDerivation rec {
-  name = basename + stdenv.lib.optionalString (cross != null) "-${cross.config}";
+  name = basename + optionalString (cross != null) "-${cross.config}";
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
@@ -21,23 +24,31 @@ stdenv.mkDerivation rec {
     # That requires upstream changes for things to work. So we can patch it to
     # get the old behaviour by now.
     ./dtneeded.patch
-  ] ++ (stdenv.lib.optional deterministic ./deterministic.patch);
+
+    # Make binutils output deterministic by default.
+    ./deterministic.patch
+
+    # Always add PaX flags section to ELF files.
+    # This is needed, for instance, so that running "ldd" on a binary that is
+    # PaX-marked to disable mprotect doesn't fail with permission denied.
+    ./pt-pax-flags-20121023.patch
+  ];
 
   buildInputs =
     [ zlib ]
-    ++ stdenv.lib.optional gold bison;
+    ++ optional gold bison;
 
   inherit noSysDirs;
 
   preConfigure = ''
     # Clear the default library search path.
     if test "$noSysDirs" = "1"; then
-	echo 'NATIVE_LIB_DIRS=' >> ld/configure.tgt
+        echo 'NATIVE_LIB_DIRS=' >> ld/configure.tgt
     fi
 
     # Use symlinks instead of hard links to save space ("strip" in the
     # fixup phase strips each hard link separately).
-    for i in binutils/Makefile.in gas/Makefile.in ld/Makefile.in; do
+    for i in binutils/Makefile.in gas/Makefile.in ld/Makefile.in gold/Makefile.in; do
         sed -i "$i" -e 's|ln |ln -s |'
     done
   '';
@@ -46,15 +57,15 @@ stdenv.mkDerivation rec {
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
   NIX_CFLAGS_COMPILE = "-static-libgcc";
 
-  configureFlags = "--disable-werror" # needed for dietlibc build
-      + stdenv.lib.optionalString (stdenv.system == "mips64el-linux")
-        " --enable-fix-loongson2f-nop"
-      + stdenv.lib.optionalString (cross != null) " --target=${cross.config}"
-      + stdenv.lib.optionalString gold " --enable-gold --enable-plugins"
-      + stdenv.lib.optionalString deterministic " --enable-deterministic-archives";
+  configureFlags =
+    [ "--enable-shared" "--enable-deterministic-archives" ]
+    ++ optional (stdenv.system == "mips64el-linux") "--enable-fix-loongson2f-nop"
+    ++ optional (cross != null) "--target=${cross.config}"
+    ++ optionals gold [ "--enable-gold" "--enable-plugins" ]
+    ++ optional (stdenv.system == "i686-linux") "--enable-targets=x86_64-linux-gnu";
 
   enableParallelBuilding = true;
-      
+
   meta = {
     description = "GNU Binutils, tools for manipulating binaries (linker, assembler, etc.)";
 
@@ -67,7 +78,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/binutils/;
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     /* Give binutils a lower priority than gcc-wrapper to prevent a
        collision due to the ld/as wrappers/symlinks in the latter. */

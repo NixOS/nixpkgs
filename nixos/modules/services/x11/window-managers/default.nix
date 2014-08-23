@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
   cfg = config.services.xserver.windowManager;
@@ -16,7 +16,8 @@ in
       ./wmii.nix
       ./xmonad.nix
       ./i3.nix
-      ./xbmc.nix
+      ./herbstluftwm.nix
+      ./bspwm.nix
     ];
 
   options = {

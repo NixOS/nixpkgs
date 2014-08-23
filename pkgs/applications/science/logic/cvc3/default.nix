@@ -12,10 +12,10 @@ let
     ++ [(a.lib.overrideDerivation x.gmp (y: {dontDisableStatic=true;}))];
   sourceInfo = rec {
     baseName="cvc3";
-    version="2.2";
+    version="2.4.1";
     name="${baseName}-${version}";
     url="http://www.cs.nyu.edu/acsys/cvc3/releases/${version}/${name}.tar.gz";
-    hash="1dw12d5vrixfr6l9j6j7026vrr22zb433xyl6n5yxx4hgfywi0ji";
+    hash="1xxcwhz3y6djrycw8sm6xz83wb4hb12rd1n0skvc7fng0rh1snym";
   };
 in
 rec {

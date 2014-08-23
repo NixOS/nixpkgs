@@ -1,8 +1,8 @@
 # Configuration for the Name Service Switch (/etc/nsswitch.conf).
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

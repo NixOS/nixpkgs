@@ -1,7 +1,7 @@
 # Avahi daemon.
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -51,7 +51,10 @@ in
 
       hostName = mkOption {
         type = types.str;
-        description = ''Host name advertised on the LAN.'';
+        description = ''
+          Host name advertised on the LAN. If not set, avahi will use the value
+          of config.networking.hostName.
+        '';
       };
 
       browseDomains = mkOption {
@@ -138,6 +141,10 @@ in
 
     services.dbus.enable = true;
     services.dbus.packages = [avahi];
+
+    # Enabling Avahi without exposing it in the firewall doesn't make
+    # sense.
+    networking.firewall.allowedUDPPorts = [ 5353 ];
 
   };
 

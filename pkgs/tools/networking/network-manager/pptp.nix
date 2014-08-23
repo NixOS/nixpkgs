@@ -1,23 +1,23 @@
 { stdenv, fetchurl, networkmanager, pptp, ppp, intltool, pkgconfig, substituteAll
-, withGnome ? false, gtk, libgnome_keyring }:
+, withGnome ? true, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
   pname = "NetworkManager-pptp";
-  version = networkmanager.version;
+  version = "0.9.8.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/0.9/${pname}-${version}.tar.xz";
-    sha256 = "7f46ea61376d13d03685eca3f26a26e0022f6e92e6f1fc356034ca9717eb6daa";
+    sha256 = "1s6wmznd6azvg028x8y3syniqy9j7nmx5j71w2wc6mk0f9pqzflp";
   };
 
   buildInputs = [ networkmanager pptp ppp ]
-    ++ stdenv.lib.optionals withGnome [ gtk libgnome_keyring ];
+    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome_keyring ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
 
   configureFlags =
-    if withGnome then "--with-gnome --with-gtkver=2" else "--without-gnome";
+    if withGnome then "--with-gnome --with-gtkver=3" else "--without-gnome";
 
   postConfigure = "sed 's/-Werror//g' -i Makefile */Makefile";
 

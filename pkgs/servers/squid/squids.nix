@@ -16,28 +16,39 @@ rec {
     meta = {
       description = "http-proxy";
       homepage = "http://www.squid-cache.org";
-      license = "GPL2";
+      license = stdenv.lib.licenses.gpl2;
     };
 
   };
 
   squid31 = squid30.merge {
-    name = "squid-3.1.15";
+    name = "squid-3.1.23";
     src = args.fetchurl {
-      url = http://www.squid-cache.org/Versions/v3/3.1/squid-3.1.15.tar.bz2;
-      sha256 = "1300f44dd4783697bacc262a7a9b32dbc9f550367fe82b70262864fdff715a35";
+      url = http://www.squid-cache.org/Versions/v3/3.1/squid-3.1.23.tar.bz2;
+      sha256 = "13g4y0gg48xnlzrvpymb08gh25xi50y383faapkxws7i7v94305s";
     };
   };
 
   squid32 = squid30.merge rec {
-    name = "squid-3.2.2";
+    name = "squid-3.2.13";
     src = args.fetchurl {
       url = "http://www.squid-cache.org/Versions/v3/3.2/${name}.tar.bz2";
-      sha256 = "13jlx3d6rqq7ajxs8bgn8a0mh932jhq6aa8032q205nxnhqs0l4l";
+      sha256 = "0dafqv00dr3nyrm9k47d6r7gv2r3f9hjd1ykl3kkvjca11r4n54j";
     };
-    buildInputs = [openldap pam db4 cyrus_sasl libcap expat libxml2
+    buildInputs = [openldap pam db cyrus_sasl libcap expat libxml2
       libtool openssl];
   };
 
-  latest = squid32;
+  squid34 = squid30.merge rec {
+    name = "squid-3.4.5";
+    src = args.fetchurl {
+      url = "http://www.squid-cache.org/Versions/v3/3.4/${name}.tar.bz2";
+      sha256 = "1d17l27bszdxnvdr78l7yry8ka38cq7g4774m5876q25ny1q1bmr";
+    };
+    buildInputs = [openldap pam db cyrus_sasl libcap expat libxml2
+      libtool openssl];
+    configureFlags = ["--enable-ssl" "--enable-ssl-crtd"];
+  };
+
+  latest = squid34;
 }

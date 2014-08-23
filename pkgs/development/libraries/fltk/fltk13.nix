@@ -1,20 +1,28 @@
 { composableDerivation, fetchurl, pkgconfig, x11, inputproto, libXi
-, freeglut, mesa, libjpeg, zlib, libXinerama, libXft, libpng }:
+, freeglut, mesa, libjpeg, zlib, libXinerama, libXft, libpng
+
+, automake, autoconf, libtool
+}:
 
 let inherit (composableDerivation) edf; in
 
-let version = "1.3.0"; in
+let version = "1.3.2"; in
 composableDerivation.composableDerivation {} {
   name = "fltk-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.easysw.com/pub/fltk/${version}/fltk-${version}-source.tar.gz";
-    sha256 = "075j6ljx4dfg9rnkardn24y0f26ylpakm0yylg6a9kllha07c1lr";
+    url = "http://fltk.org/pub/fltk/${version}/fltk-${version}-source.tar.gz";
+    sha256 = "1974brlk723095vf8z72kazq1cbqr9a51kq6b0xda6zkjkgl8q0p";
   };
 
   propagatedBuildInputs = [ x11 inputproto libXi freeglut ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  enableParallelBilding = true;
+
+  nativeBuildInputs = [
+    pkgconfig
+    automake autoconf libtool # only required because of patch
+  ];
 
   flags =
     # this could be tidied up (?).. eg why does it require freeglut without glSupport?
@@ -46,4 +54,11 @@ composableDerivation.composableDerivation {} {
     description = "A C++ cross-platform light-weight GUI library binding";
     homepage = http://www.fltk.org;
   };
+
+  patches = [
+    # https://bugs.archlinux.org/task/36186
+    (fetchurl {
+    url = "https://bugs.archlinux.org/task/36186?getfile=10750";
+    sha256 = "1hpb1i87nc3zw6mgpgf3bfv557ci930bsn6rwlhaif51nlqd2wbj";
+  }) ];
 }

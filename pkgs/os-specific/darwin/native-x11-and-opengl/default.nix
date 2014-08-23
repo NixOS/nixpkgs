@@ -7,6 +7,10 @@ stdenv.mkDerivation rec {
 
   builder = writeScript "${name}-builder.sh" ''
     /bin/mkdir -p $out
-    /bin/ln -sv /usr/X11/{bin,lib,include,share} $out/
+    /bin/mkdir $out/lib
+    /bin/ln -sv /usr/X11/lib/{*.dylib,X11,xorg} $out/lib
+    /bin/mkdir $out/lib/pkgconfig
+    /bin/ln -sv /usr/X11/lib/pkgconfig/{x*.pc,gl*.pc} $out/lib/pkgconfig
+    /bin/ln -sv /usr/X11/{bin,include,share} $out/
   '';
 }

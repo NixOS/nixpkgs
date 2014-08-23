@@ -1,0 +1,12 @@
+diff --git a/lib/CodeGen/AsmPrinter/CMakeLists.txt.old b/lib/CodeGen/AsmPrinter/CMakeLists.txt
+index be484a6..c92ff46 100644
+--- a/lib/CodeGen/AsmPrinter/CMakeLists.txt.old
++++ b/lib/CodeGen/AsmPrinter/CMakeLists.txt
+@@ -10,6 +10,7 @@ add_llvm_library(LLVMAsmPrinter
+   DwarfCompileUnit.cpp
+   DwarfDebug.cpp
+   DwarfException.cpp
++  DwarfMonoException.cpp
+   ErlangGCPrinter.cpp
+   OcamlGCPrinter.cpp
+   Win64Exception.cpp

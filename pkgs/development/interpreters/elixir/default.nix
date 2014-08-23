@@ -1,26 +1,30 @@
 { stdenv, fetchurl, erlang, rebar, makeWrapper, coreutils }:
 
+let
+  version = "0.15.1";
+in
 stdenv.mkDerivation {
-  name = "elixir-0.10.1";
+  name = "elixir-${version}";
 
   src = fetchurl {
-    url = "https://github.com/elixir-lang/elixir/archive/v0.10.1.tar.gz";
-    sha256 = "0gfr2bz3mw7ag9z2wb2g22n2vlyrp8dwy78fj9zi52kzl5w3vc3w";
+    url = "https://github.com/elixir-lang/elixir/archive/v${version}.tar.gz";
+    sha256 = "8e608abf90a6e9a25ef5fb7e45dfd04e2cb7e1fecb4ac260bf6652885a7f0c50";
   };
 
   buildInputs = [ erlang rebar makeWrapper ];
 
   preBuild = ''
-    substituteInPlace rebar \
-      --replace "/usr/bin/env escript" ${erlang}/bin/escript
+    # The build process uses ./rebar. Link it to the nixpkgs rebar
+    rm -v rebar
+    ln -s ${rebar}/bin/rebar rebar
+
     substituteInPlace Makefile \
-      --replace '$(shell echo `pwd`/rebar)' ${rebar}/bin/rebar \
       --replace "/usr/local" $out
   '';
 
   postFixup = ''
-    # Elixirs binaries are shell scripts which run erl. This adds some
-    # stuff to PATH so the scripts run without problems.
+    # Elixir binaries are shell scripts which run erl. Add some stuff
+    # to PATH so the scripts can run without problems.
 
     for f in $out/bin/*
     do
@@ -34,11 +38,11 @@ stdenv.mkDerivation {
     description = "A functional, meta-programming aware language built on top of the Erlang VM";
 
     longDescription = ''
-      Elixir is a functional, meta-programming
-      aware language built on top of the Erlang VM. It is a dynamic
-      language with flexible syntax and macro support that leverages
-      Erlang's abilities to build concurrent, distributed and
-      fault-tolerant applications with hot code upgrades.p
+      Elixir is a functional, meta-programming aware language built on
+      top of the Erlang VM. It is a dynamic language with flexible
+      syntax and macro support that leverages Erlang's abilities to
+      build concurrent, distributed and fault-tolerant applications
+      with hot code upgrades.
     '';
 
     license = licenses.epl10;

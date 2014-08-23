@@ -20,6 +20,6 @@ stdenv.mkDerivation {
   meta = { 
       description="Virtual Tunnels over TCP/IP with traffic shaping, compression and encryption";
       homepage="http://vtun.sourceforge.net/";
-      license = "GPLv2";
+      license = stdenv.lib.licenses.gpl2;
   };
 }

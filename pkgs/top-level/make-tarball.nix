@@ -46,8 +46,18 @@ releaseTools.sourceTarball rec {
     export NIX_STATE_DIR=$TMPDIR
     nix-store --init
 
+    # Make sure that derivation paths do not depend on the Nixpkgs path.
+    mkdir $TMPDIR/foo
+    ln -s $(readlink -f .) $TMPDIR/foo/bar
+    p1=$(nix-instantiate pkgs/top-level/all-packages.nix --dry-run -A firefox)
+    p2=$(nix-instantiate $TMPDIR/foo/bar/pkgs/top-level/all-packages.nix --dry-run -A firefox)
+    if [ "$p1" != "$p2" ]; then
+        echo "Nixpkgs evaluation depends on Nixpkgs path ($p1 vs $p2)!"
+        exit 1
+    fi
+
     # Run the regression tests in `lib'.
-    res="$(nix-instantiate --eval-only --strict --show-trace lib/tests.nix)"
+    res="$(nix-instantiate --eval --strict --show-trace lib/tests.nix)"
     if test "$res" != "[ ]"; then
         echo "regression tests for lib failed, got: $res"
         exit 1
@@ -56,20 +66,22 @@ releaseTools.sourceTarball rec {
     # Check that all-packages.nix evaluates on a number of platforms.
     for platform in i686-linux x86_64-linux x86_64-darwin i686-freebsd x86_64-freebsd; do
         header "checking pkgs/top-level/all-packages.nix on $platform"
-        nix-env --readonly-mode -f pkgs/top-level/all-packages.nix \
+        nix-env -f pkgs/top-level/all-packages.nix \
             --show-trace --argstr system "$platform" \
             -qa \* --drv-path --system-filter \* --system --meta --xml > /dev/null
         stopNest
     done
 
     header "checking eval-release.nix"
-    nix-instantiate --eval-only --strict --show-trace ./maintainers/scripts/eval-release.nix > /dev/null
+    nix-instantiate --eval --strict --show-trace ./maintainers/scripts/eval-release.nix > /dev/null
+    stopNest
+
+    header "checking find-tarballs.nix"
+    nix-instantiate --eval --strict --show-trace ./maintainers/scripts/find-tarballs.nix > /dev/null
     stopNest
   '';
 
   distPhase = ''
-    find . -name "\.svn" -exec rm -rvf {} \; -prune
-
     mkdir -p $out/tarballs
     mkdir ../$releaseName
     cp -prd . ../$releaseName

@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "gnum4-1.4.16";
+stdenv.mkDerivation rec {
+  name = "gnum4-1.4.17";
 
   src = fetchurl {
-    url = mirror://gnu/m4/m4-1.4.16.tar.bz2;
-    sha256 = "035r7ma272j2cwni2961jp22k6bn3n9xwn3b3qbcn2yrvlghql22";
+    url = "mirror://gnu/m4/m4-1.4.17.tar.bz2";
+    sha256 = "0w0da1chh12mczxa5lnwzjk9czi3dq6gnnndbpa6w4rj76b1yklf";
   };
 
   doCheck = !stdenv.isDarwin
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     && !stdenv.isSunOS;                    # XXX: `test-setlocale2.sh' fails
 
   # Upstream is aware of it; it may be in the next release.
-  patches = [ ./s_isdir.patch ./readlink-EINVAL.patch ./no-gets.patch ];
+  patches = [ ./s_isdir.patch ];
 
   meta = {
     homepage = http://www.gnu.org/software/m4/;
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
       compiler or as a macro processor in its own right.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
   };
 
 }

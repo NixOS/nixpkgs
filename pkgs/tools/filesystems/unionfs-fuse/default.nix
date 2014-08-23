@@ -8,6 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "0qpnr4czgc62vsfnmv933w62nq3xwcbnvqch72qakfgca75rsp4d";
   };
 
+  patches =
+    [ # Prevent the unionfs daemon from being killed during
+      # shutdown. See
+      # http://www.freedesktop.org/wiki/Software/systemd/RootStorageDaemons/
+      # for details.
+      ./prevent-kill-on-shutdown.patch
+    ];
+
   buildInputs = [ cmake fuse ];
 
   # Put the unionfs mount helper in place as mount.unionfs-fuse. This makes it
@@ -17,7 +25,7 @@ stdenv.mkDerivation rec {
   # This must be done in preConfigure because the build process removes
   # helper from the source directory during the build.
   preConfigure = ''
-    ensureDir $out/sbin
+    mkdir -p $out/sbin
     cp -a mount.unionfs $out/sbin/mount.unionfs-fuse
     substituteInPlace $out/sbin/mount.unionfs-fuse --replace mount.fuse ${fuse}/sbin/mount.fuse
     substituteInPlace $out/sbin/mount.unionfs-fuse --replace unionfs $out/bin/unionfs

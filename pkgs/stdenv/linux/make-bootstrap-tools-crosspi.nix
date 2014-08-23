@@ -73,7 +73,7 @@ let
   patch = pkgs.patch.crossDrv;
   patchelf = pkgs.patchelf.crossDrv;
   replace = pkgs.replace.crossDrv;
-  gcc = pkgs.gcc47;
+  gcc = pkgs.gcc;
   gmp = pkgs.gmp.crossDrv;
   mpfr = pkgs.mpfr.crossDrv;
   ppl = pkgs.ppl.crossDrv;
@@ -83,7 +83,7 @@ let
   isl = pkgs.isl.crossDrv;
   mpc = pkgs.mpc.crossDrv;
   binutils = pkgs.binutils.crossDrv;
-  klibc = pkgs.klibc.crossDrv;
+  klibc = pkgs.linuxPackages.klibc.crossDrv;
 
 in
 
@@ -116,7 +116,7 @@ rec {
 
       buildCommand = ''
 	set -x
-        ensureDir $out/bin $out/lib $out/libexec
+        mkdir -p $out/bin $out/lib $out/libexec
 
         # Copy what we need of Glibc.
         cp -d ${glibc}/lib/ld-*.so* $out/lib

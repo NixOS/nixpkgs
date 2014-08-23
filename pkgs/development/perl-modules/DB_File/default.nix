@@ -1,19 +1,19 @@
-{fetchurl, buildPerlPackage, db4}:
+{fetchurl, buildPerlPackage, db}:
 
 buildPerlPackage rec {
-  name = "DB_File-1.826";
+  name = "DB_File-1.831";
 
   src = fetchurl {
     url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
-    sha256 = "c39828ef3cfecff8197ff057cb1c6127b87107c051d182b87c6b9ac79d23f09c";
+    sha256 = "0hq2vvcsa3nkb5bpcl0nkfsxhk8wyrsp3p3ara18rscrfd783hjs";
   };
 
   preConfigure = ''
     cat > config.in <<EOF
     PREFIX = size_t
     HASH = u_int32_t
-    LIB = ${db4}/lib
-    INCLUDE = ${db4}/include
+    LIB = ${db}/lib
+    INCLUDE = ${db}/include
     EOF
   '';
 

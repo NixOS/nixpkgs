@@ -46,11 +46,11 @@ stdenv.mkDerivation {
     #sed -ie "/compute/,999 d" tools/build-sequence # for testing
 
     poly < tools/smart-configure.sml
-
+    
     bin/build ${kernelFlag} -symlink
 
     mkdir -p "$out/bin"
-    ln -st $out/bin  "$out/src/${holsubdir}/bin/"*
+    ln -st $out/bin  $out/src/${holsubdir}/bin/*
     # ln -s $out/src/hol4.${version}/bin $out/bin
   '';
 

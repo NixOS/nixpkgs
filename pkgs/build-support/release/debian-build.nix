@@ -51,7 +51,7 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
     '';
 
     installPhase = ''
-      eval "$preInstall" 
+      eval "$preInstall"
       export LOGNAME=root
 
       ${checkinstall}/sbin/checkinstall --nodoc -y -D \
@@ -59,7 +59,11 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
         --requires="${concatStringsSep "," debRequires}" \
         --provides="${concatStringsSep "," debProvides}" \
         ${optionalString (src ? version) "--pkgversion=$(echo ${src.version} | tr _ -)"} \
-        make install
+        ''${debMaintainer:+--maintainer="'$debMaintainer'"} \
+        ''${debName:+--pkgname="'$debName'"} \
+        $checkInstallFlags \
+        -- \
+        $SHELL -c "''${installCommand:-make install}"
 
       mkdir -p $out/debs
       find . -name "*.deb" -exec cp {} $out/debs \;
@@ -79,7 +83,7 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
         echo "file deb-extra $(ls $i/debs/*.deb | sort | head -1)" >> $out/nix-support/hydra-build-products
       done
 
-      eval "$postInstall" 
+      eval "$postInstall"
     ''; # */
 
     meta = (if args ? meta then args.meta else {}) // {

@@ -1,29 +1,22 @@
 { stdenv, fetchurl, python, buildPythonPackage, gmp }:
 
 buildPythonPackage rec {
-  name = "pycrypto-2.6";
+  name = "pycrypto-2.6.1";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://pypi.python.org/packages/source/p/pycrypto/${name}.tar.gz";
-    md5 = "88dad0a270d1fe83a39e0467a66a22bb";
+    sha256 = "0g0ayql5b9mkjam8hym6zyg6bv77lbh66rv1fyvgqb17kfc1xkpj";
   };
 
-  buildInputs = [ python gmp ];
+  buildInputs = [ gmp ];
 
-  buildPhase =
-    ''
-      python ./setup.py build_ext --library-dirs=${gmp}/lib
-    '';
+  doCheck = !stdenv.isDarwin; # error: AF_UNIX path too long
 
-#  installPhase =
-#    ''
-#      python ./setup.py install --prefix=$out
-#    '';
 
   meta = {
     homepage = "http://www.pycrypto.org/";
     description = "Python Cryptography Toolkit";
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

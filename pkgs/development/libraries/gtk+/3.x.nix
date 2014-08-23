@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, gettext
-, expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, xlibs, x11, gobjectIntrospection
+{ stdenv, fetchurl, pkgconfig, gettext, perl
+, expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, gobjectIntrospection
+, xlibs, x11, wayland, libxkbcommon
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux, cups ? null
 }:
@@ -7,23 +8,33 @@
 assert xineramaSupport -> xlibs.libXinerama != null;
 assert cupsSupport -> cups != null;
 
+let
+  ver_maj = "3.12";
+  ver_min = "2";
+  version = "${ver_maj}.${ver_min}";
+in
 stdenv.mkDerivation rec {
-  name = "gtk+-3.8.4";
+  name = "gtk+3-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk+/3.8/${name}.tar.xz";
-    sha256 = "1qlj0qdhkp8j5xiris4l4xnx47g4pbk4qnj3nf8rwa82fwb610xh";
+    url = "mirror://gnome/sources/gtk+/${ver_maj}/gtk+-${version}.tar.xz";
+    sha256 = "1l45nd7ln2pnrf99vdki3l7an5wrzkbak11hnnj1w6r3fkm4xmv1";
   };
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
 
-  nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection ];
+  buildInputs = [ libxkbcommon ];
   propagatedBuildInputs = with xlibs; with stdenv.lib;
     [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk ]
-    ++ optionals stdenv.isLinux [ libXrandr libXrender libXcomposite libXi libXcursor ]
+    ++ optionals stdenv.isLinux [ libXrandr libXrender libXcomposite libXi libXcursor wayland ]
     ++ optional stdenv.isDarwin x11
-    ++ stdenv.lib.optional xineramaSupport libXinerama
-    ++ stdenv.lib.optionals cupsSupport [ cups ];
+    ++ optional xineramaSupport libXinerama
+    ++ optional cupsSupport cups;
+
+  # demos fail to install, no idea where's the problem
+  preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";
+
+  enableParallelBuilding = true;
 
   postInstall = "rm -rf $out/share/gtk-doc";
 
@@ -43,7 +54,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gtk.org/;
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = with stdenv.lib.maintainers; [ urkud raskin vcunat];
     platforms = stdenv.lib.platforms.all;

@@ -1,31 +1,44 @@
-{ callPackage, pkgs, fetchurl }:
+{ callPackage, pkgs, fetchurl, useMupdf }:
 
 rec {
   inherit (pkgs) stdenv;
 
-  zathura_core = callPackage ./core { };
+  icon = ./icon.xpm;
+
+  zathura_core = callPackage ./core {
+    gtk = pkgs.gtk3;
+    zathura_icon = icon;
+  };
 
   zathura_pdf_poppler = callPackage ./pdf-poppler { };
 
-  zathura_djvu = callPackage ./djvu { };
+  zathura_pdf_mupdf = callPackage ./pdf-mupdf {
+    gtk = pkgs.gtk3;
+  };
 
-  zathura_ps = callPackage ./ps { };
+  zathura_djvu = callPackage ./djvu {
+    gtk = pkgs.gtk3;
+  };
+
+  zathura_ps = callPackage ./ps {
+    gtk = pkgs.gtk3;
+  };
 
   zathuraWrapper = stdenv.mkDerivation {
 
-    inherit zathura_core;
+    inherit zathura_core icon;
 
     name = "zathura-${zathura_core.version}";
 
     plugins_path = stdenv.lib.makeSearchPath "lib" [
-      zathura_pdf_poppler
       zathura_djvu
       zathura_ps
+      (if useMupdf then zathura_pdf_mupdf else zathura_pdf_poppler)
     ];
 
-    icon = ./icon.xpm;
-
     builder = ./builder.sh;
+
+    preferLocalBuild = true;
 
     meta = {
       homepage = http://pwmt.org/projects/zathura/;

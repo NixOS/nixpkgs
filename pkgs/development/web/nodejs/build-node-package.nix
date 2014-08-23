@@ -1,6 +1,6 @@
 { stdenv, runCommand, nodejs, neededNatives}:
 
-args @ { name, src, deps ? [], peerDependencies ? [], flags ? [], ... }:
+args @ { name, src, deps ? [], peerDependencies ? [], flags ? [], preShellHook ? "",  postShellHook ? "", ... }:
 
 with stdenv.lib;
 
@@ -8,12 +8,19 @@ let
   npmFlags = concatStringsSep " " (map (v: "--${v}") flags);
 
   sources = runCommand "node-sources" {} ''
-    tar xf ${nodejs.src}
+    tar --no-same-owner -xf ${nodejs.src}
     mv *node* $out
   '';
+
+  peerDeps = listToAttrs (concatMap (dep: map (name: {
+    inherit name;
+    value = dep;
+  }) (filter (nm: !(elem nm (args.passthru.names or []))) dep.names)) (peerDependencies));
 in
 stdenv.mkDerivation ({
   unpackPhase = "true";
+
+  inherit src;
 
   configurePhase = ''
     runHook preConfigure
@@ -21,16 +28,16 @@ stdenv.mkDerivation ({
     ${concatStrings (concatMap (dep: map (name: ''
       ln -sv ${dep}/lib/node_modules/${name} node_modules/
     '') dep.names) deps)}
-    ${concatStrings (concatMap (dep: map (name: ''
+    ${concatStrings (mapAttrsToList (name: dep: ''
       ln -sv ${dep}/lib/node_modules/${name} node_modules/
-    '') dep.names) peerDependencies)}
+    '') peerDeps)}
     export HOME=$(pwd)
     runHook postConfigure
   '';
 
   buildPhase = ''
     runHook preBuild
-    npm --registry http://www.example.com --nodedir=${sources} install ${concatStringsSep " " src} ${npmFlags}
+    npm --registry http://www.example.com --nodedir=${sources} install $src ${npmFlags}
     runHook postBuild
   '';
 
@@ -51,9 +58,9 @@ stdenv.mkDerivation ({
         done
       fi
     '') args.passthru.names)}
-    ${concatStrings (concatMap (dep: map (name: ''
+    ${concatStrings (mapAttrsToList (name: dep: ''
       mv node_modules/${name} $out/lib/node_modules
-    '') dep.names) peerDependencies)}
+    '') peerDeps)}
     mv node_modules/.bin $out/lib/node_modules 2>/dev/null || true
     mv node_modules $out/.dependent-node-modules
     if [ -d "$out/lib/node_modules/.bin" ]; then
@@ -73,6 +80,16 @@ stdenv.mkDerivation ({
   preFixup = concatStringsSep "\n" (map (src: ''
     find $out -type f -print0 | xargs -0 sed -i 's|${src}|${src.name}|g'
   '') src);
+
+  shellHook = ''
+    ${preShellHook}
+    export PATH=${nodejs}/bin:$(pwd)/node_modules/.bin:$PATH
+    mkdir -p node_modules
+    ${concatStrings (concatMap (dep: map (name: ''
+      ln -sfv ${dep}/lib/node_modules/${name} node_modules/
+    '') dep.names) deps)}
+    ${postShellHook}
+  '';
 } // args // {
   # Run the node setup hook when this package is a build input
   propagatedNativeBuildInputs = (args.propagatedNativeBuildInputs or []) ++ [ nodejs ];

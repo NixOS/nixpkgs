@@ -62,7 +62,8 @@ stdenv.mkDerivation rec {
     homepage = http://unvanquished.net;
     #license = "unknown";
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
+    platforms = stdenv.lib.platforms.linux;
     # This package can take a lot of disk space, so unavailable from channel
-    #platforms = with stdenv.lib.platforms; linux;
+    hydraPlatforms = [];
   };
 }

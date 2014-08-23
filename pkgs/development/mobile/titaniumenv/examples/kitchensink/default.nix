@@ -1,25 +1,42 @@
-{titaniumenv, fetchgit, target, androidPlatformVersions ? [ "11" ]}:
+{ titaniumenv, fetchgit, target, androidPlatformVersions ? [ "14" ], tiVersion ? "3.2.3.GA", release ? false
+, rename ? false, stdenv ? null, newBundleId ? null, iosMobileProvisioningProfile ? null, iosCertificate ? null, iosCertificateName ? null, iosCertificatePassword ? null
+, enableWirelessDistribution ? false, installURL ? null
+}:
 
-titaniumenv.buildApp {
-  name = "KitchenSink-${target}";
-  appName = "KitchenSink";
-  appId = "com.appcelerator.kitchensink";
+assert rename -> (stdenv != null && newBundleId != null && iosMobileProvisioningProfile != null && iosCertificate != null && iosCertificateName != null && iosCertificatePassword != null);
+
+let
   src = fetchgit {
     url = https://github.com/appcelerator/KitchenSink.git;
-    rev = "b68757ef6639e3da564e21038dc9c1aee1f80907";
-    sha256 = "17yabdkl0p6pf2a2lcgw1kid2smwc8rnpx0i9fa4avj6930cbh5i";
+    rev = "37d766ef9cba6a2d0b22634d3edc1fa8402109a0";
+    sha256 = "1d4x9zwq92p1krds52bd41qqsnsnb3a7x74bysbiphrvrphz80kk";
   };
   
-  inherit target androidPlatformVersions;
+  # Rename the bundle id to something else
+  renamedSrc = stdenv.mkDerivation {
+    name = "KitchenSink-renamedsrc";
+    inherit src;
+    buildPhase = ''
+      sed -i -e "s|com.appcelerator.kitchensink|${newBundleId}|" tiapp.xml
+      sed -i -e "s|com.appcelerator.kitchensink|${newBundleId}|" manifest
+    '';
+    installPhase = ''
+      mkdir -p $out
+      mv * $out
+    '';
+  };
+in
+titaniumenv.buildApp {
+  name = "KitchenSink-${target}-${if release then "release" else "debug"}";
+  src = if rename then renamedSrc else src;
+  inherit tiVersion;
   
-  /*release = true;
-  androidKeyStore = /home/sander/keystore;
-  androidKeyAlias = "sander";
-  androidKeyStorePassword = "foobar";*/
+  inherit target androidPlatformVersions release;
   
-  /*release = true;
-  iosKeyFile = /Users/sander/Downloads/profile.mobileprovision;
-  iosCertificateName = "My Company";
-  iosCertificate = /Users/sander/Downloads/c.p12;
-  iosCertificatePassword = "";*/
+  androidKeyStore = ./keystore;
+  androidKeyAlias = "myfirstapp";
+  androidKeyStorePassword = "mykeystore";
+  
+  inherit iosMobileProvisioningProfile iosCertificate iosCertificateName iosCertificatePassword;
+  inherit enableWirelessDistribution installURL;
 }

@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "mtools-4.0.17";
+  name = "mtools-4.0.18";
 
   src = fetchurl {
     url = "mirror://gnu/mtools/${name}.tar.bz2";
-    sha256 = "1dpch2wsiwhyg7xhsdvmc1pws8biwqkmnqjc3mdj2bd76273bk0f";
+    sha256 = "119gdfnsxc6hzicnsf718k0fxgy2q14pxn7557rc96aki20czsar";
   };
 
   doCheck = true;

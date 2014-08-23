@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
       polkit
     ];
 
+  preBuild = ''
+    sed '/^PATH=/d'        -i scripts/xflock4
+    sed '/^export PATH$/d' -i scripts/xflock4
+  '';
+
   configureFlags = [ "--with-xsession-prefix=$(out)" ];
 
   preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
@@ -28,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.xfce.org/projects/xfce4-session;
     description = "Session manager for Xfce";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };

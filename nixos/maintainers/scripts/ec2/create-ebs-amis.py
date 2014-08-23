@@ -8,15 +8,17 @@ import nixops.util
 from nixops import deployment
 from boto.ec2.blockdevicemapping import BlockDeviceMapping, BlockDeviceType
 import boto.ec2
+from nixops.statefile import StateFile, get_default_state_file
 
 parser = argparse.ArgumentParser(description='Create an EBS-backed NixOS AMI')
 parser.add_argument('--region', dest='region', required=True, help='EC2 region to create the image in')
+parser.add_argument('--channel', dest='channel', default="13.10", help='Channel to use')
 parser.add_argument('--keep', dest='keep', action='store_true', help='Keep NixOps machine after use')
 parser.add_argument('--hvm', dest='hvm', action='store_true', help='Create HVM image')
 parser.add_argument('--key', dest='key_name', action='store_true', help='Keypair used for HVM instance creation', default="rob")
 args = parser.parse_args()
 
-instance_type = "cc1.4xlarge" if args.hvm else "m1.small"
+instance_type = "m3.medium" if args.hvm else "m1.small"
 ebs_size = 8 if args.hvm else 20
 
 
@@ -37,11 +39,11 @@ f.write('''{{
 '''.format(args.region, ebs_size))
 f.close()
 
-db = deployment.open_database(deployment.get_default_state_file())
+db = StateFile(get_default_state_file())
 try:
-    depl = deployment.open_deployment(db, "ebs-creator")
+    depl = db.open_deployment("ebs-creator")
 except Exception:
-    depl = deployment.create_deployment(db)
+    depl = db.create_deployment()
     depl.name = "ebs-creator"
 depl.auto_response = "y"
 depl.nix_exprs = [os.path.abspath("./ebs-creator.nix"), os.path.abspath("./ebs-creator-config.nix")]
@@ -49,7 +51,6 @@ if not args.keep: depl.destroy_resources()
 depl.deploy(allow_reboot=True)
 
 m = depl.machines['machine']
-
 
 # Do the installation.
 device="/dev/xvdg"
@@ -64,22 +65,26 @@ m.run_command("mkdir -p /mnt")
 m.run_command("mount {0} /mnt".format(device))
 m.run_command("touch /mnt/.ebs")
 m.run_command("mkdir -p /mnt/etc/nixos")
-m.run_command("nix-channel --add http://nixos.org/channels/nixos-unstable")
+
+m.run_command("nix-channel --add http://nixos.org/channels/nixos-{} nixos".format(args.channel))
 m.run_command("nix-channel --update")
-m.run_command("nixos-rebuild switch")
-version = m.run_command("nixos-version", capture_stdout=True).replace('"', '').rstrip()
+
+version = m.run_command("nix-instantiate --eval-only -A lib.nixpkgsVersion '<nixpkgs>'", capture_stdout=True).split(' ')[0].replace('"','').strip()
 print >> sys.stderr, "NixOS version is {0}".format(version)
-m.upload_file("./amazon-base-config.nix", "/mnt/etc/nixos/configuration.nix")
-m.run_command("nixos-install")
 if args.hvm:
-    m.run_command('cp /mnt/nix/store/*-grub-0.97*/lib/grub/i386-pc/* /mnt/boot/grub')
-    m.run_command('sed -i "s|hd0|hd0,0|" /mnt/boot/grub/menu.lst')
+    m.upload_file("./amazon-base-config.nix", "/mnt/etc/nixos/amazon-base-config.nix")
+    m.upload_file("./amazon-hvm-config.nix", "/mnt/etc/nixos/configuration.nix")
+    m.upload_file("./amazon-hvm-install-config.nix", "/mnt/etc/nixos/amazon-hvm-install-config.nix")
+    m.run_command("NIXOS_CONFIG=/etc/nixos/amazon-hvm-install-config.nix nixos-install")
+    m.run_command('nix-env -iA nixos.pkgs.grub')
+    m.run_command('cp /nix/store/*-grub-0.97*/lib/grub/i386-pc/* /mnt/boot/grub')
     m.run_command('echo "(hd1) /dev/xvdg" > device.map')
     m.run_command('echo -e "root (hd1,0)\nsetup (hd1)" | grub --device-map=device.map --batch')
-
+else:
+    m.upload_file("./amazon-base-config.nix", "/mnt/etc/nixos/configuration.nix")
+    m.run_command("nixos-install")
 
 m.run_command("umount /mnt")
-
 
 if args.hvm:
     ami_name = "nixos-{0}-x86_64-ebs-hvm".format(version)
@@ -98,7 +103,7 @@ def check():
 m.connect()
 volume = m._conn.get_all_volumes([], filters={'attachment.instance-id': m.resource_id, 'attachment.device': "/dev/sdg"})[0]
 if args.hvm:
-    instance = m._conn.run_instances( image_id="ami-6a9e4503"
+    instance = m._conn.run_instances( image_id="ami-5f491f36"
                                     , instance_type=instance_type
                                     , key_name=args.key_name
                                     , placement=m.zone
@@ -185,7 +190,7 @@ f.write(
     '''.format(args.region, ami_id, instance_type))
 f.close()
 
-test_depl = deployment.create_deployment(db)
+test_depl = db.create_deployment()
 test_depl.auto_response = "y"
 test_depl.name = "ebs-creator-test"
 test_depl.nix_exprs = [os.path.abspath("./ebs-test.nix")]
@@ -202,7 +207,7 @@ f = open("{0}.{1}.ami-id".format(args.region, image_type), "w")
 f.write("{0}".format(ami_id))
 f.close()
 
-for dest in [ 'us-east-1', 'us-west-1', 'us-west-2', 'eu-west-1']:
+for dest in [ 'us-east-1', 'us-west-1', 'us-west-2', 'eu-west-1', 'ap-southeast-1', 'ap-southeast-2', 'ap-northeast-1', 'sa-east-1']:
     if args.region != dest:
         print >> sys.stderr, "copying image from region {0} to {1}".format(args.region, dest)
         conn = boto.ec2.connect_to_region(dest)

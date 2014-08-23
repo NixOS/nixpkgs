@@ -11,16 +11,13 @@ let
     sha256 = "1swwfyzaj3l40yh9np3x4fcracgs79nwryc85sxbdakx8wwxs2xb";
   };
 
-  version = "0.7.1";
-
 in
 stdenv.mkDerivation rec {
-  name = "filegive-${version}";
+  name = "filegive-0.7.4";
 
   src = fetchurl {
-    url = "http://viric.name/cgi-bin/filegive/tarball/${name}.tar.gz?uuid=v${version}";
-    name = "${name}.tar.gz";
-    sha256 = "14yyif6q89ihn28kliszaf19vywjg9f7192q1ak8823da1svbq8a";
+    url = "http://viric.name/soft/filegive/${name}.tar.gz";
+    sha256 = "1z3vyqfdp271qa5ah0i6jmn9gh3gb296wcm33sd2zfjqapyh12hy";
   };
 
   buildInputs = [ go ];
@@ -38,14 +35,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp filegive $out/bin
   '';
 
   meta = {
     homepage = http://viric.name/cgi-bin/filegive;
     description = "Easy p2p file sending program";
-    license = "AGPLv3+";
+    license = stdenv.lib.licenses.agpl3Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

@@ -3,9 +3,9 @@
 # of the virtual consoles.  The latter is useful for the installation
 # CD.
 
-{ config, pkgs, baseModules, ... } @ extraArgs:
+{ config, lib, pkgs, baseModules, ... } @ extraArgs:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -23,6 +23,7 @@ let
 
   manual = import ../../../doc/manual {
     inherit pkgs;
+    version = config.system.nixosVersion;
     revision = config.system.nixosRevision;
     options = eval.options;
   };

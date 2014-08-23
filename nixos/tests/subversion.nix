@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+import ./make-test.nix (
 
 let
 
@@ -20,7 +20,7 @@ let
         # To build the kernel with coverage instrumentation, we need a
         # special patch to make coverage data available under /proc.
         linux = pkgs.linux.override (orig: {
-          stdenv = cleanupBuildTree (keepBuildTree orig.stdenv);
+          stdenv = overrideInStdenv pkgs.stdenv [ pkgs.keepBuildTree ];
           extraConfig =
             ''
               GCOV_KERNEL y
@@ -32,6 +32,7 @@ let
 in
 
 {
+  name = "subversion";
 
   nodes =
     { webserver =
@@ -114,4 +115,4 @@ in
       $webserver->stopJob("httpd");
     '';
 
-}
+})

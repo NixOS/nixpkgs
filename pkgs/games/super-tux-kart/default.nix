@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     echo Building internal Irrlicht
     cd lib/irrlicht/source/Irrlicht/
+    cp "${mesa}"/include/GL/{gl,glx,wgl}ext.h .
     NDEBUG=1 make ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES} -l''${NIX_BUILD_CORES}}
     cd -
   '';
@@ -35,6 +36,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://supertuxkart.sourceforge.net/;
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

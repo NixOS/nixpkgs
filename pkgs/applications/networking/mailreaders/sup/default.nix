@@ -1,31 +1,40 @@
 { stdenv, fetchurl, ruby, rake, rubygems, makeWrapper, ncursesw_sup
 , xapian_ruby, gpgme, libiconvOrEmpty, mime_types, chronic, trollop, lockfile
-, gettext, iconv, locale, text, highline, rmail_sup, unicode, gnupg, which }:
+, gettext, iconv, locale, text, highline, rmail_sup, unicode, gnupg, which
+, bundler, git }:
 
 stdenv.mkDerivation rec {
-  version = "f27661b1656ae1f0d28fd89595b5a16f268d8d3d";
+  version = "0.18.0";
   name    = "sup-${version}";
-  
+
   meta = {
-    homepage = http://supmua.org;
     description = "A curses threads-with-tags style email client";
+    homepage    = http://supmua.org;
+    license     = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ lovek323 ];
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    platforms   = stdenv.lib.platforms.unix;
   };
 
   dontStrip = true;
 
   src = fetchurl {
-    url    = "https://github.com/sup-heliotrope/sup/archive/${version}.tar.gz";
-    sha256 = "08fxf1knji3260d0mrp86x6yayp43iq7kc5rfay3hga8i2sckdia";
+    url    = "https://github.com/sup-heliotrope/sup/archive/release-${version}.tar.gz";
+    sha256 = "1dhg0i2v0ddhwi32ih5lc56x00kbaikd2wdplgzlshq0nljr9xy0";
   };
 
   buildInputs =
-    [ ruby rake rubygems makeWrapper gpgme ncursesw_sup xapian_ruby
-      libiconvOrEmpty ];
+    [ rake ruby rubygems makeWrapper gpgme ncursesw_sup xapian_ruby
+      libiconvOrEmpty git ];
 
-  buildPhase = "rake gem";
+  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
+
+  buildPhase = ''
+    # the builder uses git to get a listing of the files
+    git init >/dev/null
+    git add .
+    git commit -m "message" >/dev/null
+    gem build sup.gemspec
+  '';
 
   installPhase = ''
     export HOME=$TMP/home; mkdir -pv "$HOME"
@@ -49,13 +58,13 @@ stdenv.mkDerivation rec {
     # Don't install some dependencies -- we have already installed
     # the dependencies but gem doesn't acknowledge this
     gem install --no-verbose --install-dir "$out/${ruby.gemPath}" \
-        --bindir "$out/bin" --no-rdoc --no-ri pkg/sup-999.gem \
-        --ignore-dependencies
+        --bindir "$out/bin" --no-rdoc --no-ri sup-${version}.gem \
+        --ignore-dependencies >/dev/null
 
     # specify ruby interpreter explicitly
     sed -i '1 s|^.*$|#!${ruby}/bin/ruby|' bin/sup-sync-back-maildir
 
-    cp bin/sup-sync-back-maildir "$out"/bin
+    cp bin/sup-sync-back-maildir "$out/bin"
 
     for prog in $out/bin/*; do
       wrapProgram "$prog" --prefix GEM_PATH : "$GEM_PATH" --prefix PATH : "${gnupg}/bin:${which}/bin"

@@ -1,12 +1,19 @@
 { stdenv, fetchurl, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "enscript-1.6.5.2";
+  name = "enscript-1.6.6";
 
   src = fetchurl {
     url = "mirror://gnu/enscript/${name}.tar.gz";
-    sha256 = "0xfblj3liwf1zxpx8bdcl2dwqi2lkfm1zsl6ld9757kgnfyk6gnv";
+    sha256 = "1fy0ymvzrrvs889zanxcaxjfcxarm2d3k43c9frmbl1ld7dblmkd";
   };
+
+  preBuild =
+    ''
+      # Fix building on Darwin with GCC.
+      substituteInPlace compat/regex.c --replace \
+         __private_extern__  '__attribute__ ((visibility ("hidden")))'
+    '';
 
   buildInputs = [ gettext ];
 
@@ -26,11 +33,11 @@ stdenv.mkDerivation rec {
          it has many options that can be used to customize printouts.
       '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     homepage = http://www.gnu.org/software/enscript/;
 
-    maintainer = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.all;
   };
 }

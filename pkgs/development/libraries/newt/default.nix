@@ -1,11 +1,11 @@
 { fetchurl, stdenv, slang, popt }:
 
 stdenv.mkDerivation rec {
-  name = "newt-0.52.14";
+  name = "newt-0.52.15";
 
   src = fetchurl {
     url = "https://fedorahosted.org/releases/n/e/newt/${name}.tar.gz";
-    sha256 = "13lp815zwldbw917wxmjy90gp608n3zlk4p3ybfqh0x6p9c4y3zp";
+    sha256 = "0hg2l0siriq6qrz6mmzr6l7rpl40ay56c8cak87rb2ks7s952qbs";
   };
 
   patchPhase = ''
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     homepage = https://fedorahosted.org/newt/;
     description = "Library for color text mode, widget based user interfaces";
 
-    license = "LGPLv2";
+    license = stdenv.lib.licenses.lgpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.viric ];
   };

@@ -20,11 +20,10 @@ stdenv.mkDerivation rec {
       cfdisk.  It uses GNU Parted.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     homepage = http://www.gnu.org/software/fdisk/;
 
-    maintainers = [ ];
-    #platforms = stdenv.lib.platforms.linux; # was failing for long without anyone complaining
+    platforms = stdenv.lib.platforms.linux;
   };
 }

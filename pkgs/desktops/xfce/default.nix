@@ -41,12 +41,14 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
 
   gigolo          = callPackage ./applications/gigolo.nix { };
   mousepad        = callPackage ./applications/mousepad.nix { };
+  parole          = callPackage ./applications/parole.nix { };
   ristretto       = callPackage ./applications/ristretto.nix { };
   terminal        = xfce4terminal; # it has changed its name
   xfce4mixer      = callPackage ./applications/xfce4-mixer.nix { };
   xfce4notifyd    = callPackage ./applications/xfce4-notifyd.nix { };
   xfce4taskmanager= callPackage ./applications/xfce4-taskmanager.nix { };
   xfce4terminal   = callPackage ./applications/terminal.nix { };
+  xfce4screenshooter   = callPackage ./applications/xfce4-screenshooter.nix { };
 
   #### ART                  from "mirror://xfce/src/art/${p_name}/${ver_maj}/${name}.tar.bz2"
 
@@ -55,7 +57,9 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   #### PANEL PLUGINS        from "mirror://xfce/src/panel-plugins/${p_name}/${ver_maj}/${name}.tar.bz2"
 
   xfce4_systemload_plugin = callPackage ./panel-plugins/xfce4-systemload-plugin.nix { };
-  xfce4_cpufreq_plugin    = callPackage ./panel-plugins/xfce4-cpufreq-plugin.nix { };
+  xfce4_cpufreq_plugin    = callPackage ./panel-plugins/xfce4-cpufreq-plugin.nix    { };
+  xfce4_xkb_plugin        = callPackage ./panel-plugins/xfce4-xkb-plugin.nix        { };
+  xfce4_datetime_plugin   = callPackage ./panel-plugins/xfce4-datetime-plugin.nix   { };
 
 }; # xfce_self
 

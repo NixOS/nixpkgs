@@ -3,8 +3,10 @@ bashInteractive, xz, shadow, gawk, less, buildEnv}:
 {name, pkgs ? [], profile ? ""}:
 
 let
-  basePkgs = [ glibc glibcLocales gcc coreutils diffutils findutils gnused gnugrep gnutar gzip bzip2 
-bashInteractive xz shadow gawk less ];
+  basePkgs = [
+    glibc glibcLocales gcc coreutils diffutils findutils gnused gnugrep gnutar
+    gzip bzip2 bashInteractive xz shadow gawk less
+  ];
 
   # Compose a global profile for the chroot environment
   profilePkg = stdenv.mkDerivation {
@@ -31,16 +33,16 @@ bashInteractive xz shadow gawk less ];
   mountSh = ./mount.sh.in;
   loadSh = ./load.sh.in;
   umountSh = ./umount.sh.in;
-  destroySh = ./destroy.sh.in;                                                                                       
-in                                                                                                                   
-stdenv.mkDerivation {                                                                                                
-  name = "${name}-chrootenv";                                                                                        
-  buildCommand = ''                                                                                                  
-    mkdir -p $out/sw                                                                                                 
-    cd $out/sw                                                                                                       
-                                                                                                                     
-    for i in ${staticUsrProfile}/{etc,bin,lib{,32,64},sbin,var}                                                      
-    do                                                                                                               
+  destroySh = ./destroy.sh.in;
+in
+stdenv.mkDerivation {
+  name = "${name}-chrootenv";
+  buildCommand = ''
+    mkdir -p $out/sw
+    cd $out/sw
+    
+    for i in ${staticUsrProfile}/{etc,bin,lib{,32,64},sbin,var}
+    do
         if [ -x "$i" ]
         then
             ln -s "$i"

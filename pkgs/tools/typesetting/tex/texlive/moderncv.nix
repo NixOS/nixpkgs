@@ -21,6 +21,6 @@ rec {
     maintainers = [ args.lib.maintainers.simons ];
 
     # Actually, arch-independent..
-    platforms = [] ;
+    hydraPlatforms = [];
   };
 }

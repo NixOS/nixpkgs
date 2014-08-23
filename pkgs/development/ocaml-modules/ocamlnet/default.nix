@@ -1,20 +1,20 @@
-{stdenv, fetchurl, ncurses, ocaml, findlib, ocaml_pcre, camlzip, openssl, ocaml_ssl, lablgtk, cryptokit }:
+{stdenv, fetchurl, ncurses, ocaml, findlib, ocaml_pcre, camlzip, openssl, ocaml_ssl, cryptokit }:
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
 in
 
 stdenv.mkDerivation {
-  name = "ocamlnet-3.6.3";
+  name = "ocamlnet-3.7.3";
 
   src = fetchurl {
-    url = http://download.camlcity.org/download/ocamlnet-3.6.3.tar.gz;
-    sha256 = "c62fe0a4db6c63c04e24c8d76bcb504054f0b59a7a41c1abcbb8dd504afc9f29";
+    url = http://download.camlcity.org/download/ocamlnet-3.7.3.tar.gz;
+    sha256 = "0s24icyrxkqqai91rgxpf52s1fx70j7p12c8vq9vcmvdhll6kp2d";
   };
 
-  buildInputs = [ncurses ocaml findlib ocaml_pcre camlzip openssl ocaml_ssl lablgtk cryptokit];
+  buildInputs = [ncurses ocaml findlib ocaml_pcre camlzip openssl ocaml_ssl cryptokit];
 
-  propagatedbuildInputs = [ncurses ocaml_pcre camlzip openssl ocaml_ssl lablgtk cryptokit];
+  propagatedbuildInputs = [ncurses ocaml_pcre camlzip openssl ocaml_ssl cryptokit];
 
   patches = [ ./configure.patch ];
 

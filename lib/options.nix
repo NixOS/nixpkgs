@@ -34,12 +34,12 @@ rec {
   mergeDefaultOption = loc: defs:
     let list = getValues defs; in
     if length list == 1 then head list
-    else if all builtins.isFunction list then x: mergeDefaultOption loc (map (f: f x) list)
+    else if all isFunction list then x: mergeDefaultOption loc (map (f: f x) list)
     else if all isList list then concatLists list
     else if all isAttrs list then fold lib.mergeAttrs {} list
-    else if all builtins.isBool list then fold lib.or false list
-    else if all builtins.isString list then lib.concatStrings list
-    else if all builtins.isInt list && all (x: x == head list) list then head list
+    else if all isBool list then fold lib.or false list
+    else if all isString list then lib.concatStrings list
+    else if all isInt list && all (x: x == head list) list then head list
     else throw "Cannot merge definitions of `${showOption loc}' given in ${showFiles (getFiles defs)}.";
 
   /* Obsolete, will remove soon.  Specify an option type or apply
@@ -54,7 +54,7 @@ rec {
 
   mergeListOption = mergeTypedOption "list" isList concatLists;
 
-  mergeStringOption = mergeTypedOption "string" builtins.isString lib.concatStrings;
+  mergeStringOption = mergeTypedOption "string" isString lib.concatStrings;
 
   mergeOneOption = loc: defs:
     if defs == [] then abort "This case should never happen."

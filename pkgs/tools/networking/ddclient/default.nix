@@ -1,14 +1,14 @@
 {buildPerlPackage, fetchurl, perlPackages, iproute}:
 
 buildPerlPackage {
-  name = "ddclient-3.8.1";
+  name = "ddclient-3.8.2";
 
   src = fetchurl {
-    url = mirror://sourceforge/ddclient/ddclient-3.8.1.tar.gz ;
-    sha256 = "f22ac7b0ec78e310d7b88a1cf636e5c00360b2ed9c087f231b3522ef3e6295f2";
+    url = mirror://sourceforge/ddclient/ddclient-3.8.2.tar.gz ;
+    sha256 = "17mcdqxcwa6c05m8xhxi4r37j4qvbp3wgbpvzqgmrmgwava5wcrw";
   };
 
-  buildInputs = [ perlPackages.IOSocketSSL ];
+  buildInputs = [ perlPackages.IOSocketSSL perlPackages.DigestSHA1 ];
 
   patches = [ ./ddclient-foreground.patch ];
 

@@ -1,0 +1,36 @@
+diff -ruN qt-everywhere-opensource-src-5.1.1-orig/qtwebkit/Source/WebCore/plugins/qt/PluginPackageQt.cpp qt-everywhere-opensource-src-5.1.1/qtwebkit/Source/WebCore/plugins/qt/PluginPackageQt.cpp
+--- qt-everywhere-opensource-src-5.1.1-orig/qtwebkit/Source/WebCore/plugins/qt/PluginPackageQt.cpp	2013-08-25 20:04:47.000000000 +0200
++++ qt-everywhere-opensource-src-5.1.1/qtwebkit/Source/WebCore/plugins/qt/PluginPackageQt.cpp	2013-09-25 17:59:45.925363807 +0200
+@@ -132,7 +132,7 @@
+         }
+     }
+ 
+-    QLibrary library(QLatin1String("libgtk-x11-2.0"), 0);
++    QLibrary library(QLatin1String("@gtk@/lib/libgtk-x11-2.0"), 0);
+     if (library.load()) {
+         typedef void *(*gtk_init_check_ptr)(int*, char***);
+         gtk_init_check_ptr gtkInitCheck = (gtk_init_check_ptr)library.resolve("gtk_init_check");
+diff -ruN qt-everywhere-opensource-src-5.1.1-orig/qtwebkit/Source/WebCore/plugins/qt/PluginViewQt.cpp qt-everywhere-opensource-src-5.1.1/qtwebkit/Source/WebCore/plugins/qt/PluginViewQt.cpp
+--- qt-everywhere-opensource-src-5.1.1-orig/qtwebkit/Source/WebCore/plugins/qt/PluginViewQt.cpp	2013-08-25 20:04:47.000000000 +0200
++++ qt-everywhere-opensource-src-5.1.1/qtwebkit/Source/WebCore/plugins/qt/PluginViewQt.cpp	2013-09-25 18:00:29.551215155 +0200
+@@ -702,7 +702,7 @@
+     // support gdk based plugins (like flash) that use a different X connection.
+     // The code below has the same effect as this one:
+     // Display *gdkDisplay = gdk_x11_display_get_xdisplay(gdk_display_get_default());
+-    QLibrary library(QLatin1String("libgdk-x11-2.0"), 0);
++    QLibrary library(QLatin1String("@gdk_pixbuf@/lib/libgdk-x11-2.0"), 0);
+     if (!library.load())
+         return 0;
+ 
+diff -ruN qt-everywhere-opensource-src-5.1.1-orig/qtwebkit/Source/WebKit2/WebProcess/Plugins/Netscape/x11/NetscapePluginX11.cpp qt-everywhere-opensource-src-5.1.1/qtwebkit/Source/WebKit2/WebProcess/Plugins/Netscape/x11/NetscapePluginX11.cpp
+--- qt-everywhere-opensource-src-5.1.1-orig/qtwebkit/Source/WebKit2/WebProcess/Plugins/Netscape/x11/NetscapePluginX11.cpp	2013-08-25 20:04:42.000000000 +0200
++++ qt-everywhere-opensource-src-5.1.1/qtwebkit/Source/WebKit2/WebProcess/Plugins/Netscape/x11/NetscapePluginX11.cpp	2013-09-25 18:04:54.955408293 +0200
+@@ -64,7 +64,7 @@
+     // The code below has the same effect as this one:
+     // Display *gdkDisplay = gdk_x11_display_get_xdisplay(gdk_display_get_default());
+ 
+-    QLibrary library(QLatin1String("libgdk-x11-2.0"), 0);
++    QLibrary library(QLatin1String("@gdk_pixbuf@/libgdk-x11-2.0"), 0);
+     if (!library.load())
+         return 0;
+ 

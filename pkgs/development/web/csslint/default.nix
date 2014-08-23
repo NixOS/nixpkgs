@@ -1,12 +1,12 @@
 { stdenv, fetchurl, nodejs }:
 
 stdenv.mkDerivation rec {
-  version = "0.5.0";
+  version = "0.10.0";
   name = "csslint-${version}";
 
   src = fetchurl {
     url = "http://registry.npmjs.org/csslint/-/${name}.tgz";
-    sha256 = "ee7a79c8f2af1c228d4b7869b6681d0d02a93568774dbf51c7a45aa1ffa1da14";
+    sha256 = "1gq2x0pf2p4jhccvn3y3kjhm1lmb4jsfdbzjdh924w8m3sr9jdid";
   };
 
   # node is the interpreter used to run this script

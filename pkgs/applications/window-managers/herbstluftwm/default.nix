@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, pkgconfig, glib, libX11, libXinerama }:
+{ stdenv, fetchurl, pkgconfig, glib, libX11, libXext, libXinerama }:
 
 stdenv.mkDerivation rec {
-  name = "herbstluftwm-0.5.2";
+  name = "herbstluftwm-0.6.2";
 
   src = fetchurl {
     url = "http://herbstluftwm.org/tarballs/${name}.tar.gz";
-    sha256 = "15crb77gw8p1h721r3dcgn0m1n03qk0g81rrnaqw8p7hz44k6gf5";
+    sha256 = "1b7h2zi0i9j17k1z62qw5zq7j9i8gv33pmcxnfiilzzfg8wmr7x8";
   };
 
   patchPhase = ''
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
           config.mk
   '';
 
-  buildInputs = [ pkgconfig glib libX11 libXinerama ];
+  buildInputs = [ pkgconfig glib libX11 libXext libXinerama ];
 
   meta = {
     description = "A manual tiling window manager for X";

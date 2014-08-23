@@ -61,11 +61,23 @@ in
 , sha1 ? ""
 , sha256 ? ""
 
+, recursiveHash ? false
+
+, # Shell code executed after the file has been fetched
+  # successfully. This can do things like check or transform the file.
+  postFetch ? ""
+
+, # Whether to download to a temporary path rather than $out. Useful
+  # in conjunction with postFetch. The location of the temporary file
+  # is communicated to postFetch via $downloadedFile.
+  downloadToTemp ? false
+
 , # If set, don't download the file, but write a list of all possible
   # URLs (resulting from resolving mirror:// URLs) to $out.
   showURLs ? false
 }:
 
+assert builtins.isList urls;
 assert urls != [] -> url == "";
 assert url != "" -> urls == [];
 
@@ -86,7 +98,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
 
-  buildInputs = [curl];
+  buildInputs = [ curl ];
 
   urls = urls_;
 
@@ -100,7 +112,9 @@ stdenv.mkDerivation {
   outputHash = if outputHash != "" then outputHash else
       if sha256 != "" then sha256 else if sha1 != "" then sha1 else md5;
 
-  inherit curlOpts showURLs mirrorsFile impureEnvVars;
+  outputHashMode = if recursiveHash then "recursive" else "flat";
+
+  inherit curlOpts showURLs mirrorsFile impureEnvVars postFetch downloadToTemp;
 
   # Doing the download on a remote machine just duplicates network
   # traffic, so don't do that.

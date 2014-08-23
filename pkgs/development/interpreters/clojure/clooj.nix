@@ -1,24 +1,27 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl, jre, makeWrapper }:
 
-let
-  jar = fetchurl {
-    url = https://github.com/downloads/arthuredelstein/clooj/clooj-0.1.36-STANDALONE.jar;
-    sha256 = "173c66c0aade3ae5d21622f629e60efa51a03ad83c087b02c25e806c5b7f838c";
-  };
-in
+let version = "0.4.4"; in
 
 stdenv.mkDerivation {
-  name = "clooj-0.1.32";
+  name = "clooj-${version}";
+
+  jar = fetchurl {
+    url = "http://www.mediafire.com/download/prkf64humftrmz3/clooj-${version}-standalone.jar";
+    sha256 = "0hbc29bg2a86rm3sx9kvj7h7db9j0kbnrb706wsfiyk3zi3bavnd";
+  };
+
+  buildInputs = [ makeWrapper ];
 
   phases = "installPhase";
 
   installPhase = ''
-    mkdir -p $out/lib/java
-    ln -s ${jar} $out/lib/java/clooj.jar
+    mkdir -p $out/share/java
+    ln -s $jar $out/share/java/clooj.jar
+    makeWrapper ${jre}/bin/java $out/bin/clooj --add-flags "-jar $out/share/java/clooj.jar"
   '';
 
   meta = {
-    description = "clooj, a lightweight IDE for clojure";
+    description = "A lightweight IDE for Clojure";
     homepage = https://github.com/arthuredelstein/clooj;
     license = stdenv.lib.licenses.bsd3;
   };

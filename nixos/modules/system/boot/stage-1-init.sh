@@ -4,7 +4,8 @@ targetRoot=/mnt-root
 console=tty1
 
 export LD_LIBRARY_PATH=@extraUtils@/lib
-export PATH=@extraUtils@/bin:@extraUtils@/sbin
+export PATH=@extraUtils@/bin
+ln -s @extraUtils@/bin /bin
 
 
 fail() {
@@ -14,7 +15,7 @@ fail() {
     # in an interactive shell.
     cat <<EOF
 
-An error occured in stage 1 of the boot process, which must mount the
+An error occurred in stage 1 of the boot process, which must mount the
 root filesystem on \`$targetRoot' and then start stage 2.  Press one
 of the following keys:
 
@@ -58,13 +59,14 @@ echo
 mkdir -p /etc
 touch /etc/fstab # to shut up mount
 touch /etc/mtab # to shut up mke2fs
+touch /etc/initrd-release
 mkdir -p /proc
-mount -t proc none /proc
+mount -t proc proc /proc
 mkdir -p /sys
-mount -t sysfs none /sys
-mount -t devtmpfs -o "size=@devSize@" none /dev
+mount -t sysfs sysfs /sys
+mount -t devtmpfs -o "size=@devSize@" devtmpfs /dev
 mkdir -p /run
-mount -t tmpfs -o "mode=0755,size=@runSize@" none /run
+mount -t tmpfs -o "mode=0755,size=@runSize@" tmpfs /run
 
 
 # Process the kernel command line.
@@ -139,8 +141,6 @@ mkdir -p /dev/.mdadm
 systemd-udevd --daemon
 udevadm trigger --action=add
 udevadm settle || true
-modprobe scsi_wait_scan || true
-udevadm settle || true
 
 
 # Load boot-time keymap before any LVM/LUKS initialization
@@ -194,6 +194,9 @@ checkFS() {
     # Don't check ROM filesystems.
     if [ "$fsType" = iso9660 -o "$fsType" = udf ]; then return 0; fi
 
+    # Don't check resilient COWs as they validate the fs structures at mount time
+    if [ "$fsType" = btrfs -o "$fsType" = zfs ]; then return 0; fi
+
     # If we couldn't figure out the FS type, then skip fsck.
     if [ "$fsType" = auto ]; then
         echo 'cannot check filesystem with type "auto"!'
@@ -206,7 +209,7 @@ checkFS() {
     # does (minutes versus seconds).
     if test -z "@checkJournalingFS@" -a \
         \( "$fsType" = ext3 -o "$fsType" = ext4 -o "$fsType" = reiserfs \
-        -o "$fsType" = xfs -o "$fsType" = jfs \)
+        -o "$fsType" = xfs -o "$fsType" = jfs -o "$fsType" = f2fs \)
     then
         return 0
     fi
@@ -262,6 +265,13 @@ mountFS() {
     echo "$device /mnt-root$mountPoint $fsType $options" >> /etc/fstab
 
     checkFS "$device" "$fsType"
+
+    # Create backing directories for unionfs-fuse.
+    if [ "$fsType" = unionfs-fuse ]; then
+        for i in $(IFS=:; echo ${options##*,dirs=}); do
+            mkdir -m 0700 -p /mnt-root"${i%=*}"
+        done
+    fi
 
     echo "mounting $device on $mountPoint..."
 
@@ -320,6 +330,10 @@ while read -u 3 mountPoint; do
         echo -n "waiting for device $device to appear..."
         for try in $(seq 1 20); do
             sleep 1
+            # also re-try lvm activation now that new block devices might have appeared
+            lvm vgchange -ay
+            # and tell udev to create nodes for the new LVs
+            udevadm trigger --action=add
             if test -e $device; then break; fi
             echo -n "."
         done
@@ -343,8 +357,8 @@ exec 3>&-
 udevadm control --exit || true
 
 # Kill any remaining processes, just to be sure we're not taking any
-# with us into stage 2. unionfs-fuse mounts require the unionfs process.
-pkill -9 -v '(1|unionfs)'
+# with us into stage 2. But keep storage daemons like unionfs-fuse.
+pkill -9 -v -f '@'
 
 
 if test -n "$debug1mounts"; then fail; fi

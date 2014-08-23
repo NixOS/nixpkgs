@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernelDev ? null, xlibs, zlib, perl
+{ stdenv, fetchurl, kernel ? null, xlibs, zlib, perl
 , gtk, atk, pango, glib, gdk_pixbuf
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
@@ -8,55 +8,54 @@
 
 with stdenv.lib;
 
+assert (!libsOnly) -> kernel != null;
+
 let
 
-  versionNumber = "319.60";
+  versionNumber = "340.32";
 
+  inherit (stdenv.lib) makeLibraryPath;
 in
 
 stdenv.mkDerivation {
-  name = "nvidia-x11-${versionNumber}${optionalString (!libsOnly) "-${kernelDev.version}"}";
+  name = "nvidia-x11-${versionNumber}${optionalString (!libsOnly) "-${kernel.version}"}";
 
   builder = ./builder.sh;
-
-  patches =
-    [ ./version-test.patch ]
-    ++ optional (!libsOnly && versionAtLeast kernelDev.version "3.11") ./nvidia-drivers-linux-3.11-incremental.patch
-    ;
 
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}.run";
-        sha256 = "0kjidkwd2b5aik74663mxk3ffq4a3fmaybq2aq1lcbfhvvh49j6j";
+        sha256 = "1xcm8czz4bmnlzkl3al58flw6jmbrg1y77cxjjdjqcsvbk1qj10x";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-no-compat32.run";
-        sha256 = "0fhrxcfsw2jaycnz9gr04c9w585wydx8kpm6rjjbw19wkf8hlq3z";
+        sha256 = "1nfrpx73817y1z0wkqqh02xjg65r0f05h9801mqm8ki2gxqv9vq0";
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
   inherit versionNumber libsOnly;
 
-  kernel = if libsOnly then null else kernelDev;
+  kernel = if libsOnly then null else kernel.dev;
 
   dontStrip = true;
 
-  glPath = stdenv.lib.makeLibraryPath [xlibs.libXext xlibs.libX11 xlibs.libXrandr];
+  glPath      = makeLibraryPath [xlibs.libXext xlibs.libX11 xlibs.libXrandr];
+  cudaPath    = makeLibraryPath [zlib stdenv.gcc.gcc];
+  openclPath  = makeLibraryPath [zlib];
+  allLibPath  = makeLibraryPath [xlibs.libXext xlibs.libX11 xlibs.libXrandr zlib stdenv.gcc.gcc];
 
-  cudaPath = stdenv.lib.makeLibraryPath [zlib stdenv.gcc.gcc];
-
-  openclPath = stdenv.lib.makeLibraryPath [zlib];
-
-  programPath = optionalString (!libsOnly) (stdenv.lib.makeLibraryPath
+  programPath = optionalString (!libsOnly) (makeLibraryPath
     [ gtk atk pango glib gdk_pixbuf xlibs.libXv ] );
 
   buildInputs = [ perl ];
 
-  meta = {
+  meta = with stdenv.lib.meta; {
     homepage = http://www.nvidia.com/object/unix.html;
     description = "X.org driver and kernel module for NVIDIA graphics cards";
-    license = stdenv.lib.licenses.unfreeRedistributable;
+    license = licenses.unfreeRedistributable;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.vcunat ];
   };
 }

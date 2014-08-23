@@ -12,4 +12,5 @@ import ../../../development/perl-modules/generic perl {
     perlPackages.DateManip perlPackages.HTMLTree perlPackages.HTMLParser
     perlPackages.HTMLTagset perlPackages.URI perlPackages.LWP
   ];
+  meta.broken = true;
 }

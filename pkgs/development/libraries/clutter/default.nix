@@ -1,21 +1,29 @@
 { stdenv, fetchurl, glib, pkgconfig, mesa, libX11, libXext, libXfixes
-, libXdamage, libXcomposite, libXi, cogl, pango, atk, json_glib }:
+, libXdamage, libXcomposite, libXi, cogl, pango, atk, json_glib, 
+gobjectIntrospection 
+}:
 
-stdenv.mkDerivation {
-  name = "clutter-1.8.2";
+let
+  ver_maj = "1.16";
+  ver_min = "2";
+in
+stdenv.mkDerivation rec {
+  name = "clutter-${ver_maj}.${ver_min}";
 
   src = fetchurl {
-    url = mirror://gnome/sources/clutter/1.8/clutter-1.8.2.tar.xz;
-    sha256 = "0bzsvnharawfg525lpavrp55mq4aih5nb01dwwqwnccg8hk9z2fw";
+    url = "mirror://gnome/sources/clutter/${ver_maj}/${name}.tar.xz";
+    sha256 = "0hnz6fnrkc7ixrm2x83sxyha32p9896d7ilzhvxwfgzlh26fidqc";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs =
     [ libX11 mesa libXext libXfixes libXdamage libXcomposite libXi cogl pango
-      atk json_glib
+      atk json_glib gobjectIntrospection
     ];
 
-  configureFlags = [ "--disable-introspection" ]; # not needed anywhere AFAIK
+  configureFlags = [ "--enable-introspection" ]; # needed by muffin AFAIK
+
+  #doCheck = true; # no tests possible without a display
 
   meta = {
     description = "Clutter, a library for creating fast, dynamic graphical user interfaces";
@@ -35,7 +43,7 @@ stdenv.mkDerivation {
          specific needs.
       '';
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
     homepage = http://www.clutter-project.org/;
 
     maintainers = with stdenv.lib.maintainers; [ urkud ];

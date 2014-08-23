@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
 
-  name = "popa3d-1.0.2";
+  name = "popa3d-1.0.3";
 
   src = fetchurl {
     url = "http://www.openwall.com/popa3d/${name}.tar.gz";
-    sha256 = "0zvspgnlrx4jhhkb5b1p280nsf9d558jijgpvwfyvdp4q4v460z7";
+    sha256 = "1g48cd74sqhl496wmljhq44iyfpghaz363a1ip8nyhpjz7d57f03";
   };
 
   buildInputs = [ openssl ];
@@ -22,8 +22,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.openwall.com/popa3d/";
-    description = "tiny POP3 daemon with security as the primary goal";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    description = "Tiny POP3 daemon with security as the primary goal";
   };
 }

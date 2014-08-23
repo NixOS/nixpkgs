@@ -9,7 +9,6 @@ import tempfile
 import errno
 
 def copy_if_not_exists(source, dest):
-    known_paths.append(dest)
     if not os.path.exists(dest):
         shutil.copyfile(source, dest)
 
@@ -38,12 +37,13 @@ def write_loader_conf(generation):
         print >> f, "default nixos-generation-%d" % (generation)
     os.rename("@efiSysMountPoint@/loader/loader.conf.tmp", "@efiSysMountPoint@/loader/loader.conf")
 
-def copy_from_profile(generation, name):
+def copy_from_profile(generation, name, dry_run=False):
     store_file_path = os.readlink("%s/%s" % (system_dir(generation), name))
     suffix = os.path.basename(store_file_path)
     store_dir = os.path.basename(os.path.dirname(store_file_path))
     efi_file_path = "/efi/nixos/%s-%s.efi" % (store_dir, suffix)
-    copy_if_not_exists(store_file_path, "@efiSysMountPoint@%s" % (efi_file_path))
+    if not dry_run:
+        copy_if_not_exists(store_file_path, "@efiSysMountPoint@%s" % (efi_file_path))
     return efi_file_path
 
 def add_entry(generation):
@@ -72,6 +72,10 @@ def get_generations(profile):
 def remove_old_entries(gens):
     slice_start = len("@efiSysMountPoint@/loader/entries/nixos-generation-")
     slice_end = -1 * len(".conf")
+    known_paths = []
+    for gen in gens:
+        known_paths.append(copy_from_profile(gen, "kernel", True))
+        known_paths.append(copy_from_profile(gen, "initrd", True))
     for path in glob.iglob("@efiSysMountPoint@/loader/entries/nixos-generation-[1-9]*.conf"):
         try:
             gen = int(path[slice_start:slice_end])
@@ -94,7 +98,6 @@ if os.getenv("NIXOS_INSTALL_GRUB") == "1":
     else:
         subprocess.check_call(["@gummiboot@/bin/gummiboot", "--path=@efiSysMountPoint@", "--no-variables", "install"])
 
-known_paths = []
 mkdir_p("@efiSysMountPoint@/efi/nixos")
 mkdir_p("@efiSysMountPoint@/loader/entries")
 try:
@@ -106,9 +109,8 @@ except IOError as e:
     machine_id = None
 
 gens = get_generations("system")
+remove_old_entries(gens)
 for gen in gens:
     add_entry(gen)
     if os.readlink(system_dir(gen)) == args.default_config:
         write_loader_conf(gen)
-
-remove_old_entries(gens)

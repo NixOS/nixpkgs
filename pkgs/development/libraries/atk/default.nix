@@ -1,11 +1,15 @@
 { stdenv, fetchurl, pkgconfig, perl, glib, libintlOrEmpty, gobjectIntrospection }:
 
+let
+  ver_maj = "2.12";
+  ver_min = "0";
+in
 stdenv.mkDerivation rec {
-  name = "atk-2.8.0";
+  name = "atk-${ver_maj}.${ver_min}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/atk/2.8/${name}.tar.xz";
-    sha256 = "1x3dd3hg9l1j9dq70xwph13vxdp6a9wbfcnryryf1wr6c8bij9dj";
+    url = "mirror://gnome/sources/atk/${ver_maj}/${name}.tar.xz";
+    sha256 = "13zijfcmx7sda83qkryzsmr9hw0r3b73xkagq9cmm733fhcl7a28";
   };
 
   enableParallelBuilding = true;
@@ -17,6 +21,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig perl ];
 
   propagatedBuildInputs = [ glib gobjectIntrospection /*ToDo: why propagate*/ ];
+
+  #doCheck = true; # no checks in there (2.10.0)
 
   meta = {
     description = "Accessibility toolkit";
@@ -31,10 +37,10 @@ stdenv.mkDerivation rec {
 
     homepage = http://library.gnome.org/devel/atk/;
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = with stdenv.lib.maintainers; [ raskin urkud ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 
 }

@@ -8,11 +8,11 @@ assert xineramaSupport -> xlibs.libXinerama != null;
 assert cupsSupport -> cups != null;
 
 stdenv.mkDerivation rec {
-  name = "gtk+-2.24.20";
+  name = "gtk+-2.24.24";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/2.24/${name}.tar.xz";
-    sha256 = "18qdvb7nxi25hfnpmcy01p3majw9jnx83ikm263dk9rrjazvqrnc";
+    sha256 = "0v9xxpkypizy9k866rvqc36zvj4kj9p8nd1nxf9znay8k3hv5khj";
   };
 
   outputs = [ "dev" "out" "bin" "doc" ];
@@ -25,14 +25,17 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = with xlibs; with stdenv.lib;
     [ glib cairo pango gdk_pixbuf atk ]
-    ++ optionals stdenv.isLinux
-      [ libXrandr libXrender libXcomposite libXi libXcursor ]
-    ++ optional stdenv.isDarwin x11
+    ++ optionals (stdenv.isLinux || stdenv.isDarwin) [
+         libXrandr libXrender libXcomposite libXi libXcursor
+       ]
+    ++ optionals stdenv.isDarwin [ x11 libXdamage ]
     ++ libintlOrEmpty
     ++ optional xineramaSupport libXinerama
     ++ optionals cupsSupport [ cups ];
 
-  configureFlags = "--with-xinput=yes";
+  configureFlags = if stdenv.isDarwin
+    then "--disable-glibtest --disable-introspection --disable-visibility"
+    else "--with-xinput=yes";
 
   meta = with stdenv.lib; {
     description = "A multi-platform toolkit for creating graphical user interfaces";

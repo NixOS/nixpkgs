@@ -40,4 +40,6 @@ stdenv.mkDerivation {
     # by definition pure.
     "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy"
     ];
+
+  preferLocalBuild = true;
 }

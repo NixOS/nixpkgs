@@ -1,11 +1,11 @@
 { stdenv, fetchurl, atk, glibmm, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "atkmm-2.22.6";
+  name = "atkmm-2.22.7";
 
   src = fetchurl {
-    url = mirror://gnome/sources/atkmm/2.22/atkmm-2.22.6.tar.xz;
-    sha256 = "1dmf72i7jv2a2gavjiah2722bf5qk3hb97hn5dasxqxr0r8jjx0a";
+    url = "mirror://gnome/sources/atkmm/2.22/${name}.tar.xz";
+    sha256 = "06zrf2ymml2dzp53sss0d4ch4dk9v09jm8rglnrmwk4v81mq9gxz";
   };
 
   propagatedBuildInputs = [ atk glibmm ];

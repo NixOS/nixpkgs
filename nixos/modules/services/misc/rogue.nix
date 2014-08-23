@@ -1,9 +1,9 @@
 # Execute the game `rogue' on tty 9.  Mostly used by the NixOS
 # installation CD.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

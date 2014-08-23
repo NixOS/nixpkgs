@@ -4,13 +4,10 @@
   imports = [ ./graphical.nix ];
 
   users.extraUsers.demo =
-    { description = "Demo user account";
-      group = "users";
+    { isNormalUser = true;
+      description = "Demo user account";
       extraGroups = [ "wheel" ];
-      home = "/home/demo";
-      createHome = true;
-      useDefaultShell = true;
       password = "demo";
-      isSystemUser = false;
+      uid = 1000;
     };
 }

@@ -1,0 +1,10 @@
+--- configure.ac.orig	2014-04-08 10:25:49.497620879 +0200
++++ configure.ac	2014-04-08 10:26:36.639440950 +0200
+@@ -43,6 +43,7 @@
+ 	     folks-telepathy
+ 	     folks-eds
+ 	     libnotify
++	     dbus-glib-1
+ 	     telepathy-glib >= 0.17.5
+ 	     libebook-1.2 >= 3.5.3
+ 	     libedataserver-1.2 >= 3.5.3

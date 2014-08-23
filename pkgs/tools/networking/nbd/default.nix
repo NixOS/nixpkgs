@@ -1,21 +1,18 @@
 { stdenv, fetchurl, pkgconfig, glib }:
 
-let
-  name = "nbd-3.4";
-in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  name = "nbd-3.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nbd/${name}.tar.bz2";
-    sha256 = "1krj185fagnqsqpcfig7zkqa3cqgyyn956241ix224wssvynsajm";
+    url = "mirror://sourceforge/nbd/${name}.tar.xz";
+    sha256 = "1qnkzrnc9m4n814ciqh95q9j8l7d6yd7sn36q8yn0dmi1rvj78j8";
   };
 
   buildInputs = [ pkgconfig glib ] ++ stdenv.lib.optional (stdenv ? glibc) stdenv.glibc.kernelHeaders;
 
   postInstall = ''
     mkdir -p "$out/share/doc/${name}"
-    cp README "$out/share/doc/${name}/README"
+    cp README.md "$out/share/doc/${name}/"
   '';
 
   # The test suite doesn't succeed in chroot builds.
@@ -29,7 +26,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://nbd.sourceforge.net";
     description = "map arbitrary files as block devices over the network";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.unix;
   };

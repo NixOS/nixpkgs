@@ -16,7 +16,7 @@ with stdenv.lib;
 
 let
   v_maj = "4.8";
-  v_min = "5";
+  v_min = "6";
   vers = "${v_maj}.${v_min}";
 in
 
@@ -30,8 +30,11 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/qt/"
       + "${v_maj}/${vers}/qt-everywhere-opensource-src-${vers}.tar.gz";
-    sha256 = "0f51dbgn1dcck8pqimls2qyf1pfmsmyknh767cvw87c3d218ywpb";
+    sha256 = "0b036iqgmbbv37dgwwfihw3mihjbnw3kb5kaisdy0qi8nn8xs54b";
   };
+
+  # The version property must be kept because it will be included into the QtSDK package name
+  version = vers;
 
   prePatch = ''
     substituteInPlace configure --replace /bin/pwd pwd
@@ -135,8 +138,7 @@ stdenv.mkDerivation rec {
   '';
 
   crossAttrs = let
-    isMingw = stdenv.cross.config == "i686-pc-mingw32" ||
-      stdenv.cross.config == "x86_64-w64-mingw32";
+    isMingw = stdenv.cross.libc == "msvcrt";
   in {
     # I've not tried any case other than i686-pc-mingw32.
     # -nomake tools:   it fails linking some asian language symbols
@@ -171,8 +173,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage    = http://qt-project.org/;
     description = "A cross-platform application framework for C++";
-    license     = "GPL/LGPL";
+    license     = licenses.lgpl21Plus; # or gpl3
     maintainers = with maintainers; [ lovek323 phreedom sander urkud ];
-    platforms   = platforms.all;
+    platforms   = platforms.linux;
   };
 }

@@ -1,0 +1,47 @@
+{ stdenv, fetchurl, perl, makeWrapper, zip, libxslt, PerlMagick }:
+
+stdenv.mkDerivation rec {
+  name = "docbook2odf-0.244";
+
+  src = fetchurl {
+    url = "http://open.comsultia.com/docbook2odf/dwn/${name}.tar.gz";
+    sha256 = "10k44g0qqa37k30pfj8vz95j6zdzz0nmnqjq1lyahfs2h4glzgwb";
+  };
+
+  buildInputs = [ perl makeWrapper ];
+
+  installPhase = ''
+    mkdir -p "$out/bin/"
+    mkdir -p "$out/share/docbook2odf/"
+    mkdir -p "$out/share/doc/docbook2odf/"
+    mkdir -p "$out/share/man/man1/"
+    mkdir -p "$out/share/applications/"
+
+    cp utils/docbook2odf "$out/bin/"
+    cp docs/docbook2odf.1 "$out/share/man/man1/"
+    cp -r examples/ "$out/share/doc/docbook2odf/"
+    cp -r xsl/ "$out/share/docbook2odf/"
+    cp bindings/desktop/docbook2odf.desktop "$out/share/applications/"
+
+    sed -i "s|/usr/share/docbook2odf|$out/share/docbook2odf|" "$out/bin/docbook2odf"
+
+    wrapProgram "$out/bin/docbook2odf" \
+      --prefix PATH : "${zip}/bin:${libxslt}/bin" \
+      --prefix PERL5PATH : "${stdenv.lib.makePerlPath [PerlMagick]}"
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Convert DocBook to OpenDocument Format (ODF)";
+    longDescription = ''
+      Docbook2odf is a toolkit that automaticaly converts DocBook to OASIS
+      OpenDocument (ODF, the ISO standardized format used for texts,
+      spreadsheets and presentations). Conversion is based on a XSLT which
+      makes it easy to convert DocBook->ODF, ODT, ODS and ODP as all these
+      documents are XML based.
+    '';
+    homepage = http://open.comsultia.com/docbook2odf/;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
+  };
+}

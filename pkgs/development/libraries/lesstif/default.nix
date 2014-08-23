@@ -1,4 +1,4 @@
-{stdenv, fetchurl, x11, libXp, libXau}:
+{stdenv, fetchurl, xlibsWrapper, libXp, libXau}:
 
 stdenv.mkDerivation {
   name = "lesstif-0.95.0-p2";
@@ -6,7 +6,7 @@ stdenv.mkDerivation {
     url = mirror://sourceforge/lesstif/lesstif-0.95.0.tar.bz2;
     md5 = "ab895165c149d7f95843c7584b1c7ad4";
   };
-  buildInputs = [x11];
+  buildInputs = [xlibsWrapper];
   propagatedBuildInputs = [libXp libXau];
 
   # The last stable release of lesstif was in June 2006. These

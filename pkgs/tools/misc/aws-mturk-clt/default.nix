@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://requester.mturk.com/developer;
     description = "Command line tools for interacting with the Amazon Mechanical Turk";
-    license = "unfree-redistributable";
+    license = "unfree-redistributable"; # Amazon http://aws.amazon.com/asl/
 
     longDescription =
       ''

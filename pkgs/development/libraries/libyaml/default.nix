@@ -1,16 +1,18 @@
-{stdenv, fetchurl}:
-
+{ stdenv, fetchurl }:
+let
+  version = "0.1.6";
+in
 stdenv.mkDerivation {
-  name = "libyaml-0.1.3";
+  name = "libyaml-${version}";
 
   src = fetchurl {
-    url = http://pyyaml.org/download/libyaml/yaml-0.1.3.tar.gz;
-    sha256 = "a8bbad7e5250b3735126b7e3bd9f6fce9db19d6be7cc13abad17a24b59ec144a";
+    url = "http://pyyaml.org/download/libyaml/yaml-${version}.tar.gz";
+    sha256 = "0j9731s5zjb8mjx7wzf6vh7bsqi38ay564x6s9nri2nh9cdrg9kx";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://pyyaml.org/;
     description = "A YAML 1.1 parser and emitter written in C";
-    license = "free";
+    license = licenses.mit;
   };
 }

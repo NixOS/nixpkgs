@@ -3,9 +3,9 @@
 # SQLite database that maps program names to Nix package names (e.g.,
 # "pdflatex" is mapped to "tetex").
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

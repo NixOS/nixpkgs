@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
   imports = [ ../profiles/qemu-guest.nix ../profiles/headless.nix ./ec2-data.nix ];

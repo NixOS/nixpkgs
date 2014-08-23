@@ -10,4 +10,6 @@ stdenv.mkDerivation {
     cat ${./python-linkme-wrapper.sh} >  $out/bin/.python-linkme-wrapper
     chmod +x $out/bin/.python-linkme-wrapper
   '';
+
+  preferLocalBuild = true;
 }

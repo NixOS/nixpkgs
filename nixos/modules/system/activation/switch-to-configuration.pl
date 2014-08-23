@@ -26,7 +26,10 @@ EOF
     exit 1;
 }
 
-die "This is not a NixOS installation (/etc/NIXOS is missing)!\n" unless -f "/etc/NIXOS";
+# This is a NixOS installation if it has /etc/NIXOS or a proper
+# /etc/os-release.
+die "This is not a NixOS installation!\n" unless
+    -f "/etc/NIXOS" || (read_file("/etc/os-release", err_mode => 'quiet') // "") =~ /ID=nixos/s;
 
 openlog("nixos", "", LOG_USER);
 
@@ -62,7 +65,7 @@ $SIG{PIPE} = "IGNORE";
 sub getActiveUnits {
     # FIXME: use D-Bus or whatever to query this, since parsing the
     # output of list-units is likely to break.
-    my $lines = `@systemd@/bin/systemctl list-units --full`;
+    my $lines = `LANG= systemctl list-units --full --no-legend`;
     my $res = {};
     foreach my $line (split '\n', $lines) {
         chomp $line;
@@ -94,17 +97,31 @@ sub parseFstab {
 sub parseUnit {
     my ($filename) = @_;
     my $info = {};
-    foreach my $line (read_file($filename)) {
+    parseKeyValues($info, read_file($filename));
+    parseKeyValues($info, read_file("${filename}.d/overrides.conf")) if -f "${filename}.d/overrides.conf";
+    return $info;
+}
+
+sub parseKeyValues {
+    my $info = shift;
+    foreach my $line (@_) {
         # FIXME: not quite correct.
         $line =~ /^([^=]+)=(.*)$/ or next;
         $info->{$1} = $2;
     }
-    return $info;
 }
 
 sub boolIsTrue {
     my ($s) = @_;
     return $s eq "yes" || $s eq "true";
+}
+
+# As a fingerprint for determining whether a unit has changed, we use
+# its absolute path. If it has an override file, we append *its*
+# absolute path as well.
+sub fingerprintUnit {
+    my ($s) = @_;
+    return abs_path($s) . (-f "${s}.d/overrides.conf" ? " " . abs_path "${s}.d/overrides.conf" : "");
 }
 
 # Stop all services that no longer exist or have changed in the new
@@ -123,7 +140,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
     $baseName =~ s/\.[a-z]*$//;
 
     if (-e $prevUnitFile && ($state->{state} eq "active" || $state->{state} eq "activating")) {
-        if (! -e $newUnitFile) {
+        if (! -e $newUnitFile || abs_path($newUnitFile) eq "/dev/null") {
             push @unitsToStop, $unit;
         }
 
@@ -158,7 +175,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
             }
         }
 
-        elsif (abs_path($prevUnitFile) ne abs_path($newUnitFile)) {
+        elsif (fingerprintUnit($prevUnitFile) ne fingerprintUnit($newUnitFile)) {
             if ($unit eq "sysinit.target" || $unit eq "basic.target" || $unit eq "multi-user.target" || $unit eq "graphical.target") {
                 # Do nothing.  These cannot be restarted directly.
             } elsif ($unit =~ /\.mount$/) {
@@ -168,7 +185,10 @@ while (my ($unit, $state) = each %{$activePrev}) {
                 # FIXME: do something?
             } else {
                 my $unitInfo = parseUnit($newUnitFile);
-                if (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "yes")) {
+                if (boolIsTrue($unitInfo->{'X-ReloadIfChanged'} // "no")) {
+                    write_file($reloadListFile, { append => 1 }, "$unit\n");
+                }
+                elsif (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "yes") || boolIsTrue($unitInfo->{'RefuseManualStop'} // "no") ) {
                     push @unitsToSkip, $unit;
                 } else {
                     # If this unit is socket-activated, then stop the
@@ -277,7 +297,7 @@ foreach my $device (keys %$prevSwaps) {
 if (scalar @unitsToStop > 0) {
     @unitsToStop = unique(@unitsToStop);
     print STDERR "stopping the following units: ", join(", ", sort(@unitsToStop)), "\n";
-    system("@systemd@/bin/systemctl", "stop", "--", @unitsToStop); # FIXME: ignore errors?
+    system("systemctl", "stop", "--", @unitsToStop); # FIXME: ignore errors?
 }
 
 print STDERR "NOT restarting the following units: ", join(", ", sort(@unitsToSkip)), "\n"
@@ -316,7 +336,7 @@ if (scalar @restart > 0) {
 # that are symlinks to other units.  We shouldn't start both at the
 # same time because we'll get a "Failed to add path to set" error from
 # systemd.
-my @start = unique("default.target", "timers.target", split('\n', read_file($startListFile, err_mode => 'quiet') // ""));
+my @start = unique("default.target", "timers.target", "sockets.target", split('\n', read_file($startListFile, err_mode => 'quiet') // ""));
 print STDERR "starting the following units: ", join(", ", sort(@start)), "\n";
 system("@systemd@/bin/systemctl", "start", "--", @start) == 0 or $res = 4;
 unlink($startListFile);
@@ -337,8 +357,22 @@ system("@systemd@/bin/systemctl", "reload", "dbus.service");
 my (@failed, @new, @restarting);
 my $activeNew = getActiveUnits;
 while (my ($unit, $state) = each %{$activeNew}) {
-    push @failed, $unit if $state->{state} eq "failed" || $state->{substate} eq "auto-restart";
-    push @new, $unit if $state->{state} ne "failed" && !defined $activePrev->{$unit};
+    if ($state->{state} eq "failed") {
+        push @failed, $unit;
+    }
+    elsif ($state->{state} eq "auto-restart") {
+        # A unit in auto-restart state is a failure *if* it previously failed to start
+        my $lines = `@systemd@/bin/systemctl show '$unit'`;
+        my $info = {};
+        parseKeyValues($info, split("\n", $lines));
+
+        if ($info->{ExecMainStatus} ne '0') {
+            push @failed, $unit;
+        }
+    }
+    elsif ($state->{state} ne "failed" && !defined $activePrev->{$unit}) {
+        push @new, $unit;
+    }
 }
 
 print STDERR "the following new units were started: ", join(", ", sort(@new)), "\n"

@@ -1,21 +1,21 @@
 { stdenv, fetchurl, pkgconfig, bc, perl, pam, libXext, libXScrnSaver, libX11
 , libXrandr, libXmu, libXxf86vm, libXrender, libXxf86misc, libjpeg, mesa, gtk
-, libxml2, libglade
+, libxml2, libglade, intltool
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.19";
+  version = "5.29";
   name = "xscreensaver-${version}";
 
   src = fetchurl {
     url = "http://www.jwz.org/xscreensaver/${name}.tar.gz";
-    sha256 = "fd62ea0f996abe1bea3770dd7141681454521b49302f9bced8af9c2ee428c0e0";
+    sha256 = "157jy1mh84h6p4mpzsgcadv6c660c212rmjgdpgpidcn0rsza664";
   };
 
   buildInputs =
     [ pkgconfig bc perl libjpeg mesa gtk libxml2 libglade pam
       libXext libXScrnSaver libX11 libXrandr libXmu libXxf86vm libXrender
-      libXxf86misc
+      libXxf86misc intltool
     ];
 
   patchPhase =
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.jwz.org/xscreensaver/";
     description = "A set of screensavers";
     maintainers = with stdenv.lib.maintainers; [ raskin urkud ];
-    platforms = stdenv.lib.platforms.allBut "i686-cygwin";
+    platforms = with stdenv.lib.platforms; allBut cygwin;
   };
 }

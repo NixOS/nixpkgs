@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 # TODO: This may file may need additional review, eg which configuartions to
 # expose to the user.
@@ -19,7 +19,7 @@
 # Eg superserver is said to be most efficiently using resources according to
 # http://www.firebirdsql.org/manual/qsg25-classic-or-super.html
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -49,6 +49,7 @@ in
 
       package = mkOption {
         default = pkgs.firebirdSuper;
+        type = types.package;
         /*
           Example: <code>package = pkgs.firebirdSuper.override { icu =
             pkgs.icu; };</code> which is not recommended for compatibility
@@ -157,6 +158,8 @@ in
       group = "firebird";
       uid = config.ids.uids.firebird;
     };
+
+    users.extraGroups.firebird.gid = config.ids.gids.firebird;
 
   };
 }

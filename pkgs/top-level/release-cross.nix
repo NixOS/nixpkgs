@@ -140,11 +140,11 @@ in {
   crossUltraSparcLinux = mapTestOnCross crossSystem basic;
 }) // (
 
-/* Test some cross builds on mingw32 */
+/* Test some cross builds on 32 bit mingw-w64 */
 let
   crossSystem = {
-      config = "i686-pc-mingw32";
-      arch = "x86";
+      config = "i686-w64-mingw32";
+      arch = "x86"; # Irrelevant
       libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
       platform = {};
   };
@@ -161,11 +161,10 @@ in {
   };
 }) // (
 
-/* Test some cross builds on mingw-w64 */
+/* Test some cross builds on 64 bit mingw-w64 */
 let
   crossSystem = {
-      # That's the triplet they use in the mingw-w64 docs,
-      # and it's relevant for nixpkgs conditions.
+      # That's the triplet they use in the mingw-w64 docs.
       config = "x86_64-w64-mingw32";
       arch = "x86_64"; # Irrelevant
       libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
@@ -192,7 +191,7 @@ let
     arch = "i586";
     float = "hard";
     withTLS = true;
-    platform = pkgs.platforms.pc;
+    platform = pkgs.platforms.pc32;
     libc = "glibc";
     openssl.system = "hurd-x86";  # Nix depends on OpenSSL.
   };

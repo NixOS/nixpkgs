@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
 
@@ -10,16 +10,14 @@ with pkgs.lib;
       [ { source = "${pkgs.cacert}/etc/ca-bundle.crt";
           target = "ssl/certs/ca-bundle.crt";
         }
-
-        # Backward compatibility; may remove at some point.
-        { source = "${pkgs.cacert}/etc/ca-bundle.crt";
-          target = "ca-bundle.crt";
-        }
       ];
 
-    environment.variables.OPENSSL_X509_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
-    environment.variables.CURL_CA_BUNDLE = "/etc/ssl/certs/ca-bundle.crt";
-    environment.variables.GIT_SSL_CAINFO = "/etc/ssl/certs/ca-bundle.crt";
+    environment.sessionVariables =
+      { SSL_CERT_FILE          = "/etc/ssl/certs/ca-bundle.crt";
+        # FIXME: unneeded - remove eventually.
+        OPENSSL_X509_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
+        GIT_SSL_CAINFO         = "/etc/ssl/certs/ca-bundle.crt";
+      };
 
   };
 

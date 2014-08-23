@@ -1,13 +1,19 @@
 {stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "re2c-0.13.5";
+stdenv.mkDerivation rec {
+  name = "re2c-${version}";
+  version = "0.13.7.4";
+
   src = fetchurl {
-    url = mirror://sourceforge/re2c/re2c/0.13.5/re2c-0.13.5.tar.gz;
-    sha256 = "1336c54b3cacjxg3grxdraq6a00yidr04z90605fhxglk89rbagk";
+    url    = "mirror://sourceforge/re2c/re2c/${version}/${name}.tar.gz";
+    sha256 = "0j42s2gpz0rgiadwyb7ksqgc7i02l0q2qnmiyaj5f1w5rfa2c7yy";
   };
 
   meta = {
     description = "Tool for writing very fast and very flexible scanners";
+    homepage    = "http://re2c.org";
+    license     = stdenv.lib.licenses.publicDomain;
+    platforms   = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }

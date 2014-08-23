@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -34,7 +34,7 @@ in
 
       password = mkOption {
         default = "/etc/cntlm.password";
-        type = with pkgs.lib.types; string;
+        type = types.str;
         description = ''Proxy account password. Note: use chmod 0600 on /etc/cntlm.password for security.'';
       };
 

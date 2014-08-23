@@ -21,5 +21,6 @@ stdenv.mkDerivation {
     license = "ZLIB/LIBPNG"; # see README.
     maintainers = [args.lib.maintainers.marcweber];
     platforms = args.lib.platforms.linux;
+    broken = true;
   };
 }

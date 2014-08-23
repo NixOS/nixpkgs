@@ -4,12 +4,17 @@
 
 stdenv.mkDerivation rec {
   name = "mysql-${version}";
-  version = "5.5.34";
+  version = "5.5.37";
 
   src = fetchurl {
     url = "http://cdn.mysql.com/Downloads/MySQL-5.5/${name}.tar.gz";
-    md5 = "930970a42d51e48599deb7fe01778a4a";
+    md5 = "bf1d80c66d4822ec6036300399a33c03";
   };
+
+  preConfigure = stdenv.lib.optional stdenv.isDarwin ''
+    ln -s /bin/ps $TMPDIR/ps
+    export PATH=$PATH:$TMPDIR
+  '';
 
   buildInputs = [ cmake bison ncurses openssl readline zlib ]
      ++ stdenv.lib.optional stdenv.isDarwin perl;
@@ -27,6 +32,8 @@ stdenv.mkDerivation rec {
     sed -i -e "s|basedir=\"\"|basedir=\"$out\"|" $out/bin/mysql_install_db
     rm -rf $out/mysql-test $out/sql-bench
   '';
+
+  passthru.mysqlVersion = "5.5";
 
   meta = {
     homepage = http://www.mysql.com/;

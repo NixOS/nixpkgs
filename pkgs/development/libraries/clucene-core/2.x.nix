@@ -20,6 +20,12 @@ stdenv.mkDerivation rec {
       ./Install-contribs-lib.patch
     ];
 
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change libclucene-shared.1.dylib \
+        $out/lib/libclucene-shared.1.dylib \
+        $out/lib/libclucene-core.1.dylib
+  '';
+
   meta = {
     description = "Core library for full-featured text search engine";
     longDescription = ''
