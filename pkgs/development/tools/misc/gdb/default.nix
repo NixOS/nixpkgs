@@ -8,7 +8,7 @@
 
 let
 
-  basename = "gdb-7.7";
+  basename = "gdb-7.8";
 
   # Whether (cross-)building for GNU/Hurd.  This is an approximation since
   # having `stdenv ? cross' doesn't tell us if we're building `crossDrv' and
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
       ("-" + target.config);
 
   src = fetchurl {
-    url = "mirror://gnu/gdb/${basename}.tar.bz2";
-    sha256 = "08vcb97j1b7vxwq6088wb6s3g3bm8iwikd922y0xsgbbxv3d2104";
+    url = "mirror://gnu/gdb/${basename}.tar.xz";
+    sha256 = "49c4abe174f79f54e1f9e75210ffb590d9b497d5b5200b5398c0e073a4ecb875";
   };
 
   patches = [ ./edit-signals.patch ];
