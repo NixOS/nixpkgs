@@ -78,8 +78,6 @@ stdenv.mkDerivation rec {
       -translationdir $out/share/${name}/translations
     "
   '' + optionalString stdenv.isDarwin ''
-    export CXX=clang++
-    export CC=clang
     sed -i 's/QMAKE_CC = gcc/QMAKE_CC = clang/' mkspecs/common/g++-base.conf
     sed -i 's/QMAKE_CXX = g++/QMAKE_CXX = clang++/' mkspecs/common/g++-base.conf
   '';

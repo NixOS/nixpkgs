@@ -22,7 +22,7 @@ stdenv.mkDerivation (rec {
     ++ (if cxx then [ "--enable-cxx"  ]
                else [ "--disable-cxx" ])
     ++ optional (cxx && stdenv.isDarwin) "CPPFLAGS=-fexceptions"
-    ++ optional stdenv.isDarwin "ABI=64 CC=clang"
+    ++ optional stdenv.isDarwin "ABI=64"
     ++ optional stdenv.is64bit "--with-pic"
     ;
 

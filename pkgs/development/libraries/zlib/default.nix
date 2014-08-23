@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = if static then "" else "--shared";
 
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-    export CC=clang
-  '' + ''
+  preConfigure = ''
     if test -n "$crossConfig"; then
       export CC=$crossConfig-gcc
       configureFlags=${if static then "" else "--shared"}
