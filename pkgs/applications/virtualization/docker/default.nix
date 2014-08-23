@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, go, lxc, sqlite, iproute, bridge_utils, devicemapper,
-btrfsProgs, iptables, bash}:
+btrfsProgs, iptables, bash, e2fsprogs}:
 
 stdenv.mkDerivation rec {
   name = "docker-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pa6k3gx940ap3r96xdry6apzkm0ymqra92b2mrp25b25264cqcy";
   };
 
-  buildInputs = [ makeWrapper go sqlite lxc iproute bridge_utils devicemapper btrfsProgs iptables ];
+  buildInputs = [ makeWrapper go sqlite lxc iproute bridge_utils devicemapper btrfsProgs iptables e2fsprogs];
 
   dontStrip = true;
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dm755 ./bundles/${version}/dynbinary/docker-${version} $out/bin/docker
     install -Dm755 ./bundles/${version}/dynbinary/dockerinit-${version} $out/bin/dockerinit
-    wrapProgram $out/bin/docker --prefix PATH : "${iproute}/sbin:sbin:${lxc}/bin:${iptables}/sbin"
+    wrapProgram $out/bin/docker --prefix PATH : "${iproute}/sbin:sbin:${lxc}/bin:${iptables}/sbin:${e2fsprogs}/sbin"
 
     # systemd
     install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
