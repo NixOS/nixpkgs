@@ -21,8 +21,8 @@ buildPythonPackage {
             s|^ZLIB_ROOT =.*$|ZLIB_ROOT = libinclude("${zlib}")|g ;'
   '';
 
-  checkPhase   = "python selftest.py";
-  buildPhase   = "python setup.py build_ext -i";
+  checkPhase   = "${python}/bin/${python.executable} selftest.py";
+  buildPhase   = "${python}/bin/${python.executable} setup.py build_ext -i";
 
   postInstall = ''
     cd "$out"/lib/python*/site-packages
