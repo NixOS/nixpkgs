@@ -608,6 +608,8 @@ let
   consul = callPackage ../servers/consul { };
   consul_ui = callPackage ../servers/consul/ui.nix { };
 
+  chntpw = callPackage ../tools/security/chntpw { };
+
   coprthr = callPackage ../development/libraries/coprthr {
     flex = flex_2_5_35;
   };
