@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
     license     = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ lovek323 ];
     platforms   = stdenv.lib.platforms.unix;
+    broken = true;
   };
 
   dontStrip = true;
