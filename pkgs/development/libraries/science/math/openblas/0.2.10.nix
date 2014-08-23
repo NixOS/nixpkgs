@@ -1,12 +1,12 @@
 { stdenv, fetchurl, gfortran, perl, liblapack }:
 
 stdenv.mkDerivation rec {
-  version = "0.2.2";
+  version = "0.2.10";
 
   name = "openblas-${version}";
   src = fetchurl {
     url = "https://github.com/xianyi/OpenBLAS/tarball/v${version}";
-    sha256 = "13kdx3knff5ajnmgn419g0dnh83plin07p7akwamr3v7z5qfrzqr";
+    sha256 = "06i0q4qnd5q5xljzrgvda0gjsczc6l2pl9hw6dn2qjpw38al73za";
     name = "openblas-${version}.tar.gz";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
      # allow autodetect
       "";
 
-  makeFlags = "${if target != "" then "TARGET=" else ""}${target} FC=gfortran CC=cc PREFIX=\"\$(out)\"";
+  makeFlags = "${if target != "" then "TARGET=" else ""}${target} FC=gfortran CC=cc PREFIX=\"\$(out)\" INTERFACE64=1";
 
   meta = {
     description = "Basic Linear Algebra Subprograms";

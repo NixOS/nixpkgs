@@ -3112,6 +3112,7 @@ let
     suitesparse = suitesparse.override {
       inherit liblapack;
     };
+    openblas = openblas_0_2_10;
     llvm = llvm_34;
   };
   julia = julia021;
@@ -10893,6 +10894,9 @@ let
   liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
 
   openblas = callPackage ../development/libraries/science/math/openblas { };
+  openblas_0_2_10 = callPackage ../development/libraries/science/math/openblas/0.2.10.nix { 
+    liblapack = liblapack_3_5_0;
+  };
 
   mathematica = callPackage ../applications/science/math/mathematica { };
 
