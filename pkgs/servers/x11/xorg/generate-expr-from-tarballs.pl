@@ -230,11 +230,6 @@ args: with args;
 
 let
 
-  mkDerivation = name: attrs:
-    let newAttrs = (overrides."\${name}" or (x: x)) attrs;
-        stdenv = newAttrs.stdenv or args.stdenv;
-    in stdenv.mkDerivation (removeAttrs newAttrs [ "stdenv" ]);
-
   overrides = import ./overrides.nix {inherit args xorg;};
 
   xorg = rec {
@@ -266,7 +261,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     $extraAttrs = "" unless defined $extraAttrs;
 
     print OUT <<EOF
-  $pkg = (mkDerivation "$pkg" {
+  $pkg = (stdenv.mkDerivation ((if overrides ? $pkg then overrides.$pkg else x: x) {
     name = "$pkgNames{$pkg}";
     builder = ./builder.sh;
     src = fetchurl {
@@ -274,7 +269,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
       sha256 = "$pkgHashes{$pkg}";
     };
     buildInputs = [pkgconfig $inputs];$extraAttrs
-  }) // {inherit $inputs;};
+  })) // {inherit $inputs;};
 
 EOF
 }
