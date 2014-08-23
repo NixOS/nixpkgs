@@ -6958,6 +6958,8 @@ let
 
   net_snmp = callPackage ../servers/monitoring/net-snmp { };
 
+  riemann = callPackage ../servers/monitoring/riemann { };
+
   oidentd = callPackage ../servers/identd/oidentd { };
 
   openfire = callPackage ../servers/xmpp/openfire { };
