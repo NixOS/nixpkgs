@@ -9373,8 +9373,11 @@ let
       cursesSupport = true;
     };
 
-    inherit gettext highline iconv locale lockfile rmail_sup
-      text trollop unicode xapian_ruby which;
+    inherit gettext highline iconv locale lockfile
+      text trollop xapian_ruby which;
+
+    rmail_sup = ""; # missing
+    unicode = "";
 
     # See https://github.com/NixOS/nixpkgs/issues/1804 and
     # https://github.com/NixOS/nixpkgs/issues/2146
@@ -9383,12 +9386,11 @@ let
         dontPatchShebangs = 1;
       }
     );
-
-    chronic      = chronic_0_9_1;
+    chronic      = chronic;
     gpgme        = ruby_gpgme;
-    mime_types   = mime_types_1_25;
+    mime_types   = mime_types;
     ncursesw_sup = ruby_ncursesw_sup;
-    rake         = rubyLibs.rake_10_1_0;
+    rake         = rake;
   };
 
   synfigstudio = callPackage ../applications/graphics/synfigstudio { };
