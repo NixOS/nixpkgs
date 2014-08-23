@@ -3230,6 +3230,8 @@ let
 
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
 
+    csv = callPackage ../development/ocaml-modules/csv { };
+
     deriving = callPackage ../development/tools/ocaml/deriving { };
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
