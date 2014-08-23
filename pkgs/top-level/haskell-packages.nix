@@ -911,6 +911,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ghcPaths = callPackage ../development/libraries/haskell/ghc-paths {};
 
+  ghcParser = callPackage ../development/libraries/haskell/ghc-parser {};
+
   ghcSyb = callPackage ../development/libraries/haskell/ghc-syb {};
 
   ghcSybUtils = callPackage ../development/libraries/haskell/ghc-syb-utils {};
