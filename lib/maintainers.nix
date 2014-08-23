@@ -19,6 +19,7 @@
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
   aszlig = "aszlig <aszlig@redmoonstudios.org>";
   auntie = "Jonathan Glines <auntieNeo@gmail.com>";
+  aycanirican = "Aycan iRiCAN <iricanaycan@gmail.com>";
   bbenoist = "Baptist BENOIST <return_0@live.com>";
   bennofs = "Benno Fünfstück <benno.fuenfstueck@gmail.com>";
   berdario = "Dario Bertini <berdario@gmail.com>";
