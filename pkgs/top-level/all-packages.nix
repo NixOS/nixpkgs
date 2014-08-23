@@ -6982,6 +6982,8 @@ let
 
   rippled = callPackage ../servers/rippled { };
 
+  s6 = callPackage ../servers/s6 { };
+
   spamassassin = callPackage ../servers/mail/spamassassin {
     inherit (perlPackages) HTMLParser NetDNS NetAddrIP DBFile
       HTTPDate MailDKIM LWP IOSocketSSL;
