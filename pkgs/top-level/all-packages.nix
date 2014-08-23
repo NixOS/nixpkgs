@@ -5442,6 +5442,8 @@ let
 
   libnfnetlink = callPackage ../development/libraries/libnfnetlink { };
 
+  libnftnl = callPackage ../development/libraries/libnftnl { };
+
   libnih = callPackage ../development/libraries/libnih { };
 
   libnova = callPackage ../development/libraries/libnova { };
