@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "187wrnq0ficwjj4y3yqci5fxcdkiazfs6k5js26k5b26hipzmham";
   };
 
-  doCheck = true;
+  doCheck = stdenv.is64bit; # see https://bugzilla.gnome.org/show_bug.cgi?id=728129#c7
 
   meta = {
     description = "The Oil Runtime Compiler";
