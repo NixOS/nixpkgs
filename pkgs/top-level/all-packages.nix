@@ -11410,6 +11410,8 @@ let
     inherit texLive unzip;
   };
 
+  thermald = callPackage ../tools/system/thermald { };
+
   thinkfan = callPackage ../tools/system/thinkfan { };
 
   vice = callPackage ../misc/emulators/vice {
