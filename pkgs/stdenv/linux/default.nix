@@ -118,12 +118,12 @@ rec {
 
   # A helper function to call gcc-wrapper.
   wrapGCC =
-    { gcc ? bootstrapTools, libc, binutils, coreutils, shell ? "", name ? "bootstrap-gcc-wrapper" }:
+    { gcc, libc, binutils, coreutils, name }:
 
     lib.makeOverridable (import ../../build-support/gcc-wrapper) {
       nativeTools = false;
       nativeLibc = false;
-      inherit gcc binutils coreutils libc shell name;
+      inherit gcc binutils coreutils libc name;
       stdenv = stdenvLinuxBoot0;
     };
 
@@ -133,9 +133,11 @@ rec {
   # configure script happy.
   stdenvLinuxBoot1 = stdenvBootFun {
     gcc = wrapGCC {
+      gcc = bootstrapTools;
       libc = bootstrapGlibc;
       binutils = bootstrapTools;
       coreutils = bootstrapTools;
+      name = "bootstrap-gcc-wrapper";
     };
   };
 
@@ -155,9 +157,11 @@ rec {
   # 3) 2nd stdenv that we will use to build only Glibc.
   stdenvLinuxBoot2 = stdenvBootFun {
     gcc = wrapGCC {
+      gcc = bootstrapTools;
       libc = bootstrapGlibc;
       binutils = binutils1;
       coreutils = bootstrapTools;
+      name = "bootstrap-gcc-wrapper";
     };
     overrides = pkgs: {
       inherit (stdenvLinuxBoot1Pkgs) perl;
@@ -183,9 +187,11 @@ rec {
   #    binutils and rest of the bootstrap tools, including GCC.
   stdenvLinuxBoot3 = stdenvBootFun {
     gcc = wrapGCC {
+      gcc = bootstrapTools;
+      libc = stdenvLinuxGlibc;
       binutils = binutils1;
       coreutils = bootstrapTools;
-      libc = stdenvLinuxGlibc;
+      name = "bootstrap-gcc-wrapper";
     };
     overrides = pkgs: {
       glibc = stdenvLinuxGlibc;
@@ -219,10 +225,10 @@ rec {
   #    (e.g. coreutils) are still from the bootstrap tools.
   stdenvLinuxBoot4 = stdenvBootFun {
     gcc = wrapGCC rec {
+      gcc = stdenvLinuxBoot3Pkgs.gcc.gcc;
+      libc = stdenvLinuxGlibc;
       binutils = binutils1;
       coreutils = bootstrapTools;
-      libc = stdenvLinuxGlibc;
-      gcc = stdenvLinuxBoot3Pkgs.gcc.gcc;
       name = "";
     };
     extraPath = [ stdenvLinuxBoot3Pkgs.xz ];
@@ -262,15 +268,14 @@ rec {
       ((import ../common-path.nix) {pkgs = stdenvLinuxBoot4Pkgs;})
       ++ [stdenvLinuxBoot4Pkgs.patchelf stdenvLinuxBoot4Pkgs.paxctl ];
 
-    gcc = wrapGCC rec {
-      inherit (stdenvLinuxBoot4Pkgs) binutils coreutils;
-      libc = stdenvLinuxGlibc;
-      gcc = stdenvLinuxBoot4.gcc.gcc;
-      shell = stdenvLinuxBoot4Pkgs.bash + "/bin/bash";
-      name = "";
-    };
-
     shell = stdenvLinuxBoot4Pkgs.bash + "/bin/bash";
+
+    gcc = (wrapGCC rec {
+      gcc = stdenvLinuxBoot4.gcc.gcc;
+      libc = stdenvLinuxGlibc;
+      inherit (stdenvLinuxBoot4Pkgs) binutils coreutils;
+      name = "";
+    }).override { inherit shell; };
 
     fetchurlBoot = stdenvLinuxBoot0.fetchurlBoot;
 
