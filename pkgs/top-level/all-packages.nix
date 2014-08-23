@@ -8277,7 +8277,9 @@ let
       inherit (gnome) libglade;
   };
 
-  calibre = callPackage ../applications/misc/calibre { };
+  calibre = callPackage ../applications/misc/calibre {
+    inherit (pythonPackages) pyqt5 sip_4_16;
+  };
 
   camlistore = callPackage ../applications/misc/camlistore { };
 
