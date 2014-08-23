@@ -147,6 +147,13 @@
       riemann = 137;
       riemanndash = 138;
       radvd = 139;
+      tinc0 = 140;
+      tinc1 = 141;
+      tinc2 = 142;
+      tinc3 = 143;
+      tinc4 = 144;
+      radvd = 145;
+      dnsmasq = 146;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
