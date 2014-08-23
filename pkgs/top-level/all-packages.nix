@@ -11162,6 +11162,8 @@ let
 
   ekiga = newScope pkgs.gnome ../applications/networking/instant-messengers/ekiga { };
 
+  emulationstation = callPackage ../misc/emulators/emulationstation { };
+
   electricsheep = callPackage ../misc/screensavers/electricsheep { };
 
   fakenes = callPackage ../misc/emulators/fakenes { };
