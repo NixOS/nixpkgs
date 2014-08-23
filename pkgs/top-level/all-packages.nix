@@ -583,7 +583,7 @@ let
 
   bmon = callPackage ../tools/misc/bmon { };
 
-  bochs = callPackage ../applications/virtualization/bochs { };
+  bochs = callPackage ../applications/virtualization/bochs { wxSupport = false; };
 
   boomerang = callPackage ../development/tools/boomerang { };
 
