@@ -10567,6 +10567,8 @@ let
 
   xonotic = callPackage ../games/xonotic { };
 
+  xskat = callPackage ../games/xskat { };
+
   xsokoban = builderDefsPackage (import ../games/xsokoban) {
     inherit (xlibs) libX11 xproto libXpm libXt;
   };
