@@ -25,7 +25,7 @@ build null {
   # $TMPDIR/nix/store/...-glibc-.../lib/locale/locale-archive.
   buildPhase =
     ''
-      mkdir -p $TMPDIR/"$(dirname $(readlink -f $(type -p localedef)))/../lib/locale"
+      mkdir -p $TMPDIR/"${stdenv.gcc.libc}/lib/locale"
 
       # Hack to allow building of the locales (needed since glibc-2.12)
       sed -i -e "s,^LOCALEDEF=.*,LOCALEDEF=localedef --prefix=$TMPDIR," -e \
