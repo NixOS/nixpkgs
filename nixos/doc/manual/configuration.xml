@@ -1053,6 +1053,12 @@ a password. However, you can use the <command>passwd</command> program
 to set a password, which is retained across invocations of
 <command>nixos-rebuild</command>.</para>
 
+<para>If you set users.mutableUsers to false, then the contents of /etc/passwd
+and /etc/group will be congruent to your NixOS configuration. For instance,
+if you remove a user from users.extraUsers and run nixos-rebuild, the user
+account will cease to exist. Also, imperative commands for managing users
+and groups, such as useradd, are no longer available.</para>
+
 <para>A user ID (uid) is assigned automatically.  You can also specify
 a uid manually by adding
 
