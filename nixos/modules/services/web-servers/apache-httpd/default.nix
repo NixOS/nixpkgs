@@ -130,7 +130,7 @@ let
   '';
 
 
-  loggingConf = ''
+  loggingConf = (if mainCfg.logFormat != "none" then ''
     ErrorLog ${mainCfg.logDir}/error_log
 
     LogLevel notice
@@ -141,7 +141,9 @@ let
     LogFormat "%{User-agent}i" agent
 
     CustomLog ${mainCfg.logDir}/access_log ${mainCfg.logFormat}
-  '';
+  '' else ''
+    ErrorLog /dev/null
+  '');
 
 
   browserHacks = ''
