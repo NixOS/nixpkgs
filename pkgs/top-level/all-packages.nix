@@ -987,6 +987,8 @@ let
 
   exempi = callPackage ../development/libraries/exempi { };
 
+  execline = callPackage ../tools/misc/execline { };
+
   exercism = callPackage ../development/tools/exercism { };
 
   exif = callPackage ../tools/graphics/exif { };
@@ -6169,6 +6171,8 @@ let
 
   sfml_git = callPackage ../development/libraries/sfml { };
 
+  skalibs = callPackage ../development/libraries/skalibs { };
+
   slang = callPackage ../development/libraries/slang { };
 
   slibGuile = callPackage ../development/libraries/slib {
@@ -6977,6 +6981,8 @@ let
   rethinkdb = callPackage ../servers/nosql/rethinkdb { };
 
   rippled = callPackage ../servers/rippled { };
+
+  s6 = callPackage ../servers/s6 { };
 
   spamassassin = callPackage ../servers/mail/spamassassin {
     inherit (perlPackages) HTMLParser NetDNS NetAddrIP DBFile
