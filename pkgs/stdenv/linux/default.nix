@@ -46,7 +46,7 @@ rec {
     builder = bootstrapFiles.sh;
 
     args =
-      if system == "armv5tel-linux" || system == "armv6l-linux" 
+      if system == "armv5tel-linux" || system == "armv6l-linux"
         || system == "armv7l-linux"
       then [ ./scripts/unpack-bootstrap-tools-arm.sh ]
       else [ ./scripts/unpack-bootstrap-tools.sh ];
@@ -69,9 +69,9 @@ rec {
   # This function builds the various standard environments used during
   # the bootstrap.
   stdenvBootFun =
-    {gcc, extraAttrs ? {}, overrides ? (pkgs: {}), extraPath ? [], fetchurl}:
+    {gcc, extraAttrs ? {}, overrides ? (pkgs: {}), extraPath ? []}:
 
-    import ../generic {
+    let thisStdenv = import ../generic {
       inherit system config;
       name = "stdenv-linux-boot";
       preHook =
@@ -83,27 +83,22 @@ rec {
         '';
       shell = "${bootstrapTools}/bin/sh";
       initialPath = [bootstrapTools] ++ extraPath;
-      fetchurlBoot = fetchurl;
+      fetchurlBoot = import ../../build-support/fetchurl {
+        stdenv = stdenvLinuxBoot0;
+        curl = bootstrapTools;
+      };
       inherit gcc;
       # Having the proper 'platform' in all the stdenvs allows getting proper
       # linuxHeaders for example.
       extraAttrs = extraAttrs // { inherit platform; };
-      overrides = pkgs: (overrides pkgs) // {
-        inherit fetchurl;
-      };
+      overrides = pkgs: (overrides pkgs) // { fetchurl = thisStdenv.fetchurlBoot; };
     };
+    in thisStdenv;
 
   # Build a dummy stdenv with no GCC or working fetchurl.  This is
   # because we need a stdenv to build the GCC wrapper and fetchurl.
   stdenvLinuxBoot0 = stdenvBootFun {
     gcc = "/no-such-path";
-    fetchurl = null;
-  };
-
-
-  fetchurl = import ../../build-support/fetchurl {
-    stdenv = stdenvLinuxBoot0;
-    curl = bootstrapTools;
   };
 
 
@@ -142,7 +137,6 @@ rec {
       binutils = bootstrapTools;
       coreutils = bootstrapTools;
     };
-    inherit fetchurl;
   };
 
 
@@ -168,7 +162,6 @@ rec {
     overrides = pkgs: {
       inherit (stdenvLinuxBoot1Pkgs) perl;
     };
-    inherit fetchurl;
   };
 
 
@@ -211,7 +204,6 @@ rec {
       glibc = stdenvLinuxGlibc;   # Required by gcc47 build
     };
     extraPath = [ stdenvLinuxBoot1Pkgs.paxctl ];
-    inherit fetchurl;
   };
 
 
@@ -238,7 +230,6 @@ rec {
       inherit (stdenvLinuxBoot1Pkgs) perl;
       inherit (stdenvLinuxBoot3Pkgs) gettext gnum4 gmp;
     };
-    inherit fetchurl;
   };
 
 
@@ -281,7 +272,7 @@ rec {
 
     shell = stdenvLinuxBoot4Pkgs.bash + "/bin/bash";
 
-    fetchurlBoot = fetchurl;
+    fetchurlBoot = stdenvLinuxBoot0.fetchurlBoot;
 
     extraAttrs = {
       inherit (stdenvLinuxBoot3Pkgs) glibc;
