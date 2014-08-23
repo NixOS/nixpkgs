@@ -283,7 +283,7 @@ stripDir() {
 
     if [ -e "$dir" ]; then
         header "stripping (with flags $stripFlags) in $dir"
-        find "$dir" -type f -print0 | xargs -0 ${xargsFlags:--r} strip $stripFlags || true
+        find "$dir" -type f -print0 | xargs -0 ${xargsFlags:--r} strip "$commonStripFlags" "$stripFlags" || true
         stopNest
     fi
 }
@@ -296,7 +296,7 @@ stripDirs() {
 
     for d in $subdirs; do
         if [ -d "$prefix/$d" ]; then
-            stripDir "$prefix/$d" "$commonStripFlags" "$stripFlags"
+            stripDir "$prefix/$d" "$stripFlags"
         fi
     done
 }
