@@ -8458,13 +8458,17 @@ rec {
 
 
   webtest = buildPythonPackage rec {
-    version = "2.0.11";
+    version = "2.0.15";
     name = "webtest-${version}";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/W/WebTest/WebTest-${version}.zip";
-      md5 = "e51da21da8815cef07f543d8688effea";
+      md5 = "49314bdba23f4d0bd807facb2a6d3f90";
     };
+    
+    preConfigure = ''
+      substituteInPlace setup.py --replace "nose<1.3.0" "nose"
+    '';
 
     # XXX: skipping two tests fails in python2.6
     doCheck = ! isPy26;
