@@ -6169,6 +6169,8 @@ let
 
   sfml_git = callPackage ../development/libraries/sfml { };
 
+  skalibs = callPackage ../development/libraries/skalibs { };
+
   slang = callPackage ../development/libraries/slang { };
 
   slibGuile = callPackage ../development/libraries/slib {
