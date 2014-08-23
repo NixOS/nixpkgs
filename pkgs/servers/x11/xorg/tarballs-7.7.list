@@ -138,6 +138,7 @@ mirror://xorg/individual/driver/xf86-video-intel-2.21.15.tar.bz2
 mirror://xorg/individual/driver/xf86-video-mach64-6.9.4.tar.bz2
 mirror://xorg/individual/driver/xf86-video-mga-1.6.3.tar.bz2
 mirror://xorg/individual/driver/xf86-video-modesetting-0.9.0.tar.bz2
+mirror://xorg/individual/driver/xf86-video-qxl-0.1.2.tar.bz2
 mirror://xorg/individual/driver/xf86-video-neomagic-1.2.8.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86-video-newport-0.2.4.tar.bz2
 mirror://xorg/individual/driver/xf86-video-nv-2.1.20.tar.bz2
