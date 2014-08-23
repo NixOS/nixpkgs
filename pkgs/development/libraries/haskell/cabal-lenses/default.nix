@@ -4,10 +4,9 @@
 
 cabal.mkDerivation (self: {
   pname = "cabal-lenses";
-  version = "0.3";
-  sha256 = "13nx9cn81cx9cj7fk07akqvz4qkl49dlgb5wl5wanag6bafa6vhl";
+  version = "0.3.1";
+  sha256 = "17piwqyzd33shp12qa6j4s579rrs34l44x19p2nzz69anhc4g1j7";
   buildDepends = [ Cabal lens unorderedContainers ];
-  jailbreak = true;
   meta = {
     description = "Lenses and traversals for the Cabal library";
     license = self.stdenv.lib.licenses.bsd3;
