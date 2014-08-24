@@ -144,11 +144,6 @@ ensureDir() {
 }
 
 
-installBin() {
-    mkdir -p $out/bin
-    cp "$@" $out/bin
-}
-
 
 ######################################################################
 # Initialisation.
@@ -264,7 +259,7 @@ for i in $crossPkgs; do
 done
 
 
-# Add the output as an rpath.
+# Add the output as an rpath. ToDo: multiple-output?
 if [ "$NIX_NO_SELF_RPATH" != 1 ]; then
     export NIX_LDFLAGS="-rpath $out/lib $NIX_LDFLAGS"
     if [ -n "$NIX_LIB64_IN_SELF_RPATH" ]; then
@@ -707,24 +702,27 @@ fixupPhase() {
         prefix=${!output} runHook fixupOutput
     done
 
+    # Multiple-output derivations mostly choose $dev instead of $out
+    local prOut="${propagateIntoOutput:-$out}"
+
     if [ -n "$propagatedBuildInputs" ]; then
-        mkdir -p "$out/nix-support"
-        echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
+        mkdir -p "$prOut/nix-support"
+        echo "$propagatedBuildInputs" > "$prOut/nix-support/propagated-build-inputs"
     fi
 
     if [ -n "$propagatedNativeBuildInputs" ]; then
-        mkdir -p "$out/nix-support"
-        echo "$propagatedNativeBuildInputs" > "$out/nix-support/propagated-native-build-inputs"
+        mkdir -p "$prOut/nix-support"
+        echo "$propagatedNativeBuildInputs" > "$prOut/nix-support/propagated-native-build-inputs"
     fi
 
     if [ -n "$propagatedUserEnvPkgs" ]; then
-        mkdir -p "$out/nix-support"
-        echo "$propagatedUserEnvPkgs" > "$out/nix-support/propagated-user-env-packages"
+        mkdir -p "$prOut/nix-support"
+        echo "$propagatedUserEnvPkgs" > "$prOut/nix-support/propagated-user-env-packages"
     fi
 
     if [ -n "$setupHook" ]; then
-        mkdir -p "$out/nix-support"
-        substituteAll "$setupHook" "$out/nix-support/setup-hook"
+        mkdir -p "$prOut/nix-support"
+        substituteAll "$setupHook" "$prOut/nix-support/setup-hook"
     fi
 
     runHook postFixup
