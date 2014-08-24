@@ -5253,7 +5253,7 @@ rec {
 
     propagatedBuildInputs = [ pycrypto ecdsa ];
 
-    checkPhase = "python test.py";
+    checkPhase = "${python}/bin/${python.executable} test.py";
 
     meta = {
       homepage = "https://github.com/paramiko/paramiko/";
