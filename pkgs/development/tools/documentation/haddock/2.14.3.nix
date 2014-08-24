@@ -12,7 +12,7 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [ Cabal deepseq filepath ghcPaths xhtml ];
   testDepends = [ Cabal deepseq filepath hspec QuickCheck ];
-  doCheck = false;
+  preCheck = "unset GHC_PACKAGE_PATH";
   meta = {
     homepage = "http://www.haskell.org/haddock/";
     description = "A documentation-generation tool for Haskell libraries";
