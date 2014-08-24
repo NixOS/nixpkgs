@@ -3,11 +3,11 @@
 assert stdenv.gcc.libc != null;
 
 stdenv.mkDerivation rec {
-  name = "gemrb-0.8.0.1";
+  name = "gemrb-0.8.1";
   
   src = fetchurl {
     url = "mirror://sourceforge/gemrb/${name}.tar.gz";
-    sha256 = "0v9iypls4iawnfkc91hcdnmc4vyg3ix7v7lmw3knv73q145v0ksd";
+    sha256 = "1g68pc0x4azy6zm5y7813g0qky96q796si9v3vafiy7sa8ph49kl";
   };
 
   buildInputs = [ cmake python openal SDL zlib libpng libvorbis ];
