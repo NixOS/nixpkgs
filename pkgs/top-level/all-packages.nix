@@ -1545,6 +1545,8 @@ let
 
   less = callPackage ../tools/misc/less { };
 
+  liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix { };
+
   lockfileProgs = callPackage ../tools/misc/lockfile-progs { };
 
   logstash = callPackage ../tools/misc/logstash { };
