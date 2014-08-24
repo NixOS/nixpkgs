@@ -20,7 +20,7 @@ let
   filter                = stdenv.lib.filter;
 in
 
-builtins.trace (ghc.parent.CabalGhcjs.version or null) {
+{
   mkDerivation =
     args : # arguments for the individual package, can modify the defaults
     let # These attributes are removed in the end. This is in order not to spoil the build
@@ -162,7 +162,6 @@ builtins.trace (ghc.parent.CabalGhcjs.version or null) {
 
             # compiles Setup and configures
             configurePhase = ''
-              set -x
               eval "$preConfigure"
 
               ${optionalString self.jailbreak "${ghc.ghc.parent.jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal"}
