@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hplayground";
-  version = "0.1.0.2";
-  sha256 = "13lzw0fhv305zh2ry0d74y5k7vxppjlwsb8vi3iri5zpkkdpfhij";
+  version = "0.1.0.3";
+  sha256 = "1k46b94n9wkbh7374mjyg5jnwxxrhj8ai53q3r4lysx1rzgw7ak6";
   buildDepends = [
     dataDefault hasteCompiler hastePerch monadsTf transformers
   ];
