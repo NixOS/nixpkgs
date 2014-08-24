@@ -21,6 +21,7 @@ cabal.mkDerivation (self: {
     tastyGolden tastyHunit time transformers utf8String
   ];
   extraLibraries = [ libXScrnSaver ];
+  jailbreak = true;
   meta = {
     homepage = "http://arbtt.nomeata.de/";
     description = "Automatic Rule-Based Time Tracker";
