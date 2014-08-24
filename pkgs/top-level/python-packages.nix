@@ -9286,6 +9286,8 @@ rec {
   tarman = buildPythonPackage rec {
     version = "0.1.3";
     name = "tarman-${version}";
+    
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/t/tarman/tarman-${version}.zip";
