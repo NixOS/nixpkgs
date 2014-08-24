@@ -7086,6 +7086,8 @@ let
 
   xinetd = callPackage ../servers/xinetd { };
 
+  zookeeper = callPackage ../servers/zookeeper { };
+
   xquartz = callPackage ../servers/x11/xquartz { };
   quartz-wm = callPackage ../servers/x11/quartz-wm { stdenv = clangStdenv; };
 
