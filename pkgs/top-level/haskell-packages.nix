@@ -901,7 +901,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     inherit (pkgs) emacs;
   };
 
-  ghcMod_5_0_1 = callPackage ../development/libraries/haskell/ghc-mod/5.0.1.nix {
+  ghcMod_5_0_1_1 = callPackage ../development/libraries/haskell/ghc-mod/5.0.1.1.nix {
     inherit (pkgs) emacs;
   };
 
