@@ -7785,10 +7785,6 @@ let
     linuxHeaders = linuxHeaders_3_14;
   };
 
-  systemd_test = callPackage ../os-specific/linux/systemd/test.nix {
-    linuxHeaders = linuxHeaders_3_14;
-  };
-
   systemtap = callPackage ../development/tools/profiling/systemtap {
     inherit (gnome) libglademm;
   };
