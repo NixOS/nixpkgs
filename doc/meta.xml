@@ -27,7 +27,7 @@ meta = {
 
 <para>Meta-attributes are not passed to the builder of the package.
 Thus, a change to a meta-attribute doesn’t trigger a recompilation of
-the package.  The value of a meta-attribute must a string.</para>
+the package.  The value of a meta-attribute must be a string.</para>
 
 <para>The meta-attributes of a package can be queried from the
 command-line using <command>nix-env</command>:
