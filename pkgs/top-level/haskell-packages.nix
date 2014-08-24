@@ -2799,6 +2799,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   yesodAuth = callPackage ../development/libraries/haskell/yesod-auth {};
 
+  yesodAuthHashdb = callPackage ../development/libraries/haskell/yesod-auth-hashdb {};
+
   yesodBin = callPackage ../development/libraries/haskell/yesod-bin {};
 
   yesodCore = callPackage ../development/libraries/haskell/yesod-core {};
