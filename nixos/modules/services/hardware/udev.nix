@@ -182,11 +182,12 @@ in
         Note that you can also add firmware packages to this
         list as these are directories in the nix store.
       '';
-      apply = list: pkgs.buildEnv {
+      apply = list: stdenv.mkDerivation {
         name = "firmware";
-        paths = list;
-        pathsToLink = [ "/" ];
-        ignoreCollisions = true;
+        buildCommand = flip concatMapStrings list (path: ''
+          cd "${path}"
+          find . ! -type d | xargs -i install -D -m 0444 {} "$out/{}"
+        '');
       };
     };
 
