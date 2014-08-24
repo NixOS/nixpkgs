@@ -138,8 +138,6 @@ let
           Whether this interface is virtual and should be created by tunctl.
           This is mainly useful for creating bridges between a host a virtual
           network such as VPN or a virtual machine.
-
-          Defaults to tap device, unless interface contains "tun" in its name.
         '';
       };
 
@@ -148,6 +146,15 @@ let
         type = types.str;
         description = ''
           In case of a virtual device, the user who owns it.
+        '';
+      };
+
+      virtualType = mkOption {
+        default = null;
+        type = types.nullOr (types.addCheck types.str (v: v == "tun" || v == "tap"));
+        description = ''
+          The explicit type of interface to create. Accepts tun or tap strings.
+          Also accepts null to implicitly detect the type of device.
         '';
       };
 
@@ -673,18 +680,25 @@ in
                 '');
           };
 
-        createTunDevice = i: nameValuePair "${i.name}"
+        createTunDevice = i: nameValuePair "${i.name}-tun"
           { description = "Virtual Network Interface ${i.name}";
             requires = [ "dev-net-tun.device" ];
             after = [ "dev-net-tun.device" ];
             wantedBy = [ "network.target" ];
             requiredBy = [ "sys-subsystem-net-devices-${i.name}.device" ];
-            serviceConfig =
-              { Type = "oneshot";
-                RemainAfterExit = true;
-                ExecStart = "${pkgs.tunctl}/bin/tunctl -t '${i.name}' -u '${i.virtualOwner}'";
-                ExecStop = "${pkgs.tunctl}/bin/tunctl -d '${i.name}'";
-              };
+            path = [ pkgs.iproute ];
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+            };
+            script = ''
+              ip tuntap add dev "${i.name}" \
+              ${optionalString (i.virtualType != null) "mode ${i.virtualType}"} \
+              user "${i.virtualOwner}"
+            '';
+            postStop = ''
+              ip link del ${i.name}
+            '';
           };
 
         createBridgeDevice = n: v:
