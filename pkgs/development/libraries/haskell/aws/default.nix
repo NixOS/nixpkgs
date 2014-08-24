@@ -11,8 +11,8 @@
 
 cabal.mkDerivation (self: {
   pname = "aws";
-  version = "0.10.2";
-  sha256 = "15yr06z54wxnl37a94515ajlxrb7z9kii5dd0ssan32izh4nfrl2";
+  version = "0.10.3";
+  sha256 = "042vx5nhafvgw0crymkw8pyhiawhpxwj03n1k538y2wr181hmz5f";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
