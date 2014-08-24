@@ -3857,13 +3857,15 @@ rec {
   }) else null;
 
   iptools = buildPythonPackage rec {
-    version = "0.4.0";
+    version = "0.6.1";
     name = "iptools-${version}";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/i/iptools/iptools-${version}.tar.gz";
-      md5 = "de60e5fab861f29dbf5f4446f8576532";
+      md5 = "aed4045638fd40c16f8d9bb04606f700";
     };
+    
+    buildInputs = [ nose ];
 
     meta = {
       description = "Utilities for manipulating IP addresses including a class that can be used to include CIDR network blocks in Django's INTERNAL_IPS setting.";
