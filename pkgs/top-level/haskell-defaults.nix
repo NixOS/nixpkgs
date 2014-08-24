@@ -119,6 +119,7 @@
     happy = super.happy.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     hashable = super.hashable.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     hashtables = super.hashtables.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    hsyslog = super.hsyslog.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     HTTP = super.HTTP.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     HUnit = super.HUnit.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     network = super.network_2_2_1_7.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
