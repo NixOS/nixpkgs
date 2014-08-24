@@ -1004,8 +1004,11 @@ rec {
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
+  
   zc_buildout171 = buildPythonPackage rec {
     name = "zc.buildout-1.7.1";
+    
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zc.buildout/${name}.tar.gz";
@@ -1019,8 +1022,11 @@ rec {
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
+  
   zc_buildout152 = buildPythonPackage rec {
     name = "zc.buildout-1.5.2";
+    
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zc.buildout/${name}.tar.gz";
