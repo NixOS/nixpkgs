@@ -3,6 +3,9 @@
  , ncurses, libunistring, lighttpd, patchelf, openblas, liblapack
  , tcl, tk, xproto, libX11, git, mpfr, which
  } :
+
+assert stdenv.isLinux; 
+
 let
   realGcc = stdenv.gcc.gcc;
 in
