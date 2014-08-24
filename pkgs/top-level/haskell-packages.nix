@@ -751,6 +751,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   entropy = callPackage ../development/libraries/haskell/entropy {};
 
+  equationalReasoning = callPackage ../development/libraries/haskell/equational-reasoning {};
+
   equivalence_0_2_3 = callPackage ../development/libraries/haskell/equivalence/0.2.3.nix {};
   equivalence_0_2_5 = callPackage ../development/libraries/haskell/equivalence/0.2.5.nix {};
   equivalence = self.equivalence_0_2_5;
@@ -1637,6 +1639,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   mongoDB = callPackage ../development/libraries/haskell/mongoDB {};
 
+  monomorphic = callPackage ../development/libraries/haskell/monomorphic {};
+
   monoTraversable = callPackage ../development/libraries/haskell/mono-traversable {};
 
   mmorph = callPackage ../development/libraries/haskell/mmorph {};
@@ -2171,6 +2175,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   silently = callPackage ../development/libraries/haskell/silently {};
 
+  sized = callPackage ../development/libraries/haskell/sized {};
+
   sizedTypes = callPackage ../development/libraries/haskell/sized-types {};
 
   skein = callPackage ../development/libraries/haskell/skein {};
@@ -2549,6 +2555,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   typeEq = callPackage ../development/libraries/haskell/type-eq {};
 
   typeEquality = callPackage ../development/libraries/haskell/type-equality {};
+
+  typeNatural = callPackage ../development/libraries/haskell/type-natural {};
 
   typeLevelNaturalNumber = callPackage ../development/libraries/haskell/type-level-natural-number {};
 
