@@ -1639,6 +1639,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   mongoDB = callPackage ../development/libraries/haskell/mongoDB {};
 
+  monomorphic = callPackage ../development/libraries/haskell/monomorphic {};
+
   monoTraversable = callPackage ../development/libraries/haskell/mono-traversable {};
 
   mmorph = callPackage ../development/libraries/haskell/mmorph {};
