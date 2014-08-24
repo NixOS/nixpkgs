@@ -5406,11 +5406,11 @@ rec {
 
 
   pg8000 = buildPythonPackage rec {
-    name = "pg8000-1.09";
+    name = "pg8000-1.9.14";
 
     src = fetchurl {
-      url = "http://pg8000.googlecode.com/files/${name}.zip";
-      sha256 = "0kdc4rg47k1qkq22inghd50xlxjdkfcilym8mxff8wy4h091xykw";
+      url = "http://pypi.python.org/packages/source/p/pg8000/${name}.tar.gz";
+      sha256 = "1vandvfaf1m3a1fbc7nbm6syfqr9bazhzsnmai0jpjkbmb349izs";
     };
 
     propagatedBuildInputs = [ pytz ];
