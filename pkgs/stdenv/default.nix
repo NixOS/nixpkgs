@@ -37,7 +37,6 @@ rec {
     inherit config;
     stdenv = stdenvNative;
     pkgs = stdenvNativePkgs;
-    haveLibCxx = true;
   };
 
   stdenvDarwinNaked = import ./darwin {
@@ -45,6 +44,13 @@ rec {
     stdenv = stdenvNative;
     pkgs = stdenvNativePkgs;
     haveLibCxx = false;
+  };
+
+  stdenvDarwin33 = import ./darwin {
+    inherit config;
+    stdenv = stdenvNative;
+    pkgs = stdenvNativePkgs;
+    useClang33 = true;
   };
 
 

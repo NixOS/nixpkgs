@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   postUnpack =
     '' export CPATH="${bzip2}/include"
        export LIBRARY_PATH="${bzip2}/lib"
+       export CXXFLAGS="-O3 -Wno-error=reserved-user-defined-literal"
     '';
 
   configureFlags =
@@ -68,9 +69,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    # due to builder args bug; see
-    # https://github.com/NixOS/nix/commit/b224ac15201c57b40ea855f5a98b1bd166c1c7f6
-    broken = stdenv.isDarwin;
     description = "The Nix Deployment System";
     homepage = http://nixos.org/;
     license = stdenv.lib.licenses.lgpl2Plus;

@@ -1,9 +1,5 @@
 { stdenv, fetchurl, perl, groff, llvm, cmake, libxml2, python }:
 
-# be sure not to rebuild clang on darwin; some packages request it specifically
-# we need to fix those
-assert stdenv.isDarwin -> stdenv.gcc.nativeTools;
-
 let
   version = "3.3";
   gccReal = if (stdenv.gcc.gcc or null) == null then stdenv.gcc else stdenv.gcc.gcc;

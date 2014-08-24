@@ -1,4 +1,6 @@
-{ stdenv, pkgs, config, haveLibCxx }:
+{ stdenv, pkgs, config
+, haveLibCxx ? true
+, useClang33 ? false }:
 
 import ../generic rec {
   inherit config;
@@ -33,7 +35,7 @@ import ../generic rec {
       };
     } else null;
     binutils = import ../../build-support/native-darwin-cctools-wrapper {inherit stdenv;};
-    clang = pkgs.clang_34;
+    clang = if useClang33 then pkgs.clang_33 else pkgs.clang;
     coreutils = pkgs.coreutils;
     shell = pkgs.bash + "/bin/sh";
   };
