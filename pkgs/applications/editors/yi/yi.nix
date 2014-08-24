@@ -58,6 +58,8 @@ cabal.mkDerivation (self: {
     description = "The Haskell-Scriptable Editor";
     license = self.stdenv.lib.licenses.gpl2;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
     maintainers = [ self.stdenv.lib.maintainers.fuuzetsu ];
+    broken = true;
   };
 })
