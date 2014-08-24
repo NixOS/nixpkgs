@@ -62,6 +62,7 @@
     hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_16_0_3; };
     haddock = self.haddock_2_11_0;
     haskeline = super.haskeline.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    network = self.network_2_3_0_13;
     shelly = self.shelly_0_15_4_1;
   };
 
