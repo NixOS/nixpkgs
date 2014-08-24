@@ -3631,11 +3631,11 @@ rec {
   };
 
   greenlet = buildPythonPackage rec {
-    name = "greenlet-0.3.1";
+    name = "greenlet-0.4.3";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/g/greenlet/${name}.tar.gz";
-      md5 = "8d75d7f3f659e915e286e1b0fa0e1c4d";
+      url = "http://pypi.python.org/packages/source/g/greenlet/${name}.zip";
+      md5 = "a5e467a5876c415cd357c1ab9027e06c";
     };
 
     meta = {
