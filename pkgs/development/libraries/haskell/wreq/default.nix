@@ -24,6 +24,8 @@ cabal.mkDerivation (self: {
     homepage = "http://www.serpentine.com/wreq";
     description = "An easy-to-use HTTP client library";
     license = self.stdenv.lib.licenses.bsd3;
+    broken = true;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };

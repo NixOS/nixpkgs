@@ -899,14 +899,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ghcjsCodemirror = callPackage ../development/libraries/haskell/ghcjs-codemirror {};
 
-  ghcMod_4_1_6 = callPackage ../development/libraries/haskell/ghc-mod/4.1.6.nix {
-    inherit (pkgs) emacs;
-  };
-
-  ghcMod_5_0_1 = callPackage ../development/libraries/haskell/ghc-mod/5.0.1.nix {
-    inherit (pkgs) emacs;
-  };
-
+  ghcMod_4_1_6 = callPackage ../development/libraries/haskell/ghc-mod/4.1.6.nix { inherit (pkgs) emacs; };
+  ghcMod_5_0_1_1 = callPackage ../development/libraries/haskell/ghc-mod/5.0.1.1.nix { inherit (pkgs) emacs; };
   ghcMod = self.ghcMod_4_1_6;
 
   ghcMtl = callPackage ../development/libraries/haskell/ghc-mtl {};
@@ -1623,7 +1617,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   MonadPrompt = callPackage ../development/libraries/haskell/MonadPrompt {};
 
-  MonadRandom = callPackage ../development/libraries/haskell/MonadRandom {};
+  MonadRandom_0_1_13 = callPackage ../development/libraries/haskell/MonadRandom/0.1.13.nix {};
+  MonadRandom_0_2 = callPackage ../development/libraries/haskell/MonadRandom/0.2.nix {};
+  MonadRandom = self.MonadRandom_0_2;
 
   monadStm = callPackage ../development/libraries/haskell/monad-stm {};
 
@@ -1711,7 +1707,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   network_2_3_1_0 = callPackage ../development/libraries/haskell/network/2.3.1.0.nix {};
   network_2_4_1_2 = callPackage ../development/libraries/haskell/network/2.4.1.2.nix {};
   network_2_5_0_0 = callPackage ../development/libraries/haskell/network/2.5.0.0.nix {};
-  network = self.network_2_5_0_0;
+  network_2_6_0_1 = callPackage ../development/libraries/haskell/network/2.6.0.1.nix {};
+  network = self.network_2_5_0_0; # the latest version break HTTP on all platforms
 
   networkCarbon = callPackage ../development/libraries/haskell/network-carbon {};
 
@@ -2002,7 +1999,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   RangedSets = callPackage ../development/libraries/haskell/Ranged-sets {};
 
   random_1_0_1_1 = callPackage ../development/libraries/haskell/random/1.0.1.1.nix {};
-  random = self.random_1_0_1_1;
+  random_1_0_1_3 = callPackage ../development/libraries/haskell/random/1.0.1.3.nix {};
+  random = self.random_1_0_1_3;
 
   randomFu = callPackage ../development/libraries/haskell/random-fu {};
 
@@ -2665,8 +2663,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   void = callPackage ../development/libraries/haskell/void {};
 
   vty_4_7_5 = callPackage ../development/libraries/haskell/vty/4.7.5.nix {};
-  vty_5_1_4 = callPackage ../development/libraries/haskell/vty/5.1.4.nix {};
-  vty = self.vty_5_1_4;
+  vty_5_2_0 = callPackage ../development/libraries/haskell/vty/5.2.0.nix {};
+  vty = self.vty_5_2_0;
 
   vtyUi = callPackage ../development/libraries/haskell/vty-ui {
     vty = self.vty_4_7_5;

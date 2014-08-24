@@ -10,6 +10,8 @@ cabal.mkDerivation (self: {
   meta = {
     homepage = "http://github.com/ocharles/json-assertions.git";
     description = "Test that your (Aeson) JSON encoding matches your expectations";
+    broken = true;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
