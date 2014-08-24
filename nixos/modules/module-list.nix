@@ -43,6 +43,7 @@
   ./misc/ids.nix
   ./misc/lib.nix
   ./misc/locate.nix
+  ./misc/meta.nix
   ./misc/nixpkgs.nix
   ./misc/passthru.nix
   ./misc/version.nix
