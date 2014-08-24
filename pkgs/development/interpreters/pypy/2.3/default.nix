@@ -75,6 +75,9 @@ let
        ln -s $out/pypy-c/include $out/include/${libPrefix}
        ln -s $out/pypy-c/lib-python/${pythonVersion} $out/lib/${libPrefix}
 
+       # verify cffi modules
+       $out/bin/pypy -c "import Tkinter"
+
        # TODO: compile python files?
     '';
 
