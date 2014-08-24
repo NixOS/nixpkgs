@@ -19,7 +19,7 @@ g: # Get dependencies from patched gems
     bitbucket_backup = g.bitbucket_backup_0_3_1;
     builder = g.builder_3_2_2;
     buildr = g.buildr_1_4_19;
-    bundler = g.bundler_1_7_0;
+    bundler = g.bundler_1_7_1;
     childprocess = g.childprocess_0_5_3;
     chronic = g.chronic_0_10_2;
     coderay = g.coderay_1_1_0;
@@ -102,7 +102,7 @@ g: # Get dependencies from patched gems
     rspec_expectations = g.rspec_expectations_2_14_5;
     rspec_mocks = g.rspec_mocks_2_14_6;
     rubyzip = g.rubyzip_1_1_6;
-    sass = g.sass_3_4_0;
+    sass = g.sass_3_4_1;
     selenium_webdriver = g.selenium_webdriver_2_42_0;
     servolux = g.servolux_0_10_0;
     sinatra = g.sinatra_1_4_5;
@@ -113,6 +113,7 @@ g: # Get dependencies from patched gems
     systemu = g.systemu_2_6_4;
     taskjuggler = g.taskjuggler_3_5_0;
     term_ansicolor = g.term_ansicolor_1_3_0;
+    terminal_notifier = g.terminal_notifier_1_6_1;
     text = g.text_1_3_0;
     thin = g.thin_1_6_2;
     thor = g.thor_0_19_1;
@@ -134,7 +135,7 @@ g: # Get dependencies from patched gems
     xapian_ruby = g.xapian_ruby_1_2_17;
     xml_simple = g.xml_simple_1_1_2;
   };
-  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''cucumber'' ''fakes3'' ''foreman'' ''gettext'' ''iconv'' ''jsduck'' ''lockfile'' ''mechanize'' ''nix'' ''papertrail-cli'' ''rails'' ''rake'' ''rb-fsevent'' ''remote_syslog'' ''riemann-dash'' ''right_aws'' ''rmail'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''taskjuggler'' ''thin'' ''travis'' ''trollop'' ''uuid'' ''xapian-full'' ''xapian-ruby'' ];
+  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''cucumber'' ''fakes3'' ''foreman'' ''gettext'' ''iconv'' ''jsduck'' ''lockfile'' ''mechanize'' ''nix'' ''papertrail-cli'' ''rails'' ''rake'' ''rb-fsevent'' ''remote_syslog'' ''riemann-dash'' ''right_aws'' ''rmail'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''taskjuggler'' ''terminal-notifier'' ''thin'' ''travis'' ''trollop'' ''uuid'' ''xapian-full'' ''xapian-ruby'' ];
   gems = {
     ZenTest_4_10_1 = {
       basename = ''ZenTest'';
@@ -361,19 +362,19 @@ for those one-off tasks, with a language that's a joy to use.
 '';
       };
       name = ''buildr-1.4.19'';
-      requiredGems = [ g.rake_0_9_2_2 g.builder_3_2_2 g.net_ssh_2_7_0 g.net_sftp_2_1_2 g.rubyzip_0_9_9 g.json_pure_1_8_0 g.hoe_3_7_1 g.rjb_1_4_8 g.atoulme_Antwrap_0_7_4 g.diff_lcs_1_2_4 g.rspec_expectations_2_14_3 g.rspec_mocks_2_14_3 g.rspec_core_2_14_5 g.rspec_2_14_1 g.xml_simple_1_1_2 g.minitar_0_5_4 g.bundler_1_7_0 g.orderedhash_0_0_6 ];
+      requiredGems = [ g.rake_0_9_2_2 g.builder_3_2_2 g.net_ssh_2_7_0 g.net_sftp_2_1_2 g.rubyzip_0_9_9 g.json_pure_1_8_0 g.hoe_3_7_1 g.rjb_1_4_8 g.atoulme_Antwrap_0_7_4 g.diff_lcs_1_2_4 g.rspec_expectations_2_14_3 g.rspec_mocks_2_14_3 g.rspec_core_2_14_5 g.rspec_2_14_1 g.xml_simple_1_1_2 g.minitar_0_5_4 g.bundler_1_7_1 g.orderedhash_0_0_6 ];
       sha256 = ''07k6z149si7v1h5m1bvdhjcv0nnjwkd2c6a8n1779l8g47ckccj0'';
     };
-    bundler_1_7_0 = {
+    bundler_1_7_1 = {
       basename = ''bundler'';
       meta = {
         description = ''The best way to manage your application's dependencies'';
         homepage = ''http://bundler.io'';
         longDescription = ''Bundler manages an application's dependencies through its entire life, across many machines, systematically and repeatably'';
       };
-      name = ''bundler-1.7.0'';
+      name = ''bundler-1.7.1'';
       requiredGems = [  ];
-      sha256 = ''0vcbqmr1h98yfaixjbpdyzz1b90ms8gf86kd3c0q0ydwh9yr7b1j'';
+      sha256 = ''144yqbmi89gl933rh8dv58bm7ia14s4a098qdi2z0q09ank9n5h2'';
     };
     childprocess_0_5_3 = {
       basename = ''childprocess'';
@@ -1378,7 +1379,7 @@ request helpers feature.'';
         longDescription = ''Ruby on Rails is a full-stack web framework optimized for programmer happiness and sustainable productivity. It encourages beautiful code by favoring convention over configuration.'';
       };
       name = ''rails-4.1.5'';
-      requiredGems = [ g.activesupport_4_1_5 g.actionpack_4_1_5 g.actionview_4_1_5 g.activemodel_4_1_5 g.activerecord_4_1_5 g.actionmailer_4_1_5 g.railties_4_1_5 g.bundler_1_7_0 g.sprockets_rails_2_1_3 ];
+      requiredGems = [ g.activesupport_4_1_5 g.actionpack_4_1_5 g.actionview_4_1_5 g.activemodel_4_1_5 g.activerecord_4_1_5 g.actionmailer_4_1_5 g.railties_4_1_5 g.bundler_1_7_1 g.sprockets_rails_2_1_3 ];
       sha256 = ''12s3jkvd6bn40apxc3973czgs7s6y36aclbwif6j770v7sjd9qj7'';
     };
     railties_4_1_5 = {
@@ -1475,7 +1476,7 @@ Rake has the following features:
         longDescription = ''HTTP dashboard for the distributed event system Riemann.'';
       };
       name = ''riemann-dash-0.2.9'';
-      requiredGems = [ g.erubis_2_7_0 g.sinatra_1_4_5 g.sass_3_4_0 g.webrick_1_3_1 g.multi_json_1_3_6 ];
+      requiredGems = [ g.erubis_2_7_0 g.sinatra_1_4_5 g.sass_3_4_1 g.webrick_1_3_1 g.multi_json_1_3_6 ];
       sha256 = ''0ws5wmjbv8w9lcr3i2mdinj2qm91p6c85k6c067i67cf0p90jxq3'';
     };
     right_aws_3_1_0 = {
@@ -1689,7 +1690,7 @@ RKelly[https://github.com/tenderlove/rkelly] JavaScript parser.'';
       requiredGems = [  ];
       sha256 = ''17ha7kmgcnhnxyfp9wgyrd2synp17v9g8j1pknhfd2v9x5g475m9'';
     };
-    sass_3_4_0 = {
+    sass_3_4_1 = {
       basename = ''sass'';
       meta = {
         description = ''A powerful but elegant CSS compiler that makes CSS fun again.'';
@@ -1700,9 +1701,9 @@ RKelly[https://github.com/tenderlove/rkelly] JavaScript parser.'';
       command line tool or a web-framework plugin.
 '';
       };
-      name = ''sass-3.4.0'';
+      name = ''sass-3.4.1'';
       requiredGems = [  ];
-      sha256 = ''1v2kda9ff69nmz2qcxfmc1w5nxv81nays450nql0mbpy8pvydfr2'';
+      sha256 = ''0f997m7g6gcd4yaxxrf1nylk2x8ynf7w2l631sby51zfn21rfli4'';
     };
     selenium_webdriver_2_42_0 = {
       basename = ''selenium_webdriver'';
@@ -1835,6 +1836,16 @@ management.
       name = ''term-ansicolor-1.3.0'';
       requiredGems = [ g.tins_1_3_2 ];
       sha256 = ''1a2gw7gmpmx57sdpyhjwl0zn4bqp7jyjz7aslpvvphd075layp4b'';
+    };
+    terminal_notifier_1_6_1 = {
+      basename = ''terminal_notifier'';
+      meta = {
+        description = ''Send User Notifications on Mac OS X 10.8 or higher.'';
+        homepage = ''https://github.com/alloy/terminal-notifier'';
+      };
+      name = ''terminal-notifier-1.6.1'';
+      requiredGems = [  ];
+      sha256 = ''0j14sblviiypzc9vb508ldd78winba4vhnm9nhg3zpq07p3528g7'';
     };
     text_1_3_0 = {
       basename = ''text'';

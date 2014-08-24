@@ -9094,7 +9094,7 @@ rec {
       md5 = "6c73c5b668a67fdc116a25b884058ed9";
     };
     
-    doCheck = !python.isPypy;
+    doCheck = !(python.isPypy or false);
 
     propagatedBuildInputs = [ zope_interface zope_exceptions zope_location ];
 
