@@ -634,6 +634,8 @@ rec {
 
   beaker = buildPythonPackage rec {
     name = "Beaker-1.6.4";
+    
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/B/Beaker/${name}.tar.gz";
