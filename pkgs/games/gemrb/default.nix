@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cmake python openal SDL zlib libpng libvorbis ];
+  # TODO: make libpng, libvorbis, sdl_mixer, freetype, vlc, glew (and other gl reqs) optional
 
   # Necessary to find libdl.
   CMAKE_LIBRARY_PATH = "${stdenv.gcc.libc}/lib";
@@ -18,8 +19,19 @@ stdenv.mkDerivation rec {
   # Can't have -werror because of the Vorbis header files.
   cmakeFlags = "-DDISABLE_WERROR=ON -DCMAKE_VERBOSE_MAKEFILE=ON";
 
-  meta = {
+  # upstream prefers some symbols to remain
+  dontStrip = true;
+
+  meta = with stdenv.lib; {
     description = "A reimplementation of the Infinity Engine, used by games such as Baldur's Gate";
-    homepage = http://gemrb.sourceforge.net/;
+    longDescription = ''
+      GemRB (Game engine made with pre-Rendered Background) is a portable open-source implementation of
+      Bioware's Infinity Engine. It was written to support pseudo-3D role playing games based on the
+      Dungeons & Dragons ruleset (Baldur's Gate and Icewind Dale series, Planescape: Torment).
+    '';
+    homepage = http://gemrb.org/;
+    license = licenses.gpl2;
+    platforms = stdenv.lib.platforms.all;
+    hydraPlatforms = [];
   };
 }
