@@ -8,21 +8,6 @@
     <subtitle>Draft (Version <xi:include href="../.version"
     parse="text" />)</subtitle>
 
-    <author>
-      <personname>
-        <firstname>Eelco</firstname>
-        <surname>Dolstra</surname>
-      </personname>
-      <affiliation>
-        <orgname>LogicBlox</orgname>
-      </affiliation>
-    </author>
-
-    <copyright>
-      <year>2008-2012</year>
-      <holder>Eelco Dolstra</holder>
-    </copyright>
-
   </info>
 
   <xi:include href="introduction.xml" />
@@ -33,6 +18,5 @@
   <xi:include href="package-notes.xml" />
   <xi:include href="coding-conventions.xml" />
   <xi:include href="contributing.xml" />
-  
-        
+
 </book>
