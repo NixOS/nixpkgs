@@ -19,6 +19,17 @@ stdenv.mkDerivation rec {
 
   patches = [ ./enable-mixer-and-dbus.patch ];
 
+  # SConstruct checks cpuinfo and an objdump of /bin/mount to determine the appropriate arch
+  # Let's just skip this and tell it which to build
+  postPatch = if stdenv.isi686 then ''
+    sed '/def is_userspace_32bit(cpuinfo):/a\
+        return True' -i SConstruct
+  ''
+  else ''
+    sed '/def is_userspace_32bit(cpuinfo):/a\
+        return False' -i SConstruct
+  '';
+
   # TODO fix ffado-diag, it doesn't seem to use PYPKGDIR
   buildPhase = ''
     export PYLIBSUFFIX=lib/${python.libPrefix}/site-packages
