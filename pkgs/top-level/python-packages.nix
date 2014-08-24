@@ -7961,14 +7961,16 @@ rec {
   };
 
   tempita = buildPythonPackage rec {
-    version = "0.4";
+    version = "0.5.2";
     name = "tempita-${version}";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/T/Tempita/Tempita-${version}.tar.gz";
-      md5 = "0abe015a72e748d0c6284679a497426c";
+      md5 = "4c2f17bb9d481821c41b6fbee904cea1";
     };
-
+    
+    disabled = isPy3k;
+    
     buildInputs = [ nose ];
 
     meta = {
