@@ -507,11 +507,11 @@ rec {
   });
 
   autopep8 = buildPythonPackage (rec {
-    name = "autopep8-1.0";
+    name = "autopep8-1.0.3";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/a/autopep8/${name}.tar.gz";
-      md5 = "41782e66efcbaf9d761bb45a2d2929bb";
+      md5 = "7c16d385cf9ad7c1d7fbcfcea2588a56";
     };
 
     propagatedBuildInputs = [ pep8 ];
