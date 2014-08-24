@@ -14,13 +14,13 @@
       effect after you run <command>nixos-rebuild</command>.</para>
   </partintro>
 
-  <xi:include href="config_syntax.xml" />
-  <xi:include href="package_mgmt.xml" />
-  <xi:include href="user_mgmt.xml" />
-  <xi:include href="file_systems.xml" />
-  <xi:include href="x_windows.xml" />
+  <xi:include href="config-syntax.xml" />
+  <xi:include href="package-mgmt.xml" />
+  <xi:include href="user-mgmt.xml" />
+  <xi:include href="file-systems.xml" />
+  <xi:include href="x-windows.xml" />
   <xi:include href="networking.xml" />
-  <xi:include href="linux_kernel.xml" />
+  <xi:include href="linux-kernel.xml" />
 
 
 <!-- Apache; libvirtd virtualisation -->

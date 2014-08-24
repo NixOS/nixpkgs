@@ -258,7 +258,7 @@ $ reboot</screen>
 }</screen>
 </example>
 
-<xi:include href="installing_UEFI.xml" />
-<xi:include href="installing_USB.xml" />
+<xi:include href="installing-UEFI.xml" />
+<xi:include href="installing-USB.xml" />
 
 </chapter>

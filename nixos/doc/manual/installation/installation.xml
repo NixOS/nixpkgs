@@ -12,6 +12,6 @@
   
   <xi:include href="obtaining.xml" />
   <xi:include href="installing.xml" />
-  <xi:include href="changing_config.xml" />
+  <xi:include href="changing-config.xml" />
   <xi:include href="upgrading.xml" />
 </part>

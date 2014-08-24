@@ -3,7 +3,7 @@
     version="5.0"
     xml:id="sec-changing-config">
     
-    <title>Changing the configuration</title>
+    <title>Changing the Configuration</title>
     
     <para>The file <filename>/etc/nixos/configuration.nix</filename>
         contains the current configuration of your machine.  Whenever you’ve

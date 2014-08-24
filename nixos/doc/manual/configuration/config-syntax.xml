@@ -19,7 +19,7 @@
             manual</link>, but here we give a short overview of the most important
         constructs useful in NixOS configuration files.</para>
 
-    <xi:include href="config_file.xml" />
+    <xi:include href="config-file.xml" />
     <xi:include href="abstractions.xml" />
     <xi:include href="modularity.xml" />
     <xi:include href="summary.xml" />
