@@ -31,5 +31,7 @@ cabal.mkDerivation (self: {
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })
