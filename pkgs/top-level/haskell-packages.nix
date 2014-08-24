@@ -1623,7 +1623,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   MonadPrompt = callPackage ../development/libraries/haskell/MonadPrompt {};
 
-  MonadRandom = callPackage ../development/libraries/haskell/MonadRandom {};
+  MonadRandom_0_1_13 = callPackage ../development/libraries/haskell/MonadRandom/0.1.13.nix {};
+  MonadRandom_0_2 = callPackage ../development/libraries/haskell/MonadRandom/0.2.nix {};
+  MonadRandom = self.MonadRandom_0_2;
 
   monadStm = callPackage ../development/libraries/haskell/monad-stm {};
 
