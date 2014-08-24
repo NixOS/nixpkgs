@@ -680,7 +680,7 @@ in
                 '');
           };
 
-        createTunDevice = i: nameValuePair "${i.name}-tun"
+        createTunDevice = i: nameValuePair "${i.name}-netdev"
           { description = "Virtual Network Interface ${i.name}";
             requires = [ "dev-net-tun.device" ];
             after = [ "dev-net-tun.device" ];
@@ -701,8 +701,8 @@ in
             '';
           };
 
-        createBridgeDevice = n: v:
-          let
+        createBridgeDevice = n: v: nameValuePair "${n}-netdev"
+          (let
             deps = map (i: "sys-subsystem-net-devices-${i}.device") v.interfaces;
           in
           { description = "Bridge Interface ${n}";
@@ -739,10 +739,10 @@ in
                 ip link set "${n}" down
                 brctl delbr "${n}"
               '';
-          };
+          });
 
-        createBondDevice = n: v:
-          let
+        createBondDevice = n: v: nameValuePair "${n}-netdev"
+          (let
             deps = map (i: "sys-subsystem-net-devices-${i}.device") v.interfaces;
           in
           { description = "Bond Interface ${n}";
@@ -778,10 +778,10 @@ in
               ifenslave -d "${n}"
               ip link delete "${n}"
             '';
-          };
+          });
 
-        createSitDevice = n: v:
-          let
+        createSitDevice = n: v: nameValuePair "${n}-netdev"
+          (let
             deps = optional (v.dev != null) "sys-subsystem-net-devices-${v.dev}.device";
           in
           { description = "6-to-4 Tunnel Interface ${n}";
@@ -804,10 +804,10 @@ in
             postStop = ''
               ip link delete "${n}"
             '';
-          };
+          });
 
-        createVlanDevice = n: v:
-          let
+        createVlanDevice = n: v: nameValuePair "${n}-netdev"
+          (let
             deps = [ "sys-subsystem-net-devices-${v.interface}.device" ];
           in
           { description = "Vlan Interface ${n}";
@@ -826,15 +826,15 @@ in
             postStop = ''
               ip link delete "${n}"
             '';
-          };
+          });
 
       in listToAttrs (
            map configureInterface interfaces ++
            map createTunDevice (filter (i: i.virtual) interfaces))
-         // mapAttrs createBridgeDevice cfg.bridges
-         // mapAttrs createBondDevice cfg.bonds
-         // mapAttrs createSitDevice cfg.sits
-         // mapAttrs createVlanDevice cfg.vlans
+         // mapAttrs' createBridgeDevice cfg.bridges
+         // mapAttrs' createBondDevice cfg.bonds
+         // mapAttrs' createSitDevice cfg.sits
+         // mapAttrs' createVlanDevice cfg.vlans
          // { "network-setup" = networkSetup; };
 
     # Set the host and domain names in the activation script.  Don't
