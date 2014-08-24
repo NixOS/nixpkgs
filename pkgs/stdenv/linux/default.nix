@@ -66,6 +66,18 @@ rec {
   };
 
 
+  # A helper function to call gcc-wrapper.
+  wrapGCC =
+    { gcc, libc, binutils, coreutils, name }:
+
+    lib.makeOverridable (import ../../build-support/gcc-wrapper) {
+      nativeTools = false;
+      nativeLibc = false;
+      inherit gcc binutils coreutils libc name;
+      stdenv = stage0.stdenv;
+    };
+
+
   # This function builds the various standard environments used during
   # the bootstrap.  In all stages, we build an stdenv and the package
   # set that can be built with that stdenv.
@@ -101,6 +113,7 @@ rec {
     };
     in { stdenv = thisStdenv; pkgs = thisPkgs; };
 
+
   # Build a dummy stdenv with no GCC or working fetchurl.  This is
   # because we need a stdenv to build the GCC wrapper and fetchurl.
   stage0 = stageFun {
@@ -122,18 +135,6 @@ rec {
       };
     };
   };
-
-
-  # A helper function to call gcc-wrapper.
-  wrapGCC =
-    { gcc, libc, binutils, coreutils, name }:
-
-    lib.makeOverridable (import ../../build-support/gcc-wrapper) {
-      nativeTools = false;
-      nativeLibc = false;
-      inherit gcc binutils coreutils libc name;
-      stdenv = stage0.stdenv;
-    };
 
 
   # Create the first "real" standard environment.  This one consists
