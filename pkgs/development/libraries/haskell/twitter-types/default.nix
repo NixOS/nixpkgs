@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "twitter-types";
-  version = "0.4.20140809";
-  sha256 = "0f32gjvpzcy5ld2j6mhsvaxaiyzyp5pvqjvmgawaiy78c3kxi8gh";
+  version = "0.5.0";
+  sha256 = "0nnis96rki60ily7ydq155nawmhz7dn51d1d3hwikb1vz16ji47a";
   buildDepends = [ aeson httpTypes text unorderedContainers ];
   testDepends = [
     aeson attoparsec filepath httpTypes HUnit testFramework
