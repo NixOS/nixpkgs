@@ -7,6 +7,8 @@
 
 with stdenv.lib;
 
+assert stdenv.gcc.gcc != null;
+
 # TODO:
 # * Add gio-module-fam
 #     Problem: cyclic dependency on gamin
