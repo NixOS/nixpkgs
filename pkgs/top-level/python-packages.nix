@@ -9026,11 +9026,11 @@ rec {
 
 
   zope_proxy = buildPythonPackage rec {
-    name = "zope.proxy-4.1.1";
+    name = "zope.proxy-4.1.4";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/z/zope.proxy/zope.proxy-4.1.1.tar.gz";
-      md5 = "c36691f0abee7573f4ddcc378603cefd";
+      url = "http://pypi.python.org/packages/source/z/zope.proxy/${name}.tar.gz";
+      md5 = "3bcaf8b8512a99649ecf2f158c11d05b";
     };
 
     propagatedBuildInputs = [ zope_interface ];
