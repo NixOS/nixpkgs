@@ -17,25 +17,31 @@ umask 0022;
 sub showHelp {
     print <<EOF;
 Usage: nixos-container list
-       nixos-container create <container-name> [--config <string>] [--ensure-unique-name]
+       nixos-container create <container-name> [--system-path <path>] [--config <string>] [--ensure-unique-name] [--auto-start]
        nixos-container destroy <container-name>
        nixos-container start <container-name>
        nixos-container stop <container-name>
+       nixos-container status <container-name>
        nixos-container login <container-name>
        nixos-container root-login <container-name>
        nixos-container run <container-name> -- args...
        nixos-container set-root-password <container-name> <password>
        nixos-container show-ip <container-name>
+       nixos-container show-host-key <container-name>
 EOF
     exit 0;
 }
 
+my $systemPath;
 my $ensureUniqueName = 0;
+my $autoStart = 0;
 my $extraConfig;
 
 GetOptions(
     "help" => sub { showHelp() },
     "ensure-unique-name" => \$ensureUniqueName,
+    "auto-start" => \$autoStart,
+    "system-path=s" => \$systemPath,
     "config=s" => \$extraConfig
     ) or exit 1;
 
@@ -122,16 +128,12 @@ if ($action eq "create") {
     push @conf, "PRIVATE_NETWORK=1\n";
     push @conf, "HOST_ADDRESS=$hostAddress\n";
     push @conf, "LOCAL_ADDRESS=$localAddress\n";
+    push @conf, "AUTO_START=$autoStart\n";
     write_file($confFile, \@conf);
 
     close($lock);
 
     print STDERR "host IP is $hostAddress, container IP is $localAddress\n";
-
-    mkpath("$root/etc/nixos", 0, 0755);
-
-    my $nixosConfigFile = "$root/etc/nixos/configuration.nix";
-    writeNixOSConfig $nixosConfigFile;
 
     # The per-container directory is restricted to prevent users on
     # the host from messing with guest users who happen to have the
@@ -141,10 +143,21 @@ if ($action eq "create") {
     $profileDir = "$profileDir/$containerName";
     mkpath($profileDir, 0, 0755);
 
-    system("nix-env", "-p", "$profileDir/system",
-           "-I", "nixos-config=$nixosConfigFile", "-f", "<nixpkgs/nixos>",
-           "--set", "-A", "system") == 0
-        or die "$0: failed to build initial container configuration\n";
+    # Build/set the initial configuration.
+    if (defined $systemPath) {
+        system("nix-env", "-p", "$profileDir/system", "--set", $systemPath) == 0
+            or die "$0: failed to set initial container configuration\n";
+    } else {
+        mkpath("$root/etc/nixos", 0, 0755);
+
+        my $nixosConfigFile = "$root/etc/nixos/configuration.nix";
+        writeNixOSConfig $nixosConfigFile;
+
+        system("nix-env", "-p", "$profileDir/system",
+               "-I", "nixos-config=$nixosConfigFile", "-f", "<nixpkgs/nixos>",
+               "--set", "-A", "system") == 0
+            or die "$0: failed to build initial container configuration\n";
+    }
 
     print "$containerName\n" if $ensureUniqueName;
     exit 0;
@@ -154,7 +167,14 @@ my $root = "/var/lib/containers/$containerName";
 my $profileDir = "/nix/var/nix/profiles/per-container/$containerName";
 my $gcRootsDir = "/nix/var/nix/gcroots/per-container/$containerName";
 my $confFile = "/etc/containers/$containerName.conf";
-die "$0: container ‘$containerName’ does not exist\n" if !-e $confFile;
+if (!-e $confFile) {
+    if ($action eq "destroy") {
+        exit 0;
+    } elsif ($action eq "status") {
+        print "gone\n";
+    }
+    die "$0: container ‘$containerName’ does not exist\n" ;
+}
 
 sub isContainerRunning {
     my $status = `systemctl show 'container\@$containerName'`;
@@ -185,6 +205,10 @@ elsif ($action eq "start") {
 
 elsif ($action eq "stop") {
     stopContainer;
+}
+
+elsif ($action eq "status") {
+    print isContainerRunning() ? "up" : "down", "\n";
 }
 
 elsif ($action eq "update") {
@@ -239,6 +263,12 @@ elsif ($action eq "show-ip") {
     my $s = read_file($confFile) or die;
     $s =~ /^LOCAL_ADDRESS=([0-9\.]+)$/m or die "$0: cannot get IP address\n";
     print "$1\n";
+}
+
+elsif ($action eq "show-host-key") {
+    my $fn = "$root/etc/ssh/ssh_host_ecdsa_key.pub";
+    exit 1 if ! -f $fn;
+    print read_file($fn);
 }
 
 else {

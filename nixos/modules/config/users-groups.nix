@@ -346,7 +346,7 @@ in {
         uid = ids.uids.root;
         description = "System administrator";
         home = "/root";
-        shell = cfg.defaultUserShell;
+        shell = mkDefault cfg.defaultUserShell;
         group = "root";
         extraGroups = [ "grsecurity" ];
         hashedPassword = mkDefault config.security.initialRootPassword;

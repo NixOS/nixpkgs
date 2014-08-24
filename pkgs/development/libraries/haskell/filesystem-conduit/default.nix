@@ -19,5 +19,7 @@ cabal.mkDerivation (self: {
     description = "Use system-filepath data types with conduits. (deprecated)";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

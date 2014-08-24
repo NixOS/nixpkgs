@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "distributed-process";
-  version = "0.5.0";
-  sha256 = "16lfmkhc6jk2n46w39vf0q1ql426h5jrjgdi6cyjgwy1d5kaqcny";
+  version = "0.5.1";
+  sha256 = "1c654l7r3cn89nknh67vsg7crnfhgswh4523qyrmn8z4ykyd0zfk";
   buildDepends = [
     binary dataAccessor deepseq distributedStatic hashable mtl
     networkTransport random rank1dynamic stm syb time transformers

@@ -17,5 +17,7 @@ cabal.mkDerivation (self: {
     description = "Optics for xml-conduit and html-conduit";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })
