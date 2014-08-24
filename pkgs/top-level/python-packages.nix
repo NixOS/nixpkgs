@@ -28,7 +28,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 # Python packages for all python versions
 rec {
 
-  inherit python isPy26 isPy27 isPy33 isPy34 isPyPy pythonName;
+  inherit python isPy26 isPy27 isPy33 isPy34 isPyPy isPy3k pythonName;
   inherit (pkgs) fetchurl fetchsvn fetchgit stdenv unzip;
 
   # helpers
@@ -111,11 +111,6 @@ rec {
   # This is used for NixOps to make sure we won't break it with the next major
   # version of nixpart.
   nixpart0 = nixpart;
-
-  pil = import ../development/python-modules/pil {
-    inherit (pkgs) fetchurl stdenv libjpeg zlib freetype;
-    inherit python buildPythonPackage;
-  };
 
   pitz = import ../applications/misc/pitz {
     inherit (pkgs) stdenv fetchurl;
@@ -5446,6 +5441,49 @@ rec {
     buildInputs = [ nose mock pyyaml ];
 
     propagatedBuildInputs = [ unittest2 ];
+  };
+  
+  pil = buildPythonPackage rec {
+    name = "PIL-${version}";
+    version = "1.1.7";
+    
+    src = fetchurl {
+      url = "http://effbot.org/downloads/Imaging-${version}.tar.gz";
+      sha256 = "04aj80jhfbmxqzvmq40zfi4z3cw6vi01m3wkk6diz3lc971cfnw9";
+    };
+  
+    buildInputs = [ python pkgs.libjpeg pkgs.zlib pkgs.freetype ];
+  
+    disabled = isPy3k;
+  
+    doCheck = true;
+  
+    preConfigure = ''
+      sed -i "setup.py" \
+          -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = libinclude("${pkgs.freetype}")|g ;
+              s|^JPEG_ROOT =.*$|JPEG_ROOT = libinclude("${pkgs.libjpeg}")|g ;
+              s|^ZLIB_ROOT =.*$|ZLIB_ROOT = libinclude("${pkgs.zlib}")|g ;'
+    '';
+  
+    checkPhase   = "${python}/bin/${python.executable} selftest.py";
+    buildPhase   = "${python}/bin/${python.executable} setup.py build_ext -i";
+  
+    postInstall = ''
+      cd "$out"/lib/python*/site-packages
+      ln -s $PWD PIL
+    '';
+  
+    meta = {
+      homepage = http://www.pythonware.com/products/pil/;
+      description = "The Python Imaging Library (PIL)";
+      longDescription = ''
+        The Python Imaging Library (PIL) adds image processing
+        capabilities to your Python interpreter.  This library
+        supports many file formats, and provides powerful image
+        processing and graphics capabilities.
+      '';
+      license = "http://www.pythonware.com/products/pil/license.htm";
+    };
   };
 
 
