@@ -140,6 +140,13 @@ rec {
   # Create the first "real" standard environment.  This one consists
   # of bootstrap tools only, and a minimal Glibc to keep the GCC
   # configure script happy.
+  #
+  # For clarity, we only use the previous stage when specifying these
+  # stages.  So stageN should only ever have references for stage{N-1}.
+  #
+  # If we ever need to use a package from more than one stage back, we
+  # simply re-export those packages in the middle stage(s) using the
+  # overrides attribute and the inherit syntax.
   stage1 = stageFun {
     gcc = wrapGCC {
       gcc = bootstrapTools;
@@ -151,6 +158,7 @@ rec {
     # Rebuild binutils to use from stage2 onwards.
     overrides = pkgs: {
       binutils = pkgs.binutils.override { gold = false; };
+      inherit (stage0.pkgs) glibc;
     };
   };
 
@@ -160,13 +168,13 @@ rec {
   stage2 = stageFun {
     gcc = wrapGCC {
       gcc = bootstrapTools;
-      libc = stage0.pkgs.glibc;
+      libc = stage1.pkgs.glibc;
       binutils = stage1.pkgs.binutils;
       coreutils = bootstrapTools;
       name = "bootstrap-gcc-wrapper";
     };
     overrides = pkgs: {
-      inherit (stage1.pkgs) perl;
+      inherit (stage1.pkgs) perl binutils paxctl;
       # This also contains the full, dynamically linked, final Glibc.
     };
   };
@@ -179,12 +187,12 @@ rec {
     gcc = wrapGCC {
       gcc = bootstrapTools;
       libc = stage2.pkgs.glibc;
-      binutils = stage1.pkgs.binutils;
+      binutils = stage2.pkgs.binutils;
       coreutils = bootstrapTools;
       name = "bootstrap-gcc-wrapper";
     };
     overrides = pkgs: {
-      inherit (stage2.pkgs) glibc perl;
+      inherit (stage2.pkgs) binutils glibc perl;
       # Link GCC statically against GMP etc.  This makes sense because
       # these builds of the libraries are only used by GCC, so it
       # reduces the size of the stdenv closure.
@@ -198,7 +206,7 @@ rec {
     extraAttrs = {
       glibc = stage2.pkgs.glibc;  # Required by gcc47 build
     };
-    extraPath = [ stage1.pkgs.paxctl ];
+    extraPath = [ stage2.pkgs.paxctl ];
   };
 
 
@@ -207,15 +215,14 @@ rec {
   stage4 = stageFun {
     gcc = wrapGCC {
       gcc = stage3.pkgs.gcc.gcc;
-      libc = stage2.pkgs.glibc;
-      binutils = stage1.pkgs.binutils;
+      libc = stage3.pkgs.glibc;
+      binutils = stage3.pkgs.binutils;
       coreutils = bootstrapTools;
       name = "";
     };
     extraPath = [ stage3.pkgs.xz ];
     overrides = pkgs: {
-      inherit (stage1.pkgs) perl;
-      inherit (stage3.pkgs) gettext gnum4 gmp glibc;
+      inherit (stage3.pkgs) gettext gnum4 gmp perl glibc;
     };
   };
 
@@ -261,11 +268,9 @@ rec {
 
     overrides = pkgs: {
       inherit gcc;
-      inherit (stage3.pkgs) glibc;
-      inherit (stage4.pkgs) binutils;
       inherit (stage4.pkgs)
-        gzip bzip2 xz bash coreutils diffutils findutils gawk
-        gnumake gnused gnutar gnugrep gnupatch patchelf
+        gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
+        glibc gnumake gnused gnutar gnugrep gnupatch patchelf
         attr acl paxctl;
     };
   };
