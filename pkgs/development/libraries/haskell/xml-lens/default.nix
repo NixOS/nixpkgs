@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.1.6.1";
   sha256 = "093grvlpm19l3g10ka82xpzl2wr0gli71kfkbvk4gvg3194fkw4h";
   buildDepends = [ lens text xmlConduit ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/fumieval/xml-lens";
     description = "Lenses, traversals, prisms for xml-conduit";
