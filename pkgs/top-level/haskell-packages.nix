@@ -2175,6 +2175,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   silently = callPackage ../development/libraries/haskell/silently {};
 
+  sized = callPackage ../development/libraries/haskell/sized {};
+
   sizedTypes = callPackage ../development/libraries/haskell/sized-types {};
 
   skein = callPackage ../development/libraries/haskell/skein {};
