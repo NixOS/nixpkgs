@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Command-line interface for Telegram messenger";
     homepage = https://telegram.org/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };
 }

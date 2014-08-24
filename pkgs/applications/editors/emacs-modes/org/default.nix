@@ -2,11 +2,11 @@
 , texLiveAggregationFun }:
 
 stdenv.mkDerivation rec {
-  name = "org-8.2.7";
+  name = "org-8.2.7c";
 
   src = fetchurl {
     url = "http://orgmode.org/${name}.tar.gz";
-    sha256 = "1n864hnjvx5n2gfi7n0xbwvb1k8l5rdh4a3vpbhw23hy8rx3bvaw";
+    sha256 = "0qqf58xqw1kkgjxm9z40s6h7xd209rx3933klla22lryv3yclc1k";
   };
 
   buildInputs = [ emacs ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
          than that found in GNU Emacs.
       '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = with stdenv.lib.maintainers; [ chaoflow pSub ];
     platforms = stdenv.lib.platforms.unix;

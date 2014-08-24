@@ -20,7 +20,7 @@ let
     ];
     # TODO install man
     installPhase = ''
-      ensureDir $out/sbin
+      mkdir -p $out/sbin
       ls -l
       t=$out/sbin/MAKEDEV
       cp MAKEDEV $t
@@ -78,7 +78,7 @@ stdenv.mkDerivation {
       functions
 
     d=$out/share/debootstrap
-    ensureDir $out/{share/debootstrap,bin}
+    mkdir -p $out/{share/debootstrap,bin}
 
     ${fakeroot}/bin/fakeroot -- make devices.tar.gz MAKEDEV=${makedev}/sbin/MAKEDEV
 
@@ -94,7 +94,7 @@ stdenv.mkDerivation {
     EOF
     chmod +x $out/bin/debootstrap
 
-    ensureDir $out/man/man8
+    mkdir -p $out/man/man8
     mv debootstrap.8 $out/man/man8
   '';
 
@@ -105,7 +105,7 @@ stdenv.mkDerivation {
   meta = { 
     description = "Tool to create a Debian system in a chroot";
     homepage = http://packages.debian.org/de/lenny/debootstrap; # http://code.erisian.com.au/Wiki/debootstrap
-    license = "GPL-2"; # gentoo says so.. ?
+    license = stdenv.lib.licenses.gpl2; # gentoo says so.. ?
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };

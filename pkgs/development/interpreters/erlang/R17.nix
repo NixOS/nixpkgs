@@ -8,11 +8,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "erlang-" + version;
-  version = "17.0";
+  version = "17.1";
 
   src = fetchurl {
     url = "http://www.erlang.org/download/otp_src_${version}.tar.gz";
-    sha256 = "1nyaka6238vh4kdgaynmg8hm5y5zj7hhyl1c971d2pjylsm2nzr9";
+    sha256 = "0mn3p5rwvjfsxjnn1vrm0lxdq40wq9bmd9nibl6hqbfcnnrga1mq";
   };
 
   buildInputs =
@@ -28,8 +28,19 @@ stdenv.mkDerivation rec {
 
   configureFlags= "--with-ssl=${openssl} ${optionalString stdenv.isDarwin "--enable-darwin-64bit"}";
 
-  postInstall = ''
+  postInstall = let
+    manpages = fetchurl {
+      url = "http://www.erlang.org/download/otp_doc_man_${version}.tar.gz";
+      sha256 = "1aza6hxhh7ag2frsa0hg6il6ancjrbazvgz7jc2p7qrmy5vh48sa";
+    };
+  in ''
     ln -s $out/lib/erlang/lib/erl_interface*/bin/erl_call $out/bin/erl_call
+    tar xf "${manpages}" -C "$out/lib/erlang"
+    for i in "$out"/lib/erlang/man/man[0-9]/*.[0-9]; do
+      prefix="''${i%/*}"
+      ensureDir "$out/share/man/''${prefix##*/}"
+      ln -s "$i" "$out/share/man/''${prefix##*/}/''${i##*/}erl"
+    done
   '';
 
   # Some erlang bin/ scripts run sed and awk

@@ -29,6 +29,16 @@ let
 
   allowBroken = config.allowBroken or false || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
 
+  forceEvalHelp = unfreeOrBroken:
+    assert (unfreeOrBroken == "Unfree" || unfreeOrBroken == "Broken");
+    ''
+      You can set
+        { nixpkgs.config.allow${unfreeOrBroken} = true; }
+      in configuration.nix to override this. If you use Nix standalone, you can add
+        { allow${unfreeOrBroken} = true; }
+      to ~/.nixpkgs/config.nix.
+    '';
+
   unsafeGetAttrPos = builtins.unsafeGetAttrPos or (n: as: null);
 
   # The stdenv that we are producing.
@@ -55,8 +65,6 @@ let
 
       propagatedUserEnvPkgs = [gcc] ++
         lib.filter lib.isDerivation initialPath;
-
-      __ignoreNulls = true;
     }
 
     // rec {
@@ -78,15 +86,16 @@ let
         in
         if !allowUnfree && (let l = lib.lists.toList attrs.meta.license or []; in lib.lists.elem "unfree" l || lib.lists.elem "unfree-redistributable" l) && !(allowUnfreePredicate attrs) then
           throw ''
-            Package ‘${attrs.name}’ in ${pos'} has an unfree license, refusing to evaluate. You can set
-              { nixpkgs.config.allowUnfree = true; }
-            in configuration.nix to override this. If you use Nix standalone, you can add
-              { allowUnfree = true; }
-            to ~/.nixpkgs/config.nix.''
+            Package ‘${attrs.name}’ in ${pos'} has an unfree license, refusing to evaluate.
+            ${forceEvalHelp "Unfree"}''
         else if !allowBroken && attrs.meta.broken or false then
-          throw "you can't use package ‘${attrs.name}’ in ${pos'} because it has been marked as broken"
+          throw ''
+            Package ‘${attrs.name}’ in ${pos'} is marked as broken, refusing to evaluate.
+            ${forceEvalHelp "Broken"}''
         else if !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem result.system attrs.meta.platforms then
-          throw "the package ‘${attrs.name}’ in ${pos'} is not supported on ‘${result.system}’"
+          throw ''
+            Package ‘${attrs.name}’ in ${pos'} is not supported on ‘${result.system}’, refusing to evaluate.
+            ${forceEvalHelp "Broken"}''
         else
           lib.addPassthru (derivation (
             (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
@@ -103,6 +112,7 @@ let
               stdenv = result;
               system = result.system;
               userHook = config.stdenv.userHook or null;
+              __ignoreNulls = true;
 
               # Inputs built by the cross compiler.
               buildInputs = lib.optionals (crossConfig != null) (buildInputs ++ extraBuildInputs);

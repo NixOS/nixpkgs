@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.lcdf.org/type/;
     # README from tarball says "BSD-like" and points to non-existing LICENSE
     # file...
-    license = "BSD-like";
+    license = "Click"; # MIT with extra clause, https://github.com/kohler/t1utils/blob/master/LICENSE
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };

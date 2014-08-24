@@ -217,9 +217,7 @@ in
     systemd.services = mkIf cfg.daemon.enable {
 
       nslcd = {
-        wantedBy = [ "nss-user-lookup.target" ];
-        before = [ "nss-user-lookup.target" ];
-        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
 
         preStart = ''
           mkdir -p /run/nslcd

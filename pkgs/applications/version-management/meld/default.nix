@@ -1,8 +1,8 @@
 {stdenv, fetchurl, pygtk, python, intltool, scrollkeeper, makeWrapper }:
 
 let
-  minor = "1.6";
-  version = "${minor}.1";
+  minor = "1.8";
+  version = "${minor}.6";
 in
 
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://gnome/sources/meld/${minor}/meld-${version}.tar.xz";
-    sha256 = "00rsff0yl5qwzh0igkdns6ry2xsbxad70avpqpkbd2bldi94v76y";
+    sha256 = "19g86rksrs77hd58zhs3zwbjmmhqc98v2ly8451avwsbiwmni5mg";
   };
 
   buildInputs = [ pygtk python intltool scrollkeeper makeWrapper ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Visual diff and merge tool";
     homepage = http://meld.sourceforge.net;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

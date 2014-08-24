@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.linux-france.org/prj/imapsync/";
     description = "Mail folder synchronizer between IMAP servers";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

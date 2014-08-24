@@ -172,7 +172,7 @@ in
     boot.initrd.extraUtilsCommands =
       ''
         # We need swapon in the initrd.
-        cp ${pkgs.utillinux}/sbin/swapon $out/bin
+        cp --remove-destination ${pkgs.utillinux}/sbin/swapon $out/bin
       '';
 
     # Don't put old configurations in the GRUB menu.  The user has no

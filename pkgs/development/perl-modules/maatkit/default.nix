@@ -34,7 +34,7 @@ buildPerlPackage rec {
       In addition to MySQL, there is support for PostgreSQL, Memcached, and a
       growing variety of other databases and technologies.
     '';
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     homepage = http://www.maatkit.org/;
   };
 }

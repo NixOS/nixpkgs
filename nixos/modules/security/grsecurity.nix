@@ -50,7 +50,7 @@ in
           description = ''
             grsecurity configuration mode. This specifies whether
             grsecurity is auto-configured or otherwise completely
-            manually configured. Can either by
+            manually configured. Can either be
             <literal>custom</literal> or <literal>auto</literal>.
 
             <literal>auto</literal> is recommended.
@@ -64,7 +64,7 @@ in
           description = ''
             grsecurity configuration priority. This specifies whether
             the kernel configuration should emphasize speed or
-            security. Can either by <literal>security</literal> or
+            security. Can either be <literal>security</literal> or
             <literal>performance</literal>.
           '';
         };
@@ -76,7 +76,7 @@ in
           description = ''
             grsecurity system configuration. This specifies whether
             the kernel configuration should be suitable for a Desktop
-            or a Server. Can either by <literal>server</literal> or
+            or a Server. Can either be <literal>server</literal> or
             <literal>desktop</literal>.
           '';
         };

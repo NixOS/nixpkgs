@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = ''
-    ensureDir "$out/man/man1"
+    mkdir -p "$out/man/man1"
     sed -i -e 's/-o bin -g bin *//' Makefile
     sed -i -e '/chgrp/d' extras/Makefile
   '';

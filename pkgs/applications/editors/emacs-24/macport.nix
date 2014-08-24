@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "194y341zrpjp75mc3099kjc0inr1d379wwsnav257bwsc967h8yx";
   };
 
+  patches = [ ./darwin-new-sections.patch ];
+
   buildInputs = [ ncurses pkgconfig texinfo libxml2 gnutls ];
 
   postUnpack = ''
@@ -53,16 +55,13 @@ stdenv.mkDerivation rec {
   postInstall = ''
     cat >$out/share/emacs/site-lisp/site-start.el <<EOF
     ;; nixos specific load-path
-    (when (getenv "NIX_PROFILES")
-      (setq load-path
-            (append (reverse
-                     (mapcar (lambda (x) (concat x "/share/emacs/site-lisp/"))
+    (when (getenv "NIX_PROFILES") (setq load-path
+                          (append (reverse (mapcar (lambda (x) (concat x "/share/emacs/site-lisp/"))
                              (split-string (getenv "NIX_PROFILES"))))
                     load-path)))
 
     ;; make tramp work for NixOS machines
-    (eval-after-load 'tramp
-      '(add-to-list 'tramp-remote-path "/run/current-system/sw/bin"))
+    (eval-after-load 'tramp '(add-to-list 'tramp-remote-path "/run/current-system/sw/bin"))
     EOF
   '';
 

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       functions, random numbers and a lot of supporting functions.
     '';
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     homepage = https://www.gnu.org/software/libgcrypt/;
     repositories.git = git://git.gnupg.org/libgcrypt.git;

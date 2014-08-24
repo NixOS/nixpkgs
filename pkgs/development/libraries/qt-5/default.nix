@@ -38,13 +38,16 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace /bin/pwd pwd
     substituteInPlace qtbase/configure --replace /bin/pwd pwd
     substituteInPlace qtbase/src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
+    substituteInPlace qtbase/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp \
+        --replace /usr/share/X11/locale ${libX11}/share/X11/locale \
+        --replace /usr/lib/X11/locale ${libX11}/share/X11/locale
     sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i config.tests/*/*.test -i qtbase/mkspecs/*/*.conf
   '';
 
   patches =
     [ ./glib-2.32.patch
       (substituteAll {
-        src = ./dlopen-absolute-paths.patch;
+        src = ./qt-5.2-dlopen-absolute-paths.patch;
         inherit cups icu libXfixes;
         glibc = stdenv.gcc.libc;
         openglDriver = if mesaSupported then mesa.driverLink else "/no-such-path";

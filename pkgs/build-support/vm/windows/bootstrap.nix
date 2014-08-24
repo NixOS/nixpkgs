@@ -69,7 +69,7 @@ in rec {
         -b "${installedVM}/disk.img" \
         -f qcow2 winvm.img
       ${runAndSuspend}
-      ensureDir "$out"
+      mkdir -p "$out"
       cp winvm.img "$out/disk.img"
       cp state.gz "$out/state.gz"
     '';

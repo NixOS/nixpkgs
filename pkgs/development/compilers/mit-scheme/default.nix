@@ -1,7 +1,7 @@
 { fetchurl, stdenv, makeWrapper, gnum4, texinfo, texLive, automake }:
 
 let
-  version = "9.1.1";
+  version = "9.2";
   bootstrapFromC = ! (stdenv.isi686 || stdenv.isx86_64);
 
   arch = if      stdenv.isi686   then "-i386"
@@ -19,14 +19,14 @@ stdenv.mkDerivation {
     if stdenv.isi686
     then fetchurl {
       url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-i386.tar.gz";
-      sha256 = "0vi760fy550d9db538m0vzbq1mpdncvw9g8bk4lswk0kcdira55z";
+      sha256 = "1fmlpnhf5a75db93phajh4ysbdgrgl72v45lk3kznriprl0a7jc6";
     } else if stdenv.isx86_64
     then fetchurl {
       url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-x86-64.tar.gz";
-      sha256 = "1wcxm9hyfc53myvlcn93fyqrnnn4scwkknl9hkbp1cphc6mp291x";
+      sha256 = "1skzxxhr0iq96bf0j5m7mvf3i4sppfyfa6gpqn34mwgkw1fx8274";
     } else fetchurl {
       url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-c-${version}.tar.gz";
-      sha256 = "0pclakzwxbqgy6wqwvs6ml62wgby8ba8xzmwzdwhx1v8wv05yw1j";
+      sha256 = "0w5ib5vsidihb4hb6fma3sp596ykr8izagm57axvgd6lqzwicsjg";
     };
 
   configurePhase =
@@ -65,7 +65,7 @@ stdenv.mkDerivation {
   # XXX: The `check' target doesn't exist.
   doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "MIT/GNU Scheme, a native code Scheme compiler";
 
     longDescription =
@@ -78,12 +78,12 @@ stdenv.mkDerivation {
 
     homepage = http://www.gnu.org/software/mit-scheme/;
 
-    license = "GPLv2+";
+    license = licenses.gpl2Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = with maintainers; [ ludo ];
 
     # Build fails on Cygwin and Darwin:
     # <http://article.gmane.org/gmane.lisp.scheme.mit-scheme.devel/489>.
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.freebsd;
+    platforms = platforms.gnu ++ platforms.freebsd;
   };
 }

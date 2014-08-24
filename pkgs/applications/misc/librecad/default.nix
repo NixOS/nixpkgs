@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   configurePhase = "qmake PREFIX=$out";
 
   installPhase = ''
-    ensureDir $out/bin $out/share
+    mkdir -p $out/bin $out/share
     cp -R unix/librecad $out/bin
     cp -R unix/resources $out/share/librecad
   '';
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A 2D CAD package based upon Qt";
     homepage = http://librecad.org;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

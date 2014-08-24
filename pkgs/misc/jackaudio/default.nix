@@ -5,7 +5,7 @@
 assert firewireSupport -> ffado != null;
 
 stdenv.mkDerivation rec {
-  name = "jackdbus-${version}";
+  name = "jack2-${version}";
   version = "1.9.9.5";
 
   src = fetchurl {

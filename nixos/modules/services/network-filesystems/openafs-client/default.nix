@@ -11,7 +11,7 @@ let
   };
 
   afsConfig = pkgs.runCommand "afsconfig" {} ''
-    ensureDir $out
+    mkdir -p $out
     echo ${cfg.cellName} > $out/ThisCell
     cp ${cellServDB} $out/CellServDB
     echo "/afs:${cfg.cacheDirectory}:${cfg.cacheSize}" > $out/cacheinfo

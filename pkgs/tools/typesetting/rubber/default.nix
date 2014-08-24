@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       of pdfLaTeX to produce PDF documents.
     '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     homepage = http://www.pps.jussieu.fr/~beffara/soft/rubber/;
   };

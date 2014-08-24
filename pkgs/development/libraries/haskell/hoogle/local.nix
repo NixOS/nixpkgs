@@ -5,7 +5,7 @@
 # It is intended to be used in config.nix similarly to:
 #
 # { packageOverrides = pkgs: rec {
-# 
+#
 #   haskellPackages =
 #     let callPackage = pkgs.lib.callPackageWith haskellPackages;
 #     in pkgs.recurseIntoAttrs (pkgs.haskellPackages.override {
@@ -65,7 +65,7 @@ cabal.mkDerivation (self: rec {
         exit 1
     fi
 
-    ensureDir $out/share/hoogle/doc
+    mkdir -p $out/share/hoogle/doc
     export HOOGLE_DOC_PATH=$out/share/hoogle/doc
 
     cd $out/share/hoogle
@@ -117,5 +117,7 @@ cabal.mkDerivation (self: rec {
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.jwiegley ];
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

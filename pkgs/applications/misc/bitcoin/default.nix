@@ -2,12 +2,12 @@
 , pkgconfig, protobuf, qrencode }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.1";
+  version = "0.9.2.1";
   name = "bitcoin-${version}";
 
   src = fetchurl {
     url = "https://bitcoin.org/bin/${version}/${name}-linux.tar.gz";
-    sha256 = "3fabc1c629007b465a278525883663d41a2ba62699f2773536a8bf59ca210425";
+    sha256 = "0060f7d38b98113ab912d4c184000291d7f026eaf77ca5830deec15059678f54";
   };
 
   # hexdump from utillinux is required for tests
@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
       '';
       homepage = "http://www.bitcoin.org/";
       maintainers = [ stdenv.lib.maintainers.roconnor ];
-      license = "MIT";
+      license = stdenv.lib.licenses.mit;
   };
 }

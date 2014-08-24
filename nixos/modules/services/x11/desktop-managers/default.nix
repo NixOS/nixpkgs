@@ -17,7 +17,10 @@ in
   # Note: the order in which desktop manager modules are imported here
   # determines the default: later modules (if enabled) are preferred.
   # E.g., if KDE is enabled, it supersedes xterm.
-  imports = [ ./none.nix ./xterm.nix ./xfce.nix ./kde4.nix ./e17.nix ./gnome3.nix ./xbmc.nix ];
+  imports = [
+    ./none.nix ./xterm.nix ./xfce.nix ./kde4.nix
+    ./e17.nix ./e18.nix ./gnome3.nix ./xbmc.nix
+  ];
 
   options = {
 

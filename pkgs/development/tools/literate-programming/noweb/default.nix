@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "10hdd6mrk26kyh4bnng4ah5h1pnanhsrhqa7qwqy6dyv3rng44y9";
   };
   preBuild = ''
-    ensureDir $out/lib/noweb
+    mkdir -p $out/lib/noweb
     cd src
     makeFlags="BIN=$out/bin LIB=$out/lib/noweb MAN=$out/share/man TEXINPUTS=$out/share/texmf/tex/latex"
   '';

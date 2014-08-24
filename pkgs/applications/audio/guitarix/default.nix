@@ -1,5 +1,5 @@
 { stdenv, fetchurl, avahi, boost, fftw, gettext, glib, glibmm, gtk
-, gtkmm, intltool, jackaudio, ladspaH, librdf, libsndfile, lv2 
+, gtkmm, intltool, jack2, ladspaH, librdf, libsndfile, lv2
 , pkgconfig, python }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    avahi boost fftw gettext glib glibmm gtk gtkmm intltool jackaudio
+    avahi boost fftw gettext glib glibmm gtk gtkmm intltool jack2
     ladspaH librdf libsndfile lv2 pkgconfig python
   ];
 

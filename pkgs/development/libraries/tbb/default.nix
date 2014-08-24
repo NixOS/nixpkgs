@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Intel Thread Building Blocks C++ Library";
     homepage = "http://threadingbuildingblocks.org/";
-    license = "LGPLv3+";
+    license = stdenv.lib.licenses.lgpl3Plus;
     longDescription = ''
       Intel Threading Building Blocks offers a rich and complete approach to
       expressing parallelism in a C++ program. It is a library that helps you

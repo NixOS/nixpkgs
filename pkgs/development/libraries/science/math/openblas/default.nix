@@ -1,12 +1,7 @@
-{ stdenv, fetchurl, gfortran, perl }:
+{ stdenv, fetchurl, gfortran, perl, liblapack }:
 
 stdenv.mkDerivation rec {
   version = "0.2.2";
-  lapack_version = "3.4.1";
-  lapack_src = fetchurl {
-    url = "http://www.netlib.org/lapack/lapack-${lapack_version}.tgz";
-    sha256 = "93b910f94f6091a2e71b59809c4db4a14655db527cfc5821ade2e8c8ab75380f";
-  };
 
   name = "openblas-${version}";
   src = fetchurl {
@@ -15,7 +10,7 @@ stdenv.mkDerivation rec {
     name = "openblas-${version}.tar.gz";
   };
 
-  preBuild = "cp ${lapack_src} lapack-${lapack_version}.tgz";
+  preBuild = "cp ${liblapack.src} lapack-${liblapack.meta.version}.tgz";
 
   buildInputs = [gfortran perl];
 
@@ -32,5 +27,6 @@ stdenv.mkDerivation rec {
     description = "Basic Linear Algebra Subprograms";
     license = stdenv.lib.licenses.bsd3;
     homepage = "https://github.com/xianyi/OpenBLAS";
+    platforms = [ "x86_64-linux" ];
   };
 }

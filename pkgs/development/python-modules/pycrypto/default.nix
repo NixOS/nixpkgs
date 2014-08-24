@@ -9,10 +9,9 @@ buildPythonPackage rec {
     sha256 = "0g0ayql5b9mkjam8hym6zyg6bv77lbh66rv1fyvgqb17kfc1xkpj";
   };
 
-  buildInputs = [ gmp ];
+  buildInputs = stdenv.lib.optional (!python.isPypy or false) gmp; # optional for pypy
 
-  doCheck = !stdenv.isDarwin; # error: AF_UNIX path too long
-
+  doCheck = !(python.isPypy or stdenv.isDarwin); # error: AF_UNIX path too long
 
   meta = {
     homepage = "http://www.pycrypto.org/";

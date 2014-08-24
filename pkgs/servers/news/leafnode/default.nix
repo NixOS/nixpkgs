@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://leafnode.sourceforge.net/";
     description = "Leafnode implements a store & forward NNTP proxy";
-    license = "X11";
+    license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;
+    broken = true; # The user check in the configure does not work in a chroot
   };
 }

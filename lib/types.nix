@@ -200,6 +200,12 @@ rec {
       merge = mergeOneOption;
     };
 
+    either = t1: t2: mkOptionType {
+      name = "${t1.name} or ${t2.name}";
+      check = x: t1.check x || t2.check x;
+      merge = mergeOneOption;
+    };
+
     # Obsolete alternative to configOf.  It takes its option
     # declarations from the ‘options’ attribute of containing option
     # declaration.

@@ -18,6 +18,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://olofson.net/kobodl/;
     description = "Enhanced version of Akira Higuchi's game XKobo  for Un*x systems with X11";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

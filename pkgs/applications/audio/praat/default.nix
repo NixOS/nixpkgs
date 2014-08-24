@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp praat $out/bin
   '';
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Doing phonetics by computer";
     homepage = http://www.fon.hum.uva.nl/praat/;
-    license = "GPLv2+"; # Has some 3rd-party code in it though
+    license = stdenv.lib.licenses.gpl2Plus; # Has some 3rd-party code in it though
     platforms = stdenv.lib.platforms.linux;
   };
 }

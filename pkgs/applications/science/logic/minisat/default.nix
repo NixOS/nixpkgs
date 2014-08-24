@@ -2,9 +2,9 @@ x@{builderDefsPackage
   , zlib
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     [];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -36,7 +36,7 @@ rec {
   setVars = a.fullDepEntry (''
     export MROOT=$PWD/../
   '') ["doUnpack"];
-      
+
   meta = {
     description = "A compact and readable SAT-solver";
     maintainers = with a.lib.maintainers;
@@ -45,7 +45,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = "MIT";
+    license = a.stdenv.lib.licenses.mit;
     homepage = "http://minisat.se/";
   };
   passthru = {
@@ -54,4 +54,3 @@ rec {
     };
   };
 }) x
-

@@ -48,11 +48,11 @@ for ((n = 0; n < ${#objects[*]}; n++)); do
     fi
 done
 
-ensureDir $out/tarball
+mkdir -p $out/tarball
 
 tar cvJf $out/tarball/$fileName.tar.xz *
 
-ensureDir $out/nix-support
+mkdir -p $out/nix-support
 echo $system > $out/nix-support/system
 echo "file system-tarball $out/tarball/$fileName.tar.xz" > $out/nix-support/hydra-build-products
 

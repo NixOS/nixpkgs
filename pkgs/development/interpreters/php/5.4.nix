@@ -9,7 +9,7 @@ in
 
 composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
-  version = "5.4.30";
+  version = "5.4.31";
 
   name = "php-${version}";
 
@@ -74,6 +74,11 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
       postgresql = {
         configureFlags = ["--with-pgsql=${postgresql}"];
+        buildInputs = [ postgresql ];
+      };
+
+      pdo_pgsql = {
+        configureFlags = ["--with-pdo-pgsql=${postgresql}"];
         buildInputs = [ postgresql ];
       };
 
@@ -203,6 +208,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     gettextSupport = config.php.gettext or true;
     pcntlSupport = config.php.pcntl or true;
     postgresqlSupport = config.php.postgresql or true;
+    pdo_pgsqlSupport = config.php.pdo_pgsql or true;
     readlineSupport = config.php.readline or true;
     sqliteSupport = config.php.sqlite or true;
     soapSupport = config.php.soap or true;
@@ -243,7 +249,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
   src = fetchurl {
     url = "http://www.php.net/distributions/php-${version}.tar.bz2";
-    sha256 = "1rkc977b4k0y6qg5nf8729g5zpica31h1isyds6khmrdwi23df1j";
+    sha256 = "0kci0yir923fc7dv7j9qrc10pj05v82jnxjxjbgrj7gx64a4k3jy";
   };
 
   meta = {

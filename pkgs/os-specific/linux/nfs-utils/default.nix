@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://nfs.sourceforge.net/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
 
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.ludo ];

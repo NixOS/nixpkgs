@@ -30,32 +30,7 @@ buildPhase() {
 
 installPhase() {
 
-    # Install libGL and friends.
-    mkdir -p $out/lib/vendors
-
-    for f in \
-      libcuda libGL libnvcuvid libnvidia-cfg libnvidia-compiler \
-      libnvidia-encode libnvidia-glcore libnvidia-ml libnvidia-opencl \
-      libnvidia-tls libOpenCL libnvidia-tls libvdpau_nvidia
-    do
-      cp -prd $f.* $out/lib/
-      ln -snf $f.so.$versionNumber $out/lib/$f.so
-      ln -snf $f.so.$versionNumber $out/lib/$f.so.1
-    done
-
-    cp -p nvidia.icd $out/lib/vendors/
-    cp -prd tls $out/lib/
-    cp -prd libOpenCL.so.1.0.0 $out/lib/
-    ln -snf libOpenCL.so.1.0.0 $out/lib/libOpenCL.so
-    ln -snf libOpenCL.so.1.0.0 $out/lib/libOpenCL.so.1
-
-    patchelf --set-rpath $out/lib:$glPath $out/lib/libGL.so.*.*
-    patchelf --set-rpath $out/lib:$glPath $out/lib/libvdpau_nvidia.so.*.*
-    patchelf --set-rpath $cudaPath $out/lib/libcuda.so.*.*
-    patchelf --set-rpath $openclPath $out/lib/libnvidia-opencl.so.*.*
-
     if test -z "$libsOnly"; then
-
         # Install the kernel module.
         mkdir -p $out/lib/modules/$kernelVersion/misc
         cp kernel/nvidia.ko $out/lib/modules/$kernelVersion/misc
@@ -69,10 +44,7 @@ installPhase() {
         mkdir -p $out/lib/xorg/modules/extensions
         cp -p libglx.so.* $out/lib/xorg/modules/extensions
 
-        ln -snf libnvidia-wfb.so.$versionNumber $out/lib/xorg/modules/libnvidia-wfb.so.1
-        ln -snf libglx.so.$versionNumber $out/lib/xorg/modules/extensions/libglx.so
-
-        patchelf --set-rpath $out/lib $out/lib/xorg/modules/extensions/libglx.so.*.*
+        #patchelf --set-rpath $out/lib $out/lib/xorg/modules/extensions/libglx.so.*.*
 
         # Install the programs.
         mkdir -p $out/bin
@@ -104,8 +76,31 @@ installPhase() {
 
         # Test a bit.
         $out/bin/nvidia-settings --version
-        $out/bin/nvidia-smi --help > /dev/null
     fi
+
+
+    # Install libGL and friends.
+    mkdir -p "$out/lib/vendors"
+    cp -p nvidia.icd $out/lib/vendors/
+
+    cp -prd *.so.* tls "$out/lib/"
+    rm "$out"/lib/lib{glx,nvidia-wfb}.so.* # handled separately
+
+    for libname in `find "$out/lib/" -name '*.so.*'`
+    do
+      # I'm lazy to differentiate needed libs per-library, as the closure is the same.
+      # Unfortunately --shrink-rpath would strip too much.
+      patchelf --set-rpath "$out/lib:$allLibPath" "$libname"
+
+      libname_short=`echo -n "$libname" | sed 's/so\..*/so/'`
+      ln -srnf "$libname" "$libname_short"
+      ln -srnf "$libname" "$libname_short.1"
+    done
+
+    #patchelf --set-rpath $out/lib:$glPath $out/lib/libGL.so.*.*
+    #patchelf --set-rpath $out/lib:$glPath $out/lib/libvdpau_nvidia.so.*.*
+    #patchelf --set-rpath $cudaPath $out/lib/libcuda.so.*.*
+    #patchelf --set-rpath $openclPath $out/lib/libnvidia-opencl.so.*.*
 }
 
 

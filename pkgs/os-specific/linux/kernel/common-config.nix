@@ -141,8 +141,10 @@ with stdenv.lib;
   # ACLs for all filesystems that support them.
   EXT2_FS_XATTR y
   EXT2_FS_POSIX_ACL y
-  EXT2_FS_SECURITY y # Ext2 Security Labels
+  EXT2_FS_SECURITY y
   EXT2_FS_XIP y # Ext2 execute in place support
+  EXT3_FS_POSIX_ACL y
+  EXT3_FS_SECURITY y
   EXT4_FS_POSIX_ACL y
   EXT4_FS_SECURITY y
   REISERFS_FS_XATTR? y
@@ -157,6 +159,13 @@ with stdenv.lib;
   BTRFS_FS_POSIX_ACL y
   UBIFS_FS_XATTR? y
   UBIFS_FS_ADVANCED_COMPR? y
+  ${optionalString (versionAtLeast version "3.6") ''
+    NFS_SWAP y
+  ''}
+  ${optionalString (versionAtLeast version "3.11") ''
+    NFS_V4_1 y  # NFSv4.1 client support
+    NFS_V4_2 y
+  ''}
   NFSD_V2_ACL y
   NFSD_V3 y
   NFSD_V3_ACL y

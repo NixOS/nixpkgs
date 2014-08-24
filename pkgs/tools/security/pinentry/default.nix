@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://gnupg.org/aegypten2/";
     description = "GnuPG's interface to passphrase input";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     longDescription = ''
       Pinentry provides a console and a GTK+ GUI that allows users to

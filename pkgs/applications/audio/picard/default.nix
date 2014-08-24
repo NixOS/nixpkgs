@@ -13,7 +13,7 @@ pythonPackages.buildPythonPackage rec {
   };
 
   postPatch = let
-    fpr = "${acoustidFingerprinter}/bin/acoustid_fpcalc";
+    fpr = "${acoustidFingerprinter}/bin/acoustid-fingerprinter";
   in ''
     sed -ri -e 's|(TextOption.*"acoustid_fpcalc"[^"]*")[^"]*|\1${fpr}|' \
       picard/ui/options/fingerprinting.py

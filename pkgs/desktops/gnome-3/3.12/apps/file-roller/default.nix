@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, pkgconfig, gnome3, intltool, itstool, libxml2, libarchive
-, attr, bzip2, acl, makeWrapper }:
+, attr, bzip2, acl, makeWrapper, librsvg, gdk_pixbuf, hicolor_icon_theme }:
 
 stdenv.mkDerivation rec {
   name = "file-roller-${version}";
@@ -16,15 +16,19 @@ stdenv.mkDerivation rec {
   # it tries to create {nautilus}/lib/nautilus/extensions-3.0/libnautilus-fileroller.so
 
   buildInputs = [ glib pkgconfig gnome3.gtk intltool itstool libxml2 libarchive
-                  attr bzip2 acl makeWrapper ];
+                  hicolor_icon_theme gnome3.gnome_icon_theme gnome3.gnome_icon_theme_symbolic
+                  attr bzip2 acl gdk_pixbuf librsvg makeWrapper ];
 
   preFixup = ''
     wrapProgram "$out/bin/file-roller" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:$out/share"
     rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   meta = with stdenv.lib; {
+    homepage = https://wiki.gnome.org/Apps/FileRoller;
+    description = "Archive manager for the GNOME desktop environment";
     platforms = platforms.linux;
+    maintainers = [ maintainers.lethalman ];
   };
 }

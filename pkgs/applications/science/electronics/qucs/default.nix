@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Integrated circuit simulator";
     homepage = http://qucs.sourceforge.net;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

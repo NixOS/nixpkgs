@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   phases = ["unpackPhase" "installPhase"];
   installPhase = ''
-    ensureDir $out && cp -R * $out
+    mkdir -p $out && cp -R * $out
     ${optionalString (conf!=null) ''cp ${conf} $out/config.js''}
   '';
 

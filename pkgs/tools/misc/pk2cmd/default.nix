@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://www.microchip.com/pickit2;
-    license = "nonfree";
+    license = "nonfree"; #MicroChip-PK2
     description = "Microchip PIC programming software for the PICKit2 programmer";
   };
 }

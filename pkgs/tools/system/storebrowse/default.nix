@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp storebrowse $out/bin
   '';
 
   meta = {
     homepage = http://viric.name/cgi-bin/storebrowse;
-    license = "AGPLv3+";
+    license = stdenv.lib.licenses.agpl3Plus;
   };
 }

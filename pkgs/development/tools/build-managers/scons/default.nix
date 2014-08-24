@@ -2,7 +2,7 @@
 
 let
   name = "scons";
-  version = "2.3.1";
+  version = "2.3.2";
 in
 
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/scons/${name}-${version}.tar.gz";
-    sha256 = "00822ax62cfi2fvz9zhw80hl1273524d97xfycq4q276z1lb86h9";
+    sha256 = "1m29lhwz7p6k4f8wc8qjpwa89058lzq3vrycgxbfc5cmbq6354zr";
   };
 
   buildInputs = [python makeWrapper];
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://scons.org/";
     description = "An improved, cross-platform substitute for Make";
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
     longDescription = ''
       SCons is an Open Source software construction tool. Think of
       SCons as an improved, cross-platform substitute for the classic

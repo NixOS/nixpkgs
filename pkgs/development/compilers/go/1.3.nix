@@ -7,11 +7,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "go-1.3";
+  name = "go-1.3.1";
 
   src = fetchurl {
-    url = https://storage.googleapis.com/golang/go1.3.src.tar.gz;
-    sha256 = "10jkqgzlinzynciw3wr15c7n2vw5q4d2ni65hbs3i61bbdn3x67b";
+    url = https://storage.googleapis.com/golang/go1.3.1.src.tar.gz;
+    sha256 = "fdfa148cc12f1e4ea45a5565261bf43d8a2e7d1fad4a16aed592d606223b93a8";
   };
 
   buildInputs = [ bison bash makeWrapper ] ++ lib.optionals stdenv.isLinux [ glibc ] ;
@@ -69,7 +69,7 @@ stdenv.mkDerivation {
     # http://lists.science.uu.nl/pipermail/nix-dev/2013-October/011891.html
     # Fix for "libgcc_s.so.1 must be installed for pthread_cancel to work"
     # during tests:
-    export LD_LIBRARY_PATH="$(dirname $(echo ${stdenv.gcc.gcc}/lib*/libgcc_s.so))"
+    export LD_LIBRARY_PATH="$(dirname $(echo ${stdenv.gcc.gcc}/lib/libgcc_s.so))"
 
     mkdir -p "$out/bin"
     export GOROOT="$(pwd)/"

@@ -20,6 +20,11 @@ let
         </Pass>
   ";
 
+  modules = pkgs.buildEnv {
+    name = "znc-modules";
+    paths = cfg.modulePackages;
+  };
+
   confOptions = { ... }: {
     options = {
       modules = mkOption {
@@ -28,6 +33,15 @@ let
         example = [ "partyline" "webadmin" "adminlog" "log" ];
         description = ''
           A list of modules to include in the `znc.conf` file.
+        '';
+      };
+
+      userModules = mkOption {
+        type = types.listOf types.string;
+        default = [ ];
+        example = [ "fish" "push" ];
+        description = ''
+          A list of user modules to include in the `znc.conf` file.
         '';
       };
 
@@ -63,9 +77,9 @@ let
       };
 
       port = mkOption {
-        default = "5000";
-        example = "5000";
-        type = types.string;
+        default = 5000;
+        example = 5000;
+        type = types.int;
         description = ''
           Specifies the port on which to listen.
         '';
@@ -80,6 +94,13 @@ let
         '';
       };
 
+      extraZncConf = mkOption {
+        default = "";
+        type = types.lines;
+        description = ''
+          Extra config to `znc.conf` file
+        '';
+      };
     };
   };
 
@@ -104,7 +125,7 @@ let
             AllowWeb = true
             IPv4 = true
             IPv6 = false
-            Port = ${if confOpts.useSSL then "+" else ""}${confOpts.port}
+            Port = ${if confOpts.useSSL then "+" else ""}${toString confOpts.port}
             SSL = ${if confOpts.useSSL then "true" else "false"}
     </Listener>
     
@@ -128,9 +149,11 @@ let
             QuitMsg = Quit
             RealName = ${confOpts.nick}
             TimestampFormat = [%H:%M:%S]
+            ${concatMapStrings (n: "LoadModule = ${n}\n") confOpts.userModules}
             
             ${confOpts.passBlock}
     </User>
+    ${confOpts.extraZncConf}
   '';
 
   zncConfFile = pkgs.writeTextFile {
@@ -168,9 +191,9 @@ in
       };
 
       dataDir = mkOption {
-        default = "/home/${cfg.user}/.znc";
-        example = "/home/john/.znc";
-        type = types.string; 
+        default = "/var/lib/znc/";
+        example = "/home/john/.znc/";
+        type = types.path;
         description = ''
           The data directory. Used for configuration files and modules.
         '';
@@ -179,7 +202,7 @@ in
       zncConf = mkOption {
         default = "";
         example = "See: http://wiki.znc.in/Configuration";
-        type = types.string;
+        type = types.lines;
         description = ''
           The contents of the `znc.conf` file to use when creating it.
           If specified, `confOptions` will be ignored, and this value, as-is, will be used.
@@ -201,6 +224,15 @@ in
         '';
         options = confOptions; 
       };
+
+      modulePackages = mkOption {
+        type = types.listOf types.package;
+        default = [ ];
+        example = [ pkgs.zncModules.fish pkgs.zncModules.push ];
+        description = ''
+          A list of global znc module packages to add to znc.
+        '';
+      };
  
       mutable = mkOption {
         default = false;
@@ -218,9 +250,9 @@ in
       };
  
       extraFlags = mkOption {
-        default = "";
-        example = "--debug";
-        type = types.string;
+        default = [ ];
+        example = [ "--debug" ];
+        type = types.listOf types.str;
         description = ''
           Extra flags to use when executing znc command.
         '';
@@ -233,25 +265,22 @@ in
 
   config = mkIf cfg.enable {
 
-    systemd.services."znc-${cfg.user}" = {
-      description = "ZNC Server of ${cfg.user}.";
+    systemd.services.znc = {
+      description = "ZNC Server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.service" ];
-      path = [ pkgs.znc ];
       serviceConfig = {
-        User = "${cfg.user}";
+        User = cfg.user;
         Restart = "always";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStop   = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
       };
       preStart = ''
-        ${pkgs.coreutils}/bin/mkdir -p ${cfg.dataDir}
-        ${pkgs.coreutils}/bin/chown ${cfg.user} ${cfg.dataDir} -R
         ${pkgs.coreutils}/bin/mkdir -p ${cfg.dataDir}/configs
 
         # If mutable, regenerate conf file every time.
         ${optionalString (!cfg.mutable) ''
-          ${pkgs.coreutils}/echo "znc-${cfg.user} is set to be system-managed. Now deleting old znc.conf file to be regenerated."
+          ${pkgs.coreutils}/echo "znc is set to be system-managed. Now deleting old znc.conf file to be regenerated."
           ${pkgs.coreutils}/rm -f ${cfg.dataDir}/configs/znc.conf
         ''}
 
@@ -259,7 +288,7 @@ in
         if [[ ! -f ${cfg.dataDir}/configs/znc.conf ]]; then
           ${pkgs.coreutils}/bin/echo "No znc.conf file found in ${cfg.dataDir}. Creating one now."
           ${if (!cfg.mutable)
-            then "${pkgs.coreutils}/bin/ln --force -s ${zncConfFile} ${cfg.dataDir}/configs/znc.conf"
+            then "${pkgs.coreutils}/bin/ln --force -s ${zncConfFile} ${cfg.dataDir}/.znc/configs/znc.conf"
             else ''
               ${pkgs.coreutils}/bin/cp --no-clobber ${zncConfFile} ${cfg.dataDir}/configs/znc.conf
               ${pkgs.coreutils}/bin/chmod u+rw ${cfg.dataDir}/configs/znc.conf
@@ -269,10 +298,14 @@ in
 
         if [[ ! -f ${cfg.dataDir}/znc.pem ]]; then
           ${pkgs.coreutils}/bin/echo "No znc.pem file found in ${cfg.dataDir}. Creating one now."
-          ${pkgs.znc}/bin/znc --makepem
+          ${pkgs.znc}/bin/znc --makepem --datadir ${cfg.dataDir} 
         fi
+
+        # Symlink modules
+        rm ${cfg.dataDir}/modules || true
+        ln -fs ${modules}/lib/znc ${cfg.dataDir}/modules
       '';
-      script = "${pkgs.znc}/bin/znc --foreground --datadir ${cfg.dataDir} ${cfg.extraFlags}";
+      script = "${pkgs.znc}/bin/znc --foreground --datadir ${cfg.dataDir} ${toString cfg.extraFlags}";
     };
 
     users.extraUsers = optional (cfg.user == defaultUser)
@@ -280,6 +313,7 @@ in
         description = "ZNC server daemon owner";
         group = defaultUser;
         uid = config.ids.uids.znc;
+        home = cfg.dataDir;
         createHome = true;
         createUser = true;
       };

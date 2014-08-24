@@ -27,10 +27,10 @@ let
   mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
 
 in stdenv.mkDerivation rec {
-  name = "mpd-0.18.11";
+  name = "mpd-0.18.12";
   src = fetchurl {
     url    = "http://www.musicpd.org/download/mpd/stable/${name}.tar.gz";
-    sha256 = "1j3jdwmxfnn4z1vjry2g54vcbrdrgi41nv3bf2i26xkgy5708icw";
+    sha256 = "09qphjcpqcs2jn5d8ga1skhif2mj5qk1ix9li76z2gyq3lf0rpz6";
   };
 
   buildInputs = [ pkgconfig glib ]
@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
     ++ opt mpg123Support mpg123
     ++ opt aacSupport faad2
     ++ opt zipSupport zziplib
-    ++ opt zipSupport pulseaudio;
+    ++ opt pulseaudioSupport pulseaudio;
 
   configureFlags =
     [ (mkFlag (!stdenv.isDarwin && alsaSupport) "alsa")

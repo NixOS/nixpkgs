@@ -1,4 +1,4 @@
-{ kde, kdelibs, htmlTidy, kactivities
+{ stdenv, kde, kdelibs, htmlTidy, kactivities
 , nepomuk_core, nepomuk_widgets, libXt }:
 
 kde {
@@ -6,6 +6,6 @@ kde {
 
   meta = {
     description = "Base KDE applications, including the Dolphin file manager and Konqueror web browser";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

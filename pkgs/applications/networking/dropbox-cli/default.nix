@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   phases = "unpackPhase installPhase";
 
   installPhase = ''
-    ensureDir "$out/bin/" "$out/share/applications"
+    mkdir -p "$out/bin/" "$out/share/applications"
     cp data/dropbox.desktop "$out/share/applications"
     substitute "dropbox.in" "$out/bin/dropbox" \
       --replace '@PACKAGE_VERSION@' ${version} \

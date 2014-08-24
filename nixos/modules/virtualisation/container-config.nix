@@ -89,6 +89,8 @@ with lib;
         restartIfChanged = false;
       };
 
+    systemd.services.systemd-remount-fs.enable = false;
+
   };
 
 }

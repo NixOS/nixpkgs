@@ -1,3 +1,33 @@
+diff --git a/src/MacVim/MacVim.xcodeproj/project.pbxproj b/src/MacVim/MacVim.xcodeproj/project.pbxproj
+index 1c5ff47..677a2cc 100644
+--- a/src/MacVim/MacVim.xcodeproj/project.pbxproj
++++ b/src/MacVim/MacVim.xcodeproj/project.pbxproj
+@@ -437,6 +437,8 @@
+ /* Begin PBXProject section */
+ 		29B97313FDCFA39411CA2CEA /* Project object */ = {
+ 			isa = PBXProject;
++			attributes = {
++			};
+ 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "MacVim" */;
+ 			compatibilityVersion = "Xcode 2.4";
+ 			developmentRegion = English;
+@@ -632,6 +634,7 @@
+ 				INSTALL_PATH = "$(HOME)/Applications";
+ 				MACOSX_DEPLOYMENT_TARGET = "";
+ 				ONLY_ACTIVE_ARCH = YES;
++				OTHER_LDFLAGS = "-headerpad_max_install_names";
+ 				PRODUCT_NAME = MacVim;
+ 				VERSIONING_SYSTEM = "apple-generic";
+ 				WARNING_CFLAGS = "-Wall";
+@@ -662,6 +665,7 @@
+ 				INSTALL_PATH = "$(HOME)/Applications";
+ 				MACOSX_DEPLOYMENT_TARGET = "";
+ 				ONLY_ACTIVE_ARCH = YES;
++				OTHER_LDFLAGS = "-headerpad_max_install_names";
+ 				PRODUCT_NAME = MacVim;
+ 				VERSIONING_SYSTEM = "apple-generic";
+ 				WRAPPER_EXTENSION = app;
+
 diff --git a/src/vimtutor b/src/vimtutor
 index 70d9ec7..b565a1a 100755
 --- a/src/vimtutor

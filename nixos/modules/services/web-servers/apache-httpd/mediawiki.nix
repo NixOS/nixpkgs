@@ -79,6 +79,8 @@ let
       sha256 = "07z5j8d988cdg4ml4n0vs9fwmj0p594ibbqdid16faxwqm52dkhl";
     };
 
+    patches = [ ./mediawiki-postgresql-fixes.patch ];
+
     skins = config.skins;
 
     buildPhase =
@@ -90,7 +92,7 @@ let
 
     installPhase =
       ''
-        ensureDir $out
+        mkdir -p $out
         cp -r * $out
         cp ${mediawikiConfig} $out/LocalSettings.php
         sed -i \
@@ -104,7 +106,7 @@ let
   mediawikiScripts = pkgs.runCommand "mediawiki-${config.id}-scripts"
     { buildInputs = [ pkgs.makeWrapper ]; }
     ''
-      ensureDir $out/bin
+      mkdir -p $out/bin
       for i in changePassword.php createAndPromote.php userOptions.php edit.php nukePage.php update.php; do
         makeWrapper ${php}/bin/php $out/bin/mediawiki-${config.id}-$(basename $i .php) \
           --add-flags ${mediawikiRoot}/maintenance/$i

@@ -30,7 +30,8 @@ stdenv.mkDerivation {
     sed -i -e "s|/bin/sh|${stdenv.shell}|" configure
   '';
 
-  configureFlags = "--disable-debug";
+  configureFlags = "--disable-debug" +
+    stdenv.lib.optionalString stdenv.isDarwin " --enable-rpath";
 
   enableParallelBuilding = true;
 

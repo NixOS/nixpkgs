@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, makeWrapper, libsoup, webkit, gtk3, gnutls, json_c,
+{ stdenv, fetchgit, pkgconfig, makeWrapper, libsoup, webkitgtk2, gtk2, gnutls, json_c,
   m4, glib_networking, gsettings_desktop_schemas, dconf }:
 
 stdenv.mkDerivation {
@@ -10,12 +10,10 @@ stdenv.mkDerivation {
     sha256 = "04p9frsnh1qz067cw36anvr41an789fba839svdjrdva0f2751g8";
   };
 
-  buildInputs = [ pkgconfig makeWrapper gsettings_desktop_schemas libsoup webkit gtk3 gnutls json_c m4 ];
+  buildInputs = [ pkgconfig makeWrapper gsettings_desktop_schemas libsoup webkitgtk2 gtk2 gnutls json_c m4 ];
 
   # There are Xlib and gtk warnings therefore I have set Wno-error
-  preBuild=''
-    makeFlagsArray=(CPPFLAGS="-Wno-error" GTK=3 PREFIX=$out);
-  '';
+  makeFlags = ''PREFIX=$(out) GTK=2 CPPFLAGS="-Wno-error"'';
 
   preFixup=''
     wrapProgram "$out/bin/dwb" \
@@ -25,11 +23,11 @@ stdenv.mkDerivation {
      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://portix.bitbucket.org/dwb/;
     description = "A lightweight web browser based on the webkit web browser engine and the gtk toolkit";
-    platforms = stdenv.lib.platforms.mesaPlatforms;
-    maintainers = [ stdenv.lib.maintainers.pSub ];
-    license = "GPL";
+    platforms = platforms.mesaPlatforms;
+    maintainers = with maintainers;[ pSub ];
+    license = licenses.gpl3;
   };
 }

@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gnonlin-1.2.0";
+  name = "gnonlin-1.2.1";
 
   meta = with stdenv.lib; {
     description = "Gstreamer Non-Linear Multimedia Editing Plugins";
@@ -13,14 +13,14 @@ stdenv.mkDerivation rec {
       support for writing non-linear audio and video editing
       applications. It introduces the concept of a timeline.
     '';
-    license     = licenses.lgpl2Plus; 
+    license     = licenses.lgpl2Plus;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ iyzsong ];
   };
 
   src = fetchurl {
     url = "${meta.homepage}/src/gnonlin/${name}.tar.xz";
-    sha256 = "15hyb0kg8sm92kj37cir4l3sa21b8zy4la1ccfhb358b4mf24vl7";
+    sha256 = "14zb3bz3xn40a2kns719amrr77cp6wyxddml621kyxc424ihcw3q";
   };
 
   nativeBuildInputs = [ pkgconfig ];

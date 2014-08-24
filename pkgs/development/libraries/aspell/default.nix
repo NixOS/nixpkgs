@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Spell checker for many languages";
     homepage = http://aspell.net/;
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = [ ];
   };
 }

@@ -127,7 +127,7 @@ rec {
     ftp://mirror.csclub.uwaterloo.ca/nongnu/
     ftp://mirror.publicns.net/pub/nongnu/
     ftp://savannah.c3sl.ufpr.br/
-    http://download.savannah.gnu.org/
+    http://download.savannah.gnu.org/releases/
     http://ftp.cc.uoc.gr/mirrors/nongnu.org/
     http://ftp.twaren.net/Unix/NonGNU/
     http://mirror.csclub.uwaterloo.ca/nongnu/
@@ -275,6 +275,7 @@ rec {
   postgresql = [
     ftp://ftp.postgresql.org/pub/
     ftp://ftp-archives.postgresql.org/pub/
+    http://ftp.postgresql.org/pub/
   ];
 
   metalab = [
@@ -305,7 +306,6 @@ rec {
     http://dirichlet.mat.puc.cl/
     http://ftp.ctex.org/mirrors/CRAN/
     http://mirror.bjtu.edu.cn/cran
-    http://cran.dataguru.cn/
     http://mirrors.ustc.edu.cn/CRAN/
     http://mirrors.xmu.edu.cn/CRAN/
     http://www.laqee.unal.edu.co/CRAN/

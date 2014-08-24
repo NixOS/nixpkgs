@@ -179,7 +179,6 @@ in
 
     fileSystems."/" =
       { fsType = "tmpfs";
-        device = "none";
         options = "mode=0755";
       };
 
@@ -192,6 +191,8 @@ in
         noCheck = true;
       };
 
+    # In stage 1, mount a tmpfs on top of /nix/store (the squashfs
+    # image) to make this a live CD.
     fileSystems."/nix/.ro-store" =
       { fsType = "squashfs";
         device = "/iso/nix-store.squashfs";
@@ -201,22 +202,19 @@ in
 
     fileSystems."/nix/.rw-store" =
       { fsType = "tmpfs";
-        device = "none";
         options = "mode=0755";
         neededForBoot = true;
+      };
+
+    fileSystems."/nix/store" =
+      { fsType = "unionfs-fuse";
+        device = "unionfs";
+        options = "allow_other,cow,nonempty,chroot=/mnt-root,max_files=32768,hide_meta_files,dirs=/nix/.rw-store=rw:/nix/.ro-store=ro";
       };
 
     boot.initrd.availableKernelModules = [ "squashfs" "iso9660" ];
 
     boot.initrd.kernelModules = [ "loop" ];
-
-    # In stage 1, mount a tmpfs on top of /nix/store (the squashfs
-    # image) to make this a live CD.
-    boot.initrd.postMountCommands =
-      ''
-        mkdir -p $targetRoot/nix/store
-        unionfs -o allow_other,cow,nonempty,chroot=$targetRoot,max_files=32768 /nix/.rw-store=RW:/nix/.ro-store=RO $targetRoot/nix/store
-      '';
 
     # Closures to be copied to the Nix store on the CD, namely the init
     # script and the top-level system configuration directory.
@@ -313,8 +311,8 @@ in
       '';
 
     # Add vfat support to the initrd to enable people to copy the
-    # contents of the CD to a bootable USB stick. Need unionfs-fuse for union mounts
-    boot.initrd.supportedFilesystems = [ "vfat" "unionfs-fuse" ];
+    # contents of the CD to a bootable USB stick.
+    boot.initrd.supportedFilesystems = [ "vfat" ];
 
   };
 

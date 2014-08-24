@@ -1,23 +1,23 @@
-{ stdenv, fetchgit, cmake, boost, libunwind, mariadb, libmemcached, pcre
+{ stdenv, fetchgit, cmake, pkgconfig, boost, libunwind, mariadb, libmemcached, pcre
 , libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php, re2c
 , expat, libcap, oniguruma, libdwarf, libmcrypt, tbb, gperftools, glog
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam, libpng
-, libxslt, ocaml
+, libxslt, ocaml, freetype
 }:
 
 stdenv.mkDerivation rec {
   name    = "hhvm-${version}";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchgit {
     url    = "https://github.com/facebook/hhvm.git";
-    rev    = "71ecbd8fb5e94b2a008387a2b5e9a8df5c6f5c7b";
-    sha256 = "1zv3k3bxahwyna2jgicwxm9lxs11jddpc9v41488rmzvfhdmzzkn";
+    rev    = "01228273b8cf709aacbd3df1c51b1e690ecebac8";
+    sha256 = "418d5a55ac4ba5335a42329ebfb7dd96fdb8d5edbc2700251c86e9fa2ae4a967";
     fetchSubmodules = true;
   };
 
   buildInputs =
-    [ cmake boost libunwind mariadb libmemcached pcre libevent gd curl
+    [ cmake pkgconfig boost libunwind mariadb libmemcached pcre libevent gd curl
       libxml2 icu flex bison openssl zlib php expat libcap oniguruma
       libdwarf libmcrypt tbb gperftools bzip2 openldap readline
       libelf uwimap binutils cyrus_sasl pam glog libpng libxslt ocaml
@@ -31,9 +31,14 @@ stdenv.mkDerivation rec {
   MYSQL_INCLUDE_DIR="${mariadb}/include/mysql";
   MYSQL_DIR=mariadb;
 
+  # work around broken build system
+  NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2";
+
   patchPhase = ''
     substituteInPlace hphp/util/generate-buildinfo.sh \
       --replace /bin/bash ${stdenv.shell}
+    substituteInPlace ./configure \
+      --replace "/usr/bin/env bash" ${stdenv.shell}
   '';
   installPhase = ''
     mkdir -p $out/bin $out/lib

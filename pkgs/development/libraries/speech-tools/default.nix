@@ -47,6 +47,7 @@ rec {
   fixPaths = a.doPatchShebangs "$out/bin";
 
   meta = {
+    broken = true;
     description = "Text-to-speech engine";
     maintainers = with a.lib.maintainers;
     [
