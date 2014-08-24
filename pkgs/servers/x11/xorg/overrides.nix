@@ -202,7 +202,7 @@ in
   };
 
   xf86videovmware = attrs: attrs // {
-    buildinputs =  attrs.buildinputs ++ [ args.mesa_drivers ]; # for libxatracker
+    buildInputs =  attrs.buildInputs ++ [ args.mesa_drivers ]; # for libxatracker
   };
 
   xf86videoqxl = attrs: attrs // {
