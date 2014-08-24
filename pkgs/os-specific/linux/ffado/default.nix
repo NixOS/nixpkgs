@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "libffado-${version}";
-  version = "2.1.0";
+  version = "2.2.1";
 
   src = fetchurl {
     url = "http://www.ffado.org/files/${name}.tgz";
-    sha256 = "11cxmy31c19720j2171l735rpg7l8i41icsgqscfd2vkbscfmh6y";
+    sha256 = "1ximic90l0av91njb123ra2zp6mg23yg5iz8xa5371cqrn79nacz";
   };
 
   buildInputs =
