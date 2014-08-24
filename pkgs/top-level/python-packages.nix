@@ -4251,11 +4251,11 @@ rec {
 
   manuel = buildPythonPackage rec {
     name = "manuel-${version}";
-    version = "1.6.1";
+    version = "1.8.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/m/manuel/${name}.tar.gz";
-      sha256 = "1h35ys31zkjd9jssqn9lzwmw8s17ikr4jn2xp5zby1v771ibbbqr";
+      sha256 = "1diyj6a8bvz2cdf9m0g2bbx9z2yjjnn3ylbg1zinpcjj6vldfx59";
     };
 
     propagatedBuildInputs = [ six zope_testing ];
