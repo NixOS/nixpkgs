@@ -259,16 +259,19 @@ for i in $crossPkgs; do
 done
 
 
-# Add the output as an rpath. ToDo: multiple-output?
-if [ "$NIX_NO_SELF_RPATH" != 1 ]; then
-    export NIX_LDFLAGS="-rpath $out/lib $NIX_LDFLAGS"
-    if [ -n "$NIX_LIB64_IN_SELF_RPATH" ]; then
-        export NIX_LDFLAGS="-rpath $out/lib64 $NIX_LDFLAGS"
+# Add $1/lib* into rpaths.
+_addRpathPrefix() {
+    if [ "$NIX_NO_SELF_RPATH" != 1 ]; then
+        export NIX_LDFLAGS="-rpath $1/lib $NIX_LDFLAGS"
+        if [ -n "$NIX_LIB64_IN_SELF_RPATH" ]; then
+            export NIX_LDFLAGS="-rpath $1/lib64 $NIX_LDFLAGS"
+        fi
+        if [ -n "$NIX_LIB32_IN_SELF_RPATH" ]; then
+            export NIX_LDFLAGS="-rpath $1/lib32 $NIX_LDFLAGS"
+        fi
     fi
-    if [ -n "$NIX_LIB32_IN_SELF_RPATH" ]; then
-        export NIX_LDFLAGS="-rpath $out/lib32 $NIX_LDFLAGS"
-    fi
-fi
+}
+_addRpathPrefix "$out"
 
 
 # Set the TZ (timezone) environment variable, otherwise commands like

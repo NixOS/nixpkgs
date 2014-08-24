@@ -206,6 +206,12 @@ let
       inherit overrides;
 
       inherit gcc;
+
+      # extra useful hooks, so we do not need to pass them as package arguments
+      hookLib = {
+        multiout = ../../build-support/setup-hooks/multiple-outputs.sh;
+        #ToDo: add also autoreconf = pkgs.autoreconfHook
+      };
     }
 
     # Propagate any extra attributes.  For instance, we use this to
