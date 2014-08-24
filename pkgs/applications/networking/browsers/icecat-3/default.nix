@@ -106,7 +106,7 @@ stdenv.mkDerivation {
 
     homepage = http://www.gnu.org/software/gnuzilla/;
     license = [ "GPLv2+" "LGPLv2+" "MPLv1+" ];
-
+    broken = true;
     maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;
   };
@@ -114,6 +114,5 @@ stdenv.mkDerivation {
   passthru = {
     inherit gtk version;
     isFirefox3Like = true;
-    broken = true;
   };
 }
