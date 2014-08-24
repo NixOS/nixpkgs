@@ -2,14 +2,14 @@
 
 { cabal, Cabal, convertible, deepseq, djinnGhc, doctest, emacs
 , filepath, ghcPaths, ghcSybUtils, haskellSrcExts, hlint, hspec
-, ioChoice, monadControl, monadJournal, mtl, split, syb, text, time
-, transformers, transformersBase, makeWrapper
+, ioChoice, makeWrapper, monadControl, monadJournal, mtl, split
+, syb, text, time, transformers, transformersBase
 }:
 
 cabal.mkDerivation (self: {
   pname = "ghc-mod";
-  version = "5.0.1";
-  sha256 = "01awsi5rfzq6433shfvvnr69ifxb7h8v90mlknxv3dl34zmrhv19";
+  version = "5.0.1.1";
+  sha256 = "0qyl1653dj14ap3035kjj7xl8rsmgpwh32bj2lnwrmdm2223m8a3";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -25,8 +25,6 @@ cabal.mkDerivation (self: {
   buildTools = [ emacs makeWrapper ];
   doCheck = false;
   configureFlags = "--datasubdir=${self.pname}-${self.version}";
-  # The method used below to wrap ghc-mod and ghc-modi was borrowed from the
-  # wrapper for haddock.
   postInstall = ''
     cd $out/share/$pname-$version
     make
@@ -34,7 +32,6 @@ cabal.mkDerivation (self: {
     cd ..
     ensureDir "$out/share/emacs"
     mv $pname-$version emacs/site-lisp
-
     wrapProgram $out/bin/ghc-mod --add-flags \
       "\$(${self.ghc.GHCGetPackages} ${self.ghc.version} \"\$(dirname \$0)\" \"-g -package-db -g\")"
     wrapProgram $out/bin/ghc-modi --add-flags \
