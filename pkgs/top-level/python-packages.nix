@@ -7,6 +7,7 @@ let
   isPy33 = python.majorVersion == "3.3";
   isPy34 = python.majorVersion == "3.4";
   isPyPy = python.executable == "pypy";
+  isPy3k = strings.substring 0 1 python.majorVersion == "3";
 
   # Unique python version identifier
   pythonName =
@@ -537,6 +538,8 @@ rec {
   avro = buildPythonPackage (rec {
     name = "avro-1.7.6";
 
+    disabled = isPy3k;
+    
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/a/avro/${name}.tar.gz";
       md5 = "7f4893205e5ad69ac86f6b44efb7df72";
@@ -550,7 +553,9 @@ rec {
 
   avro3k = pkgs.lowPrio (buildPythonPackage (rec {
     name = "avro3k-1.7.7-SNAPSHOT";
-
+    
+    disabled = (!isPy3k);
+    
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/a/avro3k/${name}.tar.gz";
       sha256 = "15ahl0irwwj558s964abdxg4vp6iwlabri7klsm2am6q5r0ngsky";
