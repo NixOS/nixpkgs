@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "rest-wai";
-  version = "0.1.0.2";
-  sha256 = "06wnazy0262b2875q4km2xy9zz7l681vlfj3ny1ha9valnqr3q6w";
+  version = "0.1.0.3";
+  sha256 = "08pprgn9xnd3ipr6clify3snm4ahshlws869mfvziplc4hdcnb59";
   buildDepends = [
     caseInsensitive httpTypes mimeTypes mtl restCore restTypes text
     unorderedContainers utf8String wai
