@@ -22,6 +22,8 @@ let
   jobs =
     { tarball = import ./make-tarball.nix { inherit nixpkgs officialRelease; };
 
+      manual = import ../../doc;
+
       unstable = pkgs.releaseTools.aggregate
         { name = "nixpkgs-${jobs.tarball.version}";
           meta.description = "Release-critical builds for the Nixpkgs unstable channel";

@@ -3,10 +3,9 @@
 
   <info>
 
-    <title>Nixpkgs Manual</title>
+    <title>Nixpkgs Contributors Guide</title>
 
-    <subtitle>Draft (Version <xi:include href="../.version"
-    parse="text" />)</subtitle>
+    <subtitle>Version <xi:include href=".version" parse="text" /></subtitle>
 
   </info>
 
