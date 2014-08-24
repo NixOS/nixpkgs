@@ -1,59 +1,27 @@
-x@{builderDefsPackage
-  , readline, tcp_wrappers, pcre, runCommand
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, pcre, readline }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="atftp";
-    version="0.7";
-    name="${baseName}-${version}";
-    url="mirror://debian/pool/main/a/atftp/atftp_${version}.dfsg.orig.tar.gz";
-    hash="0nd5dl14d6z5abgcbxcn41rfn3syza6s57bbgh4aq3r9cxdmz08q";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation {
+  name = "atftp-0.7.1";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/atftp/atftp-0.7.1.tar.gz";
+    sha256 = "0bgr31gbnr3qx4ixf8hz47l58sh3367xhcnfqd8233fvr84nyk5f";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [ pcre readline ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doPatch" "doConfigure" "doMakeInstall"];
-      
-  debianPatchGz = a.fetchurl {
-    url = ftp://ftp.ru.debian.org/pub/debian/pool/main/a/atftp/atftp_0.7.dfsg-11.diff.gz;
-    sha256 = "07g4qbmp0lnscg2dkj6nsj657jaghibvfysdm1cdxcn215n3zwqd";
+  NIX_LDFLAGS = "-lgcc_s"; # for pthread_cancel
+
+  configureFlags = [
+    "--enable-libreadline"
+    "--enable-libpcre"
+    "--enable-mtftp"
+  ];
+
+  meta = with stdenv.lib; {
+    description = "Advanced TFTP server and client";
+    homepage = http://sourceforge.net/projects/atftp/;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
-
-  debianPatch = a.runCommand "atftp-0.7.dfsg-11" {} ''
-    gunzip < "${debianPatchGz}" > "$out"
-  '';
-
-  patches = [debianPatch];
-
-  meta = {
-    description = "Advanced tftp tools";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.gpl2Plus;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://packages.debian.org/source/sid/atftp";
-    };
-  };
-}) x
-
+}
