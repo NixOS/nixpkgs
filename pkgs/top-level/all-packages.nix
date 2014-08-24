@@ -11474,6 +11474,10 @@ let
 
   xboxdrv = callPackage ../misc/drivers/xboxdrv { };
 
+  xinput_calibrator = callPackage ../tools/X11/xinput_calibrator {
+    inherit (xlibs) libXi inputproto;
+  };
+
   xosd = callPackage ../misc/xosd { };
 
   xsane = callPackage ../applications/graphics/sane/xsane.nix {
