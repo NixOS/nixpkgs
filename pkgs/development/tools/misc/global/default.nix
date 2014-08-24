@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "GNU GLOBAL source code tag system";
+    description = "Source code tag system";
 
     longDescription = ''
       GNU GLOBAL is a source code tagging system that works the same way

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       "export PATH=\"${utillinux}/sbin:$PATH\"";
 
   meta = {
-    description = "GNU Parted, a tool to create, destroy, resize, check, and copy partitions";
+    description = "Create, destroy, resize, check, and copy partitions";
 
     longDescription = ''
       GNU Parted is an industrial-strength package for creating, destroying,

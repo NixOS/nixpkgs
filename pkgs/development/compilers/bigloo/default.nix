@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
 
   meta = {
-    description = "Bigloo, an efficient Scheme compiler";
+    description = "Efficient Scheme compiler";
 
     longDescription = ''
       Bigloo is a Scheme implementation devoted to one goal: enabling

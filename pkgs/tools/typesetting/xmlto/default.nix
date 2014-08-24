@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "xmlto, a front-end to an XSL toolchain";
+    description = "Front-end to an XSL toolchain";
 
     longDescription = ''
       xmlto is a front-end to an XSL toolchain.  It chooses an

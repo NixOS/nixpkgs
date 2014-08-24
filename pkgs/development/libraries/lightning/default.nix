@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.gnu.org/software/lightning/;
-    description = "GNU lightning, a run-time code generation library";
+    description = "Run-time code generation library";
 
     longDescription = ''
       GNU lightning is a library that generates assembly language code

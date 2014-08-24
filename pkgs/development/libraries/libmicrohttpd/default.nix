@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = {
-    description = "GNU libmicrohttpd, an embeddable HTTP server library";
+    description = "Embeddable HTTP server library";
 
     longDescription = ''
       GNU libmicrohttpd is a small C library that is supposed to make

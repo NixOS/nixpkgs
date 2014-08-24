@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
 
   meta = {
-    description = "GNU help2man generates man pages from `--help' output";
+    description = "Generate man pages from `--help' output";
 
     longDescription =
       '' help2man produces simple manual pages from the ‘--help’ and

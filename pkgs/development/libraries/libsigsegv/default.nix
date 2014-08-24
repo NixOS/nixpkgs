@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.gnu.org/software/libsigsegv/;
-    description = "GNU libsigsegv, a library to handle page faults in user mode";
+    description = "Library to handle page faults in user mode";
 
     longDescription = ''
       GNU libsigsegv is a library for handling page faults in user mode. A

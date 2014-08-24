@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ unzip jdk makeWrapper ];
 
   meta = {
-    description = "Gradle is an enterprise-grade build system";
+    description = "Enterprise-grade build system";
     longDescription = ''
       Gradle is a build system which offers you ease, power and freedom.
       You can choose the balance for yourself. It has powerful multi-project

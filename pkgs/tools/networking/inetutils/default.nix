@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "GNU Inetutils, a collection of common network programs";
+    description = "Collection of common network programs";
 
     longDescription =
       '' The GNU network utilities suite provides the

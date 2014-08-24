@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lgcc_s";
 
   meta = with stdenv.lib; {
-    description = "TrouSerS is an CPL (Common Public License) licensed Trusted Computing Software Stack.";
+    description = "Trusted computing software stack";
     homepage    = http://trousers.sourceforge.net/;
     license     = licenses.cpl10;
     maintainers = [ maintainers.ak ];

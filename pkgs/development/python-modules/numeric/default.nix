@@ -23,7 +23,7 @@ let version = "24.2"; in
     # FIXME: Run the tests.
 
     meta = {
-      description = "Numeric, a Python module for high-performance, numeric computing";
+      description = "A Python module for high-performance, numeric computing";
 
       longDescription = ''
         Numeric is a Python module for high-performance, numeric

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake ] ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
 
   meta = {
-    description = "OpenAL, a cross-platform 3D audio API";
+    description = "Cross-platform 3D audio API";
 
     longDescription = ''
       OpenAL is a cross-platform 3D audio API appropriate for use with

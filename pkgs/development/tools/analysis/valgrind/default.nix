@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.valgrind.org/;
-    description = "Valgrind, a debugging and profiling tool suite";
+    description = "Debugging and profiling tool suite";
 
     longDescription = ''
       Valgrind is an award-winning instrumentation framework for

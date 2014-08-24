@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   */
 
   meta = {
-    description = "GNUnet, GNU's decentralized anonymous and censorship-resistant P2P framework";
+    description = "GNU's decentralized anonymous and censorship-resistant P2P framework";
 
     longDescription = ''
       GNUnet is a framework for secure peer-to-peer networking that

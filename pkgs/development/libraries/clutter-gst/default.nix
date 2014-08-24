@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   postBuild = "rm -rf $out/share/gtk-doc";
 
   meta = {
-    description = "Clutter-GST";
+    description = "GStreamer bindings for clutter";
 
     homepage = http://www.clutter-project.org/;
 

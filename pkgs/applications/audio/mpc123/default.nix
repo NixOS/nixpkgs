@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://mpc123.sourceforge.net/;
 
-    description = "mpc123, a Musepack (.mpc) audio player";
+    description = "A Musepack (.mpc) audio player";
 
     license = stdenv.lib.licenses.gpl2Plus;
 

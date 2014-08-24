@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    description = "Mozilla Firefox - the browser, reloaded";
+    description = "Web browser";
     homepage = http://www.mozilla.com/en-US/firefox/;
     maintainers = with lib.maintainers; [ eelco wizeman ];
     platforms = lib.platforms.linux;

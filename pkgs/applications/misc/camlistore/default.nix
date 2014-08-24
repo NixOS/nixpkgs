@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Camlistore is a way of storing, syncing, sharing, modelling and backing up content";
+    description = "A way of storing, syncing, sharing, modelling and backing up content";
     homepage = https://camlistore.org;
     license = licenses.asl20;
     maintainers = with maintainers; [ cstrahan ];

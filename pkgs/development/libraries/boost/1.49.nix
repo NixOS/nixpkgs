@@ -44,7 +44,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://boost.org/";
-    description = "Boost C++ Library Collection";
+    description = "Collection of C++ libraries";
     license = "boost-license";
 
     platforms = stdenv.lib.platforms.unix;

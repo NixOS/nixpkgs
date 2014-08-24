@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   installPhase = ''make install prefix="$out"'';
 
   meta = {
-    description = "GrafX2 is a bitmap paint program inspired by the Amiga programs Deluxe Paint and Brilliance.";
+    description = "Bitmap paint program inspired by the Amiga programs Deluxe Paint and Brilliance";
     homepage = http://code.google.co/p/grafx2/;
     license = stdenv.lib.licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];

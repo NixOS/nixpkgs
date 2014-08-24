@@ -10,6 +10,6 @@ stdenv.mkDerivation rec
   buildInputs = [fuse glib neon pkgconfig];
   meta = {
     homepage = "http://noedler.de/projekte/wdfs/";
-    description = "wdfs a user-space filesystem that allows to mount a webdav share";
+    description = "User-space filesystem that allows to mount a webdav share";
   };
 }

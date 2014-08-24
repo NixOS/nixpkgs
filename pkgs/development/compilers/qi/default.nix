@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [allBuild doForceShare doPropagate]);
 	meta = {
-		description = "Qi - next generation on top of Common Lisp";
+		description = "Functional programming language, built top of Common Lisp";
 	};
 }
