@@ -120,12 +120,12 @@ interpretation:</para>
 
   <varlistentry>
     <term><varname>license</varname></term>
-    <listitem><para>The license for the package. One from attribute set defined in
-      <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix">
-      <filename>nixpkgs/lib/licenses.nix</filename></link>.
-      Example:
-      <literal>stdenv.lib.licenses.gpl3</literal>.</para></listitem>
-      See details in <xref linkend='sec-meta-license'/>,
+    <listitem><para>The license for the package. One from the
+    attribute set defined in <link
+    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix">
+    <filename>nixpkgs/lib/licenses.nix</filename></link>.  Example:
+    <literal>stdenv.lib.licenses.gpl3</literal>. For details, see
+    <xref linkend='sec-meta-license'/>.</para></listitem>
   </varlistentry>
 
   <varlistentry>
