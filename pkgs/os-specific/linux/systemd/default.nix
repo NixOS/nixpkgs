@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
       "--with-tty-gid=3" # tty in NixOS has gid 3
       "--enable-compat-libs" # get rid of this eventually
       "--disable-tests"
-      "--disable-manpages" # FIXME
 
       "--disable-hostnamed"
       "--disable-networkd" # enable/use eventually
