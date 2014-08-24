@@ -4088,6 +4088,10 @@ let
 
   ninja = callPackage ../development/tools/build-managers/ninja { };
 
+  nixbang = callPackage ../development/tools/misc/nixbang {
+      pythonPackages = python3Packages;
+  };
+
   node_webkit = callPackage ../development/tools/node-webkit {
     gconf = pkgs.gnome.GConf;
   };
