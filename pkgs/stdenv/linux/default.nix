@@ -85,32 +85,35 @@ rec {
     {gcc, extraAttrs ? {}, overrides ? (pkgs: {}), extraPath ? []}:
 
     let
-    thisStdenv = import ../generic {
-      inherit system config;
-      name = "stdenv-linux-boot";
-      preHook =
-        ''
-          # Don't patch #!/interpreter because it leads to retained
-          # dependencies on the bootstrapTools in the final stdenv.
-          dontPatchShebangs=1
-          ${commonPreHook}
-        '';
-      shell = "${bootstrapTools}/bin/sh";
-      initialPath = [bootstrapTools] ++ extraPath;
-      fetchurlBoot = import ../../build-support/fetchurl {
-        stdenv = stage0.stdenv;
-        curl = bootstrapTools;
+
+      thisStdenv = import ../generic {
+        inherit system config;
+        name = "stdenv-linux-boot";
+        preHook =
+          ''
+            # Don't patch #!/interpreter because it leads to retained
+            # dependencies on the bootstrapTools in the final stdenv.
+            dontPatchShebangs=1
+            ${commonPreHook}
+          '';
+        shell = "${bootstrapTools}/bin/sh";
+        initialPath = [bootstrapTools] ++ extraPath;
+        fetchurlBoot = import ../../build-support/fetchurl {
+          stdenv = stage0.stdenv;
+          curl = bootstrapTools;
+        };
+        inherit gcc;
+        # Having the proper 'platform' in all the stdenvs allows getting proper
+        # linuxHeaders for example.
+        extraAttrs = extraAttrs // { inherit platform; };
+        overrides = pkgs: (overrides pkgs) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
-      inherit gcc;
-      # Having the proper 'platform' in all the stdenvs allows getting proper
-      # linuxHeaders for example.
-      extraAttrs = extraAttrs // { inherit platform; };
-      overrides = pkgs: (overrides pkgs) // { fetchurl = thisStdenv.fetchurlBoot; };
-    };
-    thisPkgs = allPackages {
-      inherit system platform;
-      bootStdenv = thisStdenv;
-    };
+
+      thisPkgs = allPackages {
+        inherit system platform;
+        bootStdenv = thisStdenv;
+      };
+
     in { stdenv = thisStdenv; pkgs = thisPkgs; };
 
 
