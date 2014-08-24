@@ -1,7 +1,7 @@
 { stdenv, fetchgit, alsaLib, pkgconfig, gtk3, glibc, autoconf, automake, libnotify, libX11, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "pa-applet";
+  name = "pnmixer";
 
   src = fetchgit {
     url = "git://github.com/nicklan/pnmixer.git";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ iElectric ];
+    maintainers = with maintainers; [ campadrenalin ];
     platforms = platforms.linux;
   };
 }
