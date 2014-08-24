@@ -9076,7 +9076,7 @@ rec {
 
 
   zope_security = buildPythonPackage rec {
-    name = "zope.security-3.7.4";
+    name = "zope.security-4.0.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.security/zope.security-3.7.4.tar.gz";
@@ -9089,7 +9089,7 @@ rec {
     ];
 
     meta = {
-        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+      maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
 
