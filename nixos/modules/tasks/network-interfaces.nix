@@ -684,8 +684,7 @@ in
           { description = "Virtual Network Interface ${i.name}";
             requires = [ "dev-net-tun.device" ];
             after = [ "dev-net-tun.device" ];
-            wantedBy = [ "network.target" ];
-            requiredBy = [ "sys-subsystem-net-devices-${i.name}.device" ];
+            wantedBy = [ "network.target" "sys-subsystem-net-devices-${i.name}.device" ];
             path = [ pkgs.iproute ];
             serviceConfig = {
               Type = "oneshot";
