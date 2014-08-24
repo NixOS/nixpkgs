@@ -2554,6 +2554,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   typeEquality = callPackage ../development/libraries/haskell/type-equality {};
 
+  typeNatural = callPackage ../development/libraries/haskell/type-natural {};
+
   typeLevelNaturalNumber = callPackage ../development/libraries/haskell/type-level-natural-number {};
 
   tz = callPackage ../development/libraries/haskell/tz {
