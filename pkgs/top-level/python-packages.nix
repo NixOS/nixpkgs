@@ -255,9 +255,8 @@ rec {
 
     propagatedBuildInputs = [
       pythonPackages.notmuch
-      pythonPackages.subprocess32
       pythonPackages.chardet
-    ];
+    ] ++ optional (!isPy3k) pythonPackages.subprocess32;
 
     doCheck = false;
 
