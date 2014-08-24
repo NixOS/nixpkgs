@@ -1,5 +1,5 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi
-, sqlite, openssl, ncurses, pythonFull, expat }:
+, sqlite, openssl, ncurses, pythonFull, expat, tcl, tk }:
 
 assert zlibSupport -> zlib != null;
 
@@ -20,7 +20,7 @@ let
       sha256 = "0fg4l48c7n59n5j3b1dgcsr927xzylkfny4a6pnk6z0pq2bhvl9z";
     };
 
-    buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite ]
+    buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite tk tcl ]
       ++ stdenv.lib.optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc
       ++ stdenv.lib.optional zlibSupport zlib;
 
