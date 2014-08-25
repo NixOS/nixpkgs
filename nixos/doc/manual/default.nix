@@ -55,16 +55,6 @@ in rec {
 
     buildInputs = [ libxml2 libxslt ];
 
-    xsltFlags = ''
-      --param section.autolabel 1
-      --param section.label.includes.component.label 1
-      --param html.stylesheet 'style.css'
-      --param xref.with.number.and.title 1
-      --param toc.section.depth 3
-      --param admon.style '''
-      --param callout.graphics.extension '.gif'
-    '';
-
     buildCommand = ''
       ${copySources}
 
@@ -76,10 +66,20 @@ in rec {
       # Generate the HTML manual.
       dst=$out/share/doc/nixos
       mkdir -p $dst
-      xsltproc $xsltFlags --nonet --xinclude \
-        --output $dst/manual.html \
-        ${docbook5_xsl}/xml/xsl/docbook/xhtml/docbook.xsl \
-        ./manual.xml
+      xsltproc \
+        --param section.autolabel 1 \
+        --param section.label.includes.component.label 1 \
+        --stringparam html.stylesheet style.css \
+        --param xref.with.number.and.title 1 \
+        --param toc.section.depth 3 \
+        --stringparam admon.style "" \
+        --stringparam callout.graphics.extension .gif \
+        --param chunk.section.depth 1 \
+        --param chunk.first.sections 1 \
+        --param use.id.as.filename 1 \
+        --stringparam generate.toc "book toc chapter toc" \
+        --nonet --xinclude --output $dst/ \
+        ${docbook5_xsl}/xml/xsl/docbook/xhtml/chunkfast.xsl ./manual.xml
 
       mkdir -p $dst/images/callouts
       cp ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.gif $dst/images/callouts/
