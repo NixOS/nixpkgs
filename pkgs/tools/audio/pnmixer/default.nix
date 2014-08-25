@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "";
+    description = "ALSA mixer for the system tray.";
     license = licenses.gpl3;
     maintainers = with maintainers; [ campadrenalin ];
     platforms = platforms.linux;
