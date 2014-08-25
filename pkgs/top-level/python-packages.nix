@@ -438,6 +438,24 @@ rec {
   };
 
 
+  apscheduler = buildPythonPackage rec {
+    name = "APScheduler-2.1.2";
+
+    propagatedBuildInputs = with pythonPackages; [ futures tzlocal six pytest mock];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/A/APScheduler/APScheduler-2.1.2.tar.gz";
+      md5 = "6862959d460c16ef325d63e1fc3a6684";
+    };
+
+    meta = with pkgs.stdenv.lib; {
+      description = "Advanced Python Scheduler (APScheduler) is a Python library that lets you schedule your Python code to be executed";
+      homepage = http://pypi.python.org/pypi/APScheduler/;
+      license = licenses.mit;
+    };
+  };
+
+
   area53 = buildPythonPackage (rec {
     name = "area53-b2c9cdcabd";
 
@@ -1993,6 +2011,21 @@ rec {
     };
   };
 
+  facebook-sdk = buildPythonPackage rec {
+    name = "facebook-sdk-0.4.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/f/facebook-sdk/facebook-sdk-0.4.0.tar.gz";
+      md5 = "ac9f38e197e54b8ba9f3a61988cc33b7";
+    };
+
+    meta = with pkgs.stdenv.lib; {
+      description = "Client library that supports the Facebook Graph API and the official Facebook JavaScript SDK.";
+      homepage = https://github.com/pythonforfacebook/facebook-sdk;
+      license = licenses.asl20 ;
+    };
+  };
+
   faker = buildPythonPackage rec {
     name = "faker-0.0.4";
     src = fetchurl {
@@ -3479,6 +3512,23 @@ rec {
     };
   });
 
+  futures = buildPythonPackage rec {
+    name = "futures-2.1.6";
+
+    propagatedBuildInputs = with pythonPackages; [  ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/f/futures/futures-2.1.6.tar.gz";
+      md5 = "cfab9ac3cd55d6c7ddd0546a9f22f453";
+    };
+
+    meta = with pkgs.stdenv.lib; {
+      description = "Backport of the concurrent.futures package from Python 3.2";
+      homepage = http://code.google.com/p/pythonfutures;
+      license = licenses.bsd2;
+    };
+  };
+
   gcovr = buildPythonPackage rec {
     name = "gcovr-2.4";
 
@@ -4601,6 +4651,21 @@ rec {
     doCheck = false;
   };
 
+
+  mpd = buildPythonPackage rec {
+    name = "python-mpd-0.3.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-mpd/python-mpd-0.3.0.tar.gz";
+      md5 = "5b3849b131e2fb12f251434597d65635";
+    };
+
+    meta = with pkgs.stdenv.lib; {
+      description = "An MPD (Music Player Daemon) client library written in pure Python.";
+      homepage = http://jatreuman.indefero.net/p/python-mpd/;
+      license = licenses.gpl3;
+    };
+  };
 
   mrbob = buildPythonPackage rec {
     name = "mrbob-${version}";
@@ -6826,6 +6891,21 @@ rec {
   };
 
 
+  quantities = buildPythonPackage rec {
+    name = "quantities-0.10.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/q/quantities/quantities-0.10.1.tar.gz";
+      md5 = "e924e21c0a5ddc9ebcdacbbe511b8ec7";
+    };
+
+    meta = with pkgs.stdenv.lib; {
+      description = "Quantities is designed to handle arithmetic and";
+      homepage = http://packages.python.org/quantities;
+      license = licenses.bsd2;
+    };
+  };
+
   qutip = buildPythonPackage rec {
     name = "qutip-2.2.0";
 
@@ -7540,6 +7620,26 @@ rec {
 
     meta = with stdenv.lib; {
       maintainers = [ maintainers.iElectric ];
+    };
+  };
+
+  semantic = buildPythonPackage rec {
+    name = "semantic-1.0.3";
+
+    propagatedBuildInputs = with pythonPackages; [ quantities numpy ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/s/semantic/semantic-1.0.3.tar.gz";
+      md5 = "78a150190e3e7d0f6f357b4c828e5f0d";
+    };
+
+    # strange setuptools error (can not import semantic.test)
+    doCheck = false;
+
+    meta = with pkgs.stdenv.lib; {
+      description = "Common Natural Language Processing Tasks for Python";
+      homepage = https://github.com/crm416/semantic;
+      license = licenses.mit;
     };
   };
 
@@ -8299,6 +8399,25 @@ rec {
     };
   };
 
+  tzlocal = buildPythonPackage rec {
+    name = "tzlocal-1.1.1";
+
+    propagatedBuildInputs = with pythonPackages; [ pytz ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/tzlocal/tzlocal-1.1.1.zip";
+      md5 = "56c2a04501b98f2a1188d003fd6d3dba";
+    };
+
+     # test fail (timezone test fail)
+     doCheck = true;
+
+    meta = with pkgs.stdenv.lib; {
+      description = "Tzinfo object for the local timezone.";
+      homepage = https://github.com/regebro/tzlocal;
+      license = licenses.cddl;
+    };
+  };
 
   unittest2 = buildPythonPackage rec {
     version = "0.5.1";
