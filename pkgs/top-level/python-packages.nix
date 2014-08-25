@@ -2013,6 +2013,8 @@ rec {
 
   facebook-sdk = buildPythonPackage rec {
     name = "facebook-sdk-0.4.0";
+    
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/f/facebook-sdk/facebook-sdk-0.4.0.tar.gz";
@@ -4655,6 +4657,8 @@ rec {
   mpd = buildPythonPackage rec {
     name = "python-mpd-0.3.0";
 
+    disabled = isPy3k;
+    
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/p/python-mpd/python-mpd-0.3.0.tar.gz";
       md5 = "5b3849b131e2fb12f251434597d65635";
@@ -7625,8 +7629,10 @@ rec {
 
   semantic = buildPythonPackage rec {
     name = "semantic-1.0.3";
+    
+    disabled = isPy3k;
 
-    propagatedBuildInputs = with pythonPackages; [ quantities numpy ];
+    propagatedBuildInputs = [ quantities numpy ];
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/s/semantic/semantic-1.0.3.tar.gz";
@@ -8410,7 +8416,7 @@ rec {
     };
 
      # test fail (timezone test fail)
-     doCheck = true;
+     doCheck = false;
 
     meta = with pkgs.stdenv.lib; {
       description = "Tzinfo object for the local timezone.";
