@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "BitlBee, an IRC to other chat networks gateway";
+    description = "IRC instant messaging gateway";
 
     longDescription = ''
       BitlBee brings IM (instant messaging) to IRC clients.  It's a

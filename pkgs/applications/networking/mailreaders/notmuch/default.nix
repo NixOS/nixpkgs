@@ -70,8 +70,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
 
   meta = {
-    description = "Notmuch -- The mail indexer";
-    longDescription = "";
+    description = "Mail indexer";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ chaoflow garbas ];
     platforms = stdenv.lib.platforms.gnu;

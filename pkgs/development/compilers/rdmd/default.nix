@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "rdmd wrapper for D language compiler";
+    description = "Wrapper for D language compiler";
     homepage = http://dlang.org/rdmd.html;
     license = lib.licenses.boost;
     maintainers = with stdenv.lib.maintainers; [ vlstill ];

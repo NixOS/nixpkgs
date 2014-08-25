@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ curl emacs ] ++ (stdenv.lib.optionals doCheck [ check bc ]);
 
   meta = {
-    description = "GNU Recutils, tools and libraries to access human-editable, text-based databases";
+    description = "Tools and libraries to access human-editable, text-based databases";
 
     longDescription =
       '' GNU Recutils is a set of tools and libraries to access

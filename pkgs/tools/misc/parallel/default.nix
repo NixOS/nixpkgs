@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "GNU Parallel, a shell tool for executing jobs in parallel";
+    description = "Shell tool for executing jobs in parallel";
 
     longDescription =
       '' GNU Parallel is a shell tool for executing jobs in parallel.  A job

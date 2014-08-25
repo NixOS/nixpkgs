@@ -91,7 +91,7 @@ let
 
     meta = with stdenv.lib; {
       homepage = "http://pypy.org/";
-      description = "PyPy is a fast, compliant alternative implementation of the Python language (2.7.3)";
+      description = "Fast, compliant alternative implementation of the Python language (2.7.3)";
       license = licenses.mit;
       platforms = platforms.linux;
       maintainers = with maintainers; [ iElectric ];

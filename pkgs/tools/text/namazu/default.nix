@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isLinux;
 
   meta = {
-    description = "Namazu, a full-text search engine";
+    description = "Full-text search engine";
 
     longDescription = ''
       Namazu is a full-text search engine intended for easy use.  Not

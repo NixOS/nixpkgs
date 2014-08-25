@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
 
     meta = {
       homepage = http://xbmc.org/;
-      description = "XBMC Media Center";
+      description = "Media center";
       license = "GPLv2";
       platforms = stdenv.lib.platforms.linux; 
       maintainers = [ stdenv.lib.maintainers.iElectric ];

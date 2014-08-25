@@ -252,7 +252,7 @@ stdenv.mkDerivation rec {
     ];
 
   meta = with stdenv.lib; {
-    description = "LibreOffice is a comprehensive, professional-quality productivity suite, a variant of openoffice.org";
+    description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
     homepage = http://libreoffice.org/;
     license = licenses.lgpl3;
     maintainers = [ maintainers.viric maintainers.raskin ];

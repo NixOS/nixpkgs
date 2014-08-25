@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "pamixer is like amixer but for pulseaudio.";
+    description = "Like amixer but for pulseaudio";
     longDescription = "Features:
       - Get the current volume of the default sink, the default source or a selected one by his id
       - Set the volume for the default sink, the default source or any other device

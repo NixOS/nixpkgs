@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://linux.techass.com/projects/xdb/;
-    description = "XBase compatible C++ class library formerly known as XDB";
+    description = "C++ class library formerly known as XDB";
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.urkud ];
   };

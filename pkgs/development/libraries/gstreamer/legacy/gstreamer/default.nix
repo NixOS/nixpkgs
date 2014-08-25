@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://gstreamer.freedesktop.org;
 
-    description = "GStreamer, a library for constructing graphs of media-handling components";
+    description = "Library for constructing graphs of media-handling components";
 
     longDescription = ''
       GStreamer is a library for constructing graphs of media-handling

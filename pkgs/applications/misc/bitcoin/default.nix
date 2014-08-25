@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-      description = "Bitcoin is a peer-to-peer currency";
+      description = "Peer-to-peer electronic cash system";
       longDescription= ''
         Bitcoin is a free open source peer-to-peer electronic cash system that is
         completely decentralized, without the need for a central server or trusted
