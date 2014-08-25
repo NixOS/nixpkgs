@@ -1500,6 +1500,8 @@ let
 
   megatools = callPackage ../tools/networking/megatools { };
 
+  mfcuk = callPackage ../tools/security/mfcuk { };
+
   minecraft = callPackage ../games/minecraft { };
 
   minecraft-server = callPackage ../games/minecraft-server { };
