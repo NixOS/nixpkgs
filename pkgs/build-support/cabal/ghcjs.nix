@@ -188,7 +188,7 @@ in
                 done
               done
 
-              configureFlags+=" --package-db=${ghc.ghc}/share/ghcjs/x86_64-linux-0.1.0-7.8.2/ghcjs/package.conf.d"
+              configureFlags+=" --package-db=${ghc.ghc}${ghc.ghc.libdir}/ghcjs/package.conf.d"
 
               ${optionalString (self.enableSharedExecutables && self.stdenv.isLinux) ''
                 configureFlags+=" --ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.ghc.name}/${self.pname}-${self.version}";
