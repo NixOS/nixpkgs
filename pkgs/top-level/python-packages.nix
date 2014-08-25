@@ -4877,18 +4877,6 @@ rec {
     doCheck = false;
   });
 
-  nose2Cov = if isPy26 then null else (buildPythonPackage rec {
-    name = "nose2-cov-1.0a4";
-    src = fetchurl {
-      url = "http://pypi.python.org/packages/source/n/nose2-cov/nose2-cov-1.0a4.tar.gz";
-      md5 = "6442f03e2ea732b0e38eb5b00fbe0b31";
-    };
-    meta = {
-      description = "nose2 plugin for coverage reporting, including subprocesses and multiprocessing";
-    };
-    propagatedBuildInputs = [ covCore nose2 ];
-  });
-
   nosejs = buildPythonPackage {
     name = "nosejs-0.9.4";
     src = fetchurl {
