@@ -15,6 +15,9 @@ cabal.mkDerivation (self: {
     description = "Extract the heap representation of Haskell values and thunks";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = with self.stdenv.lib.maintainers; [ andres ];
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = self.stdenv.lib.versionOlder "7.7" self.ghc.version;
+
   };
 })

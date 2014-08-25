@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "gtk2hs-buildtools";
-  version = "0.13.0.0";
-  sha256 = "075f6jjkk56h0nda0gbdr775d72c0b3d2z483cff2bnnjf8aqwa6";
+  version = "0.13.0.1";
+  sha256 = "0ngdg44hxpyga9kwm70340c8jhsh9wl5rja3wx9mfx194idivaxa";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ filepath hashtables random ];
@@ -15,6 +15,5 @@ cabal.mkDerivation (self: {
     description = "Tools to build the Gtk2Hs suite of User Interface libraries";
     license = self.stdenv.lib.licenses.gpl2;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

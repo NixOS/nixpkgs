@@ -621,10 +621,10 @@ stdenv.mkDerivation rec {
            else "make";
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp -p ./crafty $out/bin
 
-    ensureDir $out/share/crafty
+    mkdir -p $out/share/crafty
     cd $out/share/crafty
 
     $out/bin/crafty "books create ${startPgn} 60"
@@ -635,7 +635,7 @@ stdenv.mkDerivation rec {
         $out/bin/crafty "book create enormous.pgn 60"
         rm -f *.001 enormous.pgn
         
-        ensureDir $out/share/crafty/TB
+        mkdir -p $out/share/crafty/TB
         ${stdenv.lib.fold
           (tb: acc: acc + "\nln -s "
                         + toString tb
@@ -659,7 +659,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.craftychess.com/;
-    description = "Crafty is a free, open-source computer chess program developed by Dr. Robert M. Hyatt";
+    description = "Chess program developed by Dr. Robert M. Hyatt";
     license = stdenv.lib.licenses.unfree;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.jwiegley ];

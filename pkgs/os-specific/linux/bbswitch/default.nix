@@ -22,10 +22,10 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out/lib/modules/${kernel.modDirVersion}/misc
+    mkdir -p $out/lib/modules/${kernel.modDirVersion}/misc
     cp bbswitch.ko $out/lib/modules/${kernel.modDirVersion}/misc
 
-    ensureDir $out/bin
+    mkdir -p $out/bin
     tee $out/bin/discrete_vga_poweroff << EOF
     #!/bin/sh
 

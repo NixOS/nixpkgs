@@ -19,12 +19,11 @@ cabal.mkDerivation (self: {
     entropy HUnit ioStreams mtl network QuickCheck random SHA
     testFramework testFrameworkHunit testFrameworkQuickcheck2 text
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://jaspervdj.be/websockets";
     description = "A sensible and clean way to write WebSocket-capable servers in Haskell";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })

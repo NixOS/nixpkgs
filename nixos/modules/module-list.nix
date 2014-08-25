@@ -50,8 +50,10 @@
   ./programs/bash/bash.nix
   ./programs/bash/command-not-found.nix
   ./programs/blcr.nix
+  ./programs/dconf.nix
   ./programs/environment.nix
   ./programs/info.nix
+  ./programs/nano.nix
   ./programs/screen.nix
   ./programs/shadow.nix
   ./programs/shell.nix
@@ -98,6 +100,7 @@
   ./services/databases/monetdb.nix
   ./services/databases/mongodb.nix
   ./services/databases/mysql.nix
+  ./services/databases/neo4j.nix 
   ./services/databases/openldap.nix
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
@@ -125,6 +128,7 @@
   ./services/hardware/pcscd.nix
   ./services/hardware/pommed.nix
   ./services/hardware/sane.nix
+  ./services/hardware/tcsd.nix
   ./services/hardware/thinkfan.nix
   ./services/hardware/udev.nix
   ./services/hardware/udisks2.nix
@@ -135,9 +139,11 @@
   ./services/logging/logstash.nix
   ./services/logging/rsyslogd.nix
   ./services/logging/syslogd.nix
+  ./services/logging/syslog-ng.nix
   ./services/mail/dovecot.nix
   ./services/mail/freepops.nix
   ./services/mail/mail.nix
+  ./services/mail/mlmmj.nix
   ./services/mail/opensmtpd.nix
   ./services/mail/postfix.nix
   ./services/mail/spamassassin.nix
@@ -155,6 +161,7 @@
   ./services/misc/nix-ssh-serve.nix
   ./services/misc/rippled.nix
   ./services/misc/rogue.nix
+  ./services/misc/siproxd.nix
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
   ./services/monitoring/apcupsd.nix
@@ -163,6 +170,8 @@
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
+  ./services/monitoring/riemann.nix
+  ./services/monitoring/riemann-dash.nix
   ./services/monitoring/smartd.nix
   ./services/monitoring/statsd.nix
   ./services/monitoring/systemhealth.nix
@@ -233,6 +242,7 @@
   ./services/networking/teamspeak3.nix
   ./services/networking/tftpd.nix
   ./services/networking/unbound.nix
+  ./services/networking/unifi.nix
   ./services/networking/vsftpd.nix
   ./services/networking/wakeonlan.nix
   ./services/networking/websockify.nix
@@ -247,6 +257,7 @@
   ./services/search/elasticsearch.nix
   ./services/search/solr.nix
   ./services/security/clamav.nix
+  ./services/security/fail2ban.nix
   ./services/security/fprot.nix
   ./services/security/frandom.nix
   ./services/security/haveged.nix
@@ -277,6 +288,7 @@
   ./services/x11/desktop-managers/default.nix
   ./services/x11/display-managers/auto.nix
   ./services/x11/display-managers/default.nix
+  ./services/x11/display-managers/gdm.nix
   ./services/x11/display-managers/kdm.nix
   ./services/x11/display-managers/lightdm.nix
   ./services/x11/display-managers/slim.nix
@@ -287,7 +299,9 @@
   ./services/x11/window-managers/awesome.nix
   #./services/x11/window-managers/compiz.nix
   ./services/x11/window-managers/default.nix
+  ./services/x11/window-managers/fluxbox.nix
   ./services/x11/window-managers/icewm.nix
+  ./services/x11/window-managers/bspwm.nix
   ./services/x11/window-managers/metacity.nix
   ./services/x11/window-managers/none.nix
   ./services/x11/window-managers/twm.nix

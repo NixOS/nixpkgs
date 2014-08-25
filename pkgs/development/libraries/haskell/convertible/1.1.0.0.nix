@@ -14,6 +14,5 @@ cabal.mkDerivation (self: {
     description = "Typeclasses and instances for converting between types";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

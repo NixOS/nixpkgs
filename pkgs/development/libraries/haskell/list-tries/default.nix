@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ binary dlist ];
+  jailbreak = true;
   meta = {
     homepage = "http://iki.fi/matti.niemenmaa/list-tries/";
     description = "Tries and Patricia tries: finite sets and maps for list keys";

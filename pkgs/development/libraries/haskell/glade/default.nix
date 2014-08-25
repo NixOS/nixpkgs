@@ -12,11 +12,11 @@ cabal.mkDerivation (self: {
   buildTools = [ gtk2hsBuildtools ];
   extraLibraries = [ libc pkgconfig ];
   pkgconfigDepends = [ gtkC libglade ];
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/gtk2hs/";
     description = "Binding to the glade library";
     license = self.stdenv.lib.licenses.lgpl21;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

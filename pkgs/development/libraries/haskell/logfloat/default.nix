@@ -11,6 +11,5 @@ cabal.mkDerivation (self: {
     description = "Log-domain floating point numbers";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

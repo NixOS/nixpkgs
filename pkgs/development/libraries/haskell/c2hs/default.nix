@@ -21,6 +21,5 @@ cabal.mkDerivation (self: {
     description = "C->Haskell FFI tool that gives some cross-language type safety";
     license = self.stdenv.lib.licenses.gpl2;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

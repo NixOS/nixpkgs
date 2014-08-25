@@ -233,7 +233,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
   };
 
   meta = {
-    description = "The PHP language runtime engine";
+    description = "An HTML-embedded scripting language";
     homepage    = http://www.php.net/;
     license     = "PHP-3";
     maintainers = with stdenv.lib.maintainers; [ lovek323 ];

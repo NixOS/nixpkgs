@@ -1,21 +1,39 @@
-{stdenv, fetchurl}:
+{stdenv, fetchgit, autoconf, automake, boost149, zlib, libpng, libjpeg, libtiff}:
 
+let boost = boost149; in
 stdenv.mkDerivation {
-  name = "povray-3.6";
+  name = "povray-3.7";
 
-  src = fetchurl {
-    url = http://www.povray.org/ftp/pub/povray/Old-Versions/Official-3.62/Unix/povray-3.6.tar.bz2;
-    sha256 = "4e8a7fecd44807343b6867e1f2440aa0e09613d6d69a7385ac48f4e5e7737a73";
+  src = fetchgit {
+    url = "https://github.com/POV-Ray/povray.git";
+    rev = "39ce8a24e50651904010dda15872d63be15d7c37";
+    sha256 = "0d56631d9daacb8967ed359025f56acf0bd505d1d9e752859e8ff8656ae72d20";
   };
+
+
+  buildInputs = [ autoconf automake boost zlib libpng libjpeg libtiff ];
 
   # the installPhase wants to put files into $HOME. I let it put the files
   # to $TMPDIR, so they don't get into the $out
-  patchPhase = ''
-    sed -i -e 's/^povconfuser.*/povconfuser=$(TMPDIR)\/povray/' Makefile.{am,in};
+  postPatch = '' cd unix
+                 ./prebuild.sh
+                 cd ..
+                 sed -i -e 's/^povconfuser.*/povconfuser=$(TMPDIR)\/povray/' Makefile.{am,in}
+                 sed -i -e 's/^povuser.*/povuser=$(TMPDIR)\/.povray/' Makefile.{am,in}
+                 sed -i -e 's/^povowner.*/povowner=nobody/' Makefile.{am,in}
+                 sed -i -e 's/^povgroup.*/povgroup=nogroup/' Makefile.{am,in}
+               '';
+
+  configureFlags = "COMPILED_BY='nix' --with-boost-libdir=${boost}/lib --with-boost-includedir=${boost}/include";
+
+  preInstall = ''
+    mkdir "$TMP/bin"
+    for i in chown chgrp; do
+      echo '#!/bin/sh' >> "$TMP/bin/$i"
+      chmod +x "$TMP/bin/$i"
+      PATH="$TMP/bin:$PATH"
+    done
   '';
-  # I didn't use configureFlags because I couldn't pass the quotes properly
-  # for the COMPILED_BY.
-  configurePhase = "./configure --prefix=$out COMPILED_BY=\"nix\"";
   
   meta = {
     homepage = http://www.povray.org/;

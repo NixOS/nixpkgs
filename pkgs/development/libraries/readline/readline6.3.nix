@@ -13,10 +13,12 @@ stdenv.mkDerivation (rec {
   patchFlags = "-p0";
 
   patches =
-    [ ./link-against-ncurses.patch ];
+    [ ./link-against-ncurses.patch
+      ./no-arch_only-6.3.patch
+    ];
 
   meta = {
-    description = "GNU Readline, a library for interactive line editing";
+    description = "Library for interactive line editing";
 
     longDescription = ''
       The GNU Readline library provides a set of functions for use by

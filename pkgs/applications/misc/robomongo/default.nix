@@ -1,11 +1,11 @@
 { stdenv, fetchurl, qt5, openssl, boost, cmake, scons, python, pcre, bzip2 }:
 
 stdenv.mkDerivation {
-  name = "robomongo-0.8.3";
+  name = "robomongo-0.8.4";
 
   src = fetchurl {
-    url = https://github.com/paralect/robomongo/archive/v0.8.3.tar.gz;
-    sha256 = "1x8vpmqvjscjcw30hf0i5vsrg3rldlwx6z52i1hymlck2jfzkank";
+    url = https://github.com/paralect/robomongo/archive/v0.8.4.tar.gz;
+    sha256 = "199fb08701wrw3ky7gcqyvb3z4027qjcqdnzrx5y7yi3rb4gvkzc";
   };
 
   patches = [ ./robomongo.patch ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://robomongo.org/";
     description = "Query GUI for mongodb";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.amorsillo ];
   };

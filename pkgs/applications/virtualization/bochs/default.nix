@@ -1,34 +1,34 @@
 { stdenv, fetchurl
+, pkgconfig, gtk
 , libX11 , mesa
 , sdlSupport ? true, SDL ? null
 , termSupport ? true , ncurses ? null, readline ? null
-, wxSupport ? true , gtk ? null , wxGTK ? null , pkgconfig ? null
+, wxSupport ? false, wxGTK ? null
 , wgetSupport ? false, wget ? null
 , curlSupport ? false, curl ? null
 }:
 
-
 assert sdlSupport -> (SDL != null);
 assert termSupport -> (ncurses != null&& readline != null);
-assert wxSupport -> (gtk != null && wxGTK != null && pkgconfig != null);
+assert wxSupport -> (gtk != null && wxGTK != null);
 assert wgetSupport -> (wget != null);
 assert curlSupport -> (curl != null);
 
 stdenv.mkDerivation rec {
 
   name = "bochs-${version}";
-  version = "2.6.2";
+  version = "2.6.6";
 
   src = fetchurl {
     url = "http://downloads.sourceforge.net/project/bochs/bochs/${version}/${name}.tar.gz";
-    sha256 = "042blm1xb9ig4fh2bv8nrrfpgkcxy4hq8yrkx7mrdpm5g4mvfwyr";
+    sha256 = "0nlrl218x93vz97n46aw2szsalx97r020mn43fjsif100v7zix6f";
   };
 
   buildInputs = with stdenv.lib;
-  [ libX11 mesa ]
+  [ pkgconfig gtk libX11 mesa ]
   ++ optionals sdlSupport [ SDL ]
   ++ optionals termSupport [ readline ncurses ]
-  ++ optionals wxSupport [ gtk wxGTK pkgconfig ]
+  ++ optionals wxSupport [ wxGTK ]
   ++ optionals wgetSupport [ wget ]
   ++ optionals curlSupport [ curl ];
 
@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
     --enable-pnic
 '';
 
+  NIX_CFLAGS_COMPILE="-I${gtk}/include/gtk-2.0/";
+	
   meta = {
     description = "An open-source IA-32 (x86) PC emulator";
     longDescription = ''
@@ -61,3 +63,4 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.linux;
   };
 }
+# TODO: study config.bochs.* implementation (like config.ffmpeg.* options)

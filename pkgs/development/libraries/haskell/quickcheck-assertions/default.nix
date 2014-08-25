@@ -13,6 +13,6 @@ cabal.mkDerivation (self: {
     description = "HUnit like assertions for QuickCheck";
     license = self.stdenv.lib.licenses.gpl3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })

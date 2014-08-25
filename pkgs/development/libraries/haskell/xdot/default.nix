@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Parse Graphviz xdot files and interactively view them using GTK and Cairo";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

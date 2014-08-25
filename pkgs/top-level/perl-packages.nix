@@ -4407,6 +4407,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ImportInto = buildPerlPackage {
+    name = "Import-Into-1.002004";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/E/ET/ETHER/Import-Into-1.002004.tar.gz;
+      sha256 = "110hifk3cj14lxgjq2vaa2qfja21gll4lpn8vbimy0gzqadjbjyy";
+    };
+    propagatedBuildInputs = [ ModuleRuntime ];
+    meta = {
+      description = "Import packages into other packages";
+      license = "perl";
+    };
+  };
+
   IOAll = buildPerlPackage {
     name = "IO-All-0.60";
     src = fetchurl {
@@ -5054,7 +5067,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "The World-Wide Web library for Perl";
       license = "perl";
-      platforms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     };
   };
 
@@ -5680,13 +5693,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   Moo = buildPerlPackage {
-    name = "Moo-1.000007";
+    name = "Moo-1.006000";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MS/MSTROUT/Moo-1.000007.tar.gz;
-      sha256 = "02q5j5vsfv8ykzmkqk8zac88svard4g6rl455slgz8y2w3xn41ql";
+      url = mirror://cpan/authors/id/H/HA/HAARG/Moo-1.006000.tar.gz;
+      sha256 = "0gjh6dyz825cwjibq2wlpx14drjqx4pxxh931p4x3jd2617hax17";
     };
     buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ ClassMethodModifiers DevelGlobalDestruction ModuleRuntime RoleTiny strictures ];
+    propagatedBuildInputs = [ ClassMethodModifiers DevelGlobalDestruction ImportInto ModuleRuntime RoleTiny strictures ];
     meta = {
       description = "Minimalist Object Orientation (with Moose compatiblity)";
       license = "perl5";

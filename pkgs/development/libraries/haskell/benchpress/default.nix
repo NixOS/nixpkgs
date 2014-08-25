@@ -13,6 +13,5 @@ cabal.mkDerivation (self: {
     description = "Micro-benchmarking with detailed statistics";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

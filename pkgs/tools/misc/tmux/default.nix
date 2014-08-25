@@ -14,9 +14,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses libevent ];
 
+  postInstall =
+    ''
+      mkdir -p $out/etc/bash_completion.d
+      cp -v examples/bash_completion_tmux.sh $out/etc/bash_completion.d/tmux
+    '';
+
   meta = {
     homepage = http://tmux.sourceforge.net/;
-    description = "tmux is a terminal multiplexer";
+    description = "Terminal multiplexer";
 
     longDescription =
       '' tmux is intended to be a modern, BSD-licensed alternative to programs such as GNU screen. Major features include:

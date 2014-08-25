@@ -3,12 +3,12 @@
 , pythonPackages, cacert, cmake, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.3";
+  version = "1.0";
   name = "weechat-${version}";
 
   src = fetchurl {
     url = "http://weechat.org/files/src/${name}.tar.gz";
-    sha256 = "1sfx2j8xy6das0zis2nmzi9z41q96gzq61xaw4i0xbgag17s7ddz";
+    sha256 = "1z17wyrl5fp697qp44srpmzk79w37f5hm1r0krffbmga6sbzdj3x";
   };
 
   buildInputs = 
@@ -16,13 +16,6 @@ stdenv.mkDerivation rec {
       libgcrypt ruby lua5 tcl guile pythonPackages.pycrypto makeWrapper
       cacert cmake ]
     ++ stdenv.lib.optional stdenv.isDarwin pythonPackages.pync;
-
-  # This patch is based on
-  # weechat/c324610226cef15ecfb1235113c8243b068084c8. It fixes
-  # freeze/crash on /exit when using nixpkgs' gnutls 3.2. The next
-  # weechat release (0.4.4) will include this, so it's safe to remove
-  # then.
-  patches = [ ./fix-gnutls-32.diff ];
 
   NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix}";
 

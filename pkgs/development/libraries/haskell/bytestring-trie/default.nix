@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "An efficient finite map from (byte)strings to values";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

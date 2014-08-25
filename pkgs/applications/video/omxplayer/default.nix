@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     export INCLUDES="-I${raspberrypifw}/include/interface/vcos/pthreads -I${raspberrypifw}/include/interface/vmcs_host/linux/"
   '';
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp omxplayer.bin $out/bin
   '';
   buildInputs = [ raspberrypifw ffmpeg pcre boostHeaders freetype zlib ];

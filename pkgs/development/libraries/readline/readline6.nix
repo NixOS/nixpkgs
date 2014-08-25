@@ -12,7 +12,9 @@ stdenv.mkDerivation (rec {
 
   patchFlags = "-p0";
   patches =
-    [ ./link-against-ncurses.patch ]
+    [ ./link-against-ncurses.patch
+      ./no-arch_only.patch
+    ]
     ++
     (let
        patch = nr: sha256:
@@ -24,7 +26,7 @@ stdenv.mkDerivation (rec {
        import ./readline-6.2-patches.nix patch);
 
   meta = {
-    description = "GNU Readline, a library for interactive line editing";
+    description = "Library for interactive line editing";
 
     longDescription = ''
       The GNU Readline library provides a set of functions for use by

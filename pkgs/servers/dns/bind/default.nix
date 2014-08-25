@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.isc.org/software/bind";
-    description = "ISC BIND: a domain name server";
+    description = "Domain name server";
     license = stdenv.lib.licenses.isc;
 
     maintainers = with stdenv.lib.maintainers; [viric simons];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

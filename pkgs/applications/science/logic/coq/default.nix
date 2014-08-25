@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   buildFlags = "revision coq coqide";
 
   meta = {
-    description = "Coq proof assistant";
+    description = "Formal proof management system";
     longDescription = ''
       Coq is a formal proof management system.  It provides a formal language
       to write mathematical definitions, executable algorithms and theorems

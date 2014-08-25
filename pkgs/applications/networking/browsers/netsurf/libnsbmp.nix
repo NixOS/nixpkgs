@@ -16,5 +16,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.mit;
     maintainers = [args.lib.maintainers.marcweber];
     platforms = args.lib.platforms.linux;
+    broken = true;
   };
 }

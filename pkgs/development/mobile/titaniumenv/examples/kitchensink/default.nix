@@ -1,5 +1,6 @@
 { titaniumenv, fetchgit, target, androidPlatformVersions ? [ "14" ], tiVersion ? "3.2.3.GA", release ? false
 , rename ? false, stdenv ? null, newBundleId ? null, iosMobileProvisioningProfile ? null, iosCertificate ? null, iosCertificateName ? null, iosCertificatePassword ? null
+, enableWirelessDistribution ? false, installURL ? null
 }:
 
 assert rename -> (stdenv != null && newBundleId != null && iosMobileProvisioningProfile != null && iosCertificate != null && iosCertificateName != null && iosCertificatePassword != null);
@@ -37,4 +38,5 @@ titaniumenv.buildApp {
   androidKeyStorePassword = "mykeystore";
   
   inherit iosMobileProvisioningProfile iosCertificate iosCertificateName iosCertificatePassword;
+  inherit enableWirelessDistribution installURL;
 }

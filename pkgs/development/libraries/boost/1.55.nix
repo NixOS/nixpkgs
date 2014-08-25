@@ -45,7 +45,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://boost.org/";
-    description = "Boost C++ Library Collection";
+    description = "Collection of C++ libraries";
     license = "boost-license";
 
     platforms = stdenv.lib.platforms.unix;
@@ -75,6 +75,7 @@ stdenv.mkDerivation {
     ./b2 -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat}/include -sEXPAT_LIBPATH=${expat}/lib --layout=${layout} variant=${variant} threading=${threading} link=${link} ${cflags} install${withToolset}
     rm $out/bin/bjam
     ln -s $out/bin/b2 $out/bin/bjam
+    rm -rf $out/share/boost-build/example
   '';
 
   crossAttrs = rec {

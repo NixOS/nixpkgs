@@ -19,6 +19,5 @@ cabal.mkDerivation (self: {
     description = "Real-time heap graphing utility and profile stream server with a reusable graphing module";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

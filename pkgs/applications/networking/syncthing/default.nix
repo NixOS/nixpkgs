@@ -31,13 +31,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp -r ./bin $out
   '';
 
   meta = {
     homepage = http://syncthing.net/;
-    description = "Syncthing replaces Dropbox and BitTorrent Sync with something open, trustworthy and decentralized";
+    description = "Replaces Dropbox and BitTorrent Sync with something open, trustworthy and decentralized";
     license = with stdenv.lib.licenses; mit;
     maintainers = with stdenv.lib.maintainers; [ matejc ];
     platforms = with stdenv.lib.platforms; linux;

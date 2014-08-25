@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     rsync -av bin/ $out/bin/
 
-    ensureDir $out/lib
+    mkdir -p $out/lib
     rsync -av lib/ $out/lib/
   '';
 

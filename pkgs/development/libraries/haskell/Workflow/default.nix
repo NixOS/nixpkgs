@@ -16,6 +16,6 @@ cabal.mkDerivation (self: {
     description = "Workflow patterns over a monad for thread state logging & recovery";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.tomberek ];
+    maintainers = with self.stdenv.lib.maintainers; [ tomberek ];
   };
 })

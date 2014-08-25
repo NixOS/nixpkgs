@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cabal-cargs";
-  version = "0.7";
-  sha256 = "1dzmvwmb9sxwdgkzszhk9d5qvq2alnqmprx83dlb17sdi6f9jns1";
+  version = "0.7.1";
+  sha256 = "0y6v663mw4giwypdv34qr2l2fy1q7zdjvgw39m16sjna5lbwvm1n";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -21,6 +21,6 @@ cabal.mkDerivation (self: {
     description = "A command line program for extracting compiler arguments from a cabal file";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.tomberek ];
+    maintainers = with self.stdenv.lib.maintainers; [ tomberek ];
   };
 })

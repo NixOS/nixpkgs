@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp rkunpack rkcrc rkflashtool $out/bin
   '';
 

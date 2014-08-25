@@ -37,14 +37,14 @@ stdenv.mkDerivation rec {
     patch -p0 < ${./mips64.patch}
   '';
   postBuild = ''
-    ensureDir $out/include
+    mkdir -p $out/include
     ln -sv $out/lib/ocaml/caml $out/include/caml
   '';
 
   meta = {
     homepage = http://caml.inria.fr/ocaml;
     license = [ "QPL" /* compiler */ "LGPLv2" /* library */ ];
-    description = "Objective Caml, the most popular variant of the Caml language";
+    description = "Most popular variant of the Caml language";
 
     longDescription =
       '' Objective Caml is the most popular variant of the Caml language.

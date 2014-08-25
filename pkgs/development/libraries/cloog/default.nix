@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "CLooG, the Chunky Loop Generator";
+    description = "Library that generates loops for scanning polyhedra";
 
     longDescription = ''
       CLooG is a free software library to generate code for scanning
@@ -58,6 +58,6 @@ stdenv.mkDerivation rec {
        make[3]: *** [Box.lo] Error 1
 
     */
-    platforms = stdenv.lib.platforms.allBut "i686-cygwin";
+    platforms = with stdenv.lib.platforms; allBut cygwin;
   };
 }

@@ -41,16 +41,19 @@ in {
       };
 
       accelFactor = mkOption {
+        type = types.nullOr types.string;
         default = "0.001";
         description = "Cursor acceleration (how fast speed increases from minSpeed to maxSpeed).";
       };
 
       minSpeed = mkOption {
+        type = types.nullOr types.string;
         default = "0.6";
         description = "Cursor speed factor for precision finger motion.";
       };
 
       maxSpeed = mkOption {
+        type = types.nullOr types.string;
         default = "1.0";
         description = "Cursor speed factor for highest-speed finger motion.";
       };
@@ -120,9 +123,9 @@ in {
           MatchIsTouchpad "on"
           ${optionalString (cfg.dev != null) ''MatchDevicePath "${cfg.dev}"''}
           Driver "synaptics"
-          Option "MinSpeed" "${cfg.minSpeed}"
-          Option "MaxSpeed" "${cfg.maxSpeed}"
-          Option "AccelFactor" "${cfg.accelFactor}"
+          ${optionalString (cfg.minSpeed != null) ''Option "MinSpeed" "${cfg.minSpeed}"''}
+          ${optionalString (cfg.maxSpeed != null) ''Option "MaxSpeed" "${cfg.maxSpeed}"''}
+          ${optionalString (cfg.accelFactor != null) ''Option "AccelFactor" "${cfg.accelFactor}"''}
           ${optionalString cfg.tapButtons tapConfig}
           Option "ClickFinger1" "${builtins.elemAt cfg.buttonsMap 0}"
           Option "ClickFinger2" "${builtins.elemAt cfg.buttonsMap 1}"

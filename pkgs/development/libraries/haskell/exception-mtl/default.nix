@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Exception monad transformer instances for mtl2 classes";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

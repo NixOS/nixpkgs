@@ -34,7 +34,10 @@
 # The difference is that `pythonPath' is not propagated to the user
 # environment.  This is preferrable for programs because it doesn't
 # pollute the user environment.
-,  pythonPath ? []
+, pythonPath ? []
+
+# used to disable derivation, useful for specific python versions
+, disabled ? false
 
 , meta ? {}
 
@@ -45,6 +48,8 @@
 , postShellHook ? ""
 
 , ... } @ attrs:
+
+assert (!disabled);
 
 # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
 python.stdenv.mkDerivation (attrs // {

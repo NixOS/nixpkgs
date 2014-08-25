@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.gnu.org/software/libtasn1/;
-    description = "GNU Libtasn1, an ASN.1 library";
+    description = "An ASN.1 library";
 
     longDescription =
       '' Libtasn1 is the ASN.1 library used by GnuTLS, GNU Shishi and some

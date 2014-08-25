@@ -22,14 +22,14 @@ stdenv.mkDerivation rec {
   ";
   buildPhase = "make release";
   installPhase = "
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp ./opentyrian $out/bin
-    ensureDir $out/share/opentyrian/data
+    mkdir -p $out/share/opentyrian/data
     unzip -j $data -d $out/share/opentyrian/data
   ";
 
   meta = {
-    description = ''OpenTyrian is an open source port of the game "Tyrian".'';
+    description = ''Open source port of the game "Tyrian"'';
     homepage = https://opentyrian.googlecode.com/;
     # This does not account of Tyrian data.
     # license = stdenv.lib.licenses.gpl2;

@@ -37,7 +37,7 @@ in stdenv.mkDerivation {
   configureFlags = "--enable-release";
 
   meta = {
-    description = "Coccinelle, a program to apply C code semantic patches";
+    description = "Program to apply semantic patches to C code";
 
     longDescription =
       '' Coccinelle is a program matching and transformation engine which

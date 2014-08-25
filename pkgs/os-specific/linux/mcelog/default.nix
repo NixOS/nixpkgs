@@ -26,7 +26,7 @@ in stdenv.mkDerivation {
   makeFlags = "prefix=$(out) etcprefix=$(out) DOCDIR=$(out)/share/doc";
 
   preInstall = ''
-    ensureDir $out/share/doc
+    mkdir -p $out/share/doc
   '';
 
   meta = {

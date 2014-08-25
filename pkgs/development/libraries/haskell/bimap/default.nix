@@ -11,6 +11,5 @@ cabal.mkDerivation (self: {
     description = "Bidirectional mapping between two key types";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

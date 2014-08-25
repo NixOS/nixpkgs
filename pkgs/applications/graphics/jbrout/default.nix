@@ -33,7 +33,7 @@ buildPythonPackage {
   buildInputs = [ python pyGtkGlade makeWrapper pyexiv2 lxml pil fbida which ];
   meta = {
     homepage = "http://code.google.com/p/jbrout";
-    description = "jBrout is a photo manager";
+    description = "Photo manager";
     platforms = stdenv.lib.platforms.linux;
   };
 }

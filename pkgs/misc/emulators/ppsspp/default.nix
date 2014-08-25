@@ -3,26 +3,23 @@
 }:
 
 let
-  version = "0.9.8";
+  version = "0.9.9.1";
   fstat = x: fn: "-D" + fn + "=" + (if x then "ON" else "OFF");
 in stdenv.mkDerivation {
   name = "PPSSPP-${version}";
 
   src = fetchgit {
     url = "https://github.com/hrydgard/ppsspp.git";
-    sha256 = "11sqhb2m3502dzbizahh1w2dl7jv3fipwxyrmryj8fyaqqw0i36q";
-    rev = "cbc46be3f91cb8558fbb4b175b14e8e16cbf0243";
+    sha256 = "0fdbda0b4dfbecacd01850f1767e980281fed4cc34a21df26ab3259242d8c352";
+    rev = "bf709790c4fed9cd211f755acaa650ace0f7555a";
     fetchSubmodules = true;
   };
-
-  # Upstream forgot to bump a version in one file.
-  patches = [ ./bump-version-to-0.9.8.patch ];
 
   buildInputs = [ zlib libpng pkgconfig qt4 ]
                 ++ (if withGamepads then [ SDL ] else [ ]);
 
   configurePhase = "cd Qt && qmake PPSSPPQt.pro";
-  installPhase = "mkdir -p $out/bin && cp PPSSPPQt $out/bin";
+  installPhase = "mkdir -p $out/bin && cp ppsspp $out/bin";
 
   meta = with stdenv.lib; {
     homepage = "http://www.ppsspp.org/";

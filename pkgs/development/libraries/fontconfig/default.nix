@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig expat ];
 
   configureFlags = [
+    "--sysconfdir=/etc"
     "--with-cache-dir=/var/cache/fontconfig"
     "--disable-docs"
     "--with-default-fonts="
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # Don't try to write to /var/cache/fontconfig at install time.
-  installFlags = "fc_cachedir=$(TMPDIR)/dummy RUN_FC_CACHE_TEST=false";
+  installFlags = "sysconfdir=$(out)/etc fc_cachedir=$(TMPDIR)/dummy RUN_FC_CACHE_TEST=false";
 
   postInstall = ''
     cd "$out/etc/fonts" && tar xvf ${infinality_patch}

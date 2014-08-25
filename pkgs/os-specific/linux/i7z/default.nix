@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/sbin
+    mkdir -p $out/sbin
     make install prefix=$out
     install -Dm755 GUI/i7z_GUI $out/sbin/i7z-gui
   '';

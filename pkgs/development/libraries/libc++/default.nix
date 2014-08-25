@@ -26,6 +26,6 @@ in stdenv.mkDerivation rec {
     description = "A new implementation of the C++ standard library, targeting C++11";
     license = "BSD";
     maintainers = stdenv.lib.maintainers.shlevy;
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

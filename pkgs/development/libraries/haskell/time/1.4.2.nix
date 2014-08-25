@@ -12,11 +12,11 @@ cabal.mkDerivation (self: {
   testDepends = [
     Cabal deepseq QuickCheck testFramework testFrameworkQuickcheck2
   ];
+  doCheck = false;
   meta = {
     homepage = "http://semantic.org/TimeLib/";
     description = "A time library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

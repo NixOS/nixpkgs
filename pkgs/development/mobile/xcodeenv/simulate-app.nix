@@ -10,7 +10,7 @@ in
 stdenv.mkDerivation {
   name = stdenv.lib.replaceChars [" "] [""] name;
   buildCommand = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cat > $out/bin/run-test-simulator << "EOF"
     #! ${stdenv.shell} -e
 

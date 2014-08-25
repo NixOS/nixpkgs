@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   meta = {
     homepage    = "http://www.gromacs.org";
     license     = "GPLv2";
-    description = "The GROMACS molecular dynamics software package";
+    description = "Molecular dynamics software package";
     longDescription = ''
       GROMACS is a versatile package to perform molecular dynamics,
       i.e. simulate the Newtonian equations of motion for systems

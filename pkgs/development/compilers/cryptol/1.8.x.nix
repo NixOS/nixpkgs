@@ -1,5 +1,7 @@
 { stdenv, requireFile, gmp4, ncurses, zlib, clang_33, makeWrapper }:
 
+assert stdenv.isLinux;
+
 let
   name    = "cryptol-${version}-${rev}";
   version = "1.8.27";
@@ -111,5 +113,7 @@ stdenv.mkDerivation rec {
     license     = stdenv.lib.licenses.unfree;
     platforms   = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    hydraPlatforms = stdenv.lib.platforms.none;
+    broken = true;
   };
 }

@@ -13,6 +13,8 @@ cabal.mkDerivation (self: {
     homepage = "https://github.com/forste/haskellVCSGUI";
     description = "GUI library for source code management systems";
     license = "GPL";
-    platforms = self.ghc.meta.platforms;
+    platforms = self.stdenv.lib.platforms.linux;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

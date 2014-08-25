@@ -30,6 +30,9 @@ while [ "$#" -gt 0 ]; do
             absolute_path=$(readlink -m $given_path)
             extraBuildFlags+=("$i" "/mnt$absolute_path")
             ;;
+        --root)
+            mountPoint="$1"; shift 1
+            ;;
         --show-trace)
             extraBuildFlags+=("$i")
             ;;
@@ -81,7 +84,7 @@ mount -t tmpfs -o "mode=0755" none $mountPoint/var/setuid-wrappers
 rm -rf $mountPoint/var/run
 ln -s /run $mountPoint/var/run
 rm -f $mountPoint/etc/{resolv.conf,hosts}
-cp -f /etc/resolv.conf /etc/hosts $mountPoint/etc/
+cp -Lf /etc/resolv.conf /etc/hosts $mountPoint/etc/
 
 
 if [ -n "$runChroot" ]; then

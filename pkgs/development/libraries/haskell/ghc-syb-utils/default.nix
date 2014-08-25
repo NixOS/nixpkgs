@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Scrap Your Boilerplate utilities for the GHC API";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

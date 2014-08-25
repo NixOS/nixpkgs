@@ -9,8 +9,8 @@ in stdenv.mkDerivation {
   };
 
   preBuild = ''
-    ensureDir $out/bin
-    ensureDir $out/share/man/man1
+    mkdir -p $out/bin
+    mkdir -p $out/share/man/man1
 
     substituteInPlace Makefile \
       --replace /usr $out

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     --disable-illume2
   '';
   meta = {
-    description = "Enlightenment, the window manager";
+    description = "A window manager";
     longDescription = ''
       The Enlightenment Desktop shell provides an efficient yet
       breathtaking window manager based on the Enlightenment

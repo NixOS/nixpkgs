@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, cmake, gtk, libjpeg, libpng, libtiff, jasper, ffmpeg
-, pkgconfig, gstreamer, xineLib, glib, python27, python27Packages }:
+{ lib, stdenv, fetchurl, cmake, gtk, libjpeg, libpng, libtiff, jasper, ffmpeg
+, pkgconfig, gstreamer, xineLib, glib, python27, python27Packages
+, enableBloat ? false }:
 
 let v = "2.4.7"; in
 
@@ -11,8 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "0hravl3yhyv4r4n7vb055d4qnp893q2hc0fcmmncfh7sbdrnr3f4";
   };
 
-  buildInputs = [ gtk glib libjpeg libpng libtiff jasper ffmpeg xineLib gstreamer
-    python27 python27Packages.numpy ];
+  buildInputs =
+    [ libjpeg libpng libtiff ]
+    ++ lib.optionals enableBloat [ gtk glib jasper ffmpeg xineLib gstreamer python27 python27Packages.numpy ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
 

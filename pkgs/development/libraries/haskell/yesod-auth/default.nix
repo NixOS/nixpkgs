@@ -4,7 +4,7 @@
 , base64Bytestring, binary, blazeBuilder, blazeHtml, blazeMarkup
 , byteable, conduit, conduitExtra, cryptohash, dataDefault
 , emailValidate, fileEmbed, hamlet, httpClient, httpConduit
-, httpTypes, liftedBase, mimeMail, network, persistent
+, httpTypes, liftedBase, mimeMail, networkUri, persistent
 , persistentTemplate, random, resourcet, safe, shakespeare
 , shakespeareCss, shakespeareJs, text, time, transformers
 , unorderedContainers, wai, yesodCore, yesodForm, yesodPersistent
@@ -12,15 +12,15 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-auth";
-  version = "1.3.3";
-  sha256 = "05kzsrb49r11yhsrn9j7vx90831qd1jni1h8wdj26qn85anxr10z";
+  version = "1.3.4.2";
+  sha256 = "0hf5x1qhpxil3na7f1vdjr5i5n7q41a23ikkra9avg3yss94k04d";
   buildDepends = [
     aeson attoparsecConduit authenticate base16Bytestring
     base64Bytestring binary blazeBuilder blazeHtml blazeMarkup byteable
     conduit conduitExtra cryptohash dataDefault emailValidate fileEmbed
-    hamlet httpClient httpConduit httpTypes liftedBase mimeMail network
-    persistent persistentTemplate random resourcet safe shakespeare
-    shakespeareCss shakespeareJs text time transformers
+    hamlet httpClient httpConduit httpTypes liftedBase mimeMail
+    networkUri persistent persistentTemplate random resourcet safe
+    shakespeare shakespeareCss shakespeareJs text time transformers
     unorderedContainers wai yesodCore yesodForm yesodPersistent
   ];
   meta = {
@@ -28,6 +28,5 @@ cabal.mkDerivation (self: {
     description = "Authentication for Yesod";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
     };
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp -p src/runtime/sbcl $out/bin
-    ensureDir $out/share/sbcl
+    mkdir -p $out/share/sbcl
     cp -p output/sbcl.core $out/share/sbcl
   '';
 

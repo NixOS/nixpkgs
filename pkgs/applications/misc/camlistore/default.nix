@@ -17,12 +17,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp bin/* $out/bin
   '';
 
   meta = with stdenv.lib; {
-    description = "Camlistore is a way of storing, syncing, sharing, modelling and backing up content";
+    description = "A way of storing, syncing, sharing, modelling and backing up content";
     homepage = https://camlistore.org;
     license = licenses.asl20;
     maintainers = with maintainers; [ cstrahan ];

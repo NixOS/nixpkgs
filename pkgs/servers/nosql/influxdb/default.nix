@@ -1,5 +1,7 @@
 { stdenv, fetchurl, makeWrapper }:
 
+assert stdenv.isLinux;
+
 stdenv.mkDerivation rec {
   name = "influxdb-${version}";
   version = "0.7.0";
@@ -20,7 +22,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/influxdb" \
         --prefix LD_LIBRARY_PATH : "${stdenv.gcc.gcc}/lib:${stdenv.gcc.gcc}/lib64"
 
-    ensureDir $out/share/influxdb
+    mkdir -p $out/share/influxdb
     cp -R admin scripts config.toml $out/share/influxdb
   '';
 

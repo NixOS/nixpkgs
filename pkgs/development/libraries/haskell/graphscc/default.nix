@@ -10,6 +10,6 @@ cabal.mkDerivation (self: {
     description = "Tarjan's algorithm for computing the strongly connected components of a graph";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.thoughtpolice ];
+    maintainers = with self.stdenv.lib.maintainers; [ thoughtpolice ];
   };
 })

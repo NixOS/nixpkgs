@@ -119,7 +119,7 @@ let
   udevRules = pkgs.stdenv.mkDerivation {
     name = "udev-rules";
     buildCommand = ''
-      ensureDir $out
+      mkdir -p $out
 
       echo 'ENV{LD_LIBRARY_PATH}="${extraUtils}/lib"' > $out/00-env.rules
 
@@ -198,6 +198,18 @@ let
         }
         { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
           symlink = "/etc/mdadm.conf";
+        }
+        { object = pkgs.stdenv.mkDerivation {
+            name = "initrd-kmod-blacklist-ubuntu";
+            builder = pkgs.writeText "builder.sh" ''
+              source $stdenv/setup
+              target=$out
+
+              ${pkgs.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
+            '';
+            src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
+          };
+          symlink = "/etc/modprobe.d/ubuntu.conf";
         }
       ];
   };

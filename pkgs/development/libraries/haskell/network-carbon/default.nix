@@ -12,6 +12,6 @@ cabal.mkDerivation (self: {
     description = "A Haskell implementation of the Carbon protocol (part of the Graphite monitoring tools)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })

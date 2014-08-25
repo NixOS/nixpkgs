@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
-    ensureDir $out/scripts
+    mkdir -p $out/scripts
     mv * $out
     mv $out/_ATTENTION_ $out/doc
     mv $out/{correct.sh,cron-storebackup} $out/scripts

@@ -4,13 +4,14 @@
 
 cabal.mkDerivation (self: {
   pname = "hdaemonize";
-  version = "0.4.5.0";
-  sha256 = "1b9aic08pgmp95qy74qcrmq9dn33k6knycy7mn1dg8c5svmchb2w";
+  version = "0.5.0.0";
+  sha256 = "15dyaa9rbmsjp3sg9yxg1i90kfy9rvlzmwg5kl8kwal69ajzjjgv";
   buildDepends = [ extensibleExceptions filepath hsyslog mtl ];
   meta = {
     homepage = "http://github.com/madhadron/hdaemonize";
     description = "Library to handle the details of writing daemons for UNIX";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })

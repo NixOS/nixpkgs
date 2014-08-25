@@ -94,7 +94,7 @@ stdenv.mkDerivation {
         ${stdenv.lib.optionalString enableWirelessDistribution ''
           appname=$(basename $out/*.ipa .ipa)
           sed -e "s|@INSTALL_URL@|${installURL}?bundleId=${bundleId}\&amp;version=${version}\&amp;title=$appname|" ${./install.html.template} > $out/$appname.html
-          echo "doc install $out/$appname.html" >> $out/nix-support/hydra-build-products
+          echo "doc install \"$out/$appname.html\"" >> $out/nix-support/hydra-build-products
         ''}
       ''}
       

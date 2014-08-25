@@ -14,6 +14,5 @@ cabal.mkDerivation (self: {
     description = "Levenshtein and restricted Damerau-Levenshtein edit distances";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

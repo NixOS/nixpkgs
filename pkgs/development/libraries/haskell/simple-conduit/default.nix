@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "simple-conduit";
-  version = "0.5.0";
-  sha256 = "0fbm1nv9190p1b038p6zxmw042cgm5jgkfbhscw1fslgzja90iyz";
+  version = "0.5.1";
+  sha256 = "1jy70cdw2h6fd2618dczajml5k82kkjmd2n0mgbby2mr6r3sk5zr";
   buildDepends = [
     bifunctors chunkedData either exceptions filepath free liftedAsync
     liftedBase mmorph monadControl monoTraversable mtl mwcRandom

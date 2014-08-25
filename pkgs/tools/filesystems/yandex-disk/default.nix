@@ -1,4 +1,7 @@
 { stdenv, fetchurl, writeText, zlib, rpm, cpio, patchelf, which }:
+
+assert stdenv.isLinux;
+
 let
   p = if stdenv.is64bit then {
       arch = "x86_64";

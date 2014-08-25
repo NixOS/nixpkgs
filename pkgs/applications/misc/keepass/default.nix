@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
 
 
   installPhase = ''
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     echo "${mono}/bin/mono $out/KeePass.exe" > $out/bin/keepass
     chmod +x $out/bin/keepass
     echo $out
     cp -r ./* $out/
-    ensureDir "$out/share/applications"
+    mkdir -p "$out/share/applications"
     cp ${desktopItem}/share/applications/* $out/share/applications
   '';
 

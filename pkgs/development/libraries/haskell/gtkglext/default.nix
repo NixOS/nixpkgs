@@ -16,5 +16,7 @@ cabal.mkDerivation (self: {
     description = "Binding to the GTK+ OpenGL Extension";
     license = self.stdenv.lib.licenses.lgpl21;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

@@ -98,7 +98,7 @@ let
       # FIXME: OVMF doesn't boot from virtio http://www.mail-archive.com/edk2-devel@lists.sourceforge.net/msg01501.html
       iface = if useEFI || grubVersion == 1 then "scsi" else "virtio";
       qemuFlags =
-        (if iso.system == "x86_64-linux" then "-m 512 " else "-m 384 ") +
+        (if iso.system == "x86_64-linux" then "-m 768 " else "-m 512 ") +
         (optionalString (iso.system == "x86_64-linux") "-cpu kvm64 ") +
         (optionalString useEFI ''-L ${efiBios} -hda ''${\(Cwd::abs_path('harddisk'))} '');
       hdFlags = optionalString (!useEFI)
