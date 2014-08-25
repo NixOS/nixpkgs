@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "notsecure";
     repo = "uTox";
-    rev = "d70f9bfb4ff8a156ec35803da6226b0ac8c47961";
-    sha256 = "10cvsg0phv0jsrdl3zkk339c4bzn3xc82q1x90h6gcnrbg4vzmp0";
+    rev = "a840b459210694fdf02671567bf33845a11d4c83";
+    sha256 = "0jr0xajkv5vkq8gxspnq09k4bzc98fr3hflnz8a3lrwajyhrnpvp";
   };
 
   buildInputs = [ pkgconfig libtoxcore dbus libvpx libX11 openal freetype
