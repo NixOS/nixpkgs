@@ -13,8 +13,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-core";
-  version = "1.2.19";
-  sha256 = "0dlvg8zpr1qyav3svqybsqsrmrl9n8s1kdzxf6zxa3pn582d48il";
+  version = "1.2.19.1";
+  sha256 = "1021z0jrfbafbdybpj0jkacr9ljyap5cpmfk2911dsz3nz7sy6zg";
   buildDepends = [
     aeson attoparsecConduit blazeBuilder blazeHtml blazeMarkup
     caseInsensitive cereal clientsession conduit conduitExtra cookie
@@ -31,7 +31,6 @@ cabal.mkDerivation (self: {
     transformers wai waiExtra waiTest
   ];
   jailbreak = true;
-  doCheck = false;
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "Creation of type-safe, RESTful web applications";
