@@ -2011,6 +2011,21 @@ rec {
     };
   };
 
+  facebook-sdk = buildPythonPackage rec {
+    name = "facebook-sdk-0.4.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/f/facebook-sdk/facebook-sdk-0.4.0.tar.gz";
+      md5 = "ac9f38e197e54b8ba9f3a61988cc33b7";
+    };
+
+    meta = with pkgs.stdenv.lib; {
+      description = "Client library that supports the Facebook Graph API and the official Facebook JavaScript SDK.";
+      homepage = https://github.com/pythonforfacebook/facebook-sdk;
+      license = licenses.asl20 ;
+    };
+  };
+
   faker = buildPythonPackage rec {
     name = "faker-0.0.4";
     src = fetchurl {
