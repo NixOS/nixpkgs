@@ -5448,6 +5448,8 @@ let
 
   libnfnetlink = callPackage ../development/libraries/libnfnetlink { };
 
+  libnftnl = callPackage ../development/libraries/libnftnl { };
+
   libnih = callPackage ../development/libraries/libnih { };
 
   libnova = callPackage ../development/libraries/libnova { };
@@ -7680,6 +7682,8 @@ let
   neverball = callPackage ../games/neverball {
     libpng = libpng15;
   };
+
+  nftables = callPackage ../os-specific/linux/nftables { };
 
   numactl = callPackage ../os-specific/linux/numactl { };
 
