@@ -4307,7 +4307,7 @@ rec {
 
     propagatedBuildInputs =
       [ dateutil nose numpy pyparsing tornado pkgs.freetype pkgs.libpng pkgs.pkgconfig
-        pygtk ];
+      ];
 
     meta = with stdenv.lib; {
       description = "python plotting library, making publication quality plots";
