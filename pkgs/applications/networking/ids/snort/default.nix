@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpcap pcre libdnet daq zlib flex bison ];
   
   meta = {
-    description = "Snort is an open source network intrusion prevention and detection system (IDS/IPS)";
+    description = "Network intrusion prevention and detection system (IDS/IPS)";
     homepage = http://www.snort.org;
     license = stdenv.lib.licenses.gpl2;
   };

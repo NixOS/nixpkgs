@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "http://github.com/warner/python-ecdsa";
-    description = "pure-python ECDSA signature/verification";
+    description = "Pure-python ECDSA signature/verification";
     license = stdenv.lib.licenses.mit;
   };
 }

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "GNU Xnee, an X11 event recording and replay tool";
+    description = "X11 event recording and replay tool";
 
     longDescription =
       '' Xnee is a suite of programs that can record, replay and distribute

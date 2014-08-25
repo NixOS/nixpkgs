@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     else null;
 
   meta = with stdenv.lib; {
-    description = "OpenSpades is a compatible client of Ace of Spades 0.75";
+    description = "A compatible client of Ace of Spades 0.75";
     homepage    = "https://github.com/yvt/openspades/";
     license     = licenses.gpl3;
     platforms   = platforms.linux;

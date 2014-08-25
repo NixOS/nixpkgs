@@ -1,6 +1,8 @@
 { stdenv, patchelf, zlib, libmad, libpng12, libcaca, mesa, alsaLib, pulseaudio
 , xlibs, plowshare }:
 
+assert stdenv.isLinux;
+
 let
 
   inherit (xlibs) libXext libX11;

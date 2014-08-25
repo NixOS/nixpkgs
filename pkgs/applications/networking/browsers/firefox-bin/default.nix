@@ -37,6 +37,8 @@
 , systemd
 }:
 
+assert stdenv.isLinux;
+
 let
   version = "31.0";
   sources = [

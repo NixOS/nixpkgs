@@ -19,6 +19,6 @@ stdenv.mkDerivation (rec {
   ];
 
   meta = {
-    description = "rdesktop is an open source client for Windows Terminal Services";
+    description = "Open source client for Windows Terminal Services";
   };
 })

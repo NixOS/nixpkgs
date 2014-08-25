@@ -36,13 +36,22 @@ let
       -o $out ${./options-to-docbook.xsl} ${optionsXML}
   '';
 
+  sources = sourceFilesBySuffices ./. [".xml"];
+
+  copySources =
+    ''
+      cp -prd $sources/* . # */
+      ln -s ${optionsDocBook} options-db.xml
+      echo "${version}" > version
+    '';
+
 in rec {
 
   # Generate the NixOS manual.
   manual = stdenv.mkDerivation {
     name = "nixos-manual";
 
-    sources = sourceFilesBySuffices ./. [".xml"];
+    inherit sources;
 
     buildInputs = [ libxml2 libxslt ];
 
@@ -57,9 +66,7 @@ in rec {
     '';
 
     buildCommand = ''
-      ln -s $sources/*.xml . # */
-      ln -s ${optionsDocBook} options-db.xml
-      echo "${version}" > version
+      ${copySources}
 
       # Check the validity of the manual sources.
       xmllint --noout --nonet --xinclude --noxincludenode \
@@ -90,7 +97,7 @@ in rec {
   manualPDF = stdenv.mkDerivation {
     name = "nixos-manual-pdf";
 
-    sources = sourceFilesBySuffices ./. [".xml"];
+    inherit sources;
 
     buildInputs = [ libxml2 libxslt dblatex tetex ];
 
@@ -98,9 +105,7 @@ in rec {
       # TeX needs a writable font cache.
       export VARTEXFONTS=$TMPDIR/texfonts
 
-      ln -s $sources/*.xml . # */
-      ln -s ${optionsDocBook} options-db.xml
-      echo "${version}" > version
+      ${copySources}
 
       dst=$out/share/doc/nixos
       mkdir -p $dst
@@ -117,13 +122,12 @@ in rec {
   manpages = stdenv.mkDerivation {
     name = "nixos-manpages";
 
-    sources = sourceFilesBySuffices ./. [".xml"];
+    inherit sources;
 
     buildInputs = [ libxml2 libxslt ];
 
     buildCommand = ''
-      ln -s $sources/*.xml . # */
-      ln -s ${optionsDocBook} options-db.xml
+      ${copySources}
 
       # Check the validity of the manual sources.
       xmllint --noout --nonet --xinclude --noxincludenode \

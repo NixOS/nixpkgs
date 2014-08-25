@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://trac.bjourne.webfactional.com/;
 
-    description = "The GtkImageView image viewer widget for GTK+";
+    description = "Image viewer widget for GTK+";
 
     longDescription =
       '' GtkImageView is a simple image viewer widget for GTK+.  Similar to

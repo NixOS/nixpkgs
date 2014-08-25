@@ -11,6 +11,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://code.google.com/p/google-glog/;
     license = "BSD";
-    description = "The glog library implements application-level logging.";
+    description = "Library for application-level logging";
   };
 }

@@ -20,7 +20,8 @@ stdenv.mkDerivation {
   buildInputs = [ slang ncurses ];
 
   meta = {
-    description = ''
+    description = "A terminal pager similar to 'more' and 'less'";
+    longDescription = ''
       MOST is a powerful paging program for Unix, VMS, MSDOS, and win32
       systems. Unlike other well-known paging programs most supports multiple
       windows and can scroll left and right. Why settle for less?

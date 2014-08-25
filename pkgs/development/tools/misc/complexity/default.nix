@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "GNU Complexity, C code complexity measurement tool";
+    description = "C code complexity measurement tool";
 
     longDescription =
       '' GNU Complexity is a tool designed for analyzing the complexity of C

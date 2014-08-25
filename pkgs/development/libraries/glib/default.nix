@@ -7,6 +7,8 @@
 
 with stdenv.lib;
 
+assert stdenv.gcc.gcc != null;
+
 # TODO:
 # * Add gio-module-fam
 #     Problem: cyclic dependency on gamin
@@ -105,7 +107,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    description = "GLib, a C library of programming buildings blocks";
+    description = "C library of programming buildings blocks";
     homepage    = http://www.gtk.org/;
     license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 raskin urkud ];

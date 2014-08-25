@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   buildInputs = [ncurses postgresql]; 
 
   meta = {
-    description = "pg_top is 'top' for PostgreSQL";
+    description = "A 'top' like tool for PostgreSQL";
     longDescription = '' 
       pg_top allows you to: 
       <itemizedlist>

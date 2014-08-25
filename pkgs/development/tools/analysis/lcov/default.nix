@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "LCOV, a code coverage tool that enhances GNU gcov";
+    description = "Code coverage tool that enhances GNU gcov";
 
     longDescription =
       '' LCOV is an extension of GCOV, a GNU tool which provides information

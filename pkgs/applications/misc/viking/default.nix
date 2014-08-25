@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   doCheck = true;
 
   meta = {
-    description = "Viking, a GPS data editor and analyzer";
+    description = "GPS data editor and analyzer";
 
     longDescription = ''
       Viking is a free/open source program to manage GPS data.  You

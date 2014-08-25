@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "GNU gperf, a perfect hash function generator";
+    description = "Perfect hash function generator";
 
     longDescription = ''
       GNU gperf is a perfect hash function generator.  For a given

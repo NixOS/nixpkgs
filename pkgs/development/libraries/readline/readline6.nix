@@ -26,7 +26,7 @@ stdenv.mkDerivation (rec {
        import ./readline-6.2-patches.nix patch);
 
   meta = {
-    description = "GNU Readline, a library for interactive line editing";
+    description = "Library for interactive line editing";
 
     longDescription = ''
       The GNU Readline library provides a set of functions for use by

@@ -5698,8 +5698,8 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/H/HA/HAARG/Moo-1.006000.tar.gz;
       sha256 = "0gjh6dyz825cwjibq2wlpx14drjqx4pxxh931p4x3jd2617hax17";
     };
-    buildInputs = [ TestFatal ImportInto ];
-    propagatedBuildInputs = [ ClassMethodModifiers DevelGlobalDestruction ModuleRuntime RoleTiny strictures ];
+    buildInputs = [ TestFatal ];
+    propagatedBuildInputs = [ ClassMethodModifiers DevelGlobalDestruction ImportInto ModuleRuntime RoleTiny strictures ];
     meta = {
       description = "Minimalist Object Orientation (with Moose compatiblity)";
       license = "perl5";

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   patches = [ ./disable-samples-ftbfs.diff ./libav9.patch ./libav10.patch ];
       
   meta = with stdenv.lib; {
-    description = "OPAL VoIP library";
+    description = "VoIP library";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
   };

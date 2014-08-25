@@ -14,7 +14,7 @@ let version = "0.94"; in
     doCheck = true;
 
     meta = {
-      description = "FastJar, a fast Java archiver written in C";
+      description = "Fast Java archiver written in C";
 
       longDescription = ''
         Fastjar is a version of Sun's `jar' utility, written entirely in C, and
