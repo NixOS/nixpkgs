@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "language-c";
-  version = "0.4.5";
-  sha256 = "0q0x1rm74g27ry4jja44hk8z0lqkwnimnxbcy54m2cphaxk7yjk4";
+  version = "0.4.6";
+  sha256 = "0pzd3g5q3sjfngs29biannza6l9am75kcjy5q0xcjv7xhz0z1m31";
   buildDepends = [ filepath syb ];
   buildTools = [ alex happy ];
   meta = {
