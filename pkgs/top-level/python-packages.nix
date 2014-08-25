@@ -8399,6 +8399,25 @@ rec {
     };
   };
 
+  tzlocal = buildPythonPackage rec {
+    name = "tzlocal-1.1.1";
+
+    propagatedBuildInputs = with pythonPackages; [ pytz ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/tzlocal/tzlocal-1.1.1.zip";
+      md5 = "56c2a04501b98f2a1188d003fd6d3dba";
+    };
+
+     # test fail (timezone test fail)
+     doCheck = true;
+
+    meta = with pkgs.stdenv.lib; {
+      description = "Tzinfo object for the local timezone.";
+      homepage = https://github.com/regebro/tzlocal;
+      license = licenses.cddl;
+    };
+  };
 
   unittest2 = buildPythonPackage rec {
     version = "0.5.1";
