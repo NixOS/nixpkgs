@@ -2060,11 +2060,13 @@ rec {
   };
 
   fabric = buildPythonPackage rec {
-    name = "fabric-1.6.1";
+    name = "fabric-${version}";
+    version = "1.9.1";
     src = fetchurl {
-      url = https://pypi.python.org/packages/source/F/Fabric/Fabric-1.6.1.tar.gz;
-      sha256 = "058psbhqbfm3n214wkyfpgm069yqmdqw1hql9bac1yv9pza3bzx1";
+      url = "https://pypi.python.org/packages/source/F/Fabric/Fabric-${version}.tar.gz";
+      sha256 = "103mzf0l15kyvw5nmf7bsdrqg6y3wpyxmkyl2h9lk7jxb5gdc9s1";
     };
+    disabled = isPy3k;
     propagatedBuildInputs = [ paramiko pycrypto ];
     buildInputs = [ fudge nose ];
   };
