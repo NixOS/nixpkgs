@@ -97,6 +97,7 @@
     logict = super.logict.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     monadPar = self.monadPar_0_1_0_3;
     nats = null;                        # none of our versions compile
+    networkUri = super.networkUri.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     parallel = self.parallel_3_2_0_3;
     primitive = self.primitive_0_5_0_1;
     reflection = super.reflection.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
