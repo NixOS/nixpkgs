@@ -7,7 +7,7 @@ assert stdenv.isLinux;
 let
 
   buildIdea =
-  { name, version, build, src, description, license }:
+  { name, version, build, src, description, longDescription, license }:
 
   stdenv.mkDerivation rec {
     inherit name build src;
@@ -58,6 +58,7 @@ let
     meta = {
       homepage = http://www.jetbrains.com/idea/;
       inherit description;
+      inherit longDescription;
       inherit license;
       maintainers = [ stdenv.lib.maintainers.edwtjo ];
       platforms = stdenv.lib.platforms.linux;
@@ -66,27 +67,39 @@ let
 
 in {
 
-  idea_community = buildIdea rec {
+  idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "13.1.3";
-    build = "IC-135.909";
-    description = "IntelliJ IDEA 13 Community Edition";
+    version = "13.1.4b";
+    build = "IC-135.1230";
+    description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
+    longDescription = ''
+      Lightweight IDE for Java SE, Groovy & Scala development
+      Powerful environment for building Google Android apps
+      Integration with JUnit, TestNG, popular SCMs, Ant & Maven
+      Free, open-source, Apache 2 licensed.
+    '';
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "http://download-ln.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "62ed937ef68df16eef4d32772b6510835527f95020db1c76643f17ed2c067b51";
+      sha256 = "8b4ee25fd2934e06b87230b50e1474183ed4b331c1626a7fee69b96294d9616d";
     };
   };
 
-  idea_ultimate = buildIdea rec {
+  idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "13.1.3";
-    build = "IU-135.909";
-    description = "IntelliJ IDEA 13 Ultimate Edition";
+    version = "13.1.4b";
+    build = "IU-135.1230";
+    description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
+    longDescription = ''
+      Full-featured IDE for JVM-based and polyglot development
+      Java EE, Spring/Hibernate and other technologies support
+      Deployment and debugging with most application servers
+      Duplicate code search, dependency structure matrix, etc.
+    '';
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "http://download-ln.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "6d99e49a63a197e19381a85535ab424a7832653db8cceb3bca7d53615ec7a53d";
+      sha256 = "84660d97c9c3e4e7cfd6c2708f4685dc7322157f1e1c2888feac64df119f0606";
     };
   };
 
