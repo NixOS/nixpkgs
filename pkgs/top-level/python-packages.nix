@@ -4652,6 +4652,21 @@ rec {
   };
 
 
+  mpd = buildPythonPackage rec {
+    name = "python-mpd-0.3.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-mpd/python-mpd-0.3.0.tar.gz";
+      md5 = "5b3849b131e2fb12f251434597d65635";
+    };
+
+    meta = with pkgs.stdenv.lib; {
+      description = "An MPD (Music Player Daemon) client library written in pure Python.";
+      homepage = http://jatreuman.indefero.net/p/python-mpd/;
+      license = licenses.gpl3;
+    };
+  };
+
   mrbob = buildPythonPackage rec {
     name = "mrbob-${version}";
     version = "0.1.1";
