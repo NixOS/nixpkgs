@@ -438,6 +438,24 @@ rec {
   };
 
 
+  apscheduler = buildPythonPackage rec {
+    name = "APScheduler-2.1.2";
+
+    propagatedBuildInputs = with pythonPackages; [ futures tzlocal six pytest mock];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/A/APScheduler/APScheduler-2.1.2.tar.gz";
+      md5 = "6862959d460c16ef325d63e1fc3a6684";
+    };
+
+    meta = with pkgs.stdenv.lib; {
+      description = "Advanced Python Scheduler (APScheduler) is a Python library that lets you schedule your Python code to be executed";
+      homepage = http://pypi.python.org/pypi/APScheduler/;
+      license = licenses.mit;
+    };
+  };
+
+
   area53 = buildPythonPackage (rec {
     name = "area53-b2c9cdcabd";
 
