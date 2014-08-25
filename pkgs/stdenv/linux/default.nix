@@ -261,7 +261,7 @@ rec {
       name = "";
     }).override { inherit shell; };
 
-    fetchurlBoot = stage4.stdenv.fetchurl;
+    inherit (stage4.stdenv) fetchurlBoot;
 
     extraAttrs = {
       inherit (stage4.pkgs) glibc;
