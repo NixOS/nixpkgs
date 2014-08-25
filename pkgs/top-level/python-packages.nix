@@ -4380,11 +4380,14 @@ rec {
 
 
   memcached = buildPythonPackage rec {
-    name = "memcached-1.48";
+    name = "memcached-1.51";
 
-    src = fetchurl {
-      url = "ftp://ftp.tummy.com/pub/python-memcached/old-releases/python-memcached-1.48.tar.gz";
-      sha256 = "1i0h05z9j0zl65rgvw86p4f54pigkxynhzppn4qxby8rjlnwdfv6";
+    src = if isPy3k then fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python3-memcached/python3-${name}.tar.gz";
+      sha256 = "0na8b369q8fivh3y0nvzbvhh3lgvxiyyv9xp93cnkvwfsr8mkgkw";
+    } else fetchurl {
+      url = "http://ftp.tummy.com/pub/python-memcached/old-releases/python-${name}.tar.gz";
+      sha256 = "124s98m6hvxj6x90d7aynsjfz878zli771q96ns767r2mbqn7192";
     };
 
     meta = {
