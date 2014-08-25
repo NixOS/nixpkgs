@@ -230,7 +230,7 @@ rec {
       gcc = stdenvLinuxBoot3Pkgs.gcc.gcc;
       name = "";
     };
-    extraBuildInputs = [ stdenvLinuxBoot2Pkgs.patchelf stdenvLinuxBoot3Pkgs.xz ];
+    extraBuildInputs = [ stdenvLinuxBoot2Pkgs.patchelf stdenvLinuxBoot3Pkgs.xz.bin ];
     overrides = pkgs: {
       inherit (stdenvLinuxBoot1Pkgs) perl;
       inherit (stdenvLinuxBoot3Pkgs) gettext gnum4 gmp;

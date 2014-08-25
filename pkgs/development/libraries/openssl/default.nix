@@ -50,7 +50,7 @@ stdenv.mkDerivation {
 
   outputs = [ "dev" "out" "man" "bin" ];
 
-  setOutputConfigureFlags = false;
+  setOutputFlags = false; # ToDo: strange?
 
   buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
 

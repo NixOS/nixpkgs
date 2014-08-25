@@ -209,7 +209,7 @@ let
 
       # extra useful hooks, so we do not need to pass them as package arguments
       hookLib = {
-        multiout = ../../build-support/setup-hooks/multiple-outputs.sh;
+        multiout = ../../build-support/setup-hooks/multiple-outputs.sh; #ToDo: propagated-native-build-inputs
         #ToDo: add also autoreconf = pkgs.autoreconfHook
       };
     }

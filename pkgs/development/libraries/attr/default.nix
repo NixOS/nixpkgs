@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "dev" "out" "bin" "doc" ];
+  buildInputs = [ stdenv.hookLib.multiout ];
 
   nativeBuildInputs = [ gettext ];
 

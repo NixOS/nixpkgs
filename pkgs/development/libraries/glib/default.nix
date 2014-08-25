@@ -51,12 +51,11 @@ stdenv.mkDerivation rec {
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch;
 
-  outputs = [ "dev" "out" "bin" "doc" ];
-
+  outputs = [ "dev" "out" "bin" ]; # ToDo: docs?
 
   setupHook = ./setup-hook.sh;
 
-  buildInputs = [ libelf ]
+  buildInputs = [ stdenv.hookLib.multiout libelf ]
     ++ optionals doCheck [ tzdata libxml2 desktop_file_utils shared_mime_info ];
 
   nativeBuildInputs = [ pkgconfig gettext perl python ];

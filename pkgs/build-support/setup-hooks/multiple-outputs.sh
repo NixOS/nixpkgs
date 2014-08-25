@@ -55,6 +55,7 @@ _multioutConfig() {
 _addRpathPrefix "$outputLib"
 NIX_NO_SELF_RPATH=1
 
+# Move documentation into the desired outputs.
 _multioutDocs() {
     _moveToOutput share/man "$outputMan"
     _moveToOutput share/info "$outputInfo"
@@ -82,13 +83,13 @@ _moveToOutput() {
 }
 
 _multioutPropagateDev() {
-    if [ "$outputInclude" != "$outputDev" ]; then
-        mkdir -p "$outputDev"/nix-support
-        echo "$outputInclude" >> "$outputDev"/nix-support/propagated-build-inputs
+    if [ "$outputInclude" != "$propagateIntoOutput" ]; then
+        mkdir -p "$propagateIntoOutput"/nix-support
+        echo -n " $outputInclude" >> "$propagateIntoOutput"/nix-support/propagated-native-build-inputs
     fi
-    if [ "$outputLib" != "$outputDev" ]; then
-        mkdir -p "$outputDev"/nix-support
-        echo "$outputLib" >> "$outputDev"/nix-support/propagated-build-inputs
+    if [ "$outputLib" != "$propagateIntoOutput" ]; then
+        mkdir -p "$propagateIntoOutput"/nix-support
+        echo -n " $outputLib" >> "$propagateIntoOutput"/nix-support/propagated-native-build-inputs
     fi
 }
 

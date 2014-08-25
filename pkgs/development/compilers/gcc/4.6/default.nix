@@ -192,7 +192,7 @@ stdenv.mkDerivation ({
 
   outputs = [ "out" "lib" ];
 
-  setOutputConfigureFlags = false;
+  setOutputFlags = false;
 
   inherit patches enableMultilib;
 

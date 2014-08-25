@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, perl, xz, interactive ? false }:
+{ stdenv, fetchurl, xz, ncurses, perl, interactive ? false }:
 
 stdenv.mkDerivation rec {
   name = "texinfo-5.2";

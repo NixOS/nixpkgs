@@ -216,7 +216,7 @@ stdenv.mkDerivation ({
 
   outputs = [ "out" "lib" ];
 
-  setOutputConfigureFlags = false;
+  setOutputFlags = false;
 
 
   libc_dev = stdenv.gcc.libc_dev;
@@ -372,7 +372,7 @@ stdenv.mkDerivation ({
       )
     }
     ${if (stdenv ? glibc && cross == null)
-      then " --with-native-system-header-dir=${stdenv.glibc}/include"
+      then " --with-native-system-header-dir=${stdenv.glibc.dev}/include"
       else ""}
     ${if langAda then " --enable-libada" else ""}
     ${if cross == null && stdenv.isi686 then "--with-arch=i686" else ""}

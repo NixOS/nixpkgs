@@ -30,7 +30,7 @@ stdenv.mkDerivation (rec {
     fi
   '';
 
-  buildInputs = [ xz ] ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;
+  buildInputs = [ xz xz.bin ] ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;
 
   enableParallelBuilding = true;
 

@@ -11,5 +11,5 @@
   pkgs.gnumake
   pkgs.bash
   pkgs.patch
-  pkgs.xz
+  pkgs.xz.bin
 ]
