@@ -12,16 +12,18 @@ let
   gemspec = map (gem: pkgs.fetchurl { url=gem.url; sha256=gem.hash; })
     (import <nixpkgs/pkgs/applications/version-management/redmine/Gemfile.nix>);
 
-  unpack = name: source:
+  unpackTheme = unpack "theme";
+  unpackPlugin = unpack "plugin";
+  unpack = id: (name: source:
     pkgs.stdenv.mkDerivation {
-      name = "redmine-theme-${name}";
+      name = "redmine-${id}-${name}";
       buildInputs = [ pkgs.unzip ];
       buildCommand = ''
         mkdir -p $out
         cd $out
         unpackFile ${source}
       '';
-    };
+    });
 
   redmine = with pkgs; stdenv.mkDerivation rec {
     version = "2.5.2";
@@ -32,7 +34,7 @@ let
     };
     buildInputs = [
       ruby rubyLibs.bundler libiconv libxslt libxml2 pkgconfig libffi
-      imagemagick postgresql
+      imagemagickBig postgresql
     ];
     installPhase = ''
       cp -R . $out
@@ -45,14 +47,18 @@ let
       ${concatStrings (map (gem: "ln -s ${gem} vendor/cache/${gem.name};") gemspec)}
 
       rm -R files log tmp
-      for i in files log tmp; do
+      for i in files log tmp public/plugin_assets; do
         ln -s ${cfg.stateDir}/$i $i
       done
 
       ln -s ${cfg.stateDir}/db/schema.rb db/schema.rb
 
-      for theme in ${concatStringsSep " " (mapAttrsToList unpack cfg.themes)}; do
+      for theme in ${concatStringsSep " " (mapAttrsToList unpackTheme cfg.themes)}; do
         ln -s $theme/* public/themes/
+      done
+
+      for plugin in ${concatStringsSep " " (mapAttrsToList unpackPlugin cfg.plugins)}; do
+        ln -s $plugin/* plugins/''${plugin##*-redmine-plugin-}
       done
 
       cat > config/database.yml <<EOF
@@ -72,7 +78,6 @@ let
       GEM_HOME=./vendor/bundle/ruby/${ruby.majorVersion}.${ruby.minorVersion} ${ruby}/bin/rake generate_secret_token
 
     '';
-    passthru.version = version;
   };
 
 in {
@@ -95,13 +100,13 @@ in {
 
       themes = mkOption {
         type = types.attrsOf types.path;
-        default = null;
+        default = {};
         description = "Set of themes";
       };
 
       plugins = mkOption {
         type = types.attrsOf types.path;
-        default = null;
+        default = {};
         description = "Set of plugins";
       };
 
@@ -158,7 +163,15 @@ in {
       environment.HOME = "${redmine}";
       environment.REDMINE_LANG = "en";
       environment.GEM_PATH = "${rubyLibs.bundler}/lib/ruby/gems/2.0";
-      path = [ redmine ];
+      path = with pkgs; [
+        imagemagickBig
+        subversion
+        darcs
+        mercurial
+        cvs
+        bazaar
+        gitAndTools.git
+      ];
       preStart = ''
         for i in db files log tmp public/plugin_assets; do
           mkdir -p ${cfg.stateDir}/$i
@@ -170,6 +183,7 @@ in {
 
         cd ${redmine}
         ${ruby}/bin/rake db:migrate
+        ${ruby}/bin/rake redmine:plugins:migrate
         ${ruby}/bin/rake redmine:load_default_data
       '';
 
