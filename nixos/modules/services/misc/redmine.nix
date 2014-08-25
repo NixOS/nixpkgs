@@ -52,7 +52,7 @@ let
       ln -s ${cfg.stateDir}/db/schema.rb db/schema.rb
 
       for theme in ${concatStringsSep " " (mapAttrsToList unpack cfg.themes)}; do
-        ln -s $theme public/themes/''${theme##*-redmine-theme-}
+        ln -s $theme/* public/themes/
       done
 
       cat > config/database.yml <<EOF
