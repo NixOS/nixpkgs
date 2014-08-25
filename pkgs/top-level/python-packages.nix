@@ -533,7 +533,7 @@ rec {
     name = "avro-1.7.6";
 
     disabled = isPy3k;
-    
+
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/a/avro/${name}.tar.gz";
       md5 = "7f4893205e5ad69ac86f6b44efb7df72";
@@ -547,9 +547,9 @@ rec {
 
   avro3k = pkgs.lowPrio (buildPythonPackage (rec {
     name = "avro3k-1.7.7-SNAPSHOT";
-    
+
     disabled = (!isPy3k);
-    
+
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/a/avro3k/${name}.tar.gz";
       sha256 = "15ahl0irwwj558s964abdxg4vp6iwlabri7klsm2am6q5r0ngsky";
@@ -634,7 +634,7 @@ rec {
 
   beaker = buildPythonPackage rec {
     name = "Beaker-1.6.4";
-    
+
     disabled = isPy3k;
 
     src = fetchurl {
@@ -715,9 +715,9 @@ rec {
         modules.sqlite3
         modules.readline
       ];
-      
+
     buildInputs = with pythonPackages; [ mock pyechonest six responses nose ];
-    
+
     # 10 tests are failing
     doCheck = false;
 
@@ -728,12 +728,12 @@ rec {
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
-  
+
   responses = pythonPackages.buildPythonPackage rec {
     name = "responses-0.2.2";
 
     propagatedBuildInputs = with pythonPackages; [ requests mock six pytest flake8 ];
-    
+
     doCheck = false;
 
     src = fetchurl {
@@ -742,7 +742,7 @@ rec {
     };
 
   };
- 
+
   rarfile = pythonPackages.buildPythonPackage rec {
     name = "rarfile-2.6";
 
@@ -758,7 +758,7 @@ rec {
       homepage = https://github.com/markokr/rarfile;
     };
   };
-  
+
   pyechonest = pythonPackages.buildPythonPackage rec {
     name = "pyechonest-8.0.2";
 
@@ -1004,10 +1004,10 @@ rec {
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
-  
+
   zc_buildout171 = buildPythonPackage rec {
     name = "zc.buildout-1.7.1";
-    
+
     disabled = isPy3k;
 
     src = fetchurl {
@@ -1022,10 +1022,10 @@ rec {
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
-  
+
   zc_buildout152 = buildPythonPackage rec {
     name = "zc.buildout-1.5.2";
-    
+
     disabled = isPy3k;
 
     src = fetchurl {
@@ -2457,11 +2457,11 @@ rec {
   radicale = buildPythonPackage rec {
     name = "radicale-${version}";
     namePrefix = "";
-    version = "0.9b1";
+    version = "0.9";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/R/Radicale/Radicale-${version}.tar.gz";
-      sha256 = "3a8451909de849f173f577ddec0a085f19040dbb6aa13d5256208a0f8e11d88d";
+      sha256 = "77bf813fd26f0d359c1a7b7bcce9b842b4503c5516989a4a0a4f648e299e41f7";
     };
 
     propagatedBuildInputs = with pythonPackages; [
@@ -2474,6 +2474,7 @@ rec {
 
     meta = {
       homepage = "http://www.radicale.org/";
+      description = "CalDAV CardDAV server";
       longDescription = ''
         The Radicale Project is a complete CalDAV (calendar) and CardDAV
         (contact) server solution. Calendars and address books are available for
@@ -3866,7 +3867,7 @@ rec {
       url = "http://pypi.python.org/packages/source/i/iptools/iptools-${version}.tar.gz";
       md5 = "aed4045638fd40c16f8d9bb04606f700";
     };
-    
+
     buildInputs = [ nose ];
 
     meta = {
@@ -4169,7 +4170,7 @@ rec {
     patchPhase = ''
       substituteInPlace magic.py --replace "ctypes.CDLL(dll)" "ctypes.CDLL('${pkgs.file}/lib/libmagic.so')"
     '';
-    
+
     doCheck = false;
 
     # TODO: tests are failing
@@ -4601,7 +4602,7 @@ rec {
       url = "http://pypi.python.org/packages/source/m/mutagen/${name}.tar.gz";
       sha256 = "12f70aaf5ggdzll76bhhkn64b27xy9s1acx417dbsaqnnbis8s76";
     };
-    
+
     # one unicode test fails
     doCheck = false;
 
@@ -5254,7 +5255,7 @@ rec {
 
     # tests failures since 1.14.0 release..
     doCheck = false;
-    
+
     checkPhase = "${python}/bin/${python.executable} test.py";
 
     meta = {
@@ -5442,37 +5443,37 @@ rec {
 
     propagatedBuildInputs = [ unittest2 ];
   };
-  
+
   pil = buildPythonPackage rec {
     name = "PIL-${version}";
     version = "1.1.7";
-    
+
     src = fetchurl {
       url = "http://effbot.org/downloads/Imaging-${version}.tar.gz";
       sha256 = "04aj80jhfbmxqzvmq40zfi4z3cw6vi01m3wkk6diz3lc971cfnw9";
     };
-  
+
     buildInputs = [ python pkgs.libjpeg pkgs.zlib pkgs.freetype ];
-  
+
     disabled = isPy3k;
-  
+
     doCheck = true;
-  
+
     preConfigure = ''
       sed -i "setup.py" \
           -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = libinclude("${pkgs.freetype}")|g ;
               s|^JPEG_ROOT =.*$|JPEG_ROOT = libinclude("${pkgs.libjpeg}")|g ;
               s|^ZLIB_ROOT =.*$|ZLIB_ROOT = libinclude("${pkgs.zlib}")|g ;'
     '';
-  
+
     checkPhase   = "${python}/bin/${python.executable} selftest.py";
     buildPhase   = "${python}/bin/${python.executable} setup.py build_ext -i";
-  
+
     postInstall = ''
       cd "$out"/lib/python*/site-packages
       ln -s $PWD PIL
     '';
-  
+
     meta = {
       homepage = http://www.pythonware.com/products/pil/;
       description = "The Python Imaging Library (PIL)";
@@ -7958,9 +7959,9 @@ rec {
       url = "http://pypi.python.org/packages/source/T/Tempita/Tempita-${version}.tar.gz";
       md5 = "4c2f17bb9d481821c41b6fbee904cea1";
     };
-    
+
     disabled = isPy3k;
-    
+
     buildInputs = [ nose ];
 
     meta = {
@@ -8052,11 +8053,11 @@ rec {
 
   tox = buildPythonPackage rec {
     name = "tox-1.7.2";
-  
+
     propagatedBuildInputs = [ py virtualenv ];
 
     doCheck = false;
-  
+
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/t/tox/${name}.tar.gz";
       md5 = "0d9b3acb1a9252659d753b0ae6b9b264";
@@ -8512,7 +8513,7 @@ rec {
       url = "http://pypi.python.org/packages/source/W/WebTest/WebTest-${version}.zip";
       md5 = "49314bdba23f4d0bd807facb2a6d3f90";
     };
-    
+
     preConfigure = ''
       substituteInPlace setup.py --replace "nose<1.3.0" "nose"
     '';
@@ -9140,7 +9141,7 @@ rec {
       url = "http://pypi.python.org/packages/source/z/zope.testing/${name}.tar.gz";
       md5 = "6c73c5b668a67fdc116a25b884058ed9";
     };
-    
+
     doCheck = !(python.isPypy or false);
 
     propagatedBuildInputs = [ zope_interface zope_exceptions zope_location ];
@@ -9287,7 +9288,7 @@ rec {
   tarman = buildPythonPackage rec {
     version = "0.1.3";
     name = "tarman-${version}";
-    
+
     disabled = isPy3k;
 
     src = fetchurl {
