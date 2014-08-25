@@ -195,7 +195,7 @@ let version = "4.8.3";
     stageNameAddon = if crossStageStatic then "-stage-static" else "-stage-final";
     crossNameAddon = if cross != null then "-${cross.config}" + stageNameAddon else "";
 
-  bootstrap = cross == null && !stdenv.isArm && !stdenv.isMips;
+    bootstrap = cross == null && !stdenv.isArm && !stdenv.isMips;
 
 in
 
@@ -213,6 +213,13 @@ stdenv.mkDerivation ({
   };
 
   inherit patches;
+
+  outputs = [ "out" "lib" ];
+
+  setOutputConfigureFlags = false;
+
+
+  libc_dev = stdenv.gcc.libc_dev;
 
   postPatch =
     if (stdenv.isGNU

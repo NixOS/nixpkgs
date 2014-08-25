@@ -12,8 +12,10 @@ postConfigure() {
 
     export NIX_DONT_SET_RPATH=1
     unset CFLAGS
-}
 
+    # Apparently --bindir is not respected.
+    makeFlagsArray+=("bindir=$bin/bin" "sbindir=$bin/sbin" "rootsbindir=$bin/sbin")
+}
 
 postInstall() {
     if test -n "$installLocales"; then
@@ -27,7 +29,7 @@ postInstall() {
     if test -z "$hurdHeaders"; then
         # Include the Linux kernel headers in Glibc, except the `scsi'
         # subdirectory, which Glibc provides itself.
-        (cd $out/include && \
+        (cd $dev/include && \
          ln -sv $(ls -d $kernelHeaders/include/* | grep -v 'scsi$') .)
     fi
 
@@ -52,6 +54,17 @@ postInstall() {
 
     # Get rid of more unnecessary stuff.
     rm -rf $out/var $out/sbin/sln
+
+    # Put libraries for static linking in a separate output.  Note
+    # that libc_nonshared.a and libpthread_nonshared.a are required
+    # for dynamically-linked applications.
+    mkdir -p $static/lib
+    mv $out/lib/*.a $static/lib
+    mv $static/lib/lib*_nonshared.a $out/lib
+
+    # Work around a Nix bug: hard links across outputs cause a build failure.
+    cp $bin/bin/getconf $bin/bin/getconf_
+    mv $bin/bin/getconf_ $bin/bin/getconf
 }
 
 genericBuild
