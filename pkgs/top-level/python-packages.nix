@@ -7018,6 +7018,7 @@ rec {
   robotframework = buildPythonPackage rec {
     version = "2.8.5";
     name = "robotframework-${version}";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/r/robotframework/${name}.tar.gz";
