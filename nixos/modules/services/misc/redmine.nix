@@ -166,11 +166,12 @@ in {
       path = with pkgs; [
         imagemagickBig
         subversion
-        darcs
         mercurial
         cvs
         bazaar
         gitAndTools.git
+        # once we build binaries for darc enable it
+        #darcs
       ];
       preStart = ''
         for i in db files log tmp public/plugin_assets; do
