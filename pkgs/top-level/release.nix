@@ -160,7 +160,6 @@ let
       htmlTidy = all;
       hugin = linux;
       iana_etc = linux;
-      icecat3Xul = linux;
       icewm = linux;
       idutils = all;
       ifplugd = linux;

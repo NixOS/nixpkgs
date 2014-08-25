@@ -74,7 +74,6 @@ with import ./release-lib.nix { inherit supportedSystems; };
   hello = all;
   host = linux;
   iana_etc = linux;
-  icecat3Xul = linux;
   icewm = linux;
   idutils = all;
   ifplugd = linux;
