@@ -7591,11 +7591,13 @@ rec {
   };
 
   supervisor = buildPythonPackage rec {
-    name = "supervisor-3.0";
+    name = "supervisor-3.1.1";
+    
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/s/supervisor/${name}.tar.gz";
-      md5 = "94ff3cf09618c36889425a8e002cd51a";
+      md5 = "8c9714feaa63902f03871317e3ebf62e";
     };
 
     buildInputs = [ mock ];
