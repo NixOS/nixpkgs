@@ -5268,6 +5268,8 @@ let
 
   libnatspec = callPackage ../development/libraries/libnatspec { };
 
+  libnfc = callPackage ../development/libraries/libnfc { };
+
   libnfsidmap = callPackage ../development/libraries/libnfsidmap { };
 
   libnice = callPackage ../development/libraries/libnice { };
