@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1404i59bp6rzxya0br1q9njdv32z4sggyfrkjr7vq695hk94hv0n";
   };
 
-  outputs = [ "out" "dev" "man" "doc" ];
+  outputs = [ "dev" "out" "bin" "man" "doc" ];
+  buildInputs = [ stdenv.hookLib.multiout ];
 
   doCheck = true;
 

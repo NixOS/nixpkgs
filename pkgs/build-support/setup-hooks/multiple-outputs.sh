@@ -1,4 +1,7 @@
 preConfigureHooks+=(_multioutConfig)
+preFixupHooks+=(_multioutDocs)
+postFixupHooks+=(_multioutPropagateDev)
+
 
 # Assign the first nonempty string to variable named $1
 _assignFirst() {
@@ -28,14 +31,17 @@ _assignFirst outputDoc "$outputDoc" "$doc" "$out"
 _assignFirst outputMan "$outputMan" "$man" "$outputBin"
 _assignFirst outputInfo "$outputInfo" "$info" "$outputMan"
 
+# put propagated*BuildInputs into $outputDev instead of $out
+propagateIntoOutput="$outputDev"
+
 # Add standard flags to put files into the desired outputs.
 _multioutConfig() {
     if [ -n "${setOutputFlags-1}" ]; then
         configureFlags="\
-            --bindir=$outputBin/bin --sbindir=$outputBin/sbin --libexecdir=$outputBin/libexec \
+            --bindir=$outputBin/bin --sbindir=$outputBin/sbin \
             --includedir=$outputInclude/include --oldincludedir=$outputInclude/include \
             --mandir=$outputMan/share/man --infodir=$outputInfo/share/info --docdir=$outputDoc/share/doc \
-            --libdir=$outputLib/lib \
+            --libdir=$outputLib/lib --libexecdir=$outputLib/libexec \
             $configureFlags"
 
         installFlags="\
@@ -48,4 +54,41 @@ _multioutConfig() {
 # Add rpath prefixes to library paths, and avoid stdenv doing it for $out.
 _addRpathPrefix "$outputLib"
 NIX_NO_SELF_RPATH=1
+
+_multioutDocs() {
+    _moveToOutput share/man "$outputMan"
+    _moveToOutput share/info "$outputInfo"
+    _moveToOutput share/doc "$outputDoc"
+
+    # Remove empty share directory.
+    if [ -d "$out/share" ]; then
+        rmdir "$out/share" 2> /dev/null || true
+    fi
+}
+_moveToOutput() {
+    local d="$1"
+    local dst="$2"
+    if [ -z "$dst" -a ! -e $dst/$d ]; then return; fi
+    local output
+    for output in $outputs; do
+        if [ "${!output}" = "$dst" ]; then continue; fi
+        if [ -d "${!output}/$d" ]; then
+            echo "moving ${!output}/$d to $dst/$d"
+            mkdir -p $dst/share
+            mv ${!output}/$d $dst/$d
+            break
+        fi
+    done
+}
+
+_multioutPropagateDev() {
+    if [ "$outputInclude" != "$outputDev" ]; then
+        mkdir -p "$outputDev"/nix-support
+        echo "$outputInclude" >> "$outputDev"/nix-support/propagated-build-inputs
+    fi
+    if [ "$outputLib" != "$outputDev" ]; then
+        mkdir -p "$outputDev"/nix-support
+        echo "$outputLib" >> "$outputDev"/nix-support/propagated-build-inputs
+    fi
+}
 

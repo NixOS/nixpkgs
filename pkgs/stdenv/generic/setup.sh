@@ -144,6 +144,20 @@ ensureDir() {
 }
 
 
+# Add $1/lib* into rpaths.
+# The function is used in multiple-outputs.sh hook,
+# so it is defined here but tried after the hook.
+_addRpathPrefix() {
+    if [ "$NIX_NO_SELF_RPATH" != 1 ]; then
+        export NIX_LDFLAGS="-rpath $1/lib $NIX_LDFLAGS"
+        if [ -n "$NIX_LIB64_IN_SELF_RPATH" ]; then
+            export NIX_LDFLAGS="-rpath $1/lib64 $NIX_LDFLAGS"
+        fi
+        if [ -n "$NIX_LIB32_IN_SELF_RPATH" ]; then
+            export NIX_LDFLAGS="-rpath $1/lib32 $NIX_LDFLAGS"
+        fi
+    fi
+}
 
 ######################################################################
 # Initialisation.
@@ -259,18 +273,6 @@ for i in $crossPkgs; do
 done
 
 
-# Add $1/lib* into rpaths.
-_addRpathPrefix() {
-    if [ "$NIX_NO_SELF_RPATH" != 1 ]; then
-        export NIX_LDFLAGS="-rpath $1/lib $NIX_LDFLAGS"
-        if [ -n "$NIX_LIB64_IN_SELF_RPATH" ]; then
-            export NIX_LDFLAGS="-rpath $1/lib64 $NIX_LDFLAGS"
-        fi
-        if [ -n "$NIX_LIB32_IN_SELF_RPATH" ]; then
-            export NIX_LDFLAGS="-rpath $1/lib32 $NIX_LDFLAGS"
-        fi
-    fi
-}
 _addRpathPrefix "$out"
 
 
@@ -614,7 +616,7 @@ configurePhase() {
         done
     fi
 
-    if [ -z "$dontAddPrefix" ]; then
+    if [ -z "$dontAddPrefix" -a -n "$prefix" ]; then
         configureFlags="${prefixKey:---prefix=}$prefix $configureFlags"
     fi
 
@@ -676,7 +678,9 @@ checkPhase() {
 installPhase() {
     runHook preInstall
 
-    mkdir -p "$prefix"
+    if [ -n "$prefix" ]; then
+        mkdir -p "$prefix"
+    fi
 
     installTargets=${installTargets:-install}
     echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
@@ -780,8 +784,6 @@ showPhaseHeader() {
 
 
 genericBuild() {
-    header "building $out"
-
     if [ -n "$buildCommand" ]; then
         eval "$buildCommand"
         return
@@ -825,8 +827,6 @@ genericBuild() {
 
         stopNest
     done
-
-    stopNest
 }
 
 

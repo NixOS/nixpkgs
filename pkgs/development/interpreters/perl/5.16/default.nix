@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
   # TODO: Add a "dev" output containing the header files.
   outputs = [ "out" "man" ];
+  buildInputs = [ stdenv.hookLib.multiout ];
+  setOutputFlags = false;
 
   setOutputConfigureFlags = false;
 
