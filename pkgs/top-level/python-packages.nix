@@ -384,11 +384,12 @@ rec {
 
 
   anyjson = buildPythonPackage rec {
-    name = "anyjson-0.3.1";
+    name = "anyjson-0.3.3";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/a/anyjson/${name}.tar.gz";
-      md5 = "2b53b5d53fc40af4da7268d3c3e35a50";
+      md5 = "2ea28d6ec311aeeebaf993cb3008b27c";
     };
 
     buildInputs = [ pythonPackages.nose ];
@@ -1127,6 +1128,7 @@ rec {
   cheetah = buildPythonPackage rec {
     version = "2.4.4";
     name = "cheetah-${version}";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/C/Cheetah/Cheetah-${version}.tar.gz";
@@ -4902,6 +4904,7 @@ rec {
   netlib = buildPythonPackage rec {
     baseName = "netlib";
     name = "${baseName}-${meta.version}";
+    disabled = (!isPy27);
 
     src = fetchurl {
       url = "https://github.com/cortesi/netlib/archive/v${meta.version}.tar.gz";
@@ -6002,11 +6005,11 @@ rec {
 
 
   pycurl = buildPythonPackage (rec {
-    name = "pycurl-7.19.0";
+    name = "pycurl-7.19.5";
 
     src = fetchurl {
       url = "http://pycurl.sourceforge.net/download/${name}.tar.gz";
-      sha256 = "0hh6icdbp7svcq0p57zf520ifzhn7jw64x07k99j7h57qpy2sy7b";
+      sha256 = "0hqsap82zklhi5fxhc69kxrwzb0g9566f7sdpz7f9gyxkmyam839";
     };
 
     buildInputs = [ pkgs.curl ];
@@ -7113,6 +7116,8 @@ rec {
   rope = buildPythonPackage rec {
     version = "0.9.4";
     name = "rope-${version}";
+    
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/r/rope/${name}.tar.gz";
@@ -7506,6 +7511,7 @@ rec {
 
   pydns = buildPythonPackage rec {
     name = "pydns-2.3.6";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/p/pydns/${name}.tar.gz";
@@ -8377,7 +8383,8 @@ rec {
   twisted = buildPythonPackage rec {
     # NOTE: When updating please check if new versions still cause issues
     # to packages like carbon (http://stackoverflow.com/questions/19894708/cant-start-carbon-12-04-python-error-importerror-cannot-import-name-daem)
-
+    disabled = isPy3k;
+ 
     name = "Twisted-11.1.0";
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/T/Twisted/${name}.tar.bz2";
@@ -8455,6 +8462,7 @@ rec {
 
   urlgrabber =  buildPythonPackage rec {
     name = "urlgrabber-3.9.1";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://urlgrabber.baseurl.org/download/${name}.tar.gz";
