@@ -6891,6 +6891,21 @@ rec {
   };
 
 
+  quantities = buildPythonPackage rec {
+    name = "quantities-0.10.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/q/quantities/quantities-0.10.1.tar.gz";
+      md5 = "e924e21c0a5ddc9ebcdacbbe511b8ec7";
+    };
+
+    meta = with pkgs.stdenv.lib; {
+      description = "Quantities is designed to handle arithmetic and";
+      homepage = http://packages.python.org/quantities;
+      license = licenses.bsd2;
+    };
+  };
+
   qutip = buildPythonPackage rec {
     name = "qutip-2.2.0";
 
