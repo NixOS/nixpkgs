@@ -3575,14 +3575,15 @@ rec {
   };
 
   gevent = buildPythonPackage rec {
-    name = "gevent-0.13.8";
-
+    name = "gevent-1.0.1";
+    disabled = isPy3k;
+    
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/g/gevent/${name}.tar.gz";
-      sha256 = "0plmxnb53qbxxf6macq84dvclsiyrpv3xrm32q4qqh6f01ix5f2l";
+      sha256 = "0hyzfb0gcx9pm5c2igan8y57hqy2wixrwvdjwsaivxsqs0ay49s6";
     };
 
-    buildInputs = [ pkgs.libevent ];
+    buildInputs = [ pkgs.libev ];
     propagatedBuildInputs = [ greenlet ];
 
     meta = with stdenv.lib; {
