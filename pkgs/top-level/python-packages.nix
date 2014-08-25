@@ -7623,6 +7623,26 @@ rec {
     };
   };
 
+  semantic = buildPythonPackage rec {
+    name = "semantic-1.0.3";
+
+    propagatedBuildInputs = with pythonPackages; [ quantities numpy ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/s/semantic/semantic-1.0.3.tar.gz";
+      md5 = "78a150190e3e7d0f6f357b4c828e5f0d";
+    };
+
+    # strange setuptools error (can not import semantic.test)
+    doCheck = false;
+
+    meta = with pkgs.stdenv.lib; {
+      description = "Common Natural Language Processing Tasks for Python";
+      homepage = https://github.com/crm416/semantic;
+      license = licenses.mit;
+    };
+  };
+
   sexpdata = buildPythonPackage rec {
     name = "sexpdata-0.0.2";
     src = fetchurl {
