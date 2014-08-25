@@ -8842,14 +8842,14 @@ rec {
 
   zodb3 = buildPythonPackage rec {
     name = "zodb3-${version}";
-    version = "3.10.5";
+    version = "3.11.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/Z/ZODB3/ZODB3-${version}.tar.gz";
-      md5 = "6f180c6897a1820948fee2a6290503cd";
+      md5 = "21975c1609296e7834e8cf4025af3039";
     };
 
-    propagatedBuildInputs = [ manuel transaction zc_lockfile zconfig zdaemon zope_interface zope_event ];
+    propagatedBuildInputs = [ manuel transaction zc_lockfile zconfig zdaemon zope_interface zope_event BTrees persistent ZEO ];
 
     meta = {
       description = "An object-oriented database for Python";
