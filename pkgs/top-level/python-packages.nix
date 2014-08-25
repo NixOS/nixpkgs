@@ -5541,11 +5541,11 @@ rec {
 
   polib = buildPythonPackage rec {
     name = "polib-${version}";
-    version = "1.0.1";
+    version = "1.0.4";
 
     src = fetchurl {
       url = "http://bitbucket.org/izi/polib/downloads/${name}.tar.gz";
-      sha256 = "1sr2bb3g7rl7gr6156j5qv71kg06q1x01r1lbps9ksnyz37djn2q";
+      sha256 = "16klwlswfbgmkzrra80fgzhic9447pk3mnr75r2fkz72bkvpcclb";
     };
 
     # error: invalid command 'test'
