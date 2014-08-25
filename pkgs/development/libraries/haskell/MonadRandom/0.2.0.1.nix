@@ -4,13 +4,12 @@
 
 cabal.mkDerivation (self: {
   pname = "MonadRandom";
-  version = "0.2";
-  sha256 = "0wxn1n47mx7npxzc6iv2hj3ikj3d0s11xsndz2gfm9y5pwm3h44c";
+  version = "0.2.0.1";
+  sha256 = "1689302z053zhcr46w5q3a57kd6z365kkgzxh638gcakzzk3pmwm";
   buildDepends = [ mtl random transformers ];
   meta = {
     description = "Random-number generation monad";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })
