@@ -1,4 +1,4 @@
-<section xmlns="http://docbook.org/ns/docbook"
+<chapter xmlns="http://docbook.org/ns/docbook"
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:xi="http://www.w3.org/2001/XInclude"
     version="5.0"
@@ -53,7 +53,7 @@ $ systemctl start display-manager.service
     </para>
     
     
-    <simplesect><title>NVIDIA graphics cards</title>
+    <simplesect><title>NVIDIA Graphics Cards</title>
         
         <para>NVIDIA provides a proprietary driver for its graphics cards that
             has better 3D performance than the X.org drivers.  It is not enabled
@@ -91,4 +91,4 @@ services.xserver.synaptics.twoFingerScroll = true;
     </simplesect>
     
     
-</section>
+</chapter>

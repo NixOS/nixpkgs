@@ -4,7 +4,7 @@
     version="5.0"
     xml:id="sec-booting-from-usb">
     
-    <title>Booting from a USB stick</title>
+    <title>Booting From a USB Drive</title>
     
     <para>For systems without CD drive, the NixOS livecd can be booted from
         a usb stick. For non-UEFI installations,

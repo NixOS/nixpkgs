@@ -5,7 +5,7 @@
     xml:id="sec-luks-file-systems">
     
     
-    <title>LUKS-encrypted file systems</title>
+    <title>LUKS-Encrypted File Systems</title>
     
     <para>NixOS supports file systems that are encrypted using
         <emphasis>LUKS</emphasis> (Linux Unified Key Setup).  For example,

@@ -223,7 +223,7 @@ typical sequence of commands for installing NixOS on an empty hard
 drive (here <filename>/dev/sda</filename>).  <xref linkend="ex-config"
 /> shows a corresponding configuration Nix expression.</para>
 
-<example xml:id='ex-install-sequence'><title>Commands for installing NixOS on <filename>/dev/sda</filename></title>
+<example xml:id='ex-install-sequence'><title>Commands for Installing NixOS on <filename>/dev/sda</filename></title>
 <screen>
 $ fdisk /dev/sda # <lineannotation>(or whatever device you want to install on)</lineannotation>
 $ mkfs.ext4 -L nixos /dev/sda1
@@ -236,7 +236,7 @@ $ nixos-install
 $ reboot</screen>
 </example>
 
-<example xml:id='ex-config'><title>NixOS configuration</title>
+<example xml:id='ex-config'><title>NixOS Configuration</title>
 <screen>
 { config, pkgs, ... }:
 

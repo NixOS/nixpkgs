@@ -30,16 +30,12 @@
 
   <xi:include href="installation/installation.xml" />
   <xi:include href="configuration/configuration.xml" />
-  <xi:include href="running.xml" />
+  <xi:include href="administration/running.xml" />
   <!-- <xi:include href="userconfiguration.xml" /> -->
-  <xi:include href="troubleshooting.xml" />
-  <xi:include href="containers.xml" />
-  <xi:include href="development.xml" />
-
-  <xi:include href="release-notes.xml" />
+  <xi:include href="release-notes/release-notes.xml" />
 
   <appendix xml:id="ch-options">
-    <title>Configuration options</title>
+    <title>Configuration Options</title>
     <xi:include href="options-db.xml" />
   </appendix>
 
