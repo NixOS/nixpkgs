@@ -3512,6 +3512,23 @@ rec {
     };
   });
 
+  futures = buildPythonPackage rec {
+    name = "futures-2.1.6";
+
+    propagatedBuildInputs = with pythonPackages; [  ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/f/futures/futures-2.1.6.tar.gz";
+      md5 = "cfab9ac3cd55d6c7ddd0546a9f22f453";
+    };
+
+    meta = with pkgs.stdenv.lib; {
+      description = "Backport of the concurrent.futures package from Python 3.2";
+      homepage = http://code.google.com/p/pythonfutures;
+      license = licenses.bsd2;
+    };
+  };
+
   gcovr = buildPythonPackage rec {
     name = "gcovr-2.4";
 
