@@ -12,6 +12,17 @@ let
   gemspec = map (gem: pkgs.fetchurl { url=gem.url; sha256=gem.hash; })
     (import <nixpkgs/pkgs/applications/version-management/redmine/Gemfile.nix>);
 
+  unpack = name: source:
+    pkgs.stdenv.mkDerivation {
+      name = "redmine-theme-${name}";
+      buildInputs = [ pkgs.unzip ];
+      buildCommand = ''
+        mkdir -p $out
+        cd $out
+        unpackFile ${source}
+      '';
+    };
+
   redmine = with pkgs; stdenv.mkDerivation rec {
     version = "2.5.2";
     name = "redmine-${version}";
@@ -40,20 +51,28 @@ let
 
       ln -s ${cfg.stateDir}/db/schema.rb db/schema.rb
 
+      for theme in ${concatStringsSep " " (mapAttrsToList unpack cfg.themes)}; do
+        ln -s $theme public/themes/''${theme##*-redmine-theme-}
+      done
+
       cat > config/database.yml <<EOF
       production:
-        adapter: postgresql
-        database: redmine
-        host: 127.0.0.1
-        username: redmine
-        password: 12345
+        adapter: ${cfg.databaseType}
+        database: ${cfg.databaseName}
+        host: ${cfg.databaseHost}
+        username: ${cfg.databaseUsername}
+        password: ${cfg.databasePassword}
         encoding: utf8
       EOF
 
       bundle config build.nokogiri --use-system-libraries --with-iconv-dir=${libiconv} --with-xslt-dir=${libxslt} --with-xml2-dir=${libxml2} --with-pkg-config --with-pg-config=${postgresql}/bin/pg_config
+
       bundle install --verbose --local --deployment
-      rake generate_secret_token
+
+      GEM_HOME=./vendor/bundle/ruby/${ruby.majorVersion}.${ruby.minorVersion} ${ruby}/bin/rake generate_secret_token
+
     '';
+    passthru.version = version;
   };
 
 in {
@@ -74,6 +93,47 @@ in {
         description = "The state directory, logs and plugins are stored here";
       };
 
+      themes = mkOption {
+        type = types.attrsOf types.path;
+        default = null;
+        description = "Set of themes";
+      };
+
+      plugins = mkOption {
+        type = types.attrsOf types.path;
+        default = null;
+        description = "Set of plugins";
+      };
+
+      databaseType = mkOption {
+        type = types.str;
+        default = "postgresql";
+        description = "Type of database";
+      };
+
+      databaseName = mkOption {
+        type = types.str;
+        default = "redmine";
+        description = "Database name";
+      };
+
+      databaseHost = mkOption {
+        type = types.str;
+        default = "127.0.0.1";
+        description = "Database hostname";
+      };
+
+      databaseUsername= mkOption {
+        type = types.str;
+        default = "redmine";
+        description = "Database user";
+      };
+
+      databasePassword= mkOption {
+        type = types.str;
+        default = "";
+        description = "Database user password";
+      };
     };
   };
 
@@ -81,7 +141,6 @@ in {
 
     users.extraUsers = [
       { name = "redmine";
-        description = "Redmine daemon";
         group = "redmine";
         uid = config.ids.uids.redmine;
       } ];
@@ -101,7 +160,6 @@ in {
       environment.GEM_PATH = "${rubyLibs.bundler}/lib/ruby/gems/2.0";
       path = [ redmine ];
       preStart = ''
-
         for i in db files log tmp public/plugin_assets; do
           mkdir -p ${cfg.stateDir}/$i
         done
