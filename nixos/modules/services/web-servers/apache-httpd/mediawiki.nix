@@ -133,6 +133,7 @@ in
         RewriteEngine On
         RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
         RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-d
+        ${concatMapStringsSep "\n" (u: "RewriteCond %{REQUEST_URI} !^${u.urlPath}") serverInfo.serverConfig.servedDirs}
         RewriteRule ${if config.enableUploads
           then "!^/images"
           else "^.*\$"
