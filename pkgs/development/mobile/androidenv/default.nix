@@ -98,12 +98,6 @@ rec {
     useGoogleAPIs = true;
   };
 
-  androidsdk_4_4 = androidsdk {
-    platformVersions = [ "19" ];
-    abiVersions = [ "armeabi-v7a" "x86" ];
-    useGoogleAPIs = true;
-  };
-
   androidndk = import ./androidndk.nix {
     inherit (pkgs) stdenv fetchurl lib zlib ncurses makeWrapper;
     inherit (pkgs) coreutils file findutils gawk gnugrep gnused jdk which;
