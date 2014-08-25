@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1w0g8q5aj5pjdf8l52g0mxyvlk62f4dch51q9jm3hnqwgz0dchqj";
   };
 
+  outputs = [ "dev" "out" "bin" ];
+
   crossAttrs = {
     # Work around use of `AC_RUN_IFELSE'.
     preConfigure = "export scanf_cv_type_modifier=ms";
@@ -26,6 +28,8 @@ stdenv.mkDerivation rec {
     --enable-fs-paths-default=/var/setuid-wrappers:/var/run/current-system/sw/sbin:/sbin
     ${if ncurses == null then "--without-ncurses" else ""}
   '';
+
+  makeFlags = "usrbin_execdir=$(bin)/bin usrsbin_execdir=$(bin)/sbin";
 
   buildInputs =
     [ zlib pam ]

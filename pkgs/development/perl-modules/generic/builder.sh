@@ -28,6 +28,13 @@ preConfigure() {
     perl Makefile.PL PREFIX=$out INSTALLDIRS=site $makeMakerFlags
 }
 
+preFixup() {
+    if [ -n "$man" ]; then
+        mkdir -p $man/share
+        if [ -d $out/man ]; then mv $out/man $man/share/; fi
+    fi
+}
+
 postFixup() {
     # If a user installs a Perl package, she probably also wants its
     # dependencies in the user environment (since Perl modules don't

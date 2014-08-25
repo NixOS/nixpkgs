@@ -9,10 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "08aqis6j8nd1lb4f2h4h9d9kjvp54iwf8zvqzss0qn4v7nfcjyvx";
   };
 
+  outputs = [ "dev" "out" "bin" "doc" ];
+
   buildInputs = with stdenv.lib;
     optional (!stdenv.isDarwin) gobjectIntrospection # build problems of itself and flex
     ++ optionals stdenv.isDarwin [ gettext fontconfig ];
-
   nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ x11 glib cairo libpng harfbuzz ] ++ libintlOrEmpty;
@@ -25,8 +26,6 @@ stdenv.mkDerivation rec {
   # .../bin/sh: line 5: 14823 Abort trap: 6 srcdir=. PANGO_RC_FILE=./pangorc ${dir}$tst
   # FAIL: testiter
   doCheck = !stdenv.isDarwin;
-  postInstall = "rm -rf $out/share/gtk-doc";
-
   meta = {
     description = "A library for laying out and rendering of text, with an emphasis on internationalization";
 

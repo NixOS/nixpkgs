@@ -51,6 +51,9 @@ stdenv.mkDerivation rec {
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch;
 
+  outputs = [ "dev" "out" "bin" "doc" ];
+
+
   setupHook = ./setup-hook.sh;
 
   buildInputs = [ libelf ]
@@ -96,8 +99,6 @@ stdenv.mkDerivation rec {
        # Needed because of libtool wrappers
        sed -e '/g_subprocess_launcher_set_environ (launcher, envp);/a g_subprocess_launcher_setenv (launcher, "PATH", g_getenv("PATH"), TRUE);' -i gio/tests/gsubprocess.c
     '';
-
-  postInstall = ''rm -rvf $out/share/gtk-doc'';
 
   passthru = {
      gioModuleDir = "lib/gio/modules";

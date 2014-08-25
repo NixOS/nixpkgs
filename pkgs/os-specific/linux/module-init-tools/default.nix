@@ -17,6 +17,8 @@ stdenv.mkDerivation {
     })
   ];
 
+  buildInputs = [ stdenv.glibc.dev stdenv.glibc.static ];
+
   SGML_CATALOG_FILES = "${docbook_sgml_dtd_41}/sgml/dtd/docbook-4.1/docbook.cat";
 
   patches = [ ./module-dir.patch ./docbook2man.patch ];

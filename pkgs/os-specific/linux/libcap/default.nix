@@ -5,12 +5,14 @@ assert stdenv.isLinux;
 stdenv.mkDerivation rec {
   name = "libcap-${version}";
   version = "2.22";
-  
+
   src = fetchurl {
     url = "mirror://gentoo/distfiles/${name}.tar.bz2";
     sha256 = "03q50j6bg65cc501q87qh328ncav1i8qw2bjig99vxmmfx4bvsvk";
   };
-  
+
+  outputs = [ "dev" "out" ];
+
   nativeBuildInputs = [ perl ];
   propagatedBuildInputs = [ attr ];
 

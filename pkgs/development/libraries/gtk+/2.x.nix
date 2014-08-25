@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "0v9xxpkypizy9k866rvqc36zvj4kj9p8nd1nxf9znay8k3hv5khj";
   };
 
+  outputs = [ "dev" "out" "bin" "doc" ];
+
   enableParallelBuilding = true;
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (libintlOrEmpty != []) "-lintl";
@@ -34,8 +36,6 @@ stdenv.mkDerivation rec {
   configureFlags = if stdenv.isDarwin
     then "--disable-glibtest --disable-introspection --disable-visibility"
     else "--with-xinput=yes";
-
-  postInstall = "rm -rf $out/share/gtk-doc";
 
   meta = with stdenv.lib; {
     description = "A multi-platform toolkit for creating graphical user interfaces";

@@ -6644,8 +6644,14 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0mizg2g07fa4c13zpnhmjc87psal5gp5hi23kqpynigmkp0m1p0b";
     };
     buildInputs = [ pkgs.openssl ];
-    OPENSSL_PREFIX = pkgs.openssl;
     doCheck = false; # Test performs network access.
+    preConfigure = ''
+      mkdir openssl
+      ln -s ${pkgs.openssl.out}/lib openssl
+      ln -s ${pkgs.openssl.bin}/bin openssl
+      ln -s ${pkgs.openssl.dev}/include openssl
+      export OPENSSL_PREFIX=$(realpath openssl)
+    '';
     meta = {
       description = "Perl extension for using OpenSSL";
       license = "SSLeay";

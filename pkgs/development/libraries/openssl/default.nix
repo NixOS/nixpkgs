@@ -48,6 +48,10 @@ stdenv.mkDerivation {
 
   patches = patchesCross false;
 
+  outputs = [ "dev" "out" "man" "bin" ];
+
+  setOutputConfigureFlags = false;
+
   buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
 
   nativeBuildInputs = [ perl ];
@@ -67,7 +71,7 @@ stdenv.mkDerivation {
     sed -i -e "s|-march=i486|-march=x86-64|g" Makefile
   '';
 
-  makeFlags = "MANDIR=$(out)/share/man";
+  makeFlags = "MANDIR=$(man)/share/man";
 
   # Parallel building is broken in OpenSSL.
   enableParallelBuilding = false;
@@ -79,6 +83,18 @@ stdenv.mkDerivation {
       if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib)" ]; then
           rm $out/lib/*.a
       fi
+
+      mkdir -p $bin
+      mv $out/bin $bin/
+
+      rm -rf $out/etc/ssl/misc
+
+      mkdir $dev
+      mv $out/include $dev/
+
+      # OpenSSL installs readonly files, which otherwise we can't strip.
+      # FIXME: Can remove this after the next stdenv merge.
+      chmod -R +w $out
     ''; # */
 
   crossAttrs = {
@@ -89,14 +105,6 @@ stdenv.mkDerivation {
       export configureFlags="--libdir=lib --cross-compile-prefix=${stdenv.cross.config}- shared ${opensslCrossSystem}"
     '';
 
-    postInstall = ''
-      # Openssl installs readonly files, which otherwise we can't strip.
-      # This could at some stdenv hash change be put out of crossAttrs, too
-      chmod -R +w $out
-
-      # Remove references to perl, to avoid depending on it at runtime
-      rm $out/bin/c_rehash $out/ssl/misc/CA.pl $out/ssl/misc/tsget
-    '';
     configureScript = "./Configure";
   } // stdenv.lib.optionalAttrs (opensslCrossSystem == "darwin64-x86_64-cc") {
     CC = "gcc";

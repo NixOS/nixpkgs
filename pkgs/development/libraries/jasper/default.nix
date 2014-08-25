@@ -12,7 +12,11 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libjpeg ];
 
   configureFlags = "--enable-shared";
-  
+
+  outputs = [ "dev" "out" "man" "bin" ];
+
+  enableParallelBuilding = true;
+
   meta = {
     homepage = http://www.ece.uvic.ca/~mdadams/jasper/;
     description = "JasPer JPEG2000 Library";

@@ -19,6 +19,10 @@ in stdenv.mkDerivation rec {
     inherit sha256;
   };
 
+  outputs = [ "dev" "out" "man" ];
+
+  preConfigure = "export bin=$dev";
+
   postPatch = whenPatched "gunzip < ${patch_src} | patch -Np1";
 
   propagatedBuildInputs = [ zlib ];

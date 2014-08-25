@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig flac libogg libvorbis ];
 
+  enableParallelBuilding = true;
+
+  outputs = [ "dev" "out" "bin" "doc" ];
+
   # need headers from the Carbon.framework in /System/Library/Frameworks to
   # compile this on darwin -- not sure how to handle
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin

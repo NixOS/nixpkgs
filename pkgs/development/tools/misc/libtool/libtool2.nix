@@ -1,6 +1,6 @@
 { stdenv, fetchurl, m4, perl, lzma }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   name = "libtool-2.4.2";
 
   src = fetchurl {
@@ -10,6 +10,8 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [ lzma m4 perl ];
 
+  outputs = [ "out" "lib" ];
+
   # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
   # "fixed" path in generated files!
   dontPatchShebangs = true;
@@ -17,6 +19,10 @@ stdenv.mkDerivation (rec {
   # XXX: The GNU ld wrapper does all sorts of nasty things wrt. RPATH, which
   # leads to the failure of a number of tests.
   doCheck = false;
+
+  # Don't run the native `strip' when cross-compiling.  This breaks at least
+  # with `.a' files for MinGW.
+  dontStrip = stdenv ? cross;
 
   meta = {
     description = "GNU Libtool, a generic library support script";
@@ -38,11 +44,3 @@ stdenv.mkDerivation (rec {
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
-
-//
-
-# Don't run the native `strip' when cross-compiling.  This breaks at least
-# with `.a' files for MinGW.
-(if (stdenv ? cross)
- then { dontStrip = true; }
- else { }))

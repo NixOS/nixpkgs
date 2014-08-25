@@ -8,8 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "0jm1fgbjgh496rsc0il2y46qd4bqq2ln9168p4zzh68mk4ml1yxg";
   };
 
+  outputs = [ "dev" "out" "doc" ];
+
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib zlib libgpgerror ];
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = http://spruce.sourceforge.net/gmime/;

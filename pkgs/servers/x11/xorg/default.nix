@@ -606,6 +606,7 @@ let
       url = mirror://xorg/individual/lib/libX11-1.6.2.tar.bz2;
       sha256 = "05mx0s0vqzds3qjc1gmjr2s6x2ll37z4lfhgm7p2w7936zl2g81a";
     };
+    outputs = [ "dev" "out" "man" ];
     buildInputs = [pkgconfig inputproto kbproto libxcb xextproto xf86bigfontproto xproto xtrans ];
   })) // {inherit inputproto kbproto libxcb xextproto xf86bigfontproto xproto xtrans ;};
 
@@ -626,6 +627,7 @@ let
       url = mirror://xorg/individual/lib/libXau-1.0.8.tar.bz2;
       sha256 = "1wm4pv12f36cwzhldpp7vy3lhm3xdcnp4f184xkxsp7b18r7gm7x";
     };
+    outputs = [ "dev" "out" "man" ];
     buildInputs = [pkgconfig xproto ];
   })) // {inherit xproto ;};
 
@@ -646,6 +648,7 @@ let
       url = mirror://xorg/individual/lib/libXcomposite-0.4.4.tar.bz2;
       sha256 = "0y21nfpa5s8qmx0srdlilyndas3sgl0c6rc26d5fx2vx436m1qpd";
     };
+    outputs = [ "dev" "out" "man" ];
     buildInputs = [pkgconfig compositeproto libX11 libXfixes xproto ];
   })) // {inherit compositeproto libX11 libXfixes xproto ;};
 
@@ -656,6 +659,7 @@ let
       url = mirror://xorg/individual/lib/libXcursor-1.1.14.tar.bz2;
       sha256 = "1prkdicl5y5yx32h1azh6gjfbijvjp415javv8dsakd13jrarilv";
     };
+    outputs = [ "dev" "out" "man" ];
     buildInputs = [pkgconfig fixesproto libX11 libXfixes xproto libXrender ];
   })) // {inherit fixesproto libX11 libXfixes xproto libXrender ;};
 
@@ -666,6 +670,7 @@ let
       url = mirror://xorg/individual/lib/libXdamage-1.1.4.tar.bz2;
       sha256 = "1bamagq7g6s0d23l8rb3nppj8ifqj05f7z9bhbs4fdg8az3ffgvw";
     };
+    outputs = [ "dev" "out" ];
     buildInputs = [pkgconfig damageproto fixesproto libX11 xextproto libXfixes xproto ];
   })) // {inherit damageproto fixesproto libX11 xextproto libXfixes xproto ;};
 
@@ -676,6 +681,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/libXdmcp-1.1.1.tar.bz2;
       sha256 = "13highx4xpgkiwykpcl7z2laslrjc4pzi4h617ny9p7r6116vkls";
     };
+    outputs = [ "dev" "out" "doc" ];
     buildInputs = [pkgconfig xproto ];
   })) // {inherit xproto ;};
 
@@ -686,6 +692,7 @@ let
       url = mirror://xorg/individual/lib/libXext-1.3.3.tar.bz2;
       sha256 = "0dbfn5bznnrhqzvkrcmw4c44yvvpwdcsrvzxf4rk27r36b9x865m";
     };
+    outputs = [ "dev" "out" "man" "doc" ];
     buildInputs = [pkgconfig libX11 xextproto xproto ];
   })) // {inherit libX11 xextproto xproto ;};
 
@@ -696,6 +703,7 @@ let
       url = mirror://xorg/individual/lib/libXfixes-5.0.1.tar.bz2;
       sha256 = "0rs7qgzr6dpr62db7sd91c1b47hzhzfr010qwnpcm8sg122w1gk3";
     };
+    outputs = [ "dev" "out" "man" ];
     buildInputs = [pkgconfig fixesproto libX11 xextproto xproto ];
   })) // {inherit fixesproto libX11 xextproto xproto ;};
 
@@ -716,6 +724,7 @@ let
       url = mirror://xorg/individual/lib/libXft-2.3.2.tar.bz2;
       sha256 = "0k6wzi5rzs0d0n338ms8n8lfyhq914hw4yl2j7553wqxfqjci8zm";
     };
+    outputs = [ "dev" "out" "man" ];
     buildInputs = [pkgconfig fontconfig freetype libX11 xproto libXrender ];
   })) // {inherit fontconfig freetype libX11 xproto libXrender ;};
 
@@ -726,6 +735,7 @@ let
       url = mirror://xorg/individual/lib/libXi-1.7.4.tar.bz2;
       sha256 = "0i12lj973grlp9fa79v0vh9cahk3nf9csdjnf81iip0qcrlc5zrc";
     };
+    outputs = [ "dev" "out" "man" "doc" ];
     buildInputs = [pkgconfig inputproto libX11 libXext xextproto libXfixes xproto ];
   })) // {inherit inputproto libX11 libXext xextproto libXfixes xproto ;};
 
@@ -736,6 +746,7 @@ let
       url = mirror://xorg/individual/lib/libXinerama-1.1.3.tar.bz2;
       sha256 = "1qlqfvzw45gdzk9xirgwlp2qgj0hbsyiqj8yh8zml2bk2ygnjibs";
     };
+    outputs = [ "dev" "out" "man" ];
     buildInputs = [pkgconfig libX11 libXext xextproto xineramaproto ];
   })) // {inherit libX11 libXext xextproto xineramaproto ;};
 
@@ -776,6 +787,7 @@ let
       url = mirror://xorg/individual/lib/libXrandr-1.4.2.tar.bz2;
       sha256 = "1b95p3l84ppv6j7dbbmg0zrz6k8xdwvnag1l6ajm3gk9qwdb79ya";
     };
+    outputs = [ "dev" "out" "man" ];
     buildInputs = [pkgconfig randrproto renderproto libX11 libXext xextproto xproto libXrender ];
   })) // {inherit randrproto renderproto libX11 libXext xextproto xproto libXrender ;};
 
@@ -786,6 +798,7 @@ let
       url = mirror://xorg/individual/lib/libXrender-0.9.8.tar.bz2;
       sha256 = "0qpwyjhbpp734vnhca992pjh4w7ijslidkzx1pcwbbk000pv050x";
     };
+    outputs = [ "dev" "out" "doc" ];
     buildInputs = [pkgconfig renderproto libX11 xproto ];
   })) // {inherit renderproto libX11 xproto ;};
 
@@ -866,6 +879,7 @@ let
       url = mirror://xorg/individual/lib/libXxf86vm-1.1.3.tar.bz2;
       sha256 = "1f1pxj018nk7ybxv58jmn5y8gm2288p4q3l2dng9n1p25v1qcpns";
     };
+    outputs = [ "dev" "out" "man" ];
     buildInputs = [pkgconfig libX11 libXext xextproto xf86vidmodeproto xproto ];
   })) // {inherit libX11 libXext xextproto xf86vidmodeproto xproto ;};
 
@@ -916,6 +930,7 @@ let
       url = http://xcb.freedesktop.org/dist/libxcb-1.11.tar.bz2;
       sha256 = "1xqgc81krx14f2c8yl5chzg5g2l26mhm2rwffy8dx7jv0iq5sqq3";
     };
+    outputs = [ "dev" "out" "doc" "man" ];
     buildInputs = [pkgconfig libxslt libpthreadstubs python libXau xcbproto libXdmcp ];
   })) // {inherit libxslt libpthreadstubs python libXau xcbproto libXdmcp ;};
 

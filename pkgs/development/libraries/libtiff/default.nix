@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "0wj8d1iwk9vnpax2h29xqc2hwknxg3s0ay2d5pxkg59ihbifn6pa";
   };
 
+  outputs = [ "dev" "out" "bin" "doc" ];
+
   patchPhase = ''
     for p in ${patchDir}/*-{2013-4244,2012-4447,2012-4564,2013-1960,2013-1961,libjpeg-turbo}.patch; do
       patch -p1 < "$p"

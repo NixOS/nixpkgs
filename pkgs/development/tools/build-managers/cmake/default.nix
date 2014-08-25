@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     ++ optional useQt4 qt4;
 
   CMAKE_PREFIX_PATH = stdenv.lib.concatStringsSep ":" buildInputs;
-  
+
   configureFlags =
     "--docdir=/share/doc/${name} --mandir=/share/man --system-libs"
     + stdenv.lib.optionalString useQt4 " --qt-gui";

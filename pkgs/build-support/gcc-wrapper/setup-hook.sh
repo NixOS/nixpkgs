@@ -27,7 +27,7 @@ if test -n "@binutils@"; then
 fi
 
 if test -n "@libc@"; then
-    addToSearchPath PATH @libc@/bin
+    addToSearchPath PATH @libc_bin@/bin
 fi
 
 if test -n "@coreutils@"; then

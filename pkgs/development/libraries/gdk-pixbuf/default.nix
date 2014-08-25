@@ -13,7 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "1gpqpskp4zzf7h35bp247jcvnk6rxc52r69pb11v8g8i2q386ls8";
   };
 
+  outputs = [ "dev" "out" "bin" "doc" ];
+
   setupHook = ./setup-hook.sh;
+
+  enableParallelBuilding = true;
 
   # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
   buildInputs = [ libX11 libintlOrEmpty ];
@@ -27,8 +31,6 @@ stdenv.mkDerivation rec {
     ;
 
   doCheck = true;
-
-  postInstall = "rm -rf $out/share/gtk-doc";
 
   meta = {
     description = "A library for image loading and manipulation";

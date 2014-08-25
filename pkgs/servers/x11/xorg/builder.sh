@@ -9,7 +9,7 @@ postInstall() {
     if test -n "$origPostInstall"; then eval "$origPostInstall"; fi
 
     local r p requires
-    requires=$(grep "Requires:" $out/lib/pkgconfig/*.pc | \
+    requires=$(grep "Requires:" ${dev:-$out}/lib/pkgconfig/*.pc | \
         sed "s/Requires://" | sed "s/,/ /g")
 
     echo "propagating requisites $requires"
@@ -31,10 +31,6 @@ postInstall() {
             done
         fi
     done
-
-    mkdir -p "$out/nix-support"
-    echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
-    echo "$propagatedNativeBuildInputs" > "$out/nix-support/propagated-native-build-inputs"
 }
 
 

@@ -4833,12 +4833,15 @@ let
   };
 
   glib = callPackage ../development/libraries/glib { };
+
   glib-tested = glib.override { doCheck = true; }; # checked version separate to break cycles
+
   glibmm = callPackage ../development/libraries/glibmm { };
 
   glib_networking = callPackage ../development/libraries/glib-networking {};
 
   atk = callPackage ../development/libraries/atk { };
+
   atkmm = callPackage ../development/libraries/atkmm { };
 
   pixman = callPackage ../development/libraries/pixman { };
@@ -4847,6 +4850,8 @@ let
     glSupport = config.cairo.gl or (stdenv.isLinux &&
       !stdenv.isArm && !stdenv.isMips);
   };
+
+
   cairomm = callPackage ../development/libraries/cairomm { };
 
   pango = callPackage ../development/libraries/pango { };
@@ -5130,7 +5135,6 @@ let
   libdnet = callPackage ../development/libraries/libdnet { };
 
   libdrm = callPackage ../development/libraries/libdrm {
-    inherit fetchurl stdenv pkgconfig;
     inherit (xorg) libpthreadstubs;
   };
 
@@ -5330,8 +5334,10 @@ let
   libiptcdata = callPackage ../development/libraries/libiptcdata { };
 
   libjpeg_original = callPackage ../development/libraries/libjpeg { };
+
   libjpeg_turbo = callPackage ../development/libraries/libjpeg-turbo { };
-  libjpeg = if (stdenv.isLinux) then libjpeg_turbo else libjpeg_original; # some problems, both on FreeBSD and Darwin
+
+  libjpeg = if stdenv.isLinux then libjpeg_turbo else libjpeg_original; # some problems, both on FreeBSD and Darwin
 
   libjpeg62 = callPackage ../development/libraries/libjpeg/62.nix {
     libtool = libtool_1_5;
@@ -7801,7 +7807,8 @@ let
   });
 
   udev145 = callPackage ../os-specific/linux/udev/145.nix { };
-  udev = pkgs.systemd;
+
+  udev = pkgs.systemd.libudev;
 
   udisks1 = callPackage ../os-specific/linux/udisks/1-default.nix { };
   udisks2 = callPackage ../os-specific/linux/udisks/2-default.nix { };

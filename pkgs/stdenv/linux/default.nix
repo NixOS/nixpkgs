@@ -183,8 +183,8 @@ rec {
 
 
   # 6) Construct a third stdenv identical to the 2nd, except that this
-  #    one uses the Glibc built in step 5.  It still uses the recent
-  #    binutils and rest of the bootstrap tools, including GCC.
+  #    one uses the Glibc built in step 3.  It still uses the recent
+  #    binutils and the rest of the bootstrap tools, including GCC.
   stdenvLinuxBoot3 = stdenvBootFun {
     gcc = wrapGCC {
       binutils = binutils1;
@@ -295,7 +295,7 @@ rec {
       inherit (stdenvLinuxBoot4Pkgs)
         gzip bzip2 xz bash coreutils diffutils findutils gawk
         gnumake gnused gnutar gnugrep gnupatch patchelf
-        attr acl paxctl;
+        attr acl pcre paxctl;
     };
   };
 

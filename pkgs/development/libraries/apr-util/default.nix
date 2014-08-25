@@ -23,10 +23,12 @@ stdenv.mkDerivation rec {
   configureFlags = ''
     --with-apr=${apr} --with-expat=${expat}
     --with-crypto
-    ${stdenv.lib.optionalString sslSupport "--with-openssl=${openssl}"}
+    ${stdenv.lib.optionalString sslSupport "--with-openssl"}
     ${stdenv.lib.optionalString bdbSupport "--with-berkeley-db=${db}"}
     ${stdenv.lib.optionalString ldapSupport "--with-ldap"}
   '';
+
+  buildInputs = stdenv.lib.optional sslSupport openssl;
 
   propagatedBuildInputs = [ makeWrapper apr expat ]
     ++ optional sslSupport openssl

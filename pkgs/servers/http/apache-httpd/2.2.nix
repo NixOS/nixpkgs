@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "0iw19y6knijinqwvv4q16fgq5xq8nwxdg14wrrbc0mfasvg76n90";
   };
 
+  outputs = [ "dev" "out" "doc" ];
+
   buildInputs = [perl apr aprutil pcre] ++
     stdenv.lib.optional sslSupport openssl;
 
@@ -42,11 +44,19 @@ stdenv.mkDerivation rec {
     --with-mpm=${mpm}
   '';
 
+  preConfigure =
+    ''
+      makeFlagsArray+=("installbuilddir=$dev/share/build")
+    '';
+
   enableParallelBuilding = true;
 
+  stripDebugList = "lib modules bin";
+
   postInstall = ''
-    echo "removing manual"
-    rm -rf $out/manual
+    mkdir -p $doc/share/doc/httpd
+    mv $out/manual $doc/share/doc/httpd
+    mkdir -p $out/share # FIXME, hack
   '';
 
   passthru = {

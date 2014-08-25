@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "1hpjcc42svrs06q3isjm3m5aphgkpfdylmvpnif71zh46ys0cab5";
   };
 
+  outputs = [ "out" "man" "libudev" ];
+
   patches =
     [ # These are all changes between upstream and
       # https://github.com/edolstra/systemd/tree/nixos-v212.
@@ -57,11 +59,12 @@ stdenv.mkDerivation rec {
       for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.m4.in src/journal/cat.c src/core/shutdown.c src/nspawn/nspawn.c; do
         test -e $i
         substituteInPlace $i \
-          --replace /usr/bin/getent ${stdenv.glibc}/bin/getent \
-          --replace /bin/mount ${utillinux}/bin/mount \
-          --replace /bin/umount ${utillinux}/bin/umount \
-          --replace /sbin/swapon ${utillinux}/sbin/swapon \
-          --replace /sbin/swapoff ${utillinux}/sbin/swapoff \
+          --replace /usr/bin/getent ${stdenv.glibc.bin}/bin/getent \
+          --replace /bin/mount ${utillinux.bin}/bin/mount \
+          --replace /bin/umount ${utillinux.bin}/bin/umount \
+          --replace /sbin/swapon ${utillinux.bin}/sbin/swapon \
+          --replace /sbin/swapoff ${utillinux.bin}/sbin/swapoff \
+          --replace /sbin/fsck ${utillinux.bin}/sbin/fsck \
           --replace /bin/echo ${coreutils}/bin/echo \
           --replace /bin/cat ${coreutils}/bin/cat \
           --replace /sbin/sulogin ${sysvtools}/sbin/sulogin \
@@ -70,6 +73,8 @@ stdenv.mkDerivation rec {
 
       substituteInPlace src/journal/catalog.c \
         --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
+
+      export NIX_CFLAGS_LINK+=" -Wl,-rpath,$libudev/lib"
     '';
 
   # This is needed because systemd uses the gold linker, which doesn't
@@ -126,6 +131,16 @@ stdenv.mkDerivation rec {
       done
 
       rm -rf $out/etc/rpm
+
+      # Move libudev to a separate output.
+      mkdir -p $libudev/lib/pkgconfig $libudev/include
+      mv $out/lib/libudev* $libudev/lib/
+      mv $out/lib/pkgconfig/libudev*.pc $libudev/lib/pkgconfig/
+      mv $out/include/libudev.h $libudev/include/
+
+      for i in $libudev/lib/*.la $libudev/lib/pkgconfig/*.pc; do
+        substituteInPlace $i --replace $out $libudev
+      done
     ''; # */
 
   enableParallelBuilding = true;

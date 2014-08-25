@@ -13,6 +13,9 @@ stdenv.mkDerivation {
     md5 = "de3006e5cf1ee78a9c6145ce62c4e982";
   };
 
+  # FIXME: Split off the cups client library.
+  outputs = [ "dev" "out" "doc" "man" ];
+
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb ]
     ++ stdenv.lib.optionals stdenv.isLinux [ pam dbus.libs acl ] ;
 
@@ -37,6 +40,12 @@ stdenv.mkDerivation {
       # Work around a Makefile bug.
       "CUPS_PRIMARY_SYSTEM_GROUP=root"
     ];
+
+  postInstall =
+    ''
+      mkdir $dev/bin
+      mv $out/bin/cups-config $dev/bin/
+    '';
 
   meta = {
     homepage = "http://www.cups.org/";

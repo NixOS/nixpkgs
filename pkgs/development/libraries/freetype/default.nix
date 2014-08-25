@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
     sha256 = "0pppcn73b5pwd7zdi9yfx16f5i93y18q7q4jmlkwmwrfsllqp160";
   };
 
+  outputs = [ "dev" "out" ];
+
+  configureFlags = "--disable-static --bindir=$(dev)/bin";
+
   patches = [ ./enable-validation.patch ] # from Gentoo
     ++ [
       (fetch_bohoomil "freetype-2.5.3-pkgconfig.patch" "1dpfdh8kmka3gzv14glz7l79i545zizah6wma937574v5z2iy3nn")
@@ -50,6 +54,10 @@ stdenv.mkDerivation rec {
   # compat hacks
   postInstall = glib.flattenInclude + ''
     ln -s . "$out"/include/freetype
+
+    mkdir $dev/lib
+    mv $out/lib/pkgconfig $dev/lib/
+    ln -s freetype2/freetype $dev/include/freetype
   '';
 
   crossAttrs = {

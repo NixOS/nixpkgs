@@ -5,7 +5,7 @@ let
 in
 stdenv.mkDerivation {
   inherit name;
-  
+
   src = fetchurl {
     url = "http://downloads.xiph.org/releases/vorbis/${name}.tar.xz";
     sha256 = "0wpk87jnhngcl3nc5i39flkycx1sjzilx8jjx4zc4p8r55ylj19g";
@@ -14,6 +14,8 @@ stdenv.mkDerivation {
   buildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ libogg ];
+
+  outputs = [ "dev" "out" "doc" ];
 
   doCheck = true;
 

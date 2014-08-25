@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0gsqmsp0q0n3q0ba32gkjvgcsdy6nwidqa7sbxkbw817zzhkl15n";
   };
 
+  outputs = [ "dev" "out" "bin" "doc" "man" ];
+
   # The compiler on Darwin crashes with an internal error while building the
   # C++ interface. Disabling optimizations on that platform remedies the
   # problem. In case we ever update the Darwin GCC version, the exception for
@@ -29,6 +31,12 @@ stdenv.mkDerivation rec {
   crossAttrs = optionalAttrs (stdenv.cross.libc == "msvcrt") {
     buildInputs = [ windows.mingw_w64_pthreads.crossDrv ];
   };
+
+  postInstall =
+    ''
+      mkdir $dev/bin
+      mv $bin/bin/pcre-config $dev/bin/
+    '';
 
   meta = {
     homepage = "http://www.pcre.org/";

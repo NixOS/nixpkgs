@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   setupHook = [ ./setup-hook.sh ];
 
+  doCheck = true;
+
   meta = {
     homepage = http://nixos.org/patchelf.html;
     license = "GPL";

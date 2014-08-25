@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "0inqwsylqkrzcjivdirkjx5nhdgxbdc62fq284c3xppinfg9a195";
   };
 
+  outputs = [ "dev" "out" "bin" "doc" ];
+
   nativeBuildInputs = [ pkgconfig ] ++ libintlOrEmpty ++ libiconvOrEmpty;
 
   propagatedBuildInputs =
@@ -53,12 +55,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # The default `--disable-gtk-doc' is ignored.
-  postInstall = "rm -rf $out/share/gtk-doc"
-    + stdenv.lib.optionalString stdenv.isDarwin (''
-      #newline
-    '' + glib.flattenInclude
-    );
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin glib.flattenInclude;
 
   meta = {
     description = "A 2D graphics library with support for multiple output devices";

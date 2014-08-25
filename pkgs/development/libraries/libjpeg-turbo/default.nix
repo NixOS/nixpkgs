@@ -8,7 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "1fbgcvlnn3d5gvf0v9jnlcabpv2z3nwxclzyabahxi6x2xs90cn1";
   };
 
+  outputs = [ "dev" "out" "doc" "bin" ];
+
   buildInputs = [ nasm ];
+
+  enableParallelBuilding = true;
 
   doCheck = true;
   checkTarget = "test";

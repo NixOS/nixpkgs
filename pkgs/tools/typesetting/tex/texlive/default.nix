@@ -112,7 +112,7 @@ rec {
     "patchShebangsInterimLibexec" "patchShebangsInterimTexmfDist"
     "patchShebangsInterimShareTexmfDist"];
 
-  buildInputs = [ zlib bzip2 ncurses libpng flex bison libX11 libICE xproto
+  buildInputs = [ zlib bzip2 ncurses libpng flex bison libX11.out libICE xproto
     freetype t1lib gd libXaw icu ghostscript ed libXt libXpm libXmu libXext
     xextproto perl libSM ruby expat curl libjpeg python fontconfig xz pkgconfig
     poppler libpaper graphite2 lesstif zziplib harfbuzz texinfo potrace ]
