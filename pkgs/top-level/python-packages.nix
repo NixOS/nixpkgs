@@ -7709,19 +7709,19 @@ rec {
 
 
   sqlalchemy8 = pkgs.lib.overrideDerivation sqlalchemy9 (args: rec {
-    name = "SQLAlchemy-0.8.5";
+    name = "SQLAlchemy-0.8.7";
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
-      md5 = "ecf0738eaf1229bae27ad2be0f9978a8";
+      md5 = "4f3377306309e46739696721b1785335";
     };
   });
 
   sqlalchemy9 = buildPythonPackage rec {
-    name = "SQLAlchemy-0.9.3";
+    name = "SQLAlchemy-0.9.4";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
-      md5 = "a27989b9d4b3f14ea0b1600aa45559c4";
+      md5 = "c008ea5e2565ec1418ee8461393a99b1";
     };
 
     buildInputs = [ nose mock ];
