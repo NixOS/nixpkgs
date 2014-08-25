@@ -20,11 +20,8 @@ stdenv.mkDerivation rec {
   # work around a problem related to gtk3 updates
   NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
-  postInstall = ''
-  '';
-
   meta = with stdenv.lib; {
-    description = "ALSA mixer for the system tray.";
+    description = "ALSA mixer for the system tray";
     license = licenses.gpl3;
     maintainers = with maintainers; [ campadrenalin ];
     platforms = platforms.linux;
