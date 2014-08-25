@@ -3308,15 +3308,19 @@ rec {
   });
 
   jsonschema = buildPythonPackage (rec {
-    version = "2.0.0";
+    version = "2.4.0";
     name = "jsonschema-${version}";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/j/jsonschema/jsonschema-${version}.tar.gz";
-      md5 = "1793d97a668760ef540fadd342aa08e5";
+      md5 = "661f85c3d23094afbb9ac3c0673840bf";
     };
 
     buildInputs = [ nose mock ];
+    
+    patchPhase = ''
+      substituteInPlace jsonschema/tests/test_jsonschema_test_suite.py --replace "python" "${python}/bin/${python.executable}"
+    '';
 
     checkPhase = ''
       nosetests
