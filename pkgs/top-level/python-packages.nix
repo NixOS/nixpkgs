@@ -278,15 +278,15 @@ rec {
 
 
   alembic = buildPythonPackage rec {
-    name = "alembic-0.6.0";
+    name = "alembic-0.6.6";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/a/alembic/${name}.tar.gz";
-      md5 = "084fe81b48ebae43b0f6031af68a03d6";
+      md5 = "71e4a8f6849e1527abfc4ea33d51f37c";
     };
 
-    buildInputs = [ nose ];
-    propagatedBuildInputs = [ Mako sqlalchemy ];
+    buildInputs = [ nose mock ];
+    propagatedBuildInputs = [ Mako sqlalchemy9 ];
 
     meta = {
       homepage = http://bitbucket.org/zzzeek/alembic;
@@ -3481,11 +3481,11 @@ rec {
   });
 
   fs = buildPythonPackage rec {
-    name = "fs-0.4.0";
+    name = "fs-0.5.0";
 
     src = fetchurl {
-      url    = "https://pyfilesystem.googlecode.com/files/fs-0.4.0.tar.gz";
-      sha256 = "1fk7ilwd01qgj4anw9k1vjp0amxswzzxbp6bk4nncp7210cxp3vz";
+      url    = "https://pypi.python.org/packages/source/f/fs/${name}.tar.gz";
+      sha256 = "144f4yn2nvnxh2vrnmiabpwx3s637np0d1j1w95zym790d66shir";
     };
 
     meta = with stdenv.lib; {
@@ -4702,11 +4702,11 @@ rec {
 
 
   munkres = buildPythonPackage rec {
-    name = "munkres-1.0.5.4";
+    name = "munkres-1.0.6";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/m/munkres/${name}.tar.gz";
-      md5 = "cb9d114fb523428bab4742e88bc83696";
+      md5 = "d7ba3b8c5001578ae229a2d5a655872f";
     };
 
     # error: invalid command 'test'
@@ -4728,6 +4728,11 @@ rec {
       url = "http://pypi.python.org/packages/source/m/musicbrainzngs/${name}.tar.gz";
       md5 = "9e17a181af72d04a291c9a960bc73d44";
     };
+    
+    preCheck = ''
+      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LC_ALL="en_US.UTF-8"
+    '';
 
     meta = {
       homepage = http://alastair/python-musicbrainz-ngs;
