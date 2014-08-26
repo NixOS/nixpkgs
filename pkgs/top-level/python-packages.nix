@@ -139,8 +139,8 @@ rec {
 
   pygtk = import ../development/python-modules/pygtk {
     inherit (pkgs) fetchurl stdenv pkgconfig gtk;
-    inherit python buildPythonPackage pygobject pycairo;
-  };
+    inherit python buildPythonPackage pygobject pycairo isPy3k;
+  }; 
 
   # XXX: how can we get an override here?
   #pyGtkGlade = pygtk.override {
@@ -149,7 +149,7 @@ rec {
   pyGtkGlade = import ../development/python-modules/pygtk {
     inherit (pkgs) fetchurl stdenv pkgconfig gtk;
     inherit (pkgs.gnome) libglade;
-    inherit python buildPythonPackage pygobject pycairo;
+    inherit python buildPythonPackage pygobject pycairo isPy3k;
   };
 
   pyqt4 = import ../development/python-modules/pyqt/4.x.nix {
@@ -5225,6 +5225,7 @@ rec {
 
   oauth2 = buildPythonPackage (rec {
     name = "oauth2-1.5.211";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/o/oauth2/oauth2-1.5.211.tar.gz";
@@ -9607,6 +9608,7 @@ rec {
   libarchive = buildPythonPackage rec {
     version = "3.1.2-1";
     name = "libarchive-${version}";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://python-libarchive.googlecode.com/files/python-libarchive-${version}.tar.gz";
