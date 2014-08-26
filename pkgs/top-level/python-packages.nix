@@ -3944,11 +3944,11 @@ rec {
   };
 
   httplib2 = buildPythonPackage rec {
-    name = "httplib2-0.9";
+    name = "httplib2-0.8";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/h/httplib2/${name}.tar.gz";
-      sha256 = "1asi5wpncnc6ki3bz33mhb9xh2lrkb24y4qng8bmqnczdmm8rsir";
+      sha256 = "174w6rz4na1sdlfz37h95l0pkfm9igf9nqmhbd8aqh3sm7d9zrff";
     };
 
     meta = {
@@ -4038,12 +4038,12 @@ rec {
 
 
   ipaddr = buildPythonPackage rec {
-    name = "ipaddr-2.1.11";
+    name = "ipaddr-2.1.10";
     disabled = isPy3k;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/i/ipaddr/${name}.tar.gz";
-      sha256 = "1dwq3ngsapjc93fw61rp17fvzggmab5x1drjzvd4y4q0i255nm8v";
+      sha256 = "18ycwkfk3ypb1yd09wg20r7j7zq2a73d7j6j10qpgra7a7abzhyj";
     };
 
     meta = {
