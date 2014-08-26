@@ -615,6 +615,7 @@ rec {
 
   beautifulsoup = buildPythonPackage (rec {
     name = "beautifulsoup-3.2.1";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://www.crummy.com/software/BeautifulSoup/download/3.x/BeautifulSoup-3.2.1.tar.gz";
@@ -3071,14 +3072,15 @@ rec {
 
 
   django_evolution = buildPythonPackage rec {
-    name = "django_evolution-0.6.9";
+    name = "django_evolution-0.7.3";
+    disabled = isPy3k;
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/d/django_evolution/${name}.tar.gz";
-      md5 = "c0d7d10bc41898c88b14d434c48766ff";
+      url = "http://downloads.reviewboard.org/releases/django-evolution/0.7/${name}.tar.gz";
+      md5 = "c51895b6501dd58b0e5dc8f5a5fb6f68";
     };
 
-    propagatedBuildInputs = [ django_1_3 ];
+    propagatedBuildInputs = [ django_1_5 ];
 
     meta = {
       description = "A database schema evolution tool for the Django web framework";
