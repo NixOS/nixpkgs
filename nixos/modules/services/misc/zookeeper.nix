@@ -78,7 +78,7 @@ in {
       log4j.rootLogger=INFO, CONSOLE
       log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
       log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout
-      log4j.appender.CONSOLE.layout.ConversionPattern=%d{ISO8601} [myid:%X{myid}] - %-5p [%t:%C{1}@%L] - %m%n
+      log4j.appender.CONSOLE.layout.ConversionPattern=[myid:%X{myid}] - %-5p [%t:%C{1}@%L] - %m%n
       '';
       type = types.str;
     };
