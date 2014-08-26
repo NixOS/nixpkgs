@@ -35,6 +35,6 @@ or <literal>ext4</literal>, then it’s best to specify
 <option>fsType</option> to ensure that the kernel module is
 available.</para>
 
-<xi:include href="LUKS-file-systems.xml" />
+<xi:include href="luks-file-systems.xml" />
 
 </chapter>
