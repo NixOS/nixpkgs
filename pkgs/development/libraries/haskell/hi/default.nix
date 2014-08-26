@@ -10,7 +10,6 @@ cabal.mkDerivation (self: {
   sha256 = "0h94wjxdr6g6n3rvkn1xsjqr49p9fgidmraifvz5mzryn6rmd18r";
   isLibrary = true;
   isExecutable = true;
-  doCheck = false;
   buildDepends = [
     filepath parsec split template temporaryRc text time
   ];
@@ -18,6 +17,7 @@ cabal.mkDerivation (self: {
     doctest filepath hspec HUnit parsec split template temporaryRc text
     time
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/fujimura/hi";
     description = "Generate scaffold for cabal project";
