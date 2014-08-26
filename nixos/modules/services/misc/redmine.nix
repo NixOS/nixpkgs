@@ -71,6 +71,9 @@ let
         encoding: utf8
       EOF
 
+      cat > config/configuration.yml <<EOF
+      ${cfg.config}
+      EOF
       bundle config build.nokogiri --use-system-libraries --with-iconv-dir=${libiconv} --with-xslt-dir=${libxslt} --with-xml2-dir=${libxml2} --with-pkg-config --with-pg-config=${postgresql}/bin/pg_config
 
       bundle install --verbose --local --deployment
@@ -96,6 +99,12 @@ in {
         type = types.str;
         default = "/var/redmine";
         description = "The state directory, logs and plugins are stored here";
+      };
+
+      config = mkOption {
+        type = types.str;
+        default = "";
+        description = "Configuration for redmine";
       };
 
       themes = mkOption {
