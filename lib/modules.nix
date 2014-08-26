@@ -9,11 +9,55 @@ rec {
 
   /* Evaluate a set of modules.  The result is a set of two
      attributes: ‘options’: the nested set of all option declarations,
-     and ‘config’: the nested set of all option values. */
-  evalModules = { modules, prefix ? [], args ? {}, check ? true }:
+     and ‘config’: the nested set of all option values.
+     !!! Please think twice before adding to this argument list! The more
+     that is specified here instead of in the modules themselves the harder
+     it is to transparently move a set of modules to be a submodule of another
+     config (as the proper arguments need to be replicated at each call to
+     evalModules) and the less declarative the module set is. */
+  evalModules = { modules
+                , prefix ? []
+                , # !!! This can be specified modularly now, can we remove it?
+                  args ? {}
+                , # !!! This can be specified modularly now, can we remove it?
+                  check ? true
+                }:
     let
-      args' = args // { lib = import ./.; } // result;
-      closed = closeModules modules args';
+      internalModule = rec {
+        _file = ./modules.nix;
+
+        key = _file;
+
+        options = {
+          __internal.args = mkOption {
+            description = "Arguments passed to each module.";
+
+            # !!! Should this be types.uniq types.unspecified?
+            type = types.attrsOf types.unspecified;
+
+            internal = true;
+          };
+
+          __internal.check = mkOption {
+            description = "Whether to check whether all option definitions have matching declarations.";
+
+            type = types.uniq types.bool;
+
+            internal = true;
+
+            default = check;
+          };
+        };
+
+        config = {
+          __internal.args = args;
+        };
+      };
+      closed = closeModules (modules ++ [ internalModule ]) {
+        inherit options;
+        config = config.value;
+        lib = import ./.;
+      };
       # Note: the list of modules is reversed to maintain backward
       # compatibility with the old module system.  Not sure if this is
       # the most sensible policy.
@@ -23,19 +67,25 @@ rec {
       # definitions have matching declarations.
       config = yieldConfig prefix options;
       yieldConfig = prefix: set:
-        let res = removeAttrs (mapAttrs (n: v:
-          if isOption v then v.value
-          else yieldConfig (prefix ++ [n]) v) set) ["_definedNames"];
-        in
-        if check && set ? _definedNames then
-          fold (m: res:
+        let
+          maybeRecurse = removeAttrs (mapAttrs (n: v:
+            if isOption v then { inherit (v) value; checks = true; }
+            else yieldConfig (prefix ++ [n]) v) set) ["_definedNames"];
+
+          thisChecks = ! (set ? _definedNames) || (fold (m: res:
             fold (name: res:
-              if hasAttr name set then res else throw "The option `${showOption (prefix ++ [name])}' defined in `${m.file}' does not exist.")
-              res m.names)
-            res set._definedNames
-        else
-          res;
-      result = { inherit options config; };
+              (set ? ${name} || throw "The option `${showOption (prefix ++ [name])}' defined in `${m.file}' does not exist.") && res
+            ) res m.names)
+          true set._definedNames);
+        in {
+          value = mapAttrs (n: v: v.value) maybeRecurse;
+
+          checks = thisChecks && fold (n: res: maybeRecurse.${n}.checks && res) true (builtins.attrNames maybeRecurse);
+        };
+      result = {
+        inherit options;
+        config = if ! config.value.__internal.check || config.checks then config.value else abort;
+      };
     in result;
 
   /* Close a set of modules under the ‘imports’ relation. */
@@ -74,7 +124,16 @@ rec {
         config = removeAttrs m ["key" "_file" "require" "imports"];
       };
 
-  applyIfFunction = f: arg: if isFunction f then f arg else f;
+  applyIfFunction = f: arg@{ config, options, lib }: if isFunction f then
+    let
+      requiredArgs = builtins.attrNames (builtins.functionArgs f);
+      extraArgs = builtins.listToAttrs (map (name: {
+        inherit name;
+        value = config.__internal.args.${name};
+      }) requiredArgs);
+    in f (extraArgs // arg)
+  else
+    f;
 
   /* Merge a list of modules.  This will recurse over the option
      declarations in all modules, combining them into a single set.
@@ -106,12 +165,9 @@ rec {
               else []
             ) configs);
           nrOptions = count (m: isOption m.options) decls;
-          # Process mkMerge and mkIf properties.
-          defns' = concatMap (m:
-            if hasAttr name m.config
-              then map (m': { inherit (m) file; value = m'; }) (dischargeProperties (getAttr name m.config))
-              else []
-            ) configs;
+          # Extract the definitions for this loc
+          defns' = map (m: { inherit (m) file; value = m.config.${name}; })
+            (filter (m: m.config ? ${name}) configs);
         in
           if nrOptions == length decls then
             let opt = fixupOptionType loc (mergeOptionDecls loc decls);
@@ -153,27 +209,17 @@ rec {
      config value. */
   evalOptionValue = loc: opt: defs:
     let
-      # Process mkOverride properties, adding in the default
-      # value specified in the option declaration (if any).
-      defsFinal' = filterOverrides
-        ((if opt ? default then [{ file = head opt.declarations; value = mkOptionDefault opt.default; }] else []) ++ defs);
-      # Sort mkOrder properties.
-      defsFinal =
-        # Avoid sorting if we don't have to.
-        if any (def: def.value._type or "" == "order") defsFinal'
-        then sortProperties defsFinal'
-        else defsFinal';
+      # Add in the default value for this option, if any.
+      defs' = (optional (opt ? default)
+        { file = head opt.declarations; value = mkOptionDefault opt.default; }) ++ defs;
+      # Handle properties, check types, and merge everything together
+      inherit (mergeDefinitions loc opt.type defs') defsFinal mergedValue;
       files = map (def: def.file) defsFinal;
-      # Type-check the remaining definitions, and merge them if
-      # possible.
       merged =
         if defsFinal == [] then
           throw "The option `${showOption loc}' is used but not defined."
         else
-          fold (def: res:
-            if opt.type.check def.value then res
-            else throw "The option value `${showOption loc}' in `${def.file}' is not a ${opt.type.name}.")
-            (opt.type.merge loc defsFinal) defsFinal;
+          mergedValue;
       # Finally, apply the ‘apply’ function to the merged
       # value.  This allows options to yield a value computed
       # from the definitions.
@@ -184,6 +230,33 @@ rec {
         isDefined = defsFinal != [];
         inherit files;
       };
+
+    # Merge definitions of a value of a given type
+    mergeDefinitions = loc: type: defs: rec {
+      defsFinal =
+        let
+          # Process mkMerge and mkIf properties
+          discharged = concatMap (m:
+            map (value: { inherit (m) file; inherit value; }) (dischargeProperties m.value)
+          ) defs;
+
+          # Process mkOverride properties
+          overridden = filterOverrides discharged;
+
+          # Sort mkOrder properties
+          sorted =
+            # Avoid sorting if we don't have to.
+            if any (def: def.value._type or "" == "order") overridden
+            then sortProperties overridden
+            else overridden;
+        in sorted;
+
+        # Type-check the remaining definitions, and merge them
+        mergedValue = fold (def: res:
+          if type.check def.value then res
+          else throw "The option value `${showOption loc}' in `${def.file}' is not a ${type.name}.")
+          (type.merge loc defsFinal) defsFinal;
+    };
 
   /* Given a config set, expand mkMerge properties, and push down the
      other properties into the children.  The result is a list of

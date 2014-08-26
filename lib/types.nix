@@ -7,7 +7,9 @@ with import ./options.nix;
 with import ./trivial.nix;
 with import ./strings.nix;
 
-rec {
+let
+  inherit (import ./modules.nix) mergeDefinitions;
+in rec {
 
   isType = type: x: (x._type or "") == type;
 
@@ -104,22 +106,29 @@ rec {
 
     listOf = elemType: mkOptionType {
       name = "list of ${elemType.name}s";
-      check = value: isList value && all elemType.check value;
+      check = isList;
       merge = loc: defs:
-        concatLists (imap (n: def: imap (m: def':
-          elemType.merge (loc ++ ["[${toString n}-${toString m}]"])
-            [{ inherit (def) file; value = def'; }]) def.value) defs);
+        map (x: x.value) (filter (x: x ? value) (concatLists (imap (n: def: imap (m: def':
+          let
+            inherit (mergeDefinitions (loc ++ ["[definition ${toString n}-entry ${toString m}]"])
+              elemType [{ inherit (def) file; value = def'; }]
+            ) defsFinal mergedValue;
+          in if defsFinal == [] then {} else { value = mergedValue; }) def.value) defs)));
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
     };
 
     attrsOf = elemType: mkOptionType {
       name = "attribute set of ${elemType.name}s";
-      check = x: isAttrs x && all elemType.check (attrValues x);
+      check = isAttrs;
       merge = loc: defs:
-        zipAttrsWith (name: elemType.merge (loc ++ [name]))
+        mapAttrs (n: v: v.value) (filterAttrs (n: v: v ? value) (zipAttrsWith (name: defs:
+          let
+            inherit (mergeDefinitions (loc ++ [name]) elemType defs)
+              defsFinal mergedValue;
+          in if defsFinal == [] then {} else { value = mergedValue; })
           # Push down position info.
           (map (def: listToAttrs (mapAttrsToList (n: def':
-            { name = n; value = { inherit (def) file; value = def'; }; }) def.value)) defs);
+            { name = n; value = { inherit (def) file; value = def'; }; }) def.value)) defs)));
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
     };
 
@@ -141,10 +150,7 @@ rec {
         attrOnly = attrsOf elemType;
       in mkOptionType {
         name = "list or attribute set of ${elemType.name}s";
-        check = x:
-          if isList x       then listOnly.check x
-          else if isAttrs x then attrOnly.check x
-          else false;
+        check = x: isList x || isAttrs x;
         merge = loc: defs: attrOnly.merge loc (imap convertIfList defs);
         getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name?>"]);
       };
@@ -171,7 +177,14 @@ rec {
       name = "function that evaluates to a(n) ${elemType.name}";
       check = isFunction;
       merge = loc: defs:
-        fnArgs: elemType.merge loc (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs);
+        fnArgs: let
+          inherit (mergeDefinitions loc elemType
+            (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs)
+          ) defsFinal mergedValue;
+        in if defsFinal == [] then
+          throw "The option `${showOption loc}' is defined as a function that doesn't return any value (using mkIf or mkMerge), in ${showFiles (getFiles defs)}"
+        else
+          mergedValue;
       getSubOptions = elemType.getSubOptions;
     };
 
@@ -187,7 +200,12 @@ rec {
           let
             coerce = def: if isFunction def then def else { config = def; };
             modules = opts' ++ map (def: { _file = def.file; imports = [(coerce def.value)]; }) defs;
-          in (evalModules { inherit modules; args.name = last loc; prefix = loc; }).config;
+          in (evalModules {
+            inherit modules;
+            # !!! See comment about args in lib/modules.nix
+            args.name = last loc;
+            prefix = loc;
+          }).config;
         getSubOptions = prefix: (evalModules
           { modules = opts'; inherit prefix;
             # FIXME: hack to get shit to evaluate.
