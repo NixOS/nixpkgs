@@ -6012,13 +6012,14 @@ rec {
       sha256 = "0hqsap82zklhi5fxhc69kxrwzb0g9566f7sdpz7f9gyxkmyam839";
     };
 
-    buildInputs = [ pkgs.curl ];
+    propagatedBuildInputs = [ pkgs.curl pkgs.openssl ];
 
     # error: invalid command 'test'
     doCheck = false;
 
     preConfigure = ''
       substituteInPlace setup.py --replace '--static-libs' '--libs'
+      export PYCURL_SSL_LIBRARY=openssl
     '';
 
     meta = {
@@ -7521,8 +7522,6 @@ rec {
 
     doCheck = false;
 
-    meta = with stdenv.lib; {
-    };
   };
 
   sympy = buildPythonPackage rec {
