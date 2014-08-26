@@ -4021,11 +4021,13 @@ rec {
   };
 
 
-  ipaddr = buildPythonPackage {
-    name = "ipaddr-2.1.10";
+  ipaddr = buildPythonPackage rec {
+    name = "ipaddr-2.1.11";
+    disabled = isPy3k;
+
     src = fetchurl {
-      url = "http://ipaddr-py.googlecode.com/files/ipaddr-2.1.10.tar.gz";
-      sha256 = "18ycwkfk3ypb1yd09wg20r7j7zq2a73d7j6j10qpgra7a7abzhyj";
+      url = "http://pypi.python.org/packages/source/i/ipaddr/${name}.tar.gz";
+      sha256 = "1dwq3ngsapjc93fw61rp17fvzggmab5x1drjzvd4y4q0i255nm8v";
     };
 
     meta = {
