@@ -56,8 +56,9 @@ in
   };
 
   libxcb = attrs : attrs // {
-    nativeBuildInputs = [ args.python ];
+    nativeBuildInputs = [ stdenv.hookLib.multiout args.python ];
     configureFlags = "--enable-xkb";
+    outputs = [ "dev" "out" "doc" "man" ];
   };
 
   xcbproto = attrs : attrs // {
@@ -69,12 +70,24 @@ in
   };
 
   libX11 = attrs: attrs // {
+    outputs = [ "dev" "out" "man" ];
+    buildInputs = [ stdenv.hookLib.multiout ] ++ attrs.buildInputs;
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
     postInstall =
       ''
         # Remove useless DocBook XML files.
         rm -rf $out/share/doc
       '';
+  };
+
+  libXau = attrs: attrs // {
+    outputs = [ "dev" "out" "man" ];
+    buildInputs = [ stdenv.hookLib.multiout ] ++ attrs.buildInputs;
+  };
+
+  libXdmcp = attrs: attrs // {
+    outputs = [ "dev" "out" "doc" ];
+    buildInputs = [ stdenv.hookLib.multiout ] ++ attrs.buildInputs;
   };
 
   libXfont = attrs: attrs // {
@@ -87,12 +100,9 @@ in
 
 
   libXxf86vm = attrs: attrs // {
+    outputs = [ "dev" "out" "man" ];
+    buildInputs = [ stdenv.hookLib.multiout ] ++ attrs.buildInputs;
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
-  };
-
-  libXrandr = attrs: attrs // {
-    preConfigure = setMalloc0ReturnsNullCrossCompiling;
-    propagatedBuildInputs = [xorg.libXrender];
   };
 
   # Propagate some build inputs because of header file dependencies.
@@ -114,6 +124,8 @@ in
   };
 
   libXcomposite = attrs: attrs // {
+    outputs = [ "dev" "out" "man" ];
+    buildInputs = [ stdenv.hookLib.multiout ] ++ attrs.buildInputs;
     propagatedBuildInputs = [ xorg.libXfixes ];
   };
 
@@ -121,7 +133,19 @@ in
     propagatedBuildInputs = [ xorg.libXmu ];
   };
 
+  libXcursor = attrs: attrs // {
+    outputs = [ "dev" "out" "man" ];
+    buildInputs = [ stdenv.hookLib.multiout ] ++ attrs.buildInputs;
+  };
+
+  libXdamage = attrs: attrs // {
+    outputs = [ "dev" "out" ];
+    buildInputs = [ stdenv.hookLib.multiout ] ++ attrs.buildInputs;
+  };
+
   libXft = attrs: attrs // {
+    outputs = [ "dev" "out" "man" ];
+    buildInputs = [ stdenv.hookLib.multiout ] ++ attrs.buildInputs;
     propagatedBuildInputs = [ xorg.libXrender args.freetype args.fontconfig ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
     # the include files need ft2build.h, and Requires.private isn't enough for us
@@ -131,15 +155,42 @@ in
   };
 
   libXext = attrs: attrs // {
+    outputs = [ "dev" "out" "man" "doc" ];
+    buildInputs = [ stdenv.hookLib.multiout ] ++ attrs.buildInputs;
     propagatedBuildInputs = [ xorg.xproto xorg.libXau ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
+  };
+
+  libXfixes = attrs: attrs // {
+    outputs = [ "dev" "out" "man" ];
+    buildInputs = [ stdenv.hookLib.multiout ] ++ attrs.buildInputs;
+  };
+
+  libXi = attrs: attrs // {
+    outputs = [ "dev" "out" "man" "doc" ];
+    buildInputs = [ stdenv.hookLib.multiout ] ++ attrs.buildInputs;
+  };
+
+  libXinerama = attrs: attrs // {
+    outputs = [ "dev" "out" "man" ];
+    buildInputs = [ stdenv.hookLib.multiout ] ++ attrs.buildInputs;
+  };
+
+  libXrandr = attrs: attrs // {
+    outputs = [ "dev" "out" "man" ];
+    buildInputs = [ stdenv.hookLib.multiout ] ++ attrs.buildInputs;
+    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    propagatedBuildInputs = [xorg.libXrender];
   };
 
   libSM = attrs: attrs
     // { propagatedBuildInputs = [ xorg.libICE ]; };
 
-  libXrender = attrs: attrs
-    // { preConfigure = setMalloc0ReturnsNullCrossCompiling; };
+  libXrender = attrs: attrs // {
+    outputs = [ "dev" "out" "doc" ];
+    buildInputs = [ stdenv.hookLib.multiout ] ++ attrs.buildInputs;
+    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+  };
 
   libXvMC = attrs: attrs
     // { buildInputs = attrs.buildInputs ++ [xorg.renderproto]; };

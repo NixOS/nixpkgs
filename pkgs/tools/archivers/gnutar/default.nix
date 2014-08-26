@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, acl }:
 
 stdenv.mkDerivation rec {
   name = "gnutar-${version}";
@@ -8,6 +8,9 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/tar/tar-${version}.tar.bz2";
     sha256 = "1iip0fk0wqhxb0jcwphz43r4fxkx1y7mznnhmlvr618jhp7b63wv";
   };
+
+  outputs = [ "out" "info" ];
+  buildInputs = [ stdenv.hookLib.multiout acl ];
 
   # May have some issues with root compilation because the bootstrap tool
   # cannot be used as a login shell for now.

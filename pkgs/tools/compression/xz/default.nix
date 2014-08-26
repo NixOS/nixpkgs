@@ -14,7 +14,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # In stdenv-linux, prevent a dependency on bootstrap-tools.
-  preHook = "unset CONFIG_SHELL";
+  # The preHook hack no longer worked, no idea why.
+  postFixup = ''
+    sed '1s:#!${stdenv.shell}:#!/usr/bin/env sh:' -i "$bin"/bin/*
+  '';
 
   meta = {
     homepage = http://tukaani.org/xz/;

@@ -55,7 +55,11 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # Add an `sh' -> `bash' symlink.
     ln -s bash "$out/bin/sh"
-  '';
+  ''
+    # most space is taken by locale data
+    + stdenv.lib.optionalString (!interactive) ''
+      rm -r "$out/share"
+    '';
 
   meta = {
     homepage = http://www.gnu.org/software/bash/;

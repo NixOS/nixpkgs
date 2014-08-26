@@ -34,8 +34,10 @@ stdenv.mkDerivation rec {
     ./pt-pax-flags-20121023.patch
   ];
 
+  outputs = [ "dev" "out" "info" ];
+
   buildInputs =
-    [ zlib ]
+    [ stdenv.hookLib.multiout zlib ]
     ++ optional gold bison;
 
   inherit noSysDirs;
@@ -65,6 +67,8 @@ stdenv.mkDerivation rec {
     ++ optional (stdenv.system == "i686-linux") "--enable-targets=x86_64-linux-gnu";
 
   enableParallelBuilding = true;
+
+  postFixup = "ln -s $out/bin $dev/bin"; # tools needed for development
 
   meta = {
     description = "GNU Binutils, tools for manipulating binaries (linker, assembler, etc.)";

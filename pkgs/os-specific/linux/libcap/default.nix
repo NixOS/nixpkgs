@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "dev" "out" ];
+  buildInputs = [ stdenv.hookLib.multiout ];
 
   nativeBuildInputs = [ perl ];
   propagatedBuildInputs = [ attr ];
@@ -20,14 +21,10 @@ stdenv.mkDerivation rec {
 
   makeFlags = "lib=lib prefix=$(out)";
 
-  passthru = {
-    postinst = n : ''
-      mkdir -p $out/share/doc/${n}
-      cp ../License $out/share/doc/${n}/License
-    '';
-  };
-
-  postInstall = passthru.postinst name;
+  postInstall = ''
+    mkdir -p "$dev/share/doc/${name}"
+    cp ../License "$dev/share/doc/${name}/License"
+  '';
 
   meta = {
     description = "Library for working with POSIX capabilities";

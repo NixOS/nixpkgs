@@ -11,11 +11,11 @@ stdenv.mkDerivation {
     sha256 = "0wpk87jnhngcl3nc5i39flkycx1sjzilx8jjx4zc4p8r55ylj19g";
   };
 
-  buildInputs = [ pkgconfig ];
+  outputs = [ "dev" "out" "doc" ];
+
+  buildInputs = [ stdenv.hookLib.multiout pkgconfig ];
 
   propagatedBuildInputs = [ libogg ];
-
-  outputs = [ "dev" "out" "doc" ];
 
   doCheck = true;
 

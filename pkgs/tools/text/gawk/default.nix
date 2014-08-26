@@ -1,5 +1,8 @@
-{ stdenv, fetchurl, libsigsegv, readline, readlineSupport ? false }:
+{ stdenv, fetchurl, libsigsegv, readline, interactive ? false }:
 
+let
+  inherit (stdenv.lib) optional;
+in
 stdenv.mkDerivation rec {
   name = "gawk-4.1.0";
 
@@ -8,15 +11,17 @@ stdenv.mkDerivation rec {
     sha256 = "0hin2hswbbd6kd6i4zzvgciwpl5fba8d2s524z8y5qagyz3x010q";
   };
 
-  doCheck = !stdenv.isCygwin; # XXX: `test-dup2' segfaults on Cygwin 6.1
+  # When we do build separate interactive version, it makes sense to always include docs.
+  #outputs = stdenv.lib.optionals (!interactive) [ "out" "doc" ]; #ToDo
 
   buildInputs = [ libsigsegv ]
-    ++ stdenv.lib.optional readlineSupport readline;
+    ++ optional (!interactive) stdenv.hookLib.multiout
+    ++ optional interactive readline;
 
   configureFlags = [ "--with-libsigsegv-prefix=${libsigsegv}" ]
-    ++ stdenv.lib.optional readlineSupport "--with-readline=${readline}"
-      # only darwin where reported, seems OK on non-chrooted Fedora (don't rebuild stdenv)
-    ++ stdenv.lib.optional (!readlineSupport && stdenv.isDarwin) "--without-readline";
+    ++ [(if interactive then "--with-readline=${readline}" else "--without-readline")];
+
+  doCheck = !stdenv.isCygwin; # XXX: `test-dup2' segfaults on Cygwin 6.1
 
   postInstall = "rm $out/bin/gawk-*";
 

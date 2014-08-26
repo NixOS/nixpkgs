@@ -14,4 +14,4 @@ glibPreFixupPhase() {
     addToSearchPath GSETTINGS_SCHEMAS_PATH "$out/share/gsettings-schemas/$name"
 }
 
-preFixupPhases="$preFixupPhases glibPreFixupPhase"
+preFixupPhases+=(glibPreFixupPhase)

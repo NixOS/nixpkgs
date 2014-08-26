@@ -18,16 +18,18 @@ in stdenv.mkDerivation rec {
     url = "mirror://sourceforge/libpng/libpng-${version}.tar.xz";
     inherit sha256;
   };
+  postPatch = whenPatched "gunzip < ${patch_src} | patch -Np1";
 
   outputs = [ "dev" "out" "man" ];
-
-  preConfigure = "export bin=$dev";
-
-  postPatch = whenPatched "gunzip < ${patch_src} | patch -Np1";
+  buildInputs = [ stdenv.hookLib.multiout ];
 
   propagatedBuildInputs = [ zlib ];
 
+  preConfigure = "export bin=$dev";
+
   doCheck = true;
+
+  postInstall = ''mv "$out/bin" "$dev/bin"'';
 
   passthru = { inherit zlib; };
 

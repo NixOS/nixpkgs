@@ -8,7 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "0sqvpfkzamxdr87anzakf9dhkfh15lfmm5bsqajk02h1mxh3zivr";
   };
 
-  buildInputs = [ gmp ];
+  outputs = [ "dev" "out" "doc" ];
+
+  buildInputs = [ stdenv.hookLib.multiout gmp ];
 
   configureFlags =
     /* Work around a FreeBSD bug that otherwise leads to segfaults in the test suite:

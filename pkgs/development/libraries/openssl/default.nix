@@ -49,10 +49,10 @@ stdenv.mkDerivation {
   patches = patchesCross false;
 
   outputs = [ "dev" "out" "man" "bin" ];
+  setOutputFlags = false;
 
-  setOutputFlags = false; # ToDo: strange?
-
-  buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
+  buildInputs = [ stdenv.hookLib.multiout ]
+    ++ stdenv.lib.optional withCryptodev cryptodevHeaders;
 
   nativeBuildInputs = [ perl ];
 

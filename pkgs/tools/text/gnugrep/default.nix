@@ -10,7 +10,9 @@ stdenv.mkDerivation {
     sha256 = "1qbjb1l7f9blckc5pqy8jlf6482hpx4awn2acmhyf5mv9wfq03p7";
   };
 
-  buildInputs = [ pcre ]
+  #outputs = [ "out" "doc" ]; ToDo
+
+  buildInputs = [ stdenv.hookLib.multiout pcre ]
     ++ stdenv.lib.optional (libiconv != null) libiconv;
 
   patches = [ ./test-localeconv.patch ];

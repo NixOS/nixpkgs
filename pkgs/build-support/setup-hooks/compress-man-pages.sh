@@ -3,6 +3,7 @@ fixupOutputHooks+=('if [ -z "$dontGzipMan" ]; then compressManPages "$prefix"; f
 compressManPages() {
     local dir="$1"
 
+    if [ ! -d "$dir/share/man" ]; then return; fi
     echo "gzipping man pages in $dir"
 
     GLOBIGNORE=.:..:*.gz:*.bz2

@@ -8,6 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "1761vymxbp4wb5rzjvabhdkskk95pghnn67464byvzb5mfl8jpm2";
   };
 
+  outputs = [ "out" "info" ];
+  buildInputs = [ stdenv.hookLib.multiout ];
+
   /* If no explicit coreutils is given, use the one from stdenv. */
   nativeBuildInputs = [ coreutils ];
 

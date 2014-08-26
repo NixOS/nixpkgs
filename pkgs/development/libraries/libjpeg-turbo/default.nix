@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, nasm }:
+{ stdenv, fetchurl, nasm, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "libjpeg-turbo-1.3.1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" "doc" "bin" ];
 
-  buildInputs = [ nasm ];
+  buildInputs = [ stdenv.hookLib.multiout autoreconfHook nasm ];
 
   enableParallelBuilding = true;
 

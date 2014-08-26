@@ -13,13 +13,20 @@ stdenv.mkDerivation rec {
     sha256 = "039agw5rqvqny92cpkrfn243x2gd4xn13hs3xi6isk55d2vqqr9n";
   };
 
-  configureFlags = if static then "" else "--shared";
+  outputs = [ "dev" "out" "static" "man" ];
+  buildInputs = [ stdenv.hookLib.multiout ];
+  setOutputFlags = false;
+
+  configureFlags = stdenv.lib.optional (!static) "--shared";
 
   preConfigure = ''
     if test -n "$crossConfig"; then
       export CC=$crossConfig-gcc
-      configureFlags=${if static then "" else "--shared"}
     fi
+  '';
+
+  postInstall = ''
+    _moveToOutput lib/libz.a "$static"
   '';
 
   # As zlib takes part in the stdenv building, we don't want references

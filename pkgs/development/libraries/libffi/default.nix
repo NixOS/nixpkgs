@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optional (stdenv.needsPax) ./libffi-3.0.13-emutramp_pax_proc.patch;
 
-  buildInputs = stdenv.lib.optional doCheck dejagnu;
+  outputs = [ "dev" "out" "doc" ];
+
+  buildInputs = [ stdenv.hookLib.multiout ]
+    ++ stdenv.lib.optional doCheck dejagnu;
 
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=

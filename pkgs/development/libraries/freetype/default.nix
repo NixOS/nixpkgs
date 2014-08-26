@@ -23,10 +23,6 @@ stdenv.mkDerivation rec {
     sha256 = "0pppcn73b5pwd7zdi9yfx16f5i93y18q7q4jmlkwmwrfsllqp160";
   };
 
-  outputs = [ "dev" "out" ];
-
-  configureFlags = "--disable-static --bindir=$(dev)/bin";
-
   patches = [ ./enable-validation.patch ] # from Gentoo
     ++ [
       (fetch_bohoomil "freetype-2.5.3-pkgconfig.patch" "1dpfdh8kmka3gzv14glz7l79i545zizah6wma937574v5z2iy3nn")
@@ -36,11 +32,15 @@ stdenv.mkDerivation rec {
       (fetch_bohoomil "infinality-2.5.3.patch" "0mxiybcb4wwbicrjiinh1b95rv543bh05sdqk1v0ipr3fxfrb47q")
     ;
 
+  outputs = [ "dev" "out" ];
+
   propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype
   # dependence on harfbuzz is looser than the reverse dependence
-  buildInputs = [ pkgconfig which ]
+  buildInputs = [ stdenv.hookLib.multiout pkgconfig which ]
     # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
     ++ optional (!stdenv.isLinux) gnumake;
+
+  configureFlags = "--disable-static --bindir=$(dev)/bin";
 
   # from Gentoo, see https://bugzilla.redhat.com/show_bug.cgi?id=506840
   NIX_CFLAGS_COMPILE = "-fno-strict-aliasing";
@@ -52,12 +52,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # compat hacks
-  postInstall = glib.flattenInclude + ''
-    ln -s . "$out"/include/freetype
-
-    mkdir $dev/lib
-    mv $out/lib/pkgconfig $dev/lib/
-    ln -s freetype2/freetype $dev/include/freetype
+  postFixup = glib.flattenInclude + ''
+    ln -s . "$dev"/include/freetype
   '';
 
   crossAttrs = {
