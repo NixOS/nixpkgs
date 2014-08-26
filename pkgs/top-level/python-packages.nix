@@ -2190,18 +2190,33 @@ rec {
 
   gtimelog = buildPythonPackage rec {
     name = "gtimelog-${version}";
-    version = "0.8.1";
+    version = "0.9.1";
+    
+    disabled = isPy26;
 
     src = fetchurl {
       url = "https://github.com/gtimelog/gtimelog/archive/${version}.tar.gz";
-      sha256 = "0nwpfv284b26q97mfpagqkqb4n2ilw46cx777qsyi3plnywk1xa0";
+      sha256 = "0qk8fv8cszzqpdi3wl9vvkym1jil502ycn6sic4jrxckw5s9jsfj";
     };
+    
+    preBuild = ''
+      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LC_ALL="en_US.UTF-8"
+    '';
 
-    propagatedBuildInputs = [ pygtk ];
+    # TODO: AppIndicator
+    propagatedBuildInputs = [ pkgs.gobjectIntrospection pygobject3 pkgs.makeWrapper pkgs.gtk3 ];
 
     checkPhase = ''
-      patchShebangs ./runtests
+      substituteInPlace runtests --replace "/usr/bin/env python" "${python}/bin/${python.executable}"
       ./runtests
+    '';
+    
+    preFixup = ''
+        wrapProgram $out/bin/gtimelog \
+          --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
+          --prefix LD_LIBRARY_PATH ":" "${pkgs.gtk3}/lib" \
+     
     '';
 
     meta = with stdenv.lib; {
