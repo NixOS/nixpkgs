@@ -77,7 +77,7 @@ in rec {
         --param chunk.section.depth 1 \
         --param chunk.first.sections 1 \
         --param use.id.as.filename 1 \
-        --stringparam generate.toc "book toc chapter toc" \
+        --stringparam generate.toc "book toc chapter toc appendix toc" \
         --nonet --xinclude --output $dst/ \
         ${docbook5_xsl}/xml/xsl/docbook/xhtml/chunkfast.xsl ./manual.xml
 
