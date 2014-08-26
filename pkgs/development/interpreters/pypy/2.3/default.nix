@@ -40,12 +40,18 @@ let
       substituteInPlace pypy/goal/targetpypystandalone.py \
         --replace "/usr/bin/env pypy" "${pythonFull}/bin/python"
 
-      # convince pypy to find nix ncurses
+      # hint pypy to find nix ncurses
       substituteInPlace pypy/module/_minimal_curses/fficurses.py \
         --replace "/usr/include/ncurses/curses.h" "${ncurses}/include/curses.h" \
         --replace "ncurses/curses.h" "${ncurses}/include/curses.h" \
         --replace "ncurses/term.h" "${ncurses}/include/term.h" \
         --replace "libraries=['curses']" "libraries=['ncurses']"
+
+      # tkinter hints
+      substituteInPlace lib_pypy/_tkinter/tklib.py \
+        --replace "'/usr/include/tcl'" "'${tk}/include', '${tcl}/include'" \
+        --replace "linklibs=['tcl', 'tk']" "linklibs=['tcl8.5', 'tk8.5']" \
+        --replace "libdirs = []" "libdirs = ['${tk}/lib', '${tcl}/lib']"
     '';
 
     setupHook = ./setup-hook.sh;
