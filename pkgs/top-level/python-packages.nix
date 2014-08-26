@@ -3364,6 +3364,7 @@ rec {
 
   flexget = buildPythonPackage rec {
     name = "FlexGet-1.2.161";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/F/FlexGet/${name}.tar.gz";
@@ -4467,6 +4468,7 @@ rec {
 
   mechanize = buildPythonPackage (rec {
     name = "mechanize-0.1.11";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://wwwsearch.sourceforge.net/mechanize/src/${name}.tar.gz";
@@ -5429,6 +5431,7 @@ rec {
 
   paste = buildPythonPackage rec {
     name = "paste-1.7.5.1";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = http://pypi.python.org/packages/source/P/Paste/Paste-1.7.5.1.tar.gz;
@@ -5447,12 +5450,12 @@ rec {
 
 
   paste_deploy = buildPythonPackage rec {
-    version = "1.5.0";
+    version = "1.5.2";
     name = "paste-deploy-${version}";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/P/PasteDeploy/PasteDeploy-${version}.tar.gz";
-      md5 = "f1a068a0b680493b6eaff3dd7690690f";
+      md5 = "352b7205c78c8de4987578d19431af3b";
     };
 
     buildInputs = [ nose ];
@@ -5588,6 +5591,7 @@ rec {
 
   pika = buildPythonPackage {
     name = "pika-0.9.12";
+    diabled = isPy3k;
     src = fetchurl {
       url = https://pypi.python.org/packages/source/p/pika/pika-0.9.12.tar.gz;
       md5 = "7174fc7cc5570314fa3cfaa729106482";
@@ -6446,6 +6450,7 @@ rec {
 
   ldap = buildPythonPackage rec {
     name = "ldap-2.4.15";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/python-ldap/python-${name}.tar.gz";
@@ -6845,11 +6850,11 @@ rec {
   reportlab =
    let freetype = overrideDerivation pkgs.freetype (args: { configureFlags = "--enable-static --enable-shared"; });
    in buildPythonPackage rec {
-    name = "reportlab-2.5";
+    name = "reportlab-3.1.8";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/r/reportlab/${name}.tar.gz";
-      md5 = "cdf8b87a6cf1501de1b0a8d341a217d3";
+      md5 = "820a9fda647078503597b85cdba7ed7f";
     };
 
     buildInputs = [freetype];
