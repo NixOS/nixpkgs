@@ -348,7 +348,7 @@ in
 
               options = {
                 device = mkOption {
-                  default = /dev/sda1;
+                  default = "/dev/sda1";
                   type = types.path;
                   description = ''
                     An unencrypted device that will temporarily be mounted in stage-1.
