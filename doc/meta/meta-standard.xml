@@ -1,0 +1,122 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="ch-standard-meta">
+
+<title>Standard Meta-Attributes</title>
+
+<para>The following meta-attributes have a standard
+interpretation:</para>
+
+<variablelist>
+
+  <varlistentry>
+    <term><varname>description</varname></term>
+    <listitem><para>A short (one-line) description of the package.
+    This is shown by <command>nix-env -q --description</command> and
+    also on the Nixpkgs release pages.</para>
+
+    <para>Don’t include a period at the end.  Don’t include newline
+    characters.  Capitalise the first character.  For brevity, don’t
+    repeat the name of package — just describe what it does.</para>
+
+    <para>Wrong: <literal>"libpng is a library that allows you to decode PNG images."</literal></para>
+
+    <para>Right: <literal>"A library for decoding PNG images"</literal></para>
+
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>longDescription</varname></term>
+    <listitem><para>An arbitrarily long description of the
+    package.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>homepage</varname></term>
+    <listitem><para>The package’s homepage.  Example:
+    <literal>http://www.gnu.org/software/hello/manual/</literal></para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>license</varname></term>
+    <listitem><para>The license for the package. One from the
+    attribute set defined in <link
+    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix">
+    <filename>nixpkgs/lib/licenses.nix</filename></link>.  Example:
+    <literal>stdenv.lib.licenses.gpl3</literal>. For details, see
+    <xref linkend='sec-meta-license'/>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>maintainers</varname></term>
+    <listitem><para>A list of names and e-mail addresses of the
+    maintainers of this Nix expression. If
+    you would like to be a maintainer of a package, you may want to add
+    yourself to <link
+    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/maintainers.nix"><filename>nixpkgs/lib/maintainers.nix</filename></link>
+    and write something like <literal>[ stdenv.lib.maintainers.alice
+    stdenv.lib.maintainers.bob ]</literal>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>priority</varname></term>
+    <listitem><para>The <emphasis>priority</emphasis> of the package,
+    used by <command>nix-env</command> to resolve file name conflicts
+    between packages.  See the Nix manual page for
+    <command>nix-env</command> for details.  Example:
+    <literal>"10"</literal> (a low-priority
+    package).</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>platforms</varname></term>
+    <listitem><para>The list of Nix platform types on which the
+    package is supported. Hydra builds packages according to the
+    platform specified. If no platform is specified, the package does
+    not have prebuilt binaries. An example is:
+
+<programlisting>
+meta.platforms = stdenv.lib.platforms.linux;
+</programlisting>
+
+    Attribute Set <varname>stdenv.lib.platforms</varname> in
+    <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/platforms.nix">
+    <filename>nixpkgs/lib/platforms.nix</filename></link> defines various common
+    lists of platforms types.
+    </para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>hydraPlatforms</varname></term>
+    <listitem><para>The list of Nix platform types for which the Hydra
+    instance at <literal>hydra.nixos.org</literal> will build the
+    package.  (Hydra is the Nix-based continuous build system.)  It
+    defaults to the value of <varname>meta.platforms</varname>.  Thus,
+    the only reason to set <varname>meta.hydraPlatforms</varname> is
+    if you want <literal>hydra.nixos.org</literal> to build the
+    package on a subset of <varname>meta.platforms</varname>, or not
+    at all, e.g.
+
+<programlisting>
+meta.platforms = stdenv.lib.platforms.linux;
+meta.hydraPlatforms = [];
+</programlisting>
+
+    </para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>broken</varname></term>
+    <listitem><para>If set to <literal>true</literal>, the package is
+    marked as “broken”, meaning that it won’t show up in
+    <literal>nix-env -qa</literal>, and cannot be built or installed.
+    Such packages should be removed from Nixpkgs eventually unless
+    they are fixed.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+</chapter>

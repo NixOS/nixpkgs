@@ -1,0 +1,88 @@
+<section xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="sec-controlling-phases">
+
+<title>Controlling Phases</title>
+
+<para>There are a number of variables that control what phases are
+executed and in what order:
+
+<variablelist>
+  <title>Variables affecting phase control</title>
+
+  <varlistentry>
+    <term><varname>phases</varname></term>
+    <listitem>
+      <para>Specifies the phases.  You can change the order in which
+      phases are executed, or add new phases, by setting this
+      variable.  If it’s not set, the default value is used, which is
+      <literal>$prePhases unpackPhase patchPhase $preConfigurePhases
+      configurePhase $preBuildPhases buildPhase checkPhase
+      $preInstallPhases installPhase fixupPhase $preDistPhases
+      distPhase $postPhases</literal>.
+      </para>
+      
+      <para>Usually, if you just want to add a few phases, it’s more
+      convenient to set one of the variables below (such as
+      <varname>preInstallPhases</varname>), as you then don’t specify
+      all the normal phases.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>prePhases</varname></term>
+    <listitem>
+      <para>Additional phases executed before any of the default phases.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preConfigurePhases</varname></term>
+    <listitem>
+      <para>Additional phases executed just before the configure phase.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preBuildPhases</varname></term>
+    <listitem>
+      <para>Additional phases executed just before the build phase.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preInstallPhases</varname></term>
+    <listitem>
+      <para>Additional phases executed just before the install phase.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preFixupPhases</varname></term>
+    <listitem>
+      <para>Additional phases executed just before the fixup phase.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preDistPhases</varname></term>
+    <listitem>
+      <para>Additional phases executed just before the distribution phase.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>postPhases</varname></term>
+    <listitem>
+      <para>Additional phases executed after any of the default
+      phases.</para>
+    </listitem>
+  </varlistentry>
+
+</variablelist>
+
+</para>
+
+</section>

@@ -1,0 +1,29 @@
+<part xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="chap-stdenv">
+
+<title>The Standard Environment</title>
+
+<partintro>
+<para>The standard build environment in the Nix Packages collection
+provides an environment for building Unix packages that does a lot of
+common build tasks automatically.  In fact, for Unix packages that use
+the standard <literal>./configure; make; make install</literal> build
+interface, you don’t need to write a build script at all; the standard
+environment does everything automatically.  If
+<literal>stdenv</literal> doesn’t do what you need automatically, you
+can easily customise or override the various build phases.</para>
+</partintro>
+
+<xi:include href="building-packages-stdenv.xml" />
+<xi:include href="tools-stdenv.xml" />
+<xi:include href="attributes-stdenv.xml" />
+<xi:include href="phases-stdenv.xml" />
+<xi:include href="shell-functions-stdenv.xml" />
+<xi:include href="package-setup-hooks.xml" />
+<xi:include href="purity-nixpkgs.xml" />
+
+</part>
+

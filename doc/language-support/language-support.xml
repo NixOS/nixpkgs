@@ -1,0 +1,28 @@
+<part xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="chap-language-support">
+
+<title>Language-Specific Support</title>
+
+<partintro>
+<para>The <link linkend="chap-stdenv">standard build
+environment</link> makes it easy to build typical Autotools-based
+packages with very little code.  Any other kind of package can be
+accomodated by overriding the appropriate phases of
+<literal>stdenv</literal>.  However, there are specialised functions
+in Nixpkgs to easily build packages for other programming languages,
+such as Perl or Haskell.  These are described in this chapter.</para>
+</partintro>
+
+<xi:include href="language-perl.xml" />
+<xi:include href="language-python.xml" />
+<xi:include href="language-java.xml" />
+
+<!-- TODO: 
+<xi:include href="language-haskell.xml" />
+<xi:include href="language-latex.xml" />
+-->
+
+</part>

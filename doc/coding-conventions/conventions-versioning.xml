@@ -1,0 +1,37 @@
+<section xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="sec-versioning">
+
+<title>Versioning</title>
+
+<para>Because every version of a package in Nixpkgs creates a
+potential maintenance burden, old versions of a package should not be
+kept unless there is a good reason to do so.  For instance, Nixpkgs
+contains several versions of GCC because other packages don’t build
+with the latest version of GCC.  Other examples are having both the
+latest stable and latest pre-release version of a package, or to keep
+several major releases of an application that differ significantly in
+functionality.</para>
+
+<para>If there is only one version of a package, its Nix expression
+should be named <filename>e2fsprogs/default.nix</filename>.  If there
+are multiple versions, this should be reflected in the filename,
+e.g. <filename>e2fsprogs/1.41.8.nix</filename> and
+<filename>e2fsprogs/1.41.9.nix</filename>.  The version in the
+filename should leave out unnecessary detail.  For instance, if we
+keep the latest Firefox 2.0.x and 3.5.x versions in Nixpkgs, they
+should be named <filename>firefox/2.0.nix</filename> and
+<filename>firefox/3.5.nix</filename>, respectively (which, at a given
+point, might contain versions <literal>2.0.0.20</literal> and
+<literal>3.5.4</literal>).  If a version requires many auxiliary
+files, you can use a subdirectory for each version,
+e.g. <filename>firefox/2.0/default.nix</filename> and
+<filename>firefox/3.5/default.nix</filename>.</para>
+
+<para>All versions of a package <emphasis>must</emphasis> be included
+in <filename>all-packages.nix</filename> to make sure that they
+evaluate correctly.</para>
+
+</section>

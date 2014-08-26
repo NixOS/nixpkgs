@@ -1,0 +1,15 @@
+<part xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="chap-conventions">
+
+<title>Coding Conventions</title>
+
+<partintro><para>This section lists common coding conventions to follow when you create and extend Nix packages.</para></partintro>
+
+<xi:include href="conventions-syntax.xml" />
+<xi:include href="conventions-package-names.xml" />
+<xi:include href="conventions-organization.xml" />
+
+</part>

@@ -1,0 +1,59 @@
+<section xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="sec-install-phase">
+
+<title>The Install Phase</title>
+
+<para>The install phase is responsible for installing the package in
+the Nix store under <envar>out</envar>.  The default
+<function>installPhase</function> creates the directory
+<literal>$out</literal> and calls <command>make
+install</command>.</para>
+
+<variablelist>
+  <title>Variables controlling the check phase</title>
+
+  <varlistentry>
+    <term><varname>makeFlags</varname> /
+    <varname>makeFlagsArray</varname> /
+    <varname>makefile</varname></term>
+    <listitem><para>See the build phase for details.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>installTargets</varname></term>
+    <listitem><para>The make targets that perform the installation.
+    Defaults to <literal>install</literal>.  Example:
+
+<programlisting>
+installTargets = "install-bin install-doc";</programlisting>
+
+    </para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>installFlags</varname> / <varname>installFlagsArray</varname></term>
+    <listitem><para>Additional flags passed to
+    <command>make</command>.  Like <varname>makeFlags</varname> and
+    <varname>makeFlagsArray</varname>, but only used by the install
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preInstall</varname></term>
+    <listitem><para>Hook executed at the start of the install
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>postInstall</varname></term>
+    <listitem><para>Hook executed at the end of the install
+    phase.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+
+</section>

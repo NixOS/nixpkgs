@@ -1,0 +1,52 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="ssec-stdenv-attributes">
+
+<title>Attributes</title>
+
+<variablelist>
+  <title>Variables affecting <literal>stdenv</literal>
+  initialisation</title>
+
+  <varlistentry>
+    <term><varname>NIX_DEBUG</varname></term>
+    <listitem><para>If set, <literal>stdenv</literal> will print some
+    debug information during the build.  In particular, the
+    <command>gcc</command> and <command>ld</command> wrapper scripts
+    will print out the complete command line passed to the wrapped
+    tools.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>buildInputs</varname></term>
+    <listitem><para>A list of dependencies used by
+    <literal>stdenv</literal> to set up the environment for the build.
+    For each dependency <replaceable>dir</replaceable>, the directory
+    <filename><replaceable>dir</replaceable>/bin</filename>, if it
+    exists, is added to the <envar>PATH</envar> environment variable.
+    Other environment variables are also set up via a pluggable
+    mechanism.  For instance, if <varname>buildInputs</varname>
+    contains Perl, then the <filename>lib/site_perl</filename>
+    subdirectory of each input is added to the <envar>PERL5LIB</envar>
+    environment variable.  See <xref linkend="ssec-setup-hooks"/> for
+    details.</para></listitem>
+  </varlistentry>
+  
+  <varlistentry>
+    <term><varname>propagatedBuildInputs</varname></term>
+    <listitem><para>Like <varname>buildInputs</varname>, but these
+    dependencies are <emphasis>propagated</emphasis>: that is, the
+    dependencies listed here are added to the
+    <varname>buildInputs</varname> of any package that uses
+    <emphasis>this</emphasis> package as a dependency.  So if package
+    Y has <literal>propagatedBuildInputs = [X]</literal>, and package
+    Z has <literal>buildInputs = [Y]</literal>, then package X will
+    appear in Z’s build environment automatically.</para></listitem>
+  </varlistentry>
+  
+
+</variablelist>
+
+</chapter>

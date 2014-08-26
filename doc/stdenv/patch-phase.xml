@@ -1,0 +1,46 @@
+<section xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="sec-patch-phase">
+
+<title>The Patch Phase</title>
+
+<para>The patch phase applies the list of patches defined in the
+<varname>patches</varname> variable.</para>
+
+<variablelist>
+  <title>Variables controlling the patch phase</title>
+
+  <varlistentry>
+    <term><varname>patches</varname></term>
+    <listitem><para>The list of patches.  They must be in the format
+    accepted by the <command>patch</command> command, and may
+    optionally be compressed using <command>gzip</command>
+    (<filename>.gz</filename>) or <command>bzip2</command>
+    (<filename>.bz2</filename>).</para></listitem>
+  </varlistentry>  
+
+  <varlistentry>
+    <term><varname>patchFlags</varname></term>
+    <listitem><para>Flags to be passed to <command>patch</command>.
+    If not set, the argument <option>-p1</option> is used, which
+    causes the leading directory component to be stripped from the
+    file names in each patch.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>prePatch</varname></term>
+    <listitem><para>Hook executed at the start of the patch
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>postPatch</varname></term>
+    <listitem><para>Hook executed at the end of the patch
+    phase.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+</section>

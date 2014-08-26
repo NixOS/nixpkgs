@@ -1,0 +1,64 @@
+<section xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="sec-check-phase">
+
+<title>The Check Phase</title>
+
+<para>The check phase checks whether the package was built correctly
+by running its test suite.  The default
+<function>checkPhase</function> calls <command>make check</command>,
+but only if the <varname>doCheck</varname> variable is enabled.</para>
+
+<variablelist>
+  <title>Variables controlling the check phase</title>
+
+  <varlistentry>
+    <term><varname>doCheck</varname></term>
+    <listitem><para>If set to a non-empty string, the check phase is
+    executed, otherwise it is skipped (default).  Thus you should set
+
+    <programlisting>
+doCheck = true;</programlisting>
+
+    in the derivation to enable checks.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>makeFlags</varname> /
+    <varname>makeFlagsArray</varname> /
+    <varname>makefile</varname></term>
+    <listitem><para>See the build phase for details.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>checkTarget</varname></term>
+    <listitem><para>The make target that runs the tests.  Defaults to
+    <literal>check</literal>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>checkFlags</varname> / <varname>checkFlagsArray</varname></term>
+    <listitem><para>Additional flags passed to
+    <command>make</command>.  Like <varname>makeFlags</varname> and
+    <varname>makeFlagsArray</varname>, but only used by the check
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preCheck</varname></term>
+    <listitem><para>Hook executed at the start of the check
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>postCheck</varname></term>
+    <listitem><para>Hook executed at the end of the check
+    phase.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+  
+</section>

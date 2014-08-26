@@ -1,0 +1,57 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="ch-tools-stdenv">
+
+<title>Tools Provided by <userinput>stdenv</userinput></title>
+
+<para>The standard environment provides the following packages:
+
+<itemizedlist>
+
+  <listitem><para>The GNU C Compiler, configured with C and C++
+  support.</para></listitem>
+
+  <listitem><para>GNU coreutils (contains a few dozen standard Unix
+  commands).</para></listitem>
+
+  <listitem><para>GNU findutils (contains
+  <command>find</command>).</para></listitem>
+
+  <listitem><para>GNU diffutils (contains <command>diff</command>,
+  <command>cmp</command>).</para></listitem>
+
+  <listitem><para>GNU <command>sed</command>.</para></listitem>
+
+  <listitem><para>GNU <command>grep</command>.</para></listitem>
+
+  <listitem><para>GNU <command>awk</command>.</para></listitem>
+
+  <listitem><para>GNU <command>tar</command>.</para></listitem>
+
+  <listitem><para><command>gzip</command> and
+  <command>bzip2</command>.</para></listitem>
+
+  <listitem><para>GNU Make.  It has been patched to provide
+  <quote>nested</quote> output that can be fed into the
+  <command>nix-log2xml</command> command and
+  <command>log2html</command> stylesheet to create a structured,
+  readable output of the build steps performed by
+  Make.</para></listitem>
+
+  <listitem><para>Bash.  This is the shell used for all builders in
+  the Nix Packages collection.  Not using <command>/bin/sh</command>
+  removes a large source of portability problems.</para></listitem>
+
+  <listitem><para>The <command>patch</command>
+  command.</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+<para>On Linux, <literal>stdenv</literal> also includes the
+<command>patchelf</command> utility.</para>
+
+</chapter>

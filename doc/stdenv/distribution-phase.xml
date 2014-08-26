@@ -1,0 +1,60 @@
+<section xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="sec-distribution-phase">
+
+<title>The Distribution Phase</title>
+
+<para>The distribution phase is intended to produce a source
+distribution of the package.  The default
+<function>distPhase</function> first calls <command>make
+dist</command>, then it copies the resulting source tarballs to
+<filename>$out/tarballs/</filename>.  This phase is only executed if
+the attribute <varname>doDist</varname> is set.</para>
+
+<variablelist>
+  <title>Variables controlling the distribution phase</title>
+
+  <varlistentry>
+    <term><varname>distTarget</varname></term>
+    <listitem><para>The make target that produces the distribution.
+    Defaults to <literal>dist</literal>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>distFlags</varname> / <varname>distFlagsArray</varname></term>
+    <listitem><para>Additional flags passed to
+    <command>make</command>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>tarballs</varname></term>
+    <listitem><para>The names of the source distribution files to be
+    copied to <filename>$out/tarballs/</filename>.  It can contain
+    shell wildcards.  The default is
+    <filename>*.tar.gz</filename>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>dontCopyDist</varname></term>
+    <listitem><para>If set, no files are copied to
+    <filename>$out/tarballs/</filename>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preDist</varname></term>
+    <listitem><para>Hook executed at the start of the distribution
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>postDist</varname></term>
+    <listitem><para>Hook executed at the end of the distribution
+    phase.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+
+</section>

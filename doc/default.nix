@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   '';
 
   buildCommand = ''
-    ln -s $sources/*.xml . # */
+    cp -prd $sources/* . # */
 
     echo ${nixpkgsVersion} > .version
 
