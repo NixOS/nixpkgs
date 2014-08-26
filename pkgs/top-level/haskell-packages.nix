@@ -1382,6 +1382,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ivor = callPackage ../development/libraries/haskell/ivor {};
 
+  ivory = callPackage ../development/libraries/haskell/ivory {};
+
   ixdopp = callPackage ../development/libraries/haskell/ixdopp {
     preprocessorTools = self.preprocessorTools_0_1_3;
   };
