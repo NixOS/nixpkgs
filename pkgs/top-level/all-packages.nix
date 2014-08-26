@@ -1220,7 +1220,7 @@ let
    * objections before removal. The feature is integer coordinates
    */
   graphviz_2_0 = callPackage ../tools/graphics/graphviz/2.0.nix { };
-  
+
   /* Readded by Michael Raskin. There are programs in the wild
    * that do want 2.32 but not 2.0 or 2.36. Please give a day's notice for
    * objections before removal. The feature is libgraph.
@@ -7169,7 +7169,7 @@ let
   tomcat6 = callPackage ../servers/http/tomcat/6.0.nix { };
 
   tomcat7 = callPackage ../servers/http/tomcat/7.0.nix { };
-	
+
   tomcat8 = callPackage ../servers/http/tomcat/8.0.nix { };
 
   tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
@@ -9819,7 +9819,7 @@ let
   };
 
   stella = callPackage ../misc/emulators/stella { };
-  
+
   linuxstopmotion = callPackage ../applications/video/linuxstopmotion { };
 
   sweethome3d = recurseIntoAttrs (  (callPackage ../applications/misc/sweethome3d { })
@@ -10215,6 +10215,27 @@ let
       gtk_modules = [ libcanberra ];
     };
 
+  wrapRetroArch = { retroarch }:
+  let
+    cfg = stdenv.lib.attrByPath [ "retroarch" ] {} config;
+  in
+    import ../misc/emulators/retroarch/wrapper.nix {
+      inherit stdenv lib makeWrapper retroarch;
+      cores = with libretro;
+      ([ ]
+      ++ lib.optional (cfg.enable4do or false) _4do
+      ++ lib.optional (cfg.enableDesmume or false) desmume
+      ++ lib.optional (cfg.enableFceumm or false) fceumm
+      ++ lib.optional (cfg.enableMupen64Plus or false) mupen64plus
+      ++ lib.optional (cfg.enablePicodrive or false) picodrive
+      ++ lib.optional (cfg.enablePPSSPP or false) ppsspp
+      ++ lib.optional (cfg.enableScummVM or false) scummvm
+      ++ lib.optional (cfg.enableSnes9xNext or false) snes9x-next
+      ++ lib.optional (cfg.enableStella or false) stella
+      ++ lib.optional (cfg.enableVbaNext or false) vba-next
+      );
+  };
+
   wxhexeditor = callPackage ../applications/editors/wxhexeditor { };
 
   wxcam = callPackage ../applications/video/wxcam {
@@ -10222,7 +10243,7 @@ let
     inherit intltool;
     wxGTK = wxGTK28;
     gtk = gtk2;
-  };    
+  };
 
   x11vnc = callPackage ../tools/X11/x11vnc { };
 
@@ -10376,11 +10397,10 @@ let
   zim = callPackage ../applications/office/zim {
     pygtk = pyGtkGlade;
   };
-  
+
   zotero = callPackage ../applications/office/zotero { };
 
   zynaddsubfx = callPackage ../applications/audio/zynaddsubfx { };
-
 
   ### GAMES
 
@@ -10897,7 +10917,7 @@ let
 
       libnm-qt = callPackage ../development/libraries/libnm-qt { };
 
-      massif-visualizer = callPackage ../development/tools/analysis/massif-visualizer { }; 
+      massif-visualizer = callPackage ../development/tools/analysis/massif-visualizer { };
 
       networkmanagement = callPackage ../tools/networking/networkmanagement { };
 
@@ -11477,8 +11497,15 @@ let
 
   putty = callPackage ../applications/networking/remote/putty { };
 
-  retroarch = callPackage ../misc/emulators/retroarch { };
-  retroarchMaster = callPackage ../misc/emulators/retroarch/master.nix { };
+  retroarchBare = callPackage ../misc/emulators/retroarch { };
+
+  retroarchBareMaster = callPackage ../misc/emulators/retroarch/master.nix { };
+
+  retroarch = wrapRetroArch { retroarch = retroarchBareMaster; };
+
+  libretro = recurseIntoAttrs (callPackage ../misc/emulators/retroarch/cores.nix {
+    retroarch = retroarchBareMaster;
+  });
 
   rssglx = callPackage ../misc/screensavers/rss-glx { };
 
