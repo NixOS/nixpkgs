@@ -1312,7 +1312,7 @@ rec {
     };
 
     buildInputs = [ unittest2 ];
-    propagatedBuildInputs = [ colander sqlalchemy8 ];
+    propagatedBuildInputs = [ colander sqlalchemy9 ];
 
     # string: argument name cannot be overridden via info kwarg.
     doCheck = false;
