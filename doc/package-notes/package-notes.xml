@@ -1,0 +1,31 @@
+<part xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="chap-package-notes">
+
+<title>Package-Specific Guidelines</title>
+
+<partintro>
+<para>This section contains information about how to use and maintain
+the Nix expressions for a number of specific packages, such as the
+Linux kernel or X.org.</para>
+</partintro>
+
+<xi:include href="package-linux-kernel.xml" />
+<xi:include href="package-xorg.xml" />
+
+<!-- TODO:
+<chapter>
+  <title>Gnome</title>
+  <para>* Expression is auto-generated</para>
+  <para>* How to update</para>
+</chapter>
+
+<chapter>
+  <title>GCC</title>
+  <para>…</para>
+</chapter>
+-->
+
+</part>

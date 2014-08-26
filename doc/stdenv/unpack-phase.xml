@@ -1,0 +1,109 @@
+<section xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="sec-unpack-phase">
+
+<title>The Unpack Phase</title>
+
+<para>The unpack phase is responsible for unpacking the source code of
+the package.  The default implementation of
+<function>unpackPhase</function> unpacks the source files listed in
+the <envar>src</envar> environment variable to the current directory.
+It supports the following files by default:
+
+<variablelist>
+
+  <varlistentry>
+    <term>Tar files</term>
+    <listitem><para>These can optionally be compressed using
+    <command>gzip</command> (<filename>.tar.gz</filename>,
+    <filename>.tgz</filename> or <filename>.tar.Z</filename>) or
+    <command>bzip2</command> (<filename>.tar.bz2</filename> or
+    <filename>.tbz2</filename>).</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>Zip files</term>
+    <listitem><para>Zip files are unpacked using
+    <command>unzip</command>.  However, <command>unzip</command> is
+    not in the standard environment, so you should add it to
+    <varname>buildInputs</varname> yourself.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>Directories in the Nix store</term>
+    <listitem><para>These are simply copied to the current directory.
+    The hash part of the file name is stripped,
+    e.g. <filename>/nix/store/1wydxgby13cz...-my-sources</filename>
+    would be copied to
+    <filename>my-sources</filename>.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+Additional file types can be supported by setting the
+<varname>unpackCmd</varname> variable (see below).</para>
+
+<para></para>
+
+<variablelist>
+  <title>Variables controlling the unpack phase</title>
+
+  <varlistentry>
+    <term><varname>srcs</varname> / <varname>src</varname></term>
+    <listitem><para>The list of source files or directories to be
+    unpacked or copied.  One of these must be set.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>sourceRoot</varname></term>
+    <listitem><para>After running <function>unpackPhase</function>,
+    the generic builder changes the current directory to the directory
+    created by unpacking the sources.  If there are multiple source
+    directories, you should set <varname>sourceRoot</varname> to the
+    name of the intended directory.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>setSourceRoot</varname></term>
+    <listitem><para>Alternatively to setting
+    <varname>sourceRoot</varname>, you can set
+    <varname>setSourceRoot</varname> to a shell command to be
+    evaluated by the unpack phase after the sources have been
+    unpacked.  This command must set
+    <varname>sourceRoot</varname>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preUnpack</varname></term>
+    <listitem><para>Hook executed at the start of the unpack
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>postUnpack</varname></term>
+    <listitem><para>Hook executed at the end of the unpack
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>dontMakeSourcesWritable</varname></term>
+    <listitem><para>If set to <literal>1</literal>, the unpacked
+    sources are <emphasis>not</emphasis> made
+    writable.  By default, they are made writable to prevent problems
+    with read-only sources.  For example, copied store directories
+    would be read-only without this.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>unpackCmd</varname></term>
+    <listitem><para>The unpack phase evaluates the string
+    <literal>$unpackCmd</literal> for any unrecognised file.  The path
+    to the current source file is contained in the
+    <varname>curSrc</varname> variable.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+</section>

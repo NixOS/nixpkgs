@@ -1,0 +1,113 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="ch-building-packages-stdenv">
+
+<title>Building Packages with <userinput>stdenv</userinput></title>
+
+<para>To build a package with the standard environment, you use the
+function <varname>stdenv.mkDerivation</varname>, instead of the
+primitive built-in function <varname>derivation</varname>, e.g.
+
+<programlisting>
+stdenv.mkDerivation {
+  name = "libfoo-1.2.3";
+  src = fetchurl {
+    url = http://example.org/libfoo-1.2.3.tar.bz2;
+    md5 = "e1ec107956b6ddcb0b8b0679367e9ac9";
+  };
+}</programlisting>
+
+(<varname>stdenv</varname> needs to be in scope, so if you write this
+in a separate Nix expression from
+<filename>pkgs/all-packages.nix</filename>, you need to pass it as a
+function argument.)  Specifying a <varname>name</varname> and a
+<varname>src</varname> is the absolute minimum you need to do.  Many
+packages have dependencies that are not provided in the standard
+environment.  It’s usually sufficient to specify those dependencies in
+the <varname>buildInputs</varname> attribute:
+
+<programlisting>
+stdenv.mkDerivation {
+  name = "libfoo-1.2.3";
+  ...
+  buildInputs = [libbar perl ncurses];
+}</programlisting>
+
+This attribute ensures that the <filename>bin</filename>
+subdirectories of these packages appear in the <envar>PATH</envar>
+environment variable during the build, that their
+<filename>include</filename> subdirectories are searched by the C
+compiler, and so on.  (See <xref linkend="ssec-setup-hooks"/> for
+details.)</para>
+
+<para>Often it is necessary to override or modify some aspect of the
+build.  To make this easier, the standard environment breaks the
+package build into a number of <emphasis>phases</emphasis>, all of
+which can be overridden or modified individually: unpacking the
+sources, applying patches, configuring, building, and installing.
+(There are some others; see <xref linkend="ssec-stdenv-phases"/>.)
+For instance, a package that doesn’t supply a makefile but instead has
+to be compiled “manually” could be handled like this:
+
+<programlisting>
+stdenv.mkDerivation {
+  name = "fnord-4.5";
+  ...
+  buildPhase = ''
+    gcc foo.c -o foo
+  '';
+  installPhase = ''
+    mkdir -p $out/bin
+    cp foo $out/bin
+  '';
+}</programlisting>
+
+(Note the use of <literal>''</literal>-style string literals, which
+are very convenient for large multi-line script fragments because they
+don’t need escaping of <literal>"</literal> and <literal>\</literal>,
+and because indentation is intelligently removed.)</para>
+
+<para>There are many other attributes to customise the build.  These
+are listed in <xref linkend="ssec-stdenv-attributes"/>.</para>
+
+<para>While the standard environment provides a generic builder, you
+can still supply your own build script:
+
+<programlisting>
+stdenv.mkDerivation {
+  name = "libfoo-1.2.3";
+  ...
+  builder = ./builder.sh;
+}</programlisting>
+
+where the builder can do anything it wants, but typically starts with
+
+<programlisting>
+source $stdenv/setup
+</programlisting>
+
+to let <literal>stdenv</literal> set up the environment (e.g., process
+the <varname>buildInputs</varname>).  If you want, you can still use
+<literal>stdenv</literal>’s generic builder:
+
+<programlisting>
+source $stdenv/setup
+
+buildPhase() {
+  echo "... this is my custom build phase ..."
+  gcc foo.c -o foo
+}
+
+installPhase() {
+  mkdir -p $out/bin
+  cp foo $out/bin
+}
+
+genericBuild
+</programlisting>
+
+</para>
+
+</chapter>

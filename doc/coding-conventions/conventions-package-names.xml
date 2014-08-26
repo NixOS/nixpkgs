@@ -1,0 +1,75 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="ch-conventions-package-naming">
+
+<title>Package Names</title>
+
+<para>In Nixpkgs, there are generally three different names associated with a package:
+
+<itemizedlist>
+
+  <listitem><para>The <varname>name</varname> attribute of the
+  derivation (excluding the version part).  This is what most users
+  see, in particular when using
+  <command>nix-env</command>.</para></listitem>
+
+  <listitem><para>The variable name used for the instantiated package
+  in <filename>all-packages.nix</filename>, and when passing it as a
+  dependency to other functions.  This is what Nix expression authors
+  see.  It can also be used when installing using <command>nix-env
+  -iA</command>.</para></listitem>
+
+  <listitem><para>The filename for (the directory containing) the Nix
+  expression.</para></listitem>
+
+</itemizedlist>
+
+Most of the time, these are the same.  For instance, the package
+<literal>e2fsprogs</literal> has a <varname>name</varname> attribute
+<literal>"e2fsprogs-<replaceable>version</replaceable>"</literal>, is
+bound to the variable name <varname>e2fsprogs</varname> in
+<filename>all-packages.nix</filename>, and the Nix expression is in
+<filename>pkgs/os-specific/linux/e2fsprogs/default.nix</filename>.
+</para>
+
+<para>There are a few naming guidelines:
+
+<itemizedlist>
+
+  <listitem><para>Generally, try to stick to the upstream package
+  name.</para></listitem>
+
+  <listitem><para>Don’t use uppercase letters in the
+  <literal>name</literal> attribute — e.g.,
+  <literal>"mplayer-1.0rc2"</literal> instead of
+  <literal>"MPlayer-1.0rc2"</literal>.</para></listitem>
+
+  <listitem><para>The version part of the <literal>name</literal>
+  attribute <emphasis>must</emphasis> start with a digit (following a
+  dash) — e.g., <literal>"hello-0.3-pre-r3910"</literal> instead of
+  <literal>"hello-svn-r3910"</literal>, as the latter would be seen as
+  a package named <literal>hello-svn</literal> by
+  <command>nix-env</command>.</para></listitem>
+
+  <listitem><para>Dashes in the package name should be preserved
+  in new variable names, rather than converted to underscores
+  (which was convention up to around 2013 and most names
+   still have underscores instead of dashes) — e.g.,
+  <varname>http-parser</varname> instead of
+  <varname>http_parser</varname>.</para></listitem>
+
+  <listitem><para>If there are multiple versions of a package, this
+  should be reflected in the variable names in
+  <filename>all-packages.nix</filename>,
+  e.g. <varname>json-c-0-9</varname> and <varname>json-c-0-11</varname>.
+  If there is an obvious “default” version, make an attribute like
+  <literal>json-c = json-c-0-9;</literal>.
+  See also <xref linkend="sec-versioning" /></para></listitem>
+
+</itemizedlist>
+
+</para>
+
+</chapter>

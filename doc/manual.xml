@@ -1,21 +1,41 @@
 <book xmlns="http://docbook.org/ns/docbook"
-      xmlns:xi="http://www.w3.org/2001/XInclude">
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="NixpkgsManual">
 
   <info>
 
-    <title>Nixpkgs Contributors Guide</title>
-
+    <title>Nix Packages Manual</title>
     <subtitle>Version <xi:include href=".version" parse="text" /></subtitle>
 
   </info>
 
-  <xi:include href="introduction.xml" />
-  <xi:include href="quick-start.xml" />
-  <xi:include href="stdenv.xml" />
-  <xi:include href="meta.xml" />
-  <xi:include href="language-support.xml" />
-  <xi:include href="package-notes.xml" />
-  <xi:include href="coding-conventions.xml" />
-  <xi:include href="contributing.xml" />
+<preface>
+
+<title>Preface</title>
+
+<para>This manual tells you how to write packages for the Nix Packages
+collection (Nixpkgs).  Thus it’s for packagers and developers who want
+to add packages to Nixpkgs.  End users are kindly referred to the
+<link xlink:href="http://hydra.nixos.org/job/nix/trunk/tarball/latest/download-by-type/doc/manual">Nix
+manual</link>.</para>
+
+<para>This manual does not describe the syntax and semantics of the
+Nix expression language, which are given in the Nix manual in the
+<link
+xlink:href="http://hydra.nixos.org/job/nix/trunk/tarball/latest/download-by-type/doc/manual/#chap-writing-nix-expressions">chapter
+on writing Nix expressions</link>.  It only describes the facilities
+provided by Nixpkgs to make writing packages easier, such as the
+standard build environment (<literal>stdenv</literal>).</para>
+
+</preface>
+
+  <xi:include href="quickstart/quick-start.xml" />
+  <xi:include href="stdenv/stdenv.xml" />
+  <xi:include href="meta/meta.xml" />
+  <xi:include href="language-support/language-support.xml" />
+  <xi:include href="package-notes/package-notes.xml" />
+  <xi:include href="coding-conventions/coding-conventions.xml" />
 
 </book>

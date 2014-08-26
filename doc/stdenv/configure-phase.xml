@@ -1,0 +1,92 @@
+<section xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="sec-configure-phase">
+
+<title>The Configure Phase</title>
+
+<para>The configure phase prepares the source tree for building.  The
+default <function>configurePhase</function> runs
+<filename>./configure</filename> (typically an Autoconf-generated
+script) if it exists.</para>
+
+<variablelist>
+  <title>Variables controlling the configure phase</title>
+
+  <varlistentry>
+    <term><varname>configureScript</varname></term>
+    <listitem><para>The name of the configure script.  It defaults to
+    <filename>./configure</filename> if it exists; otherwise, the
+    configure phase is skipped.  This can actually be a command (like
+    <literal>perl ./Configure.pl</literal>).</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>configureFlags</varname></term>
+    <listitem><para>Additional arguments passed to the configure
+    script.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>configureFlagsArray</varname></term>
+    <listitem><para>A shell array containing additional arguments
+    passed to the configure script.  You must use this instead of
+    <varname>configureFlags</varname> if the arguments contain
+    spaces.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>dontAddPrefix</varname></term>
+    <listitem><para>By default, the flag
+    <literal>--prefix=$prefix</literal> is added to the configure
+    flags.  If this is undesirable, set this variable to a non-empty
+    value.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>prefix</varname></term>
+    <listitem><para>The prefix under which the package must be
+    installed, passed via the <option>--prefix</option> option to the
+    configure script.  It defaults to
+    <option>$out</option>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>dontAddDisableDepTrack</varname></term>
+    <listitem><para>By default, the flag
+    <literal>--disable-dependency-tracking</literal> is added to the
+    configure flags to speed up Automake-based builds.  If this is
+    undesirable, set this variable to a non-empty
+    value.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>dontFixLibtool</varname></term>
+    <listitem><para>By default, the configure phase applies some
+    special hackery to all files called <filename>ltmain.sh</filename>
+    before running the configure script in order to improve the purity
+    of Libtool-based packages<footnote><para>It clears the
+    <varname>sys_lib_<replaceable>*</replaceable>search_path</varname>
+    variables in the Libtool script to prevent Libtool from using
+    libraries in <filename>/usr/lib</filename> and
+    such.</para></footnote>.  If this is undesirable, set this
+    variable to a non-empty value.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preConfigure</varname></term>
+    <listitem><para>Hook executed at the start of the configure
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>postConfigure</varname></term>
+    <listitem><para>Hook executed at the end of the configure
+    phase.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+
+</section>

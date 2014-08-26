@@ -1,0 +1,34 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="ssec-stdenv-phases">
+
+<title>Phases</title>
+
+<para>The generic builder has a number of <emphasis>phases</emphasis>.
+Package builds are split into phases to make it easier to override
+specific parts of the build (e.g., unpacking the sources or installing
+the binaries).  Furthermore, it allows a nicer presentation of build
+logs in the Nix build farm.</para>
+
+<para>Each phase can be overridden in its entirety either by setting
+the environment variable
+<varname><replaceable>name</replaceable>Phase</varname> to a string
+containing some shell commands to be executed, or by redefining the
+shell function
+<varname><replaceable>name</replaceable>Phase</varname>.  The former
+is convenient to override a phase from the derivation, while the
+latter is convenient from a build script.</para>
+
+<xi:include href="controlling-phases.xml" />
+<xi:include href="unpack-phase.xml" />
+<xi:include href="patch-phase.xml" />
+<xi:include href="configure-phase.xml" />
+<xi:include href="build-phase.xml" />
+<xi:include href="check-phase.xml" />
+<xi:include href="install-phase.xml" />
+<xi:include href="fixup-phase.xml" />
+<xi:include href="distribution-phase.xml" />
+
+</chapter>

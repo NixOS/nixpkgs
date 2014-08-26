@@ -1,0 +1,88 @@
+<section xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="sec-build-phase">
+
+<title>The Build Phase</title>
+
+<para>The build phase is responsible for actually building the package
+(e.g. compiling it).  The default <function>buildPhase</function>
+simply calls <command>make</command> if a file named
+<filename>Makefile</filename>, <filename>makefile</filename> or
+<filename>GNUmakefile</filename> exists in the current directory (or
+the <varname>makefile</varname> is explicitly set); otherwise it does
+nothing.</para>
+
+<variablelist>
+  <title>Variables controlling the build phase</title>
+
+  <varlistentry>
+    <term><varname>dontBuild</varname></term>
+    <listitem><para>Set to true to skip the build phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>makefile</varname></term>
+    <listitem><para>The file name of the Makefile.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>makeFlags</varname></term>
+    <listitem><para>Additional flags passed to
+    <command>make</command>.  These flags are also used by the default
+    install and check phase.  For setting make flags specific to the
+    build phase, use <varname>buildFlags</varname> (see
+    below).</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>makeFlagsArray</varname></term>
+    <listitem><para>A shell array containing additional arguments
+    passed to <command>make</command>.  You must use this instead of
+    <varname>makeFlags</varname> if the arguments contain
+    spaces, e.g.
+
+<programlisting>
+makeFlagsArray=(CFLAGS="-O0 -g" LDFLAGS="-lfoo -lbar")
+</programlisting>
+
+    Note that shell arrays cannot be passed through environment
+    variables, so you cannot set <varname>makeFlagsArray</varname> in
+    a derivation attribute (because those are passed through
+    environment variables): you have to define them in shell
+    code.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>buildFlags</varname> / <varname>buildFlagsArray</varname></term>
+    <listitem><para>Additional flags passed to
+    <command>make</command>.  Like <varname>makeFlags</varname> and
+    <varname>makeFlagsArray</varname>, but only used by the build
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preBuild</varname></term>
+    <listitem><para>Hook executed at the start of the build
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>postBuild</varname></term>
+    <listitem><para>Hook executed at the end of the build
+    phase.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+
+<para> 
+You can set flags for <command>make</command> through the
+<varname>makeFlags</varname> variable.</para>
+
+<para>Before and after running <command>make</command>, the hooks
+<varname>preBuild</varname> and <varname>postBuild</varname> are
+called, respectively.</para>
+
+</section>

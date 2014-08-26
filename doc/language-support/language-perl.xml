@@ -1,19 +1,10 @@
 <chapter xmlns="http://docbook.org/ns/docbook"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         xml:id="chap-language-support">
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="ssec-language-perl">
 
-<title>Support for specific programming languages</title>
-
-<para>The <link linkend="chap-stdenv">standard build
-environment</link> makes it easy to build typical Autotools-based
-packages with very little code.  Any other kind of package can be
-accomodated by overriding the appropriate phases of
-<literal>stdenv</literal>.  However, there are specialised functions
-in Nixpkgs to easily build packages for other programming languages,
-such as Perl or Haskell.  These are described in this chapter.</para>
-
-
-<section xml:id="ssec-language-perl"><title>Perl</title>
+<title>Perl</title>
 
 <para>Nixpkgs provides a function <varname>buildPerlPackage</varname>,
 a generic package builder function for any Perl package that has a
@@ -151,7 +142,9 @@ ClassC3Componentised = buildPerlPackage rec {
 
 </para>
 
-<section><title>Generation from CPAN</title>
+<simplesect>
+
+<title>Generation from CPAN</title>
 
 <para>Nix expressions for Perl packages can be generated (almost)
 automatically from CPAN.  This is done by the program
@@ -186,148 +179,6 @@ The output can be pasted into
 <filename>pkgs/top-level/perl-packages.nix</filename> or wherever else
 you need it.</para>
 
-</section>
-
-</section>
-
-
-<section><title>Python</title>
-
-<para>
-  Python packages that
-  use <link xlink:href="http://pypi.python.org/pypi/setuptools/"><literal>setuptools</literal></link>,
-  which many Python packages do nowadays, can be built very simply using
-  the <varname>buildPythonPackage</varname> function.  This function is
-  implemented
-  in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/python-modules/generic/default.nix"><filename>pkgs/development/python-modules/generic/default.nix</filename></link>
-  and works similarly to <varname>buildPerlPackage</varname>. (See
-  <xref linkend="ssec-language-perl"/> for details.)
-</para>
-
-<para>
-  Python packages that use <varname>buildPythonPackage</varname> are
-  defined
-  in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/python-packages.nix"><filename>pkgs/top-level/python-packages.nix</filename></link>.
-  Most of them are simple.  For example:
-
-  <programlisting>
-twisted = buildPythonPackage {
-  name = "twisted-8.1.0";
-
-  src = fetchurl {
-    url = http://tmrc.mit.edu/mirror/twisted/Twisted/8.1/Twisted-8.1.0.tar.bz2;
-    sha256 = "0q25zbr4xzknaghha72mq57kh53qw1bf8csgp63pm9sfi72qhirl";
-  };
-
-  propagatedBuildInputs = [ pkgs.ZopeInterface ];
-
-  meta = {
-    homepage = http://twistedmatrix.com/;
-    description = "Twisted, an event-driven networking engine written in Python";
-    license = "MIT";
-  };
-};
-  </programlisting>
-</para>
-
-</section>
-
-
-<section xml:id="ssec-language-java"><title>Java</title>
-
-<para>Ant-based Java packages are typically built from source as follows:
-
-<programlisting>
-stdenv.mkDerivation {
-  name = "...";
-  src = fetchurl { ... };
-
-  buildInputs = [ jdk ant ];
-
-  buildPhase = "ant";
-}
-</programlisting>
-
-Note that <varname>jdk</varname> is an alias for the OpenJDK.</para>
-
-<para>JAR files that are intended to be used by other packages should
-be installed in <filename>$out/share/java</filename>.  The OpenJDK has
-a stdenv setup hook that adds any JARs in the
-<filename>share/java</filename> directories of the build inputs to the
-<envar>CLASSPATH</envar> environment variable.  For instance, if the
-package <literal>libfoo</literal> installs a JAR named
-<filename>foo.jar</filename> in its <filename>share/java</filename>
-directory, and another package declares the attribute
-
-<programlisting>
-buildInputs = [ jdk libfoo ];
-</programlisting>
-
-then <envar>CLASSPATH</envar> will be set to
-<filename>/nix/store/...-libfoo/share/java/foo.jar</filename>.</para>
-
-<para>Private JARs
-should be installed in a location like
-<filename>$out/share/<replaceable>package-name</replaceable></filename>.</para>
-
-<para>If your Java package provides a program, you need to generate a
-wrapper script to run it using the OpenJRE.  You can use
-<literal>makeWrapper</literal> for this:
-
-<programlisting>
-buildInputs = [ makeWrapper ];
-
-installPhase =
-  ''
-    mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/foo \
-      --add-flags "-cp $out/share/java/foo.jar org.foo.Main"
-  '';
-</programlisting>
-
-Note the use of <literal>jre</literal>, which is the part of the
-OpenJDK package that contains the Java Runtime Environment.  By using
-<literal>${jre}/bin/java</literal> instead of
-<literal>${jdk}/bin/java</literal>, you prevent your package from
-depending on the JDK at runtime.</para>
-
-<para>It is possible to use a different Java compiler than
-<command>javac</command> from the OpenJDK.  For instance, to use the
-Eclipse Java Compiler:
-
-<programlisting>
-buildInputs = [ jre ant ecj ];
-</programlisting>
-
-(Note that here you don’t need the full JDK as an input, but just the
-JRE.)  The ECJ has a stdenv setup hook that sets some environment
-variables to cause Ant to use ECJ, but this doesn’t work with all Ant
-files.  Similarly, you can use the GNU Java Compiler:
-
-<programlisting>
-buildInputs = [ gcj ant ];
-</programlisting>
-
-Here, Ant will automatically use <command>gij</command> (the GNU Java
-Runtime) instead of the OpenJRE.</para>
-
-</section>
-
-
-<!--
-<section><title>Haskell</title>
-
-<para>TODO</para>
-
-</section>
-
-
-<section><title>TeX / LaTeX</title>
-
-<para>* Special support for building TeX documents</para>
-
-</section>
--->
-
+</simplesect>
 
 </chapter>

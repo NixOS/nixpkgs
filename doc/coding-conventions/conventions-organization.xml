@@ -1,0 +1,18 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="sec-organisation">
+
+<title>File Names and Organization</title>
+
+<para>Names of files and directories should be in lowercase, with
+dashes between words — not in camel case.  For instance, it should be
+<filename>all-packages.nix</filename>, not
+<filename>allPackages.nix</filename> or
+<filename>AllPackages.nix</filename>.</para>
+
+<xi:include href="conventions-hierarchy.xml" />
+<xi:include href="conventions-versioning.xml" />
+
+</chapter>

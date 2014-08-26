@@ -1,0 +1,15 @@
+<part xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="part-quick-start">
+
+<title>Quick Start</title>
+
+<partintro>
+<para>This section describes the steps to perform to add a package to Nixpkgs.</para>
+</partintro>
+
+<xi:include href="adding-package.xml" />
+
+</part>

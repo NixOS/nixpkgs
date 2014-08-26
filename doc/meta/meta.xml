@@ -1,0 +1,15 @@
+<part xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="par-meta">
+
+<title>Meta-Attributes</title>
+
+<partintro><para>This section describes how to create and manage meta-attributes for packages.</para></partintro>
+  
+<xi:include href="meta-overview.xml" />
+<xi:include href="meta-standard.xml" />
+<xi:include href="meta-licenses.xml" />
+
+</part>

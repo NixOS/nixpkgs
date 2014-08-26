@@ -1,0 +1,127 @@
+<section xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="sec-fixup-phase">
+
+<title>The Fixup Phase</title>
+
+<para>The fixup phase performs some (Nix-specific) post-processing
+actions on the files installed under <filename>$out</filename> by the
+install phase.  The default <function>fixupPhase</function> does the
+following:
+
+<itemizedlist>
+      
+  <listitem><para>It moves the <filename>man/</filename>,
+  <filename>doc/</filename> and <filename>info/</filename>
+  subdirectories of <envar>$out</envar> to
+  <filename>share/</filename>.</para></listitem>
+      
+  <listitem><para>It strips libraries and executables of debug
+  information.</para></listitem>
+
+  <listitem><para>On Linux, it applies the <command>patchelf</command>
+  command to ELF executables and libraries to remove unused
+  directories from the <literal>RPATH</literal> in order to prevent
+  unnecessary runtime dependencies.</para></listitem>
+
+  <listitem><para>It rewrites the interpreter paths of shell scripts
+  to paths found in <envar>PATH</envar>.  E.g.,
+  <filename>/usr/bin/perl</filename> will be rewritten to
+  <filename>/nix/store/<replaceable>some-perl</replaceable>/bin/perl</filename>
+  found in <envar>PATH</envar>.</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+<variablelist>
+  <title>Variables controlling the check phase</title>
+
+  <varlistentry>
+    <term><varname>dontStrip</varname></term>
+    <listitem><para>If set, libraries and executables are not
+    stripped.  By default, they are.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>stripAllList</varname></term>
+    <listitem><para>List of directories to search for libraries and
+    executables from which <emphasis>all</emphasis> symbols should be
+    stripped.  By default, it’s empty.  Stripping all symbols is
+    risky, since it may remove not just debug symbols but also ELF
+    information necessary for normal execution.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>stripAllFlags</varname></term>
+    <listitem><para>Flags passed to the <command>strip</command>
+    command applied to the files in the directories listed in
+    <varname>stripAllList</varname>.  Defaults to <option>-s</option>
+    (i.e. <option>--strip-all</option>).</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>stripDebugList</varname></term>
+    <listitem><para>List of directories to search for libraries and
+    executables from which only debugging-related symbols should be
+    stripped.  It defaults to <literal>lib bin
+    sbin</literal>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>stripDebugFlags</varname></term>
+    <listitem><para>Flags passed to the <command>strip</command>
+    command applied to the files in the directories listed in
+    <varname>stripDebugList</varname>.  Defaults to
+    <option>-S</option>
+    (i.e. <option>--strip-debug</option>).</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>dontPatchELF</varname></term>
+    <listitem><para>If set, the <command>patchelf</command> command is
+    not used to remove unnecessary <literal>RPATH</literal> entries.
+    Only applies to Linux.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>dontPatchShebangs</varname></term>
+    <listitem><para>If set, scripts starting with
+    <literal>#!</literal> do not have their interpreter paths
+    rewritten to paths in the Nix store.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>forceShare</varname></term>
+    <listitem><para>The list of directories that must be moved from
+    <filename>$out</filename> to <filename>$out/share</filename>.
+    Defaults to <literal>man doc info</literal>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>setupHook</varname></term>
+    <listitem><para>A package can export a <link
+    linkend="ssec-setup-hooks">setup hook</link> by setting this
+    variable.  The setup hook, if defined, is copied to
+    <filename>$out/nix-support/setup-hook</filename>.  Environment
+    variables are then substituted in it using <function
+    linkend="fun-substituteAll">substituteAll</function>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preFixup</varname></term>
+    <listitem><para>Hook executed at the start of the fixup
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>postFixup</varname></term>
+    <listitem><para>Hook executed at the end of the fixup
+    phase.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+</section>

@@ -1,0 +1,20 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="ch-purity-nixpkgs">
+
+<title>Purity in Nixpkgs</title>
+
+<para>[measures taken to prevent dependencies on packages outside the
+store, and what you can do to prevent them]</para>
+
+<para>GCC doesn't search in locations such as
+<filename>/usr/include</filename>.  In fact, attempts to add such
+directories through the <option>-I</option> flag are filtered out.
+Likewise, the linker (from GNU binutils) doesn't search in standard
+locations such as <filename>/usr/lib</filename>.  Programs built on
+Linux are linked against a GNU C Library that likewise doesn't search
+in the default system locations.</para>
+
+</chapter>
