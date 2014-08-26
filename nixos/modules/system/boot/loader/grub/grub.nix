@@ -86,15 +86,6 @@ in
         '';
       };
 
-      configurationName = mkOption {
-        default = "";
-        example = "Stable 2.6.21";
-        type = types.str;
-        description = ''
-          GRUB entry name instead of default.
-        '';
-      };
-
       extraPrepareConfig = mkOption {
         default = "";
         type = types.lines;
