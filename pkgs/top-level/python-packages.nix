@@ -9039,6 +9039,8 @@ rec {
   
   BTrees = pythonPackages.buildPythonPackage rec {
     name = "BTrees-4.0.8";
+    
+    patches = [ ./../development/python-modules/btrees_interger_overflow.patch ];
 
     propagatedBuildInputs = [ persistent zope_interface transaction ];
 
