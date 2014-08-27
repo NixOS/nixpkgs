@@ -3827,12 +3827,19 @@ rec {
   };
 
   hcs_utils = buildPythonPackage rec {
-    name = "hcs_utils-1.3";
+    name = "hcs_utils-1.5";
 
     src = fetchurl {
-      url    = "https://pypi.python.org/packages/source/h/hcs_utils/hcs_utils-1.3.tar.gz";
-      sha256 = "0mcjfc0ssil86i74dg323z7mikkw1xazqyr92347x1y33zyffgxh";
+      url    = "https://pypi.python.org/packages/source/h/hcs_utils/${name}.tar.gz";
+      sha256 = "1d2za9crkgzildx610w3zif2i8phcqhh6n8nzg3yvy2mg0s18mkl";
     };
+
+    preBuild = ''
+      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LC_ALL="en_US.UTF-8"
+    '';
+
+    buildInputs = [ six ];
 
     meta = with stdenv.lib; {
       description = "Library collecting some useful snippets";
