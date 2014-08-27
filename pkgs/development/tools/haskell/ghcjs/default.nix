@@ -64,11 +64,11 @@ cabal.mkDerivation (self: rec {
     alex happy git gnumake gcc autoconf automake libtool patch gmp
     base16Bytestring cryptohash executablePath haddockInternal
     transformersCompat QuickCheck haddock hspec xhtml
-    ghcjsPrim
+    ghcjsPrim regexPosix
   ];
   buildTools = [ nodejs git ];
   testDepends = [
-    HUnit regexPosix testFramework testFrameworkHunit
+    HUnit testFramework testFrameworkHunit
   ];
   postConfigure = ''
     echo Patching ghcjs with absolute paths to the Nix store
