@@ -1919,12 +1919,13 @@ rec {
 
 
   evdev = buildPythonPackage rec {
-    version = "0.3.2";
+    version = "0.4.5";
     name = "evdev-${version}";
+    disabled = isPy34;  # see http://bugs.python.org/issue21121
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/e/evdev/${name}.tar.gz";
-      sha256 = "07gmynz764sln2sq18aafx13yawkv5nkqrkk06rj71sq71fsr9h9";
+      sha256 = "0w8ib3ab4mpfc1rvd335l8xkd41qbh3iyb0vfiiapgcfvqk74aq7";
     };
 
     buildInputs = [ pkgs.linuxHeaders ];
@@ -3968,6 +3969,7 @@ rec {
   httpretty = buildPythonPackage rec {
     name = "httpretty-${version}";
     version = "0.8.3";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/h/httpretty/${name}.tar.gz";
