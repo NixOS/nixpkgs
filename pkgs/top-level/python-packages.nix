@@ -8311,6 +8311,7 @@ rec {
 
   trac = buildPythonPackage {
     name = "trac-1.0.1";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = http://ftp.edgewall.com/pub/trac/Trac-1.0.1.tar.gz;
@@ -8414,6 +8415,7 @@ rec {
 
   tweepy = buildPythonPackage (rec {
     name = "tweepy-2.3.0";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/t/tweepy/${name}.tar.gz";
