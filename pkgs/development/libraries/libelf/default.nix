@@ -10,6 +10,8 @@ stdenv.mkDerivation (rec {
 
   doCheck = true;
 
+  buildInputs = [ gettext ];
+
   meta = {
     description = "ELF object file access library";
 

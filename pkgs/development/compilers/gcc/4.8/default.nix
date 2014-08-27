@@ -293,7 +293,6 @@ stdenv.mkDerivation ({
     ++ (optional stdenv.isDarwin gnused)
     ;
 
-  NIX_LDFLAGS = stdenv.lib.optionalString  stdenv.isSunOS "-lm -ldl";
 
   preConfigure = ''
     configureFlagsArray=(
@@ -529,6 +528,7 @@ stdenv.mkDerivation ({
     platforms =
       stdenv.lib.platforms.linux ++
       stdenv.lib.platforms.freebsd ++
+      stdenv.lib.platforms.illumos ++
       optionals (langAda == false) stdenv.lib.platforms.darwin;
   };
 }

@@ -7,7 +7,7 @@ $NetBSD: patch-ac,v 1.18 2011/11/01 14:47:46 hans Exp $
  	;;
  solaris2.1[0-9]) #(vi
 +	case "$GCC_VERSION" in 
-+		4.[67].*)
++		4.[678].*)
 +			cf_XOPEN_SOURCE=600
 +			cf_add_cflags=-std=c99
 +			CPPFLAGS="$CPPFLAGS -std=c99"

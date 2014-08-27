@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, dbus_glib, libxml2, libxslt, getopt, nixUnstable, dysnomia, libintlOrEmpty, libiconvOrEmpty }:
+{ stdenv, fetchurl, pkgconfig, dbus_glib, libxml2, libxslt, getopt, nixStable, dysnomia, libintlOrEmpty, libiconvOrEmpty }:
 
 stdenv.mkDerivation {
-  name = "disnix-0.3pre174e883b7b09da822494876d2f297736f33707a7";
+  name = "disnix-0.3pre24d959b3b37ce285971810245643a7f18cb85fcc";
   
   src = fetchurl {
-    url = http://hydra.nixos.org/build/11773951/download/4/disnix-0.3pre174e883b7b09da822494876d2f297736f33707a7.tar.gz;
-    sha256 = "19hdh2mrlyiq1g3z6lnnqqvripmfcdnm18jpm4anp5iarhnwh3y4";
+    url = http://hydra.nixos.org/build/13462853/download/4/disnix-0.3pre24d959b3b37ce285971810245643a7f18cb85fcc.tar.gz;
+    sha256 = "408707ce29497dae6c960af0e4874659a7da6a5fd49629ebe0d8c167f0dbf19a";
   };
   
-  buildInputs = [ pkgconfig dbus_glib libxml2 libxslt getopt nixUnstable libintlOrEmpty libiconvOrEmpty dysnomia ];
+  buildInputs = [ pkgconfig dbus_glib libxml2 libxslt getopt nixStable libintlOrEmpty libiconvOrEmpty dysnomia ];
 
   dontStrip = true;
   

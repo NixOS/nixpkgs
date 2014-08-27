@@ -11,14 +11,13 @@ with { inherit (stdenv.lib) optional optionals optionalString optionalAttrs; };
 
 let
   self = stdenv.mkDerivation (rec {
-    name = "coreutils-8.21";
+    name = "coreutils-8.22";
 
     src = fetchurl {
       url = "mirror://gnu/coreutils/${name}.tar.xz";
-      sha256 = "064f512185iysqqcvhnhaf3bfmzrvcgs7n405qsyp99zmfyl9amd";
+      sha256 = "04hjzzv434fb8ak3hh3dyhdvg3hqjjwvjmjxqzk1gh2jh6cr8gjv";
     };
 
-    patches = [ ./help2man.patch ];
 
     nativeBuildInputs = [ perl ];
     buildInputs = [ gmp ]
@@ -79,11 +78,10 @@ let
 
       maintainers = [ ];
     };
+  } // stdenv.lib.optionalAttrs (stdenv.system == "armv7l-linux" || stdenv.isSunOS) {
+    FORCE_UNSAFE_CONFIGURE = 1;
   } // optionalAttrs stdenv.isDarwin {
     makeFlags = "CFLAGS=-D_FORTIFY_SOURCE=0";
   });
 in
   self
-  // stdenv.lib.optionalAttrs (stdenv.system == "armv7l-linux" || stdenv.isSunOS) {
-    FORCE_UNSAFE_CONFIGURE = 1;
-  }

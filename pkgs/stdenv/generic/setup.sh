@@ -588,6 +588,10 @@ configurePhase() {
         fi
     fi
 
+    # Patch all configure and libtool* scripts to guarantee that Bash is used.
+    find $NIX_BUILD_TOP -perm -u+x -type f \( -iname libtool\* -or -iname configure \) \
+      |xargs sed -i -e "s|#! /bin/sh|#! $SHELL|g" -e "s|#!/bin/sh|#!$SHELL|g" || true
+
     if [ -z "$dontFixLibtool" ]; then
         find . -iname "ltmain.sh" | while read i; do
             echo "fixing libtool script $i"
@@ -614,7 +618,7 @@ configurePhase() {
     fi
 
     echo "configure flags: $configureFlags ${configureFlagsArray[@]}"
-    $configureScript $configureFlags "${configureFlagsArray[@]}"
+    CONFIG_SHELL="$SHELL" $configureScript $configureFlags "${configureFlagsArray[@]}"
 
     runHook postConfigure
 }
@@ -685,12 +689,12 @@ patchShebangs() {
     local newInterpreterLine
 
     find "$dir" -type f -perm +0100 | while read f; do
-        if [ "$(head -1 "$f" | head -c +2)" != '#!' ]; then
+        if [ "$(head -1 "$f" | head -c+2)" != '#!' ]; then
             # missing shebang => not a script
             continue
         fi
 
-        oldInterpreterLine=$(head -1 "$f" | tail -c +3)
+        oldInterpreterLine=$(head -1 "$f" | tail -c+3)
         read -r oldPath arg0 args <<< "$oldInterpreterLine"
 
         if $(echo "$oldPath" | grep -q "/bin/env$"); then

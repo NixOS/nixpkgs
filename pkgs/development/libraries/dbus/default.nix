@@ -88,7 +88,7 @@ let
     preBuild = makeInternalLib;
     buildInputs = buildInputsX ++ systemdOrEmpty ++ [ libs ];
     NIX_CFLAGS_LINK =
-      stdenv.lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed "
+      stdenv.lib.optionalString (!stdenv.isDarwin && !stdenv.isSunOS) "-Wl,--as-needed "
       + "-ldbus-1";
 
     meta.platforms = with stdenv.lib.platforms; allBut darwin;
