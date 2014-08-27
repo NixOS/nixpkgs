@@ -1021,6 +1021,8 @@ let
 
   fcitx = callPackage ../tools/inputmethods/fcitx { };
 
+  fcitx-anthy = callPackage ../tools/inputmethods/fcitx/fcitx-anthy.nix { };
+
   fcron = callPackage ../tools/system/fcron { };
 
   fdm = callPackage ../tools/networking/fdm {};
