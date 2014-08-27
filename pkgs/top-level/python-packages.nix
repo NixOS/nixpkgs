@@ -476,6 +476,7 @@ rec {
 
   async = buildPythonPackage rec {
     name = "async-0.6.1";
+    disabled = isPy3k;
     meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
 
     buildInputs = [ pkgs.zlib ];
@@ -1170,6 +1171,7 @@ rec {
 
   clientform = buildPythonPackage (rec {
     name = "clientform-0.2.10";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/C/ClientForm/ClientForm-0.2.10.tar.gz";
@@ -1299,11 +1301,11 @@ rec {
 
 
   configobj = buildPythonPackage (rec {
-    name = "configobj-4.7.2";
+    name = "configobj-5.0.6";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/c/configobj/${name}.tar.gz";
-      md5 = "201dbaa732a9049c839f9bb6c27fc7b5";
+      md5 = "e472a3a1c2a67bb0ec9b5d54c13a47d6";
     };
 
     # error: invalid command 'test'
@@ -1619,6 +1621,7 @@ rec {
 
   darcsver = buildPythonPackage (rec {
     name = "darcsver-1.7.4";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/d/darcsver/${name}.tar.gz";
@@ -1852,6 +1855,7 @@ rec {
 
   dpkt = buildPythonPackage rec {
     name = "dpkt-1.8";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "https://dpkt.googlecode.com/files/${name}.tar.gz";
@@ -2006,6 +2010,7 @@ rec {
 
   faker = buildPythonPackage rec {
     name = "faker-0.0.4";
+    disabled = isPy3k;
     src = fetchurl {
       url = https://pypi.python.org/packages/source/F/Faker/Faker-0.0.4.tar.gz;
       sha256 = "09q5jna3j8di0gw5yjx0dvlndkrk2x9vvqzwyfsvg3nlp8h38js1";
@@ -2219,6 +2224,7 @@ rec {
   koji = buildPythonPackage (rec {
     name = "koji-1.8";
     meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "https://fedorahosted.org/released/koji/koji-1.8.0.tar.bz2";
@@ -2828,7 +2834,16 @@ rec {
     };
   };
 
+  zope_tales = buildPythonPackage rec {
+    name = "zope.tales-4.0.2";
 
+    propagatedBuildInputs = [ zope_interface six zope_testrunner ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/z/zope.tales/${name}.zip";
+      md5 = "902b03a5f9774f6e2decf3f06d18a09d";
+    };
+  };
 
 
   zope_deprecation = buildPythonPackage rec {
@@ -3101,6 +3116,7 @@ rec {
 
   dulwich = buildPythonPackage rec {
     name = "dulwich-0.8.7";
+    disabled = isPy3k || isPyPy;
 
     src = fetchurl {
       url = "http://samba.org/~jelmer/dulwich/${name}.tar.gz";
@@ -3227,6 +3243,7 @@ rec {
 
   enum = buildPythonPackage rec {
     name = "enum-0.4.4";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/e/enum/${name}.tar.gz";
@@ -3431,6 +3448,7 @@ rec {
 
   flup = buildPythonPackage (rec {
     name = "flup-1.0.2";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://www.saddi.com/software/flup/dist/${name}.tar.gz";
@@ -3497,6 +3515,7 @@ rec {
     baseName = "fuse";
     version = "0.2.1";
     name = "${baseName}-${version}";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "mirror://sourceforge/fuse/fuse-python-${version}.tar.gz";
@@ -4138,6 +4157,8 @@ rec {
 
   kitchen = buildPythonPackage (rec {
     name = "kitchen-1.1.1";
+    disabled = isPy3k;
+
     meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
 
     src = fetchurl {
@@ -4779,6 +4800,8 @@ rec {
 
   MySQL_python = buildPythonPackage {
     name = "MySQL-python-1.2.3";
+    
+    disabled = isPy3k;
 
     # plenty of failing tests
     doCheck = false;
@@ -4888,12 +4911,12 @@ rec {
   };
 
   netifaces = buildPythonPackage rec {
-    version = "0.8";
+    version = "0.10.4";
     name = "netifaces-${version}";
 
     src = fetchurl {
-      url = "http://alastairs-place.net/projects/netifaces/${name}.tar.gz";
-      sha256 = "1v5i39kx4yz1pwgjfbzi63w55l2z318zgmi9f77ybmmkil1i39sk";
+      url = "http://pypi.python.org/packages/source/n/netifaces/${name}.tar.gz";
+      sha256 = "1plw237a4zib4z8s62g0mrs8gm3kjfrp5sxh6bbk9nl3rdls2mln";
     };
 
     meta = {
@@ -5582,7 +5605,7 @@ rec {
 
   pika = buildPythonPackage {
     name = "pika-0.9.12";
-    diabled = isPy3k;
+    disabled = isPy3k;
     src = fetchurl {
       url = https://pypi.python.org/packages/source/p/pika/pika-0.9.12.tar.gz;
       md5 = "7174fc7cc5570314fa3cfaa729106482";
@@ -5756,6 +5779,11 @@ rec {
       url = "http://pypi.python.org/packages/source/P/PrettyTable/${name}.tar.bz2";
       sha1 = "ad346a18d92c1d95f2295397c7a8a4f489e48851";
     };
+    
+    preCheck = ''
+      export LANG="en_US.UTF-8"
+      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+    '';
 
     meta = {
       description = "Simple Python library for easily displaying tabular data in a visually appealing ASCII table format";
@@ -6617,6 +6645,7 @@ rec {
 
   pysqlite = buildPythonPackage (rec {
     name = "pysqlite-2.6.3";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/p/pysqlite/${name}.tar.gz";
@@ -7436,11 +7465,11 @@ rec {
   });
 
   sigal = buildPythonPackage rec {
-    name = "sigal-0.5.0";
+    name = "sigal-0.7.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/s/sigal/${name}.tar.gz";
-      md5 = "93c93725674c0702583a638f5a09c9e4";
+      md5 = "d2386706ac8543378aebde1ea4edeba4";
     };
 
     propagatedBuildInputs = [ jinja2 markdown pillow pilkit clint argh pytest ];
@@ -7999,6 +8028,7 @@ rec {
 
   stompclient = buildPythonPackage (rec {
     name = "stompclient-0.3.2";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/s/stompclient/${name}.tar.gz";
@@ -8039,6 +8069,11 @@ rec {
   sure = buildPythonPackage rec {
     name = "sure-${version}";
     version = "1.2.7";
+    
+    preBuild = ''
+      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LC_ALL="en_US.UTF-8"
+    '';
 
     # Not picking up from PyPI because it doesn't contain tests.
     src = fetchgit {
@@ -8046,6 +8081,8 @@ rec {
       rev = "86ab9faa97aa9c1720c7d090deac2be385ed3d7a";
       sha256 = "02vffcdgr6vbj80lhl925w7zqy6cqnfvs088i0rbkjs5lxc511b3";
     };
+    
+    
 
     buildInputs = [ nose ];
 
@@ -9108,6 +9145,21 @@ rec {
         maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
+  
+  zope_browserresource = buildPythonPackage rec {
+    name = "zope.browserresource-4.0.1";
+
+    propagatedBuildInputs = [
+      zope_component zope_configuration zope_contenttype zope_i18n
+      zope_interface zope_location zope_publisher zope_schema zope_traversing
+    ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/z/zope.browserresource/zope.browserresource-4.0.1.zip";
+      md5 = "81bbe92c1f04725561470f89d73222c5";
+    };
+  };
+
 
 
   zope_component = buildPythonPackage rec {
@@ -9149,11 +9201,11 @@ rec {
 
 
   zope_container = buildPythonPackage rec {
-    name = "zope.container-3.11.2";
+    name = "zope.container-4.0.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.container/${name}.tar.gz";
-      md5 = "fc66d85a17b8ffb701091c9328983dcc";
+      md5 = "b24d2303ece65a2d9ce23a5bd074c335";
     };
 
     propagatedBuildInputs = [
@@ -9169,11 +9221,11 @@ rec {
 
 
   zope_contenttype = buildPythonPackage rec {
-    name = "zope.contenttype-3.5.5";
+    name = "zope.contenttype-4.0.1";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/z/zope.contenttype/${name}.zip";
-      md5 = "c6ac80e6887de4108a383f349fbdf332";
+      url = "http://pypi.python.org/packages/source/z/zope.contenttype/${name}.tar.gz";
+      md5 = "171be44753e86742da8c81b3ad008ce0";
     };
 
     meta = {
@@ -9356,7 +9408,7 @@ rec {
     name = "zope.schema-4.2.2";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/z/zope.schema/zope.schema-4.2.2.tar.gz";
+      url = "http://pypi.python.org/packages/source/z/zope.schema/${name}.tar.gz";
       md5 = "e7e581af8193551831560a736a53cf58";
     };
 
@@ -9372,13 +9424,13 @@ rec {
     name = "zope.security-4.0.1";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/z/zope.security/zope.security-3.7.4.tar.gz";
-      md5 = "072ab8d11adc083eace11262da08630c";
+      url = "http://pypi.python.org/packages/source/z/zope.security/${name}.tar.gz";
+      md5 = "27d1f2873a0ee9c1f485f7b8f22d8e1c";
     };
 
     propagatedBuildInputs = [
       zope_component zope_configuration zope_i18nmessageid zope_schema
-      zope_proxy
+      zope_proxy zope_testrunner
     ];
 
     meta = {
@@ -9470,14 +9522,17 @@ rec {
 
 
   zope_traversing = buildPythonPackage rec {
-    name = "zope.traversing-3.13.2";
+    name = "zope.traversing-4.0.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.traversing/${name}.zip";
-      md5 = "eaad8fc7bbef126f9f8616b074ec00aa";
+      md5 = "5cc40c552f953939f7c597ebbedd586f";
     };
 
-    propagatedBuildInputs = [ zope_location zope_security zope_publisher ];
+    propagatedBuildInputs = [ zope_location zope_security zope_publisher transaction zope_tales ];
+
+    # circular dependency on zope_browserresource
+    doCheck = false;
 
     meta = {
         maintainers = [ stdenv.lib.maintainers.goibhniu ];
@@ -9486,11 +9541,11 @@ rec {
 
 
   zope_interface = buildPythonPackage rec {
-    name = "zope.interface-4.0.3";
+    name = "zope.interface-4.1.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.interface/${name}.tar.gz";
-      md5 = "1ddd308f2c83703accd1696158c300eb";
+      md5 = "edcd5f719c5eb2e18894c4d06e29b6c6";
     };
 
     propagatedBuildInputs = [ zope_event ];
@@ -9525,6 +9580,7 @@ rec {
   cliapp = buildPythonPackage rec {
     name = "cliapp-${version}";
     version = "1.20140719";
+    disabled = isPy3k;
 
     src = fetchurl rec {
       url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_${version}.orig.tar.gz";
@@ -10016,15 +10072,19 @@ rec {
 
   IMAPClient = buildPythonPackage rec {
     name = "IMAPClient-${version}";
-    version = "0.9.2";
+    version = "0.11";
+    disabled = isPy34;
 
     src = fetchurl {
       url = "http://freshfoo.com/projects/IMAPClient/${name}.tar.gz";
-      sha256 = "10alpj7074djs048xjc4j7ggd1nrqdqpy0fzl7fj9hddp0rbchs9";
+      sha256 = "1w54h8gz25qf6ggazzp6xf7kvsyiadsjfkkk17gm0p6pmzvvccbn";
     };
+    
+    buildInputs = [ mock ];
 
     preConfigure = ''
       sed -i '/distribute_setup/d' setup.py
+      substituteInPlace setup.py --replace "mock==0.8.0" "mock"
     '';
 
     meta = {
