@@ -31,15 +31,8 @@
       extension = self: super: {
         noHaddock = true;
         hyperlinkSource = false;
-      };
-    };
-
-    # Temporary workaround for https://github.com/NixOS/nixpkgs/issues/3540
-    systemFileio = super.systemFileio.override {
-      cabal = super.cabal.override {
-        extension = self: super: {
-          doCheck = false;
-        };
+        # Temporary workaround for https://github.com/NixOS/nixpkgs/issues/3540
+        doCheck = false;
       };
     };
   });
