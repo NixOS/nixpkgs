@@ -7837,6 +7837,7 @@ rec {
 
   subprocess32 = buildPythonPackage rec {
     name = "subprocess32-3.2.6";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/s/subprocess32/${name}.tar.gz";
