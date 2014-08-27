@@ -66,9 +66,10 @@ let
        # disable shutils because it assumes gid 0 exists
        # disable socket because it has two actual network tests that fail
        # disable test_mhlib because it fails for unknown reason
+       # disable sqlite3 due to https://bugs.pypy.org/issue1740
        # disable test_multiprocessing due to transient errors
        # disable test_os because test_urandom_failure fails
-      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k '-test_socket -test_os -test_shutil -test_mhlib -test_multiprocessing' lib-python
+      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k '-test_sqlite -test_socket -test_os -test_shutil -test_mhlib -test_multiprocessing' lib-python
     '';
 
     installPhase = ''
