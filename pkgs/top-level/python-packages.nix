@@ -1944,12 +1944,12 @@ rec {
 
 
   eyeD3 = buildPythonPackage rec {
-    version = "0.7.2";
+    version = "0.7.4";
     name    = "eyeD3-${version}";
 
     src = fetchurl {
-      url = http://eyed3.nicfit.net/releases/eyeD3-0.7.2.tgz;
-      sha256 = "1r0vxdflrj83s8jc5f2qg4p00k37pskn3djym0w73bvq167vkxar";
+      url = "http://eyed3.nicfit.net/releases/${name}.tgz";
+      sha256 = "001hzgqqnf2ig432mq78jsxidpky2rl2ilm28xwjp32vzphycf51";
     };
 
     buildInputs = [ paver ];
