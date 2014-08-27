@@ -197,8 +197,7 @@ sub getLeader {
 sub runInContainer {
     my @args = @_;
     my $leader = getLeader;
-    # FIXME: initialise the environment properly.
-    exec($nsenter, "-t", $leader, "-m", "-u", "-i", "-n", "-p", "--", "env", "-i", "--", @args);
+    exec($nsenter, "-t", $leader, "-m", "-u", "-i", "-n", "-p", "--", @args);
     die "cannot run ‘nsenter’: $!\n";
 }
 
@@ -251,12 +250,14 @@ elsif ($action eq "login") {
 }
 
 elsif ($action eq "root-login") {
-    runInContainer("bash", "--login");
+    runInContainer("su", "root", "-l");
 }
 
 elsif ($action eq "run") {
     shift @ARGV; shift @ARGV;
-    runInContainer(@ARGV);
+    # Escape command.
+    my $s = join(' ', map { s/'/'\\''/g; "'$_'" } @ARGV);
+    runInContainer("su", "root", "-l", "-c", "exec " . $s);
 }
 
 elsif ($action eq "show-ip") {
