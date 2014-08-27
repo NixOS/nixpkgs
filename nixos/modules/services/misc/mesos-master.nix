@@ -86,7 +86,7 @@ in {
 	  ${pkgs.mesos}/bin/mesos-master \
 	    --port=${toString cfg.port} \
 	    --zk=${cfg.zk} \
-	    ${if cfg.quorum == 0 then "--registry=in_memory" else "--registry=replicated_log --quorum=${cfg.quorum}"} \
+	    ${if cfg.quorum == 0 then "--registry=in_memory" else "--registry=replicated_log --quorum=${toString cfg.quorum}"} \
 	    --work_dir=${cfg.workDir} \
 	    --logging_level=${cfg.logLevel} \
 	    ${toString cfg.extraCmdLineOptions}
