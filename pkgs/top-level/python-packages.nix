@@ -3719,11 +3719,14 @@ rec {
 
   goobook = buildPythonPackage rec {
     name = "goobook-1.5";
+    disabled = isPy3k;
 
     src = fetchurl {
       url    = "https://pypi.python.org/packages/source/g/goobook/${name}.tar.gz";
       sha256 = "05vpriy391l5i05ckl5ja5bswqyvl3rwrbmks9pi46w1813j7p5z";
     };
+
+    buildInputs = [ six ];
 
     preConfigure = ''
       sed -i '/distribute/d' setup.py
