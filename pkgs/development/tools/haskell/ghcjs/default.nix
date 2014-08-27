@@ -8,7 +8,7 @@
 , regexPosix, alex, happy, git, gnumake, gcc, autoconf, patch
 , automake, libtool, cabalInstallGhcjs, gmp, base16Bytestring
 , cryptohash, executablePath, transformersCompat
-, haddock, hspec, xhtml, primitive
+, haddock, hspec, xhtml, primitive, cacert
 }:
 cabal.mkDerivation (self: rec {
   pname = "ghcjs";
@@ -79,7 +79,7 @@ cabal.mkDerivation (self: rec {
   '';
   postInstall = ''
     export HOME=$(pwd)
-    export GIT_SSL_CAINFO=/etc/ssl/certs/ca-bundle.crt
+    export GIT_SSL_CAINFO=${cacert}/etc/ca-bundle.crt
     git clone git://github.com/ghcjs/ghcjs-boot.git
     cd ghcjs-boot
     git checkout f9f79d0cf40212943bcc1ad2672f2e0a7af2b7c9
