@@ -8012,9 +8012,10 @@ rec {
   };
 
 
-  statd = buildPythonPackage rec {
+  python_statsd = buildPythonPackage rec {
     name = "python-statsd-${version}";
     version = "1.6.0";
+    disabled = isPy3k;  # next release will be py3k compatible
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/p/python-statsd/${name}.tar.gz";
