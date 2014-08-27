@@ -91,7 +91,7 @@ in {
 	    --logging_level=${cfg.logLevel} \
 	    ${toString cfg.extraCmdLineOptions}
 	'';
-	PermissionsStartOnly = true;
+        Restart = "on-failure";
       };
       preStart = ''
 	mkdir -m 0700 -p ${cfg.workDir}
