@@ -7067,12 +7067,28 @@ rec {
 
     # error: invalid command 'test'
     doCheck = false;
+    
+    propagatedBuildInputs = [ isodate ];
 
     meta = {
       description = "RDFLib is a Python library for working with RDF, a simple yet powerful language for representing information.";
       homepage = http://www.rdflib.net/;
     };
   });
+  
+  isodate = buildPythonPackage rec {
+    name = "isodate-0.5.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/i/isodate/${name}.tar.gz";
+      md5 = "9a267e9327feb3d021cae26002ba6e0e";
+    };
+
+    meta = with stdenv.lib; {
+      description = "ISO 8601 date/time parser";
+      homepage = http://cheeseshop.python.org/pypi/isodate;
+    };
+  };
 
 
   robotframework = buildPythonPackage rec {

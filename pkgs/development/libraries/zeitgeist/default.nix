@@ -3,10 +3,11 @@
 , gtk3, json_glib, librdf_raptor2, pythonPackages, dbus_glib }:
 
 stdenv.mkDerivation rec {
-  name = "zeitgeist-0.0.14";
+  version = "0.9.15";
+  name = "zeitgeist-${version}";
 
   src = fetchurl {
-    url = "https://github.com/seiflotfy/zeitgeist/archive/v0.9.15.tar.gz";
+    url = "https://github.com/seiflotfy/zeitgeist/archive/v${version}.tar.gz";
     sha256 = "07pnc7kmjpd0ncm32z6s3ny5p4zl52v9lld0n0f8sp6cw87k12p0";
   };
 
