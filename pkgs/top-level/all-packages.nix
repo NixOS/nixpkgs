@@ -9201,6 +9201,11 @@ let
 
   handbrake = callPackage ../applications/video/handbrake { };
 
+  lilyterm = callPackage ../applications/misc/lilyterm {
+    inherit (gnome) vte;
+    gtk = gtk2;
+  };
+  
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
   lyx = callPackage ../applications/misc/lyx { };
