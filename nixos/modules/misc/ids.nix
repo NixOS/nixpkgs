@@ -148,6 +148,8 @@
       riemanndash = 138;
       radvd = 139;
 
+      zookeeper = 147;
+
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
       nixbld = 30000; # start of range of uids
