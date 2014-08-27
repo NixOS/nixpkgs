@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, intltool, libvirt, libxml2Python, curl }:
+{ stdenv, fetchurl, pythonPackages, intltool, libxml2Python, curl }:
 
 with stdenv.lib;
 
