@@ -6,12 +6,21 @@ with pkgs.lib;
 let
 
   # Remove invisible and internal options.
-  options' = filter (opt: opt.visible && !opt.internal) (optionAttrSetToDocList options);
+  optionsList = filter (opt: opt.visible && !opt.internal) (optionAttrSetToDocList options);
+
+  # Replace functions by the string <function>
+  substFunction = x:
+    if builtins.isAttrs x then mapAttrs (name: substFunction) x
+    else if builtins.isList x then map substFunction x
+    else if builtins.isFunction x then "<function>"
+    else x;
 
   # Clean up declaration sites to not refer to the NixOS source tree.
-  options'' = flip map options' (opt: opt // {
+  optionsList' = flip map optionsList (opt: opt // {
     declarations = map (fn: stripPrefix fn) opt.declarations;
-  });
+  }
+  // optionalAttrs (opt ? example) { example = substFunction opt.example; }
+  // optionalAttrs (opt ? default) { default = substFunction opt.default; });
 
   prefix = toString ../../..;
 
@@ -21,10 +30,35 @@ let
     else
       fn;
 
-  optionsXML = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext (builtins.toXML options''));
+  # Convert the list of options into an XML file and a JSON file.  The builtin
+  # unsafeDiscardStringContext is used to prevent the realisation of the store
+  # paths which are used in options definitions.
+  optionsXML = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext (builtins.toXML optionsList'));
+  optionsJSON = builtins.toFile "options.json" (builtins.unsafeDiscardStringContext (builtins.toJSON optionsList'));
+
+  # Tools-friendly version of the list of NixOS options.
+  options' = stdenv.mkDerivation {
+    name = "options";
+
+    buildCommand = ''
+      # Export list of options in different format.
+      dst=$out/share/doc/nixos
+      mkdir -p $dst
+
+      cp ${optionsJSON} $dst/options.json
+      cp ${optionsXML} $dst/options.xml
+
+      mkdir -p $out/nix-support
+      echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
+      echo "file xml $dst/options.xml" >> $out/nix-support/hydra-build-products
+    ''; # */
+
+    meta.description = "List of NixOS options in various formats.";
+  };
 
   optionsDocBook = runCommand "options-db.xml" {} ''
-    if grep /nixpkgs/nixos/modules ${optionsXML}; then
+    optionsXML=${options'}/doc/share/nixos/options.xml
+    if grep /nixpkgs/nixos/modules $optionsXML; then
       echo "The manual appears to depend on the location of Nixpkgs, which is bad"
       echo "since this prevents sharing via the NixOS channel.  This is typically"
       echo "caused by an option default that refers to a relative path (see above"
@@ -33,7 +67,7 @@ let
     fi
     ${libxslt}/bin/xsltproc \
       --stringparam revision '${revision}' \
-      -o $out ${./options-to-docbook.xsl} ${optionsXML}
+      -o $out ${./options-to-docbook.xsl} $optionsXML
   '';
 
   sources = sourceFilesBySuffices ./. [".xml"];
@@ -48,6 +82,9 @@ let
     '';
 
 in rec {
+
+  # Tools-friendly version of the list of NixOS options.
+  options = options';
 
   # Generate the NixOS manual.
   manual = stdenv.mkDerivation {
