@@ -694,7 +694,7 @@ rec {
     };
 
     buildInputs = [ pkgs.btrfsProgs ];
-    propagatedBuildInputs = with pkgs; [ contextlib2 sqlalchemy8 pyxdg pycparser cffi alembic ];
+    propagatedBuildInputs = with pkgs; [ contextlib2 sqlalchemy9 pyxdg pycparser cffi alembic ];
 
     meta = {
       description = "Deduplication for Btrfs";
@@ -6069,6 +6069,7 @@ rec {
 
   pycurl2 = buildPythonPackage (rec {
     name = "pycurl2-7.20.0";
+    disabled = isPy3k;
 
     src = fetchgit {
       url = "https://github.com/Lispython/pycurl.git";
@@ -6091,6 +6092,7 @@ rec {
 
   pydot = buildPythonPackage rec {
     name = "pydot-1.0.2";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pydot/${name}.tar.gz";
@@ -6600,6 +6602,7 @@ rec {
 
   pyreport = buildPythonPackage (rec {
     name = "pyreport-0.3.4c";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyreport/${name}.tar.gz";
@@ -7565,12 +7568,17 @@ rec {
   };
 
   sympy = buildPythonPackage rec {
-    name = "sympy-0.7.3";
+    name = "sympy-0.7.4";
 
     src = fetchurl {
       url    = "https://github.com/sympy/sympy/releases/download/${name}/${name}.tar.gz";
-      sha256 = "081g9gs2d1d41ipn8zr034d98cnrxvc4zsmihqmfwzirwzpcii5x";
+      sha256 = "0h1b9mx0snyyybj1x1ga69qssgjzkkgx2rw6nddjhyz1fknf8ywh";
     };
+    
+    preCheck = ''
+      export LANG="en_US.UTF-8"
+      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+    '';
 
     meta = with stdenv.lib; {
       description = "A Python library for symbolic mathematics";
@@ -7915,6 +7923,7 @@ rec {
 
   sqlalchemy = pkgs.lib.overrideDerivation sqlalchemy9 (args: rec {
     name = "SQLAlchemy-0.7.10";
+    disabled = isPy3k;
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
       sha256 = "0rhxgr85xdhjn467qfs0dkyj8x46zxcv6ad3dfx3w14xbkb3kakp";
@@ -7925,7 +7934,6 @@ rec {
       ../development/python-modules/sqlalchemy-0.7.10-test-failures.patch
     ];
   });
-
 
   sqlalchemy8 = pkgs.lib.overrideDerivation sqlalchemy9 (args: rec {
     name = "SQLAlchemy-0.8.7";
