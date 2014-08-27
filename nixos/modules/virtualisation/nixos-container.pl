@@ -7,7 +7,7 @@ use File::Slurp;
 use Fcntl ':flock';
 use Getopt::Long qw(:config gnu_getopt);
 
-my $socat = '@socat@/bin/socat';
+my $nsenter = "@utillinux@/bin/nsenter";
 
 # Ensure a consistent umask.
 umask 0022;
@@ -25,7 +25,6 @@ Usage: nixos-container list
        nixos-container login <container-name>
        nixos-container root-login <container-name>
        nixos-container run <container-name> -- args...
-       nixos-container set-root-password <container-name> <password>
        nixos-container show-ip <container-name>
        nixos-container show-host-key <container-name>
 EOF
@@ -186,6 +185,23 @@ sub stopContainer {
         or die "$0: failed to stop container\n";
 }
 
+# Return the PID of the init process of the container.
+sub getLeader {
+    my $s = `machinectl show "$containerName" -p Leader`;
+    chomp $s;
+    $s =~ /^Leader=(\d+)$/ or die "unable to get container's main PID\n";
+    return int($1);
+}
+
+# Run a command in the container.
+sub runInContainer {
+    my @args = @_;
+    my $leader = getLeader;
+    # FIXME: initialise the environment properly.
+    exec($nsenter, "-t", $leader, "-m", "-u", "-i", "-n", "-p", "--", "env", "-i", "--", @args);
+    die "cannot run ‘nsenter’: $!\n";
+}
+
 if ($action eq "destroy") {
     die "$0: cannot destroy declarative container (remove it from your configuration.nix instead)\n"
         unless POSIX::access($confFile, &POSIX::W_OK);
@@ -235,28 +251,12 @@ elsif ($action eq "login") {
 }
 
 elsif ($action eq "root-login") {
-    exec($socat, "unix:$root/var/lib/root-login.socket", "-,echo=0,raw");
+    runInContainer("bash", "--login");
 }
 
 elsif ($action eq "run") {
     shift @ARGV; shift @ARGV;
-    my $pid = open(SOCAT, "|-", $socat, "-t0", "-", "unix:$root/var/lib/run-command.socket") or die "$0: cannot start $socat: $!\n";
-    print SOCAT join(' ', map { "'$_'" } @ARGV), "\n";
-    flush SOCAT;
-    waitpid($pid, 0);
-    close(SOCAT);
-}
-
-elsif ($action eq "set-root-password") {
-    # FIXME: don't get password from the command line.
-    my $password = $ARGV[2] or die "$0: no password given\n";
-    my $pid = open(SOCAT, "|-", $socat, "-t0", "-", "unix:$root/var/lib/run-command.socket") or die "$0: cannot start $socat: $!\n";
-    print SOCAT "passwd\n";
-    print SOCAT "$password\n";
-    print SOCAT "$password\n";
-    flush SOCAT;
-    waitpid($pid, 0);
-    close(SOCAT);
+    runInContainer(@ARGV);
 }
 
 elsif ($action eq "show-ip") {
