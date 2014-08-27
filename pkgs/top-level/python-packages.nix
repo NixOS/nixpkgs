@@ -6985,7 +6985,7 @@ rec {
     };
 
     propagatedBuildInputs = [ numpy scipy matplotlib pkgs.pyqt4
-      pkgs.cython ];
+      cython ];
 
     buildInputs = with pkgs; [ gcc qt4 blas ] ++ [ nose ];
 
