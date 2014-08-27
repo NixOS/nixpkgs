@@ -4619,8 +4619,10 @@ rec {
     };
   });
 
-  moinmoin = let ver="1.9.7"; in buildPythonPackage (rec {
+  moinmoin = buildPythonPackage (rec {
     name = "moinmoin-${ver}";
+    disabled = isPy3k;
+    ver = "1.9.7";
 
     src = fetchurl {
       url = "http://static.moinmo.in/files/moin-${ver}.tar.gz";
@@ -5374,6 +5376,7 @@ rec {
 
   osc = buildPythonPackage (rec {
     name = "osc-0.133+git";
+    disabled = isPy3k;
 
     src = fetchgit {
       url = git://gitorious.org/opensuse/osc.git;
@@ -5381,7 +5384,7 @@ rec {
       sha256 = "a39ce0e321e40e9758bf7b9128d316c71b35b80eabc84f13df492083bb6f1cc6";
     };
 
-    buildPhase = "python setup.py build";
+    buildPhase = "${python}/bin/${python.executable} setup.py build";
     doCheck = false;
     postInstall = "ln -s $out/bin/osc-wrapper.py $out/bin/osc";
 
@@ -6344,6 +6347,7 @@ rec {
 
   pyro3 = buildPythonPackage (rec {
     name = "Pyro-3.16";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/P/Pyro/${name}.tar.gz";
@@ -8134,6 +8138,7 @@ rec {
 
   tarsnapper = buildPythonPackage rec {
     name = "tarsnapper-0.2.1";
+    disabled = isPy3k;
 
     src = fetchgit {
       url = https://github.com/miracle2k/tarsnapper.git;
