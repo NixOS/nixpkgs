@@ -4246,6 +4246,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/C/CF/CFRANKS/HTML-Widget-1.11.tar.gz;
       sha256 = "02w21rd30cza094m5xs9clzw8ayigbhg2ddzl6jycp4jam0dyhmy";
     };
+    doCheck = false;
     propagatedBuildInputs = [
       TestNoWarnings ClassAccessor ClassAccessorChained
       ClassDataAccessor ModulePluggableFast HTMLTree
@@ -8161,6 +8162,7 @@ let self = _self // overrides; _self = with self; {
       CatalystPluginSession CatalystPluginAuthentication
       CatalystAuthenticationStoreDBIxClass
       CatalystPluginAuthorizationRoles
+      CatalystPluginSessionStateCookie
       CatalystPluginAuthorizationACL
       CatalystPluginHTMLWidget
       CatalystPluginSessionStoreFastMmap
