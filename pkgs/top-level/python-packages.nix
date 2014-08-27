@@ -1492,7 +1492,7 @@ rec {
       md5 = "d329f5cb2053fd31dafc02e2c9ef0299";
     };
 
-    buildInputs = [ pkgs.libffi pycparser ];
+    propagatedBuildInputs = [ pkgs.libffi pycparser ];
 
     meta = {
       maintainers = [ stdenv.lib.maintainers.iElectric ];
@@ -5920,18 +5920,24 @@ rec {
 
 
   pygit2 = buildPythonPackage rec {
-    name = "pygit2-0.20.0";
+    name = "pygit2-0.21.2";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/p/pygit2/${name}.tar.gz";
-      sha256 = "04132q7bn8k7q7ky7nj3bkza8r9xkzkdpfv462b6rgjsd1x6h340";
+      sha256 = "0lya4v91d4y5fwrb55n8m8avgmz0l81jml2spvx6r7j1czcx3zic";
     };
 
     preConfigure = ( if stdenv.isDarwin then ''
       export DYLD_LIBRARY_PATH="${pkgs.libgit2}/lib"
     '' else "" );
 
-    propagatedBuildInputs = [ pkgs.libgit2 ];
+    propagatedBuildInputs = [ pkgs.libgit2 cffi ];
+
+    preCheck = ''
+      # disable tests that require networking
+      rm test/test_repository.py
+      rm test/test_credentials.py
+    '';
 
     meta = {
       homepage = https://pypi.python.org/pypi/pygit2;
