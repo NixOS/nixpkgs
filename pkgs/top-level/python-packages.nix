@@ -9486,8 +9486,8 @@ rec {
       md5 = "8b317b41244fc2e67f2f286890ba59a0";
     };
 
-    buildInputs = [ sqlalchemy zope_testing zope_interface setuptools ];
-    propagatedBuildInputs = [ sqlalchemy transaction ];
+    buildInputs = [ zope_testing zope_interface ];
+    propagatedBuildInputs = [ sqlalchemy9 transaction ];
 
     meta = {
       maintainers = [
