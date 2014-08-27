@@ -1,5 +1,6 @@
 { fetchurl, stdenv, pkgconfig
-, openssl, db48, boost, zlib, miniupnpc, qt4, qrencode, glib, protobuf, utillinux }:
+, openssl, db48, boost, zlib, miniupnpc, qt4, qrencode, glib, protobuf
+, utillinux, autogen, autoconf, autobuild, automake, db }:
 
 with stdenv.lib;
 
@@ -79,14 +80,16 @@ in rec {
     };
   };
 
-  dogecoin = buildAltcoin rec {
+  dogecoin = (buildAltcoin rec {
     walletName = "dogecoin";
-    version = "1.4";
+    version = "1.8.0";
 
     src = fetchurl {
-      url = "https://github.com/dogecoin/dogecoin/archive/1.4.tar.gz";
-      sha256 = "4af983f182976c98f0e32d525083979c9509b28b7d6faa0b90c5bd40b71009cc";
+      url = "https://github.com/dogecoin/dogecoin/archive/v${version}.tar.gz";
+      sha256 = "8a33958c04213cd621aa3c86910477813af22512f03b47c98995d20d31f3f935";
     };
+
+    extraBuildInputs = [ autogen autoconf automake pkgconfig db utillinux protobuf ];
 
     meta = {
       description = "Wow, such coin, much shiba, very rich";
@@ -94,7 +97,34 @@ in rec {
       homepage = http://www.dogecoin.com/;
       maintainers = [ maintainers.offline maintainers.edwtjo ];
     };
+  }).override rec {
+    patchPhase = ''
+      sed -i \
+        -e 's,BDB_CPPFLAGS=$,BDB_CPPFLAGS="-I${db}/include",g' \
+        -e 's,BDB_LIBS=$,BDB_LIBS="-L${db}/lib",g' \
+        -e 's,bdbdirlist=$,bdbdirlist="${db}/include",g' \
+        src/m4/dogecoin_find_bdb51.m4
+    '';
+    dogeConfigure = ''
+      ./autogen.sh \
+      && ./configure --prefix=$out \
+                     --with-incompatible-bdb \
+                     --with-boost-libdir=${boost}/lib \
+    '';
+    dogeInstall = ''
+      install -D "src/dogecoin-cli" "$out/bin/dogecoin-cli"
+      install -D "src/dogecoind" "$out/bin/dogecoind"
+    '';
+    configurePhase = dogeConfigure + "--with-gui";
+    installPhase = dogeInstall + "install -D src/qt/dogecoin-qt $out/bin/dogecoin-qt";
   };
-  dogecoind = dogecoin.override { gui = false; };
+
+  dogecoind = dogecoin.override rec {
+    gui = false;
+    makefile = "Makefile";
+    preBuild = "";
+    configurePhase = dogecoin.dogeConfigure + "--without-gui";
+    installPhase = dogecoin.dogeInstall;
+  };
 
 }
