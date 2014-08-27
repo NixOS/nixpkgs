@@ -10203,10 +10203,7 @@ let
 
   xmp = callPackage ../applications/audio/xmp { };
 
-  xnee = callPackage ../tools/X11/xnee {
-    # Work around "missing separator" error.
-    stdenv = overrideInStdenv stdenv [ gnumake381 ];
-  };
+  xnee = callPackage ../tools/X11/xnee { };
 
   xvidcap = callPackage ../applications/video/xvidcap {
     inherit (gnome) scrollkeeper libglade;
@@ -10918,7 +10915,7 @@ let
   liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
 
   openblas = callPackage ../development/libraries/science/math/openblas { };
-  openblas_0_2_10 = callPackage ../development/libraries/science/math/openblas/0.2.10.nix { 
+  openblas_0_2_10 = callPackage ../development/libraries/science/math/openblas/0.2.10.nix {
     liblapack = liblapack_3_5_0;
   };
 
