@@ -6,8 +6,6 @@ let
 
   cfg = config.services.unbound;
 
-  username = "unbound";
-
   stateDir = "/var/lib/unbound";
 
   access = concatMapStrings (x: "  access-control: ${x} allow\n") cfg.allowedAccess;
@@ -21,21 +19,13 @@ let
   confFile = pkgs.writeText "unbound.conf" ''
     server:
       directory: "${stateDir}"
-      username: ${username}
-      # make sure unbound can access entropy from inside the chroot.
-      # e.g. on linux the use these commands (on BSD, devfs(8) is used):
-      #      mount --bind -n /dev/random /etc/unbound/dev/random
-      # and  mount --bind -n /dev/log /etc/unbound/dev/log
+      username: unbound
       chroot: "${stateDir}"
-      # logfile: "${stateDir}/unbound.log"  #uncomment to use logfile.
-      pidfile: "${stateDir}/unbound.pid"
-      verbosity: 1      # uncomment and increase to get more logging.
+      pidfile: ""
       ${interfaces}
       ${access}
-
-    ${forward}
-
     ${cfg.extraConfig}
+    ${forward}
   '';
 
 in
@@ -82,7 +72,7 @@ in
     environment.systemPackages = [ pkgs.unbound ];
 
     users.extraUsers = singleton {
-      name = username;
+      name = "unbound";
       uid = config.ids.uids.unbound;
       description = "unbound daemon user";
       home = stateDir;
@@ -96,8 +86,18 @@ in
       wants = [" nss-lookup.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      path = [ pkgs.unbound ];
-      serviceConfig.ExecStart = "${pkgs.unbound}/sbin/unbound -d -c ${confFile}";
+      preStart = ''
+        mkdir -m 0755 -p ${stateDir}/dev/
+	cp ${confFile} ${stateDir}/unbound.conf
+	chown unbound ${stateDir}
+	touch ${stateDir}/dev/random
+        ${pkgs.utillinux}/bin/mount --bind -n /dev/random ${stateDir}/dev/random
+      '';
+
+      serviceConfig = {
+        ExecStart = "${pkgs.unbound}/sbin/unbound -d -c ${stateDir}/unbound.conf";
+        ExecStopPost="${pkgs.utillinux}/bin/umount ${stateDir}/dev/random";
+      };
     };
 
   };
