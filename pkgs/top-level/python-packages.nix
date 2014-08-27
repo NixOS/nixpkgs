@@ -3072,12 +3072,12 @@ rec {
 
 
   django_evolution = buildPythonPackage rec {
-    name = "django_evolution-0.7.3";
+    name = "django_evolution-0.6.9";
     disabled = isPy3k;
 
     src = fetchurl {
-      url = "http://downloads.reviewboard.org/releases/django-evolution/0.7/${name}.tar.gz";
-      md5 = "c51895b6501dd58b0e5dc8f5a5fb6f68";
+      url = "http://downloads.reviewboard.org/releases/django-evolution/${name}.tar.gz";
+      md5 = "c0d7d10bc41898c88b14d434c48766ff";
     };
 
     propagatedBuildInputs = [ django_1_5 ];
@@ -3259,6 +3259,8 @@ rec {
       url = "http://pypi.python.org/packages/source/e/enum/${name}.tar.gz";
       md5 = "ce75c7c3c86741175a84456cc5bd531e";
     };
+    
+    doCheck = !isPyPy;
 
     buildInputs = [ ];
 
@@ -4149,6 +4151,9 @@ rec {
       sha256 = "1flccphpyrb8y8dra2fq2s2v3fg615d77kjjmzl0gmiidabkkdqf";
     };
 
+    buildInputs =
+      [ fs gdata python_keyczar mock pyasn1 pycrypto pytest six ];
+
     meta = with stdenv.lib; {
       description = "Store and access your passwords safely";
       homepage    = "https://pypi.python.org/pypi/keyring";
@@ -4156,9 +4161,6 @@ rec {
       maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;
     };
-
-    buildInputs =
-      [ fs gdata python_keyczar mock pyasn1 pycrypto pytest ];
   };
 
   kitchen = buildPythonPackage (rec {
@@ -7021,9 +7023,9 @@ rec {
     };
 
     propagatedBuildInputs =
-      [ recaptcha_client pytz memcached dateutil_1_5 paramiko flup pygments
-        djblets django_1_3 django_evolution pycrypto modules.sqlite3
-        pysvn pil psycopg2
+      [ django_1_3 recaptcha_client pytz memcached dateutil_1_5 paramiko flup pygments
+        djblets django_evolution pycrypto modules.sqlite3
+        pysvn pil psycopg2 
       ];
   };
 
