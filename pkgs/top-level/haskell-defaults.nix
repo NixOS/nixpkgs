@@ -25,6 +25,13 @@
     codex = super.codex.override { hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_20_0_2; }; };
     MonadRandom = self.MonadRandom_0_1_13; # requires transformers >= 0.4.x
     mtl = self.mtl_2_1_2;
+    # Temporary workaround for https://github.com/NixOS/nixpkgs/issues/2689
+    cabal = if !pkgs.stdenv.isDarwin then super.cabal else super.cabal.override {
+      extension = self : super : {
+        noHaddock = true;
+        hyperlinkSource = false;
+      };
+    };
   };
 
   ghc763Prefs = self : super : ghc783Prefs self super // {
