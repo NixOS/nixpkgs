@@ -41,6 +41,8 @@ let
   copySources =
     ''
       cp -prd $sources/* . # */
+      chmod -R u+w .
+      cp ${../../modules/services/databases/postgresql.xml} configuration/postgresql.xml
       ln -s ${optionsDocBook} options-db.xml
       echo "${version}" > version
     '';
@@ -74,7 +76,7 @@ in rec {
         --param toc.section.depth 3 \
         --stringparam admon.style "" \
         --stringparam callout.graphics.extension .gif \
-        --param chunk.section.depth 1 \
+        --param chunk.section.depth 0 \
         --param chunk.first.sections 1 \
         --param use.id.as.filename 1 \
         --stringparam generate.toc "book toc chapter toc appendix toc" \

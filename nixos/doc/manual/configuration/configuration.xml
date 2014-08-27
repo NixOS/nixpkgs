@@ -24,6 +24,9 @@ effect after you run <command>nixos-rebuild</command>.</para>
 <xi:include href="networking.xml" />
 <xi:include href="linux-kernel.xml" />
 
+<!-- FIXME: auto-include NixOS module docs -->
+<xi:include href="postgresql.xml" />
+
 <!-- Apache; libvirtd virtualisation -->
 
 </part>
