@@ -2152,6 +2152,16 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   semigroupoidExtras = callPackage ../development/libraries/haskell/semigroupoid-extras {};
 
+  servant = callPackage ../development/libraries/haskell/servant {};
+
+  servantPool = callPackage ../development/libraries/haskell/servant-pool {};
+
+  servantPostgresql = callPackage ../development/libraries/haskell/servant-postgresql {};
+
+  servantResponse = callPackage ../development/libraries/haskell/servant-response {};
+
+  servantScotty = callPackage ../development/libraries/haskell/servant-scotty {};
+
   setenv = callPackage ../development/libraries/haskell/setenv {};
 
   setlocale = callPackage ../development/libraries/haskell/setlocale {};
