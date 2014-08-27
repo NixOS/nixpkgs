@@ -9759,6 +9759,7 @@ rec {
   ttystatus = buildPythonPackage rec {
     name = "ttystatus-${version}";
     version = "0.23";
+    disabled = isPy3k;
 
     src = fetchurl rec {
       url = "http://code.liw.fi/debian/pool/main/p/python-ttystatus/python-ttystatus_${version}.orig.tar.gz";
@@ -9944,6 +9945,7 @@ rec {
 
   versiontools = buildPythonPackage rec {
     name = "versiontools-1.9.1";
+    doCheck = (!isPy3k);
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/v/versiontools/${name}.tar.gz";
