@@ -1,19 +1,19 @@
 { stdenv, pkgs, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
-  version = "1.5-dev22";
+  version = "1.5.3";
   name = "haproxy-${version}";
 
   src = fetchurl {
-    url = "http://haproxy.1wt.eu/download/1.5/src/devel/${name}.tar.gz";
-    md5 = "980332c79ab0ffa908c77fafdf61b8cc";
+    url = "http://www.haproxy.org/download/1.5/src/${name}.tar.gz";
+    md5 = "e999a547d57445d5a5ab7eb6a06df9a1";
   };
 
   buildInputs = [ openssl ];
 
   # TODO: make it work on darwin/bsd as well
   preConfigure = ''
-    export makeFlags="TARGET=solaris PREFIX=$out USE_OPENSSL=1"
+    export makeFlags="${if stdenv.isSunOS then "TARGET=solaris" else ""} PREFIX=$out USE_OPENSSL=1"
   '';
 
   meta = {
