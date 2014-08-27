@@ -900,33 +900,6 @@ rec {
    };
 
 
-  # euca2ools (and maybe Nova) needs boto 1.9, 2.0 doesn't work.
-  boto_1_9 = buildPythonPackage (rec {
-    name = "boto-1.9b";
-
-    src = fetchurl {
-      url = "http://boto.googlecode.com/files/${name}.tar.gz";
-      sha1 = "00a033b0a593c3ca82927867950f73d88b831155";
-    };
-
-    patches = [ ../development/python-modules/boto-1.9-python-2.7.patch ];
-
-    meta = {
-      homepage = http://code.google.com/p/boto/;
-
-      license = "bsd";
-
-      description = "Python interface to Amazon Web Services";
-
-      longDescription = ''
-        The boto module is an integrated interface to current and
-        future infrastructural services offered by Amazon Web
-        Services.  This includes S3, SQS, EC2, among others.
-      '';
-    };
-  });
-
-
   boto = buildPythonPackage rec {
     name = "boto-${version}";
     version = "2.32.0";
