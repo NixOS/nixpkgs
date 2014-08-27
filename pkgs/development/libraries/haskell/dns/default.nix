@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "dns";
-  version = "1.4.3";
-  sha256 = "15v24f338w71dn3cxrzwyg04hk3vxvrvswbv3nnf2ggjgg46yq3i";
+  version = "1.4.4";
+  sha256 = "1g910rlahvrhjlg6jl7gpya1y3mqkkpmihfr2jnmmlzykll10dnd";
   buildDepends = [
     attoparsec binary blazeBuilder conduit conduitExtra iproute mtl
     network random resourcet
@@ -21,5 +21,6 @@ cabal.mkDerivation (self: {
     description = "DNS library in Haskell";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ fuuzetsu ];
   };
 })
