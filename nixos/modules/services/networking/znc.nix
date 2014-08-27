@@ -228,7 +228,7 @@ in
       modulePackages = mkOption {
         type = types.listOf types.package;
         default = [ ];
-        example = [ pkgs.zncModules.fish pkgs.zncModules.push ];
+        example = literalExample "[ pkgs.zncModules.fish pkgs.zncModules.push ]";
         description = ''
           A list of global znc module packages to add to znc.
         '';

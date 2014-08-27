@@ -65,7 +65,7 @@ in
 
     environment.kdePackages = mkOption {
       default = [];
-      example = "[ pkgs.kde4.kdesdk ]";
+      example = literalExample "[ pkgs.kde4.kdesdk ]";
       type = types.listOf types.package;
       description = "This option is obsolete.  Please use <option>environment.systemPackages</option> instead.";
     };

@@ -113,11 +113,12 @@ in
     };
 
     isoImage.contents = mkOption {
-      example =
+      example = literalExample ''
         [ { source = pkgs.memtest86 + "/memtest.bin";
             target = "boot/memtest.bin";
           }
-        ];
+        ]
+      '';
       description = ''
         This option lists files to be copied to fixed locations in the
         generated ISO image.
@@ -125,7 +126,7 @@ in
     };
 
     isoImage.storeContents = mkOption {
-      example = [pkgs.stdenv];
+      example = literalExample "[ pkgs.stdenv ]";
       description = ''
         This option lists additional derivations to be included in the
         Nix store in the generated ISO image.

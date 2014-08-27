@@ -66,7 +66,7 @@ in
 
       rsaKey = mkOption {
         default = null;
-        example = /root/certificates/irc.key;
+        example = literalExample "/root/certificates/irc.key";
         description = "
           IRCD server RSA key.
         ";
@@ -74,7 +74,7 @@ in
 
       certificate = mkOption {
         default = null;
-        example = /root/certificates/irc.pem;
+        example = literalExample "/root/certificates/irc.pem";
         description = "
           IRCD server SSL certificate. There are some limitations - read manual.
         ";

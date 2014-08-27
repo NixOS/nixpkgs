@@ -122,7 +122,9 @@ in
 
     environment.binsh = mkOption {
       default = "${config.system.build.binsh}/bin/sh";
-      example = "\${pkgs.dash}/bin/dash";
+      example = literalExample ''
+        "''${pkgs.dash}/bin/dash"
+      '';
       type = types.path;
       description = ''
         The shell executable that is linked system-wide to

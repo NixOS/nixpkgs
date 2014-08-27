@@ -31,7 +31,7 @@ in
 
       cronIntervals = mkOption {
         default = {};
-        example = { "hourly" = "0 * * * *"; "daily" = "50 21 * * *"; };
+        example = { hourly = "0 * * * *"; daily = "50 21 * * *"; };
         type = types.attrsOf types.string;
         description = ''
           Periodicity at which intervals should be run by cron.
