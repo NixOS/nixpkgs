@@ -25,14 +25,24 @@
     codex = super.codex.override { hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_20_0_2; }; };
     MonadRandom = self.MonadRandom_0_1_13; # requires transformers >= 0.4.x
     mtl = self.mtl_2_1_2;
+  } // (if !pkgs.stdenv.isDarwin then {} else {
     # Temporary workaround for https://github.com/NixOS/nixpkgs/issues/2689
-    cabal = if !pkgs.stdenv.isDarwin then super.cabal else super.cabal.override {
-      extension = self : super : {
+    cabal = super.cabal.override {
+      extension = self: super: {
         noHaddock = true;
         hyperlinkSource = false;
       };
     };
-  };
+
+    # Temporary workaround for https://github.com/NixOS/nixpkgs/issues/3540
+    systemFileio = super.systemFileio.override {
+      cabal = super.cabal.override {
+        extension = self: super: {
+          doCheck = false;
+        };
+      };
+    };
+  });
 
   ghc763Prefs = self : super : ghc783Prefs self super // {
     aeson = self.aeson_0_7_0_4;
