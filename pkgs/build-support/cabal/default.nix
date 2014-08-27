@@ -275,8 +275,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
 
               ${optionalString (self.enableSharedExecutables && self.isExecutable && self.stdenv.isDarwin) ''
                 for exe in "$out/bin/"* ; do
-                  install_name_tool -add_rpath \
-                    $out/lib/${ghc.ghc.name}/${self.pname}-${self.version} $exe
+                  install_name_tool -add_rpath $out/lib/${ghc.ghc.name}/${self.pname}-${self.version} $exe || true # Ignore failures, which seem to be due to hitting bash scripts rather than binaries
                 done
               ''}
 
