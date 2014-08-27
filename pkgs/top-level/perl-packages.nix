@@ -6467,7 +6467,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  NetAMQP = buildPerlPackage {
+  NetAMQP = buildPerlModule {
     name = "Net-AMQP-0.06";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CH/CHIPS/Net-AMQP-0.06.tar.gz;
@@ -6481,13 +6481,6 @@ let self = _self // overrides; _self = with self; {
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
     };
-    preConfigure =
-      ''
-        substituteInPlace META.json \
-          '"Module::Build" : "0.40"' '"Module::Build" : "0.39"'
-        substituteInPlace META.yml \
-          'Module::Build: 0.40' 'Module::Build: 0.39'
-      '';
   };
 
   NetCoverArtArchive = buildPerlPackage {
