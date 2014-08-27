@@ -7042,11 +7042,11 @@ rec {
 
 
   rdflib = buildPythonPackage (rec {
-    name = "rdflib-3.0.0";
+    name = "rdflib-4.1.2";
 
     src = fetchurl {
-      url = "http://www.rdflib.net/${name}.tar.gz";
-      sha256 = "1c7ipk5vwqnln83rmai5jzyxkjdajdzbk5cgy1z83nyr5hbkgkqr";
+      url = "https://pypi.python.org/packages/source/r/rdflib/${name}.tar.gz";
+      sha256 = "0kvaf332cqbi47rqzlpdx4mbkvw12mkrzkj8n9l19wk713d4py9w";
     };
 
     # error: invalid command 'test'
@@ -7759,6 +7759,7 @@ rec {
 
   skype4py = buildPythonPackage (rec {
     name = "Skype4Py-1.0.32.0";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = mirror://sourceforge/skype4py/Skype4Py-1.0.32.0.tar.gz;
