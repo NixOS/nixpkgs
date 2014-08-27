@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://github.com/gsliepen/tinc.git";
-    rev = "09e000ba54fd4a4ffe3e5c15ee7aeadac35d6996";
-    sha256 = "7f56b7a026776966ca9e7ebabde3659168fde305ad3af5b8605adc4e066000f6";
+    rev = "ac11a79ba7d56e8c770b3dd4c503b9243c4ea4e3";
+    sha256 = "28aa626feaa44fd0aec8b4a7d99288475e278730c92003553eb54f22bd5e228a";
   };
 
   buildInputs = [ ncurses zlib libtool lzo readline openssl autoconf automake gcc gettext texinfo];
