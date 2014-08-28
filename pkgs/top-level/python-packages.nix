@@ -90,6 +90,19 @@ rec {
     '';
   };
 
+  h5py = callPackage ../development/python-modules/h5py {
+    inherit (pkgs) stdenv fetchurl;
+    inherit python buildPythonPackage cython numpy;
+    hdf5 = pkgs.hdf5.override { mpi = null; };
+  };
+
+  h5py-mpi = h5py.override {
+    mpiSupport = true;
+    mpi = pkgs.openmpi;
+    hdf5 = pkgs.hdf5.override { mpi = pkgs.openmpi; enableShared = true; };
+    inherit mpi4py;
+  };
+
   ipython = import ../shells/ipython {
     inherit (pkgs) stdenv fetchurl sip pyqt4;
     inherit buildPythonPackage pythonPackages;
@@ -105,6 +118,12 @@ rec {
     pylabSupport = false;
     pylabQtSupport = false;
   });
+
+  mpi4py = callPackage ../development/python-modules/mpi4py {
+    inherit (pkgs) stdenv fetchurl openssh;
+    inherit python buildPythonPackage;
+    mpi = pkgs.openmpi;
+  };
 
   nixpart = callPackage ../tools/filesystems/nixpart { };
 
