@@ -10919,7 +10919,9 @@ let
   # julia is pinned to specific versions of openblas, so keep old versions
   # until they aren't needed. The un-versioned attribute may continue to track
   # upstream development.
-  openblas = openblas_0_2_10;
+  openblas = callPackage ../development/libraries/science/math/openblas {
+    liblapack = liblapack_3_5_0;
+  };
   openblas_0_2_10 = callPackage ../development/libraries/science/math/openblas/0.2.10.nix {
     liblapack = liblapack_3_5_0;
   };
