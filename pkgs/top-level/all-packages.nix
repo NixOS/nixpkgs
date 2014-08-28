@@ -3707,6 +3707,8 @@ let
 
   scheme48 = callPackage ../development/interpreters/scheme48 { };
 
+  self = callPackage_i686 ../development/interpreters/self { };
+
   spark = callPackage ../applications/networking/cluster/spark { };
 
   spidermonkey = callPackage ../development/interpreters/spidermonkey { };
