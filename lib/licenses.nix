@@ -62,6 +62,11 @@ rec {
     fullName = ''BSD 4-clause "Original" or "Old" License'';
   };
 
+  cc0 = spdx {
+    shortName = "CC0-1.0";
+    fullName = ''Creative Commons Zero v1.0 Universal'';
+  };
+
   cc-by-30 = spdx {
     shortName = "CC-BY-3.0";
     fullName = "Creative Commons Attribution 3.0";

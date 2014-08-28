@@ -8004,6 +8004,8 @@ let
 
   cantarell_fonts = callPackage ../data/fonts/cantarell-fonts { };
 
+  comic-neue = callPackage ../data/fonts/comic-neue { };
+
   corefonts = callPackage ../data/fonts/corefonts { };
 
   wrapFonts = paths : ((import ../data/fonts/fontWrap) {
