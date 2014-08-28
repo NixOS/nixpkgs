@@ -12,4 +12,4 @@ img=$(echo gce/*.tar.gz)
 if ! gsutil ls gs://${BUCKET_NAME}/$(basename $img); then
   gsutil cp $img gs://${BUCKET_NAME}/$(basename $img)
 fi
-gcutil addimage $(basename $img .raw.tar.gz | sed 's|\.|-|' | sed 's|_|-|') gs://${BUCKET_NAME}/$(basename $img)
+gcloud compute images create $(basename $img .raw.tar.gz | sed 's|\.|-|' | sed 's|_|-|') --source-uri gs://${BUCKET_NAME}/$(basename $img)
