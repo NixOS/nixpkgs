@@ -7,7 +7,30 @@ let lib = import ../../../lib; in lib.makeOverridable (
   # (see all-packages.nix).
   fetchurlBoot
 
-, setupScript ? ./setup.sh
+, setupScripts ? [
+    # Original huge setup.sh was split into pieces grouped by purpose:
+
+    ./default-builder/util-hook-handling.sh
+    ./default-builder/util-paths.sh
+    ./default-builder/util-substitute.sh
+    ./default-builder/pretty-print.sh
+
+    ./default-builder/add-build-inputs.sh
+    ./default-builder/unpack+patch.sh
+    ./default-builder/configure+build.sh
+    ./default-builder/check-phases.sh
+
+    ./default-builder/install+fixup.sh
+    ./default-builder/move-docs.sh
+    ./default-builder/compress-man-pages.sh
+    ./default-builder/strip.sh
+    ./default-builder/patch-shebangs.sh
+
+    ./default-builder/dist-phase.sh
+    ./default-builder/exit-handler.sh
+
+    ./default-builder/setup.sh
+  ]
 
 , extraBuildInputs ? []
 }:
@@ -39,13 +62,7 @@ let
 
   unsafeGetAttrPos = builtins.unsafeGetAttrPos or (n: as: null);
 
-  extraBuildInputs' = extraBuildInputs ++
-    [ ../../build-support/setup-hooks/move-docs.sh
-      ../../build-support/setup-hooks/compress-man-pages.sh
-      ../../build-support/setup-hooks/strip.sh
-      ../../build-support/setup-hooks/patch-shebangs.sh
-      gcc
-    ];
+  extraBuildInputs' = extraBuildInputs ++ [ gcc ];
 
   # Add a utility function to produce derivations that use this
   # stdenv and its shell.
@@ -93,7 +110,7 @@ let
         in
         {
           builder = attrs.realBuilder or shell;
-          args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
+          args = attrs.args or ["-e" (attrs.builder or ./default-builder/builder.sh)];
           stdenv = result;
           system = result.system;
           userHook = config.stdenv.userHook or null;
@@ -134,9 +151,7 @@ let
 
       args = ["-e" ./builder.sh];
 
-      setup = setupScript;
-
-      inherit preHook initialPath shell;
+      inherit setupScripts preHook initialPath shell;
 
       propagatedUserEnvPkgs = [gcc] ++
         lib.filter lib.isDerivation initialPath;

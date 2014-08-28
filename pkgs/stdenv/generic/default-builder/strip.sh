@@ -1,18 +1,18 @@
-# This setup hook strips libraries and executables in the fixup phase.
+# Strips libraries and executables in the fixup phase.
 
 fixupOutputHooks+=(_doStrip)
 
 _doStrip() {
-    if [ -z "$dontStrip" ]; then
-        stripDebugList=${stripDebugList:-lib lib32 lib64 libexec bin sbin}
-        if [ -n "$stripDebugList" ]; then
-            stripDirs "$stripDebugList" "${stripDebugFlags:--S}"
-        fi
+    if [ -n "$dontStrip" ]; then return; fi
 
-        stripAllList=${stripAllList:-}
-        if [ -n "$stripAllList" ]; then
-            stripDirs "$stripAllList" "${stripAllFlags:--s}"
-        fi
+    stripDebugList=${stripDebugList:-lib lib32 lib64 libexec bin sbin}
+    if [ -n "$stripDebugList" ]; then
+        stripDirs "$stripDebugList" "${stripDebugFlags:--S}"
+    fi
+
+    stripAllList=${stripAllList:-}
+    if [ -n "$stripAllList" ]; then
+        stripDirs "$stripAllList" "${stripAllFlags:--s}"
     fi
 }
 
@@ -34,3 +34,4 @@ stripDirs() {
         stopNest
     fi
 }
+

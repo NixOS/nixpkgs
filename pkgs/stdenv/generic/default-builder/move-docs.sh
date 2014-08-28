@@ -1,6 +1,5 @@
-# This setup hook moves $out/{man,doc,info} to $out/share; moves
-# $out/share/man to $man/share/man; and moves $out/share/doc to
-# $man/share/doc.
+# Moves $out/{man,doc,info} to $out/share.
+# Note: ./multiple-outputs.sh can later move them to different $outputs.
 
 preFixupHooks+=(_moveDocs)
 

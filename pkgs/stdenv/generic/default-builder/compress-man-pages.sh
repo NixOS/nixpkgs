@@ -1,3 +1,5 @@
+# Compresses man pages by gzip.
+
 fixupOutputHooks+=('if [ -z "$dontGzipMan" ]; then compressManPages "$prefix"; fi')
 
 compressManPages() {
@@ -25,3 +27,4 @@ compressManPages() {
 
     unset GLOBIGNORE
 }
+
