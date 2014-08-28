@@ -61,6 +61,7 @@
   ./programs/ssmtp.nix
   ./programs/venus.nix
   ./programs/wvdial.nix
+  ./programs/freetds.nix
   ./programs/zsh/zsh.nix
   ./rename.nix
   ./security/apparmor.nix
