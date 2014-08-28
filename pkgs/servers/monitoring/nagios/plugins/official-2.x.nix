@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "nagios-plugins-${version}";
-  version = "2.0";
+  version = "2.0.3";
 
   src = fetchurl {
     url = "http://nagios-plugins.org/download/${name}.tar.gz";
-    sha256 = "113nv9jqpbqpdjqilqbj1iyshxyvcmq8w94bq5ajz4dxi9j8045s";
+    sha256 = "0jm0mn55hqwl8ffx8ww9mql2wrkhp1h2k8jw53q3h0ff5m22204g";
   };
 
   # !!! Awful hack. Grrr... this of course only works on NixOS.

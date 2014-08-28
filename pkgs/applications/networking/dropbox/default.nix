@@ -25,9 +25,9 @@ let
     else if stdenv.system == "i686-linux" then "ld-linux.so.2"
     else throw "Dropbox client for: ${stdenv.system} not supported!";
 
-  version = "2.10.27";
-  sha256 = if stdenv.system == "x86_64-linux" then "0l5fkmcr5jc0sm9xm4gshhdn3a7c9ff8qf60vjbiz3gn3n7asjvv"
-    else if stdenv.system == "i686-linux" then "0gn1lx97z4wr1clyjd3y8r6bvwni47rc84zl20s3lsalmm25srh7"
+  version = "2.10.28";
+  sha256 = if stdenv.system == "x86_64-linux" then "0jrg9xy03yc7npjhng9wiyzidbq7s5n8g4fwynnm1yqfd69r3yac"
+    else if stdenv.system == "i686-linux" then "17vbikhdp5l2s8cnqmk8dln4dfzvrvgqls7av3ngf71bx3bj0fij"
     else throw "Dropbox client for: ${stdenv.system} not supported!";
 
   # relative location where the dropbox libraries are stored
@@ -57,8 +57,7 @@ in stdenv.mkDerivation {
   src = fetchurl {
     name = "dropbox-${version}.tar.gz";
     
-    # I found the URLs here: https://forums.dropbox.com/topic.php?id=118678
-    url = "https://d1ilhw0800yew8.cloudfront.net/client/dropbox-lnx.${arch}-${version}.tar.gz";
+    url = "https://dl-web.dropbox.com/u/17/dropbox-lnx.${arch}-${version}.tar.gz";
     inherit sha256;
   };
 

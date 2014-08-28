@@ -11,5 +11,7 @@ cabal.mkDerivation (self: {
     description = "Splittable Unique Identifier Supply";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

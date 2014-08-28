@@ -11,5 +11,7 @@ cabal.mkDerivation (self: {
     description = "A client library for the spread toolkit";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

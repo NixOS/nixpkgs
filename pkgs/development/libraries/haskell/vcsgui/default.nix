@@ -14,5 +14,7 @@ cabal.mkDerivation (self: {
     description = "GUI library for source code management systems";
     license = "GPL";
     platforms = self.stdenv.lib.platforms.linux;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

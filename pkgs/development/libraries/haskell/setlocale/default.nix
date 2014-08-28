@@ -10,5 +10,7 @@ cabal.mkDerivation (self: {
     description = "A Haskell interface to setlocale()";
     license = self.stdenv.lib.licenses.publicDomain;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

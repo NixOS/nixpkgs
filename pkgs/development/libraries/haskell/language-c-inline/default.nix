@@ -14,5 +14,7 @@ cabal.mkDerivation (self: {
     description = "Inline C & Objective-C code in Haskell for language interoperability";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

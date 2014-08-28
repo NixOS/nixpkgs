@@ -28,5 +28,7 @@ cabal.mkDerivation (self: {
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.tomberek ];
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

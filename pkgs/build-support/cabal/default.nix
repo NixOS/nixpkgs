@@ -18,6 +18,11 @@ let
   optionals             = stdenv.lib.optionals;
   optionalString        = stdenv.lib.optionalString;
   filter                = stdenv.lib.filter;
+
+  defaultSetupHs        = builtins.toFile "Setup.hs" ''
+                            import Distribution.Simple
+                            main = defaultMain
+                          '';
 in
 
 # Cabal shipped with GHC 6.12.4 or earlier doesn't know the "--enable-tests configure" flag.
@@ -179,9 +184,10 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
 
               ${optionalString self.jailbreak "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal"}
 
-              for i in Setup.hs Setup.lhs; do
-                test -f $i && ghc --make $i
+              for i in Setup.hs Setup.lhs ${defaultSetupHs}; do
+                test -f $i && break
               done
+              ghc --make -o Setup -odir $TMPDIR $i
 
               for p in $extraBuildInputs $propagatedNativeBuildInputs; do
                 if [ -d "$p/lib/ghc-${ghc.ghc.version}/package.conf.d" ]; then
@@ -199,10 +205,13 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               done
 
               ${optionalString (self.enableSharedExecutables && self.stdenv.isLinux) ''
-                configureFlags+=" --ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.ghc.name}/${self.pname}-${self.version}";
+                configureFlags+=" --ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.ghc.name}/${self.pname}-${self.version}"
               ''}
               ${optionalString (self.enableSharedExecutables && self.stdenv.isDarwin) ''
-                configureFlags+=" --ghc-option=-optl=-Wl,-headerpad_max_install_names";
+                configureFlags+=" --ghc-option=-optl=-Wl,-headerpad_max_install_names"
+              ''}
+              ${optionalString (versionOlder "7.8" ghc.version) ''
+                configureFlags+=" --ghc-option=-j$NIX_BUILD_CORES"
               ''}
 
               echo "configure flags: $extraConfigureFlags $configureFlags"

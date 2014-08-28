@@ -16,5 +16,7 @@ cabal.mkDerivation (self: {
     description = "A Haskell implementation of OAuth 1.0a protocol.";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })
