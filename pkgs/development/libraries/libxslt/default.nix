@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxml2 }:
+{ stdenv, fetchurl, libxml2, lzma }:
 
 stdenv.mkDerivation rec {
   name = "libxslt-1.1.28";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "13029baw9kkyjgr7q3jccw2mz38amq7mmpr5p3bh775qawd1bisz";
   };
 
-  buildInputs = [ libxml2 ];
+  buildInputs = [ libxml2 lzma ];
 
   patches = stdenv.lib.optionals stdenv.isSunOS [ ./patch-ah.patch ];
 
