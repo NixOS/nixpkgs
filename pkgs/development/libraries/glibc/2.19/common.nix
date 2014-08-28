@@ -3,7 +3,8 @@
 
 cross:
 
-{ name, fetchurl, fetchgit ? null, stdenv, installLocales ? false
+{ name, fetchurl, fetchgit ? null, stdenv, tzdata
+, installLocales ? false
 , gccCross ? null, kernelHeaders ? null
 , machHeaders ? null, hurdHeaders ? null, libpthreadHeaders ? null
 , mig ? null
@@ -70,6 +71,10 @@ stdenv.mkDerivation ({
     # nscd needs libgcc, and we don't want it dynamically linked
     # because we don't want it to depend on bootstrap-tools libs.
     echo "LDFLAGS-nscd += -static-libgcc" >> nscd/Makefile
+
+    # There is no 'zonedir' configure option, so we have to add
+    # it to 'configparms'.
+    echo "zonedir = ${tzdata}/share/zoneinfo" >> configparms
   '';
 
   configureFlags =
