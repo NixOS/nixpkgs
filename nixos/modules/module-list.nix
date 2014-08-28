@@ -5,6 +5,7 @@
   ./config/fonts/fonts.nix
   ./config/fonts/ghostscript.nix
   ./config/gnu.nix
+  ./config/gtk-exe-env.nix
   ./config/i18n.nix
   ./config/krb5.nix
   ./config/ldap.nix
@@ -13,6 +14,7 @@
   ./config/nsswitch.nix
   ./config/power-management.nix
   ./config/pulseaudio.nix
+  ./config/qt-plugin-env.nix
   ./config/shells-environment.nix
   ./config/swap.nix
   ./config/sysctl.nix
@@ -59,6 +61,7 @@
   ./programs/shell.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
+  ./programs/uim.nix
   ./programs/venus.nix
   ./programs/wvdial.nix
   ./programs/freetds.nix

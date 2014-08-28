@@ -2395,6 +2395,10 @@ let
 
   ttmkfdir = callPackage ../tools/misc/ttmkfdir { };
 
+  uim = callPackage ../tools/inputmethods/uim {
+    inherit (pkgs.kde4) kdelibs;
+  };
+
   unclutter = callPackage ../tools/misc/unclutter { };
 
   unbound = callPackage ../tools/networking/unbound { };
