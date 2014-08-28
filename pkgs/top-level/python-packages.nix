@@ -2152,6 +2152,7 @@ rec {
   googlecl = buildPythonPackage rec {
     version = "0.9.14";
     name    = "googlecl-${version}";
+    disabled = isPy3k;
 
     src = fetchurl {
       url    = "https://googlecl.googlecode.com/files/${name}.tar.gz";
@@ -3764,6 +3765,7 @@ rec {
 
    google_apputils = buildPythonPackage rec {
     name = "google-apputils-0.4.0";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = http://pypi.python.org/packages/source/g/google-apputils/google-apputils-0.4.0.tar.gz;
@@ -3917,6 +3919,7 @@ rec {
 
   http_signature = buildPythonPackage (rec {
     name = "http_signature-0.1.4";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/h/http_signature/${name}.tar.gz";
@@ -4797,6 +4800,7 @@ rec {
 
   muttils = buildPythonPackage (rec {
     name = "muttils-1.3";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = http://www.blacktrash.org/hg/muttils/archive/8bb26094df06.tar.bz2;
@@ -4859,6 +4863,7 @@ rec {
 
   namebench = buildPythonPackage (rec {
     name = "namebench-1.0.5";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://namebench.googlecode.com/files/${name}.tgz";
@@ -5073,6 +5078,7 @@ rec {
 
   nose-cprof = buildPythonPackage rec {
     name = "nose-cprof-0.1-0";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/n/nose-cprof/${name}.tar.gz";
@@ -5812,8 +5818,9 @@ rec {
   protobuf = buildPythonPackage rec {
     inherit (pkgs.protobuf) name src;
 
-    propagatedBuildInputs = [ pkgs.protobuf setuptools ];
+    propagatedBuildInputs = [ pkgs.protobuf google_apputils  ];
     sourceRoot = "${name}/python";
+    
 
     meta = {
       description = "Protocol Buffers are Google's data interchange format.";
@@ -6150,6 +6157,8 @@ rec {
     };
 
     buildInputs = [ unittest2 ];
+    
+    doCheck = !isPyPy;
 
     meta = {
       homepage = "https://launchpad.net/pyflakes";
@@ -8206,6 +8215,7 @@ rec {
 
   taskcoach = buildPythonPackage rec {
     name = "TaskCoach-1.3.22";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "mirror://sourceforge/taskcoach/${name}.tar.gz";
@@ -8347,6 +8357,7 @@ rec {
 
   smmap = buildPythonPackage rec {
     name = "smmap-0.8.2";
+    disabled = isPy3k;  # next release will have py3k support
     meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
 
     src = fetchurl {
