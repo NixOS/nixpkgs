@@ -803,6 +803,8 @@ let
 
   usb_modeswitch = callPackage ../development/tools/misc/usb-modeswitch { };
 
+  anthy = callPackage ../tools/inputmethods/anthy { };
+
   biosdevname = callPackage ../tools/networking/biosdevname { };
 
   clamav = callPackage ../tools/security/clamav { };
