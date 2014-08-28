@@ -13,8 +13,7 @@ cabal.mkDerivation (self: {
   ];
   meta = {
     homepage = "http://github.com/zalora/servant";
-    description = "Generate a web service for servant 'Resource's
-  using scotty and JSON";
+    description = "Generate a web service for servant 'Resource's using scotty and JSON";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };
