@@ -215,6 +215,11 @@ rec {
     url       = "http://research.microsoft.com/en-us/projects/pex/msr-la.txt";
   };
 
+  ncsa = spdx {
+    shortName = "NCSA";
+    fullName  = "University of Illinois/NCSA Open Source License";
+  };
+
   ofl = spdx {
     shortName = "OFL-1.1";
     fullName = "SIL Open Font License 1.1";
