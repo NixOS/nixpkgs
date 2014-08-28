@@ -3241,6 +3241,8 @@ let
 
     camlp5_transitional = camlp5_6_transitional;
 
+    calendar = callPackage ../development/ocaml-modules/calendar { };
+
     camlzip = callPackage ../development/ocaml-modules/camlzip { };
 
     camomile_0_8_2 = callPackage ../development/ocaml-modules/camomile/0.8.2.nix { };
@@ -3265,6 +3267,8 @@ let
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
+    eliom = callPackage ../development/ocaml-modules/eliom { };
+
     findlib = callPackage ../development/tools/ocaml/findlib { };
 
     javalib = callPackage ../development/ocaml-modules/javalib {
@@ -3276,6 +3280,8 @@ let
     patoline = callPackage ../tools/typesetting/patoline { };
 
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
+
+    js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml { };
 
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
 
@@ -3309,6 +3315,8 @@ let
 
     ocamlify = callPackage ../development/tools/ocaml/ocamlify { };
 
+    ocaml_ipaddr = callPackage ../development/ocaml-modules/ocaml-ipaddr { };
+
     ocaml_lwt = callPackage ../development/ocaml-modules/lwt { };
 
     ocamlmod = callPackage ../development/tools/ocaml/ocamlmod { };
@@ -3318,6 +3326,8 @@ let
     ocamlnet = callPackage ../development/ocaml-modules/ocamlnet { };
 
     ocaml_oasis = callPackage ../development/tools/ocaml/oasis { };
+
+    ocaml_optcomp = callPackage ../development/ocaml-modules/optcomp { };
 
     ocaml_pcre = callPackage ../development/ocaml-modules/pcre {
       inherit pcre;
@@ -3331,7 +3341,13 @@ let
 
     ocaml_ssl = callPackage ../development/ocaml-modules/ssl { };
 
+    ocaml_text = callPackage ../development/ocaml-modules/ocaml-text { };
+
+    ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
+
     ounit = callPackage ../development/ocaml-modules/ounit { };
+
+    tyxml = callPackage ../development/ocaml-modules/tyxml { };
 
     ulex = callPackage ../development/ocaml-modules/ulex { };
 
@@ -3366,6 +3382,9 @@ let
     yojson = callPackage ../development/ocaml-modules/yojson { };
 
     zarith = callPackage ../development/ocaml-modules/zarith { };
+
+    ocsigen_deriving = callPackage ../development/ocaml-modules/ocsigen-deriving { };
+
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
