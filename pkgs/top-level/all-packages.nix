@@ -901,6 +901,8 @@ let
 
   dhcpcd = callPackage ../tools/networking/dhcpcd { };
 
+  di = callPackage ../tools/system/di { };
+
   diffstat = callPackage ../tools/text/diffstat { };
 
   diffutils = callPackage ../tools/text/diffutils { };
