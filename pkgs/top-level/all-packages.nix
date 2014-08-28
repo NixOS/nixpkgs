@@ -8655,6 +8655,10 @@ let
     inherit (gnome) gnomedocutils libgnome libglade libgnomeui scrollkeeper;
   };
 
+  evilvte = callPackage ../applications/misc/evilvte {
+    configH = config.evilvte.config or "";
+  };
+
   evopedia = callPackage ../applications/misc/evopedia { };
 
   keepassx = callPackage ../applications/misc/keepassx { };
