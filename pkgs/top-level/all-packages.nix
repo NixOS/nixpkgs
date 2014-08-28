@@ -9349,6 +9349,7 @@ let
     bs2bSupport = true;
     quviSupport = true;
     cacaSupport = true;
+    vaapiSupport = config.mpv.vaapiSupport or false;
   };
 
   mrxvt = callPackage ../applications/misc/mrxvt { };
