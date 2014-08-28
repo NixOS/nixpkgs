@@ -1,5 +1,8 @@
-{ stdenv, fetchurl, gfortran, perl, liblapack }:
+{ stdenv, fetchurl, gfortran, perl, liblapack, config }:
 
+let local = config.openblas.preferLocalBuild or false;
+    localTarget = config.openblas.target or "";
+in
 stdenv.mkDerivation rec {
   version = "0.2.10";
 
@@ -16,7 +19,8 @@ stdenv.mkDerivation rec {
 
   cpu = builtins.head (stdenv.lib.splitString "-" stdenv.system);
 
-  target = if cpu == "i686" then "P2" else 
+  target = if local then localTarget else
+    if cpu == "i686" then "P2" else
     if cpu == "x86_64" then "CORE2" else
      # allow autodetect
       "";
