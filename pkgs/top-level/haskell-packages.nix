@@ -642,6 +642,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   diagramsContrib = callPackage ../development/libraries/haskell/diagrams/contrib.nix {};
   diagramsLib = callPackage ../development/libraries/haskell/diagrams/lib.nix {};
   diagramsPostscript = callPackage ../development/libraries/haskell/diagrams/postscript.nix {};
+  diagramsRasterific = callPackage ../development/libraries/haskell/diagrams/rasterific.nix {};
   diagramsSvg = callPackage ../development/libraries/haskell/diagrams/svg.nix {};
 
   Diff = callPackage ../development/libraries/haskell/Diff {};
@@ -852,6 +853,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   foldl = callPackage ../development/libraries/haskell/foldl {};
 
   folds = callPackage ../development/libraries/haskell/folds {};
+
+  FontyFruity = callPackage ../development/libraries/haskell/FontyFruity {};
 
   forceLayout = callPackage ../development/libraries/haskell/force-layout {};
 
@@ -2013,6 +2016,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   rank1dynamic = callPackage ../development/libraries/haskell/rank1dynamic {};
 
   ranges = callPackage ../development/libraries/haskell/ranges {};
+
+  Rasterific = callPackage ../development/libraries/haskell/Rasterific {};
 
   reserve = callPackage ../development/libraries/haskell/reserve {};
 
