@@ -9878,7 +9878,7 @@ let
 
   tilda = callPackage ../applications/misc/tilda {
     vte = gnome3.vte;
-    gtk = gtk3;    
+    gtk = gtk3;
   };
 
   timidity = callPackage ../tools/misc/timidity { };
