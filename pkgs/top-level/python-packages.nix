@@ -159,7 +159,7 @@ rec {
   pygtk = import ../development/python-modules/pygtk {
     inherit (pkgs) fetchurl stdenv pkgconfig gtk;
     inherit python buildPythonPackage pygobject pycairo isPy3k;
-  }; 
+  };
 
   # XXX: how can we get an override here?
   #pyGtkGlade = pygtk.override {
@@ -572,7 +572,7 @@ rec {
     name = "avro-1.7.6";
 
     disabled = isPy3k;
-    
+
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/a/avro/${name}.tar.gz";
       md5 = "7f4893205e5ad69ac86f6b44efb7df72";
@@ -586,9 +586,9 @@ rec {
 
   avro3k = pkgs.lowPrio (buildPythonPackage (rec {
     name = "avro3k-1.7.7-SNAPSHOT";
-    
+
     disabled = (!isPy3k);
-    
+
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/a/avro3k/${name}.tar.gz";
       sha256 = "15ahl0irwwj558s964abdxg4vp6iwlabri7klsm2am6q5r0ngsky";
@@ -674,7 +674,7 @@ rec {
 
   beaker = buildPythonPackage rec {
     name = "Beaker-1.6.4";
-    
+
     disabled = isPy3k;
 
     src = fetchurl {
@@ -755,9 +755,9 @@ rec {
         modules.sqlite3
         modules.readline
       ];
-      
+
     buildInputs = with pythonPackages; [ mock pyechonest six responses nose ];
-    
+
     # 10 tests are failing
     doCheck = false;
 
@@ -768,12 +768,12 @@ rec {
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
-  
+
   responses = pythonPackages.buildPythonPackage rec {
     name = "responses-0.2.2";
 
     propagatedBuildInputs = with pythonPackages; [ requests mock six pytest flake8 ];
-    
+
     doCheck = false;
 
     src = fetchurl {
@@ -782,7 +782,7 @@ rec {
     };
 
   };
- 
+
   rarfile = pythonPackages.buildPythonPackage rec {
     name = "rarfile-2.6";
 
@@ -798,7 +798,7 @@ rec {
       homepage = https://github.com/markokr/rarfile;
     };
   };
-  
+
   pyechonest = pythonPackages.buildPythonPackage rec {
     name = "pyechonest-8.0.2";
 
@@ -1017,10 +1017,10 @@ rec {
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
-  
+
   zc_buildout171 = buildPythonPackage rec {
     name = "zc.buildout-1.7.1";
-    
+
     disabled = isPy3k;
 
     src = fetchurl {
@@ -1035,10 +1035,10 @@ rec {
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
-  
+
   zc_buildout152 = buildPythonPackage rec {
     name = "zc.buildout-1.5.2";
-    
+
     disabled = isPy3k;
 
     src = fetchurl {
@@ -1746,7 +1746,7 @@ rec {
       platforms = stdenv.lib.platforms.all;
     };
   };
-  
+
   deform2 = buildPythonPackage rec {
     name = "deform-2.0a2";
 
@@ -2015,7 +2015,7 @@ rec {
 
   facebook-sdk = buildPythonPackage rec {
     name = "facebook-sdk-0.4.0";
-    
+
     disabled = isPy3k;
 
     src = fetchurl {
@@ -2192,14 +2192,14 @@ rec {
   gtimelog = buildPythonPackage rec {
     name = "gtimelog-${version}";
     version = "0.9.1";
-    
+
     disabled = isPy26;
 
     src = fetchurl {
       url = "https://github.com/gtimelog/gtimelog/archive/${version}.tar.gz";
       sha256 = "0qk8fv8cszzqpdi3wl9vvkym1jil502ycn6sic4jrxckw5s9jsfj";
     };
-    
+
     preBuild = ''
       export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
       export LC_ALL="en_US.UTF-8"
@@ -2212,12 +2212,12 @@ rec {
       substituteInPlace runtests --replace "/usr/bin/env python" "${python}/bin/${python.executable}"
       ./runtests
     '';
-    
+
     preFixup = ''
         wrapProgram $out/bin/gtimelog \
           --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
           --prefix LD_LIBRARY_PATH ":" "${pkgs.gtk3}/lib" \
-     
+
     '';
 
     meta = with stdenv.lib; {
@@ -2369,7 +2369,7 @@ rec {
       url = "http://pypi.python.org/packages/source/p/pyramid/${name}.tar.gz";
       md5 = "8a1ab3b773d8e22437828f7df22852c1";
     };
-    
+
     preCheck = ''
       # test is failing, see https://github.com/Pylons/pyramid/issues/1405
       rm pyramid/tests/test_response.py
@@ -2651,7 +2651,7 @@ rec {
       url = "http://pypi.python.org/packages/source/p/pyramid_zodbconn/${name}.tar.gz";
       md5 = "3c7746a227fbcda3e138ab8bfab7700b";
     };
-    
+
     # should be fixed in next release
     doCheck = false;
 
@@ -2732,7 +2732,7 @@ rec {
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
-  
+
   ZEO = pythonPackages.buildPythonPackage rec {
     name = "ZEO-4.0.0";
 
@@ -2747,7 +2747,7 @@ rec {
       homepage = https://pypi.python.org/pypi/ZEO;
     };
   };
-  
+
   random2 = pythonPackages.buildPythonPackage rec {
     name = "random2-1.0.1";
 
@@ -3272,7 +3272,7 @@ rec {
       url = "http://pypi.python.org/packages/source/e/enum/${name}.tar.gz";
       md5 = "ce75c7c3c86741175a84456cc5bd531e";
     };
-    
+
     doCheck = !isPyPy;
 
     buildInputs = [ ];
@@ -3452,7 +3452,7 @@ rec {
     };
 
     buildInputs = [ nose mock ];
-    
+
     patchPhase = ''
       substituteInPlace jsonschema/tests/test_jsonschema_test_suite.py --replace "python" "${python}/bin/${python.executable}"
     '';
@@ -3614,7 +3614,7 @@ rec {
   gevent = buildPythonPackage rec {
     name = "gevent-1.0.1";
     disabled = isPy3k;
-    
+
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/g/gevent/${name}.tar.gz";
       sha256 = "0hyzfb0gcx9pm5c2igan8y57hqy2wixrwvdjwsaivxsqs0ay49s6";
@@ -4038,7 +4038,7 @@ rec {
       url = "http://pypi.python.org/packages/source/i/iptools/iptools-${version}.tar.gz";
       md5 = "aed4045638fd40c16f8d9bb04606f700";
     };
-    
+
     buildInputs = [ nose ];
 
     meta = {
@@ -4345,7 +4345,7 @@ rec {
     patchPhase = ''
       substituteInPlace magic.py --replace "ctypes.CDLL(dll)" "ctypes.CDLL('${pkgs.file}/lib/libmagic.so')"
     '';
-    
+
     doCheck = false;
 
     # TODO: tests are failing
@@ -4718,7 +4718,7 @@ rec {
     name = "python-mpd-0.3.0";
 
     disabled = isPy3k;
-    
+
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/p/python-mpd/python-mpd-0.3.0.tar.gz";
       md5 = "5b3849b131e2fb12f251434597d65635";
@@ -4783,7 +4783,7 @@ rec {
       url = "http://pypi.python.org/packages/source/m/musicbrainzngs/${name}.tar.gz";
       md5 = "9e17a181af72d04a291c9a960bc73d44";
     };
-    
+
     preCheck = ''
       export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
       export LC_ALL="en_US.UTF-8"
@@ -4805,7 +4805,7 @@ rec {
       url = "http://pypi.python.org/packages/source/m/mutagen/${name}.tar.gz";
       sha256 = "12f70aaf5ggdzll76bhhkn64b27xy9s1acx417dbsaqnnbis8s76";
     };
-    
+
     # one unicode test fails
     doCheck = false;
 
@@ -4839,7 +4839,7 @@ rec {
 
   MySQL_python = buildPythonPackage {
     name = "MySQL-python-1.2.3";
-    
+
     disabled = isPy3k;
 
     # plenty of failing tests
@@ -5466,7 +5466,7 @@ rec {
 
     # tests failures since 1.14.0 release..
     doCheck = false;
-    
+
     checkPhase = "${python}/bin/${python.executable} test.py";
 
     meta = {
@@ -5656,37 +5656,37 @@ rec {
 
     propagatedBuildInputs = [ unittest2 ];
   };
-  
+
   pil = buildPythonPackage rec {
     name = "PIL-${version}";
     version = "1.1.7";
-    
+
     src = fetchurl {
       url = "http://effbot.org/downloads/Imaging-${version}.tar.gz";
       sha256 = "04aj80jhfbmxqzvmq40zfi4z3cw6vi01m3wkk6diz3lc971cfnw9";
     };
-  
+
     buildInputs = [ python pkgs.libjpeg pkgs.zlib pkgs.freetype ];
-  
+
     disabled = isPy3k;
-  
+
     doCheck = true;
-  
+
     preConfigure = ''
       sed -i "setup.py" \
           -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = libinclude("${pkgs.freetype}")|g ;
               s|^JPEG_ROOT =.*$|JPEG_ROOT = libinclude("${pkgs.libjpeg}")|g ;
               s|^ZLIB_ROOT =.*$|ZLIB_ROOT = libinclude("${pkgs.zlib}")|g ;'
     '';
-  
+
     checkPhase   = "${python}/bin/${python.executable} selftest.py";
     buildPhase   = "${python}/bin/${python.executable} setup.py build_ext -i";
-  
+
     postInstall = ''
       cd "$out"/lib/python*/site-packages
       ln -s $PWD PIL
     '';
-  
+
     meta = {
       homepage = http://www.pythonware.com/products/pil/;
       description = "The Python Imaging Library (PIL)";
@@ -5821,7 +5821,7 @@ rec {
       url = "http://pypi.python.org/packages/source/P/PrettyTable/${name}.tar.bz2";
       sha1 = "ad346a18d92c1d95f2295397c7a8a4f489e48851";
     };
-    
+
     preCheck = ''
       export LANG="en_US.UTF-8"
       export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
@@ -5839,7 +5839,7 @@ rec {
 
     propagatedBuildInputs = [ pkgs.protobuf google_apputils  ];
     sourceRoot = "${name}/python";
-    
+
 
     meta = {
       description = "Protocol Buffers are Google's data interchange format.";
@@ -6176,7 +6176,7 @@ rec {
     };
 
     buildInputs = [ unittest2 ];
-    
+
     doCheck = !isPyPy;
 
     meta = {
@@ -7082,7 +7082,7 @@ rec {
     propagatedBuildInputs =
       [ django_1_3 recaptcha_client pytz memcached dateutil_1_5 paramiko flup pygments
         djblets django_evolution pycrypto modules.sqlite3
-        pysvn pil psycopg2 
+        pysvn pil psycopg2
       ];
   };
 
@@ -7097,7 +7097,7 @@ rec {
 
     # error: invalid command 'test'
     doCheck = false;
-    
+
     propagatedBuildInputs = [ isodate ];
 
     meta = {
@@ -7105,7 +7105,7 @@ rec {
       homepage = http://www.rdflib.net/;
     };
   });
-  
+
   isodate = buildPythonPackage rec {
     name = "isodate-0.5.0";
 
@@ -7224,7 +7224,7 @@ rec {
   rope = buildPythonPackage rec {
     version = "0.9.4";
     name = "rope-${version}";
-    
+
     disabled = isPy3k;
 
     src = fetchurl {
@@ -7637,7 +7637,7 @@ rec {
       url    = "https://github.com/sympy/sympy/releases/download/${name}/${name}.tar.gz";
       sha256 = "0h1b9mx0snyyybj1x1ga69qssgjzkkgx2rw6nddjhyz1fknf8ywh";
     };
-    
+
     preCheck = ''
       export LANG="en_US.UTF-8"
       export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
@@ -7749,7 +7749,7 @@ rec {
 
   semantic = buildPythonPackage rec {
     name = "semantic-1.0.3";
-    
+
     disabled = isPy3k;
 
     propagatedBuildInputs = [ quantities numpy ];
@@ -7889,7 +7889,7 @@ rec {
 
   supervisor = buildPythonPackage rec {
     name = "supervisor-3.1.1";
-    
+
     disabled = isPy3k;
 
     src = fetchurl {
@@ -8149,7 +8149,7 @@ rec {
   sure = buildPythonPackage rec {
     name = "sure-${version}";
     version = "1.2.7";
-    
+
     preBuild = ''
       export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
       export LC_ALL="en_US.UTF-8"
@@ -8161,8 +8161,8 @@ rec {
       rev = "86ab9faa97aa9c1720c7d090deac2be385ed3d7a";
       sha256 = "02vffcdgr6vbj80lhl925w7zqy6cqnfvs088i0rbkjs5lxc511b3";
     };
-    
-    
+
+
 
     buildInputs = [ nose ];
 
@@ -8269,9 +8269,9 @@ rec {
       url = "http://pypi.python.org/packages/source/T/Tempita/Tempita-${version}.tar.gz";
       md5 = "4c2f17bb9d481821c41b6fbee904cea1";
     };
-    
+
     disabled = isPy3k;
-    
+
     buildInputs = [ nose ];
 
     meta = {
@@ -8363,11 +8363,11 @@ rec {
 
   tox = buildPythonPackage rec {
     name = "tox-1.7.2";
-  
+
     propagatedBuildInputs = [ py virtualenv ];
 
     doCheck = false;
-  
+
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/t/tox/${name}.tar.gz";
       md5 = "0d9b3acb1a9252659d753b0ae6b9b264";
@@ -8511,7 +8511,7 @@ rec {
     # NOTE: When updating please check if new versions still cause issues
     # to packages like carbon (http://stackoverflow.com/questions/19894708/cant-start-carbon-12-04-python-error-importerror-cannot-import-name-daem)
     disabled = isPy3k;
- 
+
     name = "Twisted-11.1.0";
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/T/Twisted/${name}.tar.bz2";
@@ -8847,7 +8847,7 @@ rec {
       url = "http://pypi.python.org/packages/source/W/WebTest/WebTest-${version}.zip";
       md5 = "49314bdba23f4d0bd807facb2a6d3f90";
     };
-    
+
     preConfigure = ''
       substituteInPlace setup.py --replace "nose<1.3.0" "nose"
     '';
@@ -9061,7 +9061,7 @@ rec {
     };
 
     propagatedBuildInputs  = [ zconfig ];
-    
+
     # too many deps..
     doCheck = false;
 
@@ -9121,7 +9121,7 @@ rec {
       maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
-  
+
   zodb = buildPythonPackage rec {
     name = "zodb-${version}";
     version = "4.0.1";
@@ -9138,7 +9138,7 @@ rec {
       # test failure on py3.4
       rm src/ZODB/tests/testDB.py
     '' else "";
-    
+
     meta = {
       description = "An object-oriented database for Python";
       homepage = http://pypi.python.org/pypi/ZODB;
@@ -9146,7 +9146,7 @@ rec {
       maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
-  
+
   zodbpickle = pythonPackages.buildPythonPackage rec {
     name = "zodbpickle-0.5.2";
 
@@ -9154,7 +9154,7 @@ rec {
       url = "https://pypi.python.org/packages/source/z/zodbpickle/${name}.tar.gz";
       md5 = "d401bd89f99ec8d56c22493e6f8c0443";
     };
-    
+
     # fails..
     doCheck = false;
 
@@ -9163,10 +9163,10 @@ rec {
     };
   };
 
-  
+
   BTrees = pythonPackages.buildPythonPackage rec {
     name = "BTrees-4.0.8";
-    
+
     patches = [ ./../development/python-modules/btrees_interger_overflow.patch ];
 
     propagatedBuildInputs = [ persistent zope_interface transaction ];
@@ -9182,7 +9182,7 @@ rec {
     };
   };
 
-  
+
   persistent = pythonPackages.buildPythonPackage rec {
     name = "persistent-4.0.8";
 
@@ -9230,7 +9230,7 @@ rec {
         maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
-  
+
   zope_browserresource = buildPythonPackage rec {
     name = "zope.browserresource-4.0.1";
 
@@ -9575,7 +9575,7 @@ rec {
       url = "http://pypi.python.org/packages/source/z/zope.testing/${name}.tar.gz";
       md5 = "6c73c5b668a67fdc116a25b884058ed9";
     };
-    
+
     doCheck = !(python.isPypy or false);
 
     propagatedBuildInputs = [ zope_interface zope_exceptions zope_location ];
@@ -9726,7 +9726,7 @@ rec {
   tarman = buildPythonPackage rec {
     version = "0.1.3";
     name = "tarman-${version}";
-    
+
     disabled = isPy3k;
 
     src = fetchurl {
@@ -10172,7 +10172,7 @@ rec {
       url = "http://freshfoo.com/projects/IMAPClient/${name}.tar.gz";
       sha256 = "1w54h8gz25qf6ggazzp6xf7kvsyiadsjfkkk17gm0p6pmzvvccbn";
     };
-    
+
     buildInputs = [ mock ];
 
     preConfigure = ''
