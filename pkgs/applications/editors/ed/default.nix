@@ -1,11 +1,12 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, lzip }:
 
 stdenv.mkDerivation rec {
-  name = "ed-1.9";
+  version = "1.10";
+  name = "ed-${version}";
 
   src = fetchurl {
-    url = "mirror://gnu/ed/${name}.tar.gz";
-    sha256 = "122syihsx2hwzj75mkf5a9ssiky2xby748kp4cc00wzhmp7p5cym";
+    url = "mirror://gnu/ed/${name}.tar.lz";
+    sha256 = "16kycdm5fcvpdr41hxb2da8da6jzs9dqznsg5552z6rh28n0jh4m";
   };
 
   /* FIXME: Tests currently fail on Darwin:
@@ -23,6 +24,8 @@ stdenv.mkDerivation rec {
     compileFlags = [ "CC=${stdenv.cross.config}-gcc" ];
   };
 
+  buildInputs = [ lzip ];
+
   meta = {
     description = "GNU ed, an implementation of the standard Unix editor";
 
@@ -38,9 +41,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = stdenv.lib.licenses.gpl3Plus;
-
     homepage = http://www.gnu.org/software/ed/;
-
-    maintainers = [ ];
+    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
   };
 }
