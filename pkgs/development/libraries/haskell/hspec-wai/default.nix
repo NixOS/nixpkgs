@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hspec-wai";
-  version = "0.3.0";
-  sha256 = "0wkzv406jiyi8ais3g0addm66274y1pvy55gypmnhwx5rp2kr6fb";
+  version = "0.3.0.1";
+  sha256 = "0c04gh32xnvyz0679n7jhp1kdcn7lbkb7248j6lh28irsh84dvp8";
   buildDepends = [
     aeson aesonQq caseInsensitive hspec2 httpTypes text transformers
     wai waiExtra
@@ -21,6 +21,5 @@ cabal.mkDerivation (self: {
     description = "Experimental Hspec support for testing WAI applications (depends on hspec2!)";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })
