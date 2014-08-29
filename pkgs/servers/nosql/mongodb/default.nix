@@ -2,14 +2,13 @@
 
 let version = "2.6.4";
     system-libraries = [
-      "tcmalloc"
       "pcre"
       "boost"
       "snappy"
       # "v8"      -- mongo still bundles 3.12 and does not work with 3.15+
       # "stemmer" -- not nice to package yet (no versioning, no makefile, no shared libs)
       # "yaml"    -- it seems nixpkgs' yamlcpp (0.5.1) is problematic for mongo
-    ];
+    ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ "tcmalloc" ];
     system-lib-args = stdenv.lib.concatStringsSep " "
                           (map (lib: "--use-system-${lib}") system-libraries);
 
@@ -43,6 +42,6 @@ in stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.agpl3;
 
     maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
