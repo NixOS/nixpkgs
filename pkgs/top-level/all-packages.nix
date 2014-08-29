@@ -1961,6 +1961,10 @@ let
 
   qjoypad = callPackage ../tools/misc/qjoypad { };
 
+  qscintilla = callPackage ../development/libraries/qscintilla {
+    qt = qt4;
+  };
+
   qshowdiff = callPackage ../tools/text/qshowdiff { };
 
   quilt = callPackage ../development/tools/quilt { };
