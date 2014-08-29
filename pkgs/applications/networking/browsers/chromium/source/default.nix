@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   prePatch = "patchShebangs .";
 
-  patches = singleton ./sandbox_userns_36.patch;
+  patches = [ ./sandbox_userns_36.patch ./missing_alg_import.patch ];
 
   postPatch = ''
     sed -i -r \
