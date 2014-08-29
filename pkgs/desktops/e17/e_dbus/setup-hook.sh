@@ -5,4 +5,4 @@ addDbusIncludePath () {
     fi
 }
 
-envHooks=(${envHooks[@]} addDbusIncludePath)
+envHooks+=(addDbusIncludePath)

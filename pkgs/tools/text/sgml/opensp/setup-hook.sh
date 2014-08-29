@@ -18,5 +18,5 @@ if test -z "$sgmlHookDone"; then
     export ftp_proxy=http://nodtd.invalid/
 
     export SGML_CATALOG_FILES
-    envHooks=(${envHooks[@]} addSGMLCatalogs)
+    envHooks+=(addSGMLCatalogs)
 fi
