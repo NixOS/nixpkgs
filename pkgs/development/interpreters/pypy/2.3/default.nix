@@ -1,5 +1,6 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi
-, sqlite, openssl, ncurses, pythonFull, expat, tcl, tk, x11, libX11 }:
+, sqlite, openssl, ncurses, pythonFull, expat, tcl, tk, x11, libX11
+, makeWrapper }:
 
 assert zlibSupport -> zlib != null;
 
@@ -20,7 +21,7 @@ let
       sha256 = "0fg4l48c7n59n5j3b1dgcsr927xzylkfny4a6pnk6z0pq2bhvl9z";
     };
 
-    buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite tk tcl x11 libX11 ]
+    buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite tk tcl x11 libX11 makeWrapper ]
       ++ stdenv.lib.optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc
       ++ stdenv.lib.optional zlibSupport zlib;
 
@@ -86,7 +87,10 @@ let
        # verify cffi modules
        $out/bin/pypy -c "import Tkinter;import sqlite3"
 
-       # TODO: compile python files?
+       # make sure pypy finds sqlite3 library
+       wrapProgram "$out/bin/pypy" \
+         --set LD_LIBRARY_PATH "${LD_LIBRARY_PATH}" \
+         --set LIBRARY_PATH "${LIBRARY_PATH}"
     '';
 
     passthru = {
@@ -98,7 +102,7 @@ let
     enableParallelBuilding = true;
 
     meta = with stdenv.lib; {
-      homepage = "http://pypy.org/";
+      homepage = http://pypy.org/;
       description = "Fast, compliant alternative implementation of the Python language (2.7.3)";
       license = licenses.mit;
       platforms = platforms.linux;
