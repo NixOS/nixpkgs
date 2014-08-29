@@ -469,4 +469,28 @@ in {
       );
     '';
   };
+
+  # Test to see if we can detect default and aux subvolumes correctly
+  btrfsSubvolDefault = makeInstallerTest "btrfsSubvolDefault" {
+    createPartitions = ''
+      $machine->succeed(
+        "sgdisk -Z /dev/vda",
+        "sgdisk -n 1:0:+1M -n 2:0:+1G -N 3 -t 1:ef02 -t 2:8200 -t 3:8300 -c 3:root /dev/vda",
+        "mkswap /dev/vda2 -L swap",
+        "swapon -L swap",
+        "mkfs.btrfs -L root /dev/vda3",
+        "btrfs device scan",
+        "mount LABEL=root /mnt",
+        "btrfs subvol create /mnt/badpath",
+        "btrfs subvol create /mnt/badpath/boot",
+        "btrfs subvol create /mnt/nixos",
+        "btrfs subvol set-default \$(btrfs subvol list /mnt | grep 'nixos' | awk '{print \$2}') /mnt",
+        "umount /mnt",
+        "mount -o defaults LABEL=root /mnt",
+        "mkdir -p /mnt/badpath/boot", # Help ensure the detection mechanism is actually looking up subvolumes
+        "mkdir /mnt/boot",
+        "mount -o defaults,subvol=badpath/boot LABEL=root /mnt/boot",
+      );
+    '';
+  };
 }
