@@ -4554,11 +4554,7 @@ let
 
   expat = callPackage ../development/libraries/expat { };
 
-  extremetuxracer = builderDefsPackage (import ../games/extremetuxracer) {
-    inherit mesa tcl freeglut SDL SDL_mixer pkgconfig
-      gettext intltool;
-    inherit (xlibs) libX11 xproto libXi inputproto
-      libXmu libXext xextproto libXt libSM libICE;
+  extremetuxracer = callPackage ../games/extremetuxracer {
     libpng = libpng12;
   };
 
@@ -9209,11 +9205,11 @@ let
     inherit (gnome) vte;
     gtk = gtk2;
   };
-  
+
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
   lyx = callPackage ../applications/misc/lyx { };
-
+  
   makeself = callPackage ../applications/misc/makeself { };
 
   matchbox = callPackage ../applications/window-managers/matchbox { };
