@@ -8285,7 +8285,8 @@ let
   bitcoind = callPackage ../applications/misc/bitcoin { gui = false; };
 
   altcoins = recurseIntoAttrs (
-    callPackage ../applications/misc/bitcoin/altcoins.nix {}
+    (callPackage ../applications/misc/bitcoin/altcoins.nix {}) //
+    (callPackage ../applications/misc/bitcoin/dogecoin.nix {})
   );
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee {
@@ -9211,7 +9212,7 @@ let
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
   lyx = callPackage ../applications/misc/lyx { };
-  
+
   makeself = callPackage ../applications/misc/makeself { };
 
   matchbox = callPackage ../applications/window-managers/matchbox { };
