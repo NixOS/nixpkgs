@@ -10,6 +10,8 @@ import ./generic.nix (args // rec {
     sha256 = "094r4kqp7bj1wcdfsgdmv73law4zb7d0sd8lw82v3rz944mlm9y3";
   };
 
+  kernelPatches = args.kernelPatches ++ [ { name = "3.17-buildfix.patch"; patch = ./3.17-buildfix.patch; } ];
+
   features.iwlwifi = true;
   features.efiBootStub = true;
   features.needsCifsUtils = true;
