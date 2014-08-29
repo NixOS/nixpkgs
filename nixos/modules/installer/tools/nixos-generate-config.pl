@@ -310,7 +310,9 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
     next if $mountPoint eq "/nix/store" && (grep { $_ eq "rw" } @superOptions) && (grep { $_ eq "ro" } @mountOptions);
 
     # Maybe this is a bind-mount of a filesystem we saw earlier?
-    if (defined $fsByDev{$fields[2]}) {
+    # BTRFS is a special case since regular btrfs mounts can work as bind mounts
+    # If we try to detect bind mounts on BTRFS, we potentially break subvolumes
+    if ($fsType ne "btrfs" && defined $fsByDev{$fields[2]}) {
         my $path = $fields[3]; $path = "" if $path eq "/";
         my $base = $fsByDev{$fields[2]};
         $base = "" if $base eq "/";
