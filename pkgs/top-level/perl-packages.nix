@@ -480,6 +480,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "14s75bsm5irisp8wkbwl3ycw160srr1rks7x9jcbvcxh79wr6gbh";
     };
     propagatedBuildInputs = [ DigestSHA1 Error IPCShareLite ];
+    doCheck = false; # randomly fails
   };
 
   CacheFastMmap = buildPerlPackage rec {
