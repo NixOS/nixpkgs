@@ -13,8 +13,8 @@ let
     };
 
     df = fetchurl {
-      url = "http://www.bay12games.com/dwarves/df_40_09_linux.tar.bz2";
-      sha256 = "1aka2vblhip4sjkcpkxfra1fa9z4hzlj0sdl6rh2qda0l7q7i0ki";
+      url = "http://www.bay12games.com/dwarves/df_40_10_linux.tar.bz2";
+      sha256 = "0hfm4395y0lacgsl7wqr6vwcw42pqm03xp7giqfk3mfsn32wqnm7";
     };
   };
 
@@ -23,7 +23,7 @@ in
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation rec {
-  name = "dwarf-fortress-0.40.09";
+  name = "dwarf-fortress-0.40.10";
 
 
   buildInputs = [ SDL SDL_image SDL_ttf gtk2 glib glew mesa ncurses openal glibc libsndfile pango atk cmake gdk_pixbuf];
