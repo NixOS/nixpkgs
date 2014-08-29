@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, python, flex, bison, qt4 }:
+{ stdenv, fetchurl, perl, python, flex, bison, qt4, libiconv }:
 
 let
   name = "doxygen-1.8.6";
@@ -15,12 +15,14 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ perl python flex bison ]
+    ++ stdenv.lib.optional stdenv.isSunOS libiconv
     ++ stdenv.lib.optional (qt4 != null) qt4;
 
   prefixKey = "--prefix ";
 
   configureFlags =
     [ "--dot dot" ]
+    ++ stdenv.lib.optional stdenv.isSunOS "--install install"
     ++ stdenv.lib.optional (qt4 != null) "--with-doxywizard";
 
   preConfigure =
