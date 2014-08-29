@@ -456,156 +456,131 @@ in
       };
 
 
-      ratelimit = mkOption {
-        type = types.submodule (
-          { options, ... }:
-          { options = {
-
-              enable = mkOption {
-                type        = types.bool;
-                default     = false;
-                description = ''
-                  Enable ratelimit capabilities.
-                '';
-              };
-
-              size = mkOption {
-                type        = types.int;
-                default     = 1000000;
-                description = ''
-                  Size of the hashtable. More buckets use more memory but lower
-                  the chance of hash hash collisions.
-                '';
-              };
-
-              ratelimit = mkOption {
-                type        = types.int;
-                default     = 200;
-                description = ''
-                  Max qps allowed from any query source.
-                  0 means unlimited. With an verbosity of 2 blocked and
-                  unblocked subnets will be logged.
-                '';
-              };
-
-              whitelistRatelimit = mkOption {
-                type        = types.int;
-                default     = 2000;
-                description = ''
-                  Max qps allowed from whitelisted sources.
-                  0 means unlimited. Set the rrl-whitelist option for specific
-                  queries to apply this limit instead of the default to them.
-                '';
-              };
-
-              slip = mkOption {
-                type        = types.nullOr types.int;
-                default     = null;
-                description = ''
-                  Number of packets that get discarded before replying a SLIP response.
-                  0 disables SLIP responses. 1 will make every response a SLIP response.
-                '';
-              };
-
-              ipv4PrefixLength = mkOption {
-                type        = types.nullOr types.int;
-                default     = null;
-                description = ''
-                  IPv4 prefix length. Addresses are grouped by netblock.
-                '';
-              };
-
-              ipv6PrefixLength = mkOption {
-                type        = types.nullOr types.int;
-                default     = null;
-                description = ''
-                  IPv6 prefix length. Addresses are grouped by netblock.
-                '';
-              };
-
-            };
-          });
-        default = {
+      ratelimit = {
+        enable = mkOption {
+          type        = types.bool;
+          default     = false;
+          description = ''
+            Enable ratelimit capabilities.
+          '';
         };
-        example = {};
-        description = ''
-        '';
+
+        size = mkOption {
+          type        = types.int;
+          default     = 1000000;
+          description = ''
+            Size of the hashtable. More buckets use more memory but lower
+            the chance of hash hash collisions.
+          '';
+        };
+
+        ratelimit = mkOption {
+          type        = types.int;
+          default     = 200;
+          description = ''
+            Max qps allowed from any query source.
+            0 means unlimited. With an verbosity of 2 blocked and
+            unblocked subnets will be logged.
+          '';
+        };
+
+        whitelistRatelimit = mkOption {
+          type        = types.int;
+          default     = 2000;
+          description = ''
+            Max qps allowed from whitelisted sources.
+            0 means unlimited. Set the rrl-whitelist option for specific
+            queries to apply this limit instead of the default to them.
+          '';
+        };
+
+        slip = mkOption {
+          type        = types.nullOr types.int;
+          default     = null;
+          description = ''
+            Number of packets that get discarded before replying a SLIP response.
+            0 disables SLIP responses. 1 will make every response a SLIP response.
+          '';
+        };
+
+        ipv4PrefixLength = mkOption {
+          type        = types.nullOr types.int;
+          default     = null;
+          description = ''
+            IPv4 prefix length. Addresses are grouped by netblock.
+          '';
+        };
+
+        ipv6PrefixLength = mkOption {
+          type        = types.nullOr types.int;
+          default     = null;
+          description = ''
+            IPv6 prefix length. Addresses are grouped by netblock.
+          '';
+        };
       };
 
 
-      remoteControl = mkOption {
-        type = types.submodule (
-          { config, options, ... }:
-          { options = {
-
-              enable = mkOption {
-                type        = types.bool;
-                default     = false;
-                description = ''
-                  Wheter to enable remote control via nsd-control(8).
-                '';
-              };
-
-              interfaces = mkOption {
-                type        = types.listOf types.str;
-                default     = [ "127.0.0.1" "::1" ];
-                description = ''
-                  Which interfaces NSD should bind to for remote control.
-                '';
-              };
-
-              port = mkOption {
-                type        = types.int;
-                default     = 8952;
-                description = ''
-                  Port number for remote control operations (uses TLS over TCP).
-                '';
-              };
-
-              serverKeyFile = mkOption {
-                type        = types.path;
-                default     = "/etc/nsd/nsd_server.key";
-                description = ''
-                  Path to the server private key, which is used by the server
-                  but not by nsd-control. This file is generated by nsd-control-setup.
-                '';
-              };
-
-              serverCertFile = mkOption {
-                type        = types.path;
-                default     = "/etc/nsd/nsd_server.pem";
-                description = ''
-                  Path to the server self signed certificate, which is used by the server
-                  but and by nsd-control. This file is generated by nsd-control-setup.
-                '';
-              };
-
-              controlKeyFile = mkOption {
-                type        = types.path;
-                default     = "/etc/nsd/nsd_control.key";
-                description = ''
-                  Path to the client private key, which is used by nsd-control
-                  but not by the server. This file is generated by nsd-control-setup.
-                '';
-              };
-
-              controlCertFile = mkOption {
-                type        = types.path;
-                default     = "/etc/nsd/nsd_control.pem";
-                description = ''
-                  Path to the client certificate signed with the server certificate.
-                  This file is used by nsd-control and generated by nsd-control-setup.
-                '';
-              };
-
-            };
-
-          });
-        default = {
+      remoteControl = {
+        enable = mkOption {
+          type        = types.bool;
+          default     = false;
+          description = ''
+            Wheter to enable remote control via nsd-control(8).
+          '';
         };
-        example = {};
-        description = ''
-        '';
+
+        interfaces = mkOption {
+          type        = types.listOf types.str;
+          default     = [ "127.0.0.1" "::1" ];
+          description = ''
+            Which interfaces NSD should bind to for remote control.
+          '';
+        };
+
+        port = mkOption {
+          type        = types.int;
+          default     = 8952;
+          description = ''
+            Port number for remote control operations (uses TLS over TCP).
+          '';
+        };
+
+        serverKeyFile = mkOption {
+          type        = types.path;
+          default     = "/etc/nsd/nsd_server.key";
+          description = ''
+            Path to the server private key, which is used by the server
+            but not by nsd-control. This file is generated by nsd-control-setup.
+          '';
+        };
+
+        serverCertFile = mkOption {
+          type        = types.path;
+          default     = "/etc/nsd/nsd_server.pem";
+          description = ''
+            Path to the server self signed certificate, which is used by the server
+            but and by nsd-control. This file is generated by nsd-control-setup.
+          '';
+        };
+
+        controlKeyFile = mkOption {
+          type        = types.path;
+          default     = "/etc/nsd/nsd_control.key";
+          description = ''
+            Path to the client private key, which is used by nsd-control
+            but not by the server. This file is generated by nsd-control-setup.
+          '';
+        };
+
+        controlCertFile = mkOption {
+          type        = types.path;
+          default     = "/etc/nsd/nsd_control.pem";
+          description = ''
+            Path to the client certificate signed with the server certificate.
+            This file is used by nsd-control and generated by nsd-control-setup.
+          '';
+        };
       };
 
 
