@@ -397,7 +397,7 @@ in {
     };
 
   # Test using labels to identify volumes in grub
-  simpleLabels = makeInstallerTest {
+  simpleLabels = makeInstallerTest "simpleLabels" {
     createPartitions = ''
       $machine->succeed(
         "sgdisk -Z /dev/vda",
@@ -413,7 +413,7 @@ in {
 
   # Test using the provided disk name within grub
   # TODO: Fix udev so the symlinks are unneeded in /dev/disks
-  simpleProvided = makeInstallerTest {
+  simpleProvided = makeInstallerTest "simpleProvided" {
     createPartitions = ''
       my $UUID = "\$(blkid -s UUID -o value /dev/vda2)";
       $machine->succeed(
@@ -436,7 +436,7 @@ in {
   };
 
   # Simple btrfs grub testing
-  btrfsSimple = makeInstallerTest {
+  btrfsSimple = makeInstallerTest "btrfsSimple" {
     createPartitions = ''
       $machine->succeed(
         "sgdisk -Z /dev/vda",
@@ -450,7 +450,7 @@ in {
   };
 
   # Test to see if we can detect /boot and /nix on subvolumes
-  btrfsSubvols = makeInstallerTest {
+  btrfsSubvols = makeInstallerTest "btrfsSubvols" {
     createPartitions = ''
       $machine->succeed(
         "sgdisk -Z /dev/vda",

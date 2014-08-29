@@ -228,6 +228,10 @@ in rec {
   tests.installer.rebuildCD = forAllSystems (system: (import tests/installer.nix { inherit system; }).rebuildCD.test);
   tests.installer.separateBoot = forAllSystems (system: (import tests/installer.nix { inherit system; }).separateBoot.test);
   tests.installer.simple = forAllSystems (system: (import tests/installer.nix { inherit system; }).simple.test);
+  tests.installer.simpleLabels = forAllSystems (system: (import tests/installer.nix { inherit system; }).simpleLabels.test);
+  tests.installer.simpleProvided = forAllSystems (system: (import tests/installer.nix { inherit system; }).simpleProvided.test);
+  tests.installer.btrfsSimple = forAllSystems (system: (import tests/installer.nix { inherit system; }).btrfsSimple.test);
+  tests.installer.btrfsSubvols = forAllSystems (system: (import tests/installer.nix { inherit system; }).btrfsSubvols.test);
   tests.influxdb = callTest tests/influxdb.nix {};
   tests.ipv6 = callTest tests/ipv6.nix {};
   tests.jenkins = callTest tests/jenkins.nix {};
