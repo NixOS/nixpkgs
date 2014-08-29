@@ -1,12 +1,12 @@
-{stdenv, fetchurl, unzip}:
+{ stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "checkstyle-5.0";
-  buildInputs = [unzip] ; 
+stdenv.mkDerivation rec {
+  version = "5.7";
+  name = "checkstyle-${version}";
 
   src = fetchurl {
-    url = mirror://sourceforge/checkstyle/checkstyle-5.0.zip ;
-    sha256 = "0972afcxjniz64hlnc89ddnd1d0mcd5hb1sd7lpw5k52h39683nh";
+    url = "mirror://sourceforge/checkstyle/${version}/${name}-bin.tar.gz";
+    sha256 = "0kzj507ylynq6p7v097bjzsckkjny5i2fxwxyrlwi5samhi2m06x";
   };
 
   installPhase = ''
@@ -22,6 +22,6 @@ stdenv.mkDerivation {
       Conventions, but is highly configurable.
     '';
     homepage = http://checkstyle.sourceforge.net/;
+    license = stdenv.lib.licenses.lgpl21;
   };
 }
-
