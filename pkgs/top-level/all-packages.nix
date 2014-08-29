@@ -3128,10 +3128,12 @@ let
   juliaGit = callPackage ../development/compilers/julia/git-20131013.nix {
     liblapack = liblapack.override {shared = true;};
     llvm = llvm_33;
+    openblas = openblas_0_2_2;
   };
   julia021 = callPackage ../development/compilers/julia/0.2.1.nix {
     liblapack = liblapack.override {shared = true;};
     llvm = llvm_33;
+    openblas = openblas_0_2_2;
   };
   julia030 = let
     liblapack = liblapack_3_5_0.override {shared = true;};
@@ -3140,8 +3142,8 @@ let
     suitesparse = suitesparse.override {
       inherit liblapack;
     };
-    openblas = openblas_0_2_10;
     llvm = llvm_34;
+    openblas = openblas_0_2_10;
   };
   julia = julia021;
 
@@ -10914,10 +10916,16 @@ let
 
   liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
 
-  openblas = callPackage ../development/libraries/science/math/openblas { };
+  # julia is pinned to specific versions of openblas, so keep old versions
+  # until they aren't needed. The un-versioned attribute may continue to track
+  # upstream development.
+  openblas = callPackage ../development/libraries/science/math/openblas {
+    liblapack = liblapack_3_5_0;
+  };
   openblas_0_2_10 = callPackage ../development/libraries/science/math/openblas/0.2.10.nix {
     liblapack = liblapack_3_5_0;
   };
+  openblas_0_2_2 = callPackage ../development/libraries/science/math/openblas/0.2.2.nix { };
 
   mathematica = callPackage ../applications/science/math/mathematica { };
 

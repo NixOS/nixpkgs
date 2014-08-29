@@ -4,12 +4,12 @@ let local = config.openblas.preferLocalBuild or false;
     localTarget = config.openblas.target or "";
 in
 stdenv.mkDerivation rec {
-  version = "0.2.11";
+  version = "0.2.2";
 
   name = "openblas-${version}";
   src = fetchurl {
     url = "https://github.com/xianyi/OpenBLAS/tarball/v${version}";
-    sha256 = "1va4yhzgj2chcj6kaxgfbzirajp1zgvkic61959aka2xq2c5igms";
+    sha256 = "13kdx3knff5ajnmgn419g0dnh83plin07p7akwamr3v7z5qfrzqr";
     name = "openblas-${version}.tar.gz";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
      # allow autodetect
       "";
 
-  makeFlags = "${if target != "" then "TARGET=" else ""}${target} FC=gfortran CC=cc PREFIX=\"\$(out)\" INTERFACE64=1";
+  makeFlags = "${if target != "" then "TARGET=" else ""}${target} FC=gfortran CC=cc PREFIX=\"\$(out)\"";
 
   meta = with stdenv.lib; {
     description = "Basic Linear Algebra Subprograms";
