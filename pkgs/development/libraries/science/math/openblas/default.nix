@@ -27,10 +27,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = "${if target != "" then "TARGET=" else ""}${target} FC=gfortran CC=cc PREFIX=\"\$(out)\" INTERFACE64=1";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Basic Linear Algebra Subprograms";
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.bsd3;
     homepage = "https://github.com/xianyi/OpenBLAS";
     platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ ttuegel ];
   };
 }
