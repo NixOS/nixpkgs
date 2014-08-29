@@ -1,7 +1,7 @@
 let lib = import ../../../lib; in lib.makeOverridable (
 
 { system, name ? "stdenv", preHook ? "", initialPath, gcc, shell
-, extraAttrs ? {}, overrides ? (pkgs: {}), config
+, allowedRequisites ? null, extraAttrs ? {}, overrides ? (pkgs: {}), config
 
 , # The `fetchurl' to use for downloading curl and its dependencies
   # (see all-packages.nix).
@@ -117,8 +117,9 @@ let
 
   # The stdenv that we are producing.
   result =
-
-    derivation {
+    derivation (
+    (if isNull allowedRequisites then {} else { inherit allowedRequisites; }) //
+    {
       inherit system name;
 
       builder = shell;
@@ -131,7 +132,7 @@ let
 
       propagatedUserEnvPkgs = [gcc] ++
         lib.filter lib.isDerivation initialPath;
-    }
+    })
 
     // rec {
 
