@@ -222,11 +222,12 @@ in rec {
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
-  tests.installer = with pkgs.lib;
-    let installer = import tests/installer.nix; in
-    flip mapAttrs (installer { }) (name: _:
-      forAllSystems (system: (installer { system = system; }).${name}.test)
-    );
+  tests.installer.efi = forAllSystems (system: (import tests/installer.nix { inherit system; }).efi.test);
+  tests.installer.grub1 = forAllSystems (system: (import tests/installer.nix { inherit system; }).grub1.test);
+  tests.installer.lvm = forAllSystems (system: (import tests/installer.nix { inherit system; }).lvm.test);
+  tests.installer.rebuildCD = forAllSystems (system: (import tests/installer.nix { inherit system; }).rebuildCD.test);
+  tests.installer.separateBoot = forAllSystems (system: (import tests/installer.nix { inherit system; }).separateBoot.test);
+  tests.installer.simple = forAllSystems (system: (import tests/installer.nix { inherit system; }).simple.test);
   tests.influxdb = callTest tests/influxdb.nix {};
   tests.ipv6 = callTest tests/ipv6.nix {};
   tests.jenkins = callTest tests/jenkins.nix {};
