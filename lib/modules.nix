@@ -132,7 +132,12 @@ rec {
      The exception is the ‘options’ attribute, which specifies
      sub-options.  These can be specified multiple times to allow one
      module to add sub-options to an option declared somewhere else
-     (e.g. multiple modules define sub-options for ‘fileSystems’). */
+     (e.g. multiple modules define sub-options for ‘fileSystems’).
+
+     'loc' is the list of attribute names where the option is located.
+
+     'opts' is a list of modules.  Each module has an options attribute which
+     correspond to the definition of 'loc' in 'opt.file'. */
   mergeOptionDecls = loc: opts:
     fold (opt: res:
       if opt.options ? default && res ? default ||
@@ -143,9 +148,23 @@ rec {
       then
         throw "The option `${showOption loc}' in `${opt.file}' is already declared in ${showFiles res.declarations}."
       else
-        opt.options // res //
+        let
+          /* Add the modules of the current option to the list of modules
+             already collected.  The options attribute except either a list of
+             submodules or a submodule. For each submodule, we add the file of the
+             current option declaration as the file use for the submodule.  If the
+             submodule defines any filename, then we ignore the enclosing option file. */
+          options' = toList opt.options.options;
+          coerceOption = file: opt:
+            if isFunction opt then args: { _file = file; } // (opt args)
+            else args: { _file = file; options = opt; };
+          submodules =
+            if opt.options ? options
+            then map (coerceOption opt.file) options' ++ res.options
+            else res.options;
+        in opt.options // res //
           { declarations = [opt.file] ++ res.declarations;
-            options = if opt.options ? options then [(toList opt.options.options ++ res.options)] else [];
+            options = submodules;
           }
     ) { inherit loc; declarations = []; options = []; } opts;
 
@@ -276,12 +295,8 @@ rec {
      optionSet to configOf.  FIXME: remove eventually. */
   fixupOptionType = loc: opt:
     let
-      options' = opt.options or
+      options = opt.options or
         (throw "Option `${showOption loc'}' has type optionSet but has no option attribute, in ${showFiles opt.declarations}.");
-      coerce = x:
-        if isFunction x then x
-        else { config, ... }: { options = x; };
-      options = map coerce (flatten options');
       f = tp:
         if tp.name == "option set" || tp.name == "submodule" then
           throw "The option ${showOption loc} uses submodules without a wrapping type, in ${showFiles opt.declarations}."
