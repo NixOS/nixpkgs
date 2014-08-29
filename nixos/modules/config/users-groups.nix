@@ -309,19 +309,19 @@ let
       u.description u.home u.shell
     ];
 
+  filterNull = a: filter (x: hasAttr a x && getAttr a x != null);
+
   sortOn = a: sort (as1: as2: lessThan (getAttr a as1) (getAttr a as2));
 
   groupFile = pkgs.writeText "group" (
     concatStringsSep "\n" (map (g: mkGroupEntry g.name) (
-      let f = g: g.gid != null; in
-        sortOn "gid" (filter f (attrValues cfg.extraGroups))
+      sortOn "gid" (filterNull "gid" (attrValues cfg.extraGroups))
     ))
   );
 
   passwdFile = pkgs.writeText "passwd" (
     concatStringsSep "\n" (map (u: mkPasswdEntry u.name) (
-      let f = u: u.createUser && (u.uid != null); in
-        sortOn "uid" (filter f (attrValues cfg.extraUsers))
+      sortOn "uid" (filterNull "uid" (attrValues cfg.extraUsers))
     ))
   );
 
@@ -330,14 +330,14 @@ let
         user.subUidRanges);
 
   subuidFile = concatStrings (map mkSubuidEntry (
-    sortOn "uid" (attrValues cfg.extraUsers)));
+    sortOn "uid" (filterNull "uid" (attrValues cfg.extraUsers))));
 
   mkSubgidEntry = user: concatStrings (
     map (range: "${user.name}:${toString range.startGid}:${toString range.count}\n")
         user.subGidRanges);
 
   subgidFile = concatStrings (map mkSubgidEntry (
-    sortOn "uid" (attrValues cfg.extraUsers)));
+    sortOn "uid" (filterNull "uid" (attrValues cfg.extraUsers))));
 
   # If mutableUsers is true, this script adds all users/groups defined in
   # users.extra{Users,Groups} to /etc/{passwd,group} iff there isn't any
