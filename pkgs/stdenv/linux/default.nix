@@ -195,7 +195,7 @@ rec {
       name = "bootstrap-gcc-wrapper";
     };
     overrides = pkgs: {
-      inherit (stage2.pkgs) binutils glibc perl;
+      inherit (stage2.pkgs) binutils glibc perl linuxHeaders;
       # Link GCC statically against GMP etc.  This makes sense because
       # these builds of the libraries are only used by GCC, so it
       # reduces the size of the stdenv closure.
@@ -229,7 +229,14 @@ rec {
       # because gcc (since JAR support) already depends on zlib, and
       # then if we already have a zlib we want to use that for the
       # other purposes (binutils and top-level pkgs) too.
-      inherit (stage3.pkgs) gettext gnum4 gmp perl glibc zlib;
+      inherit (stage3.pkgs) gettext gnum4 gmp perl glibc zlib linuxHeaders;
+
+      gcc = (wrapGCC {
+        gcc = stage4.stdenv.gcc.gcc;
+        libc = stage4.pkgs.glibc;
+        inherit (stage4.pkgs) binutils coreutils;
+        name = "";
+      }).override { shell = stage4.pkgs.bash + "/bin/bash"; };
     };
   };
 
@@ -256,14 +263,9 @@ rec {
       ((import ../common-path.nix) {pkgs = stage4.pkgs;})
       ++ [stage4.pkgs.patchelf stage4.pkgs.paxctl ];
 
-    shell = stage4.pkgs.bash + "/bin/bash";
+    gcc = stage4.pkgs.gcc;
 
-    gcc = (wrapGCC rec {
-      gcc = stage4.stdenv.gcc.gcc;
-      libc = stage4.pkgs.glibc;
-      inherit (stage4.pkgs) binutils coreutils;
-      name = "";
-    }).override { inherit shell; };
+    shell = gcc.shell;
 
     inherit (stage4.stdenv) fetchurlBoot;
 
@@ -273,12 +275,17 @@ rec {
       shellPackage = stage4.pkgs.bash;
     };
 
+    allowedRequisites = with stage4.pkgs;
+      [ gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
+        glibc gnumake gnused gnutar gnugrep gnupatch patchelf attr acl
+        paxctl zlib pcre linuxHeaders ed gcc gcc.gcc libsigsegv ];
+
     overrides = pkgs: {
       inherit gcc;
       inherit (stage4.pkgs)
         gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
-        glibc gnumake gnused gnutar gnugrep gnupatch patchelf
-        attr acl paxctl zlib;
+        glibc gnumake gnused gnutar gnugrep gnupatch patchelf attr acl
+        paxctl zlib;
     };
   };
 
