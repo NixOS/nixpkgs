@@ -492,6 +492,23 @@ rec {
 
   });
 
+  arrow = buildPythonPackage rec {
+    name = "arrow-${version}";
+    version = "0.4.4";
+
+    src = fetchurl {
+      url    = "https://pypi.python.org/packages/source/a/arrow/${name}.tar.gz";
+      sha256 = "1sdr4gyjgvz86yr0ll0i11mgy8l1slndr7f0ngam87rpy78gp052";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "Twitter API library";
+      license     = "apache";
+      maintainers = [ maintainers.thoughtpolice ];
+    };
+  };
 
   async = buildPythonPackage rec {
     name = "async-0.6.1";
@@ -4552,7 +4569,6 @@ rec {
     };
   };
 
-
   memcached = buildPythonPackage rec {
     name = "memcached-1.51";
 
@@ -4604,6 +4620,35 @@ rec {
     meta = {
       description = "A minimalistic mocking library for python";
       homepage = https://pypi.python.org/pypi/MiniMock;
+    };
+  };
+
+  rainbowstream = buildPythonPackage rec {
+    name = "rainbowstream-${version}";
+    version = "0.9.3";
+
+    src = fetchurl {
+      url    = "https://pypi.python.org/packages/source/r/rainbowstream/${name}.tar.gz";
+      sha256 = "1xgfxk3qwbfdl2fwabcppi43dxmv8pik0wb9jsbszwxz9xv3fcpk";
+    };
+
+    doCheck = false;
+
+    buildInputs = [
+      pkgs.libjpeg pkgs.freetype pkgs.zlib
+      pillow twitter pyfiglet requests arrow dateutil modules.readline
+    ];
+
+    postInstall = ''
+      wrapProgram "$out/bin/rainbowstream" \
+        --prefix PYTHONPATH : "$PYTHONPATH"
+    '';
+
+    meta = {
+      description = "Streaming command-line twitter client";
+      homepage    = "http://www.rainbowstream.org/";
+      license     = licenses.mit;
+      maintainers = [ maintainers.thoughtpolice ];
     };
   };
 
@@ -6165,6 +6210,24 @@ rec {
     meta = {
       homepage = "http://home.blarg.net/~steveha/pyfeed.html";
       description = "Tools for syndication feeds";
+    };
+  };
+
+  pyfiglet = buildPythonPackage rec {
+    name = "pyfiglet-${version}";
+    version = "0.7.1";
+
+    src = fetchurl {
+      url    = "https://pypi.python.org/packages/source/p/pyfiglet/${name}.tar.gz";
+      sha256 = "14lgwg47gnnad7sfkmmwhknwysbfmr74c9b2a6d9wgjmydycc6ka";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "FIGlet in pure Python";
+      license     = licenses.gpl2Plus;
+      maintainers = [ maintainers.thoughtpolice ];
     };
   };
 
@@ -8507,6 +8570,24 @@ rec {
       platforms = stdenv.lib.platforms.linux;
     };
   });
+
+  twitter = buildPythonPackage rec {
+    name = "twitter-${version}";
+    version = "1.14.3";
+
+    src = fetchurl {
+      url    = "https://pypi.python.org/packages/source/t/twitter/${name}.tar.gz";
+      sha256 = "1nhhjajbq0jik43q2makpnz094qcziq9p8rj35jxamybd0hwwzs9";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "Twitter API library";
+      license     = licenses.mit;
+      maintainers = [ maintainers.thoughtpolice ];
+    };
+  };
 
   twisted = buildPythonPackage rec {
     # NOTE: When updating please check if new versions still cause issues
