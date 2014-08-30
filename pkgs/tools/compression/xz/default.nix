@@ -9,7 +9,6 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "dev" "out" "bin" "man" "doc" ];
-  buildInputs = [ stdenv.hookLib.multiout ];
 
   doCheck = true;
 

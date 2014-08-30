@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   outputs = [ "dev" "out" "info" ];
 
   buildInputs =
-    [ stdenv.hookLib.multiout zlib ]
+    [ zlib ]
     ++ optional gold bison;
 
   inherit noSysDirs;

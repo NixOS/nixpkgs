@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   outputs = [ "dev" "out" "bin" "doc" ];
 
   nativeBuildInputs = [ gettext ];
-  buildInputs = [ stdenv.hookLib.multiout attr ];
+  buildInputs = [ attr ];
 
   # Upstream use C++-style comments in C code. Remove them.
   # This comment breaks compilation if too strict gcc flags are used.

@@ -21,7 +21,6 @@ in stdenv.mkDerivation rec {
   postPatch = whenPatched "gunzip < ${patch_src} | patch -Np1";
 
   outputs = [ "dev" "out" "man" ];
-  buildInputs = [ stdenv.hookLib.multiout ];
 
   propagatedBuildInputs = [ zlib ];
 

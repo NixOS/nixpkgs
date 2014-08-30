@@ -9,7 +9,6 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "info" ];
-  buildInputs = [ stdenv.hookLib.multiout ];
 
   /* If no explicit coreutils is given, use the one from stdenv. */
   nativeBuildInputs = [ coreutils ];

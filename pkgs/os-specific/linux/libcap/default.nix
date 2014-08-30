@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "dev" "out" ];
-  buildInputs = [ stdenv.hookLib.multiout ];
 
   nativeBuildInputs = [ perl ];
   propagatedBuildInputs = [ attr ];

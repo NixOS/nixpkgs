@@ -51,7 +51,7 @@ stdenv.mkDerivation {
   outputs = [ "dev" "out" "man" "bin" ];
   setOutputFlags = false;
 
-  buildInputs = [ stdenv.hookLib.multiout ]
+  buildInputs = [ ]
     ++ stdenv.lib.optional withCryptodev cryptodevHeaders;
 
   nativeBuildInputs = [ perl ];

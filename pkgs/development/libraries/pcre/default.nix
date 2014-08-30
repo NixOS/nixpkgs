@@ -13,7 +13,6 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "dev" "out" "bin" "doc" "man" ];
-  buildInputs = [ stdenv.hookLib.multiout ];
 
   # The compiler on Darwin crashes with an internal error while building the
   # C++ interface. Disabling optimizations on that platform remedies the

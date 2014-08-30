@@ -108,7 +108,7 @@ stdenv.mkDerivation ({
 
   outputs = [ "out" "dev" "bin" "static" ];
 
-  buildInputs = [ stdenv.hookLib.multiout ]
+  buildInputs = [ ]
     ++ stdenv.lib.optionals (cross != null) [ gccCross ]
     ++ stdenv.lib.optional (mig != null) mig
     ++ stdenv.lib.optionals withGd [ gd libpng ];

@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   #outputs = [ "out" "doc" ]; ToDo
 
-  buildInputs = [ stdenv.hookLib.multiout pcre ]
+  buildInputs = [ pcre ]
     ++ stdenv.lib.optional (libiconv != null) libiconv;
 
   patches = [ ./test-localeconv.patch ];

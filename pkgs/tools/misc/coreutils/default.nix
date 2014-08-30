@@ -24,7 +24,6 @@ let
 
     nativeBuildInputs = [ perl ];
     buildInputs = [ gmp ]
-      ++ [ stdenv.hookLib.multiout ]
       ++ optional aclSupport acl
       ++ optionals selinuxSupport [ libselinux libsepol ];
 

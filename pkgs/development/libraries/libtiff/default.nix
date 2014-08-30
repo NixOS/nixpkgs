@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
   ''; # ^ sh on darwin seems not to expand globs in redirects, and I don't want to rebuild all again elsewhere
 
   outputs = [ "dev" "out" "bin" "doc" ];
-  buildInputs = [ stdenv.hookLib.multiout ];
 
   nativeBuildInputs = [ pkgconfig ];
 

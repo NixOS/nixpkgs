@@ -9,7 +9,6 @@ stdenv.mkDerivation {
   };
 
   outputs = [ "out" "info" ];
-  buildInputs = [ stdenv.hookLib.multiout ];
 
   meta = {
     homepage = http://www.gnu.org/software/sed/;

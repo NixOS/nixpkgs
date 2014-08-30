@@ -9,7 +9,6 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "lib" ];
-  buildInputs = [ stdenv.hookLib.multiout ];
 
   nativeBuildInputs = [ lzma m4 perl ];
 

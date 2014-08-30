@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype
   # dependence on harfbuzz is looser than the reverse dependence
-  buildInputs = [ stdenv.hookLib.multiout pkgconfig which ]
+  buildInputs = [ pkgconfig which ]
     # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
     ++ optional (!stdenv.isLinux) gnumake;
 

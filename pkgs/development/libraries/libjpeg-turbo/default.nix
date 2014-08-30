@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" "doc" "bin" ];
 
-  buildInputs = [ stdenv.hookLib.multiout autoreconfHook nasm ];
+  buildInputs = [ autoreconfHook nasm ];
 
   enableParallelBuilding = true;
 

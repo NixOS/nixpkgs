@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "dev" "out" "static" "man" ];
-  buildInputs = [ stdenv.hookLib.multiout ];
   setOutputFlags = false;
 
   configureFlags = stdenv.lib.optional (!static) "--shared";

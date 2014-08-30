@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   outputs = [ "dev" "out" "doc" ];
 
-  buildInputs = [ stdenv.hookLib.multiout pkgconfig ];
+  buildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ libogg ];
 

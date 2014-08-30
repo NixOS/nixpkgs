@@ -11,7 +11,6 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "info" ];
-  buildInputs = [ stdenv.hookLib.multiout ];
 
   nativeBuildInputs = [ m4 ];
 

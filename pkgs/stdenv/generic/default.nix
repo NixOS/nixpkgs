@@ -44,6 +44,7 @@ let
       ../../build-support/setup-hooks/compress-man-pages.sh
       ../../build-support/setup-hooks/strip.sh
       ../../build-support/setup-hooks/patch-shebangs.sh
+      ../../build-support/setup-hooks/multiple-outputs.sh
       gcc
     ];
 
@@ -206,12 +207,6 @@ let
       inherit overrides;
 
       inherit gcc;
-
-      # extra useful hooks, so we do not need to pass them as package arguments
-      hookLib = {
-        multiout = ../../build-support/setup-hooks/multiple-outputs.sh; #ToDo: propagated-native-build-inputs
-        #ToDo: add also autoreconf = pkgs.autoreconfHook
-      };
     }
 
     # Propagate any extra attributes.  For instance, we use this to

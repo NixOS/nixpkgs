@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" "doc" ];
 
-  buildInputs = [ stdenv.hookLib.multiout ]
+  buildInputs = [ ]
     ++ stdenv.lib.optional doCheck dejagnu;
 
   configureFlags = [

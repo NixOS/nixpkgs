@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" "doc" ];
 
-  buildInputs = [ stdenv.hookLib.multiout gmp ];
+  buildInputs = [ gmp ];
 
   configureFlags =
     /* Work around a FreeBSD bug that otherwise leads to segfaults in the test suite:

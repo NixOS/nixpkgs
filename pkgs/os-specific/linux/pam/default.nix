@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ flex ];
 
-  buildInputs = [ stdenv.hookLib.multiout cracklib ];
+  buildInputs = [ cracklib ];
 
   enableParallelBuilding = true;
 

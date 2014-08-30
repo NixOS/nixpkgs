@@ -13,7 +13,6 @@ stdenv.mkDerivation rec {
   patches = [ ./findutils-path.patch ./change_echo_path.patch ];
 
   outputs = [ "out" "info" ];
-  buildInputs = [ stdenv.hookLib.multiout ];
 
   doCheck = true;
 

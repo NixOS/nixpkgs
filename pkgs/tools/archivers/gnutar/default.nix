@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "info" ];
-  buildInputs = [ stdenv.hookLib.multiout acl ];
+  buildInputs = [ acl ];
 
   # May have some issues with root compilation because the bootstrap tool
   # cannot be used as a login shell for now.

@@ -282,7 +282,7 @@ stdenv.mkDerivation ({
     ++ (optional (perl != null) perl)
     ++ (optional javaAwtGtk pkgconfig);
 
-  buildInputs = [ stdenv.hookLib.multiout gmp mpfr mpc libelf ]
+  buildInputs = [ gmp mpfr mpc libelf ]
     ++ (optional (ppl != null) ppl)
     ++ (optional (cloog != null) cloog)
     ++ (optional (isl != null) isl)

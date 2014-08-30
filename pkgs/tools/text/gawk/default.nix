@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
   #outputs = stdenv.lib.optionals (!interactive) [ "out" "doc" ]; #ToDo
 
   buildInputs = [ libsigsegv ]
-    ++ optional (!interactive) stdenv.hookLib.multiout
     ++ optional interactive readline;
 
   configureFlags = [ "--with-libsigsegv-prefix=${libsigsegv}" ]
