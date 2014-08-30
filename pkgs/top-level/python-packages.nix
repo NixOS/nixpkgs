@@ -9521,11 +9521,11 @@ rec {
 
 
   zope_location = buildPythonPackage rec {
-    name = "zope.location-4.0.0";
+    name = "zope.location-4.0.3";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/z/zope.location/zope.location-4.0.0.tar.gz";
-      md5 = "cd0e10d5923c95e352bcde505cc11324";
+      url = "http://pypi.python.org/packages/source/z/zope.location/zope.location-4.0.3.tar.gz";
+      sha256 = "1nj9da4ksiyv3h8n2vpzwd0pb03mdsh7zy87hfpx72b6p2zcwg74";
     };
 
     propagatedBuildInputs = [ zope_proxy ];
