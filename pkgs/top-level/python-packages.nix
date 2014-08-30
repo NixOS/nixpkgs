@@ -1521,11 +1521,11 @@ rec {
   };
 
   cffi = buildPythonPackage rec {
-    name = "cffi-0.7.2";
+    name = "cffi-0.8.6";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/c/cffi/${name}.tar.gz";
-      md5 = "d329f5cb2053fd31dafc02e2c9ef0299";
+      md5 = "474b5a68299a6f05009171de1dc91be6";
     };
 
     propagatedBuildInputs = [ pkgs.libffi pycparser ];

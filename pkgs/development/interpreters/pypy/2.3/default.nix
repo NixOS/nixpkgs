@@ -85,7 +85,7 @@ let
        ln -s $out/pypy-c/lib-python/${pythonVersion} $out/lib/${libPrefix}
 
        # verify cffi modules
-       $out/bin/pypy -c "import Tkinter;import sqlite3"
+       $out/bin/pypy -c "import Tkinter;import sqlite3;import curses"
 
        # make sure pypy finds sqlite3 library
        wrapProgram "$out/bin/pypy" \
