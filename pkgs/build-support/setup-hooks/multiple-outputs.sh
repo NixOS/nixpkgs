@@ -3,7 +3,6 @@ preFixupHooks+=(_multioutDocs)
 preFixupHooks+=(_multioutDevs)
 postFixupHooks+=(_multioutPropagateDev)
 
-
 # Assign the first string containing nonempty variable to the variable named $1
 _assignFirst() {
     local varName="$1"
@@ -14,25 +13,29 @@ _assignFirst() {
     done
     return 1 # none found
 }
+# Same as _assignFirst, but only if "$1" = ""
+_overrideFirst() {
+    if [ -z "${!1}" ]; then
+        _assignFirst "$@"
+    fi
+}
+
 
 # Setup chains of sane default values with easy overridability.
 # The variables are global to be usable anywhere during the build.
-# ToDo: I was unable to get rid of the double-name redundancy (I hate bash eval ways)
 
-# ToDo: easy way of overriding from withing mkDerivation attrset
+_overrideFirst outputDev "dev" "out"
+_overrideFirst outputBin "bin" "out"
 
-_assignFirst outputDev "$outputDev" "dev" "out"
-_assignFirst outputBin "$outputBin" "bin" "out"
-
-_assignFirst outputInclude "$outputInclude" "$outputDev"
+_overrideFirst outputInclude "$outputDev"
 
 # so-libs are often among the main things to keep, and so go to $out
-_assignFirst outputLib "$outputLib" "lib" "out"
+_overrideFirst outputLib "lib" "out"
 
-_assignFirst outputDoc "$outputDoc" "doc" "out"
+_overrideFirst outputDoc "doc" "out"
 # man and info pages are small and often useful to distribute with binaries
-_assignFirst outputMan "$outputMan" "man" "doc" "$outputBin"
-_assignFirst outputInfo "$outputInfo" "info" "doc" "$outputMan"
+_overrideFirst outputMan "man" "doc" "$outputBin"
+_overrideFirst outputInfo "info" "doc" "$outputMan"
 
 # Make stdenv put propagated*BuildInputs into $outputDev instead of $out
 propagateIntoOutput="${!outputDev}"
