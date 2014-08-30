@@ -9299,11 +9299,11 @@ rec {
 
 
   zope_browser = buildPythonPackage rec {
-    name = "zope.browser-1.3";
+    name = "zope.browser-2.0.2";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.browser/${name}.zip";
-      md5 = "4ff0ddbf64c45bfcc3189e35f4214ded";
+      sha256 = "0f9r5rn9lzgi4hvkhgb6vgw8kpz9sv16jsfb9ws4am8gbqcgv2iy";
     };
 
     propagatedBuildInputs = [ zope_interface ];
