@@ -8343,20 +8343,16 @@ let
 
   chatzilla = callPackage ../applications/networking/irc/chatzilla { };
 
-  chromium = lowPrio (callPackage ../applications/networking/browsers/chromium {
+  chromium = callPackage ../applications/networking/browsers/chromium {
     channel = "stable";
     pulseSupport = config.pulseaudio or true;
     enablePepperFlash = config.chromium.enablePepperFlash or false;
     enablePepperPDF = config.chromium.enablePepperPDF or false;
-  });
+  };
 
   chromiumBeta = lowPrio (chromium.override { channel = "beta"; });
-  chromiumBetaWrapper = lowPrio (wrapChromium chromiumBeta);
 
   chromiumDev = lowPrio (chromium.override { channel = "dev"; });
-  chromiumDevWrapper = lowPrio (wrapChromium chromiumDev);
-
-  chromiumWrapper = wrapChromium chromium;
 
   cinelerra = callPackage ../applications/video/cinelerra { };
 
@@ -10068,13 +10064,6 @@ let
   };
 
   wordnet = callPackage ../applications/misc/wordnet { };
-
-  wrapChromium = browser: wrapFirefox {
-    inherit browser;
-    browserName = browser.packageName;
-    desktopName = "Chromium";
-    icon = "${browser}/share/icons/hicolor/48x48/apps/${browser.packageName}.png";
-  };
 
   wrapFirefox =
     { browser, browserName ? "firefox", desktopName ? "Firefox", nameSuffix ? ""
