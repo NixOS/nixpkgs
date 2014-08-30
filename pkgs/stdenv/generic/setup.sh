@@ -450,6 +450,10 @@ unpackFile() {
             # Don't rely on tar knowing about .xz.
             xz -d < $curSrc | tar xf -
             ;;
+        *.tar.lz )
+            # Don't rely on tar knowing about .lz.
+            lzip -d < $curSrc | tar xf -
+            ;;
         *.tar | *.tar.* | *.tgz | *.tbz2)
             # GNU tar can automatically select the decompression method
             # (info "(tar) gzip").
