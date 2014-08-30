@@ -2407,6 +2407,8 @@ let
 
   unrar = callPackage ../tools/archivers/unrar { };
 
+  xar = callPackage ../tools/compression/xar { };
+
   xarchive = callPackage ../tools/archivers/xarchive { };
 
   xarchiver = callPackage ../tools/archivers/xarchiver { };
