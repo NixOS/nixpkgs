@@ -9475,11 +9475,11 @@ rec {
 
 
   zope_i18n = buildPythonPackage rec {
-    name = "zope.i18n-3.7.4";
+    name = "zope.i18n-3.8.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.i18n/${name}.tar.gz";
-      md5 = "a6fe9d9ad53dd7e94e87cd58fb67d3b7";
+      sha256 = "045nnimmshibcq71yym2d8yrs6wzzhxq5gl7wxjnkpyjm5y0hfkm";
     };
 
     propagatedBuildInputs = [ pytz zope_component ];
