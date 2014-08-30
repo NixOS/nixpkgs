@@ -2260,25 +2260,6 @@ rec {
     };
   };
 
-  # TODO: this shouldn't use a buildPythonPackage
-  koji = buildPythonPackage (rec {
-    name = "koji-1.8";
-    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
-    disabled = isPy3k;
-
-    src = fetchurl {
-      url = "https://fedorahosted.org/released/koji/koji-1.8.0.tar.bz2";
-      sha256 = "10dph209h4jgajb5jmbjhqy4z4hd22i7s2d93vm3ikdf01i8iwf1";
-    };
-
-    configurePhase = ":";
-    buildPhase = ":";
-    installPhase = "make install DESTDIR=$out/ && cp -R $out/nix/store/*/* $out/ && rm -rf $out/nix";
-    doCheck = false;
-    propagatedBuildInputs = [ pythonPackages.pycurl ];
-
-  });
-
   logilab_astng = buildPythonPackage rec {
     name = "logilab-astng-0.24.3";
 

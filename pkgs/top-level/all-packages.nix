@@ -9123,6 +9123,8 @@ let
     inherit (gnome) libglade;
   };
 
+  koji = callPackage ../tools/package-management/koji { };
+
   lame = callPackage ../applications/audio/lame { };
 
   larswm = callPackage ../applications/window-managers/larswm { };
