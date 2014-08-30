@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, replace, curl, expat, zlib, bzip2, libarchive
+{ stdenv, fetchurl, fetchpatch, replace, pkgconfig, curl, expat, zlib, bzip2, libarchive
 , useNcurses ? false, ncurses, useQt4 ? false, qt4
 }:
 
@@ -39,11 +39,14 @@ stdenv.mkDerivation rec {
       sha256 = "16acmdr27adma7gs9rs0dxdiqppm15vl3vv3agy7y8s94wyh4ybv";
     });
 
-  buildInputs = [ curl expat zlib bzip2 libarchive ]
+  buildInputs = [ pkgconfig curl expat zlib bzip2 libarchive ]
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4;
 
   CMAKE_PREFIX_PATH = stdenv.lib.concatStringsSep ":" buildInputs;
+
+  # no idea why the auto-added NIX_LDFLAGS to the same path is not enough
+  NIX_CFLAGS_COMPILE = "-L${zlib.out}/lib";
 
   configureFlags =
     "--docdir=/share/doc/${name} --mandir=/share/man --system-libs"

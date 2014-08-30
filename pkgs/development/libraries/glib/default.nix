@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   #outputs = [ "dev" "out" "bin" ]; # ToDo: no idea what's wrong! docs? 
 
-  #setupHook = ./setup-hook.sh;
+  setupHook = ./setup-hook.sh;
 
   buildInputs = [ /*stdenv.hookLib.multiout*/ libelf ]
     ++ optionals doCheck [ tzdata libxml2 desktop_file_utils shared_mime_info ];

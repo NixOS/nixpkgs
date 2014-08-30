@@ -7221,7 +7221,7 @@ let
       });
     })
     else if stdenv.isLinux
-    then utillinux
+    then e2fsprogs
     else null;
 
   e3cfsprogs = callPackage ../os-specific/linux/e3cfsprogs { };
@@ -7808,7 +7808,7 @@ let
 
   udev145 = callPackage ../os-specific/linux/udev/145.nix { };
 
-  udev = pkgs.systemd.libudev;
+  udev = pkgs.systemd; # headers are not in the libudev output
 
   udisks1 = callPackage ../os-specific/linux/udisks/1-default.nix { };
   udisks2 = callPackage ../os-specific/linux/udisks/2-default.nix { };

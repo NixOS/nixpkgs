@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hpjcc42svrs06q3isjm3m5aphgkpfdylmvpnif71zh46ys0cab5";
   };
 
-  outputs = [ "out" "man" "libudev" ];
+  outputs = [ "dev" "out" "libudev" "doc" ];
 
   patches =
     [ # These are all changes between upstream and
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
       libmicrohttpd linuxHeaders
       autoreconfHook
     ] ++ stdenv.lib.optionals pythonSupport [pythonPackages.python pythonPackages.lxml];
+
 
   configureFlags =
     [ "--localstatedir=/var"
@@ -102,6 +103,8 @@ stdenv.mkDerivation rec {
   # /var is mounted.
   makeFlags = "hwdb_bin=/var/lib/udev/hwdb.bin";
 
+  enableParallelBuilding = true;
+
   installFlags =
     [ "localstatedir=$(TMPDIR)/var"
       "sysconfdir=$(out)/etc"
@@ -112,9 +115,9 @@ stdenv.mkDerivation rec {
   # Get rid of configuration-specific data.
   postInstall =
     ''
-      mkdir -p $out/example/systemd
-      mv $out/lib/{modules-load.d,binfmt.d,sysctl.d,tmpfiles.d} $out/example
-      mv $out/lib/systemd/{system,user} $out/example/systemd
+      mkdir -p $doc/example/systemd
+      mv $doc/lib/{modules-load.d,binfmt.d,sysctl.d,tmpfiles.d} $doc/example
+      mv $doc/lib/systemd/{system,user} $doc/example/systemd
 
       rm -rf $out/etc/systemd/system
 
@@ -143,7 +146,12 @@ stdenv.mkDerivation rec {
       done
     ''; # */
 
-  enableParallelBuilding = true;
+  postPhases = "postPostFixup";
+
+  postPostFixup = ''
+    ls -l "$dev"/nix-support/
+    echo -n " $libudev" >> "$dev"/nix-support/propagated-*build-inputs
+  '';
 
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is

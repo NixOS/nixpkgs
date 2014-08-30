@@ -15,3 +15,18 @@ glibPreFixupPhase() {
 }
 
 preFixupPhases+=(glibPreFixupPhase)
+
+
+preFixupHooks+=(_multioutGtkDocs)
+
+# Move documentation to the desired outputs.
+_multioutGtkDocs() {
+    if [ "$outputs" = "out" ]; then return; fi;
+    _moveToOutput share/gtk-doc "${!outputDoc}"
+
+    # Remove empty share directory.
+    if [ -d "$out/share" ]; then
+        rmdir "$out/share" 2> /dev/null || true
+    fi
+}
+

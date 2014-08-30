@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip, xlibs, libjpeg}:
+{ stdenv, fetchurl, autoreconfHook, unzip, xlibs, libjpeg }:
 
 stdenv.mkDerivation rec {
   name = "jasper-1.900.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "154l7zk7yh3v8l2l6zm5s2alvd2fzkp6c9i18iajfbna5af5m43b";
   };
 
-  nativeBuildInputs = [unzip];
+  nativeBuildInputs = [ unzip autoreconfHook ];
   propagatedBuildInputs = [ libjpeg ];
 
   configureFlags = "--enable-shared";

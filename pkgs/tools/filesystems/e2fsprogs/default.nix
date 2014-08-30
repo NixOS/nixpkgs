@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, libuuid }:
+{ stdenv, fetchurl, autoreconfHook, gettext, pkgconfig, libuuid }:
 
 stdenv.mkDerivation rec {
-  name = "e2fsprogs-1.42.9";
+  name = "e2fsprogs-1.42.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/e2fsprogs/${name}.tar.gz";
-    sha256 = "00i83w22sbyq849as9vmaf2xcx1d06npvriyv8m0z81gx43ar4ig";
+    sha256 = "0v0qcfyls0dlrjy8gx9m3s2wbkp5z3lbsr5hb7x8kp8f3bclcy71";
   };
 
-  buildInputs = [ pkgconfig libuuid ];
+  outputs = [ "dev" "out" "bin" "man" ];
+
+  buildInputs = [ pkgconfig /*libuuid*/ ];
 
   crossAttrs = {
     preConfigure = ''
@@ -17,7 +19,8 @@ stdenv.mkDerivation rec {
   };
 
   # libuuid, libblkid, uuidd and fsck are in util-linux-ng (the "libuuid" dependency).
-  configureFlags = "--enable-elf-shlibs --disable-libuuid --disable-libblkid --disable-uuidd --disable-fsck --enable-symlink-install";
+  # ToDo: failed with shared uuid and blkid
+  configureFlags = "--enable-elf-shlibs --disable-fsck --enable-symlink-install";
 
   enableParallelBuilding = true;
 
