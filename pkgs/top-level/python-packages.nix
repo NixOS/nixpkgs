@@ -9505,11 +9505,11 @@ rec {
 
 
   zope_lifecycleevent = buildPythonPackage rec {
-    name = "zope.lifecycleevent-3.6.2";
+    name = "zope.lifecycleevent-3.7.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.lifecycleevent/${name}.tar.gz";
-      md5 = "3ba978f3ba7c0805c81c2c79ea3edb33";
+      sha256 = "0s5brphqzzz89cykg61gy7zcmz0ryq1jj2va7gh2n1b3cccllp95";
     };
 
     propagatedBuildInputs = [ zope_event zope_component ];
