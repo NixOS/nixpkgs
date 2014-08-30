@@ -9491,11 +9491,11 @@ rec {
 
 
   zope_i18nmessageid = buildPythonPackage rec {
-    name = "zope.i18nmessageid-4.0.2";
+    name = "zope.i18nmessageid-4.0.3";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/z/zope.i18nmessageid/zope.i18nmessageid-4.0.2.tar.gz";
-      md5 = "c4550f7a0b4a736186e6e0fa3b2471f7";
+      url = "http://pypi.python.org/packages/source/z/zope.i18nmessageid/zope.i18nmessageid-4.0.3.tar.gz";
+      sha256 = "1rslyph0klk58dmjjy4j0jxy21k03azksixc3x2xhqbkv97cmzml";
     };
 
     meta = {
