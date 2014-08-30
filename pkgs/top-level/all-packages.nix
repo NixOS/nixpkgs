@@ -10091,6 +10091,8 @@ let
       gtk_modules = [ libcanberra ];
     };
 
+  wxhexeditor = callPackage ../applications/editors/wxhexeditor { };
+
   x11vnc = callPackage ../tools/X11/x11vnc { };
 
   x2vnc = callPackage ../tools/X11/x2vnc { };
