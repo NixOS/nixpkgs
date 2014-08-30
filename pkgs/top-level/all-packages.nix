@@ -9435,6 +9435,8 @@ let
 
   nano = callPackage ../applications/editors/nano { };
 
+  nanoblogger = callPackage ../applications/misc/nanoblogger { };
+
   navipowm = callPackage ../applications/misc/navipowm { };
 
   navit = callPackage ../applications/misc/navit { };
