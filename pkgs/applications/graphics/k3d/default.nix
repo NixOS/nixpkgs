@@ -1,7 +1,7 @@
 {stdenv, fetchurl
 , cmake, mesa, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
 , libpng, boost, doxygen, cairomm, pkgconfig, imagemagick, libjpeg, libtiff
-, gettext, intltool, perl, gtkmm, glibmm, gtkglext, pangox_compat
+, gettext, intltool, perl, gtkmm, glibmm, gtkglext, pangox_compat, libXmu
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
      cmake mesa zlib python expat libxml2 libsigcxx libuuid freetype libpng
      boost doxygen cairomm pkgconfig imagemagick libjpeg libtiff gettext
      intltool perl
-     gtkmm glibmm gtkglext pangox_compat
+     gtkmm glibmm gtkglext pangox_compat libXmu
     ];
 
   doCheck = false;
