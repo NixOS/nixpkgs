@@ -133,15 +133,25 @@ sub GrubFs {
 
             # BTRFS is a special case in that we need to fix the referrenced path based on subvolumes
             if ($fs->type eq 'btrfs') {
-                my ($status, @info) = runCommand("btrfs subvol show @{[$fs->mount]}");
+                my ($status, @id_info) = runCommand("btrfs subvol show @{[$fs->mount]}");
                 if ($status != 0) {
-                    die "Failed to retreive subvolume info for @{[$fs->mount]}";
+                    die "Failed to retreive subvolume info for @{[$fs->mount]}\n";
                 }
-                my @subvols = join("", @info) =~ m/Name:[ \t\n]*([^ \t\n]*)/;
-                if ($#subvols > 0) {
+                my @ids = join("", @id_info) =~ m/Object ID:[ \t\n]*([^ \t\n]*)/;
+                if ($#ids > 0) {
                     die "Btrfs subvol name for @{[$fs->device]} listed multiple times in mount\n"
-                } elsif ($#subvols == 0) {
-                    $path = "/$subvols[0]$path";
+                } elsif ($#ids == 0) {
+                    my ($status, @path_info) = runCommand("btrfs subvol list @{[$fs->mount]}");
+                    if ($status != 0) {
+                        die "Failed to find @{[$fs->mount]} subvolume id from btrfs\n";
+                    }
+                    my @paths = join("", @path_info) =~ m/ID $ids[0] [^\n]* path ([^\n]*)/;
+                    if ($#paths > 0) {
+                        die "Btrfs returned multiple paths for a single subvolume id, mountpoint @{[$fs->mount]}\n";
+                    } elsif ($#paths != 0) {
+                        die "Btrfs did not return a path for the subvolume at @{[$fs->mount]}\n";
+                    }
+                    $path = "/$paths[0]$path";
                 }
             }
         }
