@@ -68,36 +68,48 @@ let
 
       ipAddress = mkOption {
         default = null;
+        example = "10.0.0.1";
+        type = types.nullOr types.str;
         description = ''
-          Defunct, create an address in the ip4 list instead.
+          IP address of the interface.  Leave empty to configure the
+          interface using DHCP.
         '';
       };
 
       prefixLength = mkOption {
         default = null;
+        example = 24;
+        type = types.nullOr types.int;
         description = ''
-          Defunct, supply the prefix length in the ip4 list instead.
+          Subnet mask of the interface, specified as the number of
+          bits in the prefix (<literal>24</literal>).
         '';
       };
 
       subnetMask = mkOption {
         default = null;
         description = ''
-          Defunct, supply the prefix length in the ip4 list instead.
+          Defunct, supply the prefix length instead.
         '';
       };
 
       ipv6Address = mkOption {
         default = null;
+        example = "2001:1470:fffd:2098::e006";
+        type = types.nullOr types.str;
         description = ''
-          Defunct, create an address in the ip6 list instead.
+          IPv6 address of the interface.  Leave empty to configure the
+          interface using NDP.
         '';
       };
 
       ipv6prefixLength = mkOption {
-        default = null;
+        default = 64;
+        example = 64;
+        type = types.int;
         description = ''
-          Defunct, supply the prefix length in the ip6 list instead.
+          Subnet mask of the interface, specified as the number of
+          bits in the prefix (<literal>64</literal>).
         '';
       };
 
@@ -470,12 +482,8 @@ in
 
     assertions =
       flip map interfaces (i: {
-        assertion = i.ipAddress == null && i.prefixLength == null && i.subnetMask == null;
-        message = "The networking.interfaces.${i.name}.ipAddress option is defunct. Use networking.ip4 instead.";
-      })
-      ++ flip map interfaces (i: {
-        assertion = i.ipv6Address == null && i.ipv6prefixLength == null;
-        message = "The networking.interfaces.${i.name}.ipv6Address option is defunct. Use networking.ip6 instead.";
+        assertion = i.subnetMask == null;
+        message = "The networking.interfaces.${i.name}.subnetMask option is defunct. Use prefixLength instead.";
       });
 
     boot.kernelModules = [ ]
@@ -574,7 +582,18 @@ in
         # network device, so it only gets started after the interface
         # has appeared, and it's stopped when the interface
         # disappears.
-        configureInterface = i: nameValuePair "${i.name}-cfg"
+        configureInterface = i:
+          let
+            ips = i.ip4 ++ optionals cfg.enableIPv6 i.ip6
+              ++ optional (i.ipAddress != null) {
+                ipAddress = i.ipAddress;
+                prefixLength = i.prefixLength;
+              } ++ optional (cfg.enableIPv6 && i.ipv6Address != null) {
+                ipAddress = i.ipv6Address;
+                prefixLength = i.ipv6PrefixLength;
+              };
+          in
+          nameValuePair "${i.name}-cfg"
           { description = "Configuration of ${i.name}";
             wantedBy = [ "network-interfaces.target" ];
             bindsTo = [ "sys-subsystem-net-devices-${i.name}.device" ];
@@ -606,7 +625,7 @@ in
                   # useful when the Nix store is accessed via this
                   # interface (e.g. in a QEMU VM test).
                 ''
-              + flip concatMapStrings (i.ip4 ++ optionals cfg.enableIPv6 i.ip6) (ip:
+              + flip concatMapStrings (ips) (ip:
                 let
                   address = "${ip.address}/${toString ip.prefixLength}";
                 in
@@ -622,7 +641,7 @@ in
                     fi
                   fi
                 '')
-              + optionalString (i.ip4 != [ ] || (cfg.enableIPv6 && i.ip6 != [ ]))
+              + optionalString (ips != [ ])
                 ''
                   if [ restart_network_setup = true ]; then
                     # Ensure that the default gateway remains set.
@@ -643,7 +662,7 @@ in
               ''
                 echo "releasing configured ip's..."
               ''
-              + flip concatMapStrings (i.ip4 ++ optionals cfg.enableIPv6 i.ip6) (ip:
+              + flip concatMapStrings (ips) (ip:
                 let
                   address = "${ip.address}/${toString ip.prefixLength}";
                 in
