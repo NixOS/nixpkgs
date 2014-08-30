@@ -9355,11 +9355,11 @@ rec {
 
 
   zope_configuration = buildPythonPackage rec {
-    name = "zope.configuration-4.0.2";
+    name = "zope.configuration-4.0.3";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/z/zope.configuration/zope.configuration-4.0.2.tar.gz";
-      md5 = "40b3c7ad0b748ede532d8cfe2544e44e";
+      url = "http://pypi.python.org/packages/source/z/zope.configuration/zope.configuration-4.0.3.tar.gz";
+      sha256 = "1x9dfqypgympnlm25p9m43xh4qv3p7d75vksv9pzqibrb4cggw5n";
     };
 
     propagatedBuildInputs = [ zope_i18nmessageid zope_schema ];
