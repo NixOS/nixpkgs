@@ -8,7 +8,7 @@
 , regexPosix, alex, happy, git, gnumake, gcc, autoconf, patch
 , automake, libtool, cabalInstallGhcjs, gmp, base16Bytestring
 , cryptohash, executablePath, transformersCompat
-, haddock, hspec, xhtml, primitive, cacert
+, haddock, hspec, xhtml, primitive, cacert, pkgs, ghc
 }:
 cabal.mkDerivation (self: rec {
   pname = "ghcjs";
@@ -77,16 +77,17 @@ cabal.mkDerivation (self: rec {
     sed -i -e "s|str = \\[\\]|str = [\"--prefix=$out\", \"--libdir=$prefix/lib/$compiler\", \"--libsubdir=$pkgid\"]|" \
       src-bin/Boot.hs
   '';
+  libdir = "/share/ghcjs/${pkgs.stdenv.system}-${version}-${ghc.ghc.version}";
   postInstall = ''
     export HOME=$(pwd)
-    export GIT_SSL_CAINFO=${cacert}/etc/ca-bundle.crt
+    export GIT_SSL_CAINFO="${cacert}/etc/ca-bundle.crt"
     git clone git://github.com/ghcjs/ghcjs-boot.git
     cd ghcjs-boot
     git checkout f9f79d0cf40212943bcc1ad2672f2e0a7af2b7c9
     git submodule update --init --recursive
     ( cd boot ; chmod u+w . ; ln -s .. ghcjs-boot )
     chmod -R u+w .              # because fetchgit made it read-only
-    local GHCJS_LIBDIR=$out/share/ghcjs/x86_64-linux-0.1.0-7.8.2
+    local GHCJS_LIBDIR=$out${libdir}
     ensureDir $GHCJS_LIBDIR
     cp -R ${shims} $GHCJS_LIBDIR/shims
     ${cabalInstallGhcjs}/bin/cabal-js update
