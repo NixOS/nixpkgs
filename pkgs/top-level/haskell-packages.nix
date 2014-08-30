@@ -1557,6 +1557,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   MaybeT = callPackage ../development/libraries/haskell/MaybeT {};
 
+  meep = callPackage ../development/libraries/haskell/meep {};
+
   MemoTrie = callPackage ../development/libraries/haskell/MemoTrie {};
 
   mersenneRandomPure64 = callPackage ../development/libraries/haskell/mersenne-random-pure64 {};
