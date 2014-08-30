@@ -440,6 +440,14 @@ let
         xfwm4 = linux;
       };
 
+      linuxPackages_testing = { };
+      linuxPackages_grsec_stable_desktop = { };
+      linuxPackages_grsec_stable_server = { };
+      linuxPackages_grsec_stable_server_xen = { };
+      linuxPackages_grsec_testing_desktop = { };
+      linuxPackages_grsec_testing_server = { };
+      linuxPackages_grsec_testing_server_xen = { };
+
     } ));
 
 in jobs
