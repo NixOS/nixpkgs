@@ -43,10 +43,7 @@ stdenv.mkDerivation rec {
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4;
 
-  CMAKE_PREFIX_PATH = stdenv.lib.concatStringsSep ":" buildInputs;
-
-  # no idea why the auto-added NIX_LDFLAGS to the same path is not enough
-  NIX_CFLAGS_COMPILE = "-L${zlib.out}/lib";
+  CMAKE_PREFIX_PATH = stdenv.lib.concatStringsSep ":" (buildInputs ++ [zlib.out]);
 
   configureFlags =
     "--docdir=/share/doc/${name} --mandir=/share/man --system-libs"

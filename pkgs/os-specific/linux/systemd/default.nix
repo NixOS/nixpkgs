@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
-, xz, pam, acl, cryptsetup, libuuid, m4, utillinux
+, zlib, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, sysvtools, docbook_xsl
 , kexectools, libmicrohttpd, linuxHeaders
 , pythonPackages ? null, pythonSupport ? false
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig intltool gperf libcap kmod xz pam acl
       /* cryptsetup */ libuuid m4 glib libxslt libgcrypt docbook_xsl
-      libmicrohttpd linuxHeaders
+      libmicrohttpd linuxHeaders libffi
       autoreconfHook
     ] ++ stdenv.lib.optionals pythonSupport [pythonPackages.python pythonPackages.lxml];
 
@@ -146,10 +146,17 @@ stdenv.mkDerivation rec {
       done
     ''; # */
 
-  postPhases = "postPostFixup";
+  # some libs fail to link to liblzma and/or libffi
+  postFixup = let extraLibs = stdenv.lib.makeLibraryPath [ xz.out libffi.out zlib.out ];
+    in ''
+      for f in "$out"/lib/*.so.0.*; do
+        patchelf --set-rpath `patchelf --print-rpath "$f"`':${extraLibs}' "$f"
+      done
+    '';
 
+  # propagate the libudev output
+  postPhases = "postPostFixup";
   postPostFixup = ''
-    ls -l "$dev"/nix-support/
     echo -n " $libudev" >> "$dev"/nix-support/propagated-*build-inputs
   '';
 

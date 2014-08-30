@@ -32,6 +32,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # propagate the bin output
+  postPhases = "postPostFixup";
+  postPostFixup = ''
+    echo -n " $bin" >> "$dev"/nix-support/propagated-*build-inputs
+  '';
+
   meta = {
     description = "A library for image loading and manipulation";
     homepage = http://library.gnome.org/devel/gdk-pixbuf/;

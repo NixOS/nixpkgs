@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, perl, zlib
+{ stdenv, fetchurl, pkgconfig, openssl, perl, zlib
 , sslSupport, proxySupport ? true
 , apr, aprutil, pcre
 , ldapSupport ? true, openldap
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" "doc" ];
 
-  buildInputs = [perl apr aprutil pcre] ++
+  buildInputs = [ pkgconfig perl apr aprutil pcre zlib ] ++
     stdenv.lib.optional sslSupport openssl;
 
   # An apr-util header file includes an apr header file
