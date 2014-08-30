@@ -1100,7 +1100,7 @@ let
   gawk = callPackage ../tools/text/gawk { };
 
   gawkInteractive = appendToName "interactive"
-    (gawk.override { readlineSupport = true; });
+    (gawk.override { interactive = true; });
 
   gbdfed = callPackage ../tools/misc/gbdfed {
     gtk = gtk2;
