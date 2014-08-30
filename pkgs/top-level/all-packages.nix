@@ -4364,8 +4364,6 @@ let
 
   audiofile = callPackage ../development/libraries/audiofile { };
 
-  axis = callPackage ../development/libraries/axis { };
-
   babl_0_0_22 = callPackage ../development/libraries/babl/0_0_22.nix { };
 
   babl = callPackage ../development/libraries/babl { };
