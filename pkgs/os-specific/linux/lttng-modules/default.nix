@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     # TODO license = with licenses; [ lgpl21 gpl2 mit ];
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
+    broken = true;
   };
 
 }
