@@ -9578,11 +9578,11 @@ rec {
 
 
   zope_schema = buildPythonPackage rec {
-    name = "zope.schema-4.2.2";
+    name = "zope.schema-4.4.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.schema/${name}.tar.gz";
-      md5 = "e7e581af8193551831560a736a53cf58";
+      sha256 = "0wpwfggd736ai8bbrwbsnqf522sh5j57d1zxq8m8p6i5nwml0q02";
     };
 
     propagatedBuildInputs = [ zope_location zope_event zope_interface zope_testing ] ++ optional isPy26 ordereddict;
