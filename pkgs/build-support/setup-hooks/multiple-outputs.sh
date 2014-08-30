@@ -1,3 +1,5 @@
+# The base package for automatic multiple-output splitting. Used in stdenv as well.
+
 preConfigureHooks+=(_multioutConfig)
 preFixupHooks+=(_multioutDocs)
 preFixupHooks+=(_multioutDevs)
@@ -43,7 +45,7 @@ propagateIntoOutput="${!outputDev}"
 
 # Add standard flags to put files into the desired outputs.
 _multioutConfig() {
-    if [ -z "${setOutputFlags-1}" ]; then return; fi;
+    if [ "$outputs" = "out" ] || [ -z "${setOutputFlags-1}" ]; then return; fi;
 
     configureFlags="\
         --bindir=${!outputBin}/bin --sbindir=${!outputBin}/sbin \
@@ -68,11 +70,9 @@ NIX_NO_SELF_RPATH=1
 _moveToOutput() {
     local patt="$1"
     local dstOut="$2"
-    echo "XXX: m2o '$1' '$2'"
     local output
     for output in $outputs; do
-        echo "XXX: output='$output'"
-        if [ "${output}" = "$dstOut" ]; then continue; fi
+        if [ "${!output}" = "$dstOut" ]; then continue; fi
         local srcPath
         for srcPath in ${!output}/$patt; do
             if [ ! -e "$srcPath" ]; then continue; fi
@@ -93,6 +93,7 @@ _moveToOutput() {
 
 # Move documentation to the desired outputs.
 _multioutDocs() {
+    if [ "$outputs" = "out" ]; then return; fi;
     echo "Looking for documentation to move between outputs"
     _moveToOutput share/man "${!outputMan}"
     _moveToOutput share/info "${!outputInfo}"
@@ -106,7 +107,7 @@ _multioutDocs() {
 
 # Move development-only stuff to the desired outputs.
 _multioutDevs() {
-    if [ -z "${moveToDev-1}" ]; then return; fi;
+    if [ "$outputs" = "out" ] || [ -z "${moveToDev-1}" ]; then return; fi;
     echo "Looking for development-only stuff to move between outputs"
     _moveToOutput include "${!outputInclude}"
     _moveToOutput lib/pkgconfig "${!outputDev}"
@@ -117,6 +118,8 @@ _multioutDevs() {
 # Note: during the build, probably only the "native" development packages are useful.
 # With current cross-building setup, all packages are "native" if not cross-building.
 _multioutPropagateDev() {
+    if [ "$outputs" = "out" ]; then return; fi;
+
     if [ "${!outputInclude}" != "$propagateIntoOutput" ]; then
         mkdir -p "$propagateIntoOutput"/nix-support
         echo -n " ${!outputInclude}" >> "$propagateIntoOutput"/nix-support/propagated-native-build-inputs
