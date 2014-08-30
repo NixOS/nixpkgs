@@ -214,10 +214,9 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  outputs = [ "out" "lib" ];
-
+  outputs = [ "out" "lib" "doc" ];
   setOutputFlags = false;
-
+  NIX_NO_SELF_RPATH = true;
 
   libc_dev = stdenv.gcc.libc_dev;
 
