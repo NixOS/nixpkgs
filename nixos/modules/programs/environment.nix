@@ -24,7 +24,7 @@ in
       };
 
     environment.sessionVariables =
-      { NIX_PATH =
+      { NIX_PATH = mkDefault
           [ "/nix/var/nix/profiles/per-user/root/channels/nixos"
             "nixpkgs=/etc/nixos/nixpkgs"
             "nixos-config=/etc/nixos/configuration.nix"
