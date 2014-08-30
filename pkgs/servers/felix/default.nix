@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     cp -av * $out
   '';
   meta = {
-    description = "Apache Felix OSGi gateway";
+    description = "An OSGi gateway";
     homepage = http://felix.apache.org;
     license = "ASF";
     maintainers = [ stdenv.lib.maintainers.sander ];

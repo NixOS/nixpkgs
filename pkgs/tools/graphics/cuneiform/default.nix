@@ -37,6 +37,6 @@ rec {
   name = "cuneiform-" + version;
   meta = {
     inherit version;
-    description = "Cuneiform OCR";
+    description = "Multi-language OCR system";
   };
 }

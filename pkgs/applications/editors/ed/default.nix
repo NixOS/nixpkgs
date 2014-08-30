@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ lzip ];
 
   meta = {
-    description = "GNU ed, an implementation of the standard Unix editor";
+    description = "An implementation of the standard Unix editor";
 
     longDescription = ''
       GNU ed is a line-oriented text editor.  It is used to create,

@@ -21,5 +21,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.mit;
     maintaners = [ stdenv.lib.maintainers.shlevy ];
     platforms = stdenv.lib.platforms.all;
+    broken = true;
   };
 }

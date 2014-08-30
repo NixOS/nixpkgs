@@ -6,10 +6,12 @@ let
   cfg = config.services.dnsmasq;
   dnsmasq = pkgs.dnsmasq;
 
-  serversParam = concatMapStrings (s: "-S ${s} ") cfg.servers;
-
   dnsmasqConf = pkgs.writeText "dnsmasq.conf" ''
-    ${cfg.extraConfig}
+    ${optionalString cfg.resolveLocalQueries ''
+      conf-file=/etc/dnsmasq-conf.conf
+      resolv-file=/etc/dnsmasq-resolv.conf
+    ''}
+      ${cfg.extraConfig}
   '';
 
 in
@@ -29,6 +31,14 @@ in
         '';
       };
 
+      resolveLocalQueries = mkOption {
+        default = true;
+        description = ''
+          Whether dnsmasq should resolve local queries (i.e. add 127.0.0.1 to
+          /etc/resolv.conf)
+        '';
+      };
+
       servers = mkOption {
         default = [];
         example = [ "8.8.8.8" "8.8.4.4" ];
@@ -36,6 +46,8 @@ in
           The parameter to dnsmasq -S.
         '';
       };
+
+
 
       extraConfig = mkOption {
         type = types.string;
@@ -55,15 +67,30 @@ in
 
   config = mkIf config.services.dnsmasq.enable {
 
-    jobs.dnsmasq =
-      { description = "dnsmasq daemon";
+    environment.systemPackages = [ dnsmasq ]
+      ++ (if cfg.resolveLocalQueries then [ pkgs.openresolv ] else []);
 
-        startOn = "ip-up";
+    services.dbus.packages = [ dnsmasq ];
 
-        daemonType = "daemon";
-
-        exec = "${dnsmasq}/bin/dnsmasq -R ${serversParam} -o -C ${dnsmasqConf}";
+    users.extraUsers = singleton
+      { name = "dnsmasq";
+        uid = config.ids.uids.dnsmasq;
+        description = "Dnsmasq daemon user";
+        home = "/var/empty";
       };
+
+    systemd.services.dnsmasq = {
+        description = "dnsmasq daemon";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          Type = "dbus";
+          BusName = "uk.org.thekelleys.dnsmasq";
+          ExecStartPre = "${dnsmasq}/bin/dnsmasq --test";
+          ExecStart = "${dnsmasq}/bin/dnsmasq -k --enable-dbus --user=dnsmasq -C ${dnsmasqConf}";
+          ExecReload = "${dnsmasq}/bin/kill -HUP $MAINPID";
+        };
+    };
 
   };
 

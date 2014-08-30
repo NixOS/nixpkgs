@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = {
-    description = "GNU Mailutils is a rich and powerful protocol-independent mail framework";
+    description = "Rich and powerful protocol-independent mail framework";
 
     longDescription = ''
       GNU Mailutils is a rich and powerful protocol-independent mail

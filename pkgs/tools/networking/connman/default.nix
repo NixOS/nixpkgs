@@ -49,7 +49,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "The ConnMan project provides a daemon for managing internet connections";
+    description = "Provides a daemon for managing internet connections";
     homepage = "https://connman.net/";
     maintainers = [ stdenv.lib.maintainers.matejc ];
     # tested only on linux, might work on others also

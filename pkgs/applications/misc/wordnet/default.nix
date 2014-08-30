@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "WordNet, a lexical database for the English language";
+    description = "Lexical database for the English language";
 
     longDescription =
       '' WordNet® is a large lexical database of English.  Nouns, verbs,

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   
   meta = {
     homepage = http://www.geocities.jp/kosako3/oniguruma/;
-    description = "Oniguruma regular expressions library";
+    description = "Regular expressions library";
     license = "BSD";
   };
 }

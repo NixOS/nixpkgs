@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    description = "Geeqie, a lightweight GTK+ based image viewer";
+    description = "Lightweight GTK+ based image viewer";
 
     longDescription =
       ''

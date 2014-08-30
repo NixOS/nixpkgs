@@ -1,6 +1,6 @@
 { stdenv, fetchurl, scons, boost, gperftools, pcre, snappy }:
 
-let version = "2.6.0";
+let version = "2.6.4";
     system-libraries = [
       "tcmalloc"
       "pcre"
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://downloads.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "066kppjdmdpadjr09ildla3aw42anzsc9pa55iwp3wa4rgqd2i33";
+    sha256 = "1h4rrgcb95234ryjma3fjg50qsm1bnxjx5ib0c3p9nzmc2ji2m07";
   };
 
   nativeBuildInputs = [ scons boost gperftools pcre snappy ];

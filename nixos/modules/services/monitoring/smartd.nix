@@ -62,7 +62,7 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        example = "true";
+        example = true;
         description = ''
           Run smartd from the smartmontools package. Note that e-mail
           notifications will not be enabled unless you configure the list of

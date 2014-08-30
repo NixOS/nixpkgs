@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://ctags.sourceforge.net/";
-    description = "Exuberant Ctags, a tool for fast source code browsing";
+    description = "A tool for fast source code browsing (exuberant ctags)";
     license = stdenv.lib.licenses.gpl2Plus;
 
     longDescription = ''

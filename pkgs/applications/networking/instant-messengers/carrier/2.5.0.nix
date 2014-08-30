@@ -41,7 +41,7 @@ rec {
       
   name = "carrier-2.5.0";
   meta = {
-    description = "Carrier - PidginIM GUI fork with user-friendly development model";
+    description = "PidginIM GUI fork with user-friendly development model";
     homepage = http://funpidgin.sf.net; 
   };
 } // (if externalPurple2 then {

@@ -2,11 +2,12 @@
 let
   atlasMaybeShared = atlas.override { inherit shared; };
   usedLibExtension = if shared then ".so" else ".a";
+  version = "3.4.1";
 in
-stdenv.mkDerivation {
-  name = "liblapack-3.4.1";
+stdenv.mkDerivation rec {
+  name = "liblapack-${version}";
   src = fetchurl {
-    url = "http://www.netlib.org/lapack/lapack-3.4.1.tgz";
+    url = "http://www.netlib.org/lapack/lapack-${version}.tgz";
     sha256 = "93b910f94f6091a2e71b59809c4db4a14655db527cfc5821ade2e8c8ab75380f";
   };
 
@@ -37,6 +38,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
+    inherit version;
     description = "Linear Algebra PACKage";
     homepage = "http://www.netlib.org/lapack/";
     license = "revised-BSD";

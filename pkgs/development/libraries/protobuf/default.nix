@@ -1,11 +1,11 @@
 { fetchurl, stdenv, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "protobuf-2.5.0";
+  name = "protobuf-2.6.0";
 
   src = fetchurl {
-    url = "http://protobuf.googlecode.com/files/${name}.tar.bz2";
-    sha256 = "0xxn9gxhvsgzz2sgmihzf6pf75clr05mqj6218camwrwajpcbgqk";
+    url = "http://protobuf.googlecode.com/svn-history/r579/rc/protobuf-2.6.0.tar.bz2";
+    sha256 = "0krfkxc85vfznqwbh59qlhp7ld81al9ss35av0gfbg74i0rvjids";
   };
 
   buildInputs = [ zlib ];
