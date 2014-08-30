@@ -9422,11 +9422,11 @@ rec {
 
   zope_event = buildPythonPackage rec {
     name = "zope.event-${version}";
-    version = "4.0.2";
+    version = "4.0.3";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.event/${name}.tar.gz";
-      md5 = "e08dd299d428d77a1cfcbfe841b81872";
+      sha256 = "1w858k9kmgzfj36h65kp27m9slrmykvi5cjq6c119xqnaz5gdzgm";
     };
 
     meta = {
