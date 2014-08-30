@@ -3145,7 +3145,7 @@ let
     llvm = llvm_34;
     openblas = openblas_0_2_10;
   };
-  julia = julia021;
+  julia = julia030;
 
   lazarus = builderDefsPackage (import ../development/compilers/fpc/lazarus.nix) {
     inherit makeWrapper gtk glib pango atk gdk_pixbuf;
