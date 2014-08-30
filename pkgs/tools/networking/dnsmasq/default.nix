@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     install -Dm644 dbus/dnsmasq.conf $out/etc/dbus-1/system.d/dnsmasq.conf
     install -Dm644 trust-anchors.conf $out/share/dnsmasq/trust-anchors.conf
 
-    ensureDir $out/share/dbus-1/system-services
+    mkdir -p $out/share/dbus-1/system-services
     cat <<END > $out/share/dbus-1/system-services/uk.org.thekelleys.dnsmasq.service
     [D-BUS Service]
     Name=uk.org.thekelleys.dnsmasq
