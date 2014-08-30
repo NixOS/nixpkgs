@@ -9333,11 +9333,11 @@ rec {
 
 
   zope_component = buildPythonPackage rec {
-    name = "zope.component-4.0.2";
+    name = "zope.component-4.2.1";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/z/zope.component/zope.component-4.0.2.tar.gz";
-      md5 = "8c2fd4414ca23cbbe014dcaf911acebc";
+      url = "http://pypi.python.org/packages/source/z/zope.component/zope.component-4.2.1.tar.gz";
+      sha256 = "1gzbr0j6c2h0cqnpi2cjss38wrz1bcwx8xahl3vykgz5laid15l6";
     };
 
     propagatedBuildInputs = [
