@@ -2051,6 +2051,8 @@ let
     ruby = ruby18;
   };
 
+  s6Dns = callPackage ../tools/networking/s6-dns { };
+
   s6PortableUtils = callPackage ../tools/misc/s6-portable-utils { };
 
   sablotron = callPackage ../tools/text/xml/sablotron { };
