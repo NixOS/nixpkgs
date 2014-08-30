@@ -2053,6 +2053,8 @@ let
 
   s6Dns = callPackage ../tools/networking/s6-dns { };
 
+  s6LinuxUtils = callPackage ../os-specific/linux/s6-linux-utils { };
+
   s6Networking = callPackage ../tools/networking/s6-networking { };
 
   s6PortableUtils = callPackage ../tools/misc/s6-portable-utils { };
