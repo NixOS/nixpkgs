@@ -9613,11 +9613,11 @@ rec {
 
 
   zope_size = buildPythonPackage rec {
-    name = "zope.size-3.4.1";
+    name = "zope.size-3.5.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.size/${name}.tar.gz";
-      md5 = "55d9084dfd9dcbdb5ad2191ceb5ed03d";
+      sha256 = "006xfkhvmypwd3ww9gbba4zly7n9w30bpp1h74d53la7l7fiqk2f";
     };
 
     propagatedBuildInputs = [ zope_i18nmessageid zope_interface ];
