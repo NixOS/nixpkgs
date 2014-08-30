@@ -158,7 +158,7 @@ my $grubStore = GrubFs("/nix");
 
 # We don't need to copy if we can read the kernels directly
 if ($grubStore->search ne "") {
-	$copyKernels = 0;
+    $copyKernels = 0;
 }
 
 # Generate the header.
@@ -275,8 +275,8 @@ sub addEntry {
         $conf .= "  " . ($xen ? "module" : "initrd") . " $initrd\n\n";
     } else {
         $conf .= "menuentry \"$name\" {\n";
-	$conf .= $grubBoot->search . "\n";
-	$conf .= $grubStore->search . "\n";
+        $conf .= $grubBoot->search . "\n";
+        $conf .= $grubStore->search . "\n";
         $conf .= "  $extraPerEntryConfig\n" if $extraPerEntryConfig;
         $conf .= "  multiboot $xen $xenParams\n" if $xen;
         $conf .= "  " . ($xen ? "module" : "linux") . " $kernel $kernelParams\n";
