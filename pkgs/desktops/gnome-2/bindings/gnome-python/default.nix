@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, pkgconfig, libgnome, GConf, pygobject, pygtk, glib, gtk, pythonDBus}:
+{ stdenv, fetchurl, python, pkgconfig, libgnome, GConf, pygobject, pygtk, glib, gtk, pythonDBus,  gnome_vfs}:
 
 with stdenv.lib;
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     cp bonobo/*.{py,defs} $out/share/pygtk/2.0/defs/
   '';
 
-  buildInputs = [ python pkgconfig pygobject pygtk glib gtk GConf libgnome pythonDBus ];
+  buildInputs = [ python pkgconfig pygobject pygtk glib gtk GConf libgnome pythonDBus gnome_vfs ];
 
   doCheck = false;
 
