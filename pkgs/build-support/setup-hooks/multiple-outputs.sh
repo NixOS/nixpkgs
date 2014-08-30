@@ -112,6 +112,11 @@ _multioutDevs() {
     _moveToOutput include "${!outputInclude}"
     _moveToOutput lib/pkgconfig "${!outputDev}"
     _moveToOutput "lib/*.la" "${!outputDev}"
+
+    echo "Patching *.pc includedir to output ${!outputInclude}"
+    for f in "${!outputDev}"/lib/pkgconfig/*.pc; do
+        sed -i "/^includedir=/s,=\${prefix},=${!outputInclude}," "$f"
+    done
 }
 
 # Make ${!outputDev} propagate other outputs needed for development
