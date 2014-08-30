@@ -8269,6 +8269,8 @@ let
 
   inherit (gnome3) baobab;
 
+  backintime = callPackage ../applications/networking/sync/backintime { };
+
   bar = callPackage ../applications/window-managers/bar { };
 
   baresip = callPackage ../applications/networking/instant-messengers/baresip {
