@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, gmp ? null
+{ stdenv, fetchurl, perl, xz, gmp ? null
 , aclSupport ? false, acl ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
 }:
@@ -22,7 +22,7 @@ let
 
     outputs = [ "out" "info" ];
 
-    nativeBuildInputs = [ perl ];
+    nativeBuildInputs = [ perl xz.bin ];
     buildInputs = [ gmp ]
       ++ optional aclSupport acl
       ++ optionals selinuxSupport [ libselinux libsepol ];

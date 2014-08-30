@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pcre, libiconv ? null }:
+{ stdenv, fetchurl, xz, pcre, libiconv ? null }:
 
 let version = "2.14"; in
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   #outputs = [ "out" "doc" ]; ToDo
 
-  buildInputs = [ pcre ]
+  buildInputs = [ pcre xz.bin ]
     ++ stdenv.lib.optional (libiconv != null) libiconv;
 
   patches = [ ./test-localeconv.patch ];

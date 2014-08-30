@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, xz }:
 
 stdenv.mkDerivation rec {
   name = "gzip-1.6";
@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
+
+  buildInputs = [ xz.bin ];
 
   # In stdenv-linux, prevent a dependency on bootstrap-tools.
   makeFlags = "SHELL=/bin/sh GREP=grep";

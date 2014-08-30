@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libsigsegv, readline, interactive ? false }:
+{ stdenv, fetchurl, xz, libsigsegv, readline, interactive ? false }:
 
 let
   inherit (stdenv.lib) optional;
@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   # When we do build separate interactive version, it makes sense to always include docs.
-  #outputs = stdenv.lib.optionals (!interactive) [ "out" "doc" ]; #ToDo
+  outputs = stdenv.lib.optionals (!interactive) [ "out" "doc" ]; #ToDo
 
-  buildInputs = [ libsigsegv ]
+  buildInputs = [ xz.bin libsigsegv ]
     ++ optional interactive readline;
 
   configureFlags = [ "--with-libsigsegv-prefix=${libsigsegv}" ]
