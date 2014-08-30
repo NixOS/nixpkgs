@@ -7356,7 +7356,7 @@ rec {
 
     # buildPhase = "python setup.py build";
     # doCheck = false;
-    propagatedBuildInputs = [ pycurl koji GitPython pkgs.git
+    propagatedBuildInputs = [ pycurl pkgs.koji GitPython pkgs.git
                               pkgs.rpm pkgs.pyopenssl ];
 
   });
