@@ -7286,14 +7286,14 @@ rec {
 
 
   rope = buildPythonPackage rec {
-    version = "0.9.4";
+    version = "0.10.2";
     name = "rope-${version}";
 
     disabled = isPy3k;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/r/rope/${name}.tar.gz";
-      sha256 = "1fm6ahff50b10mlnc0ar4x1fv9sxmcp1g651myyqy7c50hk39h1d";
+      sha256 = "0rdlvp8h74qs49wz1hx6qy8mgp2ddwlfs7z13h9139ynq04a3z7z";
     };
 
     meta = with stdenv.lib; {
