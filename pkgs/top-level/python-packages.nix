@@ -2749,6 +2749,8 @@ rec {
 
   random2 = pythonPackages.buildPythonPackage rec {
     name = "random2-1.0.1";
+    
+    doCheck = !isPyPy;
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/r/random2/${name}.zip";
