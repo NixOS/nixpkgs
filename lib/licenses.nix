@@ -62,6 +62,11 @@ rec {
     fullName = ''BSD 4-clause "Original" or "Old" License'';
   };
 
+  cc0 = spdx {
+    shortName = "CC0-1.0";
+    fullName = ''Creative Commons Zero v1.0 Universal'';
+  };
+
   cc-by-30 = spdx {
     shortName = "CC-BY-3.0";
     fullName = "Creative Commons Attribution 3.0";
@@ -208,6 +213,11 @@ rec {
     shortName = "MSR-LA";
     fullName  = "Microsoft Research License Agreement";
     url       = "http://research.microsoft.com/en-us/projects/pex/msr-la.txt";
+  };
+
+  ncsa = spdx {
+    shortName = "NCSA";
+    fullName  = "University of Illinois/NCSA Open Source License";
   };
 
   ofl = spdx {

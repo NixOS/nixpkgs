@@ -8,7 +8,7 @@ let
   npmFlags = concatStringsSep " " (map (v: "--${v}") flags);
 
   sources = runCommand "node-sources" {} ''
-    tar --no-same-owner -xf ${nodejs.src}
+    tar --no-same-owner --no-same-permissions -xf ${nodejs.src}
     mv *node* $out
   '';
 

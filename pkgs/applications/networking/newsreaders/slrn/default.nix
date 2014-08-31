@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   buildInputs = [ slang ncurses ];
 
   meta = {
-    description = "The slrn (S-Lang read news) newsreader";
+    description = "Text-based newsreader";
     homepage = http://slrn.sourceforge.net/index.html;
     license = stdenv.lib.licenses.gpl2;
   };

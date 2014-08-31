@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.mpfr.org/;
-    description = "GNU MPFR, a library for multiple-precision floating-point arithmetic";
+    description = "Library for multiple-precision floating-point arithmetic";
 
     longDescription = ''
       The GNU MPFR library is a C library for multiple-precision

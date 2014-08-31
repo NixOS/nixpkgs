@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   postFixup = "ln -s $out/bin $dev/bin"; # tools needed for development
 
   meta = {
-    description = "GNU Binutils, tools for manipulating binaries (linker, assembler, etc.)";
+    description = "Tools for manipulating binaries (linker, assembler, etc.)";
 
     longDescription = ''
       The GNU Binutils are a collection of binary tools.  The main

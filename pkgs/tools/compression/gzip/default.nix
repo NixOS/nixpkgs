@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.gnu.org/software/gzip/;
-    description = "Gzip, the GNU zip compression program";
+    description = "GNU zip compression program";
 
     longDescription =
       ''gzip (GNU zip) is a popular data compression program written by

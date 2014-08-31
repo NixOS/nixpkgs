@@ -1,5 +1,7 @@
 { stdenv, requireFile, gmp4, ncurses, zlib, clang_33, makeWrapper }:
 
+assert stdenv.isLinux;
+
 let
   name    = "cryptol-${version}-${rev}";
   version = "1.8.27";

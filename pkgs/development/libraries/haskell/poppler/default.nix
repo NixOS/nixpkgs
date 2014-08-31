@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "poppler";
-  version = "0.12.3";
-  sha256 = "1ny2r1cpsshpg00w6bd0f5mw26xsy99l7dgx2xq8f01zcwdy4nrp";
+  version = "0.13";
+  sha256 = "1fv0h2ixanzv5vy4l2ln23f9n8ghmgdxzlyx54hh69bwhrcg049s";
   buildDepends = [ cairo glib gtk mtl ];
   buildTools = [ gtk2hsBuildtools ];
   extraLibraries = [ libc ];
@@ -18,7 +18,5 @@ cabal.mkDerivation (self: {
     license = self.stdenv.lib.licenses.gpl2;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ ianwookim ];
-    hydraPlatforms = self.stdenv.lib.platforms.none;
-    broken = true;
   };
 })

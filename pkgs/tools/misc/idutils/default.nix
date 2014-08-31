@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   patches = [ ./nix-mapping.patch ];
 
   meta = {
-    description = "GNU Idutils, a text searching utility";
+    description = "Text searching utility";
 
     longDescription = ''
       An "ID database" is a binary file containing a list of file

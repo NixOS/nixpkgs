@@ -51,7 +51,10 @@ stdenv.mkDerivation rec {
     perl ./install-linux.pl --prefix="$out"
     rm $out/tools/CUDA_Occupancy_Calculator.xls
     perl ./install-sdk-linux.pl --prefix="$sdk" --cudaprefix="$out"
+    mv $out/include $out/usr_include
   '';
+
+  setupHook = ./setup-hook.sh;
 
   meta = {
     license = [ "nonfree" ];

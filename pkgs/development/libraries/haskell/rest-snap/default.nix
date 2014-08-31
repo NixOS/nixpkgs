@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "rest-snap";
-  version = "0.1.17.12";
-  sha256 = "0hhpscdbph34psfn2h1g0znds0cz7ja9byr6bg7jmj0h86plz8al";
+  version = "0.1.17.13";
+  sha256 = "13c143dzxhfrshn19ylqfmhnxjirixfif8d1fmzagz1v893narkz";
   buildDepends = [
     caseInsensitive restCore safe snapCore unorderedContainers
     uriEncode utf8String

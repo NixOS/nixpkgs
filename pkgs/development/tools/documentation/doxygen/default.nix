@@ -39,7 +39,7 @@ stdenv.mkDerivation {
   meta = {
     license = stdenv.lib.licenses.gpl2Plus;
     homepage = "http://doxygen.org/";
-    description = "Doxygen, a source code documentation generator tool";
+    description = "Source code documentation generator tool";
 
     longDescription = ''
       Doxygen is a documentation system for C++, C, Java, Objective-C,

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "libchop, tools & library for data backup and distributed storage";
+    description = "Tools & library for data backup and distributed storage";
 
     longDescription =
       '' Libchop is a set of utilities and library for data backup and

@@ -19,7 +19,7 @@ stdenv.mkDerivation (rec {
   '';
 
   meta = {
-    description = "GNU Libgcrypt, a general-pupose cryptographic library";
+    description = "General-pupose cryptographic library";
 
     longDescription = ''
       GNU Libgcrypt is a general purpose cryptographic library based on

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://caml.inria.fr/ocaml;
     license = [ "QPL" /* compiler */ "LGPLv2" /* library */ ];
-    description = "Objective Caml, the most popular variant of the Caml language";
+    description = "Most popular variant of the Caml language";
 
     longDescription =
       '' Objective Caml is the most popular variant of the Caml language.

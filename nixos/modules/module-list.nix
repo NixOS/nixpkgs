@@ -5,6 +5,7 @@
   ./config/fonts/fonts.nix
   ./config/fonts/ghostscript.nix
   ./config/gnu.nix
+  ./config/gtk-exe-env.nix
   ./config/i18n.nix
   ./config/krb5.nix
   ./config/ldap.nix
@@ -13,6 +14,7 @@
   ./config/nsswitch.nix
   ./config/power-management.nix
   ./config/pulseaudio.nix
+  ./config/qt-plugin-env.nix
   ./config/shells-environment.nix
   ./config/swap.nix
   ./config/sysctl.nix
@@ -59,8 +61,10 @@
   ./programs/shell.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
+  ./programs/uim.nix
   ./programs/venus.nix
   ./programs/wvdial.nix
+  ./programs/freetds.nix
   ./programs/zsh/zsh.nix
   ./rename.nix
   ./security/apparmor.nix
@@ -100,6 +104,7 @@
   ./services/databases/monetdb.nix
   ./services/databases/mongodb.nix
   ./services/databases/mysql.nix
+  ./services/databases/neo4j.nix 
   ./services/databases/openldap.nix
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
@@ -142,6 +147,7 @@
   ./services/mail/dovecot.nix
   ./services/mail/freepops.nix
   ./services/mail/mail.nix
+  ./services/mail/mlmmj.nix
   ./services/mail/opensmtpd.nix
   ./services/mail/postfix.nix
   ./services/mail/spamassassin.nix
@@ -159,14 +165,18 @@
   ./services/misc/nix-ssh-serve.nix
   ./services/misc/rippled.nix
   ./services/misc/rogue.nix
+  ./services/misc/siproxd.nix
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
+  ./services/misc/zookeeper.nix
   ./services/monitoring/apcupsd.nix
   ./services/monitoring/dd-agent.nix
   ./services/monitoring/graphite.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
+  ./services/monitoring/riemann.nix
+  ./services/monitoring/riemann-dash.nix
   ./services/monitoring/smartd.nix
   ./services/monitoring/statsd.nix
   ./services/monitoring/systemhealth.nix
@@ -252,6 +262,7 @@
   ./services/search/elasticsearch.nix
   ./services/search/solr.nix
   ./services/security/clamav.nix
+  ./services/security/fail2ban.nix
   ./services/security/fprot.nix
   ./services/security/frandom.nix
   ./services/security/haveged.nix
@@ -293,6 +304,7 @@
   ./services/x11/window-managers/awesome.nix
   #./services/x11/window-managers/compiz.nix
   ./services/x11/window-managers/default.nix
+  ./services/x11/window-managers/fluxbox.nix
   ./services/x11/window-managers/icewm.nix
   ./services/x11/window-managers/bspwm.nix
   ./services/x11/window-managers/metacity.nix

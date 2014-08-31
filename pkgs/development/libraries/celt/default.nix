@@ -29,7 +29,7 @@ rec {
   phaseNames = ["doConfigure" "doMakeInstall"];
       
   meta = {
-    description = "CELT - low-delay audio codec";
+    description = "Low-delay audio codec";
     maintainers = with a.lib.maintainers;
     [
       raskin

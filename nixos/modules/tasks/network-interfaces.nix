@@ -7,6 +7,7 @@ let
   cfg = config.networking;
   interfaces = attrValues cfg.interfaces;
   hasVirtuals = any (i: i.virtual) interfaces;
+  hasSits = cfg.sits != { };
   hasBonds = cfg.bonds != { };
 
   interfaceOpts = { name, ... }: {
@@ -321,6 +322,66 @@ in
       };
     };
 
+    networking.sits = mkOption {
+      type = types.attrsOf types.optionSet;
+      default = { };
+      example = {
+        hurricane = {
+          remote = "10.0.0.1";
+          local = "10.0.0.22";
+          ttl = 255;
+        };
+        msipv6 = {
+          remote = "192.168.0.1";
+          dev = "enp3s0";
+          ttl = 127;
+        };
+      };
+      description = ''
+        This option allows you to define 6-to-4 interfaces which should be automatically created.
+      '';
+      options = {
+
+        remote = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "10.0.0.1";
+          description = ''
+            The address of the remote endpoint to forward traffic over.
+          '';
+        };
+
+        local = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "10.0.0.22";
+          description = ''
+            The address of the local endpoint which the remote
+            side should send packets to.
+          '';
+        };
+
+        ttl = mkOption {
+          type = types.nullOr types.int;
+          default = null;
+          example = 255;
+          description = ''
+            The time-to-live of the connection to the remote tunnel endpoint.
+          '';
+        };
+
+        dev = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "enp4s0f0";
+          description = ''
+            The underlying network device on which the tunnel resides.
+          '';
+        };
+
+      };
+    };
+
     networking.vlans = mkOption {
       default = { };
       example = {
@@ -380,6 +441,7 @@ in
     boot.kernelModules = [ ]
       ++ optional cfg.enableIPv6 "ipv6"
       ++ optional hasVirtuals "tun"
+      ++ optional hasSits "sit"
       ++ optional hasBonds "bonding";
 
     boot.extraModprobeConfig =
@@ -641,6 +703,32 @@ in
             '';
           };
 
+        createSitDevice = n: v:
+          let
+            deps = optional (v.dev != null) "sys-subsystem-net-devices-${v.dev}.device";
+          in
+          { description = "6-to-4 Tunnel Interface ${n}";
+            wantedBy = [ "network.target" "sys-subsystem-net-devices-${n}.device" ];
+            bindsTo = deps;
+            after = deps;
+            serviceConfig.Type = "oneshot";
+            serviceConfig.RemainAfterExit = true;
+            path = [ pkgs.iproute ];
+            script = ''
+              # Remove Dead Interfaces
+              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+              ip link add "${n}" type sit \
+                ${optionalString (v.remote != null) "remote \"${v.remote}\""} \
+                ${optionalString (v.local != null) "local \"${v.local}\""} \
+                ${optionalString (v.ttl != null) "ttl ${toString v.ttl}"} \
+                ${optionalString (v.dev != null) "dev \"${v.dev}\""}
+              ip link set "${n}" up
+            '';
+            postStop = ''
+              ip link delete "${n}"
+            '';
+          };
+
         createVlanDevice = n: v:
           let
             deps = [ "sys-subsystem-net-devices-${v.interface}.device" ];
@@ -668,6 +756,7 @@ in
            map createTunDevice (filter (i: i.virtual) interfaces))
          // mapAttrs createBridgeDevice cfg.bridges
          // mapAttrs createBondDevice cfg.bonds
+         // mapAttrs createSitDevice cfg.sits
          // mapAttrs createVlanDevice cfg.vlans
          // { "network-setup" = networkSetup; };
 

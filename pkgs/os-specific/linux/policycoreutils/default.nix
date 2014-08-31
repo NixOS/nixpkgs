@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lpwxr5hw3dwhlp2p7y8jcr18mvfcrclwd8c2idz3lmmb3pglk46";
   };
 
-  patchPhase = ''
+  preConfigure = ''
     substituteInPlace po/Makefile --replace /usr/bin/install install
     find . -type f -exec sed -i 's,/usr/bin/python,${python}/bin/python,' {} \;
   '';
@@ -35,6 +35,10 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lsepol -lpcre";
 
   makeFlags = "PREFIX=$(out) DESTDIR=$(out) LOCALEDIR=$(out)/share/locale";
+
+  patches = [ ./size_format.patch ];
+
+  patchFlags = [ "-p0" ];
 
   meta = with stdenv.lib; {
     description = "SELinux policy core utilities";

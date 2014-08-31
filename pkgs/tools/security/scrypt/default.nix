@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl ];
 
   meta = {
-    description = "The scrypt encryption utility";
+    description = "Encryption utility";
     homepage    = https://www.tarsnap.com/scrypt.html;
     license     = stdenv.lib.licenses.bsd2;
     platforms   = stdenv.lib.platforms.all;

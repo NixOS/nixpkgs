@@ -6,10 +6,13 @@ let
 
   dhcpcd = if !config.boot.isContainer then pkgs.dhcpcd else pkgs.dhcpcd.override { udev = null; };
 
+  cfg = config.networking.dhcpcd;
+
   # Don't start dhcpcd on explicitly configured interfaces or on
-  # interfaces that are part of a bridge.
+  # interfaces that are part of a bridge, bond or sit device.
   ignoredInterfaces =
     map (i: i.name) (filter (i: i.ipAddress != null) (attrValues config.networking.interfaces))
+    ++ mapAttrsToList (i: _: i) config.networking.sits
     ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.bridges))
     ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.bonds))
     ++ config.networking.dhcpcd.denyInterfaces;
@@ -35,9 +38,12 @@ let
       # Ignore peth* devices; on Xen, they're renamed physical
       # Ethernet cards used for bridging.  Likewise for vif* and tap*
       # (Xen) and virbr* and vnet* (libvirt).
-      denyinterfaces ${toString ignoredInterfaces} lo peth* vif* tap* tun* virbr* vnet* vboxnet*
+      denyinterfaces ${toString ignoredInterfaces} lo peth* vif* tap* tun* virbr* vnet* vboxnet* sit*
 
-      ${config.networking.dhcpcd.extraConfig}
+      # Use the list of allowed interfaces if specified
+      ${optionalString (cfg.allowInterfaces != null) "allowinterfaces ${toString cfg.allowInterfaces}"}
+
+      ${cfg.extraConfig}
     '';
 
   # Hook for emitting ip-up/ip-down events.
@@ -77,6 +83,17 @@ in
          any of the shell glob patterns in this list. The purpose of
          this option is to blacklist virtual interfaces such as those
          created by Xen, libvirt, LXC, etc.
+      '';
+    };
+
+    networking.dhcpcd.allowInterfaces = mkOption {
+      type = types.nullOr (types.listOf types.str);
+      default = null;
+      description = ''
+         Enable the DHCP client for any interface whose name matches
+         any of the shell glob patterns in this list. Any interface not
+         explicitly matched by this pattern will be denied. This pattern only
+         applies when non-null.
       '';
     };
 

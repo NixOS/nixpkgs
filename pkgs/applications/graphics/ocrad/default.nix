@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "GNU Ocrad, optical character recognition (OCR) program & library";
+    description = "Optical character recognition (OCR) program & library";
 
     longDescription =
       '' GNU Ocrad is an OCR (Optical Character Recognition) program based on

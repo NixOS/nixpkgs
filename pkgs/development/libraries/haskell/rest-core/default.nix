@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "rest-core";
-  version = "0.31.1";
-  sha256 = "1cx1zmy1zr43n9nlrbar828izccpkvrvjkrda03ra9fkcjgd6qy6";
+  version = "0.32";
+  sha256 = "130kz1gsrbamw8gs4vc0fqfjh1gi7i52xxmj4fg1vl2dr77gf6my";
   buildDepends = [
     aeson aesonUtils either errors fclabels hxt hxtPickleUtils
     jsonSchema mtl multipart random restStringmap restTypes safe split

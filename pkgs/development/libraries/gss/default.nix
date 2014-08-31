@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "GNU GSS Generic Security Service";
+    description = "Generic Security Service";
 
     longDescription =
       '' GSS is an implementation of the Generic Security Service Application

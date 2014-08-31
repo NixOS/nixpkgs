@@ -1,6 +1,8 @@
 { stdenv, fetchurl, fetchgit, openssl, zlib, pcre, libxml2, libxslt, gd, geoip
 , perl }:
 
+assert stdenv.isLinux;
+
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
@@ -46,13 +48,14 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2}/include/libxml2 $additionalFlags"
     export PATH="$PATH:${stdenv.gcc.libc}/sbin"
+    patchShebangs .
   '';
 
   meta = {
     description = "A fast web application server built on Nginx";
     homepage    = http://openresty.org;
     license     = licenses.bsd2;
-    platforms   = platforms.all;
+    platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

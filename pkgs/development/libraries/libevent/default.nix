@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "libevent, an event notification library";
+    description = "Event notification library";
 
     longDescription =
       '' The libevent API provides a mechanism to execute a callback function

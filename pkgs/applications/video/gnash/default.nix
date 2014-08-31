@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.gnu.org/software/gnash/;
-    description = "GNU Gnash, a libre SWF (Flash) movie player";
+    description = "A libre SWF (Flash) movie player";
 
     longDescription = ''
       Gnash is a GNU Flash movie player.  Flash is an animation file format

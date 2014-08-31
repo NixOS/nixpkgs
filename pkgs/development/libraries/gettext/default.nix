@@ -42,7 +42,7 @@ stdenv.mkDerivation (rec {
   };
 
   meta = {
-    description = "GNU gettext, a well integrated set of translation tools and documentation";
+    description = "Well integrated set of translation tools and documentation";
 
     longDescription = ''
       Usually, programs are written and documented in English, and use

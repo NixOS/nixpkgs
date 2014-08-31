@@ -17,6 +17,6 @@ stdenv.mkDerivation {
     homepage = "http://www.spinnaker.de/lbdb/";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.all;
-    description = "The Little Brother's Database (lbdb)";
+    description = "The Little Brother's Database";
   };
 }

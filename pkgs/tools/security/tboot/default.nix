@@ -21,9 +21,7 @@ stdenv.mkDerivation rec {
   installFlags = "DESTDIR=$(out)";
 
   meta = with stdenv.lib; {
-    description = ''Trusted Boot (tboot) is an open source, pre-kernel/VMM module that uses
-                    Intel(R) Trusted Execution Technology (Intel(R) TXT) to perform a measured
-                    and verified launch of an OS kernel/VMM.'';
+    description = "A pre-kernel/VMM module that uses Intel(R) TXT to perform a measured and verified launch of an OS kernel/VMM";
     homepage    = http://sourceforge.net/projects/tboot/;
     license     = licenses.bsd3;
     maintainers = [ maintainers.ak ];

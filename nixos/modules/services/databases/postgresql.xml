@@ -1,0 +1,77 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="module-postgresql">
+
+<title>PostgreSQL</title>
+
+<!-- FIXME: render nicely -->
+
+<!-- FIXME: source can be added automatically -->
+<para><emphasis>Source:</emphasis> <filename>modules/services/databases/postgresql.nix</filename></para>
+
+<para><emphasis>Upstream documentation:</emphasis> <link xlink:href="http://www.postgresql.org/docs/"/></para>
+
+<!-- FIXME: more stuff, like maintainer? -->
+
+<para>PostgreSQL is an advanced, free relational database.<!-- MORE --></para>
+
+<section><title>Configuring</title>
+
+<para>To enable PostgreSQL, add the following to your
+<filename>configuration.nix</filename>:
+
+<programlisting>
+services.postgresql.enable = true;
+services.postgresql.package = pkgs.postgresql93;
+</programlisting>
+
+Note that you are required to specify the desired version of
+PostgreSQL (e.g. <literal>pkgs.postgresql93</literal>). Since
+upgrading your PostgreSQL version requires a database dump and reload
+(see below), NixOS cannot provide a default value for
+<option>services.postgresql.package</option> such as the most recent
+release of PostgreSQL.</para>
+
+<!--
+<para>After running <command>nixos-rebuild</command>, you can verify
+whether PostgreSQL works by running <command>psql</command>:
+
+<screen>
+$ psql
+psql (9.2.9)
+Type "help" for help.
+
+alice=>
+</screen>
+-->
+
+<para>By default, PostgreSQL stores its databases in
+<filename>/var/db/postgresql</filename>. You can override this using
+<option>services.postgresql.dataDir</option>, e.g.
+
+<programlisting>
+services.postgresql.dataDir = "/data/postgresql";
+</programlisting>
+
+</para>
+
+</section>
+
+
+<section><title>Upgrading</title>
+
+<para>FIXME: document dump/upgrade/load cycle.</para>
+
+</section>
+
+
+<section><title>Options</title>
+
+<para>FIXME: auto-generated list of module options.</para>
+
+</section>
+
+
+</chapter>

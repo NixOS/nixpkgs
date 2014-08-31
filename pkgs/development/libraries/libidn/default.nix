@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.gnu.org/software/libidn/;
-    description = "GNU Libidn library for internationalized domain names";
+    description = "Library for internationalized domain names";
 
     longDescription = ''
       GNU Libidn is a fully documented implementation of the

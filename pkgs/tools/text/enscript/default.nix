@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "GNU Enscript, a converter from ASCII to PostScript, HTML, or RTF";
+    description = "Converter from ASCII to PostScript, HTML, or RTF";
 
     longDescription =
       '' GNU Enscript converts ASCII files to PostScript, HTML, or RTF and

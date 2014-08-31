@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses pkgconfig alsaLib flac libmad ffmpeg libvorbis mpc mp4v2 ];
 
   meta = {
-    description = "cmus is a small, fast and powerful console music player for Linux and *BSD";
+    description = "Small, fast and powerful console music player for Linux and *BSD";
     homepage = http://cmus.sourceforge.net;
     license = stdenv.lib.licenses.gpl2;
   };
