@@ -63,25 +63,16 @@ let
        && (let l = lib.lists.toList attrs.meta.license or []; in lib.lists.elem "unfree" l || lib.lists.elem "unfree-redistributable" l)
        && !allowUnfreePredicate attrs then
       throw ''
-        Package ‘${attrs.name}’ in ${pos'} has an unfree license, refusing to evaluate. You can set
-          { nixpkgs.config.allowUnfree = true; }
-        in configuration.nix to override this. If you use Nix standalone, you can add
-          { allowUnfree = true; }
-        to ~/.nixpkgs/config.nix.''
+            Package ‘${attrs.name}’ in ${pos'} has an unfree license, refusing to evaluate.
+            ${forceEvalHelp "Unfree"}''
     else if !allowBroken && attrs.meta.broken or false then
-      throw ''
-        Package ‘${attrs.name}’ in ${pos'} is marked as broken, refusing to evaluate. You can set
-          { nixpkgs.config.allowBroken = true; }
-        in configuration.nix to override this. If you use Nix standalone, you can add
-          { allowBroken = true; }
-        to ~/.nixpkgs/config.nix.''
+          throw ''
+            Package ‘${attrs.name}’ in ${pos'} is marked as broken, refusing to evaluate.
+            ${forceEvalHelp "Broken"}''
     else if !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem result.system attrs.meta.platforms then
-      throw ''
-        Package ‘${attrs.name}’ in ${pos'} is not supported on ‘${result.system}’, refusing to evaluate. You can set
-          { nixpkgs.config.allowBroken = true; }
-        in configuration.nix to override this. If you use Nix standalone, you can add
-          { allowBroken = true; }
-        to ~/.nixpkgs/config.nix.''
+          throw ''
+            Package ‘${attrs.name}’ in ${pos'} is not supported on ‘${result.system}’, refusing to evaluate.
+            ${forceEvalHelp "Broken"}''
     else
       lib.addPassthru (derivation (
         (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
