@@ -775,7 +775,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   eventList = callPackage ../development/libraries/haskell/event-list {};
 
-  exPool = callPackage ../development/libraries/haskell/ex-pool { };
+  exPool = callPackage ../development/libraries/haskell/ex-pool {};
 
   exceptionMtl = callPackage ../development/libraries/haskell/exception-mtl {};
 
@@ -1737,7 +1737,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   networkProtocolXmpp = callPackage ../development/libraries/haskell/network-protocol-xmpp {};
 
-  networkSimple = callPackage ../development/libraries/haskell/network-simple { };
+  networkSimple = callPackage ../development/libraries/haskell/network-simple {};
 
   networkTransport = callPackage ../development/libraries/haskell/network-transport {};
 
@@ -2971,7 +2971,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   pointful = callPackage ../development/tools/haskell/pointful {};
 
-  ShellCheck = callPackage ../development/tools/misc/ShellCheck { };
+  ShellCheck = callPackage ../development/tools/misc/ShellCheck {};
 
   SourceGraph = callPackage ../development/tools/haskell/SourceGraph {};
 
