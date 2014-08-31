@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "directory-layout";
-  version = "0.7.4";
-  sha256 = "1nrbv9mzl817d6c494sxd4jg15winpp9624n84av9vdxb8x1n14d";
+  version = "0.7.4.1";
+  sha256 = "0hj7dfv5i2s1dk0rws2fg84crpxz1kgvrq68f373a6hwkbfhv89b";
   buildDepends = [
     commandQq filepath free hspec lens semigroups text transformers
     unorderedContainers
@@ -21,5 +21,4 @@ cabal.mkDerivation (self: {
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };
-  doCheck = false; # issue https://github.com/supki/directory-layout/issues/8
 })
