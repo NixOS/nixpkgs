@@ -20,13 +20,6 @@ sub uniq {
     return @res;
 }
 
-sub runCommand {
-    my ($cmd) = @_;
-    open FILE, "$cmd 2>/dev/null |" or die "Failed to execute: $cmd\n";
-    my @ret = <FILE>;
-    close FILE;
-    return ($?, @ret);
-}
 
 # Process the command line.
 my $outDir = "/etc/nixos";
@@ -341,20 +334,6 @@ EOF
             chomp $backer;
             $device = $backer;
             push @extraOptions, "loop";
-        }
-    }
-
-    # Is this a btrfs filesystem?
-    if ($fsType eq "btrfs") {
-        my ($status, @info) = runCommand("btrfs subvol show $rootDir$mountPoint");
-        if ($status != 0) {
-            die "Failed to retreive subvolume info for $mountPoint";
-        }
-        my @subvols = join("", @info) =~ m/Name:[ \t\n]*([^ \t\n]*)/;
-        if ($#subvols > 0) {
-            die "Btrfs subvol name for $mountPoint listed multiple times in mount\n"
-        } elsif ($#subvols == 0) {
-            push @extraOptions, "subvol=$subvols[0]";
         }
     }
 

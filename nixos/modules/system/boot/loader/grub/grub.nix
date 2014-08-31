@@ -6,8 +6,7 @@ let
 
   cfg = config.boot.loader.grub;
 
-  realGrub = if cfg.version == 1 then pkgs.grub
-    else pkgs.grub2.override { zfsSupport = cfg.zfsSupport; };
+  realGrub = if cfg.version == 1 then pkgs.grub else pkgs.grub2;
 
   grub =
     # Don't include GRUB if we're only generating a GRUB menu (e.g.,
@@ -26,12 +25,11 @@ let
       inherit (cfg)
         version extraConfig extraPerEntryConfig extraEntries
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels timeout
-        default devices fsIdentifier;
+        default devices explicitBootRoot;
       path = (makeSearchPath "bin" [
-        pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfsProgs
-        pkgs.utillinux
+        pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils
       ]) + ":" + (makeSearchPath "sbin" [
-        pkgs.mdadm pkgs.utillinux
+        pkgs.mdadm
       ]);
     });
 
@@ -211,26 +209,12 @@ in
         '';
       };
 
-      fsIdentifier = mkOption {
-        default = "uuid";
-        type = types.addCheck types.str
-          (type: type == "uuid" || type == "label" || type == "provided");
+      explicitBootRoot = mkOption {
+        default = "";
+        type = types.str;
         description = ''
-          Determines how grub will identify devices when generating the
-          configuration file. A value of uuid / label signifies that grub
-          will always resolve the uuid or label of the device before using
-          it in the configuration. A value of provided means that grub will
-          use the device name as show in <command>df</command> or
-          <command>mount</command>. Note, zfs zpools / datasets are ignored
-          and will always be mounted using their labels.
-        '';
-      };
-
-      zfsSupport = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          Whether grub should be build against libzfs.
+          The relative path of /boot within the parent volume. Leave empty
+          if /boot is not a btrfs subvolume.
         '';
       };
 
@@ -275,9 +259,6 @@ in
         concatStrings (mapAttrsToList (n: v: ''
           ${pkgs.coreutils}/bin/cp -pf "${v}" "/boot/${n}"
         '') config.boot.loader.grub.extraFiles);
-
-    assertions = [{ assertion = !cfg.zfsSupport || cfg.version == 2;
-                    message = "Only grub version 2 provides zfs support";}];
 
     })
 

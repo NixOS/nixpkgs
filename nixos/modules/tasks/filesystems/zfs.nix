@@ -133,7 +133,7 @@ in
       };
 
       boot.initrd = mkIf inInitrd {
-        kernelModules = [ "spl" "zfs" ];
+        kernelModules = [ "spl" "zfs" ] ;
         extraUtilsCommands =
           ''
             cp -v ${zfsPkg}/sbin/zfs $out/bin
@@ -146,10 +146,6 @@ in
           ''
             zpool import -f -a
           '';
-      };
-
-      boot.loader.grub = mkIf inInitrd {
-        zfsSupport = true;
       };
 
       systemd.services."zpool-import" = {
