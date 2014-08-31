@@ -178,11 +178,6 @@ sub addEntry {
         $conf .= "  " . ($xen ? "module" : "initrd") . " $initrd\n\n";
     } else {
         $conf .= "menuentry \"$name\" {\n";
-<<<<<<< HEAD
-        $conf .= $grubBoot->search . "\n";
-        $conf .= $grubStore->search . "\n";
-=======
->>>>>>> parent of 469f22d... Merge pull request #2449 from wkennington/master.grub
         $conf .= "  $extraPerEntryConfig\n" if $extraPerEntryConfig;
         $conf .= "  multiboot $xen $xenParams\n" if $xen;
         $conf .= "  " . ($xen ? "module" : "linux") . " $kernel $kernelParams\n";
