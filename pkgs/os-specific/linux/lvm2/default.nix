@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   configureFlags =
-    "--disable-readline --enable-udev_rules --enable-udev_sync --enable-pkgconfig --enable-applib";
+    "--disable-readline --enable-udev_rules --enable-udev_sync --enable-pkgconfig --enable-applib --enable-dmeventd --enable-cmdlib";
 
   buildInputs = [ pkgconfig udev ];
 
