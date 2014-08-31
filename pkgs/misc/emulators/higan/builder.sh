@@ -20,23 +20,16 @@ oldRPath=$(patchelf --print-rpath $out/bin/higan)
 patchelf --set-rpath $oldRPath:$out/lib $out/bin/higan
 
 # A dirty workaround, suggested by @cpages:
-# we create a wrapper script to set up
-# $HOME local configuration before higan runs
+# we create a first-run script to populate
+# the local $HOME with all the auxiliary
+# stuff needed by higan at runtime
 
-mv $out/bin/higan $out/bin/.higan-wrapped
-cat <<EOF > $out/bin/higan 
+cat <<EOF > $out/bin/higan-config.sh
+#!${shell}
 
-#!/bin/bash
-if [ ! -e \$HOME/.config/higan/.was_configured ]
-then
-    cp --update --recursive $out/share/higan \$HOME/.config
-    chmod --recursive u+w \$HOME/.config/higan
-    touch \$HOME/.config/higan/.was_configured
-fi
-# LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:$out/lib
-$out/bin/.higan-wrapped "\$@"
+cp --update --recursive $out/share/higan \$HOME/.config
+chmod --recursive u+w \$HOME/.config/higan
 
 EOF
 
-patchShebangs $out/bin/higan
-chmod +x $out/bin/higan
+chmod +x $out/bin/higan-config.sh
