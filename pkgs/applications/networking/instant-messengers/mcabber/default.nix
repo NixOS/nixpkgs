@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--with-openssl=${openssl}";
   
-  meta = with stdevn.lib; {
+  meta = with stdenv.lib; {
     homepage = http://mcabber.com/;
     description = "Small Jabber console client";
     license = licenses.gpl2;
