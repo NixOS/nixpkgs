@@ -27,7 +27,7 @@ in
   rbtrace = { dontBuild = 1; };
   method_source = { dontBuild = 1; };
 
-  pg = { buildInputs = [ postgresql ]; };
+  pg = { buildFlags = ["--with-pg-config=${postgresql}/bin/pg_config"]; };
 
   nokogiri = {
     buildInputs = [ libxml2 ];
