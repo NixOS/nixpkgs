@@ -1,28 +1,29 @@
 { stdenv, fetchurl, pkgconfig, glib, gtk3, libmowgli, libmcs
 , gettext, dbus_glib, libxml2, libmad, xlibs, alsaLib, libogg
 , libvorbis, libcdio, libcddb, flac, ffmpeg, makeWrapper
+, mpg123, neon, faad2
 }:
 
 let
-  version = "3.4.3";
+  version = "3.5.1";
 in
 stdenv.mkDerivation {
   name = "audacious-${version}";
 
   src = fetchurl {
     url = "http://distfiles.audacious-media-player.org/audacious-${version}.tar.bz2";
-    sha256 = "04lzwdr1lx6ghbfxzygvnbmdl420w6rm453ds5lyb0hlvzs58d0q";
+    sha256 = "01wmlvpp540gdjw759wif3byh98h3b3q6f5wawzp0b0ivqd0wf6z";
   };
 
   pluginsSrc = fetchurl {
     url = "http://distfiles.audacious-media-player.org/audacious-plugins-${version}.tar.bz2";
-    sha256 = "00r88q9fs9a0gicdmk2svcans7igcqgacrw303a5bn44is7pmrmy";
+    sha256 = "09lyvi15hbn3pvb2izyz2bm4021917mhcdrwxrn3q3sjvx337np6";
   };
 
   buildInputs =
     [ gettext pkgconfig glib gtk3 libmowgli libmcs libxml2 dbus_glib
       libmad xlibs.libXcomposite libogg libvorbis flac alsaLib libcdio
-      libcddb ffmpeg makeWrapper
+      libcddb ffmpeg makeWrapper mpg123 neon faad2
     ];
 
   # Here we build bouth audacious and audacious-plugins in one
