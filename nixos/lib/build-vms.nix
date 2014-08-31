@@ -48,11 +48,10 @@ rec {
             let
               interfacesNumbered = zipTwoLists config.virtualisation.vlans (range 1 255);
               interfaces = flip map interfacesNumbered ({ first, second }:
-                nameValuePair "eth${toString second}" { ip4 =
-                  [ { address = "192.168.${toString first}.${toString m.second}";
-                      prefixLength = 24;
-                  } ];
-                }
+                nameValuePair "eth${toString second}"
+                  { ipAddress = "192.168.${toString first}.${toString m.second}";
+                    subnetMask = "255.255.255.0";
+                  });
             in
             { key = "ip-address";
               config =
@@ -61,7 +60,7 @@ rec {
                   networking.interfaces = listToAttrs interfaces;
 
                   networking.primaryIPAddress =
-                    optionalString (interfaces != []) (head (head interfaces).value.ip4).address;
+                    optionalString (interfaces != []) (head interfaces).value.ipAddress;
 
                   # Put the IP addresses of all VMs in this machine's
                   # /etc/hosts file.  If a machine has multiple

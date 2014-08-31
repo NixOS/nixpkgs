@@ -10,26 +10,6 @@ let
   hasSits = cfg.sits != { };
   hasBonds = cfg.bonds != { };
 
-  addrOpts = v:
-    assert v == 4 || v == 6;
-    {
-      address = mkOption {
-        type = types.str;
-        description = ''
-          IPv${toString v} address of the interface.  Leave empty to configure the
-          interface using DHCP.
-        '';
-      };
-
-      prefixLength = mkOption {
-        type = types.addCheck types.int (n: n >= 0 && n <= (if v == 4 then 32 else 128));
-        description = ''
-          Subnet mask of the interface, specified as the number of
-          bits in the prefix (<literal>${if v == 4 then "24" else "64"}</literal>).
-        '';
-      };
-    };
-
   interfaceOpts = { name, ... }: {
 
     options = {
@@ -40,36 +20,10 @@ let
         description = "Name of the interface.";
       };
 
-      ip4 = mkOption {
-        default = [ ];
-        example = [
-          { address = "10.0.0.1"; prefixLength = 16; }
-          { address = "192.168.1.1"; prefixLength = 24; }
-        ];
-        type = types.listOf types.optionSet;
-        options = addrOpts 4;
-        description = ''
-          List of IPv4 addresses that will be statically assigned to the interface.
-        '';
-      };
-
-      ip6 = mkOption {
-        default = [ ];
-        example = [
-          { address = "fdfd:b3f0:482::1"; prefixLength = 48; }
-          { address = "2001:1470:fffd:2098::e006"; prefixLength = 64; }
-        ];
-        type = types.listOf types.optionSet;
-        options = addrOpts 6;
-        description = ''
-          List of IPv6 addresses that will be statically assigned to the interface.
-        '';
-      };
-
       ipAddress = mkOption {
         default = null;
         example = "10.0.0.1";
-        type = types.nullOr types.str;
+        type = types.nullOr (types.str);
         description = ''
           IP address of the interface.  Leave empty to configure the
           interface using DHCP.
@@ -87,16 +41,20 @@ let
       };
 
       subnetMask = mkOption {
-        default = null;
+        default = "";
+        example = "255.255.255.0";
+        type = types.str;
         description = ''
-          Defunct, supply the prefix length instead.
+          Subnet mask of the interface, specified as a bitmask.
+          This is deprecated; use <option>prefixLength</option>
+          instead.
         '';
       };
 
       ipv6Address = mkOption {
         default = null;
         example = "2001:1470:fffd:2098::e006";
-        type = types.nullOr types.str;
+        type = types.nullOr types.string;
         description = ''
           IPv6 address of the interface.  Leave empty to configure the
           interface using NDP.
@@ -266,10 +224,10 @@ in
     networking.interfaces = mkOption {
       default = {};
       example =
-        { eth0.ip4 = [ {
-            address = "131.211.84.78";
-            prefixLength = 25;
-          } ];
+        { eth0 = {
+            ipAddress = "131.211.84.78";
+            subnetMask = "255.255.255.128";
+          };
         };
       description = ''
         The configuration for each network interface.  If
@@ -480,12 +438,6 @@ in
 
   config = {
 
-    assertions =
-      flip map interfaces (i: {
-        assertion = i.subnetMask == null;
-        message = "The networking.interfaces.${i.name}.subnetMask option is defunct. Use prefixLength instead.";
-      });
-
     boot.kernelModules = [ ]
       ++ optional cfg.enableIPv6 "ipv6"
       ++ optional hasVirtuals "tun"
@@ -582,18 +534,12 @@ in
         # network device, so it only gets started after the interface
         # has appeared, and it's stopped when the interface
         # disappears.
-        configureInterface = i:
-          let
-            ips = i.ip4 ++ optionals cfg.enableIPv6 i.ip6
-              ++ optional (i.ipAddress != null) {
-                ipAddress = i.ipAddress;
-                prefixLength = i.prefixLength;
-              } ++ optional (cfg.enableIPv6 && i.ipv6Address != null) {
-                ipAddress = i.ipv6Address;
-                prefixLength = i.ipv6PrefixLength;
-              };
+        configureInterface = i: nameValuePair "${i.name}-cfg"
+          (let mask =
+                if i.prefixLength != null then toString i.prefixLength else
+                if i.subnetMask != "" then i.subnetMask else "32";
+               staticIPv6 = cfg.enableIPv6 && i.ipv6Address != null;
           in
-          nameValuePair "${i.name}-cfg"
           { description = "Configuration of ${i.name}";
             wantedBy = [ "network-interfaces.target" ];
             bindsTo = [ "sys-subsystem-net-devices-${i.name}.device" ];
@@ -616,32 +562,36 @@ in
                   echo "setting MTU to ${toString i.mtu}..."
                   ip link set "${i.name}" mtu "${toString i.mtu}"
                 ''
-
-              # Ip Setup
-              +
+              + optionalString (i.ipAddress != null)
                 ''
-                  curIps=$(ip -o a show dev "${i.name}" | awk '{print $4}')
-                  # Only do an add if it's necessary.  This is
+                  cur=$(ip -4 -o a show dev "${i.name}" | awk '{print $4}')
+                  # Only do a flush/add if it's necessary.  This is
                   # useful when the Nix store is accessed via this
                   # interface (e.g. in a QEMU VM test).
-                ''
-              + flip concatMapStrings (ips) (ip:
-                let
-                  address = "${ip.address}/${toString ip.prefixLength}";
-                in
-                ''
-                  echo "checking ip ${address}..."
-                  if ! echo "$curIps" | grep "${address}" >/dev/null 2>&1; then
-                    if out=$(ip addr add "${address}" dev "${i.name}" 2>&1); then
-                      echo "added ip ${address}..."
-                      restart_network_setup=true
-                    elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                      echo "failed to add ${address}"
-                      exit 1
-                    fi
+                  if [ "$cur" != "${i.ipAddress}/${mask}" ]; then
+                    echo "configuring interface..."
+                    ip -4 addr flush dev "${i.name}"
+                    ip -4 addr add "${i.ipAddress}/${mask}" dev "${i.name}"
+                    restart_network_setup=true
+                  else
+                    echo "skipping configuring interface"
                   fi
-                '')
-              + optionalString (ips != [ ])
+                ''
+              + optionalString (staticIPv6)
+                ''
+                  # Only do a flush/add if it's necessary.  This is
+                  # useful when the Nix store is accessed via this
+                  # interface (e.g. in a QEMU VM test).
+                  if ! ip -6 -o a show dev "${i.name}" | grep "${i.ipv6Address}/${toString i.ipv6prefixLength}"; then
+                    echo "configuring interface..."
+                    ip -6 addr flush dev "${i.name}"
+                    ip -6 addr add "${i.ipv6Address}/${toString i.ipv6prefixLength}" dev "${i.name}"
+                    restart_network_setup=true
+                  else
+                    echo "skipping configuring interface"
+                  fi
+                ''
+              + optionalString (i.ipAddress != null || staticIPv6)
                 ''
                   if [ restart_network_setup = true ]; then
                     # Ensure that the default gateway remains set.
@@ -658,20 +608,7 @@ in
                 ''
                   echo 1 > /proc/sys/net/ipv6/conf/${i.name}/proxy_ndp
                 '';
-            preStop =
-              ''
-                echo "releasing configured ip's..."
-              ''
-              + flip concatMapStrings (ips) (ip:
-                let
-                  address = "${ip.address}/${toString ip.prefixLength}";
-                in
-                ''
-                  echo -n "Deleting ${address}..."
-                  ip addr del "${address}" dev "${i.name}" >/dev/null 2>&1 || echo -n " Failed"
-                  echo ""
-                '');
-          };
+          });
 
         createTunDevice = i: nameValuePair "${i.name}"
           { description = "Virtual Network Interface ${i.name}";
