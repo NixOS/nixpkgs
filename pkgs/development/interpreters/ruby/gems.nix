@@ -11,6 +11,13 @@
 
 let
   lib = ruby.stdenv.lib;
+  patchGemsWith = gems: patches:
+    lib.mapAttrs (gem: drv:
+      if patches ? "${gem}"
+        then lib.overrideDerivation drv (oldAttrs:
+          if oldAttrs ? dontPatch && !(oldAttrs.dontPatch == false || oldAttrs.dontPatch == null) then {}
+          else patches."${gem}")
+        else drv) gems;
 self = rec {
   buildRubyGem = callPackage ./gem.nix { inherit ruby rake; };
 
@@ -19,12 +26,7 @@ self = rec {
     let
       patches = callPackage ./patches.nix { inherit ruby; gems = builtGems; };
       preBuilt = callPackage file ({ inherit buildRubyGem; self = builtGems; } // args);
-      builtGems = self // (lib.mapAttrs (gem: deriv:
-        if patches ? "${gem}"
-          then lib.overrideDerivation deriv (oldAttrs:
-              if oldAttrs ? dontPatch && !(oldAttrs.dontPatch == false || oldAttrs.dontPatch == null) then {}
-              else patches."${gem}")
-        else deriv) preBuilt);
+      builtGems = self // patchGemsWith preBuilt patches;
     in builtGems;
 
   ##################################################################
@@ -112,4 +114,12 @@ self = rec {
     gemPath = [ dotenv_deployment ];
     sha256 = "09z0y0d6bks7i0sqvd8szfqj9i1kkj01anzly7shi83b3gxhrq9m";
   };
-}; in self
+
+  pg = buildRubyGem {
+    name = "pg-0.17.1";
+    sha256 = "19hhlq5cp0cgm9b8daxjn8rkk8fq7bxxv1gd43l2hk0qgy7kx4z7";
+  };
+};
+  boringPatches = callPackage ./patches.nix { inherit ruby; gems = self; };
+  patchedSelf = patchGemsWith self boringPatches;
+in patchedSelf
