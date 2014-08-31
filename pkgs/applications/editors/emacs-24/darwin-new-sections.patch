@@ -1,0 +1,50 @@
+http://bazaar.launchpad.net/~naesten/emacs/nextstep-stuff/revision/108961
+
+diff -ru emacs-24.3-orig/src/unexmacosx.c emacs-24.3/src/unexmacosx.c
+--- emacs-24.3-orig/src/unexmacosx.c	2013-01-01 21:37:17.000000000 +0100
++++ emacs-24.3/src/unexmacosx.c	2014-08-09 18:39:52.000000000 +0200
+@@ -838,7 +838,7 @@
+ 	  if (!(sectp->addr <= (unsigned long)my_edata
+ 		&& my_size <= sectp->size))
+ 	    unexec_error ("my_edata is not in section %s", SECT_DATA);
+-	  if (!unexec_write (sectp->offset, (void *) sectp->addr, my_size))
++          if (!unexec_write (sectp->offset, (void *) sectp->addr, sectp->size))
+ 	    unexec_error ("cannot write section %s", SECT_DATA);
+ 	  if (!unexec_copy (sectp->offset + my_size, old_file_offset + my_size,
+ 			    sectp->size - my_size))
+@@ -880,6 +880,27 @@
+ 	  if (!unexec_write (header_offset, sectp, sizeof (struct section)))
+ 	    unexec_error ("cannot write section %.16s's header", sectp->sectname);
+ 	}
++      else if (strncmp (sectp->sectname, "__bss", 5) == 0
++	       || strncmp (sectp->sectname, "__pu_bss", 8) == 0)
++	{
++	  sectp->flags = S_REGULAR;
++	  
++	  /* These sections are produced by GCC 4.6+.
++
++	     FIXME: We possibly ought to clear uninitialized local
++	     variables in statically linked libraries like for
++	     SECT_BSS (__bss) above, but setting up the markers we
++	     need in lastfile.c would be rather messy.  See
++	     darwin_output_aligned_bss () in gcc/config/darwin.c for
++	     the root of the problem, keeping in mind that the
++	     sections are numbered by their alignment in GCC 4.6, but
++	     by log2(alignment) in GCC 4.7.  */
++
++	  if (!unexec_write (sectp->offset, (void *) sectp->addr, sectp->size))
++	    unexec_error ("cannot copy section %.16s", sectp->sectname);
++	  if (!unexec_write (header_offset, sectp, sizeof (struct section)))
++	    unexec_error ("cannot write section %.16s's header", sectp->sectname);
++	}
+       else if (strncmp (sectp->sectname, "__la_symbol_ptr", 16) == 0
+ 	       || strncmp (sectp->sectname, "__nl_symbol_ptr", 16) == 0
+ 	       || strncmp (sectp->sectname, "__got", 16) == 0
+@@ -891,6 +912,7 @@
+ 	       || strncmp (sectp->sectname, "__program_vars", 16) == 0
+ 	       || strncmp (sectp->sectname, "__mod_init_func", 16) == 0
+ 	       || strncmp (sectp->sectname, "__mod_term_func", 16) == 0
++	       || strncmp (sectp->sectname, "__static_data", 16) == 0
+ 	       || strncmp (sectp->sectname, "__objc_", 7) == 0)
+ 	{
+ 	  if (!unexec_copy (sectp->offset, old_file_offset, sectp->size))

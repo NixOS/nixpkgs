@@ -1,0 +1,32 @@
+--- trousers-0.3.11/man/man3/Makefile.am	2013-08-14 04:57:47.018494495 +0200
++++ trousers-0.3.11/man/man3/Makefile.am	2013-08-14 04:58:10.353453471 +0200
+@@ -75,7 +75,6 @@
+ 	    Tspi_TPM_TakeOwnership.3 \
+ 	    Tspi_TPM_GetAuditDigest.3 \
+ 	    Tspi_TPM_OwnerGetSRKPubKey.3 \
+-	    Tspi_TPM_Quote.3 \
+ 	    Tspi_TPM_CMKSetRestrictions.3
+ if TSS_BUILD_DAA
+ man3_MANS += Tspi_DAA_IssueCredential.3 \
+--- trousers-0.3.11/man/man3/Makefile.in	2013-08-14 05:06:25.029490899 +0200
++++ trousers-0.3.11/man/man3/Makefile.in	2013-08-14 05:06:43.153457942 +0200
+@@ -243,7 +243,7 @@
+ 	Tspi_TPM_PcrExtend.3 Tspi_TPM_Quote.3 Tspi_TPM_SelfTestFull.3 \
+ 	Tspi_TPM_SetStatus.3 Tspi_TPM_StirRandom.3 \
+ 	Tspi_TPM_TakeOwnership.3 Tspi_TPM_GetAuditDigest.3 \
+-	Tspi_TPM_OwnerGetSRKPubKey.3 Tspi_TPM_Quote.3 \
++	Tspi_TPM_OwnerGetSRKPubKey.3 \
+ 	Tspi_TPM_CMKSetRestrictions.3 $(am__append_1)
+ EXTRA_DIST = $(man3_MANS)
+ all: all-am
+--- trousers-0.3.11/man/man3/Makefile	2013-08-14 05:07:05.686414845 +0200
++++ trousers-0.3.11/man/man3/Makefile	2013-08-14 05:07:23.233381327 +0200
+@@ -243,7 +243,7 @@
+ 	Tspi_TPM_PcrExtend.3 Tspi_TPM_Quote.3 Tspi_TPM_SelfTestFull.3 \
+ 	Tspi_TPM_SetStatus.3 Tspi_TPM_StirRandom.3 \
+ 	Tspi_TPM_TakeOwnership.3 Tspi_TPM_GetAuditDigest.3 \
+-	Tspi_TPM_OwnerGetSRKPubKey.3 Tspi_TPM_Quote.3 \
++	Tspi_TPM_OwnerGetSRKPubKey.3 \
+ 	Tspi_TPM_CMKSetRestrictions.3 $(am__append_1)
+ EXTRA_DIST = $(man3_MANS)
+ all: all-am

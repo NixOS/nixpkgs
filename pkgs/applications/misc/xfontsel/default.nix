@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.x.org/;
     description = "Allows testing the fonts available in an X server";
-    licesnse = "free";
+    license = "free";
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

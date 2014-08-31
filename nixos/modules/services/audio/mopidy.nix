@@ -92,6 +92,17 @@ in {
       };
     };
 
+    systemd.services.mopidy-scan = {
+      description = "mopidy local files scanner";
+      preStart = "mkdir -p ${cfg.dataDir} && chown -R mopidy:mopidy  ${cfg.dataDir}";
+      serviceConfig = {
+        ExecStart = "${mopidyLauncher}/bin/mopidy --config ${concatStringsSep ":" ([mopidyConf] ++ cfg.extraConfigFiles)} local scan";
+        User = "mopidy";
+        PermissionsStartOnly = true;
+        Type = "oneshot";
+      };
+    };
+
     users.extraUsers.mopidy = {
       inherit uid;
       group = "mopidy";

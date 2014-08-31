@@ -66,6 +66,9 @@ in
                 PATH=$PATH:$i/bin:$i/sbin
             done
 
+            _status=0
+            trap "_status=1" ERR
+
             # Ensure a consistent umask.
             umask 0022
 
@@ -84,6 +87,8 @@ in
 
             # Prevent the current configuration from being garbage-collected.
             ln -sfn /run/current-system /nix/var/nix/gcroots/current-system
+
+            exit $_status
           '';
       };
 

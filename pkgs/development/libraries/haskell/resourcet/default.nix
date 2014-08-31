@@ -18,6 +18,5 @@ cabal.mkDerivation (self: {
     description = "Deterministic allocation and freeing of scarce resources";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

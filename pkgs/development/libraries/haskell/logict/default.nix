@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "A backtracking logic-programming monad";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

@@ -11,6 +11,6 @@ cabal.mkDerivation (self: {
     description = "tcache using Amazon Web Services as default persistence mechanism";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.tomberek ];
+    maintainers = with self.stdenv.lib.maintainers; [ tomberek ];
   };
 })

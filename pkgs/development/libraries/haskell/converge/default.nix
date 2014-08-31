@@ -11,6 +11,5 @@ cabal.mkDerivation (self: {
     description = "Limit operations for converging sequences";
     license = self.stdenv.lib.licenses.publicDomain;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

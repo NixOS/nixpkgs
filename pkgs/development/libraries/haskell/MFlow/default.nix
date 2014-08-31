@@ -22,6 +22,6 @@ cabal.mkDerivation (self: {
     description = "stateful, RESTful web framework";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.tomberek ];
+    maintainers = with self.stdenv.lib.maintainers; [ tomberek ];
   };
 })

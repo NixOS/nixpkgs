@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cabal-bounds";
-  version = "0.7";
-  sha256 = "1dz3bi33s2s0glsw248dxh76yj6qqlq2v2z7rys5js1mi6dicwa3";
+  version = "0.8";
+  sha256 = "0db5vy4qfjc2d27d4vk37gz9sdjgjlargndligmljf52s2g568r0";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -15,7 +15,6 @@ cabal.mkDerivation (self: {
     unorderedContainers
   ];
   testDepends = [ filepath tasty tastyGolden ];
-  jailbreak = true;
   doCheck = false;
   meta = {
     description = "A command line program for managing the bounds/versions of the dependencies in a cabal file";

@@ -11,6 +11,6 @@ cabal.mkDerivation (self: {
     description = "Composable, streaming, and efficient left folds";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })

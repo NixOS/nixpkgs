@@ -12,6 +12,6 @@ cabal.mkDerivation (self: {
     description = "acid-state snaplet for Snap Framework";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })

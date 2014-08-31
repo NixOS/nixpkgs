@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "A raw binding for the OpenGL graphics system";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

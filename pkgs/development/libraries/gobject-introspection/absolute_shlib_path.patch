@@ -1,0 +1,25 @@
+--- ./giscanner/utils.py.orig	2014-08-14 22:05:05.055334080 +0200
++++ ./giscanner/utils.py	2014-08-14 22:05:24.687497334 +0200
+@@ -110,17 +110,11 @@
+     if dlname is None:
+         return None
+ 
+-    # Darwin uses absolute paths where possible; since the libtool files never
+-    # contain absolute paths, use the libdir field
+-    if platform.system() == 'Darwin':
+-        dlbasename = os.path.basename(dlname)
+-        libdir = _extract_libdir_field(la_file)
+-        if libdir is None:
+-            return dlbasename
+-        return libdir + '/' + dlbasename
+-    # From the comments in extract_libtool(), older libtools had
+-    # a path rather than the raw dlname
+-    return os.path.basename(dlname)
++    dlbasename = os.path.basename(dlname)
++    libdir = _extract_libdir_field(la_file)
++    if libdir is None:
++        return dlbasename
++    return libdir + '/' + dlbasename
+ 
+ 
+ def extract_libtool(la_file):

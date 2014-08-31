@@ -14,6 +14,5 @@ cabal.mkDerivation (self: {
     description = "Utilities for manipulating XML documents";
     license = "LGPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

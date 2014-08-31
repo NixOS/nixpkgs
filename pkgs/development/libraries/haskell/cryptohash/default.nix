@@ -17,6 +17,5 @@ cabal.mkDerivation (self: {
     description = "collection of crypto hashes, fast, pure and practical";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

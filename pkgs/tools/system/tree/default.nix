@@ -8,7 +8,7 @@ let
   # manually, so we have to duplicate the know how here.
   systemFlags =
     if stdenv.isDarwin then ''
-      CFLAGS="-O2 -Wall -fomit-frame-pointer -no-cpp-precomp"
+      CFLAGS="-O2 -Wall -fomit-frame-pointer"
       LDFLAGS=
       EXTRA_OBJS=strverscmp.o
     '' else if stdenv.isCygwin then ''

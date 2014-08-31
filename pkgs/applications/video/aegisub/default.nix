@@ -22,11 +22,11 @@ assert portaudioSupport -> (portaudio != null);
 
 stdenv.mkDerivation rec {
   name = "aegisub-${version}";
-  version = "3.1.3";
+  version = "3.2.0";
 
   src = fetchurl {
     url = "http://ftp.aegisub.org/pub/releases/${name}.tar.xz";
-    sha256 = "0n2y5cggayr8246p2cvrz0ajlhhvmzcgsp7nljnm21jypk15pspg";
+    sha256 = "0nciw5p1aq94qwz5j4vbc06fywdjhazgh4qs6qr9iqj3n94gvrfr";
   };
 
   nativeBuildInputs = [ intltool ];

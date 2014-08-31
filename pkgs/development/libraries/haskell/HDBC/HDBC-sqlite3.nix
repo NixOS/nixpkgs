@@ -15,6 +15,5 @@ cabal.mkDerivation (self: {
     description = "Sqlite v3 driver for HDBC";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

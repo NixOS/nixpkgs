@@ -25,6 +25,6 @@ cabal.mkDerivation (self: {
     description = "A compiler for Fay, a Haskell subset that compiles to JavaScript";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })

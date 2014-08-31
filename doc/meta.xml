@@ -121,10 +121,11 @@ interpretation:</para>
   <varlistentry>
     <term><varname>license</varname></term>
     <listitem><para>The license for the package. One from attribute set defined in
-      <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/lib/licenses.nix">
+      <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix">
       <filename>nixpkgs/lib/licenses.nix</filename></link>.
       Example:
       <literal>stdenv.lib.licenses.gpl3</literal>.</para></listitem>
+      See details in <xref linkend='sec-meta-license'/>,
   </varlistentry>
 
   <varlistentry>
@@ -133,7 +134,7 @@ interpretation:</para>
     maintainers of this Nix expression. If
     you would like to be a maintainer of a package, you may want to add
     yourself to <link
-    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/lib/maintainers.nix"><filename>nixpkgs/lib/maintainers.nix</filename></link>
+    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/maintainers.nix"><filename>nixpkgs/lib/maintainers.nix</filename></link>
     and write something like <literal>[ stdenv.lib.maintainers.alice
     stdenv.lib.maintainers.bob ]</literal>.</para></listitem>
   </varlistentry>
@@ -159,8 +160,8 @@ interpretation:</para>
 meta.platforms = stdenv.lib.platforms.linux;
 </programlisting>
 
-    Attribute Set <varname>stdenv.lib.platforms</varname> in 
-    <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/lib/platforms.nix">
+    Attribute Set <varname>stdenv.lib.platforms</varname> in
+    <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/platforms.nix">
     <filename>nixpkgs/lib/platforms.nix</filename></link> defines various common
     lists of platforms types.
     </para></listitem>
@@ -202,9 +203,15 @@ meta.hydraPlatforms = [];
 
 <section xml:id="sec-meta-license"><title>Licenses</title>
 
-<para>The <varname>meta.license</varname> attribute could be one of the
-following:
+<para>The <varname>meta.license</varname> attribute should preferrably contain
+a value from <varname>stdenv.lib.licenses</varname> defined in
+<link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix">
+<filename>nixpkgs/lib/licenses.nix</filename></link>,
+or in-place license description of the same format if the license is
+unlikely to be useful in another expression.
 
+A few generic options are available, although it's typically better
+to indicate the specific license:
 <variablelist>
 
   <varlistentry>

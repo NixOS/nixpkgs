@@ -73,6 +73,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # Hack to build on Mac OS X. The system header files use C99-style
+  # comments, but Subversion passes -std=c90.
+  NIX_CFLAGS_COMPILE = "-std=c99";
+
   meta = {
     description = "A version control system intended to be a compelling replacement for CVS in the open source community";
     homepage = http://subversion.apache.org/;

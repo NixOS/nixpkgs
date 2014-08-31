@@ -30,7 +30,7 @@ let
 
   buildInputs =
     optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc ++
-    [ bzip2 ]
+    [ bzip2 openssl ]
     ++ optional zlibSupport zlib;
 
 
@@ -178,10 +178,7 @@ let
       deps = [ sqlite ];
     };
 
-    ssl = buildInternalPythonModule {
-      moduleName = "ssl";
-      deps = [ openssl ];
-    };
+    ssl = null;
 
     tkinter = buildInternalPythonModule {
       moduleName = "tkinter";

@@ -13,6 +13,5 @@ cabal.mkDerivation (self: {
     description = "Partial OpenSSL binding for Haskell";
     license = self.stdenv.lib.licenses.publicDomain;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

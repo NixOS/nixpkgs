@@ -20,6 +20,6 @@ cabal.mkDerivation (self: {
     description = "API library for working with Git repositories";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ianwookim ];
+    maintainers = with self.stdenv.lib.maintainers; [ ianwookim ];
   };
 })

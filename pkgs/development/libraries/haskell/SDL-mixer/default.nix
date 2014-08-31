@@ -12,6 +12,6 @@ cabal.mkDerivation (self: {
     description = "Binding to libSDL_mixer";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

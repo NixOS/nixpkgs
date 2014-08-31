@@ -11,6 +11,6 @@ cabal.mkDerivation (self: {
     description = "Preprocess+parse haskell code";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })
