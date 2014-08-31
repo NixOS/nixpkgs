@@ -2948,11 +2948,11 @@ rec {
   };
 
   deluge = buildPythonPackage rec {
-    name = "deluge-1.3.6";
+    name = "deluge-1.3.7";
 
     src = fetchurl {
-      url = "http://download.deluge-torrent.org/source/${name}.tar.gz";
-      md5 = "33557678bf2f320de670ddaefaea009d";
+      url = "http://download.deluge-torrent.org/source/${name}.tar.bz2";
+      sha256 = "07m5lgkqymlh0810bk2f5l0k83n51xb3gszj11sr509jgbnxjnmm";
     };
 
     propagatedBuildInputs = with pkgs; [
