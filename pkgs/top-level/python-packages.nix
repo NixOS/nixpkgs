@@ -730,7 +730,8 @@ rec {
     };
 
     buildInputs = [ pkgs.btrfsProgs ];
-    propagatedBuildInputs = with pkgs; [ contextlib2 sqlalchemy9 pyxdg pycparser cffi alembic ];
+    propagatedBuildInputs = with pkgs; [ contextlib2 sqlalchemy9 pyxdg pycparser alembic ]
+      ++ optionals (!isPyPy) [ cffi ];
 
     meta = {
       description = "Deduplication for Btrfs";
@@ -1513,7 +1514,7 @@ rec {
       md5 = "c5df008669d17dd6eeb5e2042d5e136f";
     };
 
-    buildInputs = [ cffi pycparser mock pytest py ];
+    buildInputs = [ pycparser mock pytest py ] ++ optionals (!isPyPy) [ cffi ];
 
     meta = {
       maintainers = [ stdenv.lib.maintainers.iElectric ];
@@ -5998,7 +5999,7 @@ rec {
       export DYLD_LIBRARY_PATH="${pkgs.libgit2}/lib"
     '' else "" );
 
-    propagatedBuildInputs = [ pkgs.libgit2 cffi ];
+    propagatedBuildInputs = [ pkgs.libgit2 ] ++ optionals (!isPyPy) [ cffi ];
 
     preCheck = ''
       # disable tests that require networking
