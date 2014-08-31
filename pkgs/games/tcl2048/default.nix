@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = https://raw.githubusercontent.com/dbohdan/2048-tcl/v0.2.6/2048.tcl;
-    sha256 = "3a6466a214c538daec8e2d08e0c1467f10f770c74e5897bea642134e22016730";
+    sha256 = "481eac7cccc37d1122c3069da6186f584906bd27b86b8d4ae1a2d7e355c1b6b2";
   };
 
   builder = ./builder.sh;
