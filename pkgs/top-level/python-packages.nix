@@ -8027,6 +8027,9 @@ rec {
       # waiting for 0.7.11 release
       ../development/python-modules/sqlalchemy-0.7.10-test-failures.patch
     ];
+    preConfigure = optionalString isPy3k ''
+      python3 sa2to3.py --no-diffs -w lib test examples
+    '';
   });
 
   sqlalchemy8 = pkgs.lib.overrideDerivation sqlalchemy9 (args: rec {
@@ -8035,6 +8038,9 @@ rec {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
       md5 = "4f3377306309e46739696721b1785335";
     };
+    preConfigure = optionalString isPy3k ''
+      python3 sa2to3.py --no-diffs -w lib test examples
+    '';
   });
 
   sqlalchemy9 = buildPythonPackage rec {
