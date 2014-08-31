@@ -19,10 +19,11 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp -r linux/work/* $out/
-    rm $out/processing-java
     sed -e "s#APPDIR=\`dirname \"\$APPDIR\"\`#APPDIR=$out#" -i $out/processing
-    mv $out/processing $out/bin/
+    sed -e "s#APPDIR=\`dirname \"\$APPDIR\"\`#APPDIR=$out#" -i $out/processing-java
+    mv $out/processing{,-java} $out/bin/
     wrapProgram $out/bin/processing --prefix PATH : ${jre}/bin --prefix LD_LIBRARY_PATH : ${libXxf86vm}/lib
+    wrapProgram $out/bin/processing-java --prefix PATH : ${jre}/bin --prefix LD_LIBRARY_PATH : ${libXxf86vm}/lib
     mkdir $out/java
     ln -s ${jre}/bin $out/java/
   '';
