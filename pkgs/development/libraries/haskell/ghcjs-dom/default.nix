@@ -1,5 +1,5 @@
 { cabal, fetchgit, ghc, mtl
-, buildType ? if (builtins.parseDrvName ghc.ghc.name).name == "ghcjs" then "jsffi" else "webkit"
+, buildType ? if ghc.ghc.pname or null == "ghcjs" then "jsffi" else "webkit"
 , ghcjsBase ? null # jsffi dependencies
 , glib ? null, transformers ? null, gtk ? null, webkit ? null # webkit dependencies
 }:
