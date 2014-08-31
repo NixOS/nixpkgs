@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pkgconfig, udev, utillinux, coreutils }:
 
 let
-  v = "2.02.106";
+  version = "2.02.110";
 in
 
 stdenv.mkDerivation {
-  name = "lvm2-${v}";
+  name = "lvm2-${version}";
 
   src = fetchurl {
-    url = "ftp://sources.redhat.com/pub/lvm2/releases/LVM2.${v}.tgz";
-    sha256 = "0nr833bl0q4zq52drjxmmpf7bs6kqxwa5kahwwxm9411khkxz0vc";
+    url = "ftp://sources.redhat.com/pub/lvm2/releases/LVM2.${version}.tgz";
+    sha256 = "04fdzvv5431d1i4p701zkm9kc50087q56k7l2l5l5f3i9ah1mb9x";
   };
 
   configureFlags =
@@ -54,5 +54,8 @@ stdenv.mkDerivation {
     homepage = http://sourceware.org/lvm2/;
     descriptions = "Tools to support Logical Volume Management (LVM) on Linux";
     platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [raskin];
+    inherit version;
+    downloadPage = "ftp://sources.redhat.com/pub/lvm2/";
   };
 }
