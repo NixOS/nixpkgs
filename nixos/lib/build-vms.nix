@@ -52,7 +52,7 @@ rec {
                   [ { address = "192.168.${toString first}.${toString m.second}";
                       prefixLength = 24;
                   } ];
-                });
+                }
             in
             { key = "ip-address";
               config =
