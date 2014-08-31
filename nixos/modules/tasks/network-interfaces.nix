@@ -586,10 +586,10 @@ in
           let
             ips = i.ip4 ++ optionals cfg.enableIPv6 i.ip6
               ++ optional (i.ipAddress != null) {
-                ipAddress = i.ipAddress;
+                address = i.ipAddress;
                 prefixLength = i.prefixLength;
               } ++ optional (cfg.enableIPv6 && i.ipv6Address != null) {
-                ipAddress = i.ipv6Address;
+                address = i.ipv6Address;
                 prefixLength = i.ipv6PrefixLength;
               };
           in
