@@ -6,8 +6,8 @@ let
   cfg = config.networking.vpnc;
   mkServiceDef = name: value:
     {
-      source = builtins.toFile "${name}.conf" value;
-      target = "vpnc/${name}.conf";
+      name = "vpnc/${name}.conf";
+      value = { text = value; };
     };
 
 in
@@ -35,7 +35,7 @@ in
     };
   };
 
-  config.environment.etc = mapAttrsToList mkServiceDef cfg.services;
+  config.environment.etc = mapAttrs' mkServiceDef cfg.services;
 }
 
 
