@@ -3,9 +3,8 @@
 # gems in here generally involve native extensions; there's no way to tell
 # based on the gemfile
 
-{ fetchurl, writeScript, ruby, ncurses, sqlite, libxml2, libxslt, libffi
-, zlib, libuuid, gems, jdk, python, stdenv, libiconvOrEmpty, imagemagick
-, gnumake, pkgconfig, which, postgresql, v8_3_16_14, clang }:
+{ libxml2, libxslt, postgresql, python, ruby, self, v8_3_16_14, which, writeScript
+, stdenv }:
 
 let
   v8 = v8_3_16_14;
@@ -39,11 +38,8 @@ in
 
   therubyracer = {
     preBuild = ''
-      addToSearchPath RUBYLIB "${gems.libv8}/${ruby.gemPath}/gems/libv8-3.16.14.3/lib"
-      addToSearchPath RUBYLIB "${gems.libv8}/${ruby.gemPath}/gems/libv8-3.16.14.3/ext"
-      ln -s ${clang}/bin/clang $TMPDIR/gcc
-      ln -s ${clang}/bin/clang++ $TMPDIR/g++
-      export PATH=$TMPDIR:$PATH
+      addToSearchPath RUBYLIB "${self.libv8}/${ruby.gemPath}/gems/libv8-3.16.14.3/lib"
+      addToSearchPath RUBYLIB "${self.libv8}/${ruby.gemPath}/gems/libv8-3.16.14.3/ext"
     '';
 
     postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
