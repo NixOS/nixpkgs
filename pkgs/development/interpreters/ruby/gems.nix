@@ -18,13 +18,13 @@ let
           if oldAttrs ? dontPatch && !(oldAttrs.dontPatch == false || oldAttrs.dontPatch == null) then {}
           else patches."${gem}")
         else drv) gems;
-self = rec {
+selfPre = rec {
   buildRubyGem = callPackage ./gem.nix { inherit ruby rake; };
 
   # import an attrset full of gems, then override badly behaved ones
   importGems = file: args:
     let
-      patches = callPackage ./patches.nix { inherit ruby; gems = builtGems; };
+      patches = callPackage ./patches.nix { inherit ruby; self = builtGems; };
       preBuilt = callPackage file ({ inherit buildRubyGem; self = builtGems; } // args);
       builtGems = self // patchGemsWith preBuilt patches;
     in builtGems;
@@ -115,14 +115,41 @@ self = rec {
     sha256 = "09z0y0d6bks7i0sqvd8szfqj9i1kkj01anzly7shi83b3gxhrq9m";
   };
 
+  libv8 = buildRubyGem {
+    name = "libv8-3.16.14.3";
+    sha256 = "1arjjbmr9zxkyv6pdrihsz1p5cadzmx8308vgfvrhm380ccgridm";
+  };
+
+  mini_portile = buildRubyGem {
+    name = "mini_portile-0.6.0";
+    sha256 = "09kcn4g63xrdirgwxgjikqg976rr723bkc9bxfr29pk22cj3wavn";
+  };
+
+  nokogiri = buildRubyGem {
+    name = "nokogiri-1.6.3.1";
+    sha256 = "11958hlfd8i3i9y0wk1b6ck9x0j95l4zdbbixmdnnh1r8ijilxli";
+    gemPath = [ mini_portile ];
+  };
+
   pg = buildRubyGem {
     name = "pg-0.17.1";
     sha256 = "19hhlq5cp0cgm9b8daxjn8rkk8fq7bxxv1gd43l2hk0qgy7kx4z7";
+  };
+
+  ref = buildRubyGem {
+    name = "ref-1.0.5";
+    sha256 = "19qgpsfszwc2sfh6wixgky5agn831qq8ap854i1jqqhy1zsci3la";
+  };
+
+  therubyracer = buildRubyGem {
+    name = "therubyracer-0.12.1";
+    sha256 = "106fqimqyaalh7p6czbl5m2j69z8gv7cm10mjb8bbb2p2vlmqmi6";
+    gemPath = [ self.libv8 self.ref ];
   };
 };
   # TODO: refactor mutual recursion here
   # it looks a lot like the importGems function above, but it's too late at night
   # to write a more generic version
-  boringPatches = callPackage ./patches.nix { inherit ruby; gems = patchedSelf; };
-  patchedSelf = patchGemsWith self boringPatches;
-in patchedSelf
+  boringPatches = callPackage ./patches.nix { inherit ruby self; };
+  self = patchGemsWith selfPre boringPatches;
+in self
