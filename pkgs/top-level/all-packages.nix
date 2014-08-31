@@ -7259,7 +7259,9 @@ let
     inherit (xlibs) xproto;
   };
 
-  dmraid = callPackage ../os-specific/linux/dmraid { };
+  dmraid = callPackage ../os-specific/linux/dmraid {
+    devicemapper = devicemapper.override {enable_dmeventd = true;};
+  };
 
   drbd = callPackage ../os-specific/linux/drbd { };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, udev, utillinux, coreutils }:
+{ stdenv, fetchurl, pkgconfig, udev, utillinux, coreutils, enable_dmeventd ? false }:
 
 let
   version = "2.02.110";
@@ -13,7 +13,9 @@ stdenv.mkDerivation {
   };
 
   configureFlags =
-    "--disable-readline --enable-udev_rules --enable-udev_sync --enable-pkgconfig --enable-applib --enable-dmeventd --enable-cmdlib";
+    "--disable-readline --enable-udev_rules --enable-udev_sync --enable-pkgconfig --enable-applib --enable-cmdlib"
+      + (stdenv.lib.optionalString enable_dmeventd " --enable-dmeventd")
+      ;
 
   buildInputs = [ pkgconfig udev ];
 
