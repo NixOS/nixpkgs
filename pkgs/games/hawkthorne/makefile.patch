@@ -3,13 +3,13 @@ index 55eb817..f3406aa 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -18,10 +18,14 @@ endif
- 
+
  tilemaps := $(patsubst %.tmx,%.lua,$(wildcard src/maps/*.tmx))
- 
+
 -maps: $(tilemaps)
 -
  love: build/hawkthorne.love
- 
+
 +shebang: build/hawkthorne.love
 +	cat <(echo '#!/usr/bin/env love') build/hawkthorne.love > build/hawkthorne
 +	chmod +x build/hawkthorne
@@ -22,7 +22,7 @@ index 55eb817..f3406aa 100644
 @@ -30,6 +34,12 @@ build/hawkthorne.love: $(tilemaps) src/*
  run: $(tilemaps) $(LOVE)
  	$(LOVE) src
- 
+
 +check: test
 +
 +install: shebang
@@ -31,4 +31,4 @@ index 55eb817..f3406aa 100644
 +
  src/maps/%.lua: src/maps/%.tmx bin/tmx2lua
  	bin/tmx2lua $<
- 
+
