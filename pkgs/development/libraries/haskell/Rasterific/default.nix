@@ -12,15 +12,15 @@ cabal.mkDerivation (self: {
   buildDepends = [
     dlist FontyFruity free JuicyPixels mtl vector vectorAlgorithms
   ];
-  doCheck = false; # depends on criterion < 0.9
   testDepends = [
     binary criterion deepseq filepath FontyFruity JuicyPixels
     QuickCheck statistics vector
   ];
+  doCheck = false;
   meta = {
     description = "A pure haskell drawing engine";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.bergey ];
+    maintainers = with self.stdenv.lib.maintainers; [ bergey ];
   };
 })
