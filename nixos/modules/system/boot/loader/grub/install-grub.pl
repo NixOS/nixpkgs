@@ -154,7 +154,7 @@ sub GrubFs {
     return Grub->new(path => $path, search => $search);
 }
 my $grubBoot = GrubFs("/boot");
-my $grubStore = GrubFs("/nix");
+my $grubStore = GrubFs("/nix/store");
 
 # We don't need to copy if we can read the kernels directly
 if ($grubStore->search ne "") {
