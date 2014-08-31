@@ -232,6 +232,7 @@ in rec {
   tests.installer.simpleProvided = forAllSystems (system: (import tests/installer.nix { inherit system; }).simpleProvided.test);
   tests.installer.btrfsSimple = forAllSystems (system: (import tests/installer.nix { inherit system; }).btrfsSimple.test);
   tests.installer.btrfsSubvols = forAllSystems (system: (import tests/installer.nix { inherit system; }).btrfsSubvols.test);
+  tests.installer.btrfsSubvolDefault = forAllSystems (system: (import tests/installer.nix { inherit system; }).btrfsSubvolDefault.test);
   tests.influxdb = callTest tests/influxdb.nix {};
   tests.ipv6 = callTest tests/ipv6.nix {};
   tests.jenkins = callTest tests/jenkins.nix {};
