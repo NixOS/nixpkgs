@@ -2,11 +2,11 @@
 
 cabal.mkDerivation (self: rec {
   pname = "Agda-stdlib";
-  version = "0.8";
+  version = "0.8.1";
 
   src = fetchurl {
     url = "https://github.com/agda/agda-stdlib/archive/v${version}.tar.gz";
-    sha256 = "03gdcy2gar46qlmd6w91y05cm1x304ig6bda90ryww9qn05kif78";
+    sha256 = "0ij4rg4lk0pq01ing285gbmnn23dcf2rhihdcs8bbdpjg52vl4gf";
   };
 
   buildDepends = [ filemanip Agda ];
