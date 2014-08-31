@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
 # TODO:
 #   - options to choose profiles (accuracy, balanced, performance)
 #     and different GUIs (gtk2, qt4)
-#   - fix the BML and BIOS paths - maybe a custom patch to Higan project?
+#   - fix the BML and BIOS paths - maybe submitting
+#     a custom patch to Higan project would not be a bad idea...
 #
