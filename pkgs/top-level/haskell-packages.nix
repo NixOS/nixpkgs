@@ -670,6 +670,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   directSqlite = callPackage ../development/libraries/haskell/direct-sqlite {};
 
+  directoryLayout = callPackage ../development/libraries/haskell/directory-layout {};
+
   directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
 
   distributedStatic = callPackage ../development/libraries/haskell/distributed-static {};
