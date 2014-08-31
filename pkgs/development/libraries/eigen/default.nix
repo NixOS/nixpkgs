@@ -7,8 +7,8 @@ stdenv.mkDerivation {
   name = "eigen-${version}";
   
   src = fetchurl {
-    url = "http://bitbucket.org/eigen/eigen/get/${version}.tar.bz2";
-    name = "eigen-${version}.tar.bz2";
+    url = "http://bitbucket.org/eigen/eigen/get/${version}.tar.gz";
+    name = "eigen-${version}.tar.gz";
     sha256 = "0pwykjkz5n8wfyg9cjj7smgs54a9zc80m9gi106w43n2m72ni39i";
   };
   
