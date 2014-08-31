@@ -6089,6 +6089,7 @@ rec {
 
   pycryptopp = buildPythonPackage (rec {
     name = "pycryptopp-0.6.0.1206569328141510525648634803928199668821045408958";
+    disabled = isPy3k || isPyPy;  # see https://bitbucket.org/pypy/pypy/issue/1190/
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pycryptopp/${name}.tar.gz";
