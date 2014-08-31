@@ -11,6 +11,6 @@ cabal.mkDerivation (self: {
     description = "A decision procedure for quantifier-free linear arithmetic";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.thoughtpolice ];
+    maintainers = with self.stdenv.lib.maintainers; [ thoughtpolice ];
   };
 })

@@ -17,6 +17,5 @@ cabal.mkDerivation (self: {
     description = "Bindings to ZeroMQ 2.1.x";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

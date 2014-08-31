@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Type classes generalizing the functionality of the 'monad-par' library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

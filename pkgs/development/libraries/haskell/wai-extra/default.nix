@@ -27,6 +27,5 @@ cabal.mkDerivation (self: {
     description = "Provides some basic WAI handlers and middleware";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

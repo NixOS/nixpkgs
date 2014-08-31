@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Simple 3D vector library";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

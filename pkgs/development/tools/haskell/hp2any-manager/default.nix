@@ -19,5 +19,6 @@ cabal.mkDerivation (self: {
     description = "A utility to visualise and compare heap profiles";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

@@ -19,6 +19,6 @@ cabal.mkDerivation (self: {
     description = "A command line program for extending the import list of a Haskell source file";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })

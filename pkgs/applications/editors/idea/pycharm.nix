@@ -16,6 +16,7 @@ let
       desktopName = "PyCharm";
       genericName = "Powerful Python and Django IDE";
       categories = "Application;Development;";
+      icon = "pycharm";
     };
 
     buildInputs = [ makeWrapper patchelf p7zip ];
@@ -39,8 +40,9 @@ let
     '';
 
     installPhase = ''
-      mkdir -vp "$out/bin" "$out/$name"
+      mkdir -vp "$out/bin" "$out/$name" "$out/share/pixmaps"
       cp -va . "$out/$name"
+      ln -s "$out/$name/bin/pycharm.png" "$out/share/pixmaps/"
 
       jdk="${jdk}/lib/openjdk"
       makeWrapper "$out/$name/bin/pycharm.sh" "$out/bin/pycharm" \
@@ -52,12 +54,12 @@ let
       cp -a "${desktopItem}"/* "$out"
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = "https://www.jetbrains.com/pycharm/";
       inherit description;
       inherit license;
-      maintainers = [ stdenv.lib.maintainers.jgeerds ];
-      platforms = stdenv.lib.platforms.linux;
+      maintainers = [ maintainers.jgeerds ];
+      platforms = platforms.linux;
     };
   };
 

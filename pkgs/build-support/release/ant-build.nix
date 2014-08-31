@@ -11,6 +11,8 @@
 , ant ? pkgs.ant
 , jre ? pkgs.openjdk
 , hydraAntLogger ? pkgs.hydraAntLogger
+, zip ? pkgs.zip
+, unzip ? pkgs.unzip
 , ... } @ args:
 
 let
@@ -45,7 +47,10 @@ stdenv.mkDerivation (
          '' else stdenv.lib.concatMapStrings (j: ''
            cp -v ${j} $out/share/java
          '') jars }
+
+      . ${./functions.sh}
       for j in $out/share/java/*.jar ; do
+        canonicalizeJar $j
         echo file jar $j >> $out/nix-support/hydra-build-products
       done
     '';
@@ -95,7 +100,7 @@ stdenv.mkDerivation (
   {
     name = name + (if src ? version then "-" + src.version else "");
   
-    buildInputs = [ant jre] ++ stdenv.lib.optional (args ? buildInputs) args.buildInputs ;
+    buildInputs = [ant jre zip unzip] ++ stdenv.lib.optional (args ? buildInputs) args.buildInputs ;
 
     postHook = ''
       mkdir -p $out/nix-support

@@ -11,6 +11,5 @@ cabal.mkDerivation (self: {
     description = "Scrap Your Boilerplate With Class Text instance";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

@@ -2,12 +2,12 @@
 stdenv.mkDerivation rec {
 
   name = "libsemanage-${version}";
-  version = "2.2";
+  version = "2.3";
   inherit (libsepol) se_release se_url;
 
   src = fetchurl {
     url = "${se_url}/${se_release}/libsemanage-${version}.tar.gz";
-    sha256 = "0xdx0dwcsyw4kv9l6xwdkfg6v7fc9b5y176rkg6n6q0w1zx0pxhi";
+    sha256 = "0jrf66df80mvjhrsbxcnb60j69pg4dh2pydy8vj8dhhiwqsrxq03";
   };
 
   makeFlags = "PREFIX=$(out) DESTDIR=$(out)";

@@ -91,7 +91,7 @@ let
       stdenv.lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed "
       + "-ldbus-1";
 
-    meta.platforms = stdenv.lib.platforms.all;
+    meta.platforms = with stdenv.lib.platforms; allBut darwin;
   };
 
   daemon = tools;

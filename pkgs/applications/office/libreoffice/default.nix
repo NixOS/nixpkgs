@@ -14,28 +14,30 @@
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
 , libwpg, dbus_glib, glibc, qt4, kde4, clucene_core, libcdr, lcms, vigra
 , unixODBC, mdds, saneBackends, mythes, libexttextcat, libvisio
-, fontsConf, pkgconfig, libzip, bluez5, libtool, maven, libe-book_00
-, libmwaw_02, libatomic_ops, graphite2, harfbuzz
+, fontsConf, pkgconfig, libzip, bluez5, libtool, maven
+, libatomic_ops, graphite2, harfbuzz
+, librevenge, libe-book, libmwaw, glm, glew
 , langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" "sl" ]
 }:
 
 let
   langsSpaces = stdenv.lib.concatStringsSep " " langs;
   major = "4";
-  minor = "2";
-  patch = "5";
-  tweak = "2";
+  minor = "3";
+  patch = "0";
+  tweak = "4";
   subdir = "${major}.${minor}.${patch}";
   version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
 
   # doesn't exist in srcs
+  # 0.8 version is in 0.7.0 tarball
   libixion = stdenv.mkDerivation rec {
-     version = "0.5.0";
+     version = "0.7.0";
      name = "libixion-${version}";
 
      src = fetchurl {
        url = "http://kohei.us/files/ixion/src/${name}.tar.bz2";
-       sha256 = "010k33bfkckx28r4rdk5mkd0mmayy5ng9ja0j0zg0z237gcfgrzb";
+       sha256 = "10amvz7fzr1kcy3svfspkdykmspqgpjdmk44cyr406wi7v4lwnf9";
      };
 
      configureFlags = "--with-boost=${boost}";
@@ -43,12 +45,24 @@ let
      buildInputs = [ boost mdds pkgconfig ];
   };
 
-  fetchThirdParty = {name, md5, brief}: fetchurl {
+  fetchThirdParty = {name, md5, brief, subDir ? ""}: fetchurl {
     inherit name md5;
     url = if brief then
-            "http://dev-www.libreoffice.org/src/${name}"
+            "http://dev-www.libreoffice.org/src/${subDir}${name}"
           else
-            "http://dev-www.libreoffice.org/src/${md5}-${name}";
+            "http://dev-www.libreoffice.org/src/${subDir}${md5}-${name}";
+  };
+
+  # Can't find Boost inside LO build
+  liborcus = stdenv.mkDerivation rec {
+    name = "liborcus-0.7.0";
+    src = fetchThirdParty (stdenv.lib.findFirst 
+      (x: x.name == "${name}.tar.bz2")
+      ("Error: update liborcus version inside LO expression")
+      (import ./libreoffice-srcs.nix));
+    configureFlags = "--with-boost=${boost}";
+
+    buildInputs = [ boost mdds pkgconfig zlib libixion ];
   };
 
   fetchSrc = {name, sha256}: fetchurl {
@@ -65,14 +79,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "0nv47r043w151687ks06w786h8azi8gylxma9c7qyjbdj6cdb2ly";
+      sha256 = "1l445284mih0c7d6v3ps1piy5pbjvisyrjjvlrqizvwxqm7bxpr1";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "1kbkdngq39gfq2804v6vnllax4gqs25zlfk6y561iiipld1ncc5v";
+      sha256 = "0avsc11d4nmycsxvadr0xcd8z9506sjcc89hgmliqlmhmw48ax7y";
     };
 
   };
@@ -82,7 +96,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";
-    sha256 = "4bf7898d7d0ba918a8f6668eff0904a549e5a2de837854716e6d996f121817d5";
+    sha256 = "1r605nwjdq20qd96chqic1bjkw7y36wmpg2lzzvv5sz6gw12rzi8";
   };
 
   # Openoffice will open libcups dynamically, so we link it directly
@@ -111,7 +125,6 @@ stdenv.mkDerivation rec {
       -e 's,! */usr/bin/python,!${python3}/bin/${python3.executable},' -e 's,! */usr/bin/env python,!${python3}/bin/${python3.executable},'
     #sed -i 's,ANT_OPTS+="\(.*\)",ANT_OPTS+=\1,' apache-commons/java/*/makefile.mk
 
-    patch -Np1 -i ${./ooxmlexport.diff};
   '';
 
   QT4DIR = qt4;
@@ -129,6 +142,13 @@ stdenv.mkDerivation rec {
     chmod a+x ./bin/unpack-sources
     # It is used only as an indicator of the proper current directory
     touch solenv/inc/target.mk
+  '';
+
+  # fetch_Download_item tries to interpret the name as a variable name
+  # Let it do so…
+  postConfigure = ''
+    sed -e '1ilibreoffice-translations-${version}.tar.xz=libreoffice-translations-${version}.tar.xz' -i Makefile
+    sed -e '1ilibreoffice-help-${version}.tar.xz=libreoffice-help-${version}.tar.xz' -i Makefile
   '';
 
   makeFlags = "SHELL=${bash}/bin/bash";
@@ -190,7 +210,6 @@ stdenv.mkDerivation rec {
     "--enable-epm"
     "--with-jdk-home=${jdk}/lib/openjdk"
     "--with-ant-home=${ant}/lib/ant"
-    "--without-afms"
     "--without-fonts"
     "--without-myspell-dicts"
     "--without-ppds"
@@ -207,7 +226,6 @@ stdenv.mkDerivation rec {
     "--without-system-libodfgen"
     "--without-system-libabw"
     "--without-system-firebird"
-    "--without-system-orcus"
     "--without-system-liblangtag"
     "--without-system-libmspub"
   ];
@@ -228,14 +246,16 @@ stdenv.mkDerivation rec {
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfigUpstream poppler
       python3 sablotron saneBackends tcsh unzip vigra which zip zlib
       mdds bluez5 glibc libixion
-      libxshmfence libe-book_00 libmwaw_02 libatomic_ops graphite2 harfbuzz
+      libxshmfence libatomic_ops graphite2 harfbuzz
+      librevenge libe-book libmwaw glm glew
+      liborcus
     ];
 
   meta = with stdenv.lib; {
     description = "LibreOffice is a comprehensive, professional-quality productivity suite, a variant of openoffice.org";
     homepage = http://libreoffice.org/;
     license = licenses.lgpl3;
-    maintainers = [ maintainers.viric ];
+    maintainers = [ maintainers.viric maintainers.raskin ];
     platforms = platforms.linux;
   };
 }

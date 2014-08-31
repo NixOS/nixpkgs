@@ -12,5 +12,7 @@ cabal.mkDerivation (self: {
     description = "Used to be Haskell 98 Lenses";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

@@ -3,13 +3,13 @@
 { cabal, assertFailure, async, binary, deepseq, enummapsetTh
 , filepath, gtk, hashable, hsini, keys, miniutter, mtl, prettyShow
 , random, stm, text, transformers, unorderedContainers, vector
-, vectorBinaryInstances, zlib
+, vectorBinaryInstances, x11, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "LambdaHack";
-  version = "0.2.14";
-  sha256 = "1nygyzrgzrv7qfr153xvkh50p0sjrbv3jbif7qmpam5jjlw26ahs";
+  version = "0.4.99.0";
+  sha256 = "1mcz44akf706a0q1xr4h7hlf1gj60570bi8im6jpg73k728314cp";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -22,16 +22,12 @@ cabal.mkDerivation (self: {
     hsini keys miniutter mtl prettyShow random stm text transformers
     unorderedContainers vector vectorBinaryInstances zlib
   ];
-  doCheck = false;
-  patchPhase = ''
-    sed -i -e 's|gtk >=.*|gtk|' LambdaHack.cabal
-  '';
+  pkgconfigDepends = [ gtk x11 ];
   meta = {
     homepage = "http://github.com/LambdaHack/LambdaHack";
-    description = "A roguelike game engine in early development";
+    description = "A game engine library for roguelike dungeon crawlers";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = with self.stdenv.lib.maintainers; [ andres ];
   };
 })

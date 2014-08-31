@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ autoconf automake pcre ];
 
   configureFlags = [
+      "--enable-lenient"
       "--enable-conffile=${if confFile == null then "no" else confFile}"
       "--with-pcre=yes"
   ];

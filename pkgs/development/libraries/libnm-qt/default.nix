@@ -15,6 +15,8 @@ stdenv.mkDerivation {
     networkmanager
   ];
 
+  cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ];
+
   propagatedBuildInputs = [ libmm-qt ];
 
   src = fetchurl {

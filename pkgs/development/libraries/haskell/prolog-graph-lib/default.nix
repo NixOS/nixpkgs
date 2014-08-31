@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Generating images of resolution trees for Prolog queries";
     license = self.stdenv.lib.licenses.publicDomain;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

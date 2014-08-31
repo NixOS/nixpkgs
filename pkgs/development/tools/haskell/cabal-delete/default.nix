@@ -30,5 +30,7 @@ cabal.mkDerivation (self: {
     description = "Uninstall packages installed by cabal";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

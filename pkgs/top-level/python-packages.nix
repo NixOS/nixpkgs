@@ -163,7 +163,20 @@ rec {
     pythonDBus = dbus;
   };
 
+  pyqt5 = import ../development/python-modules/pyqt/5.x.nix {
+    inherit (pkgs) stdenv fetchurl pkgconfig qt5 makeWrapper;
+    inherit (pkgs.xorg) lndir;
+    inherit python;
+    sip = sip_4_16;
+    pythonDBus = dbus;
+  };
+
   sip = import ../development/python-modules/sip {
+    inherit (pkgs) stdenv fetchurl;
+    inherit python;
+  };
+
+  sip_4_16 = import ../development/python-modules/sip/4.16.nix {
     inherit (pkgs) stdenv fetchurl;
     inherit python;
   };
@@ -3738,6 +3751,24 @@ rec {
       license = stdenv.lib.licenses.mit;
     };
   });
+
+  httpbin = buildPythonPackage rec {
+    name = "httpbin-0.2.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/h/httpbin/${name}.tar.gz";
+      md5 = "9b2bb2fab45f5fa839e9a776a64d6089";
+    };
+
+    propagatedBuildInputs = [ flask markupsafe decorator itsdangerous six ];
+
+    meta = {
+      homepage = https://github.com/kennethreitz/httpbin;
+      description = "HTTP Request & Response Service";
+      license = licenses.mit;
+    };
+
+  };
 
   httplib2 = buildPythonPackage rec {
     name = "httplib2-0.9";
@@ -7914,16 +7945,19 @@ rec {
   # cmd.run("tox", "-h")
   # also, buildPythonPackage needs to supply the tox.ini correctly for projects that use tox for their tests
   #
-  # tox = buildPythonPackage rec {
-  #   name = "tox-1.7.0";
-  #
-  #   propagatedBuildInputs = [ py virtualenv ];
-  #
-  #   src = fetchurl {
-  #     url = "https://pypi.python.org/packages/source/t/tox/${name}.tar.gz";
-  #     md5 = "5314ceca2b179ad4a9c79f4d817b8a99";
-  #   };
-  # };
+
+  tox = buildPythonPackage rec {
+    name = "tox-1.7.2";
+  
+    propagatedBuildInputs = [ py virtualenv ];
+
+    doCheck = false;
+  
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/tox/${name}.tar.gz";
+      md5 = "0d9b3acb1a9252659d753b0ae6b9b264";
+    };
+  };
 
   smmap = buildPythonPackage rec {
     name = "smmap-0.8.2";
@@ -8141,10 +8175,10 @@ rec {
   });
 
   virtualenv = buildPythonPackage rec {
-    name = "virtualenv-1.11.4";
+    name = "virtualenv-1.11.6";
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/v/virtualenv/${name}.tar.gz";
-      md5 = "9accc2d3f0ec1da479ce2c3d1fdff06e";
+      md5 = "f61cdd983d2c4e6aeabb70b1060d6f49";
     };
 
     inherit recursivePthLoader;
@@ -8204,6 +8238,27 @@ rec {
     patchPhase = ''
       substituteInPlace "virtualenvwrapper.sh" --replace "which" "${pkgs.which}/bin/which"
       substituteInPlace "virtualenvwrapper_lazy.sh" --replace "which" "${pkgs.which}/bin/which"
+    '';
+
+    postInstall = ''
+      # This might look like a dirty hack but we can't use the makeWrapper function because
+      # the wrapped file were then called via "exec". The virtualenvwrapper shell scripts
+      # aren't normal executables. Instead, the user has to evaluate them.
+
+      for file in "virtualenvwrapper.sh" "virtualenvwrapper_lazy.sh"; do
+        local wrapper="$out/bin/$file"
+        local wrapped="$out/bin/.$file-wrapped"
+        mv "$wrapper" "$wrapped"
+
+        cat > "$wrapper" <<- EOF
+	export PATH=$PATH:\$PATH
+	export PYTHONPATH=$PYTHONPATH:$(toPythonPath $out):\$PYTHONPATH
+	source "$wrapped"
+	EOF
+
+        chmod -x "$wrapped"
+        chmod +x "$wrapper"
+      done
     '';
 
     meta = {
@@ -9030,11 +9085,11 @@ rec {
 
   cliapp = buildPythonPackage rec {
     name = "cliapp-${version}";
-    version = "1.20130808";
+    version = "1.20140719";
 
     src = fetchurl rec {
       url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_${version}.orig.tar.gz";
-      sha256 = "0i9fqkahrc16mnxjw8fcr4hwrq3ibfrj2lzzbzzb7v5yk5dlr532";
+      sha256 = "0kxl2q85n4ggvbw2m8crl11x8n637mx6y3a3b5ydw8nhlsiqijgp";
     };
 
     buildInputs = [ sphinx ];

@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "A portable sendfile library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

@@ -1,0 +1,80 @@
+cstrahan:
+
+When the X / Xquartz server initiallizes, it starts the XQuartz.app and
+hands-off the display FD. To start the XQuartz.app, Xquartz normally uses some
+system calls to get the path of the application by app bundle id, and then
+executes the Contents/MacOS/X11 script contained inside, which in turn executes
+Contents/MacOS/X11.bin (the actual app).
+
+This patch replaces that discovery technique with a simple call to
+`getenv'. In order to make Xquartz actually work, we'll need another wrapper
+that sets the `XQUARTZ_X11' environment variable to point to the `X11' script.
+
+diff --git a/hw/xquartz/mach-startup/stub.c b/hw/xquartz/mach-startup/stub.c
+index 756e4ef..3313a55 100644
+--- a/hw/xquartz/mach-startup/stub.c
++++ b/hw/xquartz/mach-startup/stub.c
+@@ -61,54 +61,16 @@ aslclient aslc;
+ static void
+ set_x11_path(void)
+ {
+-#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
+-
+-    CFURLRef appURL = NULL;
+-    OSStatus osstatus =
+-        LSFindApplicationForInfo(kLSUnknownCreator, CFSTR(
+-                                     kX11AppBundleId), nil, nil, &appURL);
+-
+-    switch (osstatus) {
+-    case noErr:
+-        if (appURL == NULL) {
+-            asl_log(
+-                aslc, NULL, ASL_LEVEL_ERR,
+-                "Xquartz: Invalid response from LSFindApplicationForInfo(%s)",
+-                kX11AppBundleId);
+-            exit(1);
+-        }
+-
+-        if (!CFURLGetFileSystemRepresentation(appURL, true,
+-                                              (unsigned char *)x11_path,
+-                                              sizeof(x11_path))) {
+-            asl_log(aslc, NULL, ASL_LEVEL_ERR,
+-                    "Xquartz: Error resolving URL for %s",
+-                    kX11AppBundleId);
+-            exit(3);
+-        }
+-
+-        strlcat(x11_path, kX11AppBundlePath, sizeof(x11_path));
+-        asl_log(aslc, NULL, ASL_LEVEL_INFO, "Xquartz: X11.app = %s", x11_path);
+-        break;
+-
+-    case kLSApplicationNotFoundErr:
+-        asl_log(aslc, NULL, ASL_LEVEL_ERR,
+-                "Xquartz: Unable to find application for %s",
+-                kX11AppBundleId);
+-        exit(10);
+-
+-    default:
+-        asl_log(aslc, NULL, ASL_LEVEL_ERR,
+-                "Xquartz: Unable to find application for %s, error code = %d",
+-                kX11AppBundleId,
+-                (int)osstatus);
+-        exit(11);
++    char *xquartzX11 = getenv("XQUARTZ_X11");
++    if (xquartzX11) {
++        strlcpy(x11_path, xquartzX11,
++                sizeof(x11_path));
++    } else {
++        asl_log(
++            aslc, NULL, ASL_LEVEL_ERR,
++            "Xquartz: XQUARTZ_X11 environment variable not set");
++        exit(1);
+     }
+-#else
+-    /* TODO: Make Tiger smarter... but TBH, this should never get called on Tiger... */
+-    strlcpy(x11_path, "/Applications/Utilities/X11.app/Contents/MacOS/X11",
+-            sizeof(x11_path));
+-#endif
+ }
+ 
+ static int

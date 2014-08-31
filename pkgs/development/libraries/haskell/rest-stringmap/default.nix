@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     aeson hashable hxt jsonSchema tagged text tostring
     unorderedContainers
   ];
+  jailbreak = true;
   meta = {
     description = "Maps with stringy keys that can be transcoded to JSON and XML";
     license = self.stdenv.lib.licenses.bsd3;

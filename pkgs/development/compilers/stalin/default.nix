@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     description = "Stalin, an optimizing Scheme compiler";
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = ["i686-linux"];  # doesn't want to work on 64-bit platforms
   };
 }

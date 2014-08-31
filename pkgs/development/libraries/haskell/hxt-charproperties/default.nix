@@ -11,6 +11,5 @@ cabal.mkDerivation (self: {
     description = "Character properties and classes for XML and Unicode";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })
