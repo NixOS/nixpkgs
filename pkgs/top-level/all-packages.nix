@@ -1278,6 +1278,8 @@ let
 
   haveged = callPackage ../tools/security/haveged { };
 
+  hawkthorne = callPackage ../games/hawkthorne { love = love_0_9; };
+
   hardlink = callPackage ../tools/system/hardlink { };
 
   hashcat = callPackage ../tools/security/hashcat { };
