@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "llvm-general";
-  version = "3.4.2.2";
-  sha256 = "1dqdvv8pslblavyi14xy0bgrr1ca8d1jqp60x16zgbzkk3f2jx6a";
+  version = "3.4.4.0";
+  sha256 = "10x7qb2svw0gz0sqf4vn14hpzks3rk29g4i2pzfdi5qk11j8jd9b";
   buildDepends = [
     llvmGeneralPure mtl parsec setenv transformers utf8String
   ];
