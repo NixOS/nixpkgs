@@ -2209,6 +2209,8 @@ let
 
   tboot = callPackage ../tools/security/tboot { };
 
+  tcl2048 = callPackage ../games/tcl2048 { };
+
   tcpdump = callPackage ../tools/networking/tcpdump { };
 
   tcpflow = callPackage ../tools/networking/tcpflow { };
@@ -9213,7 +9215,7 @@ let
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
   lyx = callPackage ../applications/misc/lyx { };
-  
+
   makeself = callPackage ../applications/misc/makeself { };
 
   matchbox = callPackage ../applications/window-managers/matchbox { };
