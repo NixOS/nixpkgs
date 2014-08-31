@@ -1,4 +1,4 @@
-{ fetchgit, stdenv, love_0_9, curl, zip }:
+{ fetchgit, stdenv, love, curl, zip }:
 
 stdenv.mkDerivation rec {
   version = "0.9.1";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    love_0_9 curl zip
+    love curl zip
   ];
 
   patches = [
