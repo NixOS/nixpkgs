@@ -2753,6 +2753,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   word8 = callPackage ../development/libraries/haskell/word8 {};
 
+  wordexp = callPackage ../development/libraries/haskell/wordexp {};
+
   Workflow = callPackage ../development/libraries/haskell/Workflow {};
 
   wreq = callPackage ../development/libraries/haskell/wreq {};
