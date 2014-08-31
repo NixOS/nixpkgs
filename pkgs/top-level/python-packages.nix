@@ -3324,7 +3324,7 @@ rec {
 
     buildInputs = [ nose httplib2  ];
 
-    propagatedBuildInputs = [ greenlet ];
+    propagatedBuildInputs = optionals (!isPyPy) [ greenlet ];
 
     PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
 
@@ -3615,7 +3615,7 @@ rec {
 
   gevent = buildPythonPackage rec {
     name = "gevent-1.0.1";
-    disabled = isPy3k;
+    disabled = isPy3k || isPyPy;  # see https://github.com/surfly/gevent/issues/248
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/g/gevent/${name}.tar.gz";
@@ -3623,7 +3623,7 @@ rec {
     };
 
     buildInputs = [ pkgs.libev ];
-    propagatedBuildInputs = [ greenlet ];
+    propagatedBuildInputs = optionals (!isPyPy) [ greenlet ];
 
     meta = with stdenv.lib; {
       description = "Coroutine-based networking library";
@@ -8699,6 +8699,7 @@ rec {
 
   pyuv = buildPythonPackage rec {
     name = "pyuv-0.11.5";
+    disabled = isPyPy;  # see https://github.com/saghul/pyuv/issues/49
 
     src = fetchurl {
       url = "https://github.com/saghul/pyuv/archive/${name}.tar.gz";
