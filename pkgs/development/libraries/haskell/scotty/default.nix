@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
   ];
   testDepends = [ hspec2 hspecWai httpTypes liftedBase text wai ];
   jailbreak = true;
+  doCheck = false;
   meta = {
     homepage = "https://github.com/scotty-web/scotty";
     description = "Haskell web framework inspired by Ruby's Sinatra, using WAI and Warp";
