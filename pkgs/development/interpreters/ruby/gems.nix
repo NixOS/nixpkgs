@@ -10,10 +10,9 @@
 { ruby, callPackage, pkgs }:
 
 let
-  buildRubyGem = callPackage ./gem.nix { inherit ruby; };
   lib = ruby.stdenv.lib;
 self = rec {
-  inherit buildRubyGem;
+  buildRubyGem = callPackage ./gem.nix { inherit ruby rake; };
 
   # import an attrset full of gems, then override badly behaved ones
   importGems = file: args:
