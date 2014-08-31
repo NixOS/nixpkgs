@@ -43,7 +43,7 @@ selfPre = rec {
   rake = buildRubyGem {
     name = "rake-10.3.2";
     sha256 = "0nvpkjrpsk8xxnij2wd1cdn6arja9q11sxx4aq4fz18bc6fss15m";
-    gemPath = [ bundler ];
+    gemPath = [ self.bundler ];
     checkPhase = ":";
   };
 
@@ -68,7 +68,10 @@ selfPre = rec {
   rspec_3_0 = buildRubyGem {
     name = "rspec-3.0.0";
     sha256 = "1x94vk8dlk57clqlyb741y5bsmidp8131wyrb1vh00hi5mdb5szy";
-    gemPath = [ diff_lcs rspec_core rspec_expectations rspec_mocks rspec_support ];
+    gemPath = [
+      self.diff_lcs self.rspec_core self.rspec_expectations self.rspec_mocks
+      self.rspec_support
+    ];
   };
 
   rspec_2_14 = buildRubyGem {
@@ -79,19 +82,19 @@ selfPre = rec {
   rspec_core = buildRubyGem {
     name = "rspec-core-3.0.3";
     sha256 = "0395m5rfpbh87wm3mx549zvm190gikpzyld0xhlr55qwzp6ny97m";
-    gemPath = [ rspec_support ];
+    gemPath = [ self.rspec_support ];
   };
 
   rspec_expectations = buildRubyGem {
     name = "rspec-expectations-3.0.3";
     sha256 = "1mzp3v5r7qy28q8x6dkdib9ymwrxxz81jiq9vfr94jxbmy8rkhn0";
-    gemPath = [ diff_lcs rspec_support ];
+    gemPath = [ self.diff_lcs self.rspec_support ];
   };
 
   rspec_mocks = buildRubyGem {
     name = "rspec-mocks-3.0.3";
     sha256 = "0svc5wq8k4w8iamj2r7xw4xwhfczcj09s0ps9wz1mmgy9cvn1lj6";
-    gemPath = [ rspec_support ];
+    gemPath = [ self.rspec_support ];
   };
 
   rspec_support = buildRubyGem {
@@ -111,7 +114,7 @@ selfPre = rec {
 
   dotenv = buildRubyGem {
     name = "dotenv-0.11.1";
-    gemPath = [ dotenv_deployment ];
+    gemPath = [ self.dotenv_deployment ];
     sha256 = "09z0y0d6bks7i0sqvd8szfqj9i1kkj01anzly7shi83b3gxhrq9m";
   };
 
@@ -128,7 +131,7 @@ selfPre = rec {
   nokogiri = buildRubyGem {
     name = "nokogiri-1.6.3.1";
     sha256 = "11958hlfd8i3i9y0wk1b6ck9x0j95l4zdbbixmdnnh1r8ijilxli";
-    gemPath = [ mini_portile ];
+    gemPath = [ self.mini_portile ];
   };
 
   pg = buildRubyGem {
