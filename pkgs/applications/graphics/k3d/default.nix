@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./k3d_gtkmm224.patch
+    ./libpng-1.4.patch
   ];
 
   preConfigure = ''
@@ -28,7 +29,9 @@ stdenv.mkDerivation rec {
      gtkmm glibmm gtkglext pangox_compat libXmu
     ];
 
-  doCheck = false;
+  #doCheck = false;
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "A 3D editor with support for procedural editing";
