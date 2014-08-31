@@ -120,6 +120,9 @@ self = rec {
     sha256 = "19hhlq5cp0cgm9b8daxjn8rkk8fq7bxxv1gd43l2hk0qgy7kx4z7";
   };
 };
-  boringPatches = callPackage ./patches.nix { inherit ruby; gems = self; };
+  # TODO: refactor mutual recursion here
+  # it looks a lot like the importGems function above, but it's too late at night
+  # to write a more generic version
+  boringPatches = callPackage ./patches.nix { inherit ruby; gems = patchedSelf; };
   patchedSelf = patchGemsWith self boringPatches;
 in patchedSelf
