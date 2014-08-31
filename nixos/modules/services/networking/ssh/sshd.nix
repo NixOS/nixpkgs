@@ -144,6 +144,33 @@ in
         '';
       };
 
+      listenAddresses = mkOption {
+        type = types.listOf types.optionSet;
+        default = [];
+        example = [ { addr = "192.168.3.1"; port = 22; } { addr = "0.0.0.0"; port = 64022; } ];
+        description = ''
+          List of addresses and ports to listen on (ListenAddress directive
+          in config). If port is not specified for address sshd will listen
+          on all ports specified by ports option.
+        '';
+        options = {
+          addr = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+              Host, IPv4 or IPv6 address to listen to.
+            '';
+          };
+          port = mkOption {
+            type = types.nullOr types.int;
+            default = null;
+            description = ''
+              Port to listen to.
+            '';
+          };
+        };
+      };
+
       passwordAuthentication = mkOption {
         type = types.bool;
         default = true;
@@ -349,6 +376,10 @@ in
           Port ${toString port}
         '') cfg.ports}
 
+        ${concatMapStrings ({ port, addr }: ''
+          ListenAddress ${addr}${if port != null then ":" + toString port else ""}
+        '') cfg.listenAddresses}
+
         ${optionalString cfgc.setXAuthLocation ''
             XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
         ''}
@@ -383,6 +414,10 @@ in
         assertion = (data.publicKey == null && data.publicKeyFile != null) ||
                     (data.publicKey != null && data.publicKeyFile == null);
         message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
+      })
+      ++ flip map cfg.listenAddresses ({ addr, port }: {
+        assertion = addr != null;
+        message = "addr must be spefied in each listenAddresses entry";
       });
 
   };
