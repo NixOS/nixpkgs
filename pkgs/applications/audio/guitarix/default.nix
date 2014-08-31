@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, avahi, boost, fftw, gettext, glib, glibmm, gtk
-, gtkmm, intltool, jack2, ladspaH, librdf, libsndfile, lv2
-, pkgconfig, python }:
+{ stdenv, fetchurl, avahi, boost, eigen, fftw, gettext, glib, glibmm, gtk
+, gtkmm, intltool, jack2, ladspaH, librdf, libsndfile, lilv, lv2
+, pkgconfig, python, serd, sord, sratom }:
 
 stdenv.mkDerivation rec {
   name = "guitarix-${version}";
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    avahi boost fftw gettext glib glibmm gtk gtkmm intltool jack2
-    ladspaH librdf libsndfile lv2 pkgconfig python
+    avahi boost eigen fftw gettext glib glibmm gtk gtkmm intltool jack2
+    ladspaH librdf libsndfile lilv lv2 pkgconfig python serd sord sratom
   ];
 
   configurePhase = "python waf configure --prefix=$out";
