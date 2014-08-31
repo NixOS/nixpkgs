@@ -4590,24 +4590,24 @@ rec {
 
   rainbowstream = buildPythonPackage rec {
     name = "rainbowstream-${version}";
-    version = "0.9.3";
+    version = "0.9.5";
 
     src = fetchurl {
       url    = "https://pypi.python.org/packages/source/r/rainbowstream/${name}.tar.gz";
-      sha256 = "1xgfxk3qwbfdl2fwabcppi43dxmv8pik0wb9jsbszwxz9xv3fcpk";
+      sha256 = "0v79xiihgsfjipxkzzi92l8y1f8vxxachpv71gyzyhxdsl2zfj57";
     };
 
     doCheck = false;
+
+    preBuild = ''
+      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LC_ALL="en_US.UTF-8"
+    '';
 
     buildInputs = [
       pkgs.libjpeg pkgs.freetype pkgs.zlib
       pillow twitter pyfiglet requests arrow dateutil modules.readline
     ];
-
-    postInstall = ''
-      wrapProgram "$out/bin/rainbowstream" \
-        --prefix PYTHONPATH : "$PYTHONPATH"
-    '';
 
     meta = {
       description = "Streaming command-line twitter client";
