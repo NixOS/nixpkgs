@@ -16,7 +16,7 @@ in
     networking.vpnc = {
       services = mkOption {
        type = types.attrsOf types.str;
-       default = [];
+       default = {};
        example = {
          test = 
           ''
