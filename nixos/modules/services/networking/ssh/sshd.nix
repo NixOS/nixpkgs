@@ -152,6 +152,8 @@ in
           List of addresses and ports to listen on (ListenAddress directive
           in config). If port is not specified for address sshd will listen
           on all ports specified by ports option.
+          NOTE: setting this option won't automatically enable given ports
+          in firewall configuration.
         '';
         options = {
           addr = mkOption {
