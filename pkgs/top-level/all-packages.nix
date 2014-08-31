@@ -9709,6 +9709,8 @@ let
     conf = config.st.conf or null;
   };
 
+  stella = callPackage ../misc/emulators/stella { };
+  
   linuxstopmotion = callPackage ../applications/video/linuxstopmotion { };
 
   sweethome3d = recurseIntoAttrs (  (callPackage ../applications/misc/sweethome3d { })
