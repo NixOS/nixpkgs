@@ -70,6 +70,7 @@ with lib;
       { serviceConfig.ExecStart = "@${pkgs.utillinux}/sbin/agetty agetty --noclear --login-program ${pkgs.shadow}/bin/login --keep-baud console 115200,38400,9600 $TERM";
         serviceConfig.Restart = "always";
         restartIfChanged = false;
+	enable = mkDefault config.boot.isContainer;
       };
 
     environment.etc = singleton
