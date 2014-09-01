@@ -11347,6 +11347,8 @@ let
 
   pgfplots = callPackage ../tools/typesetting/tex/pgfplots { };
 
+  phabricator = callPackage ../misc/phabricator { };
+
   pjsip = callPackage ../applications/networking/pjsip { };
 
   polytable = callPackage ../tools/typesetting/tex/polytable { };
