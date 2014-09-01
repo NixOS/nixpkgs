@@ -182,9 +182,12 @@ if ($grubVersion == 1) {
 }
 
 else {
+    if ($copyKernels == 0) {
+        $conf .= "
+            " . $grubStore->search;
+    }
     $conf .= "
         " . $grubBoot->search . "
-        " . $grubStore->search . "
         if [ -s \$prefix/grubenv ]; then
           load_env
         fi
@@ -282,7 +285,9 @@ sub addEntry {
     } else {
         $conf .= "menuentry \"$name\" {\n";
         $conf .= $grubBoot->search . "\n";
-        $conf .= $grubStore->search . "\n";
+        if ($copyKernels == 0) {
+            $conf .= $grubStore->search . "\n";
+        }
         $conf .= "  $extraPerEntryConfig\n" if $extraPerEntryConfig;
         $conf .= "  multiboot $xen $xenParams\n" if $xen;
         $conf .= "  " . ($xen ? "module" : "linux") . " $kernel $kernelParams\n";
