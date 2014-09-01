@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
     commandQq doctest filepath free hspec lens semigroups temporary
     text transformers unorderedContainers
   ];
+  doCheck = false;
   meta = {
     description = "Directory layout DSL";
     license = self.stdenv.lib.licenses.bsd3;
