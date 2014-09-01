@@ -15,5 +15,7 @@ cabal.mkDerivation (self: {
     description = "Modernised bindings to GNU ncurses";
     license = self.stdenv.lib.licenses.gpl3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })
