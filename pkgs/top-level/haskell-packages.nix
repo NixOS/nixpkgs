@@ -2134,6 +2134,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   RSA = callPackage ../development/libraries/haskell/RSA {};
 
+  saltine = callPackage ../development/libraries/haskell/saltine {};
+
   sampleFrame = callPackage ../development/libraries/haskell/sample-frame {};
 
   safe = callPackage ../development/libraries/haskell/safe {};
