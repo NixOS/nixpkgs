@@ -6104,6 +6104,8 @@ let
   readline = readline6;
   readline6 = readline63;
 
+  readline5 = callPackage ../development/libraries/readline/readline5.nix { };
+
   readline62 = callPackage ../development/libraries/readline/readline6.nix { };
 
   readline63 = callPackage ../development/libraries/readline/readline6.3.nix { };
