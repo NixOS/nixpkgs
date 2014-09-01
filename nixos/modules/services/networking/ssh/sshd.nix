@@ -151,7 +151,8 @@ in
         description = ''
           List of addresses and ports to listen on (ListenAddress directive
           in config). If port is not specified for address sshd will listen
-          on all ports specified by ports option.
+          on all ports specified by <literal>ports</literal> option.
+          NOTE: this will override default listening on all local addresses and port 22.
           NOTE: setting this option won't automatically enable given ports
           in firewall configuration.
         '';
