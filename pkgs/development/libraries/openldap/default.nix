@@ -18,9 +18,10 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = 1; # !!!
 
-  meta = {
-    homepage = "http://www.openldap.org/";
+  meta = with stdenv.lib; {
+    homepage    = http://www.openldap.org/;
     description = "An open source implementation of the Lightweight Directory Access Protocol";
-    maintainers = stdenv.lib.maintainers.mornfall;
+    maintainers = with maintainers; [ lovek323 mornfall ];
+    platforms   = platforms.unix;
   };
 }
