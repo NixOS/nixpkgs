@@ -13,7 +13,7 @@ import ./make-test.nix {
         { virtualisation.vlans = [ 1 ];
           networking.firewall.allowPing = true;
           networking.defaultGateway =
-            (head nodes.router.config.networking.interfaces.eth2.ip4).address;
+            (pkgs.lib.head nodes.router.config.networking.interfaces.eth2.ip4).address;
         };
 
       router =
