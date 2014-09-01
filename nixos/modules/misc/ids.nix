@@ -149,6 +149,7 @@
       radvd = 139;
       zookeeper = 140;
       dnsmasq = 141;
+      uhub = 142;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -268,6 +269,7 @@
       mlmmj = 135;
       riemann = 137;
       riemanndash = 138;
+      uhub = 142;
 
       # When adding a gid, make sure it doesn't match an existing uid. And don't use gids above 399!
 
