@@ -8280,7 +8280,11 @@ let
 
   inherit (gnome3) baobab;
 
-  backintime = callPackage ../applications/networking/sync/backintime { };
+  backintime-common = callPackage ../applications/networking/sync/backintime/common.nix { };
+
+  backintime-gnome = callPackage ../applications/networking/sync/backintime/gnome.nix { };
+
+  backintime = backintime-gnome;
 
   bar = callPackage ../applications/window-managers/bar { };
 
