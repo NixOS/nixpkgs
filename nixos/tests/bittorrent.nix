@@ -16,7 +16,7 @@ let
   miniupnpdConf = nodes: pkgs.writeText "miniupnpd.conf"
     ''
       ext_ifname=eth1
-      listening_ip=${(head nodes.router.config.networking.interfaces.eth2.ip4).address}/24
+      listening_ip=${(pkgs.lib.head nodes.router.config.networking.interfaces.eth2.ip4).address}/24
       allow 1024-65535 192.168.2.0/24 1024-65535
     '';
 
@@ -53,7 +53,7 @@ in
         { environment.systemPackages = [ pkgs.transmission ];
           virtualisation.vlans = [ 2 ];
           networking.defaultGateway =
-            (head nodes.router.config.networking.interfaces.eth2.ip4).address;
+            (pkgs.lib.head nodes.router.config.networking.interfaces.eth2.ip4).address;
           networking.firewall.enable = false;
         };
 
@@ -81,7 +81,7 @@ in
       # Create the torrent.
       $tracker->succeed("mkdir /tmp/data");
       $tracker->succeed("cp ${file} /tmp/data/test.tar.bz2");
-      $tracker->succeed("transmission-create /tmp/data/test.tar.bz2 -t http://${(head nodes.tracker.config.networking.interfaces.eth1.ip4).address}:6969/announce -o /tmp/test.torrent");
+      $tracker->succeed("transmission-create /tmp/data/test.tar.bz2 -t http://${(pkgs.lib.head nodes.tracker.config.networking.interfaces.eth1.ip4).address}:6969/announce -o /tmp/test.torrent");
       $tracker->succeed("chmod 644 /tmp/test.torrent");
 
       # Start the tracker.  !!! use a less crappy tracker
