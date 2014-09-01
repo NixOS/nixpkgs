@@ -66,6 +66,12 @@ with lib;
         restartIfChanged = false;
       };
 
+    systemd.services."console-getty" =
+      { serviceConfig.ExecStart = "@${pkgs.utillinux}/sbin/agetty agetty --noclear --login-program ${pkgs.shadow}/bin/login --keep-baud console 115200,38400,9600 $TERM";
+        serviceConfig.Restart = "always";
+        restartIfChanged = false;
+      };
+
     environment.etc = singleton
       { # Friendly greeting on the virtual consoles.
         source = pkgs.writeText "issue" ''
