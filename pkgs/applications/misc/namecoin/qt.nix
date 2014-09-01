@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Decentralized open source information registration and transfer system based on the Bitcoin cryptocurrency";
     homepage = "http://namecoin.info";
-    license = "MIT";
-    maintainers = [ "Chris Double <chris.double@double.co.nz>" ];
+    license = stdenv.lib.licenses.mit;
+    maintainers = [ stdenv.lib.maintainers.doublec ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }
