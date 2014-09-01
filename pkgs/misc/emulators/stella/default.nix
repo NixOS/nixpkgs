@@ -15,11 +15,6 @@ stdenv.mkDerivation rec {
   buildInputs = with stdenv.lib;
   [ pkgconfig SDL2 ];
 
-  configureFlags = ''
-  '';
-
-  NIX_CFLAGS_COMPILE="";
-	
   meta = with stdenv.lib; {
     description = "An open-source Atari 2600 VCS emulator";
     longDescription = ''
