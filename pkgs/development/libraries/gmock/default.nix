@@ -11,12 +11,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ unzip cmake ];
 
-  configurePhase = ''
-    mkdir build
-    cd build
-    cmake ../ -DCMAKE_INSTALL_PREFIX=$out
-  '';
-
   buildPhase = ''
     # avoid building gtest
     make gmock gmock_main
@@ -30,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Google mock: Google's framework for writing C++ mock classes.";
+    description = "Google mock: Google's framework for writing C++ mock classes";
     homepage = https://code.google.com/p/googlemock/;
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.auntie ];
