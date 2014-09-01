@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "byacc-1.9";
 
   src = fetchurl {
-    url = http://invisible-island.net/datafiles/release/byacc.tar.gz;
+    url = ftp://invisible-island.net/byacc/byacc-20140715.tgz;
     sha256 = "1rbzx5ipkvih9rjfdfv6310wcr6mxjbdlsh9zcv5aaz6yxxxil7c";
   };
 
