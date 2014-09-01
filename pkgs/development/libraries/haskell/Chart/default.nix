@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Chart";
-  version = "1.2.4";
-  sha256 = "0zizrkxsligvxs5x5r2j0pynf6ncjl4mgyzbh1zfqgnz29frylh7";
+  version = "1.3";
+  sha256 = "1xvr90x1kmnjfmbap47ffzi3xbawcwz7q6b76v2gbqp4gjlhiyx7";
   buildDepends = [
     colour dataDefaultClass lens mtl operational time
   ];
