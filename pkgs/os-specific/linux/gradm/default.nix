@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name    = "gradm-${version}";
-  version = "3.0-201405281853";
+  version = "3.0-201408301734";
 
   src  = fetchurl {
     url    = "http://grsecurity.net/stable/${name}.tar.gz";
-    sha256 = "0yjmbjhm71cik5j8h2prgk40wki3sflwbf2zqmc4pwaqlvis9s2f";
+    sha256 = "171i1jyw82dnv2fi4dnh40dw1wa5hrllnpjf181cafnzxjpyb45i";
   };
 
   buildInputs = [ gcc coreutils findutils binutils pam flex bison bash ];
