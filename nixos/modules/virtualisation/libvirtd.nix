@@ -7,11 +7,21 @@ with lib;
 let
 
   cfg = config.virtualisation.libvirtd;
+
+  listenArgs = if cfg.listen then "--listen" else "";
+  
+  caFile = if cfg.authorityCert != "" then pkgs.writeText "cacert.pem" cfg.authorityCert else "";
+  certFile = if cfg.serverCert != "" then pkgs.writeText "servercert.pem" cfg.serverCert else "";
+  keyFile = if cfg.serverKey != "" then pkgs.writeText "serverkey.pem" cfg.serverKey else "";
+
   configFile = pkgs.writeText "libvirtd.conf" ''
     unix_sock_group = "libvirtd"
     unix_sock_rw_perms = "0770"
     auth_unix_ro = "none"
     auth_unix_rw = "none"
+    ca_file = "${caFile}"
+    key_file = "${keyFile}"
+    cert_file = "${certFile}"
     ${cfg.extraConfig}
   '';
 
@@ -56,6 +66,61 @@ in
           '';
       };
 
+    virtualisation.libvirtd.listen =
+      mkOption {
+        default = false;
+        description =
+          ''
+            Start libvirtd with the listen_tls option.
+            Note: requires that you also set caPem, keyPem, certPem 
+          '';
+      };
+
+    virtualisation.libvirtd.authorityCert =
+      mkOption {
+        default = "";
+        description =
+          ''
+            Set the trusted CA certificate in pem format. 
+          '';
+      };
+
+    virtualisation.libvirtd.serverCert =
+      mkOption {
+        default = "";
+        description =
+          ''
+            Set the server's certificate signed by the CA.
+          '';
+      };
+
+    virtualisation.libvirtd.serverKey =
+      mkOption {
+        default = "";
+        description =
+          ''
+            Set the server's private key.
+          '';
+      };
+
+    virtualisation.libvirtd.clientCert =
+      mkOption {
+        default = "";
+        description =
+          ''
+            Set the client's certificate signed by the CA.
+          '';
+      };
+
+    virtualisation.libvirtd.clientKey =
+      mkOption {
+        default = "";
+        description =
+          ''
+            Set the client's private key.
+          '';
+      };
+
   };
 
 
@@ -73,7 +138,7 @@ in
       { description = "Libvirt Virtual Machine Management Daemon";
 
         wantedBy = [ "multi-user.target" ];
-        after = [ "systemd-udev-settle.service" ];
+        after = [ "systemd-udev-settle.service" "syslog.target" "network.target"];
 
         path =
           [ pkgs.bridge_utils pkgs.dmidecode pkgs.dnsmasq
@@ -120,8 +185,7 @@ in
             done
           ''; # */
 
-        serviceConfig.ExecStart = ''@${pkgs.libvirt}/sbin/libvirtd libvirtd --config "${configFile}" --daemon --verbose'';
-        serviceConfig.Type = "forking";
+        serviceConfig.ExecStart = ''@${pkgs.libvirt}/sbin/libvirtd libvirtd --config "${configFile}" --verbose ${listenArgs}'';
         serviceConfig.KillMode = "process"; # when stopping, leave the VMs alone
 
         # Wait until libvirtd is ready to accept requests.
@@ -159,6 +223,20 @@ in
       };
 
     users.extraGroups.libvirtd.gid = config.ids.gids.libvirtd;
+
+    environment.etc = []
+      ++ optional (caFile != "") {
+        target = "pki/CA/cacert.pem";
+        source = caFile;
+      }
+      ++ optional (cfg.clientCert != "") {
+        target = "pki/libvirt/clientcert.pem";
+        text = cfg.clientCert;
+      }
+      ++ optional (cfg.clientKey != "") {
+        target = "pki/libvirt/private/clientkey.pem";
+        text = cfg.clientKey;
+      };
 
   };
 
