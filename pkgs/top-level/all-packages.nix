@@ -1788,6 +1788,8 @@ let
 
   openvpn_learnaddress = callPackage ../tools/networking/openvpn/openvpn_learnaddress.nix { };
 
+  openvswitch = callPackage ../os-specific/linux/openvswitch { };
+
   optipng = callPackage ../tools/graphics/optipng {
     libpng = libpng12;
   };
