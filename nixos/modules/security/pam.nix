@@ -142,6 +142,12 @@ let
         description = "Whether to update <filename>/var/log/wtmp</filename>.";
       };
 
+      logFailures = mkOption {
+        default = false;
+        type = types.bool;
+        description = "Whether to log authentication failures in <filename>/var/log/faillog</filename>.";
+      };
+
       text = mkOption {
         type = types.nullOr types.lines;
         description = "Contents of the PAM service file.";
@@ -169,6 +175,8 @@ let
           # Authentication management.
           ${optionalString cfg.rootOK
               "auth sufficient pam_rootok.so"}
+          ${optionalString cfg.logFailures
+              "auth required pam_tally.so"}
           ${optionalString (config.security.pam.enableSSHAgentAuth && cfg.sshAgentAuth)
               "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=~/.ssh/authorized_keys:~/.ssh/authorized_keys2:/etc/ssh/authorized_keys.d/%u"}
           ${optionalString cfg.usbAuth
