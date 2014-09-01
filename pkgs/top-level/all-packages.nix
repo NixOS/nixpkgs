@@ -6535,6 +6535,10 @@ let
     inherit writeScriptBin;
   };
 
+  AgdaStdlib = callPackage ../development/compilers/agda/stdlib.nix {
+    ghcWithPackages = haskellPackages.ghcWithPackages;
+  };
+
   ### DEVELOPMENT / LIBRARIES / JAVA
 
   atermjava = callPackage ../development/libraries/java/aterm {
