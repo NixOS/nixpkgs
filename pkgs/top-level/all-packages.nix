@@ -1752,6 +1752,8 @@ let
 
   openjade = callPackage ../tools/text/sgml/openjade { };
 
+  openntpd = callPackage ../tools/networking/openntpd { };
+
   openobex = callPackage ../tools/bluetooth/openobex { };
 
   openopc = callPackage ../tools/misc/openopc {
