@@ -9404,6 +9404,9 @@ let
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
 
+  namecoin = callPackage ../applications/misc/namecoin { };
+  namecoinqt = callPackage ../applications/misc/namecoin/qt.nix { };
+
   pcmanfm = callPackage ../applications/misc/pcmanfm { };
 
   ruby_gpgme = callPackage ../development/libraries/ruby_gpgme {
