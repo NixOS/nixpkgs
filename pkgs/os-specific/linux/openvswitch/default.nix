@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, python27, iproute, perl510, kernel ? null}:
+{ stdenv, fetchurl, openssl, python27, iproute, perl, kernel ? null}:
 let
 
   version = "2.1.2";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   buildInputs = [
     openssl
     python27
-    perl510
+    perl
   ];
   configureFlags = [
     "--localstatedir=/var"
