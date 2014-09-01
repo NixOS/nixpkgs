@@ -12,7 +12,7 @@ let
     version = "0.99";
     baseName="barcode";
     name="${baseName}-${version}";
-    url="mirror://gnu/${baseName}/${name}.tar.gz";
+    url="mirror://gnu/${baseName}/${name}.tar.xz";
   };
 in
 rec {
