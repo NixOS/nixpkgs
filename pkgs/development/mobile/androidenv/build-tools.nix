@@ -39,6 +39,13 @@ stdenv.mkDerivation {
         do
             patchelf --set-rpath ${stdenv_32bit.gcc.gcc}/lib:`pwd` $i
         done
+
+        # These binaries also need zlib in addition to libstdc++
+        for i in zipalign
+        do
+            patchelf --set-interpreter ${stdenv_32bit.gcc.libc}/lib/ld-linux.so.2 $i
+            patchelf --set-rpath ${stdenv_32bit.gcc.gcc}/lib:${zlib_32bit}/lib $i
+        done
         
         # These binaries need to find libstdc++, libgcc_s, and zlib
         for i in aapt dexdump
