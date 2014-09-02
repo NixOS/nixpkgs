@@ -21,7 +21,7 @@ let
     (fold (num: _: num / 2) (ipToInt address) (range 1 (32-prefixLength)))
     (range 1 (32-prefixLength));
 
-  gatewayInterfaces = flatten (flip mapAttrsToList cfg.interfaces (name: data:
+  unsortedGatewayInterfaces = flatten (flip mapAttrsToList cfg.interfaces (name: data:
     if any ({ address, prefixLength, ... }:
         subnetOf address prefixLength == subnetOf cfg.defaultGateway prefixLength
       )
@@ -29,8 +29,12 @@ let
         address = data.ipAddress;
         prefixLength = data.prefixLength;
       })
-    then name else [ ]
+    then { inherit name prefixLength; } else [ ]
   ));
+
+  gatewayInterfaces = flip sort unsortedGatewayInterfaces (a: b:
+    a.prefixLength < b.prefixLength
+  );
 
   addrOpts = v:
     assert v == 4 || v == 6;
@@ -568,7 +572,7 @@ in
 
     assertions = [
       {
-        assertion = cfg.defaultGateway != null -> length gatewayInterfaces == 1;
+        assertion = cfg.defaultGateway != null -> gatewayInterfaces != [ ];
         message = "Could not determine which interface communicates to the default gateway.";
       }
       ] ++ flatten (flip map interfaces (i: [ {
@@ -680,7 +684,7 @@ in
               };
             routes = i.routes4 ++ optionals cfg.enableIPv6 i.routes6
               ++ optional (gatewayInterfaces != [ ]
-                && i.name == head gatewayInterfaces) {
+                && i.name == (head gatewayInterfaces).name) {
                   address = "default";
                   type = null;
                   via = cfg.defaultGateway;
