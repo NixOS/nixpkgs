@@ -1,5 +1,5 @@
 { stdenv, pkgconfig, cmake, bluez, ffmpeg, libao, mesa, gtk2, glib
-, gettext, git, libpthreadstubs, libXrandr, libXext, readline
+, gettext, libpthreadstubs, libXrandr, libXext, readline
 , openal, libXdmcp, portaudio, SDL, wxGTK30, fetchurl
 , pulseaudio ? null }:
 
