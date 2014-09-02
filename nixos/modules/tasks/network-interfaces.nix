@@ -571,10 +571,14 @@ in
         assertion = cfg.defaultGateway != null -> length gatewayInterfaces == 1;
         message = "Could not determine which interface communicates to the default gateway.";
       }
-      ] ++ flip map interfaces (i: {
-        assertion = i.subnetMask == null;
-        message = "The networking.interfaces.${i.name}.subnetMask option is defunct. Use prefixLength instead.";
-      });
+      ] ++ flatten (flip map interfaces (i: [ {
+          assertion = i.subnetMask == null;
+          message = "The networking.interfaces.${i.name}.subnetMask option is defunct. Use prefixLength instead.";
+        } ] ++ flip map i.routes4 (r: {
+          assertion = r.address != "default" -> subnetOf r.address 32 == subnetOf r.address r.prefixLength;
+          message = "Route ${r.address}/${r.prefixLength} must use the base address in the subnet";
+        })
+      ));
 
     boot.kernelModules = [ ]
       ++ optional cfg.enableIPv6 "ipv6"
