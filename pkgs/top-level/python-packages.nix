@@ -1835,6 +1835,27 @@ rec {
     };
   };
 
+  docker = buildPythonPackage rec {
+    name = "docker-py-0.4.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/d/docker-py/${name}.tar.gz";
+      md5 = "21ab8fd729105487e6423b654d6c0860";
+    };
+
+    propagatedBuildInputs = [ six requests ];
+
+    # Version conflict
+    doCheck = false;
+
+    meta = {
+      description = "An API client for docker written in Python";
+      homepage = https://github.com/docker/docker-py;
+      license = licenses.asl20;
+    };
+  };
+
+
   dogpile_cache = buildPythonPackage rec {
     name = "dogpile.cache-0.5.4";
 
