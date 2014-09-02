@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ stdenv pkgconfig cmake bluez ffmpeg libao mesa gtk2 glib
                   gettext libpthreadstubs libXrandr libXext readline openal
-                  git libXdmcp portaudio SDL wxGTK30 pulseaudio ];
+                  libXdmcp portaudio SDL wxGTK30 pulseaudio ];
 
   meta = {
     homepage = http://dolphin-emu.org/;
