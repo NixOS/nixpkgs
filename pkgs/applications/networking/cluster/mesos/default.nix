@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     makeWrapper autoconf automake libtool curl sasl jdk maven
-    python wrapPython boto distutils-cfg
+    python wrapPython boto distutils-cfg setuptools
   ];
 
   propagatedBuildInputs = [

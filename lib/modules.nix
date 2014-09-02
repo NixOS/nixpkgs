@@ -277,13 +277,14 @@ rec {
   fixupOptionType = loc: opt:
     let
       options' = opt.options or
-        (throw "Option `${showOption loc'}' has type optionSet but has no option attribute.");
+        (throw "Option `${showOption loc'}' has type optionSet but has no option attribute, in ${showFiles opt.declarations}.");
       coerce = x:
         if isFunction x then x
         else { config, ... }: { options = x; };
       options = map coerce (flatten options');
       f = tp:
-        if tp.name == "option set" then types.submodule options
+        if tp.name == "option set" || tp.name == "submodule" then
+          throw "The option ${showOption loc} uses submodules without a wrapping type, in ${showFiles opt.declarations}."
         else if tp.name == "attribute set of option sets" then types.attrsOf (types.submodule options)
         else if tp.name == "list or attribute set of option sets" then types.loaOf (types.submodule options)
         else if tp.name == "list of option sets" then types.listOf (types.submodule options)

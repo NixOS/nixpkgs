@@ -1,6 +1,5 @@
 use strict;
 use warnings;
-use Class::Struct;
 use XML::LibXML;
 use File::Basename;
 use File::Path;
@@ -28,14 +27,6 @@ sub writeFile {
     close FILE or die;
 }
 
-sub runCommand {
-    my ($cmd) = @_;
-    open FILE, "$cmd 2>/dev/null |" or die "Failed to execute: $cmd\n";
-    my @ret = <FILE>;
-    close FILE;
-    return ($?, @ret);
-}
-
 my $grub = get("grub");
 my $grubVersion = int(get("version"));
 my $extraConfig = get("extraConfig");
@@ -48,7 +39,7 @@ my $configurationLimit = int(get("configurationLimit"));
 my $copyKernels = get("copyKernels") eq "true";
 my $timeout = int(get("timeout"));
 my $defaultEntry = int(get("default"));
-my $fsIdentifier = get("fsIdentifier");
+my $explicitBootRoot = get("explicitBootRoot");
 $ENV{'PATH'} = get("path");
 
 die "unsupported GRUB version\n" if $grubVersion != 1 && $grubVersion != 2;
@@ -57,108 +48,22 @@ print STDERR "updating GRUB $grubVersion menu...\n";
 
 mkpath("/boot/grub", 0, 0700);
 
+
 # Discover whether /boot is on the same filesystem as / and
 # /nix/store.  If not, then all kernels and initrds must be copied to
-# /boot.
-if (stat("/boot")->dev != stat("/nix/store")->dev) {
+# /boot, and all paths in the GRUB config file must be relative to the
+# root of the /boot filesystem.  `$bootRoot' is the path to be
+# prepended to paths under /boot.
+my $bootRoot = "/boot";
+if (stat("/")->dev != stat("/boot")->dev) {
+    $bootRoot = "";
+    $copyKernels = 1;
+} elsif (stat("/boot")->dev != stat("/nix/store")->dev) {
     $copyKernels = 1;
 }
 
-# Discover information about the location of /boot
-struct(Fs => {
-    device => '$',
-    type => '$',
-    mount => '$',
-});
-sub GetFs {
-    my ($dir) = @_;
-    my ($status, @dfOut) = runCommand("df -T $dir");
-    if ($status != 0 || $#dfOut != 1) {
-        die "Failed to retrieve output about $dir from `df`";
-    }
-    my @boot = split(/[ \n\t]+/, $dfOut[1]);
-    return Fs->new(device => $boot[0], type => $boot[1], mount => $boot[6]);
-}
-struct (Grub => {
-    path => '$',
-    search => '$',
-});
-my $driveid = 1;
-sub GrubFs {
-    my ($dir) = @_;
-    my $fs = GetFs($dir);
-    my $path = "/" . substr($dir, length($fs->mount));
-    my $search = "";
-
-    if ($grubVersion > 1) {
-        # ZFS is completely separate logic as zpools are always identified by a label
-        # or custom UUID
-        if ($fs->type eq 'zfs') {
-            my $sid = index($fs->device, '/');
-
-            if ($sid < 0) {
-                $search = '--label ' . $fs->device;
-                $path = '/@' . $path;
-            } else {
-                $search = '--label ' . substr($fs->device, 0, $sid);
-                $path = '/' . substr($fs->device, $sid) . '/@' . $path;
-            }
-        } else {
-            my %types = ('uuid' => '--fs-uuid', 'label' => '--label');
-
-            if ($fsIdentifier eq 'provided') {
-                # If the provided dev is identifying the partition using a label or uuid,
-                # we should get the label / uuid and do a proper search
-                my @matches = $fs->device =~ m/\/dev\/disk\/by-(label|uuid)\/(.*)/;
-                if ($#matches > 1) {
-                    die "Too many matched devices"
-                } elsif ($#matches == 1) {
-                    $search = "$types{$matches[0]} $matches[1]"
-                }
-            } else {
-                # Determine the identifying type
-                $search = $types{$fsIdentifier} . ' ';
-
-                # Based on the type pull in the identifier from the system
-                my ($status, @devInfo) = runCommand("blkid -o export @{[$fs->device]}");
-                if ($status != 0) {
-                    die "Failed to get blkid info for @{[$fs->device]}";
-                }
-                my @matches = join("", @devInfo) =~ m/@{[uc $fsIdentifier]}=([^\n]*)/;
-                if ($#matches != 0) {
-                    die "Couldn't find a $types{$fsIdentifier} for @{[$fs->device]}\n"
-                }
-                $search .= $matches[0];
-            }
-
-            # BTRFS is a special case in that we need to fix the referrenced path based on subvolumes
-            if ($fs->type eq 'btrfs') {
-                my ($status, @info) = runCommand("btrfs subvol show @{[$fs->mount]}");
-                if ($status != 0) {
-                    die "Failed to retreive subvolume info for @{[$fs->mount]}";
-                }
-                my @subvols = join("", @info) =~ m/Name:[ \t\n]*([^ \t\n]*)/;
-                if ($#subvols > 0) {
-                    die "Btrfs subvol name for @{[$fs->device]} listed multiple times in mount\n"
-                } elsif ($#subvols == 0) {
-                    $path = "/$subvols[0]$path";
-                }
-            }
-        }
-        if (not $search eq "") {
-            $search = "search --set=drive$driveid " . $search;
-            $path = "(\$drive$driveid)$path";
-            $driveid += 1;
-        }
-    }
-    return Grub->new(path => $path, search => $search);
-}
-my $grubBoot = GrubFs("/boot");
-my $grubStore = GrubFs("/nix");
-
-# We don't need to copy if we can read the kernels directly
-if ($grubStore->search ne "") {
-	$copyKernels = 0;
+if ($explicitBootRoot ne "") {
+    $bootRoot = $explicitBootRoot;
 }
 
 # Generate the header.
@@ -171,14 +76,12 @@ if ($grubVersion == 1) {
     ";
     if ($splashImage) {
         copy $splashImage, "/boot/background.xpm.gz" or die "cannot copy $splashImage to /boot\n";
-        $conf .= "splashimage " . $grubBoot->path . "/background.xpm.gz\n";
+        $conf .= "splashimage $bootRoot/background.xpm.gz\n";
     }
 }
 
 else {
     $conf .= "
-        " . $grubBoot->search . "
-        " . $grubStore->search . "
         if [ -s \$prefix/grubenv ]; then
           load_env
         fi
@@ -199,7 +102,7 @@ else {
           set timeout=$timeout
         fi
 
-        if loadfont " . $grubBoot->path . "/grub/fonts/unicode.pf2; then
+        if loadfont $bootRoot/grub/fonts/unicode.pf2; then
           set gfxmode=640x480
           insmod gfxterm
           insmod vbe
@@ -213,7 +116,7 @@ else {
         copy $splashImage, "/boot/background.png" or die "cannot copy $splashImage to /boot\n";
         $conf .= "
             insmod png
-            if background_image " . $grubBoot->path . "/background.png; then
+            if background_image $bootRoot/background.png; then
               set color_normal=white/black
               set color_highlight=black/white
             else
@@ -235,7 +138,7 @@ mkpath("/boot/kernels", 0, 0755) if $copyKernels;
 
 sub copyToKernelsDir {
     my ($path) = @_;
-    return $grubStore->path . substr($path, length("/nix")) unless $copyKernels;
+    return $path unless $copyKernels;
     $path =~ /\/nix\/store\/(.*)/ or die;
     my $name = $1; $name =~ s/\//-/g;
     my $dst = "/boot/kernels/$name";
@@ -248,7 +151,7 @@ sub copyToKernelsDir {
         rename $tmp, $dst or die "cannot rename $tmp to $dst\n";
     }
     $copied{$dst} = 1;
-    return $grubBoot->path . "/kernels/$name";
+    return "$bootRoot/kernels/$name";
 }
 
 sub addEntry {
@@ -275,8 +178,6 @@ sub addEntry {
         $conf .= "  " . ($xen ? "module" : "initrd") . " $initrd\n\n";
     } else {
         $conf .= "menuentry \"$name\" {\n";
-	$conf .= $grubBoot->search . "\n";
-	$conf .= $grubStore->search . "\n";
         $conf .= "  $extraPerEntryConfig\n" if $extraPerEntryConfig;
         $conf .= "  multiboot $xen $xenParams\n" if $xen;
         $conf .= "  " . ($xen ? "module" : "linux") . " $kernel $kernelParams\n";
@@ -294,7 +195,7 @@ addEntry("NixOS - Default", $defaultConfig);
 $conf .= "$extraEntries\n" unless $extraEntriesBeforeNixOS;
 
 # extraEntries could refer to @bootRoot@, which we have to substitute
-$conf =~ s/\@bootRoot\@/$grubBoot->path/g;
+$conf =~ s/\@bootRoot\@/$bootRoot/g;
 
 # Emit submenus for all system profiles.
 sub addProfile {

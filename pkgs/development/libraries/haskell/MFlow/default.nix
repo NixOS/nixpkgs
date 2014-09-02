@@ -9,8 +9,8 @@
 
 cabal.mkDerivation (self: {
   pname = "MFlow";
-  version = "0.4.5.7";
-  sha256 = "0faw082z8yyzf0k1vrgpqa8kvwb2zwmasy1p1vvj3a7lhhnlr20s";
+  version = "0.4.5.8";
+  sha256 = "1gfv5ky68dyn8gjjg60c5s9x3dl9xn6j9q43w7vaj9sd1q12wk3c";
   buildDepends = [
     blazeHtml blazeMarkup caseInsensitive clientsession conduit
     conduitExtra extensibleExceptions httpTypes monadloc mtl parsec

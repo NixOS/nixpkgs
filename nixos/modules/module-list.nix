@@ -21,6 +21,7 @@
   ./config/system-environment.nix
   ./config/system-path.nix
   ./config/timezone.nix
+  ./config/vpnc.nix
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
   ./config/zram.nix
@@ -45,6 +46,7 @@
   ./misc/ids.nix
   ./misc/lib.nix
   ./misc/locate.nix
+  ./misc/meta.nix
   ./misc/nixpkgs.nix
   ./misc/passthru.nix
   ./misc/version.nix
@@ -168,6 +170,7 @@
   ./services/misc/siproxd.nix
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
+  ./services/misc/uhub.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/apcupsd.nix
   ./services/monitoring/dd-agent.nix
@@ -190,6 +193,7 @@
   ./services/network-filesystems/rsyncd.nix
   ./services/network-filesystems/samba.nix
   ./services/networking/amuled.nix
+  ./services/networking/atftpd.nix
   ./services/networking/avahi-daemon.nix
   ./services/networking/bind.nix
   ./services/networking/bitlbee.nix
@@ -227,6 +231,7 @@
   ./services/networking/ntpd.nix
   ./services/networking/oidentd.nix
   ./services/networking/openfire.nix
+  ./services/networking/openntpd.nix
   ./services/networking/openvpn.nix
   ./services/networking/polipo.nix
   ./services/networking/prayer.nix
@@ -360,6 +365,7 @@
   ./virtualisation/docker.nix
   ./virtualisation/libvirtd.nix
   #./virtualisation/nova.nix
+  ./virtualisation/openvswitch.nix
   ./virtualisation/virtualbox-guest.nix
   #./virtualisation/xen-dom0.nix
 ]

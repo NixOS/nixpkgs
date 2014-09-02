@@ -11,7 +11,7 @@ let
   # Don't start dhcpcd on explicitly configured interfaces or on
   # interfaces that are part of a bridge, bond or sit device.
   ignoredInterfaces =
-    map (i: i.name) (filter (i: i.ipAddress != null) (attrValues config.networking.interfaces))
+    map (i: i.name) (filter (i: i.ip4 != [ ] || i.ipAddress != null) (attrValues config.networking.interfaces))
     ++ mapAttrsToList (i: _: i) config.networking.sits
     ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.bridges))
     ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.bonds))
@@ -64,7 +64,7 @@ let
       #    ${config.systemd.package}/bin/systemctl start ip-down.target
       #fi
 
-      ${config.networking.dhcpcd.runHook}
+      ${cfg.runHook}
     '';
 
 in
@@ -74,6 +74,18 @@ in
   ###### interface
 
   options = {
+
+    networking.dhcpcd.persistent = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+          Whenever to leave interfaces configured on dhcpcd daemon
+          shutdown. Set to true if you have your root or store mounted
+          over the network or this machine accepts SSH connections
+          through DHCP interfaces and clients should be notified when
+          it shuts down.
+      '';
+    };
 
     networking.dhcpcd.denyInterfaces = mkOption {
       type = types.listOf types.str;
@@ -139,7 +151,7 @@ in
         serviceConfig =
           { Type = "forking";
             PIDFile = "/run/dhcpcd.pid";
-            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --quiet --config ${dhcpcdConf}";
+            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --quiet ${optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}";
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
             Restart = "always";
           };

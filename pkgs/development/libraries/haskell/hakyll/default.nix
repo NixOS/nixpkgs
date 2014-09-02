@@ -27,6 +27,9 @@ cabal.mkDerivation (self: {
     snapCore snapServer systemFilepath tagsoup testFramework
     testFrameworkHunit testFrameworkQuickcheck2 text time utillinux
   ];
+  patchPhase = ''
+    sed -i -e 's|pandoc-citeproc .*,|pandoc-citeproc,|' hakyll.cabal
+  '';
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
     description = "A static website compiler library";

@@ -1,18 +1,16 @@
-{stdenv, fetchurl, gfortran, readline, ncurses, perl, flex, texinfo, qhull,
-libX11, graphicsmagick, pcre, liblapack, pkgconfig, mesa, fltk,
-fftw, fftwSinglePrec, zlib, curl, qrupdate
+{ stdenv, fetchurl, gfortran, readline, ncurses, perl, flex, texinfo, qhull
+, libX11, graphicsmagick, pcre, liblapack, pkgconfig, mesa, fltk
+, fftw, fftwSinglePrec, zlib, curl, qrupdate
 , qt ? null, ghostscript ? null, llvm ? null, hdf5 ? null,glpk ? null
 , suitesparse ? null, gnuplot ? null, openjdk ? null, python ? null
 }:
 
-let
-  version = "3.8.1";
-in
 stdenv.mkDerivation rec {
+  version = "3.8.2";
   name = "octave-${version}";
   src = fetchurl {
     url = "mirror://gnu/octave/${name}.tar.bz2";
-    sha256 = "1gcvzbgyz98mxzy3gjkdbdiirafkl73l9ywml11j412amp92wxnn";
+    sha256 = "83bbd701aab04e7e57d0d5b8373dd54719bebb64ce0a850e69bf3d7454f33bae";
   };
 
   buildInputs = [ gfortran readline ncurses perl flex texinfo qhull libX11

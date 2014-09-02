@@ -3,11 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "graphviz-2.36.0";
+  version = "2.38.0";
+  name = "graphviz-${version}";
 
   src = fetchurl {
     url = "http://www.graphviz.org/pub/graphviz/ARCHIVE/${name}.tar.gz";
-    sha256 = "0qb30z5sxlbjni732ndad3j4x7l36vsxpxn4fmf5fn7ivvc6dz9p";
+    sha256 = "17l5czpvv5ilmg17frg0w4qwf89jzh2aglm9fgx0l0aakn6j7al1";
   };
 
   buildInputs =
@@ -52,6 +53,9 @@ stdenv.mkDerivation rec {
     '';
 
     hydraPlatforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    maintainers = with stdenv.lib.maintainers; [ simons bjornfor ];
+    maintainers = with stdenv.lib.maintainers; [ simons bjornfor raskin ];
+    downloadPage = "http://www.graphviz.org/pub/graphviz/ARCHIVE/";
+    inherit version;
+    updateWalker = true;
   };
 }

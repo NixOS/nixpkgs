@@ -1,11 +1,12 @@
 { stdenv, fetchurl, apr, scons, openssl, aprutil, zlib, krb5, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "serf-1.3.7";
+  version = "1.3.7";
+  name = "serf-${version}";
 
   src = fetchurl {
     url = "http://serf.googlecode.com/svn/src_releases/${name}.tar.bz2";
-    sha1 = "db9ae339dba10a2b47f9bdacf30a58fd8e36683a";
+    sha256 = "1bphz616dv1svc50kkm8xbgyszhg3ni2dqbij99sfvjycr7bgk7c";
   };
 
   buildInputs = [ apr scons openssl aprutil zlib krb5 pkgconfig ];
@@ -30,5 +31,8 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.asl20 ;
     maintainers = [stdenv.lib.maintainers.raskin];
     hydraPlatforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    inherit version;
+    downloadPage = "http://serf.googlecode.com/svn/src_releases/";
+    updateWalker = true;
   };
 }
