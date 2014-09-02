@@ -584,6 +584,9 @@ in
         })
       ));
 
+    warnings = optional (cfg.defaultGateway != null)
+      "networking.defaultGateway is deprecated, please use networking.interfaces.<if>.routes4 instead";
+
     boot.kernelModules = [ ]
       ++ optional cfg.enableIPv6 "ipv6"
       ++ optional hasVirtuals "tun"
