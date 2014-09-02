@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yaml";
-  version = "0.8.8.4";
-  sha256 = "1mh5xv66cqvk0r5n6pwcm11m9489y40l69ca417yvymkksmncc7b";
+  version = "0.8.9.1";
+  sha256 = "129pf4gg3mf2ljag8vxknnqxbrbx53hshzpaggndxjir72303njy";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

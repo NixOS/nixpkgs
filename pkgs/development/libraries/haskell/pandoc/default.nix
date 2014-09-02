@@ -4,26 +4,27 @@
 , blazeHtml, blazeMarkup, dataDefault, deepseqGenerics, Diff
 , executablePath, extensibleExceptions, filepath, haddockLibrary
 , happy, highlightingKate, hslua, HTTP, httpClient, httpClientTls
-, httpTypes, HUnit, JuicyPixels, mtl, network, pandocTypes, parsec
-, QuickCheck, random, scientific, SHA, syb, tagsoup, temporary
-, testFramework, testFrameworkHunit, testFrameworkQuickcheck2
-, texmath, text, time, unorderedContainers, vector, wai, waiExtra
-, xml, yaml, zipArchive, zlib
+, httpTypes, HUnit, JuicyPixels, mtl, network, networkUri
+, pandocTypes, parsec, QuickCheck, random, scientific, SHA, syb
+, tagsoup, temporary, testFramework, testFrameworkHunit
+, testFrameworkQuickcheck2, texmath, text, time
+, unorderedContainers, vector, xml, yaml, zipArchive, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "pandoc";
-  version = "1.13.0.1";
-  sha256 = "0pjyxsr93gv0vrdxlr5i0c56mg6rf21qxf1141cb8l0hl0b416d6";
+  version = "1.13.1";
+  sha256 = "0vvysa70xp4pskxrvslmddwdsalc479zb8wn6z1vmpvfssvvj6vv";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     aeson alex base64Bytestring binary blazeHtml blazeMarkup
     dataDefault deepseqGenerics extensibleExceptions filepath
     haddockLibrary happy highlightingKate hslua HTTP httpClient
-    httpClientTls httpTypes JuicyPixels mtl network pandocTypes parsec
-    random scientific SHA syb tagsoup temporary texmath text time
-    unorderedContainers vector wai waiExtra xml yaml zipArchive zlib
+    httpClientTls httpTypes JuicyPixels mtl network networkUri
+    pandocTypes parsec random scientific SHA syb tagsoup temporary
+    texmath text time unorderedContainers vector xml yaml zipArchive
+    zlib
   ];
   testDepends = [
     ansiTerminal Diff executablePath filepath highlightingKate HUnit

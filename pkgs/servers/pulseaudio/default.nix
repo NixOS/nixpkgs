@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   installFlags = "sysconfdir=$(out)/etc pulseconfdir=$(out)/etc/pulse";
 
   meta = with stdenv.lib; {
-    description = "PulseAudio, a sound server for POSIX and Win32 systems";
+    description = "Sound server for POSIX and Win32 systems";
     homepage    = http://www.pulseaudio.org/;
     # Note: Practically, the server is under the GPL due to the
     # dependency on `libsamplerate'.  See `LICENSE' for details.

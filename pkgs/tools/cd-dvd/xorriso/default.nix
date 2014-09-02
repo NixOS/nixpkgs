@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isLinux acl;
 
   meta = {
-    description = "GNU xorriso, an ISO 9660 Rock Ridge file system manipulator";
+    description = "ISO 9660 Rock Ridge file system manipulator";
 
     longDescription =
       '' GNU xorriso copies file objects from POSIX compliant filesystems

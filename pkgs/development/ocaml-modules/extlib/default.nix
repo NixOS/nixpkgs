@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib}:
+{stdenv, fetchurl, ocaml, findlib, minimal ? true}:
 
 stdenv.mkDerivation {
   name = "ocaml-extlib-1.6.1";
@@ -14,8 +14,8 @@ stdenv.mkDerivation {
 
   configurePhase = "true";      # Skip configure
   # De facto, option minimal=1 seems to be the default.  See the README.
-  buildPhase     = "make minimal=1 build";
-  installPhase   = "make minimal=1 install";
+  buildPhase     = "make ${if minimal then "minimal=1" else ""} build";
+  installPhase   = "make ${if minimal then "minimal=1" else ""} install";
 
   meta = {
     homepage = http://code.google.com/p/ocaml-extlib/;

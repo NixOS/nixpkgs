@@ -2,11 +2,11 @@
 , libxml2, gnome3, gobjectIntrospection, libsoup }:
 
 stdenv.mkDerivation rec {
-  name = "grilo-0.2.10";
+  name = "grilo-0.2.11";
 
   src = fetchurl {
     url = "mirror://gnome/sources/grilo/0.2/${name}.tar.xz";
-    sha256 = "559a2470fe541b0090bcfdfac7a33e92dba967727bbab6d0eca70e5636a77b25";
+    sha256 = "8a52c37521de80d6caf08a519a708489b9e2b097c2758a0acaab6fbd26d30ea6";
   };
 
   configureFlags = [ "--enable-grl-pls" "--enable-grl-net" ];

@@ -13,5 +13,6 @@ cabal.mkDerivation (self: {
     description = "Haskell Web Library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })

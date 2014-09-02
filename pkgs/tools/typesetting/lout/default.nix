@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   builder = ./builder.sh;
 
   meta = {
-    description = "Lout, a document layout system similar in style to LaTeX";
+    description = "Document layout system similar in style to LaTeX";
 
     longDescription = ''
       The Lout document formatting system is now reads a high-level

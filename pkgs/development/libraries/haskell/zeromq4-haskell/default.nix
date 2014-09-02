@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "zeromq4-haskell";
-  version = "0.6";
-  sha256 = "1n8vvlwnmvi2hlqhkmzsqgpbpxnhdcs8jy3rj1srsg729m2aqc8y";
+  version = "0.6.1";
+  sha256 = "14ai6sp39qv6kmj33basnvvfqhzbiqxskv3crjwfdaxbijh23mif";
   buildDepends = [ async exceptions semigroups transformers ];
   testDepends = [
     async QuickCheck tasty tastyHunit tastyQuickcheck

@@ -100,4 +100,5 @@ in
     v0_11_24 = "1hygn81iwbdshzrq603qm6k1r7pjflx9qqazmlb72c3vy1hq21c6";
     v0_11_25 = "1abszivlxf0sddwvcj3jywfsip5q9vz6axvn40qqyl8sjs80zcvj";
     v0_11_26 = "1pfjdwrxhqz1vqcdm42g3j45ghrb4yl7wsngvraclhgqicff1sc3";
+    v0_11_29 = "1z07phfwryfy2155p3lxcm2a33h20sfl96lds5dghn157x6csz7m";
   }

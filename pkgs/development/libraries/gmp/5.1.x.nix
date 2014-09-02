@@ -29,7 +29,7 @@ stdenv.mkDerivation (rec {
 
   meta = with stdenv.lib; {
     homepage = "http://gmplib.org/";
-    description = "GMP, the GNU multiple precision arithmetic library";
+    description = "GNU multiple precision arithmetic library";
     license = licenses.gpl3Plus;
 
     longDescription =

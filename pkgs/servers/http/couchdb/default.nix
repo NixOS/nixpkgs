@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Apache CouchDB is a database that uses JSON for documents, JavaScript for MapReduce queries, and regular HTTP for an API";
+    description = "A database that uses JSON for documents, JavaScript for MapReduce queries, and regular HTTP for an API";
     homepage = "http://couchdb.apache.org";
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ viric garbas ];

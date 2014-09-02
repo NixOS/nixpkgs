@@ -36,30 +36,29 @@ let
       -o $out ${./options-to-docbook.xsl} ${optionsXML}
   '';
 
+  sources = sourceFilesBySuffices ./. [".xml"];
+
+  copySources =
+    ''
+      cp -prd $sources/* . # */
+      chmod -R u+w .
+      cp ${../../modules/services/databases/postgresql.xml} configuration/postgresql.xml
+      ln -s ${optionsDocBook} options-db.xml
+      echo "${version}" > version
+    '';
+
 in rec {
 
   # Generate the NixOS manual.
   manual = stdenv.mkDerivation {
     name = "nixos-manual";
 
-    sources = sourceFilesBySuffices ./. [".xml"];
+    inherit sources;
 
     buildInputs = [ libxml2 libxslt ];
 
-    xsltFlags = ''
-      --param section.autolabel 1
-      --param section.label.includes.component.label 1
-      --param html.stylesheet 'style.css'
-      --param xref.with.number.and.title 1
-      --param toc.section.depth 3
-      --param admon.style '''
-      --param callout.graphics.extension '.gif'
-    '';
-
     buildCommand = ''
-      ln -s $sources/*.xml . # */
-      ln -s ${optionsDocBook} options-db.xml
-      echo "${version}" > version
+      ${copySources}
 
       # Check the validity of the manual sources.
       xmllint --noout --nonet --xinclude --noxincludenode \
@@ -69,10 +68,20 @@ in rec {
       # Generate the HTML manual.
       dst=$out/share/doc/nixos
       mkdir -p $dst
-      xsltproc $xsltFlags --nonet --xinclude \
-        --output $dst/manual.html \
-        ${docbook5_xsl}/xml/xsl/docbook/xhtml/docbook.xsl \
-        ./manual.xml
+      xsltproc \
+        --param section.autolabel 1 \
+        --param section.label.includes.component.label 1 \
+        --stringparam html.stylesheet style.css \
+        --param xref.with.number.and.title 1 \
+        --param toc.section.depth 3 \
+        --stringparam admon.style "" \
+        --stringparam callout.graphics.extension .gif \
+        --param chunk.section.depth 0 \
+        --param chunk.first.sections 1 \
+        --param use.id.as.filename 1 \
+        --stringparam generate.toc "book toc chapter toc appendix toc" \
+        --nonet --xinclude --output $dst/ \
+        ${docbook5_xsl}/xml/xsl/docbook/xhtml/chunkfast.xsl ./manual.xml
 
       mkdir -p $dst/images/callouts
       cp ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.gif $dst/images/callouts/
@@ -90,7 +99,7 @@ in rec {
   manualPDF = stdenv.mkDerivation {
     name = "nixos-manual-pdf";
 
-    sources = sourceFilesBySuffices ./. [".xml"];
+    inherit sources;
 
     buildInputs = [ libxml2 libxslt dblatex tetex ];
 
@@ -98,9 +107,7 @@ in rec {
       # TeX needs a writable font cache.
       export VARTEXFONTS=$TMPDIR/texfonts
 
-      ln -s $sources/*.xml . # */
-      ln -s ${optionsDocBook} options-db.xml
-      echo "${version}" > version
+      ${copySources}
 
       dst=$out/share/doc/nixos
       mkdir -p $dst
@@ -117,13 +124,12 @@ in rec {
   manpages = stdenv.mkDerivation {
     name = "nixos-manpages";
 
-    sources = sourceFilesBySuffices ./. [".xml"];
+    inherit sources;
 
     buildInputs = [ libxml2 libxslt ];
 
     buildCommand = ''
-      ln -s $sources/*.xml . # */
-      ln -s ${optionsDocBook} options-db.xml
+      ${copySources}
 
       # Check the validity of the manual sources.
       xmllint --noout --nonet --xinclude --noxincludenode \

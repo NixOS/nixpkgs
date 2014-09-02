@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Mpage, many-to-one page printing utility";
+    description = "Many-to-one page printing utility";
 
     longDescription = ''
       Mpage reads plain text files or PostScript documents and prints

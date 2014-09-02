@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "libdnet provides a simplified, portable interface to several low-level networking routines";
+    description = "Provides a simplified, portable interface to several low-level networking routines";
     homepage = http://code.google.com/p/libdnet/;
     license = "BSD"; # New BSD license
     maintainers = [stdenv.lib.maintainers.marcweber];

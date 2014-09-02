@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cabal-bounds";
-  version = "0.8.4";
-  sha256 = "00vj6ca9liqlqg69d4ziacsxz6x9365sbyc1ag6g18bhibyinsh2";
+  version = "0.8.6";
+  sha256 = "0q7fpblhxba4np5a9igwmcvmkkvka9f85nccxw0m2lvwbjrs51xq";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

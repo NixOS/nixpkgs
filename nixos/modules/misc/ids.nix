@@ -141,6 +141,15 @@
       unifi = 131;
       gdm = 132;
       dhcpd = 133;
+      siproxd = 134;
+      mlmmj = 135;
+      neo4j = 136;
+      riemann = 137;
+      riemanndash = 138;
+      radvd = 139;
+      zookeeper = 140;
+      dnsmasq = 141;
+      uhub = 142;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -256,6 +265,11 @@
       docker = 131;
       gdm = 132;
       tss = 133;
+      siproxd = 134;
+      mlmmj = 135;
+      riemann = 137;
+      riemanndash = 138;
+      uhub = 142;
 
       # When adding a gid, make sure it doesn't match an existing uid. And don't use gids above 399!
 

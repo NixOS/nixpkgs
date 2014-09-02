@@ -35,11 +35,10 @@ fi
 # download the file and add it to the store.
 if test -z "$finalPath"; then
 
-    tmpPath=/tmp/hg-checkout-tmp-$$
-    tmpArchive=$tmpPath/hg-archive
-    mkdir $tmpPath
+    tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/hg-checkout-tmp-XXXXXXXX")"
+    trap "rm -rf \"$tmpPath\"" EXIT
 
-    trap "rm -rf $tmpPath" EXIT
+    tmpArchive="$tmpPath/hg-archive"
 
     # Perform the checkout.
     if [[ $url != /* ]]; then

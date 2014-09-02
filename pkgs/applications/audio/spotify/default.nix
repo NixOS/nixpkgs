@@ -148,7 +148,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = https://www.spotify.com/;
-    description = "Spotify for Linux allows you to play music from the Spotify music service";
+    description = "Play music from the Spotify music service";
     license = stdenv.lib.licenses.unfree;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };

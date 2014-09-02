@@ -13,7 +13,9 @@ cabal.mkDerivation (self: {
     homepage = "http://haskell.org/haskellwiki/Yi";
     description = "Add-ons to Yi, the Haskell-Scriptable Editor";
     license = "GPL";
+    broken = true;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
     maintainers = with self.stdenv.lib.maintainers; [ fuuzetsu ];
   };
 })

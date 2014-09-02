@@ -81,7 +81,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pulseaudioFull;
-        example = literalExample "pulseaudioFull";
+        example = literalExample "pkgs.pulseaudioFull";
         description = ''
           The PulseAudio derivation to use.  This can be used to disable
           features (such as JACK support, Bluetooth) that are enabled in the

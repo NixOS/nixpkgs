@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "lifted-async";
-  version = "0.2.0.1";
-  sha256 = "1x3qdgy0jkqx71xndjh769lw3wrwq63k2kc33pxn6x11yyklcf1j";
+  version = "0.2.0.2";
+  sha256 = "07sqgd3lxplfwrpys4jhz0068sx99765lpx8n4nj3k117z32slgf";
   buildDepends = [ async liftedBase monadControl transformersBase ];
   testDepends = [
     async HUnit liftedBase monadControl mtl tasty tastyHunit tastyTh

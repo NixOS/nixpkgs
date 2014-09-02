@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   + (lib.optionalString (gnutls != null) " --enable-gnutls=yes --enable-nss=no")
   ;
   meta = with stdenv.lib; {
-    description = "Pidgin IM - XMPP(Jabber), AIM/ICQ, IRC, SIP etc client";
+    description = "Multi-protocol instant messaging client";
     homepage = http://pidgin.im;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

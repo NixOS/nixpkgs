@@ -36,7 +36,7 @@
 
 let
   # -> http://get.adobe.com/flashplayer/
-  version = "11.2.202.394";
+  version = "11.2.202.400";
 
   src =
     if stdenv.system == "x86_64-linux" then
@@ -47,7 +47,7 @@ let
       else rec {
         inherit version;
         url = "http://fpdownload.macromedia.com/get/flashplayer/pdc/${version}/install_flash_player_11_linux.x86_64.tar.gz";
-        sha256 = "1w82kmda91xdsrqpkrbcbrzswnbfszy0x9hvf9wf2h14isimdknx";
+        sha256 = "043bzjcqxjkjk68kba5nk77m59k6g71h32bypjpnwaigdgbhafyl";
       }
     else if stdenv.system == "i686-linux" then
       if debug then {
@@ -58,7 +58,7 @@ let
       } else rec {
         inherit version;
         url = "http://fpdownload.macromedia.com/get/flashplayer/pdc/${version}/install_flash_player_11_linux.i386.tar.gz";
-        sha256 = "0c8wp4qn6k224krihxb08g7727wlklk9bl4h7nqp3cpp85x9hg97";
+        sha256 = "1xvfzm926rj0l2mq2kybrvykrv7bjfl3m7p5mvhj1586a3x1gb6h";
       }
     else throw "Flash Player is not supported on this platform";
 

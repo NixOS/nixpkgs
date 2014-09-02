@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     ];
 
   meta = {
-    description = "dvgrab, receive and store audio & video over IEEE1394";
+    description = "Receive and store audio & video over IEEE1394";
 
     longDescription =
       '' dvgrab receives audio and video data from a digital camcorder via an

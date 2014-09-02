@@ -19,6 +19,18 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DOPENSPADES_INSTALL_BINARY=bin" ];
 
+  enableParallelBuilding = true;
+
+  devPack = fetchurl {
+    url = "http://yvt.jp/files/programs/osppaks/DevPaks27.zip";
+    sha256 = "05y7wldg70v5ys41fm0c8kipyspn524z4pglwr3p8h0gfz9n52v6";
+  };
+
+  preBuild = ''
+    cp $devPack Resources/DevPaks27.zip
+    unzip -u -o Resources/DevPaks27.zip -d Resources/DevPak
+  '';
+
   # OpenAL is loaded dynamicly
   postInstall = 
     if withOpenal then ''
@@ -28,7 +40,7 @@ stdenv.mkDerivation rec {
     else null;
 
   meta = with stdenv.lib; {
-    description = "OpenSpades is a compatible client of Ace of Spades 0.75";
+    description = "A compatible client of Ace of Spades 0.75";
     homepage    = "https://github.com/yvt/openspades/";
     license     = licenses.gpl3;
     platforms   = platforms.linux;

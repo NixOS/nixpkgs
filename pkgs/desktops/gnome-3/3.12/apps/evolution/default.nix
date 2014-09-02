@@ -5,11 +5,11 @@
 , libcanberra_gtk3, bogofilter, gst_all_1, procps, p11_kit }:
 
 stdenv.mkDerivation rec {
-  name = "evolution-3.12.2";
+  name = "evolution-3.12.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/3.12/${name}.tar.xz";
-    sha256 = "60742334aaf1e3b9f044c2003c44a37be5905b166e24580e9e6e6c5ae1b9f948";
+    sha256 = "08y1qiydbbk4fq8rrql9sgbwsny8bwz6f7m5kbbj5zjqvf1baksj";
   };
 
   doCheck = true;

@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     description = "Leafnode implements a store & forward NNTP proxy";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;
+    broken = true; # The user check in the configure does not work in a chroot
   };
 }

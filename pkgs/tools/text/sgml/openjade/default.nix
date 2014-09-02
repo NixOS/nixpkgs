@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1l92sfvx1f0wmkbvzv1385y1gb3hh010xksi1iyviyclrjb7jb8x";
   };
 
+  patches = [ ./msggen.patch ];
+
   buildInputs = [ opensp perl ];
 
   configureFlags = [

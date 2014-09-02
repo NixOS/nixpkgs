@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = {
-    description = "SimGrid, a simulator for distributed applications in heterogeneous environments";
+    description = "Simulator for distributed applications in heterogeneous environments";
 
     longDescription =
       '' SimGrid is a toolkit that provides core functionalities for the

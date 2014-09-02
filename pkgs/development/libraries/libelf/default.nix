@@ -11,7 +11,7 @@ stdenv.mkDerivation (rec {
   doCheck = true;
 
   meta = {
-    description = "Libelf, an ELF object file access library";
+    description = "ELF object file access library";
 
     homepage = http://www.mr511.de/software/english.html;
 

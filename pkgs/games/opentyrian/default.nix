@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ";
 
   meta = {
-    description = ''OpenTyrian is an open source port of the game "Tyrian".'';
+    description = ''Open source port of the game "Tyrian"'';
     homepage = https://opentyrian.googlecode.com/;
     # This does not account of Tyrian data.
     # license = stdenv.lib.licenses.gpl2;

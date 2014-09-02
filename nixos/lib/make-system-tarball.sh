@@ -50,7 +50,7 @@ done
 
 mkdir -p $out/tarball
 
-tar cvJf $out/tarball/$fileName.tar.xz *
+tar cvJf $out/tarball/$fileName.tar.xz * $extraArgs
 
 mkdir -p $out/nix-support
 echo $system > $out/nix-support/system

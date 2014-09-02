@@ -100,6 +100,36 @@ let
         description = "The path to the user's shell.";
       };
 
+      subUidRanges = mkOption {
+        type = types.listOf types.optionSet;
+        default = [];
+        example = [
+          { startUid = 1000; count = 1; }
+          { startUid = 100001; count = 65534; }
+        ];
+        options = [ subordinateUidRange ];
+        description = ''
+          Subordinate user ids that user is allowed to use.
+          They are set into <filename>/etc/subuid</filename> and are used
+          by <literal>newuidmap</literal> for user namespaces.
+        '';
+      };
+
+      subGidRanges = mkOption {
+        type = types.listOf types.optionSet;
+        default = [];
+        example = [
+          { startGid = 100; count = 1; }
+          { startGid = 1001; count = 999; }
+        ];
+        options = [ subordinateGidRange ];
+        description = ''
+          Subordinate group ids that user is allowed to use.
+          They are set into <filename>/etc/subgid</filename> and are used
+          by <literal>newgidmap</literal> for user namespaces.
+        '';
+      };
+
       createHome = mkOption {
         type = types.bool;
         default = false;
@@ -211,6 +241,36 @@ let
 
   };
 
+  subordinateUidRange = {
+    startUid = mkOption {
+      type = types.int;
+      description = ''
+        Start of the range of subordinate user ids that user is
+        allowed to use.
+      '';
+    };
+    count = mkOption {
+      type = types.int;
+      default = 1;
+      description = ''Count of subordinate user ids'';
+    };
+  };
+
+  subordinateGidRange = {
+    startGid = mkOption {
+      type = types.int;
+      description = ''
+        Start of the range of subordinate group ids that user is
+        allowed to use.
+      '';
+    };
+    count = mkOption {
+      type = types.int;
+      default = 1;
+      description = ''Count of subordinate group ids'';
+    };
+  };
+
   getGroup = gname:
     let
       groups = mapAttrsToList (n: g: g) (
@@ -249,21 +309,35 @@ let
       u.description u.home u.shell
     ];
 
+  filterNull = a: filter (x: hasAttr a x && getAttr a x != null);
+
   sortOn = a: sort (as1: as2: lessThan (getAttr a as1) (getAttr a as2));
 
   groupFile = pkgs.writeText "group" (
     concatStringsSep "\n" (map (g: mkGroupEntry g.name) (
-      let f = g: g.gid != null; in
-        sortOn "gid" (filter f (attrValues cfg.extraGroups))
+      sortOn "gid" (filterNull "gid" (attrValues cfg.extraGroups))
     ))
   );
 
   passwdFile = pkgs.writeText "passwd" (
     concatStringsSep "\n" (map (u: mkPasswdEntry u.name) (
-      let f = u: u.createUser && (u.uid != null); in
-        sortOn "uid" (filter f (attrValues cfg.extraUsers))
+      sortOn "uid" (filterNull "uid" (attrValues cfg.extraUsers))
     ))
   );
+
+  mkSubuidEntry = user: concatStrings (
+    map (range: "${user.name}:${toString range.startUid}:${toString range.count}\n")
+        user.subUidRanges);
+
+  subuidFile = concatStrings (map mkSubuidEntry (
+    sortOn "uid" (filterNull "uid" (attrValues cfg.extraUsers))));
+
+  mkSubgidEntry = user: concatStrings (
+    map (range: "${user.name}:${toString range.startGid}:${toString range.count}\n")
+        user.subGidRanges);
+
+  subgidFile = concatStrings (map mkSubgidEntry (
+    sortOn "uid" (filterNull "uid" (attrValues cfg.extraUsers))));
 
   # If mutableUsers is true, this script adds all users/groups defined in
   # users.extra{Users,Groups} to /etc/{passwd,group} iff there isn't any
@@ -503,6 +577,15 @@ in {
 
     # for backwards compatibility
     system.activationScripts.groups = stringAfter [ "users" ] "";
+
+    environment.etc."subuid" = {
+      text = subuidFile;
+      mode = "0644";
+    };
+    environment.etc."subgid" = {
+      text = subgidFile;
+      mode = "0644";
+    };
 
     assertions = [
       { assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);

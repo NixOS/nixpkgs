@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://fricas.sourceforge.net/;
-    description = "Fricas CAS";
+    description = "An advanced computer algebra system";
     license = stdenv.lib.licenses.bsd3;
 
     hydraPlatforms = stdenv.lib.platforms.linux;

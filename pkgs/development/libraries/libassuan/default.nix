@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "Libassuan, the IPC library used by GnuPG and related software";
+    description = "IPC library used by GnuPG and related software";
 
     longDescription = ''
       Libassuan is a small library implementing the so-called Assuan

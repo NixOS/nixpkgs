@@ -46,7 +46,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Fuze for Linux";
+    description = "Internet and mobile based unified communications solutions (Linux client)";
     homepage = http://www.fuzebox.com;
     license = "unknown";
   };
