@@ -420,7 +420,7 @@ in
       })
       ++ flip map cfg.listenAddresses ({ addr, port }: {
         assertion = addr != null;
-        message = "addr must be spefied in each listenAddresses entry";
+        message = "addr must be specified in each listenAddresses entry";
       });
 
   };
