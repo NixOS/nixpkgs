@@ -15,6 +15,23 @@ let
   subsystemDevice = interface:
     "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
 
+  ipToInt = address: fold (num: octet: num * 256 + octet) 0 (splitString "." address);
+
+  subnetOf = addresss: prefixLength: fold (num: _: num * 2)
+    (fold (num: _: num / 2) (ipToInt address) (range 1 (32-prefixLength)))
+    (range 1 (32-prefixLength));
+
+  gatewayInterfaces = flatten (flip mapAttrsToList cfg.interfaces (name: data:
+    if any ({ address, prefixLength, ... }:
+        subnetOf address prefixLength == subnetOf cfg.defaultGateway prefixLength
+      )
+      (data.ip4 ++ data.routes4 ++ optional (data.ipAddress != null) {
+        address = data.ipAddress;
+        prefixLength = data.prefixLength;
+      })
+    then name else [ ]
+  ));
+
   addrOpts = v:
     assert v == 4 || v == 6;
     {
@@ -34,6 +51,36 @@ let
         '';
       };
     };
+
+  routeOpts = v: addrOpts v // {
+
+    type = mkOption {
+      default = null;
+      type = types.nullOr types.str;
+      description = ''
+        The type of route from the list of types.
+      '';
+    };
+
+    via = mkOption {
+      default = null;
+      type = types.nullOr types.str;
+      description = ''
+        Forward the packet to this ip address when routing packets for the
+        given network.
+      '';
+    };
+
+    window = mkOption {
+      default = null;
+      type = types.nullOr types.int;
+      description = ''
+        The window size of the route. It limits maximal data bursts that TCP peers
+        are allowed to send to us.
+      '';
+    };
+
+  };
 
   interfaceOpts = { name, ... }: {
 
@@ -68,6 +115,32 @@ let
         options = addrOpts 6;
         description = ''
           List of IPv6 addresses that will be statically assigned to the interface.
+        '';
+      };
+
+      routes4 = mkOption {
+        default = [ ];
+        example = [
+          { address = "10.0.0.0"; prefixLength = 16; }
+          { address = "192.168.2.0"; prefixLength = 24; via = "192.168.1.1"; }
+        ];
+        type = types.listOf types.optionSet;
+        options = routeOpts 4;
+        description = ''
+          List of IPv4 routes that will be statically assigned to the interface.
+        '';
+      };
+
+      routes6 = mkOption {
+        default = [ ];
+        example = [
+          { address = "fdfd:b3f0::"; prefixLength = 48; }
+          { address = "2001:1470:fffd:2098::"; prefixLength = 64; via = "fdfd:b3f0::1"; }
+        ];
+        type = types.listOf types.optionSet;
+        options = routeOpts 6;
+        description = ''
+          List of IPv6 routes that will be statically assigned to the interface.
         '';
       };
 
@@ -213,8 +286,9 @@ in
     };
 
     networking.defaultGateway = mkOption {
-      default = "";
+      default = null;
       example = "131.211.84.1";
+      type = types.nullOr types.str;
       description = ''
         The default gateway.  It can be left empty if it is auto-detected through DHCP.
       '';
@@ -492,8 +566,12 @@ in
 
   config = {
 
-    assertions =
-      flip map interfaces (i: {
+    assertions = [
+      {
+        assertion = cfg.defaultGateway != null -> length gatewayInterfaces == 1;
+        message = "Could not determine which interface communicates to the default gateway.";
+      }
+      ] ++ flip map interfaces (i: {
         assertion = i.subnetMask == null;
         message = "The networking.interfaces.${i.name}.subnetMask option is defunct. Use prefixLength instead.";
       });
@@ -568,14 +646,6 @@ in
                   fi
                 ''}
 
-                # Set the default gateway.
-                ${optionalString (cfg.defaultGateway != "") ''
-                  # FIXME: get rid of "|| true" (necessary to make it idempotent).
-                  ip route add default via "${cfg.defaultGateway}" ${
-                    optionalString (cfg.defaultGatewayWindowSize != null)
-                      "window ${cfg.defaultGatewayWindowSize}"} || true
-                ''}
-
                 # Turn on forwarding if any interface has enabled proxy_arp.
                 ${optionalString (any (i: i.proxyARP) interfaces) ''
                   echo 1 > /proc/sys/net/ipv4/ip_forward
@@ -604,6 +674,14 @@ in
                 address = i.ipv6Address;
                 prefixLength = i.ipv6PrefixLength;
               };
+            routes = i.routes4 ++ optionals cfg.enableIPv6 i.routes6
+              ++ optional (gatewayInterfaces != [ ]
+                && i.name == head gatewayInterfaces) {
+                  address = "default";
+                  type = null;
+                  via = cfg.defaultGateway;
+                  window = cfg.defaultGatewayWindowSize;
+                };
           in
           nameValuePair "${i.name}-cfg"
           { description = "Configuration of ${i.name}";
@@ -653,6 +731,24 @@ in
                     fi
                   fi
                 '')
+              + flip concatMapStrings (routes) (route:
+                let
+                  address = if route.address == "default" then "default"
+                    else "${route.address}/${toString route.prefixLength}";
+                  opts = optionalString (route.type != null) " type '${route.type}'"
+                    + optionalString (route.via != null) " via '${route.via}'"
+                    + optionalString (route.window != null) " window '${route.window}'";
+                in
+                ''
+                  echo "checking route ${address}..."
+                  if out=$(ip route add "${address}" dev "${i.name}"${opts} 2>&1); then
+                    echo "added route ${address}..."
+                    restart_network_setup=true
+                  elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
+                    echo "failed to add route ${address}"
+                    exit 1
+                  fi
+                '')
               + optionalString (ips != [ ])
                 ''
                   if [ restart_network_setup = true ]; then
@@ -672,6 +768,22 @@ in
                 '';
             preStop =
               ''
+                echo "releasing configured routes..."
+              ''
+              + flip concatMapStrings (routes) (route:
+                let
+                  address = if route.address == "default" then "default"
+                    else "${route.address}/${toString route.prefixLength}";
+                  opts = optionalString (route.type != null) " type '${route.type}'"
+                    + optionalString (route.via != null) " via '${route.via}'"
+                    + optionalString (route.window != null) " window '${route.window}'";
+                in
+                ''
+                  echo -n "Delete route ${address}..."
+                  ip route del "${address}" dev "${i.name}"${opts} >/dev/null 2>&1 || echo -n "Failed"
+                  echo ""
+                ''
+              ) + ''
                 echo "releasing configured ip's..."
               ''
               + flip concatMapStrings (ips) (ip:
