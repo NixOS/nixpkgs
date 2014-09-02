@@ -98,7 +98,7 @@ let
       # FIXME: OVMF doesn't boot from virtio http://www.mail-archive.com/edk2-devel@lists.sourceforge.net/msg01501.html
       iface = if useEFI || grubVersion == 1 then "scsi" else "virtio";
       qemuFlags =
-        (if iso.system == "x86_64-linux" then "-m 512 " else "-m 384 ") +
+        (if iso.system == "x86_64-linux" then "-m 768 " else "-m 512 ") +
         (optionalString (iso.system == "x86_64-linux") "-cpu kvm64 ") +
         (optionalString useEFI ''-L ${efiBios} -hda ''${\(Cwd::abs_path('harddisk'))} '');
       hdFlags = optionalString (!useEFI)
@@ -394,4 +394,78 @@ in {
           $machine->shutdown;
         '';
     };
+
+  # Test using labels to identify volumes in grub
+  simpleLabels = makeInstallerTest "simpleLabels" {
+    createPartitions = ''
+      $machine->succeed(
+        "sgdisk -Z /dev/vda",
+        "sgdisk -n 1:0:+1M -n 2:0:+1G -N 3 -t 1:ef02 -t 2:8200 -t 3:8300 -c 3:root /dev/vda",
+        "mkswap /dev/vda2 -L swap",
+        "swapon -L swap",
+        "mkfs.ext4 -L root /dev/vda3",
+        "mount LABEL=root /mnt",
+      );
+    '';
+    grubIdentifier = "label";
+  };
+
+  # Test using the provided disk name within grub
+  # TODO: Fix udev so the symlinks are unneeded in /dev/disks
+  simpleProvided = makeInstallerTest "simpleProvided" {
+    createPartitions = ''
+      my $UUID = "\$(blkid -s UUID -o value /dev/vda2)";
+      $machine->succeed(
+        "sgdisk -Z /dev/vda",
+        "sgdisk -n 1:0:+1M -n 2:0:+100M -n 3:0:+1G -N 4 -t 1:ef02 -t 2:8300 -t 3:8200 -t 4:8300 -c 2:boot -c 4:root /dev/vda",
+        "mkswap /dev/vda3 -L swap",
+        "swapon -L swap",
+        "mkfs.ext4 -L boot /dev/vda2",
+        "mkfs.ext4 -L root /dev/vda4",
+      );
+      $machine->execute("ln -s ../../vda2 /dev/disk/by-uuid/$UUID");
+      $machine->execute("ln -s ../../vda4 /dev/disk/by-label/root");
+      $machine->succeed(
+        "mount /dev/disk/by-label/root /mnt",
+        "mkdir /mnt/boot",
+        "mount /dev/disk/by-uuid/$UUID /mnt/boot"
+      );
+    '';
+    grubIdentifier = "provided";
+  };
+
+  # Simple btrfs grub testing
+  btrfsSimple = makeInstallerTest "btrfsSimple" {
+    createPartitions = ''
+      $machine->succeed(
+        "sgdisk -Z /dev/vda",
+        "sgdisk -n 1:0:+1M -n 2:0:+1G -N 3 -t 1:ef02 -t 2:8200 -t 3:8300 -c 3:root /dev/vda",
+        "mkswap /dev/vda2 -L swap",
+        "swapon -L swap",
+        "mkfs.btrfs -L root /dev/vda3",
+        "mount LABEL=root /mnt",
+      );
+    '';
+  };
+
+  # Test to see if we can detect /boot and /nix on subvolumes
+  btrfsSubvols = makeInstallerTest "btrfsSubvols" {
+    createPartitions = ''
+      $machine->succeed(
+        "sgdisk -Z /dev/vda",
+        "sgdisk -n 1:0:+1M -n 2:0:+1G -N 3 -t 1:ef02 -t 2:8200 -t 3:8300 -c 3:root /dev/vda",
+        "mkswap /dev/vda2 -L swap",
+        "swapon -L swap",
+        "mkfs.btrfs -L root /dev/vda3",
+        "btrfs device scan",
+        "mount LABEL=root /mnt",
+        "btrfs subvol create /mnt/boot",
+        "btrfs subvol create /mnt/nixos",
+        "umount /mnt",
+        "mount -o defaults,subvol=nixos LABEL=root /mnt",
+        "mkdir /mnt/boot",
+        "mount -o defaults,subvol=boot LABEL=root /mnt/boot",
+      );
+    '';
+  };
 }

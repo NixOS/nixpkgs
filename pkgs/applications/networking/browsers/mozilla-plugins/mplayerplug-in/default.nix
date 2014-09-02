@@ -8,9 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "0zkvqrzibrbljiccvz3rhbmgifxadlrfjylqpz48jnjx9kggynms";
   };
 
-  patches =
-    stdenv.lib.optional (browser ? isFirefox3Like) ./icecat3-idldir.patch;
-
   postConfigure =
     (if browser ? isFirefox3Like then ''
        # Cause a rebuild of these file from the IDL file, needed for GNU IceCat 3

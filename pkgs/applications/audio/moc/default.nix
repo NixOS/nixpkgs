@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "MOC (music on console) is a console audio player for LINUX/UNIX designed to be powerful and easy to use.";
+    description = "An ncurses console audio player designed to be powerful and easy to use";
     homepage = http://moc.daper.net/;
     license = stdenv.lib.licenses.gpl2;
   };

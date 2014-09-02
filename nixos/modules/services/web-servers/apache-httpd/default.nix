@@ -423,7 +423,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.apacheHttpd.override { mpm = mainCfg.multiProcessingModule; };
-        example = "pkgs.apacheHttpd_2_4";
+        example = literalExample "pkgs.apacheHttpd_2_4";
         description = ''
           Overridable attribute of the Apache HTTP Server package to use.
         '';

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "flvstreamer is an command-line RTMP client";
+    description = "Command-line RTMP client";
 
     longDescription =
       '' flvstreamer is an open source command-line RTMP client intended to 

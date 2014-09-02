@@ -1,11 +1,12 @@
 { stdenv, fetchurl, libewf, afflib, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "sleuthkit-3.2.2";
+  version = "4.1.3";
+  name = "sleuthkit-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/sleuthkit/${name}.tar.gz";
-    sha256 = "02hik5xvbgh1dpisvc3wlhhq1aprnlsk0spbw6h5khpbq9wqnmgj";
+    sha256 = "09q3ky4rpv18jasf5gc2hlivzadzl70jy4nnk23db1483aix5yb7";
   };
 
   enableParallelBuilding = true;
@@ -20,5 +21,6 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
     license = "IBM Public License";
+    inherit version;
   };
 }

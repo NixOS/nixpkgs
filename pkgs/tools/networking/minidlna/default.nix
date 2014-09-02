@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ffmpeg flac libvorbis libogg libid3tag libexif libjpeg sqlite ];
 
   meta = {
-    description = "MiniDLNA Media Server";
+    description = "Media server software";
     longDescription = ''
       MiniDLNA (aka ReadyDLNA) is server software with the aim of being fully
       compliant with DLNA/UPnP-AV clients.

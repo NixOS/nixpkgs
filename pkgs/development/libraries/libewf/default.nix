@@ -1,10 +1,11 @@
-{ fetchurl, stdenv, zlib, openssl, libuuid, file }:
+{ fetchurl, stdenv, zlib, openssl, libuuid, file, fuse }:
 
 stdenv.mkDerivation rec {
-  name = "libewf-20100226";
+  version = "20140608";
+  name = "libewf-${version}";
   src = fetchurl {
-    url = "mirror://sourceforge/libewf/${name}.tar.gz";
-    sha256 = "aedd2a6b3df6525ff535ab95cd569ebb361a4022eb4163390f26257913c2941a";
+    url = "https://googledrive.com/host/0B3fBvzttpiiSMTdoaVExWWNsRjg/libewf-20140608.tar.gz";
+    sha256 = "0wfsffzxk934hl8cpwr14w8ixnh8d23x0xnnzcspjwi2c7730h6i";
   };
 
   preConfigure = ''sed -e 's@/usr/bin/file@file@g' -i configure'';
@@ -14,6 +15,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Library for support of the Expert Witness Compression Format";
     homepage = http://sourceforge.net/projects/libewf/;
-    license = "free";
+    license = stdenv.lib.licenses.lgpl3;
+    maintainers = [ stdenv.lib.maintainers.raskin ] ;
+    inherit version;
   };
 }

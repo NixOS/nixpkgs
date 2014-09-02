@@ -1,7 +1,7 @@
 {stdenv, fetchurl
 , cmake, mesa, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
 , libpng, boost, doxygen, cairomm, pkgconfig, imagemagick, libjpeg, libtiff
-, gettext, intltool, perl, gtkmm, glibmm, gtkglext
+, gettext, intltool, perl, gtkmm, glibmm, gtkglext, pangox_compat, libXmu
 }:
 
 stdenv.mkDerivation rec {
@@ -13,11 +13,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # debian package source
-    ./disable_mutable_in_boost_gil.patch
     ./k3d_gtkmm224.patch
-    # http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/media-gfx/k3d/files/k3d-0.7.11.0-libpng14.patch
-    ./k3d-0.7.11.0-libpng14.patch
+    ./libpng-1.4.patch
   ];
 
   preConfigure = ''
@@ -29,10 +26,12 @@ stdenv.mkDerivation rec {
      cmake mesa zlib python expat libxml2 libsigcxx libuuid freetype libpng
      boost doxygen cairomm pkgconfig imagemagick libjpeg libtiff gettext
      intltool perl
-     gtkmm glibmm gtkglext
+     gtkmm glibmm gtkglext pangox_compat libXmu
     ];
 
-  doCheck = false;
+  #doCheck = false;
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "A 3D editor with support for procedural editing";

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "SQSH is command line tool for querying Sybase/MSSQL databases";
+    description = "Command line tool for querying Sybase/MSSQL databases";
     longDescription = 
       ''
       Sqsh (pronounced skwish) is short for SQshelL (pronounced s-q-shell),

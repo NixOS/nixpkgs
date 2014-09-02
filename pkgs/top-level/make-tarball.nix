@@ -14,14 +14,7 @@ releaseTools.sourceTarball rec {
   version = builtins.readFile ../../.version;
   versionSuffix = "pre${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
-  buildInputs = [
-    lzma
-    libxml2 # Needed for the release notes.
-    libxslt
-    w3m
-    nix # Needed to check whether the expressions are valid.
-    tetex dblatex
-  ];
+  buildInputs = [ nix ];
 
   configurePhase = ''
     eval "$preConfigure"
@@ -31,13 +24,6 @@ releaseTools.sourceTarball rec {
   '';
 
   dontBuild = false;
-
-  buildPhase = ''
-    echo "building docs..."
-    export VARTEXFONTS=$TMPDIR/texfonts
-    make -C doc docbookxsl=${docbook5_xsl}/xml/xsl/docbook
-    ln -s doc/NEWS.txt NEWS
-  '';
 
   doCheck = true;
 
@@ -87,19 +73,6 @@ releaseTools.sourceTarball rec {
     cp -prd . ../$releaseName
     echo nixpkgs > ../$releaseName/channel-name
     (cd .. && tar cfa $out/tarballs/$releaseName.tar.xz $releaseName) || false
-
-    mkdir -p $out/release-notes
-    cp doc/NEWS.html $out/release-notes/index.html
-    cp doc/style.css $out/release-notes/
-    echo "doc release-notes $out/release-notes" >> $out/nix-support/hydra-build-products
-
-    mkdir -p $out/manual
-    cp doc/manual.html $out/manual/index.html
-    cp doc/style.css $out/manual/
-    echo "doc manual $out/manual" >> $out/nix-support/hydra-build-products
-
-    cp doc/manual.pdf $out/manual.pdf
-    echo "doc-pdf manual $out/manual.pdf" >> $out/nix-support/hydra-build-products
   '';
 
   meta = {

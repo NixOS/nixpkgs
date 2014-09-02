@@ -39,7 +39,7 @@ assert withOnlineServices -> withTaglib;
 assert withReplaygain -> withTaglib;
 
 let
-  version = "1.3.4";
+  version = "1.4.1";
   pname = "cantata";
   fstat = x: fn: "-DENABLE_" + fn + "=" + (if x then "ON" else "OFF");
   fstats = x: map (fstat x);
@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     inherit name;
-    url = "https://drive.google.com/uc?export=download&id=0Bzghs6gQWi60WTYtaXk3c1IzNVU";
-    sha256 = "0ris41v44nwd68f3zis9n9lyyc089dyhlxp37rrzflanrc6glpwq";
+    url = "https://drive.google.com/uc?export=download&id=0Bzghs6gQWi60eXhuZ1Z3bGM2bjQ";
+    sha256 = "b0d5a1798efd275d72dffb87bc0f016fc865dbd1384b7c9af039cebdffe0cca3";
   };
 
   buildInputs =
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (withTaglib && !withKDE4 && withDevices) udisks2;
 
   unpackPhase = "tar -xvf $src";
-  sourceRoot = "cantata-1.3.4";
+  sourceRoot = "${name}";
 
   # Qt4 is implicit when KDE is switched off.
   cmakeFlags = stdenv.lib.flatten [

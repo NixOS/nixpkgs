@@ -1,5 +1,5 @@
 { stdenv, stdenv_32bit, fetchurl, unzip, makeWrapper
-, platformTools, buildTools, support, platforms, sysimages, addons
+, platformTools, buildTools, support, supportRepository, platforms, sysimages, addons
 , zlib_32bit
 , libX11_32bit, libxcb_32bit, libXau_32bit, libXdmcp_32bit, libXext_32bit, mesa_32bit, alsaLib_32bit
 , libX11, libXext, libXrender, libxcb, libXau, libXdmcp, libXtst, mesa, alsaLib
@@ -138,6 +138,15 @@ stdenv.mkDerivation rec {
       else ""}
       
     cd ..
+
+    # Symlink required extras
+
+    mkdir -p extras/android
+    cd extras/android
+
+    ln -s ${supportRepository}/m2repository
+
+    cd ../..
 
     # Symlink required platforms
    

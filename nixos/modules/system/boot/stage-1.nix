@@ -199,9 +199,6 @@ let
         { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
           symlink = "/etc/mdadm.conf";
         }
-        { object = config.environment.etc."modprobe.d/nixos.conf".source;
-          symlink = "/etc/modprobe.d/nixos.conf";
-        }
         { object = pkgs.stdenv.mkDerivation {
             name = "initrd-kmod-blacklist-ubuntu";
             builder = pkgs.writeText "builder.sh" ''

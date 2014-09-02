@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   preConfigure = "cp ${libtool}/share/libtool/config/config.sub .";
 
   meta = {
-    description = "GNU libxmi, a library for rasterizing 2-D vector graphics";
+    description = "Library for rasterizing 2-D vector graphics";
     homepage = http://www.gnu.org/software/libxmi/;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice

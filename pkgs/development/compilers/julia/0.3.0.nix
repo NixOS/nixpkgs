@@ -3,6 +3,9 @@
  , ncurses, libunistring, lighttpd, patchelf, openblas, liblapack
  , tcl, tk, xproto, libX11, git, mpfr, which
  } :
+
+assert stdenv.isLinux; 
+
 let
   realGcc = stdenv.gcc.gcc;
 in
@@ -33,7 +36,7 @@ stdenv.mkDerivation rec {
   openblas_src = fetchurl {
     url = "https://github.com/xianyi/OpenBLAS/tarball/${openblas_ver}";
     name = "openblas-${openblas_ver}.tar.gz";
-    sha256 = "19ffec70f9678f5c159feadc036ca47720681b782910fbaa95aa3867e7e86d8e";
+    sha256 = "06i0q4qnd5q5xljzrgvda0gjsczc6l2pl9hw6dn2qjpw38al73za";
   };
   arpack_src = fetchurl rec {
     url = "http://forge.scilab.org/index.php/p/arpack-ng/downloads/get/arpack-ng_${arpack_ver}.tar.gz";
@@ -42,7 +45,7 @@ stdenv.mkDerivation rec {
   lapack_src = fetchurl {
     url = "http://www.netlib.org/lapack/lapack-${lapack_ver}.tgz";
     name = "lapack-${lapack_ver}.tgz";
-    sha256 = "93b910f94f6091a2e71b59809c4db4a14655db527cfc5821ade2e8c8ab75380f";
+    sha256 = "0lk3f97i9imqascnlf6wr5mjpyxqcdj73pgj97dj2mgvyg9z1n4s";
   };
   lighttpd_src = fetchurl {
     url = "http://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-${lighttpd_ver}.tar.gz";
@@ -73,7 +76,7 @@ stdenv.mkDerivation rec {
     ];
 
   configurePhase = ''
-    for i in GMP LLVM PCRE LAPACK OPENBLAS BLAS READLINE FFTW LIBUNWIND SUITESPARSE GLPK LIGHTTPD ZLIB MPFR;
+    for i in GMP LLVM PCRE READLINE FFTW LIBUNWIND SUITESPARSE GLPK LIGHTTPD ZLIB MPFR;
     do
       makeFlags="$makeFlags USE_SYSTEM_$i=1 "
     done
@@ -82,12 +85,13 @@ stdenv.mkDerivation rec {
       cp "$1" "$2/$(basename "$1" | sed -e 's/^[a-z0-9]*-//')"
     }
 
-    for i in "${grisu_src}" "${dsfmt_src}" "${arpack_src}" "${patchelf_src}" "${pcre_src}" "${utf8proc_src}"; do
+    for i in "${grisu_src}" "${dsfmt_src}" "${arpack_src}" "${patchelf_src}" \
+        "${pcre_src}" "${utf8proc_src}" "${lapack_src}" "${openblas_src}"; do
       copy_kill_hash "$i" deps
     done
 
     ${if realGcc ==null then "" else 
-    ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${realGcc}/lib -L${realGcc}/lib64 -lpcre -llapack -lm -lfftw3f -lfftw3 -lglpk -lunistring -lz -lgmp -lmpfr"''}
+    ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${realGcc}/lib -L${realGcc}/lib64 -lpcre -llapack -lm -lfftw3f -lfftw3 -lglpk -lunistring -lz -lgmp -lmpfr -lblas -lopenblas -L$out/lib"''}
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fPIC "
 
     export LDFLAGS="-L${suitesparse}/lib -L$out/lib/julia -Wl,-rpath,$out/lib/julia"
@@ -105,6 +109,14 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PWD/usr/lib:$PWD/usr/lib/julia"
 
     patchShebangs . contrib
+
+    export PATH="$PATH:${stdenv.gcc.libc}/sbin"
+
+    # ldconfig doesn't seem to ever work on NixOS; system-wide ldconfig cache
+    # is probably not what we want anyway on non-NixOS
+    sed -e "s@/sbin/ldconfig@true@" -i src/ccall.*
+
+    ln -s "${openblas}/lib/libopenblas.so" "$out/lib/libblas.so"
   '';
 
   preBuild = ''
@@ -126,7 +138,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  enableParallelBuilding = false;
+  dontStrip = true;
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     rm -f "$out"/lib/julia/sys.{so,dylib,dll}
@@ -138,6 +152,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = with stdenv.lib.platforms; linux;
-    broken = true;
+    broken = false;
   };
 }

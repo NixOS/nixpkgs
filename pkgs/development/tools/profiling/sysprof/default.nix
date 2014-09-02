@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://sysprof.com/;
-    description = "Sysprof, a system-wide profiler for Linux";
+    description = "System-wide profiler for Linux";
     license = stdenv.lib.licenses.gpl2Plus;
 
     longDescription = ''

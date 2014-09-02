@@ -30,6 +30,9 @@ while [ "$#" -gt 0 ]; do
             absolute_path=$(readlink -m $given_path)
             extraBuildFlags+=("$i" "/mnt$absolute_path")
             ;;
+        --root)
+            mountPoint="$1"; shift 1
+            ;;
         --show-trace)
             extraBuildFlags+=("$i")
             ;;

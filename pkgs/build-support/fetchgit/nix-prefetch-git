@@ -256,11 +256,11 @@ else
   # download the file and add it to the store.
   if test -z "$finalPath"; then
 
-      tmpPath=/tmp/git-checkout-tmp-$$
-      tmpFile=$tmpPath/git-export
-      mkdir $tmpPath $tmpFile
+      tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/git-checkout-tmp-XXXXXXXX")"
+      trap "rm -rf \"$tmpPath\"" EXIT
 
-      trap "rm -rf $tmpPath" EXIT
+      tmpFile="$tmpPath/git-export"
+      mkdir "$tmpFile"
 
       # Perform the checkout.
       clone_user_rev "$tmpFile" "$url" "$rev"

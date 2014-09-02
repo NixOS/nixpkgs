@@ -18,6 +18,6 @@ cabal.mkDerivation (self: {
     description = "Postscript backend for diagrams drawing EDSL";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.bergey ];
+    maintainers = with self.stdenv.lib.maintainers; [ bergey ];
   };
 })

@@ -1,5 +1,5 @@
 url http://sourceforge.net/projects/wine/files/Source/
-attribute_name wine_unstable
+attribute_name wineUnstable
 version_link '[.]tar[.][^./]+/download$'
 SF_redirect
 do_overwrite () {

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "OProfile, a system-wide profiler for Linux";
+    description = "System-wide profiler for Linux";
     longDescription = ''
       OProfile is a system-wide profiler for Linux systems, capable of
       profiling all running code at low overhead.  It consists of a

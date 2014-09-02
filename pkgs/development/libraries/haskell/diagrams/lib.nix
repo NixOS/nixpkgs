@@ -21,6 +21,6 @@ cabal.mkDerivation (self: {
     description = "Embedded domain-specific language for declarative graphics";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.bergey ];
+    maintainers = with self.stdenv.lib.maintainers; [ bergey ];
   };
 })

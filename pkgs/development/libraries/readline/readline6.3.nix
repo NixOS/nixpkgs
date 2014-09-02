@@ -18,7 +18,7 @@ stdenv.mkDerivation (rec {
     ];
 
   meta = {
-    description = "GNU Readline, a library for interactive line editing";
+    description = "Library for interactive line editing";
 
     longDescription = ''
       The GNU Readline library provides a set of functions for use by

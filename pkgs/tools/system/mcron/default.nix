@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "GNU mcron, a flexible implementation of `cron' in Guile";
+    description = "Flexible implementation of `cron' in Guile";
 
     longDescription = ''
       The GNU package mcron (Mellor's cron) is a 100% compatible

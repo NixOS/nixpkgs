@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   version = "2.0";
   sha256 = "02v698grn43bvikqhqiz9ys8x2amngdmhvl3i0ar9203p2x8q3pq";
   testDepends = [ doctest ];
+  noHaddock = self.stdenv.lib.versionOlder self.ghc.version "6.11";
   meta = {
     homepage = "http://github.com/peti/hsyslog";
     description = "FFI interface to syslog(3) from POSIX.1-2001";

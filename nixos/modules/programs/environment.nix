@@ -52,7 +52,7 @@ in
         STRIGI_PLUGIN_PATH = [ "${i}/lib/strigi/" ];
         QT_PLUGIN_PATH = [ "${i}/lib/qt4/plugins" "${i}/lib/kde4/plugins" ];
         QTWEBKIT_PLUGIN_PATH = [ "${i}/lib/mozilla/plugins/" ];
-        GTK_PATH = [ "${i}/lib/gtk-2.0" ];
+        GTK_PATH = [ "${i}/lib/gtk-2.0" "${i}/lib/gtk-3.0" ];
         XDG_CONFIG_DIRS = [ "${i}/etc/xdg" ];
         XDG_DATA_DIRS = [ "${i}/share" ];
         MOZ_PLUGIN_PATH = [ "${i}/lib/mozilla/plugins" ];
