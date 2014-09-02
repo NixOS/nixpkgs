@@ -11,7 +11,10 @@ let
       conf-file=/etc/dnsmasq-conf.conf
       resolv-file=/etc/dnsmasq-resolv.conf
     ''}
-      ${cfg.extraConfig}
+    ${flip concatMapStrings cfg.servers (server: ''
+      server=${server}
+    '')}
+    ${cfg.extraConfig}
   '';
 
 in
@@ -43,11 +46,9 @@ in
         default = [];
         example = [ "8.8.8.8" "8.8.4.4" ];
         description = ''
-          The parameter to dnsmasq -S.
+          The dns servers which dnsmasq should query.
         '';
       };
-
-
 
       extraConfig = mkOption {
         type = types.string;
@@ -67,8 +68,8 @@ in
 
   config = mkIf config.services.dnsmasq.enable {
 
-    environment.systemPackages = [ dnsmasq ]
-      ++ (if cfg.resolveLocalQueries then [ pkgs.openresolv ] else []);
+    networking.nameservers =
+      optional cfg.resolveLocalQueries "127.0.0.1";
 
     services.dbus.packages = [ dnsmasq ];
 
@@ -83,10 +84,14 @@ in
         description = "dnsmasq daemon";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
+        path = [ dnsmasq ];
+        preStart = ''
+          touch /etc/dnsmasq-{conf,resolv}.conf
+          dnsmasq --test
+        '';
         serviceConfig = {
           Type = "dbus";
           BusName = "uk.org.thekelleys.dnsmasq";
-          ExecStartPre = "${dnsmasq}/bin/dnsmasq --test";
           ExecStart = "${dnsmasq}/bin/dnsmasq -k --enable-dbus --user=dnsmasq -C ${dnsmasqConf}";
           ExecReload = "${dnsmasq}/bin/kill -HUP $MAINPID";
         };
