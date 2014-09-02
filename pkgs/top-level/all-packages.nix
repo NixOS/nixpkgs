@@ -3771,7 +3771,6 @@ let
   lua = lua5;
 
   lua51Packages = recurseIntoAttrs (callPackage ./lua-packages.nix { lua = lua5_1; });
-
   lua52Packages = recurseIntoAttrs (callPackage ./lua-packages.nix { lua = lua5_2; });
 
   luaPackages = lua52Packages;
@@ -7136,6 +7135,12 @@ let
   ejabberd = callPackage ../servers/xmpp/ejabberd {
     erlang = erlangR16;
   };
+
+  prosody = recurseIntoAttrs (
+    callPackage ../servers/xmpp/prosody {
+      lua5 = lua5_1;
+      inherit (lua51Packages) luasocket luasec luaexpat luafilesystem;
+  });
 
   elasticmq = callPackage ../servers/elasticmq { };
 
