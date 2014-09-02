@@ -1,12 +1,13 @@
 { stdenv, fetchurl, buildPythonPackage }:
 
 buildPythonPackage rec {
-  name = "getmail-4.43.0";
+  version = "4.46.0";
+  name = "getmail-${version}";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://pyropus.ca/software/getmail/old-versions/${name}.tar.gz";
-    sha256 = "0abcj4d2jp9y56c85kq7265d8wcij91w9lpzib9q6j9lcs4la8hy";
+    sha256 = "15rqmm25pq6ll8aaqh8h6pfdkpqs7y6yismb3h3w1bz8j292c8zl";
   };
 
   doCheck = false;
@@ -15,5 +16,9 @@ buildPythonPackage rec {
     description = "A program for retrieving mail";
     maintainers = [ stdenv.lib.maintainers.raskin stdenv.lib.maintainers.iElectric ];
     platforms = stdenv.lib.platforms.linux;
+
+    homepage = "http://pyropus.ca/software/getmail/";
+    inherit version;
+    updateWalker = true;
   };
 }
