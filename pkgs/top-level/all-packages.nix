@@ -933,6 +933,9 @@ let
 
   dotnetfx40 = callPackage ../development/libraries/dotnetfx40 { };
 
+  dolphinEmu = callPackage ../misc/emulators/dolphin-emu { };
+  dolphinEmuMaster = callPackage ../misc/emulators/dolphin-emu/master.nix { };
+
   dropbear = callPackage ../tools/networking/dropbear { };
 
   dtach = callPackage ../tools/misc/dtach { };
