@@ -48,9 +48,6 @@ stdenv.mkDerivation rec {
         done
       ''}
       
-      # Patch the path to the executable so that it can find sdkmanager.jar file
-      #sed -i -e 's|frameworkdir="\$progdir"|'"frameworkdir=$(echo $out/libexec/android-sdk-*/tools/lib)|" android
-      
       # The android script used SWT and wants to dynamically load some GTK+ stuff.
       # The following wrapper ensures that they can be found:
       wrapProgram `pwd`/android \
