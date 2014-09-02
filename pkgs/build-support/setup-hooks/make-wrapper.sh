@@ -97,9 +97,9 @@ filterExisting() {
 wrapProgram() {
     local prog="$1"
     local progBasename=$(basename $prog)
-    local hiddenDir="$(dirname $prog)/../wrapped-bin/.$progBasename-wrapped-bin"
-    mkdir -p $hiddenDir
-    local hidden="$(cd "$hiddenDir"; pwd)/$progBasename"
+    local hiddenDir=$(dirname $prog)/.$progBasename-wrapped-bin
+    local hidden=$hiddenDir/$progBasename
+    mkdir $hiddenDir
     mv $prog $hidden
     makeWrapper $hidden $prog "$@"
 }
