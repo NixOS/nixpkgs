@@ -1843,7 +1843,7 @@ rec {
       md5 = "21ab8fd729105487e6423b654d6c0860";
     };
 
-    propagatedBuildInputs = [ six requests ];
+    propagatedBuildInputs = [ six requests websocket_client ];
 
     # Version conflict
     doCheck = false;
@@ -9944,6 +9944,24 @@ rec {
       homepage = http://liw.fi/larch/;
       description = "Python B-tree library.";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
+    };
+  };
+
+
+  websocket_client = buildPythonPackage rec {
+    name = "websocket-client-0.17.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/w/websocket-client/${name}.tar.gz";
+      md5 = "c86591719085eaf4a01c2275e0c834fc";
+    };
+
+    propagatedBuildInputs = [ six backports_ssl_match_hostname_3_4_0_2 unittest2 argparse ];
+
+    meta = {
+      homepage = https://github.com/liris/websocket-client;
+      description = "Websocket client for python";
+      license = licenses.lgpl2;
     };
   };
 
