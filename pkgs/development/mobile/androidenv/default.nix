@@ -63,8 +63,38 @@ rec {
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
+
+  androidsdk_2_3_3 = androidsdk {
+    platformVersions = [ "10" ];
+    abiVersions = [ "armeabi-v7a" ];
+    useGoogleAPIs = true;
+  };
+  
+  androidsdk_3_0 = androidsdk {
+    platformVersions = [ "11" ];
+    abiVersions = [ "armeabi-v7a" ];
+    useGoogleAPIs = true;
+  };
+  
+  androidsdk_3_1 = androidsdk {
+    platformVersions = [ "12" ];
+    abiVersions = [ "armeabi-v7a" ];
+    useGoogleAPIs = true;
+  };
+  
+  androidsdk_3_2 = androidsdk {
+    platformVersions = [ "13" ];
+    abiVersions = [ "armeabi-v7a" ];
+    useGoogleAPIs = true;
+  };
   
   androidsdk_4_0 = androidsdk {
+    platformVersions = [ "14" ];
+    abiVersions = [ "armeabi-v7a" ];
+    useGoogleAPIs = true;
+  };
+  
+  androidsdk_4_0_3 = androidsdk {
     platformVersions = [ "15" ];
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
