@@ -753,6 +753,9 @@ let
 
   chkrootkit = callPackage ../tools/security/chkrootkit { };
 
+  chocolateDoom = callPackage ../games/chocolate-doom { };
+  chocolateDoomMaster = callPackage ../games/chocolate-doom/master.nix { };
+
   chrony = callPackage ../tools/networking/chrony { };
 
   chunkfs = callPackage ../tools/filesystems/chunkfs { };
