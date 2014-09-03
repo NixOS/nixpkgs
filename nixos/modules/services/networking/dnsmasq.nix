@@ -46,7 +46,7 @@ in
         default = [];
         example = [ "8.8.8.8" "8.8.4.4" ];
         description = ''
-          The dns servers which dnsmasq should query.
+          The DNS servers which dnsmasq should query.
         '';
       };
 
