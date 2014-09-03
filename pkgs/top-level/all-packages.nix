@@ -2262,6 +2262,8 @@ let
 
   tinc = callPackage ../tools/networking/tinc { };
 
+  tinc_pre = callPackage ../tools/networking/tinc/pre.nix { };
+
   tiny8086 = callPackage ../applications/virtualization/8086tiny { };
 
   tmpwatch = callPackage ../tools/misc/tmpwatch  { };
