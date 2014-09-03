@@ -39,7 +39,7 @@ in
 
       serviceConfig = {
         ExecStart = "${pkgs.phabricator}/phabricator/bin/phd start";
-        ExecStop = "${pkgs.phabricator}/phabricator/bin/phd start";
+        ExecStop = "${pkgs.phabricator}/phabricator/bin/phd stop";
         User = "wwwrun";
         RestartSec = "30s";
         Restart = "always";
