@@ -7,6 +7,9 @@
 #   * nix-env -p /nix/var/nix/profiles/system -i <nix-expr for the configuration>
 #   * install the boot loader
 
+# Ensure a consistent umask.
+umask 0022
+
 # Re-exec ourselves in a private mount namespace so that our bind
 # mounts get cleaned up automatically.
 if [ "$(id -u)" = 0 ]; then
