@@ -906,7 +906,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   ghcjsCodemirror = callPackage ../development/libraries/haskell/ghcjs-codemirror {};
 
   ghcMod_4_1_6 = callPackage ../development/libraries/haskell/ghc-mod/4.1.6.nix { inherit (pkgs) emacs; };
-  ghcMod_5_0_1_1 = callPackage ../development/libraries/haskell/ghc-mod/5.0.1.1.nix { inherit (pkgs) emacs; };
+  ghcMod_5_0_1_2 = callPackage ../development/libraries/haskell/ghc-mod/5.0.1.2.nix { inherit (pkgs) emacs; };
   ghcMod = self.ghcMod_4_1_6;
 
   ghcMtl = callPackage ../development/libraries/haskell/ghc-mtl {};
