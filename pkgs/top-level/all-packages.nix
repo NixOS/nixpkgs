@@ -1394,6 +1394,8 @@ let
 
   jnettop = callPackage ../tools/networking/jnettop { };
 
+  john = callPackage ../tools/security/john { };
+
   jq = callPackage ../development/tools/jq {};
 
   jscoverage = callPackage ../development/tools/misc/jscoverage { };
