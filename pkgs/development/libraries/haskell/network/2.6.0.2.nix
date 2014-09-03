@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "network";
-  version = "2.6.0.1";
-  sha256 = "0qfffsdbvrf9gs8wr9ps7iv5h6drz4vb2ja9rprmc7ypswsacxsq";
+  version = "2.6.0.2";
+  sha256 = "12b7saam5ga6l4cplgkad49xa4vkynz2ri9jxidx1cxiqjcl0vc4";
   testDepends = [ HUnit testFramework testFrameworkHunit ];
   meta = {
     homepage = "https://github.com/haskell/network";
