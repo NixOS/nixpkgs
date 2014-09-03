@@ -46,9 +46,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ openssh ];
 
   meta = {
-    description = "
-      Provides Python bindings for the Message Passing Interface standard.
-    ";
+    description =
+      "Provides Python bindings for the Message Passing Interface standard";
     homepage = "http://code.google.com/p/mpi4py/";
     license = stdenv.lib.licenses.bsd3;
   };
