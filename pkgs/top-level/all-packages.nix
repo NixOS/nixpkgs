@@ -10821,6 +10821,8 @@ let
 
       kdiff3 = callPackage ../tools/text/kdiff3 { };
 
+      kgraphviewer = callPackage ../applications/graphics/kgraphviewer { };
+
       kile = callPackage ../applications/editors/kile { };
 
       kmplayer = callPackage ../applications/video/kmplayer { };
@@ -10854,6 +10856,8 @@ let
       libmm-qt = callPackage ../development/libraries/libmm-qt { };
 
       libnm-qt = callPackage ../development/libraries/libnm-qt { };
+
+      massif-visualizer = callPackage ../development/tools/analysis/massif-visualizer { }; 
 
       networkmanagement = callPackage ../tools/networking/networkmanagement { };
 
