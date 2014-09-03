@@ -8356,7 +8356,8 @@ let
   bitcoind = callPackage ../applications/misc/bitcoin { gui = false; };
 
   altcoins = recurseIntoAttrs (
-    callPackage ../applications/misc/bitcoin/altcoins.nix {}
+    (callPackage ../applications/misc/bitcoin/altcoins.nix {}) //
+    (callPackage ../applications/misc/bitcoin/dogecoin.nix {})
   );
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee {
