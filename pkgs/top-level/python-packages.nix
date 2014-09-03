@@ -4734,6 +4734,25 @@ rec {
     };
   });
 
+  moretools = buildPythonPackage rec {
+    name = "moretools-0.1a41";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/m/moretools/${name}.tar.gz";
+      sha256 = "1n442wprbl3cmg08233m1sr3g4z0i8hv9g6bhch7kzdmbl21399f";
+    };
+
+    buildInputs = [ six pathpy setuptools ];
+    propagatedBuildInputs = [ decorator ];
+
+    meta = with stdenv.lib; {
+      description = "Many more basic tools for python 2/3 extending itertools, functools, operator and collections";
+      homepage = https://bitbucket.org/userzimmermann/python-moretools;
+      license = licenses.gpl3Plus;
+      platforms = platforms.linux;
+    };
+  };
+
 
   mox = buildPythonPackage rec {
     name = "mox-0.5.3";
