@@ -11434,6 +11434,7 @@ let
   putty = callPackage ../applications/networking/remote/putty { };
 
   retroarch = callPackage ../misc/emulators/retroarch { };
+  retroarchMaster = callPackage ../misc/emulators/retroarch/master.nix { };
 
   rssglx = callPackage ../misc/screensavers/rss-glx { };
 
