@@ -260,7 +260,7 @@ in
         if cfg.devices == [] then
           throw "You must set the option ‘boot.loader.grub.device’ to make the system bootable."
         else
-          "PERL5LIB=${makePerlPath [ pkgs.perlPackages.XMLLibXML pkgs.perlPackages.XMLSAX ]} " +
+          "PERL5LIB=${makePerlPath (with pkgs.perlPackages; [ FileSlurp XMLLibXML XMLSAX ])} " +
           "${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig}";
 
       system.build.grub = grub;

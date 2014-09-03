@@ -6,6 +6,7 @@ use File::Basename;
 use File::Path;
 use File::stat;
 use File::Copy;
+use File::Slurp;
 use POSIX;
 use Cwd;
 
@@ -70,14 +71,48 @@ struct(Fs => {
     type => '$',
     mount => '$',
 });
+sub PathInMount {
+    my ($path, $mount) = @_;
+    my @splitMount = split /\//, $mount;
+    my @splitPath = split /\//, $path;
+    if ($#splitPath < $#splitMount) {
+        return 0;
+    }
+    for (my $i = 0; $i <= $#splitMount; $i++) {
+        if ($splitMount[$i] ne $splitPath[$i]) {
+            return 0;
+        }
+    }
+    return 1;
+}
 sub GetFs {
     my ($dir) = @_;
-    my ($status, @dfOut) = runCommand("df -T $dir");
-    if ($status != 0 || $#dfOut != 1) {
-        die "Failed to retrieve output about $dir from `df`";
+    my $bestFs = Fs->new(device => "", type => "", mount => "");
+    foreach my $fs (read_file("/proc/self/mountinfo")) {
+        chomp $fs;
+        my @fields = split / /, $fs;
+        my $mountPoint = $fields[4];
+        next unless -d $mountPoint;
+        my @mountOptions = split /,/, $fields[5];
+
+        # Skip the optional fields.
+        my $n = 6; $n++ while $fields[$n] ne "-"; $n++;
+        my $fsType = $fields[$n];
+        my $device = $fields[$n + 1];
+        my @superOptions = split /,/, $fields[$n + 2];
+
+        # Skip the read-only bind-mount on /nix/store.
+        next if $mountPoint eq "/nix/store" && (grep { $_ eq "rw" } @superOptions) && (grep { $_ eq "ro" } @mountOptions);
+
+        # Ensure this matches the intended directory
+        next unless PathInMount($dir, $mountPoint);
+
+        # Is it better than our current match?
+        if (length($mountPoint) > length($bestFs->mount)) {
+            $bestFs = Fs->new(device => $device, type => $fsType, mount => $mountPoint);
+        }
     }
-    my @boot = split(/[ \n\t]+/, $dfOut[1]);
-    return Fs->new(device => $boot[0], type => $boot[1], mount => $boot[6]);
+    return $bestFs;
 }
 struct (Grub => {
     path => '$',
