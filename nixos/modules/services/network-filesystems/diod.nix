@@ -79,7 +79,7 @@ in
         default = 16;
         description = ''
           Sets the (fixed) number of worker threads created to handle 9P
-          requests for a unique aname. The default is 16 per aname.
+          requests for a unique aname.
         '';
       };
 
@@ -88,7 +88,6 @@ in
         default = false;
         description = ''
           Allow clients to connect without authentication, i.e. without a valid MUNGE credential.
-          Default is false.
         '';
       };
 
@@ -98,7 +97,6 @@ in
         description = ''
           This option disables password/group lookups. It allows any uid to attach and
           assumes gid=uid, and supplementary groups contain only the primary gid.
-          Default is false
         '';
       };
 
@@ -108,7 +106,6 @@ in
         description = ''
           Remap all users to "nobody". The attaching user need not be present in the
           password file.
-          Default is true
         '';
       };
 
@@ -116,8 +113,7 @@ in
         type = types.str;
         default = "nobody";
         description = ''
-          Change the squash user from the default of "nobody". The squash user must be
-          present in the password file.
+          Change the squash user. The squash user must be present in the password file.
         '';
       };
 
@@ -126,8 +122,7 @@ in
         default = "syslog:daemon:err";
         description = ''
           Set the destination for logging.
-          DEST is in the form of "syslog:facility:level" or "filename".
-          The default is "syslog:daemon:err".
+          The value has the form of "syslog:facility:level" or "filename".
         '';
       };
 
@@ -137,7 +132,7 @@ in
         default = false;
         description = ''
           This option configures statfs to return the host file system's type
-          rather than V9FS_MAGIC. The default is false (return V9FS_MAGIC).
+          rather than V9FS_MAGIC.
         '';
       };
 
