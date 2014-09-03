@@ -2266,7 +2266,7 @@ rec {
   jsonwatch = buildPythonPackage rec {
     name = "jsonwatch-0.2.0";
 
-    disabled = isPyPy;
+    disabled = isPyPy; # doesn't find setuptools
 
     src = fetchurl {
       url = "https://github.com/dbohdan/jsonwatch/archive/v0.2.0.tar.gz";
