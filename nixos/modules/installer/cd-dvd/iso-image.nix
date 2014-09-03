@@ -11,7 +11,7 @@ let
   # The Grub image.
   grubImage = pkgs.runCommand "grub_eltorito" {}
     ''
-      ${pkgs.grub2}/bin/grub-mkimage -O i386-pc -o tmp biosdisk iso9660 help linux linux16 chain png jpeg echo gfxmenu reboot
+      ${pkgs.grub2}/bin/grub-mkimage -p /boot/grub -O i386-pc -o tmp biosdisk iso9660 help linux linux16 chain png jpeg echo gfxmenu reboot
       cat ${pkgs.grub2}/lib/grub/*/cdboot.img tmp > $out
     ''; # */
 
