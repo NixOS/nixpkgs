@@ -146,13 +146,6 @@ in {
 
       users.extraGroups.pulse.gid = gid;
 
-      users.extraGroups.pulse-access = {
-        gid = ids.gids.pulse-access;
-        members = with builtins; config.users.extraGroups.audio.members ++ (
-          attrNames(filterAttrs (n: u: elem "audio" u.extraGroups) config.users.extraUsers)
-        );
-      };
-
       systemd.services.pulseaudio = {
         description = "PulseAudio System-Wide Server";
         wantedBy = [ "sound.target" ];

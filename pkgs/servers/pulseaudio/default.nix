@@ -45,10 +45,15 @@ stdenv.mkDerivation rec {
        -e "s|chmod r+s |true |"
   '';
 
-  configureFlags =
-    [ "--disable-solaris" "--disable-jack" "--disable-oss-output"
-      "--disable-oss-wrapper" "--localstatedir=/var" "--sysconfdir=/etc" ]
-    ++ stdenv.lib.optional jackaudioSupport "--enable-jack"
+  configureFlags = [
+    "--disable-solaris"
+    "--disable-jack"
+    "--disable-oss-output"
+    "--disable-oss-wrapper"
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    "--with-access-group=audio"
+  ] ++ stdenv.lib.optional jackaudioSupport "--enable-jack"
     ++ stdenv.lib.optional stdenv.isDarwin "--with-mac-sysroot=/";
 
   enableParallelBuilding = true;
