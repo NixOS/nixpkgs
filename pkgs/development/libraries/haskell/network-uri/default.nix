@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
     HUnit network testFramework testFrameworkHunit
     testFrameworkQuickcheck2
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/haskell/network-uri";
     description = "URI manipulation";
