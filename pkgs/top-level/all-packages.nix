@@ -6085,24 +6085,24 @@ let
       else stdenv;
   };
 
-  qt48Full = qt48.override {
+  qt48Full = appendToName "full" (qt48.override {
     docs = true;
     demos = true;
     examples = true;
     developerBuild = true;
-  };
+  });
 
   qt4SDK = qtcreator.override {
     sdkBuild = true;
     qtLib = qt48Full;
   };
 
-  qt53Full = qt53.override {
+  qt53Full = appendToName "full" (qt53.override {
     buildDocs = true;
     buildExamples = true;
     buildTests = true;
     developerBuild = true;
-  };
+  });
 
   qt53 = callPackage ../development/libraries/qt-5/qt-5.3.nix {
     mesa = mesa_noglu;
@@ -6120,12 +6120,12 @@ let
     bison = bison2; # error: too few arguments to function 'int yylex(...
   };
 
-  qt5Full = qt5.override {
+  qt5Full = appendToName "full" (qt5.override {
     buildDocs = true;
     buildExamples = true;
     buildTests = true;
     developerBuild = true;
-  };
+  });
 
   qt5SDK = qtcreator.override {
     sdkBuild = true;
