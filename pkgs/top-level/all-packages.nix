@@ -6293,6 +6293,8 @@ let
 
   sphinxbase = callPackage ../development/libraries/sphinxbase { };
 
+  sphinxsearch = callPackage ../servers/search/sphinxsearch { };
+
   spice = callPackage ../development/libraries/spice {
     celt = celt_0_5_1;
     inherit (xlibs) libXrandr libXfixes libXext libXrender libXinerama;
