@@ -34,9 +34,8 @@ buildPythonPackage rec {
     ;
 
   meta = {
-    description = "
-      The h5py package is a Pythonic interface to the HDF5 binary data format.
-    ";
+    description =
+      "Provides a Pythonic interface to the HDF5 binary data format";
     homepage = "http://www.h5py.org/";
     license = stdenv.lib.licenses.bsd2;
   };
