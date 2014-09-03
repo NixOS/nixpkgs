@@ -7280,6 +7280,26 @@ rec {
   };
 
 
+  robotframework-tools = buildPythonPackage rec {
+    version = "0.1a115";
+    name = "robotframework-tools-${version}";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/r/robotframework-tools/${name}.tar.gz";
+      sha256 = "04gkn1zpf3rsvbqdxrrjqqi8sa0md9gqwh6n5w2m03fdwjg4lc7q";
+    };
+
+    propagatedBuildInputs = [ robotframework moretools pathpy six setuptools ];
+
+    meta = with stdenv.lib; {
+      description = "Python Tools for Robot Framework and Test Libraries";
+      homepage = http://bitbucket.org/userzimmermann/robotframework-tools;
+      license = licenses.gpl3;
+      platforms = platforms.linux;
+    };
+  };
+
+
   robotsuite = buildPythonPackage rec {
     version = "1.4.2";
     name = "robotsuite-${version}";
