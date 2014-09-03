@@ -22,6 +22,13 @@ let
     url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
     sha256 = "0s0qfff6n6282q28nwwblp5x295zd6n71kl43xj40vgvdqxv0fxx";
   };
+
+  po_src = fetchurl {
+    name = "grub-2.02-beta2.tar.gz";
+    url = "http://alpha.gnu.org/gnu/grub/grub-2.02~beta2.tar.gz";
+    sha256 = "1lr9h3xcx0wwrnkxdnkfjwy08j7g7mdlmmbdip2db4zfgi69h0rm";
+  };
+
 in (
 
 assert efiSupport -> canEfi;
@@ -61,7 +68,10 @@ stdenv.mkDerivation rec {
     '';
 
   prePatch =
-    '' sh autogen.sh
+    '' tar zxf ${po_src} grub-2.02~beta2/po
+       rm -rf po
+       mv grub-2.02~beta2/po po
+       sh autogen.sh
        gunzip < "${unifont_bdf}" > "unifont.bdf"
        sed -i "configure" \
            -e "s|/usr/src/unifont.bdf|$PWD/unifont.bdf|g"
