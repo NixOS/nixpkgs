@@ -39,8 +39,6 @@ stdenv.mkDerivation rec {
     rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
-  patches = [ ./fix_files_loss.patch ];
-
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Videos;
     description = "Movie player for the GNOME desktop based on GStreamer";
