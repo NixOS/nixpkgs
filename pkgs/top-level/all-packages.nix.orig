@@ -2262,8 +2262,6 @@ let
 
   tinc = callPackage ../tools/networking/tinc { };
 
-  tinc_pre = callPackage ../tools/networking/tinc/pre.nix { };
-
   tiny8086 = callPackage ../applications/virtualization/8086tiny { };
 
   tmpwatch = callPackage ../tools/misc/tmpwatch  { };
@@ -6087,24 +6085,24 @@ let
       else stdenv;
   };
 
-  qt48Full = appendToName "full" (qt48.override {
+  qt48Full = qt48.override {
     docs = true;
     demos = true;
     examples = true;
     developerBuild = true;
-  });
+  };
 
   qt4SDK = qtcreator.override {
     sdkBuild = true;
     qtLib = qt48Full;
   };
 
-  qt53Full = appendToName "full" (qt53.override {
+  qt53Full = qt53.override {
     buildDocs = true;
     buildExamples = true;
     buildTests = true;
     developerBuild = true;
-  });
+  };
 
   qt53 = callPackage ../development/libraries/qt-5/qt-5.3.nix {
     mesa = mesa_noglu;
@@ -6122,12 +6120,12 @@ let
     bison = bison2; # error: too few arguments to function 'int yylex(...
   };
 
-  qt5Full = appendToName "full" (qt5.override {
+  qt5Full = qt5.override {
     buildDocs = true;
     buildExamples = true;
     buildTests = true;
     developerBuild = true;
-  });
+  };
 
   qt5SDK = qtcreator.override {
     sdkBuild = true;
@@ -6292,8 +6290,6 @@ let
   speex = callPackage ../development/libraries/speex { };
 
   sphinxbase = callPackage ../development/libraries/sphinxbase { };
-
-  sphinxsearch = callPackage ../servers/search/sphinxsearch { };
 
   spice = callPackage ../development/libraries/spice {
     celt = celt_0_5_1;
@@ -9780,8 +9776,6 @@ let
 
   bittorrentSync = callPackage ../applications/networking/bittorrentsync { };
 
-  copy-com = callPackage ../applications/networking/copy-com { };
-
   dropbox = callPackage ../applications/networking/dropbox { };
 
   dropbox-cli = callPackage ../applications/networking/dropbox-cli { };
@@ -10229,13 +10223,6 @@ let
 
   gxneur = callPackage ../applications/misc/gxneur  {
     inherit (gnome) libglade GConf;
-  };
-
-  xiphos = callPackage ../applications/misc/xiphos {
-    gconf = gnome2.GConf;
-    inherit (gnome2) gtkhtml libgtkhtml libglade scrollkeeper;
-    python = python27;
-    webkitgtk = webkitgtk2;
   };
 
   xournal = callPackage ../applications/graphics/xournal {
