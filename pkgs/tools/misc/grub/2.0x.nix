@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autogen, flex, bison, python, autoconf, automake
+{ stdenv, fetchurl, fetchgit, autogen, flex, bison, python, autoconf, automake
 , gettext, ncurses, libusb, freetype, qemu, devicemapper
 , linuxPackages ? null
 , efiSupport ? false
@@ -14,9 +14,9 @@ let
 
   canEfi = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) efiSystems);
 
-  prefix = "grub${if efiSupport then "-efi" else ""}";
+  prefix = "grub${if efiSupport then "-efi" else ""}${optionalString zfsSupport "-zfs"}";
 
-  version = "2.02-beta2";
+  version = "2.02-git-1de3a4";
 
   unifont_bdf = fetchurl {
     url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
@@ -30,10 +30,10 @@ assert zfsSupport -> linuxPackages != null && linuxPackages.zfs != null;
 stdenv.mkDerivation rec {
   name = "${prefix}-${version}";
 
-  src = fetchurl {
-    name = "grub-2.02-beta2.tar.xz";
-    url = "http://alpha.gnu.org/gnu/grub/grub-2.02~beta2.tar.xz";
-    sha256 = "13a13fhc0wf473dn73zhga15mjvkg6vqp4h25dxg4n7am2r05izn";
+  src = fetchgit {
+    url = "git://git.savannah.gnu.org/grub.git";
+    rev = "1de3a48098053aaebd35232bd73e3ce3f3fdf51c";
+    sha256 = "0d1953nmi251czkm1dmd7vnm3iz2rkqbznlp6ph33va0d7kw1kfc";
   };
 
   nativeBuildInputs = [ autogen flex bison python autoconf automake ];
