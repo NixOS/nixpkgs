@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt
   ];
 
+  patches = [ ./multiple_mounts.patch ];
+
   # for btrfs to get the rpath to libgcc_s, needed for pthread_cancel to work
   NIX_CFLAGS_LINK = "-lgcc_s";
 
