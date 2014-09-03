@@ -8164,6 +8164,8 @@ let
 
   posix_man_pages = callPackage ../data/documentation/man-pages-posix { };
 
+  proggyfonts = callPackage ../data/fonts/proggyfonts { };
+
   pthreadmanpages = callPackage ../data/documentation/pthread-man-pages { };
 
   shared_mime_info = callPackage ../data/misc/shared-mime-info { };
