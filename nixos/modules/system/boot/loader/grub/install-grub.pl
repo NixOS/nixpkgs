@@ -135,7 +135,7 @@ sub GrubFs {
             if ($fs->type eq 'btrfs') {
                 my ($status, @id_info) = runCommand("btrfs subvol show @{[$fs->mount]}");
                 if ($status != 0) {
-                    die "Failed to retreive subvolume info for @{[$fs->mount]}\n";
+                    die "Failed to retrieve subvolume info for @{[$fs->mount]}\n";
                 }
                 my @ids = join("", @id_info) =~ m/Object ID:[ \t\n]*([^ \t\n]*)/;
                 if ($#ids > 0) {
