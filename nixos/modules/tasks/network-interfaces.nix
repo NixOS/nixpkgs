@@ -1,6 +1,7 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
+with utils;
 
 let
 
@@ -9,6 +10,10 @@ let
   hasVirtuals = any (i: i.virtual) interfaces;
   hasSits = cfg.sits != { };
   hasBonds = cfg.bonds != { };
+
+  # We must escape interfaces due to the systemd interpretation
+  subsystemDevice = interface:
+    "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
 
   addrOpts = v:
     assert v == 4 || v == 6;
@@ -603,8 +608,8 @@ in
           nameValuePair "${i.name}-cfg"
           { description = "Configuration of ${i.name}";
             wantedBy = [ "network-interfaces.target" ];
-            bindsTo = [ "sys-subsystem-net-devices-${i.name}.device" ];
-            after = [ "sys-subsystem-net-devices-${i.name}.device" ];
+            bindsTo = [ (subsystemDevice i.name) ];
+            after = [ (subsystemDevice i.name) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute pkgs.gawk ];
@@ -684,7 +689,7 @@ in
           { description = "Virtual Network Interface ${i.name}";
             requires = [ "dev-net-tun.device" ];
             after = [ "dev-net-tun.device" ];
-            wantedBy = [ "network.target" "sys-subsystem-net-devices-${i.name}.device" ];
+            wantedBy = [ "network.target" (subsystemDevice i.name) ];
             path = [ pkgs.iproute ];
             serviceConfig = {
               Type = "oneshot";
@@ -702,10 +707,10 @@ in
 
         createBridgeDevice = n: v: nameValuePair "${n}-netdev"
           (let
-            deps = map (i: "sys-subsystem-net-devices-${i}.device") v.interfaces;
+            deps = map subsystemDevice v.interfaces;
           in
           { description = "Bridge Interface ${n}";
-            wantedBy = [ "network.target" "sys-subsystem-net-devices-${n}.device" ];
+            wantedBy = [ "network.target" (subsystemDevice n) ];
             bindsTo = deps;
             after = deps;
             serviceConfig.Type = "oneshot";
@@ -742,10 +747,10 @@ in
 
         createBondDevice = n: v: nameValuePair "${n}-netdev"
           (let
-            deps = map (i: "sys-subsystem-net-devices-${i}.device") v.interfaces;
+            deps = map subsystemDevice v.interfaces;
           in
           { description = "Bond Interface ${n}";
-            wantedBy = [ "network.target" "sys-subsystem-net-devices-${n}.device" ];
+            wantedBy = [ "network.target" (subsystemDevice n) ];
             bindsTo = deps;
             after = deps;
             serviceConfig.Type = "oneshot";
@@ -781,10 +786,10 @@ in
 
         createSitDevice = n: v: nameValuePair "${n}-netdev"
           (let
-            deps = optional (v.dev != null) "sys-subsystem-net-devices-${v.dev}.device";
+            deps = optional (v.dev != null) (subsystemDevice v.dev);
           in
           { description = "6-to-4 Tunnel Interface ${n}";
-            wantedBy = [ "network.target" "sys-subsystem-net-devices-${n}.device" ];
+            wantedBy = [ "network.target" (subsystemDevice n) ];
             bindsTo = deps;
             after = deps;
             serviceConfig.Type = "oneshot";
@@ -807,10 +812,10 @@ in
 
         createVlanDevice = n: v: nameValuePair "${n}-netdev"
           (let
-            deps = [ "sys-subsystem-net-devices-${v.interface}.device" ];
+            deps = [ (subsystemDevice v.interface) ];
           in
           { description = "Vlan Interface ${n}";
-            wantedBy = [ "network.target" "sys-subsystem-net-devices-${n}.device" ];
+            wantedBy = [ "network.target" (subsystemDevice n) ];
             bindsTo = deps;
             after = deps;
             serviceConfig.Type = "oneshot";
