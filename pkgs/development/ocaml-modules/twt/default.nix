@@ -16,9 +16,9 @@ stdenv.mkDerivation {
     mkdir $out/bin
   '';
 
-  installPhase = ''
-    make install PREFIX=$out
-  '';
+  dontBuild = true;
+
+  installFlags = "PREFIX=$(out)";
 
   meta = {
     homepage = http://people.csail.mit.edu/mikelin/ocaml+twt/;
