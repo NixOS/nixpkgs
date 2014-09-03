@@ -5583,6 +5583,22 @@ rec {
     };
   };
 
+  pathpy = buildPythonPackage rec {
+    name = "path.py-5.2";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/path.py/${name}.zip";
+      sha256 = "0n1kpbbm1dg5f484yzxr7gb3ak6vjp92j70nw3bgjzsj9fh26afq";
+    };
+
+    meta = with stdenv.lib; {
+      description = "A module wrapper for os.path";
+      homepage = http://github.com/jaraco/path.py;
+      license = licenses.mit;
+      platforms = platforms.linux;
+    };
+  };
+
   paypalrestsdk = buildPythonPackage rec {
     name = "paypalrestsdk-0.7.0";
 
