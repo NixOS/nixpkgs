@@ -18,10 +18,10 @@ agda.mkDerivation (self: rec {
 
   topSourceDirectories = [ "src" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://wiki.portal.chalmers.se/agda/pmwiki.php?n=Libraries.StandardLibrary";
     description = "A standard library for use with the Agda compiler.";
     license = "unknown";
-    maintainers = with stdenv.lib.maintaianers; [ jwiegley ];
+    maintainers = with maintainers; [ jwiegley ];
   };
 })

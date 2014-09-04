@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     else
       fetchurl {
         url    = "https://dl.bintray.com/mitchellh/vagrant/vagrant_${version}_i686.deb";
-        sha256 = "1845sg2v9qas6obkkjtkmmamds901ik9rp2q2r6v75v69m0opvog";
+        sha256 = "047zij0lvrlpyg6icnp4knl0q87icsavbd2g98bkcp79yh2y91d0";
       };
 
   meta = with stdenv.lib; {
