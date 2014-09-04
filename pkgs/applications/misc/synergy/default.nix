@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://synergy-project.org/files/packages/${name}-r2398-Source.tar.gz";
-    sha256 = "19q8ck15f0jgpbzlm34dzp046wf3iiwa21s1qfyj5sj7xjxwa367";
+    sha256 = "c70cc5bbec47ea22bdc34107a1788cc37143c0fd8d8c4affba4f0257c26408a7";
   };
 
   patches = optional stdenv.isLinux ./cryptopp.patch;
