@@ -3,19 +3,21 @@
 
 assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
 
+let version = "1.6.4";
+in
 stdenv.mkDerivation rec {
-  name = "vagrant-1.6.3";
+  name = "vagrant-${version}";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url    = https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb;
-        sha256 = "1gmdg92dw7afnvpji0wg4nzr7vhk8mrmcqk3hcrkwscby2f2bhqg";
+        url    = "https://dl.bintray.com/mitchellh/vagrant/vagrant_${version}_x86_64.deb";
+        sha256 = "1f171d2yjs4p2kzlwcknx1k29qnjvaxizjrxp84ya3sfxvfckm92";
       }
     else
       fetchurl {
-        url    = https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_i686.deb;
-        sha256 = "1z26b6yghqgx8jbi2igf4kk4h6rzy869gli2vj7ayl7vbqdfvb60";
+        url    = "https://dl.bintray.com/mitchellh/vagrant/vagrant_${version}_i686.deb";
+        sha256 = "1845sg2v9qas6obkkjtkmmamds901ik9rp2q2r6v75v69m0opvog";
       };
 
   meta = with stdenv.lib; {
@@ -84,10 +86,10 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     # 'hide' the template file from shebang-patching
-    chmod -x $out/opt/vagrant/embedded/gems/gems/bundler-1.6.2/lib/bundler/templates/Executable
+    chmod -x $out/opt/vagrant/embedded/gems/gems/bundler-1.6.6/lib/bundler/templates/Executable
   '';
 
   postFixup = ''
-    chmod +x $out/opt/vagrant/embedded/gems/gems/bundler-1.6.2/lib/bundler/templates/Executable
+    chmod +x $out/opt/vagrant/embedded/gems/gems/bundler-1.6.6/lib/bundler/templates/Executable
   '';
 }
