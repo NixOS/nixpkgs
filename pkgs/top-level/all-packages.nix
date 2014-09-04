@@ -11273,6 +11273,40 @@ let
 
   xplanet = callPackage ../applications/science/astronomy/xplanet { };
 
+  ### SCIENCE / PHYSICS
+
+  geant4 = callPackage ../development/libraries/physics/geant4 {
+    enableMultiThreading = true; 
+    enableG3toG4         = false;
+    enableInventor       = false;
+    enableGDML           = false;
+    enableQT             = false;
+    enableXM             = false;
+    enableOpenGLX11      = true; 
+    enableRaytracerX11   = false;
+
+    # Optional system packages, otherwise internal GEANT4 packages are used. 
+    clhep = null; 
+    expat = expat;
+    zlib  = null; 
+
+    # For enableGDML.
+    xercesc = null; 
+
+    # For enableQT.
+    qt = null; # qt4SDK or qt5SDK
+
+    # For enableXM.
+    motif = null; # motif or lesstif
+
+    # For enableQT, enableXM, enableOpenGLX11, enableRaytracerX11.
+    mesa = mesa;
+    x11  = x11;
+    inherit (xlibs) libXmu;
+  };
+
+  g4py = callPackage ../development/libraries/physics/geant4/g4py { };
+
   ### MISC
 
   atari800 = callPackage ../misc/emulators/atari800 { };
