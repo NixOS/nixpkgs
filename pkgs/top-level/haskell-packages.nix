@@ -2072,6 +2072,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   regexCompatTdfa = callPackage ../development/libraries/haskell/regex-compat-tdfa {};
 
+  regexPcreBuiltin = callPackage ../development/libraries/haskell/regex-pcre-builtin {};
+
   regexPosix_0_72_0_3 = callPackage ../development/libraries/haskell/regex-posix/0.72.0.3.nix {};
   regexPosix_0_94_1 = callPackage ../development/libraries/haskell/regex-posix/0.94.1.nix {};
   regexPosix_0_94_2 = callPackage ../development/libraries/haskell/regex-posix/0.94.2.nix {};
