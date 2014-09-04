@@ -82,10 +82,14 @@ in
       options = {
         sourcePort = mkOption {
           type = types.int;
+          example = 8080;
+          description = "Source port of the external interface";
         };
 
         destination = mkOption {
           type = types.str;
+          example = "10.0.0.1:80";
+          description = "Forward tcp connection to destination ip:port";
         };
       };
 
