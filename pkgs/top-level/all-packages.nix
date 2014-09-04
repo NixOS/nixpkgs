@@ -10060,7 +10060,12 @@ let
     libpng = libpng12;
   };
 
+
   smartgithg = callPackage ../applications/version-management/smartgithg { };
+
+  slimThemes = recurseIntoAttrs (import ../applications/display-managers/slim/themes.nix {
+    inherit stdenv fetchurl slim;
+  });
 
   smartdeblur = callPackage ../applications/graphics/smartdeblur { };
 
