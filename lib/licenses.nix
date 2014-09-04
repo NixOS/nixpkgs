@@ -232,6 +232,11 @@ rec {
     fullName = "OpenSSL License";
   };
 
+  postgresql = spqd {
+    shortName = "PostgreSQL";
+    fullName = "PostgreSQL License";
+  };
+
   psfl = spdx {
     shortName = "Python-2.0";
     fullName = "Python Software Foundation License version 2";
