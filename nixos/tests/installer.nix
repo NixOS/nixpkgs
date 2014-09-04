@@ -35,7 +35,8 @@ let
 
 
   # The configuration to install.
-  makeConfig = { testChannel, useEFI, grubVersion, grubDevice, grubIdentifier }:
+  makeConfig = { testChannel, useEFI, grubVersion, grubDevice, grubIdentifier
+    , readOnly ? true, forceGrubReinstallCount ? 0 }:
     pkgs.writeText "configuration.nix" ''
       { config, pkgs, modulesPath, ... }:
 
@@ -56,6 +57,10 @@ let
           boot.loader.grub.extraConfig = "serial; terminal_output.serial";
           boot.loader.grub.fsIdentifier = "${grubIdentifier}";
         ''}
+
+        boot.loader.grub.configurationLimit = 100 + ${toString forceGrubReinstallCount};
+
+        ${optionalString (!readOnly) "nix.readOnlyStore = false;"}
 
         environment.systemPackages = [ ${optionalString testChannel "pkgs.rlwrap"} ];
       }
@@ -198,6 +203,11 @@ let
       $machine->succeed("type -tP ls | tee /dev/stderr") =~ /.nix-profile/
           or die "nix-env failed";
 
+      # We need to a writable nix-store on next boot
+      $machine->copyFileFromHost(
+          "${ makeConfig { inherit testChannel useEFI grubVersion grubDevice grubIdentifier; readOnly = false; forceGrubReinstallCount = 1; } }",
+          "/etc/nixos/configuration.nix");
+
       # Check whether nixos-rebuild works.
       $machine->succeed("nixos-rebuild switch >&2");
 
@@ -206,6 +216,15 @@ let
       $machine->succeed("nixos-option -d boot.initrd.kernelModules | grep 'List of modules'");
       $machine->succeed("nixos-option -l boot.initrd.kernelModules | grep qemu-guest.nix");
 
+      $machine->shutdown;
+
+      # Check whether a writable store build works
+      $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}" });
+      $machine->waitForUnit("multi-user.target");
+      $machine->copyFileFromHost(
+          "${ makeConfig { inherit testChannel useEFI grubVersion grubDevice grubIdentifier; readOnly = false; forceGrubReinstallCount = 2; } }",
+          "/etc/nixos/configuration.nix");
+      $machine->succeed("nixos-rebuild boot >&2");
       $machine->shutdown;
 
       # And just to be sure, check that the machine still boots after
