@@ -2892,7 +2892,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   # Compilers.
 
   Agda = callPackage ../development/compilers/agda {};
-  AgdaStdlib = callPackage ../development/compilers/agda/stdlib.nix {};
 
   uhc = callPackage ../development/compilers/uhc {};
 

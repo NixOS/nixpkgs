@@ -6586,6 +6586,18 @@ let
 
   zziplib = callPackage ../development/libraries/zziplib { };
 
+  ### DEVELOPMENT / LIBRARIES / AGDA
+
+  agda = callPackage ../build-support/agda {
+    glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
+    extension = self : super : {};
+    Agda = haskellPackages.Agda;
+    inherit writeScriptBin;
+  };
+
+  AgdaStdlib = callPackage ../development/compilers/agda/stdlib.nix {
+    ghcWithPackages = haskellPackages.ghcWithPackages;
+  };
 
   ### DEVELOPMENT / LIBRARIES / JAVA
 
