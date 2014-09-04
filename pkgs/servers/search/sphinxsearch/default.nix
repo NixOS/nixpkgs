@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, mysql,
+{ stdenv, fetchurl, pkgconfig,
   version ? "2.1.9",
   mainSrc ? fetchurl {
     url = "http://sphinxsearch.com/files/sphinx-${version}-release.tar.gz";
@@ -12,11 +12,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--program-prefix=sphinxsearch-"
+    "--without-mysql"
+    "--enable-id64"
   ];
 
-  buildInputs = [ 
+  buildInputs = [
     pkgconfig
-    mysql
   ];
 
   meta = {
