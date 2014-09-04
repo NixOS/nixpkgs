@@ -35,10 +35,7 @@ cabal.mkDerivation (self: {
   ];
   buildTools = [ bup curl git gnupg1 lsof openssh perl rsync which ];
   configureFlags = "-fAssistant -fProduction";
-  preConfigure = ''
-    export HOME="$NIX_BUILD_TOP/tmp"
-    mkdir "$HOME"
-  '';
+  preConfigure = "export HOME=$TEMPDIR";
   installPhase = "./Setup install";
   checkPhase = ''
     cp dist/build/git-annex/git-annex git-annex
