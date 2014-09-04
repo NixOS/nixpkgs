@@ -3031,13 +3031,19 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   cabal2nix = callPackage ../development/tools/haskell/cabal2nix {};
 
   # Build a cabal package given a local .cabal file
-  buildLocalCabalWithArgs = { src, name, args ? {}, cabalDrvArgs ? { jailbreak = true; } }: let
-    cabalExpr = pkgs.stdenv.mkDerivation ({
+  buildLocalCabalWithArgs = { src
+                            , name
+                            , args ? {}
+                            , cabalDrvArgs ? { jailbreak = true; }
+                            # for import-from-derivation, want to use current system
+                            , nativePkgs ? import pkgs.path {}
+                            }: let
+    cabalExpr = nativePkgs.stdenv.mkDerivation ({
       name = "${name}.nix";
 
       buildCommand = ''
       export HOME="$TMPDIR"
-      ${self.cabal2nix}/bin/cabal2nix ${src + "/${name}.cabal"} --sha256=FILTERME \
+      ${nativePkgs.haskellPackages.cabal2nix}/bin/cabal2nix ${src + "/${name}.cabal"} --sha256=FILTERME \
           | grep -v FILTERME | sed \
             -e 's/licenses.proprietary/licenses.unfree/' \
             -e 's/{ cabal/{ cabal, cabalInstall, cabalDrvArgs ? {}, src/' \
@@ -3046,9 +3052,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
             -e 's/pname = \([^\n]*\)/pname = \1\n  inherit src;\n/'  > $out
       '';
 
-    } // pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
+    } // pkgs.lib.optionalAttrs nativePkgs.stdenv.isLinux {
       LANG = "en_US.UTF-8";
-      LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
+      LOCALE_ARCHIVE = "${nativePkgs.glibcLocales}/lib/locale/locale-archive";
     });
   in callPackage cabalExpr ({ inherit src cabalDrvArgs; } // args);
 
