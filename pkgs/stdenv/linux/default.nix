@@ -169,8 +169,12 @@ rec {
       binutils = pkgs.binutils.override { gold = false; };
       inherit (stage0.pkgs) glibc;
 
-      # TODO(errge) This was accidentally like this historically, most probably not needed
-      perl = pkgs.perl.override { stdenv = stage1.stdenv.override { extraAttrs = { inherit platform; }; }; };
+      # A threaded perl build needs glibc/libpthread_nonshared.a,
+      # which is not included in bootstrapTools, so disable threading.
+      # This is not an issue for the final stdenv, because this perl
+      # won't be included in the final stdenv and won't be exported to
+      # top-level pkgs as an override either.
+      perl = pkgs.perl.override { enableThreading = false; };
     };
   };
 
