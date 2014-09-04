@@ -1480,6 +1480,8 @@ let
     inherit (perlPackages) mimeConstruct;
   };
 
+  logkeys = callPackage ../tools/security/logkeys { };
+
   logrotate = callPackage ../tools/system/logrotate { };
 
   logstalgia = callPackage ../tools/graphics/logstalgia {};
