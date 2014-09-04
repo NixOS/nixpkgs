@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     description = "A GitHub specific wrapper for git";
     homepage = "http://defunkt.io/hub/";
     license = stdenv.lib.licenses.mit;
+    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };
 }
