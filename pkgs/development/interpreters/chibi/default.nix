@@ -10,6 +10,7 @@ stdenv.mkDerivation {
     homepage = "https://code.google.com/p/chibi-scheme/";
     description = "Small Footprint Scheme for use as a C Extension Language";
     platforms = stdenv.lib.platforms.all;
+    license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.DerGuteMoritz ];
   };
 
