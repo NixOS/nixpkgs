@@ -855,6 +855,8 @@ let
     sslSupport = zlibSupport;
   };
 
+  curl_unix_socket = callPackage ../tools/networking/curl-unix-socket rec { };
+
   cunit = callPackage ../tools/misc/cunit { };
 
   curlftpfs = callPackage ../tools/filesystems/curlftpfs { };
