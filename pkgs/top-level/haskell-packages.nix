@@ -2139,6 +2139,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   robotsTxt = callPackage ../development/libraries/haskell/robots-txt {};
 
+  rope = callPackage ../development/libraries/haskell/rope {};
+
   rosezipper = callPackage ../development/libraries/haskell/rosezipper {};
 
   RSA = callPackage ../development/libraries/haskell/RSA {};
