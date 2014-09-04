@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   # reported upstream http://springrts.com/mantis/view.php?id=4305
   #enableParallelBuilding = true; # occasionally missing generated files on Hydra
 
+  NIX_CFLAGS_COMPILE = "-fpermissive"; # GL header minor incompatibility
+
   postInstall = ''
     wrapProgram "$out/bin/spring" \
       --prefix LD_LIBRARY_PATH : "${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib::${systemd}/lib"

@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
                       --replace "which %s" "${which}/bin/which %s"
   '';
   configureFlags = "--with-backend=qt --with-distributor=NixOS";
+
+  NIX_CFLAGS_COMPILE = "-fpermissive"; # GL header minor incompatibility
+
   postInstall = []
     ++ stdenv.lib.optional withVideos "cp ${sequences_src} $out/share/warzone2100/sequences.wz";
   meta = {
