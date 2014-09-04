@@ -3033,6 +3033,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
       name = "${name}.nix";
 
       buildCommand = ''
+      export HOME="$TMPDIR"
       ${self.cabal2nix}/bin/cabal2nix ${src + "/${name}.cabal"} --sha256=FILTERME \
           | grep -v FILTERME | sed \
             -e 's/licenses.proprietary/licenses.unfree/' \
