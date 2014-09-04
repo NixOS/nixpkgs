@@ -277,7 +277,11 @@ in
         '') config.boot.loader.grub.extraFiles);
 
     assertions = [{ assertion = !cfg.zfsSupport || cfg.version == 2;
-                    message = "Only grub version 2 provides zfs support";}];
+                    message = "Only grub version 2 provides zfs support";}]
+      ++ flip map cfg.devices (dev: {
+        assertion = hasPrefix "/" dev;
+        message = "Grub devices must be absolute paths, not ${dev}";
+      });
 
     })
 
