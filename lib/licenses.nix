@@ -232,7 +232,7 @@ rec {
     fullName = "OpenSSL License";
   };
 
-  postgresql = spqd {
+  postgresql = spdx {
     shortName = "PostgreSQL";
     fullName = "PostgreSQL License";
   };
