@@ -16,7 +16,7 @@ let
 
     nix = config.nix.package;
 
-    inherit (cfg) timeout;
+    timeout = if cfg.timeout != null then cfg.timeout else "";
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
   };
