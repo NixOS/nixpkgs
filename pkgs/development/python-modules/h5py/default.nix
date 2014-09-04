@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = {
     description =
-      "Provides a Pythonic interface to the HDF5 binary data format";
+      "Pythonic interface to the HDF5 binary data format";
     homepage = "http://www.h5py.org/";
     license = stdenv.lib.licenses.bsd2;
   };
