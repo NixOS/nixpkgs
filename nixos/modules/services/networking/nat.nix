@@ -76,9 +76,19 @@ in
     };
 
     networking.nat.forwardPorts = mkOption {
-      type = types.listOf types.attrs;
+      type = types.listOf types.optionSet;
       default = [];
       example = [ { sourcePort = 8080; destination = "10.0.0.1:80"; } ];
+      options = {
+        sourcePort = mkOption {
+          type = types.int;
+        };
+
+        destination = mkOption {
+          type = types.str;
+        };
+      };
+
       description =
         ''
           List of forwarded ports from the external interface to
