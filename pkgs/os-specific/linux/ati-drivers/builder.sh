@@ -8,7 +8,7 @@ die(){ echo $@; exit 1; }
 
 # custom unpack:
 unzip $src
-run_file=$(echo amd-catalyst-*)
+run_file=$(echo fglrx-*/amd-driver-installer-*)
 sh $run_file --extract .
 
 eval "$patchPhase"
@@ -60,7 +60,7 @@ setSMP(){
 }
 
 setModVersions(){
-  ! grep CONFIG_MODVERSIONS=y $kernel/config ||
+  ! grep CONFIG_MODVERSIONS=y $kernelBuild/.config ||
   def_modversions="-DMODVERSIONS"
   # make.sh contains much more code to determine this whether its enabled
 }

@@ -31,21 +31,3 @@ index d3ad3ce..9362b58 100755
 +# endif
  #endif
  }
- 
-
-diff -urN a/common/lib/modules/fglrx/build_mod/kcl_acpi.c common/lib/modules/fglrx/build_mod/kcl_acpi.c
---- a/common/lib/modules/fglrx/build_mod/kcl_acpi.c	2013-12-27 13:32:34.734832283 +0100
-+++ b/common/lib/modules/fglrx/build_mod/kcl_acpi.c	2013-12-27 13:33:31.849831765 +0100
-@@ -1002,7 +1002,11 @@
- #endif
-     {
-         return KCL_ACPI_ERROR;
--    }    
-+    }
-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,9,1)
-+    ((acpi_tbl_table_handler)handler)(hdr);
-+#else
-     ((acpi_table_handler)handler)(hdr);
-+#endif
-     return KCL_ACPI_OK;
- }

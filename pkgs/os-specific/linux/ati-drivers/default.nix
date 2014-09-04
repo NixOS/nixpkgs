@@ -26,7 +26,7 @@
 assert stdenv.system == "x86_64-linux";
 
 stdenv.mkDerivation {
-  name = "ati-drivers-13.12-${kernel.version}";
+  name = "ati-drivers-14.4-${kernel.version}";
 
   builder = ./builder.sh;
 
@@ -34,8 +34,8 @@ stdenv.mkDerivation {
   gcc = stdenv.gcc.gcc;
 
   src = fetchurl {
-    url = http://www2.ati.com/drivers/linux/amd-catalyst-13.12-linux-x86.x86_64.zip;
-    sha256 = "1c3fn328340by4qn99dgfj8c2q34fxdb2alcak0vnyc6bw7l5sms";
+    url = http://www2.ati.com/drivers/linux/amd-catalyst-14-4-rev2-linux-x86-x86-64-may6.zip;
+    sha256 = "1xbhn55yifis9b0lzb3s03hc1bcq8jmy7l96m4x8d842n7ji7qlk";
     curlOpts = "--referer http://support.amd.com/en-us/download/desktop?os=Linux%20x86_64";
   };
 
