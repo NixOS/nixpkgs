@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     "--with-sendmail=${sendmailPath}"
   ];
 
+  configureFlagsArray = [
+    "--with-passprompt=[sudo] password for %p: "  # intentional trailing space
+  ];
+
   postConfigure =
     ''
     cat >> pathnames.h <<'EOF'
