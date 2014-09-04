@@ -1,4 +1,16 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, enableThreading ? true }:
+
+# We can only compile perl with threading on platforms where we have a
+# real glibc in the stdenv.
+#
+# Instead of silently building an unthreaded perl if this is not the
+# case, we force callers to disableThreading explicitly, therefore
+# documenting the platforms where the perl is not threaded.
+#
+# In the case of stdenv linux boot stage1 it's not possible to use
+# threading because of the simpleness of the bootstrap glibc, so we
+# use enableThreading = false there.
+assert enableThreading -> (stdenv ? glibc);
 
 let
 
@@ -39,7 +51,7 @@ stdenv.mkDerivation rec {
       "-Dlocincpth=${libc}/include"
       "-Dloclibpth=${libc}/lib"
     ]
-    ++ optional (stdenv ? glibc) "-Dusethreads";
+    ++ optional enableThreading "-Dusethreads";
 
   configureScript = "${stdenv.shell} ./Configure";
 
