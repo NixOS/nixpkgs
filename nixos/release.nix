@@ -239,7 +239,7 @@ in rec {
   tests.kde4 = callTest tests/kde4.nix {};
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
   tests.login = callTest tests/login.nix {};
-  tests.logstash = callTest tests/logstash.nix {};
+  #tests.logstash = callTest tests/logstash.nix {};
   tests.misc = callTest tests/misc.nix {};
   tests.mumble = callTest tests/mumble.nix {};
   tests.munin = callTest tests/munin.nix {};
