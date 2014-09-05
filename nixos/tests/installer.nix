@@ -213,8 +213,8 @@ let
 
       # Test nixos-option.
       $machine->succeed("nixos-option boot.initrd.kernelModules | grep virtio_console");
-      $machine->succeed("nixos-option -d boot.initrd.kernelModules | grep 'List of modules'");
-      $machine->succeed("nixos-option -l boot.initrd.kernelModules | grep qemu-guest.nix");
+      $machine->succeed("nixos-option boot.initrd.kernelModules | grep 'List of modules'");
+      $machine->succeed("nixos-option  boot.initrd.kernelModules | grep qemu-guest.nix");
 
       $machine->shutdown;
 
