@@ -18,8 +18,8 @@ import ./make-test.nix {
              '';
            };
           };
+          systemd.services.munin-node.unitConfig.TimeoutSec = 240;
         };
-      systemd.services.munin-node.unitConfig.TimeoutSec = 240;
     };
 
   testScript = ''
