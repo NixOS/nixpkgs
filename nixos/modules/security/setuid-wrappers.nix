@@ -77,9 +77,7 @@ in
   config = {
 
     security.setuidPrograms =
-      [ "mount.nfs" "mount.nfs4" "mount.cifs"
-        "fusermount" "umount"
-        "wodim" "cdrdao" "growisofs" ];
+      [ "fusermount" "wodim" "cdrdao" "growisofs" ];
 
     system.activationScripts.setuid =
       let
