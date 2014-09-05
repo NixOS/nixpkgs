@@ -8,8 +8,6 @@ stdenv.mkDerivation {
     sha256 = "08y5qf75ssk4fnazyv2yz1c5zs7gjiwigaibv8yz1gbr290r0b52";
   };
 
-  buildInputs = [ dpkg ];
-  unpackPhase = "true";
   installPhase = ''
     make DESTDIR=$out install
     mv $out/usr/* $out #*/
