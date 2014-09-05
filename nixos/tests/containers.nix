@@ -67,7 +67,6 @@ import ./make-test.nix {
 
       # Execute commands via the root shell.
       $machine->succeed("nixos-container run $id1 -- uname") =~ /Linux/ or die;
-      $machine->succeed("nixos-container set-root-password $id1 foobar");
 
       # Destroy the containers.
       $machine->succeed("nixos-container destroy $id1");
