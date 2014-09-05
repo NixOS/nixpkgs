@@ -34,7 +34,7 @@ in rec {
       maintainers = [ pkgs.lib.maintainers.eelco pkgs.lib.maintainers.shlevy ];
     };
     constituents =
-      let all = x: [ x.x86_64-linux x.i686-linux ]; in
+      let all = x: map (p: x.${p}) supportedSystems; in
       [ nixos.channel
         (all nixos.manual)
 
