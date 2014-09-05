@@ -8641,9 +8641,9 @@ let
 
     darcsum = callPackage ../applications/editors/emacs-modes/darcsum { };
 
-    # ecb = callPackage ../applications/editors/emacs-modes/ecb { };
+    dash = callPackage ../applications/editors/emacs-modes/dash { };
 
-    jabber = callPackage ../applications/editors/emacs-modes/jabber { };
+    # ecb = callPackage ../applications/editors/emacs-modes/ecb { };
 
     emacsClangCompleteAsync = callPackage ../applications/editors/emacs-modes/emacs-clang-complete-async { };
 
@@ -8664,6 +8664,8 @@ let
     gist = callPackage ../applications/editors/emacs-modes/gist { };
 
     idris = callPackage ../applications/editors/emacs-modes/idris { };
+
+    jabber = callPackage ../applications/editors/emacs-modes/jabber { };
 
     jade = callPackage ../applications/editors/emacs-modes/jade { };
 
