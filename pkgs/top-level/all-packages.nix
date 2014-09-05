@@ -8653,6 +8653,8 @@ let
 
     emms = callPackage ../applications/editors/emacs-modes/emms { };
 
+    ensime = callPackage ../applications/editors/emacs-modes/ensime { };
+
     ess = callPackage ../applications/editors/emacs-modes/ess { };
 
     flymakeCursor = callPackage ../applications/editors/emacs-modes/flymake-cursor { };
