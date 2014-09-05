@@ -10,10 +10,12 @@ let
   systemWide = cfg.enable && cfg.systemWide;
   nonSystemWide = cfg.enable && !cfg.systemWide;
 
-  uid = config.ids.uids.pulseaudio;
-  gid = config.ids.gids.pulseaudio;
+  ids = config.ids;
 
-  stateDir = "/run/pulse";
+  uid = ids.uids.pulseaudio;
+  gid = ids.gids.pulseaudio;
+
+  stateDir = "/var/run/pulse";
 
   # Create pulse/client.conf even if PulseAudio is disabled so
   # that we can disable the autospawn feature in programs that
@@ -81,7 +83,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pulseaudioFull;
-        example = literalExample "pulseaudioFull";
+        example = literalExample "pkgs.pulseaudioFull";
         description = ''
           The PulseAudio derivation to use.  This can be used to disable
           features (such as JACK support, Bluetooth) that are enabled in the
@@ -138,6 +140,8 @@ in {
         group = "pulse";
         extraGroups = [ "audio" ];
         description = "PulseAudio system service user";
+        home = stateDir;
+        createHome = true;
       };
 
       users.extraGroups.pulse.gid = gid;
@@ -147,10 +151,6 @@ in {
         wantedBy = [ "sound.target" ];
         before = [ "sound.target" ];
         environment.PULSE_RUNTIME_PATH = stateDir;
-        preStart = ''
-          mkdir -p --mode 755 ${stateDir}
-          chown -R pulse:pulse ${stateDir}
-        '';
         serviceConfig = {
           ExecStart = "${cfg.package}/bin/pulseaudio -D --log-level=${cfg.daemon.logLevel} --system --use-pid-file -n --file=${cfg.configFile}";
           PIDFile = "${stateDir}/pid";

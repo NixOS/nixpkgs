@@ -35,7 +35,7 @@ fi
 # download the file and add it to the store.
 if test -z "$finalPath"; then
 
-    tmpPath="$(mktemp --tmpdir -d hg-checkout-tmp-XXXXXXXX)"
+    tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/hg-checkout-tmp-XXXXXXXX")"
     trap "rm -rf \"$tmpPath\"" EXIT
 
     tmpArchive="$tmpPath/hg-archive"

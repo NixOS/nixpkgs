@@ -83,6 +83,7 @@
 , "grunt-contrib-uglify"
 , "grunt-karma"
 , "grunt-sed"
+, "gulp"
 , "karma"
 , "karma-mocha"
 , "karma-coverage"
@@ -123,4 +124,5 @@
 , "sinon"
 , "shelljs"
 , "typescript"
+, "git-run"
 ]

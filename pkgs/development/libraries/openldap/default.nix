@@ -12,14 +12,16 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--enable-overlays"
+      "--disable-dependency-tracking"   # speeds up one-time build
     ] ++ stdenv.lib.optional (openssl == null) "--without-tls"
       ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl";
 
   dontPatchELF = 1; # !!!
 
-  meta = {
-    homepage = "http://www.openldap.org/";
+  meta = with stdenv.lib; {
+    homepage    = http://www.openldap.org/;
     description = "An open source implementation of the Lightweight Directory Access Protocol";
-    maintainers = stdenv.lib.maintainers.mornfall;
+    maintainers = with maintainers; [ lovek323 mornfall ];
+    platforms   = platforms.unix;
   };
 }

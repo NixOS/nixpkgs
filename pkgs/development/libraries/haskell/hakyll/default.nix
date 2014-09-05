@@ -5,13 +5,13 @@
 , HUnit, lrucache, mtl, network, pandoc, pandocCiteproc, parsec
 , QuickCheck, random, regexBase, regexTdfa, snapCore, snapServer
 , systemFilepath, tagsoup, testFramework, testFrameworkHunit
-, testFrameworkQuickcheck2, text, time
+, testFrameworkQuickcheck2, text, time, utillinux
 }:
 
 cabal.mkDerivation (self: {
   pname = "hakyll";
-  version = "4.5.3.0";
-  sha256 = "11ibpjff1zkihpxydlzvvzbgd1vxswi4c7g3lr0hhaaw89bikypy";
+  version = "4.5.4.0";
+  sha256 = "16srkm2fxjw1xg7zaikn49zz4xsz9awddnjm6ibv522k3xf3l24c";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -25,15 +25,16 @@ cabal.mkDerivation (self: {
     filepath fsnotify httpConduit httpTypes HUnit lrucache mtl network
     pandoc pandocCiteproc parsec QuickCheck random regexBase regexTdfa
     snapCore snapServer systemFilepath tagsoup testFramework
-    testFrameworkHunit testFrameworkQuickcheck2 text time
+    testFrameworkHunit testFrameworkQuickcheck2 text time utillinux
   ];
-  doCheck = false;
+  patchPhase = ''
+    sed -i -e 's|pandoc-citeproc .*,|pandoc-citeproc,|' hakyll.cabal
+  '';
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
     description = "A static website compiler library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
-    broken = true;
+    maintainers = with self.stdenv.lib.maintainers; [ fuuzetsu ];
   };
 })

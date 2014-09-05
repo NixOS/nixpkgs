@@ -2,6 +2,8 @@
 , cross ? null, gold ? true, bison ? null
 }:
 
+assert !stdenv.isDarwin;
+
 let basename = "binutils-2.23.1"; in
 
 with { inherit (stdenv.lib) optional optionals optionalString; };

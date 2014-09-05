@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "lv2-${version}";
-  version = "1.8.0";
+  version = "1.10.0";
 
   src = fetchurl {
     url = "http://lv2plug.in/spec/${name}.tar.bz2";
-    sha256 = "1mxkp7gajh1alw6s358cqwf3qkpr1ld9wfxwswnqrxcd9a7hxjd4";
+    sha256 = "1md41x9snrp4mcfyli7lyfpvcfa78nfy6xkdy84kppnl8m5qw378";
   };
 
   buildInputs = [ gtk libsndfile pkgconfig python ];

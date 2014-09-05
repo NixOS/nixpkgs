@@ -37,7 +37,7 @@ in {
 
     services.xserver.desktopManager.gnome3.sessionPath = mkOption {
       default = [];
-      example = "[ pkgs.gnome3.gpaste ]";
+      example = literalExample "[ pkgs.gnome3.gpaste ]";
       description = "Additional list of packages to be added to the session search path.
                      Useful for gnome shell extensions or gsettings-conditionated autostart.";
       apply = list: list ++ [ gnome3.gnome_shell ]; 
@@ -51,7 +51,7 @@ in {
     
     environment.gnome3.excludePackages = mkOption {
       default = [];
-      example = "[ pkgs.gnome3.totem ]";
+      example = literalExample "[ pkgs.gnome3.totem ]";
       type = types.listOf types.package;
       description = "Which packages gnome should exclude from the default environment";
     };

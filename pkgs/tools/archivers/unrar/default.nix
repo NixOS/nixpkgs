@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Utility for RAR archives";
-    license = "freeware";
+    license = stdenv.lib.licenses.unfree;
     maintainers = [ stdenv.lib.maintainers.emery ];
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin; # arbitrary
   };

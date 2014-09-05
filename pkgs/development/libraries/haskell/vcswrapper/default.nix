@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vcswrapper";
-  version = "0.0.4";
-  sha256 = "130pmzxdsqv703k2g197vd5rl60fwkqqv2xck66ygb932wsq3fnk";
+  version = "0.1.0";
+  sha256 = "058xbfgxsp3g4x4rwbp57dqgr9mwnmj623js39dbmiqkixsda31a";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ filepath hxt mtl parsec split text ];

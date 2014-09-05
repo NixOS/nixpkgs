@@ -41,7 +41,7 @@ fi
 # If we don't know the hash or a path with that hash doesn't exist,
 # download the file and add it to the store.
 if test -z "$finalPath"; then
-    tmpPath="$(mktemp --tmpdir -d svn-checkout-tmp-XXXXXXXX)"
+    tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/svn-checkout-tmp-XXXXXXXX")"
     trap "rm -rf \"$tmpPath\"" EXIT
 
     tmpFile="$tmpPath/$dstFile"

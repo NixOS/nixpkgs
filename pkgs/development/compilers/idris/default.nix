@@ -11,8 +11,8 @@
 
 cabal.mkDerivation (self: {
   pname = "idris";
-  version = "0.9.14.1";
-  sha256 = "11x4f0hvd51m9rlf9r0i5xsjmc73kjsayny4xyv0wgb88v9v737b";
+  version = "0.9.14.3";
+  sha256 = "03zppfqjamy4mdwcfx3x1wzxav67ha1zgnynrxhvdqw3zcsrwnlr";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

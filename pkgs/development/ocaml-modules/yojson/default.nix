@@ -4,16 +4,18 @@ let
   version = "1.1.8";
   webpage = "http://mjambon.com/${pname}.html";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
-  name = "${pname}-${version}";
+  name = "ocaml-${pname}-${version}";
 
   src = fetchurl {
-    url = "http://mjambon.com/releases/${pname}/${name}.tar.gz";
+    url = "http://mjambon.com/releases/${pname}/${pname}-${version}.tar.gz";
     sha256 = "0ayx17dimnpavdfyq6dk9xv2x1fx69by85vc6vl3nqxjkcv5d2rv";
   };
 
-  buildInputs = [ ocaml findlib cppo easy-format biniou ];
+  buildInputs = [ ocaml findlib ];
+
+  propagatedBuildInputs = [ cppo easy-format biniou ];
 
   createFindlibDestdir = true;
 

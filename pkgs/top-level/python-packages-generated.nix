@@ -5242,6 +5242,7 @@ in
     doCheck = true;
     buildInputs = [ self."nose-1.3.3" self."unittest2-0.5.1" self."pyquery-1.2.8" self."WSGIProxy2-0.4.1" self."PasteDeploy-1.5.2" self."mock-1.0.1" self."coverage-3.7.1" pkgs.unzip ];
     propagatedBuildInputs = [ self."beautifulsoup4-4.3.2" self."six-1.6.1" self."waitress-0.8.9" self."WebOb-1.4" ];
+    preConfigure = ''substituteInPlace setup.py --replace "nose<1.3.0" "nose"'';
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
     meta = {
       description = ''

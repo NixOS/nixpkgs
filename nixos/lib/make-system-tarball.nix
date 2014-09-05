@@ -15,6 +15,9 @@
   # store path whose closure will be copied, and `symlink' is a
   # symlink to `object' that will be added to the tarball.
   storeContents ? []
+
+  # Extra tar arguments
+, extraArgs ? ""
 }:
 
 stdenv.mkDerivation {
@@ -22,7 +25,7 @@ stdenv.mkDerivation {
   builder = ./make-system-tarball.sh;
   buildInputs = [perl xz];
 
-  inherit fileName pathsFromGraph;
+  inherit fileName pathsFromGraph extraArgs;
 
   # !!! should use XML.
   sources = map (x: x.source) contents;

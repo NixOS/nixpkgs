@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
+    sed -i 's/ON_SHUTDOWN=suspend/ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}/' $out/libexec/libvirt-guests.sh
     substituteInPlace $out/libexec/libvirt-guests.sh \
       --replace "$out/bin" "${gettext}/bin"
     wrapProgram $out/sbin/libvirtd \

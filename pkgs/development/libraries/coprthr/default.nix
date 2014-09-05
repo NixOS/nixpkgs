@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url    = "https://github.com/browndeer/coprthr/archive/stable-${version}.zip";
-    sha256 = "042aykmcxhdpck0j6k5rcp6a0b5i377fv2nz96v1bpfhzxd1mjwg";
+    sha256 = "0ilx4v1ydppjnq1i0z5j0x4lmi29z39sappar7c0wqady0b5dpz9";
   };
 
   buildInputs =
@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license     = stdenv.lib.licenses.lgpl3;
     platforms   = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    broken = true;
   };
 }

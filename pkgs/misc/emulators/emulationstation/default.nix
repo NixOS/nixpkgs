@@ -1,25 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, cmake, boost, eigen, freeimage, freetype
-, mesa, SDL, dejavu_fonts }:
+{ stdenv, fetchFromGitHub, pkgconfig, cmake, curl, boost, eigen
+, freeimage, freetype, mesa, SDL2, alsaLib, libarchive }:
 
 stdenv.mkDerivation rec {
   name = "emulationstation-${version}";
-  version = "1.0.2";
-  src = fetchurl {
-    url = "https://github.com/Aloshi/EmulationStation/archive/v${version}.tar.gz";
-    sha256 = "809d67aaa727809c1426fb543e36bb788ca6a3404f8c46dd1917088b57ab5f50";
+  version = "2.0.0-rc1";
+
+  src = fetchFromGitHub {
+    owner = "Aloshi";
+    repo = "EmulationStation";
+    rev = "8739519e1591819cab85e1d2056804d20c197dac";
+    sha256 = "1psq5cqyq2yy1lqxrcj7pfp8szfmzhamxf3111l97w2h2zzcgvq9";
   };
 
-  buildInputs = [ pkgconfig cmake boost eigen freeimage freetype mesa SDL ];
-
-  prePatch = ''
-    sed -i \
-      -e 's,/usr\(.*\)/ttf-dejavu\(.*\),${dejavu_fonts}\1\2,' src/Font.cpp
-  '';
+  buildInputs = [ pkgconfig cmake alsaLib boost curl eigen freeimage freetype libarchive mesa SDL2 ];
 
   buildPhase = "cmake . && make";
   installPhase = ''
-    mkdir -p $out/bin
-    mv ../emulationstation $out/bin/.
+    install -D ../emulationstation $out/bin/emulationstation
   '';
 
   meta = {

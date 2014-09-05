@@ -1,15 +1,14 @@
-{ stdenv, python27Packages, curaengine, makeDesktopItem, fetchgit }:
+{ stdenv, python27Packages, curaengine, makeDesktopItem, fetchurl }:
 let
     py = python27Packages;
+    version = "14.07";
 in
 stdenv.mkDerivation rec {
   name = "cura";
 
-  src = fetchgit {
-    url = "https://github.com/daid/Cura";
-    rev = "58414695269d60ca9b165e8cbc3424933ed79403";
-    sha256 = "1nxrrz8sjjx9i9cyvz15vay6yarnywp3vlk7qzr65sw88lzxgq23";
-    fetchSubmodules = false;
+  src = fetchurl {
+    url = "https://github.com/daid/Cura/archive/${version}.tar.gz";
+    sha256 = "1jfgkb2qh1syakcssk66yhnfjm9p9qcx48v34bbza9nryrdlmxdb";
   };
 
   desktopItem = makeDesktopItem {
@@ -67,5 +66,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/daid/Cura;
     license = licenses.agpl3;
     platforms = platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };
 }

@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Chart-diagrams";
-  version = "1.2.4";
-  sha256 = "099frqvfjqqc7h3zr52saqyg37di0klr0y649afzxd7lj3d67mvw";
+  version = "1.3";
+  sha256 = "1lfdv2bn942w4b0bjd6aw59wdc2jfk305ym5vm88liy9127b65bp";
   buildDepends = [
     blazeSvg Chart colour dataDefaultClass diagramsCore diagramsLib
     diagramsPostscript diagramsSvg lens mtl operational SVGFonts text
@@ -20,6 +20,5 @@ cabal.mkDerivation (self: {
     description = "Diagrams backend for Charts";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })
