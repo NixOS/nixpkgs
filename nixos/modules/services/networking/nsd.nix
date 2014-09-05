@@ -33,7 +33,6 @@ let
       # the list of dynamically added zones.
       zonelistfile: "${stateDir}/var/zone.list"
       database:     "${stateDir}/var/nsd.db"
-      logfile:      "${stateDir}/var/nsd.log"
       pidfile:      "${pidFile}"
       xfrdfile:     "${stateDir}/var/xfrd.state"
       xfrdir:       "${stateDir}/tmp"
@@ -687,10 +686,9 @@ in
       after       = [ "network.target" ];
 
       serviceConfig = {
-        Type      = "forking";
         PIDFile   = pidFile;
         Restart   = "always";
-        ExecStart = "${pkgs.nsd}/sbin/nsd -c ${configFile}";
+        ExecStart = "${pkgs.nsd}/sbin/nsd -d -c ${configFile}";
       };
 
       preStart = ''
