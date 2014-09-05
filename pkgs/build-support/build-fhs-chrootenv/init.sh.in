@@ -46,3 +46,4 @@ mkdir $chrootenvDest/root
 
 # Create tmp folder
 mkdir -m1777 $chrootenvDest/tmp
+mkdir -m1777 /tmp/chrootenv-@name@
