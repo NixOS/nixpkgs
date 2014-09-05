@@ -28,7 +28,7 @@ in
   nodes =
     { tracker =
         { config, pkgs, ... }:
-        { environment.systemPackages = [ pkgs.transmission pkgs.bittorrent ];
+        { environment.systemPackages = [ pkgs.transmission ];
 
           # We need Apache on the tracker to serve the torrents.
           services.httpd.enable = true;

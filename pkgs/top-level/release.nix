@@ -64,7 +64,6 @@ let
       binutils = linux;
       bind = linux;
       bitlbee = linux;
-      bittorrent = linux;
       blender = linux;
       bsdiff = all;
       btrfsProgs = linux;
