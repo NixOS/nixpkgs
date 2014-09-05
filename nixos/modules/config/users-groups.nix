@@ -276,23 +276,17 @@ let
     };
   };
 
-  filterNull = a: filter (x: hasAttr a x && getAttr a x != null);
-
-      sortOn "gid" (filterNull "gid" (attrValues cfg.extraGroups))
-      sortOn "uid" (filterNull "uid" (attrValues cfg.extraUsers))
   mkSubuidEntry = user: concatStrings (
     map (range: "${user.name}:${toString range.startUid}:${toString range.count}\n")
-        user.subUidRanges);
+      user.subUidRanges);
 
-  subuidFile = concatStrings (map mkSubuidEntry (
-    sortOn "uid" (filterNull "uid" (attrValues cfg.extraUsers))));
+  subuidFile = concatStrings (map mkSubuidEntry (attrValues cfg.extraUsers));
 
   mkSubgidEntry = user: concatStrings (
     map (range: "${user.name}:${toString range.startGid}:${toString range.count}\n")
         user.subGidRanges);
 
-  subgidFile = concatStrings (map mkSubgidEntry (
-    sortOn "uid" (filterNull "uid" (attrValues cfg.extraUsers))));
+  subgidFile = concatStrings (map mkSubgidEntry (attrValues cfg.extraUsers));
 
   idsAreUnique = set: idAttr: !(fold (name: args@{ dup, acc }:
     let
