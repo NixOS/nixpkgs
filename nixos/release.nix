@@ -247,6 +247,7 @@ in rec {
   tests.mysqlReplication = callTest tests/mysql-replication.nix {};
   tests.nat = callTest tests/nat.nix {};
   tests.nfs3 = callTest tests/nfs.nix { version = 3; };
+  tests.nsd = callTest tests/nsd.nix {};
   tests.openssh = callTest tests/openssh.nix {};
   tests.printing = callTest tests/printing.nix {};
   tests.proxy = callTest tests/proxy.nix {};
