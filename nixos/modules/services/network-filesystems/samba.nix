@@ -6,9 +6,6 @@ let
 
   cfg = config.services.samba;
 
-  user = "smbguest";
-  group = "smbguest";
-
   logDir = "/var/log/samba";
   privateDir = "/var/samba/private";
 
@@ -16,12 +13,6 @@ let
 
   setupScript =
     ''
-      if ! test -d /home/smbd ; then
-        mkdir -p /home/smbd
-        chown ${user} /home/smbd
-        chmod a+rwx /home/smbd
-      fi
-
       if ! test -d /var/samba ; then
         mkdir -p /var/samba/locks /var/samba/cores/nmbd  /var/samba/cores/smbd /var/samba/cores/winbindd
       fi
@@ -42,13 +33,6 @@ let
       log file = ${logDir}/log.%m
       private dir = ${privateDir}
       ${optionalString cfg.syncPasswordsByPam "pam password change = true"}
-
-      ${if cfg.defaultShare.enable then ''
-      [default]
-      path = /home/smbd
-      read only = ${if cfg.defaultShare.writeable then "no" else "yes"}
-      guest ok = ${if cfg.defaultShare.guest then "yes" else "no"}
-      ''else ""}
 
       ${cfg.extraConfig}
     '';
@@ -149,21 +133,6 @@ in
         ";
       };
 
-      defaultShare = {
-        enable = mkOption {
-          description = "Whether to share /home/smbd as 'default'.";
-          default = false;
-        };
-        writeable = mkOption {
-          description = "Whether to allow write access to default share.";
-          default = false;
-        };
-        guest = mkOption {
-          description = "Whether to allow guest access to default share.";
-          default = true;
-        };
-      };
-
       securityType = mkOption {
         description = "Samba security type";
         default = "user";
@@ -199,14 +168,6 @@ in
 
       (mkIf config.services.samba.enable {
 
-        users.extraUsers.smbguest = {
-          description = "Samba service user";
-          group = group;
-          uid = config.ids.uids.smbguest;
-        };
-
-        users.extraGroups.smbguest.gid = config.ids.uids.smbguest;
-
         system.nssModules = optional cfg.nsswins samba;
 
         systemd = {
@@ -224,7 +185,7 @@ in
             "samba-setup" = {
               description = "Samba Setup Task";
               script = setupScript;
-              unitConfig.RequiresMountsFor = "/home/smbd /var/samba /var/log/samba";
+              unitConfig.RequiresMountsFor = "/var/samba /var/log/samba";
             };
           };
         };

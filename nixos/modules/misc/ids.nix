@@ -82,7 +82,7 @@
       statsd = 69;
       transmission = 70;
       postgres = 71;
-      smbguest = 74;
+      smbguest = 74;  # unused
       varnish = 75;
       datadog = 76;
       lighttpd = 77;
@@ -220,7 +220,7 @@
       postgres = 71;
       vboxusers = 72;
       vboxsf = 73;
-      smbguest = 74;
+      smbguest = 74;  # unused
       varnish = 75;
       datadog = 76;
       lighttpd = 77;
