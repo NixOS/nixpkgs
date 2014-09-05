@@ -3852,6 +3852,7 @@ rec {
 
   greenlet = buildPythonPackage rec {
     name = "greenlet-0.4.3";
+    disabled = isPyPy;  # builtin for pypy
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/g/greenlet/${name}.zip";
