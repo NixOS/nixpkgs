@@ -108,7 +108,7 @@ let
         '';
       };
 
-      ipv6prefixLength = mkOption {
+      ipv6PrefixLength = mkOption {
         default = 64;
         example = 64;
         type = types.int;
