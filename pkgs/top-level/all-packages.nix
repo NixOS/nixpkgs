@@ -7204,6 +7204,8 @@ let
   tomcat8 = callPackage ../servers/http/tomcat/8.0.nix { };
 
   tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
+  
+  torque = callPackage ../servers/computing/torque { };
 
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 
