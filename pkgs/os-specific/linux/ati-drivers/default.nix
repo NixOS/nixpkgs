@@ -21,8 +21,6 @@
 # There is one issue left:
 # /usr/lib/dri/fglrx_dri.so must point to /run/opengl-driver/lib/fglrx_dri.so
 
-# You eventually have to blacklist radeon module (?)
-
 assert stdenv.system == "x86_64-linux";
 
 stdenv.mkDerivation {
