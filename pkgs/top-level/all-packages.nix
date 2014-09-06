@@ -994,7 +994,6 @@ let
   ethtool = callPackage ../tools/misc/ethtool { };
 
   eternity = callPackage ../games/eternity-engine { };
-  eternityMaster = callPackage ../games/eternity-engine/master.nix { };
 
   ettercap = callPackage ../applications/networking/sniffers/ettercap { };
 
