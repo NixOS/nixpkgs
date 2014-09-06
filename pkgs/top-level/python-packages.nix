@@ -38,7 +38,7 @@ rec {
   # global distutils config used by buildPythonPackage
   distutils-cfg = callPackage ../development/python-modules/distutils-cfg { };
 
-  buildPythonPackage = callPackage ../development/python-modules/generic { };
+  buildPythonPackage = makeOverridable (callPackage ../development/python-modules/generic { });
 
   wrapPython = pkgs.makeSetupHook
     { deps = pkgs.makeWrapper;
