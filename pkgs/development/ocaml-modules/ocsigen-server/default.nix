@@ -25,7 +25,10 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://ocsigen.org/ocsigenserver/;
-    description = "Ocsigen Server is a full featured Web server. It implements most features of the HTTP protocol, and has a very powerful extension mechanism that make very easy to plug your own OCaml modules for generating pages.";
+    description = "A full featured Web server''
+    longDescription =''
+      A full featured Web server. It implements most features of the HTTP protocol, and has a very powerful extension mechanism that make very easy to plug your own OCaml modules for generating pages.
+      '';
     license = "LGPL"; # <- todo: check
     platforms = ocaml.meta.platforms;
     maintainers = [ stdenv.lib.maintainers.gal_bolle ];
