@@ -93,6 +93,9 @@ in
 
   fileSystems."/".device = "/dev/disk/by-label/nixos";
 
+  # Azure metadata is available as a CD-ROM drive.
+  fileSystems."/metadata".device = "/dev/sr0";
+
   boot.kernelParams = [ "console=ttyS0" "earlyprintk=ttyS0" "rootdelay=300" "panic=1" "boot.panic_on_fail" ];
   boot.initrd.kernelModules = [ "hv_vmbus" "hv_netvsc" "hv_utils" "hv_storvsc" ];
 
