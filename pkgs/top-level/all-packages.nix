@@ -690,10 +690,6 @@ let
     inherit (strategoPackages016) strategoxt sdf;
   };
 
-  bittorrent = callPackage ../tools/networking/p2p/bittorrent {
-    gui = true;
-  };
-
   bittornado = callPackage ../tools/networking/p2p/bit-tornado { };
 
   blueman = callPackage ../tools/bluetooth/blueman {
