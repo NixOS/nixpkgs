@@ -188,12 +188,12 @@ rec {
 
   sip = import ../development/python-modules/sip {
     inherit (pkgs) stdenv fetchurl;
-    inherit python;
+    inherit python isPyPy;
   };
 
   sip_4_16 = import ../development/python-modules/sip/4.16.nix {
     inherit (pkgs) stdenv fetchurl;
-    inherit python;
+    inherit python isPyPy;
   };
 
   tables = import ../development/python-modules/tables {
@@ -440,6 +440,7 @@ rec {
 
   apsw = buildPythonPackage rec {
     name = "apsw-3.7.6.2-r1";
+    disabled = isPyPy;
 
     src = fetchurl {
       url = "http://apsw.googlecode.com/files/${name}.zip";
@@ -2005,6 +2006,7 @@ rec {
   eyeD3 = buildPythonPackage rec {
     version = "0.7.4";
     name    = "eyeD3-${version}";
+    disabled = isPyPy;
 
     src = fetchurl {
       url = "http://eyed3.nicfit.net/releases/${name}.tgz";
@@ -6478,6 +6480,7 @@ rec {
   pyparted = buildPythonPackage rec {
     name = "pyparted-${version}";
     version = "3.10";
+    disabled = isPyPy;
 
     src = fetchurl {
       url = "https://fedorahosted.org/releases/p/y/pyparted/${name}.tar.gz";
@@ -8536,7 +8539,7 @@ rec {
 
   smmap = buildPythonPackage rec {
     name = "smmap-0.8.2";
-    disabled = isPy3k;  # next release will have py3k support
+    disabled = isPy3k || isPyPy;  # next release will have py3k/pypy support
     meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
 
     src = fetchurl {

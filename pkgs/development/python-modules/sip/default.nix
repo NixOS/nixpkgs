@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, python }:
+{ stdenv, fetchurl, python, isPyPy }:
 
-stdenv.mkDerivation rec {
+if isPyPy then throw "sip not supported for interpreter ${python.executable}" else stdenv.mkDerivation rec {
   name = "sip-4.14.7"; # kde410.pykde4 doesn't build with 4.15
 
   src = fetchurl {
