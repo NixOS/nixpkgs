@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, emacs, unzip, autoComplete, dash, s }:
+{ stdenv, fetchurl, emacs, unzip, autoComplete, dash, s, scalaMode2, sbtMode }:
 
 stdenv.mkDerivation {
   name = "emacs-ensime-2014-09-04";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ emacs unzip ];
-  propagatedUserEnvPkgs = [ autoComplete dash s ];
+  propagatedUserEnvPkgs = [ autoComplete dash s scalaMode2 sbtMode ];
 
   buildPhase = ''
     emacs -L . -L ${autoComplete}/share/emacs/site-lisp --batch -f batch-byte-compile *.el
