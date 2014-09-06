@@ -5982,6 +5982,7 @@ rec {
 
   psycopg2 = buildPythonPackage rec {
     name = "psycopg2-2.5.3";
+    disabled = isPyPy;
 
     # error: invalid command 'test'
     doCheck = false;
