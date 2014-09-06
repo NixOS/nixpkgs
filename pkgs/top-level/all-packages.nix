@@ -8683,33 +8683,21 @@ let
 
     gist = callPackage ../applications/editors/emacs-modes/gist { };
 
+    haskellMode = callPackage ../applications/editors/emacs-modes/haskell { };
+
+    hol_light_mode = callPackage ../applications/editors/emacs-modes/hol_light { };
+
+    htmlize = callPackage ../applications/editors/emacs-modes/htmlize { };
+
     idris = callPackage ../applications/editors/emacs-modes/idris { };
 
     jabber = callPackage ../applications/editors/emacs-modes/jabber { };
 
     jade = callPackage ../applications/editors/emacs-modes/jade { };
 
-    jdee = callPackage ../applications/editors/emacs-modes/jdee {
-      # Requires Emacs 23, for `avl-tree'.
-    };
+    jdee = callPackage ../applications/editors/emacs-modes/jdee { };
 
     js2 = callPackage ../applications/editors/emacs-modes/js2 { };
-
-    stratego = callPackage ../applications/editors/emacs-modes/stratego { };
-
-    haskellMode = callPackage ../applications/editors/emacs-modes/haskell { };
-
-    ocamlMode = callPackage ../applications/editors/emacs-modes/ocaml { };
-
-    structuredHaskellMode = callPackage ../applications/editors/emacs-modes/structured-haskell-mode {
-      inherit (haskellPackages) cabal haskellSrcExts;
-    };
-
-    tuaregMode = callPackage ../applications/editors/emacs-modes/tuareg { };
-
-    hol_light_mode = callPackage ../applications/editors/emacs-modes/hol_light { };
-
-    htmlize = callPackage ../applications/editors/emacs-modes/htmlize { };
 
     logito = callPackage ../applications/editors/emacs-modes/logito { };
 
@@ -8722,6 +8710,8 @@ let
     metaweblog = callPackage ../applications/editors/emacs-modes/metaweblog { };
 
     notmuch = lowPrio (callPackage ../applications/networking/mailreaders/notmuch { });
+
+    ocamlMode = callPackage ../applications/editors/emacs-modes/ocaml { };
 
     offlineimap = callPackage ../applications/editors/emacs-modes/offlineimap {};
 
@@ -8766,7 +8756,15 @@ let
     scalaMode1 = callPackage ../applications/editors/emacs-modes/scala-mode/v1.nix { };
     scalaMode2 = callPackage ../applications/editors/emacs-modes/scala-mode/v2.nix { };
 
+    stratego = callPackage ../applications/editors/emacs-modes/stratego { };
+
+    structuredHaskellMode = callPackage ../applications/editors/emacs-modes/structured-haskell-mode {
+      inherit (haskellPackages) cabal haskellSrcExts;
+    };
+
     sunriseCommander = callPackage ../applications/editors/emacs-modes/sunrise-commander { };
+
+    tuaregMode = callPackage ../applications/editors/emacs-modes/tuareg { };
 
     writeGood = callPackage ../applications/editors/emacs-modes/writegood { };
 
