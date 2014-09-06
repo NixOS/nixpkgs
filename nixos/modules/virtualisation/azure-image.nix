@@ -121,5 +121,5 @@ in
 
   networking.usePredictableInterfaceNames = false;
 
-  users.extraUsers.root.openssh.authorizedKeys.keys = [ builtins.readFile <ssh-pub-key> ];
+  users.extraUsers.root.openssh.authorizedKeys.keys = [ (builtins.readFile <ssh-pub-key>) ];
 }
