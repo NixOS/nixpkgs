@@ -4368,11 +4368,11 @@ rec {
   };
 
   lxml = buildPythonPackage ( rec {
-    name = "lxml-3.0.2";
+    name = "lxml-3.3.6";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/l/lxml/${name}.tar.gz";
-      md5 = "38b15b0dd5e9292cf98be800e84a3ce4";
+      md5 = "a804b36864c483fe7abdd7f493a0c379";
     };
 
     buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
