@@ -7980,7 +7980,7 @@ rec {
 
   skype4py = buildPythonPackage (rec {
     name = "Skype4Py-1.0.32.0";
-    disabled = isPy3k;
+    disabled = isPy3k || isPyPy;
 
     src = fetchurl {
       url = mirror://sourceforge/skype4py/Skype4Py-1.0.32.0.tar.gz;
