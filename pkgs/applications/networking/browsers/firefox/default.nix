@@ -66,7 +66,8 @@ stdenv.mkDerivation rec {
     ]
     ++ (if debugBuild then [ "--enable-debug" "--enable-profiling"]
                       else [ "--disable-debug" "--enable-release"
-                             "--enable-optimize" "--enable-strip" ])
+                             "--enable-optimize${lib.optionalString (stdenv.system == "i686-linux") "=-O1"}"
+                             "--enable-strip" ])
     ++ lib.optional enableOfficialBranding "--enable-official-branding";
 
   enableParallelBuilding = true;
