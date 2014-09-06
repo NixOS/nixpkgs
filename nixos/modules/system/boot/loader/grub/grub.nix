@@ -260,7 +260,7 @@ in
         if cfg.devices == [] then
           throw "You must set the option ‘boot.loader.grub.device’ to make the system bootable."
         else
-          "PERL5LIB=${makePerlPath [ pkgs.perlPackages.XMLLibXML pkgs.perlPackages.XMLSAX ]} " +
+          "PERL5LIB=${makePerlPath (with pkgs.perlPackages; [ FileSlurp XMLLibXML XMLSAX ])} " +
           "${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig}";
 
       system.build.grub = grub;
@@ -277,7 +277,11 @@ in
         '') config.boot.loader.grub.extraFiles);
 
     assertions = [{ assertion = !cfg.zfsSupport || cfg.version == 2;
-                    message = "Only grub version 2 provides zfs support";}];
+                    message = "Only grub version 2 provides zfs support";}]
+      ++ flip map cfg.devices (dev: {
+        assertion = hasPrefix "/" dev;
+        message = "Grub devices must be absolute paths, not ${dev}";
+      });
 
     })
 
