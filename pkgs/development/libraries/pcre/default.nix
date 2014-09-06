@@ -5,11 +5,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "pcre-8.34";
+  name = "pcre-8.35";
 
   src = fetchurl {
     url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${name}.tar.bz2";
-    sha256 = "0gsqmsp0q0n3q0ba32gkjvgcsdy6nwidqa7sbxkbw817zzhkl15n";
+    sha256 = "0nw66r92dr24vy9k4lw17bkv8x5nlzn6wx9hq4y2dvzgig3w2qd9";
   };
 
   # The compiler on Darwin crashes with an internal error while building the
