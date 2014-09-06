@@ -182,7 +182,9 @@ if test "$(evalOpt "_type" 2> /dev/null)" = '"option"'; then
   fi
   echo
   if example=$(evalOpt "example" - 2> /dev/null); then
-    echo "Example: $example"
+    echo "Example:"
+    echo "$example"
+    echo
   fi
   echo "Description:"
   echo

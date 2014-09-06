@@ -71,7 +71,7 @@ Description:
 Whether to enable the GNU GRUB boot loader.
 
 Declared by:
-  "/path/to/nixpkgs/nixos/modules/system/boot/loader/grub/grub.nix"
+  "/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs/nixos/modules/system/boot/loader/grub/grub.nix"
 
 Defined by:
   "/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs/nixos/modules/system/boot/loader/grub/grub.nix"
