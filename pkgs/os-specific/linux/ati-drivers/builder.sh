@@ -13,6 +13,21 @@ sh $run_file --extract .
 
 eval "$patchPhase"
 
+case "$system" in
+  x86_64-linux)
+    arch=x86_64
+    lib_arch=lib64
+    DIR_DEPENDING_ON_XORG_VERSION=xpic_64a
+  ;;
+  i686-linux)
+    arch=x86
+    lib_arch=lib
+    DIR_DEPENDING_ON_XORG_VERSION=xpic
+  ;;
+  *) exit 1;;
+esac
+
+if test -z "$libsOnly"; then
 kernelVersion=$(cd ${kernel}/lib/modules && ls)
 kernelBuild=$(echo ${kernel}/lib/modules/$kernelVersion/build)
 linuxsources=$(echo ${kernel}/lib/modules/$kernelVersion/source)
@@ -105,17 +120,6 @@ setSMP
 setModVersions
 CC=gcc
 MODULE=fglrx
-case "$system" in
-  x86_64-linux)
-    arch=x86_64
-    lib_arch=lib64
-  ;;
-  i686-linux)
-    arch=x86
-    lib_arch=lib
-  ;;
-  *) exit 1;;
-esac
 LIBIP_PREFIX=$TMP/arch/$arch/lib/modules/fglrx/build_mod
 [ -d $LIBIP_PREFIX ]
 GCC_MAJOR="`gcc --version | grep -o -e ") ." | head -1 | cut -d " " -f 2`"
@@ -138,6 +142,8 @@ GCC_MAJOR="`gcc --version | grep -o -e ") ." | head -1 | cut -d " " -f 2`"
   cd $TMP
 }
 
+fi
+
 { # install
 
   mkdir -p $out/lib/xorg
@@ -152,13 +158,15 @@ GCC_MAJOR="`gcc --version | grep -o -e ") ." | head -1 | cut -d " " -f 2`"
   # what are those files used for?
   cp -r common/etc $out
 
-  DIR_DEPENDING_ON_XORG_VERSION=xpic_64a
   cp -r $DIR_DEPENDING_ON_XORG_VERSION/usr/X11R6/$lib_arch/* $out/lib/xorg
 
+  # install kernel module
+  if test -z "$libsOnly"; then
   t=$out/lib/modules/${kernelVersion}/kernel/drivers/misc
   mkdir -p $t
 
   cp ./common/lib/modules/fglrx/build_mod/2.6.x/fglrx.ko $t
+  fi
 
   # should this be installed at all?
   # its used by the example fglrx_gamma only
@@ -184,6 +192,8 @@ GCC_MAJOR="`gcc --version | grep -o -e ") ." | head -1 | cut -d " " -f 2`"
   # libstdc++ and gcc are needed by some libs
   patchelf --set-rpath $gcc/$lib_arch $out/lib/libatiadlxx.so
 }
+
+if test -z "$libsOnly"; then
 
 { # build samples
   mkdir -p $out/bin
@@ -228,6 +238,8 @@ GCC_MAJOR="`gcc --version | grep -o -e ") ." | head -1 | cut -d " " -f 2`"
   rm -fr $out/lib/modules/fglrx # don't think those .a files are needed. They cause failure of the mod
 
 }
+
+fi
 
 for p in $extraDRIlibs; do
   for lib in $p/lib/*.so*; do

@@ -22,7 +22,7 @@ in
       { name = "fglrx"; modules = [ ati_x11 ]; libPath = [ "${ati_x11}/lib" ]; };
 
     hardware.opengl.package = ati_x11;
-    #hardware.opengl.package32 = pkgs_i686.linuxPackages.ati_x11.override { libsOnly = true; kernel = null; };
+    hardware.opengl.package32 = pkgs_i686.linuxPackages.ati_drivers_x11.override { libsOnly = true; kernel = null; };
 
     environment.systemPackages = [ ati_x11 ];
 
