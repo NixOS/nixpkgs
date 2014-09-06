@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://ocsigen.org/ocsigenserver/;
-    description = "A full featured Web server''
+    description = "A full featured Web server";
     longDescription =''
       A full featured Web server. It implements most features of the HTTP protocol, and has a very powerful extension mechanism that make very easy to plug your own OCaml modules for generating pages.
       '';
