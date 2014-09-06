@@ -8140,9 +8140,10 @@ rec {
     };
   });
 
-  sqlalchemy = pkgs.lib.overrideDerivation sqlalchemy9 (args: rec {
+  sqlalchemy = sqlalchemy9.override rec {
     name = "SQLAlchemy-0.7.10";
-    disabled = isPy3k;
+    disabled = isPy34;
+
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
       sha256 = "0rhxgr85xdhjn467qfs0dkyj8x46zxcv6ad3dfx3w14xbkb3kakp";
@@ -8155,10 +8156,12 @@ rec {
     preConfigure = optionalString isPy3k ''
       python3 sa2to3.py --no-diffs -w lib test examples
     '';
-  });
+  };
 
-  sqlalchemy8 = pkgs.lib.overrideDerivation sqlalchemy9 (args: rec {
+  sqlalchemy8 = sqlalchemy9.override rec {
     name = "SQLAlchemy-0.8.7";
+    disabled = isPy34;
+
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
       md5 = "4f3377306309e46739696721b1785335";
@@ -8166,7 +8169,7 @@ rec {
     preConfigure = optionalString isPy3k ''
       python3 sa2to3.py --no-diffs -w lib test examples
     '';
-  });
+  };
 
   sqlalchemy9 = buildPythonPackage rec {
     name = "SQLAlchemy-0.9.4";
