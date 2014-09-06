@@ -9779,8 +9779,7 @@ rec {
 
     propagatedBuildInputs = [ zope_interface zope_exceptions zope_testing six ] ++ optional (!python.is_py3k or false) subunit;
 
-    # a test is failing
-    doCheck = false;
+    doCheck = true;
 
     meta = {
       description = "A flexible test runner with layer support";
