@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, bison, flex, pam, ssmtp }:
+{ fetchurl, stdenv, bison, flex, pam, sendmailPath ? "/var/setuid-wrappers/sendmail" }:
 
 stdenv.mkDerivation {
   name = "at-3.1.15";
@@ -12,15 +12,11 @@ stdenv.mkDerivation {
   patches = [ ./install.patch ];
 
   buildInputs =
-    [ bison flex pam
-      # `configure' and `atd' want the `sendmail' command.
-      ssmtp
-    ];
+    [ bison flex pam ];
 
   preConfigure =
     ''
-      export PATH="${ssmtp}/sbin:$PATH"
-
+      export SENDMAIL=${sendmailPath}
       # Purity: force atd.pid to be placed in /var/run regardless of
       # whether it exists now.
       substituteInPlace ./configure --replace "test -d /var/run" "true"
