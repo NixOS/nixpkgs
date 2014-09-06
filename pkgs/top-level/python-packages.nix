@@ -8315,14 +8315,10 @@ rec {
       export LC_ALL="en_US.UTF-8"
     '';
 
-    # Not picking up from PyPI because it doesn't contain tests.
-    src = fetchgit {
-      url = "git://github.com/gabrielfalcao/sure.git";
-      rev = "86ab9faa97aa9c1720c7d090deac2be385ed3d7a";
-      sha256 = "02vffcdgr6vbj80lhl925w7zqy6cqnfvs088i0rbkjs5lxc511b3";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/s/sure/${name}.tar.gz";
+      md5 = "6dbecef27dffc41c8cd8aab8a8b3fdfb";
     };
-
-
 
     buildInputs = [ nose ];
 
