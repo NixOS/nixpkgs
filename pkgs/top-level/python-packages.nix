@@ -5785,8 +5785,9 @@ rec {
     buildInputs = [ python pkgs.libjpeg pkgs.zlib pkgs.freetype ];
 
     disabled = isPy3k;
-
     doCheck = true;
+    
+    postInstall = "ln -s $out/lib/${python.libPrefix}/site-packages $out/lib/${python.libPrefix}/site-packages/PIL";
 
     preConfigure = ''
       sed -i "setup.py" \
@@ -5795,13 +5796,8 @@ rec {
               s|^ZLIB_ROOT =.*$|ZLIB_ROOT = libinclude("${pkgs.zlib}")|g ;'
     '';
 
-    checkPhase   = "${python}/bin/${python.executable} selftest.py";
-    buildPhase   = "${python}/bin/${python.executable} setup.py build_ext -i";
-
-    postInstall = ''
-      cd "$out"/lib/python*/site-packages
-      ln -s $PWD PIL
-    '';
+    checkPhase = "${python}/bin/${python.executable} selftest.py";
+    buildPhase = "${python}/bin/${python.executable} setup.py build_ext -i";
 
     meta = {
       homepage = http://www.pythonware.com/products/pil/;
