@@ -528,7 +528,7 @@ let
     pkgs_i686 = pkgsi686Linux;
   };
 
-  inherit (androidenv) androidsdk_4_1;
+  inherit (androidenv) androidsdk_4_4 androidndk;
 
   aria2 = callPackage ../tools/networking/aria2 { };
   aria = aria2;
@@ -1032,6 +1032,8 @@ let
 
   fcitx = callPackage ../tools/inputmethods/fcitx { };
 
+  fcitx-anthy = callPackage ../tools/inputmethods/fcitx/fcitx-anthy.nix { };
+
   fcron = callPackage ../tools/system/fcron { };
 
   fdm = callPackage ../tools/networking/fdm {};
@@ -1235,9 +1237,11 @@ let
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
   };
 
-  grub2 = callPackage ../tools/misc/grub/2.0x.nix { libusb = libusb1; flex = flex_2_5_35; };
+  grub2 = callPackage ../tools/misc/grub/2.0x.nix { };
 
-  grub2_efi = grub2.override { EFIsupport = true; };
+  grub2_efi = grub2.override { efiSupport = true; };
+
+  grub2_zfs = grub2.override { zfsSupport = true; };
 
   gssdp = callPackage ../development/libraries/gssdp {
     inherit (gnome) libsoup;
@@ -1389,6 +1393,8 @@ let
   jmtpfs = callPackage ../tools/filesystems/jmtpfs { };
 
   jnettop = callPackage ../tools/networking/jnettop { };
+
+  john = callPackage ../tools/security/john { };
 
   jq = callPackage ../development/tools/jq {};
 
@@ -1975,6 +1981,10 @@ let
 
   qjoypad = callPackage ../tools/misc/qjoypad { };
 
+  qscintilla = callPackage ../development/libraries/qscintilla {
+    qt = qt4;
+  };
+
   qshowdiff = callPackage ../tools/text/qshowdiff { };
 
   quilt = callPackage ../development/tools/quilt { };
@@ -2260,6 +2270,8 @@ let
 
   tinc = callPackage ../tools/networking/tinc { };
 
+  tinc_pre = callPackage ../tools/networking/tinc/pre.nix { };
+
   tiny8086 = callPackage ../applications/virtualization/8086tiny { };
 
   tmpwatch = callPackage ../tools/misc/tmpwatch  { };
@@ -2492,7 +2504,10 @@ let
 
   wicd = callPackage ../tools/networking/wicd { };
 
-  wkhtmltopdf = callPackage ../tools/graphics/wkhtmltopdf { };
+  wkhtmltopdf = callPackage ../tools/graphics/wkhtmltopdf {
+    overrideDerivation = lib.overrideDerivation;
+    inherit (xlibs) libX11 libXext libXrender;
+  };
 
   wv = callPackage ../tools/misc/wv { };
 
@@ -3392,6 +3407,10 @@ let
     opam_1_1 = callPackage ../development/tools/ocaml/opam/1.1.nix { };
     opam = opam_1_1;
 
+    sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
+
+    twt = callPackage ../development/ocaml-modules/twt { };
+
     utop = callPackage ../development/tools/ocaml/utop { };
 
     sawja = callPackage ../development/ocaml-modules/sawja { };
@@ -3901,9 +3920,11 @@ let
 
   bam = callPackage ../development/tools/build-managers/bam {};
 
-  binutils = callPackage ../development/tools/misc/binutils {
-    inherit noSysDirs;
-  };
+  binutils = if stdenv.isDarwin
+    then stdenv.gcc.binutils
+    else callPackage ../development/tools/misc/binutils {
+      inherit noSysDirs;
+    };
 
   binutils_nogold = lowPrio (callPackage ../development/tools/misc/binutils {
     inherit noSysDirs;
@@ -4224,6 +4245,15 @@ let
     rubyBindings = config.radare.rubyBindings or false;
     luaBindings = config.radare.luaBindings or false;
   };
+  radare2 = callPackage ../development/tools/analysis/radare2 {
+    inherit (gnome) vte;
+    lua = lua5;
+    useX11 = config.radare.useX11 or false;
+    pythonBindings = config.radare.pythonBindings or false;
+    rubyBindings = config.radare.rubyBindings or false;
+    luaBindings = config.radare.luaBindings or false;
+  };
+
 
   ragel = callPackage ../development/tools/parsing/ragel { };
 
@@ -6080,24 +6110,24 @@ let
       else stdenv;
   };
 
-  qt48Full = qt48.override {
+  qt48Full = appendToName "full" (qt48.override {
     docs = true;
     demos = true;
     examples = true;
     developerBuild = true;
-  };
+  });
 
   qt4SDK = qtcreator.override {
     sdkBuild = true;
     qtLib = qt48Full;
   };
 
-  qt53Full = qt53.override {
+  qt53Full = appendToName "full" (qt53.override {
     buildDocs = true;
     buildExamples = true;
     buildTests = true;
     developerBuild = true;
-  };
+  });
 
   qt53 = callPackage ../development/libraries/qt-5/qt-5.3.nix {
     mesa = mesa_noglu;
@@ -6115,12 +6145,12 @@ let
     bison = bison2; # error: too few arguments to function 'int yylex(...
   };
 
-  qt5Full = qt5.override {
+  qt5Full = appendToName "full" (qt5.override {
     buildDocs = true;
     buildExamples = true;
     buildTests = true;
     developerBuild = true;
-  };
+  });
 
   qt5SDK = qtcreator.override {
     sdkBuild = true;
@@ -6284,6 +6314,8 @@ let
   speex = callPackage ../development/libraries/speex { };
 
   sphinxbase = callPackage ../development/libraries/sphinxbase { };
+
+  sphinxsearch = callPackage ../servers/search/sphinxsearch { };
 
   spice = callPackage ../development/libraries/spice {
     celt = celt_0_5_1;
@@ -8035,6 +8067,8 @@ let
 
   aurulent-sans = callPackage ../data/fonts/aurulent-sans { };
 
+  baekmuk-ttf = callPackage ../data/fonts/baekmuk-ttf { };
+
   bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
 
   cacert = callPackage ../data/misc/cacert { };
@@ -8139,6 +8173,8 @@ let
   poly = callPackage ../data/fonts/poly { };
 
   posix_man_pages = callPackage ../data/documentation/man-pages-posix { };
+
+  proggyfonts = callPackage ../data/fonts/proggyfonts { };
 
   pthreadmanpages = callPackage ../data/documentation/pthread-man-pages { };
 
@@ -8332,7 +8368,8 @@ let
   bitcoind = callPackage ../applications/misc/bitcoin { gui = false; };
 
   altcoins = recurseIntoAttrs (
-    callPackage ../applications/misc/bitcoin/altcoins.nix {}
+    (callPackage ../applications/misc/bitcoin/altcoins.nix {}) //
+    (callPackage ../applications/misc/bitcoin/dogecoin.nix {})
   );
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee {
@@ -8834,6 +8871,11 @@ let
 
   fluxbox = callPackage ../applications/window-managers/fluxbox { };
 
+  fme = callPackage ../applications/misc/fme {
+    inherit (gnome) libglademm;
+    inherit pkgconfig autoconf automake gettext;
+  };
+
   freecad = callPackage ../applications/graphics/freecad {
     opencascade = opencascade_6_5;
     inherit (pythonPackages) matplotlib pycollada;
@@ -9073,7 +9115,7 @@ let
 
   ii = callPackage ../applications/networking/irc/ii { };
 
-  ike = callPackage ../applications/ike { };
+  ike = callPackage ../applications/networking/ike { };
 
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
@@ -9770,6 +9812,8 @@ let
 
   bittorrentSync = callPackage ../applications/networking/bittorrentsync { };
 
+  copy-com = callPackage ../applications/networking/copy-com { };
+
   dropbox = callPackage ../applications/networking/dropbox { };
 
   dropbox-cli = callPackage ../applications/networking/dropbox-cli { };
@@ -10217,6 +10261,13 @@ let
 
   gxneur = callPackage ../applications/misc/gxneur  {
     inherit (gnome) libglade GConf;
+  };
+
+  xiphos = callPackage ../applications/misc/xiphos {
+    gconf = gnome2.GConf;
+    inherit (gnome2) gtkhtml libgtkhtml libglade scrollkeeper;
+    python = python27;
+    webkitgtk = webkitgtk2;
   };
 
   xournal = callPackage ../applications/graphics/xournal {
@@ -10785,6 +10836,8 @@ let
 
       kdiff3 = callPackage ../tools/text/kdiff3 { };
 
+      kgraphviewer = callPackage ../applications/graphics/kgraphviewer { };
+
       kile = callPackage ../applications/editors/kile { };
 
       kmplayer = callPackage ../applications/video/kmplayer { };
@@ -10818,6 +10871,8 @@ let
       libmm-qt = callPackage ../development/libraries/libmm-qt { };
 
       libnm-qt = callPackage ../development/libraries/libnm-qt { };
+
+      massif-visualizer = callPackage ../development/tools/analysis/massif-visualizer { }; 
 
       networkmanagement = callPackage ../tools/networking/networkmanagement { };
 
@@ -11385,6 +11440,8 @@ let
 
   pgfplots = callPackage ../tools/typesetting/tex/pgfplots { };
 
+  phabricator = callPackage ../misc/phabricator { };
+
   pjsip = callPackage ../applications/networking/pjsip { };
 
   polytable = callPackage ../tools/typesetting/tex/polytable { };
@@ -11396,6 +11453,7 @@ let
   putty = callPackage ../applications/networking/remote/putty { };
 
   retroarch = callPackage ../misc/emulators/retroarch { };
+  retroarchMaster = callPackage ../misc/emulators/retroarch/master.nix { };
 
   rssglx = callPackage ../misc/screensavers/rss-glx { };
 

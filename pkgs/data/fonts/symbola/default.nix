@@ -1,7 +1,7 @@
 {stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "symbola-7.12";
+  name = "symbola-7.17";
 
   src = fetchurl {
     url = "http://users.teilar.gr/~g1951d/Symbola.zip";

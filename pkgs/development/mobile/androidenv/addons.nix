@@ -209,8 +209,8 @@ in
   google_apis_19 = buildGoogleApis {
     name = "google_apis-19";
       src = fetchurl {
-        url = https://dl-ssl.google.com/android/repository/google_apis-19_r01.zip;
-        sha1 = "6c530a8318446e4da1e3ab7d2abd154bc493bc5a";
+        url = https://dl-ssl.google.com/android/repository/google_apis-19_r07.zip;
+        sha1 = "150f5a3fec4f03313ca770b90126605619bd713c";
       };
       meta = {
         description = "Android + Google APIs";

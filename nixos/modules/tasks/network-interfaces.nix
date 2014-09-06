@@ -1,6 +1,7 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
+with utils;
 
 let
 
@@ -9,6 +10,10 @@ let
   hasVirtuals = any (i: i.virtual) interfaces;
   hasSits = cfg.sits != { };
   hasBonds = cfg.bonds != { };
+
+  # We must escape interfaces due to the systemd interpretation
+  subsystemDevice = interface:
+    "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
 
   addrOpts = v:
     assert v == 4 || v == 6;
@@ -138,8 +143,6 @@ let
           Whether this interface is virtual and should be created by tunctl.
           This is mainly useful for creating bridges between a host a virtual
           network such as VPN or a virtual machine.
-
-          Defaults to tap device, unless interface contains "tun" in its name.
         '';
       };
 
@@ -148,6 +151,15 @@ let
         type = types.str;
         description = ''
           In case of a virtual device, the user who owns it.
+        '';
+      };
+
+      virtualType = mkOption {
+        default = null;
+        type = types.nullOr (types.addCheck types.str (v: v == "tun" || v == "tap"));
+        description = ''
+          The explicit type of interface to create. Accepts tun or tap strings.
+          Also accepts null to implicitly detect the type of device.
         '';
       };
 
@@ -596,8 +608,8 @@ in
           nameValuePair "${i.name}-cfg"
           { description = "Configuration of ${i.name}";
             wantedBy = [ "network-interfaces.target" ];
-            bindsTo = [ "sys-subsystem-net-devices-${i.name}.device" ];
-            after = [ "sys-subsystem-net-devices-${i.name}.device" ];
+            bindsTo = [ (subsystemDevice i.name) ];
+            after = [ (subsystemDevice i.name) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute pkgs.gawk ];
@@ -673,26 +685,32 @@ in
                 '');
           };
 
-        createTunDevice = i: nameValuePair "${i.name}"
+        createTunDevice = i: nameValuePair "${i.name}-netdev"
           { description = "Virtual Network Interface ${i.name}";
             requires = [ "dev-net-tun.device" ];
             after = [ "dev-net-tun.device" ];
-            wantedBy = [ "network.target" ];
-            requiredBy = [ "sys-subsystem-net-devices-${i.name}.device" ];
-            serviceConfig =
-              { Type = "oneshot";
-                RemainAfterExit = true;
-                ExecStart = "${pkgs.tunctl}/bin/tunctl -t '${i.name}' -u '${i.virtualOwner}'";
-                ExecStop = "${pkgs.tunctl}/bin/tunctl -d '${i.name}'";
-              };
+            wantedBy = [ "network.target" (subsystemDevice i.name) ];
+            path = [ pkgs.iproute ];
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+            };
+            script = ''
+              ip tuntap add dev "${i.name}" \
+              ${optionalString (i.virtualType != null) "mode ${i.virtualType}"} \
+              user "${i.virtualOwner}"
+            '';
+            postStop = ''
+              ip link del ${i.name}
+            '';
           };
 
-        createBridgeDevice = n: v:
-          let
-            deps = map (i: "sys-subsystem-net-devices-${i}.device") v.interfaces;
+        createBridgeDevice = n: v: nameValuePair "${n}-netdev"
+          (let
+            deps = map subsystemDevice v.interfaces;
           in
           { description = "Bridge Interface ${n}";
-            wantedBy = [ "network.target" "sys-subsystem-net-devices-${n}.device" ];
+            wantedBy = [ "network.target" (subsystemDevice n) ];
             bindsTo = deps;
             after = deps;
             serviceConfig.Type = "oneshot";
@@ -725,14 +743,14 @@ in
                 ip link set "${n}" down
                 brctl delbr "${n}"
               '';
-          };
+          });
 
-        createBondDevice = n: v:
-          let
-            deps = map (i: "sys-subsystem-net-devices-${i}.device") v.interfaces;
+        createBondDevice = n: v: nameValuePair "${n}-netdev"
+          (let
+            deps = map subsystemDevice v.interfaces;
           in
           { description = "Bond Interface ${n}";
-            wantedBy = [ "network.target" "sys-subsystem-net-devices-${n}.device" ];
+            wantedBy = [ "network.target" (subsystemDevice n) ];
             bindsTo = deps;
             after = deps;
             serviceConfig.Type = "oneshot";
@@ -764,14 +782,14 @@ in
               ifenslave -d "${n}"
               ip link delete "${n}"
             '';
-          };
+          });
 
-        createSitDevice = n: v:
-          let
-            deps = optional (v.dev != null) "sys-subsystem-net-devices-${v.dev}.device";
+        createSitDevice = n: v: nameValuePair "${n}-netdev"
+          (let
+            deps = optional (v.dev != null) (subsystemDevice v.dev);
           in
           { description = "6-to-4 Tunnel Interface ${n}";
-            wantedBy = [ "network.target" "sys-subsystem-net-devices-${n}.device" ];
+            wantedBy = [ "network.target" (subsystemDevice n) ];
             bindsTo = deps;
             after = deps;
             serviceConfig.Type = "oneshot";
@@ -790,14 +808,14 @@ in
             postStop = ''
               ip link delete "${n}"
             '';
-          };
+          });
 
-        createVlanDevice = n: v:
-          let
-            deps = [ "sys-subsystem-net-devices-${v.interface}.device" ];
+        createVlanDevice = n: v: nameValuePair "${n}-netdev"
+          (let
+            deps = [ (subsystemDevice v.interface) ];
           in
           { description = "Vlan Interface ${n}";
-            wantedBy = [ "network.target" "sys-subsystem-net-devices-${n}.device" ];
+            wantedBy = [ "network.target" (subsystemDevice n) ];
             bindsTo = deps;
             after = deps;
             serviceConfig.Type = "oneshot";
@@ -812,15 +830,15 @@ in
             postStop = ''
               ip link delete "${n}"
             '';
-          };
+          });
 
       in listToAttrs (
            map configureInterface interfaces ++
            map createTunDevice (filter (i: i.virtual) interfaces))
-         // mapAttrs createBridgeDevice cfg.bridges
-         // mapAttrs createBondDevice cfg.bonds
-         // mapAttrs createSitDevice cfg.sits
-         // mapAttrs createVlanDevice cfg.vlans
+         // mapAttrs' createBridgeDevice cfg.bridges
+         // mapAttrs' createBondDevice cfg.bonds
+         // mapAttrs' createSitDevice cfg.sits
+         // mapAttrs' createVlanDevice cfg.vlans
          // { "network-setup" = networkSetup; };
 
     # Set the host and domain names in the activation script.  Don't

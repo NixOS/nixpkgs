@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
     [
       qknight
     ];
-    platforms = with stdenv.lib.platforms;
-      linux;
+    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = [];
     license = stdenv.lib.licenses.bsd2;
     homepage = https://google.github.io/liquidfun/;
   };

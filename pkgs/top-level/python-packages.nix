@@ -1843,7 +1843,7 @@ rec {
       md5 = "21ab8fd729105487e6423b654d6c0860";
     };
 
-    propagatedBuildInputs = [ six requests ];
+    propagatedBuildInputs = [ six requests websocket_client ];
 
     # Version conflict
     doCheck = false;
@@ -2260,6 +2260,34 @@ rec {
     meta = with stdenv.lib; {
       description = "helpers to pass trusted data to untrusted environments and back";
       homepage = "https://pypi.python.org/pypi/itsdangerous/";
+    };
+  };
+
+  jsonwatch = buildPythonPackage rec {
+    name = "jsonwatch-0.2.0";
+
+    disabled = isPyPy; # doesn't find setuptools
+
+    src = fetchurl {
+      url = "https://github.com/dbohdan/jsonwatch/archive/v0.2.0.tar.gz";
+      sha256 = "04b616ef97b9d8c3887004995420e52b72a4e0480a92dbf60aa6c50317261e06";
+    };
+
+    propagatedBuildInputs = [ six ];
+
+    meta = {
+      description = "Like watch -d but for JSON";
+      longDescription = ''
+        jsonwatch is a command line utility with which you can track changes in
+        JSON data delivered by a shell command or a web (HTTP/HTTPS) API.
+        jsonwatch requests data from the designated source repeatedly at a set
+        interval and displays the differences when the data changes. It is
+        similar in its behavior to how watch(1) with the -d switch works
+        for plain-text data.
+      '';
+      homepage = "https://github.com/dbohdan/jsonwatch";
+      license = stdenv.lib.licenses.mit;
+      platforms = stdenv.lib.platforms.all;
     };
   };
 
@@ -2752,7 +2780,7 @@ rec {
 
   random2 = pythonPackages.buildPythonPackage rec {
     name = "random2-1.0.1";
-    
+
     doCheck = !isPyPy;
 
     src = fetchurl {
@@ -9944,6 +9972,24 @@ rec {
       homepage = http://liw.fi/larch/;
       description = "Python B-tree library.";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
+    };
+  };
+
+
+  websocket_client = buildPythonPackage rec {
+    name = "websocket-client-0.17.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/w/websocket-client/${name}.tar.gz";
+      md5 = "c86591719085eaf4a01c2275e0c834fc";
+    };
+
+    propagatedBuildInputs = [ six backports_ssl_match_hostname_3_4_0_2 unittest2 argparse ];
+
+    meta = {
+      homepage = https://github.com/liris/websocket-client;
+      description = "Websocket client for python";
+      license = licenses.lgpl2;
     };
   };
 
