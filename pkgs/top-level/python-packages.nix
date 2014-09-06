@@ -4026,11 +4026,11 @@ rec {
   };
 
   httplib2 = buildPythonPackage rec {
-    name = "httplib2-0.8";
+    name = "httplib2-0.9";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/h/httplib2/${name}.tar.gz";
-      sha256 = "174w6rz4na1sdlfz37h95l0pkfm9igf9nqmhbd8aqh3sm7d9zrff";
+      sha256 = "1asi5wpncnc6ki3bz33mhb9xh2lrkb24y4qng8bmqnczdmm8rsir";
     };
 
     meta = {
