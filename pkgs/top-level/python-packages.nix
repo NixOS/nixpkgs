@@ -6203,6 +6203,7 @@ rec {
 
   pycurl = buildPythonPackage (rec {
     name = "pycurl-7.19.5";
+    disabled = isPyPy; # https://github.com/pycurl/pycurl/issues/208
 
     src = fetchurl {
       url = "http://pycurl.sourceforge.net/download/${name}.tar.gz";
