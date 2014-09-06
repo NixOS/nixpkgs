@@ -5297,12 +5297,14 @@ rec {
   };
 
   numpy = buildPythonPackage ( rec {
-    name = "numpy-1.7.1";
+    name = "numpy-1.8.2";
 
     src = fetchurl {
       url = "mirror://sourceforge/numpy/${name}.tar.gz";
-      sha256 = "0jh832j439jj2b7m1z5a4rv5cpdn1yiw1r6gwrhdihw562d029am";
+      sha256 = "1gcxlk3mf43pzpxvbw8kcfg173g4105j9szsfc1kxwablail6myf";
     };
+    
+    disabled = isPyPy;  # WIP
 
     preConfigure = ''
       sed -i 's/-faltivec//' numpy/distutils/system_info.py
