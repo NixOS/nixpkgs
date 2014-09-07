@@ -6695,7 +6695,7 @@ let
 
   ### DEVELOPMENT / LIBRARIES / JAVASCRIPT
 
-  jquery_ui = callPackage ../development/libraries/javascript/jquery-ui { };
+  jquery-ui = callPackage ../development/libraries/javascript/jquery-ui { };
 
   yuicompressor = callPackage ../development/tools/yuicompressor { };
 
@@ -11778,6 +11778,7 @@ let
   asciidocFull = asciidoc-full;  # added 2014-06-22
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
+  jquery_ui = jquery-ui;  # added 2014-09-07
 
 
 }; in self; in pkgs
