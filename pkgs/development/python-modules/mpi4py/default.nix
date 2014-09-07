@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, buildPythonPackage, mpi, openssh }:
+{ stdenv, fetchurl, python, buildPythonPackage, mpi, openssh, isPy3k, isPyPy }:
 
 buildPythonPackage rec {
   name = "mpi4py-1.3.1";
@@ -44,6 +44,8 @@ buildPythonPackage rec {
   # Requires openssh for tests. Tests of dependent packages will also fail,
   # if openssh is not present. E.g. h5py with mpi support.
   propagatedBuildInputs = [ openssh ];
+
+  disabled = isPy3k || isPyPy;
 
   meta = {
     description =
