@@ -675,7 +675,7 @@ rec {
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/b/beautifulsoup4/${name}.tar.gz";
-      md5 = "c012adc06217b8532c446d181cc56586";
+      md5 = "f1481ed77336de77a2d8e5b061b6ad62";
     };
 
     # invalid command 'test'
