@@ -8423,10 +8423,7 @@ let
     (callPackage ../applications/misc/bitcoin/dogecoin.nix {})
   );
 
-  bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee {
-    gnutls = gnutls;
-    libotr = libotr_3_2;
-  };
+  bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
 
   blender = callPackage  ../applications/misc/blender {
     python = python34;
