@@ -4138,11 +4138,11 @@ rec {
     };
   };
 
-  ipdb = buildPythonPackage {
-    name = "ipdb-0.7";
+  ipdb = buildPythonPackage rec {
+    name = "ipdb-0.8";
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/i/ipdb/ipdb-0.7.tar.gz";
-      md5 = "d879f9b2b0f26e0e999809585dcaec61";
+      url = "http://pypi.python.org/packages/source/i/ipdb/${name}.zip";
+      md5 = "96dca0712efa01aa5eaf6b22071dd3ed";
     };
     propagatedBuildInputs = [ pythonPackages.ipythonLight ];
   };
@@ -5356,13 +5356,13 @@ rec {
     };
   };
 
-  livestreamer = if isPy34 then null else (buildPythonPackage rec {
-    version = "1.8.2";
+  livestreamer = buildPythonPackage rec {
+    version = "1.10.2";
     name = "livestreamer-${version}";
 
     src = fetchurl {
       url = "https://github.com/chrippa/livestreamer/archive/v${version}.tar.gz";
-      sha256 = "130h97qdb7qx8xg0gz54p5a6cb2zbffi5hsi305xf0ah9nf4rbrc";
+      sha256 = "0f1m51wax4q17ida4h0ckyakmlchf36kbhfa9qs6bpxc6xqqbry0";
     };
 
     buildInputs = [ pkgs.makeWrapper ];
@@ -5379,7 +5379,7 @@ rec {
       '';
       license = "bsd";
     };
-  });
+  };
 
   oauth2 = buildPythonPackage (rec {
     name = "oauth2-1.5.211";
@@ -6365,6 +6365,7 @@ rec {
   pygpgme = buildPythonPackage rec {
     version = "0.3";
     name = "pygpgme-${version}";
+    disabled = isPyPy;
 
     src = fetchurl {
       url = "https://launchpad.net/pygpgme/trunk/${version}/+download/${name}.tar.gz";
@@ -6441,6 +6442,7 @@ rec {
 
   pyodbc = buildPythonPackage rec {
     name = "pyodbc-3.0.7";
+    disabled = isPyPy;  # use pypypdbc instead
 
     src = fetchurl {
       url = "https://pyodbc.googlecode.com/files/${name}.zip";
@@ -9258,6 +9260,7 @@ rec {
 
   zfec = buildPythonPackage (rec {
     name = "zfec-1.4.24";
+    disabled = isPyPy;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zfec/${name}.tar.gz";
@@ -9331,6 +9334,7 @@ rec {
 
   zodbpickle = pythonPackages.buildPythonPackage rec {
     name = "zodbpickle-0.5.2";
+    disabled = isPyPy; # https://github.com/zopefoundation/zodbpickle/issues/10
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/z/zodbpickle/${name}.tar.gz";
@@ -9729,11 +9733,13 @@ rec {
 
 
   zope_sqlalchemy = buildPythonPackage rec {
-    name = "zope.sqlalchemy-0.7.3";
+    name = "zope.sqlalchemy-0.7.5";
+
+    doCheck = !isPyPy; # https://github.com/zopefoundation/zope.sqlalchemy/issues/12
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.sqlalchemy/${name}.zip";
-      md5 = "8b317b41244fc2e67f2f286890ba59a0";
+      md5 = "0a468bd5b8884cd29fb71acbf7eaa31e";
     };
 
     buildInputs = [ zope_testing zope_interface ];
