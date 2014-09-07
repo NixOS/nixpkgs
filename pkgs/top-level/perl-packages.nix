@@ -6976,10 +6976,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Plack = buildPerlPackage {
-    name = "Plack-1.0030";
+    name = "Plack-1.0031";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-1.0030.tar.gz;
-      sha256 = "0bb9aqb0h9q4qjgkw756gf695h4qg6vim54s6f2icgsazdi63zq7";
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-1.0031.tar.gz;
+      sha256 = "0vvppxs36729lggrx4s1gn37lzsm794wfkm3k386bwhkmk7sr31i";
     };
     buildInputs = [ FileShareDirInstall TestRequires ];
     propagatedBuildInputs = [ ApacheLogFormatCompiler DevelStackTrace DevelStackTraceAsHTML FileShareDir FilesysNotifySimple HTTPBody HTTPMessage HashMultiValue LWP StreamBuffered TestTCP TryTiny URI ];
