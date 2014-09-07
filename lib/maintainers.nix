@@ -28,6 +28,7 @@
   bjg = "Brian Gough <bjg@gnu.org>";
   bjornfor = "Bjørn Forsman <bjorn.forsman@gmail.com>";
   bluescreen303 = "Mathijs Kwik <mathijs@bluescreen303.nl>";
+  bobvanderlinden = "Bob van der Linden <bobvanderlinden@gmail.com>";
   bodil = "Bodil Stokke <nix@bodil.org>";
   bosu = "Boris Sukholitko <boriss@gmail.com>";
   calrama = "Moritz Maxeiner <moritz@ucworks.org>";
