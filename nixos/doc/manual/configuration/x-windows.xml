@@ -73,6 +73,25 @@ services.xserver.driSupport32Bit = true;
 
 </simplesect>
 
+<simplesect><title>AMD Graphics Cards</title>
+
+<para>AMD provides a proprietary driver for its graphics cards that
+has better 3D performance than the X.org drivers.  It is not enabled
+by default because it’s not free software.  You can enable it as follows:
+<programlisting>
+services.xserver.videoDrivers = [ "ati_unfree" ];
+</programlisting>
+You will need to reboot after enabling this driver to prevent a clash
+with other kernel modules.</para>
+
+<para>On 64-bit systems, if you want full acceleration for 32-bit
+programs such as Wine, you should also set the following:
+<programlisting>
+hardware.opengl.driSupport32Bit = true;
+</programlisting>
+</para>
+
+</simplesect>
 
 <simplesect><title>Touchpads</title>
 
