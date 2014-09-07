@@ -33,9 +33,14 @@ rec {
     , # Return a flat list of sub-options.  Used to generate
       # documentation.
       getSubOptions ? prefix: {}
+    , # List of modules if any, or null if none.
+      getSubModules ? null
+    , # Function for building the same option type  with a different list of
+      # modules.
+      substSubModules ? m: null
     }:
     { _type = "option-type";
-      inherit name check merge getSubOptions;
+      inherit name check merge getSubOptions getSubModules substSubModules;
     };
 
 
@@ -110,6 +115,8 @@ rec {
           elemType.merge (loc ++ ["[${toString n}-${toString m}]"])
             [{ inherit (def) file; value = def'; }]) def.value) defs);
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
+      getSubModules = elemType.getSubModules;
+      substSubModules = m: listOf (elemType.substSubModules m);
     };
 
     attrsOf = elemType: mkOptionType {
@@ -121,6 +128,8 @@ rec {
           (map (def: listToAttrs (mapAttrsToList (n: def':
             { name = n; value = { inherit (def) file; value = def'; }; }) def.value)) defs);
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
+      getSubModules = elemType.getSubModules;
+      substSubModules = m: attrsOf (elemType.substSubModules m);
     };
 
     # List or attribute set of ...
@@ -147,12 +156,16 @@ rec {
           else false;
         merge = loc: defs: attrOnly.merge loc (imap convertIfList defs);
         getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name?>"]);
+        getSubModules = elemType.getSubModules;
+        substSubModules = m: loaOf (elemType.substSubModules m);
       };
 
     uniq = elemType: mkOptionType {
       inherit (elemType) name check;
       merge = mergeOneOption;
       getSubOptions = elemType.getSubOptions;
+      getSubModules = elemType.getSubModules;
+      substSubModules = m: uniq (elemType.substSubModules m);
     };
 
     nullOr = elemType: mkOptionType {
@@ -165,6 +178,8 @@ rec {
           throw "The option `${showOption loc}' is defined both null and not null, in ${showFiles (getFiles defs)}."
         else elemType.merge loc defs;
       getSubOptions = elemType.getSubOptions;
+      getSubModules = elemType.getSubModules;
+      substSubModules = m: nullOr (elemType.substSubModules m);
     };
 
     functionTo = elemType: mkOptionType {
@@ -173,6 +188,8 @@ rec {
       merge = loc: defs:
         fnArgs: elemType.merge loc (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs);
       getSubOptions = elemType.getSubOptions;
+      getSubModules = elemType.getSubModules;
+      substSubModules = m: functionTo (elemType.substSubModules m);
     };
 
     submodule = opts:
@@ -192,6 +209,8 @@ rec {
           { modules = opts'; inherit prefix;
             # FIXME: hack to get shit to evaluate.
             args = { name = ""; }; }).options;
+        getSubModules = opts';
+        substSubModules = m: submodule m;
       };
 
     enum = values: mkOptionType {
