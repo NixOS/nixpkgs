@@ -11951,7 +11951,10 @@ let
 
   snes9x-gtk = callPackage ../misc/emulators/snes9x-gtk { };
 
-  higan = callPackage ../misc/emulators/higan { };
+  higan = callPackage ../misc/emulators/higan {
+    profile = "accuracy";
+    gui = "gtk";
+  };
 
   misc = import ../misc/misc.nix { inherit pkgs stdenv; };
 
