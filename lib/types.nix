@@ -182,16 +182,6 @@ rec {
       substSubModules = m: nullOr (elemType.substSubModules m);
     };
 
-    functionTo = elemType: mkOptionType {
-      name = "function that evaluates to a(n) ${elemType.name}";
-      check = isFunction;
-      merge = loc: defs:
-        fnArgs: elemType.merge loc (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs);
-      getSubOptions = elemType.getSubOptions;
-      getSubModules = elemType.getSubModules;
-      substSubModules = m: functionTo (elemType.substSubModules m);
-    };
-
     submodule = opts:
       let
         opts' = toList opts;
