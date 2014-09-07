@@ -1001,6 +1001,8 @@ let
 
   ethtool = callPackage ../tools/misc/ethtool { };
 
+  eternity = callPackage ../games/eternity-engine { };
+
   ettercap = callPackage ../applications/networking/sniffers/ettercap { };
 
   euca2ools = callPackage ../tools/virtualization/euca2ools { pythonPackages = python26Packages; };
