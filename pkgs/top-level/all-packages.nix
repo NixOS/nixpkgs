@@ -4045,9 +4045,13 @@ let
   ruby_2_0 = ruby_2_0_0;
   ruby_2_1 = ruby_2_1_3;
 
-  rubyLibsWith = myruby: callPackage ../development/interpreters/ruby/gems.nix {
-    ruby = myruby;
+  rubyLibsWith = ruby: callPackage ../development/interpreters/ruby/gems.nix {
+    inherit ruby;
   };
+
+  loadRubyEnv = (callPackage ../development/interpreters/ruby/bundix.nix {
+    inherit rubyLibsWith;
+  }).loadRubyEnv;
 
   rubyLibs_1_8_7 = rubyLibsWith ruby_1_8_7;
   rubyLibs_1_9_3 = rubyLibsWith ruby_1_9_3;
