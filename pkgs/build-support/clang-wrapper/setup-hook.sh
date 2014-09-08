@@ -1,3 +1,5 @@
+export NIX_GCC=@out@
+
 addCVars () {
     if test -d $1/include; then
         export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem $1/include"
@@ -12,7 +14,7 @@ addCVars () {
     fi
 }
 
-envHooks=(${envHooks[@]} addCVars)
+envHooks+=(addCVars)
 
 # Note: these come *after* $out in the PATH (see setup.sh).
 

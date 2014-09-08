@@ -7,11 +7,9 @@
 # The function defaults are for easy testing.
 { system ? builtins.currentSystem
 , allPackages ? import ../../top-level/all-packages.nix
-, platform ? null, config ? {} }:
+, platform ? null, config ? {}, lib }:
 
 rec {
-
-  lib = import ../../../lib;
 
   bootstrapFiles =
     if system == "i686-linux" then import ./bootstrap/i686.nix
@@ -26,7 +24,6 @@ rec {
   commonPreHook =
     ''
       export NIX_ENFORCE_PURITY=1
-      havePatchELF=1
       ${if system == "x86_64-linux" then "NIX_LIB64_IN_SELF_RPATH=1" else ""}
       ${if system == "mips64el-linux" then "NIX_LIB32_IN_SELF_RPATH=1" else ""}
     '';
@@ -209,7 +206,7 @@ rec {
     extraAttrs = {
       glibc = stage2.pkgs.glibc;  # Required by gcc47 build
     };
-    extraPath = [ stage2.pkgs.paxctl ];
+    extraPath = [ stage2.pkgs.patchelf stage2.pkgs.paxctl ];
   };
 
 
@@ -223,13 +220,9 @@ rec {
       coreutils = bootstrapTools;
       name = "";
     };
-    extraPath = [ stage3.pkgs.xz ];
+    extraPath = [ stage2.pkgs.patchelf stage3.pkgs.xz ];
     overrides = pkgs: {
-      # Zlib has to be inherited and not rebuilt in this stage,
-      # because gcc (since JAR support) already depends on zlib, and
-      # then if we already have a zlib we want to use that for the
-      # other purposes (binutils and top-level pkgs) too.
-      inherit (stage3.pkgs) gettext gnum4 gmp perl glibc zlib;
+      inherit (stage3.pkgs) gettext gnum4 gmp perl glibc;
     };
   };
 
@@ -253,8 +246,9 @@ rec {
       '';
 
     initialPath =
-      ((import ../common-path.nix) {pkgs = stage4.pkgs;})
-      ++ [stage4.pkgs.patchelf stage4.pkgs.paxctl ];
+      ((import ../common-path.nix) {pkgs = stage4.pkgs;});
+
+    extraBuildInputs = [ stage4.pkgs.patchelf stage4.pkgs.paxctl ];
 
     shell = stage4.pkgs.bash + "/bin/bash";
 
@@ -278,7 +272,7 @@ rec {
       inherit (stage4.pkgs)
         gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
         glibc gnumake gnused gnutar gnugrep gnupatch patchelf
-        attr acl paxctl zlib;
+        attr acl paxctl;
     };
   };
 
