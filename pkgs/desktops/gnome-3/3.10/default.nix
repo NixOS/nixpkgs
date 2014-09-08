@@ -2,6 +2,7 @@
 
 rec {
   inherit (pkgs) glib gtk2 gtk3 gnome2 upower glib_networking;
+  gnome3 = pkgs.gnome3_10 // { recurseForDerivations = false; };
   gtk = gtk3; # just to be sure
   libcanberra = pkgs.libcanberra_gtk3; # just to be sure
   inherit (pkgs.gnome2) ORBit2;

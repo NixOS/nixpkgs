@@ -1,11 +1,8 @@
 { stdenv, fetchurl, pkgconfig, makeWrapper, intltool, libgpod, curl, flac,
-  gnome3_12, gtk3, glib, gettext, perl, perlXMLParser , libglade, flex, libid3tag,
+  gnome, gtk3, glib, gettext, perl, perlXMLParser, flex, libglade, libid3tag,
   libvorbis, hicolor_icon_theme, gdk_pixbuf }:
 
-let
-  gnome = gnome3_12;
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   version = "2.1.4";
   name = "gtkpod-${version}";
 
