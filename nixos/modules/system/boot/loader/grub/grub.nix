@@ -279,7 +279,7 @@ in
     assertions = [{ assertion = !cfg.zfsSupport || cfg.version == 2;
                     message = "Only grub version 2 provides zfs support";}]
       ++ flip map cfg.devices (dev: {
-        assertion = hasPrefix "/" dev;
+        assertion = dev == "nodev" || hasPrefix "/" dev;
         message = "Grub devices must be absolute paths, not ${dev}";
       });
 
