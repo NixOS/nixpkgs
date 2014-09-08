@@ -968,6 +968,8 @@ let
 
   duply = callPackage ../tools/backup/duply { };
 
+  dvdisaster = callPackage ../tools/cd-dvd/dvdisaster { };
+
   dvdplusrwtools = callPackage ../tools/cd-dvd/dvd+rw-tools { };
 
   dvgrab = callPackage ../tools/video/dvgrab { };
