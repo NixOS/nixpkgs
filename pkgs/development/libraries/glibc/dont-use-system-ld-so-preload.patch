@@ -1,0 +1,6 @@
+diff -rupN a/elf/rtld.c b/elf/rtld.c
+--- a/elf/rtld.c	2013-08-11 00:52:55.000000001 +0200
++++ b/elf/rtld.c	2014-02-18 13:56:19.000000001 +0100
+@@ -1642,1 +1642,1 @@ ERROR: ld.so: object '%s' cannot be load
+-  static const char preload_file[] = "/etc/ld.so.preload";
++  static const char preload_file[] = "/etc/ld-nix.so.preload";
