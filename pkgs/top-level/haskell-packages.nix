@@ -1234,9 +1234,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hoodleTypes = callPackage ../development/libraries/haskell/hoodle-types {};
 
   hoogle = callPackage ../development/libraries/haskell/hoogle {};
-  hoogleLocal = callPackage ../development/libraries/haskell/hoogle/local.nix {
-    parallel = pkgs.parallel;
-  };
+  hoogleLocal = callPackage ../development/libraries/haskell/hoogle/local.nix {};
 
   hopenssl = callPackage ../development/libraries/haskell/hopenssl {};
 
