@@ -2627,7 +2627,6 @@ let
 
   bashInteractive = appendToName "interactive" (callPackage ../shells/bash {
     interactive = true;
-    readline = readline63; # Includes many vi mode fixes
   });
 
   bashCompletion = callPackage ../shells/bash-completion { };
@@ -3684,7 +3683,6 @@ let
     suitesparse = null;
     openjdk = null;
     gnuplot = null;
-    readline = readline63;
   };
   octaveFull = (lowPrio (callPackage ../development/interpreters/octave {
     fltk = fltk13;
@@ -4372,7 +4370,6 @@ let
   gdb = callPackage ../development/tools/misc/gdb {
     guile = null;
     hurd = gnu.hurdCross;
-    readline = readline63;
     inherit (gnu) mig;
   };
 
@@ -6215,13 +6212,12 @@ let
 
   raul = callPackage ../development/libraries/audio/raul { };
 
-  readline = readline6; # 6.2 works, 6.3 breaks python, parted
-
-  readline4 = callPackage ../development/libraries/readline/readline4.nix { };
+  readline = readline6;
+  readline6 = readline63;
 
   readline5 = callPackage ../development/libraries/readline/readline5.nix { };
 
-  readline6 = callPackage ../development/libraries/readline/readline6.nix { };
+  readline62 = callPackage ../development/libraries/readline/readline6.nix { };
 
   readline63 = callPackage ../development/libraries/readline/readline6.3.nix { };
 

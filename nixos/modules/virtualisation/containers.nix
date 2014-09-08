@@ -177,6 +177,11 @@ in
             if [ "$PRIVATE_NETWORK" = 1 ]; then
               ip link del dev "ve-$INSTANCE" 2> /dev/null || true
             fi
+
+
+            if [ "$PRIVATE_NETWORK" = 1 ]; then
+              ip link del dev "ve-$INSTANCE" 2> /dev/null || true
+            fi
          '';
 
         script =
@@ -240,6 +245,12 @@ in
                 ip route add $LOCAL_ADDRESS dev $ifaceHost
               fi
             fi
+
+            # This blocks until the container-startup-done service
+            # writes something to this pipe.  FIXME: it also hangs
+            # until the start timeout expires if systemd-nspawn exits.
+            read x < $root/var/lib/startup-done
+            rm -f $root/var/lib/startup-done
           '';
 
         preStop =

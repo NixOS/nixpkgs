@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-isl=system" ];
 
+  enableParallelBuilding = true;
+
   doCheck = true;
 
   meta = {

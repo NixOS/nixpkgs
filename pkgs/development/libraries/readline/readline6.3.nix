@@ -1,11 +1,13 @@
-{ fetchurl, stdenv, ncurses }:
+{ fetchzip, stdenv, ncurses }:
 
 stdenv.mkDerivation (rec {
-  name = "readline-6.3";
+  name = "readline-6.3p08";
 
-  src = fetchurl {
-    url = "mirror://gnu/readline/${name}.tar.gz";
-    sha256 = "0hzxr9jxqqx5sxsv9vmlxdnvlr9vi4ih1avjb869hbs6p5qn1fjn";
+  src = fetchzip {
+    #url = "mirror://gnu/readline/${name}.tar.gz";
+    url = "http://git.savannah.gnu.org/cgit/readline.git/snapshot/"
+      + "readline-a73b98f779b388a5d0624e02e8bb187246e3e396.tar.gz";
+    sha256 = "19ji3wrv4fs79fd0nkacjy9q94pvy2cm66yb3aqysahg0cbrz5l1";
   };
 
   propagatedBuildInputs = [ncurses];
@@ -17,7 +19,7 @@ stdenv.mkDerivation (rec {
       ./no-arch_only-6.3.patch
     ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Library for interactive line editing";
 
     longDescription = ''
@@ -37,9 +39,11 @@ stdenv.mkDerivation (rec {
 
     homepage = http://savannah.gnu.org/projects/readline/;
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ maintainers.ludo ];
+
+    platforms = platforms.unix;
   };
 }
 
