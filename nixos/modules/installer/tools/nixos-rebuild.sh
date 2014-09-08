@@ -226,7 +226,7 @@ fi
 # default and/or activate it now.
 if [ "$action" = switch -o "$action" = boot -o "$action" = test ]; then
     if ! $pathToConfig/bin/switch-to-configuration "$action"; then
-        echo "warning: there were error switching to the new configuration" >&2
+        echo "warning: error(s) occured while switching to the new configuration" >&2
         exit 1
     fi
 fi
