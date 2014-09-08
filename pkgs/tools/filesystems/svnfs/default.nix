@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   NIX_LDFLAGS="-lsvn_client-1";
 
   meta = {
-    description = "SvnFs is a filesystem written using FUSE for accessing Subversion repositories";
+    description = "FUSE filesystem for accessing Subversion repositories";
     homepage = http://www.jmadden.eu/index.php/svnfs/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [stdenv.lib.maintainers.marcweber];

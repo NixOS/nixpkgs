@@ -18,7 +18,7 @@ rec {
   phaseNames = ["doConfigure" "doMakeInstall"];
       
   meta = {
-    description = "Gambit Scheme to C compiler";
+    description = "Scheme to C compiler";
     maintainers = [
       a.lib.maintainers.raskin
     ];

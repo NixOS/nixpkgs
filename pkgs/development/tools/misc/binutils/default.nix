@@ -2,6 +2,8 @@
 , cross ? null, gold ? true, bison ? null
 }:
 
+assert !stdenv.isDarwin;
+
 let basename = "binutils-2.23.1"; in
 
 with { inherit (stdenv.lib) optional optionals optionalString; };
@@ -59,7 +61,6 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--enable-shared" "--enable-deterministic-archives" ]
-    ++ optional noSysDirs "--with-sysroot=/var/empty"
     ++ optional (stdenv.system == "mips64el-linux") "--enable-fix-loongson2f-nop"
     ++ optional (cross != null) "--target=${cross.config}"
     ++ optionals gold [ "--enable-gold" "--enable-plugins" ]
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    description = "GNU Binutils, tools for manipulating binaries (linker, assembler, etc.)";
+    description = "Tools for manipulating binaries (linker, assembler, etc.)";
 
     longDescription = ''
       The GNU Binutils are a collection of binary tools.  The main

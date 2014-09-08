@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, dbus_glib, libxml2, libxslt, getopt, nixUnstable, dysnomia, libintlOrEmpty, libiconvOrEmpty }:
 
 stdenv.mkDerivation {
-  name = "disnix-0.3pre174e883b7b09da822494876d2f297736f33707a7";
+  name = "disnix-0.3pre24d959b3b37ce285971810245643a7f18cb85fcc";
   
   src = fetchurl {
-    url = http://hydra.nixos.org/build/11773951/download/4/disnix-0.3pre174e883b7b09da822494876d2f297736f33707a7.tar.gz;
-    sha256 = "19hdh2mrlyiq1g3z6lnnqqvripmfcdnm18jpm4anp5iarhnwh3y4";
+    url = http://hydra.nixos.org/build/13612993/download/4/disnix-0.3pre24d959b3b37ce285971810245643a7f18cb85fcc.tar.gz;
+    sha256 = "0ml8g6h7x79mvv84il9vb9b88kqak9m3yzavmar66i3dvyqr1dwb";
   };
   
   buildInputs = [ pkgconfig dbus_glib libxml2 libxslt getopt nixUnstable libintlOrEmpty libiconvOrEmpty dysnomia ];

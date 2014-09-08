@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.torproject.org/;
     repositories.git = https://git.torproject.org/git/tor;
-    description = "Tor, an anonymous network router to improve privacy on the Internet";
+    description = "Anonymous network router to improve privacy on the Internet";
 
     longDescription=''
       Tor protects you by bouncing your communications around a distributed

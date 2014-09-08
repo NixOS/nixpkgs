@@ -7,18 +7,18 @@
 
 cabal.mkDerivation (self: {
   pname = "github";
-  version = "0.9";
-  sha256 = "19ff9srvm03n9iz7mf6wadydfw0xs0j9ayvr86dmmp9blmjkqc0d";
+  version = "0.11.0";
+  sha256 = "13p0iplxr85fvgx5lird76xchmhh7xpddq900qr02kbvn5mqv607";
   buildDepends = [
     aeson attoparsec caseInsensitive conduit dataDefault failure
     hashable HTTP httpConduit httpTypes network text time
     unorderedContainers vector
   ];
-  jailbreak = true;
   meta = {
     homepage = "https://github.com/fpco/github";
     description = "Access to the Github API, v3";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ fuuzetsu ];
   };
 })

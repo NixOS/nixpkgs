@@ -1,0 +1,11 @@
+diff -u -r a/src/makefile.unix b/src/makefile.unix
+--- a/src/makefile.unix	2014-01-22 22:07:59.801601964 -0800
++++ b/src/makefile.unix	2014-01-22 22:08:07.980332839 -0800
+@@ -12,7 +12,6 @@
+ 
+ # for boost 1.37, add -mt to the boost libraries
+ LIBS= \
+- -Wl,-Bstatic \
+    -l boost_system \
+    -l boost_filesystem \
+    -l boost_program_options \

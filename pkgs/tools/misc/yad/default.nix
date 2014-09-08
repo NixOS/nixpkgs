@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://code.google.com/p/yad/";
-    description = "Yad (yet another dialog) is a GUI dialog tool for shell scripts";
+    description = "GUI dialog tool for shell scripts";
     longDescription = ''
       Yad (yet another dialog) is a GUI dialog tool for shell scripts. It is a
       fork of Zenity with many improvements, such as custom buttons, additional

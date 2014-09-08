@@ -35,7 +35,7 @@ let
   bindir = pkgs.buildEnv {
     name = "cups-progs";
     paths = cfg.drivers;
-    pathsToLink = [ "/lib/cups" "/share/cups" "/bin" ];
+    pathsToLink = [ "/lib/cups" "/share/cups" "/bin" "/etc/cups" ];
     postBuild = cfg.bindirCmds;
   };
 
@@ -89,6 +89,20 @@ in
         '';
       };
 
+      clientConf = mkOption {
+        type = types.lines;
+        default = "";
+        example =
+          ''
+            ServerName server.example.com
+            Encryption Never
+          '';
+        description = ''
+          The contents of the client configuration.
+          (<filename>client.conf</filename>)
+        '';
+      };
+
       drivers = mkOption {
         type = types.listOf types.path;
         example = literalExample "[ pkgs.splix ]";
@@ -123,6 +137,14 @@ in
       };
 
     environment.systemPackages = [ cups ];
+
+    environment.variables.CUPS_SERVERROOT = "/etc/cups";
+
+    environment.etc = [
+      { source = pkgs.writeText "client.conf" cfg.clientConf;
+        target = "cups/client.conf";
+      }
+    ];
 
     services.dbus.packages = [ cups ];
 

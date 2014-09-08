@@ -2,27 +2,27 @@
 
 { cabal, aeson, attoparsec, authenticateOauth, caseInsensitive
 , conduit, conduitExtra, dataDefault, doctest, filepath, hlint
-, hspec, httpClient, httpConduit, httpTypes, lens, monadControl
-, monadLogger, network, resourcet, shakespeare, text, time
+, hspec, httpClient, httpConduit, httpTypes, lens, lensAeson
+, monadControl, monadLogger, networkUri, resourcet, text, time
 , transformers, transformersBase, twitterTypes
 }:
 
 cabal.mkDerivation (self: {
   pname = "twitter-conduit";
-  version = "0.0.5.5";
-  sha256 = "13wk863xjlg8g62yhbq4aar7z77n0awh500l6v41fam99lihzxab";
+  version = "0.0.5.8";
+  sha256 = "0cpakiajrwgpg2f04nbfryajln281kgsi0ly9xnx370y5pn98r86";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     aeson attoparsec authenticateOauth conduit conduitExtra dataDefault
-    httpClient httpConduit httpTypes lens monadLogger resourcet
-    shakespeare text time transformers twitterTypes
+    httpClient httpConduit httpTypes lens lensAeson monadLogger
+    networkUri resourcet text time transformers twitterTypes
   ];
   testDepends = [
     aeson attoparsec authenticateOauth caseInsensitive conduit
     conduitExtra dataDefault doctest filepath hlint hspec httpClient
-    httpConduit httpTypes lens monadControl monadLogger network
-    resourcet shakespeare text time transformers transformersBase
+    httpConduit httpTypes lens lensAeson monadControl monadLogger
+    networkUri resourcet text time transformers transformersBase
     twitterTypes
   ];
   meta = {

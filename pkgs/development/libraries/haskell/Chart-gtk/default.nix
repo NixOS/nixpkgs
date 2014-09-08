@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Chart-gtk";
-  version = "1.2.4";
-  sha256 = "16dfmkls341cmk13j1z3rw2wxdvxr5rqsv1ff4qjhjak9j7hkqjq";
+  version = "1.3";
+  sha256 = "1bi7gim31w3xf6jsd2hkwhkhw1i9c4dmxnm3f46336k9rsxn59ph";
   buildDepends = [ cairo Chart ChartCairo colour gtk mtl time ];
   meta = {
     homepage = "https://github.com/timbod7/haskell-chart/wiki";

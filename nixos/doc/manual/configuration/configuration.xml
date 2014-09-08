@@ -1,0 +1,32 @@
+<part xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:id="ch-configuration">
+
+<title>Configuration</title>
+
+<partintro>
+
+<para>This chapter describes how to configure various aspects of a
+NixOS machine through the configuration file
+<filename>/etc/nixos/configuration.nix</filename>.  As described in
+<xref linkend="sec-changing-config" />, changes to this file only take
+effect after you run <command>nixos-rebuild</command>.</para>
+
+</partintro>
+
+<xi:include href="config-syntax.xml" />
+<xi:include href="package-mgmt.xml" />
+<xi:include href="user-mgmt.xml" />
+<xi:include href="file-systems.xml" />
+<xi:include href="x-windows.xml" />
+<xi:include href="networking.xml" />
+<xi:include href="linux-kernel.xml" />
+
+<!-- FIXME: auto-include NixOS module docs -->
+<xi:include href="postgresql.xml" />
+
+<!-- Apache; libvirtd virtualisation -->
+
+</part>

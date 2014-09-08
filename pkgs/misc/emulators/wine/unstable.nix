@@ -7,12 +7,12 @@ assert stdenv.isLinux;
 assert stdenv.gcc.gcc != null;
 
 let
-    version = "1.7.23";
+    version = "1.7.25";
     name = "wine-${version}";
 
     src = fetchurl {
       url = "mirror://sourceforge/wine/${name}.tar.bz2";
-      sha256 = "012ww1yifayakw9n2m23sx83dc3i2xiq3bn5n9iprppdhwxpp76v";
+      sha256 = "0h7mijxv5nhn0nn5knr8arq9bl7chi3diaa668yyhjbxwn15xqzm";
     };
 
     gecko = fetchurl {

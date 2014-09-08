@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "GNU uCommon C++, C++ library to facilitate using C++ design patterns";
+    description = "C++ library to facilitate using C++ design patterns";
     homepage = http://www.gnu.org/software/commoncpp/;
     license = stdenv.lib.licenses.lgpl3Plus;
 

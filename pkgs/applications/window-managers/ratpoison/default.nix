@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.nongnu.org/ratpoison/";
-    description = "Ratpoison, a simple mouse-free tiling window manager";
+    description = "Simple mouse-free tiling window manager";
     license = stdenv.lib.licenses.gpl2Plus;
 
     longDescription = ''

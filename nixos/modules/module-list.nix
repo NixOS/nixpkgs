@@ -5,6 +5,7 @@
   ./config/fonts/fonts.nix
   ./config/fonts/ghostscript.nix
   ./config/gnu.nix
+  ./config/gtk-exe-env.nix
   ./config/i18n.nix
   ./config/krb5.nix
   ./config/ldap.nix
@@ -13,12 +14,14 @@
   ./config/nsswitch.nix
   ./config/power-management.nix
   ./config/pulseaudio.nix
+  ./config/qt-plugin-env.nix
   ./config/shells-environment.nix
   ./config/swap.nix
   ./config/sysctl.nix
   ./config/system-environment.nix
   ./config/system-path.nix
   ./config/timezone.nix
+  ./config/vpnc.nix
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
   ./config/zram.nix
@@ -43,6 +46,7 @@
   ./misc/ids.nix
   ./misc/lib.nix
   ./misc/locate.nix
+  ./misc/meta.nix
   ./misc/nixpkgs.nix
   ./misc/passthru.nix
   ./misc/version.nix
@@ -59,8 +63,10 @@
   ./programs/shell.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
+  ./programs/uim.nix
   ./programs/venus.nix
   ./programs/wvdial.nix
+  ./programs/freetds.nix
   ./programs/zsh/zsh.nix
   ./rename.nix
   ./security/apparmor.nix
@@ -100,6 +106,7 @@
   ./services/databases/monetdb.nix
   ./services/databases/mongodb.nix
   ./services/databases/mysql.nix
+  ./services/databases/neo4j.nix 
   ./services/databases/openldap.nix
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
@@ -142,6 +149,7 @@
   ./services/mail/dovecot.nix
   ./services/mail/freepops.nix
   ./services/mail/mail.nix
+  ./services/mail/mlmmj.nix
   ./services/mail/opensmtpd.nix
   ./services/mail/postfix.nix
   ./services/mail/spamassassin.nix
@@ -153,20 +161,28 @@
   ./services/misc/folding-at-home.nix
   ./services/misc/gitolite.nix
   ./services/misc/gpsd.nix
+  ./services/misc/mesos-master.nix
+  ./services/misc/mesos-slave.nix
   ./services/misc/nix-daemon.nix
   ./services/misc/nix-gc.nix
   ./services/misc/nixos-manual.nix
   ./services/misc/nix-ssh-serve.nix
+  ./services/misc/phd.nix
   ./services/misc/rippled.nix
   ./services/misc/rogue.nix
+  ./services/misc/siproxd.nix
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
+  ./services/misc/uhub.nix
+  ./services/misc/zookeeper.nix
   ./services/monitoring/apcupsd.nix
   ./services/monitoring/dd-agent.nix
   ./services/monitoring/graphite.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
+  ./services/monitoring/riemann.nix
+  ./services/monitoring/riemann-dash.nix
   ./services/monitoring/smartd.nix
   ./services/monitoring/statsd.nix
   ./services/monitoring/systemhealth.nix
@@ -179,7 +195,10 @@
   ./services/network-filesystems/openafs-client/default.nix
   ./services/network-filesystems/rsyncd.nix
   ./services/network-filesystems/samba.nix
+  ./services/network-filesystems/diod.nix
+  ./services/network-filesystems/yandex-disk.nix
   ./services/networking/amuled.nix
+  ./services/networking/atftpd.nix
   ./services/networking/avahi-daemon.nix
   ./services/networking/bind.nix
   ./services/networking/bitlbee.nix
@@ -217,6 +236,7 @@
   ./services/networking/ntpd.nix
   ./services/networking/oidentd.nix
   ./services/networking/openfire.nix
+  ./services/networking/openntpd.nix
   ./services/networking/openvpn.nix
   ./services/networking/polipo.nix
   ./services/networking/prayer.nix
@@ -252,6 +272,7 @@
   ./services/search/elasticsearch.nix
   ./services/search/solr.nix
   ./services/security/clamav.nix
+  ./services/security/fail2ban.nix
   ./services/security/fprot.nix
   ./services/security/frandom.nix
   ./services/security/haveged.nix
@@ -293,6 +314,7 @@
   ./services/x11/window-managers/awesome.nix
   #./services/x11/window-managers/compiz.nix
   ./services/x11/window-managers/default.nix
+  ./services/x11/window-managers/fluxbox.nix
   ./services/x11/window-managers/icewm.nix
   ./services/x11/window-managers/bspwm.nix
   ./services/x11/window-managers/metacity.nix
@@ -348,6 +370,7 @@
   ./virtualisation/docker.nix
   ./virtualisation/libvirtd.nix
   #./virtualisation/nova.nix
+  ./virtualisation/openvswitch.nix
   ./virtualisation/virtualbox-guest.nix
   #./virtualisation/xen-dom0.nix
 ]

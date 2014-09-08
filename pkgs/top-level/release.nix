@@ -22,11 +22,14 @@ let
   jobs =
     { tarball = import ./make-tarball.nix { inherit nixpkgs officialRelease; };
 
+      manual = import ../../doc;
+
       unstable = pkgs.releaseTools.aggregate
         { name = "nixpkgs-${jobs.tarball.version}";
           meta.description = "Release-critical builds for the Nixpkgs unstable channel";
           constituents =
             [ jobs.tarball
+              jobs.manual
               jobs.stdenv.x86_64-linux
               jobs.stdenv.i686-linux
               jobs.stdenv.x86_64-darwin
@@ -61,7 +64,6 @@ let
       binutils = linux;
       bind = linux;
       bitlbee = linux;
-      bittorrent = linux;
       blender = linux;
       bsdiff = all;
       btrfsProgs = linux;
@@ -157,7 +159,6 @@ let
       htmlTidy = all;
       hugin = linux;
       iana_etc = linux;
-      icecat3Xul = linux;
       icewm = linux;
       idutils = all;
       ifplugd = linux;
@@ -437,6 +438,14 @@ let
         xfdesktop = linux;
         xfwm4 = linux;
       };
+
+      linuxPackages_testing = { };
+      linuxPackages_grsec_stable_desktop = { };
+      linuxPackages_grsec_stable_server = { };
+      linuxPackages_grsec_stable_server_xen = { };
+      linuxPackages_grsec_testing_desktop = { };
+      linuxPackages_grsec_testing_server = { };
+      linuxPackages_grsec_testing_server_xen = { };
 
     } ));
 

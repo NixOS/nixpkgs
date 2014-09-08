@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   postFixup = lib.optionalString stdenv.isDarwin "rm $out/lib/*.so";
 
   meta = {
-    description = "GNU Ncurses, a free software emulation of curses in SVR4 and more";
+    description = "Free software emulation of curses in SVR4 and more";
 
     longDescription = ''
       The Ncurses (new curses) library is a free software emulation of

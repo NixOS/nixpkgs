@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://gravit.slowchop.com";
-    description = "A beautiful OpenGL-based gravity simulator";
+    description = "Beautiful OpenGL-based gravity simulator";
     license = stdenv.lib.licenses.gpl2;
 
     longDescription = ''

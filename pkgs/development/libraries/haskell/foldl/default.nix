@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "foldl";
-  version = "1.0.5";
-  sha256 = "08yjzzplg715hzkhwbf8nv2zm7c5wd2kph4zx94iml0cnc6ip048";
+  version = "1.0.6";
+  sha256 = "1i4pm48x7f8l4gqbb2bgqshx5cx44acr24l75czliq656sqm405i";
   buildDepends = [ primitive text transformers vector ];
   meta = {
     description = "Composable, streaming, and efficient left folds";

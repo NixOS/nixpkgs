@@ -7,6 +7,11 @@ stdenv.mkDerivation {
     sha256 = "07fgn0y4yj7p2vh6a37q273hf98gkfw2sdam5r1ldn1k0m1ayrqj";
   };
   buildInputs = [ gettext perl pkgconfig libxml2 pango cairo ];
+  
+  postInstall = ''
+    # for munin support
+    mv $out/lib/perl/5*/*/*.pm $out/lib/perl/5*/
+  '';
 
   meta = {
     homepage = http://oss.oetiker.ch/rrdtool/;

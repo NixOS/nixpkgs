@@ -37,7 +37,6 @@
     #pkgs.jfsrec # disabled because of Boost dependency
 
     # Some compression/archiver tools.
-    pkgs.unrar
     pkgs.unzip
     pkgs.zip
     pkgs.dar # disk archiver

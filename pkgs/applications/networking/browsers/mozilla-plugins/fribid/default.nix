@@ -1,20 +1,19 @@
 { stdenv, fetchurl, pkgconfig, openssl, glib, libX11, gtk2, gettext, intltool }:
 
-let version = "1.0.2"; in
 stdenv.mkDerivation rec {
   name = "fribid-${version}";
+  version = "1.0.4";
   builder = ./builder.sh;
 
   src = fetchurl {
     url = "https://fribid.se/releases/source/${name}.tar.bz2";
-    sha256 = "d7cd9adf04fedf50b266a5c14ddb427cbb263d3bc160ee0ade03aca9d5356e5c";
+    sha256 = "a679f3a0534d5f05fac10b16b49630a898c0b721cfa24d2c827fa45485476649";
   };
 
   buildInputs = [ pkgconfig openssl libX11 gtk2 glib gettext intltool ];
   patches = [
     ./translation-xgettext-to-intltool.patch
     ./plugin-linkfix.patch
-    ./emulated-version.patch
     ./ipc-lazytrace.patch
     ];
 
@@ -22,10 +21,15 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A browser plugin to manage Swedish BankID:s";
+    longDescription = ''
+      FriBID is an open source software for the Swedish e-id system
+      called BankID. FriBID also supports processor architectures and
+      Linux/BSD distributions that the official software doesn't
+      support.
+    '';
     homepage = http://fribid.se;
     license = [ "GPLv2" "MPLv1" ];
     maintainers = [ stdenv.lib.maintainers.edwtjo ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }
-

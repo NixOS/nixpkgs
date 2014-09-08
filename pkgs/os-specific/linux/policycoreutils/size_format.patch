@@ -1,0 +1,11 @@
+--- setfiles/restore.c.orig	2014-08-21 17:26:00.200788259 +0200
++++ setfiles/restore.c	2014-08-21 17:26:04.728888118 +0200
+@@ -118,7 +118,7 @@
+ 		r_opts->count++;
+ 		if (r_opts->count % STAR_COUNT == 0) {
+ 			if (r_opts->progress == 1) {
+-				fprintf(stdout, "\r%luk", (size_t) r_opts->count / STAR_COUNT );
++				fprintf(stdout, "\r%zuk", (size_t) r_opts->count / STAR_COUNT );
+ 			} else {
+ 				if (r_opts->nfile > 0) {
+ 					progress = (r_opts->count < r_opts->nfile) ? (100.0 * r_opts->count / r_opts->nfile) : 100;

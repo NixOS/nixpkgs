@@ -21,12 +21,12 @@ rec {
 
 
   # Get all files ending with the specified suffices from the given
-  # directory.  E.g. `sourceFilesBySuffices ./dir [".xml" ".c"]'.
+  # directory or its descendants.  E.g. `sourceFilesBySuffices ./dir
+  # [".xml" ".c"]'.
   sourceFilesBySuffices = path: exts:
     let filter = name: type:
       let base = baseNameOf (toString name);
-      in type != "directory" && lib.any (ext: lib.hasSuffix ext base) exts;
+      in type == "directory" || lib.any (ext: lib.hasSuffix ext base) exts;
     in builtins.filterSource filter path;
-
 
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, cairo, gettext, glibmm, gtk, gtkmm
+{ stdenv, fetchurl, boost, cairo, fontsConf, gettext, glibmm, gtk, gtkmm
 , libsigcxx, libtool, libxmlxx, pango, pkgconfig, imagemagick
 , intltool
 }:
@@ -42,9 +42,13 @@ stdenv.mkDerivation rec {
     };
 
   buildInputs = [
-    ETL boost cairo gettext glibmm gtk gtkmm imagemagick intltool
+    ETL boost cairo fontsConf gettext glibmm gtk gtkmm imagemagick intltool
     intltool libsigcxx libtool libxmlxx pkgconfig synfig
   ];
+
+  preBuild = ''
+    export FONTCONFIG_FILE=${fontsConf}
+  '';
 
   meta = with stdenv.lib; {
     description = "A 2D animation program";

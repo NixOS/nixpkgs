@@ -41,7 +41,7 @@ in {
 
       output = mkOption {
         type = types.path;
-        default = /var/cache/locatedb;
+        default = "/var/cache/locatedb";
         description = ''
           The database file to build.
         '';

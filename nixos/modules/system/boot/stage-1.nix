@@ -50,7 +50,7 @@ let
       cp -pvd ${pkgs.busybox}/bin/* ${pkgs.busybox}/sbin/* $out/bin/
 
       # Copy some utillinux stuff.
-      cp -vf ${pkgs.utillinux}/sbin/blkid $out/bin
+      cp -vf --remove-destination ${pkgs.utillinux}/sbin/blkid $out/bin
       cp -pdv ${pkgs.utillinux}/lib/libblkid*.so.* $out/lib
       cp -pdv ${pkgs.utillinux}/lib/libuuid*.so.* $out/lib
 
@@ -198,6 +198,18 @@ let
         }
         { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
           symlink = "/etc/mdadm.conf";
+        }
+        { object = pkgs.stdenv.mkDerivation {
+            name = "initrd-kmod-blacklist-ubuntu";
+            builder = pkgs.writeText "builder.sh" ''
+              source $stdenv/setup
+              target=$out
+
+              ${pkgs.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
+            '';
+            src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
+          };
+          symlink = "/etc/modprobe.d/ubuntu.conf";
         }
       ];
   };

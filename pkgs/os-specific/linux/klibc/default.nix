@@ -1,7 +1,7 @@
 { stdenv, fetchurl, kernelHeaders, kernel, perl }:
 
 let
-  version = "2.0.3";
+  version = "2.0.4";
 
   commonMakeFlags = [
     "prefix=$(out)"
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/klibc/2.0/klibc-${version}.tar.xz";
-    sha256 = "02035f2b230020de569d40605485121e0fe481ed33a93bdb8bf8c6ee2695fffa";
+    sha256 = "7f9a0850586def7cf4faeeb75e5d0f66e613674c524f6e77b0f4d93a26c801cb";
   };
 
   patches = [ ./no-reinstall-kernel-headers.patch ];

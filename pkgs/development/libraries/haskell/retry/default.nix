@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "retry";
-  version = "0.5";
-  sha256 = "1qp949w8pisgki06j5qgaxw1761q3gfccc7bqnhqpchazl4p6p6n";
+  version = "0.5.1";
+  sha256 = "1k5qv7c960dayhddvra1gpy1zv90rdjcrzpg8nzar9bpcxapczvj";
   buildDepends = [ dataDefaultClass exceptions transformers ];
   testDepends = [
     dataDefaultClass exceptions hspec HUnit QuickCheck time

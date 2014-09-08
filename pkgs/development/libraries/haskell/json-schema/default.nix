@@ -17,6 +17,7 @@ cabal.mkDerivation (self: {
     aeson attoparsec genericAeson HUnit tagged tasty tastyHunit tastyTh
     text
   ];
+  jailbreak = true;
   meta = {
     description = "Types and type classes for defining JSON schemas";
     license = self.stdenv.lib.licenses.bsd3;

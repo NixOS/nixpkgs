@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
   # 'make check' uses boost and tcl
   buildInputs = stdenv.lib.optionals doCheck [ boost tcl ];
 
-  configureFlags = stdenv.lib.optionalString stdenv.isDarwin "--disable-ccache";
+  configureFlags = "--disable-ccache";
 
   meta = {
-    description = "SWIG, an interface compiler that connects C/C++ code to higher-level languages";
+    description = "Interface compiler that connects C/C++ code to higher-level languages";
 
     longDescription = ''
        SWIG is an interface compiler that connects programs written in C and

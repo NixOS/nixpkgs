@@ -211,7 +211,7 @@ foreach my $line (-f "/etc/shadow" ? read_file("/etc/shadow") : ()) {
     my ($name, $password, @rest) = split(':', $line, -9);
     my $u = $usersOut{$name};;
     next if !defined $u;
-    $password = $u->{hashedPassword} if $u->{hashedPassword} && !$spec->{mutableUsers}; # FIXME
+    $password = $u->{hashedPassword} if defined $u->{hashedPassword} && !$spec->{mutableUsers}; # FIXME
     push @shadowNew, join(":", $name, $password, @rest) . "\n";
     $shadowSeen{$name} = 1;
 }
@@ -219,7 +219,7 @@ foreach my $line (-f "/etc/shadow" ? read_file("/etc/shadow") : ()) {
 foreach my $u (values %usersOut) {
     next if defined $shadowSeen{$u->{name}};
     my $password = "!";
-    $password = $u->{hashedPassword} if $u->{hashedPassword};
+    $password = $u->{hashedPassword} if defined $u->{hashedPassword};
     # FIXME: set correct value for sp_lstchg.
     push @shadowNew, join(":", $u->{name}, $password, "1::::::") . "\n";
 }

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   configureFlags = "--disable-Werror --disable-plugin --with-antlr-jar=${antlr}/lib/antlr.jar";
 
   meta = {
-    description = "GNU Classpath, essential libraries for Java";
+    description = "Essential libraries for Java";
 
     longDescription = ''
       GNU Classpath, Essential Libraries for Java, is a GNU project to create

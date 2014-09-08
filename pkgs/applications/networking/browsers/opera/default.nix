@@ -81,6 +81,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.opera.com;
-    description = "The Opera web browser";
+    description = "Web browser";
   };
 }

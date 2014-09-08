@@ -32,5 +32,7 @@ stdenv.mkDerivation {
     installTargets=copyfiles
     installFlags="COPYDIR=$out"
   '';
+
+  meta.broken = true;
   
 }

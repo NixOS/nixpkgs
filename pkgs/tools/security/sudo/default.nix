@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, coreutils, pam, groff }:
+{ stdenv, fetchurl, coreutils, pam, groff
+, sendmailPath ? "/var/setuid-wrappers/sendmail"
+}:
 
 stdenv.mkDerivation rec {
   name = "sudo-1.8.10p3";
@@ -17,6 +19,11 @@ stdenv.mkDerivation rec {
     "--with-rundir=/var/run"
     "--with-vardir=/var/db/sudo"
     "--with-logpath=/var/log/sudo.log"
+    "--with-sendmail=${sendmailPath}"
+  ];
+
+  configureFlagsArray = [
+    "--with-passprompt=[sudo] password for %p: "  # intentional trailing space
   ];
 
   postConfigure =

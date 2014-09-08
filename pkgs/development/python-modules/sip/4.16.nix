@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, python }:
+{ stdenv, fetchurl, python, isPyPy }:
 
-stdenv.mkDerivation rec {
+if isPyPy then throw "sip not supported for interpreter ${python.executable}" else stdenv.mkDerivation rec {
   name = "sip-4.16.1";
 
   src = fetchurl {

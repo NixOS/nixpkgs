@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.gnu.org/software/rcs/;
-    description = "GNU RCS, a revision control system";
+    description = "Revision control system";
     longDescription =
       '' The GNU Revision Control System (RCS) manages multiple revisions of
          files. RCS automates the storing, retrieval, logging,

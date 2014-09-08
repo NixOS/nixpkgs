@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://biolib.open-bio.org/";
-    description = "BioLib";
+    description = "Shared libraries for the major Bio* languages";
     license = stdenv.lib.licenses.gpl2;
     longDescription = ''
       BioLib brings together a set of opensource libraries written

@@ -14,10 +14,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-isl=system" ];
 
+  enableParallelBuilding = true;
+
   doCheck = true;
 
   meta = {
-    description = "CLooG, the Chunky Loop Generator";
+    description = "Library that generates loops for scanning polyhedra";
 
     longDescription = ''
       CLooG is a free software library to generate code for scanning

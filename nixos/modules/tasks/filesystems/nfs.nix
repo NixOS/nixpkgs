@@ -24,13 +24,37 @@ let
     Method = nsswitch
   '';
 
+  cfg = config.services.nfs;
+
 in
 
 {
+  ###### interface
+
+  options = {
+
+    services.nfs = {
+      statdPort = mkOption {
+        default = null;
+        example = 4000;
+        description = ''
+          Use fixed port for rpc.statd, usefull if NFS server is behind firewall.
+        '';
+      };
+      lockdPort = mkOption {
+        default = null;
+        example = 4001;
+        description = ''
+          Use fixed port for NFS lock manager kernel module (lockd/nlockmgr),
+          usefull if NFS server is behind firewall.
+        '';
+      };
+    };
+  };
 
   ###### implementation
 
-  config = mkIf (any (fs: fs == "nfs" || fs == "nfs4") config.boot.supportedFilesystems) {
+  config = mkIf (any (fs: fs == "nfs" || fs == "nfs4") config.boot.supportedFilesystems) ({
 
     services.rpcbind.enable = true;
 
@@ -60,7 +84,10 @@ in
           '';
 
         serviceConfig.Type = "forking";
-        serviceConfig.ExecStart = "@${pkgs.nfsUtils}/sbin/rpc.statd rpc.statd --no-notify";
+        serviceConfig.ExecStart = ''
+          @${pkgs.nfsUtils}/sbin/rpc.statd rpc.statd --no-notify \
+              ${if cfg.statdPort != null then "-p ${toString statdPort}" else ""}
+        '';
         serviceConfig.Restart = "always";
       };
 
@@ -90,5 +117,9 @@ in
         serviceConfig.Restart = "always";
       };
 
-  };
+  } // mkIf (cfg.lockdPort != null) {
+    boot.extraModprobeConfig = ''
+      options lockd nlm_udpport=${toString cfg.lockdPort} nlm_tcpport=${toString cfg.lockdPort}
+    '';
+  });
 }

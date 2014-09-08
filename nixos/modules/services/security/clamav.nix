@@ -71,7 +71,7 @@ in
             mkdir -m 0755 -p ${stateDir}
             chown ${clamavUser}:${clamavGroup} ${stateDir}
           '';
-          exec = "${pkgs.clamav}/bin/freshclam --config-file=${pkgs.writeText "freshclam.conf" cfg.updater.config}";
+          exec = "${pkgs.clamav}/bin/freshclam --daemon --config-file=${pkgs.writeText "freshclam.conf" cfg.updater.config}";
       }; 
     };
 

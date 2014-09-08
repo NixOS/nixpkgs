@@ -10,8 +10,8 @@ stdenv.mkDerivation {
   };
 
   patches = fetchurl {
-    url = http://ftp.de.debian.org/debian/pool/main/j/jigdo/jigdo_0.7.3-2.diff.gz;
-    sha256 = "0jnlzm9m2hjlnw0zs2fv456ml5r2jj2q1lncqbrgg52lq18f6fa3";
+    url = http://ftp.de.debian.org/debian/pool/main/j/jigdo/jigdo_0.7.3-3.diff.gz;
+    sha256 = "0cp4jz3sg9g86vprh90pmwpcfla79f0dr50w14yh01k0yaq70fs8";
   };
 
   buildInputs = [ db gtk bzip2 ];

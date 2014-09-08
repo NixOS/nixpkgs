@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   doCheck = true;
 
   meta = {
-    description = "GPSBabel, a tool to convert, upload and download data from GPS and Map programs";
+    description = "Convert, upload and download data from GPS and Map programs";
 
     longDescription = ''
       GPSBabel converts waypoints, tracks, and routes between popular
