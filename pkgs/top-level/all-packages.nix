@@ -3652,10 +3652,12 @@ let
   lua5 = lua5_2_compat;
   lua = lua5;
 
-  lua5_sockets = callPackage ../development/interpreters/lua-5/sockets.nix {};
+  lua5_1_sockets = callPackage ../development/interpreters/lua-5/sockets.nix {
+    lua5 = lua5_1; # version 2.* only works with 5.1
+  };
   lua5_expat = callPackage ../development/interpreters/lua-5/expat.nix {};
   lua5_filesystem = callPackage ../development/interpreters/lua-5/filesystem.nix {};
-  lua5_sec = callPackage ../development/interpreters/lua-5/sec.nix {};
+  lua5_sec = callPackage ../development/interpreters/lua-5/sec.nix { };
 
   luarocks = callPackage ../development/tools/misc/luarocks {
      lua = lua5;
@@ -9027,7 +9029,10 @@ let
 
   praat = callPackage ../applications/audio/praat { };
 
-  quvi = callPackage ../applications/video/quvi/tool.nix { };
+  quvi = callPackage ../applications/video/quvi/tool.nix {
+    lua5_sockets = lua5_1_sockets;
+    lua5 = lua5_1;
+  };
 
   quvi_scripts = callPackage ../applications/video/quvi/scripts.nix { };
 
@@ -9491,6 +9496,7 @@ let
 
   mpv = callPackage ../applications/video/mpv {
     lua = lua5_1;
+    lua5_sockets = lua5_1_sockets;
     bs2bSupport = config.mpv.bs2bSupport or true;
     quviSupport = config.mpv.quviSupport or false;
     cacaSupport = config.mpv.cacaSupport or true;

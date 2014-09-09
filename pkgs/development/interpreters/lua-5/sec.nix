@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lua5, lua5_sockets, openssl }:
+{ stdenv, fetchurl, lua5, openssl }:
 
 stdenv.mkDerivation rec {
   version = "0.5";
