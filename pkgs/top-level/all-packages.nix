@@ -444,7 +444,6 @@ let
 
   aegisub = callPackage ../applications/video/aegisub {
     wxGTK = wxGTK30;
-    lua = lua5_1;
   };
 
   aespipe = callPackage ../tools/security/aespipe { };
@@ -5149,7 +5148,6 @@ let
 
   keybinder3 = callPackage ../development/libraries/keybinder3 {
     automake = automake111x;
-    lua = lua5_1;
   };
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix { };
@@ -5174,9 +5172,7 @@ let
     libpng = libpng12;
   };
 
-  lgi = callPackage ../development/libraries/lgi {
-    lua = lua5_1;
-  };
+  lgi = callPackage ../development/libraries/lgi { };
 
   lib3ds = callPackage ../development/libraries/lib3ds { };
 
@@ -8387,11 +8383,9 @@ let
   avxsynth = callPackage ../applications/video/avxsynth { };
 
   awesome-3-4 = callPackage ../applications/window-managers/awesome/3.4.nix {
-    lua = lua5;
     cairo = cairo.override { xcbSupport = true; };
   };
   awesome-3-5 = callPackage ../applications/window-managers/awesome {
-    lua   = lua5_1;
     cairo = cairo.override { xcbSupport = true; };
   };
   awesome = awesome-3-5;
