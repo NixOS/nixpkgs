@@ -64,7 +64,7 @@ in {
         '';
       };
 
-      extraOpts = mkOption {
+      extraOptions = mkOption {
         type = types.listOf types.str;
         default = [ ];
         example = [ "--debug=9" "--httpListenAddress=localhost" ];
@@ -103,7 +103,7 @@ in {
       path = cfg.packages;
 
       script = ''
-        ${pkgs.jdk}/bin/java -jar ${pkgs.jenkins} --httpPort=${toString cfg.port} ${concatStringsSep " " cfg.extraOpts}
+        ${pkgs.jdk}/bin/java -jar ${pkgs.jenkins} --httpPort=${toString cfg.port} ${concatStringsSep " " cfg.extraOptions}
       '';
 
       postStart = ''
