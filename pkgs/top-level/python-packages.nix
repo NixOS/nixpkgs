@@ -3456,7 +3456,7 @@ rec {
     };
 
     buildInputs = [ nose ];
-    # dateutil dependancy: requirement is dateutil !=2.0 and != 2.2,
+    # dateutil dependency: requirement is dateutil !=2.0 and != 2.2,
     # dateutil_1_5 is used as it's supported, but a newer version could be used
     propagatedBuildInputs = [ paver feedparser sqlalchemy pyyaml rpyc
 	    beautifulsoup4 html5lib pyrss2gen pynzb progressbar jinja2 flask

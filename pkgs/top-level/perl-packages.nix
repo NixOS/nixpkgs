@@ -301,7 +301,7 @@ let self = _self // overrides; _self = with self; {
         and produces an XML document in Dia format (or images via graphviz
         and vcg).  Its goal is to be a UML / DB Schema diagram autocreation
         package.  The diagrams its creates are standard UML diagrams showing
-        dependancies, superclasses, packages, classes and inheritances, as
+        dependencies, superclasses, packages, classes and inheritances, as
         well as the methods, etc of each class.
 
         AutoDia supports any language that a Handler has been written for,
