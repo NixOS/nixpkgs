@@ -28,6 +28,6 @@ stdenv.mkDerivation {
     description = "Visual diff and merge tool";
     homepage = http://meld.sourceforge.net;
     license = stdenv.lib.licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }
