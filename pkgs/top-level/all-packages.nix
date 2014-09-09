@@ -9169,8 +9169,7 @@ let
     libart = gnome2.libart_lgpl;
   }; # latest version: gnome3.goffice
 
-  ideas = recurseIntoAttrs (  (callPackage ../applications/editors/idea { })
-                           // (callPackage ../applications/editors/idea/pycharm.nix { }));
+  idea = recurseIntoAttrs (callPackage ../applications/editors/idea { });
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
