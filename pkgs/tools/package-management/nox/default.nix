@@ -7,7 +7,7 @@ pythonPackages.buildPythonPackage rec {
   src = fetchgit {
     url = "git://github.com/madjar/nox.git";
     rev = "49e4bb7de473ac5e446a76c292bdaefa7e20a1c6";
-    sha256 = "1w1b2g44lj6nbs7f2j5dz5pijhfah3fyldspfb34zcv17j2nlv0b";
+    sha256 = "0rsw0hs5swv6lwkfmj5fw3j22ah8g5gdb0hb5ikk321c6ww5dm5p";
     leaveDotGit = true; # required by pbr
   };
 
