@@ -1,6 +1,6 @@
 { fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio, gnugrep, gzip
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
-, libxslt, tcl, tk, makeWrapper, openssh
+, libxslt, tcl, tk, makeWrapper
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs
 , guiSupport
 , withManual ? true
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   patches = [ ./docbook2texi.patch ./symlinks-in-bin.patch ./cert-path.patch ];
 
-  buildInputs = [curl openssl zlib expat gettext cpio makeWrapper openssh]
+  buildInputs = [curl openssl zlib expat gettext cpio makeWrapper]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ]
     ++ stdenv.lib.optionals guiSupport [tcl tk];
@@ -58,9 +58,6 @@ stdenv.mkDerivation {
       make install install-doc
       popd
       rm -rf contrib/subtree
-
-      # Wrap git to be able to find ssh
-      wrapProgram $out/bin/git  --prefix PATH ":" "${openssh}/bin" 
 
       # Install contrib stuff.
       mkdir -p $out/share/git
