@@ -2198,6 +2198,10 @@ rec {
       sha256 = "12c98ivhjr01iz6lkga574xm8p0bsil6arydvpblyw8sjkgim5sq";
     };
 
+    patchPhase = ''
+      substituteInPlace setup.py --replace "httplib2==0.8" "httplib2"
+    '';
+
     propagatedBuildInputs = [ gflags iso8601_0_1_4 ipaddr httplib2 google_apputils google_api_python_client ];
   };
 
