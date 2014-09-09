@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "An open source small-footprint implementation of the Tcl programming language.";
+    description = "An open source small-footprint implementation of the Tcl programming language";
     homepage = http://jim.tcl.tk/;
     license = stdenv.lib.licenses.bsd2;
     platforms = stdenv.lib.platforms.all;
