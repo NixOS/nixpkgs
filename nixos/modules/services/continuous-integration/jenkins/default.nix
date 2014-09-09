@@ -15,7 +15,7 @@ in {
 
       user = mkOption {
         default = "jenkins";
-        type = with types; string;
+        type = types.str;
         description = ''
           User the jenkins server should execute under.
         '';
@@ -23,7 +23,7 @@ in {
 
       group = mkOption {
         default = "jenkins";
-        type = with types; string;
+        type = types.str;
         description = ''
           If the default user "jenkins" is configured then this is the primary
           group of that user.
@@ -32,7 +32,7 @@ in {
 
       home = mkOption {
         default = "/var/lib/jenkins";
-        type = with types; string;
+        type = types.path;
         description = ''
           The path to use as JENKINS_HOME. If the default user "jenkins" is configured then
           this is the home of the "jenkins" user.
@@ -57,7 +57,7 @@ in {
 
       environment = mkOption {
         default = { NIX_REMOTE = "daemon"; };
-        type = with types; attrsOf string;
+        type = with types; attrsOf str;
         description = ''
           Additional environment variables to be passed to the jenkins process.
           The environment will always include JENKINS_HOME.
