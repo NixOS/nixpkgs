@@ -492,6 +492,8 @@ let
 
   ahcpd = callPackage ../tools/networking/ahcpd { };
 
+  aiccu = callPackage ../tools/networking/aiccu { };
+
   aide = callPackage ../tools/security/aide { };
 
   aircrackng = callPackage ../tools/networking/aircrack-ng { };
