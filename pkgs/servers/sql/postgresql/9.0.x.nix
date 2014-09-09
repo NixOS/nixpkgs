@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.postgresql.org/;
     description = "A powerful, open source object-relational database system";
-    license = "bsd";
+    license = stdenv.lib.licenses.postgresql;
     maintainers = [ stdenv.lib.maintainers.ocharles ];
     hydraPlatforms = stdenv.lib.platforms.linux;
   };

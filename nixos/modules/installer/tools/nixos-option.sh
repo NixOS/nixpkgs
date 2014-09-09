@@ -11,9 +11,6 @@ usage () {
 # Process Arguments #
 #####################
 
-desc=false
-defs=false
-value=false
 xml=false
 verbose=false
 
@@ -24,14 +21,11 @@ for arg; do
   if test -z "$argfun"; then
     case $arg in
       -*)
-        longarg=""
         sarg="$arg"
+        longarg=""
         while test "$sarg" != "-"; do
           case $sarg in
             --*) longarg=$arg; sarg="--";;
-            -d*) longarg="$longarg --description";;
-            -v*) longarg="$longarg --value";;
-            -l*) longarg="$longarg --lookup";;
             -*) usage;;
           esac
           # remove the first letter option
@@ -42,9 +36,6 @@ for arg; do
     esac
     for larg in $longarg; do
       case $larg in
-        --description) desc=true;;
-        --value) value=true;;
-        --lookup) defs=true;;
         --xml) xml=true;;
         --verbose) verbose=true;;
         --help) usage;;
@@ -67,16 +58,6 @@ for arg; do
   fi
 done
 
-if $xml; then
-  value=true
-  desc=true
-  defs=true
-fi
-
-if ! $defs && ! $desc; then
-  value=true
-fi
-
 if $verbose; then
   set -x
 else
@@ -95,8 +76,7 @@ evalAttr(){
   local prefix="$1"
   local strict="$2"
   local suffix="$3"
-  echo "(import <nixos> {}).$prefix${option:+.$option}${suffix:+.$suffix}" |
-    evalNix ${strict:+--strict}
+  echo "(import <nixos> {}).$prefix${option:+.$option}${suffix:+.$suffix}" | evalNix ${strict:+--strict}
 }
 
 evalOpt(){
@@ -189,35 +169,37 @@ EOF
 fi
 
 if test "$(evalOpt "_type" 2> /dev/null)" = '"option"'; then
-  $value && evalCfg 1
+  echo "Value:"
+  evalCfg 1
 
-  if $desc; then
-    $value && echo;
+  echo
 
-    if default=$(evalOpt "default" - 2> /dev/null); then
-      echo "Default: $default"
-    else
-      echo "Default: <None>"
-    fi
-    if example=$(evalOpt "example" - 2> /dev/null); then
-      echo "Example: $example"
-    fi
-    echo "Description:"
-    eval printf $(evalOpt "description")
+  echo "Default:"
+  if default=$(evalOpt "default" - 2> /dev/null); then
+    echo "$default"
+  else
+    echo "<None>"
   fi
-
-  if $defs; then
-    $desc || $value && echo;
-
-    printPath () { echo "  $1"; }
-
-    echo "Declared by:"
-    nixMap printPath "$(findSources "declarations")"
-    echo ""
-    echo "Defined by:"
-    nixMap printPath "$(findSources "files")"
-    echo ""
+  echo
+  if example=$(evalOpt "example" - 2> /dev/null); then
+    echo "Example:"
+    echo "$example"
+    echo
   fi
+  echo "Description:"
+  echo
+  eval printf $(evalOpt "description")
+
+  echo $desc;
+
+  printPath () { echo "  $1"; }
+
+  echo "Declared by:"
+  nixMap printPath "$(findSources "declarations")"
+  echo
+  echo "Defined by:"
+  nixMap printPath "$(findSources "files")"
+  echo
 
 else
   # echo 1>&2 "Warning: This value is not an option."

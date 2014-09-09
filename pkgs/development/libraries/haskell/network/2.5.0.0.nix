@@ -17,5 +17,6 @@ cabal.mkDerivation (self: {
     description = "Low-level networking interface";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

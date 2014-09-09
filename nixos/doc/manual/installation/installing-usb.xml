@@ -1,0 +1,30 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-booting-from-usb">
+
+<title>Booting from a USB Drive</title>
+
+<para>For systems without CD drive, the NixOS livecd can be booted from
+a usb stick. For non-UEFI installations,
+<link xlink:href="http://unetbootin.sourceforge.net/">unetbootin</link>
+will work. For UEFI installations, you should mount the ISO, copy its contents
+verbatim to your drive, then either:
+
+<itemizedlist>
+  <listitem>
+    <para>Change the label of the disk partition to the label of the ISO
+    (visible with the blkid command), or</para>
+  </listitem>
+  <listitem>
+    <para>Edit <filename>loader/entries/nixos-livecd.conf</filename> on the drive
+    and change the <literal>root=</literal> field in the <literal>options</literal>
+    line to point to your drive (see the documentation on <literal>root=</literal>
+    in <link xlink:href="https://www.kernel.org/doc/Documentation/kernel-parameters.txt">
+    the kernel documentation</link> for more details).</para>
+  </listitem>
+</itemizedlist>
+</para>
+
+</section>

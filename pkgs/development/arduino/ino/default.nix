@@ -13,7 +13,7 @@ buildPythonPackage rec {
   # TODO: add avrgcclibc, it must be rebuild with C++ support
   propagatedBuildInputs =
     [ arduino_core avrdude minicom pythonPackages.configobj
-      pythonPackages.jinja2 pythonPackages.pyserial ];
+      pythonPackages.jinja2 pythonPackages.pyserial pythonPackages.six ];
 
   patchPhase = ''
     echo "Patching Arduino distribution path"

@@ -12,5 +12,7 @@ cabal.mkDerivation (self: {
     description = "Generic programming library with a sum of products view";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

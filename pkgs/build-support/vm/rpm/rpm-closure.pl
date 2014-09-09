@@ -91,7 +91,7 @@ for (my $i = 0; $i < scalar(@packagesFiles); $i++) {
 
 my %provides;
 foreach my $pkgName (keys %pkgs) {
-    print STDERR "looking at $pkgName\n";
+    #print STDERR "looking at $pkgName\n";
     my $pkg = $pkgs{$pkgName};
     
     #print STDERR keys %{$pkg->{format}}, "\n";

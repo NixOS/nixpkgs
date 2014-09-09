@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp ];
 
   meta = {
-    description = "Ikarus - a Scheme compiler, aiming at R6RS";
+    description = "Scheme compiler, aiming at R6RS";
     homepage = http://ikarus-scheme.org/;
     license = stdenv.lib.licenses.gpl3;
   };

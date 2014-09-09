@@ -23,6 +23,7 @@
   ghc783Prefs = self : super : ghcHEADPrefs self super // {
     cabalInstall_1_20_0_3 = super.cabalInstall_1_20_0_3.override { Cabal = self.Cabal_1_20_0_2; };
     codex = super.codex.override { hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_20_0_2; }; };
+    MonadRandom = self.MonadRandom_0_1_13; # requires transformers >= 0.4.x
     mtl = self.mtl_2_1_2;
   };
 
@@ -58,10 +59,15 @@
 
   ghc742Prefs = self : super : ghc763Prefs self super // {
     aeson = self.aeson_0_7_0_4.override { blazeBuilder = self.blazeBuilder; };
+    cabalInstall_0_14_0 = super.cabalInstall_0_14_0.override {
+      HTTP = self.HTTP.override { network = self.network_2_3_0_13; };
+      network = self.network_2_3_0_13;
+    };
     extensibleExceptions = null;        # core package in ghc <= 7.4.x
     hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_16_0_3; };
     haddock = self.haddock_2_11_0;
     haskeline = super.haskeline.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    random = self.random_1_0_1_1;       # requires base >= 4.6.x
     shelly = self.shelly_0_15_4_1;
   };
 
@@ -95,6 +101,7 @@
     logict = super.logict.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     monadPar = self.monadPar_0_1_0_3;
     nats = null;                        # none of our versions compile
+    networkUri = super.networkUri.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     parallel = self.parallel_3_2_0_3;
     primitive = self.primitive_0_5_0_1;
     reflection = super.reflection.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
@@ -118,6 +125,7 @@
     happy = super.happy.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     hashable = super.hashable.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     hashtables = super.hashtables.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    hsyslog = super.hsyslog.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     HTTP = super.HTTP.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     HUnit = super.HUnit.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     network = super.network_2_2_1_7.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };

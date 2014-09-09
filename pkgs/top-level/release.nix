@@ -22,11 +22,14 @@ let
   jobs =
     { tarball = import ./make-tarball.nix { inherit nixpkgs officialRelease; };
 
+      manual = import ../../doc;
+
       unstable = pkgs.releaseTools.aggregate
         { name = "nixpkgs-${jobs.tarball.version}";
           meta.description = "Release-critical builds for the Nixpkgs unstable channel";
           constituents =
             [ jobs.tarball
+              jobs.manual
               jobs.stdenv.x86_64-linux
               jobs.stdenv.i686-linux
               jobs.stdenv.x86_64-darwin
@@ -61,7 +64,6 @@ let
       binutils = linux;
       bind = linux;
       bitlbee = linux;
-      bittorrent = linux;
       blender = linux;
       bsdiff = all;
       btrfsProgs = linux;
@@ -157,7 +159,6 @@ let
       htmlTidy = all;
       hugin = linux;
       iana_etc = linux;
-      icecat3Xul = linux;
       icewm = linux;
       idutils = all;
       ifplugd = linux;
@@ -382,21 +383,21 @@ let
       };
 
       xorg = {
-        fontadobe100dpi = linux;
-        fontadobe75dpi = linux;
-        fontbh100dpi = linux;
-        fontbhlucidatypewriter100dpi = linux;
-        fontbhlucidatypewriter75dpi = linux;
-        fontbhttf = linux;
-        fontcursormisc = linux;
-        fontmiscmisc = linux;
-        iceauth = linux;
-        libX11 = linux;
-        lndir = all;
-        setxkbmap = linux;
-        xauth = linux;
-        xbitmaps = linux;
-        xev = linux;
+        fontadobe100dpi = linux ++ darwin;
+        fontadobe75dpi = linux ++ darwin;
+        fontbh100dpi = linux ++ darwin;
+        fontbhlucidatypewriter100dpi = linux ++ darwin;
+        fontbhlucidatypewriter75dpi = linux ++ darwin;
+        fontbhttf = linux ++ darwin;
+        fontcursormisc = linux ++ darwin;
+        fontmiscmisc = linux ++ darwin;
+        iceauth = linux ++ darwin;
+        libX11 = linux ++ darwin;
+        lndir = all ++ darwin;
+        setxkbmap = linux ++ darwin;
+        xauth = linux ++ darwin;
+        xbitmaps = linux ++ darwin;
+        xev = linux ++ darwin;
         xf86inputevdev = linux;
         xf86inputkeyboard = linux;
         xf86inputmouse = linux;
@@ -408,18 +409,18 @@ let
         xf86videovesa = linux;
         xf86videovmware = linux;
         xf86videomodesetting = linux;
-        xfs = linux;
-        xinput = linux;
-        xkbcomp = linux;
-        xlsclients = linux;
-        xmessage = linux;
-        xorgserver = linux;
-        xprop = linux;
-        xrandr = linux;
-        xrdb = linux;
-        xset = linux;
-        xsetroot = linux;
-        xwininfo = linux;
+        xfs = linux ++ darwin;
+        xinput = linux ++ darwin;
+        xkbcomp = linux ++ darwin;
+        xlsclients = linux ++ darwin;
+        xmessage = linux ++ darwin;
+        xorgserver = linux ++ darwin;
+        xprop = linux ++ darwin;
+        xrandr = linux ++ darwin;
+        xrdb = linux ++ darwin;
+        xset = linux ++ darwin;
+        xsetroot = linux ++ darwin;
+        xwininfo = linux ++ darwin;
       };
 
       xfce = {
@@ -437,6 +438,14 @@ let
         xfdesktop = linux;
         xfwm4 = linux;
       };
+
+      linuxPackages_testing = { };
+      linuxPackages_grsec_stable_desktop = { };
+      linuxPackages_grsec_stable_server = { };
+      linuxPackages_grsec_stable_server_xen = { };
+      linuxPackages_grsec_testing_desktop = { };
+      linuxPackages_grsec_testing_server = { };
+      linuxPackages_grsec_testing_server_xen = { };
 
     } ));
 

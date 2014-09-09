@@ -18,6 +18,7 @@ import ./make-test.nix {
              '';
            };
           };
+          systemd.services.munin-node.unitConfig.TimeoutSec = 240;
         };
     };
 

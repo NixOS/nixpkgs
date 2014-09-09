@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "dynamic-cabal";
-  version = "0.3.1";
-  sha256 = "0jjhz6h1ggznbvi4qgv0p5x1s7j0fgv1xvkfgid57jrjvdvd4gic";
+  version = "0.3.2";
+  sha256 = "0f0g4kml17j1j101gnpjjpdmny4m2wgr0dbjq18fw1s3nxc3jagm";
   buildDepends = [
     dataDefault filepath ghcPaths haskellGenerate haskellSrcExts time
     void

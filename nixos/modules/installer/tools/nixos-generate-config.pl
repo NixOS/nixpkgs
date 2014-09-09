@@ -20,6 +20,13 @@ sub uniq {
     return @res;
 }
 
+sub runCommand {
+    my ($cmd) = @_;
+    open FILE, "$cmd 2>&1 |" or die "Failed to execute: $cmd\n";
+    my @ret = <FILE>;
+    close FILE;
+    return ($?, @ret);
+}
 
 # Process the command line.
 my $outDir = "/etc/nixos";
@@ -304,10 +311,13 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
 
     # Maybe this is a bind-mount of a filesystem we saw earlier?
     if (defined $fsByDev{$fields[2]}) {
-        my $path = $fields[3]; $path = "" if $path eq "/";
-        my $base = $fsByDev{$fields[2]};
-        $base = "" if $base eq "/";
-        $fileSystems .= <<EOF;
+        # Make sure this isn't a btrfs subvolume
+        my ($status, @msg) = runCommand("btrfs subvol show $rootDir$mountPoint");
+        if (join("", @msg) =~ /ERROR:/) {
+            my $path = $fields[3]; $path = "" if $path eq "/";
+            my $base = $fsByDev{$fields[2]};
+            $base = "" if $base eq "/";
+            $fileSystems .= <<EOF;
   fileSystems.\"$mountPoint\" =
     { device = \"$base$path\";
       fsType = \"none\";
@@ -315,7 +325,8 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
     };
 
 EOF
-        next;
+            next;
+        }
     }
     $fsByDev{$fields[2]} = $mountPoint;
 
@@ -334,6 +345,30 @@ EOF
             chomp $backer;
             $device = $backer;
             push @extraOptions, "loop";
+        }
+    }
+
+    # Is this a btrfs filesystem?
+    if ($fsType eq "btrfs") {
+        my ($status, @id_info) = runCommand("btrfs subvol show $rootDir$mountPoint");
+        if ($status != 0 || join("", @msg) =~ /ERROR:/) {
+            die "Failed to retreive subvolume info for $mountPoint\n";
+        }
+        my @ids = join("", @id_info) =~ m/Object ID:[ \t\n]*([^ \t\n]*)/;
+        if ($#ids > 0) {
+            die "Btrfs subvol name for $mountPoint listed multiple times in mount\n"
+        } elsif ($#ids == 0) {
+            my ($status, @path_info) = runCommand("btrfs subvol list $rootDir$mountPoint");
+            if ($status != 0) {
+                die "Failed to find $mountPoint subvolume id from btrfs\n";
+            }
+            my @paths = join("", @path_info) =~ m/ID $ids[0] [^\n]* path ([^\n]*)/;
+            if ($#paths > 0) {
+                die "Btrfs returned multiple paths for a single subvolume id, mountpoint $mountPoint\n";
+            } elsif ($#paths != 0) {
+                die "Btrfs did not return a path for the subvolume at $mountPoint\n";
+            }
+            push @extraOptions, "subvol=$paths[0]";
         }
     }
 
@@ -490,12 +525,8 @@ $bootLoaderConfig
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   # users.extraUsers.guest = {
-  #   name = "guest";
-  #   group = "users";
+  #   isNormalUser = true;
   #   uid = 1000;
-  #   createHome = true;
-  #   home = "/home/guest";
-  #   shell = "/run/current-system/sw/bin/bash";
   # };
 
 }

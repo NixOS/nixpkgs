@@ -1,23 +1,26 @@
 { stdenv, fetchurl, perl, gnum4, ncurses, openssl
 , gnused, gawk, makeWrapper
+, odbcSupport ? false, unixODBC ? null
 , wxSupport ? false, mesa ? null, wxGTK ? null, xlibs ? null }:
 
 assert wxSupport -> mesa != null && wxGTK != null && xlibs != null;
+assert odbcSupport -> unixODBC != null;
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "erlang-" + version;
-  version = "17.0";
+  name = "erlang-" + version + "${optionalString odbcSupport "-odbc"}";
+  version = "17.1";
 
   src = fetchurl {
     url = "http://www.erlang.org/download/otp_src_${version}.tar.gz";
-    sha256 = "1nyaka6238vh4kdgaynmg8hm5y5zj7hhyl1c971d2pjylsm2nzr9";
+    sha256 = "0mn3p5rwvjfsxjnn1vrm0lxdq40wq9bmd9nibl6hqbfcnnrga1mq";
   };
 
   buildInputs =
     [ perl gnum4 ncurses openssl makeWrapper
-    ] ++ optional wxSupport [ mesa wxGTK xlibs.libX11 ];
+    ] ++ optional wxSupport [ mesa wxGTK xlibs.libX11 ]
+      ++ optional odbcSupport [ unixODBC ];
 
   patchPhase = '' sed -i "s@/bin/rm@rm@" lib/odbc/configure erts/configure '';
 
@@ -26,12 +29,12 @@ stdenv.mkDerivation rec {
     sed -e s@/bin/pwd@pwd@g -i otp_build
   '';
 
-  configureFlags= "--with-ssl=${openssl} ${optionalString stdenv.isDarwin "--enable-darwin-64bit"}";
+  configureFlags= "--with-ssl=${openssl} ${optionalString odbcSupport "--with-odbc=${unixODBC}"} ${optionalString stdenv.isDarwin "--enable-darwin-64bit"}";
 
   postInstall = let
     manpages = fetchurl {
       url = "http://www.erlang.org/download/otp_doc_man_${version}.tar.gz";
-      sha256 = "16dkz3w1q4ahy37c8a8r2h8zjcr7cxz7pd9z38chbxf6frc2pxxc";
+      sha256 = "1aza6hxhh7ag2frsa0hg6il6ancjrbazvgz7jc2p7qrmy5vh48sa";
     };
   in ''
     ln -s $out/lib/erlang/lib/erl_interface*/bin/erl_call $out/bin/erl_call

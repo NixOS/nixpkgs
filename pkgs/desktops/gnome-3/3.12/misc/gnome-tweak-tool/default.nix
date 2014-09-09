@@ -4,11 +4,11 @@
 , gnome3, librsvg, gdk_pixbuf, file, libnotify }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-tweak-tool-3.10.1";
+  name = "gnome-tweak-tool-3.12.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-tweak-tool/3.10/${name}.tar.xz";
-    sha256 = "fb5af9022c0521a925ef9f295e4080212b1b45427cd5f5f3a901667590afa7ec";
+    url = "mirror://gnome/sources/gnome-tweak-tool/3.12/${name}.tar.xz";
+    sha256 = "f8811d638797ef62500770a8dccc5bc689a427c8396a0dff8cbeddffdebf0e29";
   };
 
   doCheck = true;
@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix LD_LIBRARY_PATH ":" "${libsoup}/lib:${gnome3.gnome_desktop}/lib:${libnotify}/lib:${gtk3}/lib:${atk}/lib" \
       --prefix PYTHONPATH : "$PYTHONPATH:$(toPythonPath $out)"
   '';
 

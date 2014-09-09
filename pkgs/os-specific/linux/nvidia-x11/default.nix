@@ -12,8 +12,9 @@ assert (!libsOnly) -> kernel != null;
 
 let
 
-  versionNumber = "340.24";
+  versionNumber = "340.32";
 
+  inherit (stdenv.lib) makeLibraryPath;
 in
 
 stdenv.mkDerivation {
@@ -25,12 +26,12 @@ stdenv.mkDerivation {
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}.run";
-        sha256 = "0c5iix6rihbx7mbfhznz0jjbc3kkccwyfxi56p76fvrbyan9dvam";
+        sha256 = "1xcm8czz4bmnlzkl3al58flw6jmbrg1y77cxjjdjqcsvbk1qj10x";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-no-compat32.run";
-        sha256 = "04yy26722fjf9k7y6r909g68nqnsglfd9xs1dk1nain1021p70iq";
+        sha256 = "1nfrpx73817y1z0wkqqh02xjg65r0f05h9801mqm8ki2gxqv9vq0";
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
@@ -40,13 +41,12 @@ stdenv.mkDerivation {
 
   dontStrip = true;
 
-  glPath = stdenv.lib.makeLibraryPath [xlibs.libXext xlibs.libX11 xlibs.libXrandr];
+  glPath      = makeLibraryPath [xlibs.libXext xlibs.libX11 xlibs.libXrandr];
+  cudaPath    = makeLibraryPath [zlib stdenv.gcc.gcc];
+  openclPath  = makeLibraryPath [zlib];
+  allLibPath  = makeLibraryPath [xlibs.libXext xlibs.libX11 xlibs.libXrandr zlib stdenv.gcc.gcc];
 
-  cudaPath = stdenv.lib.makeLibraryPath [zlib stdenv.gcc.gcc];
-
-  openclPath = stdenv.lib.makeLibraryPath [zlib];
-
-  programPath = optionalString (!libsOnly) (stdenv.lib.makeLibraryPath
+  programPath = optionalString (!libsOnly) (makeLibraryPath
     [ gtk atk pango glib gdk_pixbuf xlibs.libXv ] );
 
   buildInputs = [ perl ];

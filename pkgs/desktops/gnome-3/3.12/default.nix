@@ -237,5 +237,7 @@ rec {
 
   gnome-tweak-tool = callPackage ./misc/gnome-tweak-tool { };
 
+  gpaste = callPackage ./misc/gpaste { };
+
   gtkhtml = callPackage ./misc/gtkhtml { };
 }

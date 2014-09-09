@@ -5,16 +5,16 @@ rec {
     sha256 = "0nh8hfayyf60nm4z8zyclrbc3792c62azgsvrwxnl28iq223200s";
   };
 
-  texmfVersion = "2014.20140717";
+  texmfVersion = "2014.20140821";
   texmfSrc = fetchurl {
     url = "mirror://debian/pool/main/t/texlive-base/texlive-base_${texmfVersion}.orig.tar.xz";
-    sha256 = "08vhl6x742r8fl0gags2r6yspz8ynvz26vdjrqb4vyz5h7h3rzc9";
+    sha256 = "02qkzlhb381sybs970fgpc94nhx4jm0l3j5pv8z48l11415lvm9b";
   };
 
-  langTexmfVersion = "2014.20140717";
+  langTexmfVersion = "2014.20140821";
   langTexmfSrc = fetchurl {
     url = "mirror://debian/pool/main/t/texlive-lang/texlive-lang_${langTexmfVersion}.orig.tar.xz";
-    sha256 = "1x9aa3v2cg4lcb58lwksnfdsgrhi0sg968pjqsbndmbxhr1msbp7";
+    sha256 = "075avhhhhzw5pbd19q659rn23rws15b5hv7nv0grd93vn3vfwdcy";
   };
 
   passthru = { inherit texmfSrc langTexmfSrc; };
@@ -22,6 +22,7 @@ rec {
   setupHook = ./setup-hook.sh;
 
   doMainBuild = fullDepEntry ( stdenv.lib.optionalString stdenv.isDarwin ''
+    export MACOSX_DEPLOYMENT_TARGET=10.9
     export DYLD_LIBRARY_PATH="${poppler}/lib"
   '' + ''
     mkdir -p $out

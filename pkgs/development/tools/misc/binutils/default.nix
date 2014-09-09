@@ -2,6 +2,8 @@
 , cross ? null, gold ? true, bison ? null
 }:
 
+assert !stdenv.isDarwin;
+
 let basename = "binutils-2.23.1"; in
 
 with { inherit (stdenv.lib) optional optionals optionalString; };
@@ -67,7 +69,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    description = "GNU Binutils, tools for manipulating binaries (linker, assembler, etc.)";
+    description = "Tools for manipulating binaries (linker, assembler, etc.)";
 
     longDescription = ''
       The GNU Binutils are a collection of binary tools.  The main

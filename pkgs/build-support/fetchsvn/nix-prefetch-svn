@@ -41,11 +41,10 @@ fi
 # If we don't know the hash or a path with that hash doesn't exist,
 # download the file and add it to the store.
 if test -z "$finalPath"; then
-    tmpPath=/tmp/svn-checkout-tmp-$$
-    tmpFile=$tmpPath/$dstFile
-    mkdir $tmpPath
+    tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/svn-checkout-tmp-XXXXXXXX")"
+    trap "rm -rf \"$tmpPath\"" EXIT
 
-    trap "rm -rf $tmpPath" EXIT
+    tmpFile="$tmpPath/$dstFile"
 
     # Perform the checkout.
     if test "$NIX_PREFETCH_SVN_LEAVE_DOT_SVN" != 1

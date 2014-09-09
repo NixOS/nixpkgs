@@ -13,7 +13,7 @@ let
       default-lease-time 600;
       max-lease-time 7200;
       authoritative;
-      ddns-update-style ad-hoc;
+      ddns-update-style interim;
       log-facility local1; # see dhcpd.nix
 
       ${cfg.extraConfig}
@@ -108,22 +108,41 @@ in
 
   config = mkIf config.services.dhcpd.enable {
 
-    jobs.dhcpd =
+    users = {
+      extraUsers.dhcpd = {
+        uid = config.ids.uids.dhcpd;
+        description = "DHCP daemon user";
+      };
+    };
+
+    systemd.services.dhcpd =
       { description = "DHCP server";
 
-        startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
+        wantedBy = [ "multi-user.target" ];
 
-        script =
+        after = [ "network.target" ];
+
+        path = [ pkgs.dhcp ];
+
+        preStart =
           ''
             mkdir -m 755 -p ${stateDir}
 
             touch ${stateDir}/dhcpd.leases
 
-            exec ${pkgs.dhcp}/sbin/dhcpd -f -cf ${configFile} \
-                -lf ${stateDir}/dhcpd.leases \
-                ${toString cfg.interfaces}
+            mkdir -m 755 -p /run/dhcpd
+            chown dhcpd /run/dhcpd
           '';
+
+        serviceConfig =
+          { ExecStart = "@${pkgs.dhcp}/sbin/dhcpd dhcpd"
+              + " -pf /run/dhcpd/dhcpd.pid -cf ${configFile}"
+              + " -lf ${stateDir}/dhcpd.leases -user dhcpd -group nogroup"
+              + " ${toString cfg.interfaces}";
+            Restart = "always";
+            Type = "forking";
+            PIDFile = "/run/dhcpd/dhcpd.pid";
+          };
       };
 
   };

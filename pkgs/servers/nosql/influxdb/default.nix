@@ -1,5 +1,7 @@
 { stdenv, fetchurl, makeWrapper }:
 
+assert stdenv.isLinux;
+
 stdenv.mkDerivation rec {
   name = "influxdb-${version}";
   version = "0.7.0";

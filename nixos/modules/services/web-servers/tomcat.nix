@@ -5,7 +5,7 @@ with lib;
 let
 
   cfg = config.services.tomcat;
-  tomcat = pkgs.tomcat6;
+  tomcat = pkgs.tomcat7;
 in
 
 {

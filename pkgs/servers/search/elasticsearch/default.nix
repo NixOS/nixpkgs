@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre, utillinux }:
+{ stdenv, fetchurl, makeWrapper, jre, utillinux, getopt }:
 
 with stdenv.lib;
 
@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./es-home.patch ];
 
-  buildInputs = [ makeWrapper jre ] ++ optional (!stdenv.isDarwin) utillinux;
+  buildInputs = [ makeWrapper jre ] ++
+    (if (!stdenv.isDarwin) then [utillinux] else [getopt]);
 
   installPhase = ''
     mkdir -p $out
@@ -24,10 +25,13 @@ stdenv.mkDerivation rec {
     # set ES_CLASSPATH and JAVA_HOME
     wrapProgram $out/bin/elasticsearch \
       --prefix ES_CLASSPATH : "$out/lib/${name}.jar":"$out/lib/*":"$out/lib/sigar/*" \
-      ${optionalString (!stdenv.isDarwin) ''--prefix PATH : "${utillinux}/bin/"''} \
+      ${if (!stdenv.isDarwin)
+        then ''--prefix PATH : "${utillinux}/bin/"''
+        else ''--prefix PATH : "${getopt}/bin"''} \
       --set JAVA_HOME "${jre}"
     wrapProgram $out/bin/elasticsearch-plugin \
-      --prefix ES_CLASSPATH : "$out/lib/${name}.jar":"$out/lib/*":"$out/lib/sigar/*" --set JAVA_HOME "${jre}"
+      --prefix ES_CLASSPATH : "$out/lib/${name}.jar":"$out/lib/*":"$out/lib/sigar/*" \
+      --set JAVA_HOME "${jre}"
   '';
 
   meta = {

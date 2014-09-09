@@ -16,6 +16,10 @@ rec {
     inherit (pkgs) stdenv fetchurl unzip;
   };
   
+  supportRepository = import ./support-repository.nix {
+    inherit (pkgs) stdenv fetchurl unzip;
+  };
+
   platforms = if (pkgs.stdenv.system == "i686-linux" || pkgs.stdenv.system == "x86_64-linux")
     then import ./platforms-linux.nix {
       inherit (pkgs) stdenv fetchurl unzip;
@@ -39,7 +43,7 @@ rec {
     inherit (pkgs) freetype fontconfig glib gtk atk mesa file alsaLib jdk;
     inherit (pkgs.xorg) libX11 libXext libXrender libxcb libXau libXdmcp libXtst;
     
-    inherit platformTools buildTools support platforms sysimages addons;
+    inherit platformTools buildTools support supportRepository platforms sysimages addons;
     
     stdenv_32bit = pkgs_i686.stdenv;
     zlib_32bit = pkgs_i686.zlib;
@@ -52,13 +56,49 @@ rec {
     alsaLib_32bit = pkgs_i686.alsaLib;
   };
   
+  androidsdk_2_1 = androidsdk {
+    platformVersions = [ "7" ];
+    abiVersions = [ "armeabi-v7a" ];
+    useGoogleAPIs = true;
+  };
+  
   androidsdk_2_2 = androidsdk {
     platformVersions = [ "8" ];
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
+
+  androidsdk_2_3_3 = androidsdk {
+    platformVersions = [ "10" ];
+    abiVersions = [ "armeabi-v7a" ];
+    useGoogleAPIs = true;
+  };
+  
+  androidsdk_3_0 = androidsdk {
+    platformVersions = [ "11" ];
+    abiVersions = [ "armeabi-v7a" ];
+    useGoogleAPIs = true;
+  };
+  
+  androidsdk_3_1 = androidsdk {
+    platformVersions = [ "12" ];
+    abiVersions = [ "armeabi-v7a" ];
+    useGoogleAPIs = true;
+  };
+  
+  androidsdk_3_2 = androidsdk {
+    platformVersions = [ "13" ];
+    abiVersions = [ "armeabi-v7a" ];
+    useGoogleAPIs = true;
+  };
   
   androidsdk_4_0 = androidsdk {
+    platformVersions = [ "14" ];
+    abiVersions = [ "armeabi-v7a" ];
+    useGoogleAPIs = true;
+  };
+  
+  androidsdk_4_0_3 = androidsdk {
     platformVersions = [ "15" ];
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
@@ -78,6 +118,12 @@ rec {
   
   androidsdk_4_3 = androidsdk {
     platformVersions = [ "18" ];
+    abiVersions = [ "armeabi-v7a" "x86" ];
+    useGoogleAPIs = true;
+  };
+
+  androidsdk_4_4 = androidsdk {
+    platformVersions = [ "19" ];
     abiVersions = [ "armeabi-v7a" "x86" ];
     useGoogleAPIs = true;
   };

@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--enable-runas-user=nobody";
 
+  preConfigure = ''
+    # configure uses id to check environment; we don't want this check
+    sed -re 's/^ID[=].*/ID="echo whatever"/' -i configure
+  '';
+
   postConfigure = ''
       # The is_validfqdn is far too restrictive, and only allows
       # Internet-facing servers to run.  In order to run leafnode via

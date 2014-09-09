@@ -12,5 +12,7 @@ cabal.mkDerivation (self: {
     description = "This package has been absorbed into semigroupoids 4.0";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

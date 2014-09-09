@@ -34,6 +34,9 @@ rec {
   concatStringsSep = separator: list:
     concatStrings (intersperse separator list);
 
+  concatMapStringsSep = sep: f: list: concatStringsSep sep (map f list);
+  concatImapStringsSep = sep: f: list: concatStringsSep sep (lib.imap f list);
+
 
   # Construct a Unix-style search path consisting of each `subDir"
   # directory of the given list of packages.  For example,

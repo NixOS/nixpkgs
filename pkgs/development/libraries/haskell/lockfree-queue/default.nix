@@ -18,5 +18,7 @@ cabal.mkDerivation (self: {
     description = "Michael and Scott lock-free queues";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

@@ -1,11 +1,12 @@
 { stdenv, fetchurl, perl, php, gd, libpng, zlib }:
 
-stdenv.mkDerivation {
-  name = "nagios-4.0.7";
+stdenv.mkDerivation rec {
+  name = "nagios-${version}";
+  version = "4.0.8";
 
   src = fetchurl {
-    url = mirror://sourceforge/nagios/nagios-4.x/nagios-4.0.7/nagios-4.0.7.tar.gz;
-    sha256 = "1687qnbsag84r57y9745g2klypacfixd6gkzaj42lmzn0v8y27gg";
+    url = "mirror://sourceforge/nagios/nagios-4.x/${name}/${name}.tar.gz";
+    sha256 = "0jyad39wa318613awlnpczrrakvjcipz8qp1mdsig1cp1hjqs9lb";
   };
 
   patches = [ ./nagios.patch ];

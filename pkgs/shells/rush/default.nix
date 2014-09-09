@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "GNU Rush, Restricted User Shell";
+    description = "Restricted User Shell";
 
     longDescription =
       '' GNU Rush is a Restricted User Shell, designed for sites

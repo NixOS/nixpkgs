@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "(Un)ChunkFS is a pair of FUSE filesystems for viewing chunksync-style directory trees as a block device and vice versa.";
+    description = "FUSE filesystems for viewing chunksync-style directory trees as a block device and vice versa";
     homepage = "http://chunkfs.florz.de/";
     license = stdenv.lib.licenses.gpl2;
     platforms = with stdenv.lib.platforms; linux;

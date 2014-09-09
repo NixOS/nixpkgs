@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-base-1.2.4";
+  name = "gst-plugins-base-1.4.1";
 
   meta = {
     description = "Base plugins and helper libraries";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-base/${name}.tar.xz";
-    sha256 = "0l35zh2cdv515zv6n4yif49y6jfxzlf73q6g7k2vr52s7zf76qjd";
+    sha256 = "aea9e25be6691bd3cc0785d005b2b5d70ce313a2c897901680a3f7e7cab5a499";
   };
 
   nativeBuildInputs = [
@@ -29,4 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [ gstreamer ];
+
+  enableParallelBuilding = true;
 }
+

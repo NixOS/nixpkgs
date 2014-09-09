@@ -17,11 +17,6 @@
 <refsynopsisdiv>
   <cmdsynopsis>
     <command>nixos-option</command>
-    <group choice="opt">
-      <option>-v</option>
-      <option>-d</option>
-      <option>-l</option>
-    </group>
     <arg choice='plain'><replaceable>option.name</replaceable></arg>
   </cmdsynopsis>
 </refsynopsisdiv>
@@ -31,49 +26,12 @@
 
 <para>This command evaluates the configuration specified in
 <filename>/etc/nixos/configuration.nix</filename> and returns the properties
-of the option name given as argument.  By default, it returns the value of
-the option.</para>
+of the option name given as argument.</para>
 
 <para>When the option name is not an option, the command prints the list of
 attributes contained in the attribute set.</para>
 
 </refsection>
-
-<refsection><title>Options</title>
-
-<para>This command accepts the following options:</para>
-
-<variablelist>
-
-  <varlistentry>
-    <term><option>--value</option>, <option>-v</option></term>
-    <listitem>
-      <para>Returns the value of the option.  This is the default operation
-      if no other options are defined.</para>
-    </listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><option>--description</option>, <option>-d</option></term>
-    <listitem>
-      <para>Return the default value, the example and the description of the
-      option when available.</para>
-    </listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><option>--lookup</option>, <option>-l</option></term>
-    <listitem>
-      <para>Return the locations where the option is declared and where it
-      is defined.  This is extremely useful to find sources of errors in
-      your configuration.</para>
-    </listitem>
-  </varlistentry>
-
-</variablelist>
-
-</refsection>
-
 
 <refsection><title>Environment</title>
 
@@ -103,27 +61,21 @@ grub
 initScript
 
 $ nixos-option boot.loader.grub.enable
-true</screen></para>
+Value:
+true
 
-<para>Prints option information:
+Default: 
+true
 
-<screen>$ nixos-option -d networking.hostName
-Default: "nixos"
 Description:
-The name of the machine. Leave it empty if you want to obtain
-it from a DHCP server (if using DHCP).</screen></para>
+Whether to enable the GNU GRUB boot loader.
 
-<para>Find the locations which are declaring and defining an option:
-
-<screen>$ nixos-option -l hardware.firmware
 Declared by:
-  /mnt/data/nix-sources/nixos/modules/services/hardware/udev.nix
+  "/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs/nixos/modules/system/boot/loader/grub/grub.nix"
 
 Defined by:
-  /path/to/nixpkgs/nixos/modules/system/boot/kernel.nix
-  /path/to/nixpkgs/nixos/modules/hardware/network/rt73.nix
-  /path/to/nixpkgs/nixos/modules/hardware/network/intel-3945abg.nix
-  /path/to/nixpkgs/nixos/modules/hardware/network/intel-2200bg.nix</screen></para>
+  "/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs/nixos/modules/system/boot/loader/grub/grub.nix"
+</screen></para>
 
 </refsection>
 

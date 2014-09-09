@@ -36,6 +36,8 @@ stdenv.mkDerivation {
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
+  patches = [ ./issue21121-3.patch ];
+
   preConfigure = ''
     for i in /usr /sw /opt /pkg; do	# improve purity
       substituteInPlace ./setup.py --replace $i /no-such-path

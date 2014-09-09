@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   installPhase = ''cp -r gen/firebird $out'';
 
   meta = {
-    description = "firebird database engine";
+    description = "SQL relational database management system";
     homepage = http://www.firebirdnews.org;
     license = ["IDPL" "Interbase-1.0"];
     maintainers = [stdenv.lib.maintainers.marcweber];

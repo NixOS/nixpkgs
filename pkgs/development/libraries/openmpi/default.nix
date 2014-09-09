@@ -1,4 +1,13 @@
-{stdenv, fetchurl, gfortran}:
+{stdenv, fetchurl, gfortran
+
+# Enable the Sun Grid Engine bindings
+, enableSGE ? false
+
+# Pass PATH/LD_LIBRARY_PATH to point to current mpirun by default
+, enablePrefix ? false
+}:
+
+with stdenv.lib;
 
 stdenv.mkDerivation {
   name = "openmpi-1.6.5";
@@ -7,6 +16,10 @@ stdenv.mkDerivation {
     sha256 = "11gws4d3z7934zna2r7m1f80iay2ha17kp42mkh39wjykfwbldzy";
   };
   buildInputs = [ gfortran ];
+  configureFlags = []
+    ++ optional enableSGE "--with-sge"
+    ++ optional enablePrefix "--enable-mpirun-prefix-by-default"
+    ;
   meta = {
     homePage = http://www.open-mpi.org/;
     description = "Open source MPI-2 implementation";

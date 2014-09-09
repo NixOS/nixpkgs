@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   patches = [ ./max-resident.patch ];
 
   meta = {
-    description = "GNU Time, a tool that runs programs and summarizes the system resources they use";
+    description = "Tool that runs programs and summarizes the system resources they use";
 
     longDescription = ''
       The `time' command runs another program, then displays

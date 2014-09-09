@@ -29,7 +29,9 @@ setPath "@path@"
 # Normally, stage 1 mounts the root filesystem read/writable.
 # However, in some environments, stage 2 is executed directly, and the
 # root is read-only.  So make it writable here.
-mount -n -o remount,rw none /
+if [ "$container" != systemd-nspawn ]; then
+    mount -n -o remount,rw none /
+fi
 
 
 # Likewise, stage 1 mounts /proc, /dev and /sys, so if we don't have a

@@ -17,13 +17,13 @@ assert javahlBindings -> jdk != null && perl != null;
 
 stdenv.mkDerivation rec {
 
-  version = "1.8.9";
+  version = "1.8.10";
 
   name = "subversion-${version}";
 
   src = fetchurl {
     url = "mirror://apache/subversion/${name}.tar.bz2";
-    sha1 = "424ee12708f39a126efd905886666083dcc4eeaf";
+    sha256 = "1k3xskg2kjfp3zipl46lqx4fq4lhqnswd79qxp1kfhwplz401j8w";
   };
 
   buildInputs = [ zlib apr aprutil sqlite ]

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "Ming, a library for generating Flash `.swf' files";
+    description = "Library for generating Flash `.swf' files";
 
     longDescription = ''
       Ming is a library for generating Macromedia Flash files (.swf),

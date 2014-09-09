@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, gstreamer, gst_plugins_base, gtk
-, libxfce4util, libxfce4ui, xfce4panel, xfconf, libunique?null }:
+{ stdenv, fetchurl, pkgconfig, intltool, makeWrapper
+, glib, gstreamer, gst_plugins_base, gtk
+, libxfce4util, libxfce4ui, xfce4panel, xfconf, libunique ? null
+}:
 
 let
   # The usual Gstreamer plugins package has a zillion dependencies
@@ -23,13 +25,13 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig intltool glib gstreamer gst_plugins_minimal gtk
-      libxfce4util libxfce4ui xfce4panel xfconf libunique
+      libxfce4util libxfce4ui xfce4panel xfconf libunique makeWrapper
     ];
 
   postInstall =
     ''
-      mkdir -p $out/nix-support
-      echo ${gst_plugins_minimal} > $out/nix-support/propagated-user-env-packages
+      wrapProgram "$out/bin/xfce4-mixer" \
+        --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
     '';
 
   meta = {

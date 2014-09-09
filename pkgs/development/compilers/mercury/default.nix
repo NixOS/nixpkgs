@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Mercury is a pure logic programming language.";
+    description = "A pure logic programming language";
     longDescription = ''
       Mercury is a logic/functional programming language which combines the
       clarity and expressiveness of declarative programming with advanced

@@ -13,5 +13,7 @@ cabal.mkDerivation (self: {
     description = "Run processes on Unix systems, with a conduit interface (deprecated)";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

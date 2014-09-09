@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xml-html-conduit-lens";
-  version = "0.3.2.0";
-  sha256 = "150b772wkl2k8xcrcbqj3qhndjkl35qzwqdjbgs9mxp867aihiv0";
+  version = "0.3.2.1";
+  sha256 = "0iy58nq5b6ixdky2xr4r8xxk3c8wqp1y3jbpsk3dr1qawzjbzp12";
   buildDepends = [ htmlConduit lens text xmlConduit ];
   testDepends = [
     doctest hspec hspecExpectationsLens lens xmlConduit

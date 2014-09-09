@@ -14,5 +14,7 @@ cabal.mkDerivation (self: {
     description = "Sized types in Haskell using the GHC Nat kind";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

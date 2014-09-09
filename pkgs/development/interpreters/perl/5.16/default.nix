@@ -54,6 +54,12 @@ stdenv.mkDerivation rec {
       ${optionalString stdenv.isArm ''
         configureFlagsArray=(-Dldflags="-lm -lrt")
       ''}
+
+      ${optionalString stdenv.isCygwin ''
+        cp cygwin/cygwin.c{,.bak}
+        echo "#define PERLIO_NOT_STDIO 0" > tmp
+        cat tmp cygwin/cygwin.c.bak > cygwin/cygwin.c
+      ''}
     '';
 
   preBuild = optionalString (!(stdenv ? gcc && stdenv.gcc.nativeTools))

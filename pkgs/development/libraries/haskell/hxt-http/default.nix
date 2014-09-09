@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hxt-http";
-  version = "9.1.4";
-  sha256 = "176k71dc30cnjjr9y9vphs0aixs3ww16197qyc491qjrzhymm2g2";
+  version = "9.1.5";
+  sha256 = "172y08zx9q4qvdi7k9hg9qahp6qjs24r663il6fmynaw7szsiib9";
   buildDepends = [ HTTP hxt network parsec ];
   meta = {
     homepage = "http://www.fh-wedel.de/~si/HXmlToolbox/index.html";

@@ -18,6 +18,7 @@ cabal.mkDerivation (self: {
     description = "Hoodle file renderer";
     license = self.stdenv.lib.licenses.gpl3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
     maintainers = with self.stdenv.lib.maintainers; [ ianwookim ];
   };
 })

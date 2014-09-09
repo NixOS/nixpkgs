@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   #postInstall = "make check";
 
   meta = {
-    description = "GNU libextractor, a simple library for keyword extraction";
+    description = "Simple library for keyword extraction";
 
     longDescription =
       '' GNU libextractor is a library used to extract meta-data from files

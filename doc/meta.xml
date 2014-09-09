@@ -27,7 +27,7 @@ meta = {
 
 <para>Meta-attributes are not passed to the builder of the package.
 Thus, a change to a meta-attribute doesn’t trigger a recompilation of
-the package.  The value of a meta-attribute must a string.</para>
+the package.  The value of a meta-attribute must be a string.</para>
 
 <para>The meta-attributes of a package can be queried from the
 command-line using <command>nix-env</command>:
@@ -84,8 +84,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
 
 <section><title>Standard meta-attributes</title>
 
-<para>The following meta-attributes have a standard
-interpretation:</para>
+<para>It is expected that each meta-attribute is one of the following:</para>
 
 <variablelist>
 
@@ -113,18 +112,30 @@ interpretation:</para>
   </varlistentry>
 
   <varlistentry>
+    <term><varname>version</varname></term>
+    <listitem><para>Package version.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term><varname>homepage</varname></term>
     <listitem><para>The package’s homepage.  Example:
     <literal>http://www.gnu.org/software/hello/manual/</literal></para></listitem>
   </varlistentry>
 
   <varlistentry>
+    <term><varname>downloadPage</varname></term>
+    <listitem><para>The page where a link to the current version can be found.  Example:
+    <literal>http://ftp.gnu.org/gnu/hello/</literal></para></listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term><varname>license</varname></term>
-    <listitem><para>The license for the package. One from attribute set defined in
-      <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/lib/licenses.nix">
-      <filename>nixpkgs/lib/licenses.nix</filename></link>.
-      Example:
-      <literal>stdenv.lib.licenses.gpl3</literal>.</para></listitem>
+    <listitem><para>The license for the package. One from the
+    attribute set defined in <link
+    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix">
+    <filename>nixpkgs/lib/licenses.nix</filename></link>.  Example:
+    <literal>stdenv.lib.licenses.gpl3</literal>. For details, see
+    <xref linkend='sec-meta-license'/>.</para></listitem>
   </varlistentry>
 
   <varlistentry>
@@ -133,7 +144,7 @@ interpretation:</para>
     maintainers of this Nix expression. If
     you would like to be a maintainer of a package, you may want to add
     yourself to <link
-    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/lib/maintainers.nix"><filename>nixpkgs/lib/maintainers.nix</filename></link>
+    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/maintainers.nix"><filename>nixpkgs/lib/maintainers.nix</filename></link>
     and write something like <literal>[ stdenv.lib.maintainers.alice
     stdenv.lib.maintainers.bob ]</literal>.</para></listitem>
   </varlistentry>
@@ -159,8 +170,8 @@ interpretation:</para>
 meta.platforms = stdenv.lib.platforms.linux;
 </programlisting>
 
-    Attribute Set <varname>stdenv.lib.platforms</varname> in 
-    <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/lib/platforms.nix">
+    Attribute Set <varname>stdenv.lib.platforms</varname> in
+    <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/platforms.nix">
     <filename>nixpkgs/lib/platforms.nix</filename></link> defines various common
     lists of platforms types.
     </para></listitem>
@@ -194,6 +205,16 @@ meta.hydraPlatforms = [];
     they are fixed.</para></listitem>
   </varlistentry>
 
+  <varlistentry>
+    <term><varname>updateWalker</varname></term>
+    <listitem><para>If set to <literal>true</literal>, the package is
+    tested to be updated correctly by the <literal>update-walker.sh</literal>
+    script without additional settings. Such packages have
+    <varname>meta.version</varname> set and their homepage (or
+    the page specified by <varname>meta.downloadPage</varname>) contains
+    a direct link to the package tarball.</para></listitem>
+  </varlistentry>
+
 </variablelist>
 
 
@@ -202,9 +223,15 @@ meta.hydraPlatforms = [];
 
 <section xml:id="sec-meta-license"><title>Licenses</title>
 
-<para>The <varname>meta.license</varname> attribute could be one of the
-following:
+<para>The <varname>meta.license</varname> attribute should preferrably contain
+a value from <varname>stdenv.lib.licenses</varname> defined in
+<link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix">
+<filename>nixpkgs/lib/licenses.nix</filename></link>,
+or in-place license description of the same format if the license is
+unlikely to be useful in another expression.
 
+A few generic options are available, although it's typically better
+to indicate the specific license:
 <variablelist>
 
   <varlistentry>
@@ -249,9 +276,9 @@ following:
 </variablelist>
 
 </para>
-  
+
 
 </section>
-  
+
 
 </chapter>

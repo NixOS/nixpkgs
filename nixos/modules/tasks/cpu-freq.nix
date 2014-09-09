@@ -30,9 +30,7 @@ in
 
   config = mkIf (!config.boot.isContainer && config.powerManagement.cpuFreqGovernor != null) {
 
-    boot.kernelModules = [ "acpi-cpufreq" "speedstep-lib" "pcc-cpufreq"
-      "cpufreq_${cfg.cpuFreqGovernor}"
-    ];
+    boot.kernelModules = [ "cpufreq_${cfg.cpuFreqGovernor}" ];
 
     environment.systemPackages = [ cpupower ];
 

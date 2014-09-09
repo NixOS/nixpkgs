@@ -3,11 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gource-0.40";
+  version = "0.42";
+  name = "gource-${version}";
 
   src = fetchurl {
-    url = "http://gource.googlecode.com/files/${name}.tar.gz";
-    sha256 = "04nirh07xjslqsph557as4s50nlf91bi6v2l7vmbifmkdf90m2cw";
+    url = "https://github.com/acaudwell/Gource/releases/download/${name}/${name}.tar.gz";
+    sha256 = "08ab57z44y8b5wxg1193j6hiy50njbpi6dwafjh6nb0apcq8ziz5";
   };
 
   buildInputs = [

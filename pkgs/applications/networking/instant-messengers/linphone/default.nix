@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     description = "Open Source video SIP softphone";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.gnu;
+    broken = true;
   };
 }

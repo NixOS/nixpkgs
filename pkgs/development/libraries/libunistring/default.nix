@@ -21,7 +21,7 @@ stdenv.mkDerivation (rec {
   meta = {
     homepage = http://www.gnu.org/software/libunistring/;
 
-    description = "GNU Libunistring, a Unicode string library";
+    description = "Unicode string library";
 
     longDescription = ''
       This library provides functions for manipulating Unicode strings

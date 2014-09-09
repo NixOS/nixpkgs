@@ -8,12 +8,12 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "libselinux-${version}";
-  version = "2.2.2";
+  version = "2.3";
   inherit (libsepol) se_release se_url;
 
   src = fetchurl {
     url = "${se_url}/${se_release}/libselinux-${version}.tar.gz";
-    sha256 = "0gjs5cqwhqzmf0avnn0343ip69153k9z35vbp03sjvc02qs3darh";
+    sha256 = "1ckpiv6m5c07rp5vawlhv02w5rq8kc0n95fh2ckq2jnqxi1hn7hb";
   };
 
   buildInputs = [ pkgconfig libsepol pcre ]
