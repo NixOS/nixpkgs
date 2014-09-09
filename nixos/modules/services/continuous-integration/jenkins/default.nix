@@ -63,6 +63,15 @@ in {
           The environment will always include JENKINS_HOME.
         '';
       };
+
+      extraOpts = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = [ "--debug=9" "--httpListenAddress=localhost" ];
+        description = ''
+          Additional command line arguments to pass to Jenkins.
+        '';
+      };
     };
   };
 
@@ -94,7 +103,7 @@ in {
       path = cfg.packages;
 
       script = ''
-        ${pkgs.jdk}/bin/java -jar ${pkgs.jenkins} --httpPort=${toString cfg.port}
+        ${pkgs.jdk}/bin/java -jar ${pkgs.jenkins} --httpPort=${toString cfg.port} ${concatStringsSep " " cfg.extraOpts}
       '';
 
       postStart = ''
