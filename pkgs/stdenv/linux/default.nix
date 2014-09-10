@@ -221,7 +221,11 @@ rec {
       name = "";
     };
     overrides = pkgs: {
-      inherit (stage3.pkgs) gettext gnum4 gmp perl glibc;
+      # Zlib has to be inherited and not rebuilt in this stage,
+      # because gcc (since JAR support) already depends on zlib, and
+      # then if we already have a zlib we want to use that for the
+      # other purposes (binutils and top-level pkgs) too.
+      inherit (stage3.pkgs) gettext gnum4 gmp perl glibc zlib;
     };
     extraBuildInputs = [ stage3.pkgs.patchelf stage3.pkgs.xz ];
   };
@@ -272,7 +276,7 @@ rec {
       inherit (stage4.pkgs)
         gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
         glibc gnumake gnused gnutar gnugrep gnupatch patchelf
-        attr acl paxctl;
+        attr acl paxctl zlib;
     };
   };
 
