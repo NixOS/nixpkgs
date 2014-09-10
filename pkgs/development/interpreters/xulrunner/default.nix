@@ -3,21 +3,18 @@
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
-, cairo, gstreamer, gst_plugins_base, icu
+, cairo, gstreamer, gst_plugins_base, icu, firefox
 , debugBuild ? false
 }:
 
 assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
-let version = "31.0"; in
+let version = firefox.version; in
 
 stdenv.mkDerivation rec {
   name = "xulrunner-${version}";
 
-  src = fetchurl {
-    url = "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${version}/source/firefox-${version}.source.tar.bz2";
-    sha1 = "a6c3e25ee3aeb7da42db2aaeb50a385d63532beb";
-  };
+  src = firefox.src;
 
   buildInputs =
     [ pkgconfig gtk perl zip libIDL libjpeg zlib bzip2
