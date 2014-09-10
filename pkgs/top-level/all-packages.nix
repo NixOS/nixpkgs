@@ -2211,6 +2211,8 @@ let
 
   ssdeep = callPackage ../tools/security/ssdeep { };
 
+  sshpass = callPackage ../tools/networking/sshpass { };
+
   ssmtp = callPackage ../tools/networking/ssmtp {
     tlsSupport = true;
   };
