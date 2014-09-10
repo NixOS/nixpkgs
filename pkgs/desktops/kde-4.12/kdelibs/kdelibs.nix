@@ -4,7 +4,7 @@
 , automoc4, soprano, qca2, attica, enchant, libdbusmenu_qt, grantlee
 , docbook_xml_dtd_42, docbook_xsl, polkit_qt_1, acl, attr, libXtst
 , udev, herqq, phonon, libjpeg, xz, ilmbase, libxslt
-, pkgconfig, fetchpatch
+, pkgconfig
 }:
 
 kde {
@@ -30,12 +30,7 @@ kde {
 
   patches = [
     ../files/polkit-install.patch
-    (fetchpatch {
-      name = "CVE-2014-5033.patch";
-      url = "http://quickgit.kde.org/?p=kdelibs.git"
-        + "&a=commit&h=e4e7b53b71e2659adaf52691d4accc3594203b23";
-      sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
-    })
+    ../files/kdelibs-cve-2014-5033.patch  # Security patch, remove when updating to 4.14.0 or more
   ];
 
   cmakeFlags = [
