@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
-  meta = {
-    license = stdenv.lib.licenses.mit;
+  meta = with stdenv.lib; {
+    license = licenses.mit;
     homepage = http://www.gecode.org;
     description = "Toolkit for developing constraint-based systems";
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
     maintainers = [ maintainers.manveru ];
   };
 }
