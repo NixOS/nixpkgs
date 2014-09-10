@@ -4156,6 +4156,25 @@ rec {
     doCheck = false;
   }) else null;
 
+  influxdb = buildPythonPackage rec {
+    name = "influxdb-0.1.12";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/i/influxdb/${name}.tar.gz";
+      md5 = "6c975058ccc4df41dad8d8234c52d754";
+    };
+
+    # ImportError: No module named tests
+    doCheck = false;
+    propagatedBuildInputs = [ requests ];
+
+    meta = {
+      description = "Python client for InfluxDB";
+      homepage = https://github.com/influxdb/influxdb-python;
+      license = licenses.mit;
+    };
+  };
+
   iptools = buildPythonPackage rec {
     version = "0.6.1";
     name = "iptools-${version}";
@@ -10380,6 +10399,24 @@ rec {
       license = licenses.asl20;
     };
   };
+
+  graphite_influxdb = buildPythonPackage rec {
+    name = "graphite-influxdb-0.3";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/g/graphite-influxdb/${name}.tar.gz";
+      md5 = "5ce64ff6bb0b41c99e57486d6ec86eb7";
+    };
+
+    propagatedBuildInputs = [ influxdb graphite_api ];
+
+    meta = {
+      description = "An influxdb backend for Graphite-web and graphite-api";
+      homepage = https://github.com/vimeo/graphite-influxdb;
+      license = licenses.asl20;
+    };
+  };
+
 
   pyspotify = buildPythonPackage rec {
     name = "pyspotify-${version}";
