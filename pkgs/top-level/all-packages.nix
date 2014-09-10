@@ -8537,6 +8537,8 @@ let
 
   batik = callPackage ../applications/graphics/batik { };
 
+  batti = callPackage ../applications/misc/batti { };
+
   bazaar = callPackage ../applications/version-management/bazaar { };
 
   bazaarTools = builderDefsPackage (import ../applications/version-management/bazaar/tools.nix) {
