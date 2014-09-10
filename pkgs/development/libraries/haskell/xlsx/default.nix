@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xlsx";
-  version = "0.1.0.2";
-  sha256 = "0m9ph34mpnc6vj1d3x80y0gaya5bqdhfa193jn0a8clw4qz88sbr";
+  version = "0.1.0.3";
+  sha256 = "1i1dfb6gv4h3nc9ja7yxjzb8g207vzp58dnk4rgfcfglyvadn8kp";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
