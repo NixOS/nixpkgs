@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "case-insensitive";
-  version = "1.2.0.0";
-  sha256 = "0ybdmqaqh9hdl3dl5kx8qhs4b67g78fhnkqnd3y2lpgqjvhnbzp4";
+  version = "1.2.0.1";
+  sha256 = "1hnckzi6yq3332fx4b140lwa9p6x69rlpaw6y1pmldj2h9nsxl6m";
   buildDepends = [ deepseq hashable text ];
   testDepends = [ HUnit testFramework testFrameworkHunit text ];
   meta = {
@@ -15,6 +15,5 @@ cabal.mkDerivation (self: {
     description = "Case insensitive string comparison";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })
