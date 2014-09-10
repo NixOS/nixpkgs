@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "arbtt";
-  version = "0.8.1.2";
-  sha256 = "074vb84vkygxamvq7xnwlpgbch6qkbhyzbakc343230p1ryxf62q";
+  version = "0.8.1.4";
+  sha256 = "15ydb425nvqfzajx09q713wy5xa7awbzfjlsidk17vf7qbhfjn7z";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
