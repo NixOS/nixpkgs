@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "language-c-inline";
-  version = "0.6.0.0";
-  sha256 = "08a22sr01kch365p5536fv32rxsfmdd6hkhcq1j7vhchjrsy3f6w";
+  version = "0.7.6.0";
+  sha256 = "01imdfjqkx49pcwplvmd5lqbal5hq1cx11zcig3na1x46ggiavah";
   buildDepends = [ filepath languageCQuote mainlandPretty ];
   testDepends = [ languageCQuote ];
   doCheck = false;
@@ -14,7 +14,5 @@ cabal.mkDerivation (self: {
     description = "Inline C & Objective-C code in Haskell for language interoperability";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
-    broken = true;
   };
 })
