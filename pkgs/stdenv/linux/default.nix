@@ -214,7 +214,6 @@ rec {
       mpc = pkgs.mpc.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       isl = pkgs.isl.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       cloog = pkgs.cloog.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-      ppl = pkgs.ppl.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       gccPlain = pkgs.gcc.gcc;
     };
     extraBuildInputs = [ stage2.pkgs.patchelf stage2.pkgs.paxctl ];
@@ -235,14 +234,6 @@ rec {
       # other purposes (binutils and top-level pkgs) too.
       inherit (stage3.pkgs) gettext gnum4 gmp perl glibc zlib linuxHeaders;
 
-      # Accidental historical garbage
-      #
-      # TODO(errge): this historical mistake accidentally disables
-      # tests for the production coreutils, we definitely don't want
-      # that, so fix this in another commit!  (But will change drv and
-      # out hashes.)
-      coreutils = pkgs.coreutils.override { stdenv = stage4.stdenv.override { extraAttrs = { inherit platform; }; }; };
-
       gcc = import ../../build-support/gcc-wrapper {
         nativeTools = false;
         nativeLibc = false;
@@ -250,7 +241,7 @@ rec {
         libc = stage4.pkgs.glibc;
         inherit (stage4.pkgs) binutils coreutils;
         name = "";
-        stdenv = stage0.stdenv; # TODO(errge): legacy
+        stdenv = stage4.stdenv;
         shell = stage4.pkgs.bash + "/bin/bash";
       };
     };
