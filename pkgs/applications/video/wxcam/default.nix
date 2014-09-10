@@ -9,8 +9,7 @@
 , mjpegtools
 , alsaLib
 , libv4l
-, cimg
-}:
+, cimg }:
 
 stdenv.mkDerivation rec {
 
@@ -35,7 +34,7 @@ stdenv.mkDerivation rec {
     make install prefix="$out" wxcamdocdir="$out/share/doc/wxcam"
   '';    
   
-  meta = {
+  meta = with stdenv.lib; {
     description = "An open-source, wxGTK-based webcam app for Linux"; 
     longDescription = ''
     wxCam is a webcam application for linux. It supports video recording
@@ -45,8 +44,8 @@ stdenv.mkDerivation rec {
     so it should work on a very large number of devices.
     '';
     homepage = http://wxcam.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [ stdenv.lib.maintainers.AndersonTorres ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.linux;
   };
 }

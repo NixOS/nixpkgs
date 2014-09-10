@@ -5,8 +5,7 @@
 , termSupport ? true , ncurses ? null, readline ? null
 , wxSupport ? false, wxGTK ? null
 , wgetSupport ? false, wget ? null
-, curlSupport ? false, curl ? null
-}:
+, curlSupport ? false, curl ? null }:
 
 assert sdlSupport -> (SDL != null);
 assert termSupport -> (ncurses != null&& readline != null);
@@ -52,15 +51,19 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE="-I${gtk}/include/gtk-2.0/";
 	
-  meta = {
+  meta = with stdenv.lib; {
     description = "An open-source IA-32 (x86) PC emulator";
     longDescription = ''
-    Bochs is an open-source (LGPL), highly portable IA-32 PC emulator, written in C++, that runs on most popular platforms. It includes emulation of the Intel x86 CPU, common I/O devices, and a custom BIOS.
+    Bochs is an open-source (LGPL), highly portable IA-32 PC emulator,
+    written in C++, that runs on most popular platforms. It includes
+    emulation of the Intel x86 CPU, common I/O devices, and a custom
+    BIOS.
     '';
     homepage = http://bochs.sourceforge.net/;
-    license = stdenv.lib.licenses.lgpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.AndersonTorres ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.lgpl2Plus;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.linux;
   };
 }
+
 # TODO: study config.bochs.* implementation (like config.ffmpeg.* options)
