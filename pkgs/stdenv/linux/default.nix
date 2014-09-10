@@ -63,23 +63,11 @@ rec {
   };
 
 
-  # A helper function to call gcc-wrapper.
-  wrapGCC =
-    { gcc, libc, binutils, coreutils, name }:
-
-    lib.makeOverridable (import ../../build-support/gcc-wrapper) {
-      nativeTools = false;
-      nativeLibc = false;
-      inherit gcc binutils coreutils libc name;
-      stdenv = stage0.stdenv;
-    };
-
-
   # This function builds the various standard environments used during
   # the bootstrap.  In all stages, we build an stdenv and the package
   # set that can be built with that stdenv.
   stageFun =
-    {gcc, extraAttrs ? {}, overrides ? (pkgs: {}), extraBuildInputs ? []}:
+    {gccPlain, glibc, binutils, coreutils, name, overrides ? (pkgs: {}), extraBuildInputs ? []}:
 
     let
 
@@ -99,10 +87,28 @@ rec {
           stdenv = stage0.stdenv;
           curl = bootstrapTools;
         };
-        inherit gcc;
-        # Having the proper 'platform' in all the stdenvs allows getting proper
-        # linuxHeaders for example.
-        extraAttrs = extraAttrs // { inherit platform; };
+
+        gcc = if isNull gccPlain
+              then "/no-such-path"
+              else lib.makeOverridable (import ../../build-support/gcc-wrapper) {
+          nativeTools = false;
+          nativeLibc = false;
+          gcc = gccPlain;
+          libc = glibc;
+          inherit binutils coreutils;
+          name = name;
+          stdenv = stage0.stdenv;
+        };
+
+        extraAttrs = {
+          # Having the proper 'platform' in all the stdenvs allows getting proper
+          # linuxHeaders for example.
+          inherit platform;
+
+          # stdenv.glibc is used by GCC build to figure out the system-level
+          # /usr/include directory.
+          inherit glibc;
+        };
         overrides = pkgs: (overrides pkgs) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
 
@@ -117,7 +123,11 @@ rec {
   # Build a dummy stdenv with no GCC or working fetchurl.  This is
   # because we need a stdenv to build the GCC wrapper and fetchurl.
   stage0 = stageFun {
-    gcc = "/no-such-path";
+    gccPlain = null;
+    glibc = null;
+    binutils = null;
+    coreutils = null;
+    name = null;
 
     overrides = pkgs: {
       # The Glibc include directory cannot have the same prefix as the
@@ -148,17 +158,19 @@ rec {
   # simply re-export those packages in the middle stage(s) using the
   # overrides attribute and the inherit syntax.
   stage1 = stageFun {
-    gcc = wrapGCC {
-      gcc = bootstrapTools;
-      libc = stage0.pkgs.glibc;
-      binutils = bootstrapTools;
-      coreutils = bootstrapTools;
-      name = "bootstrap-gcc-wrapper";
-    };
+    gccPlain = bootstrapTools;
+    inherit (stage0.pkgs) glibc;
+    binutils = bootstrapTools;
+    coreutils = bootstrapTools;
+    name = "bootstrap-gcc-wrapper";
+
     # Rebuild binutils to use from stage2 onwards.
     overrides = pkgs: {
       binutils = pkgs.binutils.override { gold = false; };
       inherit (stage0.pkgs) glibc;
+
+      # TODO(errge) This was accidentally like this historically, most probably not needed
+      perl = pkgs.perl.override { stdenv = stage1.stdenv.override { extraAttrs = { inherit platform; }; }; };
     };
   };
 
@@ -166,13 +178,12 @@ rec {
   # 2nd stdenv that contains our own rebuilt binutils and is used for
   # compiling our own Glibc.
   stage2 = stageFun {
-    gcc = wrapGCC {
-      gcc = bootstrapTools;
-      libc = stage1.pkgs.glibc;
-      binutils = stage1.pkgs.binutils;
-      coreutils = bootstrapTools;
-      name = "bootstrap-gcc-wrapper";
-    };
+    gccPlain = bootstrapTools;
+    inherit (stage1.pkgs) glibc;
+    binutils = stage1.pkgs.binutils;
+    coreutils = bootstrapTools;
+    name = "bootstrap-gcc-wrapper";
+
     overrides = pkgs: {
       inherit (stage1.pkgs) perl binutils paxctl;
       # This also contains the full, dynamically linked, final Glibc.
@@ -184,13 +195,11 @@ rec {
   # one uses the rebuilt Glibc from stage2.  It still uses the recent
   # binutils and rest of the bootstrap tools, including GCC.
   stage3 = stageFun {
-    gcc = wrapGCC {
-      gcc = bootstrapTools;
-      libc = stage2.pkgs.glibc;
-      binutils = stage2.pkgs.binutils;
-      coreutils = bootstrapTools;
-      name = "bootstrap-gcc-wrapper";
-    };
+    gccPlain = bootstrapTools;
+    inherit (stage2.pkgs) glibc binutils;
+    coreutils = bootstrapTools;
+    name = "bootstrap-gcc-wrapper";
+
     overrides = pkgs: {
       inherit (stage2.pkgs) binutils glibc perl patchelf linuxHeaders;
       # Link GCC statically against GMP etc.  This makes sense because
@@ -202,9 +211,7 @@ rec {
       isl = pkgs.isl.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       cloog = pkgs.cloog.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       ppl = pkgs.ppl.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-    };
-    extraAttrs = {
-      glibc = stage2.pkgs.glibc;  # Required by gcc47 build
+      gccPlain = pkgs.gcc.gcc;
     };
     extraBuildInputs = [ stage2.pkgs.patchelf stage2.pkgs.paxctl ];
   };
@@ -213,13 +220,10 @@ rec {
   # Construct a fourth stdenv that uses the new GCC.  But coreutils is
   # still from the bootstrap tools.
   stage4 = stageFun {
-    gcc = wrapGCC {
-      gcc = stage3.pkgs.gcc.gcc;
-      libc = stage3.pkgs.glibc;
-      binutils = stage3.pkgs.binutils;
-      coreutils = bootstrapTools;
-      name = "";
-    };
+    inherit (stage3.pkgs) gccPlain glibc binutils;
+    coreutils = bootstrapTools;
+    name = "";
+
     overrides = pkgs: {
       # Zlib has to be inherited and not rebuilt in this stage,
       # because gcc (since JAR support) already depends on zlib, and
@@ -227,12 +231,24 @@ rec {
       # other purposes (binutils and top-level pkgs) too.
       inherit (stage3.pkgs) gettext gnum4 gmp perl glibc zlib linuxHeaders;
 
-      gcc = (wrapGCC {
+      # Accidental historical garbage
+      #
+      # TODO(errge): this historical mistake accidentally disables
+      # tests for the production coreutils, we definitely don't want
+      # that, so fix this in another commit!  (But will change drv and
+      # out hashes.)
+      coreutils = pkgs.coreutils.override { stdenv = stage4.stdenv.override { extraAttrs = { inherit platform; }; }; };
+
+      gcc = import ../../build-support/gcc-wrapper {
+        nativeTools = false;
+        nativeLibc = false;
         gcc = stage4.stdenv.gcc.gcc;
         libc = stage4.pkgs.glibc;
         inherit (stage4.pkgs) binutils coreutils;
         name = "";
-      }).override { shell = stage4.pkgs.bash + "/bin/bash"; };
+        stdenv = stage0.stdenv; # TODO(errge): legacy
+        shell = stage4.pkgs.bash + "/bin/bash";
+      };
     };
     extraBuildInputs = [ stage3.pkgs.patchelf stage3.pkgs.xz ];
   };
