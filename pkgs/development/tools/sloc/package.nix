@@ -83,15 +83,15 @@
     passthru.names = [ "cli-table" ];
   };
   "cli-table" = self.by-version."cli-table"."0.3.0";
-  by-spec."coffee-script"."~1.7.1" =
-    self.by-version."coffee-script"."1.7.1";
-  by-version."coffee-script"."1.7.1" = lib.makeOverridable self.buildNodePackage {
-    name = "coffee-script-1.7.1";
+  by-spec."coffee-script"."~1.8.0" =
+    self.by-version."coffee-script"."1.8.0";
+  by-version."coffee-script"."1.8.0" = lib.makeOverridable self.buildNodePackage {
+    name = "coffee-script-1.8.0";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/coffee-script/-/coffee-script-1.7.1.tgz";
-        name = "coffee-script-1.7.1.tgz";
-        sha1 = "62996a861780c75e6d5069d13822723b73404bfc";
+        url = "http://registry.npmjs.org/coffee-script/-/coffee-script-1.8.0.tgz";
+        name = "coffee-script-1.8.0.tgz";
+        sha1 = "9c9f1d2b4a52a000ded15b659791703648263c1d";
       })
     ];
     buildInputs =
@@ -103,7 +103,7 @@
     ];
     passthru.names = [ "coffee-script" ];
   };
-  "coffee-script" = self.by-version."coffee-script"."1.7.1";
+  "coffee-script" = self.by-version."coffee-script"."1.8.0";
   by-spec."colors"."0.6.2" =
     self.by-version."colors"."0.6.2";
   by-version."colors"."0.6.2" = lib.makeOverridable self.buildNodePackage {
@@ -201,14 +201,14 @@
     passthru.names = [ "core-util-is" ];
   };
   by-spec."debug"."*" =
-    self.by-version."debug"."1.0.4";
-  by-version."debug"."1.0.4" = lib.makeOverridable self.buildNodePackage {
-    name = "node-debug-1.0.4";
+    self.by-version."debug"."2.0.0";
+  by-version."debug"."2.0.0" = lib.makeOverridable self.buildNodePackage {
+    name = "node-debug-2.0.0";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/debug/-/debug-1.0.4.tgz";
-        name = "debug-1.0.4.tgz";
-        sha1 = "5b9c256bd54b6ec02283176fa8a0ede6d154cbf8";
+        url = "http://registry.npmjs.org/debug/-/debug-2.0.0.tgz";
+        name = "debug-2.0.0.tgz";
+        sha1 = "89bd9df6732b51256bc6705342bba02ed12131ef";
       })
     ];
     buildInputs =
@@ -480,7 +480,7 @@
       self.by-version."growl"."1.8.1"
       self.by-version."jade"."0.26.3"
       self.by-version."diff"."1.0.7"
-      self.by-version."debug"."1.0.4"
+      self.by-version."debug"."2.0.0"
       self.by-version."mkdirp"."0.3.5"
       self.by-version."glob"."3.2.3"
     ];
