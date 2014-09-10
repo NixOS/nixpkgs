@@ -1114,6 +1114,24 @@ rec {
   });
 
 
+  cairocffi = buildPythonPackage rec {
+    name = "cairocffi-0.5.4";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/c/cairocffi/${name}.tar.gz";
+      md5 = "e3fa4002583bfaa88b156e1af9c75bde";
+    };
+
+    propagatedBuildInputs = [ cffi ];
+
+    meta = {
+      homepage = https://github.com/SimonSapin/cairocffi;
+      license = "bsd";
+      description = "cffi-based cairo bindings for Python";
+    };
+  };
+
+
   carrot = buildPythonPackage rec {
     name = "carrot-0.10.7";
 
@@ -3478,6 +3496,23 @@ rec {
     meta = {
       homepage = http://flask.pocoo.org/;
       description = "A microframework based on Werkzeug, Jinja 2, and good intentions";
+      license = "BSD";
+    };
+  };
+
+  flask_cache = buildPythonPackage rec {
+    name = "Flask-Cache-0.13.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/F/Flask-Cache/${name}.tar.gz";
+      md5 = "ab82a9cd0844891ccdb54fbb93fd6c59";
+    };
+
+    propagatedBuildInputs = [ werkzeug flask ];
+
+    meta = {
+      homepage = https://github.com/thadeusb/flask-cache;
+      description = "Adds cache support to your Flask application";
       license = "BSD";
     };
   };
@@ -8377,6 +8412,22 @@ rec {
   };
 
 
+  structlog = buildPythonPackage rec {
+    name = "structlog-0.4.2";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/s/structlog/${name}.tar.gz";
+      md5 = "062cda36069e8573e00c265f451f899e";
+    };
+
+    meta = {
+      description = "Painless structural logging";
+      homepage = http://www.structlog.org/;
+      license = licenses.asl20;
+    };
+  };
+
+
   # XXX: ValueError: ZIP does not support timestamps before 1980
   # svneverever =  buildPythonPackage rec {
   #   name = "svneverever-778489a8";
@@ -10296,6 +10347,37 @@ rec {
       homepage = http://graphite.wikidot.com/;
       description = "Enterprise scalable realtime graphing";
       maintainers = with maintainers; [ rickynils offline ];
+    };
+  };
+
+  graphite_api = buildPythonPackage rec {
+    name = "graphite-api-1.0.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/g/graphite-api/${name}.tar.gz";
+      md5 = "466c13a902744bed09a054da452140f0";
+    };
+
+    # ImportError: No module named tests
+    doCheck = false;
+
+    propagatedBuildInputs = [
+      flask
+      flask_cache
+      cairocffi
+      pyparsing
+      pytz
+      pyyaml
+      raven
+      six
+      structlog
+      tzlocal
+    ];
+
+    meta = {
+      description = "Graphite-web,  without the interface. Just the rendering HTTP API.";
+      homepage = https://github.com/brutasse/graphite-api;
+      license = licenses.asl20;
     };
   };
 
