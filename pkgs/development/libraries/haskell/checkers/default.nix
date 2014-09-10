@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "checkers";
-  version = "0.3.2";
-  sha256 = "0v8i6754syvjh2p5qdqh95j3swkar9077gidsnahwk9h6qfsx6r3";
+  version = "0.4.1";
+  sha256 = "19ndgbivd07vchsqs6z9iqjl2jldbq7h4skqc9acracd9xyq1vdr";
   buildDepends = [ QuickCheck random ];
   meta = {
     description = "Check properties on standard classes and data structures";
