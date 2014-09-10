@@ -131,6 +131,7 @@
     network = super.network_2_2_1_7.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     OpenGLRaw = self.OpenGLRaw_1_3_0_0;
     OpenGL = self.OpenGL_2_6_0_1;
+    parsec = super.parsec.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     QuickCheck = super.QuickCheck.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     stm = self.stm_2_4_2.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     systemFilepath = super.systemFilepath.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
