@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "language-java";
-  version = "0.2.6";
-  sha256 = "1rwkc71c77v1lm5vnfkf7wr4lzvkpdylwz8wia40xwyxidq9qv27";
+  version = "0.2.7";
+  sha256 = "1519grsjw0f4skldxs563qz07mmj1cg72ma0plmvzpas7inkikyf";
   buildDepends = [ cpphs parsec syb ];
   testDepends = [
     filepath HUnit mtl QuickCheck testFramework testFrameworkHunit
