@@ -2158,8 +2158,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   sbv = callPackage ../development/libraries/haskell/sbv {};
 
   scientific_0_2_0_2 = callPackage ../development/libraries/haskell/scientific/0.2.0.2.nix {};
-  scientific_0_3_3_0 = callPackage ../development/libraries/haskell/scientific/0.3.3.0.nix {};
-  scientific = self.scientific_0_3_3_0;
+  scientific_0_3_3_1 = callPackage ../development/libraries/haskell/scientific/0.3.3.1.nix {};
+  scientific = self.scientific_0_3_3_1;
 
   scotty = callPackage ../development/libraries/haskell/scotty {};
 

@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "scientific";
-  version = "0.3.3.0";
-  sha256 = "1kj49ibq53m7cfs9pq396l4fbqnarqzay7a65rmsrzi2vz15parv";
+  version = "0.3.3.1";
+  sha256 = "1p1g9cj827hb1zsn6zip7vgiwrw2vxfali6qvhccd6j1p12drw0b";
   buildDepends = [ deepseq hashable text ];
   testDepends = [
     QuickCheck smallcheck tasty tastyAntXml tastyHunit tastyQuickcheck
