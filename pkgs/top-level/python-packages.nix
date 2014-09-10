@@ -2189,6 +2189,21 @@ rec {
     };
   };
 
+  singledispatch = buildPythonPackage rec {
+    name = "singledispatch-3.4.0.3";
+
+    propagatedBuildInputs = [ six ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/s/singledispatch/${name}.tar.gz";
+      md5 = "af2fc6a3d6cc5a02d0bf54d909785fcb";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = http://docs.python.org/3/library/functools.html;
+    };
+  };
+
   gcutil = buildPythonPackage rec {
     name = "gcutil-1.15.0";
     meta.maintainers = [ stdenv.lib.maintainers.phreedom ];
@@ -5387,7 +5402,7 @@ rec {
     };
 
     buildInputs = [ pkgs.makeWrapper ];
-    propagatedBuildInputs = [ requests pkgs.rtmpdump pycrypto ];
+    propagatedBuildInputs = [ requests2 pkgs.rtmpdump pycrypto singledispatch futures ];
     postInstall = ''
       wrapProgram $out/bin/livestreamer --prefix PATH : ${pkgs.rtmpdump}/bin
     '';
@@ -7106,11 +7121,11 @@ rec {
 
 
   requests = buildPythonPackage rec {
-    name = "requests-1.2.0";
+    name = "requests-1.2.3";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
-      md5 = "22af2682233770e5468a986f451c51c0";
+      md5 = "adbd3f18445f7fe5e77f65c502e264fb";
     };
 
     meta = {
