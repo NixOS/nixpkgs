@@ -127,7 +127,7 @@ in rec {
 
       mkdir -p $out/nix-support
       echo "nix-build out $out" >> $out/nix-support/hydra-build-products
-      echo "doc manual $dst manual.html" >> $out/nix-support/hydra-build-products
+      echo "doc manual $dst" >> $out/nix-support/hydra-build-products
     ''; # */
 
     meta.description = "The NixOS manual in HTML format";
