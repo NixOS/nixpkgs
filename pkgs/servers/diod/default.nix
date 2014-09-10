@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, munge, lua5, libcap, perl, ncurses }:
+{ stdenv, fetchurl, munge, lua, libcap, perl, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "diod-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0h92zadbkq4fjhqjzq17cl3x7bdkz2yakpcl0nccv4ml0gwfbx27";
   };
 
-  buildInputs = [ munge lua5 libcap perl ncurses ];
+  buildInputs = [ munge lua libcap perl ncurses ];
 
   meta = {
     description = "An I/O forwarding server that implements a variant of the 9P protocol";

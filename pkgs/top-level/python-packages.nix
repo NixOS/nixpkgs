@@ -138,7 +138,7 @@ rec {
 
   pycairo = import ../development/python-modules/pycairo {
     inherit (pkgs) stdenv fetchurl fetchpatch pkgconfig cairo x11;
-    inherit python;
+    inherit python isPyPy;
   };
 
   pycrypto = import ../development/python-modules/pycrypto {
