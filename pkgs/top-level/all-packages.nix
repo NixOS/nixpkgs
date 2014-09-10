@@ -4768,6 +4768,8 @@ let
 
   gdbm = callPackage ../development/libraries/gdbm { };
 
+  gecode = callPackage ../development/libraries/gecode { };
+
   gegl = callPackage ../development/libraries/gegl {
     #  avocodec avformat librsvg
   };
