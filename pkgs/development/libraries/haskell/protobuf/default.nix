@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "protobuf";
-  version = "0.2.0.3";
-  sha256 = "0jcrnym0j8w4vjrdmvn88x8ddp8wf809wviy1vkz94p2nyp6l2hw";
+  version = "0.2.0.4";
+  sha256 = "0gg678cb1psgdsjzv9x7mhcjmywj8bgzmp9pd850d3p9zyiw9l2j";
   buildDepends = [
     cereal dataBinaryIeee754 deepseq mtl text unorderedContainers
   ];
