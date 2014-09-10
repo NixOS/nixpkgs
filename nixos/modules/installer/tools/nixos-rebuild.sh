@@ -194,13 +194,13 @@ if [ -z "$rollback" ]; then
         nix-env "${extraBuildFlags[@]}" -p "$profile" -f '<nixpkgs/nixos>' --set -A system
         pathToConfig="$profile"
     elif [ "$action" = test -o "$action" = build -o "$action" = dry-run ]; then
-        nix-build '<nixpkgs/nixos>' -A system -K -k "${extraBuildFlags[@]}" > /dev/null
+        nix-build '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}" > /dev/null
         pathToConfig=./result
     elif [ "$action" = build-vm ]; then
-        nix-build '<nixpkgs/nixos>' -A vm -K -k "${extraBuildFlags[@]}" > /dev/null
+        nix-build '<nixpkgs/nixos>' -A vm -k "${extraBuildFlags[@]}" > /dev/null
         pathToConfig=./result
     elif [ "$action" = build-vm-with-bootloader ]; then
-        nix-build '<nixpkgs/nixos>' -A vmWithBootLoader -K -k "${extraBuildFlags[@]}" > /dev/null
+        nix-build '<nixpkgs/nixos>' -A vmWithBootLoader -k "${extraBuildFlags[@]}" > /dev/null
         pathToConfig=./result
     else
         showSyntax
