@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "setlocale";
-  version = "1.0.0";
-  sha256 = "1bnxh09jjac8gyjl87w6v86dqc1xr398l28ili8283im141anpzi";
+  version = "1.0.0.1";
+  sha256 = "15dzf4hgkn5saz6qyn1xqvinvy0y571crfxfwycmcmm4az6rsqk0";
   jailbreak = true;
   meta = {
     description = "Haskell bindings to setlocale";
