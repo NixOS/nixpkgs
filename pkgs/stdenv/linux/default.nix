@@ -192,7 +192,7 @@ rec {
       name = "bootstrap-gcc-wrapper";
     };
     overrides = pkgs: {
-      inherit (stage2.pkgs) binutils glibc perl;
+      inherit (stage2.pkgs) binutils glibc perl patchelf;
       # Link GCC statically against GMP etc.  This makes sense because
       # these builds of the libraries are only used by GCC, so it
       # reduces the size of the stdenv closure.
@@ -220,7 +220,7 @@ rec {
       coreutils = bootstrapTools;
       name = "";
     };
-    extraPath = [ stage2.pkgs.patchelf stage3.pkgs.xz ];
+    extraPath = [ stage3.pkgs.patchelf stage3.pkgs.xz ];
     overrides = pkgs: {
       inherit (stage3.pkgs) gettext gnum4 gmp perl glibc;
     };
