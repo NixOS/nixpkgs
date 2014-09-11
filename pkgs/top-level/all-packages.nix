@@ -7918,6 +7918,8 @@ let
 
   shadow = callPackage ../os-specific/linux/shadow { };
 
+  smem = callPackage ../os-specific/linux/smem { };
+
   statifier = builderDefsPackage (import ../os-specific/linux/statifier) { };
 
   sysdig = callPackage ../os-specific/linux/sysdig {
