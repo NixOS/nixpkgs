@@ -201,15 +201,32 @@ sub runInContainer {
     die "cannot run ‘nsenter’: $!\n";
 }
 
+# Remove a directory while recursively unmounting all mounted filesystems within
+# that directory and unmounting/removing that directory afterwards as well.
+#
+# NOTE: If the specified path is a mountpoint, its contents will be removed,
+#       only mountpoints underneath that path will be unmounted properly.
+sub safeRemoveTree {
+    my ($path) = @_;
+    system("find", $path, "-mindepth", "1", "-xdev",
+           "(", "-type", "d", "-exec", "mountpoint", "-q", "{}", ";", ")",
+           "-exec", "umount", "-fR", "{}", "+");
+    system("rm", "--one-file-system", "-rf", $path);
+    if (-e $path) {
+        system("umount", "-fR", $path);
+        system("rm", "--one-file-system", "-rf", $path);
+    }
+}
+
 if ($action eq "destroy") {
     die "$0: cannot destroy declarative container (remove it from your configuration.nix instead)\n"
         unless POSIX::access($confFile, &POSIX::W_OK);
 
     stopContainer if isContainerRunning;
 
-    rmtree($profileDir) if -e $profileDir;
-    rmtree($gcRootsDir) if -e $gcRootsDir;
-    rmtree($root) if -e $root;
+    safeRemoveTree($profileDir) if -e $profileDir;
+    safeRemoveTree($gcRootsDir) if -e $gcRootsDir;
+    safeRemoveTree($root) if -e $root;
     unlink($confFile) or die;
 }
 
