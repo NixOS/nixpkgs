@@ -1,11 +1,11 @@
 { stdenv, fetchurl, openssl, zlib }:
 
 stdenv.mkDerivation {
-  name = "ircd-hybrid-7.2.2";
+  name = "ircd-hybrid-7.2.3";
 
   src = fetchurl {
-    url = mirror://sourceforge/ircd-hybrid/ircd-hybrid-7.2.2.tgz;
-    sha256 = "1xn4dfbgx019mhismfnr2idhslvarlajyahj7c6bqzmarcwwrvck";
+    url = mirror://sourceforge/ircd-hybrid/ircd-hybrid-7.2.3.tgz;
+    sha256 = "0w28w10vx3j2s6h2p0qx2p08gafyad7ddxa4f8i94vmx193l7w37";
   };
 
   buildInputs = [ openssl zlib ];
