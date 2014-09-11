@@ -4004,12 +4004,12 @@ rec {
 
   hetzner = buildPythonPackage rec {
     name = "hetzner-${version}";
-    version = "0.7.0";
+    version = "0.7.2";
 
     src = fetchurl {
       url = "https://github.com/RedMoonStudios/hetzner/archive/"
           + "v${version}.tar.gz";
-      sha256 = "1ldbhwy6yk18frv6n9znvdsrqfnpch4mfvc70jrpq3f9fw236src";
+      sha256 = "07jnrgy9fkh1hwgsa8491ljz9spazmifqsg92m3xnamja1536qfl";
     };
 
     # not there yet, but coming soon.
