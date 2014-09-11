@@ -8265,6 +8265,8 @@ let
 
   stdmanpages = callPackage ../data/documentation/std-man-pages { };
 
+  stix-otf = callPackage ../data/fonts/stix-otf { };
+
   symbola = callPackage ../data/fonts/symbola { };
 
   iana_etc = callPackage ../data/misc/iana-etc { };
