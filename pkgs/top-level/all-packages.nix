@@ -611,8 +611,11 @@ let
 
   ccnet = callPackage ../tools/networking/ccnet { };
 
-  consul = callPackage ../servers/consul { };
-  consul_ui = callPackage ../servers/consul/ui.nix { };
+  consul = callPackage ../servers/consul {
+    inherit ruby rubyLibs;
+  };
+
+  consul_ui = consul.ui;
 
   chntpw = callPackage ../tools/security/chntpw { };
 
