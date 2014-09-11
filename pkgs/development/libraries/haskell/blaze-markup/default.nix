@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "blaze-markup";
-  version = "0.6.1.0";
-  sha256 = "0ydk34y1j8bssdiqw6m70383dh4khbcac3jd7fpr37cx7ighlp7l";
+  version = "0.6.1.1";
+  sha256 = "1ah6fgfqsmarq8g4gw81yhckz4pclb2ifxv237cqz5zhy9il4j5d";
   buildDepends = [ blazeBuilder text ];
   testDepends = [
     blazeBuilder HUnit QuickCheck testFramework testFrameworkHunit
