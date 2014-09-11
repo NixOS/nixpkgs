@@ -8,6 +8,16 @@ let
 
   dataDir = cfg.dataDir;
 
+  graphiteApiConfig = pkgs.writeText "graphite-api.yaml" ''
+    time_zone: ${config.time.timeZone}
+    search_index: ${dataDir}/index
+    ${optionalString (cfg.api.finders != []) ''finders:''}
+    ${concatMapStringsSep "\n" (f: "  - " + f.moduleName) cfg.api.finders}
+    ${optionalString (cfg.api.functions != []) ''functions:''}
+    ${concatMapStringsSep "\n" (f: "  - " + f) cfg.api.functions}
+    ${cfg.api.extraConfig}
+  '';
+
   configDir = pkgs.buildEnv {
     name = "graphite-config";
     paths = lists.filter (el: el != null) [
@@ -62,6 +72,40 @@ in {
         description = "Graphite web frontend port.";
         default = 8080;
         type = types.int;
+      };
+    };
+
+    api = {
+      enable = mkOption {
+        description = "Whether to enable graphite api.";
+        default = false;
+        type = types.uniq types.bool;
+      };
+
+      finders = mkOption {
+        description = "List of finder plugins load.";
+        default = [];
+        example = [ pkgs.python27Packages.graphite_influxdb ];
+        type = types.listOf types.package;
+      };
+
+      functions = mkOption {
+        description = "List of functions to load.";
+        default = [
+          "graphite_api.functions.SeriesFunctions"
+          "graphite_api.functions.PieFunctions"
+        ];
+        type = types.listOf types.str;
+      };
+
+      extraConfig = mkOption {
+        description = "Extra configuration for graphite api.";
+        default = ''
+          whisper:
+            directories:
+                - ${dataDir}/whisper
+        '';
+        type = types.str;
       };
     };
 
@@ -176,7 +220,7 @@ in {
 
   ###### implementation
 
-  config = mkIf (cfg.carbon.enableAggregator || cfg.carbon.enableCache || cfg.carbon.enableRelay || cfg.web.enable) {
+  config = mkIf (cfg.carbon.enableAggregator || cfg.carbon.enableCache || cfg.carbon.enableRelay || cfg.web.enable || cfg.api.enable) {
     systemd.services.carbonCache = {
       enable = cfg.carbon.enableCache;
       description = "Graphite Data Storage Backend";
@@ -189,10 +233,6 @@ in {
         Group = "graphite";
         PermissionsStartOnly = true;
       };
-      restartTriggers = [
-        pkgs.pythonPackages.carbon
-        configDir
-      ];
       preStart = ''
         mkdir -p ${cfg.dataDir}/whisper
         chmod 0700 ${cfg.dataDir}/whisper
@@ -211,10 +251,6 @@ in {
         User = "graphite";
         Group = "graphite";
       };
-      restartTriggers = [
-        pkgs.pythonPackages.carbon
-        configDir
-      ];
     };
 
     systemd.services.carbonRelay = {
@@ -228,10 +264,6 @@ in {
         User = "graphite";
         Group = "graphite";
       };
-      restartTriggers = [
-        pkgs.pythonPackages.carbon
-        configDir
-      ];
     };
 
     systemd.services.graphiteWeb = {
@@ -243,7 +275,7 @@ in {
       environment = {
         PYTHONPATH = "${pkgs.python27Packages.graphite_web}/lib/python2.7/site-packages";
         DJANGO_SETTINGS_MODULE = "graphite.settings";
-        GRAPHITE_CONF_DIR = "/etc/graphite/";
+        GRAPHITE_CONF_DIR = configDir;
         GRAPHITE_STORAGE_DIR = dataDir;
       };
       serviceConfig = {
@@ -271,9 +303,40 @@ in {
           chown -R graphite:graphite ${cfg.dataDir}
         fi
       '';
-      restartTriggers = [
-        pkgs.python27Packages.graphite_web
-      ];
+    };
+
+    systemd.services.graphiteApi = {
+      enable = cfg.api.enable;
+      description = "Graphite Api Interface";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network-interfaces.target" ];
+      environment = {
+        PYTHONPATH =
+          "${pkgs.python27Packages.graphite_api}/lib/python2.7/site-packages:" +
+          concatMapStringsSep ":" (f: f + "/lib/python2.7/site-packages") cfg.api.finders;
+        GRAPHITE_API_CONFIG = graphiteApiConfig;
+        LD_LIBRARY_PATH = "${pkgs.cairo}/lib";
+      };
+      serviceConfig = {
+        ExecStart = ''
+          ${pkgs.python27Packages.waitress}/bin/waitress-serve \
+          --host=${cfg.web.host} --port=${toString cfg.web.port} \
+          graphite_api.app:app 
+        '';
+        User = "graphite";
+        Group = "graphite";
+        PermissionsStartOnly = true;
+      };
+      preStart = ''
+        if ! test -e ${dataDir}/db-created; then
+          mkdir -p ${dataDir}/cache/
+          chmod 0700 ${dataDir}/cache/
+
+          touch ${dataDir}/db-created
+
+          chown -R graphite:graphite ${cfg.dataDir}
+        fi
+      '';
     };
 
     environment.systemPackages = [
