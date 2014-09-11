@@ -62,6 +62,8 @@ rec {
             makeOverridable f (origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs));
           deepOverride = newArgs:
             makeOverridable f (lib.overrideExisting (lib.mapAttrs (deepOverrider newArgs) origArgs) newArgs);
+          overrideDerivation = fdrv:
+            makeOverridable (args: overrideDerivation (f args) fdrv) origArgs;
         })
       else ff;
 
