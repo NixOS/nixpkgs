@@ -444,7 +444,6 @@ let
 
   aegisub = callPackage ../applications/video/aegisub {
     wxGTK = wxGTK30;
-    lua = lua5_1;
   };
 
   aespipe = callPackage ../tools/security/aespipe { };
@@ -2212,6 +2211,8 @@ let
 
   ssdeep = callPackage ../tools/security/ssdeep { };
 
+  sshpass = callPackage ../tools/networking/sshpass { };
+
   ssmtp = callPackage ../tools/networking/ssmtp {
     tlsSupport = true;
   };
@@ -3652,10 +3653,12 @@ let
   lua5 = lua5_2_compat;
   lua = lua5;
 
-  lua5_sockets = callPackage ../development/interpreters/lua-5/sockets.nix {};
+  lua5_1_sockets = callPackage ../development/interpreters/lua-5/sockets.nix {
+    lua5 = lua5_1; # version 2.* only works with 5.1
+  };
   lua5_expat = callPackage ../development/interpreters/lua-5/expat.nix {};
   lua5_filesystem = callPackage ../development/interpreters/lua-5/filesystem.nix {};
-  lua5_sec = callPackage ../development/interpreters/lua-5/sec.nix {};
+  lua5_sec = callPackage ../development/interpreters/lua-5/sec.nix { };
 
   luarocks = callPackage ../development/tools/misc/luarocks {
      lua = lua5;
@@ -4767,6 +4770,8 @@ let
 
   gdbm = callPackage ../development/libraries/gdbm { };
 
+  gecode = callPackage ../development/libraries/gecode { };
+
   gegl = callPackage ../development/libraries/gegl {
     #  avocodec avformat librsvg
   };
@@ -5147,7 +5152,6 @@ let
 
   keybinder3 = callPackage ../development/libraries/keybinder3 {
     automake = automake111x;
-    lua = lua5_1;
   };
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix { };
@@ -5172,9 +5176,7 @@ let
     libpng = libpng12;
   };
 
-  lgi = callPackage ../development/libraries/lgi {
-    lua = lua5_1;
-  };
+  lgi = callPackage ../development/libraries/lgi { };
 
   lib3ds = callPackage ../development/libraries/lib3ds { };
 
@@ -6080,7 +6082,7 @@ let
 
   pocketsphinx = callPackage ../development/libraries/pocketsphinx { };
 
-  podofo = callPackage ../development/libraries/podofo { };
+  podofo = callPackage ../development/libraries/podofo { lua5 = lua5_1; };
 
   polkit = callPackage ../development/libraries/polkit {
     spidermonkey = spidermonkey_185;
@@ -6935,7 +6937,7 @@ let
 
   dictdWordnet = callPackage ../servers/dict/dictd-wordnet.nix {};
 
-  diod = callPackage ../servers/diod { };
+  diod = callPackage ../servers/diod { lua = lua5_1; };
 
   dovecot = dovecot21;
 
@@ -7204,6 +7206,8 @@ let
   tomcat8 = callPackage ../servers/http/tomcat/8.0.nix { };
 
   tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
+  
+  torque = callPackage ../servers/computing/torque { };
 
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 
@@ -8383,11 +8387,9 @@ let
   avxsynth = callPackage ../applications/video/avxsynth { };
 
   awesome-3-4 = callPackage ../applications/window-managers/awesome/3.4.nix {
-    lua = lua5;
     cairo = cairo.override { xcbSupport = true; };
   };
   awesome-3-5 = callPackage ../applications/window-managers/awesome {
-    lua   = lua5_1;
     cairo = cairo.override { xcbSupport = true; };
   };
   awesome = awesome-3-5;
@@ -9019,11 +9021,16 @@ let
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
+  linssid = callPackage ../applications/networking/linssid { };
+
   mi2ly = callPackage ../applications/audio/mi2ly {};
 
   praat = callPackage ../applications/audio/praat { };
 
-  quvi = callPackage ../applications/video/quvi/tool.nix { };
+  quvi = callPackage ../applications/video/quvi/tool.nix {
+    lua5_sockets = lua5_1_sockets;
+    lua5 = lua5_1;
+  };
 
   quvi_scripts = callPackage ../applications/video/quvi/scripts.nix { };
 
@@ -9487,6 +9494,7 @@ let
 
   mpv = callPackage ../applications/video/mpv {
     lua = lua5_1;
+    lua5_sockets = lua5_1_sockets;
     bs2bSupport = config.mpv.bs2bSupport or true;
     quviSupport = config.mpv.quviSupport or false;
     cacaSupport = config.mpv.cacaSupport or true;
@@ -10604,7 +10612,7 @@ let
 
   oilrush = callPackage ../games/oilrush { };
 
-  openra = callPackage ../games/openra { };
+  openra = callPackage ../games/openra { lua = lua5_1; };
 
   openttd = callPackage ../games/openttd {
     zlib = zlibStatic;

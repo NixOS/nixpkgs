@@ -301,7 +301,7 @@ let
   uidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) cfg.extraUsers) "uid";
   gidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) cfg.extraGroups) "gid";
 
-  spec = builtins.toFile "users-groups.json" (builtins.toJSON {
+  spec = pkgs.writeText "users-groups.json" (builtins.toJSON {
     inherit (cfg) mutableUsers;
     users = mapAttrsToList (n: u:
       { inherit (u)

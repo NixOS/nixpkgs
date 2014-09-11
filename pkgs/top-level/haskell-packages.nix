@@ -1548,6 +1548,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   machines = callPackage ../development/libraries/haskell/machines {};
 
+  managed = callPackage ../development/libraries/haskell/managed {};
+
   markdown = callPackage ../development/libraries/haskell/markdown {};
 
   markdownUnlit = callPackage ../development/libraries/haskell/markdown-unlit {};
