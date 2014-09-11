@@ -9540,6 +9540,8 @@ let
 
   shotcut = callPackage ../applications/video/shotcut { mlt = mlt-qt5; };
 
+  smartgithg = callPackage ../applications/version-management/smartgithg { };
+
   smplayer = callPackage ../applications/video/smplayer { };
 
   sup = with rubyLibs; callPackage ../applications/networking/mailreaders/sup {
