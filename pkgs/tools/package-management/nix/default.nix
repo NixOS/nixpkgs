@@ -66,14 +66,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    description = "Powerful package manager that makes package management reliable and reproducible";
-    longDescription = ''
-      Nix is a powerful package manager for Linux and other Unix systems that
-      makes package management reliable and reproducible. It provides atomic
-      upgrades and rollbacks, side-by-side installation of multiple versions of
-      a package, multi-user package management and easy setup of build
-      environments.
-    '';
+    # due to builder args bug; see
+    # https://github.com/NixOS/nix/commit/b224ac15201c57b40ea855f5a98b1bd166c1c7f6
+    broken = stdenv.isDarwin;
+    description = "The Nix Deployment System";
     homepage = http://nixos.org/;
     license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = [ stdenv.lib.maintainers.eelco ];

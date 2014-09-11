@@ -14,6 +14,7 @@ stdenv.mkDerivation (rec {
   patches =
     [ ./link-against-ncurses.patch
       ./no-arch_only.patch
+      ./clang.patch
     ]
     ++
     (let

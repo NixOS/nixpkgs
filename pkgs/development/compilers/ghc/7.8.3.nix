@@ -26,8 +26,6 @@ stdenv.mkDerivation rec {
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
   '';
 
-  configureFlags = "--with-gcc=${stdenv.gcc}/bin/gcc";
-
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
   stripDebugFlags = [ "-S" "--keep-file-symbols" ];

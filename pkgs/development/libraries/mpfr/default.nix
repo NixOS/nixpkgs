@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gmp ];
 
+  CFLAGS = "-I${gmp}/include";
+
   configureFlags =
     /* Work around a FreeBSD bug that otherwise leads to segfaults in the test suite:
           http://hydra.bordeaux.inria.fr/build/34862

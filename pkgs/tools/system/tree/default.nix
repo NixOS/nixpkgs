@@ -37,6 +37,7 @@ stdenv.mkDerivation {
       prefix=$out
       MANDIR=$out/share/man/man1
       ${systemFlags}
+      CC="$CC"
     )
   '';
 

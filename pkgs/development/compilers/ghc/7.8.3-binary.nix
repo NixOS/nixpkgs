@@ -1,7 +1,7 @@
 {stdenv, fetchurl, perl, ncurses, gmp}:
 
 stdenv.mkDerivation rec {
-  version = "7.4.2";
+  version = "7.8.3";
 
   name = "ghc-${version}-binary";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     else if stdenv.system == "x86_64-darwin" then
       fetchurl {
         url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-apple-darwin.tar.bz2";
-        sha256 = "1imzqc0slpg0r6p40n5a9m18cbcm0m86z8dgyhfxcckksw54mzwf";
+        sha256 = "1ja0cq5xyjcvjpvjmm4nzhkpmwfs2kjlldbc48lxcs9rmqi7rnay";
       }
     else throw "cannot bootstrap GHC on this platform";
 
@@ -62,8 +62,8 @@ stdenv.mkDerivation rec {
      '' else "");
 
   configurePhase = ''
-    ./configure --prefix=$out --with-gmp-libraries=${gmp}/lib --with-gmp-includes=${gmp}/include \
-      --with-clang
+    ./configure --prefix=$out --with-gmp-libraries=${gmp}/lib \
+      --with-gmp-includes=${gmp}/include
   '';
 
   # Stripping combined with patchelf breaks the executables (they die

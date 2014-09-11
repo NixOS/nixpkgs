@@ -299,4 +299,9 @@ rec {
         ''; # */
     in overrideGCC stdenv (stdenv.gcc.override { binutils = binutils'; });
 
+  dropCxx = drv: drv.override {
+    stdenv = if pkgs.stdenv.isDarwin
+      then pkgs.allStdenvs.stdenvDarwinNaked
+      else pkgs.stdenv;
+  };
 }

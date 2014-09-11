@@ -3,6 +3,10 @@
 stdenv.mkDerivation {
   name = "distcc-masq-${gccRaw.name}";
 
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
+
   phases = [ "installPhase" ];
   installPhase = ''
     mkdir -p $out/bin

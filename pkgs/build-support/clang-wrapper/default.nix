@@ -26,6 +26,8 @@ stdenv.mkDerivation {
     (if name != "" then name else clangName + "-wrapper") +
     (if clang != null && clangVersion != "" then "-" + clangVersion else "");
 
+  isDarwin = stdenv.isDarwin;
+
   builder = ./builder.sh;
   setupHook = ./setup-hook.sh;
   clangWrapper = ./clang-wrapper.sh;
