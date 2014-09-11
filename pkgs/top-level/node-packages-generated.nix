@@ -18770,6 +18770,27 @@
     passthru.names = [ "statsd" ];
   };
   "statsd" = self.by-version."statsd"."0.7.1";
+  by-spec."statsd-influxdb-backend"."*" =
+    self.by-version."statsd-influxdb-backend"."0.3.0";
+  by-version."statsd-influxdb-backend"."0.3.0" = lib.makeOverridable self.buildNodePackage {
+    name = "statsd-influxdb-backend-0.3.0";
+    bin = false;
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/statsd-influxdb-backend/-/statsd-influxdb-backend-0.3.0.tgz";
+        name = "statsd-influxdb-backend-0.3.0.tgz";
+        sha1 = "f66197570545c04743c8637af1fbbc914096ec44";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."statsd-influxdb-backend" or []);
+    deps = {
+    };
+    peerDependencies = [
+    ];
+    passthru.names = [ "statsd-influxdb-backend" ];
+  };
+  "statsd-influxdb-backend" = self.by-version."statsd-influxdb-backend"."0.3.0";
   by-spec."statsd-librato-backend"."*" =
     self.by-version."statsd-librato-backend"."0.1.3";
   by-version."statsd-librato-backend"."0.1.3" = lib.makeOverridable self.buildNodePackage {
