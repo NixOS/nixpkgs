@@ -2484,6 +2484,8 @@ let
 
   vlan = callPackage ../tools/networking/vlan { };
 
+  volumeicon = callPackage ../tools/audio/volumeicon { };
+
   wakelan = callPackage ../tools/networking/wakelan { };
 
   wavemon = callPackage ../tools/networking/wavemon { };
