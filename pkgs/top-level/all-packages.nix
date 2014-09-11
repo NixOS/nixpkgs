@@ -9906,6 +9906,8 @@ let
     libpng = libpng12;
   };
 
+  smartgithg = callPackage ../applications/version-management/smartgithg { };
+
   smartdeblur = callPackage ../applications/graphics/smartdeblur { };
 
   snd = callPackage ../applications/audio/snd { };
