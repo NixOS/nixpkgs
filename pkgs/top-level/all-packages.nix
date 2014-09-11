@@ -6642,6 +6642,8 @@ let
 
   AgdaSheaves = callPackage ../development/libraries/agda/AgdaSheaves {};
 
+  bitvector = callPackage ../development/libraries/agda/bitvector {};
+
   ### DEVELOPMENT / LIBRARIES / JAVA
 
   atermjava = callPackage ../development/libraries/java/aterm {
