@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, python, pkgconfig, dbus, dbus_glib, dbus_tools }:
+{ stdenv, fetchurl, python, pkgconfig, dbus, dbus_glib, dbus_tools, isPyPy }:
 
-stdenv.mkDerivation rec {
+if isPyPy then throw "dbus-python not supported for interpreter ${python.executable}" else stdenv.mkDerivation rec {
   name = "dbus-python-1.2.0";
 
   src = fetchurl {

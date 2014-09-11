@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with pythonPackages; [
-    pillow jinja2 spambayes pythonPackages."lxml-2.3.6" python.modules.readline or null];
+    pillow jinja2 spambayes pythonPackages.lxml python.modules.readline or null];
 
   meta = with stdenv.lib; {
     description = "A modern, fast web-mail client with user-friendly encryption and privacy features";

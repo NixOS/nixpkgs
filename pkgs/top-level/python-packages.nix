@@ -65,7 +65,7 @@ rec {
 
   dbus = import ../development/python-modules/dbus {
     inherit (pkgs) stdenv fetchurl pkgconfig dbus dbus_glib dbus_tools;
-    inherit python;
+    inherit python isPyPy;
   };
 
   discid = buildPythonPackage rec {
@@ -4118,6 +4118,7 @@ rec {
     name = "httpretty-${version}";
     version = "0.8.3";
     disabled = isPy3k;
+    doCheck = !isPyPy;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/h/httpretty/${name}.tar.gz";
@@ -4230,6 +4231,7 @@ rec {
 
   ipdb = buildPythonPackage rec {
     name = "ipdb-0.8";
+    disabled = isPyPy;  # setupterm: could not find terminfo database
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/i/ipdb/${name}.zip";
       md5 = "96dca0712efa01aa5eaf6b22071dd3ed";
@@ -4440,23 +4442,6 @@ rec {
     };
 
     propagatedBuildInputs = [ unittest2 ];
-  };
-
-  "lxml-2.3.6" = buildPythonPackage rec {
-    name = "lxml-2.3.6";
-    src = fetchurl {
-      url = "http://pypi.python.org/packages/source/l/lxml/lxml-2.3.6.tar.gz";
-      md5 = "d5d886088e78b1bdbfd66d328fc2d0bc";
-    };
-    buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
-    propagatedBuildInputs = [  ];
-    doCheck = false;
-
-    meta = {
-      description = "Pythonic binding for the libxml2 and libxslt libraries";
-      homepage = http://codespeak.net/lxml/index.html;
-      license = "BSD";
-    };
   };
 
   lxml = buildPythonPackage ( rec {
@@ -5449,6 +5434,7 @@ rec {
   livestreamer = buildPythonPackage rec {
     version = "1.10.2";
     name = "livestreamer-${version}";
+    disabled = isPyPy;
 
     src = fetchurl {
       url = "https://github.com/chrippa/livestreamer/archive/v${version}.tar.gz";
@@ -8238,6 +8224,7 @@ rec {
   sqlalchemy = sqlalchemy9.override rec {
     name = "SQLAlchemy-0.7.10";
     disabled = isPy34;
+    doCheck = !isPyPy;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
@@ -8256,6 +8243,7 @@ rec {
   sqlalchemy8 = sqlalchemy9.override rec {
     name = "SQLAlchemy-0.8.7";
     disabled = isPy34;
+    doCheck = !isPyPy;
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
@@ -9231,13 +9219,13 @@ rec {
 
   wxPython28 = import ../development/python-modules/wxPython/2.8.nix {
     inherit (pkgs) stdenv fetchurl pkgconfig;
-    inherit pythonPackages;
+    inherit pythonPackages isPyPy python;
     wxGTK = pkgs.wxGTK28;
   };
 
   wxPython30 = import ../development/python-modules/wxPython/3.0.nix {
     inherit (pkgs) stdenv fetchurl pkgconfig;
-    inherit pythonPackages;
+    inherit pythonPackages isPyPy python;
     wxGTK = pkgs.wxGTK30;
   };
 
@@ -9397,6 +9385,7 @@ rec {
   zodb3 = buildPythonPackage rec {
     name = "zodb3-${version}";
     version = "3.11.0";
+    disabled = isPyPy;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/Z/ZODB3/ZODB3-${version}.tar.gz";
@@ -9415,6 +9404,8 @@ rec {
 
   zodb = buildPythonPackage rec {
     name = "zodb-${version}";
+    disabled = isPyPy;
+
     version = "4.0.1";
 
     src = fetchurl {

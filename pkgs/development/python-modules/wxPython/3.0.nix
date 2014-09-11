@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, wxGTK, pythonPackages, openglSupport ? true }:
+{ stdenv, fetchurl, pkgconfig, wxGTK, pythonPackages, openglSupport ? true, python, isPyPy }:
 
 assert wxGTK.unicode;
 
@@ -6,7 +6,7 @@ with stdenv.lib;
 
 let version = "3.0.0.0"; in
 
-stdenv.mkDerivation {
+if isPyPy then throw "wxPython-${version} not supported for interpreter ${python.executable}" else stdenv.mkDerivation {
   name = "wxPython-${version}";
   
   builder = ./builder3.0.sh;
