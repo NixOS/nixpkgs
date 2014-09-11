@@ -6638,6 +6638,8 @@ let
     ghcWithPackages = haskellPackages.ghcWithPackages;
   };
 
+  AgdaSheaves = callPackage ../development/libraries/agda/AgdaSheaves {};
+
   ### DEVELOPMENT / LIBRARIES / JAVA
 
   atermjava = callPackage ../development/libraries/java/aterm {
