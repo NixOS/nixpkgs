@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "classy-prelude";
-  version = "0.9.4";
-  sha256 = "1pxg515dg174minvajaxl3sqpqjm862pgfpf7n2ynw5cqmaxngxa";
+  version = "0.9.5";
+  sha256 = "1gd5z4gd62v3k59psmrj41ca6mly4fjqgf4l80smv89kc2s2w809";
   buildDepends = [
     basicPrelude chunkedData enclosedExceptions exceptions hashable
     liftedBase monoTraversable mtl primitive semigroups stm
