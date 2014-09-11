@@ -5051,6 +5051,8 @@ let
 
   gtkspell3 = callPackage ../development/libraries/gtkspell/3.nix { };
 
+  gtkspellmm = callPackage ../development/libraries/gtkspellmm { };
+
   gts = callPackage ../development/libraries/gts { };
 
   gvfs = callPackage ../development/libraries/gvfs { gconf = gnome.GConf; };
