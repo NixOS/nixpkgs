@@ -18,5 +18,6 @@ cabal.mkDerivation (self: {
     description = "A time library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })
