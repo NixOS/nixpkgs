@@ -85,7 +85,8 @@
   ./services/amqp/activemq/default.nix
   ./services/amqp/rabbitmq.nix
   ./services/audio/alsa.nix
-  ./services/audio/fuppes.nix
+  # Disabled as fuppes it does no longer builds.
+  # ./services/audio/fuppes.nix
   ./services/audio/mpd.nix
   ./services/audio/mopidy.nix
   ./services/backup/almir.nix
