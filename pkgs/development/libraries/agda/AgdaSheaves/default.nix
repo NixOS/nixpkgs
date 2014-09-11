@@ -16,7 +16,7 @@ agda.mkDerivation (self: rec {
   meta = {
     homepage = "https://github.com/jonsterling/Agda-Sheaves";
     description = "Sheaves in Agda";
-    license = "CC-BY-4.0";
+    license = stdenv.lib.licenses.cc-by-40;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
   };
