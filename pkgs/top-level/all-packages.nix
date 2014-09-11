@@ -3087,6 +3087,8 @@ let
 
   fsharp = callPackage ../development/compilers/fsharp {};
 
+  gem-nix = callPackage ../tools/package-management/gem-nix { };
+
   go_1_0 = callPackage ../development/compilers/go { };
 
   go_1_1 =
