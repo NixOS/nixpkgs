@@ -6637,7 +6637,7 @@ let
   };
 
   AgdaStdlib = callPackage ../development/compilers/agda/stdlib.nix {
-    ghcWithPackages = haskellPackages.ghcWithPackages;
+    inherit (haskellPackages) ghc filemanip;
   };
 
   AgdaSheaves = callPackage ../development/libraries/agda/AgdaSheaves {};
