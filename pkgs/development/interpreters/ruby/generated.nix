@@ -14,8 +14,8 @@ g: # Get dependencies from patched gems
     arel = g.arel_5_0_1_20140414130214;
     atoulme_Antwrap = g.atoulme_Antwrap_0_7_4;
     autotest_rails = g.autotest_rails_4_2_1;
-    aws_sdk = g.aws_sdk_1_52_0;
-    aws_sdk_v1 = g.aws_sdk_v1_1_52_0;
+    aws_sdk = g.aws_sdk_1_53_0;
+    aws_sdk_v1 = g.aws_sdk_v1_1_53_0;
     backports = g.backports_3_6_0;
     bitbucket_backup = g.bitbucket_backup_0_3_1;
     builder = g.builder_3_2_2;
@@ -36,6 +36,7 @@ g: # Get dependencies from patched gems
     ethon = g.ethon_0_7_1;
     eventmachine = g.eventmachine_1_0_3;
     eventmachine_tail = g.eventmachine_tail_0_6_4;
+    execjs = g.execjs_2_2_1;
     fakes3 = g.fakes3_0_1_5_2;
     faraday = g.faraday_0_9_0;
     faraday_middleware = g.faraday_middleware_0_9_1;
@@ -90,6 +91,7 @@ g: # Get dependencies from patched gems
     rake = g.rake_10_3_2;
     rb_fsevent = g.rb_fsevent_0_9_4;
     rdiscount = g.rdiscount_2_1_7_1;
+    rdoc = g.rdoc_4_1_2;
     remote_syslog = g.remote_syslog_1_6_14;
     riemann_dash = g.riemann_dash_0_2_9;
     right_aws = g.right_aws_3_1_0;
@@ -124,6 +126,7 @@ g: # Get dependencies from patched gems
     trollop = g.trollop_2_0;
     typhoeus = g.typhoeus_0_6_9;
     tzinfo = g.tzinfo_1_2_2;
+    uglifier = g.uglifier_2_5_3;
     unf = g.unf_0_1_4;
     unf_ext = g.unf_ext_0_0_6;
     uuid = g.uuid_2_3_7;
@@ -135,7 +138,7 @@ g: # Get dependencies from patched gems
     xml_simple = g.xml_simple_1_1_2;
     yajl_ruby = g.yajl_ruby_1_2_1;
   };
-  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''cucumber'' ''erubis'' ''fakes3'' ''foreman'' ''gettext'' ''iconv'' ''jsduck'' ''lockfile'' ''mechanize'' ''nix'' ''papertrail-cli'' ''rails'' ''rake'' ''rb-fsevent'' ''remote_syslog'' ''riemann-dash'' ''right_aws'' ''rmail'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''taskjuggler'' ''terminal-notifier'' ''thin'' ''travis'' ''trollop'' ''uuid'' ''xapian-full'' ''xapian-ruby'' ''yajl-ruby'' ];
+  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''cucumber'' ''erubis'' ''execjs'' ''fakes3'' ''foreman'' ''gettext'' ''iconv'' ''jsduck'' ''lockfile'' ''mechanize'' ''nix'' ''papertrail-cli'' ''rails'' ''rake'' ''rb-fsevent'' ''rdoc'' ''remote_syslog'' ''riemann-dash'' ''right_aws'' ''rmail'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''taskjuggler'' ''terminal-notifier'' ''thin'' ''travis'' ''trollop'' ''uglifier'' ''uuid'' ''xapian-full'' ''xapian-ruby'' ''yajl-ruby'' ];
   gems = {
     ZenTest_4_10_1 = {
       basename = ''ZenTest'';
@@ -300,7 +303,7 @@ rails support and extra plugins for migrations and fixtures.'';
       requiredGems = [ g.ZenTest_4_10_1 ];
       sha256 = ''1v1dm9zlhdlrxvk90zs8d439ldar674ix41s7pncddgyswcfgg5l'';
     };
-    aws_sdk_1_52_0 = {
+    aws_sdk_1_53_0 = {
       basename = ''aws_sdk'';
       meta = {
         description = ''AWS SDK for Ruby V1'';
@@ -309,11 +312,11 @@ rails support and extra plugins for migrations and fixtures.'';
 Use `aws-sdk-v1` if you want to load v1 and v2 of the Ruby SDK in the same
 application.'';
       };
-      name = ''aws-sdk-1.52.0'';
-      requiredGems = [ g.aws_sdk_v1_1_52_0 ];
-      sha256 = ''1ffdkihid83wm0wwzpm35anhh62lpwld6ca47kpf8zlgs5m53hgh'';
+      name = ''aws-sdk-1.53.0'';
+      requiredGems = [ g.aws_sdk_v1_1_53_0 ];
+      sha256 = ''1jwvzlpyh5hpa3qn972wmn2pmhqpzw5vjal2n5i14qplvafmj7p2'';
     };
-    aws_sdk_v1_1_52_0 = {
+    aws_sdk_v1_1_53_0 = {
       basename = ''aws_sdk_v1'';
       meta = {
         description = ''AWS SDK for Ruby V1'';
@@ -322,9 +325,9 @@ application.'';
 Use `aws-sdk-v1` if you want to load v1 and v2 of the Ruby SDK in the same
 application.'';
       };
-      name = ''aws-sdk-v1-1.52.0'';
+      name = ''aws-sdk-v1-1.53.0'';
       requiredGems = [ g.nokogiri_1_6_3_1 g.json_1_8_1 ];
-      sha256 = ''17df4w7jzyjlal1855gv0q4dhdwjc8j16ncqmv89lxbbqdvrjmfj'';
+      sha256 = ''00yagrm2d5agwkfgkv4rqbxymwmgjmv5n8hah3xhrc90q1ywr7hw'';
     };
     backports_3_6_0 = {
       basename = ''backports'';
@@ -346,7 +349,7 @@ application.'';
       };
       name = ''bitbucket-backup-0.3.1'';
       requiredGems = [ g.highline_1_6_21 g.json_1_8_1 ];
-      sha256 = ''no hash'';
+      sha256 = ''17d2pfk0z3cxcx9m90avcp5wxhdbrq23zd665263m3hh9b5qi0fj'';
     };
     builder_3_2_2 = {
       basename = ''builder'';
@@ -612,6 +615,17 @@ using TCP/IP, especially if custom protocols are required.'';
       requiredGems = [ g.eventmachine_1_0_3 ];
       sha256 = ''1pvlb34vdzd81kf9f3xyibb4f55xjqm7lqqy28dgyci5cyv50y61'';
     };
+    execjs_2_2_1 = {
+      basename = ''execjs'';
+      meta = {
+        description = ''Run JavaScript code from Ruby'';
+        homepage = ''https://github.com/sstephenson/execjs'';
+        longDescription = ''ExecJS lets you run JavaScript code from Ruby.'';
+      };
+      name = ''execjs-2.2.1'';
+      requiredGems = [  ];
+      sha256 = ''1s41g9qwq0h4452q4gp934lnkzfkxh4wrg8fd4bcynba86bf3j8b'';
+    };
     fakes3_0_1_5_2 = {
       basename = ''fakes3'';
       meta = {
@@ -811,7 +825,7 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
       };
       name = ''json-1.8.1'';
       requiredGems = [  ];
-      sha256 = ''no hash'';
+      sha256 = ''0002bsycvizvkmk1jyv8px1hskk6wrjfk4f7x5byi8gxm6zzn6wn'';
     };
     json_pure_1_8_0 = {
       basename = ''json_pure'';
@@ -967,7 +981,7 @@ with some types added by the users of mime-types.'';
       };
       name = ''minitar-0.5.4'';
       requiredGems = [  ];
-      sha256 = ''no hash'';
+      sha256 = ''1vpdjfmdq1yc4i620frfp9af02ia435dnpj8ybsd7dc3rypkvbka'';
     };
     minitest_5_4_1 = {
       basename = ''minitest'';
@@ -1183,7 +1197,7 @@ enough of it.'';
       };
       name = ''nokogiri-1.6.3.1'';
       requiredGems = [ g.mini_portile_0_6_0 ];
-      sha256 = ''no hash'';
+      sha256 = ''11958hlfd8i3i9y0wk1b6ck9x0j95l4zdbbixmdnnh1r8ijilxli'';
     };
     ntlm_http_0_1_1 = {
       basename = ''ntlm_http'';
@@ -1388,6 +1402,19 @@ Rake has the following features:
       name = ''rdiscount-2.1.7.1'';
       requiredGems = [  ];
       sha256 = ''1g70vsgv7mdwcyk9rxja7wm4qqap67prqwkj335c460vlzs6pqii'';
+    };
+    rdoc_4_1_2 = {
+      basename = ''rdoc'';
+      meta = {
+        description = ''RDoc produces HTML and command-line documentation for Ruby projects'';
+        homepage = ''http://docs.seattlerb.org/rdoc'';
+        longDescription = ''RDoc produces HTML and command-line documentation for Ruby projects.  RDoc
+includes the +rdoc+ and +ri+ tools for generating and displaying documentation
+from the command-line.'';
+      };
+      name = ''rdoc-4.1.2'';
+      requiredGems = [ g.json_1_8_1 ];
+      sha256 = ''0cqhjidw657d8irkypxsrv6dr4y9r8csg9inaq40c3iz110cc8w6'';
     };
     remote_syslog_1_6_14 = {
       basename = ''remote_syslog'';
@@ -1892,6 +1919,17 @@ specify.'';
       requiredGems = [ g.thread_safe_0_3_4 ];
       sha256 = ''1c01p3kg6xvy1cgjnzdfq45fggbwish8krd0h864jvbpybyx7cgx'';
     };
+    uglifier_2_5_3 = {
+      basename = ''uglifier'';
+      meta = {
+        description = ''Ruby wrapper for UglifyJS JavaScript compressor'';
+        homepage = ''http://github.com/lautis/uglifier'';
+        longDescription = ''Uglifier minifies JavaScript files by wrapping UglifyJS to be accessible in Ruby'';
+      };
+      name = ''uglifier-2.5.3'';
+      requiredGems = [ g.execjs_2_2_1 g.json_1_8_1 ];
+      sha256 = ''0rlx9nrcavpfffyacsrh7xyvz3adv7jvylz0sv0jnix1mj5rkpd9'';
+    };
     unf_0_1_4 = {
       basename = ''unf'';
       meta = {
@@ -1990,7 +2028,7 @@ to Ruby/JRuby.
       };
       name = ''xml-simple-1.1.2'';
       requiredGems = [  ];
-      sha256 = ''no hash'';
+      sha256 = ''0ni8cbkj7l2k5pc4fs2jzp1ymxy4xqa2jc681l4y9iy9chrayddb'';
     };
     yajl_ruby_1_2_1 = {
       basename = ''yajl_ruby'';
