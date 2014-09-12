@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper, zlib, glib, libpng, freetype, xorg
 , fontconfig, xlibs, qt5, xkeyboard_config, alsaLib, pulseaudio ? null
-, libredirect
+, libredirect, quazip
 }:
 
 let
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   installPhase =
     ''
       # Delete unecessary libraries - these are provided by nixos.
-      rm libQt*.so.*
+      rm *.so.*
       rm qt.conf
 
       # Install files.
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
       ln -s $out/lib/teamspeak/ts3client $out/bin/ts3client
 
       wrapProgram $out/bin/ts3client \
-        --set LD_PRELOAD "${libredirect}/lib/libredirect.so:$out/lib/teamspeak/libquazip.so.1" \
+        --set LD_PRELOAD "${libredirect}/lib/libredirect.so:${quazip}/lib/libquazip.so" \
         --set QT_PLUGIN_PATH "$out/lib/teamspeak/platforms" \
         --set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb
     '';
