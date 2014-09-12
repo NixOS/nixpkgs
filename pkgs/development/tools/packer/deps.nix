@@ -7,8 +7,8 @@ let
       src = fetchFromGitHub {
         owner = "mitchellh";
         repo = "packer";
-        rev = "3006be43766b0b538e10d1e355344d7996eeebfb";
-        sha256 = "0lkf2y5znic63b8f8qpgm3gsqhxxafk7aky5m9i8sr83508i5xxv";
+        rev = "a22f70f61f93db146a376ac0200e860535281fcb";
+        sha256 = "0h8ql955vr0mdkszyf9vrqif7bqqk162jxggnnfs4bfnhlqki1jb";
       };
     }
     {
