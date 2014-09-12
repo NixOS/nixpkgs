@@ -2918,7 +2918,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   BNFC = callPackage ../development/tools/haskell/BNFC {};
 
-  cake3 = callPackage ../development/tools/haskell/cake3 {};
+  cake3 = callPackage ../development/tools/haskell/cake3 {
+    optparseApplicative = self.optparseApplicative_0_9_1_1;
+  };
 
   cpphs = callPackage ../development/tools/misc/cpphs {};
 
