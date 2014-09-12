@@ -17,7 +17,7 @@ let
 
   ipToInt = address: fold (num: octet: num * 256 + octet) 0 (splitString "." address);
 
-  subnetOf = addresss: prefixLength: fold (num: _: num * 2)
+  subnetOf = address: prefixLength: fold (num: _: num * 2)
     (fold (num: _: num / 2) (ipToInt address) (range 1 (32-prefixLength)))
     (range 1 (32-prefixLength));
 
@@ -29,7 +29,7 @@ let
         address = data.ipAddress;
         prefixLength = data.prefixLength;
       })
-    then { inherit name prefixLength; } else [ ]
+    then { inherit name; inherit (data) prefixLength; } else [ ]
   ));
 
   gatewayInterfaces = flip sort unsortedGatewayInterfaces (a: b:
