@@ -3342,6 +3342,8 @@ let
 
     fix = callPackage ../development/ocaml-modules/fix { };
 
+    functory = callPackage ../development/ocaml-modules/functory { };
+
     javalib = callPackage ../development/ocaml-modules/javalib {
       extlib = ocaml_extlib_maximal;
     };
