@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, zlib, glib, libpng, freetype, xorg, fontconfig, alsaLib, makeWrapper, xlibs
-,  qt5, pulseaudio ? null, qt4, xkeyboard_config, libredirect }:
+{ stdenv, fetchurl, makeWrapper, zlib, glib, libpng, freetype, xorg
+, fontconfig, xlibs, qt5, xkeyboard_config, alsaLib, pulseaudio ? null
+, libredirect
+}:
 
 let
 
@@ -9,8 +11,8 @@ let
 
   deps =
     [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender
-      xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama xlibs.libxcb
-      fontconfig xorg.libXext xorg.libX11 alsaLib qt5 pulseaudio
+      xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
+      xlibs.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qt5 pulseaudio
     ];
 
 in
