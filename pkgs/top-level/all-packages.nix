@@ -3439,6 +3439,8 @@ let
       minimal = false;
     };
 
+    pprint = callPackage ../development/ocaml-modules/pprint { };
+
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
 
     opam_1_0_0 = callPackage ../development/tools/ocaml/opam/1.0.0.nix { };
