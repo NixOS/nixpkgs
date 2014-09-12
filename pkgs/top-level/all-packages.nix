@@ -3636,6 +3636,8 @@ let
 
   j = callPackage ../development/interpreters/j {};
 
+  jimtcl = callPackage ../development/interpreters/jimtcl {};
+
   jmeter = callPackage ../applications/networking/jmeter {};
 
   davmail = callPackage ../applications/networking/davmail {};
