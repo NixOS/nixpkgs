@@ -135,6 +135,9 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
 
             isLibrary = ! self.isExecutable;
             isExecutable = false;
+            # wrap executables with GHC environment variables
+            # that seems useful when using ghc-paths, which is specially patched for Nix
+            wrapExecutables = false;
 
             # ignore version restrictions on the build inputs that the cabal file might specify
             jailbreak = false;
@@ -278,6 +281,17 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
                   install_name_tool -add_rpath \
                     $out/lib/${ghc.ghc.name}/${self.pname}-${self.version} $exe
                 done
+              ''}
+
+              ${optionalString self.wrapExecutables ''
+                if [ -d "$out/bin" ]; then
+                  mv $out/bin $out/libexec
+                  for exe in `ls $out/libexec`; do
+                      cp ${ghc.ghc}/nix-build-helpers/haskell/mkGHCWrapperContent.txt $out/bin/$exe
+                      sed -i 's@__NIX_GHC_HASKELL_WRAPPER_TARGET__@'$out/libexec/$exe'@' $out/bin/$exe
+                      chmod +x $out/bin/$exe
+                  done
+                fi
               ''}
 
               eval "$postInstall"

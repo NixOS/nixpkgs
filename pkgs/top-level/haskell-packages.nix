@@ -75,7 +75,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
                                # top of this file.
 
   ghc = callPackage ../development/compilers/ghc/wrapper.nix {
-    ghc = ghc; # refers to ghcPlain
+    ghcPlain = ghc; # ghc refers to ghcPlain
   };
 
   # An experimental wrapper around ghcPlain that does not automatically
@@ -84,7 +84,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   # argument to this function.
 
   ghcWithPackages = pkgs : callPackage ../development/compilers/ghc/with-packages.nix {
-    ghc = ghc;                  # refers to ghcPlain
+    ghc = ghc;  # refers to ghcPlain, but could be a wrapped ghc as well
     packages = pkgs self;
     ignoreCollisions = false;
   };

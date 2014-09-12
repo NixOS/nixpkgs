@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
   sha256 = "093wafaizr2xf7vmzj6f3vs8ch0vpcmwlrja6af6hshgaj2d80qs";
   isLibrary = true;
   isExecutable = true;
+  wrapExecutables = true;
   buildDepends = [
     Cabal convertible deepseq filepath ghcSybUtils hlint ioChoice syb
     time transformers
@@ -28,14 +29,6 @@ cabal.mkDerivation (self: {
     cd ..
     mkdir -p "$out/share/emacs"
     mv $pname-$version emacs/site-lisp
-    mv $out/bin/ghc-mod $out/bin/.ghc-mod-wrapped
-    cat - > $out/bin/ghc-mod <<EOF
-    #! ${self.stdenv.shell}
-    COMMAND=\$1
-    shift
-    eval exec $out/bin/.ghc-mod-wrapped \$COMMAND \$( ${self.ghc.GHCGetPackages} ${self.ghc.version} | tr " " "\n" | tail -n +2 | paste -d " " - - | sed 's/.*/-g "&"/' | tr "\n" " ") "\$@"
-    EOF
-    chmod +x $out/bin/ghc-mod
   '';
   meta = {
     homepage = "http://www.mew.org/~kazu/proj/ghc-mod/";

@@ -1,0 +1,848 @@
+diff --git a/AUTHORS b/AUTHORS
+index 8c5acb7..75a6b52 100644
+--- a/AUTHORS
++++ b/AUTHORS
+@@ -1 +1,2 @@
+ Bit Connor <mutantlemon@gmail.com>
++Takano Akio <aljee@hyper.cx>
+diff --git a/README.md b/README.md
+index 0b7e307..04eff45 100644
+--- a/README.md
++++ b/README.md
+@@ -67,10 +67,10 @@ including retrieving info about the identifier under the cursor, and getting
+ the type of the code under the cursor. Refer to its documentation for more
+ details.
+ 
+-### Emacs ###
++### Emacs - [flycheck][5] ###
+ 
+-I encourage the community to develop integration plugins for Emacs and other
+-editors. In the mean time, please see the manual integration information below.
++[Flycheck][5] is a modern batteries-included
++syntax checker for Emacs, and there is a [flycheck-hdevtools][6] checker available.
+ 
+ ### Manual Editor Integration for any Editor ###
+ 
+@@ -180,3 +180,5 @@ client-server architecture it is much faster.
+ [2]: https://github.com/scrooloose/syntastic
+ [3]: https://github.com/bitc/vim-hdevtools
+ [4]: http://www.mew.org/~kazu/proj/ghc-mod/en/
++[5]: https://github.com/flycheck/flycheck
++[6]: https://github.com/flycheck/flycheck-hdevtools
+diff --git a/hdevtools.cabal b/hdevtools.cabal
+index 2c34b96..a4859f9 100644
+--- a/hdevtools.cabal
++++ b/hdevtools.cabal
+@@ -1,5 +1,5 @@
+ name:                hdevtools
+-version:             0.1.0.5
++version:             0.1.0.6
+ synopsis:            Persistent GHC powered background server for FAST haskell development tools
+ description:
+     'hdevtools' is a backend for text editor plugins, to allow for things such as
+@@ -47,7 +47,8 @@ executable hdevtools
+   ghc-options:         -Wall
+   cpp-options:         -DCABAL
+   main-is:             Main.hs
+-  other-modules:       Client,
++  other-modules:       Cabal,
++                       Client,
+                        CommandArgs,
+                        CommandLoop,
+                        Daemonize,
+@@ -60,9 +61,18 @@ executable hdevtools
+   build-depends:       base == 4.*,
+                        cmdargs,
+                        directory,
++                       filepath,
+                        ghc >= 7.2,
+                        ghc-paths,
+                        syb,
+                        network,
+                        time,
+                        unix
++
++  if impl(ghc == 7.6.*)
++    build-depends:     Cabal == 1.16.*
++    cpp-options:       -DENABLE_CABAL
++
++  if impl(ghc >= 7.7)
++    build-depends:     Cabal >= 1.18
++    cpp-options:       -DENABLE_CABAL
+diff --git a/src/Cabal.hs b/src/Cabal.hs
+new file mode 100644
+index 0000000..80e59d8
+--- /dev/null
++++ b/src/Cabal.hs
+@@ -0,0 +1,195 @@
++{-# LANGUAGE CPP #-}
++module Cabal
++  ( getPackageGhcOpts
++  , findCabalFile
++  ) where
++
++#ifdef ENABLE_CABAL
++
++import Control.Exception (IOException, catch)
++import Data.Char (isSpace)
++import Data.List (foldl', nub, sort, find, isPrefixOf, isSuffixOf)
++import Data.Monoid (Monoid(..))
++import Distribution.Package (PackageIdentifier(..), PackageName)
++import Distribution.PackageDescription (PackageDescription(..), Executable(..), TestSuite(..), Benchmark(..), emptyHookedBuildInfo, buildable, libBuildInfo)
++import Distribution.PackageDescription.Parse (readPackageDescription)
++import Distribution.Simple.Configure (configure)
++import Distribution.Simple.LocalBuildInfo (LocalBuildInfo(..), ComponentLocalBuildInfo(..),
++    Component(..), ComponentName(..),
++#if __GLASGOW_HASKELL__ < 707
++    allComponentsBy,
++#endif
++    componentBuildInfo, foldComponent)
++import Distribution.Simple.Compiler (PackageDB(..))
++import Distribution.Simple.GHC (componentGhcOptions)
++import Distribution.Simple.Program (defaultProgramConfiguration)
++import Distribution.Simple.Program.Db (lookupProgram)
++import Distribution.Simple.Program.Types (ConfiguredProgram(programVersion), simpleProgram)
++import Distribution.Simple.Program.GHC (GhcOptions(..), renderGhcOptions)
++import Distribution.Simple.Setup (ConfigFlags(..), defaultConfigFlags, toFlag)
++import Distribution.Verbosity (silent)
++import Distribution.Version (Version(..))
++
++import System.IO.Error (ioeGetErrorString)
++import System.Directory (doesFileExist, getDirectoryContents)
++import System.FilePath (takeDirectory, splitFileName, (</>))
++
++componentName :: Component -> ComponentName
++componentName =
++    foldComponent (const CLibName)
++                  (CExeName . exeName)
++                  (CTestName . testName)
++                  (CBenchName . benchmarkName)
++
++getComponentLocalBuildInfo :: LocalBuildInfo -> ComponentName -> ComponentLocalBuildInfo
++#if __GLASGOW_HASKELL__ >= 707
++getComponentLocalBuildInfo lbi cname = getLocalBuildInfo cname $ componentsConfigs lbi
++    where getLocalBuildInfo cname' ((cname'', clbi, _):cfgs) =
++            if cname' == cname'' then clbi else getLocalBuildInfo cname' cfgs
++          getLocalBuildInfo _ [] = error $ "internal error: missing config"
++#else
++getComponentLocalBuildInfo lbi CLibName =
++    case libraryConfig lbi of
++        Nothing -> error $ "internal error: missing library config"
++        Just clbi -> clbi
++getComponentLocalBuildInfo lbi (CExeName name) =
++    case lookup name (executableConfigs lbi) of
++        Nothing -> error $ "internal error: missing config for executable " ++ name
++        Just clbi -> clbi
++getComponentLocalBuildInfo lbi (CTestName name) =
++    case lookup name (testSuiteConfigs lbi) of
++        Nothing -> error $ "internal error: missing config for test suite " ++ name
++        Just clbi -> clbi
++getComponentLocalBuildInfo lbi (CBenchName name) =
++    case lookup name (testSuiteConfigs lbi) of
++        Nothing -> error $ "internal error: missing config for benchmark " ++ name
++        Just clbi -> clbi
++#endif
++
++#if __GLASGOW_HASKELL__ >= 707
++-- TODO: Fix callsites so we don't need `allComponentsBy`. It was taken from
++-- http://hackage.haskell.org/package/Cabal-1.16.0.3/docs/src/Distribution-Simple-LocalBuildInfo.html#allComponentsBy
++-- since it doesn't exist in Cabal 1.18.*
++--
++-- | Obtains all components (libs, exes, or test suites), transformed by the
++-- given function.  Useful for gathering dependencies with component context.
++allComponentsBy :: PackageDescription
++                -> (Component -> a)
++                -> [a]
++allComponentsBy pkg_descr f =
++    [ f (CLib  lib) | Just lib <- [library pkg_descr]
++                    , buildable (libBuildInfo lib) ]
++ ++ [ f (CExe  exe) | exe <- executables pkg_descr
++                    , buildable (buildInfo exe) ]
++ ++ [ f (CTest tst) | tst <- testSuites pkg_descr
++                    , buildable (testBuildInfo tst)
++                    , testEnabled tst ]
++ ++ [ f (CBench bm) | bm <- benchmarks pkg_descr
++                    , buildable (benchmarkBuildInfo bm)
++                    , benchmarkEnabled bm ]
++#endif
++
++
++getPackageGhcOpts :: FilePath -> IO (Either String [String])
++getPackageGhcOpts path = do
++    getPackageGhcOpts' `catch` (\e -> do
++        return $ Left $ "Cabal error: " ++ (ioeGetErrorString (e :: IOException)))
++  where
++    getPackageGhcOpts' :: IO (Either String [String])
++    getPackageGhcOpts' = do
++        genPkgDescr <- readPackageDescription silent path
++
++        let cfgFlags' = (defaultConfigFlags defaultProgramConfiguration)
++                            { configDistPref = toFlag $ takeDirectory path </> "dist"
++                            -- TODO: figure out how to find out this flag
++                            , configUserInstall = toFlag True
++                            }
++
++        let sandboxConfig = takeDirectory path </> "cabal.sandbox.config"
++        exists <- doesFileExist sandboxConfig
++
++        cfgFlags <- case exists of
++                         False -> return cfgFlags'
++                         True -> do
++                             sandboxPackageDb <- getSandboxPackageDB sandboxConfig
++                             return $ cfgFlags'
++                                          { configPackageDBs = [Just sandboxPackageDb]
++                                          }
++
++        localBuildInfo <- configure (genPkgDescr, emptyHookedBuildInfo) cfgFlags
++
++        let pkgDescr = localPkgDescr localBuildInfo
++        let baseDir = fst . splitFileName $ path
++        case getGhcVersion localBuildInfo of
++            Nothing -> return $ Left "GHC is not configured"
++            Just ghcVersion -> do
++                let mbLibName = pkgLibName pkgDescr
++
++                let ghcOpts' = foldl' mappend mempty $ map (getComponentGhcOptions localBuildInfo) $ flip allComponentsBy (\c -> c) . localPkgDescr $ localBuildInfo
++                    -- FIX bug in GhcOptions' `mappend`
++                    ghcOpts = ghcOpts' { ghcOptExtra = filter (/= "-Werror") $ nub $ ghcOptExtra ghcOpts'
++                                       , ghcOptPackageDBs = sort $ nub (ghcOptPackageDBs ghcOpts')
++                                       , ghcOptPackages = filter (\(_, pkgId) -> Just (pkgName pkgId) /= mbLibName) $ nub (ghcOptPackages ghcOpts')
++                                       , ghcOptSourcePath = map (baseDir </>) (ghcOptSourcePath ghcOpts')
++                                       }
++
++                return $ Right $ renderGhcOptions ghcVersion ghcOpts
++
++    pkgLibName :: PackageDescription -> Maybe PackageName
++    pkgLibName pkgDescr = if hasLibrary pkgDescr
++                          then Just $ pkgName . package $ pkgDescr
++                          else Nothing
++
++    hasLibrary :: PackageDescription -> Bool
++    hasLibrary = maybe False (\_ -> True) . library
++
++    getComponentGhcOptions :: LocalBuildInfo -> Component -> GhcOptions
++    getComponentGhcOptions lbi comp =
++        componentGhcOptions silent lbi bi clbi (buildDir lbi)
++
++      where bi   = componentBuildInfo comp
++            clbi = getComponentLocalBuildInfo lbi (componentName comp)
++
++    getGhcVersion :: LocalBuildInfo -> Maybe Version
++    getGhcVersion lbi = let db = withPrograms lbi
++                         in do ghc <- lookupProgram (simpleProgram "ghc") db
++                               programVersion ghc
++
++    getSandboxPackageDB :: FilePath -> IO PackageDB
++    getSandboxPackageDB sandboxPath = do
++        contents <- readFile sandboxPath
++        return $ SpecificPackageDB $ extractValue . parse $ contents
++      where
++        pkgDbKey = "package-db:"
++        parse = head . filter (pkgDbKey `isPrefixOf`) . lines
++        extractValue = fst . break isSpace . dropWhile isSpace . drop (length pkgDbKey)
++
++
++findCabalFile :: FilePath -> IO (Maybe FilePath)
++findCabalFile dir = do
++    allFiles <- getDirectoryContents dir
++    let mbCabalFile = find (isCabalFile) allFiles
++    case mbCabalFile of
++      Just cabalFile -> return $ Just $ dir </> cabalFile
++      Nothing ->
++        let parentDir = takeDirectory dir
++         in if parentDir == dir
++            then return Nothing
++            else findCabalFile parentDir
++
++  where
++
++    isCabalFile :: FilePath -> Bool
++    isCabalFile path = cabalExtension `isSuffixOf` path
++                    && length path > length cabalExtension
++        where cabalExtension = ".cabal"
++
++# else
++
++getPackageGhcOpts :: FilePath -> IO (Either String [String])
++getPackageGhcOpts _ = return $ Right []
++
++findCabalFile :: FilePath -> IO (Maybe FilePath)
++findCabalFile _ = return Nothing
++
++#endif
+diff --git a/src/Client.hs b/src/Client.hs
+index 71c14b8..5e97488 100644
+--- a/src/Client.hs
++++ b/src/Client.hs
+@@ -13,7 +13,7 @@ import System.IO.Error (isDoesNotExistError)
+ 
+ import Daemonize (daemonize)
+ import Server (createListenSocket, startServer)
+-import Types (ClientDirective(..), Command(..), ServerDirective(..))
++import Types (ClientDirective(..), Command(..), CommandExtra(..), ServerDirective(..))
+ import Util (readMaybe)
+ 
+ connect :: FilePath -> IO Handle
+@@ -34,18 +34,18 @@ stopServer sock = do
+     hFlush h
+     startClientReadLoop h
+ 
+-serverCommand :: FilePath -> Command -> [String] -> IO ()
+-serverCommand sock cmd ghcOpts = do
++serverCommand :: FilePath -> Command -> CommandExtra -> IO ()
++serverCommand sock cmd cmdExtra = do
+     r <- tryJust (guard . isDoesNotExistError) (connect sock)
+     case r of
+         Right h -> do
+-            hPutStrLn h $ show (SrvCommand cmd ghcOpts)
++            hPutStrLn h $ show (SrvCommand cmd cmdExtra)
+             hFlush h
+             startClientReadLoop h
+         Left _ -> do
+             s <- createListenSocket sock
+             daemonize False $ startServer sock (Just s)
+-            serverCommand sock cmd ghcOpts
++            serverCommand sock cmd cmdExtra
+ 
+ startClientReadLoop :: Handle -> IO ()
+ startClientReadLoop h = do
+diff --git a/src/CommandArgs.hs b/src/CommandArgs.hs
+index 2149b29..2fd3cb7 100644
+--- a/src/CommandArgs.hs
++++ b/src/CommandArgs.hs
+@@ -24,11 +24,22 @@ programVersion =
+     "unknown-version (not built with cabal)"
+ #endif
+ 
++cabalVersion :: String
++cabalVersion =
++#ifdef ENABLE_CABAL
++    "cabal-" ++ VERSION_Cabal
++#else
++    "no cabal support"
++#endif
++
+ fullVersion :: String
+ fullVersion =
+     concat
+         [ programVersion
+-        , " (ghc-", Config.cProjectVersion, "-", arch, "-", os, ")"
++        , " ("
++        , "ghc-", Config.cProjectVersion, "-", arch, "-", os
++        , ", ", cabalVersion
++        , ")"
+         ]
+ 
+ data HDevTools
+diff --git a/src/CommandLoop.hs b/src/CommandLoop.hs
+index 1a62ca3..6c7c580 100644
+--- a/src/CommandLoop.hs
++++ b/src/CommandLoop.hs
+@@ -1,24 +1,31 @@
+ {-# LANGUAGE CPP #-}
+ module CommandLoop
+     ( newCommandLoopState
++    , Config(..)
++    , CabalConfig(..)
++    , newConfig
+     , startCommandLoop
+     ) where
+ 
+ import Control.Monad (when)
+ import Data.IORef
+ import Data.List (find)
++import Data.Traversable (traverse)
+ import MonadUtils (MonadIO, liftIO)
++import System.Directory (setCurrentDirectory)
+ import System.Exit (ExitCode(ExitFailure, ExitSuccess))
++import System.FilePath (takeDirectory)
+ import qualified ErrUtils
+ import qualified Exception (ExceptionMonad)
+ import qualified GHC
+ import qualified GHC.Paths
+ import qualified Outputable
++import System.Posix.Types (EpochTime)
++import System.Posix.Files (getFileStatus, modificationTime)
+ 
+-import Types (ClientDirective(..), Command(..))
++import Types (ClientDirective(..), Command(..), CommandExtra(..))
+ import Info (getIdentifierInfo, getType)
+-
+-type CommandObj = (Command, [String])
++import Cabal (getPackageGhcOpts)
+ 
+ type ClientSend = ClientDirective -> IO ()
+ 
+@@ -32,6 +39,35 @@ newCommandLoopState = do
+         { stateWarningsEnabled = True
+         }
+ 
++data CabalConfig = CabalConfig
++    { cabalConfigPath :: FilePath
++    , cabalConfigLastUpdatedAt :: EpochTime
++    }
++    deriving Eq
++
++mkCabalConfig :: FilePath -> IO CabalConfig
++mkCabalConfig path = do
++    fileStatus <- getFileStatus path
++    return $ CabalConfig { cabalConfigPath = path
++                         , cabalConfigLastUpdatedAt = modificationTime fileStatus
++                         }
++
++data Config = Config
++    { configGhcOpts :: [String]
++    , configCabal :: Maybe CabalConfig
++    }
++    deriving Eq
++
++newConfig :: CommandExtra -> IO Config
++newConfig cmdExtra = do
++    mbCabalConfig <- traverse mkCabalConfig $ ceCabalConfig cmdExtra
++    return $ Config { configGhcOpts = ceGhcOptions cmdExtra
++                    , configCabal = mbCabalConfig
++                    }
++
++
++type CommandObj = (Command, Config)
++
+ withWarnings :: (MonadIO m, Exception.ExceptionMonad m) => IORef State -> Bool -> m a -> m a
+ withWarnings state warningsValue action = do
+     beforeState <- liftIO $ getWarnings
+@@ -44,22 +80,26 @@ withWarnings state warningsValue action = do
+     setWarnings :: Bool -> IO ()
+     setWarnings val = modifyIORef state $ \s -> s { stateWarningsEnabled = val }
+ 
+-startCommandLoop :: IORef State -> ClientSend -> IO (Maybe CommandObj) -> [String] -> Maybe Command -> IO ()
+-startCommandLoop state clientSend getNextCommand initialGhcOpts mbInitial = do
++startCommandLoop :: IORef State -> ClientSend -> IO (Maybe CommandObj) -> Config -> Maybe Command -> IO ()
++startCommandLoop state clientSend getNextCommand initialConfig mbInitialCommand = do
+     continue <- GHC.runGhc (Just GHC.Paths.libdir) $ do
+-        configOk <- GHC.gcatch (configSession state clientSend initialGhcOpts >> return True)
+-            handleConfigError
+-        if configOk
+-            then do
+-                doMaybe mbInitial $ \cmd -> sendErrors (runCommand state clientSend cmd)
+-                processNextCommand False
+-            else processNextCommand True
++        configResult <- configSession state clientSend initialConfig
++        case configResult of
++          Left e -> do
++              liftIO $ mapM_ clientSend
++                  [ ClientStderr e
++                  , ClientExit (ExitFailure 1)
++                  ]
++              processNextCommand True
++          Right _ -> do
++              doMaybe mbInitialCommand $ \cmd -> sendErrors (runCommand state clientSend cmd)
++              processNextCommand False
+ 
+     case continue of
+         Nothing ->
+             -- Exit
+             return ()
+-        Just (cmd, ghcOpts) -> startCommandLoop state clientSend getNextCommand ghcOpts (Just cmd)
++        Just (cmd, config) -> startCommandLoop state clientSend getNextCommand config (Just cmd)
+     where
+     processNextCommand :: Bool -> GHC.Ghc (Maybe CommandObj)
+     processNextCommand forceReconfig = do
+@@ -68,37 +108,54 @@ startCommandLoop state clientSend getNextCommand initialGhcOpts mbInitial = do
+             Nothing ->
+                 -- Exit
+                 return Nothing
+-            Just (cmd, ghcOpts) ->
+-                if forceReconfig || (ghcOpts /= initialGhcOpts)
+-                    then return (Just (cmd, ghcOpts))
++            Just (cmd, config) ->
++                if forceReconfig || (config /= initialConfig)
++                    then return (Just (cmd, config))
+                     else sendErrors (runCommand state clientSend cmd) >> processNextCommand False
+ 
+     sendErrors :: GHC.Ghc () -> GHC.Ghc ()
+-    sendErrors action = GHC.gcatch action (\x -> handleConfigError x >> return ())
+-
+-    handleConfigError :: GHC.GhcException -> GHC.Ghc Bool
+-    handleConfigError e = do
++    sendErrors action = GHC.gcatch action $ \e -> do
+         liftIO $ mapM_ clientSend
+-            [ ClientStderr (GHC.showGhcException e "")
++            [ ClientStderr $ GHC.showGhcException e ""
+             , ClientExit (ExitFailure 1)
+             ]
+-        return False
++        return ()
+ 
+ doMaybe :: Monad m => Maybe a -> (a -> m ()) -> m ()
+ doMaybe Nothing _ = return ()
+ doMaybe (Just x) f = f x
+ 
+-configSession :: IORef State -> ClientSend -> [String] -> GHC.Ghc ()
+-configSession state clientSend ghcOpts = do
+-    initialDynFlags <- GHC.getSessionDynFlags
+-    let updatedDynFlags = initialDynFlags
+-            { GHC.log_action = logAction state clientSend
+-            , GHC.ghcLink = GHC.NoLink
+-            , GHC.hscTarget = GHC.HscInterpreted
+-            }
+-    (finalDynFlags, _, _) <- GHC.parseDynamicFlags updatedDynFlags (map GHC.noLoc ghcOpts)
+-    _ <- GHC.setSessionDynFlags finalDynFlags
+-    return ()
++configSession :: IORef State -> ClientSend -> Config -> GHC.Ghc (Either String ())
++configSession state clientSend config = do
++    eCabalGhcOpts <- case configCabal config of
++                      Nothing ->
++                          return $ Right []
++                      Just cabalConfig -> do
++                          liftIO $ setCurrentDirectory . takeDirectory $ cabalConfigPath cabalConfig
++                          liftIO $ getPackageGhcOpts $ cabalConfigPath cabalConfig
++
++    case eCabalGhcOpts of
++      Left e -> return $ Left e
++      Right cabalGhcOpts -> do
++          let allGhcOpts = cabalGhcOpts ++ (configGhcOpts config)
++          GHC.gcatch (fmap Right $ updateDynFlags allGhcOpts)
++                     (fmap Left . handleGhcError)
++  where
++    updateDynFlags :: [String] -> GHC.Ghc ()
++    updateDynFlags ghcOpts = do
++        initialDynFlags <- GHC.getSessionDynFlags
++        let updatedDynFlags = initialDynFlags
++                { GHC.log_action = logAction state clientSend
++                , GHC.ghcLink = GHC.NoLink
++                , GHC.hscTarget = GHC.HscInterpreted
++                }
++        (finalDynFlags, _, _) <- GHC.parseDynamicFlags updatedDynFlags (map GHC.noLoc ghcOpts)
++        _ <- GHC.setSessionDynFlags finalDynFlags
++        return ()
++
++    handleGhcError :: GHC.GhcException -> GHC.Ghc String
++    handleGhcError e = return $ GHC.showGhcException e ""
++
+ 
+ runCommand :: IORef State -> ClientSend -> Command -> GHC.Ghc ()
+ runCommand _ clientSend (CmdCheck file) = do
+diff --git a/src/Info.hs b/src/Info.hs
+index b9dedb5..469a70c 100644
+--- a/src/Info.hs
++++ b/src/Info.hs
+@@ -16,6 +16,9 @@ import qualified Desugar
+ #if __GLASGOW_HASKELL__ >= 706
+ import qualified DynFlags
+ #endif
++#if __GLASGOW_HASKELL__ >= 708
++import qualified HsExpr
++#endif
+ import qualified GHC
+ import qualified HscTypes
+ import qualified NameSet
+@@ -127,13 +130,22 @@ getSrcSpan (GHC.RealSrcSpan spn) =
+ getSrcSpan _ = Nothing
+ 
+ getTypeLHsBind :: GHC.TypecheckedModule -> GHC.LHsBind GHC.Id -> GHC.Ghc (Maybe (GHC.SrcSpan, GHC.Type))
++#if __GLASGOW_HASKELL__ >= 708
++getTypeLHsBind _ (GHC.L spn GHC.FunBind{GHC.fun_matches = HsExpr.MG _ _ typ _}) = return $ Just (spn, typ)
++#else
+ getTypeLHsBind _ (GHC.L spn GHC.FunBind{GHC.fun_matches = GHC.MatchGroup _ typ}) = return $ Just (spn, typ)
++#endif
+ getTypeLHsBind _ _ = return Nothing
+ 
+ getTypeLHsExpr :: GHC.TypecheckedModule -> GHC.LHsExpr GHC.Id -> GHC.Ghc (Maybe (GHC.SrcSpan, GHC.Type))
+ getTypeLHsExpr tcm e = do
+     hs_env <- GHC.getSession
++#if __GLASGOW_HASKELL__ >= 708
++    let fm_inst_env = TcRnTypes.tcg_fam_inst_env $ fst $ GHC.tm_internals_ tcm
++    (_, mbe) <- liftIO $ Desugar.deSugarExpr hs_env e
++#else
+     (_, mbe) <- liftIO $ Desugar.deSugarExpr hs_env modu rn_env ty_env e
++#endif
+     return ()
+     case mbe of
+         Nothing -> return Nothing
+@@ -161,14 +173,22 @@ pretty dflags =
+ pretty :: GHC.Type -> String
+ pretty =
+ #endif
++#if __GLASGOW_HASKELL__ >= 708
++    Pretty.showDoc Pretty.OneLineMode 0
++#else
+     Pretty.showDocWith Pretty.OneLineMode
++#endif
+ #if __GLASGOW_HASKELL__ >= 706
+     . Outputable.withPprStyleDoc dflags
+ #else
+     . Outputable.withPprStyleDoc
+ #endif
+         (Outputable.mkUserStyle Outputable.neverQualify Outputable.AllTheWay)
++#if __GLASGOW_HASKELL__ >= 708
++    . PprTyThing.pprTypeForUser
++#else
+     . PprTyThing.pprTypeForUser False
++#endif
+ 
+ ------------------------------------------------------------------------------
+ -- The following was taken from 'ghc-syb-utils'
+@@ -198,8 +218,13 @@ everythingStaged stage k z f x
+ infoThing :: String -> GHC.Ghc String
+ infoThing str = do
+     names <- GHC.parseName str
++#if __GLASGOW_HASKELL__ >= 708
++    mb_stuffs <- mapM (GHC.getInfo False) names
++    let filtered = filterOutChildren (\(t,_f,_i,_) -> t) (catMaybes mb_stuffs)
++#else
+     mb_stuffs <- mapM GHC.getInfo names
+     let filtered = filterOutChildren (\(t,_f,_i) -> t) (catMaybes mb_stuffs)
++#endif
+     unqual <- GHC.getPrintUnqual
+ #if __GLASGOW_HASKELL__ >= 706
+     dflags <- DynFlags.getDynFlags
+@@ -207,7 +232,11 @@ infoThing str = do
+ #else
+     return $ Outputable.showSDocForUser unqual $
+ #endif
++#if __GLASGOW_HASKELL__ >= 708
++        Outputable.vcat (intersperse (Outputable.text "") $ map pprInfo filtered)
++#else
+         Outputable.vcat (intersperse (Outputable.text "") $ map (pprInfo False) filtered)
++#endif
+ 
+   -- Filter out names whose parent is also there Good
+   -- example is '[]', which is both a type and data
+@@ -225,13 +254,19 @@ filterOutChildren get_thing xs
+                      Just p  -> GHC.getName p `NameSet.elemNameSet` all_names
+                      Nothing -> False
+ 
+-#if __GLASGOW_HASKELL__ >= 706
++#if __GLASGOW_HASKELL__ >= 708
++pprInfo :: (HscTypes.TyThing, GHC.Fixity, [GHC.ClsInst], [GHC.FamInst]) -> Outputable.SDoc
++pprInfo (thing, fixity, insts, _) =
++    PprTyThing.pprTyThingInContextLoc thing
++#elif __GLASGOW_HASKELL__ >= 706
+ pprInfo :: PprTyThing.PrintExplicitForalls -> (HscTypes.TyThing, GHC.Fixity, [GHC.ClsInst]) -> Outputable.SDoc
++pprInfo pefas (thing, fixity, insts) =
++    PprTyThing.pprTyThingInContextLoc pefas thing
+ #else
+ pprInfo :: PprTyThing.PrintExplicitForalls -> (HscTypes.TyThing, GHC.Fixity, [GHC.Instance]) -> Outputable.SDoc
+-#endif
+ pprInfo pefas (thing, fixity, insts) =
+     PprTyThing.pprTyThingInContextLoc pefas thing
++#endif
+         Outputable.$$ show_fixity fixity
+         Outputable.$$ Outputable.vcat (map GHC.pprInstance insts)
+     where
+diff --git a/src/Main.hs b/src/Main.hs
+index 517f224..c0d28d7 100644
+--- a/src/Main.hs
++++ b/src/Main.hs
+@@ -1,34 +1,59 @@
+ module Main where
+ 
++import Data.Maybe (fromMaybe)
++import Data.Traversable (Traversable(..))
++import System.Directory (getCurrentDirectory)
+ import System.Environment (getProgName)
+ import System.IO (hPutStrLn, stderr)
++import System.FilePath ((</>), isAbsolute, takeDirectory)
+ 
++import Cabal (findCabalFile)
+ import Client (getServerStatus, serverCommand, stopServer)
+ import CommandArgs
+ import Daemonize (daemonize)
+ import Server (startServer, createListenSocket)
+-import Types (Command(..))
++import Types (Command(..), CommandExtra(..), emptyCommandExtra)
+ 
+-defaultSocketFilename :: FilePath
+-defaultSocketFilename = ".hdevtools.sock"
++absoluteFilePath :: FilePath -> IO FilePath
++absoluteFilePath path = if isAbsolute path then return path else do
++    dir <- getCurrentDirectory
++    return $ dir </> path
++
++
++defaultSocketFile :: FilePath
++defaultSocketFile = ".hdevtools.sock"
++
++
++fileArg :: HDevTools -> Maybe String
++fileArg (Admin {})      = Nothing
++fileArg (ModuleFile {}) = Nothing
++fileArg args@(Check {}) = Just $ file args
++fileArg args@(Info  {}) = Just $ file args
++fileArg args@(Type  {}) = Just $ file args
+ 
+-getSocketFilename :: Maybe FilePath -> FilePath
+-getSocketFilename Nothing = defaultSocketFilename
+-getSocketFilename (Just f) = f
+ 
+ main :: IO ()
+ main = do
+     args <- loadHDevTools
+-    let sock = getSocketFilename (socket args)
++    dir  <- maybe getCurrentDirectory (return . takeDirectory) $ fileArg args
++    mCabalFile <- findCabalFile dir >>= traverse absoluteFilePath
++    let extra = emptyCommandExtra
++                    { ceGhcOptions = ghcOpts args
++                    , ceCabalConfig = mCabalFile
++                    }
++
++    let defaultSocketPath = maybe "" takeDirectory mCabalFile </> defaultSocketFile
++    let sock = fromMaybe defaultSocketPath $ socket args
++
+     case args of
+-        Admin {} -> doAdmin sock args
+-        Check {} -> doCheck sock args
+-        ModuleFile {} -> doModuleFile sock args
+-        Info {} -> doInfo sock args
+-        Type {} -> doType sock args
+-
+-doAdmin :: FilePath -> HDevTools -> IO ()
+-doAdmin sock args
++        Admin {} -> doAdmin sock args extra
++        Check {} -> doCheck sock args extra
++        ModuleFile {} -> doModuleFile sock args extra
++        Info {} -> doInfo sock args extra
++        Type {} -> doType sock args extra
++
++doAdmin :: FilePath -> HDevTools -> CommandExtra -> IO ()
++doAdmin sock args _extra
+     | start_server args =
+         if noDaemon args then startServer sock Nothing
+             else do
+@@ -41,26 +66,29 @@ doAdmin sock args
+         hPutStrLn stderr "You must provide a command. See:"
+         hPutStrLn stderr $ progName ++ " --help"
+ 
+-doModuleFile :: FilePath -> HDevTools -> IO ()
+-doModuleFile sock args =
+-    serverCommand sock (CmdModuleFile (module_ args)) (ghcOpts args)
++doModuleFile :: FilePath -> HDevTools -> CommandExtra -> IO ()
++doModuleFile sock args extra =
++    serverCommand sock (CmdModuleFile (module_ args)) extra
+ 
+-doFileCommand :: String -> (HDevTools -> Command) -> FilePath -> HDevTools -> IO ()
+-doFileCommand cmdName cmd sock args
++doFileCommand :: String -> (HDevTools -> Command) -> FilePath -> HDevTools -> CommandExtra -> IO ()
++doFileCommand cmdName cmd sock args extra
+     | null (file args) = do
+         progName <- getProgName
+         hPutStrLn stderr "You must provide a haskell source file. See:"
+         hPutStrLn stderr $ progName ++ " " ++ cmdName ++ " --help"
+-    | otherwise = serverCommand sock (cmd args) (ghcOpts args)
++    | otherwise = do
++        absFile <- absoluteFilePath $ file args
++        let args' = args { file = absFile }
++        serverCommand sock (cmd args') extra
+ 
+-doCheck :: FilePath -> HDevTools -> IO ()
++doCheck :: FilePath -> HDevTools -> CommandExtra -> IO ()
+ doCheck = doFileCommand "check" $
+     \args -> CmdCheck (file args)
+ 
+-doInfo :: FilePath -> HDevTools -> IO ()
++doInfo :: FilePath -> HDevTools -> CommandExtra -> IO ()
+ doInfo = doFileCommand "info" $
+     \args -> CmdInfo (file args) (identifier args)
+ 
+-doType :: FilePath -> HDevTools -> IO ()
++doType :: FilePath -> HDevTools -> CommandExtra -> IO ()
+ doType = doFileCommand "type" $
+     \args -> CmdType (file args) (line args, col args)
+diff --git a/src/Server.hs b/src/Server.hs
+index af4967b..7c560b5 100644
+--- a/src/Server.hs
++++ b/src/Server.hs
+@@ -1,16 +1,17 @@
+ module Server where
+ 
+-import Control.Exception (bracket, finally, tryJust)
++import Control.Exception (bracket, finally, handleJust, tryJust)
+ import Control.Monad (guard)
+ import Data.IORef (IORef, newIORef, readIORef, writeIORef)
++import GHC.IO.Exception (IOErrorType(ResourceVanished))
+ import Network (PortID(UnixSocket), Socket, accept, listenOn, sClose)
+ import System.Directory (removeFile)
+ import System.Exit (ExitCode(ExitSuccess))
+ import System.IO (Handle, hClose, hFlush, hGetLine, hPutStrLn)
+-import System.IO.Error (isDoesNotExistError)
++import System.IO.Error (ioeGetErrorType, isDoesNotExistError)
+ 
+-import CommandLoop (newCommandLoopState, startCommandLoop)
+-import Types (ClientDirective(..), Command, ServerDirective(..))
++import CommandLoop (newCommandLoopState, Config, newConfig, startCommandLoop)
++import Types (ClientDirective(..), Command, emptyCommandExtra, ServerDirective(..))
+ import Util (readMaybe)
+ 
+ createListenSocket :: FilePath -> IO Socket
+@@ -32,7 +33,8 @@ startServer socketPath mbSock = do
+     go sock = do
+         state <- newCommandLoopState
+         currentClient <- newIORef Nothing
+-        startCommandLoop state (clientSend currentClient) (getNextCommand currentClient sock) [] Nothing
++        config <- newConfig emptyCommandExtra
++        startCommandLoop state (clientSend currentClient) (getNextCommand currentClient sock) config Nothing
+ 
+     removeSocketFile :: IO ()
+     removeSocketFile = do
+@@ -44,13 +46,16 @@ clientSend :: IORef (Maybe Handle) -> ClientDirective -> IO ()
+ clientSend currentClient clientDirective = do
+     mbH <- readIORef currentClient
+     case mbH of
+-        Just h -> do
+-            -- TODO catch exception
++        Just h -> ignoreEPipe $ do
+             hPutStrLn h (show clientDirective)
+             hFlush h
+-        Nothing -> error "This is impossible"
++        Nothing -> return ()
++    where
++    -- EPIPE means that the client is no longer there.
++    ignoreEPipe = handleJust (guard . isEPipe) (const $ return ())
++    isEPipe = (==ResourceVanished) . ioeGetErrorType
+ 
+-getNextCommand :: IORef (Maybe Handle) -> Socket -> IO (Maybe (Command, [String]))
++getNextCommand :: IORef (Maybe Handle) -> Socket -> IO (Maybe (Command, Config))
+ getNextCommand currentClient sock = do
+     checkCurrent <- readIORef currentClient
+     case checkCurrent of
+@@ -65,8 +70,9 @@ getNextCommand currentClient sock = do
+             clientSend currentClient $ ClientUnexpectedError $
+                 "The client sent an invalid message to the server: " ++ show msg
+             getNextCommand currentClient sock
+-        Just (SrvCommand cmd ghcOpts) -> do
+-            return $ Just (cmd, ghcOpts)
++        Just (SrvCommand cmd cmdExtra) -> do
++            config <- newConfig cmdExtra
++            return $ Just (cmd, config)
+         Just SrvStatus -> do
+             mapM_ (clientSend currentClient) $
+                 [ ClientStdout "Server is running."
+diff --git a/src/Types.hs b/src/Types.hs
+index 9b50707..2aaf3b0 100644
+--- a/src/Types.hs
++++ b/src/Types.hs
+@@ -2,12 +2,24 @@ module Types
+     ( ServerDirective(..)
+     , ClientDirective(..)
+     , Command(..)
++    , CommandExtra(..)
++    , emptyCommandExtra
+     ) where
+ 
+ import System.Exit (ExitCode)
+ 
++data CommandExtra = CommandExtra
++  { ceGhcOptions :: [String]
++  , ceCabalConfig :: Maybe FilePath
++  } deriving (Read, Show)
++
++emptyCommandExtra :: CommandExtra
++emptyCommandExtra = CommandExtra { ceGhcOptions = []
++                                 , ceCabalConfig = Nothing
++                                 }
++
+ data ServerDirective
+-    = SrvCommand Command [String]
++    = SrvCommand Command CommandExtra
+     | SrvStatus
+     | SrvExit
+     deriving (Read, Show)
