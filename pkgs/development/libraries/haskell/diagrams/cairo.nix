@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
     hashable JuicyPixels lens mtl optparseApplicative pango split
     statestack time transformers vector
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams";
     description = "Cairo backend for diagrams drawing EDSL";
