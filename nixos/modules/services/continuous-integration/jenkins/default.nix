@@ -30,6 +30,15 @@ in {
         '';
       };
 
+      extraGroups = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = [ "wheel" "dialout" ];
+        description = ''
+          List of extra groups that the "jenkins" user should be a part of.
+        '';
+      };
+
       home = mkOption {
         default = "/var/lib/jenkins";
         type = types.path;
@@ -87,6 +96,7 @@ in {
       createHome = true;
       home = cfg.home;
       group = cfg.group;
+      extraGroups = cfg.extraGroups;
       useDefaultShell = true;
       uid = config.ids.uids.jenkins;
     };
