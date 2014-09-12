@@ -19,6 +19,7 @@ cabal.mkDerivation (self: {
     blazeMarkup conduit hspec HUnit resourcet text transformers
     xmlTypes
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/snoyberg/xml";
     description = "Pure-Haskell utilities for dealing with XML with the conduit package";
