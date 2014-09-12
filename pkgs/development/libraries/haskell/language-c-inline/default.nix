@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ filepath languageCQuote mainlandPretty ];
   testDepends = [ languageCQuote ];
   doCheck = false;
+  noHaddock = true;
   meta = {
     homepage = "https://github.com/mchakravarty/language-c-inline/";
     description = "Inline C & Objective-C code in Haskell for language interoperability";
