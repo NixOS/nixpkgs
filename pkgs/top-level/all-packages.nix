@@ -3340,6 +3340,8 @@ let
 
     findlib = callPackage ../development/tools/ocaml/findlib { };
 
+    fix = callPackage ../development/ocaml-modules/fix { };
+
     javalib = callPackage ../development/ocaml-modules/javalib {
       extlib = ocaml_extlib_maximal;
     };
