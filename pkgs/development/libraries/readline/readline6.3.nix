@@ -1,13 +1,11 @@
-{ fetchzip, stdenv, ncurses }:
+{ fetchurl, stdenv, ncurses }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   name = "readline-6.3p08";
 
-  src = fetchzip {
-    #url = "mirror://gnu/readline/${name}.tar.gz";
-    url = "http://git.savannah.gnu.org/cgit/readline.git/snapshot/"
-      + "readline-a73b98f779b388a5d0624e02e8bb187246e3e396.tar.gz";
-    sha256 = "19ji3wrv4fs79fd0nkacjy9q94pvy2cm66yb3aqysahg0cbrz5l1";
+  src = fetchurl {
+    url = "mirror://gnu/readline/readline-6.3.tar.gz";
+    sha256 = "0hzxr9jxqqx5sxsv9vmlxdnvlr9vi4ih1avjb869hbs6p5qn1fjn";
   };
 
   propagatedBuildInputs = [ncurses];
@@ -17,7 +15,19 @@ stdenv.mkDerivation (rec {
   patches =
     [ ./link-against-ncurses.patch
       ./no-arch_only-6.3.patch
-    ];
+    ]
+    ++
+    (let
+       patch = nr: sha256:
+         fetchurl {
+           url = "mirror://gnu/readline/readline-6.3-patches/readline63-${nr}";
+           inherit sha256;
+         };
+     in
+       import ./readline-6.3-patches.nix patch);
+
+  # Don't run the native `strip' when cross-compiling.
+  dontStrip = stdenv ? cross;
 
   meta = with stdenv.lib; {
     description = "Library for interactive line editing";
@@ -46,10 +56,3 @@ stdenv.mkDerivation (rec {
     platforms = platforms.unix;
   };
 }
-
-//
-
-# Don't run the native `strip' when cross-compiling.
-(if (stdenv ? cross)
- then { dontStrip = true; }
- else { }))
