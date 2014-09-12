@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
   sha256 = "0jdni0n5qzz0ncaa3ja4b6vcfykbl7swiafak4wyvm9izssjh8ra";
   isLibrary = true;
   isExecutable = true;
+  wrapExecutables = true;
   buildDepends = [
     async Cabal convertible deepseq djinnGhc filepath ghcPaths
     ghcSybUtils haskellSrcExts hlint ioChoice monadControl monadJournal
@@ -32,10 +33,6 @@ cabal.mkDerivation (self: {
     cd ..
     ensureDir "$out/share/emacs"
     mv $pname-$version emacs/site-lisp
-    wrapProgram $out/bin/ghc-mod --add-flags \
-      "\$(${self.ghc.GHCGetPackages} ${self.ghc.version} \"\$(dirname \$0)\" \"-g -package-db -g\")"
-    wrapProgram $out/bin/ghc-modi --add-flags \
-      "\$(${self.ghc.GHCGetPackages} ${self.ghc.version} \"\$(dirname \$0)\" \"-g -package-db -g\")"
   '';
   meta = {
     homepage = "http://www.mew.org/~kazu/proj/ghc-mod/";
