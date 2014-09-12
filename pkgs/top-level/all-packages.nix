@@ -776,6 +776,8 @@ let
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
+  cmst = callPackage ../tools/networking/cmst { };
+
   colord = callPackage ../tools/misc/colord { };
 
   colord-gtk = callPackage ../tools/misc/colord-gtk { };
