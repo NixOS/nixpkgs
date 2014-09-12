@@ -9639,6 +9639,8 @@ let
 
   openbox = callPackage ../applications/window-managers/openbox { };
 
+  openbox-menu = callPackage ../applications/misc/openbox-menu { };
+
   openimageio = callPackage ../applications/graphics/openimageio { };
 
   openjump = callPackage ../applications/misc/openjump { };
