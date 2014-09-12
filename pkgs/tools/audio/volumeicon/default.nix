@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk3 pkgconfig intltool alsaLib ];
 
   meta = with stdenv.lib; {
-    description = "Volume Icon aims to be a lightweight volume control that sits in your systray.";
+    description = "A lightweight volume control that sits in your systray.";
     platforms = pkgs.lib.platforms.linux;
     maintainers = with maintainers; [ bobvanderlinden ];
     license = pkgs.lib.licenses.gpl3;
