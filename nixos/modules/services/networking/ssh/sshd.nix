@@ -291,7 +291,7 @@ in
       };
 
     environment.etc = authKeysFiles ++ [
-      { source = "${pkgs.openssh}/etc/ssh/moduli";
+      { source = "${cfgc.package}/etc/ssh/moduli";
         target = "ssh/moduli";
       }
       { source = knownHostsFile;
@@ -308,7 +308,7 @@ in
 
             stopIfChanged = false;
 
-            path = [ pkgs.openssh pkgs.gawk ];
+            path = [ cfgc.package pkgs.gawk ];
 
             environment.LD_LIBRARY_PATH = nssModulesPath;
 
@@ -325,7 +325,7 @@ in
 
             serviceConfig =
               { ExecStart =
-                  "${pkgs.openssh}/sbin/sshd " + (optionalString cfg.startWhenNeeded "-i ") +
+                  "${cfgc.package}/sbin/sshd " + (optionalString cfg.startWhenNeeded "-i ") +
                   "-f ${pkgs.writeText "sshd_config" cfg.extraConfig}";
                 KillMode = "process";
               } // (if cfg.startWhenNeeded then {
@@ -394,7 +394,7 @@ in
         ''}
 
         ${optionalString cfg.allowSFTP ''
-          Subsystem sftp ${pkgs.openssh}/libexec/sftp-server
+          Subsystem sftp ${cfgc.package}/libexec/sftp-server
         ''}
 
         PermitRootLogin ${cfg.permitRootLogin}
