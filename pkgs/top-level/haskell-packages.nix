@@ -1157,7 +1157,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   haxl = callPackage ../development/libraries/haskell/haxl {};
 
-  haxr = callPackage ../development/libraries/haskell/haxr {};
+  haxr = callPackage ../development/libraries/haskell/haxr {
+    HTTP = self.HTTP.override { network = self.network_2_6_0_2; };
+  };
 
   haxr_th = callPackage ../development/libraries/haskell/haxr-th {};
 
