@@ -21,6 +21,7 @@ cabal.mkDerivation (self: {
     Cabal HUnit QuickCheck smallcheck tasty tastyHunit tastyQuickcheck
     tastySmallcheck
   ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/yogsototh/holy-project";
     description = "Start your Haskell project with cabal, git and tests";
