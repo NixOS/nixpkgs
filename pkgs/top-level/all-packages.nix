@@ -2730,10 +2730,6 @@ let
   cython = pythonPackages.cython;
   cython3 = python3Packages.cython;
 
-  dylan = callPackage ../development/compilers/gwydion-dylan {
-    dylan = callPackage ../development/compilers/gwydion-dylan/binary.nix {  };
-  };
-
   ecl = callPackage ../development/compilers/ecl { };
 
   eql = callPackage ../development/compilers/eql {};
