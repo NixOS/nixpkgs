@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "async";
-  version = "2.0.1.5";
-  sha256 = "0g587b64zgn971qb2lh846ihg4z89037f18821kyaqsgixasq4yd";
+  version = "2.0.1.6";
+  sha256 = "06fzkqjliccxqiygms7v1xff3wlkg54n9xwzv7m1yxylkzlikjkz";
   buildDepends = [ stm ];
   testDepends = [ HUnit testFramework testFrameworkHunit ];
   jailbreak = true;
