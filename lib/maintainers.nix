@@ -118,6 +118,7 @@
   ttuegel = "Thomas Tuegel <ttuegel@gmail.com>";
   tv = "Tomislav Viljetić <tv@shackspace.de>";
   urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>";
+  vandenoever = "Jos van den Oever <jos@vandenoever.info>";
   vbmithr = "Vincent Bernardoff <vb@luminar.eu.org>";
   vcunat = "Vladimír Čunát <vcunat@gmail.com>";
   viric = "Lluís Batlle i Rossell <viric@viric.name>";

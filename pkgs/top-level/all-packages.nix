@@ -9538,6 +9538,8 @@ let
     iceSupport = config.murmur.iceSupport or true;
   };
 
+  musescore = callPackage ../applications/audio/musescore { };
+
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
 
   namecoin = callPackage ../applications/misc/namecoin { };
