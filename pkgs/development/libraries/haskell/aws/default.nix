@@ -27,6 +27,7 @@ cabal.mkDerivation (self: {
     tastyQuickcheck text transformers
   ];
   doCheck = false;
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/aristidb/aws";
     description = "Amazon Web Services (AWS) for Haskell";
