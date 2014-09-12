@@ -10927,6 +10927,8 @@ let
 
   urbanterror = callPackage ../games/urbanterror { };
 
+  ue4demos = recurseIntoAttrs (callPackage ../games/ue4demos { });
+
   ut2004demo = callPackage ../games/ut2004demo { };
 
   vdrift = callPackage ../games/vdrift { };
