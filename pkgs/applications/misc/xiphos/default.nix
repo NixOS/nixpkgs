@@ -7,8 +7,7 @@
 , libgsf, gconf
 , gtkhtml, libgtkhtml, libglade, scrollkeeper
 , webkitgtk
-, dbus_glib, enchant, isocodes, libuuid
-}:
+, dbus_glib, enchant, isocodes, libuuid }:
 
 stdenv.mkDerivation rec {
   name = "xiphos-${version}";  
@@ -42,16 +41,17 @@ stdenv.mkDerivation rec {
     python waf install
   '';
 
-  meta =  {
+  meta = with stdenv.lib; {
     description = "A GTK Bible study tool";
     longDescription = ''
-    Xiphos (formerly known as GnomeSword) is a Bible study tool written for Linux, UNIX,
-    and Windows using GTK, offering a rich and featureful environment for reading, study,
-    and research using modules from The SWORD Project and elsewhere.    
+    Xiphos (formerly known as GnomeSword) is a Bible study tool
+    written for Linux, UNIX, and Windows using GTK, offering a rich
+    and featureful environment for reading, study, and research using
+    modules from The SWORD Project and elsewhere.
     '';
     homepage = http://www.xiphos.org/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.AndersonTorres ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.linux;
   };
 }
