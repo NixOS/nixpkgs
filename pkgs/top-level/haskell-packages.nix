@@ -2539,7 +2539,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   threepennyGui = callPackage ../development/libraries/haskell/threepenny-gui {};
 
   time_1_1_2_4 = callPackage ../development/libraries/haskell/time/1.1.2.4.nix {};
-  time_1_4_2 = callPackage ../development/libraries/haskell/time/1.4.2.nix {};
+  time_1_5 = callPackage ../development/libraries/haskell/time/1.5.nix {};
   time = null;                  # core package since ghc >= 6.12.x
 
   timerep = callPackage ../development/libraries/haskell/timerep {};
