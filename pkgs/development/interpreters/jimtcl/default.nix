@@ -27,5 +27,6 @@ stdenv.mkDerivation {
     homepage = http://jim.tcl.tk/;
     license = stdenv.lib.licenses.bsd2;
     platforms = stdenv.lib.platforms.all;
+    maintainers = with stdenv.lib.maintainers; [ dbohdan ];
   };
 }
