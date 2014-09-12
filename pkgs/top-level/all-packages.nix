@@ -4314,7 +4314,8 @@ let
 
   scons = callPackage ../development/tools/build-managers/scons { };
 
-  simpleBuildTool = callPackage ../development/tools/build-managers/simple-build-tool { };
+  sbt = callPackage ../development/tools/build-managers/sbt { };
+  simpleBuildTool = sbt;
 
   sigrok-cli = callPackage ../development/tools/sigrok-cli { };
 
@@ -7219,7 +7220,7 @@ let
   tomcat8 = callPackage ../servers/http/tomcat/8.0.nix { };
 
   tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
-  
+
   torque = callPackage ../servers/computing/torque { };
 
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
