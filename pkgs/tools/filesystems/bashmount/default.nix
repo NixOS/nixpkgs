@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.2.0";
 
   src = fetchurl {
-    url = "https://github.com/jamielinux/${name}/archive/${version}.tar.gz";
+    url = "https://github/jamielinux/bashmount/archive/${version}.tar.gz";
     sha256 = "08ncksz8xl0qg5y5qf64b9adfnsg6769wf5bw8lv8q0zjbhjiwrj";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/jamielinux/bashmount";
+    homepage = https://github.com/jamielinux/bashmount;
     description = "A menu-driven bash script for the management of removable media with udisks";
     maintainers = maintainers.koral;
     platforms = platforms.all;
