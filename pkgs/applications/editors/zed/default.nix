@@ -1,19 +1,9 @@
-{ stdenv, buildEnv, fetchgit, xlibs, glib, gtk2, atk, pango, gdk_pixbuf,
-  cairo, freetype, fontconfig, nss, nspr, gnome, alsaLib, expat, dbus, udev,
-  makeWrapper, writeScript, fetchurl, zip, pkgs, node_webkit }:
+{ stdenv, buildEnv, fetchgit, makeWrapper, writeScript, fetchurl, zip, pkgs
+, node_webkit }:
 
 let
   name = "zed-${version}";
-  version = "0.12";
-
-  rpath_env = buildEnv {
-    name = "rpath_env";
-    paths = [ xlibs.libX11 xlibs.libXrender glib xlibs.libXtst gtk2 atk pango
-      gdk_pixbuf cairo freetype fontconfig xlibs.libXi xlibs.libXcomposite
-      nss nspr gnome.GConf xlibs.libXext xlibs.libXfixes alsaLib
-      xlibs.libXdamage expat dbus stdenv.gcc ];
-    pathsToLink = [ "/lib" "/lib64" ];
-  };
+  version = "0.13";
 
   # When upgrading node.nix / node packages:
   #   fetch package.json from Zed's repository
@@ -29,8 +19,10 @@ let
 
   node_env = buildEnv {
     name = "node_env";
-    paths = [ nodePackages.tar nodePackages.request ];
+    paths = [ nodePackages."body-parser" nodePackages.express
+      nodePackages.request nodePackages.tar nodePackages.ws ];
     pathsToLink = [ "/lib" ];
+    ignoreCollisions = true;
   };
 
   zed = stdenv.mkDerivation rec {
@@ -39,7 +31,7 @@ let
     src = fetchgit {
         url = "git://github.com/zedapp/zed";
         rev = "refs/tags/v${version}";
-        sha256 = "1l1adj4p916km626vxg1lv0bapzay4z5nq005pxsbjbcycrhds59";
+        sha256 = "023nq4y6dgh57xpsgawdn2zqvfyhjz1p00ldnsfsjajyy4nn6yb1";
       };
 
     buildInputs = [ makeWrapper zip ];
@@ -62,14 +54,7 @@ let
     '';
 
     postFixup = ''
-      patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" $out/zed/zed-bin
-      patchelf --set-rpath "${rpath_env}/lib:${rpath_env}/lib64" $out/zed/zed-bin
-
-      mkdir -p $out/lib
-      ln -s ${udev}/lib/libudev.so.1 $out/lib/libudev.so.0
-
       wrapProgram $out/zed/zed-bin \
-        --prefix LD_LIBRARY_PATH : $out/lib \
         --prefix NODE_PATH : ${node_env}/lib/node_modules
     '';
   };
