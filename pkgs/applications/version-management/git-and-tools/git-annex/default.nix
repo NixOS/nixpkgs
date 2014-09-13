@@ -48,5 +48,6 @@ cabal.mkDerivation (self: {
     license = self.stdenv.lib.licenses.gpl3;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ simons ];
+    broken = true;
   };
 })
