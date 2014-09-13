@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "boundingboxes";
-  version = "0.2.1";
-  sha256 = "0c9kcgg8596q7wgzc7c2dqq37f16w3f6ilwfzqgdqc33p06x6pha";
+  version = "0.2.2";
+  sha256 = "09yj85ikpdgzbibpdk0mw9vcaklmqlbhwpm6knz595596wr25fcx";
   buildDepends = [ lens ];
   testDepends = [
     lens linear QuickCheck random testFramework
