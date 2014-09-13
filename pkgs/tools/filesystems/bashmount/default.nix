@@ -1,7 +1,7 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "bashmount";
+  name = "bashmount-${version}";
   version = "3.2.0";
 
   src = fetchurl {
