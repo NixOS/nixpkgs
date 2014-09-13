@@ -1,5 +1,6 @@
 { pkgs, python }:
-  with pkgs.lib;
+
+with pkgs.lib;
 
 let
   isPy26 = python.majorVersion == "2.6";
@@ -17,23 +18,29 @@ let
     if isPy34 then "python34" else
     if isPyPy then "pypy" else "";
 
-  modules = python.modules or { readline = null; sqlite3 = null; curses = null; curses_panel = null; ssl = null; crypt = null; };
+  modules = python.modules or {
+    readline = null;
+    sqlite3 = null;
+    curses = null;
+    curses_panel = null;
+    ssl = null;
+    crypt = null;
+  };
 
-pythonPackages = modules // import ./python-packages-generated.nix {
-  inherit pkgs python;
-  inherit (pkgs) stdenv fetchurl;
-  self = pythonPackages;
-} //
-
+  pythonPackages = modules // import ./python-packages-generated.nix {
+    inherit pkgs python;
+    inherit (pkgs) stdenv fetchurl;
+    self = pythonPackages;
+  }
 # Python packages for all python versions
-rec {
+// rec {
 
   inherit python isPy26 isPy27 isPy33 isPy34 isPyPy isPy3k pythonName;
   inherit (pkgs) fetchurl fetchsvn fetchgit stdenv unzip;
 
   # helpers
 
-  callPackage = callPackageWith (pkgs // pythonPackages);
+  callPackage = pkgs.newScope pythonPackages;
 
   # global distutils config used by buildPythonPackage
   distutils-cfg = callPackage ../development/python-modules/distutils-cfg { };
@@ -49,23 +56,16 @@ rec {
 
   # specials
 
-  recursivePthLoader = import ../development/python-modules/recursive-pth-loader {
-    inherit (pkgs) stdenv;
-    inherit python;
-  };
+  recursivePthLoader = callPackage ../development/python-modules/recursive-pth-loader { };
 
-  setuptools = import ../development/python-modules/setuptools {
-    inherit (pkgs) stdenv fetchurl;
-    inherit python wrapPython distutils-cfg;
-  };
+  setuptools = callPackage ../development/python-modules/setuptools { };
 
   # packages defined elsewhere
 
   blivet = callPackage ../development/python-modules/blivet { };
 
-  dbus = import ../development/python-modules/dbus {
-    inherit (pkgs) stdenv fetchurl pkgconfig dbus dbus_glib dbus_tools;
-    inherit python isPyPy;
+  dbus = callPackage ../development/python-modules/dbus {
+    dbus = pkgs.dbus;
   };
 
   discid = buildPythonPackage rec {
@@ -91,8 +91,6 @@ rec {
   };
 
   h5py = callPackage ../development/python-modules/h5py {
-    inherit (pkgs) stdenv fetchurl;
-    inherit python buildPythonPackage cython numpy;
     hdf5 = pkgs.hdf5.override { mpi = null; };
   };
 
@@ -103,25 +101,19 @@ rec {
     inherit mpi4py;
   };
 
-  ipython = import ../shells/ipython {
-    inherit (pkgs) stdenv fetchurl sip pyqt4;
-    inherit buildPythonPackage pythonPackages;
+  ipython = callPackage ../shells/ipython {
     qtconsoleSupport = !pkgs.stdenv.isDarwin; # qt is not supported on darwin
     pylabQtSupport = !pkgs.stdenv.isDarwin;
     pylabSupport = !pkgs.stdenv.isDarwin; # cups is not supported on darwin
   };
 
-  ipythonLight = lowPrio (import ../shells/ipython {
-    inherit (pkgs) stdenv fetchurl;
-    inherit buildPythonPackage pythonPackages;
+  ipythonLight = lowPrio (ipython.override {
     qtconsoleSupport = false;
     pylabSupport = false;
     pylabQtSupport = false;
   });
 
   mpi4py = callPackage ../development/python-modules/mpi4py {
-    inherit (pkgs) stdenv fetchurl openssh;
-    inherit python buildPythonPackage;
     mpi = pkgs.openmpi;
   };
 
@@ -131,74 +123,37 @@ rec {
   # version of nixpart.
   nixpart0 = nixpart;
 
-  pitz = import ../applications/misc/pitz {
-    inherit (pkgs) stdenv fetchurl;
-    inherit buildPythonPackage tempita jinja2 pyyaml clepy mock nose decorator docutils;
+  pitz = callPackage ../applications/misc/pitz { };
+
+  pycairo = callPackage ../development/python-modules/pycairo {
   };
 
-  pycairo = import ../development/python-modules/pycairo {
-    inherit (pkgs) stdenv fetchurl fetchpatch pkgconfig cairo x11;
-    inherit python isPyPy;
+  pycrypto = callPackage ../development/python-modules/pycrypto { };
+
+  pygobject = callPackage ../development/python-modules/pygobject { };
+
+  pygobject3 = callPackage ../development/python-modules/pygobject/3.nix { };
+
+  pygtk = callPackage ../development/python-modules/pygtk { libglade = null; };
+
+  pyGtkGlade = pygtk.override {
+    libglade = pkgs.gnome.libglade;
   };
 
-  pycrypto = import ../development/python-modules/pycrypto {
-    inherit (pkgs) fetchurl stdenv gmp;
-    inherit python buildPythonPackage;
-  };
-
-  pygobject = import ../development/python-modules/pygobject {
-    inherit (pkgs) stdenv fetchurl pkgconfig glib;
-    inherit python;
-  };
-
-  pygobject3 = import ../development/python-modules/pygobject/3.nix {
-    inherit (pkgs) stdenv fetchurl pkgconfig glib gobjectIntrospection cairo;
-    inherit python pycairo;
-  };
-
-  pygtk = import ../development/python-modules/pygtk {
-    inherit (pkgs) fetchurl stdenv pkgconfig gtk;
-    inherit python buildPythonPackage pygobject pycairo isPy3k;
-  };
-
-  # XXX: how can we get an override here?
-  #pyGtkGlade = pygtk.override {
-  #  inherit (pkgs.gnome) libglade;
-  #};
-  pyGtkGlade = import ../development/python-modules/pygtk {
-    inherit (pkgs) fetchurl stdenv pkgconfig gtk;
-    inherit (pkgs.gnome) libglade;
-    inherit python buildPythonPackage pygobject pycairo isPy3k;
-  };
-
-  pyqt4 = import ../development/python-modules/pyqt/4.x.nix {
-    inherit (pkgs) stdenv fetchurl pkgconfig qt4 makeWrapper;
-    inherit (pkgs.xorg) lndir;
-    inherit python sip;
+  pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
     pythonDBus = dbus;
   };
 
-  pyqt5 = import ../development/python-modules/pyqt/5.x.nix {
-    inherit (pkgs) stdenv fetchurl pkgconfig qt5 makeWrapper;
-    inherit (pkgs.xorg) lndir;
-    inherit python;
+  pyqt5 = callPackage ../development/python-modules/pyqt/5.x.nix {
     sip = sip_4_16;
     pythonDBus = dbus;
   };
 
-  sip = import ../development/python-modules/sip {
-    inherit (pkgs) stdenv fetchurl;
-    inherit python isPyPy;
-  };
+  sip = callPackage ../development/python-modules/sip { };
 
-  sip_4_16 = import ../development/python-modules/sip/4.16.nix {
-    inherit (pkgs) stdenv fetchurl;
-    inherit python isPyPy;
-  };
+  sip_4_16 = callPackage ../development/python-modules/sip/4.16.nix { };
 
-  tables = import ../development/python-modules/tables {
-    inherit (pkgs) stdenv fetchurl bzip2 lzo;
-    inherit python buildPythonPackage cython numpy numexpr;
+  tables = callPackage ../development/python-modules/tables {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
 
@@ -9217,15 +9172,11 @@ rec {
   wxPython = wxPython28;
 
 
-  wxPython28 = import ../development/python-modules/wxPython/2.8.nix {
-    inherit (pkgs) stdenv fetchurl pkgconfig;
-    inherit pythonPackages isPyPy python;
+  wxPython28 = callPackage ../development/python-modules/wxPython/2.8.nix {
     wxGTK = pkgs.wxGTK28;
   };
 
-  wxPython30 = import ../development/python-modules/wxPython/3.0.nix {
-    inherit (pkgs) stdenv fetchurl pkgconfig;
-    inherit pythonPackages isPyPy python;
+  wxPython30 = callPackage ../development/python-modules/wxPython/3.0.nix {
     wxGTK = pkgs.wxGTK30;
   };
 
