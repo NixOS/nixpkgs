@@ -10121,6 +10121,8 @@ let
 
   vanitygen = callPackage ../applications/misc/vanitygen { };
 
+  vanubi = callPackage ../applications/editors/vanubi { };
+
   vbindiff = callPackage ../applications/editors/vbindiff { };
 
   vcprompt = callPackage ../applications/version-management/vcprompt { };
