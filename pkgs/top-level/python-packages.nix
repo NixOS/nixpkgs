@@ -65,7 +65,7 @@ rec {
 
   dbus = import ../development/python-modules/dbus {
     inherit (pkgs) stdenv fetchurl pkgconfig dbus dbus_glib dbus_tools;
-    inherit python;
+    inherit python isPyPy;
   };
 
   discid = buildPythonPackage rec {
@@ -138,7 +138,7 @@ rec {
 
   pycairo = import ../development/python-modules/pycairo {
     inherit (pkgs) stdenv fetchurl fetchpatch pkgconfig cairo x11;
-    inherit python;
+    inherit python isPyPy;
   };
 
   pycrypto = import ../development/python-modules/pycrypto {
@@ -675,7 +675,7 @@ rec {
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/b/beautifulsoup4/${name}.tar.gz";
-      md5 = "c012adc06217b8532c446d181cc56586";
+      md5 = "f1481ed77336de77a2d8e5b061b6ad62";
     };
 
     # invalid command 'test'
@@ -1112,6 +1112,24 @@ rec {
     };
     doCheck = false;
   });
+
+
+  cairocffi = buildPythonPackage rec {
+    name = "cairocffi-0.5.4";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/c/cairocffi/${name}.tar.gz";
+      md5 = "e3fa4002583bfaa88b156e1af9c75bde";
+    };
+
+    propagatedBuildInputs = [ cffi ];
+
+    meta = {
+      homepage = https://github.com/SimonSapin/cairocffi;
+      license = "bsd";
+      description = "cffi-based cairo bindings for Python";
+    };
+  };
 
 
   carrot = buildPythonPackage rec {
@@ -1912,6 +1930,23 @@ rec {
     };
   };
 
+  dotfiles = buildPythonPackage rec {
+    name = "dotfiles-0.6.3";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/d/dotfiles/${name}.tar.gz";
+      md5 = "95a0792eb92a8fc0db8a7e59389470fe";
+    };
+
+    doCheck = true;
+
+    meta = {
+      description = "Easily manage your dotfiles";
+      homepage = https://github.com/jbernard/dotfiles;
+      license = licenses.isc;
+    };
+  };
+
   dpkt = buildPythonPackage rec {
     name = "dpkt-1.8";
     disabled = isPy3k;
@@ -2172,6 +2207,21 @@ rec {
     };
   };
 
+  singledispatch = buildPythonPackage rec {
+    name = "singledispatch-3.4.0.3";
+
+    propagatedBuildInputs = [ six ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/s/singledispatch/${name}.tar.gz";
+      md5 = "af2fc6a3d6cc5a02d0bf54d909785fcb";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = http://docs.python.org/3/library/functools.html;
+    };
+  };
+
   gcutil = buildPythonPackage rec {
     name = "gcutil-1.15.0";
     meta.maintainers = [ stdenv.lib.maintainers.phreedom ];
@@ -2180,6 +2230,10 @@ rec {
       url = https://dl.google.com/dl/cloudsdk/release/artifacts/gcutil-1.15.0.tar.gz;
       sha256 = "12c98ivhjr01iz6lkga574xm8p0bsil6arydvpblyw8sjkgim5sq";
     };
+
+    patchPhase = ''
+      substituteInPlace setup.py --replace "httplib2==0.8" "httplib2"
+    '';
 
     propagatedBuildInputs = [ gflags iso8601_0_1_4 ipaddr httplib2 google_apputils google_api_python_client ];
   };
@@ -3446,6 +3500,23 @@ rec {
     };
   };
 
+  flask_cache = buildPythonPackage rec {
+    name = "Flask-Cache-0.13.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/F/Flask-Cache/${name}.tar.gz";
+      md5 = "ab82a9cd0844891ccdb54fbb93fd6c59";
+    };
+
+    propagatedBuildInputs = [ werkzeug flask ];
+
+    meta = {
+      homepage = https://github.com/thadeusb/flask-cache;
+      description = "Adds cache support to your Flask application";
+      license = "BSD";
+    };
+  };
+
   flexget = buildPythonPackage rec {
     name = "FlexGet-1.2.161";
     disabled = isPy3k;
@@ -3456,7 +3527,7 @@ rec {
     };
 
     buildInputs = [ nose ];
-    # dateutil dependancy: requirement is dateutil !=2.0 and != 2.2,
+    # dateutil dependency: requirement is dateutil !=2.0 and != 2.2,
     # dateutil_1_5 is used as it's supported, but a newer version could be used
     propagatedBuildInputs = [ paver feedparser sqlalchemy pyyaml rpyc
 	    beautifulsoup4 html5lib pyrss2gen pynzb progressbar jinja2 flask
@@ -3933,12 +4004,12 @@ rec {
 
   hetzner = buildPythonPackage rec {
     name = "hetzner-${version}";
-    version = "0.7.0";
+    version = "0.7.2";
 
     src = fetchurl {
       url = "https://github.com/RedMoonStudios/hetzner/archive/"
           + "v${version}.tar.gz";
-      sha256 = "1ldbhwy6yk18frv6n9znvdsrqfnpch4mfvc70jrpq3f9fw236src";
+      sha256 = "07jnrgy9fkh1hwgsa8491ljz9spazmifqsg92m3xnamja1536qfl";
     };
 
     # not there yet, but coming soon.
@@ -4047,6 +4118,7 @@ rec {
     name = "httpretty-${version}";
     version = "0.8.3";
     disabled = isPy3k;
+    doCheck = !isPyPy;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/h/httpretty/${name}.tar.gz";
@@ -4084,6 +4156,25 @@ rec {
     };
     doCheck = false;
   }) else null;
+
+  influxdb = buildPythonPackage rec {
+    name = "influxdb-0.1.12";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/i/influxdb/${name}.tar.gz";
+      md5 = "6c975058ccc4df41dad8d8234c52d754";
+    };
+
+    # ImportError: No module named tests
+    doCheck = false;
+    propagatedBuildInputs = [ requests ];
+
+    meta = {
+      description = "Python client for InfluxDB";
+      homepage = https://github.com/influxdb/influxdb-python;
+      license = licenses.mit;
+    };
+  };
 
   iptools = buildPythonPackage rec {
     version = "0.6.1";
@@ -4140,6 +4231,7 @@ rec {
 
   ipdb = buildPythonPackage rec {
     name = "ipdb-0.8";
+    disabled = isPyPy;  # setupterm: could not find terminfo database
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/i/ipdb/${name}.zip";
       md5 = "96dca0712efa01aa5eaf6b22071dd3ed";
@@ -4350,23 +4442,6 @@ rec {
     };
 
     propagatedBuildInputs = [ unittest2 ];
-  };
-
-  "lxml-2.3.6" = buildPythonPackage rec {
-    name = "lxml-2.3.6";
-    src = fetchurl {
-      url = "http://pypi.python.org/packages/source/l/lxml/lxml-2.3.6.tar.gz";
-      md5 = "d5d886088e78b1bdbfd66d328fc2d0bc";
-    };
-    buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
-    propagatedBuildInputs = [  ];
-    doCheck = false;
-
-    meta = {
-      description = "Pythonic binding for the libxml2 and libxslt libraries";
-      homepage = http://codespeak.net/lxml/index.html;
-      license = "BSD";
-    };
   };
 
   lxml = buildPythonPackage ( rec {
@@ -5359,6 +5434,7 @@ rec {
   livestreamer = buildPythonPackage rec {
     version = "1.10.2";
     name = "livestreamer-${version}";
+    disabled = isPyPy;
 
     src = fetchurl {
       url = "https://github.com/chrippa/livestreamer/archive/v${version}.tar.gz";
@@ -5366,7 +5442,7 @@ rec {
     };
 
     buildInputs = [ pkgs.makeWrapper ];
-    propagatedBuildInputs = [ requests pkgs.rtmpdump pycrypto ];
+    propagatedBuildInputs = [ requests2 pkgs.rtmpdump pycrypto singledispatch futures ];
     postInstall = ''
       wrapProgram $out/bin/livestreamer --prefix PATH : ${pkgs.rtmpdump}/bin
     '';
@@ -7085,11 +7161,11 @@ rec {
 
 
   requests = buildPythonPackage rec {
-    name = "requests-1.2.0";
+    name = "requests-1.2.3";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
-      md5 = "22af2682233770e5468a986f451c51c0";
+      md5 = "adbd3f18445f7fe5e77f65c502e264fb";
     };
 
     meta = {
@@ -8148,6 +8224,7 @@ rec {
   sqlalchemy = sqlalchemy9.override rec {
     name = "SQLAlchemy-0.7.10";
     disabled = isPy34;
+    doCheck = !isPyPy;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
@@ -8166,6 +8243,7 @@ rec {
   sqlalchemy8 = sqlalchemy9.override rec {
     name = "SQLAlchemy-0.8.7";
     disabled = isPy34;
+    doCheck = !isPyPy;
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
@@ -8337,6 +8415,22 @@ rec {
       description = "Utility belt for automated testing";
       homepage = "http://falcao.it/sure/";
       license = licenses.gpl3Plus;
+    };
+  };
+
+
+  structlog = buildPythonPackage rec {
+    name = "structlog-0.4.2";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/s/structlog/${name}.tar.gz";
+      md5 = "062cda36069e8573e00c265f451f899e";
+    };
+
+    meta = {
+      description = "Painless structural logging";
+      homepage = http://www.structlog.org/;
+      license = licenses.asl20;
     };
   };
 
@@ -9125,13 +9219,13 @@ rec {
 
   wxPython28 = import ../development/python-modules/wxPython/2.8.nix {
     inherit (pkgs) stdenv fetchurl pkgconfig;
-    inherit pythonPackages;
+    inherit pythonPackages isPyPy python;
     wxGTK = pkgs.wxGTK28;
   };
 
   wxPython30 = import ../development/python-modules/wxPython/3.0.nix {
     inherit (pkgs) stdenv fetchurl pkgconfig;
-    inherit pythonPackages;
+    inherit pythonPackages isPyPy python;
     wxGTK = pkgs.wxGTK30;
   };
 
@@ -9291,6 +9385,7 @@ rec {
   zodb3 = buildPythonPackage rec {
     name = "zodb3-${version}";
     version = "3.11.0";
+    disabled = isPyPy;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/Z/ZODB3/ZODB3-${version}.tar.gz";
@@ -9309,6 +9404,8 @@ rec {
 
   zodb = buildPythonPackage rec {
     name = "zodb-${version}";
+    disabled = isPyPy;
+
     version = "4.0.1";
 
     src = fetchurl {
@@ -10262,6 +10359,55 @@ rec {
       maintainers = with maintainers; [ rickynils offline ];
     };
   };
+
+  graphite_api = buildPythonPackage rec {
+    name = "graphite-api-1.0.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/g/graphite-api/${name}.tar.gz";
+      md5 = "466c13a902744bed09a054da452140f0";
+    };
+
+    # ImportError: No module named tests
+    doCheck = false;
+
+    propagatedBuildInputs = [
+      flask
+      flask_cache
+      cairocffi
+      pyparsing
+      pytz
+      pyyaml
+      raven
+      six
+      structlog
+      tzlocal
+    ];
+
+    meta = {
+      description = "Graphite-web,  without the interface. Just the rendering HTTP API.";
+      homepage = https://github.com/brutasse/graphite-api;
+      license = licenses.asl20;
+    };
+  };
+
+  graphite_influxdb = buildPythonPackage rec {
+    name = "graphite-influxdb-0.3";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/g/graphite-influxdb/${name}.tar.gz";
+      md5 = "5ce64ff6bb0b41c99e57486d6ec86eb7";
+    };
+
+    propagatedBuildInputs = [ influxdb graphite_api ];
+
+    meta = {
+      description = "An influxdb backend for Graphite-web and graphite-api";
+      homepage = https://github.com/vimeo/graphite-influxdb;
+      license = licenses.asl20;
+    };
+  };
+
 
   pyspotify = buildPythonPackage rec {
     name = "pyspotify-${version}";

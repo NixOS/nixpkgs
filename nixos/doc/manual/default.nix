@@ -57,7 +57,7 @@ let
   };
 
   optionsDocBook = runCommand "options-db.xml" {} ''
-    optionsXML=${options'}/doc/share/nixos/options.xml
+    optionsXML=${options'}/share/doc/nixos/options.xml
     if grep /nixpkgs/nixos/modules $optionsXML; then
       echo "The manual appears to depend on the location of Nixpkgs, which is bad"
       echo "since this prevents sharing via the NixOS channel.  This is typically"
@@ -127,7 +127,7 @@ in rec {
 
       mkdir -p $out/nix-support
       echo "nix-build out $out" >> $out/nix-support/hydra-build-products
-      echo "doc manual $dst manual.html" >> $out/nix-support/hydra-build-products
+      echo "doc manual $dst" >> $out/nix-support/hydra-build-products
     ''; # */
 
     meta.description = "The NixOS manual in HTML format";

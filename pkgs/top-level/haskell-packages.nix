@@ -873,6 +873,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   fuzzcheck = callPackage ../development/libraries/haskell/fuzzcheck {};
 
+  functorInfix = callPackage ../development/libraries/haskell/functor-infix {};
+
   gamma = callPackage ../development/libraries/haskell/gamma {};
 
   geniplate = callPackage ../development/libraries/haskell/geniplate {};
@@ -1232,9 +1234,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hoodleTypes = callPackage ../development/libraries/haskell/hoodle-types {};
 
   hoogle = callPackage ../development/libraries/haskell/hoogle {};
-  hoogleLocal = callPackage ../development/libraries/haskell/hoogle/local.nix {
-    parallel = pkgs.parallel;
-  };
+  hoogleLocal = callPackage ../development/libraries/haskell/hoogle/local.nix {};
 
   hopenssl = callPackage ../development/libraries/haskell/hopenssl {};
 
@@ -1547,6 +1547,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   maccatcher = callPackage ../development/libraries/haskell/maccatcher {};
 
   machines = callPackage ../development/libraries/haskell/machines {};
+
+  managed = callPackage ../development/libraries/haskell/managed {};
 
   markdown = callPackage ../development/libraries/haskell/markdown {};
 

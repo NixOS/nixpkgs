@@ -14,8 +14,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cat > $out/bin/sbt << EOF
-    #!/bin/sh
-    SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=384M"
+    #! ${stdenv.shell}
     ${jre}/bin/java \$SBT_OPTS -jar ${src} "\$@"
     EOF
     chmod +x $out/bin/sbt

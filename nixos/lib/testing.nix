@@ -53,6 +53,8 @@ rec {
           xsltproc --output $out/log.html ${./test-driver/log2html.xsl} $out/log.xml
           ln -s ${./test-driver/logfile.css} $out/logfile.css
           ln -s ${./test-driver/treebits.js} $out/treebits.js
+          ln -s ${jquery}/js/jquery.min.js $out/
+          ln -s ${jquery-ui}/js/jquery-ui.min.js $out/
 
           touch $out/nix-support/hydra-build-products
           echo "report testlog $out log.html" >> $out/nix-support/hydra-build-products

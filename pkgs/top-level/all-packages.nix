@@ -444,7 +444,6 @@ let
 
   aegisub = callPackage ../applications/video/aegisub {
     wxGTK = wxGTK30;
-    lua = lua5_1;
   };
 
   aespipe = callPackage ../tools/security/aespipe { };
@@ -612,8 +611,11 @@ let
 
   ccnet = callPackage ../tools/networking/ccnet { };
 
-  consul = callPackage ../servers/consul { };
-  consul_ui = callPackage ../servers/consul/ui.nix { };
+  consul = callPackage ../servers/consul {
+    inherit ruby rubyLibs;
+  };
+
+  consul_ui = consul.ui;
 
   chntpw = callPackage ../tools/security/chntpw { };
 
@@ -755,6 +757,10 @@ let
   };
 
   chkrootkit = callPackage ../tools/security/chkrootkit { };
+
+  chocolateDoom = callPackage ../games/chocolate-doom { };
+  # master is here because chocolateDoom v2.0 has broken netplay
+  chocolateDoomMaster = callPackage ../games/chocolate-doom/master.nix { };
 
   chrony = callPackage ../tools/networking/chrony { };
 
@@ -2208,6 +2214,8 @@ let
 
   ssdeep = callPackage ../tools/security/ssdeep { };
 
+  sshpass = callPackage ../tools/networking/sshpass { };
+
   ssmtp = callPackage ../tools/networking/ssmtp {
     tlsSupport = true;
   };
@@ -2483,6 +2491,8 @@ let
   };
 
   vlan = callPackage ../tools/networking/vlan { };
+
+  volumeicon = callPackage ../tools/audio/volumeicon { };
 
   wakelan = callPackage ../tools/networking/wakelan { };
 
@@ -3082,6 +3092,8 @@ let
 
   fsharp = callPackage ../development/compilers/fsharp {};
 
+  gem-nix = callPackage ../tools/package-management/gem-nix { };
+
   go_1_0 = callPackage ../development/compilers/go { };
 
   go_1_1 =
@@ -3626,6 +3638,8 @@ let
 
   j = callPackage ../development/interpreters/j {};
 
+  jimtcl = callPackage ../development/interpreters/jimtcl {};
+
   jmeter = callPackage ../applications/networking/jmeter {};
 
   davmail = callPackage ../applications/networking/davmail {};
@@ -3648,10 +3662,12 @@ let
   lua5 = lua5_2_compat;
   lua = lua5;
 
-  lua5_sockets = callPackage ../development/interpreters/lua-5/sockets.nix {};
+  lua5_1_sockets = callPackage ../development/interpreters/lua-5/sockets.nix {
+    lua5 = lua5_1; # version 2.* only works with 5.1
+  };
   lua5_expat = callPackage ../development/interpreters/lua-5/expat.nix {};
   lua5_filesystem = callPackage ../development/interpreters/lua-5/filesystem.nix {};
-  lua5_sec = callPackage ../development/interpreters/lua-5/sec.nix {};
+  lua5_sec = callPackage ../development/interpreters/lua-5/sec.nix { };
 
   luarocks = callPackage ../development/tools/misc/luarocks {
      lua = lua5;
@@ -4302,7 +4318,8 @@ let
 
   scons = callPackage ../development/tools/build-managers/scons { };
 
-  simpleBuildTool = callPackage ../development/tools/build-managers/simple-build-tool { };
+  sbt = callPackage ../development/tools/build-managers/sbt { };
+  simpleBuildTool = sbt;
 
   sigrok-cli = callPackage ../development/tools/sigrok-cli { };
 
@@ -4615,7 +4632,9 @@ let
   dbus_cplusplus  = callPackage ../development/libraries/dbus-cplusplus { };
   dbus_glib       = callPackage ../development/libraries/dbus-glib { };
   dbus_java       = callPackage ../development/libraries/java/dbus-java { };
-  dbus_python     = callPackage ../development/python-modules/dbus { };
+  dbus_python     = callPackage ../development/python-modules/dbus {
+    isPyPy = python.executable == "pypy";
+  };
 
   # Should we deprecate these? Currently there are many references.
   dbus_tools = pkgs.dbus.tools;
@@ -4762,6 +4781,8 @@ let
   };
 
   gdbm = callPackage ../development/libraries/gdbm { };
+
+  gecode = callPackage ../development/libraries/gecode { };
 
   gegl = callPackage ../development/libraries/gegl {
     #  avocodec avformat librsvg
@@ -5042,6 +5063,8 @@ let
 
   gtkspell3 = callPackage ../development/libraries/gtkspell/3.nix { };
 
+  gtkspellmm = callPackage ../development/libraries/gtkspellmm { };
+
   gts = callPackage ../development/libraries/gts { };
 
   gvfs = callPackage ../development/libraries/gvfs { gconf = gnome.GConf; };
@@ -5143,7 +5166,6 @@ let
 
   keybinder3 = callPackage ../development/libraries/keybinder3 {
     automake = automake111x;
-    lua = lua5_1;
   };
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix { };
@@ -5168,9 +5190,7 @@ let
     libpng = libpng12;
   };
 
-  lgi = callPackage ../development/libraries/lgi {
-    lua = lua5_1;
-  };
+  lgi = callPackage ../development/libraries/lgi { };
 
   lib3ds = callPackage ../development/libraries/lib3ds { };
 
@@ -6076,7 +6096,7 @@ let
 
   pocketsphinx = callPackage ../development/libraries/pocketsphinx { };
 
-  podofo = callPackage ../development/libraries/podofo { };
+  podofo = callPackage ../development/libraries/podofo { lua5 = lua5_1; };
 
   polkit = callPackage ../development/libraries/polkit {
     spidermonkey = spidermonkey_185;
@@ -6215,11 +6235,11 @@ let
   readline = readline6;
   readline6 = readline63;
 
-  readline5 = callPackage ../development/libraries/readline/readline5.nix { };
+  readline5 = callPackage ../development/libraries/readline/5.x.nix { };
 
-  readline62 = callPackage ../development/libraries/readline/readline6.nix { };
+  readline62 = callPackage ../development/libraries/readline/6.2.nix { };
 
-  readline63 = callPackage ../development/libraries/readline/readline6.3.nix { };
+  readline63 = callPackage ../development/libraries/readline/6.3.nix { };
 
   librdf_raptor = callPackage ../development/libraries/librdf/raptor.nix { };
 
@@ -6629,8 +6649,12 @@ let
   };
 
   AgdaStdlib = callPackage ../development/compilers/agda/stdlib.nix {
-    ghcWithPackages = haskellPackages.ghcWithPackages;
+    inherit (haskellPackages) ghc filemanip;
   };
+
+  AgdaSheaves = callPackage ../development/libraries/agda/AgdaSheaves {};
+
+  bitvector = callPackage ../development/libraries/agda/bitvector {};
 
   ### DEVELOPMENT / LIBRARIES / JAVA
 
@@ -6931,7 +6955,7 @@ let
 
   dictdWordnet = callPackage ../servers/dict/dictd-wordnet.nix {};
 
-  diod = callPackage ../servers/diod { };
+  diod = callPackage ../servers/diod { lua = lua5_1; };
 
   dovecot = dovecot21;
 
@@ -7200,6 +7224,8 @@ let
   tomcat8 = callPackage ../servers/http/tomcat/8.0.nix { };
 
   tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
+
+  torque = callPackage ../servers/computing/torque { };
 
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 
@@ -7904,6 +7930,8 @@ let
 
   shadow = callPackage ../os-specific/linux/shadow { };
 
+  smem = callPackage ../os-specific/linux/smem { };
+
   statifier = builderDefsPackage (import ../os-specific/linux/statifier) { };
 
   sysdig = callPackage ../os-specific/linux/sysdig {
@@ -8379,11 +8407,9 @@ let
   avxsynth = callPackage ../applications/video/avxsynth { };
 
   awesome-3-4 = callPackage ../applications/window-managers/awesome/3.4.nix {
-    lua = lua5;
     cairo = cairo.override { xcbSupport = true; };
   };
   awesome-3-5 = callPackage ../applications/window-managers/awesome {
-    lua   = lua5_1;
     cairo = cairo.override { xcbSupport = true; };
   };
   awesome = awesome-3-5;
@@ -9015,11 +9041,16 @@ let
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
+  linssid = callPackage ../applications/networking/linssid { };
+
   mi2ly = callPackage ../applications/audio/mi2ly {};
 
   praat = callPackage ../applications/audio/praat { };
 
-  quvi = callPackage ../applications/video/quvi/tool.nix { };
+  quvi = callPackage ../applications/video/quvi/tool.nix {
+    lua5_sockets = lua5_1_sockets;
+    lua5 = lua5_1;
+  };
 
   quvi_scripts = callPackage ../applications/video/quvi/scripts.nix { };
 
@@ -9484,6 +9515,7 @@ let
 
   mpv = callPackage ../applications/video/mpv {
     lua = lua5_1;
+    lua5_sockets = lua5_1_sockets;
     bs2bSupport = config.mpv.bs2bSupport or true;
     quviSupport = config.mpv.quviSupport or false;
     cacaSupport = config.mpv.cacaSupport or true;
@@ -9510,6 +9542,8 @@ let
     };
     iceSupport = config.murmur.iceSupport or true;
   };
+
+  musescore = callPackage ../applications/audio/musescore { };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
 
@@ -9888,6 +9922,8 @@ let
   slim = callPackage ../applications/display-managers/slim {
     libpng = libpng12;
   };
+
+  smartgithg = callPackage ../applications/version-management/smartgithg { };
 
   smartdeblur = callPackage ../applications/graphics/smartdeblur { };
 
@@ -10601,7 +10637,7 @@ let
 
   oilrush = callPackage ../games/oilrush { };
 
-  openra = callPackage ../games/openra { };
+  openra = callPackage ../games/openra { lua = lua5_1; };
 
   openttd = callPackage ../games/openttd {
     zlib = zlibStatic;
@@ -11013,7 +11049,11 @@ let
     geoclue = geoclue2;
   };
 
-  oxygen_gtk = callPackage ../misc/themes/gtk2/oxygen-gtk { };
+  oxygen-gtk2 = callPackage ../misc/themes/gtk2/oxygen-gtk { };
+
+  oxygen-gtk3 = callPackage ../misc/themes/gtk3/oxygen-gtk3 { };
+
+  oxygen_gtk = oxygen-gtk2; # backwards compatibility
 
   gtk_engines = callPackage ../misc/themes/gtk2/gtk-engines { };
 

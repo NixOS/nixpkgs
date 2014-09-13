@@ -245,12 +245,6 @@ in
                 ip route add $LOCAL_ADDRESS dev $ifaceHost
               fi
             fi
-
-            # This blocks until the container-startup-done service
-            # writes something to this pipe.  FIXME: it also hangs
-            # until the start timeout expires if systemd-nspawn exits.
-            read x < $root/var/lib/startup-done
-            rm -f $root/var/lib/startup-done
           '';
 
         preStop =

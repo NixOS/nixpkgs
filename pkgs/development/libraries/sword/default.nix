@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, icu, clucene_core, curl}:
+{ stdenv, fetchurl, pkgconfig, icu, clucene_core, curl }:
 
 stdenv.mkDerivation rec {
 
@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--without-conf --enable-tests=no CXXFLAGS=-Wno-unused-but-set-variable";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A software framework that allows research manipulation of Biblical texts";
     homepage = http://www.crosswire.org/sword/;
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.piotr stdenv.lib.maintainers.AndersonTorres ];
+    platforms = platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.piotr maintainers.AndersonTorres ];
   };
 
 }

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   prefixKey = "--prefix ";
 
   meta = {
-    description = "An editor-independant tool to ease the developpement of programs in OCaml";
+    description = "An editor-independent tool to ease the development of programs in OCaml";
     homepage = "http://the-lambda-church.github.io/merlin/";
     license = stdenv.lib.licenses.mit;
   };

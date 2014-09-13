@@ -301,7 +301,7 @@ let self = _self // overrides; _self = with self; {
         and produces an XML document in Dia format (or images via graphviz
         and vcg).  Its goal is to be a UML / DB Schema diagram autocreation
         package.  The diagrams its creates are standard UML diagrams showing
-        dependancies, superclasses, packages, classes and inheritances, as
+        dependencies, superclasses, packages, classes and inheritances, as
         well as the methods, etc of each class.
 
         AutoDia supports any language that a Handler has been written for,
@@ -6976,10 +6976,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Plack = buildPerlPackage {
-    name = "Plack-1.0030";
+    name = "Plack-1.0031";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-1.0030.tar.gz;
-      sha256 = "0bb9aqb0h9q4qjgkw756gf695h4qg6vim54s6f2icgsazdi63zq7";
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-1.0031.tar.gz;
+      sha256 = "0vvppxs36729lggrx4s1gn37lzsm794wfkm3k386bwhkmk7sr31i";
     };
     buildInputs = [ FileShareDirInstall TestRequires ];
     propagatedBuildInputs = [ ApacheLogFormatCompiler DevelStackTrace DevelStackTraceAsHTML FileShareDir FilesysNotifySimple HTTPBody HTTPMessage HashMultiValue LWP StreamBuffered TestTCP TryTiny URI ];
