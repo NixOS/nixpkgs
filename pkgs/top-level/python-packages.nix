@@ -10363,9 +10363,10 @@ rec {
   graphite_api = buildPythonPackage rec {
     name = "graphite-api-1.0.1";
 
-    src = fetchurl {
-      url = "https://pypi.python.org/packages/source/g/graphite-api/${name}.tar.gz";
-      md5 = "466c13a902744bed09a054da452140f0";
+    src = fetchgit {
+      url = "https://github.com/brutasse/graphite-api.git";
+      rev = "b6f75e8a08fae695c094fece6de611b893fc65fb";
+      sha256 = "41b90d5f35e99a020a6b1b77938690652521d1841b3165574fcfcee807ce4e6a";
     };
 
     # ImportError: No module named tests
@@ -10400,6 +10401,8 @@ rec {
     };
 
     propagatedBuildInputs = [ influxdb graphite_api ];
+
+    passthru.moduleName = "graphite_influxdb.InfluxdbFinder";
 
     meta = {
       description = "An influxdb backend for Graphite-web and graphite-api";
