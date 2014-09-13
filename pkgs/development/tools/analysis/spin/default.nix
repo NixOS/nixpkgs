@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     description = "Formal verification tool for distributed software systems";
     homepage = http://spinroot.com/;
     license = "free";
-    maintainers = stdenv.lib.maintainers.mornfall;
+    maintainers = [ stdenv.lib.maintainers.mornfall ];
   };
 }

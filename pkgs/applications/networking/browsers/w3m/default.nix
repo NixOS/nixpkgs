@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://w3m.sourceforge.net/;
     description = "A text-mode web browser";
-    maintainers = maintainers.mornfall;
+    maintainers = [ maintainers.mornfall ];
   };
 }

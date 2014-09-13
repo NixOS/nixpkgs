@@ -43,6 +43,6 @@ stdenv.mkDerivation {
     description = "The Debian package manager";
     homepage = http://wiki.debian.org/Teams/Dpkg;
     platforms = platforms.linux;
-    maintainers = maintainers.mornfall;
+    maintainers = [ maintainers.mornfall ];
   };
 }

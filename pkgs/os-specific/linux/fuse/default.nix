@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = http://fuse.sourceforge.net/;
     description = "Kernel module and library that allows filesystems to be implemented in user space";
     platforms = platforms.linux;
-    maintainers = maintainers.mornfall;
+    maintainers = [ maintainers.mornfall ];
   };
 }

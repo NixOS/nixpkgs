@@ -28,7 +28,7 @@ stdenv.mkDerivation  {
 
   meta = {
     description = "A viewer for remote virtual machines";
-    maintainers = maintainers.raskin;
+    maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
     license = licenses.gpl2;
   };

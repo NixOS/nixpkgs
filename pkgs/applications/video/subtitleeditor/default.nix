@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       '';
     homepage = http://home.gna.org/subtitleeditor;
     license = stdenv.lib.licenses.gpl3;
-    maintainers = stdenv.lib.maintainers.plcplc;
+    maintainers = [ stdenv.lib.maintainers.plcplc ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

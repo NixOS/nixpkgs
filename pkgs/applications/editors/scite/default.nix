@@ -30,6 +30,6 @@ in stdenv.mkDerivation {
     description = "SCIntilla based Text Editor";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = stdenv.lib.maintainers.rszibele;
+    maintainers = [ stdenv.lib.maintainers.rszibele ];
   };
 }

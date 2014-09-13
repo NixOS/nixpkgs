@@ -26,6 +26,6 @@ stdenv.mkDerivation {
     license = "LGPL";
     description = "Library for manipulation of term data structures in C";
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    maintainers = stdenv.lib.maintainers.eelco;
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

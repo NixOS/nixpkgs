@@ -7,6 +7,6 @@
   };
   meta = with stdenv.lib; {
     platforms = platforms.linux;
-    maintainers = maintainers.mornfall;
+    maintainers = [ maintainers.mornfall ];
   };
 }

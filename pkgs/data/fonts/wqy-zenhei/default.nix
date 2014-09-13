@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A (mainly) Chinese Unicode font";
-    homepage = "http://wenq.org";
+    homepage = http://wenq.org;
     license = stdenv.lib.licenses.gpl2; # with font embedding exceptions
-    maintainers = stdenv.lib.maintainers.pkmx;
+    maintainers = [ stdenv.lib.maintainers.pkmx ];
     platforms = stdenv.lib.platforms.all;
   };
 }

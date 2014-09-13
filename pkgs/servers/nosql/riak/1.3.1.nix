@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    maintainers = stdenv.lib.maintainers.orbitz;
+    maintainers = [ stdenv.lib.maintainers.orbitz ];
     description = "Dynamo inspired NoSQL DB by Basho";
     longDescription = ''
       This patches the riak and riak-admin scripts to work better in Nix.

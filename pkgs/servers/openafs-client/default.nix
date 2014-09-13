@@ -40,6 +40,6 @@ stdenv.mkDerivation {
     homepage = http://www.openafs.org;
     license = stdenv.lib.licenses.ipl10;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = stdenv.lib.maintainers.z77z;
+    maintainers = [ stdenv.lib.maintainers.z77z ];
   };
 }
