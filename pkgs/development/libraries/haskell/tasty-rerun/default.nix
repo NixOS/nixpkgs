@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tasty-rerun";
-  version = "1.1.2";
-  sha256 = "0vgx6l9yd21aiwivd6zp67rgjly1j2wwqdmx99p17prr430rm4id";
+  version = "1.1.3";
+  sha256 = "1pgm3h7kyg7q8ydgqqj9sn65ckl6i7cz6a8g1cfighf4gy5y0cj3";
   buildDepends = [
     mtl optparseApplicative reducers split stm tagged tasty
     transformers
@@ -18,6 +18,5 @@ cabal.mkDerivation (self: {
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
-    broken = true;
   };
 })
