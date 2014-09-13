@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
+    broken = true; # broken by the directfb 1.6.3 -> 1.7.6 update
   };
 }
