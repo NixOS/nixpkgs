@@ -8656,6 +8656,11 @@ let
 
   dd-agent = callPackage ../tools/networking/dd-agent { inherit (pythonPackages) tornado; };
 
+  deadbeef = callPackage ../applications/audio/deadbeef {
+    gtk = gtk3;
+    pulseSupport = config.pulseaudio or true;
+  };
+
   dia = callPackage ../applications/graphics/dia {
     inherit (pkgs.gnome) libart_lgpl libgnomeui;
   };
