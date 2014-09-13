@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "shotcut-${version}";
-  version = "14.08";
+  version = "14.09";
 
   src = fetchurl {
     url = "https://github.com/mltframework/shotcut/archive/v${version}.tar.gz";
-    sha256 = "0klcvpgp2l6xcdjy1gg7a5s8mx0mm347zdf26q6kk685pldlvkyj";
+    sha256 = "1504ds3ppqmpg84nb2gb74qndqysjwn3xw7n8xv19kd1pppnr10f";
   };
 
   buildInputs = [ SDL frei0r gettext makeWrapper mlt pkgconfig qt5 ];
