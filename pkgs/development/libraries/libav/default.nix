@@ -26,17 +26,17 @@ with { inherit (stdenv.lib) optional optionals; };
 
 let
   result = {
-    libav_0_8 = libavFun "0.8.13" "1fr3rzykrlm1cla0csm9hqa3gcqp19hf5rgn70nyb9w92r67v685";
-    libav_9   = libavFun   "9.16" "18378gdgzqsxaacc9vl7ligwndbdvy95wbn50hs8xvdqn1rn916a";
-    libav_10  = libavFun  "10.4"  "1zzvjfdlv9swhq7dzvli1pk8cn02q1076ax9m3cx9ipilbg21639";
+    libav_0_8 = libavFun "0.8.16" "df88b8f7d04d47edea8b19d80814227f0c058e57";
+    libav_9   = libavFun   "9.17" "5899d51947b62f6b0cf9795ec2330d5ed59a3273";
+    libav_10  = libavFun  "10.5"  "925a45d2700a436c28e0b663510fc8df5bb7e861";
   };
 
-  libavFun = version : sha256 : stdenv.mkDerivation rec {
+  libavFun = version : sha1 : stdenv.mkDerivation rec {
     name = "libav-${version}";
 
     src = fetchurl {
       url = "${meta.homepage}/releases/${name}.tar.xz";
-      inherit sha256;
+      inherit sha1; # upstream directly provides sha1 of releases over https
     };
     configureFlags =
       assert stdenv.lib.all (x: x!=null) buildInputs;
