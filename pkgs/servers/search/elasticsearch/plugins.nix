@@ -67,6 +67,7 @@ in {
       homepage = https://github.com/Asquera/elasticsearch-http-basic;
       description = "HTTP Basic Authentication for Elasticsearch";
       license = licenses.mit;
+      platforms = elasticsearch.meta.platforms;
     };
   };
 }
