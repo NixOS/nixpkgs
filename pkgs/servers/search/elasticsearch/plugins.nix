@@ -50,4 +50,23 @@ in {
       license = licenses.asl20;
     };
   };
+
+  elasticsearch_http_basic = stdenv.mkDerivation rec {
+    name = "elasticsearch-http-basic-${version}";
+    version = "1.2.0";
+
+    src = fetchurl {
+      url = "https://github.com/Asquera/elasticsearch-http-basic/releases/download/${version}/${name}.jar";
+      sha256 = "0makhlsgxlawfscz70mc2ikh68vp6mdmmzz4ggcgwrravzvyw5vq";
+    };
+
+    phases = ["installPhase"];
+    installPhase = "install -D $src $out/plugins/http-basic/${name}.jar";
+
+    meta = {
+      homepage = https://github.com/Asquera/elasticsearch-http-basic;
+      description = "HTTP Basic Authentication for Elasticsearch";
+      license = licenses.mit;
+    };
+  };
 }
