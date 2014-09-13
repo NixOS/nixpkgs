@@ -305,7 +305,6 @@ in
         uid = config.ids.uids.znc;
         home = cfg.dataDir;
         createHome = true;
-        createUser = true;
       };
  
     users.extraGroups = optional (cfg.user == defaultUser)
