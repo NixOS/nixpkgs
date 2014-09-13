@@ -573,6 +573,8 @@ let
 
   barcode = callPackage ../tools/graphics/barcode {};
 
+  bashmount = callPackage ../tools/filesystems/bashmount {};
+
   bc = callPackage ../tools/misc/bc { };
 
   bcache-tools = callPackage ../tools/filesystems/bcache-tools { };
