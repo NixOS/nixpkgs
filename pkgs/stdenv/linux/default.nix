@@ -85,6 +85,7 @@ rec {
 
       thisStdenv = import ../generic {
         inherit system config;
+        extraBuildInputs = extraPath;
         name = "stdenv-linux-boot";
         preHook =
           ''
@@ -94,7 +95,7 @@ rec {
             ${commonPreHook}
           '';
         shell = "${bootstrapTools}/bin/sh";
-        initialPath = [bootstrapTools] ++ extraPath;
+        initialPath = [bootstrapTools];
         fetchurlBoot = import ../../build-support/fetchurl {
           stdenv = stage0.stdenv;
           curl = bootstrapTools;
