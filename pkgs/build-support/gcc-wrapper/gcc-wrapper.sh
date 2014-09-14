@@ -87,8 +87,8 @@ extraBefore=()
 # When enforcing purity, pretend gcc can't find the current date and
 # time
 if test "$NIX_ENFORCE_PURITY" = "1"; then
-    extraAfter+=('-D__DATE__=??? ?? ????'
-        '-D__TIME__=??:??:??'
+    extraAfter+=('-D__DATE__="??? ?? ????"'
+        '-D__TIME__="??:??:??"'
         -Wno-builtin-macro-redefined)
 fi
 
