@@ -12,8 +12,6 @@ let
   # generate a GHC_PKG database that is passed on with the wrapper.
   # For efficiency reasons, the GHC_PKG database is saved under /tmp/nix-haskell-env...
   #
-  # TODO: Make script portable to systems that don't have a temporary dir under '/tmp'!
-  #
   mkGHCWrapper =
     ghcWrapper:
     target: # content of the file
@@ -32,13 +30,17 @@ let
       if [ ! -z "\$NIX_HASKELL_ENVIRONMENT" ]; then
         exec ${target} "\$@"
       else
-        CACHEDIR=$CACHEDIR_PREFIX
-        for i in \$NIX_PROFILES; do
-          PROFILE=\$(${coreutils}/bin/readlink -f \$i)  #get store path of profile
-          bn="${"\\\${PROFILE##*/}"}"                   #get last dir of store path
-          hash="${"\\\${bn%%-*}"}"                      #get hash of store path
-          CACHEDIR="\$CACHEDIR\$hash"
-        done
+        if [ ! -z "\$NIX_GHC_PKG_DIR_OVERRIDE" ]; then
+          CACHEDIR=\$NIX_GHC_PKG_DIR_OVERRIDE
+        else
+          CACHEDIR=$CACHEDIR_PREFIX
+          for i in \$NIX_PROFILES; do
+            PROFILE=\$(${coreutils}/bin/readlink -f \$i)  #get store path of profile
+            bn="${"\\\${PROFILE##*/}"}"                   #get last dir of store path
+            hash="${"\\\${bn%%-*}"}"                      #get hash of store path
+            CACHEDIR="\$CACHEDIR\$hash"
+          done
+        fi
         if [ ! -d "\$CACHEDIR" ]; then
           ${ghcPlain}/bin/ghc-pkg init \$CACHEDIR
           ARGS=""
@@ -47,7 +49,7 @@ let
           for p in \$PATH; do
             PkgDir="\$p/../lib/ghc-${ghcPlain.version}/package.conf.d"
             for i in "\$PkgDir/"*.conf; do
-              test -f \$i && ln -sf \$i \$CACHEDIR/.
+              test -f \$i && ln -sf \$i \$CACHEDIR
             done
           done
           test -f "${ghcPlain}/lib/ghc-${ghcPlain.version}/package.conf" && \\
@@ -59,6 +61,7 @@ let
         export NIX_GHCPKG=${ghcWrapper}/bin/ghc-pkg
         export NIX_GHC_LIBDIR=${ghcWrapper}/lib/ghc-${ghcPlain.version}
         export NIX_GHC_DOCDIR=${ghcWrapper}/share/doc/ghc/html
+        export NIX_GHC_PACKAGE_PATH=\$CACHEDIR
         exec ${target} ${extraArg} "\$@"
       fi
       EOF_NIX_HASKELL_CONFIGURATION
@@ -67,8 +70,9 @@ let
       '';
 
   #
-  # function needed in cabal.mkDerivation;
-  # will be modified in the future, eventually
+  # The function is kept for compatibility only.
+  # It is not used in NIX though!
+  # It will be removed in the future, eventually.
   #
   GHCPackages =
     let
@@ -108,7 +112,8 @@ let
 in
 let
   ghc761OrLater = !stdenv.lib.versionOlder ghcPlain.version "7.6.1";
-  globalPackageDBFlag = if ghc761OrLater then "--global-package-db" else "--global-conf";
+  packageDBFlag = if ghc761OrLater then "-package-db" else "-package-conf";
+  globalPackageDBFlag = if ghc761OrLater then "-global-package-db" else "-global-conf";
 in
 stdenv.mkDerivation {
   name = "ghc-${ghcPlain.version}-wrapper";
@@ -125,14 +130,13 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     ls -l
     for prg in ghc ghci ghc-${ghcPlain.version} ghci-${ghcPlain.version}; do
-    '' + (mkGHCWrapper "$out" "${ghcPlain}/bin/$prg" "$out/bin/$prg"
-           "-B$out/lib/ghc-${ghcPlain.version}" true) + ''
+    '' + (mkGHCWrapper "$out" "${ghcPlain}/bin/$prg" "$out/bin/$prg" "-B$out/lib/ghc-${ghcPlain.version}" true) + ''
     done
     for prg in runghc runhaskell; do
     '' + (mkGHCWrapper "$out" "${ghcPlain}/bin/$prg" "$out/bin/$prg" "-f $out/bin/ghc" true) + ''
     done
     for prg in ghc-pkg ghc-pkg-${ghcPlain.version}; do
-    '' + (mkGHCWrapper "$out" "${ghcPlain}/bin/$prg" "$out/bin/$prg" "${globalPackageDBFlag}=\\$CACHEDIR" true) + ''
+    '' + (mkGHCWrapper "$out" "${ghcPlain}/bin/$prg" "$out/bin/$prg" "" true) + ''
     done
     for prg in hp2ps hpc hasktags hsc2hs; do
       test -x ${ghcPlain}/bin/$prg && ln -s ${ghcPlain}/bin/$prg $out/bin/$prg

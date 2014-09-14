@@ -24,10 +24,12 @@ assert stdenv.lib.versionOlder "6.12" ghc.version;
 # A good way to import the environment set by the wrapper below into
 # your shell is to add the following snippet to your ~/.bashrc:
 #
-#   if [ -e ~/.nix-profile/bin/nix-ghc-env-set ]; then
-#     source ~/.nix-profile/bin/nix-ghc-env-set
+#   if [ -e /etc/profile.d/ghc-env.sh ]; then
+#     source /etc/profile.d/ghc-env.sh
 #   fi
 #
+# Some shell environments pick up the script automatically, though.
+# 
 # You can also directly execute a command within the environment of the
 # wrapper by:
 #
@@ -59,6 +61,7 @@ let
     ${prefix}"NIX_GHCPKG"${splitter}"$out/bin/ghc-pkg"${postfix}
     ${prefix}"NIX_GHC_DOCDIR"${splitter}"${docDir}"${postfix}
     ${prefix}"NIX_GHC_LIBDIR"${splitter}"${libDir}"${postfix}
+    ${prefix}"NIX_GHC_PACKAGE_PATH"${splitter}"${packageCfgDir}"${postfix}
     '' + (if !mkHscope then "" else ''
     ${prefix}"NIX_HASKELL_HSCOPE"${splitter}"$out/nix-build-helpers/haskell/hscope.db"${postfix}
     '') + (if !mkHtags then "" else ''
@@ -91,14 +94,15 @@ buildEnv {
     #
     # all binaries will be wrapped; make space in $out/bin for the wrappers
     #
+    TEMP_BIN_DIR=$(mktemp -d --dry-run --tmpdir=$TMPDIR)
     if [[ -L "$out/bin" && -d "$out/bin" ]]; then
-      mkdir $out/_tmp_bin
+      mkdir $TEMP_BIN_DIR
       for i in `ls $out/bin`; do
-        ln -s $(readlink $out/bin)/$i $out/_tmp_bin/$i
+        ln -s $(readlink $out/bin)/$i $TEMP_BIN_DIR
       done
       rm -f $out/bin
     else
-      mv $out/bin $out/_tmp_bin
+      mv $out/bin $TEMP_BIN_DIR
     fi
     mkdir -p $out/bin
 
@@ -106,7 +110,7 @@ buildEnv {
     #
     # generate helper functions for using the wrapped GHC
     #
-    '' + (writeTextFile "$out/bin/nix-ghc-env-set" (wrapperArguments "export " "=" "") false) + ''
+    '' + (writeTextFile "$out/etc/profile.d/ghc-env.sh" (wrapperArguments "export " "=" "") false) + ''
     '' + (writeTextFile "$out/bin/nix-ghc-env-exec" (''
                                                      #! $SHELL -e
                                                      '' + (wrapperArguments "export " "=" "") + ''
@@ -125,36 +129,29 @@ buildEnv {
     # special treatment for binaries in GHC package
     #
     for prg in ghc ghci ghc-${ghc.version} ghci-${ghc.version}; do
-      if [ -e $out/_tmp_bin/$prg ]; then
-        rm $out/_tmp_bin/$prg
-        $out/nix-build-helpers/nix-ghc-env-wrapper ${ghc}/bin/$prg $out/bin/$prg \
-          --add-flags '"-B$NIX_GHC_LIBDIR"'
-      if
+      rm "$TEMP_BIN_DIR/$prg"
+      $out/nix-build-helpers/nix-ghc-env-wrapper "${ghc}/bin/$prg" "$out/bin/$prg" \
+        --add-flags "-B$out/lib/ghc-${ghc.version}"
     done
 
     for prg in runghc runhaskell; do
-      if [ -e $out/_tmp_bin/$prg ]; then
-        rm $out/_tmp_bin/$prg
-        $out/nix-build-helpers/nix-ghc-env-wrapper ${ghc}/bin/$prg $out/bin/$prg \
-          --add-flags "-f $out/bin/ghc"
-      fi
+      rm "$TEMP_BIN_DIR/$prg"
+      $out/nix-build-helpers/nix-ghc-env-wrapper ${ghc}/bin/$prg $out/bin/$prg \
+        --add-flags "-f $out/bin/ghc"
     done
 
     for prg in ghc-pkg ghc-pkg-${ghc.version}; do
-      if [ -e $out/_tmp_bin/$prg ]; then
-        rm $out/_tmp_bin/$prg
-        $out/nix-build-helpers/nix-ghc-env-wrapper ${ghc}/bin/$prg $out/bin/$prg \
-          --add-flags "${packageDBFlag}=${packageCfgDir}"
-      fi
+      rm "$TEMP_BIN_DIR/$prg"
+      $out/nix-build-helpers/nix-ghc-env-wrapper ${ghc}/bin/$prg $out/bin/$prg
     done
 
 
     #
     # wrap all binaries provided by the library packages, that is all packages except GHC
     #
-    for prg in `ls $out/_tmp_bin`; do
-      TARGET=$(readlink -f $out/_tmp_bin/$prg)
-      rm -f $out/_tmp_bin/$prg
+    for prg in `ls "$TEMP_BIN_DIR"`; do
+      TARGET=$(readlink -f "$TEMP_BIN_DIR/$prg")
+      rm "$TEMP_BIN_DIR/$prg"
       $out/nix-build-helpers/nix-ghc-env-wrapper $TARGET $out/bin/$prg
     done
 
