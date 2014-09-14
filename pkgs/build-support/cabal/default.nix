@@ -74,13 +74,13 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
             # fname.
             name = if self.isLibrary then
                      if enableLibraryProfiling && self.enableSharedLibraries then
-                       "haskell-${self.pname}-ghc${ghc.ghc.version}-${self.version}-profiling-shared"
+                       "haskell-${self.pname}-ghc${ghc.ghcPlain.version}-${self.version}-profiling-shared"
                      else if enableLibraryProfiling && !self.enableSharedLibraries then
-                       "haskell-${self.pname}-ghc${ghc.ghc.version}-${self.version}-profiling"
+                       "haskell-${self.pname}-ghc${ghc.ghcPlain.version}-${self.version}-profiling"
                      else if !enableLibraryProfiling && self.enableSharedLibraries then
-                       "haskell-${self.pname}-ghc${ghc.ghc.version}-${self.version}-shared"
+                       "haskell-${self.pname}-ghc${ghc.ghcPlain.version}-${self.version}-shared"
                      else
-                       "haskell-${self.pname}-ghc${ghc.ghc.version}-${self.version}"
+                       "haskell-${self.pname}-ghc${ghc.ghcPlain.version}-${self.version}"
                    else
                      "${self.pname}-${self.version}";
 
@@ -185,6 +185,9 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
             configurePhase = ''
               eval "$preConfigure"
 
+              # Trigger the creation of an unique package-db for the current build
+              export NIX_GHC_PKG_DIR_OVERRIDE="$(mktemp -d --dry-run --tmpdir=$TMPDIR)"
+
               ${optionalString self.jailbreak "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal"}
 
               for i in Setup.hs Setup.lhs ${defaultSetupHs}; do
@@ -193,7 +196,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               ghc --make -o Setup -odir $TMPDIR $i
 
               for p in $extraBuildInputs $propagatedNativeBuildInputs; do
-                if [ -d "$p/lib/ghc-${ghc.ghc.version}/package.conf.d" ]; then
+                if [ -d "$p/lib/ghc-${ghc.ghcPlain.version}/package.conf.d" ]; then
                   # Haskell packages don't need any extra configuration.
                   continue;
                 fi
@@ -208,7 +211,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               done
 
               ${optionalString (self.enableSharedExecutables && self.stdenv.isLinux) ''
-                configureFlags+=" --ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.ghc.name}/${self.pname}-${self.version}"
+                configureFlags+=" --ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.ghcPlain.name}/${self.pname}-${self.version}"
               ''}
               ${optionalString (self.enableSharedExecutables && self.stdenv.isDarwin) ''
                 configureFlags+=" --ghc-option=-optl=-Wl,-headerpad_max_install_names"
@@ -237,8 +240,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
 
               ./Setup build ${self.buildTarget}
 
-              export GHC_PACKAGE_PATH=$(${ghc.GHCPackages})
-              test -n "$noHaddock" || ./Setup haddock --html --hoogle \
+              test -n "$noHaddock" || GHC_PACKAGE_PATH="$NIX_GHC_PKG_DIR_OVERRIDE": ./Setup haddock --html --hoogle \
                   ${optionalString self.hyperlinkSource "--hyperlink-source"}
 
               eval "$postBuild"
@@ -262,11 +264,12 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
 
               mkdir -p $out/bin # necessary to get it added to PATH
 
-              local confDir=$out/lib/ghc-${ghc.ghc.version}/package.conf.d
-              local installedPkgConf=$confDir/${self.fname}.installedconf
+              local confDir=$out/lib/ghc-${ghc.ghcPlain.version}/package.conf.d
+              local installedPkgConf=$confDir/${self.fname}.installedconf #TODO: remove, only kept for compatibility
               local pkgConf=$confDir/${self.fname}.conf
               mkdir -p $confDir
               ./Setup register --gen-pkg-config=$pkgConf
+              #TODO: remove the if case, only kept for compatibility
               if test -f $pkgConf; then
                 echo '[]' > $installedPkgConf
                 GHC_PACKAGE_PATH=$installedPkgConf ghc-pkg --global register $pkgConf --force
@@ -279,16 +282,16 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               ${optionalString (self.enableSharedExecutables && self.isExecutable && self.stdenv.isDarwin) ''
                 for exe in "$out/bin/"* ; do
                   install_name_tool -add_rpath \
-                    $out/lib/${ghc.ghc.name}/${self.pname}-${self.version} $exe
+                    $out/lib/${ghc.ghcPlain.name}/${self.pname}-${self.version} $exe
                 done
               ''}
 
               ${optionalString self.wrapExecutables ''
                 if [ -d "$out/bin" ]; then
-                  mv $out/bin $out/libexec
-                  for exe in `ls $out/libexec`; do
-                      cp ${ghc.ghc}/nix-build-helpers/haskell/mkGHCWrapperContent.txt $out/bin/$exe
-                      sed -i 's@__NIX_GHC_HASKELL_WRAPPER_TARGET__@'$out/libexec/$exe'@' $out/bin/$exe
+                  for exe in `ls $out/bin`; do
+                      mv $out/bin/$exe $out/bin/.$exe-wrapped
+                      cp ${ghc}/nix-build-helpers/haskell/mkGHCWrapperContent.txt $out/bin/$exe
+                      sed -i 's@__NIX_GHC_HASKELL_WRAPPER_TARGET__@'$out/bin/.$exe-wrapped'@' $out/bin/$exe
                       chmod +x $out/bin/$exe
                   done
                 fi
