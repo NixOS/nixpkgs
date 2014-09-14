@@ -3106,6 +3106,8 @@ let
 
   go = go_1_3;
 
+  go-repo-root = callPackage ../development/tools/misc/go-repo-root { };
+
   gox = callPackage ../development/compilers/go/gox.nix { };
 
   gprolog = callPackage ../development/compilers/gprolog { };
