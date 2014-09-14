@@ -211,6 +211,8 @@ rec {
 
   seahorse = callPackage ./apps/seahorse { };
 
+  pomodoro = callPackage ./apps/pomodoro { };
+
 #### Dev http://ftp.gnome.org/pub/GNOME/devtools/
 
   anjuta = callPackage ./devtools/anjuta { };
@@ -240,4 +242,5 @@ rec {
   gpaste = callPackage ./misc/gpaste { };
 
   gtkhtml = callPackage ./misc/gtkhtml { };
+
 }
