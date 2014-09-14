@@ -1594,7 +1594,6 @@ let
   monit = callPackage ../tools/system/monit { };
 
   mosh = callPackage ../tools/networking/mosh {
-    boost = boostHeaders;
     inherit (perlPackages) IOTty;
   };
 
@@ -4502,8 +4501,6 @@ let
   boost156 = callPackage ../development/libraries/boost/1.56.nix { };
   boost = boost156;
 
-  boostHeaders = callPackage ../development/libraries/boost/header-only-wrapper.nix { };
-
   botan = callPackage ../development/libraries/botan { };
   botanUnstable = callPackage ../development/libraries/botan/unstable.nix { };
 
@@ -4607,9 +4604,7 @@ let
 
   cppunit = callPackage ../development/libraries/cppunit { };
 
-  cppnetlib = callPackage ../development/libraries/cppnetlib {
-    boost = boostHeaders;
-  };
+  cppnetlib = callPackage ../development/libraries/cppnetlib { };
 
   cracklib = callPackage ../development/libraries/cracklib { };
 
