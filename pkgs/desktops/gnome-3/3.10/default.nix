@@ -1,4 +1,4 @@
-{ callPackage, self, pkgs }:
+{ callPackage, pkgs }:
 
 rec {
   inherit (pkgs) glib gtk2 gtk3 gnome2 upower glib_networking;

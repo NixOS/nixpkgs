@@ -10865,8 +10865,7 @@ let
   };
 
   gnome3_10 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.10 {
-    callPackage = pkgs.newScope pkgs.gnome3;
-    self = pkgs.gnome3;
+    callPackage = pkgs.newScope pkgs.gnome3_10;
   });
 
   gnome3_12 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.12 {
