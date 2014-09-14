@@ -10,8 +10,8 @@ let
 
       buildInputs = [ unzip patchelf ];
 
-      rtdep = stdenv.lib.makeLibraryPath
-        [ xlibs.libXxf86vm openal ]
+      rtdeps = stdenv.lib.makeLibraryPath
+        [ xlibs.libXxf86vm xlibs.libXext openal ]
         + ":" + stdenv.lib.makeSearchPath "lib64" [ stdenv.gcc.gcc ];
 
       buildCommand =
@@ -21,14 +21,24 @@ let
         unzip $src
 
         interpreter=$(echo ${stdenv.glibc}/lib/ld-linux*.so.2)
-        # Executables are buried under a varied across demos paths,
-        # and may have a space char in their names.
         binary=$(find . -executable -type f)
         patchelf \
           --set-interpreter $interpreter \
-          --set-rpath ${rtdep} \
+          --set-rpath ${rtdeps} \
           "$binary"
 
+        # Workaround on
+        # LogLinuxPlatformFile:Warning: open('/nix/store/hash-ue4demos-demo/demo/demo/Saved/Config/CleanSourceConfigs/Engine.ini', Flags=0x00080241) failed: errno=2 (No such file or directory)
+        # for Vehicle, Shooter and Strategy games.
+        ls | grep ' ' && $(
+          haxname=$(ls | grep ' ' | sed 's/ //g'); \
+          haxpath=$(ls | grep ' ')/$haxname/Saved; \
+          mkdir -p "$haxpath"/Config/CleanSourceConfigs; \
+          ln -s /dev/null "$haxpath"/Config/CleanSourceConfigs/Engine.ini; \
+          mkdir -p "$haxpath"/Logs; \
+          ln -s /dev/null "$haxpath"/Logs/$haxname.log)
+
+        # Executables are buried under a varied paths across demos.
         mkdir bin
         cd bin
         ln -s "$out/$binary" $(basename "$out/$binary")
