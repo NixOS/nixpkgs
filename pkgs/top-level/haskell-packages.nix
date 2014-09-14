@@ -1858,6 +1858,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   pcreLight = callPackage ../development/libraries/haskell/pcre-light {};
 
+  pdfToolboxCore = callPackage ../development/libraries/haskell/pdf-toolbox-core {};
+
   pem = callPackage ../development/libraries/haskell/pem {};
 
   permutation = callPackage ../development/libraries/haskell/permutation {};
