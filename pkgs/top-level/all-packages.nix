@@ -7191,7 +7191,9 @@ let
 
   mariadb = callPackage ../servers/sql/mariadb {};
 
-  mongodb = callPackage ../servers/nosql/mongodb { };
+  mongodb = callPackage ../servers/nosql/mongodb {
+    sasl = cyrus_sasl;
+  };
 
   riak = callPackage ../servers/nosql/riak/1.3.1.nix { };
 
