@@ -10,14 +10,14 @@ stdenv.mkDerivation rec {
 
   configurePhase = "cd quazip && qmake quazip.pro";
 
-  installPhase = "INSTALL_ROOT=$out make install";
+  installFlags = "INSTALL_ROOT=$out";
 
   buildInputs = [ zlib qt5 ];
 
   meta = {
-    description = "A Qt/C++ wrapper for Gilles Vollant's ZIP/UNZIP C package (minizip). Provides access to ZIP archives from Qt programs using QIODevice API.";
-    license = [ "GPLv2+" ];
+    description = "Provides access to ZIP archives from Qt programs";
+    license = stdenv.lib.licenses.gpl2Plus;
     homepage = http://quazip.sourceforge.net/;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
