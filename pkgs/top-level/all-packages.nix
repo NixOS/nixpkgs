@@ -5892,7 +5892,6 @@ let
   libyaml = callPackage ../development/libraries/libyaml { };
 
   libyamlcpp = callPackage ../development/libraries/libyaml-cpp { };
-  libyamlcpp03 = callPackage ../development/libraries/libyaml-cpp/0.3.x.nix { };
 
   libyubikey = callPackage ../development/libraries/libyubikey {};
 
