@@ -4122,6 +4122,8 @@ let
 
   byacc = callPackage ../development/tools/parsing/byacc { };
 
+  cargoSnapshot = callPackage ../development/tools/build-managers/cargo/snapshot.nix { };
+
   casperjs = callPackage ../development/tools/casperjs { };
 
   cbrowser = callPackage ../development/tools/misc/cbrowser { };
