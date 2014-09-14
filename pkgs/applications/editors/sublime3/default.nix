@@ -13,13 +13,13 @@ in let
     src =
       if stdenv.system == "i686-linux" then
         fetchurl {
-          name = "sublimetext-3.0.59.tar.bz2";
+          name = "sublimetext-3.0.65.tar.bz2";
           url = "http://c758482.r82.cf2.rackcdn.com/sublime_text_3_build_${build}_x32.tar.bz2";
           sha256 = "e25f84fe0d0c02ce71274d334fd42ce6313adcd4ec1d588b165d25f5e93ad78d";
         }
       else
         fetchurl {
-          name = "sublimetext-3.0.59.tar.bz2";
+          name = "sublimetext-3.0.65.tar.bz2";
           url = "http://c758482.r82.cf2.rackcdn.com/sublime_text_3_build_${build}_x64.tar.bz2";
           sha256 = "fe548e6d86d72cd7e90eee9d5396b590ae6e8f8b0dfc661d86c814214e60faea";
         };
