@@ -4578,8 +4578,8 @@ let
 
   boost144 = callPackage ../development/libraries/boost/1.44.nix { };
   boost149 = callPackage ../development/libraries/boost/1.49.nix { };
-  boost155 = callPackage ../development/libraries/boost/1.55.nix { };
-  boost = boost155;
+  boost156 = callPackage ../development/libraries/boost/1.56.nix { };
+  boost = boost156;
 
   boostHeaders = callPackage ../development/libraries/boost/header-only-wrapper.nix { };
 
@@ -9456,7 +9456,6 @@ let
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2 gnome_vfs;
     zip = zip.override { enableNLS = false; };
-    boost = boost155;
     jdk = openjdk;
     fontsConf = makeFontsConf {
       fontDirectories = [
