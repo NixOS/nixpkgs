@@ -10759,6 +10759,24 @@ let
     };
   };
 
+  weboob = buildPythonPackage rec {
+    name = "weboob-0.j";
 
+    src = fetchurl {
+      url = "https://symlink.me/attachments/download/271/${name}.tar.gz";
+      md5 = "9e11b1f376ccb87d35995ec87bba5b38";
+    };
+
+    setupPyBuildFlags = ["--qt" "--xdg"];
+
+    propagatedBuildInputs = [ pillow prettytable pyyaml dateutil gdata requests2 mechanize feedparser lxml pkgs.gnupg pyqt4 pkgs.libyaml simplejson cssselect ];
+
+    meta = {
+      homepage = http://weboob.org;
+      description = "Collection of applications and APIs to interact with websites without requiring the user to open a browser";
+      license = stdenv.lib.licenses.agpl3;
+      maintainers = [ stdenv.lib.maintainers.DamienCassou ];
+    };
+  };
 
 }); in pythonPackages
