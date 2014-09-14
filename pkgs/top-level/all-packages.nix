@@ -3778,6 +3778,8 @@ let
     inherit (python27Packages) recursivePthLoader;
   };
 
+  python2nix = callPackage ../tools/package-management/python2nix { };
+
   pythonDocs = recurseIntoAttrs (import ../development/interpreters/python/docs {
     inherit stdenv fetchurl lib;
   });
