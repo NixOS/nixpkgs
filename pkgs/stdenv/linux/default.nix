@@ -79,13 +79,12 @@ rec {
   # the bootstrap.  In all stages, we build an stdenv and the package
   # set that can be built with that stdenv.
   stageFun =
-    {gcc, extraAttrs ? {}, overrides ? (pkgs: {}), extraPath ? []}:
+    {gcc, extraAttrs ? {}, overrides ? (pkgs: {}), extraBuildInputs ? []}:
 
     let
 
       thisStdenv = import ../generic {
-        inherit system config;
-        extraBuildInputs = extraPath;
+        inherit system config extraBuildInputs;
         name = "stdenv-linux-boot";
         preHook =
           ''
@@ -207,7 +206,7 @@ rec {
     extraAttrs = {
       glibc = stage2.pkgs.glibc;  # Required by gcc47 build
     };
-    extraPath = [ stage2.pkgs.patchelf stage2.pkgs.paxctl ];
+    extraBuildInputs = [ stage2.pkgs.patchelf stage2.pkgs.paxctl ];
   };
 
 
@@ -221,10 +220,10 @@ rec {
       coreutils = bootstrapTools;
       name = "";
     };
-    extraPath = [ stage3.pkgs.patchelf stage3.pkgs.xz ];
     overrides = pkgs: {
       inherit (stage3.pkgs) gettext gnum4 gmp perl glibc;
     };
+    extraBuildInputs = [ stage3.pkgs.patchelf stage3.pkgs.xz ];
   };
 
 
