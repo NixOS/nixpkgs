@@ -599,6 +599,8 @@ let
 
   boomerang = callPackage ../development/tools/boomerang { };
 
+  boost-build = callPackage ../development/tools/boost-build { };
+
   bootchart = callPackage ../tools/system/bootchart { };
 
   bro = callPackage ../applications/networking/ids/bro { };
