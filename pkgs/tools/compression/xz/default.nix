@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # In stdenv-linux, prevent a dependency on bootstrap-tools.
-  preHook = "unset CONFIG_SHELL";
+  preConfigure = "unset CONFIG_SHELL";
 
   meta = {
     homepage = http://tukaani.org/xz/;
