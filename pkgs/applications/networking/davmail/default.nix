@@ -1,10 +1,10 @@
 { fetchurl, stdenv, jre, glib, libXtst, gtk, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "davmail-4.5.0";
+  name = "davmail-4.5.1";
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/davmail/davmail/4.5.0/davmail-linux-x86_64-4.5.0-2292.tgz";
-    sha256 = "0ixg26s8535b4xf4i8jr0v3acwvaslmi2dvcxg2nmzkicvh6rfd4";
+    url = "mirror://sourceforge/davmail/davmail-linux-x86_64-4.5.1-2303.tgz";
+    sha256 = "0y9dwxlfrfm6yf010fad1p5vsyz2ddci6vhz4sa1js2fq4rvyx7a";
   };
 
   buildInputs = [ makeWrapper ];
