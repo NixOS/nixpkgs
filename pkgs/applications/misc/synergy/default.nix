@@ -6,11 +6,11 @@ assert stdenv.isLinux -> cryptopp != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "synergy-1.5.0";
+  name = "synergy-1.5.1";
 
   src = fetchurl {
-    url = "http://synergy-project.org/files/packages/synergy-1.5.0-r2278-Source.tar.gz";
-    sha256 = "097hk9v01lwzs7ly6ynadxmjh7ad68l5si7w4qmjn6z7l8b61gv6";
+    url = "http://synergy-project.org/files/packages/${name}-r2398-Source.tar.gz";
+    sha256 = "19q8ck15f0jgpbzlm34dzp046wf3iiwa21s1qfyj5sj7xjxwa367";
   };
 
   patches = optional stdenv.isLinux ./cryptopp.patch;

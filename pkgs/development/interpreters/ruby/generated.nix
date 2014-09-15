@@ -4,22 +4,23 @@ g: # Get dependencies from patched gems
 {
   aliases = {
     ZenTest = g.ZenTest_4_10_1;
-    actionmailer = g.actionmailer_4_1_5;
-    actionpack = g.actionpack_4_1_5;
-    actionview = g.actionview_4_1_5;
-    activemodel = g.activemodel_4_1_5;
-    activerecord = g.activerecord_4_1_5;
-    activesupport = g.activesupport_4_1_5;
+    actionmailer = g.actionmailer_4_1_6;
+    actionpack = g.actionpack_4_1_6;
+    actionview = g.actionview_4_1_6;
+    activemodel = g.activemodel_4_1_6;
+    activerecord = g.activerecord_4_1_6;
+    activesupport = g.activesupport_4_1_6;
     addressable = g.addressable_2_3_6;
     arel = g.arel_5_0_1_20140414130214;
     atoulme_Antwrap = g.atoulme_Antwrap_0_7_4;
     autotest_rails = g.autotest_rails_4_2_1;
-    aws_sdk = g.aws_sdk_1_51_0;
+    aws_sdk = g.aws_sdk_1_53_0;
+    aws_sdk_v1 = g.aws_sdk_v1_1_53_0;
     backports = g.backports_3_6_0;
     bitbucket_backup = g.bitbucket_backup_0_3_1;
     builder = g.builder_3_2_2;
-    buildr = g.buildr_1_4_19;
-    bundler = g.bundler_1_7_1;
+    buildr = g.buildr_1_4_20;
+    bundler = g.bundler_1_7_2;
     childprocess = g.childprocess_0_5_3;
     chronic = g.chronic_0_10_2;
     coderay = g.coderay_1_1_0;
@@ -27,7 +28,7 @@ g: # Get dependencies from patched gems
     daemons = g.daemons_1_1_9;
     diff_lcs = g.diff_lcs_1_2_5;
     dimensions = g.dimensions_1_2_0;
-    domain_name = g.domain_name_0_5_20;
+    domain_name = g.domain_name_0_5_21;
     dotenv = g.dotenv_0_11_1;
     dotenv_deployment = g.dotenv_deployment_0_0_2;
     em_resolv_replace = g.em_resolv_replace_1_1_3;
@@ -35,13 +36,14 @@ g: # Get dependencies from patched gems
     ethon = g.ethon_0_7_1;
     eventmachine = g.eventmachine_1_0_3;
     eventmachine_tail = g.eventmachine_tail_0_6_4;
+    execjs = g.execjs_2_2_1;
     fakes3 = g.fakes3_0_1_5_2;
     faraday = g.faraday_0_9_0;
     faraday_middleware = g.faraday_middleware_0_9_1;
     ffi = g.ffi_1_9_3;
     file_tail = g.file_tail_1_0_12;
-    foreman = g.foreman_0_74_0;
-    gettext = g.gettext_3_1_3;
+    foreman = g.foreman_0_75_0;
+    gettext = g.gettext_3_1_4;
     gh = g.gh_0_13_2;
     gherkin = g.gherkin_2_12_2;
     highline = g.highline_1_6_21;
@@ -63,7 +65,7 @@ g: # Get dependencies from patched gems
     mime_types = g.mime_types_2_3;
     mini_portile = g.mini_portile_0_6_0;
     minitar = g.minitar_0_5_4;
-    minitest = g.minitest_5_4_0;
+    minitest = g.minitest_5_4_1;
     multi_json = g.multi_json_1_10_1;
     multi_test = g.multi_test_0_1_1;
     multipart_post = g.multipart_post_2_0_0;
@@ -79,17 +81,17 @@ g: # Get dependencies from patched gems
     papertrail = g.papertrail_0_9_10;
     papertrail_cli = g.papertrail_cli_0_9_3;
     parallel = g.parallel_0_7_1;
-    polyglot = g.polyglot_0_3_5;
     pry = g.pry_0_9_12_6;
     pusher_client = g.pusher_client_0_6_0;
     rack = g.rack_1_5_2;
     rack_protection = g.rack_protection_1_5_3;
     rack_test = g.rack_test_0_6_2;
-    rails = g.rails_4_1_5;
-    railties = g.railties_4_1_5;
+    rails = g.rails_4_1_6;
+    railties = g.railties_4_1_6;
     rake = g.rake_10_3_2;
     rb_fsevent = g.rb_fsevent_0_9_4;
     rdiscount = g.rdiscount_2_1_7_1;
+    rdoc = g.rdoc_4_1_2;
     remote_syslog = g.remote_syslog_1_6_14;
     riemann_dash = g.riemann_dash_0_2_9;
     right_aws = g.right_aws_3_1_0;
@@ -102,13 +104,13 @@ g: # Get dependencies from patched gems
     rspec_expectations = g.rspec_expectations_2_14_5;
     rspec_mocks = g.rspec_mocks_2_14_6;
     rubyzip = g.rubyzip_1_1_6;
-    sass = g.sass_3_4_1;
-    selenium_webdriver = g.selenium_webdriver_2_42_0;
+    sass = g.sass_3_4_3;
+    selenium_webdriver = g.selenium_webdriver_2_43_0;
     servolux = g.servolux_0_10_0;
     sinatra = g.sinatra_1_4_5;
     slop = g.slop_3_6_0;
-    sprockets = g.sprockets_2_12_1;
-    sprockets_rails = g.sprockets_rails_2_1_3;
+    sprockets = g.sprockets_2_12_2;
+    sprockets_rails = g.sprockets_rails_2_1_4;
     syslog_protocol = g.syslog_protocol_0_9_2;
     systemu = g.systemu_2_6_4;
     taskjuggler = g.taskjuggler_3_5_0;
@@ -121,21 +123,22 @@ g: # Get dependencies from patched gems
     tilt = g.tilt_1_4_1;
     tins = g.tins_1_3_2;
     travis = g.travis_1_7_1;
-    treetop = g.treetop_1_4_15;
     trollop = g.trollop_2_0;
     typhoeus = g.typhoeus_0_6_9;
     tzinfo = g.tzinfo_1_2_2;
+    uglifier = g.uglifier_2_5_3;
     unf = g.unf_0_1_4;
     unf_ext = g.unf_ext_0_0_6;
     uuid = g.uuid_2_3_7;
     webrick = g.webrick_1_3_1;
     webrobots = g.webrobots_0_1_1;
-    websocket = g.websocket_1_2_0;
+    websocket = g.websocket_1_2_1;
     xapian_full = g.xapian_full_1_2_3;
     xapian_ruby = g.xapian_ruby_1_2_17;
     xml_simple = g.xml_simple_1_1_2;
+    yajl_ruby = g.yajl_ruby_1_2_1;
   };
-  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''cucumber'' ''fakes3'' ''foreman'' ''gettext'' ''iconv'' ''jsduck'' ''lockfile'' ''mechanize'' ''nix'' ''papertrail-cli'' ''rails'' ''rake'' ''rb-fsevent'' ''remote_syslog'' ''riemann-dash'' ''right_aws'' ''rmail'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''taskjuggler'' ''terminal-notifier'' ''thin'' ''travis'' ''trollop'' ''uuid'' ''xapian-full'' ''xapian-ruby'' ];
+  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''cucumber'' ''erubis'' ''execjs'' ''fakes3'' ''foreman'' ''gettext'' ''iconv'' ''jsduck'' ''lockfile'' ''mechanize'' ''nix'' ''papertrail-cli'' ''rails'' ''rake'' ''rb-fsevent'' ''rdoc'' ''remote_syslog'' ''riemann-dash'' ''right_aws'' ''rmail'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''taskjuggler'' ''terminal-notifier'' ''thin'' ''travis'' ''trollop'' ''uglifier'' ''uuid'' ''xapian-full'' ''xapian-ruby'' ''yajl-ruby'' ];
   gems = {
     ZenTest_4_10_1 = {
       basename = ''ZenTest'';
@@ -168,71 +171,71 @@ installed versions.'';
       requiredGems = [  ];
       sha256 = ''1jyk0lag27s71idna2h72ljskimj0snsiw7diyjx5rqxnz6fj7z1'';
     };
-    actionmailer_4_1_5 = {
+    actionmailer_4_1_6 = {
       basename = ''actionmailer'';
       meta = {
         description = ''Email composition, delivery, and receiving framework (part of Rails).'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''Email on Rails. Compose, deliver, receive, and test emails using the familiar controller/view pattern. First-class support for multipart email and attachments.'';
       };
-      name = ''actionmailer-4.1.5'';
-      requiredGems = [ g.actionpack_4_1_5 g.actionview_4_1_5 g.mail_2_5_4 ];
-      sha256 = ''19frz9njy6jbxh7yasx62l4ifns3dxfkfqvnxlqb4pwsz7lqcp9c'';
+      name = ''actionmailer-4.1.6'';
+      requiredGems = [ g.actionpack_4_1_6 g.actionview_4_1_6 g.mail_2_6_1 ];
+      sha256 = ''1lsw9h0wm7pwdzm9jdq3y5b8b1cf56fd4dcgx4s91qf0lc0dw0wv'';
     };
-    actionpack_4_1_5 = {
+    actionpack_4_1_6 = {
       basename = ''actionpack'';
       meta = {
         description = ''Web-flow and rendering framework putting the VC in MVC (part of Rails).'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''Web apps on Rails. Simple, battle-tested conventions for building and testing MVC web applications. Works with any Rack-compatible server.'';
       };
-      name = ''actionpack-4.1.5'';
-      requiredGems = [ g.activesupport_4_1_5 g.rack_1_5_2 g.rack_test_0_6_2 g.actionview_4_1_5 ];
-      sha256 = ''05wh3c5rw3c0rsza3bnpmr6s63n481d4gkbhsp3ngwn9lpp3jdb6'';
+      name = ''actionpack-4.1.6'';
+      requiredGems = [ g.activesupport_4_1_6 g.rack_1_5_2 g.rack_test_0_6_2 g.actionview_4_1_6 ];
+      sha256 = ''07a95iahv04gikk4qbgpi9is709ynkpcd4g00kqm629jaffrsyj2'';
     };
-    actionview_4_1_5 = {
+    actionview_4_1_6 = {
       basename = ''actionview'';
       meta = {
         description = ''Rendering framework putting the V in MVC (part of Rails).'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''Simple, battle-tested conventions and helpers for building web pages.'';
       };
-      name = ''actionview-4.1.5'';
-      requiredGems = [ g.activesupport_4_1_5 g.builder_3_2_2 g.erubis_2_7_0 ];
-      sha256 = ''02zb4xi2farzh892j9awxshyly7ijlvbj39g6cwq5mhs5cx59qk8'';
+      name = ''actionview-4.1.6'';
+      requiredGems = [ g.activesupport_4_1_6 g.builder_3_2_2 g.erubis_2_7_0 ];
+      sha256 = ''1r06r4zsaqsq1wyqy2g29nnycw50v37ab7zmnvzjhy24y53rv9w7'';
     };
-    activemodel_4_1_5 = {
+    activemodel_4_1_6 = {
       basename = ''activemodel'';
       meta = {
         description = ''A toolkit for building modeling frameworks (part of Rails).'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''A toolkit for building modeling frameworks like Active Record. Rich support for attributes, callbacks, validations, serialization, internationalization, and testing.'';
       };
-      name = ''activemodel-4.1.5'';
-      requiredGems = [ g.activesupport_4_1_5 g.builder_3_2_2 ];
-      sha256 = ''1anbjwdfgdjfxiv5vzysrdd98mapvd2h8xjkayq3vq54n13ymjvl'';
+      name = ''activemodel-4.1.6'';
+      requiredGems = [ g.activesupport_4_1_6 g.builder_3_2_2 ];
+      sha256 = ''14mw7d0jax7sky4nc2a7rspcf2inb3m6mxhx653i00v0xjrxa3x6'';
     };
-    activerecord_4_1_5 = {
+    activerecord_4_1_6 = {
       basename = ''activerecord'';
       meta = {
         description = ''Object-relational mapper framework (part of Rails).'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''Databases on Rails. Build a persistent domain model by mapping database tables to Ruby classes. Strong conventions for associations, validations, aggregations, migrations, and testing come baked-in.'';
       };
-      name = ''activerecord-4.1.5'';
-      requiredGems = [ g.activesupport_4_1_5 g.activemodel_4_1_5 g.arel_5_0_1_20140414130214 ];
-      sha256 = ''1z8awkkl4bn4ghdp432n2qpagbb8569ffq63kmgkbwf8127kmzrc'';
+      name = ''activerecord-4.1.6'';
+      requiredGems = [ g.activesupport_4_1_6 g.activemodel_4_1_6 g.arel_5_0_1_20140414130214 ];
+      sha256 = ''15s72gawgvd7msa2i7hmjw81znif8zh1v57pmans8vmphfg2n9l7'';
     };
-    activesupport_4_1_5 = {
+    activesupport_4_1_6 = {
       basename = ''activesupport'';
       meta = {
         description = ''A toolkit of support libraries and Ruby core extensions extracted from the Rails framework.'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''A toolkit of support libraries and Ruby core extensions extracted from the Rails framework. Rich support for multibyte strings, internationalization, time zones, and testing.'';
       };
-      name = ''activesupport-4.1.5'';
-      requiredGems = [ g.i18n_0_6_11 g.json_1_8_1 g.tzinfo_1_2_2 g.minitest_5_4_0 g.thread_safe_0_3_4 ];
-      sha256 = ''0vmf58q96469dci509hhbqxwr7gaxq4yjsb37xd56ggpqn3qm30k'';
+      name = ''activesupport-4.1.6'';
+      requiredGems = [ g.i18n_0_6_11 g.json_1_8_1 g.tzinfo_1_2_2 g.minitest_5_4_1 g.thread_safe_0_3_4 ];
+      sha256 = ''0crwl6rlxpv5fvvnvcbrjc7iygj8nklj83v1734h5lrhjzirxc22'';
     };
     addressable_2_3_6 = {
       basename = ''addressable'';
@@ -300,16 +303,31 @@ rails support and extra plugins for migrations and fixtures.'';
       requiredGems = [ g.ZenTest_4_10_1 ];
       sha256 = ''1v1dm9zlhdlrxvk90zs8d439ldar674ix41s7pncddgyswcfgg5l'';
     };
-    aws_sdk_1_51_0 = {
+    aws_sdk_1_53_0 = {
       basename = ''aws_sdk'';
       meta = {
-        description = ''AWS SDK for Ruby'';
+        description = ''AWS SDK for Ruby V1'';
         homepage = ''http://aws.amazon.com/sdkforruby'';
-        longDescription = ''AWS SDK for Ruby'';
+        longDescription = ''Version 1 of the AWS SDK for Ruby. Available as both `aws-sdk` and `aws-sdk-v1`.
+Use `aws-sdk-v1` if you want to load v1 and v2 of the Ruby SDK in the same
+application.'';
       };
-      name = ''aws-sdk-1.51.0'';
+      name = ''aws-sdk-1.53.0'';
+      requiredGems = [ g.aws_sdk_v1_1_53_0 ];
+      sha256 = ''1jwvzlpyh5hpa3qn972wmn2pmhqpzw5vjal2n5i14qplvafmj7p2'';
+    };
+    aws_sdk_v1_1_53_0 = {
+      basename = ''aws_sdk_v1'';
+      meta = {
+        description = ''AWS SDK for Ruby V1'';
+        homepage = ''http://aws.amazon.com/sdkforruby'';
+        longDescription = ''Version 1 of the AWS SDK for Ruby. Available as both `aws-sdk` and `aws-sdk-v1`.
+Use `aws-sdk-v1` if you want to load v1 and v2 of the Ruby SDK in the same
+application.'';
+      };
+      name = ''aws-sdk-v1-1.53.0'';
       requiredGems = [ g.nokogiri_1_6_3_1 g.json_1_8_1 ];
-      sha256 = ''092a7km6ar7zvyyzgiqsb0dm354sqa6mzx7sa0c8ndwm918lbqai'';
+      sha256 = ''00yagrm2d5agwkfgkv4rqbxymwmgjmv5n8hah3xhrc90q1ywr7hw'';
     };
     backports_3_6_0 = {
       basename = ''backports'';
@@ -349,7 +367,7 @@ simple to do.  Currently the following builder objects are supported:
       requiredGems = [  ];
       sha256 = ''14fii7ab8qszrvsvhz6z2z3i4dw0h41a62fjr2h1j8m41vbrmyv2'';
     };
-    buildr_1_4_19 = {
+    buildr_1_4_20 = {
       basename = ''buildr'';
       meta = {
         description = ''Build like you code'';
@@ -361,20 +379,20 @@ to do, and it takes care of the rest.  But also something we can easily extend
 for those one-off tasks, with a language that's a joy to use.
 '';
       };
-      name = ''buildr-1.4.19'';
-      requiredGems = [ g.rake_0_9_2_2 g.builder_3_2_2 g.net_ssh_2_7_0 g.net_sftp_2_1_2 g.rubyzip_0_9_9 g.json_pure_1_8_0 g.hoe_3_7_1 g.rjb_1_4_8 g.atoulme_Antwrap_0_7_4 g.diff_lcs_1_2_4 g.rspec_expectations_2_14_3 g.rspec_mocks_2_14_3 g.rspec_core_2_14_5 g.rspec_2_14_1 g.xml_simple_1_1_2 g.minitar_0_5_4 g.bundler_1_7_1 g.orderedhash_0_0_6 ];
-      sha256 = ''07k6z149si7v1h5m1bvdhjcv0nnjwkd2c6a8n1779l8g47ckccj0'';
+      name = ''buildr-1.4.20'';
+      requiredGems = [ g.rake_0_9_2_2 g.builder_3_2_2 g.net_ssh_2_7_0 g.net_sftp_2_1_2 g.rubyzip_0_9_9 g.json_pure_1_8_0 g.hoe_3_7_1 g.rjb_1_4_9 g.atoulme_Antwrap_0_7_4 g.diff_lcs_1_2_4 g.rspec_expectations_2_14_3 g.rspec_mocks_2_14_3 g.rspec_core_2_14_5 g.rspec_2_14_1 g.xml_simple_1_1_2 g.minitar_0_5_4 g.bundler_1_7_2 g.orderedhash_0_0_6 ];
+      sha256 = ''0x4ffblw7jg0z49ywfm5abfxgg23di3d661czndwi904cvmghrkv'';
     };
-    bundler_1_7_1 = {
+    bundler_1_7_2 = {
       basename = ''bundler'';
       meta = {
         description = ''The best way to manage your application's dependencies'';
         homepage = ''http://bundler.io'';
         longDescription = ''Bundler manages an application's dependencies through its entire life, across many machines, systematically and repeatably'';
       };
-      name = ''bundler-1.7.1'';
+      name = ''bundler-1.7.2'';
       requiredGems = [  ];
-      sha256 = ''144yqbmi89gl933rh8dv58bm7ia14s4a098qdi2z0q09ank9n5h2'';
+      sha256 = ''1xfacbivyi40ig9jzpsv2z42vwghf77n4r65ls0pcnbqn4ypqyhc'';
     };
     childprocess_0_5_3 = {
       basename = ''childprocess'';
@@ -486,7 +504,7 @@ We are happy to report that this issue has been resolved.'';
       requiredGems = [  ];
       sha256 = ''1pqb7yzjcpbgbyi196ifqbd1wy570cn12bkzcvpcha4xilhajja0'';
     };
-    domain_name_0_5_20 = {
+    domain_name_0_5_21 = {
       basename = ''domain_name'';
       meta = {
         description = ''Domain Name manipulation library for Ruby'';
@@ -497,9 +515,9 @@ It can also be used for cookie domain validation based on the Public
 Suffix List.
 '';
       };
-      name = ''domain_name-0.5.20'';
+      name = ''domain_name-0.5.21'';
       requiredGems = [ g.unf_0_1_4 ];
-      sha256 = ''17ls88kp18dxjc93q8kmyx2anknva0vbmny60xbgpbwq3hg0qv6s'';
+      sha256 = ''1ryb2gmryzcrqm9gl19658m1kcjkjz5m0r24mzq4j0zfrs95nfnq'';
     };
     dotenv_0_11_1 = {
       basename = ''dotenv'';
@@ -597,6 +615,17 @@ using TCP/IP, especially if custom protocols are required.'';
       requiredGems = [ g.eventmachine_1_0_3 ];
       sha256 = ''1pvlb34vdzd81kf9f3xyibb4f55xjqm7lqqy28dgyci5cyv50y61'';
     };
+    execjs_2_2_1 = {
+      basename = ''execjs'';
+      meta = {
+        description = ''Run JavaScript code from Ruby'';
+        homepage = ''https://github.com/sstephenson/execjs'';
+        longDescription = ''ExecJS lets you run JavaScript code from Ruby.'';
+      };
+      name = ''execjs-2.2.1'';
+      requiredGems = [  ];
+      sha256 = ''1s41g9qwq0h4452q4gp934lnkzfkxh4wrg8fd4bcynba86bf3j8b'';
+    };
     fakes3_0_1_5_2 = {
       basename = ''fakes3'';
       meta = {
@@ -650,18 +679,18 @@ using TCP/IP, especially if custom protocols are required.'';
       requiredGems = [ g.tins_0_13_2 ];
       sha256 = ''0mzxxnwj7k5pwxs0rdbmb3b41zgvzw7x40sf3qlkch4zdfx91i1j'';
     };
-    foreman_0_74_0 = {
+    foreman_0_75_0 = {
       basename = ''foreman'';
       meta = {
         description = ''Process manager for applications with multiple components'';
         homepage = ''http://github.com/ddollar/foreman'';
         longDescription = ''Process manager for applications with multiple components'';
       };
-      name = ''foreman-0.74.0'';
+      name = ''foreman-0.75.0'';
       requiredGems = [ g.thor_0_19_1 g.dotenv_0_11_1 ];
-      sha256 = ''0jqblq0myzmdp2cywzz7flvgqnhf267ykcdn250cccy68s9wm37m'';
+      sha256 = ''0iicqdjwwms86nchk80ia7x4wjcd3p5c8s53bc0z0h063i0ks9ha'';
     };
-    gettext_3_1_3 = {
+    gettext_3_1_4 = {
       basename = ''gettext'';
       meta = {
         description = ''Gettext is a pure Ruby libary and tools to localize messages.'';
@@ -671,9 +700,9 @@ The catalog file(po-file) is same format with GNU gettext.
 So you can use GNU gettext tools for maintaining.
 '';
       };
-      name = ''gettext-3.1.3'';
+      name = ''gettext-3.1.4'';
       requiredGems = [ g.locale_2_1_0 g.text_1_3_0 ];
-      sha256 = ''066x2dbryab02kdbk6km79h4j9b0f0ynsnzcygjgvzn9001ybf9q'';
+      sha256 = ''0gfnbkj2knpq8jxplkdr18by64kcadqxjhrxr3ncldz2ghm5zhvb'';
     };
     gh_0_13_2 = {
       basename = ''gh'';
@@ -751,7 +780,7 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
         longDescription = ''HTTP::Cookie is a Ruby library to handle HTTP Cookies based on RFC 6265.  It has with security, standards compliance and compatibility in mind, to behave just the same as today's major web browsers.  It has builtin support for the legacy cookies.txt and the latest cookies.sqlite formats of Mozilla Firefox, and its modular API makes it easy to add support for a new backend store.'';
       };
       name = ''http-cookie-1.0.2'';
-      requiredGems = [ g.domain_name_0_5_20 ];
+      requiredGems = [ g.domain_name_0_5_21 ];
       sha256 = ''0cz2fdkngs3jc5w32a6xcl511hy03a7zdiy988jk1sf3bf5v3hdw'';
     };
     i18n_0_6_11 = {
@@ -854,17 +883,6 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
       requiredGems = [ g.systemu_2_6_4 ];
       sha256 = ''1clii8mvhmh5lmnm95ljnjygyiyhdpja85c5vy487rhxn52scn0b'';
     };
-    mail_2_5_4 = {
-      basename = ''mail'';
-      meta = {
-        description = ''Mail provides a nice Ruby DSL for making, sending and reading emails.'';
-        homepage = ''http://github.com/mikel/mail'';
-        longDescription = ''A really Ruby Mail handler.'';
-      };
-      name = ''mail-2.5.4'';
-      requiredGems = [ g.mime_types_1_25_1 g.treetop_1_4_15 ];
-      sha256 = ''0z15ksb8blcppchv03g34844f7xgf36ckp484qjj2886ig1qara4'';
-    };
     mail_2_6_1 = {
       basename = ''mail'';
       meta = {
@@ -888,7 +906,7 @@ submitted.  Mechanize also keeps track of the sites that you have visited as
 a history.'';
       };
       name = ''mechanize-2.7.3'';
-      requiredGems = [ g.net_http_digest_auth_1_4 g.net_http_persistent_2_9_4 g.mime_types_2_3 g.http_cookie_1_0_2 g.nokogiri_1_6_3_1 g.ntlm_http_0_1_1 g.webrobots_0_1_1 g.domain_name_0_5_20 ];
+      requiredGems = [ g.net_http_digest_auth_1_4 g.net_http_persistent_2_9_4 g.mime_types_2_3 g.http_cookie_1_0_2 g.nokogiri_1_6_3_1 g.ntlm_http_0_1_1 g.webrobots_0_1_1 g.domain_name_0_5_21 ];
       sha256 = ''00jkazj8fqnynaxca0lnwx5a084irxrnw8n8i0kppq4vg71g7rrx'';
     };
     method_source_0_8_2 = {
@@ -901,64 +919,6 @@ a history.'';
       name = ''method_source-0.8.2'';
       requiredGems = [  ];
       sha256 = ''1g5i4w0dmlhzd18dijlqw5gk27bv6dj2kziqzrzb7mpgxgsd1sf2'';
-    };
-    mime_types_1_25_1 = {
-      basename = ''mime_types'';
-      meta = {
-        description = ''This library allows for the identification of a file's likely MIME content type'';
-        homepage = ''http://mime-types.rubyforge.org/'';
-        longDescription = ''This library allows for the identification of a file's likely MIME content
-type. This is release 1.25.1, fixing an issue with priority comparison for
-mime-types 1.x. The current release is 2.0, which only supports Ruby 1.9 or
-later.
-
-Release 1.25.1 contains all features of 1.25, including the experimental
-caching and lazy loading functionality. The caching and lazy loading features
-were initially implemented by Greg Brockman (gdb). As these features are
-experimental, they are disabled by default and must be enabled through the use
-of environment variables. The cache is invalidated on a per-version basis; the
-cache for version 1.25 will not be reused for any later version.
-
-To use lazy loading, set the environment variable +RUBY_MIME_TYPES_LAZY_LOAD+
-to any value other than 'false'. When using lazy loading, the initial startup
-of MIME::Types is around 12–25× faster than normal startup (on my system,
-normal startup is about 90 ms; lazy startup is about 4 ms). This isn't
-generally useful, however, as the MIME::Types database has not been loaded.
-Lazy startup and load is just *slightly* faster—around 1 ms. The real advantage
-comes from using the cache.
-
-To enable the cache, set the environment variable +RUBY_MIME_TYPES_CACHE+ to a
-filename where MIME::Types will have read-write access. The first time a new
-version of MIME::Types is run using this file, it will be created, taking a
-little longer than normal. Subsequent loads using the same cache file will be
-approximately 3½× faster (25 ms) than normal loads. This can be combined with
-+RUBY_MIME_TYPES_LAZY_LOAD+, but this is *not* recommended in a multithreaded
-or multiprocess environment where all threads or processes will be using the
-same cache file.
-
-As the caching interface is still experimental, the only values cached are the
-default MIME::Types database, not any custom MIME::Types added by users.
-
-MIME types are used in MIME-compliant communications, as in e-mail or HTTP
-traffic, to indicate the type of content which is transmitted. MIME::Types
-provides the ability for detailed information about MIME entities (provided as
-a set of MIME::Type objects) to be determined and used programmatically. There
-are many types defined by RFCs and vendors, so the list is long but not
-complete; don't hesitate to ask to add additional information. This library
-follows the IANA collection of MIME types (see below for reference).
-
-MIME::Types for Ruby was originally based on MIME::Types for Perl by Mark
-Overmeer, copyright 2001 - 2009.
-
-MIME::Types is built to conform to the MIME types of RFCs 2045 and 2231. It
-tracks the {IANA registry}[http://www.iana.org/assignments/media-types/]
-({ftp}[ftp://ftp.iana.org/assignments/media-types]) with some unofficial types
-added from the {LTSW collection}[http://www.ltsw.se/knbase/internet/mime.htp]
-and added by the users of MIME::Types.'';
-      };
-      name = ''mime-types-1.25.1'';
-      requiredGems = [  ];
-      sha256 = ''0mhzsanmnzdshaba7gmsjwnv168r1yj8y0flzw88frw1cickrvw8'';
     };
     mime_types_2_3 = {
       basename = ''mime_types'';
@@ -1023,7 +983,7 @@ with some types added by the users of mime-types.'';
       requiredGems = [  ];
       sha256 = ''1vpdjfmdq1yc4i620frfp9af02ia435dnpj8ybsd7dc3rypkvbka'';
     };
-    minitest_5_4_0 = {
+    minitest_5_4_1 = {
       basename = ''minitest'';
       meta = {
         description = ''minitest provides a complete suite of testing facilities supporting TDD, BDD, mocking, and benchmarking'';
@@ -1082,9 +1042,9 @@ classes, modules, inheritance, methods. This means you only have to
 learn ruby to use minitest and all of your regular OO practices like
 extract-method refactorings still apply.'';
       };
-      name = ''minitest-5.4.0'';
+      name = ''minitest-5.4.1'';
       requiredGems = [  ];
-      sha256 = ''002xflqz5wl8gcj9gw4q66mq5jkp445zgd9c5vs6cw6lsfsyg4rl'';
+      sha256 = ''04iqz25v8vngw4z5pzhwnsf72fb8gf2vzhidrfcbphwsqqik5s4r'';
     };
     multi_json_1_10_1 = {
       basename = ''multi_json'';
@@ -1292,20 +1252,6 @@ enough of it.'';
       requiredGems = [  ];
       sha256 = ''1kzz6ydg7r23ks2b7zbpx4vz3h186n19vhgnjcwi7xwd6h2f1fsq'';
     };
-    polyglot_0_3_5 = {
-      basename = ''polyglot'';
-      meta = {
-        description = ''Augment 'require' to load non-Ruby file types'';
-        homepage = ''http://github.com/cjheath/polyglot'';
-        longDescription = ''
-The Polyglot library allows a Ruby module to register a loader
-for the file type associated with a filename extension, and it
-augments 'require' to find and load matching files.'';
-      };
-      name = ''polyglot-0.3.5'';
-      requiredGems = [  ];
-      sha256 = ''1bqnxwyip623d8pr29rg6m8r0hdg08fpr2yb74f46rn1wgsnxmjr'';
-    };
     pry_0_9_12_6 = {
       basename = ''pry'';
       meta = {
@@ -1325,7 +1271,7 @@ augments 'require' to find and load matching files.'';
         longDescription = ''Client for consuming WebSockets from http://pusher.com'';
       };
       name = ''pusher-client-0.6.0'';
-      requiredGems = [ g.websocket_1_2_0 g.json_1_8_1 ];
+      requiredGems = [ g.websocket_1_2_1 g.json_1_8_1 ];
       sha256 = ''0n7l630qg6wgzak45b6gfjg9a0fmpbrs7mwchqqbja9mjs95r8qy'';
     };
     rack_1_5_2 = {
@@ -1371,27 +1317,27 @@ request helpers feature.'';
       requiredGems = [ g.rack_1_5_2 ];
       sha256 = ''01mk715ab5qnqf6va8k3hjsvsmplrfqpz6g58qw4m3l8mim0p4ky'';
     };
-    rails_4_1_5 = {
+    rails_4_1_6 = {
       basename = ''rails'';
       meta = {
         description = ''Full-stack web application framework.'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''Ruby on Rails is a full-stack web framework optimized for programmer happiness and sustainable productivity. It encourages beautiful code by favoring convention over configuration.'';
       };
-      name = ''rails-4.1.5'';
-      requiredGems = [ g.activesupport_4_1_5 g.actionpack_4_1_5 g.actionview_4_1_5 g.activemodel_4_1_5 g.activerecord_4_1_5 g.actionmailer_4_1_5 g.railties_4_1_5 g.bundler_1_7_1 g.sprockets_rails_2_1_3 ];
-      sha256 = ''12s3jkvd6bn40apxc3973czgs7s6y36aclbwif6j770v7sjd9qj7'';
+      name = ''rails-4.1.6'';
+      requiredGems = [ g.activesupport_4_1_6 g.actionpack_4_1_6 g.actionview_4_1_6 g.activemodel_4_1_6 g.activerecord_4_1_6 g.actionmailer_4_1_6 g.railties_4_1_6 g.bundler_1_7_2 g.sprockets_rails_2_1_4 ];
+      sha256 = ''187g903gmni3prd5i768yfgszc4ak5kmrazavr93d0ybfdbcjlgk'';
     };
-    railties_4_1_5 = {
+    railties_4_1_6 = {
       basename = ''railties'';
       meta = {
         description = ''Tools for creating, working with, and running Rails applications.'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''Rails internals: application bootup, plugins, generators, and rake tasks.'';
       };
-      name = ''railties-4.1.5'';
-      requiredGems = [ g.activesupport_4_1_5 g.actionpack_4_1_5 g.rake_10_3_2 g.thor_0_19_1 ];
-      sha256 = ''18jkjvny51vk53l2g9ibcnjk3gjj1vgh3pyrskmk69csqm2hmaha'';
+      name = ''railties-4.1.6'';
+      requiredGems = [ g.activesupport_4_1_6 g.actionpack_4_1_6 g.rake_10_3_2 g.thor_0_19_1 ];
+      sha256 = ''11valflllkrrz06bsflz78h5nmxhrhm7hdpm1lwmgm8hwd4ybl0c'';
     };
     rake_0_9_2_2 = {
       basename = ''rake'';
@@ -1457,6 +1403,19 @@ Rake has the following features:
       requiredGems = [  ];
       sha256 = ''1g70vsgv7mdwcyk9rxja7wm4qqap67prqwkj335c460vlzs6pqii'';
     };
+    rdoc_4_1_2 = {
+      basename = ''rdoc'';
+      meta = {
+        description = ''RDoc produces HTML and command-line documentation for Ruby projects'';
+        homepage = ''http://docs.seattlerb.org/rdoc'';
+        longDescription = ''RDoc produces HTML and command-line documentation for Ruby projects.  RDoc
+includes the +rdoc+ and +ri+ tools for generating and displaying documentation
+from the command-line.'';
+      };
+      name = ''rdoc-4.1.2'';
+      requiredGems = [ g.json_1_8_1 ];
+      sha256 = ''0cqhjidw657d8irkypxsrv6dr4y9r8csg9inaq40c3iz110cc8w6'';
+    };
     remote_syslog_1_6_14 = {
       basename = ''remote_syslog'';
       meta = {
@@ -1476,7 +1435,7 @@ Rake has the following features:
         longDescription = ''HTTP dashboard for the distributed event system Riemann.'';
       };
       name = ''riemann-dash-0.2.9'';
-      requiredGems = [ g.erubis_2_7_0 g.sinatra_1_4_5 g.sass_3_4_1 g.webrick_1_3_1 g.multi_json_1_3_6 ];
+      requiredGems = [ g.erubis_2_7_0 g.sinatra_1_4_5 g.sass_3_4_3 g.webrick_1_3_1 g.multi_json_1_3_6 ];
       sha256 = ''0ws5wmjbv8w9lcr3i2mdinj2qm91p6c85k6c067i67cf0p90jxq3'';
     };
     right_aws_3_1_0 = {
@@ -1545,18 +1504,6 @@ algorithm for low-level network errors.
       name = ''right_http_connection-1.5.0'';
       requiredGems = [  ];
       sha256 = ''0shd8v24aqxdvim1gdqzwxpanjhfgkhdaw0m0lzz7sybkb02j8qf'';
-    };
-    rjb_1_4_8 = {
-      basename = ''rjb'';
-      meta = {
-        description = ''Ruby Java bridge'';
-        homepage = ''http://rjb.rubyforge.org/'';
-        longDescription = ''RJB is a bridge program that connect between Ruby and Java with Java Native Interface.
-'';
-      };
-      name = ''rjb-1.4.8'';
-      requiredGems = [  ];
-      sha256 = ''06ps4ssaxb8jwja53h7v7kb31hsdr997b8na89d1yasm5zyraliw'';
     };
     rjb_1_4_9 = {
       basename = ''rjb'';
@@ -1690,7 +1637,7 @@ RKelly[https://github.com/tenderlove/rkelly] JavaScript parser.'';
       requiredGems = [  ];
       sha256 = ''17ha7kmgcnhnxyfp9wgyrd2synp17v9g8j1pknhfd2v9x5g475m9'';
     };
-    sass_3_4_1 = {
+    sass_3_4_3 = {
       basename = ''sass'';
       meta = {
         description = ''A powerful but elegant CSS compiler that makes CSS fun again.'';
@@ -1701,20 +1648,20 @@ RKelly[https://github.com/tenderlove/rkelly] JavaScript parser.'';
       command line tool or a web-framework plugin.
 '';
       };
-      name = ''sass-3.4.1'';
+      name = ''sass-3.4.3'';
       requiredGems = [  ];
-      sha256 = ''0f997m7g6gcd4yaxxrf1nylk2x8ynf7w2l631sby51zfn21rfli4'';
+      sha256 = ''0k9qv35wf28qjlv8a1nmvv8n71wxnqim1kwf95igvngys6kih7ds'';
     };
-    selenium_webdriver_2_42_0 = {
+    selenium_webdriver_2_43_0 = {
       basename = ''selenium_webdriver'';
       meta = {
         description = ''The next generation developer focused tool for automated testing of webapps'';
         homepage = ''http://selenium.googlecode.com'';
         longDescription = ''WebDriver is a tool for writing automated tests of websites. It aims to mimic the behaviour of a real user, and as such interacts with the HTML of the application.'';
       };
-      name = ''selenium-webdriver-2.42.0'';
-      requiredGems = [ g.multi_json_1_10_1 g.rubyzip_1_1_6 g.childprocess_0_5_3 g.websocket_1_0_7 ];
-      sha256 = ''04yjwzc7cy2ax5xgp618z9jbm55cx4b5l546l7xnxj1hk30znw6q'';
+      name = ''selenium-webdriver-2.43.0'';
+      requiredGems = [ g.multi_json_1_10_1 g.rubyzip_1_1_6 g.childprocess_0_5_3 g.websocket_1_2_1 ];
+      sha256 = ''06jjkb4hcyh8mwsqc8c5p6pz6ac1v313h4md0dab872ls5s47zh9'';
     };
     servolux_0_10_0 = {
       basename = ''servolux'';
@@ -1763,26 +1710,26 @@ interpreters.'';
       requiredGems = [  ];
       sha256 = ''00w8g3j7k7kl8ri2cf1m58ckxk8rn350gp4chfscmgv6pq1spk3n'';
     };
-    sprockets_2_12_1 = {
+    sprockets_2_12_2 = {
       basename = ''sprockets'';
       meta = {
         description = ''Rack-based asset packaging system'';
         homepage = ''http://getsprockets.org/'';
         longDescription = ''Sprockets is a Rack-based asset packaging system that concatenates and serves JavaScript, CoffeeScript, CSS, LESS, Sass, and SCSS.'';
       };
-      name = ''sprockets-2.12.1'';
+      name = ''sprockets-2.12.2'';
       requiredGems = [ g.hike_1_2_3 g.multi_json_1_10_1 g.rack_1_5_2 g.tilt_1_4_1 ];
-      sha256 = ''0fi5f32i3bj739qb0zn050k5jjkfqzkn8fjz5dfjwhmh9hl5pb1y'';
+      sha256 = ''0sclb5nqs5hhr7qfp42rgpasy0f9k4c3jcr3hz89amf2bg5v7slx'';
     };
-    sprockets_rails_2_1_3 = {
+    sprockets_rails_2_1_4 = {
       basename = ''sprockets_rails'';
       meta = {
         description = ''Sprockets Rails integration'';
         homepage = ''https://github.com/rails/sprockets-rails'';
       };
-      name = ''sprockets-rails-2.1.3'';
-      requiredGems = [ g.sprockets_2_12_1 g.actionpack_4_1_5 g.activesupport_4_1_5 ];
-      sha256 = ''12kdy9vjn3ygrxhn9jxxx0rvsq601vayrkgbr3rqcpyhqhl4s4wy'';
+      name = ''sprockets-rails-2.1.4'';
+      requiredGems = [ g.sprockets_2_12_2 g.actionpack_4_1_6 g.activesupport_4_1_6 ];
+      sha256 = ''1difqidflj71qh8a84lcfdfg9vy4rw5hkgf2j0jis8bcczcq54l3'';
     };
     syslog_protocol_0_9_2 = {
       basename = ''syslog_protocol'';
@@ -1935,16 +1882,6 @@ management.
       requiredGems = [ g.faraday_0_9_0 g.faraday_middleware_0_9_1 g.highline_1_6_21 g.backports_3_6_0 g.gh_0_13_2 g.launchy_2_4_2 g.pry_0_9_12_6 g.typhoeus_0_6_9 g.pusher_client_0_6_0 g.addressable_2_3_6 ];
       sha256 = ''1h0xajfzkz7pdrbhs2650nl5www8qfmgazmmmw0bcr3dai5kimdf'';
     };
-    treetop_1_4_15 = {
-      basename = ''treetop'';
-      meta = {
-        description = ''A Ruby-based text parsing and interpretation DSL'';
-        homepage = ''https://github.com/cjheath/treetop'';
-      };
-      name = ''treetop-1.4.15'';
-      requiredGems = [ g.polyglot_0_3_5 g.polyglot_0_3_5 ];
-      sha256 = ''1zqj5y0mvfvyz11nhsb4d5ch0i0rfcyj64qx19mw4qhg3hh8z9pz'';
-    };
     trollop_2_0 = {
       basename = ''trollop'';
       meta = {
@@ -1981,6 +1918,17 @@ specify.'';
       name = ''tzinfo-1.2.2'';
       requiredGems = [ g.thread_safe_0_3_4 ];
       sha256 = ''1c01p3kg6xvy1cgjnzdfq45fggbwish8krd0h864jvbpybyx7cgx'';
+    };
+    uglifier_2_5_3 = {
+      basename = ''uglifier'';
+      meta = {
+        description = ''Ruby wrapper for UglifyJS JavaScript compressor'';
+        homepage = ''http://github.com/lautis/uglifier'';
+        longDescription = ''Uglifier minifies JavaScript files by wrapping UglifyJS to be accessible in Ruby'';
+      };
+      name = ''uglifier-2.5.3'';
+      requiredGems = [ g.execjs_2_2_1 g.json_1_8_1 ];
+      sha256 = ''0rlx9nrcavpfffyacsrh7xyvz3adv7jvylz0sv0jnix1mj5rkpd9'';
     };
     unf_0_1_4 = {
       basename = ''unf'';
@@ -2041,27 +1989,16 @@ to Ruby/JRuby.
       requiredGems = [  ];
       sha256 = ''1jlnhhpa1mkrgsmihs2qx13z3n6xhswjnlk5a2ypyplw2id5x32n'';
     };
-    websocket_1_0_7 = {
+    websocket_1_2_1 = {
       basename = ''websocket'';
       meta = {
         description = ''Universal Ruby library to handle WebSocket protocol'';
         homepage = ''http://github.com/imanel/websocket-ruby'';
         longDescription = ''Universal Ruby library to handle WebSocket protocol'';
       };
-      name = ''websocket-1.0.7'';
+      name = ''websocket-1.2.1'';
       requiredGems = [  ];
-      sha256 = ''1jrfz4295qbnjaxv37fw9jzxyxz61izp7c0683mnscacpx262zw0'';
-    };
-    websocket_1_2_0 = {
-      basename = ''websocket'';
-      meta = {
-        description = ''Universal Ruby library to handle WebSocket protocol'';
-        homepage = ''http://github.com/imanel/websocket-ruby'';
-        longDescription = ''Universal Ruby library to handle WebSocket protocol'';
-      };
-      name = ''websocket-1.2.0'';
-      requiredGems = [  ];
-      sha256 = ''17q3fsqwa44cali3x852jzjpzgcvvly0n8gszmkaqx520lb9r5l4'';
+      sha256 = ''17mf28xp6h4gglbn1606jjrhdz9r6kyb2pr603ckadsrx31wh9p6'';
     };
     xapian_full_1_2_3 = {
       basename = ''xapian_full'';
@@ -2092,6 +2029,16 @@ to Ruby/JRuby.
       name = ''xml-simple-1.1.2'';
       requiredGems = [  ];
       sha256 = ''0ni8cbkj7l2k5pc4fs2jzp1ymxy4xqa2jc681l4y9iy9chrayddb'';
+    };
+    yajl_ruby_1_2_1 = {
+      basename = ''yajl_ruby'';
+      meta = {
+        description = ''Ruby C bindings to the excellent Yajl JSON stream-based parser library.'';
+        homepage = ''http://github.com/brianmario/yajl-ruby'';
+      };
+      name = ''yajl-ruby-1.2.1'';
+      requiredGems = [  ];
+      sha256 = ''0zvvb7i1bl98k3zkdrnx9vasq0rp2cyy5n7p9804dqs4fz9xh9vf'';
     };
   };
 }

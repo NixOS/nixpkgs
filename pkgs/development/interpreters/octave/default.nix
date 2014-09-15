@@ -1,7 +1,7 @@
 { stdenv, fetchurl, gfortran, readline, ncurses, perl, flex, texinfo, qhull
 , libX11, graphicsmagick, pcre, liblapack, pkgconfig, mesa, fltk
 , fftw, fftwSinglePrec, zlib, curl, qrupdate
-, qt ? null, ghostscript ? null, llvm ? null, hdf5 ? null,glpk ? null
+, qt ? null, qscintilla ? null, ghostscript ? null, llvm ? null, hdf5 ? null,glpk ? null
 , suitesparse ? null, gnuplot ? null, openjdk ? null, python ? null
 }:
 
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     graphicsmagick pcre liblapack pkgconfig mesa fltk zlib curl
     fftw fftwSinglePrec qrupdate ]
     ++ (stdenv.lib.optional (qt != null) qt)
+    ++ (stdenv.lib.optional (qscintilla != null) qscintilla)
     ++ (stdenv.lib.optional (ghostscript != null) ghostscript)
     ++ (stdenv.lib.optional (llvm != null) llvm)
     ++ (stdenv.lib.optional (hdf5 != null) hdf5)

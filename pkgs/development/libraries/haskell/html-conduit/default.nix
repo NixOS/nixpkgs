@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "html-conduit";
-  version = "1.1.0.5";
-  sha256 = "1yxvaiklg90fsiv2sfzrr3hp1wjs0fhcg709b24lqm81aryaq2sn";
+  version = "1.1.1.1";
+  sha256 = "1bsr0fsy7k606m477c4rxdh7j71nyrp86f1lg9wlwnbm31vrhw00";
   buildDepends = [
     conduit conduitExtra resourcet systemFilepath tagstreamConduit text
     transformers xmlConduit xmlTypes

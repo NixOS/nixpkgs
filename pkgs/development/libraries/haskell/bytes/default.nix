@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "bytes";
-  version = "0.14.1";
-  sha256 = "023sdwdirvigrdg03f6jrdndm6pkqsmsrwz9ji57dpqg4f5k9jzk";
+  version = "0.14.1.1";
+  sha256 = "11bsl31352h5lj7ad68byqqc27d5iz53kwx7b433l44g9kaijrvc";
   buildDepends = [
     binary cereal mtl text time transformers transformersCompat void
   ];

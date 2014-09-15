@@ -18,3 +18,18 @@ install -m 644 ananke/libananke.so $out/lib/libananke.so.1
 (cd $out/lib && ln -s libananke.so.1 libananke.so)
 oldRPath=$(patchelf --print-rpath $out/bin/higan)
 patchelf --set-rpath $oldRPath:$out/lib $out/bin/higan
+
+# A dirty workaround, suggested by @cpages:
+# we create a first-run script to populate
+# the local $HOME with all the auxiliary
+# stuff needed by higan at runtime
+
+cat <<EOF > $out/bin/higan-config.sh
+#!${shell}
+
+cp --update --recursive $out/share/higan \$HOME/.config
+chmod --recursive u+w \$HOME/.config/higan
+
+EOF
+
+chmod +x $out/bin/higan-config.sh

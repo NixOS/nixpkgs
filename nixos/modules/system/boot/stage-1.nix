@@ -50,7 +50,7 @@ let
       cp -pvd ${pkgs.busybox}/bin/* ${pkgs.busybox}/sbin/* $out/bin/
 
       # Copy some utillinux stuff.
-      cp -vf ${pkgs.utillinux}/sbin/blkid $out/bin
+      cp -vf --remove-destination ${pkgs.utillinux}/sbin/blkid $out/bin
       cp -pdv ${pkgs.utillinux}/lib/libblkid*.so.* $out/lib
       cp -pdv ${pkgs.utillinux}/lib/libuuid*.so.* $out/lib
 

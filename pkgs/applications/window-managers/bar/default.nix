@@ -17,8 +17,8 @@ in
   
     meta = {
       description = "A lightweight xcb based bar";
-      homepage = "https://github.com/LemonBoy/bar";
-      maintainers = stdenv.lib.maintainers.meisternu;
+      homepage = https://github.com/LemonBoy/bar;
+      maintainers = [ stdenv.lib.maintainers.meisternu ];
       license = "Custom";   
       platforms = stdenv.lib.platforms.linux;
     };

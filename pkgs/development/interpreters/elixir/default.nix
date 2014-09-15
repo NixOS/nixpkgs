@@ -1,14 +1,14 @@
 { stdenv, fetchurl, erlang, rebar, makeWrapper, coreutils }:
 
 let
-  version = "0.15.1";
+  version = "1.0.0";
 in
 stdenv.mkDerivation {
   name = "elixir-${version}";
 
   src = fetchurl {
     url = "https://github.com/elixir-lang/elixir/archive/v${version}.tar.gz";
-    sha256 = "8e608abf90a6e9a25ef5fb7e45dfd04e2cb7e1fecb4ac260bf6652885a7f0c50";
+    sha256 = "1ci8g6nh89xnn0ax9kazcs47w406nqsj1d4rf8sb1b6abfq78xsj";
   };
 
   buildInputs = [ erlang rebar makeWrapper ];
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     '';
 
     license = licenses.epl10;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.the-kenny ];
   };
 }

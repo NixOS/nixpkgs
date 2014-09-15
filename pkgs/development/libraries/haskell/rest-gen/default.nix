@@ -9,8 +9,8 @@
 
 cabal.mkDerivation (self: {
   pname = "rest-gen";
-  version = "0.14.2.1";
-  sha256 = "1dvcs25ndmzwdann5yq4567zjirirzskf9v31gkrki0im8mi9x14";
+  version = "0.15.0.2";
+  sha256 = "1k33bhjy909ffc5bnk3fb8vi8pvylb7rh6m95f70x5h6wgq4lhjg";
   buildDepends = [
     aeson blazeHtml Cabal codeBuilder fclabels filepath hashable
     haskellSrcExts hslogger HStringTemplate hxt jsonSchema restCore

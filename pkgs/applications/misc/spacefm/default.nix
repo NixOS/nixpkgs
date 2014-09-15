@@ -3,14 +3,14 @@
 }:
 
 let
-  version = "0.9.4";
+  version = "0.9.2";
 
 in stdenv.mkDerivation rec {
   name = "spacefm-${version}";
 
   src = fetchurl {
     url = "https://github.com/IgnorantGuru/spacefm/blob/pkg/${version}/${name}.tar.xz?raw=true";
-    sha256 = "0marwa031jk24q8hy90dr7yw6rv5hn1shar404zpb1k57v4nr23m";
+    sha256 = "3767137d74aa78597ffb42a6121784e91a4276efcd5d718b3793b9790f82268c";
   };
 
   buildInputs = [ gtk3 udev desktop_file_utils shared_mime_info intltool pkgconfig makeWrapper ];

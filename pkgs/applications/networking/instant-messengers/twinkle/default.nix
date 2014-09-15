@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_LINK = "-Wl,--as-needed -lboost_regex -lasound -lzrtpcpp -lspeex -lspeexdsp";
 
-  enableParallelBuilding = true;
+  #enableParallelBuilding = true; # fatal error: messageform.h: No such file or directory
 
   meta = with stdenv.lib; {
     homepage = http://www.twinklephone.com/;

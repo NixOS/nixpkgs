@@ -20,5 +20,7 @@ cabal.mkDerivation (self: {
     description = "A program to find and display the docs and type of a name";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

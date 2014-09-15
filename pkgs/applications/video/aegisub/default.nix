@@ -10,8 +10,7 @@
 , openalSupport ? false, openal ? null
 , alsaSupport ? true, alsaLib ? null
 , pulseaudioSupport ? true, pulseaudio ? null
-, portaudioSupport ? false, portaudio ? null
-}:
+, portaudioSupport ? false, portaudio ? null }:
 
 assert spellChecking -> (hunspell != null);
 assert automationSupport -> (lua != null);
@@ -62,6 +61,5 @@ stdenv.mkDerivation rec {
               # - so the resulting program will be GPL
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
-
   };
 }

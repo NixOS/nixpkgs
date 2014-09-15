@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libunwind }:
 
 stdenv.mkDerivation rec {
-  name = "gperftools-2.1";
+  name = "gperftools-2.2.1";
 
   src = fetchurl {
-    url = "https://gperftools.googlecode.com/files/${name}.tar.gz";
-    sha256 = "0ks9gsnhxrs2vccc6ha9m8xmj83lmw09xcws4zc0k57q4jcy5bgk";
+    url = "https://googledrive.com/host/0B6NtGsLhIcf7MWxMMF9JdTN3UVk/gperftools-2.2.1.tar.gz";
+    sha256 = "04zkz5mh4vzcc7cx72b21bq70xy7y5kq9gsk4nbssxk5wlqggy2n";
   };
 
   buildInputs = stdenv.lib.optional stdenv.isLinux libunwind;
@@ -16,9 +16,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://code.google.com/p/gperftools/;
     description = "Fast, multi-threaded malloc() and nifty performance analysis tools";
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = with platforms; linux ++ darwin;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ wkennington ];
   };
 }

@@ -56,7 +56,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "Sophisticated text editor for code, markup and prose";
-    maintainers = stdenv.lib.maintainers.wmertens;
+    maintainers = [ stdenv.lib.maintainers.wmertens ];
     license = stdenv.lib.licenses.unfree;
   };
 }

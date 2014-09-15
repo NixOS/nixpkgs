@@ -1,7 +1,7 @@
 { stdenv, fetchgit, xdpyinfo, xprop }:
 
 let
-  version = "2014-05-27";
+  version = "3.6.2";
 in
 stdenv.mkDerivation {
   name = "screenFetch-${version}";
@@ -9,8 +9,8 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = git://github.com/KittyKatt/screenFetch.git;
-    rev = "69c46cb94b5765dbcb36905c5a35c42eb8e6e470";
-    sha256 = "0479na831120bpyrg5nb3nb1jr8p8ahkixk1znwg730q3vdcjd6j";
+    rev = "dec1cd6c2471defe4459967fbc8ae15b55714338";
+    sha256 = "138a7g0za5dq27jx7x8gqg7gjkgyq0017v0nbcg68ys7dqlxsdl3";
   };
 
   installPhase = ''

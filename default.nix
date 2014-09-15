@@ -1,6 +1,6 @@
-if ! builtins ? nixVersion || builtins.compareVersions "1.6" builtins.nixVersion == 1 then
+if ! builtins ? nixVersion || builtins.compareVersions "1.7" builtins.nixVersion == 1 then
 
-  abort "This version of Nixpkgs requires Nix >= 1.6, please upgrade!"
+  abort "This version of Nixpkgs requires Nix >= 1.7, please upgrade!"
 
 else
 

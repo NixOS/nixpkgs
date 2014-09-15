@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "fcitx-4.2.8.3";
+  name = "fcitx-4.2.8.4";
 
   src = fetchurl {
     url = "http://download.fcitx-im.org/fcitx/${name}_dict.tar.xz";
-    sha256 = "05dw6cbjh2jyjrkr4qx2bcq6nyhhrs0akf6fcjk5a72bgphhwqnb";
+    sha256 = "1yhvqg4q0knywdrh8sljqjn1i72rd8ya0fr70pc0w7fq25013x37";
   };
 
   patchPhase = ''

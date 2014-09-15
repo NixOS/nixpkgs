@@ -1,11 +1,11 @@
 { stdenv, fetchurl, disnix, socat, pkgconfig, getopt }:
 
 stdenv.mkDerivation {
-  name = "disnixos-0.2prebb320d396f93d7062c28d6a54105d8e8196b9d99";
+  name = "disnixos-0.2prec3310e2d8975c45e4ffacec940049fb781739b8d";
   
   src = fetchurl {
-    url = http://hydra.nixos.org/build/9877039/download/3/disnixos-0.2preb10c56eeb1be3046645eea90c779e2d64045581f.tar.gz;
-    sha256 = "1pkpf6vp9q3jjp212lghbs1km8iqh4rm9xa5jm0dqb5ya25f0jf2";
+    url = http://hydra.nixos.org/build/13617499/download/3/disnixos-0.2prec3310e2d8975c45e4ffacec940049fb781739b8d.tar.gz;
+    sha256 = "1kcpzzwy9jc1zz700whnp6sc77yp3wxzr935f07jy55ddkl8mdi5";
   };
   
   buildInputs = [ socat pkgconfig disnix getopt ];

@@ -1,8 +1,7 @@
 { stdenv, fetchurl, pkgconfig
 , libX11, mesa, freeglut
 , jack2, libcdio, libsndfile, libsamplerate
-, SDL, SDL_net, zlib
-}:
+, SDL, SDL_net, zlib }:
 
 stdenv.mkDerivation rec {
 
@@ -25,11 +24,11 @@ stdenv.mkDerivation rec {
     install -m 644 -t $out/share/doc/$name *.css *.def *.html *.php *.png *.txt
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A portable, CLI-driven, SDL+OpenGL-based, multi-system emulator";
     homepage = http://mednafen.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.AndersonTorres ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.linux;
   };
 }

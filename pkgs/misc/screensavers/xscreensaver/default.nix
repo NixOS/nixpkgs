@@ -41,5 +41,8 @@ stdenv.mkDerivation rec {
     description = "A set of screensavers";
     maintainers = with stdenv.lib.maintainers; [ raskin urkud ];
     platforms = with stdenv.lib.platforms; allBut cygwin;
+    inherit version;
+    downloadPage = "http://www.jwz.org/xscreensaver/download.html";
+    updateWalker = true;
   };
 }

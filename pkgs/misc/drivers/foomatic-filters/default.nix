@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Foomatic printing filters";
-    maintainers = stdenv.lib.maintainers.raskin;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2Plus;
   };

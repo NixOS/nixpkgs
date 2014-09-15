@@ -10,16 +10,15 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="ised";
-    version="2.5.0";
+    version = "2.6.0";
     name="${baseName}-${version}";
     url="mirror://sourceforge/project/ised/${name}.tar.bz2";
-    hash="1avfb4ivq6iz50rraci0pcxl0w94899sz6icdqc0l4954y4zs8qd";
   };
 in
 rec {
   src = a.fetchurl {
     url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+    sha256 = "0rf9brqkrad8f3czpfc1bxq9ybv3nxci9276wdxas033c82cqkjs";
   };
 
   inherit (sourceInfo) name version;
@@ -37,11 +36,7 @@ rec {
     platforms = with a.lib.platforms;
       linux;
     license = a.lib.licenses.gpl3Plus;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "ised.sf.net";
-    };
+    inherit version;
   };
 }) x
 

@@ -79,7 +79,6 @@ in
       pkgs.jfsrec
 
       # Some compression/archiver tools.
-      pkgs.unrar
       pkgs.unzip
       pkgs.zip
       pkgs.xz

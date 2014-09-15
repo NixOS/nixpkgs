@@ -1,13 +1,13 @@
 { stdenv, fetchurl, makeWrapper, qt4, utillinux, coreutils, which, p7zip, mtools, syslinux }:
 
-let version = "603"; in
+let version = "608"; in
 
 stdenv.mkDerivation {
   name = "unetbootin-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/unetbootin/UNetbootin/${version}/unetbootin-source-${version}.tar.gz";
-    sha256 = "03nhy1w9q0ycpcni6w61ps1mji859nvmvr1bhnlzi04z0s5ldbwx";
+    sha256 = "1010ccdrblsjr5zid6wl3c3b75ld37lrr1a1xc6dlrhz1gvcb6ff";
   };
 
   sourceRoot = ".";

@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/d-feet \
         --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pygobject3})" \
         --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-        --prefix LD_LIBRARY_PATH : "${gtk3}/lib:${atk}/lib:${libwnck3}/lib" \
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$out/share"
 
       rm $out/share/icons/hicolor/icon-theme.cache

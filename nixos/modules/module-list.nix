@@ -85,7 +85,8 @@
   ./services/amqp/activemq/default.nix
   ./services/amqp/rabbitmq.nix
   ./services/audio/alsa.nix
-  ./services/audio/fuppes.nix
+  # Disabled as fuppes it does no longer builds.
+  # ./services/audio/fuppes.nix
   ./services/audio/mpd.nix
   ./services/audio/mopidy.nix
   ./services/backup/almir.nix
@@ -95,6 +96,8 @@
   ./services/backup/rsnapshot.nix
   ./services/backup/sitecopy-backup.nix
   ./services/backup/tarsnap.nix
+  ./services/computing/torque/server.nix
+  ./services/computing/torque/mom.nix
   ./services/continuous-integration/jenkins/default.nix
   ./services/continuous-integration/jenkins/slave.nix
   ./services/databases/4store-endpoint.nix
@@ -161,10 +164,13 @@
   ./services/misc/folding-at-home.nix
   ./services/misc/gitolite.nix
   ./services/misc/gpsd.nix
+  ./services/misc/mesos-master.nix
+  ./services/misc/mesos-slave.nix
   ./services/misc/nix-daemon.nix
   ./services/misc/nix-gc.nix
   ./services/misc/nixos-manual.nix
   ./services/misc/nix-ssh-serve.nix
+  ./services/misc/phd.nix
   ./services/misc/rippled.nix
   ./services/misc/rogue.nix
   ./services/misc/siproxd.nix
@@ -192,6 +198,8 @@
   ./services/network-filesystems/openafs-client/default.nix
   ./services/network-filesystems/rsyncd.nix
   ./services/network-filesystems/samba.nix
+  ./services/network-filesystems/diod.nix
+  ./services/network-filesystems/yandex-disk.nix
   ./services/networking/amuled.nix
   ./services/networking/atftpd.nix
   ./services/networking/avahi-daemon.nix

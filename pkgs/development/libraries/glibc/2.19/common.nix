@@ -60,6 +60,7 @@ stdenv.mkDerivation ({
       ./fix-math.patch
 
       ./cve-2014-0475.patch
+      ./cve-2014-5119.patch
     ];
 
   postPatch = ''

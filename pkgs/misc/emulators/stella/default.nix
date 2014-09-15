@@ -1,6 +1,5 @@
-{ stdenv, fetchurl
-, pkgconfig, SDL2
-}:
+{ stdenv, fetchurl, pkgconfig
+, SDL2 }:
 
 stdenv.mkDerivation rec {
 

@@ -22,5 +22,6 @@ cabal.mkDerivation (self: {
     description = "Web interface to sproxy";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })

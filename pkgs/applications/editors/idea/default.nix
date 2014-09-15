@@ -42,7 +42,9 @@ let
 
       mkdir -p $out/bin
 
-      jdk=${jdk}/lib/openjdk
+      [ -d ${jdk}/lib/openjdk ] \
+        && jdk=${jdk}/lib/openjdk \
+        || jdk=${jdk}
 
       makeWrapper $out/idea-$build/bin/idea.sh $out/bin/idea \
         --prefix PATH : ${jdk}/bin:${coreutils}/bin:${gnugrep}/bin:${which}/bin:${git}/bin \

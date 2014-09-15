@@ -75,6 +75,31 @@ in
         '';
     };
 
+    networking.nat.forwardPorts = mkOption {
+      type = types.listOf types.optionSet;
+      default = [];
+      example = [ { sourcePort = 8080; destination = "10.0.0.1:80"; } ];
+      options = {
+        sourcePort = mkOption {
+          type = types.int;
+          example = 8080;
+          description = "Source port of the external interface";
+        };
+
+        destination = mkOption {
+          type = types.str;
+          example = "10.0.0.1:80";
+          description = "Forward tcp connection to destination ip:port";
+        };
+      };
+
+      description =
+        ''
+          List of forwarded ports from the external interface to
+          internal destinations by using DNAT.
+        '';
+    };
+
   };
 
 
@@ -117,6 +142,14 @@ in
               iptables -w -t nat -A POSTROUTING \
                 -s '${range}' -o ${cfg.externalInterface} ${dest}
             '') cfg.internalIPs}
+
+            # NAT from external ports to internal ports.
+            ${concatMapStrings (fwd: ''
+              iptables -w -t nat -A PREROUTING \
+                -i ${cfg.externalInterface} -p tcp \
+                --dport ${builtins.toString fwd.sourcePort} \
+                -j DNAT --to-destination ${fwd.destination}
+            '') cfg.forwardPorts}
 
             echo 1 > /proc/sys/net/ipv4/ip_forward
           '';

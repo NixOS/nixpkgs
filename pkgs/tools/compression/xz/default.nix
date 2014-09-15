@@ -10,6 +10,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # In stdenv-linux, prevent a dependency on bootstrap-tools.
+  preHook = "unset CONFIG_SHELL";
+
   meta = {
     homepage = http://tukaani.org/xz/;
     description = "XZ, general-purpose data compression software, successor of LZMA";

@@ -34,7 +34,7 @@ stdenv.mkDerivation {
       variety of locations (git, hg, etc).
       '';
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.the-kenny ];
   };
 }

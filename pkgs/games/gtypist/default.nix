@@ -1,20 +1,26 @@
-{stdenv, fetchurl, ncurses}:
+{stdenv, fetchurl, makeWrapper, ncurses, perl, fortune}:
 
-stdenv.mkDerivation {
-  name = "gtypist-2.9.4";
+stdenv.mkDerivation rec {
+  name = "gtypist-${version}";
+  version = "2.9.5";
 
   src = fetchurl {
-    url = "mirror://gnu/gtypist/gtypist-2.9.4.tar.xz";
-    sha256 = "18f54lh7ihhfvgwk3xd9d087kmganrgi2jd7avhvwn5gcc31vrqq";
+    url = "mirror://gnu/gtypist/gtypist-${version}.tar.xz";
+    sha256 = "0xzrkkmj0b1dw3yr0m9hml2y634cc4h61im6zwcq57s7285z8fn1";
   };
 
-  buildInputs = [ncurses];
+  buildInputs = [ makeWrapper ncurses perl fortune ];
 
-  patchPhase = "sed -e 's#ncursesw/##' -i configure src/*";
+  preFixup = ''
+     wrapProgram "$out/bin/typefortune" \
+       --prefix PATH : "${fortune}/bin" \
+  '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.gnu.org/software/gtypist;
     description = "Universal typing tutor";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pSub ];
   };
 }

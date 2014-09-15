@@ -28,7 +28,7 @@ cabal.mkDerivation (self: {
   meta = {
     homepage = "http://wiki.portal.chalmers.se/agda/";
     description = "A dependently typed functional programming language and proof assistant";
-    license = "unknown";
+    license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
   };
 })

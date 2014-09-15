@@ -72,6 +72,11 @@ rec {
     fullName = "Creative Commons Attribution 3.0";
   };
 
+  cc-by-40 = spdx {
+    shortName = "CC-BY-4.0";
+    fullName = "Creative Commons Attribution 4.0";
+  };
+
   cddl = spdx {
     shortName = "CDDL-1.0";
     fullName = "Common Development and Distribution License 1.0";
@@ -230,6 +235,11 @@ rec {
   openssl = spdx {
     shortName = "OpenSSL";
     fullName = "OpenSSL License";
+  };
+
+  postgresql = spdx {
+    shortName = "PostgreSQL";
+    fullName = "PostgreSQL License";
   };
 
   psfl = spdx {

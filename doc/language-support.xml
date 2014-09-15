@@ -233,6 +233,17 @@ twisted = buildPythonPackage {
 </section>
 
 
+<section xml:id="ssec-language-java"><title>Ruby</title>
+  <para>For example, to package yajl-ruby package, use gem-nix:</para>
+  
+  <screen>
+    $ nix-env -i gem-nix
+    $ gem-nix --no-user-install --nix-file=pkgs/development/interpreters/ruby/generated.nix yajl-ruby
+    $ nix-build -A rubyLibs.yajl-ruby
+  </screen>
+</section>
+
+
 <section xml:id="ssec-language-java"><title>Java</title>
 
 <para>Ant-based Java packages are typically built from source as follows:

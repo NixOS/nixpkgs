@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "flite-1.4";
+  name = "flite-1.9.0";
 
   src = fetchurl {
-    url = "http://www.speech.cs.cmu.edu/flite/packed/${name}/${name}-release.tar.bz2";
-    sha256 = "036dagsydi0qh71ayi6jshfi3ik2md1az3gpi42md9pc18b65ij5";
+    url = "http://www.festvox.org/bard/${name}-current.tar.bz2";
+    sha256 = "197cc2a1f045b1666a29a9b5f035b3d676db6db94a4439d99a03b65e551ae2e0";
   };
 
   buildInputs = [ pkgconfig ];
@@ -16,8 +16,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A small, fast run-time speech synthesis engine";
-    homepage = http://www.speech.cs.cmu.edu/flite/index.html; 
+    homepage = http://www.festvox.org/flite/;
     license = "free-non-copyleft";
+    platforms = stdenv.lib.platforms.linux;
   };
 }
 

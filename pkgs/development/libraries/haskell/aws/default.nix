@@ -26,6 +26,7 @@ cabal.mkDerivation (self: {
     aeson errors mtl QuickCheck quickcheckInstances tagged tasty
     tastyQuickcheck text transformers
   ];
+  jailbreak = true;
   doCheck = false;
   meta = {
     homepage = "http://github.com/aristidb/aws";

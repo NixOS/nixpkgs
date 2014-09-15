@@ -8,7 +8,7 @@ stdenv.mkDerivation (rec {
     sha256 = "0pz58vr12qihq2f0bypjxsb6cf6ajq5258fmfm8s6lvwm3b9xz6a";
   };
 
-  # If architecture-dependant MO files aren't available, they're generated
+  # If architecture-dependent MO files aren't available, they're generated
   # during build, so we need gettext for cross-builds.
   crossAttrs.buildInputs = [ gettext ];
 
