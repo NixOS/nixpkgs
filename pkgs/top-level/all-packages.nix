@@ -2175,6 +2175,8 @@ let
 
   solr = callPackage ../servers/search/solr { };
 
+  solvespace = callPackage ../applications/graphics/solvespace { };
+
   sparsehash = callPackage ../development/libraries/sparsehash { };
 
   spiped = callPackage ../tools/networking/spiped { };
