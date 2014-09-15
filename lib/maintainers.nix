@@ -117,6 +117,7 @@
   the-kenny = "Moritz Ulrich <moritz@tarn-vedra.de>";
   thoughtpolice = "Austin Seipp <aseipp@pobox.com>";
   tomberek = "Thomas Bereknyei <tomberek@gmail.com>";
+  tstrobel = "Thomas Strobel <ts468@cam.ac.uk>";
   ttuegel = "Thomas Tuegel <ttuegel@gmail.com>";
   tv = "Tomislav Viljetić <tv@shackspace.de>";
   urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>";
