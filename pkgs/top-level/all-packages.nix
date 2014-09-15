@@ -1429,6 +1429,8 @@ let
 
   keychain = callPackage ../tools/misc/keychain { };
 
+  kibana = callPackage ../development/tools/misc/kibana { };
+
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
   less = callPackage ../tools/misc/less { };
