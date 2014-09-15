@@ -17,12 +17,14 @@ stdenv.mkDerivation rec {
   in ''
     mkdir -pv $out;
     mkdir -pv ${bin_dir};
-    cp mudlet ${bin_dir};
-    cp LuaGlobal.lua ${bin_dir};
-    cp -r mudlet-lua ${bin_dir};
-    cp -r doc ${bin_dir};
-    cp -r icons ${bin_dir};
-    cp -r fonts ${bin_dir};
+    cp mudlet $out;
+    cp LuaGlobal.lua $out;
+    cp -r mudlet-lua $out;
+    cp -r doc $out;
+    cp -r icons $out;
+    cp -r fonts $out;
+
+    ln -s $out/mudlet ${bin_dir}/mudlet;
   '';
 
   patches = [ ./libs.patch ];
