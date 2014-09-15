@@ -8378,6 +8378,8 @@ let
 
   alchemy = callPackage ../applications/graphics/alchemy { };
 
+  alock = callPackage ../misc/screensavers/alock { };
+
   ams-lv2 = callPackage ../applications/audio/ams-lv2 { };
 
   amsn = callPackage ../applications/networking/instant-messengers/amsn { };

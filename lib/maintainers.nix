@@ -50,6 +50,7 @@
   ertes = "Ertugrul Söylemez <ertesx@gmx.de>";
   falsifian = "James Cook <james.cook@utoronto.ca>";
   flosse = "Markus Kohlhase <mail@markus-kohlhase.de>";
+  ftrvxmtrx = "Siarhei Zirukin <ftrvxmtrx@gmail.com>";
   funfunctor = "Edward O'Callaghan <eocallaghan@alterapraxis.com>";
   fuuzetsu = "Mateusz Kowalczyk <fuuzetsu@fuuzetsu.co.uk>";
   gal_bolle = "Florent Becker <florent.becker@ens-lyon.org>";
