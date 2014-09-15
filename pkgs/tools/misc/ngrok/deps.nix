@@ -8,7 +8,7 @@ let
       src = fetchhg {
         url = "https://bitbucket.org/kardianos/osext";
         rev = "10";
-        sha256 = "";
+        sha256 = "1sj9r5pm28l9sqx6354fwp032n53znx9k8495k3dfnyqjrkvlw6n";
       };
     }
     {
@@ -16,7 +16,7 @@ let
       src = fetchhg {
         url = "https://code.google.com/p/log4go";
         rev = "48";
-        sha256 = "";
+        sha256 = "0q906sxrmwir295virfibqvdzlaj340qh2r4ysx1ccjrjazc0q5p";
       };
     }
     {
