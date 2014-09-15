@@ -657,6 +657,8 @@ let
 
   mcrypt = callPackage ../tools/misc/mcrypt { };
 
+  mstflint = callPackage ../tools/misc/mstflint { };
+
   mcelog = callPackage ../os-specific/linux/mcelog { };
 
   apparix = callPackage ../tools/misc/apparix { };
