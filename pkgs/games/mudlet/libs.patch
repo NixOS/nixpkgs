@@ -1,0 +1,20 @@
+--- a/src/src.pro	2014-09-11 12:13:50.959338542 +0400
++++ b/src/src.pro	2014-09-15 10:56:20.189594118 +0400
+@@ -6,7 +6,7 @@
+ QT += network opengl uitools multimedia
+ DEPENDPATH += .
+ INCLUDEPATH += .
+-LIBLUA = -llua5.1
++LIBLUA = -llua
+ #!exists(/usr/lib/x86_64-linux-gnu/liblua5.1.a):LIBLUA = -llua
+ 
+ # automatically link to LuaJIT if it exists
+@@ -14,7 +14,7 @@
+ 
+ unix:LIBS += -lpcre \
+     $$LIBLUA \
+-    -lhunspell \
++    -lhunspell-1.3 \
+     -L/usr/local/lib/ \
+     -lyajl \
+     -lGLU \

@@ -5947,6 +5947,8 @@ let
     texinfo = texinfo4;
   };
 
+  mudlet = callPackage ../games/mudlet { };
+
   muparser = callPackage ../development/libraries/muparser { };
 
   mygpoclient = callPackage ../development/python-modules/mygpoclient { };
