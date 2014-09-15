@@ -3116,6 +3116,8 @@ let
 
   go-repo-root = callPackage ../development/tools/misc/go-repo-root { };
 
+  go-bindata = callPackage ../tools/misc/go-bindata { };
+
   gox = callPackage ../development/compilers/go/gox.nix { };
 
   gprolog = callPackage ../development/compilers/gprolog { };
