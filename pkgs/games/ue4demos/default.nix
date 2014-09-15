@@ -53,6 +53,14 @@ let
     };
 
 in {
+  tappy_chicken = buildDemo rec {
+    name = "ue4demos-tappy_chicken";
+    src = fetchurl {
+      url = "http://ue4linux.raxxy.com/tappy_chicken.zip";
+      sha256 = "0lwhvk3lpb2r5ng2cnzk7fpjj5lwhy2sch1a8v154x1xfhfb3h4v";
+    };
+  };
+
   swing_ninja = buildDemo rec {
     name = "ue4demos-swing_ninja";
     src = fetchurl {
