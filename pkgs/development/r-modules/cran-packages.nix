@@ -38,7 +38,7 @@
 
 let
 
-  inherit (pkgs) R fetchurl stdenv curl;
+  inherit (pkgs) R fetchurl stdenv curl gdal geos proj;
 
   buildRPackage = import ./generic-builder.nix R;
 
@@ -4387,11 +4387,11 @@ let self = _self // overrides; _self = with self; {
   Rgbp = derive { name="Rgbp"; version="1.0.6"; sha256="1j4j7g9z7p592f82k0yvibrydynkd9v1ldil2vf3ikc650bn2l02"; depends=[sn]; };
   RGCCA = derive { name="RGCCA"; version="2.0"; sha256="0mcp51z5jkn7yxmspp5cvmmvq0cwh7hj66g7wjmxsi74dwxcinvg"; depends=[MASS]; };
   rgcvpack = derive { name="rgcvpack"; version="0.1-4"; sha256="1vlvw9slrra18qaizqk2xglzky0i6z3bsan85x908wrg8drss4h5"; depends=[]; };
-  rgdal = derive { name="rgdal"; version="0.8-16"; sha256="17qk7kd0l0l52nyf6drr0gv4b0ibkggyn6g3ky9flsjy05b3wg8j"; depends=[sp]; };
+  rgdal = derive { name="rgdal"; version="0.8-16"; sha256="17qk7kd0l0l52nyf6drr0gv4b0ibkggyn6g3ky9flsjy05b3wg8j"; depends=[sp gdal proj]; };
   RGENERATE = derive { name="RGENERATE"; version="1.1"; sha256="1da3b50cfv5jb63ijzbnr226jadbww2bapcxzx8am7zydm6gqnss"; depends=[RMAWGEN]; };
   RGenetics = derive { name="RGenetics"; version="0.1"; sha256="0x5sspd67hh08qm62whlnnd838m0np29q3bfzgwp6j85lhil3jrx"; depends=[]; };
   rgenoud = derive { name="rgenoud"; version="5.7-12"; sha256="17gzkn4laylnksy8h2w8c0whcxpchsx7bwjzk1q5sfqxswclqq0g"; depends=[]; };
-  rgeos = derive { name="rgeos"; version="0.3-6"; sha256="134cppgg5349i5qs9k2161fakd15l1fx1x6mgv28c5vic2xdm4wl"; depends=[sp]; };
+  rgeos = derive { name="rgeos"; version="0.3-6"; sha256="134cppgg5349i5qs9k2161fakd15l1fx1x6mgv28c5vic2xdm4wl"; depends=[sp geos]; };
   rgexf = derive { name="rgexf"; version="0.14.3.11"; sha256="16mil1csyzkaywcdrjzz5r60n4xhhinxawg30skc7d9awkf26qfa"; depends=[XML Rook igraph]; };
   rggobi = derive { name="rggobi"; version="2.1.20"; sha256="1a7l68h3m9cq14k7y96ijgh0iz3d6j4j2anxg50pykz20lnykr9g"; depends=[RGtk2]; };
   RGIFT = derive { name="RGIFT"; version="0.1-5"; sha256="1745fs4bq0ss39fiwljspvrmnkgbbpc1fjvhvcrsmp2iizq12sgn"; depends=[]; };
