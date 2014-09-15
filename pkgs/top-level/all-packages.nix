@@ -5405,6 +5405,8 @@ let
 
   libharu = callPackage ../development/libraries/libharu { };
 
+  libibmad = callPackage ../development/libraries/libibmad { };
+
   libibumad = callPackage ../development/libraries/libibumad { };
 
   libical = callPackage ../development/libraries/libical { };
