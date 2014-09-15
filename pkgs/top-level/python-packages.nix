@@ -10362,9 +10362,10 @@ let
   graphite_influxdb = buildPythonPackage rec {
     name = "graphite-influxdb-0.3";
 
-    src = fetchurl {
-      url = "https://pypi.python.org/packages/source/g/graphite-influxdb/${name}.tar.gz";
-      md5 = "5ce64ff6bb0b41c99e57486d6ec86eb7";
+    src = fetchgit {
+      url = "https://github.com/vimeo/graphite-influxdb.git";
+      rev = "2273d12a24e1d804685a36debfd4224b7416b62f";
+      sha256 = "e386eaf190793d3ad0a42a74b9e137a968a51fc3806f602ff756e09c0c0648a8";
     };
 
     propagatedBuildInputs = [ influxdb graphite_api ];
