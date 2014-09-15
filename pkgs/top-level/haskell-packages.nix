@@ -1860,6 +1860,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   pdfToolboxCore = callPackage ../development/libraries/haskell/pdf-toolbox-core {};
 
+  pdfToolboxContent = callPackage ../development/libraries/haskell/pdf-toolbox-content {};
+
   pem = callPackage ../development/libraries/haskell/pem {};
 
   permutation = callPackage ../development/libraries/haskell/permutation {};
