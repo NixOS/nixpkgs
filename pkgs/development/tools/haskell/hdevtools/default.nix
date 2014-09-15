@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   isLibrary = false;
   isExecutable = true;
   wrapExecutables = true;
-  patches = [ ./github-schell.diff ];
+  patches = [ (fetchurl { url = "https://github.com/ts468/hdevtools/pull/2.patch"; md5 = "256609d2d3f5b719caa0002ee579d169"; }) ];
   buildDepends = [ cmdargs ghcPaths network syb time ];
   meta = {
     homepage = "https://github.com/bitc/hdevtools/";
