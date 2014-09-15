@@ -1,7 +1,7 @@
 { fetchurl, pkgs, stdenv, qt5, yajl, gl117, zziplib, quazip, zlib, zip, lua5_1, hunspell, boost, libzip }:
 
 stdenv.mkDerivation rec {
-  name = "mudlet-2.0";
+  name = "mudlet-2.1";
 
   src = fetchurl {
     url = "http://sourceforge.net/code-snapshots/git/m/mu/mudlet/code.git/mudlet-code-f30a55f176c853d1b4ef9f0da8069213f27eaa57.zip";
@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
     mkdir -pv $out;
     mkdir -pv ${bin_dir};
     cp mudlet ${bin_dir};
+    cp LuaGlobal.lua ${bin_dir};
     cp -r mudlet-lua ${bin_dir};
+    cp -r doc ${bin_dir};
+    cp -r icons ${bin_dir};
+    cp -r fonts ${bin_dir};
   '';
 
   patches = [ ./libs.patch ];
