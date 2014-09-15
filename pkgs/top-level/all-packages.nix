@@ -9652,6 +9652,8 @@ let
 
   mrxvt = callPackage ../applications/misc/mrxvt { };
 
+  mudlet = callPackage ../games/mudlet { };
+
   multisync = callPackage ../applications/misc/multisync {
     inherit (gnome) ORBit2 libbonobo libgnomeui GConf;
   };
