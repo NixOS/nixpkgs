@@ -11264,6 +11264,10 @@ let
 
   opensmt = callPackage ../applications/science/logic/opensmt { };
 
+  ott = callPackage ../applications/science/logic/ott {
+    camlp5 = ocamlPackages.camlp5_transitional;
+  };
+
   otter = callPackage ../applications/science/logic/otter {};
 
   picosat = callPackage ../applications/science/logic/picosat {};
