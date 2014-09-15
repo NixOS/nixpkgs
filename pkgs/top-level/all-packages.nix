@@ -9455,6 +9455,8 @@ let
 
   moc = callPackage ../applications/audio/moc { };
 
+  monero = callPackage ../applications/misc/monero { };
+
   monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
 
   monodevelop = callPackage ../applications/editors/monodevelop {
