@@ -98,6 +98,18 @@ in {
         type = types.listOf types.str;
       };
 
+      host = mkOption {
+        description = "Graphite web service listen address.";
+        default = "127.0.0.1";
+        type = types.str;
+      };
+
+      port = mkOption {
+        description = "Graphite api service port.";
+        default = 8080;
+        type = types.int;
+      };
+
       extraConfig = mkOption {
         description = "Extra configuration for graphite api.";
         default = ''
@@ -320,7 +332,7 @@ in {
       serviceConfig = {
         ExecStart = ''
           ${pkgs.python27Packages.waitress}/bin/waitress-serve \
-          --host=${cfg.web.host} --port=${toString cfg.web.port} \
+          --host=${cfg.api.host} --port=${toString cfg.api.port} \
           graphite_api.app:app 
         '';
         User = "graphite";
