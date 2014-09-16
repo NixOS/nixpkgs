@@ -370,7 +370,7 @@ simple to do.  Currently the following builder objects are supported:
       };
       name = ''builder-3.2.2'';
       requiredGems = [  ];
-      sha256 = ''no hash'';
+      sha256 = ''14fii7ab8qszrvsvhz6z2z3i4dw0h41a62fjr2h1j8m41vbrmyv2'';
     };
     buildr_1_4_20 = {
       basename = ''buildr'';
