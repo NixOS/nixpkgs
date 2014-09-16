@@ -2097,7 +2097,7 @@ let
   s3cmd_15_pre_81e3842f7a = lowPrio (callPackage ../tools/networking/s3cmd/git.nix { });
 
   s3sync = callPackage ../tools/networking/s3sync {
-    ruby = ruby18;
+    ruby = ruby_1_8;
   };
 
   s6Dns = callPackage ../tools/networking/s6-dns { };
