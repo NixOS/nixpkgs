@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     find tests -type f | xargs sed -e 's@/bin/pwd@${coreutils}&@g' -i
-    find . -name pcsc-wrapper.c | xargs sed -i 's/typedef unsinged int pcsc_dword_t/typedef unsigned int pcsc_dword_t/'
   '';
 
   configureFlags =
