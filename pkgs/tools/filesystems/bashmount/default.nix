@@ -1,12 +1,14 @@
-{stdenv, fetchurl}:
+{stdenv, fetchFromGitHub}:
 
 stdenv.mkDerivation rec {
   name = "bashmount-${version}";
   version = "3.2.0";
 
-  src = fetchurl {
-    url = "https://github.com/jamielinux/bashmount/archive/${version}.tar.gz";
-    sha256 = "08ncksz8xl0qg5y5qf64b9adfnsg6769wf5bw8lv8q0zjbhjiwrj";
+  src = fetchFromGitHub {
+    owner = "jamielinux";
+    repo = "bashmount";
+    rev = version;
+    sha256 = "0rki4s0jgz6vkywc6hcx9qa551r5bnjs7sw0rdh93k64l32kh644";
   };
 
   installPhase = ''
