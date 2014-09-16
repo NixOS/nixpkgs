@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, makeWrapper }:
+{ fetchurl, stdenv, coreutils, makeWrapper }:
 
 let version = "1.9.4"; in
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
       if [ -z "\$JAVA_HOME" ]; then
           for i in javac java gij; do
               if p="\$(type -p \$i)"; then
-                  export JAVA_HOME="\$(dirname \$(dirname \$(readlink -f \$p)))"
+                  export JAVA_HOME="\$(${coreutils}/bin/dirname \$(${coreutils}/bin/dirname \$(${coreutils}/bin/readlink -f \$p)))"
                   break
               fi
           done
