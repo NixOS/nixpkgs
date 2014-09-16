@@ -117,6 +117,20 @@ in {
             directories:
                 - ${dataDir}/whisper
         '';
+        example = literalExample ''
+          allowed_origins:
+            - dashboard.example.com
+          cheat_times: true
+          influxdb:
+            host: localhost
+            port: 8086
+            user: influxdb
+            pass: influxdb
+            db: metrics
+          cache:
+            CACHE_TYPE: 'filesystem'
+            CACHE_DIR: '/tmp/graphite-api-cache'
+        '';
         type = types.str;
       };
     };
