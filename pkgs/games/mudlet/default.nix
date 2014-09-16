@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
   version = "3.1";
 
   src = fetchurl {
-    url = "https://github.com/Mudlet/Mudlet/archive/release_31.zip";
-    sha256 = "43cb70e5e559cb265440cd0e68e659ab102a3ebf98b9eb2061b6685e04a6449c";
+    url = "https://github.com/Mudlet/Mudlet/archive/6bc55dde0499cffab48b0021f27dcff1d57b0b66.zip";
+    sha256 = "c7b9a383d2cf393da730ce07ac8f06478eaec1fdf730054e837e58c598222d38";
   };
 
   buildInputs = [ pkgs.unzip qt5 lua5_1 hunspell libzip yajl boost ];
