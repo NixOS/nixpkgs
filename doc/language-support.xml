@@ -233,7 +233,7 @@ twisted = buildPythonPackage {
 </section>
 
 
-<section xml:id="ssec-language-java"><title>Ruby</title>
+<section xml:id="ssec-language-ruby"><title>Ruby</title>
   <para>For example, to package yajl-ruby package, use gem-nix:</para>
   
   <screen>
@@ -241,6 +241,11 @@ twisted = buildPythonPackage {
     $ gem-nix --no-user-install --nix-file=pkgs/development/interpreters/ruby/generated.nix yajl-ruby
     $ nix-build -A rubyLibs.yajl-ruby
   </screen>
+</section>
+
+
+<section xml:id="ssec-language-go"><title>Go</title>
+  <para>To extract dependency information from a Go package in automated way use <link xlink:href="https://github.com/cstrahan/go2nix">go2nix</link>.</para>
 </section>
 
 
