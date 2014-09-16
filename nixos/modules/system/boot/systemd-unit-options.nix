@@ -230,6 +230,15 @@ in rec {
       '';
     };
 
+    reload = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        Shell commands executed when the service's main process
+        is reloaded.
+      '';
+    };
+
     preStop = mkOption {
       type = types.lines;
       default = "";
