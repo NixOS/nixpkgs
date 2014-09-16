@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.2.0";
 
   src = fetchurl {
-    url = "https://github/jamielinux/bashmount/archive/${version}.tar.gz";
+    url = "https://github.com/jamielinux/bashmount/archive/${version}.tar.gz";
     sha256 = "08ncksz8xl0qg5y5qf64b9adfnsg6769wf5bw8lv8q0zjbhjiwrj";
   };
 
