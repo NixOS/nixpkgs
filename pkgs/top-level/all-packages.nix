@@ -1240,6 +1240,10 @@ let
 
   grafx2 = callPackage ../applications/graphics/grafx2 {};
 
+  grails = callPackage ../development/web/grails {
+    jdkPath = "${openjdk}/lib/openjdk";
+  };
+
   graphviz = callPackage ../tools/graphics/graphviz { };
 
   /* Readded by Michael Raskin. There are programs in the wild
