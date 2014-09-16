@@ -6,7 +6,7 @@ with stdenv.lib;
 let
   os = stdenv.lib.optionalString;
   majorVersion = "5.10";
-  minorVersion = "0";
+  minorVersion = "1";
   version = "${majorVersion}.${minorVersion}";
 in
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   name = "vtk-${os (qtLib != null) "qvtk-"}${version}";
   src = fetchurl {
     url = "${meta.homepage}files/release/${majorVersion}/vtk-${version}.tar.gz";
-    md5 = "a0363f78910f466ba8f1bd5ab5437cb9";
+    sha256 = "1fxxgsa7967gdphkl07lbfr6dcbq9a72z5kynlklxn7hyp0l18pi";
   };
 
   buildInputs = [ cmake mesa libX11 xproto libXt ]
