@@ -3822,12 +3822,20 @@ let
 
   ruby18 = callPackage ../development/interpreters/ruby/ruby-18.nix { };
   ruby19 = callPackage ../development/interpreters/ruby/ruby-19.nix { };
-  ruby2 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.0.nix { });
-  ruby21 = callPackage ../development/interpreters/ruby/ruby-2.1.2.nix { };
+  ruby2 = lowPrio (callPackage ../development/interpreters/ruby/ruby-20.nix { });
+  ruby21 = lowPrio (callPackage ../development/interpreters/ruby/ruby-21.nix { });
 
   ruby = ruby19;
 
-  rubyLibs = recurseIntoAttrs (callPackage ../development/interpreters/ruby/libs.nix { });
+  rubyLibsWith = myruby: callPackage ../development/interpreters/ruby/gems.nix {
+    ruby = myruby;
+  };
+
+  ruby18Libs = rubyLibsWith ruby18;
+  ruby19Libs = rubyLibsWith ruby19;
+  ruby2Libs = rubyLibsWith ruby2;
+  ruby21Libs = rubyLibsWith ruby21;
+  rubyLibs = recurseIntoAttrs ruby19Libs;
 
   rake = rubyLibs.rake;
 
@@ -6509,6 +6517,10 @@ let
   };
 
   ucommon = callPackage ../development/libraries/ucommon { };
+
+  v8_3_16_14 = callPackage ../development/libraries/v8/3.16.14.nix {
+    inherit (pythonPackages) gyp;
+  };
 
   v8 = callPackage ../development/libraries/v8 {
     inherit (pythonPackages) gyp;
