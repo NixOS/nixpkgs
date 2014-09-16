@@ -6672,6 +6672,8 @@ let
 
   bitvector = callPackage ../development/libraries/agda/bitvector {};
 
+  categories = callPackage ../development/libraries/agda/categories {};
+
   ### DEVELOPMENT / LIBRARIES / JAVA
 
   atermjava = callPackage ../development/libraries/java/aterm {
