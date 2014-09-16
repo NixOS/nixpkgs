@@ -209,6 +209,10 @@ in rec {
     assert list != []; elemAt list (dec (length list));
 
 
+  # Return all elements but the last
+  init = list: assert list != []; take (length list - 1) list;
+
+
   # Zip two lists together.
   zipTwoLists = xs: ys:
     let
