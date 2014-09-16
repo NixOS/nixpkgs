@@ -1478,6 +1478,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   lensFamilyCore = callPackage ../development/libraries/haskell/lens-family-core {};
 
+  lensFamily = callPackage ../development/libraries/haskell/lens-family {};
+
+  lensFamilyTh = callPackage ../development/libraries/haskell/lens-family-th {};
+
   lenses = callPackage ../development/libraries/haskell/lenses {};
 
   leveldbHaskell = callPackage ../development/libraries/haskell/leveldb-haskell {};
