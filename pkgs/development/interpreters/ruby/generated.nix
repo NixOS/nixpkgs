@@ -20,11 +20,15 @@ g: # Get dependencies from patched gems
     bitbucket_backup = g.bitbucket_backup_0_3_1;
     builder = g.builder_3_2_2;
     buildr = g.buildr_1_4_20;
-    bundler = g.bundler_1_7_2;
+    bundler = g.bundler_1_7_3;
     childprocess = g.childprocess_0_5_3;
     chronic = g.chronic_0_10_2;
+    chunky_png = g.chunky_png_1_3_1;
     coderay = g.coderay_1_1_0;
-    cucumber = g.cucumber_1_3_16;
+    compass = g.compass_1_0_1;
+    compass_core = g.compass_core_1_0_1;
+    compass_import_once = g.compass_import_once_1_0_5;
+    cucumber = g.cucumber_1_3_17;
     daemons = g.daemons_1_1_9;
     diff_lcs = g.diff_lcs_1_2_5;
     dimensions = g.dimensions_1_2_0;
@@ -90,6 +94,7 @@ g: # Get dependencies from patched gems
     railties = g.railties_4_1_6;
     rake = g.rake_10_3_2;
     rb_fsevent = g.rb_fsevent_0_9_4;
+    rb_inotify = g.rb_inotify_0_9_5;
     rdiscount = g.rdiscount_2_1_7_1;
     rdoc = g.rdoc_4_1_2;
     remote_syslog = g.remote_syslog_1_6_14;
@@ -104,7 +109,7 @@ g: # Get dependencies from patched gems
     rspec_expectations = g.rspec_expectations_2_14_5;
     rspec_mocks = g.rspec_mocks_2_14_6;
     rubyzip = g.rubyzip_1_1_6;
-    sass = g.sass_3_4_3;
+    sass = g.sass_3_4_4;
     selenium_webdriver = g.selenium_webdriver_2_43_0;
     servolux = g.servolux_0_10_0;
     sinatra = g.sinatra_1_4_5;
@@ -138,7 +143,7 @@ g: # Get dependencies from patched gems
     xml_simple = g.xml_simple_1_1_2;
     yajl_ruby = g.yajl_ruby_1_2_1;
   };
-  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''cucumber'' ''erubis'' ''execjs'' ''fakes3'' ''foreman'' ''gettext'' ''iconv'' ''jsduck'' ''lockfile'' ''mechanize'' ''nix'' ''papertrail-cli'' ''rails'' ''rake'' ''rb-fsevent'' ''rdoc'' ''remote_syslog'' ''riemann-dash'' ''right_aws'' ''rmail'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''taskjuggler'' ''terminal-notifier'' ''thin'' ''travis'' ''trollop'' ''uglifier'' ''uuid'' ''xapian-full'' ''xapian-ruby'' ''yajl-ruby'' ];
+  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''compass'' ''cucumber'' ''erubis'' ''execjs'' ''fakes3'' ''foreman'' ''gettext'' ''iconv'' ''jsduck'' ''lockfile'' ''mechanize'' ''nix'' ''papertrail-cli'' ''rails'' ''rake'' ''rb-fsevent'' ''rdoc'' ''remote_syslog'' ''riemann-dash'' ''right_aws'' ''rmail'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''taskjuggler'' ''terminal-notifier'' ''thin'' ''travis'' ''trollop'' ''uglifier'' ''uuid'' ''xapian-full'' ''xapian-ruby'' ''yajl-ruby'' ];
   gems = {
     ZenTest_4_10_1 = {
       basename = ''ZenTest'';
@@ -365,7 +370,7 @@ simple to do.  Currently the following builder objects are supported:
       };
       name = ''builder-3.2.2'';
       requiredGems = [  ];
-      sha256 = ''14fii7ab8qszrvsvhz6z2z3i4dw0h41a62fjr2h1j8m41vbrmyv2'';
+      sha256 = ''no hash'';
     };
     buildr_1_4_20 = {
       basename = ''buildr'';
@@ -380,19 +385,19 @@ for those one-off tasks, with a language that's a joy to use.
 '';
       };
       name = ''buildr-1.4.20'';
-      requiredGems = [ g.rake_0_9_2_2 g.builder_3_2_2 g.net_ssh_2_7_0 g.net_sftp_2_1_2 g.rubyzip_0_9_9 g.json_pure_1_8_0 g.hoe_3_7_1 g.rjb_1_4_9 g.atoulme_Antwrap_0_7_4 g.diff_lcs_1_2_4 g.rspec_expectations_2_14_3 g.rspec_mocks_2_14_3 g.rspec_core_2_14_5 g.rspec_2_14_1 g.xml_simple_1_1_2 g.minitar_0_5_4 g.bundler_1_7_2 g.orderedhash_0_0_6 ];
+      requiredGems = [ g.rake_0_9_2_2 g.builder_3_2_2 g.net_ssh_2_7_0 g.net_sftp_2_1_2 g.rubyzip_0_9_9 g.json_pure_1_8_0 g.hoe_3_7_1 g.rjb_1_4_9 g.atoulme_Antwrap_0_7_4 g.diff_lcs_1_2_4 g.rspec_expectations_2_14_3 g.rspec_mocks_2_14_3 g.rspec_core_2_14_5 g.rspec_2_14_1 g.xml_simple_1_1_2 g.minitar_0_5_4 g.bundler_1_7_3 g.orderedhash_0_0_6 ];
       sha256 = ''0x4ffblw7jg0z49ywfm5abfxgg23di3d661czndwi904cvmghrkv'';
     };
-    bundler_1_7_2 = {
+    bundler_1_7_3 = {
       basename = ''bundler'';
       meta = {
         description = ''The best way to manage your application's dependencies'';
         homepage = ''http://bundler.io'';
         longDescription = ''Bundler manages an application's dependencies through its entire life, across many machines, systematically and repeatably'';
       };
-      name = ''bundler-1.7.2'';
+      name = ''bundler-1.7.3'';
       requiredGems = [  ];
-      sha256 = ''1xfacbivyi40ig9jzpsv2z42vwghf77n4r65ls0pcnbqn4ypqyhc'';
+      sha256 = ''00r3b4bchiqbd12y896hmrp5sa6n4391fygg1jmvljx1635x5kyj'';
     };
     childprocess_0_5_3 = {
       basename = ''childprocess'';
@@ -416,6 +421,33 @@ for those one-off tasks, with a language that's a joy to use.
       requiredGems = [  ];
       sha256 = ''1hrdkn4g8x7dlzxwb1rfgr8kw3bp4ywg5l4y4i9c2g5cwv62yvvn'';
     };
+    chunky_png_1_3_1 = {
+      basename = ''chunky_png'';
+      meta = {
+        description = ''Pure ruby library for read/write, chunk-level access to PNG files'';
+        homepage = ''http://wiki.github.com/wvanbergen/chunky_png'';
+        longDescription = ''    This pure Ruby library can read and write PNG images without depending on an external 
+    image library, like RMagick. It tries to be memory efficient and reasonably fast.
+    
+    It supports reading and writing all PNG variants that are defined in the specification, 
+    with one limitation: only 8-bit color depth is supported. It supports all transparency, 
+    interlacing and filtering options the PNG specifications allows. It can also read and 
+    write textual metadata from PNG files. Low-level read/write access to PNG chunks is
+    also possible.
+    
+    This library supports simple drawing on the image canvas and simple operations like
+    alpha composition and cropping. Finally, it can import from and export to RMagick for 
+    interoperability.
+    
+    Also, have a look at OilyPNG at http://github.com/wvanbergen/oily_png. OilyPNG is a 
+    drop in mixin module that implements some of the ChunkyPNG algorithms in C, which 
+    provides a massive speed boost to encoding and decoding.
+'';
+      };
+      name = ''chunky_png-1.3.1'';
+      requiredGems = [  ];
+      sha256 = ''1kpcv2wrx3zyfi5jbsnd9da1wmkjwidnmpshq6vhzz0r8hp7ai8a'';
+    };
     coderay_1_1_0 = {
       basename = ''coderay'';
       meta = {
@@ -427,16 +459,49 @@ for those one-off tasks, with a language that's a joy to use.
       requiredGems = [  ];
       sha256 = ''059wkzlap2jlkhg460pkwc1ay4v4clsmg1bp4vfzjzkgwdckr52s'';
     };
-    cucumber_1_3_16 = {
+    compass_1_0_1 = {
+      basename = ''compass'';
+      meta = {
+        description = ''A Real Stylesheet Framework'';
+        homepage = ''http://compass-style.org'';
+        longDescription = ''Compass is a Sass-based Stylesheet Framework that streamlines the creation and maintenance of CSS.'';
+      };
+      name = ''compass-1.0.1'';
+      requiredGems = [ g.sass_3_4_4 g.compass_core_1_0_1 g.compass_import_once_1_0_5 g.chunky_png_1_3_1 g.rb_fsevent_0_9_4 g.rb_inotify_0_9_5 ];
+      sha256 = ''0cxb6nbj37wz2zwwb4pkbvg9pg0ymamxx9v400h9ibvlb5n0ri40'';
+    };
+    compass_core_1_0_1 = {
+      basename = ''compass_core'';
+      meta = {
+        description = ''The Compass core stylesheet library'';
+        homepage = ''http://compass-style.org/reference/compass/'';
+        longDescription = ''The Compass core stylesheet library and minimum required ruby extensions. This library can be used stand-alone without the compass ruby configuration file or compass command line tools.'';
+      };
+      name = ''compass-core-1.0.1'';
+      requiredGems = [ g.sass_3_4_4 g.multi_json_1_10_1 ];
+      sha256 = ''0zhbmgjq6s9j2qdx3cz0v8s216mh8g0ymk4fzmq3c4an9rryl1zx'';
+    };
+    compass_import_once_1_0_5 = {
+      basename = ''compass_import_once'';
+      meta = {
+        description = ''Speed up your Sass compilation by making @import only import each file once.'';
+        homepage = ''https://github.com/chriseppstein/compass/tree/master/import-once'';
+        longDescription = ''Changes the behavior of Sass's @import directive to only import a file once.'';
+      };
+      name = ''compass-import-once-1.0.5'';
+      requiredGems = [ g.sass_3_4_4 ];
+      sha256 = ''0bn7gwbfz7jvvdd0qdfqlx67fcb83gyvxqc7dr9fhcnks3z8z5rq'';
+    };
+    cucumber_1_3_17 = {
       basename = ''cucumber'';
       meta = {
-        description = ''cucumber-1.3.16'';
+        description = ''cucumber-1.3.17'';
         homepage = ''http://cukes.info'';
         longDescription = ''Behaviour Driven Development with elegance and joy'';
       };
-      name = ''cucumber-1.3.16'';
+      name = ''cucumber-1.3.17'';
       requiredGems = [ g.builder_3_2_2 g.diff_lcs_1_2_5 g.gherkin_2_12_2 g.multi_json_1_10_1 g.multi_test_0_1_1 ];
-      sha256 = ''11cjw2d03r41b5pn5in6q822s3v6bpd8isxc9dl7by01jrzi0662'';
+      sha256 = ''1gjnxxrcf43mzs5qlg1m0b61g8vwfzjkj1wwi6xbpsqlhcwjjq1x'';
     };
     daemons_1_1_9 = {
       basename = ''daemons'';
@@ -1325,7 +1390,7 @@ request helpers feature.'';
         longDescription = ''Ruby on Rails is a full-stack web framework optimized for programmer happiness and sustainable productivity. It encourages beautiful code by favoring convention over configuration.'';
       };
       name = ''rails-4.1.6'';
-      requiredGems = [ g.activesupport_4_1_6 g.actionpack_4_1_6 g.actionview_4_1_6 g.activemodel_4_1_6 g.activerecord_4_1_6 g.actionmailer_4_1_6 g.railties_4_1_6 g.bundler_1_7_2 g.sprockets_rails_2_1_4 ];
+      requiredGems = [ g.activesupport_4_1_6 g.actionpack_4_1_6 g.actionview_4_1_6 g.activemodel_4_1_6 g.activerecord_4_1_6 g.actionmailer_4_1_6 g.railties_4_1_6 g.bundler_1_7_3 g.sprockets_rails_2_1_4 ];
       sha256 = ''187g903gmni3prd5i768yfgszc4ak5kmrazavr93d0ybfdbcjlgk'';
     };
     railties_4_1_6 = {
@@ -1393,6 +1458,17 @@ Rake has the following features:
       requiredGems = [  ];
       sha256 = ''12if5xsik64kihxf5awsyavlp595y47g9qz77vfp2zvkxgglaka7'';
     };
+    rb_inotify_0_9_5 = {
+      basename = ''rb_inotify'';
+      meta = {
+        description = ''A Ruby wrapper for Linux's inotify, using FFI'';
+        homepage = ''http://github.com/nex3/rb-inotify'';
+        longDescription = ''A Ruby wrapper for Linux's inotify, using FFI'';
+      };
+      name = ''rb-inotify-0.9.5'';
+      requiredGems = [ g.ffi_1_9_3 ];
+      sha256 = ''0kddx2ia0qylw3r52nhg83irkaclvrncgy2m1ywpbhlhsz1rymb9'';
+    };
     rdiscount_2_1_7_1 = {
       basename = ''rdiscount'';
       meta = {
@@ -1435,7 +1511,7 @@ from the command-line.'';
         longDescription = ''HTTP dashboard for the distributed event system Riemann.'';
       };
       name = ''riemann-dash-0.2.9'';
-      requiredGems = [ g.erubis_2_7_0 g.sinatra_1_4_5 g.sass_3_4_3 g.webrick_1_3_1 g.multi_json_1_3_6 ];
+      requiredGems = [ g.erubis_2_7_0 g.sinatra_1_4_5 g.sass_3_4_4 g.webrick_1_3_1 g.multi_json_1_3_6 ];
       sha256 = ''0ws5wmjbv8w9lcr3i2mdinj2qm91p6c85k6c067i67cf0p90jxq3'';
     };
     right_aws_3_1_0 = {
@@ -1637,7 +1713,7 @@ RKelly[https://github.com/tenderlove/rkelly] JavaScript parser.'';
       requiredGems = [  ];
       sha256 = ''17ha7kmgcnhnxyfp9wgyrd2synp17v9g8j1pknhfd2v9x5g475m9'';
     };
-    sass_3_4_3 = {
+    sass_3_4_4 = {
       basename = ''sass'';
       meta = {
         description = ''A powerful but elegant CSS compiler that makes CSS fun again.'';
@@ -1648,9 +1724,9 @@ RKelly[https://github.com/tenderlove/rkelly] JavaScript parser.'';
       command line tool or a web-framework plugin.
 '';
       };
-      name = ''sass-3.4.3'';
+      name = ''sass-3.4.4'';
       requiredGems = [  ];
-      sha256 = ''0k9qv35wf28qjlv8a1nmvv8n71wxnqim1kwf95igvngys6kih7ds'';
+      sha256 = ''0xvdj5lb062z1byq7s8f8zmp5kkjhghih5rfdb1q61mmmbmy9lw7'';
     };
     selenium_webdriver_2_43_0 = {
       basename = ''selenium_webdriver'';
