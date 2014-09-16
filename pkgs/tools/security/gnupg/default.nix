@@ -1,8 +1,6 @@
-# Remember to install Pinentry and
-# 'echo "pinentry-program `which pinentry-gtk-2`" >> ~/.gnupg/gpg-agent.conf'.
-
 { fetchurl, stdenv, readline, zlib, libgpgerror, pth, libgcrypt, libassuan
 , libksba, coreutils, libiconvOrEmpty
+, pinentry
 , useLdap ? true, openldap ? null, useBzip2 ? true, bzip2 ? null
 , useUsb ? true, libusb ? null, useCurl ? true, curl ? null
 }:
@@ -32,6 +30,10 @@ stdenv.mkDerivation rec {
     find tests -type f | xargs sed -e 's@/bin/pwd@${coreutils}&@g' -i
     find . -name pcsc-wrapper.c | xargs sed -i 's/typedef unsinged int pcsc_dword_t/typedef unsigned int pcsc_dword_t/'
   '';
+
+  configureFlags =
+    if pinentry != null then "--with-pinentry-pgm=${pinentry}/bin/pinentry"
+                        else "";
 
   checkPhase="GNUPGHOME=`pwd` ./agent/gpg-agent --daemon make check";
 
