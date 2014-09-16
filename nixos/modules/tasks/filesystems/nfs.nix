@@ -54,11 +54,15 @@ in
 
   ###### implementation
 
-  config = mkIf (any (fs: fs == "nfs" || fs == "nfs4") config.boot.supportedFilesystems) ({
+  config = mkIf (any (fs: fs == "nfs" || fs == "nfs4") config.boot.supportedFilesystems) {
 
     services.rpcbind.enable = true;
 
     system.fsPackages = [ pkgs.nfsUtils ];
+
+    boot.extraModprobeConfig = mkIf (cfg.lockdPort != null) ''
+      options lockd nlm_udpport=${toString cfg.lockdPort} nlm_tcpport=${toString cfg.lockdPort}
+    '';
 
     boot.kernelModules = [ "sunrpc" ];
 
@@ -117,9 +121,5 @@ in
         serviceConfig.Restart = "always";
       };
 
-  } // mkIf (cfg.lockdPort != null) {
-    boot.extraModprobeConfig = ''
-      options lockd nlm_udpport=${toString cfg.lockdPort} nlm_tcpport=${toString cfg.lockdPort}
-    '';
-  });
+  };
 }
