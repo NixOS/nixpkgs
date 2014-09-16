@@ -27,10 +27,9 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    make release-client
+    make release-client release-server
     mkdir -p $out/bin
-    cp bin/ngrok $out/bin
-    cp -R assets $out
+    cp bin/ngrok{d,} $out/bin
   '';
 
   meta = with lib; {
