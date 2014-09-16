@@ -151,6 +151,7 @@
       dnsmasq = 141;
       uhub = 142;
       yandexdisk=143;
+      collectd=144;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
