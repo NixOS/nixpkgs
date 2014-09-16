@@ -264,7 +264,7 @@ in
                      message = "This kernel does not support disabling conntrack helpers"; }
                  ];
 
-    systemd.services.firewall =
+    systemd.services.firewall = rec
       { description = "Firewall";
 
         wantedBy = [ "network.target" ];
@@ -277,8 +277,12 @@ in
         # better have all necessary modules already loaded.
         unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 
-        serviceConfig.Type = "oneshot";
-        serviceConfig.RemainAfterExit = true;
+        reloadIfChanged = true;
+
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
 
         script =
           ''
@@ -417,11 +421,17 @@ in
             ip46tables -A INPUT -j nixos-fw
           '';
 
+        reload = ''
+          ${helpers}
+          ip46tables -A INPUT -j DROP
+          ${script}
+          ip46tables -D INPUT -j DROP || true # extraCommands might delete the above rule and cause this to fail
+        '';
+
         postStop =
           ''
             ${helpers}
             ip46tables -D INPUT -j nixos-fw || true
-            #ip46tables -P INPUT ACCEPT
           '';
       };
 
