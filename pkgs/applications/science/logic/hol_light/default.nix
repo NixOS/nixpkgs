@@ -7,14 +7,15 @@ let
     exec ${ocaml}/bin/ocaml -I \`${camlp5}/bin/camlp5 -where\` -init make.ml
   '';
 in
+
 stdenv.mkDerivation rec {
   name     = "hol_light-${version}";
-  version  = "189";
+  version  = "198";
 
   src = fetchsvn {
     url = http://hol-light.googlecode.com/svn/trunk;
     rev = version;
-    sha256 = "1v10l64rs7da2kag3wlb651i09pn83icy9n5z84j8h1iwlxzajdh";
+    sha256 = "1y7vivj5l84fb7wqn38qbykpgs8ql2gmqxxch1yn5mg1cf9iiqsx";
   };
 
   buildInputs = [ ocaml findlib camlp5 ];
@@ -26,11 +27,11 @@ stdenv.mkDerivation rec {
     chmod a+x "$out/bin/hol_light"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Interactive theorem prover based on Higher-Order Logic";
     homepage    = http://www.cl.cam.ac.uk/~jrh13/hol-light/;
-    license     = stdenv.lib.licenses.bsd2;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = licenses.bsd2;
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ thoughtpolice z77z ];
   };
 }
