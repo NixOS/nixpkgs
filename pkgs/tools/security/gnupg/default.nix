@@ -1,14 +1,7 @@
 { fetchurl, stdenv, readline, zlib, libgpgerror, pth, libgcrypt, libassuan
 , libksba, coreutils, libiconvOrEmpty
-, pinentry
-, useLdap ? true, openldap ? null, useBzip2 ? true, bzip2 ? null
-, useUsb ? true, libusb ? null, useCurl ? true, curl ? null
+, pinentry ? null, openldap ? null, bzip2 ? null, libusb ? null, curl ? null
 }:
-
-assert useLdap -> (openldap != null);
-assert useBzip2 -> (bzip2 != null);
-assert useUsb -> (libusb != null);
-assert useCurl -> (curl != null);
 
 stdenv.mkDerivation rec {
   name = "gnupg-2.0.26";
@@ -19,12 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs
-    = [ readline zlib libgpgerror libgcrypt libassuan libksba pth ]
-    ++ libiconvOrEmpty
-    ++ stdenv.lib.optional useLdap openldap
-    ++ stdenv.lib.optional useBzip2 bzip2
-    ++ stdenv.lib.optional useUsb libusb
-    ++ stdenv.lib.optional useCurl curl;
+    = [ readline zlib libgpgerror libgcrypt libassuan libksba pth
+        openldap bzip2 libusb curl ]
+    ++ libiconvOrEmpty;
 
   patchPhase = ''
     find tests -type f | xargs sed -e 's@/bin/pwd@${coreutils}&@g' -i
