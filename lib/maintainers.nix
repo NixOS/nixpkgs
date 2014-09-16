@@ -137,6 +137,7 @@
   wjlroe = "William Roe <willroe@gmail.com>";
   wkennington = "William A. Kennington III <william@wkennington.com>";
   wmertens = "Wout Mertens <Wout.Mertens@gmail.com>";
+  wyvie = "Elijah Rum <elijahrum@gmail.com>";
   z77z = "Marco Maggesi <maggesi@math.unifi.it>";
   zef = "Zef Hemel <zef@zef.me>";
   zimbatm = "zimbatm <zimbatm@zimbatm.com>";
