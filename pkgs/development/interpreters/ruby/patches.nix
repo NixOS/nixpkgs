@@ -132,4 +132,6 @@ in
         zcat ${patch} | patch -p 1
       ''; # */
     };
+
+  bundler = { dontPatchShebangs=1; };
 }
