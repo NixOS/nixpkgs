@@ -5,6 +5,7 @@ with lib;
 let
   cfg = config.services.gitolite;
   pubkeyFile = pkgs.writeText "gitolite-admin.pub" cfg.adminPubkey;
+  hooks = lib.concatMapStrings (hook: "${hook} ") cfg.commonHooks;
 in
 {
   options = {
@@ -28,6 +29,14 @@ in
           Initial administrative public key for Gitolite. This should
           be an SSH Public Key. Note that this key will only be used
           once, upon the first initialization of the Gitolite user.
+        '';
+      };
+
+      commonHooks = mkOption {
+        type = types.listOf types.path;
+        default = [];
+        description = ''
+          A list of custom git hooks that get copied to <literal>~/.gitolite/hooks/common</literal>.
         '';
       };
     };
@@ -56,6 +65,10 @@ in
         mkdir -p .gitolite/logs
         if [ ! -d repositories ]; then
           gitolite setup -pk ${pubkeyFile}
+        fi
+        if [ -n "${hooks}" ]; then
+          cp ${hooks} .gitolite/hooks/common/
+          chmod +x .gitolite/hooks/common/*
         fi
         gitolite setup # Upgrade if needed
       '';
