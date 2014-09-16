@@ -3,8 +3,8 @@
 , libX11, libICE, libSM, useX11 ? (stdenv.isLinux || stdenv.isDarwin) }:
 
 let
-  version = "1.8.6";
-  sha256 = "0gyjxd0gfpjs3fq5bx6aljb5f3zxky5zsq0yfqr9ywbv03587vgd";
+  version = "1.8.8";
+  sha256 = "1zfi5grrlryppgrl23im82cqw6l9fk1wlc2ayvzx0yd994v2dayz";
 
   inherit (stdenv) lib;
 
