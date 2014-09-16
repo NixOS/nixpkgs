@@ -1,16 +1,7 @@
-# Remember to install Pinentry and
-# 'echo "pinentry-program `which pinentry-gtk-2`" >> ~/.gnupg/gpg-agent.conf'.
-
 { fetchgit, stdenv, readline, zlib, libgpgerror, npth, libgcrypt, libassuan
 , libksba, coreutils, autoconf, automake, transfig, ghostscript, texinfo
-, useLdap ? true, openldap ? null, useBzip2 ? true, bzip2 ? null, useUsb ? true
-, libusb ? null, useCurl ? true, curl ? null
+, pinentry ? null, openldap ? null, bzip2 ? null, libusb ? null, curl ? null
 }:
-
-assert useLdap -> (openldap != null);
-assert useBzip2 -> (bzip2 != null);
-assert useUsb -> (libusb != null);
-assert useCurl -> (curl != null);
 
 stdenv.mkDerivation rec {
   name = "gnupg-2.1pre-git20120407";
@@ -22,18 +13,17 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ readline zlib libgpgerror npth libgcrypt libassuan libksba 
-                  autoconf automake transfig ghostscript texinfo ]
-    ++ stdenv.lib.optional useLdap openldap
-    ++ stdenv.lib.optional useBzip2 bzip2
-    ++ stdenv.lib.optional useUsb libusb
-    ++ stdenv.lib.optional useCurl curl;
+                  openldap bzip2 libusb curl
+                  autoconf automake transfig ghostscript texinfo ];
 
   patchPhase = ''
     find tests -type f | xargs sed -e 's@/bin/pwd@${coreutils}&@g' -i
   '';
 
   preConfigure = "autoreconf -v";
-  configureFlags = "--enable-maintainer-mode";
+  configureFlags = "--enable-maintainer-mode" +
+   (if pinentry != null then " --with-pinentry-pgm=${pinentry}/bin/pinentry"
+                        else "");
 
   meta = {
     description = "GNU Privacy Guard (GnuPG), GNU Project's implementation of the OpenPGP standard";
