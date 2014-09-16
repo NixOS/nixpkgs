@@ -5,14 +5,14 @@
 , ncurses, readline, cursesSupport ? false
 , groff, docSupport ? false
 , libyaml, yamlSupport ? true
-, ruby_2_1_2, autoreconfHook, bison, useRailsExpress ? true
+, ruby_2_1_1, autoreconfHook, bison, useRailsExpress ? true
 }:
 
 let
   op = stdenv.lib.optional;
   ops = stdenv.lib.optionals;
   patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
-  baseruby = ruby_2_1_2.override { useRailsExpress = false; };
+  baseruby = ruby_2_1_1.override { useRailsExpress = false; };
 in
 
 stdenv.mkDerivation rec {
@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
   src = if useRailsExpress then fetchFromGitHub {
     owner  = "ruby";
     repo   = "ruby";
-    rev    = "v2_1_2";
-    sha256 = "14f8w3zwngnxsgigffh6h9z3ng53xq8mk126xmwrsmz9n3ypm6l0";
+    rev    = "v2_1_1";
+    sha256 = "1v2ffvyd0xx1h1qd70431zczhvsdiyyw5kjxih4rszd5avzh5grl";
   } else fetchurl {
-    url = "http://cache.ruby-lang.org/pub/ruby/2.1/ruby-2.1.2.tar.gz";
-    sha256 = "0db6krc2bd7yha8p96lcqrahjpsz7g7abhni134g708sh53n8apj";
+    url = "http://cache.ruby-lang.org/pub/ruby/2.1/ruby-2.1.1.tar.gz";
+    sha256 = "0hc9x3mazyvnk94gs19q8mbnanlzk8mv0hii77slkvc8mqqxyhy8";
   };
 
   # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
@@ -49,16 +49,17 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patches = ops useRailsExpress [
-    "${patchSet}/patches/ruby/2.1.2/railsexpress/01-zero-broken-tests.patch"
-    "${patchSet}/patches/ruby/2.1.2/railsexpress/02-improve-gc-stats.patch"
-    "${patchSet}/patches/ruby/2.1.2/railsexpress/03-display-more-detailed-stack-trace.patch"
-    "${patchSet}/patches/ruby/2.1.2/railsexpress/04-show-full-backtrace-on-stack-overflow.patch"
-    "${patchSet}/patches/ruby/2.1.2/railsexpress/05-fix-missing-c-return-event.patch"
-    "${patchSet}/patches/ruby/2.1.2/railsexpress/06-backport-006e66b6680f60adfb434ee7397f0dbc77de7873.patch"
-    "${patchSet}/patches/ruby/2.1.2/railsexpress/07-funny-falcon-stc-density.patch"
-    "${patchSet}/patches/ruby/2.1.2/railsexpress/08-funny-falcon-stc-pool-allocation.patch"
-    "${patchSet}/patches/ruby/2.1.2/railsexpress/09-aman-opt-aset-aref-str.patch"
-    "${patchSet}/patches/ruby/2.1.2/railsexpress/10-funny-falcon-method-cache.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/01-zero-broken-tests.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/02-improve-gc-stats.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/03-display-more-detailed-stack-trace.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/04-show-full-backtrace-on-stack-overflow.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/05-fix-missing-c-return-event.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/06-backport-006e66b6680f60adfb434ee7397f0dbc77de7873.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/07-funny-falcon-stc-density.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/08-funny-falcon-stc-pool-allocation.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/09-aman-opt-aset-aref-str.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/10-funny-falcon-method-cache.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/11-backport-r44370.patch"
   ];
 
   configureFlags = ["--enable-shared" ]
@@ -92,8 +93,8 @@ stdenv.mkDerivation rec {
   passthru = rec {
     majorVersion = "2";
     minorVersion = "1";
-    teenyVersion = "2";
-    patchLevel = "353";
+    teenyVersion = "1";
+    patchLevel = "0";
     libPath = "lib/ruby/${majorVersion}.${minorVersion}";
     gemPath = "lib/ruby/gems/${majorVersion}.${minorVersion}";
   };

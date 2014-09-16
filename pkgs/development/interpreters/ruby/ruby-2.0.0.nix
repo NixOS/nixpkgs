@@ -1,31 +1,40 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, fetchFromGitHub
 , zlib, zlibSupport ? true
 , openssl, opensslSupport ? true
 , gdbm, gdbmSupport ? true
 , ncurses, readline, cursesSupport ? false
 , groff, docSupport ? false
 , libyaml, yamlSupport ? true
+, ruby_2_0_0, autoreconfHook, bison, useRailsExpress ? true
 }:
 
 let
   op = stdenv.lib.optional;
   ops = stdenv.lib.optionals;
+  patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
+  baseruby = ruby_2_0_0.override { useRailsExpress = false; };
 in
 
 stdenv.mkDerivation rec {
-  version = with passthru; "${majorVersion}.${minorVersion}-p${patchLevel}";
-  
+  version = with passthru; "${majorVersion}.${minorVersion}.${teenyVersion}-p${patchLevel}";
+
   name = "ruby-${version}";
-  
-  src = fetchurl {
+
+  src = if useRailsExpress then fetchFromGitHub {
+    owner  = "ruby";
+    repo   = "ruby";
+    rev    = "v2_0_0_${passthru.patchLevel}";
+    sha256 = "07ccnxgiqxn5ycmq2wl7j3aqmndm4n358y35kzaivb488ayjg3pj";
+  } else fetchurl {
     url = "http://cache.ruby-lang.org/pub/ruby/2.0/${name}.tar.bz2";
-    sha256 = "3de4e4d9aff4682fa4f8ed2b70bd0d746fae17452fc3d3a8e8f505ead9105ad9";
+    sha256 = "1qnqccyfhx0fykxqbzlxq0yvyvq6q9v32givyfyr303dx7bxlqh7";
   };
 
   # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
   NROFF = "${groff}/bin/nroff";
 
-  buildInputs = (ops cursesSupport [ ncurses readline ] )
+  buildInputs = ops useRailsExpress [ autoreconfHook bison ]
+    ++ (ops cursesSupport [ ncurses readline ] )
     ++ (op docSupport groff )
     ++ (op zlibSupport zlib)
     ++ (op opensslSupport openssl)
@@ -38,8 +47,17 @@ stdenv.mkDerivation rec {
     ++ (op (!cursesSupport && stdenv.isDarwin) readline);
 
   enableParallelBuilding = true;
-    
+
+  patches = ops useRailsExpress [
+    "${patchSet}/patches/ruby/2.0.0/p481/01-zero-broken-tests.patch"
+    "${patchSet}/patches/ruby/2.0.0/p481/02-railsexpress-gc.patch"
+    "${patchSet}/patches/ruby/2.0.0/p481/03-display-more-detailed-stack-trace.patch"
+    "${patchSet}/patches/ruby/2.0.0/p481/04-show-full-backtrace-on-stack-overflow.patch"
+    "${patchSet}/patches/ruby/2.0.0/p481/05-fix-missing-c-return-event.patch"
+  ];
+
   configureFlags = ["--enable-shared" ]
+    ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
     # on darwin, we have /usr/include/tk.h -- so the configure script detects
     # that tk is installed
     ++ ( if stdenv.isDarwin then [ "--with-out-ext=tk " ] else [ ]);
@@ -67,10 +85,11 @@ stdenv.mkDerivation rec {
   };
 
   passthru = rec {
-    majorVersion = "2.0";
+    majorVersion = "2";
     minorVersion = "0";
-    patchLevel = "353";
-    libPath = "lib/ruby/${majorVersion}";
-    gemPath = "lib/ruby/gems/${majorVersion}";
+    teenyVersion = "0";
+    patchLevel = "481";
+    libPath = "lib/ruby/${majorVersion}.${minorVersion}";
+    gemPath = "lib/ruby/gems/${majorVersion}.${minorVersion}";
   };
 }
