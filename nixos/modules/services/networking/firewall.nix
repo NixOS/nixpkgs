@@ -240,6 +240,18 @@ in
         '';
     };
 
+    networking.firewall.extraStopCommands = mkOption {
+      type = types.lines;
+      default = "";
+      example = "iptables -P INPUT ACCEPT";
+      description =
+        ''
+          Additional shell commands executed as part of the firewall
+          shutdown script.  These are executed just after the removal
+          of the nixos input rule.
+        '';
+    };
+
   };
 
 
@@ -432,6 +444,7 @@ in
           ''
             ${helpers}
             ip46tables -D INPUT -j nixos-fw || true
+            ${cfg.extraStopCommands}
           '';
       };
 
