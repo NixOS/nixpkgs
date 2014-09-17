@@ -25,6 +25,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/joeyh/git-remote-gcrypt";
     description = "GNU Privacy Guard-encrypted git remote";
-    license = self.stdenv.lib.licenses.gpl3;
+    license = stdenv.lib.licenses.gpl3;
+    maintainers = with stdenv.lib.maintainers; [ ellis ];
   };
 }
