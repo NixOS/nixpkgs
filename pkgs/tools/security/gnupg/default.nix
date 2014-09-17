@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       S/MIME.
     '';
 
-    maintainers = with stdenv.lib.maintainers; [ urkud ];
+    maintainers = with stdenv.lib.maintainers; [ roconnor urkud ];
     platforms = stdenv.lib.platforms.all;
   };
 }
