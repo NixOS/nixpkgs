@@ -2207,6 +2207,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   setlocale = callPackage ../development/libraries/haskell/setlocale {};
 
+  shellCheck = callPackage ../development/libraries/haskell/ShellCheck {};
 
   shellish = callPackage ../development/libraries/haskell/shellish {};
 
