@@ -14,8 +14,6 @@
 , unixODBC
 , xlibs
 , zlib
-, libxml2
-, libuuid
 }:
 
 let
@@ -26,18 +24,17 @@ let
       throw "Mathematica requires i686-linux or x86_64 linux";
 in
 stdenv.mkDerivation rec {
-  version = "10.0.1";
 
-  name = "mathematica-${version}";
+  name = "mathematica-9.0.0";
 
   src = requireFile rec {
-    name = "Mathematica_${version}_LINUX.sh";
+    name = "Mathematica_9.0.0_LINUX.sh";
     message = '' 
-      This nix expression requires that ${name} is
+      This nix expression requires that Mathematica_9.0.0_LINUX.sh is
       already part of the store. Find the file on your Mathematica CD
       and add it to the nix store with nix-store --add-fixed sha256 <FILE>.
     '';
-    sha256 = "1514qy5kbyislv8j7ryw8021k26y0z6dndliwy8hfi7w7kgb3ynq";
+    sha256 = "106zfaplhwcfdl9rdgs25x83xra9zcny94gb22wncbfxvrsk3a4q";
   };
 
   buildInputs = [
@@ -54,8 +51,6 @@ stdenv.mkDerivation rec {
     opencv
     openssl
     unixODBC
-    libxml2
-    libuuid
   ] ++ (with xlibs; [
     libX11
     libXext
@@ -64,11 +59,6 @@ stdenv.mkDerivation rec {
     libXmu
     libXrender
     libxcb
-    libXcursor
-    libXfixes
-    libXrandr
-    libICE
-    libSM
   ]);
 
   ldpath = stdenv.lib.makeLibraryPath buildInputs
@@ -102,13 +92,11 @@ stdenv.mkDerivation rec {
         :
       elif [ "$type" == "EXEC" ]; then
         echo "patching $f executable <<"
-        patchelf --shrink-rpath "$f"
         patchelf \
-	  --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-          --set-rpath "$(patchelf --print-rpath "$f"):${ldpath}" \
-          "$f" \
-          && patchelf --shrink-rpath "$f" \
-          || echo unable to patch ... ignoring 1>&2
+            --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+            --set-rpath "${ldpath}" \
+            "$f"
+        patchelf --shrink-rpath "$f"
       elif [ "$type" == "DYN" ]; then
         echo "patching $f library <<"
         patchelf \
