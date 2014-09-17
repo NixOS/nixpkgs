@@ -7,7 +7,7 @@ let
 
   conf = pkgs.writeText "collectd.conf" ''
     BaseDir "${cfg.dataDir}"
-    PIDFile "${cfg.dataDir}/collectd.pid"
+    PIDFile "${cfg.pidFile}"
     AutoLoadPlugin ${if cfg.autoLoadPlugin then "true" else "false"}
     Hostname ${config.networking.hostName}
 
@@ -50,6 +50,14 @@ in {
       type = path;
     };
 
+    pidFile = mkOption {
+      default = "/var/run/collectd.pid";
+      description = ''
+        Location of collectd pid file.
+      '';
+      type = path;
+    };
+
     autoLoadPlugin = mkOption {
       default = false;
       description = ''
@@ -83,16 +91,20 @@ in {
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.collectd}/sbin/collectd -C ${conf} -P ${cfg.dataDir}/collectd.pid";
+        ExecStart = "${pkgs.collectd}/sbin/collectd -C ${conf} -P ${cfg.pidFile}";
         Type = "forking";
-        PIDFile = "${cfg.dataDir}/collectd.pid";
+        PIDFile = cfg.pidFile;
         User = optional (cfg.user!="root") cfg.user;
         PermissionsStartOnly = true;
       };
 
       preStart = ''
         mkdir -m 0700 -p ${cfg.dataDir}
-        if [ "$(id -u)" = 0 ]; then chown -R ${cfg.user} ${cfg.dataDir}; fi
+        install -D /dev/null ${cfg.pidFile}
+        if [ "$(id -u)" = 0 ]; then
+          chown -R ${cfg.user} ${cfg.dataDir};
+          chown ${cfg.user} ${cfg.pidFile}
+        fi
       '';
     }; 
 
