@@ -48,7 +48,7 @@ in
   importGems = file: args:
     let
       # 1. Load set of gem names and versions from a bundix-created expression.
-      gemset = callPackage file { };
+      gemset = if (builtins.isAttrs file) then file else (callPackage file { });
       # 2. Allow gems to be overriden by providing a derivation yourself.
       config = gemset // (args gemset);
       # 3.
