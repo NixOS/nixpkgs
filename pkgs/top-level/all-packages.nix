@@ -1349,6 +1349,8 @@ let
 
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
+  httptunnel = callPackage ../tools/networking/httptunnel { };
+
   # FIXME: This Hydra snapshot is outdated and depends on the `nixPerl',
   # which no longer exists.
   #
