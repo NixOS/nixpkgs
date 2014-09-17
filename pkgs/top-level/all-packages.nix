@@ -3372,9 +3372,16 @@ let
 
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
 
-    lablgtk = callPackage ../development/ocaml-modules/lablgtk {
+    lablgtk_2_14 = callPackage ../development/ocaml-modules/lablgtk/2.14.0.nix {
       inherit (gnome) libgnomecanvas libglade gtksourceview;
     };
+
+    lablgtk =
+      if lib.strings.versionAtLeast (builtins.parseDrvName ocaml.name).version "3.12"
+      then callPackage ../development/ocaml-modules/lablgtk {
+        inherit (gnome) libgnomecanvas libglade gtksourceview;
+      }
+      else lablgtk_2_14;
 
     lablgtkmathview = callPackage ../development/ocaml-modules/lablgtkmathview {
       gtkmathview = callPackage ../development/libraries/gtkmathview { };
@@ -11242,8 +11249,9 @@ let
   };
 
   coq_8_3 = callPackage ../applications/science/logic/coq/8.3.nix {
-    inherit (ocamlPackages) findlib lablgtk;
-    camlp5 = ocamlPackages.camlp5_transitional;
+    inherit (ocamlPackages_3_12_1) ocaml findlib;
+    camlp5 = ocamlPackages_3_12_1.camlp5_transitional;
+    lablgtk = ocamlPackages_3_12_1.lablgtk_2_14;
   };
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {};
