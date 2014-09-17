@@ -440,6 +440,8 @@ let
 
   adom = callPackage ../games/adom { };
 
+  advancecomp = callPackage ../tools/compression/advancecomp {};
+
   aefs = callPackage ../tools/filesystems/aefs { };
 
   aegisub = callPackage ../applications/video/aegisub {
