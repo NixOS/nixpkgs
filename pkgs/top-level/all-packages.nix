@@ -5195,6 +5195,8 @@ let
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix { };
 
+  LASzip = callPackage ../development/libraries/LASzip { };
+
   lcms = lcms1;
 
   lcms1 = callPackage ../development/libraries/lcms { };
