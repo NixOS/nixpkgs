@@ -11,7 +11,9 @@ let
 
   forAllSystems = pkgs.lib.genAttrs supportedSystems;
 
-  callTest = fn: args: forAllSystems (system: import fn ({ inherit system; } // args));
+  scrubDrv = drv: let res = { inherit (drv) drvPath outPath type name; outputName = "out"; out = res; }; in res;
+
+  callTest = fn: args: forAllSystems (system: scrubDrv (import fn ({ inherit system; } // args)));
 
   pkgs = import nixpkgs { system = "x86_64-linux"; };
 
@@ -40,7 +42,7 @@ let
 
     in
       # Declare the ISO as a build product so that it shows up in Hydra.
-      runCommand "nixos-iso-${config.system.nixosVersion}"
+      scrubDrv (runCommand "nixos-iso-${config.system.nixosVersion}"
         { meta = {
             description = "NixOS installation CD (${description}) - ISO image for ${system}";
             maintainers = map (x: lib.getAttr x lib.maintainers) maintainers;
@@ -51,7 +53,7 @@ let
         ''
           mkdir -p $out/nix-support
           echo "file iso" $iso/iso/*.iso* >> $out/nix-support/hydra-build-products
-        ''; # */
+        ''); # */
 
 
   makeSystemTarball =
@@ -78,7 +80,7 @@ let
         };
 
 
-  makeClosure = module: forAllSystems (system: (import ./lib/eval-config.nix {
+  makeClosure = module: forAllSystems (system: scrubDrv (import ./lib/eval-config.nix {
     inherit system;
     modules = [ module ] ++ lib.singleton
       ({ config, lib, ... }:
@@ -171,7 +173,7 @@ in rec {
 
     in
       # Declare the OVA as a build product so that it shows up in Hydra.
-      runCommand "nixos-ova-${config.system.nixosVersion}-${system}"
+      scrubDrv (runCommand "nixos-ova-${config.system.nixosVersion}-${system}"
         { meta = {
             description = "NixOS VirtualBox appliance (${system})";
             maintainers = lib.maintainers.eelco;
@@ -182,7 +184,7 @@ in rec {
           mkdir -p $out/nix-support
           fn=$(echo $ova/*.ova)
           echo "file ova $fn" >> $out/nix-support/hydra-build-products
-        '' # */
+        '') # */
 
   );
 
@@ -222,17 +224,17 @@ in rec {
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
-  tests.installer.efi = forAllSystems (system: (import tests/installer.nix { inherit system; }).efi.test);
-  tests.installer.grub1 = forAllSystems (system: (import tests/installer.nix { inherit system; }).grub1.test);
-  tests.installer.lvm = forAllSystems (system: (import tests/installer.nix { inherit system; }).lvm.test);
-  tests.installer.rebuildCD = forAllSystems (system: (import tests/installer.nix { inherit system; }).rebuildCD.test);
-  tests.installer.separateBoot = forAllSystems (system: (import tests/installer.nix { inherit system; }).separateBoot.test);
-  tests.installer.simple = forAllSystems (system: (import tests/installer.nix { inherit system; }).simple.test);
-  tests.installer.simpleLabels = forAllSystems (system: (import tests/installer.nix { inherit system; }).simpleLabels.test);
-  tests.installer.simpleProvided = forAllSystems (system: (import tests/installer.nix { inherit system; }).simpleProvided.test);
-  tests.installer.btrfsSimple = forAllSystems (system: (import tests/installer.nix { inherit system; }).btrfsSimple.test);
-  tests.installer.btrfsSubvols = forAllSystems (system: (import tests/installer.nix { inherit system; }).btrfsSubvols.test);
-  tests.installer.btrfsSubvolDefault = forAllSystems (system: (import tests/installer.nix { inherit system; }).btrfsSubvolDefault.test);
+  tests.installer.efi = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).efi.test);
+  tests.installer.grub1 = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).grub1.test);
+  tests.installer.lvm = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).lvm.test);
+  tests.installer.rebuildCD = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).rebuildCD.test);
+  tests.installer.separateBoot = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).separateBoot.test);
+  tests.installer.simple = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).simple.test);
+  tests.installer.simpleLabels = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).simpleLabels.test);
+  tests.installer.simpleProvided = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).simpleProvided.test);
+  tests.installer.btrfsSimple = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).btrfsSimple.test);
+  tests.installer.btrfsSubvols = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).btrfsSubvols.test);
+  tests.installer.btrfsSubvolDefault = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).btrfsSubvolDefault.test);
   tests.influxdb = callTest tests/influxdb.nix {};
   tests.ipv6 = callTest tests/ipv6.nix {};
   tests.jenkins = callTest tests/jenkins.nix {};
