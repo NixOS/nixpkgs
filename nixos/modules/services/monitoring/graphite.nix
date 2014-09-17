@@ -116,6 +116,12 @@ in {
         type = types.int;
       };
 
+      package = mkOption {
+        description = "Package to use for graphite api.";
+        default = pkgs.python27Packages.graphite_api;
+        type = types.package;
+      };
+
       extraConfig = mkOption {
         description = "Extra configuration for graphite api.";
         default = ''
@@ -398,7 +404,7 @@ in {
       after = [ "network-interfaces.target" ];
       environment = {
         PYTHONPATH =
-          "${pkgs.python27Packages.graphite_api}/lib/python2.7/site-packages:" +
+          "${cfg.api.package}/lib/python2.7/site-packages:" +
           concatMapStringsSep ":" (f: f + "/lib/python2.7/site-packages") cfg.api.finders;
         GRAPHITE_API_CONFIG = graphiteApiConfig;
         LD_LIBRARY_PATH = "${pkgs.cairo}/lib";
