@@ -10336,8 +10336,7 @@ let
       sha256 = "41b90d5f35e99a020a6b1b77938690652521d1841b3165574fcfcee807ce4e6a";
     };
 
-    # ImportError: No module named tests
-    doCheck = false;
+    checkPhase = "nosetests";
 
     propagatedBuildInputs = [
       flask
@@ -10352,8 +10351,15 @@ let
       tzlocal
     ];
 
+    buildInputs = [
+      nose
+      mock
+    ];
+
+    LD_LIBRARY_PATH = "${pkgs.cairo}/lib";
+
     meta = {
-      description = "Graphite-web,  without the interface. Just the rendering HTTP API.";
+      description = "Graphite-web, without the interface. Just the rendering HTTP API.";
       homepage = https://github.com/brutasse/graphite-api;
       license = licenses.asl20;
     };
