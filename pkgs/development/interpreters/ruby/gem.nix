@@ -27,16 +27,24 @@ in ruby.stdenv.mkDerivation (attrs // {
       inherit (attrs) sha256;
     };
 
-  unpackPhase = ''
-    if test -d $src; then
-      cd $src
+  # The source is expected to either be a gem package or a directory.
+  #
+  # - Gem packages are already built, so they don't even need to be unpacked.
+  #   They will skip the buildPhase.
+  # - A directory containing the sources will need to go through all of the
+  #   usual phases.
+  unpackPhase= ''
+    gemRegex="\.gem"
+    if [[ $src =~ $gemRegex ]]
+    then
+      runHook preUnpack
+      echo "Source is a gem package, won't unpack."
+      gempkg=$src
+      dontBuild=1
+      runHook postUnpack
     else
-      cp $src ${attrs.name}.gem
-      gem unpack ${attrs.name}.gem
-      rm ${attrs.name}.gem
-      mv ${attrs.name} gem-build
-      cd gem-build
-      sourceRoot=`pwd`
+      # Fall back to the original thing for everything else.
+      unpackPhase
     fi
   '';
 
@@ -44,6 +52,23 @@ in ruby.stdenv.mkDerivation (attrs // {
     runHook preCheck
     ${attrs.checkPhase or "${rake}/bin/rake spec"}
     runHook postCheck
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    # TODO: Investigate. The complete working tree is touched by fetchgit.
+    if [ -d .git ]; then
+      git reset
+    fi
+
+    gemspec=`find . -name '*.gemspec'`
+    output=`gem build $gemspec`
+    gempkg=`echo $output|grep -oP 'File: \K(.*)'`
+
+    echo "Gem package built: $gempkg"
+
+    runHook postBuild
   '';
 
   installPhase = ''
@@ -54,7 +79,7 @@ in ruby.stdenv.mkDerivation (attrs // {
     #       separate buildPhase.
     #       --ignore-dependencies is necessary as rubygems otherwise always
     #       connects to the repository, thus breaking pure builds.
-    GEM_HOME=$out/${ruby.gemPath} \
+    GEM_HOME=$out \
       gem install \
       --local \
       --force \
@@ -63,30 +88,26 @@ in ruby.stdenv.mkDerivation (attrs // {
       --build-root "/" \
       --bindir "$out/bin" \
       --backtrace \
-      $src $gemFlags -- $buildFlags
+      $gempkg $gemFlags -- $buildFlags
 
-    rm -frv $out/${ruby.gemPath}/cache # don't keep the .gem file here
+    rm -frv $out/cache # don't keep the .gem file here
 
     for prog in $out/bin/*; do
       wrapProgram "$prog" \
-        --prefix GEM_PATH : "$out/${ruby.gemPath}:$GEM_PATH" \
+        --prefix GEM_PATH : "$out:$GEM_PATH" \
         --prefix RUBYLIB : "${rubygems}/lib" \
         --set RUBYOPT rubygems \
         $extraWrapperFlags ''${extraWrapperFlagsArray[@]}
     done
 
-    for prog in $out/gems/*/bin/*; do
-      [[ -e "$out/bin/$(basename $prog)" ]]
-    done
-
     # looks like useless files which break build repeatability and consume space
-    rm -fv $out/${ruby.gemPath}/doc/*/*/created.rid || true
-    rm -fv $out/${ruby.gemPath}/gems/*/ext/*/mkmf.log || true
+    rm -fv $out/doc/*/*/created.rid || true
+    rm -fv $out/gems/*/ext/*/mkmf.log || true
 
     mkdir -p $out/nix-support
 
     cat > $out/nix-support/setup-hook <<EOF
-    if [[ "$GEM_PATH" != *$out/${ruby.gemPath}* ]]; then
+    if [[ "$GEM_PATH" != *$out* ]]; then
       addToSearchPath GEM_PATH $out/${ruby.gemPath}
     fi
     EOF

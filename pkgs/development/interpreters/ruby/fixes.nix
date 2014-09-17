@@ -36,15 +36,11 @@ let
             then (builtins.getAttr name fixes) attrs
             else {};
     in
-      buildRubyGem ({
-        name = attrs.name;
-        sha256 = attrs.sha256;
+      buildRubyGem (attrs // {
         inherit gemPath;
         # Disable the checkPhase as there no single way to run tests for a given
         # gem: https://github.com/rubygems/rubygems/issues/730
         checkPhase = ":";
-        # Gems downloaded from rubygems.org don't need to be built again.
-        dontBuild = true;
       } // fix)
   );
 
@@ -70,9 +66,9 @@ let
     therubyracer = attrs: {
       dontBuild = false;
 
-      preBuild = ''
-        addToSearchPath RUBYLIB "${gems.libv8}/${ruby.gemPath}/gems/libv8-3.16.14.3/lib"
-        addToSearchPath RUBYLIB "${gems.libv8}/${ruby.gemPath}/gems/libv8-3.16.14.3/ext"
+      preInstall = ''
+        addToSearchPath RUBYLIB "${gems.libv8}/gems/libv8-3.16.14.3/lib"
+        addToSearchPath RUBYLIB "${gems.libv8}/gems/libv8-3.16.14.3/ext"
         ln -s ${clang}/bin/clang $TMPDIR/gcc
         ln -s ${clang}/bin/clang++ $TMPDIR/g++
         export PATH=$TMPDIR:$PATH
