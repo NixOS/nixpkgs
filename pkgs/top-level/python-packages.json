@@ -89,6 +89,10 @@
       "Products.DCWorkflow": {
         "propagatedBuildInputs": [ "eggtestinfo" ]
       },
+      "lxml": {
+        "buildInputs": [ "pkgs.libxml2", "pkgs.libxslt" ],
+        "doCheck": false
+      },
       "Products.CMFDefault": {
         "propagatedBuildInputs": [ "eggtestinfo" ]
       },
