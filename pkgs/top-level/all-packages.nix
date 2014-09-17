@@ -5432,6 +5432,8 @@ let
 
   libharu = callPackage ../development/libraries/libharu { };
 
+  libHX = callPackage ../development/libraries/libHX { };
+
   libibmad = callPackage ../development/libraries/libibmad { };
 
   libibumad = callPackage ../development/libraries/libibumad { };
@@ -7901,6 +7903,8 @@ let
   pam_ldap = callPackage ../os-specific/linux/pam_ldap { };
 
   pam_login = callPackage ../os-specific/linux/pam_login { };
+
+  pam_mount = callPackage ../os-specific/linux/pam_mount { };
 
   pam_ssh_agent_auth = callPackage ../os-specific/linux/pam_ssh_agent_auth { };
 
