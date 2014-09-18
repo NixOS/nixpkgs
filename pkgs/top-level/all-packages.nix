@@ -10203,7 +10203,7 @@ let
       libICE;
 
     features = "huge"; # one of  tiny, small, normal, big or huge
-    lua = pkgs.lua5;
+    lua = pkgs.lua5_1;
     gui = config.vim.gui or "auto";
 
     # optional features by flags
