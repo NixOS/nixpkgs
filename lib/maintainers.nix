@@ -103,7 +103,7 @@
   relrod = "Ricky Elrod <ricky@elrod.me>";
   rickynils = "Rickard Nilsson <rickynils@gmail.com>";
   rob = "Rob Vermaas <rob.vermaas@gmail.com>";
-  robberer = "Longrin Wischnewski <robberer@freakmail.de>"
+  robberer = "Longrin Wischnewski <robberer@freakmail.de>";
   roconnor = "Russell O'Connor <roconnor@theorem.ca>";
   roelof = "Roelof Wobben <rwobben@hotmail.com>";
   romildo = "José Romildo Malaquias <malaquias@gmail.com>";
