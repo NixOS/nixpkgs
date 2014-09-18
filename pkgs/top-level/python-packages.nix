@@ -8251,12 +8251,13 @@ let
 
   sqlalchemy_imageattach = buildPythonPackage rec {
     name = "SQLAlchemy-ImageAttach-${version}";
-    version = "0.8.1";
+    version = "0.8.2";
+    disabled = isPy33;
 
     src = fetchgit {
       url = https://github.com/crosspop/sqlalchemy-imageattach.git;
       rev = "refs/tags/${version}";
-      md5 = "051dd9de0757714d33c3ecd5ab37b97d";
+      md5 = "cffdcde30952176e35fccf385f579dda";
     };
 
     buildInputs = [ pytest webob pkgs.imagemagick nose ];
