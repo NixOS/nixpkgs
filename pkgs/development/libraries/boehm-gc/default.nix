@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, enableLargeConfig ? false }:
 
 stdenv.mkDerivation rec {
   name = "boehm-gc-7.2d";
@@ -8,7 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "0phwa5driahnpn79zqff14w9yc8sn3599cxz91m78hqdcpl0mznr";
   };
 
-  configureFlags = "--enable-cplusplus";
+  configureFlags =
+    [ "--enable-cplusplus" ]
+    ++ lib.optional enableLargeConfig "--enable-large-config";
 
   doCheck = true;
 
