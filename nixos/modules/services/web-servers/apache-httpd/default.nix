@@ -209,10 +209,11 @@ let
     '';
 
     robotsTxt =
-      concatStringsSep "\n" (
+      concatStringsSep "\n" (filter (x: x != "") (
         # If this is a vhost, the include the entries for the main server as well.
-        (if isMainServer then [] else map (svc: svc.robotsEntries) mainSubservices)
-        ++ (map (svc: svc.robotsEntries) subservices));
+        (if isMainServer then [] else [mainCfg.robotsEntries] ++ map (svc: svc.robotsEntries) mainSubservices)
+        ++ [cfg.robotsEntries]
+        ++ (map (svc: svc.robotsEntries) subservices)));
 
   in ''
     ServerName ${serverInfo.canonicalName}
