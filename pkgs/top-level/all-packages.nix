@@ -8453,6 +8453,7 @@ let
 
   awesome-3-4 = callPackage ../applications/window-managers/awesome/3.4.nix {
     cairo = cairo.override { xcbSupport = true; };
+    lua = lua5_1;
   };
   awesome-3-5 = callPackage ../applications/window-managers/awesome {
     cairo = cairo.override { xcbSupport = true; };
