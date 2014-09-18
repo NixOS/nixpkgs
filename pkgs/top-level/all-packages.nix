@@ -915,6 +915,8 @@ let
     inherit (perlPackages) XMLSAX XMLParser XMLNamespaceSupport;
   };
 
+  dog = callPackage ../tools/system/dog { };
+
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
 
   dotnetfx35 = callPackage ../development/libraries/dotnetfx35 { };
