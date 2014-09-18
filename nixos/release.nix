@@ -149,12 +149,6 @@ in rec {
     inherit system;
   });
 
-  iso_graphical_new_kernel = forAllSystems (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-graphical-new-kernel.nix;
-    type = "graphical-new-kernel";
-    inherit system;
-  });
-
 
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
   ova = forAllSystems (system:
