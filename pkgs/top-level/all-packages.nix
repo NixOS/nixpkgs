@@ -3835,6 +3835,8 @@ let
     fftw = fftwSinglePrec;
   };
 
+  seturgent = callPackage ../os-specific/linux/seturgent { };
+
   supercollider_scel = supercollider.override { useSCEL = true; };
 
   sysPerl = callPackage ../development/interpreters/perl/sys-perl { };
