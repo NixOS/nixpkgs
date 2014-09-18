@@ -37,10 +37,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     autoconf libtool automake libsodium ncurses libopus
-    libvpx check libconfig pkgconfig
+    check libconfig pkgconfig
   ];
 
-  doCheck = false;  # certian tests fail, upstream advice is to wait
+  propagatedBuildInputs = [ libvpx ];
+
+  doCheck = true;
 
   meta = {
     description = "P2P FOSS instant messaging application aimed to replace Skype with crypto";

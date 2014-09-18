@@ -9986,6 +9986,8 @@ let
 
   qsynth = callPackage ../applications/audio/qsynth { };
 
+  qtox = callPackage ../applications/networking/instant-messengers/qtox { };
+
   qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
 
   qtractor = callPackage ../applications/audio/qtractor { };
