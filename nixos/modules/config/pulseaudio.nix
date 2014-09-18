@@ -69,8 +69,7 @@ in {
       };
 
       configFile = mkOption {
-        type = types.uniq types.path;
-        default = "${cfg.package}/etc/pulse/default.pa";
+        type = types.path;
         description = ''
           The path to the configuration the PulseAudio server
           should use. By default, the "default.pa" configuration
@@ -110,6 +109,8 @@ in {
         target = "pulse/client.conf";
         source = clientConf;
       };
+
+      hardware.pulseaudio.configFile = mkDefault "${cfg.package}/etc/pulse/default.pa";
     }
 
     (mkIf cfg.enable {
