@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
+  configureFlags = [
+    "--enable-colors"
+    "--enable-lyrics-screen"
+  ];
+
   meta = with stdenv.lib; {
     description = "Curses-based interface for MPD (music player daemon)";
     homepage    = http://www.musicpd.org/clients/ncmpc/;
