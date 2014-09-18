@@ -2,21 +2,20 @@
 
 stdenv.mkDerivation rec {
   version = "2.2.0";
-  name = "laszip-${version}";
+  name = "LASzip-${version}";
 
   src = fetchurl {
-
     url = "https://github.com/LASzip/LASzip/archive/v${version}.tar.gz";
-    md5 = "5b8a7c713bd79e0d1d7f7cc8fe9e59bb";
+    sha256 = "b8e8cc295f764b9d402bc587f3aac67c83ed8b39f1cb686b07c168579c61fbb2";
   };
   
   buildInputs = [cmake];
 
   meta = {
-
-    description = "LASzip  quickly turns bulky LAS files into compact LAZ files without information loss";
+    description = "Turn quickly bulky LAS files into compact LAZ files without information loss";
     homepage = http://www.laszip.org;
     license = stdenv.lib.licenses.lgpl2;
+    maintainer = stdenv.maintainers.michelk;
     platforms = stdenv.lib.platforms.linux;
   };
 }
