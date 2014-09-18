@@ -6,8 +6,8 @@ with stdenv.lib;
 
 let
   os = stdenv.lib.optionalString;
-  majorVersion = "2.8";
-  minorVersion = "12.2";
+  majorVersion = "3.0";
+  minorVersion = "2";
   version = "${majorVersion}.${minorVersion}";
 in
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    sha256 = "0phf295a9cby0v7zqdswr238v5aiy3rb2fs6dz39zjxbmzlp8rcc";
+    sha256 = "0gk90mw7f93sgkrsrxqy2b6fm5j43yfw50xkrk0bxndvmlgackkb";
   };
 
   enableParallelBuilding = true;
