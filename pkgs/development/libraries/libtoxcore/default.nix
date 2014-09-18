@@ -2,8 +2,8 @@
 , libvpx, check, libconfig, pkgconfig }:
 
 let
-  version = "f83fcbb13c0";
-  date = "20140811";
+  version = "7ec83c3623";
+  date = "20140918";
 in
 stdenv.mkDerivation rec {
   name = "tox-core-${date}-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/irungentoo/toxcore/tarball/${version}";
     name = "${name}.tar.gz";
-    sha256 = "09g74h3qnx9adyxxvzay8m2idbgbln7m4kkm7sg9925mvi5abb1w";
+    sha256 = "026zv0brdqxf0h6zgyqpb55099yc6ghqgf8lrkdsfrrpb7ilg0is";
   };
 
   NIX_LDFLAGS = "-lgcc_s";
