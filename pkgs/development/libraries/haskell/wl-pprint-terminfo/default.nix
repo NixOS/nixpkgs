@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wl-pprint-terminfo";
-  version = "3.7.1.1";
-  sha256 = "1mjnbkk3cw2v7nda7qxdkl21pmclz6m17sviqp4qf3rc8rgin3zd";
+  version = "3.7.1.2";
+  sha256 = "17c5ys8730hhhpy0swk4yxrjs1042w4m7aypsfnzzk3b0cw94q56";
   buildDepends = [
     nats semigroups terminfo text transformers wlPprintExtras
   ];

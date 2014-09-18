@@ -27,6 +27,7 @@
 , proprietaryCodecs ? true
 , cupsSupport ? false
 , pulseSupport ? false, pulseaudio ? null
+, hiDPISupport ? false
 
 , source
 , plugins
@@ -162,6 +163,7 @@ let
       linux_sandbox_chrome_path="${libExecPath}/${packageName}";
       werror = "";
       clang = false;
+      enable_hidpi = hiDPISupport;
 
       # Google API keys, see:
       #   http://www.chromium.org/developers/how-tos/api-keys

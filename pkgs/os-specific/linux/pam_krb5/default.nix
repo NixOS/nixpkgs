@@ -19,6 +19,6 @@ stdenv.mkDerivation {
       pam_krb5 can optionally convert Kerberos 5 credentials to Kerberos IV
       credentials and/or use them to set up AFS tokens for a user's session.
     '';
-    maintainers = stdenv.lib.maintainers.mornfall;
+    maintainers = [ stdenv.lib.maintainers.mornfall ];
   };
 }

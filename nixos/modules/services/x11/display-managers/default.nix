@@ -169,7 +169,6 @@ in
 
       xserverBin = mkOption {
         type = types.path;
-        default = "${xorg.xorgserver}/bin/X";
         description = "Path to the X server used by display managers.";
       };
 
@@ -277,6 +276,12 @@ in
       };
 
     };
+
+  };
+
+  config = {
+
+    services.xserver.displayManager.xserverBin = "${xorg.xorgserver}/bin/X";
 
   };
 

@@ -129,12 +129,12 @@ in
             # config file. But this path can unfortunately be garbage collected
             # while still being used by the virtual machine. So update the
             # emulator path on each startup to something valid (re-scan $PATH).
-            for file in /etc/libvirt/qemu/*.xml; do
+            for file in /etc/libvirt/qemu/*.xml /etc/libvirt/lxc/*.xml; do
                 test -f "$file" || continue
                 # get (old) emulator path from config file
                 emulator=$(grep "^[[:space:]]*<emulator>" "$file" | sed 's,^[[:space:]]*<emulator>\(.*\)</emulator>.*,\1,')
                 # get a (definitely) working emulator path by re-scanning $PATH
-                new_emulator=$(command -v $(basename "$emulator"))
+                new_emulator=$(PATH=${pkgs.libvirt}/libexec:$PATH command -v $(basename "$emulator"))
                 # write back
                 sed -i "s,^[[:space:]]*<emulator>.*,    <emulator>$new_emulator</emulator> <!-- WARNING: emulator dirname is auto-updated by the nixos libvirtd module -->," "$file"
             done

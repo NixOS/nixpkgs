@@ -26,11 +26,11 @@ cabal.mkDerivation (self: {
   buildTools = [ happy ];
   extraLibraries = [ boehmgc gmp ];
   configureFlags = "-fllvm -fgmp -fffi";
-  jailbreak = true;
   meta = {
     homepage = "http://www.idris-lang.org/";
     description = "Functional Programming Language with Dependent Types";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })

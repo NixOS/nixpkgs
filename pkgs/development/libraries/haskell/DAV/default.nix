@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "DAV";
-  version = "1.0.1";
-  sha256 = "0j8z7hi5dykimv6da584zgyn8xlvfhg1k9sbhj5ay7ncxszb134k";
+  version = "1.0.2";
+  sha256 = "0xbiq3q8w1cjnh71sfnincir8igvwig734r8schbsps993p2d24b";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -17,7 +17,6 @@ cabal.mkDerivation (self: {
     httpClientTls httpTypes lens mtl network optparseApplicative
     transformers transformersBase utf8String xmlConduit xmlHamlet
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://floss.scru.org/hDAV";
     description = "RFC 4918 WebDAV support";

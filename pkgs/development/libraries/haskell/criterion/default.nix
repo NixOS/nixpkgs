@@ -9,8 +9,8 @@
 
 cabal.mkDerivation (self: {
   pname = "criterion";
-  version = "1.0.0.2";
-  sha256 = "1r30vcrplilj3silnrmn0r5m0df27icdsgd5hx35li9yrs862n95";
+  version = "1.0.1.0";
+  sha256 = "1mp4rm6jd8g38yyhfrxk1xzhp6mxrwwns9kl6494ylsdpsv0v4ll";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

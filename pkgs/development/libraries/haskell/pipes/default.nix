@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     mtl QuickCheck testFramework testFrameworkQuickcheck2 transformers
   ];
+  jailbreak = true;
   meta = {
     description = "Compositional pipelines";
     license = self.stdenv.lib.licenses.bsd3;

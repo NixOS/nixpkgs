@@ -1,28 +1,41 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, fetchgit, fetchFromGitHub
 , zlib, zlibSupport ? true
 , openssl, opensslSupport ? true
 , gdbm, gdbmSupport ? true
 , ncurses, readline, cursesSupport ? false
 , groff, docSupport ? false
 , libyaml, yamlSupport ? true
+, ruby_2_1_2, autoreconfHook, bison, useRailsExpress ? true
 }:
 
 let
   op = stdenv.lib.optional;
   ops = stdenv.lib.optionals;
+  patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
+  config = import ./config.nix fetchgit;
+  baseruby = ruby_2_1_2.override { useRailsExpress = false; };
 in
 
 stdenv.mkDerivation rec {
-  name = "ruby-2.1.2";
-  src = fetchurl {
-    url = "http://cache.ruby-lang.org/pub/ruby/2.1/${name}.tar.bz2";
-    sha256 = "6948b02570cdfb89a8313675d4aa665405900e27423db408401473f30fc6e901";
+  version = with passthru; "${majorVersion}.${minorVersion}.${teenyVersion}-p${patchLevel}";
+
+  name = "ruby-${version}";
+
+  src = if useRailsExpress then fetchFromGitHub {
+    owner  = "ruby";
+    repo   = "ruby";
+    rev    = "v2_1_2";
+    sha256 = "14f8w3zwngnxsgigffh6h9z3ng53xq8mk126xmwrsmz9n3ypm6l0";
+  } else fetchurl {
+    url = "http://cache.ruby-lang.org/pub/ruby/2.1/ruby-2.1.2.tar.gz";
+    sha256 = "0db6krc2bd7yha8p96lcqrahjpsz7g7abhni134g708sh53n8apj";
   };
 
   # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
   NROFF = "${groff}/bin/nroff";
 
-  buildInputs = (ops cursesSupport [ ncurses readline ] )
+  buildInputs = ops useRailsExpress [ autoreconfHook bison ]
+    ++ (ops cursesSupport [ ncurses readline ] )
     ++ (op docSupport groff )
     ++ (op zlibSupport zlib)
     ++ (op opensslSupport openssl)
@@ -36,7 +49,28 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  patches = ops useRailsExpress [
+    "${patchSet}/patches/ruby/2.1.2/railsexpress/01-zero-broken-tests.patch"
+    "${patchSet}/patches/ruby/2.1.2/railsexpress/02-improve-gc-stats.patch"
+    "${patchSet}/patches/ruby/2.1.2/railsexpress/03-display-more-detailed-stack-trace.patch"
+    "${patchSet}/patches/ruby/2.1.2/railsexpress/04-show-full-backtrace-on-stack-overflow.patch"
+    "${patchSet}/patches/ruby/2.1.2/railsexpress/05-fix-missing-c-return-event.patch"
+    "${patchSet}/patches/ruby/2.1.2/railsexpress/06-backport-006e66b6680f60adfb434ee7397f0dbc77de7873.patch"
+    "${patchSet}/patches/ruby/2.1.2/railsexpress/07-funny-falcon-stc-density.patch"
+    "${patchSet}/patches/ruby/2.1.2/railsexpress/08-funny-falcon-stc-pool-allocation.patch"
+    "${patchSet}/patches/ruby/2.1.2/railsexpress/09-aman-opt-aset-aref-str.patch"
+    "${patchSet}/patches/ruby/2.1.2/railsexpress/10-funny-falcon-method-cache.patch"
+  ];
+
+  # Ruby >= 2.1.0 tries to download config.{guess,sub}
+  postPatch = ''
+    rm tool/config_files.rb
+    cp ${config}/config.guess tool/
+    cp ${config}/config.sub tool/
+  '';
+
   configureFlags = ["--enable-shared" ]
+    ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
     # on darwin, we have /usr/include/tk.h -- so the configure script detects
     # that tk is installed
     ++ ( if stdenv.isDarwin then [ "--with-out-ext=tk " ] else [ ]);
@@ -64,9 +98,11 @@ stdenv.mkDerivation rec {
   };
 
   passthru = rec {
-    majorVersion = "2.1";
-    minorVersion = "2";
-    libPath = "lib/ruby/${majorVersion}";
-    gemPath = "lib/ruby/gems/${majorVersion}";
+    majorVersion = "2";
+    minorVersion = "1";
+    teenyVersion = "2";
+    patchLevel = "353";
+    libPath = "lib/ruby/${majorVersion}.${minorVersion}";
+    gemPath = "lib/ruby/gems/${majorVersion}.${minorVersion}";
   };
 }

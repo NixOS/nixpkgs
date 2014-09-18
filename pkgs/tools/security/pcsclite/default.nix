@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
     homepage = http://pcsclite.alioth.debian.org/;
     license = licenses.bsd3;
-    maintainers = with maintainers; [viric];
+    maintainers = with maintainers; [ viric wkennington ];
     platforms = with platforms; linux;
   };
 }

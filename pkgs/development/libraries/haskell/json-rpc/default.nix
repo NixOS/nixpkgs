@@ -18,6 +18,7 @@ cabal.mkDerivation (self: {
     stm stmConduit testFramework testFrameworkQuickcheck2 text
     unorderedContainers
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/xenog/json-rpc";
     description = "Fully-featured JSON-RPC 2.0 library";

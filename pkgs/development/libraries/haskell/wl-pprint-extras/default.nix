@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wl-pprint-extras";
-  version = "3.5";
-  sha256 = "172xp23j3w8jbd7h0sna9g8p4d6xwy8154gqj93ycz2907r2kwb7";
+  version = "3.5.0.2";
+  sha256 = "1wh8nm7h8bbr1xxf0q3cwb837jk5y1cq4l2h6lw63wavwqqvjfw6";
   buildDepends = [ nats semigroupoids semigroups text utf8String ];
   testDepends = [ HUnit testFramework testFrameworkHunit ];
   meta = {

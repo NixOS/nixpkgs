@@ -1,5 +1,6 @@
 { pkgs, python }:
-  with pkgs.lib;
+
+with pkgs.lib;
 
 let
   isPy26 = python.majorVersion == "2.6";
@@ -17,23 +18,29 @@ let
     if isPy34 then "python34" else
     if isPyPy then "pypy" else "";
 
-  modules = python.modules or { readline = null; sqlite3 = null; curses = null; curses_panel = null; ssl = null; crypt = null; };
+  modules = python.modules or {
+    readline = null;
+    sqlite3 = null;
+    curses = null;
+    curses_panel = null;
+    ssl = null;
+    crypt = null;
+  };
 
-pythonPackages = modules // import ./python-packages-generated.nix {
-  inherit pkgs python;
-  inherit (pkgs) stdenv fetchurl;
-  self = pythonPackages;
-} //
-
+  pythonPackages = modules // import ./python-packages-generated.nix {
+    inherit pkgs python;
+    inherit (pkgs) stdenv fetchurl;
+    self = pythonPackages;
+  }
 # Python packages for all python versions
-rec {
+// rec {
 
   inherit python isPy26 isPy27 isPy33 isPy34 isPyPy isPy3k pythonName;
   inherit (pkgs) fetchurl fetchsvn fetchgit stdenv unzip;
 
   # helpers
 
-  callPackage = callPackageWith (pkgs // pythonPackages);
+  callPackage = pkgs.newScope pythonPackages;
 
   # global distutils config used by buildPythonPackage
   distutils-cfg = callPackage ../development/python-modules/distutils-cfg { };
@@ -49,23 +56,16 @@ rec {
 
   # specials
 
-  recursivePthLoader = import ../development/python-modules/recursive-pth-loader {
-    inherit (pkgs) stdenv;
-    inherit python;
-  };
+  recursivePthLoader = callPackage ../development/python-modules/recursive-pth-loader { };
 
-  setuptools = import ../development/python-modules/setuptools {
-    inherit (pkgs) stdenv fetchurl;
-    inherit python wrapPython distutils-cfg;
-  };
+  setuptools = callPackage ../development/python-modules/setuptools { };
 
   # packages defined elsewhere
 
   blivet = callPackage ../development/python-modules/blivet { };
 
-  dbus = import ../development/python-modules/dbus {
-    inherit (pkgs) stdenv fetchurl pkgconfig dbus dbus_glib dbus_tools;
-    inherit python isPyPy;
+  dbus = callPackage ../development/python-modules/dbus {
+    dbus = pkgs.dbus;
   };
 
   discid = buildPythonPackage rec {
@@ -91,8 +91,6 @@ rec {
   };
 
   h5py = callPackage ../development/python-modules/h5py {
-    inherit (pkgs) stdenv fetchurl;
-    inherit python buildPythonPackage cython numpy;
     hdf5 = pkgs.hdf5.override { mpi = null; };
   };
 
@@ -103,25 +101,19 @@ rec {
     inherit mpi4py;
   };
 
-  ipython = import ../shells/ipython {
-    inherit (pkgs) stdenv fetchurl sip pyqt4;
-    inherit buildPythonPackage pythonPackages;
+  ipython = callPackage ../shells/ipython {
     qtconsoleSupport = !pkgs.stdenv.isDarwin; # qt is not supported on darwin
     pylabQtSupport = !pkgs.stdenv.isDarwin;
     pylabSupport = !pkgs.stdenv.isDarwin; # cups is not supported on darwin
   };
 
-  ipythonLight = lowPrio (import ../shells/ipython {
-    inherit (pkgs) stdenv fetchurl;
-    inherit buildPythonPackage pythonPackages;
+  ipythonLight = lowPrio (ipython.override {
     qtconsoleSupport = false;
     pylabSupport = false;
     pylabQtSupport = false;
   });
 
   mpi4py = callPackage ../development/python-modules/mpi4py {
-    inherit (pkgs) stdenv fetchurl openssh;
-    inherit python buildPythonPackage;
     mpi = pkgs.openmpi;
   };
 
@@ -131,74 +123,37 @@ rec {
   # version of nixpart.
   nixpart0 = nixpart;
 
-  pitz = import ../applications/misc/pitz {
-    inherit (pkgs) stdenv fetchurl;
-    inherit buildPythonPackage tempita jinja2 pyyaml clepy mock nose decorator docutils;
+  pitz = callPackage ../applications/misc/pitz { };
+
+  pycairo = callPackage ../development/python-modules/pycairo {
   };
 
-  pycairo = import ../development/python-modules/pycairo {
-    inherit (pkgs) stdenv fetchurl fetchpatch pkgconfig cairo x11;
-    inherit python isPyPy;
+  pycrypto = callPackage ../development/python-modules/pycrypto { };
+
+  pygobject = callPackage ../development/python-modules/pygobject { };
+
+  pygobject3 = callPackage ../development/python-modules/pygobject/3.nix { };
+
+  pygtk = callPackage ../development/python-modules/pygtk { libglade = null; };
+
+  pyGtkGlade = pygtk.override {
+    libglade = pkgs.gnome.libglade;
   };
 
-  pycrypto = import ../development/python-modules/pycrypto {
-    inherit (pkgs) fetchurl stdenv gmp;
-    inherit python buildPythonPackage;
-  };
-
-  pygobject = import ../development/python-modules/pygobject {
-    inherit (pkgs) stdenv fetchurl pkgconfig glib;
-    inherit python;
-  };
-
-  pygobject3 = import ../development/python-modules/pygobject/3.nix {
-    inherit (pkgs) stdenv fetchurl pkgconfig glib gobjectIntrospection cairo;
-    inherit python pycairo;
-  };
-
-  pygtk = import ../development/python-modules/pygtk {
-    inherit (pkgs) fetchurl stdenv pkgconfig gtk;
-    inherit python buildPythonPackage pygobject pycairo isPy3k;
-  };
-
-  # XXX: how can we get an override here?
-  #pyGtkGlade = pygtk.override {
-  #  inherit (pkgs.gnome) libglade;
-  #};
-  pyGtkGlade = import ../development/python-modules/pygtk {
-    inherit (pkgs) fetchurl stdenv pkgconfig gtk;
-    inherit (pkgs.gnome) libglade;
-    inherit python buildPythonPackage pygobject pycairo isPy3k;
-  };
-
-  pyqt4 = import ../development/python-modules/pyqt/4.x.nix {
-    inherit (pkgs) stdenv fetchurl pkgconfig qt4 makeWrapper;
-    inherit (pkgs.xorg) lndir;
-    inherit python sip;
+  pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
     pythonDBus = dbus;
   };
 
-  pyqt5 = import ../development/python-modules/pyqt/5.x.nix {
-    inherit (pkgs) stdenv fetchurl pkgconfig qt5 makeWrapper;
-    inherit (pkgs.xorg) lndir;
-    inherit python;
+  pyqt5 = callPackage ../development/python-modules/pyqt/5.x.nix {
     sip = sip_4_16;
     pythonDBus = dbus;
   };
 
-  sip = import ../development/python-modules/sip {
-    inherit (pkgs) stdenv fetchurl;
-    inherit python isPyPy;
-  };
+  sip = callPackage ../development/python-modules/sip { };
 
-  sip_4_16 = import ../development/python-modules/sip/4.16.nix {
-    inherit (pkgs) stdenv fetchurl;
-    inherit python isPyPy;
-  };
+  sip_4_16 = callPackage ../development/python-modules/sip/4.16.nix { };
 
-  tables = import ../development/python-modules/tables {
-    inherit (pkgs) stdenv fetchurl bzip2 lzo;
-    inherit python buildPythonPackage cython numpy numexpr;
+  tables = callPackage ../development/python-modules/tables {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
 
@@ -3941,13 +3896,13 @@ rec {
 
 
   gyp = buildPythonPackage rec {
-    rev = "1944";
+    rev = "1977";
     name = "gyp-r${rev}";
 
     src = fetchsvn {
       url = "http://gyp.googlecode.com/svn/trunk";
       inherit rev;
-      sha256 = "15k3ivk3jyhx4rwdf1mn6qpyrwixvy01jpkir8d14c4g9hax1dx1";
+      sha256 = "0vnr75yd3bidysiwl9lljvf1dv6v9m9xqdnx0hdgyl92w689n9j8";
     };
 
     patches = optionals pkgs.stdenv.isDarwin [
@@ -6041,11 +5996,12 @@ rec {
 
 
   psutil = buildPythonPackage rec {
-    name = "psutil-1.0.1";
+    name = "psutil-${version}";
+    version = "2.1.1";
 
     src = fetchurl {
-      url = "http://psutil.googlecode.com/files/${name}.tar.gz";
-      sha256 = "1zrzh7hi0f79sf9axwrw3c2kl86qs72kvx8xbbrdwlp39rfa1i1f";
+      url = "https://pypi.python.org/packages/source/p/psutil/${name}.tar.gz";
+      sha256 = "14smqj57yjrm6hjz5n2annkgv0kmxckdhqvfx784f4d4lr52m0dz";
     };
 
     # failed tests: https://code.google.com/p/psutil/issues/detail?id=434
@@ -7790,12 +7746,27 @@ rec {
     };
   };
 
+  pgpdump = pythonPackages.buildPythonPackage rec {
+    name = "pgpdump-1.5";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pgpdump/pgpdump-1.5.tar.gz";
+      md5 = "040a451c8e63de3e61fc5b66efa7fca5";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Python library for parsing PGP packets";
+      homepage = https://github.com/toofishes/python-pgpdump;
+      license = licenses.bsd3;
+    };
+  };
+
   spambayes = buildPythonPackage rec {
-    name = "spambayes-1.1a6";
+    name = "spambayes-1.1b1";
 
     src = fetchurl {
       url = "mirror://sourceforge/spambayes/${name}.tar.gz";
-      sha256 = "0lqhn2v0avgwxmk4dq9lkwr2g39ls2p6x8hqk5w07wd462cjsx8l";
+      sha256 = "0kqvjb89b02wp41p650ydfspi1s8d7akx1igcrw62diidqbxp04n";
     };
 
     propagatedBuildInputs = [ pydns lockfile ];
@@ -7868,6 +7839,7 @@ rec {
 
   sympy = buildPythonPackage rec {
     name = "sympy-0.7.4";
+    disabled = isPy34;  # some tests fail
 
     src = fetchurl {
       url    = "https://github.com/sympy/sympy/releases/download/${name}/${name}.tar.gz";
@@ -8279,12 +8251,13 @@ rec {
 
   sqlalchemy_imageattach = buildPythonPackage rec {
     name = "SQLAlchemy-ImageAttach-${version}";
-    version = "0.8.1";
+    version = "0.8.2";
+    disabled = isPy33;
 
     src = fetchgit {
       url = https://github.com/crosspop/sqlalchemy-imageattach.git;
       rev = "refs/tags/${version}";
-      md5 = "051dd9de0757714d33c3ecd5ab37b97d";
+      md5 = "cffdcde30952176e35fccf385f579dda";
     };
 
     buildInputs = [ pytest webob pkgs.imagemagick nose ];
@@ -9217,15 +9190,11 @@ rec {
   wxPython = wxPython28;
 
 
-  wxPython28 = import ../development/python-modules/wxPython/2.8.nix {
-    inherit (pkgs) stdenv fetchurl pkgconfig;
-    inherit pythonPackages isPyPy python;
+  wxPython28 = callPackage ../development/python-modules/wxPython/2.8.nix {
     wxGTK = pkgs.wxGTK28;
   };
 
-  wxPython30 = import ../development/python-modules/wxPython/3.0.nix {
-    inherit (pkgs) stdenv fetchurl pkgconfig;
-    inherit pythonPackages isPyPy python;
+  wxPython30 = callPackage ../development/python-modules/wxPython/3.0.nix {
     wxGTK = pkgs.wxGTK30;
   };
 
@@ -9779,11 +9748,11 @@ rec {
 
 
   zope_schema = buildPythonPackage rec {
-    name = "zope.schema-4.4.1";
+    name = "zope.schema-4.4.2";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.schema/${name}.tar.gz";
-      sha256 = "0wpwfggd736ai8bbrwbsnqf522sh5j57d1zxq8m8p6i5nwml0q02";
+      sha256 = "1p943jdxb587dh7php4vx04qvn7b2877hr4qs5zyckvp5afhhank";
     };
 
     propagatedBuildInputs = [ zope_location zope_event zope_interface zope_testing ] ++ optional isPy26 ordereddict;
@@ -10006,6 +9975,37 @@ rec {
     };
   };
 
+  screenkey = buildPythonPackage rec {
+    version = "0.2-b3634a2c6eb6d6936c3b2c1ef5078bf3a84c40c6";
+    name = "screenkey-${version}";
+
+    propagatedBuildInputs = [ pygtk distutils_extra xlib pkgs.xorg.xmodmap ];
+
+    preConfigure = ''
+      substituteInPlace setup.py --replace "/usr/share" "./share"
+
+      # disable the feature that binds a shortcut to turning on/off
+      # screenkey. This is because keybinder is not packages in Nix as
+      # of today.
+      substituteInPlace Screenkey/screenkey.py \
+        --replace "import keybinder" "" \
+        --replace "        keybinder.bind(self.options['hotkey'], self.hotkey_cb, show_item)" ""
+    '';
+
+    src = fetchgit {
+        url = https://github.com/scs3jb/screenkey.git;
+        rev = "b3634a2c6eb6d6936c3b2c1ef5078bf3a84c40c6";
+        sha256 = "eb754917e98e03cb9d528eb5f57a08c88fa7a8172f92325a9fe796b2daf14db0";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/scs3jb/screenkey;
+      description = "A screencast tool to show your keys";
+      license = stdenv.lib.licenses.gpl3Plus;
+      maintainers = [ maintainers.DamienCassou ];
+      platforms = platforms.linux;
+    };
+  };
 
   tarman = buildPythonPackage rec {
     version = "0.1.3";
@@ -10363,13 +10363,13 @@ rec {
   graphite_api = buildPythonPackage rec {
     name = "graphite-api-1.0.1";
 
-    src = fetchurl {
-      url = "https://pypi.python.org/packages/source/g/graphite-api/${name}.tar.gz";
-      md5 = "466c13a902744bed09a054da452140f0";
+    src = fetchgit {
+      url = "https://github.com/brutasse/graphite-api.git";
+      rev = "b6f75e8a08fae695c094fece6de611b893fc65fb";
+      sha256 = "41b90d5f35e99a020a6b1b77938690652521d1841b3165574fcfcee807ce4e6a";
     };
 
-    # ImportError: No module named tests
-    doCheck = false;
+    checkPhase = "nosetests";
 
     propagatedBuildInputs = [
       flask
@@ -10384,8 +10384,15 @@ rec {
       tzlocal
     ];
 
+    buildInputs = [
+      nose
+      mock
+    ];
+
+    LD_LIBRARY_PATH = "${pkgs.cairo}/lib";
+
     meta = {
-      description = "Graphite-web,  without the interface. Just the rendering HTTP API.";
+      description = "Graphite-web, without the interface. Just the rendering HTTP API.";
       homepage = https://github.com/brutasse/graphite-api;
       license = licenses.asl20;
     };
@@ -10394,12 +10401,15 @@ rec {
   graphite_influxdb = buildPythonPackage rec {
     name = "graphite-influxdb-0.3";
 
-    src = fetchurl {
-      url = "https://pypi.python.org/packages/source/g/graphite-influxdb/${name}.tar.gz";
-      md5 = "5ce64ff6bb0b41c99e57486d6ec86eb7";
+    src = fetchgit {
+      url = "https://github.com/vimeo/graphite-influxdb.git";
+      rev = "2273d12a24e1d804685a36debfd4224b7416b62f";
+      sha256 = "e386eaf190793d3ad0a42a74b9e137a968a51fc3806f602ff756e09c0c0648a8";
     };
 
     propagatedBuildInputs = [ influxdb graphite_api ];
+
+    passthru.moduleName = "graphite_influxdb.InfluxdbFinder";
 
     meta = {
       description = "An influxdb backend for Graphite-web and graphite-api";
@@ -10685,6 +10695,26 @@ rec {
     };
   };
 
+  pythonefl_1_11 = buildPythonPackage rec {
+    name = "python-efl-${version}";
+    version = "1.11.0";
+    src = fetchurl {
+      url = "http://download.enlightenment.org/rel/bindings/python/${name}.tar.xz";
+      sha256 = "1d4hj39alg6j7ah1bc8wvlka9d13i8iy3fxxraik2f60w6811i48";
+    };
+    preConfigure = ''
+      export NIX_CFLAGS_COMPILE="-I${pkgs.e19.efl}/include/eo-1 -I${pkgs.e19.efl}/include/eina-1 -I${pkgs.e19.efl}/include/eina-1/eina -I${pkgs.e19.efl}/include/evas-1 -I${dbus}/include/dbus-1.0 -I${pkgs.e19.efl}/include/efl-1 -I${pkgs.e19.efl}/include/eet-1 -I${pkgs.e19.efl}/include/ecore-1 -I${pkgs.e19.efl}/include/ecore-evas-1 -I${pkgs.e19.efl}/include/ecore-file-1 -I${pkgs.e19.efl}/include/ecore-input-1 -I${pkgs.e19.efl}/include/ecore-imf-1 -I${pkgs.e19.efl}/include/ecore-con-1 -I${pkgs.e19.efl}/include/edje-1 -I${pkgs.e19.efl}/include/eldbus-1 -I${pkgs.e19.efl}/include/efreet-1 -I${pkgs.e19.efl}/include/ethumb-client-1 -I${pkgs.e19.efl}/include/ethumb-1 -I${pkgs.e19.efl}/include/ecore-x-1 $NIX_CFLAGS_COMPILE"
+    '';
+    buildInputs = [ pkgs.pkgconfig pkgs.e19.efl pkgs.e19.elementary ];
+    meta = {
+      description = "Python bindings for EFL and Elementary.";
+      homepage = http://enlightenment.org/;
+      maintainers = [ stdenv.lib.maintainers.matejc ];
+      platforms = stdenv.lib.platforms.linux;
+      license = stdenv.lib.licenses.gpl3;
+    };
+  };
+
   pythonefl = buildPythonPackage rec {
     name = "python-efl-${version}";
     version = "1.10.0";
@@ -10805,6 +10835,24 @@ rec {
     };
   };
 
+  weboob = buildPythonPackage rec {
+    name = "weboob-0.j";
 
+    src = fetchurl {
+      url = "https://symlink.me/attachments/download/271/${name}.tar.gz";
+      md5 = "9e11b1f376ccb87d35995ec87bba5b38";
+    };
+
+    setupPyBuildFlags = ["--qt" "--xdg"];
+
+    propagatedBuildInputs = [ pillow prettytable pyyaml dateutil gdata requests2 mechanize feedparser lxml pkgs.gnupg pyqt4 pkgs.libyaml simplejson cssselect ];
+
+    meta = {
+      homepage = http://weboob.org;
+      description = "Collection of applications and APIs to interact with websites without requiring the user to open a browser";
+      license = stdenv.lib.licenses.agpl3;
+      maintainers = [ stdenv.lib.maintainers.DamienCassou ];
+    };
+  };
 
 }); in pythonPackages
