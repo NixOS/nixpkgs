@@ -80,14 +80,17 @@ let
         };
 
 
-  makeClosure = module: forAllSystems (system: scrubDrv (import ./lib/eval-config.nix {
+  makeClosure = module: buildFromConfig module (config: config.system.build.toplevel);
+
+
+  buildFromConfig = module: sel: forAllSystems (system: scrubDrv (sel (import ./lib/eval-config.nix {
     inherit system;
-    modules = [ module ] ++ lib.singleton
+    modules = [ module versionModule ] ++ lib.singleton
       ({ config, lib, ... }:
       { fileSystems."/".device  = lib.mkDefault "/dev/sda1";
         boot.loader.grub.device = lib.mkDefault "/dev/sda";
       });
-  }).config.system.build.toplevel);
+  }).config));
 
 
 in rec {
@@ -124,9 +127,9 @@ in rec {
     };
 
 
-  manual = forAllSystems (system: (builtins.getAttr system iso_minimal).config.system.build.manual.manual);
-  manualPDF = iso_minimal.x86_64-linux.config.system.build.manual.manualPDF;
-  manpages = forAllSystems (system: (builtins.getAttr system iso_minimal).config.system.build.manual.manpages);
+  manual = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manual);
+  manualPDF = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manualPDF)).x86_64-linux;
+  manpages = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manpages);
 
 
   iso_minimal = forAllSystems (system: makeIso {
