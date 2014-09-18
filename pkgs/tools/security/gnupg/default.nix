@@ -1,5 +1,7 @@
 { fetchurl, stdenv, readline, zlib, libgpgerror, pth, libgcrypt, libassuan
 , libksba, coreutils, libiconvOrEmpty
+# Each of the dependencies below are optional.
+# Gnupg can be built without them at the cost of reduced functionality.
 , pinentry ? null, openldap ? null, bzip2 ? null, libusb ? null, curl ? null
 }:
 
