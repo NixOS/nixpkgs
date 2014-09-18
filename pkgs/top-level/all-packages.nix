@@ -883,6 +883,8 @@ let
 
   despotify = callPackage ../development/libraries/despotify { };
 
+  dfc  = callPackage ../tools/system/dfc { };
+
   dev86 = callPackage ../development/compilers/dev86 { };
 
   dnsmasq = callPackage ../tools/networking/dnsmasq { };
