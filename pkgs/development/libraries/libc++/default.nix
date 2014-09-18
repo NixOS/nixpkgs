@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchsvn, cmake, libcxxabi, python }:
+{ stdenv, fetchurl, cmake, libcxxabi, python }:
 
 let
   version = "3.4.2";
