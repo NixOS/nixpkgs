@@ -8522,6 +8522,10 @@ let
 
   clipit = callPackage ../applications/misc/clipit { };
 
+  cmplayer = callPackage ../applications/video/cmplayer {
+    pulseSupport = config.pulseaudio or false;
+  };
+
   cmus = callPackage ../applications/audio/cmus { };
 
   compiz = callPackage ../applications/window-managers/compiz {
