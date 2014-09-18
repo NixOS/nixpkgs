@@ -244,7 +244,8 @@ in rec {
   tests.munin = callTest tests/munin.nix {};
   tests.mysql = callTest tests/mysql.nix {};
   tests.mysqlReplication = callTest tests/mysql-replication.nix {};
-  tests.nat = callTest tests/nat.nix {};
+  tests.nat.firewall = callTest tests/nat.nix { withFirewall = true; };
+  tests.nat.standalone = callTest tests/nat.nix { withFirewall = false; };
   tests.nfs3 = callTest tests/nfs.nix { version = 3; };
   tests.nsd = callTest tests/nsd.nix {};
   tests.openssh = callTest tests/openssh.nix {};
