@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, xproto, xdotool, pkgs }:
+{ stdenv, fetchurl, libX11, xproto, xdotool, unzip }:
 
 stdenv.mkDerivation {
   name = "seturgent";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    libX11 xproto pkgs.unzip
+    libX11 xproto unzip
   ];
 
   installPhase = ''
@@ -18,7 +18,8 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-      description = "Set an applications urgency hint (or not)";
+      description = "Set an application's urgency hint (or not)";
+      maintainers = [ stdenv.lib.maintainers.yarr ];
       homepage = https://github.com/hiltjo/seturgent;
       license = stdenv.lib.licenses.mit;
   };
