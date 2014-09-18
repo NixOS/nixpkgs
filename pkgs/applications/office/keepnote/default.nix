@@ -18,5 +18,6 @@ buildPythonPackage {
     description = "Note taking application";
     homepage = http://rasm.ods.org/keepnote;
     license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = [ maintainers.robberer ];
   };
 }
