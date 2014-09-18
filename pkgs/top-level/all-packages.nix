@@ -9814,7 +9814,7 @@ let
 
   qbittorrent = callPackage ../applications/networking/p2p/qbittorrent { };
 
-  eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp { };
+  eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp { lua5 = lua5_1; };
 
   qemu = callPackage ../applications/virtualization/qemu { };
 
