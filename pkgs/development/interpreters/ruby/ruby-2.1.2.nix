@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub
+{ stdenv, fetchurl, fetchgit, fetchFromGitHub
 , zlib, zlibSupport ? true
 , openssl, opensslSupport ? true
 , gdbm, gdbmSupport ? true
@@ -12,6 +12,7 @@ let
   op = stdenv.lib.optional;
   ops = stdenv.lib.optionals;
   patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
+  config = import ./config.nix fetchgit;
   baseruby = ruby_2_1_2.override { useRailsExpress = false; };
 in
 
@@ -60,6 +61,13 @@ stdenv.mkDerivation rec {
     "${patchSet}/patches/ruby/2.1.2/railsexpress/09-aman-opt-aset-aref-str.patch"
     "${patchSet}/patches/ruby/2.1.2/railsexpress/10-funny-falcon-method-cache.patch"
   ];
+
+  # Ruby >= 2.1.0 tries to download config.{guess,sub}
+  postPatch = ''
+    rm tool/config_files.rb
+    cp ${config}/config.guess tool/
+    cp ${config}/config.sub tool/
+  '';
 
   configureFlags = ["--enable-shared" ]
     ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
