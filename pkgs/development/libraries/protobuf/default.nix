@@ -1,28 +1,28 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, zlib }:
+{ fetchurl, stdenv, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "protobuf-${version}";
-  version = "2.6.0";
+  name = "protobuf-2.5.0";
 
-  src = fetchFromGitHub {
-    owner = "google";
-    repo = "protobuf";
-    rev = "v${version}";
-    sha256 = "020a59x9kbrbhh207j62gw55pj7p5rvz01i6ml6xhpcghp7l50b4";
+  src = fetchurl {
+    url = "http://protobuf.googlecode.com/files/${name}.tar.bz2";
+    sha256 = "0xxn9gxhvsgzz2sgmihzf6pf75clr05mqj6218camwrwajpcbgqk";
   };
 
-  buildInputs = [ autoreconfHook zlib ];
+  buildInputs = [ zlib ];
 
-  meta = with stdenv.lib; {
-    homepage = http://code.google.com/p/protobuf/;
+  doCheck = true;
+
+  meta = {
     description = "Protocol Buffers - Google's data interchange format";
+
     longDescription =
       '' Protocol Buffers are a way of encoding structured data in an
          efficient yet extensible format.  Google uses Protocol Buffers for
          almost all of its internal RPC protocols and file formats.
       '';
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
+
+    license = "mBSD";
+
+    homepage = http://code.google.com/p/protobuf/;
   };
 }
