@@ -1,22 +1,23 @@
-{ fetchurl, stdenv, zlib, protobuf }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, protobuf, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "protobuf-c-0.15";
+  name = "protobuf-c-${version}";
+  version = "1.0.2";
 
-  src = fetchurl {
-    url = "http://protobuf-c.googlecode.com/files/${name}.tar.gz";
-    sha256 = "0dh0180lzqk6n1r0qk38kgdy4x15mpkg5j4g2r31qhx52f757jwg";
+  src = fetchFromGitHub {
+    owner = "protobuf-c";
+    repo = "protobuf-c";
+    rev = "v${version}";
+    sha256 = "1harabw7qdgcmh098664xkcv8bkyach6i35sisc40yhvagr3fzsz";
   };
 
-  buildInputs = [ protobuf ];
+  buildInputs = [ autoreconfHook pkgconfig protobuf zlib ];
 
-  doCheck = true;
-
-  meta = {
+  meta = with stdenv.lib; {
+    homepage = http://github.com/protobuf-c/protobuf-c/;
     description = "C bindings for Google's Protocol Buffers";
-
-    license = "BSD";
-
-    homepage = http://code.google.com/p/protobuf-c/;
+    license = licenses.bsd2;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ wkennington ];
   };
 }
