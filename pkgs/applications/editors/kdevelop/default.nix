@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "4.6.0";
+  version = "4.7.0";
   pname = "kdevelop";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "1ee9e7b8c46f575dd29d920cfd6284130f2e738a2e1f52dfd97b075fab2e4c73";
+    sha256 = "68de8f412e8ab6107766f00623e54c458d02825e3a70f5ea9969688f8c77c120";
   };
 
   buildInputs = [ kdevplatform kdebase_workspace okteta qjson ];
