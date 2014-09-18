@@ -48,7 +48,7 @@ import ./make-test.nix {
       $router->succeed("curl --fail http://server/ >&2");
 
       # The client should be also able to connect via the NAT router.
-      $router->waitForUnit("nat");
+      $router->waitForUnit("firewall"); # Nat leverages the firewall service
       $client->waitForUnit("network.target");
       $client->succeed("curl --fail http://server/ >&2");
       $client->succeed("ping -c 1 server >&2");
@@ -66,12 +66,13 @@ import ./make-test.nix {
       $router->succeed("ping -c 1 client >&2");
 
       # If we turn off NAT, the client shouldn't be able to reach the server.
-      $router->stopJob("nat");
+      $router->succeed("iptables -t nat -D PREROUTING -j nixos-nat-pre");
+      $router->succeed("iptables -t nat -D POSTROUTING -j nixos-nat-post");
       $client->fail("curl --fail --connect-timeout 5 http://server/ >&2");
       $client->fail("ping -c 1 server >&2");
 
       # And make sure that restarting the NAT job works.
-      $router->succeed("systemctl start nat");
+      $router->succeed("systemctl reload firewall"); # Nat leverages the firewall service
       $client->succeed("curl --fail http://server/ >&2");
       $client->succeed("ping -c 1 server >&2");
     '';
