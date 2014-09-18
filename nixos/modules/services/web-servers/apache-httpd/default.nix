@@ -206,16 +206,11 @@ let
       </Directory>
     '';
 
-    robotsTxt = pkgs.writeText "robots.txt" ''
-      ${# If this is a vhost, the include the entries for the main server as well.
-        if isMainServer then ""
-        else concatMapStrings (svc: svc.robotsEntries) mainSubservices}
-      ${concatMapStrings (svc: svc.robotsEntries) subservices}
-    '';
-
-    robotsConf = ''
-      Alias /robots.txt ${robotsTxt}
-    '';
+    robotsTxt =
+      concatStringsSep "\n" (
+        # If this is a vhost, the include the entries for the main server as well.
+        (if isMainServer then [] else map (svc: svc.robotsEntries) mainSubservices)
+        ++ (map (svc: svc.robotsEntries) subservices));
 
   in ''
     ServerName ${serverInfo.canonicalName}
@@ -243,7 +238,9 @@ let
       CustomLog ${mainCfg.logDir}/access_log-${cfg.hostName} ${cfg.logFormat}
     '' else ""}
 
-    ${robotsConf}
+    ${optionalString (robotsTxt != "") ''
+      Alias /robots.txt ${pkgs.writeText "robots.txt" robotsTxt}
+    ''}
 
     ${if isMainServer || maybeDocumentRoot != null then documentRootConf else ""}
 
