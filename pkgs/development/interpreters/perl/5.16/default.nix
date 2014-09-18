@@ -1,26 +1,10 @@
-{ stdenv, fetchurl, enableThreading ? true }:
-
-# We can only compile perl with threading on platforms where we have a
-# real glibc in the stdenv.
-#
-# Instead of silently building an unthreaded perl if this is not the
-# case, we force callers to disableThreading explicitly, therefore
-# documenting the platforms where the perl is not threaded.
-#
-# In the case of stdenv linux boot stage1 it's not possible to use
-# threading because of the simpleness of the bootstrap glibc, so we
-# use enableThreading = false there.
-assert enableThreading -> (stdenv ? glibc);
+{ lib, stdenv, fetchurl, enableThreading ? true }:
 
 let
 
   libc = if stdenv.gcc.libc or null != null then stdenv.gcc.libc else "/usr";
 
 in
-
-with {
-  inherit (stdenv.lib) optional optionalString;
-};
 
 stdenv.mkDerivation rec {
   name = "perl-5.16.3";
@@ -37,8 +21,8 @@ stdenv.mkDerivation rec {
       ./fixed-man-page-date.patch
       ./no-date-in-perl-binary.patch
     ]
-    ++ optional stdenv.isSunOS  ./ld-shared.patch
-    ++ stdenv.lib.optional stdenv.isDarwin [ ./cpp-precomp.patch ./no-libutil.patch ] ;
+    ++ lib.optional stdenv.isSunOS  ./ld-shared.patch
+    ++ lib.optional stdenv.isDarwin [ ./cpp-precomp.patch ./no-libutil.patch ] ;
 
   # Build a thread-safe Perl with a dynamic libperls.o.  We need the
   # "installstyle" option to ensure that modules are put under
@@ -54,7 +38,7 @@ stdenv.mkDerivation rec {
       "-Dlocincpth=${libc}/include"
       "-Dloclibpth=${libc}/lib"
     ]
-    ++ optional enableThreading "-Dusethreads";
+    ++ lib.optional enableThreading "-Dusethreads";
 
   configureScript = "${stdenv.shell} ./Configure";
 
@@ -66,18 +50,18 @@ stdenv.mkDerivation rec {
     ''
       configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
 
-      ${optionalString stdenv.isArm ''
+      ${lib.optionalString stdenv.isArm ''
         configureFlagsArray=(-Dldflags="-lm -lrt")
       ''}
 
-      ${optionalString stdenv.isCygwin ''
+      ${lib.optionalString stdenv.isCygwin ''
         cp cygwin/cygwin.c{,.bak}
         echo "#define PERLIO_NOT_STDIO 0" > tmp
         cat tmp cygwin/cygwin.c.bak > cygwin/cygwin.c
       ''}
     '';
 
-  preBuild = optionalString (!(stdenv ? gcc && stdenv.gcc.nativeTools))
+  preBuild = lib.optionalString (!(stdenv ? gcc && stdenv.gcc.nativeTools))
     ''
       # Make Cwd work on NixOS (where we don't have a /bin/pwd).
       substituteInPlace dist/Cwd/Cwd.pm --replace "'/bin/pwd'" "'$(type -tP pwd)'"
