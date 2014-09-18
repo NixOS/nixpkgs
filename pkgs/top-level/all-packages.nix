@@ -1199,10 +1199,6 @@ let
 
   gnupg = callPackage ../tools/security/gnupg { libusb = libusb1; };
 
-  gnupg2_1 = lowPrio (callPackage ../tools/security/gnupg/git.nix {
-    libassuan = libassuan2_1;
-  });
-
   gnuplot = callPackage ../tools/graphics/gnuplot { };
 
   gnuplot_qt = gnuplot.override { withQt = true; };
