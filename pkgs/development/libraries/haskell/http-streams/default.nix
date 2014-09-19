@@ -25,6 +25,7 @@ cabal.mkDerivation (self: {
     unorderedContainers
   ];
   doCheck = false;
+  jailbreak = true;
   meta = {
     homepage = "http://research.operationaldynamics.com/projects/http-streams/";
     description = "An HTTP client using io-streams";
