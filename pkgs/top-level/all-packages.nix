@@ -11392,6 +11392,8 @@ let
 
   pari = callPackage ../applications/science/math/pari {};
 
+  pcalc = callPackage ../applications/science/math/pcalc { };
+
   pspp = callPackage ../applications/science/math/pssp {
     inherit (gnome) libglade gtksourceview;
   };
