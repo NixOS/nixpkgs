@@ -10484,7 +10484,7 @@ let
 
   roxterm = callPackage ../applications/misc/roxterm {
     inherit (pythonPackages) lockfile;
-	inherit (gnome3) vte gsettings_desktop_schemas;
+    inherit (gnome3) vte gsettings_desktop_schemas;
   };
 
   xtrace = callPackage ../tools/X11/xtrace { };
