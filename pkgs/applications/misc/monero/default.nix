@@ -32,6 +32,6 @@ stdenv.mkDerivation {
     homepage = http://monero.cc/;
     license = licenses.bsd3;
     maintainers = [ maintainers.emery ];
-    platforms = platforms.all;
+    platforms = [ "x86_64-linux" ];
   };
 }
