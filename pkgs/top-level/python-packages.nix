@@ -10362,6 +10362,7 @@ let
 
   graphite_api = buildPythonPackage rec {
     name = "graphite-api-1.0.1";
+    disabled = isPyPy;
 
     src = fetchgit {
       url = "https://github.com/brutasse/graphite-api.git";
