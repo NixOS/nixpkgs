@@ -1,5 +1,6 @@
 { stdenv, fetchgit, pkgconfig, makeWrapper, python27
-, retroarch, fluidsynth, mesa, SDL, libpng, libjpeg, libvorbis, zlib }:
+, retroarch, fluidsynth, mesa, SDL, libav, libpng, libjpeg, libvorbis
+, zlib }:
 
 let
 
@@ -58,6 +59,18 @@ in
     buildPhase = "make";
   };
 
+  bsnes-mercury = (mkLibRetroCore rec {
+    core = "bsnes-mercury";
+    src = fetchRetro {
+      repo = core;
+      rev = "cc44e91bfba6f7b3d1d3d51a9fa28b39a579f5e0";
+      sha256 = "0nzwjrbfvzywsimrvp4vbpj7zxf9iwpghd9z7f9f1q027l0vj42f";
+    };
+    description = "Fork of bsnes with HLE DSP emulation restored";
+  }).override {
+    buildPhase = "make && cd out";
+  };
+
   desmume = mkLibRetroCore rec {
     core = "desmume";
     src = fetchRetro {
@@ -78,6 +91,44 @@ in
     description = "FCEUmm libretro port";
   };
 
+  fba = (mkLibRetroCore rec {
+    core = "fba";
+    src = fetchRetro {
+      repo = core + "-libretro";
+      rev = "da6355526a9b02a642447994414baababe904c1e";
+      sha256 = "14kba506m9dnldmkpq3vgw416pm7cgc167hgm3f0l59ylp2592ff";
+    };
+    description = "Port of Final Burn Alpha to libretro";
+  }).override {
+    buildPhase = ''
+      cd svn-current/trunk \
+      && make -f makefile.libretro \
+      && mv fb_alpha_libretro.so fba_libretro.so
+    '';
+  };
+
+  gambatte = (mkLibRetroCore rec {
+    core = "gambatte";
+    src = fetchRetro {
+      repo = core + "-libretro";
+      rev = "267a4e09bf8f0877483abdffde6295f29d7235ee";
+      sha256 = "1swx3mjb6qmlg6grcakhl17vrmy4vdvimxkv5gbv6gnj5riya4vl";
+    };
+    description = "Gambatte libretro port";
+  }).override {
+    configurePhase = "cd libgambatte";
+  };
+
+  genesis-plus-gx = mkLibRetroCore rec {
+    core = "genesis-plus-gx";
+    src = fetchRetro {
+      repo = "Genesis-Plus-GX";
+      rev = "c0015e27e3ae607ea0490b2accfe31097ef3cbce";
+      sha256 = "1k4b5wib7nqzk53qwvhkh4a70gc4pq7vkrpvmfzp5f2c4vrbw1i7";
+    };
+    description = "Enhanced Genesis Plus libretro port";
+  };
+
   mupen64plus = (mkLibRetroCore rec {
     core = "mupen64plus";
     src = fetchRetro {
@@ -90,6 +141,47 @@ in
     extraBuildInputs = [ mesa ];
   }).override {
     buildPhase = "make WITH_DYNAREC=${if stdenv.system == "x86_64-linux" then "x86_64" else "x86"}";
+  };
+
+  picodrive = (mkLibRetroCore rec {
+    core = "picodrive";
+    src = fetchRetro {
+      repo = core;
+      rev = "d84817550ac064fbba7ee718fb3baeda7d5546da";
+      sha256 = "17zh9m2v7h1cifzz8dcwqm4wn94zyhz6g85gf0aw6xylxahza627";
+    };
+    description = "Fast MegaDrive/MegaCD/32X emulator";
+
+    extraBuildInputs = [ libpng SDL ];
+  }).override {
+    patchPhase = "sed -i -e 's,SDL_CONFIG=\".*\",SDL_CONFIG=\"${SDL}/bin/sdl-config\",' configure";
+    configurePhase = "./configure";
+  };
+
+  prboom = (mkLibRetroCore rec {
+    core = "prboom";
+    src = fetchRetro {
+      repo = "libretro-" + core;
+      rev = "de2f0a0fab1a73a28cd501fdb9291ffc7dc357f5";
+      sha256 = "01gxa6hh9vijic2n44q1lndhdyw0kdpmajabs0nizn7bni51b29c";
+    };
+    description = "Prboom libretro port";
+  }).override {
+    buildPhase = "make";
+  };
+
+  ppsspp = (mkLibRetroCore rec {
+    core = "ppsspp";
+    src = fetchRetro {
+      repo = "libretro-" + core;
+      rev = "6ee828171218b26e124c5e8fa7877e6ee1d5ff79";
+      sha256 = "1559d4k3h0a2dv3684j4w924p2dg8z2j1fwhy7w9mhb5z4kddjhk";
+    };
+    description = "ppsspp libretro port";
+
+    extraBuildInputs = [ mesa libav ];
+  }).override{
+    buildPhase = "cd libretro && make";
   };
 
   scummvm = (mkLibRetroCore rec {
@@ -126,35 +218,6 @@ in
     description = "Port of Stella to libretro";
   }).override {
     buildPhase = "make";
-  };
-
-  picodrive = (mkLibRetroCore rec {
-    core = "picodrive";
-    src = fetchRetro {
-      repo = core;
-      rev = "d84817550ac064fbba7ee718fb3baeda7d5546da";
-      sha256 = "17zh9m2v7h1cifzz8dcwqm4wn94zyhz6g85gf0aw6xylxahza627";
-    };
-    description = "Fast MegaDrive/MegaCD/32X emulator";
-
-    extraBuildInputs = [ libpng SDL ];
-  }).override {
-    patchPhase = "sed -i -e 's,SDL_CONFIG=\".*\",SDL_CONFIG=\"${SDL}/bin/sdl-config\",' configure";
-    configurePhase = "./configure";
-  };
-
-  ppsspp = (mkLibRetroCore rec {
-    core = "ppsspp";
-    src = fetchRetro {
-      repo = "libretro-" + core;
-      rev = "6ee828171218b26e124c5e8fa7877e6ee1d5ff79";
-      sha256 = "1559d4k3h0a2dv3684j4w924p2dg8z2j1fwhy7w9mhb5z4kddjhk";
-    };
-    description = "ppsspp libretro port";
-
-    extraBuildInputs = [ mesa ];
-  }).override{
-    buildPhase = "cd libretro && make";
   };
 
   vba-next = mkLibRetroCore rec {
