@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" ];
 
+  preConfigure = ''
+    NIX_LDFLAGS="$(echo $NIX_LDFLAGS | sed "s,$out,$lib,g")"
+  '';
+
   configureFlags = [
     "MAKE=make"
     "MSGFMT=msgfmt"
@@ -41,11 +45,6 @@ stdenv.mkDerivation rec {
   ];
 
   installFlags = [ "install-dev" ];
-
-  postInstall = ''
-    # Emitted libraries have references to $out, fix this
-    sed -i "s,$out,$lib,g" $lib/lib/*
-  '';
 
   enableParallelBuilding = true;
 
