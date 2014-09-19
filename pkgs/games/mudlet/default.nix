@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = http://mudlet.org/;
     maintainers = [ stdenv.lib.maintainers.wyvie ];
     platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.free;
+    license = stdenv.lib.licenses.gpl2;
   };
 }
