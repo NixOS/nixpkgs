@@ -31,11 +31,7 @@ stdenv.mkDerivation rec {
     sha256 = "1yppp0jbq3mwa7vq4sjmm2lsqnfcv4n7cjap50gc2bavq7qynr85";
   };
 
-  patches = [ (fetchpatch {
-                url = "https://github.com/xylosper/cmplayer/commit/f6de1c7537dc3a0b4c9d69a63653c9bb4af26948.patch";
-                sha256 = "09ss9bm9z29nqzvdw6a1wv572fl64af1qv55h0wicr6vp0v491h9";
-              })
-            ];
+  patches = [ ./fix-gcc48.patch ];
 
   buildInputs = with stdenv.lib;
                 [ libX11 libxcb qt5 mesa

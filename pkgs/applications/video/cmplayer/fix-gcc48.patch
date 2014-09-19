@@ -1,0 +1,22 @@
+From f6de1c7537dc3a0b4c9d69a63653c9bb4af26948 Mon Sep 17 00:00:00 2001
+From: xylosper <darklin20@gmail.com>
+Date: Wed, 2 Jul 2014 11:57:05 +0900
+Subject: [PATCH] add a space between user defined literal operator
+
+---
+ src/cmplayer/stdafx.hpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/cmplayer/stdafx.hpp b/src/cmplayer/stdafx.hpp
+index 5f7d49c..c724f08 100644
+--- a/src/cmplayer/stdafx.hpp
++++ b/src/cmplayer/stdafx.hpp
+@@ -52,7 +52,7 @@ SIA operator "" _q(const char16_t *str, size_t len) -> QString
+ SIA operator "" _a(const char *str, size_t len) -> QLatin1String
+ { return QLatin1String(str, len); }
+ 
+-SIA operator ""_b(const char *str, size_t len) -> QByteArray
++SIA operator "" _b(const char *str, size_t len) -> QByteArray
+ { return QByteArray::fromRawData(str, len); }
+ 
+ SIA operator "" _8(const char *str, size_t len) -> QString
