@@ -60,7 +60,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://www.wireshark.org/;
-    description = "a powerful network protocol analyzer";
+    description = "Powerful network protocol analyzer";
     license = stdenv.lib.licenses.gpl2;
 
     longDescription = ''
