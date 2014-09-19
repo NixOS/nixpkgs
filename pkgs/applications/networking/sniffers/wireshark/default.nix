@@ -3,14 +3,14 @@
 , libcap
 }:
 
-let version = "1.11.2"; in
+let version = "1.12.1"; in
 
 stdenv.mkDerivation {
   name = "wireshark-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/wireshark/wireshark-${version}.tar.bz2";
-    sha256 = "077hjnmqn44s8dx3pc38bxps5liicjnhzrnf6ky2x60m2cp7ngr3";
+    url = "http://www.wireshark.org/download/src/wireshark-${version}.tar.bz2";
+    sha256 = "0jsqpr4s5smadvlm881l8fkhhw384ak3apkq4wxr05gc2va6pcl2";
   };
 
   buildInputs = [
@@ -19,10 +19,6 @@ stdenv.mkDerivation {
   ];
 
   patches = [ ./wireshark-lookup-dumpcap-in-path.patch ];
-
-  preConfigure = ''
-    sed -re 's/g_memmove/memmove/' -i $(grep -rl g_memmove .)
-  '';
 
   configureFlags = "--disable-usr-local --disable-silent-rules --with-gtk2 --without-gtk3 --without-qt --with-ssl";
 
