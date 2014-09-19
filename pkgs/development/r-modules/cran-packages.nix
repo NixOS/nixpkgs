@@ -2479,7 +2479,7 @@ let self = _self // overrides; _self = with self; {
   jpeg = derive { name="jpeg"; version="0.1-8"; sha256="05hawv5qcb82ljc1l2nchx1wah8mq2k2kfkhpzyww554ngzbwcnh"; depends=[]; };
   JPSurv = derive { name="JPSurv"; version="1.0.1"; sha256="11hfji0nyfmw1d7y2cijpp7ivlv5s9k8g771kmgwy14wflkyf7g2"; depends=[]; };
   jSonarR = derive { name="jSonarR"; version="1.0"; sha256="1369v79y2679p1c1s6pfi0zdj21zbbln3a4gqsxivx82m0lwqprp"; depends=[RCurl]; };
-  jsonlite = derive { name="jsonlite"; version="0.9.10"; sha256="0w49mv4fabzgc86gv2jn9apwf9k6bk1s1p3mjmaxpmw95wgjpc9r"; depends=[]; };
+  jsonlite = derive { name="jsonlite"; version="0.9.11"; sha256="4e6d86dfd1584ed2b96b1eb6c067b07847df5fff673d07ffacca6399c330552e"; depends=[]; };
   jtrans = derive { name="jtrans"; version="0.1"; sha256="1wcrjyifsnpk9jfmwc1cx30qp5vavwl87i0avbbls8cmji7z0nay"; depends=[]; };
   JudgeIt = derive { name="JudgeIt"; version="1.5.1"; sha256="1jssz1x9gw9hjpqlqbvlxa99icl8gffzl6qya0cnaxr50p82hdag"; depends=[]; };
   Julia = derive { name="Julia"; version="1.0"; sha256="0df72mjkfsaz7wbrg3l6fcypwm59hdxxndjv1b833xa4qpq5301g"; depends=[]; };
