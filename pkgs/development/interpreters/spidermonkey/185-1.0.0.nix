@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Explained below in configureFlags for ARM
-  patches = stdenv.lib.optionals stdenv.isARM [
+  patches = stdenv.lib.optionals stdenv.isArm [
     ./findvanilla.patch
   ];
 
