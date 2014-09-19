@@ -168,6 +168,8 @@ rec {
 
   vte = callPackage ./core/vte { };
 
+  vte-select-text = callPackage ./core/vte { selectTextPatch = true; };
+
   vino = callPackage ./core/vino { };
 
   yelp = callPackage ./core/yelp { };
@@ -232,7 +234,7 @@ rec {
   libgit2-glib = callPackage ./misc/libgit2-glib { };
 
   libmediaart = callPackage ./misc/libmediaart { };
-  
+
   gexiv2 = callPackage ./misc/gexiv2 { };
 
   gnome-tweak-tool = callPackage ./misc/gnome-tweak-tool { };
