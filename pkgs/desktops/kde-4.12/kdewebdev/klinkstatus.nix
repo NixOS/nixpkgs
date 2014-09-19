@@ -4,7 +4,7 @@ kde {
 
 # todo: ruby19 is not found by the build system. not linking against ruby18 due to it being too old
 
-  buildInputs = [ kdelibs kdepimlibs htmlTidy boost ];
+  buildInputs = [ kdelibs kdepimlibs htmlTidy boost boost.lib ];
 
   meta = {
     description = "A KDE link checker";

@@ -8,7 +8,7 @@ kde {
 
   buildInputs =
     [ kdelibs libktorrent nepomuk_core nepomuk_widgets sqlite qca2
-      libmms kde_baseapps kde_workspace boost ];
+      libmms kde_baseapps kde_workspace boost boost.lib ];
 
   nativeBuildInputs = [ pkgconfig ];
 

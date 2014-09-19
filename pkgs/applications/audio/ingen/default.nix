@@ -13,7 +13,7 @@ stdenv.mkDerivation  rec {
   };
 
   buildInputs = [
-    boost ganv glibmm gtk gtkmm jack2 lilv lv2 pkgconfig python
+    boost boost.lib ganv glibmm gtk gtkmm jack2 lilv lv2 pkgconfig python
     raul serd sord sratom suil
   ];
 

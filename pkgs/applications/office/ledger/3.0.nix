@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "1yr4i8gpby67j4vl7xk109dwb14z8a424nwgva8rbms8115w4ps5";
   };
 
-  buildInputs = [ cmake boost gmp mpfr libedit python texinfo gnused ];
+  buildInputs = [ cmake boost boost.lib gmp mpfr libedit python texinfo gnused ];
 
   enableParallelBuilding = true;
 

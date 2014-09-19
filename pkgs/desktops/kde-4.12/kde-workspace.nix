@@ -20,7 +20,7 @@ kde {
       xorg.libxkbfile xorg.libXcomposite  xorg.libXtst
       xorg.libXdamage
 
-      python boost qjson lm_sensors gpsd libraw1394 pciutils udev
+      python boost boost.lib qjson lm_sensors gpsd libraw1394 pciutils udev
       akonadi pam libusb1 libqalculate kdepimlibs  prison
       kactivities
     ];
