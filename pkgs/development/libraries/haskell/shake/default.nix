@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "shake";
-  version = "0.13.2";
-  sha256 = "0ibq0y0dxxahfwgcvamjfhbl5mrqmj7ryzf8bfmqky843fg7dyna";
+  version = "0.13.3";
+  sha256 = "030hvhvd2s6inp4nfl21vzp7qw1ssy34f7zdh1sfknyk8lszzinb";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -19,7 +19,7 @@ cabal.mkDerivation (self: {
     transformers unorderedContainers utf8String
   ];
   meta = {
-    homepage = "https://github.com/ndmitchell/shake";
+    homepage = "https://github.com/ndmitchell/shake#readme";
     description = "Build system library, like Make, but more accurate dependencies";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
