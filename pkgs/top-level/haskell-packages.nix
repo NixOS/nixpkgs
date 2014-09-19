@@ -2457,6 +2457,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   tastyHunit = callPackage ../development/libraries/haskell/tasty-hunit {};
 
+  tastyProgram = callPackage ../development/libraries/haskell/tasty-program {};
+
   tastyQuickcheck = callPackage ../development/libraries/haskell/tasty-quickcheck {};
 
   tastyRerun = callPackage ../development/libraries/haskell/tasty-rerun {};
