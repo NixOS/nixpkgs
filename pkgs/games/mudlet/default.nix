@@ -1,4 +1,4 @@
-{ fetchurl, pkgs, stdenv, makeWrapper, qt5, yajl, libzip, hunspell, lua5_1, boost, lua51_filesystem }:
+{ fetchurl, pkgs, stdenv, makeWrapper, qt5, yajl, libzip, hunspell, lua5_1, boost, fileSystem }:
 
 stdenv.mkDerivation rec {
   name = "mudlet-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "c7b9a383d2cf393da730ce07ac8f06478eaec1fdf730054e837e58c598222d38";
   };
 
-  buildInputs = [ pkgs.unzip qt5 lua5_1 hunspell libzip yajl boost makeWrapper lua51_filesystem ];
+  buildInputs = [ pkgs.unzip qt5 lua5_1 hunspell libzip yajl boost makeWrapper fileSystem ];
 
   configurePhase = "cd src && qmake";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
     # ln -s $out/mudlet $out/bin/mudlet
     makeWrapper $out/mudlet $out/bin/mudlet \
-      --set LUA_CPATH "${lua51_filesystem}/lib/lua/5.1/?.so"
+      --set LUA_CPATH "${fileSystem}/lib/lua/5.1/?.so"
   '';
 
   patches = [ ./libs.patch ];
