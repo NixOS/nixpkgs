@@ -8,6 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "1ki6v9c54ykppqnj3prgh62na97yajnvnm2zr1gjxzv05syk035h";
   };
 
+  patches = [ ./respect-path.patch ];
+
+  # --sysconfdir=/etc makes the build try to write to /etc...
+  NIX_CFLAGS_COMPILE = "-DIPSEC_CONFDIR=\"/etc\"";
+
   buildInputs = [ gmp ];
 
   meta = {
