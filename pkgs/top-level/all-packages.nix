@@ -8983,7 +8983,13 @@ let
 
   wavesurfer = callPackage ../applications/misc/audio/wavesurfer { };
 
-  wireshark = callPackage ../applications/networking/sniffers/wireshark { };
+  wireshark-cli = callPackage ../applications/networking/sniffers/wireshark {
+    withQt = false;
+    withGtk = false;
+  };
+  wireshark-gtk = wireshark-cli.override { withGtk = true; };
+  wireshark-qt = wireshark-cli.override { withQt = true; };
+  wireshark = wireshark-gtk;
 
   wvdial = callPackage ../os-specific/linux/wvdial { };
 
