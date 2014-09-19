@@ -1,20 +1,20 @@
-{stdenv, fetchurl, ocaml, findlib, ocaml_typeconv}:
+{stdenv, fetchurl, ocaml, findlib, typeconv}:
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
 in
 
-assert stdenv.lib.versionOlder "4.00" ocaml_version;
+assert stdenv.lib.versionOlder "3.12" ocaml_version;
 
 stdenv.mkDerivation {
-  name = "ocaml-sexplib-111.25.0";
+  name = "ocaml-sexplib-108.08.00";
 
   src = fetchurl {
-    url = https://ocaml.janestreet.com/ocaml-core/111.25.00/individual/sexplib-111.25.00.tar.gz;
-    sha256 = "0qh0zqp5nakqpmmhh4x7cg03vqj3j2bj4zj0nqdlksai188p9ila";
+    url = https://ocaml.janestreet.com/ocaml-core/108.08.00/individual/sexplib-108.08.00.tar.gz;
+    sha256 = "11z1k1d7dbb5m957klgalimpr0r602xp5zkkbgbffib1bphasarg";
   };
 
-  buildInputs = [ocaml findlib ocaml_typeconv ];
+  buildInputs = [ocaml findlib typeconv ];
 
   createFindlibDestdir = true;
 
