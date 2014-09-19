@@ -8330,6 +8330,7 @@ let
       py.test
       cd ..
     '';
+    doCheck = !isPyPy;  # failures due to sqla version mismatch
 
     meta = {
       homepage = https://github.com/crosspop/sqlalchemy-imageattach;
