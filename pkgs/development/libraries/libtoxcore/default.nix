@@ -37,13 +37,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     autoconf libtool automake libsodium ncurses
-    libconfig pkgconfig
+    check libconfig pkgconfig
   ] ++ stdenv.lib.optionals (!stdenv.isArm) [
     libopus
   ];
 
   propagatedBuildInputs = stdenv.lib.optionals (!stdenv.isArm) [ libvpx ];
 
+  # Some tests fail in the Sheevaplug due to timeout
   doCheck = !stdenv.isArm;
 
   meta = {
