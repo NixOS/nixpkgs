@@ -589,6 +589,24 @@ let
     };
   };
 
+  batinfo = buildPythonPackage rec {
+    version = "0.1.9";
+    name = "batinfo-${version}";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/b/batinfo/${name}.tar.gz";
+      sha256 = "0ppzbh8lii16xfq5piczn82hwps1fnbq9rbwwl3rdpdx0n86l560";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/nicolargo/batinfo;
+      description = "A simple Python lib to retreive battery information";
+      license = licenses.lgpl3;
+      platforms = platforms.all;
+      maintainers = [ maintainers.koral ];
+    };
+  };
+
   bcdoc = buildPythonPackage rec {
     name = "bcdoc-0.12.1";
 
@@ -944,6 +962,26 @@ let
 
       description = "A low-level interface to a growing number of Amazon Web Services";
 
+    };
+  };
+
+  bottle = buildPythonPackage rec {
+    version = "0.12.7";
+    name = "bottle-${version}";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/b/bottle/${name}.tar.gz";
+      sha256 = "0wr0gfz0bqlzhxk691x0xnf80b8v5pnl3jpnbgs1m9bcy28j3sp3";
+    };
+
+    propagatedBuildInputs = [ setuptools ];
+
+    meta = with stdenv.lib; {
+      homepage = http://bottlepy.org;
+      description = "A fast and simple micro-framework for small web-applications";
+      license = licenses.mit;
+      platforms = platforms.all;
+      maintainers = [ maintainers.koral ];
     };
   };
 
@@ -3794,25 +3832,27 @@ let
   };
 
   glances = buildPythonPackage rec {
-    name = "glances-${meta.version}";
+    name = "glances-${version}";
+    version = "2.1";
+    disabled = isPyPy;
 
-    src = fetchurl {
-      url = "https://github.com/nicolargo/glances/archive/v${meta.version}.tar.gz";
-      sha256 = "19pin04whc1z4gmwv2rqa7mh08d6007r8dyrhihnxj0v35ghp5i0";
+    src = pkgs.fetchFromGitHub {
+      owner = "nicolargo";
+      repo = "glances";
+      rev = "v${version}";
+      sha256 = "1bgr7lif0bpnz39arcdrsfdy7ra4c3ay2pxz1lvh4fqxyxwp3gm6";
     };
-
-    buildInputs = [ pkgs.hddtemp ];
-
-    propagatedBuildInputs = [ psutil jinja2 modules.curses modules.curses_panel];
 
     doCheck = false;
 
+    buildInputs = [ unittest2 ];
+    propagatedBuildInputs = [ modules.curses modules.curses_panel psutil setuptools bottle batinfo pkgs.hddtemp pysnmp ];
+
     preConfigure = ''
-      sed -i -r -e '/data_files.append[(][(](conf|etc)_path/ietc_path="etc/glances"; conf_path="etc/glances"' setup.py;
+      sed -i 's/data_files\.append((conf_path/data_files.append(("etc\/glances"/' setup.py;
     '';
 
     meta = {
-      version = "1.7.4";
       homepage = "http://nicolargo.github.io/glances/";
       description = "Cross-platform curses-based monitoring tool";
     };
@@ -5335,7 +5375,7 @@ let
       url = "mirror://sourceforge/numpy/${name}.tar.gz";
       sha256 = "1gcxlk3mf43pzpxvbw8kcfg173g4105j9szsfc1kxwablail6myf";
     };
-    
+
     disabled = isPyPy;  # WIP
 
     preConfigure = ''
@@ -5821,7 +5861,7 @@ let
 
     disabled = isPy3k;
     doCheck = true;
-    
+
     postInstall = "ln -s $out/lib/${python.libPrefix}/site-packages $out/lib/${python.libPrefix}/site-packages/PIL";
 
     preConfigure = ''
@@ -6600,6 +6640,26 @@ let
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   });
+
+  pysnmp = buildPythonPackage rec {
+    version = "4.2.5";
+    name = "pysnmp-${version}";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pysnmp/${name}.tar.gz";
+      sha256 = "0zq7yx8732ad9dxpxqgpqyixj7kfwbvf402q7l5njkv0kbcnavn4";
+    };
+
+    propagatedBuildInputs = [ pyasn1 pycrypto ];
+
+    meta = with stdenv.lib; {
+      homepage = http://pysnmp.sf.net;
+      description = "A pure-Python SNMPv1/v2c/v3 library";
+      license = licenses.bsd2;
+      platforms = platforms.all;
+      maintainers = [ maintainers.koral ];
+    };
+  };
 
   python_fedora = buildPythonPackage (rec {
     name = "python-fedora-0.3.33";
