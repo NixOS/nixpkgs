@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gmp }:
+{ stdenv, fetchurl, gmp, autoreconfHook, gettext, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "strongswan-5.2.0";
@@ -8,12 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "1ki6v9c54ykppqnj3prgh62na97yajnvnm2zr1gjxzv05syk035h";
   };
 
-  patches = [ ./respect-path.patch ];
+  patches = [ ./respect-path.patch ./no-sysconfdir-write.patch ];
 
-  # --sysconfdir=/etc makes the build try to write to /etc...
-  NIX_CFLAGS_COMPILE = "-DIPSEC_CONFDIR=\"/etc\"";
+  buildInputs = [ gmp autoreconfHook gettext pkgconfig ];
 
-  buildInputs = [ gmp ];
+  configureFlags = [ "--enable-swanctl" "--sysconfdir=/etc" ];
 
   meta = {
     maintainers = [ stdenv.lib.maintainers.shlevy ];
