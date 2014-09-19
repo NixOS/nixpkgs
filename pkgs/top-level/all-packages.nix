@@ -3743,6 +3743,8 @@ let
   love_luajit = callPackage ../development/interpreters/love {lua=luajit;};
   love_0_9 = callPackage ../development/interpreters/love/0.9.nix { };
 
+  ### LUA MODULES
+
   lua4 = callPackage ../development/interpreters/lua-4 { };
   lua5_0 = callPackage ../development/interpreters/lua-5/5.0.3.nix { };
   lua5_1 = callPackage ../development/interpreters/lua-5/5.1.nix { };
@@ -3753,12 +3755,23 @@ let
   lua5 = lua5_2_compat;
   lua = lua5;
 
-  lua5_1_sockets = callPackage ../development/interpreters/lua-5/sockets.nix {
-    lua5 = lua5_1; # version 2.* only works with 5.1
-  };
+  lua51Packages = recurseIntoAttrs (import ./lua-packages.nix {
+    pkgs = pkgs // {
+      lua = lua5_1;
+    };
+  });
+
+  lua52Packages = recurseIntoAttrs (import ./lua-packages.nix {
+    pkgs = pkgs // {
+      lua = lua5_2;
+    };
+  });
+
+  luaPackages = lua52Packages;
+
+  lua5_1_sockets = lua51Packages.sockets;
+
   lua5_expat = callPackage ../development/interpreters/lua-5/expat.nix {};
-  lua5_filesystem = callPackage ../development/interpreters/lua-5/filesystem.nix {};
-  lua51_filesystem = lua5_filesystem.override { lua5=lua5_1; };
   lua51_zip = callPackage ../development/interpreters/lua-5/zip.nix { };
   lua5_sec = callPackage ../development/interpreters/lua-5/sec.nix { };
 
@@ -3767,6 +3780,8 @@ let
   };
 
   luajit = callPackage ../development/interpreters/luajit {};
+
+  ### END OF LUA
 
   lush2 = callPackage ../development/interpreters/lush {};
 
@@ -6898,7 +6913,6 @@ let
 
   planetary_annihilation = callPackage ../games/planetaryannihilation { };
 
-
   ### DEVELOPMENT / PYTHON MODULES
 
   # python function with default python interpreter
@@ -9686,7 +9700,9 @@ let
 
   mrxvt = callPackage ../applications/misc/mrxvt { };
 
-  mudlet = callPackage ../games/mudlet { };
+  mudlet = callPackage ../games/mudlet {
+    inherit (lua51Packages) fileSystem;
+  };
 
   multisync = callPackage ../applications/misc/multisync {
     inherit (gnome) ORBit2 libbonobo libgnomeui GConf;
