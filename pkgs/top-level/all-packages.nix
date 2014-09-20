@@ -5380,6 +5380,9 @@ let
   libelf = callPackage ../development/libraries/libelf { };
 
   libfm = callPackage ../development/libraries/libfm { };
+  libfm-extra = callPackage ../development/libraries/libfm {
+    extraOnly = true;
+  };
 
   libgadu = callPackage ../development/libraries/libgadu { };
 
