@@ -3376,6 +3376,10 @@ let
 
     findlib = callPackage ../development/tools/ocaml/findlib { };
 
+    fix = callPackage ../development/ocaml-modules/fix { };
+
+    functory = callPackage ../development/ocaml-modules/functory { };
+
     javalib = callPackage ../development/ocaml-modules/javalib {
       extlib = ocaml_extlib_maximal;
     };
@@ -3406,6 +3410,8 @@ let
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
     merlin = callPackage ../development/tools/ocaml/merlin { };
+
+    mezzo = callPackage ../development/compilers/mezzo { };
 
     mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
 
@@ -3487,6 +3493,8 @@ let
     ocaml_extlib_maximal = callPackage ../development/ocaml-modules/extlib {
       minimal = false;
     };
+
+    pprint = callPackage ../development/ocaml-modules/pprint { };
 
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
 
