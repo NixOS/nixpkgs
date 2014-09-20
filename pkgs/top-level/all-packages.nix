@@ -456,6 +456,8 @@ let
 
   aircrackng = callPackage ../tools/networking/aircrack-ng { };
 
+  airfield = callPackage ../tools/networking/airfield { };
+
   analog = callPackage ../tools/admin/analog {};
 
   apktool = callPackage ../development/tools/apktool {
