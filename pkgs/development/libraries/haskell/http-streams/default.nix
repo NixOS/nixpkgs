@@ -24,8 +24,8 @@ cabal.mkDerivation (self: {
     snapCore snapServer systemFileio systemFilepath text transformers
     unorderedContainers
   ];
-  doCheck = false;
   jailbreak = true;
+  doCheck = false;
   meta = {
     homepage = "http://research.operationaldynamics.com/projects/http-streams/";
     description = "An HTTP client using io-streams";
