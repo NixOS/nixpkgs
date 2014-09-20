@@ -6,6 +6,8 @@ let
   version = "2.16.0";
 in
 
+assert stdenv.lib.versionAtLeast ocaml_version "3.12";
+
 stdenv.mkDerivation (rec {
   name = "${pname}-${version}";
   src = fetchurl {
