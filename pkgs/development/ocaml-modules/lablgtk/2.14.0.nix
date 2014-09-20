@@ -3,16 +3,15 @@
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
   pname = "lablgtk";
-  version = "2.16.0";
+  version = "2.14.0";
 in
-
-assert stdenv.lib.versionAtLeast ocaml_version "3.12";
 
 stdenv.mkDerivation (rec {
   name = "${pname}-${version}";
+
   src = fetchurl {
-    url = "https://forge.ocamlcore.org/frs/download.php/979/${name}.tar.gz";
-    sha256 = "a0ea9752eb257dadcfc2914408fff339d4c34357802f02c63329dd41b777de2f";
+    url = "https://forge.ocamlcore.org/frs/download.php/561/${name}.tar.gz";
+    sha256 = "1fnh0amm7lwgyjdhmlqgsp62gwlar1140425yc1j6inwmgnsp0a9";
   };
 
   buildInputs = [ocaml findlib pkgconfig gtk libgnomecanvas libglade gtksourceview];

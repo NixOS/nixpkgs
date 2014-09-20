@@ -3390,6 +3390,9 @@ let
 
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
 
+    lablgtk_2_14 = callPackage ../development/ocaml-modules/lablgtk/2.14.0.nix {
+      inherit (gnome) libgnomecanvas libglade gtksourceview;
+    };
     lablgtk = callPackage ../development/ocaml-modules/lablgtk {
       inherit (gnome) libgnomecanvas libglade gtksourceview;
     };
@@ -3515,8 +3518,10 @@ let
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
-  ocamlPackages_3_10_0 = mkOcamlPackages ocaml_3_10_0 pkgs.ocamlPackages_3_10_0;
-  ocamlPackages_3_11_2 = mkOcamlPackages ocaml_3_11_2 pkgs.ocamlPackages_3_11_2;
+  ocamlPackages_3_10_0 = (mkOcamlPackages ocaml_3_10_0 pkgs.ocamlPackages_3_10_0)
+  // { lablgtk = ocamlPackages_3_10_0.lablgtk_2_14; };
+  ocamlPackages_3_11_2 = (mkOcamlPackages ocaml_3_11_2 pkgs.ocamlPackages_3_11_2)
+  // { lablgtk = ocamlPackages_3_11_2.lablgtk_2_14; };
   ocamlPackages_3_12_1 = mkOcamlPackages ocaml_3_12_1 pkgs.ocamlPackages_3_12_1;
   ocamlPackages_4_00_1 = mkOcamlPackages ocaml_4_00_1 pkgs.ocamlPackages_4_00_1;
   ocamlPackages_4_01_0 = mkOcamlPackages ocaml_4_01_0 pkgs.ocamlPackages_4_01_0;
@@ -11299,8 +11304,9 @@ let
   };
 
   coq_8_3 = callPackage ../applications/science/logic/coq/8.3.nix {
-    inherit (ocamlPackages) findlib lablgtk;
-    camlp5 = ocamlPackages.camlp5_transitional;
+    inherit (ocamlPackages_3_12_1) ocaml findlib;
+    camlp5 = ocamlPackages_3_12_1.camlp5_transitional;
+    lablgtk = ocamlPackages_3_12_1.lablgtk_2_14;
   };
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {};
