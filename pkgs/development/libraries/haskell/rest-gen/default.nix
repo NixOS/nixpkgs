@@ -2,23 +2,24 @@
 
 { cabal, aeson, blazeHtml, Cabal, codeBuilder, fclabels, filepath
 , hashable, haskellSrcExts, hslogger, HStringTemplate, HUnit, hxt
-, jsonSchema, restCore, safe, scientific, split, tagged
+, jsonSchema, restCore, safe, scientific, semigroups, split, tagged
 , testFramework, testFrameworkHunit, text, uniplate
 , unorderedContainers, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "rest-gen";
-  version = "0.15.0.2";
-  sha256 = "1k33bhjy909ffc5bnk3fb8vi8pvylb7rh6m95f70x5h6wgq4lhjg";
+  version = "0.16";
+  sha256 = "05qpj4zhihmb2cdgw3vx7ir0mqga1w6qidc4vwdjq6dy8d81sdmc";
   buildDepends = [
     aeson blazeHtml Cabal codeBuilder fclabels filepath hashable
     haskellSrcExts hslogger HStringTemplate hxt jsonSchema restCore
-    safe scientific split tagged text uniplate unorderedContainers
-    vector
+    safe scientific semigroups split tagged text uniplate
+    unorderedContainers vector
   ];
   testDepends = [
-    haskellSrcExts HUnit restCore testFramework testFrameworkHunit
+    fclabels haskellSrcExts HUnit restCore testFramework
+    testFrameworkHunit
   ];
   jailbreak = true;
   meta = {
