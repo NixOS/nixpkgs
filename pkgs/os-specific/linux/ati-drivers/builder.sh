@@ -189,6 +189,40 @@ fi
   # make xorg use the ati version
   ln -s $out/lib/xorg/modules/extensions/{fglrx/fglrx-libglx.so,libglx.so}
 
+  # Correct some paths that are hardcoded into binary libs.
+  if [ "$arch" ==  "x86_64" ]; then
+    for lib in \
+      lib/xorg/modules/extensions/fglrx/fglrx-libglx.so \
+      lib/xorg/modules/glesx.so \
+      lib/dri/fglrx_dri.so \
+      lib/fglrx_dri.so \
+      lib/fglrx-libGL.so.1.2
+    do
+      oldPaths="/usr/X11R6/lib/modules/dri"
+      newPaths="/run/opengl-driver/lib/dri"
+      sed -i -e "s|$oldPaths|$newPaths|" $out/$lib
+    done
+  else
+    oldPaths="/usr/X11R6/lib32/modules/dri\x00/usr/lib32/dri"
+    newPaths="/run/opengl-driver-32/lib/dri\x00/dev/null/dri"
+    sed -i -e "s|$oldPaths|$newPaths|" \
+      $out/lib/xorg/modules/extensions/fglrx/fglrx-libglx.so
+
+    for lib in \
+      lib/dri/fglrx_dri.so \
+      lib/fglrx_dri.so \
+      lib/xorg/modules/glesx.so
+    do
+      oldPaths="/usr/X11R6/lib32/modules/dri/"
+      newPaths="/run/opengl-driver-32/lib/dri"
+      sed -i -e "s|$oldPaths|$newPaths|" $out/$lib
+    done
+
+    oldPaths="/usr/X11R6/lib32/modules/dri\x00"
+    newPaths="/run/opengl-driver-32/lib/dri"
+    sed -i -e "s|$oldPaths|$newPaths|" $out/lib/fglrx-libGL.so.1.2
+  fi
+
   # libstdc++ and gcc are needed by some libs
   patchelf --set-rpath $gcc/$lib_arch $out/lib/libatiadlxx.so
 }
