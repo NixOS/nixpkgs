@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "5.2";
-  name    = "bcel-${version}";
+  name    = "commons-bcel-${version}";
 
   src = fetchurl {
-    url    = "mirror://apache/commons/bcel/binaries/${name}.tar.gz";
+    url    = "mirror://apache/commons/bcel/binaries/bcel-${version}.tar.gz";
     sha256 = "13ppnd6afljdjq21jpn4ik2h1yxq8k2kg21ghi0lyb1yap1rd7k6";
   };
 
