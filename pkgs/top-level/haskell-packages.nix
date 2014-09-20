@@ -1426,6 +1426,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   JuicyPixelsUtil = callPackage ../development/libraries/haskell/JuicyPixels-util {};
 
+  jwt = callPackage ../development/libraries/haskell/jwt {};
+
   kanExtensions = callPackage ../development/libraries/haskell/kan-extensions {};
 
   kansasLava = callPackage ../development/libraries/haskell/kansas-lava {};
