@@ -167,7 +167,7 @@ let
   x11 = xlibsWrapper;
 
   # `xlibs' is the set of X library components.  This used to be the
-  # old modular X llibraries project (called `xlibs') but now it's just
+  # old modular X libraries project (called `xlibs') but now it's just
   # the set of packages in the modular X.org tree (which also includes
   # non-library components like the server, drivers, fonts, etc.).
   xlibs = xorg // {xlibs = xlibsWrapper;};
@@ -8455,6 +8455,12 @@ let
   adobe-reader = callPackage_i686 ../applications/misc/adobe-reader { };
 
   aewan = callPackage ../applications/editors/aewan { };
+
+  afterstep = callPackage ../applications/window-managers/afterstep {
+    inherit (xlibs) libX11 libXext libICE;
+    fltk = fltk13;
+    gtk = gtk2;
+  };
 
   alchemy = callPackage ../applications/graphics/alchemy { };
 
