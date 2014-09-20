@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     blazeBuilder enumerator ioStreams mtl snapCore snapServer
     websockets
   ];
+  jailbreak = true;
   meta = {
     description = "Snap integration for the websockets library";
     license = self.stdenv.lib.licenses.bsd3;
