@@ -2311,6 +2311,8 @@ let
 
   texstudio = callPackage ../applications/editors/texstudio { };
 
+  thc-hydra = callPackage ../tools/security/thc-hydra { };
+
   tiled-qt = callPackage ../applications/editors/tiled-qt { qt = qt4; };
 
   tinc = callPackage ../tools/networking/tinc { };
