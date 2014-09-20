@@ -4283,6 +4283,9 @@ let
 
   lttv = callPackage ../development/tools/misc/lttv { };
 
+  maven = maven3;
+  maven3 = callPackage ../development/tools/build-managers/apache-maven { jdk = openjdk; };
+
   mk = callPackage ../development/tools/build-managers/mk { };
 
   neoload = callPackage ../development/tools/neoload {
@@ -11593,9 +11596,6 @@ let
   lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
 
   martyr = callPackage ../development/libraries/martyr { };
-
-  maven = maven3;
-  maven3 = callPackage ../misc/maven { jdk = openjdk; };
 
   mess = callPackage ../misc/emulators/mess {
     inherit (pkgs.gnome) GConf;
