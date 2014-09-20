@@ -18,6 +18,11 @@ let
   optionals             = stdenv.lib.optionals;
   optionalString        = stdenv.lib.optionalString;
   filter                = stdenv.lib.filter;
+
+  defaultSetupHs        = builtins.toFile "Setup.hs" ''
+                            import Distribution.Simple
+                            main = defaultMain
+                          '';
 in
 
 {
@@ -168,9 +173,10 @@ in
 
               PATH=$PATH:${ghc.ghc.ghc}/bin
 
-              for i in Setup.hs Setup.lhs; do
-                test -f $i && ghc --make $i
+              for i in Setup.hs Setup.lhs ${defaultSetupHs}; do
+                test -f $i && break
               done
+              ghc --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
 
               for p in $extraBuildInputs $propagatedBuildInputs $propagatedNativeBuildInputs; do
                 PkgDir="$p/lib/ghcjs-${ghc.ghc.version}_ghc-${ghc.ghc.ghc.version}/package.conf.d"
