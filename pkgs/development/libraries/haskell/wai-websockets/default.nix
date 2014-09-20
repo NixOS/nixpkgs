@@ -15,6 +15,7 @@ cabal.mkDerivation (self: {
     blazeBuilder caseInsensitive fileEmbed httpTypes ioStreams network
     text transformers wai waiAppStatic warp websockets
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/yesodweb/wai";
     description = "Provide a bridge betweeen WAI and the websockets package";
