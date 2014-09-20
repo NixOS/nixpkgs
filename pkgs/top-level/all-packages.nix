@@ -6732,6 +6732,8 @@ let
 
   commonsFileUpload = callPackage ../development/libraries/java/jakarta-commons/file-upload { };
 
+  commonsBcel = callPackage ../development/libraries/java/commons/bcel { };
+
   fastjar = callPackage ../development/tools/java/fastjar { };
 
   httpunit = callPackage ../development/libraries/java/httpunit { };
@@ -6739,10 +6741,6 @@ let
   gwtdragdrop = callPackage ../development/libraries/java/gwt-dragdrop { };
 
   gwtwidgets = callPackage ../development/libraries/java/gwt-widgets { };
-
-  jakartabcel = callPackage ../development/libraries/java/jakarta-bcel {
-    regexp = jakartaregexp;
-  };
 
   jakartaregexp = callPackage ../development/libraries/java/jakarta-regexp { };
 
