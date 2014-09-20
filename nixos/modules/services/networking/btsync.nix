@@ -57,7 +57,7 @@ let
     ''
       {
         "device_name":     "${cfg.deviceName}",
-        "storage_path":    "/var/lib/btsync",
+        "storage_path":    "/var/lib/btsync/",
         "listening_port":  ${toString cfg.listeningPort},
         "use_gui":         false,
 
