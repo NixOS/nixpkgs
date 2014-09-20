@@ -42,6 +42,7 @@
   DamienCassou = "Damien Cassou <damien.cassou@gmail.com>";
   DerGuteMoritz = "Moritz Heidkamp <moritz@twoticketsplease.de>";
   dbohdan = "Danyil Bohdan <danyil.bohdan@gmail.com>";
+  dmalikov = "Dmitry Malikov <malikov.d.y@gmail.com>";
   doublec = "Chris Double <chris.double@double.co.nz>";
   ederoyd46 = "Matthew Brown <matt@ederoyd.co.uk>";
   edwtjo = "Edward Tjörnhammar <ed@cflags.cc>";
