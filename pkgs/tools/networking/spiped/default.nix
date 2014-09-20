@@ -2,18 +2,28 @@
 
 stdenv.mkDerivation rec {
   name    = "spiped-${version}";
-  version = "1.3.1";
+  version = "1.4.1";
 
   src = fetchurl {
     url    = "http://www.tarsnap.com/spiped/${name}.tgz";
-    sha256 = "1viglk61v1v2ga1n31r0h8rvib5gy2h02lhhbbnqh2s6ps1sjn4a";
+    sha256 = "1y642mn4jz2h83vhkji0l42r2l1hbzbwwlplc3xmr66zjj54psqf";
   };
 
   buildInputs = [ openssl ];
-  patches = [ ./no-dev-stderr.patch ];
 
-  postPatch = ''
-    substituteInPlace POSIX/posix-l.sh --replace "rm" "${coreutils}/bin/rm"
+  patchPhase = ''
+    substituteInPlace libcperciva/cpusupport/Build/cpusupport.sh \
+      --replace "2>/dev/null" "2>stderr.log"
+
+    substituteInPlace POSIX/posix-l.sh       \
+      --replace "rm" "${coreutils}/bin/rm"   \
+      --replace ">/dev/stderr" ">stderr.log" \
+      --replace "2>/dev/null" "2>stderr.log"
+
+    substituteInPlace POSIX/posix-cflags.sh  \
+      --replace "rm" "${coreutils}/bin/rm"   \
+      --replace ">/dev/stderr" ">stderr.log" \
+      --replace "2>/dev/null" "2>stderr.log"
   '';
 
   installPhase = ''
