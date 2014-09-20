@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     homepage = https://ocaml.janestreet.com/;
     description = "Support library for OCaml preprocessor type conversions";
-    license = licenses.apl20;
+    #license = licenses.apl20; invalid license
     platforms = ocaml.meta.platforms;
     maintainers = with maintainers; [ z77z ];
   };

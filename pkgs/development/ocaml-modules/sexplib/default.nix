@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = https://ocaml.janestreet.com/;
     description = "Library for serializing OCaml values to and from S-expressions";
-    license = stdenv.lib.asl20;
+    license = stdenv.lib.licenses.asl20;
     platforms = ocaml.meta.platforms;
   };
 }
