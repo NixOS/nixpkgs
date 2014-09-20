@@ -3099,6 +3099,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   cabalGhci = callPackage ../development/tools/haskell/cabal-ghci {};
 
+  cabalg = callPackage ../development/libraries/haskell/cabalg {};
+
   cabalInstall_0_6_2  = callPackage ../tools/package-management/cabal-install/0.6.2.nix {};
   cabalInstall_0_8_0  = callPackage ../tools/package-management/cabal-install/0.8.0.nix {};
   cabalInstall_0_8_2  = callPackage ../tools/package-management/cabal-install/0.8.2.nix {};
