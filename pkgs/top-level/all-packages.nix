@@ -5317,6 +5317,8 @@ let
 
   libchamplain_0_6 = callPackage ../development/libraries/libchamplain/0.6.nix {};
 
+  libchardet = callPackage ../development/libraries/libchardet { };
+
   libchop = callPackage ../development/libraries/libchop { };
 
   libcm = callPackage ../development/libraries/libcm { };
@@ -8608,6 +8610,10 @@ let
   cinelerra = callPackage ../applications/video/cinelerra { };
 
   clipit = callPackage ../applications/misc/clipit { };
+
+  cmplayer = callPackage ../applications/video/cmplayer {
+    pulseSupport = config.pulseaudio or false;
+  };
 
   cmus = callPackage ../applications/audio/cmus { };
 
