@@ -6738,9 +6738,17 @@ let
     stdenv = overrideInStdenv stdenv [gnumake380];
   };
 
-  commonsFileUpload = callPackage ../development/libraries/java/jakarta-commons/file-upload { };
-
   commonsBcel = callPackage ../development/libraries/java/commons/bcel { };
+
+  commonsCompress = callPackage ../development/libraries/java/commons/compress { };
+
+  commonsFileUpload = callPackage ../development/libraries/java/commons/fileupload { };
+
+  commonsLang = callPackage ../development/libraries/java/commons/lang { };
+
+  commonsIo = callPackage ../development/libraries/java/commons/io { };
+
+  commonsMath = callPackage ../development/libraries/java/commons/math { };
 
   fastjar = callPackage ../development/tools/java/fastjar { };
 
@@ -6749,8 +6757,6 @@ let
   gwtdragdrop = callPackage ../development/libraries/java/gwt-dragdrop { };
 
   gwtwidgets = callPackage ../development/libraries/java/gwt-widgets { };
-
-  jakartaregexp = callPackage ../development/libraries/java/jakarta-regexp { };
 
   javaCup = callPackage ../development/libraries/java/cup { };
 
