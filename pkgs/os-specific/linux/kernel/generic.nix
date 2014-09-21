@@ -57,6 +57,7 @@ let
     autoModules = stdenv.platform.kernelAutoModules;
     arch = stdenv.platform.kernelArch;
 
+    KBUILD_BUILD_TIMESTAMP = 1; # (time_t)1
     crossAttrs = let
         cp = stdenv.cross.platform;
       in {
