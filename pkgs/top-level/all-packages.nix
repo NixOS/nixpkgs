@@ -5080,6 +5080,8 @@ let
 
   qt_gstreamer = callPackage ../development/libraries/gstreamer/legacy/qt-gstreamer {};
 
+  qt_gstreamer1 = callPackage ../development/libraries/gstreamer/qt-gstreamer {};
+
   gnet = callPackage ../development/libraries/gnet { };
 
   gnu-efi = callPackage ../development/libraries/gnu-efi { };
