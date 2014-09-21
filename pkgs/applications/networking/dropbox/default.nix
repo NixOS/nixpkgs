@@ -88,5 +88,6 @@ in stdenv.mkDerivation {
   meta = {
     homepage = "http://www.dropbox.com";
     description = "Online stored folders (daemon version)";
+    maintainers = with stdenv.lib.maintainers; [ ttuegel ];
   };
 }
