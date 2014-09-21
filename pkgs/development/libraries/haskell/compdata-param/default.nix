@@ -3,7 +3,7 @@
 }:
 
 cabal.mkDerivation (self: {
-  pname = "compdataParam";
+  pname = "compdata-param";
   version = "0.8.0.2";
   sha256 = "0496i1vnawl7m7ymvf5hl3kxy352rnhxy2gni4xkfz36psnnr7fs";
   buildDepends = [ compdata mtl transformers ];
