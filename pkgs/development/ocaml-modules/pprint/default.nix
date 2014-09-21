@@ -1,5 +1,7 @@
 {stdenv, fetchurl, ocaml, findlib}:
 
+assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12";
+
 stdenv.mkDerivation {
 
   name = "ocaml-pprint-20140424";
@@ -20,8 +22,7 @@ stdenv.mkDerivation {
     homepage = http://gallium.inria.fr/~fpottier/pprint/;
     description = "An OCaml adaptation of Wadler’s and Leijen’s prettier printer";
     license = licenses.cecill-c;
+    maintainers = [ maintainers.vbgl ];
     platforms = ocaml.meta.platforms;
   };
 }
-
-

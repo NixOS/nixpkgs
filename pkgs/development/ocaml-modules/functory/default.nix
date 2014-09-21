@@ -1,5 +1,7 @@
 {stdenv, fetchurl, ocaml, findlib}:
 
+assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.11";
+
 stdenv.mkDerivation {
 
   name = "ocaml-functory-0.5";
@@ -19,8 +21,7 @@ stdenv.mkDerivation {
     homepage = https://www.lri.fr/~filliatr/functory/;
     description = "A distributed computing library for Objective Caml which facilitates distributed execution of parallelizable computations in a seamless fashion";
     license = licenses.lgpl21;
+    maintainers = [ maintainers.vbgl ];
     platforms = ocaml.meta.platforms;
   };
 }
-
-

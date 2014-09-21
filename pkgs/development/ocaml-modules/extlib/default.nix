@@ -1,5 +1,7 @@
 {stdenv, fetchurl, ocaml, findlib, minimal ? true}:
 
+assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.11";
+
 stdenv.mkDerivation {
   name = "ocaml-extlib-1.6.1";
 

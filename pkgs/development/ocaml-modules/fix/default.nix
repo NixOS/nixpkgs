@@ -1,5 +1,7 @@
 {stdenv, fetchurl, ocaml, findlib}:
 
+assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12";
+
 stdenv.mkDerivation {
 
   name = "ocaml-fix-20130611";
@@ -17,7 +19,7 @@ stdenv.mkDerivation {
     homepage = http://gallium.inria.fr/~fpottier/fix/;
     description = "A simple OCaml module for computing the least solution of a system of monotone equations";
     license = licenses.cecill-c;
+    maintainers = [ maintainers.vbgl ];
     platforms = ocaml.meta.platforms;
   };
 }
-
