@@ -182,6 +182,11 @@ rec {
     fullName = "GNU Lesser General Public License v3.0 or later";
   };
 
+  libpng = spdx {
+    shortName = "Libpng";
+    fullName = "libpng License";
+  };
+
   libtiff = {
     shortName = "libtiff";
     fullName = "libtiff license";
@@ -292,4 +297,3 @@ rec {
   };
 
 }
-
