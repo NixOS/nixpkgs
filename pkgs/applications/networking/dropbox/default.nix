@@ -25,9 +25,9 @@ let
     else if stdenv.system == "i686-linux" then "ld-linux.so.2"
     else throw "Dropbox client for: ${stdenv.system} not supported!";
 
-  version = "2.10.28";
-  sha256 = if stdenv.system == "x86_64-linux" then "0jrg9xy03yc7npjhng9wiyzidbq7s5n8g4fwynnm1yqfd69r3yac"
-    else if stdenv.system == "i686-linux" then "17vbikhdp5l2s8cnqmk8dln4dfzvrvgqls7av3ngf71bx3bj0fij"
+  version = "2.10.30";
+  sha256 = if stdenv.system == "x86_64-linux" then "1gdch4fka5f671zwl329j6b60igki1rzxw9ggxcywcg1h4rlvw7r"
+    else if stdenv.system == "i686-linux" then "1a4pswpy945iqzvi8kcs1r0sydb04h28v5zv0hdyra0c548wsm2g"
     else throw "Dropbox client for: ${stdenv.system} not supported!";
 
   # relative location where the dropbox libraries are stored
@@ -88,5 +88,6 @@ in stdenv.mkDerivation {
   meta = {
     homepage = "http://www.dropbox.com";
     description = "Online stored folders (daemon version)";
+    maintainers = with stdenv.lib.maintainers; [ ttuegel ];
   };
 }
