@@ -1989,6 +1989,7 @@ let
 
   dropbox = buildPythonPackage rec {
     name = "dropbox-2.0.0";
+    doCheck = !isPy3k; # failures with hash randomization
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/d/dropbox/${name}.zip";
