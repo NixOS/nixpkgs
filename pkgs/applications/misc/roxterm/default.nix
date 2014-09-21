@@ -3,9 +3,10 @@
 , imagemagick, itstool, librsvg, libtool, libxslt, lockfile, makeWrapper
 , pkgconfig, pythonFull, pythonPackages, vte }:
 
-# TODO: Still getting following warning:
-# Gtk-WARNING **: Error loading icon from file '/nix/store/36haql12nc3c91jqf0w8nz29zrwxd2gl-roxterm-2.9.4/share/icons/hicolor/scalable/apps/roxterm.svg':
-# Couldn't recognize the image file format for file '/nix/store/36haql12nc3c91jqf0w8nz29zrwxd2gl-roxterm-2.9.4/share/icons/hicolor/scalable/apps/roxterm.svg'
+# TODO: Still getting following warning.
+# WARNING **: Error retrieving accessibility bus address: org.freedesktop.DBus.Error.ServiceUnknown: The name org.a11y.Bus was not provided by any .service files
+# Seems related to this:
+# https://forums.gentoo.org/viewtopic-t-947210-start-0.html
 
 let version = "2.9.4";
 in stdenv.mkDerivation rec {
@@ -44,7 +45,8 @@ in stdenv.mkDerivation rec {
     python mscript.py install
 
     wrapProgram "$out/bin/roxterm" \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
+        --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';
 
   meta = with stdenv.lib; {
@@ -54,6 +56,7 @@ in stdenv.mkDerivation rec {
     longDescription = ''
       Tabbed, VTE-based terminal emulator.  Similar to gnome-terminal without the dependencies on Gnome.
     '';
+    maintainers = with maintainers; [ cdepillabout ];
     platforms = platforms.linux;
   };
 }
