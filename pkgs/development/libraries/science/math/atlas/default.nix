@@ -72,5 +72,7 @@ stdenv.mkDerivation {
       portable performance. At present, it provides C and Fortran77 interfaces to a
       portably efficient BLAS implementation, as well as a few routines from LAPACK.
     '';
+
+    maintainers = with stdenv.lib.maintainers; [ ttuegel ];
   };
 }
