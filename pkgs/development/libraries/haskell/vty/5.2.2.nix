@@ -9,8 +9,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vty";
-  version = "5.2.1";
-  sha256 = "15xg7yznizscvyjlnivakrzk60l0a0pigax7sgnn2ab79rfzcxww";
+  version = "5.2.2";
+  sha256 = "06bpsmkfdl10x82kk27ymfkiiq36s9ifs2q1gj3w1rf6l30k2ca6";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -23,12 +23,12 @@ cabal.mkDerivation (self: {
     testFramework testFrameworkHunit testFrameworkSmallcheck text
     utf8String vector
   ];
-  jailbreak = true;
   doCheck = false;
   meta = {
     homepage = "https://github.com/coreyoconnor/vty";
     description = "A simple terminal UI library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ fuuzetsu ];
   };
 })
