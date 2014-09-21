@@ -1,8 +1,8 @@
-{ kde, kdelibs, gsl, libqalculate, eigen, pkgconfig }:
+{ kde, kdelibs, gsl, libqalculate, eigen2, pkgconfig }:
 
 kde {
 
-  buildInputs = [ kdelibs gsl libqalculate eigen ];
+  buildInputs = [ kdelibs gsl libqalculate eigen2 ];
 
   nativeBuildInputs = [ pkgconfig ];
 

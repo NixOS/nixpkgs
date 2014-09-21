@@ -1,9 +1,9 @@
-{ kde, kdelibs, facile, ocaml, eigen, openbabel, avogadro, pkgconfig }:
+{ kde, kdelibs, facile, ocaml, eigen2, eigen, openbabel, avogadro, pkgconfig }:
 kde {
 
 # TODO: chemical mime data
 
-  buildInputs = [ kdelibs facile ocaml eigen openbabel avogadro ];
+  buildInputs = [ kdelibs facile ocaml eigen2 eigen openbabel avogadro ];
 
   nativeBuildInputs = [ pkgconfig ];
 

@@ -1,6 +1,6 @@
 { kde, boost, gpgme, libassuan, libxslt, kdepimlibs, kdepim_runtime
 , akonadi, shared_desktop_ontologies, cyrus_sasl, grantlee, prison
-, nepomuk_widgets, kactivities, libXScrnSaver, qjson
+, nepomuk_widgets, kactivities, libXScrnSaver, qjson, baloo
 , pkgconfig }:
 
 kde {
@@ -10,7 +10,7 @@ kde {
   buildInputs =
     [ kdepimlibs boost shared_desktop_ontologies akonadi nepomuk_widgets
       libxslt cyrus_sasl gpgme libassuan grantlee prison kactivities
-      libXScrnSaver qjson
+      libXScrnSaver qjson baloo
     ];
 
   nativeBuildInputs = [ pkgconfig ];
