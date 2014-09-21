@@ -40,7 +40,7 @@
 assert stdenv.isLinux;
 
 let
-  version = "31.0";
+  version = "31.1.1";
   sources = [
     { locale = "nn-NO"; arch = "linux-i686"; sha256 = "a1e9954236de1d0581342fbb894b721528bc51a208d3bbedd4d8defbcc1cb50f"; }
     { locale = "nn-NO"; arch = "linux-x86_64"; sha256 = "0fe9c22ad8cf575813ae8e476d985a3b951174df5beda67fd98e261f831252aa"; }
@@ -129,7 +129,7 @@ let
     { locale = "sk"; arch = "linux-i686"; sha256 = "4d3a4d283705889759dcb321e4b700896b132634005590e546bf6744e6187260"; }
     { locale = "sk"; arch = "linux-x86_64"; sha256 = "456252e7bb5f29ef3c76afb2df0f406fcf93ef1c6df56d0f209bb85e91c8acce"; }
     { locale = "en-US"; arch = "linux-i686"; sha256 = "ee93df33057576bd55bc80b71aeec7c6f487028f0fe52f679614811be5c71bae"; }
-    { locale = "en-US"; arch = "linux-x86_64"; sha256 = "7f7189250d76f970bfc1879b2ac6fe2d42bdcf3a652614fa4e080dcc636bbd4c"; }
+    { locale = "en-US"; arch = "linux-x86_64"; sha256 = "1a0dbcm050q4j4sx2i1fczfcvxnzm8m99hjjj7v7brfwzchnwx9x"; }
     { locale = "sr"; arch = "linux-i686"; sha256 = "cb389bd9712def87c06ffab3fc50b8fa58c773c6725fd0e0befec3e2ac957ef5"; }
     { locale = "sr"; arch = "linux-x86_64"; sha256 = "8f9bf916357e7385dec5de9e4d58f6dfbe3c7fc6d2b66298304c3630189833e6"; }
     { locale = "zh-TW"; arch = "linux-i686"; sha256 = "f89251f74b85c22a9f7b97b844a118e498698e205f733f1fb0d7a98787f973ee"; }
@@ -264,6 +264,7 @@ stdenv.mkDerivation {
       fullName = "unfree";
       url = http://www.mozilla.org/en-US/foundation/trademarks/policy/;
     };
+    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
     platforms = platforms.linux;
   };
 }
