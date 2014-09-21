@@ -19,7 +19,7 @@ let
     ${if cfg.network.host != "any" then
    "bind_to_address     ${cfg.network.host}" else ""}
     ${if cfg.network.port != 6600 then
-   "port                ${cfg.network.port.toString()}" else ""}
+   "port                ${toString cfg.network.port}" else ""}
     ${cfg.extraConfig}
   '';
 
