@@ -2213,6 +2213,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   shelly_1_5_3_1 = callPackage ../development/libraries/haskell/shelly {};
   shelly = self.shelly_1_5_3_1;
 
+  shell-conduit = callPackage ../development/libraries/haskell/shell-conduit {};
+
   simpleConduit = callPackage ../development/libraries/haskell/simple-conduit {};
 
   simpleReflect = callPackage ../development/libraries/haskell/simple-reflect {};
