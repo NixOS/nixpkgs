@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
     homepage = "https://github.com/Mikolaj/miniutter";
     description = "Simple English clause creation from arbitrary words";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.ghc.meta.platforms;
+    # https://github.com/Mikolaj/miniutter/issues/3
+    platforms = self.stdenv.lib.lists.filter (x: x != "i686-linux") self.ghc.meta.platforms;
   };
 })
