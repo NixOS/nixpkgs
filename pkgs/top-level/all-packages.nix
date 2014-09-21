@@ -3320,6 +3320,8 @@ let
 
   ocaml_4_01_0 = callPackage ../development/compilers/ocaml/4.01.0.nix { };
 
+  ocaml_4_02_0 = callPackage ../development/compilers/ocaml/4.02.0.nix { };
+
   orc = callPackage ../development/compilers/orc { };
 
   metaocaml_3_09 = callPackage ../development/compilers/ocaml/metaocaml-3.09.nix { };
@@ -3534,7 +3536,7 @@ let
 
   };
 
-  ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
+  ocamlPackages = recurseIntoAttrs ocamlPackages_4_02_0;
   ocamlPackages_3_10_0 = (mkOcamlPackages ocaml_3_10_0 pkgs.ocamlPackages_3_10_0)
   // { lablgtk = ocamlPackages_3_10_0.lablgtk_2_14; };
   ocamlPackages_3_11_2 = (mkOcamlPackages ocaml_3_11_2 pkgs.ocamlPackages_3_11_2)
@@ -3542,7 +3544,8 @@ let
   ocamlPackages_3_12_1 = mkOcamlPackages ocaml_3_12_1 pkgs.ocamlPackages_3_12_1;
   ocamlPackages_4_00_1 = mkOcamlPackages ocaml_4_00_1 pkgs.ocamlPackages_4_00_1;
   ocamlPackages_4_01_0 = mkOcamlPackages ocaml_4_01_0 pkgs.ocamlPackages_4_01_0;
-  ocamlPackages_latest = ocamlPackages_4_01_0;
+  ocamlPackages_4_02_0 = mkOcamlPackages ocaml_4_02_0 pkgs.ocamlPackages_4_02_0;
+  ocamlPackages_latest = ocamlPackages_4_02_0;
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
