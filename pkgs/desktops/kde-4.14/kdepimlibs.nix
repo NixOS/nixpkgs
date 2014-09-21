@@ -6,11 +6,11 @@ kde {
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs =
-    [ boost gpgme libical libxslt qjson prison
+    [ gpgme libical libxslt qjson prison
       openldap cyrus_sasl akonadi shared_desktop_ontologies
     ];
 
-  propagatedBuildInputs = [ kdelibs nepomuk_core ];
+  propagatedBuildInputs = [ kdelibs nepomuk_core boost ];
 
   meta = {
     description = "KDE PIM libraries";

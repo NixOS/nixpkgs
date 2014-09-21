@@ -1,7 +1,7 @@
-{ callPackage, callPackageOrig, stdenv, qt48, release ? "4.12.4" }:
+{ callPackage, callPackageOrig, stdenv, qt48, release ? "4.14.1" }:
 
 let
-  branch = "4.12";
+  branch = "4.14";
 
   # Need callPackageOrig to avoid infinite cycle
   kde = callPackageOrig ./kde-package {

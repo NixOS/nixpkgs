@@ -30,7 +30,6 @@ kde {
 
   patches = [
     ../files/polkit-install.patch
-    ../files/kdelibs-cve-2014-5033.patch  # Security patch, remove when updating to 4.14.0 or more
   ];
 
   cmakeFlags = [
