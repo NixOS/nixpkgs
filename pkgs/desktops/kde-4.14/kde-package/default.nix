@@ -44,7 +44,7 @@ rec {
   # Build subdirectory ${subdir} of tarball ${module}-${release}.tar.xz
   kdeSubdirPkg = module:
     {name, subdir ? name, sane ? name}:
-    let name_ = name; version_ = getAttr name manifest.versions; in
+    let name_ = name; version_ = getAttr module manifest.versions; in
     a@{cmakeFlags ? [], name ? name_, version ? version_, meta ? {}, ...}:
     stdenv.mkDerivation ({
       name = "${name}-${release}";
