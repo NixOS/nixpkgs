@@ -467,7 +467,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
                then callPackage ../development/libraries/haskell/compdata {}
                else null;
 
-  compdata-param = callPackage ../development/libraries/haskell/compdata-param {};
+  compdataParam = callPackage ../development/libraries/haskell/compdataParam {};
 
   composition = callPackage ../development/libraries/haskell/composition {};
 
