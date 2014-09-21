@@ -5249,6 +5249,8 @@ let
 
   indilib = callPackage ../development/libraries/indilib { };
 
+  indilib_0_9_9 = callPackage ../development/libraries/indilib/0_9_9.nix { };
+
   iniparser = callPackage ../development/libraries/iniparser { };
 
   intltool = callPackage ../development/tools/misc/intltool { };
