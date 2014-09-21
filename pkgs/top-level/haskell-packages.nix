@@ -3042,7 +3042,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   xlsx = callPackage ../development/libraries/haskell/xlsx {};
 
-  xmobar = callPackage ../applications/misc/xmobar {};
+  xmobar = callPackage ../applications/misc/xmobar {
+    libmpd = self.libmpd_0_8_0_5;
+  };
 
   xmonad = callPackage ../applications/window-managers/xmonad {};
 
