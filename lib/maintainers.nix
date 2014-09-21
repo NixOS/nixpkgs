@@ -82,7 +82,7 @@
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
   matejc = "Matej Cotman <cotman.matej@gmail.com>";
   meisternu = "Matt Miemiec <meister@krutt.org>";
-  michelk = "Michel Kuhlmann <michel@kuhlmanns.info>"
+  michelk = "Michel Kuhlmann <michel@kuhlmanns.info>";
   modulistic = "Pablo Costa <modulistic@gmail.com>";
   mornfall = "Petr Ročkai <me@mornfall.net>";
   MP2E = "Cray Elliott <MP2E@archlinux.us>";
