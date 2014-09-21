@@ -16,7 +16,7 @@ g: # Get dependencies from patched gems
     autotest_rails = g.autotest_rails_4_2_1;
     aws_sdk = g.aws_sdk_1_53_0;
     aws_sdk_v1 = g.aws_sdk_v1_1_53_0;
-    backports = g.backports_3_6_0;
+    backports = g.backports_3_6_1;
     bitbucket_backup = g.bitbucket_backup_0_3_1;
     blankslate = g.blankslate_2_1_2_4;
     builder = g.builder_3_2_2;
@@ -46,6 +46,7 @@ g: # Get dependencies from patched gems
     ethon = g.ethon_0_7_1;
     eventmachine = g.eventmachine_1_0_3;
     eventmachine_tail = g.eventmachine_tail_0_6_4;
+    excon = g.excon_0_39_5;
     execjs = g.execjs_2_2_1;
     fakes3 = g.fakes3_0_1_5_2;
     faraday = g.faraday_0_9_0;
@@ -57,6 +58,8 @@ g: # Get dependencies from patched gems
     gettext = g.gettext_3_1_4;
     gh = g.gh_0_13_2;
     gherkin = g.gherkin_2_12_2;
+    heroku = g.heroku_3_10_3;
+    heroku_api = g.heroku_api_0_3_19;
     highline = g.highline_1_6_21;
     hike = g.hike_1_2_3;
     hitimes = g.hitimes_1_2_2;
@@ -96,6 +99,7 @@ g: # Get dependencies from patched gems
     net_http_pipeline = g.net_http_pipeline_1_0_1;
     net_sftp = g.net_sftp_2_1_2;
     net_ssh = g.net_ssh_2_9_1;
+    netrc = g.netrc_0_7_7;
     nix = g.nix_0_1_1;
     nokogiri = g.nokogiri_1_6_3_1;
     ntlm_http = g.ntlm_http_0_1_1;
@@ -120,10 +124,11 @@ g: # Get dependencies from patched gems
     rdoc = g.rdoc_4_1_2;
     redcarpet = g.redcarpet_3_1_2;
     remote_syslog = g.remote_syslog_1_6_14;
+    rest_client = g.rest_client_1_6_7;
     riemann_dash = g.riemann_dash_0_2_9;
     right_aws = g.right_aws_3_1_0;
     right_http_connection = g.right_http_connection_1_5_0;
-    rjb = g.rjb_1_4_9;
+    rjb = g.rjb_1_5_0;
     rkelly_remix = g.rkelly_remix_0_0_6;
     rmail = g.rmail_1_0_0;
     rspec = g.rspec_2_14_1;
@@ -132,7 +137,7 @@ g: # Get dependencies from patched gems
     rspec_mocks = g.rspec_mocks_2_14_6;
     rubyzip = g.rubyzip_1_1_6;
     safe_yaml = g.safe_yaml_1_0_3;
-    sass = g.sass_3_4_4;
+    sass = g.sass_3_4_5;
     selenium_webdriver = g.selenium_webdriver_2_43_0;
     servolux = g.servolux_0_10_0;
     sinatra = g.sinatra_1_4_5;
@@ -150,9 +155,9 @@ g: # Get dependencies from patched gems
     thread_safe = g.thread_safe_0_3_4;
     tilt = g.tilt_1_4_1;
     timers = g.timers_4_0_1;
-    tins = g.tins_1_3_2;
+    tins = g.tins_1_3_3;
     toml = g.toml_0_1_1;
-    travis = g.travis_1_7_1;
+    travis = g.travis_1_7_2;
     trollop = g.trollop_2_0;
     typhoeus = g.typhoeus_0_6_9;
     tzinfo = g.tzinfo_1_2_2;
@@ -168,7 +173,7 @@ g: # Get dependencies from patched gems
     xml_simple = g.xml_simple_1_1_2;
     yajl_ruby = g.yajl_ruby_1_2_1;
   };
-  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''compass'' ''cucumber'' ''erubis'' ''execjs'' ''fakes3'' ''foreman'' ''gettext'' ''iconv'' ''jekyll'' ''jsduck'' ''lockfile'' ''mechanize'' ''nix'' ''papertrail-cli'' ''rails'' ''rake'' ''rb-fsevent'' ''rdoc'' ''remote_syslog'' ''riemann-dash'' ''right_aws'' ''rmail'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''taskjuggler'' ''terminal-notifier'' ''thin'' ''travis'' ''trollop'' ''uglifier'' ''uuid'' ''xapian-full'' ''xapian-ruby'' ''yajl-ruby'' ];
+  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''compass'' ''cucumber'' ''erubis'' ''execjs'' ''fakes3'' ''foreman'' ''gettext'' ''heroku'' ''iconv'' ''jekyll'' ''jsduck'' ''lockfile'' ''mechanize'' ''nix'' ''papertrail-cli'' ''rails'' ''rake'' ''rb-fsevent'' ''rdoc'' ''remote_syslog'' ''riemann-dash'' ''right_aws'' ''rmail'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''taskjuggler'' ''terminal-notifier'' ''thin'' ''travis'' ''trollop'' ''uglifier'' ''uuid'' ''xapian-full'' ''xapian-ruby'' ''yajl-ruby'' ];
   gems = {
     ZenTest_4_10_1 = {
       basename = ''ZenTest'';
@@ -318,7 +323,7 @@ database compatibility and query generation.'';
 	check out Buildr!'';
       };
       name = ''atoulme-Antwrap-0.7.4'';
-      requiredGems = [ g.rjb_1_4_9 ];
+      requiredGems = [ g.rjb_1_5_0 ];
       sha256 = ''0sh9capkya88qm9mvixwly32fwb2c4nzif9j9vv0f73rqw8kz4j4'';
     };
     autotest_rails_4_2_1 = {
@@ -359,16 +364,16 @@ application.'';
       requiredGems = [ g.nokogiri_1_6_3_1 g.json_1_8_1 ];
       sha256 = ''00yagrm2d5agwkfgkv4rqbxymwmgjmv5n8hah3xhrc90q1ywr7hw'';
     };
-    backports_3_6_0 = {
+    backports_3_6_1 = {
       basename = ''backports'';
       meta = {
         description = ''Backports of Ruby features for older Ruby.'';
         homepage = ''http://github.com/marcandre/backports'';
-        longDescription = ''Essential backports that enable many of the nice features of Ruby 1.8.7 up to 2.0.0 for earlier versions.'';
+        longDescription = ''Essential backports that enable many of the nice features of Ruby 1.8.7 up to 2.1.0 for earlier versions.'';
       };
-      name = ''backports-3.6.0'';
+      name = ''backports-3.6.1'';
       requiredGems = [  ];
-      sha256 = ''1pinn0m4fmq124adc6xjl2hk9799xq5jw4bva82cdzd4h2hwrgq5'';
+      sha256 = ''182fzzmzhjknnh8r6196lnws5fik86wnsn64a382w0fqb2vz98bq'';
     };
     bitbucket_backup_0_3_1 = {
       basename = ''bitbucket_backup'';
@@ -562,7 +567,7 @@ for those one-off tasks, with a language that's a joy to use.
         longDescription = ''Compass is a Sass-based Stylesheet Framework that streamlines the creation and maintenance of CSS.'';
       };
       name = ''compass-1.0.1'';
-      requiredGems = [ g.sass_3_4_4 g.compass_core_1_0_1 g.compass_import_once_1_0_5 g.chunky_png_1_3_1 g.rb_fsevent_0_9_4 g.rb_inotify_0_9_5 ];
+      requiredGems = [ g.sass_3_4_5 g.compass_core_1_0_1 g.compass_import_once_1_0_5 g.chunky_png_1_3_1 g.rb_fsevent_0_9_4 g.rb_inotify_0_9_5 ];
       sha256 = ''0cxb6nbj37wz2zwwb4pkbvg9pg0ymamxx9v400h9ibvlb5n0ri40'';
     };
     compass_core_1_0_1 = {
@@ -573,7 +578,7 @@ for those one-off tasks, with a language that's a joy to use.
         longDescription = ''The Compass core stylesheet library and minimum required ruby extensions. This library can be used stand-alone without the compass ruby configuration file or compass command line tools.'';
       };
       name = ''compass-core-1.0.1'';
-      requiredGems = [ g.sass_3_4_4 g.multi_json_1_10_1 ];
+      requiredGems = [ g.sass_3_4_5 g.multi_json_1_10_1 ];
       sha256 = ''0zhbmgjq6s9j2qdx3cz0v8s216mh8g0ymk4fzmq3c4an9rryl1zx'';
     };
     compass_import_once_1_0_5 = {
@@ -584,7 +589,7 @@ for those one-off tasks, with a language that's a joy to use.
         longDescription = ''Changes the behavior of Sass's @import directive to only import a file once.'';
       };
       name = ''compass-import-once-1.0.5'';
-      requiredGems = [ g.sass_3_4_4 ];
+      requiredGems = [ g.sass_3_4_5 ];
       sha256 = ''0bn7gwbfz7jvvdd0qdfqlx67fcb83gyvxqc7dr9fhcnks3z8z5rq'';
     };
     cucumber_1_3_17 = {
@@ -775,6 +780,17 @@ using TCP/IP, especially if custom protocols are required.'';
       requiredGems = [ g.eventmachine_1_0_3 ];
       sha256 = ''1pvlb34vdzd81kf9f3xyibb4f55xjqm7lqqy28dgyci5cyv50y61'';
     };
+    excon_0_39_5 = {
+      basename = ''excon'';
+      meta = {
+        description = ''speed, persistence, http(s)'';
+        homepage = ''https://github.com/excon/excon'';
+        longDescription = ''EXtended http(s) CONnections'';
+      };
+      name = ''excon-0.39.5'';
+      requiredGems = [  ];
+      sha256 = ''04dgrjq6b955bv2bps0g59gvn089mz8339nhlqksjf9jimgjglcq'';
+    };
     execjs_2_2_1 = {
       basename = ''execjs'';
       meta = {
@@ -883,7 +899,7 @@ So you can use GNU gettext tools for maintaining.
         longDescription = ''multi-layer client for the github api v3'';
       };
       name = ''gh-0.13.2'';
-      requiredGems = [ g.faraday_0_9_0 g.backports_3_6_0 g.multi_json_1_10_1 g.addressable_2_3_6 g.net_http_persistent_2_9_4 g.net_http_pipeline_1_0_1 ];
+      requiredGems = [ g.faraday_0_9_0 g.backports_3_6_1 g.multi_json_1_10_1 g.addressable_2_3_6 g.net_http_persistent_2_9_4 g.net_http_pipeline_1_0_1 ];
       sha256 = ''17scqa35j6ghpykzk986gnd6dvbrh8nn60ib04hb2gbyh9dns1dj'';
     };
     gherkin_2_12_2 = {
@@ -896,6 +912,28 @@ So you can use GNU gettext tools for maintaining.
       name = ''gherkin-2.12.2'';
       requiredGems = [ g.multi_json_1_10_1 ];
       sha256 = ''1mxfgw15pii1jmq00xxbyp77v71mh3bp99ndgwzfwkxvbcisha25'';
+    };
+    heroku_3_10_3 = {
+      basename = ''heroku'';
+      meta = {
+        description = ''Client library and CLI to deploy apps on Heroku.'';
+        homepage = ''http://heroku.com/'';
+        longDescription = ''Client library and command-line tool to deploy and manage apps on Heroku.'';
+      };
+      name = ''heroku-3.10.3'';
+      requiredGems = [ g.heroku_api_0_3_19 g.launchy_2_4_2 g.netrc_0_7_7 g.rest_client_1_6_7 g.rubyzip_0_9_9 ];
+      sha256 = ''04j9rndygkf5gkv2w5a29wvn683viskhaqyj4fsvnj02qfhfrvnr'';
+    };
+    heroku_api_0_3_19 = {
+      basename = ''heroku_api'';
+      meta = {
+        description = ''Ruby Client for the Heroku API'';
+        homepage = ''http://github.com/heroku/heroku.rb'';
+        longDescription = ''Ruby Client for the Heroku API'';
+      };
+      name = ''heroku-api-0.3.19'';
+      requiredGems = [ g.excon_0_39_5 g.multi_json_1_10_1 ];
+      sha256 = ''08wddhsnvjyb2a1wl85gbb00rjb1xs26pjlkd068635hi6wmx2id'';
     };
     highline_1_6_21 = {
       basename = ''highline'';
@@ -1035,7 +1073,7 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
         homepage = ''https://github.com/jekyll/jekyll-sass-converter'';
       };
       name = ''jekyll-sass-converter-1.2.1'';
-      requiredGems = [ g.sass_3_4_4 ];
+      requiredGems = [ g.sass_3_4_5 ];
       sha256 = ''1w221nzcpaqh2llflciwhbzw1sqxjavwwzbri9n4qkj057a73ar1'';
     };
     jekyll_watch_1_1_1 = {
@@ -1461,6 +1499,17 @@ The server will respond in-order.'';
       requiredGems = [  ];
       sha256 = ''1vscp4r58jisiigqc6d6752w19m1m6hmi3jkzmp3ydxai7h3jb2j'';
     };
+    netrc_0_7_7 = {
+      basename = ''netrc'';
+      meta = {
+        description = ''Library to read and write netrc files.'';
+        homepage = ''https://github.com/geemus/netrc'';
+        longDescription = ''This library can read and update netrc files, preserving formatting including comments and whitespace.'';
+      };
+      name = ''netrc-0.7.7'';
+      requiredGems = [  ];
+      sha256 = ''1y64v93hsxdwgx3dfkyzdki3zqd1slm42dmi23v0zy3kap4vpard'';
+    };
     nix_0_1_1 = {
       basename = ''nix'';
       meta = {
@@ -1769,6 +1818,17 @@ from the command-line.'';
       requiredGems = [ g.servolux_0_10_0 g.file_tail_1_0_12 g.eventmachine_1_0_3 g.eventmachine_tail_0_6_4 g.syslog_protocol_0_9_2 g.em_resolv_replace_1_1_3 ];
       sha256 = ''1f2yjyqhbdc4vlx52zli1b33f6yn8qc1kd4n0dpv27zswj9qfdkr'';
     };
+    rest_client_1_6_7 = {
+      basename = ''rest_client'';
+      meta = {
+        description = ''Simple HTTP and REST client for Ruby, inspired by microframework syntax for specifying actions.'';
+        homepage = ''http://github.com/archiloque/rest-client'';
+        longDescription = ''A simple HTTP and REST client for Ruby, inspired by the Sinatra microframework style of specifying actions: get, put, post, delete.'';
+      };
+      name = ''rest-client-1.6.7'';
+      requiredGems = [ g.mime_types_2_3 ];
+      sha256 = ''0nn7zalgidz2yj0iqh3xvzh626krm2al79dfiij19jdhp0rk8853'';
+    };
     riemann_dash_0_2_9 = {
       basename = ''riemann_dash'';
       meta = {
@@ -1777,7 +1837,7 @@ from the command-line.'';
         longDescription = ''HTTP dashboard for the distributed event system Riemann.'';
       };
       name = ''riemann-dash-0.2.9'';
-      requiredGems = [ g.erubis_2_7_0 g.sinatra_1_4_5 g.sass_3_4_4 g.webrick_1_3_1 g.multi_json_1_3_6 ];
+      requiredGems = [ g.erubis_2_7_0 g.sinatra_1_4_5 g.sass_3_4_5 g.webrick_1_3_1 g.multi_json_1_3_6 ];
       sha256 = ''0ws5wmjbv8w9lcr3i2mdinj2qm91p6c85k6c067i67cf0p90jxq3'';
     };
     right_aws_3_1_0 = {
@@ -1858,6 +1918,18 @@ algorithm for low-level network errors.
       name = ''rjb-1.4.9'';
       requiredGems = [  ];
       sha256 = ''062f7bjwz6iz6da49nzzbbx4xn8ahqqha2smqvqhbf0i7kd5v0yz'';
+    };
+    rjb_1_5_0 = {
+      basename = ''rjb'';
+      meta = {
+        description = ''Ruby Java bridge'';
+        homepage = ''http://rjb.rubyforge.org/'';
+        longDescription = ''RJB is a bridge program that connect between Ruby and Java with Java Native Interface.
+'';
+      };
+      name = ''rjb-1.5.0'';
+      requiredGems = [  ];
+      sha256 = ''0hjc0l3241lqrfracgb7gmsyd54v0lzplqfv9kfzk8km61pkjlfb'';
     };
     rkelly_remix_0_0_6 = {
       basename = ''rkelly_remix'';
@@ -1990,7 +2062,7 @@ RKelly[https://github.com/tenderlove/rkelly] JavaScript parser.'';
       requiredGems = [  ];
       sha256 = ''063bykyk40s3rhy1dxfbvl69s179n1iny418z4wqjbvhrmjn18wl'';
     };
-    sass_3_4_4 = {
+    sass_3_4_5 = {
       basename = ''sass'';
       meta = {
         description = ''A powerful but elegant CSS compiler that makes CSS fun again.'';
@@ -2001,9 +2073,9 @@ RKelly[https://github.com/tenderlove/rkelly] JavaScript parser.'';
       command line tool or a web-framework plugin.
 '';
       };
-      name = ''sass-3.4.4'';
+      name = ''sass-3.4.5'';
       requiredGems = [  ];
-      sha256 = ''0xvdj5lb062z1byq7s8f8zmp5kkjhghih5rfdb1q61mmmbmy9lw7'';
+      sha256 = ''1rd07m2gprzgd6a4vnrlnyx5lkslfn30hcgfav86rb82a8zqmxah'';
     };
     selenium_webdriver_2_43_0 = {
       basename = ''selenium_webdriver'';
@@ -2134,7 +2206,7 @@ management.
         longDescription = ''This library uses ANSI escape sequences to control the attributes of terminal output'';
       };
       name = ''term-ansicolor-1.3.0'';
-      requiredGems = [ g.tins_1_3_2 ];
+      requiredGems = [ g.tins_1_3_3 ];
       sha256 = ''1a2gw7gmpmx57sdpyhjwl0zn4bqp7jyjz7aslpvvphd075layp4b'';
     };
     terminal_notifier_1_6_1 = {
@@ -2224,16 +2296,16 @@ management.
       requiredGems = [  ];
       sha256 = ''1ygkm4ava7x6ap61qz6pn79193g6g29248fa04mwknsz6acfjs2y'';
     };
-    tins_1_3_2 = {
+    tins_1_3_3 = {
       basename = ''tins'';
       meta = {
         description = ''Useful stuff.'';
         homepage = ''http://flori.github.com/tins'';
         longDescription = ''All the stuff that isn't good/big enough for a real library.'';
       };
-      name = ''tins-1.3.2'';
+      name = ''tins-1.3.3'';
       requiredGems = [  ];
-      sha256 = ''1i27zj1bhmgq19f3i5i08njprfnlv3yi5frm8ax6w0b342p6v8ly'';
+      sha256 = ''14jnsg15wakdk1ljh2iv9yvzk8nb7gpzd2zw4yvjikmffqjyqvna'';
     };
     toml_0_1_1 = {
       basename = ''toml'';
@@ -2246,16 +2318,16 @@ management.
       requiredGems = [ g.parslet_1_5_0 ];
       sha256 = ''1m5dv66qnbbg0r2zpp45hzq2nkmc4qaq0xmqw8j1kwkrpiwihwp8'';
     };
-    travis_1_7_1 = {
+    travis_1_7_2 = {
       basename = ''travis'';
       meta = {
         description = ''Travis CI client'';
         homepage = ''https://github.com/travis-ci/travis.rb'';
         longDescription = ''CLI and Ruby client library for Travis CI'';
       };
-      name = ''travis-1.7.1'';
-      requiredGems = [ g.faraday_0_9_0 g.faraday_middleware_0_9_1 g.highline_1_6_21 g.backports_3_6_0 g.gh_0_13_2 g.launchy_2_4_2 g.pry_0_9_12_6 g.typhoeus_0_6_9 g.pusher_client_0_6_0 g.addressable_2_3_6 ];
-      sha256 = ''1h0xajfzkz7pdrbhs2650nl5www8qfmgazmmmw0bcr3dai5kimdf'';
+      name = ''travis-1.7.2'';
+      requiredGems = [ g.faraday_0_9_0 g.faraday_middleware_0_9_1 g.highline_1_6_21 g.backports_3_6_1 g.gh_0_13_2 g.launchy_2_4_2 g.pry_0_9_12_6 g.typhoeus_0_6_9 g.pusher_client_0_6_0 g.addressable_2_3_6 ];
+      sha256 = ''0zl9b48dv0v0gmrj6xyprhysa4g0r3yz8a6f99h0qgwiw2l2xxcc'';
     };
     trollop_2_0 = {
       basename = ''trollop'';
