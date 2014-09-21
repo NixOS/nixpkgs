@@ -56,6 +56,7 @@ in stdenv.mkDerivation rec {
     longDescription = ''
       Tabbed, VTE-based terminal emulator.  Similar to gnome-terminal without the dependencies on Gnome.
     '';
+    maintainers = with maintainers; [ cdepillabout ];
     platforms = platforms.linux;
   };
 }

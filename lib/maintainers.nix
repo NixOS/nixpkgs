@@ -34,6 +34,7 @@
   bosu = "Boris Sukholitko <boriss@gmail.com>";
   calrama = "Moritz Maxeiner <moritz@ucworks.org>";
   campadrenalin = "Philip Horger <campadrenalin@gmail.com>";
+  cdepillabout = "Dennis Gosnell <cdep.illabout@gmail.com>";
   cfouche = "Chaddaï Fouché <chaddai.fouche@gmail.com>";
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
   coconnor = "Corey O'Connor <coreyoconnor@gmail.com>";
