@@ -32,6 +32,6 @@ pythonPackages.buildPythonPackage rec {
     description = "A simple automation tool";
     license = licenses.gpl3;
     maintainers = [ maintainers.joamaki ];
-    platforms = platforms.linux; # Only tested on Linux
+    platforms = platforms.linux ++ [ "x86_64-darwin" ];
   };
 }
