@@ -8,9 +8,9 @@ kde {
 # TODO: LinkGrammar
 
   buildInputs =
-    [ kdepimlibs boost shared_desktop_ontologies akonadi nepomuk_widgets
-      libxslt cyrus_sasl gpgme libassuan grantlee prison kactivities
-      libXScrnSaver qjson
+    [ kdepimlibs boost boost.lib shared_desktop_ontologies akonadi
+      nepomuk_widgets libxslt cyrus_sasl gpgme libassuan grantlee prison
+      kactivities libXScrnSaver qjson
     ];
 
   nativeBuildInputs = [ pkgconfig ];
