@@ -1449,6 +1449,8 @@ let
 
   kexectools = callPackage ../os-specific/linux/kexectools { };
 
+  keybase-node-client = callPackage ../applications/misc/keybase-node-client { };
+
   keychain = callPackage ../tools/misc/keychain { };
 
   kibana = callPackage ../development/tools/misc/kibana { };
