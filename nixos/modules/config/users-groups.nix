@@ -310,9 +310,9 @@ let
       }) cfg.extraUsers;
     groups = mapAttrsToList (n: g:
       { inherit (g) name gid;
-        members = mapAttrsToList (n: u: u.name) (
+        members = g.members ++ (mapAttrsToList (n: u: u.name) (
           filterAttrs (n: u: elem g.name u.extraGroups) cfg.extraUsers
-        );
+        ));
       }) cfg.extraGroups;
   });
 
