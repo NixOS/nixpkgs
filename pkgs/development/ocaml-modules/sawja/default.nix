@@ -1,4 +1,4 @@
-{stdenv, fetchurl, which, perl, ocaml, findlib, javalib }:
+{stdenv, fetchurl, which, perl, ocaml, findlib, javalib, camlp4 }:
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0i8qgqkw9vgj6k2g6npss268ivxdkzx5qj2a52jbd8ih59rn68cm";
   };
 
-  buildInputs = [ which perl ocaml findlib javalib ];
+  buildInputs = [ which perl ocaml findlib camlp4 ];
 
   patches = [ ./configure.sh.patch ./Makefile.config.example.patch ];
 

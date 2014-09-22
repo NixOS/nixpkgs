@@ -1,4 +1,4 @@
-{stdenv, fetchurl, which, ocaml, findlib, camlzip, extlib}:
+{stdenv, fetchurl, which, ocaml, findlib, camlzip, extlib, camlp4}:
 let
   pname = "javalib";
   version = "2.3";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1i8djcanzm250mwilm3jfy37cz0k0x7jbnrz8a5vvdi91kyzh52j";
   };
 
-  buildInputs = [ which ocaml findlib camlzip extlib ];
+  buildInputs = [ which ocaml findlib camlp4 ];
 
   patches = [ ./configure.sh.patch ./Makefile.config.example.patch ];
 
