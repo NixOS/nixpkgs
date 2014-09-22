@@ -39,13 +39,14 @@ in
         }
       ];
 
-    jobs.sabnzbd =
+    systemd.services.sabnzbd =
       { description = "sabnzbd server";
-
-        startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
-
-        exec = "${sabnzbd}/bin/sabnzbd -d -f ${cfg.configFile}";
+        wantedBy    = [ "multi-user.target" ];
+        after = [ "network.target" ];
+        serviceConfig = {
+          Type = "forking";
+          ExecStart = "${sabnzbd}/bin/sabnzbd -d -f ${cfg.configFile}";
+        };
       };
 
   };
