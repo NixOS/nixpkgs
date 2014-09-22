@@ -3,9 +3,10 @@
 stdenv.mkDerivation rec {
   name = "slang-2.3.0";
   src = fetchurl {
-    url = "ftp://ftp.fu-berlin.de/pub/unix/misc/slang/v2.2/${name}.tar.bz2";
-    sha256 = "0ab1j8pb3r84c5wqwadh3d5akwd5mwwv6fah58hxiq251w328lpr";
+    url = "http://www.jedsoft.org/releases/slang/${name}.tar.gz";
+    sha256 = "0aqd2cjabj6nhd4r3dc4vhqif2bf3dmqnrn2gj0xm4gqyfd177jy";
   };
+
   # Fix some wrong hardcoded paths
   preConfigure = ''
     sed -i -e "s|/usr/lib/terminfo|${ncurses}/lib/terminfo|" configure
