@@ -1232,6 +1232,8 @@ let
 
   gource = callPackage ../applications/version-management/gource {};
 
+  gparted = callPackage ../tools/misc/gparted { };
+
   gpodder = callPackage ../applications/audio/gpodder { };
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
@@ -1275,6 +1277,10 @@ let
   grub2_efi = grub2.override { efiSupport = true; };
 
   grub2_zfs = grub2.override { zfsSupport = true; };
+
+  gsmartcontrol = callPackage ../tools/misc/gsmartcontrol {
+    inherit (gnome) libglademm;
+  };
 
   gssdp = callPackage ../development/libraries/gssdp {
     inherit (gnome) libsoup;
@@ -10755,12 +10761,6 @@ let
   gnuchess = callPackage ../games/gnuchess { };
 
   gnugo = callPackage ../games/gnugo { };
-
-  gparted = callPackage ../tools/misc/gparted { };
-
-  gsmartcontrol = callPackage ../tools/misc/gsmartcontrol {
-    inherit (gnome) libglademm;
-  };
 
   gtypist = callPackage ../games/gtypist { };
 
