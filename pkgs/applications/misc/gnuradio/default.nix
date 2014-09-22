@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    cmake pkgconfig git boost cppunit fftw python swig2 orc lxml qt4 qwt
-    alsaLib SDL libusb1 uhd gsl makeWrapper
+    cmake pkgconfig git boost boost.lib cppunit fftw python swig2 orc lxml qt4
+    qwt alsaLib SDL libusb1 uhd gsl makeWrapper
   ];
 
   propagatedBuildInputs = [

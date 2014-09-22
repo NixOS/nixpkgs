@@ -1,18 +1,19 @@
 { stdenv, fetchurl, expat, zlib, boost }:
 
 stdenv.mkDerivation rec {
-  name = "exempi-2.2.1";
+  name = "exempi-2.2.2";
 
   src = fetchurl {
     url = "http://libopenraw.freedesktop.org/download/${name}.tar.bz2";
-    sha256 = "00d6gycl0wcyd3c71y0jp033a64z203rq0p0y07aig0s0j0477kc";
+    sha256 = "01vcd1mfn2s0iiq2cjyzgvnxx6kcq9cwra1iipijhs0vwvjx0yhf";
   };
 
   configureFlags = [ "--with-boost=${boost}" ];
 
-  buildInputs = [ expat zlib boost ];
+  buildInputs = [ expat zlib boost boost.lib ];
 
   meta = with stdenv.lib; {
+    homepage = http://libopenraw.freedesktop.org/wiki/Exempi/;
     platforms = platforms.linux;
     license = licenses.bsd3;
   };

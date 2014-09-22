@@ -1,6 +1,6 @@
 { kde, kdelibs, boost, python}:
 kde {
-  buildInputs = [ kdelibs boost python ];
+  buildInputs = [ kdelibs boost boost.lib python ];
 
   cmakeFlags = "-DKIG_ENABLE_PYTHON_SCRIPTING=1";
   meta = {

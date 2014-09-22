@@ -599,6 +599,8 @@ let
 
   boomerang = callPackage ../development/tools/boomerang { };
 
+  boost-build = callPackage ../development/tools/boost-build { };
+
   bootchart = callPackage ../tools/system/bootchart { };
 
   bro = callPackage ../applications/networking/ids/bro { };
@@ -1614,7 +1616,6 @@ let
   monit = callPackage ../tools/system/monit { };
 
   mosh = callPackage ../tools/networking/mosh {
-    boost = boostHeaders;
     inherit (perlPackages) IOTty;
   };
 
@@ -4576,10 +4577,8 @@ let
 
   boost144 = callPackage ../development/libraries/boost/1.44.nix { };
   boost149 = callPackage ../development/libraries/boost/1.49.nix { };
-  boost155 = callPackage ../development/libraries/boost/1.55.nix { };
-  boost = boost155;
-
-  boostHeaders = callPackage ../development/libraries/boost/header-only-wrapper.nix { };
+  boost156 = callPackage ../development/libraries/boost/1.56.nix { };
+  boost = boost156;
 
   botan = callPackage ../development/libraries/botan { };
   botanUnstable = callPackage ../development/libraries/botan/unstable.nix { };
@@ -4684,9 +4683,7 @@ let
 
   cppunit = callPackage ../development/libraries/cppunit { };
 
-  cppnetlib = callPackage ../development/libraries/cppnetlib {
-    boost = boostHeaders;
-  };
+  cppnetlib = callPackage ../development/libraries/cppnetlib { };
 
   cracklib = callPackage ../development/libraries/cracklib { };
 
@@ -5895,7 +5892,6 @@ let
   libyaml = callPackage ../development/libraries/libyaml { };
 
   libyamlcpp = callPackage ../development/libraries/libyaml-cpp { };
-  libyamlcpp03 = callPackage ../development/libraries/libyaml-cpp/0.3.x.nix { };
 
   libyubikey = callPackage ../development/libraries/libyubikey {};
 
@@ -7195,7 +7191,9 @@ let
 
   mariadb = callPackage ../servers/sql/mariadb {};
 
-  mongodb = callPackage ../servers/nosql/mongodb { };
+  mongodb = callPackage ../servers/nosql/mongodb {
+    sasl = cyrus_sasl;
+  };
 
   riak = callPackage ../servers/nosql/riak/1.3.1.nix { };
 
@@ -9454,7 +9452,6 @@ let
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2 gnome_vfs;
     zip = zip.override { enableNLS = false; };
-    boost = boost155;
     jdk = openjdk;
     fontsConf = makeFontsConf {
       fontDirectories = [
