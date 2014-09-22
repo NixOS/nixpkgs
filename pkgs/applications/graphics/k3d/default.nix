@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
      cmake mesa zlib python expat libxml2 libsigcxx libuuid freetype libpng
-     boost doxygen cairomm pkgconfig imagemagick libjpeg libtiff gettext
-     intltool perl
+     boost boost.lib doxygen cairomm pkgconfig imagemagick libjpeg libtiff
+     gettext intltool perl
      gtkmm glibmm gtkglext pangox_compat libXmu
     ];
 

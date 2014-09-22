@@ -56,22 +56,51 @@ import ./make-test.nix {
 
       die if $id1 eq $id2;
 
+      # Put the root of $id2 into a bind mount.
+      $machine->succeed(
+        "mv /var/lib/containers/$id2 /id2-bindmount",
+        "mount --bind /id2-bindmount /var/lib/containers/$id1"
+      );
+
       my $ip1 = $machine->succeed("nixos-container show-ip $id1");
       chomp $ip1;
       my $ip2 = $machine->succeed("nixos-container show-ip $id2");
       chomp $ip2;
       die if $ip1 eq $ip2;
 
+      # Create a directory and a file we can later check if it still exists
+      # after destruction of the container.
+      $machine->succeed(
+        "mkdir /nested-bindmount",
+        "echo important data > /nested-bindmount/dummy",
+      );
+
+      # Create a directory with a dummy file and bind-mount it into both
+      # containers.
+      foreach ($id1, $id2) {
+        my $importantPath = "/var/lib/containers/$_/very/important/data";
+        $machine->succeed(
+          "mkdir -p $importantPath",
+          "mount --bind /nested-bindmount $importantPath"
+        );
+      }
+
       # Start one of them.
       $machine->succeed("nixos-container start $id1");
 
       # Execute commands via the root shell.
       $machine->succeed("nixos-container run $id1 -- uname") =~ /Linux/ or die;
-      $machine->succeed("nixos-container set-root-password $id1 foobar");
 
       # Destroy the containers.
       $machine->succeed("nixos-container destroy $id1");
       $machine->succeed("nixos-container destroy $id2");
+
+      $machine->succeed(
+        # Check whether destruction of any container has killed important data
+        "grep -qF 'important data' /nested-bindmount/dummy",
+        # Ensure that the container path is gone
+        "test ! -e /var/lib/containers/$id1"
+      );
 
       # Destroying a declarative container should fail.
       $machine->fail("nixos-container destroy webserver");

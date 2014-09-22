@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd3;
 
     hydraPlatforms = stdenv.lib.platforms.linux;
-    maintainers = stdenv.lib.maintainers.sprock;
+    maintainers = [ stdenv.lib.maintainers.sprock ];
   };
 }

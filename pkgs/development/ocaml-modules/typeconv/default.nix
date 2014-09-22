@@ -1,5 +1,11 @@
 {stdenv, fetchurl, ocaml, findlib}:
 
+let
+  ocaml_version = (builtins.parseDrvName ocaml.name).version;
+in
+
+assert stdenv.lib.versionOlder "4.00" ocaml_version;
+
 stdenv.mkDerivation {
   name = "ocaml-typeconv-109.60.01";
 

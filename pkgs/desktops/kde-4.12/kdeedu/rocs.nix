@@ -1,7 +1,9 @@
 { kde, kdelibs, boost, grantlee }:
-
+let
+  boostpkg = boost.override { enableExceptions = true; };
+in
 kde {
-  buildInputs = [ kdelibs (boost.override { enableExceptions = true; }) grantlee ];
+  buildInputs = [ kdelibs boostpkg boostpkg.lib grantlee ];
 
   NIX_CFLAGS_COMPILE = "-fexceptions";
 

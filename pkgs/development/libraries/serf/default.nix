@@ -1,8 +1,7 @@
 { stdenv, fetchurl, apr, scons, openssl, aprutil, zlib, krb5, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.7";
-  name = "serf-${version}";
+  name = "serf-1.3.7";
 
   src = fetchurl {
     url = "http://serf.googlecode.com/svn/src_releases/${name}.tar.bz2";
@@ -28,11 +27,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "HTTP client library based on APR";
-    license = stdenv.lib.licenses.asl20 ;
+    license = stdenv.lib.licenses.asl20;
     maintainers = [stdenv.lib.maintainers.raskin];
     hydraPlatforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    inherit version;
-    downloadPage = "http://serf.googlecode.com/svn/src_releases/";
-    updateWalker = true;
   };
 }

@@ -177,6 +177,11 @@ in
             if [ "$PRIVATE_NETWORK" = 1 ]; then
               ip link del dev "ve-$INSTANCE" 2> /dev/null || true
             fi
+
+
+            if [ "$PRIVATE_NETWORK" = 1 ]; then
+              ip link del dev "ve-$INSTANCE" 2> /dev/null || true
+            fi
          '';
 
         script =

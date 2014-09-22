@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Smart and user-friendly command line shell";
     homepage = "http://fishshell.com/";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ ocharles ];
   };
 }

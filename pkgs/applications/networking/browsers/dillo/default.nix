@@ -3,8 +3,7 @@
 , openssl
 , libjpeg, libpng
 , perl
-, libXcursor, libXi, libXinerama
-}:
+, libXcursor, libXi, libXinerama }:
 
 stdenv.mkDerivation rec {
   version = "3.0.4";
@@ -22,10 +21,13 @@ stdenv.mkDerivation rec {
 
   configureFlags =  "--enable-ssl";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.dillo.org/;
     description = "A fast graphical web browser with a small footprint";
-    maintainers = [ stdenv.lib.maintainers.AndersonTorres ];
-    platforms = stdenv.lib.platforms.linux;
+    longDescription = ''
+      Dillo is a small, fast web browser, tailored for older machines.
+    '';
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.linux;
   };
 }

@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
+  preConfigure = "patchShebangs ./configure.sh";
+
   configureScript = "./configure.sh";
   dontAddPrefix = "true";
 
@@ -31,10 +33,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ camlzip extlib ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A library that parses Java .class files into OCaml data structures";
     homepage = "${webpage}";
-    license = stdenv.lib.licenses.lgpl3;
+    license = licenses.lgpl3;
+    maintainers = [ maintainers.vbgl ];
     platforms = ocaml.meta.platforms;
   };
 }

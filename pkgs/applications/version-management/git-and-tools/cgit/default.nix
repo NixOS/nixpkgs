@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "cgit-${version}";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchurl {
     url = "http://git.zx2c4.com/cgit/snapshot/${name}.tar.xz";
-    sha256 = "0bci1p9spf79wirc4lk36cndcx2b9wj0fq1l58rlp6r563is77l3";
+    sha256 = "13ac4rqmxc87ymh78ff8kbw1s252nbid71l0ircmj9kmh9jqwncl";
   };
 
   # cgit is tightly coupled with git and needs a git source tree to build.

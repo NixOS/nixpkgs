@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, scons, pkgconfig, openssl, protobuf, boost155, zlib}:
+{ stdenv, fetchurl, scons, pkgconfig, openssl, protobuf, boost, zlib}:
 
 stdenv.mkDerivation rec {
   name = "rippled-${version}";
@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./scons-env.patch ];
 
-  buildInputs = [ scons pkgconfig openssl protobuf boost155 zlib ];
+  buildInputs = [ scons pkgconfig openssl protobuf boost zlib ];
 
-  RIPPLED_BOOST_HOME = boost155.out;
+  RIPPLED_BOOST_HOME = boost.out;
   RIPPLED_ZLIB_HOME = zlib.out;
   buildPhase = "scons build/rippled";
 
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Ripple P2P payment network reference server";
-    homepage = "https://ripple.com";
-    maintainers = stdenv.lib.maintainers.emery;
+    homepage = https://ripple.com;
+    maintainers = [ stdenv.lib.maintainers.emery ];
     license = stdenv.lib.licenses.isc;
     platforms = stdenv.lib.platforms.linux;
   };

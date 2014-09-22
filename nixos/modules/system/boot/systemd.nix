@@ -245,6 +245,12 @@ let
               ${config.postStart}
             '';
           })
+        (mkIf (config.reload != "")
+          { serviceConfig.ExecReload = makeJobScript "${name}-reload" ''
+              #! ${pkgs.stdenv.shell} -e
+              ${config.reload}
+            '';
+          })
         (mkIf (config.preStop != "")
           { serviceConfig.ExecStop = makeJobScript "${name}-pre-stop" ''
               #! ${pkgs.stdenv.shell} -e

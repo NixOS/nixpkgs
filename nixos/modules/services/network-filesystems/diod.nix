@@ -31,7 +31,7 @@ in
 
       listen = mkOption {
         type = types.listOf types.str;
-        default = [ ];
+        default = [ "0.0.0.0:564" ];
         description = ''
           [ "IP:PORT" [,"IP:PORT",...] ]
           List the interfaces and ports that diod should listen on.
@@ -39,7 +39,7 @@ in
       };
 
       exports = mkOption {
-        type = types.listOf types.path;
+        type = types.listOf types.str;
         default = [];
         description = ''
           List the file systems that clients will be allowed to mount. All paths should
@@ -152,7 +152,8 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.diod}/sbin/diod -c ${diodConfig}";
+        ExecStart = "${pkgs.diod}/sbin/diod -f -c ${diodConfig}";
+        Capabilities = "cap_net_bind_service+=ep";
       };
     };
   };

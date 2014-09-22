@@ -9,8 +9,8 @@
 
 cabal.mkDerivation (self: {
   pname = "diagrams-contrib";
-  version = "1.1.2.1";
-  sha256 = "05jsqc9wm87hpnaclzfa376m5z8lnp4qgll6lqnfa5m49cqcabki";
+  version = "1.1.2.2";
+  sha256 = "1a9ayqyffgwq8k9d8l12s6l1pqv27fvzngsklnh3y1bgp20d2z01";
   buildDepends = [
     arithmoi circlePacking colour dataDefault dataDefaultClass
     diagramsCore diagramsLib forceLayout lens MonadRandom mtl parsec

@@ -20,8 +20,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pythonPackages.sqlite3 pygtk /*pythonPackages.pyxdg*/ pygobject ];
 
   preBuild = ''
-    mkdir -p $tmp/home
-    export HOME="$tmp/home"
+    mkdir -p /tmp/home
+    export HOME="/tmp/home"
   '';
   
   setupPyInstallFlags = ["--skip-xdg-cmd"];
@@ -68,6 +68,27 @@ buildPythonPackage rec {
     rm -f "$out/lib/${python.libPrefix}"/site-packages/site.py*
 
     runHook postInstall
+  '';
+
+  # FIXME: this is quick and dirty hack, because zim expects the
+  # path to the executable in argv[0] therefore the wrapper is
+  # modified accordingly.
+  postFixup = ''
+    wrapPythonPrograms
+
+    sed -i "s#sys\.argv\[0\] = 'zim'#sys.argv[0] = '$out/bin/zim'#g" \
+      $out/bin/.zim-wrapped
+
+    if test -e $out/nix-support/propagated-build-inputs; then
+        ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
+    fi
+
+    createBuildInputsPth build-inputs "$buildInputStrings"
+    for inputsfile in propagated-build-inputs propagated-native-build-inputs; do
+      if test -e $out/nix-support/$inputsfile; then
+          createBuildInputsPth $inputsfile "$(cat $out/nix-support/$inputsfile)"
+      fi
+    done
   '';
   
   # Testing fails.

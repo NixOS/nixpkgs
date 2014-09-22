@@ -4,8 +4,8 @@ stdenv.mkDerivation rec {
   name = "pharo-vm-core-i386-2014.06.25";
   system = "x86_32-linux";
   src = fetchurl {
-    url = http://files.pharo.org/vm/src/vm-unix-sources/pharo-vm-2014.06.25.tar.bz2;
-    md5 = "4d80d8169c2f2f0355c43ee90bbad23f";
+    url = http://files.pharo.org/vm/src/vm-unix-sources/blessed/pharo-vm-2014.08.14.tar.bz2;
+    md5 = "8e9e8dfde4f4bb69aac4590ecf82dd3b";
   };
 
   sources10Zip = fetchurl {

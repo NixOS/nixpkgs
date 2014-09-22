@@ -23,16 +23,16 @@
 
 stdenv.mkDerivation rec {
   name = "gnuradio-${version}";
-  version = "3.7.3";
+  version = "3.7.5";
 
   src = fetchurl {
     url = "http://gnuradio.org/releases/gnuradio/${name}.tar.gz";
-    sha256 = "0caj7dqppav53nhn0ima106hpsn0sakw57v1ihac9fk7ka0x2w8w";
+    sha256 = "0hv2nyz2hp1mjinin2q7jimh9mr81rjqvghqmaglz8w70qcn4zs6";
   };
 
   buildInputs = [
-    cmake pkgconfig git boost cppunit fftw python swig2 orc lxml qt4 qwt
-    alsaLib SDL libusb1 uhd gsl makeWrapper
+    cmake pkgconfig git boost boost.lib cppunit fftw python swig2 orc lxml qt4
+    qwt alsaLib SDL libusb1 uhd gsl makeWrapper
   ];
 
   propagatedBuildInputs = [

@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     repositories.git = git://repo.or.cz/socat.git;
     platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.gpl2;
-    maintainers = stdenv.lib.maintainers.eelco;
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

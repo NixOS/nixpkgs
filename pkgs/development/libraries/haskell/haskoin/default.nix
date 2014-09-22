@@ -22,6 +22,7 @@ cabal.mkDerivation (self: {
     homepage = "http://github.com/haskoin/haskoin";
     description = "Implementation of the Bitcoin protocol";
     license = self.stdenv.lib.licenses.publicDomain;
-    platforms = self.ghc.meta.platforms;
+    # https://github.com/haskoin/haskoin/issues/109
+    platforms = [ "x86_64-linux" ];
   };
 })

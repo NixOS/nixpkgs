@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    cmake wxGTK openal pkgconfig curl gettext libtorrentRasterbar boost libpng libX11
-    libnotify gtk doxygen makeWrapper
+    cmake wxGTK openal pkgconfig curl gettext libtorrentRasterbar
+    boost boost.lib libpng libX11 libnotify gtk doxygen makeWrapper
   ];
 
   prePatch = ''

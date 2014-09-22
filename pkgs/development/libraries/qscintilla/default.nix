@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pyqt/QScintilla2/QScintilla-2.8.3/${name}.tar.gz";
+    url = "mirror://sourceforge/pyqt/QScintilla2/QScintilla-${version}/QScintilla-gpl-${version}.tar.gz";
     sha256 = "fb94e6d61c3ccd4bf167d5f092629e619f7069d42207469458998b761a7cf505";
   };
 

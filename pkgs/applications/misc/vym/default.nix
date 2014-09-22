@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     qmake PREFIX="$out"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A mind-mapping software";
     longDescription = ''
       VYM (View Your Mind) is a tool to generate and manipulate maps which show your thoughts.
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
       vym offers much more features to work with such maps.
     '';
     homepage = http://www.insilmaril.de/vym/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainer = [ stdenv.lib.maintainers.AndersonTorres ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainer = [ maintainers.AndersonTorres ];
+    platforms = platforms.linux;
   };
 }

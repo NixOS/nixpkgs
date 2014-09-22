@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.clamav.net;
     description = "Antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats";
     license = licenses.gpl2;
-    maintainers = [ maintainers.phreedom ];
+    maintainers = [ maintainers.phreedom maintainers.robberer ];
     platforms = platforms.linux;
   };
 }

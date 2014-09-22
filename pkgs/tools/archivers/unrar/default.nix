@@ -1,32 +1,29 @@
 {stdenv, fetchurl}:
 
 let
-  version = "5.1.5";
+  version = "5.1.7";
 in
 stdenv.mkDerivation {
   name = "unrar-${version}";
 
   src = fetchurl {
     url = "http://www.rarlab.com/rar/unrarsrc-${version}.tar.gz";
-    sha256 = "1jrla255911rbl953br2xbgvyw15kpi11r4lpqm3jlw553ccw912";
+    sha256 = "13ida8vcamiagl40d9yfjma9k6givxczhx278f1p7bv9wgb8gfmc";
   };
 
-  patchPhase = ''
-    sed -i \
-      -e "/CXX=/d" \
-      -e "/CXXFLAGS=/d" \
-      makefile
-  '';
-
   installPhase = ''
-    mkdir -p $out/bin
-    cp unrar $out/bin
+    installBin unrar
+
+    mkdir -p $out/share/doc/unrar
+    cp acknow.txt license.txt \
+        $out/share/doc/unrar
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Utility for RAR archives";
-    license = "freeware";
-    maintainers = [ stdenv.lib.maintainers.emery ];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin; # arbitrary
+    homepage = http://www.rarlab.com/;
+    license = licenses.unfreeRedistributable;
+    maintainers = [ maintainers.emery ];
+    platforms = platforms.all;
   };
 }

@@ -11,20 +11,25 @@ in
   ###### interface
 
   options = {
+
     services.logstash = {
+
       enable = mkOption {
+        type = types.bool;
         default = false;
-        description = "Enable logstash";
+        description = "Enable logstash.";
       };
 
       enableWeb = mkOption {
+        type = types.bool;
         default = false;
-        description = "Enable logstash web interface";
+        description = "Enable the logstash web interface.";
       };
 
       inputConfig = mkOption {
+        type = types.lines;
         default = ''stdin { type => "example" }'';
-        description = "Logstash input configuration";
+        description = "Logstash input configuration.";
         example = ''
           # Read from journal
           pipe {
@@ -35,8 +40,9 @@ in
       };
 
       filterConfig = mkOption {
+        type = types.lines;
         default = ''noop {}'';
-        description = "logstash filter configuration";
+        description = "logstash filter configuration.";
         example = ''
           if [type] == "syslog" {
             # Keep only relevant systemd fields
@@ -52,13 +58,15 @@ in
       };
 
       outputConfig = mkOption {
+        type = types.lines;
         default = ''stdout { debug => true debug_format => "json"}'';
-        description = "Logstash output configuration";
+        description = "Logstash output configuration.";
         example = ''
           redis { host => "localhost" data_type => "list" key => "logstash" codec => json }
           elasticsearch { embedded => true }
         '';
       };
+
     };
   };
 

@@ -12,6 +12,7 @@
 , enablePepperPDF ? false
 , cupsSupport ? false
 , pulseSupport ? false
+, hiDPISupport ? false
 }:
 
 let
@@ -27,7 +28,7 @@ let
     mkChromiumDerivation = callPackage ./common.nix {
       inherit enableSELinux enableNaCl useOpenSSL gnomeSupport
               gnomeKeyringSupport proprietaryCodecs cupsSupport
-              pulseSupport;
+              pulseSupport hiDPISupport;
     };
 
     browser = callPackage ./browser.nix { };
@@ -74,6 +75,7 @@ in stdenv.mkDerivation {
       --set CHROMIUM_SANDBOX_BINARY_PATH "${sandboxBinary}" \
       --add-flags "${chromium.plugins.flagsEnabled}"
 
+    ln -s "$out/bin/chromium" "$out/bin/chromium-browser"
     ln -s "${chromium.browser}/share/icons" "$out/share/icons"
     cp -v "${desktopItem}/share/applications/"* "$out/share/applications"
   '';

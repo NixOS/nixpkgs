@@ -1,8 +1,7 @@
 { stdenv, fetchurl, pkgconfig
 , autoreconfHook, gettext, expat
 , confuse, vte, gtk
-, makeWrapper
-}:
+, makeWrapper }:
 
 stdenv.mkDerivation rec {
 

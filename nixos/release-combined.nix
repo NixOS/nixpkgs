@@ -34,7 +34,7 @@ in rec {
       maintainers = [ pkgs.lib.maintainers.eelco pkgs.lib.maintainers.shlevy ];
     };
     constituents =
-      let all = x: [ x.x86_64-linux x.i686-linux ]; in
+      let all = x: map (p: x.${p}) supportedSystems; in
       [ nixos.channel
         (all nixos.manual)
 
@@ -61,7 +61,8 @@ in rec {
         (all nixos.tests.kde4)
         (all nixos.tests.login)
         (all nixos.tests.misc)
-        (all nixos.tests.nat)
+        (all nixos.tests.nat.firewall)
+        (all nixos.tests.nat.standalone)
         (all nixos.tests.nfs3)
         (all nixos.tests.openssh)
         (all nixos.tests.printing)

@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "purescript";
-  version = "0.5.4.1";
-  sha256 = "1d2i2sspr1dbzjznk70flvnik0b2m226a3z0rkqwrjjbl92bhgwb";
+  version = "0.5.5";
+  sha256 = "19a2ra37cxh56gd1k43y9fg2cdp848yimybsx8728in39m8cjbxw";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

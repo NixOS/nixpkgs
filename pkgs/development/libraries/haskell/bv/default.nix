@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "bv";
-  version = "0.2.2";
-  sha256 = "0d5hscjakp7dwifa4l8xikyip45y402kf9pbmpfmmnybja23zhg0";
+  version = "0.3.0";
+  sha256 = "0r2bp39ilwq3zx38spbx5qrpccwm255ax2skab3i7jxjmf7yj025";
   isLibrary = true;
   isExecutable = true;
   meta = {
@@ -13,7 +13,6 @@ cabal.mkDerivation (self: {
     description = "Bit-vector arithmetic library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
-    broken = true;
+    maintainers = with self.stdenv.lib.maintainers; [ fuuzetsu ];
   };
 })

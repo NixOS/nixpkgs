@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
                 "-DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON"
                 "-DPREFER_STATIC_LIBS:BOOL=OFF"];
 
-  buildInputs = [ cmake lzma boost libdevil zlib p7zip openal libvorbis freetype SDL 
+  buildInputs = [ cmake lzma boost boost.lib libdevil zlib p7zip openal libvorbis freetype SDL
     xlibs.libX11 xlibs.libXcursor mesa glew asciidoc libxslt docbook_xsl curl makeWrapper
     docbook_xsl_ns systemd ]
     ++ stdenv.lib.optional withAI jdk
@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
 
   # reported upstream http://springrts.com/mantis/view.php?id=4305
   #enableParallelBuilding = true; # occasionally missing generated files on Hydra
+
+  NIX_CFLAGS_COMPILE = "-fpermissive"; # GL header minor incompatibility
 
   postInstall = ''
     wrapProgram "$out/bin/spring" \

@@ -38,6 +38,7 @@
   ./hardware/pcmcia.nix
   ./hardware/video/bumblebee.nix
   ./hardware/video/nvidia.nix
+  ./hardware/video/ati.nix
   ./installer/tools/nixos-checkout.nix
   ./installer/tools/tools.nix
   ./misc/assertions.nix
@@ -85,7 +86,8 @@
   ./services/amqp/activemq/default.nix
   ./services/amqp/rabbitmq.nix
   ./services/audio/alsa.nix
-  ./services/audio/fuppes.nix
+  # Disabled as fuppes it does no longer builds.
+  # ./services/audio/fuppes.nix
   ./services/audio/mpd.nix
   ./services/audio/mopidy.nix
   ./services/backup/almir.nix
@@ -95,6 +97,8 @@
   ./services/backup/rsnapshot.nix
   ./services/backup/sitecopy-backup.nix
   ./services/backup/tarsnap.nix
+  ./services/computing/torque/server.nix
+  ./services/computing/torque/mom.nix
   ./services/continuous-integration/jenkins/default.nix
   ./services/continuous-integration/jenkins/slave.nix
   ./services/databases/4store-endpoint.nix
@@ -176,6 +180,7 @@
   ./services/misc/uhub.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/apcupsd.nix
+  ./services/monitoring/collectd.nix
   ./services/monitoring/dd-agent.nix
   ./services/monitoring/graphite.nix
   ./services/monitoring/monit.nix

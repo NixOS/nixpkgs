@@ -1,0 +1,3 @@
+language: python
+python: "3.4"
+script: ./maintainers/scripts/travis-nox-review-pr.sh

@@ -83,6 +83,8 @@ puts(<<"EOH")
 , systemd
 }:
 
+assert stdenv.isLinux;
+
 let
   version = "#{real_version}";
   sources = [

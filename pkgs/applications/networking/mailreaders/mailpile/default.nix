@@ -1,16 +1,26 @@
-{ stdenv, fetchgit, buildPythonPackage, pythonPackages }:
+{ stdenv, fetchurl, pythonPackages, gnupg1orig, makeWrapper }:
 
-buildPythonPackage rec {
-  name = "mailpile-dev";
+pythonPackages.buildPythonPackage rec {
+  name = "mailpile-${version}";
+  version = "0.4.0";
 
-  src = fetchgit {
-    url = "https://github.com/pagekite/Mailpile.git";
-    rev = "6e19c1942541dbdefb5155db5f2583bf3ed22aeb";
-    sha256 = "04idlbjkasigq3vslcv33kg21rjyklm2yl8pyrf5h94lzabbl1fs";
+  src = fetchurl {
+    url = "https://github.com/pagekite/Mailpile/archive/${version}.zip";
+    sha256 = "1di859lnhmlih4byfpsj8x6wjvzrddw0ng0w69bsj5f9bdy4rgq4";
   };
+  
+  patchPhase = ''
+    substituteInPlace setup.py --replace "data_files.append((dir" "data_files.append(('lib/${pythonPackages.python.libPrefix}/site-packages/' + dir"
+  '';
 
   propagatedBuildInputs = with pythonPackages; [
-    pillow jinja2 spambayes pythonPackages."lxml-2.3.6" python.modules.readline or null];
+    makeWrapper pillow jinja2 spambayes pythonPackages.lxml
+    python.modules.readline pgpdump gnupg1orig
+  ];
+
+  postInstall = ''
+    wrapProgram $out/bin/mailpile --prefix PATH ":" "${gnupg1orig}/bin"
+  '';
 
   meta = with stdenv.lib; {
     description = "A modern, fast web-mail client with user-friendly encryption and privacy features";

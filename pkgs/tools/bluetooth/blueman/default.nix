@@ -5,11 +5,11 @@
 }:
    
 stdenv.mkDerivation rec {
-  name = "blueman-1.21";
+  name = "blueman-1.23";
    
   src = fetchurl {
     url = "http://download.tuxfamily.org/blueman/${name}.tar.gz";
-    sha256 = "1bz31w0cqcl77r7vfjwm9c4gmk4hvq3nqn1pjnd5qndia2mhs846";
+    sha256 = "04ghlh4h5bwp9mqr5jxcmjm01595l5fq5561qxvf369fvjy63cjh";
   };
 
   configureFlags = "--disable-polkit";

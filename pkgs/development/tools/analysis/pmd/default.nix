@@ -1,12 +1,12 @@
 {stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation {
-  name = "pmd-4.2.5";
+  name = "pmd-4.2.6";
   buildInputs = [unzip] ;
 
   src = fetchurl {
-    url = mirror://sourceforge/pmd/pmd-bin-4.2.5.zip ;
-    sha256 = "07cb18mv7rplksy3iw3rxyjaav4m7kcjqfhzv20ki73hfkqxa85c";
+    url = mirror://sourceforge/pmd/pmd-bin-4.2.6.zip ;
+    sha256 = "0gg1px2jmqn09f5vjzgy9gck37qjm9p2d7gf9grsmrr2xncbipp8";
   };
 
   installPhase = ''

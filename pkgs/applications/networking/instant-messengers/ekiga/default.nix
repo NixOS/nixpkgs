@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cyrus_sasl, gettext, openldap, ptlib, opal, libXv, rarian, intltool
+{ stdenv, glib, fetchurl, cyrus_sasl, gettext, openldap, ptlib, opal, libXv, rarian, intltool
 , perl, perlXMLParser, evolution_data_server, gnome_doc_utils, avahi, autoreconfHook
 , libsigcxx, gtk, dbus_glib, libnotify, libXext, xextproto, gnome3, boost, libsecret
 , pkgconfig, libxml2, videoproto, unixODBC, db, nspr, nss, zlib, hicolor_icon_theme
@@ -15,10 +15,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ cyrus_sasl gettext openldap ptlib opal libXv rarian intltool
                   perl perlXMLParser evolution_data_server gnome_doc_utils avahi
                   libsigcxx gtk dbus_glib libnotify libXext xextproto sqlite
-                  gnome3.libsoup
-                  hicolor_icon_theme gnome3.gnome_icon_theme boost autoreconfHook
-                  pkgconfig libxml2 videoproto unixODBC db nspr nss zlib libsecret
-                  libXrandr randrproto which libxslt libtasn1 gmp nettle makeWrapper ];
+                  gnome3.libsoup glib gnome3.gnome_icon_theme_symbolic
+                  hicolor_icon_theme gnome3.gnome_icon_theme boost boost.lib
+                  autoreconfHook pkgconfig libxml2 videoproto unixODBC db nspr
+                  nss zlib libsecret libXrandr randrproto which libxslt libtasn1
+                  gmp nettle makeWrapper ];
 
   preAutoreconf = ''
     substituteInPlace configure.ac --replace AM_GCONF_SOURCE_2 ""
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-ldap-dir=${openldap}"
     "--with-libsasl2-dir=${cyrus_sasl}"
-    "--with-boost-libdir=${boost}/lib"
+    "--with-boost-libdir=${boost.lib}/lib"
     "--disable-gconf"
   ];
 
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out"/bin/ekiga \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {
