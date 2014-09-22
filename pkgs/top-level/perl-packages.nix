@@ -6218,6 +6218,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Use the Amazon S3 - Simple Storage Service";
       license = "perl";
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
