@@ -4334,6 +4334,11 @@ let
 
   neoload = callPackage ../development/tools/neoload {
     licenseAccepted = (config.neoload.accept_license or false);
+    fontsConf = makeFontsConf {
+      fontDirectories = [
+        xorg.fontbhttf
+      ];
+    };
   };
 
   ninja = callPackage ../development/tools/build-managers/ninja { };
