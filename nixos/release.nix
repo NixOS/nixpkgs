@@ -11,7 +11,7 @@ let
 
   forAllSystems = pkgs.lib.genAttrs supportedSystems;
 
-  scrubDrv = drv: let res = { inherit (drv) drvPath outPath type name; outputName = "out"; out = res; }; in res;
+  scrubDrv = drv: let res = { inherit (drv) drvPath outPath type name system meta; outputName = "out"; out = res; }; in res;
 
   callTest = fn: args: forAllSystems (system: scrubDrv (import fn ({ inherit system; } // args)));
 
