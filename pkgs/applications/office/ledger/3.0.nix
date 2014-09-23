@@ -2,16 +2,16 @@
 , texinfo, gnused }:
 
 let
-  rev = "a0c5addbbd";
+  rev = "5961384";
 in
 
 stdenv.mkDerivation {
-  name = "ledger-3.0.2.${rev}";
+  name = "ledger-3.0.4.${rev}";
 
   src = fetchgit {
     url = "git://github.com/ledger/ledger.git";
     inherit rev;
-    sha256 = "1yr4i8gpby67j4vl7xk109dwb14z8a424nwgva8rbms8115w4ps5";
+    sha256 = "48d62cfa06f4a0c5863c072437e67aeafaa210a60e9147f8b2a4403da2a8b3e8";
   };
 
   buildInputs = [ cmake boost boost.lib gmp mpfr libedit python texinfo gnused ];
