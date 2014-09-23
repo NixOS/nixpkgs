@@ -5486,6 +5486,8 @@ let
 
   libgtop = callPackage ../development/libraries/libgtop {};
 
+  libLAS = callPackage ../development/libraries/libLAS { };
+
   liblo = callPackage ../development/libraries/liblo { };
 
   liblrdf = librdf;
