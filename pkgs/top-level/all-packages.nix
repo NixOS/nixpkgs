@@ -9389,7 +9389,7 @@ let
     webkit = webkitgtk2;
   };
   
-  uTox = callPackage ../applications/networking/instant-messengers/utox { };
+  utox = callPackage ../applications/networking/instant-messengers/utox { };
 
   vanitygen = callPackage ../applications/misc/vanitygen { };
 
