@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram "$out/bin/notify-osd" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:\$XDG_DATA_DIRS"
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {
