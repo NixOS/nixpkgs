@@ -1,11 +1,11 @@
 { fetchurl, stdenv, flex, bison, db, iptables, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "iproute2-3.12.0";
+  name = "iproute2-3.16.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/iproute2/${name}.tar.xz";
-    sha256 = "04gi11gh087bg2nlxhj0lxrk8l9qxkpr88nsiil23917bm3h1xj4";
+    sha256 = "0ybv29m88lccpfrh2dgiqash4c3gfvwwpx9kakvnc8c71rn8l2hz";
   };
 
   patch = [ "vpnc.patch" ];
