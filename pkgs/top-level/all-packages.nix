@@ -8725,6 +8725,7 @@ let
   darcs = with haskellPackages_ghc783; callPackage ../applications/version-management/darcs {
     cabal = cabal.override {
       extension = self : super : {
+        enableSharedExecutables = false;
         isLibrary = false;
         configureFlags = "-f-library " + super.configureFlags or "";
       };
