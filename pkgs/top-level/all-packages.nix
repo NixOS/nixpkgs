@@ -4822,7 +4822,7 @@ let
   boost149 = callPackage ../development/libraries/boost/1.49.nix { };
   boost155 = callPackage ../development/libraries/boost/1.55.nix { };
   boost156 = callPackage ../development/libraries/boost/1.56.nix { };
-  boost = boost155;
+  boost = boost156;
 
   botan = callPackage ../development/libraries/botan { };
   botanUnstable = callPackage ../development/libraries/botan/unstable.nix { };
