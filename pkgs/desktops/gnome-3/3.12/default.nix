@@ -168,7 +168,9 @@ rec {
 
   vte = callPackage ./core/vte { };
 
-  vte-select-text = callPackage ./core/vte { selectTextPatch = true; };
+  vte_038 = callPackage ./core/vte/0.38.0.nix { }; # To be moved in gnome 3.14 when available
+
+  vte-select-text = vte_038.override { selectTextPatch = true; };
 
   vino = callPackage ./core/vino { };
 
