@@ -21,5 +21,6 @@ cabal.mkDerivation (self: {
     description = "An MPD client library";
     license = "LGPL";
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })
