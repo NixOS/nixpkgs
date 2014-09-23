@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, callPackage, utillinux }:
+{ stdenv, fetchurl, makeWrapper, callPackage, gnupg, utillinux }:
 
 with stdenv.lib;
 
@@ -19,7 +19,7 @@ in nodePackages.buildNodePackage rec {
   })];
 
   deps = (filter (v: nixType v == "derivation") (attrValues nodePackages));
-  buildInputs = [ makeWrapper ];
+  buildInputs = [ makeWrapper gnupg ];
 
   postInstall = ''
     wrapProgram "$out/bin/keybase" --set NODE_PATH "$out/lib/node_modules/keybase/node_modules/"
