@@ -3124,7 +3124,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   escoger = callPackage ../tools/misc/escoger { };
 
-  gitAnnex = callPackage ../applications/version-management/git-and-tools/git-annex {};
+  gitAnnex = callPackage ../applications/version-management/git-and-tools/git-annex {
+    cabal = self.cabal.override { extension = self : super : { enableSharedExecutables = false; }; };
+  };
 
   githubBackup = callPackage ../applications/version-management/git-and-tools/github-backup {};
 
