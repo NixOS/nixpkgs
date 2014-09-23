@@ -10818,6 +10818,27 @@ let
     };
   };
 
+  snapperGUI = buildPythonPackage rec {
+    name = "Snapper-GUI";
+
+    src = fetchgit {
+      url = "https://github.com/ricardomv/snapper-gui";
+      rev = "11d98586b122180c75a86fccda45c4d7e3137591";
+      sha256 = "7a9f86fc17dbf130526e70c3e925eac30e2c74d6b932efbf7e7cd9fbba6dc4b1";
+    };
+
+    # no tests available
+    doCheck = false;
+
+    propagatedBuildInputs = with pythonPackages; [ pygobject3 dbus ];
+
+    meta = {
+      homepage = https://github.com/ricardomv/snapper-gui;
+      description = "Graphical frontend for snapper";
+      license = licenses.gpl2;
+      maintainers = [ stdenv.lib.maintainers.tstrobel ];
+    };
+  };
 
 # python2.7 specific packages
 } // optionalAttrs isPy27 (
@@ -10937,5 +10958,4 @@ let
       maintainers = [ stdenv.lib.maintainers.DamienCassou ];
     };
   };
-
 }); in pythonPackages

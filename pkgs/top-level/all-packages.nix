@@ -10106,6 +10106,8 @@ let
 
   smartdeblur = callPackage ../applications/graphics/smartdeblur { };
 
+  snapper = callPackage ../tools/misc/snapper { };
+
   snd = callPackage ../applications/audio/snd { };
 
   shntool = callPackage ../applications/audio/shntool { };
