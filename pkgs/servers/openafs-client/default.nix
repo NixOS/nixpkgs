@@ -10,6 +10,11 @@ stdenv.mkDerivation {
     url = http://www.openafs.org/dl/openafs/1.6.9/openafs-1.6.9-src.tar.bz2;
     sha256 = "1isgw7znp10w0mr3sicnjzbc12bd1gdwfqqr667w6p3syyhs6bkv";
   };
+ 
+  patches = [ 
+   ./f3c0f74186f4a323ffc5f125d961fe384d396cac.patch
+   ./ae86b07f827d6f3e2032a412f5f6cb3951a27d2d.patch
+  ];
 
   buildInputs = [ autoconf automake flex yacc ncurses perl which ];
 
