@@ -4607,8 +4607,9 @@ let
 
   boost144 = callPackage ../development/libraries/boost/1.44.nix { };
   boost149 = callPackage ../development/libraries/boost/1.49.nix { };
+  boost155 = callPackage ../development/libraries/boost/1.55.nix { };
   boost156 = callPackage ../development/libraries/boost/1.56.nix { };
-  boost = boost156;
+  boost = boost155;
 
   botan = callPackage ../development/libraries/botan { };
   botanUnstable = callPackage ../development/libraries/botan/unstable.nix { };
