@@ -190,7 +190,7 @@ in
         echo '${cjdrouteConf}' | sed \
 	  -e "s/@CJDNS_ADMIN_PASSWORD@/$CJDNS_ADMIN_PASSWORD/g" \
           -e "s/@CJDNS_PRIVATE_KEY@/$CJDNS_PRIVATE_KEY/g" \
-            | ${pkgs.cjdns}/sbin/cjdroute
+            | ${pkgs.cjdns}/bin/cjdroute
       '';
 
       serviceConfig = {
@@ -201,7 +201,7 @@ in
 
     system.activationScripts.cjdns = ''
       grep -q "CJDNS_PRIVATE_KEY=" /etc/cjdns.keys || \
-        echo "CJDNS_PRIVATE_KEY=$(${pkgs.cjdns}/sbin/makekey)" \
+        echo "CJDNS_PRIVATE_KEY=$(${pkgs.cjdns}/bin/makekey)" \
 	  >> /etc/cjdns.keys
 
       grep -q "CJDNS_ADMIN_PASSWORD=" /etc/cjdns.keys || \
