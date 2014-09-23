@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, libcxxabi, python }:
+{ stdenv, fetchurl, cmake, libcxxabi }:
 
 let
   version = "3.4.2";
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0z3jdvgcq995khkpis5c5vaxhbmvbqjlalbhn09k6pgb5zp46rc2";
   };
 
-  buildInputs = [ cmake libcxxabi python ];
+  buildInputs = [ cmake libcxxabi ];
 
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release"
                  "-DLIBCXX_LIBCXXABI_INCLUDE_PATHS=${libcxxabi}/include"
