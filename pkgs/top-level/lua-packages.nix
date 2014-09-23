@@ -8,7 +8,6 @@
 {fetchurl, stdenv, lua}:
 
 let self = _self; _self = with self; {
-
   inherit (stdenv.lib) maintainers;
 
   #define build lua package function
