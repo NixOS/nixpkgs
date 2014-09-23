@@ -64,7 +64,7 @@ let res = stdenv.mkDerivation {
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   configureScript = "./bootstrap.sh";
-  configureFlags = "--with-icu=${icu} --with-python=${python}/bin/python" + withToolset;
+  configureFlags = "--libdir=$lib/lib --with-icu=${icu} --with-python=${python}/bin/python" + withToolset;
 
   buildPhase = "${stdenv.lib.optionalString (toolset == "clang") "unset NIX_ENFORCE_PURITY; "}./b2 -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat}/include -sEXPAT_LIBPATH=${expat}/lib --layout=${layout} variant=${variant} threading=${threading} link=${link} ${cflags} install${withToolset}";
 
@@ -72,7 +72,7 @@ let res = stdenv.mkDerivation {
   installPhase = ''
     cd tools/build/v2
     sh bootstrap.sh${withToolset}
-    ./b2 -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat}/include -sEXPAT_LIBPATH=${expat}/lib --layout=${layout} variant=${variant} threading=${threading} link=${link} ${cflags} install${withToolset}
+    ./b2 -j$NIX_BUILD_CORES --libdir=$lib/lib -sEXPAT_INCLUDE=${expat}/include -sEXPAT_LIBPATH=${expat}/lib --layout=${layout} variant=${variant} threading=${threading} link=${link} ${cflags} install${withToolset}
     rm $out/bin/bjam
     ln -s $out/bin/b2 $out/bin/bjam
     rm -rf $out/share/boost-build/example
