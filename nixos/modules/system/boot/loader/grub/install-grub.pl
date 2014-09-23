@@ -201,7 +201,7 @@ sub GrubFs {
 my $grubBoot = GrubFs("/boot");
 my $grubStore;
 if ($copyKernels == 0) {
-    my $grubStore = GrubFs("/nix/store");
+    $grubStore = GrubFs("/nix/store");
 }
 
 # Generate the header.
