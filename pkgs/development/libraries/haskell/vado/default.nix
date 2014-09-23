@@ -10,12 +10,11 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [ attoparsec filepath text ];
   testDepends = [ attoparsec filepath QuickCheck text ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/hamishmack/vado";
     description = "Runs commands on remote machines using ssh";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
-    broken = true;
   };
 })
