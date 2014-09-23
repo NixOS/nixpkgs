@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
     sha256 = "01k32431zay1mdqvrw5qk0pjxb7gkcxr78w1a06g23b7ymjwfawv";
   };
 
-  makeFlags = [ "-Cbuild" "VERSION=${version}" ];
+  makeFlags = [ "-Cbuild" "VERSION=${version}" "PREFIX=$(out)" ];
   installFlags = [ "PREFIX=$(out)" ];
 
   buildInputs = [
