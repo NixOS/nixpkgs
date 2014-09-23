@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     attoparsecEnumerator engineIo snapCore unorderedContainers
     websockets websocketsSnap
   ];
+  jailbreak = true;
   meta = {
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
