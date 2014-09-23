@@ -9693,7 +9693,7 @@ let
   mrxvt = callPackage ../applications/misc/mrxvt { };
 
   mudlet = callPackage ../games/mudlet {
-    inherit (lua51Packages) fileSystem;
+    inherit (lua51Packages) filesystem;
   };
 
   multisync = callPackage ../applications/misc/multisync {
