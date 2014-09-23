@@ -10645,7 +10645,7 @@ let
 
   inherit (gnome3) yelp;
 
-  qgis = callPackage ../applications/misc/qgis {};
+  qgis = callPackage ../applications/gis/qgis {};
 
   qtbitcointrader = callPackage ../applications/misc/qtbitcointrader { };
 
@@ -10888,6 +10888,8 @@ let
   rili = callPackage ../games/rili { };
 
   rogue = callPackage ../games/rogue { };
+
+  saga = callPackage ../applications/gis/saga { };
 
   samplv1 = callPackage ../applications/audio/samplv1 { };
 
