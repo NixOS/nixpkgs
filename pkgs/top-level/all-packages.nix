@@ -3755,9 +3755,9 @@ let
   lua5 = lua5_2_compat;
   lua = lua5;
 
-  lua51Packages = recurseIntoAttrs (import ./lua-packages.nix pkgs lua5_1);
+  lua51Packages = recurseIntoAttrs (callPackage ./lua-packages.nix pkgs lua5_1);
 
-  lua52Packages = recurseIntoAttrs (import ./lua-packages.nix pkgs lua5_2);
+  lua52Packages = recurseIntoAttrs (callPackage ./lua-packages.nix pkgs lua5_2);
 
   luaPackages = lua52Packages;
 
