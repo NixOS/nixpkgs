@@ -18,11 +18,11 @@ cabal.mkDerivation (self: {
     mtl pbkdf QuickCheck split testFramework testFrameworkHunit
     testFrameworkQuickcheck2 text
   ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/haskoin/haskoin";
     description = "Implementation of the Bitcoin protocol";
     license = self.stdenv.lib.licenses.publicDomain;
-    # https://github.com/haskoin/haskoin/issues/109
-    platforms = [ "x86_64-linux" ];
+    platforms = self.ghc.meta.platforms;
   };
 })
