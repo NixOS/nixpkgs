@@ -14,7 +14,7 @@ in stdenv.mkDerivation {
   };
 
   buildInputs = with ocamlPackages; [
-    ocaml findlib menhir
+    ocaml findlib menhir ocamlPackages.camlp4
     ocaml_pcre pycaml
     python ncurses pkgconfig
     makeWrapper
