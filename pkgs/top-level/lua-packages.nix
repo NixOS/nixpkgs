@@ -5,12 +5,9 @@
    for each package in a separate file: the call to the function would
    be almost as must code as the function itself. */
 
-pkgs:
-lua:
+{fetchurl, stdenv, lua}:
 
 let self = _self; _self = with self; {
-
-  inherit (pkgs) fetchurl stdenv;
 
   inherit (stdenv.lib) maintainers;
 
