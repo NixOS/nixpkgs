@@ -10807,6 +10807,9 @@ let
       sha256 = "7a9f86fc17dbf130526e70c3e925eac30e2c74d6b932efbf7e7cd9fbba6dc4b1";
     };
 
+    # no tests available
+    doCheck = false;
+
     propagatedBuildInputs = with pythonPackages; [ pygobject3 dbus ];
 
     meta = {
