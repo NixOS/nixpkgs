@@ -1,4 +1,4 @@
-{ fetchurl, pkgs, stdenv, makeWrapper, qt5, yajl, libzip, hunspell, lua5_1, boost, filesystem }:
+{ fetchurl, pkgs, stdenv, makeWrapper, qt5, yajl, libzip, hunspell, boost, lua5_1, luafilesystem, luazip, lrexlib, luasqlite3 }:
 
 stdenv.mkDerivation rec {
   name = "mudlet-${version}";
@@ -9,19 +9,23 @@ stdenv.mkDerivation rec {
     sha256 = "c7b9a383d2cf393da730ce07ac8f06478eaec1fdf730054e837e58c598222d38";
   };
 
-  buildInputs = [ pkgs.unzip qt5 lua5_1 hunspell libzip yajl boost makeWrapper filesystem ];
+  buildInputs = [ pkgs.unzip qt5 lua5_1 hunspell libzip yajl boost makeWrapper luafilesystem luazip lrexlib luasqlite3 ];
 
   configurePhase = "cd src && qmake";
 
-  installPhase = ''
-    mkdir -pv $out
+  installPhase = let
+    luaZipPath = "${luazip}/lib/lua/5.1/?.so";
+    luaFileSystemPath = "${luafilesystem}/lib/lua/5.1/?.so";
+    lrexlibPath = "${lrexlib}/lib/lua/5.1/?.so";
+    luasqlitePath = "${luasqlite3}/lib/lua/5.1/?.so";
+  in ''
     mkdir -pv $out/bin
     cp mudlet $out
     cp -r mudlet-lua $out
 
-    # ln -s $out/mudlet $out/bin/mudlet
     makeWrapper $out/mudlet $out/bin/mudlet \
-      --set LUA_CPATH "${filesystem}/lib/lua/5.1/?.so"
+      --set LUA_CPATH "\"${luaFileSystemPath};${luaZipPath};${lrexlibPath};${luasqlitePath}\"" \
+      --run "cd $out";
   '';
 
   patches = [ ./libs.patch ];

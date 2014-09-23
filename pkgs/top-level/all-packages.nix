@@ -3774,17 +3774,14 @@ let
 
   luaPackages = lua52Packages;
 
-  lua5_1_sockets = lua51Packages.sockets;
+  lua5_1_sockets = lua51Packages.luasocket;
 
   lua5_expat = callPackage ../development/interpreters/lua-5/expat.nix {};
-  lua51_zip = callPackage ../development/interpreters/lua-5/zip.nix { };
   lua5_sec = callPackage ../development/interpreters/lua-5/sec.nix { };
 
-  luarocks = callPackage ../development/tools/misc/luarocks {
-     lua = lua5;
-  };
-
   luajit = callPackage ../development/interpreters/luajit {};
+
+  luarocks = luaPackages.luarocks;
 
   ### END OF LUA
 
@@ -9727,7 +9724,7 @@ let
   mrxvt = callPackage ../applications/misc/mrxvt { };
 
   mudlet = callPackage ../games/mudlet {
-    inherit (lua51Packages) filesystem;
+    inherit (lua51Packages) luafilesystem lrexlib luazip luasqlite3;
   };
 
   multisync = callPackage ../applications/misc/multisync {
