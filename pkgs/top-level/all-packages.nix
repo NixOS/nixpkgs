@@ -10077,8 +10077,7 @@ let
 
   smartdeblur = callPackage ../applications/graphics/smartdeblur { };
 
-  # TODO: boost is just fixed as boost156 is split into out and lib, and I don't know how to access lib
-  snapper = callPackage ../tools/misc/snapper { boost=boost149; };
+  snapper = callPackage ../tools/misc/snapper { };
 
   snd = callPackage ../applications/audio/snd { };
 
