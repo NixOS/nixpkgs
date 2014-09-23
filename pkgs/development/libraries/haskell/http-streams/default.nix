@@ -10,8 +10,8 @@
 
 cabal.mkDerivation (self: {
   pname = "http-streams";
-  version = "0.7.2.0";
-  sha256 = "0h7fjnpday34skhafv2v0ybhfv0x915prfb4qa0ld4gm50scsinz";
+  version = "0.7.2.2";
+  sha256 = "093ldljnabkmi67vj1qnvdlpjk1mpgqwrzdl9cq93v64sqbfwkjw";
   buildDepends = [
     aeson attoparsec base64Bytestring blazeBuilder caseInsensitive
     HsOpenSSL httpCommon ioStreams mtl network opensslStreams text
