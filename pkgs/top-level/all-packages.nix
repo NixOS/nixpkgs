@@ -9432,6 +9432,7 @@ let
 
   k3d = callPackage ../applications/graphics/k3d {
     inherit (pkgs.gnome2) gtkglext;
+    boost = boost149;
   };
 
   keepnote = callPackage ../applications/office/keepnote {
