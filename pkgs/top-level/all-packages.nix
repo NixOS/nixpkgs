@@ -3550,7 +3550,7 @@ let
 
   };
 
-  ocamlPackages = recurseIntoAttrs ocamlPackages_4_02_0;
+  ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
   ocamlPackages_3_10_0 = (mkOcamlPackages ocaml_3_10_0 pkgs.ocamlPackages_3_10_0)
   // { lablgtk = ocamlPackages_3_10_0.lablgtk_2_14; };
   ocamlPackages_3_11_2 = (mkOcamlPackages ocaml_3_11_2 pkgs.ocamlPackages_3_11_2)
