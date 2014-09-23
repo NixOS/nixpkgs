@@ -3,7 +3,7 @@
 , libevent, openssl
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "libcouchbase-2.4.1";
 
   src = fetchgit {
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "";
-    homepage = "";
+    description = "This is the C client library for Couchbase It communicates with the cluster and speaks the relevant protocols necessary to connect to the cluster and execute data operations.";
+    homepage = "https://github.com/couchbase/libcouchbase";
     license = stdenv.lib.licenses.asl20;
   };
 }
