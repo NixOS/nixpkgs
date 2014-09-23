@@ -12,7 +12,7 @@ echo "trusted-binary-caches = http://hydra.nixos.org" | sudo tee -a /etc/nix/nix
 
 if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
     echo "Not a pull request, checking evaluation"
-    nix-env -f. -qaP --drv-path
+    nix-build pkgs/top-level/release.nix -A tarball
     exit 0
 fi
 
