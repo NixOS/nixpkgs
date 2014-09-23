@@ -5,7 +5,9 @@
    for each package in a separate file: the call to the function would
    be almost as must code as the function itself. */
 
-{ fetchurl, stdenv, lua, callPackage }:
+{ fetchurl, stdenv, lua, callPackage, unzip, zziplib,
+pcre, oniguruma, gnulib, tre, glibc,
+sqlite }:
 
 let
  isLua51 = lua.luaversion == "5.1";
@@ -17,12 +19,16 @@ let
   #define build lua package function
   buildLuaPackage = callPackage ../development/lua-modules/generic lua;
 
-  filesystem = buildLuaPackage {
+  luarocks = callPackage ../development/tools/misc/luarocks {
+    inherit lua;
+  };
+
+  luafilesystem = buildLuaPackage {
     name = "filesystem-1.6.2";
     src = fetchurl {
       url = "https://github.com/keplerproject/luafilesystem/archive/v1_6_2.tar.gz";
       sha256 = "1n8qdwa20ypbrny99vhkmx8q04zd2jjycdb5196xdhgvqzk10abz";
-    };  
+    };
     meta = {
       homepage = "https://github.com/keplerproject/luafilesystem";
       hydraPlatforms = stdenv.lib.platforms.linux;
@@ -30,8 +36,8 @@ let
     };
   };
 
-  sockets = buildLuaPackage rec {
-    name = "sockets-${version}";
+  luasocket = buildLuaPackage rec {
+    name = "socket-${version}";
     version = "2.0.2";
     src = fetchurl {
         url = "http://files.luaforge.net/releases/luasocket/luasocket/luasocket-${version}/luasocket-${version}.tar.gz";
@@ -47,6 +53,92 @@ let
       homepage = "http://w3.impa.br/~diego/software/luasocket/";
       hydraPlatforms = stdenv.lib.platforms.linux;
       maintainers = with maintainers; [ mornfall ];
+    };
+  };
+
+  luazip = buildLuaPackage rec {
+    name = "zip-${version}";
+    version = "1.2.3";
+    src = fetchurl {
+      url = "https://github.com/luaforge/luazip/archive/0b8f5c958e170b1b49f05bc267bc0351ad4dfc44.zip";
+      sha256 = "beb9260d606fdd5304aa958d95f0d3c20be7ca0a2cff44e7b75281c138a76a50";
+    };
+    buildInputs = [ unzip zziplib ];
+    patches = [ ../development/lua-modules/zip.patch ];
+    # does not currently work under lua 5.2
+    disabled = isLua52;
+    meta = {
+      homepage = "https://github.com/luaforge/luazip";
+      hydraPlatforms = stdenv.lib.platforms.linux;
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  luastdlib = buildLuaPackage {
+    name = "stdlib";
+    src = fetchurl {
+      url = "https://github.com/lua-stdlib/lua-stdlib/archive/release.zip";
+      sha256 = "1v3158g5050sdqfrqi6d2bjh0lmi1v01a6m2nwqpr527a2dqcf0c";
+    };
+    buildInputs = [ unzip ];
+    meta = {
+      homepage = "https://github.com/lua-stdlib/lua-stdlib/";
+      hydraPlatforms = stdenv.lib.platforms.linux;
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  lrexlib = buildLuaPackage rec {
+    name = "lrexlib-${version}";
+    version = "2.7.2";
+    src = fetchurl {
+      url = "https://github.com/rrthomas/lrexlib/archive/150c251be57c4e569da0f48bf6b01fbca97179fe.zip";
+      sha256 = "0i5brqbykc2nalp8snlq1r0wmf8y2wqp6drzr2xmq5phvj8913xh";
+    };
+    buildInputs = [ unzip luastdlib pcre luarocks oniguruma gnulib tre glibc ];
+
+    buildPhase = let
+      luaVariable = "LUA_PATH=${luastdlib}/share/lua/${lua.luaversion}/?.lua";
+
+      pcreVariable = "PCRE_DIR=${pcre}";
+      onigVariable = "ONIG_DIR=${oniguruma}";
+      gnuVariable = "GNU_INCDIR=${gnulib}/lib";
+      treVariable = "TRE_DIR=${tre}";
+      posixVariable = "POSIX_DIR=${glibc}";
+    in ''
+      sed -e 's@$(LUAROCKS) $(LUAROCKS_COMMAND) $$i;@$(LUAROCKS) $(LUAROCKS_COMMAND) $$i ${pcreVariable} ${onigVariable} ${gnuVariable} ${treVariable} ${posixVariable};@' \
+          -i Makefile
+      ${luaVariable} make
+    '';
+
+    installPhase = ''
+      mkdir -pv $out;
+      cp -r luarocks/lib $out;
+    '';
+
+    meta = {
+      homepage = "https://github.com/lua-stdlib/lua-stdlib/";
+      hydraPlatforms = stdenv.lib.platforms.linux;
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  luasqlite3 = buildLuaPackage rec {
+    name = "sqlite3-${version}";
+    version = "2.1.1";
+    src = fetchurl {
+      url = "https://github.com/LuaDist/luasql-sqlite3/archive/2acdb6cb256e63e5b5a0ddd72c4639d8c0feb52d.zip";
+      sha256 = "1yy1n1l1801j48rlf3bhxpxqfgx46ixrs8jxhhbf7x1hn1j4axlv";
+    };
+
+    buildInputs = [ unzip sqlite ];
+
+    patches = [ ../development/lua-modules/luasql.patch ];
+
+    meta = {
+      homepage = "https://github.com/LuaDist/luasql-sqlite3";
+      hydraPlatforms = stdenv.lib.platforms.linux;
+      license = stdenv.lib.licenses.mit;
     };
   };
 

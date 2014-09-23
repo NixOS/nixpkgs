@@ -1,0 +1,39 @@
+--- a/config	2014-09-19 13:32:52.356775109 +0400
++++ b/config	2014-09-19 13:33:42.750501633 +0400
+@@ -1,12 +1,12 @@
+ # $Id: config,v 1.10 2008/05/30 17:21:18 tomas Exp $
+
+ # Driver (leave uncommented ONLY the line with the name of the driver)
+-T= mysql
++#T= mysql
+ #T= oci8
+ #T= odbc
+ #T= postgres
+ #T= sqlite
+-#T=sqlite3
++T=sqlite3
+ #T=firebird
+
+ # Installation directories
+@@ -37,8 +37,8 @@
+ ######## MySQL
+ #DRIVER_LIBS= -L/usr/local/mysql/lib -lmysqlclient -lz
+ #DRIVER_INCS= -I/usr/local/mysql/include
+-DRIVER_LIBS= -L/usr/lib -lmysqlclient -lz
+-DRIVER_INCS= -I/usr/include/mysql
++#DRIVER_LIBS= -L/usr/lib -lmysqlclient -lz
++#DRIVER_INCS= -I/usr/include/mysql
+ ######## Oracle OCI8
+ #DRIVER_LIBS= -L/home/oracle/OraHome1/lib -lz -lclntsh
+ #DRIVER_INCS= -I/home/oracle/OraHome1/rdbms/demo -I/home/oracle/OraHome1/rdbms/public
+@@ -51,8 +51,8 @@
+ #DRIVER_LIBS= -lsqlite
+ #DRIVER_INCS=
+ ######## SQLite3
+-#DRIVER_LIBS= -L/opt/local/lib -lsqlite3
+-#DRIVER_INCS= -I/opt/local/include
++DRIVER_LIBS= -L/opt/local/lib -lsqlite3
++DRIVER_INCS= -I/opt/local/include
+ ######## ODBC
+ #DRIVER_LIBS= -L/usr/local/lib -lodbc
+ #DRIVER_INCS= -DUNIXODBC -I/usr/local/include
