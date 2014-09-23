@@ -1,8 +1,8 @@
 { stdenv, fetchgit, nodejs, which, python27 }:
 
 let
-  date = "20140919";
-  rev = "e9bcb0f9f06870d6f4904149e1c15eca09c7ed8a";
+  date = "20140922";
+  rev = "5ebca772b0582173127e8c1e61ee235c5ab3fb50";
 in
 stdenv.mkDerivation {
   name = "cjdns-${date}-${stdenv.lib.strings.substring 0 7 rev}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://github.com/cjdelisle/cjdns.git";
     inherit rev;
-    sha256 = "e9fa82f3495b718cebd4d1836312b224c6689dc521fba093ad1accf2d2e15ff1";
+    sha256 = "04abf73f4aede12c35b70ae09a367b3d6352a63f818185f788ed13356d06197a";
   };
 
   buildInputs = [ which python27 nodejs];
