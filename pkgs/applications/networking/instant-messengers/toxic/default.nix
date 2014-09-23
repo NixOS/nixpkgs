@@ -15,8 +15,10 @@ in stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   buildInputs = [
-    autoconf libtool automake libtoxcore libsodium ncurses openal libvpx
-    freealut libconfig pkgconfig
+    autoconf libtool automake libtoxcore libsodium ncurses
+    libconfig pkgconfig
+  ] ++ stdenv.lib.optionals (!stdenv.isArm) [
+    openal libvpx freealut
   ];
 
   meta = {

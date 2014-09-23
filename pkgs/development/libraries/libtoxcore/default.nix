@@ -36,13 +36,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    autoconf libtool automake libsodium ncurses libopus
-    check libconfig pkgconfig
+    autoconf libtool automake libsodium ncurses
+    libconfig pkgconfig
+  ] ++ stdenv.lib.optionals (!stdenv.isArm) [
+    libopus libvpx
   ];
+
 
   propagatedBuildInputs = [ libvpx ];
 
-  doCheck = true;
+  doCheck = !stdenv.isArm;
 
   meta = {
     description = "P2P FOSS instant messaging application aimed to replace Skype with crypto";
