@@ -16,19 +16,19 @@ assert stdenv.gcc.gcc != null;
 
 */
 
-with ((import ./common.nix) {inherit stdenv; version = "0.12.0-pre-79a5448f4"; });
+with ((import ./common.nix) {inherit stdenv; version = "0.12.0-pre-7fbbfe6bf"; });
 
 let snapshot = if stdenv.system == "i686-linux"
-      then "6f5464c9ab191d93bfea0894ca7c6f90c3506f2b"
+      then "5c2132b65f45c21b43d28de6a9460978b1a7b08a"
       else if stdenv.system == "x86_64-linux"
-      then "72c92895fa9a1dba7880073f2b2b5d0e3e1a2ab6"
+      then "152be582853c2cf1ddcc88b085153b52ebbeb065"
       else if stdenv.system == "i686-darwin"
-      then "545fc45a0071142714639c6be377e6d308c3a4e1"
+      then "7adbb076aeae8e1d9bdf3fe968bc7ef8a8fe0096"
       else if stdenv.system == "x86_64-darwin"
-      then "8b44fbbbd1ba519d2e83d0d5ce1f6053d3cab8c6"
+      then "152be582853c2cf1ddcc88b085153b52ebbeb065"
       else abort "no-snapshot for platform ${stdenv.system}";
-    snapshotDate = "2014-09-10";
-    snapshotRev = "6faa4f3";
+    snapshotDate = "2014-09-22";
+    snapshotRev = "437179e";
     snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshot}.tar.bz2";
 
 in stdenv.mkDerivation {
@@ -38,8 +38,8 @@ in stdenv.mkDerivation {
 
   src = fetchgit {
     url = https://github.com/rust-lang/rust;
-    rev = "79a5448f41dcc6ab52663105a6b02fc5af4c503e";
-    sha256 = "0v2ahwgb1ls3g4ch6005azjmfh8bs0v0nbmmfpn53zgiiywad2ji";
+    rev = "9a68da7401d9bef645a8b6a4e0ce4cae12604df4";
+    sha256 = "1nrmahz9scv06v8pyfgjl902dh9947irpqi78lh11r5lyixia8ci";
   };
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
@@ -66,7 +66,8 @@ in stdenv.mkDerivation {
   patches = [ ./hardcode_paths.HEAD.patch ./local_stage0.HEAD.patch ];
   postPatch = ''
     substituteInPlace src/librustc/back/link.rs \
-      --subst-var-by "ccPath" "${stdenv.gcc}/bin/cc" \
+      --subst-var-by "ccPath" "${stdenv.gcc}/bin/cc"
+    substituteInPlace src/librustc_back/archive.rs \
       --subst-var-by "arPath" "${stdenv.gcc.binutils}/bin/ar"
   '';
 
