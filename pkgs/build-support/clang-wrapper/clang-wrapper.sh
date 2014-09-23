@@ -138,13 +138,4 @@ if test -n "$NIX_CLANG_WRAPPER_EXEC_HOOK"; then
     source "$NIX_CLANG_WRAPPER_EXEC_HOOK"
 fi
 
-# Call the real `clang'.  Filter out warnings from stderr about unused
-# `-B' flags, since they confuse some programs.  Deep bash magic to
-# apply grep to stderr (by swapping stdin/stderr twice).
-if test -z "$NIX_CLANG_NEEDS_GREP"; then
-    @clangProg@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]}
-else
-    (@clangProg@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]} 3>&2 2>&1 1>&3- \
-        | (grep -v 'file path prefix' || true); exit ${PIPESTATUS[0]}) 3>&2 2>&1 1>&3-
-    exit $?
-fi    
+exec @clangProg@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]}
