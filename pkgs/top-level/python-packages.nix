@@ -6608,6 +6608,26 @@ let
     };
   });
 
+  pyqtgraph = buildPythonPackage rec {
+    name = "pyqtgraph-${version}";
+    version = "0.9.8";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyqtgraph/${name}.tar.gz";
+      sha256 = "1fnhj26d9qrqqmjx092m1qspclh3mia3vag7rji5wciw0plpszi5";
+    };
+
+    propagatedBuildInputs = [ scipy numpy pyqt4 pyopengl ];
+
+    meta = with stdenv.lib; {
+      description = "Scientific Graphics and GUI Library for Python";
+      homepage = http://www.pyqtgraph.org/;
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = [ maintainers.koral ];
+    };
+  };
+
   pyro3 = buildPythonPackage (rec {
     name = "Pyro-3.16";
     disabled = isPy3k;
