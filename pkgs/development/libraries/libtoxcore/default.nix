@@ -39,11 +39,10 @@ stdenv.mkDerivation rec {
     autoconf libtool automake libsodium ncurses
     libconfig pkgconfig
   ] ++ stdenv.lib.optionals (!stdenv.isArm) [
-    libopus libvpx
+    libopus
   ];
 
-
-  propagatedBuildInputs = [ libvpx ];
+  propagatedBuildInputs = stdenv.lib.optionals (!stdenv.isArm) [ libvpx ];
 
   doCheck = !stdenv.isArm;
 
