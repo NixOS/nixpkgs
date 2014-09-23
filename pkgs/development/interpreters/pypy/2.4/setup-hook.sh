@@ -1,5 +1,5 @@
 addPythonPath() {
-    addToSearchPathWithCustomDelimiter : PYTHONPATH $1/lib/pypy2.3/site-packages
+    addToSearchPathWithCustomDelimiter : PYTHONPATH $1/lib/pypy2.4/site-packages
 }
 
 toPythonPath() {

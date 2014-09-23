@@ -3878,7 +3878,7 @@ let
   python33 = callPackage ../development/interpreters/python/3.3 { };
   python34 = hiPrio (callPackage ../development/interpreters/python/3.4 { });
 
-  pypy = callPackage ../development/interpreters/pypy/2.3 { };
+  pypy = callPackage ../development/interpreters/pypy/2.4 { };
 
   python26Full = callPackage ../development/interpreters/python/wrapper.nix {
     extraLibs = [];
