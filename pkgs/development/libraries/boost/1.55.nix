@@ -59,6 +59,8 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  outputs = [ "out" "lib" ];
+
   buildInputs =
     [ icu expat zlib bzip2 python ]
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
