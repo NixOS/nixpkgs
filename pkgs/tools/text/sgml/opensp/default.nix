@@ -13,6 +13,10 @@ stdenv.mkDerivation {
       docsrc/*.xml
   '';
 
+  configureFlags = optional stdenv.isDarwin [
+    "--with-libintl-prefix=/usr"
+    "--with-libiconv-prefix=/usr"
+  ];
 
   setupHook = ./setup-hook.sh;
 

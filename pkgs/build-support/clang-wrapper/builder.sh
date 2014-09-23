@@ -28,20 +28,32 @@ if test -z "$nativeLibc"; then
 fi
 
 if test -n "$nativeTools"; then
-    clangPath="$nativePrefix/bin"
+    if [ -n "$isDarwin" ]; then
+      clangPath="$clang/bin"
+    else
+      clangPath="$nativePrefix/bin"
+    fi
     ldPath="$nativePrefix/bin"
 else
-    basePath=`echo $gcc/lib/*/*/*`
-    # Need libgcc until the llvm compiler-rt library is complete
-    clangLDFlags="$clangLDFlags -L$basePath"
-    if test -e "$gcc/lib64"; then
-        clangLDFlags="$clangLDFlags -L$gcc/lib64"
-    else
-        clangLDFlags="$clangLDFlags -L$gcc/lib"
+    clangLDFlags=""
+    if test -d "$gcc/lib"; then
+      basePath=`echo $gcc/lib/*/*/*`
+      # Need libgcc until the llvm compiler-rt library is complete
+      clangLDFlags="$clangLDFlags -L$basePath"
+      if test -e "$gcc/lib64"; then
+          clangLDFlags="$clangLDFlags -L$gcc/lib64"
+      else
+          clangLDFlags="$clangLDFlags -L$gcc/lib"
+      fi
     fi
 
-    clangLDFlags="$clangLDFlags -L$clang/lib"
-    echo "$clangLDFlags" > $out/nix-support/clang-ldflags
+    if test -d "$clang/lib"; then
+      clangLDFlags="$clangLDFlags -L$clang/lib"
+    fi
+
+    if [ -n "$clangLDFlags" ]; then
+      echo "$clangLDFlags" > $out/nix-support/clang-ldflags
+    fi
 
     # Need files like crtbegin.o from gcc
     # It's unclear if these will ever be provided by an LLVM project
@@ -49,9 +61,9 @@ else
 
     clangCFlags="$clangCFlags -isystem$clang/lib/clang/$clangVersion/include"
     echo "$clangCFlags" > $out/nix-support/clang-cflags
-    
-    clangPath="$clang/bin"
+
     ldPath="$binutils/bin"
+    clangPath="$clang/bin"
 fi
 
 
@@ -125,6 +137,10 @@ test -n "$libc" && echo $libc > $out/nix-support/orig-libc
 doSubstitute "$addFlags" "$out/nix-support/add-flags.sh"
 
 doSubstitute "$setupHook" "$out/nix-support/setup-hook"
+cat >> "$out/nix-support/setup-hook" << EOF
+export CC=clang
+export CXX=clang++
+EOF
 
 cp -p $utils $out/nix-support/utils.sh
 

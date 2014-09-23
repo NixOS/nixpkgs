@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   postInstall =
     # Install headers in the right place.
-    '' ln -s${if stdenv.isFreeBSD then "" else "r"}v "$out/lib/"libffi*/include "$out/include"
+    '' ln -s${if stdenv.isBSD then "" else "r"}v "$out/lib/"libffi*/include "$out/include"
     '';
 
   meta = {

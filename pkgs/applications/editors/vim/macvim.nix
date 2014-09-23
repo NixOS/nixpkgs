@@ -1,9 +1,8 @@
-{ stdenv, stdenvAdapters, gccApple, fetchFromGitHub, ncurses, gettext,
+{ stdenv, stdenvAdapters, fetchFromGitHub, ncurses, gettext,
   pkgconfig, cscope, python, ruby, tcl, perl, luajit
 }:
 
-let inherit (stdenvAdapters.overrideGCC stdenv gccApple) mkDerivation;
-in mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "macvim-${version}";
 
   version = "7.4.355";

@@ -4,6 +4,7 @@
 , gmp ? null, mpfr ? null, bison ? null, flex ? null
 }:
 
+assert false;
 assert stdenv.isDarwin;
 assert langF77 -> gmp != null;
 

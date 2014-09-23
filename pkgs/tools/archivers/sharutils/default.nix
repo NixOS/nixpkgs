@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext }:
+{ stdenv, fetchurl, gettext, coreutils }:
 
 stdenv.mkDerivation rec {
   name = "sharutils-4.11.1";
@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
     ''
        # Fix for building on Glibc 2.16.  Won't be needed once the
        # gnulib in sharutils is updated.
-       sed -i '/gets is a security hole/d' lib/stdio.in.h
+       sed -i ${stdenv.lib.optionalString (stdenv.isBSD && stdenv.gcc.nativeTools) "''"} '/gets is a security hole/d' lib/stdio.in.h
     '';
 
   # GNU Gettext is needed on non-GNU platforms.
-  buildInputs = [ gettext ];
+  buildInputs = [ gettext coreutils ];
 
   doCheck = true;
 
