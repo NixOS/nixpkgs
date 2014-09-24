@@ -81,7 +81,7 @@ fi
 
 if test -n "@libcxx@"; then
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem@libcxx@/include/c++/v1 -stdlib=libc++"
-    NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -L@libcxx@/lib -stdlib=libc++ -L@libcxxabi@/lib -lc++abi"
+    NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -L@libcxx@/lib -stdlib=libc++ -L@libcxxabi@/lib"
 fi
 
 # Add the flags for the C compiler proper.
