@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
     freetype fontconfig stdenv.gcc.gcc mesa mesa_noglu.osmesa libdrm
     xlibs.libXinerama xlibs.libXrender xlibs.libXrandr
     xlibs.libXcursor xlibs.libXcomposite libpng libjpeg
-    openssl gnutls cups
+    openssl gnutls cups ncurses
   ];
 
   # Don't shrink the ELF RPATHs in order to keep the extra RPATH
