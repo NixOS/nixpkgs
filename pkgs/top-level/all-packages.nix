@@ -1764,7 +1764,7 @@ let
 
   notbit = callPackage ../applications/networking/notbit { };
 
-  notify_osd = callPackage ../applications/misc/notify-osd { };
+  notify-osd = callPackage ../applications/misc/notify-osd { };
 
   nox = callPackage ../tools/package-management/nox {
     pythonPackages = python3Packages;
