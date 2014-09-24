@@ -1448,7 +1448,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   languageGlsl = callPackage ../development/libraries/haskell/language-glsl {};
 
-  languageJava = callPackage ../development/libraries/haskell/language-java {};
+  languageJava_0_2_6 = callPackage ../development/libraries/haskell/language-java/0.2.6.nix {};
+  languageJava_0_2_7 = callPackage ../development/libraries/haskell/language-java/0.2.7.nix {};
+  languageJava = self.languageJava_0_2_7;
 
   languageJavascript = callPackage ../development/libraries/haskell/language-javascript {};
 
@@ -3025,6 +3027,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   idris_plain = callPackage ../development/compilers/idris {
     llvmGeneral = self.llvmGeneral_3_3_8_2;
     llvmGeneralPure = self.llvmGeneralPure_3_3_8_2;
+    languageJava = self.languageJava_0_2_6;
   };
 
   idris = callPackage ../development/compilers/idris/wrapper.nix {};
