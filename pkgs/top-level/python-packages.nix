@@ -1166,6 +1166,22 @@ let
   };
 
 
+  characteristic = buildPythonPackage rec {
+    name = "characteristic-14.1.0";
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/c/characteristic/${name}.tar.gz";
+      md5 = "68ea7e28997fc57d3631791ec0567a05";
+    };
+
+    buildInputs = [ pythonPackages.pytest ];
+
+    meta = {
+      description = "Python attributes without boilerplate";
+      homepage = https://characteristic.readthedocs.org;
+    };
+  };
+
+
   cheetah = buildPythonPackage rec {
     version = "2.4.4";
     name = "cheetah-${version}";
