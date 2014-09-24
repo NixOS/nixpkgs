@@ -645,4 +645,14 @@ in rec
     path = "pathogen";
   };
 
+  vimoutliner = simpleDerivation {
+    name = "vimoutliner-git-dce383e7";
+    src = fetchgit {
+      url = "https://github.com/vimoutliner/vimoutliner";
+      rev = "2fc82976683c8770bece157ae3ada55251b6ddeb";
+      sha256 = "dce383e7842c42bcfa8e7c3329fa426cb0fb05786d40a733da705c03aabd196b";
+     };
+    path = "vimoutliner";
+  };
+
 }
