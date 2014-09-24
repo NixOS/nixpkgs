@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
   # Remove a Makefile that causes many retained dependencies.
   postInstall = "rm $out/include/c++/v1/Makefile";
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     homepage = http://libcxx.llvm.org/;
     description = "A new implementation of the C++ standard library, targeting C++11";
