@@ -12,12 +12,12 @@ assert ldapSupport -> aprutil.ldapSupport && openldap != null;
 assert mpm == "prefork" || mpm == "worker" || mpm == "event";
 
 stdenv.mkDerivation rec {
-  version = "2.2.27";
+  version = "2.2.29";
   name = "apache-httpd-${version}";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "0iw19y6knijinqwvv4q16fgq5xq8nwxdg14wrrbc0mfasvg76n90";
+    sha1 = "1d6a8fbc1391d358cc6fe430edc16222b97258d5";
   };
 
   buildInputs = [perl apr aprutil pcre] ++
