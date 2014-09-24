@@ -1,9 +1,8 @@
 { stdenv, fetchurl, cmake, libcxxabi }:
 
-let
-  version = "3.4.2";
+let version = "3.4.2"; in
 
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "libc++-${version}";
 
   src = fetchurl {
@@ -20,6 +19,9 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.abi = libcxxabi;
+
+  # Remove a Makefile that causes many retained dependencies.
+  postInstall = "rm $out/include/c++/v1/Makefile";
 
   meta = {
     homepage = http://libcxx.llvm.org/;
