@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, libcxxabi }:
+{ lib, stdenv, fetchurl, cmake, libcxxabi, fixDarwinDylibNames }:
 
 let version = "3.4.2"; in
 
@@ -10,11 +10,16 @@ stdenv.mkDerivation rec {
     sha256 = "0z3jdvgcq995khkpis5c5vaxhbmvbqjlalbhn09k6pgb5zp46rc2";
   };
 
-  buildInputs = [ cmake libcxxabi ];
+  patches = [ ./darwin.patch ];
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release"
-                 "-DLIBCXX_LIBCXXABI_INCLUDE_PATHS=${libcxxabi}/include"
-                 "-DLIBCXX_CXX_ABI=libcxxabi" ];
+  buildInputs = [ cmake libcxxabi ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+
+  cmakeFlags =
+    [ "-DCMAKE_BUILD_TYPE=Release"
+      "-DLIBCXX_LIBCXXABI_INCLUDE_PATHS=${libcxxabi}/include"
+      "-DLIBCXX_LIBCXXABI_LIB_PATH=${libcxxabi}/lib"
+      "-DLIBCXX_CXX_ABI=libcxxabi"
+    ];
 
   enableParallelBuilding = true;
 
