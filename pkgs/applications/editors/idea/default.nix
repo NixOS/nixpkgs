@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeDesktopItem, makeWrapper, patchelf, p7zip, jdk
-, coreutils, gnugrep, which, git, python
+, coreutils, gnugrep, which, git, python, unzip
 }:
 
 assert stdenv.isLinux;
@@ -24,7 +24,7 @@ let
       icon = loName;
     };
 
-    buildInputs = [ makeWrapper patchelf p7zip ];
+    buildInputs = [ makeWrapper patchelf p7zip unzip ];
 
     patchPhase = ''
 
@@ -79,6 +79,24 @@ let
 
   };
 
+  buildAndroidStudio = { name, version, build, src, license, description }:
+    (mkIdeaProduct rec {
+      inherit name version build src;
+      product = "Studio";
+      meta = with stdenv.lib; {
+        homepage = https://developer.android.com/sdk/installing/studio.html;
+        inherit description license;
+        longDescription = ''
+          Android development environment based on IntelliJ
+          IDEA providing new features and improvements over
+          Eclipse ADT and will be the official Android IDE
+          once it's ready.
+        '';
+        platforms = platforms.linux;
+        maintainers = with maintainers; [ edwtjo ];
+      };
+    });
+
   buildPycharm = { name, version, build, src, license, description }:
     (mkIdeaProduct rec {
       inherit name version build src;
@@ -126,6 +144,19 @@ let
 in
 
 {
+
+  android-studio = buildAndroidStudio rec {
+    name = "android-studio-${version}";
+    version = "0.8.10";
+    build = "135.1428667";
+    description = "Android development environment based on IntelliJ IDEA";
+    license = stdenv.lib.licenses.asl20;
+    src = fetchurl {
+      url = "https://dl.google.com/dl/android/studio/ide-zips/${version}" +
+            "/android-studio-ide-${build}-linux.zip";
+      sha256 = "5736a92ffda24233026ff45a47f1b4f9567ba40347cfa0c9f351112e729b5401";
+    };
+  };
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
