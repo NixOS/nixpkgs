@@ -1607,6 +1607,8 @@ let
 
   mfcuk = callPackage ../tools/security/mfcuk { };
 
+  mfoc = callPackage ../tools/security/mfoc { };
+
   minecraft = callPackage ../games/minecraft { };
 
   minecraft-server = callPackage ../games/minecraft-server { };
