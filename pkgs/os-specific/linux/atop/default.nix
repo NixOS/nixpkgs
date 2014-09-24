@@ -1,12 +1,12 @@
 {stdenv, fetchurl, zlib, ncurses}:
 
 stdenv.mkDerivation rec {
-  version = "2.0.2";
+  version = "2.1-1";
   name = "atop-${version}";
 
   src = fetchurl {
     url = "http://www.atoptool.nl/download/atop-${version}.tar.gz";
-    sha256 = "029lfa2capz1lg3m3rnyrgb8v6jm4znin84vjh2f0zkwvvhdn856";
+    sha256 = "17wqqyym4d02cqmn1l1asah3sld939nlkc84g4ad939kpkzd98ir";
   };
 
   buildInputs = [zlib ncurses];
@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
     sed -e "/touch.*LOGPATH/s@touch@echo should have created @" -i Makefile
     sed -e 's/chown/true/g' -i Makefile
     sed -e '/chkconfig/d' -i Makefile
+  '';
+
+  preInstall = ''
+    mkdir -p "$out"/{bin,sbin}
   '';
 
   meta = {
