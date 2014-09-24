@@ -1584,6 +1584,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   MemoTrie = callPackage ../development/libraries/haskell/MemoTrie {};
 
+  mersenneRandom = callPackage ../development/libraries/haskell/mersenne-random {};
+
   mersenneRandomPure64 = callPackage ../development/libraries/haskell/mersenne-random-pure64 {};
 
   MFlow = callPackage ../development/libraries/haskell/MFlow {};
