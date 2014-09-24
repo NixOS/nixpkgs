@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libcxx, libunwind, coreutils, gnused }:
+{ lib, stdenv, fetchurl, libcxx, libunwind, coreutils, gnused }:
 
 let rev = "199626"; in
 
@@ -10,6 +10,8 @@ stdenv.mkDerivation {
     sha256 = "09wr6qwgmdzbmgfkdzfhph9giy0zd6fp3s017fcfy4g0prjn5s4c";
   };
 
+  patches = [ ./no-stdc++.patch ./darwin.patch ];
+
   NIX_CFLAGS_LINK = "-L${libunwind}/lib -lunwind";
 
   buildInputs = [ coreutils ];
@@ -17,7 +19,7 @@ stdenv.mkDerivation {
   postUnpack = ''
     unpackFile ${libcxx.src}
     export NIX_CFLAGS_COMPILE="-I${libunwind}/include -I$PWD/include -I$(readlink -f libcxx-*)/include"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
   '';
 
@@ -34,8 +36,6 @@ stdenv.mkDerivation {
       ln -s libc++abi.so.1.0 $out/lib/libc++abi.so
       ln -s libc++abi.so.1.0 $out/lib/libc++abi.so.1
     '';
-
-  patchPhase = "${gnused}/bin/sed -e s,-lstdc++,, -i lib/buildit";
 
   buildPhase = "(cd lib; ./buildit)";
 
