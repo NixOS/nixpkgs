@@ -7,7 +7,15 @@
 , libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, liboggz
 , libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
 , libvdpau
+, decklink-sdk ? null
 }:
+
+with stdenv.lib;
+let
+  decklinkOS = if hasSuffix "linux" stdenv.system then "Linux"
+    else if hasSuffix "darwin" stdenv.system then "Mac"
+    else "Win";
+in
 
 stdenv.mkDerivation rec {
   name = "vlc-${version}";
@@ -36,7 +44,9 @@ stdenv.mkDerivation rec {
       "--enable-dc1394"
       "--enable-ncurses"
       "--enable-vdpau"
-    ];
+    ]
+    ++ optional (decklink-sdk != null)
+      "--with-decklink-sdk=${decklink-sdk}/${decklinkOS}";
 
   preConfigure = ''sed -e "s@/bin/echo@echo@g" -i configure'';
 
@@ -48,7 +58,7 @@ stdenv.mkDerivation rec {
       ${freefont_ttf}/share/fonts/truetype/FreeSerifBold.ttf
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Cross-platform media player and streaming server";
     homepage = http://www.videolan.org/vlc/;
     platforms = platforms.linux;
