@@ -186,6 +186,16 @@ in rec {
   );
 
 
+  # Ensure that all packages used by the minimal NixOS config end up in the channel.
+  dummy = forAllSystems (system: pkgs.runCommand "dummy"
+    { propagatedBuildInputs = (import lib/eval-config.nix {
+        inherit system;
+        modules = lib.singleton ({ config, pkgs, ... }: { });
+      }).config.environment.systemPackages;
+    }
+    "mkdir $out; fixupPhase");
+
+
   # Provide a tarball that can be unpacked into an SD card, and easily
   # boot that system from uboot (like for the sheevaplug).
   # The pc variant helps preparing the expression for the system tarball

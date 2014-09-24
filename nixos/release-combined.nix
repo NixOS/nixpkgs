@@ -1,3 +1,7 @@
+# This jobset defines the main NixOS channels (such as nixos-unstable
+# and nixos-14.04). The channel is updated every time the ‘tested’ job
+# succeeds, and all other jobs have finished (they may fail).
+
 { nixpkgs ? { outPath = ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "x86_64-linux" "i686-linux" ]
@@ -18,7 +22,7 @@ let
 in rec {
 
   nixos = removeMaintainers (import ./release.nix {
-    inherit stableBranch;
+    inherit stableBranch supportedSystems;
     nixpkgs = nixpkgsSrc;
   });
 
@@ -30,12 +34,13 @@ in rec {
   tested = pkgs.releaseTools.aggregate {
     name = "nixos-${nixos.channel.version}";
     meta = {
-      description = "Release-critical builds for the NixOS unstable channel";
-      maintainers = [ pkgs.lib.maintainers.eelco pkgs.lib.maintainers.shlevy ];
+      description = "Release-critical builds for the NixOS channel";
+      maintainers = [ pkgs.lib.maintainers.eelco ];
     };
     constituents =
-      let all = x: map (p: x.${p}) supportedSystems; in
+      let all = x: map (system: x.${system}) supportedSystems; in
       [ nixos.channel
+        (all nixos.dummy)
         (all nixos.manual)
 
         (all nixos.iso_minimal)
