@@ -1606,22 +1606,16 @@ let
   };
 
   pytest = buildPythonPackage rec {
-    name = "pytest-2.5.1";
+    name = "pytest-2.6.2";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pytest/${name}.tar.gz";
-      md5 = "4e155a0134e6757b37cc6698c20f3e9f";
+      md5 = "0a1735fb1d481ef3864f34678607ba85";
     };
 
     preCheck = ''
-      # broken on python3, fixed in master, remove in next release
-      rm doc/en/plugins_index/test_plugins_index.py
-
       # don't test bash builtins
       rm testing/test_argcomplete.py
-
-      # yaml test are failing
-      rm doc/en/example/nonpython/test_simple.yml
     '';
 
     propagatedBuildInputs = [ py ]
@@ -1631,7 +1625,7 @@ let
         pythonPackages.selenium;
 
     meta = with stdenv.lib; {
-      maintainers = with maintainers; [ iElectric lovek323 ];
+      maintainers = with maintainers; [ iElectric lovek323 madjar ];
       platforms = platforms.unix;
     };
   };
@@ -6149,11 +6143,11 @@ let
 
 
   py = buildPythonPackage rec {
-    name = "py-1.4.20";
+    name = "py-1.4.24";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/p/py/${name}.tar.gz";
-      md5 = "5f1708be5482f3ff6711dfd6cafd45e0";
+      md5 = "8f32ee0cd1e01472a255fe1d28d81217";
     };
   };
 
