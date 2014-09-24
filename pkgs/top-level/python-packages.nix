@@ -10905,6 +10905,30 @@ let
     };
   };
 
+
+  redNotebook = buildPythonPackage rec {
+    name = "rednotebook-1.8.1";
+
+    src = fetchurl {
+      url = "mirror://sourceforge/rednotebook/${name}.tar.gz";
+      sha256 = "00b7s4xpqpxsbzjvjx9qsx5d84m9pvn383c5di1nsfh35pig0rzn";
+    };
+
+    # no tests available
+    doCheck = false;
+
+    propagatedBuildInputs = with pythonPackages; [ pygtk pywebkitgtk pyyaml chardet ];
+
+    meta = {
+      homepage = http://rednotebook.sourceforge.net/index.html;
+      description = "A modern journal that includes a calendar navigation, customizable templates, export functionality and word clouds";
+      license = licenses.gpl2;
+      maintainers = [ stdenv.lib.maintainers.tstrobel ];
+    };
+  };
+
+
+
 # python2.7 specific packages
 } // optionalAttrs isPy27 (
   with pythonPackages;
