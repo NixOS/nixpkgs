@@ -21,17 +21,15 @@ assert portaudioSupport -> (portaudio != null);
 
 stdenv.mkDerivation rec {
   name = "aegisub-${version}";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "http://ftp.aegisub.org/pub/releases/${name}.tar.xz";
-    sha256 = "0nciw5p1aq94qwz5j4vbc06fywdjhazgh4qs6qr9iqj3n94gvrfr";
+    sha256 = "1p7qdnxyyyrlpvxdrrp15b5967d7bzpjl3vdy0q66g4aabr2h6ln";
   };
 
-  nativeBuildInputs = [ intltool ];
-
   buildInputs = with stdenv.lib;
-  [ libX11 gettext wxGTK libiconv fontconfig freetype mesa libass fftw ffms ffmpeg pkgconfig zlib icu boost boost.lib ]
+  [ intltool libX11 gettext wxGTK libiconv fontconfig freetype mesa libass fftw ffms ffmpeg pkgconfig zlib icu boost boost.lib ]
   ++ optional spellChecking hunspell
   ++ optional automationSupport lua
   ++ optional openalSupport openal
