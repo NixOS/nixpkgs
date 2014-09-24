@@ -38,8 +38,8 @@ stdenv.mkDerivation (rec {
     ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}
     ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
     ${if stdenv.isDarwin then "--enable-keychain" else "--disable-keychain"}
-    ${if saslSupport then "--enable-sasl --with-sasl=${sasl}" else "--disable-sasl"}
-    ${if httpSupport then "--enable-serf --with-serf=${serf}" else "--disable-serf"}
+    ${if saslSupport then "--with-sasl=${sasl}" else "--without-sasl"}
+    ${if httpSupport then "--with-serf=${serf}" else "--without-serf"}
     --with-zlib=${zlib}
     --with-sqlite=${sqlite}
   '';
