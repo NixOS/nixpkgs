@@ -15,7 +15,7 @@ assert httpServer -> httpd != null;
 assert pythonBindings -> swig != null && python != null;
 assert javahlBindings -> jdk != null && perl != null;
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
 
   version = "1.8.10";
 
@@ -77,9 +77,4 @@ stdenv.mkDerivation (rec {
     maintainers = with stdenv.lib.maintainers; [ eelco lovek323 ];
     hydraPlatforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
-} // stdenv.lib.optionalAttrs stdenv.isDarwin {
-  CXX = "clang++";
-  CC = "clang";
-  CPP = "clang -E";
-  CXXCPP = "clang++ -E";
-})
+}
