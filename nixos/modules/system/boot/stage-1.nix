@@ -181,6 +181,9 @@ let
     inherit (config.boot.initrd) checkJournalingFS
       preLVMCommands postDeviceCommands postMountCommands kernelModules;
 
+    resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
+                    (filter (sd: sd ? label || hasPrefix "/dev/" sd.device) config.swapDevices);
+
     fsInfo =
       let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType fs.options ];
       in pkgs.writeText "initrd-fsinfo" (concatStringsSep "\n" (concatMap f fileSystems));
@@ -220,13 +223,14 @@ in
   options = {
 
     boot.resumeDevice = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      example = "8:2";
+      type = types.str;
+      default = "";
+      example = "/dev/sda3";
       description = ''
-        Device for manual resume attempt during boot, specified using
-        the device's major and minor number as
-        <literal><replaceable>major</replaceable>:<replaceable>minor</replaceable></literal>.
+        Device for manual resume attempt during boot. This should be used primarily
+        if you want to resume from file. Specify here the device where the file
+        resides. You should also use <varname>boot.kernelParams</varname> to specify
+        <literal><replaceable>resume_offset</replaceable></literal>.
       '';
     };
 
