@@ -103,22 +103,6 @@ let result = stdenv.mkDerivation rec {
       mv $sourceRoot $out
     fi
 
-    for file in $out/*
-    do
-      if test -f $file ; then
-        rm $file
-      fi
-    done
-
-    if test -n "$installjdk"; then
-      for file in $out/jre/*
-      do
-        if test -f $file ; then
-          rm $file
-        fi
-      done
-    fi
-
     # construct the rpath
     rpath=
     for i in $libraries; do
