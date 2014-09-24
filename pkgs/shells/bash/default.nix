@@ -8,7 +8,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "${realName}-p${toString (builtins.length patches)}";
+  name = "${realName}-p${toString (builtins.length bashPatches)}";
 
   src = fetchurl {
     url = "mirror://gnu/bash/${realName}.tar.gz";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   patchFlags = "-p0";
 
-  patches =
+  bashPatches =
     let
       patch = nr: sha256:
         fetchurl {
@@ -35,6 +35,10 @@ stdenv.mkDerivation rec {
         };
     in
       import ./bash-4.2-patches.nix patch;
+
+  # CVE-2014-6271 (938976.patch)
+  # https://bugzilla.redhat.com/show_bug.cgi?id=1141597
+  patches = bashPatches ++ [ ./938976.patch ];
 
   crossAttrs = {
     configureFlags = baseConfigureFlags +
