@@ -56,7 +56,6 @@ in rec {
       apacheHttpd_2_2
       apacheHttpd_2_4
       emacs
-      gd
       mysql51
       mysql55
       nginx
