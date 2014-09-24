@@ -20,6 +20,7 @@ cabal.mkDerivation (self: {
     homepage = "http://github.com/ekmett/tables/";
     description = "In-memory storage with multiple keys using lenses and traversals";
     license = self.stdenv.lib.licenses.bsd3;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
     platforms = self.ghc.meta.platforms;
   };
 })

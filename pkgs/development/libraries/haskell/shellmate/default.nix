@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     homepage = "http://github.com/valderman/shellmate";
     description = "Simple interface for shell scripting in Haskell";
     license = self.stdenv.lib.licenses.bsd3;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
     platforms = self.ghc.meta.platforms;
   };
 })

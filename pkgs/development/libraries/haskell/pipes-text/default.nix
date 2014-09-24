@@ -17,6 +17,7 @@ cabal.mkDerivation (self: {
     homepage = "https://github.com/michaelt/text-pipes";
     description = "Text pipes";
     license = self.stdenv.lib.licenses.bsd3;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
     platforms = self.ghc.meta.platforms;
   };
 })

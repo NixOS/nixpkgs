@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     homepage = "http://hub.darcs.net/gershomb/jmacro-rpc";
     description = "Snap backend for jmacro-rpc";
     license = self.stdenv.lib.licenses.bsd3;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
     platforms = self.ghc.meta.platforms;
   };
 })

@@ -21,6 +21,7 @@ cabal.mkDerivation (self: {
   meta = {
     description = "Types and type classes for defining JSON schemas";
     license = self.stdenv.lib.licenses.bsd3;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
     platforms = self.ghc.meta.platforms;
   };
 })

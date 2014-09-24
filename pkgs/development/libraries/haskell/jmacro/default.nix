@@ -18,6 +18,7 @@ cabal.mkDerivation (self: {
   meta = {
     description = "QuasiQuotation library for programmatic generation of Javascript code";
     license = self.stdenv.lib.licenses.bsd3;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
     platforms = self.ghc.meta.platforms;
   };
 })
