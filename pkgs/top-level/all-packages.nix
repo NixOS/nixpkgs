@@ -7088,6 +7088,10 @@ let
     sslSupport = true;
   });
 
+  apache-jena = callPackage ../servers/nosql/apache-jena/binary.nix {
+    java = icedtea7_jdk;
+  };
+
   apcupsd = callPackage ../servers/apcupsd { };
 
   sabnzbd = callPackage ../servers/sabnzbd { };
