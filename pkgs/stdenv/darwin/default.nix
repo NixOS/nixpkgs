@@ -26,7 +26,6 @@ import ../generic rec {
 
   gcc = import ../../build-support/clang-wrapper {
     nativeTools = false;
-    nativePrefix = stdenv.lib.optionalString stdenv.isSunOS "/usr";
     nativeLibc = true;
     inherit stdenv;
     libcxx = if haveLibCxx then pkgs.libcxx.override {
@@ -35,7 +34,7 @@ import ../generic rec {
       };
     } else null;
     binutils = import ../../build-support/native-darwin-cctools-wrapper {inherit stdenv;};
-    clang = if useClang33 then pkgs.clang_33 else pkgs.clang;
+    clang = if useClang33 then pkgs.clang_33.clang else pkgs.clang.clang;
     coreutils = pkgs.coreutils;
     shell = pkgs.bash + "/bin/sh";
   };
