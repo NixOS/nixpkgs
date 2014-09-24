@@ -865,6 +865,23 @@ let
   };
 
 
+  blinker = buildPythonPackage rec {
+    name = "blinker-${version}";
+    version = "1.3";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/b/blinker/${name}.tar.gz";
+      md5 = "66e9688f2d287593a0e698cd8a5fbc57";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = http://pythonhosted.org/blinker/;
+      description = "Fast, simple object-to-object and broadcast signaling";
+      license = licenses.mit;
+    };
+  };
+
+
   blockdiag = buildPythonPackage rec {
     name = "blockdiag-1.3.2";
 
@@ -3436,6 +3453,21 @@ let
     };
   };
 
+  feedgenerator = buildPythonPackage (rec {
+    name = "feedgenerator-1.7";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/f/feedgenerator/${name}.tar.gz";
+      md5 = "92978492871342ad64e8ae0ccfcf200c";
+    };
+
+    propagatedBuildInputs = [ six pytz ];
+
+    meta = {
+      homepage = https://github.com/dmdm/feedgenerator-py3k.git;
+      description = "Standalone version of django.utils.feedgenerator,  compatible with Py3k";
+    };
+  });
 
   feedparser = buildPythonPackage (rec {
     name = "feedparser-5.1.3";
@@ -5751,6 +5783,29 @@ let
       description = "Python Build Reasonableness";
       homepage = "http://docs.openstack.org/developer/pbr/";
       license = licenses.asl20;
+    };
+  };
+
+  pelican = buildPythonPackage rec {
+    name = "pelican-${version}";
+    version = "3.4.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pelican/${name}.tar.gz";
+      md5 = "8e57bdd075503903125b14621b1e533d";
+    };
+
+    # Test data not provided
+    #buildInputs = [nose mock];
+    doCheck = false;
+
+    propagatedBuildInputs = [jinja2 pygments docutils pytz unidecode six dateutil feedgenerator blinker pillow beautifulsoup4];
+
+    meta = {
+      homepage = http://getpelican.com/;
+      description = "A tool to generate a static blog from reStructuredText or Markdown input files";
+      license = licenses.agpl3;
+      maintainers = [ stdenv.lib.maintainers.offline ];
     };
   };
 
