@@ -82,6 +82,11 @@ rec {
     fullName = "Common Development and Distribution License 1.0";
   };
 
+  cecill-b = spdx {
+    shortName = "CECILL-B";
+    fullName  = "CeCILL-B Free Software License Agreement";
+  };
+
   cecill-c = spdx {
     shortName = "CECILL-C";
     fullName  = "CeCILL-C Free Software License Agreement";
