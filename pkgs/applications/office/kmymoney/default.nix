@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, kdelibs, automoc4, kdepimlibs, gettext, pkgconfig
 , shared_mime_info, perl, boost, gpgme, gmpxx, libalkimia, libofx, libical
-, doxygen }:
+, doxygen, oxygen_icons, kactivities }:
 
 stdenv.mkDerivation rec {
   name = "kmymoney-4.6.4";
@@ -11,10 +11,16 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ kdepimlibs perl boost gpgme gmpxx libalkimia libofx libical
-                  doxygen ];
-  nativeBuildInputs = [ cmake automoc4 gettext shared_mime_info pkgconfig ];
+                  doxygen oxygen_icons kactivities shared_mime_info ];
+  nativeBuildInputs = [ cmake automoc4 gettext pkgconfig ]; 
 
   KDEDIRS = libalkimia;
+
+  postInstall = ''
+    ln -s ${shared_mime_info}/share/mime/application/* $out/share/mime/application/
+    ln -s ${shared_mime_info}/share/mime/inode $out/share/mime/inode
+    ln -s ${oxygen_icons}/share/icons/oxygen/ $out/share/icons/oxygen
+  '';
 
   patches = [ ./qgpgme.patch ];
 
@@ -22,5 +28,6 @@ stdenv.mkDerivation rec {
     homepage = http://kmymoney2.sourceforge.net/;
     description = "KDE personal money manager";
     inherit (kdelibs.meta) platforms maintainers;
+    priority = 100;
   };
 }
