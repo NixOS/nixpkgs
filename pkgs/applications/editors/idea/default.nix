@@ -27,16 +27,33 @@ let
     buildInputs = [ makeWrapper patchelf p7zip ];
 
     patchPhase = ''
+
+      get_file_size() {
+          local fname="$1"
+          echo $(ls -l $fname | cut -d ' ' -f5)
+      }
+
+      munge_size_hack() {
+          local fname="$1"
+          local size="$2"
+          strip $fname
+          truncate --size=$size $fname
+      }
+
       interpreter=$(echo ${stdenv.glibc}/lib/ld-linux*.so.2)
       snappyPath="lib/snappy-java-1.0.5"
 
       7z x -o"$snappyPath" "$snappyPath.jar"
       if [ "${stdenv.system}" == "x86_64-linux" ]; then
+        target_size=$(get_file_size bin/fsnotifier64)
         patchelf --set-interpreter "$interpreter" bin/fsnotifier64
         patchelf --set-rpath ${stdenv.gcc.gcc}/lib64/ "$snappyPath/org/xerial/snappy/native/Linux/amd64/libsnappyjava.so"
+        munge_size_hack bin/fsnotifier64 $target_size
       else
+        target_size=$(get_file_size bin/fsnotifier)
         patchelf --set-interpreter "$interpreter" bin/fsnotifier
         patchelf --set-rpath ${stdenv.gcc.gcc}/lib/ "$snappyPath/org/xerial/snappy/native/Linux/i386/libsnappyjava.so"
+        munge_size_hack bin/fsnotifier $target_size
       fi
       7z a -tzip "$snappyPath.jar" ./"$snappyPath"/*
       rm -vr "$snappyPath"
