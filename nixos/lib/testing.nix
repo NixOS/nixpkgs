@@ -27,7 +27,7 @@ rec {
         cp ${./test-driver/Logger.pm} $libDir/Logger.pm
 
         wrapProgram $out/bin/nixos-test-driver \
-          --prefix PATH : "${pkgs.qemu_kvm}/bin:${pkgs.vde2}/bin:${imagemagick}/bin:${coreutils}/bin" \
+          --prefix PATH : "${qemu_kvm}/bin:${vde2}/bin:${netpbm}/bin:${coreutils}/bin" \
           --prefix PERL5LIB : "${lib.makePerlPath [ perlPackages.TermReadLineGnu perlPackages.XMLWriter perlPackages.IOTty ]}:$out/lib/perl5/site_perl"
       '';
   };
@@ -41,7 +41,7 @@ rec {
 
       requiredSystemFeatures = [ "kvm" "nixos-test" ];
 
-      buildInputs = [ pkgs.libxslt ];
+      buildInputs = [ libxslt ];
 
       buildCommand =
         ''
@@ -153,7 +153,7 @@ rec {
         startAll;
         $client->waitForUnit("multi-user.target");
         ${preBuild}
-        $client->succeed("env -i ${pkgs.bash}/bin/bash ${buildrunner} /tmp/xchg/saved-env >&2");
+        $client->succeed("env -i ${bash}/bin/bash ${buildrunner} /tmp/xchg/saved-env >&2");
         ${postBuild}
         $client->succeed("sync"); # flush all data before pulling the plug
       '';
