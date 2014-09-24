@@ -1,0 +1,72 @@
+*** ../bash-4.2.47/builtins/common.h	2010-05-30 18:31:51.000000000 -0400
+--- builtins/common.h	2014-09-16 19:35:45.000000000 -0400
+***************
+*** 36,39 ****
+--- 36,41 ----
+  
+  /* Flags for describe_command, shared between type.def and command.def */
++ #define SEVAL_FUNCDEF	0x080		/* only allow function definitions */
++ #define SEVAL_ONECMD	0x100		/* only allow a single command */
+  #define CDESC_ALL		0x001	/* type -a */
+  #define CDESC_SHORTDESC		0x002	/* command -V */
+*** ../bash-4.2.47/builtins/evalstring.c	2010-11-23 08:22:15.000000000 -0500
+--- builtins/evalstring.c	2014-09-16 19:35:45.000000000 -0400
+***************
+*** 262,265 ****
+--- 262,273 ----
+  	      struct fd_bitmap *bitmap;
+  
++ 	      if ((flags & SEVAL_FUNCDEF) && command->type != cm_function_def)
++ 		{
++ 		  internal_warning ("%s: ignoring function definition attempt", from_file);
++ 		  should_jump_to_top_level = 0;
++ 		  last_result = last_command_exit_value = EX_BADUSAGE;
++ 		  break;
++ 		}
++ 
+  	      bitmap = new_fd_bitmap (FD_BITMAP_SIZE);
+  	      begin_unwind_frame ("pe_dispose");
+***************
+*** 322,325 ****
+--- 330,336 ----
+  	      dispose_fd_bitmap (bitmap);
+  	      discard_unwind_frame ("pe_dispose");
++ 
++ 	      if (flags & SEVAL_ONECMD)
++ 		break;
+  	    }
+  	}
+*** ../bash-4.2.47/variables.c	2011-03-01 16:15:20.000000000 -0500
+--- variables.c	2014-09-16 19:35:45.000000000 -0400
+***************
+*** 348,357 ****
+  	  strcpy (temp_string + char_index + 1, string);
+  
+! 	  parse_and_execute (temp_string, name, SEVAL_NONINT|SEVAL_NOHIST);
+! 
+! 	  /* Ancient backwards compatibility.  Old versions of bash exported
+! 	     functions like name()=() {...} */
+! 	  if (name[char_index - 1] == ')' && name[char_index - 2] == '(')
+! 	    name[char_index - 2] = '\0';
+  
+  	  if (temp_var = find_function (name))
+--- 348,355 ----
+  	  strcpy (temp_string + char_index + 1, string);
+  
+! 	  /* Don't import function names that are invalid identifiers from the
+! 	     environment. */
+! 	  if (legal_identifier (name))
+! 	    parse_and_execute (temp_string, name, SEVAL_NONINT|SEVAL_NOHIST|SEVAL_FUNCDEF|SEVAL_ONECMD);
+  
+  	  if (temp_var = find_function (name))
+***************
+*** 362,369 ****
+  	  else
+  	    report_error (_("error importing function definition for `%s'"), name);
+- 
+- 	  /* ( */
+- 	  if (name[char_index - 1] == ')' && name[char_index - 2] == '\0')
+- 	    name[char_index - 2] = '(';		/* ) */
+  	}
+  #if defined (ARRAY_VARS)
+--- 360,363 ----
