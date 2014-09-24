@@ -24,6 +24,7 @@ cabal.mkDerivation (self: {
     homepage = "https://github.com/kallisti-dev/hs-webdriver";
     description = "a Haskell client for the Selenium WebDriver protocol";
     license = self.stdenv.lib.licenses.bsd3;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
     platforms = self.ghc.meta.platforms;
   };
 })

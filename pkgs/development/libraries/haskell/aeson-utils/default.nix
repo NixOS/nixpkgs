@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
   meta = {
     description = "Utilities for working with Aeson";
     license = self.stdenv.lib.licenses.bsd3;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
     platforms = self.ghc.meta.platforms;
   };
 })

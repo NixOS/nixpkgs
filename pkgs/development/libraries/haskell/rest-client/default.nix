@@ -18,6 +18,7 @@ cabal.mkDerivation (self: {
   meta = {
     description = "Utility library for use in generated API client libraries";
     license = self.stdenv.lib.licenses.bsd3;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
     platforms = self.ghc.meta.platforms;
   };
 })

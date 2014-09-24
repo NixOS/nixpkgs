@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
     homepage = "http://hub.darcs.net/gershomb/jmacro";
     description = "JSON-RPC clients and servers using JMacro, and evented client-server Reactive Programming";
     license = self.stdenv.lib.licenses.bsd3;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
     platforms = self.ghc.meta.platforms;
   };
 })

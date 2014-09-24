@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
   meta = {
     description = "Silk Rest Framework Types";
     license = self.stdenv.lib.licenses.bsd3;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
     platforms = self.ghc.meta.platforms;
   };
 })

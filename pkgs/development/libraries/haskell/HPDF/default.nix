@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     homepage = "http://www.alpheccar.org";
     description = "Generation of PDF documents";
     license = self.stdenv.lib.licenses.bsd3;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
     platforms = self.ghc.meta.platforms;
   };
 })
