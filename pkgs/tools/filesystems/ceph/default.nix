@@ -2,8 +2,10 @@
 , boost, btrfsProgs, cryptopp, curl, expat, fcgi, fuse, gperftools, keyutils
 , leveldb, libaio, libatomic_ops, libedit, libuuid, linuxHeaders, openssl
 , python, snappy, udev, xfsprogs, xz
+, zfs ? null
 }:
 
+with stdenv.lib;
 let
   wrapArgs = "--prefix PYTHONPATH : \"$(toPythonPath $out)\""
     + " --prefix PATH : \"$out/bin\""
@@ -28,14 +30,16 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost boost.lib btrfsProgs cryptopp curl expat fcgi fuse gperftools keyutils
     libatomic_ops leveldb libaio libedit libuuid linuxHeaders openssl python
-    snappy udev xfsprogs.lib xz
+    snappy udev xfsprogs.lib xz zfs
   ];
 
   preConfigure = ''
     ./autogen.sh
   '';
 
-  configureFlags = [ "--exec_prefix=$(out)" ];
+  configureFlags = [
+    "--exec_prefix=$(out)"
+  ] ++ optional (zfs != null) "--with-zfs=${zfs}";
 
   postInstall = ''
     wrapProgram $out/bin/ceph ${wrapArgs}
@@ -45,7 +49,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = http://ceph.com/;
     description = "Distributed storage system";
     license = licenses.lgpl21;
