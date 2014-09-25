@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk, glib, libid3tag, id3lib, taglib
-, libvorbis, libogg, flac
+, libvorbis, libogg, flac, itstool, libxml2
 }:
 
 stdenv.mkDerivation rec {
   name = "easytag-${version}";
-  version = "2.1.8";
+  version = "2.2.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/easytag/2.1/${name}.tar.xz";
-    sha256 = "1ab5iv0a83cdf07qzi81ydfk5apay06nxags9m07msqalz4pabqs";
+    url = "mirror://gnome/sources/easytag/2.2/${name}.tar.xz";
+    sha256 = "1cxfmr4fr6a75i0ril40nc4kcy0960dc5vfvkfwswzx6d34av77l";
   };
 
   preConfigure = ''
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig intltool gtk glib libid3tag id3lib taglib libvorbis libogg flac
+    itstool libxml2
   ];
 
   meta = {
