@@ -1,11 +1,14 @@
 { stdenv, fetchurl, cmake, bash, unzip, glibc, openssl, gcc, mesa, freetype, xlibs, alsaLib }:
 
 stdenv.mkDerivation rec {
-  name = "pharo-vm-core-i386-2014.06.25";
+
+  version = "2014.09.20";
+
+  name = "pharo-vm-core-i386-${version}";
   system = "x86_32-linux";
   src = fetchurl {
-    url = http://files.pharo.org/vm/src/vm-unix-sources/blessed/pharo-vm-2014.08.14.tar.bz2;
-    md5 = "8e9e8dfde4f4bb69aac4590ecf82dd3b";
+    url = "http://files.pharo.org/vm/src/vm-unix-sources/blessed/pharo-vm-${version}.tar.bz2";
+    md5 = "f4183566aeeb7cb9d0d7832b4e40b573";
   };
 
   sources10Zip = fetchurl {
@@ -73,8 +76,6 @@ stdenv.mkDerivation rec {
     unzip ${sources30Zip} -d $prefix/lib/pharo-vm/
   '';
 
-  patches = [ patches/pharo-is-not-squeak.patch patches/fix-executable-name.patch patches/fix-cmake-root-directory.patch ];
- 
   buildInputs = [ bash unzip cmake glibc openssl gcc mesa freetype xlibs.libX11 xlibs.libICE xlibs.libSM alsaLib ];
 
   meta = {
