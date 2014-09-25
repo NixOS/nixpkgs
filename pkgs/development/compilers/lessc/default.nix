@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "lessc-${version}";
-  version = "1.4.0";
+  version = "1.4.2";
 
   src = fetchgit {
     url = https://github.com/less/less.js.git;
     rev = "refs/tags/v${version}";
-    sha256 = "12nzaz7v1bnqzylh4zm1srrj7w7f45fqj4sihxyg0bknfvfwdc56";
+    sha256 = "1v3b4f1np3mxkj0irh1pk52r26nzpf4k2ax14cbn7mxx16mqjp50";
   };
 
   phases = [ "installPhase" ];
@@ -19,10 +19,11 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/lessc --replace "/usr/bin/env node" ${nodejs}/bin/node
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "LESS to CSS compiler";
     homepage = http://lesscss.org/;
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pSub ];
   };
 }
