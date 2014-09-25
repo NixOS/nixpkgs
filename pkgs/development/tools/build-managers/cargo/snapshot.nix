@@ -2,6 +2,6 @@
 
 /* Cargo binary snapshot */
 
-with ((import ./common.nix) {inherit stdenv fetchurl zlib; });
+with ((import ./common.nix) { inherit stdenv fetchurl zlib; });
 
-snapshot // meta
+snapshot // { inherit meta; }
