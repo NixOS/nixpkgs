@@ -2353,6 +2353,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     inherit (pkgs) SDL;
   };
 
+  sdl2 = callPackage ../development/libraries/haskell/sdl2 {
+    inherit (pkgs) SDL2;
+  };
+
   SHA = callPackage ../development/libraries/haskell/SHA {};
 
   SHA2 = callPackage ../development/libraries/haskell/SHA2 {};
