@@ -17,9 +17,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Free Software alternative to µtorrent";
     homepage = http://www.qbittorrent.org/;
-    maintainers = with stdenv.lib.maintainers; [ viric ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ viric ];
+    platforms = platforms.linux;
   };
 }
