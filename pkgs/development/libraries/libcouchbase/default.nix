@@ -1,4 +1,4 @@
-{ stdenv, fetchGithubgit
+{ stdenv, fetchgit
 , autoconf, automake, libtool, pkgconfig, perl, git
 , libevent, openssl
 }:
