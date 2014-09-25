@@ -2,11 +2,11 @@
 , pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "qbittorrent-3.1.3";
+  name = "qbittorrent-3.1.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/qbittorrent/${name}.tar.xz";
-    sha256 = "16m3l8qjcj63brzrdn82cbijvz8fcxfgpibi4g5g6sbissjkwsww";
+    sha256 = "0xhqli191r5v9b5x6wj1wsjlj6svf6ldgzl7jza39q3ipr5c2pg6";
   };
 
   buildInputs = [ qt4 which dbus_libs boost libtorrentRasterbar
