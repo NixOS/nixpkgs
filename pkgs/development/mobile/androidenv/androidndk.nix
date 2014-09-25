@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     mkdir -pv $out
     tar xf $src
     mv */* $out
+
+    # so that it doesn't fail because of read-only permissions set
+    patch -p1 -d $out < ${ ./make-standalone-toolchain.patch }
+
     find $out \( \
         \( -type f -a -name "*.so*" \) -o \
         \( -type f -a -perm +0100 \) \
