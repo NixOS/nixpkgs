@@ -27,14 +27,14 @@ stdenv.mkDerivation rec {
   patchFlags = "-p0";
 
   patches =
-    let
+    (let
       patch = nr: sha256:
         fetchurl {
           url = "mirror://gnu/bash/bash-4.2-patches/bash42-${nr}";
           inherit sha256;
         };
     in
-      import ./bash-4.2-patches.nix patch;
+      import ./bash-4.2-patches.nix patch) ++ [ ./cve-2014-7169.patch ];
 
   crossAttrs = {
     configureFlags = baseConfigureFlags +
