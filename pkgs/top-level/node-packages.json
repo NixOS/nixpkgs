@@ -126,4 +126,13 @@
 , "shelljs"
 , "typescript"
 , "git-run"
+, "pg"
+, "connect"
+, "sjcl"
+, "ng-di"
+, "request"
+, "socket.io"
+, "bluebird"
+, "sodium"
+, "vhost"
 ]
