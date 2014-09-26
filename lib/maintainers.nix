@@ -115,6 +115,7 @@
   rszibele = "Richard Szibele <richard_szibele@hotmail.com>";
   rycee = "Robert Helgesson <robert@rycee.net>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
+  sepi = "Raffael Mancini <raffael@mancini.lu>";
   shlevy = "Shea Levy <shea@shealevy.com>";
   simons = "Peter Simons <simons@cryp.to>";
   skeidel = "Sven Keidel <svenkeidel@gmail.com>";
