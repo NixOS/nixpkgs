@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "git://github.com/ledger/ledger.git";
     inherit rev;
-    sha256 = "48d62cfa06f4a0c5863c072437e67aeafaa210a60e9147f8b2a4403da2a8b3e8";
+    sha256 = "0fmmhr3as4v2kb6h64k1fq979080cqhd75jvxfg7axk2mylb6b3q";
   };
 
   buildInputs = [ cmake boost boost.lib gmp mpfr libedit python texinfo gnused ];
