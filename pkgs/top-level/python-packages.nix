@@ -433,12 +433,11 @@ let
 
 
   area53 = buildPythonPackage (rec {
-    name = "area53-b2c9cdcabd";
+    name = "Area53-0.94";
 
-    src = fetchgit {
-      url = git://github.com/bigmlcom/Area53.git;
-      rev = "b2c9cdcabd";
-      sha256 = "b0c12b8c48ed9180c7475fab18de50d63e1b517cfb46da4d2c66fc406fe902bc";
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/A/Area53/${name}.tar.gz";
+      sha256 = "0v9b7f8b6v21y410anx5sr52k2ac8jrzdf19q6m6p0zsdsf9vr42";
     };
 
     # error: invalid command 'test'
