@@ -1,10 +1,10 @@
 { stdenv, fetchurl, gdal, wxGTK30, proj, libiodbc, lzma, jasper,
-  libharu, opencv, vigra, postgresql}:
+  libharu, opencv, vigra, postgresql }:
 
 stdenv.mkDerivation rec {
   name = "saga-2.1.2";
 
-  buildInputs = [ gdal wxGTK30 proj libharu opencv vigra postgresql libiodbc lzma jasper];
+  buildInputs = [ gdal wxGTK30 proj libharu opencv vigra postgresql libiodbc lzma jasper ];
 
   enableParallelBuilding = true;
 
@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
     maintainer = stdenv.lib.maintainers.michelk;
     platforms = with stdenv.lib.platforms; linux;
+    broken = true;
   };
 }
