@@ -150,8 +150,9 @@
       zookeeper = 140;
       dnsmasq = 141;
       uhub = 142;
-      yandexdisk=143;
-      collectd=144;
+      yandexdisk = 143;
+      collectd = 144;
+      consul = 145;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
