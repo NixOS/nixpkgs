@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "http://binwalk.org";
     description = "A tool for searching a given binary image for embedded files";
     platforms = platforms.all;
-    maintainers = maintainers.koral;
+    maintainers = [ maintainers.koral ];
   };
 }
