@@ -3267,40 +3267,41 @@ let
 
 
   dulwich = buildPythonPackage rec {
-    name = "dulwich-0.8.7";
-    disabled = isPy3k || isPyPy;
+    name = "dulwich-${version}";
+    version = "0.9.7";
 
     src = fetchurl {
-      url = "http://samba.org/~jelmer/dulwich/${name}.tar.gz";
-      sha256 = "041qp5v2x8fbwkmws6hwwiny74lavkz723dj8gwbm40b2383d8vv";
+      url = "https://pypi.python.org/packages/source/d/dulwich/${name}.tar.gz";
+      sha256 = "1wq083g9b1xsk89kb0wwpi4mxy63x6760vn9x5sk1fx36h27prqj";
     };
 
-    buildPhase = "make build";
+    # For some reason "python setup.py test" doesn't work
+    doCheck = false;
 
-    # For some reason "python setup.py test" doesn't work with Python 2.6.
-    # pretty sure that is about import behaviour.
-    doCheck = python.majorVersion != "2.6";
-
-    meta = {
+    meta = with stdenv.lib; {
       description = "Simple Python implementation of the Git file formats and protocols.";
       homepage = http://samba.org/~jelmer/dulwich/;
+      license = licenses.gpl2Plus;
+      maintainers = [ maintainers.koral ];
     };
   };
 
 
-  hggit = buildPythonPackage rec {
-    name = "hg-git-0.3.1";
+  hg-git = buildPythonPackage rec {
+    name = "hg-git-${version}";
+    version = "0.6.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/h/hg-git/${name}.tar.gz";
-      md5 = "4b15867a07abb0be985177581ce64cee";
+      sha256 = "136kz4w377ldcjdg865azi8aym0xnxzxl3rycnflgay26ar1309s";
     };
 
-    propagatedBuildInputs = [ dulwich ];
+    propagatedBuildInputs = [ pkgs.mercurial dulwich ];
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "Push and pull from a Git server using Mercurial.";
       homepage = http://hg-git.github.com/;
+      maintainers = [ maintainers.koral ];
     };
   };
 
