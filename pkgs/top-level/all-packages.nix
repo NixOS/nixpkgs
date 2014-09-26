@@ -11625,6 +11625,8 @@ let
 
   cups_pdf_filter = callPackage ../misc/cups/pdf-filter.nix { };
 
+  crashplan = callPackage ../applications/backup/crashplan { };
+
   gutenprint = callPackage ../misc/drivers/gutenprint { };
 
   gutenprintBin = callPackage ../misc/drivers/gutenprint/bin.nix { };
