@@ -8,8 +8,8 @@ let
   loaderArm = "${glibc}/lib/ld-linux.so.3";
   srcs = {
     golang = fetchurl {
-      url = https://storage.googleapis.com/golang/go1.3.1.src.tar.gz;
-      sha256 = "fdfa148cc12f1e4ea45a5565261bf43d8a2e7d1fad4a16aed592d606223b93a8";
+      url = https://storage.googleapis.com/golang/go1.3.2.src.tar.gz;
+      sha256 = "1yq6xygc5lhn3b9d4sbddlf8dzi3wihyzjwyc8rhiwrb3hj8hx1y";
     };
     tools = fetchhg {
       url = https://code.google.com/p/go.tools/;
@@ -20,7 +20,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "go-1.3.1";
+  name = "go-1.3.2";
 
   src = srcs.golang;
 
