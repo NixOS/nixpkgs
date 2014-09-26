@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "01y8r45fw02rps9q995mv82bxrm6p0mysv4wir5glpagrhnyw7md";
   };
 
+  patches = [ ./bossa-no-applet-build.patch ];
+
   nativeBuildInputs = [ bin2c ];
   buildInputs = [ wxGTK libX11 readline ];
 
