@@ -3521,8 +3521,6 @@ let
   flask = buildPythonPackage {
     name = "flask-0.10.1";
 
-    doCheck = !isPyPy; # https://github.com/mitsuhiko/werkzeug/issues/604
-
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/F/Flask/Flask-0.10.1.tar.gz";
       md5 = "378670fe456957eb3c27ddaef60b2b24";
@@ -9277,12 +9275,12 @@ let
   };
 
 
-  werkzeug = buildPythonPackage {
-    name = "werkzeug-0.9.4";
+  werkzeug = buildPythonPackage rec {
+    name = "Werkzeug-0.9.6";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/W/Werkzeug/Werkzeug-0.9.4.tar.gz";
-      md5 = "670fad41f57c13b71a6816765765a3dd";
+      url = "http://pypi.python.org/packages/source/W/Werkzeug/${name}.tar.gz";
+      md5 = "f7afcadc03b0f2267bdc156c34586043";
     };
 
     propagatedBuildInputs = [ itsdangerous ];
