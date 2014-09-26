@@ -70,7 +70,8 @@ let
        # disable sqlite3 due to https://bugs.pypy.org/issue1740
        # disable test_multiprocessing due to transient errors
        # disable test_os because test_urandom_failure fails
-      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k 'not (test_sqlite or test_socket or test_os or test_shutil or test_mhlib or test_multiprocessing)' lib-python
+       # disable test_urllib2net and test_urllibnet because it requires networking (example.com)
+      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k 'not (test_sqlite or test_urllib2net or test_urllibnet or test_socket or test_os or test_shutil or test_mhlib or test_multiprocessing)' lib-python
     '';
 
     installPhase = ''
