@@ -3521,6 +3521,8 @@ let
   flask = buildPythonPackage {
     name = "flask-0.10.1";
 
+    doCheck = !isPyPy; # https://github.com/mitsuhiko/werkzeug/issues/604
+
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/F/Flask/Flask-0.10.1.tar.gz";
       md5 = "378670fe456957eb3c27ddaef60b2b24";
