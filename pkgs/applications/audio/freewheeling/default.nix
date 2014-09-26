@@ -1,4 +1,6 @@
-{ stdenv, fetchsvn, pkgconfig, autoconf, automake, gnutls, freetype, SDL, SDL_gfx, SDL_ttf, liblo, libxml2, alsaLib, jack2, libvorbis, libsndfile, libogg }:
+{ stdenv, fetchsvn, pkgconfig, autoconf, automake, gnutls, freetype,
+SDL, SDL_gfx, SDL_ttf, liblo, libxml2, alsaLib, jack2, libvorbis,
+libsndfile, libogg }:
 
 stdenv.mkDerivation {
   name = "freewheeling-100";
@@ -19,7 +21,18 @@ stdenv.mkDerivation {
   
   meta = {
     description = "A live looping instrument with jack and MIDI support";
-    longDescription = "";
+    longDescription = ''
+        Freewheeling allows us to build repetitive grooves
+        by sampling and directing loops from within spirited improvisation.
+
+        It works because, down to the core, it's built around
+        improv. We leave mice and menus, and dive into our own process
+        of making sound.
+
+        Freewheeling runs under Mac OS X and Linux, and is open source
+        software, released under the GNU GPL license.
+    '' ;
+
     version = "r100";
     homepage = "http://freewheeling.sourceforge.net";
     license = stdenv.lib.licenses.gpl2;
