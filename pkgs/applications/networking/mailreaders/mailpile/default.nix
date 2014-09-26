@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, pythonPackages, gnupg1orig, makeWrapper }:
+{ stdenv, fetchgit, pythonPackages, gnupg1orig, makeWrapper, openssl }:
 
 pythonPackages.buildPythonPackage rec {
   name = "mailpile-${version}";
   version = "0.4.0";
 
-  src = fetchurl {
-    url = "https://github.com/pagekite/Mailpile/archive/${version}.zip";
-    sha256 = "1di859lnhmlih4byfpsj8x6wjvzrddw0ng0w69bsj5f9bdy4rgq4";
+  src = fetchgit {
+    url = "git://github.com/pagekite/Mailpile";
+    rev = "af3e2554dcef892cc44e044ce61e1693f09228c0";
+    sha256 = "0p8j5w5281rjl0nigsw7glfp7inz13p6iqlr9g3m3vh72i9pvl7h";
   };
   
   patchPhase = ''
@@ -19,7 +20,8 @@ pythonPackages.buildPythonPackage rec {
   ];
 
   postInstall = ''
-    wrapProgram $out/bin/mailpile --prefix PATH ":" "${gnupg1orig}/bin"
+    wrapProgram $out/bin/mailpile \
+      --prefix PATH ":" "${gnupg1orig}/bin:${openssl}/bin"
   '';
 
   meta = with stdenv.lib; {
