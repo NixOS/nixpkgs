@@ -8,7 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "0ybv29m88lccpfrh2dgiqash4c3gfvwwpx9kakvnc8c71rn8l2hz";
   };
 
-  patch = [ "vpnc.patch" ];
+  patch = [
+    ./vpnc.patch
+    ./device-checking.patch # Remove after 3.16.0
+  ];
 
   preConfigure =
     ''

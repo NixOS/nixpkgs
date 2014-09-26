@@ -760,7 +760,7 @@ in
               # Remove Dead Interfaces
               ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
 
-              ip link add "${n}" type bond
+              ip link add name "${n}" type bond
 
               # !!! There must be a better way to wait for the interface
               while [ ! -d /sys/class/net/${n} ]; do sleep 0.1; done;
@@ -798,7 +798,7 @@ in
             script = ''
               # Remove Dead Interfaces
               ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
-              ip link add "${n}" type sit \
+              ip link add name "${n}" type sit \
                 ${optionalString (v.remote != null) "remote \"${v.remote}\""} \
                 ${optionalString (v.local != null) "local \"${v.local}\""} \
                 ${optionalString (v.ttl != null) "ttl ${toString v.ttl}"} \
@@ -824,7 +824,7 @@ in
             script = ''
               # Remove Dead Interfaces
               ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
-              ip link add link "${v.interface}" "${n}" type vlan id "${toString v.id}"
+              ip link add link "${v.interface}" name "${n}" type vlan id "${toString v.id}"
               ip link set "${n}" up
             '';
             postStop = ''
