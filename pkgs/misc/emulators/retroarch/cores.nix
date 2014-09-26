@@ -1,6 +1,5 @@
-{ stdenv, fetchgit, pkgconfig, makeWrapper, python27
-, retroarch, fluidsynth, mesa, SDL, libav, libpng, libjpeg, libvorbis
-, zlib }:
+{ stdenv, fetchgit, pkgconfig, makeWrapper, python27, retroarch
+, fluidsynth, mesa, SDL, ffmpeg, libpng, libjpeg, libvorbis, zlib }:
 
 let
 
@@ -179,7 +178,7 @@ in
     };
     description = "ppsspp libretro port";
 
-    extraBuildInputs = [ mesa libav ];
+    extraBuildInputs = [ mesa ffmpeg ];
   }).override{
     buildPhase = "cd libretro && make";
   };
