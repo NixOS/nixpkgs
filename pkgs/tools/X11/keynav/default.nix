@@ -2,11 +2,11 @@
 , libXinerama, glib, cairo, xdotool }:
 
 stdenv.mkDerivation rec {
-  name = "keynav-0.20101014.3067";
+  name = "keynav-0.20110708.0";
 
   src = fetchurl {
     url = "https://semicomplete.googlecode.com/files/${name}.tar.gz";
-    sha256 = "05jpq17xqccv97mrqq2rgm4jwq4s8lkyq49rfaq7sz4gbnq1832k";
+    sha256 = "1gizjhji3yspxxxvb90js3z1bv18rbf5phxg8rciixpj3cccff8z";
   };
 
   buildInputs = [ pkgconfig libX11 xextproto libXtst libXi libXext libXinerama
