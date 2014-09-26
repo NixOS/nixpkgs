@@ -11,7 +11,7 @@ rec {
     then "i686-apple-darwin"
     else if stdenv.system == "x86_64-darwin"
     then "x86_64-apple-darwin"
-    else abort "no snapshot to boostrap for this platform (missing platform url suffix)";
+    else throw "no snapshot to boostrap for this platform (missing platform url suffix)";
 
   snapshotHash = if stdenv.system == "i686-linux"
     then "c92895421e6fa170dbd713e74334b8c3cf22b817"
@@ -21,7 +21,7 @@ rec {
     then "e2364b1f1ece338b9fc4c308c472fc2413bff04e"
     else if stdenv.system == "x86_64-darwin"
     then "09f92f06ab4f048acf71d83dc0426ff1509779a9"
-    else abort "no snapshot for platform ${stdenv.system}";
+    else throw "no snapshot for platform ${stdenv.system}";
 
   snapshotDate = "2014-09-19";
   snapshotName = "cargo-nightly-${platform}.tar.gz";
