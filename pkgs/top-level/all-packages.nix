@@ -4848,6 +4848,8 @@ let
     vpxSupport = !stdenv.isMips;
   };
 
+  ffmpeg_2_3 = callPackage ../development/libraries/ffmpeg/2.3.x.nix { };
+
   ffmpeg_2 = callPackage ../development/libraries/ffmpeg/2.x.nix { };
 
   ffmpeg = ffmpeg_2;
@@ -10401,7 +10403,9 @@ let
     inherit (xlibs) libX11;
   };
 
-  vlc = callPackage ../applications/video/vlc { };
+  vlc = callPackage ../applications/video/vlc {
+    ffmpeg = ffmpeg_2_3;
+  };
 
   vmpk = callPackage ../applications/audio/vmpk { };
 
