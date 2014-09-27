@@ -6801,6 +6801,8 @@ let
 
   categories = callPackage ../development/libraries/agda/categories {};
 
+  TotalParserCombinators = callPackage ../development/libraries/agda/TotalParserCombinators {};
+
   ### DEVELOPMENT / LIBRARIES / JAVA
 
   atermjava = callPackage ../development/libraries/java/aterm {
