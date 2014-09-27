@@ -384,3 +384,4 @@
   ./virtualisation/virtualbox-guest.nix
   #./virtualisation/xen-dom0.nix
 ]
+++ import ./nixuser-module-list.nix

@@ -28,12 +28,17 @@
   # ~/.nixpkgs/config.nix.
   config ? null
 
+, # Allow a nixuser configuration attribute set to be passed in as an
+  # argument.  Otherwise, it's read from $NIXUSER_CONFIG or
+  # ~/.nixuser/configuration.nix.
+  nixuserConfig ? null
+
 , crossSystem ? null
 , platform ? null
 }:
 
 
-let config_ = config; platform_ = platform; in # rename the function arguments
+let config_ = config; nixuserConfig_ = nixuserConfig; platform_ = platform; in # rename the function arguments
 
 let
 
@@ -42,7 +47,7 @@ let
   # The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.nixpkgs/config.nix.
   # for NIXOS (nixos-rebuild): use nixpkgs.config option
-  config =
+  nixpkgsConfig =
     let
       toPath = builtins.toPath;
       getEnv = x: if builtins ? getEnv then builtins.getEnv x else "";
@@ -66,6 +71,42 @@ let
       if builtins.isFunction configExpr
         then configExpr { inherit pkgs; }
         else configExpr;
+
+
+  # Merge the content found in the configuration file found at $NIXUSER_CONFIG or
+  # $HOME/.nixuser/configuration.nix with nixpkgsConfig.
+  # TODO: Think about: for NIXOS (nixos-rebuild): use nixpkgs.<username>.config option
+  config =
+    let
+      toPath = builtins.toPath;
+      getEnv = x: if builtins ? getEnv then builtins.getEnv x else "";
+      pathExists = name:
+        builtins ? pathExists && builtins.pathExists (toPath name);
+
+      configFile = getEnv "NIXUSER_CONFIG";
+      homeDir = getEnv "HOME";
+      configFile2 = homeDir + "/.nixuser/configuration.nix";
+
+      configuration =
+        if nixuserConfig_ != null && pathExists nixuserConfig_  then [(toPath nixuserConfig_)]
+        else if configFile != "" && pathExists configFile then [(toPath configFile)]
+        else if homeDir != "" && pathExists configFile2 then [(toPath configFile2)]
+        else [];
+
+      nixpkgs_options_base =  [ ../../nixos/modules/misc/nixpkgs.nix ];
+      nixuser_modules = import ../../nixos/modules/nixuser-module-list.nix;
+
+      nixpkgsConfig_ = [{nixpkgs.config = nixpkgsConfig;}];
+    in
+      if configuration == []
+      then nixpkgsConfig
+      else
+        (lib.evalModules {
+          modules = configuration ++ nixpkgs_options_base ++ nixuser_modules ++ nixpkgsConfig_;
+          args = {inherit pkgs;};
+          check = true;
+        }).config.nixpkgs.config;
+
 
   # Allow setting the platform in the config file. Otherwise, let's use a reasonable default (pc)
 
@@ -530,6 +571,8 @@ let
   apg = callPackage ../tools/security/apg { };
 
   grc = callPackage ../tools/misc/grc { };
+
+  nixuser = callPackage ../tools/package-management/nixuser { };
 
   otool = callPackage ../os-specific/darwin/otool { };
 
@@ -3143,6 +3186,9 @@ let
 
   # Import Haskell infrastructure.
 
+  # NOTE: If there would be an opposite for recurseIntoAttrs like e.g. dontListAttrs,
+  #       then haskell should be prefixed with it.
+  #       haskell can not be installed directly.
   haskell = let pkgs_       = pkgs // { gmp = gmp.override { withStatic = true; }; };
                 callPackage = newScope pkgs_;
                 newScope    = extra: lib.callPackageWith (pkgs_ // pkgs_.xorg // extra);
@@ -10450,7 +10496,11 @@ let
     flup = pythonPackages.flup;
   };
 
-  vim = callPackage ../applications/editors/vim { };
+  vimPlain = callPackage ../applications/editors/vim { };
+
+  vim = if isNull config.vim.profile
+    then vimPlain
+    else callPackage ../applications/editors/vim/vimProfiles.nix { vimProfiles=null; vimDefault = config.vim.profile; };
 
   macvim = callPackage ../applications/editors/vim/macvim.nix { };
 
@@ -10487,6 +10537,8 @@ let
     lua = pkgs.lua5;
     flags = [ "python" "X11" ]; # only flag "X11" by now
   });
+
+  vimProfiles = callPackage ../applications/editors/vim/vimProfiles.nix { vimProfiles = config.vimProfiles; };
 
   vimpc = callPackage ../applications/audio/vimpc { };
 
@@ -12122,7 +12174,7 @@ let
 
   viewnior = callPackage ../applications/graphics/viewnior { };
 
-  vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins { });
+  vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins { vim=vimPlain; });
 
   vimprobable2 = callPackage ../applications/networking/browsers/vimprobable2 {
     webkit = webkitgtk2;
