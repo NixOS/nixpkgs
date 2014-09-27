@@ -17,7 +17,7 @@ import ./make-test.nix {
 
         users.extraUsers.jenkins.extraGroups = [ "users" ];
 
-        systemd.services.jenkins.unitConfig.TimeoutSec = 240;
+        systemd.services.jenkins.unitConfig.TimeoutSec = 600;
       };
 
     slave =
