@@ -1,0 +1,40 @@
+diff --git a/lib/ssl/src/ssl_handshake.erl b/lib/ssl/src/ssl_handshake.erl
+index 22673e4..88ccb94 100644
+--- a/lib/ssl/src/ssl_handshake.erl
++++ b/lib/ssl/src/ssl_handshake.erl
+@@ -1732,6 +1732,9 @@ dec_hello_extensions(<<?UINT16(?EC_POINT_FORMATS_EXT), ?UINT16(Len),
+ 							#ec_point_formats{ec_point_format_list =
+ 									      ECPointFormats}});
+ 
++dec_hello_extensions(<<?UINT16(?SNI_EXT), ?UINT16(Len), Rest/binary>>, Acc) when Len == 0 ->
++    dec_hello_extensions(Rest, Acc#hello_extensions{sni = ""}); %% Server may send an empy SNI
++
+ dec_hello_extensions(<<?UINT16(?SNI_EXT), ?UINT16(Len),
+                 ExtData:Len/binary, Rest/binary>>, Acc) ->
+     <<?UINT16(_), NameList/binary>> = ExtData,
+diff --git a/lib/ssl/test/ssl_handshake_SUITE.erl b/lib/ssl/test/ssl_handshake_SUITE.erl
+index e5e942c..8dca733 100644
+--- a/lib/ssl/test/ssl_handshake_SUITE.erl
++++ b/lib/ssl/test/ssl_handshake_SUITE.erl
+@@ -39,6 +39,7 @@ all() -> [decode_hello_handshake,
+ 	  decode_unknown_hello_extension_correctly,
+ 	  encode_single_hello_sni_extension_correctly,
+ 	  decode_single_hello_sni_extension_correctly,
++	  decode_empty_server_sni_correctly,
+ 	  select_proper_tls_1_2_rsa_default_hashsign].
+ 
+ %%--------------------------------------------------------------------
+@@ -106,6 +107,13 @@ decode_single_hello_sni_extension_correctly(_Config) ->
+     Decoded = ssl_handshake:decode_hello_extensions(SNI),
+     Exts = Decoded.
+ 
++decode_empty_server_sni_correctly(_Config) ->
++    Exts = #hello_extensions{sni = ""},
++    SNI = <<?UINT16(?SNI_EXT),?UINT16(0)>>,
++    Decoded = ssl_handshake:decode_hello_extensions(SNI),
++    Exts = Decoded.
++
++
+ select_proper_tls_1_2_rsa_default_hashsign(_Config) ->
+     % RFC 5246 section 7.4.1.4.1 tells to use {sha1,rsa} as default signature_algorithm for RSA key exchanges
+     {sha, rsa} = ssl_handshake:select_hashsign_algs(undefined, ?rsaEncryption, {3,3}),

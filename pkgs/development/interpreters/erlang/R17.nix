@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
     ] ++ optional wxSupport [ mesa wxGTK xlibs.libX11 ]
       ++ optional odbcSupport [ unixODBC ];
 
-  patchPhase = '' sed -i "s@/bin/rm@rm@" lib/odbc/configure erts/configure '';
+  patches = [ ./ssl_handshake_17.3.patch ];
+  postPatch = '' sed -i "s@/bin/rm@rm@" lib/odbc/configure erts/configure '';
 
   preConfigure = ''
     export HOME=$PWD/../
