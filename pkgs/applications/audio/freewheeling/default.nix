@@ -1,6 +1,7 @@
-{ stdenv, fetchsvn, pkgconfig, autoconf, automake, gnutls, freetype,
-SDL, SDL_gfx, SDL_ttf, liblo, libxml2, alsaLib, jack2, libvorbis,
-libsndfile, libogg }:
+{ stdenv, fetchsvn, pkgconfig, autoconf, automake, gnutls, freetype
+, SDL, SDL_gfx, SDL_ttf, liblo, libxml2, alsaLib, jack2, libvorbis
+, libsndfile, libogg
+}:
 
 stdenv.mkDerivation {
   name = "freewheeling-100";
@@ -11,16 +12,17 @@ stdenv.mkDerivation {
     sha256 = "1m6z7p93xyha25qma9bazpzbp04pqdv5h3yrv6851775xsyvzksv";
   };
 
-  buildInputs = [ pkgconfig autoconf automake gnutls freetype
-                  SDL SDL_gfx SDL_ttf liblo libxml2 jack2 alsaLib
-                  libvorbis libsndfile libogg ];
+  buildInputs = [
+    pkgconfig autoconf automake gnutls freetype SDL SDL_gfx SDL_ttf
+    liblo libxml2 jack2 alsaLib libvorbis libsndfile libogg
+  ];
 
   preConfigure = "autoreconf -vfi";
 
   patches = [ ./am_path_sdl.patch ./xml.patch ];
-  
+
   meta = {
-    description = "A live looping instrument with jack and MIDI support";
+    description = "A live looping instrument with JACK and MIDI support";
     longDescription = ''
         Freewheeling allows us to build repetitive grooves
         by sampling and directing loops from within spirited improvisation.

@@ -1147,8 +1147,6 @@ let
 
   freetds = callPackage ../development/libraries/freetds { };
 
-  freewheeling = callPackage ../applications/audio/freewheeling { };
-
   ftgl = callPackage ../development/libraries/ftgl { };
 
   ftgl212 = callPackage ../development/libraries/ftgl/2.1.2.nix { };
@@ -9038,6 +9036,8 @@ let
   fluidsynth = callPackage ../applications/audio/fluidsynth { };
 
   fossil = callPackage ../applications/version-management/fossil { };
+
+  freewheeling = callPackage ../applications/audio/freewheeling { };
 
   fribid = callPackage ../applications/networking/browsers/mozilla-plugins/fribid { };
 
