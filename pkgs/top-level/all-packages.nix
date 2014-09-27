@@ -6789,6 +6789,8 @@ let
     inherit writeScriptBin;
   };
 
+  agdaPrelude = callPackage ../development/libraries/agda/agda-prelude {};
+
   AgdaStdlib = callPackage ../development/compilers/agda/stdlib.nix {
     inherit (haskellPackages) ghc filemanip;
   };
