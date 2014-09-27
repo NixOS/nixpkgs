@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, coreutils }:
+{ stdenv, fetchurl, ncurses, coreutils, pcre }:
 
 let
 
@@ -19,10 +19,10 @@ stdenv.mkDerivation {
     sha256 = "1bwfz9n850pclzmzrb437icfhzv1s5pgh2dhs92f194gdkxx4936";
   };
 
-  buildInputs = [ ncurses coreutils ];
+  buildInputs = [ ncurses coreutils pcre ];
 
   preConfigure = ''
-    configureFlags="--enable-maildir-support --enable-multibyte --enable-zprofile=$out/etc/zprofile --with-tcsetpgrp"
+    configureFlags="--enable-maildir-support --enable-multibyte --enable-zprofile=$out/etc/zprofile --with-tcsetpgrp --enable-pcre"
   '';
 
   # XXX: think/discuss about this, also with respect to nixos vs nix-on-X
