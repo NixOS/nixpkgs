@@ -6782,6 +6782,8 @@ let
 
   ### DEVELOPMENT / LIBRARIES / AGDA
 
+  aaronStumpStdlib = callPackage ../development/libraries/agda/aaron-stump-stdlib {};
+
   agda = callPackage ../build-support/agda {
     glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
     extension = self : super : {};
