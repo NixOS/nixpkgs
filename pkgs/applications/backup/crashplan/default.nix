@@ -12,10 +12,11 @@ in stdenv.mkDerivation rec {
 
   srcs = [ crashPlanArchive ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An online/offline backup solution";
     homepage = "http://www.crashplan.org";
-    license = stdenv.lib.licenses.unfree;
+    license = licenses.unfree;
+    maintainers = with maintainers; [ sztupi ];
   };
 
   buildInputs = [ makeWrapper cpio ];
