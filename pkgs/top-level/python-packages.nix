@@ -1165,6 +1165,22 @@ let
     };
   };
 
+  certifi = buildPythonPackage rec {
+    name = "certifi-${version}";
+    version = "14.05.14";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/c/certifi/${name}.tar.gz";
+      sha256 = "0s8vxzfz6s4m6fvxc7z25k9j35w0rh6jkw3wwcd1az1mssncn6qy";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = http://certifi.io/;
+      description = "Python package for providing Mozilla's CA Bundle.";
+      license = licenses.isc;
+      maintainers = [ maintainers.koral ];
+    };
+  };
 
   characteristic = buildPythonPackage rec {
     name = "characteristic-14.1.0";
@@ -3275,8 +3291,8 @@ let
       sha256 = "1wq083g9b1xsk89kb0wwpi4mxy63x6760vn9x5sk1fx36h27prqj";
     };
 
-    # For some reason "python setup.py test" doesn't work
-    doCheck = false;
+    # Only test dependencies
+    buildInputs = [ pkgs.git gevent geventhttpclient mock fastimport ];
 
     meta = with stdenv.lib; {
       description = "Simple Python implementation of the Git file formats and protocols.";
@@ -3461,6 +3477,23 @@ let
     meta = {
       homepage = http://pypi.python.org/pypi/eventlet/;
       description = "A concurrent networking library for Python";
+    };
+  };
+
+  fastimport = buildPythonPackage rec {
+    name = "fastimport-${version}";
+    version = "0.9.4";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/f/fastimport/${name}.tar.gz";
+      sha256 = "0k8x7552ypx9rc14vbsvg2lc6z0r8pv9laah28pdwyynbq10825d";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://launchpad.net/python-fastimport;
+      description = "VCS fastimport/fastexport parser";
+      maintainers = [ maintainers.koral ];
+      license = licenses.gpl2Plus;
     };
   };
 
@@ -3794,6 +3827,24 @@ let
     };
   };
 
+  geventhttpclient = buildPythonPackage rec {
+    name = "geventhttpclient-${version}";
+    version = "1.1.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/g/geventhttpclient/${name}.tar.gz";
+      sha256 = "1k7s4dnkmcfqqkmbqi0vvb2ns53r9cl2652mq20bgg65zj26j2l6";
+    };
+
+    propagatedBuildInputs = [ gevent certifi backports_ssl_match_hostname_3_4_0_2 ];
+
+    meta = with stdenv.lib; {
+      homepage = http://github.com/gwik/geventhttpclient;
+      description = "HTTP client library for gevent";
+      license = licenses.mit;
+      maintainers = [ maintainers.koral ];
+    };
+  };
 
   gevent-socketio = buildPythonPackage rec {
     name = "gevent-socketio-0.3.6";
