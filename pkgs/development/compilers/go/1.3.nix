@@ -8,8 +8,8 @@ let
   loaderArm = "${glibc}/lib/ld-linux.so.3";
   srcs = {
     golang = fetchurl {
-      url = https://storage.googleapis.com/golang/go1.3.1.src.tar.gz;
-      sha256 = "fdfa148cc12f1e4ea45a5565261bf43d8a2e7d1fad4a16aed592d606223b93a8";
+      url = https://storage.googleapis.com/golang/go1.3.2.src.tar.gz;
+      sha256 = "3e7488241c2bf30833629ecbef61e423fe861c6d6d69d2d21a16d2c29eef06fb";
     };
     tools = fetchhg {
       url = https://code.google.com/p/go.tools/;
