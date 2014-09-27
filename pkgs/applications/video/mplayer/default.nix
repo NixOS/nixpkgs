@@ -21,6 +21,7 @@
 , bs2bSupport ? false, libbs2b ? null
 # For screenshots
 , libpngSupport ? true, libpng ? null
+, libjpegSupport ? true, libjpeg ? null
 , useUnfreeCodecs ? false
 }:
 
@@ -46,6 +47,7 @@ assert jackaudioSupport -> jack2 != null;
 assert pulseSupport -> pulseaudio != null;
 assert bs2bSupport -> libbs2b != null;
 assert libpngSupport -> libpng != null;
+assert libjpegSupport -> libjpeg != null;
 
 let
 
@@ -121,6 +123,7 @@ stdenv.mkDerivation rec {
     ++ optional vdpauSupport libvdpau
     ++ optional speexSupport speex
     ++ optional libpngSupport libpng
+    ++ optional libjpegSupport libjpeg
     ++ optional bs2bSupport libbs2b
     ;
 
