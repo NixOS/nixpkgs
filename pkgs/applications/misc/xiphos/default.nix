@@ -7,18 +7,21 @@
 , libgsf, gconf
 , gtkhtml, libgtkhtml, libglade, scrollkeeper
 , webkitgtk
-, dbus_glib, enchant, isocodes, libuuid }:
+, dbus_glib, enchant, isocodes, libuuid
+}:
 
 stdenv.mkDerivation rec {
   name = "xiphos-${version}";  
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchurl {
     url = "http://downloads.sourceforge.net/project/gnomesword/Xiphos/${version}/${name}.tar.gz";
-    sha256 = "0xff31f89as1p7fn3vq8ishjhbmx6qhc25msh5ypa0zg8hm5dxbb";
+    sha256 = "1imd3v8knb5y3kddlfzp67p927zpfy0adjri89n7vcnipb9fy9i3";
   };
 
-  buildInputs = [ pkgconfig python intltool docbook2x docbook_xml_dtd_412 libxslt sword clucene_core gnome_doc_utils libgsf gconf gtkhtml libgtkhtml libglade scrollkeeper webkitgtk dbus_glib enchant isocodes libuuid ];
+  buildInputs = [ pkgconfig python intltool docbook2x docbook_xml_dtd_412 libxslt
+                  sword clucene_core gnome_doc_utils libgsf gconf gtkhtml libgtkhtml
+                  libglade scrollkeeper webkitgtk dbus_glib enchant isocodes libuuid ];
 
   prePatch = ''
     patchShebangs .;
