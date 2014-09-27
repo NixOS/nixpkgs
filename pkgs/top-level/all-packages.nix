@@ -1147,6 +1147,8 @@ let
 
   freetds = callPackage ../development/libraries/freetds { };
 
+  freewheeling = callPackage ../applications/audio/freewheeling { };
+
   ftgl = callPackage ../development/libraries/ftgl { };
 
   ftgl212 = callPackage ../development/libraries/ftgl/2.1.2.nix { };
