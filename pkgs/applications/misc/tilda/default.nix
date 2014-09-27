@@ -6,11 +6,11 @@
 stdenv.mkDerivation rec {
 
   name = "tilda-${version}";
-  version = "1.1.12";
+  version = "1.1.13";
 
   src = fetchurl {
     url = "https://github.com/lanoxx/tilda/archive/${name}.tar.gz";
-    sha256 = "10kjlcdaylkisb8i0cw4wfssg52mrz2lxr5zmw3q4fpnhh2xlaix";
+    sha256 = "1b9rnyrdvqmw2xjv899a4k6hvr9w482c4xvlpfnckckxdyp2852d";
   };
 
   buildInputs = [ pkgconfig autoreconfHook gettext confuse vte gtk makeWrapper ];
