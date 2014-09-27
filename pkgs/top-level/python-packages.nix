@@ -3470,6 +3470,11 @@ let
       md5 = "92978492871342ad64e8ae0ccfcf200c";
     };
 
+    preConfigure = ''
+      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LC_ALL="en_US.UTF-8"
+    '';
+
     propagatedBuildInputs = [ six pytz ];
 
     meta = {
@@ -5803,6 +5808,11 @@ let
       url = "https://pypi.python.org/packages/source/p/pelican/${name}.tar.gz";
       md5 = "8e57bdd075503903125b14621b1e533d";
     };
+
+    preConfigure = ''
+      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LC_ALL="en_US.UTF-8"
+    '';
 
     # Test data not provided
     #buildInputs = [nose mock];
