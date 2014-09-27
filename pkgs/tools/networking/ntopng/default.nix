@@ -6,7 +6,7 @@
 # directory.
 
 stdenv.mkDerivation rec {
-  name = "ntopng-1.2.0_r8116";
+  name = "ntopng-1.2.1";
 
   geoLiteCity = fetchurl {
     url = "http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz";
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/ntop/ntopng/old/${name}.tgz";
-    sha256 = "0y7xc0l77k2qi2qalwfqiw2z361hdypirfv4k5gi652pb20jc9j6";
+    url = "mirror://sourceforge/project/ntop/ntopng/${name}.tgz";
+    sha256 = "1db83cd1v4ivl8hxzzdvvdcgk22ji7mwrfnd5nnwll6kb11i364v";
   };
 
   patches = [
