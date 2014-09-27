@@ -4,13 +4,12 @@
 
 cabal.mkDerivation (self: {
   pname = "vado";
-  version = "0.0.1";
-  sha256 = "11b8glzzpzhm8cfw3vyvvvz3h0xid5r3prwhnvplajr7v3r562h2";
+  version = "0.0.2";
+  sha256 = "15kdqgpdy501g4hpldq44s7qgh4xchl6acnr95i5fj8ky4vgwfi0";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ attoparsec filepath text ];
   testDepends = [ attoparsec filepath QuickCheck text ];
-  jailbreak = true;
   meta = {
     homepage = "https://github.com/hamishmack/vado";
     description = "Runs commands on remote machines using ssh";
