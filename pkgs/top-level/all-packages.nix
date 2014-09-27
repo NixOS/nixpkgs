@@ -5084,6 +5084,8 @@ let
 
   qt_gstreamer = callPackage ../development/libraries/gstreamer/legacy/qt-gstreamer {};
 
+  qt_gstreamer1 = callPackage ../development/libraries/gstreamer/qt-gstreamer {};
+
   gnet = callPackage ../development/libraries/gnet { };
 
   gnu-efi = callPackage ../development/libraries/gnu-efi { };
@@ -5250,6 +5252,8 @@ let
   incrtcl = callPackage ../development/libraries/incrtcl { };
 
   indilib = callPackage ../development/libraries/indilib { };
+
+  indilib_0_9_9 = callPackage ../development/libraries/indilib/0_9_9.nix { };
 
   iniparser = callPackage ../development/libraries/iniparser { };
 
@@ -11115,13 +11119,18 @@ let
 
   kde4 = recurseIntoAttrs pkgs.kde412;
 
-  kde4_next = recurseIntoAttrs( lib.lowPrioSet pkgs.kde412 );
+  kde4_next = recurseIntoAttrs( lib.lowPrioSet pkgs.kde414 );
 
   kde412 = kdePackagesFor (pkgs.kde412 // {
       eigen = eigen2;
       libusb = libusb1;
       libcanberra = libcanberra_kde;
     }) ../desktops/kde-4.12;
+
+  kde414 = kdePackagesFor (pkgs.kde414 // {
+      libusb = libusb1;
+      libcanberra = libcanberra_kde;
+    }) ../desktops/kde-4.14;
 
   kdePackagesFor = self: dir:
     let callPackageOrig = callPackage; in
