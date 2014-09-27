@@ -3880,7 +3880,7 @@ let
   python33 = callPackage ../development/interpreters/python/3.3 { };
   python34 = hiPrio (callPackage ../development/interpreters/python/3.4 { });
 
-  pypy = callPackage ../development/interpreters/pypy/2.3 { };
+  pypy = callPackage ../development/interpreters/pypy/2.4 { };
 
   python26Full = callPackage ../development/interpreters/python/wrapper.nix {
     extraLibs = [];
@@ -4850,6 +4850,8 @@ let
     vpxSupport = !stdenv.isMips;
   };
 
+  ffmpeg_2_3 = callPackage ../development/libraries/ffmpeg/2.3.x.nix { };
+
   ffmpeg_2 = callPackage ../development/libraries/ffmpeg/2.x.nix { };
 
   ffmpeg = ffmpeg_2;
@@ -5379,8 +5381,6 @@ let
   libchamplain = callPackage ../development/libraries/libchamplain {
     inherit (gnome) libsoup;
   };
-
-  libchamplain_0_6 = callPackage ../development/libraries/libchamplain/0.6.nix {};
 
   libchardet = callPackage ../development/libraries/libchardet { };
 
@@ -6784,12 +6784,16 @@ let
 
   ### DEVELOPMENT / LIBRARIES / AGDA
 
+  aaronStumpStdlib = callPackage ../development/libraries/agda/aaron-stump-stdlib {};
+
   agda = callPackage ../build-support/agda {
     glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
     extension = self : super : {};
     Agda = haskellPackages.Agda;
     inherit writeScriptBin;
   };
+
+  agdaPrelude = callPackage ../development/libraries/agda/agda-prelude {};
 
   AgdaStdlib = callPackage ../development/compilers/agda/stdlib.nix {
     inherit (haskellPackages) ghc filemanip;
@@ -6800,6 +6804,10 @@ let
   bitvector = callPackage ../development/libraries/agda/bitvector {};
 
   categories = callPackage ../development/libraries/agda/categories {};
+
+  pretty = callPackage ../development/libraries/agda/pretty {};
+
+  TotalParserCombinators = callPackage ../development/libraries/agda/TotalParserCombinators {};
 
   ### DEVELOPMENT / LIBRARIES / JAVA
 
@@ -10405,7 +10413,9 @@ let
     inherit (xlibs) libX11;
   };
 
-  vlc = callPackage ../applications/video/vlc { };
+  vlc = callPackage ../applications/video/vlc {
+    ffmpeg = ffmpeg_2_3;
+  };
 
   vmpk = callPackage ../applications/audio/vmpk { };
 

@@ -433,12 +433,11 @@ let
 
 
   area53 = buildPythonPackage (rec {
-    name = "area53-b2c9cdcabd";
+    name = "Area53-0.94";
 
-    src = fetchgit {
-      url = git://github.com/bigmlcom/Area53.git;
-      rev = "b2c9cdcabd";
-      sha256 = "b0c12b8c48ed9180c7475fab18de50d63e1b517cfb46da4d2c66fc406fe902bc";
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/A/Area53/${name}.tar.gz";
+      sha256 = "0v9b7f8b6v21y410anx5sr52k2ac8jrzdf19q6m6p0zsdsf9vr42";
     };
 
     # error: invalid command 'test'
@@ -5247,12 +5246,12 @@ let
   });
 
   nose = buildPythonPackage rec {
-    version = "1.3.3";
+    version = "1.3.4";
     name = "nose-${version}";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/n/nose/${name}.tar.gz";
-      sha256 = "09h3a74hzw1cfx4ic19ibxq8kg6sl1n64px2mmb57f5yd3r2y35l";
+      sha256 = "00qymfgwg4iam4xi0w9bnv7lcb3fypq1hzfafzgs1rfmwaj67g3n";
     };
 
     buildInputs = [ coverage ];
@@ -9276,12 +9275,12 @@ let
   };
 
 
-  werkzeug = buildPythonPackage {
-    name = "werkzeug-0.9.4";
+  werkzeug = buildPythonPackage rec {
+    name = "Werkzeug-0.9.6";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/W/Werkzeug/Werkzeug-0.9.4.tar.gz";
-      md5 = "670fad41f57c13b71a6816765765a3dd";
+      url = "http://pypi.python.org/packages/source/W/Werkzeug/${name}.tar.gz";
+      md5 = "f7afcadc03b0f2267bdc156c34586043";
     };
 
     propagatedBuildInputs = [ itsdangerous ];

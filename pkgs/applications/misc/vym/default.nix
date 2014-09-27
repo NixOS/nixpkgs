@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.insilmaril.de/vym/;
     license = licenses.gpl2;
-    maintainer = [ maintainers.AndersonTorres ];
+    maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
   };
 }
