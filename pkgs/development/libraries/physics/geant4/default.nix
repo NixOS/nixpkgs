@@ -142,37 +142,6 @@ let
   };
 
 in {
-
-  ### VERSION 9.6
-
-  v9_6 = buildGeant4 {
-    inherit (fetchGeant4.v9_6) version src;
-  };
-
-  v9_6_1 = buildGeant4 {
-    inherit (fetchGeant4.v9_6_1) version src;
-  };
-
-  v9_6_2 = buildGeant4 {
-    inherit (fetchGeant4.v9_6_2) version src;
-  };
-
-  v9_6_3 = buildGeant4 {
-    inherit (fetchGeant4.v9_6_3) version src;
-  };
-
-  ## VERSION 10.0
-
-  v10_0 = buildGeant4 {
-    inherit (fetchGeant4.v10_0) version src;
-    multiThreadingCapable = true;
-  };
-
-  v10_0_1 = buildGeant4 {
-    inherit (fetchGeant4.v10_0_1) version src;
-    multiThreadingCapable = true;
-  };
-
   v10_0_2 = buildGeant4 {
     inherit (fetchGeant4.v10_0_2) version src;
     multiThreadingCapable = true;

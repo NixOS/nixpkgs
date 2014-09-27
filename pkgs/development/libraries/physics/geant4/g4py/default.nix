@@ -63,41 +63,6 @@ let
     };  
 
 in {
-
-  ### VERSION 9.6 
-
-  v9_6 = buildG4py {
-    inherit (fetchGeant4.v9_6) version src;
-    geant4 = geant4.v9_6;
-  };  
-
-  v9_6_1 = buildG4py {
-    inherit (fetchGeant4.v9_6_1) version src;
-    geant4 = geant4.v9_6_1;
-  };  
-
-  v9_6_2 = buildG4py {
-    inherit (fetchGeant4.v9_6_2) version src;
-    geant4 = geant4.v9_6_2;
-  };  
-
-  v9_6_3 = buildG4py {
-    inherit (fetchGeant4.v9_6_3) version src;
-    geant4 = geant4.v9_6_3;
-  };  
-
-  ## VERSION 10.0
-
-  v10_0 = buildG4py {
-    inherit (fetchGeant4.v10_0) version src;
-    geant4 = geant4.v10_0;
-  };  
-
-  v10_0_1 = buildG4py {
-    inherit (fetchGeant4.v10_0_1) version src;
-    geant4 = geant4.v10_0_1;
-  };  
-
   v10_0_2 = buildG4py {
     inherit (fetchGeant4.v10_0_2) version src;
     geant4 = geant4.v10_0_2;
