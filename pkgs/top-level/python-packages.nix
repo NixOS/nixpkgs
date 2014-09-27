@@ -4526,10 +4526,11 @@ let
 
     propagatedBuildInputs = [ requests2 ];
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = "https://github.com/ghickman/linode";
-      description = "A thin python wrapper around Linode's API.";
+      description = "A thin python wrapper around Linode's API";
       license = licenses.mit;
+      maintainers = [ maintainers.nslqqq ];
     };
   };
 

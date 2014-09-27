@@ -91,6 +91,7 @@
   msackman = "Matthew Sackman <matthew@wellquite.org>";
   nathan-gs = "Nathan Bijnens <nathan@nathan.gs>";
   notthemessiah = "Brian Cohen <brian.cohen.88@gmail.com>";
+  nslqqq = "Nikita Mikhailov <nslqqq@gmail.com>";
   ocharles = "Oliver Charles <ollie@ocharles.org.uk>";
   offline = "Jaka Hudoklin <jakahudoklin@gmail.com>";
   orbitz = "Malcolm Matalka <mmatalka@gmail.com>";
