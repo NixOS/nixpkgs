@@ -458,7 +458,7 @@ in
         restartIfChanged = false;
 
         environment =
-          { FONTCONFIG_FILE = "/etc/fonts/fonts.conf"; # !!! cleanup
+          {
             XKB_BINDIR = "${xorg.xkbcomp}/bin"; # Needed for the Xkb extension.
             XORG_DRI_DRIVER_PATH = "/run/opengl-driver/lib/dri"; # !!! Depends on the driver selected at runtime.
             LD_LIBRARY_PATH = concatStringsSep ":" (
