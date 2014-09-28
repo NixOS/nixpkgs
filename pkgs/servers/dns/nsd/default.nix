@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     description = "Authoritative only, high performance, simple and open source name server.";
     license = "BSD";
     homepage = http://www.nlnetlabs.nl;
+    maintainers = with stdenv.lib.maintainers; [ hrdinka ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }
