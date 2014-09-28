@@ -1392,6 +1392,8 @@ let
     # error: invalid command 'test'
     doCheck = false;
 
+    propagatedBuildInputs = [ six ];
+
     meta = {
       description = "Config file reading, writing and validation.";
       homepage = http://pypi.python.org/pypi/configobj;
