@@ -2370,6 +2370,8 @@ let
 
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
 
+  tty-clock = callPackage ../tools/misc/tty-clock { };
+
   ttysnoop = callPackage ../os-specific/linux/ttysnoop {};
 
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
