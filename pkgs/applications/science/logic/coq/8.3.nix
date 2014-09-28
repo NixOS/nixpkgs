@@ -54,7 +54,7 @@ stdenv.mkDerivation {
    cp ide/*.cmi ide/ide.*a $out/lib/coq/ide/
   '' else "";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Coq proof assistant";
     longDescription = ''
       Coq is a formal proof management system.  It provides a formal language
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
       machine-checked proofs.
     '';
     homepage = "http://coq.inria.fr";
-    license = "LGPL";
-    maintainers = [ stdenv.lib.maintainers.roconnor ];
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ roconnor vbgl ];
   };
 }
