@@ -3802,6 +3802,10 @@ let
     pythonProtobuf = pythonPackages.protobuf;
   };
 
+  nix-exec = callPackage ../development/interpreters/nix-exec {
+    nix = nixUnstable;
+  };
+
   octave = callPackage ../development/interpreters/octave {
     fltk = fltk13;
     qt = null;
