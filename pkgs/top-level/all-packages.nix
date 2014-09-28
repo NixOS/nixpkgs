@@ -9892,6 +9892,10 @@ let
 
   panotools = callPackage ../applications/graphics/panotools { };
 
+  paprefs = callPackage ../applications/audio/paprefs {
+    inherit (gnome) libglademm gconfmm;
+  };
+
   pavucontrol = callPackage ../applications/audio/pavucontrol { };
 
   paraview = callPackage ../applications/graphics/paraview { };
