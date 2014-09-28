@@ -33,11 +33,12 @@ stdenv.mkDerivation rec {
      ++ edf rootServer       "root-server"
      ++ [ "--with-ssl=${openssl}" "--with-libevent=${libevent}" ];
 
-  meta = {
-    description = "Authoritative only, high performance, simple and open source name server.";
-    license = "BSD";
+  meta = with stdenv.lib; {
     homepage = http://www.nlnetlabs.nl;
-    maintainers = with stdenv.lib.maintainers; [ hrdinka ];
-    platforms = with stdenv.lib.platforms; linux;
+    description = "Authoritative only, high performance, simple and open source name server";
+    license = licenses.bsd3;
+
+    platforms = platforms.unix;
+    maintainers = [ maintainers.hrdinka ];
   };
 }
