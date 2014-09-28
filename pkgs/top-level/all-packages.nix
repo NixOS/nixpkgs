@@ -11438,6 +11438,18 @@ let
     lablgtk = ocamlPackages_3_12_1.lablgtk_2_14;
   };
 
+  mkCoqPackages_8_4 = self: let callPackage = newScope self; in {
+
+    containers = callPackage ../development/coq-modules/containers {};
+
+    mathcomp = callPackage ../development/coq-modules/mathcomp {};
+
+    ssreflect = callPackage ../development/coq-modules/ssreflect {};
+
+  };
+
+  coqPackages = recurseIntoAttrs (mkCoqPackages_8_4 coqPackages);
+
   cvc3 = callPackage ../applications/science/logic/cvc3 {};
 
   ekrhyper = callPackage ../applications/science/logic/ekrhyper {};
