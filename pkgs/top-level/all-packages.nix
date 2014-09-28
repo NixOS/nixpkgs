@@ -6786,7 +6786,7 @@ let
 
   ### DEVELOPMENT / LIBRARIES / AGDA
 
-  aaronStumpStdlib = callPackage ../development/libraries/agda/aaron-stump-stdlib {};
+  agdaIowaStdlib = callPackage ../development/libraries/agda/agda-iowa-stdlib {};
 
   agda = callPackage ../build-support/agda {
     glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;

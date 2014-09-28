@@ -2,7 +2,7 @@
 
 agda.mkDerivation (self: rec {
   version = "18437";
-  name = "aaron-stump-stdlib-${version}";
+  name = "agda-iowa-stdlib-${version}";
 
   src = fetchsvn {
     url = "https://svn.divms.uiowa.edu/repos/clc/projects/agda/lib";
@@ -18,7 +18,7 @@ agda.mkDerivation (self: rec {
 
   meta = {
     homepage = "https://svn.divms.uiowa.edu/repos/clc/projects/agda/lib/";
-    description = "A standard library by Aaron Stump";
+    description = "Agda standard library developed at Iowa";
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
