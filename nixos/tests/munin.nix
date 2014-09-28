@@ -18,7 +18,7 @@ import ./make-test.nix {
              '';
            };
           };
-          systemd.services.munin-node.unitConfig.TimeoutSec = 600;
+          systemd.services.munin-node.serviceConfig.TimeoutStartSec = "3min";
         };
     };
 
