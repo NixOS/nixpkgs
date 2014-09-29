@@ -16,7 +16,7 @@ assert stdenv.gcc.gcc != null;
 
 */
 
-with ((import ./common.nix) {inherit stdenv; version = "0.12.0-pre-7fbbfe6bf"; });
+with ((import ./common.nix) {inherit stdenv; version = "0.12.0-pre-9a68da740"; });
 
 let snapshot = if stdenv.system == "i686-linux"
       then "5c2132b65f45c21b43d28de6a9460978b1a7b08a"
