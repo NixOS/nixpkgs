@@ -9483,6 +9483,10 @@ let
 
   keymon = callPackage ../applications/video/key-mon { };
 
+  kid3 = callPackage ../applications/audio/kid3 {
+    qt = qt4;
+  };
+
   kino = callPackage ../applications/video/kino {
     inherit (gnome) libglade;
   };
