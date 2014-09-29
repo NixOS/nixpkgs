@@ -2364,6 +2364,8 @@ let
 
   tpm-tools = callPackage ../tools/security/tpm-tools { };
 
+  traceroute = callPackage ../tools/networking/traceroute { };
+
   trickle = callPackage ../tools/networking/trickle {};
 
   trousers = callPackage ../tools/security/trousers { };
