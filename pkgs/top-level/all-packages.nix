@@ -4587,6 +4587,8 @@ let
     bdbSupport = true;
   };
 
+  assimp = callPackage ../development/libraries/assimp { };
+
   asio = callPackage ../development/libraries/asio { };
 
   aspell = callPackage ../development/libraries/aspell { };
