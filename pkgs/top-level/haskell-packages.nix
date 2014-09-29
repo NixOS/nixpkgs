@@ -293,9 +293,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   bloomfilter = callPackage ../development/libraries/haskell/bloomfilter {};
 
-  bmp = callPackage ../development/libraries/haskell/bmp {
-    binary = self.binary_0_7_2_1;
-  };
+  bmp = callPackage ../development/libraries/haskell/bmp {};
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
