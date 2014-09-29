@@ -99,7 +99,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     hscolour = self.hscolourBootstrap;
     inherit enableLibraryProfiling enableCheckPhase
       enableStaticLibraries enableSharedLibraries enableSharedExecutables;
-    glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
     extension = self : super : {};
   };
 
