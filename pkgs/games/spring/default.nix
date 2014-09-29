@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/bin/spring" \
-      --prefix LD_LIBRARY_PATH : "${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib::${systemd}/lib"
+      --prefix LD_LIBRARY_PATH : "${stdenv.gcc.gcc}/lib::${systemd}/lib"
   '';
 
   meta = with stdenv.lib; {
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     description = "A powerful real-time strategy (RTS) game engine";
     license = licenses.gpl2;
     maintainers = [ maintainers.phreedom maintainers.qknight maintainers.iElectric ];
-    platforms = platforms.mesaPlatforms;
+    platforms = platforms.linux;
   };
 }

@@ -2732,7 +2732,8 @@ let
     libc = glibc;
     binutils = binutils;
     shell = bash;
-    inherit libcxx coreutils zlib;
+    inherit coreutils zlib;
+    extraPackages = [ libcxx ];
     nativeTools = false;
     nativeLibc = false;
   };
@@ -2771,6 +2772,8 @@ let
 
   gcc       = gcc48;
   gcc_multi = gcc48_multi;
+
+  gccApple = throw "gccApple is no longer supported";
 
   gcc33 = wrapGCC (import ../development/compilers/gcc/3.3 {
     inherit fetchurl stdenv noSysDirs;
