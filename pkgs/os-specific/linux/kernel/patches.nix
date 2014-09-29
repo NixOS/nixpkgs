@@ -61,16 +61,16 @@ rec {
 
   grsecurity_stable = grsecPatch
     { kversion  = "3.14.19";
-      revision  = "201409180900";
+      revision  = "201409282024";
       branch    = "stable";
-      sha256    = "1kpv43imm9yhfg4pric40snqpgh91w7pqhikzfkzrybg5zza9x5j";
+      sha256    = "05xjfllw6kx6y2cs0pwvlp5cpspqb7nf7kgfzk2z5gd04vc8ywqm";
     };
 
   grsecurity_unstable = grsecPatch
     { kversion  = "3.16.3";
-      revision  = "201409180901";
+      revision  = "201409282025";
       branch    = "test";
-      sha256    = "1gcm16hlfcabwmrhm4fcgmv7136d6mh3fcpnqjsav1mgpvh84zzz";
+      sha256    = "14vzg513xkqa71hp9drs2z9smamhxh87fxxyfjdbi3k93cbvkk22";
     };
 
   grsec_fix_path =
