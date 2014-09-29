@@ -40,6 +40,9 @@ let
 
   # helpers
 
+  # glibcLocales doesn't build on Darwin
+  localePath = optionalString (! stdenv.isDarwin) "${pkgs.glibcLocales}/lib/locale/locale-archive";
+
   callPackage = pkgs.newScope pythonPackages;
 
   # global distutils config used by buildPythonPackage
@@ -2319,7 +2322,7 @@ let
     };
 
     preBuild = ''
-      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
@@ -4030,7 +4033,7 @@ let
     };
 
     preBuild = ''
-      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
@@ -4791,7 +4794,7 @@ let
     doCheck = false;
 
     preBuild = ''
-      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
@@ -4963,7 +4966,7 @@ let
 
     # some files in tests dir include unicode names
     preBuild = ''
-      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
@@ -5006,7 +5009,7 @@ let
     };
 
     preCheck = ''
-      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
@@ -6088,7 +6091,7 @@ let
 
     preCheck = ''
       export LANG="en_US.UTF-8"
-      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LOCALE_ARCHIVE=${localePath}
     '';
 
     meta = {
@@ -7946,8 +7949,7 @@ let
 
     preConfigure = ''
       export LANG="en_US.UTF-8";
-    '' + stdenv.lib.optionalString stdenv.isLinux ''
-      export LOCALE_ARCHIVE="${pkgs.glibcLocales}/lib/locale/locale-archive";
+      export LOCALE_ARCHIVE=${localePath}
     '';
 
     patchPhase = ''
@@ -8005,7 +8007,7 @@ let
 
     preCheck = ''
       export LANG="en_US.UTF-8"
-      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LOCALE_ARCHIVE=${localePath}
     '';
 
     meta = with stdenv.lib; {
@@ -8068,7 +8070,7 @@ let
 
     preCheck = ''
       export LANG="en_US.UTF-8"
-      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LOCALE_ARCHIVE=${localePath}
     '';
 
     buildInputs = [ pytest py mock ];
@@ -8529,7 +8531,7 @@ let
     version = "1.2.7";
 
     preBuild = ''
-      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
