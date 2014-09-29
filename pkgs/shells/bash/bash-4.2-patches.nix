@@ -49,4 +49,6 @@ patch: [
 (patch "046" "0vc1ngkxkamwr022ww3vjp9ww9c647az4pjn175c1v60d0xk5hcm")
 (patch "047" "0ymgimqz65sx2izg1dvm1h5cc01arl3j9j5137212l1ls00r55y1")
 (patch "048" "091xk1ms7ycnczsl3fx461gjhj69j6ycnfijlymwj6mj60ims6km")
+(patch "049" "03jipi8qz5baf1dyhld7yvazkkad7lz5czchrjsrnglzvm6df74h")
+(patch "050" "19lb9nh0x5siwf21xkga3khy5pa3srfrlx97mby4cfz8am2bh68s")
 ]
