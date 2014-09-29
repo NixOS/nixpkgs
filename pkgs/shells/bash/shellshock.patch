@@ -1,0 +1,83 @@
+From 37783aef036c64123db409728a681a1106133f99 Mon Sep 17 00:00:00 2001
+From: aszlig <aszlig@redmoonstudios.org>
+Date: Mon, 29 Sep 2014 11:06:55 +0200
+Subject: [PATCH] variables: Don't define exported functions.
+
+As POSIX shells do not have support for this, I think this is currently
+the best way to deal with Shellshock because the functionality of
+exporting functions is rarely used. And if someone _really_ needs that
+functionality, (s)he can still eval the variable selectively.
+
+Fixing the parser however is going to be like patching a window that's
+broken into a lot of tiny glass shards.
+
+Signed-off-by: aszlig <aszlig@redmoonstudios.org>
+---
+ variables.c | 45 ---------------------------------------------
+ 1 file changed, 45 deletions(-)
+
+diff --git variables.c variables.c
+index d7c6d10..8321018 100644
+--- variables.c
++++ variables.c
+@@ -336,50 +336,6 @@ initialize_shell_variables (env, privmode)
+ 
+       temp_var = (SHELL_VAR *)NULL;
+ 
+-      /* If exported function, define it now.  Don't import functions from
+-	 the environment in privileged mode. */
+-      if (privmode == 0 && read_but_dont_execute == 0 && STREQN ("() {", string, 4))
+-	{
+-	  string_length = strlen (string);
+-	  temp_string = (char *)xmalloc (3 + string_length + char_index);
+-
+-	  strcpy (temp_string, name);
+-	  temp_string[char_index] = ' ';
+-	  strcpy (temp_string + char_index + 1, string);
+-
+-	  /* Don't import function names that are invalid identifiers from the
+-	     environment. */
+-	  if (legal_identifier (name))
+-	    parse_and_execute (temp_string, name, SEVAL_NONINT|SEVAL_NOHIST|SEVAL_FUNCDEF|SEVAL_ONECMD);
+-
+-	  if (temp_var = find_function (name))
+-	    {
+-	      VSETATTR (temp_var, (att_exported|att_imported));
+-	      array_needs_making = 1;
+-	    }
+-	  else
+-	    report_error (_("error importing function definition for `%s'"), name);
+-	}
+-#if defined (ARRAY_VARS)
+-#  if 0
+-      /* Array variables may not yet be exported. */
+-      else if (*string == '(' && string[1] == '[' && string[strlen (string) - 1] == ')')
+-	{
+-	  string_length = 1;
+-	  temp_string = extract_array_assignment_list (string, &string_length);
+-	  temp_var = assign_array_from_string (name, temp_string);
+-	  FREE (temp_string);
+-	  VSETATTR (temp_var, (att_exported | att_imported));
+-	  array_needs_making = 1;
+-	}
+-#  endif
+-#endif
+-#if 0
+-      else if (legal_identifier (name))
+-#else
+-      else
+-#endif
+-	{
+ 	  temp_var = bind_variable (name, string, 0);
+ 	  if (temp_var)
+ 	    {
+@@ -389,7 +345,6 @@ initialize_shell_variables (env, privmode)
+ 		VSETATTR (temp_var, (att_exported | att_imported | att_invisible));
+ 	      array_needs_making = 1;
+ 	    }
+-	}
+ 
+       name[char_index] = '=';
+       /* temp_var can be NULL if it was an exported function with a syntax
+-- 
+2.1.0
