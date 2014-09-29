@@ -2,13 +2,13 @@
 , libtoxcore, openal, libvpx, freealut, libconfig, pkgconfig }:
 
 let
-  version = "0.5.0";
+  version = "0.5.1";
 in stdenv.mkDerivation rec {
   name = "toxic-${version}";
 
   src = fetchurl {
     url = "https://github.com/Tox/toxic/archive/v${version}.tar.gz";
-    sha256 = "01k32431zay1mdqvrw5qk0pjxb7gkcxr78w1a06g23b7ymjwfawv";
+    sha256 = "0zzfgwm17a4xcy9l0ll2pksp45mz6f4s3isdrgjpw1xibv9xnzcm";
   };
 
   makeFlags = [ "-Cbuild" "VERSION=${version}" "PREFIX=$(out)" ];
