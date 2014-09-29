@@ -12,15 +12,16 @@ stdenv.mkDerivation {
 
   patches = [ ./no-stdc++.patch ./darwin.patch ];
 
-  NIX_CFLAGS_LINK = "-L${libunwind}/lib -lunwind";
-
   buildInputs = [ coreutils ];
 
   postUnpack = ''
     unpackFile ${libcxx.src}
-    export NIX_CFLAGS_COMPILE="-I${libunwind}/include -I$PWD/include -I$(readlink -f libcxx-*)/include"
+    export NIX_CFLAGS_COMPILE="-I$PWD/include -I$(readlink -f libcxx-*)/include"
   '' + lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
+  '' + lib.optionalString (!stdenv.isDarwin) ''
+    export NIX_CFLAGS_COMPILE+=" -I${libunwind}/include"
+    export NIX_CFLAGS_LINK+=" -L${libunwind}/lib -lunwind"
   '';
 
   installPhase = if stdenv.isDarwin

@@ -28,12 +28,7 @@ import ../generic rec {
     nativeTools = false;
     nativeLibc = true;
     inherit stdenv;
-    extraPackages =
-      stdenv.lib.optional haveLibCxx (pkgs.libcxx.override {
-        libcxxabi = pkgs.libcxxabi.override {
-          libunwind = pkgs.libunwindNative;
-        };
-      });
+    extraPackages = stdenv.lib.optional haveLibCxx pkgs.libcxx;
     binutils = import ../../build-support/native-darwin-cctools-wrapper {inherit stdenv;};
     clang = if useClang33 then pkgs.clang_33.clang else pkgs.clang.clang;
     coreutils = pkgs.coreutils;
