@@ -94,7 +94,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
             # default buildInputs are just ghc, if more buildInputs are required
             # buildInputs can be extended by the client by using extraBuildInputs,
             # but often propagatedBuildInputs is preferable anyway
-            buildInputs = [ghc Cabal] ++ self.extraBuildInputs;
+            buildInputs = [ghc Cabal glibcLocales] ++ self.extraBuildInputs;
             extraBuildInputs = self.buildTools ++
                                (optionals self.doCheck self.testDepends) ++
                                (optional self.hyperlinkSource hscolour) ++
@@ -176,7 +176,6 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
 
             # GHC needs the locale configured during the Haddock phase.
             LANG = "en_US.UTF-8";
-            LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
 
             # compiles Setup and configures
             configurePhase = ''

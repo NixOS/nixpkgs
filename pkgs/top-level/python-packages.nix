@@ -2337,8 +2337,9 @@ let
       sha256 = "0qk8fv8cszzqpdi3wl9vvkym1jil502ycn6sic4jrxckw5s9jsfj";
     };
 
+    buildInputs = [ pkgs.glibcLocales ];
+
     preBuild = ''
-      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
@@ -3510,10 +3511,10 @@ let
     };
 
     preConfigure = ''
-      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
       export LC_ALL="en_US.UTF-8"
     '';
 
+    buildInputs = [ pkgs.glibcLocales ];
     propagatedBuildInputs = [ six pytz ];
 
     meta = {
@@ -4085,11 +4086,10 @@ let
     };
 
     preBuild = ''
-      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
-    buildInputs = [ six ];
+    buildInputs = [ six pkgs.glibcLocales ];
 
     meta = with stdenv.lib; {
       description = "Library collecting some useful snippets";
@@ -4866,13 +4866,13 @@ let
     doCheck = false;
 
     preBuild = ''
-      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
     buildInputs = [
       pkgs.libjpeg pkgs.freetype pkgs.zlib
       pillow twitter pyfiglet requests arrow dateutil modules.readline
+      pkgs.glibcLocales
     ];
 
     meta = {
@@ -5038,9 +5038,10 @@ let
 
     # some files in tests dir include unicode names
     preBuild = ''
-      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
+
+    buildInputs = [ pkgs.glibcLocales ];
 
     propagatedBuildInputs = [ argparse jinja2 six modules.readline ] ++
                             (optionals isPy26 [ importlib ordereddict ]);
@@ -5081,9 +5082,10 @@ let
     };
 
     preCheck = ''
-      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
+
+    buildInputs = [ pkgs.glibcLocales ];
 
     meta = {
       homepage = http://alastair/python-musicbrainz-ngs;
@@ -6163,8 +6165,9 @@ let
 
     preCheck = ''
       export LANG="en_US.UTF-8"
-      export LOCALE_ARCHIVE=${localePath}
     '';
+
+    buildInputs = [ pkgs.glibcLocales ];
 
     meta = {
       description = "Simple Python library for easily displaying tabular data in a visually appealing ASCII table format";
@@ -8038,11 +8041,10 @@ let
       sha256 = "099sc7ajpp6hbgrx3c0bl6hhkz1mhnr0ahvc7s4i3f3b7q1zfn7l";
     };
 
-    buildInputs = [ pkgs.geos ];
+    buildInputs = [ pkgs.geos pkgs.glibcLocales ];
 
     preConfigure = ''
       export LANG="en_US.UTF-8";
-      export LOCALE_ARCHIVE=${localePath}
     '';
 
     patchPhase = ''
@@ -8100,8 +8102,9 @@ let
 
     preCheck = ''
       export LANG="en_US.UTF-8"
-      export LOCALE_ARCHIVE=${localePath}
     '';
+
+    buildInputs = [ pkgs.glibcLocales ];
 
     meta = with stdenv.lib; {
       description = "A Python library for symbolic mathematics";
@@ -8163,10 +8166,9 @@ let
 
     preCheck = ''
       export LANG="en_US.UTF-8"
-      export LOCALE_ARCHIVE=${localePath}
     '';
 
-    buildInputs = [ pytest py mock ];
+    buildInputs = [ pytest py mock pkgs.glibcLocales ];
 
     meta = with stdenv.lib; {
       maintainers = [ maintainers.iElectric ];
@@ -8624,7 +8626,6 @@ let
     version = "1.2.7";
 
     preBuild = ''
-      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
@@ -8633,7 +8634,7 @@ let
       md5 = "6dbecef27dffc41c8cd8aab8a8b3fdfb";
     };
 
-    buildInputs = [ nose ];
+    buildInputs = [ nose pkgs.glibcLocales ];
 
     propagatedBuildInputs = [ six mock ];
 
