@@ -10,6 +10,7 @@
 , proprietaryCodecs ? true
 , enablePepperFlash ? false
 , enablePepperPDF ? false
+, enableWideVine ? false
 , cupsSupport ? false
 , pulseSupport ? false
 , hiDPISupport ? false
@@ -35,7 +36,7 @@ let
     sandbox = callPackage ./sandbox.nix { };
 
     plugins = callPackage ./plugins.nix {
-      inherit enablePepperFlash enablePepperPDF;
+      inherit enablePepperFlash enablePepperPDF enableWideVine;
     };
   };
 
