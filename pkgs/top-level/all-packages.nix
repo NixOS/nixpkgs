@@ -1302,6 +1302,8 @@ let
     inherit (gnome) libsoup;
   };
 
+  gsutil = callPackage ../tools/networking/gsutil {};
+
   gt5 = callPackage ../tools/system/gt5 { };
 
   gtest = callPackage ../development/libraries/gtest {};
