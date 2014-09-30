@@ -8,6 +8,7 @@
 with stdenv.lib;
 let
   wrapArgs = "--prefix PYTHONPATH : \"$(toPythonPath $out)\""
+    + " --prefix PYTHONPATH : \"$(toPythonPath ${python.modules.readline})\""
     + " --prefix PATH : \"$out/bin\""
     + " --prefix LD_LIBRARY_PATH : \"$out/lib\"";
 in
@@ -45,6 +46,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/ceph ${wrapArgs}
     wrapProgram $out/bin/ceph-brag ${wrapArgs}
     wrapProgram $out/bin/ceph-rest-api ${wrapArgs}
+    wrapProgram $out/sbin/ceph-create-keys ${wrapArgs}
+    wrapProgram $out/sbin/ceph-disk ${wrapArgs}
   '';
 
   enableParallelBuilding = true;
