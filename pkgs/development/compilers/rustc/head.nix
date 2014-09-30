@@ -1,4 +1,6 @@
-{stdenv, fetchurl, fetchgit, which, file, perl, curl, python27, makeWrapper}:
+{ stdenv, fetchurl, fetchgit, which, file, perl, curl, python27, makeWrapper
+, tzdata, git
+}:
 
 assert stdenv.gcc.gcc != null;
 
@@ -63,7 +65,7 @@ in stdenv.mkDerivation {
   configureFlags = [ "--enable-local-rust" "--local-rust-root=$snapshot" ];
 
   # The compiler requires cc, so we patch the source to tell it where to find it
-  patches = [ ./hardcode_paths.HEAD.patch ./local_stage0.HEAD.patch ];
+  patches = [ ./hardcode_paths.HEAD.patch ./local_stage0.HEAD.patch ./override_env.HEAD.patch ];
   postPatch = ''
     substituteInPlace src/librustc/back/link.rs \
       --subst-var-by "ccPath" "${stdenv.gcc}/bin/cc"
@@ -71,6 +73,11 @@ in stdenv.mkDerivation {
       --subst-var-by "arPath" "${stdenv.gcc.binutils}/bin/ar"
   '';
 
-  buildInputs = [ which file perl curl python27 makeWrapper ];
-  enableParallelBuilding = true;
+  buildInputs = [ which file perl curl python27 makeWrapper git ];
+
+  enableParallelBuilding = false; # disabled due to rust-lang/rust#16305
+
+  preCheck = "export TZDIR=${tzdata}/share/zoneinfo";
+
+  doCheck = true;
 }
