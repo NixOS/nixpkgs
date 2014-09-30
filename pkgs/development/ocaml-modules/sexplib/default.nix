@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, ocaml_typeconv}:
+{stdenv, fetchurl, ocaml, findlib, ocaml_typeconv, camlp4}:
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
@@ -14,14 +14,16 @@ stdenv.mkDerivation {
     sha256 = "0qh0zqp5nakqpmmhh4x7cg03vqj3j2bj4zj0nqdlksai188p9ila";
   };
 
-  buildInputs = [ocaml findlib ocaml_typeconv ];
+  buildInputs = [ocaml findlib];
+  propagatedBuildInputs = [ocaml_typeconv camlp4];
 
   createFindlibDestdir = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://ocaml.janestreet.com/;
     description = "Library for serializing OCaml values to and from S-expressions";
-    license = stdenv.lib.licenses.asl20;
+    license = licenses.asl20;
+    maintainers = [ maintainers.vbgl ];
     platforms = ocaml.meta.platforms;
   };
 }
