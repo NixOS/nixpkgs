@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.libpng.org/pub/png/libpng.html;
     license = stdenv.lib.licenses.libpng;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    branch = "1.2";
   };
 }

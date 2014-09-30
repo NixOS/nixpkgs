@@ -104,5 +104,6 @@ stdenv.mkDerivation rec {
     license = if (fdkAACSupport || faacSupport) then stdenv.lib.licenses.unfree else stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    branch = "2.3";
   };
 }
