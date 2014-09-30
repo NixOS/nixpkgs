@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     }
     else fetchurl {
       url = http://isabelle.in.tum.de/dist/Isabelle2014_linux.tar.gz;
-      sha256 = "0l17s41hwzma0q2glpxrzic8i6mqd9b7awlpwhz0jkli7fj6ny7b";
+      sha256 = "0z81pwwllavka4r57fx6yi9kbpbb9xbanp8dsjix49qpyj2a72jy";
     };
 
   buildInputs = [ perl polyml ]
