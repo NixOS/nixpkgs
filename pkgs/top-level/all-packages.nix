@@ -11891,6 +11891,8 @@ let
 
   slock = callPackage ../misc/screensavers/slock { };
 
+  soundOfSorting = callPackage ../misc/sound-of-sorting { };
+
   sourceAndTags = import ../misc/source-and-tags {
     inherit pkgs stdenv unzip lib ctags;
     hasktags = haskellPackages.hasktags;
