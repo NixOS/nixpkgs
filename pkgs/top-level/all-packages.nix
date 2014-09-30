@@ -283,6 +283,11 @@ let
     vs = vs90wrapper;
   };
 
+  fetchadc = import ../build-support/fetchadc {
+    inherit curl stdenv;
+    inherit (config) adc_user adc_pass;
+  };
+
   fetchbower = import ../build-support/fetchbower {
     inherit stdenv git;
     inherit (nodePackages) fetch-bower;
