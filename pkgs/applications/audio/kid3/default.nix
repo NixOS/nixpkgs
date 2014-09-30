@@ -3,7 +3,7 @@
 , docbook_xml_dtd_45, docbook_xsl, libxslt
 , phonon, automoc4, chromaprint, id3lib
 , taglib, mp4v2, flac, libogg, libvorbis
-, qt, automoc4, zlib, readline
+, qt, zlib, readline
 , makeWrapper
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = with stdenv.lib;
   [ pkgconfig cmake perl ffmpeg docbook_xml_dtd_45 docbook_xsl libxslt
     phonon automoc4 chromaprint id3lib taglib mp4v2 flac libogg libvorbis
-    qt automoc zlib readline makeWrapper ];
+    qt zlib readline makeWrapper ];
 
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DWITH_APPS=Qt;CLI" ];
   NIX_LDFLAGS = "-lm -lpthread";
