@@ -46,7 +46,7 @@ let
   withToolset = stdenv.lib.optionalString (toolset != null) "--with-toolset=${toolset}";
 
   genericB2Flags = [
-    "--prefix=$out"
+    "--prefix=$dev"
     "--libdir=$lib/lib"
     "-j$NIX_BUILD_CORES"
     "--layout=${layout}"
@@ -78,11 +78,16 @@ let
 
   installer = b2Args: ''
     # boostbook is needed by some applications
-    mkdir -p $out/share/boostbook
-    cp -a tools/boostbook/{xsl,dtd} $out/share/boostbook/
+    mkdir -p $dev/share/boostbook
+    cp -a tools/boostbook/{xsl,dtd} $dev/share/boostbook/
 
     # Let boost install everything else
     ./b2 ${b2Args} install
+
+    # Create a derivation which encompasses everything, making buildInputs nicer
+    mkdir -p $out/nix-support
+    echo $dev >> $out/nix-support/propagated-build-inputs
+    echo $lib >> $out/nix-support/propagated-build-inputs
   '';
 
   commonConfigureFlags = [
@@ -124,7 +129,7 @@ stdenv.mkDerivation {
 
   installPhase = installer nativeB2Args;
 
-  outputs = [ "out" "lib" ];
+  outputs = [ "out" "dev" "lib" ];
 
   crossAttrs = rec {
     buildInputs = [ expat.crossDrv zlib.crossDrv bzip2.crossDrv ];
@@ -134,7 +139,7 @@ stdenv.mkDerivation {
     # We want to substitute the contents of configureFlags, removing thus the
     # usual --build and --host added on cross building.
     preConfigure = ''
-      export configureFlags="--prefix=$out --without-icu ${concatStringsSep " " commonConfigureFlags}"
+      export configureFlags="--prefix=$dev --without-icu ${concatStringsSep " " commonConfigureFlags}"
       set -x
       cat << EOF > user-config.jam
       using gcc : cross : $crossConfig-g++ ;
