@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   meta = {
     description = "giflib is a library for reading and writing gif images";
     platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.license.mit;
+    license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
   };
 }
