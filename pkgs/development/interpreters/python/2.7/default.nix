@@ -28,6 +28,9 @@ let
       # patch python to put zero timestamp into pyc
       # if DETERMINISTIC_BUILD env var is set
       ./deterministic-build.patch
+
+      # http://bugs.python.org/issue21963
+      ./remove-avoid-daemon-thread-shutdown.patch
     ];
 
   postPatch = stdenv.lib.optionalString (stdenv.gcc.libc != null) ''
