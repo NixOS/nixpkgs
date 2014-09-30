@@ -53,11 +53,11 @@ in {
 
   elasticsearch_http_basic = stdenv.mkDerivation rec {
     name = "elasticsearch-http-basic-${version}";
-    version = "1.2.0";
+    version = "1.3.2";
 
     src = fetchurl {
       url = "https://github.com/Asquera/elasticsearch-http-basic/releases/download/${version}/${name}.jar";
-      sha256 = "0makhlsgxlawfscz70mc2ikh68vp6mdmmzz4ggcgwrravzvyw5vq";
+      sha256 = "1qq8z0233mzz699zbzjwmx7ghn8k0djgyc5ixr8i5xchfrsrymn2";
     };
 
     phases = ["installPhase"];
