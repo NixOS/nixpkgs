@@ -7882,6 +7882,8 @@ let
 
     psmouse_alps = callPackage ../os-specific/linux/psmouse-alps { };
 
+    seturgent = callPackage ../os-specific/linux/seturgent { };
+
     spl = callPackage ../os-specific/linux/spl { };
     spl_git = callPackage ../os-specific/linux/spl/git.nix { };
 
