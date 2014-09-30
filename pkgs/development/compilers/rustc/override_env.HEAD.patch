@@ -1,0 +1,39 @@
+commit 02f4c61bd6a2aedbf56169aff5b3a65c83c89557
+Author: Ricardo M. Correia <rcorreia@wizy.org>
+Date:   Tue Sep 30 15:57:06 2014 +0200
+
+    libstd: Pass-through PATH in test_override_env test
+    
+    In some operating systems (such as NixOS), `env` can only be found in
+    the explicitly-provided PATH, not in default places such as /bin or
+    /usr/bin. So we need to pass-through PATH when spawning the `env`
+    sub-process.
+
+diff --git a/src/libstd/io/process.rs b/src/libstd/io/process.rs
+index 83890d2..8fbf254 100644
+--- a/src/libstd/io/process.rs
++++ b/src/libstd/io/process.rs
+@@ -956,7 +956,22 @@ mod tests {
+     })
+ 
+     iotest!(fn test_override_env() {
+-        let new_env = vec![("RUN_TEST_NEW_ENV", "123")];
++        use os;
++        let mut new_env = vec![("RUN_TEST_NEW_ENV", "123")];
++
++        // In some operating systems (such as NixOS), `env` can only be found in
++        // the explicitly-provided PATH env variable, not in default places
++        // such as /bin or /usr/bin. So we need to pass through PATH to our
++        // sub-process.
++        let path_val: String;
++        match os::getenv("PATH") {
++            None => {}
++            Some(val) => {
++                path_val = val;
++                new_env.push(("PATH", path_val.as_slice()))
++            }
++        }
++
+         let prog = env_cmd().env_set_all(new_env.as_slice()).spawn().unwrap();
+         let result = prog.wait_with_output().unwrap();
+         let output = String::from_utf8_lossy(result.output.as_slice()).into_string();
