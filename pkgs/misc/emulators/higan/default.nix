@@ -4,12 +4,12 @@
 , udev
 , mesa, SDL
 , libao, openal, pulseaudio
-, profile ? "accuracy" # Options: accuracy, balanced, performance
-, gui ? "gtk" # can be gtk or qt4
+, profile ? "performance" # Options: accuracy, balanced, performance
+, guiToolkit ? "gtk" # can be gtk or qt4
 , gtk ? null, qt4 ? null }:
 
-assert gui == "gtk" || gui == "qt4";
-assert (gui == "gtk" -> gtk != null) || (gui == "qt4" -> qt4 != null);
+assert guiToolkit == "gtk" || guiToolkit == "qt4";
+assert (guiToolkit == "gtk" -> gtk != null) || (guiToolkit == "qt4" -> qt4 != null);
 
 stdenv.mkDerivation rec {
 
@@ -18,19 +18,19 @@ stdenv.mkDerivation rec {
   sourceName = "higan_v${version}-source";
 
   src = fetchurl {
-    url = "http://byuu.org/files/${sourceName}.tar.xz";
+    urls = [ "http://byuu.org/files/${sourceName}.tar.xz" "http://byuu.net/files/${sourceName}.tar.xz" ];
     sha256 = "06qm271pzf3qf2labfw2lx6k0xcd89jndmn0jzmnc40cspwrs52y";
     curlOpts = "--user-agent 'Mozilla/5.0'"; # the good old user-agent trick...
   };
 
   buildInputs = with stdenv.lib;
   [ pkgconfig libX11 libXv udev mesa SDL libao openal pulseaudio ]
-  ++ optionals (gui == "gtk") [ gtk ]
-  ++ optionals (gui == "qt4") [ qt4 ];
+  ++ optionals (guiToolkit == "gtk") [ gtk ]
+  ++ optionals (guiToolkit == "qt4") [ qt4 ];
 
   buildPhase = ''
-    make phoenix=${gui} profile=${profile} -C ananke
-    make phoenix=${gui} profile=${profile}
+    make phoenix=${guiToolkit} profile=${profile} -C ananke
+    make phoenix=${guiToolkit} profile=${profile}
   '';
 
   installPhase = ''
@@ -86,5 +86,4 @@ stdenv.mkDerivation rec {
 # TODO:
 #   - fix the BML and BIOS paths - maybe submitting
 #     a custom patch to Higan project would not be a bad idea...
-#   - config.higan.{gui,profile} options
-#
+#   - Qt support
