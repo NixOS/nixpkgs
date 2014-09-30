@@ -101,5 +101,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.ffmpeg.org/;
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
+    branch = "1";
   };
 }
