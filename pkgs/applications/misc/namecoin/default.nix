@@ -1,13 +1,13 @@
 { fetchgit, stdenv, db4, boost, openssl, unzip }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.75";
+  version = "0.3.76";
   name = "namecoin-${version}";
 
   src = fetchgit {
     url = "https://github.com/namecoin/namecoin";
-    rev = "31ea638d4ba7f0a3011cb25483f4c7d293134c7a";
-    sha256 = "c14a5663cba675b3508937a26a812316559938fd7b64659dd00749a9f5d7e9e0";
+    rev = "224175ca3bba6eea6f6b1bdb007b482eb2bd2aee";
+    sha256 = "3ccfb6fdda1b9d105e775eb19c696be7fec1b3671f9b4f43d02fa14a4c6848dd";
   };
 
   # Don't build with miniupnpc due to namecoin using a different verison that

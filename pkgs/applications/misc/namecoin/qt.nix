@@ -1,7 +1,7 @@
 { fetchgit, stdenv, db4, boost, openssl, qt4, unzip, namecoin }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.75";
+  version = namecoin.version;
   name = "namecoin-qt-${version}";
 
   src = namecoin.src;
