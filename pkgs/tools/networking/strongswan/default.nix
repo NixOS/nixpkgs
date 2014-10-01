@@ -8,11 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "1ki6v9c54ykppqnj3prgh62na97yajnvnm2zr1gjxzv05syk035h";
   };
 
-  patches = [ ./respect-path.patch ./no-sysconfdir-write.patch ];
+  patches = [ ./respect-path.patch ./no-hardcoded-sysconfdir.patch ];
 
   buildInputs = [ gmp autoreconfHook gettext pkgconfig ];
 
-  configureFlags = [ "--enable-swanctl" "--sysconfdir=/etc" ];
+  configureFlags = [ "--enable-swanctl" ];
 
   meta = {
     maintainers = [ stdenv.lib.maintainers.shlevy ];
