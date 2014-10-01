@@ -15,12 +15,12 @@ let
   
 in stdenv.mkDerivation {
   
-  name = "copy-com-1.4";
+  name = "copy-com-1.47.0410";
 
   src = fetchurl {
     # Note: copy.com doesn't version this file. Annoying.
     url = "https://copy.com/install/linux/Copy.tgz";
-    sha256 = "f8da6dbfdaac71c4c4e9102671cf8fbe4ac5cb1dac63464783b8b62a7939b6fa";
+    sha256 = "a48c69f6798f888617cfeef5359829e619057ae0e6edf3940b4ea6c81131012a";
   };
 
   buildInputs = [ coreutils patchelf ];
