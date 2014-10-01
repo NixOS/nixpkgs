@@ -3,12 +3,12 @@
 , pythonPackages, cacert, cmake, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "1.0";
+  version = "1.0.1";
   name = "weechat-${version}";
 
   src = fetchurl {
     url = "http://weechat.org/files/src/${name}.tar.gz";
-    sha256 = "1z17wyrl5fp697qp44srpmzk79w37f5hm1r0krffbmga6sbzdj3x";
+    sha256 = "0ly6lih7nvhacjs642v7n9z0x3lbgipiza00n632vrpi2zfvclrz";
   };
 
   buildInputs = 
