@@ -15,5 +15,6 @@ cabal.mkDerivation (self: {
     description = "Shell script analysis tool";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })
