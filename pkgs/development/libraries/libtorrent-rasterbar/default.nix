@@ -8,11 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "1ph4cb6nrk2hiy89j3kz1wj16ph0b9yixrf4f4935rnzhha8x31w";
   };
 
-  buildInputs = [ boost boost.lib pkgconfig openssl zlib python libiconvOrNull geoip ];
+  buildInputs = [ boost pkgconfig openssl zlib python libiconvOrNull geoip ];
 
   configureFlags = [ 
-    "--with-boost=${boost}/include/boost" 
-    "--with-boost-libdir=${boost.lib}/lib" 
     "--enable-python-binding"
     "--with-libgeoip=system"
     "--with-libiconv=yes"

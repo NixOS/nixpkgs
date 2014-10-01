@@ -59,7 +59,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  outputs = [ "out" "lib" ];
+  outputs = [ "out" ];
 
   buildInputs =
     [ icu expat zlib bzip2 python ]

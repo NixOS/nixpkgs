@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     md5 = "0765cf203f451394df98e6ddf7bf2541";
   };
 
-  buildInputs = [ cmake boost boost.lib openssl ];
+  buildInputs = [ cmake boost openssl ];
 
   cmakeFlags = [ "-DCPP-NETLIB_BUILD_SHARED_LIBS=ON" "-DCMAKE_BUILD_TYPE=RELEASE" ];
 

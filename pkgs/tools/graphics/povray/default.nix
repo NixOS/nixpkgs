@@ -24,7 +24,7 @@ stdenv.mkDerivation {
                  sed -i -e 's/^povgroup.*/povgroup=nogroup/' Makefile.{am,in}
                '';
 
-  configureFlags = "COMPILED_BY='nix' --with-boost-libdir=${boost}/lib --with-boost-includedir=${boost}/include";
+  configureFlags = [ "COMPILED_BY='nix'" ];
 
   preInstall = ''
     mkdir "$TMP/bin"

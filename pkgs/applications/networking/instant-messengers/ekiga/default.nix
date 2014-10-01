@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
                   perl perlXMLParser evolution_data_server gnome_doc_utils avahi
                   libsigcxx gtk dbus_glib libnotify libXext xextproto sqlite
                   gnome3.libsoup glib gnome3.gnome_icon_theme_symbolic
-                  hicolor_icon_theme gnome3.gnome_icon_theme boost boost.lib
+                  hicolor_icon_theme gnome3.gnome_icon_theme boost
                   autoreconfHook pkgconfig libxml2 videoproto unixODBC db nspr
                   nss zlib libsecret libXrandr randrproto which libxslt libtasn1
                   gmp nettle makeWrapper ];
@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-ldap-dir=${openldap}"
     "--with-libsasl2-dir=${cyrus_sasl}"
-    "--with-boost-libdir=${boost.lib}/lib"
     "--disable-gconf"
   ];
 

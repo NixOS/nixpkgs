@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
     expat wxGTK zlib ruby gettext pkgconfig curl
   ];
 
-  configureFlags = "--with-boost-libdir=${boost}/lib";
   buildPhase = ''
     ruby ./drake
   '';

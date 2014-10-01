@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake makeWrapper pkgconfig libtool which ];
   buildInputs = [
-    boost boost.lib btrfsProgs cryptopp curl expat fcgi fuse gperftools keyutils
+    boost btrfsProgs cryptopp curl expat fcgi fuse gperftools keyutils
     libatomic_ops leveldb libaio libedit libuuid linuxHeaders openssl python
     snappy udev xfsprogs.lib xz zfs
   ];

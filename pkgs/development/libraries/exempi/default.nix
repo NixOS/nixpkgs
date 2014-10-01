@@ -8,9 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "01vcd1mfn2s0iiq2cjyzgvnxx6kcq9cwra1iipijhs0vwvjx0yhf";
   };
 
-  configureFlags = [ "--with-boost=${boost}" ];
-
-  buildInputs = [ expat zlib boost boost.lib ];
+  buildInputs = [ expat zlib boost ];
 
   meta = with stdenv.lib; {
     homepage = http://libopenraw.freedesktop.org/wiki/Exempi/;

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1s0ylyrx74vgw6vsg6xxk4b07jrxh8pqcmxcbkx46v01nczv3ixj";
   };
 
-  buildInputs = [ cmake boost boost.lib gmp mpfr ];
+  buildInputs = [ cmake boost gmp mpfr ];
 
   doCheck = false;
 

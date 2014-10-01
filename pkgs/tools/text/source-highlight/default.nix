@@ -12,8 +12,6 @@ stdenv.mkDerivation {
     sha256 = "1s49ld8cnpzhhwq0r7s0sfm3cg3nhhm0wla27lwraifrrl3y1cp1";
   };
 
-  configureFlags = [ "--with-boost=${boost}" ];
-
   buildInputs = [ boost ];
 
   enableParallelBuilding = false;

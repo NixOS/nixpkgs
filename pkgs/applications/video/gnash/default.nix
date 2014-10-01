@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gettext x11 SDL SDL_mixer gstreamer gst_plugins_base gst_plugins_good
     gst_ffmpeg speex libtool
-    libogg libxml2 libjpeg mesa libpng libungif boost boost.lib freetype agg
+    libogg libxml2 libjpeg mesa libpng libungif boost freetype agg
     dbus curl pkgconfig glib gtk gtkglext pangox_compat
     xulrunner
     makeWrapper

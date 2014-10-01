@@ -12,9 +12,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ qt4 which dbus_libs boost libtorrentRasterbar
     pkgconfig ];
 
-  configureFlags = "--with-libboost-inc=${boost}/include "
-    + "--with-libboost-lib=${boost}/lib";
-
   # https://github.com/qbittorrent/qBittorrent/issues/1992 
   #enableParallelBuilding = true;
 
