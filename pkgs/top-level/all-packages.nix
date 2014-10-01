@@ -7093,6 +7093,8 @@ let
     sslSupport = true;
   });
 
+  cassandra = callPackage ../servers/nosql/cassandra { };
+
   apache-jena = callPackage ../servers/nosql/apache-jena/binary.nix {
     java = icedtea7_jdk;
   };
