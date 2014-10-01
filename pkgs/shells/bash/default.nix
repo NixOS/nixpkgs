@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
           inherit sha256;
         };
     in
-      import ./bash-4.2-patches.nix patch) ++ [ ./cve-2014-7169.patch ];
+      import ./bash-4.2-patches.nix patch);
 
   crossAttrs = {
     configureFlags = baseConfigureFlags +
