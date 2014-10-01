@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, nettools, polyml, proofgeneral }:
+{ stdenv, fetchurl, perl, nettools, java, polyml, proofgeneral }:
 # nettools needed for hostname
 
 let
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     };
 
   buildInputs = [ perl polyml ]
-             ++ stdenv.lib.optional (!stdenv.isDarwin) nettools;
+             ++ stdenv.lib.optionals (!stdenv.isDarwin) [ nettools java ];
 
   sourceRoot = dirname;
 
@@ -35,10 +35,15 @@ stdenv.mkDerivation {
     substituteInPlace etc/settings \
       --subst-var-by ML_HOME "${polyml}/bin" \
       --subst-var-by PROOFGENERAL_HOME "${proofgeneral}/share/emacs/site-lisp/ProofGeneral"
+    substituteInPlace contrib/jdk/etc/settings \
+      --replace ISABELLE_JDK_HOME= '#ISABELLE_JDK_HOME='
+    substituteInPlace contrib/polyml-5.5.2-1/etc/settings \
+      --replace 'ML_HOME="$POLYML_HOME/$ML_PLATFORM"' \
+                "ML_HOME=\"${polyml}/bin\""
   '';
 
   buildPhase = ''
-    ./bin/isabelle build -s $theories
+    ISABELLE_JDK_HOME=${java} ./bin/isabelle build -s $theories
   '';
 
   installPhase = ''
