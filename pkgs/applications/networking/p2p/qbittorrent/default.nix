@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   configureFlags = "--with-libboost-inc=${boost}/include "
     + "--with-libboost-lib=${boost}/lib";
 
-  enableParallelBuilding = true;
+  # https://github.com/qbittorrent/qBittorrent/issues/1992 
+  #enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Free Software alternative to µtorrent";
