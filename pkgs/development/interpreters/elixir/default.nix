@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
     substituteInPlace Makefile \
       --replace "/usr/local" $out
-    substituteInPlace bin//mix \
+    substituteInPlace bin/mix \
       --replace "/usr/bin/env elixir" "$out/bin/elixir"
   '';
 
