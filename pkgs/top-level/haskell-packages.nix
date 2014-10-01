@@ -273,6 +273,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   bktrees = callPackage ../development/libraries/haskell/bktrees {};
 
+  blankCanvas = callPackage ../development/libraries/haskell/blank-canvas {};
+
   blazeBuilder = callPackage ../development/libraries/haskell/blaze-builder {};
 
   blazeBuilderConduit = callPackage ../development/libraries/haskell/blaze-builder-conduit {};
