@@ -2213,8 +2213,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   setlocale = callPackage ../development/libraries/haskell/setlocale {};
 
-  shellCheck = callPackage ../development/libraries/haskell/ShellCheck {};
-
   shellish = callPackage ../development/libraries/haskell/shellish {};
 
   shellmate = callPackage ../development/libraries/haskell/shellmate {};
@@ -3012,7 +3010,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   pointful = callPackage ../development/tools/haskell/pointful {};
 
-  ShellCheck = callPackage ../development/tools/misc/ShellCheck {};
+  shellCheck = callPackage ../development/tools/misc/ShellCheck {};
 
   SourceGraph = callPackage ../development/tools/haskell/SourceGraph {};
 
