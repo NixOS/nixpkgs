@@ -1430,6 +1430,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   kanExtensions = callPackage ../development/libraries/haskell/kan-extensions {};
 
+  kansasComet = callPackage ../development/libraries/haskell/kansas-comet {};
+
   kansasLava = callPackage ../development/libraries/haskell/kansas-lava {};
 
   keys = callPackage ../development/libraries/haskell/keys {};
