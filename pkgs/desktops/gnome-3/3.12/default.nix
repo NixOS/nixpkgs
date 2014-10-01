@@ -164,7 +164,7 @@ rec {
 
   totem-pl-parser = callPackage ./core/totem-pl-parser { };
 
-  tracker = callPackage ./core/tracker { };
+  tracker = callPackage ./core/tracker { giflib = pkgs.giflib_5_0; };
 
   vte = callPackage ./core/vte { };
 
