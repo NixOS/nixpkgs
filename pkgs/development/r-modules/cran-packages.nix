@@ -5841,7 +5841,7 @@ let self = _self // overrides; _self = with self; {
   xlsx = derive { name="xlsx"; version="0.5.7"; sha256="0qxkdpf1dvi0x7fy65abjx2j60rdx7fv5yi8l2wdm0f2631pnwin"; depends=[rJava xlsxjars]; };
   xlsxjars = derive { name="xlsxjars"; version="0.6.0"; sha256="0mjfvd433iz742gn3avaq48172yi5hhd0ajc3v22y1j4k9w82pr7"; depends=[rJava]; };
   Xmisc = derive { name="Xmisc"; version="0.1.0"; sha256="1iyv9gp7fw3r7s3v9srd799nhwgpn5851v3n2xfwpcvj9kczrd5r"; depends=[]; };
-  XML = derive { name="XML"; version="3.98-1.1"; sha256="0n9i6746211wihglbpsgalj2cyvggn4rv6a4fbavqwnjw3h1hwwl"; depends=[]; };
+  XML = derive { name="XML"; version="3.98-1.1"; sha256="0n9i6746211wihglbpsgalj2cyvggn4rv6a4fbavqwnjw3h1hwwl"; depends=[pkgs.libxml2]; };
   XML2R = derive { name="XML2R"; version="0.0.6"; sha256="0azfh950r2b7ck3n1vzk3mdll7zy844nx3mbk676jxnj8gg7nxk5"; depends=[XML RCurl plyr]; };
   XNomial = derive { name="XNomial"; version="1.0.1"; sha256="134bwglqhgah7v3w6ir65dch2dwp5h4vldw521ba74l5v9b2j2h4"; depends=[]; };
   xoi = derive { name="xoi"; version="0.61-1"; sha256="0ypy0rb0f0bns41vjzyln04k3hypgr3wysqbdi0b0r14ip5rb47k"; depends=[qtl]; };
