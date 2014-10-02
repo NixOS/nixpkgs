@@ -24,7 +24,10 @@ let
         --add-flags "-L $COREDIR/${d2u core}_libretro.so $@"
     '';
 
-    passthru.libretroCore = "/lib/retroarch/cores";
+    passthru = {
+      core = core;
+      libretroCore = "/lib/retroarch/cores";
+    };
 
     meta = with stdenv.lib; {
       inherit description;

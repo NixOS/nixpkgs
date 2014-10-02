@@ -10519,13 +10519,11 @@ let
       gtk_modules = [ libcanberra ];
     };
 
-  wrapRetroArch = { retroarch }:
+  retroArchCores =
   let
     cfg = stdenv.lib.attrByPath [ "retroarch" ] {} config;
   in
-    import ../misc/emulators/retroarch/wrapper.nix {
-      inherit stdenv lib makeWrapper retroarch;
-      cores = with libretro;
+    with libretro;
       ([ ]
       ++ lib.optional (cfg.enable4do or false) _4do
       ++ lib.optional (cfg.enableBsnesMercury or false) bsnes-mercury
@@ -10543,6 +10541,14 @@ let
       ++ lib.optional (cfg.enableStella or false) stella
       ++ lib.optional (cfg.enableVbaNext or false) vba-next
       );
+
+  wrapRetroArch = { retroarch }:
+  let
+    cfg = stdenv.lib.attrByPath [ "retroarch" ] {} config;
+  in
+    import ../misc/emulators/retroarch/wrapper.nix {
+      inherit stdenv lib makeWrapper retroarch;
+      cores = retroArchCores;
   };
 
   wxhexeditor = callPackage ../applications/editors/wxhexeditor { };
@@ -10573,6 +10579,11 @@ let
   xbmc = callPackage ../applications/video/xbmc {
     ffmpeg = ffmpeg_1;
   };
+
+  xbmc-retroarch-advanced-launchers =
+    callPackage ../misc/emulators/retroarch/xbmc-advanced-launchers.nix {
+      cores = retroArchCores;
+    };
 
   xca = callPackage ../applications/misc/xca { };
 
