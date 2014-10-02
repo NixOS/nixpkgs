@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "webkitgtk-2.4.5";
+  name = "webkitgtk-2.4.6";
 
   meta = {
     description = "Web content rendering engine, GTK+ port";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "04wadcnp71wvmy0qxapmb5pwlqsnbqd8bqa8nl2w4yg1m9vn5l48";
+    sha256 = "0mqlq4ivh921k92xjsp5pdvbg9vf75qjliqmx81qwrm2sjl4mvvg";
   };
 
   patches = [ ./webcore-svg-libxml-cflags.patch ];
