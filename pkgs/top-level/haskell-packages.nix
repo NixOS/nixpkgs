@@ -2437,6 +2437,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   symbol = callPackage ../development/libraries/haskell/symbol {};
 
+  systemArgv0 = callPackage ../development/libraries/haskell/system-argv0 {};
+
   systemFilepath = callPackage ../development/libraries/haskell/system-filepath {};
 
   systemFileio = callPackage ../development/libraries/haskell/system-fileio {};
