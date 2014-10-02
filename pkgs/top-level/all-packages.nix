@@ -6808,14 +6808,16 @@ let
 
   ### DEVELOPMENT / LIBRARIES / AGDA
 
-  agdaIowaStdlib = callPackage ../development/libraries/agda/agda-iowa-stdlib {};
-
   agda = callPackage ../build-support/agda {
     glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
     extension = self : super : {};
     Agda = haskellPackages.Agda;
     inherit writeScriptBin;
   };
+
+  agdaBase = callPackage ../development/libraries/agda/agda-base {};
+
+  agdaIowaStdlib = callPackage ../development/libraries/agda/agda-iowa-stdlib {};
 
   agdaPrelude = callPackage ../development/libraries/agda/agda-prelude {};
 
