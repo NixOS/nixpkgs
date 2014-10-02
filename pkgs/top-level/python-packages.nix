@@ -9287,12 +9287,12 @@ let
 
 
   webob = buildPythonPackage rec {
-    version = "1.3.1";
+    version = "1.4";
     name = "webob-${version}";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/W/WebOb/WebOb-${version}.tar.gz";
-      md5 = "20918251c5726956ba8fef22d1556177";
+      md5 = "8437607c0cc00c35f658f972516ffb55";
     };
 
     propagatedBuildInputs = [ nose modules.ssl ];
