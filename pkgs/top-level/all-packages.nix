@@ -10520,48 +10520,41 @@ let
     };
 
   retroArchCores =
-  let
-    cfg = stdenv.lib.attrByPath [ "retroarch" ] {} config;
-  in
-    with libretro;
+    let
+      cfg = config.retroarch or {};
+      inherit (lib) optional;
+    in with libretro;
       ([ ]
-      ++ lib.optional (cfg.enable4do or false) _4do
-      ++ lib.optional (cfg.enableBsnesMercury or false) bsnes-mercury
-      ++ lib.optional (cfg.enableDesmume or false) desmume
-      ++ lib.optional (cfg.enableFBA or false) fba
-      ++ lib.optional (cfg.enableFceumm or false) fceumm
-      ++ lib.optional (cfg.enableGambatte or false) gambatte
-      ++ lib.optional (cfg.enableGenesisPlusGX or false) genesis-plus-gx
-      ++ lib.optional (cfg.enableMupen64Plus or false) mupen64plus
-      ++ lib.optional (cfg.enablePicodrive or false) picodrive
-      ++ lib.optional (cfg.enablePrboom or false) prboom
-      ++ lib.optional (cfg.enablePPSSPP or false) ppsspp
-      ++ lib.optional (cfg.enableScummVM or false) scummvm
-      ++ lib.optional (cfg.enableSnes9xNext or false) snes9x-next
-      ++ lib.optional (cfg.enableStella or false) stella
-      ++ lib.optional (cfg.enableVbaNext or false) vba-next
+      ++ optional (cfg.enable4do or false) _4do
+      ++ optional (cfg.enableBsnesMercury or false) bsnes-mercury
+      ++ optional (cfg.enableDesmume or false) desmume
+      ++ optional (cfg.enableFBA or false) fba
+      ++ optional (cfg.enableFceumm or false) fceumm
+      ++ optional (cfg.enableGambatte or false) gambatte
+      ++ optional (cfg.enableGenesisPlusGX or false) genesis-plus-gx
+      ++ optional (cfg.enableMupen64Plus or false) mupen64plus
+      ++ optional (cfg.enablePicodrive or false) picodrive
+      ++ optional (cfg.enablePrboom or false) prboom
+      ++ optional (cfg.enablePPSSPP or false) ppsspp
+      ++ optional (cfg.enableScummVM or false) scummvm
+      ++ optional (cfg.enableSnes9xNext or false) snes9x-next
+      ++ optional (cfg.enableStella or false) stella
+      ++ optional (cfg.enableVbaNext or false) vba-next
       );
 
-  wrapRetroArch = { retroarch }:
-  let
-    cfg = stdenv.lib.attrByPath [ "retroarch" ] {} config;
-  in
-    import ../misc/emulators/retroarch/wrapper.nix {
-      inherit stdenv lib makeWrapper retroarch;
-      cores = retroArchCores;
-    };
+  wrapRetroArch = { retroarch }: import ../misc/emulators/retroarch/wrapper.nix {
+    inherit stdenv lib makeWrapper retroarch;
+    cores = retroArchCores;
+  };
 
-  wrapXBMC = { xbmc }:
-  let
-    cfg = stdenv.lib.attrByPath [ "xbmc" ] {} config;
-  in
-    import ../applications/video/xbmc/wrapper.nix {
-      inherit stdenv lib makeWrapper xbmc;
-      plugins = with xbmcPlugins;
-        ([]
-        ++ lib.optional (cfg.enableAdvancedLauncher or false) advanced-launcher
-        );
-    };
+  wrapXBMC = { xbmc }: import ../applications/video/xbmc/wrapper.nix {
+    inherit stdenv lib makeWrapper xbmc;
+    plugins = let inherit (lib) optional; in with xbmcPlugins;
+      ([]
+      ++ optional (config.xbmc.enableAdvancedLauncher or false) advanced-launcher
+      ++ optional (config.xbmc.enableSVTPlay or false) svtplay
+      );
+  };
 
   wxhexeditor = callPackage ../applications/editors/wxhexeditor { };
 
