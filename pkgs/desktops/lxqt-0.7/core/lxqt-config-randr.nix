@@ -4,8 +4,6 @@
 
 , libX11
 , xrandr
-#, libqtxdg
-#, liblxqt
 }:
 
 stdenv.mkDerivation rec {
