@@ -10549,7 +10549,19 @@ let
     import ../misc/emulators/retroarch/wrapper.nix {
       inherit stdenv lib makeWrapper retroarch;
       cores = retroArchCores;
-  };
+    };
+
+  wrapXBMC = { xbmc }:
+  let
+    cfg = stdenv.lib.attrByPath [ "xbmc" ] {} config;
+  in
+    import ../applications/video/xbmc/wrapper.nix {
+      inherit stdenv lib makeWrapper xbmc;
+      plugins = with xbmcPlugins;
+        ([]
+        ++ lib.optional (cfg.enableAdvancedLauncher or false) advanced-launcher
+        );
+    };
 
   wxhexeditor = callPackage ../applications/editors/wxhexeditor { };
 
@@ -10576,8 +10588,16 @@ let
 
   xbindkeys = callPackage ../tools/X11/xbindkeys { };
 
-  xbmc = callPackage ../applications/video/xbmc {
+  xbmcPlain = callPackage ../applications/video/xbmc {
     ffmpeg = ffmpeg_1;
+  };
+
+  xbmcPlugins = recurseIntoAttrs (callPackage ../applications/video/xbmc/plugins.nix {
+    xbmc = xbmcPlain;
+  });
+
+  xbmc = wrapXBMC {
+    xbmc = xbmcPlain;
   };
 
   xbmc-retroarch-advanced-launchers =
