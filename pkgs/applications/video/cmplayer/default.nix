@@ -54,7 +54,10 @@ stdenv.mkDerivation rec {
                 ++ optional cddaSupport libcdda
                 ;
 
-  preConfigure = "patchShebangs ./configure";
+  preConfigure = ''
+    patchShebangs ./configure
+    patchShebangs src/mpv/waf
+  '';
 
   configureFlags = with stdenv.lib;
                    [ "--qmake=qmake" ]
