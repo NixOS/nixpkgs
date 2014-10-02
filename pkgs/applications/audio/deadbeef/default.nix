@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gtk
+{ stdenv, fetchurl, intltool, pkgconfig
+# deadbeef can use either gtk2 or gtk3
+, gtk2Support ? true, gtk2 ? null
+, gtk3Support ? false, gtk3 ? null, gsettings_desktop_schemas ? null, makeWrapper ? null
 # input plugins
 , vorbisSupport ? true, libvorbis ? null
 , mp123Support ? true, libmad ? null
@@ -23,6 +26,9 @@
 , remoteSupport ? true, curl ? null
 }:
 
+assert gtk2Support || gtk3Support;
+assert gtk2Support -> gtk2 != null;
+assert gtk3Support -> gtk3 != null && gsettings_desktop_schemas != null && makeWrapper != null;
 assert vorbisSupport -> libvorbis != null;
 assert mp123Support -> libmad != null;
 assert flacSupport -> flac != null;
@@ -41,9 +47,6 @@ assert overloadSupport -> zlib != null;
 assert wavpackSupport -> wavpack != null;
 assert remoteSupport -> curl != null;
 
-# DeaDBeeF installs working .desktop file(s) all by itself, so we don't need to
-# handle that.
-
 stdenv.mkDerivation rec {
   name = "deadbeef-0.6.2";
 
@@ -53,7 +56,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with stdenv.lib;
-    [ gtk ]
+       optional gtk2Support gtk2
+    ++ optionals gtk3Support [gtk3 gsettings_desktop_schemas]
     ++ optional vorbisSupport libvorbis
     ++ optional mp123Support libmad
     ++ optional flacSupport flac
@@ -73,9 +77,15 @@ stdenv.mkDerivation rec {
     ++ optional remoteSupport curl
     ;
 
-  nativeBuildInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = with stdenv.lib; [ intltool pkgconfig ]
+    ++ optional gtk3Support makeWrapper;
 
   enableParallelBuilding = true;
+
+  postInstall = if !gtk3Support then "" else ''
+    wrapProgram "$out/bin/deadbeef" \
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+  '';
 
   meta = with stdenv.lib; {
     description = "Ultimate Music Player for GNU/Linux";
