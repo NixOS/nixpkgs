@@ -1404,6 +1404,11 @@ let
 
   iftop = callPackage ../tools/networking/iftop { };
 
+  ihaskell = callPackage ../development/tools/haskell/ihaskell/wrapper.nix {
+    inherit (pythonPackages) ipython;
+    inherit (haskellPackages) ihaskell ghc;
+  };
+
   imapproxy = callPackage ../tools/networking/imapproxy { };
 
   imapsync = callPackage ../tools/networking/imapsync {

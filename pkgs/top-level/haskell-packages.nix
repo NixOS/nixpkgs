@@ -1351,6 +1351,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ieee754 = callPackage ../development/libraries/haskell/ieee754 {};
 
+  ihaskell = callPackage ../development/tools/haskell/ihaskell {};
+
   imm = callPackage ../development/libraries/haskell/imm {};
 
   implicit = callPackage ../development/libraries/haskell/implicit {
