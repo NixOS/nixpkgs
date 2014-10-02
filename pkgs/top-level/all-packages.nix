@@ -285,7 +285,12 @@ let
 
   fetchadc = import ../build-support/fetchadc {
     inherit curl stdenv;
-    inherit (config) adc_user adc_pass;
+    adc_user = if config ? adc_user
+      then config.adc_user
+      else throw "You need an adc_user attribute in your config to download files from Apple Developer Connection";
+    adc_pass = if config ? adc_pass
+      then config.adc_pass
+      else throw "You need an adc_pass attribute in your config to download files from Apple Developer Connection";
   };
 
   fetchbower = import ../build-support/fetchbower {
@@ -7550,7 +7555,9 @@ let
 
   cramfsswap = callPackage ../os-specific/linux/cramfsswap { };
 
-  darwin = rec {
+  darwin = let
+    cmdline = callPackage ../os-specific/darwin/command-line-tools {};
+  in rec {
     cctools = forceNativeDrv (callPackage ../os-specific/darwin/cctools-port {
       cross = assert crossSystem != null; crossSystem;
       inherit maloader;
@@ -7569,6 +7576,9 @@ let
     osx_private_sdk = callPackage ../os-specific/darwin/osx-private-sdk { inherit osx_sdk; };
 
     security_tool = callPackage ../os-specific/darwin/security-tool { inherit osx_private_sdk; };
+
+    cmdline_sdk   = cmdline.sdk;
+    cmdline_tools = cmdline.tools;
   };
 
   devicemapper = lvm2;

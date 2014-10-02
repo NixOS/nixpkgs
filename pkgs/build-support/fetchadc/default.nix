@@ -10,8 +10,8 @@ let
   ];
 in
 
-{ # URL to fetch.
-  url
+{ # Path to fetch.
+  path
 
   # Hash of the downloaded file
 , sha256
@@ -19,13 +19,14 @@ in
 , # Additional curl options needed for the download to succeed.
   curlOpts ? ""
 
-, # Name of the file.  If empty, use the basename of `url' (or of the
-  # first element of `urls').
+, # Name of the file.  If empty, use the basename of `path'.
   name ? ""
 }:
 
 stdenv.mkDerivation {
-  name    = if name != "" then name else baseNameOf (toString url);
+  url = "https://developer.apple.com/downloads/download.action?path=${path}";
+
+  name    = if name != "" then name else baseNameOf path;
   builder = ./builder.sh;
 
   buildInputs = [ curl ];
@@ -39,7 +40,7 @@ stdenv.mkDerivation {
   outputHash     =  sha256;
   outputHashMode = "flat";
 
-  inherit curlOpts url adc_user adc_pass;
+  inherit curlOpts adc_user adc_pass;
 
   preferLocalBuild = true;
 }
