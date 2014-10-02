@@ -1105,6 +1105,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   heredoc = callPackage ../development/libraries/haskell/heredoc {};
 
+  here = callPackage ../development/libraries/haskell/here {};
+
   hexpat = callPackage ../development/libraries/haskell/hexpat {};
 
   hex = callPackage ../development/libraries/haskell/hex {};
