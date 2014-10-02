@@ -53,4 +53,32 @@ in
 
   };
 
+  svtplay = mkXBMCPlugin rec {
+
+    plugin = "svtplay";
+    namespace = "plugin.video.svtplay";
+    version = "4.0.6";
+
+    src = fetchFromGitHub {
+      owner = "nilzen";
+      repo = "xbmc-" + plugin;
+      rev = "4f27254edbd6dc48350152832833c5b164ca58de";
+      sha256 = "11r8vljpx9fxwdx20cvkb5szlaypfrn6c235jwcg61s4hmjy4kl8";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "http://forum.xbmc.org/showthread.php?tid=67110";
+      description = "Watch content from SVT Play";
+      longDescription = ''
+        With this addon you can stream content from SVT Play
+        (svtplay.se). The plugin fetches the video URL from the SVT
+        Play website and feeds it to the XBMC video player. HLS (m3u8)
+        is the preferred video format by the plugin.
+      '';
+      platforms = platforms.all;
+      maintainers = with maintainers; [ edwtjo ];
+    };
+
+  };
+
 }
