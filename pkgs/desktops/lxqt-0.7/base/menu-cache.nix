@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.lxqt.org";
-    #description = "";
+    description = "Library used to read freedesktop.org menus";
     license = stdenv.lib.licenses.lgpl21;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.ellis ];

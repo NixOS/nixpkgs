@@ -2,7 +2,6 @@
 , cmake
 , qt48
 
-#, libqtxdg
 , liblxqt
 }:
 
