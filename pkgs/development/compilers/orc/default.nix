@@ -8,7 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "17mmgwll2waz44m908lcxc5fd6n44yysh7p4pdw33hr138r507z2";
   };
 
-  doCheck = true;
+  # The test suite verifies run-times against expected values and thus
+  # fails randomly if the host machine is under high load.
+  doCheck = false;
 
   meta = {
     description = "The Oil Runtime Compiler";
