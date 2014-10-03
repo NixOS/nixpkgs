@@ -20,4 +20,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   doCheck = false; # giving up for now
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }
