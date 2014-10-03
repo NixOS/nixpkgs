@@ -111,7 +111,7 @@
 , "posix"
 , "node-protobuf"
 , "rethinkdb"
-, { "titanium": "3.2.1" }
+, "titanium"
 , "deepmerge"
 , "slasp"
 , "react"
