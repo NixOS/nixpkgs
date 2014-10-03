@@ -60,7 +60,7 @@ let
   };
 
 in stdenv.mkDerivation {
-  name = "chromium-${channel}-${chromium.browser.version}";
+  name = "chromium${if channel != "stable" then "-" + channel else ""}-${chromium.browser.version}";
 
   buildInputs = [ makeWrapper ];
 
