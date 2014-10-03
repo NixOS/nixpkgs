@@ -115,7 +115,7 @@ in rec
       sha256 = "1yxrxskxnr2da5awm59ra4s9wg67rimcbazvln9bayg9saxs540d";
      };
 
-    name = "youcompleteme-git-a2cae90";
+    name = "youcompleteme-20140929";  # commit date
     buildInputs = [ python cmake clang.clang ];
 
     configurePhase = ":";
