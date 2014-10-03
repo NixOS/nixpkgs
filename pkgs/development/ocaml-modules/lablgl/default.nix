@@ -14,9 +14,10 @@ stdenv.mkDerivation {
     sha256 = "0qabydd219i4ak7hxgc67496qnnscpnydya2m4ijn3cpbgih7zyq";
   };
 
-  buildInputs = [ocaml findlib lablgtk mesa freeglut ];
+  buildInputs = [ocaml findlib lablgtk freeglut ];
+  propagatedBuildInputs = [ mesa ];
 
-  patches = [ ./Makefile.config.patch ];
+  patches = [ ./Makefile.config.patch ./META.patch ];
 
   preConfigure = ''
     substituteInPlace Makefile.config \
@@ -35,10 +36,10 @@ stdenv.mkDerivation {
     cp ./META $out/lib/ocaml/${ocaml_version}/site-lib/lablgl
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html;
     description = "OpenGL bindings for ocaml";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.pSub ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ pSub vbgl ];
   };
 }
