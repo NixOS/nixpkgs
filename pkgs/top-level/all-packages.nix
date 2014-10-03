@@ -11919,6 +11919,8 @@ let
 
   pgf2 = callPackage ../tools/typesetting/tex/pgf/2.x.nix { };
 
+  pgf3 = callPackage ../tools/typesetting/tex/pgf/3.x.nix { };
+
   pgfplots = callPackage ../tools/typesetting/tex/pgfplots { };
 
   phabricator = callPackage ../misc/phabricator { };
