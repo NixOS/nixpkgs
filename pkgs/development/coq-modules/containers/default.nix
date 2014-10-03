@@ -19,6 +19,7 @@ stdenv.mkDerivation {
     description = "A typeclass-based Coq library of finite sets/maps";
     maintainers = with maintainers; [ vbgl ];
     platforms = coq.meta.platforms;
+    broken = true; /* the source hash is wrong */
   };
 
 }
