@@ -1,4 +1,12 @@
-{stdenv, fetchurl, jre, python, makeWrapper}:
+{ stdenv
+, fetchurl
+, jre
+, python
+, makeWrapper
+, gawk
+, bash
+, getopt
+}:
 
 let version = "2.1.0";
 in stdenv.mkDerivation rec {
@@ -16,10 +24,14 @@ in stdenv.mkDerivation rec {
     mv * $out
 
     for cmd in cassandra nodetool sstablekeys sstableloader sstableupgrade
-      do wrapProgram $out/bin/$cmd --set JAVA_HOME ${jre}
+      do wrapProgram $out/bin/$cmd \
+        --set JAVA_HOME ${jre} \
+        --prefix PATH : ${bash}/bin \
+        --prefix PATH : ${getopt}/bin \
+        --prefix PATH : ${gawk}/bin
     done
 
-    wrapProgram $out/bin/cqlsh --prefix PATH : ${python}
+    wrapProgram $out/bin/cqlsh --prefix PATH : ${python}/bin
     '';
 
   meta = {
