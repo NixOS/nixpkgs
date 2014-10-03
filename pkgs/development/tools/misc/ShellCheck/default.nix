@@ -13,7 +13,8 @@ cabal.mkDerivation (self: {
   meta = {
     homepage = "http://www.shellcheck.net/";
     description = "Shell script analysis tool";
-    license = "unknown";
+    license = self.stdenv.lib.licenses.lgpl3;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
