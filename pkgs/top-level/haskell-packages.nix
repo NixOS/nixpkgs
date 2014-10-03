@@ -916,6 +916,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ghcPaths = callPackage ../development/libraries/haskell/ghc-paths {};
 
+  ghcParser = callPackage ../development/libraries/haskell/ghc-parser {};
+
   ghcSyb = callPackage ../development/libraries/haskell/ghc-syb {};
 
   ghcSybUtils = callPackage ../development/libraries/haskell/ghc-syb-utils {};
@@ -1106,6 +1108,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hedis = callPackage ../development/libraries/haskell/hedis {};
 
   heredoc = callPackage ../development/libraries/haskell/heredoc {};
+
+  here = callPackage ../development/libraries/haskell/here {};
 
   hexpat = callPackage ../development/libraries/haskell/hexpat {};
 
@@ -1348,6 +1352,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   IfElse = callPackage ../development/libraries/haskell/IfElse {};
 
   ieee754 = callPackage ../development/libraries/haskell/ieee754 {};
+
+  ihaskell = callPackage ../development/tools/haskell/ihaskell {};
 
   imm = callPackage ../development/libraries/haskell/imm {};
 
@@ -2436,6 +2442,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   SVGFonts = callPackage ../development/libraries/haskell/SVGFonts {};
 
   symbol = callPackage ../development/libraries/haskell/symbol {};
+
+  systemArgv0 = callPackage ../development/libraries/haskell/system-argv0 {};
 
   systemFilepath = callPackage ../development/libraries/haskell/system-filepath {};
 
