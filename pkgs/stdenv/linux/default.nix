@@ -234,7 +234,7 @@ rec {
       # other purposes (binutils and top-level pkgs) too.
       inherit (stage3.pkgs) gettext gnum4 gmp perl glibc zlib linuxHeaders;
 
-      gcc = import ../../build-support/gcc-wrapper {
+      gcc = lib.makeOverridable (import ../../build-support/gcc-wrapper) {
         nativeTools = false;
         nativeLibc = false;
         gcc = stage4.stdenv.gcc.gcc;
