@@ -11,7 +11,7 @@ cabal.mkDerivation (self: {
   meta = {
     description = "HTTP client with pipes interface";
     license = self.stdenv.lib.licenses.bsd3;
-    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })

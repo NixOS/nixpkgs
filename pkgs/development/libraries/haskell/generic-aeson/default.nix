@@ -15,7 +15,7 @@ cabal.mkDerivation (self: {
   meta = {
     description = "Derivation of Aeson instances using GHC generics";
     license = self.stdenv.lib.licenses.bsd3;
-    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })

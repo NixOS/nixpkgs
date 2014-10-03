@@ -12,7 +12,7 @@ cabal.mkDerivation (self: {
   meta = {
     description = "Unicode aware uri-encoding";
     license = "unknown";
-    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })

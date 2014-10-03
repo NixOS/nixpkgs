@@ -11,7 +11,7 @@ cabal.mkDerivation (self: {
     homepage = "http://github.com/silkapp/regular-xmlpickler";
     description = "Generic generation of HXT XmlPickler instances using Regular";
     license = self.stdenv.lib.licenses.bsd3;
-    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })

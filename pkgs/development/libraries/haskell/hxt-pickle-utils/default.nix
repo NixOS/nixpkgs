@@ -11,7 +11,7 @@ cabal.mkDerivation (self: {
     homepage = "https://github.com/silkapp/hxt-pickle-utils";
     description = "Utility functions for using HXT picklers";
     license = self.stdenv.lib.licenses.bsd3;
-    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })

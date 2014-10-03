@@ -11,7 +11,7 @@ cabal.mkDerivation (self: {
     homepage = "http://happstack.com";
     description = "Efficient relational queries on Haskell sets";
     license = self.stdenv.lib.licenses.bsd3;
-    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })
