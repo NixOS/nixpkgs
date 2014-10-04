@@ -55,7 +55,7 @@ rec {
        attrValues {c = 3; a = 1; b = 2;}
        => [1 2 3]
   */
-  attrValues = attrs: attrVals (attrNames attrs) attrs;
+  attrValues = builtins.attrValues or (attrs: attrVals (attrNames attrs) attrs);
 
 
   /* Collect each attribute named `attr' from a list of attribute
@@ -65,7 +65,8 @@ rec {
        catAttrs "a" [{a = 1;} {b = 0;} {a = 2;}]
        => [1 2]
   */
-  catAttrs = attr: l: concatLists (map (s: if hasAttr attr s then [(getAttr attr s)] else []) l);
+  catAttrs = builtins.catAttrs or
+    (attr: l: concatLists (map (s: if hasAttr attr s then [(getAttr attr s)] else []) l));
 
 
   /* Filter an attribute set by removing all attributes for which the
