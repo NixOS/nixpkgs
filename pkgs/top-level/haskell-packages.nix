@@ -3051,9 +3051,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   nc-indicators = callPackage ../applications/misc/nc-indicators {};
 
-  sloane = callPackage ../applications/science/math/sloane {
-    optparseApplicative = self.optparseApplicative_0_9_1_1;
-  };
+  sloane = callPackage ../applications/science/math/sloane {};
 
   taffybar = callPackage ../applications/misc/taffybar {};
 

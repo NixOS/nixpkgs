@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "sloane";
-  version = "1.9.1";
-  sha256 = "0scnvir7il8ldy3g846xmrdkk2rxnlsiyqak0jvcarf2qi251x5i";
+  version = "1.9.3";
+  sha256 = "0xl3dmi6czwfbi17742hqxf3d6sl9dci08qszrkdmasnvivakg78";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -23,6 +23,6 @@ cabal.mkDerivation (self: {
     description = "A command line interface to Sloane's On-Line Encyclopedia of Integer Sequences";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.akc ];
+    maintainers = with self.stdenv.lib.maintainers; [ akc ];
   };
 })
