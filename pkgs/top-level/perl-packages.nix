@@ -4891,7 +4891,7 @@ let self = _self // overrides; _self = with self; {
       platforms   = stdenv.lib.platforms.unix;
     };
   };
-  
+
   ListBinarySearch = pkgs.buildPerlPackage {
     name = "List-BinarySearch-0.20";
     src = pkgs.fetchurl {
