@@ -9324,12 +9324,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   Throwable = buildPerlPackage rec {
-    name = "Throwable-0.102080";
+    name = "Throwable-0.200010";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "0vjzlh23rpmgr5h8qfh9pb3kqw0j8sxn2bpbc1p2306dwqwbymm5";
+      sha256 = "0qhq1f5bvgf5kjhmdg45vadq8dbc9gfms81hply5c6a71nmkv8yp";
     };
-    propagatedBuildInputs = [ DevelStackTrace Moose ];
+    propagatedBuildInputs = [ DevelStackTrace Moose Moo MooXTypesMooseLike ];
   };
 
   TieCycle = buildPerlPackage {
