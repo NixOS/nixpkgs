@@ -3133,10 +3133,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   EmailSender = buildPerlPackage {
-    name = "Email-Sender-0.120002";
+    name = "Email-Sender-1.300014";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Sender-0.120002.tar.gz;
-      sha256 = "1cp735ndmh76xzijsm1hd0yh0m9yj34jc8akjhidkn677h2021dc";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Sender-1.300014.tar.gz;
+      sha256 = "0yxqk0fjxasd7q62m65dl2n6xm4xcvfb6i1lajvwibygd9ckifw6";
     };
     propagatedBuildInputs = [ CaptureTiny EmailAbstract EmailAddress EmailSimple ListMoreUtils Moose Throwable TryTiny ];
     meta = {
