@@ -4450,7 +4450,19 @@ let self = _self // overrides; _self = with self; {
   Rivivc = derive { name="Rivivc"; version="0.9"; sha256="0gl3040pp9nqm4g2ympnx80z64zfnn1hfsxka8ynd2cqhjn3b5i1"; depends=[signal]; };
   RJaCGH = derive { name="RJaCGH"; version="2.0.2"; sha256="1fy8wsnv7diwg2w7j61scm6vd35a5jb36i9pzh5m7jz6yqsank50"; depends=[]; };
   rjags = derive { name="rjags"; version="3-13"; sha256="0npfyphi8z25h7w4frplbyjgib1gawz7ib9gz5w6h2i0pricm53r"; depends=[coda]; };
-  rJava = derive { name="rJava"; version="0.9-6"; sha256="008g6s6rcb5lnz5y2a2rs4iq85a4nl522g714s1w1r153qcc0jz0"; depends=[]; };
+  rJava = buildRPackage {
+    name = "rJava-0.9-6";
+    src = fetchurl {
+      url = "mirror://cran/src/contrib/rJava_0.9-6.tar.gz";
+      sha256 ="008g6s6rcb5lnz5y2a2rs4iq85a4nl522g714s1w1r153qcc0jz0";
+    };
+    propagatedBuildInputs = [pkgs.jdk pkgs.lzma pkgs.bzip2 pkgs.pcre pkgs.icu pkgs.libzip];
+    preConfigure = ''
+    export JAVA_CPPFLAGS=-I${pkgs.jdk}/include/
+    export JAVA_HOME=${pkgs.jdk}
+    '';
+    meta.hydraPlatforms = R.meta.hydraPlatforms;
+  };
   rJavax = derive { name="rJavax"; version="0.3"; sha256="0sv2fjinp4wmdfvcpgm4hv8v3fkiiv84ywqyr4hz86j50ncd79km"; depends=[rJava]; };
   RJDBC = derive { name="RJDBC"; version="0.2-4"; sha256="14nqz4gx24gcjmnd3hrhvfs5f68c3nqhb6nypv9gvk19dx1jayg0"; depends=[DBI rJava]; };
   rje = derive { name="rje"; version="1.9"; sha256="1dyd34z6lb0p6zmyax5dpzflgc9a4saka33mvdfcxi5pj0rnygaz"; depends=[]; };
