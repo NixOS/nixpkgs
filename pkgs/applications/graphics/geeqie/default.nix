@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, autoconf, automake, gtk, libpng, exiv2, lcms
+{ stdenv, fetchgit, pkgconfig, autoconf, automake, gtk, libpng, exiv2, lcms
 , intltool, gettext, libchamplain, fbida }:
 
 stdenv.mkDerivation rec {
   name = "geeqie-${version}";
   version = "1.2";
 
-  src = fetchurl {
-    url = "https://gitorious.org/geeqie/geeqie/archive/v${version}.tar.gz";
-    sha256 = "13sgf20h0z8dz1075vmyh8vbxgchq30cqrl15zfv9h8hp271vpfj";
+  src = fetchgit {
+    url = "git://gitorious.org/geeqie/geeqie.git";
+    rev = "refs/tags/v${version}";
+    sha256 = "1h9w0jrcqcp5jjgmks5pvpppnfxhcd1s3vqlyb3qyil2wfk8n8wp";
   };
 
   preConfigure = "./autogen.sh";
