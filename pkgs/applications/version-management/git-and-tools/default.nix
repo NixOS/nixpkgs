@@ -74,7 +74,7 @@ rec {
 
   hub = import ./hub {
     inherit (rubyLibs) rake;
-    inherit stdenv fetchurl groff makeWrapper;
+    inherit stdenv fetchurl groff ruby makeWrapper;
   };
 
   gitFastExport = import ./fast-export {
