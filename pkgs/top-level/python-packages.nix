@@ -7838,11 +7838,11 @@ let
 
 
   scipy = buildPythonPackage rec {
-    name = "scipy-0.12.0";
+    name = "scipy-0.14.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/s/scipy/${name}.tar.gz";
-      md5 = "8fb4da324649f655e8557ea92b998786";
+      md5 = "d7c7f4ccf8b07b08d6fe49d5cd51f85d";
     };
 
     buildInputs = [pkgs.gfortran];
