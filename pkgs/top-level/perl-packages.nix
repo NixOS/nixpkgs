@@ -5723,6 +5723,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MooXTypesMooseLike = buildPerlPackage rec {
+    name = "MooX-Types-MooseLike-0.27";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MATEU/${name}.tar.gz";
+      sha256 = "1489almsam2zcrs5039sh0y88gjicwna8kws8j2jgfs8bpcf4dgf";
+    };
+    propagatedBuildInputs = [ Moo TestFatal ];
+  };
+
   MooseAutobox = buildPerlPackage {
     name = "Moose-Autobox-0.15";
     src = fetchurl {
