@@ -25,7 +25,7 @@ rec {
     shortName = "amd";
     fullName = "AMD License Agreement";
     url = http://developer.amd.com/amd-license-agreement/;
-  };#
+  };
 
   apsl20 = spdx {
     shortName = "APSL-2.0";
