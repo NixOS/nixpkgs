@@ -6,8 +6,8 @@ let
 
   checkService = v:
     let assertValueOneOf = name: values: attr:
-          let val = getAttr name attr;
-          in optional ( hasAttr name attr && !elem val values) "Systemd service field `${name}' cannot have value `${val}'.";
+          let val = attr.${name};
+          in optional (attr ? ${name} && !elem val values) "Systemd service field `${name}' cannot have value `${val}'.";
         checkType = assertValueOneOf "Type" ["simple" "forking" "oneshot" "dbus" "notify" "idle"];
         checkRestart = assertValueOneOf "Restart" ["no" "on-success" "on-failure" "on-abort" "always"];
         errors = concatMap (c: c v) [checkType checkRestart];

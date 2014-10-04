@@ -399,8 +399,8 @@ in
     services.xserver.drivers = flip concatMap cfg.videoDrivers (name:
       let driver =
         attrByPath [name]
-          (if (hasAttr ("xf86video" + name) xorg)
-           then { modules = [(getAttr ("xf86video" + name) xorg) ]; }
+          (if xorg ? ${"xf86video" + name}
+           then { modules = [xorg.${"xf86video" + name}]; }
            else null)
           knownVideoDrivers;
       in optional (driver != null) ({ inherit name; driverName = name; } // driver));

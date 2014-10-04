@@ -30,7 +30,7 @@ rec {
         if check && set ? _definedNames then
           fold (m: res:
             fold (name: res:
-              if hasAttr name set then res else throw "The option `${showOption (prefix ++ [name])}' defined in `${m.file}' does not exist.")
+              if set ? ${name} then res else throw "The option `${showOption (prefix ++ [name])}' defined in `${m.file}' does not exist.")
               res m.names)
             res set._definedNames
         else
@@ -94,22 +94,22 @@ rec {
           loc = prefix ++ [name];
           # Get all submodules that declare ‘name’.
           decls = concatLists (map (m:
-            if hasAttr name m.options
-              then [ { inherit (m) file; options = getAttr name m.options; } ]
+            if m.options ? ${name}
+              then [ { inherit (m) file; options = m.options.${name}; } ]
               else []
             ) options);
           # Get all submodules that define ‘name’.
           defns = concatLists (map (m:
-            if hasAttr name m.config
+            if m.config ? ${name}
               then map (config: { inherit (m) file; inherit config; })
-                (pushDownProperties (getAttr name m.config))
+                (pushDownProperties m.config.${name})
               else []
             ) configs);
           nrOptions = count (m: isOption m.options) decls;
           # Process mkMerge and mkIf properties.
           defns' = concatMap (m:
-            if hasAttr name m.config
-              then map (m': { inherit (m) file; value = m'; }) (dischargeProperties (getAttr name m.config))
+            if m.config ? ${name}
+              then map (m': { inherit (m) file; value = m'; }) (dischargeProperties m.config.${name})
               else []
             ) configs;
         in
