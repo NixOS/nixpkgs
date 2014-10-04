@@ -9704,6 +9704,22 @@ let
     };
   };
 
+  xdot = buildPythonPackage rec {
+    name = "xdot-0.6";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/x/xdot/xdot-0.6.tar.gz";
+      md5 = "a8e5fc5208657b03ad1bd4c46de75724";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [ pygtk pygobject pkgs.graphviz ];
+
+    meta = with stdenv.lib; {
+      description = "xdot.py is an interactive viewer for graphs written in Graphviz's dot";
+      homepage = https://github.com/jrfonseca/xdot.py;
+      license = licenses.lgpl3Plus;
+    };
+  };
 
   zope_broken = buildPythonPackage rec {
     name = "zope.broken-3.6.0";
