@@ -7563,7 +7563,7 @@ let
   cramfsswap = callPackage ../os-specific/linux/cramfsswap { };
 
   darwin = let
-    cmdline = callPackage ../os-specific/darwin/command-line-tools {};
+    cmdline = (callPackage ../os-specific/darwin/command-line-tools {}).pure { inherit xpwn; };
   in rec {
     cctools = forceNativeDrv (callPackage ../os-specific/darwin/cctools-port {
       cross = assert crossSystem != null; crossSystem;
