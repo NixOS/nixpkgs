@@ -115,12 +115,12 @@ let
               __ignoreNulls = true;
 
               # Inputs built by the cross compiler.
-              buildInputs = lib.optionals (crossConfig != null) (buildInputs ++ extraBuildInputs);
-              propagatedBuildInputs = lib.optionals (crossConfig != null) propagatedBuildInputs;
+              buildInputs = if crossConfig != null then buildInputs ++ extraBuildInputs else [];
+              propagatedBuildInputs = if crossConfig != null then propagatedBuildInputs else [];
               # Inputs built by the usual native compiler.
-              nativeBuildInputs = nativeBuildInputs ++ lib.optionals (crossConfig == null) (buildInputs ++ extraBuildInputs);
+              nativeBuildInputs = nativeBuildInputs ++ (if crossConfig == null then buildInputs ++ extraBuildInputs else []);
               propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
-                lib.optionals (crossConfig == null) propagatedBuildInputs;
+                (if crossConfig == null then propagatedBuildInputs else []);
           }))) (
           {
             # The meta attribute is passed in the resulting attribute set,
