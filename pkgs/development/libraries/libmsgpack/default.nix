@@ -1,25 +1,16 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, ruby, scatterOutputHook }:
+{ stdenv, fetchurl, cmake}:
 
 stdenv.mkDerivation rec {
-  version = "0.5.8";
+  version = "0.5.9";
   name = "libmsgpack-${version}";
 
   src = fetchurl {
     url = "https://github.com/msgpack/msgpack-c/archive/cpp-${version}.tar.gz";
-    sha256 = "1h6k9kdbfavmw3by5kk3raszwa64hn9k8yw9rdhvl5m8g2lks89k";
+    sha256 = "0xy204srq5grng7p17hwdxpfzbsfrn89gi4c3k62a23p4f9z0szq";
   };
 
-  nativeBuildInputs = [ scatterOutputHook ];
-  buildInputs = [ autoconf automake libtool ruby ];
-
-  outputs = [ "out" "bin" ];
-
-  preConfigure = ''
-    sed -i s,glibtoolize,libtoolize, ./bootstrap
-    ./bootstrap
-  '';
-
-  enableParallelBuilding = true;
+  buildInputs = [ cmake ];
+  patches = [ ./CMakeLists.patch ];
 
   meta = with stdenv.lib; {
     description = "MessagePack implementation for C and C++";
