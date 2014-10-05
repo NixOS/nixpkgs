@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "compcert-${version}";
-  version = "2.3pl2";
+  version = "2.4";
 
   src = fetchurl {
     url    = "http://compcert.inria.fr/release/${name}.tgz";
-    sha256 = "1cq4my646ll1mszs5mbzwk4vp8l8qnsc96fpcv2pl35aw5i6jqm8";
+    sha256 = "1qrb1cplx3v5wxn1c46kx67v1j52yznvjm2hkrsdybphhki2pyia";
   };
 
   buildInputs = [ coq ocaml ocamlPackages.menhir ];
@@ -15,13 +15,12 @@ stdenv.mkDerivation rec {
   configurePhase = "./configure -prefix $out -toolprefix ${gcc}/bin/ " +
     (if stdenv.isDarwin then "ia32-macosx" else "ia32-linux");
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Formally verified C compiler";
     homepage    = "http://compcert.inria.fr";
-    license     = stdenv.lib.licenses.inria;
-    platforms   = stdenv.lib.platforms.linux ++
-                  stdenv.lib.platforms.darwin;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice
-                    stdenv.lib.maintainers.jwiegley ];
+    license     = licenses.inria;
+    platforms   = platforms.linux ++
+                  platforms.darwin;
+    maintainers = with maintainers; [ thoughtpolice jwiegley vbgl ];
   };
 }
