@@ -2,20 +2,20 @@
 
 { cabal, blazeBuilder, conduit, hspec, persistent, persistentSqlite
 , persistentTemplate, resourcePool, resourcet, text, transformers
-, waiExtra, waiTest, yesodCore
+, waiExtra, yesodCore
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-persistent";
-  version = "1.2.3.1";
-  sha256 = "1mmy1l91ksjvwi2zr1wnb50vshs4pdri9rcaracwrnrmdpbmyy3s";
+  version = "1.4.0.1";
+  sha256 = "08648n6b4xhsqbvqh8vpsf3481hvzhrkyqbzs303s6fz683mn0zw";
   buildDepends = [
     blazeBuilder conduit persistent persistentTemplate resourcePool
     resourcet transformers yesodCore
   ];
   testDepends = [
     blazeBuilder conduit hspec persistent persistentSqlite text
-    waiExtra waiTest yesodCore
+    waiExtra yesodCore
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";

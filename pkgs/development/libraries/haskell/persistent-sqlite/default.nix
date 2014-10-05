@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "persistent-sqlite";
-  version = "2.0.5";
-  sha256 = "1x65pni93xgsbfwaknd9fgqccz0gbn1ky6k55l2ss5ab92apqy8i";
+  version = "2.1";
+  sha256 = "0692dgrk8q3lg0fhy683wgxn0dy1ci05k57jzclxls247npf5lxb";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
