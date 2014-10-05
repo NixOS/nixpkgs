@@ -1,7 +1,8 @@
 { stdenv, fetchurl
-, pkgconfig, makeWrapper, gettext, python
+, pkgconfig, gettext, python
 , gtk, pygtk, dbus_python
-, upower }:
+, gdk_pixbuf, upower
+, makeWrapper }:
 
 stdenv.mkDerivation rec {
 
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with stdenv.lib;
-  [ pkgconfig makeWrapper gettext python gtk pygtk dbus_python upower ];
+  [ pkgconfig gettext python gtk pygtk dbus_python gdk_pixbuf upower makeWrapper ];
 
   configurePhase = "true";
 
@@ -24,7 +25,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     python setup.py install --prefix $out
-    wrapProgram $out/bin/batti --set PYTHONPATH "$PYTHONPATH:$(toPythonPath $out)"
+    wrapProgram "$out/bin/batti" \
+      --set PYTHONPATH "$PYTHONPATH:$(toPythonPath $out)" \
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
+      --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   '';
 
 
