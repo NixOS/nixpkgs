@@ -3,12 +3,12 @@
 with lib;
 
 let
-
   cfg = config.services.redmine;
 
-  ruby = pkgs.ruby2;
-  rubyLibs = pkgs.ruby2Libs;
+  ruby = pkgs.ruby;
+  rubyLibs = pkgs.rubyLibs;
 
+  # TODO: do not point to nixpkgs dir
   gemspec = map (gem: pkgs.fetchurl { url=gem.url; sha256=gem.hash; })
     (import <nixpkgs/pkgs/applications/version-management/redmine/Gemfile.nix>);
 
@@ -38,6 +38,7 @@ let
     ];
     installPhase = ''
       cp -R . $out
+      # TODO: /usr/share/redmine
       cd $out
       ln -s ${<nixpkgs/pkgs/applications/version-management/redmine/Gemfile.lock>} Gemfile.lock
       export HOME=$(pwd)
@@ -65,22 +66,26 @@ let
       production:
         adapter: ${cfg.databaseType}
         database: ${cfg.databaseName}
-        host: ${cfg.databaseHost}
         username: ${cfg.databaseUsername}
-        password: ${cfg.databasePassword}
         encoding: utf8
       EOF
 
-      cat > config/configuration.yml <<EOF
-      ${cfg.config}
-      EOF
+      ln -s ${pkgs.writeText "configuration.yml" cfg.config} config/configuration.yml
+
       bundle config build.nokogiri --use-system-libraries --with-iconv-dir=${libiconv} --with-xslt-dir=${libxslt} --with-xml2-dir=${libxml2} --with-pkg-config --with-pg-config=${postgresql}/bin/pg_config
 
       bundle install --verbose --local --deployment
 
-      GEM_HOME=./vendor/bundle/ruby/${ruby.majorVersion}.${ruby.minorVersion} ${ruby}/bin/rake generate_secret_token
-
+      # TODO: remove
+      GEM_HOME=./vendor/bundle/ruby/1.9.1 ${ruby}/bin/rake generate_secret_token
     '';
+
+    meta = with stdenv.lib; {
+      homepage = http://www.redmine.org/;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.garbas ];
+      license = licenses.gpl2;
+    };
   };
 
 in {
@@ -103,7 +108,31 @@ in {
 
       config = mkOption {
         type = types.str;
-        default = "";
+        default = ''
+          default:
+            # Absolute path to the directory where attachments are stored.
+            # The default is the 'files' directory in your Redmine instance.
+            # Your Redmine instance needs to have write permission on this
+            # directory.
+            # Examples:
+            # attachments_storage_path: /var/redmine/files
+            # attachments_storage_path: D:/redmine/files
+            attachments_storage_path: ${cfg.stateDir}/files
+
+            # Configuration of the autologin cookie.
+            # autologin_cookie_name: the name of the cookie (default: autologin)
+            # autologin_cookie_path: the cookie path (default: /)
+            # autologin_cookie_secure: true sets the cookie secure flag (default: false)
+            autologin_cookie_name:
+            autologin_cookie_path:
+            autologin_cookie_secure:
+
+            # Absolute path to the SCM commands errors (stderr) log file.
+            # The default is to log in the 'log' directory of your Redmine instance.
+            # Example:
+            # scm_stderr_log_file: /var/log/redmine_scm_stderr.log
+            scm_stderr_log_file: ${cfg.stateDir}/redmine_scm_stderr.log
+        '';
         description = "Configuration for redmine";
       };
 
@@ -131,22 +160,10 @@ in {
         description = "Database name";
       };
 
-      databaseHost = mkOption {
-        type = types.str;
-        default = "127.0.0.1";
-        description = "Database hostname";
-      };
-
-      databaseUsername= mkOption {
+      databaseUsername = mkOption {
         type = types.str;
         default = "redmine";
         description = "Database user";
-      };
-
-      databasePassword= mkOption {
-        type = types.str;
-        default = "";
-        description = "Database user password";
       };
     };
   };
@@ -168,10 +185,10 @@ in {
       after = [ "network.target" "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
       environment.RAILS_ENV = "production";
-      environment.GEM_HOME = "${redmine}/vendor/bundle/ruby/${ruby.majorVersion}.${ruby.minorVersion}";
+      environment.GEM_HOME = "${redmine}/vendor/bundle/ruby/1.9.1";
       environment.HOME = "${redmine}";
       environment.REDMINE_LANG = "en";
-      environment.GEM_PATH = "${rubyLibs.bundler}/lib/ruby/gems/2.0";
+      environment.GEM_PATH = "${rubyLibs.bundler}/lib/ruby/gems/1.9";
       path = with pkgs; [
         imagemagickBig
         subversion
@@ -191,10 +208,18 @@ in {
         chown -R redmine:redmine ${cfg.stateDir}
         chmod -R 755 ${cfg.stateDir}
 
+        if ! test -e "${cfg.stateDir}/db-created"; then
+          # TODO: support other dbs
+          ${config.services.postgresql.package}/bin/createuser --no-superuser --no-createdb --no-createrole redmine || true
+          ${config.services.postgresql.package}/bin/createdb --owner redmine redmine || true
+          #${ruby}/bin/rake generate_secret_token
+          touch "${cfg.stateDir}/db-created"
+        fi
+
         cd ${redmine}
-        ${ruby}/bin/rake db:migrate
-        ${ruby}/bin/rake redmine:plugins:migrate
-        ${ruby}/bin/rake redmine:load_default_data
+        /var/setuid-wrappers/sudo -u redmine -E -- ${ruby}/bin/rake db:migrate
+        /var/setuid-wrappers/sudo -u redmine -E -- ${ruby}/bin/rake redmine:plugins:migrate
+        /var/setuid-wrappers/sudo -u redmine -E -- ${ruby}/bin/rake redmine:load_default_data
       '';
 
       serviceConfig = {
