@@ -60,6 +60,7 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   xfce4_cpufreq_plugin    = callPackage ./panel-plugins/xfce4-cpufreq-plugin.nix    { };
   xfce4_xkb_plugin        = callPackage ./panel-plugins/xfce4-xkb-plugin.nix        { };
   xfce4_datetime_plugin   = callPackage ./panel-plugins/xfce4-datetime-plugin.nix   { };
+  xfce4_battery_plugin    = callPackage ./panel-plugins/xfce4-battery-plugin.nix    { };
 
 }; # xfce_self
 
