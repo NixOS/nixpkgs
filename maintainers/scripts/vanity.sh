@@ -40,7 +40,7 @@ echo "$maintainers" | cut -f 2 | sed -e 's@.*@<my://name/&>	<my://is-name>	<my:/
 ) | normalize_name | grep -E '<my://[-a-z]+>' | sort | uniq > "$n3"
 
 # Get transitive closure
-sparql="$(nix-build '<nixpkgs>' -A apache-jena --no-out-link)/bin/sparql"
+sparql="$(nix-build '<nixpkgs>' -Q -A apache-jena --no-out-link)/bin/sparql"
 name_list="$(
 	"$sparql" --results=TSV --data="$n3" "
 	select ?x ?y ?g where {
