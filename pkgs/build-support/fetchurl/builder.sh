@@ -27,16 +27,17 @@ tryDownload() {
     header "trying $url"
     local curlexit=18;
 
+    success=
+
     # if we get error code 18, resume partial download
     while [ $curlexit -eq 18 ]; do
-        $curl -C - --fail "$url" --output "$downloadedFile"
-        local curlexit=$?;
+       # keep this inside an if statement, since on failure it doesn't abort the script
+       if $curl -C - --fail "$url" --output "$downloadedFile"; then
+          success=1
+       else
+          curlexit=$?;
+       fi
     done
-
-    success=
-    if [ $curlexit -eq 0 ]; then
-        success=1
-    fi
     stopNest
 }
 
