@@ -641,6 +641,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   diagramsCairo = callPackage ../development/libraries/haskell/diagrams/cairo.nix {};
   diagramsCore = callPackage ../development/libraries/haskell/diagrams/core.nix {};
   diagramsContrib = callPackage ../development/libraries/haskell/diagrams/contrib.nix {};
+  diagramsGtk = callPackage ../development/libraries/haskell/diagrams/gtk.nix {};
   diagramsLib = callPackage ../development/libraries/haskell/diagrams/lib.nix {};
   diagramsPostscript = callPackage ../development/libraries/haskell/diagrams/postscript.nix {};
   diagramsRasterific = callPackage ../development/libraries/haskell/diagrams/rasterific.nix {};
