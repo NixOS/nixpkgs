@@ -345,8 +345,18 @@ in
 
         interfaces = mkOption {
           example = [ "enp4s0f0" "enp4s0f1" "wlan0" ];
-          type = types.listOf types.string;
+          type = types.listOf types.str;
           description = "The interfaces to bond together";
+        };
+
+        lacp_rate = mkOption {
+          default = null;
+          example = "fast";
+          type = types.nullOr types.str;
+          description = ''
+            Option specifying the rate in which we'll ask our link partner
+            to transmit LACPDU packets in 802.3ad mode.
+          '';
         };
 
         miimon = mkOption {
@@ -364,12 +374,22 @@ in
         mode = mkOption {
           default = null;
           example = "active-backup";
-          type = types.nullOr types.string;
+          type = types.nullOr types.str;
           description = ''
             The mode which the bond will be running. The default mode for
             the bonding driver is balance-rr, optimizing for throughput.
             More information about valid modes can be found at
             https://www.kernel.org/doc/Documentation/networking/bonding.txt
+          '';
+        };
+
+        xmit_hash_policy = mkOption {
+          default = null;
+          example = "layer2+3";
+          type = types.nullOr types.str;
+          description = ''
+            Selects the transmit hash policy to use for slave selection in
+            balance-xor, 802.3ad, and tlb modes.
           '';
         };
 
@@ -766,10 +786,14 @@ in
               while [ ! -d /sys/class/net/${n} ]; do sleep 0.1; done;
 
               # Set the miimon and mode options
+              ${optionalString (v.lacp_rate != null)
+                "echo \"${v.lacp_rate}\" > /sys/class/net/${n}/bonding/lacp_rate"}
               ${optionalString (v.miimon != null)
                 "echo ${toString v.miimon} > /sys/class/net/${n}/bonding/miimon"}
               ${optionalString (v.mode != null)
                 "echo \"${v.mode}\" > /sys/class/net/${n}/bonding/mode"}
+              ${optionalString (v.xmit_hash_policy != null)
+                "echo \"${v.xmit_hash_policy}\" > /sys/class/net/${n}/bonding/xmit_hash_policy"}
 
               # Bring up the bridge and enslave the specified interfaces
               ip link set "${n}" up
