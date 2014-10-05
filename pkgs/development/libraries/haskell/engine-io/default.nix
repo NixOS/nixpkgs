@@ -7,13 +7,12 @@
 
 cabal.mkDerivation (self: {
   pname = "engine-io";
-  version = "1.1.2";
-  sha256 = "1ry6rklrij7x1z8mw31vh41lc0axzj8l0lhmjsmhs554nv50062f";
+  version = "1.2.0";
+  sha256 = "07k5zc8zbjpcj3iql0kcs4zrw5g24cngkp9yanpdmnhi18ms45dv";
   buildDepends = [
     aeson async attoparsec base64Bytestring either monadLoops mwcRandom
     stm text transformers unorderedContainers vector websockets
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://github.com/ocharles/engine.io";
     description = "A Haskell implementation of Engine.IO";
