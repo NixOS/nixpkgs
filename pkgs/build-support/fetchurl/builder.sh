@@ -34,6 +34,7 @@ tryDownload() {
        # keep this inside an if statement, since on failure it doesn't abort the script
        if $curl -C - --fail "$url" --output "$downloadedFile"; then
           success=1
+          break
        else
           curlexit=$?;
        fi
