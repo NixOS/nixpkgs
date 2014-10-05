@@ -1433,7 +1433,9 @@ let
 
   iodine = callPackage ../tools/networking/iodine { };
 
-  iperf = callPackage ../tools/networking/iperf { };
+  iperf2 = callPackage ../tools/networking/iperf/2.nix { };
+  iperf3 = callPackage ../tools/networking/iperf/3.nix { };
+  iperf = iperf3;
 
   ipmitool = callPackage ../tools/system/ipmitool {
     static = false;
