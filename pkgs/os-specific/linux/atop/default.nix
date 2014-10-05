@@ -41,6 +41,5 @@ stdenv.mkDerivation rec {
     '';
     inherit version;
     downloadPage = http://atoptool.nl/downloadatop.php;
-    updateWalker = true;
   };
 }
