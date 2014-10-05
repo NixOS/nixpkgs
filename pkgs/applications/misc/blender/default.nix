@@ -9,11 +9,11 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "blender-2.71";
+  name = "blender-2.72";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "12aqdrpl86xjk2xdwj2nbfcmdzyv61n443gw6j2japffm1kmlz8x";
+    sha256 = "0wydh5bs1pxnx3ya65lfy3val1s8wz027a5kb4va6wg3aqnwlvlv";
   };
 
   buildInputs =
@@ -30,8 +30,7 @@ stdenv.mkDerivation rec {
     '';
 
   cmakeFlags =
-    [ "-DOPENEXR_INC=${openexr}/include/OpenEXR"
-      "-DWITH_OPENCOLLADA=OFF"
+    [ "-DWITH_OPENCOLLADA=OFF"
       "-DWITH_MOD_OCEANSIM=ON"
       "-DWITH_CODEC_FFMPEG=ON"
       "-DWITH_CODEC_SNDFILE=ON"
