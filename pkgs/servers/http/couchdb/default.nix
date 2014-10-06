@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "couchdb-${version}";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchurl {
     url = "mirror://apache/couchdb/source/${version}/apache-${name}.tar.gz";
-    sha256 = "0m4k7i3gibzzcabssysv42rmdr89myppc6765xr0jggwkwdxgxmx";
+    sha256 = "09w6ijj9l5jzh81nvc3hrlqp345ajg3haj353g9kxkik6wbinq2s";
   };
 
   buildInputs = [ erlang icu openssl spidermonkey curl help2man sphinx which
