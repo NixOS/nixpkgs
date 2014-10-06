@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    qt4 bison flex eigen boost mesa glew opencsg cgal mpfr gmp glib pkgconfig
+    qt4 bison flex eigen boost boost.lib mesa glew opencsg cgal mpfr gmp glib
+    pkgconfig
   ];
 
   configurePhase = ''

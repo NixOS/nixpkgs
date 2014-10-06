@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, erlang, rebar, makeWrapper, coreutils }:
+{ stdenv, fetchurl, erlang, rebar, makeWrapper, coreutils, curl, bash, cacert }:
 
 let
   version = "1.0.0";
@@ -20,6 +20,8 @@ stdenv.mkDerivation {
 
     substituteInPlace Makefile \
       --replace "/usr/local" $out
+    substituteInPlace bin/mix \
+      --replace "/usr/bin/env elixir" "$out/bin/elixir"
   '';
 
   postFixup = ''
@@ -29,7 +31,8 @@ stdenv.mkDerivation {
     for f in $out/bin/*
     do
       wrapProgram $f \
-      --prefix PATH ":" "${erlang}/bin:${coreutils}/bin"
+      --prefix PATH ":" "${erlang}/bin:${coreutils}/bin:${curl}/bin:${bash}/bin" \
+      --set CURL_CA_BUNDLE "${cacert}/etc/ca-bundle.crt"
     done
   '';
 

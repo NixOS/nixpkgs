@@ -2,14 +2,12 @@
 , telepathy_farstream, telepathy_glib, pythonDBus }:
 
 stdenv.mkDerivation rec {
-  name = "telepathy-qt-0.9.4";
+  name = "telepathy-qt-0.9.5";
 
   src = fetchurl {
     url = "http://telepathy.freedesktop.org/releases/telepathy-qt/${name}.tar.gz";
-    sha256 = "1wk13rwpas1crj19xsbgl1c4qzri616xxa1hyhnykv4nkwxdpcgi";
+    sha256 = "13lwh23ad9bg7hx1mj4xjc2lb8nlaaw8hbrmx5gg8nz5xxc4hiwk";
   };
-
-  patches = [ ./farstream-0.2.diff ];
 
   nativeBuildInputs = [ cmake pkgconfig python libxslt ];
   propagatedBuildInputs = [ qt4 dbus_glib telepathy_farstream telepathy_glib pythonDBus ];
@@ -22,4 +20,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   doCheck = false; # giving up for now
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

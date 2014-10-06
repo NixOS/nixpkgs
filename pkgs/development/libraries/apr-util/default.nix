@@ -13,11 +13,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "apr-util-1.5.3";
+  name = "apr-util-1.5.4";
 
   src = fetchurl {
     url = "mirror://apache/apr/${name}.tar.bz2";
-    sha256 = "0s1rpqjy5xr03k9s4xrsm5wvhj5286vlkf6jvqayw99yy5sb3vbq";
+    sha256 = "0bn81pfscy9yjvbmyx442svf43s6dhrdfcsnkpxz43fai5qk5kx6";
   };
 
   configureFlags = ''
@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://apr.apache.org/;
     description = "A companion library to APR, the Apache Portable Runtime";
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

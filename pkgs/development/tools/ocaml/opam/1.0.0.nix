@@ -1,5 +1,7 @@
 { stdenv, fetchgit, fetchurl, ocaml, unzip, ncurses, curl }:
 
+assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12.1";
+
 let
   srcs = {
     cudf = fetchurl {

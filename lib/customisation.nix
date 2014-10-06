@@ -1,6 +1,6 @@
-let lib = import ./default.nix;
-    inherit (builtins) getAttr attrNames isFunction;
-
+let
+  lib = import ./default.nix;
+  inherit (builtins) attrNames isFunction;
 in
 
 rec {
@@ -107,10 +107,10 @@ rec {
       outputToAttrListElement = outputName:
         { name = outputName;
           value = commonAttrs // {
-            inherit (builtins.getAttr outputName drv) outPath drvPath type outputName;
+            inherit (drv.${outputName}) outPath drvPath type outputName;
           };
         };
 
       outputsList = map outputToAttrListElement outputs;
-  in builtins.getAttr drv.outputName commonAttrs;
+  in commonAttrs.${drv.outputName};
 }

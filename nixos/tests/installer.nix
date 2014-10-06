@@ -6,13 +6,13 @@ with pkgs.lib;
 
 let
 
-  # Build the ISO.  This is the regular installation CD but with test
-  # instrumentation.
+  # Build the ISO.  This is the regular minimal installation CD but
+  # with test instrumentation.
   iso =
     (import ../lib/eval-config.nix {
       inherit system;
       modules =
-        [ ../modules/installer/cd-dvd/installation-cd-graphical.nix
+        [ ../modules/installer/cd-dvd/installation-cd-minimal.nix
           ../modules/testing/test-instrumentation.nix
           { key = "serial";
             boot.loader.grub.timeout = mkOverride 0 0;
@@ -43,6 +43,7 @@ let
       { imports =
           [ ./hardware-configuration.nix
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
+            <nixpkgs/nixos/modules/profiles/minimal.nix>
           ];
 
         ${if useEFI then ''

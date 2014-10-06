@@ -5,18 +5,16 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "ocamlnet-3.7.3";
+  name = "ocamlnet-3.7.6";
 
   src = fetchurl {
-    url = http://download.camlcity.org/download/ocamlnet-3.7.3.tar.gz;
-    sha256 = "0s24icyrxkqqai91rgxpf52s1fx70j7p12c8vq9vcmvdhll6kp2d";
+    url = http://download.camlcity.org/download/ocamlnet-3.7.6.tar.gz;
+    sha256 = "0z17kxn1cyn1x5wgajw737m9rsjwji823rxdwvv8a5239xd1whji";
   };
 
   buildInputs = [ncurses ocaml findlib ocaml_pcre camlzip openssl ocaml_ssl cryptokit];
 
   propagatedbuildInputs = [ncurses ocaml_pcre camlzip openssl ocaml_ssl cryptokit];
-
-  patches = [ ./configure.patch ];
 
   createFindlibDestdir = true;
 

@@ -10,11 +10,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "erlang-" + version + "${optionalString odbcSupport "-odbc"}";
-  version = "17.1";
+  version = "17.3";
 
   src = fetchurl {
     url = "http://www.erlang.org/download/otp_src_${version}.tar.gz";
-    sha256 = "0mn3p5rwvjfsxjnn1vrm0lxdq40wq9bmd9nibl6hqbfcnnrga1mq";
+    sha256 = "1r3n7drzgmwcv46n4lzic9ki19psgx1vjgnmjp5g85k06kmh7gnl";
   };
 
   buildInputs =
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   postInstall = let
     manpages = fetchurl {
       url = "http://www.erlang.org/download/otp_doc_man_${version}.tar.gz";
-      sha256 = "1aza6hxhh7ag2frsa0hg6il6ancjrbazvgz7jc2p7qrmy5vh48sa";
+      sha256 = "1dys0903snk0ppip8hfckfd656pl9z3s4vqqv3yk4i2rn30dmarz";
     };
   in ''
     ln -s $out/lib/erlang/lib/erl_interface*/bin/erl_call $out/bin/erl_call

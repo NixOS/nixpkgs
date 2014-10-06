@@ -21,5 +21,6 @@ stdenv.mkDerivation {
     description = "DOM C library developped for the Gnome project";
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [ stdenv.lib.maintainers.roconnor ];
+    broken = true;
   };
 }

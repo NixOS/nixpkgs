@@ -9,7 +9,7 @@ kde {
 
   buildInputs = [
     python kdepimlibs shared_desktop_ontologies
-    boost polkit_qt_1
+    boost boost.lib polkit_qt_1
   ];
 
   nativeBuildInputs = [ pkgconfig ];

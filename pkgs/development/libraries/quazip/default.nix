@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = "cd quazip && qmake quazip.pro";
 
-  installFlags = "INSTALL_ROOT=$out";
+  installFlags = "INSTALL_ROOT=$(out)";
 
   buildInputs = [ zlib qt5 ];
 

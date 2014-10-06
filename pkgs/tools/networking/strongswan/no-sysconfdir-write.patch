@@ -1,0 +1,36 @@
+commit 0de10fe4950672053fe2b242bcec064e9e88c880
+Author: Shea Levy <shea@shealevy.com>
+Date:   Fri Sep 19 14:32:22 2014 -0400
+
+    Don't fail to install if sysconfdir isn't writable
+
+diff --git a/conf/Makefile.am b/conf/Makefile.am
+index 373be16..85b7b0e 100644
+--- a/conf/Makefile.am
++++ b/conf/Makefile.am
+@@ -152,9 +152,9 @@ maintainer-clean-local:
+ 		rm -f $(confsnippets) default.conf plugins/*.conf plugins/*.tmp
+ 
+ install-data-local: $(plugins_install_src)
+-	test -e "$(DESTDIR)${strongswanconfdir}" || $(INSTALL) -d "$(DESTDIR)$(strongswanconfdir)"
+-	test -e "$(DESTDIR)${strongswanddir}" || $(INSTALL) -d "$(DESTDIR)$(strongswanddir)"
+-	test -e "$(DESTDIR)${charonconfdir}" || $(INSTALL) -d "$(DESTDIR)$(charonconfdir)"
++	test -e "$(DESTDIR)${strongswanconfdir}" || $(INSTALL) -d "$(DESTDIR)$(strongswanconfdir)" || true
++	test -e "$(DESTDIR)${strongswanddir}" || $(INSTALL) -d "$(DESTDIR)$(strongswanddir)" || true
++	test -e "$(DESTDIR)${charonconfdir}" || $(INSTALL) -d "$(DESTDIR)$(charonconfdir)" || true
+ 	test -e "$(DESTDIR)$(strongswanconfdir)/strongswan.conf" || $(INSTALL) -m 644 $(srcdir)/strongswan.conf $(DESTDIR)$(strongswanconfdir)/strongswan.conf || true
+ 	for f in $(options_install_src); do \
+ 		name=`basename $$f`; \
+diff --git a/src/swanctl/Makefile.am b/src/swanctl/Makefile.am
+index 385737a..912fdf8 100644
+--- a/src/swanctl/Makefile.am
++++ b/src/swanctl/Makefile.am
+@@ -54,7 +54,7 @@ maintainer-clean-local:
+ 	cd $(srcdir) && rm -f swanctl.conf swanctl.conf.5.main
+ 
+ install-data-local: swanctl.conf
+-	test -e "$(DESTDIR)$(swanctldir)" || $(INSTALL) -d "$(DESTDIR)$(swanctldir)"
++	test -e "$(DESTDIR)$(swanctldir)" || $(INSTALL) -d "$(DESTDIR)$(swanctldir)" || true
+ 	test -e "$(DESTDIR)$(swanctldir)/x509" || $(INSTALL) -d "$(DESTDIR)$(swanctldir)/x509" || true
+ 	test -e "$(DESTDIR)$(swanctldir)/x509ca" || $(INSTALL) -d "$(DESTDIR)$(swanctldir)/x509ca" || true
+ 	test -e "$(DESTDIR)$(swanctldir)/x509aa" || $(INSTALL) -d "$(DESTDIR)$(swanctldir)/x509aa" || true

@@ -1,8 +1,8 @@
 # NixOS module for atftpd TFTP server
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

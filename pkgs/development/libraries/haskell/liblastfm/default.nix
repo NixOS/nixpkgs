@@ -2,27 +2,26 @@
 
 { cabal, aeson, cereal, contravariant, cryptoApi, hspec
 , hspecExpectationsLens, httpClient, httpClientTls, HUnit, lens
-, network, profunctors, pureMD5, semigroups, text, void, xmlConduit
-, xmlHtmlConduitLens
+, lensAeson, networkUri, profunctors, pureMD5, semigroups, text
+, void, xmlConduit, xmlHtmlConduitLens
 }:
 
 cabal.mkDerivation (self: {
   pname = "liblastfm";
-  version = "0.4.0.0";
-  sha256 = "0dr1nvb7sxlp1fihvnwz9lyfmaynbj39npah2ndvlgnzz670j0z9";
+  version = "0.4.1.0";
+  sha256 = "06w8rj2f2r0v15w6498px07krsqh1amcr6q22y3jlvaibm9mrvcw";
   buildDepends = [
     aeson cereal contravariant cryptoApi httpClient httpClientTls
-    network profunctors pureMD5 semigroups text void xmlConduit
+    networkUri profunctors pureMD5 semigroups text void xmlConduit
   ];
   testDepends = [
     aeson cereal contravariant cryptoApi hspec hspecExpectationsLens
-    httpClient httpClientTls HUnit lens network profunctors pureMD5
-    text void xmlConduit xmlHtmlConduitLens
+    httpClient httpClientTls HUnit lens lensAeson networkUri
+    profunctors pureMD5 text void xmlConduit xmlHtmlConduitLens
   ];
   meta = {
     description = "Lastfm API interface";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

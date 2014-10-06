@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "basic-prelude";
-  version = "0.3.8";
-  sha256 = "0lywnsds0q1nr466s3pc2izfr58kp23z7ing9k7dlgbmh9cqxypg";
+  version = "0.3.9";
+  sha256 = "0f2l8xryagl1f0d30gq1hhydjnn77qhhwgg9l44gvqn30y2n66h7";
   buildDepends = [
     hashable liftedBase ReadArgs safe systemFilepath text transformers
     unorderedContainers vector

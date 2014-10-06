@@ -1,22 +1,29 @@
-{stdenv, fetchurl, ocaml, findlib, ocaml_typeconv}:
+{stdenv, fetchurl, ocaml, findlib, ocaml_typeconv, camlp4}:
+
+let
+  ocaml_version = (builtins.parseDrvName ocaml.name).version;
+in
+
+assert stdenv.lib.versionOlder "4.00" ocaml_version;
 
 stdenv.mkDerivation {
-  name = "ocaml-sexplib-7.0.5";
+  name = "ocaml-sexplib-111.25.0";
 
   src = fetchurl {
-    url = "http://forge.ocamlcore.org/frs/download.php/832/sexplib-7.0.5.tar.gz";
-    sha256 = "b1022da052254581aae51fb634345920364439f715a2c786abcd0b828c2ce697";
+    url = https://ocaml.janestreet.com/ocaml-core/111.25.00/individual/sexplib-111.25.00.tar.gz;
+    sha256 = "0qh0zqp5nakqpmmhh4x7cg03vqj3j2bj4zj0nqdlksai188p9ila";
   };
 
-  patches = [ ./sexp-3.10-compat.patch ./sexplib-7.0.5-patch-ocamlbuild-ocaml4.patch ];
-  buildInputs = [ocaml findlib ocaml_typeconv ];
+  buildInputs = [ocaml findlib];
+  propagatedBuildInputs = [ocaml_typeconv camlp4];
 
   createFindlibDestdir = true;
 
-  meta = {
-    homepage = "http://forge.ocamlcore.org/projects/sexplib/";
+  meta = with stdenv.lib; {
+    homepage = https://ocaml.janestreet.com/;
     description = "Library for serializing OCaml values to and from S-expressions";
-    license = "LGPL";
+    license = licenses.asl20;
+    maintainers = [ maintainers.vbgl ];
     platforms = ocaml.meta.platforms;
   };
 }

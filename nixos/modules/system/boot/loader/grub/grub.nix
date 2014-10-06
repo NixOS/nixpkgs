@@ -234,6 +234,15 @@ in
         '';
       };
 
+      enableCryptodisk = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Enable support for encrypted partitions. Grub should automatically
+          unlock the correct encrypted partition and look for filesystems.
+        '';
+      };
+
     };
 
   };
@@ -261,6 +270,7 @@ in
           throw "You must set the option ‘boot.loader.grub.device’ to make the system bootable."
         else
           "PERL5LIB=${makePerlPath (with pkgs.perlPackages; [ FileSlurp XMLLibXML XMLSAX ])} " +
+          (if cfg.enableCryptodisk then "GRUB_ENABLE_CRYPTODISK=y " else "") +
           "${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig}";
 
       system.build.grub = grub;

@@ -13,8 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "0gi5fzij48hmhhqxc370jxvxig5q3d70jiz56rjn8yx514s5lfwa";
   };
 
-  buildInputs = [ SDL SDL_image SDL_mixer SDL_net SDL_ttf pango gettext zlib boost fribidi
-                  cmake freetype libpng pkgconfig lua dbus fontconfig libtool ];
+  buildInputs = [ SDL SDL_image SDL_mixer SDL_net SDL_ttf pango gettext zlib
+                  boost boost.lib fribidi cmake freetype libpng pkgconfig lua
+                  dbus fontconfig libtool ];
 
   cmakeFlags = [ "-DENABLE_STRICT_COMPILATION=FALSE" ]; # newer gcc problems http://gna.org/bugs/?21030
 

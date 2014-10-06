@@ -11,11 +11,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nsd-4.0.3";
+  name = "nsd-4.1.0";
 
   src = fetchurl {
     url = "http://www.nlnetlabs.nl/downloads/nsd/${name}.tar.gz";
-    sha256 = "4bf05f2234e1b41899198aa1070f409201fc3c4980feef6567cd92c7074c4a8b";
+    sha256 = "ec3f6902f6f26a6b9248dcd7e9f42472fa52755740b4ba6b9d3bd08910b39b62";
   };
 
   buildInputs = [ libevent openssl ];
@@ -33,10 +33,12 @@ stdenv.mkDerivation rec {
      ++ edf rootServer       "root-server"
      ++ [ "--with-ssl=${openssl}" "--with-libevent=${libevent}" ];
 
-  meta = {
-    description = "Authoritative only, high performance, simple and open source name server.";
-    license = "BSD";
+  meta = with stdenv.lib; {
     homepage = http://www.nlnetlabs.nl;
-    platforms = with stdenv.lib.platforms; linux;
+    description = "Authoritative only, high performance, simple and open source name server";
+    license = licenses.bsd3;
+
+    platforms = platforms.unix;
+    maintainers = [ maintainers.hrdinka ];
   };
 }

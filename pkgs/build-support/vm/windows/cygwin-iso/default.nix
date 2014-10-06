@@ -40,7 +40,7 @@ let
     };
   in map gen expr;
 
-in import <nixpkgs/nixos/lib/make-iso9660-image.nix> {
+in import ../../../../../nixos/lib/make-iso9660-image.nix {
   inherit stdenv perl cdrkit pathsFromGraph;
   contents = [
     { source = "${cygwinCross}/bin/setup.exe";

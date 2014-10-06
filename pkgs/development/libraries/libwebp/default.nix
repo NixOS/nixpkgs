@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libpng, libjpeg, giflib, libtiff }:
 
 stdenv.mkDerivation rec {
-  name = "libwebp-0.4.0";
+  name = "libwebp-0.4.1";
 
   src = fetchurl {
-    url = "http://webp.googlecode.com/files/${name}.tar.gz";
-    sha256 = "0sadjkx8m6sf064r5gngjvz4b5246q3j27dlaml5b1k3x5vkb49i";
+    url = "http://downloads.webmproject.org/releases/webp/${name}.tar.gz";
+    sha256 = "09yhfhb90hlhr0vq8ajnpk9rxvmb1bkiywcqm7xahl35yvk4ddh0";
   };
 
   buildInputs = [ libpng libjpeg giflib libtiff ];

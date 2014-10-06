@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0k96i8xq3xkm5rrxrj3zqgppcmqbzcpc918xnx0p54jkkm85gchc";
   };
 
-  buildInputs = [ qt4 soprano libxslt boost sqlite ];
+  buildInputs = [ qt4 soprano libxslt boost boost.lib sqlite ];
 
   nativeBuildInputs = [ cmake automoc4 shared_mime_info ];
 

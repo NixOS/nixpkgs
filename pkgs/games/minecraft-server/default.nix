@@ -1,7 +1,5 @@
 { stdenv, fetchurl, jre }:
 
-with import <nixpkgs> {};
-
 stdenv.mkDerivation rec {
   name    = "minecraft-server-${version}";
   version = "1.7.10";

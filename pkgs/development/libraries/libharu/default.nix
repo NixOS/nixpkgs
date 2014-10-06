@@ -17,8 +17,8 @@ stdenv.mkDerivation {
         name = "linpng15.patch";
 
         src = fetchurl {
-          url = https://github.com/tony2001/libharu/commit/e5bf8b01f6c3d5e3fe0e26ac5345e0da10c03934.diff;
-          sha256 = "1993vskpycyr43rwdp8f688fc5zvllrqq935r7rhsgbqbipkk73h";
+          url = https://github.com/libharu/libharu/commit/e5bf8b01f6c3d5e3fe0e26ac5345e0da10c03934.diff;
+          sha256 = "07k2x5d4pvpf8a5hvfb9pj0dpjgcvv8sdvxwx3wzbwqsf9swwrxb";
         };
 
         nativeBuildInputs = [ patchutils ];
@@ -26,9 +26,9 @@ stdenv.mkDerivation {
         buildCommand = "filterdiff -x '*/CHANGES' $src > $out";
       })
       (fetchurl {
-        url = https://github.com/tony2001/libharu/commit/b472b64ab44d834eb29d237f31bf12396fee9aca.diff;
+        url = https://github.com/libharu/libharu/commit/b472b64ab44d834eb29d237f31bf12396fee9aca.diff;
         name = "endless-loop.patch";
-        sha256 = "1c95mn6a5wddznqgrsaf3xsh27lz8q0pzc0a7ampxpscq0w6c9fq";
+        sha256 = "1jrajz6zdch2pyzjkhmhm1b6ms8dk62snps7fwphnpvndrm4h4rr";
       })
     ];
 

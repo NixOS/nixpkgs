@@ -1,12 +1,12 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, zlib, freetype, libjpeg, jbig2dec, openjpeg
 , libX11, libXext }:
 stdenv.mkDerivation rec {
-  version = "1.5";
+  version = "1.6";
   name = "mupdf-${version}";
 
   src = fetchurl {
     url = "http://mupdf.com/download/archive/${name}-source.tar.gz";
-    sha256 = "0sl47zqf4c9fhs4h5zg046vixjmwgy4vhljhr5g4md733nash7z4";
+    sha256 = "0qx51rj6alzcagcixm59rvdpm54w6syrwr4184v439jh14ryw4wq";
   };
 
   buildInputs = [ pkgconfig zlib freetype libjpeg jbig2dec openjpeg libX11 libXext ];

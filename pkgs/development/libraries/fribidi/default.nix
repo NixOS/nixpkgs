@@ -2,15 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "fribidi-${version}";
-  version = "0.19.2";
+  version = "0.19.6";
   
   src = fetchurl {
-    url = "http://fribidi.org/download/${name}.tar.gz";
-    sha256 = "0xs1yr22zw9a1qq9ygsrqam0vzqdvb0ndzvjb3i2zda8drc93ks9";
+    url = "http://fribidi.org/download/${name}.tar.bz2";
+    sha256 = "0zg1hpaml34ny74fif97j7ngrshlkl3wk3nja3gmlzl17i1bga6b";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://fribidi.org/;
     description = "GNU implementation of the Unicode Bidirectional Algorithm (bidi)";
+    license = licenses.gpl2;
   };
 }

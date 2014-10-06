@@ -10,7 +10,7 @@ kde {
   buildInputs = [
     kdelibs qca2 mediastreamer libgadu jsoncpp
     kdepimlibs qimageblitz sqlite jasper libotr libmsn giflib
-    libidn libxslt boost
+    libidn libxslt boost boost.lib
     ortp srtp libv4l
   ];
 

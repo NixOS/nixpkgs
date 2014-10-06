@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vado";
-  version = "0.0.1";
-  sha256 = "11b8glzzpzhm8cfw3vyvvvz3h0xid5r3prwhnvplajr7v3r562h2";
+  version = "0.0.2";
+  sha256 = "15kdqgpdy501g4hpldq44s7qgh4xchl6acnr95i5fj8ky4vgwfi0";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ attoparsec filepath text ];
@@ -15,7 +15,5 @@ cabal.mkDerivation (self: {
     description = "Runs commands on remote machines using ssh";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
-    broken = true;
   };
 })

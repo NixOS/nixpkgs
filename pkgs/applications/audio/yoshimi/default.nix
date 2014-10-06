@@ -1,5 +1,5 @@
 { stdenv, fetchurl, alsaLib, boost, cairo, cmake, fftwSinglePrec, fltk
-, jack2, libsndfile, mesa, minixml, pkgconfig, zlib
+, jack2, libsndfile, mesa, minixml, pkgconfig, zlib, xorg
 }:
 
 assert stdenv ? glibc;
@@ -14,8 +14,8 @@ stdenv.mkDerivation  rec {
   };
 
   buildInputs = [
-    alsaLib boost cairo fftwSinglePrec fltk jack2 libsndfile mesa
-    minixml zlib
+    alsaLib boost boost.lib cairo fftwSinglePrec fltk jack2 libsndfile mesa
+    minixml zlib xorg.libpthreadstubs
   ];
 
   nativeBuildInputs = [ cmake pkgconfig ];

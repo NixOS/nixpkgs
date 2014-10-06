@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "raul-svn-${rev}";
-  rev = "5205";
+  rev = "5449";
 
   src = fetchsvn {
     url = "http://svn.drobilla.net/lad/trunk/raul";
     rev = rev;
-    sha256 = "1rkl7vxhwf6d0qfl2ymfd1qwmh9cl1xv6kkz893xg0blpvzcdmp3";
+    sha256 = "02ph1hikp1iynwbxbiaf28brkwig7n4lsb3djaivnf14arg5vmzx";
   };
 
   buildInputs = [ boost gtk pkgconfig python ];

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, pkgs_i686, ... }:
 
 with pkgs;
 with lib;
@@ -9,6 +9,10 @@ let
 
   systemWide = cfg.enable && cfg.systemWide;
   nonSystemWide = cfg.enable && !cfg.systemWide;
+
+  # Forces 32bit pulseaudio and alsaPlugins to be built/supported for apps
+  # using 32bit alsa on 64bit linux.
+  enable32BitAlsaPlugins = stdenv.isx86_64 && (pkgs_i686.alsaLib != null);
 
   ids = config.ids;
 
@@ -28,21 +32,25 @@ let
   # Write an /etc/asound.conf that causes all ALSA applications to
   # be re-routed to the PulseAudio server through ALSA's Pulse
   # plugin.
-  alsaConf = writeText "asound.conf" ''
+  alsaConf = writeText "asound.conf" (''
     pcm_type.pulse {
-      lib ${alsaPlugins}/lib/alsa-lib/libasound_module_pcm_pulse.so
+      libs.native = ${pkgs.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;
+      ${lib.optionalString enable32BitAlsaPlugins
+     "libs.32Bit = ${pkgs_i686.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;"}
     }
     pcm.!default {
       type pulse
       hint.description "Default Audio Device (via PulseAudio)"
     }
     ctl_type.pulse {
-      lib ${alsaPlugins}/lib/alsa-lib/libasound_module_ctl_pulse.so
+      libs.native = ${alsaPlugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;
+      ${lib.optionalString enable32BitAlsaPlugins
+     "libs.32Bit = ${pkgs_i686.alsaPlugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;"}
     }
     ctl.!default {
       type pulse
     }
-  '';
+  '');
 
 in {
 
@@ -116,7 +124,10 @@ in {
     }
 
     (mkIf cfg.enable {
-      environment.systemPackages = [ cfg.package ];
+      environment.systemPackages = [
+        cfg.package
+        (lib.optional enable32BitAlsaPlugins pkgs_i686.pulseaudio)
+      ];
 
       environment.etc = singleton {
         target = "asound.conf";

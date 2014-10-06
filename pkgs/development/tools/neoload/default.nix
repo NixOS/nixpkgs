@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, writeTextFile, jre, makeWrapper, licenseAccepted ? false }:
+{ stdenv, fetchurl, writeTextFile, jre, makeWrapper, fontsConf, licenseAccepted ? false }:
 
 # If you happen to use this software on the XMonad window manager, you will have issues with
 # grey windows, no resizing, menus not showing and other glitches.
@@ -62,6 +62,7 @@ in stdenv.mkDerivation rec {
 
     export HOME=`pwd`
     export INSTALL4J_JAVA_HOME=${jre}
+    export FONTCONFIG_FILE=${fontsConf}
     bash -ic './installer -q -varfile response.varfile'
 
     sed -i 's/Xmx450m/Xmx900m/;s/Xss192k/Xss384k/' $out/lib/neoload/conf/agent.properties

@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "findbugs-2.0.3";
+  name = "findbugs-3.0.0";
 
   src = fetchurl {
-    url = mirror://sourceforge/findbugs/findbugs-2.0.3.tar.gz;
-    sha256 = "17s93vszc5s2b7pwi0yk8d6w54gandxrr7vflhzmpbl6sxj2mfjr";
+    url = mirror://sourceforge/findbugs/findbugs-3.0.0.tar.gz;
+    sha256 = "0csz6drzdz867r2p2wa4cvick6bv9dpz2yym9wrvp3fnxabmgiri";
   };
 
   buildPhase = ''

@@ -3,16 +3,17 @@
 { cabal, aeson, attoparsec, base16Bytestring, base64Bytestring
 , blazeBuilder, byteable, caseInsensitive, cereal, conduit
 , conduitExtra, cryptohash, dataDefault, errors, filepath
-, httpConduit, httpTypes, liftedBase, monadControl, mtl, network
-, QuickCheck, quickcheckInstances, resourcet, safe, scientific
-, tagged, tasty, tastyQuickcheck, text, time, transformers
-, unorderedContainers, utf8String, vector, xmlConduit
+, httpClient, httpConduit, httpTypes, liftedBase, monadControl, mtl
+, network, QuickCheck, quickcheckInstances, resourcet, safe
+, scientific, tagged, tasty, tastyQuickcheck, text, time
+, transformers, transformersBase, unorderedContainers, utf8String
+, vector, xmlConduit
 }:
 
 cabal.mkDerivation (self: {
   pname = "aws";
-  version = "0.10.3";
-  sha256 = "042vx5nhafvgw0crymkw8pyhiawhpxwj03n1k538y2wr181hmz5f";
+  version = "0.10.5";
+  sha256 = "1d82q2477wp08zavlkzsksalbkiczz3vzy17ijk2z5xsw5yslqnj";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -23,8 +24,9 @@ cabal.mkDerivation (self: {
     unorderedContainers utf8String vector xmlConduit
   ];
   testDepends = [
-    aeson errors mtl QuickCheck quickcheckInstances tagged tasty
-    tastyQuickcheck text transformers
+    aeson errors httpClient liftedBase monadControl mtl QuickCheck
+    quickcheckInstances resourcet tagged tasty tastyQuickcheck text
+    time transformers transformersBase
   ];
   jailbreak = true;
   doCheck = false;

@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "miniutter";
-  version = "0.4.4.0";
-  sha256 = "1pfgbvnxh3c9b489i121p5bg785bp9ivfwizjfwc9w3r6spgppvk";
+  version = "0.4.4.1";
+  sha256 = "1raq5dq6mx56ddyq5hnh9r2yflry6prcjf17p15ds1w5r8cp8yx1";
   buildDepends = [ binary minimorph text ];
   testDepends = [ HUnit testFramework testFrameworkHunit text ];
   meta = {

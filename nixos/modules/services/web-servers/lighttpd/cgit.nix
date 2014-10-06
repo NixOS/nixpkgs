@@ -44,6 +44,9 @@ in
     # make the cgitrc manpage available
     environment.systemPackages = [ pkgs.cgit ];
 
+    # declare module dependencies
+    services.lighttpd.enableModules = [ "mod_cgi" "mod_alias" "mod_setenv" ];
+
     services.lighttpd.extraConfig = ''
       $HTTP["url"] =~ "^/cgit" {
           cgi.assign = (
