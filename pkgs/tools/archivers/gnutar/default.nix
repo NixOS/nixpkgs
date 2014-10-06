@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnutar-${version}";
-  version = "1.27.1";
+  version = "1.28";
 
   src = fetchurl {
     url = "mirror://gnu/tar/tar-${version}.tar.bz2";
-    sha256 = "1iip0fk0wqhxb0jcwphz43r4fxkx1y7mznnhmlvr618jhp7b63wv";
+    sha256 = "0qkm2k9w8z91hwj8rffpjj9v1vhpiriwz4cdj36k9vrgc3hbzr30";
   };
 
   # May have some issues with root compilation because the bootstrap tool
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl3Plus;
 
-    maintainers = [ ];
+    maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.all;
   };
 }
