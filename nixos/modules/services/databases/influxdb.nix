@@ -224,6 +224,11 @@ in
         mkdir -m 0770 -p ${cfg.dataDir}
         if [ "$(id -u)" = 0 ]; then chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}; fi
       '';
+      postStart = mkBefore ''
+        until ${pkgs.curl}/bin/curl -s -o /dev/null 'http://${cfg.bindAddress}:${toString cfg.apiPort}/'; do
+          sleep 1;
+        done
+      '';
     };
 
     users.extraUsers = optional (cfg.user == "influxdb") {

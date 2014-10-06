@@ -18,7 +18,7 @@ let
 
   syslogngOptions = [
     "--foreground"
-    "--module-path=${concatStringsSep ":" (["${pkgs.syslogng}/lib/syslog-ng"] ++ cfg.extraModulePaths)}"
+    "--module-path=${concatStringsSep ":" (["${cfg.package}/lib/syslog-ng"] ++ cfg.extraModulePaths)}"
     "--cfgfile=${syslogngConfig}"
     "--control=${ctrlSocket}"
     "--persist-file=${persistFile}"
@@ -37,6 +37,13 @@ in {
           Whether to enable the syslog-ng daemon.
         '';
       };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.syslogng;
+        description = ''
+          The package providing syslog-ng binaries.
+        '';
+      };
       serviceName = mkOption {
         type = types.str;
         default = "syslog-ng";
@@ -49,7 +56,9 @@ in {
       extraModulePaths = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "${pkgs.syslogng_incubator}/lib/syslog-ng" ];
+        example = literalExample ''
+          [ "''${pkgs.syslogng_incubator}/lib/syslog-ng" ]
+        '';
         description = ''
           A list of paths that should be included in syslog-ng's
           <literal>--module-path</literal> option. They should usually
@@ -75,7 +84,7 @@ in {
         Sockets = "syslog.socket";
         StandardOutput = "null";
         Restart = "on-failure";
-        ExecStart = "${pkgs.syslogng}/sbin/syslog-ng ${concatStringsSep " " syslogngOptions}";
+        ExecStart = "${cfg.package}/sbin/syslog-ng ${concatStringsSep " " syslogngOptions}";
       };
     };
   };

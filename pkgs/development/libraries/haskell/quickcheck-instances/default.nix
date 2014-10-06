@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "quickcheck-instances";
-  version = "0.3.8";
-  sha256 = "0132a37zi1haz1aaggxa1hr421bcmxlbaa4m2l53m2rmr4z5mgkg";
+  version = "0.3.9";
+  sha256 = "1a0mbd1kga4qnamp80x2g4avjwcy8z0zrriqxdhb1525wyyb0656";
   buildDepends = [
     hashable QuickCheck text time unorderedContainers
   ];

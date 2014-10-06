@@ -19,5 +19,6 @@ cabal.mkDerivation (self: {
     description = "Fast, streaming csv parser";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })

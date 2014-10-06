@@ -6,16 +6,18 @@ pythonPackages.buildPythonPackage rec {
 
   src = fetchgit {
     url = "git://github.com/madjar/nox.git";
-    rev = "49e4bb7de473ac5e446a76c292bdaefa7e20a1c6";
-    sha256 = "1w1b2g44lj6nbs7f2j5dz5pijhfah3fyldspfb34zcv17j2nlv0b";
+    rev = "088249aa766c9fa929aa08a60f1a7eb41008da40";
+    sha256 = "0dscnmhm1va2h0jz7hh60nvjwxv5a92n5pp8c0g7hz76g67mi5xs";
     leaveDotGit = true; # required by pbr
   };
 
   buildInputs = [ git pythonPackages.pbr makeWrapper ];
 
-  pythonPath =
-    [ pythonPackages.dogpile_cache
-      pythonPackages.click
+  pythonPath = with pythonPackages; [
+      dogpile_cache
+      click
+      requests2
+      characteristic
     ];
 
   postInstall = "wrapProgram $out/bin/nox --prefix PATH : ${nix}/bin";

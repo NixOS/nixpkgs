@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "robots-txt";
-  version = "0.4.1.0";
-  sha256 = "1q18pgilrwppmd8d7pby3p6qgk47alzmd8izqspk7n4h4agrscn4";
+  version = "0.4.1.1";
+  sha256 = "16r6j96iay1r6435ym34dp9iggwlfigmzmqq5k5f5ss5bljfc72f";
   buildDepends = [ attoparsec time ];
   testDepends = [ attoparsec heredoc hspec QuickCheck transformers ];
   meta = {

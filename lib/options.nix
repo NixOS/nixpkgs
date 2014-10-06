@@ -80,9 +80,9 @@ rec {
           internal = opt.internal or false;
           visible = opt.visible or true;
         }
-        // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
-        // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }
-        // optionalAttrs (opt ? defaultText) { default = opt.defaultText; };
+        // (if opt ? example then { example = scrubOptionValue opt.example; } else {})
+        // (if opt ? default then { default = scrubOptionValue opt.default; } else {})
+        // (if opt ? defaultText then { default = opt.defaultText; } else {});
 
         subOptions =
           let ss = opt.type.getSubOptions opt.loc;

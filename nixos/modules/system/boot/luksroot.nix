@@ -342,40 +342,39 @@ in
               description = "Path where the ramfs used to update the LUKS key will be mounted in stage-1";
             };
 
-            storage = mkOption {
-              type = types.optionSet;
-              description = "Options related to the storing the salt";
+            /* TODO: Add to the documentation of the current module:
 
-              options = {
-                device = mkOption {
-                  default = /dev/sda1;
-                  type = types.path;
-                  description = ''
-                    An unencrypted device that will temporarily be mounted in stage-1.
-                    Must contain the current salt to create the challenge for this LUKS device.
-                  '';
-                };
+               Options related to the storing the salt.
+            */
+            storage = {
+              device = mkOption {
+                default = "/dev/sda1";
+                type = types.path;
+                description = ''
+                  An unencrypted device that will temporarily be mounted in stage-1.
+                  Must contain the current salt to create the challenge for this LUKS device.
+                '';
+              };
 
-                fsType = mkOption {
-                  default = "vfat";
-                  type = types.string;
-                  description = "The filesystem of the unencrypted device";
-                };
+              fsType = mkOption {
+                default = "vfat";
+                type = types.string;
+                description = "The filesystem of the unencrypted device";
+              };
 
-                mountPoint = mkOption {
-                  default = "/crypt-storage";
-                  type = types.string;
-                  description = "Path where the unencrypted device will be mounted in stage-1";
-                };
+              mountPoint = mkOption {
+                default = "/crypt-storage";
+                type = types.string;
+                description = "Path where the unencrypted device will be mounted in stage-1";
+              };
 
-                path = mkOption {
-                  default = "/crypt-storage/default";
-                  type = types.string;
-                  description = ''
-                    Absolute path of the salt on the unencrypted device with
-                    that device's root directory as "/".
-                  '';
-                };
+              path = mkOption {
+                default = "/crypt-storage/default";
+                type = types.string;
+                description = ''
+                  Absolute path of the salt on the unencrypted device with
+                  that device's root directory as "/".
+                '';
               };
             };
           };

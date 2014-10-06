@@ -6,14 +6,14 @@
 
 cabal.mkDerivation (self: {
   pname = "socket-io";
-  version = "1.0.1";
-  sha256 = "0257c5wf6b9rmprqq5q5d7fih4s2szwv98w16ggl61p8khf5d2qs";
+  version = "1.1.1";
+  sha256 = "0zr5kj519hw90rlicang5f573dd325rxv24psf12fxl6vmyxx1zc";
   buildDepends = [
     aeson attoparsec engineIo mtl stm text transformers
     unorderedContainers vector
   ];
-  jailbreak = true;
   meta = {
+    homepage = "http://github.com/ocharles/engine.io";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ ocharles ];

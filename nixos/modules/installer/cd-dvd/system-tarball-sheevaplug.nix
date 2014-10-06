@@ -70,7 +70,6 @@ in
       pkgs.btrfsProgs
 
       # Some compression/archiver tools.
-      pkgs.unrar
       pkgs.unzip
       pkgs.zip
       pkgs.xz

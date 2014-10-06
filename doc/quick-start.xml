@@ -93,17 +93,6 @@ $ git add pkgs/development/libraries/libfoo/default.nix</screen>
         </listitem>
 
         <listitem>
-          <para>BitTorrent (wxPython-based): <link
-          xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/networking/p2p/bittorrent/default.nix"><filename>pkgs/tools/networking/p2p/bittorrent/default.nix</filename></link>.
-          Uses an external <link
-          xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/networking/p2p/bittorrent/builder.sh">build
-          script</link>, which can be useful if you have lots of code
-          that you don’t want cluttering up the Nix expression.  But
-          external builders are mostly obsolete.
-          </para>
-        </listitem>
-
-        <listitem>
           <para>Thunderbird: <link
           xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/networking/mailreaders/thunderbird/default.nix"><filename>pkgs/applications/networking/mailreaders/thunderbird/default.nix</filename></link>.
           Lots of dependencies.</para>

@@ -4,12 +4,13 @@
 
 cabal.mkDerivation (self: {
   pname = "rest-happstack";
-  version = "0.2.10.1";
-  sha256 = "0p4km3l8n50flj9cnxvjl34pp3msxz2yq4d91r318di8pacrgnxc";
+  version = "0.2.10.3";
+  sha256 = "05sakr88j6rlwnghzd00g3c3895wpjxi36n9pdbpv0fpm0hh86yv";
   buildDepends = [ happstackServer mtl restCore restGen utf8String ];
   meta = {
     description = "Rest driver for Happstack";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })

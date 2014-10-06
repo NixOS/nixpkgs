@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk, glib, libid3tag, id3lib, taglib
-, libvorbis, libogg, flac
+, libvorbis, libogg, flac, itstool, libxml2
 }:
 
 stdenv.mkDerivation rec {
   name = "easytag-${version}";
-  version = "2.1.8";
+  version = "2.2.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/easytag/2.1/${name}.tar.xz";
-    sha256 = "1ab5iv0a83cdf07qzi81ydfk5apay06nxags9m07msqalz4pabqs";
+    url = "mirror://gnome/sources/easytag/2.2/${name}.tar.xz";
+    sha256 = "14f0s0l28fwxnc37aw1imal2xcg9ykq35mx2j9gaqzz02ymjk0s5";
   };
 
   preConfigure = ''
@@ -22,11 +22,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig intltool gtk glib libid3tag id3lib taglib libvorbis libogg flac
+    itstool libxml2
   ];
 
   meta = {
     description = "View and edit tags for various audio files";
     homepage = "http://projects.gnome.org/easytag/";
     license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
   };
 }

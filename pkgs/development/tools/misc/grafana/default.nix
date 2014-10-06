@@ -4,11 +4,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "grafana-${version}";
-  version = "1.5.4";
+  version = "1.8.0-rc1";
 
   src = fetchurl {
     url = "http://grafanarel.s3.amazonaws.com/${name}.zip";
-    sha256 = "fee7334efba967142955be2fa39ecae7bca0cc9b7a76c301430746be4fc7ec6d";
+    sha256 = "1wx4zwkpgvb8lxcrkp67zgqd8aqms4bnxzwz3i9190sl55j1yf4i";
   };
 
   buildInputs = [ unzip ];

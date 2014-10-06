@@ -56,6 +56,14 @@ in
           default = false;
           description = "Whether to create the mount points in the exports file at startup time.";
         };
+
+        mountdPort = mkOption {
+          default = null;
+          example = 4002;
+          description = ''
+            Use fixed port for rpc.mountd, usefull if server is behind firewall.
+          '';
+        };
       };
 
     };
@@ -138,7 +146,10 @@ in
         restartTriggers = [ exports ];
 
         serviceConfig.Type = "forking";
-        serviceConfig.ExecStart = "@${pkgs.nfsUtils}/sbin/rpc.mountd rpc.mountd";
+        serviceConfig.ExecStart = ''
+          @${pkgs.nfsUtils}/sbin/rpc.mountd rpc.mountd \
+              ${if cfg.mountdPort != null then "-p ${toString cfg.mountdPort}" else ""}
+        '';
         serviceConfig.Restart = "always";
       };
 

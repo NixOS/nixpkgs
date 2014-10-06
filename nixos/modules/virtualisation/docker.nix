@@ -59,6 +59,7 @@ in
 
   config = mkIf cfg.enable (mkMerge [
     { environment.systemPackages = [ pkgs.docker ];
+      users.extraGroups.docker.gid = config.ids.gids.docker;
     }
     (mkIf cfg.socketActivation {
 

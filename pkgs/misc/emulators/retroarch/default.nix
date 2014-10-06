@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "retroarch-0.9.9.7";
+  name = "retroarch-bare-0.9.9.7";
 
   src = fetchgit {
     url = "https://github.com/libretro/RetroArch.git";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     configureFlags="--global-config-dir=$out/etc"
   '';
- 
+
   meta = {
     description = "Modular multi-system game/emulator system";
     homepage = "http://www.libretro.com/";

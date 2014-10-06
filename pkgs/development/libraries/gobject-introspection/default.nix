@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
+  patches = [ ./absolute_shlib_path.patch ];
+
   meta = with stdenv.lib; {
     description = "A middleware layer between C libraries and language bindings";
     homepage    = http://live.gnome.org/GObjectIntrospection;

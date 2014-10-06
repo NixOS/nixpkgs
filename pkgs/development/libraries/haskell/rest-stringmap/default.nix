@@ -17,5 +17,6 @@ cabal.mkDerivation (self: {
     description = "Maps with stringy keys that can be transcoded to JSON and XML";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })

@@ -3,14 +3,14 @@ let
   inherit (stdenv.lib) optional optionalString;
   s = rec {
     baseName="sysdig";
-    version="0.1.87";
+    version = "0.1.89";
     name="${baseName}-${version}";
     url="https://github.com/draios/sysdig/archive/${version}.tar.gz";
-    sha256="0xfildaj8kzbngpza47zqm363i6q87m97a18qlmdisrxmz11s32b";
+    sha256 = "06g0s38xvsmi8m80719m4h3h4by8q12imlp4k8sixhw06k959mhw";
   };
   buildInputs = [
     cmake zlib luajit
-  ] ++ optional (kernel != null) kernel;
+  ];
 in
 stdenv.mkDerivation {
   inherit (s) name version;
@@ -30,6 +30,10 @@ stdenv.mkDerivation {
   '';
   postInstall = optionalString (kernel != null) ''
     make install_driver
+    kernel_dev=${kernel.dev}
+    kernel_dev=''${kernel_dev#/nix/store/}
+    kernel_dev=''${kernel_dev%%-linux*dev*}
+    sed -i "s#$kernel_dev#................................#g" $out/lib/modules/${kernel.modDirVersion}/extra/sysdig-probe.ko
   '';
 
   meta = with stdenv.lib; {

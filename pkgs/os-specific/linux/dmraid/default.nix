@@ -1,12 +1,16 @@
 { stdenv, fetchurl, devicemapper }:
 
 stdenv.mkDerivation rec {
-  name = "dmraid-1.0.0.rc15";
+  name = "dmraid-1.0.0.rc16";
 
   src = fetchurl {
     url = "http://people.redhat.com/~heinzm/sw/dmraid/src/old/${name}.tar.bz2";
-    sha256 = "01bcaq0sc329ghgj7f182xws7jgjpdc41bvris8fsiprnxc7511h";
+    sha256 = "0m92971gyqp61darxbiri6a48jz3wq3gkp8r2k39320z0i6w8jgq";
   };
+
+  postPatch = ''
+    sed -i 's/\[\[[^]]*\]\]/[ "''$''${n##*.}" = "so" ]/' */lib/Makefile.in
+  '';
 
   preConfigure = "cd */";
 

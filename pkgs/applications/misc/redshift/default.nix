@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
       temperature to allow your eyes to slowly adapt.
       '';
     license = stdenv.lib.licenses.gpl3Plus;
-    homepage = "http://jonls.dk/redshift";
+    homepage = http://jonls.dk/redshift;
     platforms = platforms.linux;
-    maintainers = maintainers.mornfall;
+    maintainers = [ maintainers.mornfall ];
   }; 
 }

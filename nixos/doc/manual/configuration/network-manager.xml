@@ -1,0 +1,27 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-networkmanager">
+
+<title>NetworkManager</title>
+
+<para>To facilitate network configuration, some desktop environments
+use NetworkManager. You can enable NetworkManager by setting:
+
+<programlisting>
+services.networkmanager.enable = true;
+</programlisting>
+
+Some desktop managers (e.g., GNOME) enable NetworkManager
+automatically for you.</para>
+
+<para>All users that should have permission to change network settings
+must belong to the <code>networkmanager</code> group.</para>
+
+<note><para><code>services.networkmanager</code> and
+<code>services.wireless</code> can not be enabled at the same time:
+you can still connect to the wireless networks using
+NetworkManager.</para></note>
+
+</section>

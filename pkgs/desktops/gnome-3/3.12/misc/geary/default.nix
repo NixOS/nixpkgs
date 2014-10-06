@@ -5,11 +5,11 @@
 , gnome3, librsvg, gnome_doc_utils, webkitgtk }:
 
 stdenv.mkDerivation rec {
-  name = "geary-0.6.0";
+  name = "geary-0.6.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/geary/0.6/${name}.tar.xz";
-    sha256 = "44ad1dc2c81c50006c751f8e72aa817f07002188da4c29e158060524a1962715";
+    sha256 = "0ap40mpj89sx82kcxlhl9gipq34ks2b70yhiv9s8zc5wg0nm7rpg";
   };
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];

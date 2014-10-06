@@ -38,6 +38,13 @@ stdenv.mkDerivation rec {
 
   postInstall = "rm -rf $out/share/gtk-doc";
 
+  passthru = {
+    gtkExeEnvPostBuild = ''
+      rm $out/lib/gtk-3.0/3.0.0/immodules.cache
+      $out/bin/gtk-query-immodules-3.0 $out/lib/gtk-3.0/3.0.0/immodules/*.so > $out/lib/gtk-3.0/3.0.0/immodules.cache
+    ''; # workaround for bug of nix-mode for Emacs */ '';
+  };
+
   meta = {
     description = "A multi-platform toolkit for creating graphical user interfaces";
 

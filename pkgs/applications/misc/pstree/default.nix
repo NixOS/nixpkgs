@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Show the set of running processes as a tree";
     license = "GPL";
-    maintainers = stdenv.lib.maintainers.mornfall;
+    maintainers = [ stdenv.lib.maintainers.mornfall ];
   };
 }

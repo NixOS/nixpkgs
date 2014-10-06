@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "either";
-  version = "4.3.0.1";
-  sha256 = "1ib6288gxzqfm2y198dzhhq588mlwqxm07pcrj4h66g1mcy54q1f";
+  version = "4.3.1";
+  sha256 = "1k7aqy3k0ivpbqhym79q49dx41gnrkn1nw2inkm6gv8dy7bj9h6x";
   buildDepends = [
     exceptions free monadControl MonadRandom mtl semigroupoids
     semigroups transformers transformersBase

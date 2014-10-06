@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/gedit" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix LD_LIBRARY_PATH : "${gnome3.libpeas}/lib:${gnome3.gtksourceview}/lib" \
       --prefix XDG_DATA_DIRS : "${gnome3.gtksourceview}/share:${gnome3.gnome_themes_standard}/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   '';
 

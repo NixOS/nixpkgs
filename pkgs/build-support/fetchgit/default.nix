@@ -1,5 +1,7 @@
 {stdenv, git, cacert}:
-{url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? false, fetchSubmodules ? true}:
+{url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? false, fetchSubmodules ? true
+, name ? "git-export"
+}:
 
 /* NOTE:
    fetchgit has one problem: git fetch only works for refs.
@@ -26,7 +28,7 @@
 assert md5 != "" || sha256 != "";
 
 stdenv.mkDerivation {
-  name = "git-export";
+  inherit name;
   builder = ./builder.sh;
   fetcher = ./nix-prefetch-git;
   buildInputs = [git];

@@ -39,6 +39,12 @@ let self = with self; {
     sha256 = "1gcsh9iar5qa1yzpjki9bb5rivcb6yjp45lmjmp98wlyf83vmy2y";
   };
 
+  zendopcache = buildPecl {
+    name = "zendopcache-7.0.3";
+
+    sha256 = "0qpfbkfy4wlnsfq4vc4q5wvaia83l89ky33s08gqrcfp3p1adn88";
+  };
+
   zmq = buildPecl {
     name = "zmq-1.1.2";
 

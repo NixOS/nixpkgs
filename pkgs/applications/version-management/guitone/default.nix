@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchmtn, qt4 }:
+{ stdenv, fetchurl, fetchmtn, qt4, pkgconfig, graphviz }:
 
 let version = "1.0-mtn-head"; in
 stdenv.mkDerivation rec {
@@ -11,12 +11,12 @@ stdenv.mkDerivation rec {
 
   src = fetchmtn {
     dbs = ["mtn://code.monotone.ca/guitone"];
-    selector = "2777cdef424c65df93fa1ff181f02ee30d4901ab";
-    sha256 = "918d36a83060b84efa0ee0fe0fd058f1c871c91156d91366e2e979c886ff4271";
+    selector = "3a728afdbd3943b1d86c2a249b1e2ede7bf64c27";
+    sha256 = "01vs8m00phs5pl75mjkpdarynfpkqrg0qf4rsn95czi3q6nxiaq5";
     branch = "net.venge.monotone.guitone";
   };
 
-  buildInputs = [ qt4 ];
+  buildInputs = [ qt4 pkgconfig graphviz ];
 
   prefixKey="PREFIX=";
   configureScript = "qmake guitone.pro";

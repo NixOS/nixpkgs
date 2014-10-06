@@ -62,8 +62,8 @@ rec {
             in { result = x.result ++ [entry.text] ++ y.result;
                  done = y.done;
                }
-          else if hasAttr entry done then f done (tail todo)
-          else f (done // listToAttrs [{name = entry; value = 1;}]) ([(builtins.getAttr entry predefined)] ++ tail todo);
+          else if done ? ${entry} then f done (tail todo)
+          else f (done // listToAttrs [{name = entry; value = 1;}]) ([predefined.${entry}] ++ tail todo);
     in (f {} arg).result;
 
   textClosureMap = f: predefined: names:

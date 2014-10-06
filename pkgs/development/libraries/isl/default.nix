@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp ];
   patches = [ ./fix-gcc-build.diff ];
 
+  enableParallelBuilding = true;
+
   meta = {
     homepage = http://www.kotnet.org/~skimo/isl/;
     license = stdenv.lib.licenses.lgpl21;

@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cabal-cargs";
-  version = "0.7.1";
-  sha256 = "0y6v663mw4giwypdv34qr2l2fy1q7zdjvgw39m16sjna5lbwvm1n";
+  version = "0.7.3";
+  sha256 = "10707nja5j9hbx5yj7pq8s9zgfx21n36r4xhs71g70g6hwpciqjb";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

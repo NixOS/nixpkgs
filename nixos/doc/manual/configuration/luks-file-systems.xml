@@ -1,0 +1,42 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-luks-file-systems">
+
+<title>LUKS-Encrypted File Systems</title>
+
+<para>NixOS supports file systems that are encrypted using
+<emphasis>LUKS</emphasis> (Linux Unified Key Setup).  For example,
+here is how you create an encrypted Ext4 file system on the device
+<filename>/dev/sda2</filename>:
+
+<screen>
+$ cryptsetup luksFormat /dev/sda2
+
+WARNING!
+========
+This will overwrite data on /dev/sda2 irrevocably.
+
+Are you sure? (Type uppercase yes): YES
+Enter LUKS passphrase: ***
+Verify passphrase: ***
+
+$ cryptsetup luksOpen /dev/sda2 crypted
+Enter passphrase for /dev/sda2: ***
+
+$ mkfs.ext4 /dev/mapper/crypted
+</screen>
+
+To ensure that this file system is automatically mounted at boot time
+as <filename>/</filename>, add the following to
+<filename>configuration.nix</filename>:
+
+<programlisting>
+boot.initrd.luks.devices = [ { device = "/dev/sda2"; name = "crypted"; } ];
+fileSystems."/".device = "/dev/mapper/crypted";
+</programlisting>
+
+</para>
+
+</section>

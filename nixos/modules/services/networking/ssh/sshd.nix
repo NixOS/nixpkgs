@@ -144,6 +144,36 @@ in
         '';
       };
 
+      listenAddresses = mkOption {
+        type = types.listOf types.optionSet;
+        default = [];
+        example = [ { addr = "192.168.3.1"; port = 22; } { addr = "0.0.0.0"; port = 64022; } ];
+        description = ''
+          List of addresses and ports to listen on (ListenAddress directive
+          in config). If port is not specified for address sshd will listen
+          on all ports specified by <literal>ports</literal> option.
+          NOTE: this will override default listening on all local addresses and port 22.
+          NOTE: setting this option won't automatically enable given ports
+          in firewall configuration.
+        '';
+        options = {
+          addr = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+              Host, IPv4 or IPv6 address to listen to.
+            '';
+          };
+          port = mkOption {
+            type = types.nullOr types.int;
+            default = null;
+            description = ''
+              Port to listen to.
+            '';
+          };
+        };
+      };
+
       passwordAuthentication = mkOption {
         type = types.bool;
         default = true;
@@ -261,7 +291,7 @@ in
       };
 
     environment.etc = authKeysFiles ++ [
-      { source = "${pkgs.openssh}/etc/ssh/moduli";
+      { source = "${cfgc.package}/etc/ssh/moduli";
         target = "ssh/moduli";
       }
       { source = knownHostsFile;
@@ -278,7 +308,7 @@ in
 
             stopIfChanged = false;
 
-            path = [ pkgs.openssh pkgs.gawk ];
+            path = [ cfgc.package pkgs.gawk ];
 
             environment.LD_LIBRARY_PATH = nssModulesPath;
 
@@ -295,7 +325,7 @@ in
 
             serviceConfig =
               { ExecStart =
-                  "${pkgs.openssh}/sbin/sshd " + (optionalString cfg.startWhenNeeded "-i ") +
+                  "${cfgc.package}/sbin/sshd " + (optionalString cfg.startWhenNeeded "-i ") +
                   "-f ${pkgs.writeText "sshd_config" cfg.extraConfig}";
                 KillMode = "process";
               } // (if cfg.startWhenNeeded then {
@@ -349,6 +379,10 @@ in
           Port ${toString port}
         '') cfg.ports}
 
+        ${concatMapStrings ({ port, addr }: ''
+          ListenAddress ${addr}${if port != null then ":" + toString port else ""}
+        '') cfg.listenAddresses}
+
         ${optionalString cfgc.setXAuthLocation ''
             XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
         ''}
@@ -360,7 +394,7 @@ in
         ''}
 
         ${optionalString cfg.allowSFTP ''
-          Subsystem sftp ${pkgs.openssh}/libexec/sftp-server
+          Subsystem sftp ${cfgc.package}/libexec/sftp-server
         ''}
 
         PermitRootLogin ${cfg.permitRootLogin}
@@ -383,6 +417,10 @@ in
         assertion = (data.publicKey == null && data.publicKeyFile != null) ||
                     (data.publicKey != null && data.publicKeyFile == null);
         message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
+      })
+      ++ flip map cfg.listenAddresses ({ addr, port }: {
+        assertion = addr != null;
+        message = "addr must be specified in each listenAddresses entry";
       });
 
   };

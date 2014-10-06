@@ -7,18 +7,18 @@
 , hamlet, hinotify, hS3, hslogger, httpClient, httpConduit
 , httpTypes, IfElse, json, lsof, MissingH, monadControl, mtl
 , network, networkInfo, networkMulticast, networkProtocolXmpp
-, openssh, optparseApplicative, pathPieces, perl, QuickCheck
-, random, regexTdfa, rsync, SafeSemaphore, securemem, SHA
-, shakespeare, stm, tasty, tastyHunit, tastyQuickcheck, tastyRerun
-, text, time, transformers, unixCompat, utf8String, uuid, wai
-, waiExtra, warp, warpTls, which, xmlTypes, yesod, yesodCore
-, yesodDefault, yesodForm, yesodStatic
+, networkUri, openssh, optparseApplicative, pathPieces, perl
+, QuickCheck, random, regexTdfa, rsync, SafeSemaphore, securemem
+, SHA, shakespeare, stm, tasty, tastyHunit, tastyQuickcheck
+, tastyRerun, text, time, transformers, unixCompat, utf8String
+, uuid, wai, waiExtra, warp, warpTls, which, xmlTypes, yesod
+, yesodCore, yesodDefault, yesodForm, yesodStatic
 }:
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "5.20140817";
-  sha256 = "0cly19rd250qiikzszgad2r5xz570kr00vcb8ij6icbm53pw3hxc";
+  version = "5.20140927";
+  sha256 = "02zmg8pcrdavfna2xy51n6chn6i5g0b8p20rba1vj29rlfj3cask";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -27,18 +27,15 @@ cabal.mkDerivation (self: {
     dlist dns editDistance exceptions fdoNotify feed filepath gnutls
     hamlet hinotify hS3 hslogger httpClient httpConduit httpTypes
     IfElse json MissingH monadControl mtl network networkInfo
-    networkMulticast networkProtocolXmpp optparseApplicative pathPieces
-    QuickCheck random regexTdfa SafeSemaphore securemem SHA shakespeare
-    stm tasty tastyHunit tastyQuickcheck tastyRerun text time
-    transformers unixCompat utf8String uuid wai waiExtra warp warpTls
-    xmlTypes yesod yesodCore yesodDefault yesodForm yesodStatic
+    networkMulticast networkProtocolXmpp networkUri optparseApplicative
+    pathPieces QuickCheck random regexTdfa SafeSemaphore securemem SHA
+    shakespeare stm tasty tastyHunit tastyQuickcheck tastyRerun text
+    time transformers unixCompat utf8String uuid wai waiExtra warp
+    warpTls xmlTypes yesod yesodCore yesodDefault yesodForm yesodStatic
   ];
   buildTools = [ bup curl git gnupg1 lsof openssh perl rsync which ];
   configureFlags = "-fAssistant -fProduction";
-  preConfigure = ''
-    export HOME="$NIX_BUILD_TOP/tmp"
-    mkdir "$HOME"
-  '';
+  preConfigure = "export HOME=$TEMPDIR";
   installPhase = "./Setup install";
   checkPhase = ''
     cp dist/build/git-annex/git-annex git-annex

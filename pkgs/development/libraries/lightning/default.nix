@@ -1,11 +1,11 @@
 { fetchurl, stdenv, binutils }:
 
 stdenv.mkDerivation rec {
-  name = "lightning-2.0.4";
+  name = "lightning-2.0.5";
 
   src = fetchurl {
-    url = "ftp://ftp.gnu.org/gnu/lightning/${name}.tar.gz";
-    sha256 = "1lrckrx51d5hrv66bc99fd4b7g2wwn4vr304hwq3glfzhb8jqcdy";
+    url = "mirror://gnu/lightning/${name}.tar.gz";
+    sha256 = "0jm9a8ddxc1v9hyzyv4ybg37fjac2yjqv1hkd262wxzqms36mdk5";
   };
 
   # Needs libopcodes.so  from binutils for 'make check'

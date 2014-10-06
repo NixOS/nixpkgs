@@ -4,12 +4,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.29";
+  version = "5.30";
   name = "xscreensaver-${version}";
 
   src = fetchurl {
     url = "http://www.jwz.org/xscreensaver/${name}.tar.gz";
-    sha256 = "157jy1mh84h6p4mpzsgcadv6c660c212rmjgdpgpidcn0rsza664";
+    sha256 = "0ljx10fsypdddcx43lwhrwqa9ksp9djv7p4i1y7760m4frl1fw9p";
   };
 
   buildInputs =
@@ -41,5 +41,8 @@ stdenv.mkDerivation rec {
     description = "A set of screensavers";
     maintainers = with stdenv.lib.maintainers; [ raskin urkud ];
     platforms = with stdenv.lib.platforms; allBut cygwin;
+    inherit version;
+    downloadPage = "http://www.jwz.org/xscreensaver/download.html";
+    updateWalker = true;
   };
 }

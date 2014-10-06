@@ -6,7 +6,7 @@ let
   esPlugin = a@{
     pluginName, 
     installPhase ? ''
-      mkdir -p $out
+      mkdir -p $out/bin
       ES_HOME=$out ${elasticsearch}/bin/elasticsearch-plugin --install ${pluginName} --url file://$src
     '', 
     ...
@@ -23,11 +23,11 @@ let
 in {
   elasticsearch_river_jdbc = esPlugin rec {
     name = "elasticsearch-river-jdbc-${version}";
-    pluginName = "jdbc";
-    version = "1.2.1.1";
+    pluginName = "elasticsearch-river-jdbc";
+    version = "1.3.0.4";
     src = fetchurl {
       url = "http://xbib.org/repository/org/xbib/elasticsearch/plugin/elasticsearch-river-jdbc/${version}/${name}-plugin.zip";
-      sha1 = "68e7e1fdf45d0e5852b21610a84740595223ea11";
+      sha256 = "0272l6cr032iccwwa803shzfjg3505jc48d9qdazrwxjmnlkkzqk";
     };
     meta = {
       homepage = "https://github.com/jprante/elasticsearch-river-jdbc";
@@ -48,6 +48,26 @@ in {
       homepage = "https://github.com/vhyza/elasticsearch-analysis-lemmagen";
       description = "LemmaGen Analysis plugin provides jLemmaGen lemmatizer as Elasticsearch token filter";
       license = licenses.asl20;
+    };
+  };
+
+  elasticsearch_http_basic = stdenv.mkDerivation rec {
+    name = "elasticsearch-http-basic-${version}";
+    version = "1.3.2";
+
+    src = fetchurl {
+      url = "https://github.com/Asquera/elasticsearch-http-basic/releases/download/${version}/${name}.jar";
+      sha256 = "1qq8z0233mzz699zbzjwmx7ghn8k0djgyc5ixr8i5xchfrsrymn2";
+    };
+
+    phases = ["installPhase"];
+    installPhase = "install -D $src $out/plugins/http-basic/${name}.jar";
+
+    meta = {
+      homepage = https://github.com/Asquera/elasticsearch-http-basic;
+      description = "HTTP Basic Authentication for Elasticsearch";
+      license = licenses.mit;
+      platforms = elasticsearch.meta.platforms;
     };
   };
 }

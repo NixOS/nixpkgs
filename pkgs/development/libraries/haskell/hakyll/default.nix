@@ -2,38 +2,38 @@
 
 { cabal, binary, blazeHtml, blazeMarkup, cmdargs, cryptohash
 , dataDefault, deepseq, filepath, fsnotify, httpConduit, httpTypes
-, HUnit, lrucache, mtl, network, pandoc, pandocCiteproc, parsec
-, QuickCheck, random, regexBase, regexTdfa, snapCore, snapServer
-, systemFilepath, tagsoup, testFramework, testFrameworkHunit
-, testFrameworkQuickcheck2, text, time
+, HUnit, lrucache, mtl, network, networkUri, pandoc, pandocCiteproc
+, parsec, QuickCheck, random, regexBase, regexTdfa, snapCore
+, snapServer, systemFilepath, tagsoup, testFramework
+, testFrameworkHunit, testFrameworkQuickcheck2, text, time
+, utillinux
 }:
 
 cabal.mkDerivation (self: {
   pname = "hakyll";
-  version = "4.5.3.0";
-  sha256 = "11ibpjff1zkihpxydlzvvzbgd1vxswi4c7g3lr0hhaaw89bikypy";
+  version = "4.5.5.0";
+  sha256 = "1igna446dsidlq3f9myclgcdawgvyyjxjk3r3icjra6zgdqd6j4l";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     binary blazeHtml blazeMarkup cmdargs cryptohash dataDefault deepseq
-    filepath fsnotify httpConduit httpTypes lrucache mtl network pandoc
-    pandocCiteproc parsec random regexBase regexTdfa snapCore
-    snapServer systemFilepath tagsoup text time
+    filepath fsnotify httpConduit httpTypes lrucache mtl network
+    networkUri pandoc pandocCiteproc parsec random regexBase regexTdfa
+    snapCore snapServer systemFilepath tagsoup text time
   ];
   testDepends = [
     binary blazeHtml blazeMarkup cmdargs cryptohash dataDefault deepseq
     filepath fsnotify httpConduit httpTypes HUnit lrucache mtl network
-    pandoc pandocCiteproc parsec QuickCheck random regexBase regexTdfa
-    snapCore snapServer systemFilepath tagsoup testFramework
-    testFrameworkHunit testFrameworkQuickcheck2 text time
+    networkUri pandoc pandocCiteproc parsec QuickCheck random regexBase
+    regexTdfa snapCore snapServer systemFilepath tagsoup testFramework
+    testFrameworkHunit testFrameworkQuickcheck2 text time utillinux
   ];
-  doCheck = false;
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
     description = "A static website compiler library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
+    maintainers = with self.stdenv.lib.maintainers; [ fuuzetsu ];
     broken = true;
   };
 })

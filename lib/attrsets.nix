@@ -20,8 +20,8 @@ rec {
     let attr = head attrPath;
     in
       if attrPath == [] then e
-      else if hasAttr attr e
-      then attrByPath (tail attrPath) default (getAttr attr e)
+      else if e ? ${attr}
+      then attrByPath (tail attrPath) default e.${attr}
       else default;
 
 
@@ -44,8 +44,7 @@ rec {
        attrVals ["a" "b" "c"] as
        => [as.a as.b as.c]
   */
-  attrVals = nameList: set:
-    map (x: getAttr x set) nameList;
+  attrVals = nameList: set: map (x: set.${x}) nameList;
 
 
   /* Return the values of all attributes in the given set, sorted by
@@ -55,7 +54,7 @@ rec {
        attrValues {c = 3; a = 1; b = 2;}
        => [1 2 3]
   */
-  attrValues = attrs: attrVals (attrNames attrs) attrs;
+  attrValues = builtins.attrValues or (attrs: attrVals (attrNames attrs) attrs);
 
 
   /* Collect each attribute named `attr' from a list of attribute
@@ -65,7 +64,8 @@ rec {
        catAttrs "a" [{a = 1;} {b = 0;} {a = 2;}]
        => [1 2]
   */
-  catAttrs = attr: l: concatLists (map (s: if hasAttr attr s then [(getAttr attr s)] else []) l);
+  catAttrs = builtins.catAttrs or
+    (attr: l: concatLists (map (s: if s ? ${attr} then [s.${attr}] else []) l));
 
 
   /* Filter an attribute set by removing all attributes for which the
@@ -76,7 +76,7 @@ rec {
        => { foo = 1; }
   */
   filterAttrs = pred: set:
-    listToAttrs (fold (n: ys: let v = getAttr n set; in if pred n v then [(nameValuePair n v)] ++ ys else ys) [] (attrNames set));
+    listToAttrs (fold (n: ys: let v = set.${n}; in if pred n v then [(nameValuePair n v)] ++ ys else ys) [] (attrNames set));
 
 
   /* foldAttrs: apply fold functions to values grouped by key. Eg accumulate values as list:
@@ -86,7 +86,7 @@ rec {
   foldAttrs = op: nul: list_of_attrs:
     fold (n: a:
         fold (name: o:
-          o // (listToAttrs [{inherit name; value = op (getAttr name n) (maybeAttr name nul a); }])
+          o // (listToAttrs [{inherit name; value = op n.${name} (maybeAttr name nul a); }])
         ) a (attrNames n)
     ) {} list_of_attrs;
 
@@ -132,7 +132,7 @@ rec {
        => { x = "x-foo"; y = "y-bar"; }
   */
   mapAttrs = f: set:
-    listToAttrs (map (attr: { name = attr; value = f attr (getAttr attr set); }) (attrNames set));
+    listToAttrs (map (attr: { name = attr; value = f attr set.${attr}; }) (attrNames set));
 
 
   /* Like `mapAttrs', but allows the name of each attribute to be
@@ -145,7 +145,7 @@ rec {
        => { foo_x = "bar-a"; foo_y = "bar-b"; }
   */
   mapAttrs' = f: set:
-    listToAttrs (map (attr: f attr (getAttr attr set)) (attrNames set));
+    listToAttrs (map (attr: f attr set.${attr}) (attrNames set));
 
 
   /* Call a function for each attribute in the given set and return
@@ -157,7 +157,7 @@ rec {
        => [ "xa" "yb" ]
   */
   mapAttrsToList = f: attrs:
-    map (name: f name (getAttr name attrs)) (attrNames attrs);
+    map (name: f name attrs.${name}) (attrNames attrs);
 
 
   /* Like `mapAttrs', except that it recursively applies itself to
@@ -322,7 +322,7 @@ rec {
   # override only the attributes that are already present in the old set
   # useful for deep-overriding
   overrideExisting = old: new:
-    old // listToAttrs (map (attr: nameValuePair attr (attrByPath [attr] (getAttr attr old) new)) (attrNames old));
+    old // listToAttrs (map (attr: nameValuePair attr (attrByPath [attr] old.${attr} new)) (attrNames old));
 
   deepSeqAttrs = x: y: deepSeqList (attrValues x) y;
 }

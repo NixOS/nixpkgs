@@ -337,6 +337,8 @@ with stdenv.lib;
     ZSMALLOC y
   ''}
   ZRAM m
+  
+  ${optionalString (versionAtLeast version "3.17") "NFC? n"}
 
   ${kernelPlatform.kernelExtraConfig or ""}
   ${extraConfig}

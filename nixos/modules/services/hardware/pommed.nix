@@ -4,30 +4,34 @@ with lib;
 
 {
 
-  options.services.hardware.pommed = {
-    enable = mkOption {
-      default = false;
-       description = ''
-        Whether to use the pommed tool to handle Apple laptop keyboard hotkeys.
-      '';
+  options = {
+
+    services.hardware.pommed = {
+
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to use the pommed tool to handle Apple laptop keyboard hotkeys.
+        '';
+      };
+
+      configFile = mkOption {
+        type = types.path;
+        description = ''
+          The path to the <filename>pommed.conf</filename> file.
+        '';
+      };
     };
 
-    configFile = mkOption {
-      default = "${pkgs.pommed}/etc/pommed.conf";
-      description = ''
-        The contents of the pommed.conf file.
-      '';
-    };
   };
 
   config = mkIf config.services.hardware.pommed.enable {
     environment.systemPackages = [ pkgs.polkit ];
 
-    environment.etc = [
-      { source = config.services.hardware.pommed.configFile;
-        target = "pommed.conf";
-      }
-    ];
+    environment.etc."pommed.conf".source = config.services.hardware.pommed.configFile;
+
+    services.hardware.pommed.configFile = "${pkgs.pommed}/etc/pommed.conf";
 
     services.dbus.packages = [ pkgs.pommed ];
 

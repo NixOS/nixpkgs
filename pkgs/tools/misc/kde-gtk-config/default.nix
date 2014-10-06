@@ -22,7 +22,10 @@ stdenv.mkDerivation {
     pkgconfig
   ];
 
-  patches = [ ./kde-gtk-config-2.2.1-install-paths.patch ];
+  patches = [
+    ./kde-gtk-config-2.2.1-install-paths.patch
+    ./kde-gtk-config-follow-symlinks.patch
+  ];
 
   cmakeFlags = ''
     -DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib}/lib/glib-2.0/include

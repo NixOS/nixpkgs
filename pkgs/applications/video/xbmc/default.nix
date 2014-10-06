@@ -90,6 +90,7 @@ stdenv.mkDerivation rec {
           --prefix PATH ":" "${xdpyinfo}/bin" \
           --prefix LD_LIBRARY_PATH ":" "${curl}/lib" \
           --prefix LD_LIBRARY_PATH ":" "${systemd}/lib" \
+          --prefix LD_LIBRARY_PATH ":" "${libmad}/lib" \
           --prefix LD_LIBRARY_PATH ":" "${libvdpau}/lib"
       done
     '';
@@ -98,7 +99,7 @@ stdenv.mkDerivation rec {
       homepage = http://xbmc.org/;
       description = "Media center";
       license = "GPLv2";
-      platforms = stdenv.lib.platforms.linux; 
+      platforms = stdenv.lib.platforms.linux;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
 }

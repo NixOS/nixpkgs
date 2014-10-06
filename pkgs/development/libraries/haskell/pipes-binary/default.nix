@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pipes-binary";
-  version = "0.4.0.2";
-  sha256 = "1lbz2hybglkmm7dawg16pma2yr732yy1agh5b9vwlw2ik92hrm58";
+  version = "0.4.0.3";
+  sha256 = "0r56h5f9i6hy4zb2bhfi26y7y3z0j4nacdb2dgkxmh5mqjd33f0q";
   buildDepends = [
     binary pipes pipesBytestring pipesParse transformers
   ];

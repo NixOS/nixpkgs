@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, raspberrypifw, pcre, boostHeaders, freetype, zlib }:
+{ stdenv, fetchurl, raspberrypifw, pcre, boost, freetype, zlib }:
 
 let
   ffmpeg = stdenv.mkDerivation rec {
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp omxplayer.bin $out/bin
   '';
-  buildInputs = [ raspberrypifw ffmpeg pcre boostHeaders freetype zlib ];
+  buildInputs = [ raspberrypifw ffmpeg pcre boost freetype zlib ];
 
   meta = {
     homepage = https://github.com/huceke/omxplayer;

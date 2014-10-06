@@ -15,14 +15,14 @@
 
 assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
-let version = "31.0"; in
+let version = "32.0.3"; in
 
 stdenv.mkDerivation rec {
   name = "firefox-${version}";
 
   src = fetchurl {
     url = "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${version}/source/firefox-${version}.source.tar.bz2";
-    sha1 = "a6c3e25ee3aeb7da42db2aaeb50a385d63532beb";
+    sha1 = "1f831147365478e353212714038e812ca3e9fe42";
   };
 
   buildInputs =
@@ -66,7 +66,8 @@ stdenv.mkDerivation rec {
     ]
     ++ (if debugBuild then [ "--enable-debug" "--enable-profiling"]
                       else [ "--disable-debug" "--enable-release"
-                             "--enable-optimize" "--enable-strip" ])
+                             "--enable-optimize${lib.optionalString (stdenv.system == "i686-linux") "=-O1"}"
+                             "--enable-strip" ])
     ++ lib.optional enableOfficialBranding "--enable-official-branding";
 
   enableParallelBuilding = true;
@@ -87,7 +88,7 @@ stdenv.mkDerivation rec {
   postInstall =
     ''
       # For grsecurity kernels
-      paxmark m $out/lib/*/{plugin-container,xulrunner}
+      paxmark m $out/lib/${name}/{firefox,firefox-bin,plugin-container}
 
       # Remove SDK cruft. FIXME: move to a separate output?
       rm -rf $out/share/idl $out/include $out/lib/firefox-devel-*

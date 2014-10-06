@@ -5,7 +5,7 @@ kde {
 # TODO: libkgapi(2), LibKFbAPI,libkolab, libkolabxml
 
   buildInputs = [
-    kdepimlibs akonadi boost shared_desktop_ontologies
+    kdepimlibs akonadi boost boost.lib shared_desktop_ontologies
     libxslt
   ];
 

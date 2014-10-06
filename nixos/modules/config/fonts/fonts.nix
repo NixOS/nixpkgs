@@ -11,7 +11,7 @@ with lib;
       # TODO: find another name for it.
       fonts = mkOption {
         type = types.listOf types.path;
-        example = [ pkgs.dejavu_fonts ];
+        example = literalExample "[ pkgs.dejavu_fonts ]";
         description = "List of primary font paths.";
         apply = list: list ++
           [ # - the user's current profile

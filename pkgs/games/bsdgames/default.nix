@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     bsd_games_cfg_varlibdir=.
     bsd_games_cfg_non_interactive=y
     bsd_games_cfg_no_build_dirs="dab hack phantasia sail"
-    bsd_games_cfg_dictionary_src=${miscfiles}/share/dict/words
+    bsd_games_cfg_dictionary_src=${miscfiles}/share/web2
     bsd_games_cfg_pager=${less}
     EOF
 

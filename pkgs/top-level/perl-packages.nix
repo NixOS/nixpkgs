@@ -25,10 +25,10 @@ let self = _self // overrides; _self = with self; {
 
 
   ack = buildPerlPackage rec {
-    name = "ack-2.12";
+    name = "ack-2.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/${name}.tar.gz";
-      sha256 = "0avxpgg1fvib4354d9a9710j63sgxpb5j07if5qr83apq9xx7wjj";
+      sha256 = "0gqv30666vlclnwylhk9i64s7raa70x4ncy6bg48s5gcxwrshjc5";
     };
     # use gnused so that the preCheck command passes
     buildInputs = stdenv.lib.optional stdenv.isDarwin [ gnused ];
@@ -301,7 +301,7 @@ let self = _self // overrides; _self = with self; {
         and produces an XML document in Dia format (or images via graphviz
         and vcg).  Its goal is to be a UML / DB Schema diagram autocreation
         package.  The diagrams its creates are standard UML diagrams showing
-        dependancies, superclasses, packages, classes and inheritances, as
+        dependencies, superclasses, packages, classes and inheritances, as
         well as the methods, etc of each class.
 
         AutoDia supports any language that a Handler has been written for,
@@ -480,6 +480,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "14s75bsm5irisp8wkbwl3ycw160srr1rks7x9jcbvcxh79wr6gbh";
     };
     propagatedBuildInputs = [ DigestSHA1 Error IPCShareLite ];
+    doCheck = false; # randomly fails
   };
 
   CacheFastMmap = buildPerlPackage rec {
@@ -1784,10 +1785,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptRandPasswd = buildPerlPackage {
-    name = "Crypt-RandPasswd-0.05";
+    name = "Crypt-RandPasswd-0.06";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NE/NEILB/Crypt-RandPasswd-0.05.tar.gz;
-      sha256 = "0djcjzk0wmlf02gx9935m7c1dhpmdwx3hjal8x80aa92baavwf2s";
+      url = mirror://cpan/authors/id/N/NE/NEILB/Crypt-RandPasswd-0.06.tar.gz;
+      sha256 = "0ca8544371wp4vvqsa19lnhl02hczpkbwkgsgm65ziwwim3r1gdi";
     };
   };
 
@@ -3132,10 +3133,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   EmailSender = buildPerlPackage {
-    name = "Email-Sender-0.120002";
+    name = "Email-Sender-1.300014";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Sender-0.120002.tar.gz;
-      sha256 = "1cp735ndmh76xzijsm1hd0yh0m9yj34jc8akjhidkn677h2021dc";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Sender-1.300014.tar.gz;
+      sha256 = "0yxqk0fjxasd7q62m65dl2n6xm4xcvfb6i1lajvwibygd9ckifw6";
     };
     propagatedBuildInputs = [ CaptureTiny EmailAbstract EmailAddress EmailSimple ListMoreUtils Moose Throwable TryTiny ];
     meta = {
@@ -3784,10 +3785,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   FinanceQuote = buildPerlPackage rec {
-    name = "Finance-Quote-1.29";
+    name = "Finance-Quote-1.35";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EC/ECOCODE/${name}.tar.gz";
-      sha256 = "0rx8whixbhwq2imd3ffx3vcqdgfbjj6y1s01m38b52x3bjn9hw0f";
+      sha256 = "0mxfhi1ndckj4w7fw20rwy6ymalg2yncnp9xn0v2bnk5ibqj439w";
     };
     propagatedBuildInputs = [ CryptSSLeay HTMLTableExtract HTMLTree HTTPMessage LWP DateCalc JSON ];
     meta = {
@@ -4246,6 +4247,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/C/CF/CFRANKS/HTML-Widget-1.11.tar.gz;
       sha256 = "02w21rd30cza094m5xs9clzw8ayigbhg2ddzl6jycp4jam0dyhmy";
     };
+    doCheck = false;
     propagatedBuildInputs = [
       TestNoWarnings ClassAccessor ClassAccessorChained
       ClassDataAccessor ModulePluggableFast HTMLTree
@@ -4889,7 +4891,7 @@ let self = _self // overrides; _self = with self; {
       platforms   = stdenv.lib.platforms.unix;
     };
   };
-  
+
   ListBinarySearch = pkgs.buildPerlPackage {
     name = "List-BinarySearch-0.20";
     src = pkgs.fetchurl {
@@ -5721,6 +5723,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MooXTypesMooseLike = buildPerlPackage rec {
+    name = "MooX-Types-MooseLike-0.27";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MATEU/${name}.tar.gz";
+      sha256 = "1489almsam2zcrs5039sh0y88gjicwna8kws8j2jgfs8bpcf4dgf";
+    };
+    propagatedBuildInputs = [ Moo TestFatal ];
+  };
+
   MooseAutobox = buildPerlPackage {
     name = "Moose-Autobox-0.15";
     src = fetchurl {
@@ -6449,6 +6460,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Use the Amazon S3 - Simple Storage Service";
       license = "perl";
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -6467,12 +6479,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  NetAMQP = buildPerlPackage {
+  NetAMQP = buildPerlModule {
     name = "Net-AMQP-0.06";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CH/CHIPS/Net-AMQP-0.06.tar.gz;
       sha256 = "0b2ba7de2cd7ddd5fe102a2e2ae7aeba21eaab1078bf3bfd3c5a722937256380";
     };
+    doCheck = false; # failures on 32bit
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ ClassAccessor ClassDataInheritable XMLLibXML ];
     meta = {
@@ -6481,13 +6494,6 @@ let self = _self // overrides; _self = with self; {
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
     };
-    preConfigure =
-      ''
-        substituteInPlace META.json \
-          '"Module::Build" : "0.40"' '"Module::Build" : "0.39"'
-        substituteInPlace META.yml \
-          'Module::Build: 0.40' 'Module::Build: 0.39'
-      '';
   };
 
   NetCoverArtArchive = buildPerlPackage {
@@ -6981,10 +6987,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Plack = buildPerlPackage {
-    name = "Plack-1.0030";
+    name = "Plack-1.0031";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-1.0030.tar.gz;
-      sha256 = "0bb9aqb0h9q4qjgkw756gf695h4qg6vim54s6f2icgsazdi63zq7";
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-1.0031.tar.gz;
+      sha256 = "0vvppxs36729lggrx4s1gn37lzsm794wfkm3k386bwhkmk7sr31i";
     };
     buildInputs = [ FileShareDirInstall TestRequires ];
     propagatedBuildInputs = [ ApacheLogFormatCompiler DevelStackTrace DevelStackTraceAsHTML FileShareDir FilesysNotifySimple HTTPBody HTTPMessage HashMultiValue LWP StreamBuffered TestTCP TryTiny URI ];
@@ -8168,6 +8174,7 @@ let self = _self // overrides; _self = with self; {
       CatalystPluginSession CatalystPluginAuthentication
       CatalystAuthenticationStoreDBIxClass
       CatalystPluginAuthorizationRoles
+      CatalystPluginSessionStateCookie
       CatalystPluginAuthorizationACL
       CatalystPluginHTMLWidget
       CatalystPluginSessionStoreFastMmap
@@ -9317,12 +9324,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   Throwable = buildPerlPackage rec {
-    name = "Throwable-0.102080";
+    name = "Throwable-0.200010";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "0vjzlh23rpmgr5h8qfh9pb3kqw0j8sxn2bpbc1p2306dwqwbymm5";
+      sha256 = "0qhq1f5bvgf5kjhmdg45vadq8dbc9gfms81hply5c6a71nmkv8yp";
     };
-    propagatedBuildInputs = [ DevelStackTrace Moose ];
+    propagatedBuildInputs = [ DevelStackTrace Moose Moo MooXTypesMooseLike ];
   };
 
   TieCycle = buildPerlPackage {

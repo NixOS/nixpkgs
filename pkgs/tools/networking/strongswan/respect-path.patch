@@ -1,0 +1,19 @@
+commit 09c4ae5b7bcd7057bede788f02c1d2d30aeeacda
+Author: Shea Levy <shea@shealevy.com>
+Date:   Thu Sep 18 02:00:03 2014 -0400
+
+    ipsec script: just append to PATH if already set
+
+diff --git a/src/ipsec/_ipsec.in b/src/ipsec/_ipsec.in
+index e6725d0..82041f4 100644
+--- a/src/ipsec/_ipsec.in
++++ b/src/ipsec/_ipsec.in
+@@ -15,7 +15,7 @@
+ # for more details.
+ 
+ # define a minimum PATH environment in case it is not set
+-PATH="/sbin:/bin:/usr/sbin:/usr/bin:@IPSEC_SBINDIR@:@IPSEC_BINDIR@"
++PATH="${PATH:-/sbin:/bin:/usr/sbin:/usr/bin}:@IPSEC_SBINDIR@:@IPSEC_BINDIR@"
+ export PATH
+ 
+ # set daemon name

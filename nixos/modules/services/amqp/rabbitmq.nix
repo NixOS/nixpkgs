@@ -89,6 +89,8 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
 
+      path = [ pkgs.rabbitmq_server ];
+
       environment = {
         RABBITMQ_MNESIA_BASE = "${cfg.dataDir}/mnesia";
         RABBITMQ_NODE_IP_ADDRESS = cfg.listenAddress;
@@ -119,6 +121,8 @@ in {
         mkdir -p /var/log/rabbitmq && chmod 0700 /var/log/rabbitmq
         chown rabbitmq:rabbitmq /var/log/rabbitmq
       '';
+
+      postStart = mkBefore "until rabbitmqctl status; do sleep 1; done";
     };
 
   };

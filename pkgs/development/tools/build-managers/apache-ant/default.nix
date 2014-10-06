@@ -1,6 +1,6 @@
-{ fetchurl, stdenv, makeWrapper }:
+{ fetchurl, stdenv, coreutils, makeWrapper }:
 
-let version = "1.9.3"; in
+let version = "1.9.4"; in
 
 stdenv.mkDerivation {
   name = "ant-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://apache/ant/binaries/apache-ant-${version}-bin.tar.bz2";
-    sha1 = "efcf206e24b0dd1583c501182ad163af277951a4";
+    sha256 = "1kw801p8h5x4f0g8i5yknppssrj5a3xy1aqrkpfnk22bd1snbh90";
   };
 
   contrib = fetchurl {
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
       if [ -z "\$JAVA_HOME" ]; then
           for i in javac java gij; do
               if p="\$(type -p \$i)"; then
-                  export JAVA_HOME="\$(dirname \$(dirname \$(readlink -f \$p)))"
+                  export JAVA_HOME="\$(${coreutils}/bin/dirname \$(${coreutils}/bin/dirname \$(${coreutils}/bin/readlink -f \$p)))"
                   break
               fi
           done

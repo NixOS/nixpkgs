@@ -4,6 +4,7 @@ let
   version = "0.9.4";
   webpage = "http://mjambon.com/${pname}.html";
 in
+assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12";
 stdenv.mkDerivation rec {
 
   name = "${pname}-${version}";
@@ -23,15 +24,13 @@ stdenv.mkDerivation rec {
     mkdir $out/bin
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "The C preprocessor for OCaml";
     longDescription = ''
       Cppo is an equivalent of the C preprocessor targeted at the OCaml language and its variants.
     '';
     homepage = "${webpage}";
-    license = "bsd";
+    maintainers = [ maintainers.vbgl ];
+    license = licenses.bsd3;
   };
 }
-
-
-

@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
             *.jar) continue;;
         esac
         wrapProgram "$file" \
-          --set PERL5LIB "$out/lib/perl5/site_perl:${with perlPackages; stdenv.lib.makePerlPath [
+          --set PERL5LIB "$out/lib/perl5/site_perl:${rrdtool}/lib/perl:${with perlPackages; stdenv.lib.makePerlPath [
                 Log4Perl IOSocketInet6 Socket6 URI DBFile DateManip
                 HTMLTemplate FileCopyRecursive FCGI NetSNMP NetServer
                 ListMoreUtils TimeHiRes DBDPg LWPUserAgent

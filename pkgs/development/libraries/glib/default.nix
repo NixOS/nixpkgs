@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     sha256 = "1d98mbqjmc34s8095lkw1j1bwvnnkw9581yfvjaikjvfjsaz29qd";
   };
 
-  patches = optional stdenv.isDarwin ./darwin-compilation.patch;
+  patches = optional stdenv.isDarwin ./darwin-compilation.patch ++ optional doCheck ./skip-timer-test.patch;
 
   setupHook = ./setup-hook.sh;
 

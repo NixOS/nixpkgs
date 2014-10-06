@@ -1,30 +1,41 @@
 { stdenv, fetchurl, pkgconfig, perl, flex, bison, libpcap, libnl, c-ares
-, gnutls, libgcrypt, geoip, heimdal, lua5, gtk, makeDesktopItem, python
-, libcap
+, gnutls, libgcrypt, geoip, heimdal, lua5, makeDesktopItem, python, libcap, glib
+, withGtk ? false, gtk ? null
+, withQt ? false, qt4 ? null
 }:
 
-let version = "1.11.2"; in
+assert withGtk -> !withQt && gtk != null;
+assert withQt -> !withGtk && qt4 != null;
+
+with stdenv.lib;
+
+let
+  version = "1.12.1";
+  variant = if withGtk then "gtk" else if withQt then "qt" else "cli";
+in
 
 stdenv.mkDerivation {
-  name = "wireshark-${version}";
+  name = "wireshark-${variant}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/wireshark/wireshark-${version}.tar.bz2";
-    sha256 = "077hjnmqn44s8dx3pc38bxps5liicjnhzrnf6ky2x60m2cp7ngr3";
+    url = "http://www.wireshark.org/download/src/wireshark-${version}.tar.bz2";
+    sha256 = "0jsqpr4s5smadvlm881l8fkhhw384ak3apkq4wxr05gc2va6pcl2";
   };
 
   buildInputs = [
     bison flex perl pkgconfig libpcap lua5 heimdal libgcrypt gnutls
-    geoip libnl c-ares gtk python libcap
-  ];
+    geoip libnl c-ares python libcap glib
+  ] ++ optional withQt qt4
+    ++ optional withGtk gtk;
 
   patches = [ ./wireshark-lookup-dumpcap-in-path.patch ];
 
-  preConfigure = ''
-    sed -re 's/g_memmove/memmove/' -i $(grep -rl g_memmove .)
-  '';
-
-  configureFlags = "--disable-usr-local --disable-silent-rules --with-gtk2 --without-gtk3 --without-qt --with-ssl";
+  configureFlags = "--disable-usr-local --disable-silent-rules --with-ssl"
+    + (if withGtk then
+         " --with-gtk2 --without-gtk3 --without-qt"
+       else if withQt then
+         " --without-gtk2 --without-gtk3 --with-qt"
+       else " --disable-wireshark");
 
   desktopItem = makeDesktopItem {
     name = "Wireshark";
@@ -36,18 +47,20 @@ stdenv.mkDerivation {
     categories = "Network;System";
   };
 
-  postInstall = ''
+  postInstall = optionalString (withQt || withGtk) ''
     mkdir -p "$out"/share/applications/
     mkdir -p "$out"/share/icons/
     cp "$desktopItem/share/applications/"* "$out/share/applications/"
     cp image/wsicon.svg "$out"/share/icons/wireshark.svg
+  '' + optionalString withQt ''
+    mv "$out/bin/wireshark-qt" "$out/bin/wireshark"
   '';
 
   enableParallelBuilding = true;
 
   meta = {
     homepage = http://www.wireshark.org/;
-    description = "a powerful network protocol analyzer";
+    description = "Powerful network protocol analyzer";
     license = stdenv.lib.licenses.gpl2;
 
     longDescription = ''

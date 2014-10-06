@@ -6,11 +6,11 @@
 # use packaged gnome3.gnome_icon_theme_symbolic 
 
 stdenv.mkDerivation rec {
-  name = "gitg-0.3.2";
+  name = "gitg-3.13.91";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gitg/0.3/${name}.tar.xz";
-    sha256 = "03vc59d1r3326piqdph6qjqnc40chm1lpg52lpf8466ddjs0x8vp";
+    url = "mirror://gnome/sources/gitg/3.13/${name}.tar.xz";
+    sha256 = "1c2016grvgg5f3l5xkracz85rblsc1a4brzr6vgn6kh2h494rv37";
   };
 
   preCheck = ''

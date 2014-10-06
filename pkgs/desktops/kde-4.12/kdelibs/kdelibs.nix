@@ -28,7 +28,10 @@ kde {
   # There are a few hardcoded paths.
   # Split plugins from libs?
 
-  patches = [ ../files/polkit-install.patch ];
+  patches = [
+    ../files/polkit-install.patch
+    ../files/kdelibs-cve-2014-5033.patch  # Security patch, remove when updating to 4.14.0 or more
+  ];
 
   cmakeFlags = [
     "-DDOCBOOKXML_CURRENTDTD_DIR=${docbook_xml_dtd_42}/xml/dtd/docbook"

@@ -1,25 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, ncurses, confuse, libnl }:
+{ stdenv, fetchFromGitHub, autoconf, automake, pkgconfig, ncurses, confuse
+, libnl }:
 
-stdenv.mkDerivation {
-  name = "bmon-3.1";
+stdenv.mkDerivation rec {
+  name = "bmon-${version}";
+  version = "3.5";
 
-  src = fetchurl {
-    url = http://www.carisma.slowglass.com/~tgr/bmon/files/bmon-3.1.tar.gz;
-    sha256 = "005ib7c3g3cva0rdwsgl6hfakxd5yp88sf4bjxb6iarcm3ax18ky";
+  src = fetchFromGitHub {
+    owner = "tgraf";
+    repo = "bmon";
+    rev = "v${version}";
+    sha256 = "0k6cwprwnrnilbs2fgkx7z9mg6rr11wf6djq6pjfc7fjn2fjvybi";
   };
 
-  buildInputs = [ pkgconfig ncurses confuse libnl ];
+  buildInputs = [ autoconf automake pkgconfig ncurses confuse libnl ];
+
+  preConfigure = "sh ./autogen.sh";
 
   meta = with stdenv.lib; {
     description = "Network bandwidth monitor";
-    homepage = http://www.carisma.slowglass.com/~tgr/bmon/;
-    # Neither the homepage nor the source archive has license info, but in the
-    # latest git version there is a LICENSE file that is the 2-clause BSD
-    # license.
-    #  - https://github.com/tgraf/bmon/blob/master/LICENSE
-    #  - http://opensource.org/licenses/BSD-2-Clause
+    homepage = https://github.com/tgraf/bmon;
+    # Licensed unter BSD and MIT
+    #  - https://github.com/tgraf/bmon/blob/master/LICENSE.BSD
+    #  - https://github.com/tgraf/bmon/blob/master/LICENSE.MIT
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor pSub ];
   };
 }

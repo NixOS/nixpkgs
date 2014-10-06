@@ -256,7 +256,7 @@ else
   # download the file and add it to the store.
   if test -z "$finalPath"; then
 
-      tmpPath="$(mktemp --tmpdir -d git-checkout-tmp-XXXXXXXX)"
+      tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/git-checkout-tmp-XXXXXXXX")"
       trap "rm -rf \"$tmpPath\"" EXIT
 
       tmpFile="$tmpPath/git-export"

@@ -1,0 +1,95 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+        version="5.0"
+        xml:id="sec-getting-sources">
+
+<title>Getting the Sources</title>
+
+<para>By default, NixOS’s <command>nixos-rebuild</command> command
+uses the NixOS and Nixpkgs sources provided by the
+<literal>nixos-unstable</literal> channel (kept in
+<filename>/nix/var/nix/profiles/per-user/root/channels/nixos</filename>).
+To modify NixOS, however, you should check out the latest sources from
+Git.  This is done using the following command:
+
+<screen>
+$ nixos-checkout <replaceable>/my/sources</replaceable>
+</screen>
+
+or
+
+<screen>
+$ mkdir -p <replaceable>/my/sources</replaceable>
+$ cd <replaceable>/my/sources</replaceable>
+$ nix-env -i git
+$ git clone git://github.com/NixOS/nixpkgs.git
+</screen>
+
+This will check out the latest NixOS sources to
+<filename><replaceable>/my/sources</replaceable>/nixpkgs/nixos</filename>
+and the Nixpkgs sources to
+<filename><replaceable>/my/sources</replaceable>/nixpkgs</filename>.
+(The NixOS source tree lives in a subdirectory of the Nixpkgs
+repository.)</para>
+
+<para>It’s often inconvenient to develop directly on the master
+branch, since if somebody has just committed (say) a change to GCC,
+then the binary cache may not have caught up yet and you’ll have to
+rebuild everything from source. So you may want to create a local
+branch based on your current NixOS version:
+
+<screen>
+$ nixos-version
+14.04.273.ea1952b (Baboon)
+
+$ git checkout -b local ea1952b
+</screen>
+
+Or, to base your local branch on the latest version available in the
+NixOS channel:
+
+<screen>
+$ curl -sI http://nixos.org/channels/nixos-unstable/ | grep Location
+Location: http://releases.nixos.org/nixos/unstable/nixos-14.10pre43986.acaf4a6/
+
+$ git checkout -b local acaf4a6
+</screen>
+
+You can then use <command>git rebase</command> to sync your local
+branch with the upstream branch, and use <command>git
+cherry-pick</command> to copy commits from your local branch to the
+upstream branch.</para>
+
+<para>If you want to rebuild your system using your (modified)
+sources, you need to tell <command>nixos-rebuild</command> about them
+using the <option>-I</option> flag:
+
+<screen>
+$ nixos-rebuild switch -I nixpkgs=<replaceable>/my/sources</replaceable>/nixpkgs
+</screen>
+
+</para>
+
+<para>If you want <command>nix-env</command> to use the expressions in
+<replaceable>/my/sources</replaceable>, use <command>nix-env -f
+<replaceable>/my/sources</replaceable>/nixpkgs</command>, or change
+the default by adding a symlink in
+<filename>~/.nix-defexpr</filename>:
+
+<screen>
+$ ln -s <replaceable>/my/sources</replaceable>/nixpkgs ~/.nix-defexpr/nixpkgs
+</screen>
+
+You may want to delete the symlink
+<filename>~/.nix-defexpr/channels_root</filename> to prevent root’s
+NixOS channel from clashing with your own tree.</para>
+
+<!-- FIXME: not sure what this means.
+<para>You should not pass the base directory
+<filename><replaceable>/my/sources</replaceable></filename>
+to <command>nix-env</command>, as it will break after interpreting expressions
+in <filename>nixos/</filename> as packages.</para>
+-->
+
+</chapter>

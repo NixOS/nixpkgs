@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, gettext }:
-   
+{ stdenv, fetchurl, gettext, bzip2 }:
+
 stdenv.mkDerivation rec {
-  name = "sysstat-10.1.1";
-   
+  name = "sysstat-11.0.1";
+
   src = fetchurl {
-    url = "http://perso.orange.fr/sebastien.godard/${name}.tar.bz2";
-    sha256 = "1ig6k4yjkkazddjr90hykiapl30s9r9c1gy1h8hqzn2c3xgkm7p3";
+    url = "http://perso.orange.fr/sebastien.godard/${name}.tar.xz";
+    sha256 = "1cwgsxvs7jkr3il6r344mw46502yjnhrsbcp4217vh4b7xv6czaq";
   };
 
   buildInputs = [ gettext ];
@@ -13,10 +13,17 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export PATH_CP=$(type -tp cp)
     export PATH_CHKCONFIG=/no-such-program
-    makeFlagsArray=(SA_DIR=/var/log/sa SYSCONFIG_DIR=$out/etc CHOWN=true IGNORE_MAN_GROUP=y)
+    export BZIP=${bzip2}/bin/bzip2
+    export SYSTEMCTL=systemctl
+    makeFlagsArray=(SYSCONFIG_DIR=$out/etc CHOWN=true IGNORE_MAN_GROUP=y CHOWN=true)
+    installFlagsArray=(SA_DIR=$TMPDIR/dummy)
+    # Note: --enable-install-cron actually installs systemd units.
+    configureFlagsArray+=(--with-systemdsystemunitdir=$out/lib/systemd/system --enable-install-cron)
   '';
 
-  patches = [ ./no-install-statedir.patch ];
+  preInstall = ''
+    mkdir -p $out/lib/systemd/system
+  '';
 
   meta = {
     homepage = http://sebastien.godard.pagesperso-orange.fr/;
