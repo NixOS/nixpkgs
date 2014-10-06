@@ -22,6 +22,18 @@ stdenv.mkDerivation {
     export MKDIR_P="mkdir -p"
   '';
 
+  # Fix reference to sh in bootstrap-tools, and invoke grep via
+  # absolute path rather than looking at argv[0].
+  postInstall =
+    ''
+      rm $out/bin/egrep $out/bin/fgrep
+      echo "#! /bin/sh" > $out/bin/egrep
+      echo "exec $out/bin/grep -E \"\$@\"" >> $out/bin/egrep
+      echo "#! /bin/sh" > $out/bin/fgrep
+      echo "exec $out/bin/grep -F \"\$@\"" >> $out/bin/fgrep
+      chmod +x $out/bin/egrep $out/bin/fgrep
+    '';
+
   meta = {
     homepage = http://www.gnu.org/software/grep/;
     description = "GNU implementation of the Unix grep command";
