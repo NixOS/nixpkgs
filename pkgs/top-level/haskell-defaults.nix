@@ -37,6 +37,7 @@
     attoparsec = self.attoparsec_0_11_3_1;
     binaryConduit = super.binaryConduit.override { binary = self.binary_0_7_2_1; };
     bson = super.bson.override { dataBinaryIeee754 = self.dataBinaryIeee754.override { binary = self.binary_0_7_2_1; }; };
+    cabal2nix = super.cabal2nix.override { hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_18_1_3; }; };
     criterion = super.criterion.override {
       statistics = self.statistics.override {
         vectorBinaryInstances = self.vectorBinaryInstances.override { binary = self.binary_0_7_2_1; };

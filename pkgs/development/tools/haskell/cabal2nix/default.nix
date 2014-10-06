@@ -14,7 +14,7 @@ cabal.mkDerivation (self: {
     Cabal filepath hackageDb mtl regexPosix transformers
   ];
   testDepends = [ doctest ];
-  doCheck = self.stdenv.lib.versionOlder "7.6" self.ghc.version;
+  doCheck = self.stdenv.lib.versionOlder "7.8" self.ghc.version;
   meta = {
     homepage = "http://github.com/NixOS/cabal2nix";
     description = "Convert Cabal files into Nix build instructions";
