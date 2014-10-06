@@ -1628,7 +1628,10 @@ let
 
   mfoc = callPackage ../tools/security/mfoc { };
 
-  minecraft = callPackage ../games/minecraft { };
+  minecraft = callPackage ../games/minecraft {
+    pulseaudioSupport = config.pulseaudio or true;
+    pulseaudio = pulseaudio.override { ossWrapper = true; };
+  };
 
   minecraft-server = callPackage ../games/minecraft-server { };
 
