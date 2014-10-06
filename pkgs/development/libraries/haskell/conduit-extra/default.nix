@@ -18,6 +18,7 @@ cabal.mkDerivation (self: {
     async attoparsec blazeBuilder conduit exceptions hspec resourcet
     stm text transformers transformersBase
   ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/snoyberg/conduit";
     description = "Batteries included conduit: adapters for common libraries";
