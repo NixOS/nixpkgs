@@ -37,8 +37,9 @@ in stdenv.mkDerivation rec {
       --with-pkg-config \
       --with-pg-config=${postgresql}/bin/pg_config
 
-    bundle install --without development test rmagick --path /tmp/redmine-${version}
+    bundle install --verbose --without development test rmagick --path /tmp/redmine-${version}
 
-    ruby generate_nix_requirements.rb
+    HOME="/tmp/redmine-${version}" ruby generate_nix_requirements.rb
+    rm -R /tmp/gems
   '';
 }

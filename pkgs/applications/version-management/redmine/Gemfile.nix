@@ -61,9 +61,9 @@ version = "2.1.0";
 }
 {
 name = "childprocess";
-hash = "9cebed1bd68f7ba0deb54683a5c05a8c3e79037f682b5d0a6ecd1d4472bbb289";
-url = "http://rubygems.org/downloads/childprocess-0.5.3.gem";
-version = "0.5.3";
+hash = "9b583295a11932d2eeffa1e8f5b8fb2fb0064a2f0111ad98c3b752b94f80bf33";
+url = "http://rubygems.org/downloads/childprocess-0.5.5.gem";
+version = "0.5.5";
 }
 {
 name = "coderay";
@@ -85,9 +85,9 @@ version = "1.5.5";
 }
 {
 name = "ffi";
-hash = "57977d095c1c324ac1cb134863180b34d5743fed2b6d7528adc5ec71a581e320";
-url = "http://rubygems.org/downloads/ffi-1.9.3.gem";
-version = "1.9.3";
+hash = "0d2ef90163eef8545689e8dfc27fb1245a2d82e3500d587de1e38290629e662f";
+url = "http://rubygems.org/downloads/ffi-1.9.5.gem";
+version = "1.9.5";
 }
 {
 name = "hike";
@@ -259,9 +259,9 @@ version = "1.1.6";
 }
 {
 name = "selenium-webdriver";
-hash = "d870fbc19830c86efba186145a16e9ac94ba64fa2898fb7ae94a7876d8e7d213";
-url = "http://rubygems.org/downloads/selenium-webdriver-2.42.0.gem";
-version = "2.42.0";
+hash = "09fe4374d1541cb45403ad1238c2d88129f3afb985218635af087a06c99a521a";
+url = "http://rubygems.org/downloads/selenium-webdriver-2.43.0.gem";
+version = "2.43.0";
 }
 {
 name = "shoulda";
@@ -313,9 +313,9 @@ version = "0.3.41";
 }
 {
 name = "websocket";
-hash = "807f6144bf4c316deb4006b0737f0ce677dfbf4cdc9db1bb9276e19204f92ecb";
-url = "http://rubygems.org/downloads/websocket-1.0.7.gem";
-version = "1.0.7";
+hash = "e626c8c3e8593735d900265fb1fc3439fd06b394069860177d8f40733b12ae9e";
+url = "http://rubygems.org/downloads/websocket-1.2.1.gem";
+version = "1.2.1";
 }
 {
 name = "xpath";
