@@ -3146,6 +3146,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   gitAnnex = callPackage ../applications/version-management/git-and-tools/git-annex {
     cabal = self.cabal.override { extension = self : super : { enableSharedExecutables = false; }; };
+    dbus = if pkgs.stdenv.isLinux then self.dbus else null;
+    fdoNotify = if pkgs.stdenv.isLinux then self.fdoNotify else null;
+    hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
   };
 
   githubBackup = callPackage ../applications/version-management/git-and-tools/github-backup {};
