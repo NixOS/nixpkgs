@@ -6,7 +6,7 @@ let
   esPlugin = a@{
     pluginName, 
     installPhase ? ''
-      mkdir -p $out
+      mkdir -p $out/bin
       ES_HOME=$out ${elasticsearch}/bin/elasticsearch-plugin --install ${pluginName} --url file://$src
     '', 
     ...
