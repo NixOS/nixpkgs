@@ -145,20 +145,26 @@
 
   # Abstraction for Haskell packages collections
   packagesFun = makeOverridable
-   ({ ghcPath
+   ({ ghcPath ? null
+    , haskellCompiler ? callPackage ghcPath ({ ghc = ghcBinary; } // extraArgs)
     , ghcBinary ? ghc6101Binary
     , prefFun
     , extension ? (self : super : {})
     , profExplicit ? false, profDefault ? false
     , modifyPrio ? lowPrio
     , extraArgs ? {}
+    , cabalPackage ? import ../build-support/cabal/default.nix
+    , haskellCompilerWrapperPackage ? import ../development/compilers/ghc/wrapper.nix
+    , haskellCompilerWithPackagesPackage ? import ../development/compilers/ghc/with-packages.nix
+    , haskellCompilerBinaryName ? "ghc"
     } :
     let haskellPackagesClass = import ./haskell-packages.nix {
-          inherit pkgs newScope modifyPrio;
+          inherit pkgs newScope modifyPrio cabalPackage;
           enableLibraryProfiling =
             if profExplicit then profDefault
                             else config.cabal.libraryProfiling or profDefault;
-          ghc = callPackage ghcPath ({ ghc = ghcBinary; } // extraArgs);
+          inherit haskellCompiler;
+          inherit haskellCompilerWrapperPackage haskellCompilerWithPackagesPackage haskellCompilerBinaryName;
         };
         haskellPackagesPrefsClass = self : let super = haskellPackagesClass self; in super // prefFun self super;
         haskellPackagesExtensionClass = self : let super = haskellPackagesPrefsClass self; in super // extension self super;
@@ -228,6 +234,9 @@
     packages { ghcPath = ../development/compilers/ghc/7.8.3.nix;
                ghcBinary = ghc742Binary;
                prefFun = ghc783Prefs;
+               cabalPackage = import ../build-support/cabal/default-new.nix;
+               haskellCompilerWrapperPackage = import ../development/compilers/ghc/wrapper-new.nix;
+               haskellCompilerWithPackagesPackage = import ../development/compilers/ghc/with-packages-new.nix;
              };
 
   packages_ghc763 =
