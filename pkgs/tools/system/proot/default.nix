@@ -16,10 +16,6 @@ stdenv.mkDerivation rec {
     substituteInPlace GNUmakefile --replace "/usr/local" "$out"
   '';
 
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
-
-
-
   sourceRoot = "git-export/src";
 
   meta = with stdenv.lib; {
