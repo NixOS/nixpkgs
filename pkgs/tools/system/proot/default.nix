@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "User-space implementation of chroot, mount --bind and binfmt_misc";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with self.stdenv.lib.maintainers; [ ianwookim ];
+    maintainers = [ maintainers.ianwookim ];
   };
 }
 
