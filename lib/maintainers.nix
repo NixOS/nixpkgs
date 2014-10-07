@@ -38,6 +38,7 @@
   cfouche = "Chaddaï Fouché <chaddai.fouche@gmail.com>";
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
   coconnor = "Corey O'Connor <coreyoconnor@gmail.com>";
+  codyopel = "Cody Opel <codyopel@gmail.com>";
   copumpkin = "Dan Peebles <pumpkingod@gmail.com>";
   coroa = "Jonas Hörsch <jonas@chaoflow.net>";
   cstrahan = "Charles Strahan <charles.c.strahan@gmail.com>";

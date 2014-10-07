@@ -1550,6 +1550,8 @@ let
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
+  libtorrent-git = callPackage ../tools/networking/p2p/libtorrent/git.nix { };
+
   logcheck = callPackage ../tools/system/logcheck {
     inherit (perlPackages) mimeConstruct;
   };
@@ -2148,6 +2150,8 @@ let
   rrdtool = callPackage ../tools/misc/rrdtool { };
 
   rtorrent = callPackage ../tools/networking/p2p/rtorrent { };
+
+  rtorrent-git = callPackage ../tools/networking/p2p/rtorrent/git.nix { };
 
   rubber = callPackage ../tools/typesetting/rubber { };
 
