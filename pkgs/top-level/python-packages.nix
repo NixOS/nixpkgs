@@ -10506,6 +10506,22 @@ let
   };
 
 
+  ujson = buildPythonPackage rec {
+    name = "ujson-1.33";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/u/ujson/${name}.zip";
+      md5 = "8148a2493fff78940feab1e11dc0a893";
+    };
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/ujson;
+      description = "Ultra fast JSON encoder and decoder for Python";
+      license = licenses.bsd3;
+    };
+  };
+
+
   unidecode = buildPythonPackage rec {
     name = "Unidecode-0.04.12";
 
