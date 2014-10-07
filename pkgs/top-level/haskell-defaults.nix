@@ -271,4 +271,21 @@
                prefFun = ghc6104Prefs;
              };
 
+
+  packages_haste043 =
+    packages { ghcBinary = null;
+               haskellCompiler = pkgs.haskellPackages_ghc783.callPackage ../development/compilers/haste/0.4.3.nix {
+                 cabalInstall=pkgs.haskellPackages_ghc783.cabalInstall_1_18_0_3;
+                 deepseqBoot=pkgs.haskellPackages_ghc783.deepseq_1_3_0_2;
+                 transformersBoot=pkgs.haskellPackages_ghc783.transformers_0_4_1_0;
+               };
+               prefFun = self : super : super // {
+                 ghcPaths = super.callPackage ../development/libraries/haskell/ghc-paths/haste.nix {};
+               };
+               profExplicit = false;
+               cabalPackage = import ../build-support/cabal/default-new.nix;
+               haskellCompilerBinaryName = "haste";
+               haskellCompilerWrapperPackage = import ../development/compilers/haste/wrapper.nix;
+               haskellCompilerWithPackagesPackage = import ../development/compilers/haste/with-packages.nix;
+             };
 }

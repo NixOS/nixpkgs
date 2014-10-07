@@ -1,0 +1,15 @@
+diff --git a/haste-compiler.cabal b/haste-compiler.cabal
+index 5fd8738..a02c17a 100644
+--- a/haste-compiler.cabal
++++ b/haste-compiler.cabal
+@@ -61,8 +61,8 @@ Executable haste-boot
+         tar,
+         bzlib,
+         transformers,
+-        network,
+-        network-uri,
++        network < 2.6,
++        -- network-uri,
+         HTTP,
+         shellmate >= 0.1.5,
+         ghc-paths,
