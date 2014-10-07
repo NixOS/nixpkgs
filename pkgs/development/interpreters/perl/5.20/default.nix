@@ -11,11 +11,11 @@ with {
 };
 
 stdenv.mkDerivation rec {
-  name = "perl-5.20.0";
+  name = "perl-5.20.1";
 
   src = fetchurl {
-    url = "mirror://cpan/src/${name}.tar.gz";
-    sha256 = "00ndpgw4bjing9gy2y6jvs3q46mv2ll6zrxjkhpr12fcdsnji32f";
+    url = "mirror://cpan/authors/id/S/SH/SHAY/${name}.tar.gz";
+    sha256 = "1dfl4v5fngnkd1c4278gcdjgcapsw7laxq0b34nxrx76z4805wgy";
   };
 
   patches =
