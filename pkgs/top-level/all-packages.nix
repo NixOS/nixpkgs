@@ -1338,7 +1338,7 @@ let
   gupnptools = callPackage ../tools/networking/gupnp-tools {};
 
   gvpe = builderDefsPackage ../tools/networking/gvpe {
-    inherit openssl gmp nettools iproute;
+    inherit openssl gmp nettools iproute zlib;
   };
 
   gvolicon = callPackage ../tools/audio/gvolicon {};
