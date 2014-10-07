@@ -101,7 +101,7 @@ let
       iface = if grubVersion == 1 then "scsi" else "virtio";
       qemuFlags =
         (if iso.system == "x86_64-linux" then "-m 768 " else "-m 512 ") +
-        (optionalString (iso.system == "x86_64-linux") "-cpu kvm64 ") +
+        (optionalString (iso.system == "x86_64-linux") "-cpu kvm64 ");
       hdFlags =''hda => "harddisk", hdaInterface => "${iface}", '';
     in
     ''
