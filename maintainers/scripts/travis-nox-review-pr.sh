@@ -13,6 +13,9 @@ trusted-binary-caches = http://hydra.nixos.org
 build-max-jobs = 4
 EOF
 
+echo "First of all, checking evaluation, including meta"
+nix-env -f. -qa --json > /dev/null
+
 if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
     echo "Not a pull request, checking evaluation"
     nix-build pkgs/top-level/release.nix -A tarball
