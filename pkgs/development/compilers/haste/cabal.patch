@@ -1,0 +1,11 @@
+--- haste-compiler-old/src/haste-inst.hs	2014-10-01 01:57:29.923738891 +0200
++++ haste-compiler/src/haste-inst.hs	2014-10-02 14:27:03.786880614 +0200
+@@ -10,7 +10,7 @@ type Match = (String -> Bool, [String] -
+ 
+ cabal :: [String] -> IO ()
+ cabal args = do
+-  res <- shell $ run_ "cabal" (hasteargs ++ args') ""
++  res <- shell $ run_ "__NIX_CABAL_INSTALL_TARGET__" (hasteargs ++ args') ""
+   case res of
+     Left _ -> exitFailure
+     _      -> exitSuccess

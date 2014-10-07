@@ -3182,6 +3182,9 @@ let
   haskellPackages_ghc783              = recurseIntoAttrs haskell.packages_ghc783.highPrio;
   haskellPackages_ghcHEAD = haskell.packages_ghcHEAD;
 
+  hastePackages  = haskellPackages_haste043;
+  haskellPackages_haste043  = haskell.packages_haste043;
+
   haskellPlatformPackages = recurseIntoAttrs (import ../development/libraries/haskell/haskell-platform { inherit pkgs; });
 
   haxe = callPackage ../development/compilers/haxe { };

@@ -334,6 +334,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   bytes = callPackage ../development/libraries/haskell/bytes {};
 
+  bytestrings = callPackage ../development/libraries/haskell/bytestrings {};
+
   bytestringNums = callPackage ../development/libraries/haskell/bytestring-nums {};
 
   bytestringLexing = callPackage ../development/libraries/haskell/bytestring-lexing {};
@@ -503,6 +505,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   connection = callPackage ../development/libraries/haskell/connection {};
 
   constraints = callPackage ../development/libraries/haskell/constraints {};
+
+  containers = callPackage ../development/libraries/haskell/containers {};
 
   controlBool = callPackage ../development/libraries/haskell/control-bool {};
 
@@ -1110,8 +1114,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   haskore = callPackage ../development/libraries/haskell/haskore {};
 
   hastache = callPackage ../development/libraries/haskell/hastache {};
-
-  hasteCompiler = callPackage ../development/libraries/haskell/haste-compiler {};
 
   hastePerch = callPackage ../development/libraries/haskell/haste-perch {};
 
@@ -1815,6 +1817,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   ObjectName = callPackage ../development/libraries/haskell/ObjectName {};
 
   oeis = callPackage ../development/libraries/haskell/oeis {};
+
+  oldLocale = callPackage ../development/libraries/haskell/old-locale {};
 
   OpenAL = callPackage ../development/libraries/haskell/OpenAL {};
 
