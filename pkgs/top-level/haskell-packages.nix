@@ -1801,6 +1801,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   OneTuple = callPackage ../development/libraries/haskell/OneTuple {};
 
+  objective = callPackage ../development/libraries/haskell/objective {};
+
   ObjectName = callPackage ../development/libraries/haskell/ObjectName {};
 
   oeis = callPackage ../development/libraries/haskell/oeis {};
