@@ -43,11 +43,12 @@
 #
 # For most packages, however, we keep only one version, and use default.nix.
 
-{ pkgs, newScope, ghc, modifyPrio ? (x : x)
+{ pkgs, newScope, haskellCompiler, modifyPrio ? (x : x), cabalPackage
+, haskellCompilerWrapperPackage, haskellCompilerWithPackagesPackage, haskellCompilerBinaryName
 , enableLibraryProfiling ? false
-, enableSharedLibraries ? pkgs.stdenv.lib.versionOlder "7.7" ghc.version
-, enableSharedExecutables ? pkgs.stdenv.lib.versionOlder "7.7" ghc.version
-, enableCheckPhase ? pkgs.stdenv.lib.versionOlder "7.4" ghc.version
+, enableSharedLibraries ? ((haskellCompilerBinaryName == "ghc") && (pkgs.stdenv.lib.versionOlder "7.7" haskellCompiler.version))
+, enableSharedExecutables ? ((haskellCompilerBinaryName == "ghc") && (pkgs.stdenv.lib.versionOlder "7.7" haskellCompiler.version))
+, enableCheckPhase ? ((haskellCompilerBinaryName == "ghc") && (pkgs.stdenv.lib.versionOlder "7.4" haskellCompiler.version))
 , enableStaticLibraries ? true
 }:
 
@@ -56,6 +57,10 @@
 # low priority.
 
 self : let callPackage = x : y : modifyPrio (newScope self x y); in
+
+# Filter attributes of packages that are enabled for a particular compiler.
+# When a package is not enabled, the value of the attribute is null.
+# TODO: pkgs.stdenv.lib.filterAttrs (n: v: !(isNull v))
 
 # Indentation deliberately broken at this point to keep the bulk
 # of this file at a low indentation level.
@@ -70,31 +75,35 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   # Nix. Because the wrapper is so much more useful than the plain GHC, we
   # call the plain GHC ghcPlain and the wrapped GHC simply ghc.
 
-  ghcPlain = pkgs.lowPrio ghc; # Note that "ghc" is not "self.ghc" and
+  ${haskellCompilerBinaryName + "Plain"} = pkgs.lowPrio haskellCompiler; # Note that "ghc" is not "self.ghc" and
                                # refers to the function argument at the
                                # top of this file.
 
-  ghc = callPackage ../development/compilers/ghc/wrapper.nix {
-    ghcPlain = ghc; # ghc refers to ghcPlain
+  ${haskellCompilerBinaryName} = callPackage haskellCompilerWrapperPackage {
+    haskellCompiler = haskellCompiler; # ghc refers to ghcPlain
   };
+
+  # define the Haskell compiler to use for building packages
+  #haskellCompiler = self.${haskellCompilerBinaryName};
+  haskellCompiler = self.ghc;
 
   # An experimental wrapper around ghcPlain that does not automatically
   # pick up packages from the profile, but instead has a fixed set of packages
   # in its global database. The set of packages can be specified as an
   # argument to this function.
 
-  ghcWithPackages = pkgs : callPackage ../development/compilers/ghc/with-packages.nix {
-    ghc = ghc;  # refers to ghcPlain, but could be a wrapped ghc as well
+  ${haskellCompilerBinaryName + "WithPackages"} = pkgs : callPackage haskellCompilerWithPackagesPackage {
+    haskellCompiler = haskellCompiler;  # refers to ghcPlain, but could be a wrapped ghc as well
     packages = pkgs self;
     ignoreCollisions = false;
   };
 
-  ghcWithPackagesOld = pkgs : (self.ghcWithPackages pkgs).override { ignoreCollisions = true; };
+  ${haskellCompilerBinaryName + "WithPackagesOld"} = pkgs : (self.ghcWithPackages pkgs).override { ignoreCollisions = true; };
 
   # This is the Cabal builder, the function we use to build most Haskell
   # packages. It isn't the Cabal library, which is spelled "Cabal".
 
-  cabal = callPackage ../build-support/cabal {
+  cabal = callPackage cabalPackage {
     Cabal = null;               # prefer the Cabal version shipped with the compiler
     hscolour = self.hscolourBootstrap;
     inherit enableLibraryProfiling enableCheckPhase
@@ -465,7 +474,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   compactStringFix = callPackage ../development/libraries/haskell/compact-string-fix {};
 
-  compdata = if (pkgs.stdenv.lib.versionOlder "7.8" ghc.version)
+  compdata = if ((haskellCompilerBinaryName == "ghc") && (pkgs.stdenv.lib.versionOlder "7.8" haskellCompiler.version))
                then callPackage ../development/libraries/haskell/compdata {}
                else null;
 
@@ -1250,7 +1259,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hsdns = callPackage ../development/libraries/haskell/hsdns {};
 
-  hsemail = if (pkgs.stdenv.lib.versionOlder ghc.version "7") then null else
+  hsemail = if ((haskellCompilerBinaryName == "ghc") && (pkgs.stdenv.lib.versionOlder haskellCompiler.version "7")) then null else
     callPackage ../development/libraries/haskell/hsemail {};
 
   hslua = callPackage ../development/libraries/haskell/hslua {
@@ -2509,7 +2518,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   textStreamDecode = callPackage ../development/libraries/haskell/text-stream-decode {};
 
-  tfRandom = if (pkgs.stdenv.lib.versionOlder ghc.version "7") then null else
+  tfRandom = if ((haskellCompilerBinaryName == "ghc") && (pkgs.stdenv.lib.versionOlder haskellCompiler.version "7")) then null else
     callPackage ../development/libraries/haskell/tf-random {};
 
   these = callPackage ../development/libraries/haskell/these {};
@@ -2971,7 +2980,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
       extension = self : super : {
         hyperlinkSource = false;
         configureFlags = super.configureFlags or "" +
-          pkgs.lib.optionalString (pkgs.stdenv.lib.versionOlder "6.12" ghc.version) " --ghc-option=-rtsopts";
+          pkgs.lib.optionalString ((haskellCompilerBinaryName == "ghc") && (pkgs.stdenv.lib.versionOlder "6.12" haskellCompiler.version)) " --ghc-option=-rtsopts";
       };
     };
   };
