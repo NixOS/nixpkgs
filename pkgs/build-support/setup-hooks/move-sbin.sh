@@ -6,7 +6,7 @@ fixupOutputHooks+=(_moveSbin)
 
 _moveSbin() {
     if [ "$dontMoveSbin" = 1 ]; then return; fi
-    if ! [ -e "$prefix/sbin" ]; then return; fi
+    if [ ! -e "$prefix/sbin" -o -L "$prefix/sbin" ]; then return; fi
     echo "moving $prefix/sbin/* to $prefix/bin"
     mkdir -p $prefix/bin
     shopt -s dotglob
