@@ -57,5 +57,6 @@ stdenv.mkDerivation rec {
     hydraPlatforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = with stdenv.lib.maintainers; [ simons bjornfor raskin ];
     inherit version;
+    branch = "2.32";
   };
 }
