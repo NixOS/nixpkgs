@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "gdcm-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gdcm/gdcm%202.x/GDCM$20${version}/${name}.tar.bz2";
+    url = "mirror://sourceforge/gdcm/${name}.tar.bz2";
     sha256 = "07svgp7c928sw712gq6rx4h0c6wp2kr1n8fmxjlzb031l51jzkf5";
   };
 
