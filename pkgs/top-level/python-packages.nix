@@ -10228,13 +10228,13 @@ let
 
 
   tornadokick = buildPythonPackage rec {
-    name = "tornadokick-2014.07.23";
+    name = "tornadokick-0.2.1";
 
     propagatedBuildInputs = [ tornado ];
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/t/tornadokick/${name}.tar.gz";
-      md5 = "201d26de2993a554b16140af3b4ee1b6";
+      md5 = "95ee5a295ce3f361c6f843c4f39cbb8c";
     };
 
     meta = {
