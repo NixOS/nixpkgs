@@ -4806,6 +4806,8 @@ let
 
   directfb = callPackage ../development/libraries/directfb { };
 
+  dlib = callPackage ../development/libraries/dlib { };
+
   dotconf = callPackage ../development/libraries/dotconf { };
 
   dssi = callPackage ../development/libraries/dssi {};
