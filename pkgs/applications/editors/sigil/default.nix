@@ -3,15 +3,15 @@
 }:
 
 let
-  the_version = "0.7.4";
+  version = "0.7.4";
 
 in
 
 stdenv.mkDerivation rec {
-  name = "sigil-${the_version}";
+  name = "sigil-${version}";
 
   src = fetchurl {
-    url = "https://sigil.googlecode.com/files/Sigil-${the_version}-Code.zip";
+    url = "https://sigil.googlecode.com/files/Sigil-${version}-Code.zip";
     sha256 = "68c7ca15ea8611921af0c435369563f55c6afd2ef1fb0945cf6c4a47429b0fb5";
   };
 
@@ -47,16 +47,12 @@ stdenv.mkDerivation rec {
     sed -i \
         -e 's|\(COMMAND\) \([^ ]\+\) \([^ ]\+\) \(.*\)|\1 \2 \3 -c \4|' \
         cmake_extras/CustomPCH.cmake
-#    sed -i \
-#        -e 's|\(COMMAND\) \([^ ]\+\) \([^ ]\+\) \(.*\)|\1 \2 \3 -x c++-header \4|' \
-#        cmake_extras/CustomPCH.cmake
     cd ../build
     cmake -G "Unix Makefiles" \
         -DCMAKE_INSTALL_PREFIX=$out \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_SKIP_BUILD_RPATH=ON \
         ../src
-    #make VERBOSE=1
     make
     make install
   '';
@@ -65,5 +61,6 @@ stdenv.mkDerivation rec {
     description = "Free, open source, multi-platform ebook (ePub) editor";
     homepage = https://code.google.com/p/sigil/;
     license = stdenv.lib.licenses.gpl3;
+    inherit version;
   };
 }
