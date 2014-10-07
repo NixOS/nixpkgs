@@ -2619,6 +2619,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   trifecta = callPackage ../development/libraries/haskell/trifecta {};
 
+  trivia = callPackage ../development/libraries/haskell/trivia {};
+
   tuple = callPackage ../development/libraries/haskell/tuple {};
 
   twitterConduit = callPackage ../development/libraries/haskell/twitter-conduit {};
