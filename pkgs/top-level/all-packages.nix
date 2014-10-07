@@ -4969,6 +4969,8 @@ let
 
   gdal = callPackage ../development/libraries/gdal { };
 
+  gdcm = callPackage ../development/libraries/gdcm { };
+
   ggz_base_libs = callPackage ../development/libraries/ggz_base_libs {};
 
   giblib = callPackage ../development/libraries/giblib { };
