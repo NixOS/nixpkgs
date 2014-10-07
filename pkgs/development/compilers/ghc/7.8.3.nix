@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ghc perl gmp ncurses ];
 
-  patches = [ ./7.8.3-nixEnvVar.patch ];
-
   enableParallelBuilding = true;
 
   buildMK = ''
