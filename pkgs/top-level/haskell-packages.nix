@@ -2773,6 +2773,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   warpTls = callPackage ../development/libraries/haskell/warp-tls {};
 
+  WAVE = callPackage ../development/libraries/haskell/WAVE {};
+
   wcwidth = callPackage ../development/libraries/haskell/wcwidth {};
 
   webdriver = callPackage ../development/libraries/haskell/webdriver {};
