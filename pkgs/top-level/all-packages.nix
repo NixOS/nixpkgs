@@ -2211,6 +2211,8 @@ let
 
   siege = callPackage ../tools/networking/siege {};
 
+  sigil = callPackage ../applications/editors/sigil { };
+
   silc_client = callPackage ../applications/networking/instant-messengers/silc-client { };
 
   silc_server = callPackage ../servers/silc-server { };
