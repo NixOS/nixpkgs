@@ -1152,7 +1152,7 @@ let
   freeipmi = callPackage ../tools/system/freeipmi {};
 
   freetalk = callPackage ../applications/networking/instant-messengers/freetalk {
-    guile = guile_1_8;
+    automake = automake114x;
   };
 
   freetds = callPackage ../development/libraries/freetds { };
