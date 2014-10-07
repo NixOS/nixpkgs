@@ -1,4 +1,4 @@
-{pkgs, pkgs_i686, xcodeVersion ? "5.0", tiVersion ? "3.4.0.GA"}:
+{pkgs, pkgs_i686, xcodeVersion ? "6.0", xcodeBaseDir ? "/Applications/Xcode.app", tiVersion ? "3.4.0.GA"}:
 
 let
   # We have to use Oracle's JDK. On Darwin, just simply expose the host system's
@@ -25,6 +25,7 @@ rec {
 
   xcodeenv = if pkgs.stdenv.system == "x86_64-darwin" then pkgs.xcodeenv.override {
     version = xcodeVersion;
+    inherit xcodeBaseDir;
   } else null;
   
   titaniumsdk = let
