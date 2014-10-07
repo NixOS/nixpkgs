@@ -27,10 +27,10 @@ let
   mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
 
 in stdenv.mkDerivation rec {
-  name = "mpd-0.18.12";
+  name = "mpd-0.18.16";
   src = fetchurl {
     url    = "http://www.musicpd.org/download/mpd/stable/${name}.tar.gz";
-    sha256 = "09qphjcpqcs2jn5d8ga1skhif2mj5qk1ix9li76z2gyq3lf0rpz6";
+    sha256 = "0xpmc70ccp0s2s10vsi4hkijiv497dy42a7g225y77axp5ncf364";
   };
 
   buildInputs = [ pkgconfig glib ]
