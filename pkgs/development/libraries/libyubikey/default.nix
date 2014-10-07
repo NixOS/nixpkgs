@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec
 {
-  version = "1.11";
+  version = "1.12";
   name = "libyubikey-${version}";
 
   src = fetchurl
   {
     url = "http://opensource.yubico.com/yubico-c/releases/${name}.tar.gz";
-    sha256 = "19pm4rqsnm9r0n5j26bqkxa1jpimdavzcvg5g7p416vkjhxc6lw9";
+    sha256 = "1f0plzmr1gwry4rfgq9q70v6qwqny009hac289ad5m6sj7vqflxr";
   };
 
   meta =
