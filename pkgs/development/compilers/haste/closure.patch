@@ -1,0 +1,14 @@
+--- a/src/Main.hs
++++ b/src/Main.hs
+@@ -219,9 +219,8 @@ closurize cfg cloPath f = do
+   logStr cfg $ "Running the Google Closure compiler on " ++ f ++ "..."
+   let cloFile = f `Sh.addExtension` ".clo"
+   res <- Sh.shell $ do
+-    str <- Sh.run "java"
+-      (["-jar", cloPath,
+-        "--compilation_level", "ADVANCED_OPTIMIZATIONS",
++    str <- Sh.run cloPath
++      (["--compilation_level", "ADVANCED_OPTIMIZATIONS",
+         "--jscomp_off", "globalThis", f]
+        ++ arguments) ""
+     Sh.file cloFile str :: Sh.Shell ()
