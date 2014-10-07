@@ -231,7 +231,6 @@ in rec {
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
-  tests.installer.efi = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).efi.test);
   tests.installer.grub1 = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).grub1.test);
   tests.installer.lvm = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).lvm.test);
   tests.installer.rebuildCD = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).rebuildCD.test);

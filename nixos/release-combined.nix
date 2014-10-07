@@ -47,12 +47,10 @@ in rec {
         (all nixos.iso_graphical)
         (all nixos.ova)
 
-        #(all nixos.tests.efi-installer.simple)
         #(all nixos.tests.containers)
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
         (all nixos.tests.gnome3)
-        #(all nixos.tests.installer.efi)
         (all nixos.tests.installer.grub1)
         (all nixos.tests.installer.lvm)
         (all nixos.tests.installer.separateBoot)
