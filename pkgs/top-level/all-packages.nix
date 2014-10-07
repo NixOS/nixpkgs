@@ -2027,6 +2027,8 @@ let
 
   projectm = callPackage ../applications/audio/projectm { };
 
+  proot = callPackage ../tools/system/proot { };
+
   proxychains = callPackage ../tools/networking/proxychains { };
 
   proxytunnel = callPackage ../tools/misc/proxytunnel { };
