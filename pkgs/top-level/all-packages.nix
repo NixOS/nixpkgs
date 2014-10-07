@@ -1878,6 +1878,8 @@ let
 
   spCompat = callPackage ../tools/text/sgml/opensp/compat.nix { };
 
+  opentracker = callPackage ../applications/networking/p2p/opentracker { };
+
   openvpn = callPackage ../tools/networking/openvpn { };
 
   openvpn_learnaddress = callPackage ../tools/networking/openvpn/openvpn_learnaddress.nix { };
@@ -9578,6 +9580,8 @@ let
   ldcpp = callPackage ../applications/networking/p2p/ldcpp {
     inherit (gnome) libglade;
   };
+  
+  libowfat = callPackage ../development/libraries/libowfat { };
 
   librecad = callPackage ../applications/misc/librecad { };
 
