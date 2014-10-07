@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     homepage = http://clisp.cons.org;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
+    branch = "2.44";
   };
 }
