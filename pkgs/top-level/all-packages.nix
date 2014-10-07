@@ -2081,6 +2081,8 @@ let
 
   privateer = callPackage ../games/privateer { };
 
+  redmine = callPackage ../applications/version-management/redmine { };
+
   rtmpdump = callPackage ../tools/video/rtmpdump { };
 
   reaverwps = callPackage ../tools/networking/reaver-wps {};
