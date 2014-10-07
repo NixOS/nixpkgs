@@ -13,7 +13,7 @@ maintainers="$(cat "$(dirname "$0")/../../lib/maintainers.nix" |
   grep '=' | sed -re 's/\\"/''/g;
   s/ *([^ =]*) *= *" *(.*[^ ]) *[<](.*)[>] *".*/\1\t\2\t\3/')"
 git_lines="$( ( echo "$git_data"; 
-  cat vanity-manual-equalities.txt) | sort |uniq)"
+    cat "$(dirname "$0")/vanity-manual-equalities.txt") | sort |uniq)"
 
 # For RDF
 normalize_name () {
