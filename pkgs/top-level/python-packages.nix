@@ -5213,12 +5213,12 @@ let
 
 
   nbxmpp = buildPythonPackage rec {
-    name = "nbxmpp-0.5";
+    name = "nbxmpp-0.5.1";
 
     src = fetchurl {
       name = "${name}.tar.gz";
-      url = "https://python-nbxmpp.gajim.org/downloads/5";
-      sha256 = "0y270c9v4i9n58p4ghlm18h50qcfichmfkgcpqd3bypx4fkmdx90";
+      url = "https://python-nbxmpp.gajim.org/downloads/6";
+      sha256 = "0agr0ikfdmna5rjvm7lm0mx52cdwqp5b2xbx3inagp70whmdv219";
     };
 
     meta = {

@@ -22,20 +22,14 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "gajim-${version}";
-  version = "0.15.4";
+  version = "0.16";
 
   src = fetchurl {
-    url = "http://www.gajim.org/downloads/0.15/gajim-${version}.tar.gz";
-    sha256 = "1g4m5j777vqqdwqvr2m6l09ljjx65ilag45d5kfc78z7frm0cz7g";
+    url = "http://www.gajim.org/downloads/0.16/gajim-${version}.tar.bz2";
+    sha256 = "14x15jwgl0c6vwj02ccpzmxr3fczp632mnj50cpklbaj4bxqvgbs";
   };
 
   patches = [
-    (fetchurl {
-      name = "gajim-drill-srv.patch";
-      url = "https://projects.archlinux.org/svntogit/packages.git/"
-          + "plain/trunk/gajim-drill.patch?h=packages/gajim";
-      sha256 = "1k8zz3ns0l0kriffq41jgkv5ym6jvyd24171l7s98v9d81prdw1w";
-    })
     (fetchurl {
       name = "gajim-icon-index.patch";
       url = "http://hg.gajim.org/gajim/raw-rev/b9ec78663dfb";
@@ -69,6 +63,7 @@ stdenv.mkDerivation rec {
     pythonPackages.pygobject pythonPackages.pyGtkGlade
     pythonPackages.sqlite3 pythonPackages.pyasn1
     pythonPackages.pyxdg
+    pythonPackages.nbxmpp
     pyopenssl pythonDBus
   ] ++ optionals enableJingle [ farstream gst_plugins_bad libnice ]
     ++ optional enableE2E pythonPackages.pycrypto
@@ -88,5 +83,7 @@ stdenv.mkDerivation rec {
     description = "Jabber client written in PyGTK";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.raskin maintainers.aszlig ];
+    downloadPage = "http://gajim.org/downloads.php";
+    updateWalker = true;
   };
 }
