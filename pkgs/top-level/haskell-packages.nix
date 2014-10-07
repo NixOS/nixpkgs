@@ -435,6 +435,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   clay = callPackage ../development/libraries/haskell/clay {};
 
+  cleanUnions = callPackage ../development/libraries/haskell/clean-unions {};
+
   clientsession = callPackage ../development/libraries/haskell/clientsession {};
 
   clock = callPackage ../development/libraries/haskell/clock {};
