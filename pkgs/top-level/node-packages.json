@@ -126,4 +126,6 @@
 , "shelljs"
 , "typescript"
 , "git-run"
+, "bower"
+, "bower2nix"
 ]

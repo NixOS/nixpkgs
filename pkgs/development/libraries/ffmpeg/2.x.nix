@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.1";
+  version = "2.4.2";
   name = "ffmpeg-${version}";
 
   src = fetchurl {
     url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
-    sha256 = "1wy7hdkaijsr6cbvgq5gkjdb0rd3m6583b8d68hlmsj15k7czbml";
+    sha256 = "0zps80jyjvkmgmjvp9s7drbddr820hcw4w5r78hkbs5xsylr0kwp";
   };
 
   subtitleSupport = config.ffmpeg.subtitle or true;

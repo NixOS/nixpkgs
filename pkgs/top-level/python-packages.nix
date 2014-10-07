@@ -5213,12 +5213,12 @@ let
 
 
   nbxmpp = buildPythonPackage rec {
-    name = "nbxmpp-0.5";
+    name = "nbxmpp-0.5.1";
 
     src = fetchurl {
       name = "${name}.tar.gz";
-      url = "https://python-nbxmpp.gajim.org/downloads/5";
-      sha256 = "0y270c9v4i9n58p4ghlm18h50qcfichmfkgcpqd3bypx4fkmdx90";
+      url = "https://python-nbxmpp.gajim.org/downloads/6";
+      sha256 = "0agr0ikfdmna5rjvm7lm0mx52cdwqp5b2xbx3inagp70whmdv219";
     };
 
     meta = {
@@ -10228,13 +10228,13 @@ let
 
 
   tornadokick = buildPythonPackage rec {
-    name = "tornadokick-2014.07.23";
+    name = "tornadokick-0.2.1";
 
     propagatedBuildInputs = [ tornado ];
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/t/tornadokick/${name}.tar.gz";
-      md5 = "201d26de2993a554b16140af3b4ee1b6";
+      md5 = "95ee5a295ce3f361c6f843c4f39cbb8c";
     };
 
     meta = {
@@ -10502,6 +10502,22 @@ let
       homepage = http://graphite.wikidot.com/;
       description = "Backend data caching and persistence daemon for Graphite";
       maintainers = with maintainers; [ rickynils offline ];
+    };
+  };
+
+
+  ujson = buildPythonPackage rec {
+    name = "ujson-1.33";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/u/ujson/${name}.zip";
+      md5 = "8148a2493fff78940feab1e11dc0a893";
+    };
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/ujson;
+      description = "Ultra fast JSON encoder and decoder for Python";
+      license = licenses.bsd3;
     };
   };
 

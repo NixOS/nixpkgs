@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A program for visualising graphs";
     homepage = http://www.graphviz.org/;
+    branch = "2.0";
   };
 }
