@@ -40,7 +40,7 @@ let
   withToolset = stdenv.lib.optionalString (toolset != null) " --with-toolset=${toolset}";
 in
 
-let res = stdenv.mkDerivation {
+stdenv.mkDerivation {
   name = "boost-1.55.0";
 
   meta = {
@@ -58,6 +58,8 @@ let res = stdenv.mkDerivation {
   };
 
   enableParallelBuilding = true;
+
+  outputs = [ "out" "lib" ];
 
   buildInputs =
     [ icu expat zlib bzip2 python ]
@@ -96,4 +98,4 @@ let res = stdenv.mkDerivation {
       ./b2 -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat.crossDrv}/include -sEXPAT_LIBPATH=${expat.crossDrv}/lib --layout=${layout} --user-config=user-config.jam toolset=gcc-cross variant=${variant} threading=${threading} link=${link} ${cflags} --without-python install
     '';
   };
-}; in res // { lib = res; }
+}
