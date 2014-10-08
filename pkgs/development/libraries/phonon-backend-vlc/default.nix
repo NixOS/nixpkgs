@@ -2,7 +2,7 @@
 
 let
   pname = "phonon-backend-vlc";
-  v = "0.7.0";
+  v = "0.7.2";
   vlc_ = vlc.override { inherit qt4; }; #Force using the same qt version
 in
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://kde/stable/phonon/${pname}/${v}/src/${pname}-${v}.tar.xz";
-    sha256 = "1rhzc3d188l6ygxgfxwikscj71pyy0nchzikvkkq465r9ajavdgd";
+    sha256 = "1acmbn8pmmq16gcz825dlzaf3haj6avp1bmcxzpkjd1fvxh86y0a";
   };
 
   nativeBuildInputs = [ cmake pkgconfig automoc4 xz ];
