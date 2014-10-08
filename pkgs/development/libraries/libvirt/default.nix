@@ -2,9 +2,12 @@
 , iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, makeWrapper, pmutils, libcap_ng
 , dnsmasq, libnl
+, pythonPackages
 }:
 
 let version = "1.2.9"; in
+
+assert version == pythonPackages.libvirt.version;
 
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
