@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, less }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "gzip-1.6";
