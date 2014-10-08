@@ -1546,6 +1546,8 @@ let
 
   libshout = callPackage ../development/libraries/libshout { };
 
+  libqb = callPackage ../development/libraries/libqb { };
+
   libqmi = callPackage ../development/libraries/libqmi { };
 
   libmbim = callPackage ../development/libraries/libmbim { };
