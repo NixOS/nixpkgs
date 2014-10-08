@@ -1554,6 +1554,8 @@ let
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
+  libibverbs = callPackage ../development/libraries/libibverbs { };
+
   logcheck = callPackage ../tools/system/logcheck {
     inherit (perlPackages) mimeConstruct;
   };
