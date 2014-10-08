@@ -10536,6 +10536,8 @@ let
   ujson = buildPythonPackage rec {
     name = "ujson-1.33";
 
+    disabled = isPyPy;
+
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/u/ujson/${name}.zip";
       md5 = "8148a2493fff78940feab1e11dc0a893";
