@@ -29,5 +29,7 @@ rec {
   passthru = {
     inherit srcDrv;
   };
+
+  broken = true ; # source repository unreachable (201410)
 }
 
