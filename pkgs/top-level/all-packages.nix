@@ -1556,6 +1556,8 @@ let
 
   libibverbs = callPackage ../development/libraries/libibverbs { };
 
+  librdmacm = callPackage ../development/libraries/librdmacm { };
+
   logcheck = callPackage ../tools/system/logcheck {
     inherit (perlPackages) mimeConstruct;
   };
