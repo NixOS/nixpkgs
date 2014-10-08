@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
     url = https://github.com/chocolate-doom/chocolate-doom/archive/chocolate-doom-2.0.0.tar.gz;
     sha256 = "1n9lkx97h987bq8z586jgissdhs07xyfr0xfdk7m2wpw4yhw10k1";
   };
-  buildInputs = [ autoconf autoconf automake pkgconfig SDL SDL_mixer SDL_net ];
+  buildInputs = [ autoconf automake pkgconfig SDL SDL_mixer SDL_net ];
   patchPhase = ''
     sed -e 's#/games#/bin#g' -i src{,/setup}/Makefile.am
     ./autogen.sh --prefix=$out
