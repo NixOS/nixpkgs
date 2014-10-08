@@ -2,9 +2,9 @@ args : with args;
 rec {
   srcDrv = fetchmtn {
     name = "monotone-viz-mtn-checkout";
-    dbs = ["monotone.mtn-host.prjek.net"];
+    dbs = [ "code.monotone.ca/contrib" ];
     selector = "c3fdb3af1c7c89989c7da8062bb62203f2aaccf0";
-    branch = "net.venge.monotone-viz.new-stdio";
+    branch = "ca.monotone.monotone-viz.new-stdio";
     sha256 = "661c6a49d442b7e5a7ba455bb9a892e7e12b3968c2ddd69375e7bd0cd0b3ecb9";
   };
   src = srcDrv + "/";
