@@ -659,6 +659,8 @@ let
 
   cv = callPackage ../tools/misc/cv { };
 
+  datamash = callPackage ../tools/misc/datamash { };
+
   direnv = callPackage ../tools/misc/direnv { };
 
   ditaa = callPackage ../tools/graphics/ditaa { };
