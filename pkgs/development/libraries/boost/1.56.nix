@@ -46,7 +46,7 @@ let
   withToolset = stdenv.lib.optionalString (toolset != null) "--with-toolset=${toolset}";
 
   genericB2Flags = [
-    "--prefix=$dev"
+    "--includedir=$dev/include"
     "--libdir=$lib/lib"
     "-j$NIX_BUILD_CORES"
     "--layout=${layout}"
@@ -86,11 +86,11 @@ let
 
     # Create a derivation which encompasses everything, making buildInputs nicer
     mkdir -p $out/nix-support
-    echo $dev >> $out/nix-support/propagated-build-inputs
-    echo $lib >> $out/nix-support/propagated-build-inputs
+    echo "$dev $lib" > $out/nix-support/propagated-native-build-inputs
   '';
 
   commonConfigureFlags = [
+    "--includedir=$(dev)/include"
     "--libdir=$(lib)/lib"
   ];
 in
@@ -111,6 +111,10 @@ stdenv.mkDerivation {
     url = "mirror://sourceforge/boost/boost_1_56_0.tar.bz2";
     sha256 = "07gz62nj767qzwqm3xjh11znpyph8gcii0cqhnx7wvismyn34iqk";
   };
+
+  preConfigure = ''
+    NIX_LDFLAGS="$(echo $NIX_LDFLAGS | sed "s,$out,$lib,g")"
+  '';
 
   enableParallelBuilding = true;
 
@@ -139,7 +143,7 @@ stdenv.mkDerivation {
     # We want to substitute the contents of configureFlags, removing thus the
     # usual --build and --host added on cross building.
     preConfigure = ''
-      export configureFlags="--prefix=$dev --without-icu ${concatStringsSep " " commonConfigureFlags}"
+      export configureFlags="--without-icu ${concatStringsSep " " commonConfigureFlags}"
       set -x
       cat << EOF > user-config.jam
       using gcc : cross : $crossConfig-g++ ;
