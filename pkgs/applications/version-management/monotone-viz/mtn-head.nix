@@ -21,6 +21,8 @@ rec {
     autoconf -I .
   '') ["minInit" "addInputs" "doUnpack"];
 
+  dobedowah = "true";
+
   name = "monotone-viz-mtn-head";
   meta = {
     description = "Monotone commit tree visualizer";
