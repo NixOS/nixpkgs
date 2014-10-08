@@ -5862,6 +5862,8 @@ let
 
   libspatialite = callPackage ../development/libraries/libspatialite { };
 
+  libstatgrab = callPackage ../development/libraries/libstatgrab { };
+
   libtar = callPackage ../development/libraries/libtar { };
 
   libtasn1 = callPackage ../development/libraries/libtasn1 { };
