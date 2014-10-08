@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://github.com/ceph/ceph.git";
     rev = "refs/tags/v${version}";
-    sha256 = "0g98cgrs3gfsc8azg3k0n61bgna2w906qm69j4qbjkb61l83ld1z";
+    sha256 = "19bl96z97kvsrliwid4g6dl7s3i0nw5z9nmg964i7jdwlsl98cfj";
   };
 
   patches = [ ./0001-Makefile-env-Don-t-force-sbin.patch ];
