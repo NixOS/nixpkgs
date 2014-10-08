@@ -5204,6 +5204,8 @@ let
       else stdenv;
   };
 
+  granite = callPackage ../development/libraries/granite { };
+
   gtk2 = callPackage ../development/libraries/gtk+/2.x.nix {
     cupsSupport = config.gtk2.cups or stdenv.isLinux;
   };
@@ -11398,6 +11400,11 @@ let
 
       kwooty = callPackage ../applications/networking/newsreaders/kwooty { };
     };
+
+  pantheon = recurseIntoAttrs rec {
+    callPackage = newScope pkgs.pantheon;
+    pantheon-terminal = callPackage ../desktops/pantheon/apps/pantheon-terminal { };
+  };
 
   redshift = callPackage ../applications/misc/redshift {
     inherit (xorg) libX11 libXrandr libxcb randrproto libXxf86vm
