@@ -11094,6 +11094,23 @@ let
     };
   };
 
+  svg2tikz = pythonPackages.buildPythonPackage {
+    name = "svg2tikz-1.0.0";
+
+    propagatedBuildInputs = [lxml];
+
+    src = pkgs.fetchgit {
+      url = "https://github.com/kjellmf/svg2tikz";
+      sha256 = "429428ec435e53672b85cdfbb89bb8af0ff9f8238f5d05970729e5177d252d5f";
+      rev = "ad36f2c3818da13c4136d70a0fd8153acf8daef4";
+    };
+
+    meta = {
+      homepage = https://github.com/kjellmf/svg2tikz;
+      description = "An SVG to TikZ converter";
+      maintainers =  with pkgs.stdenv.lib.maintainers; [gal_bolle];
+    };
+  };
 
   thumbor = pythonPackages.buildPythonPackage rec {
     name = "thumbor-4.0.4";
