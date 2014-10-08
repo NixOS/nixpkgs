@@ -679,6 +679,8 @@ let
 
   fop = callPackage ../tools/typesetting/fop { };
 
+  gist = callPackage ../tools/text/gist { };
+
   mcrl = callPackage ../tools/misc/mcrl { };
 
   mcrl2 = callPackage ../tools/misc/mcrl2 { };
