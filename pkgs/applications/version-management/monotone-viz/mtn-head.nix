@@ -30,6 +30,6 @@ rec {
     inherit srcDrv;
   };
 
-  broken = true ; # source repository unreachable (201410)
+  broken = false ; # source repository unreachable (201410)
 }
 
