@@ -649,6 +649,8 @@ let
 
   consul_ui = consul.ui;
 
+  corosync = callPackage ../servers/corosync { };
+
   chntpw = callPackage ../tools/security/chntpw { };
 
   coprthr = callPackage ../development/libraries/coprthr {
