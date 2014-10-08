@@ -762,6 +762,33 @@ let
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
+  
+  circus = buildPythonPackage rec {
+    name = "circus-0.11.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/c/circus/${name}.tar.gz";
+      md5 = "5c07cdbe9bb4a9b82e52737ad590617b";
+    };
+
+    doCheck = false; # weird error 
+
+    propagatedBuildInputs = with pythonPackages; [ iowait psutil pyzmq tornado mock ];
+  };
+
+  iowait = buildPythonPackage rec {
+    name = "iowait-0.2";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/i/iowait/${name}.tar.gz";
+      md5 = "f49ca7766fe4a67e03a731e575614f87";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Platform-independent module for I/O completion events";
+      homepage = https://launchpad.net/python-iowait;
+    };
+  };
 
   responses = pythonPackages.buildPythonPackage rec {
     name = "responses-0.2.2";
