@@ -9499,6 +9499,18 @@ let
   };
 
 
+  traits = buildPythonPackage {
+    name = "traits";
+    version = "4.5.0";
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/traits/traits-4.5.0.tar.gz";
+      md5 = "3ad558eebaedc63c29c80183c0371d2f";
+    };
+    buildInputs = [ numpy ];
+    propagatedBuildInputs = [ numpy ];
+  };
+
+
   transaction = buildPythonPackage rec {
     name = "transaction-${version}";
     version = "1.4.3";
