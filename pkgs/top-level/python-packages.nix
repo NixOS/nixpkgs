@@ -409,6 +409,8 @@ let
   apptools = buildPythonPackage {
     name = "apptools";
     version = "4.2.1";
+    disabled = isPy3k;
+
     src = fetchurl {
       url = "https://github.com/enthought/apptools/archive/4.2.1.zip";
       sha256 = "07pvynf6dclaarcjala2mxgf42lzndps6vs1hnl2pcbg6fp7wggf";
