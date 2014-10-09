@@ -2791,7 +2791,9 @@ let
 
   bigloo = callPackage ../development/compilers/bigloo { };
 
-  chicken = callPackage ../development/compilers/chicken { };
+  chicken = callPackage ../development/compilers/chicken {
+    bootstrap-chicken = chicken.override { bootstrap-chicken = null; }; 
+  };
 
   ccl = builderDefsPackage ../development/compilers/ccl {};
 

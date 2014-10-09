@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, bootstrap-chicken ? null }:
 
 let
   version = "4.9.0.1";
@@ -19,6 +19,28 @@ stdenv.mkDerivation {
 
   buildFlags = "PLATFORM=${platform} PREFIX=$(out) VARDIR=$(out)/var/lib";
   installFlags = "PLATFORM=${platform} PREFIX=$(out) VARDIR=$(out)/var/lib";
+
+  # We need a bootstrap-chicken to regenerate the c-files after
+  # applying a patch to add support for CHICKEN_REPOSITORY_EXTRA
+  patches = stdenv.lib.ifEnable (bootstrap-chicken != null) [
+    ./0001-Introduce-CHICKEN_REPOSITORY_EXTRA.patch
+  ];
+
+  buildInputs = stdenv.lib.ifEnable (bootstrap-chicken != null) [
+    bootstrap-chicken
+  ];
+
+  preBuild = stdenv.lib.ifEnable (bootstrap-chicken != null) ''
+    # Backup the build* files - those are generated from hostname,
+    # git-tag, etc. and we don't need/want that
+    mkdir -p build-backup
+    mv buildid buildbranch buildtag.h build-backup
+
+    # Regenerate eval.c after the patch
+    make spotless $buildFlags
+
+    mv build-backup/* .
+  '';
 
   meta = {
     homepage = http://www.call-cc.org/;
