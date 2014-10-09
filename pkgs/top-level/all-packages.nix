@@ -1663,6 +1663,8 @@ let
 
   mkpasswd = callPackage ../tools/security/mkpasswd { };
 
+  mkrand = callPackage ../tools/security/mkrand { };
+
   mktemp = callPackage ../tools/security/mktemp { };
 
   mktorrent = callPackage ../tools/misc/mktorrent { };
