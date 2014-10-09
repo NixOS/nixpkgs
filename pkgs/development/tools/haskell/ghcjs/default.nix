@@ -7,7 +7,7 @@
 , vector, wlPprintText, yaml, fetchgit, Cabal, CabalGhcjs, cabalInstall
 , regexPosix, alex, happy, git, gnumake, gcc, autoconf, patch
 , automake, libtool, cabalInstallGhcjs, gmp, base16Bytestring
-, cryptohash, executablePath, transformersCompat
+, cryptohash, executablePath, transformersCompat, haddockApi
 , haddock, hspec, xhtml, primitive, cacert, pkgs, ghc
 }:
 cabal.mkDerivation (self: rec {
@@ -15,20 +15,13 @@ cabal.mkDerivation (self: rec {
   version = "0.1.0";
   src = fetchgit {
     url = git://github.com/ghcjs/ghcjs.git;
-    rev = "fd034b7e6fb61120d22f1c314398f37a673b8b1d";
-    sha256 = "0182bb706cc263a6d268eb61e243214186abae7b81dec420187c858e989c4dba";
+    rev = "bd3dfe56d55fd046bfbec4d9d834af4f46595535";
+    sha256 = "82c37faf725a230945d71c617be259c94a0816d240663714c3a62b85e4a2b731";
   };
-/*
-  bootSrc = fetchgit {
-    url = git://github.com/ghcjs/ghcjs-boot.git;
-    rev = "f9f79d0cf40212943bcc1ad2672f2e0a7af2b7c9";
-    sha256 = "83f1706bcf7e666f6fb6dee455517e0efb019aabd1393f444c80169f04b9d3b8";
-  };
-*/
   shims = fetchgit {
     url = git://github.com/ghcjs/shims.git;
-    rev = "dc5bb54778f3dbba4b463f4f7df5f830f14d1cb6";
-    sha256 = "fcef2879df0735b1011a8642a7c3e0e3f39b7d395830b91a992658f4ff67c9ce";
+    rev = "5e11d33cb74f8522efca0ace8365c0dc994b10f6";
+    sha256 = "64be139022e6f662086103fca3838330006d38e6454bd3f7b66013031a47278e";
   };
   isLibrary = true;
   isExecutable = true;
@@ -50,8 +43,8 @@ cabal.mkDerivation (self: rec {
     version = "0.1.0.0";
     src = fetchgit {
       url = git://github.com/ghcjs/ghcjs-prim.git;
-      rev = "659d6ceb45b1b8ef526c7451d90afff80d76e2f5";
-      sha256 = "55b64d93cdc8220042a35ea12f8c53e82f78b51bc0f87ddd12300ad56e4b7ba7";
+      rev = "915f263c06b7f4a246c6e02ecdf2b9a0550ed967";
+      sha256 = "34dd58b6e2d0ce780da46b509fc2701c28a7b2182f8d700b53a80981ac8bcf86";
     };
     buildDepends = [ primitive ];
   });
@@ -64,7 +57,7 @@ cabal.mkDerivation (self: rec {
     alex happy git gnumake gcc autoconf automake libtool patch gmp
     base16Bytestring cryptohash executablePath haddockInternal
     transformersCompat QuickCheck haddock hspec xhtml
-    ghcjsPrim regexPosix
+    ghcjsPrim regexPosix haddockApi
   ];
   buildTools = [ nodejs git ];
   testDepends = [
@@ -83,7 +76,7 @@ cabal.mkDerivation (self: rec {
     export GIT_SSL_CAINFO="${cacert}/etc/ca-bundle.crt"
     git clone git://github.com/ghcjs/ghcjs-boot.git
     cd ghcjs-boot
-    git checkout f9f79d0cf40212943bcc1ad2672f2e0a7af2b7c9
+    git checkout f5e57f9d4d8241a78ebdbdb34262921782a27e1a
     git submodule update --init --recursive
     ( cd boot ; chmod u+w . ; ln -s .. ghcjs-boot )
     chmod -R u+w .              # because fetchgit made it read-only
