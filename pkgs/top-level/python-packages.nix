@@ -1885,23 +1885,6 @@ let
     };
   });
 
-  dateutil_2_1 = buildPythonPackage (rec {
-    name = "dateutil-2.1";
-
-    src = fetchurl {
-      url = "http://pypi.python.org/packages/source/p/python-dateutil/python-${name}.tar.gz";
-      sha256 = "1vlx0lpsxjxz64pz87csx800cwfqznjyr2y7nk3vhmzhkwzyqi2c";
-    };
-
-    propagatedBuildInputs = [ pythonPackages.six ];
-
-    meta = {
-      description = "Powerful extensions to the standard datetime module";
-      homepage = http://pypi.python.org/pypi/python-dateutil;
-      license = stdenv.lib.licenses.bsd3;
-    };
-  });
-
   # Buildbot 0.8.7p1 needs dateutil==1.5
   dateutil_1_5 = buildPythonPackage (rec {
     name = "dateutil-1.5";
@@ -3816,7 +3799,7 @@ let
     buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ paver feedparser sqlalchemy pyyaml rpyc
 	    beautifulsoup4 html5lib pyrss2gen pynzb progressbar jinja2 flask
-	    cherrypy requests dateutil_2_1 jsonschema python_tvrage tmdb3
+	    cherrypy requests dateutil_1_5 jsonschema python_tvrage tmdb3
             guessit pathpy
         ]
 	# enable deluge and transmission plugin support, if they're installed
@@ -4300,7 +4283,7 @@ let
     };
 
     propagatedBuildInputs = with self; [
-      dateutil_2_1 requests stevedore babelfish pyyaml
+      dateutil_1_5 requests stevedore babelfish pyyaml
     ];
 
     # A unicode test fails
