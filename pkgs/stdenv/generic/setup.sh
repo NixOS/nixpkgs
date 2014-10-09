@@ -569,12 +569,12 @@ patchPhase() {
 
     for i in $patches; do
         header "applying patch $i" 3
-        if [ ! -r $i ]; then
+        if [ ! -r "$i" ]; then
             echo "file $i does not exist or not readable"
             exit 1
         fi
         local uncompress=cat
-        case $i in
+        case "$i" in
             *.gz)
                 uncompress="gzip -d"
                 ;;
@@ -589,7 +589,7 @@ patchPhase() {
                 ;;
         esac
         # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
-        $uncompress < $i 2>&1 | patch ${patchFlags:--p1}
+        $uncompress < "$i" 2>&1 | patch ${patchFlags:--p1}
         stopNest
     done
 
