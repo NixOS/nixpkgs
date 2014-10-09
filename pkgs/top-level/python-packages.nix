@@ -6539,11 +6539,11 @@ let
 
   pyfiglet = buildPythonPackage rec {
     name = "pyfiglet-${version}";
-    version = "0.7.1";
+    version = "0.7.2";
 
     src = fetchurl {
       url    = "https://pypi.python.org/packages/source/p/pyfiglet/${name}.tar.gz";
-      sha256 = "14lgwg47gnnad7sfkmmwhknwysbfmr74c9b2a6d9wgjmydycc6ka";
+      sha256 = "0v8a18wvaqnb1jksyv5dc5n6zj0vrkyhz0ivmm8gfwpa0ky6n68y";
     };
 
     doCheck = false;
