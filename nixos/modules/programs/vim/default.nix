@@ -12,6 +12,29 @@ let
     statusline = import ./statusline.nix {inherit pkgs;};
     haskell = import ./haskell.nix {inherit pkgs;};
   };
+  defaultConfig = {
+    #TODO: will overwrite all vim configurations :), so warn people about it first! enable = true;
+    leader = " ";
+    general.enable = true;
+    statusline.enable = true;
+    profiles =
+      { hvim =
+          { enable = true;
+            exec = { package = pkgs.vim_configurable; bin = "bin/vim"; };
+            search.enable = true;
+            text.enable = true;
+            sidebar.enable = true;
+            completion.enable = true;
+            haskell.enable = true;
+          };
+        hqvim =
+          { enable = true;
+            name = "Hvim";
+            parent = "hvim";
+            exec = { package = pkgs.qvim; bin = "bin/qvim"; };
+          };
+      };
+  };
 in
 let
   #
@@ -257,7 +280,7 @@ let
            
 
     # write content into a file in the nix store
-    createVimDir = vimExcePackage: profile_name: vimrcContent: plugins:
+    createVimDir = vimExecPackage: profile_name: vimrcContent: plugins:
       let
         pluginPackages = map (pluginName: getAttr pluginName pkgs.vimPlugins) plugins;
         rtps = 
@@ -272,7 +295,7 @@ let
           phases = ["installPhase"];
           installPhase = ''
             mkdir $out
-            ln -s ${vimExcePackage}/share/vim/* $out/.
+            ln -s ${vimExecPackage}/share/vim/* $out/.
             rm -f $out/vimrc
             echo "set nocompatible" > $out/vimrc
             echo "" >> $out/vimrc
@@ -344,9 +367,19 @@ in
      defaultCfg = (filterAttrs (n: v: n != "profile") config.programs.vim);
      enabledProfiles = filterAttrs (n: v: v.enable) config.programs.vim.profiles;
 
-     profilesConfig = mapAttrs (p_name: p_cfg: configHelpers.defineWrapper p_name (configHelpers.mergeConfig defaultCfg p_cfg)) enabledProfiles;
-     defaultConfig = if defaultCfg.enable then (configHelpers.defineWrapper null defaultCfg) else null;
+     vimProfilesConfig = mapAttrs (p_name: p_cfg: configHelpers.defineWrapper p_name (configHelpers.mergeConfig defaultCfg p_cfg)) enabledProfiles;
+     vimDefaultConfig = if defaultCfg.enable then (configHelpers.defineWrapper null defaultCfg) else null;
+
+     # reduce the priority of the default configuration;
+     vimProfileOptionDefaults =
+       let
+         default = mapAttrs (n: value: mkDefault value) defaultConfig;
+         profiles = (mapAttrsRecursive (path: value: if ((length path) <= 2) then mkDefault value else value) defaultConfig.profiles);
+       in
+         if (hasAttr "profiles" defaultConfig) then
+           default // { profiles = (mkDefault profiles); }
+         else default;
    in 
-    {nixpkgs.config.vim.profile = defaultConfig; nixpkgs.config.vimProfiles = profilesConfig;};
+    {nixpkgs.config.vim.profile = vimDefaultConfig; nixpkgs.config.vimProfiles = vimProfilesConfig; programs.vim = vimProfileOptionDefaults;};
 }
 
