@@ -8,29 +8,34 @@ let
     else if isBSD then "bsd"
     else if isSunOS then "solaris"
     else "linux";               # Should be a sane default
+  lib = stdenv.lib;
 in
 stdenv.mkDerivation {
   name = "chicken-${version}";
+
+  binaryVersion = 7;
 
   src = fetchurl {
     url = "http://code.call-cc.org/releases/4.9.0/chicken-${version}.tar.gz";
     sha256 = "0598mar1qswfd8hva9nqs88zjn02lzkqd8fzdd21dz1nki1prpq4";
   };
 
+  setupHook = lib.ifEnable (bootstrap-chicken != null) ./setup-hook.sh;
+  
   buildFlags = "PLATFORM=${platform} PREFIX=$(out) VARDIR=$(out)/var/lib";
   installFlags = "PLATFORM=${platform} PREFIX=$(out) VARDIR=$(out)/var/lib";
 
   # We need a bootstrap-chicken to regenerate the c-files after
   # applying a patch to add support for CHICKEN_REPOSITORY_EXTRA
-  patches = stdenv.lib.ifEnable (bootstrap-chicken != null) [
+  patches = lib.ifEnable (bootstrap-chicken != null) [
     ./0001-Introduce-CHICKEN_REPOSITORY_EXTRA.patch
   ];
 
-  buildInputs = stdenv.lib.ifEnable (bootstrap-chicken != null) [
+  buildInputs = lib.ifEnable (bootstrap-chicken != null) [
     bootstrap-chicken
   ];
 
-  preBuild = stdenv.lib.ifEnable (bootstrap-chicken != null) ''
+  preBuild = lib.ifEnable (bootstrap-chicken != null) ''
     # Backup the build* files - those are generated from hostname,
     # git-tag, etc. and we don't need/want that
     mkdir -p build-backup
@@ -41,6 +46,8 @@ stdenv.mkDerivation {
 
     mv build-backup/* .
   '';
+
+  # TODO: Assert csi -R files -p '(pathname-file (repository-path))' == binaryVersion
 
   meta = {
     homepage = http://www.call-cc.org/;

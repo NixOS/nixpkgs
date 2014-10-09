@@ -2791,6 +2791,10 @@ let
 
   bigloo = callPackage ../development/compilers/bigloo { };
 
+  fetchegg = callPackage ../build-support/fetchegg { };
+
+  eggDerivation = callPackage ../development/compilers/chicken/eggDerivation.nix { };
+
   chicken = callPackage ../development/compilers/chicken {
     bootstrap-chicken = chicken.override { bootstrap-chicken = null; }; 
   };
