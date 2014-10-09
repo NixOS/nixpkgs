@@ -512,11 +512,11 @@ let
   });
 
   astroid = buildPythonPackage (rec {
-    name = "astroid-1.1.1";
+    name = "astroid-1.2.1";
     propagatedBuildInputs = [ logilab_common ];
     src = fetchurl {
-      url = "https://pypi.python.org/packages/source/a/astroid/${name}.tar.gz";
-      sha256 = "1x7103mlzndgg66yas6xrfwkwpihcq4bi9m8py1fjnhz8p5ka1vq";
+      url = "https://pypi.python.org/packages/source/a/astroid/${name}.zip";
+      md5 = "337017c82a28c97741797493fb2c980f";
     };
   });
 
