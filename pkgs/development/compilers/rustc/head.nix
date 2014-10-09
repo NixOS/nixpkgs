@@ -18,7 +18,7 @@ assert stdenv.gcc.gcc != null;
 
 */
 
-with ((import ./common.nix) {inherit stdenv; version = "0.12.0-pre-a2e7c4da9"; });
+with ((import ./common.nix) {inherit stdenv; version = "0.12.0-pre-3edcdbb0";});
 
 let snapshot = if stdenv.system == "i686-linux"
       then "555aca74f9a268f80cab2df1147dc6406403e9e4"
@@ -40,8 +40,8 @@ in stdenv.mkDerivation {
 
   src = fetchgit {
     url = https://github.com/rust-lang/rust;
-    rev = "a2e7c4da9b331d337fba0b3911c6d3d7f48e8305";
-    sha256 = "1lpncqx3lfyjk6llfc7pd1iqxzfhj32hjqvj09zks73r4isc02n4";
+    rev = "3edcdbb0c01187a0cc6456ca29cd858579459b18";
+    sha256 = "0s125x71r0wi7m142nnynpc6vcwlmq4bh8rbysn9cg3bvj5ddgrm";
   };
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
