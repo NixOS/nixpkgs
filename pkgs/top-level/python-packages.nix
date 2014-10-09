@@ -406,6 +406,18 @@ let
   };
 
 
+  apptools = buildPythonPackage {
+    name = "apptools";
+    version = "4.2.1";
+    src = fetchurl {
+      url = "https://github.com/enthought/apptools/archive/4.2.1.zip";
+      sha256 = "07pvynf6dclaarcjala2mxgf42lzndps6vs1hnl2pcbg6fp7wggf";
+    };
+    buildInputs = [ configobj traitsui six ];
+    propagatedBuildInputs = [ configobj traitsui six ];
+  };
+
+
   apsw = buildPythonPackage rec {
     name = "apsw-3.7.6.2-r1";
     disabled = isPyPy;
