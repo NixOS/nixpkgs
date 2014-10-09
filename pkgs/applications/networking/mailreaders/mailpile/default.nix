@@ -2,14 +2,14 @@
 
 pythonPackages.buildPythonPackage rec {
   name = "mailpile-${version}";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchgit {
     url = "git://github.com/pagekite/Mailpile";
-    rev = "af3e2554dcef892cc44e044ce61e1693f09228c0";
-    sha256 = "0p8j5w5281rjl0nigsw7glfp7inz13p6iqlr9g3m3vh72i9pvl7h";
+    rev = "refs/tags/${version}";
+    sha256 = "0h84cc9kwb0m4admqjkpg4pllxlh095rmzvrql45kz71fpnxs780";
   };
-  
+
   patchPhase = ''
     substituteInPlace setup.py --replace "data_files.append((dir" "data_files.append(('lib/${pythonPackages.python.libPrefix}/site-packages/' + dir"
   '';
