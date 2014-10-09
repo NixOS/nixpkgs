@@ -98,14 +98,11 @@ let
 
       nixpkgsConfig_ = [{nixpkgs.config = nixpkgsConfig;}];
     in
-      if configuration == []
-      then nixpkgsConfig
-      else
-        (lib.evalModules {
-          modules = configuration ++ nixpkgs_options_base ++ nixuser_modules ++ nixpkgsConfig_;
-          args = {inherit pkgs;};
-          check = true;
-        }).config.nixpkgs.config;
+      (lib.evalModules {
+        modules = configuration ++ nixpkgs_options_base ++ nixuser_modules ++ nixpkgsConfig_;
+        args = {inherit pkgs;};
+        check = true;
+      }).config.nixpkgs.config;
 
 
   # Allow setting the platform in the config file. Otherwise, let's use a reasonable default (pc)
