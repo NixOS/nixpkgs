@@ -42,7 +42,7 @@ stdenv.mkDerivation ({
         --set CHICKEN_REPOSITORY $CHICKEN_REPOSITORY \
         --prefix CHICKEN_REPOSITORY_EXTRA : "$out/lib/chicken/${toString chicken.binaryVersion}/:$CHICKEN_REPOSITORY_EXTRA" \
         --prefix CHICKEN_INCLUDE_PATH \; \"$CHICKEN_INCLUDE_PATH\;$out/share/\" \
-        --prefix PATH : "$out/bin:$CHICKEN_REPOSITORY_EXTRA:$CHICKEN_REPOSITORY"
+        --prefix PATH : "$out/bin:${chicken}/bin:$CHICKEN_REPOSITORY_EXTRA:$CHICKEN_REPOSITORY"
     done
   '';
 } // (builtins.removeAttrs args ["name" "buildInputs"]) // override)
