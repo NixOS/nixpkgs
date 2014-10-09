@@ -4883,11 +4883,11 @@ let
 
   rainbowstream = buildPythonPackage rec {
     name = "rainbowstream-${version}";
-    version = "0.9.5";
+    version = "1.1.6";
 
     src = fetchurl {
       url    = "https://pypi.python.org/packages/source/r/rainbowstream/${name}.tar.gz";
-      sha256 = "0v79xiihgsfjipxkzzi92l8y1f8vxxachpv71gyzyhxdsl2zfj57";
+      sha256 = "04i2a8a5k6n6lgfpa9bzzbkhvywgd4bn3qlspl97pn8ply9kgszm";
     };
 
     doCheck = false;
@@ -4897,9 +4897,16 @@ let
       export LC_ALL="en_US.UTF-8"
     '';
 
+    postInstall = ''
+      for prog in "$out/bin/"*; do
+        wrapProgram "$prog" \
+          --prefix PYTHONPATH : "$PYTHONPATH"
+      done
+    '';
+
     buildInputs = [
       pkgs.libjpeg pkgs.freetype pkgs.zlib
-      pillow twitter pyfiglet requests arrow dateutil modules.readline
+      pillow twitter pyfiglet requests arrow dateutil modules.readline pysocks
     ];
 
     meta = {
