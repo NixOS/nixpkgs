@@ -6912,6 +6912,19 @@ let
     };
   };
 
+
+  pyface = buildPythonPackage {
+    name = "pyface";
+    version = "4.4.0";
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyface/pyface-4.4.0.tar.gz";
+      md5 = "0e8667a365042310b7302d968e067e5b";
+    };
+    buildInputs = [ traits ];
+    propagatedBuildInputs = [ traits ];
+  };
+
+
   pyfeed = buildPythonPackage rec {
     url = "http://www.blarg.net/%7Esteveha/pyfeed-0.7.4.tar.gz";
     name = stdenv.lib.nameFromURL url ".tar";
