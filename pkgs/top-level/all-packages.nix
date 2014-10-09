@@ -11238,8 +11238,6 @@ let
 
   kde4 = recurseIntoAttrs pkgs.kde414;
 
-  kde4_next = recurseIntoAttrs( lib.lowPrioSet pkgs.kde414 );
-
   kde414 = kdePackagesFor (pkgs.kde414 // {
       libusb = libusb1;
       libcanberra = libcanberra_kde;
