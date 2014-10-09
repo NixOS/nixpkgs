@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl, python, ruby, bison, gperf, flex
-, pkgconfig, which, gettext, gobjectIntrospection, cmake
+, pkgconfig, which, gettext, gobjectIntrospection
 , gtk2, gtk3, wayland, libwebp, enchant
-, libxml2, libsoup, libsecret, libxslt, harfbuzz, libpthreadstubs
+, libxml2, libsoup, libsecret, libxslt, harfbuzz
 , gst-plugins-base
 , withGtk2 ? false
 , enableIntrospection ? true
@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.6.0";
+  version = "2.4.6";
 
   meta = with stdenv.lib; {
     description = "Web content rendering engine, GTK+ port";
@@ -21,8 +21,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "1wzlmmm7b430v799gn7ib7m58x3p6dq52zycxsv26lvxsnrh5dxy";
+    sha256 = "0mqlq4ivh921k92xjsp5pdvbg9vf75qjliqmx81qwrm2sjl4mvvg";
   };
+
+  patches = [ ./webcore-svg-libxml-cflags.patch ];
 
   CC = "cc";
 
@@ -38,18 +40,16 @@ stdenv.mkDerivation rec {
     "--disable-webkit2"
   ];
 
-  cmakeFlags = [ "-DPORT=GTK" ];
-
   dontAddDisableDepTrack = true;
 
   nativeBuildInputs = [
     perl python ruby bison gperf flex
-    pkgconfig which gettext gobjectIntrospection cmake
+    pkgconfig which gettext gobjectIntrospection
   ];
 
   buildInputs = [
     gtk2 wayland libwebp enchant
-    libxml2 libsecret libxslt harfbuzz libpthreadstubs
+    libxml2 libsecret libxslt harfbuzz
     gst-plugins-base
   ];
 

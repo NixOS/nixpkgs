@@ -5266,6 +5266,10 @@ let
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
 
   harfbuzz = callPackage ../development/libraries/harfbuzz { };
+  harfbuzz-icu = callPackage ../development/libraries/harfbuzz {
+    withIcu = true;
+    withGraphite2 = true;
+  };
 
   hawknl = callPackage ../development/libraries/hawknl { };
 
@@ -6737,12 +6741,22 @@ let
 
   webkit = webkitgtk;
 
-  webkitgtk = callPackage ../development/libraries/webkitgtk {
-    harfbuzz = harfbuzz.override {
-      withIcu = true;
-    };
+  webkitgtk = let pango_    = pango.override { harfbuzz = harfbuzz-icu; };
+                  gtk2_     = gtk2.override { pango = pango_; };
+                  gtk3_     = gtk3.override { pango = pango_; };
+              in callPackage ../development/libraries/webkitgtk {
+    harfbuzz = harfbuzz-icu;
+    inherit (xorg) libpthreadstubs;
+    gst-plugins-base = gst_all_1.gst-plugins-base;
+    gtk2 = gtk2_;
+    gtk3 = gtk3_;
+  };
+
+  webkitgtk246 = callPackage ../development/libraries/webkitgtk/2.4.6.nix {
+    harfbuzz = harfbuzz-icu;
     gst-plugins-base = gst_all_1.gst-plugins-base;
   };
+
 
   webkitgtk2 = webkitgtk.override {
     withGtk2 = true;
@@ -9558,6 +9572,11 @@ let
 
   jbrout = callPackage ../applications/graphics/jbrout {
     inherit (pythonPackages) lxml;
+  };
+
+  jumanji = callPackage ../applications/networking/browsers/jumanji {
+    webkitgtk = webkitgtk246;
+    gtk = gtk3;
   };
 
   jwm = callPackage ../applications/window-managers/jwm { };
