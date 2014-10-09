@@ -572,8 +572,6 @@ let
 
   grc = callPackage ../tools/misc/grc { };
 
-  nixuser = callPackage ../tools/package-management/nixuser { };
-
   otool = callPackage ../os-specific/darwin/otool { };
 
   pass = callPackage ../tools/security/pass {
