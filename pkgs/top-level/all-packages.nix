@@ -1479,9 +1479,7 @@ let
 
   jdiskreport = callPackage ../tools/misc/jdiskreport { };
 
-  jfsrec = callPackage ../tools/filesystems/jfsrec {
-    boost = boost144;
-  };
+  jfsrec = callPackage ../tools/filesystems/jfsrec { };
 
   jfsutils = callPackage ../tools/filesystems/jfsutils { };
 
@@ -2342,10 +2340,7 @@ let
 
   socat2pre = lowPrio (callPackage ../tools/networking/socat/2.x.nix { });
 
-  sourceHighlight = callPackage ../tools/text/source-highlight {
-    # Boost 1.54 causes the "test_regexranges" test to fail
-    boost = boost149;
-  };
+  sourceHighlight = callPackage ../tools/text/source-highlight { };
 
   spaceFM = callPackage ../applications/misc/spacefm { };
 
@@ -7400,9 +7395,7 @@ let
 
   freeswitch = callPackage ../servers/sip/freeswitch { };
 
-  ghostOne = callPackage ../servers/games/ghost-one {
-    boost = boost144.override { taggedLayout = true; };
-  };
+  ghostOne = callPackage ../servers/games/ghost-one { };
 
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
@@ -8991,7 +8984,6 @@ let
 
   compiz = callPackage ../applications/window-managers/compiz {
     inherit (gnome) GConf ORBit2 metacity;
-    boost = boost149; # https://bugs.launchpad.net/compiz/+bug/1131864
   };
 
   coriander = callPackage ../applications/video/coriander {
@@ -9766,7 +9758,6 @@ let
 
   k3d = callPackage ../applications/graphics/k3d {
     inherit (pkgs.gnome2) gtkglext;
-    boost = boost149;
   };
 
   keepnote = callPackage ../applications/office/keepnote {
@@ -9955,7 +9946,6 @@ let
 
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;
-    boost = boost149;
   };
 
   monotoneViz = builderDefsPackage (import ../applications/version-management/monotone-viz/mtn-head.nix) {

@@ -1,6 +1,5 @@
-{stdenv, fetchgit, autoconf, automake, boost149, zlib, libpng, libjpeg, libtiff}:
+{stdenv, fetchgit, autoconf, automake, boost, zlib, libpng, libjpeg, libtiff}:
 
-let boost = boost149; in
 stdenv.mkDerivation {
   name = "povray-3.7";
 
