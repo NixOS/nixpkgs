@@ -5044,6 +5044,19 @@ let
   };
 
 
+  mayavi = buildPythonPackage {
+    name = "mayavi";
+    version = "4.3.1";
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/m/mayavi/mayavi-4.3.1.tar.gz";
+      sha256 = "0ca8zpsxyram98a3k0xa1gw6wc2mxhmjirqxsh1169wc4cymf2ss";
+    };     
+    
+    buildInputs = [ numpy pkgs.vtk wxPython30 pyface configobj traitsui apptools envisage ];
+    propagatedBuildInputs = [ numpy pkgs.vtk wxPython30 pyface configobj traitsui apptools envisage ];
+  };
+
+
   mccabe = buildPythonPackage (rec {
     name = "mccabe-0.2.1";
 
