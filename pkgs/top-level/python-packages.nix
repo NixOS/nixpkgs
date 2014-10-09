@@ -9572,6 +9572,8 @@ let
   traitsui = buildPythonPackage {
     name = "traitsui";
     version = "4.4.0";
+    disabled = isPy3k;
+
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/t/traitsui/traitsui-4.4.0.tar.gz";
       md5 = "71aaf7f5b9b76e5f288252e090d29a63";
