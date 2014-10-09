@@ -11265,8 +11265,6 @@ let
 
       recurseForRelease = true;
 
-      akunambol = callPackage ../applications/networking/sync/akunambol { };
-
       amarok = callPackage ../applications/audio/amarok { };
 
       bangarang = callPackage ../applications/video/bangarang { };
