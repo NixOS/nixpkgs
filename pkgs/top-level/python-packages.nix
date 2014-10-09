@@ -6860,6 +6860,24 @@ let
     };
   };
 
+  pysocks = buildPythonPackage rec {
+    name = "pysocks-${version}";
+    version = "1.5.0";
+
+    src = fetchurl {
+      url    = "https://pypi.python.org/packages/source/P/PySocks/PySocks-${version}.tar.gz";
+      sha256 = "10wq5311qrnk8rvzsh6gwzxi7h51pgvzw3d7s1mb39fsvf0vyjdk";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "SOCKS module for Python";
+      license     = licenses.bsd;
+      maintainers = [ maintainers.thoughtpolice ];
+    };
+  };
+
   python_fedora = buildPythonPackage (rec {
     name = "python-fedora-0.3.33";
     meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
