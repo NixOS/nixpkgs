@@ -50,7 +50,6 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     # Some comments in files are in UTF-8, so include the locale needed by GHC runtime.
-    export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive
     export LC_ALL=en_US.UTF-8
 
     # Set up link to cymake, which has been built already.
