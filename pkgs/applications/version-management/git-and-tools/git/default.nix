@@ -83,6 +83,13 @@ stdenv.mkDerivation {
       # gitweb.cgi, need to patch so that it's found
       sed -i -e "s|'compressor' => \['gzip'|'compressor' => ['${gzip}/bin/gzip'|" \
           $out/share/gitweb/gitweb.cgi
+
+      # make sure it finds the CA certificates
+      # SSL_CERT_FILE is set by etc/profile.d/nix.sh
+      for f in $(grep -rl GIT_SSL_CAINFO $out/libexec/git-core/); do
+        wrapProgram "$f" \
+            --run '[ -z "$GIT_SSL_CAINFO" -a -n "$SSL_CERT_FILE" ] && export GIT_SSL_CAINFO="$SSL_CERT_FILE"'
+      done
     ''
 
    + (if svnSupport then
