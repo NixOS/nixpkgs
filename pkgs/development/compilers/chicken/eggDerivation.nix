@@ -7,6 +7,14 @@
 
 let
   libPath = "${chicken}/var/lib/chicken/${toString chicken.binaryVersion}/";
+  patches = import ./patches.nix;
+  lib = stdenv.lib;
+  baseName = (builtins.parseDrvName name).name;
+  patch = if builtins.hasAttr baseName patches
+   then
+     builtins.getAttr baseName patches
+   else
+     {};
 in
 stdenv.mkDerivation ({
   name = "chicken-${name}";
@@ -37,4 +45,4 @@ stdenv.mkDerivation ({
         --prefix PATH : "$out/bin:$CHICKEN_REPOSITORY_EXTRA:$CHICKEN_REPOSITORY"
     done
   '';
-} // (builtins.removeAttrs args ["name" "buildInputs"]))
+} // (builtins.removeAttrs args ["name" "buildInputs"]) // patch)
