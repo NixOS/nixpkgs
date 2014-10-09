@@ -1,12 +1,12 @@
-{stdenv, fetchurl }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "re2c-${version}";
-  version = "0.13.7.4";
+  version = "0.13.7.5";
 
   src = fetchurl {
     url    = "mirror://sourceforge/re2c/re2c/${version}/${name}.tar.gz";
-    sha256 = "0j42s2gpz0rgiadwyb7ksqgc7i02l0q2qnmiyaj5f1w5rfa2c7yy";
+    sha256 = "0qdly4493d4p6jif0anf79c8h6ylc34aw622zk4n8icyax8gv2nm";
   };
 
   meta = {
