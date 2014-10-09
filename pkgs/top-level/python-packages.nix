@@ -11108,6 +11108,7 @@ let
     meta = {
       homepage = https://github.com/kjellmf/svg2tikz;
       description = "An SVG to TikZ converter";
+      license = stdenv.lib.licenses.gpl2Plus;
       maintainers =  with pkgs.stdenv.lib.maintainers; [gal_bolle];
     };
   };
