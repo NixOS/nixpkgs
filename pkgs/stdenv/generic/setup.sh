@@ -339,7 +339,7 @@ substitute() {
     local n p pattern replacement varName content
 
     # a slightly hacky way to keep newline at the end
-    content="$(cat $input; echo -n X)"
+    content="$(cat "$input"; echo -n X)"
     content="${content%X}"
 
     for ((n = 2; n < ${#params[*]}; n += 1)); do
