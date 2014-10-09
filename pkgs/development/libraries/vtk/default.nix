@@ -1,5 +1,11 @@
 { stdenv, fetchurl, cmake, mesa, libX11, xproto, libXt
-, qtLib ? null }:
+, qtLib ? null, tcl ? null, tk ? null, python ? null
+, wrapPython ? false }:
+
+# If we are wrapping Python, we need these packages.
+assert wrapPython -> tcl != null;
+assert wrapPython -> tk != null;
+assert wrapPython -> python != null;
 
 with stdenv.lib;
 
@@ -18,17 +24,25 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cmake mesa libX11 xproto libXt ]
-    ++ optional (qtLib != null) qtLib;
+    ++ optional (qtLib != null) [ qtLib ]
+    ++ optional (wrapPython == true) [ tcl tk python ];
 
-  # Shared libraries don't work, because of rpath troubles with the current
-  # nixpkgs camke approach. It wants to call a binary at build time, just
-  # built and requiring one of the shared objects.
-  # At least, we use -fPIC for other packages to be able to use this in shared
-  # objects.
-  cmakeFlags = [ "-DCMAKE_C_FLAGS=-fPIC" "-DCMAKE_CXX_FLAGS=-fPIC" ]
-    ++ optional (qtLib != null) [ "-DVTK_USE_QT:BOOL=ON" ];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ]
+    ++ optional (qtLib != null) [ "-DVTK_USE_QT:BOOL=ON" ]
+    ++ optional (wrapPython == true) [ "-DVTK_WRAP_PYTHON=ON" ];
 
+  # When building, VTK executables are called at various times.
+  preBuild = ''
+    export PATH=$PATH:$TMP/VTK${version}/build/bin
+    export LIBRARY_PATH=$LIBRARY_PATH:$TMP/VTK${version}/build/bin
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$TMP/VTK${version}/build/bin
+  '';
+  
   enableParallelBuilding = true;
+
+  setupHook = ./setup-hook.sh;
+
+  shellHook = "source $out/nix-support/setup-hook";
 
   meta = {
     description = "Open source libraries for 3D computer graphics, image processing and visualization";
