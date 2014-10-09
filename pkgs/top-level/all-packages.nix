@@ -1558,6 +1558,8 @@ let
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
+  libtorrent-git = callPackage ../tools/networking/p2p/libtorrent/git.nix { };
+
   libibverbs = callPackage ../development/libraries/libibverbs { };
 
   librdmacm = callPackage ../development/libraries/librdmacm { };
@@ -2162,6 +2164,8 @@ let
   rrdtool = callPackage ../tools/misc/rrdtool { };
 
   rtorrent = callPackage ../tools/networking/p2p/rtorrent { };
+
+  rtorrent-git = callPackage ../tools/networking/p2p/rtorrent/git.nix { };
 
   rubber = callPackage ../tools/typesetting/rubber { };
 
