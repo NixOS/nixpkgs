@@ -2200,6 +2200,18 @@ let
   };
 
 
+  envisage = buildPythonPackage {
+    name = "envisage";
+    version = "4.4.0";
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/e/envisage/envisage-4.4.0.tar.gz";
+      md5 = "35547a7b5736de292a264cba4326bca4";
+    };
+    buildInputs = [ traitsui apptools ];
+    propagatedBuildInputs = [ traitsui apptools ];
+  };
+
+
   evdev = buildPythonPackage rec {
     version = "0.4.6";
     name = "evdev-${version}";
