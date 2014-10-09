@@ -5506,6 +5506,8 @@ let
 
   libelf = callPackage ../development/libraries/libelf { };
 
+  libetpan = callPackage ../development/libraries/libetpan { };
+
   libfm = callPackage ../development/libraries/libfm { };
   libfm-extra = callPackage ../development/libraries/libfm {
     extraOnly = true;
@@ -8777,6 +8779,10 @@ let
   chromiumDev = lowPrio (chromium.override { channel = "dev"; });
 
   cinelerra = callPackage ../applications/video/cinelerra { };
+
+  clawsMail = callPackage ../applications/networking/mailreaders/claws-mail {
+    enableNetworkManager = config.networking.networkmanager.enable or false;
+  };
 
   clipit = callPackage ../applications/misc/clipit { };
 
