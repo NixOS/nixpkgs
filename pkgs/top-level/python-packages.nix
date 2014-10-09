@@ -6953,6 +6953,8 @@ let
   pyface = buildPythonPackage {
     name = "pyface";
     version = "4.4.0";
+    disabled = isPy3k;
+
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/p/pyface/pyface-4.4.0.tar.gz";
       md5 = "0e8667a365042310b7302d968e067e5b";
