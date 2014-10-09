@@ -1,16 +1,18 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, lzip, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "ocrad-0.21";
+  name = "ocrad-0.23";
 
   src = fetchurl {
-    url = "mirror://gnu/ocrad/${name}.tar.gz";
-    sha256 = "1k58ha70r0cqahssx67hfgyzia9ymf691yay06n7nrkbklii3isf";
+    url = "mirror://gnu/ocrad/${name}.tar.lz";
+    sha256 = "0vx0v4sz8ivgcp04zggdq9cv9sb5zxnn7j1nm15cds0zq1wr9g7m";
   };
+
+  buildInputs = [ lzip texinfo ];
 
   doCheck = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Optical character recognition (OCR) program & library";
 
     longDescription =
@@ -26,9 +28,9 @@ stdenv.mkDerivation rec {
          backend to other programs.
       '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
 
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.gnu;  # arbitrary choice
   };
 }

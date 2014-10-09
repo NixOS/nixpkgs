@@ -5,13 +5,13 @@
 
 cabal.mkDerivation (self: {
   pname = "monad-journal";
-  version = "0.2.3.2";
-  sha256 = "02356yapx5g6lam72kdyhndq5lcyhd2zsjvvcndiyhqik6csi457";
+  version = "0.4.0.2";
+  sha256 = "0biz564lgddzd6hygb7jd3rh8xa7qmzby4q3fyfa9fizmdcwf9j8";
   buildDepends = [
     either monadControl mtl transformers transformersBase
   ];
   meta = {
-    homepage = "https://github.com/phaazon/monad-journal";
+    homepage = "http://github.com/phaazon/monad-journal";
     description = "Pure logger typeclass and monad transformer";
     license = self.stdenv.lib.licenses.publicDomain;
     platforms = self.ghc.meta.platforms;

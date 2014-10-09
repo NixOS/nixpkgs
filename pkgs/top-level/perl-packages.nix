@@ -1785,10 +1785,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptRandPasswd = buildPerlPackage {
-    name = "Crypt-RandPasswd-0.05";
+    name = "Crypt-RandPasswd-0.06";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NE/NEILB/Crypt-RandPasswd-0.05.tar.gz;
-      sha256 = "0djcjzk0wmlf02gx9935m7c1dhpmdwx3hjal8x80aa92baavwf2s";
+      url = mirror://cpan/authors/id/N/NE/NEILB/Crypt-RandPasswd-0.06.tar.gz;
+      sha256 = "0ca8544371wp4vvqsa19lnhl02hczpkbwkgsgm65ziwwim3r1gdi";
     };
   };
 
@@ -3133,10 +3133,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   EmailSender = buildPerlPackage {
-    name = "Email-Sender-0.120002";
+    name = "Email-Sender-1.300014";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Sender-0.120002.tar.gz;
-      sha256 = "1cp735ndmh76xzijsm1hd0yh0m9yj34jc8akjhidkn677h2021dc";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Sender-1.300014.tar.gz;
+      sha256 = "0yxqk0fjxasd7q62m65dl2n6xm4xcvfb6i1lajvwibygd9ckifw6";
     };
     propagatedBuildInputs = [ CaptureTiny EmailAbstract EmailAddress EmailSimple ListMoreUtils Moose Throwable TryTiny ];
     meta = {
@@ -4891,7 +4891,7 @@ let self = _self // overrides; _self = with self; {
       platforms   = stdenv.lib.platforms.unix;
     };
   };
-  
+
   ListBinarySearch = pkgs.buildPerlPackage {
     name = "List-BinarySearch-0.20";
     src = pkgs.fetchurl {
@@ -5723,6 +5723,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MooXTypesMooseLike = buildPerlPackage rec {
+    name = "MooX-Types-MooseLike-0.27";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MATEU/${name}.tar.gz";
+      sha256 = "1489almsam2zcrs5039sh0y88gjicwna8kws8j2jgfs8bpcf4dgf";
+    };
+    propagatedBuildInputs = [ Moo TestFatal ];
+  };
+
   MooseAutobox = buildPerlPackage {
     name = "Moose-Autobox-0.15";
     src = fetchurl {
@@ -6451,6 +6460,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Use the Amazon S3 - Simple Storage Service";
       license = "perl";
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -6475,6 +6485,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/C/CH/CHIPS/Net-AMQP-0.06.tar.gz;
       sha256 = "0b2ba7de2cd7ddd5fe102a2e2ae7aeba21eaab1078bf3bfd3c5a722937256380";
     };
+    doCheck = false; # failures on 32bit
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ ClassAccessor ClassDataInheritable XMLLibXML ];
     meta = {
@@ -9313,12 +9324,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   Throwable = buildPerlPackage rec {
-    name = "Throwable-0.102080";
+    name = "Throwable-0.200010";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "0vjzlh23rpmgr5h8qfh9pb3kqw0j8sxn2bpbc1p2306dwqwbymm5";
+      sha256 = "0qhq1f5bvgf5kjhmdg45vadq8dbc9gfms81hply5c6a71nmkv8yp";
     };
-    propagatedBuildInputs = [ DevelStackTrace Moose ];
+    propagatedBuildInputs = [ DevelStackTrace Moose Moo MooXTypesMooseLike ];
   };
 
   TieCycle = buildPerlPackage {

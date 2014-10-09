@@ -11,7 +11,7 @@ let
 
   forAllSystems = pkgs.lib.genAttrs supportedSystems;
 
-  scrubDrv = drv: let res = { inherit (drv) drvPath outPath type name; outputName = "out"; out = res; }; in res;
+  scrubDrv = drv: let res = { inherit (drv) drvPath outPath type name system meta; outputName = "out"; out = res; }; in res;
 
   callTest = fn: args: forAllSystems (system: scrubDrv (import fn ({ inherit system; } // args)));
 
@@ -186,6 +186,16 @@ in rec {
   );
 
 
+  # Ensure that all packages used by the minimal NixOS config end up in the channel.
+  dummy = forAllSystems (system: pkgs.runCommand "dummy"
+    { propagatedBuildInputs = (import lib/eval-config.nix {
+        inherit system;
+        modules = lib.singleton ({ config, pkgs, ... }: { });
+      }).config.environment.systemPackages;
+    }
+    "mkdir $out; fixupPhase");
+
+
   # Provide a tarball that can be unpacked into an SD card, and easily
   # boot that system from uboot (like for the sheevaplug).
   # The pc variant helps preparing the expression for the system tarball
@@ -244,7 +254,8 @@ in rec {
   tests.munin = callTest tests/munin.nix {};
   tests.mysql = callTest tests/mysql.nix {};
   tests.mysqlReplication = callTest tests/mysql-replication.nix {};
-  tests.nat = callTest tests/nat.nix {};
+  tests.nat.firewall = callTest tests/nat.nix { withFirewall = true; };
+  tests.nat.standalone = callTest tests/nat.nix { withFirewall = false; };
   tests.nfs3 = callTest tests/nfs.nix { version = 3; };
   tests.nsd = callTest tests/nsd.nix {};
   tests.openssh = callTest tests/openssh.nix {};

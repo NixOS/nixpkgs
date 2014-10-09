@@ -4,11 +4,11 @@
 , pango, libX11, xproto, zlib, poppler, poppler_data
 , autoconf, automake, libtool, pkgconfig}:
 stdenv.mkDerivation rec {
-  version = "0.4.5";
+  version = "0.4.8";
   name = "xournal-" + version;
   src = fetchurl {
     url = "mirror://sourceforge/xournal/${name}.tar.gz";
-    sha256 = "1lamfzhby06w2pg56lpv1symdixcwmg6wvi7g6br6la4ak5w5mx7";
+    sha256 = "0c7gjcqhygiyp0ypaipdaxgkbivg6q45vhsj8v5jsi9nh6iqff13";
   };
 
   buildInputs = [
@@ -18,14 +18,6 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig ];
-
-  # Build with poppler-0.18.x
-  patchFlags = "-p0";
-
-  patches = [ (fetchurl {
-      url = "https://api.opensuse.org/public/source/X11:Utilities/xournal/xournal-poppler-0.18.patch?rev=eca1c0b24f5bc78111147ab8f4688455";
-      sha256 = "1q565kqb4bklncriq4dlhp1prhidv88wmxr9k3laykiia0qjmfyj";
-    })];
 
   NIX_LDFLAGS="-lX11 -lz";
 

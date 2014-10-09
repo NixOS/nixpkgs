@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, libevent, pkgconfig}:
+{stdenv, fetchurl, ncurses, libevent, pkgconfig, makeWrapper}:
 
 stdenv.mkDerivation rec {
   pname = "tmux";
@@ -12,12 +12,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ ncurses libevent ];
+  buildInputs = [ ncurses libevent makeWrapper ];
 
   postInstall =
     ''
       mkdir -p $out/etc/bash_completion.d
       cp -v examples/bash_completion_tmux.sh $out/etc/bash_completion.d/tmux
+      wrapProgram $out/bin/tmux --prefix TERMINFO : $out/share/terminfo
     '';
 
   meta = {

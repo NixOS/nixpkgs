@@ -2,8 +2,8 @@
 , libvpx, check, libconfig, pkgconfig }:
 
 let
-  version = "f83fcbb13c0";
-  date = "20140811";
+  version = "900d72f951";
+  date = "20140921";
 in
 stdenv.mkDerivation rec {
   name = "tox-core-${date}-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/irungentoo/toxcore/tarball/${version}";
     name = "${name}.tar.gz";
-    sha256 = "09g74h3qnx9adyxxvzay8m2idbgbln7m4kkm7sg9925mvi5abb1w";
+    sha256 = "1fwgflizb21mp4jwkfac7mgmahlly1f3ldbma6h8h6a2qf3pkn2r";
   };
 
   NIX_LDFLAGS = "-lgcc_s";
@@ -36,11 +36,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    autoconf libtool automake libsodium ncurses libopus
-    libvpx check libconfig pkgconfig
+    autoconf libtool automake libsodium ncurses
+    libconfig pkgconfig
+  ] ++ stdenv.lib.optionals (!stdenv.isArm) [
+    libopus
   ];
 
-  doCheck = false;  # certian tests fail, upstream advice is to wait
+  propagatedBuildInputs = stdenv.lib.optionals (!stdenv.isArm) [ libvpx ];
+
+  doCheck = !stdenv.isArm;
 
   meta = {
     description = "P2P FOSS instant messaging application aimed to replace Skype with crypto";

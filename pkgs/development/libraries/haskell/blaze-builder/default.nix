@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "blaze-builder";
-  version = "0.3.3.3";
-  sha256 = "1kzm2crwan11wrg8ky2gc29c7xpi9fm34xhz5gf5xlc3vy423y8s";
+  version = "0.3.3.4";
+  sha256 = "12xgmi8bc3h3cfk31rrfaklmwvyxgdwzwmxzw22yxd0dd8g11hg5";
   buildDepends = [ text ];
   meta = {
     homepage = "http://github.com/meiersi/blaze-builder";

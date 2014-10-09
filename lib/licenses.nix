@@ -25,7 +25,7 @@ rec {
     shortName = "amd";
     fullName = "AMD License Agreement";
     url = http://developer.amd.com/amd-license-agreement/;
-  };#
+  };
 
   apsl20 = spdx {
     shortName = "APSL-2.0";
@@ -80,6 +80,11 @@ rec {
   cddl = spdx {
     shortName = "CDDL-1.0";
     fullName = "Common Development and Distribution License 1.0";
+  };
+
+  cecill-b = spdx {
+    shortName = "CECILL-B";
+    fullName  = "CeCILL-B Free Software License Agreement";
   };
 
   cecill-c = spdx {
@@ -180,6 +185,11 @@ rec {
   lgpl3Plus = spdx {
     shortName = "LGPL-3.0+";
     fullName = "GNU Lesser General Public License v3.0 or later";
+  };
+
+  libpng = spdx {
+    shortName = "Libpng";
+    fullName = "libpng License";
   };
 
   libtiff = {
@@ -292,4 +302,3 @@ rec {
   };
 
 }
-

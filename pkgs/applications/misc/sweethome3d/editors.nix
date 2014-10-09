@@ -60,28 +60,28 @@ let
 in rec {
 
   textures-editor = mkEditorProject rec {
-    version = "1.3";
+    version = "1.4";
     module = "TexturesLibraryEditor";
     name = sweetName module version;
     description = "Easily create SH3T files and edit the properties of the texture images it contain";
     license = stdenv.lib.licenses.gpl2Plus;
     src = fetchcvs {
       cvsRoot = ":pserver:anonymous@sweethome3d.cvs.sourceforge.net:/cvsroot/sweethome3d";
-      sha256 = "1caf1hmf87bj5dr7w2swnlbvkb3q1jdjr1zgjn1k07d0fxh0ikbx";
+      sha256 = "1j1ygb32dca48hng5bsna9f84vyin5qc3ds44xi39057izmw8499";
       module = module;
       tag = "V_" + d2u version;
     };
   };
 
   furniture-editor = mkEditorProject rec {
-    version = "1.13";
+    version = "1.14";
     module = "FurnitureLibraryEditor";
     name = sweetName module version;
     description = "Quickly create SH3F files and edit the properties of the 3D models it contain";
     license = stdenv.lib.licenses.gpl2;
     src = fetchcvs {
       cvsRoot = ":pserver:anonymous@sweethome3d.cvs.sourceforge.net:/cvsroot/sweethome3d";
-      sha256 = "1nll5589rc0g71zd86cwmzl4p2icynykj106schmxric9v17jbv5";
+      sha256 = "0rdcd8vjbcv9jdms2xr3y7ykm2a9bkmwj4y7ybk9zcldayqsgn6z";
       module = module;
       tag = "V_" + d2u version;
     };

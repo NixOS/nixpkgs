@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, ncurses, coreutils }:
+{ stdenv, fetchurl, ncurses, coreutils, pcre }:
 
 let
 
-  version = "5.0.5";
+  version = "5.0.6";
 
   documentation = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}-doc.tar.bz2";
-    sha256 = "1wljqii2lkz5kc4y3xs65isnahvnlj678b9zv31bn444mapjpwp4";
+    sha256 = "1mngi85q56szzlrdzv60vg7wl03lih8vlnl800gwr0i6d1laawxj";
   };
 
 in
@@ -16,13 +16,13 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}.tar.bz2";
-    sha256 = "1bwfz9n850pclzmzrb437icfhzv1s5pgh2dhs92f194gdkxx4936";
+    sha256 = "0ic86y35v82d87ixjzdb6zrnzf002b7gn573jnva6cqm2jdm1jl4";
   };
 
-  buildInputs = [ ncurses coreutils ];
+  buildInputs = [ ncurses coreutils pcre ];
 
   preConfigure = ''
-    configureFlags="--enable-maildir-support --enable-multibyte --enable-zprofile=$out/etc/zprofile --with-tcsetpgrp"
+    configureFlags="--enable-maildir-support --enable-multibyte --enable-zprofile=$out/etc/zprofile --with-tcsetpgrp --enable-pcre"
   '';
 
   # XXX: think/discuss about this, also with respect to nixos vs nix-on-X

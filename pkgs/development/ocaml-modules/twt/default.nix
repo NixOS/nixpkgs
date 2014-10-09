@@ -20,10 +20,11 @@ stdenv.mkDerivation {
 
   installFlags = "PREFIX=$(out)";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://people.csail.mit.edu/mikelin/ocaml+twt/;
     description = "“The Whitespace Thing” for OCaml";
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
     platforms = ocaml.meta.platforms;
   };
 }

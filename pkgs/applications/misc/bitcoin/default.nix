@@ -4,12 +4,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "0.9.2.1";
+  version = "0.9.3";
   name = "bitcoin${toString (optional (!gui) "d")}-${version}";
 
   src = fetchurl {
     url = "https://bitcoin.org/bin/${version}/bitcoin-${version}-linux.tar.gz";
-    sha256 = "0060f7d38b98113ab912d4c184000291d7f026eaf77ca5830deec15059678f54";
+    sha256 = "1kb59w7232qzfh952rz6vvjri2w26n9cq7baml0vifdsdhxph9f4";
   };
 
   # hexdump from utillinux is required for tests

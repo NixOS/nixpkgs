@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "clock";
-  version = "0.4.0.1";
-  sha256 = "1bn6dalank30l680iifyam0mg9izxbyscgq0vmr1aw5brba5kv6j";
+  version = "0.4.1.1";
+  sha256 = "0xbhx16sa0rwidaljp8lklb5ifhdc8cccbyznrpxqqwh8icm5pjp";
   meta = {
     homepage = "http://corsis.github.com/clock/";
     description = "High-resolution clock functions: monotonic, realtime, cputime";

@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "The official reference implementation for the PNG file format";
     homepage = http://www.libpng.org/pub/png/libpng.html;
-    license = "free-non-copyleft"; # http://www.libpng.org/pub/png/src/libpng-LICENSE.txt
+    license = stdenv.lib.licenses.libpng;
+    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    branch = "1.2";
   };
 }

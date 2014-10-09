@@ -38,7 +38,7 @@
 
 let
 
-  inherit (pkgs) R fetchurl stdenv curl;
+  inherit (pkgs) R fetchurl stdenv;
 
   buildRPackage = import ./generic-builder.nix R;
 
@@ -2479,7 +2479,7 @@ let self = _self // overrides; _self = with self; {
   jpeg = derive { name="jpeg"; version="0.1-8"; sha256="05hawv5qcb82ljc1l2nchx1wah8mq2k2kfkhpzyww554ngzbwcnh"; depends=[]; };
   JPSurv = derive { name="JPSurv"; version="1.0.1"; sha256="11hfji0nyfmw1d7y2cijpp7ivlv5s9k8g771kmgwy14wflkyf7g2"; depends=[]; };
   jSonarR = derive { name="jSonarR"; version="1.0"; sha256="1369v79y2679p1c1s6pfi0zdj21zbbln3a4gqsxivx82m0lwqprp"; depends=[RCurl]; };
-  jsonlite = derive { name="jsonlite"; version="0.9.10"; sha256="0w49mv4fabzgc86gv2jn9apwf9k6bk1s1p3mjmaxpmw95wgjpc9r"; depends=[]; };
+  jsonlite = derive { name="jsonlite"; version="0.9.11"; sha256="4e6d86dfd1584ed2b96b1eb6c067b07847df5fff673d07ffacca6399c330552e"; depends=[]; };
   jtrans = derive { name="jtrans"; version="0.1"; sha256="1wcrjyifsnpk9jfmwc1cx30qp5vavwl87i0avbbls8cmji7z0nay"; depends=[]; };
   JudgeIt = derive { name="JudgeIt"; version="1.5.1"; sha256="1jssz1x9gw9hjpqlqbvlxa99icl8gffzl6qya0cnaxr50p82hdag"; depends=[]; };
   Julia = derive { name="Julia"; version="1.0"; sha256="0df72mjkfsaz7wbrg3l6fcypwm59hdxxndjv1b833xa4qpq5301g"; depends=[]; };
@@ -4252,7 +4252,7 @@ let self = _self // overrides; _self = with self; {
   rcqp = derive { name="rcqp"; version="0.3"; sha256="0vxcgchnxdsdamclcshjbkn00ysmfmqp586a36wsyv3zqrd6rg7p"; depends=[plyr]; };
   Rcsdp = derive { name="Rcsdp"; version="0.1.53"; sha256="0x91hyx6z9f4zd7djxlq7dnznmr9skyzwbbcbjyid9hxbcfyvhcp"; depends=[]; };
   rCUR = derive { name="rCUR"; version="1.3"; sha256="1f38xbc5n91k2y88cg0sv1z2p4g5vl7v2k1024f42f7526g2p2lx"; depends=[MASS Matrix lattice]; };
-  RCurl = derive { name="RCurl"; version="1.95-4.3"; sha256="1gyjarnxwz3ldpm1vwq9ls6al66rvs7yshzhrl1fv9lbm1qi8yfg"; depends=[bitops curl]; };
+  RCurl = derive { name="RCurl"; version="1.95-4.3"; sha256="1gyjarnxwz3ldpm1vwq9ls6al66rvs7yshzhrl1fv9lbm1qi8yfg"; depends=[bitops pkgs.curl]; };
   Rd2roxygen = derive { name="Rd2roxygen"; version="1.4"; sha256="09dxgp65zac5b9mxbjrvy3ihdwski98xva5afq659b8yfvkviq4g"; depends=[roxygen2 formatR]; };
   rda = derive { name="rda"; version="1.0.2-2"; sha256="1g2q7c0y138i9r7jgjrlpqznvwpqsj6f7vljqqfzh2l6kcj43vjj"; depends=[]; };
   rdatamarket = derive { name="rdatamarket"; version="0.6.4"; sha256="16a1yxvf841505a8gh7jf09fx6ipysymrpvsd4b07xdg5hvbzx25"; depends=[zoo RCurl RJSONIO]; };
@@ -4387,11 +4387,11 @@ let self = _self // overrides; _self = with self; {
   Rgbp = derive { name="Rgbp"; version="1.0.6"; sha256="1j4j7g9z7p592f82k0yvibrydynkd9v1ldil2vf3ikc650bn2l02"; depends=[sn]; };
   RGCCA = derive { name="RGCCA"; version="2.0"; sha256="0mcp51z5jkn7yxmspp5cvmmvq0cwh7hj66g7wjmxsi74dwxcinvg"; depends=[MASS]; };
   rgcvpack = derive { name="rgcvpack"; version="0.1-4"; sha256="1vlvw9slrra18qaizqk2xglzky0i6z3bsan85x908wrg8drss4h5"; depends=[]; };
-  rgdal = derive { name="rgdal"; version="0.8-16"; sha256="17qk7kd0l0l52nyf6drr0gv4b0ibkggyn6g3ky9flsjy05b3wg8j"; depends=[sp]; };
+  rgdal = derive { name="rgdal"; version="0.8-16"; sha256="17qk7kd0l0l52nyf6drr0gv4b0ibkggyn6g3ky9flsjy05b3wg8j"; depends=[sp pkgs.gdal pkgs.proj]; };
   RGENERATE = derive { name="RGENERATE"; version="1.1"; sha256="1da3b50cfv5jb63ijzbnr226jadbww2bapcxzx8am7zydm6gqnss"; depends=[RMAWGEN]; };
   RGenetics = derive { name="RGenetics"; version="0.1"; sha256="0x5sspd67hh08qm62whlnnd838m0np29q3bfzgwp6j85lhil3jrx"; depends=[]; };
   rgenoud = derive { name="rgenoud"; version="5.7-12"; sha256="17gzkn4laylnksy8h2w8c0whcxpchsx7bwjzk1q5sfqxswclqq0g"; depends=[]; };
-  rgeos = derive { name="rgeos"; version="0.3-6"; sha256="134cppgg5349i5qs9k2161fakd15l1fx1x6mgv28c5vic2xdm4wl"; depends=[sp]; };
+  rgeos = derive { name="rgeos"; version="0.3-6"; sha256="134cppgg5349i5qs9k2161fakd15l1fx1x6mgv28c5vic2xdm4wl"; depends=[sp pkgs.geos]; };
   rgexf = derive { name="rgexf"; version="0.14.3.11"; sha256="16mil1csyzkaywcdrjzz5r60n4xhhinxawg30skc7d9awkf26qfa"; depends=[XML Rook igraph]; };
   rggobi = derive { name="rggobi"; version="2.1.20"; sha256="1a7l68h3m9cq14k7y96ijgh0iz3d6j4j2anxg50pykz20lnykr9g"; depends=[RGtk2]; };
   RGIFT = derive { name="RGIFT"; version="0.1-5"; sha256="1745fs4bq0ss39fiwljspvrmnkgbbpc1fjvhvcrsmp2iizq12sgn"; depends=[]; };
@@ -4450,7 +4450,19 @@ let self = _self // overrides; _self = with self; {
   Rivivc = derive { name="Rivivc"; version="0.9"; sha256="0gl3040pp9nqm4g2ympnx80z64zfnn1hfsxka8ynd2cqhjn3b5i1"; depends=[signal]; };
   RJaCGH = derive { name="RJaCGH"; version="2.0.2"; sha256="1fy8wsnv7diwg2w7j61scm6vd35a5jb36i9pzh5m7jz6yqsank50"; depends=[]; };
   rjags = derive { name="rjags"; version="3-13"; sha256="0npfyphi8z25h7w4frplbyjgib1gawz7ib9gz5w6h2i0pricm53r"; depends=[coda]; };
-  rJava = derive { name="rJava"; version="0.9-6"; sha256="008g6s6rcb5lnz5y2a2rs4iq85a4nl522g714s1w1r153qcc0jz0"; depends=[]; };
+  rJava = buildRPackage {
+    name = "rJava-0.9-6";
+    src = fetchurl {
+      url = "mirror://cran/src/contrib/rJava_0.9-6.tar.gz";
+      sha256 ="008g6s6rcb5lnz5y2a2rs4iq85a4nl522g714s1w1r153qcc0jz0";
+    };
+    propagatedBuildInputs = [pkgs.jdk pkgs.lzma pkgs.bzip2 pkgs.pcre pkgs.icu pkgs.libzip];
+    preConfigure = ''
+    export JAVA_CPPFLAGS=-I${pkgs.jdk}/include/
+    export JAVA_HOME=${pkgs.jdk}
+    '';
+    meta.hydraPlatforms = R.meta.hydraPlatforms;
+  };
   rJavax = derive { name="rJavax"; version="0.3"; sha256="0sv2fjinp4wmdfvcpgm4hv8v3fkiiv84ywqyr4hz86j50ncd79km"; depends=[rJava]; };
   RJDBC = derive { name="RJDBC"; version="0.2-4"; sha256="14nqz4gx24gcjmnd3hrhvfs5f68c3nqhb6nypv9gvk19dx1jayg0"; depends=[DBI rJava]; };
   rje = derive { name="rje"; version="1.9"; sha256="1dyd34z6lb0p6zmyax5dpzflgc9a4saka33mvdfcxi5pj0rnygaz"; depends=[]; };
@@ -5841,7 +5853,7 @@ let self = _self // overrides; _self = with self; {
   xlsx = derive { name="xlsx"; version="0.5.7"; sha256="0qxkdpf1dvi0x7fy65abjx2j60rdx7fv5yi8l2wdm0f2631pnwin"; depends=[rJava xlsxjars]; };
   xlsxjars = derive { name="xlsxjars"; version="0.6.0"; sha256="0mjfvd433iz742gn3avaq48172yi5hhd0ajc3v22y1j4k9w82pr7"; depends=[rJava]; };
   Xmisc = derive { name="Xmisc"; version="0.1.0"; sha256="1iyv9gp7fw3r7s3v9srd799nhwgpn5851v3n2xfwpcvj9kczrd5r"; depends=[]; };
-  XML = derive { name="XML"; version="3.98-1.1"; sha256="0n9i6746211wihglbpsgalj2cyvggn4rv6a4fbavqwnjw3h1hwwl"; depends=[]; };
+  XML = derive { name="XML"; version="3.98-1.1"; sha256="0n9i6746211wihglbpsgalj2cyvggn4rv6a4fbavqwnjw3h1hwwl"; depends=[pkgs.libxml2]; };
   XML2R = derive { name="XML2R"; version="0.0.6"; sha256="0azfh950r2b7ck3n1vzk3mdll7zy844nx3mbk676jxnj8gg7nxk5"; depends=[XML RCurl plyr]; };
   XNomial = derive { name="XNomial"; version="1.0.1"; sha256="134bwglqhgah7v3w6ir65dch2dwp5h4vldw521ba74l5v9b2j2h4"; depends=[]; };
   xoi = derive { name="xoi"; version="0.61-1"; sha256="0ypy0rb0f0bns41vjzyln04k3hypgr3wysqbdi0b0r14ip5rb47k"; depends=[qtl]; };

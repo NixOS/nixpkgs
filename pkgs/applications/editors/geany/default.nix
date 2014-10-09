@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, gtk2, which, pkgconfig, intltool }:
+{ stdenv, fetchurl, gtk2, which, pkgconfig, intltool, file }:
 
 let
-  version = "1.23.1";
+  version = "1.24.1";
 in
 
 stdenv.mkDerivation rec {
@@ -9,14 +9,16 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.geany.org/${name}.tar.bz2";
-    sha256 = "1bcgjxywggsljs9kq22kr9xpzrq5xr7pb9d1b71rwryqb5pb25c8";
+    sha256 = "0cwci8876dpgcn60dfvjlciqr8x68iv86psjj148grhzn3chbdbz";
   };
 
-  buildInputs = [ gtk2 which pkgconfig intltool ];
+  buildInputs = [ gtk2 which pkgconfig intltool file ];
 
   doCheck = true;
 
   enableParallelBuilding = true;
+
+  patchPhase = "patchShebangs .";
 
   # This file should normally require a gtk-update-icon-cache -q /usr/share/icons/hicolor command
   # It have no reasons to exist in a redistribuable package

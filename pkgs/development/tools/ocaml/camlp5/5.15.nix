@@ -8,6 +8,8 @@ let
   metafile = ./META;
 in
 
+assert !stdenv.lib.versionOlder "4.00" ocaml_version;
+
 stdenv.mkDerivation {
 
   name = "${pname}${if transitional then "_transitional" else ""}-${version}";

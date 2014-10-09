@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, makeWrapper
-, jdk
+, jre
 , gtk, glib
 , libXtst
 , git, mercurial, subversion
@@ -22,14 +22,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     makeWrapper
-    jdk
+    jre
   ];
 
   buildCommand = let
     pkg_path = "$out/${name}";
     bin_path = "$out/bin";
     runtime_paths = lib.makeSearchPath "bin" [
-      jdk
+      jre
       git mercurial subversion
       which
     ];
@@ -43,10 +43,15 @@ stdenv.mkDerivation rec {
     # unpacking should have produced a dir named ${name}
     cp -a ${name} $out
     mkdir -pv ${bin_path}
+    [ -d ${jre}/lib/openjdk ] \
+      && jre=${jre}/lib/openjdk \
+      || jre=${jre}
     makeWrapper ${pkg_path}/bin/smartgithg.sh ${bin_path}/smartgithg \
       --prefix PATH : ${runtime_paths} \
       --prefix LD_LIBRARY_PATH : ${runtime_lib_paths} \
-      --prefix JDK_HOME : ${jdk}/lib/openjdk
+      --prefix JRE_HOME : ${jre} \
+      --prefix JAVA_HOME : ${jre} \
+      --prefix SMARTGITHG_JAVA_HOME : ${jre}
     patchShebangs $out
   '';
 

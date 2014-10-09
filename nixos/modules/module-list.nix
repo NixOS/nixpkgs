@@ -38,6 +38,7 @@
   ./hardware/pcmcia.nix
   ./hardware/video/bumblebee.nix
   ./hardware/video/nvidia.nix
+  ./hardware/video/ati.nix
   ./installer/tools/nixos-checkout.nix
   ./installer/tools/tools.nix
   ./misc/assertions.nix
@@ -142,6 +143,7 @@
   ./services/hardware/udev.nix
   ./services/hardware/udisks2.nix
   ./services/hardware/upower.nix
+  ./services/hardware/thermald.nix
   ./services/logging/klogd.nix
   ./services/logging/logcheck.nix
   ./services/logging/logrotate.nix
@@ -157,6 +159,7 @@
   ./services/mail/postfix.nix
   ./services/mail/spamassassin.nix
   #./services/misc/autofs.nix
+  ./services/misc/cpuminer-cryptonight.nix
   ./services/misc/cgminer.nix
   ./services/misc/dictd.nix
   ./services/misc/disnix.nix
@@ -211,6 +214,7 @@
   ./services/networking/cjdns.nix
   ./services/networking/cntlm.nix
   ./services/networking/connman.nix
+  ./services/networking/consul.nix
   ./services/networking/ddclient.nix
   ./services/networking/dhcpcd.nix
   ./services/networking/dhcpd.nix
@@ -229,6 +233,7 @@
   ./services/networking/iodined.nix
   ./services/networking/ircd-hybrid/default.nix
   ./services/networking/kippo.nix
+  ./services/networking/mailpile.nix
   ./services/networking/minidlna.nix
   ./services/networking/murmur.nix
   ./services/networking/nat.nix

@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
       X session.
     '';
     platforms = with stdenv.lib.platforms; allBut cygwin;
-    maintainers = stdenv.lib.maintainers.ftrvxmtrx;
+    maintainers = [ stdenv.lib.maintainers.ftrvxmtrx ];
   };
 }

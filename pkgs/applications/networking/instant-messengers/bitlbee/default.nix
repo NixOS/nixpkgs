@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gnutls glib pkgconfig libotr ]
     ++ optional doCheck check;
 
-  configureFlaags = [
+  configureFlags = [
     "--gcov=1"
     "--otr=1"
     "--ssl=gnutls"

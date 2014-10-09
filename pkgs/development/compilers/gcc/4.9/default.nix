@@ -153,7 +153,6 @@ let version = "4.9.1";
           " --disable-libssp --disable-nls" +
           " --without-headers" +
           " --disable-threads " +
-          " --disable-libmudflap " +
           " --disable-libgomp " +
           " --disable-libquadmath" +
           " --disable-shared" +

@@ -5,6 +5,9 @@ let
   version = "0.9.5";
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
 in
+
+assert stdenv.lib.versionAtLeast ocaml_version "3.12";
+
 stdenv.mkDerivation {
 
   name = "ocaml-${pname}-${version}";
@@ -31,6 +34,7 @@ stdenv.mkDerivation {
     homepage = http://erratique.ch/software/cmdliner;
     description = "An OCaml module for the declarative definition of command line interfaces";
     license = licenses.bsd3;
+    maintainers = [ maintainers.vbgl ];
     platforms = ocaml.meta.platforms;
   };
 }

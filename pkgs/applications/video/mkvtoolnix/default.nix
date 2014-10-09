@@ -15,12 +15,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "7.1.0";
+  version = "7.2.0";
   name = "mkvtoolnix-${version}";
 
   src = fetchurl {
     url = "http://www.bunkus.org/videotools/mkvtoolnix/sources/${name}.tar.xz";
-    sha256 = "06xqy4f7gi1xj0yqb6y1wmxwvsxfxal2plfsbl33dkwd0srixj06";
+    sha256 = "1bpmd37y2v4icv9iqjv3p4kr62jbdng2ar8vpiij3bdgwrjc6gv1";
   };
 
   buildInputs = [

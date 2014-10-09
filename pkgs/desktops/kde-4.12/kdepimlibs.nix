@@ -6,7 +6,7 @@ kde {
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs =
-    [ boost gpgme libical libxslt qjson prison
+    [ boost boost.lib gpgme libical libxslt qjson prison
       openldap cyrus_sasl akonadi shared_desktop_ontologies
     ];
 

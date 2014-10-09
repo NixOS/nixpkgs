@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    avahi boost eigen fftw gettext glib glibmm gtk gtkmm intltool jack2
-    ladspaH librdf libsndfile lilv lv2 pkgconfig python serd sord sratom
+    avahi boost boost.lib eigen fftw gettext glib glibmm gtk gtkmm intltool
+    jack2 ladspaH librdf libsndfile lilv lv2 pkgconfig python serd sord sratom
   ];
 
   configurePhase = "python waf configure --prefix=$out";

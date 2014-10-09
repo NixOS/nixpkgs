@@ -31,6 +31,7 @@ cabal.mkDerivation (self: {
     pandocTypes QuickCheck syb testFramework testFrameworkHunit
     testFrameworkQuickcheck2 text zipArchive
   ];
+  configureFlags = "-fhttps -fmake-pandoc-man-pages";
   jailbreak = true;
   doCheck = false;
   meta = {

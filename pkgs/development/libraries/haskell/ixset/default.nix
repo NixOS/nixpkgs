@@ -12,5 +12,6 @@ cabal.mkDerivation (self: {
     description = "Efficient relational queries on Haskell sets";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })

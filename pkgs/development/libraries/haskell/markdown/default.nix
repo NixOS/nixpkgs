@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "markdown";
-  version = "0.1.10";
-  sha256 = "1n453xsarrrshn4pidlhknazjpsjh1nnygfir54z17rxcrvgprr1";
+  version = "0.1.11";
+  sha256 = "1v5bqwzh0v17ylgnbl16bw4n9shyrff7nabwnzzhs2wmqp85n3js";
   buildDepends = [
     attoparsec blazeHtml conduit conduitExtra dataDefault text
     transformers xssSanitize

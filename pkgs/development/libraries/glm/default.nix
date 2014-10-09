@@ -1,11 +1,11 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "glm-0.9.5.1";
+  name = "glm-0.9.5.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/ogl-math/${name}/${name}.zip";
-    sha256 = "1x8bpmqdszzkg21r411w7cy4mqd5dcvb9jghc8h3xrx7ldbicqjg";
+    sha256 = "0ndwaw2mp7pzcwwm4dghbv5qqax5a8c5plnwdgnpc9adm79gj1rl";
   };
 
   buildInputs = [ unzip ];
@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     homepage = http://glm.g-truc.net/;
     license = licenses.mit;
     platforms = platforms.unix;
+    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
   };
 }

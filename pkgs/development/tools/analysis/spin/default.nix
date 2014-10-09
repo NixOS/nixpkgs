@@ -1,13 +1,14 @@
 {stdenv, fetchurl, yacc }:
 
 stdenv.mkDerivation rec {
-  version = "6.3.2";
   name = "spin-${version}";
+  version = "6.4.1";
+  url-version = stdenv.lib.replaceChars ["."] [""] version;
 
   src = fetchurl {
-    url = http://spinroot.com/spin/Src/spin632.tar.gz;
+    url = "http://spinroot.com/spin/Src/spin${url-version}.tar.gz";
     curlOpts = "--user-agent 'Mozilla/5.0'";
-    sha256 = "1llsv1mnwr99hvsm052i3wwpa3dm5j12s5p10hizi6i9hlp00b5y";
+    sha256 = "02r2jazb2hnhcqcjnmlj6sjd9dvyfalgi99bzncwfadixf3hmpvn";
   };
 
   buildInputs = [ yacc ];
@@ -16,10 +17,10 @@ stdenv.mkDerivation rec {
 
   installPhase = "install -D spin $out/bin/spin";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Formal verification tool for distributed software systems";
     homepage = http://spinroot.com/;
     license = "free";
-    maintainers = [ stdenv.lib.maintainers.mornfall ];
+    maintainers = with maintainers; [ mornfall pSub ];
   };
 }

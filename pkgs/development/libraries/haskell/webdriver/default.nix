@@ -25,5 +25,6 @@ cabal.mkDerivation (self: {
     description = "a Haskell client for the Selenium WebDriver protocol";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })

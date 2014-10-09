@@ -4,12 +4,10 @@
 
 cabal.mkDerivation (self: {
   pname = "language-c-inline";
-  version = "0.7.6.0";
-  sha256 = "01imdfjqkx49pcwplvmd5lqbal5hq1cx11zcig3na1x46ggiavah";
+  version = "0.7.6.1";
+  sha256 = "0giyclrkxbigqpgrvlz896nsiqi7fghm79pzcxmxn7vslmardn4a";
   buildDepends = [ filepath languageCQuote mainlandPretty ];
   testDepends = [ languageCQuote ];
-  noHaddock = true;
-  doCheck = false;
   meta = {
     homepage = "https://github.com/mchakravarty/language-c-inline/";
     description = "Inline C & Objective-C code in Haskell for language interoperability";

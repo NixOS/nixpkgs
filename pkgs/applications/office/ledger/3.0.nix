@@ -2,19 +2,19 @@
 , texinfo, gnused }:
 
 let
-  rev = "a0c5addbbd";
+  rev = "5961384";
 in
 
 stdenv.mkDerivation {
-  name = "ledger-3.0.2.${rev}";
+  name = "ledger-3.0.4.${rev}";
 
   src = fetchgit {
     url = "git://github.com/ledger/ledger.git";
     inherit rev;
-    sha256 = "1yr4i8gpby67j4vl7xk109dwb14z8a424nwgva8rbms8115w4ps5";
+    sha256 = "0fmmhr3as4v2kb6h64k1fq979080cqhd75jvxfg7axk2mylb6b3q";
   };
 
-  buildInputs = [ cmake boost gmp mpfr libedit python texinfo gnused ];
+  buildInputs = [ cmake boost boost.lib gmp mpfr libedit python texinfo gnused ];
 
   enableParallelBuilding = true;
 

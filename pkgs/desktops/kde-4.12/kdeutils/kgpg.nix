@@ -2,7 +2,7 @@
 
 kde {
 
-  buildInputs = [ kdelibs kdepimlibs boost ];
+  buildInputs = [ kdelibs kdepimlibs boost boost.lib ];
 
   meta = {
     description = "Simple KDE GUI for GPG";

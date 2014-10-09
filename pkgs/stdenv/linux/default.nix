@@ -284,19 +284,17 @@ rec {
       shellPackage = stage4.pkgs.bash;
     };
 
-    /*
     allowedRequisites = with stage4.pkgs;
       [ gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
         glibc gnumake gnused gnutar gnugrep gnupatch patchelf attr acl
         paxctl zlib pcre linuxHeaders ed gcc gcc.gcc libsigsegv ];
-    */
 
     overrides = pkgs: {
       inherit gcc;
       inherit (stage4.pkgs)
         gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
         glibc gnumake gnused gnutar gnugrep gnupatch patchelf
-        attr acl paxctl zlib;
+        attr acl paxctl zlib pcre;
     };
   };
 

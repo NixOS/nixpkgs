@@ -161,11 +161,12 @@ if disabled then throw "${name} not supported for interpreter ${python.executabl
 
   shellHook = attrs.shellHook or ''
     if test -e setup.py; then
-       mkdir -p /tmp/$name/lib/${python.libPrefix}/site-packages
+       tmp_path=/tmp/`pwd | md5sum | cut -f 1 -d " "`-$name
+       mkdir -p $tmp_path/lib/${python.libPrefix}/site-packages
        ${preShellHook}
-       export PATH="/tmp/$name/bin:$PATH"
-       export PYTHONPATH="/tmp/$name/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-       ${python}/bin/${python.executable} setup.py develop --prefix /tmp/$name
+       export PATH="$tmp_path/bin:$PATH"
+       export PYTHONPATH="$tmp_path/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+       ${python}/bin/${python.executable} setup.py develop --prefix $tmp_path
        ${postShellHook}
     fi
   '';

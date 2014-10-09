@@ -1,22 +1,20 @@
 { stdenv, fetchurl, attr, acl, zlib, libuuid, e2fsprogs, lzo
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt }:
 
-let version = "3.16"; in
+let version = "3.16.2"; in
 
 stdenv.mkDerivation rec {
   name = "btrfs-progs-${version}";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/kernel/people/mason/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "0phbrgipl04q8cdj9nnshik7b6p2bg51jxb3l1gvfc04dkgm2xls";
+    url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
+    sha256 = "0avk8x0k91zrqvlbk8r067aw49byr8hvvr4niy48d3ib1jz2mmnl";
   };
 
   buildInputs = [
     attr acl zlib libuuid e2fsprogs lzo
     asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt
   ];
-
-  patches = [ ./multiple_mounts.patch ];
 
   # for btrfs to get the rpath to libgcc_s, needed for pthread_cancel to work
   NIX_CFLAGS_LINK = "-lgcc_s";

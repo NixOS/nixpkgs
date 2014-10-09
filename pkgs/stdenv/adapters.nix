@@ -8,14 +8,14 @@ rec {
 
 
   # Override the compiler in stdenv for specific packages.
-  overrideGCC = stdenv: gcc: stdenv.override { inherit gcc; };
+  overrideGCC = stdenv: gcc: stdenv.override { allowedRequisites = null; inherit gcc; };
 
 
   # Add some arbitrary packages to buildInputs for specific packages.
   # Used to override packages in stdenv like Make.  Should not be used
   # for other dependencies.
   overrideInStdenv = stdenv: pkgs:
-    stdenv.override (prev: { extraBuildInputs = prev.extraBuildInputs or [] ++ pkgs; });
+    stdenv.override (prev: { allowedRequisites = null; extraBuildInputs = prev.extraBuildInputs or [] ++ pkgs; });
 
 
   # Override the setup script of stdenv.  Useful for testing new

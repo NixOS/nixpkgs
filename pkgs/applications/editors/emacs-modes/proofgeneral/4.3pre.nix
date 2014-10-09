@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, emacs, texinfo, texLive, perl, which, automake }:
+{ stdenv, fetchurl, emacs, texinfo, texLive, perl, which, automake, enableDoc ? false }:
 
 stdenv.mkDerivation (rec {
   name = "ProofGeneral-4.3pre131011";
@@ -10,7 +10,7 @@ stdenv.mkDerivation (rec {
 
   sourceRoot = name;
 
-  buildInputs = [ emacs texinfo texLive perl which ];
+  buildInputs = [ emacs texinfo perl which ] ++ stdenv.lib.optional enableDoc texLive;
 
   prePatch =
     '' sed -i "Makefile" \
@@ -25,15 +25,20 @@ stdenv.mkDerivation (rec {
        sed -i '96d' doc/ProofGeneral.texi
     '';
 
+  patches = [ ./pg.patch ];
+
   preBuild = ''
     make clean;
   '';
 
   installPhase =
+    if enableDoc
+    then
     # Copy `texinfo.tex' in the right place so that `texi2pdf' works.
     '' cp -v "${automake}/share/"automake-*/texinfo.tex doc
        make install install-doc
-    '';
+    ''
+    else "make install";
 
   meta = {
     description = "Proof General, an Emacs front-end for proof assistants";

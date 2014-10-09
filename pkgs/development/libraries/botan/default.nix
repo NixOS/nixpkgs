@@ -9,8 +9,9 @@ let
   helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
     [];
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
+  buildInputs = [ boost.lib ]
+    ++ map (n: builtins.getAttr n x)
+      (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="botan";
     tarBaseName="Botan";

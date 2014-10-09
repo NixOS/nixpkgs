@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "aeson-qq";
-  version = "0.7.3";
-  sha256 = "1d5wl38gkqc2dbk626f7vdcc2i3faannac13zdc9py0kbcniw231";
+  version = "0.7.4";
+  sha256 = "0wnc9pdjvd15gfkdxzf084393vwmxv2xaxdchzgal1qhwa1mak4v";
   buildDepends = [ aeson haskellSrcMeta parsec text vector ];
   testDepends = [ aeson haskellSrcMeta hspec parsec text vector ];
   meta = {

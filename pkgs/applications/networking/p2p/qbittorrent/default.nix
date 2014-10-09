@@ -2,11 +2,11 @@
 , pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "qbittorrent-3.1.3";
+  name = "qbittorrent-3.1.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/qbittorrent/${name}.tar.xz";
-    sha256 = "16m3l8qjcj63brzrdn82cbijvz8fcxfgpibi4g5g6sbissjkwsww";
+    sha256 = "0xhqli191r5v9b5x6wj1wsjlj6svf6ldgzl7jza39q3ipr5c2pg6";
   };
 
   buildInputs = [ qt4 which dbus_libs boost libtorrentRasterbar
@@ -15,11 +15,14 @@ stdenv.mkDerivation rec {
   configureFlags = "--with-libboost-inc=${boost}/include "
     + "--with-libboost-lib=${boost}/lib";
 
-  enableParallelBuilding = true;
+  # https://github.com/qbittorrent/qBittorrent/issues/1992 
+  #enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Free Software alternative to µtorrent";
     homepage = http://www.qbittorrent.org/;
-    maintainers = with stdenv.lib.maintainers; [ viric ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ viric ];
+    platforms = platforms.linux;
   };
 }

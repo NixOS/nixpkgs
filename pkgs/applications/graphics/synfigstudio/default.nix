@@ -26,11 +26,11 @@ let
     patches = [ ./synfig-cstring.patch ];
 
     buildInputs = [
-      ETL boost cairo gettext glibmm libsigcxx libtool libxmlxx pango
+      ETL boost boost.lib cairo gettext glibmm libsigcxx libtool libxmlxx pango
       pkgconfig
     ];
 
-    configureFlags = [ "--with-boost-libdir=${boost}/lib" ];
+    configureFlags = [ "--with-boost-libdir=${boost.lib}/lib" ];
   };
 in
 stdenv.mkDerivation rec {

@@ -1,13 +1,13 @@
-{ stdenv, fetchsvn, pkgconfig, libjpeg, libpng, flex, zlib, perl, libxml2, makeWrapper, libX11, libtiff }:
+{ lib, stdenv, fetchurl, pkgconfig, libjpeg, libpng, flex, zlib, perl, libxml2
+, makeWrapper, libtiff
+, enableX11 ? false, libX11 }:
 
-let rev = 1742; in
-stdenv.mkDerivation {
-  name = "netpbm-advanced-${toString rev}";
+stdenv.mkDerivation rec {
+  name = "netpbm-10.66.00";
 
-  src = fetchsvn {
-    url = https://netpbm.svn.sourceforge.net/svnroot/netpbm/advanced;
-    inherit rev;
-    sha256 = "0csx6g0ci66nx1a6z0a9dkpfp66mdvcpp5r7g6zrx4jp18r9hzb2";
+  src = fetchurl {
+    url = "mirror://gentoo/distfiles/${name}.tar.xz";
+    sha256 = "1z33pxdir92m7jlvp5c2q44gxwj7jyf8skiqkr71kgirw4w4zsbz";
   };
 
   postPatch = /* CVE-2005-2471, from Arch */ ''
@@ -17,10 +17,13 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = "-fPIC"; # Gentoo adds this on every platform
 
-  buildInputs = [ pkgconfig flex zlib perl libpng libjpeg libxml2 makeWrapper libX11 libtiff ];
+  buildInputs =
+    [ pkgconfig flex zlib perl libpng libjpeg libxml2 makeWrapper libtiff ]
+    ++ lib.optional enableX11 libX11;
 
   configurePhase = ''
     cp config.mk.in config.mk
+    echo "STATICLIB_TOO = n" >> config.mk
     substituteInPlace "config.mk" \
         --replace "TIFFLIB = NONE" "TIFFLIB = ${libtiff}/lib/libtiff.so" \
         --replace "TIFFHDR_DIR =" "TIFFHDR_DIR = ${libtiff}/include"
@@ -38,21 +41,12 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   installPhase = ''
-    make package pkgdir=$PWD/netpbmpkg
-    # Pass answers to the script questions
-    ./installnetpbm << EOF
-    $PWD/netpbmpkg
-    $out
-    Y
-    $out/bin
-    $out/lib
-    N
-    $out/lib
-    $out/lib
-    $out/include
-    $out/man
-    N
-    EOF
+    make package pkgdir=$out
+
+    rm -rf $out/link $out/*_template $out/{pkginfo,README,VERSION} $out/man/web
+
+    mkdir -p $out/share/netpbm
+    mv $out/misc $out/share/netpbm/
 
     # wrap any scripts that expect other programs in the package to be in their PATH
     for prog in ppmquant; do

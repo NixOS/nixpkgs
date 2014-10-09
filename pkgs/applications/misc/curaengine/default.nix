@@ -3,7 +3,7 @@ let
   version = "14.03";
 in
 stdenv.mkDerivation {
-  name = "curaengine";
+  name = "curaengine-${version}";
 
   src = fetchurl {
     url = "https://github.com/Ultimaker/CuraEngine/archive/${version}.tar.gz";

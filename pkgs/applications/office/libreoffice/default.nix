@@ -42,7 +42,7 @@ let
 
      configureFlags = "--with-boost=${boost}";
 
-     buildInputs = [ boost mdds pkgconfig ];
+     buildInputs = [ boost boost.lib mdds pkgconfig ];
   };
 
   fetchThirdParty = {name, md5, brief, subDir ? ""}: fetchurl {
@@ -62,7 +62,7 @@ let
       (import ./libreoffice-srcs.nix));
     configureFlags = "--with-boost=${boost}";
 
-    buildInputs = [ boost mdds pkgconfig zlib libixion ];
+    buildInputs = [ boost boost.lib mdds pkgconfig zlib libixion ];
   };
 
   fetchSrc = {name, sha256}: fetchurl {
@@ -198,7 +198,7 @@ stdenv.mkDerivation rec {
     "--with-system-headers"
     "--with-system-openssl"
     "--with-system-openldap"
-    "--with-boost-libdir=${boost}/lib"
+    "--with-boost-libdir=${boost.lib}/lib"
     "--without-system-libwps"  # TODO
     "--without-doxygen"
 
@@ -236,7 +236,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = with xorg;
-    [ ant ArchiveZip autoconf automake bison boost cairo clucene_core
+    [ ant ArchiveZip autoconf automake bison boost boost.lib cairo clucene_core
       CompressZlib cppunit cups curl db dbus_glib expat file flex fontconfig
       freetype GConf getopt gnome_vfs gperf gst_plugins_base gstreamer gtk
       hunspell icu jdk kde4.kdelibs lcms libcdr libexttextcat unixODBC libjpeg

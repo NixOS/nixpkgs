@@ -1,30 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, gtk, libglade, libgnomecanvas, fribidi
-, libpng, popt, libgsf, enchant, wv, librsvg, bzip2, libjpeg
+{ stdenv, fetchurl, pkgconfig, gtk3, libglade, libgnomecanvas, fribidi
+, libpng, popt, libgsf, enchant, wv, librsvg, bzip2, libjpeg, perl
+, boost, libxslt
 }:
 
-stdenv.mkDerivation {
-  name = "abiword-2.8.6";
+stdenv.mkDerivation rec {
+  name = "abiword-${version}";
+  version = "3.0.0";
 
   src = fetchurl {
-    url = http://www.abisource.org/downloads/abiword/2.8.6/source/abiword-2.8.6.tar.gz;
-    sha256 = "059sd2apxdmcacc4pll880i7vm18h0kyjsq299m1mz3c7ak8k46r";
+    url = "http://www.abisource.org/downloads/abiword/${version}/source/${name}.tar.gz";
+    sha256 = "00dc3w48k2z3l1hh5b0jhzfrskqxic4lp6g7w19v6kpz02632zni";
   };
-
-  prePatch = ''
-    sed -i -e '/#include <glib\/gerror.h>/d' src/af/util/xp/ut_go_file.h
-    sed -i -e 's|#include <glib/gmacros.h>|#include <glib.h>|' \
-      goffice-bits/goffice/app/goffice-app.h
-    sed -i -e 's/ptr->jmpbuf/jmpbuf(png_ptr)/' src/af/util/xp/ut_png.cpp
-    sed -i -e 's/\(m_pPNG\)->\(jmpbuf\)/png_\2(\1)/' \
-      src/wp/impexp/gtk/ie_impGraphic_GdkPixbuf.cpp
-    sed -i -e 's/--no-undefined //' src/Makefile*
-  '';
 
   enableParallelBuilding = true;
 
   buildInputs =
-    [ pkgconfig gtk libglade librsvg bzip2 libgnomecanvas fribidi libpng popt
-      libgsf enchant wv libjpeg
+    [ pkgconfig gtk3 libglade librsvg bzip2 libgnomecanvas fribidi libpng popt
+      libgsf enchant wv libjpeg perl boost libxslt
     ];
 
   meta = with stdenv.lib; {
@@ -32,5 +24,6 @@ stdenv.mkDerivation {
     homepage = http://www.abisource.com/;
     license = licenses.gpl3;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ pSub ];
   };
 }

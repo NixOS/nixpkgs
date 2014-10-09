@@ -13,38 +13,49 @@ let
   dest = if cfg.externalIP == null then "-j MASQUERADE" else "-j SNAT --to-source ${cfg.externalIP}";
 
   flushNat = ''
-    iptables -w -t nat -F PREROUTING
-    iptables -w -t nat -F POSTROUTING
-    iptables -w -t nat -X
+    iptables -w -t nat -D PREROUTING -j nixos-nat-pre 2>/dev/null|| true
+    iptables -w -t nat -F nixos-nat-pre 2>/dev/null || true
+    iptables -w -t nat -X nixos-nat-pre 2>/dev/null || true
+    iptables -w -t nat -D POSTROUTING -j nixos-nat-post 2>/dev/null || true
+    iptables -w -t nat -F nixos-nat-post 2>/dev/null || true
+    iptables -w -t nat -X nixos-nat-post 2>/dev/null || true
   '';
 
   setupNat = ''
+    # Create subchain where we store rules
+    iptables -w -t nat -N nixos-nat-pre
+    iptables -w -t nat -N nixos-nat-post
+
     # We can't match on incoming interface in POSTROUTING, so
     # mark packets coming from the external interfaces.
     ${concatMapStrings (iface: ''
-      iptables -w -t nat -A PREROUTING \
+      iptables -w -t nat -A nixos-nat-pre \
         -i '${iface}' -j MARK --set-mark 1
     '') cfg.internalInterfaces}
 
     # NAT the marked packets.
     ${optionalString (cfg.internalInterfaces != []) ''
-      iptables -w -t nat -A POSTROUTING -m mark --mark 1 \
+      iptables -w -t nat -A nixos-nat-post -m mark --mark 1 \
         -o ${cfg.externalInterface} ${dest}
     ''}
 
     # NAT packets coming from the internal IPs.
     ${concatMapStrings (range: ''
-      iptables -w -t nat -A POSTROUTING \
+      iptables -w -t nat -A nixos-nat-post \
         -s '${range}' -o ${cfg.externalInterface} ${dest}
     '') cfg.internalIPs}
 
     # NAT from external ports to internal ports.
     ${concatMapStrings (fwd: ''
-      iptables -w -t nat -A PREROUTING \
+      iptables -w -t nat -A nixos-nat-pre \
         -i ${cfg.externalInterface} -p tcp \
         --dport ${builtins.toString fwd.sourcePort} \
         -j DNAT --to-destination ${fwd.destination}
     '') cfg.forwardPorts}
+
+    # Append our chains to the nat tables
+    iptables -w -t nat -A PREROUTING -j nixos-nat-pre
+    iptables -w -t nat -A POSTROUTING -j nixos-nat-post
   '';
 
 in
@@ -157,7 +168,7 @@ in
       extraStopCommands = flushNat;
     };
 
-    systemd.services =  mkIf (!config.networking.firewall.enable) { nat = {
+    systemd.services = mkIf (!config.networking.firewall.enable) { nat = {
       description = "Network Address Translation";
       wantedBy = [ "network.target" ];
       after = [ "network-interfaces.target" "systemd-modules-load.service" ];
