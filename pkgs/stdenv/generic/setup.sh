@@ -101,7 +101,7 @@ exitHandler() {
         if [ -n "$succeedOnFailure" ]; then
             echo "build failed with exit code $exitCode (ignored)"
             mkdir -p "$out/nix-support"
-            echo -n $exitCode > "$out/nix-support/failed"
+            printf "%s" $exitCode > "$out/nix-support/failed"
             exit 0
         fi
 
@@ -339,7 +339,7 @@ substitute() {
     local n p pattern replacement varName content
 
     # a slightly hacky way to keep newline at the end
-    content="$(cat "$input"; echo -n X)"
+    content="$(cat "$input"; printf "%s" X)"
     content="${content%X}"
 
     for ((n = 2; n < ${#params[*]}; n += 1)); do
@@ -367,8 +367,7 @@ substitute() {
         content="${content//"$pattern"/$replacement}"
     done
 
-    # !!! This doesn't work properly if $content is "-n".
-    echo -n "$content" > "$output".tmp
+    printf "%s" "$content" > "$output".tmp
     if [ -x "$output" ]; then chmod +x "$output".tmp; fi
     mv -f "$output".tmp "$output"
 }
