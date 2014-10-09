@@ -2203,6 +2203,8 @@ let
   envisage = buildPythonPackage {
     name = "envisage";
     version = "4.4.0";
+    disabled = isPy3k;
+
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/e/envisage/envisage-4.4.0.tar.gz";
       md5 = "35547a7b5736de292a264cba4326bca4";
@@ -5047,6 +5049,8 @@ let
   mayavi = buildPythonPackage {
     name = "mayavi";
     version = "4.3.1";
+    disabled = isPy3k;
+
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/m/mayavi/mayavi-4.3.1.tar.gz";
       sha256 = "0ca8zpsxyram98a3k0xa1gw6wc2mxhmjirqxsh1169wc4cymf2ss";
