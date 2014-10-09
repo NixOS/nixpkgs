@@ -6880,7 +6880,7 @@ let
 
     meta = {
       description = "SOCKS module for Python";
-      license     = licenses.bsd;
+      license     = licenses.bsd3;
       maintainers = [ maintainers.thoughtpolice ];
     };
   };
