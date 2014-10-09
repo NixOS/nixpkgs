@@ -9021,11 +9021,11 @@ let
 
   twitter = buildPythonPackage rec {
     name = "twitter-${version}";
-    version = "1.14.3";
+    version = "1.15.0";
 
     src = fetchurl {
       url    = "https://pypi.python.org/packages/source/t/twitter/${name}.tar.gz";
-      sha256 = "1nhhjajbq0jik43q2makpnz094qcziq9p8rj35jxamybd0hwwzs9";
+      sha256 = "1m6b17irb9klc345k8174pni724jzy2973z2x2jg69h83hipjw2c";
     };
 
     doCheck = false;
