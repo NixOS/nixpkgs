@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake x11 ];
   propagatedBuildInputs = [ x11 ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Dlib is a general purpose cross-platform C++ machine learning library.";
     homepage = http://www.dlib.net;
     license = stdenv.lib.licenses.boost;
-    maintainers = [ ];
+    maintainers = with maintainers; [ christopherpoole ];
     platforms = stdenv.lib.platforms.all;
   };
 }
