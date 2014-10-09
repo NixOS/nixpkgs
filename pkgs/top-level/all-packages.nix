@@ -3948,6 +3948,8 @@ let
 
   pypi2nix = python27Packages.pypi2nix;
 
+  svg2tikz = python27Packages.svg2tikz;
+
   pyrex = pyrex095;
 
   pyrex095 = callPackage ../development/interpreters/pyrex/0.9.5.nix { };
