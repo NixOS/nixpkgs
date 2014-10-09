@@ -5052,8 +5052,8 @@ let
       sha256 = "0ca8zpsxyram98a3k0xa1gw6wc2mxhmjirqxsh1169wc4cymf2ss";
     };     
     
-    buildInputs = [ numpy pkgs.vtk wxPython30 pyface configobj traitsui apptools envisage ];
-    propagatedBuildInputs = [ numpy pkgs.vtk wxPython30 pyface configobj traitsui apptools envisage ];
+    buildInputs = [ numpy pkgs.vtkWithPython wxPython30 pyface configobj traitsui apptools envisage ];
+    propagatedBuildInputs = [ numpy pkgs.vtkWithPython wxPython30 pyface configobj traitsui apptools envisage ];
   };
 
 
