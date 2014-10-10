@@ -9,7 +9,7 @@ let
   srcs = {
     golang = fetchurl {
       url = https://storage.googleapis.com/golang/go1.3.3.src.tar.gz;
-      sha256 = "1zym3kcl7hb8yb05syr2c549kq6cjkcmbbvmm1b9g2zykklgvdhv";
+      sha1 = "b54b7deb7b7afe9f5d9a3f5dd830c7dede35393a";
     };
     tools = fetchhg {
       url = https://code.google.com/p/go.tools/;
