@@ -1,4 +1,7 @@
-{ stdenv, ghc, makeWrapper, coreutils, writeScript }:
+{ stdenv, haskellCompiler, makeWrapper, coreutils, writeScript }:
+let
+  ghc = haskellCompiler;
+in
 
 let
   ghc761OrLater = !stdenv.lib.versionOlder ghc.version "7.6.1";

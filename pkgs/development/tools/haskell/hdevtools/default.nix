@@ -6,6 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "1a218m817q35f52fv6mn28sfv136i6fm2mzgdidpm24pc0585gl7";
   isLibrary = false;
   isExecutable = true;
+  wrapExecutables = true;
   patches = [ (fetchurl { url = "https://github.com/ts468/hdevtools/pull/2.patch"; md5 = "256609d2d3f5b719caa0002ee579d169"; }) ];
   buildDepends = [ cmdargs ghcPaths network syb time ];
   meta = {

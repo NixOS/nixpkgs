@@ -145,20 +145,26 @@
 
   # Abstraction for Haskell packages collections
   packagesFun = makeOverridable
-   ({ ghcPath
+   ({ ghcPath ? null
+    , haskellCompiler ? callPackage ghcPath ({ ghc = ghcBinary; } // extraArgs)
     , ghcBinary ? ghc6101Binary
     , prefFun
     , extension ? (self : super : {})
     , profExplicit ? false, profDefault ? false
     , modifyPrio ? lowPrio
     , extraArgs ? {}
+    , cabalPackage ? import ../build-support/cabal/default.nix
+    , haskellCompilerWrapperPackage ? import ../development/compilers/ghc/wrapper.nix
+    , haskellCompilerWithPackagesPackage ? import ../development/compilers/ghc/with-packages.nix
+    , haskellCompilerBinaryName ? "ghc"
     } :
     let haskellPackagesClass = import ./haskell-packages.nix {
-          inherit pkgs newScope modifyPrio;
+          inherit pkgs newScope modifyPrio cabalPackage;
           enableLibraryProfiling =
             if profExplicit then profDefault
                             else config.cabal.libraryProfiling or profDefault;
-          ghc = callPackage ghcPath ({ ghc = ghcBinary; } // extraArgs);
+          inherit haskellCompiler;
+          inherit haskellCompilerWrapperPackage haskellCompilerWithPackagesPackage haskellCompilerBinaryName;
         };
         haskellPackagesPrefsClass = self : let super = haskellPackagesClass self; in super // prefFun self super;
         haskellPackagesExtensionClass = self : let super = haskellPackagesPrefsClass self; in super // extension self super;
@@ -228,6 +234,9 @@
     packages { ghcPath = ../development/compilers/ghc/7.8.3.nix;
                ghcBinary = ghc742Binary;
                prefFun = ghc783Prefs;
+               cabalPackage = import ../build-support/cabal/default-new.nix;
+               haskellCompilerWrapperPackage = import ../development/compilers/ghc/wrapper-new.nix;
+               haskellCompilerWithPackagesPackage = import ../development/compilers/ghc/with-packages-new.nix;
              };
 
   packages_ghc763 =
@@ -264,4 +273,21 @@
                prefFun = ghc6104Prefs;
              };
 
+
+  packages_haste043 =
+    packages { ghcBinary = null;
+               haskellCompiler = pkgs.haskellPackages_ghc783.callPackage ../development/compilers/haste/0.4.3.nix {
+                 cabalInstall=pkgs.haskellPackages_ghc783.cabalInstall_1_18_0_3;
+                 deepseqBoot=pkgs.haskellPackages_ghc783.deepseq_1_3_0_2;
+                 transformersBoot=pkgs.haskellPackages_ghc783.transformers_0_4_1_0;
+               };
+               prefFun = self : super : super // {
+                 ghcPaths = super.callPackage ../development/libraries/haskell/ghc-paths/haste.nix {};
+               };
+               profExplicit = false;
+               cabalPackage = import ../build-support/cabal/default-new.nix;
+               haskellCompilerBinaryName = "haste";
+               haskellCompilerWrapperPackage = import ../development/compilers/haste/wrapper.nix;
+               haskellCompilerWithPackagesPackage = import ../development/compilers/haste/with-packages.nix;
+             };
 }
