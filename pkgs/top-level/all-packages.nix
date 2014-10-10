@@ -255,6 +255,12 @@ let
     { substitutions = { inherit autoconf automake libtool; }; }
     ../build-support/setup-hooks/autoreconf.sh;
 
+  buildRustPackage = import ../build-support/rust {
+    inherit stdenv cacert;
+    cargo = cargoSnapshot;
+    rustc = rustcMaster;
+  };
+
   buildEnv = import ../build-support/buildenv {
     inherit (pkgs) runCommand perl;
   };
@@ -4361,6 +4367,8 @@ let
   };
 
   byacc = callPackage ../development/tools/parsing/byacc { };
+
+  cargo = callPackage ../development/tools/build-managers/cargo { };
 
   cargoSnapshot = callPackage ../development/tools/build-managers/cargo/snapshot.nix { };
 
