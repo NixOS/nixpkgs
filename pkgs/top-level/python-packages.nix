@@ -604,6 +604,7 @@ let
   babelfish = buildPythonPackage rec {
     version = "0.5.3";
     name = "babelfish-${version}";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/b/babelfish/${name}.tar.gz";
@@ -4276,6 +4277,7 @@ let
   guessit = buildPythonPackage rec {
     version = "0.9.3";
     name = "guessit-${version}";
+    disabled = isPy3k;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/g/guessit/${name}.tar.gz";
