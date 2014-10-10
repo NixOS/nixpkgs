@@ -11,7 +11,7 @@ extraBefore=()
 #done
 
 # Optionally print debug info.
-if test "$NIX_DEBUG" = "1"; then
+if [ -n "$NIX_DEBUG" ]; then
   echo "original flags to @prog@:" >&2
   for i in "$@"; do
       echo "  $i" >&2
@@ -26,7 +26,7 @@ if test "$NIX_DEBUG" = "1"; then
   done
 fi
 
-if test -n "$NIX_GNAT_WRAPPER_EXEC_HOOK"; then
+if [ -n "$NIX_GNAT_WRAPPER_EXEC_HOOK" ]; then
     source "$NIX_GNAT_WRAPPER_EXEC_HOOK"
 fi
 

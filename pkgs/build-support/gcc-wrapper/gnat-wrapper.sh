@@ -1,10 +1,10 @@
 #! @shell@ -e
 
-if test -n "$NIX_GNAT_WRAPPER_START_HOOK"; then
+if [ -n "$NIX_GNAT_WRAPPER_START_HOOK" ]; then
     source "$NIX_GNAT_WRAPPER_START_HOOK"
 fi
 
-if test -z "$NIX_GNAT_WRAPPER_FLAGS_SET"; then
+if [ -z "$NIX_GNAT_WRAPPER_FLAGS_SET" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 
@@ -18,14 +18,14 @@ getVersion=0
 nonFlagArgs=0
 
 for i in "$@"; do
-    if test "$i" = "-c"; then
+    if [ "$i" = -c ]; then
         dontLink=1
-    elif test "$i" = "-M"; then
+    elif [ "$i" = -M ]; then
         dontLink=1
-    elif test "${i:0:1}" != "-"; then
+    elif [ "${i:0:1}" != - ]; then
         nonFlagArgs=1
-    elif test "$i" = "-m32"; then
-        if test -e @out@/nix-support/dynamic-linker-m32; then
+    elif [ "$i" = -m32 ]; then
+        if [ -e @out@/nix-support/dynamic-linker-m32 ]; then
             NIX_LDFLAGS="$NIX_LDFLAGS -dynamic-linker $(cat @out@/nix-support/dynamic-linker-m32)"
         fi
     fi
@@ -36,26 +36,26 @@ done
 # "-c" flag).  So if no non-flag arguments are given, don't pass any
 # linker flags.  This catches cases like "gcc" (should just print
 # "gcc: no input files") and "gcc -v" (should print the version).
-if test "$nonFlagArgs" = "0"; then
+if [ "$nonFlagArgs" = 0 ]; then
     dontLink=1
 fi
 
 
 # Optionally filter out paths not refering to the store.
 params=("$@")
-if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE"; then
+if [ "$NIX_ENFORCE_PURITY" = 1 -a -n "$NIX_STORE" ]; then
     rest=()
     n=0
-    while test $n -lt ${#params[*]}; do
+    while [ $n -lt ${#params[*]} ]; do
         p=${params[n]}
         p2=${params[$((n+1))]}
-        if test "${p:0:3}" = "-L/" && badPath "${p:2}"; then
+        if [ "${p:0:3}" = -L/ ] && badPath "${p:2}"; then
             skip $p
-        elif test "${p:0:3}" = "-I/" && badPath "${p:2}"; then
+        elif [ "${p:0:3}" = -I/ ] && badPath "${p:2}"; then
             skip $p
-        elif test "${p:0:4}" = "-aI/" && badPath "${p:3}"; then
+        elif [ "${p:0:4}" = -aI/ ] && badPath "${p:3}"; then
             skip $p
-        elif test "${p:0:4}" = "-aO/" && badPath "${p:3}"; then
+        elif [ "${p:0:4}" = -aO/ ] && badPath "${p:3}"; then
             skip $p
         else
             rest=("${rest[@]}" "$p")
@@ -81,7 +81,7 @@ fi
 #done
 
 # Optionally print debug info.
-if test "$NIX_DEBUG" = "1"; then
+if [ -n "$NIX_DEBUG" ]; then
   echo "original flags to @prog@:" >&2
   for i in "${params[@]}"; do
       echo "  $i" >&2
@@ -96,7 +96,7 @@ if test "$NIX_DEBUG" = "1"; then
   done
 fi
 
-if test -n "$NIX_GNAT_WRAPPER_EXEC_HOOK"; then
+if [ -n "$NIX_GNAT_WRAPPER_EXEC_HOOK" ]; then
     source "$NIX_GNAT_WRAPPER_EXEC_HOOK"
 fi
 
