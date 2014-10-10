@@ -136,7 +136,7 @@ let
   #
   GHCGetPackages =
     let
-      ghc761OrLater = !stdenv.lib.versionOlder ghc.version "7.6.1";
+      ghc761OrLater = !stdenv.lib.versionOlder ghcPlain.version "7.6.1";
       packageDBFlag = if ghc761OrLater then "-package-db" else "-package-conf";
     in
       writeScript "ghc-get-packages.sh" ''
