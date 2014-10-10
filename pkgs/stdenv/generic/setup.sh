@@ -1,4 +1,5 @@
 set -e
+set -o pipefail
 
 : ${outputs:=out}
 
@@ -568,10 +569,6 @@ patchPhase() {
 
     for i in $patches; do
         header "applying patch $i" 3
-        if [ ! -r "$i" ]; then
-            echo "file $i does not exist or not readable"
-            exit 1
-        fi
         local uncompress=cat
         case "$i" in
             *.gz)
