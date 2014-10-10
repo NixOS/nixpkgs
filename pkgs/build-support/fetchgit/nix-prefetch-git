@@ -224,7 +224,7 @@ make_deterministic_repo(){
         fi
     done
 
-    # Do a full repack. Must run single-threaded, or else we loose determinism.
+    # Do a full repack. Must run single-threaded, or else we lose determinism.
     git config pack.threads 1
     git repack -A -d -f
     rm -f .git/config

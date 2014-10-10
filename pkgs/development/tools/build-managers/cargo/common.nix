@@ -3,6 +3,16 @@
 {
   inherit version;
 
+  name = "cargo-${version}";
+
+  postInstall = ''
+    rm "$out/lib/rustlib/components" \
+       "$out/lib/rustlib/install.log" \
+       "$out/lib/rustlib/rust-installer-version" \
+       "$out/lib/rustlib/uninstall.sh" \
+       "$out/lib/rustlib/manifest-cargo"
+  '';
+
   platform = if stdenv.system == "i686-linux"
     then "i686-unknown-linux-gnu"
     else if stdenv.system == "x86_64-linux"
@@ -20,5 +30,5 @@
     platforms = platforms.linux;
   };
 
-  name = "cargo-${version}";
+  setupHook = ./setup-hook.sh;
 }

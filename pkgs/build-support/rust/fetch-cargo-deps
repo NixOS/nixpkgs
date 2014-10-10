@@ -1,0 +1,119 @@
+#! /bin/sh -eu
+
+set -o pipefail
+
+src=$(realpath $1)
+out=$(realpath $2)
+
+echo "Fetching $src to $out"
+
+mkdir $out
+
+# Configure cargo to fetch from a local copy of the crates.io registry
+#
+# Unfortunately, `cargo fetch` will create an output directory named after a
+# hash of the registry index URL.
+#
+# This makes things difficult for us because we don't want our output to change
+# just because the path to the registry changed, otherwise we'd have to update
+# all deps' SHA256 hashes whenever we simply update the registry to a newer
+# commit.
+#
+# Also, since cargo doesn't seem to support relative URLs in the format
+# file://../path, we use a hack to make sure the registry index path/URL is
+# always the same: we'll create a symlink in the current working directory to
+# the real registry path, while pointing cargo to the following fixed absolute
+# path:
+#
+# file:///proc/self/cwd/symlink-name
+
+ln -s $rustRegistry $src/cargo-rust-registry
+
+# TODO: replace /proc/self/cwd hack with normal relative path. Probably
+# needs cargo fix.
+cat <<EOF > $out/config
+[registry]
+index = "file:///proc/self/cwd/cargo-rust-registry"
+EOF
+
+export CARGO_HOME=$out
+cd $src
+cargo fetch --verbose
+
+# TODO: check that Cargo.lock exists, and hasn't changed
+# TODO: this should be done by cargo itself
+
+# Make it deterministic
+
+# The registry index changes all the time, so it's not deterministic
+rm -rf $out/registry/index
+
+# Make git DBs deterministic
+# TODO: test with git submodules
+[[ ! -d $out/git/checkouts ]] || (cd $out/git/checkouts && for name in *; do
+    cd "$out/git/checkouts/$name"
+    revs=""
+    for branch in *; do
+        cd "$branch"
+        rev="$(git rev-parse HEAD)"
+        revs="$revs $rev"
+        cd ..
+    done
+
+    (
+        # The following code was adapted from nix-prefetch-git
+
+        cd "$out/git/db/$name"
+
+        export GIT_DIR=.
+
+        # Remove all remote branches
+        git branch -r | while read branch; do
+            git branch -rD "$branch" >&2
+        done
+
+        # Remove tags that don't point to any HEAD
+        git tag | while read tag; do
+            rev="$(git rev-parse $tag)"
+            if [[ $revs != *" $rev"* ]]; then
+                git tag -d "$tag" >&2
+            fi
+        done
+
+        # Remove branches that don't point to any HEAD
+        branchrefs=()
+        eval "$(git for-each-ref --shell --format='branchrefs+=(%(refname))' refs/heads/)"
+
+        for branchref in "${branchrefs[@]}"; do
+            echo "Examining $branchref"
+            rev="$(git rev-parse "$branchref")"
+            echo "Has rev $rev"
+            echo "List of revs: $revs"
+            if [[ $revs != *" $rev"* ]]; then
+                echo "Deleting $branchref"
+                git update-ref -d "$branchref" >&2
+            fi
+        done
+
+        echo "$revs" | while read rev; do
+            echo "git branch b_$rev $rev"
+            git branch b_$rev $rev
+        done
+
+        # Remove files that have timestamps or otherwise have non-deterministic
+        # properties.
+        rm -rf logs/ hooks/ index FETCH_HEAD ORIG_HEAD refs/remotes/origin/HEAD config
+
+        # Do a full repack. Must run single-threaded, or else we lose determinism.
+        git config pack.threads 1
+        git repack -A -d -f
+        rm -f config
+
+        # Garbage collect unreferenced objects.
+        git gc --prune=all
+    )
+done)
+
+# Remove unneeded outputs
+[[ ! -d $out/registry/src ]] || rm -rf $out/registry/src
+[[ ! -d $out/git/checkouts ]] || rm -rf $out/git/checkouts
