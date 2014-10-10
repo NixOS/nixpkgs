@@ -1,13 +1,8 @@
 { autonix, docbook_xml_dtd_45, docbook_xml_xslt }:
 
-with autonix;
+with autonix.package;
 
 {
-  manifestRules = [
-    (addInput (input "pythoninterp") "")
-    (addInput (input "gettext") "")
-  ];
-
   derivationRules = [
     (manifest: attrs: attrs // {
       setupHook = ./setup-hook.sh;

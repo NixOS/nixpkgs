@@ -1,8 +1,6 @@
-{ pkgs, autonix, stdenv
-, qt53
-}:
+{ pkgs, autonix, stdenv, callAutoCollection }:
 
-with autonix;
+with autonix.collection;
 with stdenv.lib;
 
 callAutoCollection ./. {
@@ -10,42 +8,58 @@ callAutoCollection ./. {
   manifestRules = [
     breakRecursion
 
-    (renameInput "pythoninterp" "python")
+    (substInputs {
+      cmake = {
+        native = true;
+        propagated = true;
+      };
 
-    (userEnvPkgs [
-      "shared_mime_info"
-    ])
+      ecm = {
+        name = "extra-cmake-modules";
+        native = true;
+        propagated = true;
+      };
 
-    (propagateInputs [
-      "cmake"
-      "gettext"
-      "pkgconfig"
-      "shared_mime_info"
-    ])
+      kdoctools = { native = true; };
 
-    (nativeInputs [
-      "cmake"
-      "gettext"
-      "kdoctools"
-      "pkgconfig"
-      "pythoninterp"
-      "shared_mime_info"
-    ])
+      # Removing the "kf5" prefix of the input names gives an extra "k"
+      kattica = { name = "attica"; };
+      kkio = { name = "kio"; };
+      ksonnet = { name = "sonnet"; };
+
+      openexr = { name = "ilmbase"; };
+
+      pkgconfig = {
+        name = "pkgconfig";
+        propagated = true;
+        native = true;
+      };
+
+      polkitqt = { name = "polkit_qt5_1"; };
+
+      pythoninterp = {
+        name = "python";
+        native = true;
+      };
+
+      sharedmimeinfo = {
+        name = "shared_mime_info";
+        userEnv = true;
+        propagated = true;
+        native = true;
+      };
+    })
 
     (mapInputNames (name: if hasPrefix "qt5" name then "qt5" else name))
-    (renameInput "ecm" "extra-cmake-modules")
-    (renameInput "openexr" "ilmbase")
-    (renameInput "sharedmimeinfo" "shared_mime_info")
 
-    (mapInputNames (name:
-      if hasPrefix "kf5" name && name != "kf5"
-        then "k" + removePrefix "kf5" name
-      else name))
-
-    (perPackage {
-      extra-cmake-modules = filterInputsByName (n: !(hasPrefix "kf5" n));
-    })
+    (mapInputs (i:
+      if hasPrefix "kf5" i.name && i.name != "kf5"
+        then i // { name = "k" + removePrefix "kf5" i.name; propagated = true; }
+      else i))
   ];
 
-  scope = pkgs // { qt5 = qt53; };
+  scope = with pkgs; pkgs // {
+    phonon = phonon_qt5;
+    qt5 = qt53;
+  };
 }
