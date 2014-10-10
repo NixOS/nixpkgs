@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, lablgtk, findlib, mesa, freeglut } :
+{stdenv, fetchurl, ocaml, lablgtk, findlib, mesa, freeglut, camlp4 } :
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "0qabydd219i4ak7hxgc67496qnnscpnydya2m4ijn3cpbgih7zyq";
   };
 
-  buildInputs = [ocaml findlib lablgtk freeglut ];
+  buildInputs = [ocaml findlib lablgtk freeglut camlp4];
   propagatedBuildInputs = [ mesa ];
 
   patches = [ ./Makefile.config.patch ./META.patch ];
