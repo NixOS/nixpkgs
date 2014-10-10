@@ -2,15 +2,15 @@ export NIX_GCC=@out@
 
 addCVars () {
     if [ -d $1/include ]; then
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem $1/include"
+        export NIX_CFLAGS_COMPILE+=" -isystem $1/include"
     fi
 
     if [ -d $1/lib64 -a ! -L $1/lib64 ]; then
-        export NIX_LDFLAGS="$NIX_LDFLAGS -L$1/lib64"
+        export NIX_LDFLAGS+=" -L$1/lib64"
     fi
 
     if [ -d $1/lib ]; then
-        export NIX_LDFLAGS="$NIX_LDFLAGS -L$1/lib"
+        export NIX_LDFLAGS+=" -L$1/lib"
     fi
 }
 
