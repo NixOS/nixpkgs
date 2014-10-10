@@ -3536,6 +3536,7 @@ let
     };
 
     ocaml_react = callPackage ../development/ocaml-modules/react { };
+    reactivedata = callPackage ../development/ocaml-modules/reactivedata {};
 
     ocamlsdl= callPackage ../development/ocaml-modules/ocamlsdl { };
 
