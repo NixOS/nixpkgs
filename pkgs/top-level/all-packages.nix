@@ -3535,6 +3535,8 @@ let
       inherit pcre;
     };
 
+    pgocaml = callPackage ../development/ocaml-modules/pgocaml {};
+
     ocaml_react = callPackage ../development/ocaml-modules/react { };
     reactivedata = callPackage ../development/ocaml-modules/reactivedata {};
 
