@@ -18,7 +18,9 @@ stdenv.mkDerivation {
     # for flock
     stdenv.lib.optional stdenv.isLinux [ utillinux ];
 
-  buildPhase = "bash do";
+  buildPhase =
+    stdenv.lib.optionalString stdenv.isArm "Seccomp_NO=1 "
+    + "bash do";
   installPhase = ''
     installBin cjdroute makekeys privatetopublic publictoip6
     sed -i 's,/usr/bin/env node,'$(type -P node), \
