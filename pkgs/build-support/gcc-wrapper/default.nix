@@ -143,6 +143,14 @@ stdenv.mkDerivation {
 
       wrap ld ${./ld-wrapper.sh} $ld
 
+      if [ -e $binutils/bin/ld.gold ]; then
+        wrap ld.gold ${./ld-wrapper.sh} $binutils/bin/ld.gold
+      fi
+
+      if [ -e $binutils/bin/ld.bfd ]; then
+        wrap ld.bfd ${./ld-wrapper.sh} $binutils/bin/ld.bfd
+      fi
+
       if [ -e $gccPath/gcc ]; then
         wrap gcc ${./gcc-wrapper.sh} $gccPath/gcc
         ln -s gcc $out/bin/cc
