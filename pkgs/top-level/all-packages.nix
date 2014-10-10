@@ -665,6 +665,8 @@ let
 
   direnv = callPackage ../tools/misc/direnv { };
 
+  discount = callPackage ../tools/text/discount { };
+
   ditaa = callPackage ../tools/graphics/ditaa { };
 
   dlx = callPackage ../misc/emulators/dlx { };
