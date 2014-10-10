@@ -20,12 +20,20 @@ callAutoCollection ./. {
         propagated = true;
       };
 
+      gif = { name = "giflib"; };
+
       kdoctools = { native = true; };
 
       # Removing the "kf5" prefix of the input names gives an extra "k"
       kattica = { name = "attica"; };
       kkio = { name = "kio"; };
+      kplasma = { name = "plasma-framework"; };
+      ksolid = { name = "solid"; };
       ksonnet = { name = "sonnet"; };
+      kthreadweaver = { name = "threadweaver"; };
+      kwebkit = { name = "kdewebkit"; };
+
+      libcap = { name = "libcap_progs"; native = true; userEnv = true; };
 
       openexr = { name = "ilmbase"; };
 
