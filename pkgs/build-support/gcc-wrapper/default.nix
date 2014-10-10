@@ -7,7 +7,7 @@
 
 { name ? "", stdenv, nativeTools, nativeLibc, nativePrefix ? ""
 , gcc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? stdenv.shell
-, zlib ? null
+, zlib ? null, extraPackages ? []
 }:
 
 with stdenv.lib;
@@ -124,6 +124,8 @@ stdenv.mkDerivation {
       # you get tools like gcov, the manpages, etc. as well (including
       # for binutils and Glibc).
       echo $gcc $binutils $libc > $out/nix-support/propagated-user-env-packages
+
+      echo ${toString extraPackages} > $out/nix-support/propagated-native-build-inputs
     ''
 
     + optionalString (stdenv.isSunOS && nativePrefix != "") ''
@@ -161,6 +163,16 @@ stdenv.mkDerivation {
         ln -s g++ $out/bin/c++
       fi
 
+      if [ -e $gccPath/clang ]; then
+        wrap clang ${./gcc-wrapper.sh} $gccPath/clang
+        ln -s clang $out/bin/cc
+      fi
+
+      if [ -e $gccPath/clang++ ]; then
+        wrap clang++ ${./gcc-wrapper.sh} $gccPath/clang++
+        ln -s clang++ $out/bin/c++
+      fi
+
       if [ -e $gccPath/cpp ]; then
         wrap cpp ${./gcc-wrapper.sh} $gccPath/cpp
       fi
@@ -195,6 +207,14 @@ stdenv.mkDerivation {
       substituteAll ${./setup-hook.sh} $out/nix-support/setup-hook
       substituteAll ${./add-flags} $out/nix-support/add-flags.sh
       cp -p ${./utils.sh} $out/nix-support/utils.sh
+
+      if [ -e $out/bin/clang ]; then
+        echo 'export CC; : ''${CC:=clang}' >> $out/nix-support/setup-hook
+      fi
+
+      if [ -e $out/bin/clang++ ]; then
+        echo 'export CXX; : ''${CXX:=clang++}' >> $out/nix-support/setup-hook
+      fi
     '';
 
   # The dynamic linker has different names on different Linux platforms.

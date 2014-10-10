@@ -24,13 +24,13 @@ import ../generic rec {
 
   system = stdenv.system;
 
-  gcc = import ../../build-support/clang-wrapper {
+  gcc = import ../../build-support/gcc-wrapper {
     nativeTools = false;
     nativeLibc = true;
     inherit stdenv;
     extraPackages = stdenv.lib.optional haveLibCxx pkgs.libcxx;
     binutils = import ../../build-support/native-darwin-cctools-wrapper {inherit stdenv;};
-    clang = if useClang33 then pkgs.clang_33.clang else pkgs.clang.clang;
+    gcc = if useClang33 then pkgs.clang_33.gcc else pkgs.clang.gcc;
     coreutils = pkgs.coreutils;
     shell = pkgs.bash + "/bin/sh";
   };

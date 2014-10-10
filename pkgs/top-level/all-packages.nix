@@ -2763,10 +2763,10 @@ let
 
   ccl = builderDefsPackage ../development/compilers/ccl {};
 
-  clang = wrapClang llvmPackages.clang;
+  clang = wrapGCC llvmPackages.clang;
 
-  clang_34 = wrapClang llvmPackages_34.clang;
-  clang_33 = wrapClang (clangUnwrapped llvm_33 ../development/compilers/llvm/3.3/clang.nix);
+  clang_34 = wrapGCC llvmPackages_34.clang;
+  clang_33 = wrapGCC (clangUnwrapped llvm_33 ../development/compilers/llvm/3.3/clang.nix);
 
   clangAnalyzer = callPackage ../development/tools/analysis/clang-analyzer {
     clang = clang_34;
@@ -2779,8 +2779,8 @@ let
 
   clangSelf = clangWrapSelf llvmPackagesSelf.clang;
 
-  clangWrapSelf = build: (import ../build-support/clang-wrapper) {
-    clang = build;
+  clangWrapSelf = build: (import ../build-support/gcc-wrapper) {
+    gcc = build;
     stdenv = clangStdenv;
     libc = glibc;
     binutils = binutils;
@@ -3667,18 +3667,6 @@ let
     libc = glibc;
     inherit stdenv binutils coreutils zlib;
   };
-
-  wrapClangWith = clangWrapper: glibc: baseClang: clangWrapper {
-    nativeTools = stdenv.gcc.nativeTools or false;
-    nativeLibc = stdenv.gcc.nativeLibc or false;
-    nativePrefix = stdenv.gcc.nativePrefix or "";
-    clang = baseClang;
-    libc = glibc;
-    binutils = stdenv.gcc.binutils;
-    inherit stdenv coreutils zlib;
-  };
-
-  wrapClang = wrapClangWith (makeOverridable (import ../build-support/clang-wrapper)) glibc;
 
   wrapGCC = wrapGCCWith (makeOverridable (import ../build-support/gcc-wrapper)) glibc;
 
