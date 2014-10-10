@@ -6294,7 +6294,14 @@ let
 
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
 
-  phonon = callPackage ../development/libraries/phonon { };
+  phonon = callPackage ../development/libraries/phonon {
+    qt = qt4;
+  };
+
+  phonon4qt5 = callPackage ../development/libraries/phonon {
+    qt = qt53;
+    useQt5 = true;
+  };
 
   phonon_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer { };
 
