@@ -128,6 +128,42 @@ let
           echo -n "$path:"
         done
       '';
+
+  #
+  # The function is kept for compatibility only.
+  # It is used in the haddock nix expression.
+  # Please don't use that package in new nix-expressions!
+  #
+  GHCGetPackages =
+    let
+      ghc761OrLater = !stdenv.lib.versionOlder ghc.version "7.6.1";
+      packageDBFlag = if ghc761OrLater then "-package-db" else "-package-conf";
+    in
+      writeScript "ghc-get-packages.sh" ''
+        #! ${stdenv.shell}
+        # Usage:
+        #  $1: version of GHC
+        #  $2: invocation path of GHC
+        #  $3: prefix
+        version="$1"
+        if test -z "$3"; then
+          prefix="${packageDBFlag} "
+        else
+          prefix="$3"
+        fi
+        PATH="$2:$PATH"
+        IFS=":"
+        for p in $PATH; do
+          PkgDir="$p/../lib/ghc-$version/package.conf.d"
+          for i in "$PkgDir/"*.installedconf; do
+            # output takes place here
+            test -f $i && echo -n " $prefix$i"
+          done
+        done
+        test -f "$2/../lib/ghc-$version/package.conf" && echo -n " $prefix$2/../lib/ghc-$version/package.conf"
+        '';
+
+
 in
 let
   ghc761OrLater = !stdenv.lib.versionOlder ghcPlain.version "7.6.1";
@@ -185,7 +221,7 @@ stdenv.mkDerivation {
   '');
 
   ghc = ghcPlain; # keep for now for compatibility reasons; maybe delete later
-  inherit ghcPlain GHCPackages;
+  inherit ghcPlain GHCPackages GHCGetPackages;
   inherit (ghcPlain) meta version;
 
   # support information for cabal build-support
