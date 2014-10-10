@@ -149,11 +149,11 @@ fi
 
 # Optionally print debug info.
 if test "$NIX_DEBUG" = "1"; then
-  echo "original flags to @ld@:" >&2
+  echo "original flags to @prog@:" >&2
   for i in "${params[@]}"; do
       echo "  $i" >&2
   done
-  echo "extra flags to @ld@:" >&2
+  echo "extra flags to @prog@:" >&2
   for i in ${extra[@]}; do
       echo "  $i" >&2
   done
@@ -163,4 +163,4 @@ if test -n "$NIX_LD_WRAPPER_EXEC_HOOK"; then
     source "$NIX_LD_WRAPPER_EXEC_HOOK"
 fi
 
-exec @ld@ ${extraBefore[@]} "${params[@]}" ${extra[@]}
+exec @prog@ ${extraBefore[@]} "${params[@]}" ${extra[@]}

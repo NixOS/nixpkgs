@@ -2784,7 +2784,6 @@ let
     stdenv = clangStdenv;
     libc = glibc;
     binutils = binutils;
-    shell = bash;
     inherit coreutils zlib;
     extraPackages = [ libcxx ];
     nativeTools = false;
@@ -3661,12 +3660,11 @@ let
   win32hello = callPackage ../development/compilers/visual-c++/test { };
 
   wrapGCCWith = gccWrapper: glibc: baseGCC: gccWrapper {
-    nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
-    nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
-    nativePrefix = if stdenv ? gcc then stdenv.gcc.nativePrefix else "";
+    nativeTools = stdenv.gcc.nativeTools or false;
+    nativeLibc = stdenv.gcc.nativeLibc or false;
+    nativePrefix = stdenv.gcc.nativePrefix or "";
     gcc = baseGCC;
     libc = glibc;
-    shell = bash;
     inherit stdenv binutils coreutils zlib;
   };
 
@@ -3676,7 +3674,6 @@ let
     nativePrefix = stdenv.gcc.nativePrefix or "";
     clang = baseClang;
     libc = glibc;
-    shell = bash;
     binutils = stdenv.gcc.binutils;
     inherit stdenv coreutils zlib;
   };

@@ -82,15 +82,15 @@ fi
 
 # Optionally print debug info.
 if test "$NIX_DEBUG" = "1"; then
-  echo "original flags to @gnatProg@:" >&2
+  echo "original flags to @prog@:" >&2
   for i in "${params[@]}"; do
       echo "  $i" >&2
   done
-  echo "extraBefore flags to @gnatProg@:" >&2
+  echo "extraBefore flags to @prog@:" >&2
   for i in ${extraBefore[@]}; do
       echo "  $i" >&2
   done
-  echo "extraAfter flags to @gnatProg@:" >&2
+  echo "extraAfter flags to @prog@:" >&2
   for i in ${extraAfter[@]}; do
       echo "  $i" >&2
   done
@@ -100,4 +100,4 @@ if test -n "$NIX_GNAT_WRAPPER_EXEC_HOOK"; then
     source "$NIX_GNAT_WRAPPER_EXEC_HOOK"
 fi
 
-exec @gnatProg@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]}
+exec @prog@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]}
