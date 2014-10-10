@@ -1,4 +1,7 @@
-{ stdenv, ghc, packages, buildEnv, makeWrapper, ignoreCollisions ? false }:
+{ stdenv, haskellCompiler, packages, buildEnv, makeWrapper, ignoreCollisions ? false }:
+let
+  ghc = haskellCompiler;
+in
 
 # This wrapper works only with GHC 6.12 or later.
 assert stdenv.lib.versionOlder "6.12" ghc.version;
