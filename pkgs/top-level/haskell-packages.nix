@@ -84,8 +84,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   };
 
   # define the Haskell compiler to use for building packages
-  #haskellCompiler = self.${haskellCompilerBinaryName};
-  haskellCompiler = self.ghc;
+  haskellCompiler = pkgs.stdenv.lib.getAttr haskellCompilerBinaryName self;
 
   # An experimental wrapper around ghcPlain that does not automatically
   # pick up packages from the profile, but instead has a fixed set of packages
@@ -93,7 +92,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   # argument to this function.
 
   ${haskellCompilerBinaryName + "WithPackages"} = pkgs : callPackage haskellCompilerWithPackagesPackage {
-    haskellCompiler = haskellCompiler;  # refers to ghcPlain, but could be a wrapped ghc as well
+    haskellCompiler = haskellCompiler;  # refers to ghcPlain
     packages = pkgs self;
     ignoreCollisions = false;
   };
