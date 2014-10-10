@@ -1,22 +1,18 @@
-{ stdenv, fetchurl, jdk, jre, ant, coreutils, gnugrep }:
+{ stdenv, fetchFromGitHub, jdk, jre, ant, coreutils, gnugrep }:
 
 stdenv.mkDerivation rec {
 
-  version = "1.0.2";
+  version = "1.0.6";
   name = "arduino-core";
 
-  src = fetchurl {
-    url = "http://arduino.googlecode.com/files/arduino-${version}-src.tar.gz";
-    sha256 = "0nszl2hdjjgxk87gyk0xi0ww9grbq83hch3iqmpaf9yp4y9bra0x";
+  src = fetchFromGitHub {
+    owner = "arduino";
+    repo = "Arduino";
+    rev = "${version}";
+    sha256 = "0nr5b719qi03rcmx6swbhccv6kihxz3b8b6y46bc2j348rja5332";
   };
 
   buildInputs = [ jdk ant ];
-
-  phases = "unpackPhase patchPhase buildPhase installPhase";
-
-  patchPhase = ''
-  #
-  '';
 
   buildPhase = ''
     cd ./core && ant 
@@ -34,9 +30,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Arduino libraries";
+    description = "Libraries for the open-source electronics prototyping platform";
     homepage = http://arduino.cc/;
-    license = "GPL";
-    maintainers = [ stdenv.lib.maintainers.antono ];
+    license = stdenv.lib.licenses.gpl2;
+    maintainers = [ stdenv.lib.maintainers.antono stdenv.lib.maintainers.robberer ];
   }; 
 }
