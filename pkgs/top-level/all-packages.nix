@@ -9629,7 +9629,7 @@ let
   ldcpp = callPackage ../applications/networking/p2p/ldcpp {
     inherit (gnome) libglade;
   };
-  
+
   libowfat = callPackage ../development/libraries/libowfat { };
 
   librecad = callPackage ../applications/misc/librecad { };
@@ -11795,22 +11795,22 @@ let
   ### SCIENCE / PHYSICS
 
   geant4 = callPackage ../development/libraries/physics/geant4 {
-    enableMultiThreading = true; 
+    enableMultiThreading = true;
     enableG3toG4         = false;
     enableInventor       = false;
     enableGDML           = false;
     enableQT             = false;
     enableXM             = false;
-    enableOpenGLX11      = true; 
+    enableOpenGLX11      = true;
     enableRaytracerX11   = false;
 
-    # Optional system packages, otherwise internal GEANT4 packages are used. 
-    clhep = null; 
+    # Optional system packages, otherwise internal GEANT4 packages are used.
+    clhep = null;
     expat = expat;
-    zlib  = null; 
+    zlib  = null;
 
     # For enableGDML.
-    xercesc = null; 
+    xercesc = null;
 
     # For enableQT.
     qt = null; # qt4SDK or qt5SDK
