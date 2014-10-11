@@ -3,7 +3,7 @@
 { cabal, alsaCore, alsaMixer, dbus, filepath, hinotify, HTTP
 , libmpd, libXrandr, mtl, parsec, regexCompat, stm, time
 , timezoneOlson, timezoneSeries, utf8String, wirelesstools, X11
-, X11Xft, Xpm
+, X11Xft, libXpm
 }:
 
 cabal.mkDerivation (self: {
@@ -17,7 +17,7 @@ cabal.mkDerivation (self: {
     regexCompat stm time timezoneOlson timezoneSeries utf8String X11
     X11Xft
   ];
-  extraLibraries = [ libXrandr wirelesstools Xpm ];
+  extraLibraries = [ libXrandr wirelesstools libXpm ];
   configureFlags = "-fall_extensions";
   meta = {
     homepage = "http://xmobar.org";
