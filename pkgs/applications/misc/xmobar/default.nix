@@ -3,13 +3,13 @@
 { cabal, alsaCore, alsaMixer, dbus, filepath, hinotify, HTTP
 , libmpd, libXrandr, mtl, parsec, regexCompat, stm, time
 , timezoneOlson, timezoneSeries, utf8String, wirelesstools, X11
-, X11Xft
+, X11Xft, libXpm
 }:
 
 cabal.mkDerivation (self: {
   pname = "xmobar";
-  version = "0.21";
-  sha256 = "1h0gsb808zm4j4kmw7fl4339wllc16ldy1ki96l8w3fvj30bcxpm";
+  version = "0.22";
+  sha256 = "158q2mcdn58jjli3wh3zlcjchrzz9krdgvx39n8qdl6a9pgmf8bd";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -17,7 +17,7 @@ cabal.mkDerivation (self: {
     regexCompat stm time timezoneOlson timezoneSeries utf8String X11
     X11Xft
   ];
-  extraLibraries = [ libXrandr wirelesstools ];
+  extraLibraries = [ libXrandr wirelesstools libXpm ];
   configureFlags = "-fall_extensions";
   meta = {
     homepage = "http://xmobar.org";
