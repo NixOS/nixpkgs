@@ -5686,6 +5686,8 @@ let
 
   libsamplerate = callPackage ../development/libraries/libsamplerate { };
 
+  libsieve = callPackage ../development/libraries/libsieve { };
+
   libspectre = callPackage ../development/libraries/libspectre { };
 
   libgsf = callPackage ../development/libraries/libgsf { };
