@@ -1,14 +1,28 @@
-{stdenv, fetchurl, flex, bison, perl, gmp, zlib, tcl, tk, gdbm, m4, x11, emacs}:
+{ stdenv, fetchurl, bash, makeWrapper, coreutils, emacs, tcl, tk, boost, gmp, cacert }:
 
+let
+  version = "2.0.0";
+in
 stdenv.mkDerivation {
-  name = "mozart-1.4.0";
+  name = "mozart-${version}";
+
   src = fetchurl {
-    url = http://www.mozart-oz.org/download/mozart-ftp/store/1.4.0-2008-07-02-tar/mozart-1.4.0.20080704-src.tar.gz;
-    sha256 = "5da73d80b5aa7fa42edca64159a1a076323f090e5c548f3747f94d0afc60b223";
+    url = "http://sourceforge.net/projects/mozart-oz/files/v${version}-alpha.0/mozart2-${version}-alpha.0+build.4105.5c06ced-x86_64-linux.tar.gz";
+    sha256 = "0rsfrjimjxqbwprpzzlmydl3z3aiwg5qkb052jixdxjyad7gyh5z";
   };
 
-  buildInputs = [flex bison perl gmp zlib tcl tk gdbm m4 x11 emacs];
+  libPath = stdenv.lib.makeLibraryPath
+    [stdenv.gcc.gcc emacs tk tcl boost gmp];
 
-  # micq gives a compile error for me
-  configureFlags = "--with-tcl=${tcl}/lib --with-tk=${tk}/lib --disable-contrib-micq";
+  builder = ./builder.sh;
+
+  buildInputs = [ makeWrapper ];
+
+  meta = with stdenv.lib; {
+    homepage = "http://www.mozart-oz.org/";
+    description = "The Mozart Programming System combines ongoing research in programming language design and implementation, constraint logic programming, distributed computing, and human-computer interfaces. Mozart implements the Oz language and provides both expressive power and advanced functionality.";
+
+    license = licenses.mit;
+    platforms = platforms.unix;
+  };
 }
