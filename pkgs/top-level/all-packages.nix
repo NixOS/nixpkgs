@@ -1538,6 +1538,8 @@ let
 
   libconfig = callPackage ../development/libraries/libconfig { };
 
+  libcouchbase = callPackage ../development/libraries/libcouchbase { };
+
   libee = callPackage ../development/libraries/libee { };
 
   libestr = callPackage ../development/libraries/libestr { };
