@@ -1081,7 +1081,7 @@ let
 
   evtest = callPackage ../applications/misc/evtest { };
 
-  exempi = callPackage ../development/libraries/exempi { };
+  exempi = callPackage ../development/libraries/exempi { boost = boost155; };
 
   execline = callPackage ../tools/misc/execline { };
 
@@ -1280,7 +1280,7 @@ let
 
   googleAuthenticator = callPackage ../os-specific/linux/google-authenticator { };
 
-  gource = callPackage ../applications/version-management/gource {};
+  gource = callPackage ../applications/version-management/gource { };
 
   gparted = callPackage ../tools/misc/gparted { };
 
@@ -1639,7 +1639,9 @@ let
 
   memtest86plus = callPackage ../tools/misc/memtest86+ { };
 
-  meo = callPackage ../tools/security/meo { };
+  meo = callPackage ../tools/security/meo {
+    boost = boost155;
+  };
 
   mc = callPackage ../tools/misc/mc { };
 
@@ -7580,9 +7582,13 @@ let
 
   restund = callPackage ../servers/restund {};
 
-  rethinkdb = callPackage ../servers/nosql/rethinkdb { };
+  rethinkdb = callPackage ../servers/nosql/rethinkdb {
+    boost = boost155;
+  };
 
-  rippled = callPackage ../servers/rippled { };
+  rippled = callPackage ../servers/rippled {
+    boost = boost155;
+  };
 
   s6 = callPackage ../servers/s6 { };
 
@@ -9660,7 +9666,9 @@ let
     fltk = fltk13;
   };
 
-  hugin = callPackage ../applications/graphics/hugin { };
+  hugin = callPackage ../applications/graphics/hugin {
+    boost = boost155;
+  };
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
@@ -9761,6 +9769,7 @@ let
 
   k3d = callPackage ../applications/graphics/k3d {
     inherit (pkgs.gnome2) gtkglext;
+    boost = boost155;
   };
 
   keepnote = callPackage ../applications/office/keepnote {
@@ -9820,6 +9829,7 @@ let
     inherit (gnome) GConf ORBit2 gnome_vfs;
     zip = zip.override { enableNLS = false; };
     jdk = openjdk;
+    boost = boost155;
     fontsConf = makeFontsConf {
       fontDirectories = [
         freefont_ttf xorg.fontmiscmisc xorg.fontbhttf
@@ -11211,7 +11221,9 @@ let
 
   glestae = callPackage ../games/glestae {};
 
-  globulation2 = callPackage ../games/globulation {};
+  globulation2 = callPackage ../games/globulation {
+    boost = boost155;
+  };
 
   gltron = callPackage ../games/gltron { };
 
@@ -11231,7 +11243,9 @@ let
 
   icbm3d = callPackage ../games/icbm3d { };
 
-  ingen = callPackage ../applications/audio/ingen { };
+  ingen = callPackage ../applications/audio/ingen {
+    boost = boost155;
+  };
 
   instead = callPackage ../games/instead {
     lua = lua5;
@@ -11336,7 +11350,9 @@ let
   # You still can override by passing more arguments.
   spaceOrbit = callPackage ../games/orbit { };
 
-  spring = callPackage ../games/spring { };
+  spring = callPackage ../games/spring {
+    boost = boost155;
+  };
 
   springLobby = callPackage ../games/spring/springlobby.nix { };
 

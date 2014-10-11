@@ -14,9 +14,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ boost ];
 
-  enableParallelBuilding = false;
+  configureFlags = [ "--with-boost=${boost.lib}" ];
 
-  doCheck = true;
+  enableParallelBuilding = false;
 
   meta = {
     description = "Source code renderer with syntax highlighting";

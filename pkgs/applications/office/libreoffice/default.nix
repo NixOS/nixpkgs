@@ -41,6 +41,8 @@ let
      };
 
      buildInputs = [ boost mdds pkgconfig ];
+
+     configureFlags = [ "--with-boost=${boost.dev}" ];
   };
 
   fetchThirdParty = {name, md5, brief, subDir ? ""}: fetchurl {
@@ -60,6 +62,8 @@ let
       (import ./libreoffice-srcs.nix));
 
     buildInputs = [ boost mdds pkgconfig zlib libixion ];
+
+    configureFlags = [ "--with-boost=${boost.dev}" ];
   };
 
   fetchSrc = {name, sha256}: fetchurl {
@@ -180,6 +184,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
+    "--with-boost=${boost.dev}"
+    "--with-boost-libdir=${boost.lib}/lib"
     "--with-vendor=NixOS"
 
     # Without these, configure does not finish

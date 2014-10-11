@@ -30,12 +30,11 @@ stdenv.mkDerivation rec {
     patch -p1 < ${patch_CVE}
 
     # Add all libs to `macros/libslist', a list of library search paths.
-    for lib in ${lib.concatStringsSep " "
-                                      (map (lib: "\"${lib}\"/lib")
-                                           (buildInputs ++ [stdenv.glibc]))}
-    do
+    libs=$(echo "$NIX_LDFLAGS" | tr ' ' '\n' | sed -n 's/.*-L\(.*\).*/\1/p')
+    for lib in $libs; do
       echo -n "$lib " >> macros/libslist
     done
+    echo -n "${stdenv.glibc}/lib" >> macros/libslist
 
     # Make sure to honor $TMPDIR, for chroot builds.
     for file in configure gui/Makefile.in Makefile.in
