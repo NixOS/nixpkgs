@@ -29,8 +29,8 @@ in stdenv.mkDerivation rec {
 
   buildInputs =
     [ perl groff cmake libxml2 libffi ]
-    ++ stdenv.lib.optional (!stdenv.isDarwin) python
-    ++ stdenv.lib.optional stdenv.isLinux valgrind;
+    ++ stdenv.lib.optional (!stdenv.isDarwin) python /*
+    ++ stdenv.lib.optional stdenv.isLinux valgrind */;
 
   propagatedBuildInputs = [ ncurses zlib ];
 

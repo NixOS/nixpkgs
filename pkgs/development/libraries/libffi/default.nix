@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=
   ] ++ stdenv.lib.optional (stdenv.needsPax) "--enable-pax_emutramp";
 
-  doCheck = stdenv.isLinux; # until we solve dejagnu problems on darwin and expect on BSD
+  #doCheck = stdenv.isLinux; # until we solve dejagnu problems on darwin and expect on BSD
+  doCheck = false;
 
   dontStrip = stdenv ? cross; # Don't run the native `strip' when cross-compiling.
 
