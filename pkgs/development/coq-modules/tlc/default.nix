@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     COQLIB=$out/lib/coq/${coq.coq-version}/
-    ensureDir $COQLIB/user-contrib/Tlc
+    mkdir -p $COQLIB/user-contrib/Tlc
     cp -p *.vo $COQLIB/user-contrib/Tlc
   '';
 

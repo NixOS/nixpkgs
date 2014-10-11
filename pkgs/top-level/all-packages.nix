@@ -11598,11 +11598,19 @@ let
 
     containers = callPackage ../development/coq-modules/containers {};
 
+    coqExtLib = callPackage ../development/coq-modules/coq-ext-lib {};
+
+    heq = callPackage ../development/coq-modules/heq {};
+
     mathcomp = callPackage ../development/coq-modules/mathcomp {};
+
+    paco = callPackage ../development/coq-modules/paco {};
 
     ssreflect = callPackage ../development/coq-modules/ssreflect {};
 
     tlc = callPackage ../development/coq-modules/tlc {};
+
+    ynot = callPackage ../development/coq-modules/ynot {};
 
   };
 

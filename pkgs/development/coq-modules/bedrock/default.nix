@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     COQLIB=$out/lib/coq/${coq.coq-version}/
-    ensureDir $COQLIB/user-contrib/Bedrock
+    mkdir -p $COQLIB/user-contrib/Bedrock
     cp -pR src $COQLIB/user-contrib/Bedrock
   '';
 
