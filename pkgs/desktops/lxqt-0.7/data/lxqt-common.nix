@@ -1,6 +1,8 @@
-{ stdenv, fetchgit
+{ stdenv
+, fetchgit
 , cmake
 , qt48
+, which
 }:
 
 stdenv.mkDerivation rec {
@@ -14,13 +16,16 @@ stdenv.mkDerivation rec {
     sha256 = "4de5ffaf8261c6072068b562ab5bc9c1fbefbf10c52292d62de97521c1e46f21";
   };
 
-  buildInputs = [ stdenv cmake qt48 ];
+  buildInputs = [ stdenv cmake qt48 which ];
 
-  # Delete the lines which pull in liblxqt, since CMake will try to install into the liblxqt paths.
-  # Also, the xsession files should be installed to $out/usr rather than /usr/share
+  # 1) Delete the lines which pull in liblxqt, since CMake will try to install into the liblxqt paths.
+  # 2) The xsession files should be installed to $out/usr rather than /usr/share
+  # 3) Start startlxqt with bash instead of sh, so that the 'which' command is known
   patchPhase = ''
     sed -i '8,10d' CMakeLists.txt
     substituteInPlace "xsession/CMakeLists.txt" --replace /usr/share $out/usr
+    #substituteInPlace startlxqt.in --replace '#!/bin/sh' '#!/usr/bin/env bash'
+    substituteInPlace startlxqt.in --replace 'if which' "if ${which}/bin/which"
   '';
 
   # Set the variable which would have been acquired from liblxqt.
