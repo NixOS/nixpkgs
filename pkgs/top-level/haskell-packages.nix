@@ -1507,11 +1507,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   libjenkins = callPackage ../development/libraries/haskell/libjenkins {};
 
-  libmpd_0_8_0_5 = callPackage ../development/libraries/haskell/libmpd/0.8.0.5.nix {};
-
-  libmpd_0_9_0_1 = callPackage ../development/libraries/haskell/libmpd/0.9.0.1.nix {};
-
-  libmpd = self.libmpd_0_9_0_1;
+  libmpd = callPackage ../development/libraries/haskell/libmpd {};
 
   liblastfm = callPackage ../development/libraries/haskell/liblastfm {};
 
