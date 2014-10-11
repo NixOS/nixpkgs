@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.abi = libcxxabi;
+  inherit libcxxabi;
 
   # Remove a Makefile that causes many retained dependencies.
   postInstall = "rm $out/include/c++/v1/Makefile";
