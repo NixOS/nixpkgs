@@ -23,7 +23,6 @@ let
     sqlite3 = null;
     curses = null;
     curses_panel = null;
-    ssl = null;
     crypt = null;
   };
 
@@ -1040,7 +1039,7 @@ let
   #     rev = "refs/tags/0.9.3";
   #   };
   #
-  #   propagatedBuildInputs = [ pythonPackages.argparse modules.ssl ];
+  #   propagatedBuildInputs = [ pythonPackages.argparse ];
   #
   #   doCheck = false;
   #
@@ -9367,7 +9366,7 @@ let
       md5 = "8437607c0cc00c35f658f972516ffb55";
     };
 
-    propagatedBuildInputs = [ nose modules.ssl ];
+    propagatedBuildInputs = [ nose ];
 
     meta = {
       description = "WSGI request and response object";
