@@ -11592,6 +11592,8 @@ let
 
   mkCoqPackages_8_4 = self: let callPackage = newScope self; in {
 
+    bedrock = callPackage ../development/coq-modules/bedrock {};
+
     containers = callPackage ../development/coq-modules/containers {};
 
     mathcomp = callPackage ../development/coq-modules/mathcomp {};
