@@ -118,7 +118,6 @@ stdenv.mkDerivation {
 
       gccPath="$gcc/bin"
       ldPath="$binutils/bin"
-      ld="$ldPath/ld"
 
       # Propagate the wrapped gcc so that if you install the wrapper,
       # you get tools like gcov, the manpages, etc. as well (including
@@ -143,7 +142,7 @@ stdenv.mkDerivation {
         ln -s $ldPath/as $out/bin/as
       fi
 
-      wrap ld ${./ld-wrapper.sh} $ld
+      wrap ld ${./ld-wrapper.sh} ''${ld:-$ldPath/ld}
 
       if [ -e $binutils/bin/ld.gold ]; then
         wrap ld.gold ${./ld-wrapper.sh} $binutils/bin/ld.gold
@@ -156,19 +155,15 @@ stdenv.mkDerivation {
       if [ -e $gccPath/gcc ]; then
         wrap gcc ${./gcc-wrapper.sh} $gccPath/gcc
         ln -s gcc $out/bin/cc
+      elif [ -e $gccPath/clang ]; then
+        wrap clang ${./gcc-wrapper.sh} $gccPath/clang
+        ln -s clang $out/bin/cc
       fi
 
       if [ -e $gccPath/g++ ]; then
         wrap g++ ${./gcc-wrapper.sh} $gccPath/g++
         ln -s g++ $out/bin/c++
-      fi
-
-      if [ -e $gccPath/clang ]; then
-        wrap clang ${./gcc-wrapper.sh} $gccPath/clang
-        ln -s clang $out/bin/cc
-      fi
-
-      if [ -e $gccPath/clang++ ]; then
+      elif [ -e $gccPath/clang++ ]; then
         wrap clang++ ${./gcc-wrapper.sh} $gccPath/clang++
         ln -s clang++ $out/bin/c++
       fi
