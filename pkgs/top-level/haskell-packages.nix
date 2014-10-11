@@ -1527,6 +1527,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   linear = callPackage ../development/libraries/haskell/linear {};
 
+  linuxInotify = callPackage ../development/libraries/haskell/linux-inotify {};
+
   List = callPackage ../development/libraries/haskell/List {};
 
   lists = callPackage ../development/libraries/haskell/lists {};
