@@ -29,7 +29,7 @@ let
 in stdenv.mkDerivation rec {
   name = "mpd-0.18.16";
   src = fetchurl {
-    url    = "http://www.musicpd.org/download/mpd/stable/${name}.tar.gz";
+    url    = "http://www.musicpd.org/download/mpd/0.18/${name}.tar.gz";
     sha256 = "0xpmc70ccp0s2s10vsi4hkijiv497dy42a7g225y77axp5ncf364";
   };
 
@@ -92,7 +92,7 @@ in stdenv.mkDerivation rec {
     description = "A flexible, powerful daemon for playing music";
     homepage    = http://mpd.wikia.com/wiki/Music_Player_Daemon_Wiki;
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ astsmtl ];
+    maintainers = with maintainers; [ astsmtl fuuzetsu ];
     platforms   = platforms.unix;
 
     longDescription = ''
