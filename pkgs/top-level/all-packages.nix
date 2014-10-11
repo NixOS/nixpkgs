@@ -9866,6 +9866,8 @@ let
 
   smplayer = callPackage ../applications/video/smplayer { };
 
+  smtube = callPackage ../applications/video/smtube {};
+
   sup = with rubyLibs; callPackage ../applications/networking/mailreaders/sup {
     ruby = ruby_1_9_3.override {
       cursesSupport = true;
