@@ -1,0 +1,155 @@
+--- a/src/Haste/Environment.hs
++++ b/src/Haste/Environment.hs
+@@ -10,14 +10,17 @@ module Haste.Environment (
+ import System.IO.Unsafe
+ import Data.Bits
+ import Foreign.C.Types (CIntPtr)
+-import Control.Shell
+-import System.Environment (getExecutablePath)
++import Control.Shell hiding (getEnv)
++import Control.Exception
++import System.IO.Error
++import System.Environment (getEnv, getExecutablePath)
+ import System.Directory (findExecutable)
+ import Paths_haste_compiler
+-import GHC.Paths (libdir)
++--import GHC.Paths (libdir)
+ import Config (cProjectVersion)
+ import Data.Maybe (catMaybes)
+ 
++
+ #if defined(PORTABLE)
+ portableHaste :: Bool
+ portableHaste = True
+@@ -25,8 +28,7 @@ portableHaste = True
+ -- | Haste system directory. Identical to @hasteUserDir@ unless built with
+ --   -f portable.
+ hasteSysDir :: FilePath
+-hasteSysDir =
+-  joinPath . init . init . splitPath $ unsafePerformIO getExecutablePath
++hasteSysDir = joinPath . init . init . splitPath $ unsafePerformIO getExecutablePath
+ 
+ ghcLibDir :: FilePath
+ ghcLibDir = unsafePerformIO $ do
+@@ -39,16 +41,19 @@ hasteBinDir = hasteSysDir </> "bin"
+ jsDir :: FilePath
+ jsDir = hasteSysDir </> "js"
+ #else
++
++
+ portableHaste :: Bool
+ portableHaste = False
+ 
+ -- | Haste system directory. Identical to @hasteUserDir@ unless built with
+ --   -f portable.
+ hasteSysDir :: FilePath
+-hasteSysDir = hasteUserDir
++hasteSysDir = "__NIX_HASTE_SYSDIR_TARGET__"
+ 
++-- In NIX, libdir is patched to resolve to the environment variable NIX_TODO
+ ghcLibDir :: FilePath
+-ghcLibDir = libdir
++ghcLibDir = "__NIX_GHC_LIBDIR_TARGET__"
+ 
+ hasteBinDir :: FilePath
+ hasteBinDir = unsafePerformIO $ getBinDir
+@@ -57,11 +62,11 @@ jsDir :: FilePath
+ jsDir = unsafePerformIO $ getDataDir
+ #endif
+ 
+--- | Haste user directory. Usually ~/.haste.
+-hasteUserDir :: FilePath
+-Right hasteUserDir = unsafePerformIO . shell $ withAppDirectory "haste" return
+ 
+--- | Directory where user .jsmod files are stored.
++--
++-- SYSTEM directories
++--
++-- | Directory where global .jsmod files are stored.
+ jsmodSysDir :: FilePath
+ jsmodSysDir = hasteSysDir </> "jsmods"
+ 
+@@ -75,7 +80,18 @@ pkgSysLibDir = hasteInstSysDir </> "lib"
+ 
+ -- | Directory housing package information.
+ pkgSysDir :: FilePath
+-pkgSysDir = hasteSysDir </> "packages"
++pkgSysDir = unsafePerformIO $ do
++  e_ghc_path <- tryIOError (getEnv "NIX_HASTE_PACKAGE_PATH")
++  return $ case e_ghc_path of
++             Right path -> path
++             Left _ -> hasteSysDir </> "packages"
++
++--
++-- USER directories
++--
++-- | Haste user directory. Usually ~/.haste.
++hasteUserDir :: FilePath
++Right hasteUserDir = unsafePerformIO . shell $ withAppDirectory "haste" return
+ 
+ -- | Directory where user .jsmod files are stored.
+ jsmodUserDir :: FilePath
+@@ -93,6 +109,10 @@ pkgUserLibDir = hasteInstUserDir </> "li
+ pkgUserDir :: FilePath
+ pkgUserDir = hasteUserDir </> "packages"
+ 
++
++
++
++
+ -- | Host word size in bits.
+ hostWordSize :: Int
+ #if __GLASGOW_HASKELL__ >= 708
+@@ -103,33 +123,28 @@ hostWordSize = bitSize (undefined :: CIn
+ 
+ -- | Path to the GHC binary.
+ ghcBinary :: FilePath
+-ghcBinary = unsafePerformIO $ do
+-  exes <- catMaybes `fmap` mapM findExecutable ["ghc-" ++ cProjectVersion,
+-                                                "ghc"]
+-  case exes of
+-    (exe:_) -> return exe
+-    _       -> error $  "No appropriate GHC executable in search path!\n"
+-                     ++ "Are you sure you have GHC " ++ cProjectVersion
+-                     ++ " installed?"
++ghcBinary = "__NIX_GHC_TARGET__"
+ 
+ -- | Path to the GHC binary.
+ ghcPkgBinary :: FilePath
+-ghcPkgBinary = unsafePerformIO $ do
+-  exes <- catMaybes `fmap` mapM findExecutable ["ghc-pkg-" ++ cProjectVersion,
+-                                                "ghc-pkg"]
+-  case exes of
+-    (exe:_) -> return exe
+-    _       -> error $  "No appropriate ghc-pkg executable in search path!\n"
+-                     ++ "Are you sure you have GHC " ++ cProjectVersion
+-                     ++ " installed?"
++ghcPkgBinary = "__NIX_GHC_PKG_TARGET__"
++
+ 
+ -- | The main Haste compiler binary.
+ hasteBinary :: FilePath
+-hasteBinary = hasteBinDir </> "hastec"
++hasteBinary = unsafePerformIO $ do
++  e_path <- tryIOError (getEnv "NIX_HASTEC")
++  return $ case e_path of
++             Right path -> path
++             Left _ -> hasteBinDir </> "hastec"
+ 
+ -- | Binary for haste-pkg.
+ hastePkgBinary :: FilePath
+-hastePkgBinary = hasteBinDir </> "haste-pkg"
++hastePkgBinary = unsafePerformIO $ do
++  e_path <- tryIOError (getEnv "NIX_HASTE_PKG")
++  return $ case e_path of
++             Right path -> path
++             Left _ -> hasteBinDir </> "haste-pkg"
+ 
+ -- | Binary for haste-copy-pkg.
+ hasteCopyPkgBinary :: FilePath
+@@ -145,4 +160,4 @@ hasteInstHisBinary = hasteBinDir </> "ha
+ 
+ -- | JAR for Closure compiler.
+ closureCompiler :: FilePath
+-closureCompiler = hasteBinDir </> "compiler.jar"
++closureCompiler = "__NIX_CLOSURE_COMPILER_TARGET__"
