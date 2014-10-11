@@ -7,7 +7,7 @@
 
 { fetchurl, stdenv, lua, callPackage, unzip, zziplib,
 pcre, oniguruma, gnulib, tre, glibc,
-sqlite }:
+sqlite, openssl, expat }:
 
 let
  isLua51 = lua.luaversion == "5.1";
@@ -23,7 +23,32 @@ let
     inherit lua;
   };
 
-  luafilesystem = buildLuaPackage {
+  luaexpat = buildLuaPackage rec {
+    version = "1.3.0";
+    name = "expat-${version}";
+    isLibrary = true;
+    src = fetchurl {
+      url = "https://matthewwild.co.uk/projects/luaexpat/luaexpat-${version}.tar.gz";
+      sha256 = "1hvxqngn0wf5642i5p3vcyhg3pmp102k63s9ry4jqyyqc1wkjq6h";
+    };
+
+    buildInputs = [ expat ];
+
+    preBuild = ''
+      makeFlagsArray=(
+        LUA_LDIR="$out/share/lua/${lua.luaversion}"
+        LUA_INC="-I${lua}/include" LUA_CDIR="$out/lib/lua/${lua.luaversion}"
+        EXPAT_INC="-I${expat}/include");
+    '';
+
+    meta = {
+      homepage = "http://matthewwild.co.uk/projects/luaexpat";
+      hydraPlatforms = stdenv.lib.platforms.linux;
+      maintainers = [ stdenv.lib.maintainers.flosse ];
+    };
+  };
+
+  luafilesystem = buildLuaPackage rec {
     name = "filesystem-1.6.2";
     src = fetchurl {
       url = "https://github.com/keplerproject/luafilesystem/archive/v1_6_2.tar.gz";
@@ -33,6 +58,32 @@ let
       homepage = "https://github.com/keplerproject/luafilesystem";
       hydraPlatforms = stdenv.lib.platforms.linux;
       maintainers = with maintainers; [ flosse ];
+    };
+  };
+
+  luasec = buildLuaPackage rec {
+    version = "0.5";
+    name = "sec-${version}";
+    src = fetchurl {
+      url = "https://github.com/brunoos/luasec/archive/luasec-${version}.tar.gz";
+      sha256 = "08rm12cr1gjdnbv2jpk7xykby9l292qmz2v0dfdlgb4jfj7mk034";
+    };
+
+    buildInputs = [ openssl ];
+
+    preBuild = ''
+      makeFlagsArray=(
+        linux
+        LUAPATH="$out/lib/lua/${lua.luaversion}"
+        LUACPATH="$out/lib/lua/${lua.luaversion}"
+        INC_PATH="-I${lua}/include"
+        LIB_PATH="-L$out/lib");
+    '';
+
+    meta = {
+      homepage = "https://github.com/brunoos/luasec";
+      hydraPlatforms = stdenv.lib.platforms.linux;
+      maintainers = [ stdenv.lib.maintainers.flosse ];
     };
   };
 

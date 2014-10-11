@@ -156,6 +156,8 @@
       mailpile = 146;
       redmine = 147;
 
+      prosody = 148;
+
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
       nixbld = 30000; # start of range of uids
@@ -277,6 +279,8 @@
       uhub = 142;
       mailpile = 146;
       redmine = 147;
+
+      prosody = 148;
 
       # When adding a gid, make sure it doesn't match an existing uid. And don't use gids above 399!
 

@@ -251,6 +251,7 @@
   ./services/networking/polipo.nix
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix
+  ./services/networking/prosody.nix
   ./services/networking/quassel.nix
   ./services/networking/radicale.nix
   ./services/networking/radvd.nix
