@@ -11593,6 +11593,8 @@ let
 
     ssreflect = callPackage ../development/coq-modules/ssreflect {};
 
+    tlc = callPackage ../development/coq-modules/tlc {};
+
   };
 
   coqPackages = recurseIntoAttrs (mkCoqPackages_8_4 coqPackages);
