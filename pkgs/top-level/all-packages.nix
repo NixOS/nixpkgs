@@ -3924,7 +3924,7 @@ let
   polyml = callPackage ../development/compilers/polyml { };
 
   pure = callPackage ../development/interpreters/pure {
-    llvm = llvm_33 ;
+    llvm = llvm_34 ;
   };
 
   python = python2;
