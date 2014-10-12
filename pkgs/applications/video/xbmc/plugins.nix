@@ -16,7 +16,9 @@ let
     installPhase = ''
       d=$out${pluginDir}/${namespace}
       mkdir -p $d
-      cp -R $src/* $d
+      sauce="."
+      [ -d ${namespace} ] && sauce=${namespace}
+      cp -R $sauce/* $d
     '';
   };
 
@@ -47,6 +49,28 @@ in
         and manage all the meta-data (informations and images) related
         to these applications.
       '';
+      platforms = platforms.all;
+      maintainers = with maintainers; [ edwtjo ];
+    };
+
+  };
+
+  genesis = mkXBMCPlugin rec {
+
+    plugin = "genesis";
+    namespace = "plugin.video.genesis";
+    version = "2.1.3";
+
+    src = fetchFromGitHub {
+      owner = "lambda81";
+      repo = "lambda-xbmc-addons";
+      rev = "f8aa34064bf31fffbb3c264af32c66bbdaf0a59e";
+      sha256 = "0d197fd6n3m9knpg38frnmfhqyabvh00ridpmikyw4vzk3hx11km";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "http://forums.tvaddons.ag/forums/148-lambda-s-xbmc-addons";
+      description = "The origins of streaming";
       platforms = platforms.all;
       maintainers = with maintainers; [ edwtjo ];
     };
