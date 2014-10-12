@@ -28,12 +28,17 @@
   # ~/.nixpkgs/config.nix.
   config ? null
 
+, # Allow a nixuser configuration attribute set to be passed in as an
+  # argument.  Otherwise, it's read from $NIXUSER_CONFIG or
+  # ~/.nixuser/configuration.nix.
+  nixuserConfig ? null
+
 , crossSystem ? null
 , platform ? null
 }:
 
 
-let config_ = config; platform_ = platform; in # rename the function arguments
+let config_ = config; nixuserConfig_ = nixuserConfig; platform_ = platform; in # rename the function arguments
 
 let
 
@@ -42,7 +47,7 @@ let
   # The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.nixpkgs/config.nix.
   # for NIXOS (nixos-rebuild): use nixpkgs.config option
-  config =
+  nixpkgsConfig =
     let
       toPath = builtins.toPath;
       getEnv = x: if builtins ? getEnv then builtins.getEnv x else "";
@@ -66,6 +71,39 @@ let
       if builtins.isFunction configExpr
         then configExpr { inherit pkgs; }
         else configExpr;
+
+
+  # Merge the content found in the configuration file found at $NIXUSER_CONFIG or
+  # $HOME/.nixuser/configuration.nix with nixpkgsConfig.
+  # TODO: Think about: for NIXOS (nixos-rebuild): use nixpkgs.<username>.config option
+  config =
+    let
+      toPath = builtins.toPath;
+      getEnv = x: if builtins ? getEnv then builtins.getEnv x else "";
+      pathExists = name:
+        builtins ? pathExists && builtins.pathExists (toPath name);
+
+      configFile = getEnv "NIXUSER_CONFIG";
+      homeDir = getEnv "HOME";
+      configFile2 = homeDir + "/.nixuser/configuration.nix";
+
+      configuration =
+        if nixuserConfig_ != null && pathExists nixuserConfig_  then [(toPath nixuserConfig_)]
+        else if configFile != "" && pathExists configFile then [(toPath configFile)]
+        else if homeDir != "" && pathExists configFile2 then [(toPath configFile2)]
+        else [];
+
+      nixpkgs_options_base =  [ ../../nixos/modules/misc/nixpkgs.nix ];
+      nixuser_modules = import ../../nixos/modules/nixuser-module-list.nix;
+
+      nixpkgsConfig_ = [{nixpkgs.config = nixpkgsConfig;}];
+    in
+      (lib.evalModules {
+        modules = configuration ++ nixpkgs_options_base ++ nixuser_modules ++ nixpkgsConfig_;
+        args = {inherit pkgs;};
+        check = true;
+      }).config.nixpkgs.config;
+
 
   # Allow setting the platform in the config file. Otherwise, let's use a reasonable default (pc)
 
