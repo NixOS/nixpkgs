@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "generic-aeson";
-  version = "0.2.0.0";
-  sha256 = "0w7bwmbjsskynyfisnhp4piikdw2jkr4zg24c9ipsp28szy8qsb9";
+  version = "0.2.0.1";
+  sha256 = "0k5zkfmwffdv4q0c9zgysq4654gjwnz1nbl37y8aq7g3rsfzfbf5";
   buildDepends = [
     aeson attoparsec genericDeriving mtl tagged text
     unorderedContainers vector
