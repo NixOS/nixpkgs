@@ -11,6 +11,6 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = mirror://sourceforge/libusb/libusb-0.1.12.tar.gz;
-    md5 = "caf182cbc7565dac0fd72155919672e6";
+    sha256 = "0i4bacxkyr7xyqxbmb00ypkrv4swkgm0mghbzjsnw6blvvczgxip";
   };
 }

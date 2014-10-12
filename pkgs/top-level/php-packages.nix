@@ -64,7 +64,7 @@ let self = with self; {
 
     src = pkgs.fetchurl {
       url = "http://xcache.lighttpd.net/pub/Releases/${version}/${name}.tar.bz2";
-      md5 = "e5816d47d52be200b959bf69a673ff74";
+      sha256 = "1saysvzwkfmcyg53za4j7qnranxd6871spjzfpclhdlqm043xbw6";
     };
 
     configureFlags = [

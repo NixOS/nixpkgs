@@ -229,7 +229,7 @@ let self = _self // overrides; _self = with self; {
     name = "Archive-Zip-1.16";
     src = fetchurl {
       url = http://tarballs.nixos.org/Archive-Zip-1.16.tar.gz;
-      md5 = "e28dff400d07b1659d659d8dde7071f1";
+      sha256 = "1ghgs64by3ybjlb0bj65kxysb03k72i7iwmw63g41bj175l44ima";
     };
   };
 
