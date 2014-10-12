@@ -17,7 +17,7 @@ let
     desktopItem = makeDesktopItem {
       name = loName;
       exec = loName;
-      comment = meta.longDescription;
+      comment = lib.replaceChars ["\n"] [" "] meta.longDescription;
       desktopName = product;
       genericName = meta.description;
       categories = "Application;Development;";
