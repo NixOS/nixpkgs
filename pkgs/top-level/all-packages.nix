@@ -1504,6 +1504,8 @@ let
 
   logstash = callPackage ../tools/misc/logstash { };
 
+  logstash-contrib = callPackage ../tools/misc/logstash/contrib.nix { };
+
   logstash-forwarder = callPackage ../tools/misc/logstash-forwarder { };
 
   kippo = callPackage ../servers/kippo { };
