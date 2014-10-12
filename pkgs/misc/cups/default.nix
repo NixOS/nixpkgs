@@ -9,8 +9,8 @@ stdenv.mkDerivation {
   passthru = { inherit version; };
 
   src = fetchurl {
-    url = "http://ftp.easysw.com/pub/cups/${version}/cups-${version}-source.tar.bz2";
-    sha256 = "07xq6rwpg2r6vjvimd53f259ijx50cnw3p7s1sk84z4dddi6vnfk";
+    url = "https://www.cups.org/software/${version}/cups-${version}-source.tar.bz2";
+    sha256 = "1rfhlv9b37120d6shngvyrcp99vh4a3lwdkrfanv3sjqid7068w0";
   };
 
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb ]
