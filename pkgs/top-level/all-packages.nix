@@ -11600,6 +11600,8 @@ let
 
     coqExtLib = callPackage ../development/coq-modules/coq-ext-lib {};
 
+    domains = callPackage ../development/coq-modules/domains {};
+
     heq = callPackage ../development/coq-modules/heq {};
 
     mathcomp = callPackage ../development/coq-modules/mathcomp {};
