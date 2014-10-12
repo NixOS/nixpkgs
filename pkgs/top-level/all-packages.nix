@@ -253,6 +253,9 @@ let
     theAttrSet = arg;
   };
 
+  autonix = callPackage ../build-support/autonix {};
+  inherit (autonix) callAutoPackage callAutoCollection;
+
   autoreconfHook = makeSetupHook
     { substitutions = { inherit autoconf automake libtool; }; }
     ../build-support/setup-hooks/autoreconf.sh;
@@ -5272,6 +5275,8 @@ let
   # TODO : Add MIT Kerberos and let admin choose.
   kerberos = heimdal;
 
+  kf5 = callPackage ../development/libraries/kde-frameworks {};
+
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
 
   harfbuzz = callPackage ../development/libraries/harfbuzz { };
@@ -6302,7 +6307,14 @@ let
 
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
 
-  phonon = callPackage ../development/libraries/phonon { };
+  phonon = callPackage ../development/libraries/phonon {
+    qt = qt4;
+  };
+
+  phonon4qt5 = callPackage ../development/libraries/phonon {
+    qt = qt53;
+    useQt5 = true;
+  };
 
   phonon_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer { };
 
@@ -6322,7 +6334,14 @@ let
     spidermonkey = spidermonkey_185;
   };
 
-  polkit_qt_1 = callPackage ../development/libraries/polkit-qt-1 { };
+  polkit_qt_1 = callPackage ../development/libraries/polkit-qt-1 {
+    qt = qt4;
+  };
+
+  polkit_qt5_1 = callPackage ../development/libraries/polkit-qt-1 {
+    qt = qt53;
+    useQt5 = true;
+  };
 
   policykit = callPackage ../development/libraries/policykit { };
 

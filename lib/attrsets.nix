@@ -12,6 +12,11 @@ with {
 rec {
   inherit (builtins) attrNames listToAttrs hasAttr isAttrs getAttr;
 
+  /* Return the specified attribute from a set if it exists, or the specified
+     default value if it does not. */
+  getAttrOr = attr: set: default:
+    if hasAttr attr set then getAttr attr set else default;
+
 
   /* Return an attribute from nested attribute sets.  For instance
      ["x" "y"] applied to some set e returns e.x.y, if it exists.  The
