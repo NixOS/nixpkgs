@@ -476,6 +476,8 @@ let
 
   apt-offline = callPackage ../tools/misc/apt-offline { };
 
+  apulse = callPackage ../misc/apulse { };
+
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
   arandr = callPackage ../tools/X11/arandr { };
