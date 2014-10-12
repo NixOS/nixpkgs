@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
     description = "Ynot is a library for writing and verifying imperative programs";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;
-    broken = true;              # does not work with Coq 8.4pl4
   };
 
 }
