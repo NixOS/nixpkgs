@@ -43,11 +43,12 @@
 #
 # For most packages, however, we keep only one version, and use default.nix.
 
-{ pkgs, newScope, ghc, modifyPrio ? (x : x)
+{ pkgs, newScope, haskellCompiler, modifyPrio ? (x : x), cabalPackage
+, haskellCompilerWrapperPackage, haskellCompilerWithPackagesPackage, haskellCompilerBinaryName
 , enableLibraryProfiling ? false
-, enableSharedLibraries ? pkgs.stdenv.lib.versionOlder "7.7" ghc.version
-, enableSharedExecutables ? pkgs.stdenv.lib.versionOlder "7.7" ghc.version
-, enableCheckPhase ? pkgs.stdenv.lib.versionOlder "7.4" ghc.version
+, enableSharedLibraries ? ((haskellCompilerBinaryName == "ghc") && (pkgs.stdenv.lib.versionOlder "7.7" haskellCompiler.version))
+, enableSharedExecutables ? ((haskellCompilerBinaryName == "ghc") && (pkgs.stdenv.lib.versionOlder "7.7" haskellCompiler.version))
+, enableCheckPhase ? ((haskellCompilerBinaryName == "ghc") && (pkgs.stdenv.lib.versionOlder "7.4" haskellCompiler.version))
 , enableStaticLibraries ? true
 }:
 
@@ -70,12 +71,12 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   # Nix. Because the wrapper is so much more useful than the plain GHC, we
   # call the plain GHC ghcPlain and the wrapped GHC simply ghc.
 
-  ghcPlain = pkgs.lowPrio ghc; # Note that "ghc" is not "self.ghc" and
+  ${haskellCompilerBinaryName + "Plain"} = pkgs.lowPrio haskellCompiler; # Note that "ghc" is not "self.ghc" and
                                # refers to the function argument at the
                                # top of this file.
 
-  ghc = callPackage ../development/compilers/ghc/wrapper.nix {
-    ghc = ghc; # refers to ghcPlain
+  ${haskellCompilerBinaryName} = callPackage haskellCompilerWrapperPackage {
+    ${haskellCompilerBinaryName} = haskellCompiler; # refers to ghcPlain/ghcjsPlain/hastePlain
   };
 
   # An experimental wrapper around ghcPlain that does not automatically
@@ -83,18 +84,18 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   # in its global database. The set of packages can be specified as an
   # argument to this function.
 
-  ghcWithPackages = pkgs : callPackage ../development/compilers/ghc/with-packages.nix {
-    ghc = ghc;                  # refers to ghcPlain
+  ${haskellCompilerBinaryName + "WithPackages"} = pkgs : callPackage haskellCompilerWithPackagesPackage {
+    ${haskellCompilerBinaryName} = haskellCompiler;  # refers to ghcPlain/ghcjsPlain/hastePlain
     packages = pkgs self;
     ignoreCollisions = false;
   };
 
-  ghcWithPackagesOld = pkgs : (self.ghcWithPackages pkgs).override { ignoreCollisions = true; };
+  ${haskellCompilerBinaryName + "WithPackagesOld"} = pkgs : (self.ghcWithPackages pkgs).override { ignoreCollisions = true; };
 
   # This is the Cabal builder, the function we use to build most Haskell
   # packages. It isn't the Cabal library, which is spelled "Cabal".
 
-  cabal = callPackage ../build-support/cabal {
+  cabal = callPackage cabalPackage {
     Cabal = null;               # prefer the Cabal version shipped with the compiler
     hscolour = self.hscolourBootstrap;
     inherit enableLibraryProfiling enableCheckPhase
@@ -3014,7 +3015,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
       extension = self : super : {
         hyperlinkSource = false;
         configureFlags = super.configureFlags or "" +
-          pkgs.lib.optionalString (pkgs.stdenv.lib.versionOlder "6.12" ghc.version) " --ghc-option=-rtsopts";
+          pkgs.lib.optionalString ((haskellCompilerBinaryName == "ghc") && (pkgs.stdenv.lib.versionOlder "6.12" haskellCompiler.version)) " --ghc-option=-rtsopts";
       };
     };
   };
