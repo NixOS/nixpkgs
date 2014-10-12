@@ -11011,6 +11011,8 @@ let
 
   mars = callPackage ../games/mars { };
 
+  megaglest = callPackage ../games/megaglest {};
+
   micropolis = callPackage ../games/micropolis { };
 
   mnemosyne = callPackage ../games/mnemosyne {
