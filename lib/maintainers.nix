@@ -118,6 +118,7 @@
   rycee = "Robert Helgesson <robert@rycee.net>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
   sepi = "Raffael Mancini <raffael@mancini.lu>";
+  shell = "Shell Turner <cam.turn@gmail.com>";
   shlevy = "Shea Levy <shea@shealevy.com>";
   simons = "Peter Simons <simons@cryp.to>";
   skeidel = "Sven Keidel <svenkeidel@gmail.com>";
