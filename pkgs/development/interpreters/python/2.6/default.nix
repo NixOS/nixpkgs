@@ -115,7 +115,7 @@ let
     , internalName ? "_" + moduleName
     , deps
     }:
-    if (includeModules) then null else stdenv.mkDerivation rec {
+    if includeModules then null else stdenv.mkDerivation rec {
       name = "python-${moduleName}-${python.version}";
 
       inherit src patches preConfigure;

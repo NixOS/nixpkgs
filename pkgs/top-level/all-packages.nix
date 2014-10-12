@@ -1875,7 +1875,7 @@ let
   openobex = callPackage ../tools/bluetooth/openobex { };
 
   openopc = callPackage ../tools/misc/openopc {
-    pythonFull = python27FullWithPkgs.override {
+    pythonFull = python27FullBuildEnv.override {
       extraLibs = [ python27Packages.pyro3 ];
     };
   };
@@ -3947,16 +3947,16 @@ let
   python27Full = python27.override {
     includeModules = true;
   };
-  python26FullWithPkgs = callPackage ../development/interpreters/python/wrapper.nix {
+  python26FullBuildEnv = callPackage ../development/interpreters/python/wrapper.nix {
     python = python26Full;
     inherit (python26Packages) recursivePthLoader;
   };
-  python27FullWithPkgs = callPackage ../development/interpreters/python/wrapper.nix {
+  python27FullBuildEnv = callPackage ../development/interpreters/python/wrapper.nix {
     python = python27Full;
     inherit (python27Packages) recursivePthLoader;
   };
-  pythonFullWithPkgs = python2FullWithPkgs;
-  python2FullWithPkgs = python27FullWithPkgs;
+  pythonFullBuildEnv = python2FullBuildEnv;
+  python2FullBuildEnv = python27FullBuildEnv;
 
   python2nix = callPackage ../tools/package-management/python2nix { };
 

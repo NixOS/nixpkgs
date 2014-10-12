@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   patches = [ ./yylex.patch ];
 
   # Workaround to make the python wrapper not drop this package:
-  # pythonFullWithPkgs.override { extraLibs = [ thrift ]; }
+  # pythonFullBuildEnv.override { extraLibs = [ thrift ]; }
   pythonPath = [];
 
   buildInputs = [
