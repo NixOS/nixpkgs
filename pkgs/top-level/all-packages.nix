@@ -2698,19 +2698,6 @@ let
 
   xmltv = callPackage ../tools/misc/xmltv { };
 
-  xmobar = let haskellPackagesExt = haskellPackages.override {
-      extension = self : super : {
-        # We need to disable tests unfortunately because doctest
-        # does not work with transformers-overrides, because it
-        # uses the GHC API.
-        cabal = super.cabal.override { enableCheckPhase = false; };
-
-        transformers = self.transformers_0_4_1_0;
-        mtl = self.mtl_2_2_1;
-      };
-    };
-    in haskellPackagesExt.callPackage ../applications/misc/xmobar {};
-
   xmpppy = builderDefsPackage (import ../development/python-modules/xmpppy) {
     inherit python setuptools;
   };
