@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, curl, pkgconfig, fuse, glib_networking, makeWrapper
+{ stdenv, fetchurl, glib, curl, pkgconfig, fuse, glib-networking, makeWrapper
 , gsettings_desktop_schemas }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for a in $out/bin/*; do
       wrapProgram "$a" \
-            --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
+            --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
             --prefix XDG_DATA_DIRS : "${gsettings_desktop_schemas}/share"
 
     done

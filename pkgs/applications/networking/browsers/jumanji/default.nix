@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, girara, gtk, webkitgtk, glib_networking, makeWrapper }:
+{ stdenv, fetchgit, pkgconfig, girara, gtk, webkitgtk, glib-networking, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "jumanji-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   preFixup=''
     wrapProgram "$out/bin/jumanji" \
-     --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules"
+     --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules"
   '';
 
   meta = with stdenv.lib; {

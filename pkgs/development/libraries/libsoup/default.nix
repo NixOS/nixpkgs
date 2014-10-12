@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, libxml2, pkgconfig
-, gnomeSupport ? true, libgnome_keyring, sqlite, glib_networking, gobjectIntrospection
+, gnomeSupport ? true, libgnome_keyring, sqlite, glib-networking, gobjectIntrospection
 , libintlOrEmpty
 , intltool, python }:
 let
@@ -22,9 +22,9 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib libxml2 gobjectIntrospection ]
     ++ stdenv.lib.optionals gnomeSupport [ libgnome_keyring sqlite ];
-  passthru.propagatedUserEnvPackages = [ glib_networking ];
+  passthru.propagatedUserEnvPackages = [ glib-networking ];
 
-  # glib_networking is a runtime dependency, not a compile-time dependency
+  # glib-networking is a runtime dependency, not a compile-time dependency
   configureFlags = "--disable-tls-check";
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-lintl";

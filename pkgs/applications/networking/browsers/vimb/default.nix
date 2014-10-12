@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libsoup, webkit, gtk, glib_networking
+{ stdenv, fetchurl, pkgconfig, libsoup, webkit, gtk, glib-networking
 , gsettings_desktop_schemas, makeWrapper
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram "$out/bin/vimb" \
-      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
