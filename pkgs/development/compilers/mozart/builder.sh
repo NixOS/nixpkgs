@@ -1,5 +1,3 @@
-#!/bin/bash
-
 source $stdenv/setup
 
 echo "unpacking $src..."
