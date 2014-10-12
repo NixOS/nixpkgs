@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "xmlroff-0.3.98";
   src = fetchurl {
     url = mirror://sourceforge/xmlroff/xmlroff-0.3.98.tar.gz;
-    md5 = "6c1d05b6480e98870751bf9102ea68e2";
+    sha256 = "0pg7zc8ri0xzmdk30vnyd84wy8yn973h1bnrvibv71q44s6xhwp2";
   };
 
   buildInputs = [

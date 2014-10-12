@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://ftp.easysw.com/pub/cups/${version}/cups-${version}-source.tar.bz2";
-    md5 = "de3006e5cf1ee78a9c6145ce62c4e982";
+    sha256 = "07xq6rwpg2r6vjvimd53f259ijx50cnw3p7s1sk84z4dddi6vnfk";
   };
 
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb ]

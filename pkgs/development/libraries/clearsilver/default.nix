@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = http://www.clearsilver.net/downloads/clearsilver-0.10.3.tar.gz;
-    md5 = "ff4104b0e58bca1b61d528edbd902769";
+    sha256 = "1lhbbf5rrqxb44y5clga7iifcfrh8sfjwpj4phnr3qabk92wdn3i";
   };
 
   builder = ./builder.sh;

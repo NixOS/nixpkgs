@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://samba.org/ftp/talloc/${name}.tar.gz";
-    md5 = "c6e736540145ca58cb3dcb42f91cf57b";
+    sha256 = "1d694zyi451a5zr03l5yv0n8yccyr3r8pmzga17xaaaz80khb0av";
   };
 
   configureFlags = "--enable-talloc-compat1 --enable-largefile";

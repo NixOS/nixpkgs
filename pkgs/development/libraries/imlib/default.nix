@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "imlib-1.9.15";
   src = fetchurl {
     url = http://tarballs.nixos.org/imlib-1.9.15.tar.gz;
-    md5 = "2a5561457e7f8b2e04d88f73508fd13a";
+    sha256 = "0ggjxyvgp4pxc0b88v40xj9daz90518ydnycw7qax011gxpr12d3";
   };
 
   configureFlags = "
