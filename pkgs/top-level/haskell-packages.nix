@@ -143,8 +143,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   aeson_0_7_0_4 = callPackage ../development/libraries/haskell/aeson/0.7.0.4.nix { blazeBuilder = null; };
   aeson_0_7_0_6 = callPackage ../development/libraries/haskell/aeson/0.7.0.6.nix { blazeBuilder = null; };
-  aeson_0_8_0_0 = callPackage ../development/libraries/haskell/aeson/0.8.0.0.nix { blazeBuilder = null; };
-  aeson = self.aeson_0_8_0_0;
+  aeson_0_8_0_1 = callPackage ../development/libraries/haskell/aeson/0.8.0.1.nix { blazeBuilder = null; };
+  aeson = self.aeson_0_8_0_1;
 
   aesonPretty = callPackage ../development/libraries/haskell/aeson-pretty {};
 
