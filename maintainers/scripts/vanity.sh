@@ -17,11 +17,11 @@ git_lines="$( ( echo "$git_data";
 
 # For RDF
 normalize_name () {
-	sed -e 's/ /_/g; s/'\''/*/g; s/"/**/g;'
+	sed -e 's/%/%25/g; s/ /%20/g; s/'\''/%27/g; s/"/%22/g;'
 }
 
 denormalize_name () {
-	sed -e 's/_/ /g; s/[*][*]/"/g; s/[*]/'\''/g;'
+	sed -e 's/%20/ /g; s/%27/'\''/g; s/%22/"/g; s/%25/%/g;';
 }
 
 n3="$(mktemp --suffix .n3)"
