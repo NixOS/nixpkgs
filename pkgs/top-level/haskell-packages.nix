@@ -465,9 +465,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   compactStringFix = callPackage ../development/libraries/haskell/compact-string-fix {};
 
-  compdata = if (pkgs.stdenv.lib.versionOlder "7.8" ghc.version)
-               then callPackage ../development/libraries/haskell/compdata {}
-               else null;
+  compdata = callPackage ../development/libraries/haskell/compdata {};
 
   compdataParam = callPackage ../development/libraries/haskell/compdata-param {};
 
@@ -1259,8 +1257,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hsdns = callPackage ../development/libraries/haskell/hsdns {};
 
-  hsemail = if (pkgs.stdenv.lib.versionOlder ghc.version "7") then null else
-    callPackage ../development/libraries/haskell/hsemail {};
+  hsemail = callPackage ../development/libraries/haskell/hsemail {};
 
   hslua = callPackage ../development/libraries/haskell/hslua {
     lua = pkgs.lua5_1;
@@ -2553,8 +2550,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   textStreamDecode = callPackage ../development/libraries/haskell/text-stream-decode {};
 
-  tfRandom = if (pkgs.stdenv.lib.versionOlder ghc.version "7") then null else
-    callPackage ../development/libraries/haskell/tf-random {};
+  tfRandom = callPackage ../development/libraries/haskell/tf-random {};
 
   these = callPackage ../development/libraries/haskell/these {};
 
