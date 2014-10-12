@@ -517,7 +517,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   cprngAes = callPackage ../development/libraries/haskell/cprng-aes {};
 
-  criterion = callPackage ../development/libraries/haskell/criterion {};
+  criterion = callPackage ../development/libraries/haskell/criterion {
+    optparseApplicative = self.optparseApplicative_0_11_0_1;
+  };
 
   Crypto = callPackage ../development/libraries/haskell/Crypto {};
 
