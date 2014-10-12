@@ -3202,6 +3202,9 @@ let
 
   # Import Haskell infrastructure.
 
+  # NOTE: If there would be an opposite for recurseIntoAttrs like e.g. dontListAttrs,
+  #       then haskell should be prefixed with it.
+  #       haskell can not be installed directly.
   haskell = let pkgs_       = pkgs // { gmp = gmp.override { withStatic = true; }; };
                 callPackage = newScope pkgs_;
                 newScope    = extra: lib.callPackageWith (pkgs_ // pkgs_.xorg // extra);
@@ -10534,7 +10537,11 @@ let
     flup = pythonPackages.flup;
   };
 
-  vim = callPackage ../applications/editors/vim { };
+  vimPlain = callPackage ../applications/editors/vim { };
+
+  vim = if isNull config.vim.profile
+    then vimPlain
+    else callPackage ../applications/editors/vim/vimProfiles.nix { vimProfiles=null; vimDefault = config.vim.profile; };
 
   macvim = callPackage ../applications/editors/vim/macvim.nix { };
 
@@ -10571,6 +10578,8 @@ let
     lua = pkgs.lua5;
     flags = [ "python" "X11" ]; # only flag "X11" by now
   });
+
+  vimProfiles = callPackage ../applications/editors/vim/vimProfiles.nix { vimProfiles = config.vimProfiles; };
 
   vimpc = callPackage ../applications/audio/vimpc { };
 
@@ -12216,7 +12225,7 @@ let
 
   viewnior = callPackage ../applications/graphics/viewnior { };
 
-  vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins { });
+  vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins { vim=vimPlain; });
 
   vimprobable2 = callPackage ../applications/networking/browsers/vimprobable2 {
     webkit = webkitgtk2;
