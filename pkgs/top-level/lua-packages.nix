@@ -5,15 +5,15 @@
    for each package in a separate file: the call to the function would
    be almost as must code as the function itself. */
 
-{ fetchurl, stdenv, lua, callPackage, unzip, zziplib,
-pcre, oniguruma, gnulib, tre, glibc,
-sqlite, openssl, expat }:
+{ fetchurl, stdenv, lua, callPackage, unzip, zziplib
+, pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat
+}:
 
 let
- isLua51 = lua.luaversion == "5.1";
- isLua52 = lua.luaversion == "5.2";
- self = _self;
- _self = with self; {
+  isLua51 = lua.luaversion == "5.1";
+  isLua52 = lua.luaversion == "5.2";
+  self = _self;
+  _self = with self; {
   inherit (stdenv.lib) maintainers;
 
   #define build lua package function
@@ -91,14 +91,14 @@ let
     name = "socket-${version}";
     version = "2.0.2";
     src = fetchurl {
-        url = "http://files.luaforge.net/releases/luasocket/luasocket/luasocket-${version}/luasocket-${version}.tar.gz";
-        sha256 = "19ichkbc4rxv00ggz8gyf29jibvc2wq9pqjik0ll326rrxswgnag";
+      url = "http://files.luaforge.net/releases/luasocket/luasocket/luasocket-${version}/luasocket-${version}.tar.gz";
+      sha256 = "19ichkbc4rxv00ggz8gyf29jibvc2wq9pqjik0ll326rrxswgnag";
     };
     disabled = isLua52;
     patchPhase = ''
-        sed -e "s,^INSTALL_TOP_SHARE.*,INSTALL_TOP_SHARE=$out/share/lua/${lua.luaversion}," \
-            -e "s,^INSTALL_TOP_LIB.*,INSTALL_TOP_LIB=$out/lib/lua/${lua.luaversion}," \
-            -i config
+      sed -e "s,^INSTALL_TOP_SHARE.*,INSTALL_TOP_SHARE=$out/share/lua/${lua.luaversion}," \
+          -e "s,^INSTALL_TOP_LIB.*,INSTALL_TOP_LIB=$out/lib/lua/${lua.luaversion}," \
+          -i config
     '';
     meta = {
       homepage = "http://w3.impa.br/~diego/software/luasocket/";
