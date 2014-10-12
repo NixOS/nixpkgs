@@ -5402,6 +5402,8 @@ let
     usePulseAudio = config.pulseaudio or true;
   };
 
+  libantlr3c = callPackage ../development/libraries/libantlr3c {};
+
   libarchive = callPackage ../development/libraries/libarchive { };
 
   libass = callPackage ../development/libraries/libass { };
@@ -11615,6 +11617,7 @@ let
   coqPackages = recurseIntoAttrs (mkCoqPackages_8_4 coqPackages);
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {};
+  cvc4 = callPackage ../applications/science/logic/cvc4 {};
 
   ekrhyper = callPackage ../applications/science/logic/ekrhyper {};
 
