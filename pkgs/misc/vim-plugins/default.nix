@@ -141,6 +141,8 @@ in rec
     # TODO: support llvm based C completion, See README of git repository
     installPhase = ":";
 
+    path = "YouCompleteMe";
+
     meta = {
       description = "fastest non utf-8 aware word and C completion engine for Vim";
       homepage = http://github.com/Valloric/YouCompleteMe;
@@ -323,7 +325,7 @@ in rec
   };
 
   vimproc = simpleDerivation rec {
-    version = "7788b5f934bc7460c1e9134b51fe5690b21de83c";
+    version = "21a79bf4edca3ae97555df3fc729d208c7e19b9c";
     name    = "vimproc-${version}";
 
     meta = with stdenv.lib; {
@@ -338,7 +340,7 @@ in rec
     src = fetchgit {
       url = "https://github.com/Shougo/vimproc.vim.git";
       rev = "${version}";
-      sha256 = "0ahmnzccf5rv8rwg7b6pfgxh8pcmq955aznjv64slyh0mjqmh6jl";
+      sha256 = "16mlrhmd1hq4rgg7bl9gajhb4nmn1x8jxfaxfwiy2bm1phgljgq0";
      };
 
     buildInputs = [ which ];
@@ -573,6 +575,7 @@ in rec
       rev = "0c4e94281e57c475752e799adc261f7d5e4ab124";
       sha256 = "f6a085f7b8198747fae3fff0bc38e4d030e5c97aaeb84958fbf96fa658bbe862";
      };
+    patches = [ (fetchurl { url = "https://github.com/eagletmt/ghcmod-vim/pull/57.diff"; md5 = "cafbb9f725afbba26b52b6c3344ee89a"; }) ];
     path = "ghcmod";
   };
 
