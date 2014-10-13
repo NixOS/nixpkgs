@@ -1,12 +1,12 @@
 { stdenv, fetchurl, kernel }:
 
 stdenv.mkDerivation rec {
-  pname = "lttng-modules-2.4.1";
+  pname = "lttng-modules-2.5.0";
   name = "${pname}-${kernel.version}";
 
   src = fetchurl {
     url = "https://lttng.org/files/lttng-modules/${pname}.tar.bz2";
-    sha256 = "1qn1qm8lwqw9ri9wfkf6k3d58gl9rwffmpbpkwx21v1fw95zi92k";
+    sha256 = "0ayqi974ibaybzm46nb2ij1avqm1gspd4mnkpfc4ajl34j02dyix";
   };
 
   patches = [ ./lttng-fix-build-error-on-linux-3.2.patch ];
@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
     # TODO license = with licenses; [ lgpl21 gpl2 mit ];
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
-    broken = true;
   };
 
 }
