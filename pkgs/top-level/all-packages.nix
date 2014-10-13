@@ -1602,6 +1602,8 @@ let
 
   maildrop = callPackage ../tools/networking/maildrop { };
 
+  mailsend = callPackage ../tools/networking/mailsend { };
+
   mailpile = callPackage ../applications/networking/mailreaders/mailpile { };
 
   mailutils = callPackage ../tools/networking/mailutils {
