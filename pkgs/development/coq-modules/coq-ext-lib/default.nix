@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ coq.ocaml coq.camlp5 ];
   propagatedBuildInputs = [ coq ];
 
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}";
+  enableParallelBuilding = true;
+
+  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/coq-ext-lib/coq-ext-lib;

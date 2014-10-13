@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     homepage = http://coq.inria.fr/pylons/pylons/contribs/view/Containers/v8.4;
     description = "A typeclass-based Coq library of finite sets/maps";
-    maintainers = with maintainers; [ vbgl ];
+    maintainers = with maintainers; [ vbgl jwiegley ];
     platforms = coq.meta.platforms;
   };
 
