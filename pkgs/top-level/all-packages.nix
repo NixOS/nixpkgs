@@ -10352,6 +10352,8 @@ let
 
   tabbed = callPackage ../applications/window-managers/tabbed { };
 
+  tagainijisho = callPackage ../applications/office/tagainijisho {};
+
   tahoelafs = callPackage ../tools/networking/p2p/tahoe-lafs {
     inherit (pythonPackages) twisted foolscap simplejson nevow zfec
       pycryptopp sqlite3 darcsver setuptoolsTrial setuptoolsDarcs
