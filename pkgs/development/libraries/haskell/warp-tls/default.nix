@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "warp-tls";
-  version = "3.0.0";
-  sha256 = "14gm43a811v9h87ia2b9y9kynafrvq3yw89gswlj832469jx9sfw";
+  version = "3.0.0.1";
+  sha256 = "054xazykd2njwrjzxkz08nqf7fghgjzc7rg7qbl5pfpn9b2a4pls";
   buildDepends = [
     cprngAes dataDefaultClass network streamingCommons tls wai warp
   ];
