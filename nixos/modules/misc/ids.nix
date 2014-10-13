@@ -155,6 +155,7 @@
       consul = 145;
       mailpile = 146;
       redmine = 147;
+      seeks = 148;
 
       prosody = 148;
 
@@ -279,6 +280,7 @@
       uhub = 142;
       mailpile = 146;
       redmine = 147;
+      seeks = 148;
 
       prosody = 148;
 
