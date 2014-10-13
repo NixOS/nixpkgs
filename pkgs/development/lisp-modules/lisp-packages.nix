@@ -44,8 +44,6 @@ let lispPackages = rec {
     };
   };
 
-  stumpwm = callPackage ./stumpwm {};
-
   alexandria = buildLispPackage rec {
     baseName = "alexandria";
     version = "git-20131029";
