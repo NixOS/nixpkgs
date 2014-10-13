@@ -351,6 +351,8 @@ let
 
 
 
+    # the default config
+    defaultCfg = (filterAttrs (n: v: n != "profile") config.programs.vim);
   };
 in
 {
@@ -361,17 +363,12 @@ in
 
 
   ###### configuration
-  config =
-   let
-     # the default config
-     defaultCfg = (filterAttrs (n: v: n != "profile") config.programs.vim);
-     enabledProfiles = filterAttrs (n: v: v.enable) config.programs.vim.profiles;
-
-     vimProfilesConfig = mapAttrs (p_name: p_cfg: configHelpers.defineWrapper p_name (configHelpers.mergeConfig defaultCfg p_cfg)) enabledProfiles;
-     vimDefaultConfig = if defaultCfg.enable then (configHelpers.defineWrapper null defaultCfg) else null;
-
-     # reduce the priority of the default configuration;
-     vimProfileOptionDefaults =
+  config = {
+      nixpkgs.config.vim.profile = if configHelpers.defaultCfg.enable then (configHelpers.defineWrapper null configHelpers.defaultCfg) else null;
+      nixpkgs.config.vimProfiles = mapAttrs (p_name: p_cfg: configHelpers.defineWrapper p_name (configHelpers.mergeConfig configHelpers.defaultCfg p_cfg))
+                                     (filterAttrs (n: v: v.enable) config.programs.vim.profiles);
+      programs.vim =
+       # reduce the priority of the default configuration;
        let
          default = mapAttrs (n: value: mkDefault value) defaultConfig;
          profiles = (mapAttrsRecursive (path: value: if ((length path) <= 2) then mkDefault value else value) defaultConfig.profiles);
@@ -379,7 +376,6 @@ in
          if (hasAttr "profiles" defaultConfig) then
            default // { profiles = (mkDefault profiles); }
          else default;
-   in 
-    {nixpkgs.config.vim.profile = vimDefaultConfig; nixpkgs.config.vimProfiles = vimProfilesConfig; programs.vim = vimProfileOptionDefaults;};
+    };
 }
 

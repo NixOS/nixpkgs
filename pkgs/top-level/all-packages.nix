@@ -60,9 +60,11 @@ let
 
       configExpr =
         if config_ != null then config_
-        else if configFile != "" && pathExists configFile then import (toPath configFile)
-        else if homeDir != "" && pathExists configFile2 then import (toPath configFile2)
+        else if configFile != "" && pathExists configFile then warnDeprecated (import (toPath configFile))
+        else if homeDir != "" && pathExists configFile2 then warnDeprecated (import (toPath configFile2))
         else {};
+
+      warnDeprecated = x: builtins.trace "~/.nixpkgs/config.nix is deprecated, move its content into the attribute 'nixpkgs/config' in ~/.nixpkgs/configuration.nix instead" x;
 
     in
       # allow both:
@@ -94,7 +96,7 @@ let
         else [];
 
       nixpkgs_options_base =  [ ../../nixos/modules/misc/nixpkgs.nix ];
-      nixuser_modules = import ../../nixos/modules/nixuser-module-list.nix;
+      nixuser_modules = import ../../nixuser/modules/module-list.nix;
 
       nixpkgsConfig_ = [{nixpkgs.config = nixpkgsConfig;}];
     in
