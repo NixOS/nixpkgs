@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "binary";
-  version = "0.7.2.1";
-  sha256 = "0s0idmcmribgajxxnxdvppnz62qyxwrj9iy34pi7nvm41gj6q5nz";
+  version = "0.7.2.2";
+  sha256 = "10z1b9axgfg9kb44b8sfxd5mak5qaqyjfwn4i21y37zgf7wadblr";
   testDepends = [
     Cabal filepath HUnit QuickCheck random testFramework
     testFrameworkQuickcheck2
@@ -17,6 +17,5 @@ cabal.mkDerivation (self: {
     description = "Binary serialisation for Haskell values using lazy ByteStrings";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

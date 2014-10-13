@@ -35,23 +35,23 @@
       };
     };
     attoparsec = self.attoparsec_0_11_3_1;
-    binaryConduit = super.binaryConduit.override { binary = self.binary_0_7_2_1; };
-    bson = super.bson.override { dataBinaryIeee754 = self.dataBinaryIeee754.override { binary = self.binary_0_7_2_1; }; };
+    binaryConduit = super.binaryConduit.override { binary = self.binary_0_7_2_2; };
+    bson = super.bson.override { dataBinaryIeee754 = self.dataBinaryIeee754.override { binary = self.binary_0_7_2_2; }; };
     cabal2nix = super.cabal2nix.override { hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_18_1_3; }; };
     criterion = super.criterion.override {
       statistics = self.statistics.override {
-        vectorBinaryInstances = self.vectorBinaryInstances.override { binary = self.binary_0_7_2_1; };
+        vectorBinaryInstances = self.vectorBinaryInstances.override { binary = self.binary_0_7_2_2; };
       };
     };
-    Elm = super.Elm.override { pandoc = self.pandoc.override { zipArchive = self.zipArchive.override { binary = self.binary_0_7_2_1; }; }; };
+    Elm = super.Elm.override { pandoc = self.pandoc.override { zipArchive = self.zipArchive.override { binary = self.binary_0_7_2_2; }; }; };
     gloss = null;                       # requires base >= 4.7
     haddock = self.haddock_2_13_2;
     modularArithmetic = null;           # requires base >= 4.7
-    pipesBinary = super.pipesBinary.override { binary = self.binary_0_7_2_1; };
-    rank1dynamic = super.rank1dynamic.override { binary = self.binary_0_7_2_1; };
-    distributedStatic = super.distributedStatic.override { binary = self.binary_0_7_2_1; };
-    networkTransport = super.networkTransport.override { binary = self.binary_0_7_2_1; };
-    distributedProcess = super.distributedProcess.override { binary = self.binary_0_7_2_1; };
+    pipesBinary = super.pipesBinary.override { binary = self.binary_0_7_2_2; };
+    rank1dynamic = super.rank1dynamic.override { binary = self.binary_0_7_2_2; };
+    distributedStatic = super.distributedStatic.override { binary = self.binary_0_7_2_2; };
+    networkTransport = super.networkTransport.override { binary = self.binary_0_7_2_2; };
+    distributedProcess = super.distributedProcess.override { binary = self.binary_0_7_2_2; };
     scientific = self.scientific_0_2_0_2;
     singletons = null;                  # requires base >= 4.7
     transformers = self.transformers_0_3_0_0; # core packagen in ghc > 7.6.x
@@ -82,7 +82,7 @@
   };
 
   ghc704Prefs = self : super : ghc722Prefs self super // {
-    binary = self.binary_0_7_2_1;       # core package in ghc >= 7.2.2
+    binary = self.binary_0_7_2_2;       # core package in ghc >= 7.2.2
     caseInsensitive = super.caseInsensitive; # undo the override from ghc 7.2.2
     haddock = self.haddock_2_9_2.override { alex = self.alex_2_3_5; };
     HsSyck = self.HsSyck_0_51;
@@ -121,7 +121,7 @@
     alex = self.alex_2_3_5.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     async = null;                       # none of our versions compile
     attoparsec = null;                  # none of our versions compile
-    binary = super.binary_0_7_2_1.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    binary = super.binary_0_7_2_2.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     caseInsensitive = super.caseInsensitive.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     GLUT = self.GLUT_2_2_2_1;
     haddock = self.haddock_2_4_2;
