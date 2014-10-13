@@ -11,5 +11,6 @@ cabal.mkDerivation (self: {
     description = "Stateful supply monad";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })
