@@ -24,5 +24,6 @@ cabal.mkDerivation (self: {
     description = "Haskell bindings to LevelDB";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })
