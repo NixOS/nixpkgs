@@ -146,7 +146,7 @@ rec {
     description = "A TeX distribution";
     homepage    = http://www.tug.org/texlive;
     license     = stdenv.lib.licenses.gpl2;
-    maintainers = with maintainers; [ lovek323 raskin ];
+    maintainers = with maintainers; [ lovek323 raskin jwiegley ];
     platforms   = platforms.unix;
   };
 }

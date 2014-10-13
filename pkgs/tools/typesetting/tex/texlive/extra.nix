@@ -18,7 +18,7 @@ rec {
 
   meta = {
     description = "Extra components for TeXLive";
-    maintainers = [ args.lib.maintainers.raskin ];
+    maintainers = [ args.lib.maintainers.raskin args.lib.maintainers.jwiegley ];
 
     # Actually, arch-independent..
     hydraPlatforms = [];
