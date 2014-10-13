@@ -1574,6 +1574,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   machinesDirectory = callPackage ../development/libraries/haskell/machines-directory {};
 
+  machinesIo = callPackage ../development/libraries/haskell/machines-io {};
+
   managed = callPackage ../development/libraries/haskell/managed {};
 
   markdown = callPackage ../development/libraries/haskell/markdown {};
