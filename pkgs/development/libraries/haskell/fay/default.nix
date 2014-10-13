@@ -9,8 +9,8 @@
 
 cabal.mkDerivation (self: {
   pname = "fay";
-  version = "0.20.2.0";
-  sha256 = "1xblfsd1rj38nlw0dl56zvvnad3l0bpsncv1k5vjs4h8cmwl1ik2";
+  version = "0.21.0.1";
+  sha256 = "0lrnn73xqgkgh5zd4ngvl0lyzqbx5kp52j14dj2xbkbxnnivwgl4";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
