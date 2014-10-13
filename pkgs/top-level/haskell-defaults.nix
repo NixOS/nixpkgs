@@ -113,7 +113,7 @@
     syb = null;                         # core package in ghc < 7
     tagged = super.tagged.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     temporary = null;                   # none of our versions compile
-    vector = super.vector.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    vector = super.vector_0_10_9_3;
     vectorAlgorithms = super.vectorAlgorithms.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
   };
 
