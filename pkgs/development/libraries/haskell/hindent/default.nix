@@ -13,5 +13,6 @@ cabal.mkDerivation (self: {
     description = "Extensible Haskell pretty printer";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })
