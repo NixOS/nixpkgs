@@ -1858,6 +1858,8 @@ let
     inherit (pythonPackages) sqlite3;
   };
 
+  opencryptoki = callPackage ../tools/security/opencryptoki { };
+
   opendbx = callPackage ../development/libraries/opendbx { };
 
   opendkim = callPackage ../development/libraries/opendkim { };
