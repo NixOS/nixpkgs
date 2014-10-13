@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haskelldb";
-  version = "2.2.2";
-  sha256 = "1nwy05wsffagv62kbi8ahm6s591wal7cdl19p0fqi86qz05y9hkm";
+  version = "2.2.4";
+  sha256 = "0f8c9bz25wzsc65czv0chxk93w947824axl7p821fljlrykcm45y";
   buildDepends = [ mtl time ];
   meta = {
     homepage = "https://github.com/m4dc4p/haskelldb";
@@ -13,7 +13,5 @@ cabal.mkDerivation (self: {
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
-    hydraPlatforms = self.stdenv.lib.platforms.none;
-    broken = true;
   };
 })
