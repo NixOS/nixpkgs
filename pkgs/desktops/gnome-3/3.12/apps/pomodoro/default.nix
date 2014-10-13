@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, which, automake113x, intltool, pkgconfig, libtool, makeWrapper,
+{ stdenv, fetchFromGitHub, which, automake113x, intltool, pkgconfig, libtool, makeWrapper,
   dbus_glib, libcanberra, gst_all_1, upower, vala, gnome3_12, gtk3, gst_plugins_base,
   glib, gobjectIntrospection, hicolor_icon_theme
 }:
@@ -6,10 +6,11 @@
 stdenv.mkDerivation rec {
   name = "gnome-shell-pomodoro-0.10.2-11-gd5f5b69";
 
-  src = fetchgit {
-      url = git://github.com/codito/gnome-shell-pomodoro.git;
-      rev = "refs/tags/0.10.2";
-      sha256 = "e58966abd859e35cbd7fd4b8816b521f4ec9ba5cd8e8c27d2067dd2ec4554b40";
+  src = fetchFromGitHub {
+      owner = "codito";
+      repo = "gnome-shell-pomodoro";
+      rev = "0.10.2";
+      sha256 = "1jd4xmcx0fbcn57d1qj7b4xkj0dv4i75s367nifabm47akqzyn4f";
   };
 
   configureScript = ''./autogen.sh'';
