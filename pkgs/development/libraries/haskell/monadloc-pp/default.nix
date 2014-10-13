@@ -16,5 +16,6 @@ cabal.mkDerivation (self: {
     license = self.stdenv.lib.licenses.publicDomain;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ tomberek ];
+    broken = true;
   };
 })
