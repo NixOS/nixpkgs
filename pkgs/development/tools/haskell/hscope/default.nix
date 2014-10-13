@@ -20,5 +20,6 @@ cabal.mkDerivation (self: {
     description = "cscope like browser for Haskell code";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })
