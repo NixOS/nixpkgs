@@ -18,19 +18,19 @@ assert stdenv.gcc.gcc != null;
 
 */
 
-with ((import ./common.nix) {inherit stdenv; version = "0.12.0-pre-3edcdbb0";});
+with ((import ./common.nix) {inherit stdenv; version = "0.12.0-pre-127-ga0ea210";});
 
 let snapshot = if stdenv.system == "i686-linux"
-      then "555aca74f9a268f80cab2df1147dc6406403e9e4"
+      then "0644637db852db8a6c603ded0531ccaa60291bd3"
       else if stdenv.system == "x86_64-linux"
-      then "6a43c2f6c8ba2cbbcb9da1f7b58f748aef99f431"
+      then "656b8c23fbb97794e85973aca725a4b9cd07b29e"
       else if stdenv.system == "i686-darwin"
-      then "331bd7ef519cbb424188c546273e8c7d738f0894"
+      then "e4d9709fcfe485fcca00f0aa1fe456e2f164ed96"
       else if stdenv.system == "x86_64-darwin"
-      then "2c83a79a9febfe1d326acb17c3af76ba053c6ca9"
+      then "6b1aa5a441965da87961be81950e8663eadba377"
       else abort "no-snapshot for platform ${stdenv.system}";
-    snapshotDate = "2014-10-04";
-    snapshotRev = "749ff5e";
+    snapshotDate = "2014-10-10";
+    snapshotRev = "78a7676";
     snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshot}.tar.bz2";
 
 in stdenv.mkDerivation {
@@ -40,8 +40,8 @@ in stdenv.mkDerivation {
 
   src = fetchgit {
     url = https://github.com/rust-lang/rust;
-    rev = "3edcdbb0c01187a0cc6456ca29cd858579459b18";
-    sha256 = "0s125x71r0wi7m142nnynpc6vcwlmq4bh8rbysn9cg3bvj5ddgrm";
+    rev = "a0ea210b394aa1b61d341593a3f9098fe5bf7806";
+    sha256 = "0flwzj6dywaq9s77ayinshqbz8na2a1jabkr9s7zj74s2ya5096i";
   };
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
