@@ -517,9 +517,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   cprngAes = callPackage ../development/libraries/haskell/cprng-aes {};
 
-  criterion = callPackage ../development/libraries/haskell/criterion {
-    optparseApplicative = self.optparseApplicative_0_11_0_1;
-  };
+  criterion = callPackage ../development/libraries/haskell/criterion {};
 
   Crypto = callPackage ../development/libraries/haskell/Crypto {};
 
@@ -1361,9 +1359,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   imm = callPackage ../development/libraries/haskell/imm {};
 
-  implicit = callPackage ../development/libraries/haskell/implicit {
-    optparseApplicative = self.optparseApplicative_0_9_1_1;
-  };
+  implicit = callPackage ../development/libraries/haskell/implicit {};
 
   indents = callPackage ../development/libraries/haskell/indents {};
 
@@ -1832,10 +1828,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   options = callPackage ../development/libraries/haskell/options {};
 
-  optparseApplicative_0_9_1_1 = callPackage ../development/libraries/haskell/optparse-applicative/0.9.1.1.nix {};
+  #optparseApplicative_0_9_1_1 = callPackage ../development/libraries/haskell/optparse-applicative/0.9.1.1.nix {};
   optparseApplicative_0_10_0 = callPackage ../development/libraries/haskell/optparse-applicative/0.10.0.nix {};
   optparseApplicative_0_11_0_1 = callPackage ../development/libraries/haskell/optparse-applicative/0.11.0.1.nix {};
-  optparseApplicative = self.optparseApplicative_0_10_0;
+  optparseApplicative = self.optparseApplicative_0_11_0_1;
 
   pathPieces = callPackage ../development/libraries/haskell/path-pieces {};
 
@@ -2966,9 +2962,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   BNFC = callPackage ../development/tools/haskell/BNFC {};
 
-  cake3 = callPackage ../development/tools/haskell/cake3 {
-    optparseApplicative = self.optparseApplicative_0_9_1_1;
-  };
+  cake3 = callPackage ../development/tools/haskell/cake3 {};
 
   cpphs = callPackage ../development/tools/misc/cpphs {};
 
