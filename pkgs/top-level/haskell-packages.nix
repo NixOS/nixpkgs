@@ -2676,8 +2676,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   unorderedContainers_0_2_3_0 = callPackage ../development/libraries/haskell/unordered-containers/0.2.3.0.nix {};
   unorderedContainers_0_2_4_0 = callPackage ../development/libraries/haskell/unordered-containers/0.2.4.0.nix {};
-  unorderedContainers_0_2_5_0 = callPackage ../development/libraries/haskell/unordered-containers/0.2.5.0.nix {};
-  unorderedContainers = self.unorderedContainers_0_2_5_0;
+  unorderedContainers_0_2_5_1 = callPackage ../development/libraries/haskell/unordered-containers/0.2.5.1.nix {};
+  unorderedContainers = self.unorderedContainers_0_2_5_1;
 
   uri = callPackage ../development/libraries/haskell/uri {};
 

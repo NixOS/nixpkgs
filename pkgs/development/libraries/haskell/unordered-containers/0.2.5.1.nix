@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "unordered-containers";
-  version = "0.2.5.0";
-  sha256 = "0y85a9zg77h05c5ajchvfazg84ksvyi92r6bbmh09qzlf7mlb4bj";
+  version = "0.2.5.1";
+  sha256 = "06l1xv7vhpxly75saxdrbc6p2zlgz1az278arfkz4rgawfnphn3f";
   buildDepends = [ deepseq hashable ];
   testDepends = [
     ChasingBottoms hashable HUnit QuickCheck testFramework
