@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.1.0.0";
   sha256 = "07ky1j9ihn493a8q2g1pc0ynam1mkzdi4hjs74kpfnlvl9x6ic7g";
   buildDepends = [ chunkedData machines transformers ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/aloiscochard/machines-io";
     description = "IO utilities for the machines library";
