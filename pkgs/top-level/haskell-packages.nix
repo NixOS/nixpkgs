@@ -2059,7 +2059,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   random_1_0_1_1 = callPackage ../development/libraries/haskell/random/1.0.1.1.nix {};
   random_1_0_1_3 = callPackage ../development/libraries/haskell/random/1.0.1.3.nix {};
-  random = self.random_1_0_1_3;
+  random_1_1 = callPackage ../development/libraries/haskell/random/1.1.nix {};
+  random = self.random_1_1;
 
   randomFu = callPackage ../development/libraries/haskell/random-fu {};
 
