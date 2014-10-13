@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "auto-update";
-  version = "0.1.1.3";
-  sha256 = "06izsfd3xiragzac682vg3bmr6947y8s4yr2r7rip7qjvsja2yhy";
+  version = "0.1.1.5";
+  sha256 = "1gwx9k953nhw6n4d8a4jw3sfp51761s5qjsql73pr8i6gri0849h";
   meta = {
     homepage = "https://github.com/yesodweb/wai";
     description = "Efficiently run periodic, on-demand actions";
