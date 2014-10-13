@@ -1576,6 +1576,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   managed = callPackage ../development/libraries/haskell/managed {};
 
+  mapSyntax = callPackage ../development/libraries/haskell/map-syntax {};
+
   markdown = callPackage ../development/libraries/haskell/markdown {};
 
   markdownUnlit = callPackage ../development/libraries/haskell/markdown-unlit {};
