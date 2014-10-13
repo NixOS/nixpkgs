@@ -2,7 +2,6 @@ args : with args;
 rec {
   src = fetchurl {
     url = mirror://debian/pool/main/t/texlive-bin/texlive-bin_2014.20140926.35254.orig.tar.xz;
-    sha256 = "0nh8hfayyf60nm4z8zyclrbc3792c62azgsvrwxnl28iq223200s";
     sha256 = "1c39x059jhn5jsy6i9j3akjbkm1kmmzssy1jyi1aw20rl2vp86w3";
   };
 
