@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "monad-journal";
-  version = "0.4.0.2";
-  sha256 = "0biz564lgddzd6hygb7jd3rh8xa7qmzby4q3fyfa9fizmdcwf9j8";
+  version = "0.5";
+  sha256 = "1dr5l9pz1wij3ysp95pchlgw1zs12akgrm7rrr3bnv162c13vb9h";
   buildDepends = [
     either monadControl mtl transformers transformersBase
   ];
