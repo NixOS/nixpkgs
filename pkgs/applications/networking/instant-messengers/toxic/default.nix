@@ -2,21 +2,23 @@
 , libtoxcore, openal, libvpx, freealut, libconfig, pkgconfig }:
 
 let
-  version = "0.4.7";
+  version = "0.5.1";
 in stdenv.mkDerivation rec {
   name = "toxic-${version}";
 
   src = fetchurl {
     url = "https://github.com/Tox/toxic/archive/v${version}.tar.gz";
-    sha256 = "0rcrcqzvicz7787fa4b7f68qnwq6wqbyrm8ii850f1w7vnxq9dkq";
+    sha256 = "0zzfgwm17a4xcy9l0ll2pksp45mz6f4s3isdrgjpw1xibv9xnzcm";
   };
 
-  makeFlags = [ "-Cbuild" "VERSION=${version}" ];
+  makeFlags = [ "-Cbuild" "VERSION=${version}" "PREFIX=$(out)" ];
   installFlags = [ "PREFIX=$(out)" ];
 
   buildInputs = [
-    autoconf libtool automake libtoxcore libsodium ncurses openal libvpx
-    freealut libconfig pkgconfig
+    autoconf libtool automake libtoxcore libsodium ncurses
+    libconfig pkgconfig
+  ] ++ stdenv.lib.optionals (!stdenv.isArm) [
+    openal libvpx freealut
   ];
 
   meta = {

@@ -482,7 +482,7 @@ sub screenshot {
     my $name = basename($filename);
     $self->nest("making screenshot ‘$name’", sub {
         $self->sendMonitorCommand("screendump $tmp");
-        system("convert $tmp ${filename}") == 0
+        system("pnmtopng $tmp > ${filename}") == 0
             or die "cannot convert screenshot";
         unlink $tmp;
     }, { image => $name } );

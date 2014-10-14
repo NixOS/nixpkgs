@@ -164,9 +164,11 @@ rec {
 
   totem-pl-parser = callPackage ./core/totem-pl-parser { };
 
-  tracker = callPackage ./core/tracker { };
+  tracker = callPackage ./core/tracker { giflib = pkgs.giflib_5_0; };
 
   vte = callPackage ./core/vte { };
+
+  vte-select-text = callPackage ./core/vte { selectTextPatch = true; };
 
   vino = callPackage ./core/vino { };
 
@@ -211,6 +213,8 @@ rec {
 
   seahorse = callPackage ./apps/seahorse { };
 
+  pomodoro = callPackage ./apps/pomodoro { };
+
 #### Dev http://ftp.gnome.org/pub/GNOME/devtools/
 
   anjuta = callPackage ./devtools/anjuta { };
@@ -232,7 +236,7 @@ rec {
   libgit2-glib = callPackage ./misc/libgit2-glib { };
 
   libmediaart = callPackage ./misc/libmediaart { };
-  
+
   gexiv2 = callPackage ./misc/gexiv2 { };
 
   gnome-tweak-tool = callPackage ./misc/gnome-tweak-tool { };
@@ -240,4 +244,5 @@ rec {
   gpaste = callPackage ./misc/gpaste { };
 
   gtkhtml = callPackage ./misc/gtkhtml { };
+
 }

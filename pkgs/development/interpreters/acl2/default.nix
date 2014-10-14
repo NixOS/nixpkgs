@@ -26,8 +26,8 @@ rec {
   doDeploy = (a.simplyShare installSuffix);
   doBuild = a.fullDepEntry (''
     cd $out/share/${installSuffix}
-    make LISP=${a.sbcl}/bin/sbcl
-    make LISP=${a.sbcl}/bin/sbcl regression
+    make LISP='${a.sbcl}/bin/sbcl --dynamic-space-size 2000'
+    make LISP='${a.sbcl}/bin/sbcl --dynamic-space-size 2000' regression
     mkdir -p "$out/bin"
     cp saved_acl2 "$out/bin/acl2"
   '') ["doDeploy" "addInputs" "defEnsureDir"];

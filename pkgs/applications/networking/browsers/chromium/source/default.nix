@@ -22,7 +22,9 @@ stdenv.mkDerivation {
 
   prePatch = "patchShebangs .";
 
-  patches = [ ./sandbox_userns_36.patch ./missing_alg_import.patch ];
+  patches = let
+    onPre39 = optional (versionOlder version "39.0.0.0");
+  in [ ./sandbox_userns_36.patch ] ++ onPre39 ./missing_alg_import.patch;
 
   postPatch = ''
     sed -i -r \

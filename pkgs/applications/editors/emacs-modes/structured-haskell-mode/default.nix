@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "structured-haskell-mode";
-  version = "1.0.3";
-  sha256 = "0axmw8bj51q8v0wd4jp6giw9dnv0mp7kp8yd16s4nm4hcqgrh5h2";
+  version = "1.0.4";
+  sha256 = "1402wx27py7292ad7whsb13ywv71k36501jpfrn2p0v7knzknj8z";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ haskellSrcExts haskellMode ];

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1jd2y0ydcpjdmjbx77lw35710sqfwbgyrnpv66mi3gwvrbyiwpf3";
   };
 
-  buildInputs = [ qt4 pkgconfig boost ];
+  buildInputs = [ qt4 pkgconfig boost boost.lib ];
   propagatedBuildInputs = [ dbus ];
 
   configurePhase = "qmake";

@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "timeplot";
-  version = "1.0.25";
-  sha256 = "14zyzr53gpp0i7wx49zzdrndqdhsw3q4z3w5hdl8c4m541pr25fw";
+  version = "1.0.27";
+  sha256 = "072bxa0pfxyia4xvj0w0h8v3yfk05bbq5j905sj6jf9apjr9h558";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -20,7 +20,5 @@ cabal.mkDerivation (self: {
     description = "A tool for visualizing time series from log files";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
-    broken = true;
   };
 })

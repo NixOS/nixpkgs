@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "libdvdcss-1.2.13";
+  name = "libdvdcss-1.3.0";
   
   src = fetchurl {
-    url = http://download.videolan.org/pub/libdvdcss/1.2.13/libdvdcss-1.2.13.tar.bz2;
-    sha256 = "0b5s25awn2md4jr00rwg5siwvi3kivyaxkjgfxzzh7ggrykbpwc4";
+    url = http://download.videolan.org/pub/libdvdcss/1.3.0/libdvdcss-1.3.0.tar.bz2;
+    sha256 = "158k9zagmbk5bkbz96l6lwhh7xcgfcnzflkr4vblskhcab6llhbw";
   };
 
   meta = {

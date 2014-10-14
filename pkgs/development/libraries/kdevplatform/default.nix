@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, cmake, kdelibs, subversion, qt4, automoc4, perl, phonon,
+{ stdenv, fetchurl, cmake, kdelibs, subversion, qt4, automoc4, phonon,
   gettext, pkgconfig, apr, aprutil, boost, qjson, grantlee }:
 
 stdenv.mkDerivation rec {
-  name = "kdevplatform-1.6.0";
+  name = "kdevplatform-1.7.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/kdevelop/4.6.0/src/${name}.tar.xz";
-    sha256 = "cdf7c88ca8860258f46e41d2107c826a307212fd041345bee54fbd70c9794f80";
+    url = "mirror://kde/stable/kdevelop/4.7.0/src/${name}.tar.xz";
+    sha256 = "bfd765019511c5c9abc19bc412c75d7abd468f1a077ce4bc471cd6704b9f53f7";
   };
 
   propagatedBuildInputs = [ kdelibs qt4 phonon ];

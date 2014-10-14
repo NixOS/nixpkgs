@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, pythonPackages, gnupg1orig, makeWrapper }:
+{ stdenv, fetchgit, pythonPackages, gnupg1orig, makeWrapper, openssl }:
 
 pythonPackages.buildPythonPackage rec {
   name = "mailpile-${version}";
-  version = "0.4.0";
+  version = "0.4.1";
 
-  src = fetchurl {
-    url = "https://github.com/pagekite/Mailpile/archive/${version}.zip";
-    sha256 = "1di859lnhmlih4byfpsj8x6wjvzrddw0ng0w69bsj5f9bdy4rgq4";
+  src = fetchgit {
+    url = "git://github.com/pagekite/Mailpile";
+    rev = "refs/tags/${version}";
+    sha256 = "0h84cc9kwb0m4admqjkpg4pllxlh095rmzvrql45kz71fpnxs780";
   };
-  
+
   patchPhase = ''
     substituteInPlace setup.py --replace "data_files.append((dir" "data_files.append(('lib/${pythonPackages.python.libPrefix}/site-packages/' + dir"
   '';
@@ -19,7 +20,8 @@ pythonPackages.buildPythonPackage rec {
   ];
 
   postInstall = ''
-    wrapProgram $out/bin/mailpile --prefix PATH ":" "${gnupg1orig}/bin"
+    wrapProgram $out/bin/mailpile \
+      --prefix PATH ":" "${gnupg1orig}/bin:${openssl}/bin"
   '';
 
   meta = with stdenv.lib; {

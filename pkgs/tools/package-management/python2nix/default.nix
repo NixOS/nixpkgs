@@ -1,15 +1,13 @@
 { stdenv, fetchFromGitHub, pythonPackages }:
 
-
 pythonPackages.buildPythonPackage rec {
-  name = "python2nix-dev";
+  name = "python2nix-20140927";
  
-  # TODO: change to upstream once https://github.com/proger/python2nix/pull/3 is merged
   src = fetchFromGitHub {
-    owner = "iElectric";
+    owner = "proger";
     repo = "python2nix";
-    rev = "734de5f680425c6298eff46481e5e717d6e141a9";
-    sha256 = "09qpzml38rplbr7vhplhzy3iy5n9fd3ba5b9r9cp6d08sk5xidqf";
+    rev = "84e3a5bbe82e5d9d694d6db8dabf73def4ac917b";
+    sha256 = "022gr0gw6azfi3iq4ggb3fhkw2jljs6n5rncn45hb5liwakigj8i";
   };
 
   propagatedBuildInputs = with pythonPackages; [ requests pip setuptools ];

@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   
   src = fetchurl {
     url = mirror://sourceforge/rss-glx/rss-glx_0.8.1.tar.bz2;
-    md5 = "a2bdf0e10ee4e89c8975f313c5c0ba6f";
+    sha256 = "1fs2xavyf9i6vcdmdnpyi9rbnrg05ldd49bvlcwpn5igv2g400yg";
   };
 
   buildInputs = [x11 mesa pkgconfig imagemagick libtiff bzip2];

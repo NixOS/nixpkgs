@@ -1,13 +1,13 @@
-{stdenv, fetchurl, patchelf, glibc, libX11, mesa}:
+{ stdenv, fetchurl, patchelf, glibc, libX11, mesa }:
 
 with stdenv.lib;
 assert stdenv.isi686;
 stdenv.mkDerivation {
-  name = "tibia-10.41";
+  name = "tibia-10.59";
 
   src = fetchurl {
-    url = http://static.tibia.com/download/tibia1041.tgz;
-    sha256 = "1hmqn9c6qaa79ldcnl4ws9dm6rd3ymy48fw254pl6g601amn7b8v";
+    url = http://static.tibia.com/download/tibia1059.tgz;
+    sha256 = "0g9f4g7d461yj47rsiv5fpvh4wry9rsx4j6q1jajq4liv5xdlhl7";
   };
 
   shell = stdenv.shell;
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -pv $out/res
-    cp -r ./* $out/res
+    cp -r * $out/res
 
     patchelf --set-interpreter ${glibc}/lib/ld-linux.so.2 \
              --set-rpath ${stdenv.gcc.gcc}/lib:${libX11}/lib:${mesa}/lib \

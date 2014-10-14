@@ -7,11 +7,11 @@ stdenv.mkDerivation rec {
   src = if stdenv.system == "i686-linux"
     then fetchurl {
       url = "http://dl.google.com/android/ndk/${name}-linux-x86.tar.bz2";
-      md5 = "6c1d7d99f55f0c17ecbcf81ba0eb201f";
+      sha256 = "0lrxx8rclmda72dynh0qjr6xpcnv5vs3gc96jcia37h8mmn2xv6m";
     }
     else if stdenv.system == "x86_64-linux" then fetchurl {
       url = "http://dl.google.com/android/ndk/${name}-linux-x86_64.tar.bz2";
-      md5 = "c7c775ab3342965408d20fd18e71aa45";
+      sha256 = "16miwrnf3c7x7rlpmssmjx9kybmapsjyamjyivhabb2wm21x3q8l";
     }
     else throw "platform not ${stdenv.system} supported!";
 
@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     mkdir -pv $out
     tar xf $src
     mv */* $out
+
+    # so that it doesn't fail because of read-only permissions set
+    patch -p1 -d $out < ${ ./make-standalone-toolchain.patch }
+
     find $out \( \
         \( -type f -a -name "*.so*" \) -o \
         \( -type f -a -perm +0100 \) \

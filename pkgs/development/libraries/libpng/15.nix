@@ -3,11 +3,11 @@
 assert zlib != null;
 
 stdenv.mkDerivation rec {
-  name = "libpng-1.5.18";
+  name = "libpng-1.5.19";
 
   src = fetchurl {
     url = "mirror://sourceforge/libpng/${name}.tar.xz";
-    sha256 = "119m71p60iq3yn2n8ckl4j4cxvbpddj6sgdpa6g05jzyg7vw54y0";
+    sha256 = "1s990cdsdlbb78aq4sj2vq2849p2nbbbnbk5p8f9w45rn0v5q98y";
   };
 
   propagatedBuildInputs = [ zlib ];
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "The official reference implementation for the PNG file format";
     homepage = http://www.libpng.org/pub/png/libpng.html;
-    license = "free-non-copyleft"; # http://www.libpng.org/pub/png/src/libpng-LICENSE.txt
+    license = stdenv.lib.licenses.libpng;
+    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    branch = "1.5";
   };
 }

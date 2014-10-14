@@ -10,6 +10,6 @@ cabal.mkDerivation (self: {
     homepage = "https://github.com/kolmodin/hinotify.git";
     description = "Haskell binding to inotify";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.ghc.meta.platforms;
+    platforms = self.stdenv.lib.platforms.linux;
   };
 })

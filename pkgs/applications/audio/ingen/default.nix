@@ -4,16 +4,16 @@
 
 stdenv.mkDerivation  rec {
   name = "ingen-svn-${rev}";
-  rev = "5317";
+  rev = "5464";
 
   src = fetchsvn {
     url = "http://svn.drobilla.net/lad/trunk/ingen";
     rev = rev;
-    sha256 = "0zm3wbv9qsingjyr95nwin3khmnf3wq3fz2xa6p420dpcy6qnl4x";
+    sha256 = "1p5rsxwanpj3kj5yai7zqbharj2ldvn78x3p739vkgpr3dinp506";
   };
 
   buildInputs = [
-    boost ganv glibmm gtk gtkmm jack2 lilv lv2 pkgconfig python
+    boost boost.lib ganv glibmm gtk gtkmm jack2 lilv lv2 pkgconfig python
     raul serd sord sratom suil
   ];
 

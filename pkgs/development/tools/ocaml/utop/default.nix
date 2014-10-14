@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.14";
+  version = "1.15";
   name = "utop-${version}";
 
   src = fetchurl {
-    url = https://github.com/diml/utop/archive/1.14.tar.gz;
-    sha256 = "17dqinvdrpba2fjs7sl6gxs47rrx6j8a5bbjhc7flp6bdls898zk";
+    url = https://github.com/diml/utop/archive/1.15.tar.gz;
+    sha256 = "106v0x6sa2x10zgmjf73mpzws7xiqanxswivd00iqnpc0bcpkmrr";
   };
 
   buildInputs = [ ocaml findlib makeWrapper];

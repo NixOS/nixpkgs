@@ -1,11 +1,11 @@
 { stdenv, fetchurl, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "wdiff-1.2.1";
+  name = "wdiff-1.2.2";
 
   src = fetchurl {
     url = "mirror://gnu/wdiff/${name}.tar.gz";
-    sha256 = "1gb5hpiyikada9bwz63q3g96zs383iskiir0xsqynqnvq1vd4n41";
+    sha256 = "0sxgg0ms5lhi4aqqvz1rj4s77yi9wymfm3l3gbjfd1qchy66kzrl";
   };
 
   buildInputs = [ texinfo ];

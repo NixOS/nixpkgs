@@ -32,7 +32,7 @@ import ./make-test.nix ({ pkgs, ... }: {
           pkgs.kde4.kdegraphics
           pkgs.kde4.kdeutils
           pkgs.kde4.kdegames
-          pkgs.kde4.kdeedu
+          #pkgs.kde4.kdeedu
           pkgs.kde4.kdeaccessibility
           pkgs.kde4.kdeadmin
           pkgs.kde4.kdenetwork

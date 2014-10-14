@@ -111,26 +111,27 @@ in rec
   YouCompleteMe = stdenv.mkDerivation {
     src = fetchgit {
       url = "https://github.com/Valloric/YouCompleteMe.git";
-      rev = "67288080ea7057ea3111cb4c863484e3b150e738";
-      sha256 = "1a3rwdl458z1yrp50jdwp629j4al0zld21n15sad28g51m8gw5ka";
+      rev = "a2cae90f7ba1746bf1209edd6739f87d5914b375";
+      sha256 = "1yxrxskxnr2da5awm59ra4s9wg67rimcbazvln9bayg9saxs540d";
      };
 
-    name = "youcompleteme-git-6728808";
+    name = "youcompleteme-20140929";  # commit date
     buildInputs = [ python cmake clang.clang ];
 
     configurePhase = ":";
 
     buildPhase = ''
+      patchShebangs .
+
       target=$out/share/vim-plugins/YouCompleteMe
       mkdir -p $target
       cp -a ./ $target
-
 
       mkdir $target/build
       cd $target/build
       cmake -G "Unix Makefiles" . $target/third_party/ycmd/cpp -DPYTHON_LIBRARIES:PATH=${python}/lib/libpython2.7.so -DPYTHON_INCLUDE_DIR:PATH=${python}/include/python2.7 -DUSE_CLANG_COMPLETER=ON -DUSE_SYSTEM_LIBCLANG=ON
       make ycm_support_libs -j''${NIX_BUILD_CORES} -l''${NIX_BUILD_CORES}}
-      ${bash}/bin/bash $target/install.sh --clang-completer
+      ${bash}/bin/bash $target/install.sh --clang-completer --system-libclang
 
       ${vimHelpTags}
       vimHelpTags $target
@@ -139,6 +140,8 @@ in rec
     # TODO: implement proper install phase rather than keeping everything in store
     # TODO: support llvm based C completion, See README of git repository
     installPhase = ":";
+
+    path = "YouCompleteMe";
 
     meta = {
       description = "fastest non utf-8 aware word and C completion engine for Vim";
@@ -322,7 +325,7 @@ in rec
   };
 
   vimproc = simpleDerivation rec {
-    version = "7788b5f934bc7460c1e9134b51fe5690b21de83c";
+    version = "21a79bf4edca3ae97555df3fc729d208c7e19b9c";
     name    = "vimproc-${version}";
 
     meta = with stdenv.lib; {
@@ -337,7 +340,7 @@ in rec
     src = fetchgit {
       url = "https://github.com/Shougo/vimproc.vim.git";
       rev = "${version}";
-      sha256 = "0ahmnzccf5rv8rwg7b6pfgxh8pcmq955aznjv64slyh0mjqmh6jl";
+      sha256 = "16mlrhmd1hq4rgg7bl9gajhb4nmn1x8jxfaxfwiy2bm1phgljgq0";
      };
 
     buildInputs = [ which ];
@@ -572,6 +575,7 @@ in rec
       rev = "0c4e94281e57c475752e799adc261f7d5e4ab124";
       sha256 = "f6a085f7b8198747fae3fff0bc38e4d030e5c97aaeb84958fbf96fa658bbe862";
      };
+    patches = [ (fetchurl { url = "https://github.com/eagletmt/ghcmod-vim/pull/57.diff"; md5 = "cafbb9f725afbba26b52b6c3344ee89a"; }) ];
     path = "ghcmod";
   };
 
@@ -643,6 +647,16 @@ in rec
       sha256 = "24c1897d6b58576b2189c90050a7f8ede72a51343c752e9d030e833dbe5cac6f";
      };
     path = "pathogen";
+  };
+
+  vimoutliner = simpleDerivation {
+    name = "vimoutliner-git-dce383e7";
+    src = fetchgit {
+      url = "https://github.com/vimoutliner/vimoutliner";
+      rev = "2fc82976683c8770bece157ae3ada55251b6ddeb";
+      sha256 = "dce383e7842c42bcfa8e7c3329fa426cb0fb05786d40a733da705c03aabd196b";
+     };
+    path = "vimoutliner";
   };
 
 }

@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "gtk3";
-  version = "0.13.0.0";
-  sha256 = "0aq58gf6bcwnk085in0xilg7p8zyd2v079aqk1c47gjyrcg7p78f";
+  version = "0.13.0.2";
+  sha256 = "0j5df9xah5ya91x3d7cyy5zw7mkw3j2y7n0vv5s78w0adchaxzzl";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ cairo gio glib mtl pango text time transformers ];

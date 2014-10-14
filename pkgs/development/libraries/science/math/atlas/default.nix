@@ -1,5 +1,5 @@
 { stdenv, fetchurl, gfortran, tolerateCpuTimingInaccuracy ? true, shared ? false
-, cpuConfig ? if stdenv.isi686 then "-b 32 -A 18 -V 1" else "-b 64 -A 31 -V 192"
+, cpuConfig ? if stdenv.isi686 then "-b 32 -A 18 -V 1" else "-b 64 -A 31 -V 384"
 }:
 
 # Atlas detects the CPU and optimizes its build accordingly. This is great when
@@ -15,13 +15,18 @@
 #   |---------------------------------------------+------------------------|
 #   | -b 32                                       | -b 64                  |
 #   | -A 18  (Pentium II)                         | -A 31 (Athlon K7)      |
-#   | -V 1 (No SIMD: Pentium II doesn't have SSE) | -V 192 (SSE1 and SSE2) |
+#   | -V 1 (No SIMD: Pentium II doesn't have SSE) | -V 384 (SSE1 and SSE2) |
 #
 # Users who want to compile a highly optimized version of ATLAS that's suitable
 # for their local machine can override these settings accordingly.
+#
+# The -V flags can change with each release as new instruction sets are added
+# because upstream thinks it's a good idea to add entries at the start of an
+# enum, rather than the end. If the build suddenly fails with messages about
+# missing instruction sets, you may need to poke around in the source a bit.
 
 let
-  version = "3.10.1";
+  version = "3.10.2";
 
   optionalString = stdenv.lib.optionalString;
   optional = stdenv.lib.optional;
@@ -32,7 +37,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/math-atlas/atlas${version}.tar.bz2";
-    sha256 = "11ncgdc7kzb2y2gqb3sgarm5saj9fr07r3h2yh2h5bja429b85d2";
+    sha256 = "0bqh4bdnjdyww4mcpg6kn0x7338mfqbdgysn97dzrwwb26di7ars";
   };
 
   buildInputs = [ gfortran ];
@@ -67,5 +72,7 @@ stdenv.mkDerivation {
       portable performance. At present, it provides C and Fortran77 interfaces to a
       portably efficient BLAS implementation, as well as a few routines from LAPACK.
     '';
+
+    maintainers = with stdenv.lib.maintainers; [ ttuegel ];
   };
 }

@@ -1,14 +1,14 @@
 { stdenv, python27Packages, curaengine, makeDesktopItem, fetchurl }:
 let
-    py = python27Packages;
-    version = "14.07";
+  py = python27Packages;
+  version = "14.09";
 in
 stdenv.mkDerivation rec {
-  name = "cura";
+  name = "cura-${version}";
 
   src = fetchurl {
     url = "https://github.com/daid/Cura/archive/${version}.tar.gz";
-    sha256 = "1jfgkb2qh1syakcssk66yhnfjm9p9qcx48v34bbza9nryrdlmxdb";
+    sha256 = "1nr26hfqa6chim5qch92wpk0s28wfvznvcf3kkzgf23hw707f40v";
   };
 
   desktopItem = makeDesktopItem {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     categories = "GNOME;GTK;Utility;";
   };
 
-  python_deps = [ py.pyopengl py.pyserial py.numpy py.wxPython30 py.power py.setuptools ];
+  python_deps = with py; [ pyopengl pyserial numpy wxPython30 power setuptools ];
 
   pythonPath = python_deps;
 

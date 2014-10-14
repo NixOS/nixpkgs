@@ -2,7 +2,7 @@ diff --git a/src/librustc/back/link.rs b/src/librustc/back/link.rs
 index 7a3e912..ced75fa 100644
 --- a/src/librustc/back/link.rs
 +++ b/src/librustc/back/link.rs
-@@ -856,24 +856,15 @@
+@@ -766,24 +766,15 @@ pub fn output_lib_filename(id: &CrateId) -> String {
  
  pub fn get_cc_prog(sess: &Session) -> String {
      match sess.opts.cg.linker {
@@ -15,9 +15,9 @@ index 7a3e912..ced75fa 100644
 -    // In the future, FreeBSD will use clang as default compiler.
 -    // It would be flexible to use cc (system's default C compiler)
 -    // instead of hard-coded gcc.
--    // For Windows, there is no cc command, so we add a condition to make it use gcc.
+-    // For win32, there is no cc command, so we add a condition to make it use gcc.
 -    match sess.targ_cfg.os {
--        abi::OsWindows => "gcc",
+-        abi::OsWin32 => "gcc",
 -        _ => "cc",
 -    }.to_string()
  }

@@ -10,7 +10,7 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "caef5a3e2c9b515fd815034b5b7304acc878a0b9777ae4208dc033b0bf39da2b";
   };
 
-  pythonPath = [ pythonPackages.boto pythonPackages.m2crypto pythonPackages.ssl ];
+  pythonPath = [ pythonPackages.boto pythonPackages.m2crypto ];
 
   doCheck = false;
 

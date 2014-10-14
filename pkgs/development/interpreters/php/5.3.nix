@@ -10,7 +10,7 @@ in
 
 composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
-  version = "5.3.28";
+  version = "5.3.29";
 
   name = "php-${version}";
 
@@ -228,7 +228,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
   src = fetchurl {
     url = "http://www.php.net/distributions/php-${version}.tar.bz2";
-    sha256 = "04w53nn6qacpkd1x381mzd41kqh6k8kjnbyg44yvnkqwcl69db0c";
+    sha256 = "1480pfp4391byqzmvdmbxkdkqwdzhdylj63sfzrcgadjf9lwzqf4";
     name = "php-${version}.tar.bz2";
   };
 

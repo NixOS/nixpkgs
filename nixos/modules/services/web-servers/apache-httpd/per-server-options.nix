@@ -142,9 +142,19 @@ with lib;
     type = types.str;
     default = "common";
     example = "combined";
-    description = "
+    description = ''
       Log format for Apache's log files. Possible values are: combined, common, referer, agent.
-    ";
+    '';
+  };
+
+  robotsEntries = mkOption {
+    type = types.lines;
+    default = "";
+    example = "Disallow: /foo/";
+    description = ''
+      Specification of pages to be ignored by web crawlers. See <link
+      xlink:href='http://www.robotstxt.org/'/> for details.
+    '';
   };
 
 }

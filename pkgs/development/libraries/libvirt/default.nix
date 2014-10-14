@@ -2,16 +2,19 @@
 , iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, makeWrapper, pmutils, libcap_ng
 , dnsmasq, libnl
+, pythonPackages
 }:
 
-let version = "1.2.7"; in
+let version = "1.2.9"; in
+
+assert version == pythonPackages.libvirt.version;
 
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/${name}.tar.gz";
-    sha256 = "1z6yfzzbf9rvqjq1my7x1br73g8dz8kij3khpb4x520ip8n4dyrx";
+    sha256 = "1i4ggs50dipz1hm0qlk6kak1n3klll8sx9fnffmvjlgla9d1m4wm";
   };
 
   buildInputs = [

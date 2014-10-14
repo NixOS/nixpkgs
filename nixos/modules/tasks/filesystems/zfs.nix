@@ -155,6 +155,7 @@ in
       systemd.services."zpool-import" = {
         description = "Import zpools";
         after = [ "systemd-udev-settle.service" ];
+        wantedBy = [ "local-fs.target" ];
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;

@@ -1,5 +1,5 @@
 let lib = import ./default.nix;
-    inherit (builtins) isFunction hasAttr getAttr head tail isList isAttrs isInt attrNames;
+    inherit (builtins) isFunction head tail isList isAttrs isInt attrNames;
 
 in
 
@@ -61,7 +61,7 @@ rec {
         fun = n : x :
              let newArgs = fixed :
                      let args = takeFixed fixed; 
-                         mergeFun = getAttr n args;
+                         mergeFun = args.${n};
                      in if isAttrs x then (mergeFun args x)
                         else assert isFunction x;
                              mergeFun args (x ( args // { inherit fixed; }));
@@ -102,15 +102,12 @@ rec {
   # }
   composedArgsAndFun = f: foldArgs defaultMerge f {};
 
-  
-  # shortcut for attrByPath ["name"] default attrs
-  maybeAttrNullable = name: default: attrs:
-    if attrs == null then default else 
-    if __hasAttr name attrs then (__getAttr name attrs) else default;
 
   # shortcut for attrByPath ["name"] default attrs
-  maybeAttr = name: default: attrs:
-    if __hasAttr name attrs then (__getAttr name attrs) else default;
+  maybeAttrNullable = maybeAttr;
+
+  # shortcut for attrByPath ["name"] default attrs
+  maybeAttr = name: default: attrs: attrs.${name} or default;
 
 
   # Return the second argument if the first one is true or the empty version
@@ -233,7 +230,7 @@ rec {
   closePropagation = list: (uniqList {inputList = (innerClosePropagation [] list);});
 
   # calls a function (f attr value ) for each record item. returns a list
-  mapAttrsFlatten = f : r : map (attr: f attr (builtins.getAttr attr r) ) (attrNames r);
+  mapAttrsFlatten = f : r : map (attr: f attr r.${attr}) (attrNames r);
 
   # attribute set containing one attribute
   nvs = name : value : listToAttrs [ (nameValuePair name value) ];
@@ -250,10 +247,10 @@ rec {
   # merge attributes with custom function handling the case that the attribute
   # exists in both sets
   mergeAttrsWithFunc = f : set1 : set2 :
-    fold (n: set : if (__hasAttr n set) 
-                        then setAttr set n (f (__getAttr n set) (__getAttr n set2))
+    fold (n: set : if set ? ${n}
+                        then setAttr set n (f set.${n} set2.${n})
                         else set )
-           (set2 // set1) (__attrNames set2);
+           (set2 // set1) (attrNames set2);
 
   # merging two attribute set concatenating the values of same attribute names
   # eg { a = 7; } {  a = [ 2 3 ]; } becomes { a = [ 7 2 3 ]; }
@@ -270,15 +267,15 @@ rec {
                            overrideSnd ? [ "buildPhase" ]
                          } : attrs1 : attrs2 :
     fold (n: set : 
-        setAttr set n ( if (__hasAttr n set) 
+        setAttr set n ( if set ? ${n}
             then # merge 
               if elem n mergeLists # attribute contains list, merge them by concatenating
-                then (__getAttr n attrs2) ++ (__getAttr n attrs1)
+                then attrs2.${n} ++ attrs1.${n}
               else if elem n overrideSnd
-                then __getAttr n attrs1
+                then attrs1.${n}
               else throw "error mergeAttrsNoOverride, attribute ${n} given in both attributes - no merge func defined"
-            else __getAttr n attrs2 # add attribute not existing in attr1
-           )) attrs1 (__attrNames attrs2);
+            else attrs2.${n} # add attribute not existing in attr1
+           )) attrs1 (attrNames attrs2);
 
 
   # example usage:
@@ -300,14 +297,14 @@ rec {
     fold lib.mergeAttrs {} [
       x y
       (mapAttrs ( a : v : # merge special names using given functions
-          if (hasAttr a x)
-             then if (hasAttr a y)
-               then v (getAttr a x) (getAttr a y) # both have attr, use merge func
-               else (getAttr a x) # only x has attr
-             else (getAttr a y) # only y has attr)
+          if x ? ${a}
+             then if y ? ${a}
+               then v x.${a} y.${a} # both have attr, use merge func
+               else x.${a} # only x has attr
+             else y.${a} # only y has attr)
           ) (removeAttrs mergeAttrBy2
                          # don't merge attrs which are neither in x nor y
-                         (filter (a : (! hasAttr a x) && (! hasAttr a y) )
+                         (filter (a: ! x ? ${a} && ! y ? ${a})
                                  (attrNames mergeAttrBy2))
             )
       )
@@ -403,7 +400,7 @@ rec {
                           // args2.cfg;
         opts = attrValues (mapAttrs (a : v :
                 let v2 = if v ? set || v ? unset then v else { set = v; };
-                    n = if (getAttr (flagName a) cfgWithDefaults) then "set" else "unset";
+                    n = if cfgWithDefaults.${flagName a} then "set" else "unset";
                     attr = maybeAttr n {} v2; in
                 if (maybeAttr "assertion" true attr)
                   then attr

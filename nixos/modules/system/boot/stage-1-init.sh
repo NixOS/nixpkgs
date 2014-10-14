@@ -168,9 +168,24 @@ if test -e /sys/power/tuxonice/resume; then
     fi
 fi
 
-if test -n "@resumeDevice@" -a -e /sys/power/resume -a -e /sys/power/disk; then
-    echo "@resumeDevice@" > /sys/power/resume 2> /dev/null || echo "failed to resume..."
-    echo shutdown > /sys/power/disk
+if test -e /sys/power/resume -a -e /sys/power/disk; then
+    if test -n "@resumeDevice@"; then
+        resumeDev="@resumeDevice@"
+    else
+        for sd in @resumeDevices@; do
+            # Try to detect resume device. According to Ubuntu bug:
+            # https://bugs.launchpad.net/ubuntu/+source/pm-utils/+bug/923326/comments/1
+            # When there are multiple swap devices, we can't know where will hibernate
+            # image reside. We can check all of them for swsuspend blkid.
+            if [ "$(udevadm info -q property "$sd" | sed -n 's/^ID_FS_TYPE=//p')" = "swsuspend" ]; then
+                resumeDev="$sd"
+                break
+            fi
+        done
+    fi
+    if test -n "$resumeDev"; then
+        echo "$resumeDev" > /sys/power/resume 2> /dev/null || echo "failed to resume..."
+    fi
 fi
 
 
@@ -351,6 +366,14 @@ exec 3>&-
 
 
 @postMountCommands@
+
+
+# Emit a udev rule for /dev/root to prevent systemd from complaining.
+eval $(udevadm info --export --export-prefix=ROOT_ --device-id-of-file=$targetRoot || true)
+if [ "$ROOT_MAJOR" -a "$ROOT_MINOR" -a "$ROOT_MAJOR" != 0 ]; then
+    mkdir -p /run/udev/rules.d
+    echo 'ACTION=="add|change", SUBSYSTEM=="block", ENV{MAJOR}=="'$ROOT_MAJOR'", ENV{MINOR}=="'$ROOT_MINOR'", SYMLINK+="root"' > /run/udev/rules.d/61-dev-root-link.rules
+fi
 
 
 # Stop udevd.

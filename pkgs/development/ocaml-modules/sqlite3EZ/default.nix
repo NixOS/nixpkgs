@@ -1,5 +1,7 @@
 {stdenv, fetchurl, ocaml, findlib, twt, ocaml_sqlite3 }:
 
+assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12";
+
 stdenv.mkDerivation {
   name = "ocaml-sqlite3EZ-0.1.0";
 
@@ -14,10 +16,11 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://github.com/mlin/ocaml-sqlite3EZ;
     description = "A thin wrapper for sqlite3-ocaml with a simplified interface";
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
     platforms = ocaml.meta.platforms;
   };
 }

@@ -5,6 +5,9 @@ let
   webpage = "http://erratique.ch/software/${pname}";
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
 in
+
+assert stdenv.lib.versionAtLeast ocaml_version "3.12";
+
 stdenv.mkDerivation rec {
 
   name = "ocaml-${pname}-${version}";
@@ -28,10 +31,11 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/${pname} $out/lib/ocaml/${ocaml_version}/site-lib/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Non-blocking streaming Unicode codec for OCaml";
     homepage = "${webpage}";
     platforms = ocaml.meta.platforms;
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.vbgl ];
   };
 }

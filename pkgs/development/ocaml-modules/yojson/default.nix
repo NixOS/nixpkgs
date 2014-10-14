@@ -25,10 +25,11 @@ stdenv.mkDerivation {
     mkdir $out/bin
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An optimized parsing and printing library for the JSON format";
     homepage = "${webpage}";
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.vbgl ];
     platforms = ocaml.meta.platforms;
   };
 }

@@ -70,10 +70,10 @@ in
 
             # Register the paths in the Nix database.
             printRegistration=1 perl ${pkgs.pathsFromGraph} /tmp/xchg/closure | \
-                chroot /mnt ${config.nix.package}/bin/nix-store --load-db
+                chroot /mnt ${config.nix.package}/bin/nix-store --load-db --option build-users-group ""
 
             # Create the system profile to allow nixos-rebuild to work.
-            chroot /mnt ${config.nix.package}/bin/nix-env \
+            chroot /mnt ${config.nix.package}/bin/nix-env --option build-users-group "" \
                 -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel}
 
             # `nixos-rebuild' requires an /etc/NIXOS.

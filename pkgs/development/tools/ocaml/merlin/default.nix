@@ -1,4 +1,7 @@
 {stdenv, fetchurl, ocaml, findlib, yojson, menhir}:
+
+assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.00";
+
 stdenv.mkDerivation {
 
   name = "merlin-1.7.1";
@@ -12,10 +15,10 @@ stdenv.mkDerivation {
 
   prefixKey = "--prefix ";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An editor-independent tool to ease the development of programs in OCaml";
     homepage = "http://the-lambda-church.github.io/merlin/";
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
   };
 }
-

@@ -2,13 +2,7 @@
 
 with import ./trivial.nix;
 
-let
-
-  inc = builtins.add 1;
-
-  dec = n: builtins.sub n 1;
-
-in rec {
+rec {
 
   inherit (builtins) head tail length isList elemAt concatLists filter elem;
 
@@ -29,7 +23,7 @@ in rec {
       fold' = n:
         if n == len
         then nul
-        else op (elemAt list n) (fold' (inc n));
+        else op (elemAt list n) (fold' (n + 1));
     in fold' 0;
 
   # Left fold: `fold op nul [x_1 x_2 ... x_n] == op (... (op (op nul
@@ -38,12 +32,10 @@ in rec {
     let
       len = length list;
       foldl' = n:
-        if n == minus1
+        if n == -1
         then nul
-        else op (foldl' (dec n)) (elemAt list n);
-    in foldl' (dec (length list));
-
-  minus1 = dec 0;
+        else op (foldl' (n - 1)) (elemAt list n);
+    in foldl' (length list - 1);
 
 
   # map with index: `imap (i: v: "${v}-${toString i}") ["a" "b"] ==
@@ -54,7 +46,7 @@ in rec {
       imap' = n:
         if n == len
           then []
-          else [ (f (inc n) (elemAt list n)) ] ++ imap' (inc n);
+          else [ (f (n + 1) (elemAt list n)) ] ++ imap' (n + 1);
     in imap' 0;
 
 
@@ -104,7 +96,7 @@ in rec {
 
   # Count how many times function `pred' returns true for the elements
   # of `list'.
-  count = pred: fold (x: c: if pred x then inc c else c) 0;
+  count = pred: fold (x: c: if pred x then c + 1 else c) 0;
 
 
   # Return a singleton list or an empty list, depending on a boolean
@@ -125,9 +117,9 @@ in rec {
 
   # Return a list of integers from `first' up to and including `last'.
   range = first: last:
-    if lessThan last first
+    if last < first
     then []
-    else [first] ++ range (add first 1) last;
+    else [first] ++ range (first + 1) last;
 
 
   # Partition the elements of a list in two lists, `right' and
@@ -144,11 +136,11 @@ in rec {
     let
       len1 = length fst;
       len2 = length snd;
-      len = if lessThan len1 len2 then len1 else len2;
+      len = if len1 < len2 then len1 else len2;
       zipListsWith' = n:
         if n != len then
           [ (f (elemAt fst n) (elemAt snd n)) ]
-          ++ zipListsWith' (inc n)
+          ++ zipListsWith' (n + 1)
         else [];
     in zipListsWith' 0;
 
@@ -167,7 +159,7 @@ in rec {
     let
       len = length list;
       first = head list;
-      pivot' = n: acc@{ left, right }: let el = elemAt list n; next = pivot' (inc n); in
+      pivot' = n: acc@{ left, right }: let el = elemAt list n; next = pivot' (n + 1); in
         if n == len
           then acc
         else if strictLess first el
@@ -176,7 +168,7 @@ in rec {
           next { left = [ el ] ++ left; inherit right; };
       pivot = pivot' 1 { left = []; right = []; };
     in
-      if lessThan len 2 then list
+      if len < 2 then list
       else (sort strictLess pivot.left) ++  [ first ] ++  (sort strictLess pivot.right);
 
 
@@ -188,7 +180,7 @@ in rec {
         if n == len || n == count
           then []
         else
-          [ (elemAt list n) ] ++ take' (inc n);
+          [ (elemAt list n) ] ++ take' (n + 1);
     in take' 0;
 
 
@@ -197,16 +189,20 @@ in rec {
     let
       len = length list;
       drop' = n:
-        if n == minus1 || lessThan n count
+        if n == -1 || n < count
           then []
         else
-          drop' (dec n) ++ [ (elemAt list n) ];
-    in drop' (dec len);
+          drop' (n - 1) ++ [ (elemAt list n) ];
+    in drop' (len - 1);
 
 
   # Return the last element of a list.
   last = list:
-    assert list != []; elemAt list (dec (length list));
+    assert list != []; elemAt list (length list - 1);
+
+
+  # Return all elements but the last
+  init = list: assert list != []; take (length list - 1) list;
 
 
   # Zip two lists together.
@@ -214,11 +210,11 @@ in rec {
     let
       len1 = length xs;
       len2 = length ys;
-      len = if lessThan len1 len2 then len1 else len2;
+      len = if len1 < len2 then len1 else len2;
       zipTwoLists' = n:
         if n != len then
           [ { first = elemAt xs n; second = elemAt ys n; } ]
-          ++ zipTwoLists' (inc n)
+          ++ zipTwoLists' (n + 1)
         else [];
     in zipTwoLists' 0;
 

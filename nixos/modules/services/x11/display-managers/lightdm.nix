@@ -28,11 +28,10 @@ let
     buildCommand = ''
       mkdir -p $out/gtk-3.0/
 
-      # This wrapper ensures that we actually get fonts
+      # This wrapper ensures that we actually get ?? (fonts should be OK now)
       makeWrapper ${pkgs.lightdm_gtk_greeter}/sbin/lightdm-gtk-greeter \
         $out/greeter \
         --set XDG_DATA_DIRS ${pkgs.gnome2.gnome_icon_theme}/share \
-        --set FONTCONFIG_FILE /etc/fonts/fonts.conf \
         --set XDG_CONFIG_HOME $out/
 
       # We need this to ensure that it actually tries to find icons from gnome-icon-theme

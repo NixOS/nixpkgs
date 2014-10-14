@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "gem nix command in a nice wrapper";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.iElectric ];
   };
 }

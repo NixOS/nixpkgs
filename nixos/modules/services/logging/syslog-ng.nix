@@ -18,7 +18,7 @@ let
 
   syslogngOptions = [
     "--foreground"
-    "--module-path=${concatStringsSep ":" (["${pkgs.syslogng}/lib/syslog-ng"] ++ cfg.extraModulePaths)}"
+    "--module-path=${concatStringsSep ":" (["${cfg.package}/lib/syslog-ng"] ++ cfg.extraModulePaths)}"
     "--cfgfile=${syslogngConfig}"
     "--control=${ctrlSocket}"
     "--persist-file=${persistFile}"
@@ -35,6 +35,13 @@ in {
         default = false;
         description = ''
           Whether to enable the syslog-ng daemon.
+        '';
+      };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.syslogng;
+        description = ''
+          The package providing syslog-ng binaries.
         '';
       };
       serviceName = mkOption {
@@ -77,7 +84,7 @@ in {
         Sockets = "syslog.socket";
         StandardOutput = "null";
         Restart = "on-failure";
-        ExecStart = "${pkgs.syslogng}/sbin/syslog-ng ${concatStringsSep " " syslogngOptions}";
+        ExecStart = "${cfg.package}/sbin/syslog-ng ${concatStringsSep " " syslogngOptions}";
       };
     };
   };

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boostHeaders }:
+{ stdenv, fetchurl, boost }:
 
 stdenv.mkDerivation rec {
   name = "mini-httpd-1.4";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1i46klkx2ca1cgmlilajkx8gf7b7d7c2sj58llxfllh184pb6cpd";
   };
 
-  buildInputs = [ boostHeaders ];
+  buildInputs = [ boost ];
 
   enableParallelBuilding = true;
 

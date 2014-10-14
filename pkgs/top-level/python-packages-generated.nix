@@ -3670,7 +3670,7 @@ in
         md5 = "d5d886088e78b1bdbfd66d328fc2d0bc";
     };
     doCheck = false;
-    buildInputs = [  ];
+    buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {

@@ -1,4 +1,7 @@
-{stdenv, fetchurl, which, perl, ocaml, findlib, javalib }:
+{stdenv, fetchurl, which, perl, ocaml, findlib, javalib, camlp4 }:
+
+assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12";
+
 let
   pname = "sawja";
   version = "1.5";
@@ -13,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0i8qgqkw9vgj6k2g6npss268ivxdkzx5qj2a52jbd8ih59rn68cm";
   };
 
-  buildInputs = [ which perl ocaml findlib javalib ];
+  buildInputs = [ which perl ocaml findlib camlp4 ];
 
   patches = [ ./configure.sh.patch ./Makefile.config.example.patch ];
 
@@ -26,10 +29,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ javalib ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A library written in OCaml, relying on Javalib to provide a high level representation of Java bytecode programs";
     homepage = "${webpage}";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.vbgl ];
     platforms = ocaml.meta.platforms;
   };
 }

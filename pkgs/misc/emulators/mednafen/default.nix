@@ -1,16 +1,17 @@
 { stdenv, fetchurl, pkgconfig
 , libX11, mesa, freeglut
 , jack2, libcdio, libsndfile, libsamplerate
-, SDL, SDL_net, zlib }:
+, SDL, SDL_net, zlib
+}:
 
 stdenv.mkDerivation rec {
 
   name = "mednafen-${version}";
-  version = "0.9.36.3";
+  version = "0.9.36.4";
 
   src = fetchurl {
     url = "http://downloads.sourceforge.net/project/mednafen/Mednafen/${version}/${name}.tar.bz2";
-    sha256 = "00byql2p28l4476mvzmv5ysclb6yv9f4qrf6vz0x7ii648rp97in";
+    sha256 = "0s6dhdar6y64fah2ij98a9gskm0rzcbqdbksicnba8cakc87nsfy";
   };
 
   buildInputs = with stdenv.lib;

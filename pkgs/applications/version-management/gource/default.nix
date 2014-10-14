@@ -12,10 +12,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    glew SDL ftgl pkgconfig libpng libjpeg pcre SDL_image mesa boost glm
+    glew SDL ftgl pkgconfig libpng libjpeg pcre SDL_image mesa
+    boost boost.lib glm
   ];
 
-  configureFlags = "--with-boost-libdir=${boost}/lib";
+  configureFlags = "--with-boost-libdir=${boost.lib}/lib";
 
   NIX_CFLAGS_COMPILE = "-fpermissive"; # fix build with newer gcc versions
 

@@ -45,7 +45,6 @@ in
         PKG_CONFIG_PATH = [ "/lib/pkgconfig" ];
         TERMINFO_DIRS = [ "/share/terminfo" ];
         PERL5LIB = [ "/lib/perl5/site_perl" ];
-        ALSA_PLUGIN_DIRS = [ "/lib/alsa-lib" ];
         KDEDIRS = [ "" ];
         STRIGI_PLUGIN_PATH = [ "/lib/strigi/" ];
         QT_PLUGIN_PATH = [ "/lib/qt4/plugins" "/lib/kde4/plugins" ];

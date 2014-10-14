@@ -5,6 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
+      "mirror://ubuntu/pool/universe/n/netkit-tftp/netkit-tftp_0.17.orig.tar.gz"
       "ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/${name}.tar.gz"
       "http://ftp.cc.uoc.gr/mirrors/linux/ubuntu/packages/pool/universe/n/netkit-tftp/netkit-tftp_0.17.orig.tar.gz"
     ];

@@ -1,11 +1,11 @@
 { fetchurl, stdenv, perl }:
 
 stdenv.mkDerivation rec {
-  name = "parallel-20140822";
+  name = "parallel-20140922";
 
   src = fetchurl {
     url = "mirror://gnu/parallel/${name}.tar.bz2";
-    sha256 = "8a146a59bc71218921d561f2c801b85e06fe3a21571083b58e6e0966dd397fd4";
+    sha256 = "0hxx1h2ba6y2y1vy02r2hzndid2b469hj08f0vlmpjqw5g4f52a5";
   };
 
   patchPhase =
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
   doCheck = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Shell tool for executing jobs in parallel";
 
     longDescription =
@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/parallel/;
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
 
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ pSub ];
   };
 }

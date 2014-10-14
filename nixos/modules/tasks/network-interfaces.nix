@@ -345,8 +345,18 @@ in
 
         interfaces = mkOption {
           example = [ "enp4s0f0" "enp4s0f1" "wlan0" ];
-          type = types.listOf types.string;
+          type = types.listOf types.str;
           description = "The interfaces to bond together";
+        };
+
+        lacp_rate = mkOption {
+          default = null;
+          example = "fast";
+          type = types.nullOr types.str;
+          description = ''
+            Option specifying the rate in which we'll ask our link partner
+            to transmit LACPDU packets in 802.3ad mode.
+          '';
         };
 
         miimon = mkOption {
@@ -364,12 +374,22 @@ in
         mode = mkOption {
           default = null;
           example = "active-backup";
-          type = types.nullOr types.string;
+          type = types.nullOr types.str;
           description = ''
             The mode which the bond will be running. The default mode for
             the bonding driver is balance-rr, optimizing for throughput.
             More information about valid modes can be found at
             https://www.kernel.org/doc/Documentation/networking/bonding.txt
+          '';
+        };
+
+        xmit_hash_policy = mkOption {
+          default = null;
+          example = "layer2+3";
+          type = types.nullOr types.str;
+          description = ''
+            Selects the transmit hash policy to use for slave selection in
+            balance-xor, 802.3ad, and tlb modes.
           '';
         };
 
@@ -753,34 +773,41 @@ in
             wantedBy = [ "network.target" (subsystemDevice n) ];
             bindsTo = deps;
             after = deps;
+            before = [ "${n}-cfg.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.ifenslave pkgs.iproute ];
             script = ''
-              # Remove Dead Interfaces
-              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
-
-              ip link add "${n}" type bond
+              ip link add name "${n}" type bond
 
               # !!! There must be a better way to wait for the interface
               while [ ! -d /sys/class/net/${n} ]; do sleep 0.1; done;
 
+              # Ensure the link is down so that we can set options
+              ip link set "${n}" down
+
               # Set the miimon and mode options
               ${optionalString (v.miimon != null)
-                "echo ${toString v.miimon} > /sys/class/net/${n}/bonding/miimon"}
+                "echo \"${toString v.miimon}\" >/sys/class/net/${n}/bonding/miimon"}
               ${optionalString (v.mode != null)
-                "echo \"${v.mode}\" > /sys/class/net/${n}/bonding/mode"}
+                "echo \"${v.mode}\" >/sys/class/net/${n}/bonding/mode"}
+              ${optionalString (v.lacp_rate != null)
+                "echo \"${v.lacp_rate}\" >/sys/class/net/${n}/bonding/lacp_rate"}
+              ${optionalString (v.xmit_hash_policy != null)
+                "echo \"${v.xmit_hash_policy}\" >/sys/class/net/${n}/bonding/xmit_hash_policy"}
 
-              # Bring up the bridge and enslave the specified interfaces
+              # Bring up the bond and enslave the specified interfaces
               ip link set "${n}" up
               ${flip concatMapStrings v.interfaces (i: ''
                 ifenslave "${n}" "${i}"
               '')}
             '';
             postStop = ''
-              ip link set "${n}" down
-              ifenslave -d "${n}"
-              ip link delete "${n}"
+              ${flip concatMapStrings v.interfaces (i: ''
+                ifenslave -d "${n}" "${i}" >/dev/null 2>&1 || true
+              '')}
+              ip link set "${n}" down >/dev/null 2>&1 || true
+              ip link del "${n}" >/dev/null 2>&1 || true
             '';
           });
 
@@ -798,7 +825,7 @@ in
             script = ''
               # Remove Dead Interfaces
               ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
-              ip link add "${n}" type sit \
+              ip link add name "${n}" type sit \
                 ${optionalString (v.remote != null) "remote \"${v.remote}\""} \
                 ${optionalString (v.local != null) "local \"${v.local}\""} \
                 ${optionalString (v.ttl != null) "ttl ${toString v.ttl}"} \
@@ -824,7 +851,7 @@ in
             script = ''
               # Remove Dead Interfaces
               ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
-              ip link add link "${v.interface}" "${n}" type vlan id "${toString v.id}"
+              ip link add link "${v.interface}" name "${n}" type vlan id "${toString v.id}"
               ip link set "${n}" up
             '';
             postStop = ''

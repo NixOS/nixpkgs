@@ -1,20 +1,20 @@
 args : with args;
 rec {
   src = fetchurl {
-    url = mirror://debian/pool/main/t/texlive-bin/texlive-bin_2014.20140528.34243.orig.tar.xz;
-    sha256 = "0nh8hfayyf60nm4z8zyclrbc3792c62azgsvrwxnl28iq223200s";
+    url = mirror://debian/pool/main/t/texlive-bin/texlive-bin_2014.20140926.35254.orig.tar.xz;
+    sha256 = "1c39x059jhn5jsy6i9j3akjbkm1kmmzssy1jyi1aw20rl2vp86w3";
   };
 
-  texmfVersion = "2014.20140821";
+  texmfVersion = "2014.20140927";
   texmfSrc = fetchurl {
     url = "mirror://debian/pool/main/t/texlive-base/texlive-base_${texmfVersion}.orig.tar.xz";
-    sha256 = "02qkzlhb381sybs970fgpc94nhx4jm0l3j5pv8z48l11415lvm9b";
+    sha256 = "1g4nzr9rgmw8i0i82svmkwjy2kvbyrc8jgnk2f3cl2wsx7sfrydy";
   };
 
-  langTexmfVersion = "2014.20140821";
+  langTexmfVersion = "2014.20140927";
   langTexmfSrc = fetchurl {
     url = "mirror://debian/pool/main/t/texlive-lang/texlive-lang_${langTexmfVersion}.orig.tar.xz";
-    sha256 = "075avhhhhzw5pbd19q659rn23rws15b5hv7nv0grd93vn3vfwdcy";
+    sha256 = "1ckm8yra96m44n708dc1kgq4xrzi7ginxpsb73ijbwzbjy1yqzwg";
   };
 
   passthru = { inherit texmfSrc langTexmfSrc; };
@@ -115,7 +115,8 @@ rec {
   buildInputs = [ zlib bzip2 ncurses libpng flex bison libX11 libICE xproto
     freetype t1lib gd libXaw icu ghostscript ed libXt libXpm libXmu libXext
     xextproto perl libSM ruby expat curl libjpeg python fontconfig xz pkgconfig
-    poppler libpaper graphite2 lesstif zziplib harfbuzz texinfo potrace ]
+    poppler libpaper graphite2 lesstif zziplib harfbuzz texinfo potrace gmp mpfr
+    xpdf ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ makeWrapper ]
     ;
 
@@ -145,7 +146,7 @@ rec {
     description = "A TeX distribution";
     homepage    = http://www.tug.org/texlive;
     license     = stdenv.lib.licenses.gpl2;
-    maintainers = with maintainers; [ lovek323 raskin ];
+    maintainers = with maintainers; [ lovek323 raskin jwiegley ];
     platforms   = platforms.unix;
   };
 }

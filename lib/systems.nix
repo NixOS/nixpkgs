@@ -24,7 +24,7 @@ rec {
 
   isCpuType = x: isType "cpu-type" x
     && elem x.bits [8 16 32 64 128]
-    && (builtins.lessThan 8 x.bits -> isSignificantByte x.significantByte);
+    && (8 < x.bits -> isSignificantByte x.significantByte);
 
   cpuTypes = with significantBytes;
     setTypes "cpu-type" {

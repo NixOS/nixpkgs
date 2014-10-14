@@ -4,13 +4,14 @@
 
 cabal.mkDerivation (self: {
   pname = "here";
-  version = "1.2.5";
-  sha256 = "0r7hjsvbx7vshbdhi60955mdfnq6arg5ihfz9f2zyilh4l5cyzwb";
+  version = "1.2.6";
+  sha256 = "1c7b0a5a42ki8ndvc2k35jnsj433f1nv1j40vviasxksm7acbwif";
   buildDepends = [ haskellSrcMeta mtl parsec ];
   meta = {
     homepage = "https://github.com/tmhedberg/here";
     description = "Here docs & interpolated strings via quasiquotation";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ edwtjo ];
   };
 })

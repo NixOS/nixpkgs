@@ -1,13 +1,13 @@
 { stdenv, fetchurl, pythonPackages, python }:
 
 pythonPackages.buildPythonPackage rec {
-  version = "1.6.10";
+  version = "1.7.2";
   name = "ansible-${version}";
   namePrefix = "";
-  
+
   src = fetchurl {
-    url = "https://github.com/ansible/ansible/archive/v${version}.tar.gz";
-    sha256 = "0j133353skzb6ydrqqgfkzbkkj1zaibl1x8sgl0arnfma8qky1g1";
+    url = "http://releases.ansible.com/ansible/ansible-${version}.tar.gz";
+    sha256 = "1b4qhh6a8z18q7lfa7laxb3p0f7sacvv7nlbr2lix0vznhbffz51";
   };
 
   prePatch = ''
@@ -32,6 +32,6 @@ pythonPackages.buildPythonPackage rec {
     description = "A simple automation tool";
     license = licenses.gpl3;
     maintainers = [ maintainers.joamaki ];
-    platforms = platforms.linux; # Only tested on Linux
+    platforms = platforms.linux ++ [ "x86_64-darwin" ];
   };
 }
