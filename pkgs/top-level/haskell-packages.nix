@@ -3092,6 +3092,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   yiContrib = callPackage ../applications/editors/yi/yi-contrib.nix {};
 
+  yiLanguage = callPackage ../development/libraries/haskell/yi-language {};
+
   yiRope = callPackage ../development/libraries/haskell/yi-rope {};
 
   # Tools.
