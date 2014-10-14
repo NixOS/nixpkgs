@@ -18,5 +18,6 @@ cabal.mkDerivation (self: {
     description = "Stripe snaplet for the Snap Framework";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })
