@@ -3090,9 +3090,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   wordTrie = callPackage ../development/libraries/haskell/word-trie {};
 
-  yi = callPackage ../applications/editors/yi/yi.nix {
-    vty = self.vty_4_7_5;
-  };
+  yi = callPackage ../applications/editors/yi/yi.nix { };
 
   yiContrib = callPackage ../applications/editors/yi/yi-contrib.nix {};
 
