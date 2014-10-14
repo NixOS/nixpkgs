@@ -26,7 +26,7 @@ if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
 fi
 
 echo "=== Installing nox"
-git clone https://github.com/madjar/nox >/dev/null
+git clone -q https://github.com/madjar/nox
 pip --quiet install -e nox
 
 echo "=== Reviewing PR"
