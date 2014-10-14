@@ -3922,6 +3922,8 @@ let
     llvm = llvm_34 ;
   };
 
+  pure-gsl = callPackage ../development/pure-modules/pure-gsl { };
+
   python = python2;
   python2 = python27;
   python3 = python34;
