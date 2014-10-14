@@ -3080,6 +3080,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   # Yi packages
 
+  dynamicState = callPackage ../development/libraries/haskell/dynamic-state {};
+
   yi = callPackage ../applications/editors/yi/yi.nix {
     vty = self.vty_4_7_5;
   };
