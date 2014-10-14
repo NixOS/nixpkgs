@@ -5779,19 +5779,18 @@ let
   };
 
   paramiko = buildPythonPackage rec {
-    name = "paramiko-1.14.0";
+    name = "paramiko-1.15.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/paramiko/${name}.tar.gz";
-      md5 = "e26324fd398af68ad506fe98853835c3";
+      md5 = "48c274c3f9b1282932567b21f6acf3b5";
     };
 
     propagatedBuildInputs = with self; [ pycrypto ecdsa ];
 
-    # tests failures since 1.14.0 release..
-    doCheck = false;
-
-    checkPhase = "${python}/bin/${python.executable} test.py";
+    checkPhase = ''
+      ${python}/bin/${python.executable} test.py --no-sftp --no-big-file
+    '';
 
     meta = {
       homepage = "https://github.com/paramiko/paramiko/";
