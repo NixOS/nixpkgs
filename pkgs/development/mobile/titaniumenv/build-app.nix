@@ -1,4 +1,4 @@
-{stdenv, androidsdk, titaniumsdk, titanium, xcodewrapper, jdk, python, which}:
+{stdenv, androidsdk, titaniumsdk, titanium, xcodewrapper, jdk, python, which, xcodeBaseDir}:
 { name, src, target, androidPlatformVersions ? [ "8" ], androidAbiVersions ? [ "armeabi" "armeabi-v7a" ], tiVersion ? null
 , release ? false, androidKeyStore ? null, androidKeyAlias ? null, androidKeyStorePassword ? null
 , iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null
@@ -101,7 +101,10 @@ stdenv.mkDerivation {
               cat > $HOME/.titanium/auth_session.json <<EOF
               { "loggedIn": true }
               EOF
-            
+              
+              # Configure the path to Xcode
+              titanium --config-file $TMPDIR/config.json --no-colors config paths.xcode ${xcodeBaseDir}
+              
               # Set the SDK to our copy
               titanium --config-file $TMPDIR/config.json --no-colors config sdk.defaultInstallLocation $TMPDIR/titaniumsdk
             
@@ -122,6 +125,9 @@ stdenv.mkDerivation {
               cp -av * $out
               cd $out
             
+              # Configure the path to Xcode
+              titanium --config-file $TMPDIR/config.json --no-colors config paths.xcode ${xcodeBaseDir}
+              
               titanium build --config-file $TMPDIR/config.json --force --no-colors --platform ios --target simulator --build-only --device-family universal --output-dir $out
           ''}
         ''

@@ -47,6 +47,6 @@ rec {
     inherit (pkgs.nodePackages) titanium;
     inherit (androidenv) androidsdk;
     inherit (xcodeenv) xcodewrapper;
-    inherit titaniumsdk;
+    inherit titaniumsdk xcodeBaseDir;
   };
 }
