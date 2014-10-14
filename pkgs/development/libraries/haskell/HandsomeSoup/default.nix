@@ -16,5 +16,6 @@ cabal.mkDerivation (self: {
     description = "Work with HTML more easily in HXT";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })
