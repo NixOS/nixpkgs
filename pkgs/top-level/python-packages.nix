@@ -5788,6 +5788,7 @@ let
 
     propagatedBuildInputs = with self; [ pycrypto ecdsa ];
 
+    doCheck = !isPyPy;
     checkPhase = ''
       ${python}/bin/${python.executable} test.py --no-sftp --no-big-file
     '';
