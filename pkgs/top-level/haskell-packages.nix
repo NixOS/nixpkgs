@@ -3082,6 +3082,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   dynamicState = callPackage ../development/libraries/haskell/dynamic-state {};
 
+  ooPrototypes = callPackage ../development/libraries/haskell/oo-prototypes {};
+
   yi = callPackage ../applications/editors/yi/yi.nix {
     vty = self.vty_4_7_5;
   };
