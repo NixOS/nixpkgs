@@ -2538,6 +2538,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   testingFeat = callPackage ../development/libraries/haskell/testing-feat {};
 
+  testSimple = callPackage ../development/libraries/haskell/test-simple {};
+
   texmath = callPackage ../development/libraries/haskell/texmath {};
 
   text_0_11_0_5 = callPackage ../development/libraries/haskell/text/0.11.0.5.nix {};
