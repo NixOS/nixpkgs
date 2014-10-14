@@ -44,6 +44,6 @@ import ../generic rec {
     inherit (gcc) binutils;
     inherit (pkgs)
       gzip bzip2 xz bash coreutils diffutils findutils gawk
-      gnumake gnused gnutar gnugrep gnupatch perl;
+      gnumake gnused gnutar gnugrep gnupatch perl libcxx libcxxabi;
   };
 }
