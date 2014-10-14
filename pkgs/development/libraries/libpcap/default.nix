@@ -10,14 +10,15 @@ stdenv.mkDerivation rec {
   
   nativeBuildInputs = [ flex bison ];
   
-  configureFlags = "--with-pcap=linux";
+  # Apparently, 32 bit systems need this forced? Not verified if still needed.
+  configureFlags = stdenv.lib.optionals (stdenv.system == "i686-linux") "--with-pcap=linux";
 
   preInstall = ''mkdir -p $out/bin'';
   
   crossAttrs = {
     # Stripping hurts in static libraries
     dontStrip = true;
-    configureFlags = [ "--with-pcap=linux" "ac_cv_linux_vers=2" ];
+    configureFlags = configureFlags ++ [ "ac_cv_linux_vers=2" ];
   };
 
   meta = {
