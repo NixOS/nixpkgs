@@ -2310,6 +2310,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   srcloc = callPackage ../development/libraries/haskell/srcloc {};
 
+  statePlus = callPackage ../development/libraries/haskell/state-plus {};
+
   stateref = callPackage ../development/libraries/haskell/stateref {};
 
   statestack = callPackage ../development/libraries/haskell/statestack {};
@@ -2541,6 +2543,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   testFrameworkThPrime = callPackage ../development/libraries/haskell/test-framework-th-prime {};
 
   testingFeat = callPackage ../development/libraries/haskell/testing-feat {};
+
+  testSimple = callPackage ../development/libraries/haskell/test-simple {};
 
   texmath = callPackage ../development/libraries/haskell/texmath {};
 
