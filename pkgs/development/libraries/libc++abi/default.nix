@@ -16,9 +16,11 @@ stdenv.mkDerivation {
 
   postUnpack = ''
     unpackFile ${libcxx.src}
-    export NIX_CFLAGS_COMPILE="-I$PWD/include -I$(readlink -f libcxx-*)/include"
   '' + lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
+    # Hack: NIX_CFLAGS_COMPILE doesn't work here because clang++ isn't
+    # wrapped at this point.
+    export CXX="clang++ -D_LIBCXX_DYNAMIC_FALLBACK=1"
   '';
 
   installPhase = if stdenv.isDarwin
