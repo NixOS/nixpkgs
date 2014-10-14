@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation
 {
-  name = "eliom-4.0.0";
+  name = "eliom-4.1.0";
 
   src = fetchurl {
-    url = https://github.com/ocsigen/eliom/archive/4.0.0.tar.gz;
-    sha256 = "1xf2l6lvngxzwaw6lvr6sgi48rz0wxg65q9lz4jzqjarkp0sx206";
+    url = https://github.com/ocsigen/eliom/archive/4.1.0.tar.gz;
+    sha256 = "10v7mrq3zsbxdlg8k8xif777mbvcdpabvnd1g7p2yqivr7f1qm24";
   };
 
   buildInputs = [ocaml which ocsigen_server findlib ocsigen_deriving
