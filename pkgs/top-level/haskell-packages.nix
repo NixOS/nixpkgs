@@ -3057,6 +3057,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     llvmGeneral = self.llvmGeneral_3_3_8_2;
     llvmGeneralPure = self.llvmGeneralPure_3_3_8_2;
     languageJava = self.languageJava_0_2_6;
+    optparseApplicative = self.optparseApplicative_0_10_0;
   };
 
   idris = callPackage ../development/compilers/idris/wrapper.nix {};
