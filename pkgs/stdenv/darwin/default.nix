@@ -1,6 +1,6 @@
 { stdenv, pkgs, config
 , haveLibCxx ? true
-, useClang33 ? false }:
+, useClang33 ? true }:
 
 import ../generic rec {
   inherit config;

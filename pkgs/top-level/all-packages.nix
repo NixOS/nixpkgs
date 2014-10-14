@@ -11856,7 +11856,6 @@ let
   };
 
   nixUnstable = callPackage ../tools/package-management/nix/unstable.nix {
-    stdenv = if stdenv.isDarwin then allStdenvs.stdenvDarwin33 else stdenv;
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
   };
