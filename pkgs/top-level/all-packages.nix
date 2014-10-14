@@ -12057,6 +12057,8 @@ let
 
   xlockmore = callPackage ../misc/screensavers/xlockmore { };
 
+  sails = callPackage ../misc/sails { };
+
   samsungUnifiedLinuxDriver = import ../misc/cups/drivers/samsung {
     inherit fetchurl stdenv;
     inherit cups ghostscript glibc patchelf;
