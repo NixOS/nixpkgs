@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gmp autoreconfHook gettext pkgconfig ];
 
-  configureFlags = [ "--enable-swanctl" ];
+  configureFlags = [ "--enable-swanctl" "--enable-cmd" ];
 
   meta = {
     maintainers = [ stdenv.lib.maintainers.shlevy ];
