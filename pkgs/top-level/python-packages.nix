@@ -3397,11 +3397,11 @@ let
 
   ecdsa = buildPythonPackage rec {
     name = "ecdsa-${version}";
-    version = "0.10";
+    version = "0.11";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/e/ecdsa/${name}.tar.gz";
-      md5 = "e95941b3bcbf1726472bb724d7478551";
+      md5 = "8ef586fe4dbb156697d756900cb41d7c";
     };
 
     # Only needed for tests
