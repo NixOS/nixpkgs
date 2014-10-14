@@ -15,5 +15,6 @@ cabal.mkDerivation (self: {
     license = "GPL";
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ fuuzetsu ];
+    broken = true;
   };
 })
