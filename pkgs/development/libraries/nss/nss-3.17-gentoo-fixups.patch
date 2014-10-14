@@ -1,5 +1,5 @@
---- a/nss/config/Makefile
-+++ b/nss/config/Makefile
+--- nss-3.17.1/nss/config/Makefile
++++ nss-3.17.1/nss/config/Makefile
 @@ -0,0 +1,40 @@
 +CORE_DEPTH = ..
 +DEPTH      = ..
@@ -41,8 +41,8 @@
 +
 +dummy: all export libs
 +
---- a/nss/config/nss-config.in
-+++ b/nss/config/nss-config.in
+--- nss-3.17.1/nss/config/nss-config.in
++++ nss-3.17.1/nss/config/nss-config.in
 @@ -0,0 +1,145 @@
 +#!/bin/sh
 +
@@ -189,8 +189,8 @@
 +      echo $libdirs
 +fi      
 +
---- a/nss/config/nss.pc.in
-+++ b/nss/config/nss.pc.in
+--- nss-3.17.1/nss/config/nss.pc.in
++++ nss-3.17.1/nss/config/nss.pc.in
 @@ -0,0 +1,12 @@
 +prefix=@prefix@
 +exec_prefix=@exec_prefix@
@@ -204,8 +204,8 @@
 +Libs: -lssl3 -lsmime3 -lnss3 -lnssutil3
 +Cflags: -I${includedir}
 +
---- a/nss/Makefile
-+++ b/nss/Makefile
+--- nss-3.17.1/nss/Makefile
++++ nss-3.17.1/nss/Makefile
 @@ -44,7 +44,7 @@
  # (7) Execute "local" rules. (OPTIONAL).                              #
  #######################################################################
@@ -215,7 +215,7 @@
  
  nss_clean_all: clobber_nspr clobber
  
-@@ -103,12 +103,6 @@
+@@ -109,12 +109,6 @@
  	--with-dist-prefix='$(NSPR_PREFIX)' \
  	--with-dist-includedir='$(NSPR_PREFIX)/include'
  
@@ -228,11 +228,14 @@
  build_docs:
  	$(MAKE) -C $(CORE_DEPTH)/doc
  
---- a/nss/manifest.mn
-+++ b/nss/manifest.mn
-@@ -10,4 +10,4 @@
+--- nss-3.17.1/nss/manifest.mn
++++ nss-3.17.1/nss/manifest.mn
+@@ -10,7 +10,7 @@
  
  RELEASE = nss
  
 -DIRS = coreconf lib cmd
 +DIRS = coreconf lib cmd config
+ 
+ ifdef NSS_BUILD_GTESTS
+ DIRS += external_tests
