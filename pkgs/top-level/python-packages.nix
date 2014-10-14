@@ -6402,7 +6402,7 @@ let
 
   pycapnp = buildPythonPackage rec {
     name = "pycapnp-0.4.4";
-    homepage = "http://jparyani.github.io/pycapnp/index.html";
+    disabled = isPyPy || isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pycapnp/${name}.tar.gz";
@@ -6420,6 +6420,7 @@ let
       maintainers = with maintainers; [ cstrahan ];
       license = stdenv.lib.licenses.bsd2;
       platforms = stdenv.lib.platforms.all;
+      homepage = "http://jparyani.github.io/pycapnp/index.html";
     };
   };
 
