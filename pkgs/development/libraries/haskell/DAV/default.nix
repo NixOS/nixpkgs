@@ -22,5 +22,6 @@ cabal.mkDerivation (self: {
     description = "RFC 4918 WebDAV support";
     license = self.stdenv.lib.licenses.gpl3;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })
