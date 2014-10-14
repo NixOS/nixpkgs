@@ -19,5 +19,6 @@ cabal.mkDerivation (self: {
     description = "A driver for the RethinkDB database server";
     license = self.stdenv.lib.licenses.asl20;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })
