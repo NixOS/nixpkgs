@@ -126,6 +126,7 @@
     async = null;                       # none of our versions compile
     attoparsec = null;                  # none of our versions compile
     binary = super.binary_0_7_2_2.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    cabalInstall_1_16_0_2 = super.cabalInstall_1_16_0_2;
     caseInsensitive = super.caseInsensitive.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     GLUT = self.GLUT_2_2_2_1;
     haddock = self.haddock_2_4_2;
