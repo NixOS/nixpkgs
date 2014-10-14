@@ -12,5 +12,6 @@ cabal.mkDerivation (self: {
     description = "Helpers to connect to SSL/TLS mail servers with HaskellNet";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })
