@@ -3086,6 +3086,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   yiContrib = callPackage ../applications/editors/yi/yi-contrib.nix {};
 
+  yiRope = callPackage ../development/libraries/haskell/yi-rope {};
+
   # Tools.
 
   cabalDb = callPackage ../development/tools/haskell/cabal-db {};
