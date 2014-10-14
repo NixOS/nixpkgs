@@ -18,6 +18,7 @@
   antono = "Antono Vasiljev <self@antono.info>";
   aristid = "Aristid Breitkreuz <aristidb@gmail.com>";
   arobyn = "Alexei Robyn <shados@shados.net>";
+  asppsa = "Alastair Pharo <asppsa@gmail.com>";
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
   aszlig = "aszlig <aszlig@redmoonstudios.org>";
   auntie = "Jonathan Glines <auntieNeo@gmail.com>";
