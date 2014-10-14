@@ -1204,7 +1204,7 @@ let
     gtk = gtk2;
   };
 
-  gcloud = callPackage ../tools/virtualization/gcloud { 
+  google-cloud-sdk = callPackage ../tools/virtualization/google-cloud-sdk {
     python = python27;
     jre = jdk;
   };
