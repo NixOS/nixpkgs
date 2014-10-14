@@ -24,5 +24,6 @@ cabal.mkDerivation (self: {
     description = "JSON Web Token (JWT) decoding and encoding";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })
