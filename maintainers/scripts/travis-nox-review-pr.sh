@@ -1,6 +1,8 @@
 #! /usr/bin/env bash
 set -e
 
+export NIX_CURL_FLAGS=-sS
+
 # Install Nix
 bash <(curl https://nixos.org/nix/install)
 source $HOME/.nix-profile/etc/profile.d/nix.sh
