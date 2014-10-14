@@ -9,7 +9,9 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ random ];
-  jailbreak = true;
+  patchPhase = ''
+    sed -i -e 's|random.*<1.1,|random,|' dsp.cabal
+  '';
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/DSP";
     description = "Haskell Digital Signal Processing";
