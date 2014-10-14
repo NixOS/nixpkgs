@@ -1219,13 +1219,6 @@ let
 
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
-  # FIXME: This Hydra snapshot is outdated and depends on the `nixPerl',
-  # which no longer exists.
-  #
-  # hydra = callPackage ../development/tools/misc/hydra {
-  #   nix = nixUnstable;
-  # };
-
   iasl = callPackage ../development/compilers/iasl { };
 
   icecast = callPackage ../servers/icecast { };
