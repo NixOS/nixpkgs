@@ -3084,6 +3084,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ooPrototypes = callPackage ../development/libraries/haskell/oo-prototypes {};
 
+  wordTrie = callPackage ../development/libraries/haskell/word-trie {};
+
   yi = callPackage ../applications/editors/yi/yi.nix {
     vty = self.vty_4_7_5;
   };
