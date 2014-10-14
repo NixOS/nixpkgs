@@ -2,7 +2,7 @@
  cmdliner}:
 
 stdenv.mkDerivation {
-  name = "js_of_ocaml";
+  name = "js_of_ocaml-2.5";
   src = fetchurl {
     url = https://github.com/ocsigen/js_of_ocaml/archive/2.5.tar.gz;
     sha256 = "1prm08nf8szmd3p13ysb0yx1cy6lr671bnwsp25iny8hfbs39sjv";
