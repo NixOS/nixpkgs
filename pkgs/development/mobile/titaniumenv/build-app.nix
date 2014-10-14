@@ -49,6 +49,13 @@ stdenv.mkDerivation {
         ''
           titanium config --config-file $TMPDIR/config.json --no-colors android.sdkPath ${androidsdkComposition}/libexec/android-sdk-*
           
+          # Add zipalign to PATH to make Ti 3.1 builds still work
+          for i in $(find -L ${androidsdkComposition}/libexec/android-sdk-*/build-tools -name zipalign)
+          do
+              export PATH=$(dirname $i):$PATH
+              break
+          done
+          
           ${if release then
             ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target dist-playstore --keystore ${androidKeyStore} --alias ${androidKeyAlias} --password ${androidKeyStorePassword} --output-dir $out''
           else
