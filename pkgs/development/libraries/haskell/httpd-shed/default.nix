@@ -14,5 +14,6 @@ cabal.mkDerivation (self: {
     description = "A simple web-server with an interact style API";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })
