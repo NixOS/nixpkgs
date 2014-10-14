@@ -1204,6 +1204,11 @@ let
     gtk = gtk2;
   };
 
+  gcloud = callPackage ../tools/virtualization/gcloud { 
+    python = python27;
+    jre = jdk;
+  };
+
   gdmap = callPackage ../tools/system/gdmap { };
 
   genext2fs = callPackage ../tools/filesystems/genext2fs { };
