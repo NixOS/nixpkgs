@@ -11,11 +11,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nss-${version}";
-  version = "3.16.5";
+  version = "3.17.2";
 
   src = fetchurl {
-    url = "http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_16_5_RTM/src/${name}.tar.gz";
-    sha256 = "e744b9fb2a6291d7eaf1b3f0157082f4214984db33f896e4adf3141340d64196";
+    url = "http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_17_2_RTM/src/${name}.tar.gz";
+    sha256 = "134929e44e44b968a4883f4ee513a71ae45d55b486cee41ee8e26c3cc84dab8b";
   };
 
   buildInputs = [ nspr perl zlib sqlite ];
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
   '';
 
   patches =
-    [ ./nss-3.15-gentoo-fixups.patch
+    [ ./nss-3.17-gentoo-fixups.patch
       # Based on http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.4-1/85_security_load.patch
       ./85_security_load.patch
     ];
