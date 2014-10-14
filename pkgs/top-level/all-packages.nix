@@ -11005,6 +11005,12 @@ let
 
   gtypist = callPackage ../games/gtypist { };
 
+  hedgewars = callPackage ../games/hedgewars {
+    inherit (haskellPackages) ghc network vector utf8String bytestringShow
+      random hslogger dataenc;
+    SDL = SDL_pulseaudio;
+  };
+
   hexen = callPackage ../games/hexen { };
 
   icbm3d = callPackage ../games/icbm3d { };
