@@ -3068,12 +3068,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   taffybar = callPackage ../applications/misc/taffybar {};
 
-  yi = callPackage ../applications/editors/yi/yi.nix {
-    vty = self.vty_4_7_5;
-  };
-
-  yiContrib = callPackage ../applications/editors/yi/yi-contrib.nix {};
-
   xlsx = callPackage ../development/libraries/haskell/xlsx {};
 
   xmobar = callPackage ../applications/misc/xmobar {};
@@ -3083,6 +3077,14 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   xmonadContrib = callPackage ../applications/window-managers/xmonad/xmonad-contrib.nix {};
 
   xmonadExtras = callPackage ../applications/window-managers/xmonad/xmonad-extras.nix {};
+
+  # Yi packages
+
+  yi = callPackage ../applications/editors/yi/yi.nix {
+    vty = self.vty_4_7_5;
+  };
+
+  yiContrib = callPackage ../applications/editors/yi/yi-contrib.nix {};
 
   # Tools.
 
