@@ -1,7 +1,7 @@
 {stdenv, androidsdk, titaniumsdk, titanium, xcodewrapper, jdk, python, which, xcodeBaseDir}:
 { name, src, target, androidPlatformVersions ? [ "8" ], androidAbiVersions ? [ "armeabi" "armeabi-v7a" ], tiVersion ? null
 , release ? false, androidKeyStore ? null, androidKeyAlias ? null, androidKeyStorePassword ? null
-, iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null
+, iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosVersion ? "8.0"
 , enableWirelessDistribution ? false, installURL ? null
 }:
 
@@ -109,7 +109,7 @@ stdenv.mkDerivation {
               titanium --config-file $TMPDIR/config.json --no-colors config sdk.defaultInstallLocation $TMPDIR/titaniumsdk
             
               # Do the actual build
-              titanium build --config-file $TMPDIR/config.json --force --no-colors --platform ios --target dist-adhoc --pp-uuid $provisioningId --distribution-name "${iosCertificateName}" --keychain $HOME/Library/Keychains/$keychainName --device-family universal --output-dir $out
+              titanium build --config-file $TMPDIR/config.json --force --no-colors --platform ios --target dist-adhoc --pp-uuid $provisioningId --distribution-name "${iosCertificateName}" --keychain $HOME/Library/Keychains/$keychainName --device-family universal --ios-version ${iosVersion} --output-dir $out
             
               # Remove our generated keychain
             
@@ -128,7 +128,7 @@ stdenv.mkDerivation {
               # Configure the path to Xcode
               titanium --config-file $TMPDIR/config.json --no-colors config paths.xcode ${xcodeBaseDir}
               
-              titanium build --config-file $TMPDIR/config.json --force --no-colors --platform ios --target simulator --build-only --device-family universal --output-dir $out
+              titanium build --config-file $TMPDIR/config.json --force --no-colors --platform ios --target simulator --build-only --device-family universal --ios-version ${iosVersion} --output-dir $out
           ''}
         ''
 
