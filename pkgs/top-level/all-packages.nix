@@ -6134,6 +6134,9 @@ let
 
   miro = callPackage ../applications/video/miro {
     inherit (pythonPackages) pywebkitgtk pysqlite pycurl mutagen;
+    avahi = avahi.override {
+      withLibdnssdCompat = true;
+    };
   };
 
   mkvtoolnix = callPackage ../applications/video/mkvtoolnix { };
