@@ -39,6 +39,7 @@ cabal.mkDerivation (self: {
   postInstall = ''
     patchShebangs .
   '';
+  jailbreak = true;
   meta = with self.stdenv.lib; {
     homepage = "http://gibiansky.github.io/IHaskell/";
     description = "A Haskell backend kernel for the IPython project";
