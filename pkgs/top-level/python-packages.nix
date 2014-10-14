@@ -7460,9 +7460,10 @@ let
   });
 
 
-  pymacs = pkgs.stdenv.mkDerivation rec {
+  pymacs = buildPythonPackage rec {
     version = "0.25";
-    name = "Pymacs-${version}";
+    name = "pymacs-${version}";
+    disabled = isPy3k || isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://github.com/pinard/Pymacs/tarball/v${version}";
@@ -7470,11 +7471,16 @@ let
       sha256 = "1hmy76c5igm95rqbld7gvk0az24smvc8hplfwx2f5rhn6frj3p2i";
     };
 
-    buildInputs = with self; [ python ];
+    configurePhase =  "make";
 
-    patchPhase = ''
-      sed -e "s@ install@ install --prefix=$out@g" -i Makefile
+    # Doesn't work with --old-and-unmanagable
+    installPhase = ''
+      ${python}/bin/${python.executable} setup.py install \
+        --install-lib=$out/lib/${python.libPrefix}/site-packages \
+        --prefix="$out"
     '';
+
+    doCheck = false;
 
     meta = with stdenv.lib; {
       description = "Emacs Lisp to Python interface";
