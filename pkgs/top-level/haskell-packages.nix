@@ -870,7 +870,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   freeGame = callPackage ../development/libraries/haskell/free-game {};
 
-  fsnotify = callPackage ../development/libraries/haskell/fsnotify {};
+  fsnotify = callPackage ../development/libraries/haskell/fsnotify {
+    hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.hfsevents;
+  };
 
   freetype2 = callPackage ../development/libraries/haskell/freetype2 {};
 
