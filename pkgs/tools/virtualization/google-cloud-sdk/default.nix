@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = https://cloud.google.com/sdk/;
-    description = "Google Cloud SDK contains tools and libraries that enable you to easily create and manage resources on Google Cloud Platform, including App Engine, Compute Engine, Cloud Storage, BigQuery, Cloud SQL, and Cloud DNS.";
+    description = "Tools and development libraries for managing Google Cloud Platform resources.";
     license = stdenv.lib.licenses.asl20;
   };
 }
