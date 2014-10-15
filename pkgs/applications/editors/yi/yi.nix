@@ -31,7 +31,7 @@ cabal.mkDerivation (self: {
   configureFlags = "-fpango -fvty";
   noHaddock = self.stdenv.lib.versionOlder self.ghc.version "7.8";
   postInstall = ''
-    wrapProgram $out/bin/yi --prefix GHC_PACKAGE_PATH : $out/lib/ghc-${self.ghc.version}/package.conf.d/yi-$version.installedconf:$GHC_PACKAGE_PATH
+    wrapProgram $out/bin/yi --suffix GHC_PACKAGE_PATH : $out/lib/ghc-${self.ghc.version}/package.conf.d/yi-$version.installedconf:$GHC_PACKAGE_PATH
   '';
   meta = {
     homepage = "http://haskell.org/haskellwiki/Yi";
