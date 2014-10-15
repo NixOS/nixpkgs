@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
     QuickCheck random testFramework testFrameworkQuickcheck2
     transformers
   ];
+  configureFlags = "${self.stdenv.lib.optionalString self.stdenv.isi686 "--ghc-options=-msse2"}";
   meta = {
     homepage = "https://github.com/haskell/vector";
     description = "Efficient Arrays";
