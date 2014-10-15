@@ -91,6 +91,11 @@ let
       description = "Serve static files from a directory over HTTP";
     };
 
+    websocket = mkOption {
+      default = false;
+      description = "Enable WebSocket support";
+    };
+
   };
 
   createSSLOptsStr = o:
