@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam, openssl
 , dbus, libusb, acl }:
 
-let version = "1.5.4"; in
+let version = "1.7.5"; in
 
 stdenv.mkDerivation {
   name = "cups-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.cups.org/software/${version}/cups-${version}-source.tar.bz2";
-    sha256 = "1rfhlv9b37120d6shngvyrcp99vh4a3lwdkrfanv3sjqid7068w0";
+    sha256 = "00mx4rpiqw9cwx46bd3hd5lcgmcxy63zfnmkr02smanv8xl4rjqq";
   };
 
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb ]
