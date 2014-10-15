@@ -32,10 +32,6 @@ stdenv.mkDerivation ({
 
     chicken-install -p $out ${stdenv.lib.concatStringsSep " " chickenInstallFlags}
 
-    runHook postInstall
-  '';
-
-  postInstall = ''
     for f in $out/bin/*
     do
       wrapProgram $f \
@@ -44,5 +40,7 @@ stdenv.mkDerivation ({
         --prefix CHICKEN_INCLUDE_PATH \; \"$CHICKEN_INCLUDE_PATH\;$out/share/\" \
         --prefix PATH : "$out/bin:${chicken}/bin:$CHICKEN_REPOSITORY_EXTRA:$CHICKEN_REPOSITORY"
     done
+
+    runHook postInstall
   '';
 } // (builtins.removeAttrs args ["name" "buildInputs"]) // override)
