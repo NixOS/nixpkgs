@@ -56,6 +56,13 @@ in
           default = false;
           description = "Whether to create the mount points in the exports file at startup time.";
         };
+
+        lockdPort = mkOption {
+          default = 0;
+          description = ''
+            Fix the lockd port number. This can help setting firewall rules for NFS.
+          '';
+        };
       };
 
     };
@@ -95,6 +102,9 @@ in
           ''
             # Create a state directory required by NFSv4.
             mkdir -p /var/lib/nfs/v4recovery
+
+            ${pkgs.procps}/sbin/sysctl -w fs.nfs.nlm_tcpport=${builtins.toString cfg.lockdPort}
+            ${pkgs.procps}/sbin/sysctl -w fs.nfs.nlm_udpport=${builtins.toString cfg.lockdPort}
 
             rpc.nfsd \
               ${if cfg.hostName != null then "-H ${cfg.hostName}" else ""} \
