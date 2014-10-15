@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   name = "google-cloud-sdk";
   src = fetchurl {
     url = "https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz";
-    sha256 = "cc649eb16195c73c2668a73931e46635dd02fc24090cf137a20806b11911c705";
+    sha256 = "0svlzks2xvy19qqnrifkdyzsazn9fypyn7y29r53260b4hfb83dy";
   };
 
   buildInputs = [ python jdk which ];
