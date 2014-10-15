@@ -63,6 +63,7 @@ in
           description = ''
             Use fixed port for rpc.mountd, usefull if server is behind firewall.
           '';
+        };
 
         lockdPort = mkOption {
           default = 0;
