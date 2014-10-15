@@ -5,7 +5,7 @@ export NIX_CURL_FLAGS=-sS
 
 if [[ $1 == nix ]]; then
     # Install Nix
-    bash <(curl -sS https://nixos.org/nix/install) >/dev/null 2>&1
+    bash <(curl -sS https://nixos.org/nix/install)
     source $HOME/.nix-profile/etc/profile.d/nix.sh
 
     # Make sure we can use hydra's binary cache
@@ -17,7 +17,7 @@ build-max-jobs = 4
 EOF
 
     # Verify evaluation
-    nix-env -f. -qa --json >/dev/null
+    nix-env -f. -qa --json
 elif [[ $1 == nox ]]; then
     git clone -q https://github.com/madjar/nox
     pip --quiet install -e nox
@@ -30,10 +30,7 @@ elif [[ $1 == build ]]; then
     else
         # The current HEAD is the PR merged into origin/master, so we compare
         # against origin/master
-        # However, since we want to optimize build time, we compare against
-        # the last commit Hydra compiled
-        built_rev=$(ls -l $HOME/.nix-defexpr/channels/nixpkgs | sed 's/.*\.\(.*\)\/nixpkgs/\1/')
-        nox-review wip --against $built_rev
+        nox-review wip --against origin/master
     fi
 else
     echo "$0: Unknown option $1" >&2
