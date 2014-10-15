@@ -3072,6 +3072,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   taffybar = callPackage ../applications/misc/taffybar {};
 
+  validation = callPackage ../development/libraries/haskell/validation {};
+
   xlsx = callPackage ../development/libraries/haskell/xlsx {};
 
   xmobar = callPackage ../applications/misc/xmobar {};
