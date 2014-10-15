@@ -18,7 +18,7 @@ EOF
 
     # Verify evaluation
     nix-env -f. -qa --json >/dev/null
-elif [[ $1 == nox && $TRAVIS_PULL_REQUEST != false ]]; then
+elif [[ $1 == nox ]]; then
     git clone -q https://github.com/madjar/nox
     pip --quiet install -e nox
 elif [[ $1 == build ]]; then
