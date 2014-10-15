@@ -23,6 +23,31 @@ let
     inherit lua;
   };
 
+  luabitop = buildLuaPackage rec {
+    version = "1.0.2";
+    name = "bitop-${version}";
+    src = fetchurl {
+      url = "http://bitop.luajit.org/download/LuaBitOp-${version}.tar.gz";
+      sha256 = "16fffbrgfcw40kskh2bn9q7m3gajffwd2f35rafynlnd7llwj1qj";
+    };
+
+    preBuild = ''
+      makeFlagsArray=(
+        INCLUDES="-I${lua}/include"
+        LUA="${lua}/bin/lua");
+    '';
+
+    installPhase = ''
+      mkdir -p $out/lib/lua/${lua.luaversion}
+      install -p bit.so $out/lib/lua/${lua.luaversion}
+    '';
+
+    meta = {
+      homepage = "http://bitop.luajit.org";
+      maintainers = with maintainers; [ flosse ];
+    };
+  };
+
   luaexpat = buildLuaPackage rec {
     version = "1.3.0";
     name = "expat-${version}";

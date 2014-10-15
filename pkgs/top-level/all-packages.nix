@@ -7226,7 +7226,7 @@ let
   prosody = recurseIntoAttrs (
     callPackage ../servers/xmpp/prosody {
       lua5 = lua5_1;
-      inherit (lua51Packages) luasocket luasec luaexpat luafilesystem;
+      inherit (lua51Packages) luasocket luasec luaexpat luafilesystem luabitop;
   });
 
   elasticmq = callPackage ../servers/elasticmq { };
