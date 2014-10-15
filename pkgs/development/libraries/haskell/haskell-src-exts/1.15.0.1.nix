@@ -19,5 +19,6 @@ cabal.mkDerivation (self: {
     description = "Manipulating Haskell source: abstract syntax, lexer, parser, and pretty-printer";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })
