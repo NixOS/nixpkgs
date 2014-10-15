@@ -35,6 +35,8 @@ cabal.mkDerivation (self: rec {
     license = self.stdenv.lib.licenses.publicDomain;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ fuuzetsu ];
+    # The wrapper does not yet work properly if we actually try to use it.
+    broken = true;
   };
 
 })
