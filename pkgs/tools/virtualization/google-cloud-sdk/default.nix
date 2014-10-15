@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, jre, which }:
+{ stdenv, fetchurl, python, jdk, which }:
 
 stdenv.mkDerivation {
 
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "cc649eb16195c73c2668a73931e46635dd02fc24090cf137a20806b11911c705";
   };
 
-  buildInputs = [ python jre which ];
+  buildInputs = [ python jdk which ];
 
   preConfigure =
     ''

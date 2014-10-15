@@ -1206,7 +1206,7 @@ let
 
   google-cloud-sdk = callPackage ../tools/virtualization/google-cloud-sdk {
     python = python27;
-    jre = jdk;
+    jdk = jdk;
   };
 
   gdmap = callPackage ../tools/system/gdmap { };
