@@ -4,6 +4,7 @@ set -e
 export NIX_CURL_FLAGS=-sS
 
 if [[ $1 == nix ]]; then
+    echo "=== Installing Nix..."
     # Install Nix
     bash <(curl -sS https://nixos.org/nix/install)
     source $HOME/.nix-profile/etc/profile.d/nix.sh
@@ -17,8 +18,10 @@ build-max-jobs = 4
 EOF
 
     # Verify evaluation
-    nix-env -f. -qa --json
+    echo "=== Verifying that nixpkgs evaluates..."
+    nix-env -f. -qa --json >/dev/null
 elif [[ $1 == nox ]]; then
+    echo "=== Installing nox..."
     git clone -q https://github.com/madjar/nox
     pip --quiet install -e nox
 elif [[ $1 == build ]]; then
@@ -28,6 +31,7 @@ elif [[ $1 == build ]]; then
         echo "===> Not a pull request, checking evaluation"
         nix-build pkgs/top-level/release.nix -A tarball
     else
+        echo "=== Checking PR"
         # The current HEAD is the PR merged into origin/master, so we compare
         # against origin/master
         nox-review wip --against origin/master
