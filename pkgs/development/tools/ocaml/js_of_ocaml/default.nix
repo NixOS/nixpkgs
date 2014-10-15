@@ -1,5 +1,5 @@
 {stdenv, fetchurl, ocaml, findlib, ocaml_lwt, menhir, ocsigen_deriving, camlp4,
- cmdliner}:
+ cmdliner, tyxml, reactivedata}:
 
 stdenv.mkDerivation {
   name = "js_of_ocaml-2.5";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     };
   
   buildInputs = [ocaml findlib ocaml_lwt menhir ocsigen_deriving
-                 cmdliner camlp4];
+                 cmdliner tyxml camlp4 reactivedata];
 
   patches = [ ./Makefile.conf.diff ];  
 
