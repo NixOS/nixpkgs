@@ -6759,14 +6759,23 @@ let
 
   webkit = webkitgtk;
 
-  webkitgtk = callPackage ../development/libraries/webkitgtk {
+  webkitgtk = webkitgtk_2_4;
+
+  webkitgtk_2_4 = callPackage ../development/libraries/webkitgtk/2.4.nix {
     harfbuzz = harfbuzz.override {
       withIcu = true;
     };
     gst-plugins-base = gst_all_1.gst-plugins-base;
   };
 
-  webkitgtk2 = webkitgtk.override {
+  webkitgtk_2_6 = callPackage ../development/libraries/webkitgtk/2.6.nix {
+    harfbuzz = harfbuzz.override {
+      withIcu = true;
+    };
+    gst-plugins-base = gst_all_1.gst-plugins-base;
+  };
+
+  webkitgtk2 = webkitgtk_2_4.override {
     withGtk2 = true;
     enableIntrospection = false;
   };
