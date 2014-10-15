@@ -3090,9 +3090,15 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   wordTrie = callPackage ../development/libraries/haskell/word-trie {};
 
+  # You should prefer ‘yiCustom’ over ‘yi’ unless you never plan to
+  # use any external libraries in your config.
   yi = callPackage ../applications/editors/yi/yi.nix { };
 
   yiContrib = callPackage ../development/libraries/haskell/yi-contrib {};
+
+  yiCustom = callPackage ../applications/editors/yi/yi-custom.nix {
+    extraPackages = [];
+  };
 
   yiLanguage = callPackage ../development/libraries/haskell/yi-language {};
 
