@@ -8,7 +8,9 @@ stdenv.mkDerivation {
     sha256 = "0r1hj8qy91i48nd7wj0x2dqrgspqrry5awraxl4pl10vh0mn6pk7";
     };
 
-  buildInputs = [ocaml findlib ocaml_oasis camlp4 uutf];
+  buildInputs = [ocaml findlib ocaml_oasis camlp4];
+
+  propagatedBuildInputs = [uutf];
 
   createFindlibDestdir = true;
 
