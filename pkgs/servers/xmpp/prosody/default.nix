@@ -10,11 +10,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "0.9.4";
+  version = "0.9.5";
   name = "prosody-${version}";
   src = fetchurl {
     url = "http://prosody.im/downloads/source/${name}.tar.gz";
-    sha256 = "be87cf31901a25477869b4ebd52e298f63a5effacae526911a0be876cc82e1c6";
+    sha256 = "1gcvmdsyx3fjiqybgkp8vr847p9rlfz42lywxpph3jc14yh63z3n";
   };
 
   buildInputs = [ lua5 luasocket luasec luaexpat libidn openssl makeWrapper ];
