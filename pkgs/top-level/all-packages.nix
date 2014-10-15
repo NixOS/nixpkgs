@@ -5005,6 +5005,8 @@ let
 
   dhex = callPackage ../applications/editors/dhex { };
 
+  double_conversion = callPackage ../development/libraries/double-conversion { };
+
   dclib = callPackage ../development/libraries/dclib { };
 
   dillo = callPackage ../applications/networking/browsers/dillo {
