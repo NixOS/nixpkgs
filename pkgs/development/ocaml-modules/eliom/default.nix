@@ -1,6 +1,7 @@
 { stdenv, fetchurl, ocaml, findlib, which, ocsigen_server, ocsigen_deriving,
   js_of_ocaml, ocaml_react, ocaml_lwt, calendar, cryptokit, tyxml,
-  ocaml_ipaddr, ocamlnet, ocaml_ssl, ocaml_pcre, ocaml_optcomp}:
+  ocaml_ipaddr, ocamlnet, ocaml_ssl, ocaml_pcre, ocaml_optcomp,
+  reactivedata}:
 
 stdenv.mkDerivation
 {
@@ -14,12 +15,7 @@ stdenv.mkDerivation
   buildInputs = [ocaml which ocsigen_server findlib ocsigen_deriving
                  js_of_ocaml ocaml_react ocaml_lwt calendar
                  cryptokit tyxml ocaml_ipaddr ocamlnet ocaml_ssl
-                 ocaml_pcre ocaml_optcomp];
-
-  preConfigure =
-  ''chmod a+x configure
-    sed s/deriving-ocsigen/deriving/g -i configure
-  '';
+                 ocaml_pcre ocaml_optcomp reactivedata];
 
   configureFlags = "--root $(out) --prefix /";
 
