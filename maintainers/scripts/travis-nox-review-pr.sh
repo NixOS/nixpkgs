@@ -22,6 +22,8 @@ elif [[ $1 == nox ]]; then
     git clone -q https://github.com/madjar/nox
     pip --quiet install -e nox
 elif [[ $1 == build ]]; then
+    source $HOME/.nix-profile/etc/profile.d/nix.sh
+
     if [[ $TRAVIS_PULL_REQUEST == false ]]; then
         echo "===> Not a pull request, checking evaluation"
         nix-build pkgs/top-level/release.nix -A tarball
