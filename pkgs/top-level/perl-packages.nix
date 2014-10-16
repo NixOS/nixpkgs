@@ -1178,13 +1178,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   ClassAccessorGrouped = buildPerlPackage {
-    name = "Class-Accessor-Grouped-0.10010";
+    name = "Class-Accessor-Grouped-0.10012";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RI/RIBASUSHI/Class-Accessor-Grouped-0.10010.tar.gz;
-      sha256 = "1hlfjfhagsksskv01viq1z14wlr0i4xl3nvznvq1qrnqwqxs4qi1";
+      url = mirror://cpan/authors/id/R/RI/RIBASUSHI/Class-Accessor-Grouped-0.10012.tar.gz;
+      sha256 = "c4613ee3307939f47a9afd40e8b173f3a22f501c3b139799aa030f01b627e7fe";
     };
-    buildInputs = [ TestException ];
-    propagatedBuildInputs = [ ClassXSAccessor ModuleRuntime SubName ];
+    buildInputs = [ ClassXSAccessor DevelHide PackageStash SubName TestException ];
+    propagatedBuildInputs = [ ModuleRuntime ];
     meta = {
       description = "Lets you build groups of accessors";
       license = "perl";
@@ -2436,14 +2436,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   DBIxClass = buildPerlPackage {
-    name = "DBIx-Class-0.08250";
+    name = "DBIx-Class-0.082801";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RI/RIBASUSHI/DBIx-Class-0.08250.tar.gz;
-      sha256 = "0nsqvj34klc9pf4l5kj3nqkq7agbsn11ys4115100awf7gxjbad6";
+      url = mirror://cpan/authors/id/R/RI/RIBASUSHI/DBIx-Class-0.082801.tar.gz;
+      sha256 = "889d6f9139d8e73f5524dfa211019126042e84cb7a0ec30cd2ed7d315d73484b";
     };
-    patches = [ ../development/perl-modules/dbix-class-fix-tests.patch ];
-    buildInputs = [ DBDSQLite PackageStash TestException TestWarn TestDeep ];
-    propagatedBuildInputs = [ ClassAccessorGrouped ClassC3Componentised ClassInspector ClassMethodModifiers ConfigAny ContextPreserve DataCompare DataDumperConcise DataPage DBI DevelGlobalDestruction HashMerge ModuleFind Moo MROCompat namespaceclean PathClass ScopeGuard SQLAbstract strictures SubName TryTiny ];
+    buildInputs = [ DBDSQLite PackageStash TestDeep TestException TestWarn ];
+    propagatedBuildInputs = [ ClassAccessorGrouped ClassC3Componentised ClassInspector ConfigAny ContextPreserve DBI DataDumperConcise DataPage DevelGlobalDestruction HashMerge MROCompat ModuleFind Moo PathClass SQLAbstract ScopeGuard SubName TryTiny namespaceclean ];
     meta = {
       homepage = http://www.dbix-class.org/;
       description = "Extensible and flexible object <-> relational mapper";
@@ -6807,17 +6806,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   PackageStash = buildPerlPackage {
-    name = "Package-Stash-0.34";
+    name = "Package-Stash-0.37";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOY/Package-Stash-0.34.tar.gz;
-      sha256 = "1674zs96ndq3czs6v8xkdqqz4fnka0i2835nnns9zbw2q01yirj6";
+      url = mirror://cpan/authors/id/D/DO/DOY/Package-Stash-0.37.tar.gz;
+      sha256 = "06ab05388f9130cd377c0e1d3e3bafeed6ef6a1e22104571a9e1d7bfac787b2c";
     };
     buildInputs = [ DistCheckConflicts TestFatal TestRequires ];
-    propagatedBuildInputs = [ DistCheckConflicts ModuleImplementation PackageDeprecationManager ];
+    propagatedBuildInputs = [ DistCheckConflicts ModuleImplementation ];
     meta = {
       homepage = http://metacpan.org/release/Package-Stash;
       description = "Routines for manipulating stashes";
-      license = "perl5";
+      license = "perl";
     };
   };
 
@@ -7670,13 +7669,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   SQLAbstract = buildPerlPackage {
-    name = "SQL-Abstract-1.73";
+    name = "SQL-Abstract-1.80";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FR/FREW/SQL-Abstract-1.73.tar.gz;
-      sha256 = "081ppyvsc66yshmfr9q9v7hp9g58725nnibd771i9g153vzs49kb";
+      url = mirror://cpan/authors/id/R/RI/RIBASUSHI/SQL-Abstract-1.80.tar.gz;
+      sha256 = "de4d0507fca0c6340c17867abca0632017bd56594443e67ea6ace826ba9a07a2";
     };
-    buildInputs = [ TestException TestWarn ];
-    propagatedBuildInputs = [ ClassAccessorGrouped GetoptLongDescriptive HashMerge ];
+    buildInputs = [ TestDeep TestException TestWarn ];
+    propagatedBuildInputs = [ HashMerge MROCompat Moo ];
     meta = {
       description = "Generate SQL from Perl data structures";
       license = "perl";
