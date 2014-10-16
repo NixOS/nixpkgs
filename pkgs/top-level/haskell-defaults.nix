@@ -47,7 +47,6 @@
         vectorBinaryInstances = self.vectorBinaryInstances.override { binary = self.binary_0_7_2_2; };
       };
     };
-    Elm = super.Elm.override { pandoc = self.pandoc.override { zipArchive = self.zipArchive.override { binary = self.binary_0_7_2_2; }; }; };
     gloss = null;                       # requires base >= 4.7
     haddock = self.haddock_2_13_2;
     modularArithmetic = null;           # requires base >= 4.7
