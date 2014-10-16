@@ -2799,8 +2799,9 @@ let
     bootstrap-chicken = chicken.override { bootstrap-chicken = null; }; 
   };
 
-  chickenEggs = callPackage ../development/tools/egg2nix/chicken-eggs.nix { };
-  egg2nix = callPackage ../development/tools/egg2nix {};
+  egg2nix = callPackage ../development/tools/egg2nix {
+    chickenEggs = callPackage ../development/tools/egg2nix/chicken-eggs.nix { };
+  };
 
   ccl = builderDefsPackage ../development/compilers/ccl {};
 
