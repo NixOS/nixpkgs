@@ -10231,24 +10231,22 @@ let
     };
   };
 
+  hgsvn = buildPythonPackage rec {
+    name = "hgsvn-0.3.5";
+    src = pkgs.fetchurl rec {
+      url = "http://pypi.python.org/packages/source/h/hgsvn/${name}.zip";
+      sha256 = "043yvkjf9hgm0xzhmwj1qk3fsmbgwm39f4wsqkscib9wfvxs8wbg";
+    };
+    disabled = isPy3k || isPyPy;
 
-  # XXX: link broken
-  # hgsvn = buildPythonPackage rec {
-  #   name = "hgsvn-0.1.8";
-  #   src = pkgs.fetchurl rec {
-  #     name = "hgsvn-0.1.8.tar.gz";
-  #     url = "http://pypi.python.org/packages/source/h/hgsvn/${name}.tar.gz#md5=56209eae48b955754e09185712123428";
-  #     sha256 = "18a7bj1i0m4shkxmdvw1ci5i0isq5vqf0bpwgrhnk305rijvbpch";
-  #   };
-  #
-  #   buildInputs = with self; [ pkgs.setuptools ];
-  #   doCheck = false;
-  #
-  #     meta = {
-  #     description = "HgSVN";
-  #     homepage = http://pypi.python.org/pypi/hgsvn;
-  #   };
-  # };
+    buildInputs = with self; [ pkgs.setuptools ];
+    doCheck = false;
+
+      meta = {
+      description = "HgSVN";
+      homepage = http://pypi.python.org/pypi/hgsvn;
+    };
+  };
 
   cliapp = buildPythonPackage rec {
     name = "cliapp-${version}";
