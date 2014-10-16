@@ -759,7 +759,7 @@ let
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
-  
+
   circus = buildPythonPackage rec {
     name = "circus-0.11.1";
 
@@ -768,9 +768,28 @@ let
       md5 = "5c07cdbe9bb4a9b82e52737ad590617b";
     };
 
-    doCheck = false; # weird error 
+    doCheck = false; # weird error
 
     propagatedBuildInputs = with self; [ iowait psutil pyzmq tornado mock ];
+  };
+
+  cvxopt = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "cvxopt";
+    version = "1.1.7";
+    disabled = isPyPy;
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/c/${pname}/${name}.tar.gz";
+      sha256 = "f856ea2e9e2947abc1a6557625cc6b0e45228984f397a90c420b2f468dc4cb97";
+    };
+    doCheck = false;
+    buildInputs = with pkgs; [ liblapack blas ];
+    meta = with stdenv.lib; {
+      homepage = "http://cvxopt.org/";
+      description = "Python Software for Convex Optimization";
+      maintainers = with maintainers; [ edwtjo ];
+      licsense = licenses.gpl3Plus;
+    };
   };
 
   iowait = buildPythonPackage rec {
