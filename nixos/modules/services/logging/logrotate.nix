@@ -21,7 +21,7 @@ in
 
       config = mkOption {
         default = "";
-        type = type.lines;
+        type = types.lines;
         description = ''
           The contents of the logrotate config file
         '';
