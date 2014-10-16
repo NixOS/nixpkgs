@@ -132,6 +132,10 @@ in rec {
   manpages = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manpages);
 
 
+  # Build the initial ramdisk so Hydra can keep track of its size over time.
+  initialRamdisk = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.initialRamdisk);
+
+
   iso_minimal = forAllSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal.nix;
     type = "minimal";
@@ -188,12 +192,15 @@ in rec {
 
   # Ensure that all packages used by the minimal NixOS config end up in the channel.
   dummy = forAllSystems (system: pkgs.runCommand "dummy"
-    { propagatedBuildInputs = (import lib/eval-config.nix {
+    { toplevel = (import lib/eval-config.nix {
         inherit system;
-        modules = lib.singleton ({ config, pkgs, ... }: { });
-      }).config.environment.systemPackages;
+        modules = lib.singleton ({ config, pkgs, ... }:
+          { fileSystems."/".device  = lib.mkDefault "/dev/sda1";
+            boot.loader.grub.device = lib.mkDefault "/dev/sda";
+          });
+      }).config.system.build.toplevel;
     }
-    "mkdir $out; fixupPhase");
+    "mkdir $out; ln -s $toplevel $out/dummy");
 
 
   # Provide a tarball that can be unpacked into an SD card, and easily
@@ -231,7 +238,6 @@ in rec {
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
-  tests.installer.efi = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).efi.test);
   tests.installer.grub1 = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).grub1.test);
   tests.installer.lvm = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).lvm.test);
   tests.installer.rebuildCD = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).rebuildCD.test);

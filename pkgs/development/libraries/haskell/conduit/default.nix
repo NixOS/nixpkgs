@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "conduit";
-  version = "1.2.0.2";
-  sha256 = "0gr4vqyvy3jdc1l7sinwr5dgmwzv7dq2z1npwvmbxz85bq89rmd9";
+  version = "1.2.1";
+  sha256 = "0pcnaqvavy289cmsp6mfapc350p9sq2fq8aq9lv5a256nxq2qffa";
   buildDepends = [
     exceptions liftedBase mmorph monadControl mtl resourcet
     transformers transformersBase void

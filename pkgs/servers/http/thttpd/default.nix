@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "thttpd-${version}";
-  version = "2.25b";
+  version = "2.26";
 
   src = fetchurl {
     url = "http://acme.com/software/thttpd/${name}.tar.gz";
-    sha256 = "0q13sfkh6amn5wk0ccbmxq3mnhlm8g5pnyk910fa5xngn449nw87";
+    sha256 = "1dybhpyfrly0m285cdn9jah397bqzylrwzi26gin2h451z3gdcqm";
   };
 
   prePatch = ''

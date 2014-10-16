@@ -20,6 +20,6 @@ rec {
 
   meta = {
     description = "Extra components for TeXLive: beamer class";
-    maintainers = [ stdenv.lib.maintainers.mornfall ];
+    maintainers = [ stdenv.lib.maintainers.mornfall stdenv.lib.maintainers.jwiegley ];
   };
 }

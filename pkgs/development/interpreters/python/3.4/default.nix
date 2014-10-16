@@ -18,7 +18,7 @@ with stdenv.lib;
 
 let
   majorVersion = "3.4";
-  version = "${majorVersion}.1";
+  version = "${majorVersion}.2";
   fullVersion = "${version}";
 
   buildInputs = filter (p: p != null) [
@@ -31,12 +31,10 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${fullVersion}.tar.xz";
-    sha256 = "1i7dgbzyvj24i6gfhb5q2zwr9nn1ni6w1ig1rcgh96a321is35f5";
+    sha256 = "1vrd9gqdqw7rw0kiiprqvng7ywnfc2hbyys7gr9mdh25s619cv8w";
   };
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
-
-  patches = [ ./issue21121-3.patch ];
 
   preConfigure = ''
     for i in /usr /sw /opt /pkg; do	# improve purity

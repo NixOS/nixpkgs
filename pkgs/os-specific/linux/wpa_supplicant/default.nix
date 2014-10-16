@@ -5,13 +5,13 @@
 assert readlineSupport -> readline != null;
 
 stdenv.mkDerivation rec {
-  version = "2.2";
+  version = "2.3";
 
   name = "wpa_supplicant-${version}";
 
   src = fetchurl {
     url = "http://hostap.epitest.fi/releases/${name}.tar.gz";
-    sha256 = "1vf8jc4yyksbxf86narvsli3vxfbm8nbnim2mdp66nd6d3yvin70";
+    sha256 = "0skvkl6c10ls4s48b2wmf47h9j1y40nlzxnzn8hyaw2j0prmpapa";
   };
 
   extraConfig =
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     echo "$extraConfig" >> .config
     cat .config
     substituteInPlace Makefile --replace /usr/local $out
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$(echo "${libnl}"/include/libnl*/)"
   '';
 
   buildInputs = [ openssl dbus_libs libnl ]
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  patches = [ ./libnl.patch ];
+  patches = [];
 
   postInstall = ''
     mkdir -p $out/share/man/man5 $out/share/man/man8

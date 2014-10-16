@@ -5,15 +5,15 @@
    for each package in a separate file: the call to the function would
    be almost as must code as the function itself. */
 
-{ fetchurl, stdenv, lua, callPackage, unzip, zziplib,
-pcre, oniguruma, gnulib, tre, glibc,
-sqlite }:
+{ fetchurl, stdenv, lua, callPackage, unzip, zziplib
+, pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat
+}:
 
 let
- isLua51 = lua.luaversion == "5.1";
- isLua52 = lua.luaversion == "5.2";
- self = _self;
- _self = with self; {
+  isLua51 = lua.luaversion == "5.1";
+  isLua52 = lua.luaversion == "5.2";
+  self = _self;
+  _self = with self; {
   inherit (stdenv.lib) maintainers;
 
   #define build lua package function
@@ -23,7 +23,57 @@ let
     inherit lua;
   };
 
-  luafilesystem = buildLuaPackage {
+  luabitop = buildLuaPackage rec {
+    version = "1.0.2";
+    name = "bitop-${version}";
+    src = fetchurl {
+      url = "http://bitop.luajit.org/download/LuaBitOp-${version}.tar.gz";
+      sha256 = "16fffbrgfcw40kskh2bn9q7m3gajffwd2f35rafynlnd7llwj1qj";
+    };
+
+    preBuild = ''
+      makeFlagsArray=(
+        INCLUDES="-I${lua}/include"
+        LUA="${lua}/bin/lua");
+    '';
+
+    installPhase = ''
+      mkdir -p $out/lib/lua/${lua.luaversion}
+      install -p bit.so $out/lib/lua/${lua.luaversion}
+    '';
+
+    meta = {
+      homepage = "http://bitop.luajit.org";
+      maintainers = with maintainers; [ flosse ];
+    };
+  };
+
+  luaexpat = buildLuaPackage rec {
+    version = "1.3.0";
+    name = "expat-${version}";
+    isLibrary = true;
+    src = fetchurl {
+      url = "https://matthewwild.co.uk/projects/luaexpat/luaexpat-${version}.tar.gz";
+      sha256 = "1hvxqngn0wf5642i5p3vcyhg3pmp102k63s9ry4jqyyqc1wkjq6h";
+    };
+
+    buildInputs = [ expat ];
+
+    preBuild = ''
+      makeFlagsArray=(
+        LUA_LDIR="$out/share/lua/${lua.luaversion}"
+        LUA_INC="-I${lua}/include" LUA_CDIR="$out/lib/lua/${lua.luaversion}"
+        EXPAT_INC="-I${expat}/include");
+    '';
+
+    meta = {
+      homepage = "http://matthewwild.co.uk/projects/luaexpat";
+      hydraPlatforms = stdenv.lib.platforms.linux;
+      maintainers = [ stdenv.lib.maintainers.flosse ];
+    };
+  };
+
+  luafilesystem = buildLuaPackage rec {
     name = "filesystem-1.6.2";
     src = fetchurl {
       url = "https://github.com/keplerproject/luafilesystem/archive/v1_6_2.tar.gz";
@@ -36,18 +86,44 @@ let
     };
   };
 
+  luasec = buildLuaPackage rec {
+    version = "0.5";
+    name = "sec-${version}";
+    src = fetchurl {
+      url = "https://github.com/brunoos/luasec/archive/luasec-${version}.tar.gz";
+      sha256 = "08rm12cr1gjdnbv2jpk7xykby9l292qmz2v0dfdlgb4jfj7mk034";
+    };
+
+    buildInputs = [ openssl ];
+
+    preBuild = ''
+      makeFlagsArray=(
+        linux
+        LUAPATH="$out/lib/lua/${lua.luaversion}"
+        LUACPATH="$out/lib/lua/${lua.luaversion}"
+        INC_PATH="-I${lua}/include"
+        LIB_PATH="-L$out/lib");
+    '';
+
+    meta = {
+      homepage = "https://github.com/brunoos/luasec";
+      hydraPlatforms = stdenv.lib.platforms.linux;
+      maintainers = [ stdenv.lib.maintainers.flosse ];
+    };
+  };
+
   luasocket = buildLuaPackage rec {
     name = "socket-${version}";
     version = "2.0.2";
     src = fetchurl {
-        url = "http://files.luaforge.net/releases/luasocket/luasocket/luasocket-${version}/luasocket-${version}.tar.gz";
-        sha256 = "19ichkbc4rxv00ggz8gyf29jibvc2wq9pqjik0ll326rrxswgnag";
+      url = "http://files.luaforge.net/releases/luasocket/luasocket/luasocket-${version}/luasocket-${version}.tar.gz";
+      sha256 = "19ichkbc4rxv00ggz8gyf29jibvc2wq9pqjik0ll326rrxswgnag";
     };
     disabled = isLua52;
     patchPhase = ''
-        sed -e "s,^INSTALL_TOP_SHARE.*,INSTALL_TOP_SHARE=$out/share/lua/${lua.luaversion}," \
-            -e "s,^INSTALL_TOP_LIB.*,INSTALL_TOP_LIB=$out/lib/lua/${lua.luaversion}," \
-            -i config
+      sed -e "s,^INSTALL_TOP_SHARE.*,INSTALL_TOP_SHARE=$out/share/lua/${lua.luaversion}," \
+          -e "s,^INSTALL_TOP_LIB.*,INSTALL_TOP_LIB=$out/lib/lua/${lua.luaversion}," \
+          -i config
     '';
     meta = {
       homepage = "http://w3.impa.br/~diego/software/luasocket/";

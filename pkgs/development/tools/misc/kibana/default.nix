@@ -1,29 +1,28 @@
-{ stdenv, fetchurl, unzip, conf ? null }:
+{ stdenv, fetchurl, conf ? null }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "kibana-${version}";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchurl {
-    url = "https://download.elasticsearch.org/kibana/kibana/${name}.zip";
-    sha256 = "05i97zi08rxwx951hgs92fbhk6cchpvdlikrfz07v1dpn787xz8j";
+    url = "https://download.elasticsearch.org/kibana/kibana/${name}.tar.gz";
+    sha256 = "195x6zq9x16nlh2akvn6z0kp8qnba4vq90yrysiafgv8dmw34p5b";
   };
 
-  buildInputs = [ unzip ];
-
   phases = ["unpackPhase" "installPhase"];
+
   installPhase = ''
-    mkdir -p $out && cp -R * $out
-    ${optionalString (conf!=null) ''cp ${conf} $out/config.js''}
+    mkdir -p $out
+    mv * $out/
+    ${optionalString (conf != null) "cp ${conf} $out/config.js"}
   '';
 
   meta = {
     description = "Visualize logs and time-stamped data";
     homepage = http://www.elasticsearch.org/overview/kibana;
     license = licenses.asl20;
-
-    maintainers = [ maintainers.offline ];
+    maintainers = with maintainers; [ offline rickynils ];
   };
 }

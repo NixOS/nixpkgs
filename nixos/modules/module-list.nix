@@ -174,6 +174,7 @@
   ./services/misc/nixos-manual.nix
   ./services/misc/nix-ssh-serve.nix
   ./services/misc/phd.nix
+  ./services/misc/redmine.nix
   ./services/misc/rippled.nix
   ./services/misc/rogue.nix
   ./services/misc/siproxd.nix
@@ -250,6 +251,7 @@
   ./services/networking/polipo.nix
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix
+  ./services/networking/prosody.nix
   ./services/networking/quassel.nix
   ./services/networking/radicale.nix
   ./services/networking/radvd.nix
@@ -257,6 +259,7 @@
   ./services/networking/rpcbind.nix
   ./services/networking/sabnzbd.nix
   ./services/networking/searx.nix
+  ./services/networking/seeks.nix
   ./services/networking/spiped.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix

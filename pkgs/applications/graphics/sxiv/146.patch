@@ -1,0 +1,25 @@
+From b901236261dc717dc08ed10f63e2d5cd3f3031f8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bart=C5=82omiej=20Piotrowski?= <b@bpiotrowski.pl>
+Date: Tue, 27 May 2014 11:46:06 +0200
+Subject: [PATCH] Fix build with giflib >= 5.1.0.
+
+---
+ image.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/image.c b/image.c
+index e62a69f..7eec544 100644
+--- a/image.c
++++ b/image.c
+@@ -278,7 +278,11 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
+ 		}
+ 	} while (rec != TERMINATE_RECORD_TYPE);
+ 
++#if defined(GIFLIB_MAJOR) && GIFLIB_MAJOR >= 5 && GIFLIB_MINOR >= 1
++	DGifCloseFile(gif, NULL);
++#else
+ 	DGifCloseFile(gif);
++#endif
+ 
+ 	if (err && !file->loaded)
+ 		warn("corrupted gif file: %s", file->name);

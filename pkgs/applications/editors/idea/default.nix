@@ -17,7 +17,7 @@ let
     desktopItem = makeDesktopItem {
       name = loName;
       exec = loName;
-      comment = meta.longDescription;
+      comment = lib.replaceChars ["\n"] [" "] meta.longDescription;
       desktopName = product;
       genericName = meta.description;
       categories = "Application;Development;";
@@ -147,54 +147,42 @@ in
 
   android-studio = buildAndroidStudio rec {
     name = "android-studio-${version}";
-    version = "0.8.10";
-    build = "135.1428667";
+    version = "0.8.12";
+    build = "135.1503853";
     description = "Android development environment based on IntelliJ IDEA";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}" +
             "/android-studio-ide-${build}-linux.zip";
-      sha256 = "5736a92ffda24233026ff45a47f1b4f9567ba40347cfa0c9f351112e729b5401";
+      sha256 = "225c8b2f90b9159c465eae5797132350660994184a568c631d4383313a510695";
     };
   };
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "13.1.4b";
-    build = "IC-135.1230";
+    version = "13.1.5";
+    build = "IC-135.1289";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "http://download-ln.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "8b4ee25fd2934e06b87230b50e1474183ed4b331c1626a7fee69b96294d9616d";
+      sha256 = "e08b9adad0ed9aa62a43f3026a1b499d1663710314d00a3bec2e171a6c375f09";
     };
   };
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "13.1.4b";
-    build = "IU-135.1230";
+    version = "13.1.5";
+    build = "IU-135.1289";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "http://download-ln.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "84660d97c9c3e4e7cfd6c2708f4685dc7322157f1e1c2888feac64df119f0606";
+      sha256 = "0800b1ffc135f884e46f1004289fb75850148d705afc447d3374cfd281c231a2";
     };
   };
 
-  pycharm-community-313 = buildPycharm rec {
-    name = "pycharm-community-${version}";
-    version = "3.1.3";
-    build = "133.1347";
-    description = "PyCharm 3.1 Community Edition";
-    license = stdenv.lib.licenses.asl20;
-    src = fetchurl {
-      url = "http://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "f671ee4c99207c179f168b5b98fa23afe90a94c3a3914367b95a46b0c2881b23";
-    };
-  };
-
-  pycharm-community-341 = buildPycharm rec {
+  pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
     version = "3.4.1";
     build = "135.1057";
@@ -206,19 +194,7 @@ in
     };
   };
 
-  pycharm-professional-313 = buildPycharm rec {
-    name = "pycharm-professional-${version}";
-    version = "3.1.3";
-    build = "133.1347";
-    description = "PyCharm 3.1 Professional Edition";
-    license = stdenv.lib.licenses.unfree;
-    src = fetchurl {
-      url = "http://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "e0c2db8f18cb825a95de6ddc4b0b9f93c5643bf34cca9f1b3c2fa37fd7c14f11";
-    };
-  };
-
-  pycharm-professional-341 = buildPycharm rec {
+  pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
     version = "3.4.1";
     build = "135.1057";

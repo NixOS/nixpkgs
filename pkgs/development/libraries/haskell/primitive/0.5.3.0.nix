@@ -11,5 +11,6 @@ cabal.mkDerivation (self: {
     description = "Primitive memory-related operations";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

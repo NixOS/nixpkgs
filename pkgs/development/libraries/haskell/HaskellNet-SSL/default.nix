@@ -4,13 +4,14 @@
 
 cabal.mkDerivation (self: {
   pname = "HaskellNet-SSL";
-  version = "0.2.4";
-  sha256 = "0rwj69rz8i84qj6n1zd9fllp4333azfxppd7blzd486bczzkgkbb";
+  version = "0.2.5.1";
+  sha256 = "0qkc0bw0p201wi3v8ck348j8m32x9dn8lkf6r787sd1bxhrsd2z7";
   buildDepends = [ connection dataDefault HaskellNet network tls ];
   meta = {
     homepage = "https://github.com/dpwright/HaskellNet-SSL";
     description = "Helpers to connect to SSL/TLS mail servers with HaskellNet";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })

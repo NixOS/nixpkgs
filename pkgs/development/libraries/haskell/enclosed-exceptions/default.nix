@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "enclosed-exceptions";
-  version = "1.0.0.2";
-  sha256 = "1jbgqqavkhz2x5br17bdhv17rcmyi7a5mxplakhgyyg73wkjq04h";
+  version = "1.0.1";
+  sha256 = "1kid1hi392h88a1am0jkm7dhwl3v78lw5wfcyhmh0x454yr3b6zz";
   buildDepends = [
     async deepseq liftedBase monadControl transformers transformersBase
   ];

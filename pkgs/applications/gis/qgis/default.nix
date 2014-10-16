@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake python ];
 
-  enableParallelBuilding = true;
+  # fatal error: ui_qgsdelimitedtextsourceselectbase.h: No such file or directory
+  #enableParallelBuilding = true;
 
   # To handle the lack of 'local' RPATH; required, as they call one of
   # their built binaries requiring their libs, in the build process.

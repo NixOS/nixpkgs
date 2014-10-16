@@ -2,21 +2,21 @@
 
 stdenv.mkDerivation rec {
   name    = "why3-${version}";
-  version = "0.83";
+  version = "0.85";
 
   src = fetchurl {
-    url    = "https://gforge.inria.fr/frs/download.php/33490/${name}.tar.gz";
-    sha256 = "1jcs5vj91ppbgh4q4hch89b63wgakjhg35pm3r4jwhp377lnggya";
+    url    = "https://gforge.inria.fr/frs/download.php/34074/why3-0.85.tar.gz";
+    sha256 = "0sj1pd50lqvnvyss1f8ysgigdi64s91rrpdrmp7crmcy1npa8apf";
   };
 
   buildInputs = with ocamlPackages;
     [ coq ocaml findlib lablgtk ocamlgraph zarith ];
 
-  meta = {
-    description = "why is a software verification platform";
+  meta = with stdenv.lib; {
+    description = "A platform for deductive program verification";
     homepage    = "http://why3.lri.fr/";
-    license     = stdenv.lib.licenses.lgpl21;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = licenses.lgpl21;
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ thoughtpolice vbgl ];
   };
 }

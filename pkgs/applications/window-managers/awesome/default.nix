@@ -2,7 +2,8 @@
 , xlibs, libstartup_notification, libxdg_basedir, libpthreadstubs
 , xcb-util-cursor, lgi, makeWrapper, pango, gobjectIntrospection, unclutter
 , compton, procps, iproute, coreutils, curl, alsaUtils, findutils, rxvt_unicode
-, which, dbus, nettools, git, asciidoc, doxygen }:
+, which, dbus, nettools, git, asciidoc, doxygen, xmlto, docbook_xml_dtd_45
+, docbook_xsl }:
 
 let
   version = "3.5.5";
@@ -52,7 +53,10 @@ stdenv.mkDerivation rec {
     xlibs.xcbutilkeysyms
     xlibs.xcbutilrenderutil
     xlibs.xcbutilwm
+    xmlto docbook_xml_dtd_45 docbook_xsl
   ];
+
+  cmakeFlags = "-DGENERATE_MANPAGES=ON";
 
   LD_LIBRARY_PATH = "${cairo}/lib:${pango}/lib:${gobjectIntrospection}/lib";
   GI_TYPELIB_PATH = "${pango}/lib/girepository-1.0";

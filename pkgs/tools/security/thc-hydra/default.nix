@@ -3,10 +3,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "hydra-7.5";
+  name = "thc-hydra-${version}";
+  version = "7.5";
 
   src = fetchurl {
-    url = "http://www.thc.org/releases/${name}.tar.gz";
+    url = "http://www.thc.org/releases/hydra-${version}.tar.gz";
     sha256 = "1dhavbn2mcm6c2c1qw29ipbpmczax3vhhlxzwn49c8cq471yg4vj";
   };
 

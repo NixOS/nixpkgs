@@ -11,12 +11,14 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ coq ssreflect ];
 
+  enableParallelBuilding = true;
+
   installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
 
   meta = with stdenv.lib; {
     homepage = http://ssr.msr-inria.inria.fr/;
     license = licenses.cecill-b;
-    maintainers = [ maintainers.vbgl ];
+    maintainers = [ maintainers.vbgl maintainers.jwiegley ];
     platforms = coq.meta.platforms;
     hydraPlatforms = [];
   };

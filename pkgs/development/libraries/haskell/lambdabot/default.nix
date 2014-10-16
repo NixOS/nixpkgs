@@ -31,6 +31,6 @@ cabal.mkDerivation (self: {
     license = "GPL";
     platforms = self.ghc.meta.platforms;
     hydraPlatforms = self.stdenv.lib.platforms.none;
-    broken = self.stdenv.lib.versionOlder "7.7" self.ghc.version;
+    broken = true;
   };
 })

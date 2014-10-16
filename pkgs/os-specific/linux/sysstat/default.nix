@@ -15,14 +15,8 @@ stdenv.mkDerivation rec {
     export PATH_CHKCONFIG=/no-such-program
     export BZIP=${bzip2}/bin/bzip2
     export SYSTEMCTL=systemctl
-    makeFlagsArray=(SYSCONFIG_DIR=$out/etc CHOWN=true IGNORE_MAN_GROUP=y CHOWN=true)
-    installFlagsArray=(SA_DIR=$TMPDIR/dummy)
-    # Note: --enable-install-cron actually installs systemd units.
-    configureFlagsArray+=(--with-systemdsystemunitdir=$out/lib/systemd/system --enable-install-cron)
-  '';
-
-  preInstall = ''
-    mkdir -p $out/lib/systemd/system
+    makeFlagsArray=(DESTDIR=$out SYSCONFIG_DIR=$out/etc IGNORE_MAN_GROUP=y CHOWN=true)
+    installTargets="install_base install_nls install_man"
   '';
 
   meta = {

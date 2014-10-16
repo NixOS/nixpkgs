@@ -7,11 +7,11 @@ stdenv.mkDerivation rec {
   srcs = [
     (fetchurl {
       url = "mirror://debian/pool/main/n/netcat-openbsd/netcat-openbsd_1.105.orig.tar.gz";
-      md5 = "7e67b22f1ad41a1b7effbb59ff28fca1";
+      sha256 = "07i1vcz8ycnfwsvz356rqmim8akfh8yhjzmhc5mqf5hmdkk3yra0";
     })
     (fetchurl {
       url = "mirror://debian/pool/main/n/netcat-openbsd/netcat-openbsd_1.105-7.debian.tar.gz";
-      md5 = "e914f8eb7eda5c75c679dd77787ac76b";
+      sha256 = "0qxkhbwcifrps34s5mzzg79cmkvz3f96gphd3pl978pygwr5krzf";
     })
   ];
 

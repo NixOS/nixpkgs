@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
     deepseq nonNegative parsec QuickCheck random storableRecord
     utilityHt
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Numeric_Prelude";
     description = "An experimental alternative hierarchy of numeric type classes";

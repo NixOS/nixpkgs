@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   version = "1.0.1";
   sha256 = "1q3b7vw80yw6fkmpwgazy8ikhbwjmmqmm4fry8c9f8ckkpzahj2b";
   buildDepends = [ network text time vector ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/ocharles/network-carbon";
     description = "A Haskell implementation of the Carbon protocol (part of the Graphite monitoring tools)";

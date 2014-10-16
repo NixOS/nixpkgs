@@ -1,5 +1,5 @@
 diff --git a/src/librustc/back/link.rs b/src/librustc/back/link.rs
-index 6332485..9500a23 100644
+index 1cc60fc..2e94b99 100644
 --- a/src/librustc/back/link.rs
 +++ b/src/librustc/back/link.rs
 @@ -383,18 +383,9 @@ pub fn mangle_internal_name_by_path_and_seq(path: PathElems, flav: &str) -> Stri
@@ -35,4 +35,3 @@ index 060dda5..fecf76b 100644
 +        None => "@arPath@"
      };
      let mut cmd = Command::new(ar);
- 

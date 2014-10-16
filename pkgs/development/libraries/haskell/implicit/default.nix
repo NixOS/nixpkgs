@@ -21,5 +21,6 @@ cabal.mkDerivation (self: {
     description = "Math-inspired programmatic 2&3D CAD: CSG, bevels, and shells; gcode export..";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })

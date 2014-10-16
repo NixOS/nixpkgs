@@ -205,6 +205,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Appperlbrew = buildPerlPackage {
+    name = "App-perlbrew-0.71";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/G/GU/GUGOD/App-perlbrew-0.71.tar.gz;
+      sha256 = "5e5de7c4d5235556f6cd5c5e56751fb2d73821ef58390e457db4253542224a09";
+    };
+    buildInputs = [ pkgs.curl IOAll PathClass TestException TestNoWarnings TestOutput TestSpec ];
+    propagatedBuildInputs = [ CPANPerlReleases CaptureTiny DevelPatchPerl locallib ];
+    meta = {
+      description = "Manage perl installations in your $HOME";
+      license = "mit";
+    };
+  };
+
   ArrayCompare = buildPerlPackage {
     name = "Array-Compare-1.18";
     src = fetchurl {
@@ -229,7 +243,7 @@ let self = _self // overrides; _self = with self; {
     name = "Archive-Zip-1.16";
     src = fetchurl {
       url = http://tarballs.nixos.org/Archive-Zip-1.16.tar.gz;
-      md5 = "e28dff400d07b1659d659d8dde7071f1";
+      sha256 = "1ghgs64by3ybjlb0bj65kxysb03k72i7iwmw63g41bj175l44ima";
     };
   };
 
@@ -1683,6 +1697,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  CPANPerlReleases = buildPerlPackage {
+    name = "CPAN-Perl-Releases-1.94";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BI/BINGOS/CPAN-Perl-Releases-1.94.tar.gz;
+      sha256 = "ebc70640541f5b6d1191ba7bf958d369d9e21be0908ac812663047290b95fdf2";
+    };
+    meta = {
+      homepage = https://github.com/bingos/cpan-perl-releases;
+      description = "Mapping Perl releases on CPAN to the location of the tarballs";
+      license = "perl";
+    };
+  };
+
   CPANUploader = buildPerlPackage {
     name = "CPAN-Uploader-0.103006";
     src = fetchurl {
@@ -2333,6 +2360,20 @@ let self = _self // overrides; _self = with self; {
       sha256 = "14q9mibxdgqkia73426q6xw6km5bf1hhkgg2nf7x4zhnlksahbwr";
     };
     propagatedBuildInputs = [ IOCaptureOutput ];
+  };
+
+  DevelPatchPerl = buildPerlPackage {
+    name = "Devel-PatchPerl-1.28";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BI/BINGOS/Devel-PatchPerl-1.28.tar.gz;
+      sha256 = "03085cd6a8b565a4f789c838e8208a8377e0d1aeb7f5becc3b0d3219409d6b82";
+    };
+    propagatedBuildInputs = [ Filepushd ];
+    meta = {
+      homepage = https://github.com/bingos/devel-patchperl;
+      description = "Patch perl source a la Devel::PPPort's buildperl.pl";
+      license = "perl";
+    };
   };
 
   DevelSizeMe = buildPerlPackage {
@@ -4970,6 +5011,18 @@ let self = _self // overrides; _self = with self; {
       license = "unknown";
       platforms = stdenv.lib.platforms.linux;
       maintainers = with maintainers; [ ocharles ];
+    };
+  };
+
+  locallib = buildPerlPackage {
+    name = "local-lib-2.000014";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/H/HA/HAARG/local-lib-2.000014.tar.gz;
+      sha256 = "ae63356ab780c5a3aa46287b48daea748a3dd021d9b52dff8bf480b43787fa2b";
+    };
+    meta = {
+      description = "Create and use a local lib/ for perl modules with PERL5LIB";
+      license = "perl";
     };
   };
 
@@ -8850,6 +8903,19 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestSimple = null;
+
+  TestSpec = buildPerlPackage {
+    name = "Test-Spec-0.47";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PH/PHILIP/Test-Spec-0.47.tar.gz;
+      sha256 = "e425c0b9efa3c7e21496d31a607d072a63e31988c3d298a8c1fd7d145cc0681e";
+    };
+    propagatedBuildInputs = [ PackageStash TestDeep TestTrap TieIxHash ];
+    meta = {
+      description = "Write tests in a declarative specification style";
+      license = "perl";
+    };
+  };
 
   TestSubCalls = buildPerlPackage rec {
     name = "Test-SubCalls-1.09";

@@ -17,5 +17,6 @@ cabal.mkDerivation (self: {
     description = "A grab bag of modules";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })

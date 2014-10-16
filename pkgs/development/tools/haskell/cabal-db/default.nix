@@ -18,5 +18,6 @@ cabal.mkDerivation (self: {
     description = "query tools for the local cabal database (revdeps, graph, info, search-by, license, bounds)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })
