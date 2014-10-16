@@ -10,8 +10,7 @@ stdenv.mkDerivation rec {
   
   nativeBuildInputs = [ flex bison ];
   
-  # Apparently, 32 bit systems need this forced? Not verified if still needed.
-  configureFlags = stdenv.lib.optionals (stdenv.system == "i686-linux") "--with-pcap=linux";
+  configureFlags = stdenv.lib.optionals stdenv.isLinux "--with-pcap=linux";
 
   preInstall = ''mkdir -p $out/bin'';
   
