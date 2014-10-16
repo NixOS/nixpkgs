@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "openresolv-3.5.7";
 
   src = fetchurl {
-    url = "http://roy.marples.name/downloads/openresolv/${name}.tar.bz2";
+    url = "mirror://roy/openresolv/${name}.tar.bz2";
     sha256 = "14n51wqnh49zdvx11l79s3fh1jhg7kg9cfny5vk7zsix78spmyx7";
   };
 

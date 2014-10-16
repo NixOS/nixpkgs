@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "dhcpcd-6.5.1";
 
   src = fetchurl {
-    url = "http://roy.marples.name/downloads/dhcpcd/${name}.tar.bz2";
+    url = "mirror://roy/dhcpcd/${name}.tar.bz2";
     sha256 = "0y0falxxlahr2i630ydraq4ldr7d5mg8ar0s5np5ddl76w58dlrp";
   };
 
