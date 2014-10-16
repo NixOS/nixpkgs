@@ -35,7 +35,12 @@ cabal.mkDerivation (self: {
   ];
   buildTools = [ bup curl git gnupg1 lsof openssh perl rsync which ];
   configureFlags = "-fAssistant -fProduction";
-  preConfigure = "export HOME=$TEMPDIR";
+  preConfigure = ''
+    sed -i 's/Extensions: PackageImports/Extensions: PackageImports, ViewPatterns/' git-annex.cabal
+    sed -i 's/{-# LANGUAGE TemplateHaskell, MultiParamTypeClasses #-}/{-# LANGUAGE TemplateHaskell, MultiParamTypeClasses, OverloadedStrings #-}/' Assistant/Threads/WebApp.hs
+
+    export HOME=$TEMPDIR
+  '';
   installPhase = "./Setup install";
   checkPhase = ''
     cp dist/build/git-annex/git-annex git-annex
