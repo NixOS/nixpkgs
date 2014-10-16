@@ -16,19 +16,19 @@ assert stdenv.gcc.gcc != null;
 
 */
 
-with ((import ./common.nix) {inherit stdenv; version = "0.11.0"; });
+with ((import ./common.nix) {inherit stdenv; version = "0.12.0"; });
 
 let snapshot = if stdenv.system == "i686-linux"
-      then "84339ea0f796ae468ef86797ef4587274bec19ea"
+      then "555aca74f9a268f80cab2df1147dc6406403e9e4"
       else if stdenv.system == "x86_64-linux"
-      then "bd8a6bc1f28845b7f4b768f6bfa06e7fbdcfcaae"
+      then "6a43c2f6c8ba2cbbcb9da1f7b58f748aef99f431"
       else if stdenv.system == "i686-darwin"
-      then "3f25b2680efbab16ad074477a19d49dcce475977"
+      then "331bd7ef519cbb424188c546273e8c7d738f0894"
       else if stdenv.system == "x86_64-darwin"
-      then "4a8c2e1b7634d73406bac32a1a97893ec3ed818d"
+      then "2c83a79a9febfe1d326acb17c3af76ba053c6ca9"
       else abort "no-snapshot for platform ${stdenv.system}";
-    snapshotDate = "2014-06-21";
-    snapshotRev = "db9af1d";
+    snapshotDate = "2014-10-04";
+    snapshotRev = "749ff5e";
     snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshot}.tar.bz2";
 
 in stdenv.mkDerivation {
@@ -37,8 +37,8 @@ in stdenv.mkDerivation {
   inherit meta;
 
   src = fetchurl {
-    url = http://static.rust-lang.org/dist/rust-0.11.0.tar.gz;
-    sha256 = "1fhi8iiyyj5j48fpnp93sfv781z1dm0xy94h534vh4mz91jf7cyi";
+    url = http://static.rust-lang.org/dist/rust-0.12.0.tar.gz;
+    sha256 = "1dv9wxh41230zknbwj34zgjnh1kgvvy6k12kbiy9bnch9nr6cgl8";
   };
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
@@ -65,7 +65,8 @@ in stdenv.mkDerivation {
   patches = [ ./hardcode_paths.patch ./local_stage0.patch ];
   postPatch = ''
     substituteInPlace src/librustc/back/link.rs \
-      --subst-var-by "ccPath" "${stdenv.gcc}/bin/cc" \
+      --subst-var-by "ccPath" "${stdenv.gcc}/bin/cc"
+    substituteInPlace src/librustc_back/archive.rs \
       --subst-var-by "arPath" "${stdenv.gcc.binutils}/bin/ar"
   '';
 
