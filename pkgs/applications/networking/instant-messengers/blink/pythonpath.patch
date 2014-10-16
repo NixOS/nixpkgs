@@ -1,0 +1,12 @@
+diff --git a/blink/resources.py b/blink/resources.py
+index 524d9e5..c271887 100644
+--- a/blink/resources.py
++++ b/blink/resources.py
+@@ -64,6 +64,7 @@ class Resources(object):
+             if script == '':
+                 application_directory = os.path.realpath(script) # executed in interactive interpreter
+             else:
++                script = os.path.join(sys.path[0], script)
+                 binary_directory = os.path.dirname(os.path.realpath(script))
+                 if os.path.basename(binary_directory) == 'bin':
+                     application_directory = os.path.dirname(binary_directory)

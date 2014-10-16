@@ -393,6 +393,17 @@ let
   };
 
 
+  application = buildPythonPackage rec {
+    name = "python-application-${version}";
+    version = "1.4.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-application/${name}.tar.gz";
+      sha256 = "3ae188e9dfd4bd63c9b43aebbf1d9de5df03fb5ac01e72f3bff5b41007570275";
+    };
+  };
+
+
   apsw = buildPythonPackage rec {
     name = "apsw-3.7.6.2-r1";
     disabled = isPyPy;
@@ -1277,6 +1288,24 @@ let
   });
 
 
+  cjson = buildPythonPackage rec {
+    name = "python-cjson-${version}";
+    version = "1.1.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-cjson/${name}.tar.gz";
+      sha256 = "a01fabb7593728c3d851e1cd9a3efbd18f72650a31a5aa8a74018640da3de8b3";
+    };
+
+    meta = with stdenv.lib; {
+      description = "This module implements a very fast JSON encoder/decoder for Python.";
+      homepage    = "http://ag-projects.com/";
+      license     = licenses.lgpl2;
+      platforms   = platforms.all;
+    };
+  };
+
+
   click = buildPythonPackage {
     name = "click-2.1";
     src = pkgs.fetchurl {
@@ -1952,6 +1981,16 @@ let
     };
   };
 
+  dns = buildPythonPackage rec {
+    name = "dnspython-${version}";
+    version = "1.12.0";
+
+    src = pkgs.fetchurl {
+      url = "http://www.dnspython.org/kits/1.12.0/dnspython-1.12.0.tar.gz";
+      sha256 = "0kvjlkp96qzh3j31szpjlzqbp02brixh4j4clnpw80b0hspq5yq3";
+    };
+  };
+
   docker = buildPythonPackage rec {
     name = "docker-py-0.4.0";
 
@@ -2114,6 +2153,26 @@ let
       license = licenses.bsd3;
       maintainers = [ maintainers.goibhniu ];
       platforms = stdenv.lib.platforms.linux;
+    };
+  };
+
+
+  eventlib = buildPythonPackage rec {
+    name = "python-eventlib-${version}";
+    version = "0.2.0";
+
+    src = pkgs.fetchurl {
+      url = "http://download.ag-projects.com/SipClient/${name}.tar.gz";
+      sha256 = "0fld5lb85ql4a5bgc38sdxi5pgzqljysp1p8f7abxnd6vymh4rgi";
+    };
+
+    propagatedBuildInputs = with self; [ greenlet ];
+
+    meta = with stdenv.lib; {
+      description = "Eventlib bindings for python.";
+      homepage    = "http://ag-projects.com/";
+      license     = licenses.lgpl2;
+      platforms   = platforms.all;
     };
   };
 
@@ -2316,6 +2375,16 @@ let
     '';
 
     propagatedBuildInputs = with self; [ gflags iso8601_0_1_4 ipaddr httplib2 google_apputils google_api_python_client ];
+  };
+
+  gnutls = buildPythonPackage rec {
+    name = "python-gnutls";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-gnutls/python-gnutls-2.0.1.tar.gz";
+      sha256 = "d8fb368c6a4dd58bc6cd5e61d4a12d119c4506fd344a371b3429b3ac2623b9ac";
+    };
+
+    propagatedBuildInputs = with self; [ pkgs.gnutls ];
   };
 
   gitdb = buildPythonPackage rec {
@@ -4060,18 +4129,22 @@ let
     };
   };
 
+
   greenlet = buildPythonPackage rec {
-    name = "greenlet-0.4.3";
+    name = "greenlet-${version}";
+    version = "0.4.4";
     disabled = isPyPy;  # builtin for pypy
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/g/greenlet/${name}.zip";
-      md5 = "a5e467a5876c415cd357c1ab9027e06c";
+      url = "https://pypi.python.org/packages/source/g/greenlet/${name}.zip";
+      sha256 = "935a76b7ad3c41846af26e136e2fd8ec763794cbc5b5fbc4b7b09d9a8de1d056";
     };
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = http://pypi.python.org/pypi/greenlet;
       description = "Module for lightweight in-process concurrent programming";
+      license     = licenses.lgpl2;
+      platforms   = platforms.all;
     };
   };
 
@@ -5093,6 +5166,19 @@ let
       homepage = https://github.com/iElectric/mr.bob.git;
       description = "A tool to generate code skeletons from templates";
     };
+  };
+
+
+  msrplib = buildPythonPackage rec {
+    name = "python-msrplib-${version}";
+    version = "0.15.0";
+
+    src = pkgs.fetchurl {
+      url = "http://download.ag-projects.com/SipClient/${name}.tar.gz";
+      sha256 = "1sm03jcz663xkbhfmrk7rr5l3wlkydn8xs56fvqjxyapx0m5sw6f";
+    };
+
+    propagatedBuildInputs = with self; [ eventlib application gnutls ];
   };
 
 
@@ -8325,6 +8411,27 @@ let
   };
 
 
+  sipsimple = buildPythonPackage rec {
+    name = "sipsimple-${version}";
+    version = "1.4.2";
+
+    configurePhase = "find -name 'configure' -exec chmod a+x {} \\; ; find -name 'aconfigure' -exec chmod a+x {} \\; ; ${python}/bin/${python.executable} setup.py build_ext --pjsip-clean-compile";
+
+    src = pkgs.fetchurl {
+      url = "http://download.ag-projects.com/SipClient/python-${name}.tar.gz";
+      sha256 = "f6e6de7ab5f20e8ae08966b8811462e4271833db4f7fbab58ffba4e5c07ab114";
+    };
+
+    propagatedBuildInputs = with self; [ cython pkgs.openssl dns dateutil xcaplib msrplib];
+
+    buildInputs = with self; [ pkgs.alsaLib ];
+
+    installPhase = "${python}/bin/${python.executable} setup.py install --prefix=$out";
+
+    doCheck = false;
+  };
+
+
   six = buildPythonPackage rec {
     name = "six-1.7.3";
 
@@ -9509,6 +9616,18 @@ let
 
   wxPython30 = callPackage ../development/python-modules/wxPython/3.0.nix {
     wxGTK = pkgs.wxGTK30;
+  };
+
+  xcaplib = buildPythonPackage rec {
+    name = "python-xcaplib-${version}";
+    version = "1.0.17";
+
+    src = pkgs.fetchurl {
+      url = "http://download.ag-projects.com/SipClient/${name}.tar.gz";
+      sha256 = "1bf8n9ghmgxz8kjgnwy4y7ajijy5hi7viabgh0pvzkhz9gfvck86";
+    };
+
+    propagatedBuildInputs = with self; [ eventlib application ];
   };
 
   xe = buildPythonPackage rec {
@@ -10952,6 +11071,7 @@ let
       maintainers = [ stdenv.lib.maintainers.matejc ];
     };
   };
+
 
   grequests = buildPythonPackage rec {
     name = "grequests-0.2.0";
