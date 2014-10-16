@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ... } @ args:
 
 import ./generic.nix (args // rec {
-  version = "3.16.6"
+  version = "3.16.6";
   extraMeta.branch = "3.16";
 
   src = fetchurl {
