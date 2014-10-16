@@ -1,6 +1,7 @@
 { stdenv, fetchurl, perl, gmp ? null
 , aclSupport ? false, acl ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
+, autoconf, automake114x
 }:
 
 assert aclSupport -> acl != null;
@@ -18,6 +19,8 @@ let
       sha256 = "0bdq6yggyl7nkc2pbl6pxhhyx15nyqhz3ds6rfn448n6rxdwlhzc";
     };
 
+    patches = optionals stdenv.isCygwin [ ./coreutils-8.23-4.cygwin.patch ];
+
     # The test tends to fail on btrfs and maybe other unusual filesystems.
     postPatch = stdenv.lib.optionalString (!stdenv.isDarwin) ''
       sed '2i echo Skipping dd sparse test && exit 0' -i ./tests/dd/sparse.sh
@@ -26,6 +29,7 @@ let
     nativeBuildInputs = [ perl ];
     buildInputs = [ gmp ]
       ++ optional aclSupport acl
+      ++ optionals stdenv.isCygwin [ autoconf automake114x ]   # due to patch
       ++ optionals selinuxSupport [ libselinux libsepol ];
 
     crossAttrs = {
@@ -54,8 +58,6 @@ let
       configureFlags = [ "fu_cv_sys_stat_statfs2_bsize=yes" ];
       doCheck = false;
     };
-
-  # CYGWINTODO
 
     # The tests are known broken on Cygwin
     # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
