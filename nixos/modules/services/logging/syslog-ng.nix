@@ -7,8 +7,7 @@ let
   cfg = config.services.syslog-ng;
 
   syslogngConfig = pkgs.writeText "syslog-ng.conf" ''
-    @version: 3.5
-    @include "scl.conf"
+    ${cfg.configHeader}
     ${cfg.extraConfig}
   '';
 
@@ -70,6 +69,17 @@ in {
         default = "";
         description = ''
           Configuration added to the end of <literal>syslog-ng.conf</literal>.
+        '';
+      };
+      configHeader = mkOption {
+        type = types.lines;
+        default = ''
+          @version: 3.5
+          @include "scl.conf"
+        '';
+        description = ''
+          The very first lines of the configuration file. Should usually contain
+          the syslog-ng version header.
         '';
       };
     };
