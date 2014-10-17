@@ -1,12 +1,18 @@
 { stdenv, fetchurl, pkgconfig, intltool, makeWrapper
 , glib, gstreamer, gst_plugins_base, gtk
 , libxfce4util, libxfce4ui, xfce4panel, xfconf, libunique ? null
+, pulseaudioSupport ? false, gst_plugins_good ? null
 }:
+
+assert pulseaudioSupport -> gst_plugins_good != null;
 
 let
   # The usual Gstreamer plugins package has a zillion dependencies
   # that we don't need for a simple mixer, so build a minimal package.
   gst_plugins_minimal = gst_plugins_base.override {
+    minimalDeps = true;
+  };
+  gst_plugins_pulse = gst_plugins_good.override {
     minimalDeps = true;
   };
 
@@ -26,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig intltool glib gstreamer gst_plugins_minimal gtk
       libxfce4util libxfce4ui xfce4panel xfconf libunique makeWrapper
-    ];
+    ] ++ stdenv.lib.optional pulseaudioSupport gst_plugins_pulse;
 
   postInstall =
     ''
