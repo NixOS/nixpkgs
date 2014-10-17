@@ -325,6 +325,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   bytes = callPackage ../development/libraries/haskell/bytes {};
 
+  bytestring = callPackage ../development/libraries/haskell/bytestring {};
+
   bytestringNums = callPackage ../development/libraries/haskell/bytestring-nums {};
 
   bytestringLexing = callPackage ../development/libraries/haskell/bytestring-lexing {};
