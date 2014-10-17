@@ -41,7 +41,6 @@ let
 
   mozillaPluginPath = "/lib/mozilla/plugins";
 
-  fixupPatch = ./pipelight-fixup.patch;
 
 in stdenv.mkDerivation rec {
 
@@ -60,6 +59,7 @@ in stdenv.mkDerivation rec {
   patches = [ ./pipelight.patch ];
 
   configurePhase = ''
+    patchShebangs . 
     ./configure \
       --prefix=$out \
       --moz-plugin-path=$out/${mozillaPluginPath} \
@@ -76,12 +76,10 @@ in stdenv.mkDerivation rec {
   };
 
   postInstall = ''
-    $out/bin/pipelight-plugin --update
     $out/bin/pipelight-plugin --create-mozilla-plugins
   '';
 
   preFixup = ''
-    patch -d $out -p1 <${fixupPatch}
     substituteInPlace $out/share/pipelight/install-dependency \
       --replace cabextract ${cabextract}/bin/cabextract
   '';
