@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig }:
 
 stdenv.mkDerivation rec{
-  name = "libqb-0.16.0";
+  name = "libqb-0.17.1";
 
   src = fetchurl {
     url = "https://fedorahosted.org/releases/q/u/quarterback/${name}.tar.xz";
-    sha256 = "0j3zl5g5nnx98jb16p89q8w61har3gbvnlnmma8yj31xngps3kdq";
+    sha256 = "0a9fy4hb6ixs875fbqw77dfj7519ixg27vg4yajyl87y7gw1a8bs";
   };
 
   buildInputs = [ pkgconfig ];
