@@ -657,6 +657,8 @@ let
 
   ccnet = callPackage ../tools/networking/ccnet { };
 
+  cloud-init = callPackage ../tools/virtualization/cloud-init { };
+
   consul = callPackage ../servers/consul {
     inherit ruby rubyLibs;
   };
