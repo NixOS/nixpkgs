@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, nix }: let
-  version = "1.0.0";
+  version = "1.1.0";
 in stdenv.mkDerivation {
   name = "nix-exec-${version}";
 
   src = fetchurl {
     url = "https://github.com/shlevy/nix-exec/releases/download/v${version}/nix-exec-${version}.tar.xz";
 
-    sha256 = "0w89ma69iil1ki68zvs1l0ii0d87in64791l3a4yzyv9d3ncl3w6";
+    sha256 = "0w1dq2svv1l8x18q5syraf80xpyyrcxbrab51cszc3v4m04b4saa";
   };
 
   buildInputs = [ pkgconfig nix ];
