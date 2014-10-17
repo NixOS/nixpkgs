@@ -44,6 +44,9 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   parole          = callPackage ./applications/parole.nix { };
   ristretto       = callPackage ./applications/ristretto.nix { };
   terminal        = xfce4terminal; # it has changed its name
+  xfce4volumed    = callPackage ./applications/xfce4-volumed.nix {
+    pulseaudioSupport = config.pulseaudio or false;
+  };
   xfce4mixer      = callPackage ./applications/xfce4-mixer.nix {
     pulseaudioSupport = config.pulseaudio or false;
   };
