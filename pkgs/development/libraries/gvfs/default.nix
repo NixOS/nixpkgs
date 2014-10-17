@@ -1,8 +1,8 @@
 { stdenv, fetchurl, pkgconfig, intltool, libtool
 , glib, dbus, udev, udisks2, libgcrypt
 , libgphoto2, avahi, libarchive, fuse, libcdio
-, libxml2, libxslt, docbook_xsl
-, lightWeight ? true, gnome, samba, libgnome_keyring, gconf, makeWrapper }:
+, libxml2, libxslt, docbook_xsl, samba
+, lightWeight ? true, gnome,libgnome_keyring, gconf, makeWrapper }:
 
 let
   ver_maj = "1.18";
@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ makeWrapper glib dbus.libs udev udisks2 libgcrypt
       libgphoto2 avahi libarchive fuse libcdio
-      libxml2 libxslt docbook_xsl
+      libxml2 libxslt docbook_xsl samba
       # ToDo: a ligther version of libsoup to have FTP/HTTP support?
     ] ++ stdenv.lib.optionals (!lightWeight) (with gnome; [
-      gtk libsoup libgnome_keyring gconf samba
+      gtk libsoup libgnome_keyring gconf
       # ToDo: not working and probably useless until gnome3 from x-updates
     ]);
 
