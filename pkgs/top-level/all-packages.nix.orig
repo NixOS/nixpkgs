@@ -401,10 +401,6 @@ let
     inherit stdenv;
   };
 
-  substituteAllFiles = import ../build-support/substitute-files/substitute-all-files.nix {
-    inherit stdenv;
-  };
-
   replaceDependency = import ../build-support/replace-dependency.nix {
     inherit runCommand nix lib;
   };
@@ -620,8 +616,6 @@ let
   };
 
   bitbucket-cli = pythonPackages.bitbucket-cli;
-
-  blink = callPackage ../applications/networking/instant-messengers/blink { };
 
   blockdiag = pythonPackages.blockdiag;
 
@@ -1411,6 +1405,13 @@ let
 
   httptunnel = callPackage ../tools/networking/httptunnel { };
 
+  # FIXME: This Hydra snapshot is outdated and depends on the `nixPerl',
+  # which no longer exists.
+  #
+  # hydra = callPackage ../development/tools/misc/hydra {
+  #   nix = nixUnstable;
+  # };
+
   iasl = callPackage ../development/compilers/iasl { };
 
   icecast = callPackage ../servers/icecast { };
@@ -1874,7 +1875,7 @@ let
   openobex = callPackage ../tools/bluetooth/openobex { };
 
   openopc = callPackage ../tools/misc/openopc {
-    pythonFull = python27FullBuildEnv.override {
+    pythonFull = python27Full.override {
       extraLibs = [ python27Packages.pyro3 ];
     };
   };
@@ -2837,10 +2838,7 @@ let
   cryptol1 = lowPrio (callPackage ../development/compilers/cryptol/1.8.x.nix {});
   cryptol2 = with haskellPackages_ghc763; callPackage ../development/compilers/cryptol/2.0.x.nix {
     Cabal = Cabal_1_18_1_3;
-    cabalInstall = cabalInstall_1_18_0_3.override {
-      network = network_2_5_0_0;
-      HTTP = HTTP.override { network = network_2_5_0_0; };
-    };
+    cabalInstall = cabalInstall_1_18_0_3;
     process = process_1_2_0_0;
   };
 
@@ -3653,7 +3651,7 @@ let
 
   roadsend = callPackage ../development/compilers/roadsend { };
 
-  rustc       = callPackage ../development/compilers/rustc/0.12.nix {};
+  rustc       = callPackage ../development/compilers/rustc/0.11.nix {};
   rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
 
   rust = rustc;
@@ -3924,8 +3922,6 @@ let
     llvm = llvm_34 ;
   };
 
-  pure-gsl = callPackage ../development/pure-modules/pure-gsl { };
-
   python = python2;
   python2 = python27;
   python3 = python34;
@@ -3935,6 +3931,9 @@ let
   python2Packages = python27Packages;
   python3Packages = python34Packages;
 
+  pythonFull = python2Full;
+  python2Full = python27Full;
+
   python26 = callPackage ../development/interpreters/python/2.6 { db = db47; };
   python27 = callPackage ../development/interpreters/python/2.7 { };
   python32 = callPackage ../development/interpreters/python/3.2 { };
@@ -3943,24 +3942,18 @@ let
 
   pypy = callPackage ../development/interpreters/pypy/2.4 { };
 
-  pythonFull = python2Full;
-  python2Full = python27Full;
-  python26Full = python26.override {
-    includeModules = true;
-  };
-  python27Full = python27.override {
-    includeModules = true;
-  };
-  python26FullBuildEnv = callPackage ../development/interpreters/python/wrapper.nix {
-    python = python26Full;
+  python26Full = callPackage ../development/interpreters/python/wrapper.nix {
+    extraLibs = [];
+    postBuild = "";
+    python = python26;
     inherit (python26Packages) recursivePthLoader;
   };
-  python27FullBuildEnv = callPackage ../development/interpreters/python/wrapper.nix {
-    python = python27Full;
+  python27Full = callPackage ../development/interpreters/python/wrapper.nix {
+    extraLibs = [];
+    postBuild = "";
+    python = python27;
     inherit (python27Packages) recursivePthLoader;
   };
-  pythonFullBuildEnv = python2FullBuildEnv;
-  python2FullBuildEnv = python27FullBuildEnv;
 
   python2nix = callPackage ../tools/package-management/python2nix { };
 
@@ -6136,9 +6129,6 @@ let
 
   miro = callPackage ../applications/video/miro {
     inherit (pythonPackages) pywebkitgtk pysqlite pycurl mutagen;
-    avahi = avahi.override {
-      withLibdnssdCompat = true;
-    };
   };
 
   mkvtoolnix = callPackage ../applications/video/mkvtoolnix { };
@@ -6327,8 +6317,6 @@ let
   phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc { };
 
   physfs = callPackage ../development/libraries/physfs { };
-
-  pipelight = callPackage ../tools/misc/pipelight { };
 
   pkcs11helper = callPackage ../development/libraries/pkcs11helper { };
 
@@ -7038,34 +7026,34 @@ let
   # Therefore we do not recurse into attributes here, in contrast to
   # python27Packages. `nix-env -iA python26Packages.nose` works
   # regardless.
-  python26Packages = callPackage ./python-packages.nix {
+  python26Packages = import ./python-packages.nix {
+    inherit pkgs;
     python = python26;
-    self = python26Packages;
   };
 
-  python27Packages = lib.hiPrioSet (recurseIntoAttrs (callPackage ./python-packages.nix {
+  python27Packages = lib.hiPrioSet (recurseIntoAttrs (import ./python-packages.nix {
+    inherit pkgs;
     python = python27;
-    self = python27Packages;
   }));
 
-  python32Packages = callPackage ./python-packages.nix {
+  python32Packages = import ./python-packages.nix {
+    inherit pkgs;
     python = python32;
-    self = python32Packages;
   };
 
-  python33Packages = recurseIntoAttrs (callPackage ./python-packages.nix {
+  python33Packages = recurseIntoAttrs (import ./python-packages.nix {
+    inherit pkgs;
     python = python33;
-    self = python33Packages;
   });
 
-  python34Packages = recurseIntoAttrs (callPackage ./python-packages.nix {
+  python34Packages = recurseIntoAttrs (import ./python-packages.nix {
+    inherit pkgs;
     python = python34;
-    self = python34Packages;
   });
 
-  pypyPackages = recurseIntoAttrs (callPackage ./python-packages.nix {
+  pypyPackages = recurseIntoAttrs (import ./python-packages.nix {
+    inherit pkgs;
     python = pypy;
-    self = pypyPackages;
   });
 
   foursuite = callPackage ../development/python-modules/4suite { };
@@ -7237,7 +7225,7 @@ let
   prosody = recurseIntoAttrs (
     callPackage ../servers/xmpp/prosody {
       lua5 = lua5_1;
-      inherit (lua51Packages) luasocket luasec luaexpat luafilesystem luabitop;
+      inherit (lua51Packages) luasocket luasec luaexpat luafilesystem;
   });
 
   elasticmq = callPackage ../servers/elasticmq { };
@@ -8029,7 +8017,7 @@ let
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
-  linuxPackages = linuxPackages_3_14;
+  linuxPackages = linuxPackages_3_12;
 
   # Update this when adding the newest kernel major version!
   linux_latest = pkgs.linux_3_17;
@@ -10207,7 +10195,9 @@ let
 
   seafile-client = callPackage ../applications/networking/seafile-client { };
 
-  seeks = callPackage ../tools/networking/p2p/seeks { };
+  seeks = callPackage ../tools/networking/p2p/seeks {
+    opencv = opencv_2_1;
+  };
 
   seg3d = callPackage ../applications/graphics/seg3d {
     wxGTK = wxGTK28.override { unicode = false; };
@@ -10678,17 +10668,13 @@ let
       ++ optional (cfg.enableGambatte or false) gambatte
       ++ optional (cfg.enableGenesisPlusGX or false) genesis-plus-gx
       ++ optional (cfg.enableMupen64Plus or false) mupen64plus
-      ++ optional (cfg.enableNestopia or false) nestopia
       ++ optional (cfg.enablePicodrive or false) picodrive
       ++ optional (cfg.enablePrboom or false) prboom
       ++ optional (cfg.enablePPSSPP or false) ppsspp
-      ++ optional (cfg.enableQuickNES or false) quicknes
       ++ optional (cfg.enableScummVM or false) scummvm
-      ++ optional (cfg.enableSnes9x or false) snes9x
       ++ optional (cfg.enableSnes9xNext or false) snes9x-next
       ++ optional (cfg.enableStella or false) stella
       ++ optional (cfg.enableVbaNext or false) vba-next
-      ++ optional (cfg.enableVbaM or false) vba-m
       );
 
   wrapRetroArch = { retroarch }: import ../misc/emulators/retroarch/wrapper.nix {
@@ -11015,12 +11001,6 @@ let
   gnugo = callPackage ../games/gnugo { };
 
   gtypist = callPackage ../games/gtypist { };
-
-  hedgewars = callPackage ../games/hedgewars {
-    inherit (haskellPackages) ghc network vector utf8String bytestringShow
-      random hslogger dataenc;
-    SDL = SDL_pulseaudio;
-  };
 
   hexen = callPackage ../games/hexen { };
 
@@ -12065,19 +12045,17 @@ let
 
   retroarchBare = callPackage ../misc/emulators/retroarch { };
 
-  retroarch = wrapRetroArch { retroarch = retroarchBare; };
+  retroarchBareMaster = callPackage ../misc/emulators/retroarch/master.nix { };
+
+  retroarch = wrapRetroArch { retroarch = retroarchBareMaster; };
 
   libretro = recurseIntoAttrs (callPackage ../misc/emulators/retroarch/cores.nix {
-    retroarch = retroarchBare;
+    retroarch = retroarchBareMaster;
   });
 
   rssglx = callPackage ../misc/screensavers/rss-glx { };
 
-  runit = callPackage ../tools/system/runit { };
-
   xlockmore = callPackage ../misc/screensavers/xlockmore { };
-
-  sails = callPackage ../misc/sails { };
 
   samsungUnifiedLinuxDriver = import ../misc/cups/drivers/samsung {
     inherit fetchurl stdenv;
@@ -12133,7 +12111,7 @@ let
     inherit builderDefs zlib bzip2 ncurses libpng ed lesstif ruby potrace
       gd t1lib freetype icu perl expat curl xz pkgconfig zziplib texinfo
       libjpeg bison python fontconfig flex poppler libpaper graphite2
-      makeWrapper gmp mpfr xpdf;
+      makeWrapper;
     inherit (xlibs) libXaw libX11 xproto libXt libXpm
       libXmu libXext xextproto libSM libICE;
     ghostscript = ghostscriptX;
