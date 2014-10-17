@@ -1,4 +1,5 @@
-{ fetchurl, stdenv, bash, emacs, gdb, glib, gmime, gnupg,
+{ fetchurl, stdenv, bash, emacs, fixDarwinDylibNames,
+  gdb, glib, gmime, gnupg,
   pkgconfig, talloc, xapian
 }:
 
@@ -10,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1pdp9l7yv71d3fjb30qyccva8h03hvg88q4a00yi50v2j70kvmgj";
   };
 
-  buildInputs = [ bash emacs gdb glib gmime gnupg pkgconfig talloc xapian ];
+  buildInputs = [ bash emacs gdb glib gmime gnupg pkgconfig talloc xapian ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
   patchPhase = ''
     find test -type f -exec \
@@ -26,6 +28,16 @@ stdenv.mkDerivation rec {
         --replace \"gpg\" \"${gnupg}/bin/gpg2\"
     done
   '';
+
+  preFixup = if stdenv.isDarwin then
+    ''
+      prg="$out/bin/notmuch"
+      target="libnotmuch.3.dylib"
+      echo "$prg: fixing link to $target"
+      install_name_tool -change "$target" "$out/lib/$target" "$prg"
+    ''
+  else
+    "";
 
   # XXX: emacs tests broken
   doCheck = false;
