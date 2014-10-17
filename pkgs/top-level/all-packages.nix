@@ -5727,6 +5727,8 @@ let
     inherit (gnome) gtkdoc;
   };
 
+  libinput = callPackage ../development/libraries/libinput { };
+
   libiptcdata = callPackage ../development/libraries/libiptcdata { };
 
   libjpeg_original = callPackage ../development/libraries/libjpeg { };
