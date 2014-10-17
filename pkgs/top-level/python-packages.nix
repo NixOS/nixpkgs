@@ -8214,7 +8214,7 @@ let
       sha256 = "bec9269cbfa58de4f0849ec79bb7d54eeeed9df8b5fbfa1637fbc68062822847";
     };
 
-    buildInputs = with self; [ pbr pip ];
+    buildInputs = with self; [ pbr pip ] ++ optional isPy26 argparse;
 
     propagatedBuildInputs = with self; [ setuptools ];
 
