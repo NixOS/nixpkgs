@@ -10602,7 +10602,18 @@ let
 
   weechatDevel = lowPrio (callPackage ../applications/networking/irc/weechat/devel.nix { });
 
-  weston = callPackage ../applications/window-managers/weston { };
+  westonLite = callPackage ../applications/window-managers/weston {
+    pango = null;
+    freerdp = null;
+    libunwind = null;
+    vaapi = null;
+    libva = null;
+    libwebp = null;
+  };
+
+  weston = callPackage ../applications/window-managers/weston {
+    freerdp = freerdpUnstable;
+  };
 
   windowmaker = callPackage ../applications/window-managers/windowmaker { };
 
