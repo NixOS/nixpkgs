@@ -1244,6 +1244,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hoodleTypes = callPackage ../development/libraries/haskell/hoodle-types {};
 
+  hoogle_4_2_34 = callPackage ../development/libraries/haskell/hoogle/4.2.34.nix {};
   hoogle = callPackage ../development/libraries/haskell/hoogle {};
   hoogleLocal = callPackage ../development/libraries/haskell/hoogle/local.nix {};
 
@@ -1468,7 +1469,12 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   languageHaskellExtract = callPackage ../development/libraries/haskell/language-haskell-extract {};
 
-  lambdabot = callPackage ../development/libraries/haskell/lambdabot {};
+  lambdabot = callPackage ../development/libraries/haskell/lambdabot {
+    haskellSrcExts = self.haskellSrcExts_1_15_0_1;
+    hoogle = self.hoogle_4_2_34.override {
+      haskellSrcExts = self.haskellSrcExts_1_15_0_1;
+    };
+  };
 
   lambdabotWrapper = callPackage ../development/libraries/haskell/lambdabot/wrapper.nix {
     mueval = self.muevalWrapper.override {
