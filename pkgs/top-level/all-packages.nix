@@ -10516,7 +10516,7 @@ let
 
   vim = callPackage ../applications/editors/vim { };
 
-  macvim = callPackage ../applications/editors/vim/macvim.nix { };
+  macvim = callPackage ../applications/editors/vim/macvim.nix { stdenv = clangStdenv; };
 
   vimHugeX = vim_configurable;
 
