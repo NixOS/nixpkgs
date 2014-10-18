@@ -83,7 +83,9 @@ let vimHelpTags = ''
     }
   '';
 
-  buildVimPlugin = a@{name, src, path, buildPhase ? "", ...} : stdenv.mkDerivation (a // {
+  buildVimPlugin = a@{name, namePrefix ? "vimplugin-", src, path, buildPhase ? "", ...}: stdenv.mkDerivation (a // {
+    name = namePrefix + name;
+
     inherit buildPhase;
 
     installPhase = ''
@@ -114,7 +116,7 @@ in rec
       sha256 = "1yxrxskxnr2da5awm59ra4s9wg67rimcbazvln9bayg9saxs540d";
      };
 
-    name = "youcompleteme-20140929";  # commit date
+    name = "vimplugin-youcompleteme-20140929";  # commit date
     buildInputs = [ python cmake clang.clang ];
 
     configurePhase = ":";
@@ -153,7 +155,7 @@ in rec
 
   syntastic = buildVimPlugin rec {
     version = "3.4.0";
-    name    = "vim-syntastic-${version}";
+    name    = "syntastic-${version}";
 
     src = fetchurl {
       url    = "https://github.com/scrooloose/syntastic/archive/${version}.tar.gz";
@@ -164,7 +166,7 @@ in rec
   };
 
   coffeeScript = buildVimPlugin {
-    name = "vim-coffee-script-v002";
+    name = "coffee-script-v002";
     src = fetchurl {
       url = "https://github.com/vim-scripts/vim-coffee-script/archive/v002.tar.gz";
       sha256 = "1xln6i6jbbihcyp5bsdylr2146y41hmp2xf7wi001g2ymj1zdsc0";
@@ -174,7 +176,7 @@ in rec
 
   command_T = buildVimPlugin rec {
     version = "1.8";
-    name = "vim-command-t-${version}";
+    name = "command-t-${version}";
     src = fetchurl {
       url    = "https://github.com/wincent/Command-T/archive/${version}.tar.gz";
       sha256 = "ad8664292e6eee40fbe195d856d20d93a8630e8c0149317ad72cc39423630800";
@@ -191,7 +193,7 @@ in rec
 
   eighties = buildVimPlugin rec {
     version = "1.0.4";
-    name = "vim-eighties-${version}";
+    name = "eighties-${version}";
     src = fetchurl {
       url    = "https://github.com/justincampbell/vim-eighties/archive/${version}.tar.gz";
       sha256 = "0cjd9hbg2qd7jjkvyi15f9ysp7m3aa2sg8nvbf80yb890rfkwaqr";
@@ -207,7 +209,7 @@ in rec
   };
 
   golang = buildVimPlugin {
-    name = "vim-golang-20131127";
+    name = "golang-20131127";
     src = fetchgit {
       url = "https://github.com/jnwhiteh/vim-golang.git";
       rev = "832d64e5a813511ed52217aa24f0255c49671bab";
@@ -224,7 +226,7 @@ in rec
   };
 
   ipython = buildVimPlugin {
-    name = "vim-ipython-ff8f88f3fe518851a91dc88aaa5a75f8f352a960";
+    name = "ipython-ff8f88f3fe518851a91dc88aaa5a75f8f352a960";
     src = fetchurl {
       url    = "https://github.com/ivanov/vim-ipython/archive/ff8f88f3fe518851a91dc88aaa5a75f8f352a960.tar.gz";
       sha256 = "0hlx526dm8amrvh41kwnmgvvdzs6sh5yc5sfq4nk1zjkfcp1ah5j";
@@ -241,7 +243,7 @@ in rec
   };
 
   taglist = buildVimPlugin {
-    name = "vim-taglist-4.6";
+    name = "taglist-4.6";
     meta = with stdenv.lib; {
       description = "Source code browser plugin";
       homepage    = "http://www.vim.org/scripts/script.php?script_id=273";
@@ -266,7 +268,7 @@ in rec
 
   tagbar = buildVimPlugin rec {
     version = "2.6.1";
-    name    = "vim-tagbar-${version}";
+    name    = "tagbar-${version}";
 
     meta = with stdenv.lib; {
       description = "A vim plugin for browsing the tags of source code files";
@@ -285,7 +287,7 @@ in rec
   };
 
   xdebug = buildVimPlugin {
-    name = "vim-xdebug-a4980fa65f7f159780593ee37c178281691ba2c4";
+    name = "xdebug-a4980fa65f7f159780593ee37c178281691ba2c4";
     src = fetchurl {
       url = "https://github.com/joonty/vim-xdebug/archive/a4980fa65f7f159780593ee37c178281691ba2c4.tar.gz";
       sha256 = "1348gzp0zhc2wifvs5vmf92m9y8ik8ldnvy7bawsxahy8hmhiksk";
@@ -354,7 +356,7 @@ in rec
 
   colorsamplerpack = buildVimPlugin rec {
     version = "2012.10.28";
-    name    = "vim-colorsamplerpack-${version}";
+    name    = "colorsamplerpack-${version}";
 
     setSourceRoot = "sourceRoot=.";
     src = fetchurl {
@@ -370,7 +372,7 @@ in rec
 
   yankring = buildVimPlugin rec {
     version = "18.0";
-    name    = "vim-yankring-${version}";
+    name    = "yankring-${version}";
 
     setSourceRoot = "sourceRoot=.";
     src = fetchurl {
@@ -386,7 +388,7 @@ in rec
 
   ctrlp = buildVimPlugin rec {
     version = "1.79";
-    name    = "vim-ctrlp-${version}";
+    name    = "ctrlp-${version}";
 
     setSourceRoot = "sourceRoot=.";
     src = fetchurl {
@@ -402,7 +404,7 @@ in rec
 
   alternate = stdenv.mkDerivation rec {
     version = "2.18";
-    name    = "vim-a-${version}";
+    name    = "alternate-${version}";
 
     src = fetchurl {
       url    = "http://www.vim.org/scripts/download_script.php?src_id=7218";
@@ -417,7 +419,7 @@ in rec
   };
 
   vundle = buildVimPlugin {
-    name = "vundle-vim-git-0b28e334";
+    name = "vundle-git-0b28e334";
     src = fetchgit {
       url = "https://github.com/gmarik/Vundle.vim.git";
       rev = "0b28e334e65b6628b0a61c412fcb45204a2f2bab";
@@ -427,7 +429,7 @@ in rec
   };
 
   tslime = buildVimPlugin {
-    name = "tslime-vim-git-e801a32b";
+    name = "tslime-git-e801a32b";
     src = fetchgit {
       url = "https://github.com/jgdavey/tslime.vim.git";
       rev = "e801a32b27d83cb5d91afbf7c3d71bb6220f32bd";
@@ -448,7 +450,7 @@ in rec
   };
 
   fugitive = buildVimPlugin {
-    name = "vim-fugitive-git-90ee6fb5";
+    name = "fugitive-git-90ee6fb5";
     src = fetchgit {
       url = "https://github.com/tpope/vim-fugitive.git";
       rev = "90ee6fb5d255d14d9f12f2469f92ee50149f5b44";
@@ -458,7 +460,7 @@ in rec
   };
 
   extradite = buildVimPlugin {
-    name = "vim-extradite-git-af4f3a51";
+    name = "extradite-git-af4f3a51";
     src = fetchgit {
       url = "https://github.com/int3/vim-extradite.git";
       rev = "af4f3a51b6b654d655121b93c0cd9d8fe9a0c85d";
@@ -478,7 +480,7 @@ in rec
   };
 
   airline = buildVimPlugin {
-    name = "vim-airline-git-2114e702";
+    name = "airline-git-2114e702";
     src = fetchgit {
       url = "https://github.com/bling/vim-airline.git";
       rev = "2114e7025188a941e5c63b1f942d576adb98d8a4";
@@ -518,7 +520,7 @@ in rec
   };
 
   commentary = buildVimPlugin {
-    name = "vim-commentary-git-8b4df6ca";
+    name = "commentary-git-8b4df6ca";
     src = fetchgit {
       url = "https://github.com/tpope/vim-commentary.git";
       rev = "8b4df6ca0ba9cd117d97a8fd26b44b2439d5e3f1";
@@ -558,7 +560,7 @@ in rec
   };
 
   haskellConceal = buildVimPlugin {
-    name = "vim-haskellConceal-git-73a8d712";
+    name = "haskellConceal-git-73a8d712";
     src = fetchgit {
       url = "https://github.com/begriffs/vim-haskellConceal.git";
       rev = "73a8d712d3342b2ffdc087b12924f1cf81053860";
@@ -568,7 +570,7 @@ in rec
   };
 
   ghcmod = buildVimPlugin {
-    name = "ghcmod-vim-git-0c4e9428";
+    name = "ghcmod-git-0c4e9428";
     src = fetchgit {
       url = "https://github.com/eagletmt/ghcmod-vim.git";
       rev = "0c4e94281e57c475752e799adc261f7d5e4ab124";
@@ -589,7 +591,7 @@ in rec
   };
 
   hoogle = buildVimPlugin {
-    name = "vim-hoogle-git-81f28318";
+    name = "hoogle-git-81f28318";
     src = fetchgit {
       url = "https://github.com/Twinside/vim-hoogle.git";
       rev = "81f28318b0d4174984c33df99db7752891c5c4e9";
@@ -599,7 +601,7 @@ in rec
   };
 
   hdevtools = buildVimPlugin {
-    name = "vim-hdevtools-git-474947c5";
+    name = "hdevtools-git-474947c5";
     src = fetchgit {
       url = "https://github.com/bitc/vim-hdevtools.git";
       rev = "474947c52ff9c93dd36f3c49de90bd9a78f0baa1";
@@ -609,7 +611,7 @@ in rec
   };
 
   stylishHaskell = buildVimPlugin {
-    name = "vim-stylish-haskell-git-453fd203";
+    name = "stylish-haskell-git-453fd203";
     src = fetchgit {
       url = "https://github.com/nbouscal/vim-stylish-haskell.git";
       rev = "453fd203aee3d7305ea8e4088ff53bd1f5933d75";
@@ -619,7 +621,7 @@ in rec
   };
 
   wombat256 = buildVimPlugin {
-    name = "wombat256-vim-git-8734ba45";
+    name = "wombat256-git-8734ba45";
     src = fetchgit {
       url = "https://github.com/vim-scripts/wombat256.vim.git";
       rev = "8734ba45dcf5e38c4d2686b35c94f9fcb30427e2";
@@ -629,7 +631,7 @@ in rec
   };
 
   tmuxNavigator = buildVimPlugin {
-    name = "vim-tmux-navigator-git-3de98bfc";
+    name = "tmux-navigator-git-3de98bfc";
     src = fetchgit {
       url = "https://github.com/christoomey/vim-tmux-navigator.git";
       rev = "3de98bfcee1289ce8edc6daf9a18f243180c7168";
@@ -639,7 +641,7 @@ in rec
   };
 
   pathogen = buildVimPlugin {
-    name = "vim-pathogen-git-3de98bfc";
+    name = "pathogen-git-3de98bfc";
     src = fetchgit {
       url = "https://github.com/tpope/vim-pathogen.git";
       rev = "91e6378908721d20514bbe5d18d292a0a15faf0c";
