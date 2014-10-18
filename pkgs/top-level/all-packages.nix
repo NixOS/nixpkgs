@@ -7303,7 +7303,7 @@ let
   nginx = callPackage ../servers/http/nginx {
     rtmp        = true;
     fullWebDAV  = true;
-    syslog      = true;
+    syslog      = false; # the patch is not found
     moreheaders = true;
   };
 
