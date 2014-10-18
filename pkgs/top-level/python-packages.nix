@@ -6509,6 +6509,24 @@ let
   };
 
 
+  pyalgotrade = buildPythonPackage {
+    name = "pyalogotrade-0.16";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/P/PyAlgoTrade/PyAlgoTrade-0.16.tar.gz";
+      md5 = "01d70583ab15eb3bad21027bdeb30ae5";
+    };
+
+    propagatedBuildInputs = with self; [ numpy scipy pytz ];
+
+    meta = {
+      description = "Python Algorithmic Trading";
+      homepage = http://gbeced.github.io/pyalgotrade/;
+      license = stdenv.lib.licenses.asl20;
+    };
+  };
+
+
   pyasn1 = buildPythonPackage ({
     name = "pyasn1-0.1.7";
 
