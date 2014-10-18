@@ -17,8 +17,8 @@
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "5.20140927";
-  sha256 = "02zmg8pcrdavfna2xy51n6chn6i5g0b8p20rba1vj29rlfj3cask";
+  version = "5.20141013";
+  sha256 = "1p2hvw2x0rm9nhk176mzwisl75xphqxv7mhd43mvwlb3q9f57lnc";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -35,12 +35,7 @@ cabal.mkDerivation (self: {
   ];
   buildTools = [ bup curl git gnupg1 lsof openssh perl rsync which ];
   configureFlags = "-fAssistant -fProduction";
-  preConfigure = ''
-    sed -i 's/Extensions: PackageImports/Extensions: PackageImports, ViewPatterns/' git-annex.cabal
-    sed -i 's/{-# LANGUAGE TemplateHaskell, MultiParamTypeClasses #-}/{-# LANGUAGE TemplateHaskell, MultiParamTypeClasses, OverloadedStrings #-}/' Assistant/Threads/WebApp.hs
-
-    export HOME=$TEMPDIR
-  '';
+  preConfigure = "export HOME=$TEMPDIR";
   installPhase = "./Setup install";
   checkPhase = ''
     cp dist/build/git-annex/git-annex git-annex
@@ -53,6 +48,5 @@ cabal.mkDerivation (self: {
     license = self.stdenv.lib.licenses.gpl3;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ simons ];
-    broken = true;
   };
 })
