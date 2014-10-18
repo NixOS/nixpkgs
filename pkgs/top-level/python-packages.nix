@@ -102,6 +102,8 @@ let
   };
 
   ipython = callPackage ../shells/ipython {
+    inherit pythonPackages;
+
     qtconsoleSupport = !pkgs.stdenv.isDarwin; # qt is not supported on darwin
     pylabQtSupport = !pkgs.stdenv.isDarwin;
     pylabSupport = !pkgs.stdenv.isDarwin; # cups is not supported on darwin
