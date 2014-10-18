@@ -5,22 +5,14 @@
 
 eggDerivation {
   src = fetchurl {
-    url = "https://github.com/the-kenny/egg2nix/archive/0.1.tar.gz";
-    sha256 = "0x1vg70rwvd4dbgp8wynlff36cnq1h9ncpag0xgn5jq0miqfr57j";
+    url = "https://github.com/the-kenny/egg2nix/archive/0.2.tar.gz";
+    sha256 = "051nsy30diapcl687pyfrvcyqh5h55fijqjhykra2nah30bmf0k0";
   };
 
-  name = "egg2nix-0.1";
+  name = "egg2nix-0.2";
   buildInputs = with chickenEggs; [
-    versions matchable http-client
+    matchable http-client
   ];
-
-  installPhase = ''
-    mkdir -p $out/bin/
-    mv egg2nix.scm $out/bin/egg2nix
-    chmod +x $out/bin/egg2nix
-
-    runHook postInstall #important - wraps the stuff in $out/bin/
-  '';
 
   meta = {
     description = "Generate nix-expression from Chicken Scheme eggs";

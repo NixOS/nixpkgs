@@ -1,6 +1,4 @@
-(
- ;; Eggs used by egg2nix
- versions
- matchable
- http-client
- )
+;; Eggs used by egg2nix
+matchable
+http-client
+
