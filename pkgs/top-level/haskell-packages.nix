@@ -493,6 +493,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   constraints = callPackage ../development/libraries/haskell/constraints {};
 
+  ConstraintKinds_1_1_0_0 = callPackage  ../development/libraries/haskell/ConstraintKinds/1.1.0.0.nix {};
+  ConstraintKinds_1_3_0 = callPackage ../development/libraries/haskell/ConstraintKinds/1.3.0.nix {};
+  ConstraintKinds = self.ConstraintKinds_1_3_0;
+
   controlBool = callPackage ../development/libraries/haskell/control-bool {};
 
   controlMonadFree = callPackage ../development/libraries/haskell/control-monad-free {};
