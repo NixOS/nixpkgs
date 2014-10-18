@@ -105,12 +105,14 @@ in
         "/lib"
         "/man"
         "/sbin"
+        "/share/doc"
         "/share/emacs"
-        "/share/vim-plugins"
-        "/share/org"
         "/share/info"
-        "/share/terminfo"
         "/share/man"
+        "/share/nano"
+        "/share/org"
+        "/share/terminfo"
+        "/share/vim-plugins"
       ];
 
     system.path = pkgs.buildEnv {
