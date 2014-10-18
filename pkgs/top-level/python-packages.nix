@@ -8319,6 +8319,36 @@ let
   };
 
 
+  scikitlearn = buildPythonPackage {
+    name = "scikit-learn-0.15.2";
+
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/scikit-learn/scikit-learn-0.15.2.tar.gz";
+      md5 = "d9822ad0238e17b382a3c756ea94fe0d";
+    };
+
+    buildInputs = with self; [ nose pillow pkgs.gfortran ];
+    propagatedBuildInputs = with self; [ numpy scipy pkgs.atlas ];
+
+    buildPhase = ''
+      export ATLAS=${pkgs.atlas}
+      ${self.python.executable} setup.py build_ext -i --fcompiler='gnu95'
+    '';
+
+    checkPhase = ''
+      LOCALE_ARCHIVE=${localePath} LC_ALL="en_US.UTF-8" HOME=$TMPDIR ATLAS="" nosetests
+    '';
+
+    meta = {
+      description = "A set of python modules for machine learning and data mining";
+      homepage = http://scikit-learn.org;
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
+
   scripttest = buildPythonPackage rec {
     version = "1.3";
     name = "scripttest-${version}";
