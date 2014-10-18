@@ -1,4 +1,4 @@
-{ fetchurl, bash, stdenv, python, cmake, vim, perl, ruby, unzip, which, fetchgit, clang }:
+{ fetchurl, bash, stdenv, python, cmake, vim, perl, ruby, unzip, which, fetchgit, fetchzip, clang }:
 
 /*
 About Vim and plugins
@@ -172,9 +172,10 @@ in rec
   command_T = buildVimPlugin rec {
     version = "1.8";
     name = "command-t-${version}";
-    src = fetchurl {
+    src = fetchzip {
+      inherit name;
       url    = "https://github.com/wincent/Command-T/archive/${version}.tar.gz";
-      sha256 = "ad8664292e6eee40fbe195d856d20d93a8630e8c0149317ad72cc39423630800";
+      sha256 = "186qz1smf7w91r68p724whg6d821f7ph6ks63l2vkhff8f9qqhrc";
     };
     buildInputs = [ perl ruby ];
     buildPhase = ''
