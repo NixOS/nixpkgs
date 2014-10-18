@@ -385,4 +385,11 @@ rec {
     http://hdiff.luite.com/packages/archive/package/
   ];
 
+  # Roy marples mirrors
+  roy = [
+    http://roy.marples.name/downloads/
+    http://roy.aydogan.net/
+    http://cflags.cc/roy/
+  ];
+
 }
