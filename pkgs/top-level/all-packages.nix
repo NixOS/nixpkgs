@@ -3326,7 +3326,17 @@ let
     llvm = llvm_34;
     openblas = openblas_0_2_10;
   };
-  julia = julia030;
+  julia031 = let
+    liblapack = liblapack_3_5_0.override {shared = true;};
+  in callPackage ../development/compilers/julia/0.3.1.nix {
+    inherit liblapack;
+    suitesparse = suitesparse.override {
+      inherit liblapack;
+    };
+    llvm = llvm_34;
+    openblas = openblas_0_2_10;
+  };
+  julia = julia031;
 
   lazarus = builderDefsPackage (import ../development/compilers/fpc/lazarus.nix) {
     inherit makeWrapper gtk glib pango atk gdk_pixbuf;
