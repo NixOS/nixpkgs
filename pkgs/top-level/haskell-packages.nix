@@ -1216,6 +1216,14 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hjsmin = callPackage ../development/libraries/haskell/hjsmin {};
 
+  HLearnAlgebra = callPackage ../development/libraries/haskell/hlearn-algebra {
+    ConstraintKinds = self.ConstraintKinds_1_1_0_0;
+  };
+  HLearnApproximation = callPackage ../development/libraries/haskell/hlearn-approximation { };
+  HLearnClassification = callPackage ../development/libraries/haskell/hlearn-classification { };
+  HLearnDatastructures = callPackage ../development/libraries/haskell/hlearn-datastructures { };
+  HLearnDistributions = callPackage ../development/libraries/haskell/hlearn-distributions { };
+
   hledger = callPackage ../development/libraries/haskell/hledger {};
   hledgerLib = callPackage ../development/libraries/haskell/hledger-lib {};
   hledgerInterest = callPackage ../applications/office/hledger-interest {};
