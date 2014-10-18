@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       following the Microsoft Open Specifications.
     '';
     homepage = http://www.freerdp.com/;
-    license = licenses.apache2;
+    license = licenses.asl20;
     maintainers = with maintainers; [ wkennington ];
     platforms = platforms.unix;
   };
