@@ -15,6 +15,7 @@ let
   wine_custom =
     stdenv.lib.overrideDerivation wineUnstable (args: rec {
       name = "wine-${wine_patches_version}";
+      version = "${wine_patches_version}";
       src = null;
       srcs = [
 	      (fetchurl {
