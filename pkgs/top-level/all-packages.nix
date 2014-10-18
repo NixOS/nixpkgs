@@ -10550,6 +10550,8 @@ let
 
   vimNox = lowPrio (vim_configurable.override { source = "vim-nox"; });
 
+  qpdfview = callPackage ../applications/misc/qpdfview {};
+
   qvim = lowPrio (callPackage ../applications/editors/vim/qvim.nix {
     inherit (pkgs) fetchgit stdenv ncurses pkgconfig gettext
       composableDerivation lib config python perl tcl ruby qt4;
