@@ -21,7 +21,8 @@
 } :
 
 stdenv.mkDerivation rec {
-  name = "pidgin-2.10.9";
+  majorVersion = "2";
+  name = "pidgin-${majorVersion}.10.9";
   src = fetchurl {
     url = "mirror://sourceforge/pidgin/${name}.tar.bz2";
     sha256 = "06gka47myl9f5x0flkq74ml75akkf28rx9sl8pm3wqkzazc2wdnw";
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
     pkgconfig gtk perl perlXMLParser gettext
   ];
 
-  patches = [./pidgin-makefile.patch ];
+  patches = [./pidgin-makefile.patch ./add-search-path.patch ];
 
   configureFlags="--with-nspr-includes=${nspr}/include/nspr --with-nspr-libs=${nspr}/lib --with-nss-includes=${nss}/include/nss --with-nss-libs=${nss}/lib --with-ncurses-headers=${ncurses}/include --disable-meanwhile --disable-nm --disable-tcl"
   + (lib.optionalString (gnutls != null) " --enable-gnutls=yes --enable-nss=no")
