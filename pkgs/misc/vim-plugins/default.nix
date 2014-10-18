@@ -22,8 +22,8 @@ assembles your profile for you.
 Vim offers the :h rtp setting which works for most plugins. Thus adding adding
 this to your .vimrc should make most plugins work:
 
-  set rtp+=~/.nix-profile/vim-plugins/YouCompleteMe
-  " or for p in ["YouCompleteMe"] | exec 'set rtp+=~/.nix-profile/vim-plugins/'.p | endfor
+  set rtp+=~/.nix-profile/vim-plugins/youcompleteme
+  " or for p in ["youcompleteme"] | exec 'set rtp+=~/.nix-profile/vim-plugins/'.p | endfor
 
 Its what pathogen, vundle, vim-addon-manager (VAM) use.
 
@@ -68,7 +68,7 @@ outdated ones.
 
 So which plugins to add here according to what Marc Weber thinks is best?
 Complicated plugins requiring dependencies, such as YouCompleteMe.
-Then its best to symlink ~/.nix-profile/vim-plugins/YouCompleteMe to
+Then its best to symlink ~/.nix-profile/vim-plugins/youcompleteme to
 ~/.vim/{vim-addons,bundle} or whatever plugin management solution you use.
 
 If you feel differently change the comments and proceed.
@@ -101,7 +101,7 @@ in rec
 
 {
 
-  vimAddonNix = {
+  vim-addon-nix = {
     # github.com/MarcWeber/vim-addon-nix provides some additional support for
     # editing .nix files
 
@@ -109,7 +109,7 @@ in rec
     # git version. It also depends on some additional plugins (see addon-info.json)
   };
 
-  YouCompleteMe = stdenv.mkDerivation {
+  youcompleteme = stdenv.mkDerivation {
     src = fetchgit {
       url = "https://github.com/Valloric/YouCompleteMe.git";
       rev = "a2cae90f7ba1746bf1209edd6739f87d5914b375";
@@ -124,7 +124,7 @@ in rec
     buildPhase = ''
       patchShebangs .
 
-      target=$out/share/vim-plugins/YouCompleteMe
+      target=$out/share/vim-plugins/youcompleteme
       mkdir -p $target
       cp -a ./ $target
 
@@ -150,6 +150,7 @@ in rec
       platforms = stdenv.lib.platforms.linux;
     };
   };
+  YouCompleteMe = youcompleteme; # backwards compat, added 2014-10-18
 
   syntastic = buildVimPlugin rec {
     version = "3.4.0";
@@ -161,15 +162,16 @@ in rec
     };
   };
 
-  coffeeScript = buildVimPlugin {
+  coffee-script = buildVimPlugin {
     name = "coffee-script-v002";
     src = fetchurl {
       url = "https://github.com/vim-scripts/vim-coffee-script/archive/v002.tar.gz";
       sha256 = "1xln6i6jbbihcyp5bsdylr2146y41hmp2xf7wi001g2ymj1zdsc0";
     };
   };
+  coffeeScript = coffee-script; # backwards compat, added 2014-10-18
 
-  command_T = buildVimPlugin rec {
+  command-t = buildVimPlugin rec {
     version = "1.8";
     name = "command-t-${version}";
     src = fetchzip {
@@ -185,6 +187,7 @@ in rec
       popd
     '';
   };
+  command_T = command-t; # backwards compat, added 2014-10-18
 
   eighties = buildVimPlugin rec {
     version = "1.0.4";
@@ -523,14 +526,15 @@ in rec
      };
   };
 
-  haskellConceal = buildVimPlugin {
-    name = "haskellConceal-git-73a8d712";
+  haskellconceal = buildVimPlugin {
+    name = "haskellconceal-git-73a8d712";
     src = fetchgit {
       url = "https://github.com/begriffs/vim-haskellConceal.git";
       rev = "73a8d712d3342b2ffdc087b12924f1cf81053860";
       sha256 = "be60ca030e2d39e972a8c71c0ab3b75b893589d26d5dd78a20cd6779f1f5cfa8";
      };
   };
+  haskellConceal = haskellconceal; # backwards compat, added 2014-10-18
 
   ghcmod = buildVimPlugin {
     name = "ghcmod-git-0c4e9428";
@@ -542,7 +546,7 @@ in rec
     patches = [ (fetchurl { url = "https://github.com/eagletmt/ghcmod-vim/pull/57.diff"; md5 = "cafbb9f725afbba26b52b6c3344ee89a"; }) ];
   };
 
-  necoGhc = buildVimPlugin {
+  neco-ghc = buildVimPlugin {
     name = "neco-ghc-git-0311f31b";
     src = fetchgit {
       url = "https://github.com/eagletmt/neco-ghc.git";
@@ -550,6 +554,7 @@ in rec
       sha256 = "302f29f54c56e9cee647745a8355aeafe323c4efe2f3593d5e4f586acc1c06a5";
      };
   };
+  necoGhc = neco-ghc; # backwards compat, added 2014-10-18
 
   hoogle = buildVimPlugin {
     name = "hoogle-git-81f28318";
@@ -569,7 +574,7 @@ in rec
      };
   };
 
-  stylishHaskell = buildVimPlugin {
+  stylish-haskell = buildVimPlugin {
     name = "stylish-haskell-git-453fd203";
     src = fetchgit {
       url = "https://github.com/nbouscal/vim-stylish-haskell.git";
@@ -577,6 +582,7 @@ in rec
       sha256 = "c0e5010e1e8e56b179ce500387afb569f051c45b37ce92feb4350f293df96a8c";
      };
   };
+  stylishHaskell = stylish-haskell; # backwards compat, added 2014-10-18
 
   wombat256 = buildVimPlugin {
     name = "wombat256-git-8734ba45";
@@ -587,7 +593,7 @@ in rec
      };
   };
 
-  tmuxNavigator = buildVimPlugin {
+  tmux-navigator = buildVimPlugin {
     name = "tmux-navigator-git-3de98bfc";
     src = fetchgit {
       url = "https://github.com/christoomey/vim-tmux-navigator.git";
@@ -595,6 +601,7 @@ in rec
       sha256 = "3843f92e0a21fe5ccf613f8a561abd06c822b2ee98bd82c98937548144e4e8df";
      };
   };
+  tmuxNavigator = tmux-navigator; # backwards compat, added 2014-10-18
 
   pathogen = buildVimPlugin {
     name = "pathogen-git-3de98bfc";
