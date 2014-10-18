@@ -1776,6 +1776,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   networkConduit = callPackage ../development/libraries/haskell/network-conduit {};
   networkConduitTls = callPackage ../development/libraries/haskell/network-conduit-tls {};
 
+  normaldistribution = callPackage ../development/libraries/haskell/normaldistribution {};
+
   networkFancy = callPackage ../development/libraries/haskell/network-fancy {};
 
   networkInfo = callPackage ../development/libraries/haskell/network-info {};
