@@ -9840,6 +9840,8 @@ let
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
+  ncmpcppBeta = callPackage ../applications/audio/ncmpcpp/beta.nix { };
+
   normalize = callPackage ../applications/audio/normalize { };
 
   mplayer = callPackage ../applications/video/mplayer {
