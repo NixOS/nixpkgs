@@ -83,8 +83,7 @@ let vimHelpTags = ''
     }
   '';
 
-  # install a simple standard vim plugin
-  simpleDerivation = a@{name, src, path, buildPhase ? "", ...} : stdenv.mkDerivation (a // {
+  buildVimPlugin = a@{name, src, path, buildPhase ? "", ...} : stdenv.mkDerivation (a // {
     inherit buildPhase;
 
     installPhase = ''
@@ -152,7 +151,7 @@ in rec
     };
   };
 
-  syntastic = simpleDerivation rec {
+  syntastic = buildVimPlugin rec {
     version = "3.4.0";
     name    = "vim-syntastic-${version}";
 
@@ -164,7 +163,7 @@ in rec
     path = "syntastic";
   };
 
-  coffeeScript = simpleDerivation {
+  coffeeScript = buildVimPlugin {
     name = "vim-coffee-script-v002";
     src = fetchurl {
       url = "https://github.com/vim-scripts/vim-coffee-script/archive/v002.tar.gz";
@@ -173,7 +172,7 @@ in rec
     path = "vim-coffee-script";
   };
 
-  command_T = simpleDerivation rec {
+  command_T = buildVimPlugin rec {
     version = "1.8";
     name = "vim-command-t-${version}";
     src = fetchurl {
@@ -190,7 +189,7 @@ in rec
     '';
   };
 
-  eighties = simpleDerivation rec {
+  eighties = buildVimPlugin rec {
     version = "1.0.4";
     name = "vim-eighties-${version}";
     src = fetchurl {
@@ -207,7 +206,7 @@ in rec
     };
   };
 
-  golang = simpleDerivation {
+  golang = buildVimPlugin {
     name = "vim-golang-20131127";
     src = fetchgit {
       url = "https://github.com/jnwhiteh/vim-golang.git";
@@ -224,7 +223,7 @@ in rec
     };
   };
 
-  ipython = simpleDerivation {
+  ipython = buildVimPlugin {
     name = "vim-ipython-ff8f88f3fe518851a91dc88aaa5a75f8f352a960";
     src = fetchurl {
       url    = "https://github.com/ivanov/vim-ipython/archive/ff8f88f3fe518851a91dc88aaa5a75f8f352a960.tar.gz";
@@ -241,7 +240,7 @@ in rec
     };
   };
 
-  taglist = simpleDerivation {
+  taglist = buildVimPlugin {
     name = "vim-taglist-4.6";
     meta = with stdenv.lib; {
       description = "Source code browser plugin";
@@ -265,7 +264,7 @@ in rec
     path = "taglist";
   };
 
-  tagbar = simpleDerivation rec {
+  tagbar = buildVimPlugin rec {
     version = "2.6.1";
     name    = "vim-tagbar-${version}";
 
@@ -285,7 +284,7 @@ in rec
     path = "tagbar";
   };
 
-  xdebug = simpleDerivation {
+  xdebug = buildVimPlugin {
     name = "vim-xdebug-a4980fa65f7f159780593ee37c178281691ba2c4";
     src = fetchurl {
       url = "https://github.com/joonty/vim-xdebug/archive/a4980fa65f7f159780593ee37c178281691ba2c4.tar.gz";
@@ -295,7 +294,7 @@ in rec
     postInstall = false;
   };
 
-  vimshell = simpleDerivation rec {
+  vimshell = buildVimPlugin rec {
     version = "9.2";
     name = "vimshell-${version}";
 
@@ -324,7 +323,7 @@ in rec
     path = "vimshell";
   };
 
-  vimproc = simpleDerivation rec {
+  vimproc = buildVimPlugin rec {
     version = "21a79bf4edca3ae97555df3fc729d208c7e19b9c";
     name    = "vimproc-${version}";
 
@@ -353,7 +352,7 @@ in rec
     path = "vimproc";
   };
 
-  colorsamplerpack = simpleDerivation rec {
+  colorsamplerpack = buildVimPlugin rec {
     version = "2012.10.28";
     name    = "vim-colorsamplerpack-${version}";
 
@@ -369,7 +368,7 @@ in rec
     path = "colorsamplerpack";
   };
 
-  yankring = simpleDerivation rec {
+  yankring = buildVimPlugin rec {
     version = "18.0";
     name    = "vim-yankring-${version}";
 
@@ -385,7 +384,7 @@ in rec
     path = "yankring";
   };
 
-  ctrlp = simpleDerivation rec {
+  ctrlp = buildVimPlugin rec {
     version = "1.79";
     name    = "vim-ctrlp-${version}";
 
@@ -417,7 +416,7 @@ in rec
     '';
   };
 
-  vundle = simpleDerivation {
+  vundle = buildVimPlugin {
     name = "vundle-vim-git-0b28e334";
     src = fetchgit {
       url = "https://github.com/gmarik/Vundle.vim.git";
@@ -427,7 +426,7 @@ in rec
     path = "vundle";
   };
 
-  tslime = simpleDerivation {
+  tslime = buildVimPlugin {
     name = "tslime-vim-git-e801a32b";
     src = fetchgit {
       url = "https://github.com/jgdavey/tslime.vim.git";
@@ -437,7 +436,7 @@ in rec
     path = "tslime";
   };
 
-  supertab = simpleDerivation {
+  supertab = buildVimPlugin {
     name = "supertab-git-23db5585";
     src = fetchgit {
       url = "https://github.com/ervandew/supertab.git";
@@ -448,7 +447,7 @@ in rec
     buildInputs = [ vim ];
   };
 
-  fugitive = simpleDerivation {
+  fugitive = buildVimPlugin {
     name = "vim-fugitive-git-90ee6fb5";
     src = fetchgit {
       url = "https://github.com/tpope/vim-fugitive.git";
@@ -458,7 +457,7 @@ in rec
     path = "fugitive";
   };
 
-  extradite = simpleDerivation {
+  extradite = buildVimPlugin {
     name = "vim-extradite-git-af4f3a51";
     src = fetchgit {
       url = "https://github.com/int3/vim-extradite.git";
@@ -468,7 +467,7 @@ in rec
     path = "extradite";
   };
 
-  nerdtree = simpleDerivation {
+  nerdtree = buildVimPlugin {
     name = "nerdtree-git-4f1e6ecb";
     src = fetchgit {
       url = "https://github.com/scrooloose/nerdtree.git";
@@ -478,7 +477,7 @@ in rec
     path = "nerdtree";
   };
 
-  airline = simpleDerivation {
+  airline = buildVimPlugin {
     name = "vim-airline-git-2114e702";
     src = fetchgit {
       url = "https://github.com/bling/vim-airline.git";
@@ -488,7 +487,7 @@ in rec
     path = "airline";
   };
 
-  ultisnips = simpleDerivation {
+  ultisnips = buildVimPlugin {
     name = "ultisnips-git-279d6e63";
     src = fetchgit {
       url = "https://github.com/SirVer/ultisnips.git";
@@ -498,7 +497,7 @@ in rec
     path = "ultisnips";
   };
 
-  align = simpleDerivation {
+  align = buildVimPlugin {
     name = "align-git-787662fe";
     src = fetchgit {
       url = "https://github.com/vim-scripts/Align.git";
@@ -508,7 +507,7 @@ in rec
     path = "align";
   };
 
-  gundo = simpleDerivation {
+  gundo = buildVimPlugin {
     name = "gundo-git-f443470b";
     src = fetchgit {
       url = "https://github.com/vim-scripts/Gundo.git";
@@ -518,7 +517,7 @@ in rec
     path = "gundo";
   };
 
-  commentary = simpleDerivation {
+  commentary = buildVimPlugin {
     name = "vim-commentary-git-8b4df6ca";
     src = fetchgit {
       url = "https://github.com/tpope/vim-commentary.git";
@@ -528,7 +527,7 @@ in rec
     path = "commentary";
   };
 
-  tabular = simpleDerivation {
+  tabular = buildVimPlugin {
     name = "tabular-git-60f25648";
     src = fetchgit {
       url = "https://github.com/godlygeek/tabular.git";
@@ -538,7 +537,7 @@ in rec
     path = "tabular";
   };
 
-  vim2hs = simpleDerivation {
+  vim2hs = buildVimPlugin {
     name = "vim2hs-git-f2afd557";
     src = fetchgit {
       url = "https://github.com/dag/vim2hs.git";
@@ -548,7 +547,7 @@ in rec
     path = "vim2hs";
   };
 
-  hasksyn = simpleDerivation {
+  hasksyn = buildVimPlugin {
     name = "hasksyn-git-175cd460";
     src = fetchgit {
       url = "https://github.com/travitch/hasksyn.git";
@@ -558,7 +557,7 @@ in rec
     path = "hasksyn";
   };
 
-  haskellConceal = simpleDerivation {
+  haskellConceal = buildVimPlugin {
     name = "vim-haskellConceal-git-73a8d712";
     src = fetchgit {
       url = "https://github.com/begriffs/vim-haskellConceal.git";
@@ -568,7 +567,7 @@ in rec
     path = "haskellConceal";
   };
 
-  ghcmod = simpleDerivation {
+  ghcmod = buildVimPlugin {
     name = "ghcmod-vim-git-0c4e9428";
     src = fetchgit {
       url = "https://github.com/eagletmt/ghcmod-vim.git";
@@ -579,7 +578,7 @@ in rec
     path = "ghcmod";
   };
 
-  necoGhc = simpleDerivation {
+  necoGhc = buildVimPlugin {
     name = "neco-ghc-git-0311f31b";
     src = fetchgit {
       url = "https://github.com/eagletmt/neco-ghc.git";
@@ -589,7 +588,7 @@ in rec
     path = "neco-ghc";
   };
 
-  hoogle = simpleDerivation {
+  hoogle = buildVimPlugin {
     name = "vim-hoogle-git-81f28318";
     src = fetchgit {
       url = "https://github.com/Twinside/vim-hoogle.git";
@@ -599,7 +598,7 @@ in rec
     path = "hoogle";
   };
 
-  hdevtools = simpleDerivation {
+  hdevtools = buildVimPlugin {
     name = "vim-hdevtools-git-474947c5";
     src = fetchgit {
       url = "https://github.com/bitc/vim-hdevtools.git";
@@ -609,7 +608,7 @@ in rec
     path = "hdevtools";
   };
 
-  stylishHaskell = simpleDerivation {
+  stylishHaskell = buildVimPlugin {
     name = "vim-stylish-haskell-git-453fd203";
     src = fetchgit {
       url = "https://github.com/nbouscal/vim-stylish-haskell.git";
@@ -619,7 +618,7 @@ in rec
     path = "stylish-haskell";
   };
 
-  wombat256 = simpleDerivation {
+  wombat256 = buildVimPlugin {
     name = "wombat256-vim-git-8734ba45";
     src = fetchgit {
       url = "https://github.com/vim-scripts/wombat256.vim.git";
@@ -629,7 +628,7 @@ in rec
     path = "wombat256";
   };
 
-  tmuxNavigator = simpleDerivation {
+  tmuxNavigator = buildVimPlugin {
     name = "vim-tmux-navigator-git-3de98bfc";
     src = fetchgit {
       url = "https://github.com/christoomey/vim-tmux-navigator.git";
@@ -639,7 +638,7 @@ in rec
     path = "tmux-navigator";
   };
 
-  pathogen = simpleDerivation {
+  pathogen = buildVimPlugin {
     name = "vim-pathogen-git-3de98bfc";
     src = fetchgit {
       url = "https://github.com/tpope/vim-pathogen.git";
@@ -649,7 +648,7 @@ in rec
     path = "pathogen";
   };
 
-  vimoutliner = simpleDerivation {
+  vimoutliner = buildVimPlugin {
     name = "vimoutliner-git-dce383e7";
     src = fetchgit {
       url = "https://github.com/vimoutliner/vimoutliner";
