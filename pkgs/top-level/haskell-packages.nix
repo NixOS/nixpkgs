@@ -3100,20 +3100,21 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
       buildCommand = ''
       export HOME="$TMPDIR"
-      ${nativePkgs.haskellPackages.cabal2nix}/bin/cabal2nix ${src + "/${name}.cabal"} --sha256=FILTERME \
-          | grep -v FILTERME | sed \
-            -e 's/licenses.proprietary/licenses.unfree/' \
-            -e 's/{ cabal/{ cabal, cabalInstall, cabalDrvArgs ? {}, src/' \
-            -e 's/cabal.mkDerivation (self: {/cabal.mkDerivation (self: cabalDrvArgs \/\/ {/' \
-            -e 's/buildDepends = \[/buildDepends = \[ cabalInstall/' \
-            -e 's/pname = \([^\n]*\)/pname = \1\n  inherit src;\n/'  > $out
+      ${nativePkgs.haskellPackages.cabal2nix}/bin/cabal2nix ${src} \
+          | sed -e 's/licenses.proprietary/licenses.unfree/' > $out
       '';
 
     } // pkgs.lib.optionalAttrs nativePkgs.stdenv.isLinux {
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = "${nativePkgs.glibcLocales}/lib/locale/locale-archive";
     });
-  in callPackage cabalExpr ({ inherit src cabalDrvArgs; } // args);
+  in callPackage cabalExpr {
+    cabal = self.cabal.override {
+      extension = eself: esuper: {
+        buildDepends = [ self.cabalInstall ] ++ esuper.buildDepends;
+      } // cabalDrvArgs;
+    };
+  };
 
   buildLocalCabal = src: name: self.buildLocalCabalWithArgs { inherit src name; };
 
