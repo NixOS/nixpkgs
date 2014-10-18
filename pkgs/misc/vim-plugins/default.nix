@@ -83,12 +83,12 @@ let vimHelpTags = ''
     }
   '';
 
-  buildVimPlugin = a@{name, namePrefix ? "vimplugin-", src, path, buildPhase ? "", ...}: stdenv.mkDerivation (a // {
+  buildVimPlugin = a@{name, namePrefix ? "vimplugin-", src, buildPhase ? "", ...}: stdenv.mkDerivation (a // {
     name = namePrefix + name;
 
     inherit buildPhase;
 
-    installPhase = ''
+    installPhase = let path = (builtins.parseDrvName name).name; in ''
       target=$out/share/vim-plugins/${path}
       mkdir -p $out/share/vim-plugins
       cp -r . $target
@@ -142,8 +142,6 @@ in rec
     # TODO: support llvm based C completion, See README of git repository
     installPhase = ":";
 
-    path = "YouCompleteMe";
-
     meta = {
       description = "fastest non utf-8 aware word and C completion engine for Vim";
       homepage = http://github.com/Valloric/YouCompleteMe;
@@ -161,8 +159,6 @@ in rec
       url    = "https://github.com/scrooloose/syntastic/archive/${version}.tar.gz";
       sha256 = "0h8vfs6icpfwc41qx6n6rc1m35haxp2gaswg9fhcki2w2ikp6knb";
     };
-
-    path = "syntastic";
   };
 
   coffeeScript = buildVimPlugin {
@@ -171,7 +167,6 @@ in rec
       url = "https://github.com/vim-scripts/vim-coffee-script/archive/v002.tar.gz";
       sha256 = "1xln6i6jbbihcyp5bsdylr2146y41hmp2xf7wi001g2ymj1zdsc0";
     };
-    path = "vim-coffee-script";
   };
 
   command_T = buildVimPlugin rec {
@@ -181,7 +176,6 @@ in rec
       url    = "https://github.com/wincent/Command-T/archive/${version}.tar.gz";
       sha256 = "ad8664292e6eee40fbe195d856d20d93a8630e8c0149317ad72cc39423630800";
     };
-    path = "Command-T";
     buildInputs = [ perl ruby ];
     buildPhase = ''
       pushd ruby/command-t
@@ -198,7 +192,6 @@ in rec
       url    = "https://github.com/justincampbell/vim-eighties/archive/${version}.tar.gz";
       sha256 = "0cjd9hbg2qd7jjkvyi15f9ysp7m3aa2sg8nvbf80yb890rfkwaqr";
     };
-    path = "eighties";
     meta = with stdenv.lib; {
       description = "Automatically resizes your windows to 80 characters";
       homepage    = https://github.com/justincampbell/vim-eighties;
@@ -215,7 +208,6 @@ in rec
       rev = "832d64e5a813511ed52217aa24f0255c49671bab";
       sha256 = "6858eb674be132477c5dc7f7d3cbe550371f90d1aba480547a614965412a7b3c";
     };
-    path = "golang";
     meta = with stdenv.lib; {
       description = "Vim plugins for Go";
       homepage    = https://github.com/jnwhiteh/vim-golang;
@@ -231,7 +223,6 @@ in rec
       url    = "https://github.com/ivanov/vim-ipython/archive/ff8f88f3fe518851a91dc88aaa5a75f8f352a960.tar.gz";
       sha256 = "0hlx526dm8amrvh41kwnmgvvdzs6sh5yc5sfq4nk1zjkfcp1ah5j";
     };
-    path = "ipython";
     meta = with stdenv.lib; {
       description = "A two-way integration between vim and iPython";
       homepage    = https://github.com/ivanov/vim-ipython;
@@ -263,7 +254,6 @@ in rec
       mv plugin taglist
     '';
     buildInputs = [ unzip ];
-    path = "taglist";
   };
 
   tagbar = buildVimPlugin rec {
@@ -282,8 +272,6 @@ in rec
       url    = "https://github.com/majutsushi/tagbar/archive/v${version}.tar.gz";
       sha256 = "c061a7e0a45a166f4558b31e6c47b9fd701f5fa1319527b65a268ea054dea5fb";
     };
-
-    path = "tagbar";
   };
 
   xdebug = buildVimPlugin {
@@ -292,7 +280,6 @@ in rec
       url = "https://github.com/joonty/vim-xdebug/archive/a4980fa65f7f159780593ee37c178281691ba2c4.tar.gz";
       sha256 = "1348gzp0zhc2wifvs5vmf92m9y8ik8ldnvy7bawsxahy8hmhiksk";
     };
-    path = "xdebug";
     postInstall = false;
   };
 
@@ -321,8 +308,6 @@ in rec
       set runtimepath+=${vimproc}/share/vim-plugins/vimproc\
       ' autoload/vimshell.vim
     '';
-
-    path = "vimshell";
   };
 
   vimproc = buildVimPlugin rec {
@@ -350,8 +335,6 @@ in rec
       sed -i 's/vimproc_mac\.so/vimproc_unix\.so/' autoload/vimproc.vim
       make -f make_unix.mak
     '';
-
-    path = "vimproc";
   };
 
   colorsamplerpack = buildVimPlugin rec {
@@ -366,8 +349,6 @@ in rec
     };
 
     buildInputs = [ unzip ];
-
-    path = "colorsamplerpack";
   };
 
   yankring = buildVimPlugin rec {
@@ -382,8 +363,6 @@ in rec
     };
 
     buildInputs = [ unzip ];
-
-    path = "yankring";
   };
 
   ctrlp = buildVimPlugin rec {
@@ -398,8 +377,6 @@ in rec
     };
 
     buildInputs = [ unzip ];
-
-    path = "ctrlp";
   };
 
   alternate = stdenv.mkDerivation rec {
@@ -425,7 +402,6 @@ in rec
       rev = "0b28e334e65b6628b0a61c412fcb45204a2f2bab";
       sha256 = "9681d471d1391626cb9ad22b2b469003d9980cd23c5c3a8d34666376447e6204";
      };
-    path = "vundle";
   };
 
   tslime = buildVimPlugin {
@@ -435,7 +411,6 @@ in rec
       rev = "e801a32b27d83cb5d91afbf7c3d71bb6220f32bd";
       sha256 = "47fb7165c1dcc444285cdff6fa89bbd4ace82ca79ec14ba0da6091c5f78d1251";
      };
-    path = "tslime";
   };
 
   supertab = buildVimPlugin {
@@ -445,7 +420,6 @@ in rec
       rev = "23db558596d4a73e4afa8fbedcde23b95bf72251";
       sha256 = "21fa675969f4cfd2686ab3b63cba632fa55d62481e61d36193403bea9c02ebde";
      };
-    path = "supertab";
     buildInputs = [ vim ];
   };
 
@@ -456,7 +430,6 @@ in rec
       rev = "90ee6fb5d255d14d9f12f2469f92ee50149f5b44";
       sha256 = "0297512f7fee62af601a99a68617591ecb2e244475ff0d79ebee9c7e6eff2eaf";
      };
-    path = "fugitive";
   };
 
   extradite = buildVimPlugin {
@@ -466,7 +439,6 @@ in rec
       rev = "af4f3a51b6b654d655121b93c0cd9d8fe9a0c85d";
       sha256 = "d1d29cfbc654134be383747f2cd6b14b7a87de75f997af6a041f14d7ef61ade6";
      };
-    path = "extradite";
   };
 
   nerdtree = buildVimPlugin {
@@ -476,7 +448,6 @@ in rec
       rev = "4f1e6ecb057fc0bac189171c1430d71ef25f6bb1";
       sha256 = "67ff2e7b9a7f39e58e9e334b1b79343a4c11aae10a657ab4fece289d8fe59300";
      };
-    path = "nerdtree";
   };
 
   airline = buildVimPlugin {
@@ -486,7 +457,6 @@ in rec
       rev = "2114e7025188a941e5c63b1f942d576adb98d8a4";
       sha256 = "b6fc4d0545f8b7e107c5f80b94cf536a2b1fdd55d9f2484a29a007911e96130f";
      };
-    path = "airline";
   };
 
   ultisnips = buildVimPlugin {
@@ -496,7 +466,6 @@ in rec
       rev = "279d6e63c9a8dbaa20ffc43c3c5f057dfc8f1121";
       sha256 = "f8d93849ef2bce798aa599ba860694ced37d12450010a48dd6bd3004bc52b503";
      };
-    path = "ultisnips";
   };
 
   align = buildVimPlugin {
@@ -506,7 +475,6 @@ in rec
       rev = "787662fe90cd057942bc5b682fd70c87e1a9dd77";
       sha256 = "f7b5764357370f03546556bd45558837f3790b0e86afadb63cd04d714a668a29";
      };
-    path = "align";
   };
 
   gundo = buildVimPlugin {
@@ -516,7 +484,6 @@ in rec
       rev = "f443470b96364c24a775629418a6b2562ec9173e";
       sha256 = "b7a949167e59c936d6eae0d23635b87491b2cd2f46a197683b171d30165a90f9";
      };
-    path = "gundo";
   };
 
   commentary = buildVimPlugin {
@@ -526,7 +493,6 @@ in rec
       rev = "8b4df6ca0ba9cd117d97a8fd26b44b2439d5e3f1";
       sha256 = "5496ed31706552957d4caa76669ecd04e9b2853cf7a7e40bd0164726b21fcca0";
      };
-    path = "commentary";
   };
 
   tabular = buildVimPlugin {
@@ -536,7 +502,6 @@ in rec
       rev = "60f25648814f0695eeb6c1040d97adca93c4e0bb";
       sha256 = "28c860ad621587f2c3213fae47d1a3997746527c17d51e9ab94c209eb7bfeb0f";
      };
-    path = "tabular";
   };
 
   vim2hs = buildVimPlugin {
@@ -546,7 +511,6 @@ in rec
       rev = "f2afd55704bfe0a2d66e6b270d247e9b8a7b1664";
       sha256 = "485fc58595bb4e50f2239bec5a4cbb0d8f5662aa3f744e42c110cd1d66b7e5b0";
      };
-    path = "vim2hs";
   };
 
   hasksyn = buildVimPlugin {
@@ -556,7 +520,6 @@ in rec
       rev = "175cd4605afa5d9b9c75758112c8159fd118c631";
       sha256 = "3488e38d1f45a9a3363da62c1c946591621151a0a9cdaedd22b3fe8f666bbdb9";
      };
-    path = "hasksyn";
   };
 
   haskellConceal = buildVimPlugin {
@@ -566,7 +529,6 @@ in rec
       rev = "73a8d712d3342b2ffdc087b12924f1cf81053860";
       sha256 = "be60ca030e2d39e972a8c71c0ab3b75b893589d26d5dd78a20cd6779f1f5cfa8";
      };
-    path = "haskellConceal";
   };
 
   ghcmod = buildVimPlugin {
@@ -577,7 +539,6 @@ in rec
       sha256 = "f6a085f7b8198747fae3fff0bc38e4d030e5c97aaeb84958fbf96fa658bbe862";
      };
     patches = [ (fetchurl { url = "https://github.com/eagletmt/ghcmod-vim/pull/57.diff"; md5 = "cafbb9f725afbba26b52b6c3344ee89a"; }) ];
-    path = "ghcmod";
   };
 
   necoGhc = buildVimPlugin {
@@ -587,7 +548,6 @@ in rec
       rev = "0311f31b3acaccec5b651ae7089d627a3a49239b";
       sha256 = "302f29f54c56e9cee647745a8355aeafe323c4efe2f3593d5e4f586acc1c06a5";
      };
-    path = "neco-ghc";
   };
 
   hoogle = buildVimPlugin {
@@ -597,7 +557,6 @@ in rec
       rev = "81f28318b0d4174984c33df99db7752891c5c4e9";
       sha256 = "0f96f3badb6218cac87d0f7027ff032ecc74f08ad3ada542898278ce11cbd5a0";
      };
-    path = "hoogle";
   };
 
   hdevtools = buildVimPlugin {
@@ -607,7 +566,6 @@ in rec
       rev = "474947c52ff9c93dd36f3c49de90bd9a78f0baa1";
       sha256 = "bf5f096b665c51ce611c6c1bfddc3267c4b2f94af84b04482b07272a6a5a92f3";
      };
-    path = "hdevtools";
   };
 
   stylishHaskell = buildVimPlugin {
@@ -617,7 +575,6 @@ in rec
       rev = "453fd203aee3d7305ea8e4088ff53bd1f5933d75";
       sha256 = "c0e5010e1e8e56b179ce500387afb569f051c45b37ce92feb4350f293df96a8c";
      };
-    path = "stylish-haskell";
   };
 
   wombat256 = buildVimPlugin {
@@ -627,7 +584,6 @@ in rec
       rev = "8734ba45dcf5e38c4d2686b35c94f9fcb30427e2";
       sha256 = "2feb7d57ab0a9f2ea44ccd606e540db64ab3285956398a50ecc562d7b8dbcd05";
      };
-    path = "wombat256";
   };
 
   tmuxNavigator = buildVimPlugin {
@@ -637,7 +593,6 @@ in rec
       rev = "3de98bfcee1289ce8edc6daf9a18f243180c7168";
       sha256 = "3843f92e0a21fe5ccf613f8a561abd06c822b2ee98bd82c98937548144e4e8df";
      };
-    path = "tmux-navigator";
   };
 
   pathogen = buildVimPlugin {
@@ -647,7 +602,6 @@ in rec
       rev = "91e6378908721d20514bbe5d18d292a0a15faf0c";
       sha256 = "24c1897d6b58576b2189c90050a7f8ede72a51343c752e9d030e833dbe5cac6f";
      };
-    path = "pathogen";
   };
 
   vimoutliner = buildVimPlugin {
@@ -657,7 +611,6 @@ in rec
       rev = "2fc82976683c8770bece157ae3ada55251b6ddeb";
       sha256 = "dce383e7842c42bcfa8e7c3329fa426cb0fb05786d40a733da705c03aabd196b";
      };
-    path = "vimoutliner";
   };
 
 }
