@@ -34,6 +34,8 @@ let
       doublePatchelf = pkgs.stdenv.isArm;
     }
     ''
+      set +o pipefail
+
       mkdir -p $out/bin $out/lib
       ln -s $out/bin $out/sbin
 
