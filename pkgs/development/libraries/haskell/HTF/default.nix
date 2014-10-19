@@ -21,6 +21,7 @@ cabal.mkDerivation (self: {
     aeson aesonPretty filepath HUnit mtl random regexCompat temporary
     text unorderedContainers
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/skogsbaer/HTF/";
     description = "The Haskell Test Framework";
