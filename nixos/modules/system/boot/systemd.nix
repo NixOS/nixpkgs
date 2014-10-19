@@ -12,13 +12,13 @@ let
 
   makeUnit = name: unit:
     if unit.enable then
-      pkgs.runCommand "unit" { preferLocalBuild = true; inherit (unit) text; }
+      pkgs.runCommand "unit-${name}" { preferLocalBuild = true; inherit (unit) text; }
         ''
           mkdir -p $out
           echo -n "$text" > $out/${shellEscape name}
         ''
     else
-      pkgs.runCommand "unit" { preferLocalBuild = true; }
+      pkgs.runCommand "unit-${name}-disabled" { preferLocalBuild = true; }
         ''
           mkdir -p $out
           ln -s /dev/null $out/${shellEscape name}
