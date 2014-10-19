@@ -1,11 +1,13 @@
 { stdenv, fetchurl, ocaml, findlib, which, ocsigen_server, ocsigen_deriving,
   js_of_ocaml, ocaml_react, ocaml_lwt, calendar, cryptokit, tyxml,
   ocaml_ipaddr, ocamlnet, ocaml_ssl, ocaml_pcre, ocaml_optcomp,
-  reactivedata}:
+  reactivedata, opam}:
 
-stdenv.mkDerivation
+stdenv.mkDerivation rec
 {
-  name = "eliom-4.1.0";
+  pname = "eliom";
+  version = "4.1.0";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = https://github.com/ocsigen/eliom/archive/4.1.0.tar.gz;
@@ -17,9 +19,15 @@ stdenv.mkDerivation
                  cryptokit tyxml ocaml_ipaddr ocamlnet ocaml_ssl
                  ocaml_pcre ocaml_optcomp reactivedata];
 
-  configureFlags = "--root $(out) --prefix /";
-
   dontAddPrefix = true;  
+  
+  installPhase =
+  let ocamlVersion = (builtins.parseDrvName (ocaml.name)).version;
+  in
+  ''opam-installer --script --prefix=$out ${pname}.install > install.sh
+    sh install.sh
+    ln -s $out/lib/${pname} $out/lib/ocaml/${ocamlVersion}/site-lib/
+  '';
 
   createFindlibDestdir = true;
 
