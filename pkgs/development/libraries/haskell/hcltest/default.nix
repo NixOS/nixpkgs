@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hcltest";
-  version = "0.3.4";
-  sha256 = "0p8skabp6z4i5xr22qxk1sij2ayla2iqylvlzxfxa8yw1fxs8wsq";
+  version = "0.3.5";
+  sha256 = "00y8bd50q6yby2zab00vryallgdndqiabg3idvzmfka0z7fmsqvl";
   buildDepends = [
     dlist either filepath free lens mmorph monadControl mtl
     optparseApplicative randomShuffle split stm tagged tasty temporary
@@ -20,7 +20,5 @@ cabal.mkDerivation (self: {
     description = "A testing library for command line applications";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
-    broken = true;
   };
 })
