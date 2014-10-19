@@ -1,0 +1,101 @@
+diff --git a/test/CryptoAddress_test.c b/test/CryptoAddress_test.c
+index a6341b0..2dea6d7 100644
+--- a/test/CryptoAddress_test.c
++++ b/test/CryptoAddress_test.c
+@@ -42,7 +42,7 @@ static const uint8_t publicKey[32] = {
+ };
+ 
+ static const char publicKeyBase32[] = "r6jzx210usqbgnm3pdtm1z6btd14pvdtkn5j8qnpgqzknpggkuw0";
+-static const char ipv6[] = "fc68:cb2c:60db:cb96:19ac:34a8:fd34:03fc";
++static const char ipv6[] = "fc68:cb2c:60db:cb96:19ac:34a8:fd34:3fc";
+ 
+ int main()
+ {
+diff --git a/util/AddrTools.h b/util/AddrTools.h
+index 858ced4..36184fe 100644
+--- a/util/AddrTools.h
++++ b/util/AddrTools.h
+@@ -21,6 +21,8 @@
+ #include "util/platform/Sockaddr.h"
+ 
+ #include <stdint.h>
++#include <stdio.h>
++#include <string.h>
+ 
+ /** Takes the path in host byte order. */
+ static inline void AddrTools_printPath(uint8_t out[20], uint64_t path)
+@@ -96,51 +98,31 @@ static inline int AddrTools_parsePath(uint64_t* out, const uint8_t netAddr[20])
+     return 0;
+ }
+ 
++/* From inet_ntop.c, FreeBSD
++ * Paul Vixie, 1996.
++ */
+ static inline void AddrTools_printIp(uint8_t output[40], const uint8_t binIp[16])
+ {
+-    uint8_t hex[32];
+-    Hex_encode(hex, 32, binIp, 16);
+-
+-    output[ 0] = hex[ 0];
+-    output[ 1] = hex[ 1];
+-    output[ 2] = hex[ 2];
+-    output[ 3] = hex[ 3];
+-    output[ 4] = ':';
+-    output[ 5] = hex[ 4];
+-    output[ 6] = hex[ 5];
+-    output[ 7] = hex[ 6];
+-    output[ 8] = hex[ 7];
+-    output[ 9] = ':';
+-    output[10] = hex[ 8];
+-    output[11] = hex[ 9];
+-    output[12] = hex[10];
+-    output[13] = hex[11];
+-    output[14] = ':';
+-    output[15] = hex[12];
+-    output[16] = hex[13];
+-    output[17] = hex[14];
+-    output[18] = hex[15];
+-    output[19] = ':';
+-    output[20] = hex[16];
+-    output[21] = hex[17];
+-    output[22] = hex[18];
+-    output[23] = hex[19];
+-    output[24] = ':';
+-    output[25] = hex[20];
+-    output[26] = hex[21];
+-    output[27] = hex[22];
+-    output[28] = hex[23];
+-    output[29] = ':';
+-    output[30] = hex[24];
+-    output[31] = hex[25];
+-    output[32] = hex[26];
+-    output[33] = hex[27];
+-    output[34] = ':';
+-    output[35] = hex[28];
+-    output[36] = hex[29];
+-    output[37] = hex[30];
+-    output[38] = hex[31];
+-    output[39] = '\0';
++  /* The chances of hitting :0:0: and breaking RFC5952
++   * are 1 in (1 / (2^16))^2 * 6.
++   */
++  char *p = output;
++
++  uint16_t words[8];
++  int i;
++
++  memset(words, '\0', sizeof words);
++  for (i = 0; i < 16; i++) {
++    words[i / 2] |= (binIp[i] << ((1 - (i %2)) << 3));
++  }
++
++  for (i = 0; i < 8; i++) {
++    if (i != 0) {
++      *p++= ':';
++    }
++    p += sprintf(p, "%x", words[i]);
++  }
++  *p++ = '\0';
+ }
+ 
+ /**
