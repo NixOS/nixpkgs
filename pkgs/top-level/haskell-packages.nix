@@ -816,6 +816,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   extensibleExceptions_0_1_1_4 = callPackage ../development/libraries/haskell/extensible-exceptions/0.1.1.4.nix {};
   extensibleExceptions = self.extensibleExceptions_0_1_1_4;
 
+  extra = callPackage ../development/libraries/haskell/extra {};
+
   failure = callPackage ../development/libraries/haskell/failure {};
 
   fastcgi = callPackage ../development/libraries/haskell/fastcgi {};
