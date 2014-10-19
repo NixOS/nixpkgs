@@ -1,5 +1,5 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, includeModules ? false
-, sqlite, tcl, tk, x11, openssl, readline, db, ncurses, gdbm, libX11 }:
+, sqlite, tcl, tk, x11, openssl, readline, db, ncurses, gdbm, libX11, self, callPackage }:
 
 assert zlibSupport -> zlib != null;
 
@@ -87,6 +87,7 @@ let
       inherit zlibSupport;
       isPy2 = true;
       isPy27 = true;
+      buildEnv = callPackage ../wrapper.nix { python = self; };
       libPrefix = "python${majorVersion}";
       executable = libPrefix;
       sitePackages = "lib/${libPrefix}/site-packages";

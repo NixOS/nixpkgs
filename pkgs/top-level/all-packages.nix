@@ -3950,32 +3950,36 @@ let
   python2Packages = python27Packages;
   python3Packages = python34Packages;
 
-  python26 = callPackage ../development/interpreters/python/2.6 { db = db47; };
-  python27 = callPackage ../development/interpreters/python/2.7 { };
-  python32 = callPackage ../development/interpreters/python/3.2 { };
-  python33 = callPackage ../development/interpreters/python/3.3 { };
-  python34 = hiPrio (callPackage ../development/interpreters/python/3.4 { });
-
-  pypy = callPackage ../development/interpreters/pypy/2.4 { };
+  python26 = callPackage ../development/interpreters/python/2.6 { 
+    db = db47;
+    self = python26;
+  };
+  python27 = callPackage ../development/interpreters/python/2.7 {
+    self = python27;
+  };
+  python32 = callPackage ../development/interpreters/python/3.2 {
+    self = python32;
+  };
+  python33 = callPackage ../development/interpreters/python/3.3 {
+    self = python33;
+  };
+  python34 = hiPrio (callPackage ../development/interpreters/python/3.4 {
+    self = python34;
+  });
+  pypy = callPackage ../development/interpreters/pypy/2.4 {
+    self = pypy;
+  };
 
   pythonFull = python2Full;
   python2Full = python27Full;
   python26Full = python26.override {
     includeModules = true;
+    self = python26Full;
   };
   python27Full = python27.override {
     includeModules = true;
+    self = python27Full;
   };
-  python26FullBuildEnv = callPackage ../development/interpreters/python/wrapper.nix {
-    python = python26Full;
-    inherit (python26Packages) recursivePthLoader;
-  };
-  python27FullBuildEnv = callPackage ../development/interpreters/python/wrapper.nix {
-    python = python27Full;
-    inherit (python27Packages) recursivePthLoader;
-  };
-  pythonFullBuildEnv = python2FullBuildEnv;
-  python2FullBuildEnv = python27FullBuildEnv;
 
   python2nix = callPackage ../tools/package-management/python2nix { };
 

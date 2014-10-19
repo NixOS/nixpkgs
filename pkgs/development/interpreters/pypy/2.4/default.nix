@@ -1,6 +1,6 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi
 , sqlite, openssl, ncurses, pythonFull, expat, tcl, tk, x11, libX11
-, makeWrapper }:
+, makeWrapper, callPackage, self }:
 
 assert zlibSupport -> zlib != null;
 
@@ -99,6 +99,7 @@ let
       inherit zlibSupport libPrefix;
       executable = "pypy";
       isPypy = true;
+      buildEnv = callPackage ../../python/wrapper.nix { python = self; };
     };
 
     enableParallelBuilding = true;
