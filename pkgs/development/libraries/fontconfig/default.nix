@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, freetype, expat, libxslt, fontbhttf }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, freetype, expat, libxslt, fontbhttf }:
 
 let
   configVersion = "2.11"; # bump whenever fontconfig breaks compatibility with older configurations
@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
         sha256 = "1fm5xx0mx2243jrq5rxk4v0ajw2nawpj23399h710bx6hd1rviq7";
       }
     ;
+
+  patches = [(fetchpatch {
+    url = "http://cgit.freedesktop.org/fontconfig/patch/?id=f44157c809d280e2a0ce87fb078fc4b278d24a67";
+    sha256 = "19s5irclg4irj2yxd7xw9yikbazs9263px8qbv4r21asw06nfalv";
+  })];
 
   propagatedBuildInputs = [ freetype ];
   buildInputs = [ pkgconfig libxslt expat ];
@@ -47,6 +52,7 @@ stdenv.mkDerivation rec {
   # Add a default font for non-nixos systems. fontbhttf is only about 1mb.
   postInstall = ''
     cd "$out/etc/fonts" && tar xvf ${infinality_patch}
+    rm conf.d/{50-user,51-local}.conf
     xsltproc --stringparam fontDirectories "${fontbhttf}" \
       --stringparam fontconfig "$out" \
       --stringparam fontconfigConfigVersion "${configVersion}" \
@@ -59,7 +65,7 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit configVersion;
   };
-  
+
   meta = with stdenv.lib; {
     description = "A library for font customization and configuration";
     homepage = http://fontconfig.org/;
@@ -68,3 +74,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.vcunat ];
   };
 }
+
