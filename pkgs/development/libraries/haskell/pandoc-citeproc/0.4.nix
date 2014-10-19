@@ -24,5 +24,6 @@ cabal.mkDerivation (self: {
     description = "Supports using pandoc with citeproc";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

@@ -11,7 +11,6 @@ cabal.mkDerivation (self: {
   sha256 = "1whi8mrbhfi8wr3qbj1lkgc1pngn8151jjri409hshl1mng4aq5b";
   isLibrary = true;
   isExecutable = true;
-  doCheck = false;
   buildDepends = [
     aeson aesonPretty attoparsec dataDefault filepath hsBibutils mtl
     pandoc pandocTypes parsec rfc5051 split syb tagsoup temporary text
@@ -20,6 +19,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     aeson filepath pandoc pandocTypes temporary text yaml
   ];
+  doCheck = false;
   meta = {
     description = "Supports using pandoc with citeproc";
     license = self.stdenv.lib.licenses.bsd3;
