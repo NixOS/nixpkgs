@@ -18,6 +18,7 @@ cabal.mkDerivation (self: {
     asn1Types cryptoPubkeyTypes HUnit mtl QuickCheck testFramework
     testFrameworkHunit testFrameworkQuickcheck2 time
   ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/vincenthz/hs-certificate";
     description = "X509 reader and writer";
