@@ -14,6 +14,8 @@ cabal.mkDerivation (self: {
     text time unorderedContainers utf8String vector
   ];
   testDepends = [ doctest ];
+  jailbreak = true;
+  doCheck = false;
   meta = {
     homepage = "http://github.com/atnnn/haskell-rethinkdb";
     description = "A driver for RethinkDB 1.15";
