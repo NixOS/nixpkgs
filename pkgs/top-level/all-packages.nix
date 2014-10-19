@@ -2162,6 +2162,8 @@ let
 
   rpm = callPackage ../tools/package-management/rpm { };
 
+  rpmextract = callPackage ../tools/archivers/rpmextract { };
+
   rrdtool = callPackage ../tools/misc/rrdtool { };
 
   rtorrent = callPackage ../tools/networking/p2p/rtorrent { };
