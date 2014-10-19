@@ -2,9 +2,8 @@
 
 { cabal, aeson, binary, blazeBuilder, Cabal, caseInsensitive
 , cmdargs, conduit, deepseq, filepath, haskellSrcExts, httpTypes
-, parsec, QuickCheck, random, resourcet, safe, shake, tagsoup
-, temporary, text, time, transformers, uniplate, vector
-, vectorAlgorithms, wai, warp
+, parsec, QuickCheck, random, resourcet, safe, shake, tagsoup, text
+, time, transformers, uniplate, vector, vectorAlgorithms, wai, warp
 }:
 
 cabal.mkDerivation (self: {
@@ -19,12 +18,13 @@ cabal.mkDerivation (self: {
     resourcet safe shake tagsoup text time transformers uniplate vector
     vectorAlgorithms wai warp
   ];
-  testDepends = [ filepath temporary ];
+  testDepends = [ filepath ];
   testTarget = "--test-option=--no-net";
   meta = {
     homepage = "http://www.haskell.org/hoogle/";
     description = "Haskell API Search";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })
