@@ -163,7 +163,7 @@ in rec
   };
 
   coffee-script = buildVimPlugin {
-    name = "coffee-script-v002";
+    name = "coffee-script-002";
     src = fetchurl {
       url = "https://github.com/vim-scripts/vim-coffee-script/archive/v002.tar.gz";
       sha256 = "1xln6i6jbbihcyp5bsdylr2146y41hmp2xf7wi001g2ymj1zdsc0";
