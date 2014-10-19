@@ -1876,7 +1876,7 @@ let
   openobex = callPackage ../tools/bluetooth/openobex { };
 
   openopc = callPackage ../tools/misc/openopc {
-    pythonFull = python27FullBuildEnv.override {
+    pythonFull = python27.buildEnv.override {
       extraLibs = [ python27Packages.pyro3 ];
     };
   };
