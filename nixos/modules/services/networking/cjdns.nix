@@ -4,7 +4,45 @@ with lib;
 
 let
 
+  pkg = pkgs.cjdns;
+
   cfg = config.services.cjdns;
+
+  connectToSubmodule =
+  { options, ... }:
+  { options =
+    { password = mkOption {
+      type = types.str;
+      description = "Authorized password to the opposite end of the tunnel.";
+      };
+      publicKey = mkOption {
+        type = types.str;
+        description = "Public key at the opposite end of the tunnel.";
+      };
+      hostname = mkOption {
+        default = "";
+        example = "foobar.hype";
+        type = types.str;
+        description = "Optional hostname to add to /etc/hosts; prevents reverse lookup failures.";
+      };
+    };
+  };
+
+  peers = mapAttrsToList (n: v: v) (cfg.ETHInterface.connectTo // cfg.UDPInterface.connectTo);
+
+  pubs  = toString (map (p: if p.hostname == "" then "" else p.publicKey) peers);
+  hosts = toString (map (p: if p.hostname == "" then "" else p.hostname)  peers);
+
+  cjdnsHosts =
+    if hosts != "" then
+      import (pkgs.stdenv.mkDerivation {
+        name = "cjdns-hosts";
+        builder = ./cjdns-hosts.sh;
+
+        inherit (pkgs) cjdns;
+        inherit pubs hosts;
+      })
+    else "";
 
   # would be nice to  merge 'cfg' with a //,
   # but the json nesting is wacky.
@@ -87,24 +125,11 @@ in
 	  '';
  	};
         connectTo = mkOption {
-          type = types.attrsOf ( types.submodule (
-	    { options, ... }:
-            { options = {
-                # TODO make host an option, and add it to networking.extraHosts
-                password = mkOption {
-                  type = types.str;
-                  description = "Authorized password to the opposite end of the tunnel.";
-                };
-                publicKey = mkOption {
-                  type = types.str;
-                  description = "Public key at the opposite end of the tunnel.";
-                };
-              };
-            }
-          ));
+          type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
 	  default = { };
           example = {
             "192.168.1.1:27313" = {
+              hostname = "homer.hype";
 	      password = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
               publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
             };
@@ -142,23 +167,11 @@ in
         };
 
         connectTo = mkOption {
-          type = types.attrsOf ( types.submodule (
-	    { options, ... }:
-            { options = {
-                password = mkOption {
-                  type = types.str;
-                  description = "Authorized password to the opposite end of the tunnel.";
-                };
-                publicKey = mkOption {
-                  type = types.str;
-                  description = "Public key at the opposite end of the tunnel.";
-                };
-              };
-            }
-          ));
+          type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
 	  default = { };
           example = {
             "01:02:03:04:05:06" = {
+              hostname = "homer.hype";
 	      password = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
               publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
             };
@@ -190,7 +203,7 @@ in
         echo '${cjdrouteConf}' | sed \
 	  -e "s/@CJDNS_ADMIN_PASSWORD@/$CJDNS_ADMIN_PASSWORD/g" \
           -e "s/@CJDNS_PRIVATE_KEY@/$CJDNS_PRIVATE_KEY/g" \
-            | ${pkgs.cjdns}/bin/cjdroute
+            | ${pkg}/bin/cjdroute
       '';
 
       serviceConfig = {
@@ -200,16 +213,27 @@ in
     };
 
     system.activationScripts.cjdns = ''
+      cjdnsWriteKeys() {
+        private=$1
+        ipv6=$2
+        public=$3
+
+        echo "CJDNS_PRIVATE_KEY=$1" >> /etc/cjdns.keys
+        echo -e "CJDNS_IPV6=$2\nCJDNS_PUBLIC_KEY=$3" > /etc/cjdns.public
+
+        chmod 600 /etc/cjdns.keys
+        chmod 444 /etc/cjdns.public
+      }
+
       grep -q "CJDNS_PRIVATE_KEY=" /etc/cjdns.keys || \
-        echo "CJDNS_PRIVATE_KEY=$(${pkgs.cjdns}/bin/makekey)" \
-	  >> /etc/cjdns.keys
+        cjdnsWriteKeys $(${pkg}/bin/makekeys)
 
       grep -q "CJDNS_ADMIN_PASSWORD=" /etc/cjdns.keys || \
         echo "CJDNS_ADMIN_PASSWORD=$(${pkgs.coreutils}/bin/head -c 96 /dev/urandom | ${pkgs.coreutils}/bin/tr -dc A-Za-z0-9)" \
 	  >> /etc/cjdns.keys
-
-      chmod 600 /etc/cjdns.keys
     '';
+
+    networking.extraHosts = "${cjdnsHosts}";
 
     assertions = [
       { assertion = ( cfg.ETHInterface.bind != "" || cfg.UDPInterface.bind != "" );
