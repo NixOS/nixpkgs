@@ -1208,7 +1208,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hi = callPackage ../development/libraries/haskell/hi {};
 
-  hindent = callPackage ../development/libraries/haskell/hindent {};
+  hindent = callPackage ../development/libraries/haskell/hindent {
+    haskellSrcExts = self.haskellSrcExts_1_15_0_1;
+  };
 
   hint = callPackage ../development/libraries/haskell/hint {};
 
