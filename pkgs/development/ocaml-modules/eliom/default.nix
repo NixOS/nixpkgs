@@ -15,12 +15,12 @@ stdenv.mkDerivation rec
   };
 
   buildInputs = [ocaml which ocsigen_server findlib ocsigen_deriving
-                 js_of_ocaml ocaml_react ocaml_lwt calendar
-                 cryptokit tyxml ocaml_ipaddr ocamlnet ocaml_ssl
-                 ocaml_pcre ocaml_optcomp reactivedata];
+                 js_of_ocaml ocaml_optcomp opam];
 
-  dontAddPrefix = true;  
-  
+  propagatedBuildInputs = [ ocaml_lwt reactivedata tyxml ocaml_ipaddr
+                            calendar cryptokit ocamlnet ocaml_react ocaml_ssl
+                            ocaml_pcre ];
+
   installPhase =
   let ocamlVersion = (builtins.parseDrvName (ocaml.name)).version;
   in
