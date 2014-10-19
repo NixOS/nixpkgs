@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
     HTTP hxt hxtHttp MaybeT mtl network networkUri parsec transformers
   ];
   testDepends = [ hspec hxt ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/egonSchiele/HandsomeSoup";
     description = "Work with HTML more easily in HXT";
