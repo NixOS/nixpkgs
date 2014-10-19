@@ -222,7 +222,7 @@ in rec
   };
 
   ipython = buildVimPlugin {
-    name = "ipython-ff8f88f3fe518851a91dc88aaa5a75f8f352a960";
+    name = "ipython-2013-08-30";
     src = fetchurl {
       url    = "https://github.com/ivanov/vim-ipython/archive/ff8f88f3fe518851a91dc88aaa5a75f8f352a960.tar.gz";
       sha256 = "0hlx526dm8amrvh41kwnmgvvdzs6sh5yc5sfq4nk1zjkfcp1ah5j";
@@ -279,7 +279,7 @@ in rec
   };
 
   xdebug = buildVimPlugin {
-    name = "xdebug-a4980fa65f7f159780593ee37c178281691ba2c4";
+    name = "xdebug-2012-08-15";
     src = fetchurl {
       url = "https://github.com/joonty/vim-xdebug/archive/a4980fa65f7f159780593ee37c178281691ba2c4.tar.gz";
       sha256 = "1348gzp0zhc2wifvs5vmf92m9y8ik8ldnvy7bawsxahy8hmhiksk";
@@ -400,7 +400,7 @@ in rec
   };
 
   vundle = buildVimPlugin {
-    name = "vundle-git-0b28e334";
+    name = "vundle-git-2014-07-19";
     src = fetchgit {
       url = "https://github.com/gmarik/Vundle.vim.git";
       rev = "0b28e334e65b6628b0a61c412fcb45204a2f2bab";
@@ -409,7 +409,7 @@ in rec
   };
 
   tslime = buildVimPlugin {
-    name = "tslime-git-e801a32b";
+    name = "tslime-git-2014-06-12";
     src = fetchgit {
       url = "https://github.com/jgdavey/tslime.vim.git";
       rev = "e801a32b27d83cb5d91afbf7c3d71bb6220f32bd";
@@ -418,7 +418,7 @@ in rec
   };
 
   supertab = buildVimPlugin {
-    name = "supertab-git-23db5585";
+    name = "supertab-git-2014-08-07";
     src = fetchgit {
       url = "https://github.com/ervandew/supertab.git";
       rev = "23db558596d4a73e4afa8fbedcde23b95bf72251";
@@ -428,7 +428,7 @@ in rec
   };
 
   fugitive = buildVimPlugin {
-    name = "fugitive-git-90ee6fb5";
+    name = "fugitive-git-2014-07-27";
     src = fetchgit {
       url = "https://github.com/tpope/vim-fugitive.git";
       rev = "90ee6fb5d255d14d9f12f2469f92ee50149f5b44";
@@ -437,7 +437,7 @@ in rec
   };
 
   extradite = buildVimPlugin {
-    name = "extradite-git-af4f3a51";
+    name = "extradite-git-2014-07-18";
     src = fetchgit {
       url = "https://github.com/int3/vim-extradite.git";
       rev = "af4f3a51b6b654d655121b93c0cd9d8fe9a0c85d";
@@ -446,7 +446,7 @@ in rec
   };
 
   nerdtree = buildVimPlugin {
-    name = "nerdtree-git-4f1e6ecb";
+    name = "nerdtree-git-2014-08-16";
     src = fetchgit {
       url = "https://github.com/scrooloose/nerdtree.git";
       rev = "4f1e6ecb057fc0bac189171c1430d71ef25f6bb1";
@@ -455,7 +455,7 @@ in rec
   };
 
   airline = buildVimPlugin {
-    name = "airline-git-2114e702";
+    name = "airline-git-2014-08-02";
     src = fetchgit {
       url = "https://github.com/bling/vim-airline.git";
       rev = "2114e7025188a941e5c63b1f942d576adb98d8a4";
@@ -464,7 +464,7 @@ in rec
   };
 
   ultisnips = buildVimPlugin {
-    name = "ultisnips-git-279d6e63";
+    name = "ultisnips-git-2014-08-02";
     src = fetchgit {
       url = "https://github.com/SirVer/ultisnips.git";
       rev = "279d6e63c9a8dbaa20ffc43c3c5f057dfc8f1121";
@@ -473,7 +473,7 @@ in rec
   };
 
   align = buildVimPlugin {
-    name = "align-git-787662fe";
+    name = "align-git-2012-08-08";
     src = fetchgit {
       url = "https://github.com/vim-scripts/Align.git";
       rev = "787662fe90cd057942bc5b682fd70c87e1a9dd77";
@@ -482,7 +482,7 @@ in rec
   };
 
   gundo = buildVimPlugin {
-    name = "gundo-git-f443470b";
+    name = "gundo-git-2013-08-12";
     src = fetchgit {
       url = "https://github.com/vim-scripts/Gundo.git";
       rev = "f443470b96364c24a775629418a6b2562ec9173e";
@@ -491,7 +491,7 @@ in rec
   };
 
   commentary = buildVimPlugin {
-    name = "commentary-git-8b4df6ca";
+    name = "commentary-git-2014-06-14";
     src = fetchgit {
       url = "https://github.com/tpope/vim-commentary.git";
       rev = "8b4df6ca0ba9cd117d97a8fd26b44b2439d5e3f1";
@@ -500,7 +500,7 @@ in rec
   };
 
   tabular = buildVimPlugin {
-    name = "tabular-git-60f25648";
+    name = "tabular-git-2013-05-17";
     src = fetchgit {
       url = "https://github.com/godlygeek/tabular.git";
       rev = "60f25648814f0695eeb6c1040d97adca93c4e0bb";
@@ -509,7 +509,7 @@ in rec
   };
 
   vim2hs = buildVimPlugin {
-    name = "vim2hs-git-f2afd557";
+    name = "vim2hs-git-2014-04-16";
     src = fetchgit {
       url = "https://github.com/dag/vim2hs.git";
       rev = "f2afd55704bfe0a2d66e6b270d247e9b8a7b1664";
@@ -518,7 +518,7 @@ in rec
   };
 
   hasksyn = buildVimPlugin {
-    name = "hasksyn-git-175cd460";
+    name = "hasksyn-git-2014-07-24";
     src = fetchgit {
       url = "https://github.com/travitch/hasksyn.git";
       rev = "175cd4605afa5d9b9c75758112c8159fd118c631";
@@ -527,7 +527,7 @@ in rec
   };
 
   haskellconceal = buildVimPlugin {
-    name = "haskellconceal-git-73a8d712";
+    name = "haskellconceal-git-2014-05-21";
     src = fetchgit {
       url = "https://github.com/begriffs/vim-haskellConceal.git";
       rev = "73a8d712d3342b2ffdc087b12924f1cf81053860";
@@ -537,7 +537,7 @@ in rec
   haskellConceal = haskellconceal; # backwards compat, added 2014-10-18
 
   ghcmod = buildVimPlugin {
-    name = "ghcmod-git-0c4e9428";
+    name = "ghcmod-git-2014-07-16";
     src = fetchgit {
       url = "https://github.com/eagletmt/ghcmod-vim.git";
       rev = "0c4e94281e57c475752e799adc261f7d5e4ab124";
@@ -547,7 +547,7 @@ in rec
   };
 
   neco-ghc = buildVimPlugin {
-    name = "neco-ghc-git-0311f31b";
+    name = "neco-ghc-git-2014-08-09";
     src = fetchgit {
       url = "https://github.com/eagletmt/neco-ghc.git";
       rev = "0311f31b3acaccec5b651ae7089d627a3a49239b";
@@ -557,7 +557,7 @@ in rec
   necoGhc = neco-ghc; # backwards compat, added 2014-10-18
 
   hoogle = buildVimPlugin {
-    name = "hoogle-git-81f28318";
+    name = "hoogle-git-2013-11-26";
     src = fetchgit {
       url = "https://github.com/Twinside/vim-hoogle.git";
       rev = "81f28318b0d4174984c33df99db7752891c5c4e9";
@@ -566,7 +566,7 @@ in rec
   };
 
   hdevtools = buildVimPlugin {
-    name = "hdevtools-git-474947c5";
+    name = "hdevtools-git-2012-12-29";
     src = fetchgit {
       url = "https://github.com/bitc/vim-hdevtools.git";
       rev = "474947c52ff9c93dd36f3c49de90bd9a78f0baa1";
@@ -575,7 +575,7 @@ in rec
   };
 
   stylish-haskell = buildVimPlugin {
-    name = "stylish-haskell-git-453fd203";
+    name = "stylish-haskell-git-2014-07-14";
     src = fetchgit {
       url = "https://github.com/nbouscal/vim-stylish-haskell.git";
       rev = "453fd203aee3d7305ea8e4088ff53bd1f5933d75";
@@ -585,7 +585,7 @@ in rec
   stylishHaskell = stylish-haskell; # backwards compat, added 2014-10-18
 
   wombat256 = buildVimPlugin {
-    name = "wombat256-git-8734ba45";
+    name = "wombat256-git-2010-10-18";
     src = fetchgit {
       url = "https://github.com/vim-scripts/wombat256.vim.git";
       rev = "8734ba45dcf5e38c4d2686b35c94f9fcb30427e2";
@@ -594,7 +594,7 @@ in rec
   };
 
   tmux-navigator = buildVimPlugin {
-    name = "tmux-navigator-git-3de98bfc";
+    name = "tmux-navigator-git-2014-07-22";
     src = fetchgit {
       url = "https://github.com/christoomey/vim-tmux-navigator.git";
       rev = "3de98bfcee1289ce8edc6daf9a18f243180c7168";
@@ -604,7 +604,7 @@ in rec
   tmuxNavigator = tmux-navigator; # backwards compat, added 2014-10-18
 
   pathogen = buildVimPlugin {
-    name = "pathogen-git-3de98bfc";
+    name = "pathogen-git-2014-07-20";
     src = fetchgit {
       url = "https://github.com/tpope/vim-pathogen.git";
       rev = "91e6378908721d20514bbe5d18d292a0a15faf0c";
@@ -613,7 +613,7 @@ in rec
   };
 
   vimoutliner = buildVimPlugin {
-    name = "vimoutliner-git-dce383e7";
+    name = "vimoutliner-git-2014-09-20";
     src = fetchgit {
       url = "https://github.com/vimoutliner/vimoutliner";
       rev = "2fc82976683c8770bece157ae3ada55251b6ddeb";
