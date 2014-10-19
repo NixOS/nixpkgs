@@ -615,6 +615,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   dbus = callPackage ../development/libraries/haskell/dbus {};
 
+  Decimal = callPackage ../development/libraries/haskell/Decimal {};
+
   deepseq_1_1_0_0 = callPackage ../development/libraries/haskell/deepseq/1.1.0.0.nix {};
   deepseq_1_1_0_2 = callPackage ../development/libraries/haskell/deepseq/1.1.0.2.nix {};
   deepseq_1_2_0_1 = callPackage ../development/libraries/haskell/deepseq/1.2.0.1.nix {};
