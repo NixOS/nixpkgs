@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     dataDefault haskellSrcExts hspec monadLoops mtl text
   ];
+  doCheck = false;
   meta = {
     description = "Extensible Haskell pretty printer";
     license = self.stdenv.lib.licenses.bsd3;
