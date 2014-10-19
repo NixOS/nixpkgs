@@ -6203,6 +6203,8 @@ let
 
   libxklavier = callPackage ../development/libraries/libxklavier { };
 
+  libxls = callPackage ../development/libraries/libxls { };
+
   libxmi = callPackage ../development/libraries/libxmi { };
 
   libxml2 = callPackage ../development/libraries/libxml2 {
