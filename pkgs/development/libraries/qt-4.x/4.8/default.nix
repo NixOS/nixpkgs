@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
       -demosdir $out/share/doc/${name}/demos
       -datadir $out/share/${name}
       -translationdir $out/share/${name}/translations
+      -sysconfdir /run/current-system/sw/etc/xdg
     "
   '' + optionalString stdenv.isDarwin ''
     export CXX=clang++
