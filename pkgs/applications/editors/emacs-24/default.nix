@@ -9,13 +9,13 @@ assert (libXft != null) -> libpng != null;	# probably a bug
 assert stdenv.isDarwin -> libXaw != null;	# fails to link otherwise
 
 stdenv.mkDerivation rec {
-  name = "emacs-24.3";
+  name = "emacs-24.4";
 
   builder = ./builder.sh;
 
   src = fetchurl {
     url    = "mirror://gnu/emacs/${name}.tar.xz";
-    sha256 = "1385qzs3bsa52s5rcncbrkxlydkw0ajzrvfxgv8rws5fx512kakh";
+    sha256 = "1zflm6ac34s6v166p58ilxrxbxjm0q2wfc25f8y0mjml1lbr3qs7";
   };
 
   patches = [ ./darwin-new-sections.patch ];
