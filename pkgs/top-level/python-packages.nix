@@ -10950,7 +10950,7 @@ let
     meta = {
       description = "A simple alerting application for Graphite metrics";
       homepage = https://github.com/seatgeek/graphite-pager;
-      maintainers = maintainers.offline;
+      maintainers = [ maintainers.offline ];
       license = licenses.bsd2;
     };
   };
