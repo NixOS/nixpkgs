@@ -213,6 +213,8 @@ let
           { Conflicts = toString config.conflicts; }
         // optionalAttrs (config.restartTriggers != [])
           { X-Restart-Triggers = toString config.restartTriggers; }
+        // optionalAttrs (config.documentation != [])
+          { Documentation = toString config.documentation; }
         // optionalAttrs (config.description != "") {
           Description = config.description;
         };

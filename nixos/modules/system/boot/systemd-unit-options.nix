@@ -78,6 +78,21 @@ in rec {
       description = "Description of this unit used in systemd messages and progress indicators.";
     };
 
+    documentation = mkOption {
+      default = [];
+      type = types.listOf types.str;
+      description = ''
+        A list of URIs referencing documentation for this unit or its
+        configuration. Accepted are only URIs of the types "http://",
+        "https://", "file:", "info:", "man:". For more information
+        about the syntax of these URIs, see uri(7). The URIs should be
+        listed in order of relevance, starting with the most relevant.
+        It is a good idea to first reference documentation that
+        explains what the unit's purpose is, followed by how it is
+        configured, followed by any other related documentation.
+      '';
+    };
+
     requires = mkOption {
       default = [];
       type = types.listOf types.str;
