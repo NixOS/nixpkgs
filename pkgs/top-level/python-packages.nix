@@ -1293,6 +1293,7 @@ let
   cjson = buildPythonPackage rec {
     name = "python-cjson-${version}";
     version = "1.1.0";
+    disabled = isPy3k || isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/python-cjson/${name}.tar.gz";
