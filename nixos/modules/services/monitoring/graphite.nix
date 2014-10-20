@@ -92,7 +92,7 @@ in {
           graphite carbon.
 
           For more information visit
-          <link xlink:href="http://graphite.readthedocs.org/en/1.0/index.html"/>
+          <link xlink:href="http://graphite-api.readthedocs.org/en/latest/"/>
         '';
         default = false;
         type = types.uniq types.bool;
