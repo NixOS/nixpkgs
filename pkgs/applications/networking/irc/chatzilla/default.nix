@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, xulrunner, makeWrapper }:
+{ stdenv, fetchurl, unzip, firefox, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "chatzilla-0.9.90.1";
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/libexec/chatzilla
     unzip $src -d $out/libexec/chatzilla
 
-    makeWrapper ${xulrunner}/bin/xulrunner $out/bin/chatzilla \
-      --add-flags $out/libexec/chatzilla/application.ini
+    makeWrapper ${firefox}/bin/firefox $out/bin/chatzilla \
+      --add-flags "-app $out/libexec/chatzilla/application.ini"
 
     sed -i $out/libexec/chatzilla/application.ini -e 's/.*MaxVersion.*/MaxVersion=99.*/'
   '';
