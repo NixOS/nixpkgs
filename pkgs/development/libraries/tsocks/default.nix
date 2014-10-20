@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ixkymiph771dcdzvssi9dr2pk1bzaw9zv85riv3xl40mzspx7c4";
   };
 
+  patches = [ ./poll.patch ];
+
   preConfigure = ''
     sed -i -e "s,\\\/usr,"$(echo $out|sed -e "s,\\/,\\\\\\\/,g")",g" tsocks
     substituteInPlace tsocks --replace /usr $out
