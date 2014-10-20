@@ -1597,7 +1597,7 @@ rec {
       fullName = "Debian 7.6 Wheezy (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-amd64/Packages.bz2;
-        sha256 = "11a8bd3648d51f51e56c9f5382168cc47267d67ef6a050826e1cd358ed46cc17";
+        sha256 = "1n46fxq8a2dm1i7ysc80s5lg10z5dh0hyd8k3h532n5wzs44xqcc";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
