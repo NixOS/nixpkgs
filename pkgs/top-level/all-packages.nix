@@ -9000,7 +9000,6 @@ let
     libXaw = xlibs.libXaw;
     Xaw3d = null;
     gconf = null;
-    librsvg = null;
     alsaLib = null;
     imagemagick = null;
   };
