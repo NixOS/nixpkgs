@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   name = "nixpart-${version}";
-  version = "0.4.1";
+  version = "1.0.0";
 
   src = fetchurl {
     url = "https://github.com/aszlig/nixpart/archive/v${version}.tar.gz";
@@ -11,12 +11,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ blivet ];
 
-  doCheck = false;
-
   meta = {
     description = "NixOS storage manager/partitioner";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.aszlig ];
     platforms = stdenv.lib.platforms.linux;
+    broken = true;
   };
 }
