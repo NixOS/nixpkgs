@@ -11670,6 +11670,8 @@ let
 
     domains = callPackage ../development/coq-modules/domains {};
 
+    flocq = callPackage ../development/coq-modules/flocq {};
+
     heq = callPackage ../development/coq-modules/heq {};
 
     mathcomp = callPackage ../development/coq-modules/mathcomp {};
