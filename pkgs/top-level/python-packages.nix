@@ -6856,6 +6856,17 @@ let
       sha256 = "17wq4invmv1nfazaksf59ymqyvgv3i8h4q03ry2az0s9lldyg3dv";
     };
 
+    patches = singleton (pkgs.fetchurl {
+      url = "https://www.redhat.com/archives/pyparted-devel/"
+          + "2014-April/msg00000.html";
+      postFetch = ''
+        sed -i -ne '/<!--X-Body-of-Message-->/,/<!--X-Body-of-Message-End-->/ {
+          s/^<[^>]*>//; /^$/!p
+        }' "$downloadedFile"
+      '';
+      sha256 = "1lakhz3nvx0qacn90bj1nq13zqxphiw4d9dsc44gwa8nj24j2zws";
+    });
+
     postPatch = ''
       sed -i -e 's|/sbin/mke2fs|${pkgs.e2fsprogs}&|' tests/baseclass.py
       sed -i -e '
