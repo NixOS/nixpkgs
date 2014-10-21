@@ -5866,6 +5866,7 @@ let
   pagerduty = buildPythonPackage rec {
     name = "pagerduty-${version}";
     version = "0.2.1";
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
         url = "https://pypi.python.org/packages/source/p/pagerduty/pagerduty-${version}.tar.gz";
@@ -8460,6 +8461,7 @@ let
   sipsimple = buildPythonPackage rec {
     name = "sipsimple-${version}";
     version = "1.4.2";
+    disabled = isPy3k;
 
     configurePhase = "find -name 'configure' -exec chmod a+x {} \\; ; find -name 'aconfigure' -exec chmod a+x {} \\; ; ${python}/bin/${python.executable} setup.py build_ext --pjsip-clean-compile";
 
