@@ -46,5 +46,6 @@ cabal.mkDerivation (self: {
     license = licenses.mit;
     platforms = self.ghc.meta.platforms;
     maintainers = with maintainers; [ edwtjo ];
+    broken = true;
   };
 })
