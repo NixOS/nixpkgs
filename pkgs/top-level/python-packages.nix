@@ -65,6 +65,8 @@ let
 
   blivet = callPackage ../development/python-modules/blivet { };
 
+  blivet_0_17 = callPackage ../development/python-modules/blivet/0.17.nix { };
+
   dbus = callPackage ../development/python-modules/dbus {
     dbus = pkgs.dbus;
   };
@@ -123,7 +125,9 @@ let
 
   # This is used for NixOps to make sure we won't break it with the next major
   # version of nixpart.
-  nixpart0 = callPackage ../tools/filesystems/nixpart/0.4.nix { };
+  nixpart0 = callPackage ../tools/filesystems/nixpart/0.4.nix {
+    blivet = self.blivet_0_17;
+  };
 
   pitz = callPackage ../applications/misc/pitz { };
 
