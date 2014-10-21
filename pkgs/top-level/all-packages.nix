@@ -9286,6 +9286,7 @@ let
   firefox13Wrapper = wrapFirefox { browser = firefox13Pkgs.firefox; };
 
   firefox = callPackage ../applications/networking/browsers/firefox {
+    stdenv = useGoldLinker stdenv;
     inherit (gnome) libIDL;
     inherit (pythonPackages) pysqlite;
   };
