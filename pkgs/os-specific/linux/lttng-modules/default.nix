@@ -1,6 +1,7 @@
 { stdenv, fetchurl, kernel }:
 
 assert stdenv.lib.versionAtLeast kernel.version "3.4";  # fails on 3.2
+assert builtins.substring 0 4 kernel.version != "3.12";
 
 stdenv.mkDerivation rec {
   pname = "lttng-modules-${version}";
