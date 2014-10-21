@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tasty-th";
-  version = "0.1.2";
-  sha256 = "1x3kixv0hnb7icigz2kfq959pivdc4jaaalvdgn8dlyqzkvfjzx4";
+  version = "0.1.3";
+  sha256 = "1fl5pagm9bdqvp7v54ilkr91m667rxw1jifwfdhrikr938aqrzx3";
   buildDepends = [ languageHaskellExtract tasty ];
   meta = {
     homepage = "http://github.com/bennofs/tasty-th";
