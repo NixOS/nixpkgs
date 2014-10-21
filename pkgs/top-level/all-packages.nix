@@ -3954,7 +3954,7 @@ let
   python2Packages = python27Packages;
   python3Packages = python34Packages;
 
-  python26 = callPackage ../development/interpreters/python/2.6 { 
+  python26 = callPackage ../development/interpreters/python/2.6 {
     db = db47;
     self = python26;
   };
@@ -9141,7 +9141,8 @@ let
     stratego = callPackage ../applications/editors/emacs-modes/stratego { };
 
     structuredHaskellMode = callPackage ../applications/editors/emacs-modes/structured-haskell-mode {
-      inherit (haskellPackages) cabal haskellSrc_1_0_1_5;
+      inherit (haskellPackages) cabal ;
+      haskellSrcExts = haskellPackages.haskellSrcExts_1_15_0_1;
     };
 
     sunriseCommander = callPackage ../applications/editors/emacs-modes/sunrise-commander { };
