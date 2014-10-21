@@ -8479,11 +8479,11 @@ let
 
 
   six = buildPythonPackage rec {
-    name = "six-1.7.3";
+    name = "six-1.8.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/six/${name}.tar.gz";
-      md5 = "784c6e5541c3c4952de9c0a966a0a80b";
+      md5 = "1626eb24cc889110c38f7e786ec69885";
     };
 
     # error: invalid command 'test'
