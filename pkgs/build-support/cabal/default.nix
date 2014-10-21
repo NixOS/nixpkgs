@@ -58,7 +58,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
                 doCheck               = enableCheckPhase && x.doCheck;
                 hyperlinkSource       = enableHyperlinkSource && x.hyperlinkSource;
                 # Disable Darwin builds: <https://github.com/NixOS/nixpkgs/issues/2689>.
-                meta                  = let meta = x.meta;
+                meta                  = let meta = x.meta or {};
                                             hydraPlatforms = meta.hydraPlatforms or meta.platforms or [];
                                             noElem         = p: ps: !stdenv.lib.elem p ps;
                                             noDarwin       = p: noElem p stdenv.lib.platforms.darwin;
