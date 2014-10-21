@@ -2208,6 +2208,8 @@ let
 
   safecopy = callPackage ../tools/system/safecopy { };
 
+  safe-rm = callPackage ../tools/system/safe-rm { };
+
   salut_a_toi = callPackage ../applications/networking/instant-messengers/salut-a-toi {};
 
   samplicator = callPackage ../tools/networking/samplicator { };
