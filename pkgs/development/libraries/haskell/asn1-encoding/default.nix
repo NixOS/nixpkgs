@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     asn1Types hourglass mtl tasty tastyQuickcheck text
   ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/vincenthz/hs-asn1";
     description = "ASN1 data reader and writer in RAW, BER and DER forms";
