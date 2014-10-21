@@ -790,7 +790,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   executablePath = callPackage ../development/libraries/haskell/executable-path {};
 
-  Extra = callPackage ../development/libraries/haskell/Extra {};
+  Extra = callPackage ../development/libraries/haskell/Extra-lib {};
 
   fay = callPackage ../development/libraries/haskell/fay {};
 
