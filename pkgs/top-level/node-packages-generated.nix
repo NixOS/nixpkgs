@@ -14886,15 +14886,15 @@
     passthru.names = [ "nib" ];
   };
   by-spec."nijs"."*" =
-    self.by-version."nijs"."0.0.19";
-  by-version."nijs"."0.0.19" = lib.makeOverridable self.buildNodePackage {
-    name = "nijs-0.0.19";
+    self.by-version."nijs"."0.0.20";
+  by-version."nijs"."0.0.20" = lib.makeOverridable self.buildNodePackage {
+    name = "nijs-0.0.20";
     bin = true;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/nijs/-/nijs-0.0.19.tgz";
-        name = "nijs-0.0.19.tgz";
-        sha1 = "611385c3a35b62665dc686c42b1d454f4286d229";
+        url = "http://registry.npmjs.org/nijs/-/nijs-0.0.20.tgz";
+        name = "nijs-0.0.20.tgz";
+        sha1 = "db193f4ed5fc9571ee6fb58542778e96e38f0f7e";
       })
     ];
     buildInputs =
@@ -14907,7 +14907,7 @@
     ];
     passthru.names = [ "nijs" ];
   };
-  "nijs" = self.by-version."nijs"."0.0.19";
+  "nijs" = self.by-version."nijs"."0.0.20";
   by-spec."node-appc"."0.2.14" =
     self.by-version."node-appc"."0.2.14";
   by-version."node-appc"."0.2.14" = lib.makeOverridable self.buildNodePackage {
@@ -21644,7 +21644,7 @@
     buildInputs =
       (self.nativeDeps."strong-data-uri" or []);
     deps = {
-      "truncate-1.0.2" = self.by-version."truncate"."1.0.2";
+      "truncate-1.0.4" = self.by-version."truncate"."1.0.4";
     };
     peerDependencies = [
     ];
@@ -22599,15 +22599,15 @@
     passthru.names = [ "traverse" ];
   };
   by-spec."truncate"."~1.0.2" =
-    self.by-version."truncate"."1.0.2";
-  by-version."truncate"."1.0.2" = lib.makeOverridable self.buildNodePackage {
-    name = "truncate-1.0.2";
+    self.by-version."truncate"."1.0.4";
+  by-version."truncate"."1.0.4" = lib.makeOverridable self.buildNodePackage {
+    name = "truncate-1.0.4";
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/truncate/-/truncate-1.0.2.tgz";
-        name = "truncate-1.0.2.tgz";
-        sha1 = "3221c41f6e747f83e8613f5466c8bfb596226a66";
+        url = "http://registry.npmjs.org/truncate/-/truncate-1.0.4.tgz";
+        name = "truncate-1.0.4.tgz";
+        sha1 = "2bcfbbff4a97b9089b693c1ae37c5105ec8775aa";
       })
     ];
     buildInputs =
