@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     makeFlagsArray=(
       PREFIX="$out"
       EFLAGS="-L ${gitModes}/share/emacs/site-lisp"
+      lispdir="$out/share/emacs/site-lisp"
     )
   '';
 
