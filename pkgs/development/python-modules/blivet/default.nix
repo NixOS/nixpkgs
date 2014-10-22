@@ -36,7 +36,7 @@ in buildPythonPackage rec {
     six
   ];
 
-  # Tests in <nixos/tests/blivet.nix> coming soon.
+  # Tests are in <nixos/tests/blivet.nix>.
   doCheck = false;
 
   meta = {
