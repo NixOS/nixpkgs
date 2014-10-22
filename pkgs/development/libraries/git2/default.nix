@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, zlib, python}:
+{stdenv, fetchurl, cmake, zlib, python, libssh2, openssl, http-parser}:
 
 stdenv.mkDerivation rec {
   version = "0.21.1";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = "-DTHREADSAFE=ON";
 
   nativeBuildInputs = [ cmake python ];
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib libssh2 openssl http-parser ];
 
   meta = {
     description = "the Git linkable library";
