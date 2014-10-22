@@ -1310,6 +1310,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hspecMeta = callPackage ../development/libraries/haskell/hspec-meta {};
 
+  hspecCheckers = callPackage ../development/libraries/haskell/hspec-checkers {};
+
   hstatsd = callPackage ../development/libraries/haskell/hstatsd {};
 
   hsyslog = callPackage ../development/libraries/haskell/hsyslog {};
