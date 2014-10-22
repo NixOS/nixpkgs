@@ -9063,6 +9063,8 @@ let
 
     gist = callPackage ../applications/editors/emacs-modes/gist { };
 
+    gitModes = callPackage ../applications/editors/emacs-modes/git-modes { };
+
     haskellMode = callPackage ../applications/editors/emacs-modes/haskell { };
 
     hol_light_mode = callPackage ../applications/editors/emacs-modes/hol_light { };
