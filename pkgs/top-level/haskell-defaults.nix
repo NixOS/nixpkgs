@@ -24,7 +24,7 @@
     cabalInstall_1_20_0_3 = super.cabalInstall_1_20_0_3.override { Cabal = self.Cabal_1_20_0_2; };
     codex = super.codex.override { hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_20_0_2; }; };
     MonadRandom = self.MonadRandom_0_1_13; # requires transformers >= 0.4.x
-    mtl = self.mtl_2_1_2;
+    mtl = self.mtl_2_1_3_1;
   };
 
   ghc763Prefs = self : super : ghc783Prefs self super // {
