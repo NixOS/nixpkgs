@@ -20,8 +20,5 @@ stdenv.mkDerivation rec {
       --set GHC_PACKAGE_PATH "\$GHC_PACKAGE_PATH:" # always end with : to include base packages
   '';
 
-  meta = {
-    description = ihaskell.meta.description;
-    broken = true;
-  };
+  inherit (ihaskell) meta;
 }
