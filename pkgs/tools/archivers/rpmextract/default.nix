@@ -3,9 +3,7 @@
 stdenv.mkDerivation rec {
   name = "rpmextract";
 
-  builder = builtins.toFile "builder.sh" ''
-    source $stdenv/setup
-
+  buildCommand = ''
     install -Dm755 $script $out/bin/rpmextract
   '';
     
