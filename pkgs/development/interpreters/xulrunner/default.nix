@@ -55,9 +55,10 @@ stdenv.mkDerivation rec {
       "--disable-updater"
       "--disable-pulseaudio"
     ]
-    ++ (if debugBuild then [ "--enable-debug" "--enable-profiling"]
-                      else [ "--disable-debug" "--enable-release"
-                             "--enable-optimize" "--enable-strip" ]);
+    ++ (if debugBuild
+        then [ "--enable-debug" "--enable-profiling"]
+        else [ "--disable-debug" "--enable-release" "--enable-strip"
+               "--enable-optimize${lib.optionalString (stdenv.system == "i686-linux") "=-O1"}" ]);
 
   enableParallelBuilding = true;
 
