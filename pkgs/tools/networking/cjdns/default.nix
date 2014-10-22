@@ -1,30 +1,31 @@
-{ stdenv, fetchgit, nodejs, which, python27 }:
+{ stdenv, fetchFromGitHub, nodejs, which, python27 }:
 
 let
-  date = "20140922";
-  rev = "5ebca772b0582173127e8c1e61ee235c5ab3fb50";
+  date = "20140928";
+  rev = "e2b673698e471dbc82b4e9dbc04cb9e16f1f06a6";
 in
 stdenv.mkDerivation {
   name = "cjdns-${date}-${stdenv.lib.strings.substring 0 7 rev}";
 
-  src = fetchgit {
-    url = "https://github.com/cjdelisle/cjdns.git";
+  src = fetchFromGitHub {
+    owner = "cjdelisle";
+    repo = "cjdns";
     inherit rev;
-    sha256 = "04abf73f4aede12c35b70ae09a367b3d6352a63f818185f788ed13356d06197a";
+    sha256 = "0ql51845rni6678dda03zr18ary7xlqcs3khva9x80x815h1sy8v";
   };
+
+  patches = [ ./rfc5952.patch ];
 
   buildInputs = [ which python27 nodejs];
 
-  patches = [ ./makekey.patch ];
-
   buildPhase = "bash do";
-  installPhase = "installBin cjdroute makekey";
+  installPhase = "installBin cjdroute makekeys privatetopublic publictoip6";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/cjdelisle/cjdns;
     description = "Encrypted networking for regular people";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ viric emery ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ viric emery ];
+    platforms = platforms.unix;
   };
 }
