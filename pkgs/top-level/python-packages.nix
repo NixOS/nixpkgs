@@ -65,7 +65,12 @@ let
 
   blivet = callPackage ../development/python-modules/blivet { };
 
-  blivet_0_17 = callPackage ../development/python-modules/blivet/0.17.nix { };
+  blivet_0_17 = callPackage ../development/python-modules/blivet/0.17.nix {
+    pyblock = self.pyblock_0_53;
+    pyparted = self.pyparted_3_10;
+    multipath_tools = pkgs.multipath_tools_oldlvm2;
+    cryptsetup = pkgs.cryptsetup_oldlvm2;
+  };
 
   dbus = callPackage ../development/python-modules/dbus {
     dbus = pkgs.dbus;
@@ -6521,6 +6526,35 @@ let
     };
   };
 
+  # pyblock 0.53 with old LVM, needed for blivet 0.17 and nixpart 0.4
+  pyblock_0_53 = stdenv.mkDerivation rec {
+    name = "pyblock-${version}";
+    version = "0.53";
+
+    src = pkgs.fetchurl rec {
+      url = "http://pkgs.fedoraproject.org/repo/pkgs/python-pyblock/"
+          + "${name}.tar.bz2/${md5}/${name}.tar.bz2";
+      md5 = "f6d33a8362dee358517d0a9e2ebdd044";
+    };
+
+    postPatch = ''
+      sed -i -e 's|/usr/include/python|${python}/include/python|' \
+             -e 's/-Werror *//' -e 's|/usr/|'"$out"'/|' Makefile
+    '';
+
+    buildInputs = with self; [ python pkgs.lvm2_2_02_106 pkgs.dmraid_rc15 ];
+
+    makeFlags = [
+      "USESELINUX=0"
+      "SITELIB=$(out)/lib/${python.libPrefix}/site-packages"
+    ];
+
+    meta = {
+      description = "Interface for working with block devices";
+      license = stdenv.lib.licenses.gpl2Plus;
+    };
+  };
+
   pycapnp = buildPythonPackage rec {
     name = "pycapnp-0.4.4";
     disabled = isPyPy || isPy3k;
@@ -6889,6 +6923,49 @@ let
     buildInputs = with self; [ pkgs.pkgconfig ];
 
     propagatedBuildInputs = with self; [ pkgs.parted ];
+
+    checkPhase = ''
+      patchShebangs Makefile
+      make test PYTHON=${python.executable}
+    '';
+
+    meta = {
+      homepage = "https://fedorahosted.org/pyparted/";
+      description = "Python interface for libparted";
+      license = stdenv.lib.licenses.gpl2Plus;
+      platforms = stdenv.lib.platforms.linux;
+    };
+  };
+
+  # Needed for blivet 0.17 and nixpart 0.4
+  pyparted_3_10 = buildPythonPackage rec {
+    name = "pyparted-${version}";
+    version = "3.10";
+    disabled = isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "https://fedorahosted.org/releases/p/y/pyparted/${name}.tar.gz";
+      sha256 = "17wq4invmv1nfazaksf59ymqyvgv3i8h4q03ry2az0s9lldyg3dv";
+    };
+
+    postPatch = ''
+      sed -i -e 's|/sbin/mke2fs|${pkgs.e2fsprogs}&|' tests/baseclass.py
+      sed -i -e '
+        s|e\.path\.startswith("/tmp/temp-device-")|"temp-device-" in e.path|
+      ' tests/test__ped_ped.py
+    '' + optionalString stdenv.isi686 ''
+      # remove some integers in this test case which overflow on 32bit systems
+      sed -i -r -e '/class *UnitGetSizeTestCase/,/^$/{/[0-9]{11}/d}' \
+        tests/test__ped_ped.py
+    '';
+
+    preConfigure = ''
+      PATH="${pkgs.parted}/sbin:$PATH"
+    '';
+
+    buildInputs = with self; [ pkgs.pkgconfig ];
+
+    propagatedBuildInputs = with self; [ pkgs.parted_3_1 ];
 
     checkPhase = ''
       patchShebangs Makefile
