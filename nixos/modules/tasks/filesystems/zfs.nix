@@ -152,40 +152,20 @@ in
         zfsSupport = true;
       };
 
-      systemd.services."zpool-import" = {
-        description = "Import zpools";
-        after = [ "systemd-udev-settle.service" ];
-        wantedBy = [ "local-fs.target" ];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = "${zfsPkg}/sbin/zpool import -f -a";
-        };
-        restartIfChanged = false;
-      };
-
-      systemd.services."zfs-mount" = {
-        description = "Mount ZFS Volumes";
-        after = [ "zpool-import.service" ];
-        wantedBy = [ "local-fs.target" ];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = "${zfsPkg}/sbin/zfs mount -a";
-          ExecStop = "${zfsPkg}/sbin/zfs umount -a";
-        };
-        restartIfChanged = false;
-      };
+      environment.etc."zfs/zed.d".source = "${zfsPkg}/etc/zfs/zed.d/*";
 
       system.fsPackages = [ zfsPkg ];                  # XXX: needed? zfs doesn't have (need) a fsck
       environment.systemPackages = [ zfsPkg ];
       services.udev.packages = [ zfsPkg ];             # to hook zvol naming, etc.
+      systemd.packages = [ zfsPkg ];
+
+      systemd.targets."zfs".wantedBy = [ "multi-user.target" ];
     })
 
     (mkIf enableAutoSnapshots {
       systemd.services."zfs-snapshot-frequent" = {
         description = "ZFS auto-snapshotting every 15 mins";
-        after = [ "zpool-import.service" ];
+        after = [ "zfs-import-scan.service" "zfs-import-cache.service" ];
         serviceConfig = {
           Type = "oneshot";
           ExecStart = "${zfsAutoSnap} frequent ${toString cfgSnapshots.frequent}";
@@ -196,7 +176,7 @@ in
 
       systemd.services."zfs-snapshot-hourly" = {
         description = "ZFS auto-snapshotting every hour";
-        after = [ "zpool-import.service" ];
+        after = [ "zfs-import-scan.service" "zfs-import-cache.service" ];
         serviceConfig = {
           Type = "oneshot";
           ExecStart = "${zfsAutoSnap} hourly ${toString cfgSnapshots.hourly}";
@@ -207,7 +187,7 @@ in
 
       systemd.services."zfs-snapshot-daily" = {
         description = "ZFS auto-snapshotting every day";
-        after = [ "zpool-import.service" ];
+        after = [ "zfs-import-scan.service" "zfs-import-cache.service" ];
         serviceConfig = {
           Type = "oneshot";
           ExecStart = "${zfsAutoSnap} daily ${toString cfgSnapshots.daily}";
@@ -218,7 +198,7 @@ in
 
       systemd.services."zfs-snapshot-weekly" = {
         description = "ZFS auto-snapshotting every week";
-        after = [ "zpool-import.service" ];
+        after = [ "zfs-import-scan.service" "zfs-import-cache.service" ];
         serviceConfig = {
           Type = "oneshot";
           ExecStart = "${zfsAutoSnap} weekly ${toString cfgSnapshots.weekly}";
@@ -229,7 +209,7 @@ in
 
       systemd.services."zfs-snapshot-monthly" = {
         description = "ZFS auto-snapshotting every month";
-        after = [ "zpool-import.service" ];
+        after = [ "zfs-import-scan.service" "zfs-import-cache.service" ];
         serviceConfig = {
           Type = "oneshot";
           ExecStart = "${zfsAutoSnap} monthly ${toString cfgSnapshots.monthly}";
