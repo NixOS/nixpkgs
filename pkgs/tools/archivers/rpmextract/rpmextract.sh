@@ -1,8 +1,10 @@
-#!/bin/sh
+#!/bin/sh -e
 
 if [ "$1" = "" ]; then
-  echo "usage: rpmextract package_name" 1>&2
+  echo "usage: rpmextract package_name..." 1>&2
   exit 1
 fi
 
-@rpm@/bin/rpm2cpio "$1" | @cpio@/bin/cpio -idv
+for i in "$@"; do
+  @rpm@/bin/rpm2cpio "$i" | @cpio@/bin/cpio -idv
+done
