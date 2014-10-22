@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   
   # https://bugzilla.samba.org/show_bug.cgi?id=7000
   postConfigure = if stdenv.isDarwin then ''
-    substituteInPlace "Makefile" --replace "SONAMEFLAG = #" "SONAMEFLAG = -install_name"
+    substituteInPlace "Makefile" --replace "SONAMEFLAG = #" "SONAMEFLAG = -Wl,-install_name,"
   '' else "";
 
   meta = {
