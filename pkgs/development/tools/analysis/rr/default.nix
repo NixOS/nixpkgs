@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, unzip, cmake, libpfm }:
+{ stdenv, fetchFromGitHub, cmake, libpfm, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.0";
+  version = "2.0.0";
   name = "rr-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/mozilla/rr/archive/${version}.zip";
-    sha256 = "c7b7efac77f00805a26b0530e0bca4076b4b058374e5501328ec17cf0fa27021";
+  src = fetchFromGitHub {
+    owner = "mozilla";
+    repo = "rr";
+    rev = version;
+    sha256 = "0mlxkj35zmm15dgnc7rfynnh2s2hpym01147vwc8pwv8qgab903s";
   };
 
-  buildInputs = [ unzip cmake libpfm ];
+  buildInputs = [ cmake libpfm zlib ];
   cmakeFlags = "-DCMAKE_C_FLAGS_RELEASE:STRING= -DCMAKE_CXX_FLAGS_RELEASE:STRING=";
 
   meta = {
