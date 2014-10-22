@@ -7,11 +7,7 @@
 
 assert useNixUdev -> udev != null;
 
-let
-  pyenable = { enablePython = true; };
-  selinuxWithPython = libselinux.override pyenable;
-  cryptsetupWithPython = cryptsetup.override pyenable;
-in buildPythonPackage rec {
+buildPythonPackage rec {
   name = "blivet-${version}";
   version = "0.17-1";
 
@@ -43,7 +39,7 @@ in buildPythonPackage rec {
   '');
 
   propagatedBuildInputs = [
-    pykickstart pyparted pyblock selinuxWithPython cryptsetupWithPython
+    pykickstart pyparted pyblock libselinux cryptsetup
   ] ++ stdenv.lib.optional useNixUdev udev;
 
   # tests are currently _heavily_ broken upstream

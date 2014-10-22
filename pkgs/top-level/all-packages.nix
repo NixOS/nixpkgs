@@ -1937,12 +1937,6 @@ let
 
   parted = callPackage ../tools/misc/parted { hurd = null; };
 
-  # Needed for blivet 0.17 and nixpart 0.4
-  parted_3_1 = callPackage ../tools/misc/parted/3.1.nix {
-    hurd = null;
-    devicemapper = lvm2_2_02_106;
-  };
-
   pitivi = callPackage ../applications/video/pitivi {
     gst = gst_all_1;
     clutter-gtk = clutter_gtk;
@@ -7665,11 +7659,6 @@ let
 
   cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
 
-  # Needed for nixpart 0.4 and blivet 0.17
-  cryptsetup_oldlvm2 = callPackage ../os-specific/linux/cryptsetup {
-    devicemapper = lvm2_2_02_106;
-  };
-
   cramfsswap = callPackage ../os-specific/linux/cramfsswap { };
 
   darwin = let
@@ -7715,11 +7704,6 @@ let
 
   dmraid = callPackage ../os-specific/linux/dmraid {
     devicemapper = devicemapper.override {enable_dmeventd = true;};
-  };
-
-  # Needed for nixpart 0.4 and blivet 0.17
-  dmraid_rc15 = callPackage ../os-specific/linux/dmraid/rc15.nix {
-    devicemapper = lvm2_2_02_106;
   };
 
   drbd = callPackage ../os-specific/linux/drbd { };
@@ -8152,9 +8136,6 @@ let
 
   lvm2 = callPackage ../os-specific/linux/lvm2 { };
 
-  # Needed for nixpart 0.4 and blivet 0.17
-  lvm2_2_02_106 = callPackage ../os-specific/linux/lvm2/2.02.106.nix { };
-
   mdadm = callPackage ../os-specific/linux/mdadm { };
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
@@ -8167,11 +8148,6 @@ let
     };
 
   multipath_tools = callPackage ../os-specific/linux/multipath-tools { };
-
-  # Needed for nixpart 0.4 and blivet 0.17
-  multipath_tools_oldlvm2 = callPackage ../os-specific/linux/multipath-tools {
-    lvm2 = lvm2_2_02_106;
-  };
 
   musl = callPackage ../os-specific/linux/musl { };
 
