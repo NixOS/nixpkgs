@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = ihaskell.meta.description;
+    broken = true;
   };
 }
