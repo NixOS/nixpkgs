@@ -209,7 +209,7 @@ in {
       ensurePartition("swap", "swap");
       ensurePartition("boot", "f2fs");
       ensurePartition("root", "f2fs");
-      remoteAndCheck;
+      remountAndCheck;
       ensureMountPoint("/mnt/boot", "f2fs");
     };
 
