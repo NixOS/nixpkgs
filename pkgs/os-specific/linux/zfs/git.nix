@@ -47,6 +47,17 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  # Remove provided services as they are buggy
+  postInstall = ''
+    rm $out/etc/systemd/system/zfs-import-*.service
+
+    sed -i '/zfs-import-scan.service/d' $out/etc/systemd/system/*
+
+    for i in $out/etc/systemd/system/*; do
+      substituteInPlace $i --replace "zfs-import-cache.service" "zfs-import.target"
+    done
+  '';
+
   meta = {
     description = "ZFS Filesystem Linux Kernel module";
     longDescription = ''
