@@ -5,6 +5,8 @@
 , supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" ]
 }:
 
+# CYGWINTODO: check whether cygwin excludes here are still current
+
 with import ./release-lib.nix { inherit supportedSystems; };
 
 {

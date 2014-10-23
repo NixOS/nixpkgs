@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
                 "$(cat ${stdenv.cc}/nix-support/orig-cc)/bin/cpp"
   '';
 
+  # CYGWINTODO
+
   buildInputs = [ gettext ] ++
     # We don't have Emacs/GTK/etc. on {Dar,Cyg}win.
     stdenv.lib.optional

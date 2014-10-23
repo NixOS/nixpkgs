@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
 
+  # CYGWINTODO
+
     platforms = with stdenv.lib.platforms; linux ++ cygwin;
     maintainers = with stdenv.lib.maintainers; [ viric ];
   };

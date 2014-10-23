@@ -55,6 +55,8 @@ stdenv.mkDerivation (rec {
 
 //
 
+  # CYGWINTODO
+
 # On Cygwin Libtool is unable to find `libiconv.dll' if there's no explicit
 # `-L/path/to/libiconv' argument on the linker's command line; and since it
 # can't find the dll, it will only create a static library.

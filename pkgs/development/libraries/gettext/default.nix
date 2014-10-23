@@ -10,6 +10,8 @@ stdenv.mkDerivation (rec {
 
   LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
 
+  # CYGWINTODO
+
   configureFlags = [ "--disable-csharp" "--with-xz" ]
      ++ (stdenv.lib.optionals stdenv.isCygwin
           [ # We have a static libiconv, so we can only build the static lib.

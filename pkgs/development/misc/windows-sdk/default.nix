@@ -1,5 +1,7 @@
 {stdenv, fetchurl, cabextract}:
 
+  # CYGWINTODO
+
 #assert stdenv.system == "i686-cygwin";
 
 stdenv.mkDerivation {

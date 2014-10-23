@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
       xscreensaver and never will. Its just for locking the current
       X session.
     '';
+  # CYGWINTODO
+
     platforms = with stdenv.lib.platforms; allBut cygwin;
     maintainers = [ stdenv.lib.maintainers.ftrvxmtrx ];
   };

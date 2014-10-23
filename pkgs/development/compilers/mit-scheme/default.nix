@@ -82,6 +82,8 @@ stdenv.mkDerivation {
 
     maintainers = [ ];
 
+    # CYGWINTODO
+
     # Build fails on Cygwin and Darwin:
     # <http://article.gmane.org/gmane.lisp.scheme.mit-scheme.devel/489>.
     platforms = platforms.gnu ++ platforms.freebsd;

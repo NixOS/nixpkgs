@@ -52,6 +52,8 @@ rec {
     shopt -s expand_aliases
   '';
 
+  # CYGWINTODO
+
   prehookCygwin = ''
     ${prehookBase}
 

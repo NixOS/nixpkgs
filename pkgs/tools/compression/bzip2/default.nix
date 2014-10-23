@@ -23,6 +23,8 @@ stdenv.mkDerivation {
     '';
   };
 
+  # CYGWINTODO
+
   sharedLibrary =
     !stdenv.isDarwin && !(stdenv ? isStatic) && stdenv.system != "i686-cygwin" && !linkStatic;
 

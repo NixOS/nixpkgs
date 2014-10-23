@@ -65,6 +65,8 @@ stdenv.mkDerivation {
     stdenv.lib.optionalString withCryptodev " -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS" +
     stdenv.lib.optionalString (stdenv.system == "x86_64-cygwin") " no-asm";
 
+  # CYGWINTODO
+
   preBuild = stdenv.lib.optionalString (stdenv.system == "x86_64-cygwin") ''
     sed -i -e "s|-march=i486|-march=x86-64|g" Makefile
   '';

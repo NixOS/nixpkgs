@@ -50,6 +50,9 @@ stdenv.mkDerivation rec {
     + optionalString (target != null) " --target=${target.config}"
     + optionalString (elem stdenv.system platforms.cygwin) "  --without-python";
 
+  # CYGWINTODO
+
+
   crossAttrs = {
     # Do not add --with-python here to avoid cross building it.
     configureFlags =

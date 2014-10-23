@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./is-this-a-compiler-bug.patch ];
 
+  # CYGWINTODO
+
   configureFlags =
     # Including the Windows headers breaks unistd.h.
     # Based on ftp://sourceware.org/pub/cygwin/release/libapr1/libapr1-1.3.8-2-src.tar.bz2

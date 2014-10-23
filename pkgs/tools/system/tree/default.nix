@@ -3,6 +3,8 @@
 let
   version = "1.7.0";
 
+  # CYGWINTODO
+
   # These settings are found in the Makefile, but there seems to be no
   # way to select one ore the other setting other than editing the file
   # manually, so we have to duplicate the know how here.

@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0w0da1chh12mczxa5lnwzjk9czi3dq6gnnndbpa6w4rj76b1yklf";
   };
 
+  # CYGWINTODO
+
   doCheck = !stdenv.isDarwin
     && !stdenv.isCygwin                    # XXX: `test-dup2' fails on Cygwin
     && !stdenv.isSunOS;                    # XXX: `test-setlocale2.sh' fails

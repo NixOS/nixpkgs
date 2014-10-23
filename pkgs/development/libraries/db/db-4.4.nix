@@ -1,5 +1,7 @@
 { stdenv, fetchurl, ... } @ args:
 
+# CYGWINTODO
+
 import ./generic.nix (args // rec {
   version = "4.4.20";
   extraPatches = [ ./cygwin-4.4.patch ];

@@ -25,6 +25,9 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/acct/;
 
     maintainers = with maintainers; [ pSub ];
+
+  # CYGWINTODO
+
     platforms = with platforms; allBut cygwin;
   };
 }

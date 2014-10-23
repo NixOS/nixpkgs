@@ -21,6 +21,8 @@ in stdenv.mkDerivation {
   configurePhase = "cd Qt && qmake PPSSPPQt.pro";
   installPhase = "mkdir -p $out/bin && cp ppsspp $out/bin";
 
+  # CYGWINTODO
+
   meta = with stdenv.lib; {
     homepage = "http://www.ppsspp.org/";
     description = "A PSP emulator, the Qt4 version";

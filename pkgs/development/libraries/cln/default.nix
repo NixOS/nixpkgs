@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gmp ];
 
+  # CYGWINTODO
+
   meta = {
     description = "C/C++ library for numbers, a part of GiNaC";
     homepage = http://www.ginac.de/CLN/;

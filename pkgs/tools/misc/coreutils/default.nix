@@ -55,6 +55,8 @@ let
       doCheck = false;
     };
 
+  # CYGWINTODO
+
     # The tests are known broken on Cygwin
     # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
     # Darwin (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),

@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0rc2pksdd0mhdvk8y1yix71rf19wdx1lb2ryrkhi7vcy240rvgvc";
   };
 
+  # CYGWINTODO
+
   buildInputs = [ autoreconfHook perl zlib bzip2 popt ];
 
   configureFlags = if stdenv.isCygwin then "--enable-static" else "--enable-shared";

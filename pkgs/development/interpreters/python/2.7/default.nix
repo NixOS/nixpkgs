@@ -40,6 +40,8 @@ let
       # if DETERMINISTIC_BUILD env var is set
       ./deterministic-build.patch
     ];
+    
+  # CYGWINTODO
 
   preConfigure = ''
       # Purity.

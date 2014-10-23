@@ -1,5 +1,7 @@
 pkgs:
 
+  # CYGWINTODO
+
 let
   bootstrapper = import ./bootstrap.nix {
     inherit (pkgs) stdenv vmTools writeScript writeText runCommand makeInitrd;

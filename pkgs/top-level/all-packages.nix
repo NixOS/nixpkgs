@@ -4738,6 +4738,8 @@ let
     fetchurl = fetchurlBoot;
   };
 
+  # CYGWINTODO
+
   perl = if system != "i686-cygwin" then perl520 else sysPerl;
 
   php = php56;
@@ -4966,6 +4968,8 @@ let
   pharo-launcher = callPackage ../development/pharo/launcher { };
 
   srecord = callPackage ../development/tools/misc/srecord { };
+
+  # CYGWINTODO
 
   windowssdk = (
     import ../development/misc/windows-sdk {
@@ -7333,7 +7337,9 @@ let
 
   nanomsg = callPackage ../development/libraries/nanomsg { };
 
-  ncurses = callPackage ../development/libraries/ncurses { };
+  ncurses = callPackage ../development/libraries/ncurses {
+    unicode = system != "i686-cygwin";
+  };
 
   neon = callPackage ../development/libraries/neon {
     compressionSupport = true;
@@ -9937,6 +9943,8 @@ let
   v4l_utils = callPackage ../os-specific/linux/v4l-utils {
     qt5 = null;
   };
+
+  # CYGWINTODO
 
   windows = rec {
     cygwinSetup = callPackage ../os-specific/windows/cygwin-setup { };

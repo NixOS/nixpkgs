@@ -29,6 +29,8 @@ let
       ./python2.6-fix-parallel-make.patch
     ];
     
+  # CYGWINTODO
+
   preConfigure = ''
       # Purity.
       for i in /usr /sw /opt /pkg; do

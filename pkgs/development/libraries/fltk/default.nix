@@ -15,6 +15,8 @@ composableDerivation.composableDerivation {} rec {
 
   buildInputs = [ pkgconfig ];
 
+  # CYGWINTODO
+
   flags =
     # this could be tidied up (?).. eg why does it require freeglut without glSupport?
     edf { name = "cygwin"; }  #         use the CygWin libraries default=no

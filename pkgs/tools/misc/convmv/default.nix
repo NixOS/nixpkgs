@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Converts filenames from one encoding to another";
+  # CYGWINTODO
+
     platforms = platforms.linux ++ platforms.freebsd ++ platforms.cygwin;
     maintainers = [ maintainers.urkud ];
   };

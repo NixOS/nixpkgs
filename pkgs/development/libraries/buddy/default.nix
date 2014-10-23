@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     description = "binary decision diagram package";
     license = "as-is";
 
+  # CYGWINTODO
+
     platforms = with stdenv.lib.platforms; allBut cygwin;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
