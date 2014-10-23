@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       --enable-gc
     '';
 
-  makeFlags = "profiledir=$(out)/etc/profile.d";
+  makeFlags = "libdir=$(out)/lib profiledir=$(out)/etc/profile.d";
 
   installFlags = "sysconfdir=$(out)/etc";
 

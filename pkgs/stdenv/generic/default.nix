@@ -210,18 +210,21 @@ let
             || system == "i686-gnu"
             || system == "i686-freebsd"
             || system == "i686-openbsd"
+            || system == "i686-cygwin"
             || system == "i386-sunos";
       isx86_64 = system == "x86_64-linux"
               || system == "x86_64-darwin"
               || system == "x86_64-freebsd"
               || system == "x86_64-openbsd"
+              || system == "x86_64-cygwin"
               || system == "x86_64-solaris";
       is64bit = system == "x86_64-linux"
              || system == "x86_64-darwin"
              || system == "x86_64-freebsd"
              || system == "x86_64-openbsd"
              || system == "x86_64-solaris"
-             || system == "mips64el-linux";
+             || system == "mips64el-linux"
+             || system == "x86_64-cygwin";
       isMips = system == "mips-linux"
             || system == "mips64el-linux";
       isArm = system == "armv5tel-linux"
