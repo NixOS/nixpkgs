@@ -4555,6 +4555,8 @@ let
 
   sigrok-cli = callPackage ../development/tools/sigrok-cli { };
 
+  simpleTpmPk11 = callPackage ../tools/security/simple-tpm-pk11 { };
+
   slimerjs = callPackage ../development/tools/slimerjs {};
 
   sloccount = callPackage ../development/tools/misc/sloccount { };
