@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   name = "google-cloud-sdk";
   src = fetchurl {
     url = "https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz";
-    sha256 = "0svlzks2xvy19qqnrifkdyzsazn9fypyn7y29r53260b4hfb83dy";
+    sha256 = "1f4237a2e52b813fefd905e5a748276186e03de0f28b94532d749fcf68a2ae10";
   };
 
   buildInputs = [ python jdk which ];
@@ -31,4 +31,3 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.asl20;
   };
 }
-
