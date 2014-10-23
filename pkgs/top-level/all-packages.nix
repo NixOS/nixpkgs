@@ -2649,6 +2649,8 @@ let
 
   wicd = callPackage ../tools/networking/wicd { };
 
+  wipe = callPackage ../tools/security/wipe { };
+
   wkhtmltopdf = callPackage ../tools/graphics/wkhtmltopdf {
     overrideDerivation = lib.overrideDerivation;
     inherit (xlibs) libX11 libXext libXrender;
