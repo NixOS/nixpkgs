@@ -468,6 +468,8 @@ let
 
   ahcpd = callPackage ../tools/networking/ahcpd { };
 
+  aide = callPackage ../tools/security/aide { };
+
   aircrackng = callPackage ../tools/networking/aircrack-ng { };
 
   airfield = callPackage ../tools/networking/airfield { };
