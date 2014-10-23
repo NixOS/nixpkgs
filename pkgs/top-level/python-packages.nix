@@ -1010,21 +1010,6 @@ let
     };
   };
 
-  boto-230 = buildPythonPackage rec {
-    name = "boto-2.30.0";
-    src = pkgs.fetchurl {
-      url = https://pypi.python.org/packages/source/b/boto/boto-2.30.0.tar.gz;
-      sha256 = "12gl8azmx1vv8dbv9jhnsbhjpc2dd1ng0jlbcg734k6ggwq1h6hh";
-    };
-    doCheck = false;
-    meta = {
-      homepage = https://github.com/boto/boto;
-      license = licenses.mit;
-      description = "Python interface to Amazon Web Services";
-    };
-  };
-
-
   botocore = buildPythonPackage rec {
     version = "0.33.0";
     name = "botocore-${version}";
@@ -2391,20 +2376,6 @@ let
     };
   };
 
-  gcs-oauth2-boto-plugin = buildPythonPackage rec {
-    name = "gcs-oauth2-boto-plugin-1.8";
-    src = pkgs.fetchurl {
-      url = https://pypi.python.org/packages/source/g/gcs-oauth2-boto-plugin/gcs-oauth2-boto-plugin-1.8.tar.gz;
-      sha256 = "0jy62y5bmaf1mb735lqwry1s5nx2qqrxvl5sxip9yg4miih3qkyb";
-    };
-    propagatedBuildInputs = with self; [ boto-230 httplib2 google_api_python_client retry_decorator pkgs.pyopenssl socksipy-branch ];
-    meta = {
-      homepage = https://developers.google.com/storage/docs/gspythonlibrary;
-      description = "Provides OAuth 2.0 credentials that can be used with Google Cloud Storage";
-      license = stdenv.lib.licenses.asl20;
-    };
-  };
-
   gcutil = buildPythonPackage rec {
     name = "gcutil-1.15.0";
     meta.maintainers = [ stdenv.lib.maintainers.phreedom ];
@@ -2429,25 +2400,6 @@ let
     };
 
     propagatedBuildInputs = with self; [ pkgs.gnutls ];
-  };
-
-  gsutil = buildPythonPackage rec {
-    name = "gsutil-4.6";
-    meta = {
-      homepage = https://developers.google.com/storage/docs/gsutil;
-      description = "Google Cloud Storage Tool";
-      maintainers = [ "Russell O'Connor <oconnorr@google.com>" ];
-      license = stdenv.lib.licenses.asl20;
-    };
-    doCheck = false;
-
-    src = pkgs.fetchurl {
-      url = https://pypi.python.org/packages/source/g/gsutil/gsutil-4.6.tar.gz;
-      sha256 = "1i0clm60162rbk45ljr8nsw4ndkzjnwb7r440shcqjrvw8jq49mn";
-    };
-
-    propagatedBuildInputs = with self; [ boto-230 crcmod httplib2 gcs-oauth2-boto-plugin google_api_python_client gflags
-                                         retry_decorator pkgs.pyopenssl socksipy-branch ];
   };
 
   gitdb = buildPythonPackage rec {
@@ -11422,6 +11374,52 @@ let
   with self;
 
 {
+  boto-230 = buildPythonPackage rec {
+    name = "boto-2.30.0";
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/b/boto/boto-2.30.0.tar.gz;
+      sha256 = "12gl8azmx1vv8dbv9jhnsbhjpc2dd1ng0jlbcg734k6ggwq1h6hh";
+    };
+    doCheck = false;
+    meta = {
+      homepage = https://github.com/boto/boto;
+      license = licenses.mit;
+      description = "Python interface to Amazon Web Services";
+    };
+  };
+
+  gcs-oauth2-boto-plugin = buildPythonPackage rec {
+    name = "gcs-oauth2-boto-plugin-1.8";
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/g/gcs-oauth2-boto-plugin/gcs-oauth2-boto-plugin-1.8.tar.gz;
+      sha256 = "0jy62y5bmaf1mb735lqwry1s5nx2qqrxvl5sxip9yg4miih3qkyb";
+    };
+    propagatedBuildInputs = with self; [ boto-230 httplib2 google_api_python_client retry_decorator pkgs.pyopenssl socksipy-branch ];
+    meta = {
+      homepage = https://developers.google.com/storage/docs/gspythonlibrary;
+      description = "Provides OAuth 2.0 credentials that can be used with Google Cloud Storage";
+      license = stdenv.lib.licenses.asl20;
+    };
+  };
+
+  gsutil = buildPythonPackage rec {
+    name = "gsutil-4.6";
+    meta = {
+      homepage = https://developers.google.com/storage/docs/gsutil;
+      description = "Google Cloud Storage Tool";
+      maintainers = [ "Russell O'Connor <oconnorr@google.com>" ];
+      license = stdenv.lib.licenses.asl20;
+    };
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/g/gsutil/gsutil-4.6.tar.gz;
+      sha256 = "1i0clm60162rbk45ljr8nsw4ndkzjnwb7r440shcqjrvw8jq49mn";
+    };
+
+    propagatedBuildInputs = with self; [ boto-230 crcmod httplib2 gcs-oauth2-boto-plugin google_api_python_client gflags
+                                         retry_decorator pkgs.pyopenssl socksipy-branch ];
+  };
 
   pypi2nix = self.buildPythonPackage rec {
     rev = "04a68d8577acbceb88bdf51b1231a9dbdead7003";
