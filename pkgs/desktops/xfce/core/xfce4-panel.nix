@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk, libxfce4util, libxfce4ui
 , libwnck, exo, garcon, xfconf, libstartup_notification
-, makeWrapper, gst_plugins_base }:
+, makeWrapper, xfce4mixer }:
 
 stdenv.mkDerivation rec {
   p_name  = "xfce4-panel";
@@ -18,9 +18,8 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig intltool gtk libxfce4util exo libwnck
-      garcon xfconf libstartup_notification
-      makeWrapper gst_plugins_base
-    ];
+      garcon xfconf libstartup_notification makeWrapper
+    ] ++ xfce4mixer.gst_plugins;
   propagatedBuildInputs = [ libxfce4ui ];
 
   postInstall = ''
