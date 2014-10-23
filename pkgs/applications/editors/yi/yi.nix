@@ -2,11 +2,11 @@
 
 { cabal, binary, Cabal, cautiousFile, dataDefault, derive, dlist
 , dynamicState, dyre, filepath, glib, gtk, hashable, hint, HUnit
-, lens, makeWrapper, mtl, ooPrototypes, pango, parsec, pointedlist
-, QuickCheck, random, regexBase, regexTdfa, safe, semigroups, split
-, tagged, tasty, tastyHunit, tastyQuickcheck, text, time
-, transformersBase, unixCompat, unorderedContainers, utf8String
-, vty, wordTrie, xdgBasedir, yiLanguage, yiRope
+, lens, mtl, ooPrototypes, pango, parsec, pointedlist, QuickCheck
+, random, regexBase, regexTdfa, safe, semigroups, split, tagged
+, tasty, tastyHunit, tastyQuickcheck, text, time, transformersBase
+, unixCompat, unorderedContainers, utf8String, vty, wordTrie
+, xdgBasedir, yiLanguage, yiRope
 }:
 
 cabal.mkDerivation (self: {
@@ -27,12 +27,8 @@ cabal.mkDerivation (self: {
     filepath HUnit lens QuickCheck semigroups tasty tastyHunit
     tastyQuickcheck text yiLanguage yiRope
   ];
-  buildTools = [ makeWrapper ];
   configureFlags = "-fpango -fvty";
   noHaddock = self.stdenv.lib.versionOlder self.ghc.version "7.8";
-  postInstall = ''
-    wrapProgram $out/bin/yi --suffix GHC_PACKAGE_PATH : $out/lib/ghc-${self.ghc.version}/package.conf.d/yi-$version.installedconf:$GHC_PACKAGE_PATH
-  '';
   meta = {
     homepage = "http://haskell.org/haskellwiki/Yi";
     description = "The Haskell-Scriptable Editor";

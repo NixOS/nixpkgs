@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
   sha256 = "19pkm4m2xk9ziai3ka4scxjavi0as8dmivz9q6vg3npmv0kyhkhb";
   isLibrary = true;
   isExecutable = true;
+  patches = [ ./deps.patch ];
   buildDepends = [
     arrows binary brainfuck dataMemocombinators dependentMap
     dependentSum dependentSumTemplate dice editDistance filepath

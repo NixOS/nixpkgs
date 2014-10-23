@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xdot";
-  version = "0.2.4.4";
-  sha256 = "1bv2n1pzn58kqf9k5qbyzlkddhx2v2c9gc50c7q7yd7wxxpml7gi";
+  version = "0.2.4.5";
+  sha256 = "0dv9y5i3707pnx4c0gf9y3zv6p02az4rvspd84hprfvnhd8qfdcp";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ cairo graphviz gtk mtl polyparse text ];

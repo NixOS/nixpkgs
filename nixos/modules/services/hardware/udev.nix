@@ -169,7 +169,6 @@ in
     hardware.firmware = mkOption {
       type = types.listOf types.path;
       default = [];
-      example = [ "/root/my-firmware" ];
       description = ''
         List of directories containing firmware files.  Such files
         will be loaded automatically if the kernel asks for them
@@ -178,10 +177,10 @@ in
         firmware file with the same name, the first path in the list
         takes precedence.  Note that you must rebuild your system if
         you add files to any of these directories.  For quick testing,
-        put firmware files in /root/test-firmware and add that
-        directory to the list.
-        Note that you can also add firmware packages to this
-        list as these are directories in the nix store.
+        put firmware files in <filename>/root/test-firmware</filename>
+        and add that directory to the list.  Note that you can also
+        add firmware packages to this list as these are directories in
+        the nix store.
       '';
       apply = list: pkgs.buildEnv {
         name = "firmware";
@@ -244,6 +243,11 @@ in
         if [ ! -e /var/lib/udev/prev-systemd -o "$(readlink /var/lib/udev/prev-systemd)" != ${config.systemd.package} ]; then
           echo "regenerating udev hardware database..."
           ${config.systemd.package}/bin/udevadm hwdb --update && ln -sfn ${config.systemd.package} /var/lib/udev/prev-systemd
+        fi
+
+        # Allow the kernel to find our firmware.
+        if [ -e /sys/module/firmware_class/parameters/path ]; then
+          echo -n "${config.hardware.firmware}" > /sys/module/firmware_class/parameters/path
         fi
       '';
 

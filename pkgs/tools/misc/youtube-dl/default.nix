@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "http://rg3.github.com/youtube-dl/";
     repositories.git = https://github.com/rg3/youtube-dl.git;
     description = "Command-line tool to download videos from YouTube.com and other sites";
+    license = stdenv.lib.licenses.unlicense;
 
     platforms = with stdenv.lib.platforms; linux ++ darwin;
     maintainers = with stdenv.lib.maintainers; [ bluescreen303 simons phreedom ];

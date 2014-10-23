@@ -5,18 +5,18 @@
 
 cabal.mkDerivation (self: {
   pname = "hindent";
-  version = "3.8";
-  sha256 = "015madajwljh2an3djla0qdds8bg7kgcdn3xb30cdf6gb77mf1xv";
+  version = "3.9";
+  sha256 = "0x8qm39rmaw1s0fbljr9zp6vnqxfcs1w6a3ylrknwqgwbzzr5hbn";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ dataDefault haskellSrcExts monadLoops mtl text ];
   testDepends = [
     dataDefault haskellSrcExts hspec monadLoops mtl text
   ];
+  doCheck = false;
   meta = {
     description = "Extensible Haskell pretty printer";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    broken = true;
   };
 })

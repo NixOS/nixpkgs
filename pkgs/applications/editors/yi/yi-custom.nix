@@ -9,34 +9,32 @@
 # ‘reload’ and similar functions should all work as long as the user
 # doesn't need new libraries at which point they should add them to
 # extraPackages and rebuild from the expression.
-{ cabal, yi, extraPackages, makeWrapper }:
-
+{ cabal, yi, extraPackages, makeWrapper, ghcWithPackages }:
+let
+  w = ghcWithPackages (self: [ yi ] ++ extraPackages self);
+  wrappedGhc = w.override { ignoreCollisions = true; };
+in
 cabal.mkDerivation (self: rec {
   pname = "yi-custom";
   version = "0.0.0.1";
   src = ./yi-custom-cabal;
   isLibrary = true;
-  buildDepends = extraPackages ++ [ yi ];
+  buildDepends = [ yi ];
   buildTools = [ makeWrapper ];
   noHaddock = true;
   doCheck = false;
 
-  # Allows Yi to find the libraries it needs at runtime. We drop ‘:’
-  # from this GHC_PACKAGE_PATH because we're wrapping over a different
-  # wrapper that used --prefix: if we didn't, we end up with a
-  # double-colon, confusing GHC.
+  # put custom GHC env in front which stops crap from being picked up
+  # from user database
   postInstall = ''
-    makeWrapper ${yi}/bin/yi $out/bin/yi --set GHC_PACKAGE_PATH ''${GHC_PACKAGE_PATH%?}
+    makeWrapper ${yi}/bin/yi $out/bin/yi --prefix PATH : ${wrappedGhc}/bin
   '';
-
   meta = {
     homepage = "http://haskell.org/haskellwiki/Yi";
     description = "Wrapper over user-specified Haskell libraries for use in Yi config";
     license = self.stdenv.lib.licenses.publicDomain;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ fuuzetsu ];
-    # The wrapper does not yet work properly if we actually try to use it.
-    broken = true;
   };
 
 })

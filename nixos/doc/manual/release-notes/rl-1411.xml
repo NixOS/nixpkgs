@@ -2,9 +2,9 @@
         xmlns:xlink="http://www.w3.org/1999/xlink"
         xmlns:xi="http://www.w3.org/2001/XInclude"
         version="5.0"
-        xml:id="sec-release-14.10">
+        xml:id="sec-release-14.11">
 
-<title>Release 14.10 (“Caterpillar”, 2014/10/??)</title>
+<title>Release 14.11 (“Caterpillar”, 2014/11/??)</title>
 
 <para>When upgrading from a previous release, please be aware of the
 following incompatible changes:

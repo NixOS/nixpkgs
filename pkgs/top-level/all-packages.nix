@@ -401,6 +401,10 @@ let
     inherit stdenv;
   };
 
+  substituteAllFiles = import ../build-support/substitute-files/substitute-all-files.nix {
+    inherit stdenv;
+  };
+
   replaceDependency = import ../build-support/replace-dependency.nix {
     inherit runCommand nix lib;
   };
@@ -617,6 +621,8 @@ let
 
   bitbucket-cli = pythonPackages.bitbucket-cli;
 
+  blink = callPackage ../applications/networking/instant-messengers/blink { };
+
   blockdiag = pythonPackages.blockdiag;
 
   bmon = callPackage ../tools/misc/bmon { };
@@ -805,8 +811,6 @@ let
   chkrootkit = callPackage ../tools/security/chkrootkit { };
 
   chocolateDoom = callPackage ../games/chocolate-doom { };
-  # master is here because chocolateDoom v2.0 has broken netplay
-  chocolateDoomMaster = callPackage ../games/chocolate-doom/master.nix { };
 
   chrony = callPackage ../tools/networking/chrony { };
 
@@ -1477,6 +1481,8 @@ let
 
   jwhois = callPackage ../tools/networking/jwhois { };
 
+  k2pdfopt = callPackage ../applications/misc/k2pdfopt { };
+
   kazam = callPackage ../applications/video/kazam { };
 
   kalibrate-rtl = callPackage ../tools/misc/kalibrate-rtl { };
@@ -1866,7 +1872,7 @@ let
   openobex = callPackage ../tools/bluetooth/openobex { };
 
   openopc = callPackage ../tools/misc/openopc {
-    pythonFull = python27FullBuildEnv.override {
+    pythonFull = python27.buildEnv.override {
       extraLibs = [ python27Packages.pyro3 ];
     };
   };
@@ -2044,6 +2050,8 @@ let
 
   projectm = callPackage ../applications/audio/projectm { };
 
+  proot = callPackage ../tools/system/proot { };
+
   proxychains = callPackage ../tools/networking/proxychains { };
 
   proxytunnel = callPackage ../tools/misc/proxytunnel { };
@@ -2160,6 +2168,8 @@ let
 
   rpm = callPackage ../tools/package-management/rpm { };
 
+  rpmextract = callPackage ../tools/archivers/rpmextract { };
+
   rrdtool = callPackage ../tools/misc/rrdtool { };
 
   rtorrent = callPackage ../tools/networking/p2p/rtorrent { };
@@ -2193,6 +2203,8 @@ let
   sablotron = callPackage ../tools/text/xml/sablotron { };
 
   safecopy = callPackage ../tools/system/safecopy { };
+
+  safe-rm = callPackage ../tools/system/safe-rm { };
 
   salut_a_toi = callPackage ../applications/networking/instant-messengers/salut-a-toi {};
 
@@ -3318,7 +3330,17 @@ let
     llvm = llvm_34;
     openblas = openblas_0_2_10;
   };
-  julia = julia030;
+  julia031 = let
+    liblapack = liblapack_3_5_0.override {shared = true;};
+  in callPackage ../development/compilers/julia/0.3.1.nix {
+    inherit liblapack;
+    suitesparse = suitesparse.override {
+      inherit liblapack;
+    };
+    llvm = llvm_34;
+    openblas = openblas_0_2_10;
+  };
+  julia = julia031;
 
   lazarus = builderDefsPackage (import ../development/compilers/fpc/lazarus.nix) {
     inherit makeWrapper gtk glib pango atk gdk_pixbuf;
@@ -3645,7 +3667,7 @@ let
 
   roadsend = callPackage ../development/compilers/roadsend { };
 
-  rustc       = callPackage ../development/compilers/rustc/0.11.nix {};
+  rustc       = callPackage ../development/compilers/rustc/0.12.nix {};
   rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
 
   rust = rustc;
@@ -3760,7 +3782,8 @@ let
   clisp = callPackage ../development/interpreters/clisp { };
 
   # compatibility issues in 2.47 - at list 2.44.1 is known good
-  # for sbcl bootstrap
+  # for sbcl bootstrap.
+  # SBCL page recommends 2.33.2, though. Not sure when was it last tested
   clisp_2_44_1 = callPackage ../development/interpreters/clisp/2.44.1.nix {
     libsigsegv = libsigsegv_25;
   };
@@ -3927,32 +3950,36 @@ let
   python2Packages = python27Packages;
   python3Packages = python34Packages;
 
-  python26 = callPackage ../development/interpreters/python/2.6 { db = db47; };
-  python27 = callPackage ../development/interpreters/python/2.7 { };
-  python32 = callPackage ../development/interpreters/python/3.2 { };
-  python33 = callPackage ../development/interpreters/python/3.3 { };
-  python34 = hiPrio (callPackage ../development/interpreters/python/3.4 { });
-
-  pypy = callPackage ../development/interpreters/pypy/2.4 { };
+  python26 = callPackage ../development/interpreters/python/2.6 {
+    db = db47;
+    self = python26;
+  };
+  python27 = callPackage ../development/interpreters/python/2.7 {
+    self = python27;
+  };
+  python32 = callPackage ../development/interpreters/python/3.2 {
+    self = python32;
+  };
+  python33 = callPackage ../development/interpreters/python/3.3 {
+    self = python33;
+  };
+  python34 = hiPrio (callPackage ../development/interpreters/python/3.4 {
+    self = python34;
+  });
+  pypy = callPackage ../development/interpreters/pypy/2.4 {
+    self = pypy;
+  };
 
   pythonFull = python2Full;
   python2Full = python27Full;
   python26Full = python26.override {
     includeModules = true;
+    self = python26Full;
   };
   python27Full = python27.override {
     includeModules = true;
+    self = python27Full;
   };
-  python26FullBuildEnv = callPackage ../development/interpreters/python/wrapper.nix {
-    python = python26Full;
-    inherit (python26Packages) recursivePthLoader;
-  };
-  python27FullBuildEnv = callPackage ../development/interpreters/python/wrapper.nix {
-    python = python27Full;
-    inherit (python27Packages) recursivePthLoader;
-  };
-  pythonFullBuildEnv = python2FullBuildEnv;
-  python2FullBuildEnv = python27FullBuildEnv;
 
   python2nix = callPackage ../tools/package-management/python2nix { };
 
@@ -4039,6 +4066,7 @@ let
   tcl = callPackage ../development/interpreters/tcl { };
 
   xulrunner = callPackage ../development/interpreters/xulrunner {
+    stdenv = if stdenv.isLinux then useGoldLinker stdenv else stdenv;
     inherit (gnome) libIDL;
     inherit (pythonPackages) pysqlite;
   };
@@ -5722,6 +5750,8 @@ let
     inherit (gnome) gtkdoc;
   };
 
+  libinput = callPackage ../development/libraries/libinput { };
+
   libiptcdata = callPackage ../development/libraries/libiptcdata { };
 
   libjpeg_original = callPackage ../development/libraries/libjpeg { };
@@ -6322,6 +6352,8 @@ let
   phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc { };
 
   physfs = callPackage ../development/libraries/physfs { };
+
+  pipelight = callPackage ../tools/misc/pipelight { };
 
   pkcs11helper = callPackage ../development/libraries/pkcs11helper { };
 
@@ -8012,6 +8044,7 @@ let
       stdenv = stdenv_32bit;
       inherit (gnome) libIDL;
       enableExtensionPack = config.virtualbox.enableExtensionPack or false;
+      pulseSupport = config.pulseaudio or false;
     };
 
     virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
@@ -8970,7 +9003,6 @@ let
     libXaw = xlibs.libXaw;
     Xaw3d = null;
     gconf = null;
-    librsvg = null;
     alsaLib = null;
     imagemagick = null;
   };
@@ -9031,6 +9063,8 @@ let
     graphvizDot = callPackage ../applications/editors/emacs-modes/graphviz-dot { };
 
     gist = callPackage ../applications/editors/emacs-modes/gist { };
+
+    gitModes = callPackage ../applications/editors/emacs-modes/git-modes { };
 
     haskellMode = callPackage ../applications/editors/emacs-modes/haskell { };
 
@@ -9110,7 +9144,8 @@ let
     stratego = callPackage ../applications/editors/emacs-modes/stratego { };
 
     structuredHaskellMode = callPackage ../applications/editors/emacs-modes/structured-haskell-mode {
-      inherit (haskellPackages) cabal haskellSrcExts;
+      inherit (haskellPackages) cabal ;
+      haskellSrcExts = haskellPackages.haskellSrcExts_1_15_0_1;
     };
 
     sunriseCommander = callPackage ../applications/editors/emacs-modes/sunrise-commander { };
@@ -9257,6 +9292,7 @@ let
   firefox13Wrapper = wrapFirefox { browser = firefox13Pkgs.firefox; };
 
   firefox = callPackage ../applications/networking/browsers/firefox {
+    stdenv = if stdenv.isLinux then useGoldLinker stdenv else stdenv;
     inherit (gnome) libIDL;
     inherit (pythonPackages) pysqlite;
   };
@@ -9832,6 +9868,8 @@ let
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
+  ncmpcppBeta = callPackage ../applications/audio/ncmpcpp/beta.nix { };
+
   normalize = callPackage ../applications/audio/normalize { };
 
   mplayer = callPackage ../applications/video/mplayer {
@@ -10243,7 +10281,9 @@ let
                                     })
                                  );
 
-  sxiv = callPackage ../applications/graphics/sxiv { };
+  sxiv = callPackage ../applications/graphics/sxiv {
+    giflib = giflib_5_0;
+  };
 
   bittorrentSync = callPackage ../applications/networking/bittorrentsync { };
 
@@ -10508,7 +10548,7 @@ let
 
   vim = callPackage ../applications/editors/vim { };
 
-  macvim = callPackage ../applications/editors/vim/macvim.nix { };
+  macvim = callPackage ../applications/editors/vim/macvim.nix { stdenv = clangStdenv; };
 
   vimHugeX = vim_configurable;
 
@@ -10530,6 +10570,8 @@ let
   };
 
   vimNox = lowPrio (vim_configurable.override { source = "vim-nox"; });
+
+  qpdfview = callPackage ../applications/misc/qpdfview {};
 
   qvim = lowPrio (callPackage ../applications/editors/vim/qvim.nix {
     inherit (pkgs) fetchgit stdenv ncurses pkgconfig gettext
@@ -10594,7 +10636,18 @@ let
 
   weechatDevel = lowPrio (callPackage ../applications/networking/irc/weechat/devel.nix { });
 
-  weston = callPackage ../applications/window-managers/weston { };
+  westonLite = callPackage ../applications/window-managers/weston {
+    pango = null;
+    freerdp = null;
+    libunwind = null;
+    vaapi = null;
+    libva = null;
+    libwebp = null;
+  };
+
+  weston = callPackage ../applications/window-managers/weston {
+    freerdp = freerdpUnstable;
+  };
 
   windowmaker = callPackage ../applications/window-managers/windowmaker { };
 
@@ -11629,6 +11682,8 @@ let
     coqExtLib = callPackage ../development/coq-modules/coq-ext-lib {};
 
     domains = callPackage ../development/coq-modules/domains {};
+
+    flocq = callPackage ../development/coq-modules/flocq {};
 
     heq = callPackage ../development/coq-modules/heq {};
 

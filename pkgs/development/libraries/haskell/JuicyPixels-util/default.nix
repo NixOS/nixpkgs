@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "JuicyPixels-util";
-  version = "0.1";
-  sha256 = "181wryax2k43qlblink9vcg2hk8f2qxn02ifmgxa2fl95z5ar0dc";
+  version = "0.2";
+  sha256 = "1b2rx5g8kd83hl50carr02mz21gvkasnsddw1f3pfvfsyfv3yyrc";
   buildDepends = [ JuicyPixels vector ];
   meta = {
     homepage = "https://github.com/fumieval/JuicyPixels-util";

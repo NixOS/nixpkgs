@@ -146,8 +146,10 @@ in
           pkgs.strigi # used by nepomuk
           pkgs.mysql # used by akonadi
         ]
-      ++ [ nepomukConfig ] ++ phononBackendPackages
-      ++ config.environment.kdePackages;
+      ++ lib.optional config.hardware.pulseaudio.enable pkgs.kde4.kmix  # Perhaps this should always be enabled
+      ++ lib.optional config.hardware.bluetooth.enable pkgs.kde4.bluedevil
+      ++ lib.optional config.networking.networkmanager.enable pkgs.kde4.networkmanagement
+      ++ [ nepomukConfig ] ++ phononBackendPackages;
 
     environment.pathsToLink = [ "/share" ];
 

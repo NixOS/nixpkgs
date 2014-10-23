@@ -10,6 +10,8 @@
 , sqlite
 , tcl, tk
 , zlib
+, callPackage
+, self
 }:
 
 assert readline != null -> ncurses != null;
@@ -66,6 +68,7 @@ stdenv.mkDerivation {
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
     libPrefix = "python${majorVersion}";
     executable = "python3.3m";
+    buildEnv = callPackage ../wrapper.nix { python = self; };
     isPy3 = true;
     isPy33 = true;
     is_py3k = true;  # deprecated

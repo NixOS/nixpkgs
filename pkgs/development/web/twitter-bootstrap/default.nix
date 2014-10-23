@@ -1,13 +1,14 @@
-{ stdenv, fetchgit, lessc, closurecompiler }:
+{ stdenv, fetchFromGitHub, lessc, closurecompiler }:
 
 stdenv.mkDerivation rec {
   name = "twitter-bootstrap-${version}";
   version = "2.3.2";
 
-  src = fetchgit {
-    url = https://github.com/twitter/bootstrap.git;
-    rev = "refs/tags/v${version}";
-    sha256 = "093z4yxqhrr30vna67ksxz3bq146q2xr05hinh78pg2ls88k77la";
+  src = fetchFromGitHub {
+    owner = "twitter";
+    repo = "bootstrap";
+    rev =  "v${version}";
+    sha256 = "0b4dsk9sqlkwwfgqqjlgi6p05qz2jssmmz4adm83f31sx70lgh4g";
   };  
 
   buildInputs = [ lessc closurecompiler ];

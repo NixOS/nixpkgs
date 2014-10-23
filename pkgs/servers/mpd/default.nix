@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, systemd
+{ stdenv, fetchurl, pkgconfig, glib, systemd, boost
 , alsaSupport ? true, alsaLib
 , flacSupport ? true, flac
 , vorbisSupport ? true, libvorbis
@@ -18,22 +18,23 @@
 , mpg123Support ? true, mpg123
 , aacSupport ? true, faad2
 , pulseaudioSupport ? true, pulseaudio
+, icuSupport ? true, icu
 }:
 
 let
-
   opt = stdenv.lib.optional;
-
   mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
+  major = "0.19";
+  minor = "1";
 
 in stdenv.mkDerivation rec {
-  name = "mpd-0.18.16";
+  name = "mpd-${major}.${minor}";
   src = fetchurl {
-    url    = "http://www.musicpd.org/download/mpd/0.18/${name}.tar.gz";
-    sha256 = "0xpmc70ccp0s2s10vsi4hkijiv497dy42a7g225y77axp5ncf364";
+    url    = "http://www.musicpd.org/download/mpd/${major}/${name}.tar.gz";
+    sha256 = "08a8wgr1kp86nnf9xbc71l9py1plslp10xw0ah344imkwyfg0nj8";
   };
 
-  buildInputs = [ pkgconfig glib ]
+  buildInputs = [ pkgconfig glib boost ]
     ++ opt stdenv.isLinux systemd
     ++ opt (stdenv.isLinux && alsaSupport) alsaLib
     ++ opt flacSupport flac
@@ -55,7 +56,8 @@ in stdenv.mkDerivation rec {
     ++ opt mpg123Support mpg123
     ++ opt aacSupport faad2
     ++ opt zipSupport zziplib
-    ++ opt pulseaudioSupport pulseaudio;
+    ++ opt pulseaudioSupport pulseaudio
+    ++ opt icuSupport icu;
 
   configureFlags =
     [ (mkFlag (!stdenv.isDarwin && alsaSupport) "alsa")
@@ -79,6 +81,7 @@ in stdenv.mkDerivation rec {
       (mkFlag aacSupport "aac")
       (mkFlag pulseaudioSupport "pulse")
       (mkFlag stdenv.isDarwin "osx")
+      (mkFlag icuSupport "icu")
       "--enable-debug"
     ]
     ++ opt stdenv.isLinux
