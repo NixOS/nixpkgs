@@ -1,0 +1,22 @@
+--- origsrc/src/x86/ffi.c	2013-02-11 13:24:18.000000000 -0600
++++ src/src/x86/ffi.c	2013-03-12 23:22:18.267762700 -0500
+@@ -28,7 +28,7 @@
+    DEALINGS IN THE SOFTWARE.
+    ----------------------------------------------------------------------- */
+ 
+-#if !defined(__x86_64__) || defined(_WIN64)
++#if !defined(__x86_64__) || defined(_WIN64) || defined(__CYGWIN__)
+ 
+ #ifdef _WIN64
+ #include <windows.h>
+--- origsrc/src/x86/win64.S	2013-02-11 13:24:18.000000000 -0600
++++ src/src/x86/win64.S	2013-03-13 04:50:09.526614600 -0500
+@@ -295,7 +295,7 @@ SYMBOL_NAME(ffi_closure_win64):
+ 	mov	%rax, %rcx	# context is first parameter
+ 	mov	%rsp, %rdx	# stack is second parameter
+ 	add	$48, %rdx	# point to start of arguments
+-	mov	$SYMBOL_NAME(ffi_closure_win64_inner), %rax
++	lea	SYMBOL_NAME(ffi_closure_win64_inner)(%rip), %rax
+ 	callq	*%rax		# call the real closure function
+ 	add	$40, %rsp
+ 	movq	%rax, %xmm0	# If the closure returned a float,
