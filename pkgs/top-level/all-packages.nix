@@ -1545,6 +1545,8 @@ let
 
   ldns = callPackage ../development/libraries/ldns { };
 
+  leafpad = callPackage ../applications/editors/leafpad { };
+
   lftp = callPackage ../tools/networking/lftp { };
 
   libconfig = callPackage ../development/libraries/libconfig { };
