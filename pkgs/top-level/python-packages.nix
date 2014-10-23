@@ -9442,7 +9442,11 @@ let
     preConfigure = "export HOME=$TMPDIR";
 
     buildInputs = with self; [ pbr pip pkgs.which ];
-    propagatedBuildInputs = with self; [ stevedore virtualenv virtualenv-clone ];
+    propagatedBuildInputs = with self; [
+      stevedore
+      virtualenv
+      virtualenv-clone
+    ] ++ optional isPy26 argparse;
 
     patchPhase = ''
       substituteInPlace "virtualenvwrapper.sh" --replace "which" "${pkgs.which}/bin/which"
