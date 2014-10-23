@@ -10,7 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "04q6lgl3kglmmhw59igq1n7v3rp1rpkypl366cy1k1yn2znlvckj";
   };
 
-  # CYGWINTODO
+  patches = stdenv.lib.optionals stdenv.isCygwin [
+    ./libiconv-1.13.1-2.reloc.patch
+    ./libiconv-1.13.1-2.src.patch
+    ./libiconv-1.13.1-2.wchar.patch
+  ];
 
   # On Cygwin, Libtool produces a `.dll.a', which is not a "real" DLL
   # (Windows' linker would need to be used somehow to produce an actual

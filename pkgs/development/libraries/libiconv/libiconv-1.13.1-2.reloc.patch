@@ -1,0 +1,418 @@
+diff -urN old//libiconv-1.13.1/lib/relocatable.c new//libiconv-1.13.1/lib/relocatable.c
+--- old/lib/relocatable.c	2009-06-21 07:17:33.000000000 -0400
++++ new/lib/relocatable.c	2011-01-27 21:36:15.149000000 -0500
+@@ -43,7 +43,7 @@
+ # include "xalloc.h"
+ #endif
+ 
+-#if defined _WIN32 || defined __WIN32__ || defined __CYGWIN__
++#if defined _WIN32 || defined __WIN32__
+ # define WIN32_LEAN_AND_MEAN
+ # include <windows.h>
+ #endif
+@@ -70,8 +70,8 @@
+    ISSLASH(C)           tests whether C is a directory separator character.
+    IS_PATH_WITH_DIR(P)  tests whether P contains a directory specification.
+  */
+-#if defined _WIN32 || defined __WIN32__ || defined __CYGWIN__ || defined __EMX__ || defined __DJGPP__
+-  /* Win32, Cygwin, OS/2, DOS */
++#if defined _WIN32 || defined __WIN32__ || defined __EMX__ || defined __DJGPP__
++  /* Win32, OS/2, DOS */
+ # define ISSLASH(C) ((C) == '/' || (C) == '\\')
+ # define HAS_DEVICE(P) \
+     ((((P)[0] >= 'A' && (P)[0] <= 'Z') || ((P)[0] >= 'a' && (P)[0] <= 'z')) \
+@@ -80,7 +80,7 @@
+     (strchr (P, '/') != NULL || strchr (P, '\\') != NULL || HAS_DEVICE (P))
+ # define FILE_SYSTEM_PREFIX_LEN(P) (HAS_DEVICE (P) ? 2 : 0)
+ #else
+-  /* Unix */
++  /* Unix, Cygwin */
+ # define ISSLASH(C) ((C) == '/')
+ # define IS_PATH_WITH_DIR(P) (strchr (P, '/') != NULL)
+ # define FILE_SYSTEM_PREFIX_LEN(P) 0
+@@ -281,7 +281,7 @@
+ /* Full pathname of shared library, or NULL.  */
+ static char *shared_library_fullname;
+ 
+-#if defined _WIN32 || defined __WIN32__ || defined __CYGWIN__
++#if defined _WIN32 || defined __WIN32__
+ 
+ /* Determine the full pathname of the shared library when it is loaded.  */
+ 
+@@ -303,37 +303,20 @@
+ 	/* Shouldn't happen.  */
+ 	return FALSE;
+ 
+-      {
+-#if defined __CYGWIN__
+-	/* On Cygwin, we need to convert paths coming from Win32 system calls
+-	   to the Unix-like slashified notation.  */
+-	static char location_as_posix_path[2 * MAX_PATH];
+-	/* There's no error return defined for cygwin_conv_to_posix_path.
+-	   See cygwin-api/func-cygwin-conv-to-posix-path.html.
+-	   Does it overflow the buffer of expected size MAX_PATH or does it
+-	   truncate the path?  I don't know.  Let's catch both.  */
+-	cygwin_conv_to_posix_path (location, location_as_posix_path);
+-	location_as_posix_path[MAX_PATH - 1] = '\0';
+-	if (strlen (location_as_posix_path) >= MAX_PATH - 1)
+-	  /* A sign of buffer overflow or path truncation.  */
+-	  return FALSE;
+-	shared_library_fullname = strdup (location_as_posix_path);
+-#else
+-	shared_library_fullname = strdup (location);
+-#endif
+-      }
++      shared_library_fullname = strdup (location);
+     }
+ 
+   return TRUE;
+ }
+ 
+-#else /* Unix except Cygwin */
++#else /* Unix or Cygwin */
+ 
+ static void
+ find_shared_library_fullname ()
+ {
+-#if defined __linux__ && __GLIBC__ >= 2
+-  /* Linux has /proc/self/maps. glibc 2 has the getline() function.  */
++#if (defined __linux__ && __GLIBC__ >= 2) || defined __CYGWIN__
++  /* Linux has /proc/self/maps. glibc 2 has the getline() function.
++     Cygwin as well.  */
+   FILE *fp;
+ 
+   /* Open the current process' maps file.  It describes one VMA per line.  */
+@@ -378,7 +361,7 @@
+ #endif
+ }
+ 
+-#endif /* (WIN32 or Cygwin) / (Unix except Cygwin) */
++#endif /* WIN32 / (Unix or Cygwin) */
+ 
+ /* Return the full pathname of the current shared library.
+    Return NULL if unknown.
+@@ -386,7 +369,7 @@
+ static char *
+ get_shared_library_fullname ()
+ {
+-#if !(defined _WIN32 || defined __WIN32__ || defined __CYGWIN__)
++#if !(defined _WIN32 || defined __WIN32__)
+   static bool tried_find_shared_library_fullname;
+   if (!tried_find_shared_library_fullname)
+     {
+diff -urN old//libiconv-1.13.1/libcharset/lib/relocatable.c new//libiconv-1.13.1/libcharset/lib/relocatable.c
+--- old/libcharset/lib/relocatable.c	2009-06-21 07:17:33.000000000 -0400
++++ new/libcharset/lib/relocatable.c	2011-01-27 21:37:44.462000000 -0500
+@@ -43,7 +43,7 @@
+ # include "xalloc.h"
+ #endif
+ 
+-#if defined _WIN32 || defined __WIN32__ || defined __CYGWIN__
++#if defined _WIN32 || defined __WIN32__
+ # define WIN32_LEAN_AND_MEAN
+ # include <windows.h>
+ #endif
+@@ -70,8 +70,8 @@
+    ISSLASH(C)           tests whether C is a directory separator character.
+    IS_PATH_WITH_DIR(P)  tests whether P contains a directory specification.
+  */
+-#if defined _WIN32 || defined __WIN32__ || defined __CYGWIN__ || defined __EMX__ || defined __DJGPP__
+-  /* Win32, Cygwin, OS/2, DOS */
++#if defined _WIN32 || defined __WIN32__ || defined __EMX__ || defined __DJGPP__
++  /* Win32, OS/2, DOS */
+ # define ISSLASH(C) ((C) == '/' || (C) == '\\')
+ # define HAS_DEVICE(P) \
+     ((((P)[0] >= 'A' && (P)[0] <= 'Z') || ((P)[0] >= 'a' && (P)[0] <= 'z')) \
+@@ -80,7 +80,7 @@
+     (strchr (P, '/') != NULL || strchr (P, '\\') != NULL || HAS_DEVICE (P))
+ # define FILE_SYSTEM_PREFIX_LEN(P) (HAS_DEVICE (P) ? 2 : 0)
+ #else
+-  /* Unix */
++  /* Unix, Cygwin */
+ # define ISSLASH(C) ((C) == '/')
+ # define IS_PATH_WITH_DIR(P) (strchr (P, '/') != NULL)
+ # define FILE_SYSTEM_PREFIX_LEN(P) 0
+@@ -290,7 +290,7 @@
+ /* Full pathname of shared library, or NULL.  */
+ static char *shared_library_fullname;
+ 
+-#if defined _WIN32 || defined __WIN32__ || defined __CYGWIN__
++#if defined _WIN32 || defined __WIN32__
+ 
+ /* Determine the full pathname of the shared library when it is loaded.  */
+ 
+@@ -312,37 +312,20 @@
+ 	/* Shouldn't happen.  */
+ 	return FALSE;
+ 
+-      {
+-#if defined __CYGWIN__
+-	/* On Cygwin, we need to convert paths coming from Win32 system calls
+-	   to the Unix-like slashified notation.  */
+-	static char location_as_posix_path[2 * MAX_PATH];
+-	/* There's no error return defined for cygwin_conv_to_posix_path.
+-	   See cygwin-api/func-cygwin-conv-to-posix-path.html.
+-	   Does it overflow the buffer of expected size MAX_PATH or does it
+-	   truncate the path?  I don't know.  Let's catch both.  */
+-	cygwin_conv_to_posix_path (location, location_as_posix_path);
+-	location_as_posix_path[MAX_PATH - 1] = '\0';
+-	if (strlen (location_as_posix_path) >= MAX_PATH - 1)
+-	  /* A sign of buffer overflow or path truncation.  */
+-	  return FALSE;
+-	shared_library_fullname = strdup (location_as_posix_path);
+-#else
+-	shared_library_fullname = strdup (location);
+-#endif
+-      }
++      shared_library_fullname = strdup (location);
+     }
+ 
+   return TRUE;
+ }
+ 
+-#else /* Unix except Cygwin */
++#else /* Unix or Cygwin */
+ 
+ static void
+ find_shared_library_fullname ()
+ {
+-#if defined __linux__ && __GLIBC__ >= 2
+-  /* Linux has /proc/self/maps. glibc 2 has the getline() function.  */
++#if (defined __linux__ && __GLIBC__ >= 2) || defined __CYGWIN__
++  /* Linux has /proc/self/maps. glibc 2 has the getline() function.
++     Cygwin as well.  */
+   FILE *fp;
+ 
+   /* Open the current process' maps file.  It describes one VMA per line.  */
+@@ -387,7 +370,7 @@
+ #endif
+ }
+ 
+-#endif /* (WIN32 or Cygwin) / (Unix except Cygwin) */
++#endif /* WIN32 / (Unix or Cygwin) */
+ 
+ /* Return the full pathname of the current shared library.
+    Return NULL if unknown.
+@@ -395,7 +378,7 @@
+ static char *
+ get_shared_library_fullname ()
+ {
+-#if !(defined _WIN32 || defined __WIN32__ || defined __CYGWIN__)
++#if !(defined _WIN32 || defined __WIN32__)
+   static bool tried_find_shared_library_fullname;
+   if (!tried_find_shared_library_fullname)
+     {
+diff -urN old/srclib/progreloc.c new/srclib/progreloc.c
+--- old/srclib/progreloc.c	2009-06-21 07:31:08.000000000 -0400
++++ new/srclib/progreloc.c	2011-01-27 21:32:15.012000000 -0500
+@@ -38,7 +38,7 @@
+ # define WIN32_NATIVE
+ #endif
+ 
+-#if defined WIN32_NATIVE || defined __CYGWIN__
++#if defined WIN32_NATIVE
+ # define WIN32_LEAN_AND_MEAN
+ # include <windows.h>
+ #endif
+@@ -64,8 +64,8 @@
+    ISSLASH(C)           tests whether C is a directory separator character.
+    IS_PATH_WITH_DIR(P)  tests whether P contains a directory specification.
+  */
+-#if defined _WIN32 || defined __WIN32__ || defined __CYGWIN__ || defined __EMX__ || defined __DJGPP__
+-  /* Win32, Cygwin, OS/2, DOS */
++#if defined _WIN32 || defined __WIN32__ || defined __EMX__ || defined __DJGPP__
++  /* Win32, OS/2, DOS */
+ # define ISSLASH(C) ((C) == '/' || (C) == '\\')
+ # define HAS_DEVICE(P) \
+     ((((P)[0] >= 'A' && (P)[0] <= 'Z') || ((P)[0] >= 'a' && (P)[0] <= 'z')) \
+@@ -74,7 +74,7 @@
+     (strchr (P, '/') != NULL || strchr (P, '\\') != NULL || HAS_DEVICE (P))
+ # define FILE_SYSTEM_PREFIX_LEN(P) (HAS_DEVICE (P) ? 2 : 0)
+ #else
+-  /* Unix */
++  /* Unix, Cygwin */
+ # define ISSLASH(C) ((C) == '/')
+ # define IS_PATH_WITH_DIR(P) (strchr (P, '/') != NULL)
+ # define FILE_SYSTEM_PREFIX_LEN(P) 0
+@@ -90,7 +90,7 @@
+ 
+ #if ENABLE_RELOCATABLE
+ 
+-#ifdef __linux__
++#if defined __linux__ || defined __CYGWIN__
+ /* File descriptor of the executable.
+    (Only used to verify that we find the correct executable.)  */
+ static int executable_fd = -1;
+@@ -100,12 +100,12 @@
+ static bool
+ maybe_executable (const char *filename)
+ {
+-  /* Woe32 lacks the access() function, but Cygwin doesn't.  */
+-#if !(defined WIN32_NATIVE && !defined __CYGWIN__)
++  /* Woe32 lacks the access() function.  */
++#ifndef WIN32_NATIVE
+   if (access (filename, X_OK) < 0)
+     return false;
+ 
+-#ifdef __linux__
++#if defined __linux__ || defined __CYGWIN__
+   if (executable_fd >= 0)
+     {
+       /* If we already have an executable_fd, check that filename points to
+@@ -136,7 +136,7 @@
+ static char *
+ find_executable (const char *argv0)
+ {
+-#if defined WIN32_NATIVE || defined __CYGWIN__
++#if defined WIN32_NATIVE
+   char location[MAX_PATH];
+   int length = GetModuleFileName (NULL, location, sizeof (location));
+   if (length < 0)
+@@ -144,36 +144,15 @@
+   if (!IS_PATH_WITH_DIR (location))
+     /* Shouldn't happen.  */
+     return NULL;
+-  {
+-#if defined __CYGWIN__
+-    /* cygwin-1.5.13 (2005-03-01) or newer would also allow a Linux-like
+-       implementation: readlink of "/proc/self/exe".  But using the
+-       result of the Win32 system call is simpler and is consistent with the
+-       code in relocatable.c.  */
+-    /* On Cygwin, we need to convert paths coming from Win32 system calls
+-       to the Unix-like slashified notation.  */
+-    static char location_as_posix_path[2 * MAX_PATH];
+-    /* There's no error return defined for cygwin_conv_to_posix_path.
+-       See cygwin-api/func-cygwin-conv-to-posix-path.html.
+-       Does it overflow the buffer of expected size MAX_PATH or does it
+-       truncate the path?  I don't know.  Let's catch both.  */
+-    cygwin_conv_to_posix_path (location, location_as_posix_path);
+-    location_as_posix_path[MAX_PATH - 1] = '\0';
+-    if (strlen (location_as_posix_path) >= MAX_PATH - 1)
+-      /* A sign of buffer overflow or path truncation.  */
+-      return NULL;
+-    /* Call canonicalize_file_name, because Cygwin supports symbolic links.  */
+-    return canonicalize_file_name (location_as_posix_path);
+-#else
+-    return xstrdup (location);
+-#endif
+-  }
+-#else /* Unix && !Cygwin */
+-#ifdef __linux__
+-  /* The executable is accessible as /proc/<pid>/exe.  In newer Linux
+-     versions, also as /proc/self/exe.  Linux >= 2.1 provides a symlink
+-     to the true pathname; older Linux versions give only device and ino,
+-     enclosed in brackets, which we cannot use here.  */
++
++  return xstrdup (location);
++
++#else /* Unix or Cygwin */
++#if defined __linux__ || defined __CYGWIN__
++  /* The executable is accessible as /proc/<pid>/exe.  In Cygwin and in
++     newer Linux versions, also as /proc/self/exe.  Linux >= 2.1 provides
++     a symlink to the true pathname; older Linux versions give only device
++     and ino, enclosed in brackets, which we cannot use here.  */
+   {
+     char *link;
+ 
+diff -urN old/srclib/relocatable.c new/srclib/relocatable.c
+--- old/srclib/relocatable.c	2009-06-21 07:31:08.000000000 -0400
++++ new/srclib/relocatable.c	2011-01-27 21:34:51.320000000 -0500
+@@ -43,7 +43,7 @@
+ # include "xalloc.h"
+ #endif
+ 
+-#if defined _WIN32 || defined __WIN32__ || defined __CYGWIN__
++#if defined _WIN32 || defined __WIN32__
+ # define WIN32_LEAN_AND_MEAN
+ # include <windows.h>
+ #endif
+@@ -70,8 +70,8 @@
+    ISSLASH(C)           tests whether C is a directory separator character.
+    IS_PATH_WITH_DIR(P)  tests whether P contains a directory specification.
+  */
+-#if defined _WIN32 || defined __WIN32__ || defined __CYGWIN__ || defined __EMX__ || defined __DJGPP__
+-  /* Win32, Cygwin, OS/2, DOS */
++#if defined _WIN32 || defined __WIN32__ || defined __EMX__ || defined __DJGPP__
++  /* Win32, OS/2, DOS */
+ # define ISSLASH(C) ((C) == '/' || (C) == '\\')
+ # define HAS_DEVICE(P) \
+     ((((P)[0] >= 'A' && (P)[0] <= 'Z') || ((P)[0] >= 'a' && (P)[0] <= 'z')) \
+@@ -80,7 +80,7 @@
+     (strchr (P, '/') != NULL || strchr (P, '\\') != NULL || HAS_DEVICE (P))
+ # define FILE_SYSTEM_PREFIX_LEN(P) (HAS_DEVICE (P) ? 2 : 0)
+ #else
+-  /* Unix */
++  /* Unix, Cygwin */
+ # define ISSLASH(C) ((C) == '/')
+ # define IS_PATH_WITH_DIR(P) (strchr (P, '/') != NULL)
+ # define FILE_SYSTEM_PREFIX_LEN(P) 0
+@@ -290,7 +290,7 @@
+ /* Full pathname of shared library, or NULL.  */
+ static char *shared_library_fullname;
+ 
+-#if defined _WIN32 || defined __WIN32__ || defined __CYGWIN__
++#if defined _WIN32 || defined __WIN32__
+ 
+ /* Determine the full pathname of the shared library when it is loaded.  */
+ 
+@@ -312,37 +312,20 @@
+ 	/* Shouldn't happen.  */
+ 	return FALSE;
+ 
+-      {
+-#if defined __CYGWIN__
+-	/* On Cygwin, we need to convert paths coming from Win32 system calls
+-	   to the Unix-like slashified notation.  */
+-	static char location_as_posix_path[2 * MAX_PATH];
+-	/* There's no error return defined for cygwin_conv_to_posix_path.
+-	   See cygwin-api/func-cygwin-conv-to-posix-path.html.
+-	   Does it overflow the buffer of expected size MAX_PATH or does it
+-	   truncate the path?  I don't know.  Let's catch both.  */
+-	cygwin_conv_to_posix_path (location, location_as_posix_path);
+-	location_as_posix_path[MAX_PATH - 1] = '\0';
+-	if (strlen (location_as_posix_path) >= MAX_PATH - 1)
+-	  /* A sign of buffer overflow or path truncation.  */
+-	  return FALSE;
+-	shared_library_fullname = strdup (location_as_posix_path);
+-#else
+-	shared_library_fullname = strdup (location);
+-#endif
+-      }
++      shared_library_fullname = strdup (location);
+     }
+ 
+   return TRUE;
+ }
+ 
+-#else /* Unix except Cygwin */
++#else /* Unix or Cygwin */
+ 
+ static void
+ find_shared_library_fullname ()
+ {
+-#if defined __linux__ && __GLIBC__ >= 2
+-  /* Linux has /proc/self/maps. glibc 2 has the getline() function.  */
++#if (defined __linux__ && __GLIBC__ >= 2) || defined __CYGWIN__
++  /* Linux has /proc/self/maps. glibc 2 has the getline() function.
++     Cygwin as well.  */
+   FILE *fp;
+ 
+   /* Open the current process' maps file.  It describes one VMA per line.  */
+@@ -387,7 +370,7 @@
+ #endif
+ }
+ 
+-#endif /* (WIN32 or Cygwin) / (Unix except Cygwin) */
++#endif /* WIN32 / (Unix or Cygwin) */
+ 
+ /* Return the full pathname of the current shared library.
+    Return NULL if unknown.
+@@ -395,7 +378,7 @@
+ static char *
+ get_shared_library_fullname ()
+ {
+-#if !(defined _WIN32 || defined __WIN32__ || defined __CYGWIN__)
++#if !(defined _WIN32 || defined __WIN32__ )
+   static bool tried_find_shared_library_fullname;
+   if (!tried_find_shared_library_fullname)
+     {

@@ -1,0 +1,125 @@
+--- libiconv-1.13.1.orig/lib/iconv.c	2009-06-21 13:17:33.000000000 +0200
++++ libiconv-1.13.1/lib/iconv.c	2011-01-27 12:46:21.544296281 +0100
+@@ -550,7 +550,7 @@ const char * iconv_canonicalize (const c
+     if (ap->encoding_index == ei_local_wchar_t) {
+       /* On systems which define __STDC_ISO_10646__, wchar_t is Unicode.
+          This is also the case on native Woe32 systems.  */
+-#if __STDC_ISO_10646__ || ((defined _WIN32 || defined __WIN32__) && !defined __CYGWIN__)
++#if __STDC_ISO_10646__ || defined _WIN32 || defined __WIN32__
+       if (sizeof(wchar_t) == 4) {
+         index = ei_ucs4internal;
+         break;
+--- libiconv-1.13.1.orig/lib/iconv_open1.h	2009-06-21 13:17:33.000000000 +0200
++++ libiconv-1.13.1/lib/iconv_open1.h	2011-01-27 12:47:03.119371056 +0100
+@@ -98,7 +98,7 @@
+     if (ap->encoding_index == ei_local_wchar_t) {
+       /* On systems which define __STDC_ISO_10646__, wchar_t is Unicode.
+          This is also the case on native Woe32 systems.  */
+-#if __STDC_ISO_10646__ || ((defined _WIN32 || defined __WIN32__) && !defined __CYGWIN__)
++#if __STDC_ISO_10646__ || defined _WIN32 || defined __WIN32__
+       if (sizeof(wchar_t) == 4) {
+         to_index = ei_ucs4internal;
+         break;
+@@ -174,7 +174,7 @@
+     if (ap->encoding_index == ei_local_wchar_t) {
+       /* On systems which define __STDC_ISO_10646__, wchar_t is Unicode.
+          This is also the case on native Woe32 systems.  */
+-#if __STDC_ISO_10646__ || ((defined _WIN32 || defined __WIN32__) && !defined __CYGWIN__)
++#if __STDC_ISO_10646__ || defined _WIN32 || defined __WIN32__
+       if (sizeof(wchar_t) == 4) {
+         from_index = ei_ucs4internal;
+         break;
+--- libiconv-1.13.1.orig/libcharset/lib/localcharset.c	2009-06-21 13:17:33.000000000 +0200
++++ libiconv-1.13.1/libcharset/lib/localcharset.c	2011-01-27 11:53:33.201852883 +0100
+@@ -52,10 +52,6 @@
+ #   include <locale.h>
+ #  endif
+ # endif
+-# ifdef __CYGWIN__
+-#  define WIN32_LEAN_AND_MEAN
+-#  include <windows.h>
+-# endif
+ #elif defined WIN32_NATIVE
+ # define WIN32_LEAN_AND_MEAN
+ # include <windows.h>
+@@ -117,7 +113,7 @@ get_charset_aliases (void)
+   cp = charset_aliases;
+   if (cp == NULL)
+     {
+-#if !(defined DARWIN7 || defined VMS || defined WIN32_NATIVE || defined __CYGWIN__)
++#if !(defined DARWIN7 || defined VMS || defined WIN32_NATIVE)
+       FILE *fp;
+       const char *dir;
+       const char *base = "charset.alias";
+@@ -276,7 +272,7 @@ get_charset_aliases (void)
+ 	   "DECKOREAN" "\0" "EUC-KR" "\0";
+ # endif
+ 
+-# if defined WIN32_NATIVE || defined __CYGWIN__
++# if defined WIN32_NATIVE
+       /* To avoid the troubles of installing a separate file in the same
+ 	 directory as the DLL and of retrieving the DLL's directory at
+ 	 runtime, simply inline the aliases here.  */
+@@ -332,55 +328,14 @@ locale_charset (void)
+ 
+ # if HAVE_LANGINFO_CODESET
+ 
+-  /* Most systems support nl_langinfo (CODESET) nowadays.  */
+-  codeset = nl_langinfo (CODESET);
+-
+-#  ifdef __CYGWIN__
+-  /* Cygwin 2006 does not have locales.  nl_langinfo (CODESET) always
+-     returns "US-ASCII".  As long as this is not fixed, return the suffix
+-     of the locale name from the environment variables (if present) or
+-     the codepage as a number.  */
+-  if (codeset != NULL && strcmp (codeset, "US-ASCII") == 0)
+-    {
+-      const char *locale;
+-      static char buf[2 + 10 + 1];
++  /* Most systems support nl_langinfo (CODESET) nowadays.
++  
++     POSIX allows that the returned pointer may point to a static area that
++     may be overwritten by subsequent calls to setlocale or nl_langinfo. */
++  static char codeset_buf[64];
+ 
+-      locale = getenv ("LC_ALL");
+-      if (locale == NULL || locale[0] == '\0')
+-	{
+-	  locale = getenv ("LC_CTYPE");
+-	  if (locale == NULL || locale[0] == '\0')
+-	    locale = getenv ("LANG");
+-	}
+-      if (locale != NULL && locale[0] != '\0')
+-	{
+-	  /* If the locale name contains an encoding after the dot, return
+-	     it.  */
+-	  const char *dot = strchr (locale, '.');
+-
+-	  if (dot != NULL)
+-	    {
+-	      const char *modifier;
+-
+-	      dot++;
+-	      /* Look for the possible @... trailer and remove it, if any.  */
+-	      modifier = strchr (dot, '@');
+-	      if (modifier == NULL)
+-		return dot;
+-	      if (modifier - dot < sizeof (buf))
+-		{
+-		  memcpy (buf, dot, modifier - dot);
+-		  buf [modifier - dot] = '\0';
+-		  return buf;
+-		}
+-	    }
+-	}
+-
+-      /* Woe32 has a function returning the locale's codepage as a number.  */
+-      sprintf (buf, "CP%u", GetACP ());
+-      codeset = buf;
+-    }
+-#  endif
++  codeset_buf[0] = '\0';
++  codeset = strncat (codeset_buf, nl_langinfo (CODESET), sizeof (codeset_buf));
+ 
+ # else
+ 

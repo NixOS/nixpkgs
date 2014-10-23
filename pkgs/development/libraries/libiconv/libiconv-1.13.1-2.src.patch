@@ -1,0 +1,147 @@
+--- origsrc/libiconv-1.13.1/Makefile.devel	2009-06-21 07:17:33.000000000 -0400
++++ src/Makefile.devel	2011-01-27 21:42:32.629000000 -0500
+@@ -4,8 +4,8 @@
+ 
+ SHELL = /bin/sh
+ MAKE = make
+-AUTOCONF = autoconf-2.63
+-AUTOHEADER = autoheader-2.63
++AUTOCONF = autoconf-2.68
++AUTOHEADER = autoheader-2.68
+ AUTOMAKE = automake-1.11
+ ACLOCAL = aclocal-1.11
+ GPERF = gperf
+--- origsrc/configure.ac	2009-06-30 16:48:03.000000000 -0400
++++ src/configure.ac	2011-01-27 22:37:30.932000000 -0500
+@@ -16,10 +16,11 @@ dnl License along with the GNU LIBICONV
+ dnl If not, write to the Free Software Foundation, Inc., 51 Franklin Street,
+ dnl Fifth Floor, Boston, MA 02110-1301, USA.
+ 
+-AC_PREREQ([2.60])
++AC_PREREQ([2.68])
+ AC_INIT
+ AC_CONFIG_SRCDIR([lib/iconv.c])
+ AC_CONFIG_AUX_DIR([build-aux])
++AC_CONFIG_MACRO_DIR([m4])
+ AM_INIT_AUTOMAKE([libiconv], [1.13.1])
+ AC_CONFIG_HEADERS([config.h lib/config.h])
+ AC_PROG_MAKE_SET
+@@ -133,8 +134,8 @@ AC_SUBST([USE_MBSTATE_T])
+ 
+ AC_CACHE_CHECK([whether <wchar.h> is standalone],
+   [gl_cv_header_wchar_h_standalone],
+-  [AC_COMPILE_IFELSE([[#include <wchar.h>
+-wchar_t w;]],
++  [AC_COMPILE_IFELSE([AC_LANG_SOURCE([[#include <wchar.h>
++wchar_t w;]])],
+     [gl_cv_header_wchar_h_standalone=yes],
+     [gl_cv_header_wchar_h_standalone=no])])
+ if test $gl_cv_header_wchar_h_standalone = yes; then
+--- origsrc/libcharset/Makefile.devel	2009-06-21 07:17:33.000000000 -0400
++++ src/libcharset/Makefile.devel	2011-01-27 21:42:32.665000000 -0500
+@@ -3,8 +3,8 @@
+ 
+ SHELL = /bin/sh
+ MAKE = make
+-AUTOCONF = autoconf-2.63
+-AUTOHEADER = autoheader-2.63
++AUTOCONF = autoconf-2.68
++AUTOHEADER = autoheader-2.68
+ ACLOCAL = aclocal-1.11
+ CP = cp
+ RM = rm -f
+--- origsrc/libcharset/configure.ac	2009-06-21 07:17:33.000000000 -0400
++++ src/libcharset/configure.ac	2011-01-27 21:42:32.690000000 -0500
+@@ -16,13 +16,14 @@ dnl along with the GNU CHARSET Library;
+ dnl write to the Free Software Foundation, Inc., 51 Franklin Street,
+ dnl Fifth Floor, Boston, MA 02110-1301, USA.
+ 
+-AC_PREREQ([2.13])
++AC_PREREQ([2.68])
+ 
+ PACKAGE=libcharset
+ VERSION=1.4
+ 
+ AC_INIT([lib/localcharset.c])
+ AC_CONFIG_AUX_DIR([build-aux])
++AC_CONFIG_MACRO_DIR([m4])
+ AC_CONFIG_HEADER([config.h])
+ AC_PROG_MAKE_SET
+ AC_SUBST([PACKAGE])
+--- origsrc/preload/Makefile.devel	2009-06-21 07:17:33.000000000 -0400
++++ src/preload/Makefile.devel	2011-01-27 21:42:32.715000000 -0500
+@@ -3,7 +3,7 @@
+ 
+ SHELL = /bin/sh
+ MAKE = make
+-AUTOCONF = autoconf-2.63
++AUTOCONF = autoconf-2.68
+ ACLOCAL = aclocal-1.11
+ CP = cp
+ RM = rm -f
+--- origsrc/preload/configure.ac	2009-06-21 07:17:33.000000000 -0400
++++ src/preload/configure.ac	2011-01-27 21:42:32.731000000 -0500
+@@ -16,13 +16,14 @@ dnl along with the GNU LIBICONV Library;
+ dnl write to the Free Software Foundation, Inc., 51 Franklin Street,
+ dnl Fifth Floor, Boston, MA 02110-1301, USA.
+ 
+-AC_PREREQ([2.60])
++AC_PREREQ([2.68])
+ 
+ PACKAGE=libiconv
+ VERSION=0
+ 
+ AC_INIT([configure.ac])
+ AC_CONFIG_AUX_DIR([../build-aux])
++AC_CONFIG_MACRO_DIR([../m4])
+ AC_PROG_MAKE_SET
+ AC_SUBST([PACKAGE])
+ AC_SUBST([VERSION])
+--- origsrc/srclib/xreadlink.c	2009-06-21 07:31:09.000000000 -0400
++++ src/srclib/xreadlink.c	2011-01-27 21:42:32.754000000 -0500
+@@ -38,7 +38,9 @@ char *
+ xreadlink (char const *filename)
+ {
+   char *result = areadlink (filename);
++#ifndef NO_XMALLOC
+   if (result == NULL && errno == ENOMEM)
+     xalloc_die ();
++#endif
+   return result;
+ }
+--- origsrc/srcm4/include_next.m4	2009-06-21 07:31:09.000000000 -0400
++++ src/srcm4/include_next.m4	2011-01-27 22:05:24.049000000 -0500
+@@ -68,10 +68,10 @@ EOF
+ EOF
+      gl_save_CPPFLAGS="$CPPFLAGS"
+      CPPFLAGS="$gl_save_CPPFLAGS -Iconftestd1b -Iconftestd2"
+-     AC_COMPILE_IFELSE([#include <conftest.h>],
++     AC_COMPILE_IFELSE([AC_LANG_DEFINES_PROVIDED[#include <conftest.h>]],
+        [gl_cv_have_include_next=yes],
+        [CPPFLAGS="$gl_save_CPPFLAGS -Iconftestd1a -Iconftestd2"
+-        AC_COMPILE_IFELSE([#include <conftest.h>],
++        AC_COMPILE_IFELSE([AC_LANG_DEFINES_PROVIDED[#include <conftest.h>]],
+           [gl_cv_have_include_next=buggy],
+           [gl_cv_have_include_next=no])
+        ])
+@@ -185,3 +185,7 @@ AC_DEFUN([gl_CHECK_NEXT_HEADERS],
+        [$gl_next_as_first_directive])
+      AS_VAR_POPDEF([gl_next_header])])
+ ])
++
++# Autoconf 2.68 added warnings for our use of AC_COMPILE_IFELSE;
++# this fallback is safe for all earlier autoconf versions.
++m4_define_default([AC_LANG_DEFINES_PROVIDED])
+--- origsrc/srcm4/wchar.m4	2009-06-21 07:31:09.000000000 -0400
++++ src/srcm4/wchar.m4	2011-01-27 22:36:18.057000000 -0500
+@@ -14,8 +14,8 @@ AC_DEFUN([gl_WCHAR_H],
+   AC_REQUIRE([gl_WCHAR_H_DEFAULTS])
+   AC_CACHE_CHECK([whether <wchar.h> is standalone],
+     [gl_cv_header_wchar_h_standalone],
+-    [AC_COMPILE_IFELSE([[#include <wchar.h>
+-wchar_t w;]],
++    [AC_COMPILE_IFELSE([AC_LANG_SOURCE([[#include <wchar.h>
++wchar_t w;]])],
+       [gl_cv_header_wchar_h_standalone=yes],
+       [gl_cv_header_wchar_h_standalone=no])])
+ 
