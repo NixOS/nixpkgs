@@ -11,7 +11,10 @@ in
 stdenv.mkDerivation rec {
     name = "anki-${version}";
     src = fetchurl {
-      url = "http://ankisrs.net/download/mirror/${name}.tgz";
+      urls = [
+        "http://ankisrs.net/download/mirror/${name}.tgz"
+        "http://ankisrs.net/download/mirror/archive/${name}.tgz"
+      ];
       sha256 = "12qw0as5cdgh4hi0vyl0zpdzha93x8rid5xrhpjgiyj5s9fisf40";
     };
 
