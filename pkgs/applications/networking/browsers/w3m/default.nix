@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   patches = [ ./glibc214.patch ]
     # Patch for the newer unstable boehm-gc 7.2alpha. Not all platforms use that
     # alpha. At the time of writing this, boehm-gc-7.1 is the last stable.
-    ++ stdenv.lib.optional (boehmgc.name != "boehm-gc-7.1") [ ./newgc.patch ];
+    ++ stdenv.lib.optional (boehmgc.name != "boehm-gc-7.1") [ ./newgc.patch ]
+    ++ stdenv.lib.optional stdenv.isCygwin ./cygwin.patch;
 
   buildInputs = [ncurses boehmgc gettext zlib]
     ++ stdenv.lib.optional sslSupport openssl
@@ -33,8 +34,8 @@ stdenv.mkDerivation rec {
     + stdenv.lib.optionalString graphicsSupport " --enable-image=x11,fb";
 
   preConfigure = ''
-    substituteInPlace ./configure --replace "/lib /usr/lib /usr/local/lib /usr/ucblib /usr/ccslib /usr/ccs/lib /lib64 /usr/lib64" /no-such-path
-    substituteInPlace ./configure --replace /usr /no-such-path
+    sed-i ./configure -e "s,/lib|/usr/lib|/usr/local/lib|/usr/ucblib|/usr/ccslib|/usr/ccs/lib|/lib64|/usr/lib64,/no-such-path,"
+    sed-i ./configure -e "s,/usr,/no-such-path,"
   '';
 
   enableParallelBuilding = false;
