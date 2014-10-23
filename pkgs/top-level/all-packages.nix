@@ -1312,6 +1312,10 @@ let
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
   };
 
+  trustedGrub = callPackage_i686 ../tools/misc/grub/trusted.nix {
+    buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
+  };
+
   grub2 = callPackage ../tools/misc/grub/2.0x.nix { };
 
   grub2_efi = grub2.override { efiSupport = true; };
