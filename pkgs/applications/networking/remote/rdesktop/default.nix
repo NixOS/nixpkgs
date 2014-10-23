@@ -10,6 +10,8 @@ stdenv.mkDerivation (rec {
     sha256 = "0il248cdsxvwjsl4bswf27ld9r1a7d48jf6bycr86kf3i55q7k3n";
   };
 
+  patches = [ ./enable_windows_key.patch ];
+
   buildInputs = [openssl libX11];
 
   configureFlags = [
