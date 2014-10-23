@@ -1111,6 +1111,8 @@ let
 
   fcitx-anthy = callPackage ../tools/inputmethods/fcitx/fcitx-anthy.nix { };
 
+  fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
+
   fcron = callPackage ../tools/system/fcron { };
 
   fdm = callPackage ../tools/networking/fdm {};
