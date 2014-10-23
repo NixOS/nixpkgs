@@ -67,7 +67,14 @@ let
 
     postInstall =
       ''
-        rm -rf "$out/lib/python${majorVersion}/test"
+        # needed for some packages, especially packages that backport
+        # functionality to 2.x from 3.x
+        for item in $out/lib/python${majorVersion}/test/*; do
+          if [[ "$item" != */test_support.py* ]]; then
+            rm -rf "$item"
+          fi
+        done
+        touch $out/lib/python${majorVersion}/test/__init__.py
         ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb
         ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb${majorVersion}
         mv $out/share/man/man1/{python.1,python2.6.1}
