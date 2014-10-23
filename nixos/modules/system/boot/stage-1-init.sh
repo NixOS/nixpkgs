@@ -122,6 +122,9 @@ for o in $(cat /proc/cmdline); do
     esac
 done
 
+# Set hostid before modules are loaded.
+# This is needed by the spl/zfs modules.
+@setHostId@
 
 # Load the required kernel modules.
 mkdir -p /lib

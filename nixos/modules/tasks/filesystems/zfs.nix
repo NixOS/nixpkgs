@@ -51,19 +51,6 @@ in
   ###### interface
 
   options = {
-    boot.spl.hostid = mkOption {
-      default = "";
-      example = "0xdeadbeef";
-      description = ''
-        ZFS uses a system's hostid to determine if a storage pool (zpool) has been
-        imported on this system, and can thus be used again without reimporting.
-        Unfortunately, this hostid can change under linux from boot to boot (by
-        changing network adapters, for instance). Specify a unique 32 bit hostid in
-        hex here for zfs to prevent getting a random hostid between boots and having to
-        manually and forcibly reimport pools.
-      '';
-    };
-
     boot.zfs = {
       useGit = mkOption {
         type = types.bool;
@@ -197,6 +184,10 @@ in
     (mkIf enableZfs {
       assertions = [
         {
+          assertion = config.networking.hostId != null;
+          message = "ZFS requires config.networking.hostId to be set";
+        }
+        {
           assertion = !cfgZfs.forceImportAll || cfgZfs.forceImportRoot;
           message = "If you enable boot.zfs.forceImportAll, you must also enable boot.zfs.forceImportRoot";
         }
@@ -205,9 +196,6 @@ in
       boot = {
         kernelModules = [ "spl" "zfs" ] ;
         extraModulePackages = [ splPkg zfsPkg ];
-        extraModprobeConfig = mkIf (cfgSpl.hostid != "") ''
-          options spl spl_hostid=${cfgSpl.hostid}
-        '';
       };
 
       boot.initrd = mkIf inInitrd {

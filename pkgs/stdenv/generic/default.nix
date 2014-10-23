@@ -187,6 +187,7 @@ let
       isArm = system == "armv5tel-linux"
            || system == "armv6l-linux"
            || system == "armv7l-linux";
+      isBigEndian = system == "powerpc-linux";
 
       # For convenience, bring in the library functions in lib/ so
       # packages don't have to do that themselves.
