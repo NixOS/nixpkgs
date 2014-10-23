@@ -35,6 +35,7 @@ let
 
     ++ stdenv.lib.optional isDarwin ./darwin-arch.patch;
 
+  extraPatches = stdenv.lib.optional stdenv.isCygwin ./1.0.1-cygwin64.patch;
 in
 
 stdenv.mkDerivation {
@@ -48,7 +49,7 @@ stdenv.mkDerivation {
     sha256 = "0x7gvyybmqm4lv62mlhlm80f1rn7il2qh8224rahqv0i15xhnpq9";
   };
 
-  patches = patchesCross false;
+  patches = (patchesCross false) ++ extraPatches;
 
   buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
 
@@ -62,12 +63,11 @@ stdenv.mkDerivation {
     else "./config";
 
   configureFlags = "shared --libdir=lib --openssldir=etc/ssl" +
-    stdenv.lib.optionalString withCryptodev " -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS" +
-    stdenv.lib.optionalString (stdenv.system == "x86_64-cygwin") " no-asm";
+    stdenv.lib.optionalString withCryptodev " -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS";
 
-  preBuild = stdenv.lib.optionalString (stdenv.system == "x86_64-cygwin") ''
-    sed -i -e "s|-march=i486|-march=x86-64|g" Makefile
-  '';
+  # CYGXXX: used to be set for cygwin with optionalString. Not needed
+  # anymore but kept to prevent rebuild.
+  preBuild = "";
 
   makeFlags = "MANDIR=$(out)/share/man";
 
