@@ -772,6 +772,8 @@ let
     par2Support = (config.bup.par2Support or false);
   };
 
+  byzanz = callPackage ../applications/video/byzanz {};
+
   ori = callPackage ../tools/backup/ori { };
 
   atool = callPackage ../tools/archivers/atool { };
