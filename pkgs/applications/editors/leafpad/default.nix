@@ -14,10 +14,11 @@ stdenv.mkDerivation rec {
     "--enable-chooser"
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A notepad clone for GTK+ 2.0";
     homepage = http://tarot.freeshell.org/leafpad;
-    maintainers = [ stdenv.lib.maintainers.flosse ];
-    license = stdenv.lib.licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.flosse ];
+    license = licenses.gpl3;
   };
 }
