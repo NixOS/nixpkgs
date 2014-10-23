@@ -10108,6 +10108,10 @@ let
     startupnotification = libstartup_notification;
   };
 
+  pidginWrapper = callPackage ../applications/networking/instant-messengers/pidgin/wrapper.nix {
+    plugins = [];
+  };
+
   pidginlatex = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex {
     imagemagick = imagemagickBig;
   };
