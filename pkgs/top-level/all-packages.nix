@@ -3645,6 +3645,8 @@ let
     ocaml_react = callPackage ../development/ocaml-modules/react { };
     reactivedata = callPackage ../development/ocaml-modules/reactivedata {};
 
+    ocamlscript = callPackage ../development/tools/ocaml/ocamlscript { };
+
     ocamlsdl= callPackage ../development/ocaml-modules/ocamlsdl { };
 
     ocaml_sqlite3 = callPackage ../development/ocaml-modules/sqlite3 { };
