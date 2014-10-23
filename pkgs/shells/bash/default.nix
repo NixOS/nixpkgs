@@ -3,8 +3,21 @@
 assert interactive -> readline != null;
 
 let
-  realName = "bash-4.3";
+  version = if stdenv.isCygwin then "4.1" else "4.3";
+  realName = "bash-${version}";
+  shortName = if stdenv.isCygwin then "bash41" else "bash43";
   baseConfigureFlags = if interactive then "--with-installed-readline" else "--disable-readline";
+  sha256 = if version == "4.1" then
+      "1np1ggp1lv8idwfx3mcxl9rhadqdf4h3x4isa3dk8v9wm0j72qiz"
+    else
+      "1m14s1f61mf6bijfibcjm9y6pkyvz6gibyl8p4hxq90fisi8gimg";
+
+  basePatchFun = if version == "4.1" then
+      ./bash-4.1-patches.nix
+    else
+      ./bash-4.3-patches.nix;
+
+  extraPatches = stdenv.lib.optional stdenv.isCygwin ./bash-4.1.17-9.src.patch;
 in
 
 stdenv.mkDerivation rec {
@@ -12,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/bash/${realName}.tar.gz";
-    sha256 = "1m14s1f61mf6bijfibcjm9y6pkyvz6gibyl8p4hxq90fisi8gimg";
+    inherit sha256;
   };
 
   NIX_CFLAGS_COMPILE = ''
@@ -30,11 +43,11 @@ stdenv.mkDerivation rec {
     (let
       patch = nr: sha256:
         fetchurl {
-          url = "mirror://gnu/bash/bash-4.3-patches/bash43-${nr}";
+          url = "mirror://gnu/bash/${realName}-patches/${shortName}-${nr}";
           inherit sha256;
         };
     in
-      import ./bash-4.3-patches.nix patch);
+      import basePatchFun patch) ++ extraPatches;
 
   crossAttrs = {
     configureFlags = baseConfigureFlags +
