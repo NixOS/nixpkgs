@@ -7,6 +7,7 @@
 
 , tcl ? null, tk ? null, x11 ? null, libX11 ? null, x11Support ? true
 , zlib ? null, zlibSupport ? true
+, expat, libffi
 }:
 
 assert zlibSupport -> zlib != null;
@@ -39,6 +40,18 @@ let
       # patch python to put zero timestamp into pyc
       # if DETERMINISTIC_BUILD env var is set
       ./deterministic-build.patch
+    ] ++ optionals stdenv.isCygwin [
+      ./2.5.2-ctypes-util-find_library.patch
+      ./2.5.2-tkinter-x11.patch
+      ./2.6.2-ssl-threads.patch
+      ./2.6.5-export-PySignal_SetWakeupFd.patch
+      ./2.6.5-FD_SETSIZE.patch
+      ./2.6.5-ncurses-abi6.patch
+      ./2.7.3-dbm.patch
+      ./2.7.3-dylib.patch
+      ./2.7.3-getpath-exe-extension.patch
+      ./2.7.3-no-libm.patch
+      ./2.7.5-export-PyNode_SizeOf.patch
     ];
 
   preConfigure = ''
@@ -50,19 +63,26 @@ let
       for i in Lib/plat-*/regen; do
         substituteInPlace $i --replace /usr/include/ ${stdenv.cc.libc}/include/
       done
-    '' + optionalString stdenv.isCygwin ''
-      # On Cygwin, `make install' tries to read this Makefile.
-      mkdir -p $out/lib/python${majorVersion}/config
-      touch $out/lib/python${majorVersion}/config/Makefile
-      mkdir -p $out/include/python${majorVersion}
-      touch $out/include/python${majorVersion}/pyconfig.h
     '';
 
-  configureFlags = "--enable-shared --with-threads --enable-unicode=ucs4";
+  configureFlags = [
+    "--enable-shared"
+    "--with-threads"
+    "--enable-unicode=ucs4"
+  ] ++ optionals stdenv.isCygwin [
+    "--with-system-ffi"
+    "--with-system-expat"
+    "ac_cv_func_bind_textdomain_codeset=yes"
+  ];
+
+  postConfigure = if stdenv.isCygwin then ''
+    sed -i Makefile -e 's,PYTHONPATH="$(srcdir),PYTHONPATH="$(abs_srcdir),'
+  '' else null;
 
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
     [ bzip2 openssl ]
+    ++ optionals stdenv.isCygwin [ expat libffi ]
     ++ optionals includeModules (
         [ db gdbm ncurses sqlite readline
         ] ++ optionals x11Support [ tcl tk x11 libX11 ]
@@ -150,14 +170,17 @@ let
     if includeModules then null else stdenv.mkDerivation rec {
       name = "python-${moduleName}-${python.version}";
 
-      inherit src patches preConfigure configureFlags;
+      inherit src patches preConfigure postConfigure configureFlags;
 
       buildInputs = [ python ] ++ deps;
 
       C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
       LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
 
-      buildPhase = ''
+      # non-python gdbm has a libintl dependency on i686-cygwin, not on x86_64-cygwin
+      buildPhase = (if (stdenv.system == "i686-cygwin" && moduleName == "gdbm") then ''
+          sed -i setup.py -e "s:libraries = \['gdbm'\]:libraries = ['gdbm', 'intl']:"
+      '' else '''') + ''
           substituteInPlace setup.py --replace 'self.extensions = extensions' \
             'self.extensions = [ext for ext in self.extensions if ext.name in ["${internalName}"]]'
 
@@ -212,10 +235,10 @@ let
 
   } // optionalAttrs x11Support {
 
-    tkinter = buildInternalPythonModule {
+    tkinter = if stdenv.isCygwin then null else (buildInternalPythonModule {
       moduleName = "tkinter";
       deps = [ tcl tk x11 libX11 ];
-    };
+    });
 
   } // {
 
