@@ -12354,6 +12354,8 @@ let
 
   yandex-disk = callPackage ../tools/filesystems/yandex-disk { };
 
+  zdfmediathk = callPackage ../applications/video/zdfmediathk { };
+
   myEnvFun = import ../misc/my-env {
     inherit substituteAll pkgs;
     inherit (stdenv) mkDerivation;
