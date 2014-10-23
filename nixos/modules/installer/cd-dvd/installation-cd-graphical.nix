@@ -14,6 +14,10 @@ with lib;
   # Include gparted for partitioning disks
   environment.systemPackages = [ pkgs.gparted ];
   
+  # Provide networkmanager for easy wireless configuration.
+  networking.networkmanager.enable = true;
+  networking.wireless.enable = mkForce false;
+
   # KDE complains if power management is disabled (to be precise, if
   # there is no power management backend such as upower).
   powerManagement.enable = true;
