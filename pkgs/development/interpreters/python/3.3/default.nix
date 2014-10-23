@@ -53,9 +53,17 @@ stdenv.mkDerivation {
   setupHook = ./setup-hook.sh;
 
   postInstall = ''
-    rm -rf "$out/lib/python${majorVersion}/test"
+    # needed for some packages, especially packages that backport functionality
+    # to 2.x from 3.x
+    for item in $out/lib/python${majorVersion}/test/*; do
+      if [[ "$item" != */test_support.py* ]]; then
+        rm -rf "$item"
+      else
+        echo $item
+      fi
+    done
+    touch $out/lib/python${majorVersion}/test/__init__.py
     ln -s "$out/include/python${majorVersion}m" "$out/include/python${majorVersion}"
-
     paxmark E $out/bin/python${majorVersion}
   '';
 
