@@ -8952,11 +8952,9 @@ let
     enableXft = config.dmenu.enableXft or false;
   };
 
-  dmtx = builderDefsPackage (import ../tools/graphics/dmtx) {
-    inherit libpng libtiff libjpeg imagemagick librsvg
-      pkgconfig bzip2 zlib libtool freetype fontconfig
-      ghostscript jasper xz;
-    inherit (xlibs) libX11;
+  dmtx = dmtx-utils;
+
+  dmtx-utils = callPackage (import ../tools/graphics/dmtx-utils) {
   };
 
   docker = callPackage ../applications/virtualization/docker { };
