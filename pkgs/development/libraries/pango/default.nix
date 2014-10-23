@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with stdenv.lib;
     optional (!stdenv.isDarwin) gobjectIntrospection # build problems of itself and flex
-    ++ optionals stdenv.isDarwin [ gettext fontconfig ];
+    ++ optionals stdenv.isDarwin [ fontconfig ];
   nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ x11 glib cairo libpng fontconfig freetype harfbuzz ] ++ libintlOrEmpty;
