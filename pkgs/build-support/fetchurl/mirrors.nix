@@ -275,9 +275,9 @@ rec {
   ];
 
   postgresql = [
+    http://ftp.postgresql.org/pub/
     ftp://ftp.postgresql.org/pub/
     ftp://ftp-archives.postgresql.org/pub/
-    http://ftp.postgresql.org/pub/
   ];
 
   metalab = [
