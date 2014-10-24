@@ -24,10 +24,10 @@ cabal.mkDerivation (self: rec {
   noHaddock = true;
   doCheck = false;
 
-  # put custom GHC env in front which stops crap from being picked up
-  # from user database
   postInstall = ''
-    makeWrapper ${yi}/bin/yi $out/bin/yi --prefix PATH : ${wrappedGhc}/bin
+    makeWrapper ${yi}/bin/yi $out/bin/yi \
+      --prefix PATH : ${wrappedGhc}/bin \
+      --suffix GHC_PACKAGE_PATH : $(find ${wrappedGhc} -name '*installedconf' | tr \\n :)
   '';
   meta = {
     homepage = "http://haskell.org/haskellwiki/Yi";
