@@ -6088,6 +6088,8 @@ let
 
   libyamlcpp = callPackage ../development/libraries/libyaml-cpp { };
 
+  libykneomgr = callPackage ../development/libraries/libykneomgr { };
+
   libyubikey = callPackage ../development/libraries/libyubikey { };
 
   libzip = callPackage ../development/libraries/libzip { };
