@@ -11528,27 +11528,48 @@ let
 
       qtcurve = callPackage ../misc/themes/qtcurve { };
 
-      quassel = callPackage ../applications/networking/irc/quassel { dconf = gnome3.dconf; };
+      quassel = callPackage ../applications/networking/irc/quassel rec {
+        monolithic = true;
+        daemon = false;
+        client = false;
+        withKDE = stdenv.isLinux;
+        qt = if withKDE then qt4 else qt5; # KDE supported quassel cannot build with qt5 yet (maybe in 0.12.0)
+        dconf = gnome3.dconf;
+      };
 
       quasselWithoutKDE = (self.quassel.override {
+        monolithic = true;
+        daemon = false;
+        client = false;
         withKDE = false;
+        qt = qt5;
         tag = "-without-kde";
       });
 
       quasselDaemon = (self.quassel.override {
         monolithic = false;
         daemon = true;
+        client = false;
+        withKDE = false;
+        qt = qt5;
         tag = "-daemon";
       });
 
       quasselClient = (self.quassel.override {
         monolithic = false;
+        daemon = false;
         client = true;
+        withKDE = stdenv.isLinux;
+        qt = if withKDE then qt4 else qt5; # KDE supported quassel cannot build with qt5 yet (maybe in 0.12.0)
         tag = "-client";
       });
 
       quasselClientWithoutKDE = (self.quasselClient.override {
+        monolithic = false;
+        daemon = false;
+        client = true;
         withKDE = false;
+        qt = qt5;
         tag = "-client-without-kde";
       });
 
