@@ -21,7 +21,22 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  cmakeFlags = "-DWITH_SSL=yes -DWITH_READLINE=yes -DWITH_EMBEDDED_SERVER=yes -DWITH_ZLIB=yes -DINSTALL_SCRIPTDIR=bin -DHAVE_IPV6=yes";
+  cmakeFlags = [
+    "-DWITH_SSL=yes"
+    "-DWITH_READLINE=yes"
+    "-DWITH_EMBEDDED_SERVER=yes"
+    "-DWITH_ZLIB=yes"
+    "-DHAVE_IPV6=yes"
+    "-DINSTALL_DOCDIR=share/doc/mysql"
+    "-DINSTALL_DOCREADMEDIR=share/doc/mysql"
+    "-DINSTALL_INCLUDEDIR=include/mysql"
+    "-DINSTALL_INFODIR=share/doc/mysql"
+    "-DINSTALL_MANDIR=share/man"
+    "-DINSTALL_MYSQLSHAREDIR=share/mysql"
+    "-DINSTALL_MYSQLPLUGINDIR=lib/mysql/plugin"
+    "-DINSTALL_SCRIPTDIR=bin"
+    "-DINSTALL_SUPPORTFILESDIR=share/mysql"
+  ];
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
@@ -30,7 +45,8 @@ stdenv.mkDerivation rec {
   '';
   postInstall = ''
     sed -i -e "s|basedir=\"\"|basedir=\"$out\"|" $out/bin/mysql_install_db
-    rm -rf $out/mysql-test $out/sql-bench
+    rm -r $out/mysql-test $out/sql-bench $out/data
+    rm $out/share/man/man1/mysql-test-run.pl.1
   '';
 
   passthru.mysqlVersion = "5.5";

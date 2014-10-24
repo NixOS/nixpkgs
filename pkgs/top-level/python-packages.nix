@@ -8608,7 +8608,21 @@ let
       md5 = "754c5ab9f533e764f931136974b618f1";
     };
 
-    doCheck = false;
+    buildInputs = [ pkgs.bash ];
+
+    preConfigure = ''
+      substituteInPlace test_subprocess32.py \
+        --replace '/usr/' '${pkgs.bash}/'
+    '';
+
+    checkPhase = ''
+      TMP_PREFIX=`pwd`/tmp/$name
+      TMP_INSTALL_DIR=$TMP_PREFIX/lib/${pythonPackages.python.libPrefix}/site-packages
+      PYTHONPATH="$TMP_INSTALL_DIR:$PYTHONPATH"
+      mkdir -p $TMP_INSTALL_DIR
+      python setup.py develop --prefix $TMP_PREFIX
+      python test_subprocess32.py
+    '';
 
     meta = {
       homepage = "https://pypi.python.org/pypi/subprocess32";
@@ -9442,7 +9456,11 @@ let
     preConfigure = "export HOME=$TMPDIR";
 
     buildInputs = with self; [ pbr pip pkgs.which ];
-    propagatedBuildInputs = with self; [ stevedore virtualenv virtualenv-clone ];
+    propagatedBuildInputs = with self; [
+      stevedore
+      virtualenv
+      virtualenv-clone
+    ] ++ optional isPy26 argparse;
 
     patchPhase = ''
       substituteInPlace "virtualenvwrapper.sh" --replace "which" "${pkgs.which}/bin/which"

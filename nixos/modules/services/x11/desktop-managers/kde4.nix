@@ -148,7 +148,7 @@ in
         ]
       ++ lib.optional config.hardware.pulseaudio.enable pkgs.kde4.kmix  # Perhaps this should always be enabled
       ++ lib.optional config.hardware.bluetooth.enable pkgs.kde4.bluedevil
-      ++ lib.optional config.networking.networkmanager.enable pkgs.kde4.networkmanagement
+      ++ lib.optional config.networking.networkmanager.enable pkgs.kde4.plasma-nm
       ++ [ nepomukConfig ] ++ phononBackendPackages;
 
     environment.pathsToLink = [ "/share" ];

@@ -1,10 +1,10 @@
---- zathura-pdf-mupdf-0.2.6/config.mk
-+++ zathura-pdf-mupdf-0.2.6/config.mk
+--- zathura-pdf-mupdf-0.2.7/config.mk
++++ zathura-pdf-mupdf-0.2.7/config.mk
 @@ -32,10 +32,11 @@
  OPENSSL_INC ?= $(shell pkg-config --cflags libcrypto)
  OPENSSL_LIB ?= $(shell pkg-config --libs libcrypto)
  
--MUPDF_LIB ?= -lmupdf -lmupdf-js-none
+-MUPDF_LIB ?= -lmupdf -lmujs
 +MUPDF_INC ?= $(shell pkg-config --cflags mupdf)
 +MUPDF_LIB ?= $(shell pkg-config --libs mupdf)
  

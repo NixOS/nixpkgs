@@ -9,6 +9,7 @@ let
   gst_plugins_minimal = gst_plugins_base.override {
     minimalDeps = true;
   };
+  gst_plugins = [ gst_plugins_minimal ];
 
 in
 
@@ -33,6 +34,8 @@ stdenv.mkDerivation rec {
       wrapProgram "$out/bin/xfce4-mixer" \
         --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
     '';
+
+  passthru = { inherit gst_plugins; };
 
   meta = {
     homepage = http://www.xfce.org/projects/xfce4-mixer; # referenced but inactive
