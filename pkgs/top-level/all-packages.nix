@@ -5335,6 +5335,10 @@ let
 
   herqq = callPackage ../development/libraries/herqq { };
 
+  hidapi = callPackage ../development/libraries/hidapi {
+    libusb = libusb1;
+  };
+
   hspell = callPackage ../development/libraries/hspell { };
 
   hspellDicts = callPackage ../development/libraries/hspell/dicts.nix { };
