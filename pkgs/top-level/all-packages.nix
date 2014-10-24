@@ -8970,6 +8970,8 @@ let
     enableXft = config.dmenu.enableXft or false;
   };
 
+  dmenu2 = callPackage ../applications/misc/dmenu2 { };
+
   dmtx = dmtx-utils;
 
   dmtx-utils = callPackage (import ../tools/graphics/dmtx-utils) {
