@@ -59,6 +59,7 @@ with stdenv.lib;
   ''}
   SCSI_LOWLEVEL y # enable lots of SCSI devices
   SCSI_LOWLEVEL_PCMCIA y
+  SCSI_SAS_ATA y  # added to enable detection of hard drive
   SPI y # needed for many devices
   SPI_MASTER y
   WAN y
