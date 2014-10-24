@@ -2621,7 +2621,7 @@ let
         A Python binding to Poppler-Qt4 that aims for completeness
         and for being actively maintained.
       '';
-      license = licenses.lgpl31Plus;
+      license = licenses.lgpl21Plus;
       maintainers = [ maintainers.sepi ];
       platforms = platforms.all;
     };
