@@ -10244,8 +10244,8 @@ let
   urxvt_perls = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-perls { };
   urxvt_tabbedex = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-tabbedex { };
 
-  rxvt_unicode_wrapper = callPackage ../applications/misc/rxvt_unicode/wrapper.nix {
-    plugins = [];
+  rxvt_unicode_with-plugins = callPackage ../applications/misc/rxvt_unicode/wrapper.nix {
+    plugins = [ urxvt_perls urxvt_tabbedex ];
   };
 
   sakura = callPackage ../applications/misc/sakura {
