@@ -6906,6 +6906,10 @@ let
 
   yajl = callPackage ../development/libraries/yajl { };
 
+  yubikey-personalization = callPackage ../tools/misc/yubikey-personalization {
+    libusb = libusb1;
+  };
+
   zangband = builderDefsPackage (import ../games/zangband) {
     inherit ncurses flex bison autoconf automake m4 coreutils;
   };
