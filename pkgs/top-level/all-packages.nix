@@ -1177,6 +1177,8 @@ let
 
   freetds = callPackage ../development/libraries/freetds { };
 
+  frescobaldi = callPackage ../misc/frescobaldi {};
+  
   ftgl = callPackage ../development/libraries/ftgl { };
 
   ftgl212 = callPackage ../development/libraries/ftgl/2.1.2.nix { };
