@@ -3124,6 +3124,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   yiFuzzyOpen = callPackage ../development/libraries/haskell/yi-fuzzy-open {};
 
+  yiMonokai = callPackage ../development/libraries/haskell/yi-monokai {};
+
   yiLanguage = callPackage ../development/libraries/haskell/yi-language {};
 
   yiRope = callPackage ../development/libraries/haskell/yi-rope {};
