@@ -5985,6 +5985,8 @@ let
 
   libgeotiff = callPackage ../development/libraries/libgeotiff { };
 
+  libu2f-host = callPackage ../development/libraries/libu2f-host { };
+
   libunistring = callPackage ../development/libraries/libunistring { };
 
   libupnp = callPackage ../development/libraries/pupnp { };
