@@ -28,8 +28,9 @@ stdenv.mkDerivation {
     # Elixir binaries are shell scripts which run erl. Add some stuff
     # to PATH so the scripts can run without problems.
 
-    for f in $out/bin/*
-    do
+    for f in $out/bin/*; do
+     b=$(basename $f)
+      if [ $b == "mix" ]; then continue; fi
       wrapProgram $f \
       --prefix PATH ":" "${erlang}/bin:${coreutils}/bin:${curl}/bin:${bash}/bin" \
       --set CURL_CA_BUNDLE "${cacert}/etc/ca-bundle.crt"
