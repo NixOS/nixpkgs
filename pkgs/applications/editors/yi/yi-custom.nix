@@ -26,8 +26,8 @@ cabal.mkDerivation (self: rec {
 
   postInstall = ''
     makeWrapper ${yi}/bin/yi $out/bin/yi \
-      --prefix PATH : ${wrappedGhc}/bin \
-      --suffix GHC_PACKAGE_PATH : $(find ${wrappedGhc} -name '*installedconf' | tr \\n :)
+      --set NIX_GHC ${wrappedGhc}/bin/ghc \
+      --set NIX_GHC_LIBDIR ${wrappedGhc}/lib/ghc-${self.ghc.version}
   '';
   meta = {
     homepage = "http://haskell.org/haskellwiki/Yi";
