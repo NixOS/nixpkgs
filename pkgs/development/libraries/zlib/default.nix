@@ -40,11 +40,6 @@ stdenv.mkDerivation (rec {
     makeFlags = [ "RANLIB=${stdenv.cross.config}-ranlib" ];
   };
 
-  # CYGWINTODO
-
-  # zlib doesn't like the automatic --disable-shared from the Cygwin stdenv.
-  cygwinConfigureEnableShared = true;
-
   passthru.version = version;
 
   meta = with stdenv.lib; {
