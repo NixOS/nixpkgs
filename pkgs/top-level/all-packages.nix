@@ -6082,7 +6082,7 @@ let
 
   libyamlcpp = callPackage ../development/libraries/libyaml-cpp { };
 
-  libyubikey = callPackage ../development/libraries/libyubikey {};
+  libyubikey = callPackage ../development/libraries/libyubikey { };
 
   libzip = callPackage ../development/libraries/libzip { };
 
