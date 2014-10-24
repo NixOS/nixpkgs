@@ -261,6 +261,8 @@ let
     inherit (pkgs) runCommand perl;
   };
 
+  buildExternalNixExpression = callPackage ../build-support/build-external-nix-expression/default.nix { };
+
   buildFHSChrootEnv = import ../build-support/build-fhs-chrootenv {
     inherit buildEnv system;
     inherit stdenv glibc glibc_multi glibcLocales;
