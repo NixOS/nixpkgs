@@ -495,6 +495,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   constraints = callPackage ../development/libraries/haskell/constraints {};
 
+  ConstraintKinds_1_1_0_0 = callPackage  ../development/libraries/haskell/ConstraintKinds/1.1.0.0.nix {};
+  ConstraintKinds_1_3_0 = callPackage ../development/libraries/haskell/ConstraintKinds/1.3.0.nix {};
+  ConstraintKinds = self.ConstraintKinds_1_3_0;
+
   controlBool = callPackage ../development/libraries/haskell/control-bool {};
 
   controlMonadFree = callPackage ../development/libraries/haskell/control-monad-free {};
@@ -1220,6 +1224,14 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hjsmin = callPackage ../development/libraries/haskell/hjsmin {};
 
+  HLearnAlgebra = callPackage ../development/libraries/haskell/hlearn-algebra {
+    ConstraintKinds = self.ConstraintKinds_1_1_0_0;
+  };
+  HLearnApproximation = callPackage ../development/libraries/haskell/hlearn-approximation { };
+  HLearnClassification = callPackage ../development/libraries/haskell/hlearn-classification { };
+  HLearnDatastructures = callPackage ../development/libraries/haskell/hlearn-datastructures { };
+  HLearnDistributions = callPackage ../development/libraries/haskell/hlearn-distributions { };
+
   hledger = callPackage ../development/libraries/haskell/hledger {};
   hledgerLib = callPackage ../development/libraries/haskell/hledger-lib {};
   hledgerInterest = callPackage ../applications/office/hledger-interest {};
@@ -1784,6 +1796,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   networkConduit = callPackage ../development/libraries/haskell/network-conduit {};
   networkConduitTls = callPackage ../development/libraries/haskell/network-conduit-tls {};
+
+  normaldistribution = callPackage ../development/libraries/haskell/normaldistribution {};
 
   networkFancy = callPackage ../development/libraries/haskell/network-fancy {};
 
@@ -2764,6 +2778,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   vectorAlgorithms = callPackage ../development/libraries/haskell/vector-algorithms {};
 
   vectorBinaryInstances = callPackage ../development/libraries/haskell/vector-binary-instances {};
+
+  vectorHeterogenous = callPackage ../development/libraries/haskell/vector-heterogenous {};
 
   vectorInstances = callPackage ../development/libraries/haskell/vector-instances {};
 
