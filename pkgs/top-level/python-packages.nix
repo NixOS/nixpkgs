@@ -1059,6 +1059,7 @@ let
   box2d = buildPythonPackage rec {
     name = "box2d-${version}";
     version = "2.3b0";
+    disabled = (!isPy27);
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/B/Box2D/Box2D-2.3b0.zip";
