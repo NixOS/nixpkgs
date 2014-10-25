@@ -1270,6 +1270,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hsBibutils = callPackage ../development/libraries/haskell/hs-bibutils {};
 
+  hsc3 = callPackage ../development/libraries/haskell/hsc3 {};
+
   hsdns = callPackage ../development/libraries/haskell/hsdns {};
 
   hsemail = callPackage ../development/libraries/haskell/hsemail {};
