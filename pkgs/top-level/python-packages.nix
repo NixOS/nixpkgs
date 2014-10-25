@@ -1056,6 +1056,30 @@ let
     };
   };
 
+  box2d = buildPythonPackage rec {
+    name = "box2d-${version}";
+    version = "2.3b0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/B/Box2D/Box2D-2.3b0.zip";
+      md5="25fc4f69cd580bdca0022ac3ace53865";
+    };
+
+    patches = [ ../development/python-modules/box2d/disable-test.patch ];
+
+    propagatedBuildInputs = [ pkgs.swig pkgs.box2d ];
+
+    meta = with stdenv.lib; {
+      homepage = https://code.google.com/p/pybox2d/;
+      description = ''
+        A 2D game physics library for Python under
+        the very liberal zlib license
+      '';
+      license = license.zlib;
+      platforms = platforms.all;
+      maintainers = [ maintainers.sepi ];
+    };
+  };
 
   # bugz = buildPythonPackage (rec {
   #   name = "bugz-0.9.3";
