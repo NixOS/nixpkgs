@@ -9080,6 +9080,8 @@ let
 
     haskellMode = callPackage ../applications/editors/emacs-modes/haskell { };
 
+    hsc3Mode = callPackage ../applications/editors/emacs-modes/hsc3 { };
+
     hol_light_mode = callPackage ../applications/editors/emacs-modes/hol_light { };
 
     htmlize = callPackage ../applications/editors/emacs-modes/htmlize { };
