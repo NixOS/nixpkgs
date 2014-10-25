@@ -1075,7 +1075,7 @@ let
         A 2D game physics library for Python under
         the very liberal zlib license
       '';
-      license = license.zlib;
+      license = licenses.zlib;
       platforms = platforms.all;
       maintainers = [ maintainers.sepi ];
     };
