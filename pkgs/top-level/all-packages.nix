@@ -2535,6 +2535,8 @@ let
 
   html-xml-utils = callPackage ../tools/text/xml/html-xml-utils { };
 
+  rcm = callPackage ../tools/misc/rcm {};
+
   tftp_hpa = callPackage ../tools/networking/tftp-hpa {};
 
   tigervnc = callPackage ../tools/admin/tigervnc {
