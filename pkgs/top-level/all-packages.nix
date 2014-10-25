@@ -1649,6 +1649,8 @@ let
     inherit (gnome) scrollkeeper;
   };
 
+  mediathek = callPackage ../applications/video/mediathek { };
+
   mednafen = callPackage ../misc/emulators/mednafen { };
 
   mednafen-server = callPackage ../misc/emulators/mednafen/server.nix { };
