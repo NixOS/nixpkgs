@@ -173,6 +173,7 @@ rec {
     ftp://ftp.nl.debian.org/debian/
     ftp://ftp.ru.debian.org/debian/
     ftp://ftp.debian.org/debian/
+    http://ftp.debian.org/debian/
     http://archive.debian.org/debian-archive/debian/
     ftp://ftp.funet.fi/pub/mirrors/ftp.debian.org/debian/
   ];
