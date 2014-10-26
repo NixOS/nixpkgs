@@ -86,7 +86,7 @@ done
 # Escape filenames that contain '='.
 # TODO: Handle this properly. This fails for filenames
 #       that contain multiple '=' symbols.
-cat pathlist | sed -e 's/=\(.*\)=\(.*\)=/\\=\1=\2\\=/' | tee pathlist.safer
+cat pathlist | sed -e 's/=\(.*\)=\(.*\)=/\\=\1=\2\\=/g' | tee pathlist.safer
 
 
 mkdir -p $out/iso
