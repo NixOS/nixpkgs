@@ -97,7 +97,8 @@ stdenv.mkDerivation rec {
     minorVersion = "0";
     teenyVersion = "0";
     patchLevel = "481";
-    libPath = "lib/ruby/${majorVersion}.${minorVersion}";
-    gemPath = "lib/ruby/gems/${majorVersion}.${minorVersion}";
+    rubyEngine = "ruby";
+    libPath = "lib/${rubyEngine}/${majorVersion}.${minorVersion}.${teenyVersion}";
+    gemPath = "lib/${rubyEngine}/gems/${majorVersion}.${minorVersion}.${teenyVersion}";
   };
 }
