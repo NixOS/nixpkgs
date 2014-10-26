@@ -1285,6 +1285,12 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hsc3-db = callPackage ../development/libraries/haskell/hsc3-db {};
 
+  hsc3-lang = callPackage ../development/libraries/haskell/hsc3-lang {
+    hmatrixSpecial = self.hmatrixSpecial.override {
+      hmatrix = self.hmatrix.override { binary = self.binary_0_7_2_2; };
+    };
+  };
+
   hsdns = callPackage ../development/libraries/haskell/hsdns {};
 
   hsemail = callPackage ../development/libraries/haskell/hsemail {};
