@@ -18,6 +18,7 @@ cabal.mkDerivation (self: {
     filepath ghcPaths HTTP monadsTf mtl network networkUri random
     shellmate systemFileio tar transformers utf8String websockets
   ];
+  configureFlags = "-fportable";
   meta = {
     homepage = "http://haste-lang.org/";
     description = "Haskell To ECMAScript compiler";
