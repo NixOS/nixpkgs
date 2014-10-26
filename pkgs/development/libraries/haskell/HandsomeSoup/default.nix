@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "HandsomeSoup";
-  version = "0.3.3";
-  sha256 = "0g2b3mw0asam005kz77zm3bsrjaa7q3n6wdj3ahr7hppivsdwizk";
+  version = "0.3.4";
+  sha256 = "0xpimys8pb0kzqnfxxf04dbxfmcrry5pzgmagyydcrmafacg0vjb";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
