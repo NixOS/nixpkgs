@@ -7,6 +7,13 @@ let
   pluginPath = lib.concatStringsSep ":" cfg.plugins;
   havePluginPath = lib.length cfg.plugins > 0;
   ops = lib.optionalString;
+  verbosityFlag = {
+    debug = "--debug";
+    info  = "--verbose";
+    warn  = ""; # intentionally empty
+    error = "--quiet";
+    fatal = "--silent";
+  }."${cfg.logLevel}";
 
 in
 
@@ -35,6 +42,12 @@ in
         default = [ ];
         example = literalExample "[ pkgs.logstash-contrib ]";
         description = "The paths to find other logstash plugins in.";
+      };
+
+      logLevel = mkOption {
+        type = types.enum [ "debug" "info" "warn" "error" "fatal" ];
+        default = "warn";
+        description = "Logging verbosity level.";
       };
 
       watchdogTimeout = mkOption {
@@ -124,6 +137,7 @@ in
           "${cfg.package}/bin/logstash agent " +
           "-w ${toString cfg.filterWorkers} " +
           ops havePluginPath "--pluginpath ${pluginPath} " +
+          "${verbosityFlag} " +
           "--watchdog-timeout ${toString cfg.watchdogTimeout} " +
           "-f ${writeText "logstash.conf" ''
             input {
