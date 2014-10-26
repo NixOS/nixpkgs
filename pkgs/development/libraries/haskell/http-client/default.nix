@@ -9,8 +9,8 @@
 
 cabal.mkDerivation (self: {
   pname = "http-client";
-  version = "0.3.8.2";
-  sha256 = "06c34h7wvn3mbr8lrkcmjygj22d94mr5rxzqwpjfdjgimd98hw3s";
+  version = "0.4.2.2";
+  sha256 = "0jcpjvfhxk3vlhy7ndand6zghs2f7mll8w0zp9x9bzfrp3kldqxk";
   buildDepends = [
     base64Bytestring blazeBuilder caseInsensitive cookie
     dataDefaultClass deepseq exceptions filepath httpTypes mimeTypes
