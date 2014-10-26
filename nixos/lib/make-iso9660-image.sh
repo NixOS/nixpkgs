@@ -31,11 +31,20 @@ if test -n "$bootable"; then
         fi
     done
 
-    bootFlags="-b $bootImage -c .boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table"
+    isoBootFlags="-eltorito-boot ${bootImage}
+                  -eltorito-catalog .boot.cat
+                  -no-emul-boot -boot-load-size 4 -boot-info-table"
+fi
+
+if test -n "$usbBootable"; then
+    usbBootFlags="-isohybrid-mbr ${isohybridMbrImage}"
 fi
 
 if test -n "$efiBootable"; then
-    bootFlags="$bootFlags -eltorito-alt-boot -e $efiBootImage -no-emul-boot"
+    efiBootFlags="-eltorito-alt-boot
+                  -e $efiBootImage
+                  -no-emul-boot
+                  -isohybrid-gpt-basdat"
 fi
 
 touch pathlist
@@ -74,18 +83,41 @@ for ((n = 0; n < ${#objects[*]}; n++)); do
     fi
 done
 
-# !!! what does this do?
+# Escape filenames that contain '='.
+# TODO: Handle this properly. This fails for filenames
+#       that contain multiple '=' symbols.
 cat pathlist | sed -e 's/=\(.*\)=\(.*\)=/\\=\1=\2\\=/' | tee pathlist.safer
 
 
 mkdir -p $out/iso
-genCommand="genisoimage -iso-level 4 -r -J $bootFlags -hide-rr-moved -graft-points -path-list pathlist.safer ${volumeID:+-V $volumeID}"
-if test -z "$compressImage"; then
-    $genCommand -o $out/iso/$isoName
-else
-    $genCommand | bzip2 > $out/iso/$isoName.bz2
+
+xorriso="xorriso
+ -as mkisofs
+ -iso-level 3
+ -volid ${volumeID}
+ -appid nixos
+ -publisher nixos
+ -graft-points
+ -full-iso9660-filenames
+ ${isoBootFlags}
+ ${usbBootFlags}
+ ${efiBootFlags}
+ -r
+ -path-list pathlist.safer
+ --sort-weight 0 /
+ --sort-weight 1 /isolinux" # Make sure isolinux is near the beginning of the ISO
+
+$xorriso -output $out/iso/$isoName
+
+if test -n "$usbBootable"; then
+    echo "Making image hybrid..."
+    isohybrid --uefi $out/iso/$isoName
 fi
 
+if test -n "$compressImage"; then
+    echo "Compressing image..."
+    bzip2 $out/iso/$isoName
+fi
 
 mkdir -p $out/nix-support
 echo $system > $out/nix-support/system
