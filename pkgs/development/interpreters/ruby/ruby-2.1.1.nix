@@ -5,6 +5,7 @@
 , ncurses, readline, cursesSupport ? false
 , groff, docSupport ? false
 , libyaml, yamlSupport ? true
+, libffi, fiddleSupport ? true
 , ruby_2_1_1, autoreconfHook, bison, useRailsExpress ? true
 }:
 
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
   NROFF = "${groff}/bin/nroff";
 
   buildInputs = ops useRailsExpress [ autoreconfHook bison ]
+    ++ (op fiddleSupport libffi)
     ++ (ops cursesSupport [ ncurses readline ] )
     ++ (op docSupport groff )
     ++ (op zlibSupport zlib)

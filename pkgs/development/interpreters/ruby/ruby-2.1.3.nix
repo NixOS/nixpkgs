@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub
+{ stdenv, fetchurl, fetchgit, fetchFromGitHub
 , zlib, zlibSupport ? true
 , openssl, opensslSupport ? true
 , gdbm, gdbmSupport ? true
@@ -6,14 +6,15 @@
 , groff, docSupport ? false
 , libyaml, yamlSupport ? true
 , libffi, fiddleSupport ? true
-, ruby_2_0_0, autoreconfHook, bison, useRailsExpress ? true
+, ruby_2_1_3, autoreconfHook, bison, useRailsExpress ? true
 }:
 
 let
   op = stdenv.lib.optional;
   ops = stdenv.lib.optionals;
   patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
-  baseruby = ruby_2_0_0.override { useRailsExpress = false; };
+  config = import ./config.nix fetchgit;
+  baseruby = ruby_2_1_3.override { useRailsExpress = false; };
 in
 
 stdenv.mkDerivation rec {
@@ -24,11 +25,11 @@ stdenv.mkDerivation rec {
   src = if useRailsExpress then fetchFromGitHub {
     owner  = "ruby";
     repo   = "ruby";
-    rev    = "v2_0_0_${passthru.patchLevel}";
-    sha256 = "07ccnxgiqxn5ycmq2wl7j3aqmndm4n358y35kzaivb488ayjg3pj";
+    rev    = "v2_1_3";
+    sha256 = "1pnam9jry2l2mbji3gvrbb7jyisxl99xjz6l1qrccwnfinxxbmhv";
   } else fetchurl {
-    url = "http://cache.ruby-lang.org/pub/ruby/2.0/${name}.tar.bz2";
-    sha256 = "1qnqccyfhx0fykxqbzlxq0yvyvq6q9v32givyfyr303dx7bxlqh7";
+    url = "http://cache.ruby-lang.org/pub/ruby/2.1/ruby-2.1.3.tar.gz";
+    sha256 = "00bz6jcbxgnllplk4b9lnyc3w8yd3pz5rn11rmca1s8cn6vvw608";
   };
 
   # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
@@ -36,8 +37,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = ops useRailsExpress [ autoreconfHook bison ]
     ++ (op fiddleSupport libffi)
-    ++ (ops cursesSupport [ ncurses readline ] )
-    ++ (op docSupport groff )
+    ++ (ops cursesSupport [ ncurses readline ])
+    ++ (op docSupport groff)
     ++ (op zlibSupport zlib)
     ++ (op opensslSupport openssl)
     ++ (op gdbmSupport gdbm)
@@ -57,12 +58,22 @@ stdenv.mkDerivation rec {
   postUnpack = ''rm "$sourceRoot/enc/unicode/name2ctype.h"'';
 
   patches = ops useRailsExpress [
-    "${patchSet}/patches/ruby/2.0.0/p481/01-zero-broken-tests.patch"
-    "${patchSet}/patches/ruby/2.0.0/p481/02-railsexpress-gc.patch"
-    "${patchSet}/patches/ruby/2.0.0/p481/03-display-more-detailed-stack-trace.patch"
-    "${patchSet}/patches/ruby/2.0.0/p481/04-show-full-backtrace-on-stack-overflow.patch"
-    "${patchSet}/patches/ruby/2.0.0/p481/05-fix-missing-c-return-event.patch"
+    "${patchSet}/patches/ruby/2.1.3/railsexpress/01-zero-broken-tests.patch"
+    "${patchSet}/patches/ruby/2.1.3/railsexpress/02-improve-gc-stats.patch"
+    "${patchSet}/patches/ruby/2.1.3/railsexpress/03-display-more-detailed-stack-trace.patch"
+    "${patchSet}/patches/ruby/2.1.3/railsexpress/04-show-full-backtrace-on-stack-overflow.patch"
+    "${patchSet}/patches/ruby/2.1.3/railsexpress/05-funny-falcon-stc-density.patch"
+    "${patchSet}/patches/ruby/2.1.3/railsexpress/06-funny-falcon-stc-pool-allocation.patch"
+    "${patchSet}/patches/ruby/2.1.3/railsexpress/07-aman-opt-aset-aref-str.patch"
+    "${patchSet}/patches/ruby/2.1.3/railsexpress/08-funny-falcon-method-cache.patch"
   ];
+
+  # Ruby >= 2.1.0 tries to download config.{guess,sub}
+  postPatch = ''
+    rm tool/config_files.rb
+    cp ${config}/config.guess tool/
+    cp ${config}/config.sub tool/
+  '';
 
   configureFlags = ["--enable-shared" ]
     ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
@@ -94,9 +105,9 @@ stdenv.mkDerivation rec {
 
   passthru = rec {
     majorVersion = "2";
-    minorVersion = "0";
-    teenyVersion = "0";
-    patchLevel = "481";
+    minorVersion = "1";
+    teenyVersion = "3";
+    patchLevel = "0";
     libPath = "lib/ruby/${majorVersion}.${minorVersion}";
     gemPath = "lib/ruby/gems/${majorVersion}.${minorVersion}";
   };
