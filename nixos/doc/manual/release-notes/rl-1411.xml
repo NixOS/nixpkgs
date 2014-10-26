@@ -1,0 +1,22 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+        version="5.0"
+        xml:id="sec-release-14.11">
+
+<title>Release 14.11 (“Caterpillar”, 2014/11/??)</title>
+
+<para>When upgrading from a previous release, please be aware of the
+following incompatible changes:
+
+<itemizedlist>
+
+  <listitem><para>The host side of a container virtual Ethernet pair
+  is now called <literal>ve-<replaceable>container-name</replaceable></literal>
+  rather than <literal>c-<replaceable>container-name</replaceable></literal>.</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+</chapter>

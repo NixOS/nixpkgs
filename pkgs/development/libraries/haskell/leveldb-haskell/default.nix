@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "leveldb-haskell";
-  version = "0.5.1";
-  sha256 = "132r23svaazb26jnapgr3r8v8xmr8ln3w5r0iv8fg7pm55gsixx5";
+  version = "0.6";
+  sha256 = "1r76dvn8scnjfdw1i5cj3s5s1nqf2yib4jdydjnr8p6c8yvpp3z5";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -24,6 +24,5 @@ cabal.mkDerivation (self: {
     description = "Haskell bindings to LevelDB";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    broken = true;
   };
 })

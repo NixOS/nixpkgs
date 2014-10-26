@@ -7,18 +7,19 @@
 
 cabal.mkDerivation (self: {
   pname = "rethinkdb";
-  version = "1.15.0.0";
-  sha256 = "0zswbz73c8h7h31ppw5251l6spn6y5ha3hm9hb90j04hjg8g235i";
+  version = "1.15.1.0";
+  sha256 = "139a5xii9fkywr1fq7z37wvs732w6j06005z6r7ycr99swrzpgvq";
   buildDepends = [
     aeson base64Bytestring binary dataDefault mtl network scientific
     text time unorderedContainers utf8String vector
   ];
   testDepends = [ doctest ];
+  jailbreak = true;
+  doCheck = false;
   meta = {
     homepage = "http://github.com/atnnn/haskell-rethinkdb";
-    description = "A driver for the RethinkDB database server";
+    description = "A driver for RethinkDB 1.15";
     license = self.stdenv.lib.licenses.asl20;
     platforms = self.ghc.meta.platforms;
-    broken = true;
   };
 })

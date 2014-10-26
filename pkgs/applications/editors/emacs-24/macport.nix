@@ -2,19 +2,19 @@
 }:
 
 stdenv.mkDerivation rec {
-  emacsName = "emacs-24.3";
-  name = "${emacsName}-mac-4.8";
+  emacsName = "emacs-24.4";
+  name = "${emacsName}-mac-5.0";
 
   #builder = ./builder.sh;
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${emacsName}.tar.xz";
-    sha256 = "1385qzs3bsa52s5rcncbrkxlydkw0ajzrvfxgv8rws5fx512kakh";
+    sha256 = "1zflm6ac34s6v166p58ilxrxbxjm0q2wfc25f8y0mjml1lbr3qs7";
   };
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${name}.tar.gz";
-    sha256 = "194y341zrpjp75mc3099kjc0inr1d379wwsnav257bwsc967h8yx";
+    sha256 = "14ipkwmzv0b02sclhgp2xj0cvhl3gk40sc2l21s87621kk640dzv";
   };
 
   patches = [ ./darwin-new-sections.patch ];

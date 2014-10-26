@@ -10,15 +10,19 @@ let
 
   systemd = cfg.package;
 
+
   makeUnit = name: unit:
+    let
+      pathSafeName = lib.replaceChars ["@" "\\"] ["-" "-"] name;
+    in
     if unit.enable then
-      pkgs.runCommand "unit" { preferLocalBuild = true; inherit (unit) text; }
+      pkgs.runCommand "unit-${pathSafeName}" { preferLocalBuild = true; inherit (unit) text; }
         ''
           mkdir -p $out
           echo -n "$text" > $out/${shellEscape name}
         ''
     else
-      pkgs.runCommand "unit" { preferLocalBuild = true; }
+      pkgs.runCommand "unit-${pathSafeName}-disabled" { preferLocalBuild = true; }
         ''
           mkdir -p $out
           ln -s /dev/null $out/${shellEscape name}

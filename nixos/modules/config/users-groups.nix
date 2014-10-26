@@ -184,7 +184,7 @@ let
         type = with types; uniq (nullOr string);
         default = null;
         description = ''
-          The path to a file that contains the user's password. The password
+          The full path to a file that contains the user's password. The password
           file is read on each system activation. The file should contain
           exactly one line, which should be the password in an encrypted form
           that is suitable for the <literal>chpasswd -e</literal> command.

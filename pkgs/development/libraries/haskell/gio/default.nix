@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "gio";
-  version = "0.13.0.1";
-  sha256 = "03194npzv48flg6pba3m8c5gfmmy34z0545y84wa979z21fbv22m";
+  version = "0.13.0.2";
+  sha256 = "12wcgycljlrxbf9hdp0c9n6d2h709wb3jk94v3lngwc7z5lnv5hs";
   buildDepends = [ glib mtl ];
   buildTools = [ gtk2hsBuildtools ];
   pkgconfigDepends = [ glib ];

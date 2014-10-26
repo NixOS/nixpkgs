@@ -30,5 +30,6 @@ cabal.mkDerivation (self: {
     description = "A dependently typed functional programming language and proof assistant";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ fuuzetsu ];
   };
 })

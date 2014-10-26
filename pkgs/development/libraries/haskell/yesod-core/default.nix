@@ -4,27 +4,28 @@
 , caseInsensitive, cereal, clientsession, conduit, conduitExtra
 , cookie, dataDefault, deepseq, exceptions, fastLogger, hspec
 , httpTypes, HUnit, liftedBase, monadControl, monadLogger, mtl
-, network, parsec, pathPieces, QuickCheck, random, resourcet, safe
-, shakespeare, streamingCommons, text, time, transformers
-, transformersBase, unixCompat, unorderedContainers, vector, wai
-, waiExtra, waiLogger, warp
+, mwcRandom, network, parsec, pathPieces, primitive, QuickCheck
+, random, resourcet, safe, shakespeare, streamingCommons, text
+, time, transformers, transformersBase, unixCompat
+, unorderedContainers, vector, wai, waiExtra, waiLogger, warp
+, word8
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-core";
-  version = "1.4.2";
-  sha256 = "0qi1shmbsi8vkxzvyzqzgmdapnbfkkjvhkshkmr7rrdhkdbnkbxl";
+  version = "1.4.3";
+  sha256 = "1mglavffzvav4dzwqq70agz5rd4bdb66p40qa445fq1dxwbwcq6i";
   buildDepends = [
     aeson blazeBuilder blazeHtml blazeMarkup caseInsensitive cereal
     clientsession conduit conduitExtra cookie dataDefault deepseq
     exceptions fastLogger httpTypes liftedBase monadControl monadLogger
-    mtl parsec pathPieces random resourcet safe shakespeare text time
-    transformers transformersBase unixCompat unorderedContainers vector
-    wai waiExtra waiLogger warp
+    mtl mwcRandom parsec pathPieces primitive random resourcet safe
+    shakespeare text time transformers transformersBase unixCompat
+    unorderedContainers vector wai waiExtra waiLogger warp word8
   ];
   testDepends = [
     async blazeBuilder conduit conduitExtra hspec httpTypes HUnit
-    liftedBase network pathPieces QuickCheck random resourcet
+    liftedBase mwcRandom network pathPieces QuickCheck random resourcet
     shakespeare streamingCommons text transformers wai waiExtra
   ];
   jailbreak = true;

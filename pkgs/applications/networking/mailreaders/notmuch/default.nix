@@ -1,60 +1,24 @@
-{ fetchurl, stdenv, bash, emacs, gdb, glib, gmime, gnupg,
+{ fetchurl, stdenv, bash, emacs, fixDarwinDylibNames,
+  gdb, glib, gmime, gnupg,
   pkgconfig, talloc, xapian
 }:
 
 stdenv.mkDerivation rec {
-  name = "notmuch-0.18.1";
+  name = "notmuch-0.18.2";
 
   src = fetchurl {
     url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "1pdp9l7yv71d3fjb30qyccva8h03hvg88q4a00yi50v2j70kvmgj";
+    sha256 = "175wzrw1mfpl4h72n9ims66zn5l34zn2dn857vraj2i5w7z7p7z9";
   };
 
-  buildInputs = [ bash emacs gdb glib gmime gnupg pkgconfig talloc xapian ];
+  buildInputs = [ bash emacs gdb glib gmime gnupg pkgconfig talloc xapian ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
   patchPhase = ''
-    (cd test && for prg in \
-        aggregate-results.sh \
-        argument-parsing \
-        atomicity \
-        author-order \
-        basic \
-        crypto \
-        count \
-        dump-restore \
-        emacs \
-        emacs-large-search-buffer \
-        encoding \
-        from-guessing \
-        help-test \
-        hooks \
-        json \
-        long-id \
-        maildir-sync \
-        multipart \
-        new \
-        notmuch-test \
-        python \
-        raw \
-        reply \
-        search \
-        search-by-folder \
-        search-insufficient-from-quoting \
-        search-folder-coherence \
-        search-limiting \
-        search-output \
-        search-position-overlap-bug \
-        symbol-hiding \
-        tagging \
-        test-lib.sh \
-        test-verbose \
-        thread-naming \
-        thread-order \
-        uuencode \
-    ;do
-      substituteInPlace "$prg" \
-        --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    done)
+    find test -type f -exec \
+      sed -i \
+        "1s_#!/usr/bin/env bash_#!${bash}/bin/bash_" \
+        "{}" ";"
 
     for src in \
       crypto.c \
@@ -64,6 +28,16 @@ stdenv.mkDerivation rec {
         --replace \"gpg\" \"${gnupg}/bin/gpg2\"
     done
   '';
+
+  preFixup = if stdenv.isDarwin then
+    ''
+      prg="$out/bin/notmuch"
+      target="libnotmuch.3.dylib"
+      echo "$prg: fixing link to $target"
+      install_name_tool -change "$target" "$out/lib/$target" "$prg"
+    ''
+  else
+    "";
 
   # XXX: emacs tests broken
   doCheck = false;

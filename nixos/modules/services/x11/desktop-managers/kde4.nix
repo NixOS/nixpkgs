@@ -7,6 +7,7 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.kde4;
   xorg = pkgs.xorg;
+  kde_workspace = config.services.xserver.desktopManager.kde4.kdeWorkspacePackage;
 
   # Disable Nepomuk and Strigi by default.  As of KDE 4.7, they don't
   # really work very well (e.g. searching files often fails to find
@@ -61,6 +62,13 @@ in
         example = ["gstreamer" "vlc"];
         description = "Which phonon multimedia backend kde should use";
       };
+
+      kdeWorkspacePackage = mkOption {
+        internal = true;
+        default = pkgs.kde4.kde_workspace;
+        type = types.package;
+        description = "Custom kde-workspace, used for NixOS rebranding.";
+      };
     };
 
     environment.kdePackages = mkOption {
@@ -108,13 +116,13 @@ in
             fi
 
             # Start KDE.
-            exec ${pkgs.kde4.kdebase_workspace}/bin/startkde
+            exec ${kde_workspace}/bin/startkde
           '';
       };
 
     security.setuidOwners = singleton
       { program = "kcheckpass";
-        source = "${pkgs.kde4.kdebase_workspace}/lib/kde4/libexec/kcheckpass";
+        source = "${kde_workspace}/lib/kde4/libexec/kcheckpass";
         owner = "root";
         group = "root";
         setuid = true;
@@ -124,7 +132,7 @@ in
         [ pkgs.kde4.kdelibs
 
           pkgs.kde4.kde_baseapps # Splitted kdebase
-          pkgs.kde4.kde_workspace
+          kde_workspace
           pkgs.kde4.kde_runtime
           pkgs.kde4.konsole
           pkgs.kde4.kate
@@ -146,8 +154,10 @@ in
           pkgs.strigi # used by nepomuk
           pkgs.mysql # used by akonadi
         ]
-      ++ [ nepomukConfig ] ++ phononBackendPackages
-      ++ config.environment.kdePackages;
+      ++ lib.optional config.hardware.pulseaudio.enable pkgs.kde4.kmix  # Perhaps this should always be enabled
+      ++ lib.optional config.hardware.bluetooth.enable pkgs.kde4.bluedevil
+      ++ lib.optional config.networking.networkmanager.enable pkgs.kde4.plasma-nm
+      ++ [ nepomukConfig ] ++ phononBackendPackages;
 
     environment.pathsToLink = [ "/share" ];
 

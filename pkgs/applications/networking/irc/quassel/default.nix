@@ -12,12 +12,12 @@ let
 
 in with stdenv; mkDerivation rec {
 
-  version = "0.10.0";
+  version = "0.10.1";
   name = "quassel${tag}-${version}";
 
   src = fetchurl {
     url = "http://quassel-irc.org/pub/quassel-${version}.tar.bz2";
-    sha256 = "08vwxkwnzlgnxn0wi6ga9fk8qgc6nklb236hsfnr5ad37bi8q8k8";
+    sha256 = "106zjn705vyh0msqwg3v4dhaahffhkn1bmfsljdz57jd539bf5qd";
   };
 
   enableParallelBuilding = true;

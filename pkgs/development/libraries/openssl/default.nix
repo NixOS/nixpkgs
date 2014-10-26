@@ -2,7 +2,7 @@
 , withCryptodev ? false, cryptodevHeaders }:
 
 let
-  name = "openssl-1.0.1i";
+  name = "openssl-1.0.1j";
 
   opensslCrossSystem = stdenv.lib.attrByPath [ "openssl" "system" ]
     (throw "openssl needs its platform name cross building" null)
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
       "http://www.openssl.org/source/${name}.tar.gz"
       "http://openssl.linux-mirror.org/source/${name}.tar.gz"
     ];
-    sha256 = "1izwv1wzqdw8aqnvb70jcqpqp0rvkcm22w5c1dm9l1kpr939y5rw";
+    sha256 = "1wzdaiix40lz0rsyf51qv0wiq4ywp29j5ni0xzl06vxsi63wlq0v";
   };
 
   patches = patchesCross false;

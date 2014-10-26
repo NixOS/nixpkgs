@@ -112,7 +112,7 @@ rec {
 
   gucharmap = callPackage ./core/gucharmap { };
 
-  gvfs = pkgs.gvfs.override { gnome = gnome3; lightWeight = false; };
+  gvfs = pkgs.gvfs.override { gnome = gnome3; gnomeSupport = true; };
 
   eog = callPackage ./core/eog { };
 
@@ -233,7 +233,9 @@ rec {
 
   libgda = callPackage ./misc/libgda { };
 
-  libgit2-glib = callPackage ./misc/libgit2-glib { };
+  libgit2-glib = callPackage ./misc/libgit2-glib {
+    libgit2 = pkgs.libgit2.override { libssh2 = null; };
+  };
 
   libmediaart = callPackage ./misc/libmediaart { };
 

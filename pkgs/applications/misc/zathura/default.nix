@@ -1,7 +1,7 @@
-{ callPackage, pkgs, fetchurl, useMupdf }:
+{ callPackage, pkgs, fetchurl, stdenv, useMupdf }:
 
 rec {
-  inherit (pkgs) stdenv;
+  inherit stdenv;
 
   icon = ./icon.xpm;
 

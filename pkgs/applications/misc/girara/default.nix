@@ -1,16 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, gtk, gettext }:
+{ stdenv, fetchurl, pkgconfig, gtk, gettext, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "girara-0.2.2";
+  name = "girara-0.2.3";
 
   src = fetchurl {
     url = "http://pwmt.org/projects/girara/download/${name}.tar.gz";
-    sha256 = "0lv6wqhx2avdxj6yx111jfs4j32r0xzmmkhy7pgzxpf73kgxz0k3";
+    sha256 = "1phfmqp8y17zcy9yi6pm2f80x8ldbk60iswpm4bmjz5217jwqzxh";
   };
 
   buildInputs = [ pkgconfig gtk gettext ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [
+    "PREFIX=$(out)"
+    "TPUT=${ncurses}/bin/tput"
+  ];
 
   meta = {
     homepage = http://pwmt.org/projects/girara/;

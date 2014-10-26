@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pdf-toolbox-document";
-  version = "0.0.3.0";
-  sha256 = "0y1kb2hf420jx6r81c431avgar32wzx2xr747akcs4rypf6w53fn";
+  version = "0.0.4.0";
+  sha256 = "1fjchlknkxxgy6rm2q4f9fhy53ip06kzvcv5876gxswdchi6kxwa";
   buildDepends = [
     cipherRc4 cryptohash ioStreams pdfToolboxContent pdfToolboxCore
     text transformers

@@ -30,7 +30,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Enable the stable grsecurity patch, based on Linux 3.2.
+          Enable the stable grsecurity patch, based on Linux 3.14.
         '';
       };
 
@@ -38,7 +38,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Enable the testing grsecurity patch, based on Linux 3.13.
+          Enable the testing grsecurity patch, based on Linux 3.17.
         '';
       };
 

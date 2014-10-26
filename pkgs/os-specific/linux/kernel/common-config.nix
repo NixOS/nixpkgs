@@ -59,6 +59,7 @@ with stdenv.lib;
   ''}
   SCSI_LOWLEVEL y # enable lots of SCSI devices
   SCSI_LOWLEVEL_PCMCIA y
+  SCSI_SAS_ATA y  # added to enable detection of hard drive
   SPI y # needed for many devices
   SPI_MASTER y
   WAN y
@@ -332,13 +333,19 @@ with stdenv.lib;
   TRANSPARENT_HUGEPAGE_ALWAYS? n
   TRANSPARENT_HUGEPAGE_MADVISE? y
 
-  # zram support (e.g for in-memory compressed swap)
+  # zram support (e.g for in-memory compressed swap).
   ${optionalString (versionAtLeast version "3.4") ''
     ZSMALLOC y
   ''}
   ZRAM m
-  
+
   ${optionalString (versionAtLeast version "3.17") "NFC? n"}
+
+  # Enable firmware loading via udev. Only needed for non-declarative
+  # firmware in /root/test-firmware.
+  ${optionalString (versionAtLeast version "3.17") ''
+    FW_LOADER_USER_HELPER_FALLBACK y
+  ''}
 
   ${kernelPlatform.kernelExtraConfig or ""}
   ${extraConfig}

@@ -81,7 +81,7 @@ in {
     services.upower.enable = config.powerManagement.enable;
     services.upower.package = gnome3.upower;
 
-    fonts.fonts = [ pkgs.dejavu_fonts ];
+    fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell_fonts ];
 
     services.xserver.desktopManager.session = singleton
       { name = "gnome3";
