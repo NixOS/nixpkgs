@@ -593,6 +593,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   dataLens = callPackage ../development/libraries/haskell/data-lens {};
 
+  dataLensFd = callPackage ../development/libraries/haskell/data-lens-fd {};
+
   dataLensLight = callPackage ../development/libraries/haskell/data-lens-light {};
 
   dataLensTemplate = callPackage ../development/libraries/haskell/data-lens-template {};
