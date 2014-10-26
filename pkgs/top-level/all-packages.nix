@@ -10129,7 +10129,7 @@ let
     startupnotification = libstartup_notification;
   };
 
-  pidginWrapper = callPackage ../applications/networking/instant-messengers/pidgin/wrapper.nix {
+  pidgin-with-plugins = callPackage ../applications/networking/instant-messengers/pidgin/wrapper.nix {
     plugins = [];
   };
 
