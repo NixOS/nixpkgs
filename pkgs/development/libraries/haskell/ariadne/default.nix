@@ -20,6 +20,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     bert filepath haskellSrcExts tasty tastyHunit utf8String
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/feuerbach/ariadne";
     description = "Go-to-definition for Haskell";
