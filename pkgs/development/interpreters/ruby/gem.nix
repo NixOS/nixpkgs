@@ -70,8 +70,8 @@ in ruby.stdenv.mkDerivation (attrs // {
     done
 
     # looks like useless files which break build repeatability and consume space
-    rm $out/${ruby.gemPath}/doc/*/*/created.rid || true
-    rm $out/${ruby.gemPath}/gems/*/ext/*/mkmf.log || true
+    rm -f $out/${ruby.gemPath}/doc/*/*/created.rid || true
+    rm -f $out/${ruby.gemPath}/gems/*/ext/*/mkmf.log || true
 
     mkdir -p $out/nix-support
 
