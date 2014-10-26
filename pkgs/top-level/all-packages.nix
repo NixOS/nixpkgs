@@ -4267,6 +4267,8 @@ let
 
   chrpath = callPackage ../development/tools/misc/chrpath { };
 
+  chruby = callPackage ../development/tools/misc/chruby { };
+
   "cl-launch" = callPackage ../development/tools/misc/cl-launch {};
 
   complexity = callPackage ../development/tools/misc/complexity { };
