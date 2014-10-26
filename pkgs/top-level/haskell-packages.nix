@@ -1279,6 +1279,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hsc3 = callPackage ../development/libraries/haskell/hsc3 {};
 
+  hsc3-dot = callPackage ../development/libraries/haskell/hsc3-dot {};
+
   hsdns = callPackage ../development/libraries/haskell/hsdns {};
 
   hsemail = callPackage ../development/libraries/haskell/hsemail {};
