@@ -25,7 +25,6 @@ cabal.mkDerivation (self: {
     description = "Go-to-definition for Haskell";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
     maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
 })
