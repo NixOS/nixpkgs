@@ -1,7 +1,7 @@
 { stdenv, buildEnv, pidgin, makeWrapper, plugins }:
 
 let drv = buildEnv {
-  name = "${pidgin.name}-with-plugins";
+  name = "pidgin-with-plugins-" + (builtins.parseDrvName pidgin.name).version;
 
   paths = [ pidgin ] ++ plugins;
 
