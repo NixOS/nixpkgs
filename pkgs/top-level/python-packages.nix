@@ -2603,6 +2603,7 @@ let
   poppler-qt4 = buildPythonPackage rec {
     name = "poppler-qt4-${version}";
     version = "0.18.1";
+    disabled = isPy3k;
     
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/python-poppler-qt4/" +
