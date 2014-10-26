@@ -2741,7 +2741,7 @@ let
 
   xvfb_run = callPackage ../tools/misc/xvfb-run { inherit (texFunctions) fontsConf; };
 
-  youtubeDL = callPackage ../tools/misc/youtube-dl { };
+  youtube-dl = callPackage ../tools/misc/youtube-dl { };
 
   zbar = callPackage ../tools/graphics/zbar {
     pygtk = lib.overrideDerivation pygtk (x: {
@@ -12420,6 +12420,7 @@ let
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
   jquery_ui = jquery-ui;  # added 2014-09-07
+  youtubeDl = youtube-dl;  # added 2014-10-26
 
 
 }; in self; in pkgs
