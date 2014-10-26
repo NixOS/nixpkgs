@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
     HTTP hxt hxtHttp MaybeT mtl network networkUri parsec transformers
   ];
   testDepends = [ hspec hxt ];
+  jailbreak = true;
   doCheck = false;
   meta = {
     homepage = "https://github.com/egonSchiele/HandsomeSoup";
