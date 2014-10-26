@@ -1260,6 +1260,11 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hopenssl = callPackage ../development/libraries/haskell/hopenssl {};
 
+  hosc = callPackage ../development/libraries/haskell/hosc {
+    binary = self.binary_0_7_2_2;
+    dataBinaryIeee754 = self.dataBinaryIeee754.override { binary = self.binary_0_7_2_2; };
+  };
+
   hostname = callPackage ../development/libraries/haskell/hostname {};
 
   hp2anyCore = callPackage ../development/libraries/haskell/hp2any-core {};
