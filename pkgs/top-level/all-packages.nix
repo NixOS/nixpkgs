@@ -12422,7 +12422,7 @@ let
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
   jquery_ui = jquery-ui;  # added 2014-09-07
-  youtubeDl = youtube-dl;  # added 2014-10-26
+  youtubeDL = youtube-dl;  # added 2014-10-26
 
 
 }; in self; in pkgs
