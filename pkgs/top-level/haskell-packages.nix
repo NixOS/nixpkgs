@@ -3116,8 +3116,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   # M-x or reload). Use ‘yiCustom’ instead.
   yi = callPackage ../applications/editors/yi/yi.nix { };
 
-  yiContrib = callPackage ../development/libraries/haskell/yi-contrib {};
-
   yiCustom = callPackage ../applications/editors/yi/yi-custom.nix {
     extraPackages = pkgs: [];
   };
