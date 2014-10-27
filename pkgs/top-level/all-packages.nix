@@ -11559,8 +11559,6 @@ let
         monolithic = false;
         daemon = false;
         client = true;
-        withKDE = stdenv.isLinux;
-        qt = if withKDE then qt4 else qt5; # KDE supported quassel cannot build with qt5 yet (maybe in 0.12.0)
         tag = "-client";
       });
 
