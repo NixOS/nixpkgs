@@ -48,11 +48,7 @@ in ruby.stdenv.mkDerivation (attrs // {
     fi
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    ${attrs.checkPhase or "${rake}/bin/rake spec"}
-    runHook postCheck
-  '';
+  checkPhase = "true";
 
   buildPhase = ''
     runHook preBuild

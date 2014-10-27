@@ -21,6 +21,7 @@
 , which, postgresql, v8_3_16_14, clang }:
 
 let
+  id = x: x;
   v8 = v8_3_16_14;
 
   gems = lib.mapAttrs (name: config:
@@ -31,17 +32,10 @@ let
   instantiate = (name: attrs:
     let
       # Turn dependency strings into actual derivations.
-      gemPath = map (name: builtins.getAttr name gems) (attrs.dependencies or []);
-      fix = if (builtins.hasAttr name fixes)
-            then (builtins.getAttr name fixes) attrs
-            else {};
+      gemPath = map (name: gems."${name}") (attrs.dependencies or []);
+      fixedAttrs = (fixes."${name}" or id) attrs;
     in
-      buildRubyGem (attrs // {
-        inherit gemPath;
-        # Disable the checkPhase as there no single way to run tests for a given
-        # gem: https://github.com/rubygems/rubygems/issues/730
-        checkPhase = ":";
-      } // fix)
+      buildRubyGem (fixedAttrs // { inherit gemPath; })
   );
 
   fixes = {
