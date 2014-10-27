@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libiconvOrNull, recode }:
 
 stdenv.mkDerivation rec {
-  name = "enca-1.15";
+  name = "enca-1.16";
 
   src = fetchurl {
-    url = "http://dl.cihar.com/enca/${name}.tar.bz2";
-    sha256 = "1iibfl2s420x7bc1hvxr1ys4cpz579brg2m2ln4rp677azmrr8mv";
+    url = "http://dl.cihar.com/enca/${name}.tar.xz";
+    sha256 = "0hg7ggldam66l9j53nlrvi2lv1k99r2qfk6dh23vg6mi05cph7bw";
   };
 
   buildInputs = [ recode libiconvOrNull ];
