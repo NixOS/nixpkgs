@@ -1,11 +1,11 @@
 { stdenv, fetchurl, bash, gettext }:
 
 stdenv.mkDerivation (rec {
-  name = "libgpg-error-1.16";
+  name = "libgpg-error-1.17";
 
   src = fetchurl {
     url = "mirror://gnupg/libgpg-error/${name}.tar.bz2";
-    sha256 = "16xv59zcr177gvgj97vg0rm4rixrpb4lz1q9fji3xay47i83gm62";
+    sha256 = "1dapxzxl1naghf342fwfc2w2f2c5hb9gr1a1s4n8dsqn26kybx1z";
   };
 
   # If architecture-dependent MO files aren't available, they're generated
