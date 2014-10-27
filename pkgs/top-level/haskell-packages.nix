@@ -3165,13 +3165,13 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = "${nativePkgs.glibcLocales}/lib/locale/locale-archive";
     });
-  in callPackage cabalExpr {
+  in callPackage cabalExpr ({
     cabal = self.cabal.override {
       extension = eself: esuper: {
         buildDepends = [ self.cabalInstall ] ++ esuper.buildDepends;
       } // cabalDrvArgs;
     };
-  };
+  } // args);
 
   buildLocalCabal = src: name: self.buildLocalCabalWithArgs { inherit src name; };
 
