@@ -8594,6 +8594,8 @@ let
 
   manpages = callPackage ../data/documentation/man-pages { };
 
+  meslo-lg = callPackage ../data/fonts/meslo-lg {};
+
   miscfiles = callPackage ../data/misc/miscfiles { };
 
   mobile_broadband_provider_info = callPackage ../data/misc/mobile-broadband-provider-info { };
