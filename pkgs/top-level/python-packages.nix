@@ -1012,12 +1012,12 @@ let
 
 
   botocore = buildPythonPackage rec {
-    version = "0.33.0";
+    version = "0.67.0";
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
-      md5 = "6743c73a2e148abaa9c487a6e2ee53a3";
+      md5 = "193fe828525af4ae58e04bd172dc355f";
     };
 
     propagatedBuildInputs =
@@ -4539,11 +4539,11 @@ let
 
 
   jmespath = buildPythonPackage rec {
-    name = "jmespath-0.2.1";
+    name = "jmespath-0.4.1";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/j/jmespath/jmespath-0.2.1.tar.gz";
-      md5 = "7800775aa12c6303f9ad597b6a8fa03c";
+      url = "https://pypi.python.org/packages/source/j/jmespath/${name}.tar.gz";
+      md5 = "a11ae39472672a650dfb55feab7d65eb";
     };
 
     propagatedBuildInputs = with self; [ ply ];
