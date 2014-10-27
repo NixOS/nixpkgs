@@ -4,12 +4,12 @@
 # the tarball. Is there a nicer way than duplicating code?
 
 let
-  version = "0.3";
+  version = "0.4";
 in
 eggDerivation {
   src = fetchurl {
     url = "https://github.com/the-kenny/egg2nix/archive/${version}.tar.gz";
-    sha256 = "1sv6v5a3a17lsyx1i9ajlvix0v8yzl0nnvv9da9c1k349w0fdijv";
+    sha256 = "1xn79fgqxg0i47asjah31zi56v60is1n8d0cy8w4gbj0i41z7pvm";
   };
 
   name = "egg2nix-${version}";
