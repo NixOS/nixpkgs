@@ -8896,6 +8896,8 @@ let
 
   chromiumDev = lowPrio (chromium.override { channel = "dev"; });
 
+  chuck = callPackage ../applications/audio/chuck { };
+
   cinelerra = callPackage ../applications/video/cinelerra { };
 
   clawsMail = callPackage ../applications/networking/mailreaders/claws-mail {
