@@ -32,6 +32,17 @@ stdenv.mkDerivation rec {
     patch -p0 <${patch}
   '';
 
+  # I still think this is a good idea, but it currently fails in the chroot because it checks
+  # that things are writable and so on.
+  #checkPhase = ''
+  #  if [ -f "${configFile}" ]
+  #  then
+  #    ${perl}/bin/perl -w ./rsnapshot configtest
+  #  else
+  #    echo File "${configFile}" does not exist, not checking
+  #  fi
+  #'';
+
   meta = with stdenv.lib; {
     description = "A filesystem snapshot utility for making backups of local and remote systems";
     homepage = http://rsnapshot.org/;
