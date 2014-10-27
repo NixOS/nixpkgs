@@ -2000,6 +2000,10 @@ let
   pdfread = callPackage ../tools/graphics/pdfread { };
 
   briss = callPackage ../tools/graphics/briss { };
+ 
+  brickd = callPackage ../servers/brickd { 
+    libusb = libusb1; 
+  };
 
   bully = callPackage ../tools/networking/bully { };
 
