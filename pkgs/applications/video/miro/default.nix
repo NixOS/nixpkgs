@@ -3,7 +3,12 @@
 , taglib, pysqlite, pycurl, mutagen, pycairo, pythonDBus, pywebkitgtk
 , libtorrentRasterbar, glib_networking, gsettings_desktop_schemas
 , gst_python, gst_plugins_base, gst_plugins_good, gst_ffmpeg
+, enableBonjour ? false, avahi ? null
 }:
+
+assert enableBonjour -> avahi != null;
+
+with stdenv.lib;
 
 buildPythonPackage rec {
   name = "miro-${version}";
@@ -37,6 +42,9 @@ buildPythonPackage rec {
                  c RESOURCE_ROOT = '"'$out/share/miro/resources/'"'
                }' \
            plat/resources.py
+  '' + optionalString enableBonjour ''
+    sed -i -e 's|ctypes.cdll.LoadLibrary( *|ctypes.CDLL("${avahi}/lib/" +|' \
+      ../lib/libdaap/pybonjour.py
   '';
 
   # Disabled for now, because it requires networking and even if we skip those
@@ -69,13 +77,13 @@ buildPythonPackage rec {
     pygobject pygtk pycurl python.modules.sqlite3 mutagen pycairo pythonDBus
     pywebkitgtk libtorrentRasterbar
     gst_python gst_plugins_base gst_plugins_good gst_ffmpeg
-  ];
+  ] ++ optional enableBonjour avahi;
 
   meta = {
     homepage = "http://www.getmiro.com/";
     description = "Video and audio feed aggregator";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.aszlig ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.aszlig ];
+    platforms = platforms.linux;
   };
 }

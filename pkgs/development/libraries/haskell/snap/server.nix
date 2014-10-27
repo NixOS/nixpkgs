@@ -17,7 +17,7 @@ cabal.mkDerivation (self: {
   ];
   configureFlags = "-fopenssl";
   patchPhase = ''
-    sed -i -e 's|HsOpenSSL >= .*|HsOpenSSL|' snap-server.cabal
+    sed -i -e 's|HsOpenSSL >= .*|HsOpenSSL|' -e 's|network.*2.6,|network,|' snap-server.cabal
   '';
   meta = {
     homepage = "http://snapframework.com/";

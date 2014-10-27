@@ -2,24 +2,26 @@
 , selectTextPatch ? false }:
 
 stdenv.mkDerivation rec {
-  versionMajor = "0.36";
-  versionMinor = "3";
+  versionMajor = "0.38";
+  versionMinor = "0";
   moduleName   = "vte";
 
   name = "${moduleName}-${versionMajor}.${versionMinor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${moduleName}/${versionMajor}/${name}.tar.xz";
-    sha256 = "54e5b07be3c0f7b158302f54ee79d4de1cb002f4259b6642b79b1e0e314a959c";
+    sha256 = "1llg2xnjpn630vd86ci8csbjjacj3ia6syck2bsq4kinr66z5zsw";
   };
 
   patches = with stdenv.lib; optional selectTextPatch ./expose_select_text.patch;
 
-  buildInputs = [ gobjectIntrospection intltool pkgconfig gnome3.glib gnome3.gtk3 ncurses ];
+  buildInputs = [ gobjectIntrospection intltool pkgconfig gnome3.glib gnome3.gtk3 ncurses vala libxml2 ];
 
   configureFlags = [ "--enable-introspection" ];
 
   enableParallelBuilding = true;
+
+  preBuild = "patchShebangs ./src";
 
   postInstall = ''
     substituteInPlace $out/lib/libvte2_90.la --replace "-lncurses" "-L${ncurses}/lib -lncurses"

@@ -65,6 +65,7 @@ in rec {
       mysql51
       mysql55
       nginx
+      openjdk
       openssh
       php
       postgresql92

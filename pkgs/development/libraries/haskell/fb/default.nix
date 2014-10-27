@@ -10,8 +10,8 @@
 
 cabal.mkDerivation (self: {
   pname = "fb";
-  version = "1.0.6";
-  sha256 = "16dwvh2xn14gpni0qpabqfifywrkdz1p0mmq6yyf3k19ix3xg9im";
+  version = "1.0.7";
+  sha256 = "0ghyddxf4aqidqvbm93pjgaban0whfj4y1w11b7nxy89srhyjhh8";
   buildDepends = [
     aeson attoparsec base16Bytestring base64Bytestring cereal conduit
     conduitExtra cryptoApi cryptohash cryptohashCryptoapi dataDefault

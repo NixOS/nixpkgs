@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "json-rpc";
-  version = "0.2.0.2";
-  sha256 = "00ha6hjg9ccwa48ab5ibnkiiri7ki3rv7ms2h9qbwr30lxyb0r88";
+  version = "0.2.1.1";
+  sha256 = "0h6dkb1rgd6qxzcxvqvgwilmibkdbqpjvflijwf54fx2z687fjld";
   buildDepends = [
     aeson async conduit conduitExtra deepseq hashable mtl stm
     stmConduit text unorderedContainers

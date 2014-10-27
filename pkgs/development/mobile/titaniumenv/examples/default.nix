@@ -66,18 +66,11 @@ rec {
     target = "iphone";
   };
 
-  simulate_kitchensink_iphone = import ./simulate-kitchensink {
+  simulate_kitchensink = import ./simulate-kitchensink {
     inherit (pkgs) stdenv;
     xcodeenv = pkgs.xcodeenv.override { version = xcodeVersion; inherit xcodeBaseDir; };
     kitchensink = kitchensink_ios_development;
-    device = "iPhone";
-  };
-  
-  simulate_kitchensink_ipad = import ./simulate-kitchensink {
-    inherit (pkgs) stdenv;
-    xcodeenv = pkgs.xcodeenv.override { version = xcodeVersion; inherit xcodeBaseDir; };
-    kitchensink = kitchensink_ios_development;
-    device = "iPad";
+    bundleId = if rename then newBundleId else "com.appcelerator.kitchensink";
   };
 } else {}) // (if rename then
   let

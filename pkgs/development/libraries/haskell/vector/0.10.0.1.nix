@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.10.0.1";
   sha256 = "1bq8am8qnpnsla315i21f1kikikalyz9ps1izxgpr9q1ic2lbsgc";
   buildDepends = [ deepseq primitive ];
+  configureFlags = "${self.stdenv.lib.optionalString self.stdenv.isi686 "--ghc-options=-msse2"}";
   meta = {
     homepage = "http://code.haskell.org/vector";
     description = "Efficient Arrays";

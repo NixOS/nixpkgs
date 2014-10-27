@@ -16,7 +16,7 @@ cabal.mkDerivation (self: {
   sha256 = "012rmasdc167w6gl18ysr53737j4p4afk0qcsv81hif92vvg5j1c";
   isLibrary = true;
   isExecutable = true;
-  patches = [ (fetchpatch { url = "https://github.com/gibiansky/IHaskell/pull/288.patch"; sha256 = "022zdz4wnyra6cfa7mq0w2ycsb007cvppn2f1360nr3fa5s9wibg"; }) ];
+  patches = [ (fetchpatch { url = "https://github.com/gibiansky/IHaskell/pull/296.patch"; sha256 = "1h9gxq9l3j949prcwqkdkrc3q3sxai4b345hfp5hfi0mhfbysfn6"; }) ];
   prePatch = ''
     tar xvf profile/profile.tar -C profile
     sed -i -e '1iexe = "'$out'/bin/IHaskell".replace(" ", "\\ ")\' profile/ipython_config.py
@@ -39,11 +39,13 @@ cabal.mkDerivation (self: {
   postInstall = ''
     patchShebangs .
   '';
+  jailbreak = true;
   meta = with self.stdenv.lib; {
     homepage = "http://gibiansky.github.io/IHaskell/";
     description = "A Haskell backend kernel for the IPython project";
     license = licenses.mit;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
     maintainers = with maintainers; [ edwtjo ];
   };
 })

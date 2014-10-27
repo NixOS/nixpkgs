@@ -19,5 +19,6 @@ cabal.mkDerivation (self: {
     description = "An interactive terminal user interface library for Vty";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })

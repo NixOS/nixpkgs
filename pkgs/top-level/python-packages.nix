@@ -102,6 +102,8 @@ let
   };
 
   ipython = callPackage ../shells/ipython {
+    inherit pythonPackages;
+
     qtconsoleSupport = !pkgs.stdenv.isDarwin; # qt is not supported on darwin
     pylabQtSupport = !pkgs.stdenv.isDarwin;
     pylabSupport = !pkgs.stdenv.isDarwin; # cups is not supported on darwin
@@ -121,7 +123,7 @@ let
 
   # This is used for NixOps to make sure we won't break it with the next major
   # version of nixpart.
-  nixpart0 = self.nixpart;
+  nixpart0 = callPackage ../tools/filesystems/nixpart/0.4 { };
 
   pitz = callPackage ../applications/misc/pitz { };
 
@@ -389,6 +391,17 @@ let
     meta = {
       homepage = http://code.google.com/p/py-amqplib/;
       description = "Python client for the Advanced Message Queuing Procotol (AMQP)";
+    };
+  };
+
+
+  application = buildPythonPackage rec {
+    name = "python-application-${version}";
+    version = "1.4.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-application/${name}.tar.gz";
+      sha256 = "3ae188e9dfd4bd63c9b43aebbf1d9de5df03fb5ac01e72f3bff5b41007570275";
     };
   };
 
@@ -759,7 +772,7 @@ let
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
-  
+
   circus = buildPythonPackage rec {
     name = "circus-0.11.1";
 
@@ -768,9 +781,28 @@ let
       md5 = "5c07cdbe9bb4a9b82e52737ad590617b";
     };
 
-    doCheck = false; # weird error 
+    doCheck = false; # weird error
 
     propagatedBuildInputs = with self; [ iowait psutil pyzmq tornado mock ];
+  };
+
+  cvxopt = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "cvxopt";
+    version = "1.1.7";
+    disabled = isPyPy;
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/${pname}/${name}.tar.gz";
+      sha256 = "f856ea2e9e2947abc1a6557625cc6b0e45228984f397a90c420b2f468dc4cb97";
+    };
+    doCheck = false;
+    buildInputs = with pkgs; [ liblapack blas ];
+    meta = with stdenv.lib; {
+      homepage = "http://cvxopt.org/";
+      description = "Python Software for Convex Optimization";
+      maintainers = with maintainers; [ edwtjo ];
+      licsense = licenses.gpl3Plus;
+    };
   };
 
   iowait = buildPythonPackage rec {
@@ -1024,6 +1056,31 @@ let
     };
   };
 
+  box2d = buildPythonPackage rec {
+    name = "box2d-${version}";
+    version = "2.3b0";
+    disabled = (!isPy27);
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/B/Box2D/Box2D-2.3b0.zip";
+      md5="25fc4f69cd580bdca0022ac3ace53865";
+    };
+
+    patches = [ ../development/python-modules/box2d/disable-test.patch ];
+
+    propagatedBuildInputs = [ pkgs.swig pkgs.box2d ];
+
+    meta = with stdenv.lib; {
+      homepage = https://code.google.com/p/pybox2d/;
+      description = ''
+        A 2D game physics library for Python under
+        the very liberal zlib license
+      '';
+      license = licenses.zlib;
+      platforms = platforms.all;
+      maintainers = [ maintainers.sepi ];
+    };
+  };
 
   # bugz = buildPythonPackage (rec {
   #   name = "bugz-0.9.3";
@@ -1256,6 +1313,25 @@ let
       description = "A pythonic, object-oriented HTTP framework";
     };
   });
+
+
+  cjson = buildPythonPackage rec {
+    name = "python-cjson-${version}";
+    version = "1.1.0";
+    disabled = isPy3k || isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-cjson/${name}.tar.gz";
+      sha256 = "a01fabb7593728c3d851e1cd9a3efbd18f72650a31a5aa8a74018640da3de8b3";
+    };
+
+    meta = with stdenv.lib; {
+      description = "This module implements a very fast JSON encoder/decoder for Python.";
+      homepage    = "http://ag-projects.com/";
+      license     = licenses.lgpl2;
+      platforms   = platforms.all;
+    };
+  };
 
 
   click = buildPythonPackage {
@@ -1933,6 +2009,16 @@ let
     };
   };
 
+  dns = buildPythonPackage rec {
+    name = "dnspython-${version}";
+    version = "1.12.0";
+
+    src = pkgs.fetchurl {
+      url = "http://www.dnspython.org/kits/1.12.0/dnspython-1.12.0.tar.gz";
+      sha256 = "0kvjlkp96qzh3j31szpjlzqbp02brixh4j4clnpw80b0hspq5yq3";
+    };
+  };
+
   docker = buildPythonPackage rec {
     name = "docker-py-0.4.0";
 
@@ -2095,6 +2181,26 @@ let
       license = licenses.bsd3;
       maintainers = [ maintainers.goibhniu ];
       platforms = stdenv.lib.platforms.linux;
+    };
+  };
+
+
+  eventlib = buildPythonPackage rec {
+    name = "python-eventlib-${version}";
+    version = "0.2.0";
+
+    src = pkgs.fetchurl {
+      url = "http://download.ag-projects.com/SipClient/${name}.tar.gz";
+      sha256 = "0fld5lb85ql4a5bgc38sdxi5pgzqljysp1p8f7abxnd6vymh4rgi";
+    };
+
+    propagatedBuildInputs = with self; [ greenlet ];
+
+    meta = with stdenv.lib; {
+      description = "Eventlib bindings for python.";
+      homepage    = "http://ag-projects.com/";
+      license     = licenses.lgpl2;
+      platforms   = platforms.all;
     };
   };
 
@@ -2297,6 +2403,16 @@ let
     '';
 
     propagatedBuildInputs = with self; [ gflags iso8601_0_1_4 ipaddr httplib2 google_apputils google_api_python_client ];
+  };
+
+  gnutls = buildPythonPackage rec {
+    name = "python-gnutls";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-gnutls/python-gnutls-2.0.1.tar.gz";
+      sha256 = "d8fb368c6a4dd58bc6cd5e61d4a12d119c4506fd344a371b3429b3ac2623b9ac";
+    };
+
+    propagatedBuildInputs = with self; [ pkgs.gnutls ];
   };
 
   gitdb = buildPythonPackage rec {
@@ -3397,11 +3513,11 @@ let
 
   ecdsa = buildPythonPackage rec {
     name = "ecdsa-${version}";
-    version = "0.10";
+    version = "0.11";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/e/ecdsa/${name}.tar.gz";
-      md5 = "e95941b3bcbf1726472bb724d7478551";
+      md5 = "8ef586fe4dbb156697d756900cb41d7c";
     };
 
     # Only needed for tests
@@ -4041,18 +4157,22 @@ let
     };
   };
 
+
   greenlet = buildPythonPackage rec {
-    name = "greenlet-0.4.3";
+    name = "greenlet-${version}";
+    version = "0.4.4";
     disabled = isPyPy;  # builtin for pypy
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/g/greenlet/${name}.zip";
-      md5 = "a5e467a5876c415cd357c1ab9027e06c";
+      url = "https://pypi.python.org/packages/source/g/greenlet/${name}.zip";
+      sha256 = "935a76b7ad3c41846af26e136e2fd8ec763794cbc5b5fbc4b7b09d9a8de1d056";
     };
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = http://pypi.python.org/pypi/greenlet;
       description = "Module for lightweight in-process concurrent programming";
+      license     = licenses.lgpl2;
+      platforms   = platforms.all;
     };
   };
 
@@ -5077,6 +5197,19 @@ let
   };
 
 
+  msrplib = buildPythonPackage rec {
+    name = "python-msrplib-${version}";
+    version = "0.15.0";
+
+    src = pkgs.fetchurl {
+      url = "http://download.ag-projects.com/SipClient/${name}.tar.gz";
+      sha256 = "1sm03jcz663xkbhfmrk7rr5l3wlkydn8xs56fvqjxyapx0m5sw6f";
+    };
+
+    propagatedBuildInputs = with self; [ eventlib application gnutls ];
+  };
+
+
   munkres = buildPythonPackage rec {
     name = "munkres-1.0.6";
 
@@ -5755,6 +5888,17 @@ let
 
   });
 
+  pagerduty = buildPythonPackage rec {
+    name = "pagerduty-${version}";
+    version = "0.2.1";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+        url = "https://pypi.python.org/packages/source/p/pagerduty/pagerduty-${version}.tar.gz";
+        md5 = "8109a330d16751a7f4041c0ccedec787";
+    };
+  };
+
   pandas = buildPythonPackage rec {
     name = "pandas-0.14.0";
 
@@ -5779,19 +5923,19 @@ let
   };
 
   paramiko = buildPythonPackage rec {
-    name = "paramiko-1.14.0";
+    name = "paramiko-1.15.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/paramiko/${name}.tar.gz";
-      md5 = "e26324fd398af68ad506fe98853835c3";
+      md5 = "48c274c3f9b1282932567b21f6acf3b5";
     };
 
     propagatedBuildInputs = with self; [ pycrypto ecdsa ];
 
-    # tests failures since 1.14.0 release..
-    doCheck = false;
-
-    checkPhase = "${python}/bin/${python.executable} test.py";
+    doCheck = !isPyPy;
+    checkPhase = ''
+      ${python}/bin/${python.executable} test.py --no-sftp --no-big-file
+    '';
 
     meta = {
       homepage = "https://github.com/paramiko/paramiko/";
@@ -6073,7 +6217,7 @@ let
       md5 = "56b6614499aacb7d6b5983c4914daea7";
     };
 
-    buildInputs = with self; [ pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp ];
+    buildInputs = with self; [ pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.tcl ];
 
     # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
     preConfigure = ''
@@ -6082,10 +6226,9 @@ let
               s|^JPEG_ROOT =.*$|JPEG_ROOT = _lib_include("${pkgs.libjpeg}")|g ;
               s|^ZLIB_ROOT =.*$|ZLIB_ROOT = _lib_include("${pkgs.zlib}")|g ;
               s|^LCMS_ROOT =.*$|LCMS_ROOT = _lib_include("${pkgs.libwebp}")|g ;
-              s|^TIFF_ROOT =.*$|TIFF_ROOT = _lib_include("${pkgs.libtiff}")|g ;'
+              s|^TIFF_ROOT =.*$|TIFF_ROOT = _lib_include("${pkgs.libtiff}")|g ;
+              s|^TCL_ROOT=.*$|TCL_ROOT = _lib_include("${pkgs.tcl}")|g ;'
     '';
-
-
 
     meta = {
       homepage = http://python-imaging.github.com/Pillow;
@@ -6400,9 +6543,10 @@ let
     };
   };
 
+
   pycapnp = buildPythonPackage rec {
     name = "pycapnp-0.4.4";
-    homepage = "http://jparyani.github.io/pycapnp/index.html";
+    disabled = isPyPy || isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pycapnp/${name}.tar.gz";
@@ -6420,6 +6564,7 @@ let
       maintainers = with maintainers; [ cstrahan ];
       license = stdenv.lib.licenses.bsd2;
       platforms = stdenv.lib.platforms.all;
+      homepage = "http://jparyani.github.io/pycapnp/index.html";
     };
   };
 
@@ -6738,6 +6883,17 @@ let
       sha256 = "17wq4invmv1nfazaksf59ymqyvgv3i8h4q03ry2az0s9lldyg3dv";
     };
 
+    patches = singleton (pkgs.fetchurl {
+      url = "https://www.redhat.com/archives/pyparted-devel/"
+          + "2014-April/msg00000.html";
+      postFetch = ''
+        sed -i -ne '/<!--X-Body-of-Message-->/,/<!--X-Body-of-Message-End-->/ {
+          s/^<[^>]*>//; /^$/!p
+        }' "$downloadedFile"
+      '';
+      sha256 = "1lakhz3nvx0qacn90bj1nq13zqxphiw4d9dsc44gwa8nj24j2zws";
+    });
+
     postPatch = ''
       sed -i -e 's|/sbin/mke2fs|${pkgs.e2fsprogs}&|' tests/baseclass.py
       sed -i -e '
@@ -6887,6 +7043,18 @@ let
     propagatedBuildInputs = with self; [ kitchen requests bunch paver ];
     doCheck = false;
   });
+
+  python_simple_hipchat = buildPythonPackage rec {
+    name = "python-simple-hipchat-${version}";
+    version = "0.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-simple-hipchat/python-simple-hipchat-${version}.zip";
+      md5 = "3806b3729a021511bac065360832f197";
+    };
+
+    buildInputs = [ pkgs.unzip ];
+  };
 
   python_keyczar = buildPythonPackage rec {
     name = "python-keyczar-0.71c";
@@ -7880,6 +8048,28 @@ let
   };
 
 
+  scapy = buildPythonPackage rec {
+    name = "scapy-2.2.0";
+
+    disabled = isPy3k || isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "http://www.secdev.org/projects/scapy/files/${name}.tar.gz";
+      sha256 = "1bqmp0xglkndrqgmybpwmzkv462mir8qlkfwsxwbvvzh9li3ndn5";
+    };
+
+    propagatedBuildInputs = [ modules.readline ];
+
+    meta = with stdenv.lib; {
+      description = "Powerful interactive network packet manipulation program";
+      homepage = http://www.secdev.org/projects/scapy/;
+      license = licenses.gpl2;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
   scipy = buildPythonPackage rec {
     name = "scipy-0.14.0";
 
@@ -8108,7 +8298,7 @@ let
       sha256 = "bec9269cbfa58de4f0849ec79bb7d54eeeed9df8b5fbfa1637fbc68062822847";
     };
 
-    buildInputs = with self; [ pbr pip ];
+    buildInputs = with self; [ pbr pip ] ++ optional isPy26 argparse;
 
     propagatedBuildInputs = with self; [ setuptools ];
 
@@ -8305,12 +8495,34 @@ let
   };
 
 
+  sipsimple = buildPythonPackage rec {
+    name = "sipsimple-${version}";
+    version = "1.4.2";
+    disabled = isPy3k;
+
+    configurePhase = "find -name 'configure' -exec chmod a+x {} \\; ; find -name 'aconfigure' -exec chmod a+x {} \\; ; ${python}/bin/${python.executable} setup.py build_ext --pjsip-clean-compile";
+
+    src = pkgs.fetchurl {
+      url = "http://download.ag-projects.com/SipClient/python-${name}.tar.gz";
+      sha256 = "f6e6de7ab5f20e8ae08966b8811462e4271833db4f7fbab58ffba4e5c07ab114";
+    };
+
+    propagatedBuildInputs = with self; [ cython pkgs.openssl dns dateutil xcaplib msrplib];
+
+    buildInputs = with self; [ pkgs.alsaLib ];
+
+    installPhase = "${python}/bin/${python.executable} setup.py install --prefix=$out";
+
+    doCheck = false;
+  };
+
+
   six = buildPythonPackage rec {
-    name = "six-1.7.3";
+    name = "six-1.8.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/six/${name}.tar.gz";
-      md5 = "784c6e5541c3c4952de9c0a966a0a80b";
+      md5 = "1626eb24cc889110c38f7e786ec69885";
     };
 
     # error: invalid command 'test'
@@ -8421,7 +8633,21 @@ let
       md5 = "754c5ab9f533e764f931136974b618f1";
     };
 
-    doCheck = false;
+    buildInputs = [ pkgs.bash ];
+
+    preConfigure = ''
+      substituteInPlace test_subprocess32.py \
+        --replace '/usr/' '${pkgs.bash}/'
+    '';
+
+    checkPhase = ''
+      TMP_PREFIX=`pwd`/tmp/$name
+      TMP_INSTALL_DIR=$TMP_PREFIX/lib/${pythonPackages.python.libPrefix}/site-packages
+      PYTHONPATH="$TMP_INSTALL_DIR:$PYTHONPATH"
+      mkdir -p $TMP_INSTALL_DIR
+      python setup.py develop --prefix $TMP_PREFIX
+      python test_subprocess32.py
+    '';
 
     meta = {
       homepage = "https://pypi.python.org/pypi/subprocess32";
@@ -9255,7 +9481,11 @@ let
     preConfigure = "export HOME=$TMPDIR";
 
     buildInputs = with self; [ pbr pip pkgs.which ];
-    propagatedBuildInputs = with self; [ stevedore virtualenv virtualenv-clone ];
+    propagatedBuildInputs = with self; [
+      stevedore
+      virtualenv
+      virtualenv-clone
+    ] ++ optional isPy26 argparse;
 
     patchPhase = ''
       substituteInPlace "virtualenvwrapper.sh" --replace "which" "${pkgs.which}/bin/which"
@@ -9489,6 +9719,18 @@ let
 
   wxPython30 = callPackage ../development/python-modules/wxPython/3.0.nix {
     wxGTK = pkgs.wxGTK30;
+  };
+
+  xcaplib = buildPythonPackage rec {
+    name = "python-xcaplib-${version}";
+    version = "1.0.17";
+
+    src = pkgs.fetchurl {
+      url = "http://download.ag-projects.com/SipClient/${name}.tar.gz";
+      sha256 = "1bf8n9ghmgxz8kjgnwy4y7ajijy5hi7viabgh0pvzkhz9gfvck86";
+    };
+
+    propagatedBuildInputs = with self; [ eventlib application ];
   };
 
   xe = buildPythonPackage rec {
@@ -10211,24 +10453,22 @@ let
     };
   };
 
+  hgsvn = buildPythonPackage rec {
+    name = "hgsvn-0.3.5";
+    src = pkgs.fetchurl rec {
+      url = "http://pypi.python.org/packages/source/h/hgsvn/${name}.zip";
+      sha256 = "043yvkjf9hgm0xzhmwj1qk3fsmbgwm39f4wsqkscib9wfvxs8wbg";
+    };
+    disabled = isPy3k || isPyPy;
 
-  # XXX: link broken
-  # hgsvn = buildPythonPackage rec {
-  #   name = "hgsvn-0.1.8";
-  #   src = pkgs.fetchurl rec {
-  #     name = "hgsvn-0.1.8.tar.gz";
-  #     url = "http://pypi.python.org/packages/source/h/hgsvn/${name}.tar.gz#md5=56209eae48b955754e09185712123428";
-  #     sha256 = "18a7bj1i0m4shkxmdvw1ci5i0isq5vqf0bpwgrhnk305rijvbpch";
-  #   };
-  #
-  #   buildInputs = with self; [ pkgs.setuptools ];
-  #   doCheck = false;
-  #
-  #     meta = {
-  #     description = "HgSVN";
-  #     homepage = http://pypi.python.org/pypi/hgsvn;
-  #   };
-  # };
+    buildInputs = with self; [ pkgs.setuptools ];
+    doCheck = false;
+
+      meta = {
+      description = "HgSVN";
+      homepage = http://pypi.python.org/pypi/hgsvn;
+    };
+  };
 
   cliapp = buildPythonPackage rec {
     name = "cliapp-${version}";
@@ -10745,6 +10985,33 @@ let
     };
   };
 
+  graphite_pager = buildPythonPackage rec {
+    name = "graphite-pager-${version}";
+    version = "2bbfe91220ec1e0ca1cdf4b5564386482a44ed7d";
+
+    src = pkgs.fetchgit {
+      url = "https://github.com/offlinehacker/graphite-pager.git";
+      sha256 = "aa932f941efe4ed89971fe7572218b020d1a144259739ef78db6397b968eef62";
+      rev = version;
+    };
+
+    buildInputs = with self; [ nose mock ];
+    propagatedBuildInputs = with self; [
+      jinja2 pyyaml redis requests pagerduty 
+      python_simple_hipchat pushbullet
+    ];
+
+    patchPhase = "> requirements.txt";
+    checkPhase = "nosetests";
+
+    meta = {
+      description = "A simple alerting application for Graphite metrics";
+      homepage = https://github.com/seatgeek/graphite-pager;
+      maintainers = [ maintainers.offline ];
+      license = licenses.bsd2;
+    };
+  };
+
 
   pyspotify = buildPythonPackage rec {
     name = "pyspotify-${version}";
@@ -10935,6 +11202,7 @@ let
     };
   };
 
+
   grequests = buildPythonPackage rec {
     name = "grequests-0.2.0";
 
@@ -10985,6 +11253,18 @@ let
       license = "bsd";
       maintainers = [ stdenv.lib.maintainers.matejc ];
     };
+  };
+
+  pushbullet = buildPythonPackage rec {
+    name = "pushbullet.py-${version}";
+    version = "0.5.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pushbullet.py/pushbullet.py-0.5.0.tar.gz";
+      md5 = "36c83ba5f7d5208bb86c00eba633f921";
+    };
+
+    propagatedBuildInputs = with self; [requests websocket_client python_magic ];
   };
 
   power = buildPythonPackage rec {

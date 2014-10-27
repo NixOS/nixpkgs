@@ -32,11 +32,6 @@ stdenv.mkDerivation {
       -e 's|/bin/echo|echo|' \
       -e "/python_arch/s/: *'[^']*'/: '""'/" \
       build/common.gypi chrome/chrome_tests.gypi
-  '' + optionalString (versionOlder version "38.0.0.0") ''
-    sed -i -e '/not RunGN/,+1d' -e '/import.*depot/d' build/gyp_chromium
-    sed -i -e 's|/usr/bin/gcc|gcc|' \
-      third_party/WebKit/Source/build/scripts/scripts.gypi \
-      third_party/WebKit/Source/build/scripts/preprocessor.pm
   '' + optionalString useOpenSSL ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
   '';

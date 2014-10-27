@@ -173,6 +173,7 @@ rec {
     ftp://ftp.nl.debian.org/debian/
     ftp://ftp.ru.debian.org/debian/
     ftp://ftp.debian.org/debian/
+    http://ftp.debian.org/debian/
     http://archive.debian.org/debian-archive/debian/
     ftp://ftp.funet.fi/pub/mirrors/ftp.debian.org/debian/
   ];
@@ -383,6 +384,13 @@ rec {
   hackage = [
     http://hackage.haskell.org/package/
     http://hdiff.luite.com/packages/archive/package/
+  ];
+
+  # Roy marples mirrors
+  roy = [
+    http://roy.marples.name/downloads/
+    http://roy.aydogan.net/
+    http://cflags.cc/roy/
   ];
 
 }

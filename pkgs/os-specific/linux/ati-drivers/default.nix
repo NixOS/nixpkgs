@@ -3,6 +3,7 @@
 , libXxf86vm, xf86vidmodeproto # for fglrx_gamma
 , xorg, makeWrapper, glibc, patchelf
 , unzip
+, qt4 # for amdcccle
 , # Whether to build the libraries only (i.e. not the kernel module or
   # driver utils). Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -53,6 +54,7 @@ stdenv.mkDerivation {
       patchelf
       unzip
       mesa
+      qt4
     ];
 
   inherit libsOnly;
@@ -74,13 +76,13 @@ stdenv.mkDerivation {
   # appear in /run/opengl-driver/lib which get's added to LD_LIBRARY_PATH
   extraDRIlibs = [ xorg.libXext ];
 
-  inherit mesa; # only required to build examples
+  inherit mesa qt4; # only required to build examples and amdcccle
 
   meta = with stdenv.lib; {
     description = "ATI drivers";
     homepage = http://support.amd.com/us/gpudownload/Pages/index.aspx;
     license = licenses.unfree;
-    maintainers = with maintainers; [marcweber offline];
+    maintainers = with maintainers; [ marcweber offline jgeerds ];
     platforms = platforms.linux;
     hydraPlatforms = [];
   };

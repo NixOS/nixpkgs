@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "5.7";
+  version = "5.8";
   name = "checkstyle-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/checkstyle/${version}/${name}-bin.tar.gz";
-    sha256 = "0kzj507ylynq6p7v097bjzsckkjny5i2fxwxyrlwi5samhi2m06x";
+    sha256 = "0ydv99rwzib29j2vq51qvgqjk0mn8zrjg8akflr5i62m866r4lsx";
   };
 
   installPhase = ''
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     cp -R * $out/checkstyle
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Checks Java source against a coding standard";
     longDescription = ''
       checkstyle is a development tool to help programmers write Java code that
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
       Conventions, but is highly configurable.
     '';
     homepage = http://checkstyle.sourceforge.net/;
-    license = stdenv.lib.licenses.lgpl21;
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ pSub ];
   };
 }

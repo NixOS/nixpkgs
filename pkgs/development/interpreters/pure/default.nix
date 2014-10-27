@@ -4,18 +4,23 @@
 stdenv.mkDerivation rec {
   baseName="pure";
   project="pure-lang";
-  version="0.62";
+  version="0.63";
   name="${baseName}-${version}";
   extension="tar.gz";
 
   src = fetchurl {
     url="https://bitbucket.org/purelang/${project}/downloads/${name}.${extension}";
-    sha256="77df64e8154ef6f8fac66f8bcc471dc8f994862d1ee77b7c98003607757a013b";
+    sha256="33acb2d560b21813f5e856973b493d9cfafba82bd6f539425ce07aa22f84ee29";
   };
 
   buildInputs = [ bison flex makeWrapper ];
   propagatedBuildInputs = [ llvm gmp mpfr readline ];
 
+  configureFlags = [ "--enable-release" ];
+  doCheck = true;
+  checkPhase = ''
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${llvm}/lib make check
+  '';
   postInstall = ''
     wrapProgram $out/bin/pure --prefix LD_LIBRARY_PATH : ${llvm}/lib
   '';
@@ -25,6 +30,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers;
     [
       raskin
+      asppsa
     ];
     platforms = with lib.platforms;
       linux;

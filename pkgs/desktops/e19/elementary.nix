@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, e19, libcap, gdbm }:
 stdenv.mkDerivation rec {
   name = "elementary-${version}";
-  version = "1.11.2";
+  version = "1.11.3";
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/elementary/${name}.tar.gz";
-    sha256 = "041hwp81qyq4wsw483g2jh52gcanqg046f91pmd0vzgwcgxyixqq";
+    sha256 = "1yr96imam9sckgagnp7wdvwmvr1xwakw29dih3gxp7nz7xsa0j8k";
   };
   buildInputs = [ pkgconfig e19.efl gdbm ] ++ stdenv.lib.optionals stdenv.isLinux [ libcap ];
   preConfigure = ''
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Widget set/toolkit";
     homepage = http://enlightenment.org/;
-    maintainers = [ stdenv.lib.maintainers.matejc ];
+    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.lgpl2;
   };

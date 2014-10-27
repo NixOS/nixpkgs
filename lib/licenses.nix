@@ -285,6 +285,12 @@ rec {
 
   unfreeRedistributableFirmware = "unfree-redistributable-firmware";
 
+  unlicense = {
+    shortName = "Unlicense";
+    fullName = "Unlicense";
+    url = http://unlicense.org/;
+  };
+
   wadalab = {
     shortName = "wadalab";
     fullName = "Wadalab Font License";

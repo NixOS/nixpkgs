@@ -182,19 +182,7 @@ in
     };
   };
 
-  pycharm-community-313 = buildPycharm rec {
-    name = "pycharm-community-${version}";
-    version = "3.1.3";
-    build = "133.1347";
-    description = "PyCharm 3.1 Community Edition";
-    license = stdenv.lib.licenses.asl20;
-    src = fetchurl {
-      url = "http://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "f671ee4c99207c179f168b5b98fa23afe90a94c3a3914367b95a46b0c2881b23";
-    };
-  };
-
-  pycharm-community-341 = buildPycharm rec {
+  pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
     version = "3.4.1";
     build = "135.1057";
@@ -206,19 +194,7 @@ in
     };
   };
 
-  pycharm-professional-313 = buildPycharm rec {
-    name = "pycharm-professional-${version}";
-    version = "3.1.3";
-    build = "133.1347";
-    description = "PyCharm 3.1 Professional Edition";
-    license = stdenv.lib.licenses.unfree;
-    src = fetchurl {
-      url = "http://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "e0c2db8f18cb825a95de6ddc4b0b9f93c5643bf34cca9f1b3c2fa37fd7c14f11";
-    };
-  };
-
-  pycharm-professional-341 = buildPycharm rec {
+  pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
     version = "3.4.1";
     build = "135.1057";

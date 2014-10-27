@@ -1,5 +1,5 @@
 { stdenv, fetchgit, autoconf, automake, libtool, pkgconfig, glib, libdaemon
-, mpd_clientlib, curl, sqlite, ruby, rubyLibs, libnotify }:
+, mpd_clientlib, curl, sqlite, ruby, rubyLibs, libnotify, haskellPackages }:
 
 stdenv.mkDerivation rec {
   version = "20130809";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ autoconf automake libtool pkgconfig glib libdaemon
+    [ autoconf automake libtool pkgconfig glib libdaemon haskellPackages.pandoc
       mpd_clientlib curl sqlite ruby rubyLibs.nokogiri libnotify ];
 
   preConfigure = ''

@@ -10,6 +10,8 @@
 , sqlite
 , tcl, tk
 , zlib
+, callPackage
+, self
 }:
 
 assert readline != null -> ncurses != null;
@@ -52,9 +54,18 @@ stdenv.mkDerivation {
   setupHook = ./setup-hook.sh;
 
   postInstall = ''
-    rm -rf "$out/lib/python${majorVersion}/test"
-    ln -s "$out/include/python${majorVersion}m" "$out/include/python${majorVersion}"
+    # needed for some packages, especially packages that backport functionality
+    # to 2.x from 3.x
+    for item in $out/lib/python${majorVersion}/test/*; do
+      if [[ "$item" != */test_support.py* ]]; then
+        rm -rf "$item"
+      else
+        echo $item
+      fi
+    done
+    touch $out/lib/python${majorVersion}/test/__init__.py
 
+    ln -s "$out/include/python${majorVersion}m" "$out/include/python${majorVersion}"
     paxmark E $out/bin/python${majorVersion}
   '';
 
@@ -67,6 +78,7 @@ stdenv.mkDerivation {
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
     libPrefix = "python${majorVersion}";
     executable = "python3.4m";
+    buildEnv = callPackage ../wrapper.nix { python = self; };
     isPy3 = true;
     isPy34 = true;
     is_py3k = true;  # deprecated

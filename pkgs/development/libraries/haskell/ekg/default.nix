@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ekg";
-  version = "0.4.0.3";
-  sha256 = "0fynng6r0aj25k4j8ba3fvq4a6kgijil4m9ygd99xq8c1cvj2zyy";
+  version = "0.4.0.4";
+  sha256 = "1v1kskl1fwwpv72lay8c7nlvg2dswf6wij176fjfml1v8lmll2lr";
   buildDepends = [
     aeson ekgCore filepath network snapCore snapServer text time
     transformers unorderedContainers

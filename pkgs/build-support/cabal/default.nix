@@ -57,6 +57,13 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
                 propagatedUserEnvPkgs = filter (y : ! (y == null)) x.propagatedUserEnvPkgs;
                 doCheck               = enableCheckPhase && x.doCheck;
                 hyperlinkSource       = enableHyperlinkSource && x.hyperlinkSource;
+                # Disable Darwin builds: <https://github.com/NixOS/nixpkgs/issues/2689>.
+                meta                  = let meta = x.meta or {};
+                                            hydraPlatforms = meta.hydraPlatforms or meta.platforms or [];
+                                            noElem         = p: ps: !stdenv.lib.elem p ps;
+                                            noDarwin       = p: noElem p stdenv.lib.platforms.darwin;
+                                        in
+                                        meta // { hydraPlatforms = filter noDarwin hydraPlatforms; };
               };
 
         defaults =
@@ -209,9 +216,6 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               ''}
               ${optionalString (self.enableSharedExecutables && self.stdenv.isDarwin) ''
                 configureFlags+=" --ghc-option=-optl=-Wl,-headerpad_max_install_names"
-              ''}
-              ${optionalString (versionOlder "7.8" ghc.version) ''
-                configureFlags+=" --ghc-option=-j$NIX_BUILD_CORES"
               ''}
 
               echo "configure flags: $extraConfigureFlags $configureFlags"

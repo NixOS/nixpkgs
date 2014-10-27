@@ -5,6 +5,7 @@
 , ncurses, readline, cursesSupport ? false
 , groff, docSupport ? false
 , libyaml, yamlSupport ? true
+, libffi, fiddleSupport ? true
 , ruby_2_0_0, autoreconfHook, bison, useRailsExpress ? true
 }:
 
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
   NROFF = "${groff}/bin/nroff";
 
   buildInputs = ops useRailsExpress [ autoreconfHook bison ]
+    ++ (op fiddleSupport libffi)
     ++ (ops cursesSupport [ ncurses readline ] )
     ++ (op docSupport groff )
     ++ (op zlibSupport zlib)
@@ -47,6 +49,12 @@ stdenv.mkDerivation rec {
     ++ (op (!cursesSupport && stdenv.isDarwin) readline);
 
   enableParallelBuilding = true;
+
+  # Fix a build failure on systems with nix store optimisation.
+  # (The build process attempted to copy file a overwriting file b, where a and
+  # b are hard-linked, which results in cp returning a non-zero exit code.)
+  # https://github.com/NixOS/nixpkgs/issues/4266
+  postUnpack = ''rm "$sourceRoot/enc/unicode/name2ctype.h"'';
 
   patches = ops useRailsExpress [
     "${patchSet}/patches/ruby/2.0.0/p481/01-zero-broken-tests.patch"

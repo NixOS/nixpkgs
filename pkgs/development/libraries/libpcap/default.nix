@@ -10,14 +10,14 @@ stdenv.mkDerivation rec {
   
   nativeBuildInputs = [ flex bison ];
   
-  configureFlags = "--with-pcap=linux";
+  configureFlags = stdenv.lib.optionals stdenv.isLinux "--with-pcap=linux";
 
   preInstall = ''mkdir -p $out/bin'';
   
   crossAttrs = {
     # Stripping hurts in static libraries
     dontStrip = true;
-    configureFlags = [ "--with-pcap=linux" "ac_cv_linux_vers=2" ];
+    configureFlags = configureFlags ++ [ "ac_cv_linux_vers=2" ];
   };
 
   meta = {

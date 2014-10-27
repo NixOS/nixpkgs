@@ -2,18 +2,18 @@
 
 { cabal, active, colour, dataDefaultClass, diagramsCore, dualTree
 , filepath, fingertree, hashable, intervals, JuicyPixels, lens
-, MemoTrie, monoidExtras, optparseApplicative, safe, semigroups
-, tagged, vectorSpace, vectorSpacePoints
+, MemoTrie, monoidExtras, optparseApplicative, semigroups, tagged
+, vectorSpace, vectorSpacePoints
 }:
 
 cabal.mkDerivation (self: {
   pname = "diagrams-lib";
-  version = "1.2.0.3";
-  sha256 = "1rgyv7yywmqk3s2cmv5s923421ybj6mnii7jgxri56jzw0agfyq7";
+  version = "1.2.0.4";
+  sha256 = "01gcbgxsnrcsysvpjhprym5ix10350x7l57f28nm0hbrfrsgidhz";
   buildDepends = [
     active colour dataDefaultClass diagramsCore dualTree filepath
     fingertree hashable intervals JuicyPixels lens MemoTrie
-    monoidExtras optparseApplicative safe semigroups tagged vectorSpace
+    monoidExtras optparseApplicative semigroups tagged vectorSpace
     vectorSpacePoints
   ];
   meta = {
