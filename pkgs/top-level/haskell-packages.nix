@@ -271,6 +271,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   bitsExtras = callPackage ../development/libraries/haskell/bits-extras {};
 
+  bitset = callPackage ../development/libraries/haskell/bitset {};
+
   bktrees = callPackage ../development/libraries/haskell/bktrees {};
 
   blankCanvas = callPackage ../development/libraries/haskell/blank-canvas {};
