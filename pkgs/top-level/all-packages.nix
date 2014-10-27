@@ -1871,6 +1871,8 @@ let
 
   opencryptoki = callPackage ../tools/security/opencryptoki { };
 
+  onscripter-en = callPackage ../games/onscripter-en { };
+
   opendbx = callPackage ../development/libraries/opendbx { };
 
   opendkim = callPackage ../development/libraries/opendkim { };
