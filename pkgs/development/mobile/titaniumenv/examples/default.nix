@@ -4,7 +4,7 @@
 , xcodeBaseDir ? "/Applications/Xcode.app"
 , tiVersion ? "3.4.0.GA"
 , rename ? false
-, newBundleId ? "com.example.kitchensink", iosMobileProvisioningProfile ? null, iosCertificate ? null, iosCertificateName ? "Example", iosCertificatePassword ? ""
+, newBundleId ? "com.example.kitchensink", iosMobileProvisioningProfile ? null, iosCertificate ? null, iosCertificateName ? "Example", iosCertificatePassword ? "", iosVersion ? "8.0"
 , allowUnfree ? false
 , enableWirelessDistribution ? false, installURL ? null
 }:
@@ -62,7 +62,7 @@ rec {
   kitchensink_ios_development = import ./kitchensink {
     inherit (pkgs) fetchgit;
     titaniumenv = pkgs.titaniumenv.override { inherit xcodeVersion xcodeBaseDir tiVersion; };
-    inherit tiVersion;
+    inherit tiVersion iosVersion;
     target = "iphone";
   };
 
@@ -84,7 +84,7 @@ rec {
       inherit tiVersion;
       release = true;
       rename = true;
-      inherit newBundleId iosMobileProvisioningProfile iosCertificate iosCertificateName iosCertificatePassword;
+      inherit newBundleId iosMobileProvisioningProfile iosCertificate iosCertificateName iosCertificatePassword iosVersion;
       inherit enableWirelessDistribution installURL;
     };
   }
