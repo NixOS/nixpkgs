@@ -16,7 +16,10 @@ let
     useGoogleAPIs = true;
   };
   
-  deleteKeychain = "security delete-keychain $keychainName";
+  deleteKeychain = ''
+    security default-keychain -s login.keychain
+    security delete-keychain $keychainName
+  '';
 in
 stdenv.mkDerivation {
   name = stdenv.lib.replaceChars [" "] [""] name;
