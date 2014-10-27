@@ -83,7 +83,7 @@ rec {
     '';
   };
 
-  build = 
+  build =
 
     stdenv.mkDerivation {
       name = "build";
@@ -91,7 +91,7 @@ rec {
       buildInputs = [nukeReferences cpio];
 
       buildCommand = ''
-	set -x
+        set -x
         mkdir -p $out/bin $out/lib $out/libexec
 
         # Copy what we need of Glibc.
@@ -105,20 +105,20 @@ rec {
         cp -d ${glibc}/lib/libnsl*.so* $out/lib
         cp -d ${glibc}/lib/libutil*.so* $out/lib
         cp -d ${glibc}/lib/crt?.o $out/lib
-        
+
         cp -rL ${glibc}/include $out
         chmod -R u+w $out/include
-        
+
         # Hopefully we won't need these.
         rm -rf $out/include/mtd $out/include/rdma $out/include/sound $out/include/video
         find $out/include -name .install -exec rm {} \;
         find $out/include -name ..install.cmd -exec rm {} \;
         mv $out/include $out/include-glibc
-        
+
         # Copy coreutils, bash, etc.
         cp ${coreutils_}/bin/* $out/bin
         (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk runcon shuf who whoami shred users)
-        
+
         cp ${bash}/bin/bash $out/bin
         cp ${findutils}/bin/find $out/bin
         cp ${findutils}/bin/xargs $out/bin
@@ -135,7 +135,7 @@ rec {
         cp ${patchelf}/bin/* $out/bin
 
         cp -d ${gnugrep.pcre}/lib/libpcre*.so* $out/lib # needed by grep
-        
+
         # Copy what we need of GCC.
         cp -d ${gcc.gcc}/bin/gcc $out/bin
         cp -d ${gcc.gcc}/bin/cpp $out/bin
@@ -164,14 +164,14 @@ rec {
         cp -d ${mpc}/lib/libmpc*.so* $out/lib
         cp -d ${zlib}/lib/libz.so* $out/lib
         cp -d ${libelf}/lib/libelf.so* $out/lib
-        
+
         # Copy binutils.
         for i in as ld ar ranlib nm strip readelf objdump; do
           cp ${binutils}/bin/$i $out/bin
         done
 
         chmod -R u+w $out
-        
+
         # Strip executables even further.
         for i in $out/bin/* $out/libexec/gcc/*/*/*; do
             if test -x $i -a ! -L $i; then
@@ -210,9 +210,9 @@ rec {
       allowedReferences = [];
     };
 
-  
+
   unpack =
-    
+
     stdenv.mkDerivation {
       name = "unpack";
 
@@ -245,7 +245,7 @@ rec {
       name = "test";
 
       realBuilder = "${unpack}/bin/bash";
-      
+
       buildCommand = ''
         export PATH=${unpack}/bin
         ls -l
@@ -267,7 +267,7 @@ rec {
         export CPP="cpp -idirafter ${unpack}/include-glibc -B${unpack}"
         export CC="gcc -idirafter ${unpack}/include-glibc -B${unpack} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${unpack}/lib"
         export CXX="g++ -idirafter ${unpack}/include-glibc -B${unpack} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${unpack}/lib"
-        
+
         echo '#include <stdio.h>' >> foo.c
         echo '#include <limits.h>' >> foo.c
         echo 'int main() { printf("Hello World\n"); return 0; }' >> foo.c
@@ -286,5 +286,5 @@ rec {
         make install
       ''; # */
     };
-    
+
 }
