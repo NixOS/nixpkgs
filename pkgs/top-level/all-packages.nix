@@ -1923,6 +1923,8 @@ let
 
   openvpn_learnaddress = callPackage ../tools/networking/openvpn/openvpn_learnaddress.nix { };
 
+  update-resolv-conf = callPackage ../tools/networking/openvpn/update-resolv-conf.nix { };
+
   openvswitch = callPackage ../os-specific/linux/openvswitch { };
 
   optipng = callPackage ../tools/graphics/optipng {
