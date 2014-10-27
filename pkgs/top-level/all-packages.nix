@@ -4270,7 +4270,7 @@ let
 
   chrpath = callPackage ../development/tools/misc/chrpath { };
 
-  chruby = callPackage ../development/tools/misc/chruby { };
+  chruby = callPackage ../development/tools/misc/chruby { rubies = null; };
 
   "cl-launch" = callPackage ../development/tools/misc/cl-launch {};
 
