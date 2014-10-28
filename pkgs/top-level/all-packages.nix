@@ -6960,6 +6960,8 @@ let
 
   yajl = callPackage ../development/libraries/yajl { };
 
+  yubico-piv-tool = callPackage ../tools/misc/yubico-piv-tool { };
+
   yubikey-personalization = callPackage ../tools/misc/yubikey-personalization {
     libusb = libusb1;
   };
