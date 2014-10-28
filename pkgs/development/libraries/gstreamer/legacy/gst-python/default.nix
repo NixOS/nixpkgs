@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, python, gstreamer
-  , gst_plugins_base, pygtk
+, gst_plugins_base, pygobject
 }:
 
 stdenv.mkDerivation rec {
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig gst_plugins_base pygtk ]
+    [ pkgconfig gst_plugins_base pygobject ]
     ;
 
   propagatedBuildInputs = [ gstreamer python ];
- 
+
   meta = {
     homepage = http://gstreamer.freedesktop.org;
 
