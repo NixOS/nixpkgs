@@ -5331,6 +5331,10 @@ let
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
 
   harfbuzz = callPackage ../development/libraries/harfbuzz { };
+  harfbuzz-icu = callPackage ../development/libraries/harfbuzz {
+    withIcu = true;
+    withGraphite2 = true;
+  };
 
   hawknl = callPackage ../development/libraries/hawknl { };
 
@@ -6809,13 +6813,17 @@ let
   webkit = webkitgtk;
 
   webkitgtk = callPackage ../development/libraries/webkitgtk {
-    harfbuzz = harfbuzz.override {
-      withIcu = true;
-    };
+    harfbuzz = harfbuzz-icu;
+    inherit (xorg) libpthreadstubs;
     gst-plugins-base = gst_all_1.gst-plugins-base;
   };
 
-  webkitgtk2 = webkitgtk.override {
+  webkitgtk24x = callPackage ../development/libraries/webkitgtk/2.4.6.nix {
+    harfbuzz = harfbuzz-icu;
+    gst-plugins-base = gst_all_1.gst-plugins-base;
+  };
+
+  webkitgtk2 = webkitgtk24x.override {
     withGtk2 = true;
     enableIntrospection = false;
   };
@@ -9722,7 +9730,9 @@ let
     };
   };
 
-  liferea = callPackage ../applications/networking/newsreaders/liferea { };
+  liferea = callPackage ../applications/networking/newsreaders/liferea {
+    webkitgtk = webkitgtk24x;
+  };
 
   lingot = callPackage ../applications/audio/lingot {
     inherit (gnome) libglade;
@@ -9757,7 +9767,9 @@ let
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
-  handbrake = callPackage ../applications/video/handbrake { };
+  handbrake = callPackage ../applications/video/handbrake {
+    webkitgtk = webkitgtk24x;
+  };
 
   lilyterm = callPackage ../applications/misc/lilyterm {
     inherit (gnome) vte;
@@ -9798,7 +9810,9 @@ let
 
   mid2key = callPackage ../applications/audio/mid2key { };
 
-  midori = callPackage ../applications/networking/browsers/midori { };
+  midori = callPackage ../applications/networking/browsers/midori {
+    webkitgtk = webkitgtk24x;
+  };
 
   midoriWrapper = wrapFirefox
     { browser = midori; browserName = "midori"; desktopName = "Midori";
