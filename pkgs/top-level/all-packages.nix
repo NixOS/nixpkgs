@@ -3507,6 +3507,8 @@ let
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
+    eff = callPackage ../development/interpreters/eff { };
+
     eliom = callPackage ../development/ocaml-modules/eliom { };
 
     findlib = callPackage ../development/tools/ocaml/findlib { };
