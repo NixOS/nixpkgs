@@ -271,6 +271,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   bitsExtras = callPackage ../development/libraries/haskell/bits-extras {};
 
+  bitset = callPackage ../development/libraries/haskell/bitset {};
+
   bktrees = callPackage ../development/libraries/haskell/bktrees {};
 
   blankCanvas = callPackage ../development/libraries/haskell/blank-canvas {};
@@ -1278,6 +1280,20 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hsBibutils = callPackage ../development/libraries/haskell/hs-bibutils {};
 
   hsc3 = callPackage ../development/libraries/haskell/hsc3 {};
+
+  hsc3Dot = callPackage ../development/libraries/haskell/hsc3-dot {};
+
+  hsc3Process = callPackage ../development/libraries/haskell/hsc3-process {};
+
+  hsc3Db = callPackage ../development/libraries/haskell/hsc3-db {};
+
+  hsc3Lang = callPackage ../development/libraries/haskell/hsc3-lang {
+    hmatrixSpecial = self.hmatrixSpecial.override {
+      hmatrix = self.hmatrix.override { binary = self.binary_0_7_2_2; };
+    };
+  };
+
+  hsc3Server = callPackage ../development/libraries/haskell/hsc3-server {};
 
   hsdns = callPackage ../development/libraries/haskell/hsdns {};
 
