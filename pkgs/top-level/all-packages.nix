@@ -3641,6 +3641,10 @@ let
 
     ocaml_text = callPackage ../development/ocaml-modules/ocaml-text { };
 
+    ocpBuild = callPackage ../development/tools/ocaml/ocp-build { };
+
+    ocpIndent = callPackage ../development/tools/ocaml/ocp-indent { };
+
     ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
 
     ounit = callPackage ../development/ocaml-modules/ounit { };
