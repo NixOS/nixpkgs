@@ -1631,6 +1631,8 @@ let
 
   man_db = callPackage ../tools/misc/man-db { };
 
+  mbox = callPackage ../tools/security/mbox { };
+
   memtest86 = callPackage ../tools/misc/memtest86 { };
 
   memtest86plus = callPackage ../tools/misc/memtest86+ { };
