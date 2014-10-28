@@ -3444,6 +3444,8 @@ let
     in rec {
     inherit ocaml;
 
+    ansiterminal = callPackage ../development/ocaml-modules/ansiterminal { };
+
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
     camlp4 =
