@@ -2831,7 +2831,17 @@ let
 
   bigloo = callPackage ../development/compilers/bigloo { };
 
-  chicken = callPackage ../development/compilers/chicken { };
+  fetchegg = callPackage ../build-support/fetchegg { };
+
+  eggDerivation = callPackage ../development/compilers/chicken/eggDerivation.nix { };
+
+  chicken = callPackage ../development/compilers/chicken {
+    bootstrap-chicken = chicken.override { bootstrap-chicken = null; }; 
+  };
+
+  egg2nix = callPackage ../development/tools/egg2nix {
+    chickenEggs = callPackage ../development/tools/egg2nix/chicken-eggs.nix { };
+  };
 
   ccl = builderDefsPackage ../development/compilers/ccl {};
 
