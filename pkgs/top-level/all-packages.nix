@@ -3446,6 +3446,8 @@ let
 
     ansiterminal = callPackage ../development/ocaml-modules/ansiterminal { };
 
+    bolt = callPackage ../development/ocaml-modules/bolt { };
+
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
     camlp4 =
