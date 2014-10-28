@@ -1,12 +1,11 @@
 { stdenv, fetchurl, boost, openssl, pkgconfig, zlib, python, libiconvOrNull, geoip }:
 
 stdenv.mkDerivation rec {
-  name = "libtorrent-rasterbar-${version}";
-  version = "0.16.16";
+  name = "libtorrent-rasterbar-1.0.2";
   
   src = fetchurl {
-    url = mirror://sourceforge/libtorrent/libtorrent-rasterbar-0.16.16.tar.gz;
-    sha256 = "1a3yxwjs4qb0rwx6cfpvar0a8jmavb6ik580b27md08jhvq80if7";
+    url = "mirror://sourceforge/libtorrent/${name}.tar.gz";
+    sha256 = "1ph4cb6nrk2hiy89j3kz1wj16ph0b9yixrf4f4935rnzhha8x31w";
   };
 
   buildInputs = [ boost boost.lib pkgconfig openssl zlib python libiconvOrNull geoip ];
@@ -17,6 +16,7 @@ stdenv.mkDerivation rec {
     "--enable-python-binding"
     "--with-libgeoip=system"
     "--with-libiconv=yes"
+    "--with-boost=${boost.lib}"
  ];
   
   meta = with stdenv.lib; {
