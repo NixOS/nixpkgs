@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preBuild = "patchShebangs ./src";
-
   postInstall = ''
     substituteInPlace $out/lib/libvte2_90.la --replace "-lncurses" "-L${ncurses}/lib -lncurses"
   '';
