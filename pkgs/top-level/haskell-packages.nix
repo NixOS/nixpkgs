@@ -2122,6 +2122,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   Rasterific = callPackage ../development/libraries/haskell/Rasterific {};
 
+  rawStringsQq = callPackage ../development/libraries/haskell/rawStringsQq {};
+
   reserve = callPackage ../development/libraries/haskell/reserve {};
 
   rvar = callPackage ../development/libraries/haskell/rvar {};
