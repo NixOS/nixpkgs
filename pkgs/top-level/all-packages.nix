@@ -3603,7 +3603,7 @@ let
 
     ocpBuild = callPackage ../development/tools/ocaml/ocp-build { };
 
-    ocpIndent = callPackage ../desktops/tools/ocaml/ocp-indent { };
+    ocpIndent = callPackage ../development/tools/ocaml/ocp-indent { };
 
     ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
 
