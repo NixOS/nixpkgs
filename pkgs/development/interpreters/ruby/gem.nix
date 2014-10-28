@@ -3,7 +3,7 @@
 { name
 , namePrefix ? "${ruby.name}" + "-"
 , buildInputs ? []
-, doCheck ? false # TODO: fix this
+, doCheck ? false
 , dontBuild ? true
 , meta ? {}
 , gemPath ? []

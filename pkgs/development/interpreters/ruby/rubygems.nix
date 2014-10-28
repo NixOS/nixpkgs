@@ -1,6 +1,7 @@
 args : with args; 
 rec {
 
+  name = "rubygems-" + version;
   version = "2.4.1";
   src = fetchurl {
     url = "http://production.cf.rubygems.org/rubygems/${name}.tgz";
@@ -23,7 +24,6 @@ rec {
   /* doConfigure should be specified separately */
   phaseNames = ["doPatch" "doInstall"];
       
-  name = "rubygems-" + version;
   meta = {
     description = "Ruby gems package collection";
     longDescription = ''

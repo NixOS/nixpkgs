@@ -1,51 +1,25 @@
-{rubyLibsWith, callPackage, lib, fetchurl, fetchgit}:
+{ pkgs, lib, callPackage, gemFixes }:
+
+{ gemset, ruby ? pkgs.ruby, fixes ? gemFixes }@args:
 
 let
+  const = x: y: x;
 
-  sourceInstantiators = {
-    # Many ruby people use `git ls-files` to compose their gemspecs.
-    git = (attrs: fetchgit { inherit (attrs) url rev sha256 leaveDotGit; });
-    url = (attrs: fetchurl { inherit (attrs) url sha256; });
-  };
+  buildRubyGem = callPackage ./gem.nix { inherit ruby; };
 
-in
-
-{
-  # Loads a set containing a ruby environment definition. The set's `gemset`
-  # key is expected to contain a set of gems. A gemset definition looks like this:
-  #
-  #  {
-  #    gemset = {
-  #      rack-test = {
-  #        version = "0.6.2";
-  #        src = {
-  #          type = "url";
-  #          url = "https://rubygems.org/downloads/rack-test-0.6.2.gem";
-  #          sha256 = "01mk715ab5qnqf6va8k3hjsvsmplrfqpz6g58qw4m3l8mim0p4ky";
-  #        };
-  #        dependencies = [ "rack" ];
-  #      };
-  #    };
-  #  }
-  loadRubyEnv = expr: config:
+  instantiate = (name: attrs:
     let
-      expr' =
-        if builtins.isAttrs expr
-        then expr
-        else import expr;
-      gemset = lib.mapAttrs (name: attrs:
-        attrs // {
-          src = (sourceInstantiators."${attrs.src.type}") attrs.src;
-          dontBuild = !(attrs.src.type == "git");
-        }
-      ) expr'.gemset;
-      ruby = config.ruby;
-      rubyLibs = rubyLibsWith ruby;
-      gems = rubyLibs.importGems gemset (config.gemOverrides or (gemset: {}));
-      gemPath = map (drv: "${drv}") (
-        builtins.filter lib.isDerivation (lib.attrValues gems)
-      );
-    in {
-      inherit ruby gems gemPath;
-    };
-}
+      gemPath = map (name: gemset''."${name}") (attrs.dependencies or []);
+      fixedAttrs = attrs // (fixes."${name}" or (const {})) attrs;
+    in
+      buildRubyGem (fixedAttrs // { name = "${name}-${attrs.version}"; inherit gemPath; })
+  );
+
+  gemset' = if builtins.isAttrs gemset then gemset else callPackage gemset { };
+
+  gemset'' = lib.flip lib.mapAttrs gemset' (name: attrs:
+    if (lib.isDerivation attrs) then attrs
+    else (instantiate name attrs)
+  );
+
+in gemset''

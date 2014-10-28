@@ -17,67 +17,51 @@
 # This seperates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
-{ lib, gemset, buildRubyGem, writeScript, ruby, libxml2, libxslt, python, stdenv
-, which, postgresql, v8_3_16_14, clang }:
+{ lib, fetchurl, writeScript, ruby, libxml2, libxslt, python, stdenv, which
+, postgresql, v8_3_16_14, clang }:
 
 let
-  const = x: y: x;
   v8 = v8_3_16_14;
 
-  gems = lib.mapAttrs (name: attrs:
-    if (lib.isDerivation attrs) then attrs
-    else (instantiate name attrs)
-  ) gemset;
+in
 
-  instantiate = (name: attrs:
-    let
-      gemPath = map (name: gems."${name}") (attrs.dependencies or []);
-      fixedAttrs = attrs // (fixes."${name}" or const {}) attrs;
-    in
-      buildRubyGem (fixedAttrs // { name = "${name}-${attrs.version}"; inherit gemPath; })
-  );
-
-  fixes = {
-    bundler = attrs: {
-      dontPatchShebangs = 1;
-    };
-
-    libv8 = attrs: {
-      buildFlags = [ "--with-system-v8" ];
-      buildInputs = [ which v8 python ];
-    };
-
-    nokogiri = attrs: {
-      buildFlags = [
-        "--with-xml2-dir=${libxml2}"
-        "--with-xml2-include=${libxml2}/include/libxml2"
-        "--with-xslt-dir=${libxslt}"
-        "--use-system-libraries"
-      ];
-    };
-
-    therubyracer = attrs: {
-      dontBuild = false;
-
-      preInstall = ''
-        addToSearchPath RUBYLIB "${gems.libv8}/gems/libv8-3.16.14.3/lib"
-        addToSearchPath RUBYLIB "${gems.libv8}/gems/libv8-3.16.14.3/ext"
-        ln -s ${clang}/bin/clang $TMPDIR/gcc
-        ln -s ${clang}/bin/clang++ $TMPDIR/g++
-        export PATH=$TMPDIR:$PATH
-      '';
-
-      postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
-        cat >> $out/nix-support/setup-hook <<EOF
-          export DYLD_INSERT_LIBRARIES="$DYLD_INSERT_LIBRARIES''${!DYLD_INSERT_LIBRARIES:+:}${v8}/lib/libv8.dylib"
-        EOF
-      '';
-
-      buildFlags = [
-        "--with-v8-dir=${v8}" "--with-v8-include=${v8}/include"
-        "--with-v8-lib=${v8}/lib"
-      ];
-    };
+{
+  bundler = attrs: {
+    dontPatchShebangs = 1;
   };
 
-in gems
+  libv8 = attrs: {
+    buildFlags = [ "--with-system-v8" ];
+    buildInputs = [ which v8 python ];
+  };
+
+  nokogiri = attrs: {
+    buildFlags = [
+      "--with-xml2-dir=${libxml2}"
+      "--with-xml2-include=${libxml2}/include/libxml2"
+      "--with-xslt-dir=${libxslt}"
+      "--use-system-libraries"
+    ];
+  };
+
+  therubyracer = attrs: {
+    dontBuild = false;
+
+    preInstall = ''
+      ln -s ${clang}/bin/clang $TMPDIR/gcc
+      ln -s ${clang}/bin/clang++ $TMPDIR/g++
+      export PATH=$TMPDIR:$PATH
+    '';
+
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      cat >> $out/nix-support/setup-hook <<EOF
+        export DYLD_INSERT_LIBRARIES="$DYLD_INSERT_LIBRARIES''${!DYLD_INSERT_LIBRARIES:+:}${v8}/lib/libv8.dylib"
+      EOF
+    '';
+
+    buildFlags = [
+      "--with-v8-dir=${v8}" "--with-v8-include=${v8}/include"
+      "--with-v8-lib=${v8}/lib"
+    ];
+  };
+}
