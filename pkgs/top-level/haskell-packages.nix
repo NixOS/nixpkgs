@@ -916,6 +916,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     cabal = self.cabal.override { enableLibraryProfiling = false; }; # pkg cannot be built with profiling enabled
   };
 
+  ghcid = callPackage ../development/tools/haskell/ghcid {};
 
   ghcServer = callPackage ../development/libraries/haskell/ghc-server {};
 
