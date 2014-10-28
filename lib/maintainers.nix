@@ -73,6 +73,7 @@
   jagajaga = "Arseniy Seroka <ars.seroka@gmail.com>";
   jcumming = "Jack Cummings <jack@mudshark.org>";
   jgeerds = "Jascha Geerds <jg@ekby.de>";
+  jirkamarsik = "Jirka Marsik <jiri.marsik89@gmail.com>";
   joamaki = "Jussi Maki <joamaki@gmail.com>";
   joelteon = "Joel Taylor <me@joelt.io>";
   jwiegley = "John Wiegley <johnw@newartisans.com>";
