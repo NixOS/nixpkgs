@@ -3482,6 +3482,12 @@ let
     in rec {
     inherit ocaml;
 
+    acgtk = callPackage ../applications/science/logic/acgtk { };
+
+    ansiterminal = callPackage ../development/ocaml-modules/ansiterminal { };
+
+    bolt = callPackage ../development/ocaml-modules/bolt { };
+
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
     camlp4 =
