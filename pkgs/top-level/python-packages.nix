@@ -9515,8 +9515,22 @@ let
     ] ++ optional isPy26 argparse;
 
     patchPhase = ''
-      substituteInPlace "virtualenvwrapper.sh" --replace "which" "${pkgs.which}/bin/which"
-      substituteInPlace "virtualenvwrapper_lazy.sh" --replace "which" "${pkgs.which}/bin/which"
+      for file in "virtualenvwrapper.sh" "virtualenvwrapper_lazy.sh"; do
+        substituteInPlace "$file" --replace "which" "${pkgs.which}/bin/which"
+
+        # We can't set PYTHONPATH in a normal way (like exporting in a wrapper
+        # script) because the user has to evaluate the script and we don't want
+        # modify the global PYTHONPATH which would affect the user's
+        # environment.
+        # Furthermore it isn't possible to just use VIRTUALENVWRAPPER_PYTHON
+        # for this workaround, because this variable is well quoted inside the
+        # shell script.
+        # (the trailing " -" is required to only replace things like these one:
+        # "$VIRTUALENVWRAPPER_PYTHON" -c "import os,[...] and not in
+        # if-statements or anything like that.
+        # ...and yes, this "patch" is hacky :)
+        substituteInPlace "$file" --replace '"$VIRTUALENVWRAPPER_PYTHON" -' 'env PYTHONPATH="$VIRTUALENVWRAPPER_PYTHONPATH" "$VIRTUALENVWRAPPER_PYTHON" -'
+      done
     '';
 
     postInstall = ''
@@ -9530,8 +9544,8 @@ let
         mv "$wrapper" "$wrapped"
 
         cat > "$wrapper" <<- EOF
-	export PATH=$PATH:\$PATH
-	export PYTHONPATH=$PYTHONPATH:$(toPythonPath $out):\$PYTHONPATH
+	export PATH="$PATH:\$PATH"
+	export VIRTUALENVWRAPPER_PYTHONPATH="$PYTHONPATH:$(toPythonPath $out)"
 	source "$wrapped"
 	EOF
 
