@@ -2625,6 +2625,33 @@ let
     };
   };
 
+  poppler-qt4 = buildPythonPackage rec {
+    name = "poppler-qt4-${version}";
+    version = "0.18.1";
+    disabled = isPy3k || isPyPy;
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-poppler-qt4/" +
+            "python-poppler-qt4-${version}.tar.gz";
+      md5 = "9c4c5a59b878aed78e96a6ae58c6c185";
+    };
+
+    propagatedBuildInputs = [ pkgs.pyqt4 pkgs.sip pkgs.pkgconfig pkgs.popplerQt4 ];
+
+    preBuild = "${python}/bin/${python.executable} setup.py build_ext" +
+               " --include-dirs=${pkgs.popplerQt4}/include/poppler/";
+
+    meta = with stdenv.lib; {
+      description = "A Python binding to Poppler-Qt4";
+      longDescription = ''
+        A Python binding to Poppler-Qt4 that aims for completeness
+        and for being actively maintained.
+      '';
+      license = licenses.lgpl21Plus;
+      maintainers = [ maintainers.sepi ];
+      platforms = platforms.all;
+    };
+  };
 
   pudb = buildPythonPackage rec {
     name = "pudb-2013.3.6";
