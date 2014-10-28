@@ -1,13 +1,12 @@
 { ruby, fetchurl, rake, rubygemsFun, makeWrapper, lib, git }:
 
 { name
-, namePrefix ? "ruby${ruby.majorVersion}" + "-"
+, namePrefix ? "${ruby.name}" + "-"
 , buildInputs ? []
 , doCheck ? false # TODO: fix this
 , dontBuild ? true
 , meta ? {}
 , gemPath ? []
-, testTask ? "test"
 , ...} @ attrs:
 
 let
@@ -60,7 +59,10 @@ in ruby.stdenv.mkDerivation (attrs // {
 
     gemspec=`find . -name '*.gemspec'`
     output=`gem build $gemspec`
-    gempkg=`echo $output|grep -oP 'File: \K(.*)'`
+
+    gem build $gemspec | tee .output
+    gempkg=`cat .output | grep -oP 'File: \K(.*)'`
+    rm .output
 
     echo "Gem package built: $gempkg"
 
@@ -103,7 +105,7 @@ in ruby.stdenv.mkDerivation (attrs // {
     mkdir -p $out/nix-support
 
     cat > $out/nix-support/setup-hook <<EOF
-    if [[ "$GEM_PATH" != *$out* ]]; then
+    if [[ "\$GEM_PATH" != *$out* ]]; then
       addToSearchPath GEM_PATH $out/${ruby.gemPath}
     fi
     EOF

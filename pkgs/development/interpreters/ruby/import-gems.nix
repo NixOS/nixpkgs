@@ -45,12 +45,12 @@ in
   #       buildInputs = [ postgresql ];
   #     });
   #   });
-  importGems = file: args:
+  importGems = file: gemOverrides:
     let
       # 1. Load set of gem names and versions from a bundix-created expression.
       gemset = if (builtins.isAttrs file) then file else (callPackage file { });
       # 2. Allow gems to be overriden by providing a derivation yourself.
-      config = gemset // (args gemset);
+      config = gemset // (gemOverrides gemset);
       # 3.
       gems = fixGems config;
     in gems;

@@ -21,21 +21,20 @@
 , which, postgresql, v8_3_16_14, clang }:
 
 let
-  id = x: x;
+  const = x: y: x;
   v8 = v8_3_16_14;
 
-  gems = lib.mapAttrs (name: config:
-    if (lib.isDerivation config) then config
-    else (instantiate name config)
+  gems = lib.mapAttrs (name: attrs:
+    if (lib.isDerivation attrs) then attrs
+    else (instantiate name attrs)
   ) gemset;
 
   instantiate = (name: attrs:
     let
-      # Turn dependency strings into actual derivations.
       gemPath = map (name: gems."${name}") (attrs.dependencies or []);
-      fixedAttrs = (fixes."${name}" or id) attrs;
+      fixedAttrs = attrs // (fixes."${name}" or const {}) attrs;
     in
-      buildRubyGem (fixedAttrs // { inherit gemPath; })
+      buildRubyGem (fixedAttrs // { name = "${name}-${attrs.version}"; inherit gemPath; })
   );
 
   fixes = {
