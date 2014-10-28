@@ -120,6 +120,6 @@ stdenv.mkDerivation rec {
     homepage = http://hplipopensource.com/;
     license = if withPlugin then licenses.unfree else "free"; # MIT/BSD/GPL
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with maintainers; [ ttuegel jgeerds ];
   };
 }
