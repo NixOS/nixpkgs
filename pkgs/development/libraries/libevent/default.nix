@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, python }:
+{ stdenv, fetchurl, python, static ? false }:
+
+with stdenv.lib;
 
 let version = "2.0.21"; in
 stdenv.mkDerivation {
@@ -13,6 +15,8 @@ stdenv.mkDerivation {
     substituteInPlace event_rpcgen.py \
       --replace "/usr/bin/env python2" "${python}/bin/python"
   '';
+
+  configureFlags = optionals static [ "--enable-static" ];
 
   meta = {
     description = "Event notification library";
