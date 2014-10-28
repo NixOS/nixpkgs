@@ -1,7 +1,7 @@
 {stdenv, androidsdk, titaniumsdk, titanium, xcodewrapper, jdk, python, which, xcodeBaseDir}:
 { name, src, target, androidPlatformVersions ? [ "8" ], androidAbiVersions ? [ "armeabi" "armeabi-v7a" ], tiVersion ? null
 , release ? false, androidKeyStore ? null, androidKeyAlias ? null, androidKeyStorePassword ? null
-, iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosVersion ? "8.0"
+, iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosVersion ? "8.0", iosWwdrCertificate ? null
 , enableWirelessDistribution ? false, installURL ? null
 }:
 
@@ -78,7 +78,9 @@ stdenv.mkDerivation {
               security default-keychain -s $keychainName
               security unlock-keychain -p "" $keychainName
               security import ${iosCertificate} -k $keychainName -P "${iosCertificatePassword}" -A
-
+              ${stdenv.lib.optionalString (iosWwdrCertificate != null) ''
+                security import ${iosWwdrCertificate} -k $keychainName
+              ''}
               provisioningId=$(grep UUID -A1 -a ${iosMobileProvisioningProfile} | grep -o "[-A-Za-z0-9]\{36\}")
    
               # Ensure that the requested provisioning profile can be found

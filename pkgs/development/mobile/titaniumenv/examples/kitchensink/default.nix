@@ -1,5 +1,5 @@
 { titaniumenv, fetchgit, target, androidPlatformVersions ? [ "14" ], tiVersion ? "3.2.3.GA", release ? false
-, rename ? false, stdenv ? null, newBundleId ? null, iosMobileProvisioningProfile ? null, iosCertificate ? null, iosCertificateName ? null, iosCertificatePassword ? null, iosVersion ? "8.0"
+, rename ? false, stdenv ? null, newBundleId ? null, iosMobileProvisioningProfile ? null, iosCertificate ? null, iosCertificateName ? null, iosCertificatePassword ? null, iosVersion ? "8.0", iosWwdrCertificate ? null
 , enableWirelessDistribution ? false, installURL ? null
 }:
 
@@ -37,6 +37,6 @@ titaniumenv.buildApp {
   androidKeyAlias = "myfirstapp";
   androidKeyStorePassword = "mykeystore";
   
-  inherit iosMobileProvisioningProfile iosCertificate iosCertificateName iosCertificatePassword iosVersion;
+  inherit iosMobileProvisioningProfile iosCertificate iosCertificateName iosCertificatePassword iosVersion iosWwdrCertificate;
   inherit enableWirelessDistribution installURL;
 }
