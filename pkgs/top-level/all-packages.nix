@@ -1869,6 +1869,8 @@ let
 
   odt2txt = callPackage ../tools/text/odt2txt { };
 
+  odamex = callPackage ../games/odamex { };
+
   offlineimap = callPackage ../tools/networking/offlineimap {
     inherit (pythonPackages) sqlite3;
   };
