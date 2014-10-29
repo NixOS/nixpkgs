@@ -2227,6 +2227,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   regularXmlpickler = callPackage ../development/libraries/haskell/regular-xmlpickler {};
 
+  rematch = callPackage ../development/libraries/haskell/rematch {};
+
   remote = callPackage ../development/libraries/haskell/remote {};
 
   repa = callPackage ../development/libraries/haskell/repa {};
