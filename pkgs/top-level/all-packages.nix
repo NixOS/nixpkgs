@@ -3657,6 +3657,9 @@ let
     uucd = callPackage ../development/ocaml-modules/uucd { };
     uunf = callPackage ../development/ocaml-modules/uunf { };
     uutf = callPackage ../development/ocaml-modules/uutf { };
+
+    vg = callPackage ../development/ocaml-modules/vg { };
+
     xmlm = callPackage ../development/ocaml-modules/xmlm { };
 
     yojson = callPackage ../development/ocaml-modules/yojson { };
