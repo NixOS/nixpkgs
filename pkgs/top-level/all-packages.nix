@@ -3605,6 +3605,8 @@ let
 
     ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
 
+    otfm = callPackage ../development/ocaml-modules/otfm { };
+
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
     tyxml = callPackage ../development/ocaml-modules/tyxml { };
