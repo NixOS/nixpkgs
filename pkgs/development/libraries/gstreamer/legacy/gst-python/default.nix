@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "0y1i4n5m1diljqr9dsq12anwazrhbs70jziich47gkdwllcza9lg";
   };
 
+  # Need to disable the testFake test case due to bug in pygobject.
+  # See https://bugzilla.gnome.org/show_bug.cgi?id=692479
+  patches = [ ./disable-testFake.patch ];
+
   buildInputs =
     [ pkgconfig gst_plugins_base pygobject ]
     ;
