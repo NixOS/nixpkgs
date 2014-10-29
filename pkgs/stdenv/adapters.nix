@@ -29,36 +29,6 @@ rec {
   overrideSetup = stdenv: setupScript: stdenv.override { inherit setupScript; };
 
 
-  # Return a modified stdenv that uses dietlibc to create small
-  # statically linked binaries.
-  useDietLibC = stdenv: stdenv //
-    { mkDerivation = args: stdenv.mkDerivation (args // {
-        NIX_CFLAGS_LINK = "-static";
-
-        # libcompat.a contains some commonly used functions.
-        NIX_LDFLAGS = "-lcompat";
-
-        # These are added *after* the command-line flags, so we'll
-        # always optimise for size.
-        NIX_CFLAGS_COMPILE =
-          args.NIX_CFLAGS_COMPILE or ""
-          + " -Os -s -D_BSD_SOURCE=1";
-
-        configureFlags =
-          args.configureFlags or ""
-          + " --disable-shared"; # brrr...
-
-        NIX_GCC = import ../build-support/gcc-wrapper {
-          inherit stdenv;
-          libc = pkgs.dietlibc;
-          inherit (stdenv.gcc) gcc binutils nativeTools nativePrefix;
-          nativeLibc = false;
-        };
-      });
-      isDietLibC = true;
-    };
-
-
   # Return a modified stdenv that uses klibc to create small
   # statically linked binaries.
   useKlibc = stdenv: klibc: stdenv //

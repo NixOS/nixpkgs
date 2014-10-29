@@ -23,10 +23,6 @@ stdenv.mkDerivation {
 
   postInstall = "rm $out/sbin/insmod.static"; # don't need it
 
-  # We don't want bash (and therefore glibc) in the closure of the
-  # output, since we want to put this in a initrd.
-  dontPatchShebangs = stdenv ? isDietLibC;
-
   meta = {
     homepage = http://www.kernel.org/pub/linux/utils/kernel/module-init-tools/;
     description = "Tools for loading and managing Linux kernel modules";
