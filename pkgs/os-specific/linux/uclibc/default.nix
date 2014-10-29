@@ -16,11 +16,6 @@ let
                 continue
             fi
 
-            if test "$NAME" == "CLEAR"; then
-                echo "parseconfig: CLEAR"
-                echo > .config
-            fi
-
             echo "parseconfig: removing $NAME"
             sed -i /^$NAME=/d .config
 
@@ -60,6 +55,13 @@ stdenv.mkDerivation {
     sha256 = "0qhngsbzj2s6nz92b1s2p0dmvwk8xiqpy58j7ljzw186grvjr3cq";
   };
 
+  patches =
+    [ (fetchurl {
+        url = https://dev.openwrt.org/export/37939/trunk/toolchain/uClibc/patches-0.9.33.2/970-add___kernel_long_and___kernel_ulong.patch;
+        sha256 = "1d1bfjpw0qla5zr32wk32s1y3wl2576zidbmvqsmqf0359bxhxrg";
+      })
+    ];
+
   # 'ftw' needed to build acl, a coreutils dependency
   configurePhase = ''
     make defconfig ${archMakeFlag}
@@ -80,6 +82,8 @@ stdenv.mkDerivation {
 
   buildInputs = stdenv.lib.optional (gccCross != null) gccCross;
 
+  enableParallelBuilding = true;
+
   installPhase = ''
     mkdir -p $out
     make PREFIX=$out VERBOSE=1 install ${crossMakeFlag}
@@ -92,7 +96,7 @@ stdenv.mkDerivation {
     # Derivations may check for the existance of this attribute, to know what to link to.
     inherit libiconv;
   };
-  
+
   meta = {
     homepage = http://www.uclibc.org/;
     description = "A small implementation of the C library";
