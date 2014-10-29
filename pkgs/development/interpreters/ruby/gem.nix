@@ -1,4 +1,4 @@
-{ ruby, fetchurl, rake, rubygemsFun, makeWrapper, lib, git }:
+{ ruby, fetchurl, rubygemsFun, makeWrapper, lib, git }:
 
 { name
 , namePrefix ? "${ruby.name}" + "-"

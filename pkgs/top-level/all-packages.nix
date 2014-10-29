@@ -4049,8 +4049,6 @@ let
 
   loadRubyEnv = callPackage ../development/interpreters/ruby/load-ruby-env.nix { };
 
-  rake = ... # TODO
-
   rubySqlite3 = callPackage ../development/ruby-modules/sqlite3 { };
 
   rubygemsFun = ruby: builderDefsPackage (import ../development/interpreters/ruby/rubygems.nix) {

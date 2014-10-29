@@ -18,7 +18,7 @@
 # (to make gems behave if necessary).
 
 { lib, fetchurl, writeScript, ruby, libxml2, libxslt, python, stdenv, which
-, libiconv, postgresql, v8_3_16_14, clang }:
+, libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick, pkgconfig}:
 
 let
   v8 = v8_3_16_14;
