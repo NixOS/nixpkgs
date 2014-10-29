@@ -3527,6 +3527,8 @@ let
 
     patoline = callPackage ../tools/typesetting/patoline { };
 
+    gg = callPackage ../development/ocaml-modules/gg { };
+
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
 
     js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml { };
