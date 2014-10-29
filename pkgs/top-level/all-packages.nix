@@ -10458,8 +10458,9 @@ let
 
   stp = callPackage ../applications/science/logic/stp {};
 
-  stumpwm = callPackage ../applications/window-managers/stumpwm {};
-  stumpwmContrib = callPackage ../applications/window-managers/stumpwm/contrib.nix {};
+  stumpwm = callPackage ../applications/window-managers/stumpwm {
+    stumpwmContrib = callPackage ../applications/window-managers/stumpwm/contrib.nix { };
+  };
 
   sublime = callPackage ../applications/editors/sublime { };
 
