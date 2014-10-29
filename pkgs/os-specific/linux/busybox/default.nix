@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     sha256 = "12v7nri79v8gns3inmz4k24q7pcnwi00hybs0wddfkcy1afh42xf";
   };
 
+  patches = [ ./busybox-in-store.patch ];
+
   configurePhase = ''
     export KCONFIG_NOTIMESTAMP=1
     make ${if enableMinimal then "allnoconfig" else "defconfig"}
