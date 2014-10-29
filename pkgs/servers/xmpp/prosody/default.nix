@@ -10,11 +10,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "0.9.5";
+  version = "0.9.6";
   name = "prosody-${version}";
   src = fetchurl {
     url = "http://prosody.im/downloads/source/${name}.tar.gz";
-    sha256 = "1gcvmdsyx3fjiqybgkp8vr847p9rlfz42lywxpph3jc14yh63z3n";
+    sha256 = "1rs0aqn1rkddgfq9pm7mi7xm5lbvxjpf8d8ijc085fc90zwqq8bm";
   };
 
   communityModules = fetchhg {
