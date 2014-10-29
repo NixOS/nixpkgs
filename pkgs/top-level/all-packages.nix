@@ -4595,6 +4595,8 @@ let
 
   ragel = callPackage ../development/tools/parsing/ragel { };
 
+  hammer = callPackage ../development/tools/parsing/hammer { };
+
   re2c = callPackage ../development/tools/parsing/re2c { };
 
   remake = callPackage ../development/tools/build-managers/remake { };
