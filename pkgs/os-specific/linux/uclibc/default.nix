@@ -46,21 +46,15 @@ let
   '';
 
 in
+
 stdenv.mkDerivation {
-  name = "uclibc-0.9.33.2" + stdenv.lib.optionalString (cross != null)
+  name = "uclibc-0.9.34-pre-20141029" + stdenv.lib.optionalString (cross != null)
     ("-" + cross.config);
 
   src = fetchurl {
-    url = http://www.uclibc.org/downloads/uClibc-0.9.33.2.tar.bz2;
-    sha256 = "0qhngsbzj2s6nz92b1s2p0dmvwk8xiqpy58j7ljzw186grvjr3cq";
+    url = http://www.uclibc.org/downloads/snapshots/uClibc-20141029.tar.bz2;
+    sha256 = "018r3bhw1jyyihmm5xxq1psl3r5yx02a57p8qxvay3vvzxn2cvzm";
   };
-
-  patches =
-    [ (fetchurl {
-        url = https://dev.openwrt.org/export/37939/trunk/toolchain/uClibc/patches-0.9.33.2/970-add___kernel_long_and___kernel_ulong.patch;
-        sha256 = "1d1bfjpw0qla5zr32wk32s1y3wl2576zidbmvqsmqf0359bxhxrg";
-      })
-    ];
 
   # 'ftw' needed to build acl, a coreutils dependency
   configurePhase = ''
