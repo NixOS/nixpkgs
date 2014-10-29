@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "hammer-${version}";
-  version = "1.0.0-rc3";
+  version = "e7aa734";
 
   src = fetchgit {
     url = "git://github.com/UpstandingHackers/hammer";
