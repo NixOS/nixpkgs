@@ -23,12 +23,16 @@ stdenv.mkDerivation rec {
  '';
 
  configurePhase = ''
-   ./configure --prefix=$out --with-contrib-dir=${pkgs.stumpwmContrib}/contrib
+   ./configure --prefix=$out --with-contrib-dir=${stumpwmContrib}/contrib
  '';
 
  installPhase = ''
    make
    make install
+   # STUMPWM_CONTRIB_DIR is not actually used. We just set it so that
+   # stumpwmContrib gets retained as a runtime dependency because for
+   # some reason $out/bin/stumpwm does not contain a reference to it.
+   wrapProgram $out/bin/stumpwm --set STUMPWM_CONTRIB_DIR "${stumpwmContrib}/contrib"
  '';
 
   meta = with stdenv.lib; {
