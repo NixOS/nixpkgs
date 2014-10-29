@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, enableStatic ? false, enableMinimal ? false, extraConfig ? "" }:
+{ lib, stdenv, uclibc, fetchurl, enableStatic ? false, enableMinimal ? false, useUclibc ? false, extraConfig ? "" }:
 
 let
   configParser = ''
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     CONFIG_PREFIX "$out"
     CONFIG_INSTALL_NO_USR y
 
-    ${stdenv.lib.optionalString enableStatic ''
+    ${lib.optionalString enableStatic ''
       CONFIG_STATIC y
     ''}
 
@@ -54,6 +54,8 @@ stdenv.mkDerivation rec {
     EOF
 
     make oldconfig
+  '' + lib.optionalString useUclibc ''
+    makeFlagsArray+=("CC=gcc -isystem ${uclibc}/include -B${uclibc}/lib -L${uclibc}/lib")
   '';
 
   crossAttrs = {
@@ -70,8 +72,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = http://busybox.net/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.viric ];
+    platforms = lib.platforms.linux;
   };
 }
