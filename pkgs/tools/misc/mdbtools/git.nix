@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, glib, readline, bison, flex, pkgconfig,
-  libiconv, autoconf, automake, libtool, which, txt2man, gnome_doc_utils,
+  libiconvOrNull, autoconf, automake, libtool, which, txt2man, gnome_doc_utils,
   scrollkeeper}:
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     name = "mdbtools-git-export";
   };
 
-  buildInputs = [glib readline bison flex pkgconfig libiconv autoconf automake
+  buildInputs = [glib readline bison flex pkgconfig libiconvOrNull autoconf automake
     libtool which txt2man gnome_doc_utils scrollkeeper ];
 
   preConfigure = ''

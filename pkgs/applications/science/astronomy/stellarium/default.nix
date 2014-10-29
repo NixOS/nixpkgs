@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, freetype, libpng, mesa, gettext, openssl, qt4, perl, libiconv }:
+{ stdenv, fetchurl, cmake, freetype, libpng, mesa, gettext, openssl, qt4, perl, libiconvOrNull }:
 
 stdenv.mkDerivation rec {
   name = "stellarium-0.12.4";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "11367hv9niyz9v47lf31vjsqkgc8da0vy2nhiyxgmk1i49p1pbhg";
   };
 
-  buildInputs = [ cmake freetype libpng mesa gettext openssl qt4 perl libiconv ];
+  buildInputs = [ cmake freetype libpng mesa gettext openssl qt4 perl libiconvOrNull ];
 
   enableParallelBuilding = true;
 
