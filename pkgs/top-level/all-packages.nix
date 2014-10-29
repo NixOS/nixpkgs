@@ -5549,6 +5549,8 @@ let
     then libcanberra.override { gtk = null; }
     else libcanberra;
 
+  libcec = callPackage ../development/libraries/libcec { };
+
   libcello = callPackage ../development/libraries/libcello {};
 
   libcdaudio = callPackage ../development/libraries/libcdaudio { };
