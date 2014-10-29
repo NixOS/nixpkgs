@@ -7388,7 +7388,9 @@ let
 
   mailman = callPackage ../servers/mail/mailman { };
 
-  mediatomb = callPackage ../servers/mediatomb { };
+  mediatomb = callPackage ../servers/mediatomb {
+    spidermonkey = spidermonkey_185;
+  };
 
   memcached = callPackage ../servers/memcached {};
 
