@@ -8,7 +8,7 @@ version = "1.0.0-rc3";
 
 src = fetchgit {
     url = "git://github.com/UpstandingHackers/hammer";
-    sha256 = "1ay790qi127crxncgsdi4qvai1s0ckq0yzzk19b1zvdlws4rvw93";
+    sha256 = "1v8f2a6bgjgdkhbqz751bqjlwb9lmqn5x63xcskwcl2b9n36vqi9";
 };
 
 buildInputs = [ glib pkgconfig python scons ];
