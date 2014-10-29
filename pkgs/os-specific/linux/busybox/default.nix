@@ -1,4 +1,4 @@
-{stdenv, fetchurl, enableStatic ? false, extraConfig ? ""}:
+{ stdenv, fetchurl, enableStatic ? false, enableMinimal ? false, extraConfig ? "" }:
 
 let
   configParser = ''
@@ -7,14 +7,7 @@ let
             NAME=`echo "$LINE" | cut -d \  -f 1`
             OPTION=`echo "$LINE" | cut -d \  -f 2`
 
-            if test -z "$NAME"; then
-                continue
-            fi
-
-            if test "$NAME" == "CLEAR"; then
-                echo "parseconfig: CLEAR"
-                echo > .config
-            fi
+            if ! [[ "$NAME" =~ ^CONFIG_ ]]; then continue; fi
 
             echo "parseconfig: removing $NAME"
             sed -i /$NAME'\(=\| \)'/d .config
@@ -23,19 +16,6 @@ let
             echo "$NAME=$OPTION" >> .config
         done
     }
-  '';
-
-  nixConfig = ''
-    CONFIG_PREFIX "$out"
-    CONFIG_INSTALL_NO_USR y
-
-    # Use the external mount.cifs program.
-    CONFIG_FEATURE_MOUNT_CIFS n
-    CONFIG_FEATURE_MOUNT_HELPERS y
-  '';
-
-  staticConfig = stdenv.lib.optionalString enableStatic ''
-    CONFIG_STATIC y
   '';
 
 in
@@ -50,14 +30,27 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     export KCONFIG_NOTIMESTAMP=1
-    make defconfig
+    make ${if enableMinimal then "allnoconfig" else "defconfig"}
+
     ${configParser}
+
     cat << EOF | parseconfig
-    ${staticConfig}
-    ${nixConfig}
+
+    CONFIG_PREFIX "$out"
+    CONFIG_INSTALL_NO_USR y
+
+    ${stdenv.lib.optionalString enableStatic ''
+      CONFIG_STATIC y
+    ''}
+
+    # Use the external mount.cifs program.
+    CONFIG_FEATURE_MOUNT_CIFS n
+    CONFIG_FEATURE_MOUNT_HELPERS y
+
     ${extraConfig}
     $extraCrossConfig
     EOF
+
     make oldconfig
   '';
 
