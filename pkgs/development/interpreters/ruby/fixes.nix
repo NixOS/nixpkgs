@@ -18,7 +18,7 @@
 # (to make gems behave if necessary).
 
 { lib, fetchurl, writeScript, ruby, libxml2, libxslt, python, stdenv, which
-, postgresql, v8_3_16_14, clang }:
+, libiconv, postgresql, v8_3_16_14, clang }:
 
 let
   v8 = v8_3_16_14;
@@ -27,7 +27,7 @@ in
 
 {
   bundler = attrs: {
-    dontPatchShebangs = 1;
+    dontPatchShebangs = true;
   };
 
   libv8 = attrs: {
@@ -37,10 +37,32 @@ in
 
   nokogiri = attrs: {
     buildFlags = [
-      "--with-xml2-dir=${libxml2}"
-      "--with-xml2-include=${libxml2}/include/libxml2"
-      "--with-xslt-dir=${libxslt}"
       "--use-system-libraries"
+      "--with-zlib-dir=${zlib}"
+      "--with-xml2-lib=${libxml2}/lib"
+      "--with-xml2-include=${libxml2}/include/libxml2"
+      "--with-xslt-lib=${libxslt}/lib"
+      "--with-xslt-include=${libxslt}/include"
+      "--with-exslt-lib=${libxslt}/lib"
+      "--with-exslt-include=${libxslt}/include"
+      "--with-iconv-dir=${libiconv}"
+    ];
+  };
+
+  pg = attrs: {
+    buildFlags = [
+      "--with-pg-config=${postgresql}/bin/pg_config"
+    ];
+  };
+
+  rmagick = attrs: {
+    buildInputs = [ imagemagick pkgconfig ];
+  };
+
+  sqlite3 = attrs: {
+    buildFlags = [
+      "--with-sqlite3-include=${sqlite}/include"
+      "--with-sqlite3-lib=${sqlite}/lib"
     ];
   };
 
