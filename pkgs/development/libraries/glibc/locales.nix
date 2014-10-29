@@ -28,8 +28,8 @@ build null {
       mkdir -p $TMPDIR/"$(dirname $(readlink -f $(type -p localedef)))/../lib/locale"
 
       # Hack to allow building of the locales (needed since glibc-2.12)
-      sed -i -e "s,^LOCALEDEF=.*,LOCALEDEF=localedef --prefix=$TMPDIR," -e \
-          /library-path/d ../glibc-2*/localedata/Makefile
+      sed -i -e 's,^$(rtld-prefix) $(common-objpfx)locale/localedef,localedef --prefix='$TMPDIR',' ../glibc-2*/localedata/Makefile
+
       ${if allLocales then "" else
           "echo SUPPORTED-LOCALES=\"${toString locales}\" > ../glibc-2*/localedata/SUPPORTED"}
 

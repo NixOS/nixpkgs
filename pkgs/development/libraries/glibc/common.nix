@@ -13,7 +13,7 @@ cross:
 
 let
 
-  version = "2.19";
+  version = "2.20";
 
 in
 
@@ -56,14 +56,6 @@ stdenv.mkDerivation ({
          "/bin:/usr/bin", which is inappropriate on NixOS machines. This
          patch extends the search path by "/run/current-system/sw/bin". */
       ./fix_path_attribute_in_getconf.patch
-
-      ./fix-math.patch
-
-      ./cve-2014-0475.patch
-      ./cve-2014-5119.patch
-
-      /* Remove references to the compilation date.  */
-      ./glibc-remove-date-from-compilation-banner.patch
     ];
 
   postPatch =
@@ -155,7 +147,7 @@ stdenv.mkDerivation ({
     }
     else fetchurl {
       url = "mirror://gnu/glibc/glibc-${version}.tar.gz";
-      sha256 = "15n7x9mmzhd7w6s5hd9srx0h23b32gwb306x98k9ss940yvnvb8q";
+      sha256 = "1g6ysvk15arpi7c1f1fpx5slgfr2k3dqd5xr0yvijajp1m0xxq9p";
     };
 
   # Remove absolute paths from `configure' & co.; build out-of-tree.
