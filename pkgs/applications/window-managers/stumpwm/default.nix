@@ -29,10 +29,11 @@ stdenv.mkDerivation rec {
  installPhase = ''
    make
    make install
-   # STUMPWM_CONTRIB_DIR is not actually used. We just set it so that
-   # stumpwmContrib gets retained as a runtime dependency because for
-   # some reason $out/bin/stumpwm does not contain a reference to it.
-   wrapProgram $out/bin/stumpwm --set STUMPWM_CONTRIB_DIR "${stumpwmContrib}/contrib"
+   # For some reason, stumpwmContrib is not retained as a runtime
+   # dependency (probably because $out/bin/stumpwm is compressed or
+   # obfuscated in some way). Thus we add an explicit reference here.
+   mkdir $out/nix-support
+   echo ${stumpwmContrib} > $out/nix-support/stumpwm-contrib
  '';
 
   meta = with stdenv.lib; {
