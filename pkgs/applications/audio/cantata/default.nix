@@ -39,7 +39,7 @@ assert withOnlineServices -> withTaglib;
 assert withReplaygain -> withTaglib;
 
 let
-  version = "1.4.2";
+  version = "1.5.0";
   pname = "cantata";
   fstat = x: fn: "-DENABLE_" + fn + "=" + (if x then "ON" else "OFF");
   fstats = x: map (fstat x);
@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     inherit name;
-    url = "https://drive.google.com/uc?export=download&id=0Bzghs6gQWi60UDFOeU1qSkIzaVE";
-    sha256 = "0ycwx75f1jlsaca170bz82av06bnlknl3q0df001rhmhb7wh4j6c";
+    url = "https://drive.google.com/uc?export=download&id=0Bzghs6gQWi60c0pFbEtldEk1UnM";
+    sha256 = "0gnqfp3ps79d500hrivxj2xkkia042knhg86md6w8ycl3945611p";
   };
 
   buildInputs =
