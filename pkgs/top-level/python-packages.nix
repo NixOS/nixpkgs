@@ -11508,16 +11508,16 @@ let
   };
 
   weboob = buildPythonPackage rec {
-    name = "weboob-0.j";
+    name = "weboob-1.0";
 
     src = pkgs.fetchurl {
-      url = "https://symlink.me/attachments/download/271/${name}.tar.gz";
-      md5 = "9e11b1f376ccb87d35995ec87bba5b38";
+      url = "https://symlink.me/attachments/download/289/${name}.tar.gz";
+      md5 = "38f832f1b8654441adafe8558faa7109";
     };
 
     setupPyBuildFlags = ["--qt" "--xdg"];
 
-    propagatedBuildInputs = with self; [ pillow prettytable pyyaml dateutil gdata requests2 mechanize feedparser lxml pkgs.gnupg pyqt4 pkgs.libyaml simplejson cssselect ];
+    propagatedBuildInputs = with self; [ pillow prettytable pyyaml dateutil gdata requests2 mechanize feedparser lxml pkgs.gnupg pyqt4 pkgs.libyaml simplejson cssselect futures ];
 
     meta = {
       homepage = http://weboob.org;
