@@ -19,7 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "1wgi9plf98gd7x3b7fzjxds089sivsap97bl1bw2lj73nxwnyb9c";
   };
 
-  buildInputs = [ ocaml findlib opam uutf ];
+  buildInputs = [ ocaml findlib opam ];
+
+  propagatedBuildInputs = [ uutf ];
 
   createFindlibDestdir = true;
 
