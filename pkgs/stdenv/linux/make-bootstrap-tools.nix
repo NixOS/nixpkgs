@@ -1,4 +1,4 @@
-{system ? builtins.currentSystem}:
+{ system ? builtins.currentSystem }:
 
 with import ../../top-level/all-packages.nix {inherit system;};
 
@@ -6,80 +6,27 @@ rec {
 
 
   # We want coreutils without ACL support.
-  coreutils_ = coreutils.override (args: {
+  coreutilsMinimal = coreutils.override (args: {
     aclSupport = false;
   });
 
-  # bzip2 wants utime.h, a header 'legacy' in uclibc
-  uclibcForBzip2 = uclibc.override {
-    extraConfig = ''
-        UCLIBC_SUSV3_LEGACY y
-        UCLIBC_SUSV4_LEGACY y
-    '';
-  };
-
-  gccLinkStatic = wrapGCCWith (import ../../build-support/gcc-wrapper) uclibcForBzip2
-    stdenv.gcc.gcc;
-  stdenvLinkStatic = overrideGCC stdenv gccLinkStatic;
-
-  curlStatic = import ../../tools/networking/curl {
-    stdenv = stdenvLinkStatic;
-    inherit fetchurl;
+  curlMinimal = curl.override {
     zlibSupport = false;
     sslSupport = false;
-    linkStatic = true;
+    scpSupport = false;
   };
 
-
-  bzip2Static = import ../../tools/compression/bzip2 {
-    stdenv = stdenvLinkStatic;
-    inherit fetchurl;
-    linkStatic = true;
-  };
-
-  #gccNoShared = wrapGCC ( gcc.gcc.override { enableShared = false; } );
-
-  busyboxStaticSh = busybox.override {
+  busyboxMinimal = busybox.override {
+    enableStatic = true;
+    enableMinimal = true;
     extraConfig = ''
-      CLEAR
-      CONFIG_STATIC y
-
       CONFIG_ASH y
-      CONFIG_BASH_COMPAT y
-      CONFIG_ASH_ALIAS y
-      CONFIG_ASH_GETOPTS y
-      CONFIG_ASH_CMDCMD y
-      CONFIG_ASH_JOB_CONTROL y
       CONFIG_ASH_BUILTIN_ECHO y
-      CONFIG_ASH_BUILTIN_PRINTF y
       CONFIG_ASH_BUILTIN_TEST y
-    '';
-  };
-
-  busyboxStaticLn = busybox.override {
-    extraConfig = ''
-      CLEAR
-      CONFIG_STATIC y
-      CONFIG_LN y
-    '';
-  };
-
-  busyboxStaticMkdir = busybox.override {
-    extraConfig = ''
-      CLEAR
-      CONFIG_STATIC y
+      CONFIG_ASH_OPTIMIZE_FOR_SIZE y
       CONFIG_MKDIR y
-    '';
-  };
-
-  busyboxStaticCpio = busybox.override {
-    extraConfig = ''
-      CLEAR
-      CONFIG_STATIC y
-      CONFIG_CPIO y
-      # (shlevy) Are these necessary?
-      CONFIG_FEATURE_CPIO_O y
-      CONFIG_FEATURE_CPIO_P y
+      CONFIG_TAR y
+      CONFIG_UNXZ y
     '';
   };
 
@@ -116,7 +63,7 @@ rec {
         mv $out/include $out/include-glibc
 
         # Copy coreutils, bash, etc.
-        cp ${coreutils_}/bin/* $out/bin
+        cp ${coreutilsMinimal}/bin/* $out/bin
         (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk runcon shuf who whoami shred users)
 
         cp ${bash}/bin/bash $out/bin
@@ -124,7 +71,7 @@ rec {
         cp ${findutils}/bin/xargs $out/bin
         cp -d ${diffutils}/bin/* $out/bin
         cp -d ${gnused}/bin/* $out/bin
-        cp -d ${gnugrep}/bin/* $out/bin
+        cp -d ${gnugrep}/bin/grep $out/bin
         cp ${gawk}/bin/gawk $out/bin
         cp -d ${gawk}/bin/awk $out/bin
         cp ${gnutar}/bin/tar $out/bin
@@ -133,6 +80,8 @@ rec {
         cp -d ${gnumake}/bin/* $out/bin
         cp -d ${patch}/bin/* $out/bin
         cp ${patchelf}/bin/* $out/bin
+        cp ${curlMinimal}/bin/curl $out/bin
+        cp -d ${curlMinimal}/lib/libcurl* $out/lib
 
         cp -d ${gnugrep.pcre}/lib/libpcre*.so* $out/lib # needed by grep
 
@@ -151,6 +100,8 @@ rec {
         rm -rf $out/lib/gcc/*/*/plugin
         #rm -f $out/lib/gcc/*/*/*.a
         cp -rd ${gcc.gcc}/libexec/* $out/libexec
+        chmod -R u+w $out/libexec
+        rm -rf $out/libexec/gcc/*/*/plugin
         mkdir $out/include
         cp -rd ${gcc.gcc}/include/c++ $out/include
         chmod -R u+w $out/include
@@ -159,8 +110,6 @@ rec {
 
         cp -d ${gmpxx}/lib/libgmp*.so* $out/lib
         cp -d ${mpfr}/lib/libmpfr*.so* $out/lib
-        cp -d ${ppl}/lib/libppl*.so* $out/lib
-        cp -d ${cloogppl}/lib/libcloog*.so* $out/lib
         cp -d ${mpc}/lib/libmpc*.so* $out/lib
         cp -d ${zlib}/lib/libz.so* $out/lib
         cp -d ${libelf}/lib/libelf.so* $out/lib
@@ -169,6 +118,7 @@ rec {
         for i in as ld ar ranlib nm strip readelf objdump; do
           cp ${binutils}/bin/$i $out/bin
         done
+        cp -d ${binutils}/lib/lib*.so* $out/lib
 
         chmod -R u+w $out
 
@@ -189,19 +139,10 @@ rec {
         mv $out/.pack $out/pack
 
         mkdir $out/on-server
-        (cd $out/pack && (find | cpio -o -H newc)) | bzip2 > $out/on-server/bootstrap-tools.cpio.bz2
-
-        mkdir $out/in-nixpkgs
-        cp ${busyboxStaticSh}/bin/busybox $out/in-nixpkgs/sh
-        cp ${busyboxStaticCpio}/bin/busybox $out/in-nixpkgs/cpio
-        cp ${busyboxStaticMkdir}/bin/busybox $out/in-nixpkgs/mkdir
-        cp ${busyboxStaticLn}/bin/busybox $out/in-nixpkgs/ln
-        cp ${curlStatic}/bin/curl $out/in-nixpkgs
-        cp ${bzip2Static}/bin/bzip2 $out/in-nixpkgs
-        chmod u+w $out/in-nixpkgs/*
-        strip $out/in-nixpkgs/*
-        nuke-refs $out/in-nixpkgs/*
-        bzip2 $out/in-nixpkgs/curl
+        tar cvfJ $out/on-server/bootstrap-tools.tar.xz -C $out/pack .
+        cp ${busyboxMinimal}/bin/busybox $out/on-server
+        chmod u+w $out/on-server/busybox
+        nuke-refs $out/on-server/busybox
       ''; # */
 
       # The result should not contain any references (store paths) so
@@ -213,19 +154,30 @@ rec {
 
   unpack =
 
-    stdenv.mkDerivation {
+    derivation {
       name = "unpack";
+      inherit system;
+      builder = "${build}/on-server/busybox";
+      args = [ "ash" "-e" "-c" "eval \"$buildCommand\"" ];
 
       buildCommand = ''
-        ${build}/in-nixpkgs/mkdir $out
-        ${build}/in-nixpkgs/bzip2 -d < ${build}/on-server/bootstrap-tools.cpio.bz2 | (cd $out && ${build}/in-nixpkgs/cpio -v -i)
+        export PATH=${build}/on-server:$out/bin
+
+        busybox mkdir $out
+        < ${build}/on-server/bootstrap-tools.tar.xz busybox unxz | busybox tar x -C $out
 
         for i in $out/bin/* $out/libexec/gcc/*/*/*; do
-            echo patching $i
-            if ! test -L $i; then
-                LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.2 \
-                    $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.2 --set-rpath $out/lib --force-rpath $i
-            fi
+            if [ -L "$i" ]; then continue; fi
+            if [ -z "''${i##*/liblto*}" ]; then continue; fi
+            echo patching "$i"
+            LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.2 \
+                $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.2 --set-rpath $out/lib --force-rpath "$i"
+        done
+
+        for i in $out/lib/libpcre*; do
+            if [ -L "$i" ]; then continue; fi
+            echo patching "$i"
+            $out/bin/patchelf --set-rpath $out/lib --force-rpath "$i"
         done
 
         # Fix the libc linker script.
@@ -241,10 +193,11 @@ rec {
 
   test =
 
-    stdenv.mkDerivation {
+    derivation {
       name = "test";
-
-      realBuilder = "${unpack}/bin/bash";
+      inherit system;
+      builder = "${build}/on-server/busybox";
+      args = [ "ash" "-e" "-c" "eval \"$buildCommand\"" ];
 
       buildCommand = ''
         export PATH=${unpack}/bin
@@ -259,8 +212,7 @@ rec {
         awk --version
         grep --version
         gcc --version
-
-        ${build}/in-nixpkgs/sh -c 'echo Hello World'
+        curl --version
 
         ldlinux=$(echo ${unpack}/lib/ld-linux*.so.2)
 
@@ -270,12 +222,12 @@ rec {
 
         echo '#include <stdio.h>' >> foo.c
         echo '#include <limits.h>' >> foo.c
-        echo 'int main() { printf("Hello World\n"); return 0; }' >> foo.c
+        echo 'int main() { printf("Hello World\\n"); return 0; }' >> foo.c
         $CC -o $out/bin/foo foo.c
         $out/bin/foo
 
         echo '#include <iostream>' >> bar.cc
-        echo 'int main() { std::cout << "Hello World\n"; }' >> bar.cc
+        echo 'int main() { std::cout << "Hello World\\n"; }' >> bar.cc
         $CXX -v -o $out/bin/bar bar.cc
         $out/bin/bar
 
