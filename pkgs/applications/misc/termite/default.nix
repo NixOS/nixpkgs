@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "termite-${version}";
-  version = "8";
+  version = "v8";
 
   src = fetchgit {
-    url = "https://github.com/thestinger/termite.git";
-    rev = "05f3bbf626245a344eb74859ef2aa49f715ebd55";
-    sha256 = "01dfg4zg7sgw0cbh0j9sbwdvn43rw7xfcnijfh1dhd6n5yx00b18";
+    url = "https://github.com/thestinger/termite";
+    rev = "7f03ded7308ad0e26b72b150080e4f3e70401815";
+    sha256 = "1yj4jvjwv73a02p8a0yip8q39znlhfc9zdr19zm1zik2k4h62c2l";
   };
 
   makeFlags = "VERSION=v${version}";
