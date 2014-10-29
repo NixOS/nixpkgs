@@ -1,9 +1,7 @@
-set -e
-
 # Unpack the bootstrap tools tarball.
 echo Unpacking the bootstrap tools...
-$mkdir $out
-$bzip2 -d < $tarball | (cd $out && $cpio -i)
+$builder mkdir $out
+< $tarball $builder unxz | $builder tar x -C $out
 
 # Set the ELF interpreter / RPATH in the bootstrap binaries.
 echo Patching the bootstrap tools...
@@ -21,32 +19,17 @@ fi
 LD_LIBRARY_PATH=$out/lib $LD_BINARY $out/bin/cp $out/bin/patchelf .
 
 for i in $out/bin/* $out/libexec/gcc/*/*/*; do
-    echo patching $i
-    if ! test -L $i; then
-         LD_LIBRARY_PATH=$out/lib $LD_BINARY \
-             $out/bin/patchelf --set-interpreter $LD_BINARY --set-rpath $out/lib --force-rpath $i
-         LD_LIBRARY_PATH=$out/lib $LD_BINARY \
-             $out/bin/patchelf --set-interpreter $LD_BINARY --set-rpath $out/lib --force-rpath $i
-    fi
-done
-for i in $out/lib/librt* ; do
-    echo patching $i
-    if ! test -L $i; then
-         LD_LIBRARY_PATH=$out/lib $LD_BINARY \
-             $out/bin/patchelf --set-interpreter $LD_BINARY --set-rpath $out/lib --force-rpath $i
-         LD_LIBRARY_PATH=$out/lib $LD_BINARY \
-             $out/bin/patchelf --set-interpreter $LD_BINARY --set-rpath $out/lib --force-rpath $i
-    fi
+    if [ -L "$i" ]; then continue; fi
+    if [ -z "${i##*/liblto*}" ]; then continue; fi
+    echo patching "$i"
+    LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.2 \
+        $out/bin/patchelf --set-interpreter $LD_BINARY --set-rpath $out/lib --force-rpath "$i"
 done
 
-for i in $out/lib/libgmp* $out/lib/libppl* $out/lib/libcloog* $out/lib/libmpc* $out/lib/libpcre* $out/lib/libstdc++*.so.*[0-9]; do
-    echo trying to patch $i
-    if test -f $i -a ! -L $i; then
-         LD_LIBRARY_PATH=$out/lib $LD_BINARY \
-             $out/bin/patchelf --set-rpath $out/lib --force-rpath $i
-         LD_LIBRARY_PATH=$out/lib $LD_BINARY \
-             $out/bin/patchelf --set-rpath $out/lib --force-rpath $i
-    fi
+for i in $out/lib/libpcre*; do
+    if [ -L "$i" ]; then continue; fi
+    echo patching "$i"
+    $out/bin/patchelf --set-rpath $out/lib --force-rpath "$i"
 done
 
 # Fix the libc linker script.
@@ -60,13 +43,16 @@ mv $out/lib/libpthread.so.tmp $out/lib/libpthread.so
 ln -s bash $out/bin/sh
 ln -s bzip2 $out/bin/bunzip2
 
-# Mimic the gunzip script as in gzip installations
+# Provide a gunzip script.
 cat > $out/bin/gunzip <<EOF
 #!$out/bin/sh
 exec $out/bin/gzip -d "\$@"
 EOF
 chmod +x $out/bin/gunzip
 
-# fetchurl needs curl.
-bzip2 -d < $curl > $out/bin/curl
-chmod +x $out/bin/curl
+# Provide fgrep/egrep.
+echo "#! $out/bin/sh" > $out/bin/egrep
+echo "exec $out/bin/grep -E \"\$@\"" >> $out/bin/egrep
+echo "#! $out/bin/sh" > $out/bin/fgrep
+echo "exec $out/bin/grep -F \"\$@\"" >> $out/bin/fgrep
+chmod +x $out/bin/egrep $out/bin/fgrep
