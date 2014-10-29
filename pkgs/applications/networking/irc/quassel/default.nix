@@ -20,7 +20,7 @@ in with stdenv; mkDerivation rec {
 
   src = fetchurl {
     url = "http://quassel-irc.org/pub/quassel-${version}.tar.bz2";
-    sha256 = "106zjn705vyh0msqwg3v4dhaahffhkn1bmfsljdz57jd539bf5qd";
+    sha256 = "01251y5i1fvm6s2g9acxaczk2jdyw1byr45q41q0yh9apjw938cr";
   };
 
   enableParallelBuilding = true;
