@@ -6541,6 +6541,40 @@ let
     };
   });
 
+  pybfd = buildPythonPackage rec {
+    name = "pybfd-0.1.1";
+
+    disabled = isPyPy || isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pybfd/${name}.tar.gz";
+      md5 = "79dd6e12c90ad0515d0ad7fb1bd2f571";
+    };
+
+    preConfigure = ''
+      substituteInPlace setup.py \
+        --replace '"/usr/include"' '"${pkgs.gdb}/include"' \
+        --replace '"/usr/lib"' '"${pkgs.binutils}/lib"'
+    '';
+
+    # --old-and-unmanageable not supported by this setup.py
+    installPhase = ''
+      mkdir -p "$out/lib/${python.libPrefix}/site-packages"
+
+      export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+
+      ${python}/bin/${python.executable} setup.py install \
+        --install-lib=$out/lib/${python.libPrefix}/site-packages \
+        --prefix="$out"
+    ''; 
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/Groundworkstech/pybfd;
+      description = "A Python interface to the GNU Binary File Descriptor (BFD) library";
+      license = licenses.gplv2;
+      platforms = platforms.linux;
+    };
+  };
 
   pyblock = stdenv.mkDerivation rec {
     name = "pyblock-${version}";
