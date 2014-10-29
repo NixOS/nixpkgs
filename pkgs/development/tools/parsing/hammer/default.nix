@@ -3,6 +3,7 @@
 stdenv.mkDerivation rec {
 
 name = "hammer-${version}";
+
 version = "1.0.0-rc3";
 
 src = fetchgit {
