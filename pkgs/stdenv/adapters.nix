@@ -29,33 +29,6 @@ rec {
   overrideSetup = stdenv: setupScript: stdenv.override { inherit setupScript; };
 
 
-  # Return a modified stdenv that uses klibc to create small
-  # statically linked binaries.
-  useKlibc = stdenv: klibc: stdenv //
-    { mkDerivation = args: stdenv.mkDerivation (args // {
-        NIX_CFLAGS_LINK = "-static";
-
-        # These are added *after* the command-line flags, so we'll
-        # always optimise for size.
-        NIX_CFLAGS_COMPILE =
-          args.NIX_CFLAGS_COMPILE or "" + " -Os -s";
-
-        configureFlags =
-          args.configureFlags or "" + " --disable-shared"; # brrr...
-
-        NIX_GCC = pkgs.runCommand "klibc-wrapper" {} ''
-          mkdir -p $out/bin
-          ln -s ${klibc}/bin/klcc $out/bin/gcc
-          ln -s ${klibc}/bin/klcc $out/bin/cc
-          mkdir -p $out/nix-support
-          echo 'PATH=$PATH:${stdenv.gcc.binutils}/bin' > $out/nix-support/setup-hook
-        '';
-      });
-      isKlibc = true;
-      isStatic = true;
-    };
-
-
   # Return a modified stdenv that tries to build statically linked
   # binaries.
   makeStaticBinaries = stdenv: stdenv //
