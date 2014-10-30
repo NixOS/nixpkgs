@@ -139,6 +139,7 @@
   tomberek = "Thomas Bereknyei <tomberek@gmail.com>";
   tstrobel = "Thomas Strobel <ts468@cam.ac.uk>";
   ttuegel = "Thomas Tuegel <ttuegel@gmail.com>";
+  twey = "James ‘Twey’ Kay <twey@twey.co.uk>";
   tv = "Tomislav Viljetić <tv@shackspace.de>";
   urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>";
   vandenoever = "Jos van den Oever <jos@vandenoever.info>";
