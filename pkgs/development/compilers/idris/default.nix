@@ -10,8 +10,8 @@
 
 cabal.mkDerivation (self: {
   pname = "idris";
-  version = "0.9.15";
-  sha256 = "1i7ra9yk5zcdw63fry8r2s61z6cga6arz9mnjc60jgg2ykcxv8md";
+  version = "0.9.15.1";
+  sha256 = "0r31jcqs9kgknm66v7bbcgj9md7z49sgvn0nhk1dwg8jj2rmfll8";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -29,6 +29,5 @@ cabal.mkDerivation (self: {
     description = "Functional Programming Language with Dependent Types";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })
