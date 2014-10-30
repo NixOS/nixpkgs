@@ -12,5 +12,6 @@ cabal.mkDerivation (self: {
     description = "An Interface for gloss in terms of a reactive-banana Behavior";
     license = self.stdenv.lib.licenses.gpl3;
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ twey ];
   };
 })
