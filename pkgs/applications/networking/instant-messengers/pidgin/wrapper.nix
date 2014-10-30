@@ -15,7 +15,7 @@ let drv = buildEnv {
       done
     fi
     wrapProgram $out/bin/pidgin \
-      --suffix-each PURPLE_PLUGIN_PATH ':' "$out/lib/purple-${pidgin.majorVersion} $out/lib/pidgin"
+      --suffix-each PURPLE_PLUGIN_PATH ':' "$out/lib/purple-${pidgin.version} $out/lib/pidgin"
   '';
   };
 in stdenv.lib.overrideDerivation drv (x : { buildInputs = x.buildInputs ++ [ makeWrapper ]; })
