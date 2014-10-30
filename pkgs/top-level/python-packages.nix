@@ -1010,7 +1010,6 @@ let
     };
   };
 
-
   botocore = buildPythonPackage rec {
     version = "0.67.0";
     name = "botocore-${version}";
@@ -1595,6 +1594,19 @@ let
       description = "plugin core for use by pytest-cov, nose-cov and nose2-cov";
     };
     propagatedBuildInputs = with self; [ self.coverage ];
+  };
+
+  crcmod = buildPythonPackage rec {
+    name = "crcmod-1.7";
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/c/crcmod/crcmod-1.7.tar.gz;
+      sha256 = "07k0hgr42vw2j92cln3klxka81f33knd7459cn3d8aszvfh52w6w";
+    };
+    meta = {
+      description = "Python module for generating objects that compute the Cyclic Redundancy Check (CRC)";
+      homepage = http://crcmod.sourceforge.net/;
+      license = stdenv.lib.licenses.mit;
+    };
   };
 
   cython = buildPythonPackage rec {
@@ -7666,6 +7678,17 @@ let
     };
   };
 
+  retry_decorator = buildPythonPackage rec {
+    name = "retry_decorator-1.0.0";
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/r/retry_decorator/retry_decorator-1.0.0.tar.gz;
+      sha256 = "086zahyb6yn7ggpc58909c5r5h3jz321i1694l1c28bbpaxnlk88";
+    };
+    meta = {
+      homepage = https://github.com/pnpnpn/retry-decorator;
+      license = stdenv.lib.licenses.mit;
+    };
+  };
 
   quantities = buildPythonPackage rec {
     name = "quantities-0.10.1";
@@ -8642,6 +8665,19 @@ let
       description = "Joyent SmartDataCenter CloudAPI connector using http-signature authentication via Requests";
       homepage = https://github.com/atl/py-smartdc;
       license = licenses.mit;
+    };
+  };
+
+  socksipy-branch = buildPythonPackage rec {
+    name = "SocksiPy-branch-1.01";
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/S/SocksiPy-branch/SocksiPy-branch-1.01.tar.gz;
+      sha256 = "01l41v4g7fy9fzvinmjxy6zcbhgqaif8dhdqm4w90fwcw9h51a8p";
+    };
+    meta = {
+      homepage = http://code.google.com/p/socksipy-branch/;
+      description = "This Python module allows you to create TCP connections through a SOCKS proxy without any special effort";
+      license = stdenv.lib.licenses.bsd3;
     };
   };
 
@@ -11470,6 +11506,52 @@ let
   with self;
 
 {
+  boto-230 = buildPythonPackage rec {
+    name = "boto-2.30.0";
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/b/boto/boto-2.30.0.tar.gz;
+      sha256 = "12gl8azmx1vv8dbv9jhnsbhjpc2dd1ng0jlbcg734k6ggwq1h6hh";
+    };
+    doCheck = false;
+    meta = {
+      homepage = https://github.com/boto/boto;
+      license = licenses.mit;
+      description = "Python interface to Amazon Web Services";
+    };
+  };
+
+  gcs-oauth2-boto-plugin = buildPythonPackage rec {
+    name = "gcs-oauth2-boto-plugin-1.8";
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/g/gcs-oauth2-boto-plugin/gcs-oauth2-boto-plugin-1.8.tar.gz;
+      sha256 = "0jy62y5bmaf1mb735lqwry1s5nx2qqrxvl5sxip9yg4miih3qkyb";
+    };
+    propagatedBuildInputs = with self; [ boto-230 httplib2 google_api_python_client retry_decorator pkgs.pyopenssl socksipy-branch ];
+    meta = {
+      homepage = https://developers.google.com/storage/docs/gspythonlibrary;
+      description = "Provides OAuth 2.0 credentials that can be used with Google Cloud Storage";
+      license = stdenv.lib.licenses.asl20;
+    };
+  };
+
+  gsutil = buildPythonPackage rec {
+    name = "gsutil-4.6";
+    meta = {
+      homepage = https://developers.google.com/storage/docs/gsutil;
+      description = "Google Cloud Storage Tool";
+      maintainers = [ "Russell O'Connor <oconnorr@google.com>" ];
+      license = stdenv.lib.licenses.asl20;
+    };
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/g/gsutil/gsutil-4.6.tar.gz;
+      sha256 = "1i0clm60162rbk45ljr8nsw4ndkzjnwb7r440shcqjrvw8jq49mn";
+    };
+
+    propagatedBuildInputs = with self; [ boto-230 crcmod httplib2 gcs-oauth2-boto-plugin google_api_python_client gflags
+                                         retry_decorator pkgs.pyopenssl socksipy-branch ];
+  };
 
   pypi2nix = self.buildPythonPackage rec {
     rev = "04a68d8577acbceb88bdf51b1231a9dbdead7003";
