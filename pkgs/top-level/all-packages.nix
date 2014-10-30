@@ -11623,7 +11623,7 @@ let
         daemon = false;
         client = false;
         withKDE = false;
-        qt = qt5;
+        #qt = qt5;
         tag = "-without-kde";
       });
 
@@ -11632,7 +11632,7 @@ let
         daemon = true;
         client = false;
         withKDE = false;
-        qt = qt5;
+        #qt = qt5;
         tag = "-daemon";
       });
 
@@ -11648,7 +11648,7 @@ let
         daemon = false;
         client = true;
         withKDE = false;
-        qt = qt5;
+        #qt = qt5;
         tag = "-client-without-kde";
       });
 
