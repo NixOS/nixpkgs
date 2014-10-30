@@ -1435,6 +1435,8 @@ let
 
   iftop = callPackage ../tools/networking/iftop { };
 
+  ifuse = callPackage ../tools/filesystems/ifuse/default.nix { };
+
   ihaskell = callPackage ../development/tools/haskell/ihaskell/wrapper.nix {
     inherit (pythonPackages) ipython;
     inherit (haskellPackages) ihaskell ghc;
