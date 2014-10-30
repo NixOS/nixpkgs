@@ -125,6 +125,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   accelerateIo = callPackage ../development/libraries/haskell/accelerate-io {};
 
+  acmeLookofdisapproval = callPackage ../development/libraries/haskell/acme-lookofdisapproval {};
+
   active = callPackage ../development/libraries/haskell/active {};
 
   ACVector = callPackage ../development/libraries/haskell/AC-Vector {};
