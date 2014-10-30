@@ -9589,7 +9589,9 @@ let
 
   gqview = callPackage ../applications/graphics/gqview { };
 
-  gmpc = callPackage ../applications/audio/gmpc { };
+  gmpc = callPackage ../applications/audio/gmpc {
+    inherit (xlibs) libSM libICE;
+  };
 
   gmtk = callPackage ../applications/networking/browsers/mozilla-plugins/gmtk {
     inherit (gnome) GConf;
