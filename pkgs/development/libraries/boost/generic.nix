@@ -1,4 +1,4 @@
-{ stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames
+{ stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, makeSetupHook
 , toolset ? null
 , enableRelease ? true
 , enableDebug ? false
@@ -89,13 +89,16 @@ let
 
     # Create a derivation which encompasses everything, making buildInputs nicer
     mkdir -p $out/nix-support
-    echo "$dev $lib" > $out/nix-support/propagated-native-build-inputs
+    echo "${stripHeaderPathHook} $dev $lib" > $out/nix-support/propagated-native-build-inputs
   '';
 
   commonConfigureFlags = [
     "--includedir=$(dev)/include"
     "--libdir=$(lib)/lib"
   ];
+
+  stripHeaderPathHook = makeSetupHook { } ./strip-header-path.sh;
+
 in
 
 stdenv.mkDerivation {
