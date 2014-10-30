@@ -7,7 +7,7 @@ assert stdenv.isLinux;
 let
 
   mkIdeaProduct =
-  { name, product, version, build, src, meta }:
+  { name, product, version, build, src, meta, patchSnappy ? true }:
 
   let loName = stdenv.lib.toLower product;
       hiName = stdenv.lib.toUpper product; in
@@ -26,38 +26,44 @@ let
 
     buildInputs = [ makeWrapper patchelf p7zip unzip ];
 
-    patchPhase = ''
-
-      get_file_size() {
+    patchPhase = lib.concatStringsSep "\n" [
+      ''
+        get_file_size() {
           local fname="$1"
           echo $(ls -l $fname | cut -d ' ' -f5)
-      }
+        }
 
-      munge_size_hack() {
+        munge_size_hack() {
           local fname="$1"
           local size="$2"
           strip $fname
           truncate --size=$size $fname
-      }
+        }
 
-      interpreter=$(echo ${stdenv.glibc}/lib/ld-linux*.so.2)
-      snappyPath="lib/snappy-java-1.0.5"
+        interpreter=$(echo ${stdenv.glibc}/lib/ld-linux*.so.2)
+        if [ "${stdenv.system}" == "x86_64-linux" ]; then
+          target_size=$(get_file_size bin/fsnotifier64)
+          patchelf --set-interpreter "$interpreter" bin/fsnotifier64
+          munge_size_hack bin/fsnotifier64 $target_size
+        else
+          target_size=$(get_file_size bin/fsnotifier)
+          patchelf --set-interpreter "$interpreter" bin/fsnotifier
+          munge_size_hack bin/fsnotifier $target_size
+        fi
+      ''
 
-      7z x -o"$snappyPath" "$snappyPath.jar"
-      if [ "${stdenv.system}" == "x86_64-linux" ]; then
-        target_size=$(get_file_size bin/fsnotifier64)
-        patchelf --set-interpreter "$interpreter" bin/fsnotifier64
-        patchelf --set-rpath ${stdenv.gcc.gcc}/lib64/ "$snappyPath/org/xerial/snappy/native/Linux/amd64/libsnappyjava.so"
-        munge_size_hack bin/fsnotifier64 $target_size
-      else
-        target_size=$(get_file_size bin/fsnotifier)
-        patchelf --set-interpreter "$interpreter" bin/fsnotifier
-        patchelf --set-rpath ${stdenv.gcc.gcc}/lib/ "$snappyPath/org/xerial/snappy/native/Linux/i386/libsnappyjava.so"
-        munge_size_hack bin/fsnotifier $target_size
-      fi
-      7z a -tzip "$snappyPath.jar" ./"$snappyPath"/*
-      rm -vr "$snappyPath"
-    '';
+      (lib.optionalString patchSnappy ''
+        snappyPath="lib/snappy-java-1.0.5"
+        7z x -o"$snappyPath" "$snappyPath.jar"
+        if [ "${stdenv.system}" == "x86_64-linux" ]; then
+          patchelf --set-rpath ${stdenv.gcc.gcc}/lib64 "$snappyPath/org/xerial/snappy/native/Linux/amd64/libsnappyjava.so"
+        else
+          patchelf --set-rpath ${stdenv.gcc.gcc}/lib "$snappyPath/org/xerial/snappy/native/Linux/i386/libsnappyjava.so"
+        fi
+        7z a -tzip "$snappyPath.jar" ./"$snappyPath"/*
+        rm -vr "$snappyPath"
+      '')
+    ];
 
     installPhase = ''
       mkdir -vp "$out/bin" "$out/$name" "$out/share/pixmaps"
@@ -67,6 +73,12 @@ let
       [ -d ${jdk}/lib/openjdk ] \
         && jdk=${jdk}/lib/openjdk \
         || jdk=${jdk}
+
+      if [ "${stdenv.system}" == "x86_64-linux" ]; then
+        makeWrapper "$out/$name/bin/fsnotifier64" "$out/bin/fsnotifier64"
+      else
+        makeWrapper "$out/$name/bin/fsnotifier" "$out/bin/fsnotifier"
+      fi
 
       makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${loName}" \
         --prefix PATH : "${jdk}/bin:${coreutils}/bin:${gnugrep}/bin:${which}/bin:${git}/bin" \
@@ -141,6 +153,24 @@ let
       };
     });
 
+  buildPhpStorm = { name, version, build, src, license, description }:
+    (mkIdeaProduct {
+      inherit name version build src;
+      product = "PhpStorm";
+      patchSnappy = false;
+      meta = with stdenv.lib; {
+        homepage = "https://www.jetbrains.com/phpstorm/";
+        inherit description license;
+        longDescription = ''
+          PhpStorm provides an editor for PHP, HTML and JavaScript
+          with on-the-fly code analysis, error prevention and
+          automated refactorings for PHP and JavaScript code.
+        '';
+        maintainers = with maintainers; [ schristo ];
+        platforms = platforms.linux;
+      };
+    });
+
 in
 
 {
@@ -203,6 +233,18 @@ in
     src = fetchurl {
       url = "http://download.jetbrains.com/python/${name}.tar.gz";
       sha256 = "e4f85f3248e8985ac9f8c326543f979b47ba1d7ac6b128a2cf2b3eb8ec545d2b";
+    };
+  };
+
+  phpstorm = buildPhpStorm rec {
+    name = "phpstorm-${version}";
+    version = "8.0.1";
+    build = "PS-138.2001";
+    description = "Professional IDE for Web and PHP developers";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "http://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
+      sha256 = "0d46442aa32174fe16846c3c31428178ab69b827d2e0ce31f633f13b64c01afc";
     };
   };
 

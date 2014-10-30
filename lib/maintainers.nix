@@ -124,6 +124,7 @@
   rszibele = "Richard Szibele <richard_szibele@hotmail.com>";
   rycee = "Robert Helgesson <robert@rycee.net>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
+  schristo = "Scott Christopher <schristopher@konputa.com>";
   sepi = "Raffael Mancini <raffael@mancini.lu>";
   shell = "Shell Turner <cam.turn@gmail.com>";
   shlevy = "Shea Levy <shea@shealevy.com>";
