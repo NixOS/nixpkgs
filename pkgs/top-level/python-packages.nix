@@ -6571,7 +6571,7 @@ let
     meta = with stdenv.lib; {
       homepage = https://github.com/Groundworkstech/pybfd;
       description = "A Python interface to the GNU Binary File Descriptor (BFD) library";
-      license = licenses.gplv2;
+      license = licenses.gpl2;
       platforms = platforms.linux;
     };
   };
