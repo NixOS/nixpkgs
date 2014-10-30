@@ -47,7 +47,6 @@ let
 
   genericB2Flags = [
     "--prefix=$out"
-    "--libdir=$lib/lib"
     "-j$NIX_BUILD_CORES"
     "--layout=${layout}"
     "variant=${variant}"
@@ -84,10 +83,6 @@ let
     # Let boost install everything else
     ./b2 ${b2Args} install
   '';
-
-  commonConfigureFlags = [
-    "--libdir=$(lib)/lib"
-  ];
 in
 
 stdenv.mkDerivation {
@@ -113,7 +108,7 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   configureScript = "./bootstrap.sh";
-  configureFlags = commonConfigureFlags ++ [
+  configureFlags = [
     "--with-icu=${icu}"
     "--with-python=${python}/bin/python"
   ] ++ optional (toolset != null) "--with-toolset=${toolset}";
@@ -124,8 +119,6 @@ stdenv.mkDerivation {
 
   installPhase = installer nativeB2Args;
 
-  outputs = [ "out" "lib" ];
-
   crossAttrs = rec {
     buildInputs = [ expat.crossDrv zlib.crossDrv bzip2.crossDrv ];
     # all buildInputs set previously fell into propagatedBuildInputs, as usual, so we have to
@@ -134,7 +127,7 @@ stdenv.mkDerivation {
     # We want to substitute the contents of configureFlags, removing thus the
     # usual --build and --host added on cross building.
     preConfigure = ''
-      export configureFlags="--prefix=$out --without-icu ${concatStringsSep " " commonConfigureFlags}"
+      export configureFlags="--prefix=$out --without-icu"
       set -x
       cat << EOF > user-config.jam
       using gcc : cross : $crossConfig-g++ ;
