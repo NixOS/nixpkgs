@@ -8732,6 +8732,8 @@ let
 
     buildInputs = [ pkgs.bash ];
 
+    doCheck = !isPyPy;
+
     preConfigure = ''
       substituteInPlace test_subprocess32.py \
         --replace '/usr/' '${pkgs.bash}/'
