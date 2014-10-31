@@ -25,12 +25,14 @@ in {
     services.xserver.synaptics = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         example = true;
         description = "Whether to enable touchpad support.";
       };
 
       dev = mkOption {
+        type = types.nullOr types.str;
         default = null;
         example = "/dev/input/event0";
         description =
@@ -59,22 +61,26 @@ in {
       };
 
       twoFingerScroll = mkOption {
+        type = types.bool;
         default = false;
         description = "Whether to enable two-finger drag-scrolling.";
       };
 
       vertEdgeScroll = mkOption {
+        type = types.bool;
         default = ! cfg.twoFingerScroll;
         description = "Whether to enable vertical edge drag-scrolling.";
       };
 
       tapButtons = mkOption {
+        type = types.bool;
         default = true;
         example = false;
         description = "Whether to enable tap buttons.";
       };
 
       buttonsMap = mkOption {
+        type = types.listOf types.int;
         default = [1 2 3];
         example = [1 3 2];
         description = "Remap touchpad buttons.";
@@ -82,18 +88,21 @@ in {
       };
 
       palmDetect = mkOption {
+        type = types.bool;
         default = false;
         example = true;
         description = "Whether to enable palm detection (hardware support required)";
       };
 
       horizontalScroll = mkOption {
+        type = types.bool;
         default = true;
         example = false;
         description = "Whether to enable horizontal scrolling (on touchpad)";
       };
 
       additionalOptions = mkOption {
+        type = types.str;
         default = "";
         example = ''
           Option "RTCornerButton" "2"
