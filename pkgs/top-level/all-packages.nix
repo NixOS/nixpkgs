@@ -3541,6 +3541,8 @@ let
 
     ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
 
+    ocaml_cairo2 = callPackage ../development/ocaml-modules/ocaml-cairo2 { };
+
     cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
 
     cppo = callPackage ../development/tools/ocaml/cppo { };
