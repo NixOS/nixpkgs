@@ -4,10 +4,10 @@
 
 cabal.mkDerivation (self: {
   pname = "extra";
-  version = "0.4";
-  sha256 = "1wqhnfm297iwf6l4bkhnlbv4bb54b9y5qig7h5n7fjn88bxgwj1l";
+  version = "0.5.1";
+  sha256 = "0ac271lsqkgi0rrnhgzh1hjghz8vi6fj4snc8j8zrjgghc30y9wk";
   buildDepends = [ filepath time ];
-  testDepends = [ QuickCheck time ];
+  testDepends = [ filepath QuickCheck time ];
   meta = {
     homepage = "https://github.com/ndmitchell/extra#readme";
     description = "Extra functions I use";
