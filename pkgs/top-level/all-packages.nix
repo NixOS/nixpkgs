@@ -3532,10 +3532,12 @@ let
     camomile_0_8_2 = callPackage ../development/ocaml-modules/camomile/0.8.2.nix { };
     camomile = callPackage ../development/ocaml-modules/camomile { };
 
-    camlimages = callPackage ../development/ocaml-modules/camlimages {
+    camlimages_4_0 = callPackage ../development/ocaml-modules/camlimages/4.0.nix {
       libpng = libpng12;
       giflib = giflib_4_1;
     };
+    camlimages_4_1 = callPackage ../development/ocaml-modules/camlimages/4.1.nix {};
+    camlimages = camlimages_4_1;
 
     biniou = callPackage ../development/ocaml-modules/biniou { };
 
@@ -3720,7 +3722,8 @@ let
   // { lablgtk = ocamlPackages_3_10_0.lablgtk_2_14; };
   ocamlPackages_3_11_2 = (mkOcamlPackages ocaml_3_11_2 pkgs.ocamlPackages_3_11_2)
   // { lablgtk = ocamlPackages_3_11_2.lablgtk_2_14; };
-  ocamlPackages_3_12_1 = mkOcamlPackages ocaml_3_12_1 pkgs.ocamlPackages_3_12_1;
+  ocamlPackages_3_12_1 = (mkOcamlPackages ocaml_3_12_1 pkgs.ocamlPackages_3_12_1)
+  // { camlimages = ocamlPackages_3_12_1.camlimages_4_0; };
   ocamlPackages_4_00_1 = mkOcamlPackages ocaml_4_00_1 pkgs.ocamlPackages_4_00_1;
   ocamlPackages_4_01_0 = mkOcamlPackages ocaml_4_01_0 pkgs.ocamlPackages_4_01_0;
   ocamlPackages_4_02_0 = mkOcamlPackages ocaml_4_02_0 pkgs.ocamlPackages_4_02_0;
@@ -5195,9 +5198,10 @@ let
   glpk = callPackage ../development/libraries/glpk { };
 
   glsurf = callPackage ../applications/science/math/glsurf {
-    inherit (ocamlPackages) lablgl findlib camlimages ocaml_mysql mlgmp;
+    inherit (ocamlPackages) lablgl findlib ocaml_mysql mlgmp;
     libpng = libpng12;
     giflib = giflib_4_1;
+    camlimages = ocamlPackages.camlimages_4_0;
   };
 
   gmime = callPackage ../development/libraries/gmime { };
