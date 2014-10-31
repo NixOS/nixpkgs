@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
     unixBytestring unorderedContainers uuid vector
   ];
   extraLibraries = [ systemd-journal ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/ocharles/libsystemd-journal";
     description = "Haskell bindings to libsystemd-journal";
