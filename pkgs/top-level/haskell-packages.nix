@@ -977,6 +977,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   gloss = callPackage ../development/libraries/haskell/gloss {};
 
+  glossBanana = callPackage ../development/libraries/haskell/gloss-banana {};
+
   glossAccelerate = callPackage ../development/libraries/haskell/gloss-accelerate {};
 
   glossRaster = callPackage ../development/libraries/haskell/gloss-raster {};
