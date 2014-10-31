@@ -7,19 +7,19 @@
 
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.6.1";
+  version = "2.6.2";
 
   meta = with stdenv.lib; {
     description = "Web content rendering engine, GTK+ port";
     homepage = "http://webkitgtk.org/";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.iyzsong ];
+    maintainers = with maintainers; [ iyzsong koral ];
   };
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "0m3ddi3s3998zkfdpcjv738iglh6wx4678vzwwk9rmrdfriacin8";
+    sha256 = "1f9qm5g1mbjm2hrnlzymas99piws4h4y3yxz4p6f6gavnsvfjwji";
   };
 
   patches = [ ./finding-harfbuzz-icu.patch ];
