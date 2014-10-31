@@ -7538,7 +7538,9 @@ let
 
   postgresql93 = callPackage ../servers/sql/postgresql/9.3.x.nix { };
 
-  postgresql94 = callPackage ../servers/sql/postgresql/9.4.x.nix { };
+  postgresql94beta2 = callPackage ../servers/sql/postgresql/9.4beta2.nix { };
+  postgresql94beta3 = callPackage ../servers/sql/postgresql/9.4beta3.nix { };
+  postgresql94 = postgresql94beta3;
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
