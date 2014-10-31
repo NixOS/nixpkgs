@@ -4197,6 +4197,8 @@ let
 
   guile_ncurses = callPackage ../development/guile-modules/guile-ncurses { };
 
+  guile-opengl = callPackage ../development/guile-modules/guile-opengl { };
+
   guile-xcb = callPackage ../development/guile-modules/guile-xcb { };
 
   pharo-vm = callPackage_i686 ../development/pharo/vm { };
