@@ -1243,6 +1243,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     liblapack = pkgs.liblapack.override { shared = true; };
   };
 
+  hmatrixGsl = callPackage ../development/libraries/haskell/hmatrix-gsl {};
+
   hmatrixSpecial = callPackage ../development/libraries/haskell/hmatrix-special {};
 
   hoauth = callPackage ../development/libraries/haskell/hoauth {};
