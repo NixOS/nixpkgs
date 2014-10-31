@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "lens-aeson";
-  version = "1.0.0.1";
-  sha256 = "1gkplcvi570bd824q4zswi1ajb3730b7qng48g1zpjskvikn32qn";
+  version = "1.0.0.2";
+  sha256 = "1hq0zs1h4wapy1n9vyr4yiysnwbv26di8gl6msx3jkcahvlnkvlp";
   buildDepends = [
     aeson attoparsec lens scientific text unorderedContainers vector
   ];
