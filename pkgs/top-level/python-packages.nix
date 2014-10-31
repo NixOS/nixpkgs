@@ -2641,7 +2641,7 @@ let
     name = "poppler-qt4-${version}";
     version = "0.18.1";
     disabled = isPy3k || isPyPy;
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/python-poppler-qt4/" +
             "python-poppler-qt4-${version}.tar.gz";
@@ -6578,7 +6578,7 @@ let
       ${python}/bin/${python.executable} setup.py install \
         --install-lib=$out/lib/${python.libPrefix}/site-packages \
         --prefix="$out"
-    ''; 
+    '';
 
     meta = with stdenv.lib; {
       homepage = https://github.com/Groundworkstech/pybfd;
@@ -11110,7 +11110,7 @@ let
 
     buildInputs = with self; [ nose mock ];
     propagatedBuildInputs = with self; [
-      jinja2 pyyaml redis requests pagerduty 
+      jinja2 pyyaml redis requests pagerduty
       python_simple_hipchat pushbullet
     ];
 
@@ -11685,4 +11685,37 @@ let
       maintainers = [ stdenv.lib.maintainers.DamienCassou ];
     };
   };
+
+  datadiff = buildPythonPackage rec {
+    name = "datadiff-1.1.6";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/datadiff/datadiff-1.1.6.zip";
+      md5 = "c34a690db75eead148aa5fa89e575d1e";
+    };
+
+    buildInputs = with self; [ nose ];
+
+    meta = with stdenv.lib; {
+      description = "DataDiff";
+      homepage = http://sourceforge.net/projects/datadiff/;
+      license = licenses.asl20;
+    };
+  };
+
+  termcolor = buildPythonPackage rec {
+    name = "termcolor-1.1.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/termcolor/termcolor-1.1.0.tar.gz";
+      md5 = "043e89644f8909d462fbbfa511c768df";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Termcolor";
+      homepage = http://pypi.python.org/pypi/termcolor;
+      license = licenses.mit;
+    };
+  };
+
 }); in pythonPackages
