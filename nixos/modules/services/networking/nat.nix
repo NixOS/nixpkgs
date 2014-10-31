@@ -157,9 +157,9 @@ in
 
     boot = {
       kernelModules = [ "nf_nat_ftp" ];
-      kernel.sysctl = mkOverride 99 {
-        "net.ipv4.conf.all.forwarding" = true;
-        "net.ipv4.conf.default.forwarding" = true;
+      kernel.sysctl = {
+        "net.ipv4.conf.all.forwarding" = mkOverride 99 true;
+        "net.ipv4.conf.default.forwarding" = mkOverride 99 true;
       };
     };
 
