@@ -2,7 +2,7 @@
 
 { cabal, cmdtheline, filepath, haskeline, monadUnify, mtl, parsec
 , patternArrows, time, transformers, unorderedContainers
-, utf8String, xdgBasedir
+, utf8String
 }:
 
 cabal.mkDerivation (self: {
@@ -13,7 +13,7 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [
     cmdtheline filepath haskeline monadUnify mtl parsec patternArrows
-    time transformers unorderedContainers utf8String xdgBasedir
+    time transformers unorderedContainers utf8String
   ];
   testDepends = [ filepath mtl parsec transformers utf8String ];
   doCheck = false;
