@@ -4030,7 +4030,10 @@ let
     wrapPython = pythonPackages.wrapPython;
   };
 
+  bundler = callPackage ../development/interpreters/ruby/bundler.nix { };
   gemFixes = callPackage ../development/interpreters/ruby/fixes.nix { };
+  buildRubyGem = callPackage ../development/interpreters/ruby/gem.nix { };
+  loadRubyEnv = callPackage ../development/interpreters/ruby/load-ruby-env.nix { };
 
   ruby_1_8_7 = callPackage ../development/interpreters/ruby/ruby-1.8.7.nix { };
   ruby_1_9_3 = callPackage ../development/interpreters/ruby/ruby-1.9.3.nix { };
@@ -4046,10 +4049,6 @@ let
   ruby_1_9 = ruby_1_9_3;
   ruby_2_0 = ruby_2_0_0;
   ruby_2_1 = ruby_2_1_3;
-
-  loadRubyEnv = callPackage ../development/interpreters/ruby/load-ruby-env.nix { };
-
-  rubySqlite3 = callPackage ../development/ruby-modules/sqlite3 { };
 
   rubygemsFun = ruby: builderDefsPackage (import ../development/interpreters/ruby/rubygems.nix) {
     inherit ruby makeWrapper;

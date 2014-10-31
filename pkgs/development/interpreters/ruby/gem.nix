@@ -1,6 +1,10 @@
-{ ruby, fetchurl, rubygemsFun, makeWrapper, lib, git }:
+{ lib, ruby, rubygemsFun, fetchurl, makeWrapper, git } @ defs:
+
+lib.makeOverridable (
 
 { name
+, ruby ? defs.ruby
+, rubygems ? (rubygemsFun ruby)
 , namePrefix ? "${ruby.name}" + "-"
 , buildInputs ? []
 , doCheck ? false
@@ -9,10 +13,7 @@
 , gemPath ? []
 , ...} @ attrs:
 
-let
-  rubygems = rubygemsFun ruby;
-
-in ruby.stdenv.mkDerivation (attrs // {
+ruby.stdenv.mkDerivation (attrs // {
   inherit doCheck;
 
   buildInputs = [ rubygems makeWrapper git ] ++ buildInputs;
@@ -119,3 +120,5 @@ in ruby.stdenv.mkDerivation (attrs // {
   passthru.isRubyGem = true;
   inherit meta;
 })
+
+)

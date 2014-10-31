@@ -1,11 +1,9 @@
-{ pkgs, lib, callPackage, gemFixes, fetchurl }:
+{ ruby, lib, callPackage, gemFixes, fetchurl, buildRubyGem }@defs:
 
-{ gemset, ruby ? pkgs.ruby, fixes ? gemFixes }@args:
+{ gemset, ruby ? defs.ruby, fixes ? gemFixes }@args:
 
 let
   const = x: y: x;
-
-  buildRubyGem = callPackage ./gem.nix { inherit ruby; };
 
   fetchers.gem = attrs: fetchurl {
     url = "${attrs.src.source or "https://rubygems.org"}/downloads/${attrs.name}-${attrs.version}.gem";
@@ -21,12 +19,12 @@ let
         fixedAttrs // {
           name = "${attrs.name}-${attrs.version}";
           src = fetchers."${attrs.src.type}" attrs;
-          inherit gemPath;
+          inherit ruby gemPath;
         }
       )
   );
 
-  gemset' = if builtins.isAttrs gemset then gemset else callPackage gemset { };
+  gemset' = if builtins.isAttrs gemset then gemset else import gemset;
 
   gemset'' = lib.flip lib.mapAttrs gemset' (name: attrs:
     if (lib.isDerivation attrs)

@@ -1,6 +1,6 @@
 args : with args; 
-rec {
 
+rec {
   name = "rubygems-" + version;
   version = "2.4.1";
   src = fetchurl {
