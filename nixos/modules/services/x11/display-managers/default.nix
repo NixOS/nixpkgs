@@ -68,14 +68,14 @@ let
       # Start PulseAudio if enabled.
       ${optionalString (config.hardware.pulseaudio.enable) ''
         ${optionalString (!config.hardware.pulseaudio.systemWide)
-          "${pkgs.pulseaudio}/bin/pulseaudio --start"
+          "${config.hardware.pulseaudio.package}/bin/pulseaudio --start"
         }
 
         # Publish access credentials in the root window.
-        ${pkgs.pulseaudio}/bin/pactl load-module module-x11-publish "display=$DISPLAY"
+        ${config.hardware.pulseaudio.package}/bin/pactl load-module module-x11-publish "display=$DISPLAY"
 
         # Keep track of devices.  Mostly useful for Phonon/KDE.
-        ${pkgs.pulseaudio}/bin/pactl load-module module-device-manager "do_routing=1"
+        ${config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
       ''}
 
       # Load X defaults.

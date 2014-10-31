@@ -135,11 +135,6 @@ let
 
       buildPhase =
         ''
-          # Fake the build environment that setup.py expects.
-          ln -s ${python}/include/python*/pyconfig.h .
-          ln -s ${python}/lib/python*/config/Setup Modules/
-          ln -s ${python}/lib/python*/config/Setup.local Modules/
-
           substituteInPlace setup.py --replace 'self.extensions = extensions' \
             'self.extensions = [ext for ext in self.extensions if ext.name in ["${internalName}"]]'
 

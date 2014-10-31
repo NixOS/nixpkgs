@@ -35,10 +35,7 @@ stdenv.mkDerivation rec {
         [ "--with-x-toolkit=lucid" "--with-xft" ]
       else
         [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
-          "--with-gif=no" "--with-tiff=no" ] ) )
-    # On NixOS, help Emacs find `crt*.o'.
-    ++ stdenv.lib.optional (stdenv ? glibc)
-         [ "--with-crt-dir=${stdenv.glibc}/lib" ];
+          "--with-gif=no" "--with-tiff=no" ] ) );
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.isDarwin && withX)
     "-I${cairo}/include/cairo";

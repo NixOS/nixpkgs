@@ -34,6 +34,7 @@ stdenv.mkDerivation {
     echo 'export SLIMERJSLAUNCHER=${xulrunner}/bin/xulrunner' >>  "$out/bin/slimerjs"
     echo "'$out/lib/slimerjs/slimerjs' \"\$@\"" >> "$out/bin/slimerjs"
     chmod a+x "$out/bin/slimerjs"
+    sed -e 's@MaxVersion=32[.]@MaxVersion=33.@' -i "$out/lib/slimerjs/application.ini"
   '';
   meta = {
     inherit (s) version;

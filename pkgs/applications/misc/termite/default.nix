@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "termite-${version}";
-  version = "v7";
+  version = "v8";
 
   src = fetchgit {
     url = "https://github.com/thestinger/termite";
-    rev = "f0ff025c1bb6a1e3fd83072f00c2dc42a0701f46";
-    sha256 = "057yzlqvp84fkmhn4bz9071glj4rh4187xhg48cdppf2w6phcbxp";
+    rev = "7f03ded7308ad0e26b72b150080e4f3e70401815";
+    sha256 = "1yj4jvjwv73a02p8a0yip8q39znlhfc9zdr19zm1zik2k4h62c2l";
   };
 
-  makeFlags = "VERSION=${version}";
+  makeFlags = "VERSION=v${version}";
 
   buildInputs = [pkgconfig vte gtk ncurses];
 

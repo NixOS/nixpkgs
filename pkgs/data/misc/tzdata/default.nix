@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 
-let version = "2014g"; in
+let version = "2014i"; in
 
 stdenv.mkDerivation rec {
   name = "tzdata-${version}";
@@ -8,11 +8,11 @@ stdenv.mkDerivation rec {
   srcs =
     [ (fetchurl {
         url = "http://www.iana.org/time-zones/repository/releases/tzdata${version}.tar.gz";
-        sha256 = "0w52hafnf82vy678rm8p39ckymcj6shv5376zwzzbxw2m6vxaism";
+        sha256 = "0lv1i3ikibf9yn1l3hcy00x5ghwxn87k1myyp1cyr55psayk3wra";
       })
       (fetchurl {
         url = "http://www.iana.org/time-zones/repository/releases/tzcode${version}.tar.gz";
-        sha256 = "0ymg0cscpbfj9jpnx4g9apmfrixq6z8dch99h6a77k2pmnj5ymfz";
+        sha256 = "10s7x24lh2vm3magl7dq2xs9pw47hhyaq6xpi6c4aiqdzdsi0nb2";
       })
     ];
 
@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.iana.org/time-zones;
     description = "Database of current and historical time zones";
+    platforms = stdenv.lib.platforms.all;
   };
 }

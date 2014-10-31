@@ -23,12 +23,17 @@ stdenv.mkDerivation rec {
  '';
 
  configurePhase = ''
-   ./configure --prefix=$out --with-contrib-dir=${pkgs.stumpwmContrib}/contrib
+   ./configure --prefix=$out --with-contrib-dir=${stumpwmContrib}/contrib
  '';
 
  installPhase = ''
    make
    make install
+   # For some reason, stumpwmContrib is not retained as a runtime
+   # dependency (probably because $out/bin/stumpwm is compressed or
+   # obfuscated in some way). Thus we add an explicit reference here.
+   mkdir $out/nix-support
+   echo ${stumpwmContrib} > $out/nix-support/stumpwm-contrib
  '';
 
   meta = with stdenv.lib; {

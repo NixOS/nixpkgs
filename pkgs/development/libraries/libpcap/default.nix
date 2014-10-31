@@ -10,7 +10,12 @@ stdenv.mkDerivation rec {
   
   nativeBuildInputs = [ flex bison ];
   
-  configureFlags = stdenv.lib.optionals stdenv.isLinux "--with-pcap=linux";
+  # We need to force the autodetection because detection doesn't
+  # work in pure build enviroments.
+  configureFlags =
+    if stdenv.isLinux then [ "--with-pcap=linux" ]
+    else if stdenv.isDarwin then [ "--with-pcap=bpf" ]
+    else [];
 
   preInstall = ''mkdir -p $out/bin'';
   

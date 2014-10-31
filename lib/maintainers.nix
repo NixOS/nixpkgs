@@ -23,6 +23,7 @@
   aszlig = "aszlig <aszlig@redmoonstudios.org>";
   auntie = "Jonathan Glines <auntieNeo@gmail.com>";
   aycanirican = "Aycan iRiCAN <iricanaycan@gmail.com>";
+  balajisivaraman = "Balaji Sivaraman<sivaraman.balaji@gmail.com>";
   bbenoist = "Baptist BENOIST <return_0@live.com>";
   bennofs = "Benno Fünfstück <benno.fuenfstueck@gmail.com>";
   berdario = "Dario Bertini <berdario@gmail.com>";
@@ -73,6 +74,7 @@
   jagajaga = "Arseniy Seroka <ars.seroka@gmail.com>";
   jcumming = "Jack Cummings <jack@mudshark.org>";
   jgeerds = "Jascha Geerds <jg@ekby.de>";
+  jirkamarsik = "Jirka Marsik <jiri.marsik89@gmail.com>";
   joamaki = "Jussi Maki <joamaki@gmail.com>";
   joelteon = "Joel Taylor <me@joelt.io>";
   jwiegley = "John Wiegley <johnw@newartisans.com>";
@@ -122,6 +124,7 @@
   rszibele = "Richard Szibele <richard_szibele@hotmail.com>";
   rycee = "Robert Helgesson <robert@rycee.net>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
+  schristo = "Scott Christopher <schristopher@konputa.com>";
   sepi = "Raffael Mancini <raffael@mancini.lu>";
   shell = "Shell Turner <cam.turn@gmail.com>";
   shlevy = "Shea Levy <shea@shealevy.com>";
@@ -136,6 +139,7 @@
   tomberek = "Thomas Bereknyei <tomberek@gmail.com>";
   tstrobel = "Thomas Strobel <ts468@cam.ac.uk>";
   ttuegel = "Thomas Tuegel <ttuegel@gmail.com>";
+  twey = "James ‘Twey’ Kay <twey@twey.co.uk>";
   tv = "Tomislav Viljetić <tv@shackspace.de>";
   urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>";
   vandenoever = "Jos van den Oever <jos@vandenoever.info>";

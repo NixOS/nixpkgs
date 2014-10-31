@@ -1,13 +1,15 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, gmp }:
 
 stdenv.mkDerivation rec {
   name = "bigloo-${version}";
-  version = "3.7a";
+  version = "4.1a-2";
 
   src = fetchurl {
     url = "ftp://ftp-sop.inria.fr/indes/fp/Bigloo/bigloo${version}.tar.gz";
-    sha256 = "0y8i87c2bpqzap8rhzgpyfgdzq21py5xq6mgp0w6xv4rjcj9d0v1";
+    sha256 = "09yrz8r0jpj7bda39fdxzrrdyhi851nlfajsyf0b6jxanz6ygcjx";
   };
+
+  buildInputs = [ gmp ];
 
   preConfigure =
     # Help libgc's configure.
@@ -32,6 +34,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Efficient Scheme compiler";
+    homepage    = http://www-sop.inria.fr/indes/fp/Bigloo/;
+    license     = stdenv.lib.licenses.gpl2Plus;
+    platforms   = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.lib.maintainers; [ ludo thoughtpolice ];
 
     longDescription = ''
       Bigloo is a Scheme implementation devoted to one goal: enabling
@@ -44,11 +50,5 @@ stdenv.mkDerivation rec {
       Scheme and C programs, between Scheme and Java programs, and
       between Scheme and C# programs.
     '';
-
-    homepage = http://www-sop.inria.fr/indes/fp/Bigloo/;
-    license = stdenv.lib.licenses.gpl2Plus;
-
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

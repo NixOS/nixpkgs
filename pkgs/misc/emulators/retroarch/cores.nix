@@ -133,6 +133,18 @@ in
     description = "Enhanced Genesis Plus libretro port";
   };
 
+  mednafen-pce-fast = (mkLibRetroCore rec {
+    core = "mednafen-pce-fast";
+    src = fetchRetro {
+      repo = "beetle-pce-fast-libretro";
+      rev = "bef70147f73e8a4b5e8a9d535fc59a597843d657";
+      sha256 = "0kkj5g5kajz4mx5xsixd2f6qnx3p68p0px2m0i8045yih50gsilp";
+    };
+    description = "Port of Mednafen's PC Engine core to libretro";
+  }).override {
+    buildPhase = "make";
+  };
+
   mupen64plus = (mkLibRetroCore rec {
     core = "mupen64plus";
     src = fetchRetro {

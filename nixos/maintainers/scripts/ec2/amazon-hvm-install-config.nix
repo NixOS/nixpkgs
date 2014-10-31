@@ -19,7 +19,8 @@ in
 {
   imports = [ ./amazon-base-config.nix ];
   ec2.hvm = true;
-  boot.loader.grub.device = lib.mkOverride 0 "nodev";
+  boot.loader.grub.device = lib.mkOverride 0 "/dev/xvdg";
+  boot.kernelParams = [ "console=ttyS0" ];
 
   boot.initrd.extraUtilsCommands = ''
     cp -v ${pkgs.gawk}/bin/gawk $out/bin/gawk

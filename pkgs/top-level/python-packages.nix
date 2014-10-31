@@ -985,11 +985,11 @@ let
 
   boto = buildPythonPackage rec {
     name = "boto-${version}";
-    version = "2.32.0";
+    version = "2.34.0";
 
     src = pkgs.fetchurl {
       url = "https://github.com/boto/boto/archive/${version}.tar.gz";
-      sha256 = "0bl5y7m0m84rz4q7hx783kxpj1n9wcm7dhv54bnx8cnanyd13cxn";
+      sha256 = "08zavyn02qng9y0251a9mrlkb3aw33m7gx5kc97hwngl3xk3s777";
     };
 
     # The tests seem to require AWS credentials.
@@ -1010,14 +1010,13 @@ let
     };
   };
 
-
   botocore = buildPythonPackage rec {
-    version = "0.33.0";
+    version = "0.67.0";
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
-      md5 = "6743c73a2e148abaa9c487a6e2ee53a3";
+      md5 = "193fe828525af4ae58e04bd172dc355f";
     };
 
     propagatedBuildInputs =
@@ -1056,6 +1055,31 @@ let
     };
   };
 
+  box2d = buildPythonPackage rec {
+    name = "box2d-${version}";
+    version = "2.3b0";
+    disabled = (!isPy27);
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/B/Box2D/Box2D-2.3b0.zip";
+      md5="25fc4f69cd580bdca0022ac3ace53865";
+    };
+
+    patches = [ ../development/python-modules/box2d/disable-test.patch ];
+
+    propagatedBuildInputs = [ pkgs.swig pkgs.box2d ];
+
+    meta = with stdenv.lib; {
+      homepage = https://code.google.com/p/pybox2d/;
+      description = ''
+        A 2D game physics library for Python under
+        the very liberal zlib license
+      '';
+      license = licenses.zlib;
+      platforms = platforms.all;
+      maintainers = [ maintainers.sepi ];
+    };
+  };
 
   # bugz = buildPythonPackage (rec {
   #   name = "bugz-0.9.3";
@@ -1570,6 +1594,19 @@ let
       description = "plugin core for use by pytest-cov, nose-cov and nose2-cov";
     };
     propagatedBuildInputs = with self; [ self.coverage ];
+  };
+
+  crcmod = buildPythonPackage rec {
+    name = "crcmod-1.7";
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/c/crcmod/crcmod-1.7.tar.gz;
+      sha256 = "07k0hgr42vw2j92cln3klxka81f33knd7459cn3d8aszvfh52w6w";
+    };
+    meta = {
+      description = "Python module for generating objects that compute the Cyclic Redundancy Check (CRC)";
+      homepage = http://crcmod.sourceforge.net/;
+      license = stdenv.lib.licenses.mit;
+    };
   };
 
   cython = buildPythonPackage rec {
@@ -2135,13 +2172,13 @@ let
 
 
   evdev = buildPythonPackage rec {
-    version = "0.4.5";
+    version = "0.4.6";
     name = "evdev-${version}";
     disabled = isPy34;  # see http://bugs.python.org/issue21121
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/e/evdev/${name}.tar.gz";
-      sha256 = "0w8ib3ab4mpfc1rvd335l8xkd41qbh3iyb0vfiiapgcfvqk74aq7";
+      sha256 = "08bzyr3zc8ijnv25bysmmvzircblh42ja15f6ijdzmqqw8vfaij8";
     };
 
     buildInputs = with self; [ pkgs.linuxHeaders ];
@@ -2600,6 +2637,33 @@ let
     };
   };
 
+  poppler-qt4 = buildPythonPackage rec {
+    name = "poppler-qt4-${version}";
+    version = "0.18.1";
+    disabled = isPy3k || isPyPy;
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-poppler-qt4/" +
+            "python-poppler-qt4-${version}.tar.gz";
+      md5 = "9c4c5a59b878aed78e96a6ae58c6c185";
+    };
+
+    propagatedBuildInputs = [ pkgs.pyqt4 pkgs.sip pkgs.pkgconfig pkgs.popplerQt4 ];
+
+    preBuild = "${python}/bin/${python.executable} setup.py build_ext" +
+               " --include-dirs=${pkgs.popplerQt4}/include/poppler/";
+
+    meta = with stdenv.lib; {
+      description = "A Python binding to Poppler-Qt4";
+      longDescription = ''
+        A Python binding to Poppler-Qt4 that aims for completeness
+        and for being actively maintained.
+      '';
+      license = licenses.lgpl21Plus;
+      maintainers = [ maintainers.sepi ];
+      platforms = platforms.all;
+    };
+  };
 
   pudb = buildPythonPackage rec {
     name = "pudb-2013.3.6";
@@ -4514,11 +4578,11 @@ let
 
 
   jmespath = buildPythonPackage rec {
-    name = "jmespath-0.2.1";
+    name = "jmespath-0.4.1";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/j/jmespath/jmespath-0.2.1.tar.gz";
-      md5 = "7800775aa12c6303f9ad597b6a8fa03c";
+      url = "https://pypi.python.org/packages/source/j/jmespath/${name}.tar.gz";
+      md5 = "a11ae39472672a650dfb55feab7d65eb";
     };
 
     propagatedBuildInputs = with self; [ ply ];
@@ -6489,6 +6553,40 @@ let
     };
   });
 
+  pybfd = buildPythonPackage rec {
+    name = "pybfd-0.1.1";
+
+    disabled = isPyPy || isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pybfd/${name}.tar.gz";
+      md5 = "79dd6e12c90ad0515d0ad7fb1bd2f571";
+    };
+
+    preConfigure = ''
+      substituteInPlace setup.py \
+        --replace '"/usr/include"' '"${pkgs.gdb}/include"' \
+        --replace '"/usr/lib"' '"${pkgs.binutils}/lib"'
+    '';
+
+    # --old-and-unmanageable not supported by this setup.py
+    installPhase = ''
+      mkdir -p "$out/lib/${python.libPrefix}/site-packages"
+
+      export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+
+      ${python}/bin/${python.executable} setup.py install \
+        --install-lib=$out/lib/${python.libPrefix}/site-packages \
+        --prefix="$out"
+    ''; 
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/Groundworkstech/pybfd;
+      description = "A Python interface to the GNU Binary File Descriptor (BFD) library";
+      license = licenses.gpl2;
+      platforms = platforms.linux;
+    };
+  };
 
   pyblock = stdenv.mkDerivation rec {
     name = "pyblock-${version}";
@@ -7580,6 +7678,17 @@ let
     };
   };
 
+  retry_decorator = buildPythonPackage rec {
+    name = "retry_decorator-1.0.0";
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/r/retry_decorator/retry_decorator-1.0.0.tar.gz;
+      sha256 = "086zahyb6yn7ggpc58909c5r5h3jz321i1694l1c28bbpaxnlk88";
+    };
+    meta = {
+      homepage = https://github.com/pnpnpn/retry-decorator;
+      license = stdenv.lib.licenses.mit;
+    };
+  };
 
   quantities = buildPythonPackage rec {
     name = "quantities-0.10.1";
@@ -8559,6 +8668,19 @@ let
     };
   };
 
+  socksipy-branch = buildPythonPackage rec {
+    name = "SocksiPy-branch-1.01";
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/S/SocksiPy-branch/SocksiPy-branch-1.01.tar.gz;
+      sha256 = "01l41v4g7fy9fzvinmjxy6zcbhgqaif8dhdqm4w90fwcw9h51a8p";
+    };
+    meta = {
+      homepage = http://code.google.com/p/socksipy-branch/;
+      description = "This Python module allows you to create TCP connections through a SOCKS proxy without any special effort";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
   sorl_thumbnail = buildPythonPackage rec {
     name = "sorl-thumbnail-11.12";
 
@@ -8609,6 +8731,8 @@ let
     };
 
     buildInputs = [ pkgs.bash ];
+
+    doCheck = !isPyPy;
 
     preConfigure = ''
       substituteInPlace test_subprocess32.py \
@@ -9463,8 +9587,22 @@ let
     ] ++ optional isPy26 argparse;
 
     patchPhase = ''
-      substituteInPlace "virtualenvwrapper.sh" --replace "which" "${pkgs.which}/bin/which"
-      substituteInPlace "virtualenvwrapper_lazy.sh" --replace "which" "${pkgs.which}/bin/which"
+      for file in "virtualenvwrapper.sh" "virtualenvwrapper_lazy.sh"; do
+        substituteInPlace "$file" --replace "which" "${pkgs.which}/bin/which"
+
+        # We can't set PYTHONPATH in a normal way (like exporting in a wrapper
+        # script) because the user has to evaluate the script and we don't want
+        # modify the global PYTHONPATH which would affect the user's
+        # environment.
+        # Furthermore it isn't possible to just use VIRTUALENVWRAPPER_PYTHON
+        # for this workaround, because this variable is well quoted inside the
+        # shell script.
+        # (the trailing " -" is required to only replace things like these one:
+        # "$VIRTUALENVWRAPPER_PYTHON" -c "import os,[...] and not in
+        # if-statements or anything like that.
+        # ...and yes, this "patch" is hacky :)
+        substituteInPlace "$file" --replace '"$VIRTUALENVWRAPPER_PYTHON" -' 'env PYTHONPATH="$VIRTUALENVWRAPPER_PYTHONPATH" "$VIRTUALENVWRAPPER_PYTHON" -'
+      done
     '';
 
     postInstall = ''
@@ -9478,8 +9616,8 @@ let
         mv "$wrapper" "$wrapped"
 
         cat > "$wrapper" <<- EOF
-	export PATH=$PATH:\$PATH
-	export PYTHONPATH=$PYTHONPATH:$(toPythonPath $out):\$PYTHONPATH
+	export PATH="$PATH:\$PATH"
+	export VIRTUALENVWRAPPER_PYTHONPATH="$PYTHONPATH:$(toPythonPath $out)"
 	source "$wrapped"
 	EOF
 
@@ -11370,6 +11508,52 @@ let
   with self;
 
 {
+  boto-230 = buildPythonPackage rec {
+    name = "boto-2.30.0";
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/b/boto/boto-2.30.0.tar.gz;
+      sha256 = "12gl8azmx1vv8dbv9jhnsbhjpc2dd1ng0jlbcg734k6ggwq1h6hh";
+    };
+    doCheck = false;
+    meta = {
+      homepage = https://github.com/boto/boto;
+      license = licenses.mit;
+      description = "Python interface to Amazon Web Services";
+    };
+  };
+
+  gcs-oauth2-boto-plugin = buildPythonPackage rec {
+    name = "gcs-oauth2-boto-plugin-1.8";
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/g/gcs-oauth2-boto-plugin/gcs-oauth2-boto-plugin-1.8.tar.gz;
+      sha256 = "0jy62y5bmaf1mb735lqwry1s5nx2qqrxvl5sxip9yg4miih3qkyb";
+    };
+    propagatedBuildInputs = with self; [ boto-230 httplib2 google_api_python_client retry_decorator pkgs.pyopenssl socksipy-branch ];
+    meta = {
+      homepage = https://developers.google.com/storage/docs/gspythonlibrary;
+      description = "Provides OAuth 2.0 credentials that can be used with Google Cloud Storage";
+      license = stdenv.lib.licenses.asl20;
+    };
+  };
+
+  gsutil = buildPythonPackage rec {
+    name = "gsutil-4.6";
+    meta = {
+      homepage = https://developers.google.com/storage/docs/gsutil;
+      description = "Google Cloud Storage Tool";
+      maintainers = [ "Russell O'Connor <oconnorr@google.com>" ];
+      license = stdenv.lib.licenses.asl20;
+    };
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/g/gsutil/gsutil-4.6.tar.gz;
+      sha256 = "1i0clm60162rbk45ljr8nsw4ndkzjnwb7r440shcqjrvw8jq49mn";
+    };
+
+    propagatedBuildInputs = with self; [ boto-230 crcmod httplib2 gcs-oauth2-boto-plugin google_api_python_client gflags
+                                         retry_decorator pkgs.pyopenssl socksipy-branch ];
+  };
 
   pypi2nix = self.buildPythonPackage rec {
     rev = "04a68d8577acbceb88bdf51b1231a9dbdead7003";
@@ -11483,16 +11667,16 @@ let
   };
 
   weboob = buildPythonPackage rec {
-    name = "weboob-0.j";
+    name = "weboob-1.0";
 
     src = pkgs.fetchurl {
-      url = "https://symlink.me/attachments/download/271/${name}.tar.gz";
-      md5 = "9e11b1f376ccb87d35995ec87bba5b38";
+      url = "https://symlink.me/attachments/download/289/${name}.tar.gz";
+      md5 = "38f832f1b8654441adafe8558faa7109";
     };
 
     setupPyBuildFlags = ["--qt" "--xdg"];
 
-    propagatedBuildInputs = with self; [ pillow prettytable pyyaml dateutil gdata requests2 mechanize feedparser lxml pkgs.gnupg pyqt4 pkgs.libyaml simplejson cssselect ];
+    propagatedBuildInputs = with self; [ pillow prettytable pyyaml dateutil gdata requests2 mechanize feedparser lxml pkgs.gnupg pyqt4 pkgs.libyaml simplejson cssselect futures ];
 
     meta = {
       homepage = http://weboob.org;

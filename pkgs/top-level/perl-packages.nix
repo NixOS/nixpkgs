@@ -3222,10 +3222,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Encode = buildPerlPackage {
-    name = "Encode-2.55";
+    name = "Encode-2.63";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-2.55.tar.gz;
-      sha256 = "0bpnfan0034k644gz6yg9xfddmsqxr2p7vbavijwbxc5k2c2sarz";
+      url = mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-2.63.tar.gz;
+      sha256 = "1wrqm6c194l5yjaifc6nxx2b768sph2pv4n86fgh4blls0pvs6z4";
     };
   };
 

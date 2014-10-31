@@ -2,23 +2,25 @@
 
 { cabal, binary, blazeBuilder, bzlib, dataBinaryIeee754
 , dataDefault, either, filepath, ghcPaths, HTTP, monadsTf, mtl
-, network, random, shellmate, systemFileio, tar, transformers
-, utf8String, websockets
+, network, networkUri, random, shellmate, systemFileio, tar
+, transformers, utf8String, websockets
 }:
 
 cabal.mkDerivation (self: {
   pname = "haste-compiler";
-  version = "0.4.2";
-  sha256 = "0agbd21c7mgzxyg6lwjl3n8w2r7xcrv3811y0x86rg7q1m7z730m";
+  version = "0.4.3";
+  sha256 = "1wkb6a1jwmpjr0jlz5fjq652jz6a6agg0a5pfazyfpdznvd4mm62";
   isLibrary = true;
   isExecutable = true;
+  noHaddock = true;
   buildDepends = [
     binary blazeBuilder bzlib dataBinaryIeee754 dataDefault either
-    filepath ghcPaths HTTP monadsTf mtl network random shellmate
-    systemFileio tar transformers utf8String websockets
+    filepath ghcPaths HTTP monadsTf mtl network networkUri random
+    shellmate systemFileio tar transformers utf8String websockets
   ];
+  configureFlags = "-fportable";
   meta = {
-    homepage = "http://github.com/valderman/haste-compiler";
+    homepage = "http://haste-lang.org/";
     description = "Haskell To ECMAScript compiler";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

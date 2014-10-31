@@ -9,8 +9,8 @@
 
 cabal.mkDerivation (self: {
   pname = "http-conduit";
-  version = "2.1.4.5";
-  sha256 = "0damsk83j52ndciybxiss0whd486i10ibawxj70z1c0h78f9wwrs";
+  version = "2.1.4.7";
+  sha256 = "1fr8vxv2xidysls9g8zh04qddg9s6i9vs1xr4zkwr6fw750547n3";
   buildDepends = [
     conduit httpClient httpClientTls httpTypes liftedBase monadControl
     mtl resourcet transformers

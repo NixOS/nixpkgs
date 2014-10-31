@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "network-carbon";
-  version = "1.0.1";
-  sha256 = "1q3b7vw80yw6fkmpwgazy8ikhbwjmmqmm4fry8c9f8ckkpzahj2b";
+  version = "1.0.2";
+  sha256 = "0r9riydwvmn8v9iih475agl4idb3z6v3djmn3pjlda28g3p0zw9h";
   buildDepends = [ network text time vector ];
   jailbreak = true;
   meta = {

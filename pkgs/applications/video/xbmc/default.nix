@@ -24,6 +24,7 @@
 # TODO: librtmp
 , libvdpau ? null, vdpauSupport ? true
 , pulseaudio ? null, pulseSupport ? true
+, libcec ? null, cecSupport ? true
 }:
 
 assert dbusSupport  -> dbus_libs != null;
@@ -32,6 +33,7 @@ assert usbSupport   -> libusb != null && ! udevSupport; # libusb won't be used i
 assert sambaSupport -> samba != null;
 assert vdpauSupport -> libvdpau != null && ffmpeg.vdpauSupport;
 assert pulseSupport -> pulseaudio != null;
+assert cecSupport   -> libcec != null;
 
 stdenv.mkDerivation rec {
     name = "xbmc-13.2";
@@ -65,7 +67,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional usbSupport libusb
     ++ lib.optional sambaSupport samba
     ++ lib.optional vdpauSupport libvdpau
-    ++ lib.optional pulseSupport pulseaudio;
+    ++ lib.optional pulseSupport pulseaudio
+    ++ lib.optional cecSupport libcec;
 
     dontUseCmakeConfigure = true;
 
@@ -91,7 +94,8 @@ stdenv.mkDerivation rec {
           --prefix LD_LIBRARY_PATH ":" "${curl}/lib" \
           --prefix LD_LIBRARY_PATH ":" "${systemd}/lib" \
           --prefix LD_LIBRARY_PATH ":" "${libmad}/lib" \
-          --prefix LD_LIBRARY_PATH ":" "${libvdpau}/lib"
+          --prefix LD_LIBRARY_PATH ":" "${libvdpau}/lib" \
+          --prefix LD_LIBRARY_PATH ":" "${libcec}/lib"
       done
     '';
 

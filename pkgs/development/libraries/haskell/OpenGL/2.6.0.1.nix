@@ -10,11 +10,13 @@ cabal.mkDerivation (self: {
   sha256 = "1fpabhpjfl1bj0dhlj2sg8zsn3l6py4zw1arplwmqalz3xbkkgdi";
   buildDepends = [ GLURaw ObjectName OpenGLRaw StateVar Tensor ];
   extraLibraries = [ libX11 mesa ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Opengl";
     description = "A binding for the OpenGL graphics system";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })
