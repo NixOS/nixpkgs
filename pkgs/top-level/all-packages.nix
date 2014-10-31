@@ -11705,7 +11705,7 @@ let
   mate-themes = callPackage ../misc/themes/mate-themes { };
 
   xfce = xfce4_10;
-  xfce4_10 = recurseIntoAttrs (import ../desktops/xfce { inherit pkgs newScope; });
+  xfce4_10 = recurseIntoAttrs (import ../desktops/xfce { inherit config pkgs newScope; });
 
 
   ### SCIENCE
