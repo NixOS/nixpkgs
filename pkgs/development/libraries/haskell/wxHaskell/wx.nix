@@ -4,15 +4,14 @@
 
 cabal.mkDerivation (self: {
   pname = "wx";
-  version = "0.90.1.0";
-  sha256 = "1669mrd73c3v7c4yc0zgyqsnfgzb7561v1wd168y06d0db1nlkn9";
+  version = "0.91.0.0";
+  sha256 = "133cjc3vfqxyw71a5x99flzg23qa2k28p2zajw6vp0z7qhv8kfjy";
   buildDepends = [ stm wxcore ];
-  preConfigure = "find . -type f -exec touch {} +";
   meta = {
     homepage = "http://haskell.org/haskellwiki/WxHaskell";
     description = "wxHaskell";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = with self.stdenv.lib.maintainers; [ andres ];
   };
 })
