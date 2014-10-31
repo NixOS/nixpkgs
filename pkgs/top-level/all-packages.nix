@@ -1267,14 +1267,22 @@ let
 
   gnupatch = callPackage ../tools/text/gnupatch { };
 
-  gnupg1orig = callPackage ../tools/security/gnupg1 { };
+  gnupg1orig = callPackage ../tools/security/gnupg/1.nix { };
 
-  gnupg1compat = callPackage ../tools/security/gnupg1compat { };
+  gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { };
 
   # use config.packageOverrides if you prefer original gnupg1
   gnupg1 = gnupg1compat;
 
-  gnupg = callPackage ../tools/security/gnupg { libusb = libusb1; };
+  gnupg20 = callPackage ../tools/security/gnupg/20.nix {
+    libgcrypt = libgcrypt_1_6;
+  };
+
+  gnupg21 = callPackage ../tools/security/gnupg/21.nix {
+    libgcrypt = libgcrypt_1_6;
+  };
+
+  gnupg = gnupg21;
 
   gnuplot = callPackage ../tools/graphics/gnuplot { };
 
