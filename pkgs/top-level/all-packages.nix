@@ -1109,11 +1109,32 @@ let
 
   fakechroot = callPackage ../tools/system/fakechroot { };
 
+  fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
+
+  # fcitx with no plugins enabled
   fcitx = callPackage ../tools/inputmethods/fcitx { };
 
-  fcitx-anthy = callPackage ../tools/inputmethods/fcitx/fcitx-anthy.nix { };
+  # fcitx with all plugins enabled
+  fcitxWithAllPlugins = callPackage ../tools/inputmethods/fcitx {
+    enableAnthy = true;
+    plugins = [ anthy ];
+  };
 
-  fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
+  # A wrapper that can be used to define exactly which plugins will be
+  # disabled and enabled.
+  fcitxWrapper = 
+    let 
+      cfg = config.fcitx or {};
+      enableAnthy = cfg.enableAnthy or false;
+    in
+      import ../tools/inputmethods/fcitx/default.nix {
+        inherit lib stdenv fetchurl pkgconfig cmake intltool gettext which;
+        inherit libxml2 enchant isocodes icu pango cairo dbus gtk2 gtk3 qt4;
+        inherit (xorg) libxkbfile libpthreadstubs libXau libXdmcp;
+        enableAnthy = enableAnthy;
+        plugins = 
+          ([ ] ++ lib.optional enableAnthy anthy);
+      };
 
   fcron = callPackage ../tools/system/fcron { };
 
