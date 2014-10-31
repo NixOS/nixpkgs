@@ -2263,6 +2263,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   scrypt = callPackage ../development/libraries/haskell/scrypt {};
 
+  serialport = callPackage ../development/libraries/haskell/serialport {};
+
   securemem = callPackage ../development/libraries/haskell/securemem {};
 
   sendfile = callPackage ../development/libraries/haskell/sendfile {};
