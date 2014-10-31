@@ -4199,6 +4199,8 @@ let
 
   guile-opengl = callPackage ../development/guile-modules/guile-opengl { };
 
+  guile-sdl = callPackage ../development/guile-modules/guile-sdl { };
+
   guile-xcb = callPackage ../development/guile-modules/guile-xcb { };
 
   pharo-vm = callPackage_i686 ../development/pharo/vm { };
