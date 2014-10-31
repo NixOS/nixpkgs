@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haste-perch";
-  version = "0.1.0.3";
-  sha256 = "1ad7kv47kq0sav49qnqdk76blk44sgjvk1zgn5k2bqvfnr26641j";
+  version = "0.1.0.4";
+  sha256 = "12ssfik7v671727yxplz44gwgy9i815l44r4z3x066ndcqglr306";
   buildDepends = [ hasteCompiler transformers ];
   meta = {
     homepage = "https://github.com/agocorona/haste-perch";
