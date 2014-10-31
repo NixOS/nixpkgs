@@ -1584,19 +1584,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ListZipper = callPackage ../development/libraries/haskell/ListZipper {};
 
-  # Needed for idris for now
-  llvmGeneral_3_3_8_2 = callPackage ../development/libraries/haskell/llvm-general/3.3.8.2.nix {
-    llvmConfig = pkgs.llvm_33;
-    llvmGeneralPure = self.llvmGeneralPure_3_3_8_2;
-  };
-  llvmGeneral_3_4_4_0 = callPackage ../development/libraries/haskell/llvm-general/3.4.4.0.nix {
-    llvmConfig = pkgs.llvm;
-  };
-  llvmGeneral = self.llvmGeneral_3_4_4_0;
+  llvmGeneral = callPackage ../development/libraries/haskell/llvm-general { llvmConfig = pkgs.llvm; };
 
-  llvmGeneralPure_3_3_8_2 = callPackage ../development/libraries/haskell/llvm-general-pure/3.3.8.2.nix {};
-  llvmGeneralPure_3_4_4_0 = callPackage ../development/libraries/haskell/llvm-general-pure/3.4.4.0.nix {};
-  llvmGeneralPure = self.llvmGeneralPure_3_4_4_0;
+  llvmGeneralPure = callPackage ../development/libraries/haskell/llvm-general-pure {};
 
   lrucache = callPackage ../development/libraries/haskell/lrucache {};
 
