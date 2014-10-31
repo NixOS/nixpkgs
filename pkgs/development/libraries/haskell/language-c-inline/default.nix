@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "language-c-inline";
-  version = "0.7.6.1";
-  sha256 = "0giyclrkxbigqpgrvlz896nsiqi7fghm79pzcxmxn7vslmardn4a";
+  version = "0.7.7.0";
+  sha256 = "10wj8dlsjimgln14y7b50pnnn865ln46v3xcqwr7ahjcl3icavg6";
   buildDepends = [ filepath languageCQuote mainlandPretty ];
   testDepends = [ languageCQuote ];
   meta = {
