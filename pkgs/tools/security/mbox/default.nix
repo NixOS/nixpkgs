@@ -32,7 +32,7 @@ stdenv.mkDerivation {
       homepage = http://pdos.csail.mit.edu/mbox/;
       maintainers = with maintainers; [ emery ];
       license = licenses.bsd3;
-      platforms = platforms.linux;
+      platforms = [ "x86_64-linux" ];
     };
 
 }
