@@ -4,13 +4,13 @@
 
 cabal.mkDerivation (self: {
   pname = "HaXml";
-  version = "1.24.1";
-  sha256 = "1pvqgczksxasayvdb6d4g7ya7g7w1v9hsa35kaxm9bcic9y8q9az";
+  version = "1.25";
+  sha256 = "02l53v9c8qzkp5zzs31973pp27q4k2h04h9x3852gah78qjvnslk";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ filepath polyparse random ];
   meta = {
-    homepage = "http://www.cs.york.ac.uk/fp/HaXml/";
+    homepage = "http://projects.haskell.org/HaXml/";
     description = "Utilities for manipulating XML documents";
     license = "LGPL";
     platforms = self.ghc.meta.platforms;
