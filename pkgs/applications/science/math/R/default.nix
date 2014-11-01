@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.1.0";
+  name = "R-3.1.2";
 
   src = fetchurl {
     url = "http://cran.r-project.org/src/base/R-3/${name}.tar.gz";
