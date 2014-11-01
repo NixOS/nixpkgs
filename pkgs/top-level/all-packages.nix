@@ -10273,7 +10273,9 @@ let
 
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
-  qbittorrent = callPackage ../applications/networking/p2p/qbittorrent { };
+  qbittorrent = callPackage ../applications/networking/p2p/qbittorrent {
+    libtorrentRasterbar = libtorrentRasterbar_0_16;
+  };
 
   eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp { lua5 = lua5_1; };
 
