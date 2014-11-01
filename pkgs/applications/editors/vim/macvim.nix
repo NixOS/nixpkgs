@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "genoma";
     repo = "macvim";
     rev = "f9c084b97fa9d5cad2448dfd3eff3d9b7f0fac59";
-    sha256 = "190bngg8m4bwqcia7w24gn7mmqkhk0mavxy81ziwysam1f652ymf";
+    sha256 = "1f6l39s6cgyzzr9ix729axmc299mpl29abbc7571g4vply17m7nv";
   };
 
   enableParallelBuilding = true;
