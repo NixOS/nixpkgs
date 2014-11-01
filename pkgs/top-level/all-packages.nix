@@ -9688,6 +9688,8 @@ let
 
   lbdb = callPackage ../tools/misc/lbdb { };
 
+  lbzip2 = callPackage ../tools/compression/lbzip2 { };
+
   lci = callPackage ../applications/science/logic/lci {};
 
   ldcpp = callPackage ../applications/networking/p2p/ldcpp {
