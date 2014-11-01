@@ -9319,6 +9319,8 @@ let
 
   fluidsynth = callPackage ../applications/audio/fluidsynth { };
 
+  focuswriter = callPackage ../applications/editors/focuswriter { };
+
   fossil = callPackage ../applications/version-management/fossil { };
 
   freewheeling = callPackage ../applications/audio/freewheeling { };
