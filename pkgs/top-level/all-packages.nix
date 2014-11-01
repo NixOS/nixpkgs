@@ -1381,6 +1381,8 @@ let
 
   pigz = callPackage ../tools/compression/pigz { };
 
+  pxz = callPackage ../tools/compression/pxz { };
+
   haproxy = callPackage ../tools/networking/haproxy { };
 
   haveged = callPackage ../tools/security/haveged { };
