@@ -5,7 +5,6 @@ rev=
 expHash=
 hashType=$NIX_HASH_ALGO
 deepClone=$NIX_PREFETCH_GIT_DEEP_CLONE
-leaveDotGit=$NIX_PREFETCH_GIT_LEAVE_DOT_GIT
 fetchSubmodules=
 builder=
 
@@ -13,12 +12,6 @@ if test -n "$deepClone"; then
   deepClone=true
 else
   deepClone=false
-fi
-
-if test "$leaveDotGit" != 1; then
-  leaveDotGit=
-else
-  leaveDotGit=true
 fi
 
 
@@ -33,7 +26,6 @@ for arg; do
       --hash) argfun=set_hashType;;
       --deepClone) deepClone=true;;
       --no-deepClone) deepClone=false;;
-      --leave-dotGit) leaveDotGit=true;;
       --fetch-submodules) fetchSubmodules=true;;
       --builder) builder=true;;
       *)
@@ -67,7 +59,6 @@ Options:
       --hash h        Expected hash.
       --deepClone     Clone submodules recursively.
       --no-deepClone  Do not clone submodules.
-      --leave-dotGit  Keep the .git directories.
       --fetch-submodules Fetch submodules.
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
 "
@@ -223,14 +214,8 @@ clone_user_rev() {
 
     # Allow doing additional processing before .git removal
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
-    if test -z "$leaveDotGit"; then
-	echo "removing \`.git'..." >&2
-        find $dir -name .git\* | xargs rm -rf
-    else
-        # The logs and index contain timestamps, and the hooks contain
-        # the nix path of git's bash
-        find $dir -name .git | xargs -I {} rm -rf {}/logs {}/index {}/hooks
-    fi
+    echo "removing \`.git'..." >&2
+    find $dir -name .git\* | xargs rm -rf
 }
 
 if test -n "$builder"; then

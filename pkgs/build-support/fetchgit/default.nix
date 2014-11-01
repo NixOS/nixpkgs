@@ -1,5 +1,5 @@
 {stdenv, git, cacert}:
-{url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? false, fetchSubmodules ? true
+{url, rev ? "HEAD", md5 ? "", sha256 ? "", fetchSubmodules ? true
 , name ? "git-export"
 }:
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = if sha256 == "" then md5 else sha256;
 
-  inherit url rev leaveDotGit fetchSubmodules;
+  inherit url rev fetchSubmodules;
 
   GIT_SSL_CAINFO = "${cacert}/etc/ca-bundle.crt";
 
