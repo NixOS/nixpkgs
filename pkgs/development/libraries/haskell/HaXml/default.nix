@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ filepath polyparse random ];
+  noHaddock = true;
   meta = {
     homepage = "http://projects.haskell.org/HaXml/";
     description = "Utilities for manipulating XML documents";
