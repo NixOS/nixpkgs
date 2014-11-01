@@ -1140,6 +1140,7 @@ let self = _self // overrides; _self = with self; {
   DeducerText = derive { name="DeducerText"; version="0.1-2"; sha256="0if2p9j74wa5rva4iv0i8iax22grl9j7lqcqzqlywjgqwnlzxa05"; depends=[Deducer tm wordcloud RColorBrewer SnowballC]; };
   deducorrect = derive { name="deducorrect"; version="1.3-5"; sha256="06lcqnay36fgkzvgbiq7b67r9lfgll3lxfr1pmx14vmivshb6mmm"; depends=[editrules]; };
   deepnet = derive { name="deepnet"; version="0.2"; sha256="09crwiq12wzwvdp3yxhc40vdh7hsnm4smqamnk4i6hli11ca90h4"; depends=[]; };
+  Defaults = derive { name="Defaults"; version="1.1-1"; sha256="0ikgd5mswlky327pzp09cz93bn3mq7qnybq1r64y19c2brbax00d"; depends=[]; };
   degenes = derive { name="degenes"; version="1.1"; sha256="1xxn5j06qizywimrp1pl8z3yjdy1a167b9jnm77gmv87rp6j240c"; depends=[]; };
   degreenet = derive { name="degreenet"; version="1.2"; sha256="07b6phgyydfp8jwjvrqcvcx3b2qhbkr44xkcn20ya1igsbyh6kzz"; depends=[]; };
   Delaporte = derive { name="Delaporte"; version="2.2-1"; sha256="09xs1gyz0wkjw0k4b5ahy7zb8xjrg610bbdvvyxkfbh9jaf8q90b"; depends=[Rcpp]; };
