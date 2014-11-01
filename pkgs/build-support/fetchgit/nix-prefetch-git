@@ -10,51 +10,51 @@ fetchSubmodules=
 builder=
 
 if test -n "$deepClone"; then
-  deepClone=true
+    deepClone=true
 else
-  deepClone=false
+    deepClone=false
 fi
 
 if test "$leaveDotGit" != 1; then
-  leaveDotGit=
+    leaveDotGit=
 else
-  leaveDotGit=true
+    leaveDotGit=true
 fi
 
 
 argi=0
 argfun=""
 for arg; do
-  if test -z "$argfun"; then
-    case $arg in
-      --out) argfun=set_out;;
-      --url) argfun=set_url;;
-      --rev) argfun=set_rev;;
-      --hash) argfun=set_hashType;;
-      --deepClone) deepClone=true;;
-      --no-deepClone) deepClone=false;;
-      --leave-dotGit) leaveDotGit=true;;
-      --fetch-submodules) fetchSubmodules=true;;
-      --builder) builder=true;;
-      *)
-          argi=$(($argi + 1))
-          case $argi in
-              1) url=$arg;;
-              2) rev=$arg;;
-              3) expHash=$arg;;
-              *) exit 1;;
-          esac
-          ;;
-    esac
-  else
-    case $argfun in
-      set_*)
-        var=$(echo $argfun | sed 's,^set_,,')
-        eval $var=$arg
-        ;;
-    esac
-    argfun=""
-  fi
+    if test -z "$argfun"; then
+        case $arg in
+            --out) argfun=set_out;;
+            --url) argfun=set_url;;
+            --rev) argfun=set_rev;;
+            --hash) argfun=set_hashType;;
+            --deepClone) deepClone=true;;
+            --no-deepClone) deepClone=false;;
+            --leave-dotGit) leaveDotGit=true;;
+            --fetch-submodules) fetchSubmodules=true;;
+            --builder) builder=true;;
+            *)
+                argi=$(($argi + 1))
+                case $argi in
+                    1) url=$arg;;
+                    2) rev=$arg;;
+                    3) expHash=$arg;;
+                    *) exit 1;;
+                esac
+                ;;
+        esac
+    else
+        case $argfun in
+            set_*)
+                var=$(echo $argfun | sed 's,^set_,,')
+                eval $var=$arg
+                ;;
+        esac
+        argfun=""
+    fi
 done
 
 usage(){
@@ -75,7 +75,7 @@ Options:
 }
 
 if test -z "$url"; then
-  usage
+    usage
 fi
 
 
@@ -116,11 +116,11 @@ checkout_ref(){
     local ref="$2";
 
     if "$deepClone"; then
-	# The caller explicitly asked for a deep clone.  Deep clones
-	# allow "git describe" and similar tools to work.  See
-	# http://thread.gmane.org/gmane.linux.distributions.nixos/3569
-	# for a discussion.
-	return 1
+        # The caller explicitly asked for a deep clone.  Deep clones
+        # allow "git describe" and similar tools to work.  See
+        # http://thread.gmane.org/gmane.linux.distributions.nixos/3569
+        # for a discussion.
+        return 1
     fi
 
     if test -z "$ref"; then
@@ -154,7 +154,7 @@ init_submodules(){
 
         # Get Absolute URL if we have a relative URL
         if ! echo "$url" | grep '^[a-zA-Z]\+://' >/dev/null 2>&1; then
-          url="$(git config --get remote.origin.url)/$url"
+            url="$(git config --get remote.origin.url)/$url"
         fi
 
         clone "$dir" "$url" "$hash" "";
@@ -186,14 +186,14 @@ clone(){
     fi
 
     if [ -z "$builder" -a -f .topdeps ]; then
-	if tg help 2>&1 > /dev/null
-	then
-	    echo "populating TopGit branches..."
-	    tg remote --populate origin
-	else
-	    echo "WARNING: would populate TopGit branches but TopGit is not available" >&2
-	    echo "WARNING: install TopGit to fix the problem" >&2
-	fi
+        if tg help 2>&1 > /dev/null
+        then
+            echo "populating TopGit branches..."
+            tg remote --populate origin
+        else
+            echo "WARNING: would populate TopGit branches but TopGit is not available" >&2
+            echo "WARNING: install TopGit to fix the problem" >&2
+        fi
     fi
 
     cd $top;
@@ -224,7 +224,7 @@ clone_user_rev() {
     # Allow doing additional processing before .git removal
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
     if test -z "$leaveDotGit"; then
-	echo "removing \`.git'..." >&2
+        echo "removing \`.git'..." >&2
         find $dir -name .git\* | xargs rm -rf
     else
         # The logs and index contain timestamps, and the hooks contain
@@ -234,55 +234,55 @@ clone_user_rev() {
 }
 
 if test -n "$builder"; then
-  test -n "$out" -a -n "$url" -a -n "$rev" || usage
-  mkdir $out
-  clone_user_rev "$out" "$url" "$rev"
+    test -n "$out" -a -n "$url" -a -n "$rev" || usage
+    mkdir $out
+    clone_user_rev "$out" "$url" "$rev"
 else
-  if test -z "$hashType"; then
-      hashType=sha256
-  fi
+    if test -z "$hashType"; then
+        hashType=sha256
+    fi
 
-  # If the hash was given, a file with that hash may already be in the
-  # store.
-  if test -n "$expHash"; then
-      finalPath=$(nix-store --print-fixed-path --recursive "$hashType" "$expHash" git-export)
-      if ! nix-store --check-validity "$finalPath" 2> /dev/null; then
-          finalPath=
-      fi
-      hash=$expHash
-  fi
+    # If the hash was given, a file with that hash may already be in the
+    # store.
+    if test -n "$expHash"; then
+        finalPath=$(nix-store --print-fixed-path --recursive "$hashType" "$expHash" git-export)
+        if ! nix-store --check-validity "$finalPath" 2> /dev/null; then
+            finalPath=
+        fi
+        hash=$expHash
+    fi
 
-  # If we don't know the hash or a path with that hash doesn't exist,
-  # download the file and add it to the store.
-  if test -z "$finalPath"; then
+    # If we don't know the hash or a path with that hash doesn't exist,
+    # download the file and add it to the store.
+    if test -z "$finalPath"; then
 
-      tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/git-checkout-tmp-XXXXXXXX")"
-      trap "rm -rf \"$tmpPath\"" EXIT
+        tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/git-checkout-tmp-XXXXXXXX")"
+        trap "rm -rf \"$tmpPath\"" EXIT
 
-      tmpFile="$tmpPath/git-export"
-      mkdir "$tmpFile"
+        tmpFile="$tmpPath/git-export"
+        mkdir "$tmpFile"
 
-      # Perform the checkout.
-      clone_user_rev "$tmpFile" "$url" "$rev"
+        # Perform the checkout.
+        clone_user_rev "$tmpFile" "$url" "$rev"
 
-      # Compute the hash.
-      hash=$(nix-hash --type $hashType $hashFormat $tmpFile)
-      if ! test -n "$QUIET"; then echo "hash is $hash" >&2; fi
+        # Compute the hash.
+        hash=$(nix-hash --type $hashType $hashFormat $tmpFile)
+        if ! test -n "$QUIET"; then echo "hash is $hash" >&2; fi
 
-      # Add the downloaded file to the Nix store.
-      finalPath=$(nix-store --add-fixed --recursive "$hashType" $tmpFile)
+        # Add the downloaded file to the Nix store.
+        finalPath=$(nix-store --add-fixed --recursive "$hashType" $tmpFile)
 
-      if test -n "$expHash" -a "$expHash" != "$hash"; then
-          echo "hash mismatch for URL \`$url'"
-          exit 1
-      fi
-  fi
+        if test -n "$expHash" -a "$expHash" != "$hash"; then
+            echo "hash mismatch for URL \`$url'"
+            exit 1
+        fi
+    fi
 
-  if ! test -n "$QUIET"; then echo "path is $finalPath" >&2; fi
+    if ! test -n "$QUIET"; then echo "path is $finalPath" >&2; fi
 
-  echo $hash
+    echo $hash
 
-  if test -n "$PRINT_PATH"; then
-      echo $finalPath
-  fi
+    if test -n "$PRINT_PATH"; then
+        echo $finalPath
+    fi
 fi
