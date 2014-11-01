@@ -5,6 +5,7 @@ with lib;
 let
   sizeType = types.either types.int types.str;
   deviceType = types.str;
+  volgroupType = types.str;
 
   commonOptions = {
     grow = mkOption {
