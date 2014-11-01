@@ -8,6 +8,7 @@ cabal.mkDerivation (self: {
   sha256 = "02sf7qn1rs33cdf1dl7vpwkhqzhmj8h3naw0ngh2kz05ymk2qng4";
   buildDepends = [ text thLift vector ];
   testDepends = [ doctest filepath QuickCheck text vector ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/bennofs/th-lift-instances/";
     description = "Lift instances for template-haskell for common data types";
