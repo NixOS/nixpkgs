@@ -15,7 +15,7 @@ cabal.mkDerivation (self: {
     wlPprintText
   ];
   testDepends = [ fgl filepath QuickCheck text ];
-  doCheck = false;
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/graphviz/";
     description = "Bindings to Graphviz for graph visualisation";
