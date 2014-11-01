@@ -176,6 +176,9 @@ with stdenv.lib;
   CIFS_POSIX y
   CIFS_FSCACHE y
 
+  # Runtime testing
+  DEBUG_SET_MODULE_RONX? y # Detect writes to read-only module pages
+
   # Security related features.
   STRICT_DEVMEM y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
