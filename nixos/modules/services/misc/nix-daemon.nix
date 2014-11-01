@@ -36,6 +36,7 @@ let
         # /etc/nixos/configuration.nix.  Do not edit it!
         build-users-group = nixbld
         build-max-jobs = ${toString (cfg.maxJobs)}
+        build-cores = ${toString (cfg.buildCores)}
         build-use-chroot = ${if cfg.useChroot then "true" else "false"}
         build-chroot-dirs = ${toString cfg.chrootDirs} /bin/sh=${sh} $(echo $extraPaths)
         binary-caches = ${toString cfg.binaryCaches}
@@ -72,6 +73,19 @@ in
           set it to the number of CPUs in your system (e.g., 2 on an Athlon
           64 X2).
         ";
+      };
+
+      buildCores = mkOption {
+        type = types.int;
+        default = 1;
+        example = 64;
+        description = ''
+          This option defines the maximum number of concurrent tasks during
+          one build. It affects, e.g., -j option for make. The default is 1.
+          Some builds may become non-deterministic with this option; use with
+          care! Packages will only be affected if enableParallelBuilding is
+          set for them.
+        '';
       };
 
       useChroot = mkOption {
