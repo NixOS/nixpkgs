@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haskell-src-exts";
-  version = "1.16.0";
-  sha256 = "15nhmwd2vfv14d4mc35alcjxg165a8jh0pgzinmx8aa8zbzvz5ha";
+  version = "1.16.0.1";
+  sha256 = "1h8gjw5g92rvvzadqzpscg73x7ajvs1wlphrh27afim3scdd8frz";
   buildDepends = [ cpphs ];
   testDepends = [
     filepath mtl smallcheck syb tasty tastyGolden tastySmallcheck

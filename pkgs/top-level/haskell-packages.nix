@@ -1108,8 +1108,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   haskellSrc = self.haskellSrc_1_0_1_6;
 
   haskellSrcExts_1_15_0_1 = callPackage ../development/libraries/haskell/haskell-src-exts/1.15.0.1.nix {};
-  haskellSrcExts_1_16_0 = callPackage ../development/libraries/haskell/haskell-src-exts/1.16.0.nix {};
-  haskellSrcExts = self.haskellSrcExts_1_16_0;
+  haskellSrcExts_1_16_0_1 = callPackage ../development/libraries/haskell/haskell-src-exts/1.16.0.1.nix {};
+  haskellSrcExts = self.haskellSrcExts_1_16_0_1;
 
   haskellSrcMeta = callPackage ../development/libraries/haskell/haskell-src-meta {};
 
