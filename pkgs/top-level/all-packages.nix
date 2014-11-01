@@ -9957,7 +9957,9 @@ let
     inherit (xlibs) libX11 xproto;
   };
 
-  easytag = callPackage ../applications/audio/easytag { };
+  easytag = callPackage ../applications/audio/easytag {
+    inherit (gnome3) gnome_icon_theme;
+  };
 
   mp3info = callPackage ../applications/audio/mp3info { };
 
