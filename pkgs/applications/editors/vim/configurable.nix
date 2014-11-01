@@ -6,22 +6,19 @@ args@{pkgs, source ? "default", ...}: with args;
 let inherit (args.composableDerivation) composableDerivation edf;
   nixosRuntimepath = pkgs.writeText "nixos-vimrc" ''
     set nocompatible
-    syntax on
 
     function! NixosPluginPath()
-      let seen = {}
+      set rtp+=${pkgs.vimPlugins.pathogen}/share/vim-plugins/pathogen-git
       for p in reverse(split($NIX_PROFILES))
-        for d in split(glob(p . '/share/vim-plugins/*'))
-          let pluginname = substitute(d, ".*/", "", "")
-          if !has_key(seen, pluginname)
-            exec 'set runtimepath^='.d
-            let seen[pluginname] = 1
-          endif
-        endfor
+        let toAdd = p.'/share/vim-plugins/{}'
+        execute pathogen#infect(toAdd)
       endfor
+      set rtp-=${pkgs.vimPlugins.pathogen}/share/vim-plugins/pathogen-git
     endfunction
 
     execute NixosPluginPath()
+    syntax on
+    filetype plugin indent on
 
     if filereadable("/etc/vimrc")
       source /etc/vimrc
@@ -29,6 +26,7 @@ let inherit (args.composableDerivation) composableDerivation edf;
       source /etc/vim/vimrc
     endif
   '';
+
 in
 composableDerivation {
   # use gccApple to compile on darwin

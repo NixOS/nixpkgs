@@ -1,76 +1,7 @@
 { fetchurl, bash, stdenv, python, cmake, vim, perl, ruby, unzip, which, fetchgit, fetchzip, clang, zip }:
-
 /*
-About Vim and plugins
-=====================
-Let me tell you how Vim plugins work, so that you can decide on how to orginize
-your setup.
-
-typical plugin files:
-
-  plugin/P1.vim
-  autoload/P1.vim
-  ftplugin/xyz.vim
-  doc/plugin-documentation.txt (traditional documentation)
-  README(.md) (nowadays thanks to github)
-
-Traditionally plugins were installed into ~/.vim/* so it was your task to keep track
-of which files belong to what plugin. Now this problem is "fixed" by nix which
-assembles your profile for you.
-
-Vim offers the :h rtp setting which works for most plugins. Thus adding adding
-this to your .vimrc should make most plugins work:
-
-  set rtp+=~/.nix-profile/vim-plugins/youcompleteme
-  " or for p in ["youcompleteme"] | exec 'set rtp+=~/.nix-profile/vim-plugins/'.p | endfor
-
-Its what pathogen, vundle, vim-addon-manager (VAM) use.
-
-VAM's benefits:
-- allows activating plugins at runtime, eg when you need them. (works around
-  some au command hooks, eg required for TheNerdTree plugin)
-- VAM checkous out all sources (vim.sf.net, git, mercurial, ...)
-- runs :helptags on update/installation only. Obviously it cannot do that on
-  store paths.
-- it reads addon-info.json files which can declare dependencies by name
-  (without version)
-
-VAM is made up of
-- the code loading plugins
-- an optional pool (github.com/MarcWeber/vim-addon-manager-known-repositories)
-
-That pool probably is the best source to automatically derive plugin
-information from or to lookup about how to get data from www.vim.org.
-
-I'm not sure we should package them all. Most of them are not used much.
-You need your .vimrc anyway, and then VAM gets the job done ?
-
-How to install VAM? eg provide such a bash function:
-
-    vim-install-vam () {
-    mkdir -p ~/.vim/vim-addons && git clone --depth=1 git://github.com/MarcWeber/vim-addon-manager.git ~/.vim/vim-addons/vim-addon-manager && cat >> ~/.vimrc <<EOF
-    set nocompatible
-    set hidden
-    filetype indent plugin on | syn on
-    fun ActivateAddons()
-      let g:vim_addon_manager = {}
-      let g:vim_addon_manager.log_to_buf =1
-      set runtimepath+=~/.vim/vim-addons/vim-addon-manager
-      call vam#ActivateAddons([])
-    endf
-    call ActivateAddons()
-    EOF
-    }
-
-Marc Weber thinks that having no plugins listed might be better than having
-outdated ones.
-
-So which plugins to add here according to what Marc Weber thinks is best?
-Complicated plugins requiring dependencies, such as YouCompleteMe.
-Then its best to symlink ~/.nix-profile/vim-plugins/youcompleteme to
-~/.vim/{vim-addons,bundle} or whatever plugin management solution you use.
-
-If you feel differently change the comments and proceed.
+All the plugins you install are automatically added to your vim.
+Just install and use.
 */
 
 # provide a function creating tag files for vim help documentation (doc/*.txt)
