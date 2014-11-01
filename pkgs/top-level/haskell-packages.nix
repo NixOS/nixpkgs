@@ -1044,7 +1044,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   graphmod = callPackage ../development/tools/haskell/graphmod {};
 
-  graphviz = callPackage ../development/libraries/haskell/graphviz {};
+  graphviz = callPackage ../development/libraries/haskell/graphviz { systemGraphviz = pkgs.graphviz; };
 
   graphSCC = callPackage ../development/libraries/haskell/graphscc {};
 
