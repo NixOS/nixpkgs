@@ -23,6 +23,11 @@ let
        sha256 = "04mx321z929ngl65hfc1hv5jw37wqbh8y2avmpvajagvn6lp3zdl";
     };
 
+    configureFlags = [
+      "--with-boost=${boost.dev}"
+      "--with-boost-libdir=${boost.lib}/lib"
+    ];
+
     patches = [ ./synfig-cstring.patch ];
 
     buildInputs = [
@@ -35,13 +40,18 @@ stdenv.mkDerivation rec {
   name = "synfigstudio-${version}";
 
   src = fetchurl {
-       url = "mirror://sourceforge/synfig/${name}.tar.gz";
-       sha256 = "13hw4z6yx70g4mnjmvmxkk7b1qzlwmqjhxflq5dd6cqdsmfw9mc7";
-    };
+    url = "mirror://sourceforge/synfig/${name}.tar.gz";
+    sha256 = "13hw4z6yx70g4mnjmvmxkk7b1qzlwmqjhxflq5dd6cqdsmfw9mc7";
+  };
 
   buildInputs = [
     ETL boost cairo fontsConf gettext glibmm gtk gtkmm imagemagick intltool
     intltool libsigcxx libtool libxmlxx pkgconfig synfig
+  ];
+
+  configureFlags = [
+    "--with-boost=${boost.dev}"
+    "--with-boost-libdir=${boost.lib}/lib"
   ];
 
   preBuild = ''
