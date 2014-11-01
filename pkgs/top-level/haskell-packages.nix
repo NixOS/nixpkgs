@@ -1297,6 +1297,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hsc3Lang = callPackage ../development/libraries/haskell/hsc3-lang {
     hmatrixSpecial = self.hmatrixSpecial.override {
       hmatrix = self.hmatrix.override { binary = self.binary_0_7_2_2; };
+      hmatrixGsl = self.hmatrixGsl.override {
+        hmatrix = self.hmatrix.override { binary = self.binary_0_7_2_2; };
+      };
     };
   };
 
