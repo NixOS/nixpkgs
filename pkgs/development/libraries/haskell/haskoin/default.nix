@@ -19,6 +19,7 @@ cabal.mkDerivation (self: {
     testFrameworkQuickcheck2 text
   ];
   doCheck = false;
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/haskoin/haskoin";
     description = "Implementation of the Bitcoin protocol";
