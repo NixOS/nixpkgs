@@ -64,6 +64,16 @@ let
 
     options = {
 
+      storage = mkOption {
+        default = null;
+        example = "partition.root";
+        type = types.nullOr types.str;
+        description = ''
+          Storage device from <option>storage.*</option> to use for
+          this file system.
+        '';
+      };
+
       label = mkOption {
         default = null;
         example = "root-partition";
@@ -159,10 +169,10 @@ in
         (the mount options passed to <command>mount</command> using the
         <option>-o</option> flag; defaults to <literal>[ "defaults" ]</literal>).
 
-        Instead of specifying <literal>device</literal>, you can also
+        Instead of specifying <literal>device</literal>, you can also either
         specify a volume label (<literal>label</literal>) for file
         systems that support it, such as ext2/ext3 (see <command>mke2fs
-        -L</command>).
+        -L</command>) or reference a device from <option>storage.*</option>.
       '';
     };
 
