@@ -8,6 +8,7 @@ cabal.mkDerivation (self: {
   sha256 = "1w2617kpj6rblmycqb97gyshwbvzp5w2h4xh494mvdzi3bkahqpn";
   buildDepends = [ mtl text ];
   testDepends = [ HUnit mtl testFramework testFrameworkHunit text ];
+  jailbreak = true;
   meta = {
     homepage = "http://fvisser.nl/clay";
     description = "CSS preprocessor as embedded Haskell";
