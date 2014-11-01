@@ -80,14 +80,14 @@ fi
 
 
 init_remote(){
-    local url=$1;
-    git init;
-    git remote add origin $url;
+    local url=$1
+    git init
+    git remote add origin $url
 }
 
 # Return the reference of an hash if it exists on the remote repository.
 ref_from_hash(){
-    local hash=$1;
+    local hash=$1
     git ls-remote origin | sed -n "\,$hash\t, { s,\(.*\)\t\(.*\),\2,; p; q}"
 }
 
@@ -99,12 +99,12 @@ hash_from_ref(){
 
 # Fetch everything and checkout the right sha1
 checkout_hash(){
-    local hash="$1";
-    local ref="$2";
+    local hash="$1"
+    local ref="$2"
 
     if test -z "$hash"; then
-        hash=$(hash_from_ref $ref);
-    fi;
+        hash=$(hash_from_ref $ref)
+    fi
 
     git fetch ${builder:+--progress} origin || return 1
     git checkout -b fetchgit $hash || return 1
@@ -112,8 +112,8 @@ checkout_hash(){
 
 # Fetch only a branch/tag and checkout it.
 checkout_ref(){
-    local hash="$1";
-    local ref="$2";
+    local hash="$1"
+    local ref="$2"
 
     if "$deepClone"; then
         # The caller explicitly asked for a deep clone.  Deep clones
@@ -124,16 +124,16 @@ checkout_ref(){
     fi
 
     if test -z "$ref"; then
-        ref=$(ref_from_hash $hash);
-    fi;
+        ref=$(ref_from_hash $hash)
+    fi
 
     if test -n "$ref"; then
         # --depth option is ignored on http repository.
         git fetch ${builder:+--progress} --depth 1 origin +"$ref" || return 1
         git checkout -b fetchgit FETCH_HEAD || return 1
     else
-        return 1;
-    fi;
+        return 1
+    fi
 }
 
 # Update submodules
@@ -145,20 +145,20 @@ init_submodules(){
     git submodule status |
     while read l; do
         # checkout each submodule
-        local hash=$(echo $l | awk '{print substr($1,2)}');
-        local dir=$(echo $l | awk '{print $2}');
+        local hash=$(echo $l | awk '{print substr($1,2)}')
+        local dir=$(echo $l | awk '{print $2}')
         local name=$(
             git config -f .gitmodules --get-regexp submodule\.[^.]*\.path |
             sed -n "s,^\(.*\)\.path $dir\$,\\1,p")
-        local url=$(git config -f .gitmodules --get ${name}.url);
+        local url=$(git config -f .gitmodules --get ${name}.url)
 
         # Get Absolute URL if we have a relative URL
         if ! echo "$url" | grep '^[a-zA-Z]\+://' >/dev/null 2>&1; then
             url="$(git config --get remote.origin.url)/$url"
         fi
 
-        clone "$dir" "$url" "$hash" "";
-    done;
+        clone "$dir" "$url" "$hash" ""
+    done
 }
 
 clone(){
@@ -168,21 +168,21 @@ clone(){
     local hash="$3"
     local ref="$4"
 
-    cd $dir;
+    cd $dir
 
     # Initialize the repository.
-    init_remote "$url";
+    init_remote "$url"
 
     # Download data from the repository.
     checkout_ref "$hash" "$ref" ||
     checkout_hash "$hash" "$ref" || (
-        echo 1>&2 "Unable to checkout $hash$ref from $url.";
-        exit 1;
+        echo 1>&2 "Unable to checkout $hash$ref from $url."
+        exit 1
     )
 
     # Checkout linked sources.
     if test -n "$fetchSubmodules"; then
-        init_submodules;
+        init_submodules
     fi
 
     if [ -z "$builder" -a -f .topdeps ]; then
@@ -196,7 +196,7 @@ clone(){
         fi
     fi
 
-    cd $top;
+    cd $top
 }
 
 clone_user_rev() {
@@ -210,10 +210,10 @@ clone_user_rev() {
             clone "$dir" "$url" "" "$rev" 1>&2;;
         *)
             if test -z "$(echo $rev | tr -d 0123456789abcdef)"; then
-                clone "$dir" "$url" "$rev" "" 1>&2;
+                clone "$dir" "$url" "$rev" "" 1>&2
             else
-                echo 1>&2 "Bad commit hash or bad reference.";
-                exit 1;
+                echo 1>&2 "Bad commit hash or bad reference."
+                exit 1
             fi;;
     esac
 
