@@ -1554,6 +1554,8 @@ let
 
   mmv = callPackage ../tools/misc/mmv { };
 
+  morituri = callPackage ../applications/audio/morituri { };
+
   most = callPackage ../tools/misc/most { };
 
   multitail = callPackage ../tools/misc/multitail { };
