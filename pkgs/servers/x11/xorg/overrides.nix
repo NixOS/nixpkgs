@@ -203,6 +203,11 @@ in
 
   xf86videovmware = attrs: attrs // {
     buildInputs =  attrs.buildInputs ++ [ args.mesa_drivers ]; # for libxatracker
+    patches = [( args.fetchpatch {
+      url = "http://cgit.freedesktop.org/xorg/driver/xf86-video-vmware/patch/"
+        + "?id=4664412d7a5266d2b392957406b34abc5db95e48";
+      sha256 = "1gix83f1is91iq1zd66nj4k72jm24jjjd9s9l0bzpzhgc8smqdk2";
+    })];
   };
 
   xf86videoqxl = attrs: attrs // {
