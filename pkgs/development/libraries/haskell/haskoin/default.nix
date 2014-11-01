@@ -18,8 +18,8 @@ cabal.mkDerivation (self: {
     mtl pbkdf QuickCheck split testFramework testFrameworkHunit
     testFrameworkQuickcheck2 text
   ];
-  doCheck = false;
   jailbreak = true;
+  doCheck = false;
   meta = {
     homepage = "http://github.com/haskoin/haskoin";
     description = "Implementation of the Bitcoin protocol";
