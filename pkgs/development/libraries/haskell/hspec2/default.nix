@@ -26,5 +26,6 @@ cabal.mkDerivation (self: {
     description = "Alpha version of Hspec 2.0";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })
