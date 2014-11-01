@@ -1,20 +1,22 @@
-{ stdenv, fetchurl, scons, pkgconfig, openssl, protobuf, boost, zlib}:
+{ stdenv, fetchFromGitHub, scons, pkgconfig, openssl, protobuf, boost, zlib}:
 
 stdenv.mkDerivation rec {
   name = "rippled-${version}";
-  version = "0.23.0";
+  version = "0.26.0";
 
-  src = fetchurl {
-    url = "https://github.com/ripple/rippled/archive/${version}.tar.gz";
-    sha256 = "0js734sk11jn19fyp403mk6p62azlc6s9kyhr5jfg466fiak537p";
+  src = fetchFromGitHub {
+    owner = "ripple";
+    repo = "rippled";
+    rev = "0.26.2";
+    sha256 = "06hcc3nnzp9f6j00890f41rrn4djwlcwkzmqnw4yra74sswgji5y";
   };
 
-  patches = [ ./scons-env.patch ];
+  postPatch = ''
+    sed -i -e "s@ENV = dict.*@ENV = os.environ@g" SConstruct
+  '';
 
   buildInputs = [ scons pkgconfig openssl protobuf boost zlib ];
 
-  RIPPLED_BOOST_HOME = boost.out;
-  RIPPLED_ZLIB_HOME = zlib.out;
   buildPhase = "scons build/rippled";
 
   installPhase = ''
