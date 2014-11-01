@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ Diff filepath parsec split time utf8String xml ];
   testDepends = [ Diff filepath HUnit mtl time ];
   jailbreak = true;
+  doCheck = false;
   meta = {
     description = "Interface for versioning file stores";
     license = self.stdenv.lib.licenses.bsd3;
