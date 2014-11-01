@@ -54,8 +54,8 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" "install-info" "install-pdf" ];
 
-  # Test suite fails: https://bugs.r-project.org/bugzilla/show_bug.cgi?id=15975.
-  doCheck = false;
+  # The test suite fails when building without the recommended packages.
+  doCheck = withRecommendedPackages;
 
   enableParallelBuilding = true;
 

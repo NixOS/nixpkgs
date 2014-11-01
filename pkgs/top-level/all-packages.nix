@@ -7275,7 +7275,7 @@ let
   R = callPackage ../applications/science/math/R {
     inherit (xlibs) libX11 libXt;
     texLive = texLiveAggregationFun { paths = [ texLive texLiveExtra ]; };
-    withRecommendedPackages = false;
+    withRecommendedPackages = true;
   };
 
   rWrapper = callPackage ../development/r-modules/wrapper.nix {
