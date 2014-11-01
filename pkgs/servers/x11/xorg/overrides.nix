@@ -254,7 +254,7 @@ in
         dmxproto /*libdmx not used*/ xf86vidmodeproto
         recordproto libXext pixman libXfont
         damageproto xcmiscproto  bigreqsproto
-        libpciaccess inputproto xextproto randrproto renderproto
+        libpciaccess inputproto xextproto randrproto renderproto presentproto
         dri2proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
       ];
       commonPatches = [ ./xorgserver-xkbcomp-path.patch ];
