@@ -5,6 +5,7 @@
 , openjpeg, libopus, librsvg
 , wildmidi, fluidsynth, libvdpau, wayland
 , libwebp, xvidcore, gnutls
+, mesa
 }:
 
 assert faacSupport -> faac != null;
@@ -36,9 +37,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gst-plugins-base orc
     faad2 libass libkate libmms
-    libmodplug mpeg2dec mpg123 
+    libmodplug mpeg2dec mpg123
     openjpeg libopus librsvg
     wildmidi fluidsynth libvdpau wayland
-    libwebp xvidcore gnutls
+    libwebp xvidcore gnutls mesa
   ] ++ stdenv.lib.optional faacSupport faac;
 }
