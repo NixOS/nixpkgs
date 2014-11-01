@@ -10,6 +10,9 @@ cabal.mkDerivation (self: {
   extraLibraries = [ libX11 mesa wxGTK ];
   noHaddock = true;
   patches = [ ./no-ldconfig.patch ];
+  postInstall = ''
+    cp -v dist/build/libwxc.so.${self.version} $out/lib/libwxc.so
+  '';
   meta = {
     homepage = "http://haskell.org/haskellwiki/WxHaskell";
     description = "wxHaskell C++ wrapper";
