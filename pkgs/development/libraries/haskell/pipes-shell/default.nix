@@ -15,6 +15,7 @@ cabal.mkDerivation (self: {
     async hspec pipes pipesBytestring pipesSafe stm stmChans text
   ];
   doCheck = false;
+  jailbreak = true;
   meta = {
     description = "Create proper Pipes from System.Process";
     license = self.stdenv.lib.licenses.bsd3;
