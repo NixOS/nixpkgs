@@ -6048,6 +6048,13 @@ let
       else stdenv;
   };
 
+  libtorrentRasterbar_0_16 = callPackage ../development/libraries/libtorrent-rasterbar/0.16.nix {
+    # fix "unrecognized option -arch" error
+    stdenv = if stdenv.isDarwin
+      then clangStdenv
+      else stdenv;
+  };
+
   libtoxcore = callPackage ../development/libraries/libtoxcore { };
 
   libtsm = callPackage ../development/libraries/libtsm { };
