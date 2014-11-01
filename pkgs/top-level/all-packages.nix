@@ -1180,7 +1180,7 @@ let
   freetds = callPackage ../development/libraries/freetds { };
 
   frescobaldi = callPackage ../misc/frescobaldi {};
-  
+
   ftgl = callPackage ../development/libraries/ftgl { };
 
   ftgl212 = callPackage ../development/libraries/ftgl/2.1.2.nix { };
@@ -2014,9 +2014,9 @@ let
   pdfread = callPackage ../tools/graphics/pdfread { };
 
   briss = callPackage ../tools/graphics/briss { };
- 
-  brickd = callPackage ../servers/brickd { 
-    libusb = libusb1; 
+
+  brickd = callPackage ../servers/brickd {
+    libusb = libusb1;
   };
 
   bully = callPackage ../tools/networking/bully { };
@@ -2846,7 +2846,7 @@ let
   eggDerivation = callPackage ../development/compilers/chicken/eggDerivation.nix { };
 
   chicken = callPackage ../development/compilers/chicken {
-    bootstrap-chicken = chicken.override { bootstrap-chicken = null; }; 
+    bootstrap-chicken = chicken.override { bootstrap-chicken = null; };
   };
 
   egg2nix = callPackage ../development/tools/egg2nix {
