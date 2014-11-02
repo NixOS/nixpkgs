@@ -63,7 +63,7 @@ let self = _self // overrides; _self = with self; {
   RcppArmadillo = buildRPackage {
     name = "RcppArmadillo-0.4.500.0";
     src = fetchurl {
-      url = "mirror://cran/src/contrib/RcppArmadillo_0.4.320.0.tar.gz";
+      url = "mirror://cran/src/contrib/RcppArmadillo_0.4.500.0.tar.gz";
       sha256="1fi6wvs4f0sb1lxpimly1i3hl3pjzwgvh4izmb9v7wm12c068kka";
     };
     propagatedBuildInputs = [Rcpp];
