@@ -11,10 +11,10 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="angelscript";
-    version = "2.29.1";
+    version = "2.29.2";
     name="${baseName}-${version}";
     url="http://www.angelcode.com/angelscript/sdk/files/angelscript_${version}.zip";
-    sha256 = "081a0wnn1hl0hjgrg0nz63ff7k7dgrwsgszka5i7623ny407fkl5";
+    sha256 = "12ws4vp9iyxbgzxxdq7g9729vg1ld92f38gfznyhsknhsay4kmf5";
   };
 in
 rec {
