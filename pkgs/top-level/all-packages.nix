@@ -6274,12 +6274,10 @@ let
 
   mlt-qt4 = callPackage ../development/libraries/mlt {
     qt = qt4;
-    SDL = SDL_pulseaudio;
   };
 
   mlt-qt5 = callPackage ../development/libraries/mlt {
     qt = qt5;
-    SDL = SDL_pulseaudio;
   };
 
   movit = callPackage ../development/libraries/movit { };
@@ -6652,16 +6650,13 @@ let
     openglSupport = mesaSupported;
     alsaSupport = (!stdenv.isDarwin);
     x11Support = true;
-    pulseaudioSupport = stdenv.isDarwin; # better go through ALSA
+    pulseaudioSupport = true;
 
     # resolve the unrecognized -fpascal-strings option error
     stdenv = if stdenv.isDarwin
       then clangStdenv
       else stdenv;
   };
-
-  # Fixes major problems with choppy sound in MLT / Kdenlive / Shotcut
-  SDL_pulseaudio = SDL.override { pulseaudioSupport = true; };
 
   SDL_gfx = callPackage ../development/libraries/SDL_gfx { };
 
@@ -11233,7 +11228,6 @@ let
   hedgewars = callPackage ../games/hedgewars {
     inherit (haskellPackages) ghc network vector utf8String bytestringShow
       random hslogger dataenc;
-    SDL = SDL_pulseaudio;
   };
 
   hexen = callPackage ../games/hexen { };
