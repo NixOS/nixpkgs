@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "sage-6.1.1";
 
   src = fetchurl {
-    url = "http://mirrors.xmission.com/sage/src/sage-6.1.1.tar.gz";
+    url = "http://www.sagemath.org/src-old/sage-6.1.1.tar.gz";
     sha256 = "0kbzs0l9q7y34jv3f8rd1c2mrjsjkdgaw6mfdwjlpg9g4gghmq5y";
   };
 
