@@ -25,6 +25,7 @@ cabal.mkDerivation (self: {
     $out/bin/agda -c --no-main $(find $out/share -name Primitive.agda)
     $out/bin/agda-mode compile
   '';
+  jailbreak = true;
   meta = {
     homepage = "http://wiki.portal.chalmers.se/agda/";
     description = "A dependently typed functional programming language and proof assistant";

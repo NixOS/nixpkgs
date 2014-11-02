@@ -1,19 +1,28 @@
-{ fetchurl, stdenv
-, withOctave ? true, octave ? null}:
+{ fetchurl, stdenv, octave ? null }:
 
 stdenv.mkDerivation rec {
-  name = "nlopt-2.3";
+  name = "nlopt-2.4.2";
 
   src = fetchurl {
     url = "http://ab-initio.mit.edu/nlopt/${name}.tar.gz";
-    sha256 = "1iw2cjgypyqz779f47fz0nmifbrvk4zs4rxi1ibk36f4ly3wg6p6";
+    sha256 = "12cfkkhcdf4zmb6h7y6qvvdvqjs2xf9sjpa3rl3bq76px4yn76c0";
   };
 
-  buildInputs = stdenv.lib.optional withOctave octave;
+  buildInputs = [ octave ];
 
   configureFlags = "--with-cxx --enable-shared --with-pic --without-guile --without-python
   --without-matlab " +
-    stdenv.lib.optionalString withOctave ("--with-octave " +
+    stdenv.lib.optionalString (octave != null) ("--with-octave " +
         "M_INSTALL_DIR=$(out)/${octave.sitePath}/m " +
         "OCT_INSTALL_DIR=$(out)/${octave.sitePath}/oct ");
+
+  meta = {
+    homepage = "http://ab-initio.mit.edu/nlopt/";
+    description = "Free open-source library for nonlinear optimization";
+    license = stdenv.lib.licenses.lgpl21Plus;
+
+    hydraPlatforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.simons ];
+  };
+
 }

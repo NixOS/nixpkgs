@@ -18,5 +18,6 @@ cabal.mkDerivation (self: {
     description = "Experimental Hspec support for testing WAI applications (depends on hspec2!)";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
     monoidExtras optparseApplicative semigroups tagged vectorSpace
     vectorSpacePoints
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams";
     description = "Embedded domain-specific language for declarative graphics";

@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.4.7";
   sha256 = "1z2drw7ighyws72wqms015n5hy0zxbrphdca7ldn34pz28122z07";
   testDepends = [ HUnit ];
-  doCheck = false; # Test requires a connected Arduino...
+  doCheck = false;
   meta = {
     homepage = "https://github.com/jputcu/serialport";
     description = "Cross platform serial port library";

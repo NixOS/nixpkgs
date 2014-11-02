@@ -21,7 +21,9 @@ cabal.mkDerivation (self: {
     snapCore snapServer stm syb text time transformers
     unorderedContainers vector vectorAlgorithms xmlhtml
   ];
-  jailbreak = true;
+  patchPhase = ''
+    sed -i -e 's|lens *>=.*|lens|' snap.cabal
+  '';
   meta = {
     homepage = "http://snapframework.com/";
     description = "Top-level package for the Snap Web Framework";

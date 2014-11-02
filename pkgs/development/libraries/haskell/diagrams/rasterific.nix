@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
     JuicyPixels lens mtl optparseApplicative Rasterific split
     statestack time
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams/";
     description = "Rasterific backend for diagrams";

@@ -6,6 +6,15 @@ use JSON;
 make_path("/var/lib/nixos", { mode => 0755 });
 
 
+sub hashPassword {
+    my ($password) = @_;
+    my $salt = "";
+    my @chars = ('.', '/', 0..9, 'A'..'Z', 'a'..'z');
+    $salt .= $chars[rand 64] for (1..8);
+    return crypt($password, '$6$' . $salt . '$');
+}
+
+
 # Functions for allocating free GIDs/UIDs. FIXME: respect ID ranges in
 # /etc/login.defs.
 sub allocId {
@@ -174,6 +183,8 @@ foreach my $u (@{$spec->{users}}) {
         } else {
             warn "warning: password file ‘$u->{passwordFile}’ does not exist\n";
         }
+    } elsif (defined $u->{password}) {
+        $u->{hashedPassword} = hashPassword($u->{password});
     }
 
     $u->{fakePassword} = $existing->{fakePassword} // "x";
@@ -208,32 +219,21 @@ my %shadowSeen;
 
 foreach my $line (-f "/etc/shadow" ? read_file("/etc/shadow") : ()) {
     chomp $line;
-    my ($name, $password, @rest) = split(':', $line, -9);
+    my ($name, $hashedPassword, @rest) = split(':', $line, -9);
     my $u = $usersOut{$name};;
     next if !defined $u;
-    $password = $u->{hashedPassword} if defined $u->{hashedPassword} && !$spec->{mutableUsers}; # FIXME
-    push @shadowNew, join(":", $name, $password, @rest) . "\n";
+    $hashedPassword = $u->{hashedPassword} if defined $u->{hashedPassword} && !$spec->{mutableUsers}; # FIXME
+    push @shadowNew, join(":", $name, $hashedPassword, @rest) . "\n";
     $shadowSeen{$name} = 1;
 }
 
 foreach my $u (values %usersOut) {
     next if defined $shadowSeen{$u->{name}};
-    my $password = "!";
-    $password = $u->{hashedPassword} if defined $u->{hashedPassword};
+    my $hashedPassword = "!";
+    $hashedPassword = $u->{hashedPassword} if defined $u->{hashedPassword};
     # FIXME: set correct value for sp_lstchg.
-    push @shadowNew, join(":", $u->{name}, $password, "1::::::") . "\n";
+    push @shadowNew, join(":", $u->{name}, $hashedPassword, "1::::::") . "\n";
 }
 
 write_file("/etc/shadow.tmp", { perms => 0600 }, @shadowNew);
 rename("/etc/shadow.tmp", "/etc/shadow") or die;
-
-
-# Call chpasswd to apply password. FIXME: generate the hashes directly
-# and merge into the /etc/shadow updating above.
-foreach my $u (@{$spec->{users}}) {
-    if (defined $u->{password}) {
-        my $pid = open(PW, "| chpasswd") or die;
-        print PW "$u->{name}:$u->{password}\n";
-        close PW or die "unable to change password of user ‘$u->{name}’: $?\n";
-    }
-}

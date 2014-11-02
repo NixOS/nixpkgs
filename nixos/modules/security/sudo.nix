@@ -46,6 +46,14 @@ in
           <filename>sudoers</filename> file.
         '';
     };
+
+    security.sudo.extraConfig = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        Extra configuration text appended to <filename>sudoers</filename>.
+      '';
+    };
   };
 
 
@@ -55,7 +63,8 @@ in
 
     security.sudo.configFile =
       ''
-        # Don't edit this file. Set the NixOS option ‘security.sudo.configFile’ instead.
+        # Don't edit this file. Set the NixOS options ‘security.sudo.configFile’
+        # and security.sudo.extraConfig instead.
 
         # Environment variables to keep for root and %wheel.
         Defaults:root,%wheel env_keep+=TERMINFO_DIRS
@@ -69,6 +78,7 @@ in
 
         # Users in the "wheel" group can do anything.
         %wheel      ALL=(ALL) ${if cfg.wheelNeedsPassword then "" else "NOPASSWD: ALL, "}SETENV: ALL
+        ${cfg.extraConfig}
       '';
 
     security.setuidPrograms = [ "sudo" "sudoedit" ];

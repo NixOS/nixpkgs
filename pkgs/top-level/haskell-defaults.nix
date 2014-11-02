@@ -47,6 +47,7 @@
         vectorBinaryInstances = self.vectorBinaryInstances.override { binary = self.binary_0_7_2_2; };
       };
     };
+    entropy = super.entropy.override { cabal = self.cabal.override { Cabal = self.Cabal_1_18_1_3; }; };
     gloss = null;                       # requires base >= 4.7
     haddock = self.haddock_2_13_2;
     modularArithmetic = null;           # requires base >= 4.7

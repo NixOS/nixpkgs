@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "lens-family-th";
-  version = "0.3.0.0";
-  sha256 = "0p9z278rpr9mqdpxa5izllplfrbxwzdziqjzjn4x1j2g9f3q5f8s";
+  version = "0.4.0.0";
+  sha256 = "02fc3kppb7y2c6j22wi2mzcxffj4k3dl3x09vjllqchfpfcpwbm5";
   meta = {
     homepage = "http://github.com/DanBurton/lens-family-th#readme";
     description = "Generate lens-family style lenses";

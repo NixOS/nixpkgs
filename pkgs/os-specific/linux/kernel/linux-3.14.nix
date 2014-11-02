@@ -1,6 +1,7 @@
 { stdenv, fetchurl, ... } @ args:
 
 import ./generic.nix (args // rec {
+  # Remember to update grsecurity!
   version = "3.14.23";
   extraMeta.branch = "3.14";
 

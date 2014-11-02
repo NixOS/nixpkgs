@@ -1044,7 +1044,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   graphmod = callPackage ../development/tools/haskell/graphmod {};
 
-  graphviz = callPackage ../development/libraries/haskell/graphviz {};
+  graphviz = callPackage ../development/libraries/haskell/graphviz { systemGraphviz = pkgs.graphviz; };
 
   graphSCC = callPackage ../development/libraries/haskell/graphscc {};
 
@@ -1108,8 +1108,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   haskellSrc = self.haskellSrc_1_0_1_6;
 
   haskellSrcExts_1_15_0_1 = callPackage ../development/libraries/haskell/haskell-src-exts/1.15.0.1.nix {};
-  haskellSrcExts_1_16_0 = callPackage ../development/libraries/haskell/haskell-src-exts/1.16.0.nix {};
-  haskellSrcExts = self.haskellSrcExts_1_16_0;
+  haskellSrcExts_1_16_0_1 = callPackage ../development/libraries/haskell/haskell-src-exts/1.16.0.1.nix {};
+  haskellSrcExts = self.haskellSrcExts_1_16_0_1;
 
   haskellSrcMeta = callPackage ../development/libraries/haskell/haskell-src-meta {};
 
@@ -1243,6 +1243,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     liblapack = pkgs.liblapack.override { shared = true; };
   };
 
+  hmatrixGsl = callPackage ../development/libraries/haskell/hmatrix-gsl {};
+
   hmatrixSpecial = callPackage ../development/libraries/haskell/hmatrix-special {};
 
   hoauth = callPackage ../development/libraries/haskell/hoauth {};
@@ -1286,15 +1288,18 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hsc3 = callPackage ../development/libraries/haskell/hsc3 {};
 
-  hsc3-dot = callPackage ../development/libraries/haskell/hsc3-dot {};
+  hsc3Dot = callPackage ../development/libraries/haskell/hsc3-dot {};
 
-  hsc3-process = callPackage ../development/libraries/haskell/hsc3-process {};
+  hsc3Process = callPackage ../development/libraries/haskell/hsc3-process {};
 
-  hsc3-db = callPackage ../development/libraries/haskell/hsc3-db {};
+  hsc3Db = callPackage ../development/libraries/haskell/hsc3-db {};
 
-  hsc3-lang = callPackage ../development/libraries/haskell/hsc3-lang {
+  hsc3Lang = callPackage ../development/libraries/haskell/hsc3-lang {
     hmatrixSpecial = self.hmatrixSpecial.override {
       hmatrix = self.hmatrix.override { binary = self.binary_0_7_2_2; };
+      hmatrixGsl = self.hmatrixGsl.override {
+        hmatrix = self.hmatrix.override { binary = self.binary_0_7_2_2; };
+      };
     };
   };
 
@@ -1582,19 +1587,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ListZipper = callPackage ../development/libraries/haskell/ListZipper {};
 
-  # Needed for idris for now
-  llvmGeneral_3_3_8_2 = callPackage ../development/libraries/haskell/llvm-general/3.3.8.2.nix {
-    llvmConfig = pkgs.llvm_33;
-    llvmGeneralPure = self.llvmGeneralPure_3_3_8_2;
-  };
-  llvmGeneral_3_4_4_0 = callPackage ../development/libraries/haskell/llvm-general/3.4.4.0.nix {
-    llvmConfig = pkgs.llvm;
-  };
-  llvmGeneral = self.llvmGeneral_3_4_4_0;
+  llvmGeneral = callPackage ../development/libraries/haskell/llvm-general { llvmConfig = pkgs.llvm; };
 
-  llvmGeneralPure_3_3_8_2 = callPackage ../development/libraries/haskell/llvm-general-pure/3.3.8.2.nix {};
-  llvmGeneralPure_3_4_4_0 = callPackage ../development/libraries/haskell/llvm-general-pure/3.4.4.0.nix {};
-  llvmGeneralPure = self.llvmGeneralPure_3_4_4_0;
+  llvmGeneralPure = callPackage ../development/libraries/haskell/llvm-general-pure {};
 
   lrucache = callPackage ../development/libraries/haskell/lrucache {};
 
@@ -1716,7 +1711,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   MonadRandom_0_1_13 = callPackage ../development/libraries/haskell/MonadRandom/0.1.13.nix {};
   MonadRandom_0_2_0_1 = callPackage ../development/libraries/haskell/MonadRandom/0.2.0.1.nix {};
-  MonadRandom = self.MonadRandom_0_2_0_1;
+  MonadRandom_0_3 = callPackage ../development/libraries/haskell/MonadRandom/0.3.nix {};
+  MonadRandom = self.MonadRandom_0_3;
 
   monadStm = callPackage ../development/libraries/haskell/monad-stm {};
 
@@ -2256,8 +2252,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   sbv = callPackage ../development/libraries/haskell/sbv {};
 
   scientific_0_2_0_2 = callPackage ../development/libraries/haskell/scientific/0.2.0.2.nix {};
-  scientific_0_3_3_1 = callPackage ../development/libraries/haskell/scientific/0.3.3.1.nix {};
-  scientific = self.scientific_0_3_3_1;
+  scientific_0_3_3_2 = callPackage ../development/libraries/haskell/scientific/0.3.3.2.nix {};
+  scientific = self.scientific_0_3_3_2;
 
   scotty = callPackage ../development/libraries/haskell/scotty {};
 
@@ -2612,7 +2608,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   text_0_11_2_3 = callPackage ../development/libraries/haskell/text/0.11.2.3.nix {};
   text_0_11_3_1 = callPackage ../development/libraries/haskell/text/0.11.3.1.nix {};
   text_1_1_1_3 = callPackage ../development/libraries/haskell/text/1.1.1.3.nix {};
-  text = self.text_1_1_1_3;
+  text_1_2_0_0 = callPackage ../development/libraries/haskell/text/1.2.0.0.nix {};
+  text = self.text_1_2_0_0;
 
   textFormat = callPackage ../development/libraries/haskell/text-format {};
 
@@ -2641,6 +2638,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   threadmanager = callPackage ../development/libraries/haskell/threadmanager {};
 
   threads = callPackage ../development/libraries/haskell/threads {};
+
+  thReifyMany = callPackage ../development/libraries/haskell/th-reify-many {};
 
   Thrift = callPackage ../development/libraries/haskell/Thrift {};
 

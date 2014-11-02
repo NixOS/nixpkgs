@@ -4,11 +4,11 @@
 , pulseaudio ? null }:
 
 stdenv.mkDerivation rec {
-  name = "dolphin-emu-20141002";
+  name = "dolphin-emu-20141101";
   src = fetchgit {
     url = git://github.com/dolphin-emu/dolphin.git;
-    rev = "ed7f0739ae31c07c31d013964986c549317aba6e";
-    sha256 = "01qwlkh3c0ij97zycq0v4kclxmnlbwcc1bmvjzl4cbczhxbbx4hk";
+    rev = "9daaf94f3c8caf71dab16c7e591ce7905c1416c4";
+    sha256 = "1n71by34mrgdxcr8c5bsbpy9azi62512knp5sjgzq6sfwzgy40d8";
     fetchSubmodules = false;
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ stdenv pkgconfig cmake bluez ffmpeg libao mesa gtk2 glib
+  buildInputs = [ pkgconfig cmake bluez ffmpeg libao mesa gtk2 glib
                   gettext libpthreadstubs libXrandr libXext readline openal
                   git libXdmcp portaudio SDL wxGTK30 pulseaudio ];
 

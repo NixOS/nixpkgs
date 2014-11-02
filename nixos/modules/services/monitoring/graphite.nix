@@ -306,7 +306,7 @@ in {
         example = literalExample ''
           {
             GRAPHITE_USERNAME = "user";
-            GRAPHITE_PASSWORD = "pass"; 
+            GRAPHITE_PASSWORD = "pass";
           }
         '';
       };
@@ -344,7 +344,7 @@ in {
               name: Test
         '';
         example = literalExample ''
-          pushbullet_key: pushbullet_api_key 
+          pushbullet_key: pushbullet_api_key
           alerts:
             - target: stats.seatgeek.app.deal_quality.venue_info_cache.hit
               warning: .5
@@ -456,7 +456,7 @@ in {
       environment.systemPackages = [ pkgs.python27Packages.graphite_web ];
     })
 
-    (mkIf cfg.api.enable { 
+    (mkIf cfg.api.enable {
       systemd.services.graphiteApi = {
         description = "Graphite Api Interface";
         wantedBy = [ "multi-user.target" ];
@@ -472,7 +472,7 @@ in {
           ExecStart = ''
             ${pkgs.python27Packages.waitress}/bin/waitress-serve \
             --host=${cfg.api.host} --port=${toString cfg.api.port} \
-            graphite_api.app:app 
+            graphite_api.app:app
           '';
           User = "graphite";
           Group = "graphite";
@@ -501,7 +501,7 @@ in {
           ExecStart = "${pkgs.seyren}/bin/seyren -httpPort ${toString cfg.seyren.port}";
           WorkingDirectory = dataDir;
           User = "graphite";
-          Group = "graphite"; 
+          Group = "graphite";
         };
         preStart = ''
           if ! test -e ${dataDir}/db-created; then
@@ -526,7 +526,7 @@ in {
         serviceConfig = {
           ExecStart = "${pkgs.pythonPackages.graphite_pager}/bin/graphite-pager --config ${pagerConfig}";
           User = "graphite";
-          Group = "graphite"; 
+          Group = "graphite";
         };
       };
 
@@ -535,14 +535,16 @@ in {
       environment.systemPackages = [ pkgs.pythonPackages.graphite_pager ];
     })
 
-    {
-      users.extraUsers = singleton {
-        name = "graphite";
-        uid = config.ids.uids.graphite;
-        description = "Graphite daemon user";
-        home = dataDir;
-      };
-      users.extraGroups.graphite.gid = config.ids.gids.graphite;
-    }
+    # Disabled: Don't create this user unconditionally!
+    #
+    # {
+    #   users.extraUsers = singleton {
+    #     name = "graphite";
+    #     uid = config.ids.uids.graphite;
+    #     description = "Graphite daemon user";
+    #     home = dataDir;
+    #   };
+    #   users.extraGroups.graphite.gid = config.ids.gids.graphite;
+    # }
   ];
 }

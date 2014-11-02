@@ -5,12 +5,12 @@
      alphabetically sorted.  */
 
   _1126 = "Christian Lask <mail@elfsechsundzwanzig.de>";
+  abbradar = "Nikolay Amiantov <ab@fmap.me>";
   aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
   ak = "Alexander Kjeldaas <ak@formalprivacy.com>";
   akc = "Anders Claesson <akc@akc.is>";
   algorith = "Dries Van Daele <dries_van_daele@telenet.be>";
   all = "Nix Committers <nix-commits@lists.science.uu.nl>";
-  abbradar = "Nikolay Amiantov <ab@fmap.me>";
   amiddelk = "Arie Middelkoop <amiddelk@gmail.com>";
   amorsillo = "Andrew Morsillo <andrew.morsillo@gmail.com>";
   AndersonTorres = "Anderson Torres <torres.anderson.85@gmail.com>";
@@ -46,8 +46,8 @@
   coroa = "Jonas Hörsch <jonas@chaoflow.net>";
   cstrahan = "Charles Strahan <charles.c.strahan@gmail.com>";
   DamienCassou = "Damien Cassou <damien.cassou@gmail.com>";
-  DerGuteMoritz = "Moritz Heidkamp <moritz@twoticketsplease.de>";
   dbohdan = "Danyil Bohdan <danyil.bohdan@gmail.com>";
+  DerGuteMoritz = "Moritz Heidkamp <moritz@twoticketsplease.de>";
   dmalikov = "Dmitry Malikov <malikov.d.y@gmail.com>";
   doublec = "Chris Double <chris.double@double.co.nz>";
   ederoyd46 = "Matthew Brown <matt@ederoyd.co.uk>";
@@ -104,6 +104,7 @@
   offline = "Jaka Hudoklin <jakahudoklin@gmail.com>";
   orbitz = "Malcolm Matalka <mmatalka@gmail.com>";
   page = "Carles Pagès <page@cubata.homelinux.net>";
+  pashev = "Igor Pashev <pashev.igor@gmail.com>";
   phreedom = "Evgeny Egorochkin <phreedom@yandex.ru>";
   pierron = "Nicolas B. Pierron <nixos@nbp.name>";
   piotr = "Piotr Pietraszkiewicz <ppietrasa@gmail.com>";
@@ -139,8 +140,8 @@
   tomberek = "Thomas Bereknyei <tomberek@gmail.com>";
   tstrobel = "Thomas Strobel <ts468@cam.ac.uk>";
   ttuegel = "Thomas Tuegel <ttuegel@gmail.com>";
-  twey = "James ‘Twey’ Kay <twey@twey.co.uk>";
   tv = "Tomislav Viljetić <tv@shackspace.de>";
+  twey = "James ‘Twey’ Kay <twey@twey.co.uk>";
   urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>";
   vandenoever = "Jos van den Oever <jos@vandenoever.info>";
   vbgl = "Vincent Laporte <Vincent.Laporte@gmail.com>";

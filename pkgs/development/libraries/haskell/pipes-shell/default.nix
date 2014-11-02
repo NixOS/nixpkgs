@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     async hspec pipes pipesBytestring pipesSafe stm stmChans text
   ];
+  jailbreak = true;
   doCheck = false;
   meta = {
     description = "Create proper Pipes from System.Process";

@@ -2,25 +2,24 @@
 
 { cabal, aeson, base64Bytestring, blazeHtml, ConfigFile, feed
 , filepath, filestore, ghcPaths, happstackServer, highlightingKate
-, hoauth2, hslogger, HStringTemplate, HTTP, httpClient
-, httpClientTls, json, mtl, network, networkUri, pandoc
-, pandocTypes, parsec, random, recaptcha, safe, SHA, split, syb
-, tagsoup, text, time, uri, url, utf8String, xhtml, xml
-, xssSanitize, zlib
+, hoauth2, hslogger, HStringTemplate, HTTP, httpClientTls
+, httpConduit, json, mtl, network, networkUri, pandoc, pandocTypes
+, parsec, random, recaptcha, safe, SHA, split, syb, tagsoup, text
+, time, uri, url, utf8String, uuid, xhtml, xml, xssSanitize, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "gitit";
-  version = "0.10.5.1";
-  sha256 = "0wi40f34xqqz0q8m14g7ay6yk37c3fkdijydv0di43i20bxixjhv";
+  version = "0.10.6.1";
+  sha256 = "1l6zra0yiwrmiycblp25b5yd1yrz94537l8zkspkf7z6wc8vdkn0";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     aeson base64Bytestring blazeHtml ConfigFile feed filepath filestore
     ghcPaths happstackServer highlightingKate hoauth2 hslogger
-    HStringTemplate HTTP httpClient httpClientTls json mtl network
+    HStringTemplate HTTP httpClientTls httpConduit json mtl network
     networkUri pandoc pandocTypes parsec random recaptcha safe SHA
-    split syb tagsoup text time uri url utf8String xhtml xml
+    split syb tagsoup text time uri url utf8String uuid xhtml xml
     xssSanitize zlib
   ];
   jailbreak = true;

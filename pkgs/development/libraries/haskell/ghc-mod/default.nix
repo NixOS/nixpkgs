@@ -3,24 +3,27 @@
 { cabal, async, Cabal, convertible, dataDefault, deepseq, djinnGhc
 , doctest, emacs, filepath, ghcPaths, ghcSybUtils, haskellSrcExts
 , hlint, hspec, ioChoice, makeWrapper, monadControl, monadJournal
-, mtl, split, syb, text, time, transformers, transformersBase
+, mtl, split, syb, temporary, text, time, transformers
+, transformersBase
 }:
 
 cabal.mkDerivation (self: {
   pname = "ghc-mod";
-  version = "5.1.1.0";
-  sha256 = "0msx2x976ap4jx506mzp48sdigc29vq4ypjbxiyn30mjw52rg53w";
+  version = "5.2.0.0";
+  sha256 = "1zwdr3zlnc8d49d6jrvj2yrfnamp1120gffzd6vfxqgvapk71vfk";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     async Cabal convertible dataDefault deepseq djinnGhc filepath
     ghcPaths ghcSybUtils haskellSrcExts hlint ioChoice monadControl
-    monadJournal mtl split syb text time transformers transformersBase
+    monadJournal mtl split syb temporary text time transformers
+    transformersBase
   ];
   testDepends = [
     Cabal convertible deepseq djinnGhc doctest filepath ghcPaths
     ghcSybUtils haskellSrcExts hlint hspec ioChoice monadControl
-    monadJournal mtl split syb text time transformers transformersBase
+    monadJournal mtl split syb temporary text time transformers
+    transformersBase
   ];
   buildTools = [ emacs makeWrapper ];
   doCheck = false;

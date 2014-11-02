@@ -19,7 +19,7 @@ with stdenv.lib;
 
 let
   majorVersion = "3.2";
-  version = "${majorVersion}.5";
+  version = "${majorVersion}.6";
 
   buildInputs = filter (p: p != null) [
     zlib bzip2 gdbm sqlite db readline ncurses openssl tcl tk libX11 xproto
@@ -30,15 +30,9 @@ stdenv.mkDerivation {
   inherit majorVersion version;
 
   src = fetchurl {
-    url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.bz2";
-    sha256 = "0pxs234g08v3lar09lvzxw4vqdpwkbqmvkv894j2w7aklskcjd6v";
+    url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
+    sha256 = "1p3vvvh3qw8avq959hdl6bq5d6r7mbhrnigqzgx6mllzh40va4hx";
   };
-
-  patches =
-    [
-      # See http://bugs.python.org/issue20246
-      ./CVE-2014-1912.patch
-    ];
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 

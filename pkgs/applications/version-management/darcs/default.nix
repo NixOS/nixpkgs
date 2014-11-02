@@ -24,7 +24,7 @@ cabal.mkDerivation (self: {
     mv contrib/darcs_completion $out/etc/bash_completion.d/darcs
   '';
   patchPhase = ''
-    sed -i -e 's|random.*==.*|random|' darcs.cabal
+    sed -i -e 's|random.*==.*|random|' -e 's|text.*>=.*,|text,|' darcs.cabal
   '';
   meta = {
     homepage = "http://darcs.net/";

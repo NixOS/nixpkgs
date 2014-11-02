@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-auth-hashdb";
-  version = "1.4.1";
-  sha256 = "11biiylg2366vymx37asr7ibw8migwnkf3nj6lx1i94ldvs9kfd4";
+  version = "1.4.1.1";
+  sha256 = "0bb37iawsdq3m5p1sjdnz954f3nfdmvvhm0hxap1z2hf9dk516ci";
   buildDepends = [
     cryptohash persistent pwstoreFast text yesodAuth yesodCore
     yesodForm yesodPersistent
