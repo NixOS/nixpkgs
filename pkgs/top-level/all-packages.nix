@@ -5656,6 +5656,8 @@ let
 
   libetpan = callPackage ../development/libraries/libetpan { };
 
+  libfaketime = callPackage ../development/libraries/libfaketime { };
+
   libfm = callPackage ../development/libraries/libfm { };
   libfm-extra = callPackage ../development/libraries/libfm {
     extraOnly = true;
