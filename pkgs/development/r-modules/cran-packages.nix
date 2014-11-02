@@ -3442,7 +3442,7 @@ let self = _self // overrides; _self = with self; {
   nlmeODE = derive { name="nlmeODE"; version="1.1"; sha256="1zp1p98mzbfxidl87yrj2i9m21zlfp622dfnmyg8f2pyijhhn0y2"; depends=[deSolve nlme lattice]; };
   nlmeU = derive { name="nlmeU"; version="0.70-3"; sha256="05kxymgybziiijpb17bhcd9aq4awmp5km67l2py9ypakivi0hc6l"; depends=[nlme]; };
   nlmrt = derive { name="nlmrt"; version="2013-9.24"; sha256="1nqcxfgl5iplmar58015ixir2c7agdw91i0ndn2imdx0il1x2hra"; depends=[]; };
-  nloptr = derive { name="nloptr"; version="1.0.4"; sha256="1cypz91z28vhvwq2rzqjrbdc6a2lvfr2g16vid2sax618q6ai089"; depends=[]; };
+  nloptr = derive { name="nloptr"; version="1.0.4"; sha256="1cypz91z28vhvwq2rzqjrbdc6a2lvfr2g16vid2sax618q6ai089"; depends=[pkgs.nlopt]; };
   NLP = derive { name="NLP"; version="0.1-5"; sha256="1l5c21bpbbnpspxi7nmjny1k3i9q5szyxnarndb3yx7aywkvjrkj"; depends=[]; };
   NLPutils = derive { name="NLPutils"; version="0.0-1"; sha256="036pafnjcbz7ihdgsjss4jq8fb420j8fmxyymv7kr4pr78wjysbx"; depends=[NLP SnowballC qdap]; };
   nlreg = derive { name="nlreg"; version="1.2-2"; sha256="1pi7057ldiqb12kw334iavb4i92ziy1kv4amcc4d1nfsjam03jxv"; depends=[statmod survival]; };
