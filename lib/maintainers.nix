@@ -137,6 +137,7 @@
   thammers = "Tobias Hammerschmidt <jawr@gmx.de>";
   the-kenny = "Moritz Ulrich <moritz@tarn-vedra.de>";
   thoughtpolice = "Austin Seipp <aseipp@pobox.com>";
+  titanous = "Jonathan Rudenberg <jonathan@titanous.com>";
   tomberek = "Thomas Bereknyei <tomberek@gmail.com>";
   tstrobel = "Thomas Strobel <ts468@cam.ac.uk>";
   ttuegel = "Thomas Tuegel <ttuegel@gmail.com>";
