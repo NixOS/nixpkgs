@@ -1303,6 +1303,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     };
   };
 
+  hsc3Server = callPackage ../development/libraries/haskell/hsc3-server {};
+
   hsdns = callPackage ../development/libraries/haskell/hsdns {};
 
   hsemail = callPackage ../development/libraries/haskell/hsemail {};
