@@ -17,6 +17,7 @@ cabal.mkDerivation (self : {
     stm xhtml zlib parsec
     cabalInstall alex happy ghc
   ];
+  propagatedUserEnvPkgs = self.propagatedBuildInputs;
   meta = {
     description = "Haskell Platform meta package";
     license = self.stdenv.lib.licenses.bsd3;

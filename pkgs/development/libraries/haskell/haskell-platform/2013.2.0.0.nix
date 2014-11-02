@@ -33,6 +33,7 @@ cabal.mkDerivation (self : {
     touch $sourceRoot/LICENSE
   '';
   noHaddock = true;
+  propagatedUserEnvPkgs = self.propagatedBuildInputs;
   meta = {
     homepage = "http://haskell.org/platform";
     description = "Haskell Platform meta package";
