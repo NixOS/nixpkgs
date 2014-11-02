@@ -81,13 +81,13 @@ in
 
     plugin = "svtplay";
     namespace = "plugin.video.svtplay";
-    version = "4.0.8";
+    version = "4.0.9";
 
     src = fetchFromGitHub {
       owner = "nilzen";
       repo = "xbmc-" + plugin;
-      rev = "967dc429201200200dba0e755ede3a0e9cb1b137";
-      sha256 = "0kaxcci9zbblpkn1mrmdl49844r90agww41frz9vw6q2ajq1z16k";
+      rev = "29a754e49584d1ca32f0c07b87304669cf266bb0";
+      sha256 = "0k7mwaknw4h1jlq7ialbzgxxpb11j8bk29dx2gimp40lvnyw4yhz";
     };
 
     meta = with stdenv.lib; {
