@@ -3,6 +3,7 @@
 rec {
   nativeDeps = {
     "node-expat" = [ pkgs.expat ];
+    "node-stringprep" = [ pkgs.icu pkgs.which ];
     "rbytes" = [ pkgs.openssl ];
     "phantomjs" = [ pkgs.phantomjs ];
     "node-protobuf" = [ pkgs.protobuf ];
