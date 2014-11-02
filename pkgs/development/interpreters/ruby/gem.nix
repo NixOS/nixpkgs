@@ -78,30 +78,30 @@ ruby.stdenv.mkDerivation (attrs // {
     #       separate buildPhase.
     #       --ignore-dependencies is necessary as rubygems otherwise always
     #       connects to the repository, thus breaking pure builds.
-    GEM_HOME=$out \
+    GEM_HOME=$out/${ruby.gemPath} \
       gem install \
       --local \
       --force \
       --http-proxy "http://nodtd.invalid" \
       --ignore-dependencies \
       --build-root "/" \
-      --bindir "$out/bin" \
       --backtrace \
       $gempkg $gemFlags -- $buildFlags
 
-    rm -frv $out/cache # don't keep the .gem file here
+    rm -frv $out/${ruby.gemPath}/cache # don't keep the .gem file here
 
-    for prog in $out/bin/*; do
-      wrapProgram "$prog" \
-        --prefix GEM_PATH : "$out:$GEM_PATH" \
+    mkdir -p $out/bin
+    for prog in $out/${ruby.gemPath}/gems/*/bin/*; do
+      makeWrapper $prog $out/bin/$(basename $prog) \
+        --prefix GEM_PATH : "$out/${ruby.gemPath}:$GEM_PATH" \
         --prefix RUBYLIB : "${rubygems}/lib" \
         --set RUBYOPT rubygems \
         $extraWrapperFlags ''${extraWrapperFlagsArray[@]}
     done
 
     # looks like useless files which break build repeatability and consume space
-    rm -fv $out/doc/*/*/created.rid || true
-    rm -fv $out/gems/*/ext/*/mkmf.log || true
+    rm -fv $out/${ruby.gemPath}/doc/*/*/created.rid || true
+    rm -fv $out/${ruby.gemPath}/gems/*/ext/*/mkmf.log || true
 
     mkdir -p $out/nix-support
 
