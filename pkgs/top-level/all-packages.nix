@@ -10222,15 +10222,9 @@ let
     plugins = [];
   };
 
-  pidginlatex = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex {
-    imagemagick = imagemagickBig;
-  };
+  pidginlatex = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex { };
 
-  pidginlatexSF = builderDefsPackage
-    (import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex/pidgin-latex-sf.nix)
-    {
-      inherit pkgconfig pidgin texLive imagemagick which glib gtk;
-    };
+  pidginlatexSF = pidginlatex;
 
   pidginmsnpecan = callPackage ../applications/networking/instant-messengers/pidgin-plugins/msn-pecan { };
 

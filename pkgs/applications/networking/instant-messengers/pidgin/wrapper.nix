@@ -1,6 +1,8 @@
 { stdenv, buildEnv, pidgin, makeWrapper, plugins }:
 
-let drv = buildEnv {
+let
+extraArgs = map (x: x.wrapArgs or "") plugins;
+drv = buildEnv {
   name = "pidgin-with-plugins-" + (builtins.parseDrvName pidgin.name).version;
 
   paths = [ pidgin ] ++ plugins;
@@ -15,7 +17,8 @@ let drv = buildEnv {
       done
     fi
     wrapProgram $out/bin/pidgin \
-      --suffix-each PURPLE_PLUGIN_PATH ':' "$out/lib/purple-${pidgin.version} $out/lib/pidgin"
+      --suffix-each PURPLE_PLUGIN_PATH ':' "$out/lib/purple-${pidgin.version} $out/lib/pidgin" \
+      ${toString extraArgs}
   '';
   };
 in stdenv.lib.overrideDerivation drv (x : { buildInputs = x.buildInputs ++ [ makeWrapper ]; })
