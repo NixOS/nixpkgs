@@ -4,14 +4,14 @@
 }:
 
 let
-  version = "0.64.1";
+  version = "0.64.2";
 
   ETL = stdenv.mkDerivation rec {
     name = "ETL-0.04.17";
 
     src = fetchurl {
        url = "mirror://sourceforge/synfig/${name}.tar.gz";
-       sha256 = "13kpiswgcpsif9fwcplqr0405aqavqn390cjnivkn3pxv0d2q8iy";
+       sha256 = "1i2m31y5hdwr365z3zmfh5p3zm4ga4l4yqrl1qrmjryqqzkw200l";
     };
   };
 
@@ -20,7 +20,7 @@ let
 
     src = fetchurl {
        url = "mirror://sourceforge/synfig/synfig-${version}.tar.gz";
-       sha256 = "1b4ksxnqbaq4rxlvasmrvk7z4jvjbsg4ns3cns2qcnz64dyvbgda";
+       sha256 = "04mx321z929ngl65hfc1hv5jw37wqbh8y2avmpvajagvn6lp3zdl";
     };
 
     patches = [ ./synfig-cstring.patch ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
        url = "mirror://sourceforge/synfig/${name}.tar.gz";
-       sha256 = "0nl6vpsn5dcjd5qhbrmd0j4mr3wddvymkg9414m77cdpz4l8b9v2";
+       sha256 = "13hw4z6yx70g4mnjmvmxkk7b1qzlwmqjhxflq5dd6cqdsmfw9mc7";
     };
 
   buildInputs = [
