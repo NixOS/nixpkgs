@@ -3988,7 +3988,7 @@ let self = _self // overrides; _self = with self; {
   potts = derive { name="potts"; version="0.5-2"; sha256="1q4kvknxkrd8qbv8l3vmwrppgzq5bsysnqgm029lx7iys73x4fck"; depends=[]; };
   PottsUtils = derive { name="PottsUtils"; version="0.3-2"; sha256="05ds0a7jq63zxr3jh66a0df0idzhis76qv6inydsjk2majadj3zv"; depends=[miscF]; };
   powell = derive { name="powell"; version="1.0-0"; sha256="160i4ki3ymvq08szaxshqlz7w063493j5zqvnw6cgjmxs7y0vj8y"; depends=[]; };
-  PoweR = derive { name="PoweR"; version="1.0.3"; sha256="0mrdw2444y0gykxy5qwlrifhfclhx9jbdhx1syv1gldk06wd6z9f"; depends=[Rcpp]; };
+  PoweR = derive { name="PoweR"; version="1.0.3"; sha256="0mrdw2444y0gykxy5qwlrifhfclhx9jbdhx1syv1gldk06wd6z9f"; depends=[Rcpp RcppArmadillo]; };
   Power2Stage = derive { name="Power2Stage"; version="0.1-5"; sha256="1mpb1qx2iad4vqqxy1zxlsi0bx2cf4d98h6s7g1040hk9lpdl671"; depends=[PowerTOST]; };
   powerAnalysis = derive { name="powerAnalysis"; version="0.2"; sha256="15ff3wnn37sjkiyycgh16g7gwl3l321fbw12kv621dad5bki14jl"; depends=[]; };
   powerGWASinteraction = derive { name="powerGWASinteraction"; version="1.1.0"; sha256="08xf7dvwz2md2y8j4bjlfr5vs7y2wxssdfpkdl0h39cdrz8y1pv2"; depends=[mvtnorm pwr]; };
