@@ -4332,7 +4332,9 @@ let self = _self // overrides; _self = with self; {
   RcmdrPlugin_plotByGroup = derive { name="RcmdrPlugin.plotByGroup"; version="0.1-0"; sha256="10wc7lnihsrldsynq2s0syr1aqmvfnj9rhgwh1nkk7jlrwcgj0z6"; depends=[Rcmdr lattice]; };
   RcmdrPlugin_pointG = derive { name="RcmdrPlugin.pointG"; version="0.6.6"; sha256="0sc3akbpdys353va05b40g3rq8qihw0pmhvv0kckkhsgrbr8mc07"; depends=[Rcmdr RColorBrewer]; };
   RcmdrPlugin_qual = derive { name="RcmdrPlugin.qual"; version="2.2.6"; sha256="00wznh0k909cd9vwdj1ag3224xkqnwjsad1bfkgxbszsx0w6xvy9"; depends=[Rcmdr]; };
+  /* Broken; the build goes on indefinitely, complaining about some freaky symlink problem.
   RcmdrPlugin_ROC = derive { name="RcmdrPlugin.ROC"; version="1.0-16"; sha256="1pxv0izdkqjhvmbvln6n2lhr1mamfy4q20ld6dqkldxj9bivzckb"; depends=[Rcmdr pROC ROCR ResourceSelection PredictABEL]; };
+  */
   RcmdrPlugin_sampling = derive { name="RcmdrPlugin.sampling"; version="1.1"; sha256="0fx0s63wq0si1jydl9xyj9ny7iglg91zpvkyrnc05i5pan9l3xd9"; depends=[lpSolve sampling MASS Rcmdr]; };
   RcmdrPlugin_SCDA = derive { name="RcmdrPlugin.SCDA"; version="1.0"; sha256="0z43hhp798kga70xmiq4wzp5iad553rndn17g3va3dh6lz1k3y3h"; depends=[SCVA SCRT SCMA Rcmdr]; };
   RcmdrPlugin_seeg = derive { name="RcmdrPlugin.seeg"; version="1.0"; sha256="105c2rl3mrcv7r3iqa9d2zs6cys7vfpyydylkg2cggfqkghxgr95"; depends=[Rcmdr seeg sgeostat]; };
