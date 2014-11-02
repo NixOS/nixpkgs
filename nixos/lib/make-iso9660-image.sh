@@ -83,12 +83,6 @@ for ((n = 0; n < ${#objects[*]}; n++)); do
     fi
 done
 
-# Escape filenames that contain '='.
-# TODO: Handle this properly. This fails for filenames
-#       that contain multiple '=' symbols.
-cat pathlist | sed -e 's/=\(.*\)=\(.*\)=/\\=\1=\2\\=/g' | tee pathlist.safer
-
-
 mkdir -p $out/iso
 
 xorriso="xorriso
@@ -103,7 +97,7 @@ xorriso="xorriso
  ${usbBootFlags}
  ${efiBootFlags}
  -r
- -path-list pathlist.safer
+ -path-list pathlist
  --sort-weight 0 /
  --sort-weight 1 /isolinux" # Make sure isolinux is near the beginning of the ISO
 
