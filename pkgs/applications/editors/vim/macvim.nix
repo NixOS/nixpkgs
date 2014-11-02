@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses, gettext,
+{ stdenv, fetchurl, ncurses, gettext,
   pkgconfig, cscope, python, ruby, tcl, perl, luajit
 }:
 
@@ -7,10 +7,8 @@ stdenv.mkDerivation rec {
 
   version = "7.4.479";
 
-  src = fetchFromGitHub {
-    owner = "genoma";
-    repo = "macvim";
-    rev = "f9c084b97fa9d5cad2448dfd3eff3d9b7f0fac59";
+  src = fetchurl {
+    url = "https://github.com/genoma/macvim/archive/g-snapshot-21.tar.gz";
     sha256 = "1f6l39s6cgyzzr9ix729axmc299mpl29abbc7571g4vply17m7nv";
   };
 
