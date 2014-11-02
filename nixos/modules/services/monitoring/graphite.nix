@@ -535,14 +535,16 @@ in {
       environment.systemPackages = [ pkgs.pythonPackages.graphite_pager ];
     })
 
-    {
-      users.extraUsers = singleton {
-        name = "graphite";
-        uid = config.ids.uids.graphite;
-        description = "Graphite daemon user";
-        home = dataDir;
-      };
-      users.extraGroups.graphite.gid = config.ids.gids.graphite;
-    }
+    # Disabled: Don't create this user unconditionally!
+    #
+    # {
+    #   users.extraUsers = singleton {
+    #     name = "graphite";
+    #     uid = config.ids.uids.graphite;
+    #     description = "Graphite daemon user";
+    #     home = dataDir;
+    #   };
+    #   users.extraGroups.graphite.gid = config.ids.gids.graphite;
+    # }
   ];
 }
