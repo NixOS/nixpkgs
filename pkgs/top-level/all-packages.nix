@@ -1181,6 +1181,8 @@ let
 
   frescobaldi = callPackage ../misc/frescobaldi {};
 
+  frostwire = callPackage ../applications/networking/p2p/frostwire { };
+
   ftgl = callPackage ../development/libraries/ftgl { };
 
   ftgl212 = callPackage ../development/libraries/ftgl/2.1.2.nix { };
