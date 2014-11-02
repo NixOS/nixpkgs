@@ -99,11 +99,11 @@ stdenv.mkDerivation rec {
       done
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = http://xbmc.org/;
       description = "Media center";
       license = "GPLv2";
-      platforms = stdenv.lib.platforms.linux;
-      maintainers = [ stdenv.lib.maintainers.iElectric ];
+      platforms = platforms.linux;
+      maintainers = [ maintainers.iElectric maintainers.titanous ];
     };
 }
