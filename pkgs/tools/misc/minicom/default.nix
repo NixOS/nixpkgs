@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    description = "Minicom, a modem control and terminal emulation program";
+    description = "Modem control and terminal emulation program";
     homepage = http://alioth.debian.org/projects/minicom/;
 
     longDescription =

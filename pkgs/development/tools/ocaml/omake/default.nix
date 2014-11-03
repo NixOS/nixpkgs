@@ -30,7 +30,7 @@ stdenv.mkDerivation {
 #  buildFlags = "world.opt";
 
   meta = {
-    description = "Omake build system";
+    description = "A build system designed for scalability and portability";
     homepage = "${webpage}";
     license = "GPL";
   };

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       with Guile.  Follow the example level sets and the documentation.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     homepage = http://www.gnu.org/software/ballandpaddle/;
 

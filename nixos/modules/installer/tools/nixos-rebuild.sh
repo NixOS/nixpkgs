@@ -97,6 +97,16 @@ if [ -n "$upgrade" -a -z "$_NIXOS_REBUILD_REEXEC" ]; then
     nix-channel --update nixos
 fi
 
+# Make sure that we use the Nix package we depend on, not something
+# else from the PATH for nix-{env,instantiate,build}.  This is
+# important, because NixOS defaults the architecture of the rebuilt
+# system to the architecture of the nix-* binaries used.  So if on an
+# amd64 system the user has an i686 Nix package in her PATH, then we
+# would silently downgrade the whole system to be i686 NixOS on the
+# next reboot.
+if [ -z "$_NIXOS_REBUILD_REEXEC" ]; then
+    export PATH=@nix@/bin:$PATH
+fi
 
 # Re-execute nixos-rebuild from the Nixpkgs tree.
 if [ -z "$_NIXOS_REBUILD_REEXEC" -a -n "$canRun" ]; then
@@ -184,13 +194,13 @@ if [ -z "$rollback" ]; then
         nix-env "${extraBuildFlags[@]}" -p "$profile" -f '<nixpkgs/nixos>' --set -A system
         pathToConfig="$profile"
     elif [ "$action" = test -o "$action" = build -o "$action" = dry-run ]; then
-        nix-build '<nixpkgs/nixos>' -A system -K -k "${extraBuildFlags[@]}" > /dev/null
+        nix-build '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}" > /dev/null
         pathToConfig=./result
     elif [ "$action" = build-vm ]; then
-        nix-build '<nixpkgs/nixos>' -A vm -K -k "${extraBuildFlags[@]}" > /dev/null
+        nix-build '<nixpkgs/nixos>' -A vm -k "${extraBuildFlags[@]}" > /dev/null
         pathToConfig=./result
     elif [ "$action" = build-vm-with-bootloader ]; then
-        nix-build '<nixpkgs/nixos>' -A vmWithBootLoader -K -k "${extraBuildFlags[@]}" > /dev/null
+        nix-build '<nixpkgs/nixos>' -A vmWithBootLoader -k "${extraBuildFlags[@]}" > /dev/null
         pathToConfig=./result
     else
         showSyntax
@@ -215,7 +225,10 @@ fi
 # If we're not just building, then make the new configuration the boot
 # default and/or activate it now.
 if [ "$action" = switch -o "$action" = boot -o "$action" = test ]; then
-    $pathToConfig/bin/switch-to-configuration "$action"
+    if ! $pathToConfig/bin/switch-to-configuration "$action"; then
+        echo "warning: error(s) occured while switching to the new configuration" >&2
+        exit 1
+    fi
 fi
 
 

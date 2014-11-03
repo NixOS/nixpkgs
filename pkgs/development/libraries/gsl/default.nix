@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "The GNU Scientific Library, a large numerical library";
     homepage = http://www.gnu.org/software/gsl/;
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     longDescription = ''
       The GNU Scientific Library (GSL) is a numerical library for C

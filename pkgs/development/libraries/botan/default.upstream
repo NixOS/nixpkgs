@@ -1,8 +1,8 @@
 url http://botan.randombit.net/download.html
 version_link 'Botan-[0-9]+[.][0-9]*[02468]([.][0-9]+)?[.](tbz|tbz2|tar[.]bz2)$'
 ensure_version
-ensure_hash
 do_overwrite(){
+  ensure_hash
   set_var_value hash $CURRENT_HASH
   set_var_value baseVersion ${CURRENT_VERSION%.*}
   set_var_value revision ${CURRENT_VERSION##*.}

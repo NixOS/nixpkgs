@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://goodies.xfce.org/projects/applications/${p_name}";
     description = "Notification daemon for Xfce";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };

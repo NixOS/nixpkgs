@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://humdi.net/vnstat/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     description = "Console-based network statistics utility for Linux";
   };
 }

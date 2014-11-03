@@ -1,11 +1,11 @@
 { fetchurl, stdenv, libgpgerror }:
 
 stdenv.mkDerivation (rec {
-  name = "libgcrypt-1.5.3";
+  name = "libgcrypt-1.5.4";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${name}.tar.bz2";
-    sha256 = "1lar8y3lh61zl5flljpz540d78g99h4d5idfwrfw8lm3gm737xdw";
+    sha256 = "d5f88d9f41a46953dc250cdb8575129b37ee2208401b7fa338c897f667c7fb33";
   };
 
   propagatedBuildInputs = [ libgpgerror ];
@@ -18,8 +18,10 @@ stdenv.mkDerivation (rec {
     make check
   '';
 
+  patches = [ ./no-build-timestamp.patch ];
+
   meta = {
-    description = "GNU Libgcrypt, a general-pupose cryptographic library";
+    description = "General-pupose cryptographic library";
 
     longDescription = ''
       GNU Libgcrypt is a general purpose cryptographic library based on
@@ -29,7 +31,7 @@ stdenv.mkDerivation (rec {
       functions, random numbers and a lot of supporting functions.
     '';
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     homepage = http://gnupg.org/;
     platforms = stdenv.lib.platforms.all;
@@ -38,4 +40,3 @@ stdenv.mkDerivation (rec {
   // stdenv.lib.optionalAttrs (stdenv.isFreeBSD && stdenv.isi686)
     { configureFlags = [ "--disable-aesni-support" ]; }
 )
-

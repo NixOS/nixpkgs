@@ -133,7 +133,7 @@ in
       };
 
       boot.initrd = mkIf inInitrd {
-        kernelModules = [ "spl" "zfs" ] ;
+        kernelModules = [ "spl" "zfs" ];
         extraUtilsCommands =
           ''
             cp -v ${zfsPkg}/sbin/zfs $out/bin
@@ -148,9 +148,14 @@ in
           '';
       };
 
+      boot.loader.grub = mkIf inInitrd {
+        zfsSupport = true;
+      };
+
       systemd.services."zpool-import" = {
         description = "Import zpools";
         after = [ "systemd-udev-settle.service" ];
+        wantedBy = [ "local-fs.target" ];
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;

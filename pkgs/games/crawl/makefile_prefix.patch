@@ -1,0 +1,11 @@
+--- old/source/Makefile	2014-05-06 08:52:24.752163702 +0200
++++ new/source/Makefile	2014-05-06 09:08:01.992018819 +0200
+@@ -344,7 +344,7 @@
+ endif
+ 
+ chroot_prefix :=
+-prefix        :=
++prefix        := $(out)
+ 
+ ifeq ($(patsubst %/local,%,$(patsubst %/,%,$(prefix))),/usr)
+ FHS := yes

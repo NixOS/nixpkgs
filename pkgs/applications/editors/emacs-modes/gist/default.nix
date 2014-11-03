@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Emacs integration for gist.github.com";
     homepage = https://github.com/sigma/gist.el;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     platforms = stdenv.lib.platforms.all;
   };

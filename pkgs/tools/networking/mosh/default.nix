@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       Mosh is a replacement for SSH. It's more robust and responsive,
       especially over Wi-Fi, cellular, and long-distance links.
     '';
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = stdenv.lib.platforms.unix;
   };

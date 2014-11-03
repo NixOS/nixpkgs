@@ -1,0 +1,14 @@
+Index: opal-3.10.4~dfsg/Makefile.in
+===================================================================
+--- opal-3.10.4~dfsg.orig/Makefile.in	2012-02-22 10:08:36.000000000 +1100
++++ opal-3.10.4~dfsg/Makefile.in	2012-03-08 08:32:44.000000000 +1100
+@@ -45,8 +45,7 @@
+            samples/codectest \
+            samples/callgen \
+            samples/opalecho \
+-           samples/faxopal \
+-           samples/c_api
++           samples/faxopal 
+ ifeq ($(OPAL_IVR),yes)
+ SUBDIRS += samples/opalmcu \
+            samples/ivropal \

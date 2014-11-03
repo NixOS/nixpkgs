@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses, readline }:
 
 stdenv.mkDerivation rec {
-  name = "hunspell-1.3.2";
+  name = "hunspell-1.3.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/hunspell/${name}.tar.gz";
-    sha256 = "1gfxdajnqk2civkshkfjx5ldg7kjdgj76m5khpsbjk4lxsjd9vdl";
+    sha256 = "0v14ff9s37vkh45diaddndcrj0hmn67arh8xh8k79q9c1vgc1cm7";
   };
 
   propagatedBuildInputs = [ ncurses readline ];
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
         * Delphi, Java (JNA, JNI), Perl, .NET, Python, Ruby ([1], [2]), UNO.
     '';
     platforms = platforms.all;
-    maintainers = [ maintainers.urkud ];
+    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
   };
 }

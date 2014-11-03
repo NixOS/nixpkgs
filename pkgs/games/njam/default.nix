@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://trackballs.sourceforge.net/;
     description = "Cross-platform pacman-like game";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

@@ -13,7 +13,6 @@ let
 
   # Map video driver names to driver packages. FIXME: move into card-specific modules.
   knownVideoDrivers = {
-    ati_unfree   = { modules = [ kernelPackages.ati_drivers_x11 ]; driverName = "fglrx"; };
     nouveau       = { modules = [ pkgs.xf86_video_nouveau ]; };
     unichrome    = { modules = [ pkgs.xorgVideoUnichrome ]; };
     virtualbox   = { modules = [ kernelPackages.virtualboxGuestAdditions ]; driverName = "vboxvideo"; };
@@ -151,7 +150,7 @@ in
       modules = mkOption {
         type = types.listOf types.path;
         default = [];
-        example = [ pkgs.xf86_input_wacom ];
+        example = literalExample "[ pkgs.xf86_input_wacom ]";
         description = "Packages to be added to the module search path of the X server.";
       };
 
@@ -201,7 +200,7 @@ in
       vaapiDrivers = mkOption {
         type = types.listOf types.path;
         default = [ ];
-        example = "[ pkgs.vaapiIntel pkgs.vaapiVdpau ]";
+        example = literalExample "[ pkgs.vaapiIntel pkgs.vaapiVdpau ]";
         description = ''
           Packages providing libva acceleration drivers.
         '';
@@ -400,8 +399,8 @@ in
     services.xserver.drivers = flip concatMap cfg.videoDrivers (name:
       let driver =
         attrByPath [name]
-          (if (hasAttr ("xf86video" + name) xorg)
-           then { modules = [(getAttr ("xf86video" + name) xorg) ]; }
+          (if xorg ? ${"xf86video" + name}
+           then { modules = [xorg.${"xf86video" + name}]; }
            else null)
           knownVideoDrivers;
       in optional (driver != null) ({ inherit name; driverName = name; } // driver));
@@ -444,8 +443,7 @@ in
         pkgs.xterm
         pkgs.xdg_utils
       ]
-      ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh
-      ++ optional (elem "ati_unfree" cfg.videoDrivers) kernelPackages.ati_drivers_x11;
+      ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;
 
     environment.pathsToLink =
       [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];
@@ -460,13 +458,11 @@ in
         restartIfChanged = false;
 
         environment =
-          { FONTCONFIG_FILE = "/etc/fonts/fonts.conf"; # !!! cleanup
+          {
             XKB_BINDIR = "${xorg.xkbcomp}/bin"; # Needed for the Xkb extension.
             XORG_DRI_DRIVER_PATH = "/run/opengl-driver/lib/dri"; # !!! Depends on the driver selected at runtime.
             LD_LIBRARY_PATH = concatStringsSep ":" (
               [ "${xorg.libX11}/lib" "${xorg.libXext}/lib" ]
-              ++ optionals (elem "ati_unfree" cfg.videoDrivers)
-                [ "${kernelPackages.ati_drivers_x11}/lib" "${kernelPackages.ati_drivers_x11}/X11R6/lib64/modules/linux" ]
               ++ concatLists (catAttrs "libPath" cfg.drivers));
           } // cfg.displayManager.job.environment;
 

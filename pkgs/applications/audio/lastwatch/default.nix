@@ -23,5 +23,6 @@ pythonPackages.buildPythonPackage rec {
     homepage = "https://github.com/aszlig/LastWatch";
     description = "An inotify-based last.fm audio scrobbler";
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ composableDerivation, stdenv, fetchurl, alsaLib, jackaudio, ncurses }:
+{ composableDerivation, stdenv, fetchurl, alsaLib, jack2, ncurses }:
 
 let inherit (composableDerivation) edf; in
 
@@ -30,8 +30,8 @@ composableDerivation.composableDerivation {} {
     };
     jack = {
       audioModes = "jack";
-      buildInputs = [jackaudio];
-      NIX_LDFLAGS = ["-ljack -L${jackaudio}/lib64"];
+      buildInputs = [jack2];
+      NIX_LDFLAGS = ["-ljack -L${jack2}/lib64"];
     };
   } // edf { name = "ncurses"; enable = { buildInputs = [ncurses]; };};
 

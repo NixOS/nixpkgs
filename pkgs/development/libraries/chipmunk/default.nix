@@ -34,6 +34,6 @@ rec {
       
   name = "chipmunk-" + version;
   meta = {
-    description = "Chipmunk 2D physics engine";
+    description = "2D physics engine";
   };
 }

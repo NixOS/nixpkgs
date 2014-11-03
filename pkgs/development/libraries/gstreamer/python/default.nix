@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-python-1.2.0";
+  name = "gst-python-1.4.0";
 
   src = fetchurl {
     urls = [
-      "${meta.homepage}/src/gst-python/${name}.tar.bz2"
-      "mirror://gentoo/distfiles/${name}.tar.bz2"
+      "${meta.homepage}/src/gst-python/${name}.tar.xz"
+      "mirror://gentoo/distfiles/${name}.tar.xz"
       ];
-    sha256 = "09c6yls8ipbmwimdjr7xi3hvf2xa1xn1pv07855r7wfyzas1xbl1";
+    sha256 = "0gixsp46mv7fvhk669q60wfk9w2lc02sdb1qipq066xlrqlhrr5i";
   };
 
   patches = [ ./different-path-with-pygobject.patch ];
@@ -24,13 +24,12 @@ stdenv.mkDerivation rec {
   '';
 
   propagatedBuildInputs = [ gstreamer python ];
- 
+
   meta = {
     homepage = http://gstreamer.freedesktop.org;
 
     description = "Python bindings for GStreamer";
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
   };
 }
-

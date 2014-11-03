@@ -34,7 +34,7 @@ buildPythonPackage (rec {
   meta = with stdenv.lib; {
     homepage = http://buildbot.net/;
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     description = "Continuous integration system that automates the build/test cycle";
 

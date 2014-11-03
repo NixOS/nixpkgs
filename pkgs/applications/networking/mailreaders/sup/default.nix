@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
     license     = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ lovek323 ];
     platforms   = stdenv.lib.platforms.unix;
+    broken = true;
   };
 
   dontStrip = true;
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     # the builder uses git to get a listing of the files
+    export EMAIL="nobody@in.here"
     git init >/dev/null
     git add .
     git commit -m "message" >/dev/null

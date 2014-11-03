@@ -14,6 +14,6 @@ stdenv.mkDerivation rec {
     description = "C/C++ library for numbers, a part of GiNaC";
     homepage = http://www.ginac.de/CLN/;
     maintainers = [ stdenv.lib.maintainers.urkud ];
-    platforms = stdenv.lib.platforms.allBut "i686-cygwin";
+    platforms = with stdenv.lib.platforms; allBut cygwin;
   };
 }

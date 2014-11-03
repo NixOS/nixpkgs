@@ -12,7 +12,7 @@
 { nixpkgs ? { outPath = (import ./all-packages.nix {}).lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
 , officialRelease ? false
 , # The platforms for which we build Nixpkgs.
-  supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" ]
+  supportedSystems ? [ "x86_64-linux" "i686-linux" /* "x86_64-darwin" */ ]
 }:
 
 with import ./release-lib.nix { inherit supportedSystems; };
@@ -22,11 +22,14 @@ let
   jobs =
     { tarball = import ./make-tarball.nix { inherit nixpkgs officialRelease; };
 
+      manual = import ../../doc;
+
       unstable = pkgs.releaseTools.aggregate
         { name = "nixpkgs-${jobs.tarball.version}";
           meta.description = "Release-critical builds for the Nixpkgs unstable channel";
           constituents =
             [ jobs.tarball
+              jobs.manual
               jobs.stdenv.x86_64-linux
               jobs.stdenv.i686-linux
               jobs.stdenv.x86_64-darwin
@@ -45,39 +48,25 @@ let
     } // (mapTestOn ((packagesWithMetaPlatform pkgs) // rec {
 
       abcde = linux;
-      alsaUtils = linux;
       apacheHttpd = linux;
       aspell = all;
       at = linux;
       atlas = linux;
-      audacious = linux;
       autoconf = all;
       automake = all;
-      avahi = allBut "i686-cygwin";  # Cygwin builds fail
       bash = all;
       bashInteractive = all;
       bazaar = linux; # first let sqlite3 work on darwin
-      bc = all;
       binutils = linux;
       bind = linux;
-      bitlbee = linux;
-      bittorrent = linux;
-      blender = linux;
-      bsdiff = all;
-      btrfsProgs = linux;
       bvi = all;
-      bzip2 = all;
-      cabextract = all;
       castle_combat = linux;
       cdrkit = linux;
-      chatzilla = linux;
       cksfv = all;
       classpath = linux;
       coreutils = all;
-      cpio = all;
       cron = linux;
       cvs = linux;
-      db4 = all;
       ddrescue = linux;
       dhcp = linux;
       dico = linux;
@@ -94,79 +83,50 @@ let
       dosbox = linux;
       dovecot = linux;
       doxygen = linux;
-      dpkg = linux;
       drgeo = linux;
       ejabberd = linux;
       elinks = linux;
-      emacs23 = gtkSupported;
-      enscript = all;
       eprover = linux;
-      evince = linux;
       expect = linux;
       exult = linux;
-      fbterm = linux;
-      feh = linux;
-      file = all;
       findutils = all;
       flex = all;
       fontforge = linux;
-      fuse = linux;
       gajim = linux;
       gawk = all;
       gcc = linux;
       gcc33 = linux;
       gcc34 = linux;
-      gcc42 = linux;
       gcc44 = linux;
       gcj = linux;
-      ghdl = linux;
       ghostscript = linux;
       ghostscriptX = linux;
-      gimp_2_8 = linux;
       git = linux;
       gitFull = linux;
       glibc = linux;
       glibcLocales = linux;
       glxinfo = linux;
-      gnash = linux;
-      gnat = linux;
-      gnugrep = all;
       gnum4 = all;
-      gnumake = all;
-      gnupatch = all;
       gnupg = linux;
-      gnuplot = allBut "i686-cygwin";
-      gnused = all;
-      gnutar = all;
+      gnuplot = allBut cygwin;
       gnutls = linux;
       gogoclient = linux;
       gphoto2 = linux;
       gpm = linux;
-      gprolog = linux;
       gpscorrelate = linux;
-      gpsd = linux;
       gqview = gtkSupported;
       graphviz = all;
       grub = linux;
-      grub2 = linux;
       gsl = linux;
       guile = linux;  # tests fail on Cygwin
-      gv = linux;
       gzip = all;
       hddtemp = linux;
-      hello = all;
       host = linux;
       htmlTidy = all;
-      hugin = linux;
       iana_etc = linux;
-      icecat3Xul = linux;
       icewm = linux;
-      idutils = all;
       ifplugd = linux;
-      impressive = linux;
-      inetutils = linux;
       inkscape = linux;
-      iputils = linux;
       irssi = linux;
       jfsutils = linux;
       jfsrec = linux;
@@ -175,20 +135,14 @@ let
       kbd = linux;
       keen4 = ["i686-linux"];
     #  klibc = linux;
-      kvm = linux;
-      qemu = linux;
-      qemu_kvm = linux;
       less = all;
       lftp = all;
       libarchive = linux;
-      libsmbios = linux;
       libtool = all;
       libtool_2 = all;
       lout = linux;
-      lsh = linux;
       lsof = linux;
       ltrace = linux;
-      lvm2 = linux;
       lynx = linux;
       lzma = linux;
       man = linux;
@@ -201,87 +155,66 @@ let
       mercurial = unix;
       mercurialFull = linux;
       mesa = mesaPlatforms;
-      midori = linux;
       mingetty = linux;
       mk = linux;
       mktemp = all;
       mod_python = linux;
       module_init_tools = linux;
-      mono = linux;
-      mpg321 = linux;
       mupen64plus = linux;
       mutt = linux;
       mysql = linux;
       mysql51 = linux;
       mysql55 = linux;
-      nano = allBut "i686-cygwin";
+      nano = allBut cygwin;
       ncat = linux;
       netcat = all;
-      nfsUtils = linux;
-      nmap = linux;
       nss_ldap = linux;
       nssmdns = linux;
-      ntfs3g = linux;
-      ntp = linux;
       ocaml = linux;
-      octave = linux;
-      openssl = all;
       pam_console = linux;
       pam_login = linux;
       pan = gtkSupported;
       par2cmdline = all;
-      pavucontrol = linux;
       pciutils = linux;
       pdf2xml = all;
       perl = all;
       php = linux;
-      pidgin = linux;
       pinentry = linux;
       pltScheme = linux;
       pmccabe = linux;
       portmap = linux;
       postgresql = all;
-      postfix = linux;
       ppl = all;
       procps = linux;
       pthreadmanpages = linux;
       pygtk = linux;
-      pyqt4 = linux;
-      python = allBut "i686-cygwin";
+      python = allBut cygwin;
       pythonFull = linux;
       sbcl = linux;
       qt3 = linux;
       quake3demo = linux;
-      readline = all;
       reiserfsprogs = linux;
       rlwrap = all;
       rogue = all;
       rpm = linux;
       rsync = linux;
-      rubber = allBut "i686-cygwin";
-      ruby = all;
+      rubber = allBut cygwin;
       rxvt_unicode = linux;
       screen = linux ++ darwin;
       scrot = linux;
       sdparm = linux;
       seccure = linux;
       sgtpuzzles = linux;
-      sharutils = all;
-      slim = linux;
-      sloccount = allBut "i686-cygwin";
-      smartmontools = linux;
+      sloccount = allBut cygwin;
       spidermonkey = linux;
-      sqlite = allBut "i686-cygwin";
       squid = linux;
       ssmtp = linux;
       stdenv = prio 175 all;
       stlport = linux;
-      strace = linux;
       su = linux;
       sudo = linux;
       superTuxKart = linux;
       swig = linux;
-      sylpheed = linux;
       sysklogd = linux;
       syslinux = ["i686-linux"];
       sysvinit = linux;
@@ -295,34 +228,27 @@ let
       texLive = linux;
       texLiveBeamer = linux;
       texLiveExtra = linux;
-      texinfo = all;
       tightvnc = linux;
       time = linux;
       tinycc = linux;
       uae = linux;
-      udev = linux;
       unrar = linux;
       upstart = linux;
       usbutils = linux;
       utillinux = linux;
       utillinuxCurses = linux;
-      uzbl = linux;
       viking = linux;
       vice = linux;
       vim = linux;
       vimHugeX = linux;
       vncrec = linux;
       vorbisTools = linux;
-      vpnc = linux;
       vsftpd = linux;
       w3m = all;
-      webkit = linux;
       weechat = linux;
-      wget = all;
       which = all;
       wicd = linux;
       wine = ["i686-linux"];
-      wireshark = linux;
       wirelesstools = linux;
       wxGTK = linux;
       x11_ssh_askpass = linux;
@@ -336,23 +262,9 @@ let
       xscreensaver = linux;
       xsel = linux;
       xterm = linux;
-      xxdiff = linux;
       zdelta = linux;
-      zile = linux;
-      zip = all;
       zsh = linux;
       zsnes = ["i686-linux"];
-
-      emacs23Packages = {
-        bbdb = linux;
-        cedet = linux;
-        emacsw3m = linux;
-        emms = linux;
-        jdee = linux;
-      };
-
-      firefox36Pkgs.firefox = linux;
-      firefoxPkgs.firefox = linux;
 
       gnome = {
         gnome_panel = linux;
@@ -397,21 +309,21 @@ let
       };
 
       xorg = {
-        fontadobe100dpi = linux;
-        fontadobe75dpi = linux;
-        fontbh100dpi = linux;
-        fontbhlucidatypewriter100dpi = linux;
-        fontbhlucidatypewriter75dpi = linux;
-        fontbhttf = linux;
-        fontcursormisc = linux;
-        fontmiscmisc = linux;
-        iceauth = linux;
-        libX11 = linux;
-        lndir = all;
-        setxkbmap = linux;
-        xauth = linux;
-        xbitmaps = linux;
-        xev = linux;
+        fontadobe100dpi = linux ++ darwin;
+        fontadobe75dpi = linux ++ darwin;
+        fontbh100dpi = linux ++ darwin;
+        fontbhlucidatypewriter100dpi = linux ++ darwin;
+        fontbhlucidatypewriter75dpi = linux ++ darwin;
+        fontbhttf = linux ++ darwin;
+        fontcursormisc = linux ++ darwin;
+        fontmiscmisc = linux ++ darwin;
+        iceauth = linux ++ darwin;
+        libX11 = linux ++ darwin;
+        lndir = all ++ darwin;
+        setxkbmap = linux ++ darwin;
+        xauth = linux ++ darwin;
+        xbitmaps = linux ++ darwin;
+        xev = linux ++ darwin;
         xf86inputevdev = linux;
         xf86inputkeyboard = linux;
         xf86inputmouse = linux;
@@ -423,18 +335,18 @@ let
         xf86videovesa = linux;
         xf86videovmware = linux;
         xf86videomodesetting = linux;
-        xfs = linux;
-        xinput = linux;
-        xkbcomp = linux;
-        xlsclients = linux;
-        xmessage = linux;
-        xorgserver = linux;
-        xprop = linux;
-        xrandr = linux;
-        xrdb = linux;
-        xset = linux;
-        xsetroot = linux;
-        xwininfo = linux;
+        xfs = linux ++ darwin;
+        xinput = linux ++ darwin;
+        xkbcomp = linux ++ darwin;
+        xlsclients = linux ++ darwin;
+        xmessage = linux ++ darwin;
+        xorgserver = linux ++ darwin;
+        xprop = linux ++ darwin;
+        xrandr = linux ++ darwin;
+        xrdb = linux ++ darwin;
+        xset = linux ++ darwin;
+        xsetroot = linux ++ darwin;
+        xwininfo = linux ++ darwin;
       };
 
       xfce = {
@@ -452,6 +364,14 @@ let
         xfdesktop = linux;
         xfwm4 = linux;
       };
+
+      linuxPackages_testing = { };
+      linuxPackages_grsec_stable_desktop = { };
+      linuxPackages_grsec_stable_server = { };
+      linuxPackages_grsec_stable_server_xen = { };
+      linuxPackages_grsec_testing_desktop = { };
+      linuxPackages_grsec_testing_server = { };
+      linuxPackages_grsec_testing_server_xen = { };
 
     } ));
 

@@ -3,11 +3,11 @@
 , automake, autoconf, libtool, gtk_doc, which, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  name = "colord-1.1.5";
+  name = "colord-1.2.3";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/colord/releases/${name}.tar.xz";
-    sha256 = "1638pfv16bdrdxxprk6dp8d706571a8i3nlfv3m0ldx26xpy8z5j";
+    sha256 = "1z3l6hb3b08fixfra6m887a2j3lvhib6vp798ik16jfh375gr490";
   };
 
   enableParallelBuilding = true;
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     rm -fr $out/var/lib/colord
+    mkdir -p $out/etc/bash_completion.d
+    cp -v data/colormgr $out/etc/bash_completion.d
   '';
 
   meta = {

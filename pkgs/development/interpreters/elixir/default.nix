@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, erlang, rebar, makeWrapper, coreutils }:
+{ stdenv, fetchurl, erlang, rebar, makeWrapper, coreutils, curl, bash, cacert }:
 
 let
-  version = "0.13.3";
+  version = "1.0.2";
 in
 stdenv.mkDerivation {
   name = "elixir-${version}";
 
   src = fetchurl {
     url = "https://github.com/elixir-lang/elixir/archive/v${version}.tar.gz";
-    sha256 = "17nb8qfyjc67g62x10l2gq0z1501xa4wry906br0w2rm8bf4j8rf";
+    sha256 = "6156ee396e85045358d11a6839e157e8fa9573b7414bddbd2c91843ed2b4b962";
   };
 
   buildInputs = [ erlang rebar makeWrapper ];
@@ -20,16 +20,20 @@ stdenv.mkDerivation {
 
     substituteInPlace Makefile \
       --replace "/usr/local" $out
+    substituteInPlace bin/mix \
+      --replace "/usr/bin/env elixir" "$out/bin/elixir"
   '';
 
   postFixup = ''
     # Elixir binaries are shell scripts which run erl. Add some stuff
     # to PATH so the scripts can run without problems.
 
-    for f in $out/bin/*
-    do
+    for f in $out/bin/*; do
+     b=$(basename $f)
+      if [ $b == "mix" ]; then continue; fi
       wrapProgram $f \
-      --prefix PATH ":" "${erlang}/bin:${coreutils}/bin"
+      --prefix PATH ":" "${erlang}/bin:${coreutils}/bin:${curl}/bin:${bash}/bin" \
+      --set CURL_CA_BUNDLE "${cacert}/etc/ca-bundle.crt"
     done
   '';
 
@@ -46,7 +50,7 @@ stdenv.mkDerivation {
     '';
 
     license = licenses.epl10;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.the-kenny ];
   };
 }

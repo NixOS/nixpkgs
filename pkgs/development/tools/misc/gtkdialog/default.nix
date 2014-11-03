@@ -13,6 +13,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://gtkdialog.googlecode.com/;
     description = "Small utility for fast and easy GUI building from many scripted and compiled languages";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

@@ -8,14 +8,14 @@ assert withMesa -> mesa != null;
 with stdenv.lib;
 
 let
-  version = "3.0.0";
+  version = "3.0.2";
 in
 stdenv.mkDerivation {
   name = "wxwidgets-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/wxwindows/wxWidgets-${version}.tar.bz2";
-    sha256 = "11dz8pn1nm79i054l05rzyk4vqxw7v0x6j78pj6mvr5nphwhad7z";
+    sha256 = "0paq27brw4lv8kspxh9iklpa415mxi8zc117vbbbhfjgapf7js1l";
   };
 
   buildInputs =

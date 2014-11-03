@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
 
@@ -6,9 +6,9 @@
 
   options = {
 
-    networking.enableIntel3945ABGFirmware = pkgs.lib.mkOption {
+    networking.enableIntel3945ABGFirmware = lib.mkOption {
       default = false;
-      type = pkgs.lib.types.bool;
+      type = lib.types.bool;
       description = ''
         This option enables automatic loading of the firmware for the Intel
         PRO/Wireless 3945ABG.
@@ -20,7 +20,7 @@
 
   ###### implementation
 
-  config = pkgs.lib.mkIf config.networking.enableIntel3945ABGFirmware {
+  config = lib.mkIf config.networking.enableIntel3945ABGFirmware {
 
     hardware.enableAllFirmware = true;
 

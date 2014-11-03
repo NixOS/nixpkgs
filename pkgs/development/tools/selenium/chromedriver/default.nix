@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   name = "chromedriver_linux64";
 
   src = fetchurl {
-    url = "http://chromedriver.storage.googleapis.com/2.9/${name}.zip";
-    sha256 = "1m5xl5pz445igvhj31hby97xbizlw05b8fc6w53zq7faw7mzm665";
+    url = "http://chromedriver.storage.googleapis.com/2.10/${name}.zip";
+    sha256 = "1949lhrv4hrmgapvypsgwzyr75w7vpy7nkkkwjkjxn61dkwmx4jw";
   };
 
   buildInputs = [ unzip makeWrapper ];

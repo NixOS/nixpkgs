@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "System for the processing and editing of unstructured 3D triangular meshes";
     homepage = http://meshlab.sourceforge.net/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

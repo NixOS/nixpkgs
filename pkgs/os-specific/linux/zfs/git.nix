@@ -28,14 +28,14 @@ stdenv.mkDerivation {
     substituteInPlace ./cmd/ztest/ztest.c          --replace "/usr/sbin/zdb"     "$out/sbin/zdb"
   '';
 
-  configureFlags = ''
-    --disable-systemd
-    --with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source
-    --with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build
-    --with-spl=${spl_git}/libexec/spl
-    --with-dracutdir=$$out/lib/dracut
-    --with-udevdir=$$out/lib/udev
-  '';
+  configureFlags = [
+    "--disable-systemd"
+    "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
+    "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "--with-spl=${spl_git}/libexec/spl"
+    "--with-dracutdir=$(out)/lib/dracut"
+    "--with-udevdir=$(out)/lib/udev"
+  ];
 
   enableParallelBuilding = true;
 

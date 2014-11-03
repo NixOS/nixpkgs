@@ -5,16 +5,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "hplip-3.14.4";
+  name = "hplip-3.14.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "1j8h44f8igl95wqypj4rk9awcw513hlps980jmcnkx60xghc4l6f";
+    sha256 = "164mm30yb61psk5j4ziybxdd310y09fixgl09hmb59ny261wvcqi";
   };
 
   plugin = fetchurl {
     url = "http://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "0k1vpmy7babbm3c5v4dcbhq0jgyr8as722nylfs8zx0dy7kr8874";
+    sha256 = "10cvgy1h84fwh7xpw4x6cbkpisqbn3nbcqrgd9xz5fc6mn0b95dk";
   };
 
   hplip_state = ./hplip.state;
@@ -56,11 +56,9 @@ stdenv.mkDerivation rec {
     ''
     + (stdenv.lib.optionalString withPlugin
     (let hplip_arch =
-          if builtins.currentSystem == "i686-linux"
-            then "x86_32"
-            else if builtins.currentSystem == "x86_64-linux"
-              then "x86_64"
-              else abort "Platform must be i686-linux or x86_64-linux!";
+          if stdenv.system == "i686-linux" then "x86_32"
+          else if stdenv.system == "x86_64-linux" then "x86_64"
+          else abort "Platform must be i686-linux or x86_64-linux!";
     in
     ''
     sh ${plugin} --noexec --keep
@@ -122,6 +120,6 @@ stdenv.mkDerivation rec {
     homepage = http://hplipopensource.com/;
     license = if withPlugin then licenses.unfree else "free"; # MIT/BSD/GPL
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with maintainers; [ ttuegel jgeerds ];
   };
 }

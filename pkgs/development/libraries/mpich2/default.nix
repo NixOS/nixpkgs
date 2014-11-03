@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     '';
 
   meta = {
-    description = "MPICH2, an implementation of the Message Passing Interface (MPI) standard";
+    description = "Implementation of the Message Passing Interface (MPI) standard";
 
     longDescription = ''
       MPICH2 is a free high-performance and portable implementation of

@@ -1,8 +1,10 @@
 { stdenv, fetchurl, python, pkgconfig, gtk, pygobject, pycairo
-, buildPythonPackage, libglade ? null }:
+, buildPythonPackage, libglade ? null, isPy3k }:
 
 buildPythonPackage rec {
   name = "pygtk-2.24.0";
+  
+  disabled = isPy3k;
 
   src = fetchurl {
     url = "mirror://gnome/sources/pygtk/2.24/${name}.tar.bz2";

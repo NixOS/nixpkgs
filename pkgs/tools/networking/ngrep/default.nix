@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     # <ngrep>/doc/README.txt says that ngrep itself is licensed under a
     # 'BSD-like' license but that the 'regex' library (in the ngrep tarball) is
     # GPLv2.
-    license = "BSD-like";
+    license = "ngrep";  # Some custom BSD-style, see LICENSE.txt
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };

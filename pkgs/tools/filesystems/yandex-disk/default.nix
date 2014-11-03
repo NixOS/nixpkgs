@@ -1,19 +1,22 @@
-{ stdenv, fetchurl, writeText, zlib, rpm, cpio, patchelf, which }:
+{ stdenv, fetchurl, writeText, zlib, rpmextract, patchelf, which }:
+
+assert stdenv.isLinux;
+
 let
   p = if stdenv.is64bit then {
       arch = "x86_64";
       gcclib = "${stdenv.gcc.gcc}/lib64";
-      sha256 = "1fmmlvvh97d60n9k08bn4k6ghwr3yhs8sib82025nwpw1sq08vim";
+      sha256 = "09kw7f0qsvx3vx1c1zb117yf3yk7kkz66agspz5xx9b0zh6i82jw";
     }
     else {
       arch = "i386";
       gcclib = "${stdenv.gcc.gcc}/lib";
-      sha256 = "3940420bd9d1fe1ecec1a117bfd9d21d545bca59f5e0a4364304ab808c976f7f";
+      sha256 = "0f2230c91120f05159281b39c620ab6bad6559ce8a17a0874d0a82350ebba426";
     };
 in 
 stdenv.mkDerivation rec {
 
-  name = "yandex-disk-0.1.2.481";
+  name = "yandex-disk-0.1.4.504";
 
   src = fetchurl {
     url = "http://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${name}-1.fedora.${p.arch}.rpm";
@@ -28,7 +31,7 @@ stdenv.mkDerivation rec {
 
     mkdir -pv unpacked
     cd unpacked
-    ${rpm}/bin/rpm2cpio $src | ${cpio}/bin/cpio -imd
+    ${rpmextract}/bin/rpmextract $src
 
     cp -r -t $out/bin usr/bin/*
     cp -r -t $out/share usr/share/*

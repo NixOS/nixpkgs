@@ -30,9 +30,10 @@ stdenv.mkDerivation rec {
     patch -p0 <${patch}
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A filesystem snapshot utility for making backups of local and remote systems";
     homepage = http://rsnapshot.org/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
   inInitrd = any (fs: fs == "f2fs") config.boot.initrd.supportedFilesystems;

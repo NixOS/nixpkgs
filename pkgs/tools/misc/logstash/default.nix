@@ -1,11 +1,38 @@
-{ fetchurl }:
+{ stdenv, fetchurl }:
 
-let version = "1.3.3"; in
+stdenv.mkDerivation rec {
+  version = "1.4.2";
+  name = "logstash-${version}";
 
-fetchurl {
-  url = "https://download.elasticsearch.org/logstash/logstash/logstash-${version}-flatjar.jar";
+  src = fetchurl {
+    url = "https://download.elasticsearch.org/logstash/logstash/logstash-${version}.tar.gz";
+    sha256 = "0sc0bwyf96fzs5h3d7ii65v9vvpfbm7w67vk1im9djnlz0d1ggnm";
+  };
 
-  name = "logstash-${version}-flatjar.jar";
+  dontBuild    = true;
+  dontPatchELF = true;
+  dontStrip    = true;
+  dontPatchShebangs = true;
 
-  sha256 = "a83503bd2aa32e1554b98f812d0b411fbc5f7b6b21cebb48b7d344474f2dfc6d";
+  installPhase = ''
+    mkdir -p $out/bin
+    mkdir -p $out/vendor
+    mkdir -p $out/lib
+    mkdir -p $out/locales
+    mkdir -p $out/patterns
+    cp -a bin $out
+    cp -a vendor $out
+    cp -a lib $out
+    cp -a locales $out
+    cp -a patterns $out
+    patchShebangs $out/bin
+  '';
+
+  meta = {
+    description = "Open Source, Distributed, RESTful Search Engine";
+    homepage    = http://www.elasticsearch.org;
+    license     = stdenv.lib.licenses.asl20;
+    platforms   = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.wjlroe ];
+  };
 }

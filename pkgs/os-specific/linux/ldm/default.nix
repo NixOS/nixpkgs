@@ -3,7 +3,7 @@
 assert mountPath != "";
 
 let
-  version = "v0.4.2";
+  version = "0.5";
   git = https://github.com/LemonBoy/ldm.git;
 in
 stdenv.mkDerivation rec {
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   # contains important fixes for LVM setups.
   src = fetchgit {
     url = meta.repositories.git;
-    rev = "refs/tags/${version}";
-    sha256 = "1fdm3l00csjyvz40py6wlsh8s441rbp4az3sc2i14ag7srh2yim8";
+    rev = "refs/tags/v${version}";
+    sha256 = "0kkby3a0xgh1lmkbzpsi4am2rqjv3ccgdpic99aw1c76y0ca837y";
   };
 
   buildInputs = [ udev utillinux ];
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
       --replace "/mnt/" "${mountPath}"
   '';
 
+  buildPhase = "make ldm";
+
   installPhase = ''
     mkdir -p $out/bin
     cp -v ldm $out/bin
@@ -31,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A lightweight device mounter, with libudev as only dependency";
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
 
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.the-kenny ];

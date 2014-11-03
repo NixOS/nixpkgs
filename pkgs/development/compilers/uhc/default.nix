@@ -42,8 +42,7 @@ in stdenv.mkDerivation {
     homepage = "http://www.cs.uu.nl/wiki/UHC";
     description = "Utrecht Haskell Compiler";
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [
-      stdenv.lib.maintainers.andres
-    ];
+    hydraPlatforms = stdenv.lib.platforms.none;
+    broken = true;
   };
 }

@@ -9,23 +9,15 @@ in
 
 rec {
 
+  inherit (builtins) addErrorContext;
 
-  # Wrapper aroung the primop `addErrorContext', which shouldn't used
-  # directly.  It evaluates and returns `val', but if an evaluation
-  # error occurs, the text in `msg' is added to the error context
-  # (stack trace) printed by Nix.
-  addErrorContext =
-    if builtins ? addErrorContext
-    then builtins.addErrorContext
-    else msg: val: val;
+  addErrorContextToAttrs = lib.mapAttrs (a: v: lib.addErrorContext "while evaluating ${a}" v);
 
-  addErrorContextToAttrs = lib.mapAttrs (a : v : lib.addErrorContext "while evaluating ${a}" v);
 
-  
-  traceVal = if builtins ? trace then x: (builtins.trace x x) else x: x;
-  traceXMLVal = if builtins ? trace then x: (builtins.trace (builtins.toXML x) x) else x: x;
-  traceXMLValMarked = str: if builtins ? trace then x: (builtins.trace ( str + builtins.toXML x) x) else x: x;
-  
+  traceVal = x: builtins.trace x x;
+  traceXMLVal = x: builtins.trace (builtins.toXML x) x;
+  traceXMLValMarked = str: x: builtins.trace (str + builtins.toXML x) x;
+
   # this can help debug your code as well - designed to not produce thousands of lines
   traceShowVal = x : trace (showVal x) x;
   traceShowValMarked = str: x: trace (str + showVal x) x;
@@ -44,7 +36,7 @@ rec {
       else if isString x then "x is a string `${substring 0 50 x}...'"
       else "x is probably a path `${substring 0 50 (toString x)}...'";
 
-  # trace the arguments passed to function and its result 
+  # trace the arguments passed to function and its result
   # maybe rewrite these functions in a traceCallXml like style. Then one function is enough
   traceCall  = n : f : a : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a));
   traceCall2 = n : f : a : b : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b));
@@ -70,7 +62,7 @@ rec {
 
       then [ { inherit name; expected = test.expected; result = test.expr; } ]
       else [] ) tests));
-  
+
   # create a test assuming that list elements are true
   # usage: { testX = allTrue [ true ]; }
   testAllTrue = expr : { inherit expr; expected = map (x: true) expr; };
@@ -109,10 +101,10 @@ rec {
       let nr = a;
       in (str: expr:
           if isFunction expr then
-            (arg: 
+            (arg:
               traceCallXml (builtins.add 1 nr) "${str}\n arg ${builtins.toString nr} is \n ${builtins.toXML (strict arg)}" (expr arg)
             )
-          else 
+          else
             let r = strict expr;
             in builtins.trace "${str}\n result:\n${builtins.toXML r}" r
       );

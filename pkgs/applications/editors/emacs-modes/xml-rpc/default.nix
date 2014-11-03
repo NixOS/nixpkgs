@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Elisp implementation of clientside XML-RPC";
     homepage = https://launchpad.net/xml-rpc-el;
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     platforms = stdenv.lib.platforms.all;
   };

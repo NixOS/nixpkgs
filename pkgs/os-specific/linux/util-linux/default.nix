@@ -1,11 +1,11 @@
 { stdenv, fetchurl, zlib, ncurses ? null, perl ? null, pam }:
 
 stdenv.mkDerivation rec {
-  name = "util-linux-2.24.1";
+  name = "util-linux-2.25.1";
 
   src = fetchurl {
-    url = "http://www.kernel.org/pub/linux/utils/util-linux/v2.24/${name}.tar.xz";
-    sha256 = "0444xhfm9525v3aagyfbp38mp7xsw2fn9zg4ya713c7s5hivcpl3";
+    url = "mirror://kernel/linux/utils/util-linux/v2.25/${name}.tar.xz";
+    sha256 = "4701305ae22790c3a92ce48e50794fa05b7ee01f4227f419a171c100d08986e8";
   };
 
   crossAttrs = {

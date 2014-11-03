@@ -1,7 +1,7 @@
-{ config, pkgs, ... }:
+{ config, lib, ... }:
 
 let
-  inherit (pkgs.lib) mkOption mkIf;
+  inherit (lib) mkOption mkIf;
   cfg = config.environment.blcr;
   blcrPkg = config.boot.kernelPackages.blcr;
 in

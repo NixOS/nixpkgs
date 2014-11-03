@@ -32,6 +32,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://folding.stanford.edu/;
     description = "Folding@home distributed computing client";
-    license = "unfree";
+    license = stdenv.lib.licenses.unfree;
   };
 }

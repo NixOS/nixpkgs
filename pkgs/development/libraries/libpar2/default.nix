@@ -1,18 +1,22 @@
 { stdenv, fetchurl, pkgconfig, libsigcxx }:
 
+let version = "0.4"; in
+
 stdenv.mkDerivation rec {
-  name = "libpar2-0.2";
+  name = "libpar2-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/parchive/${name}.tar.gz";
-    sha256 = "024r37wi01d1pfkk17l5lk0ci0cc0xhy5z050hzf3cbk1y2bykq7";
+    url = "https://launchpad.net/libpar2/trunk/${version}/+download/${name}.tar.gz";
+    sha256 = "1m4ncws1h03zq7zyqbaymvjzzbh1d3lc4wb1aksrdf0ync76yv9i";
   };
 
   buildInputs = [ pkgconfig libsigcxx ];
 
+  patches = [ ./libpar2-0.4-external-verification.patch ];
+
   meta = {
     homepage = http://parchive.sourceforge.net/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     description = "A library for using Parchives (parity archive volume sets)";
   };
 }

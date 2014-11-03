@@ -95,4 +95,8 @@ rec {
   darcsToGit = callPackage ./darcs-to-git { };
 
   gitflow = callPackage ./gitflow { };
+
+  git-remote-hg = callPackage ./git-remote-hg { };
+
+  gitRemoteGcrypt = callPackage ./git-remote-gcrypt { };
 }

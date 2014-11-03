@@ -1,28 +1,22 @@
-x@{stdenv, fetchurl, builderDefsPackage, ...}:
-builderDefsPackage
-(a :  
-let 
-  s = import ./src-for-default.nix;
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ [];
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-in
-rec {
-  src = a.fetchUrlFromSrcInfo s;
+{ stdenv, fetchurl }:
 
-  inherit (s) name;
-  inherit buildInputs;
-  configureFlags = ["--enable-shared"];
+stdenv.mkDerivation rec {
+  name    = "gambit-${version}";
+  version = "4.7.3";
+  devver  = "4_7_3";
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
-  meta = {
-    description = "Gambit Scheme to C compiler";
-    maintainers = [
-      a.lib.maintainers.raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux ++ freebsd;
+  src = fetchurl {
+    url    = "http://www.iro.umontreal.ca/~gambit/download/gambit/v4.7/source/gambc-v${devver}-devel.tgz";
+    sha256 = "12jbr6bc0zmc7vw07a9pliadbvqgwkpmw6cj8awz73clv1j7pxha";
   };
-}) x
+
+  configureFlags = [ "--enable-shared" "--enable-single-host" ];
+
+  meta = {
+    description = "Optimizing Scheme to C compiler";
+    homepage    = "http://gambitscheme.org";
+    license     = stdenv.lib.licenses.lgpl2;
+    platforms   = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ thoughtpolice raskin ];
+  };
+}

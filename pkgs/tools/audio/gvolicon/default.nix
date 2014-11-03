@@ -4,8 +4,8 @@ stdenv.mkDerivation {
   name = "gvolicon";
   src = fetchgit {
     url = "https://github.com/Unia/gvolicon";
-    rev = "26343415de836e0b05aa0b480c0c69cc2ed9e419";
-    sha256 = "68858840a45b5f74803e85116c6219f805d6d944c00354662889549910856cdd";
+    rev = "c04cafb88124e1e5edc61dd52f76bf13381d5167";
+    sha256 = "31cf770dca0d216e3108b258b4c150cbeb3b127002d53fd6ddddfcf9e3e293aa";
   };
 
   buildInputs = [ pkgconfig makeWrapper alsaLib gnome3.gtk ];
@@ -19,9 +19,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A simple and lightweight volume icon that sits in your system tray.";
-    homepage = "https://github.com/Unia/gvolicon";
+    homepage = https://github.com/Unia/gvolicon;
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = stdenv.lib.maintainers.bennofs;
+    maintainers = [ stdenv.lib.maintainers.bennofs ];
   };
 }

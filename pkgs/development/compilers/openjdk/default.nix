@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, zip, procps, coreutils, alsaLib, ant, freetype, cups
+{ stdenv, fetchurl, unzip, zip, procps, coreutils, alsaLib, ant, freetype
 , which, jdk, nettools, xorg, file
 , fontconfig, cpio, cacert, perl, setJavaClassPath }:
 
@@ -15,12 +15,17 @@ let
     else
       throw "openjdk requires i686-linux or x86_64 linux";
 
-  update = "40";
+  update = "65";
 
-  build = "43";
+  build = "32";
 
   # On x86 for heap sizes over 700MB disable SEGMEXEC and PAGEEXEC as well.
   paxflags = if stdenv.isi686 then "msp" else "m";
+
+  cupsSrc = fetchurl {
+    url = http://ftp.easysw.com/pub/cups/1.5.4/cups-1.5.4-source.tar.bz2;
+    md5 = "de3006e5cf1ee78a9c6145ce62c4e982";
+  };
 
 in
 
@@ -28,8 +33,8 @@ stdenv.mkDerivation rec {
   name = "openjdk-7u${update}b${build}";
 
   src = fetchurl {
-    url = http://www.java.net/download/openjdk/jdk7u40/promoted/b43/openjdk-7u40-fcs-src-b43-26_aug_2013.zip;
-    sha256 = "15h5nmbw6yn5596ccakqdbs0vd8hmslsfg5sfk8wmjvn31bfmy00";
+    url = "http://tarballs.nixos.org/openjdk-7u${update}-b${build}.tar.xz";
+    sha256 = "0lyp75sl5w4b9azphb2nq5cwzli85inpksq4943q4j349rkmdprx";
   };
 
   outputs = [ "out" "jre" ];
@@ -46,10 +51,14 @@ stdenv.mkDerivation rec {
   postUnpack = ''
     sed -i -e "s@/usr/bin/test@${coreutils}/bin/test@" \
       -e "s@/bin/ls@${coreutils}/bin/ls@" \
-      openjdk/hotspot/make/linux/makefiles/sa.make
+      openjdk*/hotspot/make/linux/makefiles/sa.make
 
     sed -i "s@/bin/echo -e@${coreutils}/bin/echo -e@" \
-      openjdk/{jdk,corba}/make/common/shared/Defs-utils.gmk
+      openjdk*/{jdk,corba}/make/common/shared/Defs-utils.gmk
+
+    tar xf ${cupsSrc}
+    cupsDir=$(echo $(pwd)/cups-*)
+    makeFlagsArray+=(CUPS_HEADERS_PATH=$cupsDir)
   '';
 
   patches = [ ./cppflags-include-fix.patch ./fix-java-home.patch ./paxctl.patch ];
@@ -61,9 +70,8 @@ stdenv.mkDerivation rec {
     "ALSA_INCLUDE=${alsaLib}/include/alsa/version.h"
     "FREETYPE_HEADERS_PATH=${freetype}/include"
     "FREETYPE_LIB_PATH=${freetype}/lib"
-    "MILESTONE=release"
+    "MILESTONE=u${update}"
     "BUILD_NUMBER=b${build}"
-    "CUPS_HEADERS_PATH=${cups}/include"
     "USRBIN_PATH="
     "COMPILER_PATH="
     "DEVTOOLS_PATH="
@@ -71,6 +79,7 @@ stdenv.mkDerivation rec {
     "BOOTDIR=${jdk}"
     "STATIC_CXX=false"
     "UNLIMITED_CRYPTO=1"
+    "FULL_DEBUG_SYMBOLS=0"
   ];
 
   configurePhase = "true";
@@ -156,9 +165,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://openjdk.java.net/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     description = "The open-source Java Development Kit";
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
+    maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.shlevy ];
     platforms = stdenv.lib.platforms.linux;
   };
 

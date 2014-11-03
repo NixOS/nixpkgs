@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
   buildInputs = [libao libid3tag libmad zlib];
 
   meta = {
-    description = "mpg321, a command-line MP3 player";
+    description = "Command-line MP3 player";
     homepage = http://mpg321.sourceforge.net/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;
   };

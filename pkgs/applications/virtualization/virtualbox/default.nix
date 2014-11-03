@@ -5,13 +5,14 @@
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python ? null
 , enableExtensionPack ? false, requireFile ? null, patchelf ? null
+, pulseSupport ? false, pulseaudio ? null
 }:
 
 with stdenv.lib;
 
 let
 
-  version = "4.3.12"; # changes ./guest-additions as well
+  version = "4.3.16"; # changes ./guest-additions as well
 
   forEachModule = action: ''
     for mod in \
@@ -31,13 +32,13 @@ let
   '';
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
-  extpackRevision = "93733";
+  extpackRevision = "95972";
   extensionPack = requireFile rec {
     name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRevision}.vbox-extpack";
     # IMPORTANT: Hash must be base16 encoded because it's used as an input to
     # VBoxExtPackHelperApp!
     # Tip: see http://dlc.sun.com.edgesuite.net/virtualbox/4.3.10/SHA256SUMS
-    sha256 = "f931ce41b2cc9500dc43aba004630cf7bb7050ba737eae38827e91062f072d1f";
+    sha256 = "93b01ac2c575388ea6ae994450907c24e30a788c271ae9ff18512a06f28d9abd";
     message = ''
       In order to use the extension pack, you need to comply with the VirtualBox Personal Use
       and Evaluation License (PUEL) by downloading the related binaries from:
@@ -56,7 +57,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "db84ddf47d1ecd316ec46417595f0252e3ec2f67e35e1e17320aba87b7c2934f";
+    sha256 = "99c32e646dbc93cbf4cc0b62ca6c1d24113a295fd758dc15724c14908dd6dcb3";
   };
 
   buildInputs =
@@ -64,7 +65,8 @@ in stdenv.mkDerivation {
       libcap glib lvm2 python alsaLib curl libvpx pam xorriso makeself perl
       pkgconfig which libXmu ]
     ++ optional javaBindings jdk
-    ++ optional pythonBindings python;
+    ++ optional pythonBindings python
+    ++ optional pulseSupport pulseaudio;
 
   prePatch = ''
     set -x
@@ -76,6 +78,7 @@ in stdenv.mkDerivation {
     ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2
     ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2
     find . -type f | xargs sed 's/depmod -a/true/' -i
+    sed -e 's@"libasound.so.2"@"${alsaLib}/lib/libasound.so.2"@g' -i src/VBox/Main/xml/Settings.cpp src/VBox/Devices/Audio/alsa_stubs.c
     export USER=nix
     set +x
   '';
@@ -85,7 +88,8 @@ in stdenv.mkDerivation {
     ./configure --with-qt4-dir=${qt4} \
       ${optionalString (!javaBindings) "--disable-java"} \
       ${optionalString (!pythonBindings) "--disable-python"} \
-      --disable-pulse --disable-hardening --disable-kmods \
+      ${optionalString (!pulseSupport) "--disable-pulse"} \
+      --disable-hardening --disable-kmods \
       --with-mkisofs=${xorriso}/bin/xorrisofs
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk

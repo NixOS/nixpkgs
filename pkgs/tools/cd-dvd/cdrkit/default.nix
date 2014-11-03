@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     '';
     
     homepage = http://cdrkit.org/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

@@ -3,12 +3,12 @@
 , libffi, libffcall, coreutils }:
         
 stdenv.mkDerivation rec {
-  v = "2.49";
+  v = "2.44.1";
   name = "clisp-${v}";
   
   src = fetchurl {
     url = "mirror://gnu/clisp/release/${v}/${name}.tar.gz";
-    sha256 = "0rp82nqp5362isl9i34rwgg04cidz7izljd9d85pqcw1qr964bxx";
+    sha256 = "0rkp6j6rih4s5d9acifh7pi4b9xfgcspif512l269dqy9qgyy4j1";
   };
 
   buildInputs =
@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     homepage = http://clisp.cons.org;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
+    branch = "2.44";
   };
 }

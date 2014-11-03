@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "libffado-${version}";
-  version = "2.1.0";
+  version = "2.2.1";
 
   src = fetchurl {
     url = "http://www.ffado.org/files/${name}.tgz";
-    sha256 = "11cxmy31c19720j2171l735rpg7l8i41icsgqscfd2vkbscfmh6y";
+    sha256 = "1ximic90l0av91njb123ra2zp6mg23yg5iz8xa5371cqrn79nacz";
   };
 
   buildInputs =
@@ -18,6 +18,17 @@ stdenv.mkDerivation rec {
     ];
 
   patches = [ ./enable-mixer-and-dbus.patch ];
+
+  # SConstruct checks cpuinfo and an objdump of /bin/mount to determine the appropriate arch
+  # Let's just skip this and tell it which to build
+  postPatch = if stdenv.isi686 then ''
+    sed '/def is_userspace_32bit(cpuinfo):/a\
+        return True' -i SConstruct
+  ''
+  else ''
+    sed '/def is_userspace_32bit(cpuinfo):/a\
+        return False' -i SConstruct
+  '';
 
   # TODO fix ffado-diag, it doesn't seem to use PYPKGDIR
   buildPhase = ''

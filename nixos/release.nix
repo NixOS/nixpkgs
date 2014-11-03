@@ -11,7 +11,9 @@ let
 
   forAllSystems = pkgs.lib.genAttrs supportedSystems;
 
-  callTest = fn: args: forAllSystems (system: import fn ({ inherit system; } // args));
+  scrubDrv = drv: let res = { inherit (drv) drvPath outPath type name system meta; outputName = "out"; out = res; }; in res;
+
+  callTest = fn: args: forAllSystems (system: scrubDrv (import fn ({ inherit system; } // args)));
 
   pkgs = import nixpkgs { system = "x86_64-linux"; };
 
@@ -40,7 +42,7 @@ let
 
     in
       # Declare the ISO as a build product so that it shows up in Hydra.
-      runCommand "nixos-iso-${config.system.nixosVersion}"
+      scrubDrv (runCommand "nixos-iso-${config.system.nixosVersion}"
         { meta = {
             description = "NixOS installation CD (${description}) - ISO image for ${system}";
             maintainers = map (x: lib.getAttr x lib.maintainers) maintainers;
@@ -51,7 +53,7 @@ let
         ''
           mkdir -p $out/nix-support
           echo "file iso" $iso/iso/*.iso* >> $out/nix-support/hydra-build-products
-        ''; # */
+        ''); # */
 
 
   makeSystemTarball =
@@ -76,6 +78,19 @@ let
           };
           inherit config;
         };
+
+
+  makeClosure = module: buildFromConfig module (config: config.system.build.toplevel);
+
+
+  buildFromConfig = module: sel: forAllSystems (system: scrubDrv (sel (import ./lib/eval-config.nix {
+    inherit system;
+    modules = [ module versionModule ] ++ lib.singleton
+      ({ config, lib, ... }:
+      { fileSystems."/".device  = lib.mkDefault "/dev/sda1";
+        boot.loader.grub.device = lib.mkDefault "/dev/sda";
+      });
+  }).config));
 
 
 in rec {
@@ -112,8 +127,13 @@ in rec {
     };
 
 
-  manual = forAllSystems (system: (builtins.getAttr system iso_minimal).config.system.build.manual.manual);
-  manpages = forAllSystems (system: (builtins.getAttr system iso_minimal).config.system.build.manual.manpages);
+  manual = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manual);
+  manualPDF = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manualPDF)).x86_64-linux;
+  manpages = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manpages);
+
+
+  # Build the initial ramdisk so Hydra can keep track of its size over time.
+  initialRamdisk = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.initialRamdisk);
 
 
   iso_minimal = forAllSystems (system: makeIso {
@@ -136,12 +156,6 @@ in rec {
     inherit system;
   });
 
-  iso_graphical_new_kernel = forAllSystems (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-graphical-new-kernel.nix;
-    type = "graphical-new-kernel";
-    inherit system;
-  });
-
 
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
   ova = forAllSystems (system:
@@ -160,7 +174,7 @@ in rec {
 
     in
       # Declare the OVA as a build product so that it shows up in Hydra.
-      runCommand "nixos-ova-${config.system.nixosVersion}-${system}"
+      scrubDrv (runCommand "nixos-ova-${config.system.nixosVersion}-${system}"
         { meta = {
             description = "NixOS VirtualBox appliance (${system})";
             maintainers = lib.maintainers.eelco;
@@ -171,9 +185,22 @@ in rec {
           mkdir -p $out/nix-support
           fn=$(echo $ova/*.ova)
           echo "file ova $fn" >> $out/nix-support/hydra-build-products
-        '' # */
+        '') # */
 
   );
+
+
+  # Ensure that all packages used by the minimal NixOS config end up in the channel.
+  dummy = forAllSystems (system: pkgs.runCommand "dummy"
+    { toplevel = (import lib/eval-config.nix {
+        inherit system;
+        modules = lib.singleton ({ config, pkgs, ... }:
+          { fileSystems."/".device  = lib.mkDefault "/dev/sda1";
+            boot.loader.grub.device = lib.mkDefault "/dev/sda";
+          });
+      }).config.system.build.toplevel;
+    }
+    "mkdir $out; ln -s $toplevel $out/dummy");
 
 
   # Provide a tarball that can be unpacked into an SD card, and easily
@@ -207,30 +234,37 @@ in rec {
   # ‘nix-build tests/login.nix -A result’.
   tests.avahi = callTest tests/avahi.nix {};
   tests.bittorrent = callTest tests/bittorrent.nix {};
+  tests.blivet = callTest tests/blivet.nix {};
   tests.containers = callTest tests/containers.nix {};
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
-  tests.installer.efi = forAllSystems (system: (import tests/installer.nix { inherit system; }).efi.test);
-  tests.installer.grub1 = forAllSystems (system: (import tests/installer.nix { inherit system; }).grub1.test);
-  tests.installer.lvm = forAllSystems (system: (import tests/installer.nix { inherit system; }).lvm.test);
-  tests.installer.rebuildCD = forAllSystems (system: (import tests/installer.nix { inherit system; }).rebuildCD.test);
-  tests.installer.separateBoot = forAllSystems (system: (import tests/installer.nix { inherit system; }).separateBoot.test);
-  tests.installer.simple = forAllSystems (system: (import tests/installer.nix { inherit system; }).simple.test);
+  tests.installer.grub1 = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).grub1.test);
+  tests.installer.lvm = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).lvm.test);
+  tests.installer.rebuildCD = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).rebuildCD.test);
+  tests.installer.separateBoot = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).separateBoot.test);
+  tests.installer.simple = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).simple.test);
+  tests.installer.simpleLabels = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).simpleLabels.test);
+  tests.installer.simpleProvided = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).simpleProvided.test);
+  tests.installer.btrfsSimple = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).btrfsSimple.test);
+  tests.installer.btrfsSubvols = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).btrfsSubvols.test);
+  tests.installer.btrfsSubvolDefault = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).btrfsSubvolDefault.test);
   tests.influxdb = callTest tests/influxdb.nix {};
   tests.ipv6 = callTest tests/ipv6.nix {};
   tests.jenkins = callTest tests/jenkins.nix {};
   tests.kde4 = callTest tests/kde4.nix {};
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
   tests.login = callTest tests/login.nix {};
-  tests.logstash = callTest tests/logstash.nix {};
+  #tests.logstash = callTest tests/logstash.nix {};
   tests.misc = callTest tests/misc.nix {};
   tests.mumble = callTest tests/mumble.nix {};
   tests.munin = callTest tests/munin.nix {};
   tests.mysql = callTest tests/mysql.nix {};
   tests.mysqlReplication = callTest tests/mysql-replication.nix {};
-  tests.nat = callTest tests/nat.nix {};
+  tests.nat.firewall = callTest tests/nat.nix { withFirewall = true; };
+  tests.nat.standalone = callTest tests/nat.nix { withFirewall = false; };
   tests.nfs3 = callTest tests/nfs.nix { version = 3; };
+  tests.nsd = callTest tests/nsd.nix {};
   tests.openssh = callTest tests/openssh.nix {};
   tests.printing = callTest tests/printing.nix {};
   tests.proxy = callTest tests/proxy.nix {};
@@ -240,5 +274,47 @@ in rec {
   tests.tomcat = callTest tests/tomcat.nix {};
   tests.udisks2 = callTest tests/udisks2.nix {};
   tests.xfce = callTest tests/xfce.nix {};
+
+
+  /* Build a bunch of typical closures so that Hydra can keep track of
+     the evolution of closure sizes. */
+
+  closures = {
+
+    smallContainer = makeClosure ({ pkgs, ... }:
+      { boot.isContainer = true;
+        services.openssh.enable = true;
+      });
+
+    tinyContainer = makeClosure ({ pkgs, ... }:
+      { boot.isContainer = true;
+        imports = [ modules/profiles/minimal.nix ];
+      });
+
+    ec2 = makeClosure ({ pkgs, ... }:
+      { imports = [ modules/virtualisation/amazon-image.nix ];
+      });
+
+    kde = makeClosure ({ pkgs, ... }:
+      { services.xserver.enable = true;
+        services.xserver.displayManager.kdm.enable = true;
+        services.xserver.desktopManager.kde4.enable = true;
+      });
+
+    xfce = makeClosure ({ pkgs, ... }:
+      { services.xserver.enable = true;
+        services.xserver.desktopManager.xfce.enable = true;
+      });
+
+    # Linux/Apache/PostgreSQL/PHP stack.
+    lapp = makeClosure ({ pkgs, ... }:
+      { services.httpd.enable = true;
+        services.httpd.adminAddr = "foo@example.org";
+        services.postgresql.enable = true;
+        services.postgresql.package = pkgs.postgresql93;
+        environment.systemPackages = [ pkgs.php ];
+      });
+
+  };
 
 }

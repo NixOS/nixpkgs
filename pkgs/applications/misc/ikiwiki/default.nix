@@ -23,7 +23,7 @@ assert mercurialSupport -> (mercurial != null);
 
 let
   name = "ikiwiki";
-  version = "3.20140227";
+  version = "3.20141016";
 
   lib = stdenv.lib;
 in
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://ftp.de.debian.org/debian/pool/main/i/ikiwiki/${name}_${version}.tar.gz";
-    sha256 = "1bbpqs4c1la1yqcxcxj3xip3wadjnjq0wawv19j6d6baymm66cr3";
+    sha256 = "1amvrb6djil7g0yabsngfs0f1n7qcvj2hddipjkgfjbmghd6jqiw";
   };
 
   buildInputs = [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
@@ -83,7 +83,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Wiki compiler, storing pages and history in a RCS";
     homepage = "http://ikiwiki.info/";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];

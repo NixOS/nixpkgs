@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "libchop, tools & library for data backup and distributed storage";
+    description = "Tools & library for data backup and distributed storage";
 
     longDescription =
       '' Libchop is a set of utilities and library for data backup and
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = http://nongnu.org/libchop/;
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = with stdenv.lib.maintainers; [ ludo viric ];
     platforms = stdenv.lib.platforms.gnu;

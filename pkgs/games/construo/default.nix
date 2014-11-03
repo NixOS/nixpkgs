@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs ["preConfigure" "doConfigure" "doMakeInstall" "doForceShare" "doPropagate"]);
 	meta = {
-		description = "Construo masses and springs simulation";
+		description = "Masses and springs simulation game";
 	};
 }

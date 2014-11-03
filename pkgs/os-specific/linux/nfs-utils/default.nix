@@ -1,5 +1,6 @@
 { fetchurl, stdenv, tcp_wrappers, utillinux, libcap, libtirpc, libevent, libnfsidmap
-, lvm2, e2fsprogs }:
+, lvm2, e2fsprogs, python
+}:
 
 stdenv.mkDerivation rec {
   name = "nfs-utils-1.2.5";
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ tcp_wrappers utillinux libcap libtirpc libevent libnfsidmap
-      lvm2 e2fsprogs
+      lvm2 e2fsprogs python
     ];
 
   # FIXME: Add the dependencies needed for NFSv4 and TI-RPC.
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://nfs.sourceforge.net/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
 
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.ludo ];

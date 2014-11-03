@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
         --set GCONF_CONFIG_SOURCE 'xml::~/.gconf'                       \
         --prefix PATH ":" "$out/bin:${perl}/bin:${gconf}/bin"
     done
+
+    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   # The following settings fix failures in the test suite. It's not required otherwise.
@@ -57,7 +59,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    description = "GnuCash, a personal and small-business financial-accounting application";
+    description = "Personal and small-business financial-accounting application";
 
     longDescription = ''
       GnuCash is personal and small-business financial-accounting software,
@@ -70,7 +72,7 @@ stdenv.mkDerivation rec {
       accounting principles to ensure balanced books and accurate reports.
     '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     homepage = http://www.gnucash.org/;
 

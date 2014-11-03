@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://projects.gnome.org/libchamplain/;
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
-    description = "libchamplain, a C library providing a ClutterActor to display maps";
+    description = "C library providing a ClutterActor to display maps";
 
     longDescription =
       '' libchamplain is a C library providing a ClutterActor to display

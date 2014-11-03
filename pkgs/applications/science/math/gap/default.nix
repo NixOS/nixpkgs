@@ -1,10 +1,10 @@
 x@{builderDefsPackage
-  , pari ? null 
+  , pari ? null
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     [];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -38,20 +38,20 @@ rec {
   phaseNames = ["doConfigure" "doMake" "doDeploy"];
 
   doDeploy = a.fullDepEntry ''
-    ensureDir "$out/bin" "$out/share/gap/"
+    mkdir -p "$out/bin" "$out/share/gap/"
 
     cp -r . "$out/share/gap/build-dir"
 
     tar xf "${pkgSrc}" -C "$out/share/gap/build-dir/pkg"
 
-    ${if a.pari != null then 
-      ''sed -e '2iexport PATH=$PATH:${pari}/bin' -i "$out/share/gap/build-dir/bin/gap.sh" '' 
+    ${if a.pari != null then
+      ''sed -e '2iexport PATH=$PATH:${pari}/bin' -i "$out/share/gap/build-dir/bin/gap.sh" ''
     else ""}
-    sed -e "/GAP_DIR=/aGAP_DIR='$out/share/gap/build-dir/'" -i "$out/share/gap/build-dir/bin/gap.sh" 
+    sed -e "/GAP_DIR=/aGAP_DIR='$out/share/gap/build-dir/'" -i "$out/share/gap/build-dir/bin/gap.sh"
 
     ln -s "$out/share/gap/build-dir/bin/gap.sh" "$out/bin"
   '' ["doMake" "minInit" "defEnsureDir"];
-      
+
   meta = {
     description = "Computational discrete algebra system";
     maintainers = with a.lib.maintainers;
@@ -60,8 +60,8 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = "GPLv2";
+    license = with a.lib.licenses;
+      gpl2;
     homepage = "http://gap-system.org/";
   };
 }) x
-

@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://idle3-tools.sourceforge.net/;
     description = "Tool to get/set the infamous idle3 timer in WD HDDs";
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

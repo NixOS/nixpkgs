@@ -22,7 +22,7 @@ let
   cygwinSshKey = stdenv.mkDerivation {
     name = "snakeoil-ssh-cygwin";
     buildCommand = ''
-      ensureDir "$out"
+      mkdir -p "$out"
       ${openssh}/bin/ssh-keygen -t ecdsa -f "$out/key" -N ""
     '';
   };
@@ -65,7 +65,7 @@ in stdenv.mkDerivation {
   buildCommand = ''
     ${qemu}/bin/qemu-img create -f qcow2 winvm.img 2G
     ${installController}
-    ensureDir "$out"
+    mkdir -p "$out"
     cp winvm.img "$out/disk.img"
   '';
   passthru = {

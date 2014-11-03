@@ -16,52 +16,76 @@ let
     sticker_file        "${cfg.dataDir}/sticker.sql"
     log_file            "syslog"
     user                "mpd"
+    ${if cfg.network.host != "any" then
+   "bind_to_address     ${cfg.network.host}" else ""}
+    ${if cfg.network.port != 6600 then
+   "port                ${toString cfg.network.port}" else ""}
     ${cfg.extraConfig}
-  ''; 
+  '';
 
 in {
 
   ###### interface
 
-  options = { 
+  options = {
 
-    services.mpd = { 
+    services.mpd = {
 
       enable = mkOption {
         default = false;
         description = ''
           Whether to enable MPD, the music player daemon.
-        ''; 
-      };  
+        '';
+      };
 
       musicDirectory = mkOption {
         default = "${cfg.dataDir}/music";
         description = ''
           Extra configuration added to the end of MPD's
           configuration file, mpd.conf.
-        ''; 
-      };  
+        '';
+      };
 
       extraConfig = mkOption {
-        default = ""; 
+        default = "";
         description = ''
           Extra directives added to to the end of MPD's configuration file,
           mpd.conf. Basic configuration like file location and uid/gid
           is added automatically to the beginning of the file.
-        ''; 
-      };  
+        '';
+      };
 
       dataDir = mkOption {
         default = "/var/lib/mpd";
         description = ''
           The directory where MPD stores its state, tag cache,
           playlists etc.
-        ''; 
-      };  
+        '';
+      };
 
-    };  
+      network = {
 
-  };  
+        host = mkOption {
+          default = "any";
+          description = ''
+            This setting sets the address for the daemon to listen on. Careful attention
+            should be paid if this is assigned to anything other then the default, any.
+            This setting can deny access to control of the daemon.
+          '';
+        };
+
+        port = mkOption {
+          default = 6600;
+          description = ''
+            This setting is the TCP port that is desired for the daemon to get assigned
+            to.
+          '';
+        };
+
+      };
+    };
+
+  };
 
 
   ###### implementation

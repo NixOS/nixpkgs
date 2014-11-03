@@ -1,21 +1,33 @@
-{ stdenv, fetchurl, bash, gettext }:
+{ stdenv, fetchurl, gettext }:
 
-stdenv.mkDerivation (rec {
-  name = "libgpg-error-1.12";
+stdenv.mkDerivation rec {
+  name = "libgpg-error-1.17";
 
   src = fetchurl {
     url = "mirror://gnupg/libgpg-error/${name}.tar.bz2";
-    sha256 = "0pz58vr12qihq2f0bypjxsb6cf6ajq5258fmfm8s6lvwm3b9xz6a";
+    sha256 = "1dapxzxl1naghf342fwfc2w2f2c5hb9gr1a1s4n8dsqn26kybx1z";
   };
 
-  # If architecture-dependant MO files aren't available, they're generated
+  postPatch = "sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:00+0000/' -i ./configure";
+
+  # If architecture-dependent MO files aren't available, they're generated
   # during build, so we need gettext for cross-builds.
   crossAttrs.buildInputs = [ gettext ];
+
+  postConfigure =
+    stdenv.lib.optionalString stdenv.isSunOS
+    # For some reason, /bin/sh on OpenIndiana leads to this at the end of the
+    # `config.status' run:
+    #   ./config.status[1401]: shift: (null): bad number
+    # (See <http://hydra.nixos.org/build/2931046/nixlog/1/raw>.)
+    # Thus, re-run it with Bash.
+      "${stdenv.shell} config.status";
 
   doCheck = true;
 
   meta = {
-    description = "Libgpg-error, a small library that defines common error values for all GnuPG components";
+    homepage = "https://www.gnupg.org/related_software/libgpg-error/index.html";
+    description = "A small library that defines common error values for all GnuPG components";
 
     longDescription = ''
       Libgpg-error is a small library that defines common error values
@@ -24,22 +36,9 @@ stdenv.mkDerivation (rec {
       Daemon and possibly more in the future.
     '';
 
-    homepage = http://gnupg.org;
-
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
     platforms = stdenv.lib.platforms.all;
+    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
   };
 }
 
-//
-
-(stdenv.lib.optionalAttrs stdenv.isSunOS {
-  # For some reason, /bin/sh on OpenIndiana leads to this at the end of the
-  # `config.status' run:
-  #   ./config.status[1401]: shift: (null): bad number
-  # (See <http://hydra.nixos.org/build/2931046/nixlog/1/raw>.)
-  # Thus, re-run it with Bash.
-  postConfigure =
-    '' ${bash}/bin/sh config.status
-    '';
-}))

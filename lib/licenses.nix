@@ -1,145 +1,205 @@
-{
-  /* License identifiers loosely based on: http://fedoraproject.org/wiki/Licensing
+let
+  spdx = lic: lic // {
+      url = "http://spdx.org/licenses/${lic.shortName}";
+    };
+in
+
+rec {
+  /* License identifiers from spdx.org where possible.
    * If you cannot find your license here, then look for a similar license or
    * add it to this list. The URL mentioned above is a good source for inspiration.
    */
 
-  artistic2 = {
-    shortName = "Artistic 2.0";
-    fullName = "Artistic 2.0";
-    url = "http://opensource.org/licenses/artistic-license-2.0.php";
-  };
-
-  agpl3 = {
-    shortName = "AGPLv3";
-    fullName = "GNU Affero General Public License version 3 only";
-    url = https://www.gnu.org/licenses/agpl.html;
+  agpl3 = spdx {
+    shortName = "AGPL-3.0";
+    fullName = "GNU Affero General Public License v3.0";
   };
 
   agpl3Plus = {
-    shortName = "AGPLv3+";
-    fullName = "GNU Affero General Public License version 3 or later";
-    url = https://www.gnu.org/licenses/agpl.html;
+    shortName = "AGPL-3.0+";
+    fullName = "GNU Affero General Public License v3.0 or later";
+    inherit (agpl3) url;
   };
 
   amd = {
     shortName = "amd";
     fullName = "AMD License Agreement";
     url = http://developer.amd.com/amd-license-agreement/;
-  };#
+  };
 
-  apsl20 = {
-    shortName = "APSL 2.0";
+  apsl20 = spdx {
+    shortName = "APSL-2.0";
     fullName = "Apple Public Source License 2.0";
-    url = http://opensource.org/licenses/APSL-2.0;
   };
 
-  asl20 = {
-    shortName = "ASL2.0";
-    fullName = "Apache Software License 2.0";
-    url = http://www.apache.org/licenses/LICENSE-2.0;
+  artistic2 = spdx {
+    shortName = "Artistic-2.0";
+    fullName = "Artistic License 2.0";
   };
 
-  boost = {
-    shortName = "boost";
-    fullName = "Boost Software License";
-    url = http://www.boost.org/LICENSE_1_0.txt;
+  asl20 = spdx {
+    shortName = "Apache-2.0";
+    fullName = "Apache License 2.0";
   };
 
-  bsd2 = {
-    shortName = "BSD-2";
-    fullName = "BSD license (2 clause)";
-    url = http://opensource.org/licenses/BSD-2-Clause;
+  boost = spdx {
+    shortName = "BSL-1.0";
+    fullName = "Boost Software License 1.0";
   };
 
-  bsd3 = {
-    shortName = "BSD-3";
-    fullName = "BSD license (3 clause)";
-    url = http://opensource.org/licenses/BSD-3-Clause;
+  bsd2 = spdx {
+    shortName = "BSD-2-Clause";
+    fullName = ''BSD 2-clause "Simplified" License'';
   };
 
-  bsdOriginal = {
-    shortName = "BSD-original";
-    fullName = "Original BSD license with advertising clause";
-    url = https://fedoraproject.org/wiki/Licensing/BSD;
+  bsd3 = spdx {
+    shortName = "BSD-3-Clause";
+    fullName = ''BSD 3-clause "New" or "Revised" License'';
   };
 
-  cc-by-30 = {
-    shortName = "CC BY 3.0";
+  bsdOriginal = spdx {
+    shortName = "BSD-4-Clause";
+    fullName = ''BSD 4-clause "Original" or "Old" License'';
+  };
+
+  cc0 = spdx {
+    shortName = "CC0-1.0";
+    fullName = ''Creative Commons Zero v1.0 Universal'';
+  };
+
+  cc-by-30 = spdx {
+    shortName = "CC-BY-3.0";
     fullName = "Creative Commons Attribution 3.0";
-    url = http://creativecommons.org/licenses/by/3.0;
   };
 
-  cddl = {
-    shortName = "CDDL";
-    fullName = "Common Development Distribution License ";
-    url = http://www.opensolaris.org/os/licensing/cddllicense.txt;
+  cc-by-sa-30 = spdx {
+    shortName = "CC-BY-SA-3.0";
+    fullName = "Creative Commons Attribution Share Alike 3.0";
   };
 
-  cpl10 = {
-    shortName = "CPL 1.0";
-    fullName = "Common Public License version 1.0";
-    url = http://www.eclipse.org/legal/cpl-v10.html;
+  cc-by-40 = spdx {
+    shortName = "CC-BY-4.0";
+    fullName = "Creative Commons Attribution 4.0";
   };
 
-  epl10 = {
-    shortName = "EPL 1.0";
-    fullName = "Eclipse Public License version 1.0";
-    url = http://www.eclipse.org/legal/epl-v10.html;
+  cddl = spdx {
+    shortName = "CDDL-1.0";
+    fullName = "Common Development and Distribution License 1.0";
   };
 
-  gpl2 = {
-    shortName = "GPLv2";
-    fullName = "GNU General Public License version 2";
-    url = http://www.gnu.org/licenses/old-licenses/gpl-2.0.html;
+  cecill20 = spdx {
+    shortName = "CECILL-2.0";
+    fullName = "CeCILL Free Software License Agreement v2.0";
+  };
+
+  cecill-b = spdx {
+    shortName = "CECILL-B";
+    fullName  = "CeCILL-B Free Software License Agreement";
+  };
+
+  cecill-c = spdx {
+    shortName = "CECILL-C";
+    fullName  = "CeCILL-C Free Software License Agreement";
+  };
+
+  cpl10 = spdx {
+    shortName = "CPL-1.0";
+    fullName = "Common Public License 1.0";
+  };
+
+  epl10 = spdx {
+    shortName = "EPL-1.0";
+    fullName = "Eclipse Public License 1.0";
+  };
+
+  free = "free";
+
+  gpl2 = spdx {
+    shortName = "GPL-2.0";
+    fullName = "GNU General Public License v2.0 only";
   };
 
   gpl2Oss = {
-    shortName = "GPLv2+OSS";
+    shortName = "GPL-2.0-with-OSS";
     fullName = "GNU General Public License version 2 only (with OSI approved licenses linking exception)";
     url = http://www.mysql.com/about/legal/licensing/foss-exception;
   };
 
-  gpl2Plus = {
-    shortName = "GPLv2+";
-    fullName = "GNU General Public License version 2 or later";
-    url = http://www.gnu.org/licenses/old-licenses/gpl-2.0.html;
+  gpl2Plus = spdx {
+    shortName = "GPL-2.0+";
+    fullName = "GNU General Public License v2.0 or later";
   };
 
-  gpl3 = {
-    shortName = "GPLv3";
-    fullName = "GNU General Public License version 3 only";
-    url = http://www.fsf.org/licensing/licenses/gpl.html;
+  gpl3 = spdx {
+    shortName = "GPL-3.0";
+    fullName = "GNU General Public License v3.0 only";
   };
 
-  gpl3Plus = {
-    shortName = "GPLv3+";
-    fullName = "GNU General Public License version 3 or later";
-    url = http://www.fsf.org/licensing/licenses/gpl.html;
+  gpl3Plus = spdx {
+    shortName = "GPL-3.0+";
+    fullName = "GNU General Public License v3.0 or later";
   };
 
   gpl3ClasspathPlus = {
-    shortName = "GPLv3+classpath+";
-    fullName = "GNU General Public License version 3 or later (with Classpath exception)";
+    shortName = "GPL-3.0+-with-classpath-exception";
+    fullName = "GNU General Public License v3.0 or later (with Classpath exception)";
     url = https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception;
   };
 
-  isc = {
+  inria = {
+    shortName = "INRIA-NCLA";
+    fullName  = "INRIA Non-Commercial License Agreement";
+    url       = "http://compcert.inria.fr/doc/LICENSE";
+  };
+
+  ipa = spdx {
+    shortName = "IPA";
+    fullName = "IPA Font License";
+  };
+
+  ipl10 = spdx {
+    shortName = "IPL-1.0";
+    fullName = "IBM Public License v1.0";
+  };
+
+  isc = spdx {
     shortName = "ISC";
-    fullName = "Internet Systems Consortium License";
-    url = http://www.opensource.org/licenses/ISC;
+    fullName = "ISC License";
   };
 
-  ipl10 = {
-    shortName = "IPL 1.0";
-    fullName = "IBM Public License Version 1.0";
-    url = http://www.ibm.com/developerworks/opensource/library/os-i18n2/os-ipl.html;
+  lgpl2 = spdx {
+    shortName = "LGPL-2.0";
+    fullName = "GNU Library General Public License v2 only";
   };
 
-  ijg = {
-    shortName = "IJG";
-    fullName = "Independent JPEG Group License";
-    url = https://fedoraproject.org/wiki/Licensing/IJG;
+  lgpl2Plus = spdx {
+    shortName = "LGPL-2.0+";
+    fullName = "GNU Library General Public License v2 or later";
+  };
+
+  lgpl21 = spdx {
+    shortName = "LGPL-2.1";
+    fullName = "GNU Library General Public License v2.1 only";
+  };
+
+  lgpl21Plus = spdx {
+    shortName = "LGPL-2.1+";
+    fullName = "GNU Library General Public License v2.1 or later";
+  };
+
+  lgpl3 = spdx {
+    shortName = "LGPL-3.0";
+    fullName = "GNU Lesser General Public License v3.0 only";
+  };
+
+  lgpl3Plus = spdx {
+    shortName = "LGPL-3.0+";
+    fullName = "GNU Lesser General Public License v3.0 or later";
+  };
+
+  libpng = spdx {
+    shortName = "Libpng";
+    fullName = "libpng License";
   };
 
   libtiff = {
@@ -148,76 +208,64 @@
     url = https://fedoraproject.org/wiki/Licensing/libtiff;
   };
 
-  lgpl2 = {
-    shortName = "LGPLv2";
-    fullName = "GNU Library General Public License version 2";
-    url = http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html;
-  };
-
-  lgpl2Plus = {
-    shortName = "LGPLv2+";
-    fullName = "GNU Library General Public License version 2 or later";
-    url = http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html;
-  };
-
-  lgpl21 = {
-    shortName = "LGPLv2.1";
-    fullName = "GNU Lesser General Public License version 2.1";
-    url = http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html;
-  };
-
-  lgpl21Plus = {
-    shortName = "LGPLv2.1+";
-    fullName = "GNU Lesser General Public License version 2.1 or later";
-    url = http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html;
-  };
-
   llgpl21 = {
-    shortName = "LLGPLv2.1";
+    shortName = "LLGPL-2.1";
     fullName = "Lisp LGPL; GNU Lesser General Public License version 2.1 with Franz Inc. preamble for clarification of LGPL terms in context of Lisp";
     url = http://opensource.franz.com/preamble.html;
   };
 
-  lgpl3 = {
-    shortName = "LGPLv3";
-    fullName = "GNU Lesser General Public License version 3 only";
-    url = http://www.fsf.org/licensing/licenses/lgpl.html;
+  lpl-102 = spdx {
+    shortName = "LPL-1.02";
+    fullName = "Lucent Public License v1.02";
   };
 
-  lgpl3Plus = {
-    shortName = "LGPLv3+";
-    fullName = "GNU Lesser General Public License version 3 or later";
-    url = http://www.fsf.org/licensing/licenses/lgpl.html;
-  };
-
-  mit = {
+  # spdx.org does not (yet) differentiate between the X11 and Expat versions
+  # for details see http://en.wikipedia.org/wiki/MIT_License#Various_versions
+  mit = spdx {
     shortName = "MIT";
-    fullName = "MIT/X11 license";
-    url = http://www.opensource.org/licenses/mit-license.php;
+    fullName = "MIT License";
   };
 
-  mpl11 = {
-    shortName = "MPL1.1";
-    fullName = "Mozilla Public License version 1.1";
-    url = http://www.mozilla.org/MPL/MPL-1.1.html;
+  mpl11 = spdx {
+    shortName = "MPL-1.1";
+    fullName = "Mozilla Public License 1.1";
   };
 
-  mpl20 = {
-    shortName = "MPL2.0";
-    fullName = "Mozilla Public License version 2.0";
-    url = https://www.mozilla.org/MPL/2.0;
+  mpl20 = spdx {
+    shortName = "MPL-2.0";
+    fullName = "Mozilla Public License 2.0";
   };
 
-  ofl = {
-    shortName = "OFL";
-    fullName = "SIL Open Font License";
-    url = "http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL_web";
+  msrla = {
+    shortName = "MSR-LA";
+    fullName  = "Microsoft Research License Agreement";
+    url       = "http://research.microsoft.com/en-us/projects/pex/msr-la.txt";
   };
 
-  openssl = {
-    shortName = "openssl";
-    fullName = "OpenSSL license";
-    url = http://www.openssl.org/source/license.html;
+  ncsa = spdx {
+    shortName = "NCSA";
+    fullName  = "University of Illinois/NCSA Open Source License";
+  };
+
+  ofl = spdx {
+    shortName = "OFL-1.1";
+    fullName = "SIL Open Font License 1.1";
+  };
+
+  openssl = spdx {
+    shortName = "OpenSSL";
+    fullName = "OpenSSL License";
+  };
+
+  postgresql = spdx {
+    shortName = "PostgreSQL";
+    fullName = "PostgreSQL License";
+  };
+
+  psfl = spdx {
+    shortName = "Python-2.0";
+    fullName = "Python Software Foundation License version 2";
+    #url = http://docs.python.org/license.html;
   };
 
   publicDomain = {
@@ -225,10 +273,9 @@
     fullname = "Public Domain";
   };
 
-  psfl = {
-    shortName = "PSFL";
-    fullName = "Python Software Foundation License";
-    url = http://docs.python.org/license.html;
+  sleepycat = spdx {
+    shortName = "Sleepycat";
+    fullName  = "Sleepycat License";
   };
 
   tcltk = {
@@ -243,45 +290,31 @@
 
   unfreeRedistributableFirmware = "unfree-redistributable-firmware";
 
-  zlib = {
-    shortName = "zlib";
-    fullName = "zlib license";
-    url = http://www.gzip.org/zlib/zlib_license.html;
+  unlicense = {
+    shortName = "Unlicense";
+    fullName = "Unlicense";
+    url = http://unlicense.org/;
   };
 
-  zpt20 = {
-    shortName = "ZPT2.0";
+  wadalab = {
+    shortName = "wadalab";
+    fullName = "Wadalab Font License";
+    url = https://fedoraproject.org/wiki/Licensing:Wadalab?rd=Licensing/Wadalab;
+  };
+
+  zlib = spdx {
+    shortName = "Zlib";
+    fullName = "zlib License";
+  };
+
+  zpt20 = spdx { # FIXME: why zpt* instead of zpl*
+    shortName = "ZPL-2.0";
     fullName = "Zope Public License 2.0";
-    url = "http://old.zope.org/Resources/License/ZPL-2.0";
   };
 
-  zpt21 = {
-    shortName = "ZPT2.1";
+  zpt21 = spdx {
+    shortName = "ZPL-2.1";
     fullName = "Zope Public License 2.1";
-    url = "http://old.zope.org/Resources/License/ZPL-2.1";
   };
 
-  sleepycat = {
-    shortName = "Sleepycat";
-    fullName  = "Sleepycat Public License";
-    url       = "https://en.wikipedia.org/wiki/Sleepycat_License";
-  };
-
-  cecill-c = {
-    shortName = "CeCILL-C";
-    fullName  = "CEA CNRS INRIA Logiciel Libre";
-    url       = "http://www.cecill.info/licences.en.html";
-  };
-
-  msrla = {
-    shortName = "MSR-LA";
-    fullName  = "Microsoft Research License Agreement";
-    url       = "http://research.microsoft.com/en-us/projects/pex/msr-la.txt";
-  };
-
-  inria = {
-    shortName = "INRIA-NCLA";
-    fullName  = "INRIA Non-Commercial License Agreement";
-    url       = "http://compcert.inria.fr/doc/LICENSE";
-  };
 }

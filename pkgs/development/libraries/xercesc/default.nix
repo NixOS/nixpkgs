@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://xerces.apache.org/xerces-c/;
     description = "Validating XML parser written in a portable subset of C++";
-    license = "ASL2.0";
+    license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }

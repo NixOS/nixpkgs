@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.rc0.org.uk/mairix;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     description = "Program for indexing and searching email messages stored in maildir, MH or mbox";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; all;

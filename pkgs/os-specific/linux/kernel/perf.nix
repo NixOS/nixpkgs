@@ -1,12 +1,12 @@
-{ stdenv, kernel, elfutils, python, perl, newt, slang, asciidoc, xmlto
+{ lib, stdenv, kernel, elfutils, python, perl, newt, slang, asciidoc, xmlto
 , docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison, pkgconfig
 , withGtk ? false, gtk ? null }:
 
-assert withGtk -> gtk != null;
+with lib;
 
-let optionalString = stdenv.lib.optionalString;
-    versionOlder = stdenv.lib.versionOlder;
-in
+assert withGtk -> gtk != null;
+assert versionAtLeast kernel.version "3.12";
+
 stdenv.mkDerivation {
   name = "perf-linux-${kernel.version}";
 

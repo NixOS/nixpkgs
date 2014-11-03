@@ -18,11 +18,16 @@ stdenv.mkDerivation {
   src = fetchurl {
     inherit (s) url sha256;
   };
+
+  # jq is linked to libjq:
+  configureFlags = [
+    "LDFLAGS=-Wl,-rpath,\\\${libdir}"
+  ];
   meta = {
     inherit (s) version;
     description = ''A lightweight and flexible command-line JSON processor'';
     license = stdenv.lib.licenses.mit ;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }

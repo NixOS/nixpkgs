@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   */
 
   meta = {
-    description = "GNUnet, GNU's decentralized anonymous and censorship-resistant P2P framework";
+    description = "GNU's decentralized anonymous and censorship-resistant P2P framework";
 
     longDescription = ''
       GNUnet is a framework for secure peer-to-peer networking that
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://gnunet.org/;
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = with stdenv.lib.maintainers; [ ludo viric ];
     platforms = stdenv.lib.platforms.gnu;

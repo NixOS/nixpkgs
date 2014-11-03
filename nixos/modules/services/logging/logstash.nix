@@ -4,6 +4,16 @@ with lib;
 
 let
   cfg = config.services.logstash;
+  pluginPath = lib.concatStringsSep ":" cfg.plugins;
+  havePluginPath = lib.length cfg.plugins > 0;
+  ops = lib.optionalString;
+  verbosityFlag = {
+    debug = "--debug";
+    info  = "--verbose";
+    warn  = ""; # intentionally empty
+    error = "--quiet";
+    fatal = "--silent";
+  }."${cfg.logLevel}";
 
 in
 
@@ -11,20 +21,69 @@ in
   ###### interface
 
   options = {
+
     services.logstash = {
+
       enable = mkOption {
+        type = types.bool;
         default = false;
-        description = "Enable logstash";
+        description = "Enable logstash.";
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.logstash;
+        example = literalExample "pkgs.logstash";
+        description = "Logstash package to use.";
+      };
+
+      plugins = mkOption {
+        type = types.listOf types.path;
+        default = [ ];
+        example = literalExample "[ pkgs.logstash-contrib ]";
+        description = "The paths to find other logstash plugins in.";
+      };
+
+      logLevel = mkOption {
+        type = types.enum [ "debug" "info" "warn" "error" "fatal" ];
+        default = "warn";
+        description = "Logging verbosity level.";
+      };
+
+      watchdogTimeout = mkOption {
+        type = types.int;
+        default = 10;
+        description = "Set watchdog timeout value in seconds.";
+      };
+
+      filterWorkers = mkOption {
+        type = types.int;
+        default = 1;
+        description = "The quantity of filter workers to run.";
       };
 
       enableWeb = mkOption {
+        type = types.bool;
         default = false;
-        description = "Enable logstash web interface";
+        description = "Enable the logstash web interface.";
+      };
+
+      address = mkOption {
+        type = types.str;
+        default = "0.0.0.0";
+        description = "Address on which to start webserver.";
+      };
+
+      port = mkOption {
+        type = types.str;
+        default = "9292";
+        description = "Port on which to start webserver.";
       };
 
       inputConfig = mkOption {
+        type = types.lines;
         default = ''stdin { type => "example" }'';
-        description = "Logstash input configuration";
+        description = "Logstash input configuration.";
         example = ''
           # Read from journal
           pipe {
@@ -35,8 +94,9 @@ in
       };
 
       filterConfig = mkOption {
+        type = types.lines;
         default = ''noop {}'';
-        description = "logstash filter configuration";
+        description = "logstash filter configuration.";
         example = ''
           if [type] == "syslog" {
             # Keep only relevant systemd fields
@@ -52,13 +112,15 @@ in
       };
 
       outputConfig = mkOption {
+        type = types.lines;
         default = ''stdout { debug => true debug_format => "json"}'';
-        description = "Logstash output configuration";
+        description = "Logstash output configuration.";
         example = ''
           redis { host => "localhost" data_type => "list" key => "logstash" codec => json }
           elasticsearch { embedded => true }
         '';
       };
+
     };
   };
 
@@ -69,21 +131,28 @@ in
     systemd.services.logstash = with pkgs; {
       description = "Logstash Daemon";
       wantedBy = [ "multi-user.target" ];
-
+      environment = { JAVA_HOME = jre; };
       serviceConfig = {
-        ExecStart = "${jre}/bin/java -jar ${logstash} agent -f ${writeText "logstash.conf" ''
-          input {
-            ${cfg.inputConfig}
-          }
+        ExecStart =
+          "${cfg.package}/bin/logstash agent " +
+          "-w ${toString cfg.filterWorkers} " +
+          ops havePluginPath "--pluginpath ${pluginPath} " +
+          "${verbosityFlag} " +
+          "--watchdog-timeout ${toString cfg.watchdogTimeout} " +
+          "-f ${writeText "logstash.conf" ''
+            input {
+              ${cfg.inputConfig}
+            }
 
-          filter {
-            ${cfg.filterConfig}
-          }
+            filter {
+              ${cfg.filterConfig}
+            }
 
-          output {
-            ${cfg.outputConfig}
-          }
-        ''} ${optionalString cfg.enableWeb "-- web"}";
+            output {
+              ${cfg.outputConfig}
+            }
+          ''} " +
+          ops cfg.enableWeb "-- web -a ${cfg.address} -p ${cfg.port}";
       };
     };
   };

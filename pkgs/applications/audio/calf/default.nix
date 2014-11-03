@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cairo, expat, fftwSinglePrec, fluidsynth, glib
-, gtk, jackaudio, ladspaH , libglade, lv2, pkgconfig }:
+, gtk, jack2, ladspaH , libglade, lv2, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "calf-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ 
-    cairo expat fftwSinglePrec fluidsynth glib gtk jackaudio ladspaH
+    cairo expat fftwSinglePrec fluidsynth glib gtk jack2 ladspaH
     libglade lv2 pkgconfig
   ];
 

@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "geoclue-2.1.8";
+  name = "geoclue-2.1.9";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/geoclue/releases/2.1/${name}.tar.xz";
-    sha256 = "05h102110gsxxvmvllssfz7ldjpwrrb5sqg5rbpibys6iy4w1k6m";
+    sha256 = "0aq9fqlvvc8jqbshp3mbcc1j5hq4fzjy8hd1yxcl6xrd0jkfw5ml";
   };
 
   buildInputs =

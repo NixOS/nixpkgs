@@ -1,15 +1,14 @@
-{ stdenv, fetchurl,
-slang, ncurses
-}:
+{ stdenv, fetchurl
+, slang, ncurses }:
 
-let version = "1.0.1"; in
+let version = "1.0.2"; in
 
 stdenv.mkDerivation {
   name = "slrn-${version}";
 
   src = fetchurl {
-    url = "http://www.jedsoft.org/slrn/download/slrn-1.0.1.tar.gz";
-    sha256 = "1rmaprfwvshzkv0c5vi43839cz3laqjpl306b9z0ghwyjdha1d06";
+    url = "http://www.jedsoft.org/releases/slrn/slrn-${version}.tar.gz";
+    sha256 = "1gn6m2zha2nnnrh9lz3m3nrqk6fgfij1wc53pg25j7sdgvlziv12";
   };
 
   preConfigure = ''
@@ -23,9 +22,10 @@ stdenv.mkDerivation {
 
   buildInputs = [ slang ncurses ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "The slrn (S-Lang read news) newsreader";
     homepage = http://slrn.sourceforge.net/index.html;
-    license = stdenv.lib.licenses.gpl2;
+    maintainers = with maintainers; [ emery ];
+    license = licenses.gpl2;
   };
 }

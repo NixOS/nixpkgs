@@ -1,9 +1,9 @@
-{pkgs, config, ...}:
+{lib, config, ...}:
 
 {
   hardware = {
     pcmcia = {
-      firmware = [ (pkgs.lib.cleanSource ./firmware) ];
+      firmware = [ (lib.cleanSource ./firmware) ];
     };
   };
 }

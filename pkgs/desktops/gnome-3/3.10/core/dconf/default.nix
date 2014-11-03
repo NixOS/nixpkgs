@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "dconf-${version}";
-  version = "0.18.0";
+  version = "0.20.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/dconf/0.18/${name}.tar.xz";
-    sha256 = "0mf921pnkhs8xn1dr2wxfq277vjsbkpl9cccv0gaz4460z31p6qh";
+    url = "mirror://gnome/sources/dconf/0.20/${name}.tar.xz";
+    sha256 = "22c046a247d05ea65ad181e3aef4009c898a5531f76c0181f8ec0dfef83447d9";
   };
 
   buildInputs = [ vala libxslt pkgconfig glib dbus_glib gnome3.gtk libxml2
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    homepage = https://wiki.gnome.org/action/show/Projects/dconf;
     platforms = platforms.linux;
   };
 }

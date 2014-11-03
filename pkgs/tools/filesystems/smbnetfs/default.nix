@@ -12,17 +12,16 @@ let
   sourceInfo = rec {
     baseName="smbnetfs";
     dirBaseName="SMBNetFS";
-    version="0.5.3a";
+    version = "0.5.3b";
     name="${baseName}-${version}";
     project="${baseName}";
     url="mirror://sourceforge/project/${project}/${baseName}/${dirBaseName}-${version}/${name}.tar.bz2";
-    hash="0fzlw11y2vkxmjzz3qcypqlvz074v6a3pl4pyffbniqal64qgrsw";
   };
 in
 rec {
   src = a.fetchurl {
     url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+    sha256 = "1j9b30kh4ymv4nr8c1qc7hfg6pscgyj75ib16pqa0zljjk1klx18";
   };
 
   inherit (sourceInfo) name version;
@@ -40,11 +39,9 @@ rec {
     platforms = with a.lib.platforms;
       linux;
     license = a.lib.licenses.gpl2;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://sourceforge.net/projects/smbnetfs/files/smbnetfs";
-    };
+    downloadPage = "http://sourceforge.net/projects/smbnetfs/files/smbnetfs";
+    updateWalker = true;
+    inherit version;
   };
 }) x
 

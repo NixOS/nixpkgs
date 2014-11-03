@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gperf guile gmp zlib liboop readline gnum4 pam ];
 
   meta = {
-    description = "GNU lsh, a GPL'd implementation of the SSH protocol";
+    description = "GPL'd implementation of the SSH protocol";
 
     longDescription = ''
       lsh is a free implementation (in the GNU sense) of the ssh
@@ -41,8 +41,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.lysator.liu.se/~nisse/lsh/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = [ "x86_64-linux" ];
   };
 }

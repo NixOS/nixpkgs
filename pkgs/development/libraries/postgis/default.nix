@@ -52,7 +52,7 @@ let
     name = "postgis-${version}";
 
     src = fetchurl {
-      url = "http://postgis.refractions.net/download/postgis-${fix.fixed.version}.tar.gz";
+      url = "http://download.osgeo.org/postgis/source/postgis-${fix.fixed.version}.tar.gz";
       inherit (fix.fixed) sha256;
     };
 
@@ -107,7 +107,7 @@ let
     meta = {
       description = "Geographic Objects for PostgreSQL";
       homepage = "http://postgis.refractions.net";
-      license = "GPLv2";
+      license = stdenv.lib.licenses.gpl2;
       maintainers = [stdenv.lib.maintainers.marcweber];
       platforms = stdenv.lib.platforms.linux;
     };
@@ -141,11 +141,10 @@ in rec {
     sha256 = "0i6inyiwc5zgf5a4ssg0y774f8vn45zn5c38ccgnln9r6i54vc6k";
   });
 
-  v_1_5_1 = pgDerivationBase.merge ( fix : {
-    version = "1.5.1";
-    sha256 = "0nymvqqi6pp4nh4dcshzqm76x4sraf119jp7l27c2q1lygm6p6jr";
+  v_1_5_8 = pgDerivationBase.merge ( fix : {
+    version = "1.5.8";
+    sha256 = "016qn2hk3w8rg60rqn91l2nfk9zcsw0pv2s5rb1qhjw15ypgv5j8";
     sql_srcs = ["postgis.sql" "spatial_ref_sys.sql"];
   });
 
 }
-

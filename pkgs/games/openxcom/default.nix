@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, mesa, zlib, openssl, libyamlcpp, boostHeaders
+{stdenv, fetchurl, cmake, mesa, zlib, openssl, libyamlcpp, boost
 , SDL, SDL_image, SDL_mixer, SDL_gfx }:
 
 let version = "1.0.0"; in
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     name = "openxcom-${version}.tar.gz";
   };
 
-  buildInputs = [ cmake mesa zlib openssl libyamlcpp boostHeaders
+  buildInputs = [ cmake mesa zlib openssl libyamlcpp boost
     SDL SDL_image SDL_mixer SDL_gfx ];
 
   meta = {
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     repositories.git = https://github.com/SupSuper/OpenXcom.git;
     maintainers = [ stdenv.lib.maintainers.page ];
     platforms = stdenv.lib.platforms.linux;
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3;
   };
 
 }

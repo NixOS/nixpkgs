@@ -1,19 +1,21 @@
 { fetchurl, stdenv, openssl, db48, boost, zlib, miniupnpc, qt4, utillinux
-, pkgconfig, protobuf, qrencode }:
+, pkgconfig, protobuf, qrencode, gui ? true }:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "0.9.1";
-  name = "bitcoin-${version}";
+  version = "0.9.3";
+  name = "bitcoin${toString (optional (!gui) "d")}-${version}";
 
   src = fetchurl {
-    url = "https://bitcoin.org/bin/${version}/${name}-linux.tar.gz";
-    sha256 = "3fabc1c629007b465a278525883663d41a2ba62699f2773536a8bf59ca210425";
+    url = "https://bitcoin.org/bin/${version}/bitcoin-${version}-linux.tar.gz";
+    sha256 = "1kb59w7232qzfh952rz6vvjri2w26n9cq7baml0vifdsdhxph9f4";
   };
 
   # hexdump from utillinux is required for tests
   buildInputs = [
-    openssl db48 boost zlib miniupnpc qt4 utillinux pkgconfig protobuf qrencode
-  ];
+    openssl db48 boost zlib miniupnpc utillinux pkgconfig protobuf 
+  ] ++ optionals gui [ qt4 qrencode ];
 
   unpackPhase = ''
     mkdir tmp-extract && (cd tmp-extract && tar xf $src)
@@ -34,8 +36,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.walletName = "bitcoin";
+
   meta = {
-      description = "Bitcoin is a peer-to-peer currency";
+      description = "Peer-to-peer electronic cash system";
       longDescription= ''
         Bitcoin is a free open source peer-to-peer electronic cash system that is
         completely decentralized, without the need for a central server or trusted
@@ -43,7 +47,7 @@ stdenv.mkDerivation rec {
         with each other, with the help of a P2P network to check for double-spending.
       '';
       homepage = "http://www.bitcoin.org/";
-      maintainers = [ stdenv.lib.maintainers.roconnor ];
-      license = "MIT";
+      maintainers = [ maintainers.roconnor ];
+      license = licenses.mit;
   };
 }

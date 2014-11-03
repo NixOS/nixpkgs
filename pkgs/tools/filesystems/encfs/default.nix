@@ -14,6 +14,6 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://www.arg0.net/encfs;
-    description = "EncFS provides an encrypted filesystem in user-space via FUSE";
+    description = "Provides an encrypted filesystem in user-space via FUSE";
   };
 }

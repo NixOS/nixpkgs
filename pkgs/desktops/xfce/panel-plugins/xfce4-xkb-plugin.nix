@@ -5,13 +5,13 @@
 stdenv.mkDerivation rec {
   p_name  = "xfce4-xkb-plugin";
   ver_maj = "0.5";
-  ver_min = "4.3";
+  ver_min = "6";
 
   name = "${p_name}-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://xfce/src/panel-plugins/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "0v9r0w9m5lxrzmz12f8w67l781lsywy9p1vixgn4xq6z5sxh2j6a";
+    sha256 = "198q6flrajbscwwywqq8yv6hdcwifahhj9i526vyfz4q6cq65r09";
   };
 
   buildInputs = [ pkgconfig intltool libxfce4util libxfce4ui xfce4panel gtk

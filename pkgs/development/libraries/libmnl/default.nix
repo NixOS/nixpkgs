@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       re-inventing the wheel.
     '';
     homepage = http://netfilter.org/projects/libmnl/index.html;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     platforms = stdenv.lib.platforms.linux;
   };

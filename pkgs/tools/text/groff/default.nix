@@ -28,10 +28,18 @@ stdenv.mkDerivation rec {
     '';
   };
 
+  postInstall = ''
+      # Remove example output with (random?) colors to 
+      # avoid non-determinism in the output
+      rm $out/share/doc/${name}/examples/hdtbl/*color*ps
+      # Remove creation date
+      find $out/share/doc/${name} -type f -print0 | xargs -0 sed -i -e 's/%%CreationDate: .*//'
+    '';
+
   meta = {
     homepage = "http://www.gnu.org/software/groff/";
     description = "GNU Troff, a typesetting package that reads plain text and produces formatted output";
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.all;
 
     longDescription = ''

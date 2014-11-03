@@ -3,17 +3,12 @@
 
 stdenv.mkDerivation rec {
   name = "jhc-${version}";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchurl {
-    url = "http://repetae.net/dist/${name}.tar.gz";
-    sha256 = "11fya5ggk6q4vcm3kwjacfaaqvkammih25saqwlr1g40bcikbnf2";
+    url    = "http://repetae.net/dist/${name}.tar.gz";
+    sha256 = "0lrgg698mx6xlrqcylba9z4g1f053chrzc92ri881dmb1knf83bz";
   };
-
-  patchPhase = ''
-    substituteInPlace ./src/Util/Interact.hs \
-      --replace USE_NOLINE USE_READLINE
-  '';
 
   buildInputs =
     [ perl ghc binary zlib utf8String

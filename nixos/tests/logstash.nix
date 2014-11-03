@@ -2,6 +2,7 @@
 # elasticsearch is started.
 
 import ./make-test.nix {
+  name = "logstash";
 
   nodes = {
     one =

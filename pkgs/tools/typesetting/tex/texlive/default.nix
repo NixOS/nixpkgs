@@ -1,20 +1,20 @@
 args : with args;
 rec {
   src = fetchurl {
-    url = mirror://debian/pool/main/t/texlive-bin/texlive-bin_2014.20140528.34243.orig.tar.xz;
-    sha256 = "0nh8hfayyf60nm4z8zyclrbc3792c62azgsvrwxnl28iq223200s";
+    url = mirror://debian/pool/main/t/texlive-bin/texlive-bin_2014.20140926.35254.orig.tar.xz;
+    sha256 = "1c39x059jhn5jsy6i9j3akjbkm1kmmzssy1jyi1aw20rl2vp86w3";
   };
 
-  texmfVersion = "2014.20140528";
+  texmfVersion = "2014.20140927";
   texmfSrc = fetchurl {
     url = "mirror://debian/pool/main/t/texlive-base/texlive-base_${texmfVersion}.orig.tar.xz";
-    sha256 = "09z3jp5if0llszm02x3f93izrspjh14g77034c677r0sj4xrb63w";
+    sha256 = "1g4nzr9rgmw8i0i82svmkwjy2kvbyrc8jgnk2f3cl2wsx7sfrydy";
   };
 
-  langTexmfVersion = "2014.20140528";
+  langTexmfVersion = "2014.20140927";
   langTexmfSrc = fetchurl {
     url = "mirror://debian/pool/main/t/texlive-lang/texlive-lang_${langTexmfVersion}.orig.tar.xz";
-    sha256 = "0c7rppqya74g8fb431i3bbga88xzjiarj540fcn34plar5wz4k31";
+    sha256 = "1ckm8yra96m44n708dc1kgq4xrzi7ginxpsb73ijbwzbjy1yqzwg";
   };
 
   passthru = { inherit texmfSrc langTexmfSrc; };
@@ -22,6 +22,7 @@ rec {
   setupHook = ./setup-hook.sh;
 
   doMainBuild = fullDepEntry ( stdenv.lib.optionalString stdenv.isDarwin ''
+    export MACOSX_DEPLOYMENT_TARGET=10.9
     export DYLD_LIBRARY_PATH="${poppler}/lib"
   '' + ''
     mkdir -p $out
@@ -32,6 +33,9 @@ rec {
     tar xf ${langTexmfSrc} -C $out --strip-components=1
 
     sed -e s@/usr/bin/@@g -i $(grep /usr/bin/ -rl . )
+
+    sed -e 's@dehypht-x-2013-05-26@dehypht-x-2014-05-21@' -i $(grep 'dehypht-x' -rl $out )
+    sed -e 's@dehyphn-x-2013-05-26@dehyphn-x-2014-05-21@' -i $(grep 'dehyphn-x' -rl $out )
 
     sed -e 's@\<env ruby@${ruby}/bin/ruby@' -i $(grep 'env ruby' -rl . )
     sed -e 's@\<env perl@${perl}/bin/perl@' -i $(grep 'env perl' -rl . )
@@ -111,13 +115,14 @@ rec {
   buildInputs = [ zlib bzip2 ncurses libpng flex bison libX11 libICE xproto
     freetype t1lib gd libXaw icu ghostscript ed libXt libXpm libXmu libXext
     xextproto perl libSM ruby expat curl libjpeg python fontconfig xz pkgconfig
-    poppler libpaper graphite2 lesstif zziplib harfbuzz texinfo potrace ]
+    poppler libpaper graphite2 lesstif zziplib harfbuzz texinfo potrace gmp mpfr
+    xpdf ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ makeWrapper ]
     ;
 
   configureFlags = [ "--with-x11" "--enable-ipc" "--with-mktexfmt"
     "--enable-shared" "--disable-native-texlive-build" "--with-system-zziplib"
-    "--with-system-libgs" "--with-system-t1lib" "--with-system-freetype2" 
+    "--with-system-libgs" "--with-system-t1lib" "--with-system-freetype2"
     "--with-system-freetype=no" "--disable-ttf2pk" "--enable-ttf2pk2" ]
     ++ stdenv.lib.optionals stdenv.isDarwin [
       # TODO: We should be able to fix these tests
@@ -141,7 +146,7 @@ rec {
     description = "A TeX distribution";
     homepage    = http://www.tug.org/texlive;
     license     = stdenv.lib.licenses.gpl2;
-    maintainers = with maintainers; [ lovek323 raskin ];
+    maintainers = with maintainers; [ lovek323 raskin jwiegley ];
     platforms   = platforms.unix;
   };
 }

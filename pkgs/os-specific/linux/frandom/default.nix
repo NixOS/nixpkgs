@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
  
   installPhase = ''
     kernelVersion=${kernel.modDirVersion}
-    ensureDir $out/lib/modules/$kernelVersion/misc
+    mkdir -p $out/lib/modules/$kernelVersion/misc
     cp frandom.ko $out/lib/modules/$kernelVersion/misc
 
-    ensureDir $out/lib/udev/rules.d
+    mkdir -p $out/lib/udev/rules.d
     tee $out/lib/udev/rules.d/10-frandom.rules <<-EOF
     #
     # These are the rules for the frandom devices. In theory, we could let
@@ -40,8 +40,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A very fast random number generator kernel module";
     homepage = http://frandom.sourceforge.net/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
   };
 }
-

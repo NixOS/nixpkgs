@@ -15,7 +15,7 @@ let
         MAILTO="${config.services.cron.mailto}"
       ''}
       NIX_CONF_DIR=/etc/nix
-      ${pkgs.lib.concatStrings (map (job: job + "\n") config.services.cron.systemCronJobs)}
+      ${lib.concatStrings (map (job: job + "\n") config.services.cron.systemCronJobs)}
     '';
 
   # Vixie cron requires build-time configuration for the sendmail path.
@@ -24,6 +24,10 @@ let
     # should have sendmail in this path.
     sendmailPath = "/var/setuid-wrappers/sendmail";
   };
+
+  allFiles = map (f: "\"${f}\"") (
+    [ "${systemCronJobsFile}" ] ++ config.services.cron.cronFiles
+  );
 
 in
 
@@ -71,6 +75,15 @@ in
         '';
       };
 
+      cronFiles = mkOption {
+        type = types.listOf types.path;
+        default = [];
+        description = ''
+          A list of extra crontab files that will be read and appended to the main
+          crontab file when the cron service starts.
+        '';
+      };
+
     };
 
   };
@@ -78,14 +91,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.cron.enable {
-
-    environment.etc = singleton
-      # The system-wide crontab.
-      { source = systemCronJobsFile;
-        target = "crontab";
-        mode = "0600"; # Cron requires this.
-      };
+  config = mkIf (config.services.cron.enable && allFiles != []) {
 
     security.setuidPrograms = [ "crontab" ];
 
@@ -100,6 +106,10 @@ in
 
         preStart =
           ''
+            rm -f /etc/crontab
+            cat ${toString allFiles} > /etc/crontab
+            chmod 0600 /etc/crontab
+
             mkdir -m 710 -p /var/cron
 
             # By default, allow all users to create a crontab.  This

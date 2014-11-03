@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     XC_ARCH=$(go env GOARCH)
     XC_OS=$(go env GOOS)
 
-    ensureDir $out/bin
+    mkdir -p $out/bin
 
     cd $src/src/github.com/mitchellh/packer
     gox \

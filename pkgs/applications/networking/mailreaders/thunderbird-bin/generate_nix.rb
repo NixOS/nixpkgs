@@ -41,7 +41,7 @@ end
 
 
 puts(<<"EOH")
-# This file is generated from generate_nix.rb
+# This file is generated from generate_nix.rb. DO NOT EDIT.
 # Execute the following command in a temporary directory to update the file.
 #
 # ruby generate_nix.rb > default.nix
@@ -79,6 +79,8 @@ puts(<<"EOH")
 , nss
 , pango
 }:
+
+assert stdenv.isLinux;
 
 let
   version = "#{real_version}";
@@ -204,6 +206,7 @@ stdenv.mkDerivation {
       fullName = "unfree";
       url = http://www.mozilla.org/en-US/foundation/trademarks/policy/;
     };
+    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
     platforms = platforms.linux;
   };
 }

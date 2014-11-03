@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Simple puzzle game with moving robots";
     homepage = "http://moikmellah.org/blog/?page_id=19";
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
     platforms = with stdenv.lib.platforms; linux;
   };
 }

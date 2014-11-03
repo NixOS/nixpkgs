@@ -10,7 +10,7 @@
 
 let
 
-  version = "1.9.4";
+  version = "2.1.3";
 
   svn = subversionClient.override { perlBindings = true; };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "1shxa49lsxn81qpfi60wh7rn5ci4zjgljvr0qczdmnqzd8w1zyvb";
+    sha256 = "0mvgvr2hz25p49dhhizcw9591f2h17y2699mpmndis3kzap0c6zy";
   };
 
   patches = [ ./docbook2texi.patch ./symlinks-in-bin.patch ./cert-path.patch ];
@@ -66,6 +66,7 @@ stdenv.mkDerivation {
       ln -s "$out/share/git/contrib/emacs/"*.el $out/share/emacs/site-lisp/
       mkdir -p $out/etc/bash_completion.d
       ln -s $out/share/git/contrib/completion/git-completion.bash $out/etc/bash_completion.d/
+      ln -s $out/share/git/contrib/completion/git-prompt.sh $out/etc/bash_completion.d/
 
       # grep is a runtime dependency, need to patch so that it's found
       substituteInPlace $out/libexec/git-core/git-sh-setup \
@@ -132,7 +133,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://git-scm.com/;
-    description = "Git, a popular distributed version control system";
+    description = "Distributed version control system";
     license = stdenv.lib.licenses.gpl2Plus;
 
     longDescription = ''

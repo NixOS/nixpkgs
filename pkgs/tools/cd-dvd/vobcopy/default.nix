@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Copies DVD .vob files to harddisk, decrypting them on the way";
     homepage = http://vobcopy.org/projects/c/c.shtml;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
 
     maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
     platforms = stdenv.lib.platforms.all;

@@ -14,7 +14,7 @@ in stdenv.mkDerivation {
   };
 
   buildInputs = with ocamlPackages; [
-    ocaml findlib menhir
+    ocaml findlib menhir ocamlPackages.camlp4
     ocaml_pcre pycaml
     python ncurses pkgconfig
     makeWrapper
@@ -37,7 +37,7 @@ in stdenv.mkDerivation {
   configureFlags = "--enable-release";
 
   meta = {
-    description = "Coccinelle, a program to apply C code semantic patches";
+    description = "Program to apply semantic patches to C code";
 
     longDescription =
       '' Coccinelle is a program matching and transformation engine which
@@ -54,7 +54,7 @@ in stdenv.mkDerivation {
       '';
 
     homepage = http://coccinelle.lip6.fr/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice

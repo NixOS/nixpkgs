@@ -1,0 +1,8 @@
+url http://sourceforge.net/projects/blobby/files/Blobby%20Volley%202%20%28Linux%29/
+SF_version_dir
+version_link '[.]tar[.][^.]+/download$'
+SF_redirect
+do_overwrite(){
+  do_overwrite_just_version
+  set_var_value url $CURRENT_URL
+}

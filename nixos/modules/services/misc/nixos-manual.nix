@@ -28,7 +28,7 @@ let
     options = eval.options;
   };
 
-  entry = "${manual.manual}/share/doc/nixos/manual.html";
+  entry = "${manual.manual}/share/doc/nixos/index.html";
 
   help = pkgs.writeScriptBin "nixos-help"
     ''

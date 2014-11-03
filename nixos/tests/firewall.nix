@@ -1,6 +1,7 @@
 # Test the firewall module.
 
 import ./make-test.nix {
+  name = "firewall";
 
   nodes =
     { walled =

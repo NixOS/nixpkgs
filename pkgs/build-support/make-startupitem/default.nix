@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   priority = 5;
 
   buildCommand = ''
-    ensureDir $out/share/autostart
+    mkdir -p $out/share/autostart
     target=${name}.desktop
     cp ${package}/share/applications/${srcPrefix}${name}.desktop $target
     chmod +rw $target

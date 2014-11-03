@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   patchPhase = "substituteInPlace configure --replace which \"type -P\"";
 
   meta = {
-    description = "Rubber, a wrapper for LaTeX and friends";
+    description = "Wrapper for LaTeX and friends";
 
     longDescription = ''
       Rubber is a program whose purpose is to handle all tasks related
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       of pdfLaTeX to produce PDF documents.
     '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     homepage = http://www.pps.jussieu.fr/~beffara/soft/rubber/;
   };

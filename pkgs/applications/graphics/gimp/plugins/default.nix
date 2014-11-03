@@ -83,6 +83,21 @@ rec {
     };
   };
 
+  focusblur = pluginDerivation rec {
+    /* menu:
+       Blur/Focus Blur
+    */
+    name = "focusblur-3.2.6";
+    buildInputs = [ gimp pkgconfig pkgs.fftwSinglePrec ] ++ gimp.nativeBuildInputs;
+    patches = [ ./patches/focusblur-glib.patch ];
+    postInstall = "fail";
+    installPhase = "installPlugins src/focusblur";
+    src = fetchurl {
+      url = "http://registry.gimp.org/files/${name}.tar.bz2";
+      sha256 = "1gqf3hchz7n7v5kpqkhqh8kwnxbsvlb5cr2w2n7ngrvl56f5xs1h";
+    };
+  };
+
   resynthesizer = pluginDerivation {
     /* menu:
       Filters/Map/Resynthesize
@@ -221,7 +236,7 @@ rec {
 
       homepage = http://lensfun.sebastiankraft.net/;
 
-      license = "GPLv3+";
+      license = stdenv.lib.licenses.gpl3Plus;
       maintainers = [ stdenv.lib.maintainers.ludo ];
       platforms = stdenv.lib.platforms.gnu;
     };

@@ -1,4 +1,6 @@
-{stdenv, fetchurl, ocaml, findlib}:
+{stdenv, fetchurl, ocaml, findlib, camlp4, minimal ? true}:
+
+assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.11";
 
 stdenv.mkDerivation {
   name = "ocaml-extlib-1.6.1";
@@ -8,14 +10,14 @@ stdenv.mkDerivation {
     sha256 = "1jmfj2w0f3ap0swz8k3qqmrl6x2y4gkmg88vv024xnmliiiv7m48";
   };
 
-  buildInputs = [ocaml findlib];
+  buildInputs = [ocaml findlib camlp4];
 
   createFindlibDestdir = true;
 
   configurePhase = "true";      # Skip configure
   # De facto, option minimal=1 seems to be the default.  See the README.
-  buildPhase     = "make minimal=1 build";
-  installPhase   = "make minimal=1 install";
+  buildPhase     = "make ${if minimal then "minimal=1" else ""} build";
+  installPhase   = "make ${if minimal then "minimal=1" else ""} install";
 
   meta = {
     homepage = http://code.google.com/p/ocaml-extlib/;

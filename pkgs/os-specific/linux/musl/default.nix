@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "musl-${version}";
-  version = "1.0.0";
+  version = "1.1.4";
 
   src = fetchurl {
     url    = "http://www.musl-libc.org/releases/${name}.tar.gz";
-    sha256 = "0chs9h8k4d0iwv8w7n1w02nll3ypwqa2gag6r4czznkj55fz9mqs";
+    sha256 = "1kgmi17zpzgjhywmmqxazj8qsx8cf9siwa65jqd2i6rs7jnnb335";
   };
 
   enableParallelBuilding = true;

@@ -18,6 +18,11 @@ let
   optionals             = stdenv.lib.optionals;
   optionalString        = stdenv.lib.optionalString;
   filter                = stdenv.lib.filter;
+
+  defaultSetupHs        = builtins.toFile "Setup.hs" ''
+                            import Distribution.Simple
+                            main = defaultMain
+                          '';
 in
 
 # Cabal shipped with GHC 6.12.4 or earlier doesn't know the "--enable-tests configure" flag.
@@ -29,7 +34,7 @@ assert enableSharedExecutables -> versionOlder "7.4" ghc.version;
 # Our GHC 6.10.x builds do not provide sharable versions of their core libraries.
 assert enableSharedLibraries -> versionOlder "6.12" ghc.version;
 
-# Our GHC 6.10.x builds do not provide sharable versions of their core libraries.
+# Pure shared library builds don't work before GHC 7.8.x.
 assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
 
 {
@@ -52,6 +57,13 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
                 propagatedUserEnvPkgs = filter (y : ! (y == null)) x.propagatedUserEnvPkgs;
                 doCheck               = enableCheckPhase && x.doCheck;
                 hyperlinkSource       = enableHyperlinkSource && x.hyperlinkSource;
+                # Disable Darwin builds: <https://github.com/NixOS/nixpkgs/issues/2689>.
+                meta                  = let meta = x.meta or {};
+                                            hydraPlatforms = meta.hydraPlatforms or meta.platforms or [];
+                                            noElem         = p: ps: !stdenv.lib.elem p ps;
+                                            noDarwin       = p: noElem p stdenv.lib.platforms.darwin;
+                                        in
+                                        meta // { hydraPlatforms = filter noDarwin hydraPlatforms; };
               };
 
         defaults =
@@ -82,9 +94,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
             # the default download location for Cabal packages is Hackage,
             # you still have to specify the checksum
             src = fetchurl {
-              # cannot use mirrors system because of subtly different directory structures
-              urls = ["http://hackage.haskell.org/packages/archive/${self.pname}/${self.version}/${self.fname}.tar.gz"
-                      "http://hdiff.luite.com/packages/archive/${self.pname}/${self.fname}.tar.gz"];
+              url = "mirror://hackage/${self.pname}/${self.fname}.tar.gz";
               inherit (self) sha256;
             };
 
@@ -181,9 +191,10 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
 
               ${optionalString self.jailbreak "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal"}
 
-              for i in Setup.hs Setup.lhs; do
-                test -f $i && ghc --make $i
+              for i in Setup.hs Setup.lhs ${defaultSetupHs}; do
+                test -f $i && break
               done
+              ghc --make -o Setup -odir $TMPDIR $i
 
               for p in $extraBuildInputs $propagatedNativeBuildInputs; do
                 if [ -d "$p/lib/ghc-${ghc.ghc.version}/package.conf.d" ]; then
@@ -201,10 +212,10 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               done
 
               ${optionalString (self.enableSharedExecutables && self.stdenv.isLinux) ''
-                configureFlags+=" --ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.ghc.name}/${self.pname}-${self.version}";
+                configureFlags+=" --ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.ghc.name}/${self.pname}-${self.version}"
               ''}
               ${optionalString (self.enableSharedExecutables && self.stdenv.isDarwin) ''
-                configureFlags+=" --ghc-option=-optl=-Wl,-headerpad_max_install_names";
+                configureFlags+=" --ghc-option=-optl=-Wl,-headerpad_max_install_names"
               ''}
 
               echo "configure flags: $extraConfigureFlags $configureFlags"
@@ -250,12 +261,12 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
 
               ./Setup copy
 
-              ensureDir $out/bin # necessary to get it added to PATH
+              mkdir -p $out/bin # necessary to get it added to PATH
 
               local confDir=$out/lib/ghc-${ghc.ghc.version}/package.conf.d
               local installedPkgConf=$confDir/${self.fname}.installedconf
               local pkgConf=$confDir/${self.fname}.conf
-              ensureDir $confDir
+              mkdir -p $confDir
               ./Setup register --gen-pkg-config=$pkgConf
               if test -f $pkgConf; then
                 echo '[]' > $installedPkgConf
@@ -267,7 +278,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               fi
 
               ${optionalString (self.enableSharedExecutables && self.isExecutable && self.stdenv.isDarwin) ''
-                for exe in $out/bin/* ; do
+                for exe in "$out/bin/"* ; do
                   install_name_tool -add_rpath \
                     $out/lib/${ghc.ghc.name}/${self.pname}-${self.version} $exe
                 done

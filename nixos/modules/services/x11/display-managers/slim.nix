@@ -19,6 +19,7 @@ let
       reboot_cmd ${config.systemd.package}/sbin/shutdown -r now
       ${optionalString (cfg.defaultUser != null) ("default_user " + cfg.defaultUser)}
       ${optionalString cfg.autoLogin "auto_login yes"}
+      ${cfg.extraConfig}
     '';
 
   # Unpack the SLiM theme, or use the default.
@@ -27,7 +28,7 @@ let
       unpackedTheme = pkgs.stdenv.mkDerivation {
         name = "slim-theme";
         buildCommand = ''
-          ensureDir $out
+          mkdir -p $out
           cd $out
           unpackFile ${cfg.theme}
           ln -s * default
@@ -86,6 +87,15 @@ in
         default = false;
         description = ''
           Automatically log in as the default user.
+        '';
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Extra configuration options for SLiM login manager. Do not
+          add options that can be configured directly.
         '';
       };
 

@@ -58,6 +58,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://okmij.org/ftp/ML/index.html#ber-metaocaml";
     license = [ "QPL" /* compiler */ "LGPLv2" /* library */ ];
-    description = "a conservative extension of OCaml with the primitive type of code values, and three basic multi-stage expression forms: Brackets, Escape, and Run";
+    description = "A conservative extension of OCaml with the primitive type of code values, and three basic multi-stage expression forms: Brackets, Escape, and Run";
   };
 }

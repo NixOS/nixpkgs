@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   src = fetchdarcs {
     url = "http://lama.univ-savoie.fr/~raffalli/GlSurf";
-    tag = "3.3";
+    rev = "3.3";
     sha256 = ""; md5="";
   };
 
@@ -26,6 +26,6 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://www.lama.univ-savoie.fr/~raffalli/glsurf;
-    description = "GlSurf: a program to draw implicit surfaces and curves";
+    description = "A program to draw implicit surfaces and curves";
   };
 }

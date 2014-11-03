@@ -5,11 +5,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "pcre-8.34";
+  name = "pcre-8.36";
 
   src = fetchurl {
     url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${name}.tar.bz2";
-    sha256 = "0gsqmsp0q0n3q0ba32gkjvgcsdy6nwidqa7sbxkbw817zzhkl15n";
+    sha256 = "1fs5p1z67m9f4xnyil3s4lhgyld78f7m4d1yawpyhh0cvrbk90zg";
   };
 
   # The compiler on Darwin crashes with an internal error while building the
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.pcre.org/";
     description = "A library for Perl Compatible Regular Expressions";
-    license = "BSD-3";
+    license = stdenv.lib.licenses.bsd3;
 
     longDescription = ''
       The PCRE library is a set of functions that implement regular

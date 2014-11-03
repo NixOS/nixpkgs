@@ -17,10 +17,12 @@ cabal.mkDerivation (self : {
     stm xhtml zlib parsec
     cabalInstall alex happy ghc
   ];
+  propagatedUserEnvPkgs = self.propagatedBuildInputs;
   meta = {
     description = "Haskell Platform meta package";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [andres simons];
+    broken = true;              # The source code is no longer available from haskell.org.
   };
 })

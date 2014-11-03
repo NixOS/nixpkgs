@@ -3,15 +3,15 @@
 stdenv.mkDerivation {
   name = "remind-3.1.8";
   src = fetchurl {
-    url = http://www.roaringpenguin.com/files/download/remind-03.01.08.tar.gz;
-    sha256 = "0gvizrpkbanm515bhd6mq9xxs4g4ji9pplswaj4plaqsk3yw0qjw";
+    url = http://www.roaringpenguin.com/files/download/remind-03.01.13.tar.gz;
+    sha256 = "0kzw1d53nlj90qfsibbs2gkzp1hamqqxpj57ip4kz1j1xgan69ng";
   };
 
   meta = {
     homepage = http://www.roaringpenguin.com/products/remind;
     description = "Sophisticated calendar and alarm program for the console";
-    license = "GPLv2";
-    maintainers = with stdenv.lib.maintainers; [viric];
+    license = stdenv.lib.licenses.gpl2;
+    maintainers = with stdenv.lib.maintainers; [viric raskin];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

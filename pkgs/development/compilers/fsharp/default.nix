@@ -1,13 +1,12 @@
-{ stdenv, fetchgit, mono, pkgconfig, autoconf, automake, which }:
+{ stdenv, fetchurl, mono, pkgconfig, autoconf, automake, which }:
 
 stdenv.mkDerivation rec {
   name = "fsharp-${version}";
-  version = "3.1.0";
+  version = "3.1.1.26";
 
-  src = fetchgit {
-    url = "https://github.com/fsharp/fsharp";
-    rev = "refs/heads/fsharp_31";
-    sha256 = "0d41ae31c57ec9ac8a4ea149b615ae085f3774b8877d8e53ddbf68856c32eda0";
+  src = fetchurl {
+    url = "https://github.com/fsharp/fsharp/archive/${version}.tar.gz";
+    sha256 = "1yz3cq8ys6ryc6x3a0qyc100swrg2q3az8x8in1lp7c2c0l02zb2";
   };
 
   buildInputs = [ mono pkgconfig autoconf automake which ];

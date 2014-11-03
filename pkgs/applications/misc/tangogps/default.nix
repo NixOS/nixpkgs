@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "tangoGPS, a user friendly map and GPS user interface";
+    description = "User friendly map and GPS user interface";
 
     longDescription = ''
       tangoGPS is an easy to use, fast and lightweight mapping
@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
 
     #homepage = http://www.tangogps.org/; # no longer valid, I couldn't find any other
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

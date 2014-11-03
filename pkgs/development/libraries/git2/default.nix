@@ -1,19 +1,19 @@
-{stdenv, fetchurl, cmake, zlib, python}:
+{stdenv, fetchurl, cmake, zlib, python, libssh2, openssl, http-parser}:
 
 stdenv.mkDerivation rec {
-  version = "0.20.0";
+  version = "0.21.2";
   name = "libgit2-${version}";
 
   src = fetchurl {
     name = "${name}.tar.gz";
     url = "https://github.com/libgit2/libgit2/tarball/v${version}";
-    sha256 = "1iyncz8fqazw683dxjls3lf5pw3f5ma8kachkvjz7dsq57wxllbj";
+    sha256 = "0icf119lhha96rk8m6s38sczjr0idr7yczw6knby61m81a25a96y";
   };
 
   cmakeFlags = "-DTHREADSAFE=ON";
 
   nativeBuildInputs = [ cmake python ];
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib libssh2 openssl http-parser ];
 
   meta = {
     description = "the Git linkable library";

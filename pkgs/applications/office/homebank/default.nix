@@ -2,7 +2,7 @@
 
 let
    download_root = "http://homebank.free.fr/public/";
-   name = "homebank-4.5.5";
+   name = "homebank-4.6.3";
    lastrelease = download_root + name + ".tar.gz";
    oldrelease = download_root + "old/" + name + ".tar.gz";
 in
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     urls = [ lastrelease oldrelease ];
-    sha256 = "05k4497qsb6fzr662h9yxz1amsavd287wh0sabrpr9jdbh3jcfkg";
+    sha256 = "0j39788xz9m7ic277phffznbl35c1dm1g7dgq83va9nni6vipqzn";
   };
 
   buildInputs = [ pkgconfig gtk libofx intltool ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Free, easy, personal accounting for everyone";
     homepage = http://homebank.free.fr/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

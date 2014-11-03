@@ -1,9 +1,27 @@
+# Parses a /nix/store/*-closure file and prints
+# various information.
+# By default, the nodes in the graph are printed to stdout.
+# If the environment variable printManifest is set,
+# then the graph is written as a manifest.
+# If printRegistration is set, then the graph is written
+# as a registration file for a manifest is written
+# in the `nix-store --load-db' format.
+
 use strict;
 use File::Basename;
 
 my %storePaths;
 my %refs;
 
+# Each argument on the command line is a graph file.
+# The graph file contains line-triples and a variable
+# number of references:
+# <store-path>
+# <deriver>
+# <count>
+# <ref-#1>
+# ...
+# <ref-#count>
 foreach my $graph (@ARGV) {
     open GRAPH, "<$graph" or die;
 

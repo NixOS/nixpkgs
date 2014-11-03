@@ -1,32 +1,44 @@
-{ stdenv, fetchurl, pkgconfig, wayland, mesa, libxkbcommon
-, cairo, libxcb, libXcursor, x11, udev, libdrm, mtdev
-, libjpeg, pam, autoconf, automake, libtool, dbus }:
+{ stdenv, fetchurl, pkgconfig, wayland, mesa, libxkbcommon, cairo, libxcb
+, libXcursor, x11, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput
+, pango ? null, libunwind ? null, freerdp ? null, vaapi ? null, libva ? null
+, libwebp ? null
+}:
 
-let version = "1.4.0"; in
+let version = "1.6.0"; in
 
 stdenv.mkDerivation rec {
   name = "weston-${version}";
 
   src = fetchurl {
     url = "http://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "0r7dz72ys9p3f697ajgmihkar2da36bnjna6yanb3kg9k2fk38kl";
+    sha256 = "0kb1mb54l7adihmr2y77xgsdb00dvifnq886q2mmy0mz7g8sagnw";
   };
 
   buildInputs = [
-    pkgconfig wayland mesa libxkbcommon
-    cairo libxcb libXcursor x11 udev libdrm mtdev libjpeg pam dbus.libs
+    pkgconfig wayland mesa libxkbcommon cairo libxcb libXcursor x11 udev libdrm
+    mtdev libjpeg pam dbus.libs libinput pango libunwind freerdp vaapi libva
+    libwebp
   ];
-
-  NIX_CFLAGS_COMPILE = "-I${libdrm}/include/libdrm";
 
   configureFlags = [
+    "--enable-xwayland"
+    "--enable-x11-compositor"
+    "--enable-drm-compositor"
+    "--enable-wayland-compositor"
+    "--enable-headless-compositor"
+    "--enable-fbdev-compositor"
+    "--enable-screen-sharing"
+    "--enable-clients"
+    "--enable-weston-launch"
     "--disable-setuid-install" # prevent install target to chown root weston-launch, which fails
-  ];
+  ] ++ stdenv.lib.optional (freerdp != null) "--enable-rdp-compositor"
+    ++ stdenv.lib.optional (vaapi != null) "--enabe-vaapi-recorder";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Reference implementation of a Wayland compositor";
     homepage = http://wayland.freedesktop.org/;
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ wkennington ];
   };
 }

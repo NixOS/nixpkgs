@@ -1,14 +1,17 @@
-{ stdenv, fetchurl, eventlog, pkgconfig, glib, python, systemd }:
+{ stdenv, fetchurl, eventlog, pkgconfig, glib, python, systemd, perl
+, riemann_c_client, protobufc, yacc }:
 
-stdenv.mkDerivation {
-  name = "syslog-ng-3.5.4.1";
+stdenv.mkDerivation rec {
+  name = "syslog-ng-${version}";
+
+  version = "3.6.1";
 
   src = fetchurl {
-    url = "http://www.balabit.com/downloads/files?path=/syslog-ng/sources/3.5.4.1/source/syslog-ng_3.5.4.1.tar.gz";
-    sha256 = "0rkgrmnyx1x6m3jw5n49k7r1dcg79lxh900g74rgvd3j86g9dilj";
+    url = "http://www.balabit.com/downloads/files?path=/syslog-ng/sources/${version}/source/syslog-ng_${version}.tar.gz";
+    sha256 = "1s3lsxk2pky3jkfamkw5ivpxq2kazikcvdgpmxiyn5w10dwkd0m7";
   };
 
-  buildInputs = [ eventlog pkgconfig glib python systemd ];
+  buildInputs = [ eventlog pkgconfig glib python systemd perl riemann_c_client protobufc yacc ];
 
   configureFlags = [
     "--enable-dynamic-linking"
@@ -16,9 +19,10 @@ stdenv.mkDerivation {
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://www.balabit.com/network-security/syslog-ng/";
     description = "Next-generation syslogd with advanced networking and filtering capabilities";
-    license = "GPLv2";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.rickynils ];
   };
 }

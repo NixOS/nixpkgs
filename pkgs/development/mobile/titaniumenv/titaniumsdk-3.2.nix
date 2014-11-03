@@ -1,14 +1,14 @@
 {stdenv, fetchurl, unzip, makeWrapper, python, jdk}:
 
 stdenv.mkDerivation {
-  name = "mobilesdk-3.2.2.v20140305122111";
+  name = "mobilesdk-3.2.3.GA";
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then fetchurl {
-    url = http://builds.appcelerator.com.s3.amazonaws.com/mobile/3_2_X/mobilesdk-3.2.2.v20140305122111-linux.zip;
-    sha1 = "12dc1bfe8dd73db0650a235492f5f50c7b816d69";
+    url = http://builds.appcelerator.com/mobile/3.2.3/mobilesdk-3.2.3.GA-linux.zip;
+    sha1 = "303e6d19a0ca099d47f6862c00b261c6d0206cea";
   }
   else if stdenv.system == "x86_64-darwin" then fetchurl {
-    url = http://builds.appcelerator.com.s3.amazonaws.com/mobile/3_2_X/mobilesdk-3.2.2.v20140305122111-osx.zip;
-    sha1 = "9875b59faf0ab92e8996b58476466405ed60f6e2";
+    url = http://builds.appcelerator.com/mobile/3.2.3/mobilesdk-3.2.3.GA-osx.zip;
+    sha1 = "8c358cbd8624ffe3dfbd0283738105157067e0fb";
   }
   else throw "Platform: ${stdenv.system} not supported!";
   
@@ -28,8 +28,7 @@ stdenv.mkDerivation {
    
     # Rename ugly version number
     cd mobilesdk/*
-    mv 3.2.2.v20140305122111 3.2.2.GA
-    cd 3.2.2.GA
+    cd 3.2.3.GA
     
     # Zip files do not support timestamps lower than 1980. We have to apply a few work-arounds to cope with that
     # Yes, I know it's nasty :-)

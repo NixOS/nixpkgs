@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "GNU Sharutils, tools for remote synchronization and `shell archives'";
+    description = "Tools for remote synchronization and `shell archives'";
 
     longDescription =
       '' GNU shar makes so-called shell archives out of many files, preparing
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/sharutils/;
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;

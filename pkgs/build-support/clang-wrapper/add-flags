@@ -21,4 +21,4 @@ if test -e @out@/nix-support/libc-ldflags-before; then
     export NIX_LDFLAGS_BEFORE="$(cat @out@/nix-support/libc-ldflags-before) $NIX_LDFLAGS_BEFORE"
 fi
 
-export NIX_CLANG_WRAPPER_FLAGS_SET=1
+export NIX_GCC_WRAPPER_FLAGS_SET=1

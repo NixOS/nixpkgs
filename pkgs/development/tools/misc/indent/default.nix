@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.gnu.org/software/indent/;
     description = "A source code reformatter";
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
   };
 }

@@ -109,13 +109,11 @@ if test "$noSysDirs" = "1"; then
         fi
     fi
 
-
     # CFLAGS_FOR_TARGET are needed for the libstdc++ configure script to find
     # the startfiles.
     # FLAGS_FOR_TARGET are needed for the target libraries to receive the -Bxxx
     # for the startfiles.
-    makeFlagsArray=( \
-        "${makeFlagsArray[@]}" \
+    makeFlagsArray+=( \
         NATIVE_SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
         SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
         CFLAGS_FOR_BUILD="$EXTRA_FLAGS $EXTRA_LDFLAGS" \
@@ -128,8 +126,7 @@ if test "$noSysDirs" = "1"; then
         )
 
     if test -z "$targetConfig"; then
-        makeFlagsArray=( \
-            "${makeFlagsArray[@]}" \
+        makeFlagsArray+=( \
             BOOT_CFLAGS="$EXTRA_FLAGS $EXTRA_LDFLAGS" \
             BOOT_LDFLAGS="$EXTRA_TARGET_CFLAGS $EXTRA_TARGET_LDFLAGS" \
             )
@@ -138,13 +135,11 @@ if test "$noSysDirs" = "1"; then
     if test -n "$targetConfig" -a "$crossStageStatic" == 1; then
         # We don't want the gcc build to assume there will be a libc providing
         # limits.h in this stagae
-        makeFlagsArray=( \
-            "${makeFlagsArray[@]}" \
+        makeFlagsArray+=( \
             LIMITS_H_TEST=false \
             )
     else
-        makeFlagsArray=( \
-            "${makeFlagsArray[@]}" \
+        makeFlagsArray+=( \
             LIMITS_H_TEST=true \
             )
     fi
@@ -163,6 +158,7 @@ preConfigure() {
         # Patch to get armvt5el working:
         sed -i -e 's/ arm)/ arm*)/' newlib/configure.host
     fi
+
     # Bug - they packaged zlib
     if test -d "zlib"; then
         # This breaks the build without-headers, which should build only
@@ -189,8 +185,8 @@ preConfigure() {
     fi
 
     # Eval the preConfigure script from nix expression.
-    eval $providedPreConfigure;
-    env;
+    eval "$providedPreConfigure"
+
     # Perform the build in a different directory.
     mkdir ../build
     cd ../build
@@ -201,6 +197,15 @@ preConfigure() {
 postConfigure() {
     # Don't store the configure flags in the resulting executables.
     sed -e '/TOPLEVEL_CONFIGURE_ARGUMENTS=/d' -i Makefile
+}
+
+
+preInstall() {
+    # Make ‘lib64’ a symlink to ‘lib’.
+    if [ -n "$is64bit" -a -z "$enableMultilib" ]; then
+        mkdir -p $out/lib
+        ln -s lib $out/lib64
+    fi
 }
 
 

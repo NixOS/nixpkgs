@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   phases = [ "unpackPhase" "installPhase" ];
 
   installPhase = ''
-    ensureDir $out
+    mkdir -p $out
     mv * $out/
     for j in `find $out/lib -name "*.jar"`; do
       cp="''${cp:+"$cp:"}$j";

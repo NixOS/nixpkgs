@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
     description = "A model-airplane flight simulator";
     maintainers = with stdenv.lib.maintainers; [ raskin the-kenny ];
     platforms = stdenv.lib.platforms.linux;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }
-

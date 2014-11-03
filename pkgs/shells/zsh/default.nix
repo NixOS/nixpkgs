@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, ncurses, coreutils }:
+{ stdenv, fetchurl, ncurses, coreutils, pcre }:
 
 let
 
-  version = "5.0.5";
+  version = "5.0.7";
 
   documentation = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}-doc.tar.bz2";
-    sha256 = "1wljqii2lkz5kc4y3xs65isnahvnlj678b9zv31bn444mapjpwp4";
+    sha256 = "1wgw16r7z6k3mbr94mwfc8f13yc4ds2d9qk41hvsiv6rm5dnds23";
   };
 
 in
@@ -16,13 +16,13 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}.tar.bz2";
-    sha256 = "1bwfz9n850pclzmzrb437icfhzv1s5pgh2dhs92f194gdkxx4936";
+    sha256 = "1cq4cz7ngvmbg399dva3g6njcz5d92gprmyi2swqc0klh7g2fkjl";
   };
 
-  buildInputs = [ ncurses coreutils ];
+  buildInputs = [ ncurses coreutils pcre ];
 
   preConfigure = ''
-    configureFlags="--enable-maildir-support --enable-multibyte --enable-zprofile=$out/etc/zprofile --with-tcsetpgrp"
+    configureFlags="--enable-maildir-support --enable-multibyte --enable-zprofile=$out/etc/zprofile --with-tcsetpgrp --enable-pcre"
   '';
 
   # XXX: think/discuss about this, also with respect to nixos vs nix-on-X
@@ -70,6 +70,6 @@ EOF
     license = "MIT-like";
     homePage = "http://www.zsh.org/";
     maintainers = with stdenv.lib.maintainers; [ chaoflow ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.unix;
   };
 }

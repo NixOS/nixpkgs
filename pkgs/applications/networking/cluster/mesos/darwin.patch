@@ -1,0 +1,80 @@
+diff --git a/configure.ac b/configure.ac
+index 1ebd196..a49d7d4 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -463,11 +463,6 @@ __EOF__
+   fi
+ 
+   # Determine linker flags for Java if not set.
+-  if test "$OS_NAME" = "darwin"; then
+-    dir="$JAVA_HOME/jre/lib/server"
+-    JAVA_TEST_LDFLAGS="-framework JavaVM"
+-    JAVA_JVM_LIBRARY=$dir/libjvm.dylib
+-  elif test "$OS_NAME" = "linux"; then
+     for arch in amd64 i386; do
+       dir="$JAVA_HOME/jre/lib/$arch/server"
+       if test -e "$dir"; then
+@@ -477,7 +472,6 @@ __EOF__
+ 	break;
+       fi
+     done
+-  fi
+ 
+   if test -z "$JAVA_TEST_LDFLAGS"; then
+     AC_MSG_ERROR([failed to determine linker flags for using Java \
+@@ -488,26 +482,6 @@ __EOF__
+   # flags as necessary (provided JAVA_CPPFLAGS was not set).
+   AC_MSG_CHECKING([whether or not we can build with JNI])
+   if test -z "$JAVA_CPPFLAGS"; then
+-    if test "$OS_NAME" = "darwin"; then
+-      while true; do # Loop until sucessful (via break) or exhausted options.
+-        m4_foreach([java_cppflags],
+-                   [["-I$JAVA_HOME/include -I$JAVA_HOME/include/$OS_NAME"],
+-                    ["-I/System/Library/Frameworks/JavaVM.framework/Headers"]],
+-                   [JAVA_CPPFLAGS=java_cppflags
+-                    TRY_LINK_JNI([break])])
+-        # Exhausted options.
+-        AC_MSG_ERROR([failed to build with JNI
+-  -------------------------------------------------------------------
+-  It appears we were unable to compile against the JNI. This is most
+-  likely due to one of the following issues:
+-    1. You do not have a JDK installed on your system.
+-    2. All JDKs installed on your system have deprecated JNI headers.
+-  It is advised to install OpenJDK on your system, as the JDK that
+-  ships with OS X has deprecated JNI headers.
+-  -------------------------------------------------------------------
+-        ])
+-      done
+-    else
+       while true; do # Loop until sucessful (via break) or exhausted options.
+         m4_foreach([java_cppflags],
+                    [["-I$JAVA_HOME/include -I$JAVA_HOME/include/$OS_NAME"]],
+@@ -516,7 +490,6 @@ __EOF__
+         # Exhausted options.
+         AC_MSG_ERROR([failed to build with JNI])
+       done
+-    fi
+   else
+     TRY_LINK_JNI([], [AC_MSG_ERROR([failed to build with JNI])])
+   fi
+@@ -760,20 +733,6 @@ libcurl is required for mesos to build.
+ if test "x$with_cxx11" = "xyes"; then
+   AX_CXX_COMPILE_STDCXX_11([noext], [mandatory])
+ 
+-  case "$host_os" in
+-  darwin* )
+-    # If we're using clang, we need to pass -stdlib=libc++ too.
+-    if test "x$CLANG" = "xyes"; then
+-      CXXFLAGS="$CXXFLAGS -stdlib=libc++"
+-    fi
+-
+-    # GTEST on OSX needs its own tr1 tuple.
+-    # TODO(dhamon): Update to gmock 1.7 and pass GTEST_LANG_CXX11 when in
+-    # c++11 mode.
+-    CXXFLAGS="$CXXFLAGS -DGTEST_USE_OWN_TR1_TUPLE=1"
+-    ;;
+-  esac
+-
+   # Also pass the flags to 3rdparty libraries.
+   CONFIGURE_ARGS="$CONFIGURE_ARGS CXXFLAGS='$CXXFLAGS'"
+ fi

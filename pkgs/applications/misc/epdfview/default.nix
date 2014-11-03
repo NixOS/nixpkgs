@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
         GTK+ libraries. The aim of ePDFView is to make a simple PDF document
         viewer, in the lines of Evince but without using the Gnome libraries. 
     '';
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
     platforms = with stdenv.lib.platforms; linux;
   };

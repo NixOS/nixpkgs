@@ -3,16 +3,13 @@
 let self = with self; {
   buildPecl = import ../build-support/build-pecl.nix {
     inherit php;
-    inherit (pkgs) stdenv autoreconfHook;
+    inherit (pkgs) stdenv autoreconfHook fetchurl;
   };
 
   memcache = buildPecl {
     name = "memcache-3.0.8";
 
-    src = pkgs.fetchurl {
-      url = http://pecl.php.net/get/memcache-3.0.8.tgz;
-      sha256 = "04c35rj0cvq5ygn2jgmyvqcb0k8d03v4k642b6i37zgv7x15pbic";
-    };
+    sha256 = "04c35rj0cvq5ygn2jgmyvqcb0k8d03v4k642b6i37zgv7x15pbic";
 
     configureFlags = "--with-zlib-dir=${pkgs.zlib}";
   };
@@ -20,10 +17,7 @@ let self = with self; {
   memcached = buildPecl {
     name = "memcached-2.1.0";
 
-    src = pkgs.fetchurl {
-      url = http://pecl.php.net/get/memcached-2.1.0.tgz;
-      sha256 = "1by4zhkq4mbk9ja6s0vlavv5ng8aw5apn3a1in84fkz7bc0l0jdw";
-    };
+    sha256 = "1by4zhkq4mbk9ja6s0vlavv5ng8aw5apn3a1in84fkz7bc0l0jdw";
 
     configureFlags = [
       "--with-zlib-dir=${pkgs.zlib}"
@@ -33,33 +27,55 @@ let self = with self; {
     buildInputs = [ pkgs.cyrus_sasl ];
   };
 
-  xdebug = buildPecl rec {
+  xdebug = buildPecl {
     name = "xdebug-2.2.5";
-    src = pkgs.fetchurl {
-      url = "http://pecl.php.net/get/${name}.tgz";
-      sha256 = "0vss35da615709kdvqji8pblckfvmabmj2njjjz6h8zzvj9gximd";
-    };
+
+    sha256 = "0vss35da615709kdvqji8pblckfvmabmj2njjjz6h8zzvj9gximd";
   };
 
-  apc = buildPecl rec {
+  apc = buildPecl {
     name = "apc-3.1.13";
-    src = pkgs.fetchurl {
-      url = "http://pecl.php.net/get/${name}.tgz";
-      sha256 = "1gcsh9iar5qa1yzpjki9bb5rivcb6yjp45lmjmp98wlyf83vmy2y";
-    };
+
+    sha256 = "1gcsh9iar5qa1yzpjki9bb5rivcb6yjp45lmjmp98wlyf83vmy2y";
   };
 
-  zmq = buildPecl rec {
+  zendopcache = buildPecl {
+    name = "zendopcache-7.0.3";
+
+    sha256 = "0qpfbkfy4wlnsfq4vc4q5wvaia83l89ky33s08gqrcfp3p1adn88";
+  };
+
+  zmq = buildPecl {
     name = "zmq-1.1.2";
-    src = pkgs.fetchurl {
-      url = "http://pecl.php.net/get/${name}.tgz";
-      sha256 = "0ccz73p8pkda3y9p9qbr3m19m0yrf7k2bvqgbaly3ibgh9bazc69";
-    };
+
+    sha256 = "0ccz73p8pkda3y9p9qbr3m19m0yrf7k2bvqgbaly3ibgh9bazc69";
 
     configureFlags = [
       "--with-zmq=${pkgs.zeromq2}"
     ];
 
     buildInputs = [ pkgs.pkgconfig ];
+  };
+
+  xcache = buildPecl rec {
+    name = "xcache-${version}";
+
+    version = "3.1.0";
+
+    src = pkgs.fetchurl {
+      url = "http://xcache.lighttpd.net/pub/Releases/${version}/${name}.tar.bz2";
+      sha256 = "1saysvzwkfmcyg53za4j7qnranxd6871spjzfpclhdlqm043xbw6";
+    };
+
+    configureFlags = [
+      "--enable-xcache"
+      "--enable-xcache-coverager"
+      "--enable-xcache-optimizer"
+      "--enable-xcache-assembler"
+      "--enable-xcache-encoder"
+      "--enable-xcache-decoder"
+    ];
+
+    buildInputs = [ pkgs.m4 ];
   };
 }; in self

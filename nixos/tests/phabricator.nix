@@ -1,4 +1,5 @@
 import ./make-test.nix ({ pkgs, ... }: {
+  name = "phabricator";
 
   nodes = {
     storage =
@@ -31,9 +32,16 @@ import ./make-test.nix ({ pkgs, ... }: {
             }];
           };
 
+          phd = {
+            enable = true;
+          };
+
           mysql = {
             enable = true;
             package = pkgs.mysql;
+            extraOptions = ''
+              sql_mode=STRICT_ALL_TABLES
+            '';
           };
         };
 

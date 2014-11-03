@@ -30,7 +30,7 @@ let
       }
     ];
 
-in 
+in
 
 stdenv.mkDerivation {
   name = "xen-${version}";
@@ -136,6 +136,6 @@ stdenv.mkDerivation {
     description = "Xen hypervisor and management tools for Dom0";
     platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = [ stdenv.lib.maintainers.eelco ];
-    broken = true;
+    broken = true; # bump to at least 4.1.6.1 to fix security issues
   };
 }

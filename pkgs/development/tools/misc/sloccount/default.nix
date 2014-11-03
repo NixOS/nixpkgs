@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "SLOCCount, a set of tools for counting physical Source Lines of Code (SLOC)";
+    description = "Set of tools for counting physical Source Lines of Code (SLOC)";
 
     longDescription = ''
       This is the home page of "SLOCCount", a set of tools for
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       the Perl CPAN library using this tool suite.
     '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     homepage = http://www.dwheeler.com/sloccount/;
 

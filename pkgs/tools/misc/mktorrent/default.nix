@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://mktorrent.sourceforge.net/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     description = "Command line utility to create BitTorrent metainfo files";
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [viric];

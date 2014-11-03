@@ -1,49 +1,70 @@
-{ stdenv, fetchurl, fetchgit, openssl, zlib, pcre, libxml2, libxslt, expat
-, gd, geoip
+{ stdenv, fetchurl, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt, expat
+, gd, geoip, luajit
 , rtmp ? false
 , fullWebDAV ? false
 , syslog ? false
 , moreheaders ? false
-, echo ? false }:
+, echo ? false
+, ngx_lua ? false }:
 
 with stdenv.lib;
 
 let
-  version = "1.6.0";
+  version = "1.6.2";
   mainSrc = fetchurl {
     url = "http://nginx.org/download/nginx-${version}.tar.gz";
-    sha256 = "06pwmg4qyd1sirpyl47s6qp94qc8a36dlkaw5pgv7s63l5bxffll";
+    sha256 = "060s77qxhkn02fjkcndsr0xppj2bppjzkj0gn84svrykb4lqqq5m";
   };
 
-  rtmp-ext = fetchgit {
-    url = https://github.com/arut/nginx-rtmp-module.git;
-    rev = "8c2229cce5d4d4574e8fb7b130281497f746f0fa";
-    sha256 = "6caea2a13161345c3fc963679730be54cebebddf1406ac7d4ef4ce72ac0b90b0";
+  rtmp-ext = fetchFromGitHub {
+    owner = "arut";
+    repo = "nginx-rtmp-module";
+    rev = "v1.1.5";
+    sha256 = "1d9ws4prxz22yq3nhh5h18jrs331zivrdh784l6wznc1chg3gphn";
   };
 
-  dav-ext = fetchgit {
-    url = "https://github.com/arut/nginx-dav-ext-module";
-    rev = "89d582d31ab624ff1c6a4cec0c1a52839507b323";
-    sha256 = "2175f83a291347504770d2a4bb5069999e9f7408697bd49464b6b54e994493e1";
+  dav-ext = fetchFromGitHub {
+    owner = "arut";
+    repo = "nginx-dav-ext-module";
+    rev = "v0.0.3";
+    sha256 = "1qck8jclxddncjad8yv911s9z7lrd58bp96jf13m0iqk54xghx91";
   };
 
-  syslog-ext = fetchgit {
-    url = https://github.com/yaoweibin/nginx_syslog_patch.git;
-    rev = "3ca5ba65541637f74467038aa032e2586321d0cb";
-    sha256 = "15z9r17lx42fdcw8lalddc86wpabgmc1rqi7f90v4mcirjzrpgyi";
+  syslog-ext = fetchFromGitHub {
+    owner = "yaoweibin";
+    repo = "nginx_syslog_patch";
+    rev = "v0.25";
+    sha256 = "0734f884838wcjyrrddn8wzj834wid1zffrk093jrx18447cryxl";
   };
 
-  moreheaders-ext = fetchgit {
-    url = https://github.com/openresty/headers-more-nginx-module.git;
-    rev = "0c6e05d3125a97892a250e9ba8b7674163ba500b";
-    sha256 = "e121d97fd3c81c64e6cbf6902bbcbdb01be9ac985c6832d40434379d5e998eaf";
+  moreheaders-ext = fetchFromGitHub {
+    owner = "openresty";
+    repo = "headers-more-nginx-module";
+    rev = "v0.25";
+    sha256 = "1d71y1i0smi4gkzz731fhn58gr03b3s6jz6ipnfzxxaizmgxm3rb";
   };
 
-  echo-ext = fetchgit {
-    url = https://github.com/openresty/echo-nginx-module.git;
-    rev = "refs/tags/v0.53";
-    sha256 = "90d4e3a49c678019f4f335bc18529aa108fcc9cfe0747ea4e2f6084a70da2868";
+  echo-ext = fetchFromGitHub {
+    owner = "openresty";
+    repo = "echo-nginx-module";
+    rev = "v0.56";
+    sha256 = "03vaf1ffhkj2s089f90h45n079h3zw47h6y5zpk752f4ydiagpgd";
   };
+
+  develkit-ext = fetchFromGitHub {
+    owner = "simpl";
+    repo = "ngx_devel_kit";
+    rev = "v0.2.19";
+    sha256 = "1cqcasp4lc6yq5pihfcdw4vp4wicngvdc3nqg3bg52r63c1qrz76";
+  };
+
+  lua-ext = fetchFromGitHub {
+    owner = "openresty";
+    repo = "lua-nginx-module";
+    rev = "v0.9.12";
+    sha256 = "0r07q1n3nvi7m3l8zk7nfk0z9kjhqknav61ys9lshh2ylsmz1lf4";
+  };
+
 in
 
 stdenv.mkDerivation rec {
@@ -52,7 +73,11 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ openssl zlib pcre libxml2 libxslt gd geoip
-    ] ++ optional fullWebDAV expat;
+    ] ++ optional fullWebDAV expat
+      ++ optional ngx_lua luajit;
+
+  LUAJIT_LIB = if ngx_lua then "${luajit}/lib" else "";
+  LUAJIT_INC = if ngx_lua then "${luajit}/include/luajit-2.0" else "";
 
   patches = if syslog then [ "${syslog-ext}/syslog-1.5.6.patch" ] else [];
 
@@ -83,6 +108,7 @@ stdenv.mkDerivation rec {
     ++ optional syslog "--add-module=${syslog-ext}"
     ++ optional moreheaders "--add-module=${moreheaders-ext}"
     ++ optional echo "--add-module=${echo-ext}"
+    ++ optional ngx_lua "--add-module=${develkit-ext} --add-module=${lua-ext}"
     ++ optional (elem stdenv.system (with platforms; linux ++ freebsd)) "--with-file-aio";
 
 

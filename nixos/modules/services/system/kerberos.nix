@@ -1,8 +1,8 @@
-{pkgs, config, ...}:
+{pkgs, config, lib, ...}:
 
 let
 
-  inherit (pkgs.lib) mkOption mkIf singleton;
+  inherit (lib) mkOption mkIf singleton;
 
   inherit (pkgs) heimdal;
 
@@ -36,7 +36,7 @@ in
     environment.systemPackages = [ heimdal ];
 
     services.xinetd.enable = true;
-    services.xinetd.services = pkgs.lib.singleton
+    services.xinetd.services = lib.singleton
       { name = "kerberos-adm";
         flags = "REUSE NAMEINARGS";
         protocol = "tcp";

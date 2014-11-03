@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, python, gst-plugins-base, orc
 , faacSupport ? false, faac ? null
 , faad2, libass, libkate, libmms
-, libmodplug, mpeg2dec, mpg123 
+, libmodplug, mpeg2dec, mpg123
 , openjpeg, libopus, librsvg
 , wildmidi, fluidsynth, libvdpau, wayland
 , libwebp, xvidcore, gnutls
@@ -10,7 +10,7 @@
 assert faacSupport -> faac != null;
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-bad-1.2.4";
+  name = "gst-plugins-bad-1.4.3";
 
   meta = with stdenv.lib; {
     description = "Gstreamer Bad Plugins";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-bad/${name}.tar.xz";
-    sha256 = "1jifzrgr4y3566d2lq30fibcd4rb8z8vpqnr2gihbmymr4z16k4q";
+    sha256 = "a6840080c469d0db51d6d4d0f7c42c97b3c8c01942f24401c61b1ad36726b97c";
   };
 
   nativeBuildInputs = [ pkgconfig python ];

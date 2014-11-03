@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
       Guix is based on the Nix package manager.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.linux;

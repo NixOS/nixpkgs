@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   name = "key-mon-${version}";
-  version = "1.16";
+  version = "1.17";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://key-mon.googlecode.com/files/${name}.tar.gz";
-    sha256 = "1pfki1fyh3q29sj6kq1chhi1h2v9ki6sp09qyww59rjraypvzsis";
+    sha256 = "1liz0dxcqmchbnl1xhlxkqm3gh76wz9jxdxn9pa7dy77fnrjkl5q";
   };
 
   propagatedBuildInputs =

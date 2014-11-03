@@ -233,6 +233,22 @@ twisted = buildPythonPackage {
 </section>
 
 
+<section xml:id="ssec-language-ruby"><title>Ruby</title>
+  <para>For example, to package yajl-ruby package, use gem-nix:</para>
+  
+  <screen>
+    $ nix-env -i gem-nix
+    $ gem-nix --no-user-install --nix-file=pkgs/development/interpreters/ruby/generated.nix yajl-ruby
+    $ nix-build -A rubyLibs.yajl-ruby
+  </screen>
+</section>
+
+
+<section xml:id="ssec-language-go"><title>Go</title>
+  <para>To extract dependency information from a Go package in automated way use <link xlink:href="https://github.com/cstrahan/go2nix">go2nix</link>.</para>
+</section>
+
+
 <section xml:id="ssec-language-java"><title>Java</title>
 
 <para>Ant-based Java packages are typically built from source as follows:
@@ -313,6 +329,90 @@ Runtime) instead of the OpenJRE.</para>
 
 </section>
 
+
+<section xml:id="ssec-language-lua"><title>Lua</title>
+
+<para>
+  Lua packages are built by the <varname>buildLuaPackage</varname> function.  This function is
+  implemented
+  in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/lua-modules/generic/default.nix">
+  <filename>pkgs/development/lua-modules/generic/default.nix</filename></link>
+  and works similarly to <varname>buildPerlPackage</varname>. (See
+  <xref linkend="ssec-language-perl"/> for details.)
+</para>
+
+<para>
+  Lua packages are defined
+  in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/lua-packages.nix"><filename>pkgs/top-level/lua-packages.nix</filename></link>.
+  Most of them are simple. For example:
+
+  <programlisting>
+fileSystem = buildLuaPackage {
+  name = "filesystem-1.6.2";
+  src = fetchurl {
+    url = "https://github.com/keplerproject/luafilesystem/archive/v1_6_2.tar.gz";
+    sha256 = "1n8qdwa20ypbrny99vhkmx8q04zd2jjycdb5196xdhgvqzk10abz";
+  };  
+  meta = {
+    homepage = "https://github.com/keplerproject/luafilesystem";
+    hydraPlatforms = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ flosse ];
+  };
+};
+  </programlisting>
+</para>
+
+<para>
+  Though, more complicated package should be placed in a seperate file in 
+  <link
+  xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/lua-modules"><filename>pkgs/development/lua-modules</filename></link>.
+</para>
+<para>
+  Lua packages accept additional parameter <varname>disabled</varname>, which defines
+  the condition of disabling package from luaPackages. For example, if package has
+  <varname>disabled</varname> assigned to <literal>lua.luaversion != "5.1"</literal>,
+  it will not be included in any luaPackages except lua51Packages, making it
+  only be built for lua 5.1.
+</para>
+
+</section>
+
+<section xml:id="ssec-language-coq"><title>Coq</title>
+  <para>
+    Coq libraries should be installed in
+    <literal>$(out)/lib/coq/${coq.coq-version}/user-contrib/</literal>.
+    Such directories are automatically added to the
+    <literal>$COQPATH</literal> environment variable by the hook defined
+    in the Coq derivation.
+  </para>
+  <para>
+    Some libraries require OCaml and sometimes also Camlp5. The exact
+    versions that were used to build Coq are saved in the
+    <literal>coq.ocaml</literal> and <literal>coq.camlp5</literal>
+    attributes.
+  </para>
+  <para>
+    Here is a simple package example. It is a pure Coq library, thus it
+    only depends on Coq. Its <literal>makefile</literal> has been
+    generated using <literal>coq_makefile</literal> so we only have to
+    set the <literal>$COQLIB</literal> variable at install time.
+  </para>
+  <programlisting>
+{stdenv, fetchurl, coq}:
+stdenv.mkDerivation {
+  src = fetchurl {
+    url = http://coq.inria.fr/pylons/contribs/files/Karatsuba/v8.4/Karatsuba.tar.gz;
+    sha256 = "0ymfpv4v49k4fm63nq6gcl1hbnnxrvjjp7yzc4973n49b853c5b1";
+  };
+
+  name = "coq-karatsuba";
+
+  buildInputs = [ coq ];
+
+  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+}
+</programlisting>
+</section>
 
 <!--
 <section><title>Haskell</title>

@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   doCheck = true;
 
   meta = {
-    description = "GPSBabel, a tool to convert, upload and download data from GPS and Map programs";
+    description = "Convert, upload and download data from GPS and Map programs";
 
     longDescription = ''
       GPSBabel converts waypoints, tracks, and routes between popular
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
 
     homepage = http://www.gpsbabel.org/;
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.gnu;         # arbitrary choice

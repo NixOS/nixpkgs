@@ -13,6 +13,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "X window manager for non-desktop embedded systems";
     homepage = http://matchbox-project.org/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

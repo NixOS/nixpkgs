@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "3D dungeon crawling adventure";
 
     homepage = http://www.freedink.org/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     # I take it out of hydra as it does not work as well as I'd like
     # maintainers = [ stdenv.lib.maintainers.bjg ];

@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://mygui.info/;
     description = "Library for creating GUIs for games and 3D applications";
-    license = "LGPLv3+";
+    license = stdenv.lib.licenses.lgpl3Plus;
   };
 }

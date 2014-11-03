@@ -2,6 +2,7 @@
 # machine.
 
 import ./make-test.nix {
+  name = "munin";
 
   nodes = {
     one =
@@ -17,6 +18,7 @@ import ./make-test.nix {
              '';
            };
           };
+          systemd.services.munin-node.serviceConfig.TimeoutStartSec = "3min";
         };
     };
 

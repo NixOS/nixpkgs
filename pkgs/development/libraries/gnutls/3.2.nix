@@ -4,11 +4,11 @@
 assert guileBindings -> guile != null;
 
 stdenv.mkDerivation rec {
-  name = "gnutls-3.2.15";
+  name = "gnutls-3.2.17";
 
   src = fetchurl {
     url = "ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2/${name}.tar.lz";
-    sha256 = "16c5c4k41mxib8i06npks940p9xllgn1wrackfp8712wdvl5zc4q";
+    sha256 = "a332adda1d294fbee859ae46ee0c128d8959c4a5b9c28e7cdbe5c9b56898fc25";
   };
 
   patches =
@@ -63,9 +63,8 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.gnu.org/software/gnutls/;
-    license = "LGPLv2.1+";
+    license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.all;
   };
 }
-

@@ -1,0 +1,15 @@
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=750331
+
+Index: setools-git/secmds/replcon.cc
+===================================================================
+--- setools-git.orig/secmds/replcon.cc
++++ setools-git/secmds/replcon.cc
+@@ -60,7 +60,7 @@ static struct option const longopts[] =
+ 	{NULL, 0, NULL, 0}
+ };
+ 
+-extern int lsetfilecon_raw(const char *, security_context_t) __attribute__ ((weak));
++extern int lsetfilecon_raw(const char *, const char *) __attribute__ ((weak));
+ 
+ /**
+  * As that setools must work with older libselinux versions that may

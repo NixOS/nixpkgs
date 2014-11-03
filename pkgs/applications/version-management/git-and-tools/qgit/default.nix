@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "qgit-2.5";
   meta =
   {
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     homepage = "http://libre.tibirna.org/projects/qgit/wiki/QGit";
     description = "Graphical front-end to Git";
     inherit (qt.meta) platforms;

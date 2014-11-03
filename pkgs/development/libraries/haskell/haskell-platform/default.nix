@@ -257,6 +257,8 @@ let
       stm                       = self.stm_2_1_1_2;
       xhtml                     = self.xhtml_3000_2_0_1;
       happy                     = self.happy_1_18_4;
+      # not actually specified, but important to make the whole thing build
+      mtl                       = self.mtl_1_1_0_2;
     };
   };
 
@@ -285,6 +287,8 @@ let
       cabalInstall              = self.cabalInstall_0_6_2;
       alex                      = self.alex_2_3_1;
       happy                     = self.happy_1_18_4;
+      # not actually specified, but important to make the whole thing build
+      mtl                       = self.mtl_1_1_0_2;
     };
   };
 

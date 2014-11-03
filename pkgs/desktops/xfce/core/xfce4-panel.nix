@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk, libxfce4util, libxfce4ui
-, libwnck, exo, garcon, xfconf, libstartup_notification }:
+, libwnck, exo, garcon, xfconf, libstartup_notification
+, makeWrapper, xfce4mixer }:
 
 stdenv.mkDerivation rec {
   p_name  = "xfce4-panel";
@@ -17,9 +18,14 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig intltool gtk libxfce4util exo libwnck
-      garcon xfconf libstartup_notification
-    ];
+      garcon xfconf libstartup_notification makeWrapper
+    ] ++ xfce4mixer.gst_plugins;
   propagatedBuildInputs = [ libxfce4ui ];
+
+  postInstall = ''
+    wrapProgram "$out/bin/xfce4-panel" \
+      --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
+  '';
 
   preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
 
@@ -28,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.xfce.org/projects/xfce4-panel;
     description = "Xfce panel";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };

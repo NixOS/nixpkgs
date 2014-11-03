@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, SDL, autoconf, automake, libtool, gtk, m4, pkgconfig, mesa }:
+{ stdenv, fetchsvn, SDL, autoconf, automake, libtool, gtk, m4, pkgconfig, mesa, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "smpeg-svn${version}";
@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ SDL autoconf automake libtool gtk m4 pkgconfig mesa ];
+  buildInputs = [ SDL gtk mesa ];
+
+  nativeBuildInputs = [ autoconf automake libtool m4 pkgconfig makeWrapper ];
 
   preConfigure = ''
     touch NEWS AUTHORS ChangeLog
@@ -26,11 +28,15 @@ stdenv.mkDerivation rec {
     -e 's,"SDL_thread.h",<SDL/SDL_thread.h>,' \
     -e 's,"SDL_types.h",<SDL/SDL_types.h>,' \
       $out/include/smpeg/*.h
+
+    wrapProgram $out/bin/smpeg-config \
+      --prefix PATH ":" "${pkgconfig}/bin" \
+      --prefix PKG_CONFIG_PATH ":" "${SDL}/lib/pkgconfig"
   '';
 
   meta = {
     homepage = http://icculus.org/smpeg/;
     description = "MPEG decoding library";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

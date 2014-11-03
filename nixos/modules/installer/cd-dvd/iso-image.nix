@@ -11,7 +11,7 @@ let
   # The Grub image.
   grubImage = pkgs.runCommand "grub_eltorito" {}
     ''
-      ${pkgs.grub2}/bin/grub-mkimage -O i386-pc -o tmp biosdisk iso9660 help linux linux16 chain png jpeg echo gfxmenu reboot
+      ${pkgs.grub2}/bin/grub-mkimage -p /boot/grub -O i386-pc -o tmp biosdisk iso9660 help linux linux16 chain png jpeg echo gfxmenu reboot
       cat ${pkgs.grub2}/lib/grub/*/cdboot.img tmp > $out
     ''; # */
 
@@ -113,11 +113,12 @@ in
     };
 
     isoImage.contents = mkOption {
-      example =
+      example = literalExample ''
         [ { source = pkgs.memtest86 + "/memtest.bin";
             target = "boot/memtest.bin";
           }
-        ];
+        ]
+      '';
       description = ''
         This option lists files to be copied to fixed locations in the
         generated ISO image.
@@ -125,7 +126,7 @@ in
     };
 
     isoImage.storeContents = mkOption {
-      example = [pkgs.stdenv];
+      example = literalExample "[ pkgs.stdenv ]";
       description = ''
         This option lists additional derivations to be included in the
         Nix store in the generated ISO image.
@@ -179,7 +180,6 @@ in
 
     fileSystems."/" =
       { fsType = "tmpfs";
-        device = "none";
         options = "mode=0755";
       };
 
@@ -192,6 +192,8 @@ in
         noCheck = true;
       };
 
+    # In stage 1, mount a tmpfs on top of /nix/store (the squashfs
+    # image) to make this a live CD.
     fileSystems."/nix/.ro-store" =
       { fsType = "squashfs";
         device = "/iso/nix-store.squashfs";
@@ -201,22 +203,19 @@ in
 
     fileSystems."/nix/.rw-store" =
       { fsType = "tmpfs";
-        device = "none";
         options = "mode=0755";
         neededForBoot = true;
+      };
+
+    fileSystems."/nix/store" =
+      { fsType = "unionfs-fuse";
+        device = "unionfs";
+        options = "allow_other,cow,nonempty,chroot=/mnt-root,max_files=32768,hide_meta_files,dirs=/nix/.rw-store=rw:/nix/.ro-store=ro";
       };
 
     boot.initrd.availableKernelModules = [ "squashfs" "iso9660" ];
 
     boot.initrd.kernelModules = [ "loop" ];
-
-    # In stage 1, mount a tmpfs on top of /nix/store (the squashfs
-    # image) to make this a live CD.
-    boot.initrd.postMountCommands =
-      ''
-        mkdir -p $targetRoot/nix/store
-        unionfs -o allow_other,cow,nonempty,chroot=$targetRoot,max_files=32768 /nix/.rw-store=RW:/nix/.ro-store=RO $targetRoot/nix/store
-      '';
 
     # Closures to be copied to the Nix store on the CD, namely the init
     # script and the top-level system configuration directory.
@@ -313,8 +312,8 @@ in
       '';
 
     # Add vfat support to the initrd to enable people to copy the
-    # contents of the CD to a bootable USB stick. Need unionfs-fuse for union mounts
-    boot.initrd.supportedFilesystems = [ "vfat" "unionfs-fuse" ];
+    # contents of the CD to a bootable USB stick.
+    boot.initrd.supportedFilesystems = [ "vfat" ];
 
   };
 

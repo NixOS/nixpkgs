@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://code.google.com/musicip-libofa/;
-    description = "LibOFA - Library Open Fingerprint Architecture";
+    description = "Library Open Fingerprint Architecture";
     longDescription = ''
       LibOFA (Library Open Fingerprint Architecture) is an open-source audio
       fingerprint created and provided by MusicIP'';

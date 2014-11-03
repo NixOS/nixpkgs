@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl, bdftopcf, mkfontdir, mkfontscale }:
 
 stdenv.mkDerivation rec {
-  name = "terminus-font-4.38";
+  name = "terminus-font-4.39";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/terminus-font/${name}/${name}.tar.gz";
-    sha256 = "1dwpxmg0wiyhp7hh18mvw18gnf0y2jgbn80c4xya7rmb9mm8gx7n";
+    sha256 = "1gzmn7zakvy6yrvmswyjfklnsvqrjm0imhq8rjws8rdkhqwkh21i";
   };
 
   buildInputs = [ perl bdftopcf mkfontdir mkfontscale ];

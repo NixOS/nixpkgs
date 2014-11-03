@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, ounit}:
+{stdenv, fetchurl, ocaml, findlib}:
 
 stdenv.mkDerivation {
   name = "ocamlify-0.0.2";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1f0fghvlbfryf5h3j4as7vcqrgfjb4c8abl5y0y5h069vs4kp5ii";
   };
 
-  buildInputs = [ocaml findlib ounit];
+  buildInputs = [ocaml findlib];
 
   configurePhase = "ocaml setup.ml -configure --prefix $out";
   buildPhase     = "ocaml setup.ml -build";

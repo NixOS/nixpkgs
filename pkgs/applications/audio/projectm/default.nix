@@ -2,7 +2,7 @@
 , glew, ftgl, ttf_bitstream_vera
 , withQt ? true, qt4
 , withLibvisual ? false, libvisual, SDL
-, withJack ? false, jackaudio
+, withJack ? false, jack2
 , withPulseAudio ? true, pulseaudio
 }:
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     [ glew ftgl ]
     ++ optional withQt qt4
     ++ optionals withLibvisual [ libvisual SDL ]
-    ++ optional withJack jackaudio
+    ++ optional withJack jack2
     ++ optional withPulseAudio pulseaudio
     ;
 }

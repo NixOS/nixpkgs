@@ -1,39 +1,31 @@
-{ fetchurl, stdenv, builderDefs, precision ? "double" }:
+{ fetchurl, stdenv, lib, precision ? "double" }:
 
-assert stdenv.lib.elem precision [ "single" "double" "long-double" "quad-precision" ];
+with lib;
 
-with { inherit (stdenv.lib) optional; };
+assert elem precision [ "single" "double" "long-double" "quad-precision" ];
 
-let
-  version = "3.3.3";
-  localDefs = builderDefs.passthru.function {
-    src =
-      fetchurl {
-        url = "ftp://ftp.fftw.org/pub/fftw/fftw-${version}.tar.gz";
-        sha256 = "1wwp9b2va7vkq3ay7a9jk22nr4x5q6m37rzqy2j8y3d11c5grkc5";
-      };
-    buildInputs = [];
-    configureFlags = [
-        "--enable-shared" "--disable-static"
-        "--enable-threads" "--enable-openmp" # very small wrappers
-      ]
-      ++ optional (precision != "double") "--enable-${precision}"
-      # all x86_64 have sse2
-      ++ optional stdenv.isx86_64 "--enable-sse2";
-  };
-
-in with localDefs;
+let version = "3.3.4"; in
 
 stdenv.mkDerivation rec {
   name = "fftw-${precision}-${version}";
-  builder = writeScript "${name}-builder"
-    (textClosure localDefs [doConfigure doMakeInstall doForceShare]);
+
+  src = fetchurl {
+    url = "ftp://ftp.fftw.org/pub/fftw/fftw-${version}.tar.gz";
+    sha256 = "10h9mzjxnwlsjziah4lri85scc05rlajz39nqf3mbh4vja8dw34g";
+  };
+
+  configureFlags =
+    [ "--enable-shared" "--disable-static"
+      "--enable-threads" "--enable-openmp" # very small wrappers
+    ]
+    ++ optional (precision != "double") "--enable-${precision}"
+    # all x86_64 have sse2
+    ++ optional stdenv.isx86_64 "--enable-sse2";
+
+  enableParallelBuilding = true;
+
   meta = {
     description = "Fastest Fourier Transform in the West library";
-  };
-  passthru = {
-    # Allow instantiating "-A fftw.src"
-    inherit src;
+    homepage = http://www.fftw.org/;
   };
 }
-

@@ -27,14 +27,14 @@ stdenv.mkDerivation rec {
   patchFlags = "-p0";
 
   patches =
-    let
+    (let
       patch = nr: sha256:
         fetchurl {
           url = "mirror://gnu/bash/bash-4.2-patches/bash42-${nr}";
           inherit sha256;
         };
     in
-      import ./bash-4.2-patches.nix patch;
+      import ./bash-4.2-patches.nix patch);
 
   crossAttrs = {
     configureFlags = baseConfigureFlags +
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
       Bash without modification.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.simons ];
   };

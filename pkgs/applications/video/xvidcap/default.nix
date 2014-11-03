@@ -1,5 +1,6 @@
 { stdenv, fetchurl, perl, perlXMLParser, pkgconfig, gtk
-, scrollkeeper, libglade, libXmu, libX11, libXext, gettext, lame, libXfixes, libXdamage}:
+, scrollkeeper, libglade, libXmu, libX11, libXext, gettext
+, lame, libXfixes, libXdamage }:
 
 stdenv.mkDerivation {
   name = "xvidcap-1.1.7";
@@ -10,14 +11,18 @@ stdenv.mkDerivation {
   };
 
   patches = [ ./xlib.patch ];
-  buildInputs = [perl perlXMLParser pkgconfig gtk scrollkeeper libglade libXmu gettext lame libXdamage libXfixes libXext libX11];
+  buildInputs = [
+    perl perlXMLParser pkgconfig gtk scrollkeeper
+    libglade libXmu gettext lame libXdamage libXfixes libXext libX11
+  ];
 
   # !!! don't know why this is necessary
   NIX_LDFLAGS = "-lXext -lX11 -lz -lgcc_s";
 
-  meta = { 
+  meta = with stdenv.lib; { 
     description = "screencast video catpuring tool";
     homepage = http://xvidcap.sourceforge.net/;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

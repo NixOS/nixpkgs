@@ -10,15 +10,19 @@ let
 
   systemd = cfg.package;
 
+
   makeUnit = name: unit:
+    let
+      pathSafeName = lib.replaceChars ["@" "\\"] ["-" "-"] name;
+    in
     if unit.enable then
-      pkgs.runCommand "unit" { preferLocalBuild = true; inherit (unit) text; }
+      pkgs.runCommand "unit-${pathSafeName}" { preferLocalBuild = true; inherit (unit) text; }
         ''
           mkdir -p $out
           echo -n "$text" > $out/${shellEscape name}
         ''
     else
-      pkgs.runCommand "unit" { preferLocalBuild = true; }
+      pkgs.runCommand "unit-${pathSafeName}-disabled" { preferLocalBuild = true; }
         ''
           mkdir -p $out
           ln -s /dev/null $out/${shellEscape name}
@@ -81,6 +85,7 @@ let
       "systemd-journal-flush.service"
       "systemd-journal-gatewayd.socket"
       "systemd-journal-gatewayd.service"
+      "systemd-journald-dev-log.socket"
       "syslog.socket"
 
       # SysV init compatibility.
@@ -162,10 +167,7 @@ let
       "systemd-sysctl.service"
     ]
 
-    ++ optionals cfg.enableEmergencyMode [
-      "emergency.target"
-      "emergency.service"
-    ];
+    ++ cfg.additionalUpstreamSystemUnits;
 
   upstreamSystemWants =
     [ #"basic.target.wants"
@@ -248,6 +250,12 @@ let
               ${config.postStart}
             '';
           })
+        (mkIf (config.reload != "")
+          { serviceConfig.ExecReload = makeJobScript "${name}-reload" ''
+              #! ${pkgs.stdenv.shell} -e
+              ${config.reload}
+            '';
+          })
         (mkIf (config.preStop != "")
           { serviceConfig.ExecStop = makeJobScript "${name}-pre-stop" ''
               #! ${pkgs.stdenv.shell} -e
@@ -317,7 +325,9 @@ let
         ''
           [Service]
           ${let env = cfg.globalEnvironment // def.environment;
-            in concatMapStrings (n: "Environment=\"${n}=${getAttr n env}\"\n") (attrNames env)}
+            in concatMapStrings (n:
+              let s = "Environment=\"${n}=${env.${n}}\"\n";
+              in if stringLength s >= 2048 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env)}
           ${if def.reloadIfChanged then ''
             X-ReloadIfChanged=true
           '' else if !def.restartIfChanged then ''
@@ -635,19 +645,6 @@ in
       '';
     };
 
-    systemd.enableEmergencyMode = mkOption {
-      default = true;
-      type = types.bool;
-      description = ''
-        Whether to enable emergency mode, which is an
-        <command>sulogin</command> shell started on the console if
-        mounting a filesystem fails.  Since some machines (like EC2
-        instances) have no console of any kind, emergency mode doesn't
-        make sense, and it's better to continue with the boot insofar
-        as possible.
-      '';
-    };
-
     systemd.tmpfiles.rules = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -688,6 +685,15 @@ in
       type = types.attrsOf types.optionSet;
       options = [ socketOptions unitConfig ];
       description = "Definition of systemd per-user socket units.";
+    };
+
+    systemd.additionalUpstreamSystemUnits = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      example = [ "debug-shell.service" "systemd-quotacheck.service" ];
+      description = ''
+        Additional units shipped with systemd that shall be enabled.
+      '';
     };
 
   };
@@ -749,7 +755,7 @@ in
         # Make all journals readable to users in the wheel and adm
         # groups, in addition to those in the systemd-journal group.
         # Users can always read their own journals.
-        ${pkgs.acl}/bin/setfacl -nm g:wheel:rx,d:g:wheel:rx,g:adm:rx,d:g:adm:rx /var/log/journal
+        ${pkgs.acl}/bin/setfacl -nm g:wheel:rx,d:g:wheel:rx,g:adm:rx,d:g:adm:rx /var/log/journal || true
       '';
 
     # Target for ‘charon send-keys’ to hook into.
@@ -823,6 +829,9 @@ in
       '';
 
     systemd.services."user@".restartIfChanged = false;
+
+    systemd.services.systemd-remount-fs.restartIfChanged = false;
+    systemd.services.systemd-journal-flush.restartIfChanged = false;
 
   };
 }

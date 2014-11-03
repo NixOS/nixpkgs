@@ -29,7 +29,7 @@ in
         cache-size=1000
         scan-path=/srv/git
       '';
-      type = types.string;
+      type = types.lines;
       description = ''
         Verbatim contents of the cgit runtime configuration file. Documentation
         (with cgitrc example file) is available in "man cgitrc". Or online:
@@ -43,6 +43,9 @@ in
 
     # make the cgitrc manpage available
     environment.systemPackages = [ pkgs.cgit ];
+
+    # declare module dependencies
+    services.lighttpd.enableModules = [ "mod_cgi" "mod_alias" "mod_setenv" ];
 
     services.lighttpd.extraConfig = ''
       $HTTP["url"] =~ "^/cgit" {

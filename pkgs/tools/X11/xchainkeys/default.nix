@@ -13,6 +13,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://code.google.com/p/xchainkeys/";
     description = "A standalone X11 program to create chained key bindings";
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3;
   };
 }

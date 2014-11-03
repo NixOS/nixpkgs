@@ -55,6 +55,7 @@ rec {
     meta = {
       homepage = http://strategoxt.org/;
       meta = "A language and toolset for program transformation";
+      broken = true;
     };
   };
 
@@ -104,6 +105,7 @@ rec {
     meta = {
       homepage = http://strategoxt.org/Stratego/TheDryad;
       meta = "A collection of tools for developing transformation systems for Java source and bytecode";
+      broken = true;
     };
   };
 

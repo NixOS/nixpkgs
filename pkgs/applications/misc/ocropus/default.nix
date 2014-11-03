@@ -40,7 +40,7 @@ pythonPackages.buildPythonPackage rec {
 
   src = fetchhg {
     url = "https://code.google.com/p/ocropus.ocropy";
-    tag = "a6e0fbd820ce";
+    rev = "a6e0fbd820ce";
     sha256 = "1s0v0gd6psfjp6lghwl2dj49h18mgf2n2z8hqzw8430nzhglnlvr";
   };
 

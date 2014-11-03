@@ -1,0 +1,5 @@
+url http://sourceforge.net/projects/atanks/files/atanks/
+version_link 'atanks[-][0-9.]+/$'
+version_link '[.]tar[.][a-z0-9]+/download'
+SF_redirect
+do_overwrite () { do_overwrite_just_version; }

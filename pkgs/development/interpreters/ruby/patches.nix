@@ -1,6 +1,6 @@
 { fetchurl, writeScript, ruby, ncurses, sqlite, libxml2, libxslt, libffi
 , zlib, libuuid, gems, jdk, python, stdenv, libiconvOrEmpty, imagemagick
-, pkgconfig }:
+, pkgconfig, libiconv }:
 
 let
 
@@ -80,9 +80,10 @@ in
   };
 
   nokogiri = {
+    buildInputs = [ libxml2 ];
     buildFlags =
       [ "--with-xml2-dir=${libxml2} --with-xml2-include=${libxml2}/include/libxml2"
-        "--with-xslt-dir=${libxslt}"
+        "--with-xslt-dir=${libxslt} --with-iconv-dir=${libiconv} --use-system-libraries"
       ];
   };
 
@@ -131,4 +132,6 @@ in
         zcat ${patch} | patch -p 1
       ''; # */
     };
+
+  bundler = { dontPatchShebangs=1; };
 }

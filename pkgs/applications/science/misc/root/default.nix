@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://root.cern.ch/drupal/";
     description = "A data analysis framework";
-    platforms = stdenv.lib.platforms.mesaPlatforms;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

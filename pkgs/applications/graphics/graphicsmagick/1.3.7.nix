@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   configureFlags = "--enable-shared";
 
   buildInputs =
-    [ bzip2 freetype ghostscript graphviz libjpeg libpng libtiff libX11 libxml2
+    [ libpng bzip2 freetype ghostscript graphviz libjpeg libtiff libX11 libxml2
       zlib libtool
     ];
 

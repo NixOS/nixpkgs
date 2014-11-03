@@ -6,7 +6,7 @@ Systeemvereisten
 * glib >= 2.2.0
 * gtk >= 2.2.0
 
-Glib 2 is een 'dependancy' van gtk2. Als je gtk2 op je systeem hebt staan dan heb je ongetwijfeld ook glib2 op je systeem. Zie: www.gtk.org voor meer informatie omtrent Glib/gtk2
+Glib 2 is een 'dependency' van gtk2. Als je gtk2 op je systeem hebt staan dan heb je ongetwijfeld ook glib2 op je systeem. Zie: www.gtk.org voor meer informatie omtrent Glib/gtk2
 Alhoewel FTD4Linux gtk 2.2 als minimumvereiste heeft raden we toch aan om gtk 2.4 te gebruiken. Dit vanwege een bug in gtk versies 2.2.2 t/m 2.2.4.
 
 * libxml2 >= 2.2.5

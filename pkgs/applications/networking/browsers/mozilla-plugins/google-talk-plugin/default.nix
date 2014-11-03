@@ -13,6 +13,7 @@ let
     [ mesa
       xorg.libXt
       xorg.libX11
+      xorg.libXrender
       cairo
       libpng
       gtk
@@ -47,20 +48,20 @@ stdenv.mkDerivation rec {
   name = "google-talk-plugin-${version}";
 
   # You can get the upstream version and SHA-1 hash from the following URLs:
-  # http://dl.google.com/linux/talkplugin/deb/dists/stable/main/binary-amd64/Packages
-  # http://dl.google.com/linux/talkplugin/deb/dists/stable/main/binary-i386/Packages
-  version = "5.1.5.0";
+  # curl -s http://dl.google.com/linux/talkplugin/deb/dists/stable/main/binary-amd64/Packages | grep -E 'Version|SHA1'
+  # curl -s http://dl.google.com/linux/talkplugin/deb/dists/stable/main/binary-i386/Packages | grep -E 'Version|SHA1'
+  version = "5.4.2.0";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "${baseURL}/google-talkplugin_${version}-1_amd64.deb";
-        sha1 = "fc830f4c7f5816f4578ec73e6d4aef059ad4a0b1";
+        sha1 = "d75fad757750b4830c4e401ade92b4993e2a4ab2";
       }
     else if stdenv.system == "i686-linux" then
       fetchurl {
         url = "${baseURL}/google-talkplugin_${version}-1_i386.deb";
-        sha1 = "9b7043c3585b3479ba11aabb7b8af755a61df963";
+        sha1 = "410872377b0bdac06b580c5e1755a3a3c712144b";
       }
     else throw "Google Talk does not support your platform.";
 
@@ -72,22 +73,18 @@ stdenv.mkDerivation rec {
     ''
       plugins=$out/lib/mozilla/plugins
       mkdir -p $plugins
-      cp opt/google/talkplugin/libnp*.so $plugins
+      cp opt/google/talkplugin/*.so $plugins
 
-      patchelf --set-rpath "${makeLibraryPath [ stdenv.gcc.gcc xorg.libX11 ]}:${stdenv.gcc.gcc}/lib64" \
-        $plugins/libnpgoogletalk.so
+      for i in libnpgoogletalk.so libppgoogletalk.so libppo1d.so; do
+        patchelf --set-rpath "${makeLibraryPath [ stdenv.gcc.gcc xorg.libX11 ]}:${stdenv.gcc.gcc}/lib64" $plugins/$i
+      done
 
-      patchelf --set-rpath "$out/libexec/google/talkplugin/lib:${rpathPlugin}:${stdenv.gcc.gcc}/lib64" \
-        $plugins/libnpgtpo3dautoplugin.so
+      for i in libgoogletalkremoting.so libnpo1d.so; do
+        patchelf --set-rpath "$out/libexec/google/talkplugin/lib:${rpathPlugin}:${stdenv.gcc.gcc}/lib64" $plugins/$i
+      done
 
       mkdir -p $out/libexec/google/talkplugin
-      cp -prd opt/google/talkplugin/{GoogleTalkPlugin,locale,windowpicker.glade} $out/libexec/google/talkplugin/
-
-      mkdir -p $out/libexec/google/talkplugin/lib
-      cp opt/google/talkplugin/lib/libCg* $out/libexec/google/talkplugin/lib/
-
-      patchelf --set-rpath "$out/libexec/google/talkplugin/lib" \
-        $out/libexec/google/talkplugin/lib/libCgGL.so
+      cp -prd opt/google/talkplugin/{data,GoogleTalkPlugin,locale,remoting24x24.png,windowpicker.glade} $out/libexec/google/talkplugin/
 
       patchelf \
         --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
@@ -109,7 +106,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.google.com/chat/video/;
-    license = "unfree";
+    license = stdenv.lib.licenses.unfree;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

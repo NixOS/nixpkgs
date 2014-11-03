@@ -6,9 +6,14 @@ let
   cfg = config.services.dnsmasq;
   dnsmasq = pkgs.dnsmasq;
 
-  serversParam = concatMapStrings (s: "-S ${s} ") cfg.servers;
-
   dnsmasqConf = pkgs.writeText "dnsmasq.conf" ''
+    ${optionalString cfg.resolveLocalQueries ''
+      conf-file=/etc/dnsmasq-conf.conf
+      resolv-file=/etc/dnsmasq-resolv.conf
+    ''}
+    ${flip concatMapStrings cfg.servers (server: ''
+      server=${server}
+    '')}
     ${cfg.extraConfig}
   '';
 
@@ -29,11 +34,19 @@ in
         '';
       };
 
+      resolveLocalQueries = mkOption {
+        default = true;
+        description = ''
+          Whether dnsmasq should resolve local queries (i.e. add 127.0.0.1 to
+          /etc/resolv.conf)
+        '';
+      };
+
       servers = mkOption {
         default = [];
         example = [ "8.8.8.8" "8.8.4.4" ];
         description = ''
-          The parameter to dnsmasq -S.
+          The DNS servers which dnsmasq should query.
         '';
       };
 
@@ -55,15 +68,34 @@ in
 
   config = mkIf config.services.dnsmasq.enable {
 
-    jobs.dnsmasq =
-      { description = "dnsmasq daemon";
+    networking.nameservers =
+      optional cfg.resolveLocalQueries "127.0.0.1";
 
-        startOn = "ip-up";
+    services.dbus.packages = [ dnsmasq ];
 
-        daemonType = "daemon";
-
-        exec = "${dnsmasq}/bin/dnsmasq -R ${serversParam} -o -C ${dnsmasqConf}";
+    users.extraUsers = singleton
+      { name = "dnsmasq";
+        uid = config.ids.uids.dnsmasq;
+        description = "Dnsmasq daemon user";
+        home = "/var/empty";
       };
+
+    systemd.services.dnsmasq = {
+        description = "dnsmasq daemon";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        path = [ dnsmasq ];
+        preStart = ''
+          touch /etc/dnsmasq-{conf,resolv}.conf
+          dnsmasq --test
+        '';
+        serviceConfig = {
+          Type = "dbus";
+          BusName = "uk.org.thekelleys.dnsmasq";
+          ExecStart = "${dnsmasq}/bin/dnsmasq -k --enable-dbus --user=dnsmasq -C ${dnsmasqConf}";
+          ExecReload = "${dnsmasq}/bin/kill -HUP $MAINPID";
+        };
+    };
 
   };
 

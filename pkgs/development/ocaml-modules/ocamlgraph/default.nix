@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "0bxqxzd5sd7siz57vhzb8bmiz1ddhgdv49gcsmwwfmd16mj4cryi";
   };
 
-  buildInputs = [ ocaml findlib ocamlPackages.lablgtk ];
+  buildInputs = [ ocaml findlib ocamlPackages.lablgtk ocamlPackages.camlp4 ];
 
   patches = ./destdir.patch;
 

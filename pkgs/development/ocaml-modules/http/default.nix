@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml_pcre, ocamlnet, ocaml, findlib}:
+{stdenv, fetchurl, ocaml_pcre, ocamlnet, ocaml, findlib, camlp4}:
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "070xw033r4pk6f4l0wcknm75y9qm4mp622a4cgzmcfhm58v6kssn";
   };
 
-  buildInputs = [ocaml_pcre ocamlnet ocaml findlib];
+  buildInputs = [ocaml_pcre ocamlnet ocaml findlib camlp4];
 
   createFindlibDestdir = true;
 
@@ -30,10 +30,10 @@ stdenv.mkDerivation {
     make all opt
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://upsilon.cc/~zack/hacking/software/ocaml-http/";
     description = "do it yourself (OCaml) HTTP daemon";
-    license = "LGPLv2";
-    maintainers = [ stdenv.lib.maintainers.roconnor ];
+    license = licenses.lgpl2;
+    maintainers = with maintainers; [ roconnor vbgl ];
   };
 }

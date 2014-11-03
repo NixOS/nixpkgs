@@ -14,6 +14,6 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://www.bergo.eng.br/eboard/;
-    description = "eboard is a chess interface for Unix-like systems";
+    description = "Chess interface for Unix-like systems";
   };
 }

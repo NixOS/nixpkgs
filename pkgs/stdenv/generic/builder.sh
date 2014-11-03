@@ -6,15 +6,10 @@ done
 
 mkdir $out
 
-echo "$preHook" > $out/setup
+echo "export SHELL=$shell" > $out/setup
+echo "initialPath=\"$initialPath\"" >> $out/setup
+echo "$preHook" >> $out/setup
 cat "$setup" >> $out/setup
-
-sed -e "s^@initialPath@^$initialPath^g" \
-    -e "s^@gcc@^$gcc^g" \
-    -e "s^@shell@^$shell^g" \
-    -e "s^@needsPax@^$needsPax^g" \
-    < $out/setup > $out/setup.tmp
-mv $out/setup.tmp $out/setup
 
 # Allow the user to install stdenv using nix-env and get the packages
 # in stdenv.

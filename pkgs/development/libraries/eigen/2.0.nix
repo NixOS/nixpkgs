@@ -19,5 +19,6 @@ stdenv.mkDerivation {
     license = licenses.lgpl3Plus;
     homepage = http://eigen.tuxfamily.org ;
     maintainers = with stdenv.lib.maintainers; [ sander urkud raskin ];
+    branch = "2";
   };
 }

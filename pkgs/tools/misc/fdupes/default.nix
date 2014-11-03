@@ -19,7 +19,7 @@ stdenv.mkDerivation {
       files within a set of directories.
     '';
     homepage = http://code.google.com/p/fdupes/;
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.all;
     maintainers = [
       stdenv.lib.maintainers.z77z

@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://gnupg.org;
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
   };
 }

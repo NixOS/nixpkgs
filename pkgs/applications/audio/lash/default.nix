@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, gtk, jackaudio, libuuid, libxml2
+{ stdenv, fetchurl, alsaLib, gtk, jack2, libuuid, libxml2
 , makeWrapper, pkgconfig, readline }:
 
 assert libuuid != null;
@@ -15,7 +15,7 @@ stdenv.mkDerivation  rec {
   # http://permalink.gmane.org/gmane.linux.redhat.fedora.extras.cvs/822346
   patches = [ ./socket.patch ./gcc-47.patch ];
 
-  buildInputs = [ alsaLib gtk jackaudio libuuid libxml2 makeWrapper
+  buildInputs = [ alsaLib gtk jack2 libuuid libxml2 makeWrapper
     pkgconfig readline ];
 
   postInstall = ''

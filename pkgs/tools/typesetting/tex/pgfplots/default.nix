@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildPhase = "true";
   
   installPhase = "
-    ensureDir $out/share/texmf-nix
+    mkdir -p $out/share/texmf-nix
     cp -prd * $out/share/texmf-nix
   ";
 }

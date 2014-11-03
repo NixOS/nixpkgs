@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, autoconf, automake, dssi, gtk, jackaudio,
+{ stdenv, fetchurl, alsaLib, autoconf, automake, dssi, gtk, jack2,
 ladspaH, ladspaPlugins, liblo, pkgconfig }:
 
 stdenv.mkDerivation  rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation  rec {
     sha256 = "00nwv2pqjbmxqdc6xdm0cljq6z05lv4y6bibmhz1kih9lm0lklnk";
   };
 
-  buildInputs = [ alsaLib autoconf automake dssi gtk jackaudio ladspaH
+  buildInputs = [ alsaLib autoconf automake dssi gtk jack2 ladspaH
     ladspaPlugins liblo pkgconfig ];
 
   installPhase = ''

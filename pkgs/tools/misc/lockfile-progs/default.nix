@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Programs for locking and unlocking files and mailboxes";
     homepage = http://packages.debian.org/sid/lockfile-progs;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
 
     maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
     platforms = stdenv.lib.platforms.all;

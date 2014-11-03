@@ -1,13 +1,11 @@
-{ stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2
-, sqlite, tcl, tk, x11, openssl, readline, db, ncurses, gdbm
-}:
+{ stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, includeModules ? false
+, sqlite, tcl, tk, x11, openssl, readline, db, ncurses, gdbm, self, callPackage }:
 
 assert zlibSupport -> zlib != null;
 
 with stdenv.lib;
 
 let
-
   majorVersion = "2.6";
   version = "${majorVersion}.9";
 
@@ -27,36 +25,41 @@ let
       # the Nix store to 1.  So treat that as a special case.
       ./nix-store-mtime.patch
     ];
+    
+  preConfigure = ''
+      # Purity.
+      for i in /usr /sw /opt /pkg; do
+        substituteInPlace ./setup.py --replace $i /no-such-path
+      done
+    '' + optionalString (stdenv ? gcc && stdenv.gcc.libc != null) ''
+      for i in Lib/plat-*/regen; do
+        substituteInPlace $i --replace /usr/include/ ${stdenv.gcc.libc}/include/
+      done
+    '' + optionalString stdenv.isCygwin ''
+      # On Cygwin, `make install' tries to read this Makefile.
+      mkdir -p $out/lib/python${majorVersion}/config
+      touch $out/lib/python${majorVersion}/config/Makefile
+      mkdir -p $out/include/python${majorVersion}
+      touch $out/include/python${majorVersion}/pyconfig.h
+    '';
 
   buildInputs =
     optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc ++
-    [ bzip2 ]
+    [ bzip2 openssl ]++ optionals includeModules [ db openssl ncurses gdbm readline x11 tcl tk sqlite ]
     ++ optional zlibSupport zlib;
 
 
   # Build the basic Python interpreter without modules that have
   # external dependencies.
   python = stdenv.mkDerivation {
-    name = "python-${version}";
+    name = "python${if includeModules then "" else "-minimal"}-${version}";
 
-    inherit majorVersion version src patches buildInputs;
+    inherit majorVersion version src patches buildInputs preConfigure;
 
     C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
     LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
 
     configureFlags = "--enable-shared --with-threads --enable-unicode";
-
-    preConfigure =
-      ''
-        # Purity.
-        for i in /usr /sw /opt /pkg; do
-          substituteInPlace ./setup.py --replace $i /no-such-path
-        done
-      '' + optionalString (stdenv ? gcc && stdenv.gcc.libc != null) ''
-        for i in Lib/plat-*/regen; do
-          substituteInPlace $i --replace /usr/include/ ${stdenv.gcc.libc}/include/
-        done
-      '';
 
     NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
 
@@ -64,17 +67,32 @@ let
 
     postInstall =
       ''
-        rm -rf "$out/lib/python${majorVersion}/test"
+        # needed for some packages, especially packages that backport
+        # functionality to 2.x from 3.x
+        for item in $out/lib/python${majorVersion}/test/*; do
+          if [[ "$item" != */test_support.py* ]]; then
+            rm -rf "$item"
+          fi
+        done
+        touch $out/lib/python${majorVersion}/test/__init__.py
         ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb
         ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb${majorVersion}
         mv $out/share/man/man1/{python.1,python2.6.1}
         ln -s $out/share/man/man1/{python2.6.1,python.1}
+        
+        paxmark E $out/bin/python${majorVersion}
+        
+        ${ optionalString includeModules "$out/bin/python ./setup.py build_ext"}
       '';
 
-    passthru = {
+    passthru = rec {
       inherit zlibSupport;
+      isPy2 = true;
+      isPy26 = true;
+      buildEnv = callPackage ../wrapper.nix { python = self; };
       libPrefix = "python${majorVersion}";
-      executable = "python2.6";
+      executable = libPrefix;
+      sitePackages = "lib/${libPrefix}/site-packages";
     };
 
     enableParallelBuilding = true;
@@ -93,7 +111,7 @@ let
       '';
       license = stdenv.lib.licenses.psfl;
       platforms = stdenv.lib.platforms.all;
-      maintainers = with stdenv.lib.maintainers; [ simons chaoflow ];
+      maintainers = with stdenv.lib.maintainers; [ simons chaoflow iElectric ];
     };
   };
 
@@ -105,25 +123,18 @@ let
     , internalName ? "_" + moduleName
     , deps
     }:
-    stdenv.mkDerivation rec {
+    if includeModules then null else stdenv.mkDerivation rec {
       name = "python-${moduleName}-${python.version}";
 
-      inherit src patches;
+      inherit src patches preConfigure;
 
       buildInputs = [ python ] ++ deps;
 
       C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
       LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
 
-      configurePhase = "true";
-
       buildPhase =
         ''
-          # Fake the build environment that setup.py expects.
-          ln -s ${python}/include/python*/pyconfig.h .
-          ln -s ${python}/lib/python*/config/Setup Modules/
-          ln -s ${python}/lib/python*/config/Setup.local Modules/
-
           substituteInPlace setup.py --replace 'self.extensions = extensions' \
             'self.extensions = [ext for ext in self.extensions if ext.name in ["${internalName}"]]'
 
@@ -173,11 +184,6 @@ let
     sqlite3 = buildInternalPythonModule {
       moduleName = "sqlite3";
       deps = [ sqlite ];
-    };
-
-    ssl = buildInternalPythonModule {
-      moduleName = "ssl";
-      deps = [ openssl ];
     };
 
     tkinter = buildInternalPythonModule {

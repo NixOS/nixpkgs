@@ -17,6 +17,6 @@ buildPythonPackage {
   meta = {
     description = "Note taking application";
     homepage = http://rasm.ods.org/keepnote;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

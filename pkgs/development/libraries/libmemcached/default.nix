@@ -8,11 +8,17 @@ stdenv.mkDerivation rec {
     sha256 = "10jzi14j32lpq0if0p9vygcl2c1352hwbywzvr9qzq7x6aq0nb72";
   };
   
+  # Fix linking against libpthread (patch from Fedora)
+  # https://bugzilla.redhat.com/show_bug.cgi?id=1037707
+  # https://bugs.launchpad.net/libmemcached/+bug/1281907
+  patches = [ ./libmemcached-fix-linking-with-libpthread.patch ];
+
   buildInputs = [ cyrus_sasl libevent ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://libmemcached.org;
     description = "Open source C/C++ client library and tools for the memcached server";
-    license = "BSD";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
   };
 }

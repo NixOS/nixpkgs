@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     [ ocaml findlib ocamlgraph zarith lablgtk gmp ];
 
   meta = {
-    description = "Alt-Ergo is a high-performance theorem prover and SMT solver";
+    description = "High-performance theorem prover and SMT solver";
     homepage    = "http://alt-ergo.ocamlpro.com/";
     license     = stdenv.lib.licenses.cecill-c; # LGPL-2 compatible
     platforms   = stdenv.lib.platforms.linux;

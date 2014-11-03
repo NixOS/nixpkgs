@@ -1,17 +1,20 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gnutls, devicemapper, perl, python
 , iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, makeWrapper, pmutils, libcap_ng
-, dnsmasq, libnl
+, dnsmasq, libnl, libpcap
+, pythonPackages
 }:
 
-let version = "1.2.5"; in
+let version = "1.2.9"; in
+
+assert version == pythonPackages.libvirt.version;
 
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/${name}.tar.gz";
-    sha256 = "0igd74wkksgv24i2xaa8wx51iqpgjp1v7820pk93m0jv8gipvscf";
+    sha256 = "1i4ggs50dipz1hm0qlk6kak1n3klll8sx9fnffmvjlgla9d1m4wm";
   };
 
   buildInputs = [
@@ -31,6 +34,7 @@ stdenv.mkDerivation rec {
     "--with-init-script=redhat"
     "--with-macvtap"
     "--with-virtualport"
+    "--with-libpcap"
   ];
 
   installFlags = [
@@ -39,6 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
+    sed -i 's/ON_SHUTDOWN=suspend/ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}/' $out/libexec/libvirt-guests.sh
     substituteInPlace $out/libexec/libvirt-guests.sh \
       --replace "$out/bin" "${gettext}/bin"
     wrapProgram $out/sbin/libvirtd \

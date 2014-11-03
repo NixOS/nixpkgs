@@ -6,13 +6,16 @@
 
 let
     py = pythonPackages;
-    version = "2.0.26";
+    version = "2.0.31";
 in
 stdenv.mkDerivation rec {
     name = "anki-${version}";
     src = fetchurl {
-      url = "http://ankisrs.net/download/mirror/${name}.tgz";
-      sha256 = "0w1dn2v6mbyq4dfyjskx51qwfqy6jpskpg4v5pzrv30big274p4q";
+      urls = [
+        "http://ankisrs.net/download/mirror/${name}.tgz"
+        "http://ankisrs.net/download/mirror/archive/${name}.tgz"
+      ];
+      sha256 = "0bxy4pq9yq78g0ffnlkpqj91ri0w4xqgv8mqksddn02v4llrd5jb";
     };
 
     pythonPath = [ pyqt4 py.pysqlite py.sqlalchemy py.pyaudio ]
@@ -65,7 +68,7 @@ stdenv.mkDerivation rec {
         * mastering long poems
         * even practicing guitar chords!
       '';
-      license = "GPLv3";
+      license = stdenv.lib.licenses.gpl3;
       maintainers = with stdenv.lib.maintainers; [ the-kenny ];
       platforms = stdenv.lib.platforms.mesaPlatforms;
     };

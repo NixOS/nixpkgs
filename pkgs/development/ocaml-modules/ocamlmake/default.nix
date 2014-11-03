@@ -14,7 +14,7 @@ in stdenv.mkDerivation {
   };
 
   installPhase = ''
-    ensureDir "$out/include/"
+    mkdir -p "$out/include/"
     cp OCamlMakefile "$out/include/"
   '';
 

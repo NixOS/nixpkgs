@@ -1,15 +1,15 @@
 { stdenv, fetchgit, cmake, libtiff, pkgconfig, tesseract }:
 
-let rev = "b70b6f584e8151f70f9d90df054af0911ea7475e";
+let rev = "a6abbd61127a6392d420bbbebdf7612608c943c2";
     shortRev = builtins.substring 0 7 rev;
 in
 stdenv.mkDerivation {
-  name = "vobsub2srt-git-20140226-${shortRev}";
+  name = "vobsub2srt-git-20140817-${shortRev}";
 
   src = fetchgit {
     inherit rev;
     url = https://github.com/ruediger/VobSub2SRT.git;
-    sha256 = "15437eba07e674cec66bc54cfa42ffe8b05816975401c9950bf9016e3881cd6a";
+    sha256 = "8e867a021ac529e7607627d5944b95bb9f1378ffabd8837e7a028663a8ce5adf";
   };
 
   buildInputs = [ cmake libtiff pkgconfig ];

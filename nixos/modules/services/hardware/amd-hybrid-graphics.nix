@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
 
@@ -6,9 +6,9 @@
 
   options = {
 
-    hardware.amdHybridGraphics.disable = pkgs.lib.mkOption {
+    hardware.amdHybridGraphics.disable = lib.mkOption {
       default = false;
-      type = pkgs.lib.types.bool;
+      type = lib.types.bool;
       description = ''
         Completely disable the AMD graphics card and use the
         integrated graphics processor instead.
@@ -20,7 +20,7 @@
 
   ###### implementation
 
-  config = pkgs.lib.mkIf config.hardware.amdHybridGraphics.disable {
+  config = lib.mkIf config.hardware.amdHybridGraphics.disable {
     systemd.services."amd-hybrid-graphics" = {
       path = [ pkgs.bash ];
       description = "Disable AMD Card";

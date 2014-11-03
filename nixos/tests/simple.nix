@@ -1,4 +1,5 @@
 import ./make-test.nix {
+  name = "simple";
 
   machine = { config, pkgs, ... }: { };
 

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
 
   meta = {
-    description = "TinyCC, a small, fast, and embeddable C compiler and interpreter";
+    description = "Small, fast, and embeddable C compiler and interpreter";
 
     longDescription =
       '' TinyCC (aka TCC) is a small but hyper fast C compiler.  Unlike
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = http://www.tinycc.org/;
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ ];

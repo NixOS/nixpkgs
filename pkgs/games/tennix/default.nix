@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://icculus.org/tennix/;
     description = "Tennix 2009 World Tennis Championship Tour";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

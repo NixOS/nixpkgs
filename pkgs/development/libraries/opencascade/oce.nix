@@ -2,10 +2,10 @@
 ftgl, freetype}:
 
 stdenv.mkDerivation rec {
-  name = "opencascade-oce-0.14.1";
+  name = "opencascade-oce-0.16";
   src = fetchurl {
-    url = https://github.com/tpaviot/oce/archive/OCE-0.14.1.tar.gz;
-    sha256 = "0pfc94nmzipm6zmxywxbly1cpfr6wadxasqqkkbdvzg937mrwl5d";
+    url = https://github.com/tpaviot/oce/archive/OCE-0.16.tar.gz;
+    sha256 = "05bmg1cjz827bpq8s0hp96byirm4c3zc9vx26qz76kjsg8ry87w4";
   };
 
   buildInputs = [ mesa tcl tk file libXmu libtool qt4 ftgl freetype cmake ];

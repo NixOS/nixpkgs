@@ -11,11 +11,11 @@ stdenv.mkDerivation (rec {
   doCheck = true;
 
   meta = {
-    description = "Libelf, an ELF object file access library";
+    description = "ELF object file access library";
 
     homepage = http://www.mr511.de/software/english.html;
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     platforms = stdenv.lib.platforms.all;
     maintainers = [ ];

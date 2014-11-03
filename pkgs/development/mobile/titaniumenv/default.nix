@@ -1,4 +1,4 @@
-{pkgs, pkgs_i686, xcodeVersion ? "5.0", tiVersion ? "3.2.1.GA"}:
+{pkgs, pkgs_i686, xcodeVersion ? "6.0.1", xcodeBaseDir ? "/Applications/Xcode.app", tiVersion ? "3.4.0.GA"}:
 
 let
   # We have to use Oracle's JDK. On Darwin, just simply expose the host system's
@@ -25,11 +25,14 @@ rec {
 
   xcodeenv = if pkgs.stdenv.system == "x86_64-darwin" then pkgs.xcodeenv.override {
     version = xcodeVersion;
+    inherit xcodeBaseDir;
   } else null;
   
   titaniumsdk = let
     titaniumSdkFile = if tiVersion == "3.1.4.GA" then ./titaniumsdk-3.1.nix
-      else if tiVersion == "3.2.2.GA" then ./titaniumsdk-3.2.nix
+      else if tiVersion == "3.2.3.GA" then ./titaniumsdk-3.2.nix
+      else if tiVersion == "3.3.0.GA" then ./titaniumsdk-3.3.nix
+      else if tiVersion == "3.4.0.GA" then ./titaniumsdk-3.4.nix
       else throw "Titanium version not supported: "+tiVersion;
     in
     import titaniumSdkFile {
@@ -44,6 +47,6 @@ rec {
     inherit (pkgs.nodePackages) titanium;
     inherit (androidenv) androidsdk;
     inherit (xcodeenv) xcodewrapper;
-    inherit titaniumsdk;
+    inherit titaniumsdk xcodeBaseDir;
   };
 }

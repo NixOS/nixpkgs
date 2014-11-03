@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "GNU Plotutils, a powerful C/C++ library for exporting 2D vector graphics";
+    description = "Powerful C/C++ library for exporting 2D vector graphics";
 
     longDescription =
       '' The GNU plotutils package contains software for both programmers and
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/plotutils/;
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [
       stdenv.lib.maintainers.marcweber
       stdenv.lib.maintainers.ludo

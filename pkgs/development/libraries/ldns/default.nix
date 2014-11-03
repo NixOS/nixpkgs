@@ -1,11 +1,11 @@
 {stdenv, fetchurl, openssl, perl}:
 
 stdenv.mkDerivation rec {
-  name = "ldns-1.6.16";
+  name = "ldns-1.6.17";
 
   src = fetchurl {
     url = "http://www.nlnetlabs.nl/downloads/ldns/${name}.tar.gz";
-    sha256 = "15gn9m95r6sq2n55dw4r87p2aljb5lvy1w0y0br70wbr0p5zkci4";
+    sha256 = "1kf8pkwhcssvgzhh6ha1pjjiziwvwmfaali7kaafh6118mcy124b";
   };
 
   patchPhase = ''

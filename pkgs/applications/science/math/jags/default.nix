@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   buildInputs = [gfortran liblapack blas];
 
   meta = {
-    description = "JAGS: Just Another Gibbs Sampler";
+    description = "Just Another Gibbs Sampler";
     license     = "GPL2";
     homepage    = http://www-ice.iarc.fr/~martyn/software/jags/;
     maintainers = [stdenv.lib.maintainers.andres];

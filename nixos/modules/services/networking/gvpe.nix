@@ -1,9 +1,9 @@
 # GNU Virtual Private Ethernet
 
-{config, pkgs, ...}:
+{config, pkgs, lib, ...}:
 
 let
-  inherit (pkgs.lib) mkOption mkIf;
+  inherit (lib) mkOption mkIf;
 
   cfg = config.services.gvpe;
 

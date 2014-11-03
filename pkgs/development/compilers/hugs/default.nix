@@ -47,7 +47,7 @@ composableDerivation.composableDerivation {} {
 
   meta = {
     license = "as-is"; # gentoo is calling it this way..
-    description = "The HUGS 98 Haskell interpreter";
+    description = "Haskell interpreter";
     homepage = http://www.haskell.org/hugs;
   };
 }

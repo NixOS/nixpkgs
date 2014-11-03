@@ -18,7 +18,7 @@ let version = "20000331"; in
     installTargets = "install man";
 
     meta = {
-      description = "`host', a DNS resolution utility";
+      description = "DNS resolution utility";
       license = "BSD-style";
     };
   }

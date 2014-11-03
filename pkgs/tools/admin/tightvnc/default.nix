@@ -16,9 +16,9 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   meta = {
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     homepage = "http://vnc-tight.sourceforge.net/";
-    description = "TightVNC is an improved version of VNC";
+    description = "Improved version of VNC";
 
     longDescription = ''
       TightVNC is an improved version of VNC, the great free

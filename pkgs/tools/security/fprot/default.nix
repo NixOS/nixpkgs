@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp fpscan $out/bin
 
-    ensureDir $out/opt/f-prot
+    mkdir -p $out/opt/f-prot
     cp fpupdate $out/opt/f-prot
     cp product.data.default $out/opt/f-prot/product.data
     cp license.key $out/opt/f-prot/
@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
 
     patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" $out/opt/f-prot/fpupdate
 
-    ensureDir $out/share/man/
-    ensureDir $out/share/man/man1
+    mkdir -p $out/share/man/
+    mkdir -p $out/share/man/man1
     cp doc/man/fpscan.1 $out/share/man/man1
-    ensureDir $out/share/man/man5
+    mkdir -p $out/share/man/man5
     cp doc/man/f-prot.conf.5 $out/share/man/man5
-    ensureDir $out/share/man/man8
+    mkdir -p $out/share/man/man8
     cp doc/man/fpupdate.8 $out/share/man/man8
   '';
 

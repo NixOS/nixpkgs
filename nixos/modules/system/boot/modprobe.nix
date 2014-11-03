@@ -68,20 +68,20 @@ with lib;
 
   config = mkIf (!config.boot.isContainer) {
 
-    environment.etc = [
-      { source = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
-        target = "modprobe.d/ubuntu.conf";
-      }
-      { source = pkgs.writeText "modprobe.conf"
-          ''
-            ${flip concatMapStrings config.boot.blacklistedKernelModules (name: ''
-              blacklist ${name}
-            '')}
-            ${config.boot.extraModprobeConfig}
-          '';
-        target = "modprobe.d/nixos.conf";
-      }
-    ];
+    environment.etc."modprobe.d/ubuntu.conf".source = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
+
+    environment.etc."modprobe.d/nixos.conf".text =
+      ''
+        ${flip concatMapStrings config.boot.blacklistedKernelModules (name: ''
+          blacklist ${name}
+        '')}
+        ${config.boot.extraModprobeConfig}
+      '';
+    environment.etc."modprobe.d/usb-load-ehci-first.conf".text =
+      ''
+        softdep uhci_hcd pre: ehci_hcd
+        softdep ohci_hcd pre: ehci_hcd
+      '';
 
     environment.systemPackages = [ config.system.sbin.modprobe pkgs.kmod ];
 

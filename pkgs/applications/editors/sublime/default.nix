@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Sophisticated text editor for code, markup and prose";
-    license = "unfree";
+    license = stdenv.lib.licenses.unfree;
   };
 }

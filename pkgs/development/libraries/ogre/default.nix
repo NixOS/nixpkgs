@@ -37,6 +37,6 @@ stdenv.mkDerivation {
     homepage = http://www.ogre3d.org/;
     maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
   };
 }

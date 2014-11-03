@@ -1,7 +1,7 @@
-{ config, pkgs, ... }:
+{ config, lib, ... }:
 
 let
-  inherit (pkgs.lib) mkOption mkIf types;
+  inherit (lib) mkOption mkIf types;
   cfg = config.programs.screen;
 in
 

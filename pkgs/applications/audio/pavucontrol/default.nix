@@ -1,5 +1,5 @@
-{ fetchurl, stdenv, pkgconfig, pulseaudio, gtkmm3
-, libcanberra_gtk3, intltool, gettext }:
+{ fetchurl, stdenv, pkgconfig, intltool, pulseaudio, gtkmm3
+, libcanberra_gtk3 }:
 
 stdenv.mkDerivation rec {
   name = "pavucontrol-2.0";
@@ -9,12 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "02s775m1531sshwlbvfddk3pz8zjmwkv1sgzggn386ja3gc9vwi2";
   };
 
-  buildInputs = [ pkgconfig pulseaudio gtkmm3 libcanberra_gtk3
-    intltool gettext ];
+  buildInputs = [ pulseaudio gtkmm3 libcanberra_gtk3 ];
 
-  configureFlags = "--disable-lynx";
+  nativeBuildInputs = [ pkgconfig intltool ];
 
-  meta = {
+  configureFlags = [ "--disable-lynx" ];
+
+  meta = with stdenv.lib; {
     description = "PulseAudio Volume Control";
 
     longDescription = ''
@@ -25,9 +26,9 @@ stdenv.mkDerivation rec {
 
     homepage = http://freedesktop.org/software/pulseaudio/pavucontrol/ ;
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    maintainers = [ maintainers.abbradar ];
+    platforms = platforms.linux;
   };
 }

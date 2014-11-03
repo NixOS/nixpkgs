@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://maude.cs.uiuc.edu/";
-    description = "Maude -- a high-level specification language";
-    license = "GPLv2";
+    description = "High-level specification language";
+    license = stdenv.lib.licenses.gpl2;
 
     longDescription = ''
       Maude is a high-performance reflective language and system

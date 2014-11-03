@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, intltool, libvirt, libxml2Python, curl }:
+{ stdenv, fetchurl, pythonPackages, intltool, libxml2Python, curl }:
 
 with stdenv.lib;
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   pythonPath = with pythonPackages;
     [ setuptools eventlet greenlet gflags netaddr sqlalchemy carrot routes
-      paste_deploy m2crypto ipy boto_1_9 twisted sqlalchemy_migrate
+      paste_deploy m2crypto ipy twisted sqlalchemy_migrate
       distutils_extra simplejson readline glance cheetah lockfile httplib2
       # !!! should libvirt be a build-time dependency?  Note that
       # libxml2Python is a dependency of libvirt.py. 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://virt-manager.org;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [qknight];
     description = "Command line tool which provides an easy way to provision operating systems into virtual machines";
   };

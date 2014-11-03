@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ed }:
 
 stdenv.mkDerivation rec {
-  name = "rcs-5.9.2";
+  name = "rcs-5.9.3";
 
   src = fetchurl {
     url = "mirror://gnu/rcs/${name}.tar.xz";
-    sha256 = "0wdmmplga9k05d9k7wjqv4zb6xvvzsli8hmn206pvangki1g66k5";
+    sha256 = "0isvzwfvqkg7zcsznra6wqh650z49ib113n7gp6ncxv5p30x3c38";
   };
 
   buildInputs = [ ed ];
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.gnu.org/software/rcs/;
-    description = "GNU RCS, a revision control system";
+    description = "Revision control system";
     longDescription =
       '' The GNU Revision Control System (RCS) manages multiple revisions of
          files. RCS automates the storing, retrieval, logging,
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
          documentation, graphics, papers, and form letters.
       '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [ eelco simons ];
     platforms = stdenv.lib.platforms.all;
   };

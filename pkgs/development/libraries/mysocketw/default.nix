@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Cross platform (Linux/FreeBSD/Unix/Win32) streaming socket C++";
-    license = "LGPLv2.1+";
+    license = stdenv.lib.licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.all;
   };
 }

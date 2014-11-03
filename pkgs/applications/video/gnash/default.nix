@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gettext x11 SDL SDL_mixer gstreamer gst_plugins_base gst_plugins_good
     gst_ffmpeg speex libtool
-    libogg libxml2 libjpeg mesa libpng libungif boost freetype agg
+    libogg libxml2 libjpeg mesa libpng libungif boost boost.lib freetype agg
     dbus curl pkgconfig glib gtk gtkglext pangox_compat
     xulrunner
     makeWrapper
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.gnu.org/software/gnash/;
-    description = "GNU Gnash, a libre SWF (Flash) movie player";
+    description = "A libre SWF (Flash) movie player";
 
     longDescription = ''
       Gnash is a GNU Flash movie player.  Flash is an animation file format
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
       supports most SWF v7 features and some SWF v8 and v9.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.gnu;

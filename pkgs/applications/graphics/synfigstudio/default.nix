@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, cairo, gettext, glibmm, gtk, gtkmm
+{ stdenv, fetchurl, boost, cairo, fontsConf, gettext, glibmm, gtk, gtkmm
 , libsigcxx, libtool, libxmlxx, pango, pkgconfig, imagemagick
 , intltool
 }:
@@ -26,11 +26,11 @@ let
     patches = [ ./synfig-cstring.patch ];
 
     buildInputs = [
-      ETL boost cairo gettext glibmm libsigcxx libtool libxmlxx pango
+      ETL boost boost.lib cairo gettext glibmm libsigcxx libtool libxmlxx pango
       pkgconfig
     ];
 
-    configureFlags = [ "--with-boost-libdir=${boost}/lib" ];
+    configureFlags = [ "--with-boost-libdir=${boost.lib}/lib" ];
   };
 in
 stdenv.mkDerivation rec {
@@ -42,9 +42,13 @@ stdenv.mkDerivation rec {
     };
 
   buildInputs = [
-    ETL boost cairo gettext glibmm gtk gtkmm imagemagick intltool
+    ETL boost cairo fontsConf gettext glibmm gtk gtkmm imagemagick intltool
     intltool libsigcxx libtool libxmlxx pkgconfig synfig
   ];
+
+  preBuild = ''
+    export FONTCONFIG_FILE=${fontsConf}
+  '';
 
   meta = with stdenv.lib; {
     description = "A 2D animation program";

@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
       temperature transitions smoothly from night to daytime
       temperature to allow your eyes to slowly adapt.
       '';
-    license = "GPLv3+";
-    homepage = "http://jonls.dk/redshift";
+    license = stdenv.lib.licenses.gpl3Plus;
+    homepage = http://jonls.dk/redshift;
     platforms = platforms.linux;
-    maintainers = maintainers.mornfall;
+    maintainers = [ maintainers.mornfall ];
   }; 
 }

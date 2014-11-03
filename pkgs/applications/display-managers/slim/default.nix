@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DUSE_PAM=1" ];
 
+  NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype";
+
   enableParallelBuilding = true;
 
   buildInputs =

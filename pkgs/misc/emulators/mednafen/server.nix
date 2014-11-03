@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
     install -m 644 -t $out/share/$name standard.conf
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Netplay server for Mednafen";
     homepage = http://mednafen.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.AndersonTorres ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.linux;
   };
 }

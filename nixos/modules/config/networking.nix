@@ -7,6 +7,9 @@ with lib;
 let
 
   cfg = config.networking;
+  dnsmasqResolve = config.services.dnsmasq.enable &&
+                   config.services.dnsmasq.resolveLocalQueries;
+  hasLocalResolver = config.services.bind.enable || dnsmasqResolve;
 
 in
 
@@ -14,7 +17,7 @@ in
 
   options = {
 
-    networking.extraHosts = pkgs.lib.mkOption {
+    networking.extraHosts = lib.mkOption {
       type = types.lines;
       default = "";
       example = "192.168.0.1 lanlocalhost";
@@ -23,7 +26,7 @@ in
       '';
     };
 
-    networking.dnsSingleRequest = pkgs.lib.mkOption {
+    networking.dnsSingleRequest = lib.mkOption {
       type = types.bool;
       default = false;
       description = ''
@@ -74,9 +77,12 @@ in
             '' + optionalString cfg.dnsSingleRequest ''
               # only send one DNS request at a time
               resolv_conf_options='single-request'
-            '' + optionalString config.services.bind.enable ''
+            '' + optionalString hasLocalResolver ''
               # This hosts runs a full-blown DNS resolver.
               name_servers='127.0.0.1'
+            '' + optionalString dnsmasqResolve ''
+              dnsmasq_conf=/etc/dnsmasq-conf.conf
+              dnsmasq_resolv=/etc/dnsmasq-resolv.conf
             '';
       };
 

@@ -10,6 +10,7 @@ let
 in
 
 {
+  name = "udisks2";
 
   machine =
     { config, pkgs, ... }:

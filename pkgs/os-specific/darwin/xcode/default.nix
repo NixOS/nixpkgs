@@ -31,12 +31,12 @@ in stdenv.mkDerivation rec {
   patches = optional (osxVersion == "10.9") ./gcc-fix-enum-attributes.patch;
 
   installPhase = ''
-    ensureDir "$out/share/sysroot"
+    mkdir -p "$out/share/sysroot"
     cp -a * "$out/share/sysroot/"
     ln -s "$out/share/sysroot/usr/lib" "$out/lib"
     ln -s "$out/share/sysroot/usr/include" "$out/include"
 
-    ensureDir "$toolchain"
+    mkdir -p "$toolchain"
     pushd "$toolchain"
     ${xpwn}/bin/hfsplus "$(dirs +1)/../main.hfs" extractall \
       Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr \

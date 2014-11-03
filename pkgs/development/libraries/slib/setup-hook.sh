@@ -10,4 +10,4 @@ addSlibPath () {
     fi
 }
 
-envHooks=(${envHooks[@]} addSlibPath)
+envHooks+=(addSlibPath)

@@ -1,48 +1,66 @@
-{ stdenv, fetchurl, scons, boost, gperftools, pcre, snappy }:
+{ stdenv, fetchurl, scons, boost, gperftools, pcre, snappy
+, libyamlcpp, sasl, openssl, libpcap }:
 
-let version = "2.6.0";
+with stdenv.lib;
+
+let version = "2.6.5";
     system-libraries = [
-      "tcmalloc"
       "pcre"
       "boost"
       "snappy"
-      # "v8"      -- mongo still bundles 3.12 and does not work with 3.15+
       # "stemmer" -- not nice to package yet (no versioning, no makefile, no shared libs)
-      # "yaml"    -- it seems nixpkgs' yamlcpp (0.5.1) is problematic for mongo
+      "yaml"
+      # "v8"
+    ] ++ optionals (!stdenv.isDarwin) [ "tcmalloc" ];
+    buildInputs = [
+      sasl boost boost.lib gperftools pcre snappy
+      libyamlcpp sasl openssl libpcap
     ];
-    system-lib-args = stdenv.lib.concatStringsSep " "
-                          (map (lib: "--use-system-${lib}") system-libraries);
+
+    other-args = concatStringsSep " " ([
+      "--ssl"
+      "--use-sasl-client"
+      "--extrapath=${concatStringsSep "," buildInputs}"
+    ] ++ map (lib: "--use-system-${lib}") system-libraries);
 
 in stdenv.mkDerivation rec {
   name = "mongodb-${version}";
 
   src = fetchurl {
     url = "http://downloads.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "066kppjdmdpadjr09ildla3aw42anzsc9pa55iwp3wa4rgqd2i33";
+    sha256 = "0v58kyp4cj4yag0djnswfiifrcll5y7x772y99b3afg89xicpmjm";
   };
 
-  nativeBuildInputs = [ scons boost gperftools pcre snappy ];
+  nativeBuildInputs = [ scons ];
+  inherit buildInputs;
 
   postPatch = ''
+    # fix yaml-cpp detection
+    sed -i -e "s/\[\"yaml\"\]/\[\"yaml-cpp\"\]/" SConstruct
+
+    # bug #482576
+    sed -i -e "/-Werror/d" src/third_party/v8/SConscript
+
+    # fix environment variable reading
     substituteInPlace SConstruct \
         --replace "Environment( BUILD_DIR" "Environment( ENV = os.environ, BUILD_DIR"
   '';
 
   buildPhase = ''
-    scons all --release ${system-lib-args}
+    scons all --release ${other-args}
   '';
 
   installPhase = ''
     mkdir -p $out/lib
-    scons install --release --prefix=$out ${system-lib-args}
+    scons install --release --prefix=$out ${other-args}
   '';
 
   meta = {
     description = "a scalable, high-performance, open source NoSQL database";
     homepage = http://www.mongodb.org;
-    license = "AGPLv3";
+    license = licenses.agpl3;
 
-    maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ bluescreen303 offline wkennington ];
+    platforms = platforms.unix;
   };
 }

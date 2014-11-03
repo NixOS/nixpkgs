@@ -1,13 +1,13 @@
 { stdenv, fetchurl, microcode2ucode }:
 
-let version = "20140122"; in
+let version = "20140624"; in
 
 stdenv.mkDerivation {
   name = "microcode-intel-${version}";
 
   src = fetchurl {
-    url = "http://downloadmirror.intel.com/23574/eng/microcode-${version}.tgz";
-    sha256 = "0r5ldb1jvrf0b6b112v3wdr7ikf2zky2jgby2lnqi1xwd34x42k8";
+    url = "http://downloadmirror.intel.com/23984/eng/microcode-${version}.tgz";
+    sha256 = "0dza0bdlx7q88yhnynvfgkrhgf7ycrq6mlp6hwnpp2j3h33jlrml";
   };
 
   buildInputs = [ microcode2ucode ];

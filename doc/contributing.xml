@@ -1,0 +1,21 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="chap-contributing">
+
+<title>Contributing</title>
+
+<para>If you make modifications to the manual, it's important to build the manual before contributing:</para>
+
+<orderedlist>
+
+  <listitem><para><command>$ git clone git://github.com/NixOS/nixpkgs.git</command></para></listitem>
+
+  <listitem><para><command>$ cd nixpkgs/pkgs/top-level</command></para></listitem>
+
+  <listitem><para><command>$ nix-build -A tarball release.nix</command></para></listitem>
+  
+  <listitem><para>Inside the built derivation you shall see <literal>manual/index.html</literal> file.</para></listitem>
+
+</orderedlist>
+
+</chapter>

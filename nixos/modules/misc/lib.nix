@@ -1,11 +1,11 @@
-{ config, pkgs, ... }:
+{ config, lib, ... }:
 
 {
   options = {
-    lib = pkgs.lib.mkOption {
+    lib = lib.mkOption {
       default = {};
 
-      type = pkgs.lib.types.attrsOf pkgs.lib.types.attrs;
+      type = lib.types.attrsOf lib.types.attrs;
 
       description = ''
         This option allows modules to define helper functions, constants, etc.

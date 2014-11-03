@@ -5,13 +5,13 @@
 assert readlineSupport -> readline != null;
 
 stdenv.mkDerivation rec {
-  version = "2.1";
+  version = "2.3";
 
   name = "wpa_supplicant-${version}";
 
   src = fetchurl {
     url = "http://hostap.epitest.fi/releases/${name}.tar.gz";
-    sha256 = "0xxjw7lslvql1ykfbwmbhdrnjsjljf59fbwf837418s97dz2wqwi";
+    sha256 = "0skvkl6c10ls4s48b2wmf47h9j1y40nlzxnzn8hyaw2j0prmpapa";
   };
 
   extraConfig =
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     echo "$extraConfig" >> .config
     cat .config
     substituteInPlace Makefile --replace /usr/local $out
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$(echo "${libnl}"/include/libnl*/)"
   '';
 
   buildInputs = [ openssl dbus_libs libnl ]
@@ -38,13 +39,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  patches = [ ./libnl.patch
-    # remove this patch after wpa_supplicant 2.1
-    (fetchurl {
-      url ="http://projects.archlinux.org/svntogit/packages.git/plain/trunk/0001-Revert-OpenSSL-Do-not-accept-SSL-Client-certificate-.patch?h=packages/wpa_supplicant";
-      sha256 = "0x1wl2nbl7v9kv80qvysfjhhg5a7lmgygv1y723flps6y8ngm19w";
-    })
-  ];
+  patches = [];
 
   postInstall = ''
     mkdir -p $out/share/man/man5 $out/share/man/man8

@@ -5,11 +5,11 @@
 assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
-  name = "audit-2.3.2";
+  name = "audit-2.4";
 
   src = fetchurl {
     url = "http://people.redhat.com/sgrubb/audit/${name}.tar.gz";
-    sha256 = "0a8x10wz0xfj0iq1wgjl6hdhxvq58cb3906vc687i21876sy0wl8";
+    sha256 = "16z9iyi7yzkbyczrkmk9g0i3mlivr7l4p0hgyrz4f04xmzkkjpbf";
   };
 
   buildInputs = [ openldap ]
@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Audit Library";
     homepage = "http://people.redhat.com/sgrubb/audit/";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
   };
 }

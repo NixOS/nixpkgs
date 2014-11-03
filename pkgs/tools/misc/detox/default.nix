@@ -19,6 +19,6 @@ stdenv.mkDerivation {
       (or CP-1252) characters in them.
     '';
     homepage = "http://detox.sourceforge.net/";
-    license = "bsd";
+    license = stdenv.lib.licenses.bsd3;
   };
 }

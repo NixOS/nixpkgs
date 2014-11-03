@@ -1,26 +1,32 @@
-{stdenv, fetchurl, libX11
+{stdenv, fetchurl, libX11, libXt
 , xproto ? null
-, libXt ? null
 , xextproto ? null
 , libXext ? null }:
 
 stdenv.mkDerivation rec {
-  name = "plan9port-20140228";
+  name = "plan9port-20140306";
 
   patches = [ ./fontsrv.patch ];
 
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = "http://swtch.com/plan9port/${name}.tgz";
-    sha256 = "1l7nsjfrrcq0l43kw0f1437jz3nyl9qw7i2vn0sbmcsv5vmsj0cr";
+    url = "https://plan9port.googlecode.com/files/${name}.tgz";
+    # Google code is much faster than swtch
+    # url = "http://swtch.com/plan9port/${name}.tgz";
+    sha256 = "1sza12j3db7i54r3pzli8wmby6aiyzmyfj8w0nidmawkwv6jdf6b";
   };
 
   buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 xproto libXt xextproto libXext ];
 
-  meta = {
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
     homepage = "http://swtch.com/plan9port/";
     description = "Plan 9 from User Space";
-    license="free";
+    license = licenses.lpl-102;
+    platforms = platforms.unix;
   };
+
+  inherit libXt;
 }

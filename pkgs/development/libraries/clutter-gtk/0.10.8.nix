@@ -4,7 +4,10 @@ stdenv.mkDerivation rec {
   name = "clutter-gtk-0.10.8";
 
   src = fetchurl {
-    url = "http://source.clutter-project.org/sources/clutter-gtk/0.10/${name}.tar.bz2";
+    urls = [
+      "http://download.gnome.org/sources/clutter-gtk/0.10/${name}.tar.bz2"
+      "http://source.clutter-project.org/sources/clutter-gtk/0.10/${name}.tar.bz2"
+      ];
     sha256 = "0508x1jfnlq0zhgscysvfa7i7ljkzm23d2myikvdjwc8ar8zjrvq";
   };
 
@@ -20,7 +23,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.clutter-project.org/;
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice

@@ -1,26 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, gtk, libpng, exiv2, lcms
-, intltool, gettext, libchamplain_0_6, fbida }:
+{ stdenv, fetchgit, pkgconfig, autoconf, automake, gtk, libpng, exiv2, lcms
+, intltool, gettext, libchamplain, fbida }:
 
 stdenv.mkDerivation rec {
-  name = "geeqie-1.1";
+  name = "geeqie-${version}";
+  version = "1.2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/geeqie/${name}.tar.gz";
-    sha256 = "1kzy39z9505xkayyx7rjj2wda76xy3ch1s5z35zn8yli54ffhi2m";
+  src = fetchgit {
+    url = "git://gitorious.org/geeqie/geeqie.git";
+    rev = "refs/tags/v${version}";
+    sha256 = "1h9w0jrcqcp5jjgmks5pvpppnfxhcd1s3vqlyb3qyil2wfk8n8wp";
   };
 
-  preConfigure =
-    # XXX: Trick to have Geeqie use the version we have.
-    '' sed -i "configure" \
-           -e 's/champlain-0.4/champlain-0.6/g ;
-               s/champlain-gtk-0.4/champlain-gtk-0.6/g'
-    '';
+  preConfigure = "./autogen.sh";
 
   configureFlags = [ "--enable-gps" ];
 
   buildInputs =
-    [ pkgconfig gtk libpng exiv2 lcms intltool gettext
-      libchamplain_0_6
+    [ pkgconfig autoconf automake gtk libpng exiv2 lcms intltool gettext
+      libchamplain
     ];
 
   postInstall =
@@ -31,8 +28,8 @@ stdenv.mkDerivation rec {
           -e '1 a export PATH=${exiv2}/bin:${fbida}/bin:$PATH'
     '';
 
-  meta = {
-    description = "Geeqie, a lightweight GTK+ based image viewer";
+  meta = with stdenv.lib; {
+    description = "Lightweight GTK+ based image viewer";
 
     longDescription =
       ''
@@ -45,11 +42,11 @@ stdenv.mkDerivation rec {
         initially based on GQview.
       '';
 
-    license = "GPLv2+";
+    license = licenses.gpl2Plus;
 
     homepage = http://geeqie.sourceforge.net;
 
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.gnu;
   };
 }

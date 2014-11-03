@@ -1,0 +1,19 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-ipv6">
+
+<title>IPv6 Configuration</title>
+
+<para>IPv6 is enabled by default.  Stateless address autoconfiguration
+is used to automatically assign IPv6 addresses to all interfaces.  You
+can disable IPv6 support globally by setting:
+
+<programlisting>
+networking.enableIPv6 = false;
+</programlisting>
+
+</para>
+
+</section>

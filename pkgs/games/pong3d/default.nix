@@ -17,6 +17,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.newbreedsoftware.com/3dpong/;
     description = "One or two player 3d sports game based on Pong from Atari";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

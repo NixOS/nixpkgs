@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://www.gnu.org/software/gv/;
-    description = "GNU gv, a PostScript/PDF document viewer";
+    description = "PostScript/PDF document viewer";
 
     longDescription = ''
       GNU gv allows users to view and navigate through PostScript and
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
       interface for the Ghostscript interpreter.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };

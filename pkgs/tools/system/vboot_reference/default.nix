@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp build/cgpt/cgpt $out/bin
     cp build/utility/vbutil_kernel $out/bin
     cp build/utility/vbutil_key $out/bin

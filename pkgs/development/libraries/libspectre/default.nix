@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://libspectre.freedesktop.org/;
-    description = "libspectre, a PostScript rendering library";
+    description = "PostScript rendering library";
 
     longDescription = ''
       libspectre is a small library for rendering Postscript
@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
       handling and rendering Postscript documents.
     '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

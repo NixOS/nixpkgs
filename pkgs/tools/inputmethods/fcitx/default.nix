@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "fcitx-4.2.8.3";
+  name = "fcitx-4.2.8.5";
 
   src = fetchurl {
     url = "http://download.fcitx-im.org/fcitx/${name}_dict.tar.xz";
-    sha256 = "05dw6cbjh2jyjrkr4qx2bcq6nyhhrs0akf6fcjk5a72bgphhwqnb";
+    sha256 = "0whv7mnzig4l5v518r200psa1fp3dyl1jkr5z0q13ijzh1bnyggy";
   };
 
   patchPhase = ''
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://code.google.com/p/fcitx/";
     description = "A Flexible Input Method Framework";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [iyzsong];
   };

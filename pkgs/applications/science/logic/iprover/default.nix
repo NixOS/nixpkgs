@@ -2,9 +2,9 @@ x@{builderDefsPackage
   , ocaml, eprover
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     [];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -38,7 +38,7 @@ rec {
     echo -e "#! /bin/sh\\n$out/bin/iproveropt --clausifier \"${eprover}/bin/eprover\" --clausifier_options \" --tstp-format --silent --cnf \" \"\$@\"" > "$out"/bin/iprover
     chmod a+x  "$out"/bin/iprover
   '') ["defEnsureDir" "minInit" "doMake"];
-      
+
   meta = {
     description = "An automated first-order logic theorem prover";
     maintainers = with a.lib.maintainers;
@@ -47,7 +47,8 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = "GPLv3";
+    license = with a.lib.licenses;
+      gpl3;
   };
   passthru = {
     updateInfo = {
@@ -55,4 +56,3 @@ rec {
     };
   };
 }) x
-

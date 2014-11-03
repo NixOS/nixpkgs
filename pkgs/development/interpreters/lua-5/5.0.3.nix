@@ -24,8 +24,6 @@ stdenv.mkDerivation {
       management with incremental garbage collection, making it ideal
       for configuration, scripting, and rapid prototyping.
     '';
-    license = "MIT";
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ ];
+    license = stdenv.lib.licenses.mit;
   };
 }

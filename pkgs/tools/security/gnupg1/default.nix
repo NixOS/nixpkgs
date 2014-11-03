@@ -1,11 +1,11 @@
 { stdenv, fetchurl, readline, bzip2 }:
 
 stdenv.mkDerivation rec {
-  name = "gnupg-1.4.17";
+  name = "gnupg-1.4.18";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "0nvv1bd8v13gh2m1429azws7ks0ix9y1yv87ak9k9i1dsqcrvpg6";
+    sha256 = "1233bppjvdpbbl425ii6l7xvgy0879ghhnmwrph5b6c4g3dgvddp";
   };
 
   buildInputs = [ readline bzip2 ];
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "free implementation of the OpenPGP standard for encrypting and signing data";
     homepage = http://www.gnupg.org/;
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.gnu; # arbitrary choice
   };
 }

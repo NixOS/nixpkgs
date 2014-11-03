@@ -10,7 +10,7 @@ let
     isExecutable = true;
     src = ./nixos-container.pl;
     perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
-    inherit (pkgs) socat;
+    inherit (pkgs) utillinux;
   };
 
   # The container's init script, a small wrapper around the regular
@@ -32,7 +32,10 @@ let
         fi
       fi
 
-      exec "$1"
+      # Start the regular stage 1 script, passing the bind-mounted
+      # notification socket from the host to allow the container
+      # systemd to signal readiness to the host systemd.
+      NOTIFY_SOCKET=/var/lib/private/host-notify exec "$1"
     '';
 
   system = config.nixpkgs.system;
@@ -168,17 +171,23 @@ in
 
         preStart =
           ''
-            mkdir -p -m 0755 $root/var/lib
+            # Clean up existing machined registration and interfaces.
+            machinectl terminate "$INSTANCE" 2> /dev/null || true
 
-            # Create a named pipe to get a signal when the container
-            # has finished booting.
-            rm -f $root/var/lib/startup-done
-            mkfifo -m 0600 $root/var/lib/startup-done
+            if [ "$PRIVATE_NETWORK" = 1 ]; then
+              ip link del dev "ve-$INSTANCE" 2> /dev/null || true
+            fi
+
+
+            if [ "$PRIVATE_NETWORK" = 1 ]; then
+              ip link del dev "ve-$INSTANCE" 2> /dev/null || true
+            fi
          '';
 
         script =
           ''
             mkdir -p -m 0755 "$root/etc" "$root/var/lib"
+            mkdir -p -m 0700 "$root/var/lib/private"
             if ! [ -e "$root/etc/os-release" ]; then
               touch "$root/etc/os-release"
             fi
@@ -186,6 +195,8 @@ in
             mkdir -p -m 0755 \
               "/nix/var/nix/profiles/per-container/$INSTANCE" \
               "/nix/var/nix/gcroots/per-container/$INSTANCE"
+
+            cp -f /etc/resolv.conf "$root/etc/resolv.conf"
 
             if [ "$PRIVATE_NETWORK" = 1 ]; then
               extraFlags+=" --network-veth"
@@ -203,12 +214,16 @@ in
               fi
             ''}
 
+            # Run systemd-nspawn without startup notification (we'll
+            # wait for the container systemd to signal readiness).
+            EXIT_ON_REBOOT=1 NOTIFY_SOCKET= \
             exec ${config.systemd.package}/bin/systemd-nspawn \
               --keep-unit \
               -M "$INSTANCE" -D "$root" $extraFlags \
               --bind-ro=/nix/store \
               --bind-ro=/nix/var/nix/db \
               --bind-ro=/nix/var/nix/daemon-socket \
+              --bind=/run/systemd/notify:/var/lib/private/host-notify \
               --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles" \
               --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots" \
               --setenv PRIVATE_NETWORK="$PRIVATE_NETWORK" \
@@ -220,12 +235,6 @@ in
 
         postStart =
           ''
-            # This blocks until the container-startup-done service
-            # writes something to this pipe.  FIXME: it also hangs
-            # until the start timeout expires if systemd-nspawn exits.
-            read x < $root/var/lib/startup-done
-            rm -f $root/var/lib/startup-done
-
             if [ "$PRIVATE_NETWORK" = 1 ]; then
               ifaceHost=ve-$INSTANCE
               ip link set dev $ifaceHost up
@@ -240,23 +249,44 @@ in
 
         preStop =
           ''
-            machinectl poweroff "$INSTANCE"
+            machinectl poweroff "$INSTANCE" || true
           '';
 
         restartIfChanged = false;
         #reloadIfChanged = true; # FIXME
 
-        serviceConfig.ExecReload = pkgs.writeScript "reload-container"
-          ''
-            #! ${pkgs.stdenv.shell} -e
-            SYSTEM_PATH=/nix/var/nix/profiles/system
-            echo $SYSTEM_PATH/bin/switch-to-configuration test | \
-              ${pkgs.socat}/bin/socat unix:$root/var/lib/run-command.socket -
-          '';
+        serviceConfig = {
+          ExecReload = pkgs.writeScript "reload-container"
+            ''
+              #! ${pkgs.stdenv.shell} -e
+              ${nixos-container}/bin/nixos-container run "$INSTANCE" -- \
+                bash --login -c "/nix/var/nix/profiles/system/bin/switch-to-configuration test"
+            '';
 
-        serviceConfig.SyslogIdentifier = "container %i";
+          SyslogIdentifier = "container %i";
 
-        serviceConfig.EnvironmentFile = "-/etc/containers/%i.conf";
+          EnvironmentFile = "-/etc/containers/%i.conf";
+
+          Type = "notify";
+
+          NotifyAccess = "all";
+
+          # Note that on reboot, systemd-nspawn returns 133, so this
+          # unit will be restarted. On poweroff, it returns 0, so the
+          # unit won't be restarted.
+          RestartForceExitStatus = "133";
+          SuccessExitStatus = "133";
+
+          Restart = "on-failure";
+
+          # Hack: we don't want to kill systemd-nspawn, since we call
+          # "machinectl poweroff" in preStop to shut down the
+          # container cleanly. But systemd requires sending a signal
+          # (at least if we want remaining processes to be killed
+          # after the timeout). So send an ignored signal.
+          KillMode = "mixed";
+          KillSignal = "WINCH";
+        };
       };
 
     # Generate a configuration file in /etc/containers for each
@@ -289,6 +319,31 @@ in
     networking.dhcpcd.denyInterfaces = [ "ve-*" ];
 
     environment.systemPackages = [ nixos-container ];
+
+    # Start containers at boot time.
+    systemd.services.all-containers =
+      { description = "All Containers";
+
+        wantedBy = [ "multi-user.target" ];
+
+        unitConfig.ConditionDirectoryNotEmpty = "/etc/containers";
+
+        serviceConfig.Type = "oneshot";
+
+        script =
+          ''
+            res=0
+            shopt -s nullglob
+            for i in /etc/containers/*.conf; do
+              AUTO_START=
+              source "$i"
+              if [ "$AUTO_START" = 1 ]; then
+                systemctl start "container@$(basename "$i" .conf).service" || res=1
+              fi
+            done
+            exit $res
+          ''; # */
+      };
 
   };
 }

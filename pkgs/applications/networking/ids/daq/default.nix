@@ -1,12 +1,12 @@
 {stdenv, fetchurl, flex, bison, libpcap}:
 
 stdenv.mkDerivation rec {
-  name = "daq-2.0.0";
+  name = "daq-2.0.2";
   
   src = fetchurl {
     name = "${name}.tar.gz";
-    url = http://www.snort.org/downloads/2311;
-    sha256 = "0f0w5jfmx0n2sms4f2mfg984a27r7qh927vkd7fclvx9cbiwibzv";
+    url = "http://www.snort.org/downloads/snort/${name}.tar.gz";
+    sha256 = "1a39qbm9nc05yr8llawl7mz0ny1fci4acj9c2k1h4klrqikiwpfn";
   };
   
   buildInputs = [ flex bison libpcap ];
@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Data AcQuisition library (DAQ), for packet I/O";
     homepage = http://www.snort.org;
-    license = "GPLv2";
+    maintainers = with stdenv.lib.maintainers; [ aycanirican ];
+    license = stdenv.lib.licenses.gpl2;
   };
 }

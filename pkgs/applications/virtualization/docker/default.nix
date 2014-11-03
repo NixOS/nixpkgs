@@ -1,33 +1,30 @@
 { stdenv, fetchurl, makeWrapper, go, lxc, sqlite, iproute, bridge_utils, devicemapper,
-btrfsProgs, iptables, bash}:
+btrfsProgs, iptables, bash, e2fsprogs, xz}:
 
 stdenv.mkDerivation rec {
   name = "docker-${version}";
-  version = "0.10.0";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "https://github.com/dotcloud/docker/archive/v${version}.tar.gz";
-    sha256 = "14gmx119hd3j0c6rbks2mm83hk46s5wnnyvj8rhn25h0yp39pm5q";
+    sha256 = "09bn88i8acv7kw39js1p7mgf3sglq7d782xnafkp0i97svf0x4y9";
   };
 
-  phases = ["unpackPhase" "preBuild" "buildPhase" "installPhase"];
+  buildInputs = [ makeWrapper go sqlite lxc iproute bridge_utils devicemapper btrfsProgs iptables e2fsprogs];
 
-  buildInputs = [ makeWrapper go sqlite lxc iproute bridge_utils devicemapper btrfsProgs iptables ];
-
-  preBuild = ''
-    patchShebangs ./hack
-  '';
+  dontStrip = true;
 
   buildPhase = ''
+    patchShebangs ./hack
     export AUTO_GOPATH=1
-    export DOCKER_GITCOMMIT="867b2a90c228f62cdcd44907ceef279a2d8f1ac5"
+    export DOCKER_GITCOMMIT="c78088f"
     ./hack/make.sh dynbinary
   '';
 
   installPhase = ''
-    install -Dm755 ./bundles/${version}/dynbinary/docker-${version} $out/bin/docker
-    install -Dm755 ./bundles/${version}/dynbinary/dockerinit-${version} $out/bin/dockerinit
-    wrapProgram $out/bin/docker --prefix PATH : "${iproute}/sbin:sbin:${lxc}/bin:${iptables}/sbin"
+    install -Dm755 ./bundles/${version}/dynbinary/docker-${version} $out/libexec/docker/docker
+    install -Dm755 ./bundles/${version}/dynbinary/dockerinit-${version} $out/libexec/docker/dockerinit
+    makeWrapper $out/libexec/docker/docker $out/bin/docker --prefix PATH : "${iproute}/sbin:sbin:${lxc}/bin:${iptables}/sbin:${e2fsprogs}/sbin:${xz}/bin"
 
     # systemd
     install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
@@ -41,7 +38,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.docker.io/;
     description = "An open source project to pack, ship and run any application as a lightweight container";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline ];
+    maintainers = with maintainers; [ offline tailhook ];
     platforms = platforms.linux;
   };
 }

@@ -40,7 +40,7 @@ in
 
   options = {
 
-    users.defaultUserShell = pkgs.lib.mkOption {
+    users.defaultUserShell = lib.mkOption {
       description = ''
         This option defines the default shell assigned to user
         accounts.  This must not be a store path, since the path is
@@ -60,7 +60,7 @@ in
   config = {
 
     environment.systemPackages =
-      pkgs.lib.optional config.users.mutableUsers pkgs.shadow;
+      lib.optional config.users.mutableUsers pkgs.shadow;
 
     environment.etc =
       [ { # /etc/login.defs: global configuration for pwdutils.  You
@@ -83,7 +83,7 @@ in
     security.pam.services =
       { chsh = { rootOK = true; };
         chfn = { rootOK = true; };
-        su = { rootOK = true; forwardXAuth = true; };
+        su = { rootOK = true; forwardXAuth = true; logFailures = true; };
         passwd = {};
         # Note: useradd, groupadd etc. aren't setuid root, so it
         # doesn't really matter what the PAM config says as long as it
@@ -100,7 +100,9 @@ in
         chgpasswd = { rootOK = true; };
       };
 
-    security.setuidPrograms = [ "passwd" "chfn" "su" "newgrp" ];
+    security.setuidPrograms = [ "passwd" "chfn" "su" "newgrp"
+      "newuidmap" "newgidmap"  # new in shadow 4.2.x
+      ];
 
   };
 

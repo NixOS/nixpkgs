@@ -14,6 +14,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 libXext libXt xextproto xproto ];
 
   meta = {
-    description = "XOSD displays text on your screen";
+    description = "Displays text on your screen";
   };
 }

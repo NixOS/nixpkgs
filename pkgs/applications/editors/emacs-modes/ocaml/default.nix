@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
 
   installPhase = ''
     cd emacs;
-    ensureDir "$out/share/emacs/site-lisp" "$out/bin"
+    mkdir -p "$out/share/emacs/site-lisp" "$out/bin"
     EMACSDIR=$out/share/emacs/site-lisp make simple-install install-ocamltags
   '';
 

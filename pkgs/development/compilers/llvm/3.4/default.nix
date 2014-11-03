@@ -15,13 +15,13 @@ let
 
   self = {
     llvm = callPackage ./llvm.nix rec {
-      version = "3.4.1";
+      version = "3.4.2";
       fetch = fetch_v version;
       inherit compiler-rt_src;
     };
 
     clang = callPackage ./clang.nix rec {
-      version = "3.4.1";
+      version = "3.4.2";
       fetch = fetch_v version;
       inherit clang-tools-extra_src;
     };

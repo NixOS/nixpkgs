@@ -262,7 +262,6 @@ table.simplelist
     margin-bottom: 1em;
 }
 
-div.affiliation
-{
-    font-style: italic;
+div.navheader table, div.navfooter table {
+    box-shadow: none;
 }

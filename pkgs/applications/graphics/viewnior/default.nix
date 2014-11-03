@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Viewnior is a fast and simple image viewer for GNU/Linux";
+    description = "Fast and simple image viewer";
     longDescription =
       '' Viewnior is insipred by big projects like Eye of Gnome, because of it's
          usability and richness,and by GPicView, because of it's lightweight design and
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
          in mind (follows Gnome HIG2).
       '';
 
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3;
 
     homepage = http://xsisqox.github.com/Viewnior;
 

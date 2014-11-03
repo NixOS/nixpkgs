@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, ncurses, python27, which, groff, gettext, man_db, bc }:
+{ stdenv, fetchurl, ncurses, python, which, groff, gettext, man_db, bc }:
 
 stdenv.mkDerivation rec {
   name = "fish-${version}";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchurl {
     url = "http://fishshell.com/files/${version}/${name}.tar.gz";
-    sha256 = "0i7h3hx8iszli3d4kphw79sz9m07f2lc2c9hr9smdps5s7wpllmg";
+    sha256 = "b7e4d3c3d55fc3859edcb20462fcf0d14ab26e920eddcd503072e8105284d924";
   };
 
   buildInputs = [ ncurses ];
 
   # Required binaries during execution
-  # Python27: Autocompletion generated from manpages and config editing
-  propagatedBuildInputs = [ python27 which groff gettext man_db bc ];
+  # Python: Autocompletion generated from manpages and config editing
+  propagatedBuildInputs = [ python which groff gettext man_db bc ];
 
   postInstall = ''
     sed -i "s|bc|${bc}/bin/bc|" "$out/share/fish/functions/seq.fish"
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Smart and user-friendly command line shell";
     homepage = "http://fishshell.com/";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ ocharles ];
   };
 }

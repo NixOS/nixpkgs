@@ -1,3 +1,33 @@
+diff --git a/src/MacVim/MacVim.xcodeproj/project.pbxproj b/src/MacVim/MacVim.xcodeproj/project.pbxproj
+index 1c5ff47..677a2cc 100644
+--- a/src/MacVim/MacVim.xcodeproj/project.pbxproj
++++ b/src/MacVim/MacVim.xcodeproj/project.pbxproj
+@@ -437,6 +437,8 @@
+ /* Begin PBXProject section */
+ 		29B97313FDCFA39411CA2CEA /* Project object */ = {
+ 			isa = PBXProject;
++			attributes = {
++			};
+ 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "MacVim" */;
+ 			compatibilityVersion = "Xcode 2.4";
+ 			developmentRegion = English;
+@@ -632,6 +634,7 @@
+ 				INSTALL_PATH = "$(HOME)/Applications";
+ 				MACOSX_DEPLOYMENT_TARGET = "";
+ 				ONLY_ACTIVE_ARCH = YES;
++				OTHER_LDFLAGS = "-headerpad_max_install_names";
+ 				PRODUCT_NAME = MacVim;
+ 				VERSIONING_SYSTEM = "apple-generic";
+ 				WARNING_CFLAGS = "-Wall";
+@@ -662,6 +665,7 @@
+ 				INSTALL_PATH = "$(HOME)/Applications";
+ 				MACOSX_DEPLOYMENT_TARGET = "";
+ 				ONLY_ACTIVE_ARCH = YES;
++				OTHER_LDFLAGS = "-headerpad_max_install_names";
+ 				PRODUCT_NAME = MacVim;
+ 				VERSIONING_SYSTEM = "apple-generic";
+ 				WRAPPER_EXTENSION = app;
+
 diff --git a/src/vimtutor b/src/vimtutor
 index 70d9ec7..b565a1a 100755
 --- a/src/vimtutor
@@ -157,3 +187,36 @@ index bc9f074..9b9125e 100755
    # Use ||, not &&, to avoid exiting from the if with $? = 1, which
    # would make configure fail if this is the last instruction.
    $ac_cs_success || as_fn_exit 1
+
+diff --git a/src/Makefile b/src/Makefile
+index 1c4d104..fff2015 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -1298,7 +1298,7 @@ MACVIMGUI_SRC	= gui.c gui_beval.c MacVim/gui_macvim.m MacVim/MMBackend.m \
+ 		  MacVim/MacVim.m
+ MACVIMGUI_OBJ	= objects/gui.o objects/gui_beval.o objects/pty.o \
+ 		  objects/gui_macvim.o objects/MMBackend.o objects/MacVim.o
+-MACVIMGUI_DEFS	= -DFEAT_GUI_MACVIM -Wall -Wno-unknown-pragmas -pipe
++MACVIMGUI_DEFS	= -DMACOS_X_UNIX -DFEAT_GUI_MACVIM -Wall -Wno-unknown-pragmas -pipe
+ MACVIMGUI_IPATH	=
+ MACVIMGUI_LIBS_DIR =
+ MACVIMGUI_LIBS1	= -framework Cocoa -framework Carbon
+
+diff --git a/src/if_python.c b/src/if_python.c
+index b356bf7..b7bfa78 100644
+--- a/src/if_python.c
++++ b/src/if_python.c
+@@ -55,11 +55,7 @@
+ 
+ #define PY_SSIZE_T_CLEAN
+ 
+-#ifdef FEAT_GUI_MACVIM
+-# include <Python/Python.h>
+-#else
+-# include <Python.h>
+-#endif
++#include <Python.h>
+ 
+ #if !defined(PY_VERSION_HEX) || PY_VERSION_HEX < 0x02050000
+ # undef PY_SSIZE_T_CLEAN
+ MACVIMGUI_LIBS1	= -framework Cocoa -framework Carbon

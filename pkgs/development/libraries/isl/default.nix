@@ -11,9 +11,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp ];
   patches = [ ./fix-gcc-build.diff ];
 
+  enableParallelBuilding = true;
+
   meta = {
     homepage = http://www.kotnet.org/~skimo/isl/;
-    license = "LGPLv2.1";
+    license = stdenv.lib.licenses.lgpl21;
     description = "A library for manipulating sets and relations of integer points bounded by linear constraints";
     maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms = stdenv.lib.platforms.all;

@@ -2,12 +2,16 @@
 
 stdenv.mkDerivation rec {
   name    = "concurrencykit-${version}";
-  version = "0.4.1";
+  version = "0.4.4";
 
   src = fetchurl {
     url    = "http://concurrencykit.org/releases/ck-${version}.tar.gz";
-    sha256 = "1gi5gpkxvbb6vkhjm9kab7dz1av2i11f1pggxp001rqq2mi3i6aq";
+    sha256 = "0m3gzv5l7hw3zwhndjjvwmkhh66lvgnk0mspa2s12r1hlzc91zi3";
   };
+
+  enableParallelBuilding = true;
+
+  configurePhase = "./configure --prefix=$out";
 
   meta = {
     description = "A library of safe, high-performance concurrent data structures";

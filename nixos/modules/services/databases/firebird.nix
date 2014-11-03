@@ -159,5 +159,7 @@ in
       uid = config.ids.uids.firebird;
     };
 
+    users.extraGroups.firebird.gid = config.ids.gids.firebird;
+
   };
 }

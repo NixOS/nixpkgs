@@ -9,6 +9,8 @@
 , sqlite
 , tcl, tk
 , zlib
+, callPackage
+, self
 }:
 
 assert readline != null -> ncurses != null;
@@ -17,7 +19,7 @@ with stdenv.lib;
 
 let
   majorVersion = "3.2";
-  version = "${majorVersion}.5";
+  version = "${majorVersion}.6";
 
   buildInputs = filter (p: p != null) [
     zlib bzip2 gdbm sqlite db readline ncurses openssl tcl tk libX11 xproto
@@ -28,15 +30,9 @@ stdenv.mkDerivation {
   inherit majorVersion version;
 
   src = fetchurl {
-    url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.bz2";
-    sha256 = "0pxs234g08v3lar09lvzxw4vqdpwkbqmvkv894j2w7aklskcjd6v";
+    url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
+    sha256 = "1p3vvvh3qw8avq959hdl6bq5d6r7mbhrnigqzgx6mllzh40va4hx";
   };
-
-  patches =
-    [
-      # See http://bugs.python.org/issue20246
-      ./CVE-2014-1912.patch
-    ];
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
@@ -49,27 +45,41 @@ stdenv.mkDerivation {
     configureFlagsArray=( --enable-shared --with-threads
                           CPPFLAGS="${concatStringsSep " " (map (p: "-I${p}/include") buildInputs)}"
                           LDFLAGS="${concatStringsSep " " (map (p: "-L${p}/lib") buildInputs)}"
-                          LIBS="-lcrypt ${optionalString (ncurses != null) "-lncurses"}"
+                          LIBS="${optionalString (!stdenv.isDarwin) "-lcrypt"} ${optionalString (ncurses != null) "-lncurses"}"
                         )
   '';
 
   setupHook = ./setup-hook.sh;
 
   postInstall = ''
-    rm -rf "$out/lib/python${majorVersion}/test"
+    # needed for some packages, especially packages that backport functionality
+    # to 2.x from 3.x
+    for item in $out/lib/python${majorVersion}/test/*; do
+      if [[ "$item" != */test_support.py* ]]; then
+        rm -rf "$item"
+      else
+        echo $item
+      fi
+    done
+    touch $out/lib/python${majorVersion}/test/__init__.py
     ln -s "$out/include/python${majorVersion}m" "$out/include/python${majorVersion}"
+    paxmark E $out/bin/python${majorVersion}
   '';
 
-  passthru = {
+  passthru = rec {
     zlibSupport = zlib != null;
     sqliteSupport = sqlite != null;
     dbSupport = db != null;
+    buildEnv = callPackage ../wrapper.nix { python = self; };
     readlineSupport = readline != null;
     opensslSupport = openssl != null;
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
     libPrefix = "python${majorVersion}";
     executable = "python3.2m";
-    is_py3k = true;
+    isPy3 = true;
+    isPy32 = true;
+    is_py3k = true;  # deprecated
+    sitePackages = "lib/${libPrefix}/site-packages";
   };
 
   enableParallelBuilding = true;
@@ -88,6 +98,6 @@ stdenv.mkDerivation {
     '';
     license = stdenv.lib.licenses.psfl;
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ simons chaoflow ];
+    maintainers = with stdenv.lib.maintainers; [ simons chaoflow cstrahan ];
   };
 }

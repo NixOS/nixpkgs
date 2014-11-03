@@ -1,5 +1,5 @@
 { stdenv, fetchgit, alsaLib, aubio, boost, cairomm, curl, fftw
-, fftwSinglePrec, flac, glibc, glibmm, gtk, gtkmm, jackaudio
+, fftwSinglePrec, flac, glibc, glibmm, gtk, gtkmm, jack2
 , libgnomecanvas, libgnomecanvasmm, liblo, libmad, libogg, librdf
 , librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile
 , libusb, libuuid, libxml2, libxslt, lilv, lv2, makeWrapper, pango
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = 
     [ alsaLib aubio boost cairomm curl fftw fftwSinglePrec flac glibc
-      glibmm gtk gtkmm jackaudio libgnomecanvas libgnomecanvasmm liblo
+      glibmm gtk gtkmm jack2 libgnomecanvas libgnomecanvasmm liblo
       libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
       libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv lv2
       makeWrapper pango perl pkgconfig python serd sord sratom suil
@@ -47,6 +47,21 @@ stdenv.mkDerivation rec {
     mkdir -pv $out/gtk2/engines
     cp build/libs/clearlooks-newer/libclearlooks.so $out/gtk2/engines/
     wrapProgram $out/bin/ardour3 --prefix GTK_PATH : $out/gtk2
+
+    # Install desktop file
+    mkdir -p "$out/share/applications"
+    cat > "$out/share/applications/ardour.desktop" << EOF
+    [Desktop Entry]
+    Name=Ardour 3
+    GenericName=Digital Audio Workstation
+    Comment=Multitrack harddisk recorder
+    Exec=$out/bin/ardour3
+    Icon=$out/share/ardour3/icons/ardour_icon_256px.png
+    Terminal=false
+    Type=Application
+    X-MultipleArgs=false
+    Categories=GTK;Audio;AudioVideoEditing;AudioVideo;Video;
+    EOF
   '';
 
   meta = with stdenv.lib; {

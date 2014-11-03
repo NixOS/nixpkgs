@@ -2,7 +2,7 @@
 , fontconfig, xlibs, automake, pkgconfig, gdk_pixbuf }:
 
 stdenv.mkDerivation rec {
-  name = "icewm-1.3.7";
+  name = "icewm-1.3.8";
 
   buildInputs =
     [ gettext libjpeg libtiff libungif libpng
@@ -13,10 +13,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/icewm/${name}.tar.gz";
-    sha256 = "0yw813d8amrl0n1fvdiyznxah92wcylj9kj1qhjc6h73d827h6na";
+    sha256 = "066d1mw0vm9ygxnyxksfi6k4vzclvnlkvj04pj3kbcmv1fg8sn0p";
   };
-
-  patches = [ ./deprecated.patch ];
 
   NIX_LDFLAGS = "-lfontconfig";
 

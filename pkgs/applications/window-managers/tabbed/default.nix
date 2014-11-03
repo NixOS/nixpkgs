@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
  
   src = fetchhg {
     url = http://hg.suckless.org/tabbed;
-    tag = "d7542a6f6dc5";
+    rev = "d7542a6f6dc5";
     sha256 = "1963jsazfmh5k7923c1mfwppz1xbh48z16j0sa64fiscq22as2gj";
   };
 

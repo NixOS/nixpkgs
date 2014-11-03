@@ -14,6 +14,6 @@ stdenv.mkDerivation rec {
     description = "A compatibility library for pango>1.30.*";
 
     homepage = http://www.pango.org/;
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
   };
 }

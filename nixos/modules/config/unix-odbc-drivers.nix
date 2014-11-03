@@ -27,7 +27,7 @@ with lib;
 
     environment.etc."odbcinst.ini".text =
       let inis = config.environment.unixODBCDrivers;
-      in pkgs.lib.concatStringsSep "\n" inis;
+      in lib.concatStringsSep "\n" inis;
 
   };
 

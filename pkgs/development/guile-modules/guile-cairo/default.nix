@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
          programming environment.
       '';
 
-    license = "LGPLv3+";
+    license = stdenv.lib.licenses.lgpl3Plus;
 
     homepage = http://home.gna.org/guile-cairo/;
 

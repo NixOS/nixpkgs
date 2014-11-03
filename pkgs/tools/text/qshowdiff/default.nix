@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://qshowdiff.danfis.cz/;
     description = "Colourful diff viewer";
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
   };
 }

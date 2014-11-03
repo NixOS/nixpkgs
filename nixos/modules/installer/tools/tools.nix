@@ -32,11 +32,13 @@ let
   nixos-rebuild = makeProg {
     name = "nixos-rebuild";
     src = ./nixos-rebuild.sh;
+    nix = config.nix.package;
   };
 
   nixos-generate-config = makeProg {
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
+    path = [ pkgs.btrfsProgs ];
     perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
   };
 
@@ -64,7 +66,7 @@ let
         test -e "$out/chrome/content/jquery-1.5.2.js" ||
           cp -f "$jquery" "$out/chrome/content/jquery-1.5.2.js"
       '';
-      gui = pkgs.lib.cleanSource "${modulesPath}/../gui";
+      gui = lib.cleanSource "${modulesPath}/../gui";
       jquery = pkgs.fetchurl {
         url = http://code.jquery.com/jquery-1.5.2.min.js;
         sha256 = "8f0a19ee8c606b35a10904951e0a27da1896eafe33c6e88cb7bcbe455f05a24a";

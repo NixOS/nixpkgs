@@ -6,14 +6,14 @@
 }:
 
 let pname = "liferea";
-    version = "1.10.9";
+    version = "1.10.12";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${name}.tar.bz2";
-    sha256 = "0s6rg30xwdxzh2r1n4m9ns4pbq0p428h4nh72bcrcf9m0mdcg0ai";
+    sha256 = "0c046r3cgf2adcjkgcny1gf2yj3hs0fhrc1zmcz2ja7grcbx46si";
   };
 
   buildInputs = with gst_all_1; [
@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
     for f in "$out"/bin/*; do
       wrapProgram "$f" \
         --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pygobject3})" \
-        --prefix LD_LIBRARY_PATH : "${gnome3.libgnome_keyring}/lib" \
         --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
         --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules:${glib_networking}/lib/gio/modules" \
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.gnome_icon_theme}/share:${gnome3.gtk}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation {
-  name = "procps-3.3.9";
+  name = "procps-3.3.10";
 
   src = fetchurl {
-    url = mirror://sourceforge/procps-ng/procps-ng-3.3.9.tar.xz;
-    sha256 = "0qw69v7wx8hilwylyk9455k3h1xg8sc13vxh0pvdss7rml7wpw00";
+    url = mirror://sourceforge/procps-ng/procps-ng-3.3.10.tar.xz;
+    sha256 = "013z4rzy3p5m1zp6mmynpblv0c6zlcn91pw4k2vymz2djyc6ybm0";
   };
 
   buildInputs = [ ncurses ];
@@ -17,6 +17,9 @@ stdenv.mkDerivation {
   crossAttrs = {
     CC = stdenv.cross.config + "-gcc";
   };
+
+  # Too red
+  configureFlags = [ "--disable-modern-top" ];
 
   meta = {
     homepage = http://sourceforge.net/projects/procps-ng/;

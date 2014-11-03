@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://fallabs.com/tokyotyrant/;
 
-    license = "LGPLv2.1+";
+    license = stdenv.lib.licenses.lgpl21Plus;
 
     platforms = stdenv.lib.platforms.gnu;         # arbitrary choice
     maintainers = [ ];

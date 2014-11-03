@@ -1,6 +1,6 @@
 { stdenv, fetchurl
-, libX11, gettext, wxGTK
-, libiconv, fontconfig, freetype
+, libX11, wxGTK
+, libiconvOrEmpty, fontconfig, freetype
 , mesa
 , libass, fftw, ffms
 , ffmpeg, pkgconfig, zlib # Undocumented (?) dependencies
@@ -10,8 +10,7 @@
 , openalSupport ? false, openal ? null
 , alsaSupport ? true, alsaLib ? null
 , pulseaudioSupport ? true, pulseaudio ? null
-, portaudioSupport ? false, portaudio ? null
-}:
+, portaudioSupport ? false, portaudio ? null }:
 
 assert spellChecking -> (hunspell != null);
 assert automationSupport -> (lua != null);
@@ -22,28 +21,29 @@ assert portaudioSupport -> (portaudio != null);
 
 stdenv.mkDerivation rec {
   name = "aegisub-${version}";
-  version = "3.1.3";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "http://ftp.aegisub.org/pub/releases/${name}.tar.xz";
-    sha256 = "0n2y5cggayr8246p2cvrz0ajlhhvmzcgsp7nljnm21jypk15pspg";
+    sha256 = "1p7qdnxyyyrlpvxdrrp15b5967d7bzpjl3vdy0q66g4aabr2h6ln";
   };
 
-  nativeBuildInputs = [ intltool ];
-
   buildInputs = with stdenv.lib;
-  [ libX11 gettext wxGTK libiconv fontconfig freetype mesa libass fftw ffms ffmpeg pkgconfig zlib icu boost ]
-  ++ optional spellChecking hunspell
-  ++ optional automationSupport lua
-  ++ optional openalSupport openal
-  ++ optional alsaSupport alsaLib
-  ++ optional pulseaudioSupport pulseaudio
-  ++ optional portaudioSupport portaudio
-  ;
+  [ pkgconfig intltool libX11 wxGTK fontconfig freetype mesa
+    libass fftw ffms ffmpeg zlib icu boost boost.lib
+  ]
+    ++ libiconvOrEmpty
+    ++ optional spellChecking hunspell
+    ++ optional automationSupport lua
+    ++ optional openalSupport openal
+    ++ optional alsaSupport alsaLib
+    ++ optional pulseaudioSupport pulseaudio
+    ++ optional portaudioSupport portaudio
+    ;
 
-  NIX_LDFLAGS = "-liconv -lavutil -lavformat -lavcodec -lswscale -lz -lm -lGL";
+  configureFlags = "--with-boost-libdir=${boost.lib}/lib/";
 
-  configureFlags = "--with-boost-libdir=${boost}/lib/";
+  enableParallelBuilding = true;
 
   postInstall = "ln -s $out/bin/aegisub-* $out/bin/aegisub";
 
@@ -62,6 +62,5 @@ stdenv.mkDerivation rec {
               # - so the resulting program will be GPL
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
-
   };
 }

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   meta = { 
     description = "implementation of SVG Tiny, written in C";
     homepage = http://www.netsurf-browser.org/projects/libsvgtiny/;
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
     maintainers = [args.lib.maintainers.marcweber];
     platforms = args.lib.platforms.linux;
   };

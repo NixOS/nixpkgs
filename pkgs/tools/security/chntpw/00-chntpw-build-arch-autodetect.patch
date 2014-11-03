@@ -1,0 +1,25 @@
+diff -urN chntpw-140201.orig/Makefile chntpw-140201/Makefile
+--- chntpw-140201.orig/Makefile	2014-02-01 20:54:37.000000000 +0400
++++ chntpw-140201/Makefile	2014-08-03 20:26:56.497161881 +0400
+@@ -12,14 +12,13 @@
+ 
+ CC=gcc
+ 
+-# Force 32 bit
+-CFLAGS= -DUSEOPENSSL -g -I. -I$(OSSLINC) -Wall -m32 
+-OSSLLIB=$(OSSLPATH)/lib
+-
+-# 64 bit if default for compiler setup
+-#CFLAGS= -DUSEOPENSSL -g -I. -I$(OSSLINC) -Wall
+-#OSSLLIB=$(OSSLPATH)/lib64
+-
++ifeq      '$(shell gcc -dumpmachine)' 'x86_64-unknown-linux-gnu'
++  CFLAGS= -DUSEOPENSSL -g -I. -I$(OSSLINC) -Wall
++  OSSLLIB=$(OSSLPATH)/lib64
++else ifeq '$(shell gcc -dumpmachine)' 'i686-unknown-linux-gnu'
++  CFLAGS= -DUSEOPENSSL -g -I. -I$(OSSLINC) -Wall -m32 
++  OSSLLIB=$(OSSLPATH)/lib
++endif
+ 
+ # This is to link with whatever we have, SSL crypto lib we put in static
+ #LIBS=-L$(OSSLLIB) $(OSSLLIB)/libcrypto.a

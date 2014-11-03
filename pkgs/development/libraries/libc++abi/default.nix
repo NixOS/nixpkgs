@@ -1,16 +1,16 @@
-{ stdenv, fetchsvn, libcxx, libunwind }:
-let
-  rev = "199626";
-in stdenv.mkDerivation {
-  name = "libcxxabi-pre-${rev}";
+{ stdenv, fetchurl, libcxx, libunwind }:
 
-  src = fetchsvn {
-    url = http://llvm.org/svn/llvm-project/libcxxabi/trunk;
-    rev = "199626";
-    sha256 = "0h1x1s40x5r65ar53rv34lmgcfil3zxaknqr64dka1mz29xhhrxy";
+let rev = "199626"; in
+
+stdenv.mkDerivation {
+  name = "libc++abi-${rev}";
+
+  src = fetchurl {
+    url = "http://tarballs.nixos.org/libcxxabi-${rev}.tar.bz2";
+    sha256 = "09wr6qwgmdzbmgfkdzfhph9giy0zd6fp3s017fcfy4g0prjn5s4c";
   };
 
-  NIX_CFLAGS_LINK="-L${libunwind}/lib -lunwind";
+  NIX_CFLAGS_LINK = "-L${libunwind}/lib -lunwind";
 
   postUnpack = ''
     unpackFile ${libcxx.src}
@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
     homepage = http://libcxxabi.llvm.org/;
     description = "A new implementation of low level support for a standard C++ library";
     license = "BSD";
-    maintainers = stdenv.lib.maintainers.shlevy;
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.shlevy ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

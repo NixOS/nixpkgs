@@ -5,7 +5,7 @@
 # In that case its about 6MB which could be separated
 
 let
-  ver_maj = "1.40";
+  ver_maj = "1.42";
   ver_min = "0";
 in
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gobject-introspection/${ver_maj}/${name}.tar.xz";
-    sha256 = "162flbzwzz0b8axab2gimc4dglpaw88fh1d177zfg0whczlpbsln";
+    sha256 = "1xwm7wmr9r9wp6xljb3bckx3a4siybavaq39w46ly7gpskxfv8iv";
   };
 
   buildInputs = [ flex bison glib pkgconfig python ]
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   postInstall = "rm -rf $out/share/gtk-doc";
 
   setupHook = ./setup-hook.sh;
+
+  patches = [ ./absolute_shlib_path.patch ];
 
   meta = with stdenv.lib; {
     description = "A middleware layer between C libraries and language bindings";

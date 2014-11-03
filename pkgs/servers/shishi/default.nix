@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "GNU Shishi, free implementation of the Kerberos 5 network security system";
+    description = "An implementation of the Kerberos 5 network security system";
     homepage    = http://www.gnu.org/software/shishi/;
     license     = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [ bjg lovek323 ];

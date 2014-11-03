@@ -1,13 +1,15 @@
 { stdenv, fetchurl, unzip, ruby, openssl, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "ec2-ami-tools-1.4.0.9";
+  name = "ec2-ami-tools-${version}";
+
+  version = "1.5.3";
 
   buildInputs = [ unzip makeWrapper ];
 
   src = fetchurl {
-    url = "http://tarballs.nixos.org/${name}.zip";
-    sha256 = "0icpjr2ipch3f6cf4rg9x5z2y9k6a4rd85npsmw3a1ambs3dwxlq";
+    url = "http://s3.amazonaws.com/ec2-downloads/${name}.zip";
+    sha256 = "0n184nxc57alg25h5bslg0cs1z854sf7f52a820ihxxknrq2dy6i";
   };
 
   # Amazon EC2 requires that disk images are writable.  If they're
@@ -36,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://developer.amazonwebservices.com/connect/entry.jspa?externalID=368&categoryID=88;
     description = "Command-line tools to create and manage Amazon EC2 virtual machine images";
-    license = "unfree-redistributable";
+    license = "unfree-redistributable"; # Amazon || (Ruby GPL-2)
   };
 
 }

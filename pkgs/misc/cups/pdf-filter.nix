@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.cups.org/;
     description = "Image and pdf filters for CUPS";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.urkud ];
     platforms = stdenv.lib.platforms.linux;
   };

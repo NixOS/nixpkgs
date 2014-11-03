@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, freetype, yasm
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
+, fribidiSupport ? true, fribidi ? null
 , x11Support ? true, libX11 ? null, libXext ? null, mesa ? null
 , xineramaSupport ? true, libXinerama ? null
 , xvSupport ? true, libXv ? null
@@ -15,16 +16,18 @@
 , speexSupport ? true, speex ? null
 , theoraSupport ? true, libtheora ? null
 , x264Support ? false, x264 ? null
-, jackaudioSupport ? false, jackaudio ? null
+, jackaudioSupport ? false, jack2 ? null
 , pulseSupport ? false, pulseaudio ? null
 , bs2bSupport ? false, libbs2b ? null
 # For screenshots
 , libpngSupport ? true, libpng ? null
+, libjpegSupport ? true, libjpeg ? null
 , useUnfreeCodecs ? false
 }:
 
 assert fontconfigSupport -> (fontconfig != null);
 assert (!fontconfigSupport) -> (freefont_ttf != null);
+assert fribidiSupport -> (fribidi != null);
 assert x11Support -> (libX11 != null && libXext != null && mesa != null);
 assert xineramaSupport -> (libXinerama != null && x11Support);
 assert xvSupport -> (libXv != null && x11Support);
@@ -40,10 +43,11 @@ assert lameSupport -> lame != null;
 assert speexSupport -> speex != null;
 assert theoraSupport -> libtheora != null;
 assert x264Support -> x264 != null;
-assert jackaudioSupport -> jackaudio != null;
+assert jackaudioSupport -> jack2 != null;
 assert pulseSupport -> pulseaudio != null;
 assert bs2bSupport -> libbs2b != null;
 assert libpngSupport -> libpng != null;
+assert libjpegSupport -> libjpeg != null;
 
 let
 
@@ -72,13 +76,13 @@ let
       cp -prv * $out
     '';
 
-    meta.license = "unfree";
+    meta.license = stdenv.lib.licenses.unfree;
   } else null;
 
 in
 
 stdenv.mkDerivation rec {
-  name = "mplayer-1.1";
+  name = "mplayer-1.1.1";
 
   src = fetchurl {
     # Old kind of URL:
@@ -89,8 +93,8 @@ stdenv.mkDerivation rec {
     #url = http://www.mplayerhq.hu/MPlayer/releases/mplayer-export-snapshot.tar.bz2;
     #sha256 = "cc1b3fda75b172f02c3f46581cfb2c17f4090997fe9314ad046e464a76b858bb";
 
-    url = "http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.1.tar.xz";
-    sha256 = "173cmsfz7ckzy1hay9mpnc5as51127cfnxl20b521d2jvgm4gjvn";
+    url = "http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.1.1.tar.xz";
+    sha256 = "ce8fc7c3179e6a57eb3a58cb7d1604388756b8a61764cc93e095e7aff3798c76";
   };
 
   prePatch = ''
@@ -100,6 +104,7 @@ stdenv.mkDerivation rec {
   buildInputs = with stdenv.lib;
     [ pkgconfig freetype ]
     ++ optional fontconfigSupport fontconfig
+    ++ optional fribidiSupport fribidi
     ++ optionals x11Support [ libX11 libXext mesa ]
     ++ optional alsaSupport alsaLib
     ++ optional xvSupport libXv
@@ -109,7 +114,7 @@ stdenv.mkDerivation rec {
     ++ optional dvdnavSupport libdvdnav
     ++ optional bluraySupport libbluray
     ++ optional cddaSupport cdparanoia
-    ++ optional jackaudioSupport jackaudio
+    ++ optional jackaudioSupport jack2
     ++ optionals amrSupport [ amrnb amrwb ]
     ++ optional x264Support x264
     ++ optional pulseSupport pulseaudio
@@ -118,6 +123,7 @@ stdenv.mkDerivation rec {
     ++ optional vdpauSupport libvdpau
     ++ optional speexSupport speex
     ++ optional libpngSupport libpng
+    ++ optional libjpegSupport libjpeg
     ++ optional bs2bSupport libbs2b
     ;
 
@@ -150,6 +156,7 @@ stdenv.mkDerivation rec {
       ${if pulseSupport then "--enable-pulse" else "--disable-pulse"}
       ${optionalString (useUnfreeCodecs && codecs != null) "--codecsdir=${codecs}"}
       ${optionalString (stdenv.isi686 || stdenv.isx86_64) "--enable-runtime-cpudetection"}
+      ${optionalString fribidiSupport "--enable-fribidi"}
       --disable-xanim
       --disable-ivtv
       --disable-xvid --disable-xvid-lavc
@@ -160,6 +167,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = with stdenv.lib;
        optional  fontconfigSupport "-lfontconfig"
+    ++ optional  fribidiSupport "-lfribidi"
     ++ optionals x11Support [ "-lX11" "-lXext" ]
     ;
 

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Space-efficient incremental backups of large files or block devices";
     homepage = "http://chunksync.florz.de/";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     platforms = with stdenv.lib.platforms; linux;
   };
 }

@@ -37,7 +37,7 @@ let
           --set PATH "/run/current-system/sw/bin:/run/current-system/sw/sbin" \
           --set MUNIN_LIBDIR "${pkgs.munin}/lib" \
           --set MUNIN_PLUGSTATE "/var/run/munin"
- 
+
         # munin uses markers to tell munin-node-configure what a plugin can do
         echo "#%# family=$family" >> $file
         echo "#%# capabilities=$cap" >> $file
@@ -57,7 +57,7 @@ let
       rundir    /var/run/munin
 
       ${cronCfg.extraGlobalConfig}
-      
+
       ${cronCfg.hosts}
     '';
 
@@ -72,10 +72,10 @@ let
       group root
       host_name ${config.networking.hostName}
       setsid 0
-  
+
       # wrapped plugins by makeWrapper being with dots
       ignore_file ^\.
-      
+
       allow ^127\.0\.0\.1$
 
       ${nodeCfg.extraConfig}
@@ -97,7 +97,7 @@ in
           See <link xlink:href='http://munin-monitoring.org/wiki/munin-node.conf' />.
         '';
       };
-      
+
       extraConfig = mkOption {
         default = "";
         description = ''
@@ -118,7 +118,7 @@ in
           Enable munin-cron. Takes care of all heavy lifting to collect data from
           nodes and draws graphs to html. Runs munin-update, munin-limits,
           munin-graphs and munin-html in that order.
- 
+
           HTML output is in <filename>/var/www/munin/</filename>, configure your
           favourite webserver to serve static files.
         '';
@@ -138,7 +138,7 @@ in
           };
         '';
       };
-      
+
       extraGlobalConfig = mkOption {
         default = "";
         description = ''
@@ -160,7 +160,7 @@ in
           <link xlink:href='http://munin-monitoring.org/wiki/munin.conf' />
         '';
       };
- 
+
     };
 
   };
@@ -189,18 +189,17 @@ in
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.munin ];
       environment.MUNIN_PLUGSTATE = "/var/run/munin";
+      preStart = ''
+        echo "updating munin plugins..."
+
+        mkdir -p /etc/munin/plugins
+        rm -rf /etc/munin/plugins/*
+        PATH="/run/current-system/sw/bin:/run/current-system/sw/sbin" ${pkgs.munin}/sbin/munin-node-configure --shell --families contrib,auto,manual --config ${nodeConf} --libdir=${muninPlugins} --servicedir=/etc/munin/plugins 2>/dev/null | ${pkgs.bash}/bin/bash
+      '';
       serviceConfig = {
         ExecStart = "${pkgs.munin}/sbin/munin-node --config ${nodeConf} --servicedir /etc/munin/plugins/";
       };
     };
-
-    system.activationScripts.munin-node = ''
-      echo "updating munin plugins..."
-
-      mkdir -p /etc/munin/plugins
-      rm -rf /etc/munin/plugins/*
-      PATH="/run/current-system/sw/bin:/run/current-system/sw/sbin" ${pkgs.munin}/sbin/munin-node-configure --shell --families contrib,auto,manual --config ${nodeConf} --libdir=${muninPlugins} --servicedir=/etc/munin/plugins 2>/dev/null | ${pkgs.bash}/bin/bash
-    '';
 
   }) (mkIf cronCfg.enable {
 

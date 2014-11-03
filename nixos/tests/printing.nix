@@ -1,6 +1,7 @@
 # Test printing via CUPS.
 
 import ./make-test.nix ({pkgs, ... }: {
+  name = "printing";
 
   nodes = {
 

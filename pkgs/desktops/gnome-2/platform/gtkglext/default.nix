@@ -15,11 +15,9 @@ stdenv.mkDerivation rec {
   # `GTK_WIDGET_NO_WINDOW', all of which appear to be deprecated nowadays.
   CPPFLAGS = "-UGTK_DISABLE_DEPRECATED";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://projects.gnome.org/gtkglext/;
-
     description = "GtkGLExt, an OpenGL extension to GTK+";
-
     longDescription =
       '' GtkGLExt is an OpenGL extension to GTK+. It provides additional GDK
          objects which support OpenGL rendering in GTK+ and GtkWidget API
@@ -27,9 +25,7 @@ stdenv.mkDerivation rec {
          Löf's GtkGLArea, GtkGLExt provides a GtkWidget API that enables
          OpenGL drawing for standard and custom GTK+ widgets.
       '';
-
-    license = "LGPLv2+";
-
-    maintainers = [ ];
+    license = licenses.lgpl2Plus;
+    platforms = platforms.linux;
   };
 }

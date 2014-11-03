@@ -1,11 +1,12 @@
 { fetchurl, stdenv, libgcrypt, readline }:
 
 stdenv.mkDerivation rec {
-  name = "freeipmi-1.3.4";
+  version = "1.4.5";
+  name = "freeipmi-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/freeipmi/${name}.tar.gz";
-    sha256 = "0gadf3yj019y3rvgf34pxk502p0p6nrhy6nwldvvir5rknndxh63";
+    sha256 = "033zakrk3kvi4y41kslicr90b3yb2kj052cl6nbja7ybn70y9nkz";
   };
 
   buildInputs = [ libgcrypt readline ];
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "GNU FreeIPMI, an implementation of the Intelligent Platform Management Interface";
+    description = "Implementation of the Intelligent Platform Management Interface";
 
     longDescription =
       '' GNU FreeIPMI provides in-band and out-of-band IPMI software based on
@@ -30,10 +31,14 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = http://www.gnu.org/software/freeipmi/;
+    downloadPage = "http://www.gnu.org/software/freeipmi/download.html";
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = with stdenv.lib.maintainers; [ raskin ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+
+    updateWalker = true;
+    inherit version;
   };
 }

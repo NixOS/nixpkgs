@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
   
   meta = {
     homepage = http://www.ece.uvic.ca/~mdadams/jasper/;
-    description = "JasPer JPEG2000 Library";
+    description = "JPEG2000 Library";
   };
 }

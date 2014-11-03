@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "GNU Pies, a program invocation and execution supervisor";
+    description = "A program invocation and execution supervisor";
 
     longDescription =
       '' The name Pies (pronounced "p-yes") stands for Program Invocation and
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
          native utilities).  Finally, it can replace the inetd utility!
       '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     homepage = http://www.gnu.org/software/pies/;
 

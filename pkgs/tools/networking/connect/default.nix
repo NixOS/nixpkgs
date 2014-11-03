@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     gcc -o $out/bin/connect connect.c
   '';
 

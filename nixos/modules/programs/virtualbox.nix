@@ -14,7 +14,8 @@ let virtualbox = config.boot.kernelPackages.virtualbox; in
   services.udev.extraRules =
     ''
       KERNEL=="vboxdrv",    OWNER="root", GROUP="vboxusers", MODE="0660", TAG+="systemd"
-      KERNEL=="vboxnetctl", OWNER="root", GROUP="root",      MODE="0600", TAG+="systemd"
+      KERNEL=="vboxdrvu",   OWNER="root", GROUP="root",      MODE="0666", TAG+="systemd"
+      KERNEL=="vboxnetctl", OWNER="root", GROUP="vboxusers", MODE="0660", TAG+="systemd"
       SUBSYSTEM=="usb_device", ACTION=="add", RUN+="${virtualbox}/libexec/virtualbox/VBoxCreateUSBNode.sh $major $minor $attr{bDeviceClass}"
       SUBSYSTEM=="usb", ACTION=="add", ENV{DEVTYPE}=="usb_device", RUN+="${virtualbox}/libexec/virtualbox/VBoxCreateUSBNode.sh $major $minor $attr{bDeviceClass}"
       SUBSYSTEM=="usb_device", ACTION=="remove", RUN+="${virtualbox}/libexec/virtualbox/VBoxCreateUSBNode.sh --remove $major $minor"
@@ -43,5 +44,5 @@ let virtualbox = config.boot.kernelPackages.virtualbox; in
         '';
     };
 
-  networking.interfaces.vboxnet0 = { ipAddress = "192.168.56.1"; prefixLength = 24; };
+  networking.interfaces.vboxnet0.ip4 = [ { address = "192.168.56.1"; prefixLength = 24; } ];
 }

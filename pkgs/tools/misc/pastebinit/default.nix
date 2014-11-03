@@ -6,7 +6,7 @@ python3Packages.buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://launchpad.net/pastebinit/trunk/${version}/+download/${name}.tar.bz2";
-    md5 = "b771872a9483cf92be90a3e4420fd3c9";
+    sha256 = "1rl854izwn1fpaaib6zj7a1a9bis8n7w4zfxcapgfffj37zj0dy2";
   };
 
   configurePhase = "export DETERMINISTIC_BUILD=1";

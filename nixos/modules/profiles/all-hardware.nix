@@ -8,7 +8,7 @@
 {
 
   # The initrd has to contain any module that might be necessary for
-  # mounting the CD/DVD.
+  # supporting the most important parts of HW like drives.
   boot.initrd.availableKernelModules =
     [ # SATA/PATA support.
       "ahci"
@@ -43,7 +43,7 @@
       "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "virtio_console"
 
       # Keyboards
-      "hid_apple"
+      "usbhid" "hid_apple" "hid_logitech_dj" "hid_lenovo_tpkbd" "hid_roccat"
     ];
 
   # Include lots of firmware.

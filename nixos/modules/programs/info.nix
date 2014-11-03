@@ -2,6 +2,8 @@
 
 let
 
+  texinfo = pkgs.texinfoInteractive;
+
   # Quick hack to make the `info' command work properly.  `info' needs
   # a "dir" file containing all the installed Info files, which we
   # don't have (it would be impure to have a package installation
@@ -22,15 +24,15 @@ let
 
       for i in $(IFS=:; echo $INFOPATH); do
           for j in $i/*.info; do
-              ${pkgs.texinfo}/bin/install-info --quiet $j $dir/dir
+              ${texinfo}/bin/install-info --quiet $j $dir/dir
           done
       done
 
-      INFOPATH=$dir:$INFOPATH ${pkgs.texinfo}/bin/info "$@"
+      INFOPATH=$dir:$INFOPATH ${texinfo}/bin/info "$@"
     ''; # */
 
 in
 
 {
-  environment.systemPackages = [ infoWrapper pkgs.texinfo ];
+  environment.systemPackages = [ infoWrapper texinfo ];
 }

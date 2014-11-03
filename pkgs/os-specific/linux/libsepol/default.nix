@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "libsepol-${version}";
-  version = "2.2";
-  se_release = "20131030";
+  version = "2.3";
+  se_release = "20140506";
   se_url = "${meta.homepage}/releases";
 
   src = fetchurl {
     url = "${se_url}/${se_release}/libsepol-${version}.tar.gz";
-    sha256 = "03zw6clp00cmi49x8iq8svhrp91jrcw0093zpnyhan190rqb593p";
+    sha256 = "13z6xakc2qqyhlvnc5h53jy7lqmh5b5cnpfn51lmvfdpqd18d3fc";
   };
 
   preBuild = '' makeFlags="$makeFlags PREFIX=$out DESTDIR=$out" '';
@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = http://userspace.selinuxproject.org;
     platforms = platforms.linux;
     maintainers = [ maintainers.phreedom ];
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

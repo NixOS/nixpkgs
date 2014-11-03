@@ -4,11 +4,11 @@
 
 
 stdenv.mkDerivation rec {
-  name = "evolution-data-server-3.12.2";
+  name = "evolution-data-server-3.12.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/3.12/${name}.tar.xz";
-    sha256 = "91c95e17a8c1cd1086dafcd99a40bdf8f5993770f251f8b0a10e5395e3f5a3b6";
+    sha256 = "d3a2f832f823cb2a41467926dcaec984a15b2cb51ef89cf41267e337ca750811";
   };
 
   buildInputs = with gnome3;
@@ -21,13 +21,14 @@ stdenv.mkDerivation rec {
                    ++ stdenv.lib.optional valaSupport "--enable-vala-bindings";
 
   preFixup = ''
-    for f in "$out/libexec/evolution-addressbook-factory" "$out/libexec/evolution-calendar-factory"; do
-      wrapProgram $f --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+    for f in "$out/libexec/"*; do
+      wrapProgram "$f" --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
     done
   '';
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
+    maintainers = [ maintainers.lethalman ];
   };
 
 }

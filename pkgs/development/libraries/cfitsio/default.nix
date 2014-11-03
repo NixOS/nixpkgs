@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://heasarc.gsfc.nasa.gov/fitsio/;
 
-    description = "CFITSIO, a library for reading and writing FITS data files";
+    description = "Library for reading and writing FITS data files";
 
     longDescription =
       '' CFITSIO is a library of C and Fortran subroutines for reading and

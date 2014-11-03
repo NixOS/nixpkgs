@@ -1,11 +1,11 @@
 { fetchurl, stdenv, libgpgerror, transfig, ghostscript, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "libgcrypt-1.6.1";
+  name = "libgcrypt-1.6.2";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${name}.tar.bz2";
-    sha256 = "0w10vhpj1r5nq7qm6jp21p1v1vhf37701cw8yilygzzqd7mfzhx1";
+    sha256 = "de084492a6b38cdb27b67eaf749ceba76bf7029f63a9c0c3c1b05c88c9885c4c";
   };
 
   nativeBuildInputs = [ transfig ghostscript texinfo ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "GNU Libgcrypt, a general-pupose cryptographic library";
+    description = "General-pupose cryptographic library";
 
     longDescription = ''
       GNU Libgcrypt is a general purpose cryptographic library based on
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       functions, random numbers and a lot of supporting functions.
     '';
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     homepage = https://www.gnu.org/software/libgcrypt/;
     repositories.git = git://git.gnupg.org/libgcrypt.git;

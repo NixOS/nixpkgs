@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://0pointer.de/lennart/projects/libcanberra/;
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice

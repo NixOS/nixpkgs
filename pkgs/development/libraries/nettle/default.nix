@@ -22,7 +22,7 @@ stdenv.mkDerivation (rec {
               ./cygwin.patch;
 
   meta = {
-    description = "GNU Nettle, a cryptographic library";
+    description = "Cryptographic library";
 
     longDescription = ''
         Nettle is a cryptographic library that is designed to fit
@@ -47,7 +47,7 @@ stdenv.mkDerivation (rec {
         I/O.
      '';
 
-     license = "GPLv2+";
+     license = stdenv.lib.licenses.gpl2Plus;
 
      homepage = http://www.lysator.liu.se/~nisse/nettle/;
 

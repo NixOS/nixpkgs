@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, bison, flex
+{ stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, bison, flex
 , python, swig2, tcl, libsepol, libselinux, libxml2, sqlite, bzip2 }:
 
 stdenv.mkDerivation rec {
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "http://oss.tresys.com/projects/setools/chrome/site/dists/${name}/${name}.tar.bz2";
     sha256 = "16g987ijaxabc30zyjzia4nafq49rm038y1pm4vca7i3kb67wf24";
   };
+
+  patches = [ ./ftbfs-invalid-operands-of-types.patch ];
 
   # SWIG-TCL is broken in 3.3.8
   configureFlags = ''
@@ -25,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "SELinux Tools";
     homepage = "http://oss.tresys.com/projects/setools/";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };
 }

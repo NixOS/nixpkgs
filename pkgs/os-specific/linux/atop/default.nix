@@ -1,12 +1,12 @@
 {stdenv, fetchurl, zlib, ncurses}:
 
 stdenv.mkDerivation rec {
-  version = "2.0.2";
+  version = "2.1-1";
   name = "atop-${version}";
 
   src = fetchurl {
     url = "http://www.atoptool.nl/download/atop-${version}.tar.gz";
-    sha256 = "029lfa2capz1lg3m3rnyrgb8v6jm4znin84vjh2f0zkwvvhdn856";
+    sha256 = "17wqqyym4d02cqmn1l1asah3sld939nlkc84g4ad939kpkzd98ir";
   };
 
   buildInputs = [zlib ncurses];
@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
     sed -e '/chkconfig/d' -i Makefile
   '';
 
+  preInstall = ''
+    mkdir -p "$out"/{bin,sbin}
+  '';
+
   meta = {
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [raskin];
@@ -35,5 +39,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Atop is an ASCII full-screen performance monitor that is capable of reporting the activity of all processes (even if processes have finished during the interval), daily logging of system and process activity for long-term analysis, highlighting overloaded system resources by using colors, etc. At regular intervals, it shows system-level activity related to the CPU, memory, swap, disks and network layers, and for every active process it shows the CPU utilization, memory growth, disk utilization, priority, username, state, and exit code.
     '';
+    inherit version;
+    downloadPage = http://atoptool.nl/downloadatop.php;
   };
 }

@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, gnum4, gdbm, libtool, glib, dbus, avahi
+{ stdenv, fetchurl, fetchpatch, pkgconfig, gnum4, gdbm, libtool, glib, dbus, avahi
 , gconf, gtk, intltool, gettext, alsaLib, libsamplerate, libsndfile, speex
 , bluez, sbc, udev, libcap, json_c
-, jackaudioSupport ? false, jackaudio ? null
+, jackaudioSupport ? false, jack2 ? null
 , x11Support ? false, xlibs
-, useSystemd ? false, systemd ? null }:
+, useSystemd ? false, systemd ? null
+, ossWrapper ? false }:
 
-assert jackaudioSupport -> jackaudio != null;
+assert jackaudioSupport -> jack2 != null;
 
 stdenv.mkDerivation rec {
   name = "pulseaudio-5.0";
@@ -15,6 +16,13 @@ stdenv.mkDerivation rec {
     sha256 = "0fgrr8v7yfh0byhzdv4c87v9lkj8g7gpjm8r9xrbvpa92a5kmhcr";
   };
 
+  patches = [(fetchpatch {
+    name = "CVE-2014-3970.patch";
+    url = "http://cgit.freedesktop.org/pulseaudio/pulseaudio/patch/"
+      + "?id=26b9d22dd24c17eb118d0205bf7b02b75d435e3c";
+    sha256 = "13vxp6520djgfrfxkzy5qvabl94sga3yl5pj93xawbkgwzqymdyq";
+  })];
+
   # Since `libpulse*.la' contain `-lgdbm' and `-lcap', it must be propagated.
   propagatedBuildInputs
     = [ gdbm ] ++ stdenv.lib.optionals stdenv.isLinux [ libcap ];
@@ -22,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig gnum4 libtool intltool glib dbus avahi libsamplerate libsndfile
       speex json_c ]
-    ++ stdenv.lib.optional jackaudioSupport jackaudio
+    ++ stdenv.lib.optional jackaudioSupport jack2
     ++ stdenv.lib.optionals x11Support [ xlibs.xlibs xlibs.libXtst xlibs.libXi ]
     ++ stdenv.lib.optional useSystemd systemd
     ++ stdenv.lib.optionals stdenv.isLinux [ alsaLib bluez sbc udev ];
@@ -38,9 +46,16 @@ stdenv.mkDerivation rec {
        -e "s|chmod r+s |true |"
   '';
 
-  configureFlags =
-    [ "--disable-solaris" "--disable-jack" "--disable-oss-output"
-      "--disable-oss-wrapper" "--localstatedir=/var" "--sysconfdir=/etc" ]
+  configureFlags = [
+    "--disable-solaris"
+    "--disable-jack"
+    "--disable-oss-output"
+  ] ++ stdenv.lib.optional (!ossWrapper) "--disable-oss-wrapper" ++
+  [
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    "--with-access-group=audio"
+  ]
     ++ stdenv.lib.optional jackaudioSupport "--enable-jack"
     ++ stdenv.lib.optional stdenv.isDarwin "--with-mac-sysroot=/";
 
@@ -57,7 +72,7 @@ stdenv.mkDerivation rec {
   installFlags = "sysconfdir=$(out)/etc pulseconfdir=$(out)/etc/pulse";
 
   meta = with stdenv.lib; {
-    description = "PulseAudio, a sound server for POSIX and Win32 systems";
+    description = "Sound server for POSIX and Win32 systems";
     homepage    = http://www.pulseaudio.org/;
     # Note: Practically, the server is under the GPL due to the
     # dependency on `libsamplerate'.  See `LICENSE' for details.

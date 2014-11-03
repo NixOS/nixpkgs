@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "GNU Inetutils, a collection of common network programs";
+    description = "Collection of common network programs";
 
     longDescription =
       '' The GNU network utilities suite provides the
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = http://www.gnu.org/software/inetutils/;
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.gnu;

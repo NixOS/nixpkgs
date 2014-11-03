@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://latencytop.org;
     description = "Tool to show kernel reports on latencies (LATENCYTOP option)";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.viric ];
     platforms = stdenv.lib.platforms.linux;
   };

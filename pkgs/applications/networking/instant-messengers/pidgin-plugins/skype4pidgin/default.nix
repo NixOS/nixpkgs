@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildPhase  = "make libskype.so libskype_dbus.so";
 
   installPhase = ''
-    ensureDir $out/pixmaps/pidgin/protocols/{16,22,48} $out/bin $out/lib/pidgin
+    mkdir -p $out/pixmaps/pidgin/protocols/{16,22,48} $out/bin $out/lib/pidgin
     cp icons/16/skypeout.png $out/pixmaps/pidgin/protocols/16
     cp icons/22/skypeout.png $out/pixmaps/pidgin/protocols/22
     cp icons/48/skypeout.png $out/pixmaps/pidgin/protocols/48
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = https://github.com/novas0x2a/skype4pidgin;
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
     description = "Plugin to use a running skype account through pidgin";
   };
 }

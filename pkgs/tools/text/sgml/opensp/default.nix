@@ -13,13 +13,21 @@ stdenv.mkDerivation {
       docsrc/*.xml
   '';
 
+
   setupHook = ./setup-hook.sh;
+
+  postFixup = ''
+    # Remove random ids in the release notes
+    sed -i -e 's/href="#idm.*"//g' $out/share/doc/OpenSP/releasenotes.html
+    sed -i -e 's/name="idm.*"//g' $out/share/doc/OpenSP/releasenotes.html
+    '';
+
 
   buildInputs = [ xmlto docbook_xml_dtd_412 libxslt docbook_xsl ];
 
   meta = {
     description = "A suite of SGML/XML processing tools";
-    license = "BSD";
+    license = stdenv.lib.licenses.mit;
     homepage = http://openjade.sourceforge.net/;
   };
 }

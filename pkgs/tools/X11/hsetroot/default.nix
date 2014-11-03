@@ -12,8 +12,8 @@ stdenv.mkDerivation {
   buildInputs = [ imlib2 libX11 libXext ];
 
   meta = {
-    description = "hsetroot allows you to compose wallpapers ('root pixmaps') for X";
+    description = "Allows you to compose wallpapers ('root pixmaps') for X";
     homepage = http://thegraveyard.org/hsetroot.html;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

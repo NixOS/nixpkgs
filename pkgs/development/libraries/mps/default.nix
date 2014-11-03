@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mps-${version}";
-  version = "1.113.0";
+  version = "1.114.0";
 
   src = fetchurl {
     url    = "http://www.ravenbrook.com/project/mps/release/${version}/mps-kit-${version}.tar.gz";
-    sha256 = "0v4difh3yl2mvpvnwlavhaags945l1452g07fllhdbpzgbjay79i";
+    sha256 = "1gb0rdd42ib0fai2jwm2gyii8pk59i1rhblnpdzbdj8cj5g0b30h";
   };
 
   buildInputs = [ autoreconfHook sqlite ];

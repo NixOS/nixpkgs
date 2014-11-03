@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "A console front-end for Pandora.com";
     homepage = "http://6xq.net/projects/pianobar/";
     platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.unfree;
+    license = stdenv.lib.licenses.mit; # expat version
   };
 }

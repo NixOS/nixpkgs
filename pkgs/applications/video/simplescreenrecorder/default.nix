@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, alsaLib, ffmpeg, jackaudio, libX11, libXext
+{ stdenv, fetchurl, alsaLib, ffmpeg, jack2, libX11, libXext
 , libXfixes, mesa, pkgconfig, pulseaudio, qt4
 }:
 
 stdenv.mkDerivation rec {
   name = "simplescreenrecorder-${version}";
-  version = "0.2.2";
+  version = "0.3.1";
 
   src = fetchurl {
     url = "https://github.com/MaartenBaert/ssr/archive/${version}.tar.gz";
-    sha256 = "0k1r1ilpk05qmwpnld95zxxk57qvyaq2r9f4i3la7y0xh9bz1gls";
+    sha256 = "00ra4isl4yf5l6q1cp97ss46jck1iayv1d23iz4885yzxknvhhjn";
   };
 
   buildInputs = [
-    alsaLib ffmpeg jackaudio libX11 libXext libXfixes mesa pkgconfig
+    alsaLib ffmpeg jack2 libX11 libXext libXfixes mesa pkgconfig
     pulseaudio qt4
   ];
 

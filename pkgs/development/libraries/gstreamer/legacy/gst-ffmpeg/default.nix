@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://gstreamer.freedesktop.org/releases/gst-ffmpeg";
     description = "GStreamer's plug-in using FFmpeg";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

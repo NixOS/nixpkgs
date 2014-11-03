@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "PLIB: A Suite of Portable Game Libraries";
+    description = "A suite of portable game libraries";
 
     longDescription = ''
       PLIB includes sound effects, music, a complete 3D engine, font
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       GLUT, or FLTK instead of PLIB's 'PW' windowing library, you can.
     '';
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     homepage = http://plib.sourceforge.net/;
   };

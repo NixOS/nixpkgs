@@ -23,10 +23,12 @@
 
 , # Shell command to run after building the symlink tree.
   postBuild ? ""
+
+, passthru ? {}
 }:
 
 runCommand name
-  { inherit manifest paths ignoreCollisions pathsToLink postBuild;
+  { inherit manifest paths ignoreCollisions passthru pathsToLink postBuild;
     preferLocalBuild = true;
   }
   ''

@@ -1,11 +1,13 @@
-{stdenv, androidsdk, titaniumsdk, titanium, xcodewrapper, jdk, python, which}:
+{stdenv, androidsdk, titaniumsdk, titanium, xcodewrapper, jdk, python, which, xcodeBaseDir}:
 { name, src, target, androidPlatformVersions ? [ "8" ], androidAbiVersions ? [ "armeabi" "armeabi-v7a" ], tiVersion ? null
 , release ? false, androidKeyStore ? null, androidKeyAlias ? null, androidKeyStorePassword ? null
-, iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null
+, iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosVersion ? "8.0", iosWwdrCertificate ? null
+, enableWirelessDistribution ? false, installURL ? null
 }:
 
 assert (release && target == "android") -> androidKeyStore != null && androidKeyAlias != null && androidKeyStorePassword != null;
 assert (release && target == "iphone") -> iosMobileProvisioningProfile != null && iosCertificateName != null && iosCertificate != null && iosCertificatePassword != null;
+assert enableWirelessDistribution -> installURL != null;
 
 let
   androidsdkComposition = androidsdk {
@@ -14,7 +16,10 @@ let
     useGoogleAPIs = true;
   };
   
-  deleteKeychain = "security delete-keychain $keychainName";
+  deleteKeychain = ''
+    security default-keychain -s login.keychain
+    security delete-keychain $keychainName
+  '';
 in
 stdenv.mkDerivation {
   name = stdenv.lib.replaceChars [" "] [""] name;
@@ -47,10 +52,17 @@ stdenv.mkDerivation {
         ''
           titanium config --config-file $TMPDIR/config.json --no-colors android.sdkPath ${androidsdkComposition}/libexec/android-sdk-*
           
+          # Add zipalign to PATH to make Ti 3.1 builds still work
+          for i in $(find -L ${androidsdkComposition}/libexec/android-sdk-*/build-tools -name zipalign)
+          do
+              export PATH=$(dirname $i):$PATH
+              break
+          done
+          
           ${if release then
             ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target dist-playstore --keystore ${androidKeyStore} --alias ${androidKeyAlias} --password ${androidKeyStorePassword} --output-dir $out''
           else
-            ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target emulator --build-only --output $out''}
+            ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target emulator --build-only -B foo --output $out''}
         ''
       else if target == "iphone" then
         ''
@@ -66,8 +78,10 @@ stdenv.mkDerivation {
               security default-keychain -s $keychainName
               security unlock-keychain -p "" $keychainName
               security import ${iosCertificate} -k $keychainName -P "${iosCertificatePassword}" -A
-
-              provisioningId=$(grep UUID -A1 -a ${iosMobileProvisioningProfile} | grep -o "[-A-Z0-9]\{36\}")
+              ${stdenv.lib.optionalString (iosWwdrCertificate != null) ''
+                security import ${iosWwdrCertificate} -k $keychainName
+              ''}
+              provisioningId=$(grep UUID -A1 -a ${iosMobileProvisioningProfile} | grep -o "[-A-Za-z0-9]\{36\}")
    
               # Ensure that the requested provisioning profile can be found
         
@@ -92,12 +106,15 @@ stdenv.mkDerivation {
               cat > $HOME/.titanium/auth_session.json <<EOF
               { "loggedIn": true }
               EOF
-            
+              
+              # Configure the path to Xcode
+              titanium --config-file $TMPDIR/config.json --no-colors config paths.xcode ${xcodeBaseDir}
+              
               # Set the SDK to our copy
               titanium --config-file $TMPDIR/config.json --no-colors config sdk.defaultInstallLocation $TMPDIR/titaniumsdk
             
               # Do the actual build
-              titanium build --config-file $TMPDIR/config.json --force --no-colors --platform ios --target dist-adhoc --pp-uuid $provisioningId --distribution-name "${iosCertificateName}" --keychain $HOME/Library/Keychains/$keychainName --device-family universal --output-dir $out
+              titanium build --config-file $TMPDIR/config.json --force --no-colors --platform ios --target dist-adhoc --pp-uuid $provisioningId --distribution-name "${iosCertificateName}" --keychain $HOME/Library/Keychains/$keychainName --device-family universal --ios-version ${iosVersion} --output-dir $out
             
               # Remove our generated keychain
             
@@ -113,7 +130,10 @@ stdenv.mkDerivation {
               cp -av * $out
               cd $out
             
-              titanium build --config-file $TMPDIR/config.json --force --no-colors --platform ios --target simulator --build-only --device-family universal --output-dir $out
+              # Configure the path to Xcode
+              titanium --config-file $TMPDIR/config.json --no-colors config paths.xcode ${xcodeBaseDir}
+              
+              titanium build --config-file $TMPDIR/config.json --force --no-colors --platform ios --target simulator --build-only --device-family universal --ios-version ${iosVersion} --output-dir $out
           ''}
         ''
 
@@ -132,6 +152,15 @@ stdenv.mkDerivation {
              cp -av build/iphone/build/* $out
              mkdir -p $out/nix-support
              echo "file binary-dist \"$(echo $out/Release-iphoneos/*.ipa)\"" > $out/nix-support/hydra-build-products
+             
+             ${stdenv.lib.optionalString enableWirelessDistribution ''
+               appname=$(basename $out/Release-iphoneos/*.ipa .ipa)
+               bundleId=$(grep '<id>[a-zA-Z0-9.]*</id>' tiapp.xml | sed -e 's|<id>||' -e 's|</id>||' -e 's/ //g')
+               version=$(grep '<version>[a-zA-Z0-9.]*</version>' tiapp.xml | sed -e 's|<version>||' -e 's|</version>||' -e 's/ //g')
+               
+               sed -e "s|@INSTALL_URL@|${installURL}?bundleId=$bundleId\&amp;version=$version\&amp;title=$appname|" ${../xcodeenv/install.html.template} > $out/$appname.html
+               echo "doc install \"$out/$appname.html\"" >> $out/nix-support/hydra-build-products
+             ''}
            ''
         else if target == "iphone" then ""
         else throw "Target: ${target} is not supported!"}

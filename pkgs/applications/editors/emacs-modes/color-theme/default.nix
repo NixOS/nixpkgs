@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Emacs-lisp mode for skinning your Emacs";
     homepage = http://www.nongnu.org/color-theme;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     platforms = stdenv.lib.platforms.all;
   };

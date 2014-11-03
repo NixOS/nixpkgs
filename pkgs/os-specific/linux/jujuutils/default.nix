@@ -13,6 +13,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://code.google.com/p/jujuutils/";
     description = "Utilities around FireWire devices connected to a Linux computer";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

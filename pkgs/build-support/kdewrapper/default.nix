@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   inherit libs;
 
   buildCommand = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
 
     KDEDIRS=${program}
     QT_PLUGIN_PATH=${program}/lib/qt4/plugins:${program}/lib/kde4/plugins

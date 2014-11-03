@@ -4,6 +4,7 @@
 #   3. jenkins service not started on slave node
 
 import ./make-test.nix {
+  name = "jenkins";
 
   nodes = {
 
@@ -15,6 +16,8 @@ import ./make-test.nix {
         services.jenkinsSlave.enable = true;
 
         users.extraUsers.jenkins.extraGroups = [ "users" ];
+
+        systemd.services.jenkins.serviceConfig.TimeoutStartSec = "3min";
       };
 
     slave =

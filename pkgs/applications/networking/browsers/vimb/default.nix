@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "vimb-${version}";
-  version = "2.4";
+  version = "2.8";
 
   src = fetchurl {
     url = "https://github.com/fanglingsu/vimb/archive/${version}.tar.gz";
-    sha256 = "167ilbsd4y4zl493k6g4j5v85y784qz8z7qflzd1ccsjjznv7fm8";
+    sha256 = "04ify6gqpkislsppaplvdfgs3fja9gl37j3dywg7bhz1fbkv166k";
   };
 
   # Nixos default ca bundle

@@ -13,6 +13,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Multiplayer 3D Tank game";
     homepage = http://bzflag.org/;
-    license = "LGPLv2.1+";
+    license = stdenv.lib.licenses.lgpl21Plus;
   };
 }

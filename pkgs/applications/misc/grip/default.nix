@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "GTK+-based audio CD player/ripper";
     homepage = "http://nostatic.org/grip";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
 
     maintainers = [ stdenv.lib.maintainers.marcweber stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.linux;

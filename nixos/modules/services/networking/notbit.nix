@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 let
   cfg = config.services.notbit;
   varDir = "/var/lib/notbit";

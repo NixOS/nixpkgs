@@ -7,7 +7,7 @@ use File::Slurp;
 use Fcntl ':flock';
 use Getopt::Long qw(:config gnu_getopt);
 
-my $socat = '@socat@/bin/socat';
+my $nsenter = "@utillinux@/bin/nsenter";
 
 # Ensure a consistent umask.
 umask 0022;
@@ -17,25 +17,30 @@ umask 0022;
 sub showHelp {
     print <<EOF;
 Usage: nixos-container list
-       nixos-container create <container-name> [--config <string>] [--ensure-unique-name]
+       nixos-container create <container-name> [--system-path <path>] [--config <string>] [--ensure-unique-name] [--auto-start]
        nixos-container destroy <container-name>
        nixos-container start <container-name>
        nixos-container stop <container-name>
+       nixos-container status <container-name>
        nixos-container login <container-name>
        nixos-container root-login <container-name>
        nixos-container run <container-name> -- args...
-       nixos-container set-root-password <container-name> <password>
        nixos-container show-ip <container-name>
+       nixos-container show-host-key <container-name>
 EOF
     exit 0;
 }
 
+my $systemPath;
 my $ensureUniqueName = 0;
+my $autoStart = 0;
 my $extraConfig;
 
 GetOptions(
     "help" => sub { showHelp() },
     "ensure-unique-name" => \$ensureUniqueName,
+    "auto-start" => \$autoStart,
+    "system-path=s" => \$systemPath,
     "config=s" => \$extraConfig
     ) or exit 1;
 
@@ -122,16 +127,12 @@ if ($action eq "create") {
     push @conf, "PRIVATE_NETWORK=1\n";
     push @conf, "HOST_ADDRESS=$hostAddress\n";
     push @conf, "LOCAL_ADDRESS=$localAddress\n";
+    push @conf, "AUTO_START=$autoStart\n";
     write_file($confFile, \@conf);
 
     close($lock);
 
     print STDERR "host IP is $hostAddress, container IP is $localAddress\n";
-
-    mkpath("$root/etc/nixos", 0, 0755);
-
-    my $nixosConfigFile = "$root/etc/nixos/configuration.nix";
-    writeNixOSConfig $nixosConfigFile;
 
     # The per-container directory is restricted to prevent users on
     # the host from messing with guest users who happen to have the
@@ -141,10 +142,21 @@ if ($action eq "create") {
     $profileDir = "$profileDir/$containerName";
     mkpath($profileDir, 0, 0755);
 
-    system("nix-env", "-p", "$profileDir/system",
-           "-I", "nixos-config=$nixosConfigFile", "-f", "<nixpkgs/nixos>",
-           "--set", "-A", "system") == 0
-        or die "$0: failed to build initial container configuration\n";
+    # Build/set the initial configuration.
+    if (defined $systemPath) {
+        system("nix-env", "-p", "$profileDir/system", "--set", $systemPath) == 0
+            or die "$0: failed to set initial container configuration\n";
+    } else {
+        mkpath("$root/etc/nixos", 0, 0755);
+
+        my $nixosConfigFile = "$root/etc/nixos/configuration.nix";
+        writeNixOSConfig $nixosConfigFile;
+
+        system("nix-env", "-p", "$profileDir/system",
+               "-I", "nixos-config=$nixosConfigFile", "-f", "<nixpkgs/nixos>",
+               "--set", "-A", "system") == 0
+            or die "$0: failed to build initial container configuration\n";
+    }
 
     print "$containerName\n" if $ensureUniqueName;
     exit 0;
@@ -152,8 +164,16 @@ if ($action eq "create") {
 
 my $root = "/var/lib/containers/$containerName";
 my $profileDir = "/nix/var/nix/profiles/per-container/$containerName";
+my $gcRootsDir = "/nix/var/nix/gcroots/per-container/$containerName";
 my $confFile = "/etc/containers/$containerName.conf";
-die "$0: container ‘$containerName’ does not exist\n" if !-e $confFile;
+if (!-e $confFile) {
+    if ($action eq "destroy") {
+        exit 0;
+    } elsif ($action eq "status") {
+        print "gone\n";
+    }
+    die "$0: container ‘$containerName’ does not exist\n" ;
+}
 
 sub isContainerRunning {
     my $status = `systemctl show 'container\@$containerName'`;
@@ -165,14 +185,48 @@ sub stopContainer {
         or die "$0: failed to stop container\n";
 }
 
+# Return the PID of the init process of the container.
+sub getLeader {
+    my $s = `machinectl show "$containerName" -p Leader`;
+    chomp $s;
+    $s =~ /^Leader=(\d+)$/ or die "unable to get container's main PID\n";
+    return int($1);
+}
+
+# Run a command in the container.
+sub runInContainer {
+    my @args = @_;
+    my $leader = getLeader;
+    exec($nsenter, "-t", $leader, "-m", "-u", "-i", "-n", "-p", "--", @args);
+    die "cannot run ‘nsenter’: $!\n";
+}
+
+# Remove a directory while recursively unmounting all mounted filesystems within
+# that directory and unmounting/removing that directory afterwards as well.
+#
+# NOTE: If the specified path is a mountpoint, its contents will be removed,
+#       only mountpoints underneath that path will be unmounted properly.
+sub safeRemoveTree {
+    my ($path) = @_;
+    system("find", $path, "-mindepth", "1", "-xdev",
+           "(", "-type", "d", "-exec", "mountpoint", "-q", "{}", ";", ")",
+           "-exec", "umount", "-fR", "{}", "+");
+    system("rm", "--one-file-system", "-rf", $path);
+    if (-e $path) {
+        system("umount", "-fR", $path);
+        system("rm", "--one-file-system", "-rf", $path);
+    }
+}
+
 if ($action eq "destroy") {
     die "$0: cannot destroy declarative container (remove it from your configuration.nix instead)\n"
         unless POSIX::access($confFile, &POSIX::W_OK);
 
     stopContainer if isContainerRunning;
 
-    rmtree($profileDir) if -e $profileDir;
-    rmtree($root) if -e $root;
+    safeRemoveTree($profileDir) if -e $profileDir;
+    safeRemoveTree($gcRootsDir) if -e $gcRootsDir;
+    safeRemoveTree($root) if -e $root;
     unlink($confFile) or die;
 }
 
@@ -183,6 +237,10 @@ elsif ($action eq "start") {
 
 elsif ($action eq "stop") {
     stopContainer;
+}
+
+elsif ($action eq "status") {
+    print isContainerRunning() ? "up" : "down", "\n";
 }
 
 elsif ($action eq "update") {
@@ -209,34 +267,26 @@ elsif ($action eq "login") {
 }
 
 elsif ($action eq "root-login") {
-    exec($socat, "unix:$root/var/lib/root-login.socket", "-,echo=0,raw");
+    runInContainer("su", "root", "-l");
 }
 
 elsif ($action eq "run") {
     shift @ARGV; shift @ARGV;
-    my $pid = open(SOCAT, "|-", $socat, "-t0", "-", "unix:$root/var/lib/run-command.socket") or die "$0: cannot start $socat: $!\n";
-    print SOCAT join(' ', map { "'$_'" } @ARGV), "\n";
-    flush SOCAT;
-    waitpid($pid, 0);
-    close(SOCAT);
-}
-
-elsif ($action eq "set-root-password") {
-    # FIXME: don't get password from the command line.
-    my $password = $ARGV[2] or die "$0: no password given\n";
-    my $pid = open(SOCAT, "|-", $socat, "-t0", "-", "unix:$root/var/lib/run-command.socket") or die "$0: cannot start $socat: $!\n";
-    print SOCAT "passwd\n";
-    print SOCAT "$password\n";
-    print SOCAT "$password\n";
-    flush SOCAT;
-    waitpid($pid, 0);
-    close(SOCAT);
+    # Escape command.
+    my $s = join(' ', map { s/'/'\\''/g; "'$_'" } @ARGV);
+    runInContainer("su", "root", "-l", "-c", "exec " . $s);
 }
 
 elsif ($action eq "show-ip") {
     my $s = read_file($confFile) or die;
     $s =~ /^LOCAL_ADDRESS=([0-9\.]+)$/m or die "$0: cannot get IP address\n";
     print "$1\n";
+}
+
+elsif ($action eq "show-host-key") {
+    my $fn = "$root/etc/ssh/ssh_host_ecdsa_key.pub";
+    exit 1 if ! -f $fn;
+    print read_file($fn);
 }
 
 else {

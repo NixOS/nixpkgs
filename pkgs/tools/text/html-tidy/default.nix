@@ -32,7 +32,7 @@ let date = "2009-07-04"; in
         used to validate and fix HTML data.
       '';
 
-      license = "MIT";
+      license = stdenv.lib.licenses.mit;
 
       homepage = http://tidy.sourceforge.net/;
 

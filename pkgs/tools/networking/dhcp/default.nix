@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, nettools, iputils, iproute, makeWrapper, coreutils, gnused }:
+{ stdenv, fetchurl, perl, file, nettools, iputils, iproute, makeWrapper, coreutils, gnused }:
 
 stdenv.mkDerivation rec {
-  name = "dhcp-4.1-ESV-R6";
+  name = "dhcp-${version}";
+  version = "4.3.0";
   
   src = fetchurl {
-    url = http://ftp.isc.org/isc/dhcp/4.1-ESV-R6/dhcp-4.1-ESV-R6.tar.gz;
-    sha256 = "17md1vml07szl9dx4875gfg4sgnb3z73glpbq1si7p82mfhnddny";
+    url = "http://ftp.isc.org/isc/dhcp/${version}/${name}.tar.gz";
+    sha256 = "12mydvj6x3zcl3gla06bywfkkrgg03g66fijs94mwb7kbiym3dm7";
   };
 
   patches =
@@ -23,13 +24,15 @@ stdenv.mkDerivation rec {
   # Fixes "socket.c:591: error: invalid application of 'sizeof' to
   # incomplete type 'struct in6_pktinfo'".  See
   # http://www.mail-archive.com/blfs-book@linuxfromscratch.org/msg13013.html
-  NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
+  #
+  # Also adds the ability to run dhcpd as a non-root user / group
+  NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE -DPARANOIA";
 
   # It would automatically add -Werror, which disables build in gcc 4.4
   # due to an uninitialized variable.
   CFLAGS = "-g -O2 -Wall";
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [ perl makeWrapper ];
 
   postInstall =
     ''
@@ -42,11 +45,12 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
+      substituteInPlace configure --replace "/usr/bin/file" "${file}/bin/file"
       sed -i "includes/dhcpd.h" \
 	-"es|^ *#define \+_PATH_DHCLIENT_SCRIPT.*$|#define _PATH_DHCLIENT_SCRIPT \"$out/sbin/dhclient-script\"|g"
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Dynamic Host Configuration Protocol (DHCP) tools";
 
     longDescription = ''
@@ -57,6 +61,8 @@ stdenv.mkDerivation rec {
    '';
 
     homepage = http://www.isc.org/products/DHCP/;
-    license = "http://www.isc.org/sw/dhcp/dhcp-copyright.php";
+    license = licenses.isc;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ wkennington ];
   };
 }

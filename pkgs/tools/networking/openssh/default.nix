@@ -10,8 +10,8 @@ assert withKerberos -> kerberos != null;
 let
 
   hpnSrc = fetchurl {
-    url = mirror://sourceforge/hpnssh/openssh-6.3p1-hpnssh14v2.diff.gz;
-    sha256 = "1jldqjwry9qpxxzb3mikfmmmv90mfb7xkmcfdbvwqac6nl3r7bi3";
+    url = mirror://sourceforge/hpnssh/openssh-6.6p1-hpnssh14v5.diff.gz;
+    sha256 = "682b4a6880d224ee0b7447241b684330b731018585f1ba519f46660c10d63950";
   };
   optionalString = stdenv.lib.optionalString;
 
@@ -80,9 +80,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "http://www.openssh.org/";
     description = "An implementation of the SSH protocol";
-    license = "bsd";
+    license = "bsd"; # multi BSD GPL-2
     platforms = platforms.unix;
     maintainers = with maintainers; [ eelco ];
-    broken = hpnSupport; # cf. https://github.com/NixOS/nixpkgs/pull/1640
   };
 }

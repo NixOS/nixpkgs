@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, gnome3, json_glib, libcroco, intltool, libsecret
-, python, libsoup, polkit, clutter, networkmanager, docbook_xsl, docbook_xsl_ns
+, python, libsoup, polkit, clutter, networkmanager, docbook_xsl, docbook_xsl_ns, at_spi2_core
 , libstartup_notification, telepathy_glib, telepathy_logger, libXtst, p11_kit, unzip
 , pulseaudio, libical, libtool, nss, gobjectIntrospection, gstreamer, makeWrapper
 , accountsservice, gdk_pixbuf, gdm, upower, ibus, networkmanagerapplet, librsvg }:

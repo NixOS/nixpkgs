@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "keepass-${version}";
-  version = "2.22";
+  version = "2.28";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${version}.zip";
-    sha256 = "0mman7r1jmirfwzix5qww0yn4rrgzcg7546basxjvvfc8flp43j0";
+    sha256 = "0rlll6qriflaibqpw9qqfgqqr7cvhl404c3ph6n2i22j7xn5mizh";
   };
 
   sourceRoot = ".";
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
 
 
   installPhase = ''
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     echo "${mono}/bin/mono $out/KeePass.exe" > $out/bin/keepass
     chmod +x $out/bin/keepass
     echo $out
     cp -r ./* $out/
-    ensureDir "$out/share/applications"
+    mkdir -p "$out/share/applications"
     cp ${desktopItem}/share/applications/* $out/share/applications
   '';
 

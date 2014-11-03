@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "OProfile, a system-wide profiler for Linux";
+    description = "System-wide profiler for Linux";
     longDescription = ''
       OProfile is a system-wide profiler for Linux systems, capable of
       profiling all running code at low overhead.  It consists of a
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       is profiled: hardware and software interrupt handlers, kernel
       modules, the kernel, shared libraries, and applications.
     '';
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     homepage = http://oprofile.sourceforge.net/;
 
     platforms = stdenv.lib.platforms.linux;

@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libogg ];
 
-  doCheck = true; # takes lots of time but will be run rarely (small build-time closure)
+  #doCheck = true; # takes lots of time
 
   meta = with stdenv.lib; {
     homepage = http://xiph.org/flac/;
     description = "Library and tools for encoding and decoding the FLAC lossless audio file format";
     platforms = platforms.all;
-    maintainers = maintainers.mornfall;
+    maintainers = [ maintainers.mornfall ];
   };
 }

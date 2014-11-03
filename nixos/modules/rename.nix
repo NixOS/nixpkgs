@@ -129,5 +129,8 @@ in zipModules ([]
 ++ obsolete' [ "boot" "loader" "grub" "bootDevice" ]
 ++ obsolete' [ "boot" "initrd" "luks" "enable" ]
 ++ obsolete' [ "programs" "bash" "enable" ]
+++ obsolete' [ "services" "samba" "defaultShare" ]
+++ obsolete' [ "services" "syslog-ng" "serviceName" ]
+++ obsolete' [ "services" "syslog-ng" "listenToJournal" ]
 
 )

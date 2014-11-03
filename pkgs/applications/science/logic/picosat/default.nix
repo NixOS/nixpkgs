@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://fmv.jku.at/picosat/;
     description = "SAT solver with proof and core support";
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.roconnor ];
   };
 }

@@ -1,5 +1,7 @@
 { stdenv, fetchurl, kernel, zlib }:
 
+assert stdenv.lib.versionOlder kernel.version "3.17";
+
 stdenv.mkDerivation {
   name = "netatop-${kernel.version}-0.3";
 
@@ -22,14 +24,14 @@ stdenv.mkDerivation {
   '';
 
   preInstall = ''
-    ensureDir $out/bin $out/sbin $out/share/man/man{4,8}
-    ensureDir $out/lib/modules/${kernel.modDirVersion}/extra
+    mkdir -p $out/bin $out/sbin $out/share/man/man{4,8}
+    mkdir -p $out/lib/modules/${kernel.modDirVersion}/extra
   '';
       
   meta = {
     description = "Network monitoring module for atop";
     homepage = http://www.atoptool.nl/downloadnetatop.php;
-    license = "GPL2";
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [viric];
   };

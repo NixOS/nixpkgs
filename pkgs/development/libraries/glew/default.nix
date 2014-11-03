@@ -3,11 +3,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "glew-1.10.0";
+  name = "glew-1.11.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/glew/${name}.tgz";
-    sha256 = "01zki46dr5khzlyywr3cg615bcal32dazfazkf360s1znqh17i4r";
+    sha256 = "1mhkllxz49l1x680dmzrv2i82qjrq017sykah3xc90f2d8qcxfv9";
   };
 
   nativeBuildInputs = [ x11 libXmu libXi ];
@@ -42,9 +42,11 @@ stdenv.mkDerivation rec {
   ] ++ optional (stdenv.cross.libc == "msvcrt") "SYSTEM=mingw"
     ++ optional (stdenv.cross.libc == "libSystem") "SYSTEM=darwin";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An OpenGL extension loading library for C(++)";
     homepage = http://glew.sourceforge.net/;
-    license = ["BSD" "GLX" "SGI-B" "GPL2"]; # License description copied from gentoo-1.4.0 
+    license = licenses.free; # different files under different licenses
+      #["BSD" "GLX" "SGI-B" "GPL2"]
+    platforms = platforms.mesaPlatforms;
   };
 }

@@ -1,0 +1,39 @@
+--- old/source/Makefile	2014-05-05 23:22:48.051952484 +0200
++++ new/source/Makefile	2014-05-05 23:20:46.576617833 +0200
+@@ -71,6 +71,9 @@
+ 
+ GAME = crawl
+ 
++
++CFLAGS := $(NIX_CFLAGS_COMPILE)
++
+ # Disable GNU Make implicit rules and variables. Leaving them enabled will slow
+ # down MinGW and Cygwin builds by a very VERY noticeable degree. Besides, we have
+ # _explicit_ rules defined for everything. So we don't need them.
+@@ -979,7 +983,7 @@
+ ifdef ANDROID
+ CFLAGS   := $(CFOPTIMIZE) $(CFOTHERS) $(CFWARN) $(CFLAGS)
+ else
+-CFLAGS   := $(CFOPTIMIZE) $(CFOTHERS) $(CFWARN)
++CFLAGS   := $(CFOPTIMIZE) $(CFOTHERS) $(CFWARN) $(CFLAGS)
+ endif
+ CFLAGS_L := $(CFOPTIMIZE_L) $(DEFINES_L) $(CFWARN_L) $(INCLUDES_L) $(CFOTHERS_L)
+ ALL_CFLAGS := $(CFLAGS) $(CFLAGS_L)
+@@ -1392,7 +1396,7 @@
+ 	$(RM) -r $(DOXYGEN_HTML_GEN)
+ 
+ $(GAME): $(OBJECTS) $(EXTRA_OBJECTS) $(CONTRIB_LIBS) dat/dlua/tags.lua
+-	+$(QUIET_LINK)$(CXX) $(LDFLAGS) $(EXTRA_OBJECTS) $(OBJECTS) -o $(GAME) $(LIBS)
++	g++ $(LDFLAGS) $(EXTRA_OBJECTS) $(OBJECTS) -o $(GAME) $(LIBS)
+ 
+ debug: all
+ debug-lite: all
+@@ -1492,7 +1496,7 @@
+ 	$(QUIET_GEN)util/gen-luatags.pl
+ 
+ mi-enum.h: mon-info.h util/gen-mi-enum
+-	$(QUIET_GEN)util/gen-mi-enum
++	perl util/gen-mi-enum
+ 
+ $(RLTILES)/dc-unrand.txt: art-data.h
+ 

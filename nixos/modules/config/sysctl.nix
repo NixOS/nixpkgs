@@ -6,8 +6,12 @@ let
 
   sysctlOption = mkOptionType {
     name = "sysctl option value";
-    check = x: isBool x || isString x || isInt x || isNull x;
-    merge = args: defs: (last defs).value; # FIXME: hacky way to allow overriding in configuration.nix.
+    check = val:
+      let
+        checkType = x: isBool x || isString x || isInt x || isNull x;
+      in
+        checkType val || (val._type or "" == "override" && checkType val.content);
+    merge = loc: defs: mergeOneOption loc (filterOverrides defs);
   };
 
 in

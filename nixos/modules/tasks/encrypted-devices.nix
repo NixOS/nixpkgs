@@ -1,6 +1,6 @@
-{ config, pkgs, modulesPath, ... }:
+{ config, lib, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
   fileSystems = attrValues config.fileSystems ++ config.swapDevices;

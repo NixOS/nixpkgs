@@ -59,6 +59,13 @@ in
         '';
       };
 
+      package = mkOption {
+        default = pkgs.openssh;
+        description = ''
+          The package used for the openssh client and daemon.
+        '';
+      };
+
     };
 
   };
@@ -92,7 +99,7 @@ in
         wantedBy = [ "default.target" ];
         serviceConfig =
           { ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
-            ExecStart = "${pkgs.openssh}/bin/ssh-agent -a %t/ssh-agent";
+            ExecStart = "${cfg.package}/bin/ssh-agent -a %t/ssh-agent";
             StandardOutput = "null";
             Type = "forking";
             Restart = "on-failure";

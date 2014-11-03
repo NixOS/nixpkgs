@@ -11,16 +11,8 @@ with lib;
       # TODO: find another name for it.
       fonts = mkOption {
         type = types.listOf types.path;
-        example = [ pkgs.dejavu_fonts ];
+        example = literalExample "[ pkgs.dejavu_fonts ]";
         description = "List of primary font paths.";
-        apply = list: list ++
-          [ # - the user's current profile
-            "~/.nix-profile/lib/X11/fonts"
-            "~/.nix-profile/share/fonts"
-            # - the default profile
-            "/nix/var/nix/profiles/default/lib/X11/fonts"
-            "/nix/var/nix/profiles/default/share/fonts"
-          ];
       };
 
     };

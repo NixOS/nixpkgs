@@ -2,13 +2,15 @@
 
 stdenv.mkDerivation (rec {
   pname = "rdesktop";
-  version = "1.8.1";
+  version = "1.8.2";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${name}.tar.gz";
-    sha256 = "0il248cdsxvwjsl4bswf27ld9r1a7d48jf6bycr86kf3i55q7k3n";
+    sha256 = "0y0s0qjfsflp4drcn75ykx6as7mn13092bcvlp2ibhilkpa27gzv";
   };
+
+  patches = [ ./enable_windows_key.patch ];
 
   buildInputs = [openssl libX11];
 
@@ -19,6 +21,9 @@ stdenv.mkDerivation (rec {
   ];
 
   meta = {
-    description = "rdesktop is an open source client for Windows Terminal Services";
+    description = "Open source client for Windows Terminal Services";
+    homepage = http://www.rdesktop.org/;
+    platforms = stdenv.lib.platforms.linux;
+    license     = stdenv.lib.licenses.gpl2;
   };
 })

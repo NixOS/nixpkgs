@@ -12,15 +12,15 @@ let
   optional = stdenv.lib.optional;
 in
 stdenv.mkDerivation rec {
-  name = "radare-1.5";
+  name = "radare-1.5.2";
 
   src = fetchurl {
     url = "http://radare.org/get/${name}.tar.gz";
-    sha256 = "1r0c9cc7z9likma8zicp2pbv2y85vjjmnk0k45wdhbvhgqh6il1h";
+    sha256 = "1qdrmcnzfvfvqb27c7pknwm8jl2hqa6c4l66wzyddwlb8yjm46hd";
   };
 
 
-  buildInputs = [pkgconfig readline libusb libewf perl]
+  buildInputs = [pkgconfig readline libusb perl]
     ++ optional useX11 [gtkdialog vte gtk]
     ++ optional rubyBindings [ruby]
     ++ optional pythonBindings [python]
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Free advanced command line hexadecimal editor";
     homepage = http://radare.org/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; all;
   };

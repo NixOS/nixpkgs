@@ -1,24 +1,23 @@
-{stdenv, fetchurl, gfortran, readline, ncurses, perl, flex, texinfo, qhull,
-libX11, graphicsmagick, pcre, liblapack, pkgconfig, mesa, fltk,
-fftw, fftwSinglePrec, zlib, curl, qrupdate
-, qt ? null, ghostscript ? null, llvm ? null, hdf5 ? null,glpk ? null
+{ stdenv, fetchurl, gfortran, readline, ncurses, perl, flex, texinfo, qhull
+, libX11, graphicsmagick, pcre, liblapack, pkgconfig, mesa, fltk
+, fftw, fftwSinglePrec, zlib, curl, qrupdate
+, qt ? null, qscintilla ? null, ghostscript ? null, llvm ? null, hdf5 ? null,glpk ? null
 , suitesparse ? null, gnuplot ? null, openjdk ? null, python ? null
 }:
 
-let
-  version = "3.8.0";
-in
 stdenv.mkDerivation rec {
+  version = "3.8.2";
   name = "octave-${version}";
   src = fetchurl {
     url = "mirror://gnu/octave/${name}.tar.bz2";
-    sha256 = "1yclb8p4mcx9xcjajyynxfnc5spw90lp44d84v56ksrlvp3314si";
+    sha256 = "83bbd701aab04e7e57d0d5b8373dd54719bebb64ce0a850e69bf3d7454f33bae";
   };
 
   buildInputs = [ gfortran readline ncurses perl flex texinfo qhull libX11
     graphicsmagick pcre liblapack pkgconfig mesa fltk zlib curl
     fftw fftwSinglePrec qrupdate ]
     ++ (stdenv.lib.optional (qt != null) qt)
+    ++ (stdenv.lib.optional (qscintilla != null) qscintilla)
     ++ (stdenv.lib.optional (ghostscript != null) ghostscript)
     ++ (stdenv.lib.optional (llvm != null) llvm)
     ++ (stdenv.lib.optional (hdf5 != null) hdf5)
@@ -51,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://octave.org/;
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [viric raskin];
     platforms = with stdenv.lib.platforms; linux;
   };

@@ -32,6 +32,7 @@ let
 in
 
 {
+  name = "subversion";
 
   nodes =
     { webserver =

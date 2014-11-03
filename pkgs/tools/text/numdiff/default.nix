@@ -15,9 +15,9 @@ stdenv.mkDerivation {
       line by line and field by field, ignoring small numeric differences
       or/and different numeric formats.
     '';
-    homepage = "http://www.nongnu.org/numdiff/";
+    homepage = http://www.nongnu.org/numdiff/;
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = stdenv.lib.maintainers.bbenoist;
+    maintainers = [ stdenv.lib.maintainers.bbenoist ];
     platforms = stdenv.lib.platforms.gnu;
   };
 }

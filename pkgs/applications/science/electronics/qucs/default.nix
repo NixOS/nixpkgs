@@ -1,22 +1,21 @@
-{stdenv, fetchurl, qt3, libX11}:
+{stdenv, fetchurl, flex, bison, qt4, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "qucs-0.0.16";
+  name = "qucs-0.0.18";
 
   src = fetchurl {
     url = "mirror://sourceforge/qucs/${name}.tar.gz";
-    sha256 = "1h8ba84k06rix5zl5p9p414zj2facbnlf1vxwh4a1sp4h9dbfnzy";
+    sha256 = "3609a18b57485dc9f19886ac6694667f3251702175bd1cbbbea37981b2c482a7";
   };
 
-  patches = [ ./tr1-complex.patch ];
-  patchFlags = "-p0";
+  QTDIR=qt4;
 
-  buildInputs = [ qt3 libX11 ];
+  buildInputs = [ flex bison qt4 libX11 ];
 
   meta = {
     description = "Integrated circuit simulator";
     homepage = http://qucs.sourceforge.net;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

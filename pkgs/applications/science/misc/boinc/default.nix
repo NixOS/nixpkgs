@@ -3,12 +3,12 @@ mesa, libXmu, libXi, freeglut, libjpeg, libtool, wxGTK, xcbutil,
 sqlite, gtk, patchelf, libXScrnSaver, libnotify, libX11, libxcb }:
 
 stdenv.mkDerivation rec {
-  name = "boinc-7.0.44";
+  name = "boinc-7.4.14";
 
   src = fetchgit {
     url = "git://boinc.berkeley.edu/boinc-v2.git";
-    rev = "7c449b1fb8a681ceb27d6895751b62a2b3adf0f2";
-    sha256 = "0hdramyl9nip3gadp7xiaz8ngyld15i93d8ai1nsd04bmrvdfqia";
+    rev = "fb31ab18f94f3b5141bea03e8537d76c606cd276";
+    sha256 = "1465zl8l87fm1ps5f2may6mcc3pp40mpd6wphpxnwwk1lmv48x96";
   };
 
   buildInputs = [ libtool automake autoconf m4 pkgconfig curl mesa libXmu libXi
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://boinc.berkeley.edu/;
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     platforms = stdenv.lib.platforms.linux;  # arbitrary choice
   };

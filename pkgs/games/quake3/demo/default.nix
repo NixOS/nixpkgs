@@ -7,13 +7,13 @@ stdenv.mkDerivation {
   # This is needed for pak0.pk3.
   demo = fetchurl {
     url = http://tarballs.nixos.org/linuxq3ademo-1.11-6.x86.gz.sh;
-    md5 = "484610c1ce34272223a52ec331c99d5d";
+    sha256 = "1v54a1hx1bczk9hgn9qhx8vixsy7xn7wj2pylhfjsybfkgvf7pk4";
   };
 
   # This is needed for the additional pak?.pk3 files.
   update = fetchurl {
     url = http://tarballs.nixos.org/linuxq3apoint-1.31.x86.run;
-    md5 = "2620b9eefb6d0775f766b6570870157a";
+    sha256 = "1kp689452zb8jhd67ghisz2055pqxy9awz4vi0hq5qmp7xrp1x58";
   };
 
   # Don't rebuild if the inputs change, since the output is guaranteed

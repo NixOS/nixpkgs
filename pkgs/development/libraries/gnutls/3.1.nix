@@ -4,11 +4,11 @@
 assert guileBindings -> guile != null;
 
 stdenv.mkDerivation rec {
-  name = "gnutls-3.1.25";
+  name = "gnutls-3.1.26";
 
   src = fetchurl {
     url = "ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1/${name}.tar.lz";
-    sha256 = "1i1v8pbaw72k0ps09i3lvc1zr9gn34jpliiijbs8k7axrv2w9n5g";
+    sha256 = "7947e18fd0c292c0274d810c9bdf674b8faa3566e056ea404a39f335982607a3";
   };
 
   # FreeBSD doesn't have <alloca.h>, and Gnulib's `alloca' module isn't used.
@@ -61,8 +61,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.gnu.org/software/gnutls/;
-    license = "LGPLv2.1+";
+    license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }
-

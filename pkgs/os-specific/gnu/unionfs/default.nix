@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/hurd/hurd/translator/unionfs.html;
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };

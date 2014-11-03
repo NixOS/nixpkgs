@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
  
   installPhase = ''
-    ensureDir $out/bin
-    ensureDir $out/share/man/man1
-    ensureDir $out/share/man/man5
+    mkdir -p $out/bin
+    mkdir -p $out/share/man/man1
+    mkdir -p $out/share/man/man5
 
     cp dhex $out/bin
     cp dhex.1 $out/share/man/man1

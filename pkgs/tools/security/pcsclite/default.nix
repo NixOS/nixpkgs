@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, udev, dbus_libs, perl }:
 
 stdenv.mkDerivation rec {
-  version = "1.8.11";
+  version = "1.8.12";
   name = "pcsclite-${version}";
 
   src = fetchurl {
     url = "https://alioth.debian.org/frs/download.php/file/3991/pcsc-lite-${version}.tar.bz2";
-    sha256 = "945041c94c53959ae5a767616a4ec5099fe67f549bfd344e8bd0cfe7a3c71ac6";
+    sha256 = "1ihsqyiygkyhid739zcvaizyd7q9qm76lqb7lzjrm5ak9k4l2l4l";
   };
 
   # The OS should care on preparing the drivers into this location
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
     homepage = http://pcsclite.alioth.debian.org/;
     license = licenses.bsd3;
-    maintainers = with maintainers; [viric];
+    maintainers = with maintainers; [ viric wkennington ];
     platforms = with platforms; linux;
   };
 }

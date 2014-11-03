@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://foo-projects.org/~benny/projects/thunar-archive-plugin/;
     description = "The Thunar Archive Plugin allows you to create and extract archive files using the file context menus in the Thunar file manager";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.iElectric ];
   };

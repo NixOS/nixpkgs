@@ -8,7 +8,7 @@ mkChromiumDerivation (base: rec {
   buildTargets = [ "mksnapshot" "chrome" ];
 
   installPhase = ''
-    ensureDir "$libExecPath"
+    mkdir -p "$libExecPath"
     cp -v "$buildPath/"*.pak "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
@@ -29,6 +29,8 @@ mkChromiumDerivation (base: rec {
       cp -v "$icon_file" "$logo_output_path/$packageName.png"
     done
   '';
+
+  preHook = "unset NIX_ENFORCE_PURITY";
 
   meta = {
     description = "An open source web browser from Google";

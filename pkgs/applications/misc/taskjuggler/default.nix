@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.taskjuggler.org";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     description = "Project management tool";
     longDescription = ''
       TaskJuggler is a modern and powerful, Open Source project management

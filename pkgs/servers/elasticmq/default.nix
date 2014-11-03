@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
         $ELASTICMQ_DATA_PREFIX/conf/Default.scala.  You can use the
         Default.scala included in the distribution as a template.
       '';
-    license = "APLv2";
+    license = stdenv.lib.licenses.asl20;
   };
 }

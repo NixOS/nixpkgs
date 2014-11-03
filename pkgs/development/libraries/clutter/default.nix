@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   #doCheck = true; # no tests possible without a display
 
   meta = {
-    description = "Clutter, a library for creating fast, dynamic graphical user interfaces";
+    description = "Library for creating fast, dynamic graphical user interfaces";
 
     longDescription =
       '' Clutter is free software library for creating fast, compelling,
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
          specific needs.
       '';
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
     homepage = http://www.clutter-project.org/;
 
     maintainers = with stdenv.lib.maintainers; [ urkud ];

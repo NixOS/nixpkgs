@@ -11,6 +11,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://jbig2dec.sourceforge.net/;
     description = "Decoder implementation of the JBIG2 image compression format";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

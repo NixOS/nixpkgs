@@ -12,17 +12,17 @@ stdenv.mkDerivation rec {
     md5 = "0765cf203f451394df98e6ddf7bf2541";
   };
 
-  buildInputs = [ cmake boost openssl ];
+  buildInputs = [ cmake boost boost.lib openssl ];
 
   cmakeFlags = [ "-DCPP-NETLIB_BUILD_SHARED_LIBS=ON" "-DCMAKE_BUILD_TYPE=RELEASE" ];
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A collection of open-source libraries for high level network programming";
     homepage    = http://cpp-netlib.org;
-    license     = stdenv.lib.licenses.boost;
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
-    platforms   = stdenv.lib.platforms.all;
+    license     = licenses.boost;
+    maintainers = with maintainers; [ shlevy ];
+    platforms   = platforms.all;
   };
 }

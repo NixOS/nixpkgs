@@ -1,18 +1,19 @@
 { fetchurl, cmake, stdenv, plib, SDL, openal, freealut, mesa
 , libvorbis, libogg, gettext, libXxf86vm, curl, pkgconfig
-, fribidi, autoconf, automake, libtool }:
+, fribidi, autoconf, automake, libtool, bluez }:
 
 stdenv.mkDerivation rec {
-  name = "supertuxkart-0.8";
+  version = "0.8.1";
+  name = "supertuxkart-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/supertuxkart/${name}-src.tar.bz2";
-    sha256 = "12sbml4wxg2x2wgnnkxfisj96a9gcsaj3fj27kdk8yj524ikv7xr";
+    sha256 = "1mpqmi62a2kl6n58mw11fj0dr5xiwmjkqnfmd2z7ghdhc6p02lrk";
   };
 
   buildInputs = [
     plib SDL openal freealut mesa libvorbis libogg gettext
-    libXxf86vm curl pkgconfig fribidi autoconf automake libtool cmake
+    libXxf86vm curl pkgconfig fribidi autoconf automake libtool cmake bluez
   ];
 
   enableParallelBuilding = true;
@@ -27,15 +28,13 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "SuperTuxKart is a Free 3D kart racing game";
-
     longDescription = ''
       SuperTuxKart is a Free 3D kart racing game, with many tracks,
       characters and items for you to try, similar in spirit to Mario
       Kart.
     '';
-
     homepage = http://supertuxkart.sourceforge.net/;
-
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
   };
 }

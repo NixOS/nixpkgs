@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://pkgs.fedoraproject.org/cgit/hardlink.git/";
-    description = "consolidate duplicate files via hardlinks";
+    description = "Consolidate duplicate files via hardlinks";
     license = stdenv.lib.licenses.gpl2Plus;
 
     platforms = stdenv.lib.platforms.unix;

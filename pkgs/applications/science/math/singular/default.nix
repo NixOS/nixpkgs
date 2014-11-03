@@ -3,9 +3,9 @@ x@{builderDefsPackage
   , coreutils
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     [];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -38,9 +38,9 @@ rec {
     rm -rf "$out/LIB"
     cp -r Singular/LIB "$out"
     mkdir -p "$out/bin"
-    ln -s "$out"/*/Singular "$out/bin"
+    ln -s "$out/"*/Singular "$out/bin"
   '') ["minInit" "defEnsureDir"];
-      
+
   meta = {
     description = "A CAS for polynomial computations";
     maintainers = with a.lib.maintainers;
@@ -49,7 +49,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = "GPLv3"; # Or GPLv2 at your option - but not GPLv4
+    license = a.stdenv.lib.licenses.gpl3; # Or GPLv2 at your option - but not GPLv4
     homepage = "http://www.singular.uni-kl.de/index.php";
   };
   passthru = {
@@ -58,4 +58,3 @@ rec {
     };
   };
 }) x
-

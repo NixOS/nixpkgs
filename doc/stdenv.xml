@@ -150,8 +150,8 @@ genericBuild
 
   <listitem><para>GNU <command>tar</command>.</para></listitem>
 
-  <listitem><para><command>gzip</command> and
-  <command>bzip2</command>.</para></listitem>
+  <listitem><para><command>gzip</command>, <command>bzip2</command>
+  and <command>xz</command>.</para></listitem>
 
   <listitem><para>GNU Make.  It has been patched to provide
   <quote>nested</quote> output that can be fed into the
@@ -341,9 +341,11 @@ It supports the following files by default:
     <term>Tar files</term>
     <listitem><para>These can optionally be compressed using
     <command>gzip</command> (<filename>.tar.gz</filename>,
-    <filename>.tgz</filename> or <filename>.tar.Z</filename>) or
+    <filename>.tgz</filename> or <filename>.tar.Z</filename>),
     <command>bzip2</command> (<filename>.tar.bz2</filename> or
-    <filename>.tbz2</filename>).</para></listitem>
+    <filename>.tbz2</filename>) or <command>xz</command>
+    (<filename>.tar.xz</filename> or
+    <filename>.tar.lzma</filename>).</para></listitem>
   </varlistentry>
 
   <varlistentry>
@@ -445,9 +447,10 @@ Additional file types can be supported by setting the
     <listitem><para>The list of patches.  They must be in the format
     accepted by the <command>patch</command> command, and may
     optionally be compressed using <command>gzip</command>
-    (<filename>.gz</filename>) or <command>bzip2</command>
-    (<filename>.bz2</filename>).</para></listitem>
-  </varlistentry>  
+    (<filename>.gz</filename>), <command>bzip2</command>
+    (<filename>.bz2</filename>) or <command>xz</command>
+    (<filename>.xz</filename>).</para></listitem>
+  </varlistentry>
 
   <varlistentry>
     <term><varname>patchFlags</varname></term>

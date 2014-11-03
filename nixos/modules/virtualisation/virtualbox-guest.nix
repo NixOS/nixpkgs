@@ -11,7 +11,6 @@ let
 
 in
 
-optionalAttrs (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) # ugly...
 {
 
   ###### interface
@@ -33,6 +32,10 @@ optionalAttrs (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) # ugly...
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [ {
+      assertion = pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64;
+      message = "Virtualbox not currently supported on ${pkgs.stdenv.system}";
+    } ];
 
     environment.systemPackages = [ kernel.virtualboxGuestAdditions ];
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "GNU Gengetopt, a command-line option parser generator";
+    description = "Command-line option parser generator";
 
     longDescription =
       '' GNU Gengetopt program generates a C function that uses getopt_long
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/gengetopt/;
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;

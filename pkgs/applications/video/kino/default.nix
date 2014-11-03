@@ -85,8 +85,8 @@ stdenv.mkDerivation {
 
 
   meta = { 
-      description = "Kino is a non-linear DV editor for GNU/Linux";
+      description = "Non-linear DV editor for GNU/Linux";
       homepage = http://www.kinodv.org/;
-      license = "GPL2";
+      license = stdenv.lib.licenses.gpl2;
   };
 }

@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, gettext, kdelibs, makeWrapper, qca2, qca2_ossl, qjson }:
+{ stdenv, fetchurl, gettext, kdelibs, libXtst, makeWrapper, qca2, qca2_ossl, qjson }:
 
 stdenv.mkDerivation rec {
   name = "kdeconnect-${version}";
-  version = "0.5.2.1";
+  version = "0.7.2";
 
   src = fetchurl {
-    url = "http://download.kde.org/unstable/kdeconnect/0.5.2/src/kdeconnect-kde-${version}.tar.xz";
-    sha256 = "0g632ha7xcqf839c4h0dz5637bz6gnn2gz76dc0qq09zbrq49i08";
+    url = "http://download.kde.org/unstable/kdeconnect/${version}/src/kdeconnect-kde-${version}.tar.xz";
+    sha256 = "1v7sicgy39n8pn7nzq9f7lkmwbcvavhy3b66agyhxwmyzz6mcd4g";
   };
 
-  buildInputs = [ gettext kdelibs makeWrapper qca2 qca2_ossl qjson ];
+  buildInputs = [ gettext kdelibs libXtst makeWrapper qca2 qca2_ossl qjson ];
 
   postInstall = ''
     wrapProgram $out/lib/kde4/libexec/kdeconnectd --prefix QT_PLUGIN_PATH : ${qca2_ossl}/lib/qt4/plugins

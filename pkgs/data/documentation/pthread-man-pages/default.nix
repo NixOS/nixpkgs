@@ -43,6 +43,6 @@ in
     meta = {
       description = "POSIX threads (pthreads) manual pages from LinuxThreads";
       homepage = http://www.gnu.org/software/libc/;
-      maintainers = stdenv.lib.maintainers.mornfall;
+      maintainers = [ stdenv.lib.maintainers.mornfall ];
     };
   }

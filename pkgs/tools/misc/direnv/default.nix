@@ -1,14 +1,14 @@
 { fetchurl, stdenv, go }:
 
 let
-  version = "2.2.1";
+  version = "2.4.0";
 in
 stdenv.mkDerivation {
   name = "direnv-${version}";
   src = fetchurl {
     url = "http://github.com/zimbatm/direnv/archive/v${version}.tar.gz";
     name = "direnv-${version}.tar.gz";
-    sha256 = "6d55cb96189e20609a08133fe9392c50209cd435b4f77e3baaa0f423d82ae59a";
+    sha256 = "aab8028cc1d68461dd1f6c3c9d000eef10273c52399fe5d1dd917f2f4a1a349a";
   };
 
   buildInputs = [ go ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     '';
     homepage = http://direnv.net;
     license = stdenv.lib.licenses.mit;
-    hydraPlatforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.zimbatm ];
+    platforms = go.meta.platforms;
   };
 }

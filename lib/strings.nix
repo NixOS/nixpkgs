@@ -2,7 +2,7 @@
 
 let lib = import ./default.nix;
 
-inherit (builtins) add sub lessThan length;
+inherit (builtins) length;
 
 in
 
@@ -33,6 +33,9 @@ rec {
   # concatStringsSep " " ["foo" "bar" "xyzzy"] == "foo bar xyzzy"
   concatStringsSep = separator: list:
     concatStrings (intersperse separator list);
+
+  concatMapStringsSep = sep: f: list: concatStringsSep sep (map f list);
+  concatImapStringsSep = sep: f: list: concatStringsSep sep (lib.imap f list);
 
 
   # Construct a Unix-style search path consisting of each `subDir"
@@ -76,7 +79,7 @@ rec {
   stringToCharacters = s: let l = stringLength s; in
     if l == 0
     then []
-    else map (p: substring p 1 s) (lib.range 0 (sub l 1));
+    else map (p: substring p 1 s) (lib.range 0 (l - 1));
 
 
   # Manipulate a string charcater by character and replace them by strings
@@ -120,7 +123,7 @@ rec {
   toUpper = replaceChars lowerChars upperChars;
 
   # Appends string context from another string
-  addContextFrom = a: b: (substring 0 0 a)+b;
+  addContextFrom = a: b: substring 0 0 a + b;
 
   # Compares strings not requiring context equality
   # Obviously, a workaround but works on all Nix versions
@@ -136,18 +139,18 @@ rec {
       s = addContextFrom _sep _s;
       sepLen = stringLength sep;
       sLen = stringLength s;
-      lastSearch = sub sLen sepLen;
+      lastSearch = sLen - sepLen;
       startWithSep = startAt:
         substring startAt sepLen s == sep;
 
       recurse = index: startAt:
-        let cutUntil = i: [(substring startAt (sub i startAt) s)]; in
-        if lessThan index lastSearch then
+        let cutUntil = i: [(substring startAt (i - startAt) s)]; in
+        if index < lastSearch then
           if startWithSep index then
-            let restartAt = add index sepLen; in
+            let restartAt = index + sepLen; in
             cutUntil index ++ recurse restartAt restartAt
           else
-            recurse (add index 1) startAt
+            recurse (index + 1) startAt
         else
           cutUntil sLen;
     in

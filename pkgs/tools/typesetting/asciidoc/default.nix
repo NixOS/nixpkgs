@@ -22,6 +22,10 @@
 , gnused ? null
 , coreutils ? null
 
+# if true, enable all the below filters and backends
+, enableExtraPlugins ? false
+
+# unzip is needed to extract filter and backend plugins
 , unzip ? null
 # filters
 , enableDitaaFilter ? false, jre ? null
@@ -58,16 +62,25 @@ assert enableStandardFeatures ->
   coreutils != null;
 
 # filters
-assert (enableDitaaFilter || enableMscgenFilter || enableDiagFilter || enableQrcodeFilter || enableAafigureFilter) -> unzip != null;
-assert enableDitaaFilter -> jre != null;
-assert enableMscgenFilter -> mscgen != null;
-assert enableDiagFilter -> blockdiag != null && seqdiag != null && actdiag != null && nwdiag != null;
-assert enableMatplotlibFilter -> matplotlib != null && numpy != null;
-assert enableAafigureFilter -> aafigure != null && recursivePthLoader != null;
+assert enableExtraPlugins || enableDitaaFilter || enableMscgenFilter || enableDiagFilter || enableQrcodeFilter || enableAafigureFilter -> unzip != null;
+assert enableExtraPlugins || enableDitaaFilter -> jre != null;
+assert enableExtraPlugins || enableMscgenFilter -> mscgen != null;
+assert enableExtraPlugins || enableDiagFilter -> blockdiag != null && seqdiag != null && actdiag != null && nwdiag != null;
+assert enableExtraPlugins || enableMatplotlibFilter -> matplotlib != null && numpy != null;
+assert enableExtraPlugins || enableAafigureFilter -> aafigure != null && recursivePthLoader != null;
 # backends
-assert (enableDeckjsBackend || enableOdfBackend) -> unzip != null;
+assert enableExtraPlugins || enableDeckjsBackend || enableOdfBackend -> unzip != null;
 
 let
+
+  _enableDitaaFilter = enableExtraPlugins || enableDitaaFilter;
+  _enableMscgenFilter = enableExtraPlugins || enableMscgenFilter;
+  _enableDiagFilter = enableExtraPlugins || enableDiagFilter;
+  _enableQrcodeFilter = enableExtraPlugins || enableQrcodeFilter;
+  _enableMatplotlibFilter = enableExtraPlugins || enableMatplotlibFilter;
+  _enableAafigureFilter = enableExtraPlugins || enableAafigureFilter;
+  _enableDeckjsBackend = enableExtraPlugins || enableDeckjsBackend;
+  _enableOdfBackend = enableExtraPlugins || enableOdfBackend;
 
   #
   # filters
@@ -141,17 +154,17 @@ stdenv.mkDerivation rec {
   patchPhase = with stdenv.lib; ''
     mkdir -p "$out/etc/asciidoc/filters"
     mkdir -p "$out/etc/asciidoc/backends"
-  '' + optionalString enableDitaaFilter ''
+  '' + optionalString _enableDitaaFilter ''
     echo "Extracting ditaa filter"
     unzip -d "$out/etc/asciidoc/filters/ditaa" "${ditaaFilterSrc}"
     sed -i -e "s|java -jar|${jre}/bin/java -jar|" \
         "$out/etc/asciidoc/filters/ditaa/ditaa2img.py"
-  '' + optionalString enableMscgenFilter ''
+  '' + optionalString _enableMscgenFilter ''
     echo "Extracting mscgen filter"
     unzip -d "$out/etc/asciidoc/filters/mscgen" "${mscgenFilterSrc}"
     sed -i -e "s|filter-wrapper.py mscgen|filter-wrapper.py ${mscgen}/bin/mscgen|" \
         "$out/etc/asciidoc/filters/mscgen/mscgen-filter.conf"
-  '' + optionalString enableDiagFilter ''
+  '' + optionalString _enableDiagFilter ''
     echo "Extracting diag filter"
     unzip -d "$out/etc/asciidoc/filters/diag" "${diagFilterSrc}"
     sed -i \
@@ -161,12 +174,12 @@ stdenv.mkDerivation rec {
         -e "s|filter='nwdiag|filter=\'${nwdiag}/bin/nwdiag|" \
         -e "s|filter='packetdiag|filter=\'${nwdiag}/bin/packetdiag|" \
         "$out/etc/asciidoc/filters/diag/diag-filter.conf"
-  '' + optionalString enableQrcodeFilter ''
+  '' + optionalString _enableQrcodeFilter ''
     echo "Extracting qrcode filter"
     unzip -d "$out/etc/asciidoc/filters/qrcode" "${qrcodeFilterSrc}"
     sed -i -e "s|systemcmd('qrencode|systemcmd('${qrencode}/bin/qrencode|" \
         "$out/etc/asciidoc/filters/qrcode/qrcode2img.py"
-  '' + optionalString enableMatplotlibFilter ''
+  '' + optionalString _enableMatplotlibFilter ''
     echo "Extracting mpl (matplotlib) filter"
     mkdir -p "$out/etc/asciidoc/filters/mpl"
     tar xvf "${matplotlibFilterSrc}" -C "$out/etc/asciidoc/filters/mpl" --strip-components=1
@@ -177,7 +190,7 @@ stdenv.mkDerivation rec {
     numpy_path="$(toPythonPath ${numpy})"
     sed -i "/^import.*sys/asys.path.append(\"$matplotlib_path\"); sys.path.append(\"$numpy_path\");" \
         "$out/etc/asciidoc/filters/mpl/mplw.py"
-  '' + optionalString enableAafigureFilter ''
+  '' + optionalString _enableAafigureFilter ''
     echo "Extracting aafigure filter"
     unzip -d "$out/etc/asciidoc/filters/aafigure" "${aafigureFilterSrc}"
     # Add aafigure to sys.path (and it needs recursive-pth-loader)
@@ -185,10 +198,10 @@ stdenv.mkDerivation rec {
     aafigure_path="$(toPythonPath ${aafigure})"
     sed -i "/^import.*sys/asys.path.append(\"$pth_loader_path\"); sys.path.append(\"$aafigure_path\"); import sitecustomize" \
         "$out/etc/asciidoc/filters/aafigure/aafig2img.py"
-  '' + optionalString enableDeckjsBackend ''
+  '' + optionalString _enableDeckjsBackend ''
     echo "Extracting deckjs backend"
     unzip -d "$out/etc/asciidoc/backends/deckjs" "${deckjsBackendSrc}"
-  '' + optionalString enableOdfBackend ''
+  '' + optionalString _enableOdfBackend ''
     echo "Extracting odf backend (odt + odp)"
     unzip -d "$out/etc/asciidoc/backends/odt" "${odtBackendSrc}"
     unzip -d "$out/etc/asciidoc/backends/odp" "${odpBackendSrc}"
@@ -244,7 +257,7 @@ stdenv.mkDerivation rec {
   preInstall = "mkdir -p $out/etc/vim";
 
   meta = with stdenv.lib; {
-    description = "Text-based document generation system ${stdenv.lib.optionalString enableStandardFeatures "(full version)"}";
+    description = "Text-based document generation system";
     longDescription = ''
       AsciiDoc is a text document format for writing notes, documentation,
       articles, books, ebooks, slideshows, web pages, man pages and blogs.

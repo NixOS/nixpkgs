@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, qtLib, sdkBuild ? false }:
+{ stdenv, fetchurl, qtLib, sdkBuild ? false, withDocumentation ? true }:
 
 with stdenv.lib;
 
 let
-  baseVersion = "3.1";
+  baseVersion = "3.2";
   revision = "0";
   version = "${baseVersion}.${revision}";
 in
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/qtcreator/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.gz";
-    sha256 = "c8c648f4988b707393e0f1958a8868718f27e59263f05f3b6599fa62290c2bbf";
+    sha256 = "0giilb0sl71w2p0vlaj4f9qjyaa4llbflp4m1dfdal30facbwizd";
   };
 
   # This property can be used in a nix development environment to refer to the Qt package
@@ -36,7 +36,25 @@ stdenv.mkDerivation rec {
     qmake -spec linux-g++ "QT_PRIVATE_HEADERS=${qtLib}/include" qtcreator.pro
   '';
 
-  installFlags = "INSTALL_ROOT=$(out)";
+  buildFlags = optionalString withDocumentation " docs";
+
+  installFlags = "INSTALL_ROOT=$(out)"
+    + optionalString withDocumentation " install_docs";
+
+  postInstall = ''
+    # Install desktop file
+    mkdir -p "$out/share/applications"
+    cat > "$out/share/applications/qtcreator.desktop" << __EOF__
+    [Desktop Entry]
+    Exec=$out/bin/qtcreator
+    Name=Qt Creator
+    GenericName=Cross-platform IDE for Qt
+    Icon=QtProject-qtcreator.png
+    Terminal=false
+    Type=Application
+    Categories=Qt;Development;IDE;
+    __EOF__
+  '';
 
   meta = {
     description = "Cross-platform IDE tailored to the needs of Qt developers";

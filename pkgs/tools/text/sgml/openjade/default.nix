@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1l92sfvx1f0wmkbvzv1385y1gb3hh010xksi1iyviyclrjb7jb8x";
   };
 
+  patches = [ ./msggen.patch ];
+
   buildInputs = [ opensp perl ];
 
   configureFlags = [
@@ -17,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An implementation of DSSSL, an ISO standard for formatting SGML (and XML) documents";
-    license = "BSD";
+    license = stdenv.lib.licenses.mit;
     homepage = http://openjade.sourceforge.net/;
   };
 }

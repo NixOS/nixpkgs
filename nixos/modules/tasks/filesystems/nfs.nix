@@ -24,9 +24,33 @@ let
     Method = nsswitch
   '';
 
+  cfg = config.services.nfs;
+
 in
 
 {
+  ###### interface
+
+  options = {
+
+    services.nfs = {
+      statdPort = mkOption {
+        default = null;
+        example = 4000;
+        description = ''
+          Use fixed port for rpc.statd, usefull if NFS server is behind firewall.
+        '';
+      };
+      lockdPort = mkOption {
+        default = null;
+        example = 4001;
+        description = ''
+          Use fixed port for NFS lock manager kernel module (lockd/nlockmgr),
+          usefull if NFS server is behind firewall.
+        '';
+      };
+    };
+  };
 
   ###### implementation
 
@@ -35,6 +59,10 @@ in
     services.rpcbind.enable = true;
 
     system.fsPackages = [ pkgs.nfsUtils ];
+
+    boot.extraModprobeConfig = mkIf (cfg.lockdPort != null) ''
+      options lockd nlm_udpport=${toString cfg.lockdPort} nlm_tcpport=${toString cfg.lockdPort}
+    '';
 
     boot.kernelModules = [ "sunrpc" ];
 
@@ -60,7 +88,10 @@ in
           '';
 
         serviceConfig.Type = "forking";
-        serviceConfig.ExecStart = "@${pkgs.nfsUtils}/sbin/rpc.statd rpc.statd --no-notify";
+        serviceConfig.ExecStart = ''
+          @${pkgs.nfsUtils}/sbin/rpc.statd rpc.statd --no-notify \
+              ${if cfg.statdPort != null then "-p ${toString statdPort}" else ""}
+        '';
         serviceConfig.Restart = "always";
       };
 

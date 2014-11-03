@@ -1,18 +1,17 @@
-{ stdenv, stdenvAdapters, gccApple, fetchFromGitHub, ncurses, gettext,
+{ stdenv, fetchFromGitHub, ncurses, gettext,
   pkgconfig, cscope, python, ruby, tcl, perl, luajit
 }:
 
-let inherit (stdenvAdapters.overrideGCC stdenv gccApple) mkDerivation;
-in mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "macvim-${version}";
 
-  version = "7.4-73";
+  version = "7.4.479";
 
   src = fetchFromGitHub {
-    owner = "b4winckler";
+    owner = "genoma";
     repo = "macvim";
-    rev = "snapshot-73";
-    sha256 = "0zv82y2wz8b482khkgbl08cnxq3pv5bm37c71wgfa0fzy3h12gcj";
+    rev = "f9c084b97fa9d5cad2448dfd3eff3d9b7f0fac59";
+    sha256 = "190bngg8m4bwqcia7w24gn7mmqkhk0mavxy81ziwysam1f652ymf";
   };
 
   enableParallelBuilding = true;
@@ -46,6 +45,7 @@ in mkDerivation rec {
       "--enable-perlinterp=dynamic"
       "--enable-rubyinterp=dynamic"
       "--enable-tclinterp=yes"
+      "--without-local-dir"
       "--with-luajit"
       "--with-lua-prefix=${luajit}"
       "--with-ruby-command=${ruby}/bin/ruby"
@@ -53,6 +53,8 @@ in mkDerivation rec {
       "--with-tlib=ncurses"
       "--with-compiledby=Nix"
   ];
+
+  makeFlags = ''PREFIX=$(out) CPPFLAGS="-Wno-error"'';
 
   preConfigure = ''
     DEV_DIR=$(/usr/bin/xcode-select -print-path)/Platforms/MacOSX.platform/Developer
@@ -62,7 +64,7 @@ in mkDerivation rec {
   '';
 
   postInstall = ''
-    ensureDir $out/Applications
+    mkdir -p $out/Applications
     cp -r src/MacVim/build/Release/MacVim.app $out/Applications
 
     rm $out/bin/{Vimdiff,Vimtutor,Vim,ex,rVim,rview,view}

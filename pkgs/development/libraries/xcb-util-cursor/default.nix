@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     homepage    = http://cgit.freedesktop.org/xcb/util-cursor;
     license     = licenses.mit;
     maintainer  = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms   = platforms.linux;
   };
 
   buildInputs = [

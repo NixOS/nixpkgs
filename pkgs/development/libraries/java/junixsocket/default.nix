@@ -14,9 +14,6 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
-      substituteInPlace build.xml \
-        --replace /usr/bin/ "" \
-        --replace macosx darwin
       substituteInPlace src/main/org/newsclub/net/unix/NativeUnixSocketConfig.java \
         --replace /opt/newsclub/lib-native $out/lib
     '';
@@ -25,7 +22,7 @@ stdenv.mkDerivation rec {
 
   ANT_ARGS =
     # Note that our OpenJDK on Darwin is currently 32-bit, so we have to build a 32-bit dylib.
-    (if stdenv.is64bit && !stdenv.isDarwin then [ "-Dskip32=true" ] else [ "-Dskip64=true" ])
+    (if stdenv.is64bit then [ "-Dskip32=true" ] else [ "-Dskip64=true" ])
     ++ [ "-Dgcc=cc" "-Dant.build.javac.source=1.6" ]
     ++ stdenv.lib.optional stdenv.isDarwin "-DisMac=true";
 

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = http://www.gnu.org/software/glpk/;
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.bjg ];
     platforms = stdenv.lib.platforms.all;

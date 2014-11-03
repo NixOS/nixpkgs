@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ which ];
-  propagatedBuildInputs = [x11 libXft libXrender zlib libjpeg libpng];
+  propagatedBuildInputs = [libpng x11 libXft libXrender zlib libjpeg];
 
   configureFlags = "
     -v

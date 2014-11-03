@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
         "${xmodmap}/bin:${which}/bin";
 
   meta = {
-    description = "GNU TeXmacs, a free WYSIWYW editing platform with special features for scientists";
+    description = "WYSIWYW editing platform with special features for scientists";
     longDescription =
       '' GNU TeXmacs is a free wysiwyw (what you see is what you want)
          editing platform with special features for scientists.  The software
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
          collaborative authoring are planned for later.
       '';
     homepage = http://texmacs.org/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.roconnor ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };

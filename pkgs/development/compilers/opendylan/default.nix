@@ -32,6 +32,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://opendylan.org;
     description = "Dylan is a multi-paradigm functional and object-oriented programming language.";
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
   };
 }

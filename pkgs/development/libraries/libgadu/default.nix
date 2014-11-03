@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     description = "A library to deal with gadu-gadu protocol (most popular polish IM protocol)";
     homepage = http://toxygen.net/libgadu/;
     platforms = stdenv.lib.platforms.linux;
-    license = "LGPLv2.1";
+    license = stdenv.lib.licenses.lgpl21;
   };
 
 }

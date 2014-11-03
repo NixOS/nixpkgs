@@ -1,11 +1,14 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "ed-1.9";
+  name = "ed-1.10";
 
   src = fetchurl {
-    url = "mirror://gnu/ed/${name}.tar.gz";
-    sha256 = "122syihsx2hwzj75mkf5a9ssiky2xby748kp4cc00wzhmp7p5cym";
+    # gnu only provides *.lz tarball, which is unfriendly for stdenv bootstrapping
+    #url = "mirror://gnu/ed/${name}.tar.gz";
+    url = "http://pkgs.fedoraproject.org/repo/extras/ed/${name}.tar.bz2"
+      + "/38204d4c690a17a989e802ba01b45e98/${name}.tar.bz2";
+    sha256 = "16qvshl8470f3znjfrrci3lzllqkzc6disk5kygzsg9hh4f6wysq";
   };
 
   /* FIXME: Tests currently fail on Darwin:
@@ -24,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "GNU ed, an implementation of the standard Unix editor";
+    description = "An implementation of the standard Unix editor";
 
     longDescription = ''
       GNU ed is a line-oriented text editor.  It is used to create,
@@ -37,7 +40,7 @@ stdenv.mkDerivation rec {
       full-screen editors such as GNU Emacs or GNU Moe.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     homepage = http://www.gnu.org/software/ed/;
 

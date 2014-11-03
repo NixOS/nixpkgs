@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   # I think that openssl and zlib are required, but come through other
   # packages
-  buildInputs = [ db boost gmp mpfr miniupnpc qt4 unzip ];
+  buildInputs = [ db boost boost.lib gmp mpfr miniupnpc qt4 unzip ];
 
   configurePhase = "qmake";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Peer-to-peer currency with demurrage fee";
     homepage = "http://freicoi.in/";
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

@@ -4,11 +4,11 @@
 , makeWrapper, itstool, gnome3, librsvg, gst_all_1 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-music-3.12.2";
+  name = "gnome-music-3.12.2.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-music/3.12/${name}.tar.xz";
-    sha256 = "ec4807018166aabed0263cb3ffce672e1fc1a3e959f48a5ad48b8eb08ddb451a";
+    sha256 = "1vwzjv5001pg37qc0sh4ph3srqwg3vgibbdlqpim9w2k70l9j34z";
   };
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig gtk3 glib intltool itstool gnome3.libmediaart
                   gdk_pixbuf gnome3.gnome_icon_theme librsvg python3
                   gnome3.grilo libxml2 python3Packages.pygobject3 libnotify
-                  python3Packages.pycairo python3Packages.dbus
+                  python3Packages.pycairo python3Packages.dbus gnome3.totem-pl-parser
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base
                   gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
                   hicolor_icon_theme gnome3.gnome_icon_theme_symbolic
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     let
       libPath = stdenv.lib.makeLibraryPath
         [ glib gtk3 libnotify tracker gnome3.grilo cairo
-          gst_all_1.gstreamer gst_all_1.gst-plugins-base
+          gst_all_1.gstreamer gst_all_1.gst-plugins-base gnome3.totem-pl-parser
           gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad ];
     in
     ''

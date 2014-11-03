@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://fedorahosted.org/releases/l/o/logrotate/;
     description = "Rotates and compresses system logs";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.viric ];
     platforms = stdenv.lib.platforms.all;
   };

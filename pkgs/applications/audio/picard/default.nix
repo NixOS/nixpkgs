@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pythonPackages, gettext, pyqt4
-, pkgconfig, libdiscid, libofa, ffmpeg, acoustidFingerprinter
+, pkgconfig, libdiscid, libofa, ffmpeg, chromaprint
 }:
 
 pythonPackages.buildPythonPackage rec {
@@ -9,14 +9,16 @@ pythonPackages.buildPythonPackage rec {
 
   src = fetchurl {
     url = "http://ftp.musicbrainz.org/pub/musicbrainz/picard/${name}.tar.gz";
-    md5 = "d1086687b7f7b0d359a731b1a25e7b66";
+    sha256 = "0sbsf8hzxhxcnnjqvsd6mc23lmk7w33nln0f3w72f89mjgs6pxm6";
   };
 
   postPatch = let
-    fpr = "${acoustidFingerprinter}/bin/acoustid_fpcalc";
+    discid = "${libdiscid}/lib/libdiscid.so.0";
+    fpr = "${chromaprint}/bin/fpcalc";
   in ''
-    sed -ri -e 's|(TextOption.*"acoustid_fpcalc"[^"]*")[^"]*|\1${fpr}|' \
-      picard/ui/options/fingerprinting.py
+    substituteInPlace picard/disc.py --replace libdiscid.so.0 ${discid}
+    substituteInPlace picard/const.py \
+        --replace "FPCALC_NAMES = [" "FPCALC_NAMES = ['${fpr}',"
   '';
 
   buildInputs = [
@@ -46,9 +48,11 @@ pythonPackages.buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://musicbrainz.org/doc/MusicBrainz_Picard";
     description = "The official MusicBrainz tagger";
-    license = stdenv.lib.licenses.gpl2;
+    maintainers = with maintainers; [ emery ];
+    license = licenses.gpl2;
+    platforms = platforms.all;
   };
 }

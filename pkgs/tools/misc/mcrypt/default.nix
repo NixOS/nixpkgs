@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       ever-wider range of algorithms and modes.
     '';
     homepage = http://mcrypt.sourceforge.net;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.qknight ];
   };

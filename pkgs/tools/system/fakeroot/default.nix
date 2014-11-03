@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://fakeroot.alioth.debian.org/;
     description = "Give a fake root environment through LD_PRELOAD";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

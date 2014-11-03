@@ -2,7 +2,7 @@
 , withCryptodev ? false, cryptodevHeaders }:
 
 let
-  name = "openssl-1.0.1h";
+  name = "openssl-1.0.1j";
 
   opensslCrossSystem = stdenv.lib.attrByPath [ "openssl" "system" ]
     (throw "openssl needs its platform name cross building" null)
@@ -19,6 +19,8 @@ let
       # cannot be overriden per-process.  For security, the
       # environment variable is ignored for setuid binaries.
       ./cert-file.patch
+      # Remove the compilation time from the library
+      ./no-date-in-library.patch
     ]
 
     ++ stdenv.lib.optionals (isCross && opensslCrossSystem == "hurd-x86")
@@ -43,7 +45,7 @@ stdenv.mkDerivation {
       "http://www.openssl.org/source/${name}.tar.gz"
       "http://openssl.linux-mirror.org/source/${name}.tar.gz"
     ];
-    sha256 = "14yhsgag5as7nhxnw7f0vklwjwa3pmn1i15nmp3f4qxa6sc8l74x";
+    sha256 = "1wzdaiix40lz0rsyf51qv0wiq4ywp29j5ni0xzl06vxsi63wlq0v";
   };
 
   patches = patchesCross false;
@@ -60,12 +62,17 @@ stdenv.mkDerivation {
     else "./config";
 
   configureFlags = "shared --libdir=lib --openssldir=etc/ssl" +
-    stdenv.lib.optionalString withCryptodev " -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS";
+    stdenv.lib.optionalString withCryptodev " -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS" +
+    stdenv.lib.optionalString (stdenv.system == "x86_64-cygwin") " no-asm";
+
+  preBuild = stdenv.lib.optionalString (stdenv.system == "x86_64-cygwin") ''
+    sed -i -e "s|-march=i486|-march=x86-64|g" Makefile
+  '';
 
   makeFlags = "MANDIR=$(out)/share/man";
 
   # Parallel building is broken in OpenSSL.
-  #enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   postInstall =
     ''

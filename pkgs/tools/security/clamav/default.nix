@@ -1,26 +1,33 @@
-{ stdenv, fetchurl, zlib, bzip2, libiconv }:
+{ stdenv, fetchurl, zlib, bzip2, libiconvOrNull, libxml2, openssl, ncurses, curl }:
 stdenv.mkDerivation rec {
   name = "clamav-${version}";
-  version = "0.98.1";
+  version = "0.98.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/clamav/clamav-${version}.tar.gz";
-    sha256 = "1p13n8g3b88cxwxj07if9z1d2cav1ib94v6cq4r4bpacfd6yix9m";
+    sha256 = "071yzamalj3rf7kl2jvc35ipnk1imdkq5ylbb8whyxfgmd3nf06k";
   };
 
-  buildInputs = [ zlib bzip2 libiconv ];
+  buildInputs = [ zlib bzip2 libxml2 openssl ncurses curl ]
+    ++ stdenv.lib.optional (libiconvOrNull != null) libiconvOrNull;
 
   configureFlags = [
     "--with-zlib=${zlib}"
     "--with-libbz2-prefix=${bzip2}"
-    "--with-iconv-dir=${libiconv}"
+  ] ++ (stdenv.lib.optional (libiconvOrNull != null)
+       "--with-iconv-dir=${libiconvOrNull}")
+  ++ [
+    "--with-xml=${libxml2}"
+    "--with-openssl=${openssl}"
+    "--with-libncurses-prefix=${ncurses}"
+    "--with-libcurl=${curl}"
     "--disable-clamav" ];
 
   meta = with stdenv.lib; {
     homepage = http://www.clamav.net;
     description = "Antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats";
     license = licenses.gpl2;
-    maintainers = [ maintainers.phreedom ];
+    maintainers = [ maintainers.phreedom maintainers.robberer ];
     platforms = platforms.linux;
   };
 }

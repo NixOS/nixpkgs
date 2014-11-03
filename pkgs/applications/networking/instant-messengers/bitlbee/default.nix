@@ -1,23 +1,27 @@
 { fetchurl, stdenv, gnutls, glib, pkgconfig, check, libotr }:
 
+with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "bitlbee-3.2";
+  name = "bitlbee-3.2.2";
 
   src = fetchurl {
     url = "mirror://bitlbee/src/${name}.tar.gz";
-    sha256 = "1b43828e906f5450993353f2ebecc6c038f0261c4dc3f1722ebafa6ea3e62030";
+    sha256 = "13jmcxxgli82wb2n4hs091159xk8rgh7nb02f478lgpjh6996f5s";
   };
 
   buildInputs = [ gnutls glib pkgconfig libotr ]
-    ++ stdenv.lib.optional doCheck check;
+    ++ optional doCheck check;
 
-  configureFlags = [ "--otr=1" ];
+  configureFlags = [
+    "--gcov=1"
+    "--otr=1"
+    "--ssl=gnutls"
+  ];
 
-  preCheck = "mkdir tests/.depend";
   doCheck = true;
 
   meta = {
-    description = "BitlBee, an IRC to other chat networks gateway";
+    description = "IRC instant messaging gateway";
 
     longDescription = ''
       BitlBee brings IM (instant messaging) to IRC clients.  It's a
@@ -31,9 +35,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.bitlbee.org/;
-    license = "GPLv2+";
+    license = licenses.gpl2Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    maintainers = with maintainers; [ ludo wkennington ];
+    platforms = platforms.gnu;  # arbitrary choice
   };
 }

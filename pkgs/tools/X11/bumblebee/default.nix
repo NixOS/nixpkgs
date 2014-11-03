@@ -88,7 +88,6 @@ in stdenv.mkDerivation {
     wrapProgram "$out/sbin/bumblebeed" \
       --prefix PATH : "${commonEnv}/sbin:${commonEnv}/bin:\$PATH" \
       --prefix LD_LIBRARY_PATH : "${commonEnv}/lib:\$LD_LIBRARY_PATH" \
-      --set FONTCONFIG_FILE "/etc/fonts/fonts.conf" \
       --set XKB_BINDIR "${xorg.xkbcomp}/bin" \
       --set XKB_DIR "${xkeyboard_config}/etc/X11/xkb"
 

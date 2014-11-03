@@ -1,18 +1,18 @@
 { stdenv, fetchurl, gnused, perl, libgcrypt, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
-  name = "munge-0.5.10";
+  name = "munge-0.5.11";
 
   src = fetchurl {
     url = "http://munge.googlecode.com/files/${name}.tar.bz2";
-    sha256 = "1imbmpd70vkcpca8d9yd9ajkhf6ik057nr3jb1app1wm51f15q00";
+    sha256 = "19aijdrjij2g0xpqgl198jh131j94p4gvam047gsdc0wz0a5c1wf";
   };
 
   buildInputs = [ gnused perl libgcrypt zlib bzip2 ];
 
   preConfigure = ''
     # Remove the install-data stuff, since it tries to write to /var
-    sed -i '434,465d' src/etc/Makefile.in
+    sed -i '505,511d' src/etc/Makefile.in
   '';
 
   configureFlags = [

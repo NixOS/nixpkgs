@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "libiconv-1.13.1";
+  name = "libiconv-1.14";
 
   src = fetchurl {
     url = "mirror://gnu/libiconv/${name}.tar.gz";
-    sha256 = "0jcsjk2g28bq20yh7rvbn8xgq6q42g8dkkac0nfh12b061l638sm";
+    sha256 = "04q6lgl3kglmmhw59igq1n7v3rp1rpkypl366cy1k1yn2znlvckj";
   };
 
   # On Cygwin, Libtool produces a `.dll.a', which is not a "real" DLL
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "GNU libiconv, an iconv(3) implementation";
+    description = "An iconv(3) implementation";
 
     longDescription = ''
       Some programs, like mailers and web browsers, must be able to convert
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.gnu.org/software/libiconv/;
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = [ ];
 

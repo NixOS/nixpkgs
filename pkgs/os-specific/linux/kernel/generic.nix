@@ -28,6 +28,7 @@
 }:
 
 assert stdenv.platform.name == "sheevaplug" -> stdenv.platform.uboot != null;
+assert stdenv.isLinux;
 
 let
 
@@ -95,6 +96,8 @@ let
     '';
 
     installPhase = "mv .config $out";
+
+    enableParallelBuilding = true;
   };
 
   kernel = buildLinux {

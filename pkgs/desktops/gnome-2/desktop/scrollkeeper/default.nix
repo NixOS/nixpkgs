@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, perl, perlXMLParser, libxml2, libxslt, docbook_xml_dtd_42, automake}:
+{stdenv, fetchurl, pkgconfig, perl, perlXMLParser, libxml2, libxslt, docbook_xml_dtd_42, automake, gettext}:
 
 stdenv.mkDerivation {
   name = "scrollkeeper-0.3.14";
@@ -13,6 +13,6 @@ stdenv.mkDerivation {
     cp ${automake}/share/automake*/config.{sub,guess} .
   ";
 
-  buildInputs = [pkgconfig perl perlXMLParser libxml2 libxslt];
-  configureFlags = "--with-xml-catalog=${docbook_xml_dtd_42}/xml/dtd/docbook/docbook.cat";
+  buildInputs = [pkgconfig perl perlXMLParser libxml2 libxslt gettext];
+  configureFlags = "--with-xml-catalog=${docbook_xml_dtd_42}/xml/dtd/docbook/catalog.xml";
 }

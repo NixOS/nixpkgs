@@ -21,11 +21,11 @@ assert vdpauSupport -> libvdpau != null;
 assert faacSupport -> faac != null;
 
 stdenv.mkDerivation rec {
-  name = "ffmpeg-0.10.12";
+  name = "ffmpeg-0.10.15";
 
   src = fetchurl {
     url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
-    sha256 = "00nvm3iysn8zincpvv1abqrxqj1ky0322dh2j9csjw983358538i";
+    sha256 = "0p9x559fpj4zxll7rn3kwdig6y66c3ahv3pddmz23lljq5rvyvcb";
   };
 
   # `--enable-gpl' (as well as the `postproc' and `swscale') mean that
@@ -83,5 +83,6 @@ stdenv.mkDerivation rec {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
+    branch = "0.10";
   };
 }

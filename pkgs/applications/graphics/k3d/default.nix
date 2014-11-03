@@ -1,36 +1,33 @@
-{stdenv, fetchurl
+{ stdenv, fetchurl, unzip, ftgl, glew, asciidoc
 , cmake, mesa, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
 , libpng, boost, doxygen, cairomm, pkgconfig, imagemagick, libjpeg, libtiff
-, gettext, intltool, perl, gtkmm, glibmm, gtkglext
-}:
+, gettext, intltool, perl, gtkmm, glibmm, gtkglext, pangox_compat, libXmu }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.0.2";
+  version = "0.8.0.3";
   name = "k3d-${version}";
   src = fetchurl {
-    url = "mirror://sourceforge/k3d/k3d-source-0.8.0.2.tar.bz2";
-    sha256 = "01fd2qb0zddif3wz1a2wdmwyzn81cf73678qp2gjs8iikmdz6w7x";
+    url = "https://github.com/K-3D/k3d/archive/${name}.zip";
+    sha256 = "09ywwvlk8hh1357pnal96kc40ma4jq7776hqk0609rgz13s6babp";
   };
-
-  patches = map fetchurl ((import ./debian-patches.nix) ++
-    [ {
-      url = http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/media-gfx/k3d/files/k3d-0.7.11.0-libpng14.patch;
-      sha256 = "1vl7dbvxg9b54ay0n8dd2v2k3j001h8h1bpr1cbm3vrzv31lnwzx";
-    } ]);
+  
+  cmakeFlags = "-DK3D_BUILD_DOCS=false -DK3D_BUILD_GUIDE=false";
 
   preConfigure = ''
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/build/lib"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fpermissive -I$(echo ${gtkglext}/include/gtkglext-*) -I$(echo ${gtkglext}/lib/gtkglext-*/include)"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE  -I$(echo ${gtkglext}/include/gtkglext-*) -I$(echo ${gtkglext}/lib/gtkglext-*/include)"
   '';
 
   buildInputs = [
      cmake mesa zlib python expat libxml2 libsigcxx libuuid freetype libpng
-     boost doxygen cairomm pkgconfig imagemagick libjpeg libtiff gettext
-     intltool perl
-     gtkmm glibmm gtkglext
+     boost boost doxygen cairomm pkgconfig imagemagick libjpeg libtiff
+     gettext intltool perl unzip ftgl glew asciidoc
+     gtkmm glibmm gtkglext pangox_compat libXmu
     ];
 
-  doCheck = false;
+  #doCheck = false;
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "A 3D editor with support for procedural editing";

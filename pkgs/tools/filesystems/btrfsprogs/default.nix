@@ -1,14 +1,14 @@
 { stdenv, fetchurl, attr, acl, zlib, libuuid, e2fsprogs, lzo
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt }:
 
-let version = "3.14.2"; in
+let version = "3.16.2"; in
 
 stdenv.mkDerivation rec {
   name = "btrfs-progs-${version}";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/kernel/people/mason/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "14vpj6f2v076v9zabgrz8l4dp6n1ar2mvk3lvii51ykvi35d1qbh";
+    url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
+    sha256 = "0avk8x0k91zrqvlbk8r067aw49byr8hvvr4niy48d3ib1jz2mmnl";
   };
 
   buildInputs = [
@@ -21,10 +21,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = "prefix=$(out)";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Utilities for the btrfs filesystem";
     homepage = https://btrfs.wiki.kernel.org/;
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ raskin wkennington ];
+    platforms = platforms.linux;
   };
 }

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libtool, xlibs, freetype, fontconfig, openssl, glib
 , mesa, gstreamer, gst_plugins_base, dbus, alsaLib, zlib, libuuid
 , libxml2, libxslt, sqlite, libogg, libvorbis, xz, libcanberra
-, makeWrapper, libredirect, xkeyboard_config }:
+, makeWrapper, libredirect, xkeyboard_config, xcbutilkeysyms }:
 
 let
 
-  version = "2.2.1107";
+  version = "2.2.1163";
 
   rpath = stdenv.lib.makeSearchPath "lib" [
     stdenv.glibc
@@ -40,18 +40,19 @@ let
     libvorbis
     xz
     libcanberra
+    xcbutilkeysyms
   ] + ":${stdenv.gcc.gcc}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://downloads.hipchat.com/linux/arch/x86_64/hipchat-${version}-x86_64.pkg.tar.xz";
-        sha256 = "0lf780pxbh40m2i48cki072lrm75924cz3zgkmaxddmar3y13bwa";
+        sha256 = "0yafin8qfnv9kj61z9vxza42r7fv8b9j04qs50masbly0jg5xsg8";
       }
     else if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://downloads.hipchat.com/linux/arch/i686/hipchat-${version}-i686.pkg.tar.xz";
-        sha256 = "1k33670rpigdpy9jcacryc1i05ykp5yffcplmbm5q29ng54cn0zv";
+        sha256 = "1a0yvrnp41s53wpqv2jxsb3gd4vb49nfh89m6nwbw4qd85i5lfsp";
       }
     else
       throw "HipChat is not supported on ${stdenv.system}";
@@ -94,7 +95,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "HipChat Desktop Client";
+    description = "Desktop client for HipChat services";
     homepage = http://www.hipchat.com;
     license = stdenv.lib.licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" ];

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://gstreamer.freedesktop.org/modules/gnonlin.html";
-    description = "http://gstreamer.freedesktop.org/modules/gnonlin.html";
-    license = "GPLv2+";
+    description = "Gstreamer Non-Linear Multimedia Editing Plugins";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

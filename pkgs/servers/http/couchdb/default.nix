@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "couchdb-${version}";
-  version = "1.5.1";
+  version = "1.6.1";
 
   src = fetchurl {
     url = "mirror://apache/couchdb/source/${version}/apache-${name}.tar.gz";
-    sha256 = "0isddp29zh72idgwjaswqy887c1fwx5g1lwlbzscwcv6q70xrmfr";
+    sha256 = "09w6ijj9l5jzh81nvc3hrlqp345ajg3haj353g9kxkik6wbinq2s";
   };
 
   buildInputs = [ erlang icu openssl spidermonkey curl help2man sphinx which
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Apache CouchDB is a database that uses JSON for documents, JavaScript for MapReduce queries, and regular HTTP for an API";
+    description = "A database that uses JSON for documents, JavaScript for MapReduce queries, and regular HTTP for an API";
     homepage = "http://couchdb.apache.org";
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ viric garbas ];

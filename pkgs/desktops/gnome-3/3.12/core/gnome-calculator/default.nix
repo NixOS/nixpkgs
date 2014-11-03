@@ -3,11 +3,11 @@
 , itstool, gnome3, librsvg, gdk_pixbuf }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-calculator-3.12.1";
+  name = "gnome-calculator-3.12.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-calculator/3.12/${name}.tar.xz";
-    sha256 = "15a75bbe19f6d2280d864f0504f6fc5b1f148fea9738b5548b64b7b8c0c64740";
+    sha256 = "0bn3agh3g22iradfpzkc19a2b33b1mbf0ciy1hf2sijrczi24410";
   };
 
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0";

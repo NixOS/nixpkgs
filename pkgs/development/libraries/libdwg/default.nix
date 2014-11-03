@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   meta = {
     description = "library reading dwg files";
     homepage = http://libdwg.sourceforge.net/en/;
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3;
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = stdenv.lib.platforms.linux;
   };

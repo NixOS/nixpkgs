@@ -6,16 +6,18 @@ let
     ln -sv /usr/sbin/dtrace $out/bin
   '';
 
-  version = "0.10.28";
+  version = "0.10.32";
 
   # !!! Should we also do shared libuv?
   deps = {
-    inherit openssl zlib http-parser;
+    inherit openssl zlib;
     cares = c-ares;
 
     # disabled system v8 because v8 3.14 no longer receives security fixes
     # we fall back to nodejs' internal v8 copy which receives backports for now
     # inherit v8
+  } // stdenv.lib.optionalAttrs (!stdenv.isDarwin) {
+    inherit http-parser;
   };
 
   sharedConfigureFlags = name: [
@@ -30,7 +32,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = "043pc6sb3y2b0aiakmmjvzvafgki7wly0id0v1p8y80g3r2cdpdb";
+    sha256 = "040g0gh2nl593ml1fcqp68vxa5kj7aiw1nqirda1c69d7l70s4n2";
   };
 
   configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps);

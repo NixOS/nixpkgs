@@ -1,0 +1,11 @@
+--- old/source/Makefile	2014-04-14 12:46:35.401956673 +0000
++++ new/source/Makefile	2014-04-14 12:47:12.757006254 +0000
+@@ -259,7 +259,7 @@
+ LIBZ := contrib/install/$(ARCH)/lib/libz.a
+ 
+ ifndef CROSSHOST
+-	SQLITE_INCLUDE_DIR := /usr/include
++	SQLITE_INCLUDE_DIR := ${sqlite}/include
+ else
+ 	# This is totally wrong, works only with some old-style setups, and
+ 	# on some architectures of Debian/new FHS multiarch -- excluding, for

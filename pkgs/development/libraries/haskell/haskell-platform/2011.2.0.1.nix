@@ -29,6 +29,7 @@ cabal.mkDerivation (self : {
     touch $sourceRoot/LICENSE
   '';
   noHaddock = true;
+  propagatedUserEnvPkgs = self.propagatedBuildInputs;
   meta = {
     description = "Haskell Platform meta package";
     license = self.stdenv.lib.licenses.bsd3;

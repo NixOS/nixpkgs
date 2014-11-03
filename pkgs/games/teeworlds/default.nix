@@ -51,7 +51,7 @@ EOF
   '';
 
   meta = {
-    description = "Teeworlds, a retro multiplayer shooter game";
+    description = "Retro multiplayer shooter game";
 
     longDescription = ''
       Teeworlds is a free online multiplayer game, available for all

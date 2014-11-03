@@ -1,18 +1,19 @@
 # - coqide compilation can be disabled by setting lablgtk to null;
 
-{stdenv, fetchurl, pkgconfig, ocaml, findlib, camlp5, ncurses, lablgtk ? null}:
+{stdenv, fetchurl, pkgconfig, writeText, ocaml, findlib, camlp5, ncurses, lablgtk ? null}:
 
-let 
+let
   version = "8.4pl4";
+  coq-version = "8.4";
   buildIde = lablgtk != null;
   ideFlags = if buildIde then "-lablgtkdir ${lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt" else "";
-  idePath = if buildIde then ''
-    CAML_LD_LIBRARY_PATH=${lablgtk}/lib/ocaml/3.12.1/site-lib/stublibs
-  '' else "";
 in
 
 stdenv.mkDerivation {
   name = "coq-${version}";
+
+  inherit coq-version;
+  inherit ocaml camlp5;
 
   src = fetchurl {
     url = "http://coq.inria.fr/distrib/V${version}/files/coq-${version}.tar.gz";
@@ -31,7 +32,6 @@ stdenv.mkDerivation {
   '';
 
   preConfigure = ''
-    buildFlagsArray=(${idePath})
     configureFlagsArray=(
       -opt
       -camldir ${ocaml}/bin
@@ -44,8 +44,18 @@ stdenv.mkDerivation {
 
   buildFlags = "revision coq coqide";
 
-  meta = {
-    description = "Coq proof assistant";
+  setupHook = writeText "setupHook.sh" ''
+    addCoqPath () {
+      if test -d "''$1/lib/coq/${coq-version}/user-contrib"; then
+        export COQPATH="''${COQPATH}''${COQPATH:+:}''$1/lib/coq/${coq-version}/user-contrib/"
+      fi
+    }
+
+    envHooks=(''${envHooks[@]} addCoqPath)
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Formal proof management system";
     longDescription = ''
       Coq is a formal proof management system.  It provides a formal language
       to write mathematical definitions, executable algorithms and theorems
@@ -53,8 +63,8 @@ stdenv.mkDerivation {
       machine-checked proofs.
     '';
     homepage = "http://coq.inria.fr";
-    license = "LGPL";
-    maintainers = with stdenv.lib.maintainers; [ roconnor thoughtpolice ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ roconnor thoughtpolice vbgl ];
+    platforms = platforms.unix;
   };
 }

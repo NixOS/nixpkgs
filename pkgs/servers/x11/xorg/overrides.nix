@@ -1,6 +1,10 @@
 { args, xorg }:
 
 let
+  inherit (args) stdenv;
+  inherit (stdenv) lib isDarwin;
+  inherit (lib) overrideDerivation;
+
   setMalloc0ReturnsNullCrossCompiling = ''
     if test -n "$crossConfig"; then
       configureFlags="$configureFlags --enable-malloc0returnsnull";
@@ -73,6 +77,15 @@ in
       '';
   };
 
+  libXfont = attrs: attrs // {
+    propagatedBuildInputs = [ args.freetype ]; # propagate link reqs. like bzip2
+    # prevents "misaligned_stack_error_entering_dyld_stub_binder"
+    configureFlags = lib.optionals isDarwin [
+      "CFLAGS=-O0"
+    ];
+  };
+
+
   libXxf86vm = attrs: attrs // {
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
@@ -111,6 +124,10 @@ in
   libXft = attrs: attrs // {
     propagatedBuildInputs = [ xorg.libXrender args.freetype args.fontconfig ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    # the include files need ft2build.h, and Requires.private isn't enough for us
+    postInstall = ''
+      sed "/^Requires:/s/$/, freetype2/" -i "$out/lib/pkgconfig/xft.pc"
+    '';
   };
 
   libXext = attrs: attrs // {
@@ -161,7 +178,7 @@ in
   };
 
   xf86inputsynaptics = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [args.mtdev];
+    buildInputs = attrs.buildInputs ++ [args.mtdev args.libevdev];
     installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/share/X11/xorg.conf.d";
   };
 
@@ -188,6 +205,10 @@ in
     buildInputs =  attrs.buildInputs ++ [ args.mesa_drivers ]; # for libxatracker
   };
 
+  xf86videoqxl = attrs: attrs // {
+    buildInputs =  attrs.buildInputs ++ [ args.spice_protocol ];
+  };
+
   xdriinfo = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [args.mesa];
   };
@@ -211,20 +232,16 @@ in
     # 2: I think pkgconfig/ is supposed to be in /lib/
     postInstall = ''
       ln -s share "$out/etc"
-      mkdir "$out/lib" && ln -s ../share/pkgconfig "$out/lib/"
+      mkdir -p "$out/lib" && ln -s ../share/pkgconfig "$out/lib/"
     '';
   };
 
-  xorgserver = with xorg; attrs: attrs // {
-    configureFlags = [
-      "--enable-xcsecurity" # enable SECURITY extension
-      "--with-default-font-path= "  # there were only paths containing "${prefix}",
-                                    # and there are no fonts in this package anyway
-    ];
-    patches = [ ./xorgserver-xkbcomp-path.patch ];
-    buildInputs = attrs.buildInputs ++ [ xtrans ];
-    propagatedBuildInputs =
-      [ args.zlib args.udev args.mesa args.dbus.libs
+  xorgserver = with xorg; attrs: attrs //
+    (let
+      version = (builtins.parseDrvName attrs.name).version;
+      commonBuildInputs = attrs.buildInputs ++ [ xtrans ];
+      commonPropagatedBuildInputs = [
+        args.zlib args.mesa args.dbus.libs
         xf86bigfontproto glproto xf86driproto
         compositeproto scrnsaverproto resourceproto
         xf86dgaproto
@@ -234,14 +251,86 @@ in
         libpciaccess inputproto xextproto randrproto renderproto
         dri2proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
       ];
-    postInstall =
-      ''
-        rm -fr $out/share/X11/xkb/compiled
-        ln -s /var/tmp $out/share/X11/xkb/compiled
-      '';
-    passthru.version = (builtins.parseDrvName attrs.name).version; # needed by virtualbox guest additions
-  };
+      commonPatches = [ ./xorgserver-xkbcomp-path.patch ];
+      # XQuartz requires two compilations: the first to get X / XQuartz,
+      # and the second to get Xvfb, Xnest, etc.
+      darwinOtherX = overrideDerivation xorgserver (oldAttrs: {
+        stdenv = args.stdenv;
+        configureFlags = oldAttrs.configureFlags ++ [
+          "--disable-xquartz"
+          "--enable-xorg"
+          "--enable-xvfb"
+          "--enable-xnest"
+          "--enable-kdrive"
+        ];
+        postInstall = ":"; # prevent infinite recursion
+      });
+    in
+      if (!isDarwin)
+      then {
+        buildInputs = commonBuildInputs;
+        propagatedBuildInputs = commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
+          args.udev
+        ];
+        patches = commonPatches;
+        configureFlags = [
+          "--enable-xcsecurity"         # enable SECURITY extension
+          "--with-default-font-path="   # there were only paths containing "${prefix}",
+                                        # and there are no fonts in this package anyway
+        ];
+        postInstall = ''
+          rm -fr $out/share/X11/xkb/compiled
+          ln -s /var/tmp $out/share/X11/xkb/compiled
+        '';
+        passthru.version = version; # needed by virtualbox guest additions
+      } else {
+        stdenv = args.clangStdenv;
+        name = "xorg-server-1.14.6";
+        src = args.fetchurl {
+          url = mirror://xorg/individual/xserver/xorg-server-1.14.6.tar.bz2;
+          sha256 = "0c57vp1z0p38dj5gfipkmlw6bvbz1mrr0sb3sbghdxxdyq4kzcz8";
+        };
+        buildInputs = commonBuildInputs;
+        propagatedBuildInputs = commonPropagatedBuildInputs ++ [
+          libAppleWM applewmproto
+        ];
+        patches = commonPatches ++ [
+          ./darwin/0001-XQuartz-Ensure-we-wait-for-the-server-thread-to-term.patch
+          ./darwin/5000-sdksyms.sh-Use-CPPFLAGS-not-CFLAGS.patch
+          ./darwin/5001-Workaround-the-GC-clipping-problem-in-miPaintWindow-.patch
+          ./darwin/5002-fb-Revert-fb-changes-that-broke-XQuartz.patch
+          ./darwin/5003-fb-Revert-fb-changes-that-broke-XQuartz.patch
+          ./darwin/5004-Use-old-miTrapezoids-and-miTriangles-routines.patch
+          ./darwin/private-extern.patch
+          ./darwin/bundle_main.patch
+          ./darwin/stub.patch
+          ./darwin/function-pointer-test.patch
+        ];
+        configureFlags = [
+          # note: --enable-xquartz is auto
+          "CPPFLAGS=-I${./darwin/dri}"
+          "--with-default-font-path="
+          "--with-apple-application-name=XQuartz"
+          "--with-apple-applications-dir=\${out}/Applications"
+          "--with-bundle-id-prefix=org.nixos.xquartz"
+          "--with-sha1=CommonCrypto"
+        ];
+        preConfigure = ''
+          ensureDir $out/Applications
+          export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error"
+        '';
+        postInstall = ''
+          rm -fr $out/share/X11/xkb/compiled
+          ln -s /var/tmp $out/share/X11/xkb/compiled
 
+          cp -rT ${darwinOtherX}/bin $out/bin
+          rm -f $out/bin/X
+          ln -s Xquartz $out/bin/X
+
+          cp ${darwinOtherX}/share/man -rT $out/share/man
+        '' ;
+        passthru.version = version;
+      });
 
   lndir = attrs: attrs // {
     preConfigure = ''
@@ -264,7 +353,14 @@ in
   };
 
   xinit = attrs: attrs // {
-    configureFlags = "--with-xserver=${xorg.xorgserver}/bin/X";
+    stdenv = if isDarwin then args.clangStdenv else stdenv;
+    configureFlags = [
+      "--with-xserver=${xorg.xorgserver}/bin/X"
+    ] ++ lib.optionals isDarwin [
+      "--with-bundle-id-prefix=org.nixos.xquartz"
+      "--with-launchdaemons-dir=\${out}/LaunchDaemons"
+      "--with-launchagents-dir=\${out}/LaunchAgents"
+    ];
     propagatedBuildInputs = [ xorg.xauth ];
     prePatch = ''
       sed -i 's|^defaultserverargs="|&-logfile \"$HOME/.xorg.log\"|p' startx.cpp

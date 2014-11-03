@@ -12,7 +12,7 @@ assert cupsSupport -> cups != null;
 let
   meta_common = {
     homepage = "http://www.gnu.org/software/ghostscript/";
-    description = "GNU Ghostscript, a PostScript interpreter";
+    description = "PostScript interpreter (GNU version)";
 
     longDescription = ''
       Ghostscript is the name of a set of tools that provides (i) an
@@ -23,7 +23,7 @@ let
       of output drivers for various file formats and printers.
     '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.viric ];
@@ -48,7 +48,7 @@ let
     };
     meta = meta_common // {
       homepage = "http://www.ghostscript.com/";
-      description = "GPL Ghostscript, a PostScript interpreter";
+      description = "PostScript interpreter (mainline version)";
     };
 
     preConfigure = ''

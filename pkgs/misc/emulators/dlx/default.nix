@@ -23,6 +23,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.davidviner.com/dlx.php";
     description = "DLX Simulator";
-    license = "GPL-2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

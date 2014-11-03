@@ -37,7 +37,7 @@ let
 
     doCheck = false;
 
-    meta.platforms = stdenv.lib.platforms.mesaPlatforms;
+    meta.platforms = stdenv.lib.platforms.linux;
   };
 in stdenv.lib.overrideDerivation base (b: {
   postFixup = b.postFixup + ''

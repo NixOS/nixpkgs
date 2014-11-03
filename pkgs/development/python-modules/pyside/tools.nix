@@ -1,12 +1,11 @@
-{ stdenv, fetchgit, cmake, pyside, python27, qt4, pysideShiboken }:
+{ stdenv, fetchurl, cmake, pyside, python27, qt4, pysideShiboken }:
 
 stdenv.mkDerivation {
-  name = "pyside-tools-0.2.13";
+  name = "pyside-tools-0.2.15";
 
-  src = fetchgit {
-    url = "git://github.com/PySide/Tools.git";
-    rev = "23e0712360442e50f34be0d6e4651b8c4c806d47";
-    sha256 = "68f059e4936fb8dfae6aa3a463db8c28adcb7bd050b29e8b6fef82431f72da07";
+  src = fetchurl {
+    url = "https://github.com/PySide/Tools/archive/0.2.15.tar.gz";
+    sha256 = "0x4z3aq7jgar74gxzwznl3agla9i1dcskw5gh11jnnwwn63ffzwa";
   };
 
   enableParallelBuilding = true;

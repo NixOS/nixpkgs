@@ -1,56 +1,45 @@
-{stdenv, fetchurl, SDL, SDL_mixer, zlib, libpng, unzip}:
+{ stdenv, fetchurl, pkgconfig, SDL, libogg, libvorbis, zlib, unzip }:
 
 let
 
   # Digital recordings of the music on an original Roland MT-32.  So
   # we don't need actual MIDI playback capability.
-  musicFiles =
-    [ (fetchurl {
-        url = mirror://sourceforge/exult/U7MusicOGG_1of2.zip;
-        md5 = "7746d1a9164fd67509107797496553bf";
-      })
-      (fetchurl {
-        url = mirror://sourceforge/exult/U7MusicOGG_2of2.zip;
-        md5 = "cdae5956d7c52f35e90317913a660123";
-      })
-    ];
+  audio = fetchurl {
+    url = mirror://sourceforge/exult/exult_audio.zip;
+    sha256 = "0s5wvgy9qja06v38g0qwzpaw76ff96vzd6gb1i3lb9k4hvx0xqbj";
+  };
 
 in
 
-stdenv.mkDerivation {
-  name = "exult-1.2";
-  
+stdenv.mkDerivation rec {
+  name = "exult-1.4.9rc1";
+
   src = fetchurl {
-    url = mirror://sourceforge/exult/exult-1.2.tar.gz;
-    md5 = "0fc88dee74a91724d25373ba0a8670ba";
+    url = "mirror://sourceforge/exult/${name}.tar.gz";
+    sha256 = "0a03a2l3ji6h48n106d4w55l8v6lni1axniafnvvv5c5n3nz5bgd";
   };
 
-  # Patches for building on x86_64 and gcc 4.x.
-  patches = [
-    (fetchurl {
-      url = "http://www.rocklinux.net/sources/package/stf/exult/exult-gcc4.patch";
-      sha256 = "1jlikxcpsi3yfchan3jbyi66fcyr18m7kfmsa946lwh3kzckszm7";
-    })
+  configureFlags = "--disable-tools";
 
-    # From http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/games-engines/exult/files/exult-1.2-64bits.patch?rev=1.1
-    ./64bits.patch
-  ];
+  patches =
+    [ # Arch Linux patch set.
+      ./arch.patch
+    ];
 
-  buildInputs = [SDL SDL_mixer zlib libpng unzip];
-  
-  NIX_CFLAGS_COMPILE = "-I${SDL_mixer}/include/SDL";
+  buildInputs = [ pkgconfig SDL libogg libvorbis zlib unzip ];
+
+  enableParallelBuilding = true;
 
   postInstall =
     ''
       mkdir -p $out/share/exult/music
-      for i in $musicFiles; do
-          unzip -o -d $out/share/exult/music $i
-      done
-    '';
-  
+      unzip -o -d $out/share/exult ${audio}
+      chmod 644 $out/share/exult/*.flx
+    ''; # */
+
   meta = {
     homepage = http://exult.sourceforge.net/;
     description = "A reimplementation of the Ultima VII game engine";
-    maintainers = [stdenv.lib.maintainers.eelco];
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

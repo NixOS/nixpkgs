@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   
   meta = {
     homepage = "http://www.jboss.org/";
-    description = "JBoss, Open Source J2EE application server";
+    description = "Open Source J2EE application server";
     license = "GPL/LGPL";
     maintainers = [ lib.maintainers.sander ];
   };

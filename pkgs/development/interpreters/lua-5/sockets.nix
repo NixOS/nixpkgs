@@ -1,4 +1,4 @@
-{stdenv, fetchurl, lua5}:
+{ stdenv, fetchurl, lua5 }:
 
 stdenv.mkDerivation rec {
   name    = "lua-sockets-${version}";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
       sha256 = "19ichkbc4rxv00ggz8gyf29jibvc2wq9pqjik0ll326rrxswgnag";
   };
 
-  luaver = "5.1"; # TODO
+  luaver = lua5.luaversion;
   patchPhase = ''
       sed -e "s,^INSTALL_TOP_SHARE.*,INSTALL_TOP_SHARE=$out/share/lua/${lua5.luaversion}," \
           -e "s,^INSTALL_TOP_LIB.*,INSTALL_TOP_LIB=$out/lib/lua/${lua5.luaversion}," \
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://w3.impa.br/~diego/software/luasocket/";
-    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.mornfall ];
   };
 }

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, freetype, lcms, libtiff, libxml2
 , libart_lgpl, qt4, python, cups, fontconfig, libjpeg
-, zlib, libpng, xorg, cairo, podofo, aspell, boostHeaders, cmake }:
+, zlib, libpng, xorg, cairo, podofo, aspell, boost, cmake }:
 
 stdenv.mkDerivation rec {
   name = "scribus-1.4.3";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     [ pkgconfig cmake freetype lcms libtiff libxml2 libart_lgpl qt4
       python cups fontconfig
       libjpeg zlib libpng podofo aspell cairo
-      boostHeaders # for internal 2geom library
+      boost # for internal 2geom library
       libXaw libXext libX11 libXtst libXi libXinerama
       libpthreadstubs libXau libXdmcp
     ];
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.linux;
     description = "Desktop Publishing (DTP) and Layout program for Linux";
     homepage = http://www.scribus.net;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

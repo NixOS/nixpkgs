@@ -21,8 +21,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out
-    ensureDir $out/bin
+    mkdir -p $out
+    mkdir -p $out/bin
     cp git-bz $out/bin
     wrapProgram $out/bin/git-bz \
       --prefix PYTHONPATH : "$(toPythonPath $python):$(toPythonPath $pysqlite)"

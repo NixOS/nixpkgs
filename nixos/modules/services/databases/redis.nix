@@ -38,86 +38,92 @@ in
     services.redis = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = "Whether to enable the Redis server.";
       };
 
       package = mkOption {
+        type = types.package;
         default = pkgs.redis;
         description = "Which Redis derivation to use.";
-        type = types.package;
       };
 
       user = mkOption {
+        type = types.str;
         default = "redis";
         description = "User account under which Redis runs.";
       };
 
       pidFile = mkOption {
+        type = types.path;
         default = "/var/lib/redis/redis.pid";
         description = "";
       };
 
       port = mkOption {
+        type = types.int;
         default = 6379;
         description = "The port for Redis to listen to.";
-        type = with types; int;
       };
 
       bind = mkOption {
+        type = with types; nullOr str;
         default = null; # All interfaces
         description = "The IP interface to bind to.";
         example = "127.0.0.1";
       };
 
       unixSocket = mkOption {
+        type = with types; nullOr path;
         default = null;
         description = "The path to the socket to bind to.";
         example = "/var/run/redis.sock";
       };
 
       logLevel = mkOption {
+        type = types.str;
         default = "notice"; # debug, verbose, notice, warning
         example = "debug";
         description = "Specify the server verbosity level, options: debug, verbose, notice, warning.";
-        type = with types; string;
       };
 
       logfile = mkOption {
+        type = types.str;
         default = "/dev/null";
         description = "Specify the log file name. Also 'stdout' can be used to force Redis to log on the standard output.";
         example = "/var/log/redis.log";
-        type = with types; string;
       };
 
       syslog = mkOption {
+        type = types.bool;
         default = true;
         description = "Enable logging to the system logger.";
-        type = with types; bool;
       };
 
       databases = mkOption {
+        type = types.int;
         default = 16;
         description = "Set the number of databases.";
-        type = with types; int;
       };
 
       save = mkOption {
+        type = with types; listOf (listOf int);
         default = [ [900 1] [300 10] [60 10000] ];
         description = "The schedule in which data is persisted to disk, represented as a list of lists where the first element represent the amount of seconds and the second the number of changes.";
         example = [ [900 1] [300 10] [60 10000] ];
       };
 
       dbFilename = mkOption {
+        type = types.str;
         default = "dump.rdb";
         description = "The filename where to dump the DB.";
-        type = with types; string;
       };
 
       dbpath = mkOption {
+        type = types.path;
         default = "/var/lib/redis";
         description = "The DB will be written inside this directory, with the filename specified using the 'dbFilename' configuration.";
-        type = with types; string;
       };
 
       slaveOf = mkOption {
@@ -135,46 +141,47 @@ in
       };
 
       requirePass = mkOption {
+        type = with types; nullOr str;
         default = null;
         description = "Password for database (STORED PLAIN TEXT, WORLD-READABLE IN NIX STORE)";
         example = "letmein!";
       };
 
       appendOnly = mkOption {
+        type = types.bool;
         default = false;
         description = "By default data is only periodically persisted to disk, enable this option to use an append-only file for improved persistence.";
-        type = with types; bool;
       };
 
       appendOnlyFilename = mkOption {
+        type = types.str;
         default = "appendonly.aof";
         description = "Filename for the append-only file (stored inside of dbpath)";
-        type = with types; string;
       };
 
       appendFsync = mkOption {
+        type = types.str;
         default = "everysec"; # no, always, everysec
         description = "How often to fsync the append-only log, options: no, always, everysec.";
-        type = with types; string;
       };
 
       slowLogLogSlowerThan = mkOption {
+        type = types.int;
         default = 10000;
         description = "Log queries whose execution take longer than X in milliseconds.";
         example = 1000;
-        type = with types; int;
       };
 
       slowLogMaxLen = mkOption {
+        type = types.int;
         default = 128;
         description = "Maximum number of items to keep in slow log.";
-        type = with types; int;
       };
 
       extraConfig = mkOption {
+        type = types.lines;
         default = "";
         description = "Extra configuration options for redis.conf.";
-        type = with types; string;
       };
     };
 

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "VNC viewer that adds encryption security to VNC connections";
     homepage = "http://www.karlrunge.com/x11vnc/ssvnc.html";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.edwtjo ];
     platforms = with stdenv.lib.platforms; linux;
   };

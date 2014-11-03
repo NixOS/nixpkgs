@@ -8,17 +8,22 @@ in
 
 stdenv.mkDerivation rec {
   name = "v8-${version}";
-  version = "3.26.8";
+  version = "3.26.31.15";
 
   src = fetchurl {
     url = "https://commondatastorage.googleapis.com/chromium-browser-official/"
         + "${name}.tar.bz2";
-    sha256 = "0w8mfy8jlqvp958c0zhsfwf0s3m6kw53jhcyg6aiwh877g6s21iz";
+    sha256 = "067pk6hr7wjx7yxhla5la0rnv51kf7837kfydzydjwapsbcx6m8l";
   };
+
+  patchPhase = ''
+    sed -i 's,#!/usr/bin/env python,#!${python}/bin/python,' build/gyp_v8
+  '';
 
   configurePhase = ''
     PYTHONPATH="tools/generate_shim_headers:$PYTHONPATH" \
-      ${gyp}/bin/gyp \
+    PYTHONPATH="$(toPythonPath ${gyp}):$PYTHONPATH" \
+      build/gyp_v8 \
         -f make \
         --generator-output="out" \
         -Dflock_index=0 \
@@ -26,9 +31,7 @@ stdenv.mkDerivation rec {
         -Duse_system_icu=1 \
         -Dconsole=readline \
         -Dcomponent=shared_library \
-        -Dv8_target_arch=${arch} \
-        --depth=. -Ibuild/standalone.gypi \
-        build/all.gyp
+        -Dv8_target_arch=${arch}
   '';
 
   nativeBuildInputs = [ which ];
@@ -59,8 +62,8 @@ stdenv.mkDerivation rec {
   '' else null;
 
   meta = with stdenv.lib; {
-    description = "V8 is Google's open source JavaScript engine";
-    platforms = platforms.linux ++ platforms.darwin;
+    description = "Google's open source JavaScript engine";
+    platforms = with platforms; linux ++ darwin;
     license = licenses.bsd3;
   };
 }

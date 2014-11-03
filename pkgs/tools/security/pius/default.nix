@@ -1,13 +1,13 @@
 { fetchurl, stdenv, python, gnupg }:
 
-let version = "2.0.9"; in
+let version = "2.0.11"; in
 stdenv.mkDerivation {
   name = "pius-${version}";
   namePrefix = "";
 
   src = fetchurl {
     url = "mirror://sourceforge/pgpius/pius/${version}/pius-${version}.tar.bz2";
-    sha256 = "1g1jly3wl4ks6h8ydkygyl2c4i7v3z91rg42005m6vm70y1d8b3d";
+    sha256 = "0pdbyqz6k0bm182cz81ss7yckmpms5qhrrw0wcr4a1srzcjyzf5f";
   };
 
   buildInputs = [ python ];
@@ -38,9 +38,9 @@ stdenv.mkDerivation {
          to the process.
       '';
 
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
 
     platforms = stdenv.lib.platforms.gnu;
-    maintainers = [ ];
+    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
   };
 }

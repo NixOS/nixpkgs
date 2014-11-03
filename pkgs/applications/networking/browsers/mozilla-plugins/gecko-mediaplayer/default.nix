@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
     sha256 = "913fd39e70c564cb210c2544a88869f9d1a448184421f000b14b2bc5ba718b49";
   };
 
-  buildInputs = [ pkgconfig glib dbus dbus_glib browser x11 GConf browser.xulrunner gmtk ];
+  buildInputs = [ pkgconfig glib dbus dbus_glib browser x11 GConf browser gmtk ];
 
   # !!! fix this
   preBuild =
     ''
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$(echo ${browser.xulrunner}/include/xulrunner-*) -I${browser.nspr}/include/nspr"
+      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$(echo ${browser}/include/xulrunner-*) -I${browser.nspr}/include/nspr"
       echo $NIX_CFLAGS_COMPILE
     '';
 
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A browser plugin that uses GNOME MPlayer to play media in a browser";
     homepage = http://kdekorte.googlepages.com/gecko-mediaplayer;
+    broken = true;
   };
 }
 

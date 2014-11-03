@@ -1,0 +1,113 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-x11">
+
+<title>X Window System</title>
+    
+<para>The X Window System (X11) provides the basis of NixOS’ graphical
+user interface.  It can be enabled as follows:
+<programlisting>
+services.xserver.enable = true;
+</programlisting>
+The X server will automatically detect and use the appropriate video
+driver from a set of X.org drivers (such as <literal>vesa</literal>
+and <literal>intel</literal>).  You can also specify a driver
+manually, e.g.
+<programlisting>
+services.xserver.videoDrivers = [ "r128" ];
+</programlisting>
+to enable X.org’s <literal>xf86-video-r128</literal> driver.</para>
+
+<para>You also need to enable at least one desktop or window manager.
+Otherwise, you can only log into a plain undecorated
+<command>xterm</command> window.  Thus you should pick one or more of
+the following lines:
+<programlisting>
+services.xserver.desktopManager.kde4.enable = true;
+services.xserver.desktopManager.xfce.enable = true;
+services.xserver.windowManager.xmonad.enable = true;
+services.xserver.windowManager.twm.enable = true;
+services.xserver.windowManager.icewm.enable = true;
+</programlisting>
+</para>
+
+<para>NixOS’s default <emphasis>display manager</emphasis> (the
+program that provides a graphical login prompt and manages the X
+server) is SLiM.  You can select KDE’s <command>kdm</command> instead:
+<programlisting>
+services.xserver.displayManager.kdm.enable = true;
+</programlisting>
+</para>
+
+<para>The X server is started automatically at boot time.  If you
+don’t want this to happen, you can set:
+<programlisting>
+services.xserver.autorun = false;
+</programlisting>
+The X server can then be started manually:
+<screen>
+$ systemctl start display-manager.service
+</screen>
+</para>
+
+
+<simplesect><title>NVIDIA Graphics Cards</title>
+
+<para>NVIDIA provides a proprietary driver for its graphics cards that
+has better 3D performance than the X.org drivers.  It is not enabled
+by default because it’s not free software.  You can enable it as follows:
+<programlisting>
+services.xserver.videoDrivers = [ "nvidia" ];
+</programlisting>
+You may need to reboot after enabling this driver to prevent a clash
+with other kernel modules.</para>
+
+<para>On 64-bit systems, if you want full acceleration for 32-bit
+programs such as Wine, you should also set the following:
+<programlisting>
+hardware.opengl.driSupport32Bit = true;
+</programlisting>
+</para>
+
+</simplesect>
+
+<simplesect><title>AMD Graphics Cards</title>
+
+<para>AMD provides a proprietary driver for its graphics cards that
+has better 3D performance than the X.org drivers.  It is not enabled
+by default because it’s not free software.  You can enable it as follows:
+<programlisting>
+services.xserver.videoDrivers = [ "ati_unfree" ];
+</programlisting>
+You will need to reboot after enabling this driver to prevent a clash
+with other kernel modules.</para>
+
+<para>On 64-bit systems, if you want full acceleration for 32-bit
+programs such as Wine, you should also set the following:
+<programlisting>
+hardware.opengl.driSupport32Bit = true;
+</programlisting>
+</para>
+
+</simplesect>
+
+<simplesect><title>Touchpads</title>
+
+<para>Support for Synaptics touchpads (found in many laptops such as
+the Dell Latitude series) can be enabled as follows:
+<programlisting>
+services.xserver.synaptics.enable = true;
+</programlisting>
+The driver has many options (see <xref linkend="ch-options"/>).  For
+instance, the following enables two-finger scrolling:
+<programlisting>
+services.xserver.synaptics.twoFingerScroll = true;
+</programlisting>
+</para>
+
+</simplesect>
+
+
+</chapter>

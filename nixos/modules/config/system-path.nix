@@ -63,7 +63,7 @@ in
       systemPackages = mkOption {
         type = types.listOf types.path;
         default = [];
-        example = "[ pkgs.icecat3 pkgs.thunderbird ]";
+        example = literalExample "[ pkgs.firefox pkgs.thunderbird ]";
         description = ''
           The set of packages that appear in
           /run/current-system/sw.  These packages are
@@ -110,6 +110,7 @@ in
         "/man"
         "/sbin"
         "/share/emacs"
+        "/share/vim-plugins"
         "/share/org"
         "/share/info"
         "/share/terminfo"

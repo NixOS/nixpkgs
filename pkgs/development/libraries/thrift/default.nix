@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     md5 = "466aca9e43e43df868f4385af50e32f6";
   };
 
-  enableParallelBuilding = true;
+  #enableParallelBuilding = true; problems on hydra
 
   # Fixes build error: <flex>/lib/libfl.so: undefined reference to `yylex'.
   # Patch exists in upstream git repo, so it can be removed on the next version
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   patches = [ ./yylex.patch ];
 
   # Workaround to make the python wrapper not drop this package:
-  # pythonFull.override { extraLibs = [ thrift ]; }
+  # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
   pythonPath = [];
 
   buildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     description = "Library for scalable cross-language services";
     homepage = http://thrift.apache.org/;
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.bjornfor ];
   };
 }

@@ -1,23 +1,22 @@
-{stdenv, fetchgit, libgcrypt, autoconf, automake, libtool}:
+{ stdenv, fetchurl, libgcrypt, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "libotr-20130821-git-f0f8a2";
-  src = fetchgit {
-    url = "http://git.code.sf.net/p/otr/libotr";
-    rev = "f0f8a2";
-    sha256 = "08019r8bnk8f4yx6574jdz217p283ry7dmpqcad2d87yhkdmc3mm";
+  name = "libotr-4.0.0";
+
+  src = fetchurl {
+    url = "https://otr.cypherpunks.ca/${name}.tar.gz";
+    sha256 = "1d4k0b7v4d3scwm858cmqr9c6xgd6ppla1vk4x2yg64q82a1k49z";
   };
 
-  NIX_LDFLAGS = "-lssp";
+  buildInputs = [ autoreconfHook ];
+  propagatedBuildInputs = [ libgcrypt ];
 
-  propagatedBuildInputs = [ libgcrypt autoconf automake libtool ];
-
-  preConfigure = "autoreconf -vfi";
-
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://www.cypherpunks.ca/otr/";
     repositories.git = git://git.code.sf.net/p/otr/libotr;
-    license = "LGPLv2.1";
+    license = licenses.lgpl21;
     description = "Library for Off-The-Record Messaging";
+    maintainers = with maintainers; [ wkennington ];
+    platforms = platforms.unix;
   };
 }

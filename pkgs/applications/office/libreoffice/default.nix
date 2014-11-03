@@ -15,79 +15,54 @@
 , libwpg, dbus_glib, glibc, qt4, kde4, clucene_core, libcdr, lcms, vigra
 , unixODBC, mdds, saneBackends, mythes, libexttextcat, libvisio
 , fontsConf, pkgconfig, libzip, bluez5, libtool, maven
+, libatomic_ops, graphite2, harfbuzz
+, librevenge, libe-book, libmwaw, glm, glew
 , langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" "sl" ]
 }:
 
 let
   langsSpaces = stdenv.lib.concatStringsSep " " langs;
   major = "4";
-  minor = "0";
-  patch = "5";
+  minor = "3";
+  patch = "1";
   tweak = "2";
   subdir = "${major}.${minor}.${patch}";
   version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
 
-  # configure phase dependency
-  liborcus = stdenv.mkDerivation rec {
-     version = "0.3.0";
-     name = "liborcus-${version}";
-
-     src = fetchurl {
-       url = "http://dev-www.libreoffice.org/src/8755aac23317494a9028569374dc87b2-liborcus_0.3.0.tar.bz2";
-       sha256 = "0xrw13s390mcpm50apclydl38sw2sdq27csrr1k0d39jna2990ih";
-     };
-
-     configureFlags = "--disable-werror";
-
-     buildInputs = [ zlib boost mdds pkgconfig libixion libzip ];
-  };
-
-  # configure phase dependency
-  liblangtag = stdenv.mkDerivation rec {
-     version = "0.4.0";
-     name = "liblangtag-${version}";
-
-     src = fetchurl {
-       url = "http://dev-www.libreoffice.org/src/54e578c91b1b68e69c72be22adcb2195-${name}.tar.bz2";
-       sha256 = "1bjb0fxjmvzxlhr5by9wgisf6w5yvy6wgfzfkjyw6igk39fivdyb";
-     };
-
-     buildInputs = [ libtool pkgconfig libxml2 ];
-  };
-
-  # doesn't work with srcs versioning
-  libmspub = stdenv.mkDerivation rec {
-     version = "0.0.6";
-     name = "libmspub-${version}";
-
-     src = fetchurl {
-       url = "http://dev-www.libreoffice.org/src/${name}.tar.gz";
-       sha256 = "1zdcvnm0dpac5yqdv34hq9j38cnhyqzyjgb19iyp54ajnwfjhmcq";
-     };
-
-     configureFlags = "--disable-werror";
-
-     buildInputs = [ zlib libwpd libwpg pkgconfig boost icu ];
-  };
-
   # doesn't exist in srcs
+  # 0.8 version is in 0.7.0 tarball
   libixion = stdenv.mkDerivation rec {
-     version = "0.5.0";
+     version = "0.7.0";
      name = "libixion-${version}";
 
      src = fetchurl {
        url = "http://kohei.us/files/ixion/src/${name}.tar.bz2";
-       sha256 = "010k33bfkckx28r4rdk5mkd0mmayy5ng9ja0j0zg0z237gcfgrzb";
+       sha256 = "10amvz7fzr1kcy3svfspkdykmspqgpjdmk44cyr406wi7v4lwnf9";
      };
 
      configureFlags = "--with-boost=${boost}";
 
-     buildInputs = [ boost mdds pkgconfig ];
+     buildInputs = [ boost boost.lib mdds pkgconfig ];
   };
 
-  fetchThirdParty = {name, md5}: fetchurl {
+  fetchThirdParty = {name, md5, brief, subDir ? ""}: fetchurl {
     inherit name md5;
-    url = "http://dev-www.libreoffice.org/src/${md5}-${name}";
+    url = if brief then
+            "http://dev-www.libreoffice.org/src/${subDir}${name}"
+          else
+            "http://dev-www.libreoffice.org/src/${subDir}${md5}-${name}";
+  };
+
+  # Can't find Boost inside LO build
+  liborcus = stdenv.mkDerivation rec {
+    name = "liborcus-0.7.0";
+    src = fetchThirdParty (stdenv.lib.findFirst 
+      (x: x.name == "${name}.tar.bz2")
+      ("Error: update liborcus version inside LO expression")
+      (import ./libreoffice-srcs.nix));
+    configureFlags = "--with-boost=${boost}";
+
+    buildInputs = [ boost boost.lib mdds pkgconfig zlib libixion ];
   };
 
   fetchSrc = {name, sha256}: fetchurl {
@@ -104,14 +79,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "0x96wlwr5m7w4k3ygydzak3ycq35hjq60vfi6nfxczlr8pfjyjxv";
+      sha256 = "0vj1fpr99cb124hag0hijpp3pfbbi0gak56qiikxbwbq7mab6p9h";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "0nab5jcgrrgn0v1yrm18nl9avp4vifbas48l1absz3jmzf9wka7b";
+      sha256 = "1q0vzfla764zjz6xcx6r4nc8rikwb3pr2jsraj28hhwr5b26gdfz";
     };
 
   };
@@ -121,7 +96,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";
-    sha256 = "195g1iab7j2x7sl326xbq7vya412ns57xrwpv9hqdrb7iiz2n8la";
+    sha256 = "0s1j5y1gfyf3r53bbqnzirx17p49i8ah07737nrzik0ggps3lgd5";
   };
 
   # Openoffice will open libcups dynamically, so we link it directly
@@ -135,7 +110,7 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     mkdir -v $sourceRoot/src
-  '' + (stdenv.lib.concatMapStrings (f: "ln -sv ${f} $sourceRoot/src/${f.outputHash}-${f.name}\n") srcs.third_party)
+  '' + (stdenv.lib.concatMapStrings (f: "ln -sv ${f} $sourceRoot/src/${f.outputHash}-${f.name}\nln -sv ${f} $sourceRoot/src/${f.name}\n") srcs.third_party)
   + ''
     ln -sv ${srcs.help} $sourceRoot/src/${srcs.help.name}
     tar xf $sourceRoot/src/${srcs.help.name} -C $sourceRoot/../
@@ -149,6 +124,7 @@ stdenv.mkDerivation rec {
       -e 's,! */usr/bin/perl,!${perl}/bin/perl,' -e 's,! */usr/bin/env perl,!${perl}/bin/perl,' \
       -e 's,! */usr/bin/python,!${python3}/bin/${python3.executable},' -e 's,! */usr/bin/env python,!${python3}/bin/${python3.executable},'
     #sed -i 's,ANT_OPTS+="\(.*\)",ANT_OPTS+=\1,' apache-commons/java/*/makefile.mk
+
   '';
 
   QT4DIR = qt4;
@@ -162,6 +138,17 @@ stdenv.mkDerivation rec {
       "--with-parallelism=$NIX_BUILD_CORES"
       "--with-lang=${langsSpaces}"
     );
+
+    chmod a+x ./bin/unpack-sources
+    # It is used only as an indicator of the proper current directory
+    touch solenv/inc/target.mk
+  '';
+
+  # fetch_Download_item tries to interpret the name as a variable name
+  # Let it do so…
+  postConfigure = ''
+    sed -e '1ilibreoffice-translations-${version}.tar.xz=libreoffice-translations-${version}.tar.xz' -i Makefile
+    sed -e '1ilibreoffice-help-${version}.tar.xz=libreoffice-help-${version}.tar.xz' -i Makefile
   '';
 
   makeFlags = "SHELL=${bash}/bin/bash";
@@ -171,9 +158,6 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     # This is required as some cppunittests require fontconfig configured
     export FONTCONFIG_FILE=${fontsConf}
-
-    # Fix sysui: wants to create a tar for root
-    sed -i -e 's,--own.*root,,' sysui/desktop/slackware/makefile.mk
 
     # This to aovid using /lib:/usr/lib at linking
     sed -i '/gb_LinkTarget_LDFLAGS/{ n; /rpath-link/d;}' solenv/gbuild/platform/unxgcc.mk
@@ -199,7 +183,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-vender=NixOS"
+    "--with-vendor=NixOS"
 
     # Without these, configure does not finish
     "--without-junit"
@@ -214,19 +198,18 @@ stdenv.mkDerivation rec {
     "--with-system-headers"
     "--with-system-openssl"
     "--with-system-openldap"
-    "--with-boost-libdir=${boost}/lib"
+    "--with-boost-libdir=${boost.lib}/lib"
     "--without-system-libwps"  # TODO
     "--without-doxygen"
 
     # I imagine this helps. Copied from go-oo.
-    "--disable-epm"
-    "--disable-mathmldtd"
+    # Modified on every upgrade, though
     "--disable-kde"
     "--disable-postgresql-sdbc"
     "--with-package-format=native"
+    "--enable-epm"
     "--with-jdk-home=${jdk}/lib/openjdk"
     "--with-ant-home=${ant}/lib/ant"
-    "--without-afms"
     "--without-fonts"
     "--without-myspell-dicts"
     "--without-ppds"
@@ -235,10 +218,16 @@ stdenv.mkDerivation rec {
     "--without-system-jars"
     "--without-system-altlinuxhyph"
     "--without-system-lpsolve"
-    "--without-system-graphite"
     "--without-system-npapi-headers"
     "--without-system-libcmis"
-    "--without-system-mozilla"
+
+    "--without-system-libetonyek"
+    "--without-system-libfreehand"
+    "--without-system-libodfgen"
+    "--without-system-libabw"
+    "--without-system-firebird"
+    "--without-system-liblangtag"
+    "--without-system-libmspub"
   ];
 
   checkPhase = ''
@@ -247,24 +236,26 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = with xorg;
-    [ ant ArchiveZip autoconf automake bison boost cairo clucene_core
+    [ ant ArchiveZip autoconf automake bison boost boost.lib cairo clucene_core
       CompressZlib cppunit cups curl db dbus_glib expat file flex fontconfig
       freetype GConf getopt gnome_vfs gperf gst_plugins_base gstreamer gtk
       hunspell icu jdk kde4.kdelibs lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
-      libXdmcp libpthreadstubs mdds mesa mythes
+      libXdmcp libpthreadstubs mesa mythes
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfigUpstream poppler
       python3 sablotron saneBackends tcsh unzip vigra which zip zlib
-      mdds bluez5 glibc libmspub libixion liborcus liblangtag
-      libxshmfence
+      mdds bluez5 glibc libixion
+      libxshmfence libatomic_ops graphite2 harfbuzz
+      librevenge libe-book libmwaw glm glew
+      liborcus
     ];
 
   meta = with stdenv.lib; {
-    description = "LibreOffice is a comprehensive, professional-quality productivity suite, a variant of openoffice.org";
+    description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
     homepage = http://libreoffice.org/;
     license = licenses.lgpl3;
-    maintainers = [ maintainers.viric ];
+    maintainers = [ maintainers.viric maintainers.raskin ];
     platforms = platforms.linux;
   };
 }

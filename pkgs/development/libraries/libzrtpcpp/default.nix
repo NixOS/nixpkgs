@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = { 
     description = "GNU RTP stack for the zrtp protocol developed by Phil Zimmermann";
     homepage = "http://www.gnutelephony.org/index.php/GNU_ZRTP";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };

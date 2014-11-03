@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     make
     make check
     make install
-    ensureDir $out/lib/perl5/site_perl/
+    mkdir -p $out/lib/perl5/site_perl/
     cp swig/perl/LibAppArmor.pm $out/lib/perl5/site_perl/
     cp swig/perl/LibAppArmor.bs $out/lib/perl5/site_perl/
     # this is automatically copied elsewhere....

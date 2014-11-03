@@ -5,16 +5,16 @@
 # It is intended to be used in config.nix similarly to:
 #
 # { packageOverrides = pkgs: rec {
-# 
+#
 #   haskellPackages =
 #     let callPackage = pkgs.lib.callPackageWith haskellPackages;
 #     in pkgs.recurseIntoAttrs (pkgs.haskellPackages.override {
-#         extraPrefs = self: {
+#         extension = self: super: {
 #           hoogleLocal = pkgs.haskellPackages.hoogleLocal.override {
 #             packages = with pkgs.haskellPackages; [
 #               mmorph
 #               monadControl
-#             ]
+#             ];
 #           };
 #         };
 #       });
@@ -23,75 +23,65 @@
 # This will build mmorph and monadControl, and have the hoogle installation
 # refer to their documentation via symlink so they are not garbage collected.
 
-{ cabal, aeson, binary, blazeBuilder, Cabal, caseInsensitive
-, cmdargs, conduit, deepseq, filepath, haskellSrcExts, httpTypes
-, parsec, QuickCheck, random, resourcet, safe, shake, tagsoup, text
-, time, transformers, uniplate, vector, vectorAlgorithms, wai, warp
-, fetchurl
-
-, parallel, perl, wget, rehoo, haskellPlatform
-, packages ? haskellPlatform.propagatedUserEnvPkgs
+{ stdenv, hoogle, rehoo
+, haskellPlatform, ghc, packages ? [ haskellPlatform ghc.ghc ]
 }:
 
-cabal.mkDerivation (self: rec {
-  pname = "hoogle";
-  version = "4.2.32";
-  sha256 = "1rhr7xh4x9fgflcszbsl176r8jq6rm81bwzmbz73f3pa1zf1v0zc";
-  isLibrary = true;
-  isExecutable = true;
-  buildInputs = [self.ghc Cabal] ++ self.extraBuildInputs
-    ++ [ parallel perl wget rehoo ] ++ packages;
-  buildDepends = [
-      aeson binary blazeBuilder Cabal caseInsensitive cmdargs conduit
-      deepseq filepath haskellSrcExts httpTypes parsec QuickCheck random
-      resourcet safe shake tagsoup text time transformers uniplate vector
-      vectorAlgorithms wai warp
-    ];
-  testDepends = [ filepath ];
-  testTarget = "--test-option=--no-net";
+let
+  inherit (stdenv.lib) optional;
+  wrapper = ./hoogle-local-wrapper.sh;
+in
+stdenv.mkDerivation {
+  name = "hoogle-local-0.1";
+  buildInputs = [hoogle rehoo];
 
-  # The tests will fail because of the added documentation.
-  doCheck = false;
-  patches = [ ./hoogle-local.diff
-              (fetchurl { url = "https://github.com/ndmitchell/hoogle/commit/5fc294f2b5412fda107c7700f4d833b52f26184c.diff";
-                          sha256 = "1fn52g90p2jsy87gf5rqrcg49s8hfwway5hi4v9i2rpg5mzxaq3i"; })
-            ];
+  phases = [ "installPhase" ];
 
   docPackages = packages;
-
-  postInstall = ''
+  installPhase = ''
     if [ -z "$docPackages" ]; then
         echo "ERROR: The packages attribute has not been set"
         exit 1
     fi
 
-    ensureDir $out/share/hoogle/doc
+    mkdir -p $out/share/hoogle/doc
     export HOOGLE_DOC_PATH=$out/share/hoogle/doc
 
     cd $out/share/hoogle
 
     function import_dbs() {
-        find $1 -name '*.txt' \
-            | parallel -j$NIX_BUILD_CORES 'cp -p {} .; perl -i -pe "print \"\@url file://{//}/index.html\n\" if /^\@version/;" {/}; $out/bin/hoogle convert {/}'
+        find $1 -name '*.txt' | while read f; do
+          newname=$(basename "$f" | tr '[:upper:]' '[:lower:]')
+          if [[ -f $f && ! -f ./$newname ]]; then
+            cp -p $f ./$newname
+            hoogle convert -d "$(dirname $f)" "./$newname"
+          fi
+        done
     }
 
     for i in $docPackages; do
-        import_dbs $i/share/doc
-        ln -sf $i/share/doc/*-ghc-*/* $out/share/hoogle/doc 2> /dev/null \
-            || ln -sf $i/share/doc/* $out/share/hoogle/doc
+        findInputs $i docPackages propagated-native-build-inputs
+        findInputs $i docPackages propagated-build-inputs
     done
 
-    import_dbs ${self.ghc}/share/doc/ghc*/html/libraries
-    ln -sf ${self.ghc}/share/doc/ghc*/html/libraries/* $out/share/hoogle/doc
+    for i in $docPackages; do
+      if [[ ! $i == $out ]]; then
+        for docdir in $i/share/doc/*-ghc-*/* $i/share/doc/*; do
+          if [[ -d $docdir ]]; then
+            import_dbs $docdir
+            ln -sf $docdir $out/share/hoogle/doc
+          fi
+        done
+      fi
+    done
 
-    unset http_proxy
-    unset ftp_proxy
+    import_dbs ${ghc}/share/doc/ghc*/html/libraries
+    ln -sf ${ghc}/share/doc/ghc*/html/libraries/* $out/share/hoogle/doc
 
     chmod 644 *.hoo *.txt
-    $out/bin/hoogle data -d $PWD --redownload -l $(echo *.txt | sed 's/\.txt//g')
-    PATH=$out/bin:$PATH ${rehoo}/bin/rehoo -j4 -c64 .
+    rehoo -j4 -c64 .
 
-    rm -fr downloads *.txt *.dep
+    rm -fr downloads *.dep *.txt
     mv default.hoo x || exit 0
     rm -f *.hoo
     mv x default.hoo || exit 1
@@ -101,21 +91,17 @@ cabal.mkDerivation (self: rec {
         exit 1
     fi
 
-    mv $out/bin/hoogle $out/bin/.hoogle-wrapped
-    cat - > $out/bin/hoogle <<EOF
-    #! ${self.stdenv.shell}
-    COMMAND=\$1
-    shift
-    HOOGLE_DOC_PATH=$out/share/hoogle/doc exec $out/bin/.hoogle-wrapped \$COMMAND -d $out/share/hoogle "\$@"
-    EOF
+    mkdir -p $out/bin
+    substitute ${wrapper} $out/bin/hoogle \
+        --subst-var out --subst-var-by shell ${stdenv.shell} \
+        --subst-var-by hoogle ${hoogle}
     chmod +x $out/bin/hoogle
   '';
 
   meta = {
-    homepage = "http://www.haskell.org/hoogle/";
-    description = "Haskell API Search";
-    license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.jwiegley ];
+    description = "A local Hoogle database";
+    platforms = ghc.meta.platforms;
+    hydraPlatforms = with stdenv.lib.platforms; none;
+    maintainers = with stdenv.lib.maintainers; [ ttuegel ];
   };
-})
+}

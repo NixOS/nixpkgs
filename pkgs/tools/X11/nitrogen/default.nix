@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = http://projects.l3ib.org/nitrogen/;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
-    maintainer = [ stdenv.lib.maintainers.auntie ];
+    maintainers = [ stdenv.lib.maintainers.auntie ];
   };
 }

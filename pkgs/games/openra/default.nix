@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, mono, makeWrapper
-, SDL2, freetype, openal, systemd
+{ stdenv, fetchurl, mono, makeWrapper, lua
+, SDL2, freetype, openal, systemd, pkgconfig
 }:
 
 let
-  version = "20131223";
+  version = "20140608";
 in stdenv.mkDerivation rec {
   name = "openra-${version}";
 
@@ -18,15 +18,17 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     name = "${name}.tar.gz";
     url = "https://github.com/OpenRA/OpenRA/archive/release-${version}.tar.gz";
-    sha256 = "1gfz6iiccajp86qc7xw5w843bng69k9zplvmipxxbspvr7byhw0c";
+    sha256 = "0k7siysxb2nk7zzrl7vz1cwky4nla46ixzgxgc8rq6ilmlidh96b";
   };
 
   dontStrip = true;
 
-  nativeBuildInputs = [ mono makeWrapper ];
+  buildInputs = [ lua ];
+  nativeBuildInputs = [ mono makeWrapper lua pkgconfig ];
 
   patchPhase = ''
     sed -i 's/^VERSION.*/VERSION = release-${version}/g' Makefile
+    substituteInPlace configure --replace /bin/bash "$shell" --replace /usr/local/lib "${lua}/lib"
   '';
 
   preConfigure = ''
@@ -35,10 +37,15 @@ in stdenv.mkDerivation rec {
   '';
 
   postInstall = with stdenv.lib; let
-    runtime = makeLibraryPath [ SDL2 freetype openal systemd ];
+    runtime = makeLibraryPath [ SDL2 freetype openal systemd lua ];
   in ''
-    wrapProgram $out/bin/openra \
+    wrapProgram $out/lib/openra/launch-game.sh \
       --prefix PATH : "${mono}/bin" \
+      --set PWD $out/lib/openra/ \
       --prefix LD_LIBRARY_PATH : "${runtime}"
+      
+    mkdir -p $out/bin
+    echo "cd $out/lib/openra && $out/lib/openra/launch-game.sh" > $out/bin/openra
+    chmod +x $out/bin/openra
   '';
 }

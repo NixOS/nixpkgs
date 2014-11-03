@@ -1,11 +1,11 @@
 { stdenv, fetchurl, kdelibs, gettext, xf86_input_wacom }:
 
 stdenv.mkDerivation rec {
-  name = "wacomtablet-2.0";
+  name = "wacomtablet-2.0.2";
 
   src = fetchurl {
-    url = "http://kde-apps.org/CONTENT/content-files/114856-wacomtablet-2.0.tar.bz2";
-    sha256 = "1vqdmkfl0awsjxl6p8bihz198hlc75d3zn7xwwryc674l76s25ax";
+    url = "http://kde-apps.org/CONTENT/content-files/114856-wacomtablet-2.0.2.tar.xz";
+    sha256 = "13k5f5xpka5cbgl24a3j9khqcmp96x1vhynn9v558ag6dg9ch2hw";
   };
 
   buildInputs = [ kdelibs xf86_input_wacom ];

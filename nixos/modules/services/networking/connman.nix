@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
-with lib;
 with pkgs;
+with lib;
 
 let
   cfg = config.networking.connman;

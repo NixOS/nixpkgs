@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, udev }:
 
 stdenv.mkDerivation rec {
-  name = "dhcpcd-6.3.2";
+  name = "dhcpcd-6.5.1";
 
   src = fetchurl {
-    url = "http://roy.marples.name/downloads/dhcpcd/${name}.tar.bz2";
-    sha256 = "1v2m5wdr6x5cz6i0n1y63am9dhj5j7ylrk717scjgwwjdbq1x75n";
+    url = "mirror://roy/dhcpcd/${name}.tar.bz2";
+    sha256 = "0y0falxxlahr2i630ydraq4ldr7d5mg8ar0s5np5ddl76w58dlrp";
   };
 
-  patches = [ ./lxc_ro_promote_secondaries.patch ./reload.patch ./check-interface.patch ];
+  patches = [ /* ./lxc_ro_promote_secondaries.patch */ ];
 
   buildInputs = [ pkgconfig udev ];
 

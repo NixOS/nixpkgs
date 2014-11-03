@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     cp rxp $out/bin
   '';
   meta = {
-    license = "GPL";
+    license = stdenv.lib.licenses.gpl2Plus;
     description = "a validating XML parser written in C";
     homepage = "http://www.cogsci.ed.ac.uk/~richard/rxp.html";
   };

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   dontPatchShebangs = true;
 
   meta = {
-    description = "GNU Libtool, a generic library support script";
+    description = "Generic library support script";
 
     longDescription = ''
       GNU libtool is a generic library support script.  Libtool hides
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/libtool/;
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

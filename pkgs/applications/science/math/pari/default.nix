@@ -1,11 +1,12 @@
 { stdenv, fetchurl, gmp, readline }:
 
 stdenv.mkDerivation rec {
-  name = "pari-2.5.5";
+  version = "2.7.2";
+  name = "pari-${version}";
 
   src = fetchurl {
     url = "http://pari.math.u-bordeaux.fr/pub/pari/unix/${name}.tar.gz";
-    sha256 = "058nw1fhggy7idii4f124ami521lv3izvngs9idfz964aks8cvvn";
+    sha256 = "1b0hzyhafpxhmiljyhnsh6c27ydsvb2599fshwq2fjfm96awjxmc";
   };
 
   buildInputs = [gmp readline];
@@ -21,5 +22,9 @@ stdenv.mkDerivation rec {
     license     = "GPLv2+";
     maintainers = with stdenv.lib.maintainers; [ertes raskin];
     platforms   = stdenv.lib.platforms.linux;
+
+    inherit version;
+    downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
+    updateWalker = true;
   };
 }

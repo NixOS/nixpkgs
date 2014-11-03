@@ -1,7 +1,7 @@
-{pkgs, config, ...}:
+{lib, pkgs, config, ...}:
 
 let
-  inherit (pkgs.lib) mkOption mkIf;
+  inherit (lib) mkOption mkIf;
   cfg = config.services.xserver.windowManager.openbox;
 in
 

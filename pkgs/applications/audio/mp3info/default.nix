@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    description = "MP3Info, an MP3 technical info viewer and ID3 1.x tag editor";
+    description = "MP3 technical info viewer and ID3 1.x tag editor";
 
     longDescription =
       '' MP3Info is a little utility used to read and modify the ID3 tags of
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.ibiblio.org/mp3info/;
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.unix;

@@ -93,5 +93,6 @@ rec {
       a.lib.maintainers.raskin
     ];
     platforms = a.lib.platforms.linux;
+    broken = true;
   };
 }

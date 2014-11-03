@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.astro.caltech.edu/~mcs/tecla/";
-    description = "Tecla command-line editing library";
+    description = "Command-line editing library";
     license = "as-is";
 
     hydraPlatforms = stdenv.lib.platforms.linux;

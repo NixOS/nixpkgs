@@ -1,20 +1,5 @@
-diff --git a/Makefile.am b/Makefile.am
-index 3d9e5c1..4d43cb4 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -1707,7 +1707,9 @@ dist_tmpfiles_DATA += \
- endif
- 
- SYSINIT_TARGET_WANTS += \
--	systemd-tmpfiles-setup-dev.service \
-+	systemd-tmpfiles-setup-dev.service
-+
-+MULTI_USER_TARGET_WANTS += \
- 	systemd-tmpfiles-setup.service
- 
- dist_zshcompletion_DATA += \
 diff --git a/rules/99-systemd.rules.in b/rules/99-systemd.rules.in
-index db72373..2fc12ca 100644
+index aa435c4..46a2cd4 100644
 --- a/rules/99-systemd.rules.in
 +++ b/rules/99-systemd.rules.in
 @@ -14,10 +14,6 @@ KERNEL=="vport*", TAG+="systemd"
@@ -28,79 +13,11 @@ index db72373..2fc12ca 100644
  # Ignore raid devices that are not yet assembled and started
  SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", KERNEL=="md*", TEST!="md/array_state", ENV{SYSTEMD_READY}="0"
  SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", KERNEL=="md*", ATTR{md/array_state}=="|clear|inactive", ENV{SYSTEMD_READY}="0"
-diff --git a/src/core/main.c b/src/core/main.c
-index 41605ee..8517369 100644
---- a/src/core/main.c
-+++ b/src/core/main.c
-@@ -1883,7 +1883,7 @@ finish:
-                         char_array_0(sfd);
- 
-                         i = 0;
--                        args[i++] = SYSTEMD_BINARY_PATH;
-+                        args[i++] = "/run/current-system/systemd/lib/systemd/systemd";
-                         if (switch_root_dir)
-                                 args[i++] = "--switched-root";
-                         args[i++] = arg_running_as == SYSTEMD_SYSTEM ? "--system" : "--user";
-diff --git a/src/core/service.c b/src/core/service.c
-index ae3695a..6b3aa45 100644
---- a/src/core/service.c
-+++ b/src/core/service.c
-@@ -1096,11 +1096,6 @@ static int service_verify(Service *s) {
-                 return -EINVAL;
-         }
- 
--        if (s->type == SERVICE_ONESHOT && s->restart != SERVICE_RESTART_NO) {
--                log_error_unit(UNIT(s)->id, "%s has Restart setting other than no, which isn't allowed for Type=oneshot services. Refusing.", UNIT(s)->id);
--                return -EINVAL;
--        }
--
-         if (s->type == SERVICE_DBUS && !s->bus_name) {
-                 log_error_unit(UNIT(s)->id, "%s is of type D-Bus but no D-Bus service name has been specified. Refusing.", UNIT(s)->id);
-                 return -EINVAL;
-diff --git a/src/core/socket.c b/src/core/socket.c
-index 7c18a2b..eba67d5 100644
---- a/src/core/socket.c
-+++ b/src/core/socket.c
-@@ -663,16 +663,25 @@ static int instance_from_socket(int fd, unsigned nr, char **instance) {
-                 int k;
- 
-                 k = getpeercred(fd, &ucred);
--                if (k < 0)
-+                if (k == -ENODATA) {
-+                        /* This handles the case where somebody is
-+                         * connecting from another pid/uid namespace
-+                         * (e.g. from outside of our container). */
-+                        if (asprintf(&r,
-+                                     "%u-unknown",
-+                                     nr) < 0)
-+                                return -ENOMEM;
-+                }
-+                else if (k < 0)
-                         return k;
--
--                if (asprintf(&r,
--                             "%u-%lu-%lu",
--                             nr,
--                             (unsigned long) ucred.pid,
--                             (unsigned long) ucred.uid) < 0)
--                        return -ENOMEM;
--
-+                else {
-+                        if (asprintf(&r,
-+                                     "%u-%lu-%lu",
-+                                     nr,
-+                                     (unsigned long) ucred.pid,
-+                                     (unsigned long) ucred.uid) < 0)
-+                                return -ENOMEM;
-+                }
-                 break;
-         }
- 
 diff --git a/src/core/umount.c b/src/core/umount.c
-index d1258f0..0311812 100644
+index cffa453..4d1a9ff 100644
 --- a/src/core/umount.c
 +++ b/src/core/umount.c
-@@ -404,6 +404,8 @@ static int mount_points_list_umount(MountPoint **head, bool *changed, bool log_e
+@@ -385,6 +385,8 @@ static int mount_points_list_umount(MountPoint **head, bool *changed, bool log_e
                   * anyway, since we are running from it. They have
                   * already been remounted ro. */
                  if (path_equal(m->path, "/")
@@ -110,32 +27,24 @@ index d1258f0..0311812 100644
                      || path_equal(m->path, "/usr")
  #endif
 diff --git a/src/fsck/fsck.c b/src/fsck/fsck.c
-index 18f2aca..2a2b1ea 100644
+index dfe97bc..71cd8f4 100644
 --- a/src/fsck/fsck.c
 +++ b/src/fsck/fsck.c
-@@ -285,7 +285,7 @@ int main(int argc, char *argv[]) {
- 
-         type = udev_device_get_property_value(udev_device, "ID_FS_TYPE");
-         if (type) {
--                const char *checker = strappenda("/sbin/fsck.", type);
-+                const char *checker = strappenda("/run/current-system/sw/sbin/fsck.", type);
-                 r = access(checker, X_OK);
-                 if (r < 0) {
-                         if (errno == ENOENT) {
-@@ -302,7 +302,7 @@ int main(int argc, char *argv[]) {
+@@ -315,8 +315,7 @@ int main(int argc, char *argv[]) {
                          return EXIT_FAILURE;
                  }
  
 -        cmdline[i++] = "/sbin/fsck";
+-        cmdline[i++] =  arg_repair;
 +        cmdline[i++] = "/run/current-system/sw/sbin/fsck";
-         cmdline[i++] = "-a";
          cmdline[i++] = "-T";
-         cmdline[i++] = "-l";
+ 
+         /*
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index 9a9ed9d..9e46e18 100644
+index d01da45..4976f9a 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
-@@ -2667,6 +2667,7 @@ int main(int argc, char *argv[]) {
+@@ -2985,6 +2985,7 @@ int main(int argc, char *argv[]) {
                                  goto finish;
                          }
                  } else {
@@ -143,7 +52,7 @@ index 9a9ed9d..9e46e18 100644
                          const char *p;
  
                          p = strappenda(arg_directory,
-@@ -2676,6 +2677,7 @@ int main(int argc, char *argv[]) {
+@@ -2994,6 +2995,7 @@ int main(int argc, char *argv[]) {
                                  goto finish;
  
                          }
@@ -151,39 +60,11 @@ index 9a9ed9d..9e46e18 100644
                  }
          } else {
                  char template[] = "/tmp/nspawn-root-XXXXXX";
-diff --git a/src/nss-myhostname/netlink.c b/src/nss-myhostname/netlink.c
-index d61ecdf..228a3a4 100644
---- a/src/nss-myhostname/netlink.c
-+++ b/src/nss-myhostname/netlink.c
-@@ -112,6 +112,10 @@ static int read_reply(int fd, struct address **list, unsigned *n_list) {
-                     ifaddrmsg->ifa_scope == RT_SCOPE_NOWHERE)
-                         continue;
- 
-+                if (ifaddrmsg->ifa_family == AF_INET6 &&
-+                    ifaddrmsg->ifa_scope == RT_SCOPE_LINK)
-+                        continue;
-+
-                 if (ifaddrmsg->ifa_flags & IFA_F_DEPRECATED)
-                         continue;
- 
-diff --git a/src/shared/generator.c b/src/shared/generator.c
-index 6110303..e679cb1 100644
---- a/src/shared/generator.c
-+++ b/src/shared/generator.c
-@@ -48,7 +48,7 @@ int generator_write_fsck_deps(
-                 const char *checker;
-                 int r;
- 
--                checker = strappenda("/sbin/fsck.", fstype);
-+                checker = strappenda("/run/current-system/sw/sbin/fsck.", fstype);
-                 r = access(checker, X_OK);
-                 if (r < 0) {
-                         log_warning("Checking was requested for %s, but %s cannot be used: %m", what, checker);
 diff --git a/src/systemctl/systemctl.c b/src/systemctl/systemctl.c
-index 0887bc3..6b502ce 100644
+index 36db652..b1ba6e9 100644
 --- a/src/systemctl/systemctl.c
 +++ b/src/systemctl/systemctl.c
-@@ -2561,7 +2561,7 @@ static int start_unit_one(
+@@ -2607,7 +2607,7 @@ static int start_unit_one(
  
                  log_debug("Adding %s to the set", p);
                  r = set_consume(s, p);
@@ -217,7 +98,7 @@ index 4f7794b..bad2a9a 100644
  Restart=always
  RestartSec=0
 diff --git a/units/emergency.service.in b/units/emergency.service.in
-index 94c090f..0d20640 100644
+index 91fc1bb..6a37434 100644
 --- a/units/emergency.service.in
 +++ b/units/emergency.service.in
 @@ -15,7 +15,6 @@ Before=shutdown.target
@@ -226,10 +107,10 @@ index 94c090f..0d20640 100644
  WorkingDirectory=/root
 -ExecStartPre=-/bin/plymouth quit
  ExecStartPre=-/bin/echo -e 'Welcome to emergency mode! After logging in, type "journalctl -xb" to view\\nsystem logs, "systemctl reboot" to reboot, "systemctl default" to try again\\nto boot into default mode.'
- ExecStart=-/sbin/sulogin
- ExecStopPost=@SYSTEMCTL@ --fail --no-block default
+ ExecStart=-/bin/sh -c "/sbin/sulogin; @SYSTEMCTL@ --fail --no-block default"
+ Type=idle
 diff --git a/units/getty@.service.m4 b/units/getty@.service.m4
-index aa853b8..8bcc647 100644
+index 46164ab..f194a31 100644
 --- a/units/getty@.service.m4
 +++ b/units/getty@.service.m4
 @@ -23,11 +23,12 @@ IgnoreOnIsolate=yes
@@ -248,23 +129,23 @@ index aa853b8..8bcc647 100644
  Restart=always
  RestartSec=0
 diff --git a/units/kmod-static-nodes.service.in b/units/kmod-static-nodes.service.in
-index 368f980..d0c1bd2 100644
+index 0934a87..7e30c9e 100644
 --- a/units/kmod-static-nodes.service.in
 +++ b/units/kmod-static-nodes.service.in
 @@ -10,7 +10,6 @@ Description=Create list of required static device nodes for the current kernel
  DefaultDependencies=no
  Before=sysinit.target systemd-tmpfiles-setup-dev.service
- ConditionCapability=CAP_MKNOD
+ ConditionCapability=CAP_SYS_MODULE
 -ConditionPathExists=/lib/modules/%v/modules.devname
  
  [Service]
  Type=oneshot
 diff --git a/units/local-fs.target b/units/local-fs.target
-index ae3cedc..0e36840 100644
+index d2e5429..d26984b 100644
 --- a/units/local-fs.target
 +++ b/units/local-fs.target
-@@ -13,3 +13,5 @@ DefaultDependencies=no
- Conflicts=shutdown.target
+@@ -13,3 +13,5 @@ Conflicts=shutdown.target
+ After=local-fs-pre.target
  OnFailure=emergency.target
  OnFailureJobMode=replace-irreversibly
 +
@@ -282,7 +163,7 @@ index 43ffa5c..156a681 100644
  [Install]
  WantedBy=multi-user.target
 diff --git a/units/rescue.service.m4.in b/units/rescue.service.m4.in
-index 552ef89..af3915f 100644
+index ef54369..0c841b3 100644
 --- a/units/rescue.service.m4.in
 +++ b/units/rescue.service.m4.in
 @@ -16,7 +16,6 @@ Before=shutdown.target
@@ -291,10 +172,10 @@ index 552ef89..af3915f 100644
  WorkingDirectory=/root
 -ExecStartPre=-/bin/plymouth quit
  ExecStartPre=-/bin/echo -e 'Welcome to rescue mode! Type "systemctl default" or ^D to enter default mode.\\nType "journalctl -xb" to view system logs. Type "systemctl reboot" to reboot.'
- ExecStart=-/sbin/sulogin
- ExecStopPost=-@SYSTEMCTL@ --fail --no-block default
+ ExecStart=-/bin/sh -c "/sbin/sulogin; @SYSTEMCTL@ --fail --no-block default"
+ Type=idle
 diff --git a/units/serial-getty@.service.m4 b/units/serial-getty@.service.m4
-index 4ac51e7..86a3b59 100644
+index 4522d0d..96daa5c 100644
 --- a/units/serial-getty@.service.m4
 +++ b/units/serial-getty@.service.m4
 @@ -22,7 +22,6 @@ Before=getty.target
@@ -304,19 +185,18 @@ index 4ac51e7..86a3b59 100644
 -ExecStart=-/sbin/agetty --keep-baud 115200,38400,9600 %I $TERM
  Type=idle
  Restart=always
- RestartSec=0
+ UtmpIdentifier=%I
 diff --git a/units/sysinit.target b/units/sysinit.target
-index 8f4fb8f..e0f0147 100644
+index ec33503..4ac47b9 100644
 --- a/units/sysinit.target
 +++ b/units/sysinit.target
-@@ -9,6 +9,5 @@
+@@ -9,5 +9,4 @@
  Description=System Initialization
  Documentation=man:systemd.special(7)
  Conflicts=emergency.service emergency.target
 -Wants=local-fs.target swap.target
 -After=local-fs.target swap.target emergency.service emergency.target
 +After=emergency.service emergency.target
- RefuseManualStart=yes
 diff --git a/units/systemd-backlight@.service.in b/units/systemd-backlight@.service.in
 index e945d87..77728f2 100644
 --- a/units/systemd-backlight@.service.in
@@ -342,10 +222,10 @@ index 503e8a6..fe23b8b 100644
  [Service]
  ExecStart=@rootbindir@/systemctl kill --kill-who=main --signal=SIGUSR1 systemd-journald.service
 diff --git a/units/systemd-journald.service.in b/units/systemd-journald.service.in
-index de93879..c9a49f3 100644
+index 7013979..5241d08 100644
 --- a/units/systemd-journald.service.in
 +++ b/units/systemd-journald.service.in
-@@ -25,3 +25,8 @@ WatchdogSec=1min
+@@ -26,3 +26,8 @@ WatchdogSec=1min
  # Increase the default a bit in order to allow many simultaneous
  # services being run since we keep one fd open per service.
  LimitNOFILE=16384
@@ -373,18 +253,18 @@ index 9d264a2..c505535 100644
  ExecStop=@rootlibexecdir@/systemd-rfkill save %I
 +X-RestartIfChanged=false
 diff --git a/units/systemd-tmpfiles-setup.service.in b/units/systemd-tmpfiles-setup.service.in
-index 01043b7..507f820 100644
+index 72ab083..4f77e8f 100644
 --- a/units/systemd-tmpfiles-setup.service.in
 +++ b/units/systemd-tmpfiles-setup.service.in
-@@ -12,7 +12,7 @@ DefaultDependencies=no
- Wants=local-fs.target
+@@ -11,7 +11,7 @@ Documentation=man:tmpfiles.d(5) man:systemd-tmpfiles(8)
+ DefaultDependencies=no
  Conflicts=shutdown.target
- After=systemd-readahead-collect.service systemd-readahead-replay.service local-fs.target
+ After=systemd-readahead-collect.service systemd-readahead-replay.service local-fs.target systemd-sysusers.service
 -Before=sysinit.target shutdown.target
 +Before=shutdown.target
- ConditionDirectoryNotEmpty=|/usr/lib/tmpfiles.d
- ConditionDirectoryNotEmpty=|/lib/tmpfiles.d
- ConditionDirectoryNotEmpty=|/usr/local/lib/tmpfiles.d
+ RefuseManualStop=yes
+ 
+ [Service]
 diff --git a/units/systemd-update-utmp.service.in b/units/systemd-update-utmp.service.in
 index da7dda7..e638145 100644
 --- a/units/systemd-update-utmp.service.in

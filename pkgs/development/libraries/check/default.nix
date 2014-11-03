@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   doCheck = false;
 
   meta = {
-    description = "Check, a unit testing framework for C";
+    description = "Unit testing framework for C";
 
     longDescription =
       '' Check is a unit testing framework for C.  It features a simple
@@ -26,6 +26,6 @@ stdenv.mkDerivation {
 
     homepage = http://check.sourceforge.net/;
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
   };
 }

@@ -43,7 +43,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Scientific PYthon Development EnviRonment (SPYDER)";
+    description = "Scientific python development environment";
     longDescription = ''
       Spyder (previously known as Pydee) is a powerful interactive development
       environment for the Python language with advanced editing, interactive

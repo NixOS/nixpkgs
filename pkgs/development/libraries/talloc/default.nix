@@ -5,20 +5,20 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://samba.org/ftp/talloc/${name}.tar.gz";
-    md5 = "c6e736540145ca58cb3dcb42f91cf57b";
+    sha256 = "1d694zyi451a5zr03l5yv0n8yccyr3r8pmzga17xaaaz80khb0av";
   };
 
   configureFlags = "--enable-talloc-compat1 --enable-largefile";
   
   # https://bugzilla.samba.org/show_bug.cgi?id=7000
   postConfigure = if stdenv.isDarwin then ''
-    substituteInPlace "Makefile" --replace "SONAMEFLAG = #" "SONAMEFLAG = -install_name"
+    substituteInPlace "Makefile" --replace "SONAMEFLAG = #" "SONAMEFLAG = -Wl,-install_name,"
   '' else "";
 
   meta = {
-    description = "talloc is a hierarchical pool based memory allocator with destructors";
+    description = "Hierarchical pool based memory allocator with destructors";
     homepage = http://tdb.samba.org/;
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.all;
   };
 }

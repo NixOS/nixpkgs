@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       surf to another URI by setting its XProperties.
       '';
     homepage = http://surf.suckless.org;
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
   };
 }

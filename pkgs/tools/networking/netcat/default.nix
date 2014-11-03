@@ -4,6 +4,6 @@ stdenv.mkDerivation {
   name = "netcat-gnu-0.7.1";
   src = fetchurl {
     url = mirror://sourceforge/netcat/netcat-0.7.1.tar.bz2;
-    md5 = "0a29eff1736ddb5effd0b1ec1f6fe0ef";
+    sha256 = "1frjcdkhkpzk0f84hx6hmw5l0ynpmji8vcbaxg8h5k2svyxz0nmm";
   };
 }

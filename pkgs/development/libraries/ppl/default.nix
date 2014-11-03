@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    description = "PPL: The Parma Polyhedra Library";
+    description = "The Parma Polyhedra Library";
 
     longDescription = ''
       The Parma Polyhedra Library (PPL) provides numerical abstractions
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://bugseng.com/products/ppl/;
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ ];
   };

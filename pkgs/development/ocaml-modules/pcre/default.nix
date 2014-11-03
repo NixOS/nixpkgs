@@ -1,11 +1,11 @@
 {stdenv, fetchurl, pcre, ocaml, findlib}:
 
 stdenv.mkDerivation {
-  name = "ocaml-pcre-7.0.4";
+  name = "ocaml-pcre-7.1.1";
 
   src = fetchurl {
-    url = https://bitbucket.org/mmottl/pcre-ocaml/downloads/pcre-ocaml-7.0.4.tar.gz;
-    sha256 = "0h2qlza7jkzgrglw1k0fydpbil0dgpv526kxyyd1apdbyzhb0mpw";
+    url = https://github.com/mmottl/pcre-ocaml/releases/download/v7.1.1/pcre-ocaml-7.1.1.tar.gz;
+    sha256 = "0nj4gb6hjjjmz5gnl9cjrh4w82rw8cvbwnk0hxhfgfd25p9k50n3";
   };
 
   buildInputs = [ocaml findlib];

@@ -15,14 +15,18 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mkvtoolnix-6.5.0";
+  version = "7.3.0";
+  name = "mkvtoolnix-${version}";
 
   src = fetchurl {
     url = "http://www.bunkus.org/videotools/mkvtoolnix/sources/${name}.tar.xz";
-    sha256 = "0a3h878bsjbpb2r7b528xzyqzl8r82yhrniry9bnhmw7rcl53bd8";
+    sha256 = "086lg64pki6mz00h0a735hgvz4347zbcp3wz384sigqndn99zc1c";
   };
 
-  buildInputs = [ libmatroska flac libvorbis file boost xdg_utils expat wxGTK zlib ruby gettext pkgconfig curl ];
+  buildInputs = [
+    libmatroska flac libvorbis file boost xdg_utils
+    expat wxGTK zlib ruby gettext pkgconfig curl
+  ];
 
   configureFlags = "--with-boost-libdir=${boost}/lib";
   buildPhase = ''
@@ -36,5 +40,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Cross-platform tools for Matroska";
     homepage = http://www.bunkus.org/videotools/mkvtoolnix/;
+    license = stdenv.lib.licenses.gpl2;
+    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
   };
 }

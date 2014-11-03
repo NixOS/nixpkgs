@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   buildInputs = [openssl jdk premake3];
 
   installPhase = ''
-    ensureDir $out/{bin,lib,share/${baseName}}
+    mkdir -p $out/{bin,lib,share/${baseName}}
 
     # Install lib
     install -Dm444 lib/linux/libaacskeys.so $out/lib

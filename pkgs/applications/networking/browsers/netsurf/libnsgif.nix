@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Libnsbmp is a decoding library for gif image file formats"; # used by netsurf
     homepage = http://www.netsurf-browser.org/projects/libnsgif/;
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
     maintainers = [args.lib.maintainers.marcweber];
     platforms = args.lib.platforms.linux;
     broken = true;

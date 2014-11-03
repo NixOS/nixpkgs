@@ -35,15 +35,24 @@ in {
       description = "Enable Gnome 3 desktop manager.";
     };
 
+    services.xserver.desktopManager.gnome3.sessionPath = mkOption {
+      default = [];
+      example = literalExample "[ pkgs.gnome3.gpaste ]";
+      description = "Additional list of packages to be added to the session search path.
+                     Useful for gnome shell extensions or gsettings-conditionated autostart.";
+      apply = list: list ++ [ gnome3.gnome_shell ]; 
+    };
+
     environment.gnome3.packageSet = mkOption {
-      default = pkgs.gnome3;
-      example = literalExample "pkgs.gnome3_12";
+      default = null;
+      example = literalExample "pkgs.gnome3_10";
       description = "Which Gnome 3 package set to use.";
+      apply = p: if p == null then pkgs.gnome3 else p;
     };
     
     environment.gnome3.excludePackages = mkOption {
       default = [];
-      example = "[ pkgs.gnome3.totem ]";
+      example = literalExample "[ pkgs.gnome3.totem ]";
       type = types.listOf types.package;
       description = "Which packages gnome should exclude from the default environment";
     };
@@ -69,11 +78,11 @@ in {
     services.gnome3.tracker.enable = mkDefault true;
     hardware.pulseaudio.enable = mkDefault true;
     services.telepathy.enable = mkDefault true;
-    networking.networkmanager.enable = true;
+    networking.networkmanager.enable = mkDefault true;
     services.upower.enable = config.powerManagement.enable;
     services.upower.package = gnome3.upower;
 
-    fonts.fonts = [ pkgs.dejavu_fonts ];
+    fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell_fonts ];
 
     services.xserver.desktopManager.session = singleton
       { name = "gnome3";
@@ -86,10 +95,19 @@ in {
 
           export XDG_MENU_PREFIX=gnome
 
-          # Don't let epiphany depend upon gnome-shell
-          # Don't let gnome-session depend upon vino (for .desktop autostart condition)
+          ${concatMapStrings (p: ''
+            if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
+              export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
+            fi
+
+            if [ -d "${p}/lib/girepository-1.0" ]; then
+              export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
+              export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
+            fi
+          '') cfg.sessionPath}
+
           # Override default mimeapps
-          export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${gnome3.gnome_shell}/share/gsettings-schemas/${gnome3.gnome_shell.name}:${gnome3.vino}/share/gsettings-schemas/${gnome3.vino.name}:${mimeAppsList}/share
+          export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${mimeAppsList}/share
 
           # Let gnome-control-center find gnome-shell search providers
           export GNOME_SEARCH_PROVIDERS_DIR=${config.system.path}/share/gnome-shell/search-providers/
@@ -123,7 +141,7 @@ in {
         gnome3.gnome_settings_daemon
         gnome3.gnome_shell
         gnome3.gnome_themes_standard
-      ] ++ (removePackagesByName [
+      ] ++ cfg.sessionPath ++ (removePackagesByName [
         gnome3.baobab
         gnome3.empathy
         gnome3.eog

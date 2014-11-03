@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = http://www.gnu.org/software/commoncpp/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.marcweber
                     stdenv.lib.maintainers.ludo
                   ];
-    platforms = stdenv.lib.platforms.allBut "i686-freebsd";
+    platforms = with stdenv.lib.platforms; allBut freebsd;
   };
 }

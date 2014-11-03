@@ -3,9 +3,9 @@ x@{builderDefsPackage
   , gmpxx, flex, bison
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     [];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -30,17 +30,14 @@ rec {
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["doAutotools" "doConfigure" "doMakeInstall"];
-      
+
   meta = {
     description = "A satisfiability modulo theory (SMT) solver";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = "GPLv3";
+    maintainers = [ a.lib.maintainers.raskin ];
+    platforms = a.lib.platforms.linux;
+    license = a.stdenv.lib.licenses.gpl3;
     homepage = "http://code.google.com/p/opensmt/";
+    broken = true;
   };
   passthru = {
     updateInfo = {
@@ -48,4 +45,3 @@ rec {
     };
   };
 }) x
-

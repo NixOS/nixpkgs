@@ -63,9 +63,11 @@ let
     logvol / --size=1000 --grow --fstype=ext4 --name=root --vgname=nixos
   '';
 in {
+  name = "partitiion";
+
   machine = { config, pkgs, ... }: {
     environment.systemPackages = [
-      pkgs.pythonPackages.nixpart
+      pkgs.pythonPackages.nixpart0
       pkgs.file pkgs.btrfsProgs pkgs.xfsprogs pkgs.lvm2
     ];
     virtualisation.emptyDiskImages = [ 4096 4096 ];
@@ -207,7 +209,7 @@ in {
       ensurePartition("swap", "swap");
       ensurePartition("boot", "f2fs");
       ensurePartition("root", "f2fs");
-      remoteAndCheck;
+      remountAndCheck;
       ensureMountPoint("/mnt/boot", "f2fs");
     };
 

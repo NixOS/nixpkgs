@@ -44,6 +44,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.tribler.org/;
     description = "A completely decentralised P2P filesharing client based on the Bittorrent protocol";
-    license = "LGPLv2.1";
+    license = stdenv.lib.licenses.lgpl21;
   };
 }

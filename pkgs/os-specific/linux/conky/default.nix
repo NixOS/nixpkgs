@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
     sha256 = "0vxvjmi3cdvnp994sv5zcdyncfn0mlxa71p2wm9zpyrmy58bbwds";
   };
 
+  NIX_LDFLAGS = "-lgcc_s";
+
   buildInputs = [ pkgconfig glib ncurses ]
     ++ optional  luaSupport   lua5
     ++ optional  wireless     wirelesstools
@@ -65,7 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://conky.sourceforge.net/;
-    description = "Conky is an advanced, highly configurable system monitor based on torsmo";
+    description = "Advanced, highly configurable system monitor based on torsmo";
     maintainers = [ stdenv.lib.maintainers.guibert ];
     license = stdenv.lib.licenses.gpl3Plus;
   };

@@ -45,8 +45,8 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/share/tor-browser
-    ensureDir $out/bin
+    mkdir -p $out/share/tor-browser
+    mkdir -p $out/bin
     cp -R * $out/share/tor-browser
 
     cat > "$out/bin/tor-browser" << EOF

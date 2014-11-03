@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxslt libxml2 docbook_xsl ];
 
   meta = {
-    description = "TDB, the trivial database";
+    description = "The trivial database";
     longDescription =
       '' TDB is a Trivial Database. In concept, it is very much like GDBM,
          and BSD's DB except that it allows multiple simultaneous writers and
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = http://tdb.samba.org/;
-    license = "LGPLv3+";
+    license = stdenv.lib.licenses.lgpl3Plus;
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;

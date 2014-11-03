@@ -5,11 +5,11 @@
 # TODO: enable more folks backends
 
 stdenv.mkDerivation rec {
-  name = "folks-0.9.6";
+  name = "folks-0.9.8";
 
   src = fetchurl {
     url = "mirror://gnome/sources/folks/0.9/${name}.tar.xz";
-    sha256 = "a67e055b5a2724a34a80946e2940c4c0ad708cb1f4e0a09407c6b69a5e40267f";
+    sha256 = "09cbs3ihcswpi1wg8xbjmkqjbhnxa1idy1fbzmz0gah7l5mxmlfj";
   };
 
   propagatedBuildInputs = [ glib gnome3.libgee sqlite ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
     homepage = https://wiki.gnome.org/Projects/Folks;
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = with stdenv.lib.maintainers; [ lethalman ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice

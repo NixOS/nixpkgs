@@ -1,21 +1,23 @@
-{ stdenv, fetchurl, dpkg, curl, libarchive, openssl, ruby, rubyLibs, libiconv
+{ stdenv, fetchurl, dpkg, curl, libarchive, openssl, ruby, rubyLibs, libiconvOrLibc
 , libxml2, libxslt }:
 
 assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
 
+let version = "1.6.5";
+in
 stdenv.mkDerivation rec {
-  name = "vagrant-1.4.3";
+  name = "vagrant-${version}";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url    = https://dl.bintray.com/mitchellh/vagrant/vagrant_1.4.3_x86_64.deb;
-        sha256 = "dbd06de0f3560e2d046448d627bca0cbb0ee34b036ef605aa87ed20e6ad2684b";
+        url    = "https://dl.bintray.com/mitchellh/vagrant/vagrant_${version}_x86_64.deb";
+        sha256 = "12m2mnpnfzqv2s4j58cnzg4h4i5nkk5nb4irsvmm3i9a0dnsziz2";
       }
     else
       fetchurl {
-        url    = https://dl.bintray.com/mitchellh/vagrant/vagrant_1.4.3_i686.deb;
-        sha256 = "66e613fc1c9e31ecaf8e5f1d07d2ae4fca3d4fc2e43593543962664258d9af9b";
+        url    = "https://dl.bintray.com/mitchellh/vagrant/vagrant_${version}_i686.deb";
+        sha256 = "1d4w0ni6mkb378v6rd7b188fw38vi8qql7pkwzsykr6389krbkbq";
       };
 
   meta = with stdenv.lib; {
@@ -64,7 +66,7 @@ stdenv.mkDerivation rec {
 
     # libiconv: iconv
     rm opt/vagrant/embedded/bin/iconv
-    ln -s ${libiconv}/bin/iconv opt/vagrant/embedded/bin
+    ln -s ${libiconvOrLibc}/bin/iconv opt/vagrant/embedded/bin
 
     # libxml: xml2-config, xmlcatalog, xmllint
     rm opt/vagrant/embedded/bin/{xml2-config,xmlcatalog,xmllint}
@@ -80,5 +82,14 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"
     cp -r opt "$out"
     cp -r usr/bin "$out"
+  '';
+
+  preFixup = ''
+    # 'hide' the template file from shebang-patching
+    chmod -x $out/opt/vagrant/embedded/gems/gems/bundler-1.6.6/lib/bundler/templates/Executable
+  '';
+
+  postFixup = ''
+    chmod +x $out/opt/vagrant/embedded/gems/gems/bundler-1.6.6/lib/bundler/templates/Executable
   '';
 }

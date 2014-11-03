@@ -1,31 +1,31 @@
-{ stdenv, fetchgit, pkgconfig, which
-, SDL, mesa, alsaLib
-, libXxf86vm, libXinerama, libXv
-}:
+{ stdenv, fetchgit, pkgconfig, ffmpeg, mesa, nvidia_cg_toolkit
+, freetype, libxml2, libv4l, coreutils, python34, which, udev, alsaLib
+, libX11, libXext, libXxf86vm, libXdmcp, SDL, pulseaudio ? null }:
 
 stdenv.mkDerivation rec {
-  name = "retroarch-0.9.9.7";
+  name = "retroarch-bare-${version}";
+  version = "20141009";
 
   src = fetchgit {
-    url = "https://github.com/libretro/RetroArch.git";
-    rev = "ea0c4880556e0f9d1fe8253ddc713bc743b00e1b";
-    sha256 = "1jhyh7f8ijy67fxslxqsp8pjl2lwayjljp06hp4n5cn33yajpbd7";
+    url = git://github.com/libretro/RetroArch.git;
+    rev = "72f26dfb49f236294c52eb9cb4c9d5c15da4837a";
+    sha256 = "0dn9fh1frnbxykhw3q229ck50a800p8r4va8nssfcdxh8cys385w";
   };
 
-  buildInputs = [
-    pkgconfig which SDL mesa alsaLib
-    libXxf86vm libXinerama libXv
-  ];
+  buildInputs = [ pkgconfig ffmpeg mesa nvidia_cg_toolkit freetype libxml2 libv4l coreutils
+                  python34 which udev alsaLib libX11 libXext libXxf86vm libXdmcp SDL pulseaudio ];
 
-  preConfigure = ''
-    configureFlags="--global-config-dir=$out/etc"
+  patchPhase = ''
+    export GLOBAL_CONFIG_DIR=$out/etc
+    sed -e 's#/bin/true#${coreutils}/bin/true#' -i qb/qb.libs.sh
   '';
- 
-  meta = {
-    description = "Modular multi-system game/emulator system";
-    homepage = "http://www.libretro.com/";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ iyzsong ];
+
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
+    homepage = http://libretro.org/;
+    description = "Multi-platform emulator frontend for libretro cores";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ MP2E ];
   };
 }

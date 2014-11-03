@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "SDL image library";
     homepage    = http://www.libsdl.org/projects/SDL_image/;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms   = platforms.linux;
   };
 }

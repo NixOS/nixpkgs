@@ -8,11 +8,11 @@ assert xineramaSupport -> xlibs.libXinerama != null;
 assert cupsSupport -> cups != null;
 
 stdenv.mkDerivation rec {
-  name = "gtk+-2.24.23";
+  name = "gtk+-2.24.25";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/2.24/${name}.tar.xz";
-    sha256 = "0z2ic7fma1lmmv4ncgki3vadqp7d0qkj2d235impsplvgvi0d950";
+    sha256 = "38af1020cb8ff3d10dda2c8807f11e92af9d2fa4045de61c62eedb7fbc7ea5b3";
   };
 
   enableParallelBuilding = true;
@@ -36,6 +36,13 @@ stdenv.mkDerivation rec {
     else "--with-xinput=yes";
 
   postInstall = "rm -rf $out/share/gtk-doc";
+
+  passthru = {
+    gtkExeEnvPostBuild = ''
+      rm $out/lib/gtk-2.0/2.10.0/immodules.cache
+      $out/bin/gtk-query-immodules-2.0 $out/lib/gtk-2.0/2.10.0/immodules/*.so > $out/lib/gtk-2.0/2.10.0/immodules.cache
+    ''; # workaround for bug of nix-mode for Emacs */ '';
+  };
 
   meta = with stdenv.lib; {
     description = "A multi-platform toolkit for creating graphical user interfaces";

@@ -1,6 +1,6 @@
---- at-3.1.10.1/Makefile.in	2005-08-29 10:08:28.000000000 +0200
-+++ at-3.1.10.1/Makefile.in	2008-04-01 11:05:38.000000000 +0200
-@@ -88,35 +88,28 @@ atrun: atrun.in
+--- at-3.1.14/Makefile.in	2013-09-08 14:43:53.000000000 +0200
++++ at-3.1.14/Makefile.in	2014-07-27 20:42:04.017703443 +0200
+@@ -91,35 +91,28 @@
  	$(CC) -c $(CFLAGS) $(DEFS) $*.c
  
  install: all
@@ -15,7 +15,7 @@
 -	chmod 600 $(IROOT)$(LFILE)
 -	chown $(DAEMON_USERNAME):$(DAEMON_GROUPNAME) $(IROOT)$(LFILE)
 -	test -f $(IROOT)$(etcdir)/at.allow || test -f $(IROOT)$(etcdir)/at.deny || $(INSTALL) -o root -g $(DAEMON_GROUPNAME) -m 640 at.deny $(IROOT)$(etcdir)/
--	$(INSTALL) -g $(DAEMON_GROUPNAME) -o $(DAEMON_USERNAME) -m 6755 -s at $(IROOT)$(bindir)
+-	$(INSTALL) -g $(DAEMON_GROUPNAME) -o $(DAEMON_USERNAME) -m 6755 at $(IROOT)$(bindir)
 +	$(INSTALL) -m 755 -d $(IROOT)$(bindir)
 +	$(INSTALL) -m 755 -d $(IROOT)$(sbindir)
 +	$(INSTALL) -m 755 -d $(IROOT)$(docdir)
@@ -27,7 +27,7 @@
 -	$(INSTALL) -d -o root -g root -m 755 $(IROOT)$(man1dir)
 -	$(INSTALL) -d -o root -g root -m 755 $(IROOT)$(man5dir)
 -	$(INSTALL) -d -o root -g root -m 755 $(IROOT)$(man8dir)
--	$(INSTALL) -g root -o root -m 755 -s atd $(IROOT)$(sbindir)
+-	$(INSTALL) -g root -o root -m 755 atd $(IROOT)$(sbindir)
 -	$(INSTALL) -g root -o root -m 755 atrun $(IROOT)$(sbindir)
 -	$(INSTALL) -g root -o root -m 644 at.1 $(IROOT)$(man1dir)/
 +	$(INSTALL) -m 755 batch $(IROOT)$(bindir)
@@ -44,12 +44,11 @@
 -	$(INSTALL) -g root -o root -m 644 tmpman $(IROOT)$(man8dir)/atrun.8
 +	$(INSTALL) -m 644 tmpman $(IROOT)$(man8dir)/atrun.8
  	rm -f tmpman
--	$(INSTALL) -g root -o root -m 644 at_allow.5 $(IROOT)$(man5dir)/
-+	$(INSTALL) -m 644 at_allow.5 $(IROOT)$(man5dir)/
- 	cd $(IROOT)$(man5dir) && $(LN_S) -f at_allow.5 at_deny.5 
+-	$(INSTALL) -g root -o root -m 644 at.allow.5 $(IROOT)$(man5dir)/
++	$(INSTALL) -m 644 at.allow.5 $(IROOT)$(man5dir)/
+ 	cd $(IROOT)$(man5dir) && $(LN_S) -f at.allow.5 at.deny.5
 -	$(INSTALL) -g root -o root -m 644 $(DOCS) $(IROOT)$(atdocdir)
 +	$(INSTALL) -m 644 $(DOCS) $(IROOT)$(atdocdir)
  	rm -f $(IROOT)$(mandir)/cat1/at.1* $(IROOT)$(mandir)/cat1/batch.1* \
  		$(IROOT)$(mandir)/cat1/atq.1*
  	rm -f $(IROOT)$(mandir)/cat1/atd.8*
-

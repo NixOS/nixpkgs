@@ -15,7 +15,7 @@ let
       root = "code.google.com/p/go.crypto";
       src = fetchhg {
         url = "http://code.google.com/p/go.crypto";
-        tag = "199";
+        rev = "199";
         sha256 = "0ibrpc6kknzl6a2g2fkxn03mvrd635lcnvf4a9rk1dfrpjbpcixh";
       };
     }
@@ -23,7 +23,7 @@ let
       root = "code.google.com/p/goauth2";
       src = fetchhg {
         url = "http://code.google.com/p/goauth2";
-        tag = "67";
+        rev = "67";
         sha256 = "053vajj8hd9869by7z9qfgzn84h6avpcjvyxcyw5jml8dsln4bah";
       };
     }
@@ -31,7 +31,7 @@ let
       root = "code.google.com/p/google-api-go-client";
       src = fetchhg {
         url = "http://code.google.com/p/google-api-go-client";
-        tag = "111";
+        rev = "111";
         sha256 = "1ib8i1c2mb86lkrr5w7bgwb70gkqmp860wa3h1j8080gxdx3yy16";
       };
     }
@@ -39,7 +39,7 @@ let
       root = "code.google.com/p/gosshold";
       src = fetchhg {
         url = "http://code.google.com/p/gosshold";
-        tag = "2";
+        rev = "2";
         sha256 = "1ljl8pcxxfz5rv89b2ajd31gxxzifl57kzpksvdhyjdxh98gkvg8";
       };
     }
@@ -65,7 +65,7 @@ let
       root = "launchpad.net/tomb";
       src = fetchbzr {
         url = "https://launchpad.net/tomb";
-        revision = "17";
+        rev = "17";
         sha256 = "1cjw0sr9hald1darq6n8akfpkzcgrk3mcq59hga3ibf2lrg35ha0";
       };
     }
@@ -82,7 +82,7 @@ let
       root = "code.google.com/p/goprotobuf";
       src = fetchhg {
         url = "http://code.google.com/p/goprotobuf";
-        tag = "246";
+        rev = "246";
         sha256 = "0k4wcv1dnkwcp0gdrajj6kr25f1lg4lgpbi0h5v9l9n7sdwzplf4";
       };
     }
@@ -135,7 +135,7 @@ let
       root = "launchpad.net/gocheck";
       src = fetchbzr {
         url = "https://launchpad.net/gocheck";
-        revision = "87";
+        rev = "87";
         sha256 = "1y9fa2mv61if51gpik9isls48idsdz87zkm1p3my7swjdix7fcl0";
       };
     }
@@ -278,7 +278,7 @@ let
       root = "launchpad.net/mgo";
       src = fetchbzr {
         url = "https://launchpad.net/mgo";
-        revision = "2";
+        rev = "2";
         sha256 = "0h1dxzyx5c4r4gfnmjxv92hlhjxrgx9p4g53p4fhmz6x2fdglb0x";
       };
     }

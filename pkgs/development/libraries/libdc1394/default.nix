@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libraw1394, libusb1 }:
 
 stdenv.mkDerivation rec {
-  name = "libdc1394-2.2.1";
+  name = "libdc1394-2.2.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/libdc1394/${name}.tar.gz";
-    sha256 = "1wkcx4ff094qba1fwllmlr81i7xg7l8dzq7y7pvy3wlbpwd3634j";
+    sha256 = "1p9b4ciy97s04gmp7656cybr1zfd79hlw0ffhfb52m3zcn07h6aa";
   };
 
   buildInputs = [ libraw1394 libusb1 ];
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://sourceforge.net/projects/libdc1394/;
     description = "Capture and control API for IIDC compliant cameras";
-    license = "LGPLv2.1+";
+    license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [ stdenv.lib.maintainers.viric ];
     platforms = stdenv.lib.platforms.linux;
   };

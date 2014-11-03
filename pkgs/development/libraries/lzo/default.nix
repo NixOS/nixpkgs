@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "lzo-2.06";
+  name = "lzo-2.08";
 
   src = fetchurl {
     url = "${meta.homepage}/download/${name}.tar.gz";
-    sha256 = "0wryshs446s7cclrbjykyj766znhcpnr7s3cxy33ybfn6vwfcygz";
+    sha256 = "0536ad3ksk1r8h2a27d0y4p27lwjarzyndw7sagvxzj6xr6kw6xc";
   };
 
   configureFlags = [ "--enable-shared" ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = http://www.oberhumer.com/opensource/lzo;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     platforms = stdenv.lib.platforms.all;
     maintainers = [ ];

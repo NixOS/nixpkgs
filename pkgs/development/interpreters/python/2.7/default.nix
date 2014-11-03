@@ -1,18 +1,17 @@
-{ stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2
-, sqlite, tcl, tk, x11, openssl, readline, db, ncurses, gdbm, libX11 }:
+{ stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, includeModules ? false
+, sqlite, tcl, tk, x11, openssl, readline, db, ncurses, gdbm, libX11, self, callPackage }:
 
 assert zlibSupport -> zlib != null;
 
 with stdenv.lib;
 
 let
-
   majorVersion = "2.7";
-  version = "${majorVersion}.7";
+  version = "${majorVersion}.8";
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
-    sha256 = "0y6s12rdi89k24p8zarhy9fqmyy459yg0d125c7cac4v136y70r9";
+    sha256 = "0nh7d3dp75f1aj0pamn4hla8s0l7nbaq4a38brry453xrfh11ppd";
   };
 
   patches =
@@ -28,66 +27,80 @@ let
       # patch python to put zero timestamp into pyc
       # if DETERMINISTIC_BUILD env var is set
       ./deterministic-build.patch
+
+      # http://bugs.python.org/issue21963
+      ./remove-avoid-daemon-thread-shutdown.patch
     ];
-
-  postPatch = stdenv.lib.optionalString (stdenv.gcc.libc != null) ''
-    substituteInPlace ./Lib/plat-generic/regen \
-                      --replace /usr/include/netinet/in.h \
-                                ${stdenv.gcc.libc}/include/netinet/in.h
-  '';
-
-  buildInputs =
-    optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc ++
-    [ bzip2 openssl ]
-    ++ optional zlibSupport zlib;
-
-  ensurePurity =
-    ''
+    
+  preConfigure = ''
       # Purity.
       for i in /usr /sw /opt /pkg; do
         substituteInPlace ./setup.py --replace $i /no-such-path
       done
+    '' + optionalString (stdenv ? gcc && stdenv.gcc.libc != null) ''
+      for i in Lib/plat-*/regen; do
+        substituteInPlace $i --replace /usr/include/ ${stdenv.gcc.libc}/include/
+      done
+    '' + optionalString stdenv.isCygwin ''
+      # On Cygwin, `make install' tries to read this Makefile.
+      mkdir -p $out/lib/python${majorVersion}/config
+      touch $out/lib/python${majorVersion}/config/Makefile
+      mkdir -p $out/include/python${majorVersion}
+      touch $out/include/python${majorVersion}/pyconfig.h
     '';
+
+  buildInputs =
+    optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc ++
+    [ bzip2 openssl ] ++ optionals includeModules [ db openssl ncurses gdbm libX11 readline x11 tcl tk sqlite ]
+    ++ optional zlibSupport zlib;
 
   # Build the basic Python interpreter without modules that have
   # external dependencies.
   python = stdenv.mkDerivation {
     name = "python-${version}";
 
-    inherit majorVersion version src patches postPatch buildInputs;
+    inherit majorVersion version src patches buildInputs preConfigure;
 
+    LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
     C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
     LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
 
     configureFlags = "--enable-shared --with-threads --enable-unicode";
 
-    preConfigure = "${ensurePurity}" + optionalString stdenv.isCygwin
-      ''
-        # On Cygwin, `make install' tries to read this Makefile.
-        mkdir -p $out/lib/python${majorVersion}/config
-        touch $out/lib/python${majorVersion}/config/Makefile
-        mkdir -p $out/include/python${majorVersion}
-        touch $out/include/python${majorVersion}/pyconfig.h
-      '';
-
     NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
+    DETERMINISTIC_BUILD = 1;
 
     setupHook = ./setup-hook.sh;
 
     postInstall =
       ''
-        rm -rf "$out/lib/python${majorVersion}/test"
+        # needed for some packages, especially packages that backport
+        # functionality to 2.x from 3.x
+        for item in $out/lib/python${majorVersion}/test/*; do
+          if [[ "$item" != */test_support.py* ]]; then
+            rm -rf "$item"
+          else
+            echo $item
+          fi
+        done
+        touch $out/lib/python${majorVersion}/test/__init__.py
         ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb
         ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb${majorVersion}
         ln -s $out/share/man/man1/{python2.7.1.gz,python.1.gz}
 
         paxmark E $out/bin/python${majorVersion}
+        
+        ${ optionalString includeModules "$out/bin/python ./setup.py build_ext"}
       '';
 
-    passthru = {
+    passthru = rec {
       inherit zlibSupport;
+      isPy2 = true;
+      isPy27 = true;
+      buildEnv = callPackage ../wrapper.nix { python = self; };
       libPrefix = "python${majorVersion}";
-      executable = "python2.7";
+      executable = libPrefix;
+      sitePackages = "lib/${libPrefix}/site-packages";
     };
 
     enableParallelBuilding = true;
@@ -106,7 +119,7 @@ let
       '';
       license = stdenv.lib.licenses.psfl;
       platforms = stdenv.lib.platforms.all;
-      maintainers = with stdenv.lib.maintainers; [ simons chaoflow ];
+      maintainers = with stdenv.lib.maintainers; [ simons chaoflow iElectric ];
     };
   };
 
@@ -118,25 +131,17 @@ let
     , internalName ? "_" + moduleName
     , deps
     }:
-    stdenv.mkDerivation rec {
+    if includeModules then null else stdenv.mkDerivation rec {
       name = "python-${moduleName}-${python.version}";
 
-      inherit src patches postPatch;
+      inherit src patches preConfigure;
 
       buildInputs = [ python ] ++ deps;
 
       C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
       LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
 
-      configurePhase = "${ensurePurity}";
-
-      buildPhase =
-        ''
-          # Fake the build environment that setup.py expects.
-          ln -s ${python}/include/python*/pyconfig.h .
-          ln -s ${python}/lib/python*/config/Setup Modules/
-          ln -s ${python}/lib/python*/config/Setup.local Modules/
-
+      buildPhase = ''
           substituteInPlace setup.py --replace 'self.extensions = extensions' \
             'self.extensions = [ext for ext in self.extensions if ext.name in ["${internalName}"]]'
 
@@ -187,8 +192,6 @@ let
       moduleName = "sqlite3";
       deps = [ sqlite ];
     };
-
-    ssl = null;
 
     tkinter = buildInternalPythonModule {
       moduleName = "tkinter";

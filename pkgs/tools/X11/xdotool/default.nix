@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, libX11, perl, libXtst, xextproto, libXi }:
+{ stdenv, fetchurl, libX11, perl, libXtst, xextproto, libXi, libXinerama }:
 
-let version = "2.20101012.3049"; in
+let version = "2.20110530.1"; in
 stdenv.mkDerivation {
   name = "xdotool-${version}";
   src = fetchurl {
     url = "http://semicomplete.googlecode.com/files/xdotool-${version}.tar.gz";
-    sha256 = "0amkb1zvdk0gj7va3rjw9arbyj8pgprkdik05yl6rghq21q076ls";
+    sha256 = "0rxggg1cy7nnkwidx8x2w3c5f3pk6dh2b6q0q7hp069r3n5jrd77";
   };
 
-  buildInputs = [ libX11 perl libXtst xextproto libXi ];
+  buildInputs = [ libX11 perl libXtst xextproto libXi libXinerama ];
 
   configurePhase = ''
     export makeFlags="PREFIX=$out";

@@ -1,0 +1,7 @@
+attribute_name allegro5
+url http://alleg.sourceforge.net/download.html
+version_link '[.]tar[.].*/download$'
+SF_redirect
+do_overwrite () {
+  do_overwrite_just_version
+}

@@ -12,7 +12,7 @@ let
   nagiosObjectDefs = cfg.objectDefs;
 
   nagiosObjectDefsDir = pkgs.runCommand "nagios-objects" {inherit nagiosObjectDefs;}
-    "ensureDir $out; ln -s $nagiosObjectDefs $out/";
+    "mkdir -p $out; ln -s $nagiosObjectDefs $out/";
 
   nagiosCfgFile = pkgs.writeText "nagios.cfg"
     ''

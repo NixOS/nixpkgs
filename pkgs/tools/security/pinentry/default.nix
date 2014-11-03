@@ -6,11 +6,11 @@
 assert useGtk || useNcurses || useQt4;
 
 stdenv.mkDerivation rec {
-  name = "pinentry-0.8.3";
+  name = "pinentry-0.8.4";
 
   src = fetchurl {
     url = "mirror://gnupg/pinentry/${name}.tar.bz2";
-    sha256 = "1bd047crf7xb8g61mval8v6qww98rddlsw2dz6j8h8qbnl4hp2sn";
+    sha256 = "04jnlfncj9d5rg0j4gmsi2l1q9q7c6gjbvxfnfh3nx6b8szv779m";
   };
 
   buildInputs = let opt = stdenv.lib.optional; in []
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://gnupg.org/aegypten2/";
     description = "GnuPG's interface to passphrase input";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     longDescription = ''
       Pinentry provides a console and a GTK+ GUI that allows users to

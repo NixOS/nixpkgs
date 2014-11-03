@@ -6,7 +6,8 @@ let
 
   cfg = config.boot.loader.grub;
 
-  realGrub = if cfg.version == 1 then pkgs.grub else pkgs.grub2;
+  realGrub = if cfg.version == 1 then pkgs.grub
+    else pkgs.grub2.override { zfsSupport = cfg.zfsSupport; };
 
   grub =
     # Don't include GRUB if we're only generating a GRUB menu (e.g.,
@@ -25,11 +26,12 @@ let
       inherit (cfg)
         version extraConfig extraPerEntryConfig extraEntries
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels timeout
-        default devices explicitBootRoot;
+        default devices fsIdentifier;
       path = (makeSearchPath "bin" [
-        pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils
+        pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfsProgs
+        pkgs.utillinux
       ]) + ":" + (makeSearchPath "sbin" [
-        pkgs.mdadm
+        pkgs.mdadm pkgs.utillinux
       ]);
     });
 
@@ -209,12 +211,35 @@ in
         '';
       };
 
-      explicitBootRoot = mkOption {
-        default = "";
-        type = types.str;
+      fsIdentifier = mkOption {
+        default = "uuid";
+        type = types.addCheck types.str
+          (type: type == "uuid" || type == "label" || type == "provided");
         description = ''
-          The relative path of /boot within the parent volume. Leave empty
-          if /boot is not a btrfs subvolume.
+          Determines how grub will identify devices when generating the
+          configuration file. A value of uuid / label signifies that grub
+          will always resolve the uuid or label of the device before using
+          it in the configuration. A value of provided means that grub will
+          use the device name as show in <command>df</command> or
+          <command>mount</command>. Note, zfs zpools / datasets are ignored
+          and will always be mounted using their labels.
+        '';
+      };
+
+      zfsSupport = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether grub should be build against libzfs.
+        '';
+      };
+
+      enableCryptodisk = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Enable support for encrypted partitions. Grub should automatically
+          unlock the correct encrypted partition and look for filesystems.
         '';
       };
 
@@ -244,7 +269,8 @@ in
         if cfg.devices == [] then
           throw "You must set the option ‘boot.loader.grub.device’ to make the system bootable."
         else
-          "PERL5LIB=${makePerlPath [ pkgs.perlPackages.XMLLibXML pkgs.perlPackages.XMLSAX ]} " +
+          "PERL5LIB=${makePerlPath (with pkgs.perlPackages; [ FileSlurp XMLLibXML XMLSAX ])} " +
+          (if cfg.enableCryptodisk then "GRUB_ENABLE_CRYPTODISK=y " else "") +
           "${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig}";
 
       system.build.grub = grub;
@@ -259,6 +285,13 @@ in
         concatStrings (mapAttrsToList (n: v: ''
           ${pkgs.coreutils}/bin/cp -pf "${v}" "/boot/${n}"
         '') config.boot.loader.grub.extraFiles);
+
+    assertions = [{ assertion = !cfg.zfsSupport || cfg.version == 2;
+                    message = "Only grub version 2 provides zfs support";}]
+      ++ flip map cfg.devices (dev: {
+        assertion = dev == "nodev" || hasPrefix "/" dev;
+        message = "Grub devices must be absolute paths, not ${dev}";
+      });
 
     })
 

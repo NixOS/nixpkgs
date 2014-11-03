@@ -38,7 +38,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://gentoo.org;
-    license = "GPLv3+";  # runtime support libraries are typically LGPLv3+
+    license = stdenv.lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
     maintainers = [
       stdenv.lib.maintainers.viric
     ];

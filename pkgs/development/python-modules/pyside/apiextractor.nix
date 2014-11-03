@@ -1,12 +1,11 @@
-{ stdenv, fetchgit, cmake, libxml2, libxslt, python27Packages, qt4 }:
+{ stdenv, fetchurl, cmake, libxml2, libxslt, python27Packages, qt4 }:
 
 stdenv.mkDerivation {
-  name = "pyside-apiextractor-0.10.7-6-gdcb1195";
+  name = "pyside-apiextractor-0.10.10";
 
-  src = fetchgit {
-    url = "git://github.com/PySide/Apiextractor.git";
-    rev = "dcb11958cabe518630f9f2d2bebd9f8711c2b15b";
-    sha256 = "d7b6cb16d11b6134de17a15635d0b5ad7460d31d7870cafe23a690141b9a2274";
+  src = fetchurl {
+    url = "https://github.com/PySide/Apiextractor/archive/0.10.10.tar.gz";
+    sha256 = "1zj8yrxy08iv1pk38djxw3faimm226w6wmi0gm32w4yczblylwz3";
   };
 
   enableParallelBuilding = true;

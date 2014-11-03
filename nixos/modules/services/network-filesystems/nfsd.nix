@@ -56,6 +56,21 @@ in
           default = false;
           description = "Whether to create the mount points in the exports file at startup time.";
         };
+
+        mountdPort = mkOption {
+          default = null;
+          example = 4002;
+          description = ''
+            Use fixed port for rpc.mountd, usefull if server is behind firewall.
+          '';
+        };
+
+        lockdPort = mkOption {
+          default = 0;
+          description = ''
+            Fix the lockd port number. This can help setting firewall rules for NFS.
+          '';
+        };
       };
 
     };
@@ -95,6 +110,9 @@ in
           ''
             # Create a state directory required by NFSv4.
             mkdir -p /var/lib/nfs/v4recovery
+
+            ${pkgs.procps}/sbin/sysctl -w fs.nfs.nlm_tcpport=${builtins.toString cfg.lockdPort}
+            ${pkgs.procps}/sbin/sysctl -w fs.nfs.nlm_udpport=${builtins.toString cfg.lockdPort}
 
             rpc.nfsd \
               ${if cfg.hostName != null then "-H ${cfg.hostName}" else ""} \
@@ -138,7 +156,10 @@ in
         restartTriggers = [ exports ];
 
         serviceConfig.Type = "forking";
-        serviceConfig.ExecStart = "@${pkgs.nfsUtils}/sbin/rpc.mountd rpc.mountd";
+        serviceConfig.ExecStart = ''
+          @${pkgs.nfsUtils}/sbin/rpc.mountd rpc.mountd \
+              ${if cfg.mountdPort != null then "-p ${toString cfg.mountdPort}" else ""}
+        '';
         serviceConfig.Restart = "always";
       };
 

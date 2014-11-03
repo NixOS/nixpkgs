@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://gmetadom.sourceforge.net/;
     description = "GMetaDOM is a collection of librares, each library providing a DOM implementation";
-    license = "LGPLv2.1+";
+    license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [ stdenv.lib.maintainers.roconnor ];
   };
 }

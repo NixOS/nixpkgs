@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   
   meta = {
     description = "Ultimate/Unix/Unusuable Amiga Emulator";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     homepage = http://www.amigaemulator.org;
     maintainers = [ stdenv.lib.maintainers.sander ];
   };

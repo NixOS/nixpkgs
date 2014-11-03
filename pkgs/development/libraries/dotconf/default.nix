@@ -1,18 +1,24 @@
-{ fetchurl, stdenv }:
+{ fetchFromGitHub, stdenv, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
   name = "dotconf-" + version;
-  version = "1.0.13";
+  version = "1.3";
 
-  src = fetchurl {
-    url = "http://www.azzit.de/dotconf/download/v1.0/dotconf-1.0.13.tar.gz";
-    sha256 = "0rcvi743jgnrq2p5gknnvsqiv47479y5gyc2g9pz7bp7v7bzlmc9";
+  src = fetchFromGitHub {
+    owner = "williamh";
+    repo = "dotconf";
+    rev = "v${version}";
+    sha256 = "1sc95hw5k2xagpafny0v35filmcn05k1ds5ghkldfpf6xw4hakp7";
   };
 
-  meta = {
-    description = "A configuration parser library";
+  buildInputs = [ autoconf automake libtool ];
 
+  preConfigure = "autoreconf --install";
+
+  meta = with stdenv.lib; {
+    description = "A configuration parser library";
+    maintainers = with maintainers; [ pSub ];
     homepage = http://www.azzit.de/dotconf/;
-    license = "LGPLv21+";
+    license = licenses.lgpl21Plus;
   };
 }

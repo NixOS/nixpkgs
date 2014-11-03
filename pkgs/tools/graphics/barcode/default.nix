@@ -9,17 +9,16 @@ let
   buildInputs = map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
-    version="0.99";
+    version = "0.99";
     baseName="barcode";
     name="${baseName}-${version}";
-    url="mirror://gnu/${baseName}/${name}.tar.gz";
-    hash="0r2b2lwg7a9i9ic5spkbnavy1ynrppmrldv46vsl44l1xgriq0vw";
+    url="mirror://gnu/${baseName}/${name}.tar.xz";
   };
 in
 rec {
   src = a.fetchurl {
     url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+    sha256 = "1indapql5fjz0bysyc88cmc54y8phqrbi7c76p71fgjp45jcyzp8";
   };
 
   inherit (sourceInfo) name version;
@@ -34,13 +33,10 @@ rec {
     [
       raskin
     ];
-    platforms = with a.lib.platforms;
-      all;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "ftp://ftp.gnu.org/gnu/barcode/";
-    };
+    platforms = with a.lib.platforms; allBut darwin;
+    downloadPage = "http://ftp.gnu.org/gnu/barcode/";
+    updateWalker = true;
+    inherit version;
   };
 }) x
 

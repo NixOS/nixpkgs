@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, perl, glib, libintlOrEmpty, gobjectIntrospection }:
 
 let
-  ver_maj = "2.12";
+  ver_maj = "2.14";
   ver_min = "0";
 in
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/atk/${ver_maj}/${name}.tar.xz";
-    sha256 = "13zijfcmx7sda83qkryzsmr9hw0r3b73xkagq9cmm733fhcl7a28";
+    sha256 = "1bgvp0isbmf0vb282pncsachqgkrg5zk6an2cv077cdz685wqx98";
   };
 
   buildInputs = libintlOrEmpty;
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://library.gnome.org/devel/atk/;
 
-    license = "LGPLv2+";
+    license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = with stdenv.lib.maintainers; [ raskin urkud ];
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;

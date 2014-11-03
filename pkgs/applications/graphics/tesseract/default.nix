@@ -9,7 +9,7 @@ let
         url = "http://tesseract-ocr.googlecode.com/files/tesseract-ocr-${majVersion}.${lang}.tar.gz";
         inherit sha256;
       };
-    in 
+    in
       "tar xfvz ${src} -C $out/share/ --strip=1";
 
   extraLanguages = ''
@@ -19,6 +19,7 @@ let
     ${f "nld" "162acxp1yb6gyki2is3ay2msalmfcsnrlsd9wml2ja05k94m6bjy"}
     ${f "eng" "1y5xf794n832s3lymzlsdm2s9nlrd2v27jjjp0fd9xp7c2ah4461"}
     ${f "slv" "0rqng43435cly32idxm1lvxkcippvc3xpxbfizwq5j0155ym00dr"}
+    ${f "jpn" "07v8pymd0iwyzh946lxylybda20gsw7p4fsb09jw147955x49gq9"}
   '';
 in
 
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "OCR engine";
     homepage = http://code.google.com/p/tesseract-ocr/;
-    license = "Apache2.0";
+    license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

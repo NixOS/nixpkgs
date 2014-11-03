@@ -10,11 +10,12 @@
 , bluraySupport ? true, libbluray ? null
 , speexSupport ? true, speex ? null
 , theoraSupport ? true, libtheora ? null
-, jackaudioSupport ? false, jackaudio ? null
+, jackaudioSupport ? false, jack2 ? null
 , pulseSupport ? true, pulseaudio ? null
 , bs2bSupport ? false, libbs2b ? null
 # For screenshots
 , libpngSupport ? true, libpng ? null
+, libjpegSupport ? true, libjpeg ? null
 , useUnfreeCodecs ? false
 }:
 
@@ -28,10 +29,11 @@ assert dvdnavSupport -> libdvdnav != null;
 assert bluraySupport -> libbluray != null;
 assert speexSupport -> speex != null;
 assert theoraSupport -> libtheora != null;
-assert jackaudioSupport -> jackaudio != null;
+assert jackaudioSupport -> jack2 != null;
 assert pulseSupport -> pulseaudio != null;
 assert bs2bSupport -> libbs2b != null;
 assert libpngSupport -> libpng != null;
+assert libjpegSupport -> libjpeg != null;
 
 let
 
@@ -60,7 +62,7 @@ let
       cp -prv * $out
     '';
 
-    meta.license = "unfree";
+    meta.license = stdenv.lib.licenses.unfree;
   } else null;
 
 in
@@ -89,13 +91,14 @@ stdenv.mkDerivation rec {
     ++ optional xineramaSupport libXinerama
     ++ optionals dvdnavSupport [ libdvdnav libdvdnav.libdvdread ]
     ++ optional bluraySupport libbluray
-    ++ optional jackaudioSupport jackaudio
+    ++ optional jackaudioSupport jack2
     ++ optional pulseSupport pulseaudio
     ++ optional screenSaverSupport libXScrnSaver
     ++ optional vdpauSupport libvdpau
     ++ optional speexSupport speex
     ++ optional bs2bSupport libbs2b
     ++ optional libpngSupport libpng
+    ++ optional libjpegSupport libjpeg
     ;
 
   nativeBuildInputs = [ yasm python3 ];
@@ -110,8 +113,8 @@ stdenv.mkDerivation rec {
       ${optionalString (stdenv.isi686 || stdenv.isx86_64) "--enable-runtime-cpudetection"}
       ${optionalString dvdnavSupport "--extra-ldflags=-ldvdread"}
       ${if xvSupport then "--enable-xv" else "--disable-xv"}
-      ${if x11Support then "--enable-x11 --enable-gl --extra-cflags=-I{libx11}/include"
-		else "--disable-x11 --disable-gl"}
+      ${if x11Support then "--enable-x11 --enable-gl --extra-cflags=-I${libX11}/include"
+        else "--disable-x11 --disable-gl"}
       --disable-xvid
       --disable-ossaudio
     '';
@@ -130,7 +133,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A movie player that supports many video formats (MPlayer fork)";
     homepage = "http://mplayer2.org";
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.viric ];
     platforms = stdenv.lib.platforms.linux;
   };

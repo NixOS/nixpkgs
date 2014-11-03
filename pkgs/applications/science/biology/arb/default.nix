@@ -81,5 +81,6 @@ stdenv.mkDerivation {
     pkgMaintainer = "http://BioLib.open-bio.org/";
     homepage    = http://www.arb-home.de/;
     priority    = "10";   # because it includes binaries of clustal etc.
+    broken = true;
   };
 }

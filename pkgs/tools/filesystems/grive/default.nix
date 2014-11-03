@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "f2b978cc93a2d16262c7b78c62019b2a58044eaef4ca95feaa74dfd4dfcbfa36";
   };
 
-  buildInputs = [cmake libgcrypt json_c curl expat stdenv binutils boost];
+  buildInputs = [cmake libgcrypt json_c curl expat stdenv binutils boost boost.lib];
 
   # work around new binutils headers, see
   # http://stackoverflow.com/questions/11748035/binutils-bfd-h-wants-config-h-now
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "an open source (experimental) Linux client for Google Drive";
     homepage = https://github.com/Grive/grive;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
 
     platforms = stdenv.lib.platforms.all;
   };

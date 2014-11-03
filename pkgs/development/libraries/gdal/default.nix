@@ -1,15 +1,15 @@
 { stdenv, fetchurl, composableDerivation, unzip, libjpeg, libtiff, zlib
-, postgresql, mysql, libgeotiff }:
+, postgresql, mysql, libgeotiff, python, pythonPackages}:
 
-composableDerivation.composableDerivation {} (fixed: {
-  name = "gdal-1.7.1";
+composableDerivation.composableDerivation {} (fixed: rec {
+  name = "gdal-1.11.0";
 
   src = fetchurl {
-    url = ftp://ftp.remotesensing.org/gdal/gdal171.zip;
-    md5 = "f5592cff69b239166c9b64ff81943b1a";
+    url = "http://download.osgeo.org/gdal/1.11.0/${name}.tar.gz";
+    md5 = "9fdf0f2371a3e9863d83e69951c71ec4";
   };
 
-  buildInputs = [ unzip libjpeg libtiff ];
+  buildInputs = [ unzip libjpeg libtiff python pythonPackages.numpy];
 
   # don't use optimization for gcc >= 4.3. That's said to be causeing segfaults
   preConfigure = "export CFLAGS=-O0; export CXXFLAGS=-O0";
@@ -22,12 +22,13 @@ composableDerivation.composableDerivation {} (fixed: {
     "--with-pg=${postgresql}/bin/pg_config"
     "--with-mysql=${mysql}/bin/mysql_config"
     "--with-geotiff=${libgeotiff}"
+    "--with-python"    # optional
   ];
 
   meta = {
     description = "Translator library for raster geospatial data formats";
     homepage = http://www.gdal.org/;
-    license = "X/MIT";
+    license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };

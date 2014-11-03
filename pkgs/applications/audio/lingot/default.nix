@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Not a Guitar-Only tuner";
     homepage = http://www.nongnu.org/lingot/;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [viric];
   };

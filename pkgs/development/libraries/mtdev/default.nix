@@ -1,18 +1,16 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "mtdev-1.1.2";
+  name = "mtdev-1.1.5";
 
   src = fetchurl {
     url = "http://bitmath.org/code/mtdev/${name}.tar.bz2";
-    sha256 = "0c2sfxxymf20ylvblgmdmybqs0cydmphg9fq6fnp6flbl0fd33b9";
+    sha256 = "0zxs7shzgbalkvlaiibi25bd902rbmkv9n1lww6q8j3ri9qdaxv6";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://bitmath.org/code/mtdev/;
-
     description = "Multitouch Protocol Translation Library";
-
     longDescription = ''
       The mtdev is a stand-alone library which transforms all variants of
       kernel MT events to the slotted type B protocol. The events put into
@@ -20,8 +18,8 @@ stdenv.mkDerivation rec {
       tracking, type A with contact tracking, or type B with contact tracking.
       See the kernel documentation for further details. 
     '';
-
-    license = "MIT/X11";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ wkennington ];
   };
 }
-

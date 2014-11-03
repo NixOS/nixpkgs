@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   buildCommand = ''
-    ensureDir $out/lib
+    mkdir -p $out/lib
     ln -s $src $out/lib/yuicompressor.jar
   '';
 }

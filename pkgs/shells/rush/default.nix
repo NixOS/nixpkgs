@@ -8,10 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "0fh0gbbp0iiq3wbkf503xb40r8ljk42vyj9bnlflbz82d6ipy1rm";
   };
 
+  patches = [ ./gets.patch ];
+
   doCheck = true;
 
   meta = {
-    description = "GNU Rush, Restricted User Shell";
+    description = "Restricted User Shell";
 
     longDescription =
       '' GNU Rush is a Restricted User Shell, designed for sites
@@ -28,7 +30,7 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = http://www.gnu.org/software/rush/;
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.bjg ];
     platforms = stdenv.lib.platforms.all;

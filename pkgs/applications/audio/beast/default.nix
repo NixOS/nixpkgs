@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     ];
 
   meta = { 
-    description = "BEAST - the Bedevilled Sound Engine";
+    description = "A music composition and modular synthesis application";
     homepage = http://beast.gtk.org;
     license = ["GPL-2" "LGPL-2.1"];
   };

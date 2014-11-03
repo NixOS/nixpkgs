@@ -1,14 +1,14 @@
-{ fetchurl, stdenv, texLive, python, makeWrapper, pkgconfig
-, libX11, qt4, enchant #, mythes, boost
+{ fetchurl, stdenv, pkgconfig, python, file, bc
+, qt4, hunspell, makeWrapper #, mythes, boost
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.7";
+  version = "2.1.2";
   name = "lyx-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.0.x/${name}.tar.xz";
-    sha256 = "0qp8xqmlafib4hispjgl1friln0w3s05mi20sjfzaxnl6jkvv5q5";
+    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.1.x/${name}.tar.xz";
+    sha256 = "19dvn681fz5i6zr7b1vx05sxhbsl73lb18axdcmcr58y6hi3hy68";
   };
 
   configureFlags = [
@@ -18,18 +18,29 @@ stdenv.mkDerivation rec {
     #"--without-included-mythes" # such a small library isn't worth a separate package
   ];
 
+  # LaTeX is used from $PATH, as people often want to have it with extra pkgs
   buildInputs = [
-    texLive qt4 python makeWrapper pkgconfig
-    enchant # mythes boost
+    pkgconfig qt4 python file/*for libmagic*/ bc
+    hunspell makeWrapper # enchant
   ];
 
+  enableParallelBuilding = true;
   doCheck = true;
 
-  meta = {
+  # python is run during runtime to do various tasks
+  postFixup = ''
+    sed '1s:/usr/bin/python:${python}/bin/python:'
+
+    wrapProgram "$out/bin/lyx" \
+      --prefix PATH : '${python}/bin'
+  '';
+
+  meta = with stdenv.lib; {
     description = "WYSIWYM frontend for LaTeX, DocBook";
     homepage = "http://www.lyx.org";
-    license = "GPL2";
-    maintainers = [ stdenv.lib.maintainers.vcunat ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.vcunat ];
+    platforms = platforms.linux;
   };
 }
+

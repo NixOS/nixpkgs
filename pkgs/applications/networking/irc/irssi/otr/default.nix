@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
   
   meta = {
     homepage = https://github.com/cryptodotis/irssi-otr;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

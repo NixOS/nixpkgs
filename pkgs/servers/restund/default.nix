@@ -24,5 +24,9 @@ stdenv.mkDerivation rec {
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [raskin];
     license = with stdenv.lib.licenses; bsd3;
+    inherit version;
+    downloadPage = "http://www.creytiv.com/pub/";
+    updateWalker = true;
+    downloadURLRegexp = "/restund-.*[.]tar[.]";
   };
 }

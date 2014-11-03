@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A set of text-mode partitioning tools for Globally Unique Identifier (GUID) Partition Table (GPT) disks";
 
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
 
     homepage = http://www.rodsbooks.com/gdisk/;
 
@@ -32,4 +32,3 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.linux;
   };
 }
-

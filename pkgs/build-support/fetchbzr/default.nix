@@ -1,5 +1,5 @@
 { stdenv, bazaar }: 
-{ url, revision, sha256 }:
+{ url, rev, sha256 }:
 
 stdenv.mkDerivation {
   name = "bzr-export";
@@ -11,5 +11,5 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = sha256;
   
-  inherit url revision;
+  inherit url rev;
 }

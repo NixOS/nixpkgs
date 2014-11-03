@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, gtkmm, jackaudio, pkgconfig }:
+{ stdenv, fetchurl, alsaLib, gtkmm, jack2, pkgconfig }:
 
 stdenv.mkDerivation  rec {
   name = "seq24-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation  rec {
     sha256 = "07n80zj95i80vjmsflnlbqx5vv90qmp5f6a0zap8d30849l4y258";
   };
 
-  buildInputs = [ alsaLib gtkmm jackaudio pkgconfig ];
+  buildInputs = [ alsaLib gtkmm jack2 pkgconfig ];
 
   meta = with stdenv.lib; {
     description = "minimal loop based midi sequencer";

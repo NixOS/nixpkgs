@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       of course, AGG can do much more than that.
     '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     homepage = http://www.antigrain.com/;
   };
 }

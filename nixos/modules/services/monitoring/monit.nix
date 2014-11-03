@@ -1,9 +1,9 @@
 # Monit system watcher
 # http://mmonit.org/monit/
 
-{config, pkgs, ...}:
+{config, pkgs, lib, ...}:
 
-let inherit (pkgs.lib) mkOption mkIf;
+let inherit (lib) mkOption mkIf;
 in
 
 {

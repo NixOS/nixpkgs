@@ -35,14 +35,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp filegive $out/bin
   '';
 
   meta = {
     homepage = http://viric.name/cgi-bin/filegive;
     description = "Easy p2p file sending program";
-    license = "AGPLv3+";
+    license = stdenv.lib.licenses.agpl3Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

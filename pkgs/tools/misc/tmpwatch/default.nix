@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://fedorahosted.org/tmpwatch/;
-    description = "The tmpwatch utility recursively searches through specified directories and removes files which have not been accessed in a specified period of time.";
+    description = "Recursively searches through specified directories and removes files which have not been accessed in a specified period of time";
     license = licenses.gpl2;
     maintainers = with maintainers; [ vlstill ];
     platforms = platforms.unix;

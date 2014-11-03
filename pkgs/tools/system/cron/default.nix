@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "cron-4.1";
   src = fetchurl {
     url = ftp://ftp.isc.org/isc/cron/cron_4.1.shar;
-    md5 = "5e1be9dbde66295821ac7899f2e1f561";
+    sha256 = "16n3dras4b1jh7g958nz1k54pl9pg5fwb3fvjln8z67varvq6if4";
   };
 
   unpackCmd = "(mkdir cron && cd cron && sh $curSrc)";
@@ -22,6 +22,6 @@ stdenv.mkDerivation {
   preInstall = "mkdir -p $out/bin $out/sbin $out/share/man/man1 $out/share/man/man5 $out/share/man/man8";
   
   meta = {
-    description = "Vixie Cron, a daemon for running commands at specific times";
+    description = "Daemon for running commands at specific times (Vixie Cron)";
   };
 }

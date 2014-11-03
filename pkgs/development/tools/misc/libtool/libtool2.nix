@@ -33,7 +33,7 @@ stdenv.mkDerivation (rec {
 
     homepage = http://www.gnu.org/software/libtool/;
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
