@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/genoma/macvim/archive/g-snapshot-21.tar.gz";
-    sha256 = "1f6l39s6cgyzzr9ix729axmc299mpl29abbc7571g4vply17m7nv";
+    sha256 = "1s86dpb8bcxh309gikiz8gm9ygv3d2jy6i4qlnxarbvcdk65fzv4";
   };
 
   enableParallelBuilding = true;
