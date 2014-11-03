@@ -3508,6 +3508,10 @@ let
 
     ansiterminal = callPackage ../development/ocaml-modules/ansiterminal { };
 
+    atd = callPackage ../development/ocaml-modules/atd { };
+
+    atdgen = callPackage ../development/tools/ocaml/atdgen { };
+
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
