@@ -1,0 +1,14 @@
+--- a/threadscope.cabal.orig	2014-11-03 15:23:29.000000000 -0600
++++ b/threadscope.cabal	2014-11-03 15:24:01.000000000 -0600
+@@ -41,7 +41,10 @@
+ Executable threadscope
+   Main-is:           Main.hs
+   Build-Depends:     base >= 4.0 && < 5,
+-                     gtk >= 0.12, cairo, glib, pango,
++                     gtk >= 0.12 && < 0.13,
++                     cairo < 0.13,
++                     glib < 0.13,
++                     pango < 0.13,
+                      binary, array, mtl, filepath,
+                      ghc-events >= 0.4.2,
+                      containers >= 0.2 && < 0.6,

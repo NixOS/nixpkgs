@@ -1,0 +1,15 @@
+Author: Hamish Mackenzie <Hamish.K.Mackenzie@googlemail.com>
+Date:   Mon Jul 7 21:28:50 2014 +1200
+
+    Fixes #1
+
+--- a/glib.cabal.orig	2014-11-03 14:52:40.000000000 -0600
++++ b/glib.cabal	2014-11-03 14:52:51.000000000 -0600
+@@ -36,6 +36,7 @@
+                         utf8-string >= 0.2 && < 0.4,
+                         containers
+         build-tools:    gtk2hsC2hs >= 0.13.8
++        cpp-options:    -U__BLOCKS__ -D__attribute__(A)=
+         if flag(closure_signals)
+           cpp-options:  -DUSE_GCLOSURE_SIGNALS_IMPL
+           c-sources: System/Glib/hsgclosure.ccommit aa22754e04616c354557fc350f96a8f7f331e984
