@@ -12,6 +12,7 @@
 
 # Attributes inherit from specific versions
 , version, src
+, ...
 }:
 
 # We must build at least one type of libraries
