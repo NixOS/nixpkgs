@@ -235,6 +235,14 @@ let
           useDefaultShell = mkDefault true;
           isSystemUser = mkDefault false;
         })
+        # If !mutableUsers, setting ‘initialPassword’ is equivalent to
+        # setting ‘password’ (and similarly for hashed passwords).
+        (mkIf (!cfg.mutableUsers && config.initialPassword != null) {
+          password = mkDefault config.initialPassword;
+        })
+        (mkIf (!cfg.mutableUsers && config.initialHashedPassword != null) {
+          hashedPassword = mkDefault config.initialHashedPassword;
+        })
       ];
 
   };
