@@ -9423,8 +9423,8 @@ let
   firefox-bin = callPackage ../applications/networking/browsers/firefox-bin {
     gconf = pkgs.gnome.GConf;
     inherit (pkgs.gnome) libgnome libgnomeui;
-    inherit (pkgs.xlibs) libX11 libXScrnSaver libXext
-      libXinerama libXrender libXt;
+    inherit (pkgs.xlibs) libX11 libXScrnSaver libXcomposite libXdamage libXext
+      libXfixes libXinerama libXrender libXt;
   };
 
   flac = callPackage ../applications/audio/flac { };
