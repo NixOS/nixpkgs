@@ -752,6 +752,12 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   elmServer = callPackage ../development/compilers/elm/elm-server.nix {};
 
+  elmRepl = callPackage ../development/compilers/elm/elm-repl.nix {};
+
+  elmGet = callPackage ../development/compilers/elm/elm-get.nix {
+    optparseApplicative = self.optparseApplicative_0_10_0;
+  };
+
   emailValidate = callPackage ../development/libraries/haskell/email-validate {};
 
   enclosedExceptions = callPackage ../development/libraries/haskell/enclosed-exceptions {};
