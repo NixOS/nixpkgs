@@ -8,19 +8,19 @@ let
   cfg = config.users;
 
   passwordDescription = ''
-    The options <literal>hashedPassword</literal>,
-    <literal>password</literal> and <literal>passwordFile</literal>
+    The options <option>hashedPassword</option>,
+    <option>password</option> and <option>passwordFile</option>
     controls what password is set for the user.
-    <literal>hashedPassword</literal> overrides both
-    <literal>password</literal> and <literal>passwordFile</literal>.
-    <literal>password</literal> overrides <literal>passwordFile</literal>.
+    <option>hashedPassword</option> overrides both
+    <option>password</option> and <option>passwordFile</option>.
+    <option>password</option> overrides <option>passwordFile</option>.
     If none of these three options are set, no password is assigned to
     the user, and the user will not be able to do password logins.
-    If the option <literal>users.mutableUsers</literal> is true, the
+    If the option <option>users.mutableUsers</option> is true, the
     password defined in one of the three options will only be set when
     the user is created for the first time. After that, you are free to
     change the password with the ordinary user management commands. If
-    <literal>users.mutableUsers</literal> is false, you cannot change
+    <option>users.mutableUsers</option> is false, you cannot change
     user passwords, they will always be set according to the password
     options.
   '';
@@ -155,7 +155,7 @@ let
         default = false;
         description = ''
           If true, the user's shell will be set to
-          <literal>cfg.defaultUserShell</literal>.
+          <option>users.defaultUserShell</option>.
         '';
       };
 
@@ -163,7 +163,7 @@ let
         type = with types; uniq (nullOr str);
         default = null;
         description = ''
-          Specifies the (hashed) password for the user.
+          Specifies the hashed password for the user.
           ${passwordDescription}
         '';
       };
@@ -191,6 +191,37 @@ let
           ${passwordDescription}
         '';
       };
+
+      initialHashedPassword = mkOption {
+        type = with types; uniq (nullOr str);
+        default = null;
+        description = ''
+          Specifies the initial hashed password for the user, i.e. the
+          hashed password assigned if the user does not already
+          exist. If <option>users.mutableUsers</option> is true, the
+          password can be changed subsequently using the
+          <command>passwd</command> command. Otherwise, it's
+          equivalent to setting the <option>password</option> option.
+        '';
+      };
+
+      initialPassword = mkOption {
+        type = with types; uniq (nullOr str);
+        default = null;
+        description = ''
+          Specifies the initial password for the user, i.e. the
+          password assigned if the user does not already exist. If
+          <option>users.mutableUsers</option> is true, the password
+          can be changed subsequently using the
+          <command>passwd</command> command. Otherwise, it's
+          equivalent to setting the <option>password</option>
+          option. The same caveat applies: the password specified here
+          is world-readable in the Nix store, so it should only be
+          used for guest accounts or passwords that will be changed
+          promptly.
+        '';
+      };
+
     };
 
     config = mkMerge
@@ -306,7 +337,8 @@ let
     users = mapAttrsToList (n: u:
       { inherit (u)
           name uid group description home shell createHome isSystemUser
-          password passwordFile hashedPassword;
+          password passwordFile hashedPassword
+          initialPassword initialHashedPassword;
       }) cfg.extraUsers;
     groups = mapAttrsToList (n: g:
       { inherit (g) name gid;

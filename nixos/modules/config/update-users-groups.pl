@@ -169,6 +169,12 @@ foreach my $u (@{$spec->{users}}) {
     } else {
         $u->{uid} = allocUid($u->{isSystemUser}) if !defined $u->{uid};
 
+        if (defined $u->{initialPassword}) {
+            $u->{hashedPassword} = hashPassword($u->{initialPassword});
+        } elsif (defined $u->{initialHashedPassword}) {
+            $u->{hashedPassword} = $u->{initialHashedPassword};
+        }
+
         # Create a home directory.
         if ($u->{createHome}) {
             make_path($u->{home}, { mode => 0700 }) if ! -e $u->{home};
