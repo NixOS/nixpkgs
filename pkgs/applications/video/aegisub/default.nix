@@ -1,6 +1,6 @@
 { stdenv, fetchurl
-, libX11, gettext, wxGTK
-, libiconv, fontconfig, freetype
+, libX11, wxGTK
+, libiconvOrEmpty, fontconfig, freetype
 , mesa
 , libass, fftw, ffms
 , ffmpeg, pkgconfig, zlib # Undocumented (?) dependencies
@@ -29,18 +29,21 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with stdenv.lib;
-  [ intltool libX11 gettext wxGTK libiconv fontconfig freetype mesa libass fftw ffms ffmpeg pkgconfig zlib icu boost boost.lib ]
-  ++ optional spellChecking hunspell
-  ++ optional automationSupport lua
-  ++ optional openalSupport openal
-  ++ optional alsaSupport alsaLib
-  ++ optional pulseaudioSupport pulseaudio
-  ++ optional portaudioSupport portaudio
-  ;
-
-  NIX_LDFLAGS = "-liconv -lavutil -lavformat -lavcodec -lswscale -lz -lm -lGL";
+  [ pkgconfig intltool libX11 wxGTK fontconfig freetype mesa
+    libass fftw ffms ffmpeg zlib icu boost boost.lib
+  ]
+    ++ libiconvOrEmpty
+    ++ optional spellChecking hunspell
+    ++ optional automationSupport lua
+    ++ optional openalSupport openal
+    ++ optional alsaSupport alsaLib
+    ++ optional pulseaudioSupport pulseaudio
+    ++ optional portaudioSupport portaudio
+    ;
 
   configureFlags = "--with-boost-libdir=${boost.lib}/lib/";
+
+  enableParallelBuilding = true;
 
   postInstall = "ln -s $out/bin/aegisub-* $out/bin/aegisub";
 
