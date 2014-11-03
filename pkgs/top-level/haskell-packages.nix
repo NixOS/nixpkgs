@@ -3116,7 +3116,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     };
   };
 
-  hscope = callPackage ../development/tools/haskell/hscope { testSimple = null; };
+  hscope = callPackage ../development/tools/haskell/hscope { };
 
   hslogger = callPackage ../development/tools/haskell/hslogger {};
 
