@@ -3587,6 +3587,8 @@ let
 
     patoline = callPackage ../tools/typesetting/patoline { };
 
+    gg = callPackage ../development/ocaml-modules/gg { };
+
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
 
     js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml { };
@@ -3669,6 +3671,8 @@ let
 
     ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
 
+    otfm = callPackage ../development/ocaml-modules/otfm { };
+
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
     tyxml = callPackage ../development/ocaml-modules/tyxml { };
@@ -3717,6 +3721,9 @@ let
     uucd = callPackage ../development/ocaml-modules/uucd { };
     uunf = callPackage ../development/ocaml-modules/uunf { };
     uutf = callPackage ../development/ocaml-modules/uutf { };
+
+    vg = callPackage ../development/ocaml-modules/vg { };
+
     xmlm = callPackage ../development/ocaml-modules/xmlm { };
 
     yojson = callPackage ../development/ocaml-modules/yojson { };
