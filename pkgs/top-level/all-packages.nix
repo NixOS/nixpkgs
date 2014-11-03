@@ -5673,6 +5673,10 @@ let
 
   libfaketime = callPackage ../development/libraries/libfaketime { };
 
+  libfakekey = callPackage ../development/libraries/libfakekey {
+    inherit (xlibs) libX11 libXi xextproto;
+  };
+
   libfm = callPackage ../development/libraries/libfm { };
   libfm-extra = callPackage ../development/libraries/libfm {
     extraOnly = true;
