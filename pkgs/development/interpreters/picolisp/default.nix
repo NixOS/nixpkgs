@@ -12,18 +12,18 @@ let
   sourceInfo = rec {
     baseName="picolisp";
     tarballBaseName="picoLisp";
-    version="3.0.5";
+    version="3.1.8";
     name="${baseName}-${version}";
     tarballName="${tarballBaseName}-${version}";
     extension="tgz";
     url="http://www.software-lab.de/${tarballName}.${extension}";
-    hash="07w2aygllkmnfcnby3dy88n9giqsas35s77rp2lr2ll5yy2hkc0x";
+    sha256="0bkr1ck157871bv4a8dp9dmcvxigjsikm5rr2khylxc3l6il7s1i";
   };
 in
 rec {
   src = a.fetchurl {
     url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+    sha256 = sourceInfo.sha256;
   };
 
   inherit (sourceInfo) name version;
