@@ -7470,6 +7470,11 @@ let
     syslog      = true;
     moreheaders = true;
   };
+  nginxUnstable = callPackage ../servers/http/nginx/unstable.nix {
+    fullWebDAV  = true;
+    syslog      = true;
+    moreheaders = true;
+  };
 
   ngircd = callPackage ../servers/irc/ngircd { };
 
