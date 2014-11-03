@@ -9141,9 +9141,13 @@ let
     withX = false;
   }));
 
-  emacs24Macport = lowPrio (callPackage ../applications/editors/emacs-24/macport.nix {
+  emacs24Macport_24_3 = lowPrio (callPackage ../applications/editors/emacs-24/macport-24.3.nix {
     stdenv = pkgs.clangStdenv;
   });
+  emacs24Macport_24_4 = lowPrio (callPackage ../applications/editors/emacs-24/macport-24.4.nix {
+    stdenv = pkgs.clangStdenv;
+  });
+  emacs24Macport = self.emacs24Macport_24_4;
 
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
     inherit emacs;
