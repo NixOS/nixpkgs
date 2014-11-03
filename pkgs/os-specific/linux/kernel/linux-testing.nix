@@ -1,16 +1,14 @@
 { stdenv, fetchurl, ... } @ args:
 
 import ./generic.nix (args // rec {
-  version = "3.17-rc2";
-  modDirVersion = "3.17.0-rc2";
-  extraMeta.branch = "3.17";
+  version = "3.18-rc3";
+  modDirVersion = "3.18.0-rc3";
+  extraMeta.branch = "3.18";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v3.x/testing/linux-${version}.tar.xz";
-    sha256 = "094r4kqp7bj1wcdfsgdmv73law4zb7d0sd8lw82v3rz944mlm9y3";
+    sha256 = "1w58szpljzm2ys53fiagqypiw9ylbqf843rwqyv9bwxg5lm1jaq1";
   };
-
-  kernelPatches = args.kernelPatches ++ [ { name = "3.17-buildfix.patch"; patch = ./3.17-buildfix.patch; } ];
 
   features.iwlwifi = true;
   features.efiBootStub = true;
