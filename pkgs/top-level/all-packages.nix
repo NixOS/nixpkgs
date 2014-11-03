@@ -977,6 +977,8 @@ let
 
   dev86 = callPackage ../development/compilers/dev86 { };
 
+  dnscrypt-proxy = callPackage ../tools/networking/dnscrypt-proxy { };
+
   dnsmasq = callPackage ../tools/networking/dnsmasq { };
 
   dnstop = callPackage ../tools/networking/dnstop { };

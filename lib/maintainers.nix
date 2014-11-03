@@ -80,6 +80,7 @@
   jcumming = "Jack Cummings <jack@mudshark.org>";
   jgeerds = "Jascha Geerds <jg@ekby.de>";
   jirkamarsik = "Jirka Marsik <jiri.marsik89@gmail.com>";
+  joachifm = "Joachim Fasting <joachifm@fastmail.fm>";
   joamaki = "Jussi Maki <joamaki@gmail.com>";
   joelteon = "Joel Taylor <me@joelt.io>";
   jwiegley = "John Wiegley <johnw@newartisans.com>";
