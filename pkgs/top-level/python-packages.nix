@@ -5957,11 +5957,11 @@ let
   };
 
   pandas = buildPythonPackage rec {
-    name = "pandas-0.14.0";
+    name = "pandas-0.15.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pandas/${name}.tar.gz";
-      sha256 = "f7997debca756c4dd5ccdf5a010dfe3d1c7dac98ee706b715d994cf7c9d35528";
+      sha256 = "1w3wjnn3v37hf3hrd24lfgk6vpykarv9mihhpcfq6y7rg586bgjk";
     };
 
     buildInputs = with self; [ nose ];
