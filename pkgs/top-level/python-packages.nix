@@ -3862,6 +3862,24 @@ let
     };
   });
 
+  fonttools = buildPythonPackage (rec {
+    version = "2.4";
+    name = "fonttools-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/F/FontTools/FontTools-${version}.tar.gz";
+      sha256 = "13ggkzcj34kcca6bsxjkaqsxkp2bvxxf6ijiyhq1xlyb0z37z4qa";
+    };
+
+    buildInputs = with self; [
+      numpy
+    ];
+
+    meta = {
+      homepage = "http://sourceforge.net/projects/fonttools/";
+      description = "Font file processing tools";
+    };
+  });
 
   foolscap = buildPythonPackage (rec {
     name = "foolscap-0.6.4";
