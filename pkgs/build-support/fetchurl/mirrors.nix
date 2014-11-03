@@ -393,4 +393,37 @@ rec {
     http://cflags.cc/roy/
   ];
 
+  # Sage mirrors (http://www.sagemath.org/mirrors.html)
+  sagemath = [
+    http://boxen.math.washington.edu/home/sagemath/sage-mirror/src/
+    http://echidna.maths.usyd.edu.au/sage/src/
+    http://ftp.iitm.ac.in/sage/src/
+    http://ftp.kaist.ac.kr/sage/src/
+    http://ftp.riken.jp/sagemath/src/
+    http://ftp.tsukuba.wide.ad.jp/software/sage/src/
+    http://jambu.spms.ntu.edu.sg/sage/src/
+    http://linorg.usp.br/sage/src/
+    http://mirror.aarnet.edu.au/pub/sage/src/
+    http://mirror.clibre.uqam.ca/sage/src/
+    http://mirror.hust.edu.cn/sagemath/src/
+    http://mirror.switch.ch/mirror/sagemath/src/
+    http://mirror.yandex.ru/mirrors/sage.math.washington.edu/src/
+    http://mirrors.fe.up.pt/pub/sage/src/
+    http://mirrors.hustunique.com/sagemath/src/
+    http://mirrors.ustc.edu.cn/sagemath/src/
+    http://mirrors.xmission.com/sage/src/
+    http://sage.asis.io/src/
+    http://sage.mirror.garr.it/mirrors/sage/src/
+    http://sage.yasar.edu.tr/src/
+    http://sagemath.c3sl.ufpr.br/src/
+    http://sagemath.polytechnic.edu.na/src/
+    http://sunsite.rediris.es/mirror/sagemath/src/
+    http://www-ftp.lip6.fr/pub/math/sagemath/src/
+    http://www.mirrorservice.org/sites/www.sagemath.org/src/
+
+    # Old versions
+    http://www.cecm.sfu.ca/sage/src/
+    http://sagemath.org/src-old/
+  ];
+
 }
