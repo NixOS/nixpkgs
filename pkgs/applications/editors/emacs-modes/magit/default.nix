@@ -1,16 +1,13 @@
 { stdenv, fetchFromGitHub, emacs, texinfo, gitModes, git }:
 
-let
-  version = "90141016";
-in
 stdenv.mkDerivation rec {
-  name = "magit-${version}";
+  name = "magit-90141025";
 
   src = fetchFromGitHub {
     owner = "magit";
     repo = "magit";
-    rev = version;
-    sha256 = "11d3gzj0hlb7wqsjzjb0vf9i0ik4xzwdyayjy4hfgx0gjmymkfx3";
+    rev = "50c08522c8a3c67e0f3b821fe4df61e8bd456ff9";
+    sha256 = "0mzyx72pidzvla1x2qszn3c60n2j0n8i5k875c4difvd1n4p0vsk";
   };
 
   buildInputs = [ emacs texinfo git ];
