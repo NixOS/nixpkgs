@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "sage-6.1.1";
 
   src = fetchurl {
-    url = "http://mirrors.xmission.com/sage/src/sage-6.1.1.tar.gz";
+    url = "http://www.sagemath.org/src-old/sage-6.1.1.tar.gz";
     sha256 = "0kbzs0l9q7y34jv3f8rd1c2mrjsjkdgaw6mfdwjlpg9g4gghmq5y";
   };
 
@@ -23,9 +23,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.scilab.org/;
-    description = "Scientific software package for numerical computations (Matlab lookalike)";
-    # see http://www.scilab.org/legal
-    license = "SciLab";
+    homepage = "http://www.sagemath.org";
+    description = "A free open source mathematics software system";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }
