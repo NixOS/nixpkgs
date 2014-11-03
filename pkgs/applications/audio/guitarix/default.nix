@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    avahi boost boost.lib eigen fftw gettext glib glibmm gtk gtkmm intltool
+    avahi boost eigen fftw gettext glib glibmm gtk gtkmm intltool
     jack2 ladspaH librdf libsndfile lilv lv2 pkgconfig python serd sord sratom
   ];
 

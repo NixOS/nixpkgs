@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1c03yi19d5h5h78h37add9csmy0mzvvmvn7zkcalwszabdhsb5yk";
   };
 
-  buildInputs = [ cmake python boost boost.lib libuuid ruby ];
+  buildInputs = [ cmake python boost libuuid ruby ];
 
   # the subdir managementgen wants to install python stuff in ${python} and
   # the installation tries to create some folders in /var

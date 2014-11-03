@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    boost boost.lib cmake ilmbase libjpeg libpng libtiff opencolorio openexr
+    boost cmake ilmbase libjpeg libpng libtiff opencolorio openexr
     unzip
   ];
 

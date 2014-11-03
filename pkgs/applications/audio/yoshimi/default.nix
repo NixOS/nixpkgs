@@ -14,7 +14,7 @@ stdenv.mkDerivation  rec {
   };
 
   buildInputs = [
-    alsaLib boost boost.lib cairo fftwSinglePrec fltk jack2 libsndfile mesa
+    alsaLib boost cairo fftwSinglePrec fltk jack2 libsndfile mesa
     minixml zlib xorg.libpthreadstubs
   ];
 

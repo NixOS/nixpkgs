@@ -26,7 +26,6 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--with-libgeoip"
     "--with-libiconv"
-    "--with-boost=${boost}"
     "--disable-deprecated-functions"
     "--enable-tests"
     "--enable-python-binding"

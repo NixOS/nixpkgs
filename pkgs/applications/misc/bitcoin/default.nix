@@ -23,10 +23,6 @@ stdenv.mkDerivation rec {
     cd bitcoin*
   '';
 
-  configureFlags = [
-    "--with-boost=${boost}"
-  ];
-
   preCheck = ''
     # At least one test requires writing in $HOME
     HOME=$TMPDIR

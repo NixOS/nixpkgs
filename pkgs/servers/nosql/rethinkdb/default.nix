@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--lib-path ${gperftools}/lib";
 
-  buildInputs = [ protobuf boost boost.lib zlib curl ];
+  buildInputs = [ protobuf boost zlib curl ];
 
   nativeBuildInputs = [ which m4 python ];
 

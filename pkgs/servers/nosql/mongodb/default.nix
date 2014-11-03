@@ -13,7 +13,7 @@ let version = "2.6.5";
       # "v8"
     ] ++ optionals (!stdenv.isDarwin) [ "tcmalloc" ];
     buildInputs = [
-      sasl boost boost.lib gperftools pcre snappy
+      sasl boost gperftools pcre snappy
       libyamlcpp sasl openssl libpcap
     ];
 

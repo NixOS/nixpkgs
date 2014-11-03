@@ -129,7 +129,6 @@ let
       inkscape = linux;
       irssi = linux;
       jfsutils = linux;
-      jfsrec = linux;
       jnettop = linux;
       jwhois = linux;
       kbd = linux;

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with stdenv.lib;
-  [ intltool libX11 gettext wxGTK libiconv fontconfig freetype mesa libass fftw ffms ffmpeg pkgconfig zlib icu boost boost.lib ]
+  [ intltool libX11 gettext wxGTK libiconv fontconfig freetype mesa libass fftw ffms ffmpeg pkgconfig zlib icu boost ]
   ++ optional spellChecking hunspell
   ++ optional automationSupport lua
   ++ optional openalSupport openal
@@ -39,8 +39,6 @@ stdenv.mkDerivation rec {
   ;
 
   NIX_LDFLAGS = "-liconv -lavutil -lavformat -lavcodec -lswscale -lz -lm -lGL";
-
-  configureFlags = "--with-boost-libdir=${boost.lib}/lib/";
 
   postInstall = "ln -s $out/bin/aegisub-* $out/bin/aegisub";
 

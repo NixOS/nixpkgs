@@ -14,19 +14,22 @@ let
 in
 stdenv.mkDerivation rec {
   name="ceph-${version}";
-  version="0.86";
+  version="0.87";
 
   src = fetchgit {
     url = "git://github.com/ceph/ceph.git";
     rev = "refs/tags/v${version}";
-    sha256 = "19bl96z97kvsrliwid4g6dl7s3i0nw5z9nmg964i7jdwlsl98cfj";
+    sha256 = "0l3ig4kr50j78snjzj4h1lbmjz508yykvchqyfdcqv02dfklc8qd";
   };
 
-  patches = [ ./0001-Makefile-env-Don-t-force-sbin.patch ];
+  patches = [
+    ./0001-Cleanup-boost-optionals.patch # Remove in >0.87 patch is applied
+    ./0001-Makefile-env-Don-t-force-sbin.patch
+  ];
 
   nativeBuildInputs = [ autoconf automake makeWrapper pkgconfig libtool which ];
   buildInputs = [
-    boost boost.lib btrfsProgs cryptopp curl expat fcgi fuse gperftools keyutils
+    boost btrfsProgs cryptopp curl expat fcgi fuse gperftools keyutils
     libatomic_ops leveldb libaio libedit libuuid linuxHeaders openssl python
     snappy udev xfsprogs.lib xz zfs
   ];
