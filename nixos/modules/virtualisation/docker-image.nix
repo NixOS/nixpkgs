@@ -38,8 +38,8 @@ in {
     '';
 
 
-  # docker image config
-  require = [
+  # Docker image config.
+  imports = [
     ../installer/cd-dvd/channel.nix
     ../profiles/minimal.nix
     ../profiles/clone-config.nix
@@ -47,16 +47,16 @@ in {
 
   boot.isContainer = true;
 
-  # Iptables do not work in docker
+  # Iptables do not work in Docker.
   networking.firewall.enable = false;
 
   services.openssh.enable = true;
 
-  # Socket activated ssh presents problem in docker
+  # Socket activated ssh presents problem in Docker.
   services.openssh.startWhenNeeded = false;
 
-  # Allow the user to login as root without password
-  security.initialRootPassword = "";
+  # Allow the user to login as root without password.
+  users.extraUsers.root.initialHashedPassword = mkDefault "";
 
   # Some more help text.
   services.mingetty.helpLine =

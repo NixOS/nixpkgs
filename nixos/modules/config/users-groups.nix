@@ -426,24 +426,12 @@ in {
       options = [ groupOpts ];
     };
 
+    # FIXME: obsolete - will remove.
     security.initialRootPassword = mkOption {
       type = types.str;
       default = "!";
       example = "";
-      description = ''
-        The (hashed) password for the root account set on initial
-        installation. The empty string denotes that root can login
-        locally without a password (but not via remote services such
-        as SSH, or indirectly via <command>su</command> or
-        <command>sudo</command>). The string <literal>!</literal>
-        prevents root from logging in using a password.
-        Note that setting this option sets
-        <literal>users.extraUsers.root.hashedPassword</literal>.
-        Also, if <literal>users.mutableUsers</literal> is false
-        you cannot change the root password manually, so in that case
-        the name of this option is a bit misleading, since it will define
-        the root password beyond the user initialisation phase.
-      '';
+      visible = false;
     };
 
   };
@@ -461,7 +449,7 @@ in {
         shell = mkDefault cfg.defaultUserShell;
         group = "root";
         extraGroups = [ "grsecurity" ];
-        hashedPassword = mkDefault config.security.initialRootPassword;
+        initialHashedPassword = mkDefault config.security.initialRootPassword;
       };
       nobody = {
         uid = ids.uids.nobody;
