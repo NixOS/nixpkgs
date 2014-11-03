@@ -1,25 +1,22 @@
-{stdenv, fetchgit, which, cryptopp, ocaml, findlib, ocaml_react, ocaml_ssl, libev, pkgconfig, ncurses, ocaml_oasis, ocaml_text, glib}:
+{stdenv, fetchurl, which, cryptopp, ocaml, findlib, ocaml_react, ocaml_ssl, libev, pkgconfig, ncurses, ocaml_oasis, ocaml_text, glib, camlp4, ppx_tools }:
 
 let
-  version = "2.4.5";
+  version = "2.4.6";
 in
 
 stdenv.mkDerivation {
-
-
   name = "ocaml-lwt-${version}";
 
-  src = fetchgit {
-    url = git://github.com/ocsigen/lwt;
-    rev = "refs/tags/${version}";
-    sha256 = "2bbf4f216dd62eeb765a89413f3b2b6d417a9c289ca49d595bb4d7a0545e343e";
+  src = fetchurl {
+    url = "https://github.com/ocsigen/lwt/archive/${version}.tar.gz";
+    sha256 = "1wczlr6akpr6i946p23b5v94brsywc0j724smrdqc0z64srwd44z";
   };
 
-  buildInputs = [ocaml_oasis pkgconfig which cryptopp ocaml findlib glib libev ncurses];
+  buildInputs = [ocaml_oasis pkgconfig which cryptopp ocaml findlib glib libev ncurses camlp4 ppx_tools ];
 
   propagatedBuildInputs = [ ocaml_react ocaml_ssl ocaml_text ];
 
-  configureFlags = [ "--enable-all" ];
+  #configureFlags = [ "--enable-all" ];
 
   createFindlibDestdir = true;
 

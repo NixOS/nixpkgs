@@ -3489,6 +3489,8 @@ let
 
   ocaml_4_02_0 = callPackage ../development/compilers/ocaml/4.02.0.nix { };
 
+  ocaml_4_02_1 = callPackage ../development/compilers/ocaml/4.02.1.nix { };
+
   orc = callPackage ../development/compilers/orc { };
 
   metaocaml_3_09 = callPackage ../development/compilers/ocaml/metaocaml-3.09.nix { };
@@ -3505,6 +3507,10 @@ let
     acgtk = callPackage ../applications/science/logic/acgtk { };
 
     ansiterminal = callPackage ../development/ocaml-modules/ansiterminal { };
+
+    atd = callPackage ../development/ocaml-modules/atd { };
+
+    atdgen = callPackage ../development/tools/ocaml/atdgen { };
 
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
@@ -3710,7 +3716,11 @@ let
 
     pprint = callPackage ../development/ocaml-modules/pprint { };
 
+    ppx_tools = callPackage ../development/ocaml-modules/ppx_tools { };
+
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
+
+    rpc = callPackage ../development/ocaml-modules/rpc { };
 
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
 
@@ -3748,7 +3758,8 @@ let
   ocamlPackages_4_00_1 = mkOcamlPackages ocaml_4_00_1 pkgs.ocamlPackages_4_00_1;
   ocamlPackages_4_01_0 = mkOcamlPackages ocaml_4_01_0 pkgs.ocamlPackages_4_01_0;
   ocamlPackages_4_02_0 = mkOcamlPackages ocaml_4_02_0 pkgs.ocamlPackages_4_02_0;
-  ocamlPackages_latest = ocamlPackages_4_02_0;
+  ocamlPackages_4_02_1 = mkOcamlPackages ocaml_4_02_1 pkgs.ocamlPackages_4_02_1;
+  ocamlPackages_latest = ocamlPackages_4_02_1;
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
@@ -3758,7 +3769,9 @@ let
   opam_1_1 = callPackage ../development/tools/ocaml/opam/1.1.nix {
     inherit (ocamlPackages_4_01_0) ocaml;
   };
-  opam = opam_1_1;
+  opam_1_2_0 = callPackage ../development/tools/ocaml/opam/1.2.0.nix { };
+
+  opam = opam_1_2_0;
 
   ocamlnat = let callPackage = newScope pkgs.ocamlPackages_3_12_1; in callPackage ../development/ocaml-modules/ocamlnat { };
 
