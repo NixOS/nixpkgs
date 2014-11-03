@@ -100,6 +100,13 @@ in {
       }
     ];
 
+    # Redis is required for the sidekiq queue runner.
+    services.redis.enable = mkDefault true;
+    # We use postgres as the main data store.
+    services.postgresql.enable = mkDefault true;
+    # Use postfix to send out mails.
+    services.postfix.enable = mkDefault true;
+
     users.extraUsers = [
       { name = "gitlab";
         group = "gitlab";
