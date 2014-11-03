@@ -10447,9 +10447,7 @@ let
                                     })
                                  );
 
-  sxiv = callPackage ../applications/graphics/sxiv {
-    giflib = giflib_5_0;
-  };
+  sxiv = callPackage ../applications/graphics/sxiv { };
 
   bittorrentSync = callPackage ../applications/networking/bittorrentsync { };
 
