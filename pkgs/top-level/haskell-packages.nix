@@ -3007,8 +3007,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   Agda = callPackage ../development/compilers/agda { haskellSrcExts = self.haskellSrcExts_1_15_0_1; };
 
-  uhc = callPackage ../development/compilers/uhc {};
-
   epic = callPackage ../development/compilers/epic {};
 
   pakcs = callPackage ../development/compilers/pakcs {};
