@@ -89,6 +89,12 @@ in {
         default = "example@example.org";
         description = "The source address for emails sent by gitlab.";
       };
+
+      host = mkOption {
+        type = types.str;
+        default = config.networking.hostName;
+        description = "The gitlab host name. Used e.g. for copy-paste URLs.";
+      };
     };
   };
 
@@ -135,6 +141,7 @@ in {
       environment.GITLAB_EMAIL_FROM = "${cfg.emailFrom}";
       environment.GITLAB_SHELL_CONFIG_PATH = "${cfg.stateDir}/shell/config.yml";
       environment.GITLAB_SHELL_SECRET_PATH = "${cfg.stateDir}/config/gitlab_shell_secret";
+      environment.GITLAB_HOST = "${cfg.host}";
       environment.RAILS_ENV = "production";
       path = with pkgs; [
         config.services.postgresql.package
@@ -165,6 +172,7 @@ in {
       environment.GITLAB_SHELL_HOOKS_PATH = "${cfg.stateDir}/shell/hooks";
       environment.BUNDLE_GEMFILE = "${pkgs.gitlab}/share/gitlab/Gemfile";
       environment.GITLAB_EMAIL_FROM = "${cfg.emailFrom}";
+      environment.GITLAB_HOST = "${cfg.host}";
       environment.RAILS_ENV = "production";
       path = with pkgs; [
         config.services.postgresql.package

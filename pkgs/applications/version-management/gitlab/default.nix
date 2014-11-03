@@ -79,6 +79,7 @@ in stdenv.mkDerivation rec {
     # NB careful with indendation when replacing: yml is whitespace-sensitive.
     substituteInPlace config/gitlab.yml --replace "# user: git" "user: gitlab"
     substituteInPlace config/gitlab.yml --replace "bin_path: /usr/bin/git" "bin_path: ${git}/bin/git"
+    substituteInPlace config/gitlab.yml --replace "host: localhost" "host: <%= ENV['GITLAB_HOST'] %>"
   '';
 
   meta = with stdenv.lib; {
