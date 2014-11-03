@@ -1810,7 +1810,8 @@ let
 
   nifskope = callPackage ../tools/graphics/nifskope { };
 
-  nilfs_utils = callPackage ../tools/filesystems/nilfs-utils {};
+  nilfs-utils = callPackage ../tools/filesystems/nilfs-utils {};
+  nilfs_utils = nilfs-utils;
 
   nitrogen = callPackage ../tools/X11/nitrogen {};
 
