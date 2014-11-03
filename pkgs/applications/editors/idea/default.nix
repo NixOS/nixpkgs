@@ -139,6 +139,7 @@ let
   buildIdea = { name, version, build, src, license, description }:
     (mkIdeaProduct rec {
       inherit name version build src;
+      patchSnappy = false;
       product = "IDEA";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/idea/";
@@ -190,25 +191,25 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "13.1.5";
-    build = "IC-135.1289";
+    version = "14pre";
+    build = "IC-139.222.5";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
-      url = "http://download-ln.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "e08b9adad0ed9aa62a43f3026a1b499d1663710314d00a3bec2e171a6c375f09";
+      url = "http://download-ln.jetbrains.com/idea/idea${build}.tar.gz";
+      sha256 = "e2c696f465da36b77148a61b45f35f8f08ceae3b624904de8f7cccf0e7c20ce2";
     };
   };
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "13.1.5";
-    build = "IU-135.1289";
+    version = "14pre";
+    build = "IU-139.222.5";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
-      url = "http://download-ln.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "0800b1ffc135f884e46f1004289fb75850148d705afc447d3374cfd281c231a2";
+      url = "http://download-ln.jetbrains.com/idea/idea${build}.tar.gz";
+      sha256 = "d8e8927adebdc4d2e5f1f5bfb0ecc97c3e561b74d56391898dd36abe89a4f170";
     };
   };
 
