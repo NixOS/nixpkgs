@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ nasm perl libuuid ];
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false; # problems on Hydra
 
   preBuild = ''
     substituteInPlace Makefile --replace /bin/pwd $(type -P pwd)
