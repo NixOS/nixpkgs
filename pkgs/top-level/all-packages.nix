@@ -3716,7 +3716,11 @@ let
 
     pprint = callPackage ../development/ocaml-modules/pprint { };
 
+    ppx_tools = callPackage ../development/ocaml-modules/ppx_tools { };
+
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
+
+    rpc = callPackage ../development/ocaml-modules/rpc { };
 
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
 
