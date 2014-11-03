@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper
-, coreutils, findutils, jdk, rlwrap, clojure, gnupg }:
+, coreutils, findutils, jdk, rlwrap, gnupg }:
 
 stdenv.mkDerivation rec {
   pname = "leiningen";
@@ -18,13 +18,13 @@ stdenv.mkDerivation rec {
 
   patches = [ ./lein-fix-jar-path.patch ];
 
-  inherit rlwrap clojure gnupg findutils coreutils jdk;
+  inherit rlwrap gnupg findutils coreutils jdk;
 
   builder = ./builder.sh;
 
   buildInputs = [ makeWrapper ];
 
-  propagatedBuildInputs = [ jdk clojure ];
+  propagatedBuildInputs = [ jdk ];
 
   meta = {
     homepage = http://leiningen.org/;
