@@ -4808,8 +4808,6 @@ let
 
   audiofile = callPackage ../development/libraries/audiofile { };
 
-  babl_0_0_22 = callPackage ../development/libraries/babl/0_0_22.nix { };
-
   babl = callPackage ../development/libraries/babl { };
 
   beecrypt = callPackage ../development/libraries/beecrypt { };
@@ -5108,14 +5106,7 @@ let
 
   gecode = callPackage ../development/libraries/gecode { };
 
-  gegl = callPackage ../development/libraries/gegl {
-    #  avocodec avformat librsvg
-  };
-
-  gegl_0_0_22 = callPackage ../development/libraries/gegl/0_0_22.nix {
-    #  avocodec avformat librsvg
-    libpng = libpng12;
-  };
+  gegl = callPackage ../development/libraries/gegl { };
 
   geoclue = callPackage ../development/libraries/geoclue {};
 
