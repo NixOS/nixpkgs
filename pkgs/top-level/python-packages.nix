@@ -8293,6 +8293,8 @@ let
       sha256 = "19nlsm6zyxd4d237sl39mhn0fm18sp23vnl7b7xnj4grp9471y9f";
     };
 
+    doCheck = false;
+
     preCheck = ''
       export LANG="en_US.UTF-8"
       export LOCALE_ARCHIVE=${localePath}
