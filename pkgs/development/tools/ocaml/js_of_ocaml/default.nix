@@ -1,13 +1,15 @@
-{stdenv, fetchurl, ocaml, findlib, ocaml_lwt, menhir, ocsigen_deriving}:
+{stdenv, fetchurl, ocaml, findlib, ocaml_lwt, menhir, ocsigen_deriving, camlp4,
+ cmdliner, tyxml, reactivedata}:
 
 stdenv.mkDerivation {
-  name = "js_of_ocaml";
+  name = "js_of_ocaml-2.5";
   src = fetchurl {
-    url = https://github.com/ocsigen/js_of_ocaml/archive/2.2.tar.gz;
-    sha256 = "1cp81gpvyxgvzxg0vzyl8aa2zvcixp6m433w8zjifrg6vb7lhp97";
+    url = https://github.com/ocsigen/js_of_ocaml/archive/2.5.tar.gz;
+    sha256 = "1prm08nf8szmd3p13ysb0yx1cy6lr671bnwsp25iny8hfbs39sjv";
     };
   
-  buildInputs = [ocaml findlib ocaml_lwt menhir ocsigen_deriving];
+  buildInputs = [ocaml findlib ocaml_lwt menhir ocsigen_deriving
+                 cmdliner tyxml camlp4 reactivedata];
 
   patches = [ ./Makefile.conf.diff ];  
 

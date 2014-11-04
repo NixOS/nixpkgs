@@ -3,7 +3,7 @@
 @@ -1,6 +1,6 @@
  
  # Where binaries are installed:
--BINDIR := /usr/local/bin
+-BINDIR := `dirname  \`which ocamlc\``
 +BINDIR := $(out)/bin
  
  ####
