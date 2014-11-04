@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "sysklogd-1.5";
+  name = "sysklogd-1.5.1";
 
   src = fetchurl {
-    url = http://www.infodrom.org/projects/sysklogd/download/sysklogd-1.5.tar.gz;
-    sha256 = "0wxpkrznqwz4dy11k90s2sqszwp7d4mlc0ag8288wa193plvhsb1";
+    url = http://www.infodrom.org/projects/sysklogd/download/sysklogd-1.5.1.tar.gz;
+    sha256 = "00f2wy6f0qng7qzga4iicyzl9j8b7mp6mrpfky5jxj93ms2w2rji";
   };
 
   patches = [ ./systemd.patch ];
