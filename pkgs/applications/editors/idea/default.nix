@@ -144,6 +144,19 @@ let
       };
     });
 
+  buildRubyMine = { name, version, build, src, license, description }:
+    (mkIdeaProduct rec {
+      inherit name version build src;
+      product = "RubyMine";
+      meta = with stdenv.lib; {
+        homepage = "https://www.jetbrains.com/ruby/";
+        inherit description license;
+        longDescription = description;
+        maintainers = with maintainers; [ edwtjo ];
+        platforms = platforms.linux;
+      };
+    });
+
   buildPhpStorm = { name, version, build, src, license, description }:
     (mkIdeaProduct {
       inherit name version build src;
@@ -239,6 +252,18 @@ in
     src = fetchurl {
       url = "http://download-ln.jetbrains.com/idea/idea${build}.tar.gz";
       sha256 = "d8e8927adebdc4d2e5f1f5bfb0ecc97c3e561b74d56391898dd36abe89a4f170";
+    };
+  };
+
+  ruby-mine = buildRubyMine rec {
+    name = "ruby-mine-${version}";
+    version = "6.3.3";
+    build = "135.1104";
+    description = "The Most Intelligent Ruby and Rails IDE";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "http://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
+      sha256 = "58d555c2702a93fe62f3809a5cc34e566ecce0c3f1f15daaf87744402157dfac";
     };
   };
 
