@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "15c18jvgbwyrfhv7r35ih0gzx35vjlsbi984h1sckgh2z17hjq8l";
   };
   
-  buildInputs = [qt5 cgal boost boost.lib gmp mpfr flex bison dxflib readline ];
+  buildInputs = [qt5 cgal boost gmp mpfr flex bison dxflib readline ];
 
   configurePhase = ''
     qmake;
