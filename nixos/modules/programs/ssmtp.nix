@@ -20,6 +20,7 @@ in
     networking.defaultMailServer = {
 
       directDelivery = mkOption {
+        type = types.bool;
         default = false;
         example = true;
         description = ''
@@ -35,6 +36,7 @@ in
       };
 
       hostName = mkOption {
+        type = types.str;
         example = "mail.example.org";
         description = ''
           The host name of the default mail server to use to deliver
@@ -43,6 +45,7 @@ in
       };
 
       domain = mkOption {
+        type = types.str;
         default = "";
         example = "example.org";
         description = ''
@@ -51,6 +54,7 @@ in
       };
 
       useTLS = mkOption {
+        type = types.bool;
         default = false;
         example = true;
         description = ''
@@ -60,6 +64,7 @@ in
       };
 
       useSTARTTLS = mkOption {
+        type = types.bool;
         default = false;
         example = true;
         description = ''
@@ -70,6 +75,7 @@ in
       };
 
       authUser = mkOption {
+        type = types.str;
         default = "";
         example = "foo@example.org";
         description = ''
@@ -78,6 +84,7 @@ in
       };
 
       authPass = mkOption {
+        type = types.str;
         default = "";
         example = "correctHorseBatteryStaple";
         description = ''
