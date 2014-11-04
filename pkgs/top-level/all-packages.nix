@@ -1119,6 +1119,8 @@ let
 
   fdm = callPackage ../tools/networking/fdm {};
 
+  flannel = callPackage ../tools/networking/flannel { };
+
   figlet = callPackage ../tools/misc/figlet { };
 
   file = callPackage ../tools/misc/file { };
