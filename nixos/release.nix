@@ -295,6 +295,7 @@ in rec {
   tests.sddm = callTest tests/sddm.nix {};
   tests.simple = callTest tests/simple.nix {};
   tests.smokeping = callTest tests/smokeping.nix {};
+  tests.storage = callTest tests/storage.nix {};
   tests.taskserver = callTest tests/taskserver.nix {};
   tests.tomcat = callTest tests/tomcat.nix {};
   tests.udisks2 = callTest tests/udisks2.nix {};
