@@ -109,32 +109,22 @@ let
       };
     });
 
-  buildPycharm = { name, version, build, src, license, description }:
+  buildClion = { name, version, build, src, license, description }:
     (mkIdeaProduct rec {
       inherit name version build src;
-      product = "PyCharm";
+      patchSnappy = false;
+      product = "CLion";
       meta = with stdenv.lib; {
-        homepage = "https://www.jetbrains.com/pycharm/";
+        homepage = "https://www.jetbrains.com/clion/";
         inherit description license;
         longDescription = ''
-          Python IDE with complete set of tools for productive
-          development with Python programming language. In addition, the
-          IDE provides high-class capabilities for professional Web
-          development with Django framework and Google App Engine. It
-          has powerful coding assistance, navigation, a lot of
-          refactoring features, tight integration with various Version
-          Control Systems, Unit testing, powerful all-singing
-          all-dancing Debugger and entire customization. PyCharm is
-          developer driven IDE. It was developed with the aim of
-          providing you almost everything you need for your comfortable
-          and productive development!
+          Enhancing productivity for every C and C++
+          developer on Linux, OS X and Windows.
         '';
-        maintainers = with maintainers; [ jgeerds ];
+        maintainers = with maintainers; [ edwtjo ];
         platforms = platforms.linux;
       };
-    }).override {
-      propagatedUserEnvPkgs = [ python ];
-    };
+    });
 
   buildIdea = { name, version, build, src, license, description }:
     (mkIdeaProduct rec {
@@ -172,6 +162,33 @@ let
       };
     });
 
+  buildPycharm = { name, version, build, src, license, description }:
+    (mkIdeaProduct rec {
+      inherit name version build src;
+      product = "PyCharm";
+      meta = with stdenv.lib; {
+        homepage = "https://www.jetbrains.com/pycharm/";
+        inherit description license;
+        longDescription = ''
+          Python IDE with complete set of tools for productive
+          development with Python programming language. In addition, the
+          IDE provides high-class capabilities for professional Web
+          development with Django framework and Google App Engine. It
+          has powerful coding assistance, navigation, a lot of
+          refactoring features, tight integration with various Version
+          Control Systems, Unit testing, powerful all-singing
+          all-dancing Debugger and entire customization. PyCharm is
+          developer driven IDE. It was developed with the aim of
+          providing you almost everything you need for your comfortable
+          and productive development!
+        '';
+        maintainers = with maintainers; [ jgeerds ];
+        platforms = platforms.linux;
+      };
+    }).override {
+      propagatedUserEnvPkgs = [ python ];
+    };
+
 in
 
 {
@@ -186,6 +203,18 @@ in
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}" +
             "/android-studio-ide-${build}-linux.zip";
       sha256 = "225c8b2f90b9159c465eae5797132350660994184a568c631d4383313a510695";
+    };
+  };
+
+  clion = buildClion rec {
+    name = "clion";
+    version = "eap";
+    build = "138.2344.17";
+    description  = "C/C++ IDE. New. Intelligent. Cross-platform.";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "http://download.jetbrains.com/cpp/${name}-${build}.tar.gz";
+      sha256 = "4b568d31132a787b748bc41c69b614dcd90229db69b02406677361bc077efab3";
     };
   };
 
