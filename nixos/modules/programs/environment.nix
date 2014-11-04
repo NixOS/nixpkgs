@@ -13,6 +13,19 @@ let
 in
 
 {
+  options = {
+    environment.noDefaultNixPath = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        If enabled, the NIX_PATH environment variable will not be
+        automatically defined. This allows an custom defition
+        via environment.variables, and is especially useful when
+        installing a snapshot of nixpkgs as part of the system
+        configuration.
+      '';
+    };
+  };
 
   config = {
 
@@ -24,6 +37,7 @@ in
       };
 
     environment.sessionVariables =
+      optionalAttrs (!config.environment.noDefaultNixPath)
       { NIX_PATH =
           [ "/nix/var/nix/profiles/per-user/root/channels/nixos"
             "nixpkgs=/etc/nixos/nixpkgs"
