@@ -8107,6 +8107,40 @@ let
     };
   };
 
+  squaremap = buildPythonPackage rec {
+    name = "squaremap-1.0.4";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/S/SquareMap/SquareMap-1.0.4.tar.gz";
+      md5 = "e36a453baddb97c19af6f79d5ba51f38";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Hierarchic visualization control for wxPython";
+      homepage = https://launchpad.net/squaremap;
+      license = licenses.bsd;
+    };
+  };
+
+  runsnakerun = buildPythonPackage rec {
+    name = "runsnakerun-2.0.4";
+
+  
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/R/RunSnakeRun/RunSnakeRun-2.0.4.tar.gz";
+      md5 = "3220b5b89994baee70b1c24d7e42a306";
+    };
+  
+    propagatedBuildInputs = [ self.squaremap self.wxPython28 ];
+  
+    meta = with stdenv.lib; {
+      description = "GUI Viewer for Python profiling runs";
+      homepage = http://www.vrplumber.com/programming/runsnakerun/;
+      license = licenses.bsd;
+    };
+  };
+  
   rtslib_fb = buildPythonPackage rec {
     version = "2.1.fb43";
     name = "rtslib-fb-${version}";
