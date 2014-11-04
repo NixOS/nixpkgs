@@ -3304,6 +3304,7 @@ let
 
   icedtea7_web = callPackage ../development/compilers/icedtea-web {
     jdk = "${icedtea7_jdk}/lib/icedtea";
+    xulrunner = firefox;
   };
 
   ikarus = callPackage ../development/compilers/ikarus { };
