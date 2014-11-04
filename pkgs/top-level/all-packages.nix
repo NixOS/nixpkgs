@@ -729,6 +729,8 @@ let
 
   bacula = callPackage ../tools/backup/bacula { };
 
+  bareos = callPackage ../tools/backup/bareos { };
+
   beanstalkd = callPackage ../servers/beanstalkd { };
 
   bgs = callPackage ../tools/X11/bgs { };
