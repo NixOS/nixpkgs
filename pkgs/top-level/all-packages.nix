@@ -9984,11 +9984,6 @@ let
 
   freicoin = callPackage ../applications/misc/freicoin { };
 
-  fspot = callPackage ../applications/graphics/f-spot {
-    inherit (gnome) libgnome libgnomeui;
-    gtksharp = gtksharp1;
-  };
-
   fuze = callPackage ../applications/networking/instant-messengers/fuze {};
 
   gcolor2 = callPackage ../applications/graphics/gcolor2 { };
