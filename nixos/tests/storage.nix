@@ -3,215 +3,213 @@ import ./make-test.nix ({ pkgs, ... }:
 with pkgs.lib;
 
 let
-  ext = pkgs.writeText "ext.nix" ''
-    {
-      storage = {
-        disk.vdb.clear = true;
-        disk.vdb.initlabel = true;
+  mkConf = cfg: let
+    config = (import <nixpkgs/nixos/lib/eval-config.nix> {
+      modules = singleton cfg;
+    }).config;
+  in pkgs.writeText "storage.xml" (builtins.toXML {
+    inherit (config) storage fileSystems swapDevices;
+  });
 
-        partition.boot.size = "100M";
-        partition.boot.targetDevice = "disk.vdb";
-        partition.swap.size = "500M";
-        partition.swap.targetDevice = "disk.vdb";
-        partition.nix.size = "500M";
-        partition.nix.targetDevice = "disk.vdb";
-        partition.root.grow = true;
-        partition.root.targetDevice = "disk.vdb";
-      };
+  ext = {
+    storage = {
+      disk.vdb.clear = true;
+      disk.vdb.initlabel = true;
 
-      fileSystems."/boot" = {
-        label = "boot";
-        fsType = "ext2";
-        storage = "partition.boot";
-      };
+      partition.boot.size = "100M";
+      partition.boot.targetDevice = "disk.vdb";
+      partition.swap.size = "500M";
+      partition.swap.targetDevice = "disk.vdb";
+      partition.nix.size = "500M";
+      partition.nix.targetDevice = "disk.vdb";
+      partition.root.grow = true;
+      partition.root.targetDevice = "disk.vdb";
+    };
 
-      fileSystems."/nix" = {
-        label = "nix";
-        fsType = "ext3";
-        storage = "partition.nix";
-      };
+    fileSystems."/boot" = {
+      label = "boot";
+      fsType = "ext2";
+      storage = "partition.boot";
+    };
 
-      fileSystems."/" = {
-        label = "root";
-        fsType = "ext4";
-        storage = "partition.root";
-      };
+    fileSystems."/nix" = {
+      label = "nix";
+      fsType = "ext3";
+      storage = "partition.nix";
+    };
 
-      swapDevices = [
-        { label = "swap"; storage = "partition.swap"; }
-      ];
-    }
-  '';
+    fileSystems."/" = {
+      label = "root";
+      fsType = "ext4";
+      storage = "partition.root";
+    };
 
-  btrfs = pkgs.writeText "btrfs.nix" ''
-    {
-      storage = {
-        disk.vdb.clear = true;
-        disk.vdb.initlabel = true;
+    swapDevices = [
+      { label = "swap"; storage = "partition.swap"; }
+    ];
+  };
 
-        partition.swap1.size = "500M";
-        partition.swap1.targetDevice = "disk.vdb";
-        partition.btrfs1.grow = true;
-        partition.btrfs1.targetDevice = "disk.vdb";
+  btrfs = {
+    storage = {
+      disk.vdb.clear = true;
+      disk.vdb.initlabel = true;
 
-        disk.vdc.clear = true;
-        disk.vdc.initlabel = true;
+      partition.swap1.size = "500M";
+      partition.swap1.targetDevice = "disk.vdb";
+      partition.btrfs1.grow = true;
+      partition.btrfs1.targetDevice = "disk.vdb";
 
-        partition.swap2.size = "500M";
-        partition.swap2.targetDevice = "disk.vdc";
-        partition.btrfs2.grow = true;
-        partition.btrfs2.targetDevice = "disk.vdc";
+      disk.vdc.clear = true;
+      disk.vdc.initlabel = true;
 
-        btrfs.root.data = 0;
-        btrfs.root.metadata = 1;
-        btrfs.root.devices = [ "partition.btrfs1" "partition.btrfs2" ];
-      };
+      partition.swap2.size = "500M";
+      partition.swap2.targetDevice = "disk.vdc";
+      partition.btrfs2.grow = true;
+      partition.btrfs2.targetDevice = "disk.vdc";
 
-      fileSystems."/" = {
-        label = "root";
-        storage = "btrfs.root";
-      };
+      btrfs.root.data = 0;
+      btrfs.root.metadata = 1;
+      btrfs.root.devices = [ "partition.btrfs1" "partition.btrfs2" ];
+    };
 
-      swapDevices = [
-        { label = "swap1"; storage = "partition.swap1"; }
-        { label = "swap2"; storage = "partition.swap2"; }
-      ];
-    }
-  '';
+    fileSystems."/" = {
+      label = "root";
+      storage = "btrfs.root";
+    };
 
-  f2fs = pkgs.writeText "f2fs.nix" ''
-    {
-      storage = {
-        disk.vdb.clear = true;
-        disk.vdb.initlabel = true;
+    swapDevices = [
+      { label = "swap1"; storage = "partition.swap1"; }
+      { label = "swap2"; storage = "partition.swap2"; }
+    ];
+  };
 
-        partition.swap.size = "500M";
-        partition.swap.targetDevice = "disk.vdb";
-        partition.boot.size = "100M";
-        partition.boot.targetDevice = "disk.vdb";
-        partition.root.grow = true;
-        partition.root.targetDevice = "disk.vdb";
-      };
+  f2fs = {
+    storage = {
+      disk.vdb.clear = true;
+      disk.vdb.initlabel = true;
 
-      fileSystems."/boot" = {
-        label = "boot";
-        fsType = "f2fs";
-        storage = "partition.boot";
-      };
+      partition.swap.size = "500M";
+      partition.swap.targetDevice = "disk.vdb";
+      partition.boot.size = "100M";
+      partition.boot.targetDevice = "disk.vdb";
+      partition.root.grow = true;
+      partition.root.targetDevice = "disk.vdb";
+    };
 
-      fileSystems."/" = {
-        label = "root";
-        fsType = "f2fs";
-        storage = "partition.root";
-      };
+    fileSystems."/boot" = {
+      label = "boot";
+      fsType = "f2fs";
+      storage = "partition.boot";
+    };
 
-      swapDevices = [
-        { label = "swap"; storage = "partition.swap"; }
-      ];
-    }
-  '';
+    fileSystems."/" = {
+      label = "root";
+      fsType = "f2fs";
+      storage = "partition.root";
+    };
 
-  raid = pkgs.writeText "raid.nix" ''
-    {
-      storage = {
-        disk.vdb.clear = true;
-        disk.vdb.initlabel = true;
+    swapDevices = [
+      { label = "swap"; storage = "partition.swap"; }
+    ];
+  };
 
-        partition.raid01.size = "200M";
-        partition.raid01.targetDevice = "disk.vdb";
-        partition.swap1.size = "500M";
-        partition.swap1.targetDevice = "disk.vdb";
-        partition.raid11.grow = true;
-        partition.raid11.targetDevice = "disk.vdb";
+  raid = {
+    storage = {
+      disk.vdb.clear = true;
+      disk.vdb.initlabel = true;
 
-        disk.vdc.clear = true;
-        disk.vdc.initlabel = true;
+      partition.raid01.size = "200M";
+      partition.raid01.targetDevice = "disk.vdb";
+      partition.swap1.size = "500M";
+      partition.swap1.targetDevice = "disk.vdb";
+      partition.raid11.grow = true;
+      partition.raid11.targetDevice = "disk.vdb";
 
-        partition.raid02.size = "200M";
-        partition.raid02.targetDevice = "disk.vdc";
-        partition.swap2.size = "500M";
-        partition.swap2.targetDevice = "disk.vdc";
-        partition.raid12.grow = true;
-        partition.raid12.targetDevice = "disk.vdc";
+      disk.vdc.clear = true;
+      disk.vdc.initlabel = true;
 
-        mdraid.boot.level = 1;
-        mdraid.boot.devices = [ "partition.raid01" "partition.raid02" ];
+      partition.raid02.size = "200M";
+      partition.raid02.targetDevice = "disk.vdc";
+      partition.swap2.size = "500M";
+      partition.swap2.targetDevice = "disk.vdc";
+      partition.raid12.grow = true;
+      partition.raid12.targetDevice = "disk.vdc";
 
-        mdraid.root.level = 1;
-        mdraid.root.devices = [ "partition.raid11" "partition.raid12" ];
-      };
+      mdraid.boot.level = 1;
+      mdraid.boot.devices = [ "partition.raid01" "partition.raid02" ];
 
-      fileSystems."/boot" = {
-        label = "boot";
-        fsType = "ext3";
-        storage = "mdraid.boot";
-      };
+      mdraid.root.level = 1;
+      mdraid.root.devices = [ "partition.raid11" "partition.raid12" ];
+    };
 
-      fileSystems."/" = {
-        label = "root";
-        fsType = "xfs";
-        storage = "mdraid.root";
-      };
+    fileSystems."/boot" = {
+      label = "boot";
+      fsType = "ext3";
+      storage = "mdraid.boot";
+    };
 
-      swapDevices = [
-        { label = "swap1"; storage = "partition.swap1"; }
-        { label = "swap2"; storage = "partition.swap2"; }
-      ];
-    }
-  '';
+    fileSystems."/" = {
+      label = "root";
+      fsType = "xfs";
+      storage = "mdraid.root";
+    };
 
-  raidLvmCrypt = pkgs.writeText "raid-lvm-crypt.nix" ''
-    {
-      storage = {
-        disk.vdb.clear = true;
-        disk.vdb.initlabel = true;
+    swapDevices = [
+      { label = "swap1"; storage = "partition.swap1"; }
+      { label = "swap2"; storage = "partition.swap2"; }
+    ];
+  };
 
-        partition.raid1.grow = true;
-        partition.raid1.targetDevice = "disk.vdb";
+  raidLvmCrypt = {
+    storage = {
+      disk.vdb.clear = true;
+      disk.vdb.initlabel = true;
 
-        disk.vdc.clear = true;
-        disk.vdc.initlabel = true;
+      partition.raid1.grow = true;
+      partition.raid1.targetDevice = "disk.vdb";
 
-        partition.raid2.grow = true;
-        partition.raid2.targetDevice = "disk.vdc";
+      disk.vdc.clear = true;
+      disk.vdc.initlabel = true;
 
-        mdraid.raid.level = 1;
-        mdraid.raid.devices = [ "partition.raid1" "partition.raid2" ];
+      partition.raid2.grow = true;
+      partition.raid2.targetDevice = "disk.vdc";
 
-        /* TODO!
-        luks.volroot.passphrase = "x";
-        luks.volroot.targetDevice = "mdraid.raid";
-        */
+      mdraid.raid.level = 1;
+      mdraid.raid.devices = [ "partition.raid1" "partition.raid2" ];
 
-        volgroup.nixos.devices = [ "luks.volroot" ];
+      /* TODO!
+      luks.volroot.passphrase = "x";
+      luks.volroot.targetDevice = "mdraid.raid";
+      */
 
-        logvol.boot.size = "200M";
-        logvol.boot.group = "volgroup.nixos";
+      volgroup.nixos.devices = [ "luks.volroot" ];
 
-        logvol.swap.size = "500M";
-        logvol.swap.group = "volgroup.nixos";
+      logvol.boot.size = "200M";
+      logvol.boot.group = "volgroup.nixos";
 
-        logvol.root.grow = true;
-        logvol.root.group = "volgroup.nixos";
-      };
+      logvol.swap.size = "500M";
+      logvol.swap.group = "volgroup.nixos";
 
-      fileSystems."/boot" = {
-        label = "boot";
-        fsType = "ext3";
-        storage = "logvol.boot";
-      };
+      logvol.root.grow = true;
+      logvol.root.group = "volgroup.nixos";
+    };
 
-      fileSystems."/" = {
-        label = "root";
-        fsType = "ext4";
-        storage = "logvol.root";
-      };
+    fileSystems."/boot" = {
+      label = "boot";
+      fsType = "ext3";
+      storage = "logvol.boot";
+    };
 
-      swapDevices = [
-        { label = "swap"; storage = "logvol.swap"; }
-      ];
-    }
-  '';
+    fileSystems."/" = {
+      label = "root";
+      fsType = "ext4";
+      storage = "logvol.root";
+    };
+
+    swapDevices = [
+      { label = "swap"; storage = "logvol.swap"; }
+    ];
+  };
 
 in {
   name = "partitiion";
@@ -273,8 +271,8 @@ in {
     }
 
     sub nixpart {
-      $machine->copyFileFromHost($_[0], "/storage.nix");
-      $machine->succeed("nixpart -v /storage.nix");
+      $machine->copyFileFromHost($_[0], "/storage.xml");
+      $machine->succeed("nixpart -v --from-xml /storage.xml");
       ensureSanity;
     }
 
@@ -316,7 +314,7 @@ in {
           die;
         }
         # Try to remount with nixpart
-        $machine->succeed("nixpart -vm /storage.nix");
+        $machine->succeed("nixpart -vm --from-xml /storage.xml");
         ensureMountPoint("/mnt");
         # Check if our beloved canaries are dead
         chomp $canaries;
@@ -329,7 +327,7 @@ in {
     }
 
     parttest "ext2, ext3 and ext4 filesystems", sub {
-      nixpart("${ext}");
+      nixpart("${mkConf ext}");
       ensurePartition("boot", "ext2");
       ensurePartition("swap", "swap");
       ensurePartition("nix", "ext3");
@@ -344,7 +342,7 @@ in {
 
     parttest "btrfs filesystem", sub {
       $machine->succeed("modprobe btrfs");
-      nixpart("${btrfs}");
+      nixpart("${mkConf btrfs}");
       ensurePartition("swap1", "swap");
       ensurePartition("swap2", "swap");
       ensurePartition("/dev/vdb2", "btrfs");
@@ -356,7 +354,7 @@ in {
 
     parttest "f2fs filesystem", sub {
       $machine->succeed("modprobe f2fs");
-      nixpart("${f2fs}");
+      nixpart("${mkConf f2fs}");
       ensurePartition("swap", "swap");
       ensurePartition("boot", "f2fs");
       ensurePartition("root", "f2fs");
@@ -365,7 +363,7 @@ in {
     };
 
     parttest "RAID1 with XFS", sub {
-      nixpart("${raid}");
+      nixpart("${mkConf raid}");
       ensurePartition("swap1", "swap");
       ensurePartition("swap2", "swap");
       ensurePartition("/dev/md0", "ext3");
@@ -378,7 +376,7 @@ in {
     };
 
     parttest "RAID1 with LUKS and LVM", sub {
-      nixpart("${raidLvmCrypt}");
+      nixpart("${mkConf raidLvmCrypt}");
       ensurePartition("/dev/vdb1", "data");
       ensureNoPartition("vdb2");
       ensurePartition("/dev/vdc1", "data");
