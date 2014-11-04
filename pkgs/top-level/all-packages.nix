@@ -10494,10 +10494,6 @@ let
 
   monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
 
-  monodoc = callPackage ../applications/editors/monodoc {
-    gtksharp = gtksharp1;
-  };
-
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;
   };
