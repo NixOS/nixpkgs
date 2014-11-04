@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     find tests -type f | xargs sed -e 's@/bin/pwd@${coreutils}&@g' -i
+    patch gl/stdint_.h < ${./clang.patch}
   '';
 
   configureFlags =

@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     license = [ "GPLv2+" ];
 
     maintainers = with stdenv.lib.maintainers; [ the-kenny viric ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

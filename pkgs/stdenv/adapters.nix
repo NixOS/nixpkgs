@@ -285,18 +285,17 @@ rec {
     };
 
 
-  /* Modify a stdenv so that it uses the Gold linker. FIXME: should
-     use -fuse-ld=gold instead, but then the ld-wrapper won't be
-     invoked. */
-  useGoldLinker = stdenv:
-    let
-      binutils = stdenv.gcc.binutils;
-      binutils' = pkgs.runCommand "${binutils.name}-gold" { }
-        ''
-          mkdir -p $out/bin
-          ln -s ${binutils}/bin/* $out/bin/
-          ln -sfn ${binutils}/bin/ld.gold $out/bin/ld
-        ''; # */
-    in overrideGCC stdenv (stdenv.gcc.override { binutils = binutils'; });
+  /* Modify a stdenv so that it uses the Gold linker. */
+  useGoldLinker = stdenv: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // {
+        dontStrip = true;
+        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_COMPILE or "") + " -fuse-ld=gold";
+      });
+    };
 
+  dropCxx = drv: drv.override {
+    stdenv = if pkgs.stdenv.isDarwin
+      then pkgs.allStdenvs.stdenvDarwinNaked
+      else pkgs.stdenv;
+  };
 }

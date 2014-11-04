@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     sed -i "makefile" -"es|PREFIX[[:blank:]]*=.*$|PREFIX = $out|g"
+    sed -i "makefile" -"es|gcc|$CC|g"
   '';
 
   doCheck = true;

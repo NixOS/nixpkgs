@@ -38,16 +38,14 @@ stdenv.mkDerivation rec {
     ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}
     ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
     ${if stdenv.isDarwin then "--enable-keychain" else "--disable-keychain"}
-    ${if saslSupport then "--enable-sasl --with-sasl=${sasl}" else "--disable-sasl"}
-    ${if httpSupport then "--enable-serf --with-serf=${serf}" else "--disable-serf"}
+    ${if saslSupport then "--with-sasl=${sasl}" else "--without-sasl"}
+    ${if httpSupport then "--with-serf=${serf}" else "--without-serf"}
     --with-zlib=${zlib}
     --with-sqlite=${sqlite}
   '';
 
   preBuild = ''
     makeFlagsArray=(APACHE_LIBEXECDIR=$out/modules)
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure --replace "-no-cpp-precomp" ""
   '';
 
   postInstall = ''
@@ -72,10 +70,6 @@ stdenv.mkDerivation rec {
   inherit perlBindings pythonBindings;
 
   enableParallelBuilding = true;
-
-  # Hack to build on Mac OS X. The system header files use C99-style
-  # comments, but Subversion passes -std=c90.
-  NIX_CFLAGS_COMPILE = "-std=c99";
 
   meta = {
     description = "A version control system intended to be a compelling replacement for CVS in the open source community";

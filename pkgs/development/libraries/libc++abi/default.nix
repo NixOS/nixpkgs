@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libcxx, libunwind }:
+{ lib, stdenv, fetchurl, libcxx, coreutils, gnused }:
 
 let rev = "199626"; in
 
@@ -10,22 +10,32 @@ stdenv.mkDerivation {
     sha256 = "09wr6qwgmdzbmgfkdzfhph9giy0zd6fp3s017fcfy4g0prjn5s4c";
   };
 
-  NIX_CFLAGS_LINK = "-L${libunwind}/lib -lunwind";
+  patches = [ ./no-stdc++.patch ./darwin.patch ];
+
+  buildInputs = [ coreutils ];
 
   postUnpack = ''
     unpackFile ${libcxx.src}
-    export NIX_CFLAGS_COMPILE="-I${libunwind}/include -I$PWD/include -I$(readlink -f libcxx-*)/include"
+  '' + lib.optionalString stdenv.isDarwin ''
+    export TRIPLE=x86_64-apple-darwin
+    # Hack: NIX_CFLAGS_COMPILE doesn't work here because clang++ isn't
+    # wrapped at this point.
+    export CXX="clang++ -D_LIBCXX_DYNAMIC_FALLBACK=1"
   '';
 
-  installPhase = ''
-    install -d -m 755 $out/include $out/lib
-    install -m 644 lib/libc++abi.so.1.0 $out/lib
-    install -m 644 include/cxxabi.h $out/include
-    ln -s libc++abi.so.1.0 $out/lib/libc++abi.so
-    ln -s libc++abi.so.1.0 $out/lib/libc++abi.so.1
-  '';
-
-  patchPhase = "sed -e s,-lstdc++,, -i lib/buildit";
+  installPhase = if stdenv.isDarwin
+    then ''
+      install -d -m 755 $out/include $out/lib
+      install -m 644 lib/libc++abi.dylib $out/lib
+      install -m 644 include/cxxabi.h $out/include
+    ''
+    else ''
+      install -d -m 755 $out/include $out/lib
+      install -m 644 lib/libc++abi.so.1.0 $out/lib
+      install -m 644 include/cxxabi.h $out/include
+      ln -s libc++abi.so.1.0 $out/lib/libc++abi.so
+      ln -s libc++abi.so.1.0 $out/lib/libc++abi.so.1
+    '';
 
   buildPhase = "(cd lib; ./buildit)";
 
@@ -34,6 +44,6 @@ stdenv.mkDerivation {
     description = "A new implementation of low level support for a standard C++ library";
     license = "BSD";
     maintainers = [ stdenv.lib.maintainers.shlevy ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

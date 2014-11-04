@@ -35,9 +35,6 @@ rec {
     alias sed=gsed
     export MAKE=gmake
     shopt -s expand_aliases
-
-    # Filter out stupid GCC warnings (in gcc-wrapper).
-    export NIX_GCC_NEEDS_GREP=1
   '';
 
   prehookOpenBSD = ''
@@ -52,9 +49,6 @@ rec {
 
     export MAKE=gmake
     shopt -s expand_aliases
-
-    # Filter out stupid GCC warnings (in gcc-wrapper).
-    export NIX_GCC_NEEDS_GREP=1
   '';
 
   prehookNetBSD = ''
@@ -65,9 +59,6 @@ rec {
     alias tar=gtar
     export MAKE=gmake
     shopt -s expand_aliases
-
-    # Filter out stupid GCC warnings (in gcc-wrapper).
-    export NIX_GCC_NEEDS_GREP=1
   '';
 
   prehookCygwin = ''

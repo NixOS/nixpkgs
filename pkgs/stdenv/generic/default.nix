@@ -164,7 +164,8 @@ let
       isBSD = system == "i686-freebsd"
            || system == "x86_64-freebsd"
            || system == "i686-openbsd"
-           || system == "x86_64-openbsd";
+           || system == "x86_64-openbsd"
+           || system == "x86_64-darwin";
       isi686 = system == "i686-linux"
             || system == "i686-gnu"
             || system == "i686-freebsd"
