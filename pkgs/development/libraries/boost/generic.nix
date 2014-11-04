@@ -118,7 +118,12 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     NIX_LDFLAGS="$(echo $NIX_LDFLAGS | sed "s,$out,$lib,g")"
+    substituteInPlace tools/build/src/tools/clang-darwin.jam \
+      --replace '$(<[1]:D=)' "$lib/lib/\$(<[1]:D=)"
   '';
+
+  NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.isDarwin
+                      "-headerpad_max_install_names";
 
   enableParallelBuilding = true;
 

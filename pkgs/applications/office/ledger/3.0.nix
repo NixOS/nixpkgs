@@ -23,11 +23,6 @@ stdenv.mkDerivation {
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp/
     cp -v "$src/lisp/"*.el $out/share/emacs/site-lisp/
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    for i in date_time filesystem system iostreams regex unit_test_framework; do
-      boostlib=libboost_''$i.dylib
-      install_name_tool -change ''$boostlib ${boost}/lib/''$boostlib $out/bin/ledger
-    done
   '';
 
   meta = {
