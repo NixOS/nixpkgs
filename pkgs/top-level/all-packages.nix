@@ -10248,7 +10248,10 @@ let
 
   pianobooster = callPackage ../applications/audio/pianobooster { };
 
-  picard = callPackage ../applications/audio/picard { };
+  picard = callPackage ../applications/audio/picard {
+    python-libdiscid = pythonPackages.discid;
+    mutagen = pythonPackages.mutagen;
+  };
 
   picocom = callPackage ../tools/misc/picocom { };
 
