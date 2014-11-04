@@ -7,9 +7,9 @@ let cfg = config.services.xserver.synaptics;
     enabledTapConfig = ''
       Option "MaxTapTime" "180"
       Option "MaxTapMove" "220"
-      Option "TapButton1" "${builtins.elemAt cfg.buttonsMap 0}"
-      Option "TapButton2" "${builtins.elemAt cfg.buttonsMap 1}"
-      Option "TapButton3" "${builtins.elemAt cfg.buttonsMap 2}"
+      Option "TapButton1" "${builtins.elemAt cfg.fingersMap 0}"
+      Option "TapButton2" "${builtins.elemAt cfg.fingersMap 1}"
+      Option "TapButton3" "${builtins.elemAt cfg.fingersMap 2}"
     '';
     disabledTapConfig = ''
       Option "MaxTapTime" "0"
@@ -147,9 +147,6 @@ in {
           Option "ClickFinger1" "${builtins.elemAt cfg.buttonsMap 0}"
           Option "ClickFinger2" "${builtins.elemAt cfg.buttonsMap 1}"
           Option "ClickFinger3" "${builtins.elemAt cfg.buttonsMap 2}"
-          Option "TapButton1" "${builtins.elemAt cfg.fingersMap 0}"
-          Option "TapButton2" "${builtins.elemAt cfg.fingersMap 1}"
-          Option "TapButton3" "${builtins.elemAt cfg.fingersMap 2}"
           Option "VertTwoFingerScroll" "${if cfg.twoFingerScroll then "1" else "0"}"
           Option "HorizTwoFingerScroll" "${if cfg.twoFingerScroll then "1" else "0"}"
           Option "VertEdgeScroll" "${if cfg.vertEdgeScroll then "1" else "0"}"
