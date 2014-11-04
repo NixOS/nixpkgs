@@ -264,8 +264,8 @@ in
     core = "stella";
     src = fetchRetro {
       repo = core + "-libretro";
-      rev = "394ef8c10b8057fe3f92ff9d7c73886ae2eefec2";
-      sha256 = "1a5m157fqpspi2zafmqhcd6864dvfpwh44d4n47ngswp6ii9bq0f";
+      rev = "31a455828e8f72c53283cb782e799ce54e4f1ee6";
+      sha256 = "0ab7prnc2igbmzlh6gh7ln25c6767w4ypgskl1xsbn93k2dwzkpx";
     };
     description = "Port of Stella to libretro";
   }).override {
