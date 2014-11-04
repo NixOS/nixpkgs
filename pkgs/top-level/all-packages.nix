@@ -2743,7 +2743,9 @@ let
 
   xmlstarlet = callPackage ../tools/text/xml/xmlstarlet { };
 
-  xmlto = callPackage ../tools/typesetting/xmlto { };
+  xmlto = callPackage ../tools/typesetting/xmlto {
+    w3m = w3m.override { graphicsSupport = false; };
+  };
 
   xmltv = callPackage ../tools/misc/xmltv { };
 
