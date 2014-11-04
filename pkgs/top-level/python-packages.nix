@@ -8285,12 +8285,12 @@ let
   };
 
   sympy = buildPythonPackage rec {
-    name = "sympy-0.7.4";
+    name = "sympy-0.7.5";
     disabled = isPy34;  # some tests fail
 
     src = pkgs.fetchurl {
       url    = "https://github.com/sympy/sympy/releases/download/${name}/${name}.tar.gz";
-      sha256 = "0h1b9mx0snyyybj1x1ga69qssgjzkkgx2rw6nddjhyz1fknf8ywh";
+      sha256 = "19nlsm6zyxd4d237sl39mhn0fm18sp23vnl7b7xnj4grp9471y9f";
     };
 
     preCheck = ''
