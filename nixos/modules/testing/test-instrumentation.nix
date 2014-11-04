@@ -98,7 +98,7 @@ let kernel = config.boot.kernelPackages.kernel; in
     networking.usePredictableInterfaceNames = false;
 
     # Make it easy to log in as root when running the test interactively.
-    users.extraUsers.root.initialHashedPassword = mkDefault "";
+    users.extraUsers.root.initialHashedPassword = mkOverride 150 "";
 
   };
 

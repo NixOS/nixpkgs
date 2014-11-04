@@ -56,7 +56,7 @@ in {
   services.openssh.startWhenNeeded = false;
 
   # Allow the user to login as root without password.
-  users.extraUsers.root.initialHashedPassword = mkDefault "";
+  users.extraUsers.root.initialHashedPassword = mkOverride 150 "";
 
   # Some more help text.
   services.mingetty.helpLine =
