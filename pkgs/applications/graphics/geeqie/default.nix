@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
-    ./autogen.sh $configureFlags
+    ./autogen.sh $configureFlags --prefix="$out"
   '';
 
   buildInputs = [
