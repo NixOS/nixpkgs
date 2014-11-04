@@ -8286,7 +8286,6 @@ let
 
   sympy = buildPythonPackage rec {
     name = "sympy-0.7.5";
-    disabled = isPy34;  # some tests fail
 
     src = pkgs.fetchurl {
       url    = "https://pypi.python.org/packages/source/s/sympy/${name}.tar.gz";
