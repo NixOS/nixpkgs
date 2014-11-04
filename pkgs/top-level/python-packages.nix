@@ -3865,6 +3865,7 @@ let
   fonttools = buildPythonPackage (rec {
     version = "2.4";
     name = "fonttools-${version}";
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/F/FontTools/FontTools-${version}.tar.gz";
