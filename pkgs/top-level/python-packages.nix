@@ -8289,7 +8289,7 @@ let
     disabled = isPy34;  # some tests fail
 
     src = pkgs.fetchurl {
-      url    = "https://github.com/sympy/sympy/releases/download/${name}/${name}.tar.gz";
+      url    = "https://pypi.python.org/packages/source/s/sympy/${name}.tar.gz";
       sha256 = "19nlsm6zyxd4d237sl39mhn0fm18sp23vnl7b7xnj4grp9471y9f";
     };
 
