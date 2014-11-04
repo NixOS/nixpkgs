@@ -535,16 +535,18 @@ in {
       environment.systemPackages = [ pkgs.pythonPackages.graphite_pager ];
     })
 
-    # Disabled: Don't create this user unconditionally!
-    #
-    # {
-    #   users.extraUsers = singleton {
-    #     name = "graphite";
-    #     uid = config.ids.uids.graphite;
-    #     description = "Graphite daemon user";
-    #     home = dataDir;
-    #   };
-    #   users.extraGroups.graphite.gid = config.ids.gids.graphite;
-    # }
+    (mkIf (
+      cfg.carbon.enableCache || cfg.carbon.enableAggregator || cfg.carbon.enableRelay ||
+      cfg.web.enable || cfg.api.enable ||
+      cfg.seyren.enable || cfg.pager.enable
+     ) {
+      users.extraUsers = singleton {
+        name = "graphite";
+        uid = config.ids.uids.graphite;
+        description = "Graphite daemon user";
+        home = dataDir;
+      };
+      users.extraGroups.graphite.gid = config.ids.gids.graphite;
+    })
   ];
 }
