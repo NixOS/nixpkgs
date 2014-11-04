@@ -272,7 +272,7 @@ in {
 
     }
 
-    sub kickstart {
+    sub nixpart {
       $machine->copyFileFromHost($_[0], "/storage.nix");
       $machine->succeed("nixpart -v /storage.nix");
       ensureSanity;
@@ -316,7 +316,7 @@ in {
           die;
         }
         # Try to remount with nixpart
-        $machine->succeed("nixpart -vm /kickstart");
+        $machine->succeed("nixpart -vm /storage.nix");
         ensureMountPoint("/mnt");
         # Check if our beloved canaries are dead
         chomp $canaries;
