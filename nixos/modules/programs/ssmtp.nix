@@ -44,6 +44,15 @@ in
         '';
       };
 
+      root = mkOption {
+        type = types.str;
+        default = "";
+        example = "root@example.org";
+        description = ''
+          The e-mail to which mail for users with UID &lt; 1000 is forwarded.
+        '';
+      };
+
       domain = mkOption {
         type = types.str;
         default = "";
@@ -103,6 +112,7 @@ in
       ''
         MailHub=${cfg.hostName}
         FromLineOverride=YES
+        ${if cfg.root != "" then "root=${cfg.root}" else ""}
         ${if cfg.domain != "" then "rewriteDomain=${cfg.domain}" else ""}
         UseTLS=${if cfg.useTLS then "YES" else "NO"}
         UseSTARTTLS=${if cfg.useSTARTTLS then "YES" else "NO"}
