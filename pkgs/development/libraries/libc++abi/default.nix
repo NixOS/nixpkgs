@@ -21,6 +21,7 @@ stdenv.mkDerivation {
     # Hack: NIX_CFLAGS_COMPILE doesn't work here because clang++ isn't
     # wrapped at this point.
     export CXX="clang++ -D_LIBCXX_DYNAMIC_FALLBACK=1"
+    unset SDKROOT
   '';
 
   installPhase = if stdenv.isDarwin
