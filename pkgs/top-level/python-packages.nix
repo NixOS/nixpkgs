@@ -8138,7 +8138,7 @@ let
     meta = with stdenv.lib; {
       description = "GUI Viewer for Python profiling runs";
       homepage = http://www.vrplumber.com/programming/runsnakerun/;
-      license = licenses.bsd;
+      license = licenses.bsd3;
     };
   };
   
