@@ -1,5 +1,5 @@
 { stdenv, fetchgit, autoconf, automake, libtool, pkgconfig, gtk, libpng, exiv2
-, lcms, intltool, gettext, libchamplain, fbida
+, lcms, intltool, gettext, libchamplain, fbida, vim
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     autoconf automake libtool pkgconfig gtk libpng exiv2 lcms intltool gettext
-    libchamplain
+    libchamplain vim
   ];
 
   postInstall = ''
