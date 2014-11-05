@@ -9,6 +9,7 @@
 , enablePIC ? false
 , enableExceptions ? false
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
+, mpi ? null
 
 # Attributes inherit from specific versions
 , version, src
@@ -64,7 +65,8 @@ let
   nativeB2Flags = [
     "-sEXPAT_INCLUDE=${expat}/include"
     "-sEXPAT_LIBPATH=${expat}/lib"
-  ] ++ optional (toolset != null) "toolset=${toolset}";
+  ] ++ optional (toolset != null) "toolset=${toolset}"
+    ++ optional (mpi != null) "--user-config=user-config.jam";
   nativeB2Args = concatStringsSep " " (genericB2Flags ++ nativeB2Flags);
 
   crossB2Flags = [
@@ -122,6 +124,10 @@ stdenv.mkDerivation {
         substituteInPlace tools/build/src/tools/clang-darwin.jam \
           --replace '$(<[1]:D=)' "$lib/lib/\$(<[1]:D=)";
     fi;
+  '' + optionalString (mpi != null) ''
+    cat << EOF > user-config.jam
+    using mpi : ${mpi}/bin/mpiCC ;
+    EOF
   '';
 
   NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.isDarwin
