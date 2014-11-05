@@ -4730,6 +4730,22 @@ let
     };
   };
 
+  locustio = buildPythonPackage rec {
+    name = "locustio-0.7.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/l/locustio/${name}.tar.gz";
+      md5 = "90cf4d029d58ad58d19ea17a16e59c34";
+    };
+
+    propagatedBuildInputs = [ self.msgpack self.requests2 self.flask self.gevent self.pyzmq ];
+    buildInputs = [ self.mock self.unittest2 ];
+
+    meta = {
+      homepage = http://locust.io/;
+      description = "A load testing tool";
+    };
+  };
 
   lockfile = buildPythonPackage rec {
     name = "lockfile-0.9.1";
@@ -5254,6 +5270,17 @@ let
     };
   };
 
+  msgpack = buildPythonPackage rec {
+    name = "msgpack-python-${version}";
+    version = "0.4.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/m/msgpack-python/${name}.tar.gz";
+      md5 = "e3a0fdfd864c72c958bb501d39b39caf";
+    };
+
+    propagatedBuildInputs = with self; [ ];
+  };
 
   msrplib = buildPythonPackage rec {
     name = "python-msrplib-${version}";
@@ -7669,11 +7696,11 @@ let
 
 
   requests2 = buildPythonPackage rec {
-    name = "requests-2.2.1";
+    name = "requests-2.4.3";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
-      md5 = "ac27081135f58d1a43e4fb38258d6f4e";
+      md5 = "02214b3a179e445545de4b7a98d3dd17";
     };
 
     meta = {
