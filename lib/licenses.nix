@@ -21,6 +21,12 @@ rec {
     inherit (agpl3) url;
   };
 
+  amazonsl = {
+    shortName = "asl";
+    fullName = "Amazon Software License";
+    url = http://aws.amazon.com/asl/;
+  };
+
   amd = {
     shortName = "amd";
     fullName = "AMD License Agreement";
