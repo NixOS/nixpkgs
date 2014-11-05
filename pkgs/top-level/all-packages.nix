@@ -682,6 +682,10 @@ let
 
   dlx = callPackage ../misc/emulators/dlx { };
 
+  duperemove = callPackage ../tools/filesystems/duperemove {
+    linuxHeaders = linuxHeaders_3_14;
+  };
+
   eggdrop = callPackage ../tools/networking/eggdrop { };
 
   enca = callPackage ../tools/text/enca { };
