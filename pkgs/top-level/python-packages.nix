@@ -8253,10 +8253,10 @@ let
   };
 
   selenium = buildPythonPackage rec {
-    name = "selenium-2.39.0";
+    name = "selenium-2.44.0";
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/selenium/${name}.tar.gz";
-      sha256 = "1kisndzl9s0vs0a5paqx35hxq28id3xyi1gfsjaixsi6rs0ibhhh";
+      sha256 = "0l70pqwg88imbylcd831vg8nj8ipy4zr331f6qjccss7vn56i2h5";
     };
 
     buildInputs = with self; [pkgs.xlibs.libX11];
@@ -8264,14 +8264,15 @@ let
     # Recompiling x_ignore_nofocus.so as the original one dlopen's libX11.so.6 by some
     # absolute paths. Replaced by relative path so it is found when used in nix.
     x_ignore_nofocus =
-      pkgs.fetchsvn {
-        url = http://selenium.googlecode.com/svn/tags/selenium-2.25.0/cpp/linux-specific;
-        rev = 17641;
-        sha256 = "1wif9r6307qhlcp2zbg6n05yvxxn9ppkxh8gpsplcbyh22zi7bcd";
+      pkgs.fetchFromGitHub {
+        owner = "SeleniumHQ";
+        repo = "selenium";
+        rev = "selenium-2.44.0";
+        sha256 = "13aqm0dwy17ghimy7m2mxjwlyc1k7zk5icxzrs1sa896056f1dyy";
       };
 
     preInstall = ''
-      cp "${x_ignore_nofocus}/"* .
+      cp "${x_ignore_nofocus}/cpp/linux-specific/"* .
       sed -i 's|dlopen(library,|dlopen("libX11.so.6",|' x_ignore_nofocus.c
       gcc -c -fPIC x_ignore_nofocus.c -o x_ignore_nofocus.o
       gcc -shared \
