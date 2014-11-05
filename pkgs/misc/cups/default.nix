@@ -1,24 +1,27 @@
-{ stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam, openssl
+{ stdenv, fetchurl, pkgconfig, zlib, pam, openssl
 , dbus, libusb, acl }:
 
-let version = "1.5.4"; in
+let version = "2.0.0"; in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "cups-${version}";
 
-  passthru = { inherit version; };
-
   src = fetchurl {
-    url = "https://www.cups.org/software/${version}/cups-${version}-source.tar.bz2";
-    sha256 = "1rfhlv9b37120d6shngvyrcp99vh4a3lwdkrfanv3sjqid7068w0";
+    url = "https://www.cups.org/software/${version}/${name}-source.tar.bz2";
+    sha256 = "1qjv1w8m3f9lbrnd9wx8gman4sjbgb75svfypd4jkn649b5vpzc3";
   };
 
-  buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb ]
+  buildInputs = [ pkgconfig zlib libusb ]
     ++ stdenv.lib.optionals stdenv.isLinux [ pam dbus.libs acl ] ;
 
   propagatedBuildInputs = [ openssl ];
 
-  configureFlags = "--localstatedir=/var --enable-dbus"; # --with-dbusdir
+  patches = [ ./use-initgroups.patch ];
+
+  configureFlags = [ "--localstatedir=/var" "--enable-dbus"
+                     # Workaround for installing systemd path
+                     "--with-systemd=$out/lib/systemd/system"
+                   ];
 
   installFlags =
     [ # Don't try to write in /var at build time.
