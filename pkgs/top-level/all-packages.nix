@@ -2173,6 +2173,8 @@ let
 
   qjoypad = callPackage ../tools/misc/qjoypad { };
 
+  qpdf = callPackage ../development/libraries/qpdf { };
+
   qscintilla = callPackage ../development/libraries/qscintilla {
     qt = qt4;
   };
