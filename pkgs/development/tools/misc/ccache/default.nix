@@ -3,10 +3,10 @@
 let
   ccache =
 stdenv.mkDerivation {
-  name = "ccache-3.1.9";
+  name = "ccache-3.1.10";
   src = fetchurl {
-    url = http://samba.org/ftp/ccache/ccache-3.1.9.tar.gz;
-    sha256 = "0ixlxqv1xyacwgg0k9b4a6by07c7k75y0xbr8dp76jvyada0c9x2";
+    url = http://samba.org/ftp/ccache/ccache-3.1.10.tar.gz;
+    sha256 = "0fzxa45q7wfm63zrak65wh31w7pnsp0k65fxv00cgmf454as4dza";
   };
 
   buildInputs = [ zlib ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Compiler cache for fast recompilation of C/C++ code";
     homepage = http://ccache.samba.org/;
-    license = "GPL";
+    license = stdenv.lib.licenses.gpl3Plus;
   };
 };
 in
