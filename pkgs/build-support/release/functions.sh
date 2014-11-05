@@ -1,11 +1,16 @@
-findTarballs() {
+findTarball() {
     local suffix i
-    test -d "$1/tarballs/" && {
+    if [ -f "$1" ]; then
+        echo "$1"
+        return
+    fi
+    if [ -d "$1/tarballs/" ]; then
         for suffix in tar.gz tgz tar.bz2 tbz2 tar.xz tar.lzma; do
-            for i in $1/tarballs/*.$suffix; do echo $i; done
-        done | sort
-    }
-    echo "$1"
+            for i in $1/tarballs/*.$suffix; do echo $i; return; done
+        done | sort | head -1
+        return
+    fi
+    return 1
 }
 
 canonicalizeJarManifest() {
