@@ -5,7 +5,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "fcitx-4.2.8.5";
+  name = "fcitx-${version}";
+  version = "4.2.8.5";
 
   src = fetchurl {
     url = "http://download.fcitx-im.org/fcitx/${name}_dict.tar.xz";

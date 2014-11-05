@@ -1117,6 +1117,10 @@ let
 
   fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
 
+  fcitx-with-plugins = callPackage ../tools/inputmethods/fcitx/wrapper.nix {
+    plugins = [ ];
+  };
+
   fcron = callPackage ../tools/system/fcron { };
 
   fdm = callPackage ../tools/networking/fdm {};
