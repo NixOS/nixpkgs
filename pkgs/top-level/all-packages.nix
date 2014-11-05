@@ -12319,6 +12319,8 @@ let
 
   opkg = callPackage ../tools/package-management/opkg { };
 
+  opkg-utils = callPackage ../tools/package-management/opkg-utils { };
+
   pgadmin = callPackage ../applications/misc/pgadmin { };
 
   pgf = pgf2;
