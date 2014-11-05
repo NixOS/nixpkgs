@@ -123,7 +123,7 @@ foreach my $g (@{$spec->{groups}}) {
 }
 
 # Update the persistent list of declarative groups.
-write_file($declGroupsFile, join(" ", sort(keys %groupsOut)));
+write_file($declGroupsFile, { binmode => ':utf8' }, join(" ", sort(keys %groupsOut)));
 
 # Merge in the existing /etc/group.
 foreach my $name (keys %groupsCur) {
@@ -140,7 +140,7 @@ foreach my $name (keys %groupsCur) {
 # Rewrite /etc/group. FIXME: acquire lock.
 my @lines = map { join(":", $_->{name}, $_->{password}, $_->{gid}, $_->{members}) . "\n" }
     (sort { $a->{gid} <=> $b->{gid} } values(%groupsOut));
-write_file("/etc/group.tmp", @lines);
+write_file("/etc/group.tmp", { binmode => ':utf8' }, @lines);
 rename("/etc/group.tmp", "/etc/group") or die;
 system("nscd --invalidate group");
 
@@ -198,7 +198,7 @@ foreach my $u (@{$spec->{users}}) {
 }
 
 # Update the persistent list of declarative users.
-write_file($declUsersFile, join(" ", sort(keys %usersOut)));
+write_file($declUsersFile, { binmode => ':utf8' }, join(" ", sort(keys %usersOut)));
 
 # Merge in the existing /etc/passwd.
 foreach my $name (keys %usersCur) {
@@ -214,7 +214,7 @@ foreach my $name (keys %usersCur) {
 # Rewrite /etc/passwd. FIXME: acquire lock.
 @lines = map { join(":", $_->{name}, $_->{fakePassword}, $_->{uid}, $_->{gid}, $_->{description}, $_->{home}, $_->{shell}) . "\n" }
     (sort { $a->{uid} <=> $b->{uid} } (values %usersOut));
-write_file("/etc/passwd.tmp", @lines);
+write_file("/etc/passwd.tmp", { binmode => ':utf8' }, @lines);
 rename("/etc/passwd.tmp", "/etc/passwd") or die;
 system("nscd --invalidate passwd");
 
@@ -242,5 +242,5 @@ foreach my $u (values %usersOut) {
     push @shadowNew, join(":", $u->{name}, $hashedPassword, "1::::::") . "\n";
 }
 
-write_file("/etc/shadow.tmp", { perms => 0600 }, @shadowNew);
+write_file("/etc/shadow.tmp", { binmode => ':utf8', perms => 0600 }, @shadowNew);
 rename("/etc/shadow.tmp", "/etc/shadow") or die;
