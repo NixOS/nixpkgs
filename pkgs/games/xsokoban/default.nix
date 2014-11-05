@@ -1,8 +1,8 @@
-a :  
-let 
+a :
+let
   fetchurl = a.fetchurl;
 
-  version = a.lib.attrByPath ["version"] "3.3c" a; 
+  version = a.lib.attrByPath ["version"] "3.3c" a;
   buildInputs = with a; [
     a.libX11 a.xproto a.libXpm a.libXt
   ];
@@ -35,17 +35,17 @@ rec {
     sed -e 's/getpass[(][^)]*[)]/PASSWORD/' -i main.c
     sed -e '/if [(]owner[)]/iowner=1;' -i main.c
   '') ["minInit" "doUnpack"];
-      
+
   preBuild = a.fullDepEntry (''
     sed -e "s@/usr/local/@$out/@" -i Makefile
-    sed -e "s@ /bin/@ @" -i Makefile 
+    sed -e "s@ /bin/@ @" -i Makefile
     mkdir -p $out/bin $out/share $out/man/man1 $out/lib
   '') ["minInit" "doConfigure" "defEnsureDir"];
 
   name = "xsokoban-" + version;
   meta = {
     description = "X sokoban";
-    license = a.stdemv.lib.licenses.publicDomain;
+    license = a.stdenv.lib.licenses.publicDomain;
     maintainers = [ a.stdenv.lib.maintainers.raskin ];
   };
 }
