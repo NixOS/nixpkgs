@@ -45,5 +45,7 @@ rec {
   name = "xsokoban-" + version;
   meta = {
     description = "X sokoban";
+    license = a.stdemv.lib.licenses.publicDomain;
+    maintainers = [ a.stdenv.lib.maintainers.raskin ];
   };
 }
