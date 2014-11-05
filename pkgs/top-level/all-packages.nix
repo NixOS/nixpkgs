@@ -8790,6 +8790,8 @@ let
 
   r5rs = callPackage ../data/documentation/rnrs/r5rs.nix { };
 
+  hasklig = callPackage ../data/fonts/hasklig {};
+
   source-code-pro = callPackage ../data/fonts/source-code-pro {};
 
   source-sans-pro = callPackage ../data/fonts/source-sans-pro { };
