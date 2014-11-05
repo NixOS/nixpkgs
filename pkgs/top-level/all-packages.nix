@@ -11232,6 +11232,8 @@ let
 
   exult = callPackage ../games/exult { };
 
+  fairymax = callPackage ../games/fairymax {};
+
   flightgear = callPackage ../games/flightgear { };
 
   freeciv = callPackage ../games/freeciv { };
