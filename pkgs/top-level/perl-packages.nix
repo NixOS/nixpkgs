@@ -6593,6 +6593,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  NetCIDR = buildPerlPackage {
+    name = "Net-CIDR-0.17";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MR/MRSAM/Net-CIDR-0.17.tar.gz;
+      sha256 = "4a968e700d382cf0946e47df420d0151fbd8e0135f037d404c7c63713b66daf0";
+    };
+    meta = {
+      description = "Manipulate IPv4/IPv6 netblocks in CIDR notation";
+      license = "perl";
+      platforms = stdenv.lib.platforms.unix;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
   NetCoverArtArchive = buildPerlPackage {
     name = "Net-CoverArtArchive-1.02";
     src = fetchurl {
