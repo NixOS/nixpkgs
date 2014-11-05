@@ -149,7 +149,7 @@ init_submodules(){
         local hash=$(echo $l | awk '{print substr($1,2)}')
         local dir=$(echo $l | awk '{print $2}')
         local name=$(
-            git config -f .gitmodules --get-regexp submodule\.[^.]*\.path |
+            git config -f .gitmodules --get-regexp submodule\..*\.path |
             sed -n "s,^\(.*\)\.path $dir\$,\\1,p")
         local url=$(git config -f .gitmodules --get ${name}.url)
 
