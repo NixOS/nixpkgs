@@ -276,7 +276,7 @@ rec {
 
   publicDomain = {
     shortName = "Public Domain";
-    fullname = "Public Domain";
+    fullName = "Public Domain";
   };
 
   sleepycat = spdx {
