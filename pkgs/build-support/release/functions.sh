@@ -1,8 +1,8 @@
 findTarballs() {
-    local suffix
+    local suffix i
     test -d "$1/tarballs/" && {
         for suffix in tar.gz tgz tar.bz2 tbz2 tar.xz tar.lzma; do
-            ls $1/tarballs/*.$suffix 2> /dev/null
+            for i in $1/tarballs/*.$suffix; do echo $i; done
         done | sort
     }
     echo "$1"
