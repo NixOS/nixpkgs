@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
     binary cairo deepseq filepath ghcEvents glib gtk mtl pango time
   ];
   configureFlags = "--ghc-options=-rtsopts";
+  patches = [ ./threadscope.patch ];
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/ThreadScope";
     description = "A graphical tool for profiling parallel Haskell programs";

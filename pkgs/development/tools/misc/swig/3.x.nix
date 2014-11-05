@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pcre }:
 
 stdenv.mkDerivation rec {
-  name = "swig-3.0.0";
+  name = "swig-3.0.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/swig/${name}.tar.gz";
-    sha256 = "99cab1055877d00280509f0e04c1fe76643ec3792e9b8e7efcc9aa6e247229df";
+    sha256 = "04vqrij3k6pcq41y7rzl5rmhnghqg905f11wyrqw7vdwr9brcrm2";
   };
 
   buildInputs = [ pcre ];

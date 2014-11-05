@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   dontPatchShebangs = true;
 
   meta = {
+    branch = "1.13";
     homepage = "http://www.gnu.org/software/automake/";
     description = "GNU standard-compliant makefile generator";
     license = stdenv.lib.licenses.gpl2Plus;

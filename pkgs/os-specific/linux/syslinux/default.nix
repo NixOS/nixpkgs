@@ -1,18 +1,18 @@
 { stdenv, fetchurl, nasm, perl, libuuid }:
 
 stdenv.mkDerivation rec {
-  name = "syslinux-6.02";
+  name = "syslinux-6.03";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/boot/syslinux/${name}.tar.xz";
-    sha256 = "0y2ld2s64s6vc5pf8rj36w71rq2cfax3c1iafp0w1qbjpxy1p8xg";
+    sha256 = "03l5iifwlg1wyb4yh98i0b7pd4j55a1c9y74q1frs47a5dnrilr6";
   };
 
   patches = [ ./perl-deps.patch ];
 
   buildInputs = [ nasm perl libuuid ];
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false; # problems on Hydra
 
   preBuild = ''
     substituteInPlace Makefile --replace /bin/pwd $(type -P pwd)

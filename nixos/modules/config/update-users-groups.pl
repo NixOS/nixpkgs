@@ -169,6 +169,12 @@ foreach my $u (@{$spec->{users}}) {
     } else {
         $u->{uid} = allocUid($u->{isSystemUser}) if !defined $u->{uid};
 
+        if (defined $u->{initialPassword}) {
+            $u->{hashedPassword} = hashPassword($u->{initialPassword});
+        } elsif (defined $u->{initialHashedPassword}) {
+            $u->{hashedPassword} = $u->{initialHashedPassword};
+        }
+
         # Create a home directory.
         if ($u->{createHome}) {
             make_path($u->{home}, { mode => 0700 }) if ! -e $u->{home};
@@ -222,6 +228,7 @@ foreach my $line (-f "/etc/shadow" ? read_file("/etc/shadow") : ()) {
     my ($name, $hashedPassword, @rest) = split(':', $line, -9);
     my $u = $usersOut{$name};;
     next if !defined $u;
+    $hashedPassword = "!" if !$spec->{mutableUsers};
     $hashedPassword = $u->{hashedPassword} if defined $u->{hashedPassword} && !$spec->{mutableUsers}; # FIXME
     push @shadowNew, join(":", $name, $hashedPassword, @rest) . "\n";
     $shadowSeen{$name} = 1;

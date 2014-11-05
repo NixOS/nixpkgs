@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, libtool
 , glib, dbus, udev, udisks2, libgcrypt
 , libgphoto2, avahi, libarchive, fuse, libcdio
-, libxml2, libxslt, docbook_xsl, samba
+, libxml2, libxslt, docbook_xsl, samba, libmtp
 , gnomeSupport ? false, gnome,libgnome_keyring, gconf, makeWrapper }:
 
 let
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ makeWrapper glib dbus.libs udev udisks2 libgcrypt
       libgphoto2 avahi libarchive fuse libcdio
-      libxml2 libxslt docbook_xsl samba
+      libxml2 libxslt docbook_xsl samba libmtp
       # ToDo: a ligther version of libsoup to have FTP/HTTP support?
     ] ++ stdenv.lib.optionals gnomeSupport (with gnome; [
       gtk libsoup libgnome_keyring gconf

@@ -64,8 +64,10 @@
   fuuzetsu = "Mateusz Kowalczyk <fuuzetsu@fuuzetsu.co.uk>";
   gal_bolle = "Florent Becker <florent.becker@ens-lyon.org>";
   garbas = "Rok Garbas <rok@garbas.si>";
+  gavin = "Gavin Rogers <gavin@praxeology.co.uk>";
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
   guibert = "David Guibert <david.guibert@gmail.com>";
+  henrytill = "Henry Till <henrytill@gmail.com>";
   hinton = "Tom Hinton <t@larkery.com>";
   hrdinka = "Christoph Hrdinka <c.nix@hrdinka.at>";
   ianwookim = "Ian-Woo Kim <ianwookim@gmail.com>";
@@ -137,6 +139,7 @@
   thammers = "Tobias Hammerschmidt <jawr@gmx.de>";
   the-kenny = "Moritz Ulrich <moritz@tarn-vedra.de>";
   thoughtpolice = "Austin Seipp <aseipp@pobox.com>";
+  titanous = "Jonathan Rudenberg <jonathan@titanous.com>";
   tomberek = "Thomas Bereknyei <tomberek@gmail.com>";
   tstrobel = "Thomas Strobel <ts468@cam.ac.uk>";
   ttuegel = "Thomas Tuegel <ttuegel@gmail.com>";

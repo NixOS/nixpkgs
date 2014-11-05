@@ -531,11 +531,11 @@ let
   });
 
   autopep8 = buildPythonPackage (rec {
-    name = "autopep8-1.0.3";
+    name = "autopep8-1.0.4";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/autopep8/${name}.tar.gz";
-      md5 = "7c16d385cf9ad7c1d7fbcfcea2588a56";
+      sha256 = "17lydqm8y9a5qadp6iifxrb5mb0g9fr1vxn5qy1fjpyhazxaw8n1";
     };
 
     propagatedBuildInputs = with self; [ pep8 ];
@@ -1011,12 +1011,12 @@ let
   };
 
   botocore = buildPythonPackage rec {
-    version = "0.67.0";
+    version = "0.69.0";
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
-      md5 = "193fe828525af4ae58e04bd172dc355f";
+      md5 = "b71fe35ee01e636b54de28f1f875f084";
     };
 
     propagatedBuildInputs =
@@ -3862,6 +3862,25 @@ let
     };
   });
 
+  fonttools = buildPythonPackage (rec {
+    version = "2.4";
+    name = "fonttools-${version}";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/F/FontTools/FontTools-${version}.tar.gz";
+      sha256 = "13ggkzcj34kcca6bsxjkaqsxkp2bvxxf6ijiyhq1xlyb0z37z4qa";
+    };
+
+    buildInputs = with self; [
+      numpy
+    ];
+
+    meta = {
+      homepage = "http://sourceforge.net/projects/fonttools/";
+      description = "Font file processing tools";
+    };
+  });
 
   foolscap = buildPythonPackage (rec {
     name = "foolscap-0.6.4";
@@ -5939,11 +5958,11 @@ let
   };
 
   pandas = buildPythonPackage rec {
-    name = "pandas-0.14.0";
+    name = "pandas-0.15.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pandas/${name}.tar.gz";
-      sha256 = "f7997debca756c4dd5ccdf5a010dfe3d1c7dac98ee706b715d994cf7c9d35528";
+      sha256 = "1w3wjnn3v37hf3hrd24lfgk6vpykarv9mihhpcfq6y7rg586bgjk";
     };
 
     buildInputs = with self; [ nose ];
@@ -8089,6 +8108,40 @@ let
     };
   };
 
+  squaremap = buildPythonPackage rec {
+    name = "squaremap-1.0.4";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/S/SquareMap/SquareMap-1.0.4.tar.gz";
+      md5 = "e36a453baddb97c19af6f79d5ba51f38";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Hierarchic visualization control for wxPython";
+      homepage = https://launchpad.net/squaremap;
+      license = licenses.bsd3;
+    };
+  };
+
+  runsnakerun = buildPythonPackage rec {
+    name = "runsnakerun-2.0.4";
+
+  
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/R/RunSnakeRun/RunSnakeRun-2.0.4.tar.gz";
+      md5 = "3220b5b89994baee70b1c24d7e42a306";
+    };
+  
+    propagatedBuildInputs = [ self.squaremap self.wxPython28 ];
+  
+    meta = with stdenv.lib; {
+      description = "GUI Viewer for Python profiling runs";
+      homepage = http://www.vrplumber.com/programming/runsnakerun/;
+      license = licenses.bsd3;
+    };
+  };
+  
   rtslib_fb = buildPythonPackage rec {
     version = "2.1.fb43";
     name = "rtslib-fb-${version}";

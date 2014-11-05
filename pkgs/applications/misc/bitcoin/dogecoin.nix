@@ -30,7 +30,6 @@ let
       ./autogen.sh \
       && ./configure --prefix=$out \
                      --with-incompatible-bdb \
-                     --with-boost-libdir=${boost}/lib \
                      ${ if withGui then "--with-gui" else "" }
     '';
 

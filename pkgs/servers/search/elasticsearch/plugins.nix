@@ -4,11 +4,11 @@ with pkgs.lib;
 
 let
   esPlugin = a@{
-    pluginName, 
+    pluginName,
     installPhase ? ''
       mkdir -p $out/bin
       ES_HOME=$out ${elasticsearch}/bin/elasticsearch-plugin --install ${pluginName} --url file://$src
-    '', 
+    '',
     ...
   }:
     stdenv.mkDerivation (a // {
@@ -69,5 +69,26 @@ in {
       license = licenses.mit;
       platforms = elasticsearch.meta.platforms;
     };
+  };
+
+  elasticsearch_river_twitter = esPlugin rec {
+    name = pname + "-" + version;
+    pname = "elasticsearch-river-twitter";
+    pluginName = "elasticsearch/" + pname + "/" + version;
+    version = "2.3.0";
+
+    src = fetchurl {
+      url = "http://download.elasticsearch.org/elasticsearch/${pname}/${name}.zip";
+      sha256 = "1lxxh1r61r15mzqyl0li37kcnn3vvpklnbfyys0kd6a1l82f0qvj";
+    };
+
+    meta = {
+      homepage = "https://github.com/elasticsearch/elasticsearch-river-twitter";
+      description = "Twitter River Plugin for ElasticSearch";
+      license = licenses.asl20;
+      maintainers = [ maintainers.edwtjo ];
+      platforms = elasticsearch.meta.platforms;
+    };
+
   };
 }

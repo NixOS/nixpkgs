@@ -8,7 +8,6 @@ out_bin=$out/bin/lein
 
 cp -v $src $out_bin
 cp -v $jarsrc $out/share/java
-cp -v $clojure/share/java/* $out/share/java/
 
 for p in $patches;
 do

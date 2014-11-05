@@ -12,11 +12,17 @@ stdenv.mkDerivation {
 
   buildInputs = [ autoreconfHook pkgconfig udev ];
 
-  meta = {
+  # Fix dlopen path
+  patchPhase = ''
+    substituteInPlace include/cecloader.h --replace "libcec.so" "$out/lib/libcec.so"
+  '';
+
+  meta = with stdenv.lib; {
     description = "USB CEC adapter communication library";
     homepage = "http://libcec.pulse-eight.com";
     repositories.git = "https://github.com/Pulse-Eight/libcec.git";
     license = "GPLv2+";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.titanous ];
   };
 }

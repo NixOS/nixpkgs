@@ -22,4 +22,8 @@ if isPyPy then throw "wxPython-${version} not supported for interpreter ${python
   inherit openglSupport;
 
   passthru = { inherit wxGTK openglSupport; };
+  
+  meta = {
+    platforms = stdenv.lib.platforms.all;
+  };
 }

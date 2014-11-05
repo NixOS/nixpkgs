@@ -2,12 +2,12 @@
 
 pythonPackages.buildPythonPackage rec {
   name = "awscli-${version}";
-  version = "1.5.3";
+  version = "1.5.5";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/aws/aws-cli/archive/${version}.tar.gz";
-    sha256 = "058lc4qj4xkjha9d1b5wrk2ca3lqfb9b45sb7czv0k1nwc0fciq1";
+    sha256 = "1xqaav4g07jzv8i4hkf52dimgmc0zv0fj9rbvz5kiln8470qzifw";
   };
 
   propagatedBuildInputs = [ 

@@ -17,11 +17,11 @@ assert a.stdenv.gcc.libc != null ;
 
 rec {
   src = a.fetchurl {
-    sha256 = "177vz8z74mky5nrq6qlfvnzvb1prw8jmlv4cwfx8w7k3k818y1a4";
-    url="http://gnu.spinellicreations.com/gcl/gcl-2.6.11.tar.gz";
+    sha256 = "1s4hs2qbjqmn9h88l4xvsifq5c3dlc5s74lyb61rdi5grhdlkf4f";
+    url="http://gnu.spinellicreations.com/gcl/${name}.tar.gz";
   };
 
-  name = "gcl-2.6.11";
+  name = "gcl-2.6.12";
   inherit buildInputs;
   configureFlags = [
     "--enable-ansi"

@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
   dontPatchShebangs = true;
 
   meta = {
+    branch = "1.12";
     homepage = http://www.gnu.org/software/automake/;
     description = "GNU standard-compliant makefile generator";
 

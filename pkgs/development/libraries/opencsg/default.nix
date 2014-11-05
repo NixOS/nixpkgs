@@ -2,11 +2,11 @@
   }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.2";
+  version = "1.4.0";
   name = "opencsg-${version}";
   src = fetchurl {
     url = "http://www.opencsg.org/OpenCSG-${version}.tar.gz";
-    sha256 = "09drnck27py8qg1l6gqaia85a9skqn0mz0nybjrkq4gpk0lwk467";
+    sha256 = "13c73jxadm27h7spdh3qj1v6rnn81v4xwqlv5a6k72pv9kjnpd7c";
   };
 
   buildInputs = [mesa freeglut glew libXmu libXext libX11];

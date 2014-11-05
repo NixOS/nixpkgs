@@ -130,6 +130,7 @@ let
       cp -v ${udev}/lib/udev/rules.d/80-drivers.rules $out/
       cp -v ${pkgs.lvm2}/lib/udev/rules.d/*.rules $out/
       cp -v ${pkgs.mdadm}/lib/udev/rules.d/*.rules $out/
+      cp -v ${pkgs.bcache-tools}/lib/udev/rules.d/*.rules $out/
 
       for i in $out/*.rules; do
           substituteInPlace $i \
@@ -139,7 +140,8 @@ let
             --replace ${pkgs.utillinux}/sbin/blkid ${extraUtils}/bin/blkid \
             --replace /sbin/blkid ${extraUtils}/bin/blkid \
             --replace ${pkgs.lvm2}/sbin ${extraUtils}/bin \
-            --replace /sbin/mdadm ${extraUtils}/bin/mdadm
+            --replace /sbin/mdadm ${extraUtils}/bin/mdadm \
+            --replace /bin/sh ${extraUtils}/bin/sh
       done
 
       # Work around a bug in QEMU, which doesn't implement the "READ

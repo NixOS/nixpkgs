@@ -727,6 +727,8 @@ let
 
   bacula = callPackage ../tools/backup/bacula { };
 
+  bareos = callPackage ../tools/backup/bareos { };
+
   beanstalkd = callPackage ../servers/beanstalkd { };
 
   bgs = callPackage ../tools/X11/bgs { };
@@ -1079,7 +1081,7 @@ let
 
   evtest = callPackage ../applications/misc/evtest { };
 
-  exempi = callPackage ../development/libraries/exempi { };
+  exempi = callPackage ../development/libraries/exempi { boost = boost155; };
 
   execline = callPackage ../tools/misc/execline { };
 
@@ -1179,6 +1181,8 @@ let
 
   frescobaldi = callPackage ../misc/frescobaldi {};
 
+  frostwire = callPackage ../applications/networking/p2p/frostwire { };
+
   ftgl = callPackage ../development/libraries/ftgl { };
 
   ftgl212 = callPackage ../development/libraries/ftgl/2.1.2.nix { };
@@ -1276,7 +1280,7 @@ let
 
   googleAuthenticator = callPackage ../os-specific/linux/google-authenticator { };
 
-  gource = callPackage ../applications/version-management/gource {};
+  gource = callPackage ../applications/version-management/gource { };
 
   gparted = callPackage ../tools/misc/gparted { };
 
@@ -1475,10 +1479,6 @@ let
 
   jdiskreport = callPackage ../tools/misc/jdiskreport { };
 
-  jfsrec = callPackage ../tools/filesystems/jfsrec {
-    boost = boost144;
-  };
-
   jfsutils = callPackage ../tools/filesystems/jfsutils { };
 
   jhead = callPackage ../tools/graphics/jhead { };
@@ -1639,7 +1639,9 @@ let
 
   memtest86plus = callPackage ../tools/misc/memtest86+ { };
 
-  meo = callPackage ../tools/security/meo { };
+  meo = callPackage ../tools/security/meo {
+    boost = boost155;
+  };
 
   mc = callPackage ../tools/misc/mc { };
 
@@ -1808,7 +1810,8 @@ let
 
   nifskope = callPackage ../tools/graphics/nifskope { };
 
-  nilfs_utils = callPackage ../tools/filesystems/nilfs-utils {};
+  nilfs-utils = callPackage ../tools/filesystems/nilfs-utils {};
+  nilfs_utils = nilfs-utils;
 
   nitrogen = callPackage ../tools/X11/nitrogen {};
 
@@ -2342,10 +2345,7 @@ let
 
   socat2pre = lowPrio (callPackage ../tools/networking/socat/2.x.nix { });
 
-  sourceHighlight = callPackage ../tools/text/source-highlight {
-    # Boost 1.54 causes the "test_regexranges" test to fail
-    boost = boost149;
-  };
+  sourceHighlight = callPackage ../tools/text/source-highlight { };
 
   spaceFM = callPackage ../applications/misc/spacefm { };
 
@@ -2748,7 +2748,9 @@ let
 
   xmlstarlet = callPackage ../tools/text/xml/xmlstarlet { };
 
-  xmlto = callPackage ../tools/typesetting/xmlto { };
+  xmlto = callPackage ../tools/typesetting/xmlto {
+    w3m = w3m.override { graphicsSupport = false; };
+  };
 
   xmltv = callPackage ../tools/misc/xmltv { };
 
@@ -3397,6 +3399,16 @@ let
     llvm = llvm_34;
     openblas = openblas_0_2_10;
   };
+  julia032 = let
+    liblapack = liblapack_3_5_0.override {shared = true;};
+  in callPackage ../development/compilers/julia/0.3.2.nix {
+    inherit liblapack;
+    suitesparse = suitesparse.override {
+      inherit liblapack;
+    };
+    llvm = llvm_34;
+    openblas = openblas_0_2_10;
+  };
   julia = julia031;
 
   lazarus = builderDefsPackage (import ../development/compilers/fpc/lazarus.nix) {
@@ -3562,6 +3574,8 @@ let
 
     patoline = callPackage ../tools/typesetting/patoline { };
 
+    gg = callPackage ../development/ocaml-modules/gg { };
+
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
 
     js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml { };
@@ -3630,6 +3644,8 @@ let
     ocaml_react = callPackage ../development/ocaml-modules/react { };
     reactivedata = callPackage ../development/ocaml-modules/reactivedata {};
 
+    ocamlscript = callPackage ../development/tools/ocaml/ocamlscript { };
+
     ocamlsdl= callPackage ../development/ocaml-modules/ocamlsdl { };
 
     ocaml_sqlite3 = callPackage ../development/ocaml-modules/sqlite3 { };
@@ -3643,6 +3659,8 @@ let
     ocpIndent = callPackage ../development/tools/ocaml/ocp-indent { };
 
     ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
+
+    otfm = callPackage ../development/ocaml-modules/otfm { };
 
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
@@ -3692,6 +3710,9 @@ let
     uucd = callPackage ../development/ocaml-modules/uucd { };
     uunf = callPackage ../development/ocaml-modules/uunf { };
     uutf = callPackage ../development/ocaml-modules/uutf { };
+
+    vg = callPackage ../development/ocaml-modules/vg { };
+
     xmlm = callPackage ../development/ocaml-modules/xmlm { };
 
     yojson = callPackage ../development/ocaml-modules/yojson { };
@@ -3724,7 +3745,8 @@ let
   opam_1_1 = callPackage ../development/tools/ocaml/opam/1.1.nix {
     inherit (ocamlPackages_4_01_0) ocaml;
   };
-  opam = opam_1_1;
+  opam_1_2_0 = callPackage ../development/tools/ocaml/opam/1.2.0.nix { };
+  opam = opam_1_2_0;
 
   ocamlnat = let callPackage = newScope pkgs.ocamlPackages_3_12_1; in callPackage ../development/ocaml-modules/ocamlnat { };
 
@@ -4176,6 +4198,8 @@ let
   guile_ncurses = callPackage ../development/guile-modules/guile-ncurses { };
 
   guile-opengl = callPackage ../development/guile-modules/guile-opengl { };
+
+  guile-sdl = callPackage ../development/guile-modules/guile-sdl { };
 
   guile-xcb = callPackage ../development/guile-modules/guile-xcb { };
 
@@ -4722,7 +4746,9 @@ let
 
   adns = callPackage ../development/libraries/adns { };
 
-  afflib = callPackage ../development/libraries/afflib {};
+  afflib = callPackage ../development/libraries/afflib {
+    automake = automake114x;
+  };
 
   agg = callPackage ../development/libraries/agg { };
 
@@ -4771,8 +4797,6 @@ let
 
   audiofile = callPackage ../development/libraries/audiofile { };
 
-  babl_0_0_22 = callPackage ../development/libraries/babl/0_0_22.nix { };
-
   babl = callPackage ../development/libraries/babl { };
 
   beecrypt = callPackage ../development/libraries/beecrypt { };
@@ -4781,11 +4805,9 @@ let
 
   boolstuff = callPackage ../development/libraries/boolstuff { };
 
-  boost144 = callPackage ../development/libraries/boost/1.44.nix { };
-  boost149 = callPackage ../development/libraries/boost/1.49.nix { };
   boost155 = callPackage ../development/libraries/boost/1.55.nix { };
   boost156 = callPackage ../development/libraries/boost/1.56.nix { };
-  boost = boost155;
+  boost = boost156;
 
   botan = callPackage ../development/libraries/botan { };
   botanUnstable = callPackage ../development/libraries/botan/unstable.nix { };
@@ -5074,14 +5096,7 @@ let
 
   gecode = callPackage ../development/libraries/gecode { };
 
-  gegl = callPackage ../development/libraries/gegl {
-    #  avocodec avformat librsvg
-  };
-
-  gegl_0_0_22 = callPackage ../development/libraries/gegl/0_0_22.nix {
-    #  avocodec avformat librsvg
-    libpng = libpng12;
-  };
+  gegl = callPackage ../development/libraries/gegl { };
 
   geoclue = callPackage ../development/libraries/geoclue {};
 
@@ -5638,6 +5653,10 @@ let
 
   libfaketime = callPackage ../development/libraries/libfaketime { };
 
+  libfakekey = callPackage ../development/libraries/libfakekey {
+    inherit (xlibs) libX11 libXi xextproto;
+  };
+
   libfm = callPackage ../development/libraries/libfm { };
   libfm-extra = callPackage ../development/libraries/libfm {
     extraOnly = true;
@@ -6021,6 +6040,13 @@ let
   libtommath = callPackage ../development/libraries/libtommath { };
 
   libtorrentRasterbar = callPackage ../development/libraries/libtorrent-rasterbar {
+    # fix "unrecognized option -arch" error
+    stdenv = if stdenv.isDarwin
+      then clangStdenv
+      else stdenv;
+  };
+
+  libtorrentRasterbar_0_16 = callPackage ../development/libraries/libtorrent-rasterbar/0.16.nix {
     # fix "unrecognized option -arch" error
     stdenv = if stdenv.isDarwin
       then clangStdenv
@@ -6915,6 +6941,10 @@ let
 
   x264 = callPackage ../development/libraries/x264 { };
 
+  x265 = callPackage ../development/libraries/x265 { };
+
+  x265-hg = callPackage ../development/libraries/x265/hg.nix { };
+
   xapian = callPackage ../development/libraries/xapian { };
 
   xapianBindings = callPackage ../development/libraries/xapian/bindings {  # TODO perl php Java, tcl, C#, python
@@ -7369,9 +7399,7 @@ let
 
   freeswitch = callPackage ../servers/sip/freeswitch { };
 
-  ghostOne = callPackage ../servers/games/ghost-one {
-    boost = boost144.override { taggedLayout = true; };
-  };
+  ghostOne = callPackage ../servers/games/ghost-one { };
 
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
@@ -7424,6 +7452,11 @@ let
     rtmp        = true;
     fullWebDAV  = true;
     syslog      = false; # the patch is not found
+    moreheaders = true;
+  };
+  nginxUnstable = callPackage ../servers/http/nginx/unstable.nix {
+    fullWebDAV  = true;
+    syslog      = true;
     moreheaders = true;
   };
 
@@ -7553,9 +7586,13 @@ let
 
   restund = callPackage ../servers/restund {};
 
-  rethinkdb = callPackage ../servers/nosql/rethinkdb { };
+  rethinkdb = callPackage ../servers/nosql/rethinkdb {
+    boost = boost155;
+  };
 
-  rippled = callPackage ../servers/rippled { };
+  rippled = callPackage ../servers/rippled {
+    boost = boost155;
+  };
 
   s6 = callPackage ../servers/s6 { };
 
@@ -8638,6 +8675,7 @@ let
   kochi-substitute-naga10 = callPackage ../data/fonts/kochi-substitute-naga10 {};
 
   liberation_ttf = callPackage ../data/fonts/redhat-liberation-fonts { };
+  liberation_ttf_binary = callPackage ../data/fonts/redhat-liberation-fonts/binary.nix { };
 
   libertine = builderDefsPackage (import ../data/fonts/libertine) {
     inherit fetchurl fontforge lib;
@@ -8960,7 +8998,6 @@ let
 
   compiz = callPackage ../applications/window-managers/compiz {
     inherit (gnome) GConf ORBit2 metacity;
-    boost = boost149; # https://bugs.launchpad.net/compiz/+bug/1131864
   };
 
   coriander = callPackage ../applications/video/coriander {
@@ -9102,9 +9139,13 @@ let
     withX = false;
   }));
 
-  emacs24Macport = lowPrio (callPackage ../applications/editors/emacs-24/macport.nix {
+  emacs24Macport_24_3 = lowPrio (callPackage ../applications/editors/emacs-24/macport-24.3.nix {
     stdenv = pkgs.clangStdenv;
   });
+  emacs24Macport_24_4 = lowPrio (callPackage ../applications/editors/emacs-24/macport-24.4.nix {
+    stdenv = pkgs.clangStdenv;
+  });
+  emacs24Macport = self.emacs24Macport_24_4;
 
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
     inherit emacs;
@@ -9397,8 +9438,8 @@ let
   firefox-bin = callPackage ../applications/networking/browsers/firefox-bin {
     gconf = pkgs.gnome.GConf;
     inherit (pkgs.gnome) libgnome libgnomeui;
-    inherit (pkgs.xlibs) libX11 libXScrnSaver libXext
-      libXinerama libXrender libXt;
+    inherit (pkgs.xlibs) libX11 libXScrnSaver libXcomposite libXdamage libXext
+      libXfixes libXinerama libXrender libXt;
   };
 
   flac = callPackage ../applications/audio/flac { };
@@ -9635,7 +9676,9 @@ let
     fltk = fltk13;
   };
 
-  hugin = callPackage ../applications/graphics/hugin { };
+  hugin = callPackage ../applications/graphics/hugin {
+    boost = boost155;
+  };
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
@@ -9736,7 +9779,7 @@ let
 
   k3d = callPackage ../applications/graphics/k3d {
     inherit (pkgs.gnome2) gtkglext;
-    boost = boost149;
+    boost = boost155;
   };
 
   keepnote = callPackage ../applications/office/keepnote {
@@ -9777,6 +9820,8 @@ let
 
   lbdb = callPackage ../tools/misc/lbdb { };
 
+  lbzip2 = callPackage ../tools/compression/lbzip2 { };
+
   lci = callPackage ../applications/science/logic/lci {};
 
   ldcpp = callPackage ../applications/networking/p2p/ldcpp {
@@ -9794,6 +9839,7 @@ let
     inherit (gnome) GConf ORBit2 gnome_vfs;
     zip = zip.override { enableNLS = false; };
     jdk = openjdk;
+    boost = boost155;
     fontsConf = makeFontsConf {
       fontDirectories = [
         freefont_ttf xorg.fontmiscmisc xorg.fontbhttf
@@ -9929,7 +9975,6 @@ let
 
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;
-    boost = boost149;
   };
 
   monotoneViz = builderDefsPackage (import ../applications/version-management/monotone-viz/mtn-head.nix) {
@@ -10194,7 +10239,10 @@ let
 
   pianobooster = callPackage ../applications/audio/pianobooster { };
 
-  picard = callPackage ../applications/audio/picard { };
+  picard = callPackage ../applications/audio/picard {
+    python-libdiscid = pythonPackages.discid;
+    mutagen = pythonPackages.mutagen;
+  };
 
   picocom = callPackage ../tools/misc/picocom { };
 
@@ -10254,7 +10302,9 @@ let
 
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
-  qbittorrent = callPackage ../applications/networking/p2p/qbittorrent { };
+  qbittorrent = callPackage ../applications/networking/p2p/qbittorrent {
+    libtorrentRasterbar = libtorrentRasterbar_0_16;
+  };
 
   eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp { lua5 = lua5_1; };
 
@@ -10393,9 +10443,7 @@ let
                                     })
                                  );
 
-  sxiv = callPackage ../applications/graphics/sxiv {
-    giflib = giflib_5_0;
-  };
+  sxiv = callPackage ../applications/graphics/sxiv { };
 
   bittorrentSync = callPackage ../applications/networking/bittorrentsync { };
 
@@ -11190,7 +11238,9 @@ let
 
   glestae = callPackage ../games/glestae {};
 
-  globulation2 = callPackage ../games/globulation {};
+  globulation2 = callPackage ../games/globulation {
+    boost = boost155;
+  };
 
   gltron = callPackage ../games/gltron { };
 
@@ -11209,7 +11259,9 @@ let
 
   icbm3d = callPackage ../games/icbm3d { };
 
-  ingen = callPackage ../applications/audio/ingen { };
+  ingen = callPackage ../applications/audio/ingen {
+    boost = boost155;
+  };
 
   instead = callPackage ../games/instead {
     lua = lua5;
@@ -11314,7 +11366,9 @@ let
   # You still can override by passing more arguments.
   spaceOrbit = callPackage ../games/orbit { };
 
-  spring = callPackage ../games/spring { };
+  spring = callPackage ../games/spring {
+    boost = boost155;
+  };
 
   springLobby = callPackage ../games/spring/springlobby.nix { };
 

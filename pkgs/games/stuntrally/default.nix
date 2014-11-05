@@ -1,31 +1,28 @@
-{ fetchgit, stdenv, cmake, boost, ogre, mygui, ois, SDL, libvorbis, pkgconfig
+{ fetchgit, stdenv, cmake, boost, ogre, mygui, ois, SDL2, libvorbis, pkgconfig
 , makeWrapper, enet, libXcursor }:
 
 stdenv.mkDerivation rec {
-  name = "stunt-rally-1.8";
+  name = "stunt-rally-2.4";
 
   src = fetchgit {
     url = git://github.com/stuntrally/stuntrally.git;
-    rev = "refs/tags/1.8";
-    sha256 = "0p8p83xx8q33kymsqnmxqca4jdfyg9rwrsac790z56gdbc7gnahm";
+    rev = "refs/tags/2.4";
+    sha256 = "0zyzkac11dv9c1rxknydkisg2iw1rmi72psidl7jmq8v3rrqxk4r";
   };
 
   tracks = fetchgit {
     url = git://github.com/stuntrally/tracks.git;
-    rev = "refs/tags/1.8";
-    sha256 = "1gcrs21nn0v3hvhrw8dc0wh1knn5qh66cjx7a1igiciiadmi2s3l";
+    rev = "refs/tags/2.4";
+    sha256 = "1j237dbhd1ik5mj8whbvlff5da9vzzgiskcj5nzfpw1vb1jpdjvd";
   };
 
-  patchPhase = ''
-    sed -i 's/materials/materials material_templates/' data/CMakeLists.txt
-  '';
-
   preConfigure = ''
-    mkdir data/tracks
-    cp -R $tracks/* data/tracks
+    cp -R ${tracks} data/tracks
+    chmod u+rwX -R data
   '';
 
-  buildInputs = [ cmake boost ogre mygui ois SDL libvorbis pkgconfig makeWrapper enet
+  buildInputs = [ cmake boost ogre mygui ois SDL2 libvorbis pkgconfig 
+    makeWrapper enet
     libXcursor
   ];
 

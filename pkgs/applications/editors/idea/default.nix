@@ -109,6 +109,72 @@ let
       };
     });
 
+  buildClion = { name, version, build, src, license, description }:
+    (mkIdeaProduct rec {
+      inherit name version build src;
+      patchSnappy = false;
+      product = "CLion";
+      meta = with stdenv.lib; {
+        homepage = "https://www.jetbrains.com/clion/";
+        inherit description license;
+        longDescription = ''
+          Enhancing productivity for every C and C++
+          developer on Linux, OS X and Windows.
+        '';
+        maintainers = with maintainers; [ edwtjo ];
+        platforms = platforms.linux;
+      };
+    });
+
+  buildIdea = { name, version, build, src, license, description }:
+    (mkIdeaProduct rec {
+      inherit name version build src;
+      patchSnappy = false;
+      product = "IDEA";
+      meta = with stdenv.lib; {
+        homepage = "https://www.jetbrains.com/idea/";
+        inherit description license;
+        longDescription = ''
+          IDE for Java SE, Groovy & Scala development Powerful
+          environment for building Google Android apps Integration
+          with JUnit, TestNG, popular SCMs, Ant & Maven.
+        '';
+        maintainers = with maintainers; [ edwtjo ];
+        platforms = platforms.linux;
+      };
+    });
+
+  buildRubyMine = { name, version, build, src, license, description }:
+    (mkIdeaProduct rec {
+      inherit name version build src;
+      product = "RubyMine";
+      meta = with stdenv.lib; {
+        homepage = "https://www.jetbrains.com/ruby/";
+        inherit description license;
+        longDescription = description;
+        maintainers = with maintainers; [ edwtjo ];
+        platforms = platforms.linux;
+      };
+    });
+
+  buildPhpStorm = { name, version, build, src, license, description }:
+    (mkIdeaProduct {
+      inherit name version build src;
+      product = "PhpStorm";
+      patchSnappy = false;
+      meta = with stdenv.lib; {
+        homepage = "https://www.jetbrains.com/phpstorm/";
+        inherit description license;
+        longDescription = ''
+          PhpStorm provides an editor for PHP, HTML and JavaScript
+          with on-the-fly code analysis, error prevention and
+          automated refactorings for PHP and JavaScript code.
+        '';
+        maintainers = with maintainers; [ schristo ];
+        platforms = platforms.linux;
+      };
+    });
+
   buildPycharm = { name, version, build, src, license, description }:
     (mkIdeaProduct rec {
       inherit name version build src;
@@ -136,41 +202,6 @@ let
       propagatedUserEnvPkgs = [ python ];
     };
 
-  buildIdea = { name, version, build, src, license, description }:
-    (mkIdeaProduct rec {
-      inherit name version build src;
-      product = "IDEA";
-      meta = with stdenv.lib; {
-        homepage = "https://www.jetbrains.com/idea/";
-        inherit description license;
-        longDescription = ''
-          IDE for Java SE, Groovy & Scala development Powerful
-          environment for building Google Android apps Integration
-          with JUnit, TestNG, popular SCMs, Ant & Maven.
-        '';
-        maintainers = with maintainers; [ edwtjo ];
-        platforms = platforms.linux;
-      };
-    });
-
-  buildPhpStorm = { name, version, build, src, license, description }:
-    (mkIdeaProduct {
-      inherit name version build src;
-      product = "PhpStorm";
-      patchSnappy = false;
-      meta = with stdenv.lib; {
-        homepage = "https://www.jetbrains.com/phpstorm/";
-        inherit description license;
-        longDescription = ''
-          PhpStorm provides an editor for PHP, HTML and JavaScript
-          with on-the-fly code analysis, error prevention and
-          automated refactorings for PHP and JavaScript code.
-        '';
-        maintainers = with maintainers; [ schristo ];
-        platforms = platforms.linux;
-      };
-    });
-
 in
 
 {
@@ -188,27 +219,51 @@ in
     };
   };
 
+  clion = buildClion rec {
+    name = "clion";
+    version = "eap";
+    build = "138.2344.17";
+    description  = "C/C++ IDE. New. Intelligent. Cross-platform.";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "http://download.jetbrains.com/cpp/${name}-${build}.tar.gz";
+      sha256 = "4b568d31132a787b748bc41c69b614dcd90229db69b02406677361bc077efab3";
+    };
+  };
+
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "13.1.5";
-    build = "IC-135.1289";
+    version = "14pre";
+    build = "IC-139.222.5";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
-      url = "http://download-ln.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "e08b9adad0ed9aa62a43f3026a1b499d1663710314d00a3bec2e171a6c375f09";
+      url = "http://download-ln.jetbrains.com/idea/idea${build}.tar.gz";
+      sha256 = "e2c696f465da36b77148a61b45f35f8f08ceae3b624904de8f7cccf0e7c20ce2";
     };
   };
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "13.1.5";
-    build = "IU-135.1289";
+    version = "14pre";
+    build = "IU-139.222.5";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
-      url = "http://download-ln.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "0800b1ffc135f884e46f1004289fb75850148d705afc447d3374cfd281c231a2";
+      url = "http://download-ln.jetbrains.com/idea/idea${build}.tar.gz";
+      sha256 = "d8e8927adebdc4d2e5f1f5bfb0ecc97c3e561b74d56391898dd36abe89a4f170";
+    };
+  };
+
+  ruby-mine = buildRubyMine rec {
+    name = "ruby-mine-${version}";
+    version = "6.3.3";
+    build = "135.1104";
+    description = "The Most Intelligent Ruby and Rails IDE";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "http://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
+      sha256 = "58d555c2702a93fe62f3809a5cc34e566ecce0c3f1f15daaf87744402157dfac";
     };
   };
 

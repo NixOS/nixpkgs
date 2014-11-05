@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
     ++ optional portaudioSupport portaudio
     ;
 
-  configureFlags = "--with-boost-libdir=${boost.lib}/lib/";
 
   enableParallelBuilding = true;
 

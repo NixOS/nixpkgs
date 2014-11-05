@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ cmake pkgconfig boost boost.lib libunwind mariadb libmemcached pcre
+    [ cmake pkgconfig boost libunwind mariadb libmemcached pcre
       libevent gd curl libxml2 icu flex bison openssl zlib php expat libcap
       oniguruma libdwarf libmcrypt tbb gperftools bzip2 openldap readline
       libelf uwimap binutils cyrus_sasl pam glog libpng libxslt ocaml

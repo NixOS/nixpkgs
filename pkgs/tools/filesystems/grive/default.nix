@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "f2b978cc93a2d16262c7b78c62019b2a58044eaef4ca95feaa74dfd4dfcbfa36";
   };
 
-  buildInputs = [cmake libgcrypt json_c curl expat stdenv binutils boost boost.lib];
+  buildInputs = [cmake libgcrypt json_c curl expat stdenv binutils boost];
 
   # work around new binutils headers, see
   # http://stackoverflow.com/questions/11748035/binutils-bfd-h-wants-config-h-now

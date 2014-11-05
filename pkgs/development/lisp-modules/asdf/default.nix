@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="asdf";
-    version="3.1.3";
+    version="3.1.4";
     name="${baseName}-${version}";
-    hash="11jgbl2ys98i7lir0z76g0msm89zmz1b91gwkdz0gnxr6gavj6cn";
-    url="http://common-lisp.net/project/asdf/archives/asdf-3.1.3.tar.gz";
-    sha256="11jgbl2ys98i7lir0z76g0msm89zmz1b91gwkdz0gnxr6gavj6cn";
+    hash="0hyc2g22khcmvxmlcaq0xbxqhq59spgc2nc1s0gz1r9mcgrzm2xw";
+    url="http://common-lisp.net/project/asdf/archives/asdf-3.1.4.tar.gz";
+    sha256="0hyc2g22khcmvxmlcaq0xbxqhq59spgc2nc1s0gz1r9mcgrzm2xw";
   };
   buildInputs = [
     texinfo texLive
@@ -19,6 +19,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     inherit (s) url sha256;
   };
+  sourceRoot=".";
   buildPhase = ''
     make build/asdf.lisp
     make -C doc asdf.info asdf.html

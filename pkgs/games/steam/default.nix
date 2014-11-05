@@ -1,11 +1,13 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "steam-1.0.0.48";
+stdenv.mkDerivation rec {
+  name = "${program}-${version}";
+  program = "steam";
+  version = "1.0.0.49";
 
   src = fetchurl {
-    url = http://repo.steampowered.com/steam/pool/steam/s/steam/steam_1.0.0.48.tar.gz;
-    sha256 = "08y5qf75ssk4fnazyv2yz1c5zs7gjiwigaibv8yz1gbr290r0b52";
+    url = "http://repo.steampowered.com/steam/pool/steam/s/steam/${program}_${version}.tar.gz";
+    sha256 = "1c1gl5pwvb5gnnnqf5d9hpcjnfjjgmn4lgx8v0fbx1am5xf3p2gx";
   };
 
   installPhase = ''
@@ -18,5 +20,6 @@ stdenv.mkDerivation {
     description = "A digital distribution platform";
     homepage = http://store.steampowered.com/;
     license = stdenv.lib.licenses.unfree;
+    maintainers = [ stdenv.lib.maintainers.jagajaga ];
   };
 }

@@ -1,22 +1,32 @@
 { stdenv, fetchurl, which, qt4, x11, pulseaudio, fftwSinglePrec
 , lame, zlib, mesa, alsaLib, freetype, perl, pkgconfig
 , libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm, libXmu
+, yasm, libuuid, taglib, libtool, autoconf, automake, file
 }:
 
 stdenv.mkDerivation rec {
-  name = "mythtv-0.24.2";
+  name = "mythtv-${version}";
+  version = "0.27.4";
 
   src = fetchurl {
-    url = "http://ftp.osuosl.org/pub/mythtv/${name}.tar.bz2";
-    sha256 = "14mkyf2b26pc9spx6lg15mml0nqyg1r3qnq8m9dz3110h771y2db";
+    url = "https://github.com/MythTV/mythtv/archive/v${version}.tar.gz";
+    sha256 = "0nrn4fbkkzh43n7jgbv21i92sb4z4yacwj9yj6m3hjbffzy4ywqz";
   };
+
+  sourceRoot = "${name}/mythtv";
 
   buildInputs = [
     freetype qt4 lame zlib x11 mesa perl alsaLib pulseaudio fftwSinglePrec
     libX11 libXv libXrandr libXvMC libXmu libXinerama libXxf86vm libXmu
+    libuuid taglib
   ];
+  nativeBuildInputs = [ pkgconfig which yasm libtool autoconf automake file ];
 
-  nativeBuildInputs = [ pkgconfig which ];
-
-  patches = [ ./settings.patch ];
+  meta = with stdenv.lib; {
+    homepage = "https://www.mythtv.org/";
+    description = "Open Source DVR";
+    license = licenses.gpl2;
+    meta.platforms = platforms.linux;
+    maintainers = [ maintainers.titanous ];
+  };
 }
