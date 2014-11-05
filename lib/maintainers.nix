@@ -46,6 +46,7 @@
   coroa = "Jonas Hörsch <jonas@chaoflow.net>";
   cstrahan = "Charles Strahan <charles.c.strahan@gmail.com>";
   DamienCassou = "Damien Cassou <damien.cassou@gmail.com>";
+  davidrusu = "David Rusu <davidrusu.me@gmail.com>";
   dbohdan = "Danyil Bohdan <danyil.bohdan@gmail.com>";
   DerGuteMoritz = "Moritz Heidkamp <moritz@twoticketsplease.de>";
   dmalikov = "Dmitry Malikov <malikov.d.y@gmail.com>";
