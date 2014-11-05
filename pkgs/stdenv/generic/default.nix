@@ -41,6 +41,9 @@ let
 
   unsafeGetAttrPos = builtins.unsafeGetAttrPos or (n: as: null);
 
+  isUnfree = licenses: lib.lists.any (l:
+    !l.free or true || l == "unfree" || l == "unfree-redistributable") licenses;
+
   # The stdenv that we are producing.
   result =
 
@@ -84,7 +87,7 @@ let
               unsafeGetAttrPos "name" attrs;
           pos' = if pos != null then "‘" + pos.file + ":" + toString pos.line + "’" else "«unknown-file»";
         in
-        if !allowUnfree && (let l = lib.lists.toList attrs.meta.license or []; in lib.lists.elem "unfree" l || lib.lists.elem "unfree-redistributable" l) && !(allowUnfreePredicate attrs) then
+        if !allowUnfree && isUnfree (lib.lists.toList attrs.meta.license or []) && !allowUnfreePredicate attrs then
           throw ''
             Package ‘${attrs.name}’ in ${pos'} has an unfree license, refusing to evaluate.
             ${forceEvalHelp "Unfree"}''

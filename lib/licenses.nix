@@ -25,6 +25,7 @@ rec {
     shortName = "asl";
     fullName = "Amazon Software License";
     url = http://aws.amazon.com/asl/;
+    free = false;
   };
 
   amd = {
@@ -290,11 +291,21 @@ rec {
     url = http://www.tcl.tk/software/tcltk/license.html;
   };
 
-  unfree = "unfree";
+  unfree = {
+    fullName = "Unfree";
+    free = false;
+  };
 
-  unfreeRedistributable = "unfree-redistributable";
+  unfreeRedistributable = {
+    fullName = "Unfree redistributable";
+    free = false;
+  };
 
-  unfreeRedistributableFirmware = "unfree-redistributable-firmware";
+  unfreeRedistributableFirmware = {
+    fullName = "Unfree redistributable firmware";
+    # Note: we currently consider these "free" for inclusion in the
+    # channel and NixOS images.
+  };
 
   unlicense = {
     shortName = "Unlicense";
