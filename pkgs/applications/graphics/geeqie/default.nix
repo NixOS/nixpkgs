@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     autoconf automake libtool pkgconfig gtk libpng exiv2 lcms intltool gettext
-    libchamplain
+    #libchamplain
   ];
 
   postInstall = ''
