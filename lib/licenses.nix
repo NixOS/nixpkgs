@@ -209,9 +209,9 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "libpng License";
   };
 
-  libtiff = {
-    fullName = "libtiff license";
-    url = https://fedoraproject.org/wiki/Licensing/libtiff;
+  libtiff = spdx {
+    spdxId = "libtiff";
+    fullName = "libtiff License";
   };
 
   llgpl21 = {
@@ -278,12 +278,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
 
   sleepycat = spdx {
     spdxId = "Sleepycat";
-    fullName  = "Sleepycat License";
+    fullName = "Sleepycat License";
   };
 
-  tcltk = {
-    fullName = "Tcl/Tk license";
-    url = http://www.tcl.tk/software/tcltk/license.html;
+  tcltk = spdx {
+    spdxId = "TCL";
+    fullName = "TCL/TK License";
   };
 
   unfree = {
@@ -302,9 +302,9 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     # channel and NixOS images.
   };
 
-  unlicense = {
-    fullName = "Unlicense";
-    url = http://unlicense.org/;
+  unlicense = spdx {
+    spdxId = "Unlicense";
+    fullName = "The Unlicense";
   };
 
   wadalab = {
