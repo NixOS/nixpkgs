@@ -5840,7 +5840,7 @@ let
   obfsproxy = buildPythonPackage ( rec {
     name = "obfsproxy-0.2.2";
     src = pkgs.fetchgit {
-      url = https://git.torproject.org/pluggable-transports/obfsproxy.git;
+      url = meta.repositories.git;
       rev = "3c4e843a30c430aec1de03e0e09ef654072efc03";
       sha256 = "8fd1e63a37bc42add7609d97d50ecd81da81881bcf7015a9e2958531dbf39018";
     };
@@ -5850,6 +5850,8 @@ let
     meta = {
       description = "a pluggable transport proxy";
       homepage = https://www.torproject.org/projects/obfsproxy;
+      repositories.git = https://git.torproject.org/pluggable-transports/obfsproxy.git;
+      maintainers = [ stdenv.lib.maintainers.phreedom ];
     };
   });
 
