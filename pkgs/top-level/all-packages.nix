@@ -5596,16 +5596,10 @@ let
   gtkmm3 = callPackage ../development/libraries/gtkmm/3.x.nix { };
 
   gtkmozembedsharp = callPackage ../development/libraries/gtkmozembed-sharp {
-    gtksharp = gtksharp2;
+    gtksharp = gtk-sharp;
   };
 
-  gtksharp1 = callPackage ../development/libraries/gtk-sharp-1 {
-    inherit (gnome) libglade libgtkhtml gtkhtml
-              libgnomecanvas libgnomeui libgnomeprint
-              libgnomeprintui GConf;
-  };
-
-  gtksharp2 = callPackage ../development/libraries/gtk-sharp-2 {
+  gtk-sharp = callPackage ../development/libraries/gtk-sharp-2 {
     inherit (gnome) libglade libgtkhtml gtkhtml
               libgnomecanvas libgnomeui libgnomeprint
               libgnomeprintui GConf gnomepanel;
@@ -5613,7 +5607,7 @@ let
 
   gtksourceviewsharp = callPackage ../development/libraries/gtksourceview-sharp {
     inherit (gnome) gtksourceview;
-    gtksharp = gtksharp2;
+    gtksharp = gtk-sharp;
   };
 
   gtkspell = callPackage ../development/libraries/gtkspell { };
@@ -10804,7 +10798,7 @@ let
   pinpoint = callPackage ../applications/office/pinpoint {};
 
   pinta = callPackage ../applications/graphics/pinta {
-    gtksharp = gtksharp2;
+    gtksharp = gtk-sharp;
   };
 
   pommed = callPackage ../os-specific/linux/pommed {
