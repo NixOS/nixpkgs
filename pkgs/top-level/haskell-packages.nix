@@ -2749,6 +2749,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   unboundedDelays = callPackage ../development/libraries/haskell/unbounded-delays {};
 
+  unificationFd = callPackage ../development/libraries/haskell/unification-fd {};  
+
   unionFind = callPackage ../development/libraries/haskell/union-find {};
 
   uniplate = callPackage ../development/libraries/haskell/uniplate {};
