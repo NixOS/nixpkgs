@@ -5831,6 +5831,10 @@ let
 
   libgsystem = callPackage ../development/libraries/libgsystem { };
 
+  libguestfs = callPackage ../development/libraries/libguestfs {
+    inherit (perlPackages) libintlperl GetoptLong SysVirt;
+  };
+
   libharu = callPackage ../development/libraries/libharu { };
 
   libHX = callPackage ../development/libraries/libHX { };
