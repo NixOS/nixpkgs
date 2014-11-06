@@ -1,4 +1,4 @@
-{ callPackage }:
+{ callPackage, python3Packages }:
 
 rec {
   gstreamer = callPackage ./core { };
@@ -13,7 +13,10 @@ rec {
 
   gst-libav = callPackage ./libav { inherit gst-plugins-base; };
 
-  gst-python = callPackage ./python { inherit gst-plugins-base gstreamer; };
+  gst-python = callPackage ./python {
+    inherit gstreamer;
+    pythonPackages = python3Packages;
+  };
 
   gnonlin = callPackage ./gnonlin { inherit gst-plugins-base; };
 
