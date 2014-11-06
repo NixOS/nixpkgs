@@ -9271,6 +9271,8 @@ let
 
     htmlize = callPackage ../applications/editors/emacs-modes/htmlize { };
 
+    icicles = callPackage ../applications/editors/emacs-modes/icicles { };
+
     idris = callPackage ../applications/editors/emacs-modes/idris { };
 
     jabber = callPackage ../applications/editors/emacs-modes/jabber { };
