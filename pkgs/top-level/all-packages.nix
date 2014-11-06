@@ -10480,6 +10480,8 @@ let
 
   monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
 
+  monodevelop = callPackage ../applications/editors/monodevelop {};
+
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;
   };
