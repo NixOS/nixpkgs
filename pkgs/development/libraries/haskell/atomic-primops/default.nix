@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "atomic-primops";
-  version = "0.6.0.6";
-  sha256 = "10i9s6d9951z9bf88w1vxcfb9z9axm2q4kf8wy6zd5gcc8hm7wcb";
+  version = "0.6.1";
+  sha256 = "1j8slmqsyhvx7xns1qpvbmcjsfqfkphycv32hgcmk17wl1fzbyi7";
   buildDepends = [ primitive ];
   meta = {
     homepage = "https://github.com/rrnewton/haskell-lockfree/wiki";
