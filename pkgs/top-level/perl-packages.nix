@@ -6553,7 +6553,9 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ DataStreamBulk DateTimeFormatHTTP DigestHMAC DigestMD5File FileFindRule HTTPDate HTTPMessage LWPUserAgentDetermined MIMETypes Moose MooseXStrictConstructor MooseXTypesDateTimeMoreCoercions PathClass RegexpCommon TermEncoding TermProgressBarSimple URI XMLLibXML JSON ];
     # See https://github.com/pfig/net-amazon-s3/pull/25
     patches =
-      [ ../development/perl-modules/net-amazon-s3-credentials-provider.patch ];
+      [ ../development/perl-modules/net-amazon-s3-credentials-provider.patch
+        ../development/perl-modules/net-amazon-s3-moose-warning.patch
+      ];
     meta = {
       description = "Use the Amazon S3 - Simple Storage Service";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
