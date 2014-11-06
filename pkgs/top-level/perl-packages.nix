@@ -8522,6 +8522,31 @@ let self = _self // overrides; _self = with self; {
     doCheck = false;
   };
 
+  TermSizeAny = buildPerlPackage {
+    name = "Term-Size-Any-0.002";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/F/FE/FERREIRA/Term-Size-Any-0.002.tar.gz;
+      sha256 = "64fa5fdb1ae3a823134aaa95aec75354bc17bdd9ca12ba0a7ae34a7e51b3ded2";
+    };
+    propagatedBuildInputs = [ DevelHide TermSizePerl ];
+    meta = {
+      description = "Retrieve terminal size";
+      license = "perl";
+    };
+  };
+
+  TermSizePerl = buildPerlPackage {
+    name = "Term-Size-Perl-0.029";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/F/FE/FERREIRA/Term-Size-Perl-0.029.tar.gz;
+      sha256 = "8c1aaab73646ee1d233e827213ea3b5ab8afcf1d02a8f94be7aed306574875e7";
+    };
+    meta = {
+      description = "Perl extension for retrieving terminal size (Perl version)";
+      license = "perl";
+    };
+  };
+
   TermVT102 = buildPerlPackage {
     name = "Term-VT102-0.91";
     src = fetchurl {
