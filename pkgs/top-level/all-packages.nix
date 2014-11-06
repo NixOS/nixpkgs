@@ -2585,6 +2585,8 @@ let
 
   testdisk = callPackage ../tools/misc/testdisk { };
 
+  html2text = callPackage ../tools/text/html2text { };
+
   htmlTidy = callPackage ../tools/text/html-tidy { };
 
   html-xml-utils = callPackage ../tools/text/xml/html-xml-utils { };
