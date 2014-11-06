@@ -7834,18 +7834,18 @@ let self = _self // overrides; _self = with self; {
   };
 
   Starman = buildPerlModule {
-    name = "Starman-0.4008";
+    name = "Starman-0.4010";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Starman-0.4008.tar.gz;
-      sha256 = "06fc3yp3nmi26d7lcfqanwwk5jxsmqmidyr8n2qfrsa0r7d07c88";
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Starman-0.4010.tar.gz;
+      sha256 = "abe8e2e0519b7326d64db1e93d9c32d853a7be083792d0d7e5f5a1ddf1472d42";
     };
-    buildInputs = [ ModuleBuildTiny TestRequires ];
+    buildInputs = [ LWP ModuleBuildTiny TestRequires ];
     propagatedBuildInputs = [ DataDump HTTPDate HTTPMessage HTTPParserXS NetServer Plack TestTCP ];
     doCheck = false; # binds to various TCP ports
     meta = {
       homepage = https://github.com/miyagawa/Starman;
       description = "High-performance preforking PSGI/Plack web server";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      license = "perl";
     };
   };
 
