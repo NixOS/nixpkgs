@@ -22,20 +22,19 @@ in
 
         { services.httpd.enable = true;
           services.httpd.adminAddr = "bar@example.org";
-          services.httpd.extraModules = ["proxy_balancer"];
+          services.httpd.extraModules = [ "proxy_balancer" "lbmethod_byrequests" ];
 
           services.httpd.extraConfig =
             ''
               ExtendedStatus on
 
               <Location /server-status>
-                Order deny,allow
-                Allow from all
+                Require all granted
                 SetHandler server-status
               </Location>
 
               <Proxy balancer://cluster>
-                Allow from all
+                Require all granted
                 BalancerMember http://${nodes.backend1.config.networking.hostName} retry=0
                 BalancerMember http://${nodes.backend2.config.networking.hostName} retry=0
               </Proxy>

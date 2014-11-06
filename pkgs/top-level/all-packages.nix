@@ -7342,7 +7342,7 @@ let
 
   rdf4store = callPackage ../servers/http/4store { };
 
-  apacheHttpd = pkgs.apacheHttpd_2_2;
+  apacheHttpd = pkgs.apacheHttpd_2_4;
 
   apacheHttpd_2_2 = callPackage ../servers/http/apache-httpd/2.2.nix {
     sslSupport = true;
