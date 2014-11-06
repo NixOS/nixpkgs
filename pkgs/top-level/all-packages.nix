@@ -5582,6 +5582,8 @@ let
       else stdenv;
   };
 
+  gnome-sharp = callPackage ../development/libraries/gnome-sharp {};
+
   granite = callPackage ../development/libraries/granite { };
 
   gtk2 = callPackage ../development/libraries/gtk+/2.x.nix {
