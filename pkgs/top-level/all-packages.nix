@@ -4283,6 +4283,8 @@ let
 
   ### DEVELOPMENT / TOOLS
 
+  augeas = callPackage ../tools/system/augeas { };
+
   ansible = callPackage ../tools/system/ansible { };
 
   antlr = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
