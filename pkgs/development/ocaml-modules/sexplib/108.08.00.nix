@@ -20,6 +20,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = with stdenv.lib; {
+    branch = "108";
     homepage = https://ocaml.janestreet.com/;
     description = "Library for serializing OCaml values to and from S-expressions";
     license = licenses.asl20;

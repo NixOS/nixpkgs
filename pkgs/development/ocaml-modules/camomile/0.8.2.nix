@@ -20,7 +20,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://camomile.sourceforge.net/;
     description = "A comprehensive Unicode library for OCaml";
-    license = "LGPL";
+    license = stdenv.lib.licenses.lgpl21;
+    branch = "0.8.2";
     platforms = ocaml.meta.platforms;
     maintainers = [
       stdenv.lib.maintainers.z77z

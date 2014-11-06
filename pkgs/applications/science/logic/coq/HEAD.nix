@@ -64,6 +64,7 @@ stdenv.mkDerivation {
     '';
     homepage = "http://coq.inria.fr";
     license = licenses.lgpl21;
+    branch = coq-version;
     maintainers = with maintainers; [ roconnor thoughtpolice vbgl ];
     platforms = platforms.unix;
   };
