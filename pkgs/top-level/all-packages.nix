@@ -5625,6 +5625,8 @@ let
 
   libctemplate = callPackage ../development/libraries/libctemplate { };
 
+  libcouchbase = callPackage ../development/libraries/libcouchbase { };
+
   libcue = callPackage ../development/libraries/libcue { };
 
   libdaemon = callPackage ../development/libraries/libdaemon { };
