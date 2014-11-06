@@ -41,7 +41,7 @@ let
   isUnfree = licenses: lib.lists.any (l:
     !l.free or true || l == "unfree" || l == "unfree-redistributable") licenses;
 
-  extraBuildInputs' = extraBuildInputs ++
+  defaultNativeBuildInputs = extraBuildInputs ++
     [ ../../build-support/setup-hooks/move-docs.sh
       ../../build-support/setup-hooks/compress-man-pages.sh
       ../../build-support/setup-hooks/strip.sh
@@ -93,10 +93,10 @@ let
           __ignoreNulls = true;
 
           # Inputs built by the cross compiler.
-          buildInputs = if crossConfig != null then buildInputs ++ extraBuildInputs' else [];
+          buildInputs = if crossConfig != null then buildInputs else [];
           propagatedBuildInputs = if crossConfig != null then propagatedBuildInputs else [];
           # Inputs built by the usual native compiler.
-          nativeBuildInputs = nativeBuildInputs ++ (if crossConfig == null then buildInputs ++ extraBuildInputs' else []);
+          nativeBuildInputs = nativeBuildInputs ++ (if crossConfig == null then buildInputs else []);
           propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
             (if crossConfig == null then propagatedBuildInputs else []);
         }))) (
@@ -130,9 +130,9 @@ let
 
       setup = setupScript;
 
-      inherit preHook initialPath shell;
+      inherit preHook initialPath shell defaultNativeBuildInputs;
 
-      propagatedUserEnvPkgs = [gcc] ++
+      propagatedUserEnvPkgs = [ gcc ] ++
         lib.filter lib.isDerivation initialPath;
     })
 

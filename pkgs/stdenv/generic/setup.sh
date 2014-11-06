@@ -220,12 +220,12 @@ findInputs() {
 }
 
 crossPkgs=""
-for i in $buildInputs $propagatedBuildInputs; do
+for i in $buildInputs $defaultBuildInputs $propagatedBuildInputs; do
     findInputs $i crossPkgs propagated-build-inputs
 done
 
 nativePkgs=""
-for i in $nativeBuildInputs $propagatedNativeBuildInputs; do
+for i in $nativeBuildInputs $defaultNativeBuildInputs $propagatedNativeBuildInputs; do
     findInputs $i nativePkgs propagated-native-build-inputs
 done
 
