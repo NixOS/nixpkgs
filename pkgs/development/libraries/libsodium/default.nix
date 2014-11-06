@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Version of NaCl with harwdare tests at runtime, not build time";
-    license = "ISC";
+    license = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ viric ];
     platforms = stdenv.lib.platforms.all;
   };

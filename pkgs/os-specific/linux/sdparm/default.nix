@@ -11,6 +11,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://sg.danny.cz/sg/sdparm.html;
     description = "A utility to access SCSI device parameters";
-    license = "free";
+    license = stdenv.lib.licenses.free;
   };
 }

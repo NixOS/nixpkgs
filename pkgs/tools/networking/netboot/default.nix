@@ -6,13 +6,13 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/netboot/${name}.tar.gz";
     sha256 = "09w09bvwgb0xzn8hjz5rhi3aibysdadbg693ahn8rylnqfq4hwg0";
   };
-  
+
   buildInputs = [ yacc lzo db4 ];
 
   meta = with stdenv.lib; {
     description = "Mini PXE server";
     maintainers = [ maintainers.raskin ];
     platforms = ["x86_64-linux"];
-    license = "free-noncopyleft";
+    license = stdenv.lib.licenses.free;
   };
 }

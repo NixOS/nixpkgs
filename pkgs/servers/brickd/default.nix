@@ -13,7 +13,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "brickd-${version}";
-  
+
   src = fetchgit {
     url = "git://github.com/Tinkerforge/brickd.git";
     rev = "refs/tags/v${version}";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libusb pkgconfig pmutils udev ];
- 
+
   # shell thing didn't work so i replaced it using nix
   prePatch = ''
     substituteInPlace src/brickd/Makefile --replace 'PKG_CONFIG := $(shell which pkg-config 2> /dev/null)' "PKG_CONFIG := $pkgconfig/bin/pkg_config";
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.tinkerforge.com/;
     description = "The Brick Daemon is a daemon (or service on Windows) that acts as a bridge between the Bricks/Bricklets and the API bindings for the different programming languages.";
     maintainers = [ stdenv.lib.maintainers.qknight ];
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.all;
   };
 }

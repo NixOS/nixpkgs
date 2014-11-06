@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
     url = "https://fedorahosted.org/releases/l/i/liberation-fonts/${name}.tar.gz";
     sha256 = "1ymryvd2nw4jmw4w5y1i3ll2dn48rpkqzlsgv7994lk6qc9cdjvs";
   };
-  
+
   buildInputs = [fontforge python pythonPackages.fonttools];
 
   installPhase = ''
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     '';
 
     # See `License.txt' for details.
-    license = "GPLv2 + exception";
+    license = stdenv.lib.licenses.gpl2Oss;
 
     homepage = https://fedorahosted.org/liberation-fonts/;
 

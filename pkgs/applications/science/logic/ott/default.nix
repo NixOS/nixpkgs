@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       target-system terms.
     '';
     homepage = http://www.cl.cam.ac.uk/~pes20/ott;
-    license = "BSD3";
+    license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ jwiegley ];
     platforms = stdenv.lib.platforms.unix;
   };

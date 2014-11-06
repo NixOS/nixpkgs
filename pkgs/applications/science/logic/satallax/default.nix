@@ -2,9 +2,9 @@ x@{builderDefsPackage
   , sbcl, zlib
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     [];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -47,11 +47,11 @@ rec {
 
     sbcl --load make.lisp
     ! ( ./test | grep ERROR )
-    
+
     mkdir -p "$out/bin"
     cp bin/satallax "$out/bin"
   '') ["defEnsureDir" "minInit" "addInputs" "doUnpack"];
-      
+
   meta = {
     description = "A higher-order logic prover";
     maintainers = with a.lib.maintainers;
@@ -60,7 +60,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       unix;
-    license = "free-noncopyleft";
+    license = a.lib.licenses.free;
     homepage = "http://www.ps.uni-saarland.de/~cebrown/satallax/";
   };
   passthru = {
@@ -69,4 +69,3 @@ rec {
     };
   };
 }) x
-

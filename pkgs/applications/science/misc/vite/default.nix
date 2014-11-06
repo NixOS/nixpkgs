@@ -40,7 +40,7 @@ stdenv.mkDerivation {
 
     homepage = http://vite.gforge.inria.fr/;
 
-    license = "CeCILL-A";
+    license = stdenv.lib.licenses.cecill20;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice

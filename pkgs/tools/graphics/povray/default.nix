@@ -33,10 +33,10 @@ stdenv.mkDerivation {
       PATH="$TMP/bin:$PATH"
     done
   '';
-  
+
   meta = {
     homepage = http://www.povray.org/;
     description = "Persistence of Vision Raytracer";
-    license = "free";
+    license = stdenv.lib.licenses.free;
   };
 }

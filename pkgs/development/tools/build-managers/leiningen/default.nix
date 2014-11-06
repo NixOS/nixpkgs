@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://leiningen.org/;
     description = "Project automation for Clojure";
-    license = "EPL";
+    license = stdenv.lib.licenses.epl10;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };

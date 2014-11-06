@@ -62,7 +62,7 @@ in
         Zope Version Control
         '';
       homepage = "http://pypi.python.org/pypi/Products.ZopeVersionControl";
-      license = "ZPL";
+      license = stdenv.lib.licenses.zpt20;
     };
   };
 
@@ -764,7 +764,7 @@ in
         PlonePAS adapts the PluggableAuthService for use by Plone.
         '';
       homepage = "http://pypi.python.org/pypi/Products.PlonePAS";
-      license = "ZPL";
+      license = stdenv.lib.licenses.zpt20;
     };
   };
 
@@ -1487,7 +1487,7 @@ in
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        
+
         '';
       homepage = "https://code.google.com/p/feedparser/";
       license = "";
@@ -1550,7 +1550,7 @@ in
         Automatically include ZCML
         '';
       homepage = "http://pypi.python.org/pypi/z3c.autoinclude";
-      license = "ZPL";
+      license = stdenv.lib.licenses.zpt20;
     };
   };
 
@@ -2552,7 +2552,7 @@ in
         CMFDynamicViewFTI is a product for dynamic views in CMF.
         '';
       homepage = "http://pypi.python.org/pypi/Products.CMFDynamicViewFTI";
-      license = "ZPL";
+      license = stdenv.lib.licenses.zpt20;
     };
   };
 
@@ -2674,7 +2674,7 @@ in
         Python-PostgreSQL Database Adapter
         '';
       homepage = "http://initd.org/psycopg/";
-      license = "GPL with exceptions or ZPL";
+      license = with stdenv.lib.licenses; [ lgpl3Plus zpt20 ];
     };
   };
 
@@ -3078,7 +3078,7 @@ in
         Global way of retrieving the currently active request.
         '';
       homepage = "http://pypi.python.org/pypi/zope.globalrequest";
-      license = "ZPL";
+      license = stdenv.lib.licenses.zpt20;
     };
   };
 
@@ -3198,7 +3198,7 @@ in
         Caching infrastructure for web apps
         '';
       homepage = "UNKNOWN";
-      license = "ZPL";
+      license = stdenv.lib.licenses.zpt20;
     };
   };
 
@@ -3758,7 +3758,7 @@ in
         Zope 2 integration for zope.globalrequest
         '';
       homepage = "http://pypi.python.org/pypi/five.globalrequest";
-      license = "ZPL";
+      license = stdenv.lib.licenses.zpt20;
     };
   };
 
@@ -4486,7 +4486,7 @@ in
         Easily hook into the ZCML processing machinery
         '';
       homepage = "UNKNOWN";
-      license = "ZPL";
+      license = stdenv.lib.licenses.zpt20;
     };
   };
 
@@ -4526,7 +4526,7 @@ in
         Add test information to .egg-info
         '';
       homepage = "http://pypi.python.org/pypi/eggtestinfo";
-      license = "PSF or ZPL";
+      license = with stdenv.lib.licenses; [ psfl zpt20 ];
     };
   };
 
@@ -4928,7 +4928,7 @@ in
         SecureMailHost is a reimplementation of the standard Zope2 MailHost with some security and usability enhancements.
         '';
       homepage = "http://svn.plone.org/svn/collective/SecureMailHost/trunk";
-      license = "ZPL";
+      license = stdenv.lib.licenses.zpt20;
     };
   };
 

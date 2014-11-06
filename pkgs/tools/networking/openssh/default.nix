@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "http://www.openssh.org/";
     description = "An implementation of the SSH protocol";
-    license = "bsd"; # multi BSD GPL-2
+    license = stdenv.lib.licenses.bsd2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ eelco ];
   };

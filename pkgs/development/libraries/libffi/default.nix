@@ -46,10 +46,9 @@ stdenv.mkDerivation rec {
     homepage = http://sourceware.org/libffi/;
 
     # See http://github.com/atgreen/libffi/blob/master/LICENSE .
-    license = "free, non-copyleft";
+    license = stdenv.lib.licenses.free;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.all;
   };
 }
-

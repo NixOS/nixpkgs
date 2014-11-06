@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     rev = "refs/tags/0.6.2";
     sha256 = "2b3bf3f4972d0e6eaf075f7353ce482b776726e0cd04947a89b7156384ec0662";
     };
-  
+
   buildInputs = [ocaml findlib ocaml_oasis ocaml_data_notation ocaml_optcomp];
 
   configurePhase = ''
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   meta =  {
     homepage = https://github.com/ocsigen/deriving;
     description = "Extension to OCaml for deriving functions from type declarations";
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
     platforms = ocaml.meta.platforms;
     maintainers = [
       stdenv.lib.maintainers.gal_bolle

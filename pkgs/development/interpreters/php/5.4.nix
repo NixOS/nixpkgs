@@ -185,12 +185,6 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
          php is build within this derivation in order to add the xdebug lines to the php.ini.
          So both Apache and command line php both use xdebug without having to configure anything.
          Xdebug could be put in its own derivation.
-      * /
-        meta = {
-                description = "debugging support for PHP";
-                homepage = http://xdebug.org;
-                license = "based on the PHP license - as is";
-                };
       */
     };
 
@@ -255,7 +249,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
   meta = {
     description = "An HTML-embedded scripting language";
     homepage = http://www.php.net/;
-    license = "PHP-3";
+    license = stdenv.lib.licenses.php301;
   };
 
   patches = [ ./fix-5.4.patch ];

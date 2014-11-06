@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.cinepaint.org/;
-    license = "free";
+    license = stdenv.lib.licenses.free;
     description = "Image editor which supports images over 8bpp and ICC profiles";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = stdenv.lib.platforms.linux;

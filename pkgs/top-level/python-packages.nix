@@ -1342,7 +1342,7 @@ let
     meta = {
       homepage = "http://click.pocoo.org/";
       description = "Click is a Python package for creating beautiful command line interfaces in a composable way with as little code as necessary.";
-      license = "bsd, 3-clause";
+      license = stdenv.lib.licenses.bsd3;
     };
   };
 
@@ -4909,7 +4909,7 @@ let
     meta = {
       description = "A documentation builder";
       homepage = http://pypi.python.org/pypi/manuel;
-      license = "ZPL";
+      license = stdenv.lib.licenses.zpt20;
     };
   };
 
@@ -5008,7 +5008,7 @@ let
     meta = {
       description = "An HTML/XML templating engine used by supervisor";
       homepage = https://github.com/supervisor/meld3;
-      license = "free-non-copyleft";
+      license = stdenv.lib.licenses.free;
     };
   };
 
@@ -6477,7 +6477,7 @@ let
 
     meta = {
       description = "PostgreSQL database adapter for the Python programming language";
-      license = "GPLv2/ZPL";
+      license = with stdenv.lib.licenses; [ gpl2 zpt20 ];
     };
   };
 
@@ -7638,7 +7638,7 @@ let
     meta = {
       description = "The next generation YAML parser and emitter for Python";
       homepage = http://pyyaml.org;
-      license = "free"; # !?
+      license = stdenv.lib.licenses.free; # !?
     };
   });
 
@@ -8156,21 +8156,21 @@ let
   runsnakerun = buildPythonPackage rec {
     name = "runsnakerun-2.0.4";
 
-  
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/R/RunSnakeRun/RunSnakeRun-2.0.4.tar.gz";
       md5 = "3220b5b89994baee70b1c24d7e42a306";
     };
-  
+
     propagatedBuildInputs = [ self.squaremap self.wxPython28 ];
-  
+
     meta = with stdenv.lib; {
       description = "GUI Viewer for Python profiling runs";
       homepage = http://www.vrplumber.com/programming/runsnakerun/;
       license = licenses.bsd3;
     };
   };
-  
+
   rtslib_fb = buildPythonPackage rec {
     version = "2.1.fb43";
     name = "rtslib-fb-${version}";
@@ -9359,7 +9359,7 @@ let
     meta = {
       description = "Transaction management";
       homepage = http://pypi.python.org/pypi/transaction;
-      license = "ZPL";
+      license = stdenv.lib.licenses.zpt20;
     };
   };
 
@@ -9397,7 +9397,7 @@ let
      meta = {
        description = "A tool which computes a dependency graph between active Python eggs";
        homepage = http://thomas-lotze.de/en/software/eggdeps/;
-       license = "ZPL";
+       license = stdenv.lib.licenses.zpt20;
      };
    };
 
@@ -10005,7 +10005,7 @@ let
     meta = {
       description = "Structured Configuration Library";
       homepage = http://pypi.python.org/pypi/ZConfig;
-      license = "ZPL";
+      license = stdenv.lib.licenses.zpt20;
       maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
@@ -10023,7 +10023,7 @@ let
     meta = {
       description = "Inter-process locks";
       homepage =  http://www.python.org/pypi/zc.lockfile;
-      license = "ZPL";
+      license = stdenv.lib.licenses.zpt20;
       maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
@@ -10046,7 +10046,7 @@ let
     meta = {
       description = "A daemon process control library and tools for Unix-based systems";
       homepage = http://pypi.python.org/pypi/zdaemon;
-      license = "ZPL";
+      license = stdenv.lib.licenses.zpt20;
       maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
@@ -10097,7 +10097,7 @@ let
     meta = {
       description = "An object-oriented database for Python";
       homepage = http://pypi.python.org/pypi/ZODB3;
-      license = "ZPL";
+      license = stdenv.lib.licenses.zpt20;
       maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
@@ -10124,7 +10124,7 @@ let
     meta = {
       description = "An object-oriented database for Python";
       homepage = http://pypi.python.org/pypi/ZODB;
-      license = "ZPL";
+      license = stdenv.lib.licenses.zpt20;
       maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
@@ -10349,7 +10349,7 @@ let
     meta = {
       description = "An event publishing system";
       homepage = http://pypi.python.org/pypi/zope.event;
-      license = "ZPL";
+      license = stdenv.lib.licenses.zpt20;
       maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
@@ -10369,7 +10369,7 @@ let
      meta = {
        description = "Exception interfaces and implementations";
        homepage = http://pypi.python.org/pypi/zope.exceptions;
-       license = "ZPL";
+       license = stdenv.lib.licenses.zpt20;
        maintainers = [ stdenv.lib.maintainers.goibhniu ];
      };
    };
@@ -10584,7 +10584,7 @@ let
     meta = {
       description = "Zope testing helpers";
       homepage =  http://pypi.python.org/pypi/zope.testing;
-      license = "ZPL";
+      license = stdenv.lib.licenses.zpt20;
       maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
@@ -10606,7 +10606,7 @@ let
     meta = {
       description = "A flexible test runner with layer support";
       homepage = http://pypi.python.org/pypi/zope.testrunner;
-      license = "ZPL";
+      license = stdenv.lib.licenses.zpt20;
       maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
@@ -10644,7 +10644,7 @@ let
     meta = {
       description = "Zope.Interface";
       homepage = http://zope.org/Products/ZopeInterface;
-      license = "ZPL";
+      license = stdenv.lib.licenses.zpt20;
       maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };

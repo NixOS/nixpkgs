@@ -8,9 +8,9 @@ stdenv.mkDerivation {
     sha256 = "1rbzx5ipkvih9rjfdfv6310wcr6mxjbdlsh9zcv5aaz6yxxxil7c";
   };
 
-  meta = { 
+  meta = {
     description = "Berkeley YACC";
     homepage = http://dickey.his.com/byacc/byacc.html;
-    license = "public domain";
+    license = stdenv.lib.licenses.publicDomain;
   };
 }

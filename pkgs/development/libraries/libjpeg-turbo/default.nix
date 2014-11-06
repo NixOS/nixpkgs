@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://libjpeg-turbo.virtualgl.org/;
     description = "A faster (using SIMD) libjpeg implementation";
-    license = "free";
+    license = stdenv.lib.licenses.free;
   };
 }

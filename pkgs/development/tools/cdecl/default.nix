@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Translator English -- C/C++ declarations";
-    license = "Public Domain";
+    license = stdenv.lib.licenses.publicDomain;
     maintainers = with stdenv.lib.maintainers; [viric joelteon];
     platforms = stdenv.lib.platforms.unix;
   };

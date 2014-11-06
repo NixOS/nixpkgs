@@ -14,6 +14,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
    * add it to this list. The URL mentioned above is a good source for inspiration.
    */
 
+  afl21 = spdx {
+    spdxId = "AFL-2.1";
+    fullName = "Academic Free License";
+  };
+
   agpl3 = spdx {
     spdxId = "AGPL-3.0";
     fullName = "GNU Affero General Public License v3.0";
@@ -38,6 +43,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   apsl20 = spdx {
     spdxId = "APSL-2.0";
     fullName = "Apple Public Source License 2.0";
+  };
+
+  artistic1 = spdx {
+    spdxId = "Artistic-1.0";
+    fullName = "Artistic License 1.0";
   };
 
   artistic2 = spdx {
@@ -72,7 +82,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
 
   cc0 = spdx {
     spdxId = "CC0-1.0";
-    fullName = ''Creative Commons Zero v1.0 Universal'';
+    fullName = "Creative Commons Zero v1.0 Universal";
   };
 
   cc-by-30 = spdx {
@@ -124,9 +134,19 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Unspecified free software license";
   };
 
+  gpl1Plus = spdx {
+    spdxId = "GPL-1.0+";
+    fullName = "GNU General Public License v1.0 or later";
+  };
+
   gpl2 = spdx {
     spdxId = "GPL-2.0";
     fullName = "GNU General Public License v2.0 only";
+  };
+
+  gpl2ClasspathPlus = {
+    fullName = "GNU General Public License v2.0 or later (with Classpath exception)";
+    url = https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception;
   };
 
   gpl2Oss = {
@@ -152,6 +172,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   gpl3ClasspathPlus = {
     fullName = "GNU General Public License v3.0 or later (with Classpath exception)";
     url = https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception;
+  };
+
+  # Intel's license, seems free
+  iasl = {
+    fullName = "iASL";
+    url = http://www.calculate-linux.org/packages/licenses/iASL;
   };
 
   inria = {
@@ -219,6 +245,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     url = http://opensource.franz.com/preamble.html;
   };
 
+  lppl12 = spdx {
+    spdxId = "LPPL-1.2";
+    fullName = "LaTeX Project Public License v1.2";
+  };
+
   lpl-102 = spdx {
     spdxId = "LPL-1.02";
     fullName = "Lucent Public License v1.02";
@@ -261,6 +292,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "OpenSSL License";
   };
 
+  php301 = spdx {
+    spdxId = "PHP-3.01";
+    fullName = "PHP License v3.01";
+  };
+
   postgresql = spdx {
     spdxId = "PostgreSQL";
     fullName = "PostgreSQL License";
@@ -274,6 +310,26 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
 
   publicDomain = {
     fullName = "Public Domain";
+  };
+
+  qpl = spdx {
+    spdxId = "QPL-1.0";
+    fullName = "Q Public License 1.0";
+  };
+
+  qwt = {
+    fullName = "Qwt License, Version 1.0";
+    url = http://qwt.sourceforge.net/qwtlicense.html;
+  };
+
+  ruby = spdx {
+    spdxId = "Ruby";
+    fullName = "Ruby License";
+  };
+
+  sgi-b-20 = spdx {
+    spdxId = "SGI-B-2.0";
+    fullName = "SGI Free Software License B v2.0";
   };
 
   sleepycat = spdx {
@@ -307,9 +363,24 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "The Unlicense";
   };
 
+  vsl10 = spdx {
+    spdxId = "VSL-1.0";
+    fullName = "Vovida Software License v1.0";
+  };
+
+  w3c = spdx {
+    spdxId = "W3C";
+    fullName = "W3C Software Notice and License";
+  };
+
   wadalab = {
     fullName = "Wadalab Font License";
     url = https://fedoraproject.org/wiki/Licensing:Wadalab?rd=Licensing/Wadalab;
+  };
+
+  wtfpl = spdx {
+    spdxId = "WTFPL";
+    fullName = "Do What The F*ck You Want To Public License";
   };
 
   zlib = spdx {

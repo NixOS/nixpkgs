@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://linuxtv.org/projects.php;
     description = "V4L utils and libv4l, that provides common image formats regardless of the v4l device";
-    license = "free"; # The libs are of LGPLv2.1+, some other pieces are GPL.
+    license = stdenv.lib.licenses.free; # The libs are of LGPLv2.1+, some other pieces are GPL.
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

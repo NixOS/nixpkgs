@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   meta = {
       description = "control a dwarven outpost or an adventurer in a randomly generated, persistent world";
       homepage = http://www.bay12games.com/dwarves;
-      license = "unfree-redistributable";
+      license = stdenv.lib.licenses.unfreeRedistributable;
       maintainers = [stdenv.lib.maintainers.roconnor];
   };
 }
