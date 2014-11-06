@@ -111,6 +111,7 @@ let
       "unixd"
       "cache" "cache_disk"
       "slotmem_shm"
+      "socache_shmcb"
     ]
     ++ (if mainCfg.multiProcessingModule == "prefork" then [ "cgi" ] else [ "cgid" ])
     ++ optional enableSSL "ssl"
@@ -162,9 +163,9 @@ let
 
 
   sslConf = ''
-    SSLSessionCache shm:${mainCfg.stateDir}/ssl_scache(512000)
+    SSLSessionCache ${if version24 then "shmcb" else "shm"}:${mainCfg.stateDir}/ssl_scache(512000)
 
-    SSLMutex posixsem
+    ${if version24 then "Mutex" else "SSLMutex"} posixsem
 
     SSLRandomSeed startup builtin
     SSLRandomSeed connect builtin
