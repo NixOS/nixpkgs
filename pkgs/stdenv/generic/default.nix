@@ -120,7 +120,7 @@ let
   # The stdenv that we are producing.
   result =
     derivation (
-    (if isNull allowedRequisites then {} else { inherit allowedRequisites; }) //
+    (if isNull allowedRequisites then {} else { allowedRequisites = allowedRequisites ++ defaultNativeBuildInputs; }) //
     {
       inherit system name;
 
