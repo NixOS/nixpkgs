@@ -12,6 +12,33 @@ let
     mv *node* $out
   '';
 
+  patchShebangs = dir: ''
+    node=`type -p node`
+    coffee=`type -p coffee || true`
+    find -L "${dir}" -type f -print0 | \
+      xargs -0 sed --follow-symlinks -i \
+        -e 's@#!/usr/bin/env node@#!'"$node"'@' \
+        -e 's@#!/usr/bin/env coffee@#!'"$coffee"'@' \
+        -e 's@#!/.*/node@#!'"$node"'@' \
+        -e 's@#!/.*/coffee@#!'"$coffee"'@' || true
+    '';
+
+  patchedSrc = map (src:
+    runCommand src.name { inherit src; buildInputs = [ nodejs ]; } ''
+      mkdir tmp
+      cd tmp
+      if [ -d $src ]; then
+        mkdir package
+        cp -rf $src/* package/
+        chmod -R +w .
+      else
+        unpackFile $src
+      fi
+      ${patchShebangs "."}
+      tar -czf $out *
+    ''
+  ) src;
+
   # Convert deps to attribute set
   attrDeps = if isAttrs deps then deps else
     (listToAttrs (map (dep: nameValuePair dep.name dep) deps));
@@ -38,7 +65,7 @@ let
   in stdenv.mkDerivation ({
     unpackPhase = "true";
 
-    inherit src;
+    inherit patchedSrc;
     
     configurePhase = ''
       runHook preConfigure
@@ -71,7 +98,7 @@ let
 
     buildPhase = ''
       runHook preBuild
-      npm --registry http://www.example.com --nodedir=${sources} install $src ${npmFlags}
+      npm --registry http://www.example.com --nodedir=${sources} install $patchedSrc ${npmFlags}
       runHook postBuild
     '';
 
@@ -106,21 +133,14 @@ let
       mv node_modules $out/.dependent-node-modules
       if [ -d "$out/lib/node_modules/.bin" ]; then
         ln -sv $out/lib/node_modules/.bin $out/bin
-        node=`type -p node`
-        coffee=`type -p coffee || true`
-        find -L $out/lib/node_modules/.bin/* -type f -print0 | \
-          xargs -0 sed --follow-symlinks -i \
-            -e 's@#!/usr/bin/env node@#!'"$node"'@' \
-            -e 's@#!/usr/bin/env coffee@#!'"$coffee"'@' \
-            -e 's@#!/.*/node@#!'"$node"'@' \
-            -e 's@#!/.*/coffee@#!'"$coffee"'@'
+        ${patchShebangs "$out/lib/node_modules/.bin/*"}
       fi
       runHook postInstall
     '';
 
     preFixup = concatStringsSep "\n" (map (src: ''
       find $out -type f -print0 | xargs -0 sed -i 's|${src}|${src.name}|g'
-    '') src);
+    '') patchedSrc);
 
     shellHook = ''
       ${preShellHook}
