@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hindent";
-  version = "3.9";
-  sha256 = "0x8qm39rmaw1s0fbljr9zp6vnqxfcs1w6a3ylrknwqgwbzzr5hbn";
+  version = "3.9.1";
+  sha256 = "1q1a5smykjs36y29cn34kws443kw0w26xjjfdvv0kf69jpcm4b2f";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ dataDefault haskellSrcExts monadLoops mtl text ];
