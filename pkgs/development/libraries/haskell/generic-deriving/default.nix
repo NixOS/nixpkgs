@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "generic-deriving";
-  version = "1.6.3";
-  sha256 = "04cjyl5aphf36qbbn75midrqj151fc77z2znpal8dk52gaab2f67";
+  version = "1.7.0";
+  sha256 = "145bixg4jr0hhw32jznrvl4qjjk7bgjbxlfznqra1s1rnmcyr5v6";
   meta = {
     description = "Generic programming library for generalised deriving";
     license = self.stdenv.lib.licenses.bsd3;
