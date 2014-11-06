@@ -131,9 +131,6 @@ let
       setup = setupScript;
 
       inherit preHook initialPath shell defaultNativeBuildInputs;
-
-      propagatedUserEnvPkgs = [ gcc ] ++
-        lib.filter lib.isDerivation initialPath;
     })
 
     // rec {
