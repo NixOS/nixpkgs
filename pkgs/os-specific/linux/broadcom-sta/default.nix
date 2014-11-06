@@ -42,7 +42,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Kernel module driver for some Broadcom's wireless cards";
     homepage = http://www.broadcom.com/support/802.11/linux_sta.php;
-    license = "unfree-redistributable";
+    license = stdenv.lib.licenses.unfreeRedistributable;
     maintainers = with stdenv.lib.maintainers; [ phreedom vcunat ];
     platforms = stdenv.lib.platforms.linux;
   };

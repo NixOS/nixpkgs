@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://cpp-netlib.github.com/;
     description = "Provides application layer network support at boost style";
-    license = "boost";
+    license = stdenv.lib.licenses.boost;
   };
 }

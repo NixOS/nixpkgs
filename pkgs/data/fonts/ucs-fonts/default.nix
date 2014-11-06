@@ -34,5 +34,6 @@ wrapFonts (stdenv.mkDerivation {
 
   meta = {
     description = "Unicode bitmap fonts";
+    maintainers = [stdenv.lib.maintainers.raskin];
   };
 })

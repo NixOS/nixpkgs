@@ -66,7 +66,7 @@ in buildPythonPackage rec {
       for you. Listen directly on your computer or on your mobile devices.
     '';
     homepage = "http://gpodder.org/";
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = [ stdenv.lib.maintainers.skeidel ];
   };

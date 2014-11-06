@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.flashrom.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.funfunctor ];
     platforms = with stdenv.lib.platforms; linux;
   };

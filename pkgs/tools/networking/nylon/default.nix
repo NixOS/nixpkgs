@@ -14,6 +14,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://monkey.org/~marius/nylon;
     description = "Proxy server, supporting SOCKS 4 and 5, as well as a mirror mode";
-    license = "free";
+    license = stdenv.lib.licenses.free;
   };
 }

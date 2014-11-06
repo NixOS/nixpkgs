@@ -20,9 +20,9 @@ stdenv.mkDerivation {
     mv {,$out/bin/}mysql2psql
   '';
 
-  meta = { 
+  meta = {
     description = "converts mysql dump files to psql loadable files ";
     homepage = http://pgfoundry.org/projects/mysql2pgsql/;
-    license = "BSD-Original";
+    license = stdenv.lib.licenses.bsdOriginal;
   };
 }

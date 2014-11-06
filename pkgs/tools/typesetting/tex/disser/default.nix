@@ -2,9 +2,9 @@ x@{builderDefsPackage
   , unzip, texLive, texLiveCMSuper, texLiveAggregationFun
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     ["texLive" "texLiveCMSuper" "texLiveAggregationFun"];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -36,7 +36,7 @@ rec {
   '';
 
   makeFlags = ["DESTDIR=$out/share/texmf-dist"];
-      
+
   meta = {
     description = "Russian PhD thesis LaTeX package";
     maintainers = with a.lib.maintainers;
@@ -45,7 +45,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux; # platform-independent
-    license = "free"; # LaTeX Project Public License
+    license = a.lib.licenses.free; # LaTeX Project Public License
   };
   passthru = {
     updateInfo = {
@@ -53,4 +53,3 @@ rec {
     };
   };
 }) x
-

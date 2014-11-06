@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     url = "https://fedorahosted.org/releases/l/i/liberation-fonts/liberation-fonts-ttf-${version}.tar.gz";
     sha256 = "010m4zfqan4w04b6bs9pm3gapn9hsb18bmwwgp2p6y6idj52g43q";
   };
-  
+
   installPhase = ''
     mkdir -p $out/share/fonts/truetype
     cp -v $( find . -name '*.ttf') $out/share/fonts/truetype
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     '';
 
     # See `License.txt' for details.
-    license = "GPLv2 + exception";
+    license = stdenv.lib.licenses.gpl2Oss;
 
     homepage = https://fedorahosted.org/liberation-fonts/;
 

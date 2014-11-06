@@ -17,6 +17,6 @@ buildPythonPackage rec {
     homepage = https://code.google.com/p/volatility;
     description = "advanced memory forensics framework";
     maintainers = with maintainers; [ bosu ];
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

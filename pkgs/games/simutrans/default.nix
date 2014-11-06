@@ -94,7 +94,7 @@ let
       '';
 
       homepage = http://www.simutrans.com/;
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ stdenv.lib.maintainers.kkallio ];
       platforms = stdenv.lib.platforms.linux;
     };

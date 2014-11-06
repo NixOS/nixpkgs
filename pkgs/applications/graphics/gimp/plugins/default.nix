@@ -59,7 +59,7 @@ rec {
       sed -e 's,^\(GIMP_PLUGIN_DIR=\).*,\1'"$out/${gimp.name}-plugins", \
        -e 's,^\(GIMP_DATA_DIR=\).*,\1'"$out/share/${gimp.name}", -i configure
     '';
-    meta = { 
+    meta = {
       description = "The GIMP Animation Package";
       homepage = http://www.gimp.org;
       # The main code is given in GPLv3, but it has ffmpeg in it, and I think ffmpeg license
@@ -174,10 +174,10 @@ rec {
       sourceRoot = "${name}/src";
       buildPhase = "make gimp";
       installPhase = "installPlugins gmic_gimp";
-      meta = { 
+      meta = {
         description = "script language for image processing which comes with its open-source interpreter";
         homepage = http://gmic.sourceforge.net/repository.shtml;
-        license = "CeCILL FREE SOFTWARE LICENSE AGREEMENT";
+        license = stdenv.lib.licenses.cecill20;
         /*
         The purpose of this Free Software license agreement is to grant users
         the right to modify and redistribute the software governed by this
@@ -197,7 +197,7 @@ rec {
       # --enable-dst-correction - enable DST correction for file timestamps.
       # --enable-contrast - enable the contrast setting option.
       # --enable-interp-none: enable 'None' interpolation (mostly for debugging).
-      # --with-lensfun: use the lensfun library - experimental feature, read this before using it. 
+      # --with-lensfun: use the lensfun library - experimental feature, read this before using it.
       # --with-prefix=PREFIX - use also PREFIX as an input prefix for the build
       # --with-dosprefix=PREFIX - PREFIX in the the prefix in dos format (needed only for ms-window
     configureFlags = "--enable-extras --enable-dst-correction --enable-contrast";

@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
       anglescry advanced launcher for XBMC since device input is
       caught by both XBMC and the retroarch process.
     '';
-    license = "GPL-3";
+    license = stdenv.lib.licenses.gpl3;
   };
 }

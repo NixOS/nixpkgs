@@ -34,10 +34,12 @@ let
         { nixpkgs.config.allow${unfreeOrBroken} = true; }
       in configuration.nix to override this. If you use Nix standalone, you can add
         { allow${unfreeOrBroken} = true; }
-      to ~/.nixpkgs/config.nix.
-    '';
+      to ~/.nixpkgs/config.nix.'';
 
   unsafeGetAttrPos = builtins.unsafeGetAttrPos or (n: as: null);
+
+  isUnfree = licenses: lib.lists.any (l:
+    !l.free or true || l == "unfree" || l == "unfree-redistributable") licenses;
 
   extraBuildInputs' = extraBuildInputs ++
     [ ../../build-support/setup-hooks/move-docs.sh
@@ -60,20 +62,18 @@ let
           unsafeGetAttrPos "name" attrs;
       pos' = if pos != null then "‘" + pos.file + ":" + toString pos.line + "’" else "«unknown-file»";
     in
-    if !allowUnfree
-       && (let l = lib.lists.toList attrs.meta.license or []; in lib.lists.elem "unfree" l || lib.lists.elem "unfree-redistributable" l)
-       && !allowUnfreePredicate attrs then
+    if !allowUnfree && isUnfree (lib.lists.toList attrs.meta.license or []) && !allowUnfreePredicate attrs then
       throw ''
-            Package ‘${attrs.name}’ in ${pos'} has an unfree license, refusing to evaluate.
-            ${forceEvalHelp "Unfree"}''
+        Package ‘${attrs.name}’ in ${pos'} has an unfree license, refusing to evaluate.
+        ${forceEvalHelp "Unfree"}''
     else if !allowBroken && attrs.meta.broken or false then
-          throw ''
-            Package ‘${attrs.name}’ in ${pos'} is marked as broken, refusing to evaluate.
-            ${forceEvalHelp "Broken"}''
+      throw ''
+        Package ‘${attrs.name}’ in ${pos'} is marked as broken, refusing to evaluate.
+        ${forceEvalHelp "Broken"}''
     else if !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem result.system attrs.meta.platforms then
-          throw ''
-            Package ‘${attrs.name}’ in ${pos'} is not supported on ‘${result.system}’, refusing to evaluate.
-            ${forceEvalHelp "Broken"}''
+      throw ''
+        Package ‘${attrs.name}’ in ${pos'} is not supported on ‘${result.system}’, refusing to evaluate.
+        ${forceEvalHelp "Broken"}''
     else
       lib.addPassthru (derivation (
         (removeAttrs attrs ["meta" "passthru" "crossAttrs"])

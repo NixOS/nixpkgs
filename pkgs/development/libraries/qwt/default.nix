@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "Qt widgets for technical applications";
     homepage = http://qwt.sourceforge.net/;
     # LGPL 2.1 plus a few exceptions (more liberal)
-    license = "Qwt License, Version 1.0";
+    license = stdenv.lib.licenses.qwt;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };

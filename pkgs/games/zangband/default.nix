@@ -1,8 +1,8 @@
-a :  
-let 
+a :
+let
   fetchurl = a.fetchurl;
 
-  version = a.lib.attrByPath ["version"] "2.7.3" a; 
+  version = a.lib.attrByPath ["version"] "2.7.3" a;
   buildInputs = with a; [
     ncurses flex bison autoconf automake m4
   ];
@@ -17,7 +17,7 @@ rec {
   configureFlags = [];
 
   preConfigure = a.fullDepEntry (''
-    chmod a+rwX -R . 
+    chmod a+rwX -R .
     sed -re 's/ch(own|grp|mod)/true/' -i lib/*/makefile.zb makefile.in
     sed -e '/FIXED_PATHS/d' -i src/z-config.h
     ./bootstrap
@@ -42,7 +42,7 @@ rec {
       done
       mkdir -p lib/user lib/save
       for i in lib/*/*.raw; do
-        test -L "$i" && rm "$i"; 
+        test -L "$i" && rm "$i";
       done
       for i in $(find lib -type l); do if ! test -e $(readlink "$i"); then rm "$i"; fi; done;
       export ANGBAND_PATH="$PWD"
@@ -53,10 +53,10 @@ rec {
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["preConfigure" "doConfigure" "doMakeInstall" "postInstall"];
-      
+
   name = "zangband-" + version;
   meta = {
     description = "rogue-like game";
-    license = "non-free"; # Basically "not for commercial profit"
+    license = a.lib.licenses.unfree;
   };
 }

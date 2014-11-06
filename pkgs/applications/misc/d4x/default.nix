@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   name = "d4x-2.5.7.1";
-  
+
   inherit boost;
 
   src = fetchurl {
@@ -12,9 +12,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ gtk glib pkgconfig openssl boost ];
 
-  meta = { 
+  meta = {
     description = "Graphical download manager";
     homepage = http://www.krasu.ru/soft/chuchelo/;
-    license = "perl";
+    license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
   };
 }

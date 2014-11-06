@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.info-zip.org;
     description = "An extraction utility for archives compressed in .zip format";
-    license = "free"; # http://www.info-zip.org/license.html
+    license = stdenv.lib.licenses.free; # http://www.info-zip.org/license.html
     platforms = stdenv.lib.platforms.all;
   };
 }

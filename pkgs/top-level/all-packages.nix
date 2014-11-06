@@ -640,6 +640,7 @@ let
   bsod = callPackage ../misc/emulators/bsod { };
 
   btrfsProgs = callPackage ../tools/filesystems/btrfsprogs { };
+  btrfsProgs-3_16 = callPackage ../tools/filesystems/btrfsprogs/3.16.nix { };
 
   bwm_ng = callPackage ../tools/networking/bwm-ng { };
 
@@ -678,6 +679,10 @@ let
   ditaa = callPackage ../tools/graphics/ditaa { };
 
   dlx = callPackage ../misc/emulators/dlx { };
+
+  duperemove = callPackage ../tools/filesystems/duperemove {
+    linuxHeaders = linuxHeaders_3_14;
+  };
 
   eggdrop = callPackage ../tools/networking/eggdrop { };
 
@@ -1114,6 +1119,10 @@ let
   fcitx-anthy = callPackage ../tools/inputmethods/fcitx/fcitx-anthy.nix { };
 
   fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
+
+  fcitx-with-plugins = callPackage ../tools/inputmethods/fcitx/wrapper.nix {
+    plugins = [ ];
+  };
 
   fcron = callPackage ../tools/system/fcron { };
 
@@ -2403,6 +2412,8 @@ let
 
   privoxy = callPackage ../tools/networking/privoxy { };
 
+  swaks = callPackage ../tools/networking/swaks { };
+
   t1utils = callPackage ../tools/misc/t1utils { };
 
   tarsnap = callPackage ../tools/backup/tarsnap { };
@@ -2425,6 +2436,8 @@ let
   teamviewer9 = lowPrio (callPackage_i686 ../applications/networking/remote/teamviewer/9.nix { });
 
   telnet = callPackage ../tools/networking/telnet { };
+
+  tessel = callPackage ../applications/misc/tessel { };
 
   texmacs = callPackage ../applications/editors/texmacs {
     tex = texLive; /* tetex is also an option */
@@ -3295,6 +3308,7 @@ let
 
   icedtea7_web = callPackage ../development/compilers/icedtea-web {
     jdk = "${icedtea7_jdk}/lib/icedtea";
+    xulrunner = firefox;
   };
 
   ikarus = callPackage ../development/compilers/ikarus { };
@@ -10482,7 +10496,9 @@ let
 
   smartdeblur = callPackage ../applications/graphics/smartdeblur { };
 
-  snapper = callPackage ../tools/misc/snapper { };
+  snapper = callPackage ../tools/misc/snapper { 
+    btrfsProgs = btrfsProgs-3_16;
+  };
 
   snd = callPackage ../applications/audio/snd { };
 
@@ -11216,6 +11232,8 @@ let
   egoboo = callPackage ../games/egoboo { };
 
   exult = callPackage ../games/exult { };
+
+  fairymax = callPackage ../games/fairymax {};
 
   flightgear = callPackage ../games/flightgear { };
 
@@ -12295,6 +12313,8 @@ let
   robomongo = callPackage ../applications/misc/robomongo { };
 
   opkg = callPackage ../tools/package-management/opkg { };
+
+  opkg-utils = callPackage ../tools/package-management/opkg-utils { };
 
   pgadmin = callPackage ../applications/misc/pgadmin { };
 

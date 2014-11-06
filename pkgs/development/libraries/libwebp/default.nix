@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "Tools and library for the WebP image format";
 
     /* It has its own licence, google-related, but that looks like BSD */
-    license = "free";
+    license = stdenv.lib.licenses.free;
   };
 }
