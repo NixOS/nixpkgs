@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, which, file, perl, curl, python27, makeWrapper
-, tzdata, git
+, tzdata, git, valgrind
 }:
 
 assert stdenv.gcc.gcc != null;
@@ -18,19 +18,19 @@ assert stdenv.gcc.gcc != null;
 
 */
 
-with ((import ./common.nix) {inherit stdenv; version = "0.12.0-pre-127-ga0ea210";});
+with ((import ./common.nix) {inherit stdenv; version = "0.12.0-pre-961-g93c85eb";});
 
 let snapshot = if stdenv.system == "i686-linux"
-      then "0644637db852db8a6c603ded0531ccaa60291bd3"
+      then "d827fbbd778b854923971873cf03bdb79c2e8575"
       else if stdenv.system == "x86_64-linux"
-      then "656b8c23fbb97794e85973aca725a4b9cd07b29e"
+      then "1ddca522a8ba4a4f662dc17ca16b0f50f2c15f87"
       else if stdenv.system == "i686-darwin"
-      then "e4d9709fcfe485fcca00f0aa1fe456e2f164ed96"
+      then "597cd42301e1569df8ad090574cd535d19283387"
       else if stdenv.system == "x86_64-darwin"
-      then "6b1aa5a441965da87961be81950e8663eadba377"
+      then "4bfb2aff1c3e3c57653b32adc34b399c5aeb759b"
       else abort "no-snapshot for platform ${stdenv.system}";
-    snapshotDate = "2014-10-10";
-    snapshotRev = "78a7676";
+    snapshotDate = "2014-11-04";
+    snapshotRev = "1b2ad78";
     snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshot}.tar.bz2";
 
 in stdenv.mkDerivation {
@@ -40,8 +40,8 @@ in stdenv.mkDerivation {
 
   src = fetchgit {
     url = https://github.com/rust-lang/rust;
-    rev = "a0ea210b394aa1b61d341593a3f9098fe5bf7806";
-    sha256 = "0flwzj6dywaq9s77ayinshqbz8na2a1jabkr9s7zj74s2ya5096i";
+    rev = "93c85eb8bdcc910a27caf6abd20207a626ae98e5";
+    sha256 = "0zj84xsyg8jpd6ixmdv7jsjrnsd4zwrac98qqmwgrd78h74g8kpq";
   };
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
@@ -73,7 +73,7 @@ in stdenv.mkDerivation {
       --subst-var-by "arPath" "${stdenv.gcc.binutils}/bin/ar"
   '';
 
-  buildInputs = [ which file perl curl python27 makeWrapper git ];
+  buildInputs = [ which file perl curl python27 makeWrapper git valgrind ];
 
   enableParallelBuilding = false; # disabled due to rust-lang/rust#16305
 
