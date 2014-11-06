@@ -8840,11 +8840,11 @@ let
 
 
   sphinx = buildPythonPackage (rec {
-    name = "Sphinx-1.2";
+    name = "Sphinx-1.2.3";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/S/Sphinx/${name}.tar.gz";
-      md5 = "8516046aad73fe46dedece4e8e434328";
+      md5 = "a98c93124035b4cd7183604aec656cb3";
     };
 
     propagatedBuildInputs = with self; [docutils jinja2 pygments];
