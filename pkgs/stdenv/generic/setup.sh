@@ -181,6 +181,7 @@ if [ -z "$SHELL" ]; then echo "SHELL not set"; exit 1; fi
 # Execute the pre-hook.
 export CONFIG_SHELL="$SHELL"
 if [ -z "$shell" ]; then export shell=$SHELL; fi
+runHook preHook
 
 
 # Allow the caller to augment buildInputs (it's not always possible to
