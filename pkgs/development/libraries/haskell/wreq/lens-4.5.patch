@@ -1,0 +1,15 @@
+diff --git a/Network/Wreq/Lens/Machinery.hs b/Network/Wreq/Lens/Machinery.hs
+index 782d965..0c97d27 100644
+--- a/Network/Wreq/Lens/Machinery.hs
++++ b/Network/Wreq/Lens/Machinery.hs
+@@ -13,8 +13,8 @@ import Language.Haskell.TH.Syntax (Dec, Name, Q, mkName, nameBase)
+ defaultRules :: LensRules
+ defaultRules = lensRules
+
+-fieldName :: (String -> String) -> [Name] -> Name -> [DefName]
+-fieldName f _ name = [TopName . mkName . f . nameBase $ name]
++fieldName :: (String -> String) -> Name -> [Name] -> Name -> [DefName]
++fieldName f _ _ name = [TopName . mkName . f . nameBase $ name]
+
+ makeLenses :: Name -> Q [Dec]
+ makeLenses = makeLensesWith (defaultRules & lensField .~ fieldName id)
