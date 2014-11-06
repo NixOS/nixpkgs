@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
   
-  phases = [ "unpackPhase" "installPhase"];
+  phases = [ "unpackPhase" "installPhase" ];
 
   installPhase = ''
     mkdir -p $out/share/fonts/opentype
