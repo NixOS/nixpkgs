@@ -1,17 +1,17 @@
 { stdenv, fetchurl, pkgconfig, intltool, itstool, makeWrapper
-, pythonPackages, gst, clutter-gst, clutter-gtk
+, python3Packages, gst, clutter-gst, clutter-gtk
 , gobjectIntrospection, clutter, gtk3, librsvg
 , gnome_icon_theme, gnome_icon_theme_symbolic, gnome3
 }:
 
 let
-  version = "0.93";
+  version = "0.94";
 in stdenv.mkDerivation rec {
   name = "pitivi-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pitivi/${version}/${name}.tar.xz";
-    sha256 = "0z89dwrd7akhkap270i372yszqib8yqcymv78lhdmn3a8bsa7jhp";
+    sha256 = "1v7s0qsibwykkmknspjhpdrj80s987pvbl01kh34k4aspi1hcapm";
   };
 
   meta = with stdenv.lib; {
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
     gst-python gst-editing-services
     gst-plugins-base gst-plugins-good
     gst-plugins-bad gst-plugins-ugly gst-libav
-  ]) ++ (with pythonPackages; [
+  ]) ++ (with python3Packages; [
     python pygobject3 pyxdg numpy pycairo sqlite3
   ]);
 
