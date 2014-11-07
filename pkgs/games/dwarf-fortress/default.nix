@@ -1,17 +1,41 @@
-{ stdenv, fetchurl, SDL, SDL_image, SDL_ttf, gtk, glib, mesa, openal, glibc, libsndfile
-, copyDataDirectory ? false }:
+{ stdenv, fetchgit, fetchurl, cmake, glew, ncurses, SDL, SDL_image, SDL_ttf, gtk2, glib, mesa, openal, pango, atk, gdk_pixbuf, glibc, libsndfile
+  , copyDataDirectory ? true }:
+
+/* set copyDataDirectory as true by default since df 40 does not seem to run without it */
+
+let
+
+  srcs = {
+    df_unfuck = fetchgit {
+      url = "https://github.com/svenstaro/dwarf_fortress_unfuck";
+      rev = "7c1d8bf027c8d8835d0d3ef50502f0c45a7f9bae";
+      sha256 = "d4a681231da00fec7bcdb092bcf51415c75fd20fc9da786fb6013e0c03fbc373";
+    };
+
+    df = fetchurl {
+      url = "http://www.bay12games.com/dwarves/df_40_15_linux.tar.bz2";
+      sha256 = "1mmz7mnsm2y5n2aqyf30zrflyl58haaj6p380pi4022gbd13mnsn";
+    };
+  };
+
+in
 
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation rec {
-  name = "dwarf-fortress-0.34.11";
+  name = "dwarf-fortress-0.40.15";
 
-  src = fetchurl {
-    url = "http://www.bay12games.com/dwarves/df_34_11_linux.tar.bz2";
-    sha256 = "1qk9vmdxzs0li81c8bglpj3m7aw9k71x1slf58hv2bz7hdndl3kj";
-  };
 
-  phases = "unpackPhase patchPhase installPhase";
+  buildInputs = [ SDL SDL_image SDL_ttf gtk2 glib glew mesa ncurses openal glibc libsndfile pango atk cmake gdk_pixbuf];
+  src = "${srcs.df_unfuck} ${srcs.df}";
+  phases = "unpackPhase patchPhase configurePhase buildPhase installPhase";
+
+  sourceRoot = "git-export";
+
+  cmakeFlags = [
+    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib}/lib/glib-2.0/include"
+    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2}/lib/gtk-2.0/include"
+  ];
 
   /* :TODO: Game options should be configurable by patching the default configuration files */
 
@@ -21,11 +45,15 @@ stdenv.mkDerivation rec {
     set -x
     mkdir -p $out/bin
     mkdir -p $out/share/df_linux
-    cp -r * $out/share/df_linux
+    cd ../../
+    cp -r ./df_linux/* $out/share/df_linux
+    rm $out/share/df_linux/libs/lib*
+    patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.gcc.gcc stdenv.glibc ]}:$out/share/df_linux/libs"  $out/share/df_linux/libs/Dwarf_Fortress
+    cp -f ./git-export/build/libgraphics.so $out/share/df_linux/libs/libgraphics.so
+
     cp $permission $out/share/df_linux/nix_permission
 
     patchelf --set-interpreter ${glibc}/lib/ld-linux.so.2 $out/share/df_linux/libs/Dwarf_Fortress
-    ln -s ${libsndfile}/lib/libsndfile.so $out/share/df_linux/libs/
 
     cat > $out/bin/dwarf-fortress << EOF
     #!${stdenv.shell}
@@ -60,23 +88,13 @@ stdenv.mkDerivation rec {
        ln -s \$i \$DF_DIR/data/
       done
 
-      # index initial_movies, announcement, dipscript and help files are as of 0.31.16 opened in read/write mode instead of read-only mode
-      # this is a hack to work around this
-      # Should I just apply this to the whole data directory?
-      for i in index initial_movies announcement dipscript help
-      do
-       rm \$DF_DIR/data/\$i
-       cp -rf $out/share/df_linux/data/\$i \$DF_DIR/data/
-       chmod -R u+w \$DF_DIR/data/\$i
-      done
-
       # link in persistant data
       mkdir -p \$DF_DIR/save
       ln -s \$DF_DIR/save \$DF_DIR/data/
     ''}
 
     # now run Dwarf Fortress!
-    export LD_LIBRARY_PATH=\$DF_DIR/df_linux/libs/:${SDL}/lib:${SDL_image}/lib/:${SDL_ttf}/lib/:${gtk}/lib/:${glib}/lib/:${mesa}/lib/:${openal}/lib/
+    export LD_LIBRARY_PATH=\${stdenv.gcc}/lib:${SDL}/lib:${SDL_image}/lib/:${SDL_ttf}/lib/:${gtk2}/lib/:${glib}/lib/:${mesa}/lib/:${openal}/lib/:${libsndfile}/lib:$DF_DIR/df_linux/libs/
     \$DF_DIR/df "\$@"
     EOF
 

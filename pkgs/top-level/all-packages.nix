@@ -11276,17 +11276,7 @@ let
     };
   };
 
-  dwarf_fortress_2014 = callPackage_i686 ../games/dwarf-fortress/df2014.nix {
-    SDL_image = pkgsi686Linux.SDL_image.override {
-      libpng = pkgsi686Linux.libpng12;
-    };
-  };
-
   dwarf_fortress_modable = appendToName "moddable" (dwarf_fortress.override {
-    copyDataDirectory = true;
-  });
-
-  dwarf_fortress_2014_modable = appendToName "moddable" (dwarf_fortress_2014.override {
     copyDataDirectory = true;
   });
 
