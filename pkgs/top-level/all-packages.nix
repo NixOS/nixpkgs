@@ -10326,6 +10326,8 @@ let
 
   pinfo = callPackage ../applications/misc/pinfo { };
 
+  pinpoint = callPackage ../applications/office/pinpoint {};
+
   pinta = callPackage ../applications/graphics/pinta {
     gtksharp = gtksharp2;
   };
