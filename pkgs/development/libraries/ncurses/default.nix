@@ -49,6 +49,15 @@ stdenv.mkDerivation rec {
     (mkEnable unicode     "widec"       null)
     (mkEnable true        "ext-colors"  null)
     (mkEnable true        "ext-mouse"   null)
+  ] ++ stdenv.lib.optionals stdenv.isCygwin [
+    "--enable-sp-funcs"
+    "--enable-term-driver"
+    "--enable-const"
+    "--enable-ext-colors"
+    "--enable-ext-mouse"
+    "--enable-reentrant"
+    "--enable-colorfgbg"
+    "--enable-tcap-names"
   ];
 
   # PKG_CONFIG_LIBDIR is where the *.pc files will be installed. If this
@@ -60,6 +69,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export PKG_CONFIG_LIBDIR="$out/lib/pkgconfig"
     mkdir -p "$PKG_CONFIG_LIBDIR"
+  '' + stdenv.lib.optionalString stdenv.isCygwin ''
+    sed -i -e 's,LIB_SUFFIX="t,LIB_SUFFIX=",' configure
   '';
 
   selfNativeBuildInput = true;
@@ -71,7 +82,7 @@ stdenv.mkDerivation rec {
   # When building a wide-character (Unicode) build, create backward
   # compatibility links from the the "normal" libraries to the
   # wide-character libraries (e.g. libncurses.so to libncursesw.so).
-  postInstall = if unicode then ''
+  postInstall = if unicode then (''
     # Create a non-abi versioned config
     cfg=$(basename $out/bin/ncurses*-config)
     ln -svf $cfg $out/bin/ncursesw-config
@@ -95,7 +106,13 @@ stdenv.mkDerivation rec {
     # Create curses compatability
     ln -svf libncursesw.so $out/lib/libcursesw.so
     ln -svf libncursesw.so $out/lib/libcurses.so
-  '' else ''
+  '' + stdenv.lib.optionalString stdenv.isCygwin ''
+    for lib in $libs; do
+      if test -e $out/lib/lib''${lib}w.dll.a; then
+          ln -svf lib''${lib}w.dll.a $out/lib/lib$lib.dll.a
+      fi
+    done
+  '') else ''
     # Create a non-abi versioned config
     cfg=$(basename $out/bin/ncurses*-config)
     ln -svf $cfg $out/bin/ncurses-config
