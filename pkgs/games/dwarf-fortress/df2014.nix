@@ -8,13 +8,13 @@ let
   srcs = {
     df_unfuck = fetchgit {
       url = "https://github.com/svenstaro/dwarf_fortress_unfuck";
-      rev = "044b266ce3e03b54a4228d51d6b75d70963debc9";
-      sha256 = "0xc839zmg1bqyrdirhy2ixm8i58q7nwhyi86h60qmrfdg3bsnnpr";
+      rev = "7c1d8bf027c8d8835d0d3ef50502f0c45a7f9bae";
+      sha256 = "d4a681231da00fec7bcdb092bcf51415c75fd20fc9da786fb6013e0c03fbc373";
     };
 
     df = fetchurl {
-      url = "http://www.bay12games.com/dwarves/df_40_13_linux.tar.bz2";
-      sha256 = "1azsxgjc1fh8i041p6i7dmvdk0v3xpmhg44lmimlrs78a08h4z61";
+      url = "http://www.bay12games.com/dwarves/df_40_15_linux.tar.bz2";
+      sha256 = "1mmz7mnsm2y5n2aqyf30zrflyl58haaj6p380pi4022gbd13mnsn";
     };
   };
 
@@ -23,7 +23,7 @@ in
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation rec {
-  name = "dwarf-fortress-0.40.13";
+  name = "dwarf-fortress-0.40.15";
 
 
   buildInputs = [ SDL SDL_image SDL_ttf gtk2 glib glew mesa ncurses openal glibc libsndfile pango atk cmake gdk_pixbuf];
