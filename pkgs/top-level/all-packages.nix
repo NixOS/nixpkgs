@@ -5793,6 +5793,8 @@ let
     inherit (pkgs.pythonPackages) mutagen;
   };
 
+  libgsystem = callPackage ../development/libraries/libgsystem { };
+
   libharu = callPackage ../development/libraries/libharu { };
 
   libHX = callPackage ../development/libraries/libHX { };
