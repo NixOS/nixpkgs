@@ -65,7 +65,9 @@ in stdenv.mkDerivation {
   configureFlags = [ "--enable-local-rust" "--local-rust-root=$snapshot" ];
 
   # The compiler requires cc, so we patch the source to tell it where to find it
-  patches = [ ./hardcode_paths.HEAD.patch ./local_stage0.HEAD.patch ];
+  patches = [ ./hardcode_paths.HEAD.patch ./local_stage0.HEAD.patch ]
+            ++ stdenv.lib.optional stdenv.needsPax ./grsec.HEAD.patch;
+
   postPatch = ''
     substituteInPlace src/librustc/back/link.rs \
       --subst-var-by "ccPath" "${stdenv.gcc}/bin/cc"
