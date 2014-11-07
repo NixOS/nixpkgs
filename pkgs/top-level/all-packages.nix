@@ -7089,6 +7089,8 @@ let
   zeromq3 = callPackage ../development/libraries/zeromq/3.x.nix {};
   zeromq4 = callPackage ../development/libraries/zeromq/4.x.nix {};
 
+  cppzmq = callPackage ../development/libraries/cppzmq {};
+
   zziplib = callPackage ../development/libraries/zziplib { };
 
   ### DEVELOPMENT / LIBRARIES / AGDA
