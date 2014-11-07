@@ -132,7 +132,7 @@
   shell = "Shell Turner <cam.turn@gmail.com>";
   shlevy = "Shea Levy <shea@shealevy.com>";
   simons = "Peter Simons <simons@cryp.to>";
-  sjmackenzie = "Stewart Mackenzie <setori88@gmail.com">
+  sjmackenzie = "Stewart Mackenzie <setori88@gmail.com">;
   skeidel = "Sven Keidel <svenkeidel@gmail.com>";
   smironov = "Sergey Mironov <ierton@gmail.com>";
   sprock = "Roger Mason <rmason@mun.ca>";
