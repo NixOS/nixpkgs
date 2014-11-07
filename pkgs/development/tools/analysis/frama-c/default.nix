@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ncurses, ocamlPackages, graphviz
-, ltl2ba, coq, alt-ergo, gmp, why3 }:
+, ltl2ba, coq, alt-ergo, why3 }:
 
 stdenv.mkDerivation rec {
   name    = "frama-c-${version}";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with ocamlPackages; [
-    ncurses ocaml findlib alt-ergo ltl2ba ocamlgraph gmp
+    ncurses ocaml findlib alt-ergo ltl2ba ocamlgraph
     lablgtk coq graphviz zarith why3 zarith
   ];
 
