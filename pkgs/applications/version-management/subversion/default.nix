@@ -6,12 +6,12 @@
 , javahlBindings ? false
 , saslSupport ? false
 , stdenv, fetchurl, apr, aprutil, zlib, sqlite
-, httpd ? null, expat, swig ? null, jdk ? null, python ? null, perl ? null
+, apacheHttpd ? null, expat, swig ? null, jdk ? null, python ? null, perl ? null
 , sasl ? null, serf ? null
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
-assert httpServer -> httpd != null;
+assert httpServer -> apacheHttpd != null;
 assert pythonBindings -> swig != null && python != null;
 assert javahlBindings -> jdk != null && perl != null;
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = ''
     ${if bdbSupport then "--with-berkeley-db" else "--without-berkeley-db"}
-    ${if httpServer then "--with-apxs=${httpd}/bin/apxs" else "--without-apxs"}
+    ${if httpServer then "--with-apxs=${apacheHttpd}/bin/apxs" else "--without-apxs"}
     ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}
     ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
     ${if stdenv.isDarwin then "--enable-keychain" else "--disable-keychain"}

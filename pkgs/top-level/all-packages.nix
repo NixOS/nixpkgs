@@ -7379,6 +7379,28 @@ let
     sslSupport = true;
   });
 
+  apacheHttpdPackagesFor = apacheHttpd: self: let callPackage = newScope self; in {
+    inherit apacheHttpd;
+
+    mod_dnssd = callPackage ../servers/http/apache-modules/mod_dnssd { };
+
+    mod_evasive = callPackage ../servers/http/apache-modules/mod_evasive { };
+
+    mod_fastcgi = callPackage ../servers/http/apache-modules/mod_fastcgi { };
+
+    mod_python = callPackage ../servers/http/apache-modules/mod_python { };
+
+    mod_wsgi = callPackage ../servers/http/apache-modules/mod_wsgi { };
+
+    php = pkgs.php.override { inherit apacheHttpd; };
+
+    subversion = pkgs.subversion.override { httpServer = true; inherit apacheHttpd; };
+  };
+
+  apacheHttpdPackages = apacheHttpdPackagesFor pkgs.apacheHttpd pkgs.apacheHttpdPackages;
+  apacheHttpdPackages_2_2 = apacheHttpdPackagesFor pkgs.apacheHttpd_2_2 pkgs.apacheHttpdPackages_2_2;
+  apacheHttpdPackages_2_4 = apacheHttpdPackagesFor pkgs.apacheHttpd_2_4 pkgs.apacheHttpdPackages_2_4;
+
   cassandra = callPackage ../servers/nosql/cassandra { };
 
   apache-jena = callPackage ../servers/nosql/apache-jena/binary.nix {
@@ -7487,15 +7509,12 @@ let
 
   memcached = callPackage ../servers/memcached {};
 
-  mod_dnssd = callPackage ../servers/http/apache-modules/mod_dnssd/default.nix { };
-
-  mod_evasive = callPackage ../servers/http/apache-modules/mod_evasive { };
-
-  mod_python = callPackage ../servers/http/apache-modules/mod_python { };
-
-  mod_fastcgi = callPackage ../servers/http/apache-modules/mod_fastcgi { };
-
-  mod_wsgi = callPackage ../servers/http/apache-modules/mod_wsgi { };
+  # Backwards compatibility.
+  mod_dnssd = pkgs.apacheHttpdPackages.mod_dnssd;
+  mod_evasive = pkgs.apacheHttpdPackages.mod_evasive;
+  mod_fastcgi = pkgs.apacheHttpdPackages.mod_fastcgi;
+  mod_python = pkgs.apacheHttpdPackages.mod_python;
+  mod_wsgi = pkgs.apacheHttpdPackages.mod_wsgi;
 
   mpd = callPackage ../servers/mpd {
     aacSupport    = config.mpd.aacSupport or true;
@@ -10591,7 +10610,6 @@ let
     perlBindings = false;
     javahlBindings = false;
     saslSupport = false;
-    httpd = apacheHttpd;
     sasl = cyrus_sasl;
   };
 
