@@ -6690,6 +6690,38 @@ let
   };
 
 
+  pycdio = buildPythonPackage rec {
+    name = "pycdio-0.20";
+    disabled = !isPy27;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pycdio/${name}.tar.gz";
+      sha256 = "1mrh233pj584gf7la64d4xlmvdnfl4jwpxs95lnd3i4zd5drid14";
+    };
+
+    buildInputs = [
+      self.setuptools self.nose pkgs.pkgconfig pkgs.swig pkgs.libcdio
+    ];
+
+    patches = [ ../development/python-modules/pycdio/add-cdtext-toc.patch ];
+
+    # Run tests using nosetests but first need to install the binaries
+    # to the root source directory where they can be found.
+    checkPhase = ''
+      ./setup.py install_lib -d .
+      nosetests
+    '';
+
+    meta = with stdenv.lib; {
+      homepage = http://www.gnu.org/software/libcdio/;
+      description = "Wrapper around libcdio (CD Input and Control library)";
+      maintainers = with maintainers; [ rycee ];
+      license = licenses.gpl3Plus;
+    };
+
+  };
+
+
   pycryptopp = buildPythonPackage (rec {
     name = "pycryptopp-0.6.0.1206569328141510525648634803928199668821045408958";
     disabled = isPy3k || isPyPy;  # see https://bitbucket.org/pypy/pypy/issue/1190/
