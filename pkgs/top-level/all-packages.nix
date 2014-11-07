@@ -10570,7 +10570,7 @@ let
 
   smartdeblur = callPackage ../applications/graphics/smartdeblur { };
 
-  snapper = callPackage ../tools/misc/snapper { 
+  snapper = callPackage ../tools/misc/snapper {
     btrfsProgs = btrfsProgs-3_16;
   };
 
