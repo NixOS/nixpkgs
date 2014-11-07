@@ -14,6 +14,7 @@ in
     services.gitDaemon = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Enable Git daemon, which allows public hosting  of git repositories
@@ -28,6 +29,7 @@ in
       };
 
       basePath = mkOption {
+        type = types.str;
         default = "";
         example = "/srv/git/";
         description = ''
@@ -38,6 +40,7 @@ in
       };
 
       exportAll = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Publish all directories that look like Git repositories (have the objects
@@ -52,6 +55,7 @@ in
       };
 
       repositories = mkOption {
+        type = types.listOf types.str;
         default = [];
         example = [ "/srv/git" "/home/user/git/repo2" ];
         description = ''
@@ -64,17 +68,20 @@ in
       };
 
       listenAddress = mkOption {
+        type = types.str;
         default = "";
         example = "example.com";
         description = "Listen on a specific IP address or hostname.";
       };
 
       port = mkOption {
+        type = types.int;
         default = 9418;
         description = "Port to listen on.";
       };
 
       options = mkOption {
+        type = types.str;
         default = "";
         description = "Extra configuration options to be passed to Git daemon.";
       };
