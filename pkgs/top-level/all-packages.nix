@@ -1967,6 +1967,8 @@ let
 
   ossec = callPackage ../tools/security/ossec {};
 
+  ostree = callPackage ../tools/misc/ostree { };
+
   otpw = callPackage ../os-specific/linux/otpw { };
 
   p7zip = callPackage ../tools/archivers/p7zip { };
@@ -5792,6 +5794,8 @@ let
   libgpod = callPackage ../development/libraries/libgpod {
     inherit (pkgs.pythonPackages) mutagen;
   };
+
+  libgsystem = callPackage ../development/libraries/libgsystem { };
 
   libharu = callPackage ../development/libraries/libharu { };
 
