@@ -49,6 +49,14 @@ stdenv.mkDerivation rec {
     (mkEnable unicode     "widec"       null)
     (mkEnable true        "ext-colors"  null)
     (mkEnable true        "ext-mouse"   null)
+    ]
+  ++ stdenv.lib.optionals stdenv.isCygwin [
+    (mkEnable true        "sp-funcs"    null)
+    (mkEnable true        "term-driver" null)
+    (mkEnable true        "const"       null)
+    (mkEnable true        "reentrant"   null)
+    (mkEnable true        "colorfgbg"   null)
+    (mkEnable true        "tcap-names"   null)
   ];
 
   # PKG_CONFIG_LIBDIR is where the *.pc files will be installed. If this
@@ -60,6 +68,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export PKG_CONFIG_LIBDIR="$out/lib/pkgconfig"
     mkdir -p "$PKG_CONFIG_LIBDIR"
+  '' + lib.optionalString stdenv.isCygwin ''
+    sed-i -e 's,LIB_SUFFIX="t,LIB_SUFFIX=",' configure
   '';
 
   selfNativeBuildInput = true;
