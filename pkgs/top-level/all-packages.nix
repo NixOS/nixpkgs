@@ -4866,6 +4866,8 @@ let
   boost156 = callPackage ../development/libraries/boost/1.56.nix { };
   boost = boost156;
 
+  boost_process = callPackage ../development/libraries/boost-process { };
+
   botan = callPackage ../development/libraries/botan { };
   botanUnstable = callPackage ../development/libraries/botan/unstable.nix { };
 
