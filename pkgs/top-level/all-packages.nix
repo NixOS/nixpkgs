@@ -4884,6 +4884,8 @@ let
 
   capnproto = callPackage ../development/libraries/capnproto { };
 
+  ccnx = callPackage ../development/libraries/ccnx { };
+
   cimg = callPackage  ../development/libraries/cimg { };
 
   scmccid = callPackage ../development/libraries/scmccid { };
