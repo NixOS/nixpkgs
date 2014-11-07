@@ -1269,7 +1269,7 @@ let
 
   gnupg1orig = callPackage ../tools/security/gnupg/1.nix { };
 
-  gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { };
+  gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { gnupg = gnupg20; };
 
   # use config.packageOverrides if you prefer original gnupg1
   gnupg1 = gnupg1compat;
