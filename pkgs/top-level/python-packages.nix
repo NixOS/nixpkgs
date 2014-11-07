@@ -8490,13 +8490,14 @@ let
   };
 
   sympy = buildPythonPackage rec {
-    name = "sympy-0.7.4";
-    disabled = isPy34;  # some tests fail
+    name = "sympy-0.7.5";
 
     src = pkgs.fetchurl {
-      url    = "https://github.com/sympy/sympy/releases/download/${name}/${name}.tar.gz";
-      sha256 = "0h1b9mx0snyyybj1x1ga69qssgjzkkgx2rw6nddjhyz1fknf8ywh";
+      url    = "https://pypi.python.org/packages/source/s/sympy/${name}.tar.gz";
+      sha256 = "19nlsm6zyxd4d237sl39mhn0fm18sp23vnl7b7xnj4grp9471y9f";
     };
+
+    doCheck = false;
 
     preCheck = ''
       export LANG="en_US.UTF-8"
@@ -8506,7 +8507,7 @@ let
     meta = with stdenv.lib; {
       description = "A Python library for symbolic mathematics";
       homepage    = http://www.sympy.org/;
-      license     = "free";
+      license     = licenses.bsd3;
       maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;
     };
