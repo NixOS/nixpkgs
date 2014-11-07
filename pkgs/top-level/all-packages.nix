@@ -1827,6 +1827,10 @@ let
 
   pa_applet = callPackage ../tools/audio/pa-applet { };
 
+  pasystray = callPackage ../tools/audio/pasystray {
+    inherit (gnome3) gnome_icon_theme;
+  };
+
   pnmixer = callPackage ../tools/audio/pnmixer { };
 
   nifskope = callPackage ../tools/graphics/nifskope { };
