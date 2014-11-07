@@ -3118,7 +3118,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
         hyperlinkSource = false;
         configureFlags = super.configureFlags or "" +
           pkgs.lib.optionalString (pkgs.stdenv.lib.versionOlder "6.12" ghc.version) " --ghc-option=-rtsopts";
-      };
+      } // pkgs.stdenv.lib.optionalAttrs (pkgs.stdenv.lib.versionOlder "7.9" ghc.version) { noHaddock = true; };
     };
   };
 
