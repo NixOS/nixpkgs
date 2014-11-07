@@ -3261,7 +3261,7 @@ let
   ghc = recurseIntoAttrs (lib.mapAttrs' (name: value:
     lib.nameValuePair (builtins.substring (builtins.stringLength "packages_") (builtins.stringLength name) name) value.ghc
   ) (lib.filterAttrs (name: value:
-    builtins.substring 0 (builtins.stringLength "packages_") name == "packages_"
+    builtins.substring 0 (builtins.stringLength "packages_ghc") name == "packages_ghc"
   ) haskell));
 
   haskellPackages = haskellPackages_ghc783;
