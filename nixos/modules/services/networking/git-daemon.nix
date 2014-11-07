@@ -3,7 +3,6 @@ with lib;
 let
 
   cfg = config.services.gitDaemon;
-  gitUser = "git";
 
 in
 {
@@ -86,6 +85,18 @@ in
         description = "Extra configuration options to be passed to Git daemon.";
       };
 
+      user = mkOption {
+        type = types.str;
+        default = "git";
+        description = "User under which Git daemon would be running.";
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "git";
+        description = "Group under which Git daemon would be running.";
+      };
+
     };
   };
 
@@ -93,14 +104,14 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton
-      { name = gitUser;
+    users.extraUsers = if cfg.user != "git" then {} else singleton
+      { name = "git";
         uid = config.ids.uids.git;
         description = "Git daemon user";
       };
 
-    users.extraGroups = singleton
-      { name = gitUser;
+    users.extraGroups = if cfg.group != "git" then {} else singleton
+      { name = "git";
         gid = config.ids.gids.git;
       };
 
@@ -110,7 +121,7 @@ in
       exec = "${pkgs.git}/bin/git daemon --reuseaddr "
         + (optionalString (cfg.basePath != "") "--base-path=${cfg.basePath} ")
         + (optionalString (cfg.listenAddress != "") "--listen=${cfg.listenAddress} ")
-        + "--port=${toString cfg.port} --user=${gitUser} --group=${gitUser} ${cfg.options} "
+        + "--port=${toString cfg.port} --user=${cfg.user} --group=${cfg.group} ${cfg.options} "
         + "--verbose " + (optionalString cfg.exportAll "--export-all")  + concatStringsSep " " cfg.repositories;
     };
 
