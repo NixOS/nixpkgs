@@ -8494,7 +8494,7 @@ let
     disabled = isPy34;  # some tests fail
 
     src = pkgs.fetchurl {
-      url    = "https://github.com/sympy/sympy/releases/download/${name}/${name}.tar.gz";
+      url    = "https://pypi.python.org/packages/source/s/sympy/${name}.tar.gz";
       sha256 = "0h1b9mx0snyyybj1x1ga69qssgjzkkgx2rw6nddjhyz1fknf8ywh";
     };
 
@@ -8506,7 +8506,7 @@ let
     meta = with stdenv.lib; {
       description = "A Python library for symbolic mathematics";
       homepage    = http://www.sympy.org/;
-      license     = "free";
+      license     = licenses.bsd3;
       maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;
     };
