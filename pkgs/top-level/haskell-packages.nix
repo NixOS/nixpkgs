@@ -825,6 +825,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   fileLocation = callPackage ../development/libraries/haskell/file-location {};
 
+  fixedVector = callPackage ../development/libraries/haskell/fixed-vector {};
+
   fmlist = callPackage ../development/libraries/haskell/fmlist {};
 
   ftphs = callPackage ../development/libraries/haskell/ftphs {};
