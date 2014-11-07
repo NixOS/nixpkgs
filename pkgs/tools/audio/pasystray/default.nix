@@ -19,13 +19,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "PulseAudio system tray";
-
-    home = "https://github.com/christophgysin/pasystray";
-
+    homepage = "https://github.com/christophgysin/pasystray";
     license = licenses.lgpl21Plus;
-
     maintainers = [ maintainers.exlevan ];
-
     platfoms = platforms.linux;
   };
 }
