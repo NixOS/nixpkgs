@@ -17,7 +17,15 @@ stdenv.mkDerivation rec {
     automake --add-missing
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "PulseAudio system tray";
+
+    home = "https://github.com/christophgysin/pasystray";
+
+    license = licenses.lgpl21Plus;
+
+    maintainers = [ maintainers.exlevan ];
+
+    platfoms = platforms.linux;
   };
 }
