@@ -9945,8 +9945,9 @@ let
 
   links = callPackage ../applications/networking/browsers/links { };
 
-  ledger = callPackage ../applications/office/ledger/2.6.3.nix { };
-  ledger3 = callPackage ../applications/office/ledger/3.0.nix { };
+  ledger2 = callPackage ../applications/office/ledger/2.6.3.nix { };
+  ledger3 = callPackage ../applications/office/ledger { };
+  ledger = ledger3;
 
   lighttable = callPackage ../applications/editors/lighttable {};
 
