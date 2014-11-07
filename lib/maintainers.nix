@@ -57,6 +57,7 @@
   ellis = "Ellis Whitehead <nixos@ellisw.net>";
   emery = "Emery Hemingway <emery@vfemail.net>";
   ertes = "Ertugrul Söylemez <ertesx@gmx.de>";
+  exlevan = "Alexey Levan <exlevan@gmail.com>";
   falsifian = "James Cook <james.cook@utoronto.ca>";
   flosse = "Markus Kohlhase <mail@markus-kohlhase.de>";
   fpletz = "Franz Pletz <fpletz@fnordicwalking.de>";
