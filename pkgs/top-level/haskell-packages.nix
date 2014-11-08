@@ -2555,7 +2555,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   tostring = callPackage ../development/libraries/haskell/tostring {};
 
-  transformers_0_2_2_0 = callPackage ../development/libraries/haskell/transformers/0.2.2.0.nix {};
   transformers_0_3_0_0 = callPackage ../development/libraries/haskell/transformers/0.3.0.0.nix {};
   transformers_0_4_1_0 = callPackage ../development/libraries/haskell/transformers/0.4.1.0.nix {};
   transformers = null;          # core package since ghc >= 7.8.x
