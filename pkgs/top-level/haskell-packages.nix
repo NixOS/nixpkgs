@@ -725,9 +725,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   editDistance = callPackage ../development/libraries/haskell/edit-distance {};
 
-  editline_0_2_1_0 = callPackage ../development/libraries/haskell/editline/0.2.1.0.nix {};
-  editline_0_2_1_1 = callPackage ../development/libraries/haskell/editline/0.2.1.1.nix {};
-  editline = self.editline_0_2_1_1;
+  editline = callPackage ../development/libraries/haskell/editline {};
 
   ekg = callPackage ../development/libraries/haskell/ekg {};
   ekgCarbon = callPackage ../development/libraries/haskell/ekg-carbon {};
