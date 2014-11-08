@@ -1468,9 +1468,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   languageGlsl = callPackage ../development/libraries/haskell/language-glsl {};
 
-  languageJava_0_2_6 = callPackage ../development/libraries/haskell/language-java/0.2.6.nix {};
-  languageJava_0_2_7 = callPackage ../development/libraries/haskell/language-java/0.2.7.nix {};
-  languageJava = self.languageJava_0_2_7;
+  languageJava = callPackage ../development/libraries/haskell/language-java {};
 
   languageJavascript = callPackage ../development/libraries/haskell/language-javascript {};
 
