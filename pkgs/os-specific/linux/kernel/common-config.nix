@@ -246,6 +246,7 @@ with stdenv.lib;
   MTRR_SANITIZER y
   NET_FC y # Fibre Channel driver support
   PPP_MULTILINK y # PPP multilink support
+  PPP_FILTER y
   REGULATOR y # Voltage and Current Regulator Support
   ${optionalString (versionAtLeast version "3.6") ''
     RC_DEVICES? y # Enable IR devices
