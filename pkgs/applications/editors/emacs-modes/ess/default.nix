@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://ess.r-project.org/downloads/ess/${name}.tgz";
-    sha256 = "0mk8b5i5pxyqj2i5bn6kspxq4l4i9ql84wmxvvaax9jvfgzcml0y";
+    sha256 = "0wa507jfmq3k7x0vigd2yzb4j2190ix4wnnpv7ql4bjy0vfvmwdn";
   };
 
   buildInputs = [ emacs texinfo ];
