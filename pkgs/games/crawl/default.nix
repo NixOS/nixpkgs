@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       in a quest to rescue the mystifyingly fabulous Orb of Zot.
     '';
     platforms = platforms.linux;
-    license = with licenses; [ gpl2Plus bsd2 bsd3 mit zlib cc0 ];
-    maintainers = maintainers.abbradar;
+    license = with licenses; [ gpl2Plus bsd2 bsd3 mit licenses.zlib cc0 ];
+    maintainers = [ maintainers.abbradar ];
   };
 }
