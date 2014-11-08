@@ -1746,13 +1746,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   netwire = callPackage ../development/libraries/haskell/netwire {};
 
-  network_2_2_1_4 = callPackage ../development/libraries/haskell/network/2.2.1.4.nix {};
   network_2_2_1_7 = callPackage ../development/libraries/haskell/network/2.2.1.7.nix {};
-  network_2_3_0_2 = callPackage ../development/libraries/haskell/network/2.3.0.2.nix {};
-  network_2_3_0_5 = callPackage ../development/libraries/haskell/network/2.3.0.5.nix {};
   network_2_3_0_13 = callPackage ../development/libraries/haskell/network/2.3.0.13.nix {};
-  network_2_3_1_0 = callPackage ../development/libraries/haskell/network/2.3.1.0.nix {};
-  network_2_4_1_2 = callPackage ../development/libraries/haskell/network/2.4.1.2.nix {};
   network_2_5_0_0 = callPackage ../development/libraries/haskell/network/2.5.0.0.nix {};
   network_2_6_0_2 = callPackage ../development/libraries/haskell/network/2.6.0.2.nix {};
   network = self.network_2_6_0_2;
