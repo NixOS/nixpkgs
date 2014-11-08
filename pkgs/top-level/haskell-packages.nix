@@ -2361,7 +2361,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   sourcemap = callPackage ../development/libraries/haskell/sourcemap {};
 
   split_0_1_4_3 = callPackage ../development/libraries/haskell/split/0.1.4.3.nix {};
-  split_0_2_1_1 = callPackage ../development/libraries/haskell/split/0.2.1.1.nix {};
   split_0_2_2 = callPackage ../development/libraries/haskell/split/0.2.2.nix {};
   split = self.split_0_2_2;
 
