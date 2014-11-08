@@ -80,6 +80,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace config/gitlab.yml --replace "# user: git" "user: gitlab"
     substituteInPlace config/gitlab.yml --replace "bin_path: /usr/bin/git" "bin_path: ${git}/bin/git"
     substituteInPlace config/gitlab.yml --replace "host: localhost" "host: <%= ENV['GITLAB_HOST'] %>"
+    substituteInPlace config/gitlab.yml --replace "path: \"tmp/backups\"" "path: <%= ENV['GITLAB_BACKUP_PATH'] %>"
   '';
 
   meta = with stdenv.lib; {

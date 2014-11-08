@@ -57,6 +57,7 @@ let
           --set GITLAB_SHELL_CONFIG_PATH "${cfg.stateDir}/shell/config.yml"\
           --set GITLAB_SHELL_SECRET_PATH "${cfg.stateDir}/config/gitlab_shell_secret"\
           --set GITLAB_HOST "${cfg.host}"\
+          --set GITLAB_BACKUP_PATH"${cfg.backupPath}"\
           --set RAILS_ENV "production"
     '';
   };
@@ -83,6 +84,12 @@ in {
         type = types.str;
         default = "/var/gitlab/state";
         description = "The state directory, logs are stored here.";
+      };
+
+      backupPath = mkOption {
+        type = types.str;
+        default = cfg.stateDir + "/backup";
+        description = "Path for backups.";
       };
 
       databaseHost = mkOption {
