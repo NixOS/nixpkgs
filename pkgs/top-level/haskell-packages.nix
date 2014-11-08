@@ -2200,9 +2200,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   shellmate = callPackage ../development/libraries/haskell/shellmate {};
 
-  shelly_0_15_4_1 = callPackage ../development/libraries/haskell/shelly/0.15.4.1.nix {};
-  shelly_1_5_3_1 = callPackage ../development/libraries/haskell/shelly {};
-  shelly = self.shelly_1_5_3_1;
+  shelly = callPackage ../development/libraries/haskell/shelly {};
 
   shell-conduit = callPackage ../development/libraries/haskell/shell-conduit {};
 
