@@ -1129,17 +1129,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   HTF = callPackage ../development/libraries/haskell/HTF {};
 
-  HTTP_4000_0_6 = callPackage ../development/libraries/haskell/HTTP/4000.0.6.nix {};
-  HTTP_4000_0_9 = callPackage ../development/libraries/haskell/HTTP/4000.0.9.nix {};
-  HTTP_4000_1_1 = callPackage ../development/libraries/haskell/HTTP/4000.1.1.nix {};
-  HTTP_4000_1_2 = callPackage ../development/libraries/haskell/HTTP/4000.1.2.nix {};
-  HTTP_4000_2_1 = callPackage ../development/libraries/haskell/HTTP/4000.2.1.nix {};
-  HTTP_4000_2_2 = callPackage ../development/libraries/haskell/HTTP/4000.2.2.nix {};
-  HTTP_4000_2_3 = callPackage ../development/libraries/haskell/HTTP/4000.2.3.nix {};
-  HTTP_4000_2_5 = callPackage ../development/libraries/haskell/HTTP/4000.2.5.nix {};
-  HTTP_4000_2_8 = callPackage ../development/libraries/haskell/HTTP/4000.2.8.nix {};
-  HTTP_4000_2_18 = callPackage ../development/libraries/haskell/HTTP/4000.2.18.nix {};
-  HTTP = self.HTTP_4000_2_18;
+  HTTP = callPackage ../development/libraries/haskell/HTTP {};
 
   httpAttoparsec = callPackage ../development/libraries/haskell/http-attoparsec {};
 
