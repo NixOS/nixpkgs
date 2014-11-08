@@ -2368,11 +2368,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   stbImage = callPackage ../development/libraries/haskell/stb-image {};
 
-  stm_2_1_1_2 = callPackage ../development/libraries/haskell/stm/2.1.1.2.nix {};
-  stm_2_1_2_1 = callPackage ../development/libraries/haskell/stm/2.1.2.1.nix {};
-  stm_2_2_0_1 = callPackage ../development/libraries/haskell/stm/2.2.0.1.nix {};
-  stm_2_3 = callPackage ../development/libraries/haskell/stm/2.3.nix {};
-  stm_2_4 = callPackage ../development/libraries/haskell/stm/2.4.nix {};
   stm_2_4_2 = callPackage ../development/libraries/haskell/stm/2.4.2.nix {};
   stm_2_4_3 = callPackage ../development/libraries/haskell/stm/2.4.3.nix {};
   stm = self.stm_2_4_3;
