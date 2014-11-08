@@ -694,6 +694,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   distributedProcess = callPackage ../development/libraries/haskell/distributed-process {};
 
+  distributedProcessPlatform = callPackage ../development/libraries/haskell/distributed-process-platform {};
+
   distributive = callPackage ../development/libraries/haskell/distributive {};
 
   djinn = callPackage ../development/libraries/haskell/djinn {};
@@ -2226,6 +2228,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   regular = callPackage ../development/libraries/haskell/regular {};
 
   regularXmlpickler = callPackage ../development/libraries/haskell/regular-xmlpickler {};
+
+  rematch = callPackage ../development/libraries/haskell/rematch {};
 
   remote = callPackage ../development/libraries/haskell/remote {};
 
