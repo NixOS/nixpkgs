@@ -1604,6 +1604,8 @@ let
 
   libtorrent-git = callPackage ../tools/networking/p2p/libtorrent/git.nix { };
 
+  libiberty = callPackage ../development/libraries/libiberty { };
+
   libibverbs = callPackage ../development/libraries/libibverbs { };
 
   librdmacm = callPackage ../development/libraries/librdmacm { };
@@ -5009,6 +5011,8 @@ let
 
   dhex = callPackage ../applications/editors/dhex { };
 
+  double_conversion = callPackage ../development/libraries/double-conversion { };
+
   dclib = callPackage ../development/libraries/dclib { };
 
   dillo = callPackage ../applications/networking/browsers/dillo {
@@ -5118,6 +5122,8 @@ let
   cfitsio = callPackage ../development/libraries/cfitsio { };
 
   fontconfig = callPackage ../development/libraries/fontconfig { };
+
+  folly = callPackage ../development/libraries/folly { };
 
   makeFontsConf = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
     import ../development/libraries/fontconfig/make-fonts-conf.nix {
