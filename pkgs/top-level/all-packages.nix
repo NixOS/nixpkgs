@@ -6000,6 +6000,10 @@ let
 
   libnetfilter_conntrack = callPackage ../development/libraries/libnetfilter_conntrack { };
 
+  libnetfilter_cthelper = callPackage ../development/libraries/libnetfilter_cthelper { };
+
+  libnetfilter_cttimeout = callPackage ../development/libraries/libnetfilter_cttimeout { };
+
   libnetfilter_queue = callPackage ../development/libraries/libnetfilter_queue { };
 
   libnfnetlink = callPackage ../development/libraries/libnfnetlink { };
@@ -7887,6 +7891,8 @@ let
     weatherMetar = config.conky.weatherMetar or false;
     weatherXoap  = config.conky.weatherXoap  or false;
   };
+
+  conntrack_tools = callPackage ../os-specific/linux/conntrack-tools { };
 
   cpufrequtils = callPackage ../os-specific/linux/cpufrequtils { };
 
