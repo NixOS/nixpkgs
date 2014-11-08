@@ -766,9 +766,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   equationalReasoning = callPackage ../development/libraries/haskell/equational-reasoning {};
 
-  equivalence_0_2_3 = callPackage ../development/libraries/haskell/equivalence/0.2.3.nix {};
-  equivalence_0_2_5 = callPackage ../development/libraries/haskell/equivalence/0.2.5.nix {};
-  equivalence = self.equivalence_0_2_5;
+  equivalence = callPackage ../development/libraries/haskell/equivalence {};
 
   erf = callPackage ../development/libraries/haskell/erf {};
 
