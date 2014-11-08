@@ -4127,8 +4127,6 @@ let
     inherit stdenv fetchurl lib;
   });
 
-  pythonLinkmeWrapper = callPackage ../development/interpreters/python/python-linkme-wrapper.nix { };
-
   pypi2nix = python27Packages.pypi2nix;
 
   svg2tikz = python27Packages.svg2tikz;
