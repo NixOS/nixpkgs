@@ -1805,10 +1805,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   OpenGL = callPackage ../development/libraries/haskell/OpenGL {};
 
-  OpenGLRaw_1_3_0_0 = callPackage ../development/libraries/haskell/OpenGLRaw/1.3.0.0.nix {};
-  OpenGLRaw_1_4_0_0 = callPackage ../development/libraries/haskell/OpenGLRaw/1.4.0.0.nix {};
-  OpenGLRaw_1_5_0_0 = callPackage ../development/libraries/haskell/OpenGLRaw/1.5.0.0.nix {};
-  OpenGLRaw = self.OpenGLRaw_1_5_0_0;
+  OpenGLRaw = callPackage ../development/libraries/haskell/OpenGLRaw {};
 
   opensslStreams = callPackage ../development/libraries/haskell/openssl-streams {};
 
