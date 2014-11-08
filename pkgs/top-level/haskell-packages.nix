@@ -2472,9 +2472,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   terminalSize = callPackage ../development/libraries/haskell/terminal-size {};
 
-  terminfo_0_3_2_6 = callPackage ../development/libraries/haskell/terminfo/0.3.2.6.nix { inherit (pkgs) ncurses; };
-  terminfo_0_4_0_0 = callPackage ../development/libraries/haskell/terminfo/0.4.0.0.nix { inherit (pkgs) ncurses; };
-  terminfo = self.terminfo_0_4_0_0;
+  terminfo = callPackage ../development/libraries/haskell/terminfo { inherit (pkgs) ncurses; };
 
   testFramework = callPackage ../development/libraries/haskell/test-framework {};
 
