@@ -1335,14 +1335,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   holyProject = callPackage ../development/libraries/haskell/holy-project {};
 
-  HUnit_1_2_0_3 = callPackage ../development/libraries/haskell/HUnit/1.2.0.3.nix {};
-  HUnit_1_2_2_1 = callPackage ../development/libraries/haskell/HUnit/1.2.2.1.nix {};
-  HUnit_1_2_2_3 = callPackage ../development/libraries/haskell/HUnit/1.2.2.3.nix {};
-  HUnit_1_2_4_2 = callPackage ../development/libraries/haskell/HUnit/1.2.4.2.nix {};
-  HUnit_1_2_4_3 = callPackage ../development/libraries/haskell/HUnit/1.2.4.3.nix {};
-  HUnit_1_2_5_1 = callPackage ../development/libraries/haskell/HUnit/1.2.5.1.nix {};
-  HUnit_1_2_5_2 = callPackage ../development/libraries/haskell/HUnit/1.2.5.2.nix {};
-  HUnit = self.HUnit_1_2_5_2;
+  HUnit = callPackage ../development/libraries/haskell/HUnit {};
 
   HUnitApprox = callPackage ../development/libraries/haskell/HUnit-approx {};
 
