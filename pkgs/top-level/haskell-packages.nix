@@ -848,11 +848,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   final = callPackage ../development/libraries/haskell/final {};
 
-  fgl_5_4_2_2 = callPackage ../development/libraries/haskell/fgl/5.4.2.2.nix {};
-  fgl_5_4_2_3 = callPackage ../development/libraries/haskell/fgl/5.4.2.3.nix {};
-  fgl_5_4_2_4 = callPackage ../development/libraries/haskell/fgl/5.4.2.4.nix {};
-  fgl_5_5_0_1 = callPackage ../development/libraries/haskell/fgl/5.5.0.1.nix {};
-  fgl = self.fgl_5_5_0_1;
+  fgl = callPackage ../development/libraries/haskell/fgl {};
 
   fglVisualize = callPackage ../development/libraries/haskell/fgl-visualize {};
 
