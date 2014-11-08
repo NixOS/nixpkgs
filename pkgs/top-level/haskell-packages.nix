@@ -3009,18 +3009,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   DrIFT = callPackage ../development/tools/haskell/DrIFT {};
 
-  haddock_2_4_2 = callPackage ../development/tools/documentation/haddock/2.4.2.nix { Cabal = null; };
-  haddock_2_7_2 = callPackage ../development/tools/documentation/haddock/2.7.2.nix { alex = self.alex_2_3_5; };
-  haddock_2_9_2 = callPackage ../development/tools/documentation/haddock/2.9.2.nix {};
-  haddock_2_9_4 = callPackage ../development/tools/documentation/haddock/2.9.4.nix {};
-  haddock_2_10_0 = callPackage ../development/tools/documentation/haddock/2.10.0.nix {};
-  haddock_2_11_0 = callPackage ../development/tools/documentation/haddock/2.11.0.nix {};
-  haddock_2_12_0 = callPackage ../development/tools/documentation/haddock/2.12.0.nix {};
-  haddock_2_13_2 = callPackage ../development/tools/documentation/haddock/2.13.2.nix {};
-  haddock_2_14_2 = callPackage ../development/tools/documentation/haddock/2.14.2.nix {};
-  haddock_2_14_3 = callPackage ../development/tools/documentation/haddock/2.14.3.nix {};
-  haddock_2_15_0 = callPackage ../development/tools/documentation/haddock/2.15.0.nix {};
-  haddock = self.haddock_2_15_0;
+  haddock = callPackage ../development/tools/documentation/haddock {};
 
   haddockApi = callPackage ../development/libraries/haskell/haddock-api {};
 
