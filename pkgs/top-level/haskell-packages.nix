@@ -2997,13 +2997,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   # Development tools.
 
-  alex_2_3_1 = callPackage ../development/tools/parsing/alex/2.3.1.nix {};
-  alex_2_3_2 = callPackage ../development/tools/parsing/alex/2.3.2.nix {};
-  alex_2_3_3 = callPackage ../development/tools/parsing/alex/2.3.3.nix {};
   alex_2_3_5 = callPackage ../development/tools/parsing/alex/2.3.5.nix {};
-  alex_3_0_1 = callPackage ../development/tools/parsing/alex/3.0.1.nix {};
-  alex_3_0_2 = callPackage ../development/tools/parsing/alex/3.0.2.nix {};
-  alex_3_0_5 = callPackage ../development/tools/parsing/alex/3.0.5.nix {};
   alex_3_1_3 = callPackage ../development/tools/parsing/alex/3.1.3.nix {};
   alex = self.alex_3_1_3;
 
