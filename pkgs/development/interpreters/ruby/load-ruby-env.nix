@@ -31,6 +31,7 @@
 let
   const = x: y: x;
 
+  fetchers.path = attrs: attrs.src.path;
   fetchers.gem = attrs: fetchurl {
     url = "${attrs.src.source or "https://rubygems.org"}/downloads/${attrs.name}-${attrs.version}.gem";
     inherit (attrs.src) sha256;
