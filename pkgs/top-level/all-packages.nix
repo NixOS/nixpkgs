@@ -7055,6 +7055,8 @@ let
 
   xmlsec = callPackage ../development/libraries/xmlsec { };
 
+  xlslib = callPackage ../development/libraries/xlslib { };
+
   xvidcore = callPackage ../development/libraries/xvidcore { };
 
   xylib = callPackage ../development/libraries/xylib { };
