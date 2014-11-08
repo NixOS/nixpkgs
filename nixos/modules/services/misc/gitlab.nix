@@ -36,6 +36,31 @@ let
 
   unicornConfig = builtins.readFile ./defaultUnicornConfig.rb;
 
+  gitlab-runner = pkgs.stdenv.mkDerivation rec {
+    name = "gitlab-runner";
+    buildInputs = [ pkgs.gitlab pkgs.rubyLibs.bundler pkgs.makeWrapper ];
+    phases = "installPhase fixupPhase";
+    buildPhase = "";
+    installPhase = ''
+      mkdir -p $out/bin
+      makeWrapper ${rubyLibs.bundler}/bin/bundle $out/bin/gitlab-runner\
+          --set RAKEOPT '"-f ${pkgs.gitlab}/share/gitlab/Rakefile"'\
+          --set UNICORN_PATH "${cfg.stateDir}/"\
+          --set GITLAB_PATH "${pkgs.gitlab}/share/gitlab/"\
+          --set GITLAB_APPLICATION_LOG_PATH "${cfg.stateDir}/log/application.log"\
+          --set GITLAB_SATELLITES_PATH "${cfg.stateDir}/satellites"\
+          --set GITLAB_SHELL_PATH "${pkgs.gitlab-shell}"\
+          --set GITLAB_REPOSITORIES_PATH "${cfg.stateDir}/repositories"\
+          --set GITLAB_SHELL_HOOKS_PATH "${cfg.stateDir}/shell/hooks"\
+          --set BUNDLE_GEMFILE "${pkgs.gitlab}/share/gitlab/Gemfile"\
+          --set GITLAB_EMAIL_FROM "${cfg.emailFrom}"\
+          --set GITLAB_SHELL_CONFIG_PATH "${cfg.stateDir}/shell/config.yml"\
+          --set GITLAB_SHELL_SECRET_PATH "${cfg.stateDir}/config/gitlab_shell_secret"\
+          --set GITLAB_HOST "${cfg.host}"\
+          --set RAILS_ENV "production"
+    '';
+  };
+
 in {
 
   options = {
@@ -99,6 +124,8 @@ in {
   };
 
   config = mkIf cfg.enable {
+
+    environment.systemPackages = [ gitlab-runner ];
 
     assertions = [
       { assertion = cfg.databasePassword != "";
