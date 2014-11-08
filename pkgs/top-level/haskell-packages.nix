@@ -2867,13 +2867,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   zippers = callPackage ../development/libraries/haskell/zippers {};
 
-  zlib_0_5_0_0 = callPackage ../development/libraries/haskell/zlib/0.5.0.0.nix { inherit (pkgs) zlib; };
-  zlib_0_5_2_0 = callPackage ../development/libraries/haskell/zlib/0.5.2.0.nix { inherit (pkgs) zlib; };
-  zlib_0_5_3_1 = callPackage ../development/libraries/haskell/zlib/0.5.3.1.nix { inherit (pkgs) zlib; };
-  zlib_0_5_3_3 = callPackage ../development/libraries/haskell/zlib/0.5.3.3.nix { inherit (pkgs) zlib; };
-  zlib_0_5_4_0 = callPackage ../development/libraries/haskell/zlib/0.5.4.0.nix { inherit (pkgs) zlib; };
-  zlib_0_5_4_1 = callPackage ../development/libraries/haskell/zlib/0.5.4.1.nix { inherit (pkgs) zlib;};
-  zlib = self.zlib_0_5_4_1;
+  zlib = callPackage ../development/libraries/haskell/zlib { inherit (pkgs) zlib;};
 
   zlibBindings = callPackage ../development/libraries/haskell/zlib-bindings {};
 
