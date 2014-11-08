@@ -113,8 +113,8 @@ stdenv.mkDerivation {
   '' + optionalString enableExtraFeatures ''
       `#$out/lib/libXvMC*` \
       $out/lib/gbm $out/lib/libgbm* \
-      $out/lib/gallium-pipe \
   '' + ''
+      $out/lib/gallium-pipe \
       $out/lib/libdricore* \
       $out/lib/libgallium* \
       $out/lib/vdpau \
@@ -134,8 +134,8 @@ stdenv.mkDerivation {
     sed "/^libdir=/s,$out,$drivers," -i \
   '' + optionalString enableExtraFeatures ''
       `#$drivers/lib/libXvMC*.la` \
-      $drivers/lib/gallium-pipe/*.la \
   '' + ''
+      $drivers/lib/gallium-pipe/*.la \
       $drivers/lib/libgallium.la \
       $drivers/lib/vdpau/*.la \
       $drivers/lib/libdricore*.la
