@@ -77,6 +77,7 @@ with stdenv.lib;
   IP_DCCP_CCID3 n # experimental
   CLS_U32_PERF y
   CLS_U32_MARK y
+  BPF_JIT y
 
   # Wireless networking.
   CFG80211_WEXT? y # Without it, ipw2200 drivers don't build
@@ -175,6 +176,12 @@ with stdenv.lib;
   CIFS_XATTR y
   CIFS_POSIX y
   CIFS_FSCACHE y
+  ${optionalString (versionAtLeast version "3.12") ''
+    CEPH_FSCACHE y
+  ''}
+  ${optionalString (versionAtLeast version "3.14") ''
+    CEPH_FS_POSIX_ACL y
+  ''}
 
   # Security related features.
   STRICT_DEVMEM y # Filter access to /dev/mem
@@ -308,6 +315,11 @@ with stdenv.lib;
   ${optionalString (!stdenv.is64bit) ''
     HIGHMEM64G? y # We need 64 GB (PAE) support for Xen guest support.
   ''}
+  INTEL_IOMMU_DEFAULT_ON y
+  ${optionalString (versionAtLeast version "3.9") ''
+    VFIO_PCI_VGA y
+  ''}
+  VIRT_DRIVERS y
 
   # Media support.
   ${optionalString (versionAtLeast version "3.6") ''
