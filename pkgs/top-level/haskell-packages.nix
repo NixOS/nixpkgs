@@ -2905,13 +2905,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   HandsomeSoup = callPackage ../development/libraries/haskell/HandsomeSoup {};
 
-  happy_1_18_4 = callPackage ../development/tools/parsing/happy/1.18.4.nix {};
-  happy_1_18_5 = callPackage ../development/tools/parsing/happy/1.18.5.nix {};
-  happy_1_18_6 = callPackage ../development/tools/parsing/happy/1.18.6.nix {};
-  happy_1_18_9 = callPackage ../development/tools/parsing/happy/1.18.9.nix {};
-  happy_1_18_10 = callPackage ../development/tools/parsing/happy/1.18.10.nix {};
-  happy_1_19_4 = callPackage ../development/tools/parsing/happy/1.19.4.nix {};
-  happy = self.happy_1_19_4;
+  happy = callPackage ../development/tools/parsing/happy {};
 
   happyMeta = callPackage ../development/tools/haskell/happy-meta {};
 
