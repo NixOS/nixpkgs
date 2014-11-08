@@ -63,10 +63,6 @@
 
   ghc742Prefs = self : super : ghc763Prefs self super // {
     aeson = self.aeson_0_7_0_4.override { blazeBuilder = self.blazeBuilder; };
-    cabalInstall_0_14_0 = super.cabalInstall_0_14_0.override {
-      HTTP = self.HTTP.override { network = self.network_2_3_0_13; };
-      network = self.network_2_3_0_13;
-    };
     extensibleExceptions = null;        # core package in ghc <= 7.4.x
     hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_16_0_3; };
     haskeline = super.haskeline.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
