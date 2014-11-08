@@ -194,7 +194,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               for i in Setup.hs Setup.lhs ${defaultSetupHs}; do
                 test -f $i && break
               done
-              ghc --make -o Setup -odir $TMPDIR $i
+              ghc --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
 
               for p in $extraBuildInputs $propagatedNativeBuildInputs; do
                 if [ -d "$p/lib/ghc-${ghc.ghc.version}/package.conf.d" ]; then
@@ -216,6 +216,9 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               ''}
               ${optionalString (self.enableSharedExecutables && self.stdenv.isDarwin) ''
                 configureFlags+=" --ghc-option=-optl=-Wl,-headerpad_max_install_names"
+              ''}
+              ${optionalString (versionOlder "7.8" ghc.version && !self.isLibrary) ''
+                configureFlags+=" --ghc-option=-j$NIX_BUILD_CORES"
               ''}
 
               ${optionalString self.stdenv.isDarwin ''

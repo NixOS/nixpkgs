@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yi-rope";
-  version = "0.6.0.0";
-  sha256 = "1r52mybqzy28zsv6r6a0cfmi8qaiscc91q2dhfq8rlp63l7ghq36";
+  version = "0.7.0.0";
+  sha256 = "123p0m31h8qa53jl2sd646s1hrs5qnb7y82y7bzgg2zny4qqw9a2";
   buildDepends = [
     binary charsetdetectAe dataDefault deepseq fingertree text textIcu
   ];

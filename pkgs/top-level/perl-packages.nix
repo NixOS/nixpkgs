@@ -6553,7 +6553,9 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ DataStreamBulk DateTimeFormatHTTP DigestHMAC DigestMD5File FileFindRule HTTPDate HTTPMessage LWPUserAgentDetermined MIMETypes Moose MooseXStrictConstructor MooseXTypesDateTimeMoreCoercions PathClass RegexpCommon TermEncoding TermProgressBarSimple URI XMLLibXML JSON ];
     # See https://github.com/pfig/net-amazon-s3/pull/25
     patches =
-      [ ../development/perl-modules/net-amazon-s3-credentials-provider.patch ];
+      [ ../development/perl-modules/net-amazon-s3-credentials-provider.patch
+        ../development/perl-modules/net-amazon-s3-moose-warning.patch
+      ];
     meta = {
       description = "Use the Amazon S3 - Simple Storage Service";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -7832,18 +7834,18 @@ let self = _self // overrides; _self = with self; {
   };
 
   Starman = buildPerlModule {
-    name = "Starman-0.4008";
+    name = "Starman-0.4010";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Starman-0.4008.tar.gz;
-      sha256 = "06fc3yp3nmi26d7lcfqanwwk5jxsmqmidyr8n2qfrsa0r7d07c88";
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Starman-0.4010.tar.gz;
+      sha256 = "abe8e2e0519b7326d64db1e93d9c32d853a7be083792d0d7e5f5a1ddf1472d42";
     };
-    buildInputs = [ ModuleBuildTiny TestRequires ];
+    buildInputs = [ LWP ModuleBuildTiny TestRequires ];
     propagatedBuildInputs = [ DataDump HTTPDate HTTPMessage HTTPParserXS NetServer Plack TestTCP ];
     doCheck = false; # binds to various TCP ports
     meta = {
       homepage = https://github.com/miyagawa/Starman;
       description = "High-performance preforking PSGI/Plack web server";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      license = "perl";
     };
   };
 
@@ -8520,6 +8522,31 @@ let self = _self // overrides; _self = with self; {
 
     # Tests don't work because they require /dev/tty.
     doCheck = false;
+  };
+
+  TermSizeAny = buildPerlPackage {
+    name = "Term-Size-Any-0.002";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/F/FE/FERREIRA/Term-Size-Any-0.002.tar.gz;
+      sha256 = "64fa5fdb1ae3a823134aaa95aec75354bc17bdd9ca12ba0a7ae34a7e51b3ded2";
+    };
+    propagatedBuildInputs = [ DevelHide TermSizePerl ];
+    meta = {
+      description = "Retrieve terminal size";
+      license = "perl";
+    };
+  };
+
+  TermSizePerl = buildPerlPackage {
+    name = "Term-Size-Perl-0.029";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/F/FE/FERREIRA/Term-Size-Perl-0.029.tar.gz;
+      sha256 = "8c1aaab73646ee1d233e827213ea3b5ab8afcf1d02a8f94be7aed306574875e7";
+    };
+    meta = {
+      description = "Perl extension for retrieving terminal size (Perl version)";
+      license = "perl";
+    };
   };
 
   TermVT102 = buildPerlPackage {

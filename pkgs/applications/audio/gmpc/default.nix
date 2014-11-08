@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libtool, intltool, pkgconfig, glib
 , gtk, curl, mpd_clientlib, libsoup, gob2, vala, libunique
-, libSM, libICE
+, libSM, libICE, sqlite
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libtool intltool pkgconfig glib gtk curl mpd_clientlib libsoup
-    libunique libmpd gob2 vala libSM libICE
+    libunique libmpd gob2 vala libSM libICE sqlite
   ];
 
   meta = with stdenv.lib; {

@@ -21,12 +21,12 @@ cabal.mkDerivation (self: {
     temporary testFramework testFrameworkHunit text
   ];
   doCheck = false;
+  patches = [ ./lens-4.5.patch ];
   meta = {
     homepage = "http://www.serpentine.com/wreq";
     description = "An easy-to-use HTTP client library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
-    broken = true;
   };
 })

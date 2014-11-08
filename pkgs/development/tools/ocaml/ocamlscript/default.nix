@@ -6,7 +6,7 @@ stdenv.mkDerivation {
     sha256 = "1v1i24gijxwris8w4hi95r9swld6dm7jbry0zp72767a3g5ivlrd";
   };
 
-  buildInputs = [ ocaml findlib camlp4 ];
+  propagatedBuildInputs = [ ocaml findlib camlp4 ];
 
   patches = [ ./Makefile.patch ];
 

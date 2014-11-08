@@ -6690,6 +6690,38 @@ let
   };
 
 
+  pycdio = buildPythonPackage rec {
+    name = "pycdio-0.20";
+    disabled = !isPy27;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pycdio/${name}.tar.gz";
+      sha256 = "1mrh233pj584gf7la64d4xlmvdnfl4jwpxs95lnd3i4zd5drid14";
+    };
+
+    buildInputs = [
+      self.setuptools self.nose pkgs.pkgconfig pkgs.swig pkgs.libcdio
+    ];
+
+    patches = [ ../development/python-modules/pycdio/add-cdtext-toc.patch ];
+
+    # Run tests using nosetests but first need to install the binaries
+    # to the root source directory where they can be found.
+    checkPhase = ''
+      ./setup.py install_lib -d .
+      nosetests
+    '';
+
+    meta = with stdenv.lib; {
+      homepage = http://www.gnu.org/software/libcdio/;
+      description = "Wrapper around libcdio (CD Input and Control library)";
+      maintainers = with maintainers; [ rycee ];
+      license = licenses.gpl3Plus;
+    };
+
+  };
+
+
   pycryptopp = buildPythonPackage (rec {
     name = "pycryptopp-0.6.0.1206569328141510525648634803928199668821045408958";
     disabled = isPy3k || isPyPy;  # see https://bitbucket.org/pypy/pypy/issue/1190/
@@ -8494,7 +8526,7 @@ let
     disabled = isPy34;  # some tests fail
 
     src = pkgs.fetchurl {
-      url    = "https://github.com/sympy/sympy/releases/download/${name}/${name}.tar.gz";
+      url    = "https://pypi.python.org/packages/source/s/sympy/${name}.tar.gz";
       sha256 = "0h1b9mx0snyyybj1x1ga69qssgjzkkgx2rw6nddjhyz1fknf8ywh";
     };
 
@@ -8506,7 +8538,7 @@ let
     meta = with stdenv.lib; {
       description = "A Python library for symbolic mathematics";
       homepage    = http://www.sympy.org/;
-      license     = "free";
+      license     = licenses.bsd3;
       maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;
     };
@@ -8840,11 +8872,11 @@ let
 
 
   sphinx = buildPythonPackage (rec {
-    name = "Sphinx-1.2";
+    name = "Sphinx-1.2.3";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/S/Sphinx/${name}.tar.gz";
-      md5 = "8516046aad73fe46dedece4e8e434328";
+      md5 = "a98c93124035b4cd7183604aec656cb3";
     };
 
     propagatedBuildInputs = with self; [docutils jinja2 pygments];

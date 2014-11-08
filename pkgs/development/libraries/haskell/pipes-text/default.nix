@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pipes-text";
-  version = "0.0.0.12";
-  sha256 = "18xf0rhshbl03js50n98k96692w98j0j0dfyi67780i08c39dq6m";
+  version = "0.0.0.13";
+  sha256 = "1sqwrs5y9s16zikwb5w21fvrqf06ld0915kc065ikdcrd6z4sk43";
   buildDepends = [
     pipes pipesBytestring pipesGroup pipesParse pipesSafe
     streamingCommons text transformers

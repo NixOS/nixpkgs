@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "shell-conduit";
-  version = "4.3";
-  sha256 = "1f82ncdsi4w63r48aj7679hii0hkd46drdz3bdgwxqx2yynjmlj8";
+  version = "4.4";
+  sha256 = "023cqmj5c45d65rcv07m2w1w2b5lhlfhzwv18fxxl3v8s6gr3wb8";
   buildDepends = [
     async conduit conduitExtra controlMonadLoop filepath monadControl
     monadsTf resourcet semigroups split text these transformers

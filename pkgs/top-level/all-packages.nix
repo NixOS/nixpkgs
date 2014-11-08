@@ -1263,14 +1263,22 @@ let
 
   gnupatch = callPackage ../tools/text/gnupatch { };
 
-  gnupg1orig = callPackage ../tools/security/gnupg1 { };
+  gnupg1orig = callPackage ../tools/security/gnupg/1.nix { };
 
-  gnupg1compat = callPackage ../tools/security/gnupg1compat { };
+  gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { gnupg = gnupg20; };
 
   # use config.packageOverrides if you prefer original gnupg1
   gnupg1 = gnupg1compat;
 
-  gnupg = callPackage ../tools/security/gnupg { libusb = libusb1; };
+  gnupg20 = callPackage ../tools/security/gnupg/20.nix {
+    libgcrypt = libgcrypt_1_6;
+  };
+
+  gnupg21 = callPackage ../tools/security/gnupg/21.nix {
+    libgcrypt = libgcrypt_1_6;
+  };
+
+  gnupg = gnupg21;
 
   gnuplot = callPackage ../tools/graphics/gnuplot { };
 
@@ -1542,6 +1550,8 @@ let
 
   mmv = callPackage ../tools/misc/mmv { };
 
+  morituri = callPackage ../applications/audio/morituri { };
+
   most = callPackage ../tools/misc/most { };
 
   multitail = callPackage ../tools/misc/multitail { };
@@ -1589,6 +1599,8 @@ let
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
   libtorrent-git = callPackage ../tools/networking/p2p/libtorrent/git.nix { };
+
+  libiberty = callPackage ../development/libraries/libiberty { };
 
   libibverbs = callPackage ../development/libraries/libibverbs { };
 
@@ -1815,6 +1827,10 @@ let
 
   pa_applet = callPackage ../tools/audio/pa-applet { };
 
+  pasystray = callPackage ../tools/audio/pasystray {
+    inherit (gnome3) gnome_icon_theme;
+  };
+
   pnmixer = callPackage ../tools/audio/pnmixer { };
 
   nifskope = callPackage ../tools/graphics/nifskope { };
@@ -1958,6 +1974,8 @@ let
   oslrd = callPackage ../tools/networking/oslrd { };
 
   ossec = callPackage ../tools/security/ossec {};
+
+  ostree = callPackage ../tools/misc/ostree { };
 
   otpw = callPackage ../os-specific/linux/otpw { };
 
@@ -2568,6 +2586,8 @@ let
   welkin = callPackage ../tools/graphics/welkin {};
 
   testdisk = callPackage ../tools/misc/testdisk { };
+
+  html2text = callPackage ../tools/text/html2text { };
 
   htmlTidy = callPackage ../tools/text/html-tidy { };
 
@@ -3425,9 +3445,7 @@ let
   };
   julia = julia031;
 
-  lazarus = builderDefsPackage (import ../development/compilers/fpc/lazarus.nix) {
-    inherit makeWrapper gtk glib pango atk gdk_pixbuf;
-    inherit (xlibs) libXi inputproto libX11 xproto libXext xextproto;
+  lazarus = callPackage ../development/compilers/fpc/lazarus.nix {
     fpc = fpc;
   };
 
@@ -4823,6 +4841,8 @@ let
   boost156 = callPackage ../development/libraries/boost/1.56.nix { };
   boost = boost156;
 
+  boost_process = callPackage ../development/libraries/boost-process { };
+
   botan = callPackage ../development/libraries/botan { };
   botanUnstable = callPackage ../development/libraries/botan/unstable.nix { };
 
@@ -4840,6 +4860,8 @@ let
   caelum = callPackage ../development/libraries/caelum { };
 
   capnproto = callPackage ../development/libraries/capnproto { };
+
+  ccnx = callPackage ../development/libraries/ccnx { };
 
   cimg = callPackage  ../development/libraries/cimg { };
 
@@ -4962,6 +4984,8 @@ let
 
   dhex = callPackage ../applications/editors/dhex { };
 
+  double_conversion = callPackage ../development/libraries/double-conversion { };
+
   dclib = callPackage ../development/libraries/dclib { };
 
   dillo = callPackage ../applications/networking/browsers/dillo {
@@ -5073,6 +5097,8 @@ let
   fontconfig_210 = callPackage ../development/libraries/fontconfig/2.10.nix { };
 
   fontconfig = callPackage ../development/libraries/fontconfig { };
+
+  folly = callPackage ../development/libraries/folly { };
 
   makeFontsConf = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
     import ../development/libraries/fontconfig/make-fonts-conf.nix {
@@ -5514,6 +5540,11 @@ let
 
   lcms2 = callPackage ../development/libraries/lcms2 { };
 
+  ldb = callPackage ../development/libraries/ldb {
+    sasl = cyrus_sasl;
+    libgcrypt = libgcrypt_1_6;
+  };
+
   lensfun = callPackage ../development/libraries/lensfun { };
 
   lesstif = callPackage ../development/libraries/lesstif { };
@@ -5604,6 +5635,8 @@ let
   libcredis = callPackage ../development/libraries/libcredis { };
 
   libctemplate = callPackage ../development/libraries/libctemplate { };
+
+  libcouchbase = callPackage ../development/libraries/libcouchbase { };
 
   libcue = callPackage ../development/libraries/libcue { };
 
@@ -5759,6 +5792,8 @@ let
   libgpod = callPackage ../development/libraries/libgpod {
     inherit (pkgs.pythonPackages) mutagen;
   };
+
+  libgsystem = callPackage ../development/libraries/libgsystem { };
 
   libharu = callPackage ../development/libraries/libharu { };
 
@@ -6157,6 +6192,8 @@ let
   libxkbcommon = callPackage ../development/libraries/libxkbcommon { };
 
   libxklavier = callPackage ../development/libraries/libxklavier { };
+
+  libxls = callPackage ../development/libraries/libxls { };
 
   libxmi = callPackage ../development/libraries/libxmi { };
 
@@ -6814,7 +6851,9 @@ let
 
   taglib_extras = callPackage ../development/libraries/taglib-extras { };
 
-  talloc = callPackage ../development/libraries/talloc { };
+  talloc = callPackage ../development/libraries/talloc {
+    libgcrypt = libgcrypt_1_6;
+  };
 
   tclap = callPackage ../development/libraries/tclap {};
 
@@ -6824,7 +6863,10 @@ let
 
   tcltls = callPackage ../development/libraries/tcltls { };
 
-  tdb = callPackage ../development/libraries/tdb { };
+  tdb = callPackage ../development/libraries/tdb {
+    sasl = cyrus_sasl;
+    libgcrypt = libgcrypt_1_6;
+  };
 
   tecla = callPackage ../development/libraries/tecla { };
 
@@ -6833,6 +6875,11 @@ let
   telepathy_farstream = callPackage ../development/libraries/telepathy/farstream {};
 
   telepathy_qt = callPackage ../development/libraries/telepathy/qt { };
+
+  tevent = callPackage ../development/libraries/tevent {
+    libgcrypt = libgcrypt_1_6;
+    sasl = cyrus_sasl;
+  };
 
   thrift = callPackage ../development/libraries/thrift { };
 
@@ -6997,6 +7044,8 @@ let
 
   xmlsec = callPackage ../development/libraries/xmlsec { };
 
+  xlslib = callPackage ../development/libraries/xlslib { };
+
   xvidcore = callPackage ../development/libraries/xvidcore { };
 
   xylib = callPackage ../development/libraries/xylib { };
@@ -7030,6 +7079,8 @@ let
   zeromq2 = callPackage ../development/libraries/zeromq/2.x.nix {};
   zeromq3 = callPackage ../development/libraries/zeromq/3.x.nix {};
   zeromq4 = callPackage ../development/libraries/zeromq/4.x.nix {};
+
+  cppzmq = callPackage ../development/libraries/cppzmq {};
 
   zziplib = callPackage ../development/libraries/zziplib { };
 
@@ -7321,7 +7372,7 @@ let
 
   rdf4store = callPackage ../servers/http/4store { };
 
-  apacheHttpd = pkgs.apacheHttpd_2_2;
+  apacheHttpd = pkgs.apacheHttpd_2_4;
 
   apacheHttpd_2_2 = callPackage ../servers/http/apache-httpd/2.2.nix {
     sslSupport = true;
@@ -7330,6 +7381,28 @@ let
   apacheHttpd_2_4 = lowPrio (callPackage ../servers/http/apache-httpd/2.4.nix {
     sslSupport = true;
   });
+
+  apacheHttpdPackagesFor = apacheHttpd: self: let callPackage = newScope self; in {
+    inherit apacheHttpd;
+
+    mod_dnssd = callPackage ../servers/http/apache-modules/mod_dnssd { };
+
+    mod_evasive = callPackage ../servers/http/apache-modules/mod_evasive { };
+
+    mod_fastcgi = callPackage ../servers/http/apache-modules/mod_fastcgi { };
+
+    mod_python = callPackage ../servers/http/apache-modules/mod_python { };
+
+    mod_wsgi = callPackage ../servers/http/apache-modules/mod_wsgi { };
+
+    php = pkgs.php.override { inherit apacheHttpd; };
+
+    subversion = pkgs.subversion.override { httpServer = true; inherit apacheHttpd; };
+  };
+
+  apacheHttpdPackages = apacheHttpdPackagesFor pkgs.apacheHttpd pkgs.apacheHttpdPackages;
+  apacheHttpdPackages_2_2 = apacheHttpdPackagesFor pkgs.apacheHttpd_2_2 pkgs.apacheHttpdPackages_2_2;
+  apacheHttpdPackages_2_4 = apacheHttpdPackagesFor pkgs.apacheHttpd_2_4 pkgs.apacheHttpdPackages_2_4;
 
   cassandra = callPackage ../servers/nosql/cassandra { };
 
@@ -7439,15 +7512,12 @@ let
 
   memcached = callPackage ../servers/memcached {};
 
-  mod_dnssd = callPackage ../servers/http/apache-modules/mod_dnssd/default.nix { };
-
-  mod_evasive = callPackage ../servers/http/apache-modules/mod_evasive { };
-
-  mod_python = callPackage ../servers/http/apache-modules/mod_python { };
-
-  mod_fastcgi = callPackage ../servers/http/apache-modules/mod_fastcgi { };
-
-  mod_wsgi = callPackage ../servers/http/apache-modules/mod_wsgi { };
+  # Backwards compatibility.
+  mod_dnssd = pkgs.apacheHttpdPackages.mod_dnssd;
+  mod_evasive = pkgs.apacheHttpdPackages.mod_evasive;
+  mod_fastcgi = pkgs.apacheHttpdPackages.mod_fastcgi;
+  mod_python = pkgs.apacheHttpdPackages.mod_python;
+  mod_wsgi = pkgs.apacheHttpdPackages.mod_wsgi;
 
   mpd = callPackage ../servers/mpd {
     aacSupport    = config.mpd.aacSupport or true;
@@ -8688,8 +8758,9 @@ let
 
   kochi-substitute-naga10 = callPackage ../data/fonts/kochi-substitute-naga10 {};
 
-  liberation_ttf = callPackage ../data/fonts/redhat-liberation-fonts { };
+  liberation_ttf_from_source = callPackage ../data/fonts/redhat-liberation-fonts { };
   liberation_ttf_binary = callPackage ../data/fonts/redhat-liberation-fonts/binary.nix { };
+  liberation_ttf = liberation_ttf_binary;
 
   libertine = builderDefsPackage (import ../data/fonts/libertine) {
     inherit fetchurl fontforge lib;
@@ -8744,6 +8815,8 @@ let
   r4rs = callPackage ../data/documentation/rnrs/r4rs.nix { };
 
   r5rs = callPackage ../data/documentation/rnrs/r5rs.nix { };
+
+  hasklig = callPackage ../data/fonts/hasklig {};
 
   source-code-pro = callPackage ../data/fonts/source-code-pro {};
 
@@ -9219,6 +9292,8 @@ let
     hol_light_mode = callPackage ../applications/editors/emacs-modes/hol_light { };
 
     htmlize = callPackage ../applications/editors/emacs-modes/htmlize { };
+
+    icicles = callPackage ../applications/editors/emacs-modes/icicles { };
 
     idris = callPackage ../applications/editors/emacs-modes/idris { };
 
@@ -9876,8 +9951,9 @@ let
 
   links = callPackage ../applications/networking/browsers/links { };
 
-  ledger = callPackage ../applications/office/ledger/2.6.3.nix { };
-  ledger3 = callPackage ../applications/office/ledger/3.0.nix { };
+  ledger2 = callPackage ../applications/office/ledger/2.6.3.nix { };
+  ledger3 = callPackage ../applications/office/ledger { };
+  ledger = ledger3;
 
   lighttable = callPackage ../applications/editors/lighttable {};
 
@@ -10286,6 +10362,8 @@ let
 
   pinfo = callPackage ../applications/misc/pinfo { };
 
+  pinpoint = callPackage ../applications/office/pinpoint {};
+
   pinta = callPackage ../applications/graphics/pinta {
     gtksharp = gtksharp2;
   };
@@ -10496,7 +10574,7 @@ let
 
   smartdeblur = callPackage ../applications/graphics/smartdeblur { };
 
-  snapper = callPackage ../tools/misc/snapper { 
+  snapper = callPackage ../tools/misc/snapper {
     btrfsProgs = btrfsProgs-3_16;
   };
 
@@ -10543,7 +10621,6 @@ let
     perlBindings = false;
     javahlBindings = false;
     saslSupport = false;
-    httpd = apacheHttpd;
     sasl = cyrus_sasl;
   };
 
@@ -11205,17 +11282,7 @@ let
     };
   };
 
-  dwarf_fortress_2014 = callPackage_i686 ../games/dwarf-fortress/df2014.nix {
-    SDL_image = pkgsi686Linux.SDL_image.override {
-      libpng = pkgsi686Linux.libpng12;
-    };
-  };
-
   dwarf_fortress_modable = appendToName "moddable" (dwarf_fortress.override {
-    copyDataDirectory = true;
-  });
-
-  dwarf_fortress_2014_modable = appendToName "moddable" (dwarf_fortress_2014.override {
     copyDataDirectory = true;
   });
 

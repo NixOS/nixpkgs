@@ -109,6 +109,9 @@ let
       "mpm_${mainCfg.multiProcessingModule}"
       "authz_core"
       "unixd"
+      "cache" "cache_disk"
+      "slotmem_shm"
+      "socache_shmcb"
     ]
     ++ (if mainCfg.multiProcessingModule == "prefork" then [ "cgi" ] else [ "cgid" ])
     ++ optional enableSSL "ssl"
@@ -160,9 +163,9 @@ let
 
 
   sslConf = ''
-    SSLSessionCache shm:${mainCfg.stateDir}/ssl_scache(512000)
+    SSLSessionCache ${if version24 then "shmcb" else "shm"}:${mainCfg.stateDir}/ssl_scache(512000)
 
-    SSLMutex posixsem
+    ${if version24 then "Mutex" else "SSLMutex"} posixsem
 
     SSLRandomSeed startup builtin
     SSLRandomSeed connect builtin
@@ -420,8 +423,7 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.apacheHttpd.override { mpm = mainCfg.multiProcessingModule; };
-        example = literalExample "pkgs.apacheHttpd_2_4";
+        default = pkgs.apacheHttpd;
         description = ''
           Overridable attribute of the Apache HTTP Server package to use.
         '';
@@ -593,11 +595,11 @@ in
   ###### implementation
 
   config = mkIf config.services.httpd.enable {
-  
+
     assertions = [ { assertion = mainCfg.enableSSL == true
                                -> mainCfg.sslServerCert != null
                                     && mainCfg.sslServerKey != null;
-                     message = "SSL is enabled for HTTPD, but sslServerCert and/or sslServerKey haven't been specified."; }
+                     message = "SSL is enabled for httpd, but sslServerCert and/or sslServerKey haven't been specified."; }
                  ];
 
     users.extraUsers = optionalAttrs (mainCfg.user == "wwwrun") (singleton

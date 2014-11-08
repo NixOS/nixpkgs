@@ -2,16 +2,18 @@
 , texinfo, gnused }:
 
 let
-  rev = "5961384";
+  version = "3.1";
 in
 
 stdenv.mkDerivation {
-  name = "ledger-3.0.4.${rev}";
+  name = "ledger-${version}";
 
+  # NOTE: fetchgit because ledger has submodules not included in the
+  # default github tarball.
   src = fetchgit {
-    url = "git://github.com/ledger/ledger.git";
-    inherit rev;
-    sha256 = "0fmmhr3as4v2kb6h64k1fq979080cqhd75jvxfg7axk2mylb6b3q";
+    url = "https://github.com/ledger/ledger.git";
+    rev = "refs/tags/v${version}";
+    sha256 = "1l5y4k830jyw7n1nnhssci3qahq091fj5cxcr77znk20nclz851s";
   };
 
   buildInputs = [ cmake boost gmp mpfr libedit python texinfo gnused ];

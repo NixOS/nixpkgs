@@ -1,0 +1,12 @@
+diff -Nurp morituri-0.2.3-orig/doc/Makefile.in morituri-0.2.3/doc/Makefile.in
+--- morituri-0.2.3-orig/doc/Makefile.in	2014-11-01 00:13:01.231364181 +0100
++++ morituri-0.2.3/doc/Makefile.in	2014-11-01 00:13:56.691812229 +0100
+@@ -486,7 +486,7 @@ morituri.ics: $(top_srcdir)/morituri.doa
+ 	-moap doap -f $(top_srcdir)/morituri.doap ical > morituri.ics
+ 
+ rip.1: $(top_srcdir)/morituri/extern/python-command/scripts/help2man $(top_srcdir)/morituri
+-	PYTHONPATH=$(top_srcdir) $(PYTHON) $(top_srcdir)/morituri/extern/python-command/scripts/help2man morituri.rip.main.Rip rip > rip.1
++	PYTHONPATH=$(top_srcdir):$(PYTHONPATH) $(PYTHON) $(top_srcdir)/morituri/extern/python-command/scripts/help2man morituri.rip.main.Rip rip > rip.1
+ 
+ clean-local:
+ 	@rm -rf reference
