@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, substituteAll, libXrender, libXinerama, libXcursor, libXmu, libXv, libXext
+{ stdenv, fetchurl, fetchpatch, substituteAll
+, libXrender, libXinerama, libXcursor, libXmu, libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
 , libmng, which, mesaSupported, mesa, mesa_glu, openssl, dbus, cups, pkgconfig
 , libtiff, glib, icu, mysql, postgresql, sqlite, perl, coreutils, libXi
@@ -64,7 +65,13 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional flashplayerFix (substituteAll {
         src = ./dlopen-webkit-nsplugin.diff;
         inherit gtk gdk_pixbuf;
-      });
+      })
+    ++ [(fetchpatch {
+        name = "fix-medium-font.patch";
+        url = "http://anonscm.debian.org/cgit/pkg-kde/qt/qt4-x11.git/plain/debian/patches/"
+          + "kubuntu_39_fix_medium_font.diff?id=21b342d71c19e6d68b649947f913410fe6129ea4";
+        sha256 = "0bli44chn03c2y70w1n8l7ss4ya0b40jqqav8yxrykayi01yf95j";
+      })];
 
   preConfigure = ''
     export LD_LIBRARY_PATH="`pwd`/lib:$LD_LIBRARY_PATH"
