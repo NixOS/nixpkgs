@@ -2787,11 +2787,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   xdot = callPackage ../development/libraries/haskell/xdot {};
 
-  xhtml_3000_2_0_1 = callPackage ../development/libraries/haskell/xhtml/3000.2.0.1.nix {};
-  xhtml_3000_2_0_4 = callPackage ../development/libraries/haskell/xhtml/3000.2.0.4.nix {};
-  xhtml_3000_2_0_5 = callPackage ../development/libraries/haskell/xhtml/3000.2.0.5.nix {};
-  xhtml_3000_2_1 = callPackage ../development/libraries/haskell/xhtml/3000.2.1.nix {};
-  xhtml = self.xhtml_3000_2_1;
+  xhtml = callPackage ../development/libraries/haskell/xhtml {};
 
   xml = callPackage ../development/libraries/haskell/xml {};
 
