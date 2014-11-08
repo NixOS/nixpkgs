@@ -986,24 +986,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   GLURaw_1_4_0_1 = callPackage ../development/libraries/haskell/GLURaw/1.4.0.1.nix {};
   GLURaw = self.GLURaw_1_4_0_1;
 
-  GLUT_2_1_1_2 = callPackage ../development/libraries/haskell/GLUT/2.1.1.2.nix {};
-  GLUT_2_1_2_1 = callPackage ../development/libraries/haskell/GLUT/2.1.2.1.nix {};
-  GLUT_2_1_2_2 = callPackage ../development/libraries/haskell/GLUT/2.1.2.2.nix {};
-  GLUT_2_2_2_1 = callPackage ../development/libraries/haskell/GLUT/2.2.2.1.nix {
-    OpenGL = self.OpenGL_2_6_0_1;
-  };
-  GLUT_2_3_1_0 = callPackage ../development/libraries/haskell/GLUT/2.3.1.0.nix {
-    OpenGLRaw = self.OpenGLRaw_1_3_0_0;
-    OpenGL = self.OpenGL_2_6_0_1.override { OpenGLRaw = self.OpenGLRaw_1_3_0_0; GLURaw = self.GLURaw_1_3_0_0; };
-  };
-  GLUT_2_4_0_0 = callPackage ../development/libraries/haskell/GLUT/2.4.0.0.nix {
-    OpenGLRaw = self.OpenGLRaw_1_3_0_0;
-    OpenGL = self.OpenGL_2_8_0_0.override { OpenGLRaw = self.OpenGLRaw_1_3_0_0; GLURaw = self.GLURaw_1_3_0_0; };
-  };
-  GLUT_2_5_1_1 = callPackage ../development/libraries/haskell/GLUT/2.5.1.1.nix {
-    OpenGL = self.OpenGL_2_9_2_0;
-  };
-  GLUT = self.GLUT_2_5_1_1;
+  GLUT = callPackage ../development/libraries/haskell/GLUT {};
 
   GLUtil = callPackage ../development/libraries/haskell/GLUtil {};
 
