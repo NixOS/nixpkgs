@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
   x11lib = x11env + "/lib";
   x11inc = x11env + "/include";
 
-  name = "ocaml-4.02.0";
+  name = "ocaml-4.02.1";
 
   src = fetchurl {
     url = "http://caml.inria.fr/pub/distrib/ocaml-4.02/${name}.tar.xz";
-    sha256 = "1ml5r8vzbwqhnq8jlps6jfgf0vym4nyrnr95mrbym6v5j2gabmw7";
+    sha256 = "1p7lqvh64xpykh99014mz21q8fs3qyjym2qazhhbq8scwldv1i38";
   };
 
   prefixKey = "-prefix ";

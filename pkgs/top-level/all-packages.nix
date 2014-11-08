@@ -3527,7 +3527,7 @@ let
 
   ocaml_4_01_0 = callPackage ../development/compilers/ocaml/4.01.0.nix { };
 
-  ocaml_4_02_0 = callPackage ../development/compilers/ocaml/4.02.0.nix { };
+  ocaml_4_02_1 = callPackage ../development/compilers/ocaml/4.02.1.nix { };
 
   orc = callPackage ../development/compilers/orc { };
 
@@ -3787,8 +3787,8 @@ let
   // { camlimages = ocamlPackages_3_12_1.camlimages_4_0; };
   ocamlPackages_4_00_1 = mkOcamlPackages ocaml_4_00_1 pkgs.ocamlPackages_4_00_1;
   ocamlPackages_4_01_0 = mkOcamlPackages ocaml_4_01_0 pkgs.ocamlPackages_4_01_0;
-  ocamlPackages_4_02_0 = mkOcamlPackages ocaml_4_02_0 pkgs.ocamlPackages_4_02_0;
-  ocamlPackages_latest = ocamlPackages_4_02_0;
+  ocamlPackages_4_02_1 = mkOcamlPackages ocaml_4_02_1 pkgs.ocamlPackages_4_02_1;
+  ocamlPackages_latest = ocamlPackages_4_02_1;
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
