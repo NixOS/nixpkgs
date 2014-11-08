@@ -9,11 +9,11 @@ stdenv.mkDerivation {
     sha256 = "1jyk7i8529821aassxbvzlxnvl5ly0na1qcn3v1jpxhdd0qqpg00";
   };
   buildInputs = [ openssl expat libpcap ];
-  preBuild = ''
+  preConfigure = ''
     mkdir -p $out/include
     mkdir -p $out/lib
     mkdir -p $out/bin
-    substituteInPlace csrc/configure --replace "/usr/local" $out
+    substituteInPlace csrc/configure --replace "/usr/local" $out --replace "/usr/bin/env sh" "/bin/sh"
   '';
   meta = with stdenv.lib; {
     homepage = "http://www.ccnx.org/";
