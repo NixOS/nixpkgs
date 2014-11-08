@@ -1847,12 +1847,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   parseargs = callPackage ../development/libraries/haskell/parseargs {};
 
-  parsec_2_1_0_1 = callPackage ../development/libraries/haskell/parsec/2.1.0.1.nix {};
-  parsec_3_1_1   = callPackage ../development/libraries/haskell/parsec/3.1.1.nix {};
-  parsec_3_1_2   = callPackage ../development/libraries/haskell/parsec/3.1.2.nix {};
-  parsec_3_1_3   = callPackage ../development/libraries/haskell/parsec/3.1.3.nix {};
-  parsec_3_1_7   = callPackage ../development/libraries/haskell/parsec/3.1.7.nix {};
-  parsec = self.parsec_3_1_7;
+  parsec = callPackage ../development/libraries/haskell/parsec {};
 
   parsers = callPackage ../development/libraries/haskell/parsers {};
 
