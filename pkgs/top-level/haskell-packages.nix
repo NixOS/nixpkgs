@@ -982,9 +982,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   glpkHs = callPackage ../development/libraries/haskell/glpk-hs {};
 
-  GLURaw_1_3_0_0 = callPackage ../development/libraries/haskell/GLURaw/1.3.0.0.nix { OpenGLRaw = self.OpenGLRaw_1_3_0_0; };
-  GLURaw_1_4_0_1 = callPackage ../development/libraries/haskell/GLURaw/1.4.0.1.nix {};
-  GLURaw = self.GLURaw_1_4_0_1;
+  GLURaw = callPackage ../development/libraries/haskell/GLURaw {};
 
   GLUT = callPackage ../development/libraries/haskell/GLUT {};
 
