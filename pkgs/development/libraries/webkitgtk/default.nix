@@ -41,5 +41,5 @@ stdenv.mkDerivation rec {
     libsoup gtk3
   ];
 
-  enableParallelBuilding = true;
+  # enableParallelBuilding = true; # build problems on Hydra
 }
