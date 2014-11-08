@@ -22,6 +22,13 @@ in stdenv.mkDerivation rec {
   # cmake is required by a build depdenceny, not the main binary:
   dontUseCmakeConfigure = true;
 
+  patches = [
+    ./remove-hardcoded-locations.patch
+  ];
+  postPatch = ''
+    mv config/gitlab.yml.example config/gitlab.yml
+  '';
+
   installPhase = ''
     mkdir -p $out/share/gitlab
     cp -R . $out/share/gitlab
@@ -63,24 +70,6 @@ in stdenv.mkDerivation rec {
 
     # Assets
     bundle exec rake assets:precompile RAILS_ENV=production
-  '';
-
-  # Log everything to STDOUT because otherwise the various rake-called
-  # modules attempt to create log directories in the ro filesystem.
-  postPatch = ''
-    substituteInPlace lib/gitlab/app_logger.rb --replace\
-        "'application.log'" "ENV[\"GITLAB_APPLICATION_LOG_PATH\"]"
-    mv config/gitlab.yml.example config/gitlab.yml
-    substituteInPlace config/gitlab.yml --replace "/home/git/gitlab-satellites/" "<%= ENV['GITLAB_SATELLITES_PATH'] %>"
-    substituteInPlace config/gitlab.yml --replace "/home/git/gitlab-shell/" "<%= ENV['GITLAB_SHELL_PATH'] %>"
-    substituteInPlace config/gitlab.yml --replace "/home/git/repositories/" "<%= ENV['GITLAB_REPOSITORIES_PATH'] %>"
-    substituteInPlace config/gitlab.yml --replace "/home/git/gitlab-shell/hooks/" "<%= ENV['GITLAB_SHELL_HOOKS_PATH'] %>"
-    substituteInPlace config/gitlab.yml --replace "example@example.com" "<%= ENV['GITLAB_EMAIL_FROM'] %>"
-    # NB careful with indendation when replacing: yml is whitespace-sensitive.
-    substituteInPlace config/gitlab.yml --replace "# user: git" "user: gitlab"
-    substituteInPlace config/gitlab.yml --replace "bin_path: /usr/bin/git" "bin_path: ${git}/bin/git"
-    substituteInPlace config/gitlab.yml --replace "host: localhost" "host: <%= ENV['GITLAB_HOST'] %>"
-    substituteInPlace config/gitlab.yml --replace "path: \"tmp/backups\"" "path: <%= ENV['GITLAB_BACKUP_PATH'] %>"
   '';
 
   meta = with stdenv.lib; {
