@@ -1521,9 +1521,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   liblastfm = callPackage ../development/libraries/haskell/liblastfm {};
 
-  libsystemdJournal = callPackage ../development/libraries/haskell/libsystemd-journal {
-    systemd-journal = pkgs.systemd;
-  };
+  libsystemdJournal = callPackage ../development/libraries/haskell/libsystemd-journal {};
 
   libxmlSax = callPackage ../development/libraries/haskell/libxml-sax {};
 
