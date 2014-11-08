@@ -7184,6 +7184,8 @@ let
 
   commonsLang = callPackage ../development/libraries/java/commons/lang { };
 
+  commonsLogging = callPackage ../development/libraries/java/commons/logging { };
+
   commonsIo = callPackage ../development/libraries/java/commons/io { };
 
   commonsMath = callPackage ../development/libraries/java/commons/math { };
