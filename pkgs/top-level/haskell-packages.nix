@@ -1319,8 +1319,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hsyslog = callPackage ../development/libraries/haskell/hsyslog {};
 
-  html_1_0_1_2 = callPackage ../development/libraries/haskell/html/1.0.1.2.nix {};
-  html = self.html_1_0_1_2;
+  html = callPackage ../development/libraries/haskell/html {};
 
   htmlConduit = callPackage ../development/libraries/haskell/html-conduit {};
 
