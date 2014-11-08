@@ -2075,11 +2075,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   regexBase = callPackage ../development/libraries/haskell/regex-base {};
 
-  regexCompat_0_71_0_1 = callPackage ../development/libraries/haskell/regex-compat/0.71.0.1.nix {};
-  regexCompat_0_92     = callPackage ../development/libraries/haskell/regex-compat/0.92.nix {};
-  regexCompat_0_93_1   = callPackage ../development/libraries/haskell/regex-compat/0.93.1.nix {};
-  regexCompat_0_95_1   = callPackage ../development/libraries/haskell/regex-compat/0.95.1.nix {};
-  regexCompat = self.regexCompat_0_95_1;
+  regexCompat = callPackage ../development/libraries/haskell/regex-compat {};
 
   regexCompatTdfa = callPackage ../development/libraries/haskell/regex-compat-tdfa {};
 
