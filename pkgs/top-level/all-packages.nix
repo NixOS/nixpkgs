@@ -5119,6 +5119,8 @@ let
 
   fontconfig = callPackage ../development/libraries/fontconfig { };
 
+  folly = callPackage ../development/libraries/folly { };
+
   makeFontsConf = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
     import ../development/libraries/fontconfig/make-fonts-conf.nix {
       inherit runCommand libxslt fontconfig fontDirectories;
