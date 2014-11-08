@@ -386,12 +386,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   certificate = callPackage ../development/libraries/haskell/certificate {};
 
-  cgi_3001_1_7_1 = callPackage ../development/libraries/haskell/cgi/3001.1.7.1.nix {};
-  cgi_3001_1_7_2 = callPackage ../development/libraries/haskell/cgi/3001.1.7.2.nix {};
-  cgi_3001_1_7_3 = callPackage ../development/libraries/haskell/cgi/3001.1.7.3.nix {};
-  cgi_3001_1_7_4 = callPackage ../development/libraries/haskell/cgi/3001.1.7.4.nix {};
   cgi_3001_1_7_5 = callPackage ../development/libraries/haskell/cgi/3001.1.7.5.nix {};
-  cgi_3001_1_8_5 = callPackage ../development/libraries/haskell/cgi/3001.1.8.5.nix {};
   cgi_3001_2_0_0 = callPackage ../development/libraries/haskell/cgi/3001.2.0.0.nix {};
   cgi = self.cgi_3001_2_0_0;
 
