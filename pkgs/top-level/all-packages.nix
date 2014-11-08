@@ -5109,6 +5109,8 @@ let
   fftwSinglePrec = fftw.override { precision = "single"; };
   fftwFloat = fftwSinglePrec; # the configure option is just an alias
 
+  fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
+
   flann = callPackage ../development/libraries/flann { };
 
   flite = callPackage ../development/libraries/flite { };
