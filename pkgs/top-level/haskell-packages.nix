@@ -189,7 +189,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   asn1Types = callPackage ../development/libraries/haskell/asn1-types {};
 
-  async_2_0_1_3 = callPackage ../development/libraries/haskell/async/2.0.1.3.nix {};
   async_2_0_1_4 = callPackage ../development/libraries/haskell/async/2.0.1.4.nix {};
   async_2_0_1_6 = callPackage ../development/libraries/haskell/async/2.0.1.6.nix {};
   async = self.async_2_0_1_6;
