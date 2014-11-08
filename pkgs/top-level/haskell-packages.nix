@@ -401,7 +401,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   ChartDiagrams = callPackage ../development/libraries/haskell/Chart-diagrams {};
   ChartGtk = callPackage ../development/libraries/haskell/Chart-gtk {};
 
-  ChasingBottoms = callPackage ../development/libraries/haskell/ChasingBottoms { QuickCheck = self.QuickCheck_2_6; };
+  ChasingBottoms = callPackage ../development/libraries/haskell/ChasingBottoms {};
 
   cheapskate = callPackage ../development/libraries/haskell/cheapskate {};
 
@@ -2012,17 +2012,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   pwstoreFast = callPackage ../development/libraries/haskell/pwstore-fast {};
 
-  QuickCheck_1_2_0_0 = callPackage ../development/libraries/haskell/QuickCheck/1.2.0.0.nix {};
-  QuickCheck_1_2_0_1 = callPackage ../development/libraries/haskell/QuickCheck/1.2.0.1.nix {};
-  QuickCheck_2_1_1_1 = callPackage ../development/libraries/haskell/QuickCheck/2.1.1.1.nix {};
-  QuickCheck_2_4_0_1 = callPackage ../development/libraries/haskell/QuickCheck/2.4.0.1.nix {};
-  QuickCheck_2_4_1_1 = callPackage ../development/libraries/haskell/QuickCheck/2.4.1.1.nix {};
-  QuickCheck_2_4_2 = callPackage ../development/libraries/haskell/QuickCheck/2.4.2.nix {};
-  QuickCheck_2_5_1_1 = callPackage ../development/libraries/haskell/QuickCheck/2.5.1.1.nix {};
-  QuickCheck_2_6 = callPackage ../development/libraries/haskell/QuickCheck/2.6.nix {};
-  QuickCheck_2_7_5 = callPackage ../development/libraries/haskell/QuickCheck/2.7.5.nix {};
-  QuickCheck_2_7_6 = callPackage ../development/libraries/haskell/QuickCheck/2.7.6.nix {};
-  QuickCheck = self.QuickCheck_2_7_6;
+  QuickCheck = callPackage ../development/libraries/haskell/QuickCheck {};
 
   quickcheckAssertions = callPackage ../development/libraries/haskell/quickcheck-assertions {};
 
