@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
   + ''
     ln -sv ${srcs.help} $sourceRoot/src/${srcs.help.name}
     tar xf $sourceRoot/src/${srcs.help.name} -C $sourceRoot/../
-    ln -sv ${srcs.translations} $sourceRoot/src/${srcs.translations.name}
+    ln -svf ${srcs.translations} $sourceRoot/src/${srcs.translations.name}
     tar xf $sourceRoot/src/${srcs.translations.name} -C $sourceRoot/../
   '';
 
