@@ -244,7 +244,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   bimap = callPackage ../development/libraries/haskell/bimap {};
 
-  binary_0_6_1_0 = callPackage ../development/libraries/haskell/binary/0.6.1.0.nix {};
   binary_0_7_2_2 = callPackage ../development/libraries/haskell/binary/0.7.2.2.nix {};
   binary = null;                # core package since ghc >= 7.2.x
 
