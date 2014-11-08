@@ -4,18 +4,8 @@
 }:
 
 let
-  version = "0.26.5"; # even major numbers are stable
-  sha256 = "1vni6kqpcx4jy9q8mhhxphfjych76xxmgs3jyg8yacbl6gxfazfy";
-
-  qtcairo_patches =
-    let qtcairo = fetchgit { # the version for poppler-0.24
-      url = "git://github.com/giddie/poppler-qt4-cairo-backend.git";
-      rev = "7b9e1ea763b579e635ee7614b10970b9635841cf";
-      sha256 = "0cdq0qw1sm6mxnrhmah4lfsd9wjlcdx86iyikwmjpwdmrkjk85r2";
-    }; in
-      [ "${qtcairo}/0001-Cairo-backend-added-to-Qt4-wrapper.patch"
-        "${qtcairo}/0002-Setting-default-Qt4-backend-to-Cairo.patch"
-        "${qtcairo}/0003-Forcing-subpixel-rendering-in-Cairo-backend.patch" ];
+  version = "0.28.1"; # even major numbers are stable
+  sha256 = "01pxjdbhvpxf00ncf8d9wxc8gkcqcxz59lwrpa151ah988inxkrc";
 
   poppler_drv = nameSuff: merge: stdenv.mkDerivation (stdenv.lib.mergeAttrsByFuncDefaultsClean [
   rec {
@@ -64,7 +54,6 @@ let
 
   poppler_qt4 = poppler_drv "qt4" {
     propagatedBuildInputs = [ qt4 poppler_glib ];
-    patches = qtcairo_patches;
     NIX_LDFLAGS = "-lpoppler";
     postConfigure = ''
       mkdir -p "$out/lib/pkgconfig"
