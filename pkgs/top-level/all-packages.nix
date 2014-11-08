@@ -668,7 +668,11 @@ let
     flex = flex_2_5_35;
   };
 
-  crawl = callPackage ../games/crawl { lua = lua5; };
+  crawlTiles = callPackage ../games/crawl { };
+
+  crawl = callPackage ../games/crawl {
+    tileMode = false;
+  };
 
   cv = callPackage ../tools/misc/cv { };
 
