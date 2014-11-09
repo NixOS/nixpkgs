@@ -110,7 +110,7 @@
   ./services/databases/monetdb.nix
   ./services/databases/mongodb.nix
   ./services/databases/mysql.nix
-  ./services/databases/neo4j.nix 
+  ./services/databases/neo4j.nix
   ./services/databases/openldap.nix
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
@@ -230,6 +230,7 @@
   ./services/networking/gvpe.nix
   ./services/networking/haproxy.nix
   ./services/networking/hostapd.nix
+  ./services/networking/i2pd.nix
   ./services/networking/ifplugd.nix
   ./services/networking/iodined.nix
   ./services/networking/ircd-hybrid/default.nix

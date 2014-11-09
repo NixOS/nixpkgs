@@ -1452,6 +1452,8 @@ let
 
   httptunnel = callPackage ../tools/networking/httptunnel { };
 
+  i2pd = callPackage ../tools/networking/i2pd {};
+
   iasl = callPackage ../development/compilers/iasl { };
 
   icecast = callPackage ../servers/icecast { };
