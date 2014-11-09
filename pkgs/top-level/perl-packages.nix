@@ -8305,6 +8305,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  SysVirt = buildPerlPackage rec {
+    name = "Sys-Virt-1.2.9";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DANBERR/${name}.tar.gz";
+      sha256 = "1ag55mlkbf63iq3q5mxdawf29c2nyphd52kbshnlim3lax247ml7";
+    };
+    propagatedBuildInputs = [XMLXPath];
+    buildInputs = [TestPodCoverage TimeHiRes TestPod pkgs.pkgconfig pkgs.libvirt];
+    meta = {
+      platforms = stdenv.lib.platforms.linux;
+    };
+  };
+
   TAPParserSourceHandlerpgTAP = buildPerlModule {
     name = "TAP-Parser-SourceHandler-pgTAP-3.30";
     src = fetchurl {
