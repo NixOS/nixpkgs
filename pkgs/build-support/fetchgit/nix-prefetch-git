@@ -83,6 +83,7 @@ init_remote(){
     local url=$1
     git init
     git remote add origin $url
+    [ -n "$http_proxy" ] && git config http.proxy $http_proxy || true
 }
 
 # Return the reference of an hash if it exists on the remote repository.
