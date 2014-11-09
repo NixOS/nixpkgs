@@ -4,7 +4,7 @@ let
   version = "2.0.0";
 in
 stdenv.mkDerivation {
-  name = "mozart-${version}";
+  name = "mozart-binary-${version}";
 
   src = fetchurl {
     url = "http://sourceforge.net/projects/mozart-oz/files/v${version}-alpha.0/mozart2-${version}-alpha.0+build.4105.5c06ced-x86_64-linux.tar.gz";

@@ -3508,7 +3508,8 @@ let
 
   monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
 
-  mozart = callPackage ../development/compilers/mozart { };
+  mozart-binary = callPackage ../development/compilers/mozart/binary.nix { };
+  mozart = mozart-binary;
 
   neko = callPackage ../development/compilers/neko { };
 
