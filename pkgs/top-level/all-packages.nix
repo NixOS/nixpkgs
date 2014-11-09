@@ -12217,7 +12217,7 @@ let
 
   tulip = callPackage ../applications/science/misc/tulip { };
 
-  vite = callPackage ../applications/science/misc/vite { };
+  vite = enableDebugging (callPackage ../applications/science/misc/vite { });
 
   xplanet = callPackage ../applications/science/astronomy/xplanet { };
 
