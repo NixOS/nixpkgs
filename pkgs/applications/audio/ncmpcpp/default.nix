@@ -1,16 +1,18 @@
 { stdenv, fetchurl, ncurses, curl, taglib, fftw, mpd_clientlib, pkgconfig
-, libiconvOrEmpty }:
+, libiconvOrEmpty, boost, readline }:
 
 stdenv.mkDerivation rec {
-  version = "0.5.10";
+  version = "0.6.1";
   name = "ncmpcpp-${version}";
 
   src = fetchurl {
     url = "http://ncmpcpp.rybczak.net/stable/ncmpcpp-${version}.tar.bz2";
-    sha256 = "ff6d5376a2d9caba6f5bb78e68af77cefbdb2f04cd256f738e39f8ac9a79a4a8";
+    sha256 = "033a18hj0q0smm5n0ykld9az7w95myr7jm2b1bjm0h2q5927x8qm";
   };
 
-  buildInputs = [ ncurses curl taglib fftw mpd_clientlib pkgconfig ]
+  configureFlags = "BOOST_LIB_SUFFIX=";
+
+  buildInputs = [ ncurses curl taglib fftw mpd_clientlib boost pkgconfig readline ]
     ++ libiconvOrEmpty;
 
   meta = with stdenv.lib; {
@@ -21,4 +23,3 @@ stdenv.mkDerivation rec {
     platforms   = platforms.all;
   };
 }
-
