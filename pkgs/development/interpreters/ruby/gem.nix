@@ -5,6 +5,7 @@ lib.makeOverridable (
 { name
 , ruby ? defs.ruby
 , rubygems ? (rubygemsFun ruby)
+, stdenv ? ruby.stdenv
 , namePrefix ? "${ruby.name}" + "-"
 , buildInputs ? []
 , doCheck ? false
@@ -13,7 +14,8 @@ lib.makeOverridable (
 , gemPath ? []
 , ...} @ attrs:
 
-ruby.stdenv.mkDerivation (attrs // {
+stdenv.mkDerivation (attrs // {
+  inherit ruby rubygems;
   inherit doCheck;
 
   buildInputs = [ rubygems makeWrapper git ] ++ buildInputs;
