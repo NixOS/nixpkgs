@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     "--with-systemduserunitdir=$(out)/etc/systemd/user"
     "--with-udevdir=$(out)/lib/udev"
     ] ++
-    stdenv.lib.optionalString enableWiimote ["--enable-wiimote"];
+    stdenv.lib.optional enableWiimote [ "--enable-wiimote" ];
 
   # Work around `make install' trying to create /var/lib/bluetooth.
   installFlags = "statedir=$(TMPDIR)/var/lib/bluetooth";
