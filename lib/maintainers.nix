@@ -139,6 +139,7 @@
   skeidel = "Sven Keidel <svenkeidel@gmail.com>";
   smironov = "Sergey Mironov <ierton@gmail.com>";
   sprock = "Roger Mason <rmason@mun.ca>";
+  sztupi = "Attila Sztupak <attila.sztupak@gmail.com>";
   tailhook = "Paul Colomiets <paul@colomiets.name>";
   thammers = "Tobias Hammerschmidt <jawr@gmx.de>";
   the-kenny = "Moritz Ulrich <moritz@tarn-vedra.de>";
