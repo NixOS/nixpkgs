@@ -1275,7 +1275,7 @@ let
 
   gnupg1orig = callPackage ../tools/security/gnupg/1.nix { };
 
-  gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { gnupg = gnupg20; };
+  gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { };
 
   # use config.packageOverrides if you prefer original gnupg1
   gnupg1 = gnupg1compat;
@@ -1288,7 +1288,7 @@ let
     libgcrypt = libgcrypt_1_6;
   };
 
-  gnupg = gnupg21;
+  gnupg = gnupg20;
 
   gnuplot = callPackage ../tools/graphics/gnuplot { };
 
