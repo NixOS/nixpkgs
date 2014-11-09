@@ -1,4 +1,4 @@
-{stdenv, fetchgit, ocaml, findlib, ocaml_oasis, ocaml_data_notation, ocaml_optcomp}:
+{stdenv, fetchgit, ocaml, findlib, ocaml_oasis, ocaml_data_notation, ocaml_optcomp, camlp4}:
 
 stdenv.mkDerivation {
   name = "ocsigen-deriving";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "2b3bf3f4972d0e6eaf075f7353ce482b776726e0cd04947a89b7156384ec0662";
     };
 
-  buildInputs = [ocaml findlib ocaml_oasis ocaml_data_notation ocaml_optcomp];
+  buildInputs = [ocaml findlib ocaml_oasis ocaml_data_notation ocaml_optcomp camlp4];
 
   configurePhase = ''
   make setup-dev.exe
