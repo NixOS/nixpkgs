@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, c-ares, pkgconfig, runCommand, which }:
+{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, c-ares
+, pkgconfig, runCommand, which, unstableVersion ? false 
+}:
 
 let
   dtrace = runCommand "dtrace-native" {} ''
@@ -6,19 +8,20 @@ let
     ln -sv /usr/sbin/dtrace $out/bin
   '';
 
-  version = "0.10.32";
+  version = if unstableVersion then "0.11.13" else "0.10.32";
 
   # !!! Should we also do shared libuv?
   deps = {
     inherit openssl zlib;
-    cares = c-ares;
 
     # disabled system v8 because v8 3.14 no longer receives security fixes
     # we fall back to nodejs' internal v8 copy which receives backports for now
     # inherit v8
-  } // stdenv.lib.optionalAttrs (!stdenv.isDarwin) {
+  } // (stdenv.lib.optionalAttrs (!stdenv.isDarwin) {
     inherit http-parser;
-  };
+  })
+  # Node 0.11 has patched c-ares, won't compile with system's version
+  // (if unstableVersion then {} else { cares = c-ares; });
 
   sharedConfigureFlags = name: [
     "--shared-${name}"
@@ -32,7 +35,9 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = "040g0gh2nl593ml1fcqp68vxa5kj7aiw1nqirda1c69d7l70s4n2";
+    sha256 = if unstableVersion
+             then "1642zj3sajhqflfhb8fsvy84w9mm85wagm8w8300gydd2q6fkmhm"
+             else "040g0gh2nl593ml1fcqp68vxa5kj7aiw1nqirda1c69d7l70s4n2";
   };
 
   configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps);
