@@ -1,5 +1,5 @@
 { stdenv, lib, go, fetchgit, fetchhg, fetchbzr, fetchFromGitHub
-, ruby, rubyLibs, nodejs }:
+, ruby, rubyPackages, nodejs }:
 
 let
   version = "0.4.0";
@@ -13,10 +13,10 @@ stdenv.mkDerivation {
     inherit stdenv lib fetchgit fetchhg fetchbzr fetchFromGitHub;
   };
 
-  buildInputs = [ go ruby rubyLibs.sass nodejs ];
+  buildInputs = [ go ruby rubyPackages.sass nodejs ];
 
   configurePhase = flip concatMapStrings
-    (with rubyLibs; [ execjs json minitest rake rdoc sass uglifier ])
+    (with rubyPackages; [ execjs json minitest rake rdoc sass uglifier ])
     (gem: ''
       export GEM_PATH="$GEM_PATH:${gem}/${ruby.gemPath}"
     '');

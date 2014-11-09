@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg, curl, libarchive, openssl, ruby, rubyLibs, libiconv
+{ stdenv, fetchurl, dpkg, curl, libarchive, openssl, ruby, rubyPackages, libiconv
 , libxml2, libxslt }:
 
 assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     ln -s ${ruby}/bin/erb opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/gem opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/irb opt/vagrant/embedded/bin
-    ln -s ${rubyLibs.rake}/bin/rake opt/vagrant/embedded/bin
+    ln -s ${rubyPackages.rake}/bin/rake opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/rdoc opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/ri opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/ruby opt/vagrant/embedded/bin

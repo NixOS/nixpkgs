@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ruby, rubyLibs, libiconv, libxslt, libxml2, pkgconfig, libffi, imagemagickBig, postgresql }:
+{ stdenv, fetchurl, ruby, rubyPackages, libiconv, libxslt, libxml2, pkgconfig, libffi, imagemagickBig, postgresql }:
 
 let
   gemspec = map (gem: fetchurl { url=gem.url; sha256=gem.hash; }) (import ./Gemfile.nix);
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    ruby rubyLibs.bundler libiconv libxslt libxml2 pkgconfig libffi
+    ruby rubyPackages.bundler libiconv libxslt libxml2 pkgconfig libffi
     imagemagickBig postgresql
   ];
 

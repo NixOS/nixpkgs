@@ -11495,7 +11495,7 @@ let
     propagatedBuildInputs = with self; [ dateutil ];
 
     preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
-      sed -i 's|^\([ ]*\)self.bin_path.*$|\1self.bin_path = "${pkgs.rubyLibs.terminal_notifier}/bin/terminal-notifier"|' build/lib/pync/TerminalNotifier.py
+      sed -i 's|^\([ ]*\)self.bin_path.*$|\1self.bin_path = "${pkgs.rubyPackages.terminal_notifier}/bin/terminal-notifier"|' build/lib/pync/TerminalNotifier.py
     '';
 
     meta = with stdenv.lib; {

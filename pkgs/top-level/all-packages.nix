@@ -654,7 +654,7 @@ let
   ccnet = callPackage ../tools/networking/ccnet { };
 
   consul = callPackage ../servers/consul {
-    inherit ruby rubyLibs;
+    inherit ruby rubyPackages;
   };
 
   consul_ui = consul.ui;
@@ -4049,6 +4049,8 @@ let
   ruby_1_9 = ruby_1_9_3;
   ruby_2_0 = ruby_2_0_0;
   ruby_2_1 = ruby_2_1_3;
+
+  rubyPackages = callPackage ../development/interpreters/ruby/packages.nix { };
 
   rubygemsFun = ruby: builderDefsPackage (import ../development/interpreters/ruby/rubygems.nix) {
     inherit ruby makeWrapper;
@@ -9968,7 +9970,7 @@ let
 
   ruby_gpgme = callPackage ../development/libraries/ruby_gpgme {
     ruby = ruby_1_9_3;
-    hoe = rubyLibs.hoe;
+    hoe = rubyPackages.hoe;
   };
 
   ruby_ncursesw_sup = callPackage ../development/libraries/ruby_ncursesw_sup { };
@@ -9979,7 +9981,7 @@ let
 
   smtube = callPackage ../applications/video/smtube {};
 
-  sup = with rubyLibs; callPackage ../applications/networking/mailreaders/sup {
+  sup = with rubyPackages; callPackage ../applications/networking/mailreaders/sup {
     ruby = ruby_1_9_3.override {
       cursesSupport = true;
     };
@@ -9992,7 +9994,7 @@ let
 
     # See https://github.com/NixOS/nixpkgs/issues/1804 and
     # https://github.com/NixOS/nixpkgs/issues/2146
-    bundler = pkgs.lib.overrideDerivation pkgs.rubyLibs.bundler (
+    bundler = pkgs.lib.overrideDerivation pkgs.rubyPackages.bundler (
       oldAttrs: {
         dontPatchShebangs = 1;
       }

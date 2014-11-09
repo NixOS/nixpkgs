@@ -1,9 +1,9 @@
-{ stdenv, rubygems, rubyLibs, ruby, makeWrapper }:
+{ stdenv, rubygems, rubyPackages, ruby, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "gem-nix";
 
-  buildInputs = [ ruby rubygems rubyLibs.nix makeWrapper ];
+  buildInputs = [ ruby rubygems rubyPackages.nix makeWrapper ];
 
   phases = ["installPhase"];
 
