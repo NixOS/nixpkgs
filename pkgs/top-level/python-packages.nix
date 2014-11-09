@@ -4655,12 +4655,35 @@ let
     };
   };
 
-  keyring = buildPythonPackage rec {
-    name = "keyring-3.2";
+
+  jrnl = buildPythonPackage rec {
+    name = "jrnl-1.9.7";
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
-      url    = "https://pypi.python.org/packages/source/k/keyring/${name}.zip";
-      sha256 = "1flccphpyrb8y8dra2fq2s2v3fg615d77kjjmzl0gmiidabkkdqf";
+      url = "https://pypi.python.org/packages/source/j/jrnl/${name}.tar.gz";
+      md5 = "395faff36de8a08a5bfeedbf123e9067";
+    };
+
+    propagatedBuildInputs = with self; [
+      pytz six tzlocal keyring modules.readline argparse dateutil_1_5
+      parsedatetime
+    ];
+
+    meta = with stdenv.lib; {
+      homepage = http://maebert.github.io/jrnl/;
+      description = "A simple command line journal application that stores your journal in a plain text file.";
+      license = licenses.mit;
+    };
+  };
+
+
+  keyring = buildPythonPackage rec {
+    name = "keyring-3.3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/k/keyring/${name}.zip";
+      md5 = "81291e0c7337affb71442e6c7671e77f";
     };
 
     buildInputs = with self;
@@ -6048,6 +6071,16 @@ let
       license = stdenv.lib.licenses.bsd3;
       maintainers = [ stdenv.lib.maintainers.raskin ];
       platforms = stdenv.lib.platforms.linux;
+    };
+  };
+
+  parsedatetime = buildPythonPackage rec {
+    name = "parsedatetime-${version}";
+    version = "1.4";
+
+    src = pkgs.fetchurl {
+        url = "https://pypi.python.org/packages/source/p/parsedatetime/${name}.tar.gz";
+        md5 = "3aca729761be5259a508ed184df73c68";
     };
   };
 
