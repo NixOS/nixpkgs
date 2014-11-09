@@ -606,7 +606,7 @@ let
     name = "babelfish-${version}";
     disabled = isPy3k;
 
-    src = fetchurl {
+    src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/babelfish/${name}.tar.gz";
       sha256 = "0wrw21dyq7v6lbffwvi1ik43d7dhmcv8xvgrrihhiv7ys1rd3gag";
     };
@@ -4279,7 +4279,7 @@ let
     name = "guessit-${version}";
     disabled = isPy3k;
 
-    src = fetchurl {
+    src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/g/guessit/${name}.tar.gz";
       sha256 = "16kbxdz5zm3mfn739ynis04zw76x2gn1lz5d7vcwh8hzaj16yyk6";
     };
