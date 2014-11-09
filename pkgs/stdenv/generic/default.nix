@@ -140,7 +140,10 @@ let
           # Pass through extra attributes that are not inputs, but
           # should be made available to Nix expressions using the
           # derivation (e.g., in assertions).
-          (attrs.passthru or {}));
+          (attrs.passthru or {}))
+	  # Make initial inputs available for debugging
+	  // { mkDerivationArguments = attrs; }
+	  ;
 
       # Utility flags to test the type of platform.
       isDarwin = system == "x86_64-darwin";
