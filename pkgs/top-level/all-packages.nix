@@ -4494,6 +4494,8 @@ let
 
   emma = callPackage ../development/tools/analysis/emma { };
 
+  eztrace = callPackage ../development/tools/profiling/EZTrace { };
+
   findbugs = callPackage ../development/tools/analysis/findbugs { };
 
   pmd = callPackage ../development/tools/analysis/pmd { };
