@@ -1,4 +1,4 @@
-{ stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, makeSetupHook
+{ stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames
 , toolset ? null
 , enableRelease ? true
 , enableDebug ? false
@@ -90,7 +90,7 @@ let
 
     # Create a derivation which encompasses everything, making buildInputs nicer
     mkdir -p $out/nix-support
-    echo "${stripHeaderPathHook} $dev $lib" > $out/nix-support/propagated-native-build-inputs
+    echo "$dev $lib" > $out/nix-support/propagated-native-build-inputs
   '';
 
   commonConfigureFlags = [
@@ -98,7 +98,13 @@ let
     "--libdir=$(lib)/lib"
   ];
 
-  stripHeaderPathHook = makeSetupHook { } ./strip-header-path.sh;
+  fixup = ''
+    # Make boost header paths relative so that they are not runtime dependencies
+    (
+      cd "$dev"
+      find include \( -name '*.hpp' -or -name '*.h' \) -exec sed '1i#line 1 "{}"' -i '{}' \;
+    )
+  '';
 
 in
 
@@ -144,6 +150,8 @@ stdenv.mkDerivation {
 
   installPhase = installer nativeB2Args;
 
+  postFixup = fixup;
+
   outputs = [ "out" "dev" "lib" ];
 
   crossAttrs = rec {
@@ -162,5 +170,6 @@ stdenv.mkDerivation {
     '';
     buildPhase = builder crossB2Args;
     installPhase = installer crossB2Args;
+    postFixup = fixup;
   };
 }
