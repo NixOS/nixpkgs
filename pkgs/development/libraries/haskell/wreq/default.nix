@@ -23,7 +23,7 @@ cabal.mkDerivation (self: {
   doCheck = false;
   patches = [ (fetchpatch {
     url = "https://github.com/relrod/wreq/commit/9a91d57b50a09646ecbda88d126918e49aeb2de4.diff";
-    sha256 = "143a4f661pigfqqkvhjzfmg24r4j595p1fcsiqiqc763pynccgq9";
+    sha256 = "09px4hbqkc9b0ykx7alzq2llzp0nxb2c5zsbaa05rcq9cb3nrq4m";
   })];
   meta = {
     homepage = "http://www.serpentine.com/wreq";
