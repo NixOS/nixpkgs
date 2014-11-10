@@ -8290,6 +8290,8 @@ let
 
     perf = callPackage ../os-specific/linux/kernel/perf.nix { };
 
+    prl-tools = callPackage ../os-specific/linux/prl-tools { };
+
     psmouse_alps = callPackage ../os-specific/linux/psmouse-alps { };
 
     seturgent = callPackage ../os-specific/linux/seturgent { };
