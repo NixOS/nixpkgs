@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   name = "retroarch-bare-${version}";
-  version = "20141009";
+  version = "20141109";
 
   src = fetchgit {
     url = git://github.com/libretro/RetroArch.git;
-    rev = "72f26dfb49f236294c52eb9cb4c9d5c15da4837a";
-    sha256 = "0dn9fh1frnbxykhw3q229ck50a800p8r4va8nssfcdxh8cys385w";
+    rev = "88b21b87e7554860f4b252bc59ac99fa4032393e";
+    sha256 = "0w2diklpv7wl6bmdw4msn90qn7f650q789crdawn63nbqg0rj8a2";
   };
 
   buildInputs = [ pkgconfig ffmpeg mesa nvidia_cg_toolkit freetype libxml2 libv4l coreutils
