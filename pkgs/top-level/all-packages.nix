@@ -4970,9 +4970,7 @@ let
 
   cminpack = callPackage ../development/libraries/cminpack { };
 
-  cogl = callPackage ../development/libraries/cogl { 
-    wayland = wayland_1_5;
-  };
+  cogl = callPackage ../development/libraries/cogl { };
 
   cogl_1_18 = callPackage ../development/libraries/cogl/1.18.nix {
     wayland = wayland_1_5;
