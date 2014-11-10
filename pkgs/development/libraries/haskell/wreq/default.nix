@@ -3,7 +3,7 @@
 { cabal, aeson, attoparsec, doctest, exceptions, filepath
 , httpClient, httpClientTls, httpTypes, HUnit, lens, lensAeson
 , mimeTypes, temporary, testFramework, testFrameworkHunit, text
-, time
+, time, fetchpatch
 }:
 
 cabal.mkDerivation (self: {
@@ -21,7 +21,10 @@ cabal.mkDerivation (self: {
     temporary testFramework testFrameworkHunit text
   ];
   doCheck = false;
-  patches = [ ./lens-4.5.patch ];
+  patches = [ (fetchpatch {
+    url = "https://github.com/relrod/wreq/commit/9a91d57b50a09646ecbda88d126918e49aeb2de4.diff";
+    sha256 = "143a4f661pigfqqkvhjzfmg24r4j595p1fcsiqiqc763pynccgq9";
+  })];
   meta = {
     homepage = "http://www.serpentine.com/wreq";
     description = "An easy-to-use HTTP client library";
