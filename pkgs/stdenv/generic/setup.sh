@@ -176,10 +176,11 @@ fi
 
 # Check that the pre-hook initialised SHELL.
 if [ -z "$SHELL" ]; then echo "SHELL not set"; exit 1; fi
+BASH="$SHELL"
+export CONFIG_SHELL="$SHELL"
 
 
 # Execute the pre-hook.
-export CONFIG_SHELL="$SHELL"
 if [ -z "$shell" ]; then export shell=$SHELL; fi
 
 
