@@ -4972,9 +4972,7 @@ let
 
   cogl = callPackage ../development/libraries/cogl { };
 
-  cogl_1_18 = callPackage ../development/libraries/cogl/1.18.nix {
-    wayland = wayland_1_5;
-  };
+  cogl_1_18 = callPackage ../development/libraries/cogl/1.18.nix { };
 
   coin3d = callPackage ../development/libraries/coin3d { };
 
@@ -7004,8 +7002,6 @@ let
   };
 
   wayland = callPackage ../development/libraries/wayland { };
-  
-  wayland_1_5 = callPackage ../development/libraries/wayland/1.5.nix { };
 
   webkit = webkitgtk;
 
