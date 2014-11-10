@@ -7997,6 +7997,8 @@ let
     then utillinux
     else null;
 
+  light = callPackage ../os-specific/linux/light { };
+
   e3cfsprogs = callPackage ../os-specific/linux/e3cfsprogs { };
 
   ebtables = callPackage ../os-specific/linux/ebtables { };

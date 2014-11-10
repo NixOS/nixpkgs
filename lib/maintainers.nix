@@ -116,6 +116,7 @@
   pkmx = "Chih-Mao Chen <pkmx.tw@gmail.com>";
   plcplc = "Philip Lykke Carlsen <plcplc@gmail.com>";
   pSub = "Pascal Wittmann <mail@pascal-wittmann.de>";
+  puffnfresh = "Brian McKenna <brian@brianmckenna.org>";
   qknight = "Joachim Schiele <js@lastlog.de>";
   raskin = "Michael Raskin <7c6f434c@mail.ru>";
   redbaron = "Maxim Ivanov <ivanov.maxim@gmail.com>";
