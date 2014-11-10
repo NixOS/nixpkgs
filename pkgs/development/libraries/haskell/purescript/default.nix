@@ -2,7 +2,7 @@
 
 { cabal, cmdtheline, fileEmbed, filepath, haskeline, monadUnify
 , mtl, parsec, patternArrows, time, transformers
-, unorderedContainers, utf8String
+, unorderedContainers, utf8String, nodejs
 }:
 
 cabal.mkDerivation (self: {
@@ -15,7 +15,7 @@ cabal.mkDerivation (self: {
     cmdtheline fileEmbed filepath haskeline monadUnify mtl parsec
     patternArrows time transformers unorderedContainers utf8String
   ];
-  testDepends = [ filepath mtl parsec transformers utf8String ];
+  testDepends = [ filepath mtl parsec transformers utf8String nodejs ];
   meta = {
     homepage = "http://www.purescript.org/";
     description = "PureScript Programming Language Compiler";
