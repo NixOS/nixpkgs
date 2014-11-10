@@ -13,10 +13,6 @@ stdenv.mkDerivation rec {
       url = "http://dl.google.com/android/ndk/${name}-linux-x86_64.bin";
       sha256 = "126rqzkmf8xz1hqdziwx81yln17hpivs2j45rxhzdr45iw9b758c";
     }
-    else if stdenv.system == "x86_64-linux" then fetchurl {
-      url = "http://dl.google.com/android/ndk/${name}-linux-x86_64.bin";
-      sha256 = "126rqzkmf8xz1hqdziwx81yln17hpivs2j45rxhzdr45iw9b758c";
-    }
     else throw "platform ${stdenv.system} not supported!";
 
   phases = "installPhase";
