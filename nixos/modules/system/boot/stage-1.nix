@@ -127,8 +127,8 @@ let
       cp -v ${udev}/lib/udev/rules.d/60-persistent-storage.rules $out/
       cp -v ${udev}/lib/udev/rules.d/80-drivers.rules $out/
       cp -v ${pkgs.lvm2}/lib/udev/rules.d/*.rules $out/
-      cp -v ${pkgs.mdadm}/lib/udev/rules.d/*.rules $out/
       cp -v ${pkgs.bcache-tools}/lib/udev/rules.d/*.rules $out/
+      ${config.boot.initrd.extraUdevRulesCommands}
 
       for i in $out/*.rules; do
           substituteInPlace $i \
@@ -299,6 +299,17 @@ in
         extra-utils derivation after patchelf has done its
         job.  This can be used to test additional utilities
         copied in extraUtilsCommands.
+      '';
+    };
+
+    boot.initrd.extraUdevRulesCommands = mkOption {
+      internal = true;
+      default = "";
+      type = types.lines;
+      description = ''
+        Shell commands to be executed in the builder of the
+        udev-rules derivation.  This can be used to add
+        additional udev rules in the initial ramdisk.
       '';
     };
 
