@@ -14,16 +14,7 @@ rec {
     inherit (pkgs) runCommand;
   };
 
-  patchSource = fn: srcAttrs:
-    let src = fn srcAttrs; in pkgs.runCommand src.name {} ''
-      mkdir unpack
-      cd unpack
-      unpackFile ${src}
-      chmod -R +w */
-      mv */ package 2>/dev/null || true
-      sed -i -e "s/:\s*\"latest\"/:  \"*\"/" -e "s/:\s\+\"[A-Za-z0-9_-]\+\/[A-Za-z0-9_-]\+\"/:  \"*\"/" -e "s/:\s*\"\(https\?\|git\(\+\(ssh\|http\|https\)\)\?\):\/\/[^\"]*\"/: \"*\"/" package/package.json
-      mv */ $out
-    '';
+  patchSource = fn: srcAttrs: fn srcAttrs;
 
   # Backwards compat
   patchLatest = patchSource fetchurl;
