@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   libPath = stdenv.lib.makeLibraryPath
-    [stdenv.gcc.gcc emacs tk tcl boost gmp];
+    [ stdenv.gcc.gcc emacs tk tcl boost gmp ];
 
   builder = ./builder.sh;
 
