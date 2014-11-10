@@ -67,7 +67,7 @@ with stdenv.lib;
   # Networking options.
   IP_PNP n
   ${optionalString (versionOlder version "3.13") ''
-  IPV6_PRIVACY y
+    IPV6_PRIVACY y
   ''}
   NETFILTER_ADVANCED y
   IP_VS_PROTO_TCP y
@@ -77,7 +77,9 @@ with stdenv.lib;
   IP_DCCP_CCID3 n # experimental
   CLS_U32_PERF y
   CLS_U32_MARK y
-  BPF_JIT y
+  ${optionalString (stdenv.system == "x86_64-linux") ''
+    BPF_JIT y
+  ''}
 
   # Wireless networking.
   CFG80211_WEXT? y # Without it, ipw2200 drivers don't build
