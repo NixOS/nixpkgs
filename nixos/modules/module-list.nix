@@ -58,6 +58,7 @@
   ./programs/dconf.nix
   ./programs/environment.nix
   ./programs/info.nix
+  ./programs/light.nix
   ./programs/nano.nix
   ./programs/screen.nix
   ./programs/shadow.nix
@@ -92,6 +93,7 @@
   ./services/audio/mopidy.nix
   ./services/backup/almir.nix
   ./services/backup/bacula.nix
+  ./services/backup/crashplan.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
   ./services/backup/rsnapshot.nix
@@ -110,7 +112,7 @@
   ./services/databases/monetdb.nix
   ./services/databases/mongodb.nix
   ./services/databases/mysql.nix
-  ./services/databases/neo4j.nix 
+  ./services/databases/neo4j.nix
   ./services/databases/openldap.nix
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
@@ -230,6 +232,7 @@
   ./services/networking/gvpe.nix
   ./services/networking/haproxy.nix
   ./services/networking/hostapd.nix
+  ./services/networking/i2pd.nix
   ./services/networking/ifplugd.nix
   ./services/networking/iodined.nix
   ./services/networking/ircd-hybrid/default.nix

@@ -1,0 +1,14 @@
+*~
+,*
+.*.swp
+.*.swo
+result
+result-*
+/doc/NEWS.html
+/doc/NEWS.txt
+/doc/manual.html
+/doc/manual.pdf
+.version-suffix
+
+.DS_Store
+.git

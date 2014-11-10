@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, dbus, glib, alsaLib, python,
   pythonPackages, pythonDBus, readline, libsndfile, udev, libical,
-  systemd }:
+  systemd, enableWiimote ? false }:
 
 assert stdenv.isLinux;
 
@@ -38,7 +38,8 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-systemduserunitdir=$(out)/etc/systemd/user"
     "--with-udevdir=$(out)/lib/udev"
-    ];
+    ] ++
+    stdenv.lib.optional enableWiimote [ "--enable-wiimote" ];
 
   # Work around `make install' trying to create /var/lib/bluetooth.
   installFlags = "statedir=$(TMPDIR)/var/lib/bluetooth";

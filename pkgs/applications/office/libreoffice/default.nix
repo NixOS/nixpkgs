@@ -114,9 +114,7 @@ stdenv.mkDerivation rec {
   '' + (stdenv.lib.concatMapStrings (f: "ln -sv ${f} $sourceRoot/src/${f.outputHash}-${f.name}\nln -sv ${f} $sourceRoot/src/${f.name}\n") srcs.third_party)
   + ''
     ln -sv ${srcs.help} $sourceRoot/src/${srcs.help.name}
-    tar xf $sourceRoot/src/${srcs.help.name} -C $sourceRoot/../
     ln -svf ${srcs.translations} $sourceRoot/src/${srcs.translations.name}
-    tar xf $sourceRoot/src/${srcs.translations.name} -C $sourceRoot/../
   '';
 
   patchPhase = ''

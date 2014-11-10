@@ -666,7 +666,11 @@ let
     flex = flex_2_5_35;
   };
 
-  crawl = callPackage ../games/crawl { lua = lua5; };
+  crawlTiles = callPackage ../games/crawl { };
+
+  crawl = callPackage ../games/crawl {
+    tileMode = false;
+  };
 
   cv = callPackage ../tools/misc/cv { };
 
@@ -1128,6 +1132,8 @@ let
 
   fdm = callPackage ../tools/networking/fdm {};
 
+  flannel = callPackage ../tools/networking/flannel { };
+
   figlet = callPackage ../tools/misc/figlet { };
 
   file = callPackage ../tools/misc/file { };
@@ -1265,7 +1271,7 @@ let
 
   gnupg1orig = callPackage ../tools/security/gnupg/1.nix { };
 
-  gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { gnupg = gnupg20; };
+  gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { };
 
   # use config.packageOverrides if you prefer original gnupg1
   gnupg1 = gnupg1compat;
@@ -1278,7 +1284,7 @@ let
     libgcrypt = libgcrypt_1_6;
   };
 
-  gnupg = gnupg21;
+  gnupg = gnupg20;
 
   gnuplot = callPackage ../tools/graphics/gnuplot { };
 
@@ -1442,6 +1448,8 @@ let
 
   httptunnel = callPackage ../tools/networking/httptunnel { };
 
+  i2pd = callPackage ../tools/networking/i2pd {};
+
   iasl = callPackage ../development/compilers/iasl { };
 
   icecast = callPackage ../servers/icecast { };
@@ -1560,7 +1568,8 @@ let
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
-  nodejs = callPackage ../development/web/nodejs {};
+  nodejs = callPackage ../development/web/nodejs { };
+  nodejs-unstable = callPackage ../development/web/nodejs { unstableVersion = true; };
 
   nodePackages = recurseIntoAttrs (import ./node-packages.nix {
     inherit pkgs stdenv nodejs fetchurl fetchgit;
@@ -3484,7 +3493,8 @@ let
 
   monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
 
-  mozart = callPackage ../development/compilers/mozart { };
+  mozart-binary = callPackage ../development/compilers/mozart/binary.nix { };
+  mozart = mozart-binary;
 
   neko = callPackage ../development/compilers/neko { };
 
@@ -3506,7 +3516,7 @@ let
 
   ocaml_4_01_0 = callPackage ../development/compilers/ocaml/4.01.0.nix { };
 
-  ocaml_4_02_0 = callPackage ../development/compilers/ocaml/4.02.0.nix { };
+  ocaml_4_02_1 = callPackage ../development/compilers/ocaml/4.02.1.nix { };
 
   orc = callPackage ../development/compilers/orc { };
 
@@ -3766,8 +3776,8 @@ let
   // { camlimages = ocamlPackages_3_12_1.camlimages_4_0; };
   ocamlPackages_4_00_1 = mkOcamlPackages ocaml_4_00_1 pkgs.ocamlPackages_4_00_1;
   ocamlPackages_4_01_0 = mkOcamlPackages ocaml_4_01_0 pkgs.ocamlPackages_4_01_0;
-  ocamlPackages_4_02_0 = mkOcamlPackages ocaml_4_02_0 pkgs.ocamlPackages_4_02_0;
-  ocamlPackages_latest = ocamlPackages_4_02_0;
+  ocamlPackages_4_02_1 = mkOcamlPackages ocaml_4_02_1 pkgs.ocamlPackages_4_02_1;
+  ocamlPackages_latest = ocamlPackages_4_02_1;
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
@@ -4092,8 +4102,6 @@ let
     inherit stdenv fetchurl lib;
   });
 
-  pythonLinkmeWrapper = callPackage ../development/interpreters/python/python-linkme-wrapper.nix { };
-
   pypi2nix = python27Packages.pypi2nix;
 
   svg2tikz = python27Packages.svg2tikz;
@@ -4248,6 +4256,8 @@ let
 
   ### DEVELOPMENT / TOOLS
 
+  augeas = callPackage ../tools/system/augeas { };
+
   ansible = callPackage ../tools/system/ansible { };
 
   antlr = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
@@ -4374,6 +4384,7 @@ let
 
   cmake = callPackage ../development/tools/build-managers/cmake { };
 
+  cmake-3_0 = callPackage ../development/tools/build-managers/cmake/3.0.nix { };
   cmake264 = callPackage ../development/tools/build-managers/cmake/264.nix { };
 
   cmakeCurses = cmake.override { useNcurses = true; };
@@ -4460,6 +4471,8 @@ let
   epm = callPackage ../development/tools/misc/epm { };
 
   emma = callPackage ../development/tools/analysis/emma { };
+
+  eztrace = callPackage ../development/tools/profiling/EZTrace { };
 
   findbugs = callPackage ../development/tools/analysis/findbugs { };
 
@@ -5078,6 +5091,8 @@ let
   fftwSinglePrec = fftw.override { precision = "single"; };
   fftwFloat = fftwSinglePrec; # the configure option is just an alias
 
+  fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
+
   flann = callPackage ../development/libraries/flann { };
 
   flite = callPackage ../development/libraries/flite { };
@@ -5444,6 +5459,10 @@ let
     libusb = libusb1;
   };
 
+  hivex = callPackage ../development/libraries/hivex {
+    inherit (perlPackages) IOStringy;
+  };
+
   hspell = callPackage ../development/libraries/hspell { };
 
   hspellDicts = callPackage ../development/libraries/hspell/dicts.nix { };
@@ -5795,6 +5814,10 @@ let
 
   libgsystem = callPackage ../development/libraries/libgsystem { };
 
+  libguestfs = callPackage ../development/libraries/libguestfs {
+    inherit (perlPackages) libintlperl GetoptLong SysVirt;
+  };
+
   libharu = callPackage ../development/libraries/libharu { };
 
   libHX = callPackage ../development/libraries/libHX { };
@@ -5974,6 +5997,10 @@ let
 
   libnetfilter_conntrack = callPackage ../development/libraries/libnetfilter_conntrack { };
 
+  libnetfilter_cthelper = callPackage ../development/libraries/libnetfilter_cthelper { };
+
+  libnetfilter_cttimeout = callPackage ../development/libraries/libnetfilter_cttimeout { };
+
   libnetfilter_queue = callPackage ../development/libraries/libnetfilter_queue { };
 
   libnfnetlink = callPackage ../development/libraries/libnfnetlink { };
@@ -6087,6 +6114,8 @@ let
   libtiger = callPackage ../development/libraries/libtiger { };
 
   libtommath = callPackage ../development/libraries/libtommath { };
+
+  libtomcrypt = callPackage ../development/libraries/libtomcrypt { };
 
   libtorrentRasterbar = callPackage ../development/libraries/libtorrent-rasterbar {
     # fix "unrecognized option -arch" error
@@ -7861,6 +7890,8 @@ let
     weatherXoap  = config.conky.weatherXoap  or false;
   };
 
+  conntrack_tools = callPackage ../os-specific/linux/conntrack-tools { };
+
   cpufrequtils = callPackage ../os-specific/linux/cpufrequtils { };
 
   cryopid = callPackage ../os-specific/linux/cryopid { };
@@ -7944,6 +7975,8 @@ let
     else if stdenv.isLinux
     then utillinux
     else null;
+
+  light = callPackage ../os-specific/linux/light { };
 
   e3cfsprogs = callPackage ../os-specific/linux/e3cfsprogs { };
 
@@ -10108,8 +10141,6 @@ let
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
-  ncmpcppBeta = callPackage ../applications/audio/ncmpcpp/beta.nix { };
-
   normalize = callPackage ../applications/audio/normalize { };
 
   mplayer = callPackage ../applications/video/mplayer {
@@ -10166,6 +10197,10 @@ let
   musescore = callPackage ../applications/audio/musescore { };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
+  mutt-with-sidebar = callPackage ../applications/networking/mailreaders/mutt { 
+    withSidebar = true;
+    automake = automake113x;
+  };
 
   namecoin = callPackage ../applications/misc/namecoin { };
   namecoinqt = callPackage ../applications/misc/namecoin/qt.nix { };
@@ -12187,7 +12222,7 @@ let
 
   tulip = callPackage ../applications/science/misc/tulip { };
 
-  vite = callPackage ../applications/science/misc/vite { };
+  vite = enableDebugging (callPackage ../applications/science/misc/vite { });
 
   xplanet = callPackage ../applications/science/astronomy/xplanet { };
 
@@ -12238,6 +12273,8 @@ let
   cups = callPackage ../misc/cups { libusb = libusb1; };
 
   cups_pdf_filter = callPackage ../misc/cups/pdf-filter.nix { };
+
+  crashplan = callPackage ../applications/backup/crashplan { };
 
   gutenprint = callPackage ../misc/drivers/gutenprint { };
 
@@ -12607,6 +12644,12 @@ let
   xsane = callPackage ../applications/graphics/sane/xsane.nix {
     libpng = libpng12;
     saneBackends = saneBackends;
+  };
+
+  xwiimote = callPackage ../misc/drivers/xwiimote {
+    bluez = pkgs.bluez5.override {
+      enableWiimote = true;
+    };
   };
 
   yafc = callPackage ../applications/networking/yafc { };

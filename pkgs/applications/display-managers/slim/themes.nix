@@ -177,7 +177,7 @@ in {
     fullName = "nixos-slim";
     src = fetchurl {
       url = "https://github.com/jagajaga/nixos-slim-theme/archive/1.1.tar.gz";
-      sha256 = "0cawq38l8rcgd35vpdx3i1wbs3wrkcrng1c9qch0l4qncw505hv6";
+      sha256 = "66c3020a6716130a20c3898567339b990fbd7888a3b7bbcb688f6544d1c05c31";
     };
   };
 }

@@ -1,24 +1,53 @@
-{ stdenv, fetchurl, sqlite, lua, which, zlib, pkgconfig, dejavu_fonts,
-  libpng, perl, SDL, SDL_image, ncurses, mesa}:
+{ stdenv, fetchurl, which, sqlite, lua5_1, perl, zlib, pkgconfig, ncurses
+, dejavu_fonts, libpng, SDL, SDL_image, mesa, freetype
+, tileMode ? true
+}:
 
+let version = "0.15.2";
+in
 stdenv.mkDerivation rec {
-   name = "crawl-0.14.1";
-   src = fetchurl {
-      url = "http://downloads.sourceforge.net/project/crawl-ref/Stone%20Soup/0.14.1/stone_soup-0.14.1-nodeps.tar.xz";
-      sha256 = "91726d0224b93ba26b5d4bd3762bc5aabe1f02974ea6c937be89dc6c6ab7a4dd";
-      };
+  name = "crawl-${version}" + (if tileMode then "-tiles" else "");
+  src = fetchurl {
+    url = "mirror://sourceforge/crawl-ref/Stone%20Soup/${version}/stone_soup-${version}-nodeps.tar.xz";
+    sha256 = "1qi1g8w0sxmwrv96hnay20gpwp1xn2xcq1cw9iwn1yq112484fp9";
+  };
 
-   patches = [ ./makefile_fonts.patch ./makefile_sqlite.patch
-               ./makefile_rltiles.patch ./makefile_rltiles2.patch
-               ./makefile_misc.patch ./makefile_prefix.patch
-   ];
+  patches = [ ./makefile_fonts.patch ./makefile_sqlite.patch ];
 
-   buildInputs = [stdenv pkgconfig lua zlib sqlite which libpng perl SDL
-                  dejavu_fonts SDL_image ncurses mesa];
+  nativeBuildInputs = [ pkgconfig which perl ];
 
-   preBuild = "cd source";
+  # Still unstable with luajit
+  buildInputs = [ lua5_1 zlib sqlite ncurses ]
+             ++ stdenv.lib.optionals tileMode
+                [ libpng SDL SDL_image freetype mesa ];
 
-   makeFlags = "TILES=y";
+  preBuild = ''
+    cd source
+    # Related to issue #1963
+    sed -i 's/-fuse-ld=gold//g' Makefile
+    for i in util/*.pl; do
+      patchShebangs $i
+    done
+    patchShebangs util/gen-mi-enum
+  '';
 
-   inherit dejavu_fonts sqlite SDL_image SDL;
+  makeFlags = [ "prefix=$(out)" "FORCE_CC=gcc" "FORCE_CXX=g++" "HOSTCXX=g++"
+                "SAVEDIR=~/.crawl" "sqlite=${sqlite}" ]
+           ++ stdenv.lib.optionals tileMode [ "TILES=y" "dejavu_fonts=${dejavu_fonts}" ];
+
+  postInstall = if tileMode then "mv $out/bin/crawl $out/bin/crawl-tiles" else "";
+
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
+    description = "Open-source, single-player, role-playing roguelike game";
+    longDescription = ''
+      Open-source, single-player, role-playing roguelike game of exploration and
+      treasure-hunting in dungeons filled with dangerous and unfriendly monsters
+      in a quest to rescue the mystifyingly fabulous Orb of Zot.
+    '';
+    platforms = platforms.linux;
+    license = with licenses; [ gpl2Plus bsd2 bsd3 mit licenses.zlib cc0 ];
+    maintainers = [ maintainers.abbradar ];
+  };
 }

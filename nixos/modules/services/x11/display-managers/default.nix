@@ -79,7 +79,9 @@ let
       ''}
 
       # Load X defaults.
-      if test -e ~/.Xdefaults; then
+      if test -e ~/.Xresources; then
+          ${xorg.xrdb}/bin/xrdb -merge ~/.Xresources
+      elif test -e ~/.Xdefaults; then
           ${xorg.xrdb}/bin/xrdb -merge ~/.Xdefaults
       fi
 

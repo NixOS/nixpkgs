@@ -601,6 +601,23 @@ let
     };
   };
 
+  babelfish = buildPythonPackage rec {
+    version = "0.5.3";
+    name = "babelfish-${version}";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/b/babelfish/${name}.tar.gz";
+      sha256 = "0wrw21dyq7v6lbffwvi1ik43d7dhmcv8xvgrrihhiv7ys1rd3gag";
+    };
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/babelfish;
+      description = "A module to work with countries and languages.";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
   batinfo = buildPythonPackage rec {
     version = "0.1.9";
     name = "batinfo-${version}";
@@ -3771,20 +3788,21 @@ let
   };
 
   flexget = buildPythonPackage rec {
-    name = "FlexGet-1.2.161";
+    version = "1.2.201";
+    name = "FlexGet-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/F/FlexGet/${name}.tar.gz";
-      md5 = "f7533e7b1df49cc8027fc4a2cde0290d";
+      md5 = "e940845fc38ee602109a876455a02084";
     };
 
     buildInputs = with self; [ nose ];
-    # dateutil dependency: requirement is dateutil !=2.0 and != 2.2,
-    # dateutil_1_5 is used as it's supported, but a newer version could be used
     propagatedBuildInputs = with self; [ paver feedparser sqlalchemy pyyaml rpyc
 	    beautifulsoup4 html5lib pyrss2gen pynzb progressbar jinja2 flask
-	    cherrypy requests dateutil_1_5 jsonschema python_tvrage tmdb3 ]
+	    cherrypy requests dateutil_1_5 jsonschema python_tvrage tmdb3
+            guessit pathpy
+        ]
 	# enable deluge and transmission plugin support, if they're installed
 	++ stdenv.lib.optional (pkgs.config.pythonPackages.deluge or false)
 	    pythonpackages.deluge
@@ -4256,6 +4274,30 @@ let
     };
   };
 
+  guessit = buildPythonPackage rec {
+    version = "0.9.3";
+    name = "guessit-${version}";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/g/guessit/${name}.tar.gz";
+      sha256 = "16kbxdz5zm3mfn739ynis04zw76x2gn1lz5d7vcwh8hzaj16yyk6";
+    };
+
+    propagatedBuildInputs = with self; [
+      dateutil_1_5 requests stevedore babelfish pyyaml
+    ];
+
+    # A unicode test fails
+    doCheck = false;
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/guessit;
+      license = stdenv.lib.licenses.lgpl3;
+      description = "A library for guessing information from video files.";
+    };
+  };
+
   gunicorn = buildPythonPackage rec {
     name = "gunicorn-19.1.0";
 
@@ -4613,12 +4655,35 @@ let
     };
   };
 
-  keyring = buildPythonPackage rec {
-    name = "keyring-3.2";
+
+  jrnl = buildPythonPackage rec {
+    name = "jrnl-1.9.7";
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
-      url    = "https://pypi.python.org/packages/source/k/keyring/${name}.zip";
-      sha256 = "1flccphpyrb8y8dra2fq2s2v3fg615d77kjjmzl0gmiidabkkdqf";
+      url = "https://pypi.python.org/packages/source/j/jrnl/${name}.tar.gz";
+      md5 = "395faff36de8a08a5bfeedbf123e9067";
+    };
+
+    propagatedBuildInputs = with self; [
+      pytz six tzlocal keyring modules.readline argparse dateutil_1_5
+      parsedatetime
+    ];
+
+    meta = with stdenv.lib; {
+      homepage = http://maebert.github.io/jrnl/;
+      description = "A simple command line journal application that stores your journal in a plain text file.";
+      license = licenses.mit;
+    };
+  };
+
+
+  keyring = buildPythonPackage rec {
+    name = "keyring-3.3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/k/keyring/${name}.zip";
+      md5 = "81291e0c7337affb71442e6c7671e77f";
     };
 
     buildInputs = with self;
@@ -6009,6 +6074,16 @@ let
     };
   };
 
+  parsedatetime = buildPythonPackage rec {
+    name = "parsedatetime-${version}";
+    version = "1.4";
+
+    src = pkgs.fetchurl {
+        url = "https://pypi.python.org/packages/source/p/parsedatetime/${name}.tar.gz";
+        md5 = "3aca729761be5259a508ed184df73c68";
+    };
+  };
+
   paramiko = buildPythonPackage rec {
     name = "paramiko-1.15.1";
 
@@ -6698,6 +6773,10 @@ let
       url = "https://pypi.python.org/packages/source/p/pycdio/${name}.tar.gz";
       sha256 = "1mrh233pj584gf7la64d4xlmvdnfl4jwpxs95lnd3i4zd5drid14";
     };
+
+    preConfigure = ''
+      patchShebangs .
+    '';
 
     buildInputs = [
       self.setuptools self.nose pkgs.pkgconfig pkgs.swig pkgs.libcdio

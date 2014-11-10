@@ -14,6 +14,9 @@ stdenv.mkDerivation {
     sha256 = "11z8dk7byxh9pfv7mhfvnk465qln1g7z8c8f822623d59lwjpbs1";
   };
 
+  # Make the NixOS service work a little better.
+  patches = [ ./makekeys-sigpipe.patch ];
+
   buildInputs = [ which python27 nodejs ] ++
     # for flock
     stdenv.lib.optional stdenv.isLinux [ utillinux ];

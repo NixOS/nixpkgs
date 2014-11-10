@@ -51,6 +51,10 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   xfce4taskmanager= callPackage ./applications/xfce4-taskmanager.nix { };
   xfce4terminal   = callPackage ./applications/terminal.nix { };
   xfce4screenshooter   = callPackage ./applications/xfce4-screenshooter.nix { };
+  xfce4volumed    = let
+    gst = callPackage ./applications/xfce4-volumed.nix { };
+    pulse = callPackage ./applications/xfce4-volumed-pulse.nix { };
+  in if config.pulseaudio or false then pulse else gst;
 
   #### ART                  from "mirror://xfce/src/art/${p_name}/${ver_maj}/${name}.tar.bz2"
 
