@@ -68,7 +68,6 @@
     haskeline = super.haskeline.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     primitive = self.primitive_0_5_3_0; # later versions don't compile
     random = self.random_1_0_1_1;       # requires base >= 4.6.x
-    shelly = self.shelly_0_15_4_1;
   };
 
   ghc722Prefs = self : super : ghc742Prefs self super // {
