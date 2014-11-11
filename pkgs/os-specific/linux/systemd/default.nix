@@ -10,12 +10,12 @@ assert stdenv.isLinux;
 assert pythonSupport -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
-  version = "216";
+  version = "217";
   name = "systemd-${version}";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "1wr8jxhp2rmbzabm743rmrhp2c8kir1990x6iblzzmj0v2vkspcl";
+    sha256 = "163l1y4p2a564d4ynfq3k3xf53j2v5s81blb6cvpn1y7rpxyccd0";
   };
 
   patches =

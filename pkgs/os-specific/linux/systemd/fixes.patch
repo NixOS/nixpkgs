@@ -1,5 +1,5 @@
 diff --git a/rules/99-systemd.rules.in b/rules/99-systemd.rules.in
-index aa435c4..46a2cd4 100644
+index e30d9a8..a3d399b 100644
 --- a/rules/99-systemd.rules.in
 +++ b/rules/99-systemd.rules.in
 @@ -14,10 +14,6 @@ KERNEL=="vport*", TAG+="systemd"
@@ -27,7 +27,7 @@ index cffa453..4d1a9ff 100644
                      || path_equal(m->path, "/usr")
  #endif
 diff --git a/src/fsck/fsck.c b/src/fsck/fsck.c
-index dfe97bc..71cd8f4 100644
+index 70a5918..1926e52 100644
 --- a/src/fsck/fsck.c
 +++ b/src/fsck/fsck.c
 @@ -315,8 +315,7 @@ int main(int argc, char *argv[]) {
@@ -41,10 +41,10 @@ index dfe97bc..71cd8f4 100644
  
          /*
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index d01da45..4976f9a 100644
+index b6d9bc6..04fbe57 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
-@@ -2985,6 +2985,7 @@ int main(int argc, char *argv[]) {
+@@ -3073,6 +3073,7 @@ int main(int argc, char *argv[]) {
                                  goto finish;
                          }
                  } else {
@@ -52,7 +52,7 @@ index d01da45..4976f9a 100644
                          const char *p;
  
                          p = strappenda(arg_directory,
-@@ -2994,6 +2995,7 @@ int main(int argc, char *argv[]) {
+@@ -3082,6 +3083,7 @@ int main(int argc, char *argv[]) {
                                  goto finish;
  
                          }
@@ -61,10 +61,10 @@ index d01da45..4976f9a 100644
          } else {
                  char template[] = "/tmp/nspawn-root-XXXXXX";
 diff --git a/src/systemctl/systemctl.c b/src/systemctl/systemctl.c
-index 36db652..b1ba6e9 100644
+index 28eaa6a..6292c09 100644
 --- a/src/systemctl/systemctl.c
 +++ b/src/systemctl/systemctl.c
-@@ -2607,7 +2607,7 @@ static int start_unit_one(
+@@ -2651,7 +2651,7 @@ static int start_unit_one(
  
                  log_debug("Adding %s to the set", p);
                  r = set_consume(s, p);
@@ -98,15 +98,15 @@ index 4f7794b..bad2a9a 100644
  Restart=always
  RestartSec=0
 diff --git a/units/emergency.service.in b/units/emergency.service.in
-index 91fc1bb..6a37434 100644
+index 18973e7..3a99660 100644
 --- a/units/emergency.service.in
 +++ b/units/emergency.service.in
-@@ -15,7 +15,6 @@ Before=shutdown.target
+@@ -16,7 +16,6 @@ Before=shutdown.target
  [Service]
  Environment=HOME=/root
  WorkingDirectory=/root
 -ExecStartPre=-/bin/plymouth quit
- ExecStartPre=-/bin/echo -e 'Welcome to emergency mode! After logging in, type "journalctl -xb" to view\\nsystem logs, "systemctl reboot" to reboot, "systemctl default" to try again\\nto boot into default mode.'
+ ExecStartPre=-/bin/echo -e 'Welcome to emergency mode! After logging in, type "journalctl -xb" to view\\nsystem logs, "systemctl reboot" to reboot, "systemctl default" or ^D to\\ntry again to boot into default mode.'
  ExecStart=-/bin/sh -c "/sbin/sulogin; @SYSTEMCTL@ --fail --no-block default"
  Type=idle
 diff --git a/units/getty@.service.m4 b/units/getty@.service.m4
@@ -162,16 +162,16 @@ index 43ffa5c..156a681 100644
 +
  [Install]
  WantedBy=multi-user.target
-diff --git a/units/rescue.service.m4.in b/units/rescue.service.m4.in
-index ef54369..0c841b3 100644
---- a/units/rescue.service.m4.in
-+++ b/units/rescue.service.m4.in
+diff --git a/units/rescue.service.in b/units/rescue.service.in
+index fc93f1e..3c87cf8 100644
+--- a/units/rescue.service.in
++++ b/units/rescue.service.in
 @@ -16,7 +16,6 @@ Before=shutdown.target
  [Service]
  Environment=HOME=/root
  WorkingDirectory=/root
 -ExecStartPre=-/bin/plymouth quit
- ExecStartPre=-/bin/echo -e 'Welcome to rescue mode! Type "systemctl default" or ^D to enter default mode.\\nType "journalctl -xb" to view system logs. Type "systemctl reboot" to reboot.'
+ ExecStartPre=-/bin/echo -e 'Welcome to emergency mode! After logging in, type "journalctl -xb" to view\\nsystem logs, "systemctl reboot" to reboot, "systemctl default" or ^D to\\nboot into default mode.'
  ExecStart=-/bin/sh -c "/sbin/sulogin; @SYSTEMCTL@ --fail --no-block default"
  Type=idle
 diff --git a/units/serial-getty@.service.m4 b/units/serial-getty@.service.m4
@@ -198,7 +198,7 @@ index ec33503..4ac47b9 100644
 -After=local-fs.target swap.target emergency.service emergency.target
 +After=emergency.service emergency.target
 diff --git a/units/systemd-backlight@.service.in b/units/systemd-backlight@.service.in
-index e945d87..77728f2 100644
+index ecf3de4..7e83446 100644
 --- a/units/systemd-backlight@.service.in
 +++ b/units/systemd-backlight@.service.in
 @@ -19,3 +19,4 @@ Type=oneshot
@@ -207,7 +207,7 @@ index e945d87..77728f2 100644
  ExecStop=@rootlibexecdir@/systemd-backlight save %i
 +X-RestartIfChanged=false
 diff --git a/units/systemd-journal-flush.service.in b/units/systemd-journal-flush.service.in
-index 503e8a6..fe23b8b 100644
+index 699670b..2612220 100644
 --- a/units/systemd-journal-flush.service.in
 +++ b/units/systemd-journal-flush.service.in
 @@ -10,8 +10,9 @@ Description=Trigger Flushing of Journal to Persistent Storage
@@ -216,13 +216,13 @@ index 503e8a6..fe23b8b 100644
  Requires=systemd-journald.service
 -After=systemd-journald.service local-fs.target remote-fs.target
 +After=systemd-journald.service
- Before=systemd-user-sessions.service
+ Before=systemd-user-sessions.service systemd-tmpfiles-setup.service
 +RequiresMountsFor=/var/log/journal
  
  [Service]
- ExecStart=@rootbindir@/systemctl kill --kill-who=main --signal=SIGUSR1 systemd-journald.service
+ ExecStart=@rootbindir@/journalctl --flush
 diff --git a/units/systemd-journald.service.in b/units/systemd-journald.service.in
-index 7013979..5241d08 100644
+index 4de38fa..4b6daea 100644
 --- a/units/systemd-journald.service.in
 +++ b/units/systemd-journald.service.in
 @@ -26,3 +26,8 @@ WatchdogSec=1min
@@ -235,7 +235,7 @@ index 7013979..5241d08 100644
 +# https://bugs.freedesktop.org/show_bug.cgi?id=56043).
 +X-RestartIfChanged=no
 diff --git a/units/systemd-random-seed.service.in b/units/systemd-random-seed.service.in
-index 1879b2f..9b895b9 100644
+index b55844b..3ef9fc6 100644
 --- a/units/systemd-random-seed.service.in
 +++ b/units/systemd-random-seed.service.in
 @@ -19,3 +19,4 @@ Type=oneshot
@@ -244,7 +244,7 @@ index 1879b2f..9b895b9 100644
  ExecStop=@rootlibexecdir@/systemd-random-seed save
 +X-RestartIfChanged=false
 diff --git a/units/systemd-rfkill@.service.in b/units/systemd-rfkill@.service.in
-index 9d264a2..c505535 100644
+index 0e9851b..9f8fa0d 100644
 --- a/units/systemd-rfkill@.service.in
 +++ b/units/systemd-rfkill@.service.in
 @@ -19,3 +19,4 @@ Type=oneshot
@@ -253,28 +253,28 @@ index 9d264a2..c505535 100644
  ExecStop=@rootlibexecdir@/systemd-rfkill save %I
 +X-RestartIfChanged=false
 diff --git a/units/systemd-tmpfiles-setup.service.in b/units/systemd-tmpfiles-setup.service.in
-index 72ab083..4f77e8f 100644
+index e895cda..194146f 100644
 --- a/units/systemd-tmpfiles-setup.service.in
 +++ b/units/systemd-tmpfiles-setup.service.in
 @@ -11,7 +11,7 @@ Documentation=man:tmpfiles.d(5) man:systemd-tmpfiles(8)
  DefaultDependencies=no
  Conflicts=shutdown.target
- After=systemd-readahead-collect.service systemd-readahead-replay.service local-fs.target systemd-sysusers.service
+ After=local-fs.target systemd-sysusers.service
 -Before=sysinit.target shutdown.target
 +Before=shutdown.target
  RefuseManualStop=yes
  
  [Service]
 diff --git a/units/systemd-update-utmp.service.in b/units/systemd-update-utmp.service.in
-index da7dda7..e638145 100644
+index 163eccd..7357c12 100644
 --- a/units/systemd-update-utmp.service.in
 +++ b/units/systemd-update-utmp.service.in
 @@ -11,7 +11,7 @@ Documentation=man:systemd-update-utmp.service(8) man:utmp(5)
  DefaultDependencies=no
  RequiresMountsFor=/var/log/wtmp
  Conflicts=shutdown.target
--After=systemd-readahead-collect.service systemd-readahead-replay.service systemd-remount-fs.service systemd-tmpfiles-setup.service auditd.service
-+After=systemd-readahead-collect.service systemd-readahead-replay.service systemd-remount-fs.service auditd.service
+-After=systemd-remount-fs.service systemd-tmpfiles-setup.service auditd.service
++After=systemd-remount-fs.service auditd.service
  Before=sysinit.target shutdown.target
  
  [Service]
