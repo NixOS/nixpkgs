@@ -1,5 +1,5 @@
 { stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, makeSetupHook
-, toolset ? null
+, toolset ? if stdenv.isDarwin then "clang" else null
 , enableRelease ? true
 , enableDebug ? false
 , enableSingleThreaded ? false
@@ -138,9 +138,7 @@ stdenv.mkDerivation {
     "--with-python=${python}/bin/python"
   ] ++ optional (toolset != null) "--with-toolset=${toolset}";
 
-  buildPhase = ''
-    ${stdenv.lib.optionalString (toolset == "clang") "unset NIX_ENFORCE_PURITY"}
-  '' + builder nativeB2Args;
+  buildPhase = builder nativeB2Args;
 
   installPhase = installer nativeB2Args;
 
