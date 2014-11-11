@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     [ alsaLib cmake pkgconfig glib ];
 
   meta = with stdenv.lib; {
-    description = "PulseAudio emulation for ALSA.";
+    description = "PulseAudio emulation for ALSA";
     homepage = "https://github.com/i-rinat/apulse";
     license = licenses.mit;
     platforms = platforms.linux;

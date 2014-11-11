@@ -17,10 +17,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://riemann.io/";
-    description = ''
-      A network monitoring system.
-    '';
+    homepage = http://riemann.io/;
+    description = "A network monitoring system";
     license = licenses.epl10;
     platforms = platforms.all;
     maintainers = [ maintainers.rickynils ];

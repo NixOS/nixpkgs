@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-swanctl" "--enable-cmd" ];
 
+  NIX_LDFLAGS = "-lgcc_s" ;
+
   meta = {
     maintainers = [ stdenv.lib.maintainers.shlevy ];
     description = "OpenSource IPsec-based VPN Solution";

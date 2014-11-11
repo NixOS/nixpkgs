@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://skarnet.org/software/execline/;
-    description = "A small scripting language, to be used in place of a shell in non-interactive scripts.";
+    description = "A small scripting language, to be used in place of a shell in non-interactive scripts";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;
   };

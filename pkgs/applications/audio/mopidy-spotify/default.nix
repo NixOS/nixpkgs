@@ -16,7 +16,7 @@ pythonPackages.buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     homepage = http://www.mopidy.com/;
-    description = "Mopidy extension for playing music from Spotify.";
+    description = "Mopidy extension for playing music from Spotify";
     license = licenses.asl20;
     maintainers = [ maintainers.rickynils ];
     hydraPlatforms = [];

@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.tinkerforge.com/;
-    description = "The Brick Daemon is a daemon (or service on Windows) that acts as a bridge between the Bricks/Bricklets and the API bindings for the different programming languages.";
+    description = "A daemon (or service on Windows) that acts as a bridge between the Bricks/Bricklets and the API bindings for the different programming languages";
     maintainers = [ stdenv.lib.maintainers.qknight ];
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.all;

@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://corosync.org/;
-    description = "a Group Communication System with features for implementing high availability within applications.";
+    description = "A Group Communication System with features for implementing high availability within applications";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ wkennington ];

@@ -3275,7 +3275,6 @@ let
   ) haskell));
 
   haskellPackages = haskellPackages_ghc783;
-  haskellPlatform = haskellPlatformPackages."2013_2_0_0";
 
   haskellPackages_ghc6104 = haskell.packages_ghc6104;
   haskellPackages_ghc6123 = haskell.packages_ghc6123;
@@ -3287,8 +3286,6 @@ let
   haskellPackages_ghc783_profiling    = recurseIntoAttrs haskell.packages_ghc783.profiling;
   haskellPackages_ghc783              = recurseIntoAttrs haskell.packages_ghc783.highPrio;
   haskellPackages_ghcHEAD = haskell.packages_ghcHEAD;
-
-  haskellPlatformPackages = recurseIntoAttrs (import ../development/libraries/haskell/haskell-platform { inherit pkgs; });
 
   haxe = callPackage ../development/compilers/haxe { };
 
@@ -4875,6 +4872,8 @@ let
   capnproto = callPackage ../development/libraries/capnproto { };
 
   ccnx = callPackage ../development/libraries/ccnx { };
+
+  ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
 
   cimg = callPackage  ../development/libraries/cimg { };
 
@@ -7978,6 +7977,8 @@ let
 
   light = callPackage ../os-specific/linux/light { };
 
+  lightum = callPackage ../os-specific/linux/lightum { };
+
   e3cfsprogs = callPackage ../os-specific/linux/e3cfsprogs { };
 
   ebtables = callPackage ../os-specific/linux/ebtables { };
@@ -9543,12 +9544,6 @@ let
 
   filezilla = callPackage ../applications/networking/ftp/filezilla { };
 
-  firefox13Pkgs = callPackage ../applications/networking/browsers/firefox/13.0.nix {
-    inherit (gnome) libIDL;
-  };
-
-  firefox13Wrapper = wrapFirefox { browser = firefox13Pkgs.firefox; };
-
   firefox = callPackage ../applications/networking/browsers/firefox {
     stdenv = if stdenv.isLinux then useGoldLinker stdenv else stdenv;
     inherit (gnome) libIDL;
@@ -10197,7 +10192,7 @@ let
   musescore = callPackage ../applications/audio/musescore { };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
-  mutt-with-sidebar = callPackage ../applications/networking/mailreaders/mutt { 
+  mutt-with-sidebar = callPackage ../applications/networking/mailreaders/mutt {
     withSidebar = true;
     automake = automake113x;
   };

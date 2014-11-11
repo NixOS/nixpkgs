@@ -33,7 +33,7 @@ let
       inherit description;
       homepage = "http://www.libretro.com/";
       license = licenses.gpl3Plus;
-      maintainers = [ maintainers.edwtjo ];
+      maintainers = [ maintainers.edwtjo maintainers.MP2E ];
       platforms = platforms.linux;
     };
   } // a);

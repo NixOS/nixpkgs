@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Google test: Google's framework for writing C++ tests.";
+    description = "Google's framework for writing C++ tests";
     homepage = https://code.google.com/p/googletest/;
     license = licenses.bsd3;
     platforms = platforms.all;

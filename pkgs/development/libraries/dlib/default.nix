@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ x11 ];
 
   meta = with stdenv.lib; {
-    description = "Dlib is a general purpose cross-platform C++ machine learning library.";
+    description = "A general purpose cross-platform C++ machine learning library";
     homepage = http://www.dlib.net;
     license = stdenv.lib.licenses.boost;
     maintainers = with maintainers; [ christopherpoole ];
