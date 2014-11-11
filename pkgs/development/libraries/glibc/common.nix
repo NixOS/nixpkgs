@@ -69,8 +69,11 @@ stdenv.mkDerivation ({
     + ''
       echo "LDFLAGS-nscd += -static-libgcc" >> nscd/Makefile
     ''
-    # Replace the date and time in nscd by $out.
-    #  It is used as a protocol compatibility check.
+    # Replace the date and time in nscd by a prefix of $out.
+    # It is used as a protocol compatibility check.
+    # Note: the size of the struct changes, but using only a part
+    # would break hash-rewriting. When receiving stats it does check
+    # that the struct sizes match and can't cause overflow or something.
     + ''
       cat ${./glibc-remove-datetime-from-nscd.patch} \
         | sed "s,@out@,$out," | patch -p1
