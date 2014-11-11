@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig libftdi pciutils ];
 
-  makeFlags = ["PREFIX=$out"];
+  preConfigure = "export PREFIX=$out";
 
   meta = {
     homepage = "http://www.flashrom.org";
