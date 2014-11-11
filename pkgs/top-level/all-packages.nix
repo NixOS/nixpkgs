@@ -11457,7 +11457,7 @@ let
 
   quake3demodata = callPackage ../games/quake3/demo { };
 
-  quake3game = callPackage ../games/quake3/game { };
+  quake3game = callPackage ../games/quake3/game { gcc = gcc46; };
 
   quantumminigolf = callPackage ../games/quantumminigolf {};
 
