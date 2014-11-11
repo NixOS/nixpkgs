@@ -40,6 +40,10 @@ stdenv.mkDerivation rec {
     ${if sslSupport then "--enable-ssl --with-ssl=${openssl}" else ""}
     ${if ldapSupport then "--enable-ldap --enable-authnz-ldap" else ""}
     --with-mpm=${mpm}
+    --enable-cache
+    --enable-disk-cache
+    --enable-file-cache
+    --enable-mem-cache
   '';
 
   enableParallelBuilding = true;
