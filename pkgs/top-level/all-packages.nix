@@ -7998,6 +7998,8 @@ let
 
   light = callPackage ../os-specific/linux/light { };
 
+  lightum = callPackage ../os-specific/linux/lightum { };
+
   e3cfsprogs = callPackage ../os-specific/linux/e3cfsprogs { };
 
   ebtables = callPackage ../os-specific/linux/ebtables { };
