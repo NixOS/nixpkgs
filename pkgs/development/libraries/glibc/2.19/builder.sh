@@ -46,9 +46,13 @@ postInstall() {
         ln -s lib $out/lib64
     fi
 
-    # This file, that should not remain in the glibc derivation,
-    # may have not been created during the preInstall
-    rm -f $out/lib/libgcc_s.so.1
+    # Replace the symlink with a copy, so we don't leave a dependency
+    # on bootstrap-tools in the final output.  The libgcc_s library is
+    # used by programs linked against glibc at runtime without
+    # explicitly linking against libgcc_s.
+    cp -aL $out/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.real
+    rm $out/lib/libgcc_s.so.1
+    mv $out/lib/libgcc_s.so.real $out/lib/libgcc_s.so.1
 
     # Get rid of more unnecessary stuff.
     rm -rf $out/var $out/sbin/sln
