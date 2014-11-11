@@ -318,7 +318,9 @@ with stdenv.lib;
   ${optionalString (!stdenv.is64bit) ''
     HIGHMEM64G? y # We need 64 GB (PAE) support for Xen guest support.
   ''}
-  INTEL_IOMMU_DEFAULT_ON y
+  ${optionalString stdenv.is64bit ''
+    INTEL_IOMMU_DEFAULT_ON y
+  ''}
   ${optionalString (versionAtLeast version "3.9") ''
     VFIO_PCI_VGA y
   ''}
