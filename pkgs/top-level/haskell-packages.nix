@@ -1040,7 +1040,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   groupoids = callPackage ../development/libraries/haskell/groupoids {};
 
-  hakyll = callPackage ../development/libraries/haskell/hakyll {};
+  hakyll = callPackage ../development/libraries/haskell/hakyll {
+    pandocCiteproc = self.pandocCiteproc_0_4;
+  };
 
   hamlet = callPackage ../development/libraries/haskell/hamlet {};
 
@@ -1823,7 +1825,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   pandoc = callPackage ../development/libraries/haskell/pandoc {};
 
-  pandocCiteproc = callPackage ../development/libraries/haskell/pandoc-citeproc {};
+  pandocCiteproc_0_4 = callPackage ../development/libraries/haskell/pandoc-citeproc/0.4.nix {};
+  pandocCiteproc_0_5 = callPackage ../development/libraries/haskell/pandoc-citeproc/0.5.nix {};
+  pandocCiteproc_0_6 = callPackage ../development/libraries/haskell/pandoc-citeproc/0.6.nix {};
+  pandocCiteproc = self.pandocCiteproc_0_6;
 
   pandocTypes = callPackage ../development/libraries/haskell/pandoc-types {};
 
