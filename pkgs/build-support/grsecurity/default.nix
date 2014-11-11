@@ -14,6 +14,7 @@ let
       restrictProcWithGroup = true;
       unrestrictProcGid = 121; # Ugh, an awful hack. See grsecurity NixOS gid
       disableRBAC = false;
+      disableSimultConnect = true;
       verboseVersion = false;
       kernelExtraConfig = "";
     } // grsecOptions.config;
@@ -107,6 +108,7 @@ let
         GRKERNSEC_SYSCTL ${boolToKernOpt cfg.config.sysctl}
         GRKERNSEC_CHROOT_CHMOD ${boolToKernOpt cfg.config.denyChrootChmod}
         GRKERNSEC_NO_RBAC ${boolToKernOpt cfg.config.disableRBAC}
+        GRKERNSEC_NO_SIMULT_CONNECT ${boolToKernOpt cfg.config.disableSimultConnect}
         ${restrictLinks}
 
         ${cfg.config.kernelExtraConfig}
