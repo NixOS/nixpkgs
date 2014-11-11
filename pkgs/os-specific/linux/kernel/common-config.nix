@@ -321,7 +321,7 @@ with stdenv.lib;
   ${optionalString stdenv.is64bit ''
     INTEL_IOMMU_DEFAULT_ON y
   ''}
-  ${optionalString (versionAtLeast version "3.9") ''
+  ${optionalString (versionAtLeast version "3.9" && stdenv.is64bit) ''
     VFIO_PCI_VGA y
   ''}
   VIRT_DRIVERS y
