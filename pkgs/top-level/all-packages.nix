@@ -9563,12 +9563,6 @@ let
 
   filezilla = callPackage ../applications/networking/ftp/filezilla { };
 
-  firefox13Pkgs = callPackage ../applications/networking/browsers/firefox/13.0.nix {
-    inherit (gnome) libIDL;
-  };
-
-  firefox13Wrapper = wrapFirefox { browser = firefox13Pkgs.firefox; };
-
   firefox = callPackage ../applications/networking/browsers/firefox {
     stdenv = if stdenv.isLinux then useGoldLinker stdenv else stdenv;
     inherit (gnome) libIDL;
