@@ -4903,6 +4903,8 @@ let
 
   ccnx = callPackage ../development/libraries/ccnx { };
 
+  ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
+
   cimg = callPackage  ../development/libraries/cimg { };
 
   scmccid = callPackage ../development/libraries/scmccid { };
@@ -10211,7 +10213,7 @@ let
   musescore = callPackage ../applications/audio/musescore { };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
-  mutt-with-sidebar = callPackage ../applications/networking/mailreaders/mutt { 
+  mutt-with-sidebar = callPackage ../applications/networking/mailreaders/mutt {
     withSidebar = true;
     automake = automake113x;
   };
