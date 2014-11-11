@@ -100,7 +100,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "K2pdfopt optimizes PDF/DJVU files for mobile e-readers (e.g. the Kindle) and smartphones.";
+    description = "Optimizes PDF/DJVU files for mobile e-readers (e.g. the Kindle) and smartphones";
     homepage = http://www.willus.com/k2pdfopt;
     license = licenses.gpl3;
     platforms = platforms.linux;

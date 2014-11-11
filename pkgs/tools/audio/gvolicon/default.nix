@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     '';
 
   meta = {
-    description = "A simple and lightweight volume icon that sits in your system tray.";
+    description = "A simple and lightweight volume icon that sits in your system tray";
     homepage = https://github.com/Unia/gvolicon;
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl3Plus;

@@ -872,7 +872,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestDeep TestException ];
     propagatedBuildInputs = [ CatalystRuntime MROCompat TaskWeaken ];
     meta = {
-      description = "Flexible caching support for Catalyst.";
+      description = "Flexible caching support for Catalyst";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
@@ -1503,7 +1503,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ CaptureTiny ];
     meta = {
-      description = "A module to implement some of AutoConf macros in pure perl.";
+      description = "A module to implement some of AutoConf macros in pure perl";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -2347,7 +2347,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ ClassISA DevelStackTrace StringUtil TermReadKey TextTabularDisplay TieIxHash ];
     meta = {
-      description = "Debug::ShowStuff - A collection of handy debugging routines for displaying the values of variables with a minimum of coding.";
+      description = "A collection of handy debugging routines for displaying the values of variables with a minimum of coding";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -2506,7 +2506,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ DBIxClassCandy TestDeep CarpClan DBDSQLite ];
     meta = {
-      description = "Simplify the common case stuff for DBIx::Class.";
+      description = "Simplify the common case stuff for DBIx::Class";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -2733,7 +2733,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ LWP ];
     meta = {
-      description = "Perl extension for getting MD5 sums for files and urls.";
+      description = "Perl extension for getting MD5 sums for files and urls";
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
     };
@@ -3459,7 +3459,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0j4rhx3w6nbvmxqjg6q09gm10nnpkcmqmh29cgxsfc9k14d8bb6w";
     };
     meta = {
-      description = "A tool to build C libraries.";
+      description = "A tool to build C libraries";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -7094,7 +7094,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0yphqsgg7zrar2ywk2j2fnjxmi9rq32yf0p5ln8m9fmfx4kd84mr";
     };
     meta = {
-      description = "Simple flexible means of converting the output of PHP's serialize() into the equivalent Perl memory structure, and vice versa.";
+      description = "Simple flexible means of converting the output of PHP's serialize() into the equivalent Perl memory structure, and vice versa";
       license = "unknown";
     };
   };
@@ -8052,7 +8052,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ SubExporter SubInstall ];
     meta = {
-      description = "A module for when strings are too long to be displayed in..";
+      description = "A module for when strings are too long to be displayed in";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -9460,7 +9460,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestTester ];
     propagatedBuildInputs = [ DataDump ];
     meta = {
-      description = "Trap exit codes, exceptions, output, etc.";
+      description = "Trap exit codes, exceptions, output, etc";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };

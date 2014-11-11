@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "A cron like daemon for mpd.";
+    description = "A cron like daemon for mpd";
     homepage    = http://alip.github.io/mpdcron/;
     license     = stdenv.lib.licenses.gpl2;
     platforms   = with stdenv.lib.platforms; unix;

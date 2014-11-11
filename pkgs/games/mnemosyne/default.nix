@@ -26,8 +26,8 @@ in buildPythonPackage rec {
   '';
   installCommand = "python setup.py install --prefix=$out";
   meta = {
-    homepage = "http://mnemosyne-proj.org/";
-    description = "Spaced-repetition software.";
+    homepage = http://mnemosyne-proj.org/;
+    description = "Spaced-repetition software";
     longDescription = ''
       The Mnemosyne Project has two aspects:
 

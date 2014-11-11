@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig systemd ];
 
   meta = with stdenv.lib; {
-    description = "N-DJBDNS is a brand new release of the Djbdns. Djbdns is a fully‐fledged Domain Name System(DNS), originally written by the eminent author of qmail, Dr. D J Bernstein.";
+    description = "A brand new release of the Djbdns";
+    longDescription = ''
+      Djbdns is a fully‐fledged Domain Name System(DNS), originally written by the eminent author of qmail, Dr. D J Bernstein.
+    '';
     homepage = http://pjp.dgplug.org/ndjbdns/;
     license = licenses.gpl2;
     maintainers = [ maintainers.msackman ];

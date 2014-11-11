@@ -92,8 +92,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "http://code.google.com/p/cantata/";
-    description = "A graphical client for MPD.";
+    homepage = http://code.google.com/p/cantata/;
+    description = "A graphical client for MPD";
     license = licenses.gpl3;
 
     # Technically Cantata can run on Windows so if someone wants to

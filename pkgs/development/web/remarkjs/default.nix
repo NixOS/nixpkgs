@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://remarkjs.com;
-    description = "A simple, in-browser, markdown-driven slideshow tool.";
+    description = "A simple, in-browser, markdown-driven slideshow tool";
     maintainers = [ stdenv.lib.maintainers.rickynils ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.mit;
