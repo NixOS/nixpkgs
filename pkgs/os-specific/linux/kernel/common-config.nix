@@ -249,6 +249,7 @@ with stdenv.lib;
   NET_FC y # Fibre Channel driver support
   PPP_MULTILINK y # PPP multilink support
   PPP_FILTER y
+  RTC_SYSTOHC y # copy (NTP synced) system time to hardware clock
   REGULATOR y # Voltage and Current Regulator Support
   ${optionalString (versionAtLeast version "3.6") ''
     RC_DEVICES? y # Enable IR devices
