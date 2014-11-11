@@ -10,6 +10,9 @@ with lib;
       [ { source = "${pkgs.cacert}/etc/ca-bundle.crt";
           target = "ssl/certs/ca-bundle.crt";
         }
+        { source = "${pkgs.cacert}/etc/ca-bundle.crt";
+          target = "ssl/certs/ca-certificates.crt";
+        }
       ];
 
     environment.sessionVariables =
