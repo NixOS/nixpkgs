@@ -1313,6 +1313,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hspecCheckers = callPackage ../development/libraries/haskell/hspec-checkers {};
 
+  hspecCore = callPackage ../development/libraries/haskell/hspec-core {};
+
+  hspecDiscover = callPackage ../development/libraries/haskell/hspec-discover {};
+
   hstatsd = callPackage ../development/libraries/haskell/hstatsd {};
 
   hsyslog = callPackage ../development/libraries/haskell/hsyslog {};
