@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
     aeson blazeHtml blazeMarkup exceptions hspec HUnit parsec
     systemFileio systemFilepath text time transformers
   ];
+  doCheck = false;
   meta = {
     homepage = "http://www.yesodweb.com/book/shakespearean-templates";
     description = "A toolkit for making compile-time interpolated templates";
