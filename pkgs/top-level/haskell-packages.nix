@@ -1456,6 +1456,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   knob = callPackage ../development/libraries/haskell/knob {};
 
+  labeledTree = callPackage ../development/libraries/haskell/labeled-tree {};
+
   languageC = callPackage ../development/libraries/haskell/language-c {};
 
   languageCInline = callPackage ../development/libraries/haskell/language-c-inline {};
