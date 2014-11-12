@@ -4800,6 +4800,8 @@ let
 
   yodl = callPackage ../development/tools/misc/yodl { };
 
+  winpdb = callPackage ../development/tools/winpdb { };
+
 
   ### DEVELOPMENT / LIBRARIES
 
