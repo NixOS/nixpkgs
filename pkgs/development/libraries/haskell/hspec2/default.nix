@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hspec2";
-  version = "0.6.0";
-  sha256 = "13gh7gf2kdawyssrsd8ln55i776v51r8fwih25160860n1p5dcz5";
+  version = "0.6.1";
+  sha256 = "0zlvm7r46q8yhgx2kx9mfrf6x2f5amdbi3a59fh69dsqs4lbgmf4";
   buildDepends = [ hspec hspecDiscover ];
   meta = {
     homepage = "http://hspec.github.io/";
