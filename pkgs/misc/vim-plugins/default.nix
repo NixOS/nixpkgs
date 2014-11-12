@@ -595,7 +595,7 @@ rec {
   syntastic = Syntastic;
   tabular = Tabular;
   tagbar = Tagbar;
-  "webapi-vim" = WebAPI;
+  webapi-vim = WebAPI;
   yankring = YankRing;
   youcompleteme = YouCompleteMe;
 
@@ -841,6 +841,7 @@ rec {
       rev = "a7789abffe936db56e3152e23733847f94755753";
       sha256 = "455b84d9fd13200ff5ced5d796075f434a7fb9c00f506769174579266ae2be80";
     };
+    buildInputs = [ zip ];
     dependencies = [];
   };
   "rainbow_parentheses" = buildVimPlugin {
@@ -886,6 +887,7 @@ rec {
       rev = "d609d93472db9cf45bd701bebe51adc356631547";
       sha256 = "e5cabc03d5015c589a32f11c654ab9fbd1e91d26ba01f4b737685be81852c511";
     };
+    buildInputs = [ zip ];
     dependencies = [];
   };
   "pathogen" = buildVimPlugin {
