@@ -221,6 +221,7 @@
   ./services/networking/ddclient.nix
   ./services/networking/dhcpcd.nix
   ./services/networking/dhcpd.nix
+  ./services/networking/dnscrypt-proxy.nix
   ./services/networking/dnsmasq.nix
   ./services/networking/ejabberd.nix
   ./services/networking/firewall.nix
