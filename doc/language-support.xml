@@ -239,7 +239,7 @@ twisted = buildPythonPackage {
   <screen>
     $ nix-env -i gem-nix
     $ gem-nix --no-user-install --nix-file=pkgs/development/interpreters/ruby/generated.nix yajl-ruby
-    $ nix-build -A rubyLibs.yajl-ruby
+    $ nix-build -A rubyPackages.yajl-ruby
   </screen>
 </section>
 
