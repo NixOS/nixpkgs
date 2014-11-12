@@ -331,7 +331,7 @@ rec {
   };
 
 
-  # vim-pi name: quickrun%3146
+  # vim-pi: quickrun%3146
   quickrun = buildVimPlugin {
     name = "quickrun-git-2014-10-08";
     src = fetchgit {
@@ -640,7 +640,6 @@ rec {
      \    "Supertab",
      \    "rust",
      \    "rainbow_parentheses",
-     \    "quickrun%3146",
      \    "pathogen",
      \    "quickfixstatus",
      \    "The_NERD_Commenter",
@@ -672,7 +671,7 @@ rec {
   */
 
 
-  "ctrlp" = buildVimPlugin {
+  ctrlp = buildVimPlugin {
     name = "ctrlp";
     src = fetchgit {
       url = "git://github.com/kien/ctrlp.vim";
@@ -681,16 +680,7 @@ rec {
     };
     dependencies = [];
   };
-  "quickrun%3146" = buildVimPlugin {
-    name = "quickrun%3146";
-    src = fetchgit {
-      url = "git://github.com/thinca/vim-quickrun";
-      rev = "ae97cef42ae142306e9431dce9ab97c4353e5254";
-      sha256 = "3219fadb3732c895c82b8bcff1d6e86f0917cd5ac7bf34180c27bb3f75ed1787";
-    };
-    dependencies = [];
-  };
-  "vim-addon-signs" = buildVimPlugin {
+  vim-addon-signs = buildVimPlugin {
     name = "vim-addon-signs";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-signs";
@@ -699,7 +689,7 @@ rec {
     };
     dependencies = [];
   };
-  "vundle" = buildVimPlugin {
+  vundle = buildVimPlugin {
     name = "vundle";
     src = fetchgit {
       url = "git://github.com/gmarik/vundle";
@@ -708,7 +698,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-signature" = buildVimPlugin {
+  vim-signature = buildVimPlugin {
     name = "vim-signature";
     src = fetchgit {
       url = "git://github.com/kshenoy/vim-signature";
@@ -717,7 +707,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-addon-sql" = buildVimPlugin {
+  vim-addon-sql = buildVimPlugin {
     name = "vim-addon-sql";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-sql";
@@ -726,7 +716,7 @@ rec {
     };
     dependencies = ["vim-addon-completion" "vim-addon-background-cmd" "tlib"];
   };
-  "vim-addon-background-cmd" = buildVimPlugin {
+  vim-addon-background-cmd = buildVimPlugin {
     name = "vim-addon-background-cmd";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-background-cmd";
@@ -735,7 +725,7 @@ rec {
     };
     dependencies = ["vim-addon-mw-utils"];
   };
-  "extradite" = buildVimPlugin {
+  extradite = buildVimPlugin {
     name = "extradite";
     src = fetchgit {
       url = "git://github.com/int3/vim-extradite";
@@ -744,7 +734,7 @@ rec {
     };
     dependencies = [];
   };
-  "UltiSnips" = buildVimPlugin {
+  UltiSnips = buildVimPlugin {
     name = "UltiSnips";
     src = fetchgit {
       url = "git://github.com/sirver/ultisnips";
@@ -753,7 +743,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-addon-goto-thing-at-cursor" = buildVimPlugin {
+  vim-addon-goto-thing-at-cursor = buildVimPlugin {
     name = "vim-addon-goto-thing-at-cursor";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-goto-thing-at-cursor";
@@ -762,7 +752,7 @@ rec {
     };
     dependencies = ["tlib"];
   };
-  "Tagbar" = buildVimPlugin {
+  Tagbar = buildVimPlugin {
     name = "Tagbar";
     src = fetchgit {
       url = "git://github.com/majutsushi/tagbar";
@@ -771,7 +761,7 @@ rec {
     };
     dependencies = [];
   };
-  "surround" = buildVimPlugin {
+  surround = buildVimPlugin {
     name = "surround";
     src = fetchgit {
       url = "git://github.com/tpope/vim-surround";
@@ -780,7 +770,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-addon-actions" = buildVimPlugin {
+  vim-addon-actions = buildVimPlugin {
     name = "vim-addon-actions";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-actions";
@@ -789,7 +779,7 @@ rec {
     };
     dependencies = ["vim-addon-mw-utils" "tlib"];
   };
-  "Tabular" = buildVimPlugin {
+  Tabular = buildVimPlugin {
     name = "Tabular";
     src = fetchgit {
       url = "git://github.com/godlygeek/tabular";
@@ -798,7 +788,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-addon-completion" = buildVimPlugin {
+  vim-addon-completion = buildVimPlugin {
     name = "vim-addon-completion";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-completion";
@@ -807,7 +797,7 @@ rec {
     };
     dependencies = ["tlib"];
   };
-  "table-mode" = buildVimPlugin {
+  table-mode = buildVimPlugin {
     name = "table-mode";
     src = fetchgit {
       url = "git://github.com/dhruvasagar/vim-table-mode";
@@ -816,7 +806,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-addon-xdebug" = buildVimPlugin {
+  vim-addon-xdebug = buildVimPlugin {
     name = "vim-addon-xdebug";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-xdebug";
@@ -825,7 +815,7 @@ rec {
     };
     dependencies = ["WebAPI" "vim-addon-mw-utils" "vim-addon-signs" "vim-addon-async"];
   };
-  "vim2hs" = buildVimPlugin {
+  vim2hs = buildVimPlugin {
     name = "vim2hs";
     src = fetchgit {
       url = "git://github.com/dag/vim2hs";
@@ -834,7 +824,7 @@ rec {
     };
     dependencies = [];
   };
-  "WebAPI" = buildVimPlugin {
+  WebAPI = buildVimPlugin {
     name = "WebAPI";
     src = fetchgit {
       url = "git://github.com/mattn/webapi-vim";
@@ -844,7 +834,7 @@ rec {
     buildInputs = [ zip ];
     dependencies = [];
   };
-  "rainbow_parentheses" = buildVimPlugin {
+  rainbow_parentheses = buildVimPlugin {
     name = "rainbow_parentheses";
     src = fetchgit {
       url = "git://github.com/kien/rainbow_parentheses.vim";
@@ -853,7 +843,7 @@ rec {
     };
     dependencies = [];
   };
-  "sourcemap.vim" = buildVimPlugin {
+  sourcemap.vim = buildVimPlugin {
     name = "sourcemap.vim";
     src = fetchgit {
       url = "git://github.com/chikatoike/sourcemap.vim";
@@ -862,7 +852,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-addon-other" = buildVimPlugin {
+  vim-addon-other = buildVimPlugin {
     name = "vim-addon-other";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-other";
@@ -871,7 +861,7 @@ rec {
     };
     dependencies = ["vim-addon-actions" "vim-addon-mw-utils"];
   };
-  "vim-addon-mw-utils" = buildVimPlugin {
+  vim-addon-mw-utils = buildVimPlugin {
     name = "vim-addon-mw-utils";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-mw-utils";
@@ -880,7 +870,7 @@ rec {
     };
     dependencies = [];
   };
-  "Gist" = buildVimPlugin {
+  Gist = buildVimPlugin {
     name = "Gist";
     src = fetchgit {
       url = "git://github.com/mattn/gist-vim";
@@ -890,7 +880,7 @@ rec {
     buildInputs = [ zip ];
     dependencies = [];
   };
-  "pathogen" = buildVimPlugin {
+  pathogen = buildVimPlugin {
     name = "pathogen";
     src = fetchgit {
       url = "git://github.com/tpope/vim-pathogen";
@@ -899,7 +889,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-latex-live-preview" = buildVimPlugin {
+  vim-latex-live-preview = buildVimPlugin {
     name = "vim-latex-live-preview";
     src = fetchgit {
       url = "git://github.com/xuhdev/vim-latex-live-preview";
@@ -908,7 +898,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-addon-mru" = buildVimPlugin {
+  vim-addon-mru = buildVimPlugin {
     name = "vim-addon-mru";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-mru";
@@ -917,7 +907,7 @@ rec {
     };
     dependencies = ["vim-addon-other" "vim-addon-mw-utils"];
   };
-  "VimOutliner" = buildVimPlugin {
+  VimOutliner = buildVimPlugin {
     name = "VimOutliner";
     src = fetchgit {
       url = "git://github.com/vimoutliner/vimoutliner";
@@ -926,7 +916,7 @@ rec {
     };
     dependencies = [];
   };
-  "tlib" = buildVimPlugin {
+  tlib = buildVimPlugin {
     name = "tlib";
     src = fetchgit {
       url = "git://github.com/tomtom/tlib_vim";
@@ -935,7 +925,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-airline" = buildVimPlugin {
+  vim-airline = buildVimPlugin {
     name = "vim-airline";
     src = fetchgit {
       url = "git://github.com/bling/vim-airline";
@@ -944,7 +934,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-addon-manager" = buildVimPlugin {
+  vim-addon-manager = buildVimPlugin {
     name = "vim-addon-manager";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-manager";
@@ -953,7 +943,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-gitgutter" = buildVimPlugin {
+  vim-gitgutter = buildVimPlugin {
     name = "vim-gitgutter";
     src = fetchgit {
       url = "git://github.com/airblade/vim-gitgutter";
@@ -962,7 +952,7 @@ rec {
     };
     dependencies = [];
   };
-  "wombat256" = buildVimPlugin {
+  wombat256 = buildVimPlugin {
     name = "wombat256";
     src = fetchurl {
       url = "http://www.vim.org/scripts/download_script.php?src_id=13400";
@@ -975,7 +965,7 @@ rec {
        url = "http://www.vim.org/scripts/script.php?script_id=2465";
     };
   };
-  "vim-addon-async" = buildVimPlugin {
+  vim-addon-async = buildVimPlugin {
     name = "vim-addon-async";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-async";
@@ -984,7 +974,7 @@ rec {
     };
     dependencies = ["vim-addon-signs"];
   };
-  "fugitive" = buildVimPlugin {
+  fugitive = buildVimPlugin {
     name = "fugitive";
     src = fetchgit {
       url = "git://github.com/tpope/vim-fugitive";
@@ -993,7 +983,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-addon-errorformats" = buildVimPlugin {
+  vim-addon-errorformats = buildVimPlugin {
     name = "vim-addon-errorformats";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-errorformats";
@@ -1002,7 +992,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-addon-php-manual" = buildVimPlugin {
+  vim-addon-php-manual = buildVimPlugin {
     name = "vim-addon-php-manual";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-php-manual";
@@ -1011,7 +1001,7 @@ rec {
     };
     dependencies = [];
   };
-  "matchit.zip" = buildVimPlugin {
+  matchit.zip = buildVimPlugin {
     name = "matchit.zip";
     src = fetchurl {
       url = "http://www.vim.org/scripts/download_script.php?src_id=8196";
@@ -1024,7 +1014,7 @@ rec {
        url = "http://www.vim.org/scripts/script.php?script_id=39";
     };
   };
-  "ghcmod" = buildVimPlugin {
+  ghcmod = buildVimPlugin {
     name = "ghcmod";
     src = fetchgit {
       url = "git://github.com/eagletmt/ghcmod-vim";
@@ -1033,7 +1023,7 @@ rec {
     };
     dependencies = [];
   };
-  "YankRing" = buildVimPlugin {
+  YankRing = buildVimPlugin {
     name = "YankRing";
     src = fetchurl {
       url = "http://www.vim.org/scripts/download_script.php?src_id=20842";
@@ -1046,7 +1036,7 @@ rec {
        url = "http://www.vim.org/scripts/script.php?script_id=1234";
     };
   };
-  "The_NERD_tree" = buildVimPlugin {
+  The_NERD_tree = buildVimPlugin {
     name = "The_NERD_tree";
     src = fetchgit {
       url = "git://github.com/scrooloose/nerdtree";
@@ -1055,7 +1045,7 @@ rec {
     };
     dependencies = [];
   };
-  "Colour_Sampler_Pack" = buildVimPlugin {
+  Colour_Sampler_Pack = buildVimPlugin {
     name = "Colour_Sampler_Pack";
     src = fetchurl {
       url = "http://www.vim.org/scripts/download_script.php?src_id=18915";
@@ -1068,7 +1058,7 @@ rec {
        url = "http://www.vim.org/scripts/script.php?script_id=625";
     };
   };
-  "Syntastic" = buildVimPlugin {
+  Syntastic = buildVimPlugin {
     name = "Syntastic";
     src = fetchgit {
       url = "git://github.com/scrooloose/syntastic";
@@ -1077,7 +1067,7 @@ rec {
     };
     dependencies = [];
   };
-  "Gundo" = buildVimPlugin {
+  Gundo = buildVimPlugin {
     name = "Gundo";
     src = fetchgit {
       url = "https://bitbucket.org/sjl/gundo.vim";
@@ -1086,7 +1076,7 @@ rec {
     };
     dependencies = [];
   };
-  "snipmate" = buildVimPlugin {
+  snipmate = buildVimPlugin {
     name = "snipmate";
     src = fetchgit {
       url = "git://github.com/garbas/vim-snipmate";
@@ -1095,7 +1085,7 @@ rec {
     };
     dependencies = ["vim-addon-mw-utils" "tlib"];
   };
-  "The_NERD_Commenter" = buildVimPlugin {
+  The_NERD_Commenter = buildVimPlugin {
     name = "The_NERD_Commenter";
     src = fetchgit {
       url = "git://github.com/scrooloose/nerdcommenter";
@@ -1104,7 +1094,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-addon-nix" = buildVimPlugin {
+  vim-addon-nix = buildVimPlugin {
     name = "vim-addon-nix";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-nix";
@@ -1113,7 +1103,7 @@ rec {
     };
     dependencies = ["vim-addon-completion" "vim-addon-goto-thing-at-cursor" "vim-addon-errorformats" "vim-addon-actions" "vim-addon-mw-utils" "tlib"];
   };
-  "vim-addon-syntax-checker" = buildVimPlugin {
+  vim-addon-syntax-checker = buildVimPlugin {
     name = "vim-addon-syntax-checker";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-syntax-checker";
@@ -1122,7 +1112,7 @@ rec {
     };
     dependencies = ["vim-addon-mw-utils" "tlib"];
   };
-  "commentary" = buildVimPlugin {
+  commentary = buildVimPlugin {
     name = "commentary";
     src = fetchgit {
       url = "git://github.com/tpope/vim-commentary";
@@ -1131,7 +1121,7 @@ rec {
     };
     dependencies = [];
   };
-  "undotree" = buildVimPlugin {
+  undotree = buildVimPlugin {
     name = "undotree";
     src = fetchgit {
       url = "git://github.com/mbbill/undotree";
@@ -1140,7 +1130,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-easy-align" = buildVimPlugin {
+  vim-easy-align = buildVimPlugin {
     name = "vim-easy-align";
     src = fetchgit {
       url = "git://github.com/junegunn/vim-easy-align";
@@ -1149,7 +1139,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-addon-toggle-buffer" = buildVimPlugin {
+  vim-addon-toggle-buffer = buildVimPlugin {
     name = "vim-addon-toggle-buffer";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-toggle-buffer";
@@ -1158,7 +1148,7 @@ rec {
     };
     dependencies = ["vim-addon-mw-utils" "tlib"];
   };
-  "Hoogle" = buildVimPlugin {
+  Hoogle = buildVimPlugin {
     name = "Hoogle";
     src = fetchgit {
       url = "git://github.com/Twinside/vim-hoogle";
@@ -1167,7 +1157,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-addon-commenting" = buildVimPlugin {
+  vim-addon-commenting = buildVimPlugin {
     name = "vim-addon-commenting";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-commenting";
@@ -1176,7 +1166,7 @@ rec {
     };
     dependencies = [];
   };
-  "quickfixstatus" = buildVimPlugin {
+  quickfixstatus = buildVimPlugin {
     name = "quickfixstatus";
     src = fetchgit {
       url = "git://github.com/dannyob/quickfixstatus";
@@ -1185,7 +1175,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-coffee-script" = buildVimPlugin {
+  vim-coffee-script = buildVimPlugin {
     name = "vim-coffee-script";
     src = fetchgit {
       url = "git://github.com/kchmck/vim-coffee-script";
@@ -1194,7 +1184,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-iced-coffee-script" = buildVimPlugin {
+  vim-iced-coffee-script = buildVimPlugin {
     name = "vim-iced-coffee-script";
     src = fetchgit {
       url = "git://github.com/noc7c9/vim-iced-coffee-script";
@@ -1203,7 +1193,7 @@ rec {
     };
     dependencies = ["vim-coffee-script"];
   };
-  "rust" = buildVimPlugin {
+  rust = buildVimPlugin {
     name = "rust";
     src = fetchgit {
       url = "git://github.com/wting/rust.vim";
@@ -1212,7 +1202,7 @@ rec {
     };
     dependencies = [];
   };
-  "YUNOcommit" = buildVimPlugin {
+  YUNOcommit = buildVimPlugin {
     name = "YUNOcommit";
     src = fetchgit {
       url = "git://github.com/esneide/YUNOcommit.vim";
@@ -1221,7 +1211,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-snippets" = buildVimPlugin {
+  vim-snippets = buildVimPlugin {
     name = "vim-snippets";
     src = fetchgit {
       url = "git://github.com/honza/vim-snippets";
@@ -1230,7 +1220,7 @@ rec {
     };
     dependencies = [];
   };
-  "Solarized" = buildVimPlugin {
+  Solarized = buildVimPlugin {
     name = "Solarized";
     src = fetchgit {
       url = "git://github.com/altercation/vim-colors-solarized";
@@ -1239,7 +1229,7 @@ rec {
     };
     dependencies = [];
   };
-  "vim-addon-local-vimrc" = buildVimPlugin {
+  vim-addon-local-vimrc = buildVimPlugin {
     name = "vim-addon-local-vimrc";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-local-vimrc";
@@ -1248,7 +1238,7 @@ rec {
     };
     dependencies = [];
   };
-  "Supertab" = buildVimPlugin {
+  Supertab = buildVimPlugin {
     name = "Supertab";
     src = fetchgit {
       url = "git://github.com/ervandew/supertab";
