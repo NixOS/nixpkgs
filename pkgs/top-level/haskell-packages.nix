@@ -2954,12 +2954,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   tar = callPackage ../development/libraries/haskell/tar {};
 
-  threadscope = callPackage ../development/tools/haskell/threadscope {
-    gtk = self.gtk_0_12_5_7;
-    glib = self.glib_0_12_5_4;
-    cairo = self.cairo_0_12_5_3;
-    pango = self.pango_0_12_5_3;
-  };
+  threadscope = callPackage ../development/tools/haskell/threadscope {};
 
   uuagcBootstrap = callPackage ../development/tools/haskell/uuagc/bootstrap.nix {};
   uuagcCabal = callPackage ../development/tools/haskell/uuagc/cabal.nix {};
