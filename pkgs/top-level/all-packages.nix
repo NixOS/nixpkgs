@@ -11974,6 +11974,8 @@ let
 
   sage = callPackage ../applications/science/math/sage { };
 
+  ipopt = callPackage ../development/libraries/science/math/ipopt { };
+
   ### SCIENCE/MOLECULAR-DYNAMICS
 
   gromacs = callPackage ../applications/science/molecular-dynamics/gromacs {
