@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "PastePipe";
-  version = "1.6";
-  sha256 = "08rsq2j3gy98a69pjldvbhawmnzxgld7abh9kszrb0kpjmd9sgc4";
+  version = "1.7";
+  sha256 = "0had11n44y7zjhhymdbvahwmxcxxrbxy7c9jxijhw3n7xqhdmva0";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ cmdargs HTTP network networkUri ];
