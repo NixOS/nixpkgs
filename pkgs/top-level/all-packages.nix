@@ -4021,6 +4021,10 @@ let
 
   nix-exec = callPackage ../development/interpreters/nix-exec {
     nix = nixUnstable;
+    git = git.override {
+      withManual = false;
+      pythonSupport = false;
+    };
   };
 
   octave = callPackage ../development/interpreters/octave {
