@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export XML_CATALOG_FILES=${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml
     substituteInPlace doc/rootfs/Makefile.am --replace '@LXCROOTFSMOUNT@' '$out/lib/lxc/rootfs'
+    substituteInPlace configure.ac --replace '$sysconfdir/' '/etc/'
+    substituteInPlace configure.ac --replace '$${sysconfdir}/' '/etc/'
   '';
 
   configureFlags = [
