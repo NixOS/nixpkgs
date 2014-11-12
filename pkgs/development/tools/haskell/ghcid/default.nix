@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ghcid";
-  version = "0.3.1";
-  sha256 = "09dyynqa42q6rcms8pghlyih8a3fahb5fbhc500grqc094kgfs7c";
+  version = "0.3.2";
+  sha256 = "1kx20la4snldhd709y69za8bs57v90nblghfrxrvmzhrmpvh4bn3";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ cmdargs extra filepath terminalSize time ];
