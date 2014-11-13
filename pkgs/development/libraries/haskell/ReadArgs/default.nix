@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [ systemFilepath text ];
   testDepends = [ hspec systemFilepath text ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/rampion/ReadArgs";
     description = "Simple command line argument parsing";
