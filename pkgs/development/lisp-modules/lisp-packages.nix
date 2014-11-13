@@ -219,5 +219,269 @@ let lispPackages = rec {
       rev = ''a63da5b764b6fa30e32fcda4ddac88de385c9d5b'';
     };
   };
+
+  query-fs = buildLispPackage rec {
+    baseName = "query-fs";
+    version = "git-20141113";
+    description = "High-level virtual FS using CL-Fuse-Meta-FS to represent results of queries";
+    deps = [bordeaux-threads cl-fuse cl-fuse-meta-fs cl-ppcre command-line-arguments iterate trivial-backtrace];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''https://github.com/fb08af68/query-fs'';
+      sha256 = "4ed66f255e50d2c9ea9f0b3fbaa92bde9b8acf6a5fafb0d7f12b254be9de99e9";
+      rev = ''831f0180967f09b1dd345fef82144f48334279c3'';
+    };
+  };
+
+  cl-fuse = buildLispPackage rec {
+    baseName = "cl-fuse";
+    version = "git-20141113";
+    description = "CFFI bindings to FUSE (Filesystem in user space)";
+    deps = [bordeaux-threads cffi cl-utilities iterate trivial-backtrace trivial-utf-8];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''https://github.com/fb08af68/cl-fuse'';
+      sha256 = "1l4ydxbwzlj6gkb1c9vc96rfbj951snaidpx10pxz4wdnzg3kq99";
+      rev = ''6feffaa34a21cfc7890b25357284858f924e8cb3'';
+    };
+    propagatedBuildInputs = [pkgs.fuse];
+    overrides = x : {
+      configurePhase = ''
+        export CL_SOURCE_REGISTRY="$CL_SOURCE_REGISTRY:$PWD"
+	export makeFlags="$makeFlags LISP=common-lisp.sh"
+      '';
+    };
+  };
+
+  cffi = buildLispPackage rec {
+    baseName = "cffi";
+    version = "0.14.0";
+    description = "The Common Foreign Function Interface";
+    deps = [alexandria babel trivial-features];
+    # Source type: http
+    src = pkgs.fetchurl {
+      url = ''http://common-lisp.net/project/cffi/releases/cffi_${version}.tar.gz'';
+      sha256 = "155igjh096vrp7n71c0xcg9qbcpj6547qjvzi9shxbpi6piw6fkw";
+    };
+  };
+
+  babel = buildLispPackage rec {
+    baseName = "babel";
+    version = "git-20141113";
+    description = "Babel, a charset conversion library.";
+    deps = [alexandria trivial-features];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''https://github.com/cl-babel/babel'';
+      sha256 = "abe7150f25ceb7eded520d95f1665a46f4233cf13b577fd02c3f6be54c32facc";
+      rev = ''74b35ea79b769c4f9aefad933923778ffa7915ab'';
+    };
+  };
+
+  cl-utilities = buildLispPackage rec {
+    baseName = "cl-utilities";
+    version = "1.2.4";
+    description = "A collection of Common Lisp utility functions";
+    deps = [];
+    # Source type: http
+    src = pkgs.fetchurl {
+      url = ''http://common-lisp.net/project/cl-utilities/cl-utilities-${version}.tar.gz'';
+      sha256 = "1z2ippnv2wgyxpz15zpif7j7sp1r20fkjhm4n6am2fyp6a3k3a87";
+    };
+  };
+
+  trivial-utf-8 = buildLispPackage rec {
+    baseName = "trivial-utf-8";
+    version = "2011-09-08";
+    description = "A UTF-8 encoding library";
+    deps = [];
+    # Source type: darcs
+    src = pkgs.fetchdarcs {
+      url = ''http://common-lisp.net/project/trivial-utf-8/darcs/trivial-utf-8/'';
+      sha256 = "1jz27gz8gvqdmvp3k9bxschs6d5b3qgk94qp2bj6nv1d0jc3m1l1";
+    };
+  };
+
+  cl-fuse-meta-fs = buildLispPackage rec {
+    baseName = "cl-fuse-meta-fs";
+    version = "git-20141113";
+    description = "CFFI bindings to FUSE (Filesystem in user space)";
+    deps = [bordeaux-threads cl-fuse iterate pcall];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''https://github.com/fb08af68/cl-fuse-meta-fs'';
+      sha256 = "259303effea61baf293ffc5d080cb071ef15bed8fa1c76f0c1631f68d2aa3c85";
+      rev = ''d3d332471ce9330e3eaebf9d6cecdd2014c3599b'';
+    };
+  };
+
+  pcall = buildLispPackage rec {
+    baseName = "pcall";
+    version = "0.3";
+    description = "Common Lisp library intended to simplify 'result-oriented' parallelism";
+    deps = [bordeaux-threads];
+    # Source type: http
+    src = pkgs.fetchgit {
+      url = ''https://github.com/marijnh/pcall'';
+      sha256 = "00ix5d9ljymrrpwsri0hhh3d592jqr2lvgbvkhav3k96rwq974ps";
+      rev = "4e1ef32c33c2ca18fd8ab9afb4fa793c179a3578";
+    };
+  };
+
+  command-line-arguments = buildLispPackage rec {
+    baseName = "command-line-arguments";
+    version = "git-20141113";
+    description = "small library to deal with command-line arguments";
+    deps = [];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''http://common-lisp.net/project/qitab/git/command-line-arguments.git'';
+      sha256 = "91bb321e201034c35121860cb6ec05e39c6392d5906a52b9a2d33d0f76b06123";
+      rev = ''121f303bbef9c9cdf37a7a12d8adb1ad4be5a6ae'';
+    };
+  };
+
+  trivial-backtrace = buildLispPackage rec {
+    baseName = "trivial-backtrace";
+    version = "git-2014-11-01";
+    description = "trivial-backtrace";
+    deps = [];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''http://common-lisp.net/project/trivial-backtrace/trivial-backtrace.git'';
+      sha256 = "1ql80z0igsng32rbp24h81pj5c4l87c1ana6c9lx3dlqpixzl4kj";
+      rev = ''48a6b081e00b0d85f1e001c7258393ed34d06bc9'';
+    };
+  };
+
+  drakma = buildLispPackage rec {
+    baseName = "drakma";
+    version = "v1.3.10";
+    description = "Full-featured http/https client based on usocket";
+    deps = [chipz chunga cl-ssl cl-base64 cl-ppcre flexi-streams puri usocket];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''https://github.com/edicl/drakma'';
+      sha256 = "0ecc37c9d5cc91a3b86746c4f20c0b1609969db01041df04ff6a9df1d021b30a";
+      rev = ''refs/tags/v1.3.10'';
+    };
+  };
+
+  chipz = buildLispPackage rec {
+    baseName = "chipz";
+    version = "git-20141113";
+    description = "A library for decompressing deflate, zlib, and gzip data";
+    deps = [];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''https://github.com/froydnj/chipz'';
+      sha256 = "73ae22d58b6db5b2c86af4a465260e48a5aca19827d2b7329e2870c1148da8e2";
+      rev = ''3402c94df1d0af7742df08d3ffa23fd5c04c9bf2'';
+    };
+  };
+
+  chunga = buildLispPackage rec {
+    baseName = "chunga";
+    version = "v1.1.5";
+    description = "Portable chunked streams";
+    deps = [trivial-gray-streams];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''https://github.com/edicl/chunga'';
+      sha256 = "5d045882be34b158185c491da85cfd4671f456435c9ff8fa311a864f633b0446";
+      rev = ''refs/tags/v1.1.5'';
+    };
+  };
+
+  trivial-gray-streams = buildLispPackage rec {
+    baseName = "trivial-gray-streams";
+    version = "git-20141113";
+    description = "Compatibility layer for Gray Streams (see http://www.cliki.net/Gray%20streams).";
+    deps = [];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''https://github.com/trivial-gray-streams/trivial-gray-streams'';
+      sha256 = "8d5c041f95eb31aa313adc433edf91bb14656400cae1e0ec98ad7ed085bb7954";
+      rev = ''0483ade330508b4b2edeabdb47d16ec9437ee1cb'';
+    };
+  };
+
+  cl-ssl = buildLispPackage rec {
+    baseName = "cl+ssl";
+    version = "git-20141113";
+    description = "Common Lisp interface to OpenSSL.";
+    deps = [bordeaux-threads cffi flexi-streams trivial-garbage trivial-gray-streams];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''https://github.com/cl-plus-ssl/cl-plus-ssl'';
+      sha256 = "6b99fc49ac38e49ee69a47ce5791606b8b811c01e5563bfd3164d393db6c4040";
+      rev = ''f8695c5df48ebc3557f76a8a08dd96429bdf8df2'';
+    };
+    propagatedBuildInputs = [pkgs.openssl];
+  };
+
+  flexi-streams = buildLispPackage rec {
+    baseName = "flexi-streams";
+    version = "v1.0.13";
+    description = "Flexible bivalent streams for Common Lisp";
+    deps = [trivial-gray-streams];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''https://github.com/edicl/flexi-streams'';
+      sha256 = "46d6b056cffc9ea201dedde847b071db744dfbadf0a21a261717272fe3d85cab";
+      rev = ''refs/tags/v1.0.13'';
+    };
+  };
+
+  trivial-garbage = buildLispPackage rec {
+    baseName = "trivial-garbage";
+    version = "git-20141113";
+    description = "Portable finalizers, weak hash-tables and weak pointers.";
+    deps = [];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''https://github.com/trivial-garbage/trivial-garbage'';
+      sha256 = "69f6c910921de436393ff5f93bee36443534756965fa34e43e04d9e8919212df";
+      rev = ''2721d36d71748d9736a82fe5afe333c52bae3084'';
+    };
+  };
+
+  cl-base64 = buildLispPackage rec {
+    baseName = "cl-base64";
+    version = "git-20141113";
+    description = "Base64 encoding and decoding with URI support.";
+    deps = [];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''http://git.b9.com/cl-base64.git'';
+      sha256 = "a34196544cc67d54aef74e31eff2cee62a7861a5675d010fcd925f1c61c23e81";
+      rev = ''f375d1fc3a6616e95ae88bb33493bb99f920ba13'';
+    };
+  };
+
+  puri = buildLispPackage rec {
+    baseName = "puri";
+    version = "git-20141113";
+    description = "Portable Universal Resource Indentifier Library";
+    deps = [];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''http://git.b9.com/puri.git'';
+      sha256 = "71804698e7f3009fb7f570656af5d952465bfe77f72e9c41f7e2dda8a5b45c5e";
+      rev = ''68260dbf320c01089c8cee54ef32c800eefcde7f'';
+    };
+  };
+
+  usocket = buildLispPackage rec {
+    baseName = "usocket";
+    version = "0.6.1";
+    description = "Universal socket library for Common Lisp";
+    deps = [];
+    # Source type: http
+    src = pkgs.fetchurl {
+      url = ''http://common-lisp.net/project/usocket/releases/usocket-${version}.tar.gz'';
+      sha256 = "1lnhjli85w20iy5nn6j6gsyxx42mvj8l0dfhwcjpl6dl2lz80r7a";
+    };
+  };
 };
 in lispPackages
