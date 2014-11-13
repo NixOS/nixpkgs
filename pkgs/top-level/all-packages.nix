@@ -4554,6 +4554,8 @@ let
 
   ibus = callPackage ../development/libraries/ibus { };
 
+  icmake = callPackage ../development/tools/build-managers/icmake { };
+
   iconnamingutils = callPackage ../development/tools/misc/icon-naming-utils {
     inherit (perlPackages) XMLSimple;
   };
