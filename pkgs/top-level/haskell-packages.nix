@@ -356,15 +356,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   cabalMacosx = callPackage ../development/libraries/haskell/cabal-macosx {};
 
-  cairo_0_12_5_3 = callPackage ../development/libraries/haskell/cairo/0.12.5.3.nix {
+  cairo = callPackage ../development/libraries/haskell/cairo {
     inherit (pkgs) cairo zlib;
     libc = pkgs.stdenv.gcc.libc;
   };
-  cairo_0_13_0_4 = callPackage ../development/libraries/haskell/cairo/0.13.0.4.nix {
-    inherit (pkgs) cairo zlib;
-    libc = pkgs.stdenv.gcc.libc;
-  };
-  cairo = self.cairo_0_13_0_4;
 
   carray = callPackage ../development/libraries/haskell/carray {};
 
@@ -956,15 +951,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   GLFWB = callPackage ../development/libraries/haskell/GLFW-b {};
 
-  glib_0_12_5_4 = callPackage ../development/libraries/haskell/glib/0.12.5.4.nix {
+  glib = callPackage ../development/libraries/haskell/glib {
     glib = pkgs.glib;
     libc = pkgs.stdenv.gcc.libc;
   };
-  glib_0_13_0_5 = callPackage ../development/libraries/haskell/glib/0.13.0.5.nix {
-    glib = pkgs.glib;
-    libc = pkgs.stdenv.gcc.libc;
-  };
-  glib = self.glib_0_13_0_5;
 
   Glob = callPackage ../development/libraries/haskell/Glob {};
 
@@ -996,18 +986,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   gsasl = callPackage ../development/libraries/haskell/gsasl { inherit (pkgs) gsasl; };
 
-  gtk_0_12_5_7 = callPackage ../development/libraries/haskell/gtk/0.12.5.7.nix {
-    inherit (pkgs) gtk;
-    libc = pkgs.stdenv.gcc.libc;
-    glib = self.glib_0_12_5_4;
-    cairo = self.cairo_0_12_5_3;
-    pango = self.pango_0_12_5_3;
-  };
-  gtk_0_13_0_3 = callPackage ../development/libraries/haskell/gtk/0.13.0.3.nix {
+  gtk = callPackage ../development/libraries/haskell/gtk {
     inherit (pkgs) gtk;
     libc = pkgs.stdenv.gcc.libc;
   };
-  gtk = self.gtk_0_13_0_3;
 
   gtk3 = callPackage ../development/libraries/haskell/gtk3 {
     inherit (pkgs) gtk3;
@@ -1833,17 +1815,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   pandocTypes = callPackage ../development/libraries/haskell/pandoc-types {};
 
-  pango_0_12_5_3 = callPackage ../development/libraries/haskell/pango/0.12.5.3.nix {
-    inherit (pkgs) pango;
-    libc = pkgs.stdenv.gcc.libc;
-    glib = self.glib_0_12_5_4;
-    cairo = self.cairo_0_12_5_3;
-  };
-  pango_0_13_0_3 = callPackage ../development/libraries/haskell/pango/0.13.0.3.nix {
+  pango = callPackage ../development/libraries/haskell/pango {
     inherit (pkgs) pango;
     libc = pkgs.stdenv.gcc.libc;
   };
-  pango = self.pango_0_13_0_3;
 
   parallel_3_2_0_3 = callPackage ../development/libraries/haskell/parallel/3.2.0.3.nix {};
   parallel_3_2_0_4 = callPackage ../development/libraries/haskell/parallel/3.2.0.4.nix {};
