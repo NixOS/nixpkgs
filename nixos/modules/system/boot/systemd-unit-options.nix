@@ -441,4 +441,321 @@ in rec {
 
   targetOptions = commonUnitOptions;
 
+  commonNetworkOptions = {
+
+    enable = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        If set to false, this unit will be a symlink to
+        /dev/null.
+      '';
+    };
+
+    matchConfig = mkOption {
+      default = {};
+      example = { Name = "eth0"; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Match]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.link</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+        <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+        for details.
+      '';
+    };
+
+  };
+
+  linkOptions = commonNetworkOptions // {
+
+    linkConfig = mkOption {
+      default = {};
+      example = { MACAddress = "00:ff:ee:aa:cc:dd"; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Link]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.link</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+  };
+
+  netdevOptions = commonNetworkOptions // {
+
+    netdevConfig = mkOption {
+      default = {};
+      example = { Name = "mybridge"; Kind = "bridge"; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Netdev]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    vlanConfig = mkOption {
+      default = {};
+      example = { Id = "4"; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[VLAN]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    macvlanConfig = mkOption {
+      default = {};
+      example = { Mode = "private"; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[MACVLAN]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    vxlanConfig = mkOption {
+      default = {};
+      example = { Id = "4"; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[VXLAN]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    tunnelConfig = mkOption {
+      default = {};
+      example = { Remote = "192.168.1.1"; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Tunnel]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    peerConfig = mkOption {
+      default = {};
+      example = { Name = "veth2"; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Peer]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    tunConfig = mkOption {
+      default = {};
+      example = { User = "openvpn"; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Tun]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    tapConfig = mkOption {
+      default = {};
+      example = { User = "openvpn"; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Tap]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    bondConfig = mkOption {
+      default = {};
+      example = { Mode = "802.3ad"; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Bond]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+  };
+
+  addressOptions = {
+
+    addressConfig = mkOption {
+      default = {};
+      example = { Address = "192.168.0.100/24"; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Address]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+  };
+
+  routeOptions = {
+
+    routeConfig = mkOption {
+      default = {};
+      example = { Gateway = "192.168.0.1"; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Route]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+  };
+
+  networkOptions = commonNetworkOptions // {
+
+    networkConfig = mkOption {
+      default = {};
+      example = { Description = "My Network"; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Network]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    dhcpConfig = mkOption {
+      default = {};
+      example = { UseDNS = true; UseRoutes = true; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[DHCP]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    address = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of addresses to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    gateway = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of gateways to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    dns = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of dns servers to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    ntp = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of ntp servers to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    vlan = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of vlan interfaces to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    macvlan = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of macvlan interfaces to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    vxlan = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of vxlan interfaces to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    tunnel = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of tunnel interfaces to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    addresses = mkOption {
+      default = [ ];
+      type = types.listOf types.optionSet;
+      options = [ addressOptions ];
+      description = ''
+        A list of address sections to be added to the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    routes = mkOption {
+      default = [ ];
+      type = types.listOf types.optionSet;
+      options = [ routeOptions ];
+      description = ''
+        A list of route sections to be added to the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+  };
+
 }

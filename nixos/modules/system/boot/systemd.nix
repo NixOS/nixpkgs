@@ -96,6 +96,9 @@ let
       "systemd-modules-load.service"
       "kmod-static-nodes.service"
 
+      # Networking
+      "systemd-networkd.service"
+
       # Filesystems.
       "systemd-fsck@.service"
       "systemd-fsck-root.service"
@@ -384,6 +387,103 @@ let
         '';
     };
 
+  commonMatchText = def: ''
+      [Match]
+      ${attrsToSection def.matchConfig}
+    '';
+
+  linkToUnit = name: def:
+    { inherit (def) enable;
+      text = commonMatchText def +
+        ''
+          [Link]
+          ${attrsToSection def.linkConfig}
+        '';
+    };
+
+  netdevToUnit = name: def:
+    { inherit (def) enable;
+      text = commonMatchText def +
+        ''
+          [NetDev]
+          ${attrsToSection def.netdevConfig}
+
+          ${optionalString (def.vlanConfig != { }) ''
+            [VLAN]
+            ${attrsToSection def.vlanConfig}
+
+          ''}
+          ${optionalString (def.macvlanConfig != { }) ''
+            [MACVLAN]
+            ${attrsToSection def.macvlanConfig}
+
+          ''}
+          ${optionalString (def.vxlanConfig != { }) ''
+            [VXLAN]
+            ${attrsToSection def.vxlanConfig}
+
+          ''}
+          ${optionalString (def.tunnelConfig != { }) ''
+            [Tunnel]
+            ${attrsToSection def.tunnelConfig}
+
+          ''}
+          ${optionalString (def.peerConfig != { }) ''
+            [Peer]
+            ${attrsToSection def.peerConfig}
+
+          ''}
+          ${optionalString (def.tunConfig != { }) ''
+            [Tun]
+            ${attrsToSection def.tunConfig}
+
+          ''}
+          ${optionalString (def.tapConfig != { }) ''
+            [Tap]
+            ${attrsToSection def.tapConfig}
+
+          ''}
+          ${optionalString (def.bondConfig != { }) ''
+            [Bond]
+            ${attrsToSection def.bondConfig}
+
+          ''}
+        '';
+    };
+
+  networkToUnit = name: def:
+    { inherit (def) enable;
+      text = commonMatchText def +
+        ''
+          [Network]
+          ${attrsToSection def.networkConfig}
+          ${concatStringsSep "\n" (map (s: "Address=${s}") def.address)}
+          ${concatStringsSep "\n" (map (s: "Gateway=${s}") def.gateway)}
+          ${concatStringsSep "\n" (map (s: "DNS=${s}") def.dns)}
+          ${concatStringsSep "\n" (map (s: "NTP=${s}") def.ntp)}
+          ${concatStringsSep "\n" (map (s: "VLAN=${s}") def.vlan)}
+          ${concatStringsSep "\n" (map (s: "MACVLAN=${s}") def.macvlan)}
+          ${concatStringsSep "\n" (map (s: "VXLAN=${s}") def.vxlan)}
+          ${concatStringsSep "\n" (map (s: "Tunnel=${s}") def.tunnel)}
+
+          ${optionalString (def.dhcpConfig != { }) ''
+            [DHCP]
+            ${attrsToSection def.dhcpConfig}
+
+          ''}
+          ${flip concatMapStrings def.addresses (x: ''
+            [Address]
+            ${attrsToSection x.addressConfig}
+
+          '')}
+          ${flip concatMapStrings def.routes (x: ''
+            [Route]
+            ${attrsToSection x.routeConfig}
+
+          '')}
+        '';
+    };
+
   generateUnits = type: units: upstreamUnits: upstreamWants:
     pkgs.runCommand "${type}-units" { preferLocalBuild = true; } ''
       mkdir -p $out
@@ -562,6 +662,47 @@ in
       '';
     };
 
+    systemd.network.enable = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Whether to enable networkd or not.
+      '';
+    };
+
+    systemd.network.links = mkOption {
+      default = {};
+      type = types.attrsOf types.optionSet;
+      options = [ linkOptions ];
+      description = "Definiton of systemd network links.";
+    };
+
+    systemd.network.netdevs = mkOption {
+      default = {};
+      type = types.attrsOf types.optionSet;
+      options = [ netdevOptions ];
+      description = "Definiton of systemd network devices.";
+    };
+
+    systemd.network.networks = mkOption {
+      default = {};
+      type = types.attrsOf types.optionSet;
+      options = [ networkOptions ];
+      description = "Definiton of systemd networks.";
+    };
+
+    systemd.network.units = mkOption {
+      description = "Definition of networkd units.";
+      default = {};
+      type = types.attrsOf types.optionSet;
+      options = { name, config, ... }:
+        { options = concreteUnitOptions;
+          config = {
+            unit = mkDefault (makeUnit name config);
+          };
+        };
+    };
+
     systemd.defaultUnit = mkOption {
       default = "multi-user.target";
       type = types.str;
@@ -714,6 +855,9 @@ in
     environment.etc."systemd/system".source =
       generateUnits "system" cfg.units upstreamSystemUnits upstreamSystemWants;
 
+    environment.etc."systemd/network".source =
+      generateUnits "network" cfg.network.units [] [];
+
     environment.etc."systemd/user".source =
       generateUnits "user" cfg.user.units upstreamUserUnits [];
 
@@ -779,6 +923,11 @@ in
                    (v: let n = escapeSystemdPath v.where;
                        in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
 
+    systemd.network.units =
+      mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.network.links
+      // mapAttrs' (n: v: nameValuePair "${n}.netdev" (netdevToUnit n v)) cfg.network.netdevs
+      // mapAttrs' (n: v: nameValuePair "${n}.network" (networkToUnit n v)) cfg.network.networks;
+
     systemd.user.units =
       mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.user.services
       // mapAttrs' (n: v: nameValuePair "${n}.socket" (socketToUnit n v)) cfg.user.sockets;
@@ -799,6 +948,14 @@ in
     users.extraGroups.systemd-journal.gid = config.ids.gids.systemd-journal;
     users.extraUsers.systemd-journal-gateway.uid = config.ids.uids.systemd-journal-gateway;
     users.extraGroups.systemd-journal-gateway.gid = config.ids.gids.systemd-journal-gateway;
+
+    # Networkd
+    users.extraUsers.systemd-network.uid = config.ids.uids.systemd-network;
+    users.extraGroups.systemd-network.gid = config.ids.gids.systemd-network;
+    systemd.services.systemd-networkd.wantedBy =
+      optional config.systemd.network.enable "multi-user.target";
+    systemd.services.systemd-networkd.restartTriggers =
+      [ config.environment.etc."systemd/network".source ];
 
     # Generate timer units for all services that have a ‘startAt’ value.
     systemd.timers =
