@@ -139,7 +139,7 @@ composableDerivation {
     nlsSupport       = config.vim.nls or false;
     tclSupport       = config.vim.tcl or false;
     multibyteSupport = config.vim.multibyte or false;
-    cscopeSupport    = config.vim.cscope or false;
+    cscopeSupport    = config.vim.cscope or true;
     netbeansSupport  = config.netbeans or true; # eg envim is using it
 
     # by default, compile with darwin support if we're compiling on darwin, but
