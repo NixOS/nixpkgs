@@ -95,11 +95,12 @@ let
          --set LIBRARY_PATH "${LIBRARY_PATH}"
     '';
 
-    passthru = {
+    passthru = rec {
       inherit zlibSupport libPrefix;
       executable = "pypy";
       isPypy = true;
       buildEnv = callPackage ../../python/wrapper.nix { python = self; };
+      interpreter = "${self}/bin/${executable}";
     };
 
     enableParallelBuilding = true;
