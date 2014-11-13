@@ -483,5 +483,18 @@ let lispPackages = rec {
       sha256 = "1lnhjli85w20iy5nn6j6gsyxx42mvj8l0dfhwcjpl6dl2lz80r7a";
     };
   };
+
+  cl-html-parse = buildLispPackage rec {
+    baseName = "cl-html-parse";
+    version = "git-20141113";
+    description = "HTML Parser";
+    deps = [];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''https://github.com/gwkkwg/cl-html-parse'';
+      sha256 = "0153d4962493f106849fc7cbfe03c5ff874adae8d307ea2e1ceebbb009e2f89f";
+      rev = ''b21e8757210a1eb2a47104a563f58bf82ba9a579'';
+    };
+  };
 };
 in lispPackages
