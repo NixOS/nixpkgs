@@ -818,7 +818,7 @@ let
       homepage = "http://cvxopt.org/";
       description = "Python Software for Convex Optimization";
       maintainers = with maintainers; [ edwtjo ];
-      licsense = licenses.gpl3Plus;
+      license = licenses.gpl3Plus;
     };
   };
 
