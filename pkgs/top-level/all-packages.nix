@@ -9085,6 +9085,10 @@ let
     python = python34;
   };
 
+  bluefish = callPackage ../applications/editors/bluefish {
+    gtk = gtk3;
+  };
+
   bristol = callPackage ../applications/audio/bristol { };
 
   bspwm = callPackage ../applications/window-managers/bspwm { };
