@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "shakespeare";
-  version = "2.0.1.1";
-  sha256 = "0xddm8xby19323d9bcd196b1ninlvfkv5b93w1da23m7w0hy509p";
+  version = "2.0.2";
+  sha256 = "18yzihkjxgchb4358pbm45xk9zcmpgbp3rr27mx08nj5n0mdkwyy";
   buildDepends = [
     aeson blazeHtml blazeMarkup exceptions parsec systemFileio
     systemFilepath text time transformers
@@ -16,7 +16,6 @@ cabal.mkDerivation (self: {
     aeson blazeHtml blazeMarkup exceptions hspec HUnit parsec
     systemFileio systemFilepath text time transformers
   ];
-  doCheck = false;
   meta = {
     homepage = "http://www.yesodweb.com/book/shakespearean-templates";
     description = "A toolkit for making compile-time interpolated templates";
