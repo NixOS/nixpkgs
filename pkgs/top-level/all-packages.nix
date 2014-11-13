@@ -7178,11 +7178,15 @@ let
 
   commonsBcel = callPackage ../development/libraries/java/commons/bcel { };
 
+  commonsBsf = callPackage ../development/libraries/java/commons/bsf { };
+
   commonsCompress = callPackage ../development/libraries/java/commons/compress { };
 
   commonsFileUpload = callPackage ../development/libraries/java/commons/fileupload { };
 
   commonsLang = callPackage ../development/libraries/java/commons/lang { };
+
+  commonsLogging = callPackage ../development/libraries/java/commons/logging { };
 
   commonsIo = callPackage ../development/libraries/java/commons/io { };
 
