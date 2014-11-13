@@ -59,6 +59,14 @@ in
         '';
       };
 
+      agentTimeout = mkOption {
+        type = types.string;
+        default = "1h";
+        description = ''
+          How long to keep the private keys in memory.
+        '';
+      };
+
       package = mkOption {
         default = pkgs.openssh;
         description = ''
@@ -99,7 +107,7 @@ in
         wantedBy = [ "default.target" ];
         serviceConfig =
           { ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
-            ExecStart = "${cfg.package}/bin/ssh-agent -a %t/ssh-agent";
+            ExecStart = "${cfg.package}/bin/ssh-agent -t ${cfg.agentTimeout} -a %t/ssh-agent";
             StandardOutput = "null";
             Type = "forking";
             Restart = "on-failure";
