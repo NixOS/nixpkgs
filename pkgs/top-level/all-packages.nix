@@ -7843,7 +7843,7 @@ let
 
   zabbix20 = callPackage ../servers/monitoring/zabbix/2.0.nix { };
   zabbix22 = callPackage ../servers/monitoring/zabbix/2.2.nix { };
-  zmq = callPackage ../servers/zmq/default.nix { };
+  zmq = callPackage ../servers/zeromq/default.nix { };
 
 
   ### OS-SPECIFIC
