@@ -799,6 +799,8 @@ let
 
   can-utils = callPackage ../os-specific/linux/can-utils { };
 
+  caudec = callPackage ../applications/audio/caudec { };
+
   ccid = callPackage ../tools/security/ccid { };
 
   ccrypt = callPackage ../tools/security/ccrypt { };
