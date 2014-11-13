@@ -11239,7 +11239,9 @@ let
 
   qgis = callPackage ../applications/gis/qgis {};
 
-  qtbitcointrader = callPackage ../applications/misc/qtbitcointrader { };
+  qtbitcointrader = callPackage ../applications/misc/qtbitcointrader {
+    qt = qt4;
+  };
 
   ykpers = callPackage ../applications/misc/ykpers {};
 
