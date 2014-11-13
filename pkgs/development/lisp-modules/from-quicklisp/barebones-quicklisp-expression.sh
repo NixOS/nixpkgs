@@ -85,6 +85,15 @@ url="${ql_src##* }"
     hash=$("$(dirname "$0")/../../../build-support/fetchgit/nix-prefetch-git" "$url" "$rev" | tail -n 1)
     version="git-$(date +%Y%m%d)";
   }
+  [ "${url#http://common-lisp.net/}" != "$url" ] && {
+    http_repo_url="$url"
+    http_repo_url="${http_repo_url/git:/http:}"
+    http_repo_head="$http_repo_url/refs/heads/master"
+    echo "$http_repo_head" >&2
+    rev=$(curl -L "$http_repo_head");
+    hash=$("$(dirname "$0")/../../../build-support/fetchgit/nix-prefetch-git" "$url" "$rev" | tail -n 1)
+    version="git-$(date +%Y%m%d)";
+  }
 }
 
 [ "$ql_src_type" = cvs ] && {
