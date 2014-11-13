@@ -32,13 +32,13 @@ let lispPackages = rec {
 
   iterate = buildLispPackage rec {
     baseName = "iterate";
-    version = "1.4.3";
+    version = "darcs-2014-11-01";
     description = "Iteration package for Common Lisp";
     deps = [];
     src = pkgs.fetchdarcs {
       url = "http://common-lisp.net/project/iterate/darcs/iterate";
-      sha256 = "0m3q0s7h5s8varwx584m2akgdslj14df7kg4w1bj1fbgzsag5m1w";
-      rev = version;
+      sha256 = "0gm05s3laiivsqgqjfj1rkz83c2c0jyn4msfgbv6sz42znjpam25";
+      context = ./iterate.darcs-context;
     };
     overrides = x: {
       configurePhase="buildPhase(){ true; }";
