@@ -22,9 +22,15 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     homepage = "http://www.mozart-oz.org/";
-    description = "The Mozart Programming System combines ongoing research in programming language design and implementation, constraint logic programming, distributed computing, and human-computer interfaces. Mozart implements the Oz language and provides both expressive power and advanced functionality.";
-
+    description = "Multiplatform implementation of the Oz programming language";
+    longDescription = ''
+      The Mozart Programming System combines ongoing research in
+      programming language design and implementation, constraint logic
+      programming, distributed computing, and human-computer
+      interfaces. Mozart implements the Oz language and provides both
+      expressive power and advanced functionality.
+    '';
     license = licenses.mit;
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
   };
 }

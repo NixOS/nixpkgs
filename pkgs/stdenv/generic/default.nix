@@ -183,6 +183,7 @@ let
       isArm = system == "armv5tel-linux"
            || system == "armv6l-linux"
            || system == "armv7l-linux";
+      isBigEndian = system == "powerpc-linux";
 
       # Whether we should run paxctl to pax-mark binaries.
       needsPax = isLinux;

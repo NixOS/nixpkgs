@@ -818,7 +818,7 @@ let
       homepage = "http://cvxopt.org/";
       description = "Python Software for Convex Optimization";
       maintainers = with maintainers; [ edwtjo ];
-      licsense = licenses.gpl3Plus;
+      license = licenses.gpl3Plus;
     };
   };
 
@@ -6584,6 +6584,24 @@ let
   };
 
 
+  pyalgotrade = buildPythonPackage {
+    name = "pyalogotrade-0.16";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/P/PyAlgoTrade/PyAlgoTrade-0.16.tar.gz";
+      md5 = "01d70583ab15eb3bad21027bdeb30ae5";
+    };
+
+    propagatedBuildInputs = with self; [ numpy scipy pytz ];
+
+    meta = {
+      description = "Python Algorithmic Trading";
+      homepage = http://gbeced.github.io/pyalgotrade/;
+      license = stdenv.lib.licenses.asl20;
+    };
+  };
+
+
   pyasn1 = buildPythonPackage ({
     name = "pyasn1-0.1.7";
 
@@ -8372,6 +8390,36 @@ let
     meta = {
       description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering. ";
       homepage = http://www.scipy.org/;
+    };
+  };
+
+
+  scikitlearn = buildPythonPackage {
+    name = "scikit-learn-0.15.2";
+
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/scikit-learn/scikit-learn-0.15.2.tar.gz";
+      md5 = "d9822ad0238e17b382a3c756ea94fe0d";
+    };
+
+    buildInputs = with self; [ nose pillow pkgs.gfortran ];
+    propagatedBuildInputs = with self; [ numpy scipy pkgs.atlas ];
+
+    buildPhase = ''
+      export ATLAS=${pkgs.atlas}
+      ${self.python.executable} setup.py build_ext -i --fcompiler='gnu95'
+    '';
+
+    checkPhase = ''
+      LOCALE_ARCHIVE=${localePath} LC_ALL="en_US.UTF-8" HOME=$TMPDIR ATLAS="" nosetests
+    '';
+
+    meta = {
+      description = "A set of python modules for machine learning and data mining";
+      homepage = http://scikit-learn.org;
+      license = stdenv.lib.licenses.bsd3;
     };
   };
 

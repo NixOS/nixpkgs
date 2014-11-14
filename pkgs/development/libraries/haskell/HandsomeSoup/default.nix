@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "HandsomeSoup";
-  version = "0.3.4";
-  sha256 = "0xpimys8pb0kzqnfxxf04dbxfmcrry5pzgmagyydcrmafacg0vjb";
+  version = "0.3.5";
+  sha256 = "1d1zanlr1mdxjc69xvbxg5kn5bc08gd960j6lb1x3grhcgmj9krm";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -15,7 +15,6 @@ cabal.mkDerivation (self: {
   ];
   testDepends = [ hspec hxt ];
   jailbreak = true;
-  doCheck = false;
   meta = {
     homepage = "https://github.com/egonSchiele/HandsomeSoup";
     description = "Work with HTML more easily in HXT";

@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "rethinkdb";
-  version = "1.15.2.0";
-  sha256 = "1cca6nrdaia5dgq2ah6sfr9qy01iasilw7zdw6k8vp5907alsh0f";
+  version = "1.15.2.1";
+  sha256 = "017fq9mhqdw78hrnjm9n0nipi182361bxh1qzjpb8djc8azx49b5";
   buildDepends = [
     aeson base64Bytestring binary dataDefault mtl network scientific
     text time unorderedContainers utf8String vector

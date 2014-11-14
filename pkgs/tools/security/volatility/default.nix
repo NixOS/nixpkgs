@@ -2,11 +2,12 @@
 
 buildPythonPackage rec {
   namePrefix = "";
-  name = "volatility-2.3.1";
+  name = "volatility-2.4";
+
 
   src = fetchurl {
-    url = "http://volatility.googlecode.com/files/${name}.tar.gz";
-    sha256 = "bb1411fc671e0bf550a31e534fb1991b2f940f1dce1ebe4ce2fb627aec40726c";
+    url = "http://downloads.volatilityfoundation.org/releases/2.4/${name}.tar.gz";
+    sha256 = "1wffrkvj2lrkqhwamyix9fy05y6g6w8h1sz2iqlm6i6ag7yxykv8";
   };
 
   doCheck = false;

@@ -19,5 +19,6 @@ stdenv.mkDerivation {
     description = "Python debugger with GDB-like commands and Emacs bindings";
     homepage = http://bashdb.sourceforge.net/pydb/;
     license = stdenv.lib.licenses.gpl3;
+    platforms = stdenv.lib.platforms.all;
   };
 }

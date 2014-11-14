@@ -122,6 +122,9 @@ for o in $(cat /proc/cmdline); do
     esac
 done
 
+# Set hostid before modules are loaded.
+# This is needed by the spl/zfs modules.
+@setHostId@
 
 # Load the required kernel modules.
 mkdir -p /lib
@@ -398,7 +401,7 @@ echo /sbin/modprobe > /proc/sys/kernel/modprobe
 # Start stage 2.  `switch_root' deletes all files in the ramfs on the
 # current root.  Note that $stage2Init might be an absolute symlink,
 # in which case "-e" won't work because we're not in the chroot yet.
-if ! test -e "$targetRoot/$stage2Init" -o -L "$targetRoot/$stage2Init"; then
+if ! test -e "$targetRoot/$stage2Init" -o ! -L "$targetRoot/$stage2Init"; then
     echo "stage 2 init script ($targetRoot/$stage2Init) not found"
     fail
 fi
