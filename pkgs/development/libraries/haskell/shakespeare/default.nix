@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "shakespeare";
-  version = "2.0.2";
-  sha256 = "18yzihkjxgchb4358pbm45xk9zcmpgbp3rr27mx08nj5n0mdkwyy";
+  version = "2.0.2.1";
+  sha256 = "1s73nlkccfg3wl0qfx6f7q3afiakdhzh5xksnfhsg5hjhx80qhza";
   buildDepends = [
     aeson blazeHtml blazeMarkup exceptions parsec systemFileio
     systemFilepath text time transformers
