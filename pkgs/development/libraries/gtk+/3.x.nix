@@ -9,8 +9,8 @@ assert xineramaSupport -> xlibs.libXinerama != null;
 assert cupsSupport -> cups != null;
 
 let
-  ver_maj = "3.14";
-  ver_min = "5";
+  ver_maj = "3.12";
+  ver_min = "2";
   version = "${ver_maj}.${ver_min}";
 in
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${ver_maj}/gtk+-${version}.tar.xz";
-    sha256 = "1qmv5lwqy9ax4455h8mg8py27kvv9dwrhqssmbcccik6vv6gaw5s";
+    sha256 = "1l45nd7ln2pnrf99vdki3l7an5wrzkbak11hnnj1w6r3fkm4xmv1";
   };
 
   nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
