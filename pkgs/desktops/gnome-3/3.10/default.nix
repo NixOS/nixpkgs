@@ -1,7 +1,8 @@
-{ callPackage, self, pkgs }:
+{ callPackage, pkgs }:
 
 rec {
   inherit (pkgs) glib gtk2 gtk3 gnome2 upower glib_networking;
+  gnome3 = pkgs.gnome3_10 // { recurseForDerivations = false; };
   gtk = gtk3; # just to be sure
   libcanberra = pkgs.libcanberra_gtk3; # just to be sure
   inherit (pkgs.gnome2) ORBit2;
@@ -16,9 +17,13 @@ rec {
 
   dconf = callPackage ./core/dconf { };
 
-  empathy = callPackage ./core/empathy { };
+  empathy = callPackage ./core/empathy {
+    webkitgtk = pkgs.webkitgtk24x;
+  };
 
-  epiphany = callPackage ./core/epiphany { };
+  epiphany = callPackage ./core/epiphany {
+    webkitgtk = pkgs.webkitgtk24x;
+  };
 
   evince = callPackage ./core/evince { }; # ToDo: dbus would prevent compilation, enable tests
 
@@ -66,7 +71,9 @@ rec {
 
   folks = callPackage ./core/folks { };
 
-  gnome_online_accounts = callPackage ./core/gnome-online-accounts { };
+  gnome_online_accounts = callPackage ./core/gnome-online-accounts {
+    webkitgtk = pkgs.webkitgtk24x;
+  };
 
   gnome-online-miners = callPackage ./core/gnome-online-miners { };
 
@@ -126,7 +133,9 @@ rec {
 
   rest = callPackage ./core/rest { };
 
-  sushi = callPackage ./core/sushi { };
+  sushi = callPackage ./core/sushi {
+    webkitgtk = pkgs.webkitgtk24x;
+  };
 
   totem = callPackage ./core/totem { };
 
@@ -138,7 +147,9 @@ rec {
 
   vino = callPackage ./core/vino { };
 
-  yelp = callPackage ./core/yelp { };
+  yelp = callPackage ./core/yelp {
+    webkitgtk = pkgs.webkitgtk24x;
+  };
 
   yelp_xsl = callPackage ./core/yelp-xsl { };
 
@@ -149,9 +160,13 @@ rec {
 
 #### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
 
-  bijiben = callPackage ./apps/bijiben { };
+  bijiben = callPackage ./apps/bijiben {
+    webkitgtk = pkgs.webkitgtk24x;
+  };
 
-  evolution = callPackage ./apps/evolution { };
+  evolution = callPackage ./apps/evolution {
+    webkitgtk = pkgs.webkitgtk24x;
+   };
 
   file-roller = callPackage ./apps/file-roller { };
 
@@ -161,7 +176,9 @@ rec {
 
   gnome-clocks = callPackage ./apps/gnome-clocks { };
 
-  gnome-documents = callPackage ./apps/gnome-documents { };
+  gnome-documents = callPackage ./apps/gnome-documents {
+    webkitgtk = pkgs.webkitgtk24x;
+   };
 
   gnome-music = callPackage ./apps/gnome-music { };
 
@@ -181,14 +198,16 @@ rec {
 
   goffice = callPackage ./misc/goffice { };
 
-  gitg = callPackage ./misc/gitg { };
+  gitg = callPackage ./misc/gitg {
+    webkitgtk = pkgs.webkitgtk24x;
+  };
 
   libgit2-glib = callPackage ./misc/libgit2-glib {
     libgit2 = pkgs.libgit2.override { libssh2 = null; };
   };
 
   libmediaart = callPackage ./misc/libmediaart { };
-  
+
   gexiv2 = callPackage ./misc/gexiv2 { };
 
   gnome-tweak-tool = callPackage ./misc/gnome-tweak-tool { };

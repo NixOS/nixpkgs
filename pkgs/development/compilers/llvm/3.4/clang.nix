@@ -1,5 +1,9 @@
 { stdenv, fetch, cmake, libxml2, libedit, llvm, version, clang-tools-extra_src }:
 
+# be sure not to rebuild clang on darwin; some packages request it specifically
+# we need to fix those
+assert stdenv.isDarwin -> stdenv.gcc.nativeTools;
+
 stdenv.mkDerivation {
   name = "clang-${version}";
 

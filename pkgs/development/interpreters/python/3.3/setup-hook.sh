@@ -12,4 +12,4 @@ toPythonPath() {
     echo $result
 }
 
-envHooks=(${envHooks[@]} addPythonPath)
+envHooks+=(addPythonPath)

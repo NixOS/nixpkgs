@@ -50,12 +50,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # Fix a build failure on systems with nix store optimisation.
-  # (The build process attempted to copy file a overwriting file b, where a and
-  # b are hard-linked, which results in cp returning a non-zero exit code.)
-  # https://github.com/NixOS/nixpkgs/issues/4266
-  postUnpack = ''rm "$sourceRoot/enc/unicode/name2ctype.h"'';
-
   patches = ops useRailsExpress [
     "${patchSet}/patches/ruby/2.0.0/p481/01-zero-broken-tests.patch"
     "${patchSet}/patches/ruby/2.0.0/p481/02-railsexpress-gc.patch"

@@ -1,5 +1,7 @@
 {stdenv, fetchurl, runCommand, gcc, zlib}:
 
+assert stdenv.isLinux;
+
 let
   ccache =
 stdenv.mkDerivation {

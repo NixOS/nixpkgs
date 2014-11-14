@@ -61,17 +61,28 @@ stdenv.mkDerivation ({
 
       ./cve-2014-0475.patch
       ./cve-2014-5119.patch
+
+      /* Remove references to the compilation date.  */
+      ./glibc-remove-date-from-compilation-banner.patch
     ];
 
-  postPatch = ''
+  postPatch =
     # Needed for glibc to build with the gnumake 3.82
     # http://comments.gmane.org/gmane.linux.lfs.support/31227
-    sed -i 's/ot \$/ot:\n\ttouch $@\n$/' manual/Makefile
-
+    ''
+      sed -i 's/ot \$/ot:\n\ttouch $@\n$/' manual/Makefile
+    ''
     # nscd needs libgcc, and we don't want it dynamically linked
     # because we don't want it to depend on bootstrap-tools libs.
-    echo "LDFLAGS-nscd += -static-libgcc" >> nscd/Makefile
-  '';
+    + ''
+      echo "LDFLAGS-nscd += -static-libgcc" >> nscd/Makefile
+    ''
+    # Replace the date and time in nscd by $out.
+    #  It is used as a protocol compatibility check.
+    + ''
+      cat ${./glibc-remove-datetime-from-nscd.patch} \
+        | sed "s,@out@,$out," | patch -p1
+    '';
 
   configureFlags =
     [ "-C"

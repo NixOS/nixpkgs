@@ -372,7 +372,11 @@ exec 3>&-
 
 
 # Emit a udev rule for /dev/root to prevent systemd from complaining.
-eval $(udevadm info --export --export-prefix=ROOT_ --device-id-of-file=$targetRoot || true)
+if [ -e /mnt-root/iso ]; then
+    eval $(udevadm info --export --export-prefix=ROOT_ --device-id-of-file=/mnt-root/iso || true)
+else
+    eval $(udevadm info --export --export-prefix=ROOT_ --device-id-of-file=$targetRoot || true)
+fi
 if [ "$ROOT_MAJOR" -a "$ROOT_MINOR" -a "$ROOT_MAJOR" != 0 ]; then
     mkdir -p /run/udev/rules.d
     echo 'ACTION=="add|change", SUBSYSTEM=="block", ENV{MAJOR}=="'$ROOT_MAJOR'", ENV{MINOR}=="'$ROOT_MINOR'", SYMLINK+="root"' > /run/udev/rules.d/61-dev-root-link.rules

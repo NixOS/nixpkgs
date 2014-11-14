@@ -31,7 +31,7 @@
   # libguile/vm-i-system.i is not created in time
   enableParallelBuilding = false;
 
-  patches = [ ./disable-gc-sensitive-tests.patch ./eai_system.patch ] ++
+  patches = [ ./disable-gc-sensitive-tests.patch ./eai_system.patch ./clang.patch ] ++
     (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch);
 
   # Explicitly link against libgcc_s, to work around the infamous

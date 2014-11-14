@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ijswgcrdp243mfsyza31fpzq6plz40p4b83vkr2x4x7807889vy";
   };
 
-  patches = [ ./v4l.patch ];
+  patches = [ ./v4l.patch ./linux-headers-3.9.patch ];
 
   configureFlags = "--disable-oss";
 

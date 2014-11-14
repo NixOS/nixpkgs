@@ -1,5 +1,5 @@
 import ./make-test.nix {
-  name = "gnome3_12";
+  name = "gnome3";
 
   machine =
     { config, pkgs, ... }:
@@ -11,7 +11,7 @@ import ./make-test.nix {
       services.xserver.displayManager.auto.enable = true;
       services.xserver.displayManager.auto.user = "alice";
       services.xserver.desktopManager.gnome3.enable = true;
-      environment.gnome3.packageSet = pkgs.gnome3_12;
+      environment.gnome3.packageSet = pkgs.gnome3_10;
 
       virtualisation.memorySize = 512;
     };

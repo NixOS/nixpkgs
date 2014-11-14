@@ -5,7 +5,7 @@
 # Posix utilities, the GNU C compiler, and so on.  On other systems,
 # we use the native C library.
 
-{ system, allPackages ? import ../.., platform, config }:
+{ system, allPackages ? import ../.., platform, config, lib }:
 
 
 rec {
@@ -28,14 +28,34 @@ rec {
 
   # The Nix build environment.
   stdenvNix = import ./nix {
+    inherit config lib;
+    stdenv = stdenvNative;
+    pkgs = stdenvNativePkgs;
+  };
+
+  stdenvDarwin = import ./darwin {
     inherit config;
     stdenv = stdenvNative;
     pkgs = stdenvNativePkgs;
   };
 
+  stdenvDarwinNaked = import ./darwin {
+    inherit config;
+    stdenv = stdenvNative;
+    pkgs = stdenvNativePkgs;
+    haveLibCxx = false;
+  };
+
+  stdenvDarwin33 = import ./darwin {
+    inherit config;
+    stdenv = stdenvNative;
+    pkgs = stdenvNativePkgs;
+    useClang33 = true;
+  };
+
 
   # Linux standard environment.
-  stdenvLinux = (import ./linux { inherit system allPackages platform config;}).stdenvLinux;
+  stdenvLinux = (import ./linux { inherit system allPackages platform config lib; }).stdenvLinux;
 
 
   # Select the appropriate stdenv for the platform `system'.
@@ -47,7 +67,7 @@ rec {
     if system == "armv7l-linux" then stdenvLinux else
     if system == "mips64el-linux" then stdenvLinux else
     if system == "powerpc-linux" then /* stdenvLinux */ stdenvNative else
-    if system == "x86_64-darwin" then stdenvNix else
+    if system == "x86_64-darwin" then stdenvDarwin else
     if system == "x86_64-solaris" then stdenvNix else
     stdenvNative;
 }

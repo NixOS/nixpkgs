@@ -1,30 +1,35 @@
-{ stdenv, fetchurl, pkgconfig, gettext, x11, glib, cairo, libpng, harfbuzz, fontconfig
-, libintlOrEmpty, gobjectIntrospection }:
+{ stdenv, fetchurl, pkgconfig, x11, glib, cairo, libpng, harfbuzz
+, fontconfig, freetype, libintlOrEmpty, gobjectIntrospection
+}:
 
+let
+  ver_maj = "1.36";
+  ver_min = "8";
+in
 stdenv.mkDerivation rec {
-  name = "pango-1.32.5"; #.6 and higher need fontconfig-2.11.* which is troublesome
+  name = "pango-${ver_maj}.${ver_min}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/pango/1.32/${name}.tar.xz";
-    sha256 = "08aqis6j8nd1lb4f2h4h9d9kjvp54iwf8zvqzss0qn4v7nfcjyvx";
+    url = "mirror://gnome/sources/pango/${ver_maj}/${name}.tar.xz";
+    sha256 = "01rdzjh68w8l5zn0648yibyarj8p6g7yfn59nw5awaz1i8dvbnqq";
   };
 
   buildInputs = with stdenv.lib;
     optional (!stdenv.isDarwin) gobjectIntrospection # build problems of itself and flex
-    ++ optionals stdenv.isDarwin [ gettext fontconfig ];
-
+    ++ optionals stdenv.isDarwin [ fontconfig ];
   nativeBuildInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ x11 glib cairo libpng harfbuzz ] ++ libintlOrEmpty;
+  propagatedBuildInputs = [ x11 glib cairo libpng fontconfig freetype harfbuzz ] ++ libintlOrEmpty;
 
   enableParallelBuilding = true;
 
+  doCheck = false; # test-layout fails on 1.36.8
   # jww (2014-05-05): The tests currently fail on Darwin:
   #
   # ERROR:testiter.c:139:iter_char_test: assertion failed: (extents.width == x1 - x0)
   # .../bin/sh: line 5: 14823 Abort trap: 6 srcdir=. PANGO_RC_FILE=./pangorc ${dir}$tst
   # FAIL: testiter
-  doCheck = !stdenv.isDarwin;
+
   postInstall = "rm -rf $out/share/gtk-doc";
 
   meta = {

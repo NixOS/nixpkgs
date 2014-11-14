@@ -16,7 +16,7 @@ vmTools.buildRPM (
     preBuild = ''
       . ${./functions.sh}
       propagateImageName
-      src=$(findTarballs $src | head -1) # Pick the first tarball.
+      src=$(findTarball $src)
     '';
 
     postInstall = ''

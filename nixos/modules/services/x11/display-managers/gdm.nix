@@ -5,8 +5,8 @@ with lib;
 let
 
   cfg = config.services.xserver.displayManager;
-  gdm = pkgs.gnome3_12.gdm; # gdm 3.10 not supported
   gnome3 = config.environment.gnome3.packageSet;
+  gdm = gnome3.gdm;
 
 in
 

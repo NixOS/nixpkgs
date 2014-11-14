@@ -203,6 +203,8 @@
     gmp = pkgs.gmp4;
   });
 
+  ghc783Binary = lowPrio (callPackage ../development/compilers/ghc/7.8.3-binary.nix {});
+
   ghc6101BinaryDarwin = if stdenv.isDarwin then ghc704Binary else ghc6101Binary;
   ghc6121BinaryDarwin = if stdenv.isDarwin then ghc704Binary else ghc6121Binary;
 
@@ -223,7 +225,7 @@
 
   packages_ghc783 =
     packages { ghcPath = ../development/compilers/ghc/7.8.3.nix;
-               ghcBinary = ghc742Binary;
+               ghcBinary = if stdenv.isDarwin then ghc783Binary else ghc742Binary;
                prefFun = ghc783Prefs;
              };
 

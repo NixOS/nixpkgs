@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gnonlin-1.2.1";
+  name = "gnonlin-1.4.0";
 
   meta = with stdenv.lib; {
     description = "Gstreamer Non-Linear Multimedia Editing Plugins";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gnonlin/${name}.tar.xz";
-    sha256 = "14zb3bz3xn40a2kns719amrr77cp6wyxddml621kyxc424ihcw3q";
+    sha256 = "0zv60rq2h736a6fivd3a3wp59dj1jar7b2vwzykahvl168b7wrid";
   };
 
   nativeBuildInputs = [ pkgconfig ];

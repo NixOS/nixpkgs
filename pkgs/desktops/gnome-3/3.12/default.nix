@@ -22,9 +22,13 @@ rec {
 
   dconf = callPackage ./core/dconf { };
 
-  empathy = callPackage ./core/empathy { };
+  empathy = callPackage ./core/empathy {
+    webkitgtk = pkgs.webkitgtk24x;
+  };
 
-  epiphany = callPackage ./core/epiphany { };
+  epiphany = callPackage ./core/epiphany {
+    webkitgtk = pkgs.webkitgtk24x;
+  };
 
   evince = callPackage ./core/evince { }; # ToDo: dbus would prevent compilation, enable tests
 
@@ -76,7 +80,9 @@ rec {
 
   folks = callPackage ./core/folks { };
 
-  gnome_online_accounts = callPackage ./core/gnome-online-accounts { };
+  gnome_online_accounts = callPackage ./core/gnome-online-accounts {
+    webkitgtk = pkgs.webkitgtk24x;
+  };
 
   gnome-online-miners = callPackage ./core/gnome-online-miners { };
 
@@ -158,7 +164,9 @@ rec {
 
   rest = callPackage ./core/rest { };
 
-  sushi = callPackage ./core/sushi { };
+  sushi = callPackage ./core/sushi {
+    webkitgtk = pkgs.webkitgtk24x;
+  };
 
   totem = callPackage ./core/totem { };
 
@@ -174,7 +182,9 @@ rec {
 
   vino = callPackage ./core/vino { };
 
-  yelp = callPackage ./core/yelp { };
+  yelp = callPackage ./core/yelp {
+    webkitgtk = pkgs.webkitgtk24x;
+  };
 
   yelp_xsl = callPackage ./core/yelp-xsl { };
 
@@ -185,9 +195,13 @@ rec {
 
 #### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
 
-  bijiben = callPackage ./apps/bijiben { };
+  bijiben = callPackage ./apps/bijiben {
+    webkitgtk = pkgs.webkitgtk24x;
+  };
 
-  evolution = callPackage ./apps/evolution { };
+  evolution = callPackage ./apps/evolution {
+    webkitgtk = pkgs.webkitgtk24x;
+  };
 
   file-roller = callPackage ./apps/file-roller { };
 
@@ -202,7 +216,9 @@ rec {
 
   gnome-clocks = callPackage ./apps/gnome-clocks { };
 
-  gnome-documents = callPackage ./apps/gnome-documents { };
+  gnome-documents = callPackage ./apps/gnome-documents {
+    webkitgtk = pkgs.webkitgtk24x;
+  };
 
   gnome-music = callPackage ./apps/gnome-music { };
 
@@ -225,13 +241,17 @@ rec {
 
 #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
 
-  geary = callPackage ./misc/geary { };
+  geary = callPackage ./misc/geary {
+    webkitgtk = pkgs.webkitgtk24x;
+  };
 
   gfbgraph = callPackage ./misc/gfbgraph { };
 
   goffice = callPackage ./misc/goffice { };
 
-  gitg = callPackage ./misc/gitg { };
+  gitg = callPackage ./misc/gitg {
+    webkitgtk = pkgs.webkitgtk24x;
+  };
 
   libgda = callPackage ./misc/libgda { };
 

@@ -10,5 +10,5 @@ if test -z "$sgmlHookDone"; then
     sgmlHookDone=1
 
     export SGML_CATALOG_FILES
-    envHooks=(${envHooks[@]} addSGMLCatalogs)
+    envHooks+=(addSGMLCatalogs)
 fi
