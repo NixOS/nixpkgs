@@ -45,8 +45,8 @@ in {
 
     environment.gnome3.packageSet = mkOption {
       default = null;
-      example = literalExample "pkgs.gnome3_10";
-      description = "Which Gnome 3 package set to use.";
+      example = literalExample "pkgs.gnome3_12";
+      description = "Which GNOME 3 package set to use.";
       apply = p: if p == null then pkgs.gnome3 else p;
     };
     
