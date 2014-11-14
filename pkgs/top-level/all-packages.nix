@@ -4306,6 +4306,11 @@ let
 
   astyle = callPackage ../development/tools/misc/astyle { };
 
+  atom-shell = callPackage ../development/tools/atom-shell {
+    gconf = pkgs.gnome.GConf;
+  };
+
+
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
   autoconf = callPackage ../development/tools/misc/autoconf { };
