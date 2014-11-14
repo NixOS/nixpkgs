@@ -37,7 +37,7 @@ composableDerivation {
                    else stdenv ).mkDerivation;
 } (fix: {
 
-    name = "vim_configurable-7.4.335";
+    name = "vim_configurable-7.4.516";
 
     enableParallelBuilding = true; # test this
 
@@ -46,9 +46,9 @@ composableDerivation {
       "default" =
         # latest release
       args.fetchhg {
-            url = "https://vim.googlecode.com/hg/";
-            rev = "v7-4-335";
-            sha256 = "0qnpzfcbi6fhz82pj68l4vrnigca1akq2ksrxz6krwlfhns6jhhj";
+            url = "http://vim.googlecode.com/hg/";
+            rev = "v7-4-516";
+            sha256 = "0a3b5qaywfn7jjr7fjpl8y8jx4wjj2630wxfjnmn3hi1l7iiz4z8";
       };
 
       "vim-nox" =
