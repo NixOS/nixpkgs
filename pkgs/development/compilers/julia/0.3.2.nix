@@ -82,6 +82,7 @@ stdenv.mkDerivation rec {
     do
       makeFlags="$makeFlags USE_SYSTEM_$i=1 "
     done
+	makeFlags="$makeFlags JULIA_CPU_TARGET=core2";
 
     copy_kill_hash(){
       cp "$1" "$2/$(basename "$1" | sed -e 's/^[a-z0-9]*-//')"
@@ -143,10 +144,6 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   enableParallelBuilding = true;
-
-  postInstall = ''
-    rm -f "$out"/lib/julia/sys.{so,dylib,dll}
-  '';
 
   meta = {
     description = "High-level performance-oriented dynamical language for technical computing";
