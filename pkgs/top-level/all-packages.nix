@@ -3415,36 +3415,12 @@ let
 
   jikes = callPackage ../development/compilers/jikes { };
 
-  juliaGit = callPackage ../development/compilers/julia/git-20131013.nix {
-    liblapack = liblapack.override {shared = true;};
-    llvm = llvm_33;
-    openblas = openblas_0_2_2;
-  };
   julia021 = callPackage ../development/compilers/julia/0.2.1.nix {
     liblapack = liblapack.override {shared = true;};
     llvm = llvm_33;
     openblas = openblas_0_2_2;
   };
-  julia030 = let
-    liblapack = liblapack_3_5_0.override {shared = true;};
-  in callPackage ../development/compilers/julia/0.3.0.nix {
-    inherit liblapack;
-    suitesparse = suitesparse.override {
-      inherit liblapack;
-    };
-    llvm = llvm_34;
-    openblas = openblas_0_2_10;
-  };
-  julia031 = let
-    liblapack = liblapack_3_5_0.override {shared = true;};
-  in callPackage ../development/compilers/julia/0.3.1.nix {
-    inherit liblapack;
-    suitesparse = suitesparse.override {
-      inherit liblapack;
-    };
-    llvm = llvm_34;
-    openblas = openblas_0_2_10;
-  };
+
   julia032 = let
     liblapack = liblapack_3_5_0.override {shared = true;};
   in callPackage ../development/compilers/julia/0.3.2.nix {
@@ -3455,7 +3431,7 @@ let
     llvm = llvm_34;
     openblas = openblas_0_2_10;
   };
-  julia = julia031;
+  julia = julia032;
 
   lazarus = callPackage ../development/compilers/fpc/lazarus.nix {
     fpc = fpc;
