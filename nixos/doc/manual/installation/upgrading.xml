@@ -63,7 +63,7 @@ end.)  For instance, to use the NixOS 14.04 stable channel:
 $ nix-channel --add http://nixos.org/channels/nixos-14.04 nixos
 </screen>
 
-But it you want to live on the bleeding edge:
+But if you want to live on the bleeding edge:
 
 <screen>
 $ nix-channel --add http://nixos.org/channels/nixos-unstable nixos

@@ -56,7 +56,7 @@ root file system), you can use
 boot.initrd.extraKernelModules = [ "cifs" ];
 </programlisting>
 This causes the specified modules and their dependencies to be added
-to the initial ramdark.</para>
+to the initial ramdisk.</para>
 
 <para>Kernel runtime parameters can be set through
 <option>boot.kernel.sysctl</option>, e.g.
