@@ -9,8 +9,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Agda";
-  version = "2.4.2";
-  sha256 = "0pgwx79y02a08xn5f6lghw7fsc6wilab5q2gdm9r51yi9gm32aw5";
+  version = "2.4.2.1";
+  sha256 = "094x1rdhqxm630f0kgllhivgr1vdy4xrd9pgh737b1gbb2vf3awm";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -21,15 +21,15 @@ cabal.mkDerivation (self: {
   ];
   buildTools = [ alex cpphs emacs happy ];
   noHaddock = true;
+  jailbreak = true;
   postInstall = ''
     $out/bin/agda -c --no-main $(find $out/share -name Primitive.agda)
     $out/bin/agda-mode compile
   '';
-  jailbreak = true;
   meta = {
     homepage = "http://wiki.portal.chalmers.se/agda/";
     description = "A dependently typed functional programming language and proof assistant";
-    license = self.stdenv.lib.licenses.mit;
+    license = "unknown";
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ fuuzetsu ];
   };
