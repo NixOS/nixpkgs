@@ -3,7 +3,8 @@
 stdenv.mkDerivation {
   name = "libusb-compat-0.1.5";
 
-  buildInputs = [ pkgconfig libusb1 ];
+  nativeBuildInputs = [ pkgconfig ];
+  propagatedBuildInputs = [ libusb1 ];
 
   src = fetchurl {
     url = mirror://sourceforge/libusb/libusb-compat-0.1.5.tar.bz2;
