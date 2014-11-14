@@ -1,11 +1,11 @@
 { stdenv, fetchurl, sphinxbase, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "pocketsphinx-0.7";
+  name = "pocketsphinx-0.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/cmusphinx/${name}.tar.gz";
-    sha256 = "0m94x5pridagr0hgmnidrf4z44zcya05d8fh67k0cc0mmghsq36f";
+    sha256 = "0ynf5ik4ib2d3ha3r4i8ywpr2dz5i6v51hmfl8kgzj4i7l44qk47";
   };
 
   propagatedBuildInputs = [ sphinxbase ];
