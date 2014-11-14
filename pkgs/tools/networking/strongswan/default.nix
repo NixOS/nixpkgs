@@ -1,16 +1,14 @@
-{ stdenv, fetchurl, gmp, autoreconfHook, gettext, pkgconfig }:
+{ stdenv, fetchurl, gmp, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "strongswan-5.2.0";
+  name = "strongswan-5.2.1";
 
   src = fetchurl {
     url = "http://download.strongswan.org/${name}.tar.bz2";
-    sha256 = "1ki6v9c54ykppqnj3prgh62na97yajnvnm2zr1gjxzv05syk035h";
+    sha256 = "05cjjd7gg65bl6fswj2r2i13nn1nk4x86s06y75gwfdvnlrsnlga";
   };
 
-  patches = [ ./respect-path.patch ./no-hardcoded-sysconfdir.patch ];
-
-  buildInputs = [ gmp autoreconfHook gettext pkgconfig ];
+  buildInputs = [ gmp pkgconfig ];
 
   configureFlags = [ "--enable-swanctl" "--enable-cmd" ];
 
