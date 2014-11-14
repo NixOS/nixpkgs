@@ -8130,15 +8130,6 @@ let
       ];
   };
 
-  linux_3_15 = makeOverridable (import ../os-specific/linux/kernel/linux-3.15.nix) {
-    inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
   linux_3_16 = makeOverridable (import ../os-specific/linux/kernel/linux-3.16.nix) {
     inherit fetchurl stdenv perl buildLinux;
     kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
