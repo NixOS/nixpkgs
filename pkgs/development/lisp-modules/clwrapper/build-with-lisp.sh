@@ -46,7 +46,7 @@ case "$NIX_LISP" in
                 systems=":sb-posix $systems"
                 ;;
         ecl)
-                NIX_LISP_BUILD_CODE="(asdf:make-build (first (list $systems)) :type :program :monolithic nil :epilogue-code '(progn (defpackage :asdf/image) $code) :move-here \"$target\")"
+		NIX_LISP_BUILD_CODE="()"
                 ;;
         clisp)
                 NIX_LISP_BUILD_CODE="(ext:saveinitmem \"$target\" :norc t :init-function (lambda () $code (ext:bye)) :script nil :executable 0)"
@@ -54,8 +54,7 @@ case "$NIX_LISP" in
 esac
 
 "$lisp" \
-  "$NIX_LISP_EXEC_CODE" "(require :asdf)" \
   "$NIX_LISP_EXEC_CODE" "(load \"$NIX_LISP_ASDF/lib/common-lisp/asdf/build/asdf.lisp\")" \
-  "$NIX_LISP_EXEC_CODE" "(mapcar 'require (list $systems))" \
+  "$NIX_LISP_EXEC_CODE" "(mapcar 'asdf:load-system (list $systems))" \
   "$NIX_LISP_EXEC_CODE" "$NIX_LISP_BUILD_CODE" \
   "$NIX_LISP_EXEC_CODE" "(quit)"
