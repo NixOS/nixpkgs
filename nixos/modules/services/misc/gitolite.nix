@@ -46,11 +46,19 @@ in
           A list of custom git hooks that get copied to <literal>~/.gitolite/hooks/common</literal>.
         '';
       };
+
+      user = mkOption {
+        type = types.str;
+        default = "gitolite";
+        description = ''
+          Gitolite user account. This is the username of the gitolite endpoint.
+        '';
+      };
     };
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers.gitolite = {
+    users.extraUsers.${cfg.user} = {
       description     = "Gitolite user";
       home            = cfg.dataDir;
       createHome      = true;
@@ -62,7 +70,7 @@ in
       description = "Gitolite initialization";
       wantedBy    = [ "multi-user.target" ];
 
-      serviceConfig.User = "gitolite";
+      serviceConfig.User = "${cfg.user}";
       serviceConfig.Type = "oneshot";
       serviceConfig.RemainAfterExit = true;
 
