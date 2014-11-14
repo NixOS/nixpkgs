@@ -5823,8 +5823,6 @@ let
 
   libgphoto2 = callPackage ../development/libraries/libgphoto2 { };
 
-  libgphoto2_4 = callPackage ../development/libraries/libgphoto2/2.4.nix { };
-
   libgpod = callPackage ../development/libraries/libgpod {
     inherit (pkgs.pythonPackages) mutagen;
   };
