@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cprng-aes";
-  version = "0.6.0";
-  sha256 = "0d6m6mjkwvkg1cqq3q3hc64hp445kbcdf12lwm6k2scrpd2r7bhq";
+  version = "0.6.1";
+  sha256 = "1wr15kbmk1g3l8a75n0iwbzqg24ixv78slwzwb2q6rlcvq0jlnb4";
   buildDepends = [ byteable cipherAes cryptoRandom ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-cprng-aes";
