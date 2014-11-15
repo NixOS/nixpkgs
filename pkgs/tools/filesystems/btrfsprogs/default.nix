@@ -1,14 +1,14 @@
 { stdenv, fetchurl, attr, acl, zlib, libuuid, e2fsprogs, lzo
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt }:
 
-let version = "3.17"; in
+let version = "3.17.1"; in
 
 stdenv.mkDerivation rec {
   name = "btrfs-progs-${version}";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "187hdfh10hrabvldqmhg88wdv0s9r7hc5264v83ykir9wxqvzbzc";
+    sha256 = "1axazaw6ps5gy4l6j2jrivxqx8ysva3v1cynmrd1g345gff5f0bc";
   };
 
   buildInputs = [
