@@ -7657,6 +7657,16 @@ let
 
   OVMF = callPackage ../applications/virtualization/OVMF { };
 
+  pgpool92 = callPackage ../servers/sql/pgpool/default.nix {
+    postgresql = postgresql92;
+  };
+
+  pgpool93 = callPackage ../servers/sql/pgpool/default.nix {
+    postgresql = postgresql93;
+  };
+
+  pgpool = pgpool92;
+
   postgresql = postgresql92;
 
   postgresql84 = callPackage ../servers/sql/postgresql/8.4.x.nix { };
