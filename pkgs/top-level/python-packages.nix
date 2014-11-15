@@ -6767,7 +6767,7 @@ let
       sha256 = "33b2b79438bb9bf37097966e1c90403c34ab49be1eb647ee251b62f362ee3537";
     };
 
-    buildInputs = with pkgs; [ capnproto cython ];
+    buildInputs = with pkgs; [ capnproto self.cython ];
 
     # import setuptools as soon as possible, to minimize monkeypatching mayhem.
     postConfigure = ''
@@ -7885,10 +7885,10 @@ let
       sha1 = "76ba4991322a991d580e78a197adc80d58bd5fb3";
     };
 
-    propagatedBuildInputs = with self; [ numpy scipy matplotlib pkgs.pyqt4
+    propagatedBuildInputs = with self; [ numpy scipy matplotlib pyqt4
       cython ];
 
-    buildInputs = with pkgs; [ gcc qt4 blas self.nose ];
+    buildInputs = [ pkgs.gcc pkgs.qt4 pkgs.blas self.nose ];
 
     meta = {
       description = "QuTiP - Quantum Toolbox in Python";
