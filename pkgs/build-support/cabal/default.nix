@@ -247,7 +247,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
 
               export GHC_PACKAGE_PATH=$(${ghc.GHCPackages})
               test -n "$noHaddock" || ./Setup haddock --html --hoogle \
-                  --ghc-options=-optP-P \
+                  ${optionalString (stdenv.lib.versionOlder "6.12" ghc.version) "--ghc-options=-optP-P"} \
                   ${optionalString self.hyperlinkSource "--hyperlink-source"}
 
               eval "$postBuild"
