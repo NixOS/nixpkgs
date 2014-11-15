@@ -2791,6 +2791,8 @@ let
 
   xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
 
+  xml2 = callPackage ../tools/text/xml/xml2 { };
+
   xmlroff = callPackage ../tools/typesetting/xmlroff {
     inherit (gnome) libgnomeprint;
   };
