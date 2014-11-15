@@ -29,11 +29,10 @@ in
         # There is no Hackage for Agda so we require src.
         inherit (self) src name;
 
-        buildInputs = [ Agda ] ++ self.buildDepends;
+        buildInputs = [ Agda glibcLocales ] ++ self.buildDepends;
         buildDepends = [];
         # Not much choice here ;)
         LANG = "en_US.UTF-8";
-        LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
 
         everythingFile = "Everything.agda";
 

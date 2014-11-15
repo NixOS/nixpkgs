@@ -4996,7 +4996,8 @@ let
     installLocales = config.glibc.locales or false;
   };
 
-  glibcLocales = callPackage ../development/libraries/glibc/2.19/locales.nix { };
+  # Not supported on Darwin
+  glibcLocales = if (! stdenv.isDarwin) then (callPackage ../development/libraries/glibc/2.19/locales.nix { }) else null;
 
   glibcInfo = callPackage ../development/libraries/glibc/2.19/info.nix { };
 
@@ -6792,7 +6793,6 @@ let
   ### DEVELOPMENT / LIBRARIES / AGDA
 
   agda = callPackage ../build-support/agda {
-    glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
     extension = self : super : {};
     Agda = haskellPackages.Agda;
     inherit writeScriptBin;

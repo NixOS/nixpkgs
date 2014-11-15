@@ -6,7 +6,7 @@
    http://sourceware.org/cgi-bin/cvsweb.cgi/libc/localedata/SUPPORTED?cvsroot=glibc
 */
 
-{ stdenv, fetchurl, allLocales ? true, locales ? ["en_US.UTF-8/UTF-8"] }:
+{ stdenv, fetchurl, writeText, allLocales ? true, locales ? ["en_US.UTF-8/UTF-8"] }:
 
 let build = import ./common.nix; in
 
@@ -41,6 +41,11 @@ build null {
     ''
       mkdir -p "$out/lib/locale"
       cp -v "$TMPDIR/$NIX_STORE/"*"/lib/locale/locale-archive" "$out/lib/locale"
+    '';
+
+  setupHook = writeText "locales-setup-hook.sh"
+    ''
+      export LOCALE_ARCHIVE=@out@/lib/locale/locale-archive
     '';
 
   meta.description = "Locale information for the GNU C Library";
