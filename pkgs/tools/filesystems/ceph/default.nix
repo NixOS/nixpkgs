@@ -14,16 +14,15 @@ let
 in
 stdenv.mkDerivation rec {
   name="ceph-${version}";
-  version="0.87";
+  version="0.88";
 
   src = fetchgit {
     url = "git://github.com/ceph/ceph.git";
     rev = "refs/tags/v${version}";
-    sha256 = "0l3ig4kr50j78snjzj4h1lbmjz508yykvchqyfdcqv02dfklc8qd";
+    sha256 = "1wf77mlx94h2mn75qqgb37xbdagl7zh0b579qh7gc1z4wcb8b8h0";
   };
 
   patches = [
-    ./0001-Cleanup-boost-optionals.patch # Remove in >0.87 patch is applied
     ./0001-Makefile-env-Don-t-force-sbin.patch
   ];
 
