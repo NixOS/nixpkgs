@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     sed -i "s!/lib/udev!$out/lib/udev!" udev/CMakeLists.txt
+    sed -i "/if ( PKGCONFIG_UDEV_FOUND )/,/endif ( PKGCONFIG_UDEV_FOUND )/d" udev/CMakeLists.txt
     '';
 
   meta = {
