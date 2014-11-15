@@ -15,6 +15,13 @@ stdenv.mkDerivation {
 
   preConfigure = "autoreconf";
 
+  postInstall = ''
+    # The bridge utils build does not fail even if the brctl binary
+    # is not build. This test ensures that we fail if we don't produce a brctl
+    # binary.
+    test -f $out/sbin/brctl
+  '';
+
   meta = {
     description = "http://sourceforge.net/projects/bridge/";
     homepage = [ "http://www.linux-foundation.org/en/Net:Bridge/" "http://sourceforge.net/projects/bridge/" ];
