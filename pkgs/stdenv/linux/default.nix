@@ -190,7 +190,8 @@ rec {
 
     overrides = pkgs: {
       inherit (stage1.pkgs) perl binutils paxctl;
-      # This also contains the full, dynamically linked, final Glibc.
+      # This is the full, dynamically linked, final Glibc.
+      glibc = pkgs.glibc.override { combineWithShell = true; };
     };
   };
 
