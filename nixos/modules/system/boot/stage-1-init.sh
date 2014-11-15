@@ -187,7 +187,7 @@ if test -e /sys/power/resume -a -e /sys/power/disk; then
         done
     fi
     if test -n "$resumeDev"; then
-        echo "$resumeDev" > /sys/power/resume 2> /dev/null || echo "failed to resume..."
+        readlink -f "$resumeDev" > /sys/power/resume 2> /dev/null || echo "failed to resume..."
     fi
 fi
 
