@@ -1,4 +1,11 @@
-{ stdenv, fetchurl, readline ? null, interactive ? false, texinfo ? null, bison }:
+{ stdenv
+, fetchurl
+, readline ? null, interactive ? false
+, texinfo ? null
+, bison
+, combineWithLibc ? false
+, glibc ? null
+}:
 
 assert interactive -> readline != null;
 
@@ -8,7 +15,9 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "${realName}-p${toString (builtins.length patches)}";
+  name = if combineWithLibc
+    then glibc.name
+    else "${realName}-p${toString (builtins.length patches)}";
 
   src = fetchurl {
     url = "mirror://gnu/bash/${realName}.tar.gz";
