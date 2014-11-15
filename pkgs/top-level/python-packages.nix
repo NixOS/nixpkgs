@@ -8368,7 +8368,7 @@ let
       md5 = "d7c7f4ccf8b07b08d6fe49d5cd51f85d";
     };
 
-    buildInputs = with self; [pkgs.gfortran];
+    buildInputs = [ pkgs.gfortran ];
     propagatedBuildInputs = with self; [ numpy ];
 
     # TODO: add ATLAS=${pkgs.atlas}
