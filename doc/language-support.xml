@@ -426,7 +426,7 @@ are provided with all modules included.</para>
 
 <section xml:id="python-build-env"><title><function>python.buildEnv</function> function</title>
   <para>
-    Create Python envorinments using low-level <function>pkgs.buildEnv</function> function. Example <filename>default.nix</filename>:
+    Create Python environments using low-level <function>pkgs.buildEnv</function> function. Example <filename>default.nix</filename>:
     
     <programlisting language="nix">
     <![CDATA[
@@ -475,7 +475,7 @@ are provided with all modules included.</para>
 <section xml:id="python-tools"><title>Tools</title>
 
 <para>Packages inside nixpkgs are written by hand. However many tools
-exist in community to help save time. No tool is prefered at the moment.
+exist in community to help save time. No tool is preferred at the moment.
 </para>
 
 <itemizedlist>
@@ -535,10 +535,10 @@ exist in community to help save time. No tool is prefered at the moment.
     <programlisting language="bash">$ nix-shell -p pythonPackages.pyramid zlib libjpeg git</programlisting>
   </para>
   
-  <para>
-    Note: there is a boolean value <varname>lib.inNixShell</varname> set to
+  <note><para>
+    There is a boolean value <varname>lib.inNixShell</varname> set to
     <varname>true</varname> if nix-shell is invoked.
-  </para>
+  </para></note>
 
 </section>
 
