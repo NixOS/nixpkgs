@@ -6833,6 +6833,29 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  OpenGL = buildPerlPackage rec {
+    name = "OpenGL-0.6703";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CH/CHM/${name}.tar.gz";
+      sha256 = "0k2k8zg84qj1ry77i9dvmfdfpg13s6117wy5bc4nvnzv37qcvy32";
+    };
+
+    buildInputs = with pkgs; [ mesa mesa_glu freeglut xlibs.libX11 xlibs.libXi xlibs.libXmu xlibs.libXext xdummy ];
+
+    patches = [ ../development/perl-modules/perl-opengl.patch ];
+
+    configurePhase = ''
+      substituteInPlace Makefile.PL \
+        --replace "@@libpaths@@" '${stdenv.lib.concatStringsSep "\n" (map (f: "-L${f}/lib") buildInputs)}'
+
+      cp -v ${../development/perl-modules/perl-opengl-gl-extensions.txt} utils/glversion.txt
+
+      perl Makefile.PL PREFIX=$out INSTALLDIRS=site $makeMakerFlags
+    '';
+
+    doCheck = false;
+  };
+
   NetOpenIDCommon = buildPerlPackage rec {
     name = "Net-OpenID-Common-1.18";
     src = fetchurl {
@@ -9950,6 +9973,16 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ ExtUtilsXSpp AlienWxWidgets ];
     # Testing requires an X server:
     #   Error: Unable to initialize GTK+, is DISPLAY set properly?"
+    doCheck = false;
+  };
+
+  WxGLCanvas = buildPerlPackage rec {
+    name = "Wx-GLCanvas-0.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MB/MBARBON/${name}.tar.gz";
+      sha256 = "1q4gvj4gdx4l8k4mkgiix24p9mdfy1miv7abidf0my3gy2gw5lka";
+    };
+    propagatedBuildInputs = [ Wx OpenGL pkgs.mesa_glu ];
     doCheck = false;
   };
 
