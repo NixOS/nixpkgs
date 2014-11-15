@@ -7199,7 +7199,7 @@ let
       sha256 = "1fnhj26d9qrqqmjx092m1qspclh3mia3vag7rji5wciw0plpszi5";
     };
 
-    propagatedBuildInputs = with self; [ scipy numpy pyqt4 pyopengl ];
+    propagatedBuildInputs = with self; [ scipy pyqt4 pyopengl ];
 
     meta = with stdenv.lib; {
       description = "Scientific Graphics and GUI Library for Python";
@@ -7445,41 +7445,35 @@ let
     };
   };
 
-  pyopengl =
-    let version = "3.0.2";
-    in
-      buildPythonPackage {
-        name = "pyopengl-${version}";
 
-        src = pkgs.fetchurl {
-          url = "http://pypi.python.org/packages/source/P/PyOpenGL/PyOpenGL-${version}.tar.gz";
-          sha256 = "9ef93bbea2c193898341f574e281c3ca0dfe87c53aa25fbec4b03581f6d1ba03";
-        };
+  pyopengl = buildPythonPackage rec {
+    name = "pyopengl-${version}";
+    version = "3.0.2";
 
-        propagatedBuildInputs = with pkgs; [ mesa freeglut pil ];
-
-        patchPhase = ''
-          sed -i "s|util.find_library( name )|name|" OpenGL/platform/ctypesloader.py
-          sed -i "s|'GL',|'libGL.so',|" OpenGL/platform/glx.py
-          sed -i "s|'GLU',|'${pkgs.mesa}/lib/libGLU.so',|" OpenGL/platform/glx.py
-          sed -i "s|'glut',|'${pkgs.freeglut}/lib/libglut.so',|" OpenGL/platform/glx.py
-        '';
-
-        meta = {
-          homepage = http://pyopengl.sourceforge.net/;
-          description = "PyOpenGL, the Python OpenGL bindings";
-
-          longDescription = ''
-            PyOpenGL is the cross platform Python binding to OpenGL and
-            related APIs.  The binding is created using the standard (in
-            Python 2.5) ctypes library, and is provided under an extremely
-            liberal BSD-style Open-Source license.
-          '';
-
-          license = "BSD-style";
-          platforms = stdenv.lib.platforms.mesaPlatforms;
-        };
-      };
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/P/PyOpenGL/PyOpenGL-${version}.tar.gz";
+      sha256 = "9ef93bbea2c193898341f574e281c3ca0dfe87c53aa25fbec4b03581f6d1ba03";
+    };
+    propagatedBuildInputs = [ pkgs.mesa pkgs.freeglut self.pillow ];
+    patchPhase = ''
+      sed -i "s|util.find_library( name )|name|" OpenGL/platform/ctypesloader.py
+      sed -i "s|'GL',|'libGL.so',|" OpenGL/platform/glx.py
+      sed -i "s|'GLU',|'${pkgs.mesa}/lib/libGLU.so',|" OpenGL/platform/glx.py
+      sed -i "s|'glut',|'${pkgs.freeglut}/lib/libglut.so',|" OpenGL/platform/glx.py
+    '';
+    meta = {
+      homepage = http://pyopengl.sourceforge.net/;
+      description = "PyOpenGL, the Python OpenGL bindings";
+      longDescription = ''
+        PyOpenGL is the cross platform Python binding to OpenGL and
+        related APIs.  The binding is created using the standard (in
+        Python 2.5) ctypes library, and is provided under an extremely
+        liberal BSD-style Open-Source license.
+      '';
+      license = "BSD-style";
+      platforms = stdenv.lib.platforms.mesaPlatforms;
+    };
+  };
 
 
   pyquery = buildPythonPackage rec {
@@ -7721,8 +7715,9 @@ let
       sha256 = "1svlwyl61rvbqbcbalkg6pbf38yjyv7qkq9sx4x35yk69lscaac2";
     };
 
-    buildInputs = with pkgs; [
-      pkgconfig python gtk2 pygtk libxml2 libxslt libsoup webkitgtk2 icu
+    buildInputs = [
+      pkgs.pkgconfig pkgs.gtk2 self.pygtk pkgs.libxml2
+      pkgs.libxslt pkgs.libsoup pkgs.webkitgtk2 pkgs.icu
     ];
 
     meta = {
