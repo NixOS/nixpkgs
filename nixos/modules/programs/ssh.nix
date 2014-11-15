@@ -60,7 +60,7 @@ in
       };
 
       agentTimeout = mkOption {
-        type = types.string;
+        type = types.nullOr types.string;
         default = "1h";
         description = ''
           How long to keep the private keys in memory. Use null to keep them forever.
