@@ -2173,6 +2173,8 @@ let
 
   qjoypad = callPackage ../tools/misc/qjoypad { };
 
+  qpdf = callPackage ../development/libraries/qpdf { };
+
   qscintilla = callPackage ../development/libraries/qscintilla {
     qt = qt4;
   };
@@ -5489,6 +5491,8 @@ let
   };
 
   imlib2 = callPackage ../development/libraries/imlib2 { };
+
+  ijs = callPackage ../development/libraries/ijs { };
 
   incrtcl = callPackage ../development/libraries/incrtcl { };
 
@@ -12273,7 +12277,7 @@ let
 
   cups = callPackage ../misc/cups { libusb = libusb1; };
 
-  cups_pdf_filter = callPackage ../misc/cups/pdf-filter.nix { };
+  cups-filters = callPackage ../misc/cups/drivers/cups-filters { };
 
   crashplan = callPackage ../applications/backup/crashplan { };
 
@@ -12326,7 +12330,6 @@ let
   ghostscript = callPackage ../misc/ghostscript {
     x11Support = false;
     cupsSupport = config.ghostscript.cups or (!stdenv.isDarwin);
-    gnuFork = config.ghostscript.gnu or false;
   };
 
   ghostscriptX = appendToName "with-X" (ghostscript.override {

@@ -175,7 +175,7 @@ in
       };
 
     services.printing.drivers =
-      [ pkgs.cups pkgs.cups_pdf_filter pkgs.ghostscript additionalBackends
+      [ pkgs.cups pkgs.cups-filters pkgs.ghostscript additionalBackends
         pkgs.perl pkgs.coreutils pkgs.gnused pkgs.bc pkgs.gawk pkgs.gnugrep
       ];
 
