@@ -1116,6 +1116,34 @@ let
     };
   };
 
+  bugwarrior = buildPythonPackage rec {
+    name = "bugwarrior-${version}";
+    version = "1.0.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/b/bugwarrior/${name}.tar.gz";
+      # md5 = "09c93f86a27ffc092e69b46889a3bf50"; # provided by pypi website.
+      sha256 = "efe41756c152789f39006f157add9bedfa2b85d2cac15c067e635e37c70cb8f8";
+    };
+
+    buildInputs = with self; [ mock unittest2 nose /* jira megaplan */ ];
+    propagatedBuildInputs = with self; [
+      twiggy requests2 offtrac bugzilla taskw dateutil pytz keyring six
+      jinja2 pycurl dogpile_cache lockfile click
+    ];
+
+    # for the moment jira>=0.22 and megaplan>=1.4 are missing for running the test suite.
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      homepage =  http://github.com/ralphbean/bugwarrior;
+      description = "Sync github, bitbucket, bugzilla, and trac issues with taskwarrior";
+      license = licenses.gpl3Plus;
+      platforms = platforms.all;
+      maintainers = [ maintainers.pierron ];
+    };
+  };
+
   # bugz = buildPythonPackage (rec {
   #   name = "bugz-0.9.3";
   #
