@@ -30,6 +30,8 @@ basePackage = {
 
   inherit deployConfigScript deployLaunchScript;
   installPhase = ''
+    eval "$preInstall"
+
     mkdir -p "$out"/share/doc/${args.baseName};
     mkdir -p "$out"/lib/common-lisp/${args.baseName};
     cp -r . "$out"/lib/common-lisp/${args.baseName};
@@ -37,6 +39,8 @@ basePackage = {
 
     ${deployConfigScript}
     ${deployLaunchScript}
+
+    eval "$postInstall"
   '';
   propagatedBuildInputs = (args.deps or []) ++ [clwrapper clwrapper.lisp] 
     ++ (args.propagatedBuildInputs or []);
