@@ -22,6 +22,9 @@ stdenv.mkDerivation rec {
     [ # These are all changes between upstream and
       # https://github.com/edolstra/systemd/tree/nixos-v216.
       ./fixes.patch
+      # Fixes systemd-journald so that it does not get killed
+      # by systemd-journal-flush starting too quickly
+      ./systemd-journald-type-notify.patch
     ];
 
   buildInputs =
