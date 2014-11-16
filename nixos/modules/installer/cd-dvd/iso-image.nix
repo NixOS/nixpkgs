@@ -44,19 +44,6 @@ let
     LINUX /boot/bzImage
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
     INITRD /boot/initrd
-
-    LABEL chain
-    MENU LABEL Boot existing OS
-    COM32 chain.c32
-    APPEND hd0 0
-
-    LABEL reboot
-    MENU LABEL Reboot
-    COM32 reboot.c32
-
-    LABEL poweroff
-    MENU LABEL Power Off
-    COM32 poweroff.c32
     '';
 
   isolinuxCfg = baseIsolinuxCfg + (optionalString config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry);
