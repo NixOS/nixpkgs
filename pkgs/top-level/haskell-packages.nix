@@ -247,6 +247,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   binary_0_7_2_2 = callPackage ../development/libraries/haskell/binary/0.7.2.2.nix {};
   binary = null;                # core package since ghc >= 7.2.x
 
+  binaryBits = callPackage ../development/libraries/haskell/binary-bits {};
+
   binaryConduit = callPackage ../development/libraries/haskell/binary-conduit {};
 
   binaryShared = callPackage ../development/libraries/haskell/binary-shared {};
