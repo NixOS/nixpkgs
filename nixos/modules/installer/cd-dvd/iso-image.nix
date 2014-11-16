@@ -11,6 +11,7 @@ let
   # The configuration file for syslinux.
   isolinuxCfg =
     ''
+    TIMEOUT ${builtins.toString config.boot.loader.grub.timeout}
     SERIAL 0 38400
     UI vesamenu.c32
     MENU TITLE NixOS
@@ -45,7 +46,7 @@ let
     echo "initrd /boot/initrd" >> $out/loader/entries/nixos-livecd.conf
     echo "options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}" >> $out/loader/entries/nixos-livecd.conf
     echo "default nixos-livecd" > $out/loader/loader.conf
-    echo "timeout 5" >> $out/loader/loader.conf
+    echo "timeout ${builtins.toString config.boot.loader.grub.timeout}" >> $out/loader/loader.conf
   '';
 
   efiImg = pkgs.runCommand "efi-image_eltorito" { buildInputs = [ pkgs.mtools ]; }
@@ -277,6 +278,8 @@ in
           target = "/loader";
         }
       ];
+
+    boot.loader.grub.timeout = 10;
 
     # Create the ISO image.
     system.build.isoImage = import ../../../lib/make-iso9660-image.nix ({
