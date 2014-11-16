@@ -1,5 +1,5 @@
 # TODO check that no license information gets lost
-{ fetchurl, bash, stdenv, python, cmake, vim, perl, ruby, unzip, which, fetchgit, fetchzip, clang, zip }:
+{ fetchurl, bash, stdenv, python, cmake, vim, perl, ruby, unzip, which, fetchgit, fetchzip, llvmPackages, zip }:
 
 /*
 Typical plugin files:
@@ -538,7 +538,7 @@ rec {
 
     name = "vimplugin-youcompleteme-2014-10-06";
 
-    buildInputs = [ python cmake clang.clang ];
+    buildInputs = [ python cmake llvmPackages.clang ];
 
     configurePhase = ":";
 
