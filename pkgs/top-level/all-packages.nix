@@ -4002,13 +4002,13 @@ let
 
   perl514 = callPackage ../development/interpreters/perl/5.14 { };
 
-  perl516 = callPackage ../development/interpreters/perl/5.16 {
+  perl516 = callPackage ../development/interpreters/perl/5.16 { };
+
+  perl520 = callPackage ../development/interpreters/perl/5.20 {
     fetchurl = fetchurlBoot;
   };
 
-  perl520 = callPackage ../development/interpreters/perl/5.20 { };
-
-  perl = if system != "i686-cygwin" then perl516 else sysPerl;
+  perl = if system != "i686-cygwin" then perl520 else sysPerl;
 
   php = php54;
 
