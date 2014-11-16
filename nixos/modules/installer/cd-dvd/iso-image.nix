@@ -7,14 +7,25 @@
 with lib;
 
 let
+  # Timeout in syslinux is in units of 1/10 of a second.
+  # 0 is used to disable timeouts.
+  syslinuxTimeout = if config.boot.loader.timeout == null then
+      0
+    else
+      max (config.boot.loader.timeout * 10) 1;
+
+
+  max = x: y: if x > y then x else y;
 
   # The configuration file for syslinux.
   baseIsolinuxCfg =
     ''
     SERIAL 0 38400
+    TIMEOUT ${builtins.toString syslinuxTimeout}
     UI vesamenu.c32
     MENU TITLE NixOS
     MENU BACKGROUND /isolinux/background.png
+    DEFAULT boot
 
     LABEL boot
     MENU LABEL Boot NixOS
@@ -47,7 +58,7 @@ let
     echo "initrd /boot/initrd" >> $out/loader/entries/nixos-livecd.conf
     echo "options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}" >> $out/loader/entries/nixos-livecd.conf
     echo "default nixos-livecd" > $out/loader/loader.conf
-    echo "timeout 5" >> $out/loader/loader.conf
+    echo "timeout ${builtins.toString config.boot.loader.gummiboot.timeout}" >> $out/loader/loader.conf
   '';
 
   efiImg = pkgs.runCommand "efi-image_eltorito" { buildInputs = [ pkgs.mtools ]; }
@@ -279,6 +290,8 @@ in
           target = "/loader";
         }
       ];
+
+    boot.loader.timeout = 10;
 
     # Create the ISO image.
     system.build.isoImage = import ../../../lib/make-iso9660-image.nix ({
