@@ -35,7 +35,7 @@ in
     preInstall = ''
       if [ -f ${stdenv.gcc.gcc}/lib/libgcc_s.so.1 ]; then
           mkdir -p $out/lib
-          ln -s ${stdenv.gcc.gcc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
+          cp ${stdenv.gcc.gcc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
       fi
     '';
 

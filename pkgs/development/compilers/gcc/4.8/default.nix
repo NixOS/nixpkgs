@@ -61,7 +61,7 @@ let version = "4.8.3";
 
     enableParallelBuilding = true;
 
-    patches = []
+    patches = [ ./bug-61801.patch ]
       ++ optional enableParallelBuilding ./parallel-bconfig.patch
       ++ optional (cross != null) ./libstdc++-target.patch
       ++ optional noSysDirs ./no-sys-dirs.patch

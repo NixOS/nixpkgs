@@ -16,11 +16,6 @@ let
                 continue
             fi
 
-            if test "$NAME" == "CLEAR"; then
-                echo "parseconfig: CLEAR"
-                echo > .config
-            fi
-
             echo "parseconfig: removing $NAME"
             sed -i /^$NAME=/d .config
 
@@ -51,13 +46,14 @@ let
   '';
 
 in
+
 stdenv.mkDerivation {
-  name = "uclibc-0.9.33.2" + stdenv.lib.optionalString (cross != null)
+  name = "uclibc-0.9.34-pre-20141029" + stdenv.lib.optionalString (cross != null)
     ("-" + cross.config);
 
   src = fetchurl {
-    url = http://www.uclibc.org/downloads/uClibc-0.9.33.2.tar.bz2;
-    sha256 = "0qhngsbzj2s6nz92b1s2p0dmvwk8xiqpy58j7ljzw186grvjr3cq";
+    url = http://www.uclibc.org/downloads/snapshots/uClibc-20141029.tar.bz2;
+    sha256 = "018r3bhw1jyyihmm5xxq1psl3r5yx02a57p8qxvay3vvzxn2cvzm";
   };
 
   # 'ftw' needed to build acl, a coreutils dependency
@@ -80,6 +76,8 @@ stdenv.mkDerivation {
 
   buildInputs = stdenv.lib.optional (gccCross != null) gccCross;
 
+  enableParallelBuilding = true;
+
   installPhase = ''
     mkdir -p $out
     make PREFIX=$out VERBOSE=1 install ${crossMakeFlag}
@@ -92,7 +90,7 @@ stdenv.mkDerivation {
     # Derivations may check for the existance of this attribute, to know what to link to.
     inherit libiconv;
   };
-  
+
   meta = {
     homepage = http://www.uclibc.org/;
     description = "A small implementation of the C library";

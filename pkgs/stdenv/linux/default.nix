@@ -40,20 +40,15 @@ rec {
   bootstrapTools = derivation {
     name = "bootstrap-tools";
 
-    builder = bootstrapFiles.sh;
+    builder = bootstrapFiles.busybox;
 
     args =
       if system == "armv5tel-linux" || system == "armv6l-linux"
         || system == "armv7l-linux"
       then [ ./scripts/unpack-bootstrap-tools-arm.sh ]
-      else [ ./scripts/unpack-bootstrap-tools.sh ];
+      else [ "ash" "-e" ./scripts/unpack-bootstrap-tools.sh ];
 
-    # FIXME: get rid of curl.
-    inherit (bootstrapFiles) bzip2 mkdir curl cpio;
-
-    tarball = import <nix/fetchurl.nix> {
-      inherit (bootstrapFiles.bootstrapTools) url sha256;
-    };
+    tarball = bootstrapFiles.bootstrapTools;
 
     inherit system;
 
