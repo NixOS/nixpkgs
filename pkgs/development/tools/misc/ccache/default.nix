@@ -16,11 +16,10 @@ stdenv.mkDerivation {
   passthru = {
     # A derivation that provides gcc and g++ commands, but that
     # will end up calling ccache for the given cacheDir
-    links = extraConfig : (runCommand "ccache-links"
-        { inherit (gcc) langC langCC; }
+    links = extraConfig : (runCommand "ccache-links" { }
       ''
         mkdir -p $out/bin
-        if [ $langC -eq 1 ]; then
+        if [ -x "${gcc.gcc}/bin/gcc" ]; then
           cat > $out/bin/gcc << EOF
           #!/bin/sh
           ${extraConfig}
@@ -28,7 +27,7 @@ stdenv.mkDerivation {
         EOF
           chmod +x $out/bin/gcc
         fi
-        if [ $langCC -eq 1 ]; then
+        if [ -x "${gcc.gcc}/bin/g++" ]; then
           cat > $out/bin/g++ << EOF
           #!/bin/sh
           ${extraConfig}
