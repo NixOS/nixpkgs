@@ -1134,6 +1134,34 @@ let
   #   };
   # });
 
+  bugzilla = buildPythonPackage rec {
+    name = "bugzilla-${version}";
+    version = "1.1.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-bugzilla/python-${name}.tar.gz";
+      # md5 = "c95befd1fecad21f742beaa8180538c0"; # provided by pypi website.
+      sha256 = "11361635a4f1613803a0b9b93ba9126f7fd36180653f953e2590b1536d107d46";
+    };
+
+    patches = [ ../development/python-modules/bugzilla/checkPhase-fix-cookie-compare.patch ];
+
+    buildInputs = with self; [ pep8 coverage logilab_common ];
+    propagatedBuildInputs = [ self.requests2 ];
+
+    preCheck = ''
+      mkdir -p check-phase
+      export HOME=$(pwd)/check-phase
+    '';
+
+    meta = with stdenv.lib; {
+      homepage = https://fedorahosted.org/python-bugzilla/;
+      description = "Bugzilla XMLRPC access module";
+      license = licenses.gpl2;
+      platforms = platforms.all;
+      maintainers = [ maintainers.pierron ];
+    };
+  };
 
   buildout = self.zc_buildout;
   buildout152 = self.zc_buildout152;
