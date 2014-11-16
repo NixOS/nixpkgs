@@ -18,6 +18,18 @@ let
   max = x: y: if x > y then x else y;
 
   # The configuration file for syslinux.
+
+  # Notes on syslinux configuration and UNetbootin compatiblity:
+  #   * Do not use '/syslinux/syslinux.cfg' as the path for this
+  #     configuration. UNetbootin will not parse the file and use it as-is.
+  #     This results in a broken configuration if the partition label does
+  #     not match the specified config.isoImage.volumeID. For this reason
+  #     we're using '/isolinux/isolinux.cfg'.
+  #   * Use APPEND instead of adding command-line arguments directly after
+  #     the LINUX entries.
+  #   * COM32 entries (chainload, reboot, poweroff) are not recognized. They
+  #     result in incorrect boot entries.
+
   baseIsolinuxCfg =
     ''
     SERIAL 0 38400
@@ -28,8 +40,9 @@ let
     DEFAULT boot
 
     LABEL boot
-    MENU LABEL Boot NixOS
-    LINUX /boot/bzImage init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
+    MENU LABEL NixOS ${config.system.nixosVersion} Installer
+    LINUX /boot/bzImage
+    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
     INITRD /boot/initrd
 
     LABEL chain
