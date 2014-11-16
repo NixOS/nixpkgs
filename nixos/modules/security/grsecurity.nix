@@ -226,8 +226,8 @@ in
       [ { assertion = cfg.stable || cfg.testing;
           message   = ''
             If grsecurity is enabled, you must select either the
-            stable patch (with kernel 3.2), or the testing patch (with
-            kernel 3.13) to continue.
+            stable patch (with kernel 3.14), or the testing patch (with
+            kernel 3.17) to continue.
           '';
         }
         { assertion = (cfg.stable -> !cfg.testing) || (cfg.testing -> !cfg.stable);
