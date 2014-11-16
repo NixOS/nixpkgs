@@ -502,6 +502,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   concurrentExtra = callPackage ../development/libraries/haskell/concurrent-extra {};
 
+  concurrentSupply = callPackage ../development/libraries/haskell/concurrent-supply {};
+
   converge = callPackage ../development/libraries/haskell/converge {};
 
   cookie = callPackage ../development/libraries/haskell/cookie {};
