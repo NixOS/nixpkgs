@@ -32,6 +32,7 @@ rec {
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["setVars" "doUnpack" "fixPaths" "extractTexinfoTex"
+    "fixEpsWrite"
     "doConfigure" "dumpRealVars" "doMakeInstall" "fixPathsResult"
     "fixInfoDir"];
 
@@ -56,6 +57,10 @@ rec {
   extractTexinfoTex = a.fullDepEntry ''
     xz -d < ${a.texinfo.src} | tar --wildcards -x texinfo-'*'/doc/texinfo.tex
     cp texinfo-*/doc/texinfo.tex doc/
+  '' ["minInit" "addInputs" "doUnpack"];
+
+  fixEpsWrite = a.fullDepEntry ''
+    sed -e 's@epswrite@eps2write@g' -i runlabel.in
   '' ["minInit" "addInputs" "doUnpack"];
 
   meta = {
