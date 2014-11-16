@@ -9535,6 +9535,34 @@ let
     };
   };
 
+  taskw = buildPythonPackage rec {
+    version = "0.8.6";
+    name = "taskw-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/taskw/${name}.tar.gz";
+      # md5 = "9f3ce2eaff9a3986d04632547168894d"; # provided by pypi website.
+      sha256 = "341a165a1c2ef94fb1c2a49a785357377f04a0d55cabe9563179849497e47146";
+    };
+
+    patches = [ ../development/python-modules/taskw/use-template-for-taskwarrior-install-path.patch ];
+    postPatch = ''
+      substituteInPlace taskw/warrior.py \
+        --replace '@@taskwarrior@@' '${pkgs.taskwarrior}'
+    '';
+
+    buildInputs = with self; [ nose pkgs.taskwarrior ];
+    propagatedBuildInputs = with self; [ six dateutil pytz ];
+
+    meta = {
+      homepage =  http://github.com/ralphbean/taskw;
+      description = "Python bindings for your taskwarrior database";
+      license = licenses.gpl3Plus;
+      platforms = platforms.all;
+      maintainers = [ maintainers.pierron ];
+    };
+  };
+
   tempita = buildPythonPackage rec {
     version = "0.5.2";
     name = "tempita-${version}";
