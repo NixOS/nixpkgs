@@ -4,7 +4,10 @@ stdenv.mkDerivation rec {
   name = "lftp-4.5.5";
 
   src = fetchurl {
-    url = "http://lftp.yar.ru/ftp/${name}.tar.bz2";
+    urls = [
+      "http://lftp.yar.ru/ftp/${name}.tar.bz2"
+      "http://lftp.yar.ru/ftp/old/${name}.tar.bz2"
+      ];
     sha256 = "11885mj0xk5b1mnvf63s33874x7fcg87bszsyalxwsab4yfplam3";
   };
 
