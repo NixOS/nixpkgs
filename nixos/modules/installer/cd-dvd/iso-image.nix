@@ -9,6 +9,18 @@ with lib;
 let
 
   # The configuration file for syslinux.
+
+  # Notes on syslinux configuration and UNetbootin compatiblity:
+  #   * Do not use '/syslinux/syslinux.cfg' as the path for this
+  #     configuration. UNetbootin will not parse the file and use it as-is.
+  #     This results in a broken configuration if the partition label does
+  #     not match the specified config.isoImage.volumeID. For this reason
+  #     we're using '/isolinux/isolinux.cfg'.
+  #   * Use APPEND instead of adding command-line arguments directly after
+  #     the LINUX entries.
+  #   * COM32 entries (chainload, reboot, poweroff) are not recognized. They
+  #     result in incorrect boot entries.
+
   isolinuxCfg =
     ''
     TIMEOUT ${builtins.toString config.boot.loader.grub.timeout}
