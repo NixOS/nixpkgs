@@ -655,6 +655,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     inherit (pkgs) zlib;
   };
 
+  digestPure = callPackage ../development/libraries/haskell/digest-pure {};
+
   digestiveFunctors = callPackage ../development/libraries/haskell/digestive-functors {};
 
   digestiveFunctorsAeson = callPackage ../development/libraries/haskell/digestive-functors-aeson {};
