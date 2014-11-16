@@ -15,28 +15,34 @@ NIX_LISP_BUILD_CODE=
 case "$NIX_LISP" in
         sbcl)
                 NIX_LISP_BUILD_CODE="(progn
-                  (sb-ext:with-unlocked-packages (:sb-sys :sb-alien)
-                    (let*
-                      (
-                        (old-fn (symbol-function 'sb-alien::dlopen-or-lose))
-                        (old-ldlp #.(sb-posix:getenv \"LD_LIBRARY_PATH\"))
-                        (ldlp-merged nil)
-                        )
-                        (defun sb-alien::dlopen-or-lose (&rest args)
-                          (or
-                            (ignore-errors (progn (apply old-fn args)))
-                            (and 
-                              args
-                              (loop
-                                for path in (list $(echo "$NIX_LISP_LD_LIBRARY_PATH" | sed -e 's/:/" "/g; s/^/"; s/$/"'))
-                                for try := (apply old-fn 
-                                             (format nil "~a/~a" path (first args))
-                                             (cdr args))
-                                )
-                               )
-                            )
+                  (let*
+                    ((old-fn (symbol-function 'sb-alien::dlopen-or-lose )))
+                    (sb-ext:with-unlocked-packages (:sb-sys :sb-alien)
+                      (defun sb-alien::dlopen-or-lose (&rest args)
+                        (or
+                          (ignore-errors (progn (apply old-fn args)))
+                          (and
+                            args
+                            (loop
+                              with try = nil
+                              with obj = (first args)
+                              with original-namestring = (sb-alien::shared-object-namestring obj)
+                              for path in (list $(echo "$NIX_LISP_LD_LIBRARY_PATH" | sed -e 's/:/" "/g; s/^/"/; s/$/"/'))
+                              for target := (format nil \"~a/~a\" path original-namestring)
+                              when (ignore-errors
+                                     (progn
+                                       (setf (sb-alien::shared-object-namestring obj) target)
+                                       (setf try (apply old-fn args))
+                                           t)) do
+                                (progn  (return try))
+                                finally (progn (setf (sb-alien::shared-object-namestring obj) original-namestring)
+                                  (return (apply old-fn args)))
+                              )
+                             )
                           )
-                      ))
+                        )
+                      )
+                    )
                   (sb-ext:save-lisp-and-die \"$target\"
                   :toplevel (lambda ()
                     (setf common-lisp:*standard-input* (sb-sys::make-fd-stream 0 :input t :buffering :line))
@@ -46,7 +52,7 @@ case "$NIX_LISP" in
                 systems=":sb-posix $systems"
                 ;;
         ecl)
-		NIX_LISP_BUILD_CODE="()"
+                NIX_LISP_BUILD_CODE="()"
                 ;;
         clisp)
                 NIX_LISP_BUILD_CODE="(ext:saveinitmem \"$target\" :norc t :init-function (lambda () $code (ext:bye)) :script nil :executable 0)"
