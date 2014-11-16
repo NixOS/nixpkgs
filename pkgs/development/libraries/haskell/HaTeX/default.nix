@@ -6,14 +6,14 @@
 
 cabal.mkDerivation (self: {
   pname = "HaTeX";
-  version = "3.13.1.0";
-  sha256 = "1ciifdb7yd79lvwdcxj8dq98dfmm9pg25rx9rc2wjn2jnp8j85r7";
+  version = "3.15.0.0";
+  sha256 = "1rhxml458d8y0vxns2rp76yvfk66496mvab81i71km653n6g5kky";
   buildDepends = [
     matrix parsec QuickCheck text transformers wlPprintExtras
   ];
-  testDepends = [ QuickCheck tasty tastyQuickcheck ];
+  testDepends = [ QuickCheck tasty tastyQuickcheck text ];
   meta = {
-    homepage = "http://daniel-diaz.github.io/projects/hatex";
+    homepage = "http://wrongurl.net/haskell/HaTeX";
     description = "The Haskell LaTeX library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "json";
-  version = "0.7";
-  sha256 = "18v8vbx3pyskf3ap4lpy2d3461gghfsq5bzjyrjvqsd2r9r44rfk";
+  version = "0.9";
+  sha256 = "1r37hhhhc97sxqrcijss80c0380f36bh6f2y4navwih7r3a2ci8j";
   buildDepends = [ mtl parsec syb text ];
   meta = {
     description = "Support for serialising Haskell to and from JSON";

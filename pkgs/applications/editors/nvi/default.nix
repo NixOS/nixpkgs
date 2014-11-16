@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.bostic.com/vi/;
     description = "The Berkeley Vi Editor";
-    license = "free";
+    license = stdenv.lib.licenses.free;
   };
 }

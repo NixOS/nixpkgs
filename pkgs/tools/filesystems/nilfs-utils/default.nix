@@ -1,52 +1,38 @@
-x@{builderDefsPackage
-  , libuuid
-  , ...}:
-builderDefsPackage
-(a :  
+{ stdenv, fetchurl, libuuid, libselinux }:
 let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
-
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
-    version = "2.0.19";
-    url = "http://www.nilfs.org/download/nilfs-utils-${version}.tar.bz2";
-    hash = "0q9cb6ny0ah1s9rz1rgqka1pxdm3xvg0ywcqyhzcz4yhamfhg100";
+    version = "2.2.2";
+    url = "http://nilfs.sourceforge.net/download/nilfs-utils-${version}.tar.bz2";
+    sha256 = "1w2i5wy290y03hg72lhkrnmfhap04ki0kkv5m8q60a2frbv6ydql";
     baseName = "nilfs-utils";
     name = "${baseName}-${version}";
   };
 in
-rec {
-  src = a.fetchurl {
+stdenv.mkDerivation rec {
+  src = fetchurl {
     url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+    sha256 = sourceInfo.sha256;
   };
 
   inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [libuuid libselinux];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doFixPaths" "doConfigure" "doMakeInstall"];
-
-  doFixPaths = a.fullDepEntry (''
-    sed -e '/sysconfdir=\/etc/d; /sbindir=\/sbin/d' -i configure
-    sed -e 's@/sbin/@'"$out"'/sbin/@' -i ./sbin/mount/cleaner_ctl.c
-  '') ["doUnpack" "minInit"];
+  preConfigure = ''
+    sed -e '/sysconfdir=\/etc/d; ' -i configure
+    sed -e "s@sbindir=/sbin@sbindir=$out/sbin@" -i configure
+    sed -e 's@/sbin/@'"$out"'/sbin/@' -i ./lib/cleaner*.c
+  '';
 
   meta = {
     description = "NILFS utilities";
-    maintainers = with a.lib.maintainers;
+    maintainers = with stdenv.lib.maintainers;
     [
       raskin
     ];
-    platforms = with a.lib.platforms;
+    platforms = with stdenv.lib.platforms;
       linux;
+    downloadPage = "http://nilfs.sourceforge.net/en/download.html";
+    updateWalker = true;
+    inherit version;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://www.nilfs.org/download/?C=M;O=D";
-    };
-  };
-}) x
-
+}

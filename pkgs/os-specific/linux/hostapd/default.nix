@@ -2,11 +2,11 @@
 stdenv.mkDerivation rec {
 
   name = "hostapd-${version}";
-  version = "2.1";
+  version = "2.3";
 
   src = fetchurl {
     url = "http://hostap.epitest.fi/releases/${name}.tar.gz";
-    sha256 = "121gpcs1ws7m2v8jk091jhmz3pm2xmhwkv96gqkyb4k0bgsi0waw";
+    sha256 = "1pxlkfj1r2k5lxph2x9l02jrn652b3whcfh6l604rbbghxv2nk69";
   };
 
   buildInputs = [ libnl openssl pkgconfig ];

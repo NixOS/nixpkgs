@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
     binary dataAccessor deepseq distributedStatic hashable mtl
     networkTransport random rank1dynamic stm syb time transformers
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://haskell-distributed.github.com/";
     description = "Cloud Haskell: Erlang-style concurrency in Haskell";

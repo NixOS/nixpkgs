@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "clean-unions";
-  version = "0.1";
-  sha256 = "1nh4gy2ql2h9njvcx05gl2ng8g3hnvyiqq87nnh1xalsvrkh6j0v";
+  version = "0.1.1";
+  sha256 = "1y4cj15s6gjcazwk0iycyc2qs7chrqcvchf4g5h4xnf2x8ld4i21";
   meta = {
     homepage = "https://github.com/fumieval/clean-unions";
     description = "Open unions without need for Typeable";

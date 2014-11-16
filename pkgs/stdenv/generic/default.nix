@@ -1,7 +1,7 @@
 let lib = import ../../../lib; in lib.makeOverridable (
 
 { system, name ? "stdenv", preHook ? "", initialPath, gcc, shell
-, extraAttrs ? {}, overrides ? (pkgs: {}), config
+, allowedRequisites ? null, extraAttrs ? {}, overrides ? (pkgs: {}), config
 
 , # The `fetchurl' to use for downloading curl and its dependencies
   # (see all-packages.nix).
@@ -10,8 +10,6 @@ let lib = import ../../../lib; in lib.makeOverridable (
 , setupScript ? ./setup.sh
 
 , extraBuildInputs ? []
-
-, skipPaxMarking ? false
 }:
 
 let
@@ -23,7 +21,7 @@ let
   # {pkgs, ...}:
   # {
   #   allowUnfree = false;
-  #   allowUnfreePredicate = (x: pkgs.lib.hasPrefix "flashplayero-" x.name);
+  #   allowUnfreePredicate = (x: pkgs.lib.hasPrefix "flashplayer-" x.name);
   # }
   allowUnfreePredicate = config.allowUnfreePredicate or (x: false);
 
@@ -36,108 +34,108 @@ let
         { nixpkgs.config.allow${unfreeOrBroken} = true; }
       in configuration.nix to override this. If you use Nix standalone, you can add
         { allow${unfreeOrBroken} = true; }
-      to ~/.nixpkgs/config.nix.
-    '';
+      to ~/.nixpkgs/config.nix.'';
 
   unsafeGetAttrPos = builtins.unsafeGetAttrPos or (n: as: null);
 
+  isUnfree = licenses: lib.lists.any (l:
+    !l.free or true || l == "unfree" || l == "unfree-redistributable") licenses;
+
+  defaultNativeBuildInputs = extraBuildInputs ++
+    [ ../../build-support/setup-hooks/move-docs.sh
+      ../../build-support/setup-hooks/compress-man-pages.sh
+      ../../build-support/setup-hooks/strip.sh
+      ../../build-support/setup-hooks/patch-shebangs.sh
+      ../../build-support/setup-hooks/move-sbin.sh
+      ../../build-support/setup-hooks/move-lib64.sh
+      gcc
+    ];
+
+  # Add a utility function to produce derivations that use this
+  # stdenv and its shell.
+  mkDerivation = attrs:
+    let
+      pos =
+        if attrs.meta.description or null != null then
+          unsafeGetAttrPos "description" attrs.meta
+        else
+          unsafeGetAttrPos "name" attrs;
+      pos' = if pos != null then "‘" + pos.file + ":" + toString pos.line + "’" else "«unknown-file»";
+    in
+    if !allowUnfree && isUnfree (lib.lists.toList attrs.meta.license or []) && !allowUnfreePredicate attrs then
+      throw ''
+        Package ‘${attrs.name}’ in ${pos'} has an unfree license, refusing to evaluate.
+        ${forceEvalHelp "Unfree"}''
+    else if !allowBroken && attrs.meta.broken or false then
+      throw ''
+        Package ‘${attrs.name}’ in ${pos'} is marked as broken, refusing to evaluate.
+        ${forceEvalHelp "Broken"}''
+    else if !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem result.system attrs.meta.platforms then
+      throw ''
+        Package ‘${attrs.name}’ in ${pos'} is not supported on ‘${result.system}’, refusing to evaluate.
+        ${forceEvalHelp "Broken"}''
+    else
+      lib.addPassthru (derivation (
+        (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
+        // (let
+          buildInputs = attrs.buildInputs or [];
+          nativeBuildInputs = attrs.nativeBuildInputs or [];
+          propagatedBuildInputs = attrs.propagatedBuildInputs or [];
+          propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs or [];
+          crossConfig = attrs.crossConfig or null;
+        in
+        {
+          builder = attrs.realBuilder or shell;
+          args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
+          stdenv = result;
+          system = result.system;
+          userHook = config.stdenv.userHook or null;
+          __ignoreNulls = true;
+
+          # Inputs built by the cross compiler.
+          buildInputs = if crossConfig != null then buildInputs else [];
+          propagatedBuildInputs = if crossConfig != null then propagatedBuildInputs else [];
+          # Inputs built by the usual native compiler.
+          nativeBuildInputs = nativeBuildInputs ++ (if crossConfig == null then buildInputs else []);
+          propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
+            (if crossConfig == null then propagatedBuildInputs else []);
+        }))) (
+      {
+        # The meta attribute is passed in the resulting attribute set,
+        # but it's not part of the actual derivation, i.e., it's not
+        # passed to the builder and is not a dependency.  But since we
+        # include it in the result, it *is* available to nix-env for
+        # queries.  We also a meta.position attribute here to
+        # identify the source location of the package.
+        meta = attrs.meta or {} // (if pos != null then {
+          position = pos.file + ":" + (toString pos.line);
+        } else {});
+        passthru = attrs.passthru or {};
+      } //
+      # Pass through extra attributes that are not inputs, but
+      # should be made available to Nix expressions using the
+      # derivation (e.g., in assertions).
+      (attrs.passthru or {}));
+
   # The stdenv that we are producing.
   result =
-
-    derivation {
+    derivation (
+    (if isNull allowedRequisites then {} else { allowedRequisites = allowedRequisites ++ defaultNativeBuildInputs; }) //
+    {
       inherit system name;
 
       builder = shell;
 
       args = ["-e" ./builder.sh];
-      /* TODO: special-cased @var@ substitutions are ugly.
-          However, using substituteAll* from setup.sh seems difficult,
-          as setup.sh can't be directly sourced.
-          Suggestion: split similar utility functions into a separate script.
-      */
 
       setup = setupScript;
 
-      inherit preHook initialPath gcc shell;
-
-      # Whether we should run paxctl to pax-mark binaries
-      needsPax = result.isLinux && !skipPaxMarking;
-
-      propagatedUserEnvPkgs = [gcc] ++
-        lib.filter lib.isDerivation initialPath;
-    }
+      inherit preHook initialPath shell defaultNativeBuildInputs;
+    })
 
     // rec {
 
-      meta = {
-        description = "The default build environment for Unix packages in Nixpkgs";
-      };
-
-      # Add a utility function to produce derivations that use this
-      # stdenv and its shell.
-      mkDerivation = attrs:
-        let
-          pos =
-            if attrs.meta.description or null != null then
-              unsafeGetAttrPos "description" attrs.meta
-            else
-              unsafeGetAttrPos "name" attrs;
-          pos' = if pos != null then "‘" + pos.file + ":" + toString pos.line + "’" else "«unknown-file»";
-        in
-        if !allowUnfree && (let l = lib.lists.toList attrs.meta.license or []; in lib.lists.elem "unfree" l || lib.lists.elem "unfree-redistributable" l) && !(allowUnfreePredicate attrs) then
-          throw ''
-            Package ‘${attrs.name}’ in ${pos'} has an unfree license, refusing to evaluate.
-            ${forceEvalHelp "Unfree"}''
-        else if !allowBroken && attrs.meta.broken or false then
-          throw ''
-            Package ‘${attrs.name}’ in ${pos'} is marked as broken, refusing to evaluate.
-            ${forceEvalHelp "Broken"}''
-        else if !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem result.system attrs.meta.platforms then
-          throw ''
-            Package ‘${attrs.name}’ in ${pos'} is not supported on ‘${result.system}’, refusing to evaluate.
-            ${forceEvalHelp "Broken"}''
-        else
-          lib.addPassthru (derivation (
-            (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
-            // (let
-              buildInputs = attrs.buildInputs or [];
-              nativeBuildInputs = attrs.nativeBuildInputs or [];
-              propagatedBuildInputs = attrs.propagatedBuildInputs or [];
-              propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs or [];
-              crossConfig = attrs.crossConfig or null;
-            in
-            {
-              builder = attrs.realBuilder or shell;
-              args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
-              stdenv = result;
-              system = result.system;
-              userHook = config.stdenv.userHook or null;
-              __ignoreNulls = true;
-
-              # Inputs built by the cross compiler.
-              buildInputs = if crossConfig != null then buildInputs ++ extraBuildInputs else [];
-              propagatedBuildInputs = if crossConfig != null then propagatedBuildInputs else [];
-              # Inputs built by the usual native compiler.
-              nativeBuildInputs = nativeBuildInputs ++ (if crossConfig == null then buildInputs ++ extraBuildInputs else []);
-              propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
-                (if crossConfig == null then propagatedBuildInputs else []);
-          }))) (
-          {
-            # The meta attribute is passed in the resulting attribute set,
-            # but it's not part of the actual derivation, i.e., it's not
-            # passed to the builder and is not a dependency.  But since we
-            # include it in the result, it *is* available to nix-env for
-            # queries.  We also a meta.position attribute here to
-            # identify the source location of the package.
-            meta = attrs.meta or {} // (if pos != null then {
-              position = pos.file + ":" + (toString pos.line);
-            } else {});
-            passthru = attrs.passthru or {};
-          } //
-          # Pass through extra attributes that are not inputs, but
-          # should be made available to Nix expressions using the
-          # derivation (e.g., in assertions).
-          (attrs.passthru or {}));
+      meta.description = "The default build environment for Unix packages in Nixpkgs";
 
       # Utility flags to test the type of platform.
       isDarwin = system == "x86_64-darwin";
@@ -163,7 +161,8 @@ let
       isBSD = system == "i686-freebsd"
            || system == "x86_64-freebsd"
            || system == "i686-openbsd"
-           || system == "x86_64-openbsd";
+           || system == "x86_64-openbsd"
+           || system == "x86_64-darwin";
       isi686 = system == "i686-linux"
             || system == "i686-gnu"
             || system == "i686-freebsd"
@@ -184,6 +183,12 @@ let
       isArm = system == "armv5tel-linux"
            || system == "armv6l-linux"
            || system == "armv7l-linux";
+      isBigEndian = system == "powerpc-linux";
+
+      # Whether we should run paxctl to pax-mark binaries.
+      needsPax = isLinux;
+
+      inherit mkDerivation;
 
       # For convenience, bring in the library functions in lib/ so
       # packages don't have to do that themselves.
@@ -192,6 +197,8 @@ let
       inherit fetchurlBoot;
 
       inherit overrides;
+
+      inherit gcc;
     }
 
     # Propagate any extra attributes.  For instance, we use this to

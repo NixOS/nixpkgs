@@ -44,9 +44,10 @@ in {
     };
 
     environment.gnome3.packageSet = mkOption {
-      default = pkgs.gnome3;
+      default = null;
       example = literalExample "pkgs.gnome3_12";
-      description = "Which Gnome 3 package set to use.";
+      description = "Which GNOME 3 package set to use.";
+      apply = p: if p == null then pkgs.gnome3 else p;
     };
     
     environment.gnome3.excludePackages = mkOption {
@@ -81,7 +82,7 @@ in {
     services.upower.enable = config.powerManagement.enable;
     services.upower.package = gnome3.upower;
 
-    fonts.fonts = [ pkgs.dejavu_fonts ];
+    fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell_fonts ];
 
     services.xserver.desktopManager.session = singleton
       { name = "gnome3";

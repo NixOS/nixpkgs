@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "HaskellNet-SSL";
-  version = "0.2.4";
-  sha256 = "0rwj69rz8i84qj6n1zd9fllp4333azfxppd7blzd486bczzkgkbb";
+  version = "0.2.5.2";
+  sha256 = "0jhm43zd6jvhbahk4ki29ydg02qnjj4mw823rckqxk6f91q00qlp";
   buildDepends = [ connection dataDefault HaskellNet network tls ];
   meta = {
     homepage = "https://github.com/dpwright/HaskellNet-SSL";

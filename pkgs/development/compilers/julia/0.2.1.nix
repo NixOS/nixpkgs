@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
-    rev = "e44b5939057d87c1e854077108a1a6d66203f4fa";
+    rev = "refs/tags/v${version}";
     sha256 = "7ee0f267bc1ae286764ced3c0c695c335a6f8d67bd7b3ca7e4de259333c9426a";
   };
 
@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
     do
       makeFlags="$makeFlags USE_SYSTEM_$i=1 "
     done
+	makeFlags="$makeFlags JULIA_CPU_TARGET=core2";
 
     copy_kill_hash(){
       cp "$1" "$2/$(basename "$1" | sed -e 's/^[a-z0-9]*-//')"

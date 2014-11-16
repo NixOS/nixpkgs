@@ -3,7 +3,7 @@
 
 with stdenv.lib;
 
-let version = "2.6.4";
+let version = "2.6.5";
     system-libraries = [
       "pcre"
       "boost"
@@ -13,7 +13,7 @@ let version = "2.6.4";
       # "v8"
     ] ++ optionals (!stdenv.isDarwin) [ "tcmalloc" ];
     buildInputs = [
-      sasl boost boost.lib gperftools pcre snappy
+      sasl boost gperftools pcre snappy
       libyamlcpp sasl openssl libpcap
     ];
 
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://downloads.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "1h4rrgcb95234ryjma3fjg50qsm1bnxjx5ib0c3p9nzmc2ji2m07";
+    sha256 = "0v58kyp4cj4yag0djnswfiifrcll5y7x772y99b3afg89xicpmjm";
   };
 
   nativeBuildInputs = [ scons ];

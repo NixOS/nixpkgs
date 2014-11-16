@@ -1,16 +1,27 @@
-{ stdenv, fetchurl, bash, gettext }:
+{ stdenv, fetchurl, gettext }:
 
-stdenv.mkDerivation (rec {
-  name = "libgpg-error-1.16";
+stdenv.mkDerivation rec {
+  name = "libgpg-error-1.17";
 
   src = fetchurl {
     url = "mirror://gnupg/libgpg-error/${name}.tar.bz2";
-    sha256 = "16xv59zcr177gvgj97vg0rm4rixrpb4lz1q9fji3xay47i83gm62";
+    sha256 = "1dapxzxl1naghf342fwfc2w2f2c5hb9gr1a1s4n8dsqn26kybx1z";
   };
+
+  postPatch = "sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:00+0000/' -i ./configure";
 
   # If architecture-dependent MO files aren't available, they're generated
   # during build, so we need gettext for cross-builds.
   crossAttrs.buildInputs = [ gettext ];
+
+  postConfigure =
+    stdenv.lib.optionalString stdenv.isSunOS
+    # For some reason, /bin/sh on OpenIndiana leads to this at the end of the
+    # `config.status' run:
+    #   ./config.status[1401]: shift: (null): bad number
+    # (See <http://hydra.nixos.org/build/2931046/nixlog/1/raw>.)
+    # Thus, re-run it with Bash.
+      "${stdenv.shell} config.status";
 
   doCheck = true;
 
@@ -31,15 +42,3 @@ stdenv.mkDerivation (rec {
   };
 }
 
-//
-
-(stdenv.lib.optionalAttrs stdenv.isSunOS {
-  # For some reason, /bin/sh on OpenIndiana leads to this at the end of the
-  # `config.status' run:
-  #   ./config.status[1401]: shift: (null): bad number
-  # (See <http://hydra.nixos.org/build/2931046/nixlog/1/raw>.)
-  # Thus, re-run it with Bash.
-  postConfigure =
-    '' ${bash}/bin/sh config.status
-    '';
-}))

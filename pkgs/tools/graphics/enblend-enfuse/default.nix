@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1b7r1nnwaind0344ckwggy0ghl0ipbk9jzylsxcjfl05rnasw00w";
   };
 
-  buildInputs = [ boost boost.lib freeglut glew gsl lcms2 libpng libtiff libxmi mesa vigra ];
+  buildInputs = [ boost freeglut glew gsl lcms2 libpng libtiff libxmi mesa vigra ];
 
   nativeBuildInputs = [ perl pkgconfig ];
 

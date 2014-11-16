@@ -5,6 +5,7 @@
 , ncurses, readline, cursesSupport ? false
 , groff, docSupport ? false
 , libyaml, yamlSupport ? true
+, libffi, fiddleSupport ? true
 , ruby_2_0_0, autoreconfHook, bison, useRailsExpress ? true
 }:
 
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
   NROFF = "${groff}/bin/nroff";
 
   buildInputs = ops useRailsExpress [ autoreconfHook bison ]
+    ++ (op fiddleSupport libffi)
     ++ (ops cursesSupport [ ncurses readline ] )
     ++ (op docSupport groff )
     ++ (op zlibSupport zlib)
@@ -78,7 +80,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    license = "Ruby";
+    license = stdenv.lib.licenses.ruby;
     homepage = "http://www.ruby-lang.org/en/";
     description = "The Ruby language";
     platforms = stdenv.lib.platforms.all;

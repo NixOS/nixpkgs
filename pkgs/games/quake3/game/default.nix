@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, x11, SDL, mesa, openal }:
+{ lib, stdenv, fetchurl, x11, SDL, mesa, openal, gcc46 }:
 
 stdenv.mkDerivation {
   name = "ioquake3-1.36";
-  
+
   src = fetchurl {
     url = http://ioquake3.org/files/1.36/ioquake3-1.36.tar.bz2; # calls itself "1.34-rc3"
     sha256 = "008vah60z0n9h1qp373xbqvhwfbyywbbhd1np0h0yw66g0qzchzv";
   };
 
   patchFlags = "-p0";
-  
+
   patches = [
     # Fix for compiling on gcc 4.2.
     (fetchurl {
@@ -19,10 +19,10 @@ stdenv.mkDerivation {
 
     # Do an exit() instead of _exit().  This is nice for gcov.
     # Upstream also seems to do this.
-    ./exit.patch    
+    ./exit.patch
   ];
-  
-  buildInputs = [x11 SDL mesa openal];
+
+  buildInputs = [ x11 SDL mesa openal gcc46 ];
 
   # Fix building on GCC 4.6.
   NIX_CFLAGS_COMPILE = "-Wno-error";
@@ -33,6 +33,8 @@ stdenv.mkDerivation {
     installFlags="COPYDIR=$out"
   '';
 
-  meta.broken = true;
-  
+  meta = {
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.eelco ];
+  };
 }

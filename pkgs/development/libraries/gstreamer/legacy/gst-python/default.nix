@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, python, gstreamer
-  , gst_plugins_base, pygtk
+, gst_plugins_base, pygobject
 }:
 
 stdenv.mkDerivation rec {
@@ -13,12 +13,16 @@ stdenv.mkDerivation rec {
     sha256 = "0y1i4n5m1diljqr9dsq12anwazrhbs70jziich47gkdwllcza9lg";
   };
 
+  # Need to disable the testFake test case due to bug in pygobject.
+  # See https://bugzilla.gnome.org/show_bug.cgi?id=692479
+  patches = [ ./disable-testFake.patch ];
+
   buildInputs =
-    [ pkgconfig gst_plugins_base pygtk ]
+    [ pkgconfig gst_plugins_base pygobject ]
     ;
 
   propagatedBuildInputs = [ gstreamer python ];
- 
+
   meta = {
     homepage = http://gstreamer.freedesktop.org;
 

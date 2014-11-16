@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ieee754";
-  version = "0.7.3";
-  sha256 = "0gq747h15inxbxbgmzmchb9a8p57rhv3bmj69idx5arh0d3whgv0";
+  version = "0.7.4";
+  sha256 = "1pxbkfa21mvc869n18nn7r29hcinxdbsnk68nlldzld8f6m13g1h";
   meta = {
     homepage = "http://github.com/patperry/hs-ieee754";
     description = "Utilities for dealing with IEEE floating point numbers";

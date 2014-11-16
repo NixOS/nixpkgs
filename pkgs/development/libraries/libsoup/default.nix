@@ -3,15 +3,15 @@
 , libintlOrEmpty
 , intltool, python }:
 let
-  majorVersion = "2.45";
-  version = "${majorVersion}.3";
+  majorVersion = "2.48";
+  version = "${majorVersion}.0";
 in
 stdenv.mkDerivation {
   name = "libsoup-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libsoup/${majorVersion}/libsoup-${version}.tar.xz";
-    sha256 = "04ma47hcrrbjp90r8jjn686cngnbgac24wgarpwwzlpg66wighva";
+    sha256 = "ea34dd64fe44343445daf6dd690d0691e9d973468de44878da97371c16d89784";
   };
 
   patchPhase = ''

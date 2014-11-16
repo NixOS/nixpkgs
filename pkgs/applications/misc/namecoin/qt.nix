@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   # Don't build with miniupnpc due to namecoin using a different verison that
   # ships with NixOS and it is API incompatible.
-  buildInputs = [ db4 boost boost.lib openssl unzip qt4 ];
+  buildInputs = [ db4 boost openssl unzip qt4 ];
 
   configurePhase = ''
     qmake USE_UPNP=-

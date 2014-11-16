@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchgit, zip, unzip, xulrunner, bash}:
+{stdenv, fetchurl, fetchgit, zip, unzip, firefox, bash}:
 let
   s = # Generated upstream information
   rec {
@@ -31,9 +31,10 @@ stdenv.mkDerivation {
     cp LICENSE README* "$out/share/doc/slimerjs"
     cp -r * "$out/lib/slimerjs"
     echo '#!${bash}/bin/bash' >>  "$out/bin/slimerjs"
-    echo 'export SLIMERJSLAUNCHER=${xulrunner}/bin/xulrunner' >>  "$out/bin/slimerjs"
+    echo 'export SLIMERJSLAUNCHER=${firefox}/bin/firefox' >>  "$out/bin/slimerjs"
     echo "'$out/lib/slimerjs/slimerjs' \"\$@\"" >> "$out/bin/slimerjs"
     chmod a+x "$out/bin/slimerjs"
+    sed -e 's@MaxVersion=32[.]@MaxVersion=33.@' -i "$out/lib/slimerjs/application.ini"
   '';
   meta = {
     inherit (s) version;

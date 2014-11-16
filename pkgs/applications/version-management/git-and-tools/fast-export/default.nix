@@ -30,10 +30,10 @@ stdenv.mkDerivation {
     done
   '';
 
-  # usage: 
+  # usage:
   meta = {
       description = "import svn, mercurial into git";
       homepage = "http://repo.or.cz/w/fast-export.git";
-      license = "?"; # the .py file is GPLv2
+      license = stdenv.lib.licenses.gpl2;
   };
 }

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "lessc-${version}";
-  version = "1.4.2";
+  version = "1.7.5";
 
   src = fetchgit {
     url = https://github.com/less/less.js.git;
     rev = "refs/tags/v${version}";
-    sha256 = "1v3b4f1np3mxkj0irh1pk52r26nzpf4k2ax14cbn7mxx16mqjp50";
+    sha256 = "0r8bcad247v5fyh543a7dppmfbf49ai4my3vcizk42fsbnjs8q2x";
   };
 
   phases = [ "installPhase" ];

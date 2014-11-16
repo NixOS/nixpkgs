@@ -1,25 +1,16 @@
-{ stdenv, fetchurl, pythonPackages, gettext, pyqt4
-, pkgconfig, libdiscid, libofa, ffmpeg, chromaprint
+{ stdenv, buildPythonPackage, fetchurl, gettext
+, pkgconfig, libofa, ffmpeg, chromaprint
+, pyqt4, mutagen, python-libdiscid
 }:
 
-pythonPackages.buildPythonPackage rec {
+let version = "1.3"; in
+buildPythonPackage {
   name = "picard-${version}";
-  namePrefix = "";
-  version = "1.2";
 
   src = fetchurl {
-    url = "http://ftp.musicbrainz.org/pub/musicbrainz/picard/${name}.tar.gz";
-    sha256 = "0sbsf8hzxhxcnnjqvsd6mc23lmk7w33nln0f3w72f89mjgs6pxm6";
+    url = "ftp://ftp.musicbrainz.org/pub/musicbrainz/picard/picard-${version}.tar.gz";
+    sha256 = "06s90w1j29qhd931dgj752k5v4pjbvxiz6g0613xzj3ms8zsrlys";
   };
-
-  postPatch = let
-    discid = "${libdiscid}/lib/libdiscid.so.0";
-    fpr = "${chromaprint}/bin/fpcalc";
-  in ''
-    substituteInPlace picard/disc.py --replace libdiscid.so.0 ${discid}
-    substituteInPlace picard/const.py \
-        --replace "FPCALC_NAMES = [" "FPCALC_NAMES = ['${fpr}',"
-  '';
 
   buildInputs = [
     pkgconfig
@@ -29,18 +20,10 @@ pythonPackages.buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    pythonPackages.mutagen
     pyqt4
-    libdiscid
+    mutagen
+    python-libdiscid
   ];
-
-  configurePhase = ''
-    python setup.py config
-  '';
-
-  buildPhase = ''
-    python setup.py build
-  '';
 
   installPhase = ''
     python setup.py install --prefix="$out"

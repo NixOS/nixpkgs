@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Command-line interface to various pastebins";
     homepage = http://wgetpaste.zlin.dk/;
-    license = "publicDomain";
+    license = stdenv.lib.licenses.publicDomain;
     maintainers = with stdenv.lib.maintainers; [ qknight iElectric ];
     platforms = stdenv.lib.platforms.all;
   };

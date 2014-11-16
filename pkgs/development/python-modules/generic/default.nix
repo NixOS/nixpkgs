@@ -57,12 +57,13 @@ if disabled then throw "${name} not supported for interpreter ${python.executabl
   name = namePrefix + name;
 
   buildInputs = [
-    python wrapPython setuptools
+    wrapPython setuptools
     (distutils-cfg.override { extraCfg = distutilsExtraCfg; })
   ] ++ buildInputs ++ pythonPath
     ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip);
 
-  propagatedBuildInputs = propagatedBuildInputs ++ [ recursivePthLoader ];
+  # propagate python to active setup-hook in nix-shell
+  propagatedBuildInputs = propagatedBuildInputs ++ [ recursivePthLoader python ];
 
   pythonPath = [ setuptools ] ++ pythonPath;
 

@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "accountsservice-${version}";
-  version = "0.6.38";
+  version = "0.6.39";
   
   src = fetchurl {
     url = "http://www.freedesktop.org/software/accountsservice/accountsservice-${version}.tar.xz";
-    sha256 = "1ad32qv57rx9yzrvzsw0d0lh0j7adlh664lachv621wb8ya22crn";
+    sha256 = "0p9kfnr1wvg1qwi6zsgxw031j1wqh41137xl0mv4rm6x2zas6f7r";
   };
 
   buildInputs = [ pkgconfig glib intltool libtool makeWrapper

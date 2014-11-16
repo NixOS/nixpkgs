@@ -7,8 +7,7 @@ let
   cfg = config.services.syslog-ng;
 
   syslogngConfig = pkgs.writeText "syslog-ng.conf" ''
-    @version: 3.5
-    @include "scl.conf"
+    ${cfg.configHeader}
     ${cfg.extraConfig}
   '';
 
@@ -44,15 +43,6 @@ in {
           The package providing syslog-ng binaries.
         '';
       };
-      serviceName = mkOption {
-        type = types.str;
-        default = "syslog-ng";
-        description = ''
-          The name of the systemd service that runs syslog-ng. Set this to
-          <literal>syslog</literal> if you want journald to automatically
-          forward all logs to syslog-ng.
-        '';
-      };
       extraModulePaths = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -72,16 +62,28 @@ in {
           Configuration added to the end of <literal>syslog-ng.conf</literal>.
         '';
       };
+      configHeader = mkOption {
+        type = types.lines;
+        default = ''
+          @version: 3.6
+          @include "scl.conf"
+        '';
+        description = ''
+          The very first lines of the configuration file. Should usually contain
+          the syslog-ng version header.
+        '';
+      };
     };
   };
 
   config = mkIf cfg.enable {
-    systemd.services."${cfg.serviceName}" = {
-      wantedBy = [ "multi-user.target" ];
+    systemd.services.syslog-ng = {
+      description = "syslog-ng daemon";
       preStart = "mkdir -p /{var,run}/syslog-ng";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "multi-user.target" ]; # makes sure hostname etc is set
       serviceConfig = {
         Type = "notify";
-        Sockets = "syslog.socket";
         StandardOutput = "null";
         Restart = "on-failure";
         ExecStart = "${cfg.package}/sbin/syslog-ng ${concatStringsSep " " syslogngOptions}";

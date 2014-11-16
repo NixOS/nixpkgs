@@ -10,6 +10,8 @@ stdenv.mkDerivation (rec {
 
   propagatedBuildInputs = [ libgpgerror ];
 
+  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-asm";
+
   doCheck = stdenv.system != "i686-linux"; # "basic" test fails after stdenv+glibc-2.18
 
   # For some reason the tests don't find `libgpg-error.so'.
@@ -17,6 +19,8 @@ stdenv.mkDerivation (rec {
     LD_LIBRARY_PATH="${libgpgerror}/lib:$LD_LIBRARY_PATH" \
     make check
   '';
+
+  patches = [ ./no-build-timestamp.patch ];
 
   meta = {
     description = "General-pupose cryptographic library";

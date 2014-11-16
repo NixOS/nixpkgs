@@ -1,50 +1,34 @@
-{ stdenv, fetchurl, perl, python, ruby, bison, gperf, flex
-, pkgconfig, which, gettext, gobjectIntrospection, cmake
+{ stdenv, fetchurl, perl, python, ruby, bison, gperf, cmake
+, pkgconfig, gettext, gobjectIntrospection
 , gtk2, gtk3, wayland, libwebp, enchant
 , libxml2, libsoup, libsecret, libxslt, harfbuzz, libpthreadstubs
 , gst-plugins-base
-, withGtk2 ? false
-, enableIntrospection ? true
 }:
 
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.6.0";
+  version = "2.6.2";
 
   meta = with stdenv.lib; {
     description = "Web content rendering engine, GTK+ port";
     homepage = "http://webkitgtk.org/";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.iyzsong ];
+    maintainers = with maintainers; [ iyzsong koral ];
   };
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "1wzlmmm7b430v799gn7ib7m58x3p6dq52zycxsv26lvxsnrh5dxy";
+    sha256 = "1f9qm5g1mbjm2hrnlzymas99piws4h4y3yxz4p6f6gavnsvfjwji";
   };
 
-  CC = "cc";
-
-  prePatch = ''
-    patchShebangs Tools/gtk
-  '';
-
-  configureFlags = with stdenv.lib; [
-    "--disable-geolocation"
-    (optionalString enableIntrospection "--enable-introspection")
-  ] ++ stdenv.lib.optional withGtk2 [
-    "--with-gtk=2.0"
-    "--disable-webkit2"
-  ];
+  patches = [ ./finding-harfbuzz-icu.patch ];
 
   cmakeFlags = [ "-DPORT=GTK" ];
 
-  dontAddDisableDepTrack = true;
-
   nativeBuildInputs = [
-    perl python ruby bison gperf flex
-    pkgconfig which gettext gobjectIntrospection cmake
+    cmake perl python ruby bison gperf
+    pkgconfig gettext gobjectIntrospection
   ];
 
   buildInputs = [
@@ -54,9 +38,8 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    libsoup
-    (if withGtk2 then gtk2 else gtk3)
+    libsoup gtk3
   ];
 
-  #enableParallelBuilding = true; # build problems on Hydra
+  # enableParallelBuilding = true; # build problems on Hydra
 }

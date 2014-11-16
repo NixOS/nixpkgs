@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "resource-pool";
-  version = "0.2.3.0";
-  sha256 = "15igbvnqs6ig1k30l3jngyi60ay7k15mwgza5smv8zbpx86vb1mh";
+  version = "0.2.3.1";
+  sha256 = "02fpw5jfzcdhijx8mfpb6j4c8sxl36f04i2nx3cbivh9yhbgqr92";
   buildDepends = [
     hashable monadControl stm time transformers transformersBase vector
   ];

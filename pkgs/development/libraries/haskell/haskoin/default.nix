@@ -18,6 +18,7 @@ cabal.mkDerivation (self: {
     mtl pbkdf QuickCheck split testFramework testFrameworkHunit
     testFrameworkQuickcheck2 text
   ];
+  jailbreak = true;
   doCheck = false;
   meta = {
     homepage = "http://github.com/haskoin/haskoin";

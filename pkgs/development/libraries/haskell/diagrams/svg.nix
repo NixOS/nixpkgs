@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
     diagramsLib filepath hashable JuicyPixels lens monoidExtras mtl
     split time vectorSpace
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams/";
     description = "SVG backend for diagrams drawing EDSL";

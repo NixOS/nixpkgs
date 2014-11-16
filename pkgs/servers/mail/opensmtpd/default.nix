@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
   ];  
 
   meta = {
-    homepage = "http://www.postfix.org/";
+    homepage = http://www.postfix.org/;
     description = ''
       A free implementation of the server-side SMTP protocol as defined by
-      RFC 5321, with some additional standard extensions.
+      RFC 5321, with some additional standard extensions
     '';
     license = stdenv.lib.licenses.isc;
     platforms = stdenv.lib.platforms.linux;

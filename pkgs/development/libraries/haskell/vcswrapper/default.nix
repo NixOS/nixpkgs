@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ filepath hxt mtl parsec split text ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/forste/haskellVCSWrapper";
     description = "Wrapper for source code management systems";

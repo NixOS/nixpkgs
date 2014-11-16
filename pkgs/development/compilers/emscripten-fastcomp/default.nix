@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/kripken/emscripten-fastcomp;
     description = "emscripten llvm";
     maintainers = with maintainers; [ bosu ];
-    license = "University of Illinois/NCSA Open Source License";
+    license = stdenv.lib.licenses.ncsa;
   };
 }

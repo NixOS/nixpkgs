@@ -1,11 +1,12 @@
 { stdenv, fetchurl, ncurses, readline }:
 
 stdenv.mkDerivation rec {
-  name = "cgdb-0.6.6";
+  name = "cgdb-${version}";
+  version = "0.6.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cgdb/${name}.tar.gz";
-    sha256 = "0iap84ikpk1h58wy14zzi1kwszv1hsnvpvnz14swkz54yrh9z7ng";
+    url = "http://cgdb.me/files/${name}.tar.gz";
+    sha256 = "1agxk6a97v6q0n097zw57qqpaza4j79jg36x99bh8yl23qfx6kh7";
   };
 
   buildInputs = [ ncurses readline ];
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A curses interface to gdb";
 
-    homepage = http://cgdb.sourceforge.net/;
+    homepage = https://cgdb.github.io/;
 
     repositories.git = git://github.com/cgdb/cgdb.git;
 

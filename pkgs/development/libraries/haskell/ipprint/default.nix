@@ -11,5 +11,6 @@ cabal.mkDerivation (self: {
     description = "Tiny helper for pretty-printing values in ghci console";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })

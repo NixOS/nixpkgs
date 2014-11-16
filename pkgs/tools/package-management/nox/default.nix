@@ -1,17 +1,16 @@
-{ lib, pythonPackages, git, fetchgit, makeWrapper, nix }:
+{ lib, pythonPackages, fetchurl, makeWrapper, nix }:
 
 pythonPackages.buildPythonPackage rec {
-  name = "nox-0.0.1";
+  name = "nox-${version}";
+  version = "0.0.1";
   namePrefix = "";
 
-  src = fetchgit {
-    url = "git://github.com/madjar/nox.git";
-    rev = "088249aa766c9fa929aa08a60f1a7eb41008da40";
-    sha256 = "0dscnmhm1va2h0jz7hh60nvjwxv5a92n5pp8c0g7hz76g67mi5xs";
-    leaveDotGit = true; # required by pbr
+  src = fetchurl {
+    url = "https://pypi.python.org/packages/source/n/nix-nox/nix-nox-${version}.tar.gz";
+    sha256 = "1s1jhickdhym70qrb5h4qxq1mvkpwgdppqpfb2jnpfaf1az6c207";
   };
 
-  buildInputs = [ git pythonPackages.pbr makeWrapper ];
+  buildInputs = [ pythonPackages.pbr makeWrapper ];
 
   pythonPath = with pythonPackages; [
       dogpile_cache

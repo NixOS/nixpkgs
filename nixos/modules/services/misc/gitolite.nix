@@ -15,11 +15,18 @@ in
         default = false;
         description = ''
           Enable gitolite management under the
-          <literal>gitolite</literal> user. The Gitolite home
-          directory is <literal>/var/lib/gitolite</literal>. After
+          <literal>gitolite</literal> user. After
           switching to a configuration with Gitolite enabled, you can
           then run <literal>git clone
           gitolite@host:gitolite-admin.git</literal> to manage it further.
+        '';
+      };
+
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/gitolite";
+        description = ''
+          Gitolite home directory (used to store all the repositories).
         '';
       };
 
@@ -45,7 +52,7 @@ in
   config = mkIf cfg.enable {
     users.extraUsers.gitolite = {
       description     = "Gitolite user";
-      home            = "/var/lib/gitolite";
+      home            = cfg.dataDir;
       createHome      = true;
       uid             = config.ids.uids.gitolite;
       useDefaultShell = true;
@@ -61,7 +68,7 @@ in
 
       path = [ pkgs.gitolite pkgs.git pkgs.perl pkgs.bash pkgs.openssh ];
       script = ''
-        cd /var/lib/gitolite
+        cd ${cfg.dataDir}
         mkdir -p .gitolite/logs
         if [ ! -d repositories ]; then
           gitolite setup -pk ${pubkeyFile}

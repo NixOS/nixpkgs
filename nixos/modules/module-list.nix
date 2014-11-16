@@ -58,6 +58,7 @@
   ./programs/dconf.nix
   ./programs/environment.nix
   ./programs/info.nix
+  ./programs/light.nix
   ./programs/nano.nix
   ./programs/screen.nix
   ./programs/shadow.nix
@@ -92,6 +93,7 @@
   ./services/audio/mopidy.nix
   ./services/backup/almir.nix
   ./services/backup/bacula.nix
+  ./services/backup/crashplan.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
   ./services/backup/rsnapshot.nix
@@ -110,7 +112,7 @@
   ./services/databases/monetdb.nix
   ./services/databases/mongodb.nix
   ./services/databases/mysql.nix
-  ./services/databases/neo4j.nix 
+  ./services/databases/neo4j.nix
   ./services/databases/openldap.nix
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
@@ -219,6 +221,7 @@
   ./services/networking/ddclient.nix
   ./services/networking/dhcpcd.nix
   ./services/networking/dhcpd.nix
+  ./services/networking/dnscrypt-proxy.nix
   ./services/networking/dnsmasq.nix
   ./services/networking/ejabberd.nix
   ./services/networking/firewall.nix
@@ -230,6 +233,7 @@
   ./services/networking/gvpe.nix
   ./services/networking/haproxy.nix
   ./services/networking/hostapd.nix
+  ./services/networking/i2pd.nix
   ./services/networking/ifplugd.nix
   ./services/networking/iodined.nix
   ./services/networking/ircd-hybrid/default.nix
@@ -251,6 +255,7 @@
   ./services/networking/polipo.nix
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix
+  ./services/networking/prosody.nix
   ./services/networking/quassel.nix
   ./services/networking/radicale.nix
   ./services/networking/radvd.nix
@@ -258,6 +263,7 @@
   ./services/networking/rpcbind.nix
   ./services/networking/sabnzbd.nix
   ./services/networking/searx.nix
+  ./services/networking/seeks.nix
   ./services/networking/spiped.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
@@ -355,6 +361,7 @@
   ./system/boot/tmp.nix
   ./system/etc/etc.nix
   ./system/upstart/upstart.nix
+  ./tasks/bcache.nix
   ./tasks/cpu-freq.nix
   ./tasks/encrypted-devices.nix
   ./tasks/filesystems.nix
@@ -362,6 +369,7 @@
   ./tasks/filesystems/cifs.nix
   ./tasks/filesystems/ext.nix
   ./tasks/filesystems/f2fs.nix
+  ./tasks/filesystems/jfs.nix
   ./tasks/filesystems/nfs.nix
   ./tasks/filesystems/reiserfs.nix
   ./tasks/filesystems/unionfs-fuse.nix
@@ -379,8 +387,10 @@
   ./virtualisation/containers.nix
   ./virtualisation/docker.nix
   ./virtualisation/libvirtd.nix
+  ./virtualisation/lxc.nix
   #./virtualisation/nova.nix
   ./virtualisation/openvswitch.nix
+  ./virtualisation/parallels-guest.nix
   ./virtualisation/virtualbox-guest.nix
   #./virtualisation/xen-dom0.nix
 ]

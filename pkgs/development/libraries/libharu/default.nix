@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Cross platform, open source library for generating PDF files";
     homepage = http://libharu.org/wiki/Main_Page;
-    license = "ZLIB/LIBPNG"; # see README.
+    license = stdenv.lib.licenses.zlib;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };

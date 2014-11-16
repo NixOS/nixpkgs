@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     sed -i 57d texk/kpathsea/c-std.h
   '';
 
-  patches = [ ./environment.patch ./getline.patch ];
+  patches = [ ./environment.patch ./getline.patch ./clang.patch ];
 
   setupHook = ./setup-hook.sh;
 

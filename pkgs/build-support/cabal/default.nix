@@ -57,6 +57,13 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
                 propagatedUserEnvPkgs = filter (y : ! (y == null)) x.propagatedUserEnvPkgs;
                 doCheck               = enableCheckPhase && x.doCheck;
                 hyperlinkSource       = enableHyperlinkSource && x.hyperlinkSource;
+                # Disable Darwin builds: <https://github.com/NixOS/nixpkgs/issues/2689>.
+                meta                  = let meta = x.meta or {};
+                                            hydraPlatforms = meta.hydraPlatforms or meta.platforms or [];
+                                            noElem         = p: ps: !stdenv.lib.elem p ps;
+                                            noDarwin       = p: noElem p stdenv.lib.platforms.darwin;
+                                        in
+                                        meta // { hydraPlatforms = filter noDarwin hydraPlatforms; };
               };
 
         defaults =
@@ -187,7 +194,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               for i in Setup.hs Setup.lhs ${defaultSetupHs}; do
                 test -f $i && break
               done
-              ghc --make -o Setup -odir $TMPDIR $i
+              ghc --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
 
               for p in $extraBuildInputs $propagatedNativeBuildInputs; do
                 if [ -d "$p/lib/ghc-${ghc.ghc.version}/package.conf.d" ]; then
@@ -210,8 +217,12 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               ${optionalString (self.enableSharedExecutables && self.stdenv.isDarwin) ''
                 configureFlags+=" --ghc-option=-optl=-Wl,-headerpad_max_install_names"
               ''}
-              ${optionalString (versionOlder "7.8" ghc.version) ''
+              ${optionalString (versionOlder "7.8" ghc.version && !self.isLibrary) ''
                 configureFlags+=" --ghc-option=-j$NIX_BUILD_CORES"
+              ''}
+
+              ${optionalString self.stdenv.isDarwin ''
+                configureFlags+=" --with-gcc=clang"
               ''}
 
               echo "configure flags: $extraConfigureFlags $configureFlags"
@@ -236,6 +247,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
 
               export GHC_PACKAGE_PATH=$(${ghc.GHCPackages})
               test -n "$noHaddock" || ./Setup haddock --html --hoogle \
+                  ${optionalString (stdenv.lib.versionOlder "6.12" ghc.version) "--ghc-options=-optP-P"} \
                   ${optionalString self.hyperlinkSource "--hyperlink-source"}
 
               eval "$postBuild"

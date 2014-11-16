@@ -271,9 +271,12 @@ in
 
           NotifyAccess = "all";
 
-          # Note that on reboot, systemd-nspawn returns 10, so this
+          # Note that on reboot, systemd-nspawn returns 133, so this
           # unit will be restarted. On poweroff, it returns 0, so the
           # unit won't be restarted.
+          RestartForceExitStatus = "133";
+          SuccessExitStatus = "133";
+
           Restart = "on-failure";
 
           # Hack: we don't want to kill systemd-nspawn, since we call

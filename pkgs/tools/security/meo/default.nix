@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   buildFlags = "QMAKE=qmake";
 
-  buildInputs = [ openssl pcre qt4 boost boost.lib pkcs11helper ];
+  buildInputs = [ openssl pcre qt4 boost pkcs11helper ];
 
   preConfigure = ''
     sed -i s,-mt$,, meo-gui/meo-gui.pro

@@ -1,15 +1,29 @@
-{ stdenv, fetchurl, zlib, curl, expat, fuse, openssl }:
+{ stdenv, fetchgit, zlib, curl, expat, fuse, openssl
+, autoconf, automake, libtool, python
+}:
 
 stdenv.mkDerivation rec {
-  version = "3.7.4";
+  version = "3.7.5";
   name = "afflib-${version}";
 
-  src = fetchurl {
-    url = "http://digitalcorpora.org/downloads/afflib/${name}.tar.gz";
-    sha256 = "18j1gjb31qjcmz6lry4m2d933w2a80iagg9g5vrpw5ig80lv10f8";
+  src = fetchgit {
+    url = "https://github.com/sshock/AFFLIBv3/";
+    rev = "refs/tags/v${version}";
+    sha256 = "06dr3y6bd7vfjf0p9v85yp1xzg43x515zsa9587jcx7yy5h5ams5";
+    name = "afflib-${version}-checkout";
   };
 
-  buildInputs = [ zlib curl expat fuse openssl ];
+  buildInputs = [ zlib curl expat fuse openssl 
+    libtool autoconf automake python
+    ];
+
+  preConfigure = ''
+    libtoolize -f
+    autoheader -f
+    aclocal
+    automake --add-missing -c 
+    autoconf -f
+  '';
 
   meta = {
     homepage = http://afflib.sourceforge.net/;

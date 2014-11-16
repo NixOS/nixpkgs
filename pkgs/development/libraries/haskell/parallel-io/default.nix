@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ extensibleExceptions random ];
+  jailbreak = true;
   meta = {
     homepage = "http://batterseapower.github.com/parallel-io";
     description = "Combinators for executing IO actions in parallel on a thread pool";

@@ -46,7 +46,10 @@ let
     else sdk;
 
   # The following is to prevent repetition
-  deleteKeychain = "security delete-keychain $keychainName";
+  deleteKeychain = ''
+    security default-keychain -s login.keychain
+    security delete-keychain $keychainName
+  '';
 in
 stdenv.mkDerivation {
   name = stdenv.lib.replaceChars [" "] [""] name;

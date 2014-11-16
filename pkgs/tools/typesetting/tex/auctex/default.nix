@@ -2,7 +2,7 @@
  
 stdenv.mkDerivation ( rec {
   pname = "auctex";
-  version = "11.87";
+  version = "11.88";
   name = "${pname}-${version}";
 
   meta = {
@@ -12,7 +12,7 @@ stdenv.mkDerivation ( rec {
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${name}.tar.gz";
-    sha256 = "1wjwpmvhpj8q0zd78lj7vyzqhx4rbdhkflslylkzgnw5wllp5mb3";
+    sha256 = "0gy89nzha20p6m7kpv2nl1fnsfka9scc3mw1lz66fp6czganfs3i";
   };
 
   buildInputs = [ emacs texLive ];

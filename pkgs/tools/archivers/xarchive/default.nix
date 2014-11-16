@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A GTK+ front-end for command line archiving tools";
-    mainatainers = [ stdenv.lib.maintainers.iElectric ];
+    maintainers = [ stdenv.lib.maintainers.iElectric ];
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.all;
   };

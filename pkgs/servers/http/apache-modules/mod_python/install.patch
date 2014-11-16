@@ -1,20 +1,12 @@
-diff -rc mod_python-3.1.4-orig/dist/Makefile.in mod_python-3.1.4/dist/Makefile.in
-*** mod_python-3.1.4-orig/dist/Makefile.in	2005-01-29 22:25:28.000000000 +0100
---- mod_python-3.1.4/dist/Makefile.in	2006-01-15 12:07:40.000000000 +0100
-***************
-*** 34,40 ****
-  install_py_lib: mod_python src
-  	@cd src; $(MAKE) psp_parser.c
-  	if test -z "$(DESTDIR)" ; then \
-! 		$(PYTHON_BIN) setup.py install --optimize 2 --force ; \
-  	else \
-  		$(PYTHON_BIN) setup.py install --optimize 2 --force --root $(DESTDIR) ; \
-  	fi
---- 34,40 ----
-  install_py_lib: mod_python src
-  	@cd src; $(MAKE) psp_parser.c
-  	if test -z "$(DESTDIR)" ; then \
-! 		$(PYTHON_BIN) setup.py install --optimize 2 --force --prefix $(out) ; \
-  	else \
-  		$(PYTHON_BIN) setup.py install --optimize 2 --force --root $(DESTDIR) ; \
-  	fi
+diff -ru -x '*~' mod_python-3.5.0-orig/dist/Makefile.in mod_python-3.5.0/dist/Makefile.in
+--- mod_python-3.5.0-orig/dist/Makefile.in	2013-11-12 04:21:34.000000000 +0100
++++ mod_python-3.5.0/dist/Makefile.in	2014-11-07 11:28:24.466377733 +0100
+@@ -34,7 +34,7 @@
+ install_py_lib: mod_python src
+ 	@cd src; $(MAKE) psp_parser.c
+ 	if test -z "$(DESTDIR)" ; then \
+-		$(PYTHON_BIN) setup.py install --optimize 2 --force ; \
++		$(PYTHON_BIN) setup.py install --optimize 2 --force --prefix $(out) ; \
+ 	else \
+ 		$(PYTHON_BIN) setup.py install --optimize 2 --force --root $(DESTDIR) ; \
+ 	fi

@@ -1,0 +1,16 @@
+diff --git a/src/test/run-make/relocation-model/Makefile b/src/test/run-make/relocation-model/Makefile
+index 2fcdd32..2d9ddb0 100644
+--- a/src/test/run-make/relocation-model/Makefile
++++ b/src/test/run-make/relocation-model/Makefile
+@@ -5,9 +5,11 @@ all:
+ 	$(call RUN,foo)
+ 
+ 	$(RUSTC) -C relocation-model=default foo.rs
++	paxctl -czexm $(TMPDIR)/foo
+ 	$(call RUN,foo)
+ 
+ 	$(RUSTC) -C relocation-model=static foo.rs
++	paxctl -czexm $(TMPDIR)/foo
+ 	$(call RUN,foo)
+ 
+ 	$(RUSTC) -C relocation-model=default --crate-type=dylib foo.rs

@@ -234,6 +234,8 @@ in rec {
   # ‘nix-build tests/login.nix -A result’.
   tests.avahi = callTest tests/avahi.nix {};
   tests.bittorrent = callTest tests/bittorrent.nix {};
+  tests.blivet = callTest tests/blivet.nix {};
+  tests.cjdns = callTest tests/cjdns.nix {};
   tests.containers = callTest tests/containers.nix {};
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};

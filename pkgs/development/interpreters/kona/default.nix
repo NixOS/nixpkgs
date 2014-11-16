@@ -2,9 +2,9 @@ x@{builderDefsPackage
   , fetchgit
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     ["fetchgit"];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -31,7 +31,7 @@ rec {
   prepareOut = a.fullDepEntry ''
     mkdir -p "$out/bin"
   '' ["minInit" "defEnsureDir"];
-      
+
   meta = {
     description = "An interpreter of K, APL-like programming language";
     maintainers = with a.lib.maintainers;
@@ -40,7 +40,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = "free-noncopyleft";
+    license = a.lib.licenses.free;
   };
   passthru = {
     updateInfo = {
@@ -48,4 +48,3 @@ rec {
     };
   };
 }) x
-

@@ -29,12 +29,12 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = ["doUnpack" "doBuildJ" "doDeploy"];
 
-  bits = if a.stdenv.system == "i686-linux" then 
-    "32"
-  else if a.stdenv.system == "x86_64-linux" then
+  bits = if a.stdenv.is64bit then
     "64"
-  else 
-    throw "Oops, unknown system: ${a.stdenv.system}";
+  else if a.stdenv.isi686 then
+    "32"
+  else
+    builtins.trace "assuming ${a.stdenv.system} is 32 bits" "32";
 
   doBuildJ = a.fullDepEntry ''
     sed -i bin/jconfig -e 's@bits=32@bits=${bits}@g; s@readline=0@readline=1@; s@LIBREADLINE=""@LIBREADLINE=" -lreadline "@'
@@ -69,7 +69,7 @@ rec {
       raskin
     ];
     platforms = with a.lib.platforms;
-      linux;
+      unix;
     license = a.lib.licenses.gpl3Plus;
   };
   passthru = {

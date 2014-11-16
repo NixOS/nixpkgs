@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     dataDefaultClass lens vectorSpace vectorSpacePoints
   ];
+  jailbreak = true;
   meta = {
     description = "Simple force-directed layout";
     license = self.stdenv.lib.licenses.bsd3;

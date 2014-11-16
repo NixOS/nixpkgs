@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ SDL SDL_image SDL_mixer SDL_net SDL_ttf pango gettext zlib
-                  boost boost.lib fribidi cmake freetype libpng pkgconfig lua
+                  boost fribidi cmake freetype libpng pkgconfig lua
                   dbus fontconfig libtool ];
 
   cmakeFlags = [ "-DENABLE_STRICT_COMPILATION=FALSE" ]; # newer gcc problems http://gna.org/bugs/?21030

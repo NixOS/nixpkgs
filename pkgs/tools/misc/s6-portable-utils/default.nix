@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.skarnet.org/software/s6-portable-utils/;
-    description = "A set of tiny general Unix utilities optimized for simplicity and small size.";
+    description = "A set of tiny general Unix utilities optimized for simplicity and small size";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;
   };

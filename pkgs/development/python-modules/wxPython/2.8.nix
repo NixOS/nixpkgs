@@ -17,4 +17,8 @@ if isPyPy then throw "wxPython-${version} not supported for interpreter ${python
   buildInputs = [ pkgconfig wxGTK (wxGTK.gtk) pythonPackages.python pythonPackages.wrapPython ];
   
   passthru = { inherit wxGTK; };
+
+  meta = {
+    platforms = stdenv.lib.platforms.all;
+  };
 }

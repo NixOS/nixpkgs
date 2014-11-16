@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://skarnet.org/software/skalibs/;
-    description = "A set of general-purpose C programming libraries.";
+    description = "A set of general-purpose C programming libraries";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;
   };

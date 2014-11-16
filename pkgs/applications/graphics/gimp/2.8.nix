@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "The GNU Image Manipulation Program";
     homepage = http://www.gimp.org/;
-    license = "GPL";
+    license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.linux;
   };
 }

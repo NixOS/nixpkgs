@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
                          "-I${dbus_libs}/lib/dbus-1.0/include" ];
 
   # Fix up python path so the lockfile library is on it.
-  PYTHONPATH = stdenv.lib.makeSearchPath "lib/${pythonFull.python.libPrefix}/site-packages" [
+  PYTHONPATH = stdenv.lib.makeSearchPath "lib/${pythonFull.libPrefix}/site-packages" [
     pythonPackages.curses pythonPackages.lockfile
   ];
 

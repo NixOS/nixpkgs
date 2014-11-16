@@ -3,11 +3,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation {
-  name = "gifsicle-1.84";
+  name = "gifsicle-1.86";
 
   src = fetchurl {
-    url = http://www.lcdf.org/gifsicle/gifsicle-1.84.tar.gz;
-    sha256 = "1ymk7lkk50fds6090icnjg69dswzz5zyiirq2ws23aagw3l46z86";
+    url = http://www.lcdf.org/gifsicle/gifsicle-1.86.tar.gz;
+    sha256 = "153knkff04wh1szbmqklyq371m9whib007j0lq0dwh4jc5g6s15h";
   };
 
   buildInputs = optional gifview [ xproto libXt libX11 ];

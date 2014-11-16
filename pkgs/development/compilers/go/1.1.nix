@@ -89,6 +89,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    branch = "1.1";
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = "BSD";

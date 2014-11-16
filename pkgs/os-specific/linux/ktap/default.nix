@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A lightweight script-based dynamic tracing tool for Linux.";
+    description = "A lightweight script-based dynamic tracing tool for Linux";
     homepage    = "http://www.ktap.org";
     license     = stdenv.lib.licenses.gpl2;
     platforms   = stdenv.lib.platforms.linux;

@@ -69,12 +69,15 @@ in
   };
 
   libX11 = attrs: attrs // {
-    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    preConfigure = setMalloc0ReturnsNullCrossCompiling + ''
+      sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
+    '';
     postInstall =
       ''
         # Remove useless DocBook XML files.
         rm -rf $out/share/doc
       '';
+    CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
   };
 
   libXfont = attrs: attrs // {
@@ -99,8 +102,11 @@ in
   # Note: most of these are in Requires.private, so maybe builder.sh
   # should propagate them automatically.
   libXt = attrs: attrs // {
-    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    preConfigure = setMalloc0ReturnsNullCrossCompiling + ''
+      sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
+    '';
     propagatedBuildInputs = [ xorg.libSM ];
+    CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
   };
 
   # See https://bugs.freedesktop.org/show_bug.cgi?id=47792
@@ -178,7 +184,7 @@ in
   };
 
   xf86inputsynaptics = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [args.mtdev];
+    buildInputs = attrs.buildInputs ++ [args.mtdev args.libevdev];
     installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/share/X11/xorg.conf.d";
   };
 
@@ -248,7 +254,7 @@ in
         dmxproto /*libdmx not used*/ xf86vidmodeproto
         recordproto libXext pixman libXfont
         damageproto xcmiscproto  bigreqsproto
-        libpciaccess inputproto xextproto randrproto renderproto
+        libpciaccess inputproto xextproto randrproto renderproto presentproto
         dri2proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
       ];
       commonPatches = [ ./xorgserver-xkbcomp-path.patch ];

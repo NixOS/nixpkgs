@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libiconv, pkgconfig, libffi, libtasn1 }:
+{ stdenv, fetchurl, libiconvOrEmpty, pkgconfig, libffi, libtasn1 }:
 
 stdenv.mkDerivation rec {
   name = "p11-kit-0.20.2";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--without-libtasn1";
 
-  buildInputs = [ libiconv pkgconfig libffi libtasn1 ];
+  buildInputs = [ pkgconfig libffi libtasn1 ] ++ libiconvOrEmpty;
 
   meta = {
     homepage = http://p11-glue.freedesktop.org/;

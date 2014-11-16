@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://www.boost.org/boost-build2/;
-    license = "boost-license";
+    license = stdenv.lib.licenses.boost;
     platforms = platforms.unix;
     maintainers = with maintainers; [ wkennington ];
   };

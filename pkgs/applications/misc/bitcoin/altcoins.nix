@@ -45,7 +45,7 @@ in rec {
     };
 
     meta = {
-      description = "Litecoin is a lite version of Bitcoin using scrypt as a proof-of-work algorithm.";
+      description = "A lite version of Bitcoin using scrypt as a proof-of-work algorithm";
       longDescription= ''
         Litecoin is a peer-to-peer Internet currency that enables instant payments
         to anyone in the world. It is based on the Bitcoin protocol but differs
@@ -75,7 +75,7 @@ in rec {
     extraBuildInputs = [ glib ];
 
     meta = {
-      description = "Namecoin is a decentralized key/value registration and transfer system based on Bitcoin technology.";
+      description = "A decentralized key/value registration and transfer system based on Bitcoin technology";
       homepage = http://namecoin.info;
     };
   };

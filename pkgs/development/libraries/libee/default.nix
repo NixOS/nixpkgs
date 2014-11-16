@@ -4,7 +4,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = http://www.libee.org/download/files/download/libee-0.4.1.tar.gz;
-    md5 = "7bbf4160876c12db6193c06e2badedb2";
+    sha256 = "09xhgzmsq0g3jsyj24vy67bhzk2fv971w5ixdkhfwgar70cw1nn0";
   };
 
   buildInputs = [pkgconfig libestr];

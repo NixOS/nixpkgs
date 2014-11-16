@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haskore";
-  version = "0.2.0.4";
-  sha256 = "0hhsiazdz44amilcwfxl0r10yxzhql83pgd21k89fmg1gkc4q46j";
+  version = "0.2.0.5";
+  sha256 = "0zvr7hwxnv01g626617yv7f0vwpmyqvlwbyc6yhb2mrlfqwdgbd0";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

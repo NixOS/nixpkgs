@@ -16,7 +16,7 @@ buildPerlPackage rec {
   meta = {
     homepage = http://search.cpan.org/dist/DBD-Pg/;
     description = "DBI PostgreSQL interface";
-    license = "perl";
+    license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

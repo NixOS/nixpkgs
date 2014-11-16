@@ -44,7 +44,7 @@ rec {
 
   meta = {
     description = "A game programming library";
-    license = "free-noncopyleft"; # giftware
+    license = a.lib.licenses.free; # giftware
     maintainers = with a.lib.maintainers;
     [
       raskin
@@ -54,4 +54,3 @@ rec {
     inherit version;
   };
 }) x
-

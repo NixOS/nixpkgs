@@ -32,7 +32,7 @@ let
 
     grKernel = if cfg.stable
                then mkKernel pkgs.linux_3_14 stable-patch
-               else mkKernel pkgs.linux_3_16 test-patch;
+               else mkKernel pkgs.linux_3_17 test-patch;
 
     ## -- grsecurity configuration ---------------------------------------------
 

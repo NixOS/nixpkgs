@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     "MANDIR=share/man/man1"
   ];
 
+  setupHook = ./setup-hook.sh;
+
   meta = with stdenv.lib; {
     description = "A tool for controlling PaX flags on a per binary basis";
     homepage    = "https://pax.grsecurity.net";

@@ -10,15 +10,16 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="ioping";
-    version = "0.8";
+    version = "0.9";
     name="${baseName}-${version}";
-    url="http://ioping.googlecode.com/files/${name}.tar.gz";
+    url="https://docs.google.com/uc?id=0B_PlDc2qaehFWWtLZ3Z3N1ltdm8&export=download";
   };
 in
 rec {
   src = a.fetchurl {
     url = sourceInfo.url;
-    sha256 = "0j7yal61nby1lkg9wnr6lxfljbd7wl3n0z8khqwvc9lf57bxngz2";
+    name = "${sourceInfo.name}.tar.gz";
+    sha256 = "0pbp7b3304y9yyv2w41l3898h5q8w77hnnnq1vz8qz4qfl4467lm";
   };
 
   inherit (sourceInfo) name version;
@@ -39,7 +40,7 @@ rec {
     platforms = with a.lib.platforms;
       linux;
     license = a.lib.licenses.gpl3Plus;
-    downloadPage = "http://code.google.com/p/ioping/downloads/list";
+    homepage = "http://code.google.com/p/ioping/";
     inherit version;
   };
 }) x

@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Multi-panel tabbed file and desktop manager for Linux with built-in VFS, udev- or HAL-based device manager, customizable menu system, and bash integration.";
+    description = "Multi-panel tabbed file and desktop manager for Linux with built-in VFS, udev- or HAL-based device manager, customizable menu system, and bash integration";
     platforms = pkgs.lib.platforms.linux;
     license = pkgs.lib.licenses.gpl3;
   };

@@ -4,10 +4,11 @@
 
 cabal.mkDerivation (self: {
   pname = "th-lift-instances";
-  version = "0.1.3";
-  sha256 = "0snqgcdkskwvrsw239j3xq84mwnf5x79kfsn495kprdc6yh3qdkx";
+  version = "0.1.4";
+  sha256 = "02sf7qn1rs33cdf1dl7vpwkhqzhmj8h3naw0ngh2kz05ymk2qng4";
   buildDepends = [ text thLift vector ];
   testDepends = [ doctest filepath QuickCheck text vector ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/bennofs/th-lift-instances/";
     description = "Lift instances for template-haskell for common data types";

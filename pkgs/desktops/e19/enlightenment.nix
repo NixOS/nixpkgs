@@ -4,10 +4,10 @@
 
 stdenv.mkDerivation rec {
   name = "enlightenment-${version}";
-  version = "0.19.0";
+  version = "0.19.1";
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/enlightenment/${name}.tar.xz";
-    sha256 = "0d9s8gwma32hj8h000k1bzibr3zj8qajcf14va3w81k87gkilxfp";
+    sha256 = "016z1vilhjarpxzn5bwcw696d8b66rklnhkrwzfa5mcxn8gpmvap";
   };
   buildInputs = [ pkgconfig e19.efl e19.elementary xlibs.libXdmcp xlibs.libxcb xlibs.xcbutilkeysyms xlibs.libXrandr libffi pam alsaLib luajit bzip2 libpthreadstubs gdbm ] ++ stdenv.lib.optionals stdenv.isLinux [ libcap ];
   preConfigure = ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "The Compositing Window Manager and Desktop Shell";
     homepage = http://enlightenment.org/;
-    maintainers = [ stdenv.lib.maintainers.matejc ];
+    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.bsd2;
   };

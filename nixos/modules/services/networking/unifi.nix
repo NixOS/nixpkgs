@@ -65,6 +65,7 @@ in
         # Create the volatile webapps
         mkdir -p "${stateDir}/webapps"
         chown unifi "${stateDir}/webapps"
+        rm -f "{stateDir}/webapps/ROOT.war"
         ln -s "${pkgs.unifi}/webapps/ROOT.war" "${stateDir}/webapps/ROOT.war"
       '';
 

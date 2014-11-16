@@ -8,6 +8,8 @@ stdenv.mkDerivation (rec {
     sha256 = "18q620269xzpw39dwvr9zpilnl2dkw5z5kz3mxaadnpv4k3kw3b1";
   };
 
+  patches = stdenv.lib.optional stdenv.isDarwin [ ./clang.patch ];
+
   propagatedBuildInputs =
     stdenv.lib.optional ((! (stdenv ? glibc))
                          || (stdenv ? cross &&

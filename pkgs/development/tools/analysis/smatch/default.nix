@@ -28,6 +28,6 @@ stdenv.mkDerivation {
   meta = {
     description = "A semantic analysis tool for C";
     homepage = "http://smatch.sourceforge.net/";
-    license = "free"; /* OSL, see http://www.opensource.org */
+    license = stdenv.lib.licenses.free; /* OSL, see http://www.opensource.org */
   };
 }

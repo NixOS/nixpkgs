@@ -1,32 +1,40 @@
-{ fetchurl, stdenv, gcj }:
+{ fetchurl, stdenv, gcj, unzip }:
 
 stdenv.mkDerivation {
-  name = "pdftk-1.41";
+  name = "pdftk-2.02";
 
   src = fetchurl {
-    url = http://www.pdfhacks.com/pdftk/pdftk-1.41.tar.bz2;
-    sha256 = "1vdrc3179slix6lz3gdiy53z7sh2yf9026r3xi6wdarwrcpawfrf";
+    url = "https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/pdftk-2.02-src.zip";
+    sha256 = "1hdq6zm2dx2f9h7bjrp6a1hfa1ywgkwydp14i2sszjiszljnm3qi";
   };
 
-  patches = [ ./gcc-4.3.patch ./gcc-4.4.patch ];
+  buildInputs = [ gcj unzip ];
 
-  buildInputs = [ gcj ];
+  preBuild = ''
+    cd pdftk
+    sed -e 's@/usr/bin/@@g' -i Makefile.*
+    NIX_ENFORCE_PURITY= \
+      make \
+      LIBGCJ="${gcj.gcc}/share/java/libgcj-${gcj.gcc.version}.jar" \
+      GCJ=gcj GCJH=gcjh GJAR=gjar \
+      -iC ../java all
+  '';
 
-  makeFlags = [ "-f" "Makefile.Generic" ];
-
-  preBuild = "cd pdftk";
+  # Makefile.Debian has almost fitting defaults
+  makeFlags = [ "-f" "Makefile.Debian" "VERSUFF=" ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1
     cp pdftk $out/bin
-    cp ../debian/pdftk.1 $out/share/man/man1
+    cp ../pdftk.1 $out/share/man/man1
   '';
+
 
   meta = {
     description = "Simple tool for doing everyday things with PDF documents";
-    homepage = http://www.accesspdf.com/pdftk/;
+    homepage = "https://www.pdflabs.com/tools/pdftk-server/";
     license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [viric raskin];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

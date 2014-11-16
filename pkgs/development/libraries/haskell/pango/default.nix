@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pango";
-  version = "0.13.0.0";
-  sha256 = "0qrsivr6z8pp4ibg1vyzyg2fw0jzrshn6h6g6vff93awxzqq9rlw";
+  version = "0.13.0.3";
+  sha256 = "0xvmv1r7lh727w1pag8myp069s4wnvgsqlr3c3ir1gyzxy5jq69f";
   buildDepends = [ cairo glib mtl text ];
   buildTools = [ gtk2hsBuildtools ];
   extraLibraries = [ libc pkgconfig ];

@@ -13,15 +13,27 @@ let
     wxGTK perl python zlib
   ];
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   inherit (s) name version;
   inherit buildInputs;
   src = fetchurl {
     inherit (s) url sha256;
   };
-  preConfigure = ''
-    cd gui-wx/configure
+
+  sourceRoot="${name}-src/gui-wx/configure";
+
+  # Link against Python explicitly as it is needed for scripts
+  makeFlags=[
+    "AM_LDFLAGS="
+  ];
+  NIX_LDFLAGS="-lpython${python.majorVersion} -lperl";
+  preConfigure=''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -L$(dirname "$(find ${perl} -name libperl.so)")"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE
+      -DPYTHON_SHLIB=$(basename "$(
+        readlink -f ${python}/lib/libpython*.so)")"
   '';
+
   meta = {
     inherit (s) version;
     description = "Cellular automata simulation program";

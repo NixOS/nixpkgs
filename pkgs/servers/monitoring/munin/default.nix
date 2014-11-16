@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     perl
     perlPackages.ModuleBuild
     perlPackages.HTMLTemplate
+    perlPackages.NetCIDR
     perlPackages.NetSSLeay
     perlPackages.NetServer
     perlPackages.Log4Perl
@@ -107,7 +108,7 @@ stdenv.mkDerivation rec {
         wrapProgram "$file" \
           --set PERL5LIB "$out/lib/perl5/site_perl:${rrdtool}/lib/perl:${with perlPackages; stdenv.lib.makePerlPath [
                 Log4Perl IOSocketInet6 Socket6 URI DBFile DateManip
-                HTMLTemplate FileCopyRecursive FCGI NetSNMP NetServer
+                HTMLTemplate FileCopyRecursive FCGI NetCIDR NetSNMP NetServer
                 ListMoreUtils TimeHiRes DBDPg LWPUserAgent
                 ]}"
     done

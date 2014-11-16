@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ghc-vis";
-  version = "0.7.2.3";
-  sha256 = "1gl059n85yxksnq8y7i1vrsjdg4al6himzpdmw95v61y59bbs6c2";
+  version = "0.7.2.7";
+  sha256 = "0kxkmbp71yx5mskzpcyjd8s2yq01q1q6dxmqzmwg6naalcpcbswv";
   buildDepends = [
     cairo deepseq fgl ghcHeapView graphviz gtk mtl svgcairo text
     transformers xdot
@@ -22,6 +22,5 @@ cabal.mkDerivation (self: {
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ andres ];
-    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

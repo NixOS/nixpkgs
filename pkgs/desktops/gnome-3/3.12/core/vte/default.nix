@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gnome3, ncurses, gobjectIntrospection, vala, libxml2
+{ stdenv, fetchurl, intltool, pkgconfig, gnome3, ncurses, gobjectIntrospection
 , selectTextPatch ? false }:
 
 stdenv.mkDerivation rec {

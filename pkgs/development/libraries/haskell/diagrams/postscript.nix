@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
     dataDefaultClass diagramsCore diagramsLib dlist filepath hashable
     lens monoidExtras mtl semigroups split vectorSpace
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams/";
     description = "Postscript backend for diagrams drawing EDSL";

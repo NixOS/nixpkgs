@@ -1,13 +1,15 @@
-{ stdenv, fetchurl, cmake, libpcap, libnet, zlib, curl, pcre,
+{ stdenv, fetchFromGitHub, cmake, libpcap, libnet, zlib, curl, pcre,
   openssl, ncurses, glib, gtk, atk, pango, flex, bison }:
 
 stdenv.mkDerivation rec {
   name = "ettercap-${version}";
-  version = "0.8.0";
+  version = "0.8.1";
 
-  src = fetchurl {
-    url = "https://github.com/Ettercap/ettercap/archive/v${version}.tar.gz";
-    sha256 = "1g69782wk2hag8h76jqy81szw5jhvqqnn3m4v0wjkbv9zjxy44w0";
+  src = fetchFromGitHub {
+    owner = "Ettercap";
+    repo = "ettercap";
+    rev = "v${version}";
+    sha256 = "017398fiqcl2x1bjfnz97y6j8v5n83gbsniy73vbx21kmhh5pacg";
   };
 
   buildInputs = [
@@ -16,7 +18,8 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    substituteInPlace CMakeLists.txt --replace /etc \$\{INSTALL_PREFIX\}/etc
+    substituteInPlace CMakeLists.txt --replace /etc \$\{INSTALL_PREFIX\}/etc \
+                                     --replace /usr \$\{INSTALL_PREFIX\}
   '';
 
   cmakeFlags = [
@@ -24,10 +27,11 @@ stdenv.mkDerivation rec {
     "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk}/lib/gtk-2.0/include"
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Comprehensive suite for man in the middle attacks";
     homepage = http://ettercap.github.io/ettercap/;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ pSub ];
   };
 }

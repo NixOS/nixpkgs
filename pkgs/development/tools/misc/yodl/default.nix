@@ -1,31 +1,40 @@
-# This package is only used to create the documentation of zsh-cvs
-# eg have a look at http://www.zsh.org/mla/users/2008/msg00715.html
-# latest release is newer though
+{ stdenv, fetchurl, perl, icmake }:
 
-{ stdenv, fetchurl, perl }:
+stdenv.mkDerivation rec {
+  name = "yodl-${version}";
+  version = "3.04.00";
 
-stdenv.mkDerivation {
-  name = "yodl-2.14.3";
-
-  buildInputs = [ perl ];
+  buildInputs = [ perl icmake ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/yodl/yodl_2.14.3.orig.tar.gz";
-    sha256 = "0paypm76p34hap3d18vvks5rrilchcw6q56rvq6pjf9raqw8ynd4";
+    url = "mirror://sourceforge/yodl/yodl_${version}.orig.tar.gz";
+    sha256 = "14sqd03j3w9g5l5rkdnqyxv174yz38m39ycncx86bq86g63igcv6";
   };
-  
-  patches =
-    [ (fetchurl {
-        url = "mirror://sourceforge/yodl/yodl_2.14.3-1.diff.gz";
-        sha256 = "176hlbiidv7p9051f04anzj4sr9dwlp9439f9mjvvgks47ac0qx4";
-      })
-    ];
 
-  # This doesn't isntall docs yet, do you need them?
-  installPhase = ''
-    # -> $out
-    sed -i "s@'/usr/@'$out/@" contrib/build.pl
-    perl contrib/build.pl make-software
-    perl contrib/build.pl install-software
+  preConfigure = ''
+    patchShebangs scripts/.
+    sed -i 's;/usr;;g' INSTALL.im
+    substituteInPlace build --replace /usr/bin/icmake ${icmake}/bin/icmake
+    substituteInPlace macros/rawmacros/startdoc.pl --replace /usr/bin/perl ${perl}/bin/perl
   '';
+
+  buildPhase = ''
+    ./build programs
+    ./build man
+    ./build macros
+  '';
+
+  installPhase = ''
+    ./build install programs $out
+    ./build install man $out
+    ./build install macros $out
+  '';
+
+  meta = with stdenv.lib; {
+    description = "A package that implements a pre-document language and tools to process it";
+    homepage = http://yodl.sourceforge.net/;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.linux;
+  };
 }

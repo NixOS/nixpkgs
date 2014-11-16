@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     description = "Mobile broadband service provider database";
     homepage = http://live.gnome.org/NetworkManager/MobileBroadband/ServiceProviders;
     platforms = stdenv.lib.platforms.all;
-    license = "CC-PD";
+    license = stdenv.lib.licenses.publicDomain;
     maintainers = [ stdenv.lib.maintainers.urkud ];
   };
 }

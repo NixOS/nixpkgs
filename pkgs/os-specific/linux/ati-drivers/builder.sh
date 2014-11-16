@@ -264,7 +264,7 @@ if test -z "$libsOnly"; then
     cp $BIN/* $out/bin
     for prog in $BIN/*; do
       patchelf --set-interpreter $(echo $glibc/lib/ld-linux*.so.2) $out/bin/$(basename $prog)
-      wrapProgram $out/bin/$(basename $prog) --prefix LD_LIBRARY_PATH : $out/lib:$LD_LIBRARY_PATH
+      wrapProgram $out/bin/$(basename $prog) --prefix LD_LIBRARY_PATH : $out/lib:$gcc/lib:$qt4/lib:$LD_LIBRARY_PATH
     done
   }
 

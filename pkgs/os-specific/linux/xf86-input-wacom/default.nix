@@ -3,11 +3,11 @@
 , ncurses, pkgconfig, randrproto, xorgserver, xproto, udev, libXinerama, pixman }:
 
 stdenv.mkDerivation rec {
-  name = "xf86-input-wacom-0.26.1";
+  name = "xf86-input-wacom-0.27.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/linuxwacom/${name}.tar.bz2";
-    sha256 = "1qlls71k10igjx9c5lwqa6cdl31ncpdkzirpl85acpmqbqc63qh8";
+    sha256 = "0hpc0waa91d34h2fw1sjhxzn2xya51627jrps9rw4a2zb5hh6a6i";
   };
 
   buildInputs = [ inputproto libX11 libXext libXi libXrandr libXrender

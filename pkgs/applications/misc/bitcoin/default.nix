@@ -23,14 +23,12 @@ stdenv.mkDerivation rec {
     cd bitcoin*
   '';
 
-  configureFlags = [
-    "--with-boost=${boost}"
-  ];
-
   preCheck = ''
     # At least one test requires writing in $HOME
     HOME=$TMPDIR
   '';
+
+  configureFlags = [ "--with-boost-libdir=${boost.lib}/lib" ];
 
   doCheck = true;
 
@@ -49,5 +47,6 @@ stdenv.mkDerivation rec {
       homepage = "http://www.bitcoin.org/";
       maintainers = [ maintainers.roconnor ];
       license = licenses.mit;
+      platforms = platforms.unix;
   };
 }

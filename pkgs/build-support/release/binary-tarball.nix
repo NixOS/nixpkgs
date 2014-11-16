@@ -38,7 +38,7 @@ stdenv.mkDerivation (
       . ${./functions.sh}
 
       origSrc=$src
-      src=$(findTarballs $src | head -1)
+      src=$(findTarball $src)
 
       if test -e $origSrc/nix-support/hydra-release-name; then
           releaseName=$(cat $origSrc/nix-support/hydra-release-name)
