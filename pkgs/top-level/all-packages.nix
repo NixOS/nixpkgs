@@ -7568,7 +7568,7 @@ let
   };
   nginxUnstable = callPackage ../servers/http/nginx/unstable.nix {
     fullWebDAV  = true;
-    syslog      = true;
+    syslog      = false; # the patch is not found
     moreheaders = true;
   };
 
