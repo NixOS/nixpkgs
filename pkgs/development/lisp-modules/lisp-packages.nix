@@ -507,5 +507,30 @@ let lispPackages = rec {
       rev = ''b21e8757210a1eb2a47104a563f58bf82ba9a579'';
     };
   };
+
+  nibbles = buildLispPackage rec {
+    baseName = "nibbles";
+    version = "git-20141116";
+    description = "A library for accessing octet-addressed blocks of data";
+    deps = [];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''https://github.com/froydnj/nibbles'';
+      sha256 = "39ad95be2b9f9ea80dbccd205a0ed6f9c5ef175a10da6eec55b7ba09a8f1a76a";
+      rev = ''ace095d85e48b18bf9cf9e21249ba7fb57e3efe2'';
+    };
+  };
+
+  ironclad = buildLispPackage rec {
+    baseName = "ironclad";
+    version = "0.33.0";
+    description = "A cryptographic toolkit written in pure Common Lisp";
+    deps = [nibbles];
+    # Source type: http
+    src = pkgs.fetchurl {
+      url = ''http://method-combination.net/lisp/files/ironclad_0.33.0.tar.gz'';
+      sha256 = "1ld0xz8gmi566zxl1cva5yi86aw1wb6i6446gxxdw1lisxx3xwz7";
+    };
+  };
 };
 in lispPackages

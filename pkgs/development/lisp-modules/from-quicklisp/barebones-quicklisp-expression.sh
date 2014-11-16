@@ -130,20 +130,21 @@ url="${ql_src##* }"
 }
 
 [ "$ql_src_type" = froydware-http ] && {
-  dirurl = "http://method-combination.net/lisp/files/";
-  url="$("$(dirname "$0")/../../../build-support/upstream-updater/urls-from-page.sh" "$dirurl" | grep "/$url_" | tail -n 1)"
+  dirurl="http://method-combination.net/lisp/files/";
+  url="$("$(dirname "$0")/../../../build-support/upstream-updater/urls-from-page.sh" "$dirurl" |
+    grep "/${url}_" | grep -v "[.]asc\$" | tail -n 1)"
   ql_src_type=http
 }
 
 [ "$ql_src_type" = http ] && {
   fetcher="pkgs.fetchurl";
-  version="$(echo "$url" | sed -re 's@.*-([0-9.]+)[-._].*@\1@')"
+  version="$(echo "$url" | sed -re 's@.*[-_]([0-9.]+)[-._].*@\1@')"
   hash="$(nix-prefetch-url "$url" | grep . | tail -n 1)"
 }
 
 [ "$ql_src_type" = https ] && {
   fetcher="pkgs.fetchurl";
-  version="$(echo "$url" | sed -re 's@.*-([0-9.]+)[-._].*@\1@')"
+  version="$(echo "$url" | sed -re 's@.*[-_]([0-9.]+)[-._].*@\1@')"
   hash="$(nix-prefetch-url "$url" | grep . | tail -n 1)"
 }
 
