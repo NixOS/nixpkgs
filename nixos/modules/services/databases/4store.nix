@@ -54,7 +54,7 @@ with lib;
 
     jobs.fourStore = {
       name = "4store";
-      startOn = "filesystem";
+      startOn = "ip-up";
 
       preStart = ''
         mkdir -p ${stateDir}/
