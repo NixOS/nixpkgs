@@ -12,7 +12,8 @@
 
 stdenv.mkDerivation rec {
   name = "pidgin-${version}";
-  version = "2.10.10";
+  majorVersion = "2";
+  version = "${majorVersion}.10.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/pidgin/${name}.tar.bz2";
