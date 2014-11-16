@@ -202,7 +202,7 @@ let lispPackages = rec {
     overrides = x:{
       preConfigure = ''
         export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.mysql}/include/mysql"
-	export NIX_LDFLAGS="$NIX_LDFLAGS -L${pkgs.mysql}/lib/mysql"
+        export NIX_LDFLAGS="$NIX_LDFLAGS -L${pkgs.mysql}/lib/mysql"
       '';
     };
   };
@@ -231,6 +231,17 @@ let lispPackages = rec {
       sha256 = "4ed66f255e50d2c9ea9f0b3fbaa92bde9b8acf6a5fafb0d7f12b254be9de99e9";
       rev = ''831f0180967f09b1dd345fef82144f48334279c3'';
     };
+    overrides = x: {
+      linkedSystems = [];
+      postInstall = ''
+        export CL_SOURCE_REGISTRY="$CL_SOURCE_REGISTRY:$out/lib/common-lisp/query-fs"
+	export HOME=$PWD
+	build-with-lisp.sh sbcl \
+	  ":query-fs $(echo "$linkedSystems" | sed -re 's/(^| )([^ :])/:\2/g')" \
+	  "$out/bin/query-fs" \
+	  "(query-fs:run-fs-with-cmdline-args)"
+      '';
+    };
   };
 
   cl-fuse = buildLispPackage rec {
@@ -248,7 +259,7 @@ let lispPackages = rec {
     overrides = x : {
       configurePhase = ''
         export CL_SOURCE_REGISTRY="$CL_SOURCE_REGISTRY:$PWD"
-	export makeFlags="$makeFlags LISP=common-lisp.sh"
+        export makeFlags="$makeFlags LISP=common-lisp.sh"
       '';
     };
   };
