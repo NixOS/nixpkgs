@@ -2953,6 +2953,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   validation = callPackage ../development/libraries/haskell/validation {};
 
+  waylandTracker = callPackage ../development/tools/wayland-tracker {};
+
   xlsx = callPackage ../development/libraries/haskell/xlsx {};
 
   xmobar = callPackage ../applications/misc/xmobar {};
