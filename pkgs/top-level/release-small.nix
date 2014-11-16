@@ -46,7 +46,6 @@ with import ./release-lib.nix { inherit supportedSystems; };
   findutils = all;
   flex = all;
   gcc = all;
-  gcc33 = linux;
   gcc34 = linux;
   gcc44 = linux;
   gcj = linux;
