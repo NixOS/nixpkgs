@@ -424,6 +424,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   circlePacking = callPackage ../development/libraries/haskell/circle-packing {};
 
+  clashLib = callPackage ../development/libraries/haskell/clash-lib {};
+
   clashPrelude = callPackage ../development/libraries/haskell/clash-prelude {};
 
   classyPrelude = callPackage ../development/libraries/haskell/classy-prelude {};
