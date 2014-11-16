@@ -532,5 +532,19 @@ let lispPackages = rec {
       sha256 = "1ld0xz8gmi566zxl1cva5yi86aw1wb6i6446gxxdw1lisxx3xwz7";
     };
   };
+
+  cl-smtp = buildLispPackage rec {
+    baseName = "cl-smtp";
+    version = "cvs-2014-11-15";
+    description = "SMTP client library";
+    deps = [cl-ssl cl-base64 flexi-streams trivial-gray-streams usocket];
+    # Source type: cvs
+    src = pkgs.fetchcvs {
+      sha256 = "15b7lvayn1izzfism7s7rcw2mv1hwgp9l2lgb5na9qxmqzjlw0r9";
+      date = ''2014-11-15'';
+      module = ''cl-smtp'';
+      cvsRoot = '':pserver:anonymous:anonymous@common-lisp.net:/project/cl-smtp/cvsroot'';
+    };
+  };
 };
 in lispPackages
