@@ -204,7 +204,7 @@ rec {
     name = "bootstrap-gcc-wrapper";
 
     overrides = pkgs: {
-      inherit (stage2.pkgs) binutils perl paxctl glibc;
+      inherit (stage2.pkgs) binutils perl paxctl glibc linuxHeaders;
       bash = pkgs.bash.override { combineWithLibc = true; };
       glibc-bash-final = pkgs.callPackage ./glibc-with-shell.nix {};
     };
