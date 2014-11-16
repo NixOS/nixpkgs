@@ -3551,6 +3551,8 @@ let
 
     camlp5_transitional = camlp5_6_transitional;
 
+    camlpdf = callPackage ../development/ocaml-modules/camlpdf { };
+
     calendar = callPackage ../development/ocaml-modules/calendar { };
 
     camlzip = callPackage ../development/ocaml-modules/camlzip { };
