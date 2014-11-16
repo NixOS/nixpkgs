@@ -18,8 +18,9 @@ let
     MENU BACKGROUND /isolinux/background.png
 
     LABEL boot
-    MENU LABEL Boot NixOS
-    LINUX /boot/bzImage init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
+    MENU LABEL NixOS ${config.system.nixosVersion} Installer
+    LINUX /boot/bzImage
+    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
     INITRD /boot/initrd
 
     LABEL chain
