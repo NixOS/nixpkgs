@@ -1087,6 +1087,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   HaTeX = callPackage ../development/libraries/haskell/HaTeX {};
 
+  hayland = callPackage ../development/libraries/haskell/hayland {};
+
   hcltest = callPackage ../development/libraries/haskell/hcltest {};
 
   hedis = callPackage ../development/libraries/haskell/hedis {};
