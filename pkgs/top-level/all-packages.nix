@@ -7000,6 +7000,8 @@ let
     enableIntrospection = false;
   };
 
+  websocketpp = callPackage ../development/libraries/websocket++ { };
+
   wildmidi = callPackage ../development/libraries/wildmidi { };
 
   wvstreams = callPackage ../development/libraries/wvstreams { };
