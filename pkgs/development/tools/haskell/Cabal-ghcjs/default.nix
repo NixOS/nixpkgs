@@ -5,11 +5,11 @@
 
 cabal.mkDerivation (self: {
   pname = "Cabal";
-  version = "9e87d6a3";
+  version = "b9c90bb4";
   src = fetchgit {
     url = git://github.com/ghcjs/cabal.git;
-    rev = "520591876ee57dbecba1b2de602dc79f4f67ecce"; # Must be from the ghcjs branch
-    sha256 = "f59182661707c65a2a014aa91b5e0d53cbefb6c999c1982757f476619b6728c0";
+    rev = "b9c90bb4d6fed8c2cc8323a7e24b67f821c1ee47"; # Must be from the ghcjs branch
+    sha256 = "d678d8c54d82db8b4fb0d7dc72c4832025c69586da8c0f65f6d05f6f50103c62";
   };
   preConfigure = "cd Cabal";
   configureFlags = "--program-suffix=-js";
@@ -24,6 +24,7 @@ cabal.mkDerivation (self: {
   # Cabal. Use the flag --package-db to specify a package database (it can be used
   # multiple times).
   doCheck = false;
+  noHaddock = true;
 
   buildDepends = [
     filepath HTTP mtl network random stm time zlib QuickCheck

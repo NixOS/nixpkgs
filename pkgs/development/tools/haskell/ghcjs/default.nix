@@ -27,17 +27,7 @@ cabal.mkDerivation (self: rec {
   isExecutable = true;
   jailbreak = true;
   noHaddock = true;
-  haddockInternal = cabal.mkDerivation (self: {
-    pname = "haddock-internal";
-    version = "2.14.3";
-    src = fetchgit {
-      url = git://github.com/ghcjs/haddock-internal.git;
-      rev = "47758773d6b20c395a1c76a93830070fde71dbab";
-      sha256 = "df1a024631b7781fcbda09d2b33a56650959b8ab6c831151b456133226ab90b2";
-    };
-    buildDepends = [ QuickCheck ghcPaths haddock hspec xhtml ]; # Can't specify Cabal here, or it ends up being the wrong version
-    doCheck = false;
-  });
+  doCheck = false;
   ghcjsPrim = cabal.mkDerivation (self: {
     pname = "ghcjs-prim";
     version = "0.1.0.0";
@@ -55,9 +45,9 @@ cabal.mkDerivation (self: rec {
     stringsearch syb systemFileio systemFilepath tar terminfo textBinary
     unorderedContainers vector wlPprintText yaml
     alex happy git gnumake gcc autoconf automake libtool patch gmp
-    base16Bytestring cryptohash executablePath haddockInternal
+    base16Bytestring cryptohash executablePath haddockApi
     transformersCompat QuickCheck haddock hspec xhtml
-    ghcjsPrim regexPosix haddockApi
+    ghcjsPrim regexPosix
   ];
   buildTools = [ nodejs git ];
   testDepends = [

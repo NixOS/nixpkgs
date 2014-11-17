@@ -14,18 +14,18 @@ cabal.mkDerivation (self: rec {
   version = "0.1.0";
   src = fetchgit {
     url = git://github.com/ghcjs/ghcjs.git;
-    rev = "c9ce6b9d87296b1236d5ef0f7d5236b2cedcff84";
-    sha256 = "0cla5bchprc8g5n39fkssnv3lj378h948irsnr7dslaki6laaagw";
+    rev = "c0b8ebb3e2608fdd8dc3b74b55f281b5c24be8e1";
+    sha256 = "442ebdfd426ec98a431735f72ec00c7dde54ae1f0c78dd593d33077ffdb1e2a2";
   };
   bootSrc = fetchgit {
     url = git://github.com/ghcjs/ghcjs-boot.git;
-    rev = "2daaf8fc0efd5b5906a7157a172ce77ca3b28d81";
-    sha256 = "0kwn3lh196rp02kz2vxd0mkqyix99xqzs4vsazv0s49ari0dc4w8";
+    rev = "8bf2861c0c776eec42e0a1833f220e36681e810c";
+    sha256 = "1f6695f7c25e40b87621ba6ce71a8338788951fd85e88e9223c8258520fbded6";
   };
   shims = fetchgit {
     url = git://github.com/ghcjs/shims.git;
-    rev = "a6dd0202dcdb86ad63201495b8b5d9763483eb35";
-    sha256 = "07cd7ijw4i62iz1xjpwilriiybpqdx246w8d3j27ny1xfsj9wnax";
+    rev = "5e11d33cb74f8522efca0ace8365c0dc994b10f6";
+    sha256 = "64be139022e6f662086103fca3838330006d38e6454bd3f7b66013031a47278e";
   };
   isLibrary = true;
   isExecutable = true;

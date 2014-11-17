@@ -249,6 +249,7 @@
               Cabal = packages_ghc783.CabalGhcjs;
             };
             transformersCompat = super.transformersCompat_0_3_3_3;
+            network = super.network_2_6_0_2;
             haddock = super.haddock.override {
               Cabal = null;
             };

@@ -5,13 +5,14 @@
 
 cabal.mkDerivation (self: {
   pname = "cabal-install-ghcjs";
-  version = "9e87d6a3";
+  version = CabalGhcjs.version;
   src = CabalGhcjs.src;
   isLibrary = true;
   isExecutable = true;
   doCheck = false;
   configureFlags = "--program-suffix=-js";
   preConfigure = "cd cabal-install";
+  noHaddock = true;
   buildDepends = [
     CabalGhcjs filepath HTTP mtl network random stm time zlib
   ];
