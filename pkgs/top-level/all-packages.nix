@@ -10783,6 +10783,13 @@ let
 
   todo-txt-cli = callPackage ../applications/office/todo.txt-cli { };
 
+  tomahawk = callPackage ../applications/audio/tomahawk {
+    inherit (pkgs.kde4) kdelibs;
+    enableXMPP      = config.tomahawk.enableXMPP      or true;
+    enableKDE       = config.tomahawk.enableKDE       or false;
+    enableTelepathy = config.tomahawk.enableTelepathy or false;
+  };
+
   torchat = callPackage ../applications/networking/instant-messengers/torchat {
     wrapPython = pythonPackages.wrapPython;
   };
