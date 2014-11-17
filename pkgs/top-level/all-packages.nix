@@ -3777,8 +3777,6 @@ let
     ocaml = ocaml_3_08_0;
   };
 
-  roadsend = callPackage ../development/compilers/roadsend { };
-
   rustc       = callPackage ../development/compilers/rustc/0.12.nix {};
   rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
 
