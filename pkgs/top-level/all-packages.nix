@@ -7198,6 +7198,8 @@ let
 
   lucene = callPackage ../development/libraries/java/lucene { };
 
+  lucenepp = callPackage ../development/libraries/lucene++ { };
+
   mockobjects = callPackage ../development/libraries/java/mockobjects { };
 
   saxon = callPackage ../development/libraries/java/saxon { };
