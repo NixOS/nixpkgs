@@ -1,18 +1,19 @@
-{ stdenv, curl, fetchgit }:
+{ stdenv, curl, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "stdman-${version}";
   version = "d860212";
 
-  src = fetchgit {
-    url = "git://github.com/jeaye/stdman";
-    sha256 = "0fr4bw6rsddf95chdlwami9q1fwwfbk4di35zzi25zg72ibi12qz";
+  src = fetchFromGitHub {
+    owner = "jeaye";
+    repo = "stdman";
     rev = "d860212767ca60472e33aa3bad22a3eac834b1f8";
+    sha256 = "09c5gjhcz97ghfrv9zkgfb1wckvmqnhbzga0xidbm1ir7640di8l";
   };
 
   preConfigure = "
-    substituteInPlace configure --replace /bin/bash /bin/sh;
-    substituteInPlace do_install --replace /bin/bash /bin/sh;
+    patchShebangs ./configure
+    patchShebangs ./do_install
   ";
 
   buildInputs = [ curl ];
