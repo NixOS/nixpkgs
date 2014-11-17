@@ -5754,6 +5754,8 @@ let
 
   libe-book = callPackage ../development/libraries/libe-book {};
 
+  libechonest = callPackage ../development/libraries/libechonest { };
+
   libev = builderDefsPackage ../development/libraries/libev { };
 
   libevent14 = callPackage ../development/libraries/libevent/1.4.nix { };
