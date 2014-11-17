@@ -6667,6 +6667,8 @@ let
     qtLib = qt48.override { developerBuild = true; };
   };
 
+  qtkeychain = callPackage ../development/libraries/qtkeychain { };
+
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
 
   quesoglc = callPackage ../development/libraries/quesoglc { };
