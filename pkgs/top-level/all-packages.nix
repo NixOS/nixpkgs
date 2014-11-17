@@ -4926,7 +4926,7 @@ let
 
   clutter = callPackage ../development/libraries/clutter { };
 
-  clutter_1_18 = callPackage ../development/libraries/clutter/1.18.nix {
+  clutter_1_20 = callPackage ../development/libraries/clutter/1.20.nix {
     cogl = cogl_1_18;
   };
 

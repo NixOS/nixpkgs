@@ -3,7 +3,7 @@
 rec {
   inherit (pkgs) glib gtk2 gtk3 gnome2;
   gnome3 = pkgs.gnome3_12 // { recurseForDerivations = false; };
-  clutter = pkgs.clutter_1_18;
+  clutter = pkgs.clutter_1_20;
   clutter_gtk = pkgs.clutter_gtk.override { inherit clutter; };
   clutter-gst = pkgs.clutter-gst.override { inherit clutter; };
   upower = pkgs.upower_99;
