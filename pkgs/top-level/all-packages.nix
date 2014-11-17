@@ -5925,6 +5925,8 @@ let
     libtool = libtool_1_5;
   };
 
+  libjreen = callPackage ../development/libraries/libjreen { };
+
   libjson_rpc_cpp = callPackage ../development/libraries/libjson-rpc-cpp { };
 
   libkate = callPackage ../development/libraries/libkate { };
