@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
   ]
   ++ (lib.optionals (gnutls != null) ["--enable-gnutls=yes" "--enable-nss=no"]);
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Multi-protocol instant messaging client";
     homepage = http://pidgin.im;
