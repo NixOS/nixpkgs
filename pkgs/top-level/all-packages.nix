@@ -7586,6 +7586,11 @@ in
 
   gnome-sharp = callPackage ../development/libraries/gnome-sharp {};
 
+  gnustep_startup = callPackage ../development/libraries/gnustep-startup/default.nix {
+    stdenv = clangStdenv;
+    giflib = giflib_4_1;
+  };
+
   granite = callPackage ../development/libraries/granite { };
 
   gtk2 = callPackage ../development/libraries/gtk+/2.x.nix {
@@ -8387,6 +8392,8 @@ in
   libnova = callPackage ../development/libraries/libnova { };
 
   libnxml = callPackage ../development/libraries/libnxml { };
+
+  libobjc2 = callPackage ../development/libraries/libobjc2 { stdenv = clangStdenv; };
 
   libodfgen = callPackage ../development/libraries/libodfgen { };
 

@@ -1,0 +1,20 @@
+diff -c libobjc2-1.7/Test/CMakeLists.txt libobjc2-1.7-patched/Test/CMakeLists.txt
+*** libobjc2-1.7/Test/CMakeLists.txt	2014-11-17 13:38:30.000000000 +0600
+--- libobjc2-1.7-patched/Test/CMakeLists.txt	2014-11-17 13:38:56.000000000 +0600
+***************
+*** 49,54 ****
+  endforeach()
+  
+  # Tests that are more than a single file.
+! addtest_flags(CXXExceptions "-O0" "CXXException.m;CXXException.cc")
+! addtest_flags(CXXExceptions_optimised "-O3" "CXXException.m;CXXException.cc")
+  
+--- 49,54 ----
+  endforeach()
+  
+  # Tests that are more than a single file.
+! #addtest_flags(CXXExceptions "-O0" "CXXException.m;CXXException.cc")
+! #addtest_flags(CXXExceptions_optimised "-O3" "CXXException.m;CXXException.cc")
+  
+Only in libobjc2-1.7-patched/Test: CMakeLists.txt~
+Common subdirectories: libobjc2-1.7/Test/RuntimeTest.xcodeproj and libobjc2-1.7-patched/Test/RuntimeTest.xcodeproj
