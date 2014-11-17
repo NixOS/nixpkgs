@@ -7715,6 +7715,10 @@ let
   rethinkdb = callPackage ../servers/nosql/rethinkdb {
     boost = boost155;
   };
+  rethinkdb_1_15 = callPackage ../servers/nosql/rethinkdb/1.15.nix { 
+    boost = boost155;
+    inherit writeText; 
+  };
 
   rippled = callPackage ../servers/rippled {
     boost = boost155;
