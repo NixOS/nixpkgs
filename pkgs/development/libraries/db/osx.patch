@@ -1,5 +1,5 @@
---- src/dbinc/atomic.h	2013-03-12 14:07:22.000000000 -0400
-+++ src/dbinc/atomic.h.change	2013-03-12 14:06:35.000000000 -0400
+--- a/src/dbinc/atomic.h	2013-03-12 14:07:22.000000000 -0400
++++ b/src/dbinc/atomic.h.change	2013-03-12 14:06:35.000000000 -0400
 @@ -144,7 +144,7 @@
  #define	atomic_inc(env, p)	__atomic_inc(p)
  #define	atomic_dec(env, p)	__atomic_dec(p)
