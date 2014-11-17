@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, zip, zlib, qt5 }:
+{ fetchurl, stdenv, zip, zlib, qt }:
 
 stdenv.mkDerivation rec {
   name = "quazip-0.7";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   installFlags = "INSTALL_ROOT=$(out)";
 
-  buildInputs = [ zlib qt5 ];
+  buildInputs = [ zlib qt ];
 
   meta = {
     description = "Provides access to ZIP archives from Qt programs";

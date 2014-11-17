@@ -6591,7 +6591,9 @@ let
 
   qoauth = callPackage ../development/libraries/qoauth { };
 
-  quazip = callPackage ../development/libraries/quazip { };
+  quazip = callPackage ../development/libraries/quazip {
+    qt = qt5;
+  };
 
   qt3 = callPackage ../development/libraries/qt-3 {
     openglSupport = mesaSupported;
