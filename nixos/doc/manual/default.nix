@@ -71,7 +71,9 @@ in rec {
       dst=$out/share/doc/nixos
       mkdir -p $dst
 
-      cp ${builtins.toFile "options.json" (builtins.unsafeDiscardStringContext (builtins.toJSON optionsList'))} $dst/options.json
+      cp ${builtins.toFile "options.json" (builtins.unsafeDiscardStringContext (builtins.toJSON
+        (listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name"]; }) optionsList'))))
+      } $dst/options.json
 
       mkdir -p $out/nix-support
       echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
