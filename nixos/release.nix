@@ -130,7 +130,7 @@ in rec {
   manual = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manual);
   manualPDF = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manualPDF)).x86_64-linux;
   manpages = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manpages);
-  options = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.options)).x86_64-linux;
+  options = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
 
 
   # Build the initial ramdisk so Hydra can keep track of its size over time.
