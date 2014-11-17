@@ -2,6 +2,7 @@
 , etcDir ? null
 , hpnSupport ? false
 , withKerberos ? false
+, noKeyRightsCheck ? false
 , kerberos
 }:
 
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
         + "hpb=9cbb60f5e4932634db04c330c88abc49cc5567bd";
       sha256 = "160c434igl2r8q4cavhdlwvnbqizx444sjrhg98f997pyhz524h9";
     })
-  ];
+  ] ++ stdenv.lib.optional noKeyRightsCheck ./private-key-rights.patch;
 
   buildInputs = [ zlib openssl libedit pkgconfig pam ]
     ++ stdenv.lib.optional withKerberos [ kerberos ];

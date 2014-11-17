@@ -313,7 +313,8 @@ let
   };
 
   fetchgitPrivate = import ../build-support/fetchgit/private.nix {
-    inherit fetchgit writeScript openssh stdenv;
+    inherit fetchgit writeScript stdenv;
+    openssh = openssh_no_key_check;
   };
 
   fetchgitrevision = import ../build-support/fetchgitrevision runCommand git;
@@ -1959,6 +1960,8 @@ let
       etcDir = "/etc/ssh";
       pam = if stdenv.isLinux then pam else null;
     };
+
+  openssh_no_key_check = pkgs.appendToName "no-key-check" (openssh.override { noKeyRightsCheck = true; });
 
   openssh_hpn = pkgs.appendToName "with-hpn" (openssh.override { hpnSupport = true; });
 
