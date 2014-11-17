@@ -5318,10 +5318,6 @@ let
 
   gnutls = gnutls32;
 
-  gnutls31 = callPackage ../development/libraries/gnutls/3.1.nix {
-    guileBindings = config.gnutls.guile or false;
-  };
-
   gnutls32 = callPackage ../development/libraries/gnutls/3.2.nix {
     guileBindings = config.gnutls.guile or false;
   };
