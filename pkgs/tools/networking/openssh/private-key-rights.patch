@@ -1,0 +1,28 @@
+diff -ru3 openssh-6.6p1-old/authfile.c openssh-6.6p1/authfile.c
+--- openssh-6.6p1-old/authfile.c	2014-02-04 04:20:15.000000000 +0400
++++ openssh-6.6p1/authfile.c	2014-11-17 18:23:47.486062501 +0300
+@@ -971,24 +971,6 @@
+ 
+ 	if (fstat(fd, &st) < 0)
+ 		return 0;
+-	/*
+-	 * if a key owned by the user is accessed, then we check the
+-	 * permissions of the file. if the key owned by a different user,
+-	 * then we don't care.
+-	 */
+-#ifdef HAVE_CYGWIN
+-	if (check_ntsec(filename))
+-#endif
+-	if ((st.st_uid == getuid()) && (st.st_mode & 077) != 0) {
+-		error("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+-		error("@         WARNING: UNPROTECTED PRIVATE KEY FILE!          @");
+-		error("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+-		error("Permissions 0%3.3o for '%s' are too open.",
+-		    (u_int)st.st_mode & 0777, filename);
+-		error("It is required that your private key files are NOT accessible by others.");
+-		error("This private key will be ignored.");
+-		return 0;
+-	}
+ 	return 1;
+ }
+ 
