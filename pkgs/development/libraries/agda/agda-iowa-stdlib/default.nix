@@ -22,5 +22,6 @@ agda.mkDerivation (self: rec {
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    broken = true;
   };
 })
