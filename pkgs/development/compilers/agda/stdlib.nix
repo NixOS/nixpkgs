@@ -1,12 +1,12 @@
 { stdenv, agda, fetchurl, ghc, filemanip }:
 
 agda.mkDerivation (self: rec {
-  name = "Agda-stdlib";
-  version = "0.8.1";
+  version = "0.9";
+  name = "Agda-stdlib-${version}";
 
   src = fetchurl {
     url = "https://github.com/agda/agda-stdlib/archive/v${version}.tar.gz";
-    sha256 = "0ij4rg4lk0pq01ing285gbmnn23dcf2rhihdcs8bbdpjg52vl4gf";
+    sha256 = "05rpmd2xra8wygq33mahdmijcjwq132l1akqyzj66n13frw4hfwj";
   };
 
   buildInputs = [ filemanip ghc ];
