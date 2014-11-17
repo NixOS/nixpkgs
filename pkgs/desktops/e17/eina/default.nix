@@ -1,10 +1,10 @@
 { stdenv, fetchurl }:
 stdenv.mkDerivation rec {
   name = "eina-${version}";
-  version = "1.7.5";
+  version = "1.7.10";
   src = fetchurl {
     url = "http://download.enlightenment.org/releases/${name}.tar.bz2";
-    sha256 = "0kd4116njrbag9h459cmfpg07c4ag04z3yrsg513lpi27amch27w";
+    sha256 = "06pqn17zknmxzdk5gw6df0gpbicnrdjl9g4vncw57k2wzf5icy33";
   };
   meta = {
     description = "Enlightenment's core data structure library";
