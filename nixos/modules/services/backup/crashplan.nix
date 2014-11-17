@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   cfg = config.services.crashplan;
@@ -6,7 +6,7 @@ let
   varDir = "/var/lib/crashplan";
 in
 
-with pkgs.lib;
+with lib;
 
 {
   options = {
