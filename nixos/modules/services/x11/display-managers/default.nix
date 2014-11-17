@@ -258,7 +258,7 @@ in
         environment = mkOption {
           type = types.attrsOf types.unspecified;
           default = {};
-          example = { SLIM_CFGFILE = /etc/slim.conf; };
+          example = literalExample "{ SLIM_CFGFILE = /etc/slim.conf; }";
           description = "Additional environment variables needed by the display manager.";
         };
 

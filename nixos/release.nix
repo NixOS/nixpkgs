@@ -114,6 +114,7 @@ in rec {
 
   manual = forAllSystems (system: (builtins.getAttr system iso_minimal).config.system.build.manual.manual);
   manpages = forAllSystems (system: (builtins.getAttr system iso_minimal).config.system.build.manual.manpages);
+  options = iso_minimal.x86_64-linux.config.system.build.manual.optionsJSON;
 
 
   iso_minimal = forAllSystems (system: makeIso {

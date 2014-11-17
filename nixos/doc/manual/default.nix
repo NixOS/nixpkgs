@@ -5,12 +5,21 @@ with pkgs.lib;
 let
 
   # Remove invisible and internal options.
-  options' = filter (opt: opt.visible && !opt.internal) (optionAttrSetToDocList options);
+  optionsList = filter (opt: opt.visible && !opt.internal) (optionAttrSetToDocList options);
+
+  # Replace functions by the string <function>
+  substFunction = x:
+    if builtins.isAttrs x then mapAttrs (name: substFunction) x
+    else if builtins.isList x then map substFunction x
+    else if builtins.isFunction x then "<function>"
+    else x;
 
   # Clean up declaration sites to not refer to the NixOS source tree.
-  options'' = flip map options' (opt: opt // {
+  optionsList' = flip map optionsList (opt: opt // {
     declarations = map (fn: stripPrefix fn) opt.declarations;
-  });
+  }
+  // optionalAttrs (opt ? example) { example = substFunction opt.example; }
+  // optionalAttrs (opt ? default) { default = substFunction opt.default; });
 
   prefix = toString ../../..;
 
@@ -20,7 +29,7 @@ let
     else
       fn;
 
-  optionsXML = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext (builtins.toXML options''));
+  optionsXML = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext (builtins.toXML optionsList'));
 
   optionsDocBook = pkgs.runCommand "options-db.xml" {} ''
     if grep /nixpkgs/nixos/modules ${optionsXML}; then
@@ -36,6 +45,26 @@ let
   '';
 
 in rec {
+
+  # The NixOS options in JSON format.
+  optionsJSON = pkgs.stdenv.mkDerivation {
+    name = "options-json";
+
+    buildCommand = ''
+      # Export list of options in different format.
+      dst=$out/share/doc/nixos
+      mkdir -p $dst
+
+      cp ${builtins.toFile "options.json" (builtins.unsafeDiscardStringContext (builtins.toJSON
+        (listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList'))))
+      } $dst/options.json
+
+      mkdir -p $out/nix-support
+      echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
+    ''; # */
+
+    meta.description = "List of NixOS options in JSON format";
+  };
 
   # Generate the NixOS manual.
   manual = pkgs.stdenv.mkDerivation {
