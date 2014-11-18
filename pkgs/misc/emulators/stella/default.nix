@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   name = "stella-${version}";
-  version = "4.1.1";
+  version = "4.2";
 
   src = fetchurl {
     url = "http://downloads.sourceforge.net/project/stella/stella/${version}/${name}-src.tar.gz";
-    sha256 = "1gg3z3drg3cdz1vzd0xdgkgl7jxp04hijdd1wmmymph6j1dwwf22";
+    sha256 = "0aikd7l5ill0vl5q06dg1wly8v9vav7wd78yjm6rmikd0cd2irzh";
   };
 
   buildInputs = with stdenv.lib;
