@@ -1426,6 +1426,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   jsFlot = callPackage ../development/libraries/haskell/js-flot {};
 
+  jsJquery = callPackage ../development/libraries/haskell/js-jquery {};
+
   json = callPackage ../development/libraries/haskell/json {};
 
   jsonAssertions = callPackage ../development/libraries/haskell/json-assertions {};
