@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "parsek";
-  version = "1.0.1";
-  sha256 = "197hjys71f9qgsw83w3wrmijimjzvb9cy4kywkqr95ack8a7pizn";
+  version = "1.0.1.2";
+  sha256 = "0ybh76cx5y73ywhlv4g2z74x1mvg5n2rxl045mscs6dwcyw9vhbd";
   meta = {
     description = "Parallel Parsing Processes";
     license = self.stdenv.lib.licenses.gpl3;
