@@ -1424,6 +1424,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   jpeg = callPackage ../development/libraries/haskell/jpeg {};
 
+  jsFlot = callPackage ../development/libraries/haskell/js-flot {};
+
   json = callPackage ../development/libraries/haskell/json {};
 
   jsonAssertions = callPackage ../development/libraries/haskell/json-assertions {};
