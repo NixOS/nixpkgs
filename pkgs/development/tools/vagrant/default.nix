@@ -1,9 +1,16 @@
-{ stdenv, fetchurl, dpkg, curl, libarchive, openssl, ruby, rubyPackages, libiconv
+{ stdenv, fetchurl, dpkg, curl, libarchive, openssl, ruby, buildRubyGem, libiconv
 , libxml2, libxslt }:
 
 assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
 
-let version = "1.6.5";
+let
+  version = "1.6.5";
+  rake = buildRubyGem {
+    inherit ruby;
+    name = "rake-10.3.2";
+    sha256 = "0nvpkjrpsk8xxnij2wd1cdn6arja9q11sxx4aq4fz18bc6fss15m";
+  };
+
 in
 stdenv.mkDerivation rec {
   name = "vagrant-${version}";
@@ -58,7 +65,7 @@ stdenv.mkDerivation rec {
     ln -s ${ruby}/bin/erb opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/gem opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/irb opt/vagrant/embedded/bin
-    ln -s ${rubyPackages.rake}/bin/rake opt/vagrant/embedded/bin
+    ln -s ${rake}/bin/rake opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/rdoc opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/ri opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/ruby opt/vagrant/embedded/bin
