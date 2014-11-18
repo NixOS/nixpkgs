@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "jmeter-2.11";
   src = fetchurl {
-    url = "http://ftp.unicamp.br/pub/apache//jmeter/binaries/apache-${name}.tgz";
+    url = "http://archive.apache.org/dist/jmeter/binaries/apache-${name}.tgz";
     sha256 = "1fr3sw06qncb6yygcf2lbnkxma4v1dbigpf39ajrm0isxbpyv944";
   };
 
