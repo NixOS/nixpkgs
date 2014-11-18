@@ -1836,6 +1836,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   parsec = callPackage ../development/libraries/haskell/parsec {};
 
+  parsek = callPackage ../development/libraries/haskell/parsek {};
+
   parsers = callPackage ../development/libraries/haskell/parsers {};
 
   parsimony = callPackage ../development/libraries/haskell/parsimony {};

@@ -3,12 +3,12 @@
 { cabal }:
 
 cabal.mkDerivation (self: {
-  pname = "labeled-tree";
-  version = "1.0.0.0";
-  sha256 = "1cnnyic5z5y21hpxpmx66ph34mjyysckgiasmzg7yx202y2ih7s7";
+  pname = "parsek";
+  version = "1.0.1.2";
+  sha256 = "0ybh76cx5y73ywhlv4g2z74x1mvg5n2rxl045mscs6dwcyw9vhbd";
   meta = {
-    description = "Labeled tree structure";
-    license = self.stdenv.lib.licenses.bsd3;
+    description = "Parallel Parsing Processes";
+    license = self.stdenv.lib.licenses.gpl3;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ jpbernardy ];
   };
