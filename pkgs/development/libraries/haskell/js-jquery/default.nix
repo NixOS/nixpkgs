@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   version = "1.11.1";
   sha256 = "0k4hrpxsc48nanr2zw6jcirirsarlshycx7d5hzqqv9jfhy1i88d";
   testDepends = [ HTTP ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/ndmitchell/js-jquery#readme";
     description = "Obtain minified jQuery code";
