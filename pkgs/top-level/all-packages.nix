@@ -6536,7 +6536,14 @@ let
     spidermonkey = spidermonkey_185;
   };
 
-  polkit_qt_1 = callPackage ../development/libraries/polkit-qt-1 { };
+  polkit_qt4 = callPackage ../development/libraries/polkit-qt-1 {
+    inherit qt4;
+  };
+
+  polkit_qt5 = callPackage ../development/libraries/polkit-qt-1 {
+    inherit qt5;
+    withQt5 = true;
+  };
 
   policykit = callPackage ../development/libraries/policykit { };
 
