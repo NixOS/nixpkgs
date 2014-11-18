@@ -18,7 +18,7 @@ stdenv.mkDerivation (attrs // {
   inherit ruby rubygems;
   inherit doCheck;
 
-  buildInputs = [ rubygems makeWrapper git ] ++ buildInputs;
+  buildInputs = [ ruby rubygems makeWrapper git ] ++ buildInputs;
 
   name = namePrefix + name;
 
