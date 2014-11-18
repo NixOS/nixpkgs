@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, alsaLib, cmake, pkgconfig, glib }:
+{ stdenv, fetchFromGitHub, alsaLib, cmake, pkgconfig, glib }:
 
 stdenv.mkDerivation rec {
   name = "apulse-${version}";
-  version = "0.1.2";
+  version = "0.1.4";
 
-  src = fetchurl {
-    url = "https://github.com/i-rinat/apulse/archive/v${version}.tar.gz";
-    sha256 = "02906a8iwwjzzkjvhqqai2yd1636cgz9vl69vwq0vkv2v6cn21ky";
+  src = fetchFromGitHub {
+    owner = "i-rinat";
+    repo = "apulse";
+    rev = "v${version}";
+    sha256 = "115z5a0n8lkcqfgz0cgvjw3p7d0nvzfxzd9g0h137ziflyx3ysh1";
   };
 
   buildInputs =
