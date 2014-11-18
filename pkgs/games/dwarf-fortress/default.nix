@@ -4,7 +4,8 @@
 /* set copyDataDirectory as true by default since df 40 does not seem to run without it */
 
 let
-
+  baseVersion = "40";
+  patchVersion = "16";
   srcs = {
     df_unfuck = fetchgit {
       url = "https://github.com/svenstaro/dwarf_fortress_unfuck";
@@ -13,8 +14,8 @@ let
     };
 
     df = fetchurl {
-      url = "http://www.bay12games.com/dwarves/df_40_15_linux.tar.bz2";
-      sha256 = "1mmz7mnsm2y5n2aqyf30zrflyl58haaj6p380pi4022gbd13mnsn";
+      url = "http://www.bay12games.com/dwarves/df_${baseVersion}_${patchVersion}_linux.tar.bz2";
+      sha256 = "0045ac9wz1spm4yajrnq5v802ks7aajk422zqkhsd331s1fhpirc";
     };
   };
 
@@ -23,7 +24,7 @@ in
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation rec {
-  name = "dwarf-fortress-0.40.15";
+  name = "dwarf-fortress-0.${baseVersion}.${patchVersion}";
 
 
   buildInputs = [ SDL SDL_image SDL_ttf gtk2 glib glew mesa ncurses openal glibc libsndfile pango atk cmake gdk_pixbuf];
@@ -105,6 +106,6 @@ stdenv.mkDerivation rec {
       description = "control a dwarven outpost or an adventurer in a randomly generated, persistent world";
       homepage = http://www.bay12games.com/dwarves;
       license = stdenv.lib.licenses.unfreeRedistributable;
-      maintainers = [stdenv.lib.maintainers.roconnor];
+      maintainers = with stdenv.lib.maintainers; [ roconnor the-kenny ];
   };
 }
