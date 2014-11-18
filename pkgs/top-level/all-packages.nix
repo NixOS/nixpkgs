@@ -6522,7 +6522,13 @@ let
     qt4 = null;
   };
 
-  phonon_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer { };
+  phonon_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer { inherit qt4; };
+
+  phonon_qt5_backend_gstreamer = phonon_backend_gstreamer.override {
+    withQt5 = true;
+    inherit qt5;
+    qt4 = null;
+  };
 
   phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc { };
 
