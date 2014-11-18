@@ -6530,7 +6530,13 @@ let
     qt4 = null;
   };
 
-  phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc { };
+  phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc { inherit qt4; };
+
+  phonon_qt5_backend_vlc = phonon_backend_vlc.override {
+    withQt5 = true;
+    inherit qt5;
+    qt4 = null;
+  };
 
   physfs = callPackage ../development/libraries/physfs { };
 
@@ -10889,6 +10895,8 @@ let
   vlc = callPackage ../applications/video/vlc {
     ffmpeg = ffmpeg_2_3;
   };
+
+  libvlc = vlc.override { onlyLibVLC = true; };
 
   vmpk = callPackage ../applications/audio/vmpk { };
 
