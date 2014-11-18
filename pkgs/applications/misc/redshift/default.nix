@@ -3,11 +3,11 @@
 , GConf, dbus, dbus_glib, makeWrapper, gtk, pygtk, pyxdg, geoclue }:
 
 stdenv.mkDerivation rec {
-  version = "1.8";
+  version = "1.9.1";
   name = "redshift-${version}";
   src = fetchurl {
     url = "https://github.com/jonls/redshift/archive/v${version}.tar.gz";
-    sha256 = "1srj2dwy32h71iqikb4ysv5ipclym80i9lys2ns8vjmclg7hj3vi";
+    sha256 = "0rj7lyg4ikwpk1hr1k2bgk9gjqvvv51z8hydsgpx2k2lqdv6lqri";
   };
 
   buildInputs = [
