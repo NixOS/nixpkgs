@@ -2499,7 +2499,9 @@ let
 
   torbutton = callPackage ../tools/security/torbutton { };
 
-  torbrowser = callPackage ../tools/security/tor/torbrowser.nix { };
+  torbrowser = callPackage ../tools/security/tor/torbrowser.nix {
+    stdenv = overrideGCC stdenv gcc49;
+  };
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
 
