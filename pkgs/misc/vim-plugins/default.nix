@@ -330,6 +330,45 @@ rec {
     };
   };
 
+  neosnippet = buildVimPlugin {
+    name = "neosnippet-git-2014-11-18";
+    src = fetchgit {
+      url = "https://github.com/Shougo/neosnippet.vim.git";
+      rev = "811176b29b1a60a164c9878f8dcbe4a680ee32e5";
+      sha256 = "903b6fa01511e319e5ce3efa3a7007047512f5f7ee7d61b69cd4a324420cf718";
+     };
+    meta = {
+      homepage = https://github.com/Shougo/neosnippet.vim; 
+      maintainers = [ stdenv.lib.maintainers.jagajaga ];
+    };
+  };
+
+  neocomplete = buildVimPlugin {
+    name = "neocomplete-git-2014-11-18";
+    src = fetchgit {
+      url = "https://github.com/Shougo/neocomplete.vim.git";
+      rev = "26aef680ece29047089e7540b78696f1e6336be2";
+      sha256 = "42734ddb29f6661de687e0d18c5ddbd443adc6d2f69fe8e44d0e47473f1bc0ae";
+     };
+    meta = {
+      homepage = https://github.com/Shougo/neocomplete.vim; 
+      maintainers = [ stdenv.lib.maintainers.jagajaga ];
+    };
+  };
+
+  neosnippet-snippets = buildVimPlugin {
+    name = "neosnippet-snippets-git-2014-11-17";
+    src = fetchgit {
+      url = "https://github.com/Shougo/neosnippet-snippets.git";
+      rev = "a15cdc307a62d64c3510b4a1097a8bd174746894";
+      sha256 = "8d69b93163dd93474422bf4f362130151f25e2c9fad3500ba170161c24bf5bce";
+     };
+    meta = {
+      homepage = https://github.com/Shougo/neosnippet-snippets; 
+      maintainers = [ stdenv.lib.maintainers.jagajaga ];
+    };
+  };
+
 
   # vim-pi: quickrun%3146
   quickrun = buildVimPlugin {
