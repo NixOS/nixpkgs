@@ -5757,6 +5757,8 @@ let
 
   libe-book = callPackage ../development/libraries/libe-book {};
 
+  libechonest = callPackage ../development/libraries/libechonest { };
+
   libev = builderDefsPackage ../development/libraries/libev { };
 
   libevent14 = callPackage ../development/libraries/libevent/1.4.nix { };
@@ -5927,6 +5929,8 @@ let
   libjpeg62 = callPackage ../development/libraries/libjpeg/62.nix {
     libtool = libtool_1_5;
   };
+
+  libjreen = callPackage ../development/libraries/libjreen { };
 
   libjson_rpc_cpp = callPackage ../development/libraries/libjson-rpc-cpp { };
 
@@ -6596,7 +6600,9 @@ let
 
   qoauth = callPackage ../development/libraries/qoauth { };
 
-  quazip = callPackage ../development/libraries/quazip { };
+  quazip = callPackage ../development/libraries/quazip {
+    qt = qt5;
+  };
 
   qt3 = callPackage ../development/libraries/qt-3 {
     openglSupport = mesaSupported;
@@ -6667,6 +6673,8 @@ let
   qtcreator = callPackage ../development/qtcreator {
     qtLib = qt48.override { developerBuild = true; };
   };
+
+  qtkeychain = callPackage ../development/libraries/qtkeychain { };
 
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
 
@@ -6999,6 +7007,8 @@ let
     enableIntrospection = false;
   };
 
+  websocketpp = callPackage ../development/libraries/websocket++ { };
+
   wildmidi = callPackage ../development/libraries/wildmidi { };
 
   wvstreams = callPackage ../development/libraries/wvstreams { };
@@ -7196,6 +7206,8 @@ let
   jzmq = callPackage ../development/libraries/java/jzmq { };
 
   lucene = callPackage ../development/libraries/java/lucene { };
+
+  lucenepp = callPackage ../development/libraries/lucene++ { };
 
   mockobjects = callPackage ../development/libraries/java/mockobjects { };
 
@@ -10779,6 +10791,13 @@ let
   tla = callPackage ../applications/version-management/arch { };
 
   todo-txt-cli = callPackage ../applications/office/todo.txt-cli { };
+
+  tomahawk = callPackage ../applications/audio/tomahawk {
+    inherit (pkgs.kde4) kdelibs;
+    enableXMPP      = config.tomahawk.enableXMPP      or true;
+    enableKDE       = config.tomahawk.enableKDE       or false;
+    enableTelepathy = config.tomahawk.enableTelepathy or false;
+  };
 
   torchat = callPackage ../applications/networking/instant-messengers/torchat {
     wrapPython = pythonPackages.wrapPython;
