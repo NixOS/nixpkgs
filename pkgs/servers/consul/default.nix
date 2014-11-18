@@ -1,8 +1,9 @@
 { stdenv, lib, go, fetchgit, fetchhg, fetchbzr, fetchFromGitHub
-, ruby, rubyPackages, nodejs }:
+, ruby, rubyPackages, nodejs, loadRubyEnv }:
 
 let
   version = "0.4.0";
+  rubyEnv = loadRubyEnv { gemset = ./gemset.nix; };
 in
 
 with lib;
@@ -13,13 +14,7 @@ stdenv.mkDerivation {
     inherit stdenv lib fetchgit fetchhg fetchbzr fetchFromGitHub;
   };
 
-  buildInputs = [ go ruby rubyPackages.sass nodejs ];
-
-  configurePhase = flip concatMapStrings
-    (with rubyPackages; [ execjs json minitest rake rdoc sass uglifier ])
-    (gem: ''
-      export GEM_PATH="$GEM_PATH:${gem}/${ruby.gemPath}"
-    '');
+  buildInputs = [ go ruby rubyEnv.sass rubyEnv.uglifier nodejs ];
 
   buildPhase = ''
     # Build consul binary
