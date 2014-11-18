@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.zaphoyd.com/websocketpp/";
     description = "C++/Boost Asio based websocket client/server library";
-    license = stdenv.lib.licenses.BSD3;
+    license = stdenv.lib.licenses.bsd3;
   };
 }
