@@ -7454,6 +7454,7 @@ let
   net_snmp = callPackage ../servers/monitoring/net-snmp { };
 
   riemann = callPackage ../servers/monitoring/riemann { };
+  riemann-dash = callPackage ../servers/monitoring/riemann-dash { };
 
   oidentd = callPackage ../servers/identd/oidentd { };
 

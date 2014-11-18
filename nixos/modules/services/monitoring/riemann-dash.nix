@@ -15,7 +15,7 @@ let
 
   launcher = writeScriptBin "riemann-dash" ''
     #!/bin/sh
-    exec ${rubyPackages.riemann_dash}/bin/riemann-dash ${conf}
+    exec ${pkgs.riemann-dash}/bin/riemann-dash ${conf}
   '';
 
 in {
