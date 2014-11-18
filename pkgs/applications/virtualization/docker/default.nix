@@ -3,11 +3,11 @@ btrfsProgs, iptables, bash, e2fsprogs, xz}:
 
 stdenv.mkDerivation rec {
   name = "docker-${version}";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchurl {
     url = "https://github.com/dotcloud/docker/archive/v${version}.tar.gz";
-    sha256 = "09bn88i8acv7kw39js1p7mgf3sglq7d782xnafkp0i97svf0x4y9";
+    sha256 = "0w1gz1apkcrmhgng2rkkzy7wmxm68zgs6a16bi4cx3a38n4mgday";
   };
 
   buildInputs = [ makeWrapper go sqlite lxc iproute bridge_utils devicemapper btrfsProgs iptables e2fsprogs];
