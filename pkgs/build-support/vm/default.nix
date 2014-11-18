@@ -52,11 +52,11 @@ rec {
 
   createDeviceNodes = dev:
     ''
-      mknod ${dev}/null    c 1 3
-      mknod ${dev}/zero    c 1 5
-      mknod ${dev}/random  c 1 8
-      mknod ${dev}/urandom c 1 9
-      mknod ${dev}/tty     c 5 0
+      mknod -m 666 ${dev}/null    c 1 3
+      mknod -m 666 ${dev}/zero    c 1 5
+      mknod -m 666 ${dev}/random  c 1 8
+      mknod -m 666 ${dev}/urandom c 1 9
+      mknod -m 666 ${dev}/tty     c 5 0
       mknod ${dev}/rtc     c 254 0
       . /sys/class/block/${hd}/uevent
       mknod ${dev}/${hd} b $MAJOR $MINOR
@@ -118,7 +118,7 @@ rec {
     mount -t 9p store /fs/nix/store -o trans=virtio,version=9p2000.L,msize=262144,cache=loose
 
     mkdir -p /fs/tmp
-    mount -t tmpfs -o "mode=755" none /fs/tmp
+    mount -t tmpfs -o "mode=1777" none /fs/tmp
 
     echo "mounting host's temporary directory..."
     mkdir -p /fs/tmp/xchg
