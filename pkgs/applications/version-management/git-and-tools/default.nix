@@ -73,7 +73,7 @@ rec {
   };
 
   hub = import ./hub {
-    inherit (rubyPackages) rake;
+    inherit buildRubyGem;
     inherit stdenv fetchurl groff makeWrapper;
   };
 

@@ -1,5 +1,9 @@
-{ stdenv, fetchurl, groff, rake, makeWrapper }:
+{ stdenv, fetchurl, groff, buildRubyGem, makeWrapper }:
 
+let rake = buildRubyGem {
+  name = "rake-10.3.2";
+  sha256 = "0nvpkjrpsk8xxnij2wd1cdn6arja9q11sxx4aq4fz18bc6fss15m";
+}; in
 stdenv.mkDerivation rec {
   name = "hub-${version}";
   version = "1.12.2";
