@@ -5605,11 +5605,6 @@ let
               libgnomeprintui GConf gnomepanel;
   };
 
-  gtksourceviewsharp = callPackage ../development/libraries/gtksourceview-sharp {
-    inherit (gnome) gtksourceview;
-    gtksharp = gtk-sharp;
-  };
-
   gtkspell = callPackage ../development/libraries/gtkspell { };
 
   gtkspell3 = callPackage ../development/libraries/gtkspell/3.nix { };
