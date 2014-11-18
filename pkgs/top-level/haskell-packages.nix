@@ -1026,6 +1026,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   groupoids = callPackage ../development/libraries/haskell/groupoids {};
 
+  h-booru = callPackage ../development/libraries/haskell/h-booru {};
+
   hakyll = callPackage ../development/libraries/haskell/hakyll {};
 
   hamlet = callPackage ../development/libraries/haskell/hamlet {};
