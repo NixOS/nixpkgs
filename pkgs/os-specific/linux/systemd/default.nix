@@ -2,6 +2,8 @@
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux
 , glib, kbd, libxslt, coreutils, libgcrypt, sysvtools
 , kexectools, libmicrohttpd, linuxHeaders
+, automake113x
+, autoconf
 , pythonPackages ? null, pythonSupport ? false
 }:
 
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig intltool gperf libcap kmod xz pam acl
       /* cryptsetup */ libuuid m4 glib libxslt libgcrypt
-      libmicrohttpd linuxHeaders
+      libmicrohttpd linuxHeaders automake113x autoconf
     ] ++ stdenv.lib.optionals pythonSupport [pythonPackages.python pythonPackages.lxml];
 
   configureFlags =
