@@ -1,11 +1,11 @@
 {stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "symbola-7.17";
+  name = "symbola-7.18";
 
   src = fetchurl {
     url = "http://users.teilar.gr/~g1951d/Symbola.zip";
-    sha256 = "19q5wcqk1rz8ps7jvvx1rai6x8ais79z71sm8d36hvsk2vr135al";
+    sha256 = "1dk0qawlgdfh58pz2wb80rs9h8m20nmnr4bhk6jmva8201ixz62f";
   };
   docs_pdf = fetchurl {
     url = "http://users.teilar.gr/~g1951d/Symbola.pdf";
