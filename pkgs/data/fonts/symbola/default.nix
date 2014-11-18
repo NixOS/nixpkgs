@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
   docs_pdf = fetchurl {
     url = "http://users.teilar.gr/~g1951d/Symbola.pdf";
-    sha256 = "11h2202p1p4np4nv5m8k41wk7431p2m35sjpmbi1ygizakkbla3p";
+    sha256 = "16f37fsi2zyy3ka409g3m5d9c09l0ba3rqkz912j90p4588dvk85";
   };
 
   buildInputs = [ unzip ];
