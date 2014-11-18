@@ -69,5 +69,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor the-kenny ];
+    broken = true; # requires Perl 5.14
   };
 }

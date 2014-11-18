@@ -4000,8 +4000,6 @@ let
 
   ocropus = callPackage ../applications/misc/ocropus { };
 
-  perl514 = callPackage ../development/interpreters/perl/5.14 { };
-
   perl516 = callPackage ../development/interpreters/perl/5.16 { };
 
   perl520 = callPackage ../development/interpreters/perl/5.20 {
@@ -7237,14 +7235,6 @@ let
     inherit pkgs;
     overrides = (config.perlPackageOverrides or (p: {})) pkgs;
   });
-
-  perl514Packages = import ./perl-packages.nix {
-    pkgs = pkgs // {
-      perl = perl514;
-      buildPerlPackage = import ../development/perl-modules/generic perl514;
-    };
-    overrides = (config.perl514PackageOverrides or (p: {})) pkgs;
-  };
 
   perlXMLParser = perlPackages.XMLParser;
 
@@ -10581,11 +10571,7 @@ let
 
   lightdm_gtk_greeter = callPackage ../applications/display-managers/lightdm-gtk-greeter { };
 
-  # slic3r 0.9.10b says: "Running Slic3r under Perl >= 5.16 is not supported nor recommended"
-  slic3r = callPackage ../applications/misc/slic3r {
-    perlPackages = perl514Packages;
-    perl = perl514;
-  };
+  slic3r = callPackage ../applications/misc/slic3r { };
 
   curaengine = callPackage ../applications/misc/curaengine { };
 
