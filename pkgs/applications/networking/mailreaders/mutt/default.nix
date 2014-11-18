@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   patches = [] ++
     (stdenv.lib.optional withSidebar (fetchurl {
       url = http://lunar-linux.org/~tchan/mutt/patch-1.5.23.sidebar.20140412.txt;
-      sha256 = "0bq556sycl0qkr5vg5c3l16bh2bifqc2j7d64n4hw19q0ba2b45w";
+      sha256 = "1i2r7dj0pd1k0z3jjxn2szi6sf0k28i8dwhr4f65pn8r2lh3wisz";
     }));
 
   meta = with stdenv.lib; {
