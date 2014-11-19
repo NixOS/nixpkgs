@@ -11,11 +11,15 @@ let
     cfg.extraClasspathEntries ++ [ "${riemann}/share/java/riemann.jar" ]
   );
 
+  riemannConfig = concatStringsSep "\n" (
+    [cfg.config] ++ (map (f: ''(load-file "${f}")'') cfg.configFiles)
+  );
+
   launcher = writeScriptBin "riemann" ''
     #!/bin/sh
     exec ${openjdk}/bin/java ${concatStringsSep "\n" cfg.extraJavaOpts} \
       -cp ${classpath} \
-      riemann.bin ${writeText "riemann.config" cfg.config}
+      riemann.bin ${writeText "riemann-config.clj" riemannConfig}
   '';
 
 in {
@@ -34,6 +38,16 @@ in {
         type = types.lines;
         description = ''
           Contents of the Riemann configuration file.
+        '';
+      };
+      configFiles = mkOption {
+        type = with types; listOf path;
+        default = [];
+        description = ''
+          Extra files containing Riemann configuration. These files will be
+          loaded at runtime by Riemann (with Clojure's
+          <literal>load-file</literal> function) at the end of the
+          configuration.
         '';
       };
       extraClasspathEntries = mkOption {
