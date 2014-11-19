@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
 
   patches =
     [ ./glib-2.32.patch
+      ./qt-5.3-tzdir.patch
       (substituteAll {
         src = ./qt-5.2-dlopen-absolute-paths.patch;
         inherit cups icu libXfixes;
