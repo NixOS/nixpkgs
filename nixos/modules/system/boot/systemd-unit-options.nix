@@ -140,6 +140,15 @@ in rec {
       '';
     };
 
+    requisite = mkOption {
+      default = [];
+      type = types.listOf types.str;
+      description = ''
+        Similar to requires. However if the units listed are not started,
+        they will not be started and the transaction will fail.
+      '';
+    };
+
     unitConfig = mkOption {
       default = {};
       example = { RequiresMountsFor = "/data"; };

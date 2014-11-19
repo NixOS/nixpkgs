@@ -581,8 +581,8 @@ in
           { description = "Networking Setup";
 
             after = [ "network-interfaces.target" ];
-            before = [ "network.target" ];
-            wantedBy = [ "network.target" ];
+            before = [ "network.target" "network-online.target" ];
+            wantedBy = [ "network.target" "network-online.target" ];
 
             unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 
@@ -592,7 +592,7 @@ in
             serviceConfig.RemainAfterExit = true;
 
             script =
-              ''
+              (optionalString (!config.services.resolved.enable) ''
                 # Set the static DNS configuration, if given.
                 ${pkgs.openresolv}/sbin/resolvconf -m 1 -a static <<EOF
                 ${optionalString (cfg.nameservers != [] && cfg.domain != "") ''
@@ -603,7 +603,7 @@ in
                   nameserver ${ns}
                 '')}
                 EOF
-
+              '') + ''
                 # Disable or enable IPv6.
                 ${optionalString (!config.boot.isContainer) ''
                   if [ -e /proc/sys/net/ipv6/conf/all/disable_ipv6 ]; then

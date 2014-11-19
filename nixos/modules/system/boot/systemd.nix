@@ -98,6 +98,9 @@ let
 
       # Networking
       "systemd-networkd.service"
+      "systemd-networkd-wait-online.service"
+      "systemd-resolved.service"
+      "systemd-timesyncd.service"
 
       # Filesystems.
       "systemd-fsck@.service"
@@ -215,6 +218,8 @@ let
           { PartOf = toString config.partOf; }
         // optionalAttrs (config.conflicts != [])
           { Conflicts = toString config.conflicts; }
+        // optionalAttrs (config.requisite != [])
+          { Requisite = toString config.requisite; }
         // optionalAttrs (config.restartTriggers != [])
           { X-Restart-Triggers = toString config.restartTriggers; }
         // optionalAttrs (config.description != "") {
@@ -568,8 +573,9 @@ let
         mkdir -p $out/getty.target.wants/
         ln -s ../autovt@tty1.service $out/getty.target.wants/
 
-        ln -s ../local-fs.target ../remote-fs.target ../network.target ../nss-lookup.target \
-              ../nss-user-lookup.target ../swap.target $out/multi-user.target.wants/
+        ln -s ../local-fs.target ../remote-fs.target ../network.target \
+        ../nss-lookup.target ../nss-user-lookup.target ../swap.target \
+        $out/multi-user.target.wants/
       ''}
     ''; # */
 
@@ -786,6 +792,22 @@ in
       '';
     };
 
+    services.resolved.enable = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Enables the systemd dns resolver daemon.
+      '';
+    };
+
+    services.timesyncd.enable = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Enables the systemd ntp client daemon.
+      '';
+    };
+
     systemd.tmpfiles.rules = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -842,7 +864,7 @@ in
 
   ###### implementation
 
-  config = {
+  config = mkMerge [ {
 
     warnings = concatLists (mapAttrsToList (name: service:
       optional (service.serviceConfig.Type or "" == "oneshot" && service.serviceConfig.Restart or "no" != "no")
@@ -949,14 +971,6 @@ in
     users.extraUsers.systemd-journal-gateway.uid = config.ids.uids.systemd-journal-gateway;
     users.extraGroups.systemd-journal-gateway.gid = config.ids.gids.systemd-journal-gateway;
 
-    # Networkd
-    users.extraUsers.systemd-network.uid = config.ids.uids.systemd-network;
-    users.extraGroups.systemd-network.gid = config.ids.gids.systemd-network;
-    systemd.services.systemd-networkd.wantedBy =
-      optional config.systemd.network.enable "multi-user.target";
-    systemd.services.systemd-networkd.restartTriggers =
-      [ config.environment.etc."systemd/network".source ];
-
     # Generate timer units for all services that have a ‘startAt’ value.
     systemd.timers =
       mapAttrs (name: service:
@@ -990,5 +1004,62 @@ in
     systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-journal-flush.restartIfChanged = false;
 
-  };
+  }
+  (mkIf config.systemd.network.enable {
+    users.extraUsers.systemd-network.uid = config.ids.uids.systemd-network;
+    users.extraGroups.systemd-network.gid = config.ids.gids.systemd-network;
+
+    systemd.services.systemd-networkd = {
+      wantedBy = [ "multi-user.target" ];
+      restartTriggers = [ config.environment.etc."systemd/network".source ];
+    };
+
+    systemd.services.systemd-networkd-wait-online.wantedBy = [ "network-online.target" ];
+
+    systemd.services."systemd-network-wait-online@" = {
+      description = "Wait for Network Interface %I to be Configured";
+      conflicts = [ "shutdown.target" ];
+      requisite = [ "systemd-networkd.service" ];
+      after = [ "systemd-networkd.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online -i %I";
+      };
+    };
+
+    services.resolved.enable = mkDefault true;
+    services.timesyncd.enable = mkDefault config.services.ntp.enable;
+  })
+  (mkIf config.services.resolved.enable {
+    users.extraUsers.systemd-resolve.uid = config.ids.uids.systemd-resolve;
+    users.extraGroups.systemd-resolve.gid = config.ids.gids.systemd-resolve;
+
+    systemd.services.systemd-resolved = {
+      wantedBy = [ "multi-user.target" ];
+      restartTriggers = [ config.environment.etc."systemd/resolved.conf".source ];
+    };
+
+    environment.etc."systemd/resolved.conf".text = ''
+      [Resolve]
+      DNS=${concatStringsSep " " config.networking.nameservers}
+    '';
+  })
+  (mkIf config.services.timesyncd.enable {
+    users.extraUsers.systemd-timesync.uid = config.ids.uids.systemd-timesync;
+    users.extraGroups.systemd-timesync.gid = config.ids.gids.systemd-timesync;
+
+    systemd.services.systemd-timesyncd = {
+      wantedBy = [ "sysinit.target" ];
+      restartTriggers = [ config.environment.etc."systemd/timesyncd.conf".source ];
+    };
+
+    environment.etc."systemd/timesyncd.conf".text = ''
+      [Time]
+      NTP=${concatStringsSep " " config.services.ntp.servers}
+    '';
+
+    systemd.services.ntpd.enable = false;
+  })
+  ];
 }
