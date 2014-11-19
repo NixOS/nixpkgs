@@ -9787,9 +9787,7 @@ let
     libpng = libpng12;
   };
 
-  gosmore = builderDefsPackage ../applications/misc/gosmore {
-    inherit fetchsvn curl pkgconfig libxml2 gtk;
-  };
+  gosmore = callPackage ../applications/misc/gosmore { };
 
   gpsbabel = callPackage ../applications/misc/gpsbabel { };
 
@@ -10222,7 +10220,6 @@ let
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
   mutt-with-sidebar = callPackage ../applications/networking/mailreaders/mutt {
     withSidebar = true;
-    automake = automake113x;
   };
 
   namecoin = callPackage ../applications/misc/namecoin { };
