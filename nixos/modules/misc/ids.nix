@@ -159,9 +159,9 @@
       prosody = 149;
       i2pd = 150;
       dnscrypt-proxy = 151;
-      systemd-networkd = 152;
-      systemd-resolved = 153;
-      systemd-timesyncd = 154;
+      systemd-network = 152;
+      systemd-resolve = 153;
+      systemd-timesync = 154;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -287,9 +287,9 @@
       seeks = 148;
       prosody = 149;
       i2pd = 150;
-      systemd-networkd = 152;
-      systemd-resolved = 153;
-      systemd-timesyncd = 154;
+      systemd-network = 152;
+      systemd-resolve = 153;
+      systemd-timesync = 154;
 
       # When adding a gid, make sure it doesn't match an existing uid. And don't use gids above 399!
 
