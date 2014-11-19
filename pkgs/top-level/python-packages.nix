@@ -1695,7 +1695,7 @@ let
 
     meta = with stdenv.lib; {
       homepage = https://github.com/alex/pretend;
-      license = licenses.bsd;
+      license = licenses.bsd3;
     };
   };
 
