@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.42";
+  version = "0.43";
   name = "gource-${version}";
 
   src = fetchurl {
     url = "https://github.com/acaudwell/Gource/releases/download/${name}/${name}.tar.gz";
-    sha256 = "08ab57z44y8b5wxg1193j6hiy50njbpi6dwafjh6nb0apcq8ziz5";
+    sha256 = "1r5x9ai86f609hf584n0xaf5hxkbilj5qihn89v7ghpmwk40m945";
   };
 
   buildInputs = [
@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-fpermissive"; # fix build with newer gcc versions
 
-  meta = {
-    homepage = "http://code.google.com/p/gource/";
-    description = "software version control visualization tool";
-    license = stdenv.lib.licenses.gpl3Plus;
+  meta = with stdenv.lib; {
+    homepage = http://code.google.com/p/gource/;
+    description = "A Software version control visualization tool";
+    license = licenses.gpl3Plus;
     longDescription = ''
       Software projects are displayed by Gource as an animated tree with
       the root directory of the project at its centre. Directories
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
       Mercurial and Bazaar and SVN. Gource can also parse logs produced
       by several third party tools for CVS repositories.
     '';
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pSub ];
   };
 }
