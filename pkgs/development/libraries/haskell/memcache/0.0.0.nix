@@ -1,6 +1,6 @@
-{ haskellPackages ? (import <nixpkgs> {}).haskellPackages }:
+{ cabal, binary, blazeBuilder, network }:
 
-with haskellPackages; cabal.mkDerivation (self: {
+cabal.mkDerivation (self: {
   pname = "memcache";
   version = "0.0.0";
   sha256 = "0bwnr28wn5anc2bcg2fwci3rgn2ykxp1gg58qg97d7lw1djmikwr";
