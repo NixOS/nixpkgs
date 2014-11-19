@@ -988,6 +988,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   gnutls = callPackage ../development/libraries/haskell/gnutls { inherit (pkgs) gnutls; };
 
+  greencard = callPackage ../development/libraries/haskell/greencard { };
+
   gsasl = callPackage ../development/libraries/haskell/gsasl { inherit (pkgs) gsasl; };
 
   gtk = callPackage ../development/libraries/haskell/gtk {
