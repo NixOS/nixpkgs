@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     homepage = http://dolphin-emu.org/;
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARM";
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ MP2E ];
   };
 }
