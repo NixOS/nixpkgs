@@ -7,6 +7,11 @@
 with lib;
 
 let
+  # Timeout in syslinux is in units of 1/10 of a second.
+  # 0 is used to disable timeouts.
+  syslinuxTimeout = max (config.boot.loader.grub.timeout * 10) 1;
+
+  max = x: y: if x > y then x else y;
 
   # The configuration file for syslinux.
 
@@ -23,11 +28,12 @@ let
 
   isolinuxCfg =
     ''
-    TIMEOUT ${builtins.toString config.boot.loader.grub.timeout}
     SERIAL 0 38400
+    TIMEOUT ${builtins.toString syslinuxTimeout}
     UI vesamenu.c32
     MENU TITLE NixOS
     MENU BACKGROUND /isolinux/background.png
+    DEFAULT boot
 
     LABEL boot
     MENU LABEL NixOS ${config.system.nixosVersion} Installer
