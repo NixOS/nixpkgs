@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       compared to an equivalent Java application.
     '';
     homepage = http://www.scala-lang.org/;
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.all;
     branch = "2.10";
   };
