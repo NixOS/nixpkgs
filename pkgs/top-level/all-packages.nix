@@ -4470,6 +4470,8 @@ let
 
   findbugs = callPackage ../development/tools/analysis/findbugs { };
 
+  flow = callPackage ../development/tools/analysis/flow { };
+
   pmd = callPackage ../development/tools/analysis/pmd { };
 
   jdepend = callPackage ../development/tools/analysis/jdepend { };
