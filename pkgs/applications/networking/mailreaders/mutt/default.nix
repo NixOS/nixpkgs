@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, which, perl, automake, autoconf
+{ stdenv, fetchurl, ncurses, which, perl, autoreconfHook
 , sslSupport ? true
 , imapSupport ? true
 , headerCache ? true
@@ -14,6 +14,7 @@
 assert headerCache -> gdbm != null;
 assert sslSupport -> openssl != null;
 assert saslSupport -> cyrus_sasl != null;
+assert gpgmeSupport -> gpgme != null;
 
 let
   version = "1.5.23";
@@ -26,15 +27,14 @@ stdenv.mkDerivation rec {
     sha256 = "0dzx4qk50pjfsb6cs5jahng96a52k12f7pm0sc78iqdrawg71w1s";
   };
 
-  buildInputs = [
-    ncurses which perl
-    (if headerCache then gdbm else null)
-    (if sslSupport then openssl else null)
-    (if saslSupport then cyrus_sasl else null)
-    (if gpgmeSupport then gpgme else null)
-  ]
-  ++ (stdenv.lib.optionals withSidebar [automake autoconf])
-  ;
+  buildInputs = with stdenv.lib;
+    [ ncurses which perl ]
+    ++ optional headerCache gdbm
+    ++ optional sslSupport openssl
+    ++ optional saslSupport cyrus_sasl
+    ++ optional gpgmeSupport gpgme;
+
+  nativeBuildInputs = stdenv.lib.optional withSidebar autoreconfHook;
 
   configureFlags = [
     "--with-mailpath=" "--enable-smtp"
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   patches = [] ++
     (stdenv.lib.optional withSidebar (fetchurl {
       url = http://lunar-linux.org/~tchan/mutt/patch-1.5.23.sidebar.20140412.txt;
-      sha256 = "0bq556sycl0qkr5vg5c3l16bh2bifqc2j7d64n4hw19q0ba2b45w";
+      sha256 = "1i2r7dj0pd1k0z3jjxn2szi6sf0k28i8dwhr4f65pn8r2lh3wisz";
     }));
 
   meta = with stdenv.lib; {
