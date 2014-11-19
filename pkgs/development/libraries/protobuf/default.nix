@@ -1,28 +1,41 @@
-{ fetchurl, stdenv, zlib }:
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, zlib, gtest }:
 
 stdenv.mkDerivation rec {
-  name = "protobuf-2.5.0";
+  name = "protobuf-${version}";
+  version = "2.6.1";
 
-  src = fetchurl {
-    url = "http://protobuf.googlecode.com/files/${name}.tar.bz2";
-    sha256 = "0xxn9gxhvsgzz2sgmihzf6pf75clr05mqj6218camwrwajpcbgqk";
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "protobuf";
+    rev = version;
+    sha256 = "03df8zvx2sry3jz2x4pi3l32qyfqa7w8kj8jdbz30nzy0h7aa070";
   };
 
-  buildInputs = [ zlib ];
+  postPatch = ''
+    sed -i -e '/gtest/d' Makefile.am
+    sed -i \
+      -e 's!\$(top_\(build\|src\)dir)/gtest!${gtest}!g' \
+      -e 's/\(libgtest[^.]*\.\)la/\1a/g' \
+      src/Makefile.am
+  '';
+
+  buildInputs = [ zlib autoconf automake libtool gtest ];
+
+  preConfigure = "autoreconf -vfi";
 
   doCheck = true;
 
   meta = {
     description = "Protocol Buffers - Google's data interchange format";
 
-    longDescription =
-      '' Protocol Buffers are a way of encoding structured data in an
-         efficient yet extensible format.  Google uses Protocol Buffers for
-         almost all of its internal RPC protocols and file formats.
-      '';
+    longDescription = ''
+      Protocol Buffers are a way of encoding structured data in an
+      efficient yet extensible format. Google uses Protocol Buffers for
+      almost all of its internal RPC protocols and file formats.
+    '';
 
-    license = "mBSD";
+    license = stdenv.lib.licenses.bsd3;
 
-    homepage = http://code.google.com/p/protobuf/;
+    homepage = "https://developers.google.com/protocol-buffers/";
   };
 }
