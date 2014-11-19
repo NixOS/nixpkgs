@@ -1,4 +1,12 @@
-import ./make-test.nix ({ pkgs, ... }: rec {
+import ./make-test.nix (
+{ pkgs
+, channelMap ? {
+    stable = pkgs.chromium;
+    beta   = pkgs.chromiumBeta;
+    dev    = pkgs.chromiumDev;
+  }
+, ...
+}: rec {
   name = "chromium";
 
   machine.imports = [ ./common/x11.nix ];
@@ -116,11 +124,10 @@ import ./make-test.nix ({ pkgs, ... }: rec {
       $machine->shutdown;
     }
 
-    for (
-      ["stable", "${pkgs.chromium}"],
-      ["beta",   "${pkgs.chromiumBeta}"],
-      ["dev",    "${pkgs.chromiumDev}"]
-    ) {
+    for (${let
+      mkArray = name: pkg: "[\"${name}\", \"${pkg}\"]";
+      chanArrays = pkgs.lib.mapAttrsToList mkArray channelMap;
+    in pkgs.lib.concatStringsSep ", " chanArrays}) {
       my ($channel, $pkg) = @$_;
       chromiumTest $channel, $pkg, sub {
         testNewWin "check sandbox", sub {
