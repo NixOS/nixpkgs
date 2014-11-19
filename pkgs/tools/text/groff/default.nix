@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ghostscript, perl, groff }:
 
 stdenv.mkDerivation rec {
-  name = "groff-1.22.2";
+  name = "groff-1.22.3";
 
   src = fetchurl {
     url = "mirror://gnu/groff/${name}.tar.gz";
-    sha256 = "0xi07nhj5vdgax37rj25mwxzdmsz1ifx50hjgc6hqbkpqkd6821q";
+    sha256 = "1998v2kcs288d3y7kfxpvl369nqi06zbbvjzafyvyl3pr7bajj1s";
   };
 
   buildInputs = [ ghostscript ];
@@ -36,11 +36,12 @@ stdenv.mkDerivation rec {
       find $out/share/doc/${name} -type f -print0 | xargs -0 sed -i -e 's/%%CreationDate: .*//'
     '';
 
-  meta = {
-    homepage = "http://www.gnu.org/software/groff/";
+  meta = with stdenv.lib; {
+    homepage = http://www.gnu.org/software/groff/;
     description = "GNU Troff, a typesetting package that reads plain text and produces formatted output";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ pSub ];
 
     longDescription = ''
       groff is the GNU implementation of troff, a document formatting
