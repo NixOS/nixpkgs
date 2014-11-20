@@ -10965,6 +10965,7 @@ let
     vaapi = null;
     libva = null;
     libwebp = null;
+    xwayland = null;
   };
 
   weston = callPackage ../applications/window-managers/weston {
