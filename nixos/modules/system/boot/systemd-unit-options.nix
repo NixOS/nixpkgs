@@ -832,6 +832,30 @@ in rec {
       '';
     };
 
+    name = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        The name of the network interface to match against.
+      '';
+    };
+
+    DHCP = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Whether to enable DHCP on the interfaces matched.
+      '';
+    };
+
+    domains = mkOption {
+      type = types.nullOr (types.listOf types.str);
+      default = null;
+      description = ''
+        A list of domains to pass to the network config.
+      '';
+    };
+
     address = mkOption {
       default = [ ];
       type = types.listOf types.str;

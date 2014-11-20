@@ -300,6 +300,19 @@ let
     };
   };
 
+  networkConfig = { name, config, ... }: {
+    config = {
+      matchConfig = optionalAttrs (config.name != null) {
+        Name = config.name;
+      };
+      networkConfig = optionalAttrs (config.DHCP != null) {
+        DHCP = config.DHCP;
+      } // optionalAttrs (config.domains != null) {
+        Domains = concatStringsSep " " config.domains;
+      };
+    };
+  };
+
   toOption = x:
     if x == true then "true"
     else if x == false then "false"
@@ -693,7 +706,7 @@ in
     systemd.network.networks = mkOption {
       default = {};
       type = types.attrsOf types.optionSet;
-      options = [ networkOptions ];
+      options = [ networkOptions networkConfig ];
       description = "Definiton of systemd networks.";
     };
 
