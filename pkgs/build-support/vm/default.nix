@@ -1511,6 +1511,40 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
+    ubuntu1410i386 = {
+      name = "ubuntu-14.10-utopic-i386";
+      fullName = "Ubuntu 14.10 Utopic (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/utopic/main/binary-i386/Packages.bz2;
+            sha256 = "d703032d9291783772c790c17d428ea6cf6d04c3baac5159e623ae60b681e64e";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/utopic/universe/binary-i386/Packages.bz2;
+            sha256 = "cc9232b7fd937bd8894ad6daf28bd4b2a7428e09a0c1661c708e846b3af24ec8";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1410x86_64 = {
+      name = "ubuntu-14.10-utopic-amd64";
+      fullName = "Ubuntu 14.10 Utopic (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/utopic/main/binary-amd64/Packages.bz2;
+            sha256 = "56b5cce1a2c8ae1ea46b1d4c50345f0fc8f1108a8db27f6dd8409d566eb517c9";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/utopic/universe/binary-amd64/Packages.bz2;
+            sha256 = "66ca2bf3363b4b45b97e5f5047bd736947d672c31693ed78bacd36e63b19bb63";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
     debian40i386 = {
       name = "debian-4.0r9-etch-i386";
       fullName = "Debian 4.0r9 Etch (i386)";
