@@ -89,6 +89,7 @@
   ./services/audio/alsa.nix
   # Disabled as fuppes it does no longer builds.
   # ./services/audio/fuppes.nix
+  ./services/audio/liquidsoap.nix
   ./services/audio/mpd.nix
   ./services/audio/mopidy.nix
   ./services/backup/almir.nix

@@ -162,6 +162,7 @@
       systemd-network = 152;
       systemd-resolve = 153;
       systemd-timesync = 154;
+      liquidsoap = 155;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -290,6 +291,7 @@
       systemd-network = 152;
       systemd-resolve = 153;
       systemd-timesync = 154;
+      liquidsoap = 155;
 
       # When adding a gid, make sure it doesn't match an existing uid. And don't use gids above 399!
 
