@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
     homepage = http://hplipopensource.com/;
     license = if withPlugin
       then licenses.unfree
-      else with stdenv.licenses; [ mit bsd2 gpl2Plus ];
+      else with licenses; [ mit bsd2 gpl2Plus ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ ttuegel jgeerds ];
   };
