@@ -5,6 +5,26 @@ with lib;
 let
   cfg = config.services.hbase;
 
+  configFile = pkgs.writeText "hbase-site.xml" ''
+    <configuration>
+      <property>
+        <name>hbase.rootdir</name>
+        <value>file://${cfg.dataDir}/hbase</value>
+      </property>
+      <property>
+        <name>hbase.zookeeper.property.dataDir</name>
+        <value>${cfg.dataDir}/zookeeper</value>
+      </property>
+    </configuration>
+  '';
+
+  configDir = pkgs.runCommand "hbase-config-dir" {} ''
+    mkdir -p $out
+    cp ${cfg.package}/conf/* $out/
+    rm $out/hbase-site.xml
+    ln -s ${configFile} $out/hbase-site.xml
+  '' ;
+
 in {
 
   ###### interface
@@ -82,11 +102,22 @@ in {
         HBASE_LOG_DIR = cfg.logDir;
       };
 
+      preStart =
+        ''
+        mkdir -p ${cfg.dataDir};
+        mkdir -p ${cfg.logDir};
+
+        if [ "$(id -u)" = 0 ]; then
+          chown ${cfg.user}:${cfg.group} ${cfg.dataDir}
+          chown ${cfg.user}:${cfg.group} ${cfg.logDir}
+        fi
+        '';
+
       serviceConfig = {
         PermissionsStartOnly = true;
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${cfg.package}/bin/hbase master start";
+        ExecStart = "${cfg.package}/bin/hbase --config ${configDir} master start";
       };
     };
 
