@@ -12801,6 +12801,8 @@ let
   youtubeDL = youtube-dl;  # added 2014-10-26
   rdiff_backup = rdiff-backup;  # added 2014-11-23
 
+  opentsdb = callPackage ../tools/misc/opentsdb {};
+
   hbase = callPackage ../servers/hbase {};
 
 }; in self; in pkgs

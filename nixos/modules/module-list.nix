@@ -116,6 +116,7 @@
   ./services/databases/mysql.nix
   ./services/databases/neo4j.nix
   ./services/databases/openldap.nix
+  ./services/databases/opentsdb.nix
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
   ./services/databases/virtuoso.nix
