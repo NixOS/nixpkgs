@@ -6305,6 +6305,8 @@ let
 
   lzo = callPackage ../development/libraries/lzo { };
 
+  matio = callPackage ../development/libraries/matio { };
+
   mdds_0_7_1 = callPackage ../development/libraries/mdds/0.7.1.nix { };
   mdds = callPackage ../development/libraries/mdds { };
 
