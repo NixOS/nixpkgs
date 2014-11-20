@@ -7,10 +7,11 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "bosun-20141114233454";
+  name = "bosun-${version}";
+  version = "20141119233013";
   src = fetchurl {
-    url = https://github.com/bosun-monitor/bosun/archive/20141114233453.tar.gz;
-    sha256 = "0sd4gqfclasdw3z5j67lh2i7gyxyshgakpi9bj0mb3jz3lvcz4wb";
+    url = "https://github.com/bosun-monitor/bosun/archive/${version}.tar.gz";
+    sha256 = "0l16g073ixk42g3jz1r0lhmvssc0k8s1vnr9pvgxs897rzpdjjm1";
   };
   buildInputs = [ go ];
 
@@ -18,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   buildPhase = ''
     mkdir -p src/github.com/bosun-monitor
-    mv bosun-20141114233453 src/github.com/bosun-monitor/bosun
+    mv bosun-${version} src/github.com/bosun-monitor/bosun
 
     mkdir -p src/github.com/rakyll
     ln -s ${go-fs} src/github.com/rakyll/statik
