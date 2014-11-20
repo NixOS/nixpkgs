@@ -88,13 +88,19 @@ let
       mkdir -p "$widevine/nix-support"
       echo "--register-pepper-plugins='${wvModule}${wvInfo}'" \
         > "$widevine/nix-support/chromium-flags"
+      echo "NIX_CHROMIUM_PLUGIN_PATH_WIDEVINE=$widevine/lib" \
+        > "$widevine/nix-support/chromium-env-vars"
     '';
 
-    passthru.flagsEnabled = let
+    passthru = let
       enabledPlugins = optional enablePepperFlash plugins.flash
                     ++ optional enablePepperPDF   plugins.pdf
                     ++ optional enableWideVine    plugins.widevine;
       getFlags = plugin: "$(< ${plugin}/nix-support/chromium-flags)";
-    in concatStringsSep " " (map getFlags enabledPlugins);
+      getEnvVars = plugin: "$(< ${plugin}/nix-support/chromium-env-vars)";
+    in {
+      flagsEnabled = concatStringsSep " " (map getFlags enabledPlugins);
+      envVarsEnabled = concatStringsSep " " (map getEnvVars enabledPlugins);
+    };
   };
 in plugins

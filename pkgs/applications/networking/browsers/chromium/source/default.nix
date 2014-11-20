@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   prePatch = "patchShebangs .";
 
-  patches = [ ./sandbox_userns_36.patch ];
+  patches = [ ./sandbox_userns_36.patch ./nix_plugin_paths.patch ];
 
   postPatch = ''
     sed -i -r \
