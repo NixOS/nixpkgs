@@ -190,6 +190,7 @@
   ./services/misc/uhub.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/apcupsd.nix
+  ./services/monitoring/bosun.nix
   ./services/monitoring/collectd.nix
   ./services/monitoring/dd-agent.nix
   ./services/monitoring/graphite.nix
