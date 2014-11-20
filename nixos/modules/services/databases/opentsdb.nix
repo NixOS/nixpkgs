@@ -5,6 +5,10 @@ with lib;
 let
   cfg = config.services.opentsdb;
 
+  configFile = pkgs.writeText "opentsdb.conf" ''
+    tsd.core.auto_create_metrics = true
+  '';
+
 in {
 
   ###### interface
@@ -68,12 +72,13 @@ in {
       requires = [ "hbase.service" ];
 
       environment.JAVA_HOME = "${pkgs.jre}";
+      path = [ pkgs.gnuplot ];
 
       serviceConfig = {
         PermissionsStartOnly = true;
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${cfg.package}/bin/tsdb tsd --staticroot=${cfg.package}/share/opentsdb/static --cachedir=/tmp/opentsdb --port=${toString cfg.port}";
+        ExecStart = "${cfg.package}/bin/tsdb tsd --staticroot=${cfg.package}/share/opentsdb/static --cachedir=/tmp/opentsdb --port=${toString cfg.port} --config=${configFile}";
       };
     };
 
