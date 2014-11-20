@@ -2373,10 +2373,10 @@ let
 
   fabric = buildPythonPackage rec {
     name = "fabric-${version}";
-    version = "1.9.1";
+    version = "1.10.0";
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/F/Fabric/Fabric-${version}.tar.gz";
-      sha256 = "103mzf0l15kyvw5nmf7bsdrqg6y3wpyxmkyl2h9lk7jxb5gdc9s1";
+      sha256 = "0nikc05iz1fx2c9pvxrhrs819cpmg566azm99450yq2m8qmp1cpd";
     };
     disabled = isPy3k;
     doCheck = (!isPyPy);  # https://github.com/fabric/fabric/issues/11891
@@ -2414,10 +2414,10 @@ let
   });
 
   fudge = buildPythonPackage rec {
-    name = "fudge-0.9.4";
+    name = "fudge-0.9.6";
     src = pkgs.fetchurl {
-      url = https://pypi.python.org/packages/source/f/fudge/fudge-0.9.4.tar.gz;
-      sha256 = "03sj2x6mpzm48swpa4hnn1gi6yilgniyjfg1ylz95wm1ijggi33w";
+      url = "https://pypi.python.org/packages/source/f/fudge/${name}.tar.gz";
+      sha256 = "185ia3vr3qk4f2s1a9hdxb8ci4qc0x0xidrad96pywg8j930qs9l";
     };
     buildInputs = with self; [ nose nosejs ];
     propagatedBuildInputs = with self; [ sphinx ];
