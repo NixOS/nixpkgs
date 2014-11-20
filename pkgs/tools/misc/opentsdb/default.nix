@@ -1,16 +1,21 @@
-{ stdenv, fetchurl, curl, jdk, jre, makeWrapper, nettools, python }:
+{ stdenv, autoconf, automake, fetchurl, curl, jdk, jre, makeWrapper, nettools, python }:
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "opentsdb-2.0.1";
+  name = "opentsdb-2.1.0-rc1";
 
   src = fetchurl {
-    url = https://github.com/OpenTSDB/opentsdb/releases/download/v2.0.1/opentsdb-2.0.1.tar.gz;
-    sha256 = "1q2gkl72yjzd8yrggl0018m9s8mc9zwnz3d8ias54vqh3irypc2c";
+    url = https://github.com/OpenTSDB/opentsdb/archive/v2.1.0RC1.tar.gz;
+    sha256 = "01li02j8kjanmas2gxkcz3gsn54nyfyvqdylxz3fqqjgg6y7hrm7";
   };
 
-  buildPhase = "find .";
+  buildInputs = [ autoconf automake curl jdk makeWrapper nettools python ];
 
-  buildInputs = [ curl jdk makeWrapper nettools python ];
+  configurePhase = ''
+    ./bootstrap
+    mkdir build
+    cd build
+    ../configure --prefix=$out
+  '';
 
   installPhase = ''
     make install
