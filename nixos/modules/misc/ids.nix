@@ -161,6 +161,7 @@
       dnscrypt-proxy = 151;
       hbase = 152;
       opentsdb = 153;
+      scollector = 154;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -288,6 +289,7 @@
       seeks = 148;
       prosody = 149;
       i2pd = 150;
+      scollector = 151;
 
       # When adding a gid, make sure it doesn't match an existing uid. And don't use gids above 399!
 
