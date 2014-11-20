@@ -5169,6 +5169,8 @@ let
 
   geos = callPackage ../development/libraries/geos { };
 
+  getdata = callPackage ../development/libraries/getdata { };
+
   gettext = gettext_0_18;
 
   gettext_0_17 = callPackage ../development/libraries/gettext/0.17.nix { };
