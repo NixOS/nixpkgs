@@ -86,6 +86,7 @@
   joelteon = "Joel Taylor <me@joelt.io>";
   jpbernardy = "Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>";
   jwiegley = "John Wiegley <johnw@newartisans.com>";
+  jzellner = "Jeff Zellner <jeffz@eml.cc>";
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   koral = "Koral <koral@mailoo.org>";
   kragniz = "Louis Taylor <kragniz@gmail.com>";
