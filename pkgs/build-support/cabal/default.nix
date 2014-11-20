@@ -107,7 +107,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               if "7.8.3" == ghc.version then 
                 ghc783NativePkgsFNames
             else
-                []; // TODO: Should be replace by native packages listing for other ghc versions.
+                []; # TODO: Should be replace by native packages listing for other ghc versions.
 
             isHaskellPkg = x: (x ? pname) && (x ? version);
             isGhcPkg = x: (isHaskellPkg x) && (stdenv.lib.any (ghcPkgFn: x.fname == ghcPkgFn) ghcNativePkgsFNames);
