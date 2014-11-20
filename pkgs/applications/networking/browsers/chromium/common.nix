@@ -69,7 +69,7 @@ let
     use_system_xdg_utils = true;
     use_system_yasm = true;
     use_system_zlib = false;
-    use_system_protobuf = true;
+    use_system_protobuf = versionOlder source.version "40.0.0.0";
 
     use_system_harfbuzz = false;
     use_system_icu = false; # Doesn't support ICU 52 yet.
