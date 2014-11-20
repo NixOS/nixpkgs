@@ -2963,6 +2963,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   validation = callPackage ../development/libraries/haskell/validation {};
 
+  vimus = callPackage ../applications/audio/vimus {};
+
   xlsx = callPackage ../development/libraries/haskell/xlsx {};
 
   xmobar = callPackage ../applications/misc/xmobar {};
