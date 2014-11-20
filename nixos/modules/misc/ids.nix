@@ -160,6 +160,7 @@
       i2pd = 150;
       dnscrypt-proxy = 151;
       hbase = 152;
+      opentsdb = 153;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -280,6 +281,7 @@
       riemann = 137;
       riemanndash = 138;
       hbase = 139;
+      opentsdb = 140;
       uhub = 142;
       mailpile = 146;
       redmine = 147;
