@@ -159,6 +159,7 @@
       prosody = 149;
       i2pd = 150;
       dnscrypt-proxy = 151;
+      hbase = 152;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -278,6 +279,7 @@
       mlmmj = 135;
       riemann = 137;
       riemanndash = 138;
+      hbase = 139;
       uhub = 142;
       mailpile = 146;
       redmine = 147;

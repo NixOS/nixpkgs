@@ -12757,5 +12757,6 @@ let
   jquery_ui = jquery-ui;  # added 2014-09-07
   youtubeDL = youtube-dl;  # added 2014-10-26
 
+  hbase = callPackage ../servers/hbase {};
 
 }; in self; in pkgs
