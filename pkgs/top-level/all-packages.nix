@@ -1545,6 +1545,8 @@ let
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
+  kst = callPackage ../tools/graphics/kst { };
+
   less = callPackage ../tools/misc/less { };
 
   liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix { };
