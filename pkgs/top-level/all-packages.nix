@@ -5852,6 +5852,8 @@ let
 
   liblogging = callPackage ../development/libraries/liblogging { };
 
+  libltc = callPackage ../development/libraries/libltc { };
+
   libmcrypt = callPackage ../development/libraries/libmcrypt {};
 
   libmhash = callPackage ../development/libraries/libmhash {};
