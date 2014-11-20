@@ -6514,11 +6514,29 @@ let
 
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
 
-  phonon = callPackage ../development/libraries/phonon { };
+  phonon = callPackage ../development/libraries/phonon { inherit qt4; };
 
-  phonon_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer { };
+  phonon_qt5 = phonon.override {
+    withQt5 = true;
+    inherit qt5;
+    qt4 = null;
+  };
 
-  phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc { };
+  phonon_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer { inherit qt4; };
+
+  phonon_qt5_backend_gstreamer = phonon_backend_gstreamer.override {
+    withQt5 = true;
+    inherit qt5;
+    qt4 = null;
+  };
+
+  phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc { inherit qt4; };
+
+  phonon_qt5_backend_vlc = phonon_backend_vlc.override {
+    withQt5 = true;
+    inherit qt5;
+    qt4 = null;
+  };
 
   physfs = callPackage ../development/libraries/physfs { };
 
@@ -6536,7 +6554,14 @@ let
     spidermonkey = spidermonkey_185;
   };
 
-  polkit_qt_1 = callPackage ../development/libraries/polkit-qt-1 { };
+  polkit_qt4 = callPackage ../development/libraries/polkit-qt-1 {
+    inherit qt4;
+  };
+
+  polkit_qt5 = callPackage ../development/libraries/polkit-qt-1 {
+    inherit qt5;
+    withQt5 = true;
+  };
 
   policykit = callPackage ../development/libraries/policykit { };
 
@@ -6613,21 +6638,6 @@ let
   qt4SDK = qtcreator.override {
     sdkBuild = true;
     qtLib = qt48Full;
-  };
-
-  qt53Full = appendToName "full" (qt53.override {
-    buildDocs = true;
-    buildExamples = true;
-    buildTests = true;
-    developerBuild = true;
-  });
-
-  qt53 = callPackage ../development/libraries/qt-5/qt-5.3.nix {
-    mesa = mesa_noglu;
-    cups = if stdenv.isLinux then cups else null;
-    # GNOME dependencies are not used unless gtkStyle == true
-    inherit (gnome) libgnomeui GConf gnome_vfs;
-    bison = bison2; # error: too few arguments to function 'int yylex(...
   };
 
   qt5 = callPackage ../development/libraries/qt-5 {
@@ -10885,6 +10895,8 @@ let
   vlc = callPackage ../applications/video/vlc {
     ffmpeg = ffmpeg_2_3;
   };
+
+  libvlc = vlc.override { onlyLibVLC = true; };
 
   vmpk = callPackage ../applications/audio/vmpk { };
 
