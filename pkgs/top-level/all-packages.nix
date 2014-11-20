@@ -5865,7 +5865,7 @@ let
   libnatspec = callPackage ../development/libraries/libnatspec { };
 
   libndp = callPackage ../development/libraries/libndp { };
-  
+
   libnfc = callPackage ../development/libraries/libnfc { };
 
   libnfsidmap = callPackage ../development/libraries/libnfsidmap { };
@@ -7469,6 +7469,9 @@ let
   bind = callPackage ../servers/dns/bind { };
 
   bird = callPackage ../servers/bird { };
+
+  bosun = callPackage ../servers/monitoring/bosun {};
+  scollector = callPackage ../servers/monitoring/bosun/scollector.nix {};
 
   couchdb = callPackage ../servers/http/couchdb {
     spidermonkey = spidermonkey_185;
