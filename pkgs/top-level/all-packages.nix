@@ -1994,6 +1994,8 @@ let
 
   otpw = callPackage ../os-specific/linux/otpw { };
 
+  owncloudclient = callPackage ../applications/networking/owncloud-client { };
+
   p7zip = callPackage ../tools/archivers/p7zip { };
 
   pal = callPackage ../tools/misc/pal { };
