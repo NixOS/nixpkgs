@@ -44,11 +44,11 @@ in {
         '';
       };
 
-      opentsdbHost = mkOption {
+      bosunHost = mkOption {
         type = types.string;
-        default = "localhost:4242";
+        default = "localhost:8070";
         description = ''
-          Host and port of the OpenTSDB database that will store the collected
+          Host and port of the bosun server that will store the collected
           data.
         '';
       };
@@ -70,7 +70,7 @@ in {
         User = cfg.user;
         Group = cfg.group;
         ExecStart = ''
-          ${cfg.package}/bin/scollector -h=${cfg.opentsdbHost}
+          ${cfg.package}/bin/scollector -h=${cfg.bosunHost}
         '';
       };
     };
