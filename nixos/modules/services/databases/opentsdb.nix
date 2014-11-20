@@ -74,6 +74,11 @@ in {
       environment.JAVA_HOME = "${pkgs.jre}";
       path = [ pkgs.gnuplot ];
 
+      preStart =
+        ''
+        COMPRESSION=NONE HBASE_HOME=${config.services.hbase.package} ${cfg.package}/share/opentsdb/tools/create_table.sh
+        '';
+
       serviceConfig = {
         PermissionsStartOnly = true;
         User = cfg.user;
