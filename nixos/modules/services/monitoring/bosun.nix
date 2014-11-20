@@ -10,6 +10,8 @@ let
     httpListen = ${cfg.listenAddress}
     stateFile = ${cfg.stateFile}
     checkFrequency = 5m
+
+    ${cfg.extraConfig}
   '';
 
 in {
@@ -72,6 +74,19 @@ in {
         default = "/var/lib/bosun/bosun.state";
         description = ''
           Path to bosun's state file.
+        '';
+      };
+
+      extraConfig = mkOption {
+        type = types.string;
+        default = "";
+        description = ''
+          Extra configuration options for Bosun. You should describe your
+          desired templates, alerts, macros, etc through this configuration
+          option.
+
+          A detailed description of the supported syntax can be found at-spi2-atk
+          http://bosun.org/configuration.html
         '';
       };
 
