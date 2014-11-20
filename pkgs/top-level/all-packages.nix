@@ -10428,6 +10428,8 @@ let
     inherit (xorg) libXpm;
   };
 
+  pond = callPackage ../applications/networking/pond { };
+
   potrace = callPackage ../applications/graphics/potrace {};
 
   posterazor = callPackage ../applications/misc/posterazor { };
