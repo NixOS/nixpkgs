@@ -1,27 +1,31 @@
 { stdenv, fetchurl, libelf }:
 
 stdenv.mkDerivation rec {
-  name = "libdwarf-20121130";
+  name = "libdwarf-20140805";
   
   src = fetchurl {
-    url = http://reality.sgiweb.org/davea/libdwarf-20121130.tar.gz;
-    sha256 = "1nfdfn5xf3n485pvpb853awyxxnvrg207i0wmrr7bhk8fcxdxbn0";
+    url = "http://www.prevanders.net/${name}.tar.gz";
+    sha256 = "1z5xz0w1yvk8swcqzx4dvnig94j51pns39jmipv5rl20qahik0nl";
   };
 
-  configureFlags = " --enable-shared --disable-nonshared";
+  configureFlags = "--enable-shared";
 
-  preConfigure = ''
-    cd libdwarf
+  preBuild = ''
+    export LD_LIBRARY_PATH=`pwd`/libdwarf
   '';
+
   buildInputs = [ libelf ];
 
   installPhase = ''
-    mkdir -p $out/lib $out/include
-    cp libdwarf.so $out/lib
-    cp libdwarf.h dwarf.h $out/include
+    mkdir -p $out/lib $out/include $out/bin
+    cp ./dwarfdump2/dwarfdump $out/bin/dwarfdump2
+    cp ./dwarfdump/dwarfdump $out/bin/dwarfdump
+    cp libdwarf/libdwarf.so $out/lib
+    cp libdwarf/libdwarf.h libdwarf/dwarf.h $out/include
   '';
 
   meta = {
-    homepage = http://reality.sgiweb.org/davea/dwarf.html;
+    homepage = http://www.prevanders.net/dwarf.html;
+    license = stdenv.lib.licenses.gpl2;
   };
 }
