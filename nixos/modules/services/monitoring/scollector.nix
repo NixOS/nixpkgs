@@ -5,6 +5,21 @@ with lib;
 let
   cfg = config.services.scollector;
 
+  collectors = pkgs.runCommand "collectors" {}
+    ''
+    mkdir -p $out
+    ${lib.concatStringsSep
+        "\n"
+        (lib.mapAttrsToList
+          (frequency: binaries:
+            "mkdir -p $out/${frequency}\n" +
+            (lib.concatStringsSep
+              "\n"
+              (map (path: "ln -s ${path} $out/${frequency}/$(basename ${path})")
+                   binaries)))
+          cfg.collectors)}
+    '';
+
 in {
 
   options = {
@@ -53,6 +68,17 @@ in {
         '';
       };
 
+      collectors = mkOption {
+        type = types.attrs;
+        default = {};
+        example = literalExample "{ 0 = [ \"\${postgresStats}/bin/collect-stats\" ]; }";
+        description = ''
+          An attribute set mapping the frequency of collection to a list of
+          binaries that should be executed at that frequency. You can use "0"
+          to run a binary forever.
+        '';
+      };
+
     };
 
   };
@@ -70,7 +96,7 @@ in {
         User = cfg.user;
         Group = cfg.group;
         ExecStart = ''
-          ${cfg.package}/bin/scollector -h=${cfg.bosunHost}
+          ${cfg.package}/bin/scollector -h=${cfg.bosunHost} -c=${collectors}
         '';
       };
     };
