@@ -8264,7 +8264,7 @@ let
 
     nvidia_x11 = callPackage ../os-specific/linux/nvidia-x11 { };
 
-    nvidia_x11_recent = callPackage ../os-specific/linux/nvidia-x11/shortLivedBranch.nix { };
+    nvidia_x11_stable = callPackage ../os-specific/linux/nvidia-x11/long-lived-branch.nix { };
 
     nvidia_x11_legacy173 = callPackage ../os-specific/linux/nvidia-x11/legacy173.nix { };
     nvidia_x11_legacy304 = callPackage ../os-specific/linux/nvidia-x11/legacy304.nix { };

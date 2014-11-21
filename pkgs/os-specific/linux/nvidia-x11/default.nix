@@ -12,7 +12,7 @@ assert (!libsOnly) -> kernel != null;
 
 let
 
-  versionNumber = "340.58";
+  versionNumber = "346.16";
 
   inherit (stdenv.lib) makeLibraryPath;
 in
@@ -26,12 +26,12 @@ stdenv.mkDerivation {
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}.run";
-        sha256 = "0nzvfqn3cv2n486i38r3badd5jlmfv7x6k9s47calrqnd3q8zi3w";
+        sha256 = "0vrgwb3qr30sq9ald07hxryl00nmyiansaw9bhzrlskgpfn89f7y";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-no-compat32.run";
-        sha256 = "0h78wmb1yyr1xah6x22ifk9gzd2jvg3vhhg091nvyhcvpmbjq806";
+        sha256 = "1f6xazpaxxnr1vi46nz2xqlvw5bw9z2z5a57jf115xhdgrzqf1mf";
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
@@ -56,6 +56,6 @@ stdenv.mkDerivation {
     description = "X.org driver and kernel module for NVIDIA graphics cards";
     license = licenses.unfreeRedistributable;
     platforms = platforms.linux;
-    maintainers = [ maintainers.vcunat ];
+    maintainers = [ maintainers.eduarrrd ];
   };
 }
