@@ -1,20 +1,5 @@
-diff --git a/src/librustc/back/link.rs b/src/librustc/back/link.rs
-index 81f856c..c2078a5 100644
---- a/src/librustc/back/link.rs
-+++ b/src/librustc/back/link.rs
-@@ -361,8 +361,8 @@ pub fn mangle_internal_name_by_path_and_seq(path: PathElems, flav: &str) -> Stri
- 
- pub fn get_cc_prog(sess: &Session) -> String {
-     match sess.opts.cg.linker {
--        Some(ref linker) => return linker.to_string(),
--        None => sess.target.target.options.linker.clone(),
-+        Some(ref linker) => linker.to_string(),
-+        None => "@ccPath@".to_string(),
-     }
- }
- 
 diff --git a/src/librustc_back/archive.rs b/src/librustc_back/archive.rs
-index db2f291..c7a13dc 100644
+index a88bcaf..9c3858d 100644
 --- a/src/librustc_back/archive.rs
 +++ b/src/librustc_back/archive.rs
 @@ -54,7 +54,7 @@ fn run_ar(handler: &ErrorHandler, maybe_ar_prog: &Option<String>,
@@ -25,4 +10,19 @@ index db2f291..c7a13dc 100644
 +        None => "@arPath@"
      };
      let mut cmd = Command::new(ar);
+ 
+diff --git a/src/librustc_trans/back/link.rs b/src/librustc_trans/back/link.rs
+index d27a338..c9b1508 100644
+--- a/src/librustc_trans/back/link.rs
++++ b/src/librustc_trans/back/link.rs
+@@ -361,8 +361,8 @@ pub fn mangle_internal_name_by_path_and_seq(path: PathElems, flav: &str) -> Stri
+ 
+ pub fn get_cc_prog(sess: &Session) -> String {
+     match sess.opts.cg.linker {
+-        Some(ref linker) => return linker.to_string(),
+-        None => sess.target.target.options.linker.clone(),
++        Some(ref linker) => linker.to_string(),
++        None => "@ccPath@".to_string(),
+     }
+ }
  
