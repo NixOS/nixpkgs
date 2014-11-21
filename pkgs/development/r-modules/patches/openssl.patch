@@ -1,0 +1,28 @@
+diff -ru -x '*~' openssl_orig/configure openssl/configure
+--- openssl_orig/configure	2014-10-18 08:14:15.000000000 +0900
++++ openssl/configure	2014-11-03 15:05:25.122906126 +0900
+@@ -1,23 +1 @@
+-# Check for include
+-if [ ! -e /usr/include/openssl/rand.h ]
+-then
+-  echo "openssl/rand.h not found. Make sure libssl-dev (deb) or openssl-devel (rpm) is installed."
+-  exit 1
+-fi
+-
+-# Not linux. Probably OSX.
+-if [ ! -e /sbin/ldconfig ]
+-then
+-  exit 0
+-fi
+-
+-# looks like unix
+-LIBFILE=$(/sbin/ldconfig -p | egrep -ohm1 " [-_a-zA-Z0-9/]*/libssl[0-9]*.so$")
+-
+-if [ -z "$LIBFILE" ]
+-then
+-  echo "libssl.so not found. Make sure libssl-dev (deb) or openssl-devel (rpm) is installed."
+-  exit 1
+-fi
+-
+-echo "PKG_LIBS= -L"$(dirname $LIBFILE)" -lssl -lcrypto" > src/Makevars
++echo "PKG_LIBS= -L"${OPENSSL_HOME}/lib" -lssl -lcrypto" > src/Makevars
