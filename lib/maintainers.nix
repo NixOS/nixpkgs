@@ -7,6 +7,7 @@
   _1126 = "Christian Lask <mail@elfsechsundzwanzig.de>";
   abbradar = "Nikolay Amiantov <ab@fmap.me>";
   aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
+  aherrmann = "Andreas Herrmann <andreash87@gmx.ch>";
   ak = "Alexander Kjeldaas <ak@formalprivacy.com>";
   akc = "Anders Claesson <akc@akc.is>";
   algorith = "Dries Van Daele <dries_van_daele@telenet.be>";
