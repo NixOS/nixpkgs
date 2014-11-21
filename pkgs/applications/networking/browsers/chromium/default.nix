@@ -9,7 +9,6 @@
 , gnomeKeyringSupport ? false
 , proprietaryCodecs ? true
 , enablePepperFlash ? false
-, enablePepperPDF ? false
 , enableWideVine ? false
 , cupsSupport ? false
 , pulseSupport ? false
@@ -36,7 +35,7 @@ let
     sandbox = callPackage ./sandbox.nix { };
 
     plugins = callPackage ./plugins.nix {
-      inherit enablePepperFlash enablePepperPDF enableWideVine;
+      inherit enablePepperFlash enableWideVine;
     };
   };
 
