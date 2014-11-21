@@ -10668,6 +10668,10 @@ let
     apiKey = config.libspotify.apiKey or null;
   };
 
+  src = callPackage ../applications/version-management/src/default.nix {
+    git = gitMinimal;
+  };
+
   stalonetray = callPackage ../applications/window-managers/stalonetray {};
 
   stp = callPackage ../applications/science/logic/stp {};
