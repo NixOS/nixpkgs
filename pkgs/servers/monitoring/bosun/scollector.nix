@@ -24,4 +24,10 @@ in stdenv.mkDerivation rec {
     cp scollector $out/bin
   '';
 
+  meta = with stdenv.lib; {
+    description = "Collect system information and store it in OpenTSDB or Bosun";
+    homepage = http://bosun.org/scollector;
+    license = licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
+  };
 }
