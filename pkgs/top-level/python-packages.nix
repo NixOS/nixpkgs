@@ -601,6 +601,24 @@ let
     };
   };
 
+  backports_lzma = self.buildPythonPackage rec {
+    name = "backports.lzma-0.0.3";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/b/backports.lzma/${name}.tar.gz";
+      md5 = "c3d109746aefa86268e500c07d7e8e0f";
+    };
+
+    buildInputs = [ pkgs.lzma ];
+
+    meta = {
+      describe = "Backport of Python 3.3's 'lzma' module for XZ/LZMA compressed files.";
+      homepage = https://github.com/peterjc/backports.lzma;
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
   babelfish = buildPythonPackage rec {
     version = "0.5.3";
     name = "babelfish-${version}";
@@ -2101,6 +2119,58 @@ let
     meta = {
       description = "An API client for docker written in Python";
       homepage = https://github.com/docker/docker-py;
+      license = licenses.asl20;
+    };
+  };
+
+  docker_registry_core = buildPythonPackage rec {
+    name = "docker-registry-core-2.0.3";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/docker-registry-core/${name}.tar.gz";
+      md5 = "610ef9395f2e9a2f91c68d13325fce7b";
+    };
+
+    DEPS = "loose";
+
+    doCheck = false;
+    propagatedBuildInputs = with self; [
+      boto redis setuptools simplejson
+    ];
+
+    meta = {
+      description = "Docker registry core package";
+      homepage = https://github.com/docker/docker-registry;
+      license = licenses.asl20;
+    };
+  };
+
+  docker_registry = buildPythonPackage rec {
+    name = "docker-registry-0.9.0";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/docker-registry/${name}.tar.gz";
+      md5 = "65eb9fd05b94f7f9fbbb5e2e8ca62912";
+    };
+
+    DEPS = "loose";
+
+    doCheck = false; # requires redis server
+    propagatedBuildInputs = with self; [
+      docker_registry_core blinker flask gevent gunicorn pyyaml
+      requests2 rsa sqlalchemy setuptools backports_lzma pyasn1
+    ];
+
+    # Default config uses needed env variables
+    postInstall = ''
+      ln -s $out/lib/python2.7/site-packages/config/config_sample.yml $out/lib/python2.7/site-packages/config/config.yml
+    '';
+
+    meta = {
+      description = "Docker registry core package";
+      homepage = https://github.com/docker/docker-registry;
       license = licenses.asl20;
     };
   };
