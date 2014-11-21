@@ -6,13 +6,14 @@ let
   dnscrypt-proxy = pkgs.dnscrypt-proxy;
   cfg = config.services.dnscrypt-proxy;
   uid = config.ids.uids.dnscrypt-proxy;
-  daemonArgs = [ "--daemonize"
-                 "--user=dnscrypt-proxy"
-                 "--local-address=${cfg.localAddress}:${toString cfg.port}"
-                 (optionalString cfg.tcpOnly "--tcp-only")
-                 "--resolvers-list=${dnscrypt-proxy}/share/dnscrypt-proxy/dnscrypt-resolvers.csv"
-                 "--resolver-name=${cfg.resolverName}"
-               ];
+  daemonArgs =
+    [ "--daemonize"
+      "--user=dnscrypt-proxy"
+      "--local-address=${cfg.localAddress}:${toString cfg.port}"
+      (optionalString cfg.tcpOnly "--tcp-only")
+      "--resolvers-list=${dnscrypt-proxy}/share/dnscrypt-proxy/dnscrypt-resolvers.csv"
+      "--resolver-name=${cfg.resolverName}"
+    ];
 in
 
 {
