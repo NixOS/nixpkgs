@@ -1,0 +1,12 @@
+diff -ru -x '*~' dbarts_orig/src/Makevars.in dbarts/src/Makevars.in
+--- dbarts_orig/src/Makevars.in	2014-07-01 02:30:57.000000000 +0900
++++ dbarts/src/Makevars.in	2014-10-25 19:25:58.910704279 +0900
+@@ -6,7 +6,7 @@
+ 
+ PKG_CPPFLAGS=-I$(INST_DIR)/include -Iinclude @PTHREAD_CFLAGS@ $(THREAD_SAFE_UNLOAD)
+ PKG_CPPXXFLAGS=-I$(INST_DIR)/include -Iinclude @PTHREAD_CFLAGS@ $(THREAD_SAFE_UNLOAD)
+-PKG_LIBS=$(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS) dbarts/libdbarts.a external/libexternal.a @PTHREAD_LIBS@ 
++PKG_LIBS=dbarts/libdbarts.a external/libexternal.a $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS) @PTHREAD_LIBS@ 
+ 
+ .PHONY: all dbarts/libdbarts.a external/libexternal.a clean
+ 
