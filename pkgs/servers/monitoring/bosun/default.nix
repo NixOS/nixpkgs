@@ -33,4 +33,13 @@ in stdenv.mkDerivation rec {
     cp bosun $out/bin
   '';
 
+  meta = with stdenv.lib; {
+    description = "Time series alerting framework";
+    longDescription = ''
+      An advanced, open-source monitoring and alerting system by Stack Exchange.
+    '';
+    homepage = http://bosun.org;
+    license = licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

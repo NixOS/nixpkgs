@@ -23,4 +23,11 @@ stdenv.mkDerivation rec {
       --set JAVA_HOME "${jre}" \
       --set JAVA "${jre}/bin/java"
   '';
+
+  meta = with stdenv.lib; {
+    description = "Time series database with millisecond precision";
+    homepage = http://opentsdb.net;
+    license = licenses.lgpl21Plus;
+    platforms = stdenv.lib.platforms.linux;
+  };
 }
