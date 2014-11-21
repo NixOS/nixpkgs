@@ -2671,6 +2671,8 @@ let
 
   ttmkfdir = callPackage ../tools/misc/ttmkfdir { };
 
+  udunits = callPackage ../development/libraries/udunits { };
+
   uim = callPackage ../tools/inputmethods/uim {
     inherit (pkgs.kde4) kdelibs;
   };
