@@ -9950,6 +9950,8 @@ let
 
   koji = callPackage ../tools/package-management/koji { };
 
+  kubernetes = callPackage ../applications/networking/cluster/kubernetes { };
+
   lame = callPackage ../applications/audio/lame { };
 
   larswm = callPackage ../applications/window-managers/larswm { };
