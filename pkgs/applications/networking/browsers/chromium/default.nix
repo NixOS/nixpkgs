@@ -9,7 +9,6 @@
 , gnomeKeyringSupport ? false
 , proprietaryCodecs ? true
 , enablePepperFlash ? false
-, enablePepperPDF ? false
 , enableWideVine ? false
 , cupsSupport ? false
 , pulseSupport ? false
@@ -36,7 +35,7 @@ let
     sandbox = callPackage ./sandbox.nix { };
 
     plugins = callPackage ./plugins.nix {
-      inherit enablePepperFlash enablePepperPDF enableWideVine;
+      inherit enablePepperFlash enableWideVine;
     };
   };
 
@@ -74,6 +73,7 @@ in stdenv.mkDerivation {
     ln -s "${chromium.browser}/share" "$out/share"
     makeWrapper "${browserBinary}" "$out/bin/chromium" \
       --set CHROMIUM_SANDBOX_BINARY_PATH "${sandboxBinary}" \
+      --run "export ${chromium.plugins.envVarsEnabled}" \
       --add-flags "${chromium.plugins.flagsEnabled}"
 
     ln -s "$out/bin/chromium" "$out/bin/chromium-browser"

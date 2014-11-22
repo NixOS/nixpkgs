@@ -9125,7 +9125,6 @@ let
     channel = "stable";
     pulseSupport = config.pulseaudio or true;
     enablePepperFlash = config.chromium.enablePepperFlash or false;
-    enablePepperPDF = config.chromium.enablePepperPDF or false;
     hiDPISupport = config.chromium.hiDPISupport or false;
   };
 
