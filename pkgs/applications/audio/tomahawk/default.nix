@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, pkgconfig, attica, boost, gnutls, libechonest
-, liblastfm, lucenepp, phonon, qca2, qjson, qt4, qtkeychain, quazip, sparsehash
-, taglib, websocketpp
+, liblastfm, lucenepp, phonon, phonon_backend_vlc, qca2, qjson, qt4, qtkeychain
+, quazip, sparsehash, taglib, websocketpp
 
 , enableXMPP      ? true,  libjreen     ? null
 , enableKDE       ? false, kdelibs      ? null
@@ -33,6 +33,8 @@ in stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional enableXMPP      libjreen
     ++ stdenv.lib.optional enableKDE       kdelibs
     ++ stdenv.lib.optional enableTelepathy telepathy_qt;
+
+  propagatedBuildInputs = [ phonon_backend_vlc ];
 
   enableParallelBuilding = true;
 
