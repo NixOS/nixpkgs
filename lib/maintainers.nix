@@ -108,6 +108,7 @@
   MP2E = "Cray Elliott <MP2E@archlinux.us>";
   msackman = "Matthew Sackman <matthew@wellquite.org>";
   nathan-gs = "Nathan Bijnens <nathan@nathan.gs>";
+  nckx = "Tobias Geerinckx-Rice <tobias.geerinckx.rice@gmail.com>";
   notthemessiah = "Brian Cohen <brian.cohen.88@gmail.com>";
   nslqqq = "Nikita Mikhailov <nslqqq@gmail.com>";
   ocharles = "Oliver Charles <ollie@ocharles.org.uk>";
