@@ -1,6 +1,6 @@
 { fetchurl, writeScript, ruby, ncurses, sqlite, libxml2, libxslt, libffi
 , zlib, libuuid, gems, jdk, python, stdenv, libiconvOrEmpty, imagemagick
-, pkgconfig, libiconv }:
+, pkgconfig }:
 
 let
 
@@ -83,8 +83,8 @@ in
     buildInputs = [ libxml2 ];
     buildFlags =
       [ "--with-xml2-dir=${libxml2} --with-xml2-include=${libxml2}/include/libxml2"
-        "--with-xslt-dir=${libxslt} --with-iconv-dir=${libiconv} --use-system-libraries"
-      ];
+        "--with-xslt-dir=${libxslt}  --use-system-libraries"
+      ] ++ libiconvOrEmpty;
   };
 
   pry = { gemFlags = "--no-ri --no-rdoc"; };
