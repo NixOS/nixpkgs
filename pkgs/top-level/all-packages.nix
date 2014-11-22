@@ -4669,6 +4669,8 @@ let
 
   selenium-server-standalone = callPackage ../development/tools/selenium/server { };
 
+  selendroid = callPackage ../development/tools/selenium/selendroid { };
+
   scons = callPackage ../development/tools/build-managers/scons { };
 
   sbt = callPackage ../development/tools/build-managers/sbt { };
