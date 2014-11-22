@@ -2855,6 +2855,8 @@ let
 
   zsync = callPackage ../tools/compression/zsync { };
 
+  zxing = callPackage ../tools/graphics/zxing {};
+
 
   ### SHELLS
 
