@@ -3577,6 +3577,8 @@ let
 
     ocaml_cairo2 = callPackage ../development/ocaml-modules/ocaml-cairo2 { };
 
+    cil = callPackage ../development/ocaml-modules/cil { };
+
     cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
 
     cppo = callPackage ../development/tools/ocaml/cppo { };
@@ -4909,8 +4911,6 @@ let
   chmlib = callPackage ../development/libraries/chmlib { };
 
   chromaprint = callPackage ../development/libraries/chromaprint { };
-
-  cil = callPackage ../development/libraries/cil { };
 
   cilaterm = callPackage ../development/libraries/cil-aterm {
     stdenv = overrideInStdenv stdenv [gnumake380];
