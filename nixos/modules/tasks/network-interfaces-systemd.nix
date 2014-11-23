@@ -35,9 +35,6 @@ in
     assertions = [ {
       assertion = cfg.defaultGatewayWindowSize == null;
       message = "networking.defaultGatewayWindowSize is not supported by networkd.";
-    } {
-      assertion = ! cfg.useHostResolvConf;
-      message = "networking.useHostResolvConf is not supported by networkd.";
     } ];
 
     systemd.services.dhcpcd.enable = mkDefault false;

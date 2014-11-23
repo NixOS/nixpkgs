@@ -43,10 +43,6 @@ in
 
   config = {
 
-    warnings =
-      optional (config.services.resolved.enable && config.environment.etc ? "resolvconf.conf")
-        "Openresolv is disabled if resolved is used, so resolvconf.conf is not referenced.";
-
     environment.etc =
       { # /etc/services: TCP/UDP port assignments.
         "services".source = pkgs.iana_etc + "/etc/services";
@@ -66,16 +62,7 @@ in
             ''}
             ${cfg.extraHosts}
           '';
-      } // (if config.services.resolved.enable && dnsmasqResolve then {
-        "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
-      } else {}) // (if config.services.resolved.enable then {
-        # /etc/resolv.conf: Configuration for systemd-resolved.
-        "resolv.conf" = if hasLocalResolver then {
-            text = "nameserver 127.0.0.1";
-          } else {
-            source = "/run/systemd/resolve/resolv.conf";
-          };
-      } else {
+
         # /etc/resolvconf.conf: Configuration for openresolv.
         "resolvconf.conf".text =
             ''
@@ -97,7 +84,14 @@ in
               dnsmasq_conf=/etc/dnsmasq-conf.conf
               dnsmasq_resolv=/etc/dnsmasq-resolv.conf
             '';
-      });
+
+      } // (optionalAttrs config.services.resolved.enable (
+        if dnsmasqResolve then {
+          "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
+        } else {
+          "resolv.conf".source = "/run/systemd/resolve/resolv.conf";
+        }
+      ));
 
     # The ‘ip-up’ target is started when we have IP connectivity.  So
     # services that depend on IP connectivity (like ntpd) should be
