@@ -308,8 +308,6 @@ in
           '';
       }) config.containers;
 
-    # FIXME: auto-start containers.
-
     # Generate /etc/hosts entries for the containers.
     networking.extraHosts = concatStrings (mapAttrsToList (name: cfg: optionalString (cfg.localAddress != null)
       ''
