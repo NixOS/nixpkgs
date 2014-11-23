@@ -123,6 +123,7 @@ in
                   # Only do an add if it's necessary.  This is
                   # useful when the Nix store is accessed via this
                   # interface (e.g. in a QEMU VM test).
+                  restart_network_interfaces=false
                 ''
               + flip concatMapStrings (ips) (ip:
                 let
@@ -142,7 +143,7 @@ in
                 '')
               + optionalString (ips != [ ])
                 ''
-                  if [ restart_network_setup = true ]; then
+                  if [ "$restart_network_setup" = "true" ]; then
                     # Ensure that the default gateway remains set.
                     # (Flushing this interface may have removed it.)
                     ${config.systemd.package}/bin/systemctl try-restart --no-block network-setup.service
