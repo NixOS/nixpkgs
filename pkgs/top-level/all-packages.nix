@@ -2230,7 +2230,7 @@ let
 
   reptyr = callPackage ../os-specific/linux/reptyr {};
 
-  rdiff_backup = callPackage ../tools/backup/rdiff-backup { };
+  rdiff-backup = callPackage ../tools/backup/rdiff-backup { };
 
   rdmd = callPackage ../development/compilers/rdmd { };
 
@@ -12781,6 +12781,7 @@ let
   lttngUst = lttng-ust;  # added 2014-07-31
   jquery_ui = jquery-ui;  # added 2014-09-07
   youtubeDL = youtube-dl;  # added 2014-10-26
+  rdiff_backup = rdiff-backup;  # added 2014-11-23
 
 
 }; in self; in pkgs
