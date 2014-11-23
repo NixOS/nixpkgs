@@ -3,27 +3,27 @@
 { cabal, aeson, attoparsec, authenticateOauth, caseInsensitive
 , conduit, conduitExtra, dataDefault, doctest, filepath, hlint
 , hspec, httpClient, httpConduit, httpTypes, lens, lensAeson
-, monadControl, monadLogger, networkUri, resourcet, text, time
-, transformers, transformersBase, twitterTypes
+, monadControl, networkUri, resourcet, text, time, transformers
+, transformersBase, twitterTypes, twitterTypesLens
 }:
 
 cabal.mkDerivation (self: {
   pname = "twitter-conduit";
-  version = "0.0.8";
-  sha256 = "16yxf9qdy1x2w4l4ix1kp1a9vcgmd1cvkqffkj52rzckcjpyd6fs";
+  version = "0.1.0";
+  sha256 = "1cymgp3wlswxn5qfdr442cqq2ak48b5w1zcsr67n2g5p1izadwji";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     aeson attoparsec authenticateOauth conduit conduitExtra dataDefault
-    httpClient httpConduit httpTypes lens lensAeson monadLogger
-    networkUri resourcet text time transformers twitterTypes
+    httpClient httpConduit httpTypes lens lensAeson networkUri
+    resourcet text time transformers twitterTypes twitterTypesLens
   ];
   testDepends = [
     aeson attoparsec authenticateOauth caseInsensitive conduit
     conduitExtra dataDefault doctest filepath hlint hspec httpClient
-    httpConduit httpTypes lens lensAeson monadControl monadLogger
-    networkUri resourcet text time transformers transformersBase
-    twitterTypes
+    httpConduit httpTypes lens lensAeson monadControl networkUri
+    resourcet text time transformers transformersBase twitterTypes
+    twitterTypesLens
   ];
   meta = {
     homepage = "https://github.com/himura/twitter-conduit";
@@ -31,6 +31,5 @@ cabal.mkDerivation (self: {
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
-    broken = true;
   };
 })
