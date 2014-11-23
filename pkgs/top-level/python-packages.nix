@@ -411,12 +411,12 @@ let
     version = "4.2.1";
     disabled = isPy3k;
 
-    src = fetchurl {
+    src = pkgs.fetchurl {
       url = "https://github.com/enthought/apptools/archive/4.2.1.zip";
       sha256 = "07pvynf6dclaarcjala2mxgf42lzndps6vs1hnl2pcbg6fp7wggf";
     };
-    buildInputs = [ configobj traitsui six ];
-    propagatedBuildInputs = [ configobj traitsui six ];
+    buildInputs = with self; [ configobj traitsui six ];
+    propagatedBuildInputs = with self; [ configobj traitsui six ];
   };
 
 
@@ -2207,12 +2207,12 @@ let
     version = "4.4.0";
     disabled = isPy3k;
 
-    src = fetchurl {
+    src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/e/envisage/envisage-4.4.0.tar.gz";
       md5 = "35547a7b5736de292a264cba4326bca4";
     };
-    buildInputs = [ traitsui apptools ];
-    propagatedBuildInputs = [ traitsui apptools ];
+    buildInputs = with self; [ traitsui apptools ];
+    propagatedBuildInputs = with self; [ traitsui apptools ];
   };
 
 
@@ -5053,13 +5053,13 @@ let
     version = "4.3.1";
     disabled = isPy3k;
 
-    src = fetchurl {
+    src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/m/mayavi/mayavi-4.3.1.tar.gz";
       sha256 = "0ca8zpsxyram98a3k0xa1gw6wc2mxhmjirqxsh1169wc4cymf2ss";
     };     
     
-    buildInputs = [ numpy pkgs.vtkWithPython wxPython30 pyface configobj traitsui apptools envisage ];
-    propagatedBuildInputs = [ numpy pkgs.vtkWithPython wxPython30 pyface configobj traitsui apptools envisage ];
+    buildInputs = with self; [ numpy pkgs.vtkWithPython wxPython pyface configobj traitsui apptools envisage ];
+    propagatedBuildInputs = with self; [ numpy pkgs.vtkWithPython wxPython pyface configobj traitsui apptools envisage ];
   };
 
 
@@ -6961,12 +6961,12 @@ let
     version = "4.4.0";
     disabled = isPy3k;
 
-    src = fetchurl {
+    src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pyface/pyface-4.4.0.tar.gz";
       md5 = "0e8667a365042310b7302d968e067e5b";
     };
-    buildInputs = [ traits ];
-    propagatedBuildInputs = [ traits ];
+    buildInputs = with self; [ traits ];
+    propagatedBuildInputs = with self; [ traits ];
   };
 
 
@@ -9560,12 +9560,12 @@ let
   traits = buildPythonPackage {
     name = "traits";
     version = "4.5.0";
-    src = fetchurl {
+    src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/traits/traits-4.5.0.tar.gz";
       md5 = "3ad558eebaedc63c29c80183c0371d2f";
     };
-    buildInputs = [ numpy ];
-    propagatedBuildInputs = [ numpy ];
+    buildInputs = with self; [ numpy ];
+    propagatedBuildInputs = with self; [ numpy ];
   };
 
 
@@ -9574,12 +9574,12 @@ let
     version = "4.4.0";
     disabled = isPy3k;
 
-    src = fetchurl {
+    src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/traitsui/traitsui-4.4.0.tar.gz";
       md5 = "71aaf7f5b9b76e5f288252e090d29a63";
     };
-    buildInputs = [ traits pyface ];
-    propagatedBuildInputs = [ traits pyface ];
+    buildInputs = with self; [ traits pyface ];
+    propagatedBuildInputs = with self; [ traits pyface ];
   };
 
 
