@@ -842,7 +842,9 @@ let
 
   cksfv = callPackage ../tools/networking/cksfv { };
 
-  clementine = callPackage ../applications/audio/clementine { };
+  clementine = callPackage ../applications/audio/clementine {
+    boost = boost156;
+  };
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
@@ -7680,6 +7682,7 @@ let
   mariadb = callPackage ../servers/sql/mariadb {};
 
   mongodb = callPackage ../servers/nosql/mongodb {
+    boost = boost156;
     sasl = cyrus_sasl;
   };
 
@@ -9642,6 +9645,7 @@ let
   };
 
   freecad = callPackage ../applications/graphics/freecad {
+    boost = boost156;
     opencascade = opencascade_6_5;
     inherit (pythonPackages) matplotlib pycollada;
   };
@@ -10502,6 +10506,7 @@ let
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
   qbittorrent = callPackage ../applications/networking/p2p/qbittorrent {
+    boost = boost156;
     libtorrentRasterbar = libtorrentRasterbar_0_16;
   };
 
