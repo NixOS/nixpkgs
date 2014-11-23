@@ -8981,6 +8981,7 @@ let
   alock = callPackage ../misc/screensavers/alock { };
 
   alpine = callPackage ../applications/networking/mailreaders/alpine {};
+  realpine = callPackage ../applications/networking/mailreaders/realpine {};
 
   ams-lv2 = callPackage ../applications/audio/ams-lv2 { };
 
