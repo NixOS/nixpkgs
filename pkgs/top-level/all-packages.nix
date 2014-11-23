@@ -12332,7 +12332,7 @@ let
 
   cups = callPackage ../misc/cups { libusb = libusb1; };
 
-  cups_pdf_filter = callPackage ../misc/cups/pdf-filter.nix { };
+  cups_filters = callPackage ../misc/cups/filters.nix { };
 
   crashplan = callPackage ../applications/backup/crashplan { };
 

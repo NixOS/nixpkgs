@@ -107,7 +107,7 @@ in
         type = types.listOf types.path;
         example = literalExample "[ pkgs.splix ]";
         description = ''
-          CUPS drivers to use. Drivers provided by CUPS, Ghostscript
+          CUPS drivers to use. Drivers provided by CUPS, cups-filters, Ghostscript
           and Samba are added unconditionally.
         '';
       };
@@ -175,7 +175,7 @@ in
       };
 
     services.printing.drivers =
-      [ pkgs.cups pkgs.ghostscript additionalBackends
+      [ pkgs.cups pkgs.ghostscript pkgs.cups_filters additionalBackends
         pkgs.perl pkgs.coreutils pkgs.gnused pkgs.bc pkgs.gawk pkgs.gnugrep
       ];
 
