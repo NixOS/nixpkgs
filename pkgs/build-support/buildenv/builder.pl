@@ -96,10 +96,10 @@ sub findFiles {
     }
 
     unless (-d $target && ($oldTarget eq "" || -d $oldTarget)) {
-        if ($checkCollisionContents && checkCollision($oldTarget, $target)) {
-            return;
-        } elsif ($ignoreCollisions) {
+        if ($ignoreCollisions) {
             warn "collision between `$target' and `$oldTarget'\n" if $ignoreCollisions == 1;
+            return;
+        } elsif ($checkCollisionContents && checkCollision($oldTarget, $target)) {
             return;
         } else {
             die "collision between `$target' and `$oldTarget'\n";
