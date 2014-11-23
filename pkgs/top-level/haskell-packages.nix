@@ -1303,6 +1303,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hspecCore = callPackage ../development/libraries/haskell/hspec-core {};
 
+  hspecContrib = callPackage ../development/libraries/haskell/hspec-contrib {};
+
   hspecDiscover = callPackage ../development/libraries/haskell/hspec-discover {};
 
   hstatsd = callPackage ../development/libraries/haskell/hstatsd {};
