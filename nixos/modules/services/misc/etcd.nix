@@ -28,13 +28,13 @@ in {
 
     listenClientUrls = mkOption {
       description = "Etcd list of URLs to listen on for client traffic.";
-      default = ["http://localhost:2379" "http://localhost:4001"];
+      default = ["http://localhost:4001"];
       type = types.listOf types.str;
     };
 
     listenPeerUrls = mkOption {
       description = "Etcd list of URLs to listen on for peer traffic.";
-      default = ["http://localhost:2380" "http://localhost:7001"];
+      default = ["http://localhost:7001"];
       type = types.listOf types.str;
     };
 
@@ -100,7 +100,7 @@ in {
       after = [ "network-interfaces.target" ];
 
       environment = {
-        ETCD_NAME = cfg.name; 
+        ETCD_NAME = cfg.name;
         ETCD_DISCOVERY = cfg.discovery;
         ETCD_DATA_DIR = cfg.dataDir;
         ETCD_ADVERTISE_CLIENT_URLS = concatStringsSep "," cfg.advertiseClientUrls;
