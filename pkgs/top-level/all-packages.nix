@@ -1127,6 +1127,8 @@ let
 
   fakechroot = callPackage ../tools/system/fakechroot { };
 
+  fatrace = callPackage ../os-specific/linux/fatrace { };
+
   fcitx = callPackage ../tools/inputmethods/fcitx { };
 
   fcitx-anthy = callPackage ../tools/inputmethods/fcitx/fcitx-anthy.nix { };
