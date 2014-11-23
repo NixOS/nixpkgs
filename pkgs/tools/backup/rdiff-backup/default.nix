@@ -13,6 +13,8 @@ stdenv.mkDerivation {
     python ./setup.py install --prefix=$out
     sed -i $out/bin/rdiff-backup -e \
       "/import sys/ asys.path += [ \"$out/lib/python2.7/site-packages/\" ]"
+    sed -i $out/bin/rdiff-backup-statistics -e \
+      "/import .*sys/ asys.path += [ \"$out/lib/python2.7/site-packages/\" ]"
   '';
 
   buildInputs = [ python librsync gnused ];
