@@ -239,6 +239,7 @@ in rec {
   tests.chromium = callTest tests/chromium.nix {};
   tests.cjdns = callTest tests/cjdns.nix {};
   tests.containers = callTest tests/containers.nix {};
+  tests.dockerRegistry = callTest tests/docker-registry.nix {};
   tests.etcd = callTest tests/etcd.nix {};
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
