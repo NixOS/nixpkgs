@@ -1658,6 +1658,8 @@ let
 
   lzop = callPackage ../tools/compression/lzop { };
 
+  macchanger = callPackage ../os-specific/linux/macchanger { };
+
   maildrop = callPackage ../tools/networking/maildrop { };
 
   mailsend = callPackage ../tools/networking/mailsend { };
