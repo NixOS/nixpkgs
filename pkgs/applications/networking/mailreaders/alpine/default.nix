@@ -24,6 +24,9 @@ stdenv.mkDerivation {
     "--with-ssl-include-dir=${openssl}/include/openssl"
     "--with-tcl-lib=tcl8.5"
     ];
+  preConfigure = ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
+  '';
   meta = {
     inherit (s) version;
     description = ''Console mail reader'';
