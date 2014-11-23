@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "zlib";
-  version = "0.5.4.1";
-  sha256 = "0l550l2qw4gx530h1yjjpdh6rkm59l9l6jbmlm0vx41cqpj6b8yc";
+  version = "0.5.4.2";
+  sha256 = "15hhsk7z3gvm7sz2ic2z1ca5c6rpsln2rr391mdbm1bxlzc1gmkm";
   extraLibraries = [ zlib ];
   meta = {
     description = "Compression and decompression in the gzip and zlib formats";
