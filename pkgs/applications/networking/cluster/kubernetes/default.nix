@@ -15,9 +15,12 @@ stdenv.mkDerivation rec {
 
   preBuild = "patchShebangs ./hack";
 
+  postBuild = ''go build --ldflags '-extldflags "-static" -s' build/pause/pause.go'';
+
   installPhase = ''
     mkdir -p "$out/bin"
     cp _output/local/go/bin/* "$out/bin/"
+    cp pause $out/bin/kube-pause
   '';
 
   preFixup = ''
