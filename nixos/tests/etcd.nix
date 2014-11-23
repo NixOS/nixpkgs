@@ -80,7 +80,7 @@ import ./make-test.nix {
       $simple->start();
       $simple->waitForUnit("etcd.service");
       $simple->succeed("etcdctl set /foo/bar 'Hello world'");
-      $simple->succeed("etcdctl get /foo/bar | grep 'Hello world'");
+      $simple->waitUntilSucceeds("etcdctl get /foo/bar | grep 'Hello world'");
     };
 
     subtest "multy node", sub {
@@ -89,7 +89,7 @@ import ./make-test.nix {
       $node1->waitForUnit("etcd.service");
       $node2->waitForUnit("etcd.service");
       $node1->succeed("etcdctl set /foo/bar 'Hello world'");
-      $node2->succeed("etcdctl get /foo/bar | grep 'Hello world'");
+      $node2->waitUntilSucceeds("etcdctl get /foo/bar | grep 'Hello world'");
       $node1->shutdown();
       $node2->shutdown();
     };
@@ -102,7 +102,7 @@ import ./make-test.nix {
       $discovery1->waitForUnit("etcd.service");
       $discovery2->waitForUnit("etcd.service");
       $discovery1->succeed("etcdctl set /foo/bar 'Hello world'");
-      $discovery2->succeed("etcdctl get /foo/bar | grep 'Hello world'");
+      $discovery2->waitUntilSucceeds("etcdctl get /foo/bar | grep 'Hello world'");
     };
   '';
 }

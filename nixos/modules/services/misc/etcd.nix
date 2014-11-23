@@ -46,7 +46,7 @@ in {
 
     initialCluster = mkOption {
       description = "Etcd initial cluster configuration for bootstrapping.";
-      default = ["${cfg.name}=http://localhost:2380" "${cfg.name}=http://localhost:7001"];
+      default = ["${cfg.name}=http://localhost:7001"];
       type = types.listOf types.str;
     };
 
@@ -123,7 +123,10 @@ in {
         if [ "$(id -u)" = 0 ]; then chown etcd ${cfg.dataDir}; fi
       '';
       postStart = ''
-        until ${pkgs.curl}/bin/curl -s -o /dev/null '${head cfg.listenClientUrls}/version'; do
+        until ${pkgs.etcdctl}/bin/etcdctl set /nixos/state 'up'; do
+          sleep 1;
+        done
+        until ${pkgs.etcdctl}/bin/etcdctl get /nixos/state | grep up; do
           sleep 1;
         done
       '';
