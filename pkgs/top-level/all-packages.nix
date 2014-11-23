@@ -4864,6 +4864,7 @@ let
 
   boost155 = callPackage ../development/libraries/boost/1.55.nix { };
   boost156 = callPackage ../development/libraries/boost/1.56.nix { };
+  boost157 = callPackage ../development/libraries/boost/1.57.nix { };
   boost = boost156;
 
   boost_process = callPackage ../development/libraries/boost-process { };
