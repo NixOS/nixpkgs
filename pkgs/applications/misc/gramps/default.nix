@@ -52,5 +52,6 @@ pythonPackages.buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Genealogy software";
     homepage = http://gramps-project.org;
+    license = licenses.gpl2;
   };
 }
