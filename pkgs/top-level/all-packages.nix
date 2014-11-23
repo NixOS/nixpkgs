@@ -11379,10 +11379,6 @@ let
     };
   };
 
-  dwarf_fortress_modable = appendToName "moddable" (dwarf_fortress.override {
-    copyDataDirectory = true;
-  });
-
   dwarf-therapist = callPackage ../games/dwarf-therapist { };
 
   d1x_rebirth = callPackage ../games/d1x-rebirth { };
