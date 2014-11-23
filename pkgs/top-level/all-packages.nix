@@ -7767,9 +7767,11 @@ let
 
   popa3d = callPackage ../servers/mail/popa3d { };
 
-  postfix = callPackage ../servers/mail/postfix { };
+  postfix28 = callPackage ../servers/mail/postfix { };
 
   postfix211 = callPackage ../servers/mail/postfix/2.11.nix { };
+
+  postfix = postfix211;
 
   pulseaudio = callPackage ../servers/pulseaudio {
     gconf = gnome.GConf;
