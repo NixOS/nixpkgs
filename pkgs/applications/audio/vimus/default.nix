@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   pname = "vimus";
   version = "0.2.0";
   sha256 = "0s7hfyil9rnr9rmjb08g1l1sxybx3qdkw2f59p433fkdjp2m140h";
-  isLibrary = false;
+  isLibrary = true;
   isExecutable = true;
   buildDepends = [
     dataDefault deepseq filepath libmpd mtl time utf8String wcwidth
