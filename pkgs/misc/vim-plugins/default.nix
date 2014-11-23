@@ -1,5 +1,5 @@
 # TODO check that no license information gets lost
-{ fetchurl, bash, stdenv, python, cmake, vim, perl, ruby, unzip, which, fetchgit, fetchzip, llvmPackages, zip }:
+{ fetchurl, bash, stdenv, python, cmake, vim, perl, ruby, unzip, which, fetchgit, fetchzip, llvmPackages, zip, racerRust }:
 
 /*
 Typical plugin files:
@@ -591,6 +591,26 @@ rec {
      };
     meta = {
       homepage = https://github.com/thinca/vim-quickrun;
+      maintainers = [ stdenv.lib.maintainers.jagajaga ];
+    };
+  };
+
+  racer = buildVimPlugin {
+    name = "racer-git-2014-11-24";
+    src = fetchgit {
+      url = https://github.com/phildawes/racer;
+      rev = "50655ffd509bea09ea9b310970dedfeaf5a33cf3";
+      sha256 = "0bd456i4nz12z39ljnw1kjg8mcflvm7rjql2r80fb038c7rd6xi1";
+    };
+    buildPhase = ''
+      find . -type f -not -name 'racer.vim' -exec rm -rf {} \;
+      mkdir plugin
+      mv ./editors/racer.vim plugin/racer.vim
+      rm -rf editors images src 
+    '';
+    /*patches = [ ./racer.patch ];*/
+    meta = {
+      homepage = https://github.com/phildawes/racer;
       maintainers = [ stdenv.lib.maintainers.jagajaga ];
     };
   };

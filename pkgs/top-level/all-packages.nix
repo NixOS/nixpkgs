@@ -4646,6 +4646,8 @@ let
 
   pstack = callPackage ../development/tools/misc/gdb/pstack.nix { };
 
+  racerRust = callPackage ../development/tools/rust/racer { rust = rustcMaster; };
+
   radare = callPackage ../development/tools/analysis/radare {
     inherit (gnome) vte;
     lua = lua5;
