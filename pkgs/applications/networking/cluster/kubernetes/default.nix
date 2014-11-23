@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    wrapProgram "$out/bin/proxy" --set "PATH" "${iptables}/bin"
+    wrapProgram "$out/bin/kube-proxy" --set "PATH" "${iptables}/bin"
   '';
 
   meta = with stdenv.lib; {
