@@ -11469,6 +11469,8 @@ let
     inherit (pythonPackages) matplotlib cherrypy sqlite3;
   };
 
+  n2048 = callPackage ../games/n2048 {};
+
   naev = callPackage ../games/naev { };
 
   nexuiz = callPackage ../games/nexuiz { };
