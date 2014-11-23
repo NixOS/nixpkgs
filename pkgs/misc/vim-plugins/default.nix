@@ -1,5 +1,5 @@
 # TODO check that no license information gets lost
-{ fetchurl, bash, stdenv, python, cmake, vim, perl, ruby, unzip, which, fetchgit, fetchzip, llvmPackages, zip, racerRust }:
+{ fetchurl, bash, stdenv, python, cmake, vim, perl, ruby, unzip, which, fetchgit, fetchzip, llvmPackages, zip }:
 
 /*
 Typical plugin files:
@@ -606,9 +606,8 @@ rec {
       find . -type f -not -name 'racer.vim' -exec rm -rf {} \;
       mkdir plugin
       mv ./editors/racer.vim plugin/racer.vim
-      rm -rf editors images src 
+      rm -rf editors images src
     '';
-    /*patches = [ ./racer.patch ];*/
     meta = {
       homepage = https://github.com/phildawes/racer;
       maintainers = [ stdenv.lib.maintainers.jagajaga ];
