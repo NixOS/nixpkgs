@@ -8980,6 +8980,8 @@ let
 
   alock = callPackage ../misc/screensavers/alock { };
 
+  alpine = callPackage ../applications/networking/mailreaders/alpine {};
+
   ams-lv2 = callPackage ../applications/audio/ams-lv2 { };
 
   amsn = callPackage ../applications/networking/instant-messengers/amsn { };
