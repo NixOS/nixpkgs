@@ -78,7 +78,7 @@ stdenv.mkDerivation {
 
     "--with-dri-drivers=i965,r200,radeon"
     "--with-gallium-drivers=i915,nouveau,r300,r600,svga,swrast,radeonsi"
-    "--with-egl-platforms=x11,drm" "--enable-gbm"
+    "--with-egl-platforms=x11,wayland,drm" "--enable-gbm"
   ]
     ++ optional enableTextureFloats "--enable-texture-float"
     ++ optionals enableExtraFeatures [
@@ -97,7 +97,7 @@ stdenv.mkDerivation {
     autoreconfHook intltool expat libxml2Python llvm
     glproto dri2proto dri3proto presentproto
     libX11 libXext libxcb libXt libXfixes libxshmfence
-    libffi /* wayland */ libvdpau libelf
+    libffi wayland libvdpau libelf
   ] ++ optionals enableExtraFeatures [ /*libXvMC*/ ]
     ++ optional stdenv.isLinux udev
     ;
