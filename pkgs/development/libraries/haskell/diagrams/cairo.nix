@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "diagrams-cairo";
-  version = "1.2.0.3";
-  sha256 = "00x759n6jn8cpf49ma3mfs4v77g535cpjr5vcc81am37a3vq3ypk";
+  version = "1.2.0.4";
+  sha256 = "1yg6ja5jha499b6j5fsgdl4f3l2ff1gp6cl7ixzj9y26m7a10bqq";
   buildDepends = [
     cairo colour dataDefaultClass diagramsCore diagramsLib filepath
     hashable JuicyPixels lens mtl optparseApplicative pango split
