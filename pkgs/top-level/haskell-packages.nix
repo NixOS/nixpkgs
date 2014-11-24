@@ -2590,6 +2590,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   typeLevelNaturalNumber = callPackage ../development/libraries/haskell/type-level-natural-number {};
 
+  typographyGeometry = callPackage ../development/libraries/haskell/typography-geometry {};
+
   tz = callPackage ../development/libraries/haskell/tz {
     pkgs_tzdata = pkgs.tzdata;
   };
