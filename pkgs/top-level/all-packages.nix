@@ -7569,6 +7569,8 @@ let
 
   jetty61 = callPackage ../servers/http/jetty/6.1 { };
 
+  jetty92 = callPackage ../servers/http/jetty/9.2.nix { };
+
   joseki = callPackage ../servers/http/joseki {};
 
   leafnode = callPackage ../servers/news/leafnode { };
