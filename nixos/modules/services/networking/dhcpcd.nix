@@ -58,6 +58,7 @@ let
           ${config.systemd.package}/bin/systemctl try-restart ntpd.service
 
           ${config.systemd.package}/bin/systemctl start ip-up.target
+          ${config.systemd.package}/bin/systemctl start network-online.target
       fi
 
       #if [ "$reason" = EXPIRE -o "$reason" = RELEASE -o "$reason" = NOCARRIER ] ; then

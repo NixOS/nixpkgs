@@ -47,8 +47,8 @@ in
           { description = "Networking Setup";
 
             after = [ "network-interfaces.target" ];
-            before = [ "network.target" "network-online.target" ];
-            wantedBy = [ "network.target" "network-online.target" ];
+            before = [ "network.target" ];
+            wantedBy = [ "network.target" ];
 
             unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 
@@ -149,6 +149,7 @@ in
                     ${config.systemd.package}/bin/systemctl try-restart --no-block network-setup.service
                   fi
                   ${config.systemd.package}/bin/systemctl start ip-up.target
+                  ${config.systemd.package}/bin/systemctl start network-online.target
                 '';
             preStop =
               ''
