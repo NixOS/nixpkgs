@@ -578,6 +578,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   dataFix = callPackage ../development/libraries/haskell/data-fix {};
 
+  dataFlags = callPackage ../development/libraries/haskell/data-flags {};
+
   dataHash = callPackage ../development/libraries/haskell/data-hash {};
 
   dataInttrie = callPackage ../development/libraries/haskell/data-inttrie {};
@@ -649,6 +651,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   digest = callPackage ../development/libraries/haskell/digest {
     inherit (pkgs) zlib;
   };
+
+  digestPure = callPackage ../development/libraries/haskell/digest-pure {};
 
   digestiveFunctors = callPackage ../development/libraries/haskell/digestive-functors {};
 
@@ -723,6 +727,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   editline = callPackage ../development/libraries/haskell/editline {};
 
   ekg = callPackage ../development/libraries/haskell/ekg {};
+  ekgBosun = callPackage ../development/libraries/haskell/ekg-bosun {};
   ekgCarbon = callPackage ../development/libraries/haskell/ekg-carbon {};
   ekgCore = callPackage ../development/libraries/haskell/ekg-core {};
 
@@ -984,6 +989,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   gnutls = callPackage ../development/libraries/haskell/gnutls { inherit (pkgs) gnutls; };
 
+  greencard = callPackage ../development/libraries/haskell/greencard { };
+
   gsasl = callPackage ../development/libraries/haskell/gsasl { inherit (pkgs) gsasl; };
 
   gtk = callPackage ../development/libraries/haskell/gtk {
@@ -1098,6 +1105,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hex = callPackage ../development/libraries/haskell/hex {};
 
   hgal = callPackage ../development/libraries/haskell/hgal {};
+
+  higherLeveldb = callPackage ../development/libraries/haskell/higher-leveldb {};
 
   hourglass = callPackage ../development/libraries/haskell/hourglass {};
 
@@ -1297,6 +1306,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hspecCore = callPackage ../development/libraries/haskell/hspec-core {};
 
+  hspecContrib = callPackage ../development/libraries/haskell/hspec-contrib {};
+
   hspecDiscover = callPackage ../development/libraries/haskell/hspec-discover {};
 
   hstatsd = callPackage ../development/libraries/haskell/hstatsd {};
@@ -1417,6 +1428,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   jmacroRpcSnap = callPackage ../development/libraries/haskell/jmacro-rpc-snap {};
 
   jpeg = callPackage ../development/libraries/haskell/jpeg {};
+
+  jsFlot = callPackage ../development/libraries/haskell/js-flot {};
+
+  jsJquery = callPackage ../development/libraries/haskell/js-jquery {};
 
   json = callPackage ../development/libraries/haskell/json {};
 
@@ -1544,6 +1559,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   logfloat = callPackage ../development/libraries/haskell/logfloat {};
 
   logging = callPackage ../development/libraries/haskell/logging {};
+
+  loggingFacade = callPackage ../development/libraries/haskell/logging-facade {};
+
+  loggingFacadeJournald = callPackage ../development/libraries/haskell/logging-facade-journald {};
 
   logict = callPackage ../development/libraries/haskell/logict {};
 
@@ -1830,6 +1849,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   parsec = callPackage ../development/libraries/haskell/parsec {};
 
+  parsek = callPackage ../development/libraries/haskell/parsek {};
+
   parsers = callPackage ../development/libraries/haskell/parsers {};
 
   parsimony = callPackage ../development/libraries/haskell/parsimony {};
@@ -1905,6 +1926,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   placeholders = callPackage ../development/libraries/haskell/placeholders {};
 
   plugins= callPackage ../development/libraries/haskell/plugins {};
+
+  polynomialsBernstein = callPackage ../development/libraries/haskell/polynomials-bernstein {};
 
   polyparse = callPackage ../development/libraries/haskell/polyparse {};
 
@@ -2359,6 +2382,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   stmContainers = callPackage ../development/libraries/haskell/stm-containers {};
 
+  stmDelay = callPackage ../development/libraries/haskell/stm-delay {};
+
   STMonadTrans = callPackage ../development/libraries/haskell/STMonadTrans {};
 
   stmStats = callPackage ../development/libraries/haskell/stm-stats {};
@@ -2562,6 +2587,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   twitterTypes = callPackage ../development/libraries/haskell/twitter-types {};
 
+  twitterTypesLens = callPackage ../development/libraries/haskell/twitter-types-lens {};
+
   TypeCompose = callPackage ../development/libraries/haskell/TypeCompose {};
 
   typeEq = callPackage ../development/libraries/haskell/type-eq {};
@@ -2571,6 +2598,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   typeNatural = callPackage ../development/libraries/haskell/type-natural {};
 
   typeLevelNaturalNumber = callPackage ../development/libraries/haskell/type-level-natural-number {};
+
+  typographyGeometry = callPackage ../development/libraries/haskell/typography-geometry {};
 
   tz = callPackage ../development/libraries/haskell/tz {
     pkgs_tzdata = pkgs.tzdata;
@@ -2950,6 +2979,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   taffybar = callPackage ../applications/misc/taffybar {};
 
   validation = callPackage ../development/libraries/haskell/validation {};
+
+  vimus = callPackage ../applications/audio/vimus {};
 
   xlsx = callPackage ../development/libraries/haskell/xlsx {};
 

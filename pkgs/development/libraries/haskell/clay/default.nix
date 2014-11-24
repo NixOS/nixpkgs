@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "clay";
-  version = "0.9.0.1";
-  sha256 = "1w2617kpj6rblmycqb97gyshwbvzp5w2h4xh494mvdzi3bkahqpn";
+  version = "0.10";
+  sha256 = "0xw7j9v2cfs4874l5n852b38m6v2mpkbr93dxxfkp2kwmqkjbl5v";
   buildDepends = [ mtl text ];
   testDepends = [ HUnit mtl testFramework testFrameworkHunit text ];
   jailbreak = true;

@@ -104,7 +104,8 @@ let
     # Make boost header paths relative so that they are not runtime dependencies
     (
       cd "$dev"
-      find include \( -name '*.hpp' -or -name '*.h' \) -exec sed '1i#line 1 "{}"' -i '{}' \;
+      find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
+        -exec sed '1i#line 1 "{}"' -i '{}' \;
     )
   '';
 

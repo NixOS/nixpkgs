@@ -1,9 +1,24 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 with lib;
 let
   cfg = config.services.unifi;
   stateDir = "/var/lib/unifi";
   cmd = "@${pkgs.icedtea7_jre}/bin/java java -jar ${stateDir}/lib/ace.jar";
+  mountPoints = [
+    {
+      what = "${pkgs.unifi}/dl";
+      where = "${stateDir}/dl";
+    }
+    {
+      what = "${pkgs.unifi}/lib";
+      where = "${stateDir}/lib";
+    }
+    {
+      what = "${pkgs.mongodb}/bin";
+      where = "${stateDir}/bin";
+    }
+  ];
+  systemdMountPoints = map (m: "${utils.escapeSystemdPath m.where}.mount") mountPoints;
 in
 {
 
@@ -32,30 +47,18 @@ in
     # to be used as the working directory.
     systemd.mounts = map ({ what, where }: {
         bindsTo = [ "unifi.service" ];
-        requiredBy = [ "unifi.service" ];
-        before = [ "unifi.service" ];
+        partOf = [ "unifi.service" ];
         options = "bind";
         what = what;
         where = where;
-      }) [
-        {
-          what = "${pkgs.unifi}/dl";
-          where = "${stateDir}/dl";
-        }
-        {
-          what = "${pkgs.unifi}/lib";
-          where = "${stateDir}/lib";
-        }
-        {
-          what = "${pkgs.mongodb}/bin";
-          where = "${stateDir}/bin";
-        }
-      ];
+      }) mountPoints;
 
     systemd.services.unifi = {
       description = "UniFi controller daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      after = [ "network.target" ] ++ systemdMountPoints;
+      partOf = systemdMountPoints;
+      bindsTo = systemdMountPoints;
 
       preStart = ''
         # Ensure privacy of state
@@ -63,14 +66,14 @@ in
         chmod 0700 "${stateDir}"
 
         # Create the volatile webapps
+        rm -rf "${stateDir}/webapps"
         mkdir -p "${stateDir}/webapps"
         chown unifi "${stateDir}/webapps"
-        rm -f "{stateDir}/webapps/ROOT.war"
         ln -s "${pkgs.unifi}/webapps/ROOT.war" "${stateDir}/webapps/ROOT.war"
       '';
 
       postStop = ''
-        rm "${stateDir}/webapps/ROOT.war"
+        rm -rf "${stateDir}/webapps"
       '';
 
       serviceConfig = {

@@ -3,11 +3,14 @@
 rec {
   inherit (pkgs) glib gtk2 gtk3 gnome2;
   gnome3 = pkgs.gnome3_12 // { recurseForDerivations = false; };
+
+  # DO NOT UPGRADE CLUTTER, IT BREAKS GNOME 3.12
   clutter = pkgs.clutter_1_18;
   clutter_gtk = pkgs.clutter_gtk.override { inherit clutter; };
   clutter-gst = pkgs.clutter-gst.override { inherit clutter; };
-  upower = pkgs.upower_99;
   cogl = pkgs.cogl_1_18;
+
+  upower = pkgs.upower_99;
   gtk = gtk3; # just to be sure
   libcanberra = pkgs.libcanberra_gtk3; # just to be sure
   inherit (pkgs.gnome2) ORBit2;

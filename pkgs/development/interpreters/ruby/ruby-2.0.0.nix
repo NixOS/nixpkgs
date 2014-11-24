@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patches = ops useRailsExpress [
-    "${patchSet}/patches/ruby/2.0.0/p481/01-zero-broken-tests.patch"
-    "${patchSet}/patches/ruby/2.0.0/p481/02-railsexpress-gc.patch"
-    "${patchSet}/patches/ruby/2.0.0/p481/03-display-more-detailed-stack-trace.patch"
-    "${patchSet}/patches/ruby/2.0.0/p481/04-show-full-backtrace-on-stack-overflow.patch"
-    "${patchSet}/patches/ruby/2.0.0/p481/05-fix-missing-c-return-event.patch"
+    "${patchSet}/patches/ruby/2.0.0/p481/railsexpress/01-zero-broken-tests.patch"
+    "${patchSet}/patches/ruby/2.0.0/p481/railsexpress/02-railsexpress-gc.patch"
+    "${patchSet}/patches/ruby/2.0.0/p481/railsexpress/03-display-more-detailed-stack-trace.patch"
+    "${patchSet}/patches/ruby/2.0.0/p481/railsexpress/04-show-full-backtrace-on-stack-overflow.patch"
+    "${patchSet}/patches/ruby/2.0.0/p481/railsexpress/05-fix-missing-c-return-event.patch"
   ];
 
   configureFlags = ["--enable-shared" ]

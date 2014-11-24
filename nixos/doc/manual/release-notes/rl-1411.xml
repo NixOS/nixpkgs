@@ -28,6 +28,8 @@ services.httpd.package = pkgs.apacheHttpd_2_2;
   is now called <literal>ve-<replaceable>container-name</replaceable></literal>
   rather than <literal>c-<replaceable>container-name</replaceable></literal>.</para></listitem>
 
+  <listitem><para>GNOME 3.10 support has been dropped. The default GNOME version is now 3.12.</para></listitem>
+
 </itemizedlist>
 
 </para>

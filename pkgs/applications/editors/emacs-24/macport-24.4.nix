@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   emacsName = "emacs-24.4";
-  name = "${emacsName}-mac-5.0";
+  name = "${emacsName}-mac-5.1";
 
   #builder = ./builder.sh;
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${name}.tar.gz";
-    sha256 = "14ipkwmzv0b02sclhgp2xj0cvhl3gk40sc2l21s87621kk640dzv";
+    sha256 = "0qn200vv91qxf93x6y8fdi7l3bsni3clqzf8rcjdpbva1qzgcx27";
   };
 
   patches = [ ./darwin-new-sections.patch ];

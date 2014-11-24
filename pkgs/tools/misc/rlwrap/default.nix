@@ -1,11 +1,11 @@
 { stdenv, fetchurl, readline }:
 
 stdenv.mkDerivation rec {
-  name = "rlwrap-0.41";
+  name = "rlwrap-0.42";
 
   src = fetchurl {
     url = "http://utopia.knoware.nl/~hlub/uck/rlwrap/${name}.tar.gz";
-    sha256 = "02n22yy9wgz1cj59is17j0my17y7146ghkng381yxx4dnr3pcj9l";
+    sha256 = "0i3yz303wscrysyzpdq04h4nrl9ajz9dbwi80risdl5rkm3dhw2s";
   };
 
   buildInputs = [ readline ];

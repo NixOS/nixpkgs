@@ -1,21 +1,18 @@
 { stdenv, fetchFromGitHub, nodejs, which, python27, utillinux }:
 
 let
-  date = "20141023";
-  rev = "c7eed6b14688458e16fab368f68904e530651a30";
+  version = "12"; # see ${src}/util/version/Version.h
+  date = "20141121";
 in
 stdenv.mkDerivation {
-  name = "cjdns-${date}-${stdenv.lib.strings.substring 0 7 rev}";
+  name = "cjdns-${version}-${date}";
 
   src = fetchFromGitHub {
     owner = "cjdelisle";
     repo = "cjdns";
-    inherit rev;
-    sha256 = "11z8dk7byxh9pfv7mhfvnk465qln1g7z8c8f822623d59lwjpbs1";
+    rev = "f176d2c0271d764412bd13c7adf7ea475fa25e0f";
+    sha256 = "02vp917pr0kkcg41ani2azfbmdv1rjghmlrc7nc07ckkcqg6sk0y";
   };
-
-  # Make the NixOS service work a little better.
-  patches = [ ./makekeys-sigpipe.patch ];
 
   buildInputs = [ which python27 nodejs ] ++
     # for flock

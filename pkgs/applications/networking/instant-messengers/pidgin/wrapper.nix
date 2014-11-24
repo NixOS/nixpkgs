@@ -17,7 +17,7 @@ drv = buildEnv {
       done
     fi
     wrapProgram $out/bin/pidgin \
-      --suffix-each PURPLE_PLUGIN_PATH ':' "$out/lib/purple-${pidgin.version} $out/lib/pidgin" \
+      --suffix-each PURPLE_PLUGIN_PATH ':' "$out/lib/purple-${pidgin.majorVersion} $out/lib/pidgin" \
       ${toString extraArgs}
   '';
   };

@@ -9,8 +9,15 @@
 , tagsoup, temporary, testFramework, testFrameworkHunit
 , testFrameworkQuickcheck2, texmath, text, time
 , unorderedContainers, vector, xml, yaml, zipArchive, zlib
+, fetchurl
 }:
 
+let
+  editedCabalFile = fetchurl {
+    url = "hackage.haskell.org/package/pandoc-1.13.1/pandoc.cabal";
+    sha256 = "1i57yk1pql4gv97cs86fk82hkwncics1wkzjqd9iz866204y4wrg";
+  };
+in
 cabal.mkDerivation (self: {
   pname = "pandoc";
   version = "1.13.1";
@@ -31,6 +38,7 @@ cabal.mkDerivation (self: {
     pandocTypes QuickCheck syb testFramework testFrameworkHunit
     testFrameworkQuickcheck2 text zipArchive
   ];
+  preConfigure = "cp ${editedCabalFile} pandoc.cabal";
   configureFlags = "-fhttps -fmake-pandoc-man-pages";
   jailbreak = true;
   doCheck = false;

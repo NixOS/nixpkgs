@@ -1,16 +1,16 @@
 { stdenv, fetchurl, perl, libX11, libjpeg, libpng, libtiff, pkgconfig,
-librsvg, glib, gtk, libXext, libXxf86vm, poppler }:
+librsvg, glib, gtk, libXext, libXxf86vm, poppler, xineLib }:
 
 stdenv.mkDerivation rec {
-  name = "eaglemode-0.85.0";
+  name = "eaglemode-0.86.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/eaglemode/${name}.tar.bz2";
-    sha256 = "0mz4rg2k36wvcv55dg0a5znaczpl5h4gwkkb34syj89xk8jlbwsc";
+    sha256 = "1a2hzyck95g740qg4p4wd4fjwsmlknh75i9sbx5r5v9pyr4i3m4f";
   };
 
   buildInputs = [ perl libX11 libjpeg libpng libtiff pkgconfig
-    librsvg glib gtk libXxf86vm libXext poppler ];
+    librsvg glib gtk libXxf86vm libXext poppler xineLib ];
 
   # The program tries to dlopen both Xxf86vm and Xext, so we use the
   # trick on NIX_LDFLAGS and dontPatchELF to make it find them.

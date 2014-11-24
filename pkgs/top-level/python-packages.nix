@@ -601,6 +601,24 @@ let
     };
   };
 
+  backports_lzma = self.buildPythonPackage rec {
+    name = "backports.lzma-0.0.3";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/b/backports.lzma/${name}.tar.gz";
+      md5 = "c3d109746aefa86268e500c07d7e8e0f";
+    };
+
+    buildInputs = [ pkgs.lzma ];
+
+    meta = {
+      describe = "Backport of Python 3.3's 'lzma' module for XZ/LZMA compressed files.";
+      homepage = https://github.com/peterjc/backports.lzma;
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
   babelfish = buildPythonPackage rec {
     version = "0.5.3";
     name = "babelfish-${version}";
@@ -1662,6 +1680,43 @@ let
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
+  
+  cryptography = buildPythonPackage rec {
+    name = "cryptography-0.6.1";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/cryptography/${name}.tar.gz";
+      sha256 = "17ij2acy28ryxahiq64lpf71d5z3sa9xhr4pjv7a1v81189i0j82";
+    };
+    
+    buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
+                    self.iso8601 self.pyasn1 self.pytest ];
+    propagatedBuildInputs = [ self.six self.cffi  ];
+  };
+  
+  cryptography_vectors = buildPythonPackage rec {
+    name = "cryptography_vectors-0.6.1";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/cryptography-vectors/${name}.tar.gz";
+      sha256 = "1ks1xdb1ff74qmjdzqcfvkrwsbnwpsjgg3cy18zh37p8985cvl3r";
+    };
+  };
+  
+  pretend = buildPythonPackage rec {
+    name = "pretend-1.0.8";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pretend/pretend-1.0.8.tar.gz";
+      sha256 = "0r5r7ygz9m6d2bklflbl84cqhjkc2q12xgis8268ygjh30g2q3wk";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/alex/pretend;
+      license = licenses.bsd3;
+    };
+  };
+
 
   detox = self.buildPythonPackage rec {
     name = "detox-0.9.3";
@@ -1712,11 +1767,11 @@ let
   };
 
   cffi = buildPythonPackage rec {
-    name = "cffi-0.7.2";
+    name = "cffi-0.8.6";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/c/cffi/${name}.tar.gz";
-      md5 = "d329f5cb2053fd31dafc02e2c9ef0299";
+      sha256 = "0406j3sgndmx88idv5zxkkrwfqxmjl18pj8gf47nsg4ymzixjci5";
     };
 
     propagatedBuildInputs = with self; [ pkgs.libffi pycparser ];
@@ -2068,6 +2123,58 @@ let
     };
   };
 
+  docker_registry_core = buildPythonPackage rec {
+    name = "docker-registry-core-2.0.3";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/docker-registry-core/${name}.tar.gz";
+      md5 = "610ef9395f2e9a2f91c68d13325fce7b";
+    };
+
+    DEPS = "loose";
+
+    doCheck = false;
+    propagatedBuildInputs = with self; [
+      boto redis setuptools simplejson
+    ];
+
+    meta = {
+      description = "Docker registry core package";
+      homepage = https://github.com/docker/docker-registry;
+      license = licenses.asl20;
+    };
+  };
+
+  docker_registry = buildPythonPackage rec {
+    name = "docker-registry-0.9.0";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/docker-registry/${name}.tar.gz";
+      md5 = "65eb9fd05b94f7f9fbbb5e2e8ca62912";
+    };
+
+    DEPS = "loose";
+
+    doCheck = false; # requires redis server
+    propagatedBuildInputs = with self; [
+      docker_registry_core blinker flask gevent gunicorn pyyaml
+      requests2 rsa sqlalchemy setuptools backports_lzma pyasn1
+    ];
+
+    # Default config uses needed env variables
+    postInstall = ''
+      ln -s $out/lib/python2.7/site-packages/config/config_sample.yml $out/lib/python2.7/site-packages/config/config.yml
+    '';
+
+    meta = {
+      description = "Docker registry core package";
+      homepage = https://github.com/docker/docker-registry;
+      license = licenses.asl20;
+    };
+  };
+
 
   dogpile_cache = buildPythonPackage rec {
     name = "dogpile.cache-0.5.4";
@@ -2336,10 +2443,10 @@ let
 
   fabric = buildPythonPackage rec {
     name = "fabric-${version}";
-    version = "1.9.1";
+    version = "1.10.0";
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/F/Fabric/Fabric-${version}.tar.gz";
-      sha256 = "103mzf0l15kyvw5nmf7bsdrqg6y3wpyxmkyl2h9lk7jxb5gdc9s1";
+      sha256 = "0nikc05iz1fx2c9pvxrhrs819cpmg566azm99450yq2m8qmp1cpd";
     };
     disabled = isPy3k;
     doCheck = (!isPyPy);  # https://github.com/fabric/fabric/issues/11891
@@ -2377,10 +2484,10 @@ let
   });
 
   fudge = buildPythonPackage rec {
-    name = "fudge-0.9.4";
+    name = "fudge-0.9.6";
     src = pkgs.fetchurl {
-      url = https://pypi.python.org/packages/source/f/fudge/fudge-0.9.4.tar.gz;
-      sha256 = "03sj2x6mpzm48swpa4hnn1gi6yilgniyjfg1ylz95wm1ijggi33w";
+      url = "https://pypi.python.org/packages/source/f/fudge/${name}.tar.gz";
+      sha256 = "185ia3vr3qk4f2s1a9hdxb8ci4qc0x0xidrad96pywg8j930qs9l";
     };
     buildInputs = with self; [ nose nosejs ];
     propagatedBuildInputs = with self; [ sphinx ];
@@ -2419,19 +2526,21 @@ let
   };
 
   gcutil = buildPythonPackage rec {
-    name = "gcutil-1.15.0";
+    name = "gcutil-1.16.1";
     meta.maintainers = [ stdenv.lib.maintainers.phreedom ];
 
     src = pkgs.fetchurl {
-      url = https://dl.google.com/dl/cloudsdk/release/artifacts/gcutil-1.15.0.tar.gz;
-      sha256 = "12c98ivhjr01iz6lkga574xm8p0bsil6arydvpblyw8sjkgim5sq";
+      url = https://dl.google.com/dl/cloudsdk/release/artifacts/gcutil-1.16.1.tar.gz;
+      sha256 = "00jaf7x1ji9y46fbkww2sg6r6almrqfsprydz3q2swr4jrnrsx9x";
     };
 
     patchPhase = ''
-      substituteInPlace setup.py --replace "httplib2==0.8" "httplib2"
+      substituteInPlace setup.py \
+        --replace "httplib2==0.8" "httplib2" \
+        --replace "iso8601==0.1.4" "iso8601"
     '';
 
-    propagatedBuildInputs = with self; [ gflags iso8601_0_1_4 ipaddr httplib2 google_apputils google_api_python_client ];
+    propagatedBuildInputs = with self; [ gflags iso8601 ipaddr httplib2 google_apputils google_api_python_client ];
   };
 
   gnutls = buildPythonPackage rec {
@@ -3296,7 +3405,7 @@ let
     };
 
     propagatedBuildInputs = with self; [
-      pyGtkGlade pkgs.libtorrentRasterbar twisted Mako chardet pyxdg pkgs.pyopenssl modules.curses
+      pyGtkGlade pkgs.libtorrentRasterbar twisted Mako chardet pyxdg self.pyopenssl modules.curses
     ];
 
     postInstall = ''
@@ -3908,7 +4017,7 @@ let
       sha256 = "16cddyk5is0gjfn0ia5n2l4lhdzvbjzlx6sfpy7ddjd3d3fq7ckl";
     };
 
-    propagatedBuildInputs = with self; [ twisted pkgs.pyopenssl ];
+    propagatedBuildInputs = with self; [ twisted self.pyopenssl ];
 
     meta = {
       homepage = http://foolscap.lothar.com/;
@@ -4585,11 +4694,11 @@ let
     propagatedBuildInputs = with self; [ self.nose self.ipythonLight ];
   };
 
-  iso8601_0_1_4 = buildPythonPackage {
-    name = "iso8601-0.1.4";
+  iso8601 = buildPythonPackage {
+    name = "iso8601-0.1.10";
     src = pkgs.fetchurl {
-      url = https://pypi.python.org/packages/source/i/iso8601/iso8601-0.1.4.tar.gz;
-      sha256 = "03gnjxpfq0wwimqnsvz32xcngq0hrdqryn3zm8qh95hnnggwqa3s";
+      url = https://pypi.python.org/packages/source/i/iso8601/iso8601-0.1.10.tar.gz;
+      sha256 = "1qf01afxh7j4gja71vxv345if8avg6nnm0ry0zsk6j3030xgy4p7";
     };
 
     meta = {
@@ -5177,7 +5286,7 @@ let
     };
 
     buildInputs = with self; [
-      pkgs.pyopenssl pyasn1 urwid pil lxml flask protobuf netlib
+      pyopenssl pyasn1 urwid pil lxml flask protobuf netlib
     ];
 
     doCheck = false;
@@ -5581,7 +5690,7 @@ let
     };
 
     buildInputs = with self; [
-      pkgs.pyopenssl pyasn1
+      pyopenssl pyasn1
     ];
 
     doCheck = false;
@@ -7421,9 +7530,10 @@ let
   });
 
 
-  pymacs = pkgs.stdenv.mkDerivation rec {
+  pymacs = buildPythonPackage rec {
     version = "0.25";
-    name = "Pymacs-${version}";
+    name = "pymacs-${version}";
+    disabled = isPy3k || isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://github.com/pinard/Pymacs/tarball/v${version}";
@@ -7431,11 +7541,16 @@ let
       sha256 = "1hmy76c5igm95rqbld7gvk0az24smvc8hplfwx2f5rhn6frj3p2i";
     };
 
-    buildInputs = with self; [ python ];
+    configurePhase =  "make";
 
-    patchPhase = ''
-      sed -e "s@ install@ install --prefix=$out@g" -i Makefile
+    # Doesn't work with --old-and-unmanagable
+    installPhase = ''
+      ${python}/bin/${python.executable} setup.py install \
+        --install-lib=$out/lib/${python.libPrefix}/site-packages \
+        --prefix="$out"
     '';
+
+    doCheck = false;
 
     meta = with stdenv.lib; {
       description = "Emacs Lisp to Python interface";
@@ -7473,6 +7588,21 @@ let
       license = "BSD-style";
       platforms = stdenv.lib.platforms.mesaPlatforms;
     };
+  };
+  
+  pyopenssl = buildPythonPackage rec {
+    name = "pyopenssl-${version}";
+    version = "0.14";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-0.14.tar.gz";
+      sha256 = "0vpfqhng4cky7chliknkxv910iabqbfcxvkjiankh08jkkjvi7d9";
+    };
+    
+    # 17 tests failing
+    doCheck = false;
+
+    propagatedBuildInputs = [ self.cryptography ];
   };
 
 

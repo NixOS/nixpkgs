@@ -49,6 +49,7 @@ stdenv.mkDerivation (rec {
     license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
+    branch = "6.2";
   };
 }
 

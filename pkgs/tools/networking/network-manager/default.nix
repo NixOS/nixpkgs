@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
         inherit avahi dnsmasq ppp bind;
         glibc = stdenv.gcc.libc;
       })
+      ./libnl-3.2.25.patch
     ];
 
   preInstall =

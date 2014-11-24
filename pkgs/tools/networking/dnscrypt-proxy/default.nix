@@ -11,9 +11,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ libsodium ];
 
   meta = {
-    description = "A DNS proxy which encrypts and authenticates requests using the DNSCrypt protocol.";
+    description = "A tool for securing communications between a client and a DNS resolver";
     homepage = http://dnscrypt.org/;
     license = with stdenv.lib.licenses; [ isc ];
     maintainers = with stdenv.lib.maintainers; [ joachifm ];
+    platform = stdenv.lib.platforms.all;
   };
 }

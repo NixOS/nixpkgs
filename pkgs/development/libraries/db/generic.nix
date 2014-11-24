@@ -6,6 +6,7 @@
 , version, sha256
 , extraPatches ? [ ]
 , license ? stdenv.lib.licenses.sleepycat
+, branch ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -17,10 +18,6 @@ stdenv.mkDerivation rec {
   };
 
   patches = extraPatches;
-
-  patchPhase = ''
-    patch src/dbinc/atomic.h < ${./osx.patch}
-  '';
 
   configureFlags = [
     (if cxxSupport then "--enable-cxx" else "--disable-cxx")
@@ -41,5 +38,6 @@ stdenv.mkDerivation rec {
     description = "Berkeley DB";
     license = license;
     platforms = platforms.unix;
+    branch = branch;
   };
 }

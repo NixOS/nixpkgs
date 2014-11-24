@@ -2,19 +2,19 @@
 
 { cabal, aeson, attoparsec, base64Bytestring, cond, dataDefault
 , directoryTree, exceptions, filepath, httpClient, httpTypes
-, liftedBase, monadControl, mtl, network, parallel, scientific
-, temporary, text, time, transformers, transformersBase
+, liftedBase, monadControl, mtl, network, networkUri, parallel
+, scientific, temporary, text, time, transformers, transformersBase
 , unorderedContainers, vector, zipArchive
 }:
 
 cabal.mkDerivation (self: {
   pname = "webdriver";
-  version = "0.6.0.1";
-  sha256 = "0qpk1i6qr12lcx25bdljwqxgdhf5qk67h04bp6vwmm16dwzsyqd1";
+  version = "0.6.0.3";
+  sha256 = "1q0l9rs5j4cxzyqsy6r40y425359s246spk3g3pks7s47yynjn4q";
   buildDepends = [
     aeson attoparsec base64Bytestring cond dataDefault directoryTree
     exceptions filepath httpClient httpTypes liftedBase monadControl
-    mtl network scientific temporary text time transformers
+    mtl network networkUri scientific temporary text time transformers
     transformersBase unorderedContainers vector zipArchive
   ];
   testDepends = [ parallel text ];
@@ -26,6 +26,5 @@ cabal.mkDerivation (self: {
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
-    broken = true;
   };
 })

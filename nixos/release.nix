@@ -130,6 +130,7 @@ in rec {
   manual = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manual);
   manualPDF = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manualPDF)).x86_64-linux;
   manpages = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manpages);
+  options = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
 
 
   # Build the initial ramdisk so Hydra can keep track of its size over time.
@@ -235,8 +236,11 @@ in rec {
   tests.avahi = callTest tests/avahi.nix {};
   tests.bittorrent = callTest tests/bittorrent.nix {};
   tests.blivet = callTest tests/blivet.nix {};
+  tests.chromium = callTest tests/chromium.nix {};
   tests.cjdns = callTest tests/cjdns.nix {};
   tests.containers = callTest tests/containers.nix {};
+  tests.dockerRegistry = callTest tests/docker-registry.nix {};
+  tests.etcd = callTest tests/etcd.nix {};
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};

@@ -1,20 +1,20 @@
-{ stdenv, fetchgit, fetchurl, cmake, glew, ncurses, SDL, SDL_image, SDL_ttf, gtk2, glib, mesa, openal, pango, atk, gdk_pixbuf, glibc, libsndfile
-  , copyDataDirectory ? true }:
-
-/* set copyDataDirectory as true by default since df 40 does not seem to run without it */
+{ stdenv, fetchgit, fetchurl, cmake, glew, ncurses
+, SDL, SDL_image, SDL_ttf, gtk2, glib
+, mesa, openal, pango, atk, gdk_pixbuf, glibc, libsndfile }:
 
 let
-
+  baseVersion = "40";
+  patchVersion = "18";
   srcs = {
     df_unfuck = fetchgit {
       url = "https://github.com/svenstaro/dwarf_fortress_unfuck";
-      rev = "7c1d8bf027c8d8835d0d3ef50502f0c45a7f9bae";
-      sha256 = "d4a681231da00fec7bcdb092bcf51415c75fd20fc9da786fb6013e0c03fbc373";
+      rev = "f7ef8d4fa92bcbbf8e4790056c6c3668e3c3b20b";
+      sha256 = "0kpb3gzjllvi1lahhi74cp2ny1dl7kvnhdlca7i2yxkmyzaaj9qy";
     };
 
     df = fetchurl {
-      url = "http://www.bay12games.com/dwarves/df_40_15_linux.tar.bz2";
-      sha256 = "1mmz7mnsm2y5n2aqyf30zrflyl58haaj6p380pi4022gbd13mnsn";
+      url = "http://www.bay12games.com/dwarves/df_${baseVersion}_${patchVersion}_linux.tar.bz2";
+      sha256 = "0l29dn24xhkyj8fvmz8318i5sz2wpl420mwy1ccpdd3yfd3hrjmb";
     };
   };
 
@@ -23,7 +23,7 @@ in
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation rec {
-  name = "dwarf-fortress-0.40.15";
+  name = "dwarf-fortress-0.${baseVersion}.${patchVersion}";
 
 
   buildInputs = [ SDL SDL_image SDL_ttf gtk2 glib glew mesa ncurses openal glibc libsndfile pango atk cmake gdk_pixbuf];
@@ -36,8 +36,6 @@ stdenv.mkDerivation rec {
     "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib}/lib/glib-2.0/include"
     "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2}/lib/gtk-2.0/include"
   ];
-
-  /* :TODO: Game options should be configurable by patching the default configuration files */
 
   permission = ./df_permission;
 
@@ -56,55 +54,45 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter ${glibc}/lib/ld-linux.so.2 $out/share/df_linux/libs/Dwarf_Fortress
 
     cat > $out/bin/dwarf-fortress << EOF
-    #!${stdenv.shell}
-    export DF_DIR="\$HOME/.config/df_linux"
-    if [ -n "\$XDG_DATA_HOME" ]
-     then export DF_DIR="\$XDG_DATA_HOME/df_linux"
-    fi
+      #!${stdenv.shell}
+      
+      set -ex
 
-    # Recreate a directory structure reflecting the original
-    # distribution in the user directory (for modding support)
-    ${if copyDataDirectory then ''
-      if [ ! -d "\$DF_DIR" ];
-      then
-        mkdir -p \$DF_DIR
-        cp -r $out/share/df_linux/* \$DF_DIR/
-        chmod -R u+rw \$DF_DIR/
+      export DF_DIR="\$HOME/.config/df_linux"
+      if [ -n "\$XDG_DATA_HOME" ]
+       then export DF_DIR="\$XDG_DATA_HOME/df_linux"
       fi
-    '' else ''
-      # Link in the static stuff
-      mkdir -p \$DF_DIR
-      ln -sf $out/share/df_linux/libs \$DF_DIR/
-      ln -sf $out/share/df_linux/raw \$DF_DIR/
-      ln -sf $out/share/df_linux/df \$DF_DIR/
 
-      # Delete old data directory
-      rm -rf \$DF_DIR/data
+      if [[ ! -d "\$DF_DIR" ]]; then
+          mkdir -p "\$DF_DIR"
+          ln -s $out/share/df_linux/raw "\$DF_DIR/raw"
+          ln -s $out/share/df_linux/libs "\$DF_DIR/libs"
+          mkdir -p "\$DF_DIR/data/init"
+          cp -rn $out/share/df_linux/data/init "\$DF_DIR/data/"
+      fi
 
-      # Link in the static data directory
-      mkdir \$DF_DIR/data
-      for i in $out/share/df_linux/data/*
-      do
-       ln -s \$i \$DF_DIR/data/
+      for link in announcement art dipscript help index initial_movies movies shader.fs shader.vs sound speech; do
+          cp -r $out/share/df_linux/data/\$link "\$DF_DIR/data/\$link"
+          chmod -R u+rw "\$DF_DIR/data/\$link"
       done
 
-      # link in persistant data
-      mkdir -p \$DF_DIR/save
-      ln -s \$DF_DIR/save \$DF_DIR/data/
-    ''}
+      # now run Dwarf Fortress!
+      export LD_LIBRARY_PATH=\${stdenv.gcc}/lib:${SDL}/lib:${SDL_image}/lib/:${SDL_ttf}/lib/:${gtk2}/lib/:${glib}/lib/:${mesa}/lib/:${openal}/lib/:${libsndfile}/lib:\$DF_DIR/df_linux/libs/
 
-    # now run Dwarf Fortress!
-    export LD_LIBRARY_PATH=\${stdenv.gcc}/lib:${SDL}/lib:${SDL_image}/lib/:${SDL_ttf}/lib/:${gtk2}/lib/:${glib}/lib/:${mesa}/lib/:${openal}/lib/:${libsndfile}/lib:$DF_DIR/df_linux/libs/
-    \$DF_DIR/df "\$@"
+      export SDL_DISABLE_LOCK_KEYS=1 # Work around for bug in Debian/Ubuntu SDL patch.
+      #export SDL_VIDEO_CENTERED=1    # Centre the screen.  Messes up resizing.
+
+      cd \$DF_DIR
+      $out/share/df_linux/libs/Dwarf_Fortress "$@"
     EOF
 
     chmod +x $out/bin/dwarf-fortress
   '';
 
   meta = {
-      description = "control a dwarven outpost or an adventurer in a randomly generated, persistent world";
-      homepage = http://www.bay12games.com/dwarves;
-      license = stdenv.lib.licenses.unfreeRedistributable;
-      maintainers = [stdenv.lib.maintainers.roconnor];
+    description = "A single-player fantasy game with a randomly generated adventure world";
+    homepage = http://www.bay12games.com/dwarves;
+    license = stdenv.lib.licenses.unfreeRedistributable;
+    maintainers = with stdenv.lib.maintainers; [ roconnor the-kenny ];
   };
 }

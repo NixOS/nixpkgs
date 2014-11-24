@@ -89,6 +89,7 @@
   ./services/audio/alsa.nix
   # Disabled as fuppes it does no longer builds.
   # ./services/audio/fuppes.nix
+  ./services/audio/liquidsoap.nix
   ./services/audio/mpd.nix
   ./services/audio/mopidy.nix
   ./services/backup/almir.nix
@@ -107,6 +108,7 @@
   ./services/databases/4store.nix
   ./services/databases/couchdb.nix
   ./services/databases/firebird.nix
+  ./services/databases/hbase.nix
   ./services/databases/influxdb.nix
   ./services/databases/memcached.nix
   ./services/databases/monetdb.nix
@@ -114,6 +116,7 @@
   ./services/databases/mysql.nix
   ./services/databases/neo4j.nix
   ./services/databases/openldap.nix
+  ./services/databases/opentsdb.nix
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
   ./services/databases/virtuoso.nix
@@ -165,6 +168,8 @@
   ./services/misc/cgminer.nix
   ./services/misc/dictd.nix
   ./services/misc/disnix.nix
+  ./services/misc/docker-registry.nix
+  ./services/misc/etcd.nix
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
   ./services/misc/gitolite.nix
@@ -185,6 +190,7 @@
   ./services/misc/uhub.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/apcupsd.nix
+  ./services/monitoring/bosun.nix
   ./services/monitoring/collectd.nix
   ./services/monitoring/dd-agent.nix
   ./services/monitoring/graphite.nix
@@ -193,6 +199,7 @@
   ./services/monitoring/nagios.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
+  ./services/monitoring/scollector.nix
   ./services/monitoring/smartd.nix
   ./services/monitoring/statsd.nix
   ./services/monitoring/systemhealth.nix

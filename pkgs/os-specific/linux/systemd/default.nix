@@ -50,14 +50,14 @@ stdenv.mkDerivation rec {
       "--disable-tests"
 
       "--disable-hostnamed"
-      "--disable-networkd" # enable/use eventually
+      "--enable-networkd"
       "--disable-sysusers"
       "--disable-timedated"
-      "--disable-timesyncd"
+      "--enable-timesyncd"
       "--disable-readahead"
       "--disable-firstboot"
       "--disable-localed"
-      "--disable-resolved"
+      "--enable-resolved"
       "--disable-split-usr"
 
       "--with-sysvinit-path="

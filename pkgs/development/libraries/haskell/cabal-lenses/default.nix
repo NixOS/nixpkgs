@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cabal-lenses";
-  version = "0.4.1";
-  sha256 = "0gkd82g6q8ahrrfmnjzr4r9n5cgdmhpxkqvnsy50k043v0faa0cx";
+  version = "0.4.2";
+  sha256 = "0vsicvk979qznm3b174r6d5wkkyhpqx8gxjs5jw9na2jhimzjcjf";
   buildDepends = [ Cabal lens unorderedContainers ];
   jailbreak = true;
   meta = {

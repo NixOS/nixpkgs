@@ -5,16 +5,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "hplip-3.14.10";
+  name = "hplip-3.14.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "164mm30yb61psk5j4ziybxdd310y09fixgl09hmb59ny261wvcqi";
+    sha256 = "1j8h44f8igl95wqypj4rk9awcw513hlps980jmcnkx60xghc4l6f";
   };
 
   plugin = fetchurl {
     url = "http://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "10cvgy1h84fwh7xpw4x6cbkpisqbn3nbcqrgd9xz5fc6mn0b95dk";
+    sha256 = "0k1vpmy7babbm3c5v4dcbhq0jgyr8as722nylfs8zx0dy7kr8874";
   };
 
   hplip_state = ./hplip.state;
@@ -118,7 +118,9 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Print, scan and fax HP drivers for Linux";
     homepage = http://hplipopensource.com/;
-    license = if withPlugin then licenses.unfree else "free"; # MIT/BSD/GPL
+    license = if withPlugin
+      then licenses.unfree
+      else with licenses; [ mit bsd2 gpl2Plus ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ ttuegel jgeerds ];
   };

@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hspec-core";
-  version = "2.0.1";
-  sha256 = "1yr2hkr1p95bpj5n6hqw20g8imqal6pva4nrvy0hmxdg53jyxcf7";
+  version = "2.0.2";
+  sha256 = "19nssrvwnpa9yib9qqrhf1hi8m624si97874hhdh2hqc7kjqr332";
   buildDepends = [
     ansiTerminal async deepseq hspecExpectations HUnit QuickCheck
     quickcheckIo random setenv tfRandom time transformers

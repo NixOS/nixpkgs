@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     homepage = http://homepage3.nifty.com/tsato/xvkbd/;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.bennofs ];
+    platforms = platforms.linux;
   };
 }

@@ -129,7 +129,9 @@ rec {
   };
 
   androidndk = import ./androidndk.nix {
-    inherit (pkgs) stdenv fetchurl zlib ncurses p7zip;
+    inherit (pkgs) stdenv fetchurl zlib ncurses p7zip lib makeWrapper;
+    inherit (pkgs) coreutils file findutils gawk gnugrep gnused jdk which;
+    inherit platformTools;
   };
   
   buildApp = import ./build-app.nix {

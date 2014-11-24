@@ -1,12 +1,11 @@
-diff -ruN xmlroff-0.3.98/Makefile.in xmlroff-0.3.98.new/Makefile.in
---- xmlroff-0.3.98/Makefile.in	2006-05-30 17:46:37.000000000 +0200
-+++ xmlroff-0.3.98.new/Makefile.in	2006-06-18 13:47:37.000000000 +0200
-@@ -288,7 +288,7 @@
- subdirs = @subdirs@
- sysconfdir = @sysconfdir@
- target_alias = @target_alias@
--SUBDIRS = pangoxsl libfo area fo datatype property expr util . examples docs
-+SUBDIRS = libfo area fo datatype property expr util . examples docs
- @PLATFORM_WIN32_TRUE@no_undefined = -no-undefined
- INCLUDES = \
- 	-DG_LOG_DOMAIN=\"libfo\"	\
+--- xmlroff-0.6.2.orig/libfo/fo-libfo-basic.h
++++ xmlroff-0.6.2/libfo/fo-libfo-basic.h
+@@ -11,8 +11,7 @@
+ #define __FO_LIBFO_BASIC_H__
+ 
+ #include <stdio.h>
+-#include <glib/gtypes.h>
+-#include <glib/gerror.h>
++#include <glib.h>
+ 
+ G_BEGIN_DECLS

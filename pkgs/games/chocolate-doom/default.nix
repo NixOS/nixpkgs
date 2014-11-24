@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     homepage = http://chocolate-doom.org/;
     description = "A Doom source port that accurately reproduces the experience of Doom as it was played in the 1990s";
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ MP2E ];
   };
 }

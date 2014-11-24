@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "colors";
-  version = "0.2";
-  sha256 = "009qkab6m1gnvxc23ayhv5h2v9mpiji5hasiym7a8nm69p8678xa";
+  version = "0.2.0.1";
+  sha256 = "0xl7hdp1di8gl0g28vz2lm6pbj7hihdkfnr18843016736hll4qn";
   buildDepends = [ profunctors ];
   meta = {
     homepage = "https://github.com/fumieval/colors";

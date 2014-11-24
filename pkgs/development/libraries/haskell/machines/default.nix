@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "machines";
-  version = "0.4";
-  sha256 = "00qs1hv1sc4278hlwjfv9ykbhxg4hxb0kqyrglagb42sn8j35kyz";
+  version = "0.4.0.1";
+  sha256 = "11h1b6hls7v4ifz3p7v1gdsgxqgyx92v978pjfyp81ianwjyclqg";
   buildDepends = [
     comonad free mtl pointed profunctors semigroups transformers void
   ];

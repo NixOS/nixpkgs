@@ -8,23 +8,21 @@ stdenv.mkDerivation {
     sha256 = "1prm08nf8szmd3p13ysb0yx1cy6lr671bnwsp25iny8hfbs39sjv";
     };
   
-  buildInputs = [ocaml findlib ocaml_lwt menhir ocsigen_deriving
+  buildInputs = [ocaml findlib menhir ocsigen_deriving
                  cmdliner tyxml camlp4 reactivedata];
+  propagatedBuildInputs = [ ocaml_lwt ];
 
   patches = [ ./Makefile.conf.diff ];  
 
   createFindlibDestdir = true;
 
-
-  meta =  {
+  meta = with stdenv.lib; {
     homepage = http://ocsigen.org/js_of_ocaml/;
     description = "Compiler of OCaml bytecode to Javascript. It makes it possible to run Ocaml programs in a Web browser";
-    license = "LGPL";
+    license = licenses.lgpl2;
     platforms = ocaml.meta.platforms;
     maintainers = [
-      stdenv.lib.maintainers.gal_bolle
+      maintainers.gal_bolle
     ];
   };
-
-
 }

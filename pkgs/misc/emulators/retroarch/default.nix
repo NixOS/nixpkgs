@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     homepage = http://libretro.org/;
     description = "Multi-platform emulator frontend for libretro cores";
     license = licenses.gpl3;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = with maintainers; [ MP2E ];
   };
 }

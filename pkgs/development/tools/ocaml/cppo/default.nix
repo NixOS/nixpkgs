@@ -1,7 +1,7 @@
 {stdenv, fetchurl, ocaml, findlib}:
 let
   pname = "cppo";
-  version = "1.0.1";
+  version = "1.1.2";
   webpage = "http://mjambon.com/${pname}.html";
 in
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://mjambon.com/releases/${pname}/${name}.tar.gz";
-    sha256 = "1r71qv9sl6jpza1vi5kgmbi7iwbddh3f9j7yji063c9vimp9f25z";
+    sha256 = "1pfzch4ys5gjac2lrkqq0gzmm5plkq2jl17b2m3n06kmwashqplp";
   };
 
   buildInputs = [ ocaml findlib ];

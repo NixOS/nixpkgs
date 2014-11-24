@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   name = "i2pd-${version}";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchurl {
-    url = "https://github.com/PrivacySolutions/i2pd/archive/${version}.tar.gz";
-    sha256 = "0jr7svnwxiaxlxa3a8vcb8n6iy66ahwwx7glcwf2x57xssq27ily";
+    url = "https://github.com/PrivacySolutions/i2pd/archive/v${version}-1stbinrelease.tar.gz";
+    sha256 = "015y5v6w1mmzmnylfdc1l3r4qbmax3nywyz0r0pd651xgvvvinrv";
   };
 
   buildInputs = [ boost cryptopp ];

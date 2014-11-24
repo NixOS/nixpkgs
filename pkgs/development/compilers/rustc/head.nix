@@ -18,19 +18,19 @@ assert stdenv.gcc.gcc != null;
 
 */
 
-with ((import ./common.nix) {inherit stdenv; version = "0.12.0-pre-961-g93c85eb";});
+with ((import ./common.nix) {inherit stdenv; version = "0.12.0-pre-1336-g394269d";});
 
 let snapshot = if stdenv.system == "i686-linux"
-      then "d827fbbd778b854923971873cf03bdb79c2e8575"
+      then "999ba4a0dfb70adca628138a7d5f491023621140"
       else if stdenv.system == "x86_64-linux"
-      then "1ddca522a8ba4a4f662dc17ca16b0f50f2c15f87"
+      then "55eaaed3bd6dd5a8d08e99aa4cd618d207f87d8c"
       else if stdenv.system == "i686-darwin"
-      then "597cd42301e1569df8ad090574cd535d19283387"
+      then "0581dff21a238343602ec0202a551bac93d21300"
       else if stdenv.system == "x86_64-darwin"
-      then "4bfb2aff1c3e3c57653b32adc34b399c5aeb759b"
+      then "aad290cf3f8ac4aa0661984a9799c78161ea5a72"
       else abort "no-snapshot for platform ${stdenv.system}";
-    snapshotDate = "2014-11-04";
-    snapshotRev = "1b2ad78";
+    snapshotDate = "2014-11-18";
+    snapshotRev = "9c96a79";
     snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshot}.tar.bz2";
 
 in stdenv.mkDerivation {
@@ -40,8 +40,8 @@ in stdenv.mkDerivation {
 
   src = fetchgit {
     url = https://github.com/rust-lang/rust;
-    rev = "93c85eb8bdcc910a27caf6abd20207a626ae98e5";
-    sha256 = "0zj84xsyg8jpd6ixmdv7jsjrnsd4zwrac98qqmwgrd78h74g8kpq";
+    rev = "394269d16e3752a23ffa273e68f8aaefd2a510c4";
+    sha256 = "0zkz5f4gba4glhrf9f7v42qxk638q9ahgf6m0bjh8b7c3x52cv71";
   };
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
@@ -69,7 +69,7 @@ in stdenv.mkDerivation {
             ++ stdenv.lib.optional stdenv.needsPax ./grsec.HEAD.patch;
 
   postPatch = ''
-    substituteInPlace src/librustc/back/link.rs \
+    substituteInPlace src/librustc_trans/back/link.rs \
       --subst-var-by "ccPath" "${stdenv.gcc}/bin/cc"
     substituteInPlace src/librustc_back/archive.rs \
       --subst-var-by "arPath" "${stdenv.gcc.binutils}/bin/ar"
