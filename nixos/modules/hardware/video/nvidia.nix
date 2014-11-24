@@ -16,6 +16,8 @@ let
   nvidia_x11 =
     if elem "nvidia" drivers then
       config.boot.kernelPackages.nvidia_x11
+    else if elem "nvidiaStable" drivers then
+      config.boot.kernelPackages.nvidia_x11_stable
     else if elem "nvidiaLegacy173" drivers then
       config.boot.kernelPackages.nvidia_x11_legacy173
     else if elem "nvidiaLegacy304" drivers then
