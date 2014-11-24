@@ -1549,6 +1549,8 @@ let
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
+  kst = callPackage ../tools/graphics/kst { };
+
   less = callPackage ../tools/misc/less { };
 
   liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix { };
@@ -5184,6 +5186,8 @@ let
 
   geos = callPackage ../development/libraries/geos { };
 
+  getdata = callPackage ../development/libraries/getdata { };
+
   gettext = gettext_0_18;
 
   gettext_0_17 = callPackage ../development/libraries/gettext/0.17.nix { };
@@ -6319,6 +6323,8 @@ let
   loudmouth = callPackage ../development/libraries/loudmouth { };
 
   lzo = callPackage ../development/libraries/lzo { };
+
+  matio = callPackage ../development/libraries/matio { };
 
   mdds_0_7_1 = callPackage ../development/libraries/mdds/0.7.1.nix { };
   mdds = callPackage ../development/libraries/mdds { };
