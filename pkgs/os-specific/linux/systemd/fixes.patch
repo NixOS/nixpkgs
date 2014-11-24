@@ -44,6 +44,15 @@ diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
 index b6d9bc6..04fbe57 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
+@@ -758,7 +758,7 @@ static int mount_binds(const char *dest,
+                  * and char devices. */
+                 if (S_ISDIR(source_st.st_mode)) {
+                         r = mkdir_label(where, 0755);
+-                        if (r < 0) {
++                        if (r < 0 && r != -EEXIST) {
+                                 log_error("Failed to create mount point %s: %s", where, strerror(-r));
+
+                                 return r;
 @@ -3073,6 +3073,7 @@ int main(int argc, char *argv[]) {
                                  goto finish;
                          }
