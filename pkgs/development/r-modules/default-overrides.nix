@@ -1,95 +1,95 @@
-stdenv: overrideDerivation: pkgs: old: new: {
-  RcppArmadillo = overrideDerivation old.RcppArmadillo (attrs: {
+stdenv: pkgs: old: new: {
+  RcppArmadillo = old.RcppArmadillo.overrideDerivation (attrs: {
     patchPhase = "patchShebangs configure";
   });
 
-  rpf = overrideDerivation old.rpf (attrs: {
+  rpf = old.rpf.overrideDerivation (attrs: {
     patchPhase = "patchShebangs configure";
   });
 
-  BayesXsrc = overrideDerivation old.BayesXsrc (attrs: {
+  BayesXsrc = old.BayesXsrc.overrideDerivation (attrs: {
     patches = [ ./patches/BayesXsrc.patch ];
   });
 
-  rJava = overrideDerivation old.rJava (attrs: {
+  rJava = old.rJava.overrideDerivation (attrs: {
     preConfigure = ''
       export JAVA_CPPFLAGS=-I${pkgs.jdk}/include/
       export JAVA_HOME=${pkgs.jdk}
     '';
   });
 
-  JavaGD = overrideDerivation old.JavaGD (attrs: {
+  JavaGD = old.JavaGD.overrideDerivation (attrs: {
     preConfigure = ''
       export JAVA_CPPFLAGS=-I${pkgs.jdk}/include/
       export JAVA_HOME=${pkgs.jdk}
     '';
   });
 
-  Mposterior = overrideDerivation old.Mposterior (attrs: {
+  Mposterior = old.Mposterior.overrideDerivation (attrs: {
     PKG_LIBS = "-L${pkgs.atlas}/lib -lf77blas -latlas";
   });
 
-  qtbase = overrideDerivation old.qtbase (attrs: {
+  qtbase = old.qtbase.overrideDerivation (attrs: {
     patches = [ ./patches/qtbase.patch ];
   });
 
-  Rmpi = overrideDerivation old.Rmpi (attrs: {
+  Rmpi = old.Rmpi.overrideDerivation (attrs: {
     configureFlags = [
       "--with-Rmpi-type=OPENMPI"
     ];
   });
 
-  npRmpi = overrideDerivation old.npRmpi (attrs: {
+  npRmpi = old.npRmpi.overrideDerivation (attrs: {
     configureFlags = [
       "--with-Rmpi-type=OPENMPI"
     ];
   });
 
-  Rmpfr = overrideDerivation old.Rmpfr (attrs: {
+  Rmpfr = old.Rmpfr.overrideDerivation (attrs: {
     configureFlags = [
       "--with-mpfr-include=${pkgs.mpfr}/include"
     ];
   });
 
-  RVowpalWabbit = overrideDerivation old.RVowpalWabbit (attrs: {
+  RVowpalWabbit = old.RVowpalWabbit.overrideDerivation (attrs: {
     configureFlags = [
       "--with-boost=${pkgs.boost.dev}" "--with-boost-libdir=${pkgs.boost.lib}/lib"
     ];
   });
 
-  RAppArmor = overrideDerivation old.RAppArmor (attrs: {
+  RAppArmor = old.RAppArmor.overrideDerivation (attrs: {
     patches = [ ./patches/RAppArmor.patch ];
     LIBAPPARMOR_HOME = "${pkgs.apparmor}";
   });
 
-  RMySQL = overrideDerivation old.RMySQL (attrs: {
+  RMySQL = old.RMySQL.overrideDerivation (attrs: {
     configureFlags = [
       "--with-mysql-dir=${pkgs.mysql}"
     ];
   });
 
-  slfm = overrideDerivation old.slfm (attrs: {
+  slfm = old.slfm.overrideDerivation (attrs: {
     PKG_LIBS = "-L${pkgs.atlas}/lib -lf77blas -latlas";
   });
 
-  SamplerCompare = overrideDerivation old.SamplerCompare (attrs: {
+  SamplerCompare = old.SamplerCompare.overrideDerivation (attrs: {
     PKG_LIBS = "-L${pkgs.atlas}/lib -lf77blas -latlas";
   });
 
-  gputools = overrideDerivation old.gputools (attrs: {
+  gputools = old.gputools.overrideDerivation (attrs: {
     patches = [ ./patches/gputools.patch ];
     CUDA_HOME = "${pkgs.cudatoolkit}";
   });
 
   # It seems that we cannot override meta attributes with overrideDerivation.
-  CARramps = overrideDerivation (old.CARramps.override { hydraPlatforms = stdenv.lib.platforms.none; }) (attrs: {
+  CARramps = (old.CARramps.override { hydraPlatforms = stdenv.lib.platforms.none; }).overrideDerivation (attrs: {
     patches = [ ./patches/CARramps.patch ];
     configureFlags = [
       "--with-cuda-home=${pkgs.cudatoolkit}"
     ];
   });
 
-  gmatrix = overrideDerivation old.gmatrix (attrs: {
+  gmatrix = old.gmatrix.overrideDerivation (attrs: {
     patches = [ ./patches/gmatrix.patch ];
     CUDA_LIB_PATH = "${pkgs.cudatoolkit}/lib64";
     R_INC_PATH = "${pkgs.R}/lib/R/include";
@@ -97,51 +97,51 @@ stdenv: overrideDerivation: pkgs: old: new: {
   });
 
   # It seems that we cannot override meta attributes with overrideDerivation.
-  rpud = overrideDerivation (old.rpud.override { hydraPlatforms = stdenv.lib.platforms.none; }) (attrs: {
+  rpud = (old.rpud.override { hydraPlatforms = stdenv.lib.platforms.none; }).overrideDerivation (attrs: {
     patches = [ ./patches/rpud.patch ];
     CUDA_HOME = "${pkgs.cudatoolkit}";
   });
 
-  WideLM = overrideDerivation old.WideLM (attrs: {
+  WideLM = old.WideLM.overrideDerivation (attrs: {
     patches = [ ./patches/WideLM.patch ];
     configureFlags = [
       "--with-cuda-home=${pkgs.cudatoolkit}"
     ];
   });
 
-  EMCluster = overrideDerivation old.EMCluster (attrs: {
+  EMCluster = old.EMCluster.overrideDerivation (attrs: {
     patches = [ ./patches/EMCluster.patch ];
   });
 
-  spMC = overrideDerivation old.spMC (attrs: {
+  spMC = old.spMC.overrideDerivation (attrs: {
     patches = [ ./patches/spMC.patch ];
   });
 
-  BayesLogit = overrideDerivation old.BayesLogit (attrs: {
+  BayesLogit = old.BayesLogit.overrideDerivation (attrs: {
     patches = [ ./patches/BayesLogit.patch ];
   });
 
-  BayesBridge = overrideDerivation old.BayesBridge (attrs: {
+  BayesBridge = old.BayesBridge.overrideDerivation (attrs: {
     patches = [ ./patches/BayesBridge.patch ];
   });
 
-  dbarts = overrideDerivation old.dbarts (attrs: {
+  dbarts = old.dbarts.overrideDerivation (attrs: {
     patches = [ ./patches/dbarts.patch ];
   });
 
-  openssl = overrideDerivation old.openssl (attrs: {
+  openssl = old.openssl.overrideDerivation (attrs: {
     patches = [ ./patches/openssl.patch ];
     OPENSSL_HOME = "${pkgs.openssl}";
   });
 
-  Rserve = overrideDerivation old.Rserve (attrs: {
+  Rserve = old.Rserve.overrideDerivation (attrs: {
     patches = [ ./patches/Rserve.patch ];
     configureFlags = [
       "--with-server" "--with-client"
     ];
   });
 
-  nloptr = overrideDerivation old.nloptr (attrs: {
+  nloptr = old.nloptr.overrideDerivation (attrs: {
     configureFlags = [
       "--with-nlopt-cflags=-I${pkgs.nlopt}/include"
       "--with-nlopt-libs='-L${pkgs.nlopt}/lib -lnlopt_cxx -lm'"
