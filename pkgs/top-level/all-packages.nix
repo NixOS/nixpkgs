@@ -2808,9 +2808,7 @@ let
 
   xml2 = callPackage ../tools/text/xml/xml2 { };
 
-  xmlroff = callPackage ../tools/typesetting/xmlroff {
-    inherit (gnome) libgnomeprint;
-  };
+  xmlroff = callPackage ../tools/typesetting/xmlroff { };
 
   xmlstarlet = callPackage ../tools/text/xml/xmlstarlet { };
 
