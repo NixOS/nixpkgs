@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
     configureFlags = [
         "--enable-netcdf-4"
         "--enable-dap"
-        "--with-udunits"
         "--enable-shared"
     ];
 }
