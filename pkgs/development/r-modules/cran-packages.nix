@@ -132,10 +132,10 @@ let
     in
       builtins.listToAttrs nameValuePairs;
 
-  packagesWithNativeBuildInputs = import ./packagesWithNativeBuildInputs.nix pkgs;
-  packagesWithBuildInputs = import ./packagesWithBuildInputs.nix pkgs;
-  packagesRequireingX = import ./packagesRequireingX.nix;
-  packagesToSkipTests = import ./packagesToSkipTests.nix;
+  packagesWithNativeBuildInputs = import ./packages-with-native-build-inputs.nix pkgs;
+  packagesWithBuildInputs = import ./packages-with-build-inputs.nix pkgs;
+  packagesRequireingX = import ./packages-requireing-x.nix;
+  packagesToSkipTests = import ./packages-to-skip-tests.nix;
 
   defaultOverrides = old: new:
     let old0 = old; in
@@ -145,7 +145,7 @@ let
       old3 = old2 // (overrideNativeBuildInputs packagesWithNativeBuildInputs old2);
       old4 = old3 // (overrideBuildInputs packagesWithBuildInputs old3);
       old = old4;
-    in old // (import ./defaultOverrides.nix overrideDerivation pkgs old new);
+    in old // (import ./default-overrides.nix overrideDerivation pkgs old new);
 
 
   # Recursive override pattern.
@@ -154,7 +154,7 @@ let
   # packages in `_self` may depends on overridden packages.
   overridden = (defaultOverrides _self self) // overrides;
 
-  maskedPackages = import ./maskedPackages.nix;
+  maskedPackages = import ./masked-packages.nix;
   masked = removeAttrs overridden maskedPackages;
 
   self = masked;
