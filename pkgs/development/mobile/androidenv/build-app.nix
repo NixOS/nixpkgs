@@ -39,7 +39,7 @@ stdenv.mkDerivation ({
     ${if useNDK then ''
         export GNUMAKE=${gnumake}/bin/make
         export NDK_HOST_AWK=${gawk}/bin/gawk
-        ${androidndk}/ndk-build
+        ${androidndk}/bin/ndk-build
       '' else ""}
     ant ${antFlags} ${if release then "release" else "debug"}
   '';
