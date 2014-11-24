@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
     base64Bytestring blazeBuilder blazeBuilderConduit cryptoPubkeyTypes
     dataDefault httpClient httpTypes random RSA SHA time transformers
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/yesodweb/authenticate";
     description = "Library to authenticate with OAuth for Haskell web applications";
