@@ -1027,7 +1027,10 @@ in
       restartTriggers = [ config.environment.etc."systemd/network".source ];
     };
 
-    systemd.services.systemd-networkd-wait-online.wantedBy = [ "network-online.target" ];
+    systemd.services.systemd-networkd-wait-online = {
+      before = [ "network-online.target" "ip-up.target" ];
+      wantedBy = [ "network-online.target" "ip-up.target" ];
+    };
 
     systemd.services."systemd-network-wait-online@" = {
       description = "Wait for Network Interface %I to be Configured";
