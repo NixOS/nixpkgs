@@ -1,6 +1,6 @@
 {stdenv, fetchurl, kernel, xlibs, zlib, gtk, atk, pango, glib, gdk_pixbuf}:
 
-let 
+let
 
   versionNumber = "173.14.39";
 
@@ -8,9 +8,9 @@ in
 
 stdenv.mkDerivation {
   name = "nvidia-x11-${versionNumber}-${kernel.version}";
-  
-  builder = ./builder-legacy.sh;
-  
+
+  builder = ./builder-legacy173.sh;
+
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {

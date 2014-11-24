@@ -13,14 +13,17 @@ assert (!libsOnly) -> kernel != null;
 let
 
   versionNumber = "340.58";
-
+  /* This branch is needed for G8x, G9x, and GT2xx GPUs, and motherboard chipsets based on them.
+    Ongoing support for new Linux kernels and X servers, as well as fixes for critical bugs,
+    will be included in 340.* legacy releases through the end of 2019.
+  */
   inherit (stdenv.lib) makeLibraryPath;
 in
 
 stdenv.mkDerivation {
   name = "nvidia-x11-${versionNumber}${optionalString (!libsOnly) "-${kernel.version}"}";
 
-  builder = ./builder.sh;
+  builder = ./builder-legacy340.sh;
 
   src =
     if stdenv.system == "i686-linux" then
