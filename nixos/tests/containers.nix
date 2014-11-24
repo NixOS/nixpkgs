@@ -91,6 +91,13 @@ import ./make-test.nix {
       # Execute commands via the root shell.
       $machine->succeed("nixos-container run $id1 -- uname") =~ /Linux/ or die;
 
+      # Stop and start (regression test for #4989)
+      $machine->succeed("nixos-container stop $id1");
+      $machine->succeed("nixos-container start $id1");
+
+      # Execute commands via the root shell.
+      $machine->succeed("nixos-container run $id1 -- uname") =~ /Linux/ or die;
+
       # Destroy the containers.
       $machine->succeed("nixos-container destroy $id1");
       $machine->succeed("nixos-container destroy $id2");
