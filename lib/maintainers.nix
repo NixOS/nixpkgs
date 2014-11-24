@@ -100,6 +100,7 @@
   madjar = "Georges Dubus <georges.dubus@compiletoi.net>";
   magnetophon = "Bart Brouns <bart@magnetophon.nl>";
   manveru = "Michael Fellinger <m.fellinger@gmail.com>";
+  magnetophon = "Bart Brouns <bart@magnetophon.nl>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
   matejc = "Matej Cotman <cotman.matej@gmail.com>";
   meisternu = "Matt Miemiec <meister@krutt.org>";
