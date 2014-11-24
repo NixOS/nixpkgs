@@ -1560,6 +1560,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   loggingFacade = callPackage ../development/libraries/haskell/logging-facade {};
 
+  loggingFacadeJournald = callPackage ../development/libraries/haskell/logging-facade-journald {};
+
   logict = callPackage ../development/libraries/haskell/logict {};
 
   loop = callPackage ../development/libraries/haskell/loop {};
