@@ -7,6 +7,7 @@ let
 
   configFile = pkgs.writeText "opentsdb.conf" ''
     tsd.core.auto_create_metrics = true
+    tsd.http.request.enable_chunked  = true
   '';
 
 in {
