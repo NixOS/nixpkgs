@@ -70,7 +70,7 @@ in
       '';
 
       postStop = ''
-        rm "${stateDir}/webapps"
+        rm -rf "${stateDir}/webapps"
       '';
 
       serviceConfig = {
