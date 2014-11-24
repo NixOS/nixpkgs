@@ -134,6 +134,13 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Unspecified free software license";
   };
 
+  gpl1 = {
+    shortName = "GPLv1";
+    fullName = "GNU General Public License version 1";
+    url = http://www.gnu.org/licenses/old-licenses/gpl-1.0.html;
+  };
+
+
   gpl1Plus = spdx {
     spdxId = "GPL-1.0+";
     fullName = "GNU General Public License v1.0 or later";
