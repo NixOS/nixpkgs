@@ -37,6 +37,7 @@ let
     paths = cfg.drivers;
     pathsToLink = [ "/lib/cups" "/share/cups" "/bin" "/etc/cups" ];
     postBuild = cfg.bindirCmds;
+    ignoreCollisions = true;
   };
 
 in
