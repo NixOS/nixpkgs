@@ -11304,6 +11304,12 @@ let
     stdenv = overrideGCC stdenv gcc49;
   };
 
+  girara-light = callPackage ../applications/misc/girara {
+    gtk = gtk3;
+    withBuildColors = false;
+    ncurses = null;
+  };
+
   zgrviewer = callPackage ../applications/graphics/zgrviewer {};
 
   zim = callPackage ../applications/office/zim {
