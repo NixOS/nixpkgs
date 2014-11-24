@@ -1,6 +1,8 @@
 { stdenv, fetchurl, zlib, ncurses, p7zip
 }:
 
+assert stdenv.isLinux;
+
 stdenv.mkDerivation rec {
   name = "android-ndk-r10c";
 
