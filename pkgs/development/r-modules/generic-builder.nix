@@ -16,10 +16,10 @@ R.stdenv.mkDerivation ({
     runHook postBuild
   '';
 
-  installOptions = if attrs.skipTest or false then
-    "--no-test-load "
+  installFlags = if attrs.doCheck or true then
+    []
   else
-    "";
+    [ "--no-test-load" ];
 
   rCommand = if attrs.requireX or false then
     # Unfortunately, xvfb-run has a race condition even with -a option, so that
@@ -31,7 +31,7 @@ R.stdenv.mkDerivation ({
   installPhase = ''
     runHook preInstall
     mkdir -p $out/library
-    $rCommand CMD INSTALL $installOptions --configure-args="$configureFlags" -l $out/library .
+    $rCommand CMD INSTALL $installFlags --configure-args="$configureFlags" -l $out/library .
     runHook postInstall
   '';
 
@@ -39,6 +39,10 @@ R.stdenv.mkDerivation ({
     if test -e $out/nix-support/propagated-native-build-inputs; then
         ln -s $out/nix-support/propagated-native-build-inputs $out/nix-support/propagated-user-env-packages
     fi
+  '';
+
+  checkPhase = ''
+    # noop since R CMD INSTALL tests packages
   '';
 } // attrs // {
   name = "r-" + name;
