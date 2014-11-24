@@ -11,7 +11,7 @@ let
   #
   # some packages, e.g. cncaGUI, require X running while installation,
   # so that we use xvfb-run if requireX is true.
-  derive = lib.makeOverridable ({ name, version, sha256, depends ? [], skipTest ? false, requireX ? false, hydraPlatforms ? R.meta.hydraPlatforms  }: buildRPackage {
+  derive = lib.makeOverridable ({ name, version, sha256, depends ? [], doCheck ? true, requireX ? false, hydraPlatforms ? R.meta.hydraPlatforms  }: buildRPackage {
     name = "${name}-${version}";
     src = fetchurl {
       urls = [
@@ -20,7 +20,7 @@ let
       ];
       inherit sha256;
     };
-    inherit skipTest requireX;
+    inherit doCheck requireX;
     propagatedBuildInputs = depends;
     nativeBuildInputs = depends;
     meta.homepage = "http://cran.r-project.org/web/packages/${name}/";
@@ -106,10 +106,10 @@ let
     in
       builtins.listToAttrs nameValuePairs;
 
-  # Overrides package definition to skip tests.
+  # Overrides package definition to skip check.
   # For example,
   #
-  # overrideSkipTests [
+  # overrideSkipCheck [
   #   "foo"
   # ] old
   #
@@ -117,15 +117,15 @@ let
   #
   # {
   #   foo = old.foo.override {
-  #     skipTest = true;
+  #     doCheck = false;
   #   };
   # }
-  overrideSkipTests = packageNames: old:
+  overrideSkipCheck = packageNames: old:
     let
       nameValuePairs = map (name: {
         inherit name;
         value = (builtins.getAttr name old).override {
-          skipTest = true;
+          doCheck = false;
         };
       }) packageNames;
     in
@@ -134,13 +134,13 @@ let
   packagesWithNativeBuildInputs = import ./packages-with-native-build-inputs.nix pkgs;
   packagesWithBuildInputs = import ./packages-with-build-inputs.nix pkgs;
   packagesRequireingX = import ./packages-requireing-x.nix;
-  packagesToSkipTests = import ./packages-to-skip-tests.nix;
+  packagesToSkipCheck = import ./packages-to-skip-check.nix;
 
   defaultOverrides = old: new:
     let old0 = old; in
     let
       old1 = old0 // (overrideRequireX packagesRequireingX old0);
-      old2 = old1 // (overrideSkipTests packagesToSkipTests old1);
+      old2 = old1 // (overrideSkipCheck packagesToSkipCheck old1);
       old3 = old2 // (overrideNativeBuildInputs packagesWithNativeBuildInputs old2);
       old4 = old3 // (overrideBuildInputs packagesWithBuildInputs old3);
       old = old4;
