@@ -15,6 +15,7 @@ cabal.mkDerivation (self: {
     aeson aesonPretty ansiWlPprint binary Elm filepath HTTP httpClient
     httpClientTls httpTypes mtl network optparseApplicative vector
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/elm-lang/elm-get";
     description = "Tool for sharing and using Elm libraries";
