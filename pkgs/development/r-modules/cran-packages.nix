@@ -11,7 +11,14 @@ let
   #
   # some packages, e.g. cncaGUI, require X running while installation,
   # so that we use xvfb-run if requireX is true.
-  derive = lib.makeOverridable ({ name, version, sha256, depends ? [], doCheck ? true, requireX ? false, hydraPlatforms ? R.meta.hydraPlatforms  }: buildRPackage {
+  derive = lib.makeOverridable ({
+        name, version, sha256,
+        depends ? [],
+        doCheck ? true,
+        requireX ? false,
+        broken ? false,
+        hydraPlatforms ? R.meta.hydraPlatforms
+      }: buildRPackage {
     name = "${name}-${version}";
     src = fetchurl {
       urls = [
@@ -25,6 +32,7 @@ let
     nativeBuildInputs = depends;
     meta.homepage = "http://cran.r-project.org/web/packages/${name}/";
     meta.hydraPlatforms = hydraPlatforms;
+    meta.broken = broken;
   });
 
   # Overrides package definitions with nativeBuildInputs.
@@ -131,10 +139,36 @@ let
     in
       builtins.listToAttrs nameValuePairs;
 
+  # Overrides package definition to mark it broken.
+  # For example,
+  #
+  # overrideBroken [
+  #   "foo"
+  # ] old
+  #
+  # results in
+  #
+  # {
+  #   foo = old.foo.override {
+  #     broken = true;
+  #   };
+  # }
+  overrideBroken = packageNames: old:
+    let
+      nameValuePairs = map (name: {
+        inherit name;
+        value = (builtins.getAttr name old).override {
+          broken = true;
+        };
+      }) packageNames;
+    in
+      builtins.listToAttrs nameValuePairs;
+
   packagesWithNativeBuildInputs = import ./packages-with-native-build-inputs.nix pkgs;
   packagesWithBuildInputs = import ./packages-with-build-inputs.nix pkgs;
   packagesRequireingX = import ./packages-requireing-x.nix;
   packagesToSkipCheck = import ./packages-to-skip-check.nix;
+  brokenPackages = import ./broken-packages.nix;
 
   defaultOverrides = old: new:
     let old0 = old; in
@@ -143,7 +177,8 @@ let
       old2 = old1 // (overrideSkipCheck packagesToSkipCheck old1);
       old3 = old2 // (overrideNativeBuildInputs packagesWithNativeBuildInputs old2);
       old4 = old3 // (overrideBuildInputs packagesWithBuildInputs old3);
-      old = old4;
+      old5 = old4 // (overrideBroken brokenPackages old4);
+      old = old5;
     in old // (import ./default-overrides.nix stdenv pkgs old new);
 
 
@@ -151,12 +186,7 @@ let
   # `_self` is a collection of packages;
   # `self` is `_self` with overridden packages;
   # packages in `_self` may depends on overridden packages.
-  overridden = (defaultOverrides _self self) // overrides;
-
-  maskedPackages = import ./masked-packages.nix;
-  masked = removeAttrs overridden maskedPackages;
-
-  self = masked;
+  self = (defaultOverrides _self self) // overrides;
   _self = import ./sources.nix { inherit self derive; };
 in
   self

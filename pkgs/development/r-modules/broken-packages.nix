@@ -38,9 +38,6 @@
   "rsunlight" # jsonlite.so: undefined symbol: XXX
   "slackr" # jsonlite.so: undefined symbol: XXX
   "webutils" # jsonlite.so: undefined symbol: XXX
-  "HPO" # requires AnnotationDbi
-  "HPO.db" # requires AnnotationDbi
-  "HPO_db" # requires AnnotationDbi
   "msarc" # requires AnnotationDbi
   "ppiPre" # requires AnnotationDbi
   "RobLox" # requires Biobase
@@ -69,7 +66,6 @@
   "BiSEp" # requires GOSemSim, GO.db, and org.Hs.eg.db
   "PubMedWordcloud" # requires GOsummaries
   "ExomeDepth" # requires GenomicRanges, and Rsamtools
-  "HPOSim" # requires HPO_db
   "HTSDiff" # requires HTSCluster
   "RAM" # requires Heatplus
   "RcppRedis" # requires Hiredis
@@ -125,7 +121,6 @@
   "calmate" # requires aroma_core
   "beadarrayFilter" # requires beadarray
   "PepPrep" # requires biomaRt
-  "oposSOM" # requires biomaRt
   "snplist" # requires biomaRt
   "FunctionalNetworks" # requires breastCancerVDX, and Biobase
   "rJPSGCS" # requires chopsticks
@@ -187,7 +182,6 @@
   "CORM" # requires limma
   "DAAGbio" # requires limma
   "DCGL" # requires limma
-  "GOsummaries" # requires limma
   "SQDA" # requires limma
   "metaMA" # requires limma
   "plmDE" # requires limma
@@ -216,7 +210,6 @@
   "qtlnet" # requires pcalg
   "SigTree" # requires phyloseq
   "saps" # requires piano, and survcomp
-  "sgof" # requires plot2D
   "surveillance" # requires polyCub
   "aLFQ" # requires protiq
   "NLPutils" # requires qdap
