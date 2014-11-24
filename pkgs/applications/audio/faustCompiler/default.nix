@@ -3,9 +3,9 @@
 stdenv.mkDerivation rec {
 
   version = "0.9.67";
-  name = "faust-${version}";
+  name = "faustCompiler-${version}";
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/faudiostream/${name}.zip";
+    url = "http://downloads.sourceforge.net/project/faudiostream/faust-${version}.zip";
     sha256 = "068vl9536zn0j4pknwfcchzi90rx5pk64wbcbd67z32w0csx8xm1";
   };
 
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     '';
   
   makeFlags="PREFIX=$(out)";
+FPATH="$out"; # <- where to search
 
   meta = with stdenv.lib; {
     description = "A functional programming language for realtime audio signal processing";
@@ -37,6 +38,8 @@ stdenv.mkDerivation rec {
       audio platforms and plugin formats (jack, alsa, ladspa, maxmsp,
       puredata, csound, supercollider, pure, vst, coreaudio) without
       any change to the FAUST code.
+      This package has just the compiler. Install faust for the full
+      set of faust2somethingElse tools.
     '';
     homepage = http://faust.grame.fr/;
     downloadPage = http://sourceforge.net/projects/faudiostream/files/;

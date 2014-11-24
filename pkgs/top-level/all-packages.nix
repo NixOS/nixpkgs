@@ -12372,7 +12372,7 @@ let
 
   fakenes = callPackage ../misc/emulators/fakenes { };
 
-  faust = callPackage ../applications/audio/faust { };
+  faustCompiler = callPackage ../applications/audio/faustCompiler { };
 
   fceux = callPackage ../misc/emulators/fceux { };
 
