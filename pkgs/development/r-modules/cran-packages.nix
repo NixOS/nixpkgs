@@ -4,7 +4,6 @@
 
 let
   inherit (pkgs) R fetchurl stdenv lib xvfb_run utillinux;
-  inherit (lib) overrideDerivation;
 
   buildRPackage = import ./generic-builder.nix { inherit R xvfb_run utillinux ; };
 
@@ -145,7 +144,7 @@ let
       old3 = old2 // (overrideNativeBuildInputs packagesWithNativeBuildInputs old2);
       old4 = old3 // (overrideBuildInputs packagesWithBuildInputs old3);
       old = old4;
-    in old // (import ./default-overrides.nix stdenv overrideDerivation pkgs old new);
+    in old // (import ./default-overrides.nix stdenv pkgs old new);
 
 
   # Recursive override pattern.
