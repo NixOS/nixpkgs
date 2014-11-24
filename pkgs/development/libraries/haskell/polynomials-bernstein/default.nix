@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ vector ];
   meta = {
     description = "A solver for systems of polynomial equations in bernstein form";
-    license = self.stdenv.lib.licenses.gpl2Plus;
+    license = "GPL";
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ jpbernardy ];
   };
