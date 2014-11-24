@@ -80,65 +80,44 @@ in
               '';
           };
 
-        # For each interface <foo>, create a job ‘<foo>-cfg.service"
-        # that performs static configuration.  It has a "wants"
+        # For each interface <foo>, create a job ‘network-addresses-<foo>.service"
+        # that performs static address configuration.  It has a "wants"
         # dependency on ‘<foo>.service’, which is supposed to create
         # the interface and need not exist (i.e. for hardware
         # interfaces).  It has a binds-to dependency on the actual
         # network device, so it only gets started after the interface
         # has appeared, and it's stopped when the interface
         # disappears.
-        configureInterface = i:
+        configureAddrs = i:
           let
             ips = interfaceIps i;
           in
-          nameValuePair "${i.name}-cfg"
-          { description = "Configuration of ${i.name}";
+          nameValuePair "network-addresses-${i.name}"
+          { description = "Addresss configuration of ${i.name}";
             wantedBy = [ "network-interfaces.target" ];
+            before = [ "network-interfaces.target" ];
             bindsTo = [ (subsystemDevice i.name) ];
             after = [ (subsystemDevice i.name) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute pkgs.gawk ];
             script =
               ''
                 echo "bringing up interface..."
                 ip link set "${i.name}" up
-              ''
-              + optionalString (i.macAddress != null)
-                ''
-                  echo "setting MAC address to ${i.macAddress}..."
-                  ip link set "${i.name}" address "${i.macAddress}"
-                ''
-              + optionalString (i.mtu != null)
-                ''
-                  echo "setting MTU to ${toString i.mtu}..."
-                  ip link set "${i.name}" mtu "${toString i.mtu}"
-                ''
 
-              # Ip Setup
-              +
-                ''
-                  curIps=$(ip -o a show dev "${i.name}" | awk '{print $4}')
-                  # Only do an add if it's necessary.  This is
-                  # useful when the Nix store is accessed via this
-                  # interface (e.g. in a QEMU VM test).
-                  restart_network_interfaces=false
-                ''
-              + flip concatMapStrings (ips) (ip:
+                restart_network_interfaces=false
+              '' + flip concatMapStrings (ips) (ip:
                 let
                   address = "${ip.address}/${toString ip.prefixLength}";
                 in
                 ''
                   echo "checking ip ${address}..."
-                  if ! echo "$curIps" | grep "${address}" >/dev/null 2>&1; then
-                    if out=$(ip addr add "${address}" dev "${i.name}" 2>&1); then
-                      echo "added ip ${address}..."
-                      restart_network_setup=true
-                    elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                      echo "failed to add ${address}"
-                      exit 1
-                    fi
+                  if out=$(ip addr add "${address}" dev "${i.name}" 2>&1); then
+                    echo "added ip ${address}..."
+                    restart_network_setup=true
+                  elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
+                    echo "failed to add ${address}"
+                    exit 1
                   fi
                 '')
               + optionalString (ips != [ ])
@@ -154,8 +133,7 @@ in
             preStop =
               ''
                 echo "releasing configured ip's..."
-              ''
-              + flip concatMapStrings (ips) (ip:
+              '' + flip concatMapStrings (ips) (ip:
                 let
                   address = "${ip.address}/${toString ip.prefixLength}";
                 in
@@ -321,7 +299,7 @@ in
           });
 
       in listToAttrs (
-           map configureInterface interfaces ++
+           map configureAddrs interfaces ++
            map createTunDevice (filter (i: i.virtual) interfaces))
          // mapAttrs' createBridgeDevice cfg.bridges
          // mapAttrs' createBondDevice cfg.bonds

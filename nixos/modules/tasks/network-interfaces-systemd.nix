@@ -59,15 +59,6 @@ in
         networks."99-main" = genericNetwork mkDefault;
       }
       (mkMerge (flip map interfaces (i: {
-        links."40-${i.name}" = {
-          matchConfig.Name = i.name;
-          linkConfig =
-            (optionalAttrs (i.macAddress != null) {
-              MACAddress = i.macAddress;
-            }) // (optionalAttrs (i.mtu != null) {
-              MTUBytes = toString i.mtu;
-            });
-        };
         netdevs = mkIf i.virtual (
           let
             devType = if i.virtualType != null then i.virtualType

@@ -11,6 +11,10 @@ let
   hasSits = cfg.sits != { };
   hasBonds = cfg.bonds != { };
 
+  # We must escape interfaces due to the systemd interpretation
+  subsystemDevice = interface:
+    "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
+
   addrOpts = v:
     assert v == 4 || v == 6;
     {
@@ -623,19 +627,42 @@ in
       ++ optional hasVirtuals pkgs.tunctl
       ++ optional cfg.enableIPv6 pkgs.ndisc6;
 
-    systemd.services.network-local-commands = {
-      description = "Extra networking commands.";
-      before = [ "network.target" "network-online.target" ];
-      wantedBy = [ "network.target" "network-online.target" ];
-      unitConfig.ConditionCapability = "CAP_NET_ADMIN";
-      path = [ pkgs.iproute ];
-      serviceConfig.Type = "oneshot";
-      serviceConfig.RemainAfterExit = true;
-      script = ''
-        # Run any user-specified commands.
-        ${cfg.localCommands}
-      '';
-    };
+    systemd.services = {
+      network-local-commands = {
+        description = "Extra networking commands.";
+        before = [ "network.target" "network-online.target" ];
+        wantedBy = [ "network.target" "network-online.target" ];
+        unitConfig.ConditionCapability = "CAP_NET_ADMIN";
+        path = [ pkgs.iproute ];
+        serviceConfig.Type = "oneshot";
+        serviceConfig.RemainAfterExit = true;
+        script = ''
+          # Run any user-specified commands.
+          ${cfg.localCommands}
+        '';
+      };
+    } // (listToAttrs (flip map interfaces (i:
+      nameValuePair "network-link-${i.name}"
+      { description = "Link configuration of ${i.name}";
+        wantedBy = [ "network-interfaces.target" ];
+        before = [ "network-interfaces.target" ];
+        bindsTo = [ (subsystemDevice i.name) ];
+        after = [ (subsystemDevice i.name) ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+        script =
+          ''
+            echo "Configuring link..."
+          '' + optionalString (i.macAddress != null) ''
+            echo "setting MAC address to ${i.macAddress}..."
+            ip link set "${i.name}" address "${i.macAddress}"
+          '' + optionalString (i.mtu != null) ''
+            echo "setting MTU to ${toString i.mtu}..."
+            ip link set "${i.name}" mtu "${toString i.mtu}"
+          '';
+      })));
   };
 
 }
