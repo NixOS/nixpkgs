@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     aeson ekgCore httpClient lens network networkUri text time
     unorderedContainers vector wreq
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/ocharles/ekg-bosun";
     description = "Send ekg metrics to a Bosun instance";
