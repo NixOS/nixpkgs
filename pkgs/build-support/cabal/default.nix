@@ -67,7 +67,57 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               };
 
         defaults =
-          self : { # self is the final version of the attribute set
+          self : 
+          let
+            # TODO: This should most certainly go into its respective ghc package (7.8.3.nix).
+            # I'm however not sure of the implication of moving it there (binary package it would
+            # invalidate), the form it should take and even if there could be a more automated
+            # way of retrieving this listing.
+            ghc783NativePkgsFNames = [
+                "xhtml-3000.2.1"
+                "unix-2.7.0.1"
+                "transformers-0.3.0.0"
+                "time-1.4.2"
+                "terminfo-0.4.0.0"
+                "template-haskell-2.9.0.0"
+                "process-1.2.0.0"
+                "pretty-1.1.1.1"
+                "old-time-1.1.0.2"
+                "old-locale-1.0.0.6"
+                "integer-gmp-0.5.1.0"
+                "hpc-0.6.0.1"
+                "hoopl-3.10.0.1"
+                "haskell2010-1.1.2.0"
+                "haskell98-2.0.0.3"
+                "haskeline-0.7.1.2"
+                "ghc-prim-0.3.1.0"
+                "ghc-7.8.3"
+                "filepath-1.3.0.2"
+                "directory-1.2.1.0"
+                "deepseq-1.3.0.2"
+                "containers-0.5.5.1"
+                "Cabal-1.18.1.3"
+                "bytestring-0.10.4.0"
+                "bin-package-db-0.0.0.0"
+                "binary-0.7.1.0"
+                "base-4.7.0.1"
+                "array-0.5.0.0"
+            ];
+            ghcNativePkgsFNames = 
+              if "7.8.3" == ghc.version then 
+                ghc783NativePkgsFNames
+            else
+                []; # TODO: Should be replace by native packages listing for other ghc versions.
+
+            isHaskellPkg = x: (x ? pname) && (x ? version);
+            isGhcPkg = x: (isHaskellPkg x) && (stdenv.lib.any (ghcPkgFn: x.fname == ghcPkgFn) ghcNativePkgsFNames);
+            filterOutGhcPkgs = xs: stdenv.lib.filter (x: !(isGhcPkg x)) xs;
+            # Prevent collisions / multiple registering of same lib to ghc-pkg when
+            # a library is the same (name + version) as one of the libary natively
+            # packaged with a ghc build.
+            nonGhcBuildDepends = filterOutGhcPkgs self.buildDepends;
+          in 
+          { # self is the final version of the attribute set
 
             # pname should be defined by the client to be the package basename
             # version should be defined by the client to be the package version
@@ -106,15 +156,15 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
                                (optionals self.doCheck self.testDepends) ++
                                (optional self.hyperlinkSource hscolour) ++
                                (if self.pkgconfigDepends == [] then [] else [pkgconfig]) ++
-                               (if self.isLibrary then [] else self.buildDepends ++ self.extraLibraries ++ self.pkgconfigDepends);
+                               (if self.isLibrary then [] else nonGhcBuildDepends ++ self.extraLibraries ++ self.pkgconfigDepends);
 
             # we make sure that propagatedBuildInputs is defined, so that we don't
             # have to check for its existence
-            propagatedBuildInputs = if self.isLibrary then self.buildDepends ++ self.extraLibraries ++ self.pkgconfigDepends else [];
+            propagatedBuildInputs = if self.isLibrary then nonGhcBuildDepends ++ self.extraLibraries ++ self.pkgconfigDepends else [];
 
             # By default, also propagate all dependencies to the user environment. This is required, otherwise packages would be broken, because
             # GHC also needs all dependencies to be available.
-            propagatedUserEnvPkgs = if self.isLibrary then self.buildDepends else [];
+            propagatedUserEnvPkgs = if self.isLibrary then nonGhcBuildDepends else [];
 
             # library directories that have to be added to the Cabal files
             extraLibDirs = [];
