@@ -55,6 +55,8 @@ let
       "x-scheme-handler/ftp"
       "x-scheme-handler/mailto"
       "x-scheme-handler/webcal"
+      "x-scheme-handler/about"
+      "x-scheme-handler/unknown"
     ];
     categories = "Network;WebBrowser";
   };
