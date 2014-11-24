@@ -8,7 +8,11 @@
 # The actual Haskell packages are composed in haskell-packages.nix. There is
 # more documentation in there.
 
-{ makeOverridable, lowPrio, hiPrio, stdenv, pkgs, newScope, config, callPackage } : rec {
+{ makeOverridable, lowPrio, hiPrio, stdenv, pkgs, newScope, config, callPackage } :
+
+let buildCoreLibraries = config.haskell.buildCoreLibraries or false; in
+
+rec {
 
   # haskell-packages.nix provides the latest possible version of every package,
   # and this file overrides those version choices per compiler when appropriate.
@@ -151,7 +155,7 @@
     , extraArgs ? {}
     } :
     let haskellPackagesClass = import ./haskell-packages.nix {
-          inherit pkgs newScope modifyPrio;
+          inherit pkgs newScope modifyPrio buildCoreLibraries;
           enableLibraryProfiling =
             if profExplicit then profDefault
                             else config.cabal.libraryProfiling or profDefault;
