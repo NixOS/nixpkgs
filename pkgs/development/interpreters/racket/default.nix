@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cairo, file, fontconfig, glib, gtk, freefont_ttf
-, libjpeg, libpng, libtool, makeWrapper, openssl, pango, sqlite, which } :
+, libjpeg, libpng, libtool, makeWrapper, openssl, pango, sqlite, which, readline } :
 
 stdenv.mkDerivation rec {
   pname = "racket";
@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   # Various Racket executables do runtime searches for these.
   ffiSharedLibs = "${cairo}/lib:${fontconfig}/lib:${glib}/lib:${gtk}/lib:${libjpeg}/lib:"
-                + "${libpng}/lib:${openssl}/lib:${pango}/lib:${sqlite}/lib";
+                + "${libpng}/lib:${openssl}/lib:${pango}/lib:${sqlite}/lib:"
+                + "${readline}/lib";
 
   buildInputs = [ file fontconfig freefont_ttf libtool makeWrapper sqlite which ];
 
