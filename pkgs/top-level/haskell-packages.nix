@@ -1105,6 +1105,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hgal = callPackage ../development/libraries/haskell/hgal {};
 
+  higherLeveldb = callPackage ../development/libraries/haskell/higher-leveldb {};
+
   hourglass = callPackage ../development/libraries/haskell/hourglass {};
 
   hplayground = callPackage ../development/libraries/haskell/hplayground {};
