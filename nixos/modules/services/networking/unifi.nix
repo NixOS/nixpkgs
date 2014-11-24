@@ -63,14 +63,14 @@ in
         chmod 0700 "${stateDir}"
 
         # Create the volatile webapps
+        rm -rf "${stateDir}/webapps"
         mkdir -p "${stateDir}/webapps"
         chown unifi "${stateDir}/webapps"
-        rm -f "${stateDir}/webapps/ROOT.war"
         ln -s "${pkgs.unifi}/webapps/ROOT.war" "${stateDir}/webapps/ROOT.war"
       '';
 
       postStop = ''
-        rm "${stateDir}/webapps/ROOT.war"
+        rm "${stateDir}/webapps"
       '';
 
       serviceConfig = {
