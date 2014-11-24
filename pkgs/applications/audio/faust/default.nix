@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, unzip, pkgconfig,  gcc }:
+{ fetchurl, stdenv, unzip }:
 
 stdenv.mkDerivation rec {
 
@@ -9,13 +9,17 @@ stdenv.mkDerivation rec {
     sha256 = "068vl9536zn0j4pknwfcchzi90rx5pk64wbcbd67z32w0csx8xm1";
   };
 
-  buildInputs = [ unzip pkgconfig gcc ];
+  buildInputs = [ unzip ];
 
   patchPhase=''
+    sed -i '77,101d' Makefile
     sed -i 's#?= $(shell uname -s)#:= Linux#g'  architecture/osclib/oscpack/Makefile
     sed -e "s@\$FAUST_INSTALL /usr/local /usr /opt /opt/local@$out@g" -i tools/faust2appls/faustpath
     '';
 
+  postInstallPhase=''
+    rm -rf $out/include/
+    '';
   
   makeFlags="PREFIX=$(out)";
 
