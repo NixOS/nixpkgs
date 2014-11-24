@@ -1920,6 +1920,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   plugins= callPackage ../development/libraries/haskell/plugins {};
 
+  polynomialsBernstein = callPackage ../development/libraries/haskell/polynomials-bernstein {};
+
   polyparse = callPackage ../development/libraries/haskell/polyparse {};
 
   pointed = callPackage ../development/libraries/haskell/pointed {};
