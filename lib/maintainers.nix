@@ -99,6 +99,7 @@
   ludo = "Ludovic Courtès <ludo@gnu.org>";
   madjar = "Georges Dubus <georges.dubus@compiletoi.net>";
   manveru = "Michael Fellinger <m.fellinger@gmail.com>";
+  magnetophon = "Bart Brouns <bart@magnetophon.nl>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
   matejc = "Matej Cotman <cotman.matej@gmail.com>";
   meisternu = "Matt Miemiec <meister@krutt.org>";
