@@ -192,6 +192,14 @@ stdenv.mkDerivation rec {
             ln -sf $i $out/bin/$(basename $i)
         fi
     done
+
+    for i in $out/libexec/android-sdk-*/build-tools/android-*/*
+    do
+        if [ ! -d $i ] && [ -x $i ]
+        then
+            ln -sf $i $out/bin/$(basename $i)
+        fi
+    done
   '';
   
   buildInputs = [ unzip makeWrapper ];
