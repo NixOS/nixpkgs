@@ -2382,6 +2382,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   stmContainers = callPackage ../development/libraries/haskell/stm-containers {};
 
+  stmDelay = callPackage ../development/libraries/haskell/stm-delay {};
+
   STMonadTrans = callPackage ../development/libraries/haskell/STMonadTrans {};
 
   stmStats = callPackage ../development/libraries/haskell/stm-stats {};
