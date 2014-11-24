@@ -12,7 +12,7 @@ let
   #
   # some packages, e.g. cncaGUI, require X running while installation,
   # so that we use xvfb-run if requireX is true.
-  derive = lib.makeOverridable ({ name, version, sha256, depends ? [], skipTest ? false, requireX ? false }: buildRPackage {
+  derive = lib.makeOverridable ({ name, version, sha256, depends ? [], skipTest ? false, requireX ? false, hydraPlatforms ? R.meta.hydraPlatforms  }: buildRPackage {
     name = "${name}-${version}";
     src = fetchurl {
       urls = [
@@ -25,7 +25,7 @@ let
     propagatedBuildInputs = depends;
     nativeBuildInputs = depends;
     meta.homepage = "http://cran.r-project.org/web/packages/${name}/";
-    meta.hydraPlatforms = R.meta.hydraPlatforms;
+    meta.hydraPlatforms = hydraPlatforms;
   });
 
   # Overrides package definitions with nativeBuildInputs.
@@ -38,7 +38,7 @@ let
   # results in
   #
   # {
-  #   foo = overrideDerivation old.foo (attrs: {
+  #   foo = old.foo.overrideDerivation (attrs: {
   #     nativeBuildInputs = attrs.nativeBuildInputs ++ [ pkgs.bar ];
   #   });
   # }
@@ -48,7 +48,7 @@ let
       nameValuePairs = map (name: rec {
         inherit name;
         nativeBuildInputs = builtins.getAttr name overrides;
-        value = overrideDerivation (builtins.getAttr name old) (attrs: {
+        value = (builtins.getAttr name old).overrideDerivation (attrs: {
           nativeBuildInputs = attrs.nativeBuildInputs ++ nativeBuildInputs;
         });
       }) attrNames;
@@ -65,7 +65,7 @@ let
   # results in
   #
   # {
-  #   foo = overrideDerivation old.foo (attrs: {
+  #   foo = old.foo.overrideDerivation (attrs: {
   #     buildInputs = attrs.buildInputs ++ [ pkgs.bar ];
   #   });
   # }
@@ -75,7 +75,7 @@ let
       nameValuePairs = map (name: rec {
         inherit name;
         buildInputs = builtins.getAttr name overrides;
-        value = overrideDerivation (builtins.getAttr name old) (attrs: {
+        value = (builtins.getAttr name old).overrideDerivation (attrs: {
           buildInputs = attrs.buildInputs ++ buildInputs;
         });
       }) attrNames;
@@ -145,7 +145,7 @@ let
       old3 = old2 // (overrideNativeBuildInputs packagesWithNativeBuildInputs old2);
       old4 = old3 // (overrideBuildInputs packagesWithBuildInputs old3);
       old = old4;
-    in old // (import ./default-overrides.nix overrideDerivation pkgs old new);
+    in old // (import ./default-overrides.nix stdenv overrideDerivation pkgs old new);
 
 
   # Recursive override pattern.

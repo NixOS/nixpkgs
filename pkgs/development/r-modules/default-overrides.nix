@@ -1,4 +1,4 @@
-overrideDerivation: pkgs: old: new: {
+stdenv: overrideDerivation: pkgs: old: new: {
   RcppArmadillo = overrideDerivation old.RcppArmadillo (attrs: {
     patchPhase = "patchShebangs configure";
   });
@@ -81,7 +81,8 @@ overrideDerivation: pkgs: old: new: {
     CUDA_HOME = "${pkgs.cudatoolkit}";
   });
 
-  CARramps = overrideDerivation old.CARramps (attrs: {
+  # It seems that we cannot override meta attributes with overrideDerivation.
+  CARramps = overrideDerivation (old.CARramps.override { hydraPlatforms = stdenv.lib.platforms.none; }) (attrs: {
     patches = [ ./patches/CARramps.patch ];
     configureFlags = [
       "--with-cuda-home=${pkgs.cudatoolkit}"
@@ -95,7 +96,8 @@ overrideDerivation: pkgs: old: new: {
     CUDA_INC_PATH = "${pkgs.cudatoolkit}/usr_include";
   });
 
-  rpud = overrideDerivation old.rpud (attrs: {
+  # It seems that we cannot override meta attributes with overrideDerivation.
+  rpud = overrideDerivation (old.rpud.override { hydraPlatforms = stdenv.lib.platforms.none; }) (attrs: {
     patches = [ ./patches/rpud.patch ];
     CUDA_HOME = "${pkgs.cudatoolkit}";
   });
