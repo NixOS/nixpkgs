@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
 
   version = "0.9.67";
-  name = "faustCompiler-${version}";
+  name = "faust-compiler-${version}";
   src = fetchurl {
     url = "http://downloads.sourceforge.net/project/faudiostream/faust-${version}.zip";
     sha256 = "068vl9536zn0j4pknwfcchzi90rx5pk64wbcbd67z32w0csx8xm1";
