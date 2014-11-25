@@ -576,6 +576,7 @@ in
       optionalString hasBonds "options bonding max_bonds=0";
 
     boot.kernel.sysctl = {
+      "net.net.ipv4.conf.all.promote_secondaries" = true;
       "net.ipv6.conf.all.disable_ipv6" = mkDefault (!cfg.enableIPv6);
       "net.ipv6.conf.default.disable_ipv6" = mkDefault (!cfg.enableIPv6);
       "net.ipv4.conf.all_forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
