@@ -131,7 +131,7 @@ mkDerivation {
         echo "\$tmp/script";
         source "\$tmp/script";
       fi
-      rm -fr "\$tmp"
+      ${pkgs.coreutils}/bin/rm -fr "\$tmp"
       ${extraCmds}
 
       nix_cleanup() {
