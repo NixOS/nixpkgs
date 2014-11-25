@@ -11509,6 +11509,8 @@ let
 
   openxcom = callPackage ../games/openxcom { };
 
+  performous = callPackage ../games/performous { };
+
   pingus = callPackage ../games/pingus {};
 
   pioneers = callPackage ../games/pioneers { };
