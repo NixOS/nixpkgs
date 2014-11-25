@@ -542,7 +542,8 @@ in
       type = types.bool;
       description = ''
         Whether we should use networkd as the network configuration backend or
-        the legacy script based system.
+        the legacy script based system. Note that this option is experimental,
+        enable at your own risk.
       '';
     };
 
