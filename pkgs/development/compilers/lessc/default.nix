@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "lessc-${version}";
-  version = "1.7.5";
+  version = "1.7.5"; # Upgrade to > 2.x breaks twitter-bootstrap
 
   src = fetchgit {
     url = https://github.com/less/less.js.git;
