@@ -678,6 +678,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   distributedProcess = callPackage ../development/libraries/haskell/distributed-process {};
 
+  distributedProcessP2p = callPackage ../development/libraries/haskell/distributed-process-p2p {};
+
   distributedProcessPlatform = callPackage ../development/libraries/haskell/distributed-process-platform {};
 
   distributive = callPackage ../development/libraries/haskell/distributive {};
