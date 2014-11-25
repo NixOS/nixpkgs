@@ -69,14 +69,17 @@ in stdenv.mkDerivation {
   buildCommand = let
     browserBinary = "${chromium.browser}/libexec/chromium/chromium";
     sandboxBinary = "${chromium.sandbox}/bin/chromium-sandbox";
-  in ''
+    mkEnvVar = key: val: "--set '${key}' '${val}'";
+    envVars = chromium.plugins.settings.envVars or {};
+    flags = chromium.plugins.settings.flags or [];
+  in with stdenv.lib; ''
     mkdir -p "$out/bin" "$out/share/applications"
 
     ln -s "${chromium.browser}/share" "$out/share"
     makeWrapper "${browserBinary}" "$out/bin/chromium" \
       --set CHROMIUM_SANDBOX_BINARY_PATH "${sandboxBinary}" \
-      --run "export ${chromium.plugins.envVarsEnabled}" \
-      --add-flags "${chromium.plugins.flagsEnabled}"
+      ${concatStrings (mapAttrsToList mkEnvVar envVars)} \
+      --add-flags "${concatStringsSep " " flags}"
 
     ln -s "$out/bin/chromium" "$out/bin/chromium-browser"
     ln -s "${chromium.browser}/share/icons" "$out/share/icons"
