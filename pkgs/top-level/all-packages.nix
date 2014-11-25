@@ -3443,17 +3443,16 @@ let
     openblas = openblas_0_2_2;
   };
 
-  julia032 = let
+  julia033 = let
     liblapack = liblapack_3_5_0.override {shared = true;};
-  in callPackage ../development/compilers/julia/0.3.2.nix {
+  in callPackage ../development/compilers/julia/0.3.3.nix {
     inherit liblapack;
     suitesparse = suitesparse.override {
       inherit liblapack;
     };
-    llvm = llvm_34;
-    openblas = openblas_0_2_10;
+    llvm = llvm_33;
   };
-  julia = julia032;
+  julia = julia033;
 
   lazarus = callPackage ../development/compilers/fpc/lazarus.nix {
     fpc = fpc;
