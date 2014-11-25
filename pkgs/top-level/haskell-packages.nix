@@ -341,7 +341,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   c2hs = callPackage ../development/libraries/haskell/c2hs {};
 
-  c2hsc = callPackage ../development/libraries/haskell/c2hsc {};
+  c2hsc = callPackage ../development/tools/haskell/c2hsc {};
 
   Cabal_1_16_0_3 = callPackage ../development/libraries/haskell/Cabal/1.16.0.3.nix {};
   Cabal_1_18_1_3 = callPackage ../development/libraries/haskell/Cabal/1.18.1.3.nix {};
