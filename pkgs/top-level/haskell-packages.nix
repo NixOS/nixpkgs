@@ -2238,6 +2238,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   snapletAcidState = callPackage ../development/libraries/haskell/snaplet-acid-state {};
 
+  snapErrorCollector = callPackage ../development/libraries/haskell/snap-error-collector {};
+
   snapletPostgresqlSimple = callPackage ../development/libraries/haskell/snaplet-postgresql-simple {};
 
   snapletRedis = callPackage ../development/libraries/haskell/snaplet-redis {};
