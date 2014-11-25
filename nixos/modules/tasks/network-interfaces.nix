@@ -624,9 +624,6 @@ in
         pkgs.rfkill
         pkgs.openresolv
       ]
-      ++ optional (cfg.bridges != {}) pkgs.bridge_utils
-      ++ optional hasVirtuals pkgs.tunctl
-      ++ optional cfg.enableIPv6 pkgs.ndisc6;
 
     systemd.services = {
       network-local-commands = {

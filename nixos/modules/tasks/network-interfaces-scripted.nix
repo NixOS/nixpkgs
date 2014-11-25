@@ -23,6 +23,20 @@ let
       prefixLength = i.ipv6PrefixLength;
     };
 
+  destroyBond = i: ''
+    while true; do
+      UPDATED=1
+      SLAVES=$(ip link | grep 'master ${i}' | awk -F: '{print $2}')
+      for I in $SLAVES; do
+        UPDATED=0
+        ip link set "$I" nomaster
+      done
+      [ "$UPDATED" -eq "1" ] && break
+    done
+    ip link set "${i}" down || true
+    ip link del "${i}" || true
+  '';
+
 in
 
 {
@@ -174,34 +188,31 @@ in
             after = deps;
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.bridge_utils pkgs.iproute ];
-            script =
-              ''
-                # Remove Dead Interfaces
-                ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+            path = [ pkgs.iproute ];
+            script = ''
+              # Remove Dead Interfaces
+              echo "Removing old bridge ${n}..."
+              ip link show "${n}" >/dev/null 2>&1 && ip link del "${n}"
 
-                brctl addbr "${n}"
+              echo "Adding bridge ${n}..."
+              ip link add name "${n}" type bridge
 
-                # Set bridge's hello time to 0 to avoid startup delays.
-                brctl setfd "${n}" 0
+              # Set bridge's hello time to 0 to avoid startup delays.
+              echo 0 >"/sys/class/net/${n}/bridge/hello_time"
+              echo 0 >"/sys/class/net/${n}/bridge/forward_delay"
 
-                ${flip concatMapStrings v.interfaces (i: ''
-                  brctl addif "${n}" "${i}"
-                  ip link set "${i}" up
-                  ip addr flush dev "${i}"
+              # Enslave child interfaces
+              ${flip concatMapStrings v.interfaces (i: ''
+                ip link set "${i}" master "${n}"
+                ip link set "${i}" up
+              '')}
 
-                  echo "bringing up network device ${n}..."
-                  ip link set "${n}" up
-                '')}
-
-                # !!! Should delete (brctl delif) any interfaces that
-                # no longer belong to the bridge.
-              '';
-            postStop =
-              ''
-                ip link set "${n}" down
-                brctl delbr "${n}"
-              '';
+              ip link set "${n}" up
+            '';
+            postStop = ''
+              ip link set "${n}" down || true
+              ip link del "${n}" || true
+            '';
           });
 
         createBondDevice = n: v: nameValuePair "${n}-netdev"
@@ -215,39 +226,28 @@ in
             before = [ "${n}-cfg.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.ifenslave pkgs.iproute ];
+            path = [ pkgs.iproute ];
             script = ''
-              ip link add name "${n}" type bond
+              echo "Destroying old bond ${n}..."
+              ${destroyBond n}
+
+              echo "Creating new bond ${n}..."
+              ip link add name "${n}" type bond \
+                ${optionalString (v.mode != null) "mode ${toString v.mode}"} \
+                ${optionalString (v.miimon != null) "miimon ${toString v.miimon}"} \
+                ${optionalString (v.xmit_hash_policy != null) "xmit_hash_policy ${toString v.xmit_hash_policy}"} \
+                ${optionalString (v.lacp_rate != null) "lacp_rate ${toString v.lacp_rate}"}
 
               # !!! There must be a better way to wait for the interface
-              while [ ! -d /sys/class/net/${n} ]; do sleep 0.1; done;
-
-              # Ensure the link is down so that we can set options
-              ip link set "${n}" down
-
-              # Set the miimon and mode options
-              ${optionalString (v.miimon != null)
-                "echo \"${toString v.miimon}\" >/sys/class/net/${n}/bonding/miimon"}
-              ${optionalString (v.mode != null)
-                "echo \"${v.mode}\" >/sys/class/net/${n}/bonding/mode"}
-              ${optionalString (v.lacp_rate != null)
-                "echo \"${v.lacp_rate}\" >/sys/class/net/${n}/bonding/lacp_rate"}
-              ${optionalString (v.xmit_hash_policy != null)
-                "echo \"${v.xmit_hash_policy}\" >/sys/class/net/${n}/bonding/xmit_hash_policy"}
+              while [ ! -d "/sys/class/net/${n}" ]; do sleep 0.1; done;
 
               # Bring up the bond and enslave the specified interfaces
               ip link set "${n}" up
               ${flip concatMapStrings v.interfaces (i: ''
-                ifenslave "${n}" "${i}"
+                ip link set "${i}" master "${n}"
               '')}
             '';
-            postStop = ''
-              ${flip concatMapStrings v.interfaces (i: ''
-                ifenslave -d "${n}" "${i}" >/dev/null 2>&1 || true
-              '')}
-              ip link set "${n}" down >/dev/null 2>&1 || true
-              ip link del "${n}" >/dev/null 2>&1 || true
-            '';
+            postStop = destroyBond n;
           });
 
         createSitDevice = n: v: nameValuePair "${n}-netdev"
