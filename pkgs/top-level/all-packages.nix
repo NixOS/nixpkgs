@@ -2437,7 +2437,7 @@ let
 
   stunnel = callPackage ../tools/networking/stunnel { };
 
-  strongswan = callPackage ../tools/networking/strongswan { stdenv = clangStdenv; };
+  strongswan = callPackage ../tools/networking/strongswan { };
 
   su = shadow.su;
 

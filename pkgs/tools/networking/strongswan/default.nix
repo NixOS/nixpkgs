@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "05cjjd7gg65bl6fswj2r2i13nn1nk4x86s06y75gwfdvnlrsnlga";
   };
 
+  dontPatchELF = true;
+
   buildInputs = [ gmp pkgconfig ];
 
   configureFlags = [ "--enable-swanctl" "--enable-cmd" ];
