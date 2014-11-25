@@ -7,16 +7,11 @@
 , transformersBase, twitterTypes, twitterTypesLens, fetchurl
 }:
 
-let
-  editedCabalFile = fetchurl {
-    url = "http://hackage.haskell.org/package/twitter-conduit-0.1.0/twitter-conduit.cabal";
-    sha256 = "06z8dwvc17xhzpvb7cm0j6v63r5f3xirj36rr86bds3rw1zbnd0z";
-  };
-in
 cabal.mkDerivation (self: {
   pname = "twitter-conduit";
   version = "0.1.0";
   sha256 = "1cymgp3wlswxn5qfdr442cqq2ak48b5w1zcsr67n2g5p1izadwji";
+  editedCabalFile = "06z8dwvc17xhzpvb7cm0j6v63r5f3xirj36rr86bds3rw1zbnd0z";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -31,7 +26,6 @@ cabal.mkDerivation (self: {
     resourcet text time transformers transformersBase twitterTypes
     twitterTypesLens
   ];
-  preConfigure = "cp ${editedCabalFile} twitter-conduit.cabal";
   meta = {
     homepage = "https://github.com/himura/twitter-conduit";
     description = "Twitter API package with conduit interface and Streaming API support";
