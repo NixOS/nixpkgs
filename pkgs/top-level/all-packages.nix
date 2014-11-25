@@ -2238,6 +2238,8 @@ let
 
   reptyr = callPackage ../os-specific/linux/reptyr {};
 
+  rescuetime = callPackage ../applications/misc/rescuetime { };
+
   rdiff-backup = callPackage ../tools/backup/rdiff-backup { };
 
   rdmd = callPackage ../development/compilers/rdmd { };
