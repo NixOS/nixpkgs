@@ -59,8 +59,10 @@ let
     categories = "Network;WebBrowser";
   };
 
+  suffix = if channel != "stable" then "-" + channel else "";
+
 in stdenv.mkDerivation {
-  name = "chromium${if channel != "stable" then "-" + channel else ""}-${chromium.browser.version}";
+  name = "chromium${suffix}-${chromium.browser.version}";
 
   buildInputs = [ makeWrapper ];
 
