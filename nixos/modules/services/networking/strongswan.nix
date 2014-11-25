@@ -57,8 +57,9 @@ in
       example = [ "/run/keys/ipsec-foo.secret" ];
       description = ''
         A list of paths to IPSec secret files. These
-        files will be included into the main ipsec.secrets file
-        with the `include' directive. It is safer if these paths are absolute.
+        files will be included into the main ipsec.secrets file with
+        the <literal>include</literal> directive. It is safer if these
+        paths are absolute.
       '';
     };
 
@@ -67,8 +68,9 @@ in
       default = {};
       example = { cachecrls = "yes"; strictcrlpolicy = "yes"; };
       description = ''
-        A set of options for the `config setup' section of
-        the `ipsec.conf' file. Defines general configuration parameters.
+        A set of options for the ‘config setup’ section of the
+        <filename>ipsec.conf</filename> file. Defines general
+        configuration parameters.
       '';
     };
 
@@ -89,8 +91,8 @@ in
         };
       };
       description = ''
-        A set of connections and their options for the `conn xxx'
-        sections of the `ipsec.conf' file.
+        A set of connections and their options for the ‘conn xxx’
+        sections of the <filename>ipsec.conf</filename> file.
       '';
     };
 
@@ -105,15 +107,16 @@ in
         };
       };
       description = ''
-        A set of CAs (certification authorities) and their options
-        for the `ca xxx' sections of the `ipsec.conf' file.
+        A set of CAs (certification authorities) and their options for
+        the ‘ca xxx’ sections of the <filename>ipsec.conf</filename>
+        file.
       '';
     };
   };
 
   config = with cfg; mkIf enable {
     systemd.services.strongswan = {
-      description = "strongSwan IPSec service";
+      description = "strongSwan IPSec Service";
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [ kmod ]; # XXX Linux
       wants = [ "keys.target" ];
