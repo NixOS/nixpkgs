@@ -1,6 +1,6 @@
 { stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre, zlib
  , readline, fftwSinglePrec, fftw, libunwind, suitesparse, glpk, fetchurl
- , ncurses, libunistring, lighttpd, patchelf, openblas, liblapack
+ , ncurses, libunistring, patchelf, openblas, liblapack
  , tcl, tk, xproto, libX11, git, mpfr, which
  } :
 
@@ -11,64 +11,59 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "0.3.2";
+  version = "0.3.3";
   name = "${pname}-${version}";
 
   dsfmt_ver = "2.2";
   grisu_ver = "1.1.1";
-  openblas_ver = "v0.2.10";
+  openblas_ver = "v0.2.12";
   lapack_ver = "3.5.0";
   arpack_ver = "3.1.5";
-  lighttpd_ver = "1.4.29";
-  patchelf_ver = "0.6";
-  pcre_ver = "8.31";
+  patchelf_ver = "0.8";
+  pcre_ver = "8.36";
   utf8proc_ver = "1.1.6";
 
   dsfmt_src = fetchurl {
     url = "http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/dSFMT-src-${dsfmt_ver}.tar.gz";
     name = "dsfmt-${dsfmt_ver}.tar.gz";
-    sha256 = "bc3947a9b2253a869fcbab8ff395416cb12958be9dba10793db2cd7e37b26899";
+    md5 = "cb61be3be7254eae39684612c524740d";
   };
   grisu_src = fetchurl {
     url = "http://double-conversion.googlecode.com/files/double-conversion-${grisu_ver}.tar.gz";
-    sha256 = "e1cabb73fd69e74f145aea91100cde483aef8b79dc730fcda0a34466730d4d1d";
+    md5 = "29b533ed4311161267bff1a9a97e2953";
   };
   openblas_src = fetchurl {
     url = "https://github.com/xianyi/OpenBLAS/tarball/${openblas_ver}";
     name = "openblas-${openblas_ver}.tar.gz";
-    sha256 = "06i0q4qnd5q5xljzrgvda0gjsczc6l2pl9hw6dn2qjpw38al73za";
+    md5 = "dfc868e0c134855639f036d2723bf4be";
   };
   arpack_src = fetchurl rec {
     url = "https://github.com/opencollab/arpack-ng/archive/${arpack_ver}.tar.gz";
-    sha256 = "164hc2qcvr7fvvf7bn2k7z40hyyv8hhhzjr6jq0mq6a7l80x02gn";
+    md5 = "d84e1b6108d9ee67c0d21aba7099e953";
     name = "arpack-ng-${arpack_ver}.tar.gz";
   };
   lapack_src = fetchurl {
     url = "http://www.netlib.org/lapack/lapack-${lapack_ver}.tgz";
     name = "lapack-${lapack_ver}.tgz";
-    sha256 = "0lk3f97i9imqascnlf6wr5mjpyxqcdj73pgj97dj2mgvyg9z1n4s";
-  };
-  lighttpd_src = fetchurl {
-    url = "http://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-${lighttpd_ver}.tar.gz";
-    sha256 = "ff9f4de3901d03bb285634c5b149191223d17f1c269a16c863bac44238119c85";
+    md5 = "b1d3e3e425b2e44a06760ff173104bdf";
   };
   patchelf_src = fetchurl {
     url = "http://hydra.nixos.org/build/1524660/download/2/patchelf-${patchelf_ver}.tar.bz2";
-    sha256 = "00bw29vdsscsili65wcb5ay0gvg1w0ljd00sb5xc6br8bylpyzpw";
+    md5 = "5087261514b4b5814a39c3d3a36eb6ef";
   };
   pcre_src = fetchurl {
     url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${pcre_ver}.tar.bz2";
-    sha256 = "0g4c0z4h30v8g8qg02zcbv7n67j5kz0ri9cfhgkpwg276ljs0y2p";
+    md5 = "b767bc9af0c20bc9c1fe403b0d41ad97";
   };
   utf8proc_src = fetchurl {
     url = "http://www.public-software-group.org/pub/projects/utf8proc/v${utf8proc_ver}/utf8proc-v${utf8proc_ver}.tar.gz";
-    sha256 = "1rwr84pw92ajjlbcxq0da7yxgg3ijngmrj7vhh2qzsr2h2kqzp7y";
+    md5 = "2462346301fac2994c34f5574d6c3ca7";
   };
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
     rev = "refs/tags/v${version}";
-    sha256 = "11w81mznhlfcnn6vcv1rhrbajnyz8aim29wvwl92zsllq8z9hv2i";
+    md5 = "84266f0201ad34abe8ca1474620fe891";
     name = "julia-git-v${version}";
   };
 
@@ -78,7 +73,7 @@ stdenv.mkDerivation rec {
     ];
 
   configurePhase = ''
-    for i in GMP LLVM PCRE READLINE FFTW LIBUNWIND SUITESPARSE GLPK LIGHTTPD ZLIB MPFR;
+    for i in GMP LLVM PCRE READLINE FFTW LIBUNWIND SUITESPARSE GLPK ZLIB MPFR;
     do
       makeFlags="$makeFlags USE_SYSTEM_$i=1 "
     done
