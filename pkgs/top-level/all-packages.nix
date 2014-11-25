@@ -2514,6 +2514,8 @@ let
 
   tmux = callPackage ../tools/misc/tmux { };
 
+  tmin = callPackage ../tools/security/tmin { };
+
   tor = callPackage ../tools/security/tor { };
 
   torbutton = callPackage ../tools/security/torbutton { };
