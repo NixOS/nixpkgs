@@ -6,13 +6,12 @@
 
 cabal.mkDerivation (self: {
   pname = "ekg-bosun";
-  version = "1.0.0";
-  sha256 = "0r7ri2mfqhxypjm96s03d00b3fh28mw79wkj2cbhk4w23v2rhdv0";
+  version = "1.0.2";
+  sha256 = "0q32yvl5j59s22v357j8vx0i3b5cd0gygh7gyibym5ka5d5xd82m";
   buildDepends = [
     aeson ekgCore httpClient lens network networkUri text time
     unorderedContainers vector wreq
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://github.com/ocharles/ekg-bosun";
     description = "Send ekg metrics to a Bosun instance";
