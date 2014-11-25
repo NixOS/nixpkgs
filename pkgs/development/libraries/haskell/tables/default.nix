@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     doctest filepath lens transformers unorderedContainers
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/ekmett/tables/";
     description = "In-memory storage with multiple keys using lenses and traversals";
