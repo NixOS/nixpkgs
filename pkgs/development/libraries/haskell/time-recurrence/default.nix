@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     dataOrdlist HUnit mtl testFramework testFrameworkHunit time
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/hellertime/time-recurrence";
     description = "Generate recurring dates";
