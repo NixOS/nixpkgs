@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     filepath HUnit parsec testFramework testFrameworkHunit transformers
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/eli-frey/cmdtheline";
     description = "Declarative command-line option parsing and documentation library";
