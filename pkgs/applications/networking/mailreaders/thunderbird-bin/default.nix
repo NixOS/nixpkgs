@@ -141,11 +141,10 @@ stdenv.mkDerivation {
     '';
 
   meta = with stdenv.lib; {
-    description = "Mozilla Thunderbird, a full-featured email client";
+    description = "Mozilla Thunderbird, a full-featured email client (binary package)";
     homepage = http://www.mozilla.org/thunderbird/;
     license = {
-      shortName = "unfree"; # not sure
-      fullName = "unfree";
+      free = false;
       url = http://www.mozilla.org/en-US/foundation/trademarks/policy/;
     };
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];

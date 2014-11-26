@@ -4,6 +4,17 @@ with lib;
 
 let
 
+  httpd = serverInfo.serverConfig.package;
+
+  version24 = !versionOlder httpd.version "2.4";
+
+  allGranted = if version24 then ''
+    Require all granted
+  '' else ''
+    Order allow,deny
+    Allow from all
+  '';
+
   mediawikiConfig = pkgs.writeText "LocalSettings.php"
     ''
       <?php
@@ -121,8 +132,7 @@ in
         Alias ${config.urlPrefix}/images ${config.uploadDir}
 
         <Directory ${config.uploadDir}>
-            Order allow,deny
-            Allow from all
+            ${allGranted}
             Options -Indexes
         </Directory>
       ''}
@@ -142,8 +152,7 @@ in
       ''}
 
       <Directory ${mediawikiRoot}>
-          Order allow,deny
-          Allow from all
+          ${allGranted}
           DirectoryIndex index.php
       </Directory>
 

@@ -274,6 +274,7 @@
   ./services/networking/spiped.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
+  ./services/networking/strongswan.nix
   ./services/networking/supybot.nix
   ./services/networking/syncthing.nix
   ./services/networking/tcpcrypt.nix

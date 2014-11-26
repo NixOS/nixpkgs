@@ -339,9 +339,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   bzlib = callPackage ../development/libraries/haskell/bzlib {};
 
-  c2hs = callPackage ../development/libraries/haskell/c2hs {};
+  c2hs = callPackage ../development/tools/haskell/c2hs {};
 
-  c2hsc = callPackage ../development/libraries/haskell/c2hsc {};
+  c2hsc = callPackage ../development/tools/haskell/c2hsc {};
 
   Cabal_1_16_0_3 = callPackage ../development/libraries/haskell/Cabal/1.16.0.3.nix {};
   Cabal_1_18_1_3 = callPackage ../development/libraries/haskell/Cabal/1.18.1.3.nix {};
@@ -677,6 +677,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   distributedStatic = callPackage ../development/libraries/haskell/distributed-static {};
 
   distributedProcess = callPackage ../development/libraries/haskell/distributed-process {};
+
+  distributedProcessMonadControl = callPackage ../development/libraries/haskell/distributed-process-monad-control {};
+
+  distributedProcessP2p = callPackage ../development/libraries/haskell/distributed-process-p2p {};
 
   distributedProcessPlatform = callPackage ../development/libraries/haskell/distributed-process-platform {};
 
@@ -2235,6 +2239,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   snap = callPackage ../development/libraries/haskell/snap/snap.nix {};
 
   snapletAcidState = callPackage ../development/libraries/haskell/snaplet-acid-state {};
+
+  snapErrorCollector = callPackage ../development/libraries/haskell/snap-error-collector {};
 
   snapletPostgresqlSimple = callPackage ../development/libraries/haskell/snaplet-postgresql-simple {};
 

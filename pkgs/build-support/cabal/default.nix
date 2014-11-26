@@ -189,7 +189,16 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
             configurePhase = ''
               eval "$preConfigure"
 
-              ${optionalString self.jailbreak "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal"}
+              ${let newCabalFile = fetchurl {
+                      url = "http://hackage.haskell.org/package/${self.fname}/${self.pname}.cabal";
+                      sha256 = self.editedCabalFile;
+                    };
+                in
+                  optionalString (self.editedCabalFile or "" != "") ''
+                    echo "Replace Cabal file with edited version ${newCabalFile}."
+                    cp ${newCabalFile} ${self.pname}.cabal
+                  ''
+              }${optionalString self.jailbreak "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal"}
 
               for i in Setup.hs Setup.lhs ${defaultSetupHs}; do
                 test -f $i && break

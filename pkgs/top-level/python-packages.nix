@@ -8142,6 +8142,28 @@ let
     };
   };
 
+  robomachine = buildPythonPackage rec {
+    name = "robomachine-0.6";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/R/RoboMachine/RoboMachine-0.6.tar.gz";
+      md5 = "4e95eaa43afda0f363c78a88e9da7159";
+    };
+
+    propagatedBuildInputs = with self; [ pyparsing argparse robotframework ];
+
+    # Remove Windows .bat files
+    postInstall = ''
+      rm "$out"/bin/*.bat
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Test data generator for Robot Framework";
+      homepage = https://github.com/mkorpela/RoboMachine;
+      license = licenses.asl20;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
 
   robotframework = buildPythonPackage rec {
     version = "2.8.5";

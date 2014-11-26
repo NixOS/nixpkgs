@@ -62,29 +62,38 @@ let
       install -vD PepperFlash/libpepflashplayer.so \
         "$flash/lib/libpepflashplayer.so"
       mkdir -p "$flash/nix-support"
-      echo "--ppapi-flash-path='$flash/lib/libpepflashplayer.so'" \
-           "--ppapi-flash-version=$flashVersion" \
-           > "$flash/nix-support/chromium-flags"
+      cat > "$flash/nix-support/chromium-plugin.nix" <<NIXOUT
+        { flags = [
+            "--ppapi-flash-path='$flash/lib/libpepflashplayer.so'"
+            "--ppapi-flash-version=$flashVersion"
+          ];
+        }
+      NIXOUT
 
       install -vD libwidevinecdm.so \
         "$widevine/lib/libwidevinecdm.so"
       install -vD libwidevinecdmadapter.so \
         "$widevine/lib/libwidevinecdmadapter.so"
       mkdir -p "$widevine/nix-support"
-      echo "--register-pepper-plugins='${wvModule}${wvInfo}'" \
-        > "$widevine/nix-support/chromium-flags"
-      echo "NIX_CHROMIUM_PLUGIN_PATH_WIDEVINE=$widevine/lib" \
-        > "$widevine/nix-support/chromium-env-vars"
+      cat > "$widevine/nix-support/chromium-plugin.nix" <<NIXOUT
+        { flags = [ "--register-pepper-plugins='${wvModule}${wvInfo}'" ];
+          envVars.NIX_CHROMIUM_PLUGIN_PATH_WIDEVINE = "$widevine/lib";
+        }
+      NIXOUT
     '';
 
     passthru = let
       enabledPlugins = optional enablePepperFlash plugins.flash
                     ++ optional enableWideVine    plugins.widevine;
-      getFlags = plugin: "$(< ${plugin}/nix-support/chromium-flags)";
-      getEnvVars = plugin: "$(< ${plugin}/nix-support/chromium-env-vars)";
+      getNix = plugin: import "${plugin}/nix-support/chromium-plugin.nix";
+      mergeAttrsets = let
+        f = v: if all isAttrs v then mergeAttrsets v
+          else if all isList  v then concatLists   v
+          else if tail v == []  then head          v
+          else head (tail v);
+      in fold (l: r: zipAttrsWith (_: f) [ l r ]) {};
     in {
-      flagsEnabled = concatStringsSep " " (map getFlags enabledPlugins);
-      envVarsEnabled = concatStringsSep " " (map getEnvVars enabledPlugins);
+      settings = mergeAttrsets (map getNix enabledPlugins);
     };
   };
 in plugins

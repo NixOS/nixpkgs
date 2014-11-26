@@ -72,20 +72,21 @@ mkDerivation {
   phases = [ "buildPhase" "fixupPhase" ];
   setupNew = substituteAll {
     src = ../../stdenv/generic/setup.sh;
-    initialPath= (import ../../stdenv/common-path.nix) { inherit pkgs; };
     inherit gcc;
   };
 
-  buildPhase = ''
+  buildPhase = let
+    initialPath = import ../../stdenv/common-path.nix { inherit pkgs; };
+  in ''
     set -x
     mkdir -p "$out/dev-envs" "$out/nix-support" "$out/bin"
     s="$out/nix-support/setup-new-modified"
-    cp "$setupNew" "$s"
     # shut some warning up.., do not use set -e
     sed -e 's@set -e@@' \
         -e 's@assertEnvExists\s\+NIX_STORE@:@' \
         -e 's@trap.*@@' \
-        -i "$s"
+        -e '1i initialPath="${toString initialPath}"' \
+        "$setupNew" > "$s"
     cat >> "$out/dev-envs/''${name/env-/}" << EOF
       nativeBuildInputs="$nativeBuildInputs"
       propagatedBuildInputs="$propagatedBuildInputs2"
@@ -131,7 +132,7 @@ mkDerivation {
         echo "\$tmp/script";
         source "\$tmp/script";
       fi
-      rm -fr "\$tmp"
+      ${pkgs.coreutils}/bin/rm -fr "\$tmp"
       ${extraCmds}
 
       nix_cleanup() {

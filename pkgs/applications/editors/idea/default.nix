@@ -147,6 +147,7 @@ let
   buildRubyMine = { name, version, build, src, license, description }:
     (mkIdeaProduct rec {
       inherit name version build src;
+      patchSnappy = false;
       product = "RubyMine";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/ruby/";
@@ -208,62 +209,62 @@ in
 
   android-studio = buildAndroidStudio rec {
     name = "android-studio-${version}";
-    version = "0.8.12";
-    build = "135.1503853";
+    version = "1.0.0-rc1";
+    build = "135.1598475";
     description = "Android development environment based on IntelliJ IDEA";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}" +
             "/android-studio-ide-${build}-linux.zip";
-      sha256 = "225c8b2f90b9159c465eae5797132350660994184a568c631d4383313a510695";
+      sha256 = "1d0gj9c2hkrcij79xv8i5fy1z8zss1fp8szjp6h7z7zak989rsrf";
     };
   };
 
   clion = buildClion rec {
     name = "clion";
     version = "eap";
-    build = "138.2344.17";
+    build = "140.569.17";
     description  = "C/C++ IDE. New. Intelligent. Cross-platform.";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "http://download.jetbrains.com/cpp/${name}-${build}.tar.gz";
-      sha256 = "4b568d31132a787b748bc41c69b614dcd90229db69b02406677361bc077efab3";
+      sha256 = "1y4137dxbydf3g5s6c58bf015k2q7dsl8h4n0q2llqj5bprwcr23";
     };
   };
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "14";
-    build = "IC-139.224";
+    version = "14.0.1";
+    build = "IC-139.225";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "http://download-ln.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "72e1e7659aa90c0b520eed8190fa96899e26bde7448a9fe4ed43929ef25c508a";
+      sha256 = "166m55q33q4jwfvzwxm8mak6ic32h63bvpxdnjd41si6bs19ynvg";
     };
   };
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "14";
-    build = "IU-139.224";
+    version = "14.0.1";
+    build = "IU-139.225";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "http://download-ln.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "e1c86f0b39e74b3468f7512d299ad9e0ca0c492316e996e65089368aff5446c6";
+      sha256 = "0hh84f3297ak63n2kv76xv1rnf1fhjws9d3b2r5pwzgfd78zja4q";
     };
   };
 
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
-    version = "6.3.3";
+    version = "7.0";
     build = "135.1104";
     description = "The Most Intelligent Ruby and Rails IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "http://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
-      sha256 = "58d555c2702a93fe62f3809a5cc34e566ecce0c3f1f15daaf87744402157dfac";
+      sha256 = "0xsx44gaddarkw5k4yjidzwkayf2xvsxklfzdnzcck4rg4vyk4v4";
     };
   };
 
