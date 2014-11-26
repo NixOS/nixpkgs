@@ -214,6 +214,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   aws = callPackage ../development/libraries/haskell/aws {};
 
+  awsEc2 = callPackage ../development/libraries/haskell/aws-ec2 {};
+
   authenticate = callPackage ../development/libraries/haskell/authenticate {};
 
   authenticateOauth = callPackage ../development/libraries/haskell/authenticate-oauth {};
