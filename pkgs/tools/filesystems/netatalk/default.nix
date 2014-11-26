@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, db, libgcrypt, avahi, libiconvOrEmpty, pam, openssl }:
+{ fetchurl, stdenv, pkgconfig, db, libgcrypt, avahi, libiconv, pam, openssl }:
 
 stdenv.mkDerivation rec {
   name = "netatalk-3.1.0";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1d8dc8ysslkis4yl1xab1w9p0pz7a1kg0i6fds4wxsp4fhb6wqhq";
   };
 
-  buildInputs = [ pkgconfig db libgcrypt avahi pam openssl ] ++ libiconvOrEmpty;
+  buildInputs = [ pkgconfig db libgcrypt avahi pam openssl libiconv ];
 
   configureFlags = [
     "--with-bdb=${db}"

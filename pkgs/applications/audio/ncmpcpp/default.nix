@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ncurses, curl, taglib, fftw, mpd_clientlib, pkgconfig
-, libiconvOrEmpty, boost, readline }:
+, libiconv, boost, readline }:
 
 stdenv.mkDerivation rec {
   version = "0.6.2";
@@ -12,8 +12,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = "BOOST_LIB_SUFFIX=";
 
-  buildInputs = [ ncurses curl taglib fftw mpd_clientlib boost pkgconfig readline ]
-    ++ libiconvOrEmpty;
+  buildInputs = [ ncurses curl taglib fftw mpd_clientlib boost pkgconfig readline libiconv];
 
   meta = with stdenv.lib; {
     description = "Curses-based interface for MPD (music player daemon)";
