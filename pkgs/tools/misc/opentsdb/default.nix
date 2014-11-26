@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     mkdir build
     cd build
     ../configure --prefix=$out
+    patchShebangs ./build-aux/
   '';
 
   installPhase = ''
@@ -29,5 +30,6 @@ stdenv.mkDerivation rec {
     homepage = http://opentsdb.net;
     license = licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.linux;
+    #broken = true;
   };
 }
