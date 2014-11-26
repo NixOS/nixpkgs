@@ -8161,6 +8161,7 @@ let
       description = "Test data generator for Robot Framework";
       homepage = https://github.com/mkorpela/RoboMachine;
       license = licenses.asl20;
+      maintainers = [ maintainers.bjornfor ];
     };
   };
 
