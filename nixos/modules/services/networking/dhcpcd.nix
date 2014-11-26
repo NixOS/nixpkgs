@@ -15,7 +15,7 @@ let
   # Don't start dhcpcd on explicitly configured interfaces or on
   # interfaces that are part of a bridge, bond or sit device.
   ignoredInterfaces =
-    map (i: i.name) (filter (i: if i.useDHCP != null then i.useDHCP else i.ip4 != [ ] || i.ipAddress != null) interfaces)
+    map (i: i.name) (filter (i: if i.useDHCP != null then !i.useDHCP else i.ip4 != [ ] || i.ipAddress != null) interfaces)
     ++ mapAttrsToList (i: _: i) config.networking.sits
     ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.bridges))
     ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.bonds))
@@ -28,7 +28,8 @@ let
   # If dhcp is disabled but explicit interfaces are enabled,
   # we need to provide dhcp just for those interfaces.
   allowInterfaces = arrayAppendOrNull cfg.allowInterfaces
-    (if !cfg.useDHCP && enableDHCP then map (i: i.name) (filter (i: i.useDHCP == true) interfaces) else null);
+    (if !config.networking.useDHCP && enableDHCP then
+      map (i: i.name) (filter (i: i.useDHCP == true) interfaces) else null);
 
   # Config file adapted from the one that ships with dhcpcd.
   dhcpcdConf = pkgs.writeText "dhcpcd.conf"
@@ -71,7 +72,6 @@ let
           ${config.systemd.package}/bin/systemctl try-restart ntpd.service
 
           ${config.systemd.package}/bin/systemctl start ip-up.target
-          ${config.systemd.package}/bin/systemctl start network-online.target
       fi
 
       #if [ "$reason" = EXPIRE -o "$reason" = RELEASE -o "$reason" = NOCARRIER ] ; then

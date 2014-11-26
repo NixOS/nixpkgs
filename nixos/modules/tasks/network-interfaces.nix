@@ -624,13 +624,13 @@ in
         pkgs.iw
         pkgs.rfkill
         pkgs.openresolv
-      ]
+      ];
 
     systemd.services = {
       network-local-commands = {
         description = "Extra networking commands.";
-        before = [ "network.target" "network-online.target" ];
-        wantedBy = [ "network.target" "network-online.target" ];
+        before = [ "network.target" ];
+        wantedBy = [ "network.target" ];
         unitConfig.ConditionCapability = "CAP_NET_ADMIN";
         path = [ pkgs.iproute ];
         serviceConfig.Type = "oneshot";

@@ -112,8 +112,10 @@ in
           ln -s /run/systemd/resolve/resolv.conf /run/resolvconf/interfaces/systemd
         ''}
 
-        # Make sure resolv.conf is up to date
-        ${pkgs.openresolv}/bin/resolvconf -u
+        # Make sure resolv.conf is up to date if not managed by systemd
+        ${optionalString (!config.services.resolved.enable) ''
+          ${pkgs.openresolv}/bin/resolvconf -u
+        ''}
       '';
 
   };

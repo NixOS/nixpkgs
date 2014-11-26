@@ -114,6 +114,7 @@ in
             after = [ (subsystemDevice i.name) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
+            path = [ pkgs.iproute ];
             script =
               ''
                 echo "bringing up interface..."
@@ -142,7 +143,6 @@ in
                     ${config.systemd.package}/bin/systemctl try-restart --no-block network-setup.service
                   fi
                   ${config.systemd.package}/bin/systemctl start ip-up.target
-                  ${config.systemd.package}/bin/systemctl start network-online.target
                 '';
             preStop =
               ''

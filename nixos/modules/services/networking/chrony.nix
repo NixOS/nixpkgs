@@ -99,8 +99,8 @@ in
     jobs.chronyd =
       { description = "chrony daemon";
 
-        wantedBy = [ "ip-up.target" ];
-        partOf = [ "ip-up.target" ];
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
 
         path = [ chrony ];
 
