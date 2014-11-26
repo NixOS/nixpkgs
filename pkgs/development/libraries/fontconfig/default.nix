@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     cd "$out/etc/fonts" && tar xvf ${infinality_patch}
-    rm conf.d/{50-user,51-local}.conf
+    rm conf.d/{50-user,51-local,52-infinality}.conf
     "${libxslt}/bin/xsltproc" --stringparam fontDirectories "${fontbhttf}" \
       --stringparam fontconfig "$out" \
       --stringparam fontconfigConfigVersion "${configVersion}" \
