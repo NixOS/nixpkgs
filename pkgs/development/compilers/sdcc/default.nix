@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     ${if gputils == null then "--disable-pic14-port --disable-pic16-port" else ""}
   '';
 
+  NIX_CFLAGS_COMPILE = "--std=c99"; # http://sourceforge.net/p/sdcc/code/9106/
+
   meta = with stdenv.lib; {
     description = "Small Device C Compiler";
     longDescription = ''
