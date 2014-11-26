@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "OpenSource IPsec-based VPN Solution";
     homepage = https://www.strongswan.org;
     license = stdenv.lib.licenses.gpl2Plus;
-    inherit (stdenv.gcc.gcc.meta) platforms;
+    platforms = stdenv.lib.platforms.all;
   };
 }
