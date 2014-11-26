@@ -32,10 +32,13 @@ stdenv.mkDerivation rec {
     ;
 
   patches = [
-    (fetchpatch {
-      url = "http://cgit.freedesktop.org/fontconfig/patch/?id=f44157c809d280e2a0ce87fb078fc4b278d24a67";
-      sha256 = "19s5irclg4irj2yxd7xw9yikbazs9263px8qbv4r21asw06nfalv";
-    })
+    (fetchpatch ({
+        url = "http://cgit.freedesktop.org/fontconfig/patch/?id=f44157c809d280e2a0ce87fb078fc4b278d24a67";
+        sha256 = "19s5irclg4irj2yxd7xw9yikbazs9263px8qbv4r21asw06nfalv";
+      } // stdenv.lib.optionalAttrs (!stdenv.isLinux) {
+        name = "fc-cache-bug-77252.patch"; # TODO: collapse on mass rebuild
+      }
+    ))
     (substituteAll {
       src = ./config-compat.patch;
       inherit configVersion;
