@@ -2711,6 +2711,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   vkAwsRoute53 = callPackage ../development/libraries/haskell/vk-aws-route53 {};
 
+  vkPosixPty = callPackage ../development/libraries/haskell/vk-posix-pty {};
+
   void = callPackage ../development/libraries/haskell/void {};
 
   vty = callPackage ../development/libraries/haskell/vty {};
