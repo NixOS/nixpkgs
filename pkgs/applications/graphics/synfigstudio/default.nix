@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    ETL boost cairo fontsConf gettext glibmm gtk gtkmm imagemagick intltool
+    ETL boost cairo gettext glibmm gtk gtkmm imagemagick intltool
     intltool libsigcxx libtool libxmlxx pkgconfig synfig
   ];
 
@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
   preBuild = ''
     export FONTCONFIG_FILE=${fontsConf}
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A 2D animation program";
