@@ -17,6 +17,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ gnutls ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+
   meta = {
     homepage = http://inadyn.sourceforge.net/;
     description = "Free dynamic DNS client";

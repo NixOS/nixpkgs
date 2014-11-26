@@ -60,6 +60,8 @@ stdenv.mkDerivation {
           else throw "Unsupported system";
   GOARM = stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "5";
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+
   installPhase = ''
     mkdir -p "$out/bin"
     export GOROOT="$(pwd)/"
