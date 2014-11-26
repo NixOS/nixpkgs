@@ -5106,11 +5106,11 @@ let
 
 
   matplotlib = buildPythonPackage rec {
-    name = "matplotlib-1.3.1";
+    name = "matplotlib-1.4.2";
 
     src = pkgs.fetchurl {
       url = "mirror://sourceforge/matplotlib/${name}.tar.gz";
-      sha256 = "0smgpn7lwbn02nbyhawyn0n6r3pb65zk501f21bjgavnjjfnf5pa";
+      sha256 = "0m6v9nwdldlwk22gcd339zg6mny5m301fxgks7z8sb8m9wawg8qp";
     };
 
     buildInputs = with self; [ python pkgs.which pkgs.ghostscript ] ++
@@ -5118,6 +5118,7 @@ let
 
     propagatedBuildInputs = with self;
       [ dateutil nose numpy pyparsing tornado pkgs.freetype pkgs.libpng pkgs.pkgconfig
+        mock pytz
       ];
 
     meta = with stdenv.lib; {
