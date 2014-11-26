@@ -11295,6 +11295,8 @@ let
     qt = qt4;
   };
 
+  yed = callPackage ../applications/graphics/yed {};
+
   ykpers = callPackage ../applications/misc/ykpers {};
 
   yoshimi = callPackage ../applications/audio/yoshimi {
