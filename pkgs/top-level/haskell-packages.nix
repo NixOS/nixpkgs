@@ -1146,6 +1146,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hackageDb = callPackage ../development/libraries/haskell/hackage-db {};
 
+  handaGdata = callPackage ../development/libraries/haskell/handa-gdata {};
+
   haskellForMaths = callPackage ../development/libraries/haskell/HaskellForMaths {};
 
   haxl = callPackage ../development/libraries/haskell/haxl {};
@@ -1250,6 +1252,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hS3 = callPackage ../development/libraries/haskell/hS3 {};
 
   hsbencher = callPackage ../development/libraries/haskell/hsbencher {};
+
+  hsbencherFusion = callPackage ../development/libraries/haskell/hsbencher-fusion {};
 
   hsBibutils = callPackage ../development/libraries/haskell/hs-bibutils {};
 
