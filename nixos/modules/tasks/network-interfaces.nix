@@ -428,6 +428,37 @@ in
       };
     };
 
+    networking.macvlans = mkOption {
+      type = types.attrsOf types.optionSet;
+      default = { };
+      example = {
+        wan = {
+          interface = "enp2s0";
+          mode = "vepa";
+        };
+      };
+      description = ''
+        This option allows you to define macvlan interfaces which should
+        be automatically created.
+      '';
+      options = {
+
+        interface = mkOption {
+          example = "enp4s0";
+          type = types.string;
+          description = "The interface the macvlan will transmit packets through.";
+        };
+
+        mode = mkOption {
+          default = null;
+          type = types.nullOr types.str;
+          example = "vepa";
+          description = "The mode of the macvlan device.";
+        };
+
+      };
+    };
+
     networking.sits = mkOption {
       type = types.attrsOf types.optionSet;
       default = { };

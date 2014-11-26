@@ -250,6 +250,29 @@ in
             postStop = destroyBond n;
           });
 
+        createMacvlanDevice = n: v: nameValuePair "${n}-netdev"
+          (let
+            deps = [ (subsystemDevice v.interface) ];
+          in
+          { description = "Vlan Interface ${n}";
+            wantedBy = [ "network.target" (subsystemDevice n) ];
+            bindsTo = deps;
+            after = deps;
+            serviceConfig.Type = "oneshot";
+            serviceConfig.RemainAfterExit = true;
+            path = [ pkgs.iproute ];
+            script = ''
+              # Remove Dead Interfaces
+              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+              ip link add link "${v.interface}" name "${n}" type macvlan \
+                ${optionalString (v.mode != null) "mode ${v.mode}"}
+              ip link set "${n}" up
+            '';
+            postStop = ''
+              ip link delete "${n}"
+            '';
+          });
+
         createSitDevice = n: v: nameValuePair "${n}-netdev"
           (let
             deps = optional (v.dev != null) (subsystemDevice v.dev);
@@ -303,6 +326,7 @@ in
            map createTunDevice (filter (i: i.virtual) interfaces))
          // mapAttrs' createBridgeDevice cfg.bridges
          // mapAttrs' createBondDevice cfg.bonds
+         // mapAttrs' createMacvlanDevice cfg.macvlans
          // mapAttrs' createSitDevice cfg.sits
          // mapAttrs' createVlanDevice cfg.vlans
          // {

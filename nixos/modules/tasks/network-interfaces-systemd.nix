@@ -118,6 +118,18 @@ in
             networkConfig.Bond = name;
           } ])));
       })))
+      (mkMerge (flip mapAttrsToList cfg.macvlans (name: macvlan: {
+        netdevs."40-${name}" = {
+          netdevConfig = {
+            Name = name;
+            Kind = "macvlan";
+          };
+          macvlanConfig.Mode = macvlan.mode;
+        };
+        networks."40-${macvlan.interface}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
+          macvlan = [ name ];
+        } ]);
+      })))
       (mkMerge (flip mapAttrsToList cfg.sits (name: sit: {
         netdevs."40-${name}" = {
           netdevConfig = {
