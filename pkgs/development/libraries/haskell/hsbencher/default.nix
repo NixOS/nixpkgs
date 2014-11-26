@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hsbencher";
-  version = "1.20.0.2";
-  sha256 = "1ydx70ik48s9fsn51snpl4aq7imfwgqmfin46sqpz0xlcyxs040z";
+  version = "1.20.0.3";
+  sha256 = "1qnj4zhq6j4cvnxcparm2xr9qc6l9q7j72h4dr5jz04lz8c2fkcl";
   buildDepends = [
     async dataDefault filepath GenericPretty ioStreams mtl random time
   ];
