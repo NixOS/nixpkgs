@@ -2709,6 +2709,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   vinyl = callPackage ../development/libraries/haskell/vinyl {};
 
+  vkAwsRoute53 = callPackage ../development/libraries/haskell/vk-aws-route53 {};
+
   void = callPackage ../development/libraries/haskell/void {};
 
   vty = callPackage ../development/libraries/haskell/vty {};
