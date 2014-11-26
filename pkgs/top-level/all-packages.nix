@@ -12693,6 +12693,10 @@ let
     { browser = vimprobable2; browserName = "vimprobable2"; desktopName = "Vimprobable2";
     };
 
+  rekonqWrapper = wrapFirefox {
+    browser = kde4.rekonq; browserName = "rekonq"; desktopName = "Rekonq";
+  };
+
   vimb = callPackage ../applications/networking/browsers/vimb {
     webkit = webkitgtk2;
   };
