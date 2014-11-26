@@ -11718,11 +11718,6 @@ let
 
   enlightenment = callPackage ../desktops/enlightenment { };
 
-  e17 = recurseIntoAttrs (
-    let callPackage = newScope pkgs.e17; in
-    import ../desktops/e17 { inherit callPackage pkgs; }
-  );
-
   e18 = recurseIntoAttrs (
     let callPackage = newScope pkgs.e18; in
     import ../desktops/e18 { inherit callPackage pkgs; }
