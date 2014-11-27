@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "snap-error-collector";
-  version = "1.0.0";
-  sha256 = "1rywfbc489kgbcm7svgrim3zihma5j9vy6cwhlc6dgvsb1rb37j2";
+  version = "1.1.0";
+  sha256 = "06pqlv93qgibl5gbrp7p1vg6x421nrpkvhazbrcipdpbawrsgaj2";
   buildDepends = [
     async MonadCatchIOTransformers monadLoops snap stm time
     transformers
