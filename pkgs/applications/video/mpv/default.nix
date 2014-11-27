@@ -20,7 +20,7 @@
 # For screenshots
 , libpngSupport ? true, libpng ? null
 # for Youtube support
-, quviSupport ? false, libquvi ? null
+, youtubeSupport ? false, youtubeDL ? null
 , cacaSupport ? false, libcaca ? null
 , vaapiSupport ? false, libva ? null
 }:
@@ -41,7 +41,7 @@ assert jackaudioSupport -> jack2 != null;
 assert pulseSupport -> pulseaudio != null;
 assert bs2bSupport -> libbs2b != null;
 assert libpngSupport -> libpng != null;
-assert quviSupport -> libquvi != null;
+assert youtubeSupport -> youtubeDL != null;
 assert cacaSupport -> libcaca != null;
 
 # Purity problem: Waf needed to be is downloaded by bootstrap.py
@@ -50,19 +50,19 @@ assert cacaSupport -> libcaca != null;
 
 let
   waf = fetchurl {
-    url = http://ftp.waf.io/pub/release/waf-1.7.16;
-    sha256 = "b64dc26c882572415fd450b745006107965f3fe17b357e3eb43d6676c9635a61";
+    url = http://ftp.waf.io/pub/release/waf-1.8.1;
+    sha256 = "ec658116ba0b96629d91fde0b32321849e866e0819f1e835c4c2c7f7ffe1a21d";
   };
 
 in
 
 stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.6.2";
+  version = "0.7.0";
 
   src = fetchurl {
     url = "https://github.com/mpv-player/mpv/archive/v${version}.tar.gz";
-    sha256 = "1s42i3vf8i86lx62kw00vvimjizvp8zpxdq53mqhdz1p5im2ylr0";
+    sha256 = "0rz8dp44yag442gamaa2vdmf69h25gqh2bgybx89prkfh8n4hy8x";
   };
 
   buildInputs = with stdenv.lib;
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     ++ optional speexSupport speex
     ++ optional bs2bSupport libbs2b
     ++ optional libpngSupport libpng
-    ++ optional quviSupport libquvi
+    ++ optional youtubeSupport youtubeDL
     ++ optional sdl2Support SDL2
     ++ optional cacaSupport libcaca
     ++ optional vaapiSupport libva
@@ -126,6 +126,5 @@ stdenv.mkDerivation rec {
 }
 
 # TODO: Wayland support
-# TODO: investigate libquvi problems (related to Youtube support)
 # TODO: investigate caca support
 # TODO: investigate lua5_sockets bug
