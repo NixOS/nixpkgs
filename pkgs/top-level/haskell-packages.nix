@@ -1824,6 +1824,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   oeis = callPackage ../development/libraries/haskell/oeis {};
 
+  oldLocale = callPackage ../development/libraries/haskell/old-locale {};
+
   OpenAL = callPackage ../development/libraries/haskell/OpenAL {};
 
   OpenGL = callPackage ../development/libraries/haskell/OpenGL {};
