@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
-  version = "0.9.8.8";
+  version = "0.9.8.10";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/0.9/NetworkManager-${version}.tar.xz";
-    sha256 = "0mbsl6x3aavdnam8i87p0zz8fvvgi96g199s35wgg5r8rplks2la";
+    sha256 = "0wn9qh8r56r8l19dqr68pdl1rv3zg1dv47rfy6fqa91q7li2fk86";
   };
 
   preConfigure = ''
