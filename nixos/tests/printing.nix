@@ -9,7 +9,7 @@ import ./make-test.nix ({pkgs, ... }: {
       { config, pkgs, ... }:
       { services.printing.enable = true;
         services.printing.listenAddresses = [ "*:631" ];
-        services.printing.cupsdConf =
+        services.printing.extraConf =
           ''
             <Location />
               Order allow,deny
@@ -40,10 +40,10 @@ import ./make-test.nix ({pkgs, ... }: {
       $server->fail("curl --fail --connect-timeout 2  http://client:631/");
 
       # Add a HP Deskjet printer connected via USB to the server.
-      $server->succeed("lpadmin -p DeskjetLocal -v usb://HP/Deskjet%205400%20series?serial=TH93I152S123XY -m 'drv:///sample.drv/deskjet.ppd' -E");
+      $server->succeed("lpadmin -p DeskjetLocal -E -v usb://foobar/printers/foobar");
 
       # Add it to the client as well via IPP.
-      $client->succeed("lpadmin -p DeskjetRemote -v ipp://server/printers/DeskjetLocal -m 'drv:///sample.drv/deskjet.ppd' -E");
+      $client->succeed("lpadmin -p DeskjetRemote -E -v ipp://server/printers/DeskjetLocal");
       $client->succeed("lpadmin -d DeskjetRemote");
 
       # Do some status checks.
@@ -55,7 +55,7 @@ import ./make-test.nix ({pkgs, ... }: {
       $client->succeed("lpq") =~ /DeskjetRemote is ready.*no entries/s or die;
 
       # Test printing various file types.
-      foreach my $file ("${pkgs.groff}/share/doc/*/examples/mom/typesetting.pdf",
+      foreach my $file ("${pkgs.groff}/share/doc/*/examples/mom/penguin.pdf",
                         "${pkgs.groff}/share/doc/*/meref.ps",
                         "${pkgs.cups}/share/doc/cups/images/cups.png",
                         "${pkgs.xz}/share/doc/xz/faq.txt")
@@ -72,9 +72,8 @@ import ./make-test.nix ({pkgs, ... }: {
               # (showing that the right filters have been applied).  Of
               # course, since there is no actual USB printer attached, the
               # file will stay in the queue forever.
-              $server->waitForFile("/var/spool/cups/d*-*");
-              $server->succeed("lpq -a") =~ /remroot.*$fn/ or die;
-              $server->succeed("hexdump -C -n2 /var/spool/cups/d*-*") =~ /1b 45/ or die; # 1b 45 = printer reset
+              $server->waitForFile("/var/spool/cups/d00001-001");
+              $server->succeed("lpq -a") =~ /$fn/ or die;
 
               # Delete the job on the client.  It should disappear on the
               # server as well.
