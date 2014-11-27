@@ -21,5 +21,7 @@ stdenv.mkDerivation rec {
     homepage = "http://tools.suckless.org/sselp";
     description = "Prints the X selection to stdout, usefull in scripts";
     license = stdenv.lib.licenses.mit;
+    maintainers = [stdenv.lib.maintainers.magnetophon ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
