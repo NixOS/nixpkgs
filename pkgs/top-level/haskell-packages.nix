@@ -900,6 +900,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   genericDeriving = callPackage ../development/libraries/haskell/generic-deriving {};
 
+  GenericPretty = callPackage ../development/libraries/haskell/GenericPretty {};
+
   genericsSop = callPackage ../development/libraries/haskell/generics-sop {};
 
   ghcCore = callPackage ../development/libraries/haskell/ghc-core {};
@@ -1144,6 +1146,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hackageDb = callPackage ../development/libraries/haskell/hackage-db {};
 
+  handaGdata = callPackage ../development/libraries/haskell/handa-gdata {};
+
   haskellForMaths = callPackage ../development/libraries/haskell/HaskellForMaths {};
 
   haxl = callPackage ../development/libraries/haskell/haxl {};
@@ -1246,6 +1250,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hp2anyGraph = callPackage ../development/libraries/haskell/hp2any-graph {};
 
   hS3 = callPackage ../development/libraries/haskell/hS3 {};
+
+  hsbencher = callPackage ../development/libraries/haskell/hsbencher {};
+
+  hsbencherFusion = callPackage ../development/libraries/haskell/hsbencher-fusion {};
 
   hsBibutils = callPackage ../development/libraries/haskell/hs-bibutils {};
 
