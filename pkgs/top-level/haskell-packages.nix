@@ -1576,6 +1576,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   lushtags = callPackage ../development/libraries/haskell/lushtags {};
 
+  lzmaConduit = callPackage ../development/libraries/haskell/lzma-conduit {};
+
   lzmaEnumerator = callPackage ../development/libraries/haskell/lzma-enumerator {};
 
   maccatcher = callPackage ../development/libraries/haskell/maccatcher {};
