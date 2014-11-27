@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, cmake, qhull, flann, boost, vtk, eigen, pkgconfig, qt4, libusb1 }:
+{ stdenv, fetchurl, cmake, qhull, flann, boost, vtk, eigen, pkgconfig, qt4
+, libusb1, libXt}:
 
 stdenv.mkDerivation {
-  name = "pcl-1.6.0";
+  name = "pcl-1.7.2";
 
-  buildInputs = [ cmake qhull flann boost vtk eigen pkgconfig qt4 libusb1 ];
+  buildInputs = [ cmake qhull flann boost vtk eigen pkgconfig qt4 libusb1 libXt ];
 
   src = fetchurl {
-    url = mirror://sourceforge/pointclouds/PCL-1.6.0-Source.tar.bz2;
-    sha256 = "0ip3djcjgynlr9vac6jlcw6kxhg2lm8fc0aqk747a6l0rqvllf1x";
+    url = https://github.com/PointCloudLibrary/pcl/archive/pcl-1.7.2.tar.gz;
+    sha256 = "14xfs2zdjlf3pdk1nhj3fvq6qbac3cji2497g2dk39jqqvr897s7";
   };
 
   enableParallelBuilding = true;
