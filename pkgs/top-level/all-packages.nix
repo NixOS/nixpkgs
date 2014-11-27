@@ -10517,6 +10517,8 @@ let
 
   qtractor = callPackage ../applications/audio/qtractor { };
 
+  quirc = callPackage ../tools/graphics/quirc {};
+
   quodlibet = callPackage ../applications/audio/quodlibet {
     inherit (pythonPackages) mutagen;
   };
