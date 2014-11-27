@@ -1,20 +1,16 @@
 { stdenv, fetchurl, intltool, wirelesstools, pkgconfig, dbus_glib, xz
 , udev, libnl, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
-, libgcrypt, dnsmasq, avahi, bind, perl, bluez5, substituteAll
-, gobjectIntrospection, modemmanager, openresolv }:
+, libgcrypt, dnsmasq, avahi, bind, perl, bluez5, substituteAll, iputils
+, gobjectIntrospection, modemmanager, openresolv, readline, libndp }:
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
-  version = "0.9.8.10";
+  version = "0.9.10.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/0.9/NetworkManager-${version}.tar.xz";
-    sha256 = "0wn9qh8r56r8l19dqr68pdl1rv3zg1dv47rfy6fqa91q7li2fk86";
+    sha256 = "66a88346bb04d4f402540281181340313b2ec433e75aa9d9ea13f31697f9487e";
   };
-
-  preConfigure = ''
-    substituteInPlace tools/glib-mkenums --replace /usr/bin/perl ${perl}/bin/perl
-  '';
 
   # Right now we hardcode quite a few paths at build time. Probably we should
   # patch networkmanager to allow passing these path in config file. This will
@@ -26,6 +22,7 @@ stdenv.mkDerivation rec {
     #"--with-dhcpcd=${dhcpcd}/sbin/dhcpcd"
     "--with-dhcpcd=no"
     "--with-iptables=${iptables}/sbin/iptables"
+    "--with-pppd=${ppp}/sbin/pppd"
     "--with-udev-dir=\${out}/lib/udev"
     "--with-resolvconf=${openresolv}/sbin/resolvconf"
     "--sysconfdir=/etc" "--localstatedir=/var"
@@ -37,7 +34,8 @@ stdenv.mkDerivation rec {
     "--with-modem-manager-1"
   ];
 
-  buildInputs = [ wirelesstools udev libnl libuuid polkit ppp xz bluez5 gobjectIntrospection modemmanager ];
+  buildInputs = [ wirelesstools udev libnl libuuid polkit ppp xz bluez5
+                  gobjectIntrospection modemmanager libndp readline ];
 
   propagatedBuildInputs = [ dbus_glib gnutls libgcrypt ];
 
@@ -46,10 +44,9 @@ stdenv.mkDerivation rec {
   patches =
     [ ( substituteAll {
         src = ./nixos-purity.patch;
-        inherit avahi dnsmasq ppp bind;
+        inherit avahi dnsmasq bind iputils;
         glibc = stdenv.gcc.libc;
       })
-      ./libnl-3.2.25.patch
     ];
 
   preInstall =
@@ -72,13 +69,18 @@ stdenv.mkDerivation rec {
       # aliases ourselves.
       ln -s $out/etc/systemd/system/NetworkManager-dispatcher.service $out/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
       ln -s $out/etc/systemd/system/network-manager.service $out/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
+
+      # fix readline in libtool file, avoid putting it in propagated build inputs
+      for lib in $out/lib/*.la; do
+        substituteInPlace $lib --replace "-lreadline" "-L${readline}/lib -lreadline"
+      done
     '';
 
   meta = with stdenv.lib; {
     homepage = http://projects.gnome.org/NetworkManager/;
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ phreedom urkud rickynils iElectric ];
+    maintainers = with maintainers; [ phreedom urkud rickynils iElectric lethalman ];
     platforms = platforms.linux;
   };
 }

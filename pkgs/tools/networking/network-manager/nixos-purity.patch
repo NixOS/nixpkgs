@@ -1,8 +1,8 @@
 diff --git a/src/dhcp-manager/nm-dhcp-dhclient.c b/src/dhcp-manager/nm-dhcp-dhclient.c
-index 0932139..5b5aee8 100644
+index 4232ee0..5c309c2 100644
 --- a/src/dhcp-manager/nm-dhcp-dhclient.c
 +++ b/src/dhcp-manager/nm-dhcp-dhclient.c
-@@ -68,10 +68,6 @@ const char *
+@@ -59,10 +59,6 @@ const char *
  nm_dhcp_dhclient_get_path (const char *try_first)
  {
  	static const char *dhclient_paths[] = {
@@ -14,10 +14,10 @@ index 0932139..5b5aee8 100644
  	};
  	const char **path = dhclient_paths;
 diff --git a/src/dhcp-manager/nm-dhcp-dhcpcd.c b/src/dhcp-manager/nm-dhcp-dhcpcd.c
-index 237661f..48bc33f 100644
+index c0877a6..587471c 100644
 --- a/src/dhcp-manager/nm-dhcp-dhcpcd.c
 +++ b/src/dhcp-manager/nm-dhcp-dhcpcd.c
-@@ -51,10 +51,6 @@ const char *
+@@ -52,10 +52,6 @@ const char *
  nm_dhcp_dhcpcd_get_path (const char *try_first)
  {
  	static const char *dhcpcd_paths[] = {
@@ -28,11 +28,11 @@ index 237661f..48bc33f 100644
  		NULL
  	};
  	const char **path = dhcpcd_paths;
-diff --git a/src/nm-device.c b/src/nm-device.c
-index 1dc94ee..e60f3c8 100644
---- a/src/nm-device.c
-+++ b/src/nm-device.c
-@@ -1321,8 +1321,7 @@ aipd_start (NMDevice *self, NMDeviceStateReason *reason)
+diff --git a/src/devices/nm-device.c b/src/devices/nm-device.c
+index 35ee470..615c2d0 100644
+--- a/src/devices/nm-device.c
++++ b/src/devices/nm-device.c
+@@ -2508,8 +2508,7 @@ aipd_start (NMDevice *self, NMDeviceStateReason *reason)
  	char *argv[6], *cmdline;
  	const char **aipd_binary = NULL;
  	static const char *aipd_paths[] = {
@@ -42,7 +42,7 @@ index 1dc94ee..e60f3c8 100644
  		NULL
  	};
  	int i = 0;
-@@ -2555,7 +2554,7 @@ share_init (void)
+@@ -4358,7 +4357,7 @@ share_init (void)
  	}
  
  	for (iter = modules; *iter; iter++) {
@@ -52,21 +52,10 @@ index 1dc94ee..e60f3c8 100644
  		GError *error = NULL;
  
 diff --git a/src/ppp-manager/nm-ppp-manager.c b/src/ppp-manager/nm-ppp-manager.c
-index 59698c3..7dba0f7 100644
+index e856fc1..e31c83e 100644
 --- a/src/ppp-manager/nm-ppp-manager.c
 +++ b/src/ppp-manager/nm-ppp-manager.c
-@@ -661,9 +661,7 @@ static inline const char *
- nm_find_pppd (void)
- {
- 	static const char *pppd_binary_paths[] = {
--		"/usr/local/sbin/pppd",
--		"/usr/sbin/pppd",
--		"/sbin/pppd",
-+		"@ppp@/sbin/pppd",
- 		NULL
- 	};
- 
-@@ -988,7 +986,7 @@ nm_ppp_manager_start (NMPPPManager *manager,
+@@ -1054,7 +1052,7 @@ nm_ppp_manager_start (NMPPPManager *manager,
  
  	/* Make sure /dev/ppp exists (bgo #533064) */
  	if (stat ("/dev/ppp", &st) || !S_ISCHR (st.st_mode))
@@ -75,3 +64,14 @@ index 59698c3..7dba0f7 100644
  
  	connection = nm_act_request_get_connection (req);
  	g_assert (connection);
+--- a/src/devices/nm-device.c	2014-11-20 12:58:49.219719353 +0100
++++ b/src/devices/nm-device.c	2014-11-20 12:58:59.795134261 +0100
+@@ -4429,7 +4429,7 @@
+ static void
+ send_arps (NMDevice *self, const char *mode_arg)
+ {
+-	const char *argv[] = { "/sbin/arping", mode_arg, "-q", "-I", nm_device_get_ip_iface (self), "-c", "1", NULL, NULL };
++	const char *argv[] = { "@iputils@/bin/arping", mode_arg, "-q", "-I", nm_device_get_ip_iface (self), "-c", "1", NULL, NULL };
+ 	int ip_arg = G_N_ELEMENTS (argv) - 2;
+ 	NMConnection *connection;
+ 	NMSettingIP4Config *s_ip4;
