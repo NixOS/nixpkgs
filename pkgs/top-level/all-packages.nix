@@ -10507,6 +10507,8 @@ let
 
   qmmp = callPackage ../applications/audio/qmmp { };
 
+  qrcode = callPackage ../tools/graphics/qrcode {};
+
   qsampler = callPackage ../applications/audio/qsampler { };
 
   qsynth = callPackage ../applications/audio/qsynth { };
