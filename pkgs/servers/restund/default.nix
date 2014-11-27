@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     downloadPage = "http://www.creytiv.com/pub/";
     updateWalker = true;
     downloadURLRegexp = "/restund-.*[.]tar[.]";
+    broken = true; # probably due to glibc-2.20
   };
 }
