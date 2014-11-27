@@ -40,6 +40,6 @@ in stdenv.mkDerivation rec {
     '';
     homepage = http://bosun.org;
     license = licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = ["x86_64-linux"];
   };
 }
