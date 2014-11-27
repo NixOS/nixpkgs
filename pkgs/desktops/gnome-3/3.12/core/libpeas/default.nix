@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
   };
 
   preFixup = ''
-    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   meta = {

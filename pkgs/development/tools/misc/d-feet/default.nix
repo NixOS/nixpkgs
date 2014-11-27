@@ -27,8 +27,6 @@ stdenv.mkDerivation rec {
         --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pygobject3})" \
         --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$out/share"
-
-      rm $out/share/icons/hicolor/icon-theme.cache
     '';
 
   meta = {

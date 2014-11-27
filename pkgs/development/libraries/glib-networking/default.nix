@@ -2,15 +2,15 @@
 , gsettings_desktop_schemas }:
 
 let
-  ver_maj = "2.40";
-  ver_min = "1";
+  ver_maj = "2.42";
+  ver_min = "0";
 in
 stdenv.mkDerivation rec {
   name = "glib-networking-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib-networking/${ver_maj}/${name}.tar.xz";
-    sha256 = "9fb3e54d049a480afdb814ff7452e7ab67e5d5f607ade230d7713f19922b5a28";
+    sha256 = "304dd9e4c0ced69094300e0b9e66cd2eaae7161b9fc3186536d11458677d820d";
   };
 
   configureFlags = "--with-ca-certificates=/etc/ssl/certs/ca-bundle.crt";
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     description = "Network-related giomodules for glib";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
+	maintainers = [ maintainers.lethalman ];
   };
 }
 
