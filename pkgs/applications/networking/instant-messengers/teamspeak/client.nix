@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper, zlib, glib, libpng, freetype, xorg
 , fontconfig, xlibs, qt5, xkeyboard_config, alsaLib, pulseaudio ? null
-, libredirect, quazip
+, libredirect, quazip, less, which
 }:
 
 let
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
                 else "1b3nbvfpd8lx3dig8z5yk6zjkbmsy6y938dhj1f562wc8adixciz";
   };
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [ makeWrapper less which ];
 
   unpackPhase =
     ''
-      yes | sh $src
+      echo -e 'q\ny' | sh -xe $src
       cd TeamSpeak*
     '';
 
