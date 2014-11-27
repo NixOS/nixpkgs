@@ -18,10 +18,10 @@ let
   knownHosts = map (h: getAttr h cfg.knownHosts) (attrNames cfg.knownHosts);
 
   knownHostsFile = pkgs.runCommand "ssh_known_hosts" {} ''
-    #!${pkgs.bash}/bin/bash
+    touch "$out"
     ${flip concatMapStrings knownHosts (h: ''
       pubkeyfile=${builtins.toFile "host.pub" (if h.publicKey == null then readFile h.publicKeyFile else h.publicKey)}
-      ${pkgs.gnused}/bin/sed 's/^/${concatStringsSep "," h.hostNames} /' $pubkeyfile >> $out
+      ${pkgs.gnused}/bin/sed 's/^/${concatStringsSep "," h.hostNames} /' $pubkeyfile >> "$out"
     '')}
   '';
 
