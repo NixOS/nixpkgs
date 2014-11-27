@@ -1,18 +1,18 @@
 { stdenv, fetchurl, networkmanager, pptp, ppp, intltool, pkgconfig, substituteAll
-, withGnome ? true, gnome3 }:
+, withGnome ? true, gnome3, networkmanagerapplet, libsecret }:
 
 stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
   pname = "NetworkManager-pptp";
-  version = "0.9.8.4";
+  version = networkmanager.version;
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/0.9/${pname}-${version}.tar.xz";
-    sha256 = "1s6wmznd6azvg028x8y3syniqy9j7nmx5j71w2wc6mk0f9pqzflp";
+    sha256 = "564b16c9b2821a1d2ede06f56f4db5cb0d62ccb35f87c92ad6c636ed48e0af58";
   };
 
-  buildInputs = [ networkmanager pptp ppp ]
-    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome_keyring ];
+  buildInputs = [ networkmanager pptp ppp libsecret ]
+    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome_keyring networkmanagerapplet ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
 
