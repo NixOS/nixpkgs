@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
     rm src/tool_hugehelp.c
   '';
 
+  # make curl honor CURL_CA_BUNDLE & SSL_CERT_FILE
+  postConfigure = ''
+    echo  '#define CURL_CA_BUNDLE (getenv("CURL_CA_BUNDLE") || getenv("SSL_CERT_FILE"))' >> lib/curl_config.h
+  '';
+
   configureFlags = [
       ( if sslSupport then "--with-ssl=${openssl}" else "--without-ssl" )
       ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
