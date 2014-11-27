@@ -6744,6 +6744,8 @@ let
 
   librdf = callPackage ../development/libraries/librdf { };
 
+  libsmf = callPackage ../development/libraries/audio/libsmf { };
+
   lilv = callPackage ../development/libraries/audio/lilv { };
 
   lv2 = callPackage ../development/libraries/audio/lv2 { };
@@ -9278,6 +9280,8 @@ let
   docker = callPackage ../applications/virtualization/docker { };
 
   doodle = callPackage ../applications/search/doodle { };
+
+  drumgizmo = callPackage ../applications/audio/drumgizmo { inherit (xlibs) libX11; };
 
   dunst = callPackage ../applications/misc/dunst { };
 
