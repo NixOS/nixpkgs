@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
       --prefix GRL_PLUGIN_PATH : "${gnome3.grilo-plugins}/lib/grilo-0.2" \
       --prefix PYTHONPATH : "$PYTHONPATH"
 
-    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   meta = with stdenv.lib; {

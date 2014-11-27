@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
                   hicolor_icon_theme gnome3.gnome_icon_theme_symbolic ];
 
   preFixup = ''
-    rm $out/share/icons/hicolor/icon-theme.cache
-    rm $out/share/icons/HighContrast/icon-theme.cache
     wrapProgram "$out/bin/baobab" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"

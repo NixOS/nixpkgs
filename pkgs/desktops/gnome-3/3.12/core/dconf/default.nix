@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
 
     rm $out/lib/gio/modules/giomodule.cache
-    rm $out/share/icons/hicolor/icon-theme.cache
-    rm $out/share/icons/HighContrast/icon-theme.cache
   '';
 
   meta = with stdenv.lib; {
