@@ -2933,7 +2933,7 @@ let
     chickenEggs = callPackage ../development/tools/egg2nix/chicken-eggs.nix { };
   };
 
-  ccl = builderDefsPackage ../development/compilers/ccl {};
+  ccl = callPackage ../development/compilers/ccl { };
 
   clang = wrapGCC llvmPackages.clang;
 
