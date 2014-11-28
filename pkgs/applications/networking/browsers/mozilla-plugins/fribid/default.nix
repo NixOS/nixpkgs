@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     ./ipc-lazytrace.patch
     ];
 
+  postPatch = "substituteInPlace plugin/pluginutil.c --replace strndup strndup_";
+
   passthru.mozillaPlugin = "/lib/mozilla/plugins";
 
   meta = {
