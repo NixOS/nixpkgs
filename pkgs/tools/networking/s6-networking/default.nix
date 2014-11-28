@@ -3,6 +3,7 @@
 , fetchurl
 , s6Dns
 , skalibs
+, skarnetConfCompile
 }:
 
 let
@@ -18,40 +19,9 @@ in stdenv.mkDerivation rec {
     sha256 = "1np9m2j1i2450mbcjvpbb56kv3wc2fbyvmv2a039q61j2lk6vjz7";
   };
 
-  buildInputs = [ skalibs s6Dns execline ];
+  buildInputs = [ skalibs s6Dns execline skarnetConfCompile ];
 
   sourceRoot = "net/${name}";
-
-  configurePhase = ''
-    pushd conf-compile
-
-    printf "$out/bin"           > conf-install-command
-    printf "$out/include"       > conf-install-include
-    printf "$out/lib"           > conf-install-library
-    printf "$out/lib"           > conf-install-library.so
-
-    # let nix builder strip things, cross-platform
-    truncate --size 0 conf-stripbins
-    truncate --size 0 conf-striplibs
-
-    printf "${skalibs}/sysdeps"      > import
-
-    rm -f path-include
-    rm -f path-library
-    for dep in "${execline}" "${s6Dns}" "${skalibs}"; do
-      printf "%s\n" "$dep/include" >> path-include
-      printf "%s\n" "$dep/lib"     >> path-library
-    done
-
-    rm -f flag-slashpackage
-    touch flag-allstatic
-
-    popd
-  '';
-
-  preBuild = ''
-    patchShebangs src/sys
-  '';
 
   meta = {
     homepage = http://www.skarnet.org/software/s6-networking/;
