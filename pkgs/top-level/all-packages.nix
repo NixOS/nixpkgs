@@ -2937,7 +2937,7 @@ let
     chickenEggs = callPackage ../development/tools/egg2nix/chicken-eggs.nix { };
   };
 
-  ccl = builderDefsPackage ../development/compilers/ccl {};
+  ccl = callPackage ../development/compilers/ccl { };
 
   clang = wrapGCC llvmPackages.clang;
 
@@ -3762,6 +3762,7 @@ let
     sawja = callPackage ../development/ocaml-modules/sawja { };
 
     uucd = callPackage ../development/ocaml-modules/uucd { };
+    uucp = callPackage ../development/ocaml-modules/uucp { };
     uunf = callPackage ../development/ocaml-modules/uunf { };
     uutf = callPackage ../development/ocaml-modules/uutf { };
 
@@ -4721,6 +4722,8 @@ let
   splint = callPackage ../development/tools/analysis/splint {
     flex = flex_2_5_35;
   };
+
+  sselp = callPackage ../tools/X11/sselp{ };
 
   stm32flash = callPackage ../development/tools/misc/stm32flash { };
 
@@ -6750,6 +6753,8 @@ let
   librdf_redland = callPackage ../development/libraries/librdf/redland.nix { };
 
   librdf = callPackage ../development/libraries/librdf { };
+
+  libsmf = callPackage ../development/libraries/audio/libsmf { };
 
   lilv = callPackage ../development/libraries/audio/lilv { };
 
@@ -9280,6 +9285,8 @@ let
 
   doodle = callPackage ../applications/search/doodle { };
 
+  drumgizmo = callPackage ../applications/audio/drumgizmo { inherit (xlibs) libX11; };
+
   dunst = callPackage ../applications/misc/dunst { };
 
   dvb_apps  = callPackage ../applications/video/dvb-apps { };
@@ -10229,7 +10236,7 @@ let
     lua = lua5_1;
     lua5_sockets = lua5_1_sockets;
     bs2bSupport = config.mpv.bs2bSupport or true;
-    quviSupport = config.mpv.quviSupport or false;
+    youtubeSupport = config.mpv.youtubeSupport or true;
     cacaSupport = config.mpv.cacaSupport or true;
     vaapiSupport = config.mpv.vaapiSupport or false;
   };
@@ -10508,6 +10515,8 @@ let
 
   qmmp = callPackage ../applications/audio/qmmp { };
 
+  qrcode = callPackage ../tools/graphics/qrcode {};
+
   qsampler = callPackage ../applications/audio/qsampler { };
 
   qsynth = callPackage ../applications/audio/qsynth { };
@@ -10517,6 +10526,8 @@ let
   qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
 
   qtractor = callPackage ../applications/audio/qtractor { };
+
+  quirc = callPackage ../tools/graphics/quirc {};
 
   quodlibet = callPackage ../applications/audio/quodlibet {
     inherit (pythonPackages) mutagen;
@@ -10953,6 +10964,10 @@ let
 
   vimpc = callPackage ../applications/audio/vimpc { };
 
+  neovim = callPackage ../applications/editors/neovim {
+    inherit (lua52Packages) lpeg luaMessagePack luabitop;
+  };
+
   virtviewer = callPackage ../applications/virtualization/virt-viewer {
     gtkvnc = gtkvnc.override { enableGTK3 = true; };
     spice_gtk = spice_gtk.override { enableGTK3 = true; };
@@ -11294,6 +11309,8 @@ let
   qtbitcointrader = callPackage ../applications/misc/qtbitcointrader {
     qt = qt4;
   };
+
+  yed = callPackage ../applications/graphics/yed {};
 
   ykpers = callPackage ../applications/misc/ykpers {};
 
@@ -11718,16 +11735,6 @@ let
 
   enlightenment = callPackage ../desktops/enlightenment { };
 
-  e17 = recurseIntoAttrs (
-    let callPackage = newScope pkgs.e17; in
-    import ../desktops/e17 { inherit callPackage pkgs; }
-  );
-
-  e18 = recurseIntoAttrs (
-    let callPackage = newScope pkgs.e18; in
-    import ../desktops/e18 { inherit callPackage pkgs; }
-  );
-
   e19 = recurseIntoAttrs (
     let callPackage = newScope pkgs.e19; in
     import ../desktops/e19 { inherit callPackage pkgs; }
@@ -11959,6 +11966,7 @@ let
   xfce = xfce4_10;
   xfce4_10 = recurseIntoAttrs (import ../desktops/xfce { inherit config pkgs newScope; });
 
+  xrandr-invert-colors = callPackage ../applications/misc/xrandr-invert-colors { };
 
   ### SCIENCE
 
@@ -12394,6 +12402,9 @@ let
 
   fakenes = callPackage ../misc/emulators/fakenes { };
 
+
+  faust = callPackage ../applications/audio/faust { };
+
   faust-compiler = callPackage ../applications/audio/faust-compiler { };
 
   fceux = callPackage ../misc/emulators/fceux { };
@@ -12692,6 +12703,10 @@ let
   vimprobable2Wrapper = wrapFirefox
     { browser = vimprobable2; browserName = "vimprobable2"; desktopName = "Vimprobable2";
     };
+
+  rekonqWrapper = wrapFirefox {
+    browser = kde4.rekonq; browserName = "rekonq"; desktopName = "Rekonq";
+  };
 
   vimb = callPackage ../applications/networking/browsers/vimb {
     webkit = webkitgtk2;

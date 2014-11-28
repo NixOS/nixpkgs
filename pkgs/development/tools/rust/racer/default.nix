@@ -21,9 +21,10 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/racer --set RUST_SRC_PATH "${rustSrc}/src"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A utility intended to provide rust code completion for editors and IDEs.";
     homepage = https://github.com/phildawes/racer;
     license = stdenv.lib.licenses.mit;
+    maintainers = [ maintainers.jagajaga ];
   };
 }

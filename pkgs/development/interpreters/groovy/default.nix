@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "groovy-${version}";
-  version = "2.3.7";
+  version = "2.3.8";
 
   src = fetchurl {
     url = "http://dl.bintray.com/groovy/maven/groovy-binary-${version}.zip";
-    sha256 = "09957vi33c8bgk6z4wnidch5sz3s183yh6xba8cdjy5f7jpzmmiq";
+    sha256 = "0fgsn1s7vhxcrwb2wa6zvrdzff7zbb2s6f7xj6c9x7gl9mdfcwpn";
   };
 
   installPhase = ''

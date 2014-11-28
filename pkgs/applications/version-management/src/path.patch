@@ -1,24 +1,24 @@
-diff -Naur src-0.12-orig/src src-0.12/src
---- src-0.12-orig/src	2014-11-21 08:19:59.000000000 -0500
-+++ src-0.12/src	2014-11-21 15:54:54.598113846 -0500
+diff -Naur src-0.13-orig/src src-0.13/src
+--- src-0.13-orig/src	2014-11-24 03:56:16.000000000 -0500
++++ src-0.13/src	2014-11-26 16:32:32.925151003 -0500
 @@ -1,4 +1,4 @@
 -#!/usr/bin/env python2
 +#!@python@/bin/python
  #
  # src - simple revision control.
  #
-@@ -58,6 +58,8 @@
+@@ -51,6 +51,8 @@
  
  import sys, os, subprocess, time, calendar, stat, glob, shutil, hashlib
  
 +os.environ['PATH'] = "@rcs@/bin:@git@/bin:" + os.environ['PATH']
 +
- version="0.12"
+ version="0.13"
  
  def rfc3339(t):
-diff -Naur src-0.12-orig/srctest src-0.12/srctest
---- src-0.12-orig/srctest	2014-11-21 08:12:00.000000000 -0500
-+++ src-0.12/srctest	2014-11-21 15:58:31.370500990 -0500
+diff -Naur src-0.13-orig/srctest src-0.13/srctest
+--- src-0.13-orig/srctest	2014-11-21 08:12:00.000000000 -0500
++++ src-0.13/srctest	2014-11-26 16:33:13.627715388 -0500
 @@ -12,7 +12,7 @@
  
  # Set the PATH to include the current directory, so the repository

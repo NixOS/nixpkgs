@@ -17,11 +17,13 @@ let
 
   knownHosts = map (h: getAttr h cfg.knownHosts) (attrNames cfg.knownHosts);
 
-  knownHostsFile = pkgs.writeText "ssh_known_hosts" (
-    flip concatMapStrings knownHosts (h: ''
-      ${concatStringsSep "," h.hostNames} ${if h.publicKey != null then h.publicKey else readFile h.publicKeyFile}
-    '')
-  );
+  knownHostsFile = pkgs.runCommand "ssh_known_hosts" {} ''
+    touch "$out"
+    ${flip concatMapStrings knownHosts (h: ''
+      pubkeyfile=${builtins.toFile "host.pub" (if h.publicKey == null then readFile h.publicKeyFile else h.publicKey)}
+      ${pkgs.gnused}/bin/sed 's/^/${concatStringsSep "," h.hostNames} /' $pubkeyfile >> "$out"
+    '')}
+  '';
 
   userOptions = {
 
@@ -254,7 +256,10 @@ in
             description = ''
               The public key data for the host. You can fetch a public key
               from a running SSH server with the <command>ssh-keyscan</command>
-              command.
+              command. The public key should not include any host names, only
+              the key type and the key itself. It is allowed to add several
+              lines here, each line will be treated as type/key pair and the
+              host names will be prepended to each line.
             '';
           };
           publicKeyFile = mkOption {
@@ -264,7 +269,9 @@ in
               The path to the public key file for the host. The public
               key file is read at build time and saved in the Nix store.
               You can fetch a public key file from a running SSH server
-              with the <command>ssh-keyscan</command> command.
+              with the <command>ssh-keyscan</command> command. The content
+              of the file should follow the same format as described for
+              the <literal>publicKey</literal> option.
             '';
           };
         };

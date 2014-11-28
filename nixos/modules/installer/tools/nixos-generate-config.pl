@@ -235,7 +235,7 @@ chomp $virt;
 # Check if we're a VirtualBox guest.  If so, enable the guest
 # additions.
 if ($virt eq "oracle") {
-    push @attrs, "services.virtualbox.enable = true;"
+    push @attrs, "services.virtualboxGuest.enable = true;"
 }
 
 

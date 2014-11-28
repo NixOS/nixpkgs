@@ -67,6 +67,7 @@
   ./programs/ssmtp.nix
   ./programs/uim.nix
   ./programs/venus.nix
+  ./programs/virtualbox-host.nix
   ./programs/wvdial.nix
   ./programs/freetds.nix
   ./programs/zsh/zsh.nix

@@ -13,7 +13,7 @@ use NetworkManager. You can enable NetworkManager by setting:
 services.networkmanager.enable = true;
 </programlisting>
 
-Some desktop managers (e.g., GNOME) enable NetworkManager
+some desktop managers (e.g., GNOME) enable NetworkManager
 automatically for you.</para>
 
 <para>All users that should have permission to change network settings

@@ -214,6 +214,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   aws = callPackage ../development/libraries/haskell/aws {};
 
+  awsEc2 = callPackage ../development/libraries/haskell/aws-ec2 {};
+
   authenticate = callPackage ../development/libraries/haskell/authenticate {};
 
   authenticateOauth = callPackage ../development/libraries/haskell/authenticate-oauth {};
@@ -898,6 +900,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   genericDeriving = callPackage ../development/libraries/haskell/generic-deriving {};
 
+  GenericPretty = callPackage ../development/libraries/haskell/GenericPretty {};
+
   genericsSop = callPackage ../development/libraries/haskell/generics-sop {};
 
   ghcCore = callPackage ../development/libraries/haskell/ghc-core {};
@@ -1142,6 +1146,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hackageDb = callPackage ../development/libraries/haskell/hackage-db {};
 
+  handaGdata = callPackage ../development/libraries/haskell/handa-gdata {};
+
   haskellForMaths = callPackage ../development/libraries/haskell/HaskellForMaths {};
 
   haxl = callPackage ../development/libraries/haskell/haxl {};
@@ -1244,6 +1250,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hp2anyGraph = callPackage ../development/libraries/haskell/hp2any-graph {};
 
   hS3 = callPackage ../development/libraries/haskell/hS3 {};
+
+  hsbencher = callPackage ../development/libraries/haskell/hsbencher {};
+
+  hsbencherFusion = callPackage ../development/libraries/haskell/hsbencher-fusion {};
 
   hsBibutils = callPackage ../development/libraries/haskell/hs-bibutils {};
 
@@ -1574,6 +1584,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   lushtags = callPackage ../development/libraries/haskell/lushtags {};
 
+  lzmaConduit = callPackage ../development/libraries/haskell/lzma-conduit {};
+
   lzmaEnumerator = callPackage ../development/libraries/haskell/lzma-enumerator {};
 
   maccatcher = callPackage ../development/libraries/haskell/maccatcher {};
@@ -1765,6 +1777,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   networkConduit = callPackage ../development/libraries/haskell/network-conduit {};
   networkConduitTls = callPackage ../development/libraries/haskell/network-conduit-tls {};
+
+  networkData = callPackage ../development/libraries/haskell/network-data {};
 
   networkFancy = callPackage ../development/libraries/haskell/network-fancy {};
 
@@ -2706,6 +2720,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   vectorThUnbox = callPackage ../development/libraries/haskell/vector-th-unbox {};
 
   vinyl = callPackage ../development/libraries/haskell/vinyl {};
+
+  vkAwsRoute53 = callPackage ../development/libraries/haskell/vk-aws-route53 {};
+
+  vkPosixPty = callPackage ../development/libraries/haskell/vk-posix-pty {};
 
   void = callPackage ../development/libraries/haskell/void {};
 

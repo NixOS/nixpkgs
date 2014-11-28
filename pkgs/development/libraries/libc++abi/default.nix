@@ -16,6 +16,7 @@ stdenv.mkDerivation {
 
   postUnpack = ''
     unpackFile ${libcxx.src}
+    cp -r libcxx-*/include libcxxabi*/
   '' + lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
     # Hack: NIX_CFLAGS_COMPILE doesn't work here because clang++ isn't
@@ -44,7 +45,7 @@ stdenv.mkDerivation {
     homepage = http://libcxxabi.llvm.org/;
     description = "A new implementation of low level support for a standard C++ library";
     license = "BSD";
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
+    maintainers = with stdenv.lib.maintainers; [ shlevy vlstill ];
     platforms = stdenv.lib.platforms.unix;
   };
 }
