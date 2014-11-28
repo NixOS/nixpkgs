@@ -16,6 +16,11 @@ skarnetConfigure() {
   > conf-install-library.so  printf "$out/lib"
   > conf-install-sysdeps     printf "$out/sysdeps"
 
+  # use generic 'cc' to support both gcc and clang (darwin) stdenvs
+  for file in conf-cc conf-dynld conf-ld; do
+    substituteInPlace $file --replace gcc cc
+  done
+
   # let nix builder strip things, cross-platform
   truncate --size 0 conf-stripbins conf-striplibs
 
