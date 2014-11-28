@@ -4721,6 +4721,8 @@ let
     flex = flex_2_5_35;
   };
 
+  sselp = callPackage ../tools/X11/sselp{ };
+
   stm32flash = callPackage ../development/tools/misc/stm32flash { };
 
   strace = callPackage ../development/tools/misc/strace { };
