@@ -80,4 +80,28 @@ in rec {
     };
   };
 
+  darkcoin = buildAltcoin rec {
+    walletName = "darkcoin";
+    version = "0.9.13.15";
+
+    src = fetchurl {
+      url = "https://github.com/darkcoin/darkcoin/archive/v${version}.tar.gz";
+      sha256 = "1kly2y3g4dr1jwwf81smqvc7k662x6rvg4ggmxva1yaifb67bgjb";
+    };
+
+    extraBuildInputs = [ glib ];
+
+    meta = {
+      description = "A decentralized key/value registration and transfer system";
+      longDescription = ''
+        Darkcoin (DRK) is an open sourced, privacy-centric digital
+        currency. It allows you keep your finances private as you make
+        transactions, similar to cash.
+      '';
+      homepage = http://darkcoin.io;
+      maintainers = [ stdenv.lib.maintainers.AndersonTorres ];
+    };
+  };
+  darkcoind = darkcoin.override { gui = false; };
+
 }
