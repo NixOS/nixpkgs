@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, glib, pkgconfig }:
+{ stdenv, fetchurl, autoreconfHook, glib, pkgconfig }:
 
 stdenv.mkDerivation rec {
   version = "1.3";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1527pcc1vd0l5iks2yw8m0bymcrnih2md5465lwpzw0wgy4rky7n";
   };
 
-  buildInputs = [ glib pkgconfig ];
+  buildInputs = [ autoreconfHook glib pkgconfig ];
 
   meta = with stdenv.lib; {
     description = "A C library for reading and writing Standard MIDI Files";
