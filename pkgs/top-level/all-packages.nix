@@ -4126,7 +4126,9 @@ let
 
   qi = callPackage ../development/compilers/qi { };
 
-  racket = callPackage ../development/interpreters/racket { };
+  racket = callPackage ../development/interpreters/racket {
+    cairo = cairo_1_12;
+  };
 
   rakudo = callPackage ../development/interpreters/rakudo { };
 
@@ -5406,6 +5408,10 @@ let
   pixman = callPackage ../development/libraries/pixman { };
 
   cairo = callPackage ../development/libraries/cairo {
+    glSupport = config.cairo.gl or (stdenv.isLinux &&
+      !stdenv.isArm && !stdenv.isMips);
+  };
+  cairo_1_12 = callPackage ../development/libraries/cairo/1.12.nix {
     glSupport = config.cairo.gl or (stdenv.isLinux &&
       !stdenv.isArm && !stdenv.isMips);
   };
