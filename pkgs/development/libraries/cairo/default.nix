@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libiconvOrEmpty, libintlOrEmpty
+{ stdenv, fetchurl, fetchpatch, pkgconfig, libiconvOrEmpty, libintlOrEmpty
 , expat, zlib, libpng, pixman, fontconfig, freetype, xlibs
 , gobjectSupport ? true, glib
 , xcbSupport ? true # no longer experimental since 1.12
@@ -17,6 +17,12 @@ stdenv.mkDerivation rec {
     url = "http://cairographics.org/releases/${name}.tar.xz";
     sha1 = "53cf589b983412ea7f78feee2e1ba9cea6e3ebae";
   };
+
+  patches = [(fetchpatch {
+    name = "fix-racket.diff";
+    url = "http://cgit.freedesktop.org/cairo/patch/?id=2de69581c28bf115852037ca41eba13cb7335976";
+    sha256 = "0mk2fd9fwxqzravlmnbbrzwak15wqspn7609y0yn6qh87va5i0x4";
+  })];
 
   nativeBuildInputs = [ pkgconfig ] ++ libintlOrEmpty ++ libiconvOrEmpty;
 
