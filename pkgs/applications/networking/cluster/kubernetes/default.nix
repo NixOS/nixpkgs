@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "v0.5.2";
+  version = "v0.5.4";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "kubernetes";
     rev = version;
-    sha256 = "0nrm59v43jx0cskpd294q946053cfw3y2cgs53ji35dnhgj6fl6w";
+    sha256 = "1pipcqpjz9zsi4kfsbdvbbbia642l4xg50pznjw5v061c5xk7vnk";
   };
 
   buildInputs = [ makeWrapper which go iptables rsync ];
