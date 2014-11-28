@@ -218,4 +218,41 @@ let
     };
   };
 
+  lpeg = buildLuaPackage rec {
+    name = "lpeg-${version}";
+    version = "0.12";
+    src = fetchurl {
+      url = "http://www.inf.puc-rio.br/~roberto/lpeg/${name}.tar.gz";
+      sha256 = "0xlbfw1w7l65a5qhnx5sfw327hkq1zcj8xmg4glfw6fj9ha4b9gg";
+    };
+    buildInputs = [ unzip ];
+
+    installPhase = ''
+      mkdir -p $out/lib/lua/${lua.luaversion}
+      install -p lpeg.so $out/lib/lua/${lua.luaversion}
+      install -p re.lua $out/lib/lua/${lua.luaversion}
+    '';
+
+    meta = {
+      homepage = "http://www.inf.puc-rio.br/~roberto/lpeg/";
+      hydraPlatforms = stdenv.lib.platforms.linux;
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  luaMessagePack = buildLuaPackage rec {
+    name = "lua-MessagePack-${version}";
+    version = "0.3.1";
+    src = fetchurl {
+      url = "https://github.com/fperrad/lua-MessagePack/archive/${version}.tar.gz";
+      sha256 = "185mrd6bagwwm94jxzanq01l72ama3x4hf160a7yw7hgim2y5h9c";
+    };
+    buildInputs = [ unzip ];
+
+    meta = {
+      homepage = "http://fperrad.github.io/lua-MessagePack/index.html";
+      hydraPlatforms = stdenv.lib.platforms.linux;
+      license = stdenv.lib.licenses.mit;
+    };
+  };
 }; in self
