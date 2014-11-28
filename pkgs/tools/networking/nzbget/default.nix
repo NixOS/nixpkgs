@@ -2,11 +2,11 @@
 , gnutls, libgcrypt }:
 
 stdenv.mkDerivation rec {
-  name = "nzbget-14.0";
+  name = "nzbget-14.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/nzbget/${name}.tar.gz";
-    sha256 = "1r9qdp17px8vq3mh18fzxhm5cqd37wcz2vv7hsxdq8rmgxhl7lj1";
+    sha256 = "062bvf0r290qi3xgbvvwgxxmnka7raa71dz9fg1mq0zpc5mq2sx1";
   };
 
   buildInputs = [ pkgconfig libxml2 ncurses libsigcxx libpar2 gnutls libgcrypt ];
