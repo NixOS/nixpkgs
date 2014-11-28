@@ -4126,7 +4126,9 @@ let
 
   qi = callPackage ../development/compilers/qi { };
 
-  racket = callPackage ../development/interpreters/racket { };
+  racket = callPackage ../development/interpreters/racket {
+    cairo = cairo_1_12;
+  };
 
   rakudo = callPackage ../development/interpreters/rakudo { };
 
