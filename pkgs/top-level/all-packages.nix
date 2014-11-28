@@ -5409,6 +5409,10 @@ let
     glSupport = config.cairo.gl or (stdenv.isLinux &&
       !stdenv.isArm && !stdenv.isMips);
   };
+  cairo_1_12 = callPackage ../development/libraries/cairo/1.12.nix {
+    glSupport = config.cairo.gl or (stdenv.isLinux &&
+      !stdenv.isArm && !stdenv.isMips);
+  };
   cairomm = callPackage ../development/libraries/cairomm { };
 
   pango = callPackage ../development/libraries/pango { };
