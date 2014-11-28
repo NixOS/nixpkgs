@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "libsmf-${version}";
   src = fetchurl {
     url = "https://github.com/stump/libsmf/archive/${name}.tar.gz";
-    sha256 = "16c0n40h0r56gzbh5ypxa4dwp296dan3jminml2qkb4lvqarym6k";
+    sha256 = "1527pcc1vd0l5iks2yw8m0bymcrnih2md5465lwpzw0wgy4rky7n";
   };
 
   buildInputs = [ glib pkgconfig ];
