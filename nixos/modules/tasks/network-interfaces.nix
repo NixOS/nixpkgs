@@ -678,6 +678,7 @@ in
         before = [ "network-interfaces.target" ];
         bindsTo = [ (subsystemDevice i.name) ];
         after = [ (subsystemDevice i.name) ];
+        path = [ pkgs.iproute ];
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;

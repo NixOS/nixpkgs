@@ -197,10 +197,6 @@ in
               echo "Adding bridge ${n}..."
               ip link add name "${n}" type bridge
 
-              # Set bridge's hello time to 0 to avoid startup delays.
-              echo 0 >"/sys/class/net/${n}/bridge/hello_time"
-              echo 0 >"/sys/class/net/${n}/bridge/forward_delay"
-
               # Enslave child interfaces
               ${flip concatMapStrings v.interfaces (i: ''
                 ip link set "${i}" master "${n}"
@@ -226,7 +222,7 @@ in
             before = [ "${n}-cfg.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute ];
+            path = [ pkgs.iproute pkgs.gawk ];
             script = ''
               echo "Destroying old bond ${n}..."
               ${destroyBond n}
