@@ -1,6 +1,7 @@
 { stdenv, fetchurl
 , zlibSupport ? false, zlib ? null
 , sslSupport ? false, openssl ? null
+, withCacert ? false, cacert ? null
 , scpSupport ? false, libssh2 ? null
 , gssSupport ? false, gss ? null
 , c-aresSupport ? false, c-ares ? null
@@ -9,6 +10,7 @@
 
 assert zlibSupport -> zlib != null;
 assert sslSupport -> openssl != null;
+assert withCacert -> cacert != null;
 assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 
@@ -41,6 +43,7 @@ stdenv.mkDerivation rec {
       ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
     ]
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
+    ++ stdenv.lib.optional withCacert "--with-ca-bundle=${cacert}/etc/ca-bundle.crt"
     ++ stdenv.lib.optional gssSupport "--with-gssapi=${gss}"
     ++ stdenv.lib.optionals linkStatic [ "--enable-static" "--disable-shared" ]
   ;
