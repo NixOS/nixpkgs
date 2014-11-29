@@ -125,10 +125,6 @@ stdenv: pkgs: old: new: {
     patches = [ ./patches/BayesBridge.patch ];
   });
 
-  dbarts = old.dbarts.overrideDerivation (attrs: {
-    patches = [ ./patches/dbarts.patch ];
-  });
-
   openssl = old.openssl.overrideDerivation (attrs: {
     patches = [ ./patches/openssl.patch ];
     OPENSSL_HOME = "${pkgs.openssl}";
