@@ -14,8 +14,8 @@ cabal.mkDerivation (self: rec {
   version = "0.1.0";
   src = fetchgit {
     url = git://github.com/ghcjs/ghcjs.git;
-    rev = "c0b8ebb3e2608fdd8dc3b74b55f281b5c24be8e1";
-    sha256 = "442ebdfd426ec98a431735f72ec00c7dde54ae1f0c78dd593d33077ffdb1e2a2";
+    rev = "5c2d279982466e076223fcbe1e1096e22956e5a9";
+    sha256 = "0bc37b4e8bd039208a126fea39850c99459265cb273ac7237939cdbaee6ef71f";
   };
   bootSrc = fetchgit {
     url = git://github.com/ghcjs/ghcjs-boot.git;
