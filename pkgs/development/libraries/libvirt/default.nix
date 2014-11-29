@@ -62,7 +62,6 @@ stdenv.mkDerivation rec {
       versions of Linux (and other OSes)
     '';
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ wizeman ];
     platforms = platforms.linux;
   };
 }

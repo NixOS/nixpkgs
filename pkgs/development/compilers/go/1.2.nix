@@ -83,7 +83,7 @@ stdenv.mkDerivation {
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = "BSD";
-    maintainers = with stdenv.lib.maintainers; [ pierron viric wizeman ];
+    maintainers = with stdenv.lib.maintainers; [ pierron viric ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
