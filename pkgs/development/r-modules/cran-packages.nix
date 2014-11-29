@@ -164,11 +164,13 @@ let
     in
       builtins.listToAttrs nameValuePairs;
 
-  packagesWithNativeBuildInputs = import ./packages-with-native-build-inputs.nix pkgs;
-  packagesWithBuildInputs = import ./packages-with-build-inputs.nix pkgs;
-  packagesRequireingX = import ./packages-requireing-x.nix;
-  packagesToSkipCheck = import ./packages-to-skip-check.nix;
-  brokenPackages = import ./broken-packages.nix;
+  inherit (import ./default-overrides.nix stdenv pkgs)
+    packagesWithNativeBuildInputs
+    packagesWithBuildInputs
+    packagesRequireingX
+    packagesToSkipCheck
+    brokenPackages
+    otherOverrides;
 
   defaultOverrides = old: new:
     let old0 = old; in
@@ -179,8 +181,7 @@ let
       old4 = old3 // (overrideBuildInputs packagesWithBuildInputs old3);
       old5 = old4 // (overrideBroken brokenPackages old4);
       old = old5;
-    in old // (import ./default-overrides.nix stdenv pkgs old new);
-
+    in old // (otherOverrides old new);
 
   # Recursive override pattern.
   # `_self` is a collection of packages;
