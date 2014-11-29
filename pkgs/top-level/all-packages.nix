@@ -4004,6 +4004,8 @@ let
     pythonProtobuf = pythonPackages.protobuf;
   };
 
+  mujs = callPackage ../development/interpreters/mujs { };
+
   nix-exec = callPackage ../development/interpreters/nix-exec {
     nix = nixUnstable;
     git = gitMinimal;
