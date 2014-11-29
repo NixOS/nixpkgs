@@ -6,6 +6,7 @@
 , pythonBindings ? false, python ? null
 , enableExtensionPack ? false, requireFile ? null, patchelf ? null
 , pulseSupport ? false, pulseaudio ? null
+, enableHardening ? true
 }:
 
 with stdenv.lib;
@@ -83,28 +84,39 @@ in stdenv.mkDerivation {
     set +x
   '';
 
+  patches = optional enableHardening ./hardened.patch;
+
   configurePhase = ''
     sourcedir="$(pwd)"
+    cat >> LocalConfig.kmk <<LOCAL_CONFIG
+    VBOX_WITH_TESTCASES          :=
+    VBOX_WITH_TESTSUITE          :=
+    VBOX_WITH_VALIDATIONKIT      :=
+    VBOX_WITH_DOCS               :=
+    VBOX_WITH_WARNINGS_AS_ERRORS :=
+
+    VBOX_WITH_ORIGIN           :=
+    VBOX_PATH_APP_PRIVATE_ARCH := $out/libexec/virtualbox
+    VBOX_PATH_SHARED_LIBS      := $out/libexec/virtualbox
+    VBOX_WITH_RUNPATH          := $out/libexec/virtualbox
+    VBOX_PATH_APP_PRIVATE      := $out
+    VBOX_PATH_APP_DOCS         := $out/doc
+    ${optionalString javaBindings ''
+    VBOX_JAVA_HOME             := ${jdk}
+    ''}
+    LOCAL_CONFIG
+
     ./configure --with-qt4-dir=${qt4} \
       ${optionalString (!javaBindings) "--disable-java"} \
       ${optionalString (!pythonBindings) "--disable-python"} \
       ${optionalString (!pulseSupport) "--disable-pulse"} \
-      --disable-hardening --disable-kmods \
-      --with-mkisofs=${xorriso}/bin/xorrisofs
+      ${optionalString (!enableHardening) "--disable-hardening"} \
+      --disable-kmods --with-mkisofs=${xorriso}/bin/xorrisofs
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk
     sed -e 's@arch/x86/@@' \
         -i Config.kmk
     substituteInPlace Config.kmk --replace "VBOX_WITH_TESTCASES = 1" "#"
-    cat >> AutoConfig.kmk << END_PATHS
-    VBOX_PATH_APP_PRIVATE := $out
-    VBOX_PATH_APP_DOCS := $out/doc
-    ${optionalString javaBindings ''
-      VBOX_JAVA_HOME := ${jdk}
-    ''}
-    END_PATHS
-    echo "VBOX_WITH_DOCS :=" >> LocalConfig.kmk
-    echo "VBOX_WITH_WARNINGS_AS_ERRORS :=" >> LocalConfig.kmk
   '';
 
   enableParallelBuilding = true;

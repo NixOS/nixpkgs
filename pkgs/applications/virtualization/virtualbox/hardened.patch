@@ -1,0 +1,26 @@
+diff --git a/src/VBox/HostDrivers/Support/SUPR3HardenedVerify.cpp b/src/VBox/HostDrivers/Support/SUPR3HardenedVerify.cpp
+index c39d2f7..f6a4031 100644
+--- a/src/VBox/HostDrivers/Support/SUPR3HardenedVerify.cpp
++++ b/src/VBox/HostDrivers/Support/SUPR3HardenedVerify.cpp
+@@ -1415,7 +1415,7 @@ static int supR3HardenedVerifyFsObject(PCSUPR3HARDENEDFSOBJSTATE pFsObjState, bo
+         NOREF(fRelaxed);
+ #else
+         NOREF(fRelaxed);
+-        bool fBad = true;
++        bool fBad = !(fDir && pFsObjState->Stat.st_mode & S_ISVTX && !suplibHardenedStrCmp(pszPath, "/nix/store"));
+ #endif
+         if (fBad)
+             return supR3HardenedSetError3(VERR_SUPLIB_WRITE_NON_SYS_GROUP, pErrInfo,
+diff --git a/src/VBox/Main/src-server/MachineImpl.cpp b/src/VBox/Main/src-server/MachineImpl.cpp
+index 95dc9a7..39170bc 100644
+--- a/src/VBox/Main/src-server/MachineImpl.cpp
++++ b/src/VBox/Main/src-server/MachineImpl.cpp
+@@ -7326,7 +7326,7 @@ HRESULT Machine::i_launchVMProcess(IInternalSessionControl *aControl,
+ 
+     /* get the path to the executable */
+     char szPath[RTPATH_MAX];
+-    RTPathAppPrivateArch(szPath, sizeof(szPath) - 1);
++    RTStrCopy(szPath, sizeof(szPath) - 1, "/var/setuid-wrappers");
+     size_t cchBufLeft = strlen(szPath);
+     szPath[cchBufLeft++] = RTPATH_DELIMITER;
+     szPath[cchBufLeft] = 0;
