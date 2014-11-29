@@ -3,9 +3,9 @@
   # sort -t '#' -k 2
 
   "rpanel" # I could not make Tcl to recognize BWidget. HELP WANTED!
-  "Actigraphy" # SDMTools.so: undefined symbol: X
   "MigClim" # SDMTools.So: Undefined Symbol: X
   "PatternClass" # SDMTools.So: Undefined Symbol: X
+  "Actigraphy" # SDMTools.so: undefined symbol: X
   "lefse" # SDMTools.so: undefined symbol: X
   "raincpc" # SDMTools.so: undefined symbol: X
   "rainfreq" # SDMTools.so: undefined symbol: X
@@ -39,7 +39,7 @@
   "slackr" # jsonlite.so: undefined symbol: XXX
   "webutils" # jsonlite.so: undefined symbol: XXX
   "msarc" # requires AnnotationDbi
-  "ppiPre" # requires AnnotationDbi
+  "MetaLandSim" # requires Biobase
   "RobLox" # requires Biobase
   "RobLoxBioC" # requires Biobase
   "compendiumdb" # requires Biobase
@@ -49,13 +49,17 @@
   "GExMap" # requires Biobase and multtest
   "IsoGene" # requires Biobase, and affy
   "mGSZ" # requires Biobase, and limma
+  "netweavers" # requires BiocGenerics, Biobase, and limma
   "NCmisc" # requires BiocInstaller
+  "EMDomics" # requires BiocParallel
   "RADami" # requires Biostrings
+  "ionflows" # requires Biostrings
   "RAPIDR" # requires Biostrings, Rsamtools, and GenomicRanges
   "SimRAD" # requires Biostrings, and ShortRead
   "SeqFeatR" # requires Biostrings, qvalue, and widgetTools
   "OpenCL" # requires CL/opencl.h
   "cplexAPI" # requires CPLEX
+  "empiricalFDR_DESeq2" # requires DESeq2, and GenomicRanges
   "CHAT" # requires DNAcopy
   "PSCBS" # requires DNAcopy
   "ParDNAcopy" # requires DNAcopy
@@ -63,6 +67,7 @@
   "RockFab" # requires EBImage
   "gitter" # requires EBImage
   "rggobi" # requires GGobi
+  "PANDA" # requires GO.db
   "BiSEp" # requires GOSemSim, GO.db, and org.Hs.eg.db
   "PubMedWordcloud" # requires GOsummaries
   "ExomeDepth" # requires GenomicRanges, and Rsamtools
@@ -102,6 +107,7 @@
   "dagbag" # requires Rlapack
   "ltsk" # requires Rlapack and Rblas
   "REBayes" # requires Rmosek
+  "cqrReg" # requires Rmosek
   "LinRegInteractive" # requires Rpanel
   "RVideoPoker" # requires Rpanel
   "ArrayBin" # requires SAGx
@@ -141,9 +147,9 @@
   "superbiclust" # requires fabia
   "curvHDR" # requires flowCore
   "RbioRXN" # requires fmcsR, and KEGGREST
+  "D2C" # requires gRbase
   "LogisticDx" # requires gRbase
   "gRain" # requires gRbase
-  "gRbase" # requires gRbase
   "gRc" # requires gRbase
   "gRim" # requires gRbase
   "topologyGSA" # requires gRbase
@@ -155,6 +161,7 @@
   "eulerian" # requires graph
   "gRapHD" # requires graph
   "msSurv" # requires graph
+  "QuACN" # requires graph, RBGL
   "RnavGraph" # requires graph, and RBGL
   "iRefR" # requires graph, and RBGL
   "pcalg" # requires graph, and RBGL
@@ -164,7 +171,6 @@
   "gridGraphviz" # requires graph, and Rgraphviz
   "ddepn" # requires graph, and genefilter
   "gridDebug" # requires gridGraphviz
-  "DRI" # requires impute
   "FAMT" # requires impute
   "PMA" # requires impute
   "WGCNA" # requires impute
@@ -203,6 +209,7 @@
   "pbdDMAT" # requires pbdMPI
   "pbdSLAP" # requires pbdMPI
   "LOST" # requires pcaMethods
+  "agridat" # requires pcaMethods
   "multiDimBio" # requires pcaMethods
   "crmn" # requires pcaMethods, and Biobase
   "imputeLCMD" # requires pcaMethods, and impute
@@ -272,12 +279,13 @@
   "dnet" # requires supraHex, graph, Rgraphviz, and Biobase
   "plsRcox" # requires survcomp
   "rsig" # requires survcomp
+  "leapp" # requires sva
   "ttScreening" # requires sva, and limma
   "cudaBayesreg" # requres Rmath
   "taxize" # requres bold
   "rsprng" # requres sprng
+  "evobiR" # requres taxiz
   "RNeXML" # requres taxize
   "TR8" # requres taxize
   "bdvis" # requres taxize
-  "evobiR" # requres taxiz
 ]

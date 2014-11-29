@@ -2,6 +2,7 @@ pkgs: {
   # sort -t '=' -k 2
   RAppArmor = [ pkgs.apparmor ];
   SOD = [ pkgs.cudatoolkit ]; # requres CL/cl.h
+  curl = [ pkgs.curl pkgs.openldap ];
   Rssa = [ pkgs.fftw ];
   fftw = [ pkgs.fftw ];
   fftwtools = [ pkgs.fftw ];
