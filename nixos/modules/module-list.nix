@@ -395,6 +395,7 @@
   ./virtualisation/container-config.nix
   ./virtualisation/containers.nix
   ./virtualisation/docker.nix
+  ./virtualisation/kubernetes.nix
   ./virtualisation/libvirtd.nix
   ./virtualisation/lxc.nix
   #./virtualisation/nova.nix

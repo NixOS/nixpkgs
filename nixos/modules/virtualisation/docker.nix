@@ -103,6 +103,12 @@ in
           LimitNPROC = 1048576;
         } // proxy_env;
 
+        postStart = ''
+          while ! [ -e /var/run/docker.sock ]; do
+            sleep 0.1
+          done
+        '';
+
         # Presumably some containers are running we don't want to interrupt
         restartIfChanged = false;
       };
