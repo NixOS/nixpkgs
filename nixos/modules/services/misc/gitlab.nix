@@ -21,7 +21,7 @@ let
   '';
   gitlabShellYml = ''
     user: gitlab
-    gitlab_url: "http://localhost:8080/"
+    gitlab_url: "http://${cfg.host}:${toString cfg.port}/"
     http_settings:
       self_signed_cert: false
     repos_path: "${cfg.stateDir}/repositories"
@@ -57,6 +57,7 @@ let
           --set GITLAB_SHELL_CONFIG_PATH "${cfg.stateDir}/shell/config.yml"\
           --set GITLAB_SHELL_SECRET_PATH "${cfg.stateDir}/config/gitlab_shell_secret"\
           --set GITLAB_HOST "${cfg.host}"\
+          --set GITLAB_PORT "${toString cfg.port}"\
           --set GITLAB_BACKUP_PATH"${cfg.backupPath}"\
           --set RAILS_ENV "production"
     '';
@@ -77,43 +78,43 @@ in {
       satelliteDir = mkOption {
         type = types.str;
         default = "/var/gitlab/git-satellites";
-        description = "Directory to store checked out git trees requires for operation.";
+        description = "Gitlab directory to store checked out git trees requires for operation.";
       };
 
       stateDir = mkOption {
         type = types.str;
         default = "/var/gitlab/state";
-        description = "The state directory, logs are stored here.";
+        description = "Gitlab state directory, logs are stored here.";
       };
 
       backupPath = mkOption {
         type = types.str;
         default = cfg.stateDir + "/backup";
-        description = "Path for backups.";
+        description = "Gitlab path for backups.";
       };
 
       databaseHost = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = "Database hostname";
+        description = "Gitlab database hostname.";
       };
 
       databasePassword = mkOption {
         type = types.str;
         default = "";
-        description = "Database user password";
+        description = "Gitlab database user password.";
       };
 
       databaseName = mkOption {
         type = types.str;
         default = "gitlab";
-        description = "Database name";
+        description = "Gitlab database name.";
       };
 
       databaseUsername = mkOption {
         type = types.str;
         default = "gitlab";
-        description = "Database user";
+        description = "Gitlab database user.";
       };
 
       emailFrom = mkOption {
@@ -125,7 +126,13 @@ in {
       host = mkOption {
         type = types.str;
         default = config.networking.hostName;
-        description = "The gitlab host name. Used e.g. for copy-paste URLs.";
+        description = "Gitlab host name. Used e.g. for copy-paste URLs.";
+      };
+
+      port = mkOption {
+        type = types.int;
+        default = 8080;
+        description = "Gitlab server listening port.";
       };
     };
   };
@@ -144,6 +151,7 @@ in {
     services.redis.enable = mkDefault true;
     # We use postgres as the main data store.
     services.postgresql.enable = mkDefault true;
+    services.postgresql.package = mkDefault pkgs.postgresql;
     # Use postfix to send out mails.
     services.postfix.enable = mkDefault true;
 
@@ -176,6 +184,7 @@ in {
       environment.GITLAB_SHELL_CONFIG_PATH = "${cfg.stateDir}/shell/config.yml";
       environment.GITLAB_SHELL_SECRET_PATH = "${cfg.stateDir}/config/gitlab_shell_secret";
       environment.GITLAB_HOST = "${cfg.host}";
+      environment.GITLAB_PORT = "${toString cfg.port}";
       environment.GITLAB_DATABASE_HOST = "${cfg.databaseHost}";
       environment.GITLAB_DATABASE_PASSWORD = "${cfg.databasePassword}";
       environment.RAILS_ENV = "production";
@@ -209,6 +218,7 @@ in {
       environment.BUNDLE_GEMFILE = "${pkgs.gitlab}/share/gitlab/Gemfile";
       environment.GITLAB_EMAIL_FROM = "${cfg.emailFrom}";
       environment.GITLAB_HOST = "${cfg.host}";
+      environment.GITLAB_PORT = "${toString cfg.port}";
       environment.GITLAB_DATABASE_HOST = "${cfg.databaseHost}";
       environment.GITLAB_DATABASE_PASSWORD = "${cfg.databasePassword}";
       environment.RAILS_ENV = "production";

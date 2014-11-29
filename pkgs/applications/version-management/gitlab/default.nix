@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ruby, rubyLibs, libxslt, libxml2, pkgconfig, libffi, postgresql, libyaml, ncurses, curl, openssh, redis, zlib, icu, checkinstall, logrotate, docutils, cmake, git, gdbm, readline, unzip, gnumake, which }:
+{ stdenv, fetchurl, ruby, rubyLibs, libiconv, libxslt, libxml2, pkgconfig, libffi, postgresql, libyaml, ncurses, curl, openssh, redis, zlib, icu, checkinstall, logrotate, docutils, cmake, git, gdbm, readline, unzip, gnumake, which, tzdata }:
 
 let
   gemspec = map (gem: fetchurl { url=gem.url; sha256=gem.hash; }) (import ./Gemfile.nix);
@@ -60,6 +60,10 @@ in stdenv.mkDerivation rec {
 
     # See https://github.com/gitlabhq/gitlab-public-wiki/wiki/Trouble-Shooting-Guide:
     bundle install -j4 --verbose --local --deployment --without development test mysql
+
+    # Fix timezone data directory
+    substituteInPlace $out/share/gitlab/vendor/bundle/ruby/*/gems/tzinfo-*/lib/tzinfo/zoneinfo_data_source.rb \
+      --replace "/etc/zoneinfo" "${tzdata}/share/zoneinfo"
 
     # For reasons I don't understand "bundle exec" ignores the
     # RAILS_ENV causing tests to be executed that fail because we're
