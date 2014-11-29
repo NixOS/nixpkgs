@@ -398,6 +398,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   ChartDiagrams = callPackage ../development/libraries/haskell/Chart-diagrams {};
   ChartGtk = callPackage ../development/libraries/haskell/Chart-gtk {};
 
+  chaselevDeque = callPackage ../development/libraries/haskell/chaselev-deque {};
+
   ChasingBottoms = callPackage ../development/libraries/haskell/ChasingBottoms {};
 
   cheapskate = callPackage ../development/libraries/haskell/cheapskate {};
