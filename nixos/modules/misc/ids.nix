@@ -169,7 +169,7 @@
       opentsdb = 159;
       scollector = 160;
       bosun = 161;
-      kubernetes = 158;
+      kubernetes = 162;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
