@@ -1,0 +1,33 @@
+From 2de69581c28bf115852037ca41eba13cb7335976 Mon Sep 17 00:00:00 2001
+From: Massimo Valentini <mvalentini@src.gnome.org>
+Date: Sun, 19 Oct 2014 09:19:10 +0200
+Subject: tor-scan-converter: can't do_fullrow when intersection in row +
+ 0.5subrow
+
+the active edges list must be left sorted at the next possible use
+and since full_row does not deal with intersections it is not usable
+when there is an intersection in the top half of the next row first
+subrow
+
+Reported-and-tested-by: Matthew Leach
+Bugzilla: https://bugs.freedesktop.org/show_bug.cgi?id=85151
+Reviewed-by: Chris Wilson <chris@chris-wilson.co.uk>
+
+diff --git a/src/cairo-tor-scan-converter.c b/src/cairo-tor-scan-converter.c
+index 4adcafb..14922d0 100644
+--- a/src/cairo-tor-scan-converter.c
++++ b/src/cairo-tor-scan-converter.c
+@@ -1167,8 +1167,8 @@ can_do_full_row (struct active_list *active)
+ 
+ 	if (e->dy) {
+ 	    struct quorem x = e->x;
+-	    x.quo += e->dxdy_full.quo - e->dxdy.quo/2;
+-	    x.rem += e->dxdy_full.rem - e->dxdy.rem/2;
++	    x.quo += e->dxdy_full.quo;
++	    x.rem += e->dxdy_full.rem;
+ 	    if (x.rem < 0) {
+ 		x.quo--;
+ 		x.rem += e->dy;
+-- 
+cgit v0.10.2
+

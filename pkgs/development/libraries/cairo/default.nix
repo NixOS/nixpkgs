@@ -28,6 +28,10 @@ stdenv.mkDerivation rec {
     ++ optionals glSupport [ mesa_noglu ]
     ;
 
+  # 1.14.0 has a segfaulting bug that breaks e.g. Racket's build, so we include
+  # the bugfix commit until cairo gets a new release
+  patches = [ ./cairo-1.14.0-tor-scan-converter.patch ];
+
   configureFlags = [ "--enable-tee" ]
     ++ optional xcbSupport "--enable-xcb"
     ++ optional glSupport "--enable-gl"
@@ -42,7 +46,7 @@ stdenv.mkDerivation rec {
             cat "$i" | sed -es/-ldl//g > t
             mv t "$i"
           done
-       '') 
+       '')
        +
     ''
     # Work around broken `Requires.private' that prevents Freetype
