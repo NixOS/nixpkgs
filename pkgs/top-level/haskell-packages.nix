@@ -1057,6 +1057,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hashtables = callPackage ../development/libraries/haskell/hashtables {};
 
+  hask = callPackage ../development/libraries/haskell/hask {};
+
   haskelldb = callPackage ../development/libraries/haskell/haskelldb {};
 
   haskeline = callPackage ../development/libraries/haskell/haskeline {};
