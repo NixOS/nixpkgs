@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonPackages, minicom
+{ stdenv, fetchurl, buildPythonPackage, pythonPackages, picocom
 , avrdude, arduino_core, avrgcclibc }:
 
 buildPythonPackage rec {
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   # TODO: add avrgcclibc, it must be rebuild with C++ support
   propagatedBuildInputs =
-    [ arduino_core avrdude minicom pythonPackages.configobj
+    [ arduino_core avrdude picocom pythonPackages.configobj
       pythonPackages.jinja2 pythonPackages.pyserial pythonPackages.six ];
 
   patchPhase = ''
