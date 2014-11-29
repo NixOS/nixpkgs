@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://dl.frostwire.com/frostwire/${version}/frostwire-${version}.x86_64.tar.gz";
-    sha256 = "73d6e3db9971becf1c5b7faf12b62fa3ac0a243ac06b8b4eada9118f56990177";
+    sha256 = "16rpfh235jj75vm4rx6qqw25ax3rk2p21l6lippbm0pi13lp2pdh";
   };
 
   inherit jre;
