@@ -281,7 +281,9 @@ in
       { path = [ nix pkgs.openssl pkgs.utillinux pkgs.openssh ]
           ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
 
-        environment = cfg.envVars // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-bundle.crt"; };
+        environment = cfg.envVars
+          // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-bundle.crt"; }
+          // config.networking.proxy.envVars;
 
         serviceConfig =
           { Nice = cfg.daemonNiceLevel;
