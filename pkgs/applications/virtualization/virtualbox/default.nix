@@ -77,7 +77,7 @@ in stdenv.mkDerivation {
         -i configure
     ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2
     ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2
-    find . -type f | xargs sed 's/depmod -a/true/' -i
+    find . -type f -iname '*makefile*' -exec sed -i -e 's/depmod -a/:/g' {} +
     sed -e 's@"libasound.so.2"@"${alsaLib}/lib/libasound.so.2"@g' -i src/VBox/Main/xml/Settings.cpp src/VBox/Devices/Audio/alsa_stubs.c
     export USER=nix
     set +x
