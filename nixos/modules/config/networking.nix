@@ -177,7 +177,7 @@ in
         };
 
     # Install the proxy environment variables
-    environment.sessionVariables = config.networking.proxy.envVars;
+    environment.sessionVariables = cfg.proxy.envVars;
 
     # The ‘ip-up’ target is started when we have IP connectivity.  So
     # services that depend on IP connectivity (like ntpd) should be
