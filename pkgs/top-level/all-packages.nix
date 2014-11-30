@@ -2558,6 +2558,8 @@ let
 
   ufraw = callPackage ../applications/graphics/ufraw { };
 
+  umlet = callPackage ../tools/misc/umlet { };
+
   unetbootin = callPackage ../tools/cd-dvd/unetbootin { };
 
   unfs3 = callPackage ../servers/unfs3 { };
