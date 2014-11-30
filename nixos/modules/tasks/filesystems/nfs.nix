@@ -13,7 +13,7 @@ let
   idmapdConfFile = pkgs.writeText "idmapd.conf" ''
     [General]
     Pipefs-Directory = ${rpcMountpoint}
-    ${optionalString (config.networking.domain != "")
+    ${optionalString (config.networking.domain != null)
       "Domain = ${config.networking.domain}"}
 
     [Mapping]
