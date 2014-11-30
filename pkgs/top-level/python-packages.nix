@@ -309,8 +309,8 @@ let
       self.transaction
       self.waitress
       self.webhelpers
-      self.zope_sqlalchemy
       self.psycopg2
+      (self.zope_sqlalchemy.override rec {propagatedBuildInputs = with self; [ sqlalchemy8 transaction ];})
     ];
 
     postInstall = ''
