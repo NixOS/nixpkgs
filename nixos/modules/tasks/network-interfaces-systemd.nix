@@ -18,7 +18,7 @@ let
       prefixLength = i.ipv6PrefixLength;
     };
 
-  dhcpStr = useDHCP: if useDHCP then "both" else "none";
+  dhcpStr = useDHCP: if useDHCP == true || useDHCP == null then "both" else "none";
 
   slaves =
     concatLists (map (bond: bond.interfaces) (attrValues cfg.bonds))
@@ -77,7 +77,7 @@ in
         networks."40-${i.name}" = mkMerge [ (genericNetwork mkDefault) {
           name = mkDefault i.name;
           DHCP = mkForce (dhcpStr
-            (if i.useDHCP != null then i.useDHCP else interfaceIps i == [ ]));
+            (if i.useDHCP != null then i.useDHCP else cfg.useDHCP && interfaceIps i == [ ]));
           address = flip map (interfaceIps i)
             (ip: "${ip.address}/${toString ip.prefixLength}");
         } ];
