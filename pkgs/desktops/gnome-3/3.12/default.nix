@@ -6,7 +6,7 @@ rec {
 
   # DO NOT UPGRADE CLUTTER, IT BREAKS GNOME 3.12
   clutter = pkgs.clutter_1_18;
-  clutter_gtk = pkgs.clutter_gtk.override { inherit clutter; };
+  clutter_gtk = pkgs.clutter_gtk_1_4.override { inherit clutter; };
   clutter-gst = pkgs.clutter-gst.override { inherit clutter; };
   cogl = pkgs.cogl_1_18;
 
@@ -16,6 +16,9 @@ rec {
   inherit (pkgs.gnome2) ORBit2;
   orbit = ORBit2;
   inherit (pkgs) libsoup;
+
+# Simplify the nixos module
+  icon-themes = [ gnome_icon_theme gnome_icon_theme_symbolic ];
 
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
@@ -178,10 +181,6 @@ rec {
   tracker = callPackage ./core/tracker { giflib = pkgs.giflib_5_0; };
 
   vte = callPackage ./core/vte { };
-
-  vte_038 = callPackage ./core/vte/0.38.0.nix { }; # To be moved in gnome 3.14 when available
-
-  vte-select-text = vte_038.override { selectTextPatch = true; };
 
   vino = callPackage ./core/vino { };
 

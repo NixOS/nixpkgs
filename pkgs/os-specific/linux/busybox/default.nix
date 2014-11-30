@@ -1,4 +1,4 @@
-{stdenv, fetchurl, enableStatic ? false, extraConfig ? ""}:
+{ lib, stdenv, uclibc, fetchurl, enableStatic ? false, enableMinimal ? false, useUclibc ? false, extraConfig ? "" }:
 
 let
   configParser = ''
@@ -7,14 +7,7 @@ let
             NAME=`echo "$LINE" | cut -d \  -f 1`
             OPTION=`echo "$LINE" | cut -d \  -f 2`
 
-            if test -z "$NAME"; then
-                continue
-            fi
-
-            if test "$NAME" == "CLEAR"; then
-                echo "parseconfig: CLEAR"
-                echo > .config
-            fi
+            if ! [[ "$NAME" =~ ^CONFIG_ ]]; then continue; fi
 
             echo "parseconfig: removing $NAME"
             sed -i /$NAME'\(=\| \)'/d .config
@@ -23,19 +16,6 @@ let
             echo "$NAME=$OPTION" >> .config
         done
     }
-  '';
-
-  nixConfig = ''
-    CONFIG_PREFIX "$out"
-    CONFIG_INSTALL_NO_USR y
-
-    # Use the external mount.cifs program.
-    CONFIG_FEATURE_MOUNT_CIFS n
-    CONFIG_FEATURE_MOUNT_HELPERS y
-  '';
-
-  staticConfig = stdenv.lib.optionalString enableStatic ''
-    CONFIG_STATIC y
   '';
 
 in
@@ -48,17 +28,34 @@ stdenv.mkDerivation rec {
     sha256 = "12v7nri79v8gns3inmz4k24q7pcnwi00hybs0wddfkcy1afh42xf";
   };
 
+  patches = [ ./busybox-in-store.patch ];
+
   configurePhase = ''
     export KCONFIG_NOTIMESTAMP=1
-    make defconfig
+    make ${if enableMinimal then "allnoconfig" else "defconfig"}
+
     ${configParser}
+
     cat << EOF | parseconfig
-    ${staticConfig}
-    ${nixConfig}
+
+    CONFIG_PREFIX "$out"
+    CONFIG_INSTALL_NO_USR y
+
+    ${lib.optionalString enableStatic ''
+      CONFIG_STATIC y
+    ''}
+
+    # Use the external mount.cifs program.
+    CONFIG_FEATURE_MOUNT_CIFS n
+    CONFIG_FEATURE_MOUNT_HELPERS y
+
     ${extraConfig}
     $extraCrossConfig
     EOF
+
     make oldconfig
+  '' + lib.optionalString useUclibc ''
+    makeFlagsArray+=("CC=gcc -isystem ${uclibc}/include -B${uclibc}/lib -L${uclibc}/lib")
   '';
 
   crossAttrs = {
@@ -75,8 +72,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = http://busybox.net/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.viric ];
+    platforms = lib.platforms.linux;
   };
 }

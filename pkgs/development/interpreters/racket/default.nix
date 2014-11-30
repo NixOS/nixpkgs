@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-shared" "--enable-lt=${libtool}/bin/libtool" ];
 
   NIX_LDFLAGS = "-lgcc_s";
+  enableParallelBuilding = true;
 
   postInstall = ''
     for p in $(ls $out/bin/) ; do

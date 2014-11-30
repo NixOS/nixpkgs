@@ -2,12 +2,12 @@
 , libnotify, libsecret, dbus_glib, polkit, isocodes, libgnome_keyring 
 , mobile_broadband_provider_info, glib_networking, gsettings_desktop_schemas
 , makeWrapper, networkmanager_openvpn, networkmanager_vpnc
-, networkmanager_openconnect, networkmanager_pptp, udev, hicolor_icon_theme, dconf }:
+, networkmanager_openconnect, networkmanager_pptp, udev, hicolor_icon_theme }:
 
 let
   pn = "network-manager-applet";
   major = "0.9";
-  version = networkmanager.version;
+  version = "${major}.8.10"; # force old version for gtk2 support
 in
 
 stdenv.mkDerivation rec {
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram "$out/bin/nm-applet" \
-      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules:${dconf}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules:${gnome3.dconf}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "${gnome3.gtk}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
       --set GCONF_CONFIG_SOURCE "xml::~/.gconf" \
       --prefix PATH ":" "${gnome3.gconf}/bin"

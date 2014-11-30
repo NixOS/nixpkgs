@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses curl pkgconfig gnutls readline openssl perl libjpeg
     libzrtpcpp ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+
   meta = {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
     homepage = http://freeswitch.org/;
