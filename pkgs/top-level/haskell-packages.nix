@@ -1031,6 +1031,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   graphWrapper = callPackage ../development/libraries/haskell/graph-wrapper {};
 
+  grid = callPackage ../development/libraries/haskell/grid {};
+
   groom = callPackage ../development/libraries/haskell/groom {};
 
   groups = callPackage ../development/libraries/haskell/groups {};
