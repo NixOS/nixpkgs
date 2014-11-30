@@ -39,6 +39,80 @@ in
       '';
     };
 
+    networking.proxy = {
+
+      default = lib.mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          This option specifies the *_proxy for the users in the environment.
+          It is exporting the http_proxy, https_proxy, ftp_proxy, rsync_proxy
+          with that value.
+          You can also define a dedicated httpProxy, httpsProxy, ftpProxy, rsyncProxy or noProxy.
+        '';
+        example = "http://127.0.0.1:3128";
+      };
+
+      httpProxy = lib.mkOption {
+        type = types.nullOr types.str;
+        default = cfg.proxy.default;
+        description = ''
+          This option specifies the http_proxy for the users in the environment.
+          It is just exporting the http_proxy with that value.
+        '';
+        example = "http://127.0.0.1:3128";
+      };
+
+      httpsProxy = lib.mkOption {
+        type = types.nullOr types.str;
+        default = cfg.proxy.default;
+        description = ''
+          This option specifies the https_proxy for the users in the environment.
+          It is just exporting the https_proxy with that value.
+        '';
+        example = "http://127.0.0.1:3128";
+      };
+
+      ftpProxy = lib.mkOption {
+        type = types.nullOr types.str;
+        default = cfg.proxy.default;
+        description = ''
+          This option specifies the ftp_proxy for the users in the environment.
+          It is just exporting the ftp_proxy with that value.
+        '';
+        example = "http://127.0.0.1:3128";
+      };
+
+      rsyncProxy = lib.mkOption {
+        type = types.nullOr types.str;
+        default = cfg.proxy.default;
+        description = ''
+          This option specifies the rsync_proxy for the users in the environment.
+          It is just exporting the rsync_proxy with that value.
+        '';
+        example = "http://127.0.0.1:3128";
+      };
+
+      noProxy = lib.mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          This option specifies the no_proxy for the users in the environment.
+          It is just exporting the no_proxy with that value.
+        '';
+        example = "127.0.0.1,localhost,.localdomain";
+      };
+
+      envVars = lib.mkOption {
+        type = types.attrs;
+        internal = true;
+        default = {};
+        description = ''
+          Environment variables used by networking (was specifically open for networking.proxy.*).
+          If you want to specify environment variables, use `nix.envVars`.
+        '';
+      };
+    };
   };
 
   config = {
@@ -93,6 +167,25 @@ in
         }
       ));
 
+      networking.proxy.envVars =
+        optionalAttrs (cfg.proxy.default != null) {
+          # other options already fallback to proxy.default
+          no_proxy = "127.0.0.1,localhost";
+        } // optionalAttrs (cfg.proxy.httpProxy != null) {
+          http_proxy  = cfg.proxy.httpProxy;
+        } // optionalAttrs (cfg.proxy.httpsProxy != null) {
+          https_proxy = cfg.proxy.httpsProxy;
+        } // optionalAttrs (cfg.proxy.rsyncProxy != null) {
+          rsync_proxy = cfg.proxy.rsyncProxy;
+        } // optionalAttrs (cfg.proxy.ftpProxy != null) {
+          ftp_proxy   = cfg.proxy.ftpProxy;
+        } // optionalAttrs (cfg.proxy.noProxy != null) {
+          no_proxy    = cfg.proxy.noProxy;
+        };
+
+    # Install the proxy environment variables
+    environment.sessionVariables = cfg.proxy.envVars;
+
     # The ‘ip-up’ target is started when we have IP connectivity.  So
     # services that depend on IP connectivity (like ntpd) should be
     # pulled in by this target.
@@ -120,4 +213,4 @@ in
 
   };
 
-}
+  }

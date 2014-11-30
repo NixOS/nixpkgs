@@ -110,6 +110,9 @@ in zipModules ([]
 # VirtualBox
 ++ obsolete [ "services" "virtualbox" "enable" ] [ "services" "virtualboxGuest" "enable" ]
 
+# proxy
+++ obsolete [ "nix" "proxy" ] [ "networking" "proxy" "default" ]
+
 # KDE
 ++ deprecated [ "kde" "extraPackages" ] [ "environment" "kdePackages" ]
 # ++ obsolete [ "environment" "kdePackages" ] [ "environment" "systemPackages" ] # !!! doesn't work!
