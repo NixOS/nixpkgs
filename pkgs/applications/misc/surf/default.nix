@@ -1,4 +1,4 @@
-{stdenv, fetchurl, makeWrapper, gtk, webkit, pkgconfig, glib, glib_networking, libsoup, gsettings_desktop_schemas, patches ? null}:
+{stdenv, fetchurl, makeWrapper, gtk, webkit, pkgconfig, glib, glib-networking, libsoup, gsettings_desktop_schemas, patches ? null}:
 
 stdenv.mkDerivation rec {
   name = "surf-${version}";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram "$out/bin/surf" \
-      --prefix GIO_EXTRA_MODULES : ${glib_networking}/lib/gio/modules \
+      --prefix GIO_EXTRA_MODULES : ${glib-networking}/lib/gio/modules \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 

@@ -47,7 +47,7 @@ rec {
 
   gjs = callPackage ./core/gjs { };
 
-  glib_networking = pkgs.glib_networking.override {
+  glib-networking = pkgs.glib-networking.override {
     inherit gsettings_desktop_schemas;
   };
 
@@ -160,7 +160,7 @@ rec {
   };
 
   networkmanagerapplet = pkgs.networkmanagerapplet.override {
-    inherit gnome3 gsettings_desktop_schemas glib_networking
+    inherit gnome3 gsettings_desktop_schemas glib-networking
       networkmanager_openvpn networkmanager_pptp networkmanager_vpnc
       networkmanager_openconnect;
   };
