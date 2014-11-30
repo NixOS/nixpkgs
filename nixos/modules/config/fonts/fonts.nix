@@ -25,7 +25,7 @@ with lib;
       [ pkgs.xorg.fontbhttf
         pkgs.xorg.fontbhlucidatypewriter100dpi
         pkgs.xorg.fontbhlucidatypewriter75dpi
-        pkgs.ttf_bitstream_vera
+        pkgs.dejavu_fonts
         pkgs.freefont_ttf
         pkgs.liberation_ttf
         pkgs.xorg.fontbh100dpi
