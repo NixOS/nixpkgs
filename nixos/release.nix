@@ -239,8 +239,8 @@ in rec {
   tests.chromium = callTest tests/chromium.nix {};
   tests.cjdns = callTest tests/cjdns.nix {};
   tests.containers = callTest tests/containers.nix {};
-  tests.dockerRegistry = callTest tests/docker-registry.nix {};
-  tests.etcd = callTest tests/etcd.nix {};
+  tests.dockerRegistry = scrubDrv (import tests/docker-registry.nix { system = "x86_64-linux"; });
+  tests.etcd = scrubDrv (import tests/etcd.nix { system = "x86_64-linux"; });
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
@@ -258,7 +258,7 @@ in rec {
   tests.ipv6 = callTest tests/ipv6.nix {};
   tests.jenkins = callTest tests/jenkins.nix {};
   tests.kde4 = callTest tests/kde4.nix {};
-  tests.kubernetes = callTest tests/kubernetes.nix {};
+  tests.kubernetes = scrubDrv (import tests/kubernetes.nix { system = "x86_64-linux"; });
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
   tests.login = callTest tests/login.nix {};
   #tests.logstash = callTest tests/logstash.nix {};
