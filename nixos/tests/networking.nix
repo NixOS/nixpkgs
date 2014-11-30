@@ -200,11 +200,6 @@ import ./make-test.nix ({ networkd, test, ... }:
             $client2->waitForUnit("network-interfaces.target");
             $client2->waitForUnit("network.target");
 
-            $client1->succeed("ip link >&2");
-            $client1->succeed("systemctl status bond-netdev -l");
-            $client2->succeed("ip link >&2");
-            $client2->succeed("systemctl status bond-netdev -l");
-
             # Test bonding
             $client1->succeed("ping -c 2 192.168.1.1");
             $client1->succeed("ping -c 2 192.168.1.2");
