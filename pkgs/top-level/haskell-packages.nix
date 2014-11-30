@@ -2557,6 +2557,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   threads = callPackage ../development/libraries/haskell/threads {};
 
+  threadLocalStorage = callPackage ../development/libraries/haskell/thread-local-storage {};
+
   thReifyMany = callPackage ../development/libraries/haskell/th-reify-many {};
 
   Thrift = callPackage ../development/libraries/haskell/Thrift {};
