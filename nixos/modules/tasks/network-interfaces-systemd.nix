@@ -124,7 +124,7 @@ in
             Name = name;
             Kind = "macvlan";
           };
-          macvlanConfig.Mode = macvlan.mode;
+          macvlanConfig = optionalAttrs (macvlan.mode != null) { Mode = macvlan.mode; };
         };
         networks."40-${macvlan.interface}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
           macvlan = [ name ];
