@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     homepage = https://github.com/GoogleCloudPlatform;
     maintainers = with maintainers; [offline];
-    platforms = with platforms; linux;
+    platforms = [ "x86_64-linux" ];
   };
 }
