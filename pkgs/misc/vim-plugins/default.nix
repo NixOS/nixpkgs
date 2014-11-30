@@ -17,8 +17,8 @@ assembles your profile for you.
 Vim offers the :h rtp setting which works for most plugins. Thus adding adding
 this to your .vimrc should make most plugins work:
 
-  set rtp+=~/.nix-profile/vim-plugins/youcompleteme
-  " or for p in ["youcompleteme"] | exec 'set rtp+=~/.nix-profile/vim-plugins/'.p | endfor
+  set rtp+=~/.nix-profile/share/vim-plugins/youcompleteme
+  " or for p in ["youcompleteme"] | exec 'set rtp+=~/.nix-profile/share/vim-plugins/'.p | endfor
 
 Its what pathogen, vundle, vim-addon-manager (VAM) and others use.
 Learn about some differences by visiting http://vim-wiki.mawercer.de/wiki/topic/vim%20plugin%20managment.html.
