@@ -1,7 +1,7 @@
 { cabal, filepath, HTTP, HUnit, mtl, network, QuickCheck, random, stm
 , testFramework, testFrameworkHunit, testFrameworkQuickcheck2, time
 , zlib, aeson, attoparsec, bzlib, dataDefault, ghcPaths, hashable
-, haskellSrcExts, haskellSrcMeta, lens, optparseApplicative_0_9_1_1
+, haskellSrcExts, haskellSrcMeta, lens, optparseApplicative_0_11_0_1,
 , parallel, safe, shelly, split, stringsearch, syb, systemFileio
 , systemFilepath, tar, terminfo, textBinary, unorderedContainers
 , vector, wlPprintText, yaml, fetchgit, Cabal, CabalGhcjs, cabalInstall
@@ -34,7 +34,7 @@ cabal.mkDerivation (self: rec {
   buildDepends = [
     filepath HTTP mtl network random stm time zlib aeson attoparsec
     bzlib dataDefault ghcPaths hashable haskellSrcExts haskellSrcMeta
-    lens optparseApplicative_0_9_1_1 parallel safe shelly split
+    lens optparseApplicative_0_11_0_1 parallel safe shelly split
     stringsearch syb systemFileio systemFilepath tar terminfo textBinary
     unorderedContainers vector wlPprintText yaml
     alex happy git gnumake gcc autoconf automake libtool patch gmp
