@@ -1,7 +1,7 @@
 { nodejs, cabal, filepath, HTTP, HUnit, mtl, network, QuickCheck, random, stm
 , testFramework, testFrameworkHunit, testFrameworkQuickcheck2, time
 , zlib, aeson, attoparsec, bzlib, dataDefault, ghcPaths, hashable
-, haskellSrcExts, haskellSrcMeta, lens, optparseApplicative_0_9_1_1
+, haskellSrcExts, haskellSrcMeta, lens, optparseApplicative_0_11_0_1
 , parallel, safe, shelly, split, stringsearch, syb, systemFileio
 , systemFilepath, tar, terminfo, textBinary, unorderedContainers
 , vector, wlPprintText, yaml, fetchgit, Cabal, CabalGhcjs, cabalInstall
@@ -15,8 +15,8 @@ cabal.mkDerivation (self: rec {
   version = "0.1.0";
   src = fetchgit {
     url = git://github.com/ghcjs/ghcjs.git;
-    rev = "bd3dfe56d55fd046bfbec4d9d834af4f46595535";
-    sha256 = "82c37faf725a230945d71c617be259c94a0816d240663714c3a62b85e4a2b731";
+    rev = "5c2d279982466e076223fcbe1e1096e22956e5a9";
+    sha256 = "0bc37b4e8bd039208a126fea39850c99459265cb273ac7237939cdbaee6ef71f";
   };
   shims = fetchgit {
     url = git://github.com/ghcjs/shims.git;
@@ -41,7 +41,7 @@ cabal.mkDerivation (self: rec {
   buildDepends = [
     filepath HTTP mtl network random stm time zlib aeson attoparsec
     bzlib dataDefault ghcPaths hashable haskellSrcExts haskellSrcMeta
-    lens optparseApplicative_0_9_1_1 parallel safe shelly split
+    lens optparseApplicative_0_11_0_1 parallel safe shelly split
     stringsearch syb systemFileio systemFilepath tar terminfo textBinary
     unorderedContainers vector wlPprintText yaml
     alex happy git gnumake gcc autoconf automake libtool patch gmp
