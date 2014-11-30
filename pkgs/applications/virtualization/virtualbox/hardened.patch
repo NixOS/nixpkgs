@@ -1,5 +1,5 @@
 diff --git a/src/VBox/HostDrivers/Support/SUPR3HardenedVerify.cpp b/src/VBox/HostDrivers/Support/SUPR3HardenedVerify.cpp
-index c39d2f7..f6a4031 100644
+index c39d2f7..cd19186 100644
 --- a/src/VBox/HostDrivers/Support/SUPR3HardenedVerify.cpp
 +++ b/src/VBox/HostDrivers/Support/SUPR3HardenedVerify.cpp
 @@ -1415,7 +1415,7 @@ static int supR3HardenedVerifyFsObject(PCSUPR3HARDENEDFSOBJSTATE pFsObjState, bo
@@ -11,6 +11,19 @@ index c39d2f7..f6a4031 100644
  #endif
          if (fBad)
              return supR3HardenedSetError3(VERR_SUPLIB_WRITE_NON_SYS_GROUP, pErrInfo,
+@@ -1424,9 +1424,10 @@ static int supR3HardenedVerifyFsObject(PCSUPR3HARDENEDFSOBJSTATE pFsObjState, bo
+     }
+ 
+     /*
+-     * World must not have write access.  There is no relaxing this rule.
++     * World must not have write access.
++     * There is no relaxing this rule, except when it comes to the Nix store.
+      */
+-    if (pFsObjState->Stat.st_mode & S_IWOTH)
++    if (pFsObjState->Stat.st_mode & S_IWOTH && suplibHardenedStrCmp(pszPath, "/nix/store"))
+         return supR3HardenedSetError3(VERR_SUPLIB_WORLD_WRITABLE, pErrInfo,
+                                       "World writable: '", pszPath, "'");
+ 
 diff --git a/src/VBox/Main/src-server/MachineImpl.cpp b/src/VBox/Main/src-server/MachineImpl.cpp
 index 95dc9a7..39170bc 100644
 --- a/src/VBox/Main/src-server/MachineImpl.cpp
