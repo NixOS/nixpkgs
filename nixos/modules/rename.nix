@@ -74,6 +74,7 @@ in zipModules ([]
 ++ obsolete [ "environment" "x11Packages" ] [ "environment" "systemPackages" ]
 ++ obsolete [ "environment" "enableBashCompletion" ] [ "programs" "bash" "enableCompletion" ]
 ++ obsolete [ "environment" "nix" ] [ "nix" "package" ]
+++ obsolete [ "fonts" "enableFontConfig" ] [ "fonts" "fontconfig" "enable" ]
 ++ obsolete [ "fonts" "extraFonts" ] [ "fonts" "fonts" ]
 
 ++ obsolete [ "security" "extraSetuidPrograms" ] [ "security" "setuidPrograms" ]
