@@ -47,6 +47,7 @@ import ./make-test.nix rec {
     master =
       { config, pkgs, nodes, ... }:
         {
+          virtualisation.memorySize = 512;
           virtualisation.kubernetes = {
             roles = ["master" "node"];
             controllerManager.machines = ["master" "node"];
