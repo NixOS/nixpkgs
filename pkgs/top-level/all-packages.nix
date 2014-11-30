@@ -9158,6 +9158,9 @@ let
 
   schismtracker = callPackage ../applications/audio/schismtracker { };
 
+  altcoins = recurseIntoAttrs ( callPackage ../applications/altcoins { } );
+  bitcoin = altcoins.bitcoin;
+
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
   };
@@ -9214,15 +9217,6 @@ let
   };
 
   bibletime = callPackage ../applications/misc/bibletime { };
-
-  bitcoin = callPackage ../applications/misc/bitcoin {};
-  bitcoind = callPackage ../applications/misc/bitcoin { gui = false; };
-
-  altcoins = recurseIntoAttrs (
-    (callPackage ../applications/misc/bitcoin/altcoins.nix {}) //
-    (callPackage ../applications/misc/bitcoin/dogecoin.nix {}) //
-    (callPackage ../applications/misc/bitcoin/litecoin.nix {})
-  );
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
 
@@ -10421,9 +10415,6 @@ let
   mutt-with-sidebar = callPackage ../applications/networking/mailreaders/mutt {
     withSidebar = true;
   };
-
-  namecoin = callPackage ../applications/misc/namecoin { };
-  namecoinqt = callPackage ../applications/misc/namecoin/qt.nix { };
 
   pcmanfm = callPackage ../applications/misc/pcmanfm { };
 
