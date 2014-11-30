@@ -11,6 +11,11 @@ let
   hasSits = cfg.sits != { };
   hasBonds = cfg.bonds != { };
 
+  slaves = concatMap (i: i.interfaces) (attrValues cfg.bonds)
+    ++ concatMap (i: i.interfaces) (attrValues cfg.bridges);
+
+  slaveIfs = map (i: cfg.interfaces.${i}) slaves;
+
   # We must escape interfaces due to the systemd interpretation
   subsystemDevice = interface:
     "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
@@ -589,6 +594,9 @@ in
       (flip map interfaces (i: {
         assertion = i.subnetMask == null;
         message = "The networking.interfaces.${i.name}.subnetMask option is defunct. Use prefixLength instead.";
+      })) ++ (flip map slaveIfs (i: {
+        assertion = i.ip4 == [ ] && i.ipAddress == null && i.ip6 == [ ] && i.ipv6Address == null;
+        message = "The networking.interfaces.${i.name} must not have any defined ips when it is a slave.";
       })) ++ [
         {
           assertion = cfg.hostId == null || (stringLength cfg.hostId == 8 && isHexString cfg.hostId);
@@ -656,6 +664,12 @@ in
         pkgs.rfkill
         pkgs.openresolv
       ];
+
+    systemd.targets."network-interfaces" =
+      { description = "All Network Interfaces";
+        wantedBy = [ "network.target" ];
+        unitConfig.X-StopOnReconfiguration = true;
+      };
 
     systemd.services = {
       network-local-commands = {

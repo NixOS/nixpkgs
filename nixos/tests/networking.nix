@@ -55,7 +55,9 @@ import ./make-test.nix ({ networkd, test, ... }:
           ''
             startAll;
 
+            $client->waitForUnit("network-interfaces.target");
             $client->waitForUnit("network.target");
+            $router->waitForUnit("network-interfaces.target");
             $router->waitForUnit("network.target");
 
             # Make sure dhcpcd is not started
@@ -101,9 +103,10 @@ import ./make-test.nix ({ networkd, test, ... }:
           ''
             startAll;
 
+            $client->waitForUnit("network-interfaces.target");
             $client->waitForUnit("network.target");
+            $router->waitForUnit("network-interfaces.target");
             $router->waitForUnit("network.target");
-            $client->waitForUnit("dhcpcd.service");
 
             # Wait until we have an ip address on each interface
             $client->succeed("while ! ip addr show dev eth1 | grep '192.168.1'; do true; done");
@@ -144,9 +147,10 @@ import ./make-test.nix ({ networkd, test, ... }:
           ''
             startAll;
 
+            $client->waitForUnit("network-interfaces.target");
             $client->waitForUnit("network.target");
+            $router->waitForUnit("network-interfaces.target");
             $router->waitForUnit("network.target");
-            $client->waitForUnit("dhcpcd.service");
 
             # Wait until we have an ip address on each interface
             $client->succeed("while ! ip addr show dev eth1 | grep '192.168.1'; do true; done");
@@ -177,6 +181,8 @@ import ./make-test.nix ({ networkd, test, ... }:
               mode = "balance-rr";
               interfaces = [ "eth1" "eth2" ];
             };
+            interfaces.eth1.ip4 = mkOverride 0 [ ];
+            interfaces.eth2.ip4 = mkOverride 0 [ ];
             interfaces.bond.ip4 = mkOverride 0
               [ { inherit address; prefixLength = 30; } ];
           };
@@ -189,8 +195,15 @@ import ./make-test.nix ({ networkd, test, ... }:
           ''
             startAll;
 
+            $client1->waitForUnit("network-interfaces.target");
             $client1->waitForUnit("network.target");
+            $client2->waitForUnit("network-interfaces.target");
             $client2->waitForUnit("network.target");
+
+            $client1->succeed("ip link >&2");
+            $client1->succeed("systemctl status bond-netdev -l");
+            $client2->succeed("ip link >&2");
+            $client2->succeed("systemctl status bond-netdev -l");
 
             # Test bonding
             $client1->succeed("ping -c 2 192.168.1.1");
@@ -232,8 +245,11 @@ import ./make-test.nix ({ networkd, test, ... }:
           ''
             startAll;
 
+            $client1->waitForUnit("network-interfaces.target");
             $client1->waitForUnit("network.target");
+            $client2->waitForUnit("network-interfaces.target");
             $client2->waitForUnit("network.target");
+            $router->waitForUnit("network-interfaces.target");
             $router->waitForUnit("network.target");
 
             # Test bridging
@@ -267,9 +283,10 @@ import ./make-test.nix ({ networkd, test, ... }:
           ''
             startAll;
 
+            $client->waitForUnit("network-interfaces.target");
             $client->waitForUnit("network.target");
+            $router->waitForUnit("network-interfaces.target");
             $router->waitForUnit("network.target");
-            $client->waitForUnit("dhcpcd.service");
 
             # Wait until we have an ip address on each interface
             $client->succeed("while ! ip addr show dev eth1 | grep '192.168.1'; do true; done");
@@ -311,7 +328,9 @@ import ./make-test.nix ({ networkd, test, ... }:
           ''
             startAll;
 
+            $client1->waitForUnit("network-interfaces.target");
             $client1->waitForUnit("network.target");
+            $client2->waitForUnit("network-interfaces.target");
             $client2->waitForUnit("network.target");
 
             $client1->succeed("ip addr >&2");
@@ -350,7 +369,9 @@ import ./make-test.nix ({ networkd, test, ... }:
           ''
             startAll;
 
+            $client1->waitForUnit("network-interfaces.target");
             $client1->waitForUnit("network.target");
+            $client2->waitForUnit("network-interfaces.target");
             $client2->waitForUnit("network.target");
 
             # Test vlan is setup

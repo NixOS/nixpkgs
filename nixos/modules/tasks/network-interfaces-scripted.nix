@@ -33,8 +33,8 @@ let
       done
       [ "$UPDATED" -eq "1" ] && break
     done
-    ip link set "${i}" down || true
-    ip link del "${i}" || true
+    ip link set "${i}" down 2>/dev/null || true
+    ip link del "${i}" 2>/dev/null || true
   '';
 
 in
@@ -42,12 +42,6 @@ in
 {
 
   config = mkIf (!cfg.useNetworkd) {
-
-    systemd.targets."network-interfaces" =
-      { description = "All Network Interfaces";
-        wantedBy = [ "network.target" ];
-        unitConfig.X-StopOnReconfiguration = true;
-      };
 
     systemd.services =
       let
@@ -240,6 +234,7 @@ in
               # Bring up the bond and enslave the specified interfaces
               ip link set "${n}" up
               ${flip concatMapStrings v.interfaces (i: ''
+                ip link set "${i}" down
                 ip link set "${i}" master "${n}"
               '')}
             '';
