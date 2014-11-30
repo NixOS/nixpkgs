@@ -84,12 +84,39 @@ in
               dnsmasq_conf=/etc/dnsmasq-conf.conf
               dnsmasq_resolv=/etc/dnsmasq-resolv.conf
             '';
-      };
+
+      } // (optionalAttrs config.services.resolved.enable (
+        if dnsmasqResolve then {
+          "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
+        } else {
+          "resolv.conf".source = "/run/systemd/resolve/resolv.conf";
+        }
+      ));
 
     # The ‘ip-up’ target is started when we have IP connectivity.  So
     # services that depend on IP connectivity (like ntpd) should be
     # pulled in by this target.
     systemd.targets.ip-up.description = "Services Requiring IP Connectivity";
+
+    # This is needed when /etc/resolv.conf is being overriden by networkd
+    # and other configurations. If the file is destroyed by an environment
+    # activation then it must be rebuilt so that applications which interface
+    # with /etc/resolv.conf directly don't break.
+    system.activationScripts.resolvconf = stringAfter [ "etc" "tmpfs" "var" ]
+      ''
+        # Systemd resolved controls its own resolv.conf
+        rm -f /run/resolvconf/interfaces/systemd
+        ${optionalString config.services.resolved.enable ''
+          rm -rf /run/resolvconf/interfaces
+          mkdir -p /run/resolvconf/interfaces
+          ln -s /run/systemd/resolve/resolv.conf /run/resolvconf/interfaces/systemd
+        ''}
+
+        # Make sure resolv.conf is up to date if not managed by systemd
+        ${optionalString (!config.services.resolved.enable) ''
+          ${pkgs.openresolv}/bin/resolvconf -u
+        ''}
+      '';
 
   };
 
