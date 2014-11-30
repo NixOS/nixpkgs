@@ -15,8 +15,8 @@ cabal.mkDerivation (self: rec {
   version = "0.1.0";
   src = fetchgit {
     url = git://github.com/ghcjs/ghcjs.git;
-    rev = "bd3dfe56d55fd046bfbec4d9d834af4f46595535";
-    sha256 = "82c37faf725a230945d71c617be259c94a0816d240663714c3a62b85e4a2b731";
+    rev = "5c2d279982466e076223fcbe1e1096e22956e5a9";
+    sha256 = "0bc37b4e8bd039208a126fea39850c99459265cb273ac7237939cdbaee6ef71f";
   };
   shims = fetchgit {
     url = git://github.com/ghcjs/shims.git;
