@@ -668,6 +668,7 @@ in
     systemd.targets."network-interfaces" =
       { description = "All Network Interfaces";
         wantedBy = [ "network.target" ];
+        before = [ "network.target" ];
         unitConfig.X-StopOnReconfiguration = true;
       };
 

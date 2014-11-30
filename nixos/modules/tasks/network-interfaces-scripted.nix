@@ -157,6 +157,7 @@ in
             requires = [ "dev-net-tun.device" ];
             after = [ "dev-net-tun.device" ];
             wantedBy = [ "network.target" (subsystemDevice i.name) ];
+            before = [ "network-interfaces.target" (subsystemDevice i.name) ];
             path = [ pkgs.iproute ];
             serviceConfig = {
               Type = "oneshot";
@@ -180,6 +181,7 @@ in
             wantedBy = [ "network.target" (subsystemDevice n) ];
             bindsTo = deps;
             after = deps;
+            before = [ "network-interfaces.target" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -212,8 +214,8 @@ in
           { description = "Bond Interface ${n}";
             wantedBy = [ "network.target" (subsystemDevice n) ];
             bindsTo = deps;
-            after = deps;
-            before = [ "${n}-cfg.service" ];
+            after = deps ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
+            before = [ "network-interfaces.target" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute pkgs.gawk ];
@@ -248,7 +250,8 @@ in
           { description = "Vlan Interface ${n}";
             wantedBy = [ "network.target" (subsystemDevice n) ];
             bindsTo = deps;
-            after = deps;
+            after = deps ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
+            before = [ "network-interfaces.target" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -272,6 +275,7 @@ in
             wantedBy = [ "network.target" (subsystemDevice n) ];
             bindsTo = deps;
             after = deps;
+            before = [ "network-interfaces.target" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -298,6 +302,7 @@ in
             wantedBy = [ "network.target" (subsystemDevice n) ];
             bindsTo = deps;
             after = deps;
+            before = [ "network-interfaces.target" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
