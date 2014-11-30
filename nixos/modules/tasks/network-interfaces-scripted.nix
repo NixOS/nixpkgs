@@ -180,7 +180,7 @@ in
           { description = "Bridge Interface ${n}";
             wantedBy = [ "network.target" (subsystemDevice n) ];
             bindsTo = deps;
-            after = deps;
+            after = deps ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
             before = [ "network-interfaces.target" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
@@ -250,7 +250,7 @@ in
           { description = "Vlan Interface ${n}";
             wantedBy = [ "network.target" (subsystemDevice n) ];
             bindsTo = deps;
-            after = deps ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
+            after = deps;
             before = [ "network-interfaces.target" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
