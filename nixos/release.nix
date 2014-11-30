@@ -285,6 +285,8 @@ in rec {
   tests.networking.scripted.macvlan = callTest tests/networking.nix { networkd = false; test = "macvlan"; };
   tests.networking.scripted.sit = callTest tests/networking.nix { networkd = false; test = "sit"; };
   tests.networking.scripted.vlan = callTest tests/networking.nix { networkd = false; test = "vlan"; };
+  # TODO: put in networking.nix after the test becomes more complete
+  tests.networkingProxy = callTest tests/networking-proxy.nix {};
   tests.nfs3 = callTest tests/nfs.nix { version = 3; };
   tests.nsd = callTest tests/nsd.nix {};
   tests.openssh = callTest tests/openssh.nix {};
