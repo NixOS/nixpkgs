@@ -14,7 +14,7 @@ let
   slaves = concatMap (i: i.interfaces) (attrValues cfg.bonds)
     ++ concatMap (i: i.interfaces) (attrValues cfg.bridges);
 
-  slaveIfs = map (i: cfg.interfaces.${i}) (filter (i: cfg.interfaces ? i) slaves);
+  slaveIfs = map (i: cfg.interfaces.${i}) (filter (i: cfg.interfaces ? ${i}) slaves);
 
   # We must escape interfaces due to the systemd interpretation
   subsystemDevice = interface:
