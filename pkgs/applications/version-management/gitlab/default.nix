@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ruby, rubyLibs, libiconv, libxslt, libxml2, pkgconfig, libffi, postgresql, libyaml, ncurses, curl, openssh, redis, zlib, icu, checkinstall, logrotate, docutils, cmake, git, gdbm, readline, unzip, gnumake, which }:
+{ stdenv, fetchurl, ruby, rubyLibs, libxslt, libxml2, pkgconfig, libffi, postgresql, libyaml, ncurses, curl, openssh, redis, zlib, icu, checkinstall, logrotate, docutils, cmake, git, gdbm, readline, unzip, gnumake, which }:
 
 let
   gemspec = map (gem: fetchurl { url=gem.url; sha256=gem.hash; }) (import ./Gemfile.nix);
@@ -53,7 +53,6 @@ in stdenv.mkDerivation rec {
 
     bundle config build.nokogiri \
       --use-system-libraries \
-      --with-iconv-dir=${libiconv} \
       --with-xslt-dir=${libxslt} \
       --with-xml2-dir=${libxml2} \
       --with-pkg-config \
