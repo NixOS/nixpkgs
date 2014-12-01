@@ -170,6 +170,7 @@
       scollector = 160;
       bosun = 161;
       kubernetes = 162;
+      peerflix = 163;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
