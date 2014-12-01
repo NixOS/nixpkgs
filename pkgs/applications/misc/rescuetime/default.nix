@@ -15,7 +15,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "rescuetime";
+  name = "rescuetime-2.8.6.1015";
   inherit src;
   buildInputs = [ dpkg makeWrapper ];
   unpackPhase = ''
