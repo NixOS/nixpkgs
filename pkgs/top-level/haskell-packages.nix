@@ -558,6 +558,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   cpu = callPackage ../development/libraries/haskell/cpu {};
 
+  daemons = callPackage ../development/libraries/haskell/daemons { };
+
   dataAccessor = callPackage ../development/libraries/haskell/data-accessor/data-accessor.nix {};
 
   dataAccessorTemplate = callPackage ../development/libraries/haskell/data-accessor/data-accessor-template.nix {};
