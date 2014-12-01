@@ -31,10 +31,10 @@ knownPackages <- unique(pkgs$Package)
 
 nix <- apply(pkgs, 1, function(p) formatPackage(p[1], p[2], p[18], p[4], p[5], p[6], knownPackages))
 
-cat("# This file is generated from generate_sources.R. DO NOT EDIT.\n")
+cat("# This file is generated from generate-cran-packages.R. DO NOT EDIT.\n")
 cat("# Execute the following command to update the file.\n")
 cat("#\n")
-cat("# Rscript generate_sources.R > sources.nix\n")
+cat("# Rscript generate-cran-packages.R > cran-packages.nix\n")
 cat("\n")
 cat("{ self, derive }: with self; {\n")
 cat(paste(nix, collapse="\n"), "\n")
