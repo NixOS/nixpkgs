@@ -3,6 +3,7 @@
 , cups
 , audiofile, portaudio
 , clang, libobjc2
+, gmp
 , libjpeg, libtiff, libpng, giflib, libungif
 , libxml2, libxslt, libiconv
 , libffi
@@ -25,9 +26,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ clang libobjc2 cups audiofile portaudio aspell libjpeg libtiff libpng giflib libungif libxml2 libxslt libiconv gnutls libgcrypt icu pkgconfig x11 libffi freetype which ];
-  # TODO: what's this for?
-#  nativeBuildInputs = [ ];
-# propagatedBuildInputs = [ ];
+  # TODO: libobjc2 is a propagated (compile-time/runtime) dependency
+  propagatedBuildInputs = [ libobjc2 cups audiofile portaudio aspell libjpeg libtiff libpng giflib libungif libxml2 libxslt libgcrypt icu gmp libiconv gnutls icu libffi ];
 
   buildPhase = ''
     ./InstallGNUstep --batch --prefix=$out
@@ -36,6 +36,12 @@ stdenv.mkDerivation rec {
   # TODO: add:
   # . $out/System/Library/Makefiles/GNUstep.sh
   # to bashrc prior to building any GNUstep package
+  # TODO: need a development environment for GNUstep packages
+  # - it would set various settings appropriately
+  # - similarly to what Python is doing
+  #   ~/proj/nix/nixpkgs/pkgs/top-level/python-packages.nix: wrapPython?
+  #   - buildPythonPackage: ~/proj/nix/nixpkgs/pkgs/development/python-modules/generic/default.nix
+  #
   # TODO: could simply make the installPhase = "";
   installPhase = ''
     echo Do not forget to source $out/System/Library/Makefiles/GNUstep.sh!
