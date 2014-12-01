@@ -66,7 +66,7 @@ in
             serviceConfig.RemainAfterExit = true;
 
             script =
-              (optionalString (!config.services.resolved.enable) ''
+              ''
                 # Set the static DNS configuration, if given.
                 ${pkgs.openresolv}/sbin/resolvconf -m 1 -a static <<EOF
                 ${optionalString (cfg.nameservers != [] && cfg.domain != null) ''
@@ -77,9 +77,9 @@ in
                   nameserver ${ns}
                 '')}
                 EOF
-              '') + ''
+
                 # Set the default gateway.
-                ${optionalString (cfg.defaultGateway != null) ''
+                ${optionalString (cfg.defaultGateway != null && cfg.defaultGateway != "") ''
                   # FIXME: get rid of "|| true" (necessary to make it idempotent).
                   ip route add default via "${cfg.defaultGateway}" ${
                     optionalString (cfg.defaultGatewayWindowSize != null)

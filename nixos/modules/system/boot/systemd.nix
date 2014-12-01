@@ -986,6 +986,15 @@ in
     users.extraUsers.systemd-journal-gateway.uid = config.ids.uids.systemd-journal-gateway;
     users.extraGroups.systemd-journal-gateway.gid = config.ids.gids.systemd-journal-gateway;
 
+    users.extraUsers.systemd-network.uid = config.ids.uids.systemd-network;
+    users.extraGroups.systemd-network.gid = config.ids.gids.systemd-network;
+
+    users.extraUsers.systemd-resolve.uid = config.ids.uids.systemd-resolve;
+    users.extraGroups.systemd-resolve.gid = config.ids.gids.systemd-resolve;
+
+    users.extraUsers.systemd-timesync.uid = config.ids.uids.systemd-timesync;
+    users.extraGroups.systemd-timesync.gid = config.ids.gids.systemd-timesync;
+
     # Generate timer units for all services that have a ‘startAt’ value.
     systemd.timers =
       mapAttrs (name: service:
@@ -1021,9 +1030,6 @@ in
 
   }
   (mkIf config.systemd.network.enable {
-    users.extraUsers.systemd-network.uid = config.ids.uids.systemd-network;
-    users.extraGroups.systemd-network.gid = config.ids.gids.systemd-network;
-
     systemd.services.systemd-networkd = {
       wantedBy = [ "multi-user.target" ];
       before = [ "network-interfaces.target" ];
@@ -1051,9 +1057,6 @@ in
     services.timesyncd.enable = mkDefault config.services.ntp.enable;
   })
   (mkIf config.services.resolved.enable {
-    users.extraUsers.systemd-resolve.uid = config.ids.uids.systemd-resolve;
-    users.extraGroups.systemd-resolve.gid = config.ids.gids.systemd-resolve;
-
     systemd.services.systemd-resolved = {
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."systemd/resolved.conf".source ];
@@ -1065,9 +1068,6 @@ in
     '';
   })
   (mkIf config.services.timesyncd.enable {
-    users.extraUsers.systemd-timesync.uid = config.ids.uids.systemd-timesync;
-    users.extraGroups.systemd-timesync.gid = config.ids.gids.systemd-timesync;
-
     systemd.services.systemd-timesyncd = {
       wantedBy = [ "sysinit.target" ];
       restartTriggers = [ config.environment.etc."systemd/timesyncd.conf".source ];
