@@ -1832,6 +1832,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   oeis = callPackage ../development/libraries/haskell/oeis {};
 
+  opaleye = callPackage ../development/libraries/haskell/opaleye {};
+
   OpenAL = callPackage ../development/libraries/haskell/OpenAL {};
 
   OpenGL = callPackage ../development/libraries/haskell/OpenGL {};
@@ -1984,6 +1986,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   process_1_2_0_0 = callPackage ../development/libraries/haskell/process/1.2.0.0.nix {};
   process = null;      # core package since forever
+
+  productProfunctors = callPackage ../development/libraries/haskell/product-profunctors {};
 
   profiteur = callPackage ../development/tools/haskell/profiteur {};
 
