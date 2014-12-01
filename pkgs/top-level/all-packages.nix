@@ -6444,6 +6444,11 @@ in
   gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
   gnumake = self.gnumake42;
 
+  gnustep_back = callPackage ../development/libraries/gnustep-back { stdenv = clangStdenv; };
+  gnustep_base = callPackage ../development/libraries/gnustep-base { stdenv = clangStdenv; giflib = giflib_4_1; };
+  gnustep_make = callPackage ../development/tools/build-managers/gnustep-make { stdenv = clangStdenv; };
+  gnustep_gui = callPackage ../development/libraries/gnustep-gui { stdenv = clangStdenv; };
+
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
   gocd-agent = callPackage ../development/tools/continuous-integration/gocd-agent { };
@@ -7589,6 +7594,12 @@ in
   gnustep_startup = callPackage ../development/libraries/gnustep-startup/default.nix {
     stdenv = clangStdenv;
     giflib = giflib_4_1;
+  };
+  gorm = callPackage ../applications/editors/gorm/default.nix {
+    stdenv = clangStdenv;
+  };
+  projectcenter = callPackage ../applications/editors/projectcenter/default.nix {
+    stdenv = clangStdenv;
   };
 
   granite = callPackage ../development/libraries/granite { };
