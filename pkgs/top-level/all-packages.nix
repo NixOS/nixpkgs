@@ -2118,6 +2118,8 @@ let
 
   plowshare = callPackage ../tools/misc/plowshare { };
 
+  pngcheck = callPackage ../tools/graphics/pngcheck { };
+
   pngcrush = callPackage ../tools/graphics/pngcrush { };
 
   pngnq = callPackage ../tools/graphics/pngnq { };
