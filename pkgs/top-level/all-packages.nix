@@ -5351,10 +5351,6 @@ let
       else stdenv;
   };
 
-  gnustep_startup = callPackage ../development/libraries/gnustep-startup/default.nix {
-    stdenv = clangStdenv;
-    giflib = giflib_4_1;
-  };
   gorm = callPackage ../applications/editors/gorm/default.nix {
     stdenv = clangStdenv;
   };
