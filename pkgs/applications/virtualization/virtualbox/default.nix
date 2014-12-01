@@ -4,7 +4,7 @@
 , xorriso, makeself, perl, pkgconfig
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python ? null
-, enableExtensionPack ? false, requireFile ? null, patchelf ? null
+, enableExtensionPack ? false, requireFile ? null, patchelf ? null, fakeroot ? null
 , pulseSupport ? false, pulseaudio ? null
 , enableHardening ? true
 }:
@@ -89,20 +89,21 @@ in stdenv.mkDerivation {
   configurePhase = ''
     sourcedir="$(pwd)"
     cat >> LocalConfig.kmk <<LOCAL_CONFIG
-    VBOX_WITH_TESTCASES          :=
-    VBOX_WITH_TESTSUITE          :=
-    VBOX_WITH_VALIDATIONKIT      :=
-    VBOX_WITH_DOCS               :=
-    VBOX_WITH_WARNINGS_AS_ERRORS :=
+    VBOX_WITH_TESTCASES            :=
+    VBOX_WITH_TESTSUITE            :=
+    VBOX_WITH_VALIDATIONKIT        :=
+    VBOX_WITH_DOCS                 :=
+    VBOX_WITH_WARNINGS_AS_ERRORS   :=
 
-    VBOX_WITH_ORIGIN           :=
-    VBOX_PATH_APP_PRIVATE_ARCH := $out/libexec/virtualbox
-    VBOX_PATH_SHARED_LIBS      := $out/libexec/virtualbox
-    VBOX_WITH_RUNPATH          := $out/libexec/virtualbox
-    VBOX_PATH_APP_PRIVATE      := $out
-    VBOX_PATH_APP_DOCS         := $out/doc
+    VBOX_WITH_ORIGIN               :=
+    VBOX_PATH_APP_PRIVATE_ARCH_TOP := $out/share/virtualbox
+    VBOX_PATH_APP_PRIVATE_ARCH     := $out/libexec/virtualbox
+    VBOX_PATH_SHARED_LIBS          := $out/libexec/virtualbox
+    VBOX_WITH_RUNPATH              := $out/libexec/virtualbox
+    VBOX_PATH_APP_PRIVATE          := $out/share/virtualbox
+    VBOX_PATH_APP_DOCS             := $out/doc
     ${optionalString javaBindings ''
-    VBOX_JAVA_HOME             := ${jdk}
+    VBOX_JAVA_HOME                 := ${jdk}
     ''}
     LOCAL_CONFIG
 
@@ -129,6 +130,7 @@ in stdenv.mkDerivation {
 
   installPhase = ''
     libexec=$out/libexec/virtualbox
+    share=$out/share/virtualbox
 
     # Install VirtualBox files
     cd out/linux.*/release/bin
@@ -145,12 +147,15 @@ in stdenv.mkDerivation {
     done
 
     ${optionalString enableExtensionPack ''
+      mkdir -p "$share"
+      "${fakeroot}/bin/fakeroot" "${stdenv.shell}" <<EXTHELPER
       "$libexec/VBoxExtPackHelperApp" install \
-        --base-dir "$libexec/ExtensionPacks" \
-        --cert-dir "$libexec/ExtPackCertificates" \
+        --base-dir "$share/ExtensionPacks" \
+        --cert-dir "$share/ExtPackCertificates" \
         --name "Oracle VM VirtualBox Extension Pack" \
         --tarball "${extensionPack}" \
         --sha-256 "${extensionPack.outputHash}"
+      EXTHELPER
     ''}
 
     # Create and fix desktop item
