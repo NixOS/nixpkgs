@@ -82,4 +82,9 @@ in stdenv.mkDerivation {
   preCheck = "export TZDIR=${tzdata}/share/zoneinfo";
 
   doCheck = true;
+
+  postInstall = ''
+      # Install documentation
+      cp -r doc "$out/share/doc"
+  '';
 }
