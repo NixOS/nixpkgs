@@ -7,8 +7,8 @@ with lib;
 let
 
   cfg = config.virtualisation.docker;
-  pro = config.nix.proxy;
-  proxy_env = optionalAttrs (pro != "") { Environment = "\"http_proxy=${pro}\""; };
+  pro = config.networking.proxy.default;
+  proxy_env = optionalAttrs (pro != null) { Environment = "\"http_proxy=${pro}\""; };
 
 in
 

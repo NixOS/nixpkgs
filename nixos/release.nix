@@ -239,6 +239,7 @@ in rec {
   tests.chromium = callTest tests/chromium.nix {};
   tests.cjdns = callTest tests/cjdns.nix {};
   tests.containers = callTest tests/containers.nix {};
+  tests.docker = scrubDrv (import tests/docker.nix { system = "x86_64-linux"; });
   tests.dockerRegistry = scrubDrv (import tests/docker-registry.nix { system = "x86_64-linux"; });
   tests.etcd = scrubDrv (import tests/etcd.nix { system = "x86_64-linux"; });
   tests.firefox = callTest tests/firefox.nix {};
