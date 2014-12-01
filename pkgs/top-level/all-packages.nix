@@ -9800,6 +9800,8 @@ let
     inherit libgphoto2 fuse pkgconfig glib libtool;
   };
 
+  gramps = callPackage ../applications/misc/gramps { };
+
   graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };
   graphicsmagick_q16 = callPackage ../applications/graphics/graphicsmagick { quantumdepth = 16; };
 
