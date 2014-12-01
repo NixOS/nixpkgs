@@ -1116,6 +1116,34 @@ let
     };
   };
 
+  bugwarrior = buildPythonPackage rec {
+    name = "bugwarrior-${version}";
+    version = "1.0.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/b/bugwarrior/${name}.tar.gz";
+      # md5 = "09c93f86a27ffc092e69b46889a3bf50"; # provided by pypi website.
+      sha256 = "efe41756c152789f39006f157add9bedfa2b85d2cac15c067e635e37c70cb8f8";
+    };
+
+    buildInputs = with self; [ mock unittest2 nose /* jira megaplan */ ];
+    propagatedBuildInputs = with self; [
+      twiggy requests2 offtrac bugzilla taskw dateutil pytz keyring six
+      jinja2 pycurl dogpile_cache lockfile click
+    ];
+
+    # for the moment jira>=0.22 and megaplan>=1.4 are missing for running the test suite.
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      homepage =  http://github.com/ralphbean/bugwarrior;
+      description = "Sync github, bitbucket, bugzilla, and trac issues with taskwarrior";
+      license = licenses.gpl3Plus;
+      platforms = platforms.all;
+      maintainers = [ maintainers.pierron ];
+    };
+  };
+
   # bugz = buildPythonPackage (rec {
   #   name = "bugz-0.9.3";
   #
@@ -1134,6 +1162,34 @@ let
   #   };
   # });
 
+  bugzilla = buildPythonPackage rec {
+    name = "bugzilla-${version}";
+    version = "1.1.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-bugzilla/python-${name}.tar.gz";
+      # md5 = "c95befd1fecad21f742beaa8180538c0"; # provided by pypi website.
+      sha256 = "11361635a4f1613803a0b9b93ba9126f7fd36180653f953e2590b1536d107d46";
+    };
+
+    patches = [ ../development/python-modules/bugzilla/checkPhase-fix-cookie-compare.patch ];
+
+    buildInputs = with self; [ pep8 coverage logilab_common ];
+    propagatedBuildInputs = [ self.requests2 ];
+
+    preCheck = ''
+      mkdir -p check-phase
+      export HOME=$(pwd)/check-phase
+    '';
+
+    meta = with stdenv.lib; {
+      homepage = https://fedorahosted.org/python-bugzilla/;
+      description = "Bugzilla XMLRPC access module";
+      license = licenses.gpl2;
+      platforms = platforms.all;
+      maintainers = [ maintainers.pierron ];
+    };
+  };
 
   buildout = self.zc_buildout;
   buildout152 = self.zc_buildout152;
@@ -4725,11 +4781,12 @@ let
   });
 
   jinja2 = buildPythonPackage rec {
-    name = "Jinja2-2.7.1";
+    name = "Jinja2-2.7.3";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/J/Jinja2/${name}.tar.gz";
-      sha256 = "12scn3zmmj76rzyc0axjzf6dsazyj9xgp0l46q41rjhxm23s1h2w";
+      # md5 = "b9dffd2f3b43d673802fe857c8445b1a"; # provided by pypi website.
+      sha256 = "2e24ac5d004db5714976a04ac0e80c6df6e47e98c354cb2c0d82f8879d4f8fdb";
     };
 
     propagatedBuildInputs = with self; [ self.markupsafe ];
@@ -4737,12 +4794,14 @@ let
     meta = {
       homepage = http://jinja.pocoo.org/;
       description = "Stand-alone template engine";
-      license = "BSD";
+      license = licenses.bsd3;
       longDescription = ''
         Jinja2 is a template engine written in pure Python. It provides a
         Django inspired non-XML syntax but supports inline expressions and
         an optional sandboxed environment.
       '';
+      platforms = platforms.all;
+      maintainers = [ maintainers.pierron ];
     };
   };
 
@@ -9504,6 +9563,34 @@ let
     };
   };
 
+  taskw = buildPythonPackage rec {
+    version = "0.8.6";
+    name = "taskw-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/taskw/${name}.tar.gz";
+      # md5 = "9f3ce2eaff9a3986d04632547168894d"; # provided by pypi website.
+      sha256 = "341a165a1c2ef94fb1c2a49a785357377f04a0d55cabe9563179849497e47146";
+    };
+
+    patches = [ ../development/python-modules/taskw/use-template-for-taskwarrior-install-path.patch ];
+    postPatch = ''
+      substituteInPlace taskw/warrior.py \
+        --replace '@@taskwarrior@@' '${pkgs.taskwarrior}'
+    '';
+
+    buildInputs = with self; [ nose pkgs.taskwarrior ];
+    propagatedBuildInputs = with self; [ six dateutil pytz ];
+
+    meta = {
+      homepage =  http://github.com/ralphbean/taskw;
+      description = "Python bindings for your taskwarrior database";
+      license = licenses.gpl3Plus;
+      platforms = platforms.all;
+      maintainers = [ maintainers.pierron ];
+    };
+  };
+
   tempita = buildPythonPackage rec {
     version = "0.5.2";
     name = "tempita-${version}";
@@ -9749,6 +9836,28 @@ let
       platforms = stdenv.lib.platforms.linux;
     };
   });
+
+  twiggy = buildPythonPackage rec {
+    name = "Twiggy-${version}";
+    version = "0.4.5";
+
+    src = pkgs.fetchurl {
+      url    = "https://pypi.python.org/packages/source/T/Twiggy/Twiggy-0.4.5.tar.gz";
+      # md5 = "b0dfbbb7f56342e448af4d22a47a339c"; # provided by pypi website.
+      sha256 = "4e8f1894e5aee522db6cb245ccbfde3c5d1aa08d31330c7e3af783b0e66eec23";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://twiggy.wearpants.org;
+      # Taken from http://i.wearpants.org/blog/meet-twiggy/
+      description = "Twiggy is the first totally new design for a logger since log4j";
+      license     = licenses.bsd3;
+      platforms = platforms.all;
+      maintainers = [ maintainers.pierron ];
+    };
+  };
 
   twitter = buildPythonPackage rec {
     name = "twitter-${version}";
