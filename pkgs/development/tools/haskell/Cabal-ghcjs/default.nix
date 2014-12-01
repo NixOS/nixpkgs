@@ -5,11 +5,11 @@
 
 cabal.mkDerivation (self: {
   pname = "Cabal";
-  version = "b9c90bb4";
+  version = "7471c95f23";
   src = fetchgit {
     url = git://github.com/ghcjs/cabal.git;
-    rev = "b9c90bb4d6fed8c2cc8323a7e24b67f821c1ee47"; # Must be from the ghcjs branch
-    sha256 = "d678d8c54d82db8b4fb0d7dc72c4832025c69586da8c0f65f6d05f6f50103c62";
+    rev = "7471c95f230170342bbdc7bcb8881d5d06145f95"; # Must be from the ghcjs branch
+    sha256 = "a4bbb0db43d25d73f78760ca4aa1431bf00b6dd1c43483e9b659f8b13ef9ebfc";
   };
   preConfigure = "cd Cabal";
   configureFlags = "--program-suffix=-js";

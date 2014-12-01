@@ -66,12 +66,12 @@ cabal.mkDerivation (self: rec {
     export GIT_SSL_CAINFO="${cacert}/etc/ca-bundle.crt"
     git clone git://github.com/ghcjs/ghcjs-boot.git
     cd ghcjs-boot
-    git checkout f5e57f9d4d8241a78ebdbdb34262921782a27e1a
+    git checkout 8bf2861c0c776eec42e0a1833f220e36681e810c
     git submodule update --init --recursive
     ( cd boot ; chmod u+w . ; ln -s .. ghcjs-boot )
     chmod -R u+w .              # because fetchgit made it read-only
     local GHCJS_LIBDIR=$out${libdir}
-    ensureDir $GHCJS_LIBDIR
+    mkdir -p $GHCJS_LIBDIR
     cp -R ${shims} $GHCJS_LIBDIR/shims
     ${cabalInstallGhcjs}/bin/cabal-js update
     PATH=$out/bin:${CabalGhcjs}/bin:$PATH LD_LIBRARY_PATH=${gmp}/lib:${gcc.gcc}/lib64:$LD_LIBRARY_PATH \
