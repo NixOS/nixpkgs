@@ -8254,12 +8254,12 @@ let
 
 
   robotframework-selenium2library = buildPythonPackage rec {
-    version = "1.5.0";
+    version = "1.6.0";
     name = "robotframework-selenium2library-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/r/robotframework-selenium2library/${name}.tar.gz";
-      sha256 = "0hjmar9766jqfpbckac8zncyal546vm059wnkbn33f68djdcnwz1";
+      sha256 = "1asdwrpb4s7q08bx641yrh3yicgba14n3hxmsqs58mqf86ignwly";
     };
 
     # error: invalid command 'test'
