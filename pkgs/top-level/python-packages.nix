@@ -2519,6 +2519,12 @@ let
       sha256 = "105swvzshgn3g6bjwk67xd8pslnhpxwa63mdsw6cl4c7cjp2blx9";
     };
 
+    preInstall = ''
+      # see https://bitbucket.org/pypa/setuptools/issue/130/install_data-doesnt-respect-prefix
+      ${python}/bin/${python.executable} setup.py install_data --install-dir=$out --root=$out
+      sed -i '/ = data_files/d' setup.py
+    '';
+
     propagatedBuildInputs = with self; [ python python_fedora wrapPython ];
     postInstall = "mv $out/bin/fedpkg $out/bin/fedora-cert-fedpkg";
     doCheck = false;
@@ -7999,7 +8005,7 @@ let
     name = "requests-1.2.3";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
+      url = "https://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
       md5 = "adbd3f18445f7fe5e77f65c502e264fb";
     };
 
@@ -8014,7 +8020,7 @@ let
     name = "requests-2.4.3";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
+      url = "https://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
       md5 = "02214b3a179e445545de4b7a98d3dd17";
     };
 
@@ -12194,6 +12200,45 @@ let
     meta = with stdenv.lib; {
       description = "Termcolor";
       homepage = http://pypi.python.org/pypi/termcolor;
+      license = licenses.mit;
+    };
+  };
+
+  deis = buildPythonPackage rec {
+    name = "deis-1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/deis/${name}.tar.gz";
+      md5 = "cc57873a3b60eb94f0c668d95050bf96";
+    };
+
+    propagatedBuildInputs = with self; [
+      docopt
+      dateutil
+      requests2
+      termcolor
+    ];
+
+    meta = with stdenv.lib; {
+      description = "Deis Client";
+      homepage = http://deis.io;
+      maintainers = [ stdenv.lib.maintainers.manveru ];
+      license = licenses.asl20;
+    };
+  };
+
+
+  docopt = buildPythonPackage rec {
+    name = "docopt-0.6.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/docopt/${name}.tar.gz";
+      md5 = "4bc74561b37fad5d3e7d037f82a4c3b1";
+    };
+
+    meta = with stdenv.lib; {
+      description = "``docopt`` creates *beautiful* command-line interfaces";
+      homepage = http://docopt.org;
       license = licenses.mit;
     };
   };
