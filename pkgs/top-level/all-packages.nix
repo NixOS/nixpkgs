@@ -4690,6 +4690,8 @@ let
 
   remake = callPackage ../development/tools/build-managers/remake { };
 
+  rr = callPackage_i686 ../development/tools/analysis/rr { };
+
   saleae-logic = callPackage ../development/tools/misc/saleae-logic { };
 
   # couldn't find the source yet
@@ -6104,6 +6106,8 @@ let
   libpng15 = callPackage ../development/libraries/libpng/15.nix { };
 
   libpaper = callPackage ../development/libraries/libpaper { };
+
+  libpfm = callPackage ../development/libraries/libpfm { };
 
   libproxy = callPackage ../development/libraries/libproxy {
     stdenv = if stdenv.isDarwin
