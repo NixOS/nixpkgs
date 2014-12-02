@@ -11463,11 +11463,11 @@ let
 
   usbtmc = buildPythonPackage rec {
     name = "usbtmc-${version}";
-    version = "0.5";
+    version = "0.6";
 
     src = pkgs.fetchurl {
       url = "https://github.com/python-ivi/python-usbtmc/archive/v${version}.tar.gz";
-      sha256 = "0xn8whjcdn8wgs9j1gj7sw7fh425akdmq3hi448m36fywldbhryg";
+      sha256 = "1wnw6ndc3s1i8zpbikz5zc40ijvpraqdb0xn8zmqlyn95xxfizw2";
     };
 
     propagatedBuildInputs = with self; [ pyusb ];
