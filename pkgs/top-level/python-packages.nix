@@ -8231,13 +8231,13 @@ let
   };
 
   robotframework = buildPythonPackage rec {
-    version = "2.8.5";
+    version = "2.8.6";
     name = "robotframework-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/r/robotframework/${name}.tar.gz";
-      sha256 = "0rzdn2gvmcrxs2fvxm11h55w4j5pv0lf443fc4hl8kzwjwgjckga";
+      sha256 = "0hl44pwfkagr5272s90y0bkfllj0q1l4yw4rvkdrc6ikn6l61d9v";
     };
 
     # error: invalid command 'test'
