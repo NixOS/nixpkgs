@@ -234,9 +234,6 @@ in {
         mkdir -p ${cfg.stateDir}/home/.ssh
         touch ${cfg.stateDir}/home/.ssh/authorized_keys
 
-        chown -R gitlab:gitlab ${cfg.stateDir}/
-        chmod -R 755 ${cfg.stateDir}/
-
         cp -rf ${pkgs.gitlab}/share/gitlab/config ${cfg.stateDir}/
         cp ${pkgs.gitlab}/share/gitlab/VERSION ${cfg.stateDir}/VERSION
 
@@ -262,6 +259,11 @@ in {
       ln -fs ${pkgs.writeText "config.yml" gitlabShellYml} ${cfg.stateDir}/shell/config.yml
       export GITLAB_SHELL_CONFIG_PATH=""${cfg.stateDir}/shell/config.yml
       ${pkgs.gitlab-shell}/bin/install
+
+      # Change permissions in the last step because some of the
+      # intermediary scripts like to create directories as root.
+      chown -R gitlab:gitlab ${cfg.stateDir}/
+      chmod -R 755 ${cfg.stateDir}/
       '';
 
       serviceConfig = {
