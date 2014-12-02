@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
       --use-system-libraries \
       --with-xslt-dir=${libxslt} \
       --with-xml2-dir=${libxml2} \
-      --with-pkg-config \
+      --with-pkg-config=${pkgconfig}/bin/pkg-config \
       --with-pg-config=${postgresql}/bin/pg_config
 
     # See https://github.com/gitlabhq/gitlab-public-wiki/wiki/Trouble-Shooting-Guide:
