@@ -974,6 +974,8 @@ let
 
   ddrescue = callPackage ../tools/system/ddrescue { };
 
+  decklink-sdk = callPackage ../development/libraries/decklink-sdk { };
+
   deluge = pythonPackages.deluge;
 
   desktop_file_utils = callPackage ../tools/misc/desktop-file-utils { };
