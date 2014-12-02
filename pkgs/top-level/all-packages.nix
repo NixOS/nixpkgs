@@ -1508,6 +1508,8 @@ let
 
   ipmiutil = callPackage ../tools/system/ipmiutil {};
 
+  ipxe = callPackage ../tools/misc/ipxe { };
+
   ised = callPackage ../tools/misc/ised {};
 
   isl = callPackage ../development/libraries/isl { };
