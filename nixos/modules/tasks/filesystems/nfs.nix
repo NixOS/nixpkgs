@@ -73,9 +73,10 @@ in
 
         path = [ pkgs.nfsUtils pkgs.sysvtools pkgs.utillinux ];
 
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "remote-fs-pre.target" ];
+        before = [ "remote-fs-pre.target" ];
         requires = [ "basic.target" "rpcbind.service" ];
-        after = [ "basic.target" "rpcbind.service" "network.target" ];
+        after = [ "basic.target" "rpcbind.service" ];
 
         unitConfig.DefaultDependencies = false; # don't stop during shutdown
 
@@ -99,7 +100,8 @@ in
 
         path = [ pkgs.sysvtools pkgs.utillinux ];
 
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "remote-fs-pre.target" ];
+        before = [ "remote-fs-pre.target" ];
         requires = [ "rpcbind.service" ];
         after = [ "rpcbind.service" ];
 

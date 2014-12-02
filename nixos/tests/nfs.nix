@@ -38,7 +38,7 @@ in
   testScript =
     ''
       $server->waitForUnit("nfsd");
-      $server->waitForUnit("network.target");
+      $server->waitForUnit("network-online.target");
 
       startAll;
 
