@@ -3,9 +3,9 @@
 , mesaSupported, mesa, mesa_glu, openssl, dbus, cups, pkgconfig
 , libtiff, glib, icu, mysql, postgresql, sqlite, perl, coreutils, libXi
 , gdk_pixbuf, python, gdb, xlibs, libX11, libxcb, xcbutil, xcbutilimage
-, xcbutilkeysyms, xcbutilwm,udev, libxml2, libxslt, pcre, libxkbcommon
+, xcbutilkeysyms, xcbutilwm, udev, libxml2, libxslt, pcre, libxkbcommon
 , alsaLib, gstreamer, gst_plugins_base
-, pulseaudio, bison, flex, gperf, ruby, libwebp
+, pulseaudio, bison, flex, gperf, ruby, libwebp, libXcursor
 , flashplayerFix ? false
 , gtkStyle ? false, libgnomeui, gtk, GConf, gnome_vfs
 , buildDocs ? false
@@ -45,24 +45,40 @@ stdenv.mkDerivation rec {
   '';
 
   patches =
-    [ ./glib-2.32.patch
-      ./qt-5.3-tzdir.patch
+    optional gtkStyle
       (substituteAll {
-        src = ./qt-5.3-dlopen-absolute-paths.patch;
-        inherit cups icu libXfixes;
-        glibc = stdenv.gcc.libc;
-        openglDriver = if mesaSupported then mesa.driverLink else "/no-such-path";
-      })
-    ] ++ optional gtkStyle (substituteAll {
-        src = ./dlopen-gtkstyle.patch;
+        src = ./0001-dlopen-gtkstyle.patch;
         # substituteAll ignores env vars starting with capital letter
         gconf = GConf;
         inherit gnome_vfs libgnomeui gtk;
       })
-    ++ optional flashplayerFix (substituteAll {
-        src = ./dlopen-webkit-nsplugin.patch;
+    ++ optional flashplayerFix
+      (substituteAll {
+        src = ./0002-dlopen-webkit-nsplugin.patch;
         inherit gtk gdk_pixbuf;
-      });
+      })
+    ++ optional flashplayerFix
+      (substituteAll {
+        src = ./0007-dlopen-webkit-gtk.patch;
+        inherit gtk;
+      })
+    ++ [
+      ./0003-glib-2.32.patch
+      (substituteAll {
+        src = ./0004-dlopen-resolv.patch;
+        glibc = stdenv.gcc.libc;
+      })
+      (substituteAll {
+        src = ./0005-dlopen-gl.patch;
+        openglDriver = if mesaSupported then mesa.driverLink else "/no-such-path";
+      })
+      ./0006-tzdir.patch
+      (substituteAll { src = ./0008-dlopen-webkit-udev.patch; inherit udev; })
+      (substituteAll { src = ./0009-dlopen-serialport-udev.patch; inherit udev; })
+      (substituteAll { src = ./0010-dlopen-libXcursor.patch; inherit libXcursor; })
+      (substituteAll { src = ./0011-dlopen-openssl.patch; inherit openssl; })
+      (substituteAll { src = ./0012-dlopen-dbus.patch; dbus_libs = dbus; })
+    ];
 
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/qtbase/lib:$PWD/qtbase/plugins/platforms:$PWD/qttools/lib:$LD_LIBRARY_PATH"

@@ -1,3 +1,12 @@
+From 775fd74351faaabd45f6751618b28e2b05812d05 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@gmail.com>
+Date: Mon, 1 Dec 2014 17:23:22 -0600
+Subject: [PATCH] tzdir
+
+---
+ qtbase/src/corelib/tools/qtimezoneprivate_tz.cpp | 21 +++++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
+
 diff --git a/qtbase/src/corelib/tools/qtimezoneprivate_tz.cpp b/qtbase/src/corelib/tools/qtimezoneprivate_tz.cpp
 index b4ea91e..a56a245 100644
 --- a/qtbase/src/corelib/tools/qtimezoneprivate_tz.cpp
@@ -38,3 +47,6 @@ index b4ea91e..a56a245 100644
          }
      }
  
+-- 
+2.1.3
+
