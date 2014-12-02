@@ -1736,29 +1736,29 @@ let
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
-  
+
   cryptography = buildPythonPackage rec {
     name = "cryptography-0.6.1";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/cryptography/${name}.tar.gz";
       sha256 = "17ij2acy28ryxahiq64lpf71d5z3sa9xhr4pjv7a1v81189i0j82";
     };
-    
+
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
                     self.iso8601 self.pyasn1 self.pytest ];
     propagatedBuildInputs = [ self.six self.cffi  ];
   };
-  
+
   cryptography_vectors = buildPythonPackage rec {
     name = "cryptography_vectors-0.6.1";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/cryptography-vectors/${name}.tar.gz";
       sha256 = "1ks1xdb1ff74qmjdzqcfvkrwsbnwpsjgg3cy18zh37p8985cvl3r";
     };
   };
-  
+
   pretend = buildPythonPackage rec {
     name = "pretend-1.0.8";
 
@@ -2195,6 +2195,8 @@ let
       boto redis setuptools simplejson
     ];
 
+    patchPhase = "> requirements/main.txt";
+
     meta = {
       description = "Docker registry core package";
       homepage = https://github.com/docker/docker-registry;
@@ -2215,9 +2217,11 @@ let
 
     doCheck = false; # requires redis server
     propagatedBuildInputs = with self; [
-      docker_registry_core blinker flask gevent gunicorn pyyaml
+      setuptools docker_registry_core blinker flask gevent gunicorn pyyaml
       requests2 rsa sqlalchemy setuptools backports_lzma pyasn1
     ];
+
+    patchPhase = "> requirements/main.txt";
 
     # Default config uses needed env variables
     postInstall = ''
@@ -7650,16 +7654,16 @@ let
       platforms = stdenv.lib.platforms.mesaPlatforms;
     };
   };
-  
+
   pyopenssl = buildPythonPackage rec {
     name = "pyopenssl-${version}";
     version = "0.14";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-0.14.tar.gz";
       sha256 = "0vpfqhng4cky7chliknkxv910iabqbfcxvkjiankh08jkkjvi7d9";
     };
-    
+
     # 17 tests failing
     doCheck = false;
 
