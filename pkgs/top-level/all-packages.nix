@@ -12538,8 +12538,6 @@ let
 
     bedrock = callPackage ../development/coq-modules/bedrock {};
 
-    containers = callPackage ../development/coq-modules/containers {};
-
     coqExtLib = callPackage ../development/coq-modules/coq-ext-lib {};
 
     coqeal = callPackage ../development/coq-modules/coqeal {};
