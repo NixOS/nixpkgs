@@ -160,9 +160,9 @@ in
         )}
 
         # Swap devices.
-        ${flip concatMapStrings config.swapDevices (sw:
-            "${sw.device} none swap${prioOption sw.priority}\n"
-        )}
+        #${flip concatMapStrings config.swapDevices (sw:
+        #    "${sw.device} none swap${prioOption sw.priority}\n"
+        #)}
       '';
 
     # Provide a target that pulls in all filesystems.
