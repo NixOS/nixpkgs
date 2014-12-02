@@ -227,7 +227,8 @@ in {
         mkdir -p ${cfg.stateDir}/config
         # TODO: What exactly is gitlab-shell doing with the secret?
         head -c 20 /dev/urandom > ${cfg.stateDir}/config/gitlab_shell_secret
-        mkdir -p ${cfg.stateDir}/home
+        mkdir -p ${cfg.stateDir}/home/.ssh
+        touch ${cfg.stateDir}/home/.ssh/authorized_keys
 
         chown -R gitlab:gitlab ${cfg.stateDir}/
         chmod -R 755 ${cfg.stateDir}/
