@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, iproute, lzo, openssl, pam, systemd }:
+{ stdenv, fetchurl, iproute, lzo, openssl, pam, systemd, pkgconfig }:
 
 with stdenv.lib;
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   patches = optional stdenv.isLinux ./systemd-notify.patch;
 
-  buildInputs = [ iproute lzo openssl pam ] ++ optional stdenv.isLinux systemd;
+  buildInputs = [ iproute lzo openssl pam pkgconfig ] ++ optional stdenv.isLinux systemd;
 
   configureFlags = ''
     --enable-password-save
