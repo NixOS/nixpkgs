@@ -8125,6 +8125,8 @@ let
 
   iw = callPackage ../os-specific/linux/iw { };
 
+  iwlwifi = callPackage ../os-specific/linux/firmware/iwlwifi { };
+
   jujuutils = callPackage ../os-specific/linux/jujuutils { };
 
   kbd = callPackage ../os-specific/linux/kbd { };
