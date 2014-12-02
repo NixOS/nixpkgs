@@ -132,7 +132,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ gitlab-runner ];
+    environment.systemPackages = [ gitlab-runner pkgs.gitlab-shell ];
 
     assertions = [
       { assertion = cfg.databasePassword != "";
