@@ -669,6 +669,7 @@ in
       { description = "All Network Interfaces";
         wantedBy = [ "network.target" ];
         before = [ "network.target" ];
+        after = [ "network-pre.target" ];
         unitConfig.X-StopOnReconfiguration = true;
       };
 
@@ -677,6 +678,7 @@ in
         description = "Extra networking commands.";
         before = [ "network.target" ];
         wantedBy = [ "network.target" ];
+        after = [ "network-pre.target" ];
         unitConfig.ConditionCapability = "CAP_NET_ADMIN";
         path = [ pkgs.iproute ];
         serviceConfig.Type = "oneshot";
@@ -692,7 +694,7 @@ in
         wantedBy = [ "network-interfaces.target" ];
         before = [ "network-interfaces.target" ];
         bindsTo = [ (subsystemDevice i.name) ];
-        after = [ (subsystemDevice i.name) ];
+        after = [ (subsystemDevice i.name) "network-pre.target" ];
         path = [ pkgs.iproute ];
         serviceConfig = {
           Type = "oneshot";
