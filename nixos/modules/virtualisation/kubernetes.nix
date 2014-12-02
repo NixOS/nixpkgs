@@ -12,7 +12,6 @@ in {
   options.virtualisation.kubernetes = {
     package = mkOption {
       description = "Kubernetes package to use.";
-      default = pkgs.kubernetes;
       type = types.package;
     };
 
@@ -443,6 +442,8 @@ in {
         cfg.kubelet.enable ||
         cfg.proxy.enable
     ) {
+      virtualisation.kubernetes.package = mkDefault pkgs.kubernetes; 
+
       environment.systemPackages = [ cfg.package ];
 
       users.extraUsers = singleton {
