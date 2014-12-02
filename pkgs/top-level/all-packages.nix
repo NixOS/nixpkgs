@@ -10650,6 +10650,8 @@ let
 
   skype_call_recorder = callPackage ../applications/networking/instant-messengers/skype-call-recorder { };
 
+  slmenu = callPackage ../applications/misc/slmenu {};
+
   slrn = callPackage ../applications/networking/newsreaders/slrn { };
 
   spideroak = callPackage ../applications/networking/spideroak { };
