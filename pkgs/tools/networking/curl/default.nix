@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   # make curl honor CURL_CA_BUNDLE & SSL_CERT_FILE
   postConfigure = ''
-    echo  '#define CURL_CA_BUNDLE (getenv("CURL_CA_BUNDLE") || getenv("SSL_CERT_FILE"))' >> lib/curl_config.h
+    echo  '#define CURL_CA_BUNDLE (getenv("CURL_CA_BUNDLE") ? getenv("CURL_CA_BUNDLE") : getenv("SSL_CERT_FILE"))' >> lib/curl_config.h
   '';
 
   configureFlags = [
