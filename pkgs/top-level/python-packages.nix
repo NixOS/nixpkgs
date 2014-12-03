@@ -972,11 +972,11 @@ let
 
 
   blockdiag = buildPythonPackage rec {
-    name = "blockdiag-1.3.2";
+    name = "blockdiag-1.4.7";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/blockdiag/${name}.tar.gz";
-      md5 = "602a8750f312eeee84d6d138055dfae7";
+      sha256 = "0bc29sh8hj3hmhclifh1by0n6vg2pl9wkxb7fmljyw0arjas54bf";
     };
 
     buildInputs = with self; [ pep8 nose unittest2 docutils ];
