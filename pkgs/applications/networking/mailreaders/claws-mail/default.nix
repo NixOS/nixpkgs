@@ -29,7 +29,7 @@
 
 with stdenv.lib;
 
-let version = "3.10.1"; in
+let version = "3.11.1"; in
 
 stdenv.mkDerivation {
   name = "claws-mail-${version}";
@@ -43,22 +43,17 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://downloads.sourceforge.net/project/claws-mail/Claws%20Mail/${version}/claws-mail-${version}.tar.bz2";
-    sha256 = "634d35dee311a288fb8fcba36d26987afdcd5485730cf67d00554110f414178e";
+    sha256 = "0w13xzri9d3165qsxf1dig1f0gxn3ib4lysfc9pgi4zpyzd0zgrw";
   };
 
   buildInputs =
-    [ dbus dbus_glib gtk gnutls libetpan perl pkgconfig python ]
+    [ curl dbus dbus_glib gtk gnutls libetpan perl pkgconfig python ]
     ++ optional enableSpellcheck enchant
     ++ optionals (enablePgp || enablePluginSmime) [ gnupg gpgme ]
     ++ optional enablePluginArchive libarchive
     ++ optional enablePluginNotificationSounds libcanberra
     ++ optional enablePluginNotificationDialogs libnotify
     ++ optional enablePluginFancy libsoup
-    ++ optional
-      (enablePluginFancy || enablePluginRavatar || enablePluginRssyl
-        || enablePluginSpamassassin || enablePluginSpamReport
-        || enablePluginVcalendar)
-      curl
     ++ optional enablePluginRssyl libxml2
     ++ optional enableNetworkManager networkmanager
     ++ optional enableLdap openldap
