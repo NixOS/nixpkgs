@@ -1,10 +1,10 @@
 args : with args; 
 rec {
-  version = "1.0.2";
+  version = "1.2.6";
   versionSuffix = "-0";
   src = fetchurl {
     url = "mirror://sourceforge/lazarus/Lazarus%20Zip%20_%20GZip/Lazarus%20${version}/lazarus-${version}${versionSuffix}.tar.gz";
-    sha256 = "17a94wig8b4yrkq42wng4qbal7n77axkynwh78wday5whsp7div8";
+    sha256 = "1sjyc2l46hyd5ic5hr6vscy4qr9kazyhiyddy7bfs9vgf54fdiy0";
   };
 
   buildInputs = [fpc gtk glib libXi inputproto 
@@ -24,7 +24,7 @@ rec {
   preBuild = fullDepEntry (''
     export NIX_LDFLAGS='-lXi -lX11 -lglib-2.0 -lgtk-x11-2.0 -lgdk-x11-2.0 -lc -lXext -lpango-1.0 -latk-1.0 -lgdk_pixbuf-2.0 -lcairo'
     export LCL_PLATFORM=gtk2
-    mkdir -p $out/share
+    mkdir -p $out/share "$out/lazarus"
     tar xf ${fpc.src} --strip-components=1 -C $out/share -m
     sed -e 's@/usr/fpcsrc@'"$out/share/fpcsrc@" -i ide/include/unix/lazbaseconf.inc
   '') 
