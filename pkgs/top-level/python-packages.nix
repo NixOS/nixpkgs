@@ -9468,6 +9468,10 @@ let
       export LC_ALL="en_US.UTF-8"
     '';
 
+    # https://github.com/gabrielfalcao/sure/issues/71
+    doCheck = !isPy3k;
+    disabled = isPyPy;
+
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/sure/${name}.tar.gz";
       sha256 = "0pgi9xg00wcw0m1pv5qp7jv53q38yffcmkf2fj1zlfi2b9c3njid";
