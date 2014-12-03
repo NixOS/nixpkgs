@@ -15,6 +15,7 @@ buildRustPackage {
 
   buildInputs = [ pkgconfig openssl cmake zlib ];
 
-  #RUST_PATH = "${zlibStatic}/lib";
+  # TODO: cargo-fetch as a hook?
+  
 
 } // { inherit meta; }
