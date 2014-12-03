@@ -15,6 +15,8 @@ cabal.mkDerivation (self: {
   testDepends = [
     postgresqlSimple productProfunctors profunctors time
   ];
+  jailbreak = true;
+  doCheck = false;
   meta = {
     homepage = "https://github.com/tomjaguarpaw/haskell-opaleye";
     description = "An SQL-generating DSL targeting PostgreSQL";
@@ -22,6 +24,4 @@ cabal.mkDerivation (self: {
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
-  jailbreak = true;
-  doCheck = false;
 })
