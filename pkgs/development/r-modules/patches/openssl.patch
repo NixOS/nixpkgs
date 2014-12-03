@@ -1,0 +1,30 @@
+diff -ru -x '*~' openssl_orig/configure openssl/configure
+--- openssl_orig/configure	2014-11-08 02:32:33.000000000 +0900
++++ openssl/configure	2014-11-29 20:57:19.919495325 +0900
+@@ -4,14 +4,15 @@
+ # if present, hence this script is not really required. On CRAN, we use
+ # the $OPENSSL_INCLUDES variable; elsewhere we assume to the standard
+ # linux location: /usr/include/openssl.
+-if [ -z "$OPENSSL_INCLUDES" ]; then
+-  OPENSSL_INCLUDES="/usr/include"
+-else
+-  echo "PKG_CPPFLAGS= -I$OPENSSL_INCLUDES" >> src/Makevars
+-fi
++# if [ -z "$OPENSSL_INCLUDES" ]; then
++#   OPENSSL_INCLUDES="/usr/include"
++# else
++#   echo "PKG_CPPFLAGS= -I$OPENSSL_INCLUDES" >> src/Makevars
++# fi
+ 
+-# Verify that openssl RNG is present
+-if [ ! -e $OPENSSL_INCLUDES/openssl/rand.h ]; then
+-  echo "File $OPENSSL_INCLUDES/rand.h not found. Make sure libssl-dev (deb) or openssl-devel (rpm) is installed."
+-  exit 1
+-fi
++# # Verify that openssl RNG is present
++# if [ ! -e $OPENSSL_INCLUDES/openssl/rand.h ]; then
++#   echo "File $OPENSSL_INCLUDES/rand.h not found. Make sure libssl-dev (deb) or openssl-devel (rpm) is installed."
++#   exit 1
++# fi
++echo "PKG_LIBS= -L"${OPENSSL_HOME}/lib" -lssl -lcrypto" > src/Makevars
+\ No newline at end of file
