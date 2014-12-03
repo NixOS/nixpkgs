@@ -231,6 +231,7 @@
   ./services/networking/dhcpd.nix
   ./services/networking/dnscrypt-proxy.nix
   ./services/networking/dnsmasq.nix
+  ./services/networking/dropbox.nix
   ./services/networking/ejabberd.nix
   ./services/networking/firewall.nix
   ./services/networking/flashpolicyd.nix
