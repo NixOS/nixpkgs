@@ -192,11 +192,11 @@ let
 
 
   actdiag = buildPythonPackage rec {
-    name = "actdiag-0.5.1";
+    name = "actdiag-0.5.3";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/actdiag/${name}.tar.gz";
-      md5 = "171c47bc1f70e5fadfffd9df0c3157be";
+      sha256 = "1vr4hnkr0gcvvpaycd8q3vcx029b2f5yv8swhdr8kwspaqb0dvfa";
     };
 
     buildInputs = with self; [ pep8 nose unittest2 docutils ];
