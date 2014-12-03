@@ -41,8 +41,7 @@ import ./make-test.nix ({ pkgs, ... }: {
         ];
     };
 
-  testScript =
-    ''
+  testScript = '' 
       $machine->waitUntilSucceeds("pgrep plasma-desktop");
       $machine->waitForWindow(qr/plasma-desktop/);
 
