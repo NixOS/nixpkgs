@@ -18,7 +18,7 @@ in {
 
   options.services.peerflix = {
     enable = mkOption {
-      description = "Whether to enable graphite web frontend.";
+      description = "Whether to enable peerflix service.";
       default = false;
       type = types.uniq types.bool;
     };
