@@ -81,7 +81,7 @@ def get_latest_version_url(major):
 
 def get_old_bundle_attrs(jdk, bundle):
 	attrs = {}
-	for attr in ('changeset', 'url', 'sha256'):
+	for attr in ('url', 'sha256'):
 		attrs[attr] = get_jdk_attr(jdk, 'bundles.{}.{}'.format(bundle, attr))
 
 	return attrs
@@ -128,7 +128,7 @@ def get_new_bundle_attr(makefile, bundle, attr):
 
 	return m.group(1)
 
-def get_new_bundle_attrs(jdk, branch, path):
+def get_new_bundle_attrs(jdk, version, branch, path):
 	hg_url = HG_URL.format(jdk, branch)
 
 	attrs = {}
@@ -137,31 +137,20 @@ def get_new_bundle_attrs(jdk, branch, path):
 	tar = tarfile.open(name = path, mode = 'r:xz')
 
 	makefile = get_member_file(tar, 'Makefile.am')
-	hotspot_map = get_member_file(tar, 'hotspot.map')
+	hotspot_map = get_member_file(tar, 'hotspot.map.in')
 
 	for bundle in BUNDLES:
 		battrs = {}
 
+		battrs['url'] = 'http://icedtea.wildebeest.org/download/drops/icedtea{}/{}/{}.tar.bz2'.format(jdk, version, bundle)
 		if bundle == 'hotspot':
-			m = re.search(r'^default (.*?) (.*?) (.*?)$', hotspot_map, re.MULTILINE)
+			m = re.search(r'^default (.*?) (.*?) (.*?) (.*?)$', hotspot_map, re.MULTILINE)
 			if m == None:
-				raise Exception('Could not find info for hotspot bundle in hotspot.map')
+			    raise Exception('Could not find info for hotspot bundle in hotspot.map.in')
 
-			battrs['url'] = '{}/archive/{}.tar.gz'.format(m.group(1), m.group(2))
-			battrs['changeset'] = m.group(2)
-			battrs['sha256'] = m.group(3)
-
-			attrs[bundle] = battrs
-			continue
-
-		changeset = get_new_bundle_attr(makefile, bundle, 'changeset')
-		battrs['changeset'] = changeset
-		battrs['sha256'] = get_new_bundle_attr(makefile, bundle, 'sha256sum')
-
-		if bundle == 'openjdk':
-			battrs['url'] = '{}/archive/{}.tar.gz'.format(hg_url, changeset)
+			battrs['sha256'] = m.group(4)
 		else:
-			battrs['url'] = '{}/{}/archive/{}.tar.gz'.format(hg_url, bundle, changeset)
+			battrs['sha256'] = get_new_bundle_attr(makefile, bundle, 'sha256sum')
 
 		attrs[bundle] = battrs
 
@@ -203,7 +192,7 @@ def get_new_attrs(jdk):
 
 	print('Inspecting tarball for bundle information...')
 
-	attrs['bundles'] = get_new_bundle_attrs(jdk, attrs['branch'], path)
+	attrs['bundles'] = get_new_bundle_attrs(jdk, attrs['version'], attrs['branch'], path)
 
 	print('Done!')
 
@@ -235,10 +224,8 @@ def generate_jdk(jdk):
 
 		b_url = battrs['url']
 		b_url = b_url.replace(hg_url, '${hg_url}')
-		b_url = b_url.replace(battrs['changeset'], '${changeset}')
 
 		src += '      {} = rec {{\n'.format(bundle)
-		src += '        changeset = "{}";\n'.format(battrs['changeset'])
 		src += '        url = "{}";\n'.format(b_url)
 		src += '        sha256 = "{}";\n'.format(battrs['sha256'])
 		src += '      };\n'
