@@ -8,11 +8,11 @@ cabal.mkDerivation (self: {
   sha256 = "0wqsbwnp69g6vz5irf65zv1nx4vnlwcm771jxzk70r2wzi2vsg3y";
   buildDepends = [ filepath fixed half hxt split transformers ];
   extraLibraries = [ mesa ];
+  noHaddock = true;
   meta = {
     description = "Complete OpenGL raw bindings";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
-  noHaddock = true;
 })
