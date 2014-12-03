@@ -587,6 +587,24 @@ let
     };
   }));
 
+  azure = buildPythonPackage rec {
+    version = "0.9.0";
+    name = "azure-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/azure/${name}.zip";
+      md5 = "9616767cf45c1c00794624e2a0889f23";
+    };
+
+    propagatedBuildInputs = with self; [ dateutil ];
+
+    meta = with stdenv.lib; {
+      description = "Microsoft Azure SDK for Python";
+      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      license = licenses.asl20;
+    };
+  };
+
   backports_ssl_match_hostname_3_4_0_2 = self.buildPythonPackage rec {
     name = "backports.ssl_match_hostname-3.4.0.2";
 
