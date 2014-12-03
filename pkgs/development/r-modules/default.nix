@@ -31,6 +31,7 @@ let
     propagatedBuildInputs = depends;
     nativeBuildInputs = depends;
     meta.homepage = "http://cran.r-project.org/web/packages/${name}/";
+    meta.platforms = R.meta.platforms;
     meta.hydraPlatforms = hydraPlatforms;
     meta.broken = broken;
   });
