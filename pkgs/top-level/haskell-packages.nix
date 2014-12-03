@@ -858,6 +858,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   final = callPackage ../development/libraries/haskell/final {};
 
+  fixed = callPackage ../development/libraries/haskell/fixed {};
+
   fgl = callPackage ../development/libraries/haskell/fgl {};
 
   fglVisualize = callPackage ../development/libraries/haskell/fgl-visualize {};
@@ -958,6 +960,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   gitlibTest = callPackage ../development/libraries/haskell/gitlib-test {};
 
+  gl = callPackage ../development/libraries/haskell/gl {};
+
   glade = callPackage ../development/libraries/haskell/glade {
     inherit (pkgs.gnome) libglade;
     gtkC = pkgs.gtk;
@@ -1044,6 +1048,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   groupoids = callPackage ../development/libraries/haskell/groupoids {};
 
   hakyll = callPackage ../development/libraries/haskell/hakyll {};
+
+  half = callPackage ../development/libraries/haskell/half {};
 
   hamlet = callPackage ../development/libraries/haskell/hamlet {};
 
