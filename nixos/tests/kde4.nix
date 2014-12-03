@@ -59,7 +59,7 @@ import ./make-test.nix ({ pkgs, ... }: {
 
       $machine->sleep(10);
 
-      $machine->screenshot("screen");
+      $machine->screenshot("screen"); 
     '';
 
 })
