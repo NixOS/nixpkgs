@@ -180,7 +180,7 @@ let
   # `self` is `_self` with overridden packages;
   # packages in `_self` may depends on overridden packages.
   self = (defaultOverrides _self self) // overrides;
-  _self = import ./sources.nix { inherit self derive; };
+  _self = import ./cran-packages.nix { inherit self derive; };
 
   # tweaks for the individual packages and "in self" follow
 
