@@ -1,11 +1,11 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "glm-0.9.5.4";
+  name = "glm-0.9.6.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/ogl-math/${name}/${name}.zip";
-    sha256 = "0v14xssysy3q1h2mga6rqlz722mwbis4rrx76zmvhjqh17qh4l62";
+    sha256 = "0gq79gxjm449ryi8l94rahrqy2cjccnrvivxgbwp10xdlfdyc4ha";
   };
 
   buildInputs = [ unzip ];
