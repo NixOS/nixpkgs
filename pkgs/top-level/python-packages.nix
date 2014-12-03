@@ -6008,11 +6008,11 @@ let
 
 
   nwdiag = buildPythonPackage rec {
-    name = "nwdiag-1.0.0";
+    name = "nwdiag-1.0.3";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/nwdiag/${name}.tar.gz";
-      md5 = "d81581a028840f8f7362ab21bf73e941";
+      sha256 = "0n7ary1fngxk8bk15vabc8fhnmxlh098piciwaviwn7l4a5q1zys";
     };
 
     buildInputs = with self; [ pep8 nose unittest2 docutils ];
