@@ -8529,11 +8529,11 @@ let
   };
 
   seqdiag = buildPythonPackage rec {
-    name = "seqdiag-0.9.0";
+    name = "seqdiag-0.9.4";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/seqdiag/${name}.tar.gz";
-      md5 = "92946555ce219df18002e6c88b4055d3";
+      sha256 = "1qa7d0m1wahvmrj95rxkb6128cbwd4w3gy8gbzncls66h46bifiz";
     };
 
     buildInputs = with self; [ pep8 nose unittest2 docutils ];
