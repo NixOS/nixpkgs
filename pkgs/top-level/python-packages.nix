@@ -4405,12 +4405,12 @@ let
 
   greenlet = buildPythonPackage rec {
     name = "greenlet-${version}";
-    version = "0.4.4";
+    version = "0.4.5";
     disabled = isPyPy;  # builtin for pypy
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/greenlet/${name}.zip";
-      sha256 = "935a76b7ad3c41846af26e136e2fd8ec763794cbc5b5fbc4b7b09d9a8de1d056";
+      sha256 = "1gidivqcpn6i6k01bf3hgcn0m68h4b9srhpff9kgnk0c287z145r";
     };
 
     meta = with stdenv.lib; {
