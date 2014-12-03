@@ -171,7 +171,7 @@
       bosun = 161;
       kubernetes = 162;
       peerflix = 163;
-
+      gitlab = 164;
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
       nixbld = 30000; # start of range of uids
@@ -305,7 +305,7 @@
       scollector = 156;
       bosun = 157;
       kubernetes = 158;
-
+      gitlab = 159;
       # When adding a gid, make sure it doesn't match an existing uid. And don't use gids above 399!
 
       users = 100;
