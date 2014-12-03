@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.5";
   sha256 = "02hkcq4vzk4641hkm1rf2v2qdbaqalbfgnwfdk7yfz497qv9lmad";
   buildDepends = [ contravariant profunctors ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/tomjaguarpaw/product-profunctors";
     description = "product-profunctors";
@@ -14,5 +15,4 @@ cabal.mkDerivation (self: {
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
   };
-  jailbreak = true;
 })
