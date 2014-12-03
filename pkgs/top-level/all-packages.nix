@@ -7464,7 +7464,7 @@ let
     packages = [];
   };
 
-  rPackages = import ../development/r-modules/cran-packages.nix {
+  rPackages = import ../development/r-modules {
     inherit pkgs;
     overrides = (config.rPackageOverrides or (p: {})) pkgs;
   };
