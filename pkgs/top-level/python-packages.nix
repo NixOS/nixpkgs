@@ -9443,7 +9443,7 @@ let
 
   sure = buildPythonPackage rec {
     name = "sure-${version}";
-    version = "1.2.7";
+    version = "1.2.8";
 
     preBuild = ''
       export LOCALE_ARCHIVE=${localePath}
@@ -9452,7 +9452,7 @@ let
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/sure/${name}.tar.gz";
-      md5 = "6dbecef27dffc41c8cd8aab8a8b3fdfb";
+      sha256 = "0pgi9xg00wcw0m1pv5qp7jv53q38yffcmkf2fj1zlfi2b9c3njid";
     };
 
     buildInputs = with self; [ nose ];
