@@ -1057,6 +1057,9 @@ let
         "--with-nlopt-libs='-L${pkgs.nlopt}/lib -lnlopt_cxx -lm'"
       ];
     });
+
+    # Depends on broken ecespa package.
+    selectspm = old.selectspm.override { hydraPlatforms = stdenv.lib.platforms.none; };
   };
 in
   self
