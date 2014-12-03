@@ -1632,11 +1632,11 @@ let
 
 
   construct = buildPythonPackage rec {
-    name = "construct-2.5.1";
+    name = "construct-2.5.2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/construct/${name}.tar.gz";
-      sha256 = "08qksl87vr6g2wjxwsyrjh4w6v8bfmcgrcgln7irqvw5vv7qgqss";
+      sha256 = "084h02p0m8lhmlywlwjdg0kd0hd6sz481c96qwcm5wddxrqn4nv6";
     };
 
     propagatedBuildInputs = with self; [ six ];
