@@ -25,6 +25,7 @@ with lib;
   config = mkIf config.hardware.enableAllFirmware {
     hardware.firmware = [
       "${pkgs.firmwareLinuxNonfree}/lib/firmware"
+      "${pkgs.iwlegacy}/lib/firmware"
       "${pkgs.iwlwifi}/lib/firmware"
     ];
   };
