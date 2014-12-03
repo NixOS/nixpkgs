@@ -79,6 +79,8 @@ let
       virtualisation.pathsInNixDB = channelContents ++ [ pkgs.hello.src ];
       virtualisation.memorySize = 768;
 
+      swapDevices = mkOverride 0 [ ];
+
       networking.firewall.allowedTCPPorts = [ 80 ];
     };
 
