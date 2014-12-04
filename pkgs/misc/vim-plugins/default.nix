@@ -562,8 +562,9 @@ rec {
     name = "YUNOcommit";
     src = fetchgit {
       url = "git://github.com/esneide/YUNOcommit.vim";
-      rev = "10e0d674bfba05e88359dbe0ded4eb1d806b1342";
-      sha256 = "8efe7129ccc1cd13a09ffd4b5f8abe1fca12c434768ff57b865844cf40d49b41";
+      rev = "981082055a73ef076d7e27477874d2303153a448";
+      sha256 = "4bfd80720c353884e5c373b5457397a63e5e2e4ab4a97d6ce86c1740ac3b4c56";
+    
     };
     dependencies = [];
   };
