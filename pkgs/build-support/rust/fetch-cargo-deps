@@ -18,3 +18,5 @@ find $out -name .git | xargs -I {} rm -rf {}/logs {}/index {}/hooks
 # The checkout contain the path of the output himself, which is not allowed
 #rm -rf $out/.cargo/git/checkouts
 find $out -name .git | xargs -I {} sed "s|file://$out/.cargo/git|..|g" -i {}/config
+# The registry index changes all the time, so it's not deterministic
+rm -rf $out/.cargo/registry/cache

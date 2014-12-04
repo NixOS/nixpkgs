@@ -1,11 +1,11 @@
-{ stdenv, cacert, cargo}:
-{ name, src, sha256 }:
+{ stdenv, cacert, rustc, cargo}:
+{ name ? "cargo-deps", src, sha256 }:
 
 stdenv.mkDerivation {
   name = "${name}-fetch";
-  buildInputs = [ cargo ];
+  buildInputs = [ rustc cargo ];
   builder = ./fetch-builder.sh;
-  fetcher = ./nix-prefetch-cargo;
+  fetcher = ./fetch-cargo-deps;
   inherit src;
 
   outputHashAlgo = "sha256";

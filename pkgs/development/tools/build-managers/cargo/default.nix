@@ -1,21 +1,23 @@
-{ stdenv, fetchurl, fetchgit, zlib, pkgconfig, openssl, cmake, buildRustPackage }:
-
-/* Cargo binary snapshot */
+{ stdenv, fetchurl, fetchgit, file, curl, zlib, python, pkgconfig, openssl, cmake, rustc, fetchCargoDeps }:
 
 with ((import ./common.nix) { inherit stdenv fetchurl zlib; });
 
-buildRustPackage {
+stdenv.mkDerivation rec {
   name = "cargo";
   src = fetchgit {
     url = "https://github.com/rust-lang/cargo.git";
-    rev = "0881adf3eef5283bdfc006a23ea907b6529b0027";
-    sha256 = "1a37p2v8ic7qzjf831j1ri11r1d9lnr1d0cjfmgw4xjrxghsljdb";
+    rev = "70f5205dba9887d8dab07f72dbc507aa74b12c1f";
+    sha256 = "adb72daa9cba480e81e9c00aff3aa5f77e9c11fd10cd958b9d2eeb12cfaa60fe";
   };
-  sha256 = "1w6nbz60n7dk3shnxyn864r0xhsdz3lvh1yw0226lwqvykxmnmyx";
 
-  buildInputs = [ pkgconfig openssl cmake zlib ];
+  cargoDeps = fetchCargoDeps {
+    src = src;
+    sha256 = "0cnpk04raiaqwygwliaqfqwv0yvkcfsxmv6q8iflnl3hqpf88g6y";
+  };
 
-  # TODO: cargo-fetch as a hook?
-  
+  buildInputs = [ file curl pkgconfig python openssl cmake zlib rustc snapshot ];
+
+  configurePhase = "./configure --local-cargo=${snapshot}/bin/cargo";
+  buildPhase = "cargo build --verbose";
 
 } // { inherit meta; }
