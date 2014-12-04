@@ -1,8 +1,19 @@
-{ stdenv, fetchurl, bash, xulrunner }:
+{ stdenv, fetchurl, bash, callPackage, libIDL, pysqlite }:
 
 assert (stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux");
 
+
 let
+  /* Zotero always has a hard upper bound on its firefox/xulrunner dependency.
+   * Use private versions of firefox and xulrunner to prevent breakage when the
+   * system packages are updated. Please update these dependencies whenever
+   * zotero is updated; it should be as simple as copying the system firefox
+   * and xulrunner Nix expressions into place.
+   */
+  firefox = callPackage ./firefox.nix { inherit libIDL pysqlite; };
+  xulrunner = callPackage ./xulrunner.nix { inherit libIDL pysqlite firefox; };
+
+  # Please update the firefox and xulrunner dependencies when zotero is updated!
   version = "4.0.23";
   arch = if stdenv.system == "x86_64-linux"
            then "linux-x86_64"
