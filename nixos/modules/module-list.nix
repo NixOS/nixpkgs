@@ -119,6 +119,7 @@
   ./services/databases/openldap.nix
   ./services/databases/opentsdb.nix
   ./services/databases/postgresql.nix
+  ./services/databases/postgresqlx.nix
   ./services/databases/redis.nix
   ./services/databases/virtuoso.nix
   ./services/desktops/accountsservice.nix
