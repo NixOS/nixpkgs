@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   configurePhase = "qmake";
 
   installPhase = ''
-    mkdir $out/bin
+    mkdir -p $out/bin
     cp qtox $out/bin
   '';
 
