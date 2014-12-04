@@ -1694,6 +1694,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   monadLogger = callPackage ../development/libraries/haskell/monad-logger {};
 
+  monadIO = callPackage ../development/libraries/haskell/monadIO {};
+
   monadPar_0_1_0_3 = callPackage ../development/libraries/haskell/monad-par/0.1.0.3.nix {};
   monadPar_0_3_4_6 = callPackage ../development/libraries/haskell/monad-par/0.3.4.6.nix {};
   monadPar = self.monadPar_0_3_4_6;
