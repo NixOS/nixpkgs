@@ -11820,6 +11820,7 @@ let
   kde414 = kdePackagesFor (pkgs.kde414 // {
       libusb = libusb1;
       libcanberra = libcanberra_kde;
+      boost = boost156;
     }) ../desktops/kde-4.14;
 
   kdePackagesFor = self: dir:
