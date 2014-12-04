@@ -12172,6 +12172,8 @@ let
 
     coqExtLib = callPackage ../development/coq-modules/coq-ext-lib {};
 
+    coqeal = callPackage ../development/coq-modules/coqeal {};
+
     domains = callPackage ../development/coq-modules/domains {};
 
     flocq = callPackage ../development/coq-modules/flocq {};
