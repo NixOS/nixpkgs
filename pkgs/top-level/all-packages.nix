@@ -9123,7 +9123,8 @@ let
 
   altcoins = recurseIntoAttrs (
     (callPackage ../applications/misc/bitcoin/altcoins.nix {}) //
-    (callPackage ../applications/misc/bitcoin/dogecoin.nix {})
+    (callPackage ../applications/misc/bitcoin/dogecoin.nix {}) //
+    (callPackage ../applications/misc/bitcoin/litecoin.nix {})
   );
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
