@@ -1,16 +1,18 @@
-{ stdenv, fetchurl, libtoxcore, pidgin, autoconf, automake, libtool, libsodium } :
+{ stdenv, fetchFromGitHub, libtoxcore, pidgin, autoconf, automake, libtool
+, libsodium } :
 
 let
-  version = "17a3fd9199";
-  date = "20131012";
+  version = "dd181722ea";
+  date = "20141202";
 in
 stdenv.mkDerivation rec {
   name = "tox-prpl-${date}-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/jin-eld/tox-prpl/tarball/${version}";
-    name = "${name}.tar.gz";
-    sha256 = "0sz5wkyfwmhaj652xpsxq4p252cmmfa1vy6mp3jfyn145c758v9n";
+  src = fetchFromGitHub {
+    owner = "jin-eld";
+    repo = "tox-prpl";
+    rev = "${version}";
+    sha256 = "0wzyvg11h4ym28zqd24p35lza3siwm2519ga0yhk98rv458zks0v";
   };
 
   NIX_LDFLAGS = "-lssp -lsodium";
