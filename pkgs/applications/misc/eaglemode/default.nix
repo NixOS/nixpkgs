@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   #  http://sourceforge.net/projects/eaglemode/forums/forum/808824/topic/5115261
   buildPhase = ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -lXxf86vm -lXext"
-    yes y | perl make.pl build
+    perl make.pl build
   '';
 
   dontPatchELF = true;
