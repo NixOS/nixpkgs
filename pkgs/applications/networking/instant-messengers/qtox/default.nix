@@ -1,29 +1,30 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libtoxcore, qt5, openal, opencv }:
+{ stdenv, fetchFromGitHub, pkgconfig, libtoxcore, qt5, openalSoft, opencv
+, libsodium }:
 
 
 stdenv.mkDerivation rec {
-  name = "qtox-dev-20140918";
+  name = "qtox-dev-20141201";
 
   src = fetchFromGitHub {
     owner = "tux3";
     repo = "qTox";
-    rev = "f06ec65bca";
-    sha256 = "0r7qc444bgsxawyya5nw3xk1c50b90307lcwazs8mn35h4snr97m";
+    rev = "qtox-windows-1417469442.11";
+    sha256 = "02nxj0w5qbgc79n8mgyqldk1yadf4p8pysn79f7fvi8fxq4j0j5n";
   };
 
-  buildInputs = [ pkgconfig libtoxcore qt5 openal opencv ];
+  buildInputs = [ pkgconfig libtoxcore qt5 openalSoft opencv libsodium ];
 
   configurePhase = "qmake";
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp qtox $out/bin
   '';
 
   meta = with stdenv.lib; {
     description = "QT Tox client";
     license = licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ viric ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with maintainers; [ viric jgeerds ];
+    platforms = platforms.all;
   };
 }
