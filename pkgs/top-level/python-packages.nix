@@ -4688,6 +4688,7 @@ let
       description = "A parser/generator of iCalendar files";
       homepage = "http://icalendar.readthedocs.org/";
       license = licenses.bsd2;
+      maintainers = [ maintainers.olcai ];
     };
   };
 
