@@ -540,6 +540,8 @@ let
 
   grc = callPackage ../tools/misc/grc { };
 
+  lastpass-cli = callPackage ../tools/security/lastpass-cli { };
+
   otool = callPackage ../os-specific/darwin/otool { };
 
   pass = callPackage ../tools/security/pass {
