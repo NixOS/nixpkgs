@@ -910,6 +910,9 @@ let
     "RNeXML" # requres taxize
     "TR8" # requres taxize
     "bdvis" # requres taxize
+    "h2o" # tries to download some h2o.jar during its build
+    "jvmr" # tries to download files during its build
+    "qtbase" # the smokegen binary cannot find libQtCore.so.4 etc. at runtime
   ];
 
   otherOverrides = old: new: {
@@ -1060,6 +1063,11 @@ let
 
     # Depends on broken ecespa package.
     selectspm = old.selectspm.override { hydraPlatforms = stdenv.lib.platforms.none; };
+
+    # Depends on broken qtbase package.
+    qtutils = old.qtutils.override { hydraPlatforms = stdenv.lib.platforms.none; };
+    qtpaint = old.qtpaint.override { hydraPlatforms = stdenv.lib.platforms.none; };
+    bamboo = old.bamboo.override { hydraPlatforms = stdenv.lib.platforms.none; };
 
     # Obsolete package that I keep around temporarily because some
     # existing code depends on it.
