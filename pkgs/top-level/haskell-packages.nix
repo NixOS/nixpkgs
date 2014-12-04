@@ -1250,6 +1250,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hoogleLocal = callPackage ../development/libraries/haskell/hoogle/local.nix {};
 
+  hoopl = callPackage ../development/libraries/haskell/hoopl {};
+
   hopenssl = callPackage ../development/libraries/haskell/hopenssl {};
 
   hosc = callPackage ../development/libraries/haskell/hosc {
