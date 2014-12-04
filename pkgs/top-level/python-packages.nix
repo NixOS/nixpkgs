@@ -4672,6 +4672,25 @@ let
     };
   };
 
+  icalendar = buildPythonPackage rec {
+    version = "3.8.4";
+    name = "icalendar-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/icalendar/${name}.zip";
+      md5 = "d700e6e75613fd1ee882c4b11c58940c";
+    };
+
+    buildInputs = with self; [ setuptools ];
+    propagatedBuildInputs = with self; [ pytz ];
+
+    meta = with stdenv.lib; {
+      description = "A parser/generator of iCalendar files";
+      homepage = "http://icalendar.readthedocs.org/";
+      license = licenses.bsd2;
+    };
+  };
+
   importlib = if isPy26 then (buildPythonPackage {
     name = "importlib-1.0.2";
     src = pkgs.fetchurl {
