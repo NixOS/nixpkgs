@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = "-DUSE_QT_PLUGIN_DIR=OFF -DUSE_GST_PLUGIN_DIR=OFF";
 
   meta = { 
-    platforms = stdenv.platforms.linux;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
