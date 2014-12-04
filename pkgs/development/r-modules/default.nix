@@ -1060,6 +1060,14 @@ let
 
     # Depends on broken ecespa package.
     selectspm = old.selectspm.override { hydraPlatforms = stdenv.lib.platforms.none; };
+
+    # Obsolete package that I keep around temporarily because some
+    # existing code depends on it.
+    Defaults = derive {
+      name="Defaults";
+      version="1.1-1";
+      sha256="0ikgd5mswlky327pzp09cz93bn3mq7qnybq1r64y19c2brbax00d";
+    };
   };
 in
   self
