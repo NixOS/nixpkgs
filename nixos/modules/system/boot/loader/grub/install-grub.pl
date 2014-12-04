@@ -341,8 +341,9 @@ addEntry("NixOS - Default", $defaultConfig);
 
 $conf .= "$extraEntries\n" unless $extraEntriesBeforeNixOS;
 
+my $grubBootPath = $grubBoot->path;
 # extraEntries could refer to @bootRoot@, which we have to substitute
-$conf =~ s/\@bootRoot\@/$grubBoot->path/g;
+$conf =~ s/\@bootRoot\@/$grubBootPath/g;
 
 # Emit submenus for all system profiles.
 sub addProfile {
