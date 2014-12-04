@@ -10214,6 +10214,8 @@ let
 
   mopidy-moped = callPackage ../applications/audio/mopidy-moped { };
 
+  mopidy-mopify = callPackage ../applications/audio/mopidy-mopify { };
+
   mozilla = callPackage ../applications/networking/browsers/mozilla {
     inherit (gnome) libIDL;
   };
