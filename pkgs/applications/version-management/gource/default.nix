@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-boost-libdir=${boost.lib}/lib" ];
 
-  NIX_CFLAGS_COMPILE = "-fpermissive"; # fix build with newer gcc versions
+  NIX_CFLAGS_COMPILE = "-fpermissive " + # fix build with newer gcc versions
+                       "-std=c++11"; # fix build with glm >= 0.9.6.0
 
   meta = with stdenv.lib; {
     homepage = http://code.google.com/p/gource/;
