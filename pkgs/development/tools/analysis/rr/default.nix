@@ -1,18 +1,22 @@
-{ stdenv, fetchFromGitHub, cmake, libpfm, zlib }:
+{ stdenv, fetchFromGitHub, cmake, libpfm, zlib, python }:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "2.0.0";
-  name = "rr-${version}";
+  name    = "rr-${version}";
+  version = "2.0.0-f2b02c4";
 
   src = fetchFromGitHub {
-    owner = "mozilla";
-    repo = "rr";
-    rev = version;
-    sha256 = "0mlxkj35zmm15dgnc7rfynnh2s2hpym01147vwc8pwv8qgab903s";
+    owner  = "mozilla";
+    repo   = "rr";
+    rev    = "f2b02c4144584dec092d10eb42be2396069ea546";
+    sha256 = "1vdhgh3bp287z21lxfj3rb9r3fbar18n9pl0v31h8axjn57l70h7";
   };
 
-  buildInputs = [ cmake libpfm zlib ];
-  cmakeFlags = "-DCMAKE_C_FLAGS_RELEASE:STRING= -DCMAKE_CXX_FLAGS_RELEASE:STRING=";
+  buildInputs = [ cmake libpfm zlib python ];
+  cmakeFlags =
+      "-DCMAKE_C_FLAGS_RELEASE:STRING= -DCMAKE_CXX_FLAGS_RELEASE:STRING="
+    + (optionalString (stdenv.system == "x86_64-linux") " -Dforce64bit=ON");
 
   meta = {
     homepage = http://rr-project.org/;
@@ -24,8 +28,8 @@ stdenv.mkDerivation rec {
       time the same execution is replayed.
     '';
 
-    license = "custom";
-    maintainers = [ stdenv.lib.maintainers.pierron ];
-    platforms = [ "i686-linux" ];
+    license     = "custom";
+    maintainers = with stdenv.lib.maintainers; [ pierron thoughtpolice ];
+    platforms   = stdenv.lib.platforms.linux;
   };
 }
