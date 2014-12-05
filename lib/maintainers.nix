@@ -124,6 +124,7 @@
   piotr = "Piotr Pietraszkiewicz <ppietrasa@gmail.com>";
   pkmx = "Chih-Mao Chen <pkmx.tw@gmail.com>";
   plcplc = "Philip Lykke Carlsen <plcplc@gmail.com>";
+  prikhi = "Pavan Rikhi <pavan.rikhi@gmail.com>";
   pSub = "Pascal Wittmann <mail@pascal-wittmann.de>";
   puffnfresh = "Brian McKenna <brian@brianmckenna.org>";
   qknight = "Joachim Schiele <js@lastlog.de>";

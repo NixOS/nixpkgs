@@ -11800,6 +11800,8 @@ let
     cjs = callPackage ../desktops/cinnamon/cjs.nix { };
   };
 
+  clearlooks-phenix = callPackage ../misc/themes/gtk3/clearlooks-phenix { };
+
   enlightenment = callPackage ../desktops/enlightenment { };
 
   e19 = recurseIntoAttrs (
