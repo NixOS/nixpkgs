@@ -75,8 +75,6 @@ stdenv.mkDerivation {
     mv opt/HipChat/lib/ $d
     mv usr/share $out
 
-    patchShebangs $out/bin
-
     for file in $(find $d -type f); do
         patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" $file || true
         patchelf --set-rpath ${rpath}:\$ORIGIN $file || true
