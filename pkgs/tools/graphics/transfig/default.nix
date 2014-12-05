@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   builder = ./builder.sh;
   src = fetchurl {
     url = ftp://ftp.tex.ac.uk/pub/archive/graphics/transfig/transfig.3.2.4.tar.gz;
-    md5 = "742de0f7a3cae74d247bbd0c70dd9dd7";
+    sha256 = "0429snhp5acbz61pvblwlrwv8nxr6gf12p37f9xxwrkqv4ir7dd4";
   };
 
   buildInputs = [zlib libjpeg libpng imake];

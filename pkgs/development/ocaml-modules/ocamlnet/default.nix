@@ -5,11 +5,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "ocamlnet-3.7.6";
+  name = "ocamlnet-3.7.7";
 
   src = fetchurl {
-    url = http://download.camlcity.org/download/ocamlnet-3.7.6.tar.gz;
-    sha256 = "0z17kxn1cyn1x5wgajw737m9rsjwji823rxdwvv8a5239xd1whji";
+    url = http://download.camlcity.org/download/ocamlnet-3.7.7.tar.gz;
+    sha256 = "02bnks9jshpq9nqva5lky5hl009yp19cgvf1izjca620hx54d3jv";
   };
 
   buildInputs = [ncurses ocaml findlib ocaml_pcre camlzip openssl ocaml_ssl cryptokit];

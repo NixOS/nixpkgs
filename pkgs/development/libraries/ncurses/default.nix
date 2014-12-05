@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fsn7xis81za62afan0vvm38bvgzg5wfmv1m86flqcj0nj7jjilh";
   };
 
-  patches = [ ./patch-ac ];
+  patches = [ ./patch-ac ./clang.patch ];
 
   configureFlags = ''
     --with-shared --without-debug --enable-pc-files --enable-symlinks
@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
     export configureFlags="$configureFlags --includedir=$out/include"
     export PKG_CONFIG_LIBDIR="$out/lib/pkgconfig"
     mkdir -p "$PKG_CONFIG_LIBDIR"
-  '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure --replace -no-cpp-precomp ""
   '';
 
   selfNativeBuildInput = true;

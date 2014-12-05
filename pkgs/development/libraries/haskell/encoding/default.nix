@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     binary extensibleExceptions HaXml mtl regexCompat
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://code.haskell.org/encoding/";
     description = "A library for various character encodings";

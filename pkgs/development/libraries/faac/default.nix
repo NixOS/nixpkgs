@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.audiocoding.com/faac.html;
     # Incompatible with GPL. Some changes to the base code, included in faac,
     # are under LGPL though.
-    license = "unfree-redistributable";
+    license = stdenv.lib.licenses.unfreeRedistributable;
   };
 }

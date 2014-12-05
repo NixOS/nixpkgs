@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haskell-packages";
-  version = "0.2.4.2";
-  sha256 = "03qg6b6vy9c8j9k91jajkjhswcks64vcdd28606aac0bw68lkjkg";
+  version = "0.2.4.3";
+  sha256 = "0s1z5zzl53nmjnrlf1czri634h8fksbgkqvvz8hpwa60wsaf4dxn";
   buildDepends = [
     aeson Cabal deepseq filepath haskellSrcExts hseCpp mtl
     optparseApplicative tagged transformers transformersCompat

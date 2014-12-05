@@ -141,8 +141,6 @@ fi
 # Use /etc/resolv.conf supplied by systemd-nspawn, if applicable.
 if [ -n "@useHostResolvConf@" -a -e /etc/resolv.conf ]; then
     cat /etc/resolv.conf | resolvconf -m 1000 -a host
-else
-    touch /etc/resolv.conf
 fi
 
 

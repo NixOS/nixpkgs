@@ -1,11 +1,11 @@
 { stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  name = "scala-2.11.1";
+  name = "scala-2.11.4";
 
   src = fetchurl {
     url = "http://www.scala-lang.org/files/archive/${name}.tgz";
-    sha256 = "1vjsmqjwpxavyj29wrbvvx7799fsa65d4iha5mj63cgs8qp605gk";
+    sha256 = "1140xyp8kbv4l6l95pqj2bawzlvs7h39ivikdv09n13qvqcml3q0";
   };
 
   buildInputs = [ jre makeWrapper ] ;
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       compared to an equivalent Java application.
     '';
     homepage = http://www.scala-lang.org/;
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.all;
   };
 }

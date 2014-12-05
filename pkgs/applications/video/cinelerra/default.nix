@@ -4,7 +4,7 @@
 , libtiff, freetype, mjpegtools, x264, gettext, openexr
 , libXext, libXxf86vm, libXv, libXi, libX11, xextproto, libtheora, libpng
 , libdv, libuuid, file, nasm, perl }:
-        
+
 stdenv.mkDerivation {
   name = "cinelerra-git";
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   # # END
 
   src = fetchgit {
-    url = "git://git.cinelerra.org/j6t/cinelerra.git";
+    url = "git://git.cinelerra-cv.org/j6t/cinelerra.git";
     rev = "01dc4375a0fb65d10dd95151473d0e195239175f";
     sha256 = "afb406a5637e4d0afad94e62ffd3af5b61e39f75aba9c08521523d00a0a5fec5";
   };
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
       perl
     ];
 
-  meta = { 
+  meta = {
     description = "Video Editor";
     homepage = http://www.cinelerra.org;
     maintainers = [ stdenv.lib.maintainers.marcweber ];

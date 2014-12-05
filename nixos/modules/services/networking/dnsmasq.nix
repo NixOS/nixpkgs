@@ -82,7 +82,7 @@ in
 
     systemd.services.dnsmasq = {
         description = "dnsmasq daemon";
-        after = [ "network.target" ];
+        after = [ "network.target" "systemd-resolved.conf" ];
         wantedBy = [ "multi-user.target" ];
         path = [ dnsmasq ];
         preStart = ''

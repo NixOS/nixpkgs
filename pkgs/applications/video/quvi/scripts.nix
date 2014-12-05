@@ -11,12 +11,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig ];
 
-  meta = { 
+  meta = {
     description = "Web video downloader";
     homepage = http://quvi.sf.net;
-    license = "LGPLv2.1+";
+    license = stdenv.lib.licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.mornfall ]; 
+    maintainers = [ stdenv.lib.maintainers.mornfall ];
   };
 }
-

@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "json-schema";
-  version = "0.7.0.1";
-  sha256 = "1r8f0i3w2g5i5amqpvmi6ys3ax4rzpbvwnvwk9wy95bch3nlvsw0";
+  version = "0.7.3.0";
+  sha256 = "0jdhmzg1is8dnyz46r6w616xq0w1lypc9xz1c2mcimr9xb9r70zw";
   buildDepends = [
     aeson genericAeson genericDeriving mtl scientific tagged text time
     unorderedContainers vector

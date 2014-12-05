@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = "python runtests.py";
 
-  buildInputs = [ python python.modules.bsddb python.modules.ssl libxslt
+  buildInputs = [ python python.modules.bsddb libxslt
     libxml2 pythonPackages.genshi pythonPackages.lxml makeWrapper ];
 
   installPhase = ''

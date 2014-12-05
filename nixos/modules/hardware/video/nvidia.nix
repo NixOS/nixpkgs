@@ -11,7 +11,8 @@ let
   # FIXME: should introduce an option like
   # ‘hardware.video.nvidia.package’ for overriding the default NVIDIA
   # driver.
-  enabled = elem "nvidia" drivers || elem "nvidiaLegacy173" drivers || elem "nvidiaLegacy304" drivers;
+  enabled = elem "nvidia" drivers || elem "nvidiaLegacy173" drivers
+    || elem "nvidiaLegacy304" drivers || elem "nvidiaLegacy340" drivers;
 
   nvidia_x11 =
     if elem "nvidia" drivers then
@@ -20,6 +21,8 @@ let
       config.boot.kernelPackages.nvidia_x11_legacy173
     else if elem "nvidiaLegacy304" drivers then
       config.boot.kernelPackages.nvidia_x11_legacy304
+    else if elem "nvidiaLegacy340" drivers then
+      config.boot.kernelPackages.nvidia_x11_legacy340
     else throw "impossible";
 
 in

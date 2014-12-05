@@ -39,7 +39,7 @@ assert withOnlineServices -> withTaglib;
 assert withReplaygain -> withTaglib;
 
 let
-  version = "1.4.1";
+  version = "1.5.0";
   pname = "cantata";
   fstat = x: fn: "-DENABLE_" + fn + "=" + (if x then "ON" else "OFF");
   fstats = x: map (fstat x);
@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     inherit name;
-    url = "https://drive.google.com/uc?export=download&id=0Bzghs6gQWi60eXhuZ1Z3bGM2bjQ";
-    sha256 = "b0d5a1798efd275d72dffb87bc0f016fc865dbd1384b7c9af039cebdffe0cca3";
+    url = "https://drive.google.com/uc?export=download&id=0Bzghs6gQWi60c0pFbEtldEk1UnM";
+    sha256 = "0gnqfp3ps79d500hrivxj2xkkia042knhg86md6w8ycl3945611p";
   };
 
   buildInputs =
@@ -92,8 +92,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "http://code.google.com/p/cantata/";
-    description = "A graphical client for MPD.";
+    homepage = http://code.google.com/p/cantata/;
+    description = "A graphical client for MPD";
     license = licenses.gpl3;
 
     # Technically Cantata can run on Windows so if someone wants to

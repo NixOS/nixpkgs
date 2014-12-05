@@ -8,14 +8,14 @@ rec {
 
 
   # Override the compiler in stdenv for specific packages.
-  overrideGCC = stdenv: gcc: stdenv.override { inherit gcc; };
+  overrideGCC = stdenv: gcc: stdenv.override { allowedRequisites = null; inherit gcc; };
 
 
   # Add some arbitrary packages to buildInputs for specific packages.
   # Used to override packages in stdenv like Make.  Should not be used
   # for other dependencies.
   overrideInStdenv = stdenv: pkgs:
-    stdenv.override (prev: { extraBuildInputs = prev.extraBuildInputs or [] ++ pkgs; });
+    stdenv.override (prev: { allowedRequisites = null; extraBuildInputs = prev.extraBuildInputs or [] ++ pkgs; });
 
 
   # Override the setup script of stdenv.  Useful for testing new
@@ -285,18 +285,16 @@ rec {
     };
 
 
-  /* Modify a stdenv so that it uses the Gold linker. FIXME: should
-     use -fuse-ld=gold instead, but then the ld-wrapper won't be
-     invoked. */
-  useGoldLinker = stdenv:
-    let
-      binutils = stdenv.gcc.binutils;
-      binutils' = pkgs.runCommand "${binutils.name}-gold" { }
-        ''
-          mkdir -p $out/bin
-          ln -s ${binutils}/bin/* $out/bin/
-          ln -sfn ${binutils}/bin/ld.gold $out/bin/ld
-        ''; # */
-    in overrideGCC stdenv (stdenv.gcc.override { binutils = binutils'; });
+  /* Modify a stdenv so that it uses the Gold linker. */
+  useGoldLinker = stdenv: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // {
+        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_COMPILE or "") + " -fuse-ld=gold";
+      });
+    };
 
+  dropCxx = drv: drv.override {
+    stdenv = if pkgs.stdenv.isDarwin
+      then pkgs.allStdenvs.stdenvDarwinNaked
+      else pkgs.stdenv;
+  };
 }

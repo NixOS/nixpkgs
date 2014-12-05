@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   # Don't build with miniupnpc due to namecoin using a different verison that
   # ships with NixOS and it is API incompatible.
-  buildInputs = [ db4 boost boost.lib openssl unzip ];
+  buildInputs = [ db4 boost openssl unzip ];
 
   patchPhase = ''
     sed -e 's/-Wl,-Bstatic//g' -e 's/-l gthread-2.0//g' -e 's/-l z//g' -i src/Makefile

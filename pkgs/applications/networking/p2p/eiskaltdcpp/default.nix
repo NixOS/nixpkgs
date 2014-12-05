@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "3d9170645450f9cb0a605278b8646fec2110b9637910d86fd27cf245cbe24eaf";
   };
 
-  buildInputs = [ cmake pkgconfig qt4 boost boost.lib bzip2 libX11 pcre libidn lua5 miniupnpc aspell gettext ];
+  buildInputs = [ cmake pkgconfig qt4 boost bzip2 libX11 pcre libidn lua5 miniupnpc aspell gettext ];
 
   cmakeFlags = ''
     -DUSE_ASPELL=ON

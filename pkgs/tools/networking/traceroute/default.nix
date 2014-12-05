@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     description = "Tracks the route taken by packets over an IP network";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ maintainers.koral ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }

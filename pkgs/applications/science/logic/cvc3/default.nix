@@ -2,9 +2,9 @@ x@{builderDefsPackage
   , flex, bison, gmp, perl
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     ["gmp"];
 
   buildInputs = (map (n: builtins.getAttr n x)
@@ -33,7 +33,7 @@ rec {
     sed -e "s@ /bin/bash@bash@g" -i Makefile.std
     find . -exec sed -e "s@/usr/bin/perl@${perl}/bin/perl@g" -i '{}' ';'
   '') ["minInit" "doUnpack"];
-      
+
   meta = {
     description = "A prover for satisfiability modulo theory (SMT)";
     maintainers = with a.lib.maintainers;
@@ -42,7 +42,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = "free-noncopyleft";
+    license = a.lib.licenses.free;
     homepage = "http://www.cs.nyu.edu/acsys/cvc3/index.html";
   };
   passthru = {
@@ -51,4 +51,3 @@ rec {
     };
   };
 }) x
-

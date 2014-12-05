@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libX11, libXtst, libXext, libXdamage, libXfixes, wineUnstable, makeWrapper, libXau
-, bash, patchelf }:
+, bash, patchelf, config }:
 
 let
   topath = "${wineUnstable}/bin";
@@ -10,8 +10,8 @@ in
 stdenv.mkDerivation {
   name = "teamviewer-8.0.17147";
   src = fetchurl {
-    url = "http://download.teamviewer.com/download/version_8x/teamviewer_linux_x64.deb";
-    sha256 = "0s5m15f99rdmspzwx3gb9mqd6jx1bgfm0d6rfd01k9rf7gi7qk0k";
+    url = config.teamviewer8.url or "http://download.teamviewer.com/download/version_8x/teamviewer_linux_x64.deb";
+    sha256 = config.teamviewer8.sha256 or "0s5m15f99rdmspzwx3gb9mqd6jx1bgfm0d6rfd01k9rf7gi7qk0k";
   };
 
   buildInputs = [ makeWrapper patchelf ];

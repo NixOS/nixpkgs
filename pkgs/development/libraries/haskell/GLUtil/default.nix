@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "GLUtil";
-  version = "0.8.1";
-  sha256 = "026w6rsgs0vmjx9fj4x3r93rifdyjygb83spcwmch31a7qng6l7w";
+  version = "0.8.2";
+  sha256 = "0z8fi4fd0jrywg595cc67w8pqcn7pgy651hxb4zkqb3400n4jak3";
   buildDepends = [
     cpphs filepath JuicyPixels linear OpenGL OpenGLRaw transformers
     vector

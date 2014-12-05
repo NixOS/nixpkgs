@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://dbus.freedesktop.org;
-    license = "AFL-2.1 or GPL-2";
+    license = with stdenv.lib.licenses; [ afl21 gpl2 ];
     description = "Obsolete glib bindings for D-Bus lightweight IPC mechanism";
     maintainers = [ stdenv.lib.maintainers.urkud ];
   };

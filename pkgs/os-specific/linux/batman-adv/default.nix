@@ -1,5 +1,7 @@
 { stdenv, fetchurl, kernel }:
 
+assert stdenv.lib.versionOlder kernel.version "3.17";
+
 let base = "batman-adv-2014.3.0"; in
 
 stdenv.mkDerivation rec {

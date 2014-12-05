@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.digitage.co.uk/digitage/files/cutter/${name}.tgz";
-    md5 = "50093db9b64277643969ee75b83ebbd1";
+    sha256 = "05cn22wi70l9ybhmzw0sy3fd6xxz0lq49fws4zxzm2i0qb3zmx2d";
   };
 
   installPhase = ''

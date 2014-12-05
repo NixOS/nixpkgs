@@ -46,7 +46,7 @@ in
   
     systemd.services.haveged =
       { description = "Entropy Harvesting Daemon";
-        unitConfig.documentation = "man:haveged(8)";
+        unitConfig.Documentation = "man:haveged(8)";
         wantedBy = [ "multi-user.target" ];
         
         path = [ pkgs.haveged ];

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "NumInstances";
-  version = "1.3";
-  sha256 = "0w1hls5azsg95c0v510xqgr8hs195y2rxzjc7hpjg8q44d4z78sh";
+  version = "1.4";
+  sha256 = "0ycnwn09izajv330l7a31mc0alifqmxjsn9qmfswwnbg6i4jmnyb";
   meta = {
     homepage = "https://github.com/conal/NumInstances";
     description = "Instances of numeric classes for functions and tuples";

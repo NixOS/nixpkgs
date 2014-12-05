@@ -1,24 +1,23 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation {
-  name = "junicode-0.6.15";
+  name = "junicode-0.7.8";
 
   src = fetchurl {
-    url = mirror://sourceforge/junicode/junicode-0.6.15.zip;
-    sha256 = "0p16r5s6qwyz0hayb6k61s5r2sfachlx7r6gpqqx5myx6ipbfdns";
+    url = mirror://sourceforge/junicode/junicode/junicode-0-7-8/junicode-0-7-8.zip;
+    sha256 = "1lgkhj52s351ya7lp9z3xba7kaivgdvg80njhpj1rpc3jcmc69vl";
   };
 
   buildInputs = [ unzip ];
 
-  sourceRoot = ".";
-
   installPhase =
     ''
       mkdir -p $out/share/fonts/junicode-ttf
-      cp *.ttf $out/share/fonts/junicode-ttf
+      cp fonts/*.ttf $out/share/fonts/junicode-ttf
     '';
 
   meta = {
+    homepage = http://junicode.sourceforge.net/;
     description = "A Unicode font";
   };
 }

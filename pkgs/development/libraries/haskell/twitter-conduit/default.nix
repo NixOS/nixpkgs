@@ -3,27 +3,28 @@
 { cabal, aeson, attoparsec, authenticateOauth, caseInsensitive
 , conduit, conduitExtra, dataDefault, doctest, filepath, hlint
 , hspec, httpClient, httpConduit, httpTypes, lens, lensAeson
-, monadControl, monadLogger, networkUri, resourcet, text, time
-, transformers, transformersBase, twitterTypes
+, monadControl, networkUri, resourcet, text, time, transformers
+, transformersBase, twitterTypes, twitterTypesLens, fetchurl
 }:
 
 cabal.mkDerivation (self: {
   pname = "twitter-conduit";
-  version = "0.0.6";
-  sha256 = "1vm4wa3cdmyz2m45rnwkrjcx8wajc89395c28rz1q12hf856970j";
+  version = "0.1.0";
+  sha256 = "1cymgp3wlswxn5qfdr442cqq2ak48b5w1zcsr67n2g5p1izadwji";
+  editedCabalFile = "06z8dwvc17xhzpvb7cm0j6v63r5f3xirj36rr86bds3rw1zbnd0z";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     aeson attoparsec authenticateOauth conduit conduitExtra dataDefault
-    httpClient httpConduit httpTypes lens lensAeson monadLogger
-    networkUri resourcet text time transformers twitterTypes
+    httpClient httpConduit httpTypes lens lensAeson networkUri
+    resourcet text time transformers twitterTypes twitterTypesLens
   ];
   testDepends = [
     aeson attoparsec authenticateOauth caseInsensitive conduit
     conduitExtra dataDefault doctest filepath hlint hspec httpClient
-    httpConduit httpTypes lens lensAeson monadControl monadLogger
-    networkUri resourcet text time transformers transformersBase
-    twitterTypes
+    httpConduit httpTypes lens lensAeson monadControl networkUri
+    resourcet text time transformers transformersBase twitterTypes
+    twitterTypesLens
   ];
   meta = {
     homepage = "https://github.com/himura/twitter-conduit";

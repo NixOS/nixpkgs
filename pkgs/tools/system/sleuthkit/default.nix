@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "A forensic/data recovery tool";
     maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
-    license = "IBM Public License";
+    license = stdenv.lib.licenses.ipl10;
     inherit version;
   };
 }

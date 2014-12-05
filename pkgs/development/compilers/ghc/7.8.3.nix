@@ -26,21 +26,19 @@ stdenv.mkDerivation rec {
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
   '';
 
-  configureFlags = "--with-gcc=${stdenv.gcc}/bin/gcc";
-
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
   stripDebugFlags = [ "-S" "--keep-file-symbols" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
-    maintainers = [
-      stdenv.lib.maintainers.marcweber
-      stdenv.lib.maintainers.andres
-      stdenv.lib.maintainers.simons
-    ];
-    inherit (ghc.meta) license platforms;
+    maintainers = [ maintainers.marcweber maintainers.andres maintainers.simons ];
+    inherit (ghc.meta) license;
+    # Filter old "i686-darwin" platform which is unsupported these days.
+    platforms = filter (x: elem x platforms.all) ghc.meta.platforms;
+    # Disable Darwin builds: <https://github.com/NixOS/nixpkgs/issues/2689>.
+    hydraPlatforms = filter (x: !elem x platforms.darwin) meta.platforms;
   };
 
 }

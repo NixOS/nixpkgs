@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "system-fileio";
-  version = "0.3.14";
-  sha256 = "1x5cricx2n1wwvdad4i3q8s3gb28a129v3kkj9rn9803xh43zh29";
+  version = "0.3.15";
+  sha256 = "06cnr3hzw8xd75529nfqajgb5xy5i4ddqybgjw1v1nwpq04mhihi";
   buildDepends = [ systemFilepath text time ];
   testDepends = [
     chell systemFilepath temporary text time transformers

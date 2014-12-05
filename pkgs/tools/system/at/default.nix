@@ -1,12 +1,12 @@
 { fetchurl, stdenv, bison, flex, pam, sendmailPath ? "/var/setuid-wrappers/sendmail" }:
 
 stdenv.mkDerivation {
-  name = "at-3.1.15";
+  name = "at-3.1.16";
 
   src = fetchurl {
     # Debian is apparently the last location where it can be found.
-    url = mirror://debian/pool/main/a/at/at_3.1.15.orig.tar.gz;
-    sha256 = "1z7pgglr0zmwapb4sc1bdb3z0hgig1asyzqv4gs5xafmjd94za03";
+    url = mirror://debian/pool/main/a/at/at_3.1.16.orig.tar.gz;
+    sha256 = "1hfmnhgi95vsfaa69qlakpwd22al0m0rhqms6sawxvaldafgb6nb";
   };
 
   patches = [ ./install.patch ];

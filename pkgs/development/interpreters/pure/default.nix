@@ -1,52 +1,39 @@
-x@{builderDefsPackage
-  , llvm, gmp, mpfr, readline, bison, flex, makeWrapper
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ lib, stdenv, fetchurl, makeWrapper,
+  llvm, gmp, mpfr, readline, bison, flex }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="pure";
-    project="pure-lang";
-    version="0.58";
-    name="${baseName}-${version}";
-    extension="tar.gz";
+stdenv.mkDerivation rec {
+  baseName="pure";
+  project="pure-lang";
+  version="0.63";
+  name="${baseName}-${version}";
+  extension="tar.gz";
+
+  src = fetchurl {
     url="https://bitbucket.org/purelang/${project}/downloads/${name}.${extension}";
-    hash="180ygv8nmfy8v4696km8jdahn5cnr454sc8i1av7s6z4ss7mrxmi";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+    sha256="33acb2d560b21813f5e856973b493d9cfafba82bd6f539425ce07aa22f84ee29";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [ bison flex makeWrapper ];
+  propagatedBuildInputs = [ llvm gmp mpfr readline ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall" "doWrap"];
-
-  doWrap = a.makeManyWrappers ''$out/bin/pure'' ''--prefix LD_LIBRARY_PATH : "${llvm}/lib"'';
+  configureFlags = [ "--enable-release" ];
+  doCheck = true;
+  checkPhase = ''
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${llvm}/lib make check
+  '';
+  postInstall = ''
+    wrapProgram $out/bin/pure --prefix LD_LIBRARY_PATH : ${llvm}/lib
+  '';
 
   meta = {
-    description = "A purely functional programming language based on term rewriting";
-    maintainers = with a.lib.maintainers;
+    description = "A modern-style functional programming language based on term rewriting";
+    maintainers = with lib.maintainers;
     [
       raskin
+      asppsa
     ];
-    platforms = with a.lib.platforms;
+    platforms = with lib.platforms;
       linux;
-    license = a.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "https://bitbucket.org/purelang/pure-lang/downloads";
-    };
-  };
-}) x
-
+}

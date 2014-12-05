@@ -4,11 +4,11 @@
 
 cabal.mkDerivation (self: {
   pname = "tasty-smallcheck";
-  version = "0.8";
-  sha256 = "0c4ccmhql118j4dlvy5cmrnma454b0rdv1wq2ds6xhpdhx20h1br";
+  version = "0.8.0.1";
+  sha256 = "0yckfbz8na8ccyw2911i3a4hd3fdncclk3ng5343hs5cylw6y4sm";
   buildDepends = [ async smallcheck tagged tasty ];
   meta = {
-    homepage = "https://github.com/feuerbach/tasty";
+    homepage = "http://documentup.com/feuerbach/tasty";
     description = "SmallCheck support for the Tasty test framework";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

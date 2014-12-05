@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ filepath json utf8String ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/MarcWeber/hasktags";
     description = "Produces ctags \"tags\" and etags \"TAGS\" files for Haskell programs";

@@ -18,6 +18,7 @@ in
       ./i3.nix
       ./herbstluftwm.nix
       ./bspwm.nix
+      ./stumpwm.nix
     ];
 
   options = {

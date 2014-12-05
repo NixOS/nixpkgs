@@ -321,6 +321,10 @@ system("@systemd@/bin/systemctl", "reset-failed");
 # Make systemd reload its units.
 system("@systemd@/bin/systemctl", "daemon-reload") == 0 or $res = 3;
 
+# Signal dbus to reload its configuration before starting other units.
+# Other units may rely on newly installed policy files under /etc/dbus-1
+system("@systemd@/bin/systemctl", "reload", "dbus.service");
+
 # Restart changed services (those that have to be restarted rather
 # than stopped and started).
 my @restart = unique(split('\n', read_file($restartListFile, err_mode => 'quiet') // ""));
@@ -350,8 +354,6 @@ if (scalar @reload > 0) {
     unlink($reloadListFile);
 }
 
-# Signal dbus to reload its configuration.
-system("@systemd@/bin/systemctl", "reload", "dbus.service");
 
 # Print failed and new units.
 my (@failed, @new, @restarting);

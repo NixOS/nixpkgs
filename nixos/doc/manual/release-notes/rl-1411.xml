@@ -1,0 +1,37 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+        version="5.0"
+        xml:id="sec-release-14.11">
+
+<title>Release 14.11 (“Caterpillar”, 2014/11/??)</title>
+
+<para>When upgrading from a previous release, please be aware of the
+following incompatible changes:
+
+<itemizedlist>
+
+  <listitem><para>The default version of Apache httpd is now 2.4. If
+  you use the <option>extraConfig</option> option to pass literal
+  Apache configuration text, you may need to update it — see <link
+  xlink:href="http://httpd.apache.org/docs/2.4/upgrading.html">Apache’s
+  documentation</link> for details. If you wish to continue to use
+  httpd 2.2, add the following line to your NixOS configuration:
+
+<programlisting>
+services.httpd.package = pkgs.apacheHttpd_2_2;
+</programlisting>
+
+  </para></listitem>
+
+  <listitem><para>The host side of a container virtual Ethernet pair
+  is now called <literal>ve-<replaceable>container-name</replaceable></literal>
+  rather than <literal>c-<replaceable>container-name</replaceable></literal>.</para></listitem>
+
+  <listitem><para>GNOME 3.10 support has been dropped. The default GNOME version is now 3.12.</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+</chapter>

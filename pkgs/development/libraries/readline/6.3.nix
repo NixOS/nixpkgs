@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.ludo ];
 
     platforms = platforms.unix;
+    branch = "6.3";
   };
 }

@@ -1,5 +1,7 @@
 { stdenv, fetchurl, kernel, zlib }:
 
+assert stdenv.lib.versionOlder kernel.version "3.17";
+
 stdenv.mkDerivation {
   name = "netatop-${kernel.version}-0.3";
 

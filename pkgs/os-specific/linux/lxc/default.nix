@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "lxc-1.0.3";
+  name = "lxc-1.0.6";
 
   src = fetchurl {
     url = "http://github.com/lxc/lxc/archive/${name}.tar.gz";
-    sha256 = "04k45jgj2i501yhm467s1a1yk7h7q0fjhspys158w1a2m1hari4z";
+    sha256 = "075i5h136b3dnf8nk6mpailz6i18yv1zcsj0jdpr9kg2i6d1ksia";
   };
 
   buildInputs = [ libcap apparmor perl docbook2x gnutls autoreconfHook pkgconfig ];
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export XML_CATALOG_FILES=${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml
     substituteInPlace doc/rootfs/Makefile.am --replace '@LXCROOTFSMOUNT@' '$out/lib/lxc/rootfs'
+    substituteInPlace configure.ac --replace '$sysconfdir/' '/etc/'
+    substituteInPlace configure.ac --replace '$${sysconfdir}/' '/etc/'
   '';
 
   configureFlags = [

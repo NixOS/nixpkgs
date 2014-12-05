@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cmake coin3d xercesc ode eigen qt4 opencascade gts boost
-    boost.lib zlib python swig gfortran soqt libf2c makeWrapper matplotlib
+    zlib python swig gfortran soqt libf2c makeWrapper matplotlib
     pycollada pyside pysideShiboken
   ];
 

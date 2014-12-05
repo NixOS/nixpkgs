@@ -30,7 +30,7 @@ with lib;
     boot.kernelModules = [ "bbswitch" ];
     boot.extraModulePackages = [ kernel.bbswitch kernel.nvidia_x11 ];
 
-    environment.systemPackages = [ pkgs.bumblebee ];
+    environment.systemPackages = [ pkgs.bumblebee pkgs.primus ];
 
     systemd.services.bumblebeed = {
       description = "Bumblebee Hybrid Graphics Switcher";

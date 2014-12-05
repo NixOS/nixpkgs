@@ -1,13 +1,13 @@
 { stdenv, fetchurl, libffi, expat, pkgconfig, libxslt, docbook_xsl, doxygen }:
 
-let version = "1.5.0"; in
+let version = "1.6.0"; in
 
 stdenv.mkDerivation rec {
   name = "wayland-${version}";
 
   src = fetchurl {
     url = "http://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "1da179livkkmfsds32yhh4zflxn9qs6av023702kx2w8mzly2s80";
+    sha256 = "0zzwlrmxil10g9rvdgha0y1d8z0x97g65g14kl2qrl2krwni1md7";
   };
 
   buildInputs = [ pkgconfig libffi expat libxslt docbook_xsl doxygen ];

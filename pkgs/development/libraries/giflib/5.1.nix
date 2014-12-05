@@ -13,5 +13,6 @@ stdenv.mkDerivation {
     platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    branch = "5.1";
   };
 }

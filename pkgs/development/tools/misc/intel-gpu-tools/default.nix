@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libdrm, libpciaccess, cairo, dri2proto, udev, libX11, libXext, libXv, libXrandr, glib, bison }:
 
 stdenv.mkDerivation rec {
-  name = "intel-gpu-tools-1.7";
+  name = "intel-gpu-tools-1.8";
 
   src = fetchurl {
     url = "http://xorg.freedesktop.org/archive/individual/app/${name}.tar.bz2";
-    sha256 = "0yi0024kr1xzglkkhyjpxr081bmwvdakb61az6wiidfrpd1j6q92";
+    sha256 = "0n9pzwjzx4xiffcy3nkc7q7689sid2ry8m9xx4vgxxspr8ds3qpz";
   };
 
   configureFlags = [ "--disable-tests" ];

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cereal";
-  version = "0.4.0.1";
-  sha256 = "12g23cbjxxgh3xzv6hvs093zpycl29h8fmc7kv6jx43ws4cxy2jv";
+  version = "0.4.1.0";
+  sha256 = "0m0iwjf9bds4nwk1rgr19rvjri4kncn37k51l1n9y869r104b8lb";
   meta = {
     description = "A binary serialization library";
     license = self.stdenv.lib.licenses.bsd3;

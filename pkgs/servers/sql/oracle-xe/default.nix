@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, requireFile, patchelf, rpm, cpio, libaio }:
+{ stdenv, makeWrapper, requireFile, patchelf, rpmextract, libaio }:
 
 assert stdenv.system == "x86_64-linux";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   unpackCmd = ''
     (mkdir -p "${name}" && cd "${name}" &&
-      ${rpm}/bin/rpm2cpio "$curSrc" | ${cpio}/bin/cpio -id)
+      ${rpmextract}/bin/rpmextract "$curSrc")
   '';
 
   buildPhase = let

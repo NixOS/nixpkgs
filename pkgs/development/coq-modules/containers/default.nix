@@ -6,7 +6,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = http://coq.inria.fr/pylons/contribs/files/Containers/v8.4/Containers.tar.gz;
-    sha256 = "1y9x2lwrskv2231z9ac3kv4bmg6h1415xpp4gl7v5w90ba6p6w8w";
+    sha256 = "0z7yk0g7zkniwc73ka7wwb5jjg5a2wr1krrn3akr7kn5z3gvy2mc";
   };
 
   buildInputs = [ coq.ocaml coq.camlp5 ];
@@ -17,9 +17,8 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     homepage = http://coq.inria.fr/pylons/pylons/contribs/view/Containers/v8.4;
     description = "A typeclass-based Coq library of finite sets/maps";
-    maintainers = with maintainers; [ vbgl ];
+    maintainers = with maintainers; [ vbgl jwiegley ];
     platforms = coq.meta.platforms;
-    broken = true; /* the source hash is wrong */
   };
 
 }

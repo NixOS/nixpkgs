@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
 , pkgconfig
 , bzip2
@@ -18,14 +19,22 @@
 }:
 
 let
-  version = "6.8.9-0";
+
+  version = "6.8.9-8";
+
+  arch =
+    if stdenv.system == "i686-linux" then "i686"
+    else if stdenv.system == "x86_64-linux" || stdenv.system == "x86_64-darwin" then "x86-64"
+    else throw "ImageMagick is not supported on this platform.";
+
 in
+
 stdenv.mkDerivation rec {
   name = "ImageMagick-${version}";
 
   src = fetchurl {
-    url = "mirror://imagemagick/${name}.tar.xz";
-    sha256 = "1lapn2798fkc2wn81slpms5p21kq4dsyg45khsk7n8p69cvrmw2b";
+    url = "mirror://imagemagick/releases/${name}.tar.xz";
+    sha256 = "1c792hbwi308lm9xkml319xaa4w3bz6hwy6i92jwrm7kqr4h8di7";
   };
 
   enableParallelBuilding = true;
@@ -35,18 +44,19 @@ stdenv.mkDerivation rec {
       export DVIDecodeDelegate=${tetex}/bin/dvips
     '' else "";
 
-  configureFlags = "" + stdenv.lib.optionalString (stdenv.system != "x86_64-darwin") ''
-    --with-gs-font-dir=${ghostscript}/share/ghostscript/fonts
-    --with-gslib
-  '' + ''
-    --with-frozenpaths
-    ${if librsvg != null then "--with-rsvg" else ""}
-  '';
+  configureFlags =
+    [ "--with-frozenpaths" ]
+    ++ [ "--with-gcc-arch=${arch}" ]
+    ++ lib.optional (librsvg != null) "--with-rsvg"
+    ++ lib.optionals (stdenv.system != "x86_64-darwin")
+      [ "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
+        "--with-gslib"
+      ];
 
   propagatedBuildInputs =
     [ bzip2 fontconfig freetype libjpeg libpng libtiff libxml2 zlib librsvg
       libtool jasper libX11
-    ] ++ stdenv.lib.optional (stdenv.system != "x86_64-darwin") ghostscript;
+    ] ++ lib.optional (stdenv.system != "x86_64-darwin") ghostscript;
 
   buildInputs = [ tetex pkgconfig ];
 

@@ -1,8 +1,8 @@
 diff --git a/src/librustc/back/link.rs b/src/librustc/back/link.rs
-index 7a3e912..ced75fa 100644
+index 1cc60fc..2e94b99 100644
 --- a/src/librustc/back/link.rs
 +++ b/src/librustc/back/link.rs
-@@ -766,24 +766,15 @@ pub fn output_lib_filename(id: &CrateId) -> String {
+@@ -383,18 +383,9 @@ pub fn mangle_internal_name_by_path_and_seq(path: PathElems, flav: &str) -> Stri
  
  pub fn get_cc_prog(sess: &Session) -> String {
      match sess.opts.cg.linker {
@@ -15,18 +15,23 @@ index 7a3e912..ced75fa 100644
 -    // In the future, FreeBSD will use clang as default compiler.
 -    // It would be flexible to use cc (system's default C compiler)
 -    // instead of hard-coded gcc.
--    // For win32, there is no cc command, so we add a condition to make it use gcc.
+-    // For Windows, there is no cc command, so we add a condition to make it use gcc.
 -    match sess.targ_cfg.os {
--        abi::OsWin32 => "gcc",
+-        abi::OsWindows => "gcc",
 -        _ => "cc",
 -    }.to_string()
  }
  
- pub fn get_ar_prog(sess: &Session) -> String {
-     match sess.opts.cg.ar {
-         Some(ref ar) => (*ar).clone(),
--        None => "ar".to_string()
-+        None => "@arPath@".to_string()
-     }
- }
- 
+ pub fn remove(sess: &Session, path: &Path) {
+diff --git a/src/librustc_back/archive.rs b/src/librustc_back/archive.rs
+index 060dda5..fecf76b 100644
+--- a/src/librustc_back/archive.rs
++++ b/src/librustc_back/archive.rs
+@@ -53,7 +53,7 @@ fn run_ar(handler: &ErrorHandler, maybe_ar_prog: &Option<String>,
+           paths: &[&Path]) -> ProcessOutput {
+     let ar = match *maybe_ar_prog {
+         Some(ref ar) => ar.as_slice(),
+-        None => "ar"
++        None => "@arPath@"
+     };
+     let mut cmd = Command::new(ar);

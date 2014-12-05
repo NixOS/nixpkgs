@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
     ++ optional (elem stdenv.system (with platforms; linux ++ freebsd)) "--with-file-aio";
 
 
-  additionalFlags = optionalString stdenv.isDarwin "-Wno-error=deprecated-declarations";
+  additionalFlags = optionalString stdenv.isDarwin "-Wno-error=deprecated-declarations -Wno-error=conditional-uninitialized";
 
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2}/include/libxml2 $additionalFlags"

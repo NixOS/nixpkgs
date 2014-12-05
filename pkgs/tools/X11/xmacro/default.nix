@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = mirror://sourceforge/xmacro/xmacro-pre0.3-20000911.tar.gz;
-    md5 = "d2956b82f3d5380e58a75ccc721fb746";
+    sha256 = "04gzgxhp8bx98zrcvmsm7mn72r9g9588skbf64cqvkp4yz6kfqhb";
   };
 
   preBuild = ''

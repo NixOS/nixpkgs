@@ -2,12 +2,12 @@
 , pango, gtk3, gnome3, dbus, clutter, appdata-tools, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "3.12.3";
+  version = "3.12.3.1";
   name = "gpaste-${version}";
 
   src = fetchurl {
     url = "https://github.com/Keruspe/GPaste/archive/v${version}.tar.gz";
-    sha256 = "03f48kaidgbnyi4c7qgkwvnxs5rz7nk9m3iqfpsbhc512c8qnc1f";
+    sha256 = "05afbhn3gw015cf2z3045lvlnj4cz06p6libkglb2wqsfb7azbl0";
   };
 
   buildInputs = [ intltool autoreconfHook pkgconfig vala glib

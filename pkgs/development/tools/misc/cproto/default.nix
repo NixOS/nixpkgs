@@ -13,9 +13,9 @@ stdenv.mkDerivation {
   # patch made by Joe Khoobyar copied from gentoo bugs
   patches = ./cproto_patch;
 
-  meta = { 
+  meta = {
     description = "Tool to generate C function prototypes from C source code";
     homepage = http://cproto.sourceforge.net/;
-    license = "public domain";
+    license = stdenv.lib.licenses.publicDomain;
   };
 }

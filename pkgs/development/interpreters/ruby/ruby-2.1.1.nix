@@ -5,6 +5,7 @@
 , ncurses, readline, cursesSupport ? false
 , groff, docSupport ? false
 , libyaml, yamlSupport ? true
+, libffi, fiddleSupport ? true
 , ruby_2_1_1, autoreconfHook, bison, useRailsExpress ? true
 }:
 
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
   NROFF = "${groff}/bin/nroff";
 
   buildInputs = ops useRailsExpress [ autoreconfHook bison ]
+    ++ (op fiddleSupport libffi)
     ++ (ops cursesSupport [ ncurses readline ] )
     ++ (op docSupport groff )
     ++ (op zlibSupport zlib)
@@ -55,12 +57,12 @@ stdenv.mkDerivation rec {
     "${patchSet}/patches/ruby/2.1.0/railsexpress/03-display-more-detailed-stack-trace.patch"
     "${patchSet}/patches/ruby/2.1.0/railsexpress/04-show-full-backtrace-on-stack-overflow.patch"
     "${patchSet}/patches/ruby/2.1.0/railsexpress/05-fix-missing-c-return-event.patch"
-    "${patchSet}/patches/ruby/2.1.0/railsexpress/06-backport-006e66b6680f60adfb434ee7397f0dbc77de7873.patch"
-    "${patchSet}/patches/ruby/2.1.0/railsexpress/07-funny-falcon-stc-density.patch"
-    "${patchSet}/patches/ruby/2.1.0/railsexpress/08-funny-falcon-stc-pool-allocation.patch"
-    "${patchSet}/patches/ruby/2.1.0/railsexpress/09-aman-opt-aset-aref-str.patch"
-    "${patchSet}/patches/ruby/2.1.0/railsexpress/10-funny-falcon-method-cache.patch"
-    "${patchSet}/patches/ruby/2.1.0/railsexpress/11-backport-r44370.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/07-backport-006e66b6680f60adfb434ee7397f0dbc77de7873.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/08-funny-falcon-stc-density.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/09-funny-falcon-stc-pool-allocation.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/10-aman-opt-aset-aref-str.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/11-funny-falcon-method-cache.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/12-backport-r44370.patch"
   ];
 
   # Ruby >= 2.1.0 tries to download config.{guess,sub}
@@ -92,7 +94,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    license = "Ruby";
+    license = stdenv.lib.licenses.ruby;
     homepage = "http://www.ruby-lang.org/en/";
     description = "The Ruby language";
     platforms = stdenv.lib.platforms.all;

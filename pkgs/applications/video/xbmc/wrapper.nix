@@ -28,8 +28,15 @@ stdenv.mkDerivation {
     do
       $(ln -s $share $out/share/xbmc/.)
     done)
-    makeWrapper ${xbmc}/bin/xbmc $out/bin/xbmc \
+    $(for passthrough in icons xsessions applications
+    do
+      ln -s ${xbmc}/share/$passthrough $out/share/
+    done)
+    $(for exe in xbmc{,-standalone}
+    do
+    makeWrapper ${xbmc}/bin/$exe $out/bin/$exe \
       --prefix XBMC_HOME : $out/share/xbmc;
+    done)
   '';
 
   preferLocalBuilds = true;

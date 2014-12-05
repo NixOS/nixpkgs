@@ -1,4 +1,4 @@
-{ stdenv, lndir }:
+{ lib, stdenv, lndir }:
 
 rec {
 
@@ -30,7 +30,7 @@ rec {
         (test -n "$executable" && chmod +x "$n") || true
       '';
 
-    
+
   # Shorthands for `writeTextFile'.
   writeText = name: text: writeTextFile {inherit name text;};
   writeTextDir = name: text: writeTextFile {inherit name text; destination = "/${name}";};
@@ -55,9 +55,9 @@ rec {
       (''
         mkdir -p $out/nix-support
         cp ${script} $out/nix-support/setup-hook
-      '' + stdenv.lib.optionalString (deps != []) ''
+      '' + lib.optionalString (deps != []) ''
         echo ${toString deps} > $out/nix-support/propagated-native-build-inputs
-      '' + stdenv.lib.optionalString (substitutions != {}) ''
+      '' + lib.optionalString (substitutions != {}) ''
         substituteAll ${script} $out/nix-support/setup-hook
       '');
 
@@ -80,7 +80,7 @@ rec {
   # Quickly create a set of symlinks to derivations.
   # entries is a list of attribute sets like { name = "name" ; path = "/nix/store/..."; }
   linkFarm = name: entries: runCommand name {} ("mkdir -p $out; cd $out; \n" +
-    (stdenv.lib.concatMapStrings (x: "ln -s '${x.path}' '${x.name}';\n") entries));
+    (lib.concatMapStrings (x: "ln -s '${x.path}' '${x.name}';\n") entries));
 
   # Require file
   requireFile = {name, sha256, url ? null, message ? null} :

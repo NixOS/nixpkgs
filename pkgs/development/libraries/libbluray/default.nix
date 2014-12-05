@@ -13,12 +13,12 @@ assert withFonts -> freetype != null;
 
 stdenv.mkDerivation rec {
   baseName = "libbluray";
-  version  = "0.6.0";
+  version  = "0.6.2";
   name = "${baseName}-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.videolan.org/pub/videolan/${baseName}/${version}/${name}.tar.bz2";
-    sha256 = "0zsk16p7rxwbyizm87i7x2fcy3gwjfnlfd2gi2n17fv6gajvsyv2";
+    sha256 = "1l2wr9mwz5pikqxlxkjfw3rwz0l1j0n7x9hl80sfiqm1lk41194c";
   };
 
   nativeBuildInputs = with stdenv.lib;

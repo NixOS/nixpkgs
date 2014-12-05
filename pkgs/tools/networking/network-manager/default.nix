@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
-  version = "0.9.8.8";
+  version = "0.9.8.10";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/0.9/NetworkManager-${version}.tar.xz";
-    sha256 = "0mbsl6x3aavdnam8i87p0zz8fvvgi96g199s35wgg5r8rplks2la";
+    sha256 = "0wn9qh8r56r8l19dqr68pdl1rv3zg1dv47rfy6fqa91q7li2fk86";
   };
 
   preConfigure = ''
@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
         inherit avahi dnsmasq ppp bind;
         glibc = stdenv.gcc.libc;
       })
+      ./libnl-3.2.25.patch
     ];
 
   preInstall =
@@ -63,10 +64,14 @@ stdenv.mkDerivation rec {
       # FIXME: Workaround until NixOS' dbus+systemd supports at_console policy
       substituteInPlace $out/etc/dbus-1/system.d/org.freedesktop.NetworkManager.conf --replace 'at_console="true"' 'group="networkmanager"'
 
+      # rename to network-manager to be in style
+      mv $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/network-manager.service 
+      echo "Alias=NetworkManager.service" >> $out/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
+
       # systemd in NixOS doesn't use `systemctl enable`, so we need to establish
       # aliases ourselves.
       ln -s $out/etc/systemd/system/NetworkManager-dispatcher.service $out/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
-      ln -s $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
+      ln -s $out/etc/systemd/system/network-manager.service $out/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
     '';
 
   meta = with stdenv.lib; {

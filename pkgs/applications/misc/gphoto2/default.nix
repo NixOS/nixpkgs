@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gphoto2-2.5.3";
+  name = "gphoto2-2.5.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/gphoto/${name}.tar.bz2";
-    sha256 = "0i6qjyvgn3aaspiblmiwv51mfy92gm73xpbd3z41ki8mw7plg53i";
+    sha256 = "1d0lvp5gsrss72597wixhgh8prcw4g7izfg3zdzzsswjgnlsxsal";
   };
 
   nativeBuildInputs = [ pkgconfig gettext ];

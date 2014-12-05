@@ -2,9 +2,9 @@ x@{builderDefsPackage
   , unzip
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     [];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -47,13 +47,13 @@ rec {
   phaseNames = ["doDeploy" "fixScripts"];
 
   fixScripts = a.doPatchShebangs ''$TARGET/bin'';
-      
+
   doDeploy = a.fullDepEntry (''
     ${a.lib.concatStringsSep ";" (map (y : "unzip ${y}") tarballFiles)}
     for i in */; do cp -rTf $i merged; done
     cd merged
-    
-    for i in "lib/"jsp-*/*.jar; do 
+
+    for i in "lib/"jsp-*/*.jar; do
       ln -s "''${i#lib/}" "lib" || true
     done
 
@@ -67,7 +67,7 @@ rec {
       ls "lib/"tdb-[0-9]*.jar | sort | tac | tail -n +2
       ls "lib/"jetty-[0-9]*.jar | sort | tac | tail -n +2
       ls "lib/"jetty-util-[0-9]*.jar | sort | tac | tail -n +2
-    ) | 
+    ) |
       xargs -I @@ mv @@  lib/obsolete
 
     mv lib/slf4j-simple-*.jar lib/obsolete
@@ -106,8 +106,7 @@ rec {
       raskin
     ];
     hydraPlatforms = []; # Builder is just unpacking/mixing what is needed
-    license = "free"; # mix of packages under different licenses
+    license = a.lib.licenses.free; # mix of packages under different licenses
     homepage = "http://openjena.org/";
   };
 }) x
-

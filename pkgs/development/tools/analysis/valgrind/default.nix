@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
         --replace 'obj:/usr/X11R6/lib' 'obj:*/lib' \
         --replace 'obj:/usr/lib' 'obj:*/lib'
     done
+
+    paxmark m $out/lib/valgrind/*-*-linux
   '';
 
   meta = {

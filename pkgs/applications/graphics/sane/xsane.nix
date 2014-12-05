@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     sed -e '/SANE_CAP_ALWAYS_SETTABLE/d' -i src/xsane-back-gtk.c
+    chmod a+rX -R .
   '';
 
   buildInputs = [libpng saneBackends saneFrontends libX11 gtk pkgconfig ]

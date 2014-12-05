@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = http://tarballs.nixos.org/f-spot-0.0.10.tar.bz2;
-    md5 = "19cc6e067ccc261b0502ff6189b79832";
+    sha256 = "1hgls6hzvxsnk09j9y6hq10qxsc92i864mdg3gk2cimbkbr0mh8b";
   };
 
   patches = [./dllmap.patch];

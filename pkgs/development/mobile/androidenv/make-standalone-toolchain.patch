@@ -1,7 +1,7 @@
-diff -ru android-ndk-r9d.old/build/tools/make-standalone-toolchain.sh android-ndk-r9d/build/tools/make-standalone-toolchain.sh
---- android-ndk-r9d.old/build/tools/make-standalone-toolchain.sh	2014-09-25 11:42:09.990500975 +0200
-+++ android-ndk-r9d/build/tools/make-standalone-toolchain.sh	2014-09-25 11:43:06.097501636 +0200
-@@ -252,6 +252,9 @@
+diff -ru android-ndk-r10c.old/build/tools/make-standalone-toolchain.sh android-ndk-r10c/build/tools/make-standalone-toolchain.sh
+--- android-ndk-r10c.old/build/tools/make-standalone-toolchain.sh	2014-10-16 03:46:32.000000000 +0200
++++ android-ndk-r10c/build/tools/make-standalone-toolchain.sh	2014-10-24 23:46:22.544928306 +0200
+@@ -310,6 +310,9 @@
  # Now copy the GCC toolchain prebuilt binaries
  run copy_directory "$TOOLCHAIN_PATH" "$TMPDIR"
  

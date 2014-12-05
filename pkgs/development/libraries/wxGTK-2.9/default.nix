@@ -55,4 +55,8 @@ stdenv.mkDerivation {
   passthru = {inherit gtk compat24 compat26 unicode;};
 
   enableParallelBuilding = true;
+  
+  meta = {
+    platforms = stdenv.lib.platforms.all;
+  };
 }

@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     base64Bytestring blazeBuilder HaXml HTTP mtl network networkUri
     time utf8String
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/HaXR";
     description = "XML-RPC client and server library";

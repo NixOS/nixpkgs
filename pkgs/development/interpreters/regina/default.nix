@@ -12,7 +12,7 @@ let
   sourceInfo = rec {
     baseName="Regina-REXX";
     pname="regina-rexx";
-    version = "3.8.2";
+    version = "3.9.0";
     name="${baseName}-${version}";
     url="mirror://sourceforge/${pname}/${pname}/${version}/${name}.tar.gz";
   };
@@ -20,7 +20,7 @@ in
 rec {
   src = a.fetchurl {
     url = sourceInfo.url;
-    sha256 = "06vr6p9pqr5zzsxm1l9iwb2w9z8qkm971c2knh0vf5bbm6znjz35";
+    sha256 = "051w6i5xyjq7j9yrhw4r14kw105gpylby6z5x9v31f5g824n4mfr";
   };
 
   inherit (sourceInfo) name version;

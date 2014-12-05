@@ -2,9 +2,9 @@ x@{builderDefsPackage
   , lua5, python
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     [];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -43,7 +43,7 @@ rec {
     mkdir -p "$out/bin"
     cp bam "$out/bin"
   '' ["minInit" "defEnsureDir" "build"];
-      
+
   meta = {
     description = "Yet another build manager";
     maintainers = with a.lib.maintainers;
@@ -52,7 +52,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = "free-noncopyleft";
+    license = a.lib.licenses.free;
   };
   passthru = {
     updateInfo = {
@@ -60,4 +60,3 @@ rec {
     };
   };
 }) x
-

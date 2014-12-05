@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ocaml, ocamlPackages, gmp }:
+{ fetchurl, stdenv, ocaml, ocamlPackages }:
 
 stdenv.mkDerivation rec {
   name = "alt-ergo-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with ocamlPackages;
-    [ ocaml findlib ocamlgraph zarith lablgtk gmp ];
+    [ ocaml findlib ocamlgraph zarith lablgtk ];
 
   meta = {
     description = "High-performance theorem prover and SMT solver";

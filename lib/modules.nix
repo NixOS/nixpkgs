@@ -58,7 +58,7 @@ rec {
     if m ? config || m ? options then
       let badAttrs = removeAttrs m ["imports" "options" "config" "key" "_file"]; in
       if badAttrs != {} then
-        throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'."
+        throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by assignments to the top-level attributes `config' or `options'."
       else
         { file = m._file or file;
           key = toString m.key or key;

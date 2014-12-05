@@ -12,6 +12,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.libsdl.org/projects/hexen/;
     description = "Port of Raven Software's popular Hexen 3-D shooter game";
-    license = "free";
+    license = stdenv.lib.licenses.free;
   };
 }

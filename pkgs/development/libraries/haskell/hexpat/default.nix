@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hexpat";
-  version = "0.20.6";
-  sha256 = "02ms6lchj6k0krqjk47bibfb0cbpbc16ip9f22c4rgp04qkzp60b";
+  version = "0.20.7";
+  sha256 = "03r5j54a250f01km6i8qja1h1k512ds2bp7r0yk2jpbbar2y7c08";
   buildDepends = [ deepseq List text transformers utf8String ];
   meta = {
     homepage = "http://haskell.org/haskellwiki/Hexpat/";

@@ -1,30 +1,30 @@
-{ stdenv, fetchurl, glib, curl, pkgconfig, fuse, glib_networking, makeWrapper
-, gsettings_desktop_schemas }:
+{ stdenv, fetchurl, pkgconfig, glib, fuse, curl, glib_networking, gsettings_desktop_schemas
+, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "megatools-1.9.91";
+  name = "megatools-${version}";
+  version = "1.9.93";
 
   src = fetchurl {
     url = "http://megatools.megous.com/builds/${name}.tar.gz";
-    sha256 = "0hb83wqsn6mggcmk871hl8cski5x0hxz9dhaka42115s4mdfbl1i";
+    sha256 = "0xm57pgjvfifq1j5lyvrcs6x0vxhqzr399s7paj4g7nspj0dbll9";
   };
 
-  buildInputs = [ glib curl pkgconfig fuse makeWrapper ];
+  buildInputs = [ pkgconfig glib fuse curl makeWrapper ];
 
   postInstall = ''
-    for a in $out/bin/*; do
-      wrapProgram "$a" \
+    for i in $(find $out/bin/ -type f); do
+      wrapProgram "$i" \
             --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
             --prefix XDG_DATA_DIRS : "${gsettings_desktop_schemas}/share"
-
     done
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Command line client for Mega.co.nz";
     homepage = http://megatools.megous.com/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.viric ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.viric maintainers.AndersonTorres ];
+    platforms = platforms.linux;
   };
 }

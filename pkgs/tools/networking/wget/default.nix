@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, gettext, perl, LWP, gnutls ? null }:
+{ stdenv, fetchurl, gettext, libidn
+, perl, perlPackages, LWP, python3
+, gnutls ? null }:
 
 stdenv.mkDerivation rec {
-  name = "wget-1.15";
+  name = "wget-1.16";
 
   src = fetchurl {
     url = "mirror://gnu/wget/${name}.tar.xz";
-    sha256 = "1yw0sk4mrs7bvga3c79rkbhxivmw8cs3b5wq3cglp1f9ai1mz2ni";
+    sha256 = "1rxhr3jmgbwryzl51di4avqxw9m9j1z2aak8q1npns0p184xsqcj";
   };
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./iri-test.patch;
-
   preConfigure = stdenv.lib.optionalString doCheck
-    '' for i in "doc/texi2pod.pl" "tests/run-px" "util/rmold.pl"
+    '' for i in "doc/texi2pod.pl" "util/rmold.pl"
        do
          sed -i "$i" -e 's|/usr/bin.*perl|${perl}/bin/perl|g'
        done
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
     '';
 
   nativeBuildInputs = [ gettext ];
-  buildInputs =
-    stdenv.lib.optionals doCheck [ perl LWP ]
+  buildInputs = [ libidn ]
+    ++ stdenv.lib.optionals doCheck [ perl perlPackages.IOSocketSSL LWP python3 ]
     ++ stdenv.lib.optional (gnutls != null) gnutls;
 
   configureFlags =
@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
     then "--with-ssl=gnutls"
     else "--without-ssl";
 
-  doCheck = (perl != null);
+  doCheck = (perl != null && python3 != null);
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Tool for retrieving files using HTTP, HTTPS, and FTP";
 
     longDescription =
@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
          scripts, cron jobs, terminals without X-Windows support, etc.
       '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
 
     homepage = http://www.gnu.org/software/wget/;
 
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with maintainers; [ fpletz ];
+    platforms = platforms.all;
   };
 }

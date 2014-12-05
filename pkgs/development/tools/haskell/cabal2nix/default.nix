@@ -6,15 +6,15 @@
 
 cabal.mkDerivation (self: {
   pname = "cabal2nix";
-  version = "1.70";
-  sha256 = "0jc66x6p6blcz1pk4pkdh93dx17658pr0i5h4w3zynv4c2jgy138";
+  version = "1.71";
+  sha256 = "1hhw1i4gqsd73mrj60sza36dqfz32ydh70sk9182m4wpgpsrwxvr";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
     Cabal filepath hackageDb mtl regexPosix transformers
   ];
   testDepends = [ doctest ];
-  doCheck = self.stdenv.lib.versionOlder "7.6" self.ghc.version;
+  doCheck = self.stdenv.lib.versionOlder "7.8" self.ghc.version;
   meta = {
     homepage = "http://github.com/NixOS/cabal2nix";
     description = "Convert Cabal files into Nix build instructions";

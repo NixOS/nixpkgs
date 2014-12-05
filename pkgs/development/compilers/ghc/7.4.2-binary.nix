@@ -62,7 +62,8 @@ stdenv.mkDerivation rec {
      '' else "");
 
   configurePhase = ''
-    ./configure --prefix=$out --with-gmp-libraries=${gmp}/lib --with-gmp-includes=${gmp}/include
+    ./configure --prefix=$out --with-gmp-libraries=${gmp}/lib --with-gmp-includes=${gmp}/include \
+      --with-clang
   '';
 
   # Stripping combined with patchelf breaks the executables (they die

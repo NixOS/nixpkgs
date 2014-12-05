@@ -1,12 +1,11 @@
 { stdenv, fetchurl, pkgconfig, udev, dbus_libs, perl }:
 
 stdenv.mkDerivation rec {
-  version = "1.8.12";
-  name = "pcsclite-${version}";
+  name = "pcsclite-1.8.13";
 
   src = fetchurl {
-    url = "https://alioth.debian.org/frs/download.php/file/3991/pcsc-lite-${version}.tar.bz2";
-    sha256 = "1ihsqyiygkyhid739zcvaizyd7q9qm76lqb7lzjrm5ak9k4l2l4l";
+    url = "https://alioth.debian.org/frs/download.php/file/4126/pcsc-lite-1.8.13.tar.bz2";
+    sha256 = "0fxwzckbjsckfp1f01yp3x6y1wlaaivhy12a5hka6qwdh1z085gk";
   };
 
   # The OS should care on preparing the drivers into this location

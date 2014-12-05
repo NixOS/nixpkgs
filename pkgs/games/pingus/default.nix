@@ -1,7 +1,7 @@
 {stdenv, fetchurl, scons, SDL, SDL_image, boost, libpng, SDL_mixer, pkgconfig
 , mesa}:
 let
-  buildInputs = [scons SDL SDL_image boost boost.lib libpng SDL_mixer pkgconfig mesa];
+  buildInputs = [scons SDL SDL_image boost libpng SDL_mixer pkgconfig mesa];
   s = # Generated upstream information
   rec {
     baseName="pingus";

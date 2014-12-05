@@ -10,14 +10,19 @@ stdenv.mkDerivation rec {
   
   nativeBuildInputs = [ flex bison ];
   
-  configureFlags = "--with-pcap=linux";
+  # We need to force the autodetection because detection doesn't
+  # work in pure build enviroments.
+  configureFlags =
+    if stdenv.isLinux then [ "--with-pcap=linux" ]
+    else if stdenv.isDarwin then [ "--with-pcap=bpf" ]
+    else [];
 
   preInstall = ''mkdir -p $out/bin'';
   
   crossAttrs = {
     # Stripping hurts in static libraries
     dontStrip = true;
-    configureFlags = [ "--with-pcap=linux" "ac_cv_linux_vers=2" ];
+    configureFlags = configureFlags ++ [ "ac_cv_linux_vers=2" ];
   };
 
   meta = {

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk2 }:
 
 stdenv.mkDerivation rec {
-  name = "parcellite-1.1.7";
+  name = "parcellite-1.1.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/parcellite/${name}.tar.gz";
-    sha256 = "0pszw3yd4a08p6jsz7asayr7jir08bxbwvfb16k01cj7ya4kf3w7";
+    sha256 = "1m0igxny8f8hlbwcbsr4vg08808sqwy05h61ia2bxsrf122rba6b";
   };
 
   buildInputs = [ pkgconfig intltool gtk2 ];

@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
     homepage = http://www.cs.unc.edu/Research/vrpn/;
 
-    license = "BSL1.0"; # Boost Software License,
+    license = stdenv.lib.licenses.boost;
                         # see # <http://www.cs.unc.edu/Research/vrpn/obtaining_vrpn.html>
 
   };

@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
       "--with-persistent-directory=/var/lib/net-snmp"
     ];
 
-  buildInputs = [ autoreconfHook file openssl perl unzip ];
+  buildInputs = [ autoreconfHook file perl unzip ];
+  propagatedBuildInputs = [ openssl ];
 
   enableParallelBuilding = true;
 

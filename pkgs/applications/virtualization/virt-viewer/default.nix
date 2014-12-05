@@ -7,10 +7,10 @@ with stdenv.lib;
 
 let sourceInfo = rec {
     baseName="virt-viewer";
-    version="0.6.0";
+    version="1.0";
     name="${baseName}-${version}";
     url="http://virt-manager.org/download/sources/${baseName}/${name}.tar.gz";
-    hash="0svalnr6k8rjadysnxixygk3bdx04asmwx75bhrbljyicba216v6";
+    hash="09sf1xzvw2yysv4c1jkqlzrazdg501r4j12hiwjdzk5swk6lppw0";
 }; in
 
 stdenv.mkDerivation  {

@@ -3,12 +3,12 @@
 , libtool, libvorbis, pkgconfig, qt4, rubberband, stdenv }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.3";
+  version = "0.6.4";
   name = "qtractor-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/qtractor/${name}.tar.gz";
-    sha256 = "1lsmd83vhgfzb3bf02hi6xp5ryh08lz4h21agy7wm3acjqc6gsc2";
+    sha256 = "1wgm9cx9mrxgd69kdabh78vb3nlyhhfbpd5k4g9s15ifny9cgwz4";
   };
 
   buildInputs =

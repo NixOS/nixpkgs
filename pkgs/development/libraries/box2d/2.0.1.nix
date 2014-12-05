@@ -72,6 +72,7 @@ rec {
     platforms = with a.lib.platforms;
       linux;
     license = "bsd";
+    branch = "2.0.1";
   };
   passthru = {
     updateInfo = {

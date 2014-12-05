@@ -14,16 +14,16 @@ rec {
     else throw "no snapshot to boostrap for this platform (missing platform url suffix)";
 
   snapshotHash = if stdenv.system == "i686-linux"
-    then "c92895421e6fa170dbd713e74334b8c3cf22b817"
+    then "3204c8a38721199f69d2971db887d1dc71a63825"
     else if stdenv.system == "x86_64-linux"
-    then "66ee4126f9e4820cd82e78181931f8ea365904de"
+    then "39ca0d02eac184bc764ff9c1f645ca361715c5c2"
     else if stdenv.system == "i686-darwin"
-    then "e2364b1f1ece338b9fc4c308c472fc2413bff04e"
+    then "ebc1836424c4b3ba49f9adef271c50d2a8e134c0"
     else if stdenv.system == "x86_64-darwin"
-    then "09f92f06ab4f048acf71d83dc0426ff1509779a9"
+    then "a2045e95984b65eab4a704152566f8ab9a3be518"
     else throw "no snapshot for platform ${stdenv.system}";
 
-  snapshotDate = "2014-09-19";
+  snapshotDate = "2014-11-22";
   snapshotName = "cargo-nightly-${platform}.tar.gz";
 
   snapshot = stdenv.mkDerivation {

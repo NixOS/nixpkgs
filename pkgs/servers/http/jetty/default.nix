@@ -8,6 +8,6 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = mirror://sourceforge/jetty/jetty-5.1.4.zip;
-    md5 = "5d16bb1ea4a62dff93c0b7f7de00430f";
+    sha256 = "1lzvsrlybrf3zzzv4hi2v82qzpkfkib3xbwwlya8c08gf0360mrk";
   };
 }

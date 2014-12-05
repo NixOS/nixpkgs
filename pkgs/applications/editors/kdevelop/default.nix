@@ -1,5 +1,5 @@
 { stdenv, fetchurl, kdevplatform, cmake, pkgconfig, automoc4, shared_mime_info,
-  kdebase_workspace, gettext, perl, okteta, qjson }:
+  kdebase_workspace, gettext, perl, okteta, qjson, kate, konsole, kde_runtime, oxygen_icons }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ kdevplatform kdebase_workspace okteta qjson ];
 
   nativeBuildInputs = [ cmake pkgconfig automoc4 shared_mime_info gettext perl ];
+
+  propagatedUserEnvPkgs = [ kdevplatform kate konsole kde_runtime oxygen_icons ];
 
   NIX_CFLAGS_COMPILE = "-I${okteta}/include/KDE";
 

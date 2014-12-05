@@ -64,6 +64,13 @@ in
             Use fixed port for rpc.mountd, usefull if server is behind firewall.
           '';
         };
+
+        lockdPort = mkOption {
+          default = 0;
+          description = ''
+            Fix the lockd port number. This can help setting firewall rules for NFS.
+          '';
+        };
       };
 
     };
@@ -103,6 +110,9 @@ in
           ''
             # Create a state directory required by NFSv4.
             mkdir -p /var/lib/nfs/v4recovery
+
+            ${pkgs.procps}/sbin/sysctl -w fs.nfs.nlm_tcpport=${builtins.toString cfg.lockdPort}
+            ${pkgs.procps}/sbin/sysctl -w fs.nfs.nlm_udpport=${builtins.toString cfg.lockdPort}
 
             rpc.nfsd \
               ${if cfg.hostName != null then "-H ${cfg.hostName}" else ""} \

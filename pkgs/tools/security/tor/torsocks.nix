@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     homepage = http://code.google.com/p/torsocks/;
     repositories.git = https://git.torproject.org/torsocks.git;
     license = stdenv.lib.licenses.gpl2;
+    maintainers = [ stdenv.lib.maintainers.phreedom ];
   };
 }

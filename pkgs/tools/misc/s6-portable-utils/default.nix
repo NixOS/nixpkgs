@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, skalibs }:
+{ stdenv
+, fetchurl
+, skalibs
+, skarnetConfCompile
+}:
 
 let
 
@@ -13,33 +17,9 @@ in stdenv.mkDerivation rec {
     sha256 = "040nmls7qbgw8yn502lym4kgqh5zxr2ks734bqajpi2ricnasvhl";
   };
 
-  buildInputs = [ skalibs ];
+  buildInputs = [ skalibs skarnetConfCompile ];
 
   sourceRoot = "admin/${name}";
-
-  configurePhase = ''
-    pushd conf-compile
-
-    printf "$out/bin"           > conf-install-command
-    printf "$out/libexec"       > conf-install-libexec
-
-    # let nix builder strip things, cross-platform
-    truncate --size 0 conf-stripbins
-    truncate --size 0 conf-striplibs
-
-    printf "${skalibs}/sysdeps"      > import
-    printf "%s" "${skalibs}/include" > path-include
-    printf "%s" "${skalibs}/lib"     > path-library
-
-    rm -f flag-slashpackage
-    touch flag-allstatic
-
-    popd
-  '';
-
-  preBuild = ''
-    patchShebangs src/sys
-  '';
 
   preInstall = ''
     mkdir -p "$out/libexec"
@@ -47,7 +27,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.skarnet.org/software/s6-portable-utils/;
-    description = "A set of tiny general Unix utilities optimized for simplicity and small size.";
+    description = "A set of tiny general Unix utilities optimized for simplicity and small size";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;
   };

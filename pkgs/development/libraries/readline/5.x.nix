@@ -11,5 +11,7 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ncurses];
 
   patches = stdenv.lib.optional stdenv.isDarwin ./shobj-darwin.patch;
+  meta = {
+    branch = "5";
+  };
 }
-

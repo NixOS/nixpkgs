@@ -41,8 +41,7 @@ import ./make-test.nix ({ pkgs, ... }: {
         ];
     };
 
-  testScript =
-    ''
+  testScript = '' 
       $machine->waitUntilSucceeds("pgrep plasma-desktop");
       $machine->waitForWindow(qr/plasma-desktop/);
 
@@ -60,7 +59,7 @@ import ./make-test.nix ({ pkgs, ... }: {
 
       $machine->sleep(10);
 
-      $machine->screenshot("screen");
+      $machine->screenshot("screen"); 
     '';
 
 })

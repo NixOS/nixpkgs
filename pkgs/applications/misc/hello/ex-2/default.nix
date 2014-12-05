@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "hello-2.9";
+  name = "hello-2.10";
 
   src = fetchurl {
     url = "mirror://gnu/hello/${name}.tar.gz";
-    sha256 = "19qy37gkasc4csb1d3bdiz9snn8mir2p3aj0jgzmfv0r2hi7mfzc";
+    sha256 = "0ssi1wpaf7plaswqqjwigppsg5fyh99vdlb9kzl7c9lng89ndq1i";
   };
 
   doCheck = true;
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.gnu.org/software/hello/manual/;
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.all;
   };
 }

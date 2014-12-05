@@ -1,11 +1,11 @@
 { stdenv, fetchurl, python }:
 
-stdenv.mkDerivation {
-  name = "clearsilver-0.10.3";
+stdenv.mkDerivation rec {
+  name = "clearsilver-0.10.5";
 
   src = fetchurl {
-    url = http://www.clearsilver.net/downloads/clearsilver-0.10.3.tar.gz;
-    md5 = "ff4104b0e58bca1b61d528edbd902769";
+    url = "http://www.clearsilver.net/downloads/${name}.tar.gz";
+    sha256 = "1046m1dpq3nkgxbis2dr2x7hynmy51n64465q78d7pdgvqwa178y";
   };
 
   builder = ./builder.sh;

@@ -9,13 +9,15 @@ rec {
   phaseNames = [ "doAggregate" ];
 
   doAggregate = fullDepEntry (''
+    set +o pipefail
+
     mkdir -p $out/bin
     for currentPath in ${lib.concatStringsSep " " buildInputs}; do
         echo Symlinking "$currentPath"
         find $currentPath/share/info $currentPath/share/man $(echo $currentPath/texmf*/) -type d | while read; do
             REPLY="''${REPLY#$currentPath}"
             mkdir -p $out/"$REPLY"
-	done
+        done
         find $currentPath/share/info $currentPath/share/man $(echo $currentPath/texmf*/) ! -type d | while read; do
             REPLY="''${REPLY#$currentPath}"
             ln -fs $currentPath/"$REPLY" $out/"$REPLY"

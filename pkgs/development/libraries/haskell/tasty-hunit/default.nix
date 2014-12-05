@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tasty-hunit";
-  version = "0.9";
-  sha256 = "1ivp9h34cdrahqy8i0y10fa0mqxa947dpbwvhr46sjja053asjxc";
+  version = "0.9.0.1";
+  sha256 = "0rhdjb4fakcbkz4cvmmf679zad9h5yr31i1g9xm1338p6xd4vwcb";
   buildDepends = [ tasty ];
   meta = {
     homepage = "http://documentup.com/feuerbach/tasty";

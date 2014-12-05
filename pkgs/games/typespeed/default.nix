@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   configureFlags = "--datadir=\${out}/share/";
 
   meta = {
-    description = "A curses based typing game.";
+    description = "A curses based typing game";
     homepage = http://typespeed.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.auntie ];

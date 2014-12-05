@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "mysql-${version}";
-  version = "5.5.39";
+  version = "5.5.40";
 
   src = fetchurl {
-    url = "http://cdn.mysql.com/Downloads/MySQL-5.5/${name}.tar.gz";
-    sha256 = "0qj8bc83v6vf8jyn4ag179nclpn6ilw4h4xqb50zz9jd0c5s14qq";
+    url = "http://mysql.mirrors.pair.com/Downloads/MySQL-5.5/${name}.tar.gz";
+    sha256 = "0q29nzmmxm78b89qjfzgm93r0glaam3xw3zfx1k8ihii39v22dsd";
   };
 
   preConfigure = stdenv.lib.optional stdenv.isDarwin ''
@@ -21,7 +21,22 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  cmakeFlags = "-DWITH_SSL=yes -DWITH_READLINE=yes -DWITH_EMBEDDED_SERVER=yes -DWITH_ZLIB=yes -DINSTALL_SCRIPTDIR=bin -DHAVE_IPV6=yes";
+  cmakeFlags = [
+    "-DWITH_SSL=yes"
+    "-DWITH_READLINE=yes"
+    "-DWITH_EMBEDDED_SERVER=yes"
+    "-DWITH_ZLIB=yes"
+    "-DHAVE_IPV6=yes"
+    "-DINSTALL_DOCDIR=share/doc/mysql"
+    "-DINSTALL_DOCREADMEDIR=share/doc/mysql"
+    "-DINSTALL_INCLUDEDIR=include/mysql"
+    "-DINSTALL_INFODIR=share/doc/mysql"
+    "-DINSTALL_MANDIR=share/man"
+    "-DINSTALL_MYSQLSHAREDIR=share/mysql"
+    "-DINSTALL_MYSQLPLUGINDIR=lib/mysql/plugin"
+    "-DINSTALL_SCRIPTDIR=bin"
+    "-DINSTALL_SUPPORTFILESDIR=share/mysql"
+  ];
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
@@ -30,7 +45,8 @@ stdenv.mkDerivation rec {
   '';
   postInstall = ''
     sed -i -e "s|basedir=\"\"|basedir=\"$out\"|" $out/bin/mysql_install_db
-    rm -rf $out/mysql-test $out/sql-bench
+    rm -r $out/mysql-test $out/sql-bench $out/data
+    rm $out/share/man/man1/mysql-test-run.pl.1
   '';
 
   passthru.mysqlVersion = "5.5";

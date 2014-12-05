@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://dypgen.free.fr;
     description = "Dypgen GLR self extensible parser generator";
-    license = "CeCILL-B_V1";
+    license = stdenv.lib.licenses.cecill-b;
 #    maintainers = [ stdenv.lib.maintainers.roconnor ];
   };
 }

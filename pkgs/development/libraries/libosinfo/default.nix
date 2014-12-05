@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libosinfo-0.2.10";
+  name = "libosinfo-0.2.11";
 
   src = fetchurl {
     url = "https://fedorahosted.org/releases/l/i/libosinfo/${name}.tar.gz";
-    sha256 = "564bd487a39dc09a10917c1d7a95f739ee7701d9cd0fbabcacea64f615e20a2d";
+    sha256 = "0889zvidhmpk3nd7c1xhh3fkk9i014dkr6zdlddh89kbflva2sxv";
   };
 
   buildInputs = [

@@ -34,7 +34,6 @@
     pkgs.xfsprogs
     pkgs.jfsutils
     pkgs.f2fs-tools
-    #pkgs.jfsrec # disabled because of Boost dependency
 
     # Some compression/archiver tools.
     pkgs.unzip

@@ -1,17 +1,18 @@
-{ stdenv, fetchurl, zlib, xz }:
+{ stdenv, fetchgit, zlib, xz }:
 
 stdenv.mkDerivation rec {
-  name = "squashfs-4.2";
+  name = "squashfs-4.4dev";
 
-  src = fetchurl {
-    url = mirror://sourceforge/squashfs/squashfs4.2.tar.gz;
-    sha256 = "15if08j0pl5hmnz9pwshwrp4fjp0jsm9larjxmjvdnr2m5d1kq6r";
+  src = fetchgit {
+    url = https://github.com/plougher/squashfs-tools.git;
+    sha256 = "059pa2shdysr3zfmwrhq28s12zbi5nyzbpzyaf5lmspgfh1493ks";
+    rev = "9c1db6d13a51a2e009f0027ef336ce03624eac0d";
   };
 
   buildInputs = [ zlib xz ];
 
   preBuild = "cd squashfs-tools";
-
+  
   NIX_LDFLAGS = "-lgcc_s"; # for pthread_cancel
 
   installFlags = "INSTALL_DIR=\${out}/bin";
@@ -21,5 +22,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://squashfs.sourceforge.net/;
     description = "Tool for creating and unpacking squashfs filesystems";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

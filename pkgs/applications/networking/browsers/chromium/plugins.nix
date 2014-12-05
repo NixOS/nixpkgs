@@ -1,6 +1,5 @@
 { stdenv
 , enablePepperFlash ? false
-, enablePepperPDF ? false
 , enableWideVine ? false
 
 , source
@@ -16,7 +15,7 @@ let
     src = source.plugins;
 
     phases = [ "unpackPhase" "patchPhase" "installPhase" "checkPhase" ];
-    outputs = [ "pdf" "flash" "widevine" ];
+    outputs = [ "flash" "widevine" ];
 
     unpackCmd = let
       chan = if source.channel == "dev"    then "chrome-unstable"
@@ -26,7 +25,6 @@ let
       mkdir -p plugins
       ar p "$src" data.tar.lzma | tar xJ -C plugins --strip-components=4 \
         ./opt/google/${chan}/PepperFlash \
-        ./opt/google/${chan}/libpdf.so \
         ./opt/google/${chan}/libwidevinecdm.so \
         ./opt/google/${chan}/libwidevinecdmadapter.so
     '';
@@ -40,7 +38,7 @@ let
       rpaths = [ stdenv.gcc.gcc ];
       mkrpath = p: "${makeSearchPath "lib64" p}:${makeSearchPath "lib" p}";
     in ''
-      for sofile in PepperFlash/libpepflashplayer.so libpdf.so \
+      for sofile in PepperFlash/libpepflashplayer.so \
                     libwidevinecdm.so libwidevinecdmadapter.so; do
         chmod +x "$sofile"
         patchelf --set-rpath "${mkrpath rpaths}" "$sofile"
@@ -51,25 +49,12 @@ let
     '';
 
     installPhase = let
-      pdfName = "Chrome PDF Viewer";
-      pdfDescription = "Portable Document Format";
-      pdfMimeTypes = concatStringsSep ";" [
-        "application/pdf"
-        "application/x-google-chrome-print-preview-pdf"
-      ];
-      pdfInfo = "#${pdfName}#${pdfDescription};${pdfMimeTypes}";
-
       wvName = "Widevine Content Decryption Module";
       wvDescription = "Playback of encrypted HTML audio/video content";
       wvMimeTypes = "application/x-ppapi-widevine-cdm";
       wvModule = "$widevine/lib/libwidevinecdmadapter.so";
       wvInfo = "#${wvName}#${wvDescription}:${wvMimeTypes}";
     in ''
-      install -vD libpdf.so "$pdf/lib/libpdf.so"
-      mkdir -p "$pdf/nix-support"
-      echo "--register-pepper-plugins='$pdf/lib/libpdf.so${pdfInfo}'" \
-        > "$pdf/nix-support/chromium-flags"
-
       flashVersion="$(
         sed -n -r 's/.*"version": "([^"]+)",.*/\1/p' PepperFlash/manifest.json
       )"
@@ -77,24 +62,38 @@ let
       install -vD PepperFlash/libpepflashplayer.so \
         "$flash/lib/libpepflashplayer.so"
       mkdir -p "$flash/nix-support"
-      echo "--ppapi-flash-path='$flash/lib/libpepflashplayer.so'" \
-           "--ppapi-flash-version=$flashVersion" \
-           > "$flash/nix-support/chromium-flags"
+      cat > "$flash/nix-support/chromium-plugin.nix" <<NIXOUT
+        { flags = [
+            "--ppapi-flash-path='$flash/lib/libpepflashplayer.so'"
+            "--ppapi-flash-version=$flashVersion"
+          ];
+        }
+      NIXOUT
 
       install -vD libwidevinecdm.so \
         "$widevine/lib/libwidevinecdm.so"
       install -vD libwidevinecdmadapter.so \
         "$widevine/lib/libwidevinecdmadapter.so"
       mkdir -p "$widevine/nix-support"
-      echo "--register-pepper-plugins='${wvModule}${wvInfo}'" \
-        > "$widevine/nix-support/chromium-flags"
+      cat > "$widevine/nix-support/chromium-plugin.nix" <<NIXOUT
+        { flags = [ "--register-pepper-plugins='${wvModule}${wvInfo}'" ];
+          envVars.NIX_CHROMIUM_PLUGIN_PATH_WIDEVINE = "$widevine/lib";
+        }
+      NIXOUT
     '';
 
-    passthru.flagsEnabled = let
+    passthru = let
       enabledPlugins = optional enablePepperFlash plugins.flash
-                    ++ optional enablePepperPDF   plugins.pdf
                     ++ optional enableWideVine    plugins.widevine;
-      getFlags = plugin: "$(< ${plugin}/nix-support/chromium-flags)";
-    in concatStringsSep " " (map getFlags enabledPlugins);
+      getNix = plugin: import "${plugin}/nix-support/chromium-plugin.nix";
+      mergeAttrsets = let
+        f = v: if all isAttrs v then mergeAttrsets v
+          else if all isList  v then concatLists   v
+          else if tail v == []  then head          v
+          else head (tail v);
+      in fold (l: r: zipAttrsWith (_: f) [ l r ]) {};
+    in {
+      settings = mergeAttrsets (map getNix enabledPlugins);
+    };
   };
 in plugins

@@ -37,6 +37,7 @@ let
     paths = cfg.drivers;
     pathsToLink = [ "/lib/cups" "/share/cups" "/bin" "/etc/cups" ];
     postBuild = cfg.bindirCmds;
+    ignoreCollisions = true;
   };
 
 in
@@ -89,6 +90,20 @@ in
         '';
       };
 
+      extraConf = mkOption {
+        type = types.lines;
+        default = "";
+        example =
+          ''
+            BrowsePoll cups.example.com
+            LogLevel debug
+          '';
+        description = ''
+          Extra contents of the configuration file of the CUPS daemon
+          (<filename>cupsd.conf</filename>).
+        '';
+      };
+
       clientConf = mkOption {
         type = types.lines;
         default = "";
@@ -107,7 +122,7 @@ in
         type = types.listOf types.path;
         example = literalExample "[ pkgs.splix ]";
         description = ''
-          CUPS drivers to use. Drivers provided by CUPS, Ghostscript
+          CUPS drivers to use. Drivers provided by CUPS, cups-filters, Ghostscript
           and Samba are added unconditionally.
         '';
       };
@@ -175,7 +190,7 @@ in
       };
 
     services.printing.drivers =
-      [ pkgs.cups pkgs.cups_pdf_filter pkgs.ghostscript additionalBackends
+      [ pkgs.cups pkgs.ghostscript pkgs.cups_filters additionalBackends
         pkgs.perl pkgs.coreutils pkgs.gnused pkgs.bc pkgs.gawk pkgs.gnugrep
       ];
 
@@ -257,6 +272,7 @@ in
             Order deny,allow
           </Limit>
         </Policy>
+        ${cfg.extraConf}
       '';
 
     security.pam.services.cups = {};

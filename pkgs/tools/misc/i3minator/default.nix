@@ -32,7 +32,7 @@ in buildPythonPackage rec {
       project is inspired by tmuxinator and uses i3-py.
     '';
     homepage = https://github.com/carlesso/i3minator;
-    license = "WTFPL"; # http://sam.zoy.org/wtfpl/
+    license = stdenv.lib.licenses.wtfpl;
     maintainers = with maintainers; [ iElectric ];
     platforms = stdenv.lib.platforms.linux;
   };

@@ -5,11 +5,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "optipng-0.7.4";
+  name = "optipng-0.7.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/optipng/${name}.tar.gz";
-    sha256 = "1zrphbz17rhhfl1l95q5s979rrhifbwczl2xj1fdrnq5jid5s2sj";
+    sha256 = "17b197437z5wn29llpwklk7ihgx8bhc913gvjf4zyb81idwlprbl";
   };
 
   buildInputs = [ libpng ];

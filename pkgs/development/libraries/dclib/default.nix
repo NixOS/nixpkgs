@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = ftp://ftp.debian.nl/pub/freebsd/ports/distfiles/dclib-0.3.7.tar.bz2;
-    md5 = "d35833414534bcac8ce2c8a62ce903a4";
+    sha256 = "02jdzm5hqzs1dv2rd596vgpcjaapm55pqqapz5m94l30v4q72rfc";
   };
 
   buildInputs = [libxml2 openssl bzip2];

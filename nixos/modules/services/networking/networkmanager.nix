@@ -52,6 +52,7 @@ let
     #!/bin/sh
     if test "$2" = "up"; then
       ${config.systemd.package}/bin/systemctl start ip-up.target
+      ${config.systemd.package}/bin/systemctl start network-online.target
     fi
   '';
 
@@ -177,8 +178,8 @@ in {
     systemd.services."networkmanager-init" = {
       description = "NetworkManager initialisation";
       wantedBy = [ "network.target" ];
-      wants = [ "NetworkManager.service" ];
-      before = [ "NetworkManager.service" ];
+      wants = [ "network-manager.service" ];
+      before = [ "network-manager.service" ];
       script = ''
         mkdir -m 700 -p /etc/NetworkManager/system-connections
         mkdir -m 755 -p ${stateDirs}
@@ -193,7 +194,7 @@ in {
     };
 
     powerManagement.resumeCommands = ''
-      systemctl restart NetworkManager
+      Systemctl restart network-manager
     '';
 
     security.polkit.extraConfig = polkitConf;

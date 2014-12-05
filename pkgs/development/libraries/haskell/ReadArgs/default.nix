@@ -4,12 +4,13 @@
 
 cabal.mkDerivation (self: {
   pname = "ReadArgs";
-  version = "1.2.1";
-  sha256 = "099gg6nq70yf2pl5ya8f083lw8x5rncnv54y2p5jlkdwfwmpmbnv";
+  version = "1.2.2";
+  sha256 = "1v6yr5zzrrj31prfzxxh1n27sfnkqpkw34v3a47rcnm444ba58a7";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ systemFilepath text ];
   testDepends = [ hspec systemFilepath text ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/rampion/ReadArgs";
     description = "Simple command line argument parsing";

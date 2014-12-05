@@ -18,5 +18,6 @@ cabal.mkDerivation (self: {
     description = "Static code analysis using graph-theoretic techniques";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })

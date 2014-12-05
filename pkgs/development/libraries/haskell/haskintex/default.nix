@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haskintex";
-  version = "0.5.0.1";
-  sha256 = "14x1n7x0dqcj14qkv0lmf2jcrswyjjjygqj5vdj6w29a8v9zr296";
+  version = "0.5.0.2";
+  sha256 = "1qfqslr8pxks3qmfarmscgvc0q8zn72prqyk5xhmfvkf6q35pmfn";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

@@ -30,34 +30,13 @@ let
     else
       fn;
 
-  # Convert the list of options into an XML file and a JSON file.  The builtin
-  # unsafeDiscardStringContext is used to prevent the realisation of the store
-  # paths which are used in options definitions.
+  # Convert the list of options into an XML file.  The builtin
+  # unsafeDiscardStringContext is used to prevent the realisation of
+  # the store paths which are used in options definitions.
   optionsXML = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext (builtins.toXML optionsList'));
-  optionsJSON = builtins.toFile "options.json" (builtins.unsafeDiscardStringContext (builtins.toJSON optionsList'));
-
-  # Tools-friendly version of the list of NixOS options.
-  options' = stdenv.mkDerivation {
-    name = "options";
-
-    buildCommand = ''
-      # Export list of options in different format.
-      dst=$out/share/doc/nixos
-      mkdir -p $dst
-
-      cp ${optionsJSON} $dst/options.json
-      cp ${optionsXML} $dst/options.xml
-
-      mkdir -p $out/nix-support
-      echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
-      echo "file xml $dst/options.xml" >> $out/nix-support/hydra-build-products
-    ''; # */
-
-    meta.description = "List of NixOS options in various formats.";
-  };
 
   optionsDocBook = runCommand "options-db.xml" {} ''
-    optionsXML=${options'}/share/doc/nixos/options.xml
+    optionsXML=${optionsXML}
     if grep /nixpkgs/nixos/modules $optionsXML; then
       echo "The manual appears to depend on the location of Nixpkgs, which is bad"
       echo "since this prevents sharing via the NixOS channel.  This is typically"
@@ -83,8 +62,25 @@ let
 
 in rec {
 
-  # Tools-friendly version of the list of NixOS options.
-  options = options';
+  # The NixOS options in JSON format.
+  optionsJSON = stdenv.mkDerivation {
+    name = "options-json";
+
+    buildCommand = ''
+      # Export list of options in different format.
+      dst=$out/share/doc/nixos
+      mkdir -p $dst
+
+      cp ${builtins.toFile "options.json" (builtins.unsafeDiscardStringContext (builtins.toJSON
+        (listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList'))))
+      } $dst/options.json
+
+      mkdir -p $out/nix-support
+      echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
+    ''; # */
+
+    meta.description = "List of NixOS options in JSON format";
+  };
 
   # Generate the NixOS manual.
   manual = stdenv.mkDerivation {

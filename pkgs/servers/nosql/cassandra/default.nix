@@ -35,8 +35,8 @@ in stdenv.mkDerivation rec {
     '';
 
   meta = {
-    homepage = "http://cassandra.apache.org/";
-    description = "Apache Cassandra™ is a massively scalable open source NoSQL database.";
+    homepage = http://cassandra.apache.org/;
+    description = "A massively scalable open source NoSQL database";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.asl20;
   };

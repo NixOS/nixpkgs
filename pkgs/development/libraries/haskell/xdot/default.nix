@@ -4,8 +4,10 @@
 
 cabal.mkDerivation (self: {
   pname = "xdot";
-  version = "0.2.4.3";
-  sha256 = "0p6y3ng8nwi8sksy0881bs331asi73x816zd5v7qlg4v719s8jxg";
+  version = "0.2.4.6";
+  sha256 = "123vygzkqlycc298zh3321y7w85xnynbavzqms6cb8zgzya42wrs";
+  isLibrary = true;
+  isExecutable = true;
   buildDepends = [ cairo graphviz gtk mtl polyparse text ];
   jailbreak = true;
   meta = {

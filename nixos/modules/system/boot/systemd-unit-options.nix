@@ -4,15 +4,184 @@ with lib;
 
 let
 
-  checkService = v:
-    let assertValueOneOf = name: values: attr:
-          let val = attr.${name};
-          in optional (attr ? ${name} && !elem val values) "Systemd service field `${name}' cannot have value `${val}'.";
-        checkType = assertValueOneOf "Type" ["simple" "forking" "oneshot" "dbus" "notify" "idle"];
-        checkRestart = assertValueOneOf "Restart" ["no" "on-success" "on-failure" "on-abort" "always"];
-        errors = concatMap (c: c v) [checkType checkRestart];
-    in if errors == [] then true
-       else builtins.trace (concatStringsSep "\n" errors) false;
+  boolValues = [true false "yes" "no"];
+
+  assertValueOneOf = name: values: group: attr:
+    optional (attr ? ${name} && !elem attr.${name} values)
+      "Systemd ${group} field `${name}' cannot have value `${attr.${name}}'.";
+
+  assertHasField = name: group: attr:
+    optional (!(attr ? ${name}))
+      "Systemd ${group} field `${name}' must exist.";
+
+  assertOnlyFields = fields: group: attr:
+    let badFields = filter (name: ! elem name fields) (attrNames attr); in
+    optional (badFields != [ ])
+      "Systemd ${group} has extra fields [${concatStringsSep " " badFields}].";
+
+  assertRange = name: min: max: group: attr:
+    optional (attr ? ${name} && !(min <= attr.${name} && max >= attr.${name}))
+      "Systemd ${group} field `${name}' is outside the range [${toString min},${toString max}]";
+
+  digits = map toString (range 0 9);
+
+  isByteFormat = s:
+    let
+      l = reverseList (stringToCharacters s);
+      suffix = head l;
+      nums = tail l;
+    in elem suffix (["K" "M" "G" "T"] ++ digits)
+      && all (num: elem num digits) nums;
+
+  assertByteFormat = name: group: attr:
+    optional (attr ? ${name} && ! isByteFormat attr.${name})
+      "Systemd ${group} field `${name}' must be in byte format [0-9]+[KMGT].";
+
+  hexChars = stringToCharacters "0123456789abcdefABCDEF";
+
+  isMacAddress = s: stringLength s == 17
+    && flip all (splitString ":" s) (bytes:
+      all (byte: elem byte hexChars) (stringToCharacters bytes)
+    );
+
+  assertMacAddress = name: group: attr:
+    optional (attr ? ${name} && ! isMacAddress attr.${name})
+      "Systemd ${group} field `${name}' must be a valid mac address.";
+
+  checkUnitConfig = group: checks: v:
+    let errors = concatMap (c: c group v) checks; in
+    if errors == [] then true
+      else builtins.trace (concatStringsSep "\n" errors) false;
+
+  checkService = checkUnitConfig "Service" [
+    (assertValueOneOf "Type" [
+      "simple" "forking" "oneshot" "dbus" "notify" "idle"
+    ])
+    (assertValueOneOf "Restart" [
+      "no" "on-success" "on-failure" "on-abort" "always"
+    ])
+  ];
+
+  checkLink = checkUnitConfig "Link" [
+    (assertOnlyFields [
+      "Description" "Alias" "MACAddressPolicy" "MACAddress" "NamePolicy" "Name"
+      "MTUBytes" "BitsPerSecond" "Duplex" "WakeOnLan"
+    ])
+    (assertValueOneOf "MACAddressPolicy" ["persistent" "random"])
+    (assertMacAddress "MACAddress")
+    (assertValueOneOf "NamePolicy" [
+      "kernel" "database" "onboard" "slot" "path" "mac"
+    ])
+    (assertByteFormat "MTUBytes")
+    (assertByteFormat "BitsPerSecond")
+    (assertValueOneOf "Duplex" ["half" "full"])
+    (assertValueOneOf "WakeOnLan" ["phy" "magic" "off"])
+  ];
+
+  checkNetdev = checkUnitConfig "Netdev" [
+    (assertOnlyFields [
+      "Description" "Name" "Kind" "MTUBytes" "MACAddress"
+    ])
+    (assertHasField "Name")
+    (assertHasField "Kind")
+    (assertValueOneOf "Kind" [
+      "bridge" "bond" "vlan" "macvlan" "vxlan" "ipip"
+      "gre" "sit" "vti" "veth" "tun" "tap" "dummy"
+    ])
+    (assertByteFormat "MTUBytes")
+    (assertMacAddress "MACAddress")
+  ];
+
+  checkVlan = checkUnitConfig "VLAN" [
+    (assertOnlyFields ["Id"])
+    (assertRange "Id" 0 4094)
+  ];
+
+  checkMacvlan = checkUnitConfig "MACVLAN" [
+    (assertOnlyFields ["Mode"])
+    (assertValueOneOf "Mode" ["private" "vepa" "bridge" "passthru"])
+  ];
+
+  checkVxlan = checkUnitConfig "VXLAN" [
+    (assertOnlyFields ["Id" "Group" "TOS" "TTL" "MacLearning"])
+    (assertRange "TTL" 0 255)
+    (assertValueOneOf "MacLearning" boolValues)
+  ];
+
+  checkTunnel = checkUnitConfig "Tunnel" [
+    (assertOnlyFields ["Local" "Remote" "TOS" "TTL" "DiscoverPathMTU"])
+    (assertRange "TTL" 0 255)
+    (assertValueOneOf "DiscoverPathMTU" boolValues)
+  ];
+
+  checkPeer = checkUnitConfig "Peer" [
+    (assertOnlyFields ["Name" "MACAddress"])
+    (assertMacAddress "MACAddress")
+  ];
+
+  tunTapChecks = [
+    (assertOnlyFields ["OneQueue" "MultiQueue" "PacketInfo" "User" "Group"])
+    (assertValueOneOf "OneQueue" boolValues)
+    (assertValueOneOf "MultiQueue" boolValues)
+    (assertValueOneOf "PacketInfo" boolValues)
+  ];
+
+  checkTun = checkUnitConfig "Tun" tunTapChecks;
+
+  checkTap = checkUnitConfig "Tap" tunTapChecks;
+
+  checkBond = checkUnitConfig "Bond" [
+    (assertOnlyFields [
+      "Mode" "TransmitHashPolicy" "LACPTransmitRate" "MIIMonitorSec"
+      "UpDelaySec" "DownDelaySec"
+    ])
+    (assertValueOneOf "Mode" [
+      "balance-rr" "active-backup" "balance-xor"
+      "broadcast" "802.3ad" "balance-tlb" "balance-alb"
+    ])
+    (assertValueOneOf "TransmitHashPolicy" [
+      "layer2" "layer3+4" "layer2+3" "encap2+3" "802.3ad" "encap3+4"
+    ])
+    (assertValueOneOf "LACPTransmitRate" ["slow" "fast"])
+  ];
+
+  checkNetwork = checkUnitConfig "Network" [
+    (assertOnlyFields [
+      "Description" "DHCP" "DHCPServer" "IPv4LL" "IPv4LLRoute"
+      "LLMNR" "Domains" "Bridge" "Bond"
+    ])
+    (assertValueOneOf "DHCP" ["both" "none" "v4" "v6"])
+    (assertValueOneOf "DHCPServer" boolValues)
+    (assertValueOneOf "IPv4LL" boolValues)
+    (assertValueOneOf "IPv4LLRoute" boolValues)
+    (assertValueOneOf "LLMNR" boolValues)
+  ];
+
+  checkAddress = checkUnitConfig "Address" [
+    (assertOnlyFields ["Address" "Peer" "Broadcast" "Label"])
+    (assertHasField "Address")
+  ];
+
+  checkRoute = checkUnitConfig "Route" [
+    (assertOnlyFields ["Gateway" "Destination" "Metric"])
+    (assertHasField "Gateway")
+  ];
+
+  checkDhcp = checkUnitConfig "DHCP" [
+    (assertOnlyFields [
+      "UseDNS" "UseMTU" "SendHostname" "UseHostname" "UseDomains" "UseRoutes"
+      "CriticalConnections" "VendorClassIdentifier" "RequestBroadcast"
+      "RouteMetric"
+    ])
+    (assertValueOneOf "UseDNS" boolValues)
+    (assertValueOneOf "UseMTU" boolValues)
+    (assertValueOneOf "SendHostname" boolValues)
+    (assertValueOneOf "UseHostname" boolValues)
+    (assertValueOneOf "UseDomains" boolValues)
+    (assertValueOneOf "UseRoutes" boolValues)
+    (assertValueOneOf "CriticalConnections" boolValues)
+    (assertValueOneOf "RequestBroadcast" boolValues)
+  ];
 
   unitOption = mkOptionType {
     name = "systemd option";
@@ -137,6 +306,15 @@ in rec {
       description = ''
         If the specified units are started, then this unit is stopped
         and vice versa.
+      '';
+    };
+
+    requisite = mkOption {
+      default = [];
+      type = types.listOf types.str;
+      description = ''
+        Similar to requires. However if the units listed are not started,
+        they will not be started and the transaction will fail.
       '';
     };
 
@@ -440,5 +618,346 @@ in rec {
   };
 
   targetOptions = commonUnitOptions;
+
+  commonNetworkOptions = {
+
+    enable = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        If set to false, this unit will be a symlink to
+        /dev/null.
+      '';
+    };
+
+    matchConfig = mkOption {
+      default = {};
+      example = { Name = "eth0"; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Match]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.link</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+        <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+        for details.
+      '';
+    };
+
+  };
+
+  linkOptions = commonNetworkOptions // {
+
+    linkConfig = mkOption {
+      default = {};
+      example = { MACAddress = "00:ff:ee:aa:cc:dd"; };
+      type = types.addCheck (types.attrsOf unitOption) checkLink;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Link]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.link</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+  };
+
+  netdevOptions = commonNetworkOptions // {
+
+    netdevConfig = mkOption {
+      default = {};
+      example = { Name = "mybridge"; Kind = "bridge"; };
+      type = types.addCheck (types.attrsOf unitOption) checkNetdev;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Netdev]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    vlanConfig = mkOption {
+      default = {};
+      example = { Id = "4"; };
+      type = types.addCheck (types.attrsOf unitOption) checkVlan;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[VLAN]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    macvlanConfig = mkOption {
+      default = {};
+      example = { Mode = "private"; };
+      type = types.addCheck (types.attrsOf unitOption) checkMacvlan;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[MACVLAN]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    vxlanConfig = mkOption {
+      default = {};
+      example = { Id = "4"; };
+      type = types.addCheck (types.attrsOf unitOption) checkVxlan;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[VXLAN]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    tunnelConfig = mkOption {
+      default = {};
+      example = { Remote = "192.168.1.1"; };
+      type = types.addCheck (types.attrsOf unitOption) checkTunnel;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Tunnel]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    peerConfig = mkOption {
+      default = {};
+      example = { Name = "veth2"; };
+      type = types.addCheck (types.attrsOf unitOption) checkPeer;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Peer]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    tunConfig = mkOption {
+      default = {};
+      example = { User = "openvpn"; };
+      type = types.addCheck (types.attrsOf unitOption) checkTun;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Tun]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    tapConfig = mkOption {
+      default = {};
+      example = { User = "openvpn"; };
+      type = types.addCheck (types.attrsOf unitOption) checkTap;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Tap]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    bondConfig = mkOption {
+      default = {};
+      example = { Mode = "802.3ad"; };
+      type = types.addCheck (types.attrsOf unitOption) checkBond;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Bond]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+  };
+
+  addressOptions = {
+
+    addressConfig = mkOption {
+      default = {};
+      example = { Address = "192.168.0.100/24"; };
+      type = types.addCheck (types.attrsOf unitOption) checkAddress;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Address]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+  };
+
+  routeOptions = {
+
+    routeConfig = mkOption {
+      default = {};
+      example = { Gateway = "192.168.0.1"; };
+      type = types.addCheck (types.attrsOf unitOption) checkRoute;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Route]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+  };
+
+  networkOptions = commonNetworkOptions // {
+
+    networkConfig = mkOption {
+      default = {};
+      example = { Description = "My Network"; };
+      type = types.addCheck (types.attrsOf unitOption) checkNetwork;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Network]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    dhcpConfig = mkOption {
+      default = {};
+      example = { UseDNS = true; UseRoutes = true; };
+      type = types.addCheck (types.attrsOf unitOption) checkDhcp;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[DHCP]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    name = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        The name of the network interface to match against.
+      '';
+    };
+
+    DHCP = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Whether to enable DHCP on the interfaces matched.
+      '';
+    };
+
+    domains = mkOption {
+      type = types.nullOr (types.listOf types.str);
+      default = null;
+      description = ''
+        A list of domains to pass to the network config.
+      '';
+    };
+
+    address = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of addresses to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    gateway = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of gateways to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    dns = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of dns servers to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    ntp = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of ntp servers to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    vlan = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of vlan interfaces to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    macvlan = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of macvlan interfaces to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    vxlan = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of vxlan interfaces to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    tunnel = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of tunnel interfaces to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    addresses = mkOption {
+      default = [ ];
+      type = types.listOf types.optionSet;
+      options = [ addressOptions ];
+      description = ''
+        A list of address sections to be added to the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    routes = mkOption {
+      default = [ ];
+      type = types.listOf types.optionSet;
+      options = [ routeOptions ];
+      description = ''
+        A list of route sections to be added to the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+  };
 
 }

@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "20140608";
+  version = "20141029";
 in stdenv.mkDerivation rec {
   name = "openra-${version}";
 
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     name = "${name}.tar.gz";
     url = "https://github.com/OpenRA/OpenRA/archive/release-${version}.tar.gz";
-    sha256 = "0k7siysxb2nk7zzrl7vz1cwky4nla46ixzgxgc8rq6ilmlidh96b";
+    sha256 = "082rwcy866k636s4qhbry3ja2p81mdz58bh1dw2mic5mv2q6p67r";
   };
 
   dontStrip = true;

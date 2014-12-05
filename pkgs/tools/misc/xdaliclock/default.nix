@@ -3,9 +3,9 @@ x@{builderDefsPackage
   , libSM, libXext
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     [];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -35,7 +35,7 @@ rec {
   '' ["minInit" "defEnsureDir"];
 
   goSrcDir = "cd X11";
-      
+
   meta = {
     description = "A clock application that morphs digits when they are changed";
     maintainers = with a.lib.maintainers;
@@ -44,7 +44,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux ++ freebsd;
-    license = "free"; #TODO BSD on Gentoo, looks like MIT
+    license = a.lib.licenses.free; #TODO BSD on Gentoo, looks like MIT
     downloadPage = "http://www.jwz.org/xdaliclock/";
     inherit version;
     updateWalker = true;

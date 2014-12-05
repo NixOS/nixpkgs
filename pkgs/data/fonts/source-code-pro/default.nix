@@ -37,6 +37,6 @@ rec {
     maintainers = with a.lib.maintainers; [ relrod ];
     platforms = with a.lib.platforms; all;
     homepage = "http://blog.typekit.com/2012/09/24/source-code-pro/";
-    license = "OFL";
+    license = a.lib.licenses.ofl;
   };
 }) x

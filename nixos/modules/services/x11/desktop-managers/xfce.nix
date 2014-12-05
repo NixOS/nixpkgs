@@ -56,6 +56,7 @@ in
         pkgs.xfce.xfce4session
         pkgs.xfce.xfce4settings
         pkgs.xfce.xfce4mixer
+        pkgs.xfce.xfce4volumed
         pkgs.xfce.xfce4screenshooter
         pkgs.xfce.xfconf
         pkgs.xfce.xfdesktop

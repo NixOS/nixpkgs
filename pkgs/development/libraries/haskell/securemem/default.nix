@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "securemem";
-  version = "0.1.3";
-  sha256 = "1kycpk73vh8wwxzn35hmv36vwsc9r4g53f2fy6bn21q9gfm2r90j";
+  version = "0.1.4";
+  sha256 = "1wdbcnyaarrixfvz79mcyqmfnn9h5zsmrrsa64xj8650ppyaxi48";
   buildDepends = [ byteable ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-securemem";

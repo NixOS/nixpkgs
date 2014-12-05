@@ -40,7 +40,6 @@ in
     # TODO: move most of these elsewhere
     environment.profileRelativeEnvVars =
       { PATH = [ "/bin" "/sbin" "/lib/kde4/libexec" ];
-        MANPATH = [ "/man" "/share/man" ];
         INFOPATH = [ "/info" "/share/info" ];
         PKG_CONFIG_PATH = [ "/lib/pkgconfig" ];
         TERMINFO_DIRS = [ "/share/terminfo" ];

@@ -69,7 +69,7 @@ let
     use_system_xdg_utils = true;
     use_system_yasm = true;
     use_system_zlib = false;
-    use_system_protobuf = true;
+    use_system_protobuf = false; # needs newer protobuf
 
     use_system_harfbuzz = false;
     use_system_icu = false; # Doesn't support ICU 52 yet.
@@ -190,6 +190,7 @@ let
       libExecPath="${libExecPath}"
       python build/linux/unbundle/replace_gyp_files.py ${gypFlags}
       python build/gyp_chromium -f ninja --depth "$(pwd)" ${gypFlags}
+      find . -iname '*.py[co]' -delete
     '';
 
     buildPhase = let

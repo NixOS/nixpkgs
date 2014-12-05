@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/cdrtools/${name}.tar.bz2";
-    md5 = "d44a81460e97ae02931c31188fe8d3fd";
+    sha256 = "08kc5w4z5k2ka7i05an7gfzzp0fsrc403riav7bw8xws0rsn32vj";
   };
 
   patches = [./cdrtools-2.01-install.patch];

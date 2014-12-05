@@ -4,6 +4,7 @@ set -x
 lib=" \
   makemkv-oss-${ver}/out/libdriveio.so.0 \
   makemkv-oss-${ver}/out/libmakemkv.so.1 \
+  makemkv-oss-${ver}/out/libmmbd.so.0 \
   "
 
 bin=" \
@@ -16,7 +17,8 @@ tar xzf ${src_oss}
 
 (
   cd makemkv-oss-${ver}
-  make -f makefile.linux
+  ./configure --prefix=$out
+  make
 )
 
 chmod +x ${bin}
