@@ -104,6 +104,8 @@ stdenv.mkDerivation rec {
   # to make its dlopen work.
   NIX_LDFLAGS = "-lcups";
 
+  NIX_CFLAGS_COMPILE="-std=c++11"; # glm 0.9.6.0 insists on this
+
   # If we call 'configure', 'make' will then call configure again without parameters.
   # It's their system.
   configureScript = "./autogen.sh";
