@@ -38,7 +38,7 @@ let
   makeConfig = { testChannel, grubVersion, grubDevice, grubIdentifier
     , readOnly ? true, forceGrubReinstallCount ? 0 }:
     pkgs.writeText "configuration.nix" ''
-      { config, pkgs, modulesPath, ... }:
+      { config, lib, pkgs, modulesPath, ... }:
 
       { imports =
           [ ./hardware-configuration.nix
@@ -58,7 +58,7 @@ let
 
         ${optionalString (!readOnly) "nix.readOnlyStore = false;"}
 
-        swapDevices = mkOverride 0 [ ];
+        swapDevices = lib.mkOverride 0 [ ];
 
         environment.systemPackages = [ ${optionalString testChannel "pkgs.rlwrap"} ];
       }
@@ -68,7 +68,7 @@ let
   # Configuration of a web server that simulates the Nixpkgs channel
   # distribution server.
   webserver =
-    { config, pkgs, ... }:
+    { config, lib, pkgs, ... }:
 
     { services.httpd.enable = true;
       services.httpd.adminAddr = "foo@example.org";
