@@ -1760,6 +1760,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   murmurHash = callPackage ../development/libraries/haskell/murmur-hash {};
 
+  mvc = callPackage ../development/libraries/haskell/mvc {};
+
   mwcRandom = callPackage ../development/libraries/haskell/mwc-random {};
 
   mysql = callPackage ../development/libraries/haskell/mysql {
