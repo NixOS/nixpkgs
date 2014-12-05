@@ -4,12 +4,11 @@
 
 cabal.mkDerivation (self: {
   pname = "linear-opengl";
-  version = "0.2.0.3";
-  sha256 = "1fkx5qbimkw2z6nv1jrqb1s0pixlb7l54wxvlhx0nx1kw299dbnd";
+  version = "0.2.0.4";
+  sha256 = "11pdif2w730jqknajr2si77a0z4v4k5spm5zdks642i25ya135ba";
   buildDepends = [
     distributive lens linear OpenGL OpenGLRaw tagged
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://www.github.com/bgamari/linear-opengl";
     description = "Isomorphisms between linear and OpenGL types";
