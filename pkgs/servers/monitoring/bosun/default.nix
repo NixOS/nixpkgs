@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://bosun.org;
     license = licenses.mit;
-    platforms = ["x86_64-linux"];
+    platforms = platforms.unix;
   };
 }
