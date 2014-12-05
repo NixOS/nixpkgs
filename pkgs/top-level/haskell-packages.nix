@@ -1762,6 +1762,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   mvc = callPackage ../development/libraries/haskell/mvc {};
 
+  mvcUpdates = callPackage ../development/libraries/haskell/mvc-updates {};
+
   mwcRandom = callPackage ../development/libraries/haskell/mwc-random {};
 
   mysql = callPackage ../development/libraries/haskell/mysql {
