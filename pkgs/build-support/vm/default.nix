@@ -1517,11 +1517,11 @@ rec {
       packagesLists =
         [ (fetchurl {
             url = mirror://ubuntu/dists/utopic/main/binary-i386/Packages.bz2;
-            sha256 = "d703032d9291783772c790c17d428ea6cf6d04c3baac5159e623ae60b681e64e";
+            sha256 = "dc33a906ccb5625740251da759393d7daace65013d421c79fdd6c99a6490d989";
           })
           (fetchurl {
             url = mirror://ubuntu/dists/utopic/universe/binary-i386/Packages.bz2;
-            sha256 = "cc9232b7fd937bd8894ad6daf28bd4b2a7428e09a0c1661c708e846b3af24ec8";
+            sha256 = "e50553c033d9e478507405e63ce7d43c8060368ea851eca0c93b75b72fd85167";
           })
         ];
       urlPrefix = mirror://ubuntu;
@@ -1534,11 +1534,11 @@ rec {
       packagesList =
         [ (fetchurl {
             url = mirror://ubuntu/dists/utopic/main/binary-amd64/Packages.bz2;
-            sha256 = "56b5cce1a2c8ae1ea46b1d4c50345f0fc8f1108a8db27f6dd8409d566eb517c9";
+            sha256 = "9650775abec90a24c26dbb03f91a488180309144338f64f7044f7119d60d7182";
           })
           (fetchurl {
             url = mirror://ubuntu/dists/utopic/universe/binary-amd64/Packages.bz2;
-            sha256 = "66ca2bf3363b4b45b97e5f5047bd736947d672c31693ed78bacd36e63b19bb63";
+            sha256 = "2acf0e39e64b4fd6d2b68b55c598fc167d7c3cabae233fc31a1e6b69eb6ecc63";
           })
         ];
       urlPrefix = mirror://ubuntu;
