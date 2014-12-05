@@ -5285,6 +5285,7 @@ let
   };
 
   glm = callPackage ../development/libraries/glm { };
+  glm_0954 = callPackage ../development/libraries/glm/0954.nix { };
 
   glog = callPackage ../development/libraries/glog { };
 
@@ -10063,6 +10064,7 @@ let
     zip = zip.override { enableNLS = false; };
     jdk = openjdk;
     boost = boost155;
+    glm = glm_0954;
     fontsConf = makeFontsConf {
       fontDirectories = [
         freefont_ttf xorg.fontmiscmisc xorg.fontbhttf
