@@ -35,7 +35,7 @@ let
 
 
   # The configuration to install.
-  makeConfig = { testChannel, useEFI, grubVersion, grubDevice, grubIdentifier
+  makeConfig = { testChannel, grubVersion, grubDevice, grubIdentifier
     , readOnly ? true, forceGrubReinstallCount ? 0 }:
     pkgs.writeText "configuration.nix" ''
       { config, pkgs, modulesPath, ... }:
@@ -46,22 +46,19 @@ let
             <nixpkgs/nixos/modules/profiles/minimal.nix>
           ];
 
-        ${if useEFI then ''
-          boot.loader.efi.canTouchEfiVariables = true;
-          boot.loader.gummiboot.enable = true;
-        '' else ''
-          boot.loader.grub.version = ${toString grubVersion};
-          ${optionalString (grubVersion == 1) ''
-            boot.loader.grub.splashImage = null;
-          ''}
-          boot.loader.grub.device = "${grubDevice}";
-          boot.loader.grub.extraConfig = "serial; terminal_output.serial";
-          boot.loader.grub.fsIdentifier = "${grubIdentifier}";
+        boot.loader.grub.version = ${toString grubVersion};
+        ${optionalString (grubVersion == 1) ''
+          boot.loader.grub.splashImage = null;
         ''}
+        boot.loader.grub.device = "${grubDevice}";
+        boot.loader.grub.extraConfig = "serial; terminal_output.serial";
+        boot.loader.grub.fsIdentifier = "${grubIdentifier}";
 
         boot.loader.grub.configurationLimit = 100 + ${toString forceGrubReinstallCount};
 
         ${optionalString (!readOnly) "nix.readOnlyStore = false;"}
+
+        swapDevices = mkOverride 0 [ ];
 
         environment.systemPackages = [ ${optionalString testChannel "pkgs.rlwrap"} ];
       }
@@ -100,16 +97,14 @@ let
   # disk, and then reboot from the hard disk.  It's parameterized with
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems.
-  testScriptFun = { createPartitions, testChannel, useEFI, grubVersion, grubDevice, grubIdentifier }:
+  testScriptFun = { createPartitions, testChannel, grubVersion, grubDevice, grubIdentifier }:
     let
       # FIXME: OVMF doesn't boot from virtio http://www.mail-archive.com/edk2-devel@lists.sourceforge.net/msg01501.html
-      iface = if useEFI || grubVersion == 1 then "scsi" else "virtio";
+      iface = if grubVersion == 1 then "scsi" else "virtio";
       qemuFlags =
         (if iso.system == "x86_64-linux" then "-m 768 " else "-m 512 ") +
-        (optionalString (iso.system == "x86_64-linux") "-cpu kvm64 ") +
-        (optionalString useEFI ''-L ${efiBios} -hda ''${\(Cwd::abs_path('harddisk'))} '');
-      hdFlags = optionalString (!useEFI)
-        ''hda => "harddisk", hdaInterface => "${iface}", '';
+        (optionalString (iso.system == "x86_64-linux") "-cpu kvm64 ");
+      hdFlags =''hda => "harddisk", hdaInterface => "${iface}", '';
     in
     ''
       createDisk("harddisk", 4 * 1024);
@@ -168,7 +163,7 @@ let
       $machine->succeed("cat /mnt/etc/nixos/hardware-configuration.nix >&2");
 
       $machine->copyFileFromHost(
-          "${ makeConfig { inherit testChannel useEFI grubVersion grubDevice grubIdentifier; } }",
+          "${ makeConfig { inherit testChannel grubVersion grubDevice grubIdentifier; } }",
           "/mnt/etc/nixos/configuration.nix");
 
       # Perform the installation.
@@ -189,11 +184,7 @@ let
       # Did /boot get mounted?
       $machine->waitForUnit("local-fs.target");
 
-      ${if useEFI then ''
-        $machine->succeed("test -e /boot/efi");
-      '' else ''
-        $machine->succeed("test -e /boot/grub");
-      ''}
+      $machine->succeed("test -e /boot/grub");
 
       # Did the swap device get activated?
       $machine->waitForUnit("swap.target");
@@ -206,7 +197,7 @@ let
 
       # We need to a writable nix-store on next boot
       $machine->copyFileFromHost(
-          "${ makeConfig { inherit testChannel useEFI grubVersion grubDevice grubIdentifier; readOnly = false; forceGrubReinstallCount = 1; } }",
+          "${ makeConfig { inherit testChannel grubVersion grubDevice grubIdentifier; readOnly = false; forceGrubReinstallCount = 1; } }",
           "/etc/nixos/configuration.nix");
 
       # Check whether nixos-rebuild works.
@@ -223,7 +214,7 @@ let
       $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}" });
       $machine->waitForUnit("multi-user.target");
       $machine->copyFileFromHost(
-          "${ makeConfig { inherit testChannel useEFI grubVersion grubDevice grubIdentifier; readOnly = false; forceGrubReinstallCount = 2; } }",
+          "${ makeConfig { inherit testChannel grubVersion grubDevice grubIdentifier; readOnly = false; forceGrubReinstallCount = 2; } }",
           "/etc/nixos/configuration.nix");
       $machine->succeed("nixos-rebuild boot >&2");
       $machine->shutdown;
@@ -237,13 +228,13 @@ let
 
 
   makeInstallerTest = name:
-    { createPartitions, testChannel ? false, useEFI ? false, grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid" }:
+    { createPartitions, testChannel ? false, grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid" }:
     makeTest {
       inherit iso;
       name = "installer-" + name;
       nodes = if testChannel then { inherit webserver; } else { };
       testScript = testScriptFun {
-        inherit createPartitions testChannel useEFI grubVersion grubDevice grubIdentifier;
+        inherit createPartitions testChannel grubVersion grubDevice grubIdentifier;
       };
     };
 
@@ -367,25 +358,6 @@ in {
         '';
       grubVersion = 1;
       grubDevice = "/dev/sda";
-    };
-
-  # Test an EFI install.
-  efi = makeInstallerTest "efi"
-    { createPartitions =
-        ''
-          $machine->succeed(
-              "sgdisk -Z /dev/sda",
-              "sgdisk -n 1:0:+256M -n 2:0:+1024M -N 3 -t 1:ef00 -t 2:8200 -t 3:8300 -c 1:boot -c 2:swap -c 3:root /dev/sda",
-              "mkfs.vfat -n BOOT /dev/sda1",
-              "mkswap /dev/sda2 -L swap",
-              "swapon -L swap",
-              "mkfs.ext3 -L nixos /dev/sda3",
-              "mount LABEL=nixos /mnt",
-              "mkdir /mnt/boot",
-              "mount LABEL=BOOT /mnt/boot",
-          );
-        '';
-      useEFI = true;
     };
 
   # Rebuild the CD configuration with a little modification.

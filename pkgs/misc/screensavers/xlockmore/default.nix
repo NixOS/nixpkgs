@@ -2,23 +2,20 @@
 
 stdenv.mkDerivation rec {
 
-  name = "xlockmore-5.43";
+  name = "xlockmore-5.45";
   src = fetchurl {
     url = "http://www.tux.org/~bagleyd/xlock/${name}/${name}.tar.bz2";
-    sha256 = "1l36n8x51j7lwdalv6yi37cil290vzd3djjqydhsm0pnm8hiz499";
+    sha256 = "1xqm61bbfn5q056w57vp16gvai8nqpcw570ysxlm5h46nh6ai0bz";
   };
 
   # Optionally, it can use GTK+.
   buildInputs = [ pam x11 ];
 
-  # The `xlock' program needs to be linked against Glibc's
-  # `libgcrypt', which contains `crypt(3)'.
-  patches = [ ./makefile-libcrypt.patch ];
-
   # Don't try to install `xlock' setuid. Password authentication works
   # fine via PAM without super user privileges.
   configureFlags =
-      " --with-crypt"		# TODO: set --enable-appdefaultdir to a suitable value
+      " --with-crypt"
+    + " --enable-appdefaultdir=$out/share/X11/app-defaults"
     + " --disable-setuid"
     + " --without-editres"
     + " --without-xpm"
@@ -38,9 +35,15 @@ stdenv.mkDerivation rec {
     + " --without-gtk"
     + (if pam != null then " --enable-pam --enable-bad-pam" else " --disable-pam");
 
-  meta = {
+  preConfigure = ''
+    configureFlags+=" --enable-appdefaultdir=$out/share/X11/app-defaults"
+  '';
+
+  meta = with stdenv.lib; {
     description = "Screen locker for the X Window System";
-    homepage = "http://www.tux.org/~bagleyd/xlockmore.html";
-    license = "GPL";
+    homepage = http://www.tux.org/~bagleyd/xlockmore.html;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.linux;
   };
 }

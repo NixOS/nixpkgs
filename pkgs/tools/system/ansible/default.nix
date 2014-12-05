@@ -1,13 +1,13 @@
 { stdenv, fetchurl, pythonPackages, python }:
 
 pythonPackages.buildPythonPackage rec {
-  version = "1.7.1";
+  version = "1.7.2";
   name = "ansible-${version}";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://releases.ansible.com/ansible/ansible-${version}.tar.gz";
-    sha1 = "4f4be4d45f28f52e4ab0c063efb66c7b9f482a51";
+    sha256 = "1b4qhh6a8z18q7lfa7laxb3p0f7sacvv7nlbr2lix0vznhbffz51";
   };
 
   prePatch = ''

@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ networkUri text utf8String ];
+  jailbreak = true;
   meta = {
     description = "Unicode aware uri-encoding";
     license = "unknown";

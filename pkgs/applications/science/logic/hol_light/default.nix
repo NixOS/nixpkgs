@@ -10,17 +10,15 @@ in
 
 stdenv.mkDerivation rec {
   name     = "hol_light-${version}";
-  version  = "199";
+  version  = "205";
 
   src = fetchsvn {
     url = http://hol-light.googlecode.com/svn/trunk;
     rev = version;
-    sha256 = "0308nw91iww18wvl30g5ygf6lhw329jh1vqi9hsh30inhb3dx3jw";
+    sha256 = "1qnk3fkfr6f74nd8wsi84s9kg872cw766sa15a2ldlhs9ma76chj";
   };
 
   buildInputs = [ ocaml findlib camlp5 ];
-
-  patches = [ ./Makefile.patch ];
 
   installPhase = ''
     mkdir -p "$out/lib/hol_light" "$out/bin"

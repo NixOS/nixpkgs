@@ -38,8 +38,6 @@ stdenv.mkDerivation {
 		'';
 
   meta = {
-    description = "
-	The Penguin Machine - an Incredible Machine clone.
-";
+    description = "An Incredible Machine clone";
   };
 }

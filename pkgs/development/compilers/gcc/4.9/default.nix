@@ -52,7 +52,7 @@ assert langGo -> langCC;
 with stdenv.lib;
 with builtins;
 
-let version = "4.9.1";
+let version = "4.9.2";
 
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = cross != null && cross.config == "i586-pc-gnu";
@@ -153,7 +153,6 @@ let version = "4.9.1";
           " --disable-libssp --disable-nls" +
           " --without-headers" +
           " --disable-threads " +
-          " --disable-libmudflap " +
           " --disable-libgomp " +
           " --disable-libquadmath" +
           " --disable-shared" +
@@ -206,7 +205,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
-    sha256 = "0zki3ngi0gsidnmsp88mjl2868cc7cm5wm1vwqw6znja28d7hd6k";
+    sha256 = "1pbjp4blk2ycaa6r3jmw4ky5f1s9ji3klbqgv8zs2sl5jn1cj810";
   };
 
   inherit patches;
@@ -513,4 +512,6 @@ stdenv.mkDerivation ({
 
 # Strip kills static libs of other archs (hence cross != null)
 // optionalAttrs (!stripped || cross != null) { dontStrip = true; NIX_STRIP_DEBUG = 0; }
+
+// optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
 )

@@ -10,9 +10,7 @@
 
   <listitem><para><command>$ git clone git://github.com/NixOS/nixpkgs.git</command></para></listitem>
 
-  <listitem><para><command>$ cd nixpkgs/pkgs/top-level</command></para></listitem>
-
-  <listitem><para><command>$ nix-build -A tarball release.nix</command></para></listitem>
+  <listitem><para><command>$ nix-build -A manual nixpkgs/pkgs/top-level/release.nix</command></para></listitem>
   
   <listitem><para>Inside the built derivation you shall see <literal>manual/index.html</literal> file.</para></listitem>
 

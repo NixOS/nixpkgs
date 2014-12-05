@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = if stdenv.system == "x86_64-linux"
     then fetchurl {
       url    = "http://dl.google.com/linux/musicmanager/deb/pool/main/g/google-musicmanager-beta/google-musicmanager-${version}_amd64.deb";
-      sha256 = "0efdce3970e2cf83eb7d8f6021f987a1517a41823784ada8e51f1649f8a49342";
+      sha256 = "10nr7qlrn5af4g0l6n4xzximmhc216vhzgpy7cpxs662zpli3v1a";
     }
     else fetchurl {
         url    = "http://dl.google.com/linux/musicmanager/deb/pool/main/g/google-musicmanager-beta/google-musicmanager-${version}_i386.deb";

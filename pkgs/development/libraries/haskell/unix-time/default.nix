@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "unix-time";
-  version = "0.3.3";
-  sha256 = "018wpr5d2kjv8syj97664sqh1v7ws1780qmlfxvrakj86z9k5i8x";
+  version = "0.3.4";
+  sha256 = "1bni03bzayg3vwj6mwcl4z41zixv8nida8jc3vkv41fr7mzb24g5";
   buildDepends = [ binary ];
   testDepends = [ doctest hspec QuickCheck time ];
   meta = {

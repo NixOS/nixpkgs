@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.dnielectronico.es/descargas/;
     description = "Opensc plugin to access the Spanish national ID smartcard";
-    license = "nonfree";
+    license = stdenv.lib.licenses.unfree;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
     broken = true;

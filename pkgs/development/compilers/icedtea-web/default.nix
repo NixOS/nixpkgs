@@ -3,12 +3,12 @@
 stdenv.mkDerivation rec {
   name = "icedtea-web-${version}";
 
-  version = "1.5";
+  version = "1.5.2";
 
   src = fetchurl {
     url = "http://icedtea.wildebeest.org/download/source/${name}.tar.gz";
 
-    sha256 = "0bbwa944kaam0r8ldlqrrj9z9zj54v6zdc3q663ck59shw5z828w";
+    sha256 = "1wrvl66qj0yhaqqhcq24005ci5sc3w005809cld55iiwagr8z7mj";
   };
 
   buildInputs = [ gtk2 xulrunner zip pkgconfig npapi_sdk ];

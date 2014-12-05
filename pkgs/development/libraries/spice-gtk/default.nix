@@ -6,11 +6,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "spice-gtk-0.24";
+  name = "spice-gtk-0.25";
 
   src = fetchurl {
     url = "http://www.spice-space.org/download/gtk/${name}.tar.bz2";
-    sha256 = "1l8y1pbaqyzb6w8w8xa097dvj4zxhksn85pif1b9847r8l451zkf";
+    sha256 = "11yh593frbafp0ywkk7pfc2k17q1fwrl8zcjclph3xfr1alccc07";
   };
 
   buildInputs = [

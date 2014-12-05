@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   
   src = fetchurl {
     url = mirror://sourceforge/parchive/par2cmdline-0.4.tar.gz;
-    md5 = "1551b63e57e3c232254dc62073b723a9";
+    sha256 = "0xznx4vgf9nd0ijm2xi2zrb42wb891ypa948z54q5jkvrzdvfcly";
   };
 
   patches = [

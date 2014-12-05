@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
       C or C++ programs, though that is not its primary goal.
     '';
 
-    homepage = http://www.hpl.hp.com/personal/Hans_Boehm/gc/;
+    homepage = http://hboehm.info/gc/;
 
     # non-copyleft, X11-style license
-    license = "http://www.hpl.hp.com/personal/Hans_Boehm/gc/license.txt";
+    license = http://hboehm.info/gc/license.txt;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.all;

@@ -31,6 +31,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     homepage = http://nethogs.sourceforge.net/;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wizeman ];
   };
 }

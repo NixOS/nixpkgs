@@ -4,15 +4,15 @@
 
 stdenv.mkDerivation rec {
   name = "guitarix-${version}";
-  version = "0.30.0";
+  version = "0.32.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/guitarix/guitarix2-${version}.tar.bz2";
-    sha256 = "0fbapd1pcixzlqxgzb2s2q1c64g9z9lf4hz3vy73z55cnpk72vdx";
+    sha256 = "06qxydcba1ga1l19kyqy0mk141mv6pa4wbkyh75xbwhyr65bwkc4";
   };
 
   buildInputs = [
-    avahi boost boost.lib eigen fftw gettext glib glibmm gtk gtkmm intltool
+    avahi boost eigen fftw gettext glib glibmm gtk gtkmm intltool
     jack2 ladspaH librdf libsndfile lilv lv2 pkgconfig python serd sord sratom
   ];
 

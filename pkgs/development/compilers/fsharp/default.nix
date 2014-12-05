@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "fsharp-${version}";
-  version = "3.1.1.25";
+  version = "3.1.1.26";
 
   src = fetchurl {
     url = "https://github.com/fsharp/fsharp/archive/${version}.tar.gz";
-    sha256 = "1vrgw7qk4g78mjjapc1a1frribcgya4cdrwahv3i26z9s10g5h3d";
+    sha256 = "1yz3cq8ys6ryc6x3a0qyc100swrg2q3az8x8in1lp7c2c0l02zb2";
   };
 
   buildInputs = [ mono pkgconfig autoconf automake which ];

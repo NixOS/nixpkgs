@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost gtkmm lv2 pkgconfig python ];
 
   configurePhase = ''
-    python waf configure --prefix=$out --boost-includes=${boost}/include
+    python waf configure --prefix=$out --boost-includes="${boost.dev}/include"
   '';
 
   buildPhase = "python waf";

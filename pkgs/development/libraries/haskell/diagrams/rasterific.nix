@@ -7,13 +7,14 @@
 
 cabal.mkDerivation (self: {
   pname = "diagrams-rasterific";
-  version = "0.1.0.2";
-  sha256 = "16pwpa34hxf8qd7mf3zn4k7sr6p2pkvag3c77iwcs5qwqf5vhyf9";
+  version = "0.1.0.4";
+  sha256 = "0l6072blz56rc4nxr2s7gh5p3zdcyq8cfndbqgzndsfak6wyixgb";
   buildDepends = [
     dataDefaultClass diagramsCore diagramsLib filepath FontyFruity
     JuicyPixels lens mtl optparseApplicative Rasterific split
     statestack time
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams/";
     description = "Rasterific backend for diagrams";

@@ -18,9 +18,8 @@ in stdenv.mkDerivation {
   buildInputs = [ scons libX11 pkgconfig libusb1 boost glib dbus_glib];
 
   meta = with stdenv.lib; {
-    homepage = "http://pingus.seul.org/~grumbel/xboxdrv/";
-    description =
-      "Xbox/Xbox360 (and more) gamepad driver for Linux that works in userspace.";
+    homepage = http://pingus.seul.org/~grumbel/xboxdrv/;
+    description = "Xbox/Xbox360 (and more) gamepad driver for Linux that works in userspace";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.fuuzetsu ];
   };

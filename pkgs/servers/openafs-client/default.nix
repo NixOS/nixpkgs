@@ -14,6 +14,8 @@ stdenv.mkDerivation {
   patches = [ 
    ./f3c0f74186f4a323ffc5f125d961fe384d396cac.patch
    ./ae86b07f827d6f3e2032a412f5f6cb3951a27d2d.patch
+   ./I5558c64760e4cad2bd3dc648067d81020afc69b6.patch
+   ./If1fd9d27f795dee4b5aa2152dd09e0540d643a69.patch
   ];
 
   buildInputs = [ autoconf automake flex yacc ncurses perl which ];

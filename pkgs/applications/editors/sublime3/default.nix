@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, glib, xlibs, cairo, gtk, pango, makeWrapper}:
+{ fetchurl, stdenv, glib, xlibs, cairo, gtk, pango, makeWrapper, openssl, bzip2 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
@@ -41,7 +41,7 @@ in let
       mkdir -p $out
       cp -prvd * $out/
       # Without this, plugin_host crashes, even though it has the rpath
-      wrapProgram $out/plugin_host --prefix LD_PRELOAD : ${stdenv.gcc.gcc}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1
+      wrapProgram $out/plugin_host --prefix LD_PRELOAD : ${stdenv.gcc.gcc}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1:${openssl}/lib/libssl.so:${bzip2}/lib/libbz2.so
     '';
   };
 in stdenv.mkDerivation {

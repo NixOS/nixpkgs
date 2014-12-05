@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haskell-generate";
-  version = "0.2.1";
-  sha256 = "1b7jy4a83lv9zwkzsgbipv7vlzcj27g1h3az7nxxc2gbmyrc15f4";
+  version = "0.2.2";
+  sha256 = "1wdfs28p195szg6jxq0qbyj4jdbqnsp9frgjnp25mzf14y9i1yid";
   buildDepends = [ haskellSrcExts transformers ];
   testDepends = [ doctest filepath ];
   meta = {

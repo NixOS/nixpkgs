@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "conduit-extra";
-  version = "1.1.4";
-  sha256 = "117mzy0qm8w2kzjcshcwcfbx01ybbhn63vdgzllc7cb9x4cj2ibv";
+  version = "1.1.4.2";
+  sha256 = "0s2ggca6g2104dylbrkn090xwsfrp0946bhwf7fgpfpg9gi1sz1g";
   buildDepends = [
     attoparsec blazeBuilder conduit filepath monadControl network
     primitive resourcet stm streamingCommons text transformers
@@ -18,6 +18,7 @@ cabal.mkDerivation (self: {
     async attoparsec blazeBuilder conduit exceptions hspec resourcet
     stm text transformers transformersBase
   ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/snoyberg/conduit";
     description = "Batteries included conduit: adapters for common libraries";

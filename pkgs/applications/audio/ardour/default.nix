@@ -6,7 +6,7 @@
 , perl, pkgconfig, python, serd, sord, sratom, suil }:
 
 let
-  tag = "3.5.380";
+  tag = "3.5.403";
 in
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = git://git.ardour.org/ardour/ardour.git;
     rev = "refs/tags/${tag}";
-    sha256 = "dbcbb2d9143e196d079c27b15266e47d24b81cb7591fe64b717f3485965ded7b";
+    sha256 = "7d7c8e2c7ccccca6c8324fd874509e1b0d89f3f42cb92982c50d212797463f4c";
   };
 
   buildInputs = 

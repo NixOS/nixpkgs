@@ -6,12 +6,13 @@
 
 cabal.mkDerivation (self: {
   pname = "pdf-toolbox-content";
-  version = "0.0.3.0";
-  sha256 = "0glcm6mrgg8ixzhp09kfkk3ra3qblvrp1wcsa2nhqlypg3ca8r3h";
+  version = "0.0.3.1";
+  sha256 = "08icj65l6hjl2r07ipr6c65n7ny771zq714bswhv2q0iwdigz1iz";
   buildDepends = [
     attoparsec base16Bytestring ioStreams pdfToolboxCore text
   ];
   meta = {
+    homepage = "https://github.com/Yuras/pdf-toolbox";
     description = "A collection of tools for processing PDF files";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

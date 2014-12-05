@@ -2,7 +2,7 @@
 , pkgconfig, libtool
 , gtk, mesa, readline, libX11, libXpm
 , docbook_xml_dtd_45, docbook_xsl
-, sdlSupport ? true, SDL ? null
+, sdlSupport ? true, SDL2 ? null
 , termSupport ? true , ncurses ? null
 , wxSupport ? false, wxGTK ? null # Warning! Broken
 # Optional, undocumented dependencies
@@ -10,7 +10,7 @@
 , curlSupport ? false, curl ? null
 }:
 
-assert sdlSupport -> (SDL != null);
+assert sdlSupport -> (SDL2 != null);
 assert termSupport -> (ncurses != null);
 assert wxSupport -> (gtk != null && wxGTK != null);
 assert wgetSupport -> (wget != null);
@@ -19,11 +19,11 @@ assert curlSupport -> (curl != null);
 stdenv.mkDerivation rec {
 
   name = "bochs-${version}";
-  version = "2.6.6";
+  version = "2.6.7";
 
   src = fetchurl {
     url = "http://downloads.sourceforge.net/project/bochs/bochs/${version}/${name}.tar.gz";
-    sha256 = "0nlrl218x93vz97n46aw2szsalx97r020mn43fjsif100v7zix6f";
+    sha256 = "10l2pgzwnmng0rd44kqv7y46nwpcc18j53h3kf3dlqlnd7mlwdd4";
   };
 
   # The huge list of configurable options
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   buildInputs = with stdenv.lib;
   [ pkgconfig libtool gtk mesa readline libX11 libXpm docbook_xml_dtd_45 docbook_xsl ]
   ++ optionals termSupport [ ncurses ]
-  ++ optionals sdlSupport [ SDL ]
+  ++ optionals sdlSupport [ SDL2 ]
   ++ optionals wxSupport [ wxGTK ]
   ++ optionals wgetSupport [ wget ]
   ++ optionals curlSupport [ curl ];
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     "--enable-raw-serial=no" ]
     # Boolean flags
     ++ stdenv.lib.optional termSupport "--with-term"
-    ++ stdenv.lib.optional sdlSupport "--with-sdl"
+    ++ stdenv.lib.optional sdlSupport "--with-sdl2"
     ++ stdenv.lib.optional wxSupport "--with-wx"
     ++ stdenv.lib.optional largefile "--enable-largefile"
     ++ stdenv.lib.optional idleHack "--enable-idle-hack"

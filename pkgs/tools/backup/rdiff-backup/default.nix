@@ -13,6 +13,8 @@ stdenv.mkDerivation {
     python ./setup.py install --prefix=$out
     sed -i $out/bin/rdiff-backup -e \
       "/import sys/ asys.path += [ \"$out/lib/python2.7/site-packages/\" ]"
+    sed -i $out/bin/rdiff-backup-statistics -e \
+      "/import .*sys/ asys.path += [ \"$out/lib/python2.7/site-packages/\" ]"
   '';
 
   buildInputs = [ python librsync gnused ];
@@ -21,6 +23,7 @@ stdenv.mkDerivation {
     description = "backup system trying to combine best a mirror and an incremental backup system";
     homepage = http://rdiff-backup.nongnu.org/;
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.all;
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };
 }

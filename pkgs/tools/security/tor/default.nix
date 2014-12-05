@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libevent, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "tor-0.2.4.23";
+  name = "tor-0.2.5.10";
 
   src = fetchurl {
     url = "https://archive.torproject.org/tor-package-archive/${name}.tar.gz";
-    sha256 = "0a8l6d82hk4wbn7nlphd3c1maxhgdli8338wbg5r9dk6zcy7k8q5";
+    sha256 = "0fx8qnwh2f8ykfx0np4hyznjfi4xfy96z59pk96y3zyjvjjh5pdk";
   };
 
   buildInputs = [ libevent openssl zlib ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
     license="mBSD";
 
-    maintainers = with stdenv.lib.maintainers; [ phreedom ludo ];
+    maintainers = with stdenv.lib.maintainers; [ phreedom ludo doublec ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

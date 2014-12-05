@@ -28,7 +28,7 @@ in
   nodes =
     { tracker =
         { config, pkgs, ... }:
-        { environment.systemPackages = [ pkgs.transmission ];
+        { environment.systemPackages = [ pkgs.transmission pkgs.opentracker ];
 
           # We need Apache on the tracker to serve the torrents.
           services.httpd.enable = true;
@@ -86,7 +86,7 @@ in
 
       # Start the tracker.  !!! use a less crappy tracker
       $tracker->waitForUnit("network.target");
-      $tracker->succeed("bittorrent-tracker --port 6969 --dfile /tmp/dstate >&2 &");
+      $tracker->succeed("opentracker -p 6969 >&2 &");
       $tracker->waitForOpenPort(6969);
 
       # Start the initial seeder.

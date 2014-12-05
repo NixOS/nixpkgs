@@ -11,11 +11,11 @@ let
     "${gnupg}/bin/gpg2";
 in
 stdenv.mkDerivation rec {
-  name = "gpgme-1.5.1";
+  name = "gpgme-1.5.2";
 
   src = fetchurl {
     url = "ftp://ftp.gnupg.org/gcrypt/gpgme/${name}.tar.bz2";
-    sha256 = "1qqi9bxwxxsc4r15j7drclgp0w8jk9nj3h2fsivk4c7brvw3lbvc";
+    sha256 = "1m7i0krffw4717jx7211d0pk4wi2rldg2bp7xgl6a0kgl6hb160y";
   };
 
   propagatedBuildInputs = [ libgpgerror glib libassuan pth ];

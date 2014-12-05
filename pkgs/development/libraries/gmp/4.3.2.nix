@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = {
+    branch = "4";
     description = "GNU multiple precision arithmetic library";
 
     longDescription =

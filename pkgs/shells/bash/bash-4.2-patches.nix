@@ -52,4 +52,6 @@ patch: [
 (patch "049" "03jipi8qz5baf1dyhld7yvazkkad7lz5czchrjsrnglzvm6df74h")
 (patch "050" "19lb9nh0x5siwf21xkga3khy5pa3srfrlx97mby4cfz8am2bh68s")
 (patch "051" "0705948wzi27zxphkh5vx4n62i671afyrb4qx276n49sq9xk859y")
+(patch "052" "036wc4azli48ri7641fflxh6j95fnsma2167hbn80v7p91qzm67h")
+(patch "053" "1pnkzx8bj8rz219wk8kxs8iga1k2wn13g1yvg3dci19qakbr7ri0")
 ]

@@ -8,7 +8,7 @@ let {
     name = "ut2004-demo-3120";
     src = fetchurl {
       url = http://ftp.gameaholic.com/pub/demos/ut2004-lnx-demo-3120.run.bz2;
-      md5 = "da200b043add9d083f6aa7581e6829f0";
+      sha256 = "1lravfkb1gsallqqird5dcbz42vwjg36m1qk76nmmnyyyghwqnli";
     };
     builder = ./builder.sh;
   };

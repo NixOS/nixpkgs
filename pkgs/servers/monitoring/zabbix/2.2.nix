@@ -1,5 +1,10 @@
 { stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib, gettext
-, enableJabber ? false, minmay ? null }:
+, net_snmp , libssh2, openldap
+, enableJabber ? false, minmay ? null
+, enableSnmp ? false
+, enableSsh ? false
+, enableLdap ? false
+}:
 
 assert enableJabber -> minmay != null;
 
@@ -38,7 +43,11 @@ in
       "--with-postgresql"
       "--with-libcurl"
       "--with-gettext"
-    ] ++ stdenv.lib.optional enableJabber "--with-jabber=${minmay}";
+    ]
+    ++ stdenv.lib.optional enableJabber "--with-jabber=${minmay}"
+    ++ stdenv.lib.optional enableSnmp "--with-net-snmp"
+    ++ stdenv.lib.optional enableSsh "--with-ssh2=${libssh2}"
+    ++ stdenv.lib.optional enableLdap "--with-ldap=${openldap}";
 
     postPatch = ''
       sed -i -e 's/iksemel/minmay/g' configure src/libs/zbxmedia/jabber.c
@@ -48,7 +57,10 @@ in
         -e 's/iks/mmay/g' -e 's/IKS/MMAY/g' src/libs/zbxmedia/jabber.c
     '';
 
-    buildInputs = [ pkgconfig postgresql curl openssl zlib ];
+    buildInputs = [ pkgconfig postgresql curl openssl zlib ]
+      ++ stdenv.lib.optional enableSnmp net_snmp
+      ++ stdenv.lib.optional enableSsh libssh2
+      ++ stdenv.lib.optional enableLdap openldap;
 
     postInstall =
       ''

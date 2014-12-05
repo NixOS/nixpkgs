@@ -1,4 +1,4 @@
-{ clangStdenv, fetchgit, llvm, clang }:
+{ clangStdenv, fetchgit, llvmPackages, clang }:
 
 clangStdenv.mkDerivation {
   name = "emacs-clang-complete-async-20130218";
@@ -8,7 +8,12 @@ clangStdenv.mkDerivation {
     sha256 = "1c8zqi6axbsb951azz9iqx3j52j30nd9ypv396hvids3g02cirrf";
   };
 
-  buildInputs = [ llvm clang.clang ];
+  buildInputs = [ llvmPackages.llvm ];
+
+  patches = [ ./fix-build.patch ];
+
+  CFLAGS = "-I${llvmPackages.clang}/include";
+  LDFLAGS = "-L${llvmPackages.clang}/lib";
 
   installPhase = ''
     mkdir -p $out/bin

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pam }:
 
 stdenv.mkDerivation rec {
-  name = "oath-toolkit-2.0.2";
+  name = "oath-toolkit-2.4.1";
 
   src = fetchurl {
     url = "mirror://savannah/oath-toolkit/${name}.tar.gz";
-    sha256 = "0i2rf5j83kb8h3sd9lsm0a46zq805kzagvccc4rk7879lg1fnl99";
+    sha256 = "094vbq66sn5f2dsy14hajpsfdnaivjxf70xzs91nrsq0q75l5ylv";
   };
 
   buildInputs = [ pam ];

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
    
   src = fetchurl {
     url = "http://www.padl.com/download/${name}.tar.gz";
-    md5 = "c0ad81e9d9712ddc6599a6e7a1688778";
+    sha256 = "1l0mlwvas9dnsfcgbszbzq3bzhdkibn1c3x15fczq3i82faf5g5a";
   };
 
   preInstall = "

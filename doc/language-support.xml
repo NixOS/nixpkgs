@@ -108,7 +108,7 @@ a <varname>preConfigure</varname> hook to generate a configuration
 file used by <filename>Makefile.PL</filename>:
 
 <programlisting>
-{buildPerlPackage, fetchurl, db}:
+{ buildPerlPackage, fetchurl, db }:
 
 buildPerlPackage rec {
   name = "BerkeleyDB-0.36";
@@ -191,44 +191,423 @@ you need it.</para>
 </section>
 
 
-<section><title>Python</title>
+<section xml:id="python"><title>Python</title>
+
+<para>
+  Currently supported interpreters are <varname>python26</varname>, <varname>python27</varname>,
+  <varname>python32</varname>, <varname>python33</varname>, <varname>python34</varname>
+  and <varname>pypy</varname>.
+</para>
+
+<para>
+  <varname>python</varname> is an alias of <varname>python27</varname> and <varname>python3</varname> is an alias of <varname>python34</varname>.
+</para>
+
+<para>
+  <varname>python26</varname> and <varname>python27</varname> do not include modules that require
+  external dependencies (to reduce dependency bloat). Following modules need to be added as
+  <varname>buildInput</varname> explicitly:
+</para>
+
+<itemizedlist>
+  <listitem><para><varname>python.modules.bsddb</varname></para></listitem>
+  <listitem><para><varname>python.modules.curses</varname></para></listitem>
+  <listitem><para><varname>python.modules.curses_panel</varname></para></listitem>
+  <listitem><para><varname>python.modules.crypt</varname></para></listitem>
+  <listitem><para><varname>python.modules.gdbm</varname></para></listitem>
+  <listitem><para><varname>python.modules.sqlite3</varname></para></listitem>
+  <listitem><para><varname>python.modules.tkinter</varname></para></listitem>
+  <listitem><para><varname>python.modules.readline</varname></para></listitem>
+</itemizedlist>
+
+<para>For convenience <varname>python27Full</varname> and <varname>python26Full</varname>
+are provided with all modules included.</para>
 
 <para>
   Python packages that
-  use <link xlink:href="http://pypi.python.org/pypi/setuptools/"><literal>setuptools</literal></link>,
-  which many Python packages do nowadays, can be built very simply using
-  the <varname>buildPythonPackage</varname> function.  This function is
-  implemented
-  in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/python-modules/generic/default.nix"><filename>pkgs/development/python-modules/generic/default.nix</filename></link>
-  and works similarly to <varname>buildPerlPackage</varname>. (See
-  <xref linkend="ssec-language-perl"/> for details.)
+  use <link xlink:href="http://pypi.python.org/pypi/setuptools/"><literal>setuptools</literal></link> or <literal>distutils</literal>,
+  can be built using the <varname>buildPythonPackage</varname> function as documented below.
 </para>
 
 <para>
-  Python packages that use <varname>buildPythonPackage</varname> are
-  defined
-  in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/python-packages.nix"><filename>pkgs/top-level/python-packages.nix</filename></link>.
-  Most of them are simple.  For example:
-
-  <programlisting>
-twisted = buildPythonPackage {
-  name = "twisted-8.1.0";
-
-  src = fetchurl {
-    url = http://tmrc.mit.edu/mirror/twisted/Twisted/8.1/Twisted-8.1.0.tar.bz2;
-    sha256 = "0q25zbr4xzknaghha72mq57kh53qw1bf8csgp63pm9sfi72qhirl";
-  };
-
-  propagatedBuildInputs = [ pkgs.ZopeInterface ];
-
-  meta = {
-    homepage = http://twistedmatrix.com/;
-    description = "Twisted, an event-driven networking engine written in Python";
-    license = "MIT";
-  };
-};
-  </programlisting>
+ All packages depending on any Python interpreter get appended <varname>$out/${python.libPrefix}/site-packages</varname>
+ to <literal>$PYTHONPATH</literal> if such directory exists.
 </para>
+
+<variablelist>
+  <title>
+     Useful attributes on interpreters packages:
+  </title>
+
+  <varlistentry>
+    <term><varname>libPrefix</varname></term>
+    <listitem><para>
+        Name of the folder in <literal>${python}/lib/</literal> for corresponding interpreter.
+    </para></listitem>
+  </varlistentry>
+  
+  <varlistentry>
+    <term><varname>interpreter</varname></term>
+    <listitem><para>
+        Alias for <literal>${python}/bin/${executable}.</literal>
+    </para></listitem>
+  </varlistentry>
+  
+  <varlistentry>
+    <term><varname>buildEnv</varname></term>
+    <listitem><para>
+        Function to build python interpreter environments with extra packages bundled together.
+        See <xref linkend="python-build-env" /> for usage and documentation.
+    </para></listitem>
+  </varlistentry>
+  
+  <varlistentry>
+    <term><varname>sitePackages</varname></term>
+    <listitem><para>
+      Alias for <literal>lib/${libPrefix}/site-packages</literal>.
+    </para></listitem>
+  </varlistentry>
+  
+  <varlistentry>
+    <term><varname>executable</varname></term>
+    <listitem><para>
+      Name of the interpreter executable, ie <literal>python3.4</literal>.
+    </para></listitem>
+  </varlistentry>
+  
+</variablelist>
+<section xml:id="build-python-package"><title><varname>buildPythonPackage</varname> function</title>
+  
+  <para>
+  The function is implemented in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/python-modules/generic/default.nix">
+  <filename>pkgs/development/python-modules/generic/default.nix</filename></link>.
+  Example usage:
+  
+    <programlisting language="nix">
+      twisted = buildPythonPackage {
+        name = "twisted-8.1.0";
+      
+        src = pkgs.fetchurl {
+          url = http://tmrc.mit.edu/mirror/twisted/Twisted/8.1/Twisted-8.1.0.tar.bz2;
+          sha256 = "0q25zbr4xzknaghha72mq57kh53qw1bf8csgp63pm9sfi72qhirl";
+        };
+      
+        propagatedBuildInputs = [ self.ZopeInterface ];
+      
+        meta = {
+          homepage = http://twistedmatrix.com/;
+          description = "Twisted, an event-driven networking engine written in Python";
+          license = stdenv.lib.licenses.mit;
+        };
+      };
+    </programlisting>
+
+  Most of Python packages that use <varname>buildPythonPackage</varname> are defined
+  in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/python-packages.nix"><filename>pkgs/top-level/python-packages.nix</filename></link>
+  and generated for each python interpreter separately into attribute sets <varname>python26Packages</varname>,
+  <varname>python27Packages</varname>, <varname>python32Packages</varname>, <varname>python33Packages</varname>,
+  <varname>python34Packages</varname> and <varname>pypyPackages</varname>.
+  </para>
+  
+  <para>
+    <function>buildPythonPackage</function> mainly does four things:
+      
+    <orderedlist>
+      <listitem><para>
+        In the <varname>configurePhase</varname>, it patches
+        <literal>setup.py</literal> to always include setuptools before
+        distutils for monkeypatching machinery to take place.
+      </para></listitem>
+    
+      <listitem><para>
+        In the <varname>buildPhase</varname>, it calls 
+        <literal>${python.interpreter} setup.py build ...</literal>
+      </para></listitem>
+      
+      <listitem><para>
+        In the <varname>installPhase</varname>, it calls 
+        <literal>${python.interpreter} setup.py install ...</literal>
+      </para></listitem>
+      
+      <listitem><para>
+        In the <varname>postFixup</varname> phase, <literal>wrapPythonPrograms</literal>
+        bash function is called to wrap all programs in <filename>$out/bin/*</filename>
+        directory to include <literal>$PYTHONPATH</literal> and <literal>$PATH</literal>
+        environment variables.
+      </para></listitem>
+    </orderedlist>
+  </para>
+  
+  <para>By default <varname>doCheck = true</varname> is set and tests are run with 
+  <literal>${python.interpreter} setup.py test</literal> command in <varname>checkPhase</varname>.</para>
+  
+  <para><varname>propagatedBuildInputs</varname> packages are propagated to user environment.</para>
+    
+  <para>
+    By default <varname>meta.platforms</varname> is set to the same value
+    as the interpreter unless overriden otherwise.
+  </para>
+  
+  <variablelist>
+    <title>
+      <varname>buildPythonPackage</varname> parameters
+      (all parameters from <varname>mkDerivation</varname> function are still supported)
+    </title>
+  
+    <varlistentry>
+      <term><varname>namePrefix</varname></term>
+      <listitem><para>
+        Prepended text to <varname>${name}</varname> parameter.
+        Defaults to <literal>"python3.3-"</literal> for Python 3.3, etc. Set it to
+        <literal>""</literal>
+        if you're packaging an application or a command line tool.
+      </para></listitem>
+    </varlistentry>
+  
+    <varlistentry>
+      <term><varname>disabled</varname></term>
+      <listitem><para>
+        If <varname>true</varname>, package is not build for
+        particular python interpreter version. Grep around
+        <filename>pkgs/top-level/python-packages.nix</filename>
+        for examples.
+      </para></listitem>
+    </varlistentry>
+      
+    <varlistentry>
+      <term><varname>setupPyInstallFlags</varname></term>
+      <listitem><para>
+        List of flags passed to <command>setup.py install</command> command.
+      </para></listitem>
+    </varlistentry>
+     
+    <varlistentry>
+      <term><varname>setupPyBuildFlags</varname></term>
+      <listitem><para>
+        List of flags passed to <command>setup.py build</command> command.
+      </para></listitem>
+    </varlistentry>
+     
+    <varlistentry>
+      <term><varname>pythonPath</varname></term>
+      <listitem><para>
+        List of packages to be added into <literal>$PYTHONPATH</literal>.
+        Packages in <varname>pythonPath</varname> are not propagated into user environment
+        (contrary to <varname>propagatedBuildInputs</varname>).
+      </para></listitem>
+    </varlistentry>
+     
+    <varlistentry>
+      <term><varname>preShellHook</varname></term>
+      <listitem><para>
+        Hook to execute commands before <varname>shellHook</varname>.
+      </para></listitem>
+    </varlistentry>
+    
+    <varlistentry>
+      <term><varname>postShellHook</varname></term>
+      <listitem><para>
+        Hook to execute commands after <varname>shellHook</varname>.
+      </para></listitem>
+    </varlistentry>
+    
+    <varlistentry>
+      <term><varname>distutilsExtraCfg</varname></term>
+      <listitem><para>
+        Extra lines passed to <varname>[easy_install]</varname> section of
+        <filename>distutils.cfg</filename> (acts as global setup.cfg
+        configuration).
+      </para></listitem>
+    </varlistentry>
+  
+  </variablelist>
+  
+</section>
+
+<section xml:id="python-build-env"><title><function>python.buildEnv</function> function</title>
+  <para>
+    Create Python environments using low-level <function>pkgs.buildEnv</function> function. Example <filename>default.nix</filename>:
+    
+    <programlisting language="nix">
+    <![CDATA[
+      with import <nixpkgs> {};
+      
+      python.buildEnv.override {
+        extraLibs = [ pkgs.pythonPackages.pyramid ];
+        ignoreCollisions = true;
+      }
+    ]]>
+    </programlisting>
+    
+    Running <command>nix-build</command> will create
+    <filename>/nix/store/cf1xhjwzmdki7fasgr4kz6di72ykicl5-python-2.7.8-env</filename>
+    with wrapped binaries in <filename>bin/</filename>.
+  </para>
+  
+  <variablelist>
+    <title>
+      <function>python.buildEnv</function> arguments
+    </title>
+  
+    <varlistentry>
+      <term><varname>extraLibs</varname></term>
+      <listitem><para>
+        List of packages installed inside the environment.
+      </para></listitem>
+    </varlistentry>
+    
+    <varlistentry>
+      <term><varname>postBuild</varname></term>
+      <listitem><para>
+        Shell command executed after the build of environment.
+      </para></listitem>
+    </varlistentry>
+    
+    <varlistentry>
+      <term><varname>ignoreCollisions</varname></term>
+      <listitem><para>
+         Ignore file collisions inside the environment (default is <varname>false</varname>).
+      </para></listitem>
+    </varlistentry>
+  </variablelist>
+</section>
+
+<section xml:id="python-tools"><title>Tools</title>
+
+<para>Packages inside nixpkgs are written by hand. However many tools
+exist in community to help save time. No tool is preferred at the moment.
+</para>
+
+<itemizedlist>
+
+  <listitem><para>
+    <link xlink:href="https://github.com/proger/python2nix">python2nix</link>
+    by Vladimir Kirillov
+  </para></listitem>
+
+  <listitem><para>
+    <link xlink:href="https://github.com/garbas/pypi2nix">pypi2nix</link>
+    by Rok Garbas
+  </para></listitem>
+
+  <listitem><para>
+    <link xlink:href="https://github.com/offlinehacker/pypi2nix">pypi2nix</link>
+    by Jaka Hudoklin
+  </para></listitem>
+
+</itemizedlist>
+
+</section>
+
+<section xml:id="python-development"><title>Development</title>
+
+  <para>
+    To develop Python packages <function>bulidPythonPackage</function> has
+    additional logic inside <varname>shellPhase</varname> to run
+    <command>${python.interpreter} setup.py develop</command> for the package.
+  </para>
+  
+  <para>
+    Given a <filename>default.nix</filename>:
+    
+    <programlisting language="nix">
+    <![CDATA[
+      with import <nixpkgs> {};
+      
+      buildPythonPackage {
+        name = "myproject";
+      
+        buildInputs = with pkgs.pythonPackages; [ pyramid ];
+      
+        src = ./.;
+      }
+    ]]>
+    </programlisting>
+    
+    Running <command>nix-shell</command> with no arguments should give you
+    the environment in which the package would be build with
+    <command>nix-build</command>.
+  </para>
+  
+  <para>
+    Shortcut to setup environments with C headers/libraries and python packages:
+    
+    <programlisting language="bash">$ nix-shell -p pythonPackages.pyramid zlib libjpeg git</programlisting>
+  </para>
+  
+  <note><para>
+    There is a boolean value <varname>lib.inNixShell</varname> set to
+    <varname>true</varname> if nix-shell is invoked.
+  </para></note>
+
+</section>
+
+<section xml:id="python-faq"><title>FAQ</title>
+
+<variablelist>
+
+  <varlistentry>
+    <term>How to solve circular dependencies?</term>
+    <listitem><para>
+      If you have packages <varname>A</varname> and <varname>B</varname> that
+      depend on each other, when packaging <varname>B</varname> override package
+      <varname>A</varname> not to depend on <varname>B</varname> as input
+      (and also the other way around).
+    </para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>install_data / data_files</varname> problems resulting into <literal>error: could not create '/nix/store/6l1bvljpy8gazlsw2aw9skwwp4pmvyxw-python-2.7.8/etc': Permission denied</literal></term>
+    <listitem><para>
+      <link xlink:href="https://bitbucket.org/pypa/setuptools/issue/130/install_data-doesnt-respect-prefix">
+      Known bug in setuptools <varname>install_data</varname> does not respect --prefix</link>. Example of
+      such package using the feature is <filename>pkgs/tools/X11/xpra/default.nix</filename>. As workaround
+      install it as an extra <varname>preInstall</varname> step:
+      
+      <programlisting>${python.interpreter} setup.py install_data --install-dir=$out --root=$out
+sed -i '/ = data_files/d' setup.py</programlisting>
+    </para></listitem>
+  </varlistentry>
+  
+  <varlistentry>
+    <term>Rationale of non-existent global site-packages</term>
+    <listitem><para>
+      There is no need to have global site-packages in Nix. Each package has isolated
+      dependency tree and installing any python package will only populate <varname>$PATH</varname>
+      inside user environment. See <xref linkend="python-build-env" /> to create self-contained
+      interpreter with a set of packages.
+    </para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+</section>
+
+
+<section xml:id="python-contrib"><title>Contributing guidelines</title>
+<para>
+  Following rules are desired to be respected:
+</para>
+
+<itemizedlist>
+
+  <listitem><para>
+    Make sure package builds for all python interpreters. Use <varname>disabled</varname> argument to
+    <function>buildPythonPackage</function> to set unsupported interpreters.
+  </para></listitem>
+
+  <listitem><para>
+    If tests need to be disabled for a package, make sure you leave a comment about reasoning.
+  </para></listitem>
+
+  <listitem><para>
+    Packages in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/python-packages.nix"><filename>pkgs/top-level/python-packages.nix</filename></link>
+    are sorted quasi-alphabetically to avoid merge conflicts.
+  </para></listitem>
+
+</itemizedlist>
+
+</section>
 
 </section>
 

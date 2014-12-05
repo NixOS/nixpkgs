@@ -9,8 +9,8 @@
 
 cabal.mkDerivation (self: {
   pname = "diagrams-contrib";
-  version = "1.1.2.2";
-  sha256 = "1a9ayqyffgwq8k9d8l12s6l1pqv27fvzngsklnh3y1bgp20d2z01";
+  version = "1.1.2.3";
+  sha256 = "00bn9p2a6h26q7hfqqzwimfgr2avf7ilf61z3anz25raz8jqvfxc";
   buildDepends = [
     arithmoi circlePacking colour dataDefault dataDefaultClass
     diagramsCore diagramsLib forceLayout lens MonadRandom mtl parsec
@@ -20,6 +20,7 @@ cabal.mkDerivation (self: {
     diagramsLib HUnit QuickCheck testFramework testFrameworkHunit
     testFrameworkQuickcheck2
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams/";
     description = "Collection of user contributions to diagrams EDSL";

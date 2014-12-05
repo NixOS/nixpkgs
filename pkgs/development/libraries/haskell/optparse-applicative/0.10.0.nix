@@ -13,5 +13,6 @@ cabal.mkDerivation (self: {
     description = "Utilities and combinators for parsing command line options";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

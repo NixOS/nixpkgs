@@ -1,25 +1,32 @@
-{ stdenv, fetchurl, emacs, texinfo }:
+{ stdenv, fetchFromGitHub, emacs, texinfo, gitModes, git }:
 
-let
-  version = "1.2.0";
-in
 stdenv.mkDerivation rec {
-  name = "magit-${version}";
+  name = "magit-90141025";
 
-  src = fetchurl {
-    url = "https://github.com/downloads/magit/magit/${name}.tar.gz";
-    sha256 = "1a8vvilhd5y5vmlpsh194qpl4qlg0a1brylfscxcacpfp0cmhlzg";
+  src = fetchFromGitHub {
+    owner = "magit";
+    repo = "magit";
+    rev = "50c08522c8a3c67e0f3b821fe4df61e8bd456ff9";
+    sha256 = "0mzyx72pidzvla1x2qszn3c60n2j0n8i5k875c4difvd1n4p0vsk";
   };
 
-  buildInputs = [ emacs texinfo ];
+  buildInputs = [ emacs texinfo git ];
+  propagatedUserEnvPkgs = [ gitModes ];
 
-  configurePhase = "makeFlagsArray=( PREFIX=$out SYSCONFDIR=$out/etc )";
+  configurePhase = ''
+    makeFlagsArray=(
+      PREFIX="$out"
+      EFLAGS="-L ${gitModes}/share/emacs/site-lisp"
+      lispdir="$out/share/emacs/site-lisp"
+    )
+  '';
 
-  # Add (require 'magit-site-init) to your ~/.emacs file to set-up magit mode.
+  doCheck = true;
+  checkTarget = "test";
+
   postInstall = ''
-    mv $out/etc/emacs/site-start.d/50magit.el $out/share/emacs/site-lisp/magit-site-init.el
-    sed -i -e 's|50magit|magit-site-init|' $out/share/emacs/site-lisp/magit-site-init.el
-    rmdir $out/etc/emacs/site-start.d $out/etc/emacs $out/etc
+    mkdir -p $out/bin
+    mv "bin/"* $out/bin/
   '';
 
   meta = {
@@ -39,7 +46,6 @@ stdenv.mkDerivation rec {
       save you from learning Git itself.
     '';
 
-    platforms = stdenv.lib.platforms.all;
     maintainers = with stdenv.lib.maintainers; [ simons ];
   };
 }

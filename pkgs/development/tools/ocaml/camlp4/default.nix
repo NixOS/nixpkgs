@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   '';
 
 
-  makePhase = "make all";
+  makeFlags = "all";
 
   installTargets = "install install-META";
 

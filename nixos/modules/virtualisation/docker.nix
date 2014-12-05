@@ -7,6 +7,8 @@ with lib;
 let
 
   cfg = config.virtualisation.docker;
+  pro = config.networking.proxy.default;
+  proxy_env = optionalAttrs (pro != null) { Environment = "\"http_proxy=${pro}\""; };
 
 in
 
@@ -73,7 +75,7 @@ in
           #  goes in config bundled with docker itself
           LimitNOFILE = 1048576;
           LimitNPROC = 1048576;
-        };
+        } // proxy_env;
       };
 
       systemd.sockets.docker = {
@@ -99,7 +101,13 @@ in
           #  goes in config bundled with docker itself
           LimitNOFILE = 1048576;
           LimitNPROC = 1048576;
-        };
+        } // proxy_env;
+
+        postStart = ''
+          while ! [ -e /var/run/docker.sock ]; do
+            sleep 0.1
+          done
+        '';
 
         # Presumably some containers are running we don't want to interrupt
         restartIfChanged = false;

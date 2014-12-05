@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "ec2-ami-tools-${version}";
 
-  version = "1.5.3";
+  version = "1.5.6";
 
   buildInputs = [ unzip makeWrapper ];
 
   src = fetchurl {
     url = "http://s3.amazonaws.com/ec2-downloads/${name}.zip";
-    sha256 = "0n184nxc57alg25h5bslg0cs1z854sf7f52a820ihxxknrq2dy6i";
+    sha256 = "0227370qbm26qaqvscqxv6002bqwy2i5fdhbhpwfnbymh7jz59ks";
   };
 
   # Amazon EC2 requires that disk images are writable.  If they're
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
     '';  # */
 
   meta = {
-    homepage = http://developer.amazonwebservices.com/connect/entry.jspa?externalID=368&categoryID=88;
+    homepage = https://aws.amazon.com/developertools/Amazon-EC2/368;
     description = "Command-line tools to create and manage Amazon EC2 virtual machine images";
-    license = "unfree-redistributable"; # Amazon || (Ruby GPL-2)
+    license = stdenv.lib.licenses.amazonsl;
   };
 
 }

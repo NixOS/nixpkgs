@@ -117,6 +117,13 @@ hello-2.3  A program that produces a familiar, friendly greeting
   </varlistentry>
 
   <varlistentry>
+    <term><varname>branch</varname></term>
+    <listitem><para>Release branch. Used to specify that a package is not
+    going to receive updates that are not in this branch; for example, Linux
+    kernel 3.0 is supposed to be updated to 3.0.X, not 3.1.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term><varname>homepage</varname></term>
     <listitem><para>The package’s homepage.  Example:
     <literal>http://www.gnu.org/software/hello/manual/</literal></para></listitem>

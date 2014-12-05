@@ -1,6 +1,6 @@
 source $stdenv/setup
 
-rpm2cpio $src | cpio -idv
+rpmextract $src
 tar xfvj rhpl-*.tar.bz2
 rm rhpl-*.tar.bz2
 cd rhpl-*

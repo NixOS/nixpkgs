@@ -1,4 +1,4 @@
-{stdenv, fetchurl, rpm, cpio, python, wirelesstools, gettext}:
+{stdenv, fetchurl, rpmextract, python, wirelesstools, gettext}:
 
 stdenv.mkDerivation {
   name = "rhpl-0.218";
@@ -12,5 +12,5 @@ stdenv.mkDerivation {
   
   builder = ./builder.sh;
   
-  buildInputs = [ rpm cpio python wirelesstools gettext ];
+  buildInputs = [ rpmextract python wirelesstools gettext ];
 }

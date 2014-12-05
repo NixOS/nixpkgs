@@ -147,7 +147,7 @@ in
       default = [];
       description = ''
         Additional configurations to build based on the current
-        configuration which is has a lower priority.
+        configuration which then has a lower priority.
       '';
     };
 

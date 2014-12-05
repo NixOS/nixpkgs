@@ -2,9 +2,9 @@ x@{builderDefsPackage
   , jre, unzip
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     [];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -32,11 +32,11 @@ rec {
   doDeploy = a.fullDepEntry ''
     mkdir -p "$out"/{share/vue,bin}
     cp ${src} "$out/share/vue/vue.jar"
-    echo '#!${a.stdenv.shell}' >> "$out/bin/vue" 
-    echo '${a.jre}/bin/java -jar "'"$out/share/vue/vue.jar"'" "$@"' >> "$out/bin/vue" 
+    echo '#!${a.stdenv.shell}' >> "$out/bin/vue"
+    echo '${a.jre}/bin/java -jar "'"$out/share/vue/vue.jar"'" "$@"' >> "$out/bin/vue"
     chmod a+x "$out/bin/vue"
   '' ["addInputs" "defEnsureDir"];
-      
+
   meta = {
     description = "Visual Understanding Environment - mind mapping software";
     maintainers = with a.lib.maintainers;
@@ -45,7 +45,6 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = "free-noncopyleft"; # Apache License fork, actually
+    license = a.lib.licenses.free; # Apache License fork, actually
   };
 }) x
-

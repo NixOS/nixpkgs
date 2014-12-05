@@ -21,6 +21,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://libs.suckless.org/libixp;
     description = "stand-alone client/server 9P library";
-    license = "MIT / LPL";
+    license = with stdenv.lib.licenses; [ mit lpl-102 ];
   };
 }

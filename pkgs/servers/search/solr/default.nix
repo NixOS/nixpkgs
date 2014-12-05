@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "solr-${version}";
-  version = "4.7.0";
+  version = "4.10.2";
 
   src = fetchurl {
     url = "mirror://apache/lucene/solr/${version}/solr-${version}.tgz";
-    sha256 = "0qm3pnhpfqjxdl0xiwffrcchp79q3ja5w5d278bkkxglc2y1y4xc";
+    sha256 = "07wwfgwcca3ndjrkfk7qyc4q8bdhwr0s6h4ijl4sqdy65aqcc6qh";
   };
 
   phases = [ "unpackPhase" "installPhase" ];

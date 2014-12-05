@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   patchPhase = "substituteInPlace configure --replace which \"type -P\"";
 
+  postInstall = "rm $out/share/rubber/modules/etex.rub";
+
   meta = {
     description = "Wrapper for LaTeX and friends";
 

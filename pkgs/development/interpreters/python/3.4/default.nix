@@ -10,6 +10,8 @@
 , sqlite
 , tcl, tk
 , zlib
+, callPackage
+, self
 }:
 
 assert readline != null -> ncurses != null;
@@ -18,7 +20,7 @@ with stdenv.lib;
 
 let
   majorVersion = "3.4";
-  version = "${majorVersion}.1";
+  version = "${majorVersion}.2";
   fullVersion = "${version}";
 
   buildInputs = filter (p: p != null) [
@@ -31,12 +33,10 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${fullVersion}.tar.xz";
-    sha256 = "1i7dgbzyvj24i6gfhb5q2zwr9nn1ni6w1ig1rcgh96a321is35f5";
+    sha256 = "1vrd9gqdqw7rw0kiiprqvng7ywnfc2hbyys7gr9mdh25s619cv8w";
   };
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
-
-  patches = [ ./issue21121-3.patch ];
 
   preConfigure = ''
     for i in /usr /sw /opt /pkg; do	# improve purity
@@ -54,9 +54,18 @@ stdenv.mkDerivation {
   setupHook = ./setup-hook.sh;
 
   postInstall = ''
-    rm -rf "$out/lib/python${majorVersion}/test"
-    ln -s "$out/include/python${majorVersion}m" "$out/include/python${majorVersion}"
+    # needed for some packages, especially packages that backport functionality
+    # to 2.x from 3.x
+    for item in $out/lib/python${majorVersion}/test/*; do
+      if [[ "$item" != */test_support.py* ]]; then
+        rm -rf "$item"
+      else
+        echo $item
+      fi
+    done
+    touch $out/lib/python${majorVersion}/test/__init__.py
 
+    ln -s "$out/include/python${majorVersion}m" "$out/include/python${majorVersion}"
     paxmark E $out/bin/python${majorVersion}
   '';
 
@@ -69,10 +78,12 @@ stdenv.mkDerivation {
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
     libPrefix = "python${majorVersion}";
     executable = "python3.4m";
+    buildEnv = callPackage ../wrapper.nix { python = self; };
     isPy3 = true;
     isPy34 = true;
     is_py3k = true;  # deprecated
     sitePackages = "lib/${libPrefix}/site-packages";
+    interpreter = "${self}/bin/${executable}";
   };
 
   enableParallelBuilding = true;

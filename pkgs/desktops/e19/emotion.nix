@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Extra video decoders";
     homepage = http://enlightenment.org/;
-    maintainers = [ stdenv.lib.maintainers.matejc ];
+    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.bsd2;
   };

@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Crypto++, a free C++ class library of cryptographic schemes";
     homepage = http://cryptopp.com/;
-    license = "Boost 1.0";
+    license = stdenv.lib.licenses.boost;
     maintainers = [ ];
   };
 }

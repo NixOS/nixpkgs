@@ -6,18 +6,18 @@
 , QuickCheck, reflection, semigroupoids, semigroups, simpleReflect
 , split, tagged, testFramework, testFrameworkHunit
 , testFrameworkQuickcheck2, testFrameworkTh, text, transformers
-, transformersCompat, unorderedContainers, vector, void, zlib
+, transformersCompat, unorderedContainers, vector, void
 }:
 
 cabal.mkDerivation (self: {
   pname = "lens";
-  version = "4.4.0.2";
-  sha256 = "03h1r6np1aas5nnw3nsqcvl9an9yriikcgapnfck82pmmdvg5l47";
+  version = "4.5";
+  sha256 = "009wdzybzmk7cs27fzigsmxknim6f9s7lp7iivgcsfn49pd8imwv";
   buildDepends = [
     bifunctors comonad contravariant distributive exceptions filepath
     free hashable mtl parallel primitive profunctors reflection
     semigroupoids semigroups split tagged text transformers
-    transformersCompat unorderedContainers vector void zlib
+    transformersCompat unorderedContainers vector void
   ];
   testDepends = [
     deepseq doctest filepath genericDeriving hlint HUnit mtl nats
@@ -25,9 +25,6 @@ cabal.mkDerivation (self: {
     testFrameworkHunit testFrameworkQuickcheck2 testFrameworkTh text
     transformers unorderedContainers vector
   ];
-  patchPhase = ''
-    configureFlags="-f-test-hlint"
-  '';
   meta = {
     homepage = "http://github.com/ekmett/lens/";
     description = "Lenses, Folds and Traversals";

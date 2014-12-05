@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     description = "Aurulent Sans";
     longDescription = "Aurulent Sans is a humanist sans serif intended to be used as an interface font.";
     homepage = http://delubrum.org/;
-    license = "SIL";
+    license = stdenv.lib.licenses.ofl;
     platforms = stdenv.lib.platforms.all;
   };
 }

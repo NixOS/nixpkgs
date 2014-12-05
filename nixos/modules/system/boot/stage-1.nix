@@ -34,6 +34,8 @@ let
       doublePatchelf = pkgs.stdenv.isArm;
     }
     ''
+      set +o pipefail
+
       mkdir -p $out/bin $out/lib
       ln -s $out/bin $out/sbin
 
@@ -127,7 +129,7 @@ let
       cp -v ${udev}/lib/udev/rules.d/60-persistent-storage.rules $out/
       cp -v ${udev}/lib/udev/rules.d/80-drivers.rules $out/
       cp -v ${pkgs.lvm2}/lib/udev/rules.d/*.rules $out/
-      cp -v ${pkgs.mdadm}/lib/udev/rules.d/*.rules $out/
+      ${config.boot.initrd.extraUdevRulesCommands}
 
       for i in $out/*.rules; do
           substituteInPlace $i \
@@ -137,7 +139,8 @@ let
             --replace ${pkgs.utillinux}/sbin/blkid ${extraUtils}/bin/blkid \
             --replace /sbin/blkid ${extraUtils}/bin/blkid \
             --replace ${pkgs.lvm2}/sbin ${extraUtils}/bin \
-            --replace /sbin/mdadm ${extraUtils}/bin/mdadm
+            --replace /sbin/mdadm ${extraUtils}/bin/mdadm \
+            --replace /bin/sh ${extraUtils}/bin/sh
       done
 
       # Work around a bug in QEMU, which doesn't implement the "READ
@@ -187,6 +190,15 @@ let
     fsInfo =
       let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType fs.options ];
       in pkgs.writeText "initrd-fsinfo" (concatStringsSep "\n" (concatMap f fileSystems));
+
+    setHostId = optionalString (config.networking.hostId != null) ''
+      hi="${config.networking.hostId}"
+      ${if pkgs.stdenv.isBigEndian then ''
+        echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > /etc/hostid
+      '' else ''
+        echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > /etc/hostid
+      ''}
+    '';
   };
 
 
@@ -300,6 +312,17 @@ in
       '';
     };
 
+    boot.initrd.extraUdevRulesCommands = mkOption {
+      internal = true;
+      default = "";
+      type = types.lines;
+      description = ''
+        Shell commands to be executed in the builder of the
+        udev-rules derivation.  This can be used to add
+        additional udev rules in the initial ramdisk.
+      '';
+    };
+
     boot.initrd.compressor = mkOption {
       internal = true;
       default = "gzip -9";
@@ -345,9 +368,6 @@ in
       (isYes "TMPFS")
       (isYes "BLK_DEV_INITRD")
     ];
-
-    # Prevent systemd from waiting for the /dev/root symlink.
-    systemd.units."dev-root.device".text = "";
 
     boot.initrd.supportedFilesystems = map (fs: fs.fsType) fileSystems;
 

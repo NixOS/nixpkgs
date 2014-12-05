@@ -1,0 +1,34 @@
+From e3020723dc43af2bc22af0d68571a61daf9b44d0 Mon Sep 17 00:00:00 2001
+From: Turbo Fredriksson <turbo@bayour.com>
+Date: Sun, 14 Sep 2014 15:47:22 +0000
+Subject: [PATCH] Linux 3.16 compat: smp_mb__after_clear_bit()
+
+The smp_mb__{before,after}_clear_bit functions have been renamed
+smp_mb__{before,after}_atomic.  Rather than adding a compatibility
+function to handle this the code has been updated to use smp_wmb().
+
+This has the advantage of being a stable functionally equivalent
+interface.  On many architectures smp_mb__after_clear_bit() expands
+to smp_wmb().  Others might be able to do something slightly more
+efficient but this will be safe and correct on all of them.
+
+Signed-off-by: Turbo Fredriksson <turbo@bayour.com>
+Signed-off-by: Brian Behlendorf <behlendorf1@llnl.gov>
+Closes #386
+---
+ module/spl/spl-kmem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/module/spl/spl-kmem.c b/module/spl/spl-kmem.c
+index 6de513e..79954eb 100644
+--- a/module/spl/spl-kmem.c
++++ b/module/spl/spl-kmem.c
+@@ -2365,7 +2365,7 @@ spl_kmem_cache_reap_now(spl_kmem_cache_t *skc, int count)
+ 
+ 	spl_slab_reclaim(skc, count, 1);
+ 	clear_bit(KMC_BIT_REAPING, &skc->skc_flags);
+-	smp_mb__after_clear_bit();
++	smp_wmb();
+ 	wake_up_bit(&skc->skc_flags, KMC_BIT_REAPING);
+ out:
+ 	atomic_dec(&skc->skc_ref);

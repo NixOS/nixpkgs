@@ -1,11 +1,11 @@
 {stdenv, fetchurl, jre, unzip}:
 stdenv.mkDerivation rec {
-  version = "0.8.2";
+  version = "0.9.0";
   pname = "zgrviewer";
   name="${pname}-${version}";
   src = fetchurl {
     url = "mirror://sourceforge/zvtm/${pname}/${version}/${name}.zip";
-    sha256 = "a76b9865c1490a6cfc08911592a19c15fe5972bf58e017cb31db580146f069bb";
+    sha256 = "1yg2rck81sqqrgfi5kn6c1bz42dr7d0zqpcsdjhicssi1y159f23";
   };
   buildInputs = [jre unzip];
   buildPhase = "";

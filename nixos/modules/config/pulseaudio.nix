@@ -12,7 +12,7 @@ let
 
   # Forces 32bit pulseaudio and alsaPlugins to be built/supported for apps
   # using 32bit alsa on 64bit linux.
-  enable32BitAlsaPlugins = stdenv.isx86_64 && (pkgs_i686.alsaLib != null);
+  enable32BitAlsaPlugins = stdenv.isx86_64 && (pkgs_i686.alsaLib != null && pkgs_i686.pulseaudio != null);
 
   ids = config.ids;
 
@@ -126,8 +126,7 @@ in {
     (mkIf cfg.enable {
       environment.systemPackages = [
         cfg.package
-        (lib.optional enable32BitAlsaPlugins pkgs_i686.pulseaudio)
-      ];
+      ] ++ lib.optionals enable32BitAlsaPlugins [ pkgs_i686.pulseaudio ];
 
       environment.etc = singleton {
         target = "asound.conf";

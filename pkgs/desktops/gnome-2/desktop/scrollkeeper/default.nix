@@ -14,5 +14,5 @@ stdenv.mkDerivation {
   ";
 
   buildInputs = [pkgconfig perl perlXMLParser libxml2 libxslt gettext];
-  configureFlags = "--with-xml-catalog=${docbook_xml_dtd_42}/xml/dtd/docbook/docbook.cat";
+  configureFlags = "--with-xml-catalog=${docbook_xml_dtd_42}/xml/dtd/docbook/catalog.xml";
 }

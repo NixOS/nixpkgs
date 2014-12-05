@@ -1,6 +1,6 @@
-diff -wbBur xplanet-1.3.0/src/libimage/gif.c /home/sergej/tmp/BUILD/staging-i686/sergej/build/xplanet/src/xplanet-1.3.0/src/libimage/gif.c
+diff -wbBur xplanet-1.3.0/src/libimage/gif.c xplanet-1.3.0.my/src/libimage/gif.c
 --- xplanet-1.3.0/src/libimage/gif.c	2006-03-26 01:50:51.000000000 +0300
-+++ /home/sergej/tmp/BUILD/staging-i686/sergej/build/xplanet/src/xplanet-1.3.0/src/libimage/gif.c	2013-07-30 18:21:17.412474692 +0400
++++ xplanet-1.3.0.my/src/libimage/gif.c	2014-05-29 18:59:14.830652716 +0400
 @@ -20,7 +20,7 @@
  
  #include <stdio.h>
@@ -59,6 +59,15 @@ diff -wbBur xplanet-1.3.0/src/libimage/gif.c /home/sergej/tmp/BUILD/staging-i686
                      return(0);
                  }
              }
+@@ -154,7 +154,7 @@
+     
+     free(buffer);
+ 
+-    DGifCloseFile(infile);
++    DGifCloseFile(infile, NULL);
+     return(1);
+ }
+ 
 @@ -178,7 +178,7 @@
          return(0);
      }
@@ -119,11 +128,13 @@ diff -wbBur xplanet-1.3.0/src/libimage/gif.c /home/sergej/tmp/BUILD/staging-i686
              return(0);
          }
          ptr += width;
-@@ -233,7 +233,7 @@
+@@ -232,8 +232,8 @@
+ 
      EGifSpew(outfile);
  
-     if (EGifCloseFile(outfile) == GIF_ERROR) 
+-    if (EGifCloseFile(outfile) == GIF_ERROR) 
 -        PrintGifError();
++    if (EGifCloseFile(outfile, NULL) == GIF_ERROR) 
 +        printf("%s\n", GifErrorString(GIF_ERROR));
  
      free(buffer);

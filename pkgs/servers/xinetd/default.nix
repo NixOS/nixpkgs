@@ -12,6 +12,6 @@ stdenv.mkDerivation rec {
     description = "Secure replacement for inetd";
     platforms = stdenv.lib.platforms.linux;
     homepage = http://xinetd.org;
-    license = "free";
+    license = stdenv.lib.licenses.free;
   };
 }

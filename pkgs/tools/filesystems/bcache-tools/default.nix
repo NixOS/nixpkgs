@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
         -e "/INSTALL.*initcpio\/install/d" \
         -e "/INSTALL.*dracut\/module-setup.sh/d" \
         -i Makefile
-
-    sed -e "s|/sbin/modprobe|${kmod}/sbin/modprobe|" -i bcache-register
   '';
+
+  patches = [ ./bcache-udev-modern.patch ];
 
   preBuild = ''
     export makeFlags="$makeFlags PREFIX=\"$out\" UDEVLIBDIR=\"$out/lib/udev/\"";

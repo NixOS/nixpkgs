@@ -9,11 +9,11 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "smartmontools-6.2";
+  name = "smartmontools-6.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/smartmontools/${name}.tar.gz";
-    sha256 = "0nq6jvfh8nqwfrvp6fb6qs2rdydi3i9xgpi7p7vb83xvg42ncvs8";
+    sha256 = "06gy71jh2d3gcfmlbbrsqw7215knkfq59q3j6qdxfrar39fhcxx7";
   };
 
   patchPhase = ''

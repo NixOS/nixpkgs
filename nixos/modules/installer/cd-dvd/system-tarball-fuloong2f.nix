@@ -76,7 +76,6 @@ in
       pkgs.ntfsprogs # for resizing NTFS partitions
       pkgs.btrfsProgs
       pkgs.jfsutils
-      pkgs.jfsrec
 
       # Some compression/archiver tools.
       pkgs.unzip

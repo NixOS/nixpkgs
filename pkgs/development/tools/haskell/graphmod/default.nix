@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "graphmod";
-  version = "1.2.5";
-  sha256 = "1rmrsfvajzrak7jlhwnvhrgszgyg1b6z5wp21k0d7pv2cbfdkp8s";
+  version = "1.2.6";
+  sha256 = "02p1x44ywv2mb4l2dsz9z3ybnvv4nns3882lqm3nc8sw2hkib8z3";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ dotgen filepath haskellLexer ];

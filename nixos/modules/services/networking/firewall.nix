@@ -187,6 +187,12 @@ let
     # Clean up after added ruleset
     ip46tables -D INPUT -j nixos-fw 2>/dev/null || true
 
+    ${optionalString (kernelHasRPFilter && cfg.checkReversePath) ''
+      if ! ip46tables -D PREROUTING -t raw -m rpfilter --invert -j DROP; then
+        echo "<2>failed to stop rpfilter support" >&2
+      fi
+    ''}
+
     ${cfg.extraStopCommands}
   '';
 
@@ -452,8 +458,9 @@ in
 
     systemd.services.firewall = {
       description = "Firewall";
-      wantedBy = [ "network.target" ];
-      after = [ "network-interfaces.target" "systemd-modules-load.service" ];
+      wantedBy = [ "network-pre.target" ];
+      before = [ "network-pre.target" ];
+      after = [ "systemd-modules-load.service" ];
 
       path = [ pkgs.iptables ];
 

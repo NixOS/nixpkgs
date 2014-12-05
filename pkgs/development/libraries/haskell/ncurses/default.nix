@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ncurses";
-  version = "0.2.10";
-  sha256 = "0qdw5dwi1w42nygvzyq8la7i917f0fz9qjw6ivgl2h1rjxc5j9cb";
+  version = "0.2.11";
+  sha256 = "08jr224i37jxrprka9c276sid6mw001m8r2krd6g8jscshwd5nzk";
   buildDepends = [ text transformers ];
   buildTools = [ c2hs ];
   extraLibraries = [ ncurses ];
@@ -15,7 +15,5 @@ cabal.mkDerivation (self: {
     description = "Modernised bindings to GNU ncurses";
     license = self.stdenv.lib.licenses.gpl3;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
-    broken = true;
   };
 })

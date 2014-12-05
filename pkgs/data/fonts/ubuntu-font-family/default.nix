@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     contemporary style and contains characteristics unique to
     the Ubuntu brand that convey a precise, reliable and free attitude.";
     homepage = http://font.ubuntu.com/;
-    license = "free";
+    license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.antono ];
   };

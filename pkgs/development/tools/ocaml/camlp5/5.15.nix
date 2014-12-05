@@ -37,7 +37,8 @@ stdenv.mkDerivation {
       It also provides parsing and printing tools.
     '';
     homepage = "${webpage}";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
+    branch = "5";
     platforms = ocaml.meta.platforms;
     maintainers = [
       stdenv.lib.maintainers.z77z

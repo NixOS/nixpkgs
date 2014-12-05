@@ -1,5 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, libexif, gtk
-, exo, dbus_glib, libxfce4util, libxfce4ui, xfconf }:
+, exo, dbus_glib, libxfce4util, libxfce4ui, xfconf
+, hicolor_icon_theme, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   p_name  = "ristretto";
@@ -14,8 +16,14 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig intltool libexif gtk dbus_glib exo libxfce4util
-      libxfce4ui xfconf
+      libxfce4ui xfconf hicolor_icon_theme makeWrapper
     ];
+
+  postInstall = ''
+    wrapProgram "$out/bin/ristretto" \
+      --prefix XDG_DATA_DIRS : "${hicolor_icon_theme}/share"
+  '';
+
   preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
 
   meta = {

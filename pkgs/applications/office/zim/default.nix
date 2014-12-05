@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   name = "zim-${version}";
-  version = "0.60";
+  version = "0.62";
   namePrefix = "";
   
   src = fetchurl {
-    url = "http://zim-wiki.org/downloads/zim-0.61.tar.gz";
-    sha256 = "0jncxkf83bwra3022jbvjfwhk5w8az0jlwr8nsvm7wa1zfrajhsq";
+    url = "http://zim-wiki.org/downloads/${name}.tar.gz";
+    sha256 = "1hmx24jjazqvs3z6h10jl8wrqxyvvk0wc807v222vaf1sbmjmmhr";
   };
 
   propagatedBuildInputs = [ pythonPackages.sqlite3 pygtk /*pythonPackages.pyxdg*/ pygobject ];
@@ -100,4 +100,3 @@ buildPythonPackage rec {
       license = stdenv.lib.licenses.gpl2Plus;
   };
 }
-

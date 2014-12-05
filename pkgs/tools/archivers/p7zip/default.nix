@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     description = "A port of the 7-zip archiver";
     # license = stdenv.lib.licenses.lgpl21Plus; + "unRAR restriction"
     platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
   };
 }

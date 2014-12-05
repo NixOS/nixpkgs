@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
   };
 
   configurePhase = ''
+    export KCONFIG_NOTIMESTAMP=1
     make defconfig
     ${configParser}
     cat << EOF | parseconfig

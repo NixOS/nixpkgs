@@ -18,6 +18,8 @@
 , prePhases ? []
 , postPhases ? []
 , buildInputs ? []
+, preHook ? ""
+, postHook ? ""
 , ... } @ args:
 
 let
@@ -89,7 +91,8 @@ stdenv.mkDerivation (
     postHook = ''
       . ${./functions.sh}
       origSrc=$src
-      src=$(findTarballs $src | head -1)
+      src=$(findTarball $src)
+      ${postHook}
     '';
 
     preHook = ''
@@ -105,6 +108,8 @@ stdenv.mkDerivation (
         shopt -s expand_aliases
         alias make="scan-build -o _clang_analyze_$name --html-title='Scan results for $name' make"
       fi
+
+      ${preHook}
     '';
 
     # Clean up after analysis

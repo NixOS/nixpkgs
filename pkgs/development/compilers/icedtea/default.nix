@@ -24,7 +24,7 @@ let
   defSrc = name:
     with (builtins.getAttr name srcInfo.bundles); fetchurl {
       inherit url sha256;
-      name = "${pkgName}-${name}-${baseNameOf url}";
+      name = "${pkgName}-${baseNameOf url}";
     };
 
   bundleNames = builtins.attrNames srcInfo.bundles;

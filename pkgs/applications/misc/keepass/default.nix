@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "keepass-${version}";
-  version = "2.27";
+  version = "2.28";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${version}.zip";
-    sha256 = "1qi7pls5xrv7ma53bwka738idvnxk82dvhk06m1snc8c29dws7fa";
+    sha256 = "0rlll6qriflaibqpw9qqfgqqr7cvhl404c3ph6n2i22j7xn5mizh";
   };
 
   sourceRoot = ".";

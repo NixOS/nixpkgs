@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   
   src = fetchurl {
     url = "http://upstart.ubuntu.com/download/${version}/${name}.tar.gz";
-    md5 = "870920a75f8c13f3a3af4c35916805ac";
+    sha256 = "01w4ab6nlisz5blb0an1sxjkndwikr7sjp0cmz4lg00g3n7gahmx";
   };
 
   buildInputs = [ pkgconfig dbus libnih ];

@@ -17,7 +17,8 @@ let
     { name = "intelwimax"; sha256 = "1avls6sx0pbsffrcs267r2r2rqlx2xrv8j9znc7ix1bi8g4fx91v"; }
     { name = "ipw2x00"; sha256 = "19zqc30hsz7snw020izm81qbap3xsygggnmbspxndw7jihz0amjs"; }
     { name = "ivtv"; sha256 = "1f2004lpw5nr9rxj3cl4ba0jdm51wkvsrbiy4drakawpjwh5y4qw"; }
-    { name = "iwlwifi"; sha256 = "1538r751mx8nhg3xibnnrhnflvf3kl5y9rnm7rpl4wyrfgx61amd"; }
+    # Disabled as it is packaged separately
+    #{ name = "iwlwifi"; sha256 = "1538r751mx8nhg3xibnnrhnflvf3kl5y9rnm7rpl4wyrfgx61amd"; }
     { name = "libertas"; sha256 = "0svkqlsiqgmh970r38nh0c1pjx41zdfql2k2k5djw99fscjklacd"; }
     { name = "linux"; sha256 = "0j62v6vbh2287j3x5c9i0xspmhyh5k1z8dyajgix7k37xi4jvpy2"; }
     { name = "linux-nonfree"; sha256 = "1f5x72rzicivwm0sn9l6wjkx7z9a0b8n6c9m60xrqg36ly7mizzp"; }

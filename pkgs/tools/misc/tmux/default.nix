@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, libevent, pkgconfig, makeWrapper}:
+{stdenv, fetchurl, ncurses, libevent, pkgconfig}:
 
 stdenv.mkDerivation rec {
   pname = "tmux";
@@ -12,13 +12,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ ncurses libevent makeWrapper ];
+  buildInputs = [ ncurses libevent ];
 
   postInstall =
     ''
       mkdir -p $out/etc/bash_completion.d
       cp -v examples/bash_completion_tmux.sh $out/etc/bash_completion.d/tmux
-      wrapProgram $out/bin/tmux --prefix TERMINFO : $out/share/terminfo
     '';
 
   meta = {
@@ -36,7 +35,7 @@ stdenv.mkDerivation rec {
           * Interactive menus to select windows, sessions or clients.
           * Change the current window by searching for text in the target.
           * Terminal locking, manually or after a timeout.
-          * A clean, easily extended, BSD-licensed codebase, under active development. 
+          * A clean, easily extended, BSD-licensed codebase, under active development.
       '';
 
     license = stdenv.lib.licenses.bsd3;

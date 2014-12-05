@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     homepage = https://wiki.gnome.org/Apps/Yelp;
     description = "Yelp's universal stylesheets for Mallard and DocBook";
     maintainers = with maintainers; [ lethalman ];
-    # TODO license = [licenses.gpl2 licenses.lgpl2];
+    license = [licenses.gpl2 licenses.lgpl2];
     platforms = platforms.linux;
   };
 }

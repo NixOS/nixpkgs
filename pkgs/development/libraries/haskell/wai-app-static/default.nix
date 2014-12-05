@@ -10,8 +10,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wai-app-static";
-  version = "3.0.0.1";
-  sha256 = "1xqw7xvbq38m19337vpalnz5c5mvc57mfp53vqbah3lalxy9mqby";
+  version = "3.0.0.3";
+  sha256 = "0krvjnysmfaqds715mp6lhh5am327swi2vja5insmn08da87zhnb";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

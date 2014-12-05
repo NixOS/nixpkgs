@@ -23,4 +23,4 @@ mount --rbind /run $chrootenvDest/run
 mount --bind /etc $chrootenvDest/host-etc
 
 # Bind mount /tmp
-mount --bind /tmp/chrootenv-@name@ /run/chrootenv/steam/tmp
+mount --bind /tmp/chrootenv-@name@ $chrootenvDest/tmp

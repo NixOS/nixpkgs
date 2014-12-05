@@ -1,15 +1,17 @@
 { stdenv, fetchurl, kernel }:
 
+assert stdenv.lib.versionAtLeast kernel.version "3.4";  # fails on 3.2
+assert builtins.substring 0 4 kernel.version != "3.12";
+
 stdenv.mkDerivation rec {
-  pname = "lttng-modules-2.4.1";
+  pname = "lttng-modules-${version}";
   name = "${pname}-${kernel.version}";
+  version = "2.6.0-rc1"; # "git describe bf2ba318fff"
 
   src = fetchurl {
-    url = "https://lttng.org/files/lttng-modules/${pname}.tar.bz2";
-    sha256 = "1qn1qm8lwqw9ri9wfkf6k3d58gl9rwffmpbpkwx21v1fw95zi92k";
+    url = "https://github.com/lttng/lttng-modules/archive/v${version}.tar.gz";
+    sha256 = "01gha02ybbzr86v6s6bqn649jiw5k89kb363b9s1iv8igrdlzhl1";
   };
-
-  patches = [ ./lttng-fix-build-error-on-linux-3.2.patch ];
 
   preConfigure = ''
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
@@ -23,10 +25,9 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Linux kernel modules for LTTng tracing";
     homepage = http://lttng.org/;
-    # TODO license = with licenses; [ lgpl21 gpl2 mit ];
+    license = with licenses; [ lgpl21 gpl2 mit ];
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
-    broken = true;
   };
 
 }

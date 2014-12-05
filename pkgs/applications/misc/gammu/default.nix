@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python, pkgconfig, cmake, bluez, libusb1, curl
-, libiconv, gettext, sqlite }:
+, libiconvOrEmpty, gettext, sqlite }:
 
 with stdenv.lib;
 
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./bashcomp-dir.patch ];
 
-  buildInputs = [ python pkgconfig cmake bluez libusb1 curl libiconv
-    gettext sqlite ];
+  buildInputs = [ python pkgconfig cmake bluez libusb1 curl gettext sqlite ]
+    ++ libiconvOrEmpty;
 
   enableParallelBuilding = true;
 

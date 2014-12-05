@@ -35,7 +35,7 @@ stdenv.mkDerivation {
       which runs on most major Unix platforms.  It mainly conforms to the
       ANSI Common Lisp standard.
     '';
-    license = "free";		# public domain
+    license = stdenv.lib.licenses.free;		# public domain
     homepage = http://www.cons.org/cmucl/;
   };
 }

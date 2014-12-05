@@ -1,33 +1,8 @@
-diff --git a/src/librustc/back/link.rs b/src/librustc/back/link.rs
-index 6332485..9500a23 100644
---- a/src/librustc/back/link.rs
-+++ b/src/librustc/back/link.rs
-@@ -383,18 +383,9 @@ pub fn mangle_internal_name_by_path_and_seq(path: PathElems, flav: &str) -> Stri
- 
- pub fn get_cc_prog(sess: &Session) -> String {
-     match sess.opts.cg.linker {
--        Some(ref linker) => return linker.to_string(),
--        None => {}
-+        Some(ref linker) => linker.to_string(),
-+        None => "@ccPath@".to_string()
-     }
--
--    // In the future, FreeBSD will use clang as default compiler.
--    // It would be flexible to use cc (system's default C compiler)
--    // instead of hard-coded gcc.
--    // For Windows, there is no cc command, so we add a condition to make it use gcc.
--    match sess.targ_cfg.os {
--        abi::OsWindows => "gcc",
--        _ => "cc",
--    }.to_string()
- }
- 
- pub fn remove(sess: &Session, path: &Path) {
 diff --git a/src/librustc_back/archive.rs b/src/librustc_back/archive.rs
-index 060dda5..fecf76b 100644
+index a88bcaf..9c3858d 100644
 --- a/src/librustc_back/archive.rs
 +++ b/src/librustc_back/archive.rs
-@@ -53,7 +53,7 @@ fn run_ar(handler: &ErrorHandler, maybe_ar_prog: &Option<String>,
+@@ -54,7 +54,7 @@ fn run_ar(handler: &ErrorHandler, maybe_ar_prog: &Option<String>,
            paths: &[&Path]) -> ProcessOutput {
      let ar = match *maybe_ar_prog {
          Some(ref ar) => ar.as_slice(),
@@ -35,4 +10,19 @@ index 060dda5..fecf76b 100644
 +        None => "@arPath@"
      };
      let mut cmd = Command::new(ar);
+ 
+diff --git a/src/librustc_trans/back/link.rs b/src/librustc_trans/back/link.rs
+index d27a338..c9b1508 100644
+--- a/src/librustc_trans/back/link.rs
++++ b/src/librustc_trans/back/link.rs
+@@ -361,8 +361,8 @@ pub fn mangle_internal_name_by_path_and_seq(path: PathElems, flav: &str) -> Stri
+ 
+ pub fn get_cc_prog(sess: &Session) -> String {
+     match sess.opts.cg.linker {
+-        Some(ref linker) => return linker.to_string(),
+-        None => sess.target.target.options.linker.clone(),
++        Some(ref linker) => linker.to_string(),
++        None => "@ccPath@".to_string(),
+     }
+ }
  

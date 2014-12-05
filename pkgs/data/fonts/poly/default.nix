@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Medium contrast serif font.";
+    description = "Medium contrast serif font";
     longDescription = ''
     With short ascenders and a very high x-height, Poly is efficient in small
     sizes. Thanks to its careful balance between the x-height and glyph widths,

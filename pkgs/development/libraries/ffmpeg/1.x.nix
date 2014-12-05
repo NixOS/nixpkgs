@@ -31,11 +31,12 @@ assert playSupport -> SDL != null;
 assert freetypeSupport -> freetype != null;
 
 stdenv.mkDerivation rec {
-  name = "ffmpeg-1.2.8";
+  version = "1.2.10";
+  name = "ffmpeg-${version}";
 
   src = fetchurl {
     url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
-    sha256 = "0n9fklr8zqkd60dc5ai161l6k4dbiac5hqy0pi1w82yamc25k6s2";
+    sha256 = "02wdxr55a68rjxbyrsxczp55z2qmspw8cfa0yd55x3dv82657hnj";
   };
 
   # `--enable-gpl' (as well as the `postproc' and `swscale') mean that
@@ -100,7 +101,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.ffmpeg.org/;
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
+    license = if faacSupport then stdenv.lib.licenses.unfree else stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
+    platforms = stdenv.lib.platforms.unix;
     branch = "1";
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, apr, scons, openssl, aprutil, zlib, krb5, pkgconfig }:
+{ stdenv, fetchurl, apr, scons, openssl, aprutil, zlib, krb5, pkgconfig, gnused }:
 
 stdenv.mkDerivation rec {
   name = "serf-1.3.7";
@@ -11,15 +11,19 @@ stdenv.mkDerivation rec {
   buildInputs = [ apr scons openssl aprutil zlib krb5 pkgconfig ];
 
   configurePhase = ''
-    sed -e '/^env[.]Append(BUILDERS/ienv.Append(ENV={"PATH":os.environ["PATH"]})' -i SConstruct
-    sed -e '/^env[.]Append(BUILDERS/ienv.Append(ENV={"NIX_CFLAGS_COMPILE":os.environ["NIX_CFLAGS_COMPILE"]})' -i SConstruct
-    sed -e '/^env[.]Append(BUILDERS/ienv.Append(ENV={"NIX_LDFLAGS":os.environ["NIX_LDFLAGS"]})' -i SConstruct
+    ${gnused}/bin/sed -e '/^env[.]Append(BUILDERS/ienv.Append(ENV={"PATH":os.environ["PATH"]})' -i SConstruct
+    ${gnused}/bin/sed -e '/^env[.]Append(BUILDERS/ienv.Append(ENV={"NIX_CFLAGS_COMPILE":os.environ["NIX_CFLAGS_COMPILE"]})' -i SConstruct
+    ${gnused}/bin/sed -e '/^env[.]Append(BUILDERS/ienv.Append(ENV={"NIX_LDFLAGS":os.environ["NIX_LDFLAGS"]})' -i SConstruct
   '';
 
   buildPhase = ''
     scons PREFIX="$out" OPENSSL="${openssl}" ZLIB="${zlib}" APR="$(echo "${apr}"/bin/*-config)" \
-        APU="$(echo "${aprutil}"/bin/*-config)" GSSAPI="${krb5}" CC="${stdenv.gcc}/bin/gcc"
+        APU="$(echo "${aprutil}"/bin/*-config)" GSSAPI="${krb5}" CC="${
+          if stdenv.isDarwin then "clang" else "${stdenv.gcc}/bin/gcc"
+        }"
   '';
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-L/usr/lib";
 
   installPhase = ''
     scons install

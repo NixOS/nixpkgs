@@ -7,12 +7,13 @@
 
 cabal.mkDerivation (self: {
   pname = "diagrams-postscript";
-  version = "1.1.0.1";
-  sha256 = "03747g5y33kzf76hs4y0ak9q6b79r92z130b03bcc2892na62ad6";
+  version = "1.1.0.2";
+  sha256 = "1djvra4igw43746wqhwg1ms76w2qlrsdwhr0b795si4wdx8k28b3";
   buildDepends = [
     dataDefaultClass diagramsCore diagramsLib dlist filepath hashable
     lens monoidExtras mtl semigroups split vectorSpace
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams/";
     description = "Postscript backend for diagrams drawing EDSL";

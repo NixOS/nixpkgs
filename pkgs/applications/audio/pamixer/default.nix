@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "03r0sbfj85wp6yxa87pjg69ivmk0mxxa2nykr8gf2c607igmb034";
   };
 
-  buildInputs = [ pulseaudio boost boost.lib ];
+  buildInputs = [ pulseaudio boost ];
 
   installPhase = ''
     mkdir -p $out/bin

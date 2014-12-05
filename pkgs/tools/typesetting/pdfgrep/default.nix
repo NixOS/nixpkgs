@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "a tool to search text in PDF files";
     homepage = http://pdfgrep.sourceforge.net/;
-    license = "free";
+    license = stdenv.lib.licenses.free;
     maintainers = with stdenv.lib.maintainers; [qknight];
     platforms = with stdenv.lib.platforms; linux;
   };

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "13d35rlcjncd8lx3khkgn9x8is2xjd5fp6ns5xsn3w6l4xj9b4gl";
   };
 
-  buildInputs = [ qt5 pkgconfig boost boost.lib ];
+  buildInputs = [ qt5 pkgconfig boost ];
 
   postPatch = ''
     sed -e "s|/usr/include/|/nonexistent/|g" -i linssid-app/*.pro

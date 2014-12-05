@@ -2,11 +2,11 @@
 , perl }:
 
 stdenv.mkDerivation rec {
-  name = "ming-0.4.0.rc1";
+  name = "ming-0.4.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/ming/${name}.tar.bz2";
-    sha256 = "19brcqh4mqav5gsnmnb6j4gv9s0rmkg71657ck17xj8fdklq38y7";
+    sha256 = "1sws4cs9i9hysr1l0b8hsmqf4gh06ldc24fw6avzr9y3vydhinl2";
   };
 
   # We don't currently build the Python, Perl, PHP, etc. bindings.

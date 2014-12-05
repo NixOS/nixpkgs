@@ -1,6 +1,6 @@
-{ fetchurl, stdenv, which, pkgconfig, libxcb, xcbutilkeysyms, xcbutil,
-  xcbutilwm, libstartup_notification, libX11, pcre, libev, yajl,
-  xcb-util-cursor, coreutils, perl, pango, perlPackages, xdummy }:
+{ fetchurl, stdenv, which, pkgconfig, makeWrapper, libxcb, xcbutilkeysyms
+, xcbutil, xcbutilwm, libstartup_notification, libX11, pcre, libev, yajl
+, xcb-util-cursor, coreutils, perl, pango, perlPackages, xdummy }:
 
 stdenv.mkDerivation rec {
   name = "i3-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    which pkgconfig libxcb xcbutilkeysyms xcbutil xcbutilwm
+    which pkgconfig makeWrapper libxcb xcbutilkeysyms xcbutil xcbutilwm
     libstartup_notification libX11 pcre libev yajl xcb-util-cursor perl pango
     perlPackages.AnyEventI3 perlPackages.X11XCB perlPackages.IPCRun
     perlPackages.ExtUtilsPkgConfig perlPackages.TestMore perlPackages.InlineC
@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
   '';
 
   configurePhase = "makeFlags=PREFIX=$out";
+
+  postInstall = ''
+    wrapProgram "$out/bin/i3-save-tree" --prefix PERL5LIB ":" "$PERL5LIB"
+  '';
 
   meta = with stdenv.lib; {
     description = "A tiling window manager";

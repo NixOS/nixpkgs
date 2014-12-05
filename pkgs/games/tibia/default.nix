@@ -3,11 +3,11 @@
 with stdenv.lib;
 assert stdenv.isi686;
 stdenv.mkDerivation {
-  name = "tibia-10.57";
+  name = "tibia-10.64";
 
   src = fetchurl {
-    url = http://static.tibia.com/download/tibia1057.tgz;
-    sha256 = "1bhfrz66n1cvvy11ybr3yfn3i3vr98nnp3q11gssk8nby5bqm2fi";
+    url = http://static.tibia.com/download/tibia1064.tgz;
+    sha256 = "0g3hg65aclbhdm3sfpxxzyc4cdv1q6i2mzzgq2h8bpyc1m3in1j9";
   };
 
   shell = stdenv.shell;
@@ -53,5 +53,6 @@ stdenv.mkDerivation {
     homepage = "http://tibia.com";
     license = stdenv.lib.licenses.unfree;
     platforms = ["i686-linux"];
+    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
   };
 }

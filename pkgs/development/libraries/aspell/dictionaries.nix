@@ -176,4 +176,14 @@ in {
     };
   };
 
+  sk = buildDict {
+    shortName = "sk-2.01-2";
+    fullName = "Slovak";
+    src = fetchurl {
+      url = mirror://gnu/aspell/dict/sk/aspell6-sk-2.01-2.tar.bz2;
+      sha256 = "19k0m1v5pcf7xr4lxgjkzqkdlks8nyb13bvi1n7521f3i4lhma66";
+    };
+  };
+
+
 }

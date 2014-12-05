@@ -53,8 +53,10 @@ stdenv.mkDerivation {
       ''
       else ""}
     
-    # Wrap builder script
+    # Fix zipalign compatibility issue with newer Android SDKs
+    sed -i -e 's|zipalign = self.sdk.get_zipalign()|zipalign = "zipalign"|' builder.py
     
+    # Wrap builder script
     mv builder.py .builder.py
     cat > builder.py <<EOF
     #!${python}/bin/python

@@ -23,7 +23,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     homepage = "http://www.ppsspp.org/";
-    description = "A PSP emulator, the Qt4 version.";
+    description = "A PSP emulator, the Qt4 version";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.fuuzetsu ];
     platforms = platforms.linux ++ platforms.darwin ++ platforms.cygwin;

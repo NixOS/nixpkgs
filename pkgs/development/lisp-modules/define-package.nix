@@ -1,5 +1,5 @@
 args @ {stdenv, clwrapper, baseName, version ? "latest", src, description, deps, 
-  buildInputs ? [], meta ? {}, overrides?(x: {})}:
+  buildInputs ? [], meta ? {}, overrides?(x: {}), propagatedBuildInputs ? []}:
 let 
   deployConfigScript = ''
     config_script="$out"/lib/common-lisp-settings/${args.baseName}-shell-config.sh
@@ -30,6 +30,8 @@ basePackage = {
 
   inherit deployConfigScript deployLaunchScript;
   installPhase = ''
+    eval "$preInstall"
+
     mkdir -p "$out"/share/doc/${args.baseName};
     mkdir -p "$out"/lib/common-lisp/${args.baseName};
     cp -r . "$out"/lib/common-lisp/${args.baseName};
@@ -37,8 +39,11 @@ basePackage = {
 
     ${deployConfigScript}
     ${deployLaunchScript}
+
+    eval "$postInstall"
   '';
-  propagatedBuildInputs = args.deps ++ [clwrapper clwrapper.lisp];
+  propagatedBuildInputs = (args.deps or []) ++ [clwrapper clwrapper.lisp] 
+    ++ (args.propagatedBuildInputs or []);
   buildInputs = buildInputs;
   dontStrip=true;
   meta = {

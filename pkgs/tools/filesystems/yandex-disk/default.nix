@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, writeText, zlib, rpm, cpio, patchelf, which }:
+{ stdenv, fetchurl, writeText, zlib, rpmextract, patchelf, which }:
 
 assert stdenv.isLinux;
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
     mkdir -pv unpacked
     cd unpacked
-    ${rpm}/bin/rpm2cpio $src | ${cpio}/bin/cpio -imd
+    ${rpmextract}/bin/rpmextract $src
 
     cp -r -t $out/bin usr/bin/*
     cp -r -t $out/share usr/share/*

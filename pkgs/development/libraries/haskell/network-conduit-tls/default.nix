@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "network-conduit-tls";
-  version = "1.1.0";
-  sha256 = "1q9wx7bvr4a65rkyfn2vd3h9bfpsvm9zcqqjhjsrgb91l6x5bdqi";
+  version = "1.1.0.2";
+  sha256 = "1jgv2g3fsfp0rym4g0d9w5hm5ws0sfisj07hcfk2711rm107zaax";
   buildDepends = [
     conduit conduitExtra connection cprngAes dataDefault monadControl
     network streamingCommons systemFileio systemFilepath tls

@@ -1,0 +1,29 @@
+http://sourceforge.net/p/rdesktop/code/1816/
+Fix constant naming and enabled windowskey by default.
+
+Index: trunk/rdesktop.c
+===================================================================
+--- trunk/rdesktop.c	(revision 1815)
++++ trunk/rdesktop.c	(revision 1816)
+@@ -554,7 +554,7 @@
+ 	act.sa_flags = 0;
+ 	sigaction(SIGPIPE, &act, NULL);
+ 
+-	flags = RDP_LOGON_NORMAL;
++	flags = RDP_LOGON_NORMAL | RDP_LOGON_ENABLEWINDOWSKEY;
+ 	prompt_password = False;
+ 	g_seamless_spawn_cmd[0] = domain[0] = g_password[0] = shell[0] = directory[0] = 0;
+ 	g_embed_wnd = 0;
+Index: trunk/constants.h
+===================================================================
+--- trunk/constants.h	(revision 1815)
++++ trunk/constants.h	(revision 1816)
+@@ -321,7 +321,7 @@
+ #define RDP_LOGON_AUTO		0x0008
+ #define RDP_LOGON_NORMAL	0x0033
+ #define RDP_LOGON_COMPRESSION	0x0080	/* mppc compression with 8kB histroy buffer */
+-#define RDP_LOGON_BLOB		0x0100
++#define RDP_LOGON_ENABLEWINDOWSKEY 0x0100
+ #define RDP_LOGON_COMPRESSION2	0x0200	/* rdp5 mppc compression with 64kB history buffer */
+ #define RDP_LOGON_LEAVE_AUDIO	0x2000
+ #define RDP_LOGON_PASSWORD_IS_SC_PIN 0x40000

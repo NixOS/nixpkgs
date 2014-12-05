@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0mcivbddms8kbapbs9x6achqyvh5i6h1rd2b3jm8g5yjn0flc5gl";
   };
 
-  patches = [ ./install_prefix.patch ./const.patch ];
+  patches = [ ./install_prefix.patch ./const.patch ./kernel-3.16.patch ./kernel-3.17.patch ];
 
   buildInputs = [ perl autoconf automake libtool ];
 

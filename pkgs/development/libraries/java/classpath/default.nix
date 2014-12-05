@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/classpath/;
 
     # The exception makes it similar to LGPLv2+ AFAICS.
-    license = "GPLv2+ + exception";
+    license = stdenv.lib.licenses.gpl2ClasspathPlus;
 
     maintainers = [ ];
   };

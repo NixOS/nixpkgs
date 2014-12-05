@@ -4,11 +4,11 @@
 , pulseaudio ? null }:
 
 stdenv.mkDerivation rec {
-  name = "dolphin-emu-20141002";
+  name = "dolphin-emu-20141201";
   src = fetchgit {
     url = git://github.com/dolphin-emu/dolphin.git;
-    rev = "ed7f0739ae31c07c31d013964986c549317aba6e";
-    sha256 = "01qwlkh3c0ij97zycq0v4kclxmnlbwcc1bmvjzl4cbczhxbbx4hk";
+    rev = "54f1e3a3c148d36e694d8bb08d282225bdcb3440";
+    sha256 = "1i0ps3ayga6m4v0jyflv2x6rr3cjrym0laafjdslggqkk04b2vjp";
     fetchSubmodules = false;
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ stdenv pkgconfig cmake bluez ffmpeg libao mesa gtk2 glib
+  buildInputs = [ pkgconfig cmake bluez ffmpeg libao mesa gtk2 glib
                   gettext libpthreadstubs libXrandr libXext readline openal
                   git libXdmcp portaudio SDL wxGTK30 pulseaudio ];
 
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     homepage = http://dolphin-emu.org/;
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARM";
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ MP2E ];
   };
 }

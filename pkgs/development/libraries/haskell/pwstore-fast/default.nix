@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pwstore-fast";
-  version = "2.4.3";
-  sha256 = "02dj297s04fxb4ys9nfdw6aap5zrwlryq515gky0c3af6ss2yiz7";
+  version = "2.4.4";
+  sha256 = "1cpvlwzg3qznhygrr78f75p65mnljd9v5cvnagfxjqppnrkay6bj";
   buildDepends = [
     base64Bytestring binary byteable cryptohash random
   ];

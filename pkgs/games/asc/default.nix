@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-fpermissive"; # I'm too lazy to catch all gcc47-related problems
 
   buildInputs = [
-    SDL SDL_image SDL_mixer SDL_sound libsigcxx physfs boost boost.lib expat
+    SDL SDL_image SDL_mixer SDL_sound libsigcxx physfs boost expat
     freetype libjpeg wxGTK lua perl pkgconfig zlib zip bzip2 libpng
   ];
 

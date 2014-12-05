@@ -1,13 +1,13 @@
 { stdenv, agda, fetchsvn }:
 
 agda.mkDerivation (self: rec {
-  version = "18437";
+  version = "18734";
   name = "agda-iowa-stdlib-${version}";
 
   src = fetchsvn {
     url = "https://svn.divms.uiowa.edu/repos/clc/projects/agda/lib";
     rev = version;
-    sha256 = "1g6pwvrcir53ppf6wd8s62gizc3qy35mp229b66mh53abg4brik2";
+    sha256 = "0aqib88m5n6aqb5lmns9nl62x40yqhg6zpj0zjxibbn4s4qjw9ky";
   };
 
   sourceDirectories = [ "./." ];

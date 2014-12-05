@@ -154,6 +154,24 @@
       collectd = 144;
       consul = 145;
       mailpile = 146;
+      redmine = 147;
+      seeks = 148;
+      prosody = 149;
+      i2pd = 150;
+      dnscrypt-proxy = 151;
+      systemd-network = 152;
+      systemd-resolve = 153;
+      systemd-timesync = 154;
+      liquidsoap = 155;
+      etcd = 156;
+      docker-registry = 157;
+      hbase = 158;
+      opentsdb = 159;
+      scollector = 160;
+      bosun = 161;
+      kubernetes = 162;
+      peerflix = 163;
+      chronos = 164;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -273,8 +291,21 @@
       mlmmj = 135;
       riemann = 137;
       riemanndash = 138;
+      hbase = 139;
+      opentsdb = 140;
       uhub = 142;
       mailpile = 146;
+      redmine = 147;
+      seeks = 148;
+      prosody = 149;
+      i2pd = 150;
+      systemd-network = 152;
+      systemd-resolve = 153;
+      systemd-timesync = 154;
+      liquidsoap = 155;
+      scollector = 156;
+      bosun = 157;
+      kubernetes = 158;
 
       # When adding a gid, make sure it doesn't match an existing uid. And don't use gids above 399!
 

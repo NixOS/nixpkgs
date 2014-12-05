@@ -1,11 +1,11 @@
 { stdenv, fetchurl, xorg, ncurses, freetype, fontconfig, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "xterm-303";
+  name = "xterm-312";
 
   src = fetchurl {
     url = "ftp://invisible-island.net/xterm/${name}.tgz";
-    sha256 = "0n7hay16aam9kfn642ri0wj5yzilbjm3l8znxc2p5dx9pn3rkwla";
+    sha256 = "0vpkhls3i12ly4r68igz91vh6s9179wihjkdy0gvwr752hdqxm7s";
   };
 
   buildInputs =

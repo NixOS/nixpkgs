@@ -33,7 +33,7 @@ collectNixLispLDLP () {
 
 export NIX_LISP_COMMAND NIX_LISP CL_SOURCE_REGISTRY NIX_LISP_ASDF
 
-envHooks=(envHooks[@] addASDFPaths setLisp collectNixLispLDLP)
+envHooks+=(addASDFPaths setLisp collectNixLispLDLP)
 
 mkdir -p "$HOME"/.cache/common-lisp || HOME="$TMP/.temp-$USER-home"
 mkdir -p "$HOME"/.cache/common-lisp

@@ -1,22 +1,47 @@
 {stdenv, xcodewrapper}:
-{ name, appName ? null, app
-, device ? "iPhone", baseDir ? ""
-, sdkVersion ? "7.0"
-}:
+{name, bundleId, app}:
 
-let
-  _appName = if appName == null then name else appName;
-in
 stdenv.mkDerivation {
   name = stdenv.lib.replaceChars [" "] [""] name;
   buildCommand = ''
     mkdir -p $out/bin
     cat > $out/bin/run-test-simulator << "EOF"
     #! ${stdenv.shell} -e
-
-    cd "${app}/${baseDir}/${_appName}.app"
-    "$(readlink "${xcodewrapper}/bin/iPhone Simulator")" -SimulateApplication './${_appName}' -SimulateDevice '${device}' -currentSDKRoot "$(readlink "${xcodewrapper}/SDKs")/iPhoneSimulator${sdkVersion}.sdk"
+    
+    if [ "$1" = "" ]
+    then
+        # Show the user the possibile UDIDs and let him pick one, if none is provided as a command-line parameter
+        xcrun simctl list
+        
+        echo "Please provide a UDID of a simulator:"
+        read udid
+    else
+        # If a parameter has been provided, consider that a device UDID an use that
+        udid="$1"
+    fi
+    
+    # Open the simulator instance
+    open -a "$(readlink "${xcodewrapper}/bin/iOS Simulator")" --args -CurrentDeviceUDID $udid
+    
+    # Copy the app and restore the write permissions
+    appTmpDir=$(mktemp -d -t appTmpDir)
+    cp -r "$(echo ${app}/*.app)" $appTmpDir
+    chmod -R 755 "$(echo $appTmpDir/*.app)"
+    
+    # Wait for the simulator to start
+    echo "Press enter when the simulator is started..."
+    read
+    
+    # Install the app
+    xcrun simctl install $udid "$(echo $appTmpDir/*.app)"
+    
+    # Remove the app tempdir
+    rm -Rf $appTmpDir
+    
+    # Launch the app in the simulator
+    xcrun simctl launch $udid "${bundleId}"
     EOF
+
     chmod +x $out/bin/run-test-simulator
   '';
 }

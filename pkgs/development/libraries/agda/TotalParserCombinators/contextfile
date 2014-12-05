@@ -1,6 +1,16 @@
 
 Context:
 
+[Updated the copyright year range.
+Nils Anders Danielsson <nils.anders.danielsson@gmail.com>**20141128223227
+ Ignore-this: 31d3f5e4fdd6fbfad9758d9bfd0d3a3e
+] 
+
+[Updated the code in response to changes to Agda and the library.
+Nils Anders Danielsson <nils.anders.danielsson@gmail.com>**20141128223205
+ Ignore-this: 6392ec67aab2c534a7195abed55be47
+] 
+
 [Updated code to reflect changes to Agda.
 Nils Anders Danielsson <nils.anders.danielsson@gmail.com>**20140425121055
  Ignore-this: 54d80fd647cb897eef85f57e9172f7db

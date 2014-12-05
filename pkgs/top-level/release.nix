@@ -12,7 +12,7 @@
 { nixpkgs ? { outPath = (import ./all-packages.nix {}).lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
 , officialRelease ? false
 , # The platforms for which we build Nixpkgs.
-  supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" ]
+  supportedSystems ? [ "x86_64-linux" "i686-linux" /* "x86_64-darwin" */ ]
 }:
 
 with import ./release-lib.nix { inherit supportedSystems; };
@@ -32,7 +32,7 @@ let
               jobs.manual
               jobs.stdenv.x86_64-linux
               jobs.stdenv.i686-linux
-              jobs.stdenv.x86_64-darwin
+              #jobs.stdenv.x86_64-darwin
               jobs.linux.x86_64-linux
               jobs.linux.i686-linux
               # Ensure that X11/GTK+ are in order.
@@ -95,7 +95,6 @@ let
       gajim = linux;
       gawk = all;
       gcc = linux;
-      gcc33 = linux;
       gcc34 = linux;
       gcc44 = linux;
       gcj = linux;
@@ -129,7 +128,6 @@ let
       inkscape = linux;
       irssi = linux;
       jfsutils = linux;
-      jfsrec = linux;
       jnettop = linux;
       jwhois = linux;
       kbd = linux;

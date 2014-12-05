@@ -474,6 +474,8 @@ stdenv.mkDerivation ({
 # Strip kills static libs of other archs (hence cross != null)
 // optionalAttrs (!stripped || cross != null) { dontStrip = true; NIX_STRIP_DEBUG = 0; }
 
+// optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
+
 // optionalAttrs langVhdl rec {
   name = "ghdl-0.29";
 

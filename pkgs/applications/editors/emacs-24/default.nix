@@ -9,13 +9,13 @@ assert (libXft != null) -> libpng != null;	# probably a bug
 assert stdenv.isDarwin -> libXaw != null;	# fails to link otherwise
 
 stdenv.mkDerivation rec {
-  name = "emacs-24.3";
+  name = "emacs-24.4";
 
   builder = ./builder.sh;
 
   src = fetchurl {
     url    = "mirror://gnu/emacs/${name}.tar.xz";
-    sha256 = "1385qzs3bsa52s5rcncbrkxlydkw0ajzrvfxgv8rws5fx512kakh";
+    sha256 = "1zflm6ac34s6v166p58ilxrxbxjm0q2wfc25f8y0mjml1lbr3qs7";
   };
 
   patches = [ ./darwin-new-sections.patch ];
@@ -35,10 +35,7 @@ stdenv.mkDerivation rec {
         [ "--with-x-toolkit=lucid" "--with-xft" ]
       else
         [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
-          "--with-gif=no" "--with-tiff=no" ] ) )
-    # On NixOS, help Emacs find `crt*.o'.
-    ++ stdenv.lib.optional (stdenv ? glibc)
-         [ "--with-crt-dir=${stdenv.glibc}/lib" ];
+          "--with-gif=no" "--with-tiff=no" ] ) );
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.isDarwin && withX)
     "-I${cairo}/include/cairo";

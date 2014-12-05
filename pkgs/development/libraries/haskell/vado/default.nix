@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vado";
-  version = "0.0.2";
-  sha256 = "15kdqgpdy501g4hpldq44s7qgh4xchl6acnr95i5fj8ky4vgwfi0";
+  version = "0.0.3";
+  sha256 = "1s6fb19p3lc6g13ryh7bmxciv62v8m0ihvzrymsj0nn6jghiys5f";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ attoparsec filepath text ];

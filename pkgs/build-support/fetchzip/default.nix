@@ -13,9 +13,7 @@
 , ... } @ args:
 
 fetchurl ({
-  # Remove the extension, because otherwise unpackPhase will get
-  # confused. FIXME: fix unpackPhase.
-  name = args.name or lib.removeSuffix ".zip" (lib.removeSuffix ".tar.gz" (baseNameOf url));
+  name = args.name or (baseNameOf url);
 
   recursiveHash = true;
 

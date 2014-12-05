@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = https://gitorious.org/beret/beret/archive-tarball/ae029777;
     name = "beret-1.2.0.tar.gz";
-    sha256 = "0md00ipacvz5mq8q83h7xbzycnwympr06pc1n5c351swjvyw0ysx";
+    sha256 = "1rx9z72id1810fgv8mizk8qxwd1kh5xi07fdhmjc62mh3fn38szc";
   };
 
   installPhase = ''

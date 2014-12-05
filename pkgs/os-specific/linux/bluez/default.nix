@@ -24,7 +24,11 @@ stdenv.mkDerivation rec {
       # gstreamer gst_plugins_base 
     ];
 
-  configureFlags = "--localstatedir=/var --enable-cups";
+  configureFlags = [
+    "--localstatedir=/var"
+    "--enable-cups"
+    "--with-systemdunitdir=$(out)/etc/systemd/system"
+    ];
 
   # Work around `make install' trying to create /var/lib/bluetooth.
   installFlags = "statedir=$(TMPDIR)/var/lib/bluetooth";

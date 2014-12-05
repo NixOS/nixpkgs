@@ -525,4 +525,10 @@
   md5 = "44d667c142d7cda120332623eab69f40";
   brief = true;
 }
+{
+  name = "libgltf-0.0.2.tar.bz2";
+  md5 = "d63a9f47ab048f5009d90693d6aa6424";
+  brief = true;
+  subDir = "libgltf/";
+}
 ]

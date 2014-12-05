@@ -10,15 +10,19 @@ let
 
   systemd = cfg.package;
 
+
   makeUnit = name: unit:
+    let
+      pathSafeName = lib.replaceChars ["@" "\\"] ["-" "-"] name;
+    in
     if unit.enable then
-      pkgs.runCommand "unit" { preferLocalBuild = true; inherit (unit) text; }
+      pkgs.runCommand "unit-${pathSafeName}" { preferLocalBuild = true; inherit (unit) text; }
         ''
           mkdir -p $out
           echo -n "$text" > $out/${shellEscape name}
         ''
     else
-      pkgs.runCommand "unit" { preferLocalBuild = true; }
+      pkgs.runCommand "unit-${pathSafeName}-disabled" { preferLocalBuild = true; }
         ''
           mkdir -p $out
           ln -s /dev/null $out/${shellEscape name}
@@ -32,6 +36,7 @@ let
       "graphical.target"
       "multi-user.target"
       "network.target"
+      "network-pre.target"
       "network-online.target"
       "nss-lookup.target"
       "nss-user-lookup.target"
@@ -81,6 +86,7 @@ let
       "systemd-journal-flush.service"
       "systemd-journal-gatewayd.socket"
       "systemd-journal-gatewayd.service"
+      "systemd-journald-dev-log.socket"
       "syslog.socket"
 
       # SysV init compatibility.
@@ -90,6 +96,12 @@ let
       # Kernel module loading.
       "systemd-modules-load.service"
       "kmod-static-nodes.service"
+
+      # Networking
+      "systemd-networkd.service"
+      "systemd-networkd-wait-online.service"
+      "systemd-resolved.service"
+      "systemd-timesyncd.service"
 
       # Filesystems.
       "systemd-fsck@.service"
@@ -207,6 +219,8 @@ let
           { PartOf = toString config.partOf; }
         // optionalAttrs (config.conflicts != [])
           { Conflicts = toString config.conflicts; }
+        // optionalAttrs (config.requisite != [])
+          { Requisite = toString config.requisite; }
         // optionalAttrs (config.restartTriggers != [])
           { X-Restart-Triggers = toString config.restartTriggers; }
         // optionalAttrs (config.description != "") {
@@ -284,6 +298,19 @@ let
       automountConfig =
         { Where = config.where;
         };
+    };
+  };
+
+  networkConfig = { name, config, ... }: {
+    config = {
+      matchConfig = optionalAttrs (config.name != null) {
+        Name = config.name;
+      };
+      networkConfig = optionalAttrs (config.DHCP != null) {
+        DHCP = config.DHCP;
+      } // optionalAttrs (config.domains != null) {
+        Domains = concatStringsSep " " config.domains;
+      };
     };
   };
 
@@ -379,6 +406,103 @@ let
         '';
     };
 
+  commonMatchText = def: ''
+      [Match]
+      ${attrsToSection def.matchConfig}
+    '';
+
+  linkToUnit = name: def:
+    { inherit (def) enable;
+      text = commonMatchText def +
+        ''
+          [Link]
+          ${attrsToSection def.linkConfig}
+        '';
+    };
+
+  netdevToUnit = name: def:
+    { inherit (def) enable;
+      text = commonMatchText def +
+        ''
+          [NetDev]
+          ${attrsToSection def.netdevConfig}
+
+          ${optionalString (def.vlanConfig != { }) ''
+            [VLAN]
+            ${attrsToSection def.vlanConfig}
+
+          ''}
+          ${optionalString (def.macvlanConfig != { }) ''
+            [MACVLAN]
+            ${attrsToSection def.macvlanConfig}
+
+          ''}
+          ${optionalString (def.vxlanConfig != { }) ''
+            [VXLAN]
+            ${attrsToSection def.vxlanConfig}
+
+          ''}
+          ${optionalString (def.tunnelConfig != { }) ''
+            [Tunnel]
+            ${attrsToSection def.tunnelConfig}
+
+          ''}
+          ${optionalString (def.peerConfig != { }) ''
+            [Peer]
+            ${attrsToSection def.peerConfig}
+
+          ''}
+          ${optionalString (def.tunConfig != { }) ''
+            [Tun]
+            ${attrsToSection def.tunConfig}
+
+          ''}
+          ${optionalString (def.tapConfig != { }) ''
+            [Tap]
+            ${attrsToSection def.tapConfig}
+
+          ''}
+          ${optionalString (def.bondConfig != { }) ''
+            [Bond]
+            ${attrsToSection def.bondConfig}
+
+          ''}
+        '';
+    };
+
+  networkToUnit = name: def:
+    { inherit (def) enable;
+      text = commonMatchText def +
+        ''
+          [Network]
+          ${attrsToSection def.networkConfig}
+          ${concatStringsSep "\n" (map (s: "Address=${s}") def.address)}
+          ${concatStringsSep "\n" (map (s: "Gateway=${s}") def.gateway)}
+          ${concatStringsSep "\n" (map (s: "DNS=${s}") def.dns)}
+          ${concatStringsSep "\n" (map (s: "NTP=${s}") def.ntp)}
+          ${concatStringsSep "\n" (map (s: "VLAN=${s}") def.vlan)}
+          ${concatStringsSep "\n" (map (s: "MACVLAN=${s}") def.macvlan)}
+          ${concatStringsSep "\n" (map (s: "VXLAN=${s}") def.vxlan)}
+          ${concatStringsSep "\n" (map (s: "Tunnel=${s}") def.tunnel)}
+
+          ${optionalString (def.dhcpConfig != { }) ''
+            [DHCP]
+            ${attrsToSection def.dhcpConfig}
+
+          ''}
+          ${flip concatMapStrings def.addresses (x: ''
+            [Address]
+            ${attrsToSection x.addressConfig}
+
+          '')}
+          ${flip concatMapStrings def.routes (x: ''
+            [Route]
+            ${attrsToSection x.routeConfig}
+
+          '')}
+        '';
+    };
+
   generateUnits = type: units: upstreamUnits: upstreamWants:
     pkgs.runCommand "${type}-units" { preferLocalBuild = true; } ''
       mkdir -p $out
@@ -463,8 +587,9 @@ let
         mkdir -p $out/getty.target.wants/
         ln -s ../autovt@tty1.service $out/getty.target.wants/
 
-        ln -s ../local-fs.target ../remote-fs.target ../network.target ../nss-lookup.target \
-              ../nss-user-lookup.target ../swap.target $out/multi-user.target.wants/
+        ln -s ../local-fs.target ../remote-fs.target ../network.target \
+        ../nss-lookup.target ../nss-user-lookup.target ../swap.target \
+        $out/multi-user.target.wants/
       ''}
     ''; # */
 
@@ -557,6 +682,47 @@ in
       '';
     };
 
+    systemd.network.enable = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Whether to enable networkd or not.
+      '';
+    };
+
+    systemd.network.links = mkOption {
+      default = {};
+      type = types.attrsOf types.optionSet;
+      options = [ linkOptions ];
+      description = "Definiton of systemd network links.";
+    };
+
+    systemd.network.netdevs = mkOption {
+      default = {};
+      type = types.attrsOf types.optionSet;
+      options = [ netdevOptions ];
+      description = "Definiton of systemd network devices.";
+    };
+
+    systemd.network.networks = mkOption {
+      default = {};
+      type = types.attrsOf types.optionSet;
+      options = [ networkOptions networkConfig ];
+      description = "Definiton of systemd networks.";
+    };
+
+    systemd.network.units = mkOption {
+      description = "Definition of networkd units.";
+      default = {};
+      type = types.attrsOf types.optionSet;
+      options = { name, config, ... }:
+        { options = concreteUnitOptions;
+          config = {
+            unit = mkDefault (makeUnit name config);
+          };
+        };
+    };
+
     systemd.defaultUnit = mkOption {
       default = "multi-user.target";
       type = types.str;
@@ -640,6 +806,22 @@ in
       '';
     };
 
+    services.resolved.enable = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Enables the systemd dns resolver daemon.
+      '';
+    };
+
+    services.timesyncd.enable = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Enables the systemd ntp client daemon.
+      '';
+    };
+
     systemd.tmpfiles.rules = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -696,7 +878,7 @@ in
 
   ###### implementation
 
-  config = {
+  config = mkMerge [ {
 
     warnings = concatLists (mapAttrsToList (name: service:
       optional (service.serviceConfig.Type or "" == "oneshot" && service.serviceConfig.Restart or "no" != "no")
@@ -708,6 +890,9 @@ in
 
     environment.etc."systemd/system".source =
       generateUnits "system" cfg.units upstreamSystemUnits upstreamSystemWants;
+
+    environment.etc."systemd/network".source =
+      generateUnits "network" cfg.network.units [] [];
 
     environment.etc."systemd/user".source =
       generateUnits "user" cfg.user.units upstreamUserUnits [];
@@ -761,6 +946,18 @@ in
         unitConfig.X-StopOnReconfiguration = true;
       };
 
+    systemd.targets.network-online.after = [ "ip-up.target" ];
+
+    systemd.targets.network-pre = {
+      wantedBy = [ "network.target" ];
+      before = [ "network.target" ];
+    };
+
+    systemd.targets.remote-fs-pre = {
+      wantedBy = [ "remote-fs.target" ];
+      before = [ "remote-fs.target" ];
+    };
+
     systemd.units =
       mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit n v)) cfg.targets
       // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
@@ -773,6 +970,11 @@ in
       // listToAttrs (map
                    (v: let n = escapeSystemdPath v.where;
                        in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
+
+    systemd.network.units =
+      mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.network.links
+      // mapAttrs' (n: v: nameValuePair "${n}.netdev" (netdevToUnit n v)) cfg.network.netdevs
+      // mapAttrs' (n: v: nameValuePair "${n}.network" (networkToUnit n v)) cfg.network.networks;
 
     systemd.user.units =
       mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.user.services
@@ -794,6 +996,15 @@ in
     users.extraGroups.systemd-journal.gid = config.ids.gids.systemd-journal;
     users.extraUsers.systemd-journal-gateway.uid = config.ids.uids.systemd-journal-gateway;
     users.extraGroups.systemd-journal-gateway.gid = config.ids.gids.systemd-journal-gateway;
+
+    users.extraUsers.systemd-network.uid = config.ids.uids.systemd-network;
+    users.extraGroups.systemd-network.gid = config.ids.gids.systemd-network;
+
+    users.extraUsers.systemd-resolve.uid = config.ids.uids.systemd-resolve;
+    users.extraGroups.systemd-resolve.gid = config.ids.gids.systemd-resolve;
+
+    users.extraUsers.systemd-timesync.uid = config.ids.uids.systemd-timesync;
+    users.extraGroups.systemd-timesync.gid = config.ids.gids.systemd-timesync;
 
     # Generate timer units for all services that have a ‘startAt’ value.
     systemd.timers =
@@ -828,5 +1039,57 @@ in
     systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-journal-flush.restartIfChanged = false;
 
-  };
+  }
+  (mkIf config.systemd.network.enable {
+    systemd.services.systemd-networkd = {
+      wantedBy = [ "multi-user.target" ];
+      before = [ "network-interfaces.target" ];
+      restartTriggers = [ config.environment.etc."systemd/network".source ];
+    };
+
+    systemd.services.systemd-networkd-wait-online = {
+      before = [ "network-online.target" "ip-up.target" ];
+      wantedBy = [ "network-online.target" "ip-up.target" ];
+    };
+
+    systemd.services."systemd-network-wait-online@" = {
+      description = "Wait for Network Interface %I to be Configured";
+      conflicts = [ "shutdown.target" ];
+      requisite = [ "systemd-networkd.service" ];
+      after = [ "systemd-networkd.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online -i %I";
+      };
+    };
+
+    services.resolved.enable = mkDefault true;
+    services.timesyncd.enable = mkDefault config.services.ntp.enable;
+  })
+  (mkIf config.services.resolved.enable {
+    systemd.services.systemd-resolved = {
+      wantedBy = [ "multi-user.target" ];
+      restartTriggers = [ config.environment.etc."systemd/resolved.conf".source ];
+    };
+
+    environment.etc."systemd/resolved.conf".text = ''
+      [Resolve]
+      DNS=${concatStringsSep " " config.networking.nameservers}
+    '';
+  })
+  (mkIf config.services.timesyncd.enable {
+    systemd.services.systemd-timesyncd = {
+      wantedBy = [ "sysinit.target" ];
+      restartTriggers = [ config.environment.etc."systemd/timesyncd.conf".source ];
+    };
+
+    environment.etc."systemd/timesyncd.conf".text = ''
+      [Time]
+      NTP=${concatStringsSep " " config.services.ntp.servers}
+    '';
+
+    systemd.services.ntpd.enable = false;
+  })
+  ];
 }

@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     blazeHtml dataDefault mtl syb text uniplate xssSanitize
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/jgm/cheapskate";
     description = "Experimental markdown processor";

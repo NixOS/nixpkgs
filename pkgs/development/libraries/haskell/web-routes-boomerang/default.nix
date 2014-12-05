@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "web-routes-boomerang";
-  version = "0.28.2";
-  sha256 = "17237xq8nvy0c1mxzf7pad5kw0mrgbzazy0rflp382ig9q6ipd05";
+  version = "0.28.3";
+  sha256 = "0d3ccp4hbzjhqzqy901da8dpz23sylwg54xs5iyjhmqvw0v7ljpn";
   buildDepends = [ boomerang mtl parsec text webRoutes ];
   meta = {
     description = "Library for maintaining correctness and composability of URLs within an application";

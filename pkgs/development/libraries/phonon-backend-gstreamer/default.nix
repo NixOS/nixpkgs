@@ -2,7 +2,7 @@
 , gst_plugins_base }:
 
 let
-  version = "4.7.0";
+  version = "4.7.2";
   pname = "phonon-backend-gstreamer";
 in
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/phonon/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "0zg7hnaywk9wpcvzgskx2334cgfz09ii77pvasrn00ikcqqnnxrs";
+    sha256 = "1cfjk450aajr8hfhnfq7zbmryprxiwr9ha5x585dsh7mja82mdw0";
   };
 
   buildInputs = [ phonon qt4 gstreamer gst_plugins_base ];

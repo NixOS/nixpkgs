@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Stun server and test client";
     homepage = http://sourceforge.net/projects/stun/;
-    license = "Vovida 1.0"; # See any header file.
+    license = stdenv.lib.licenses.vsl10;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };

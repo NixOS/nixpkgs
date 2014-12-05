@@ -1,9 +1,9 @@
 x@{builderDefsPackage
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     [];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -27,7 +27,7 @@ rec {
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["doConfigure" "doMakeInstall"];
-      
+
   meta = {
     description = "CELT - low-delay audio codec";
     maintainers = with a.lib.maintainers;
@@ -36,7 +36,8 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = "free";
+    license = a.lib.licenses.free;
+    branch = "0.7";
   };
   passthru = {
     updateInfo = {
@@ -44,4 +45,3 @@ rec {
     };
   };
 }) x
-
