@@ -1,22 +1,21 @@
-{ stdenv, fetchgit, fetchurl, go }:
-let
-
-in stdenv.mkDerivation rec {
-  name = "scollector-20141119233025";
+{ stdenv, fetchurl, go }:
+stdenv.mkDerivation rec {
+  name = "scollector-${version}";
+  version = "20141204222654";
   src = fetchurl {
-    url = https://github.com/bosun-monitor/scollector/archive/20141119233025.tar.gz;
-    sha256 = "13f7hg4mswcdl76ksx8ds3297rslsswb1hq327b3xm1wyr42k6wa";
+    url = "https://github.com/bosun-monitor/bosun/archive/${version}.tar.gz";
+    sha256 = "1jwhfwf24zhncrirna3q1vhap4f955bqx3sws3ryk5gp1w99l36n";
   };
   buildInputs = [ go ];
 
   sourceRoot = ".";
 
   buildPhase = ''
-    mkdir -p src/github.com/bosun-monitor
-    mv scollector-20141119233025 src/github.com/bosun-monitor/scollector
+    mkdir -p src
+    mv bosun-${version} src/bosun.org
 
     export GOPATH=$PWD
-    go build -v -o scollector src/github.com/bosun-monitor/scollector/main.go
+    go build -v -o scollector src/bosun.org/cmd/scollector/main.go
   '';
 
   installPhase = ''
