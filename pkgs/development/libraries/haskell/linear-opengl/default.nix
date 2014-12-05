@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     distributive lens linear OpenGL OpenGLRaw tagged
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.github.com/bgamari/linear-opengl";
     description = "Isomorphisms between linear and OpenGL types";
