@@ -3595,7 +3595,9 @@ let
       libpng = libpng12;
       giflib = giflib_4_1;
     };
-    camlimages_4_1 = callPackage ../development/ocaml-modules/camlimages/4.1.nix {};
+    camlimages_4_1 = callPackage ../development/ocaml-modules/camlimages/4.1.nix {
+      giflib = giflib_4_1;
+    };
     camlimages = camlimages_4_1;
 
     biniou = callPackage ../development/ocaml-modules/biniou { };
