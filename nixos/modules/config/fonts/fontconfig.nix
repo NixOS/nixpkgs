@@ -38,29 +38,29 @@ with lib;
 
         defaultFonts = {
           monospace = mkOption {
-            type = types.str;
-            default = "DejaVu Sans Mono";
+            type = types.listOf types.str;
+            default = ["DejaVu Sans Mono"];
             description = ''
-              System-wide default monospace font. The default is not set if the
-              option is set to <literal>""</literal>.
+              System-wide default monospace font(s). Multiple fonts may be
+              listed in case multiple languages must be supported.
             '';
           };
 
           sansSerif = mkOption {
-            type = types.str;
-            default = "DejaVu Sans";
+            type = types.listOf types.str;
+            default = ["DejaVu Sans"];
             description = ''
-              System-wide default sans serif font. The default is not set if the
-              option is set to <literal>""</literal>.
+              System-wide default sans serif font(s). Multiple fonts may be
+              listed in case multiple languages must be supported.
             '';
           };
 
           serif = mkOption {
-            type = types.str;
-            default = "DejaVu Serif";
+            type = types.listOf types.str;
+            default = ["DejaVu Serif"];
             description = ''
-              System-wide default serif font. The default is not set if the
-              option is set to <literal>""</literal>.
+              System-wide default serif font(s). Multiple fonts may be listed
+              in case multiple languages must be supported.
             '';
           };
         };
@@ -142,16 +142,7 @@ with lib;
   config =
     let fontconfig = config.fonts.fontconfig;
         fcBool = x: "<bool>" + (if x then "true" else "false") + "</bool>";
-    in mkIf fontconfig.enable {
-
-      # Fontconfig 2.10 backward compatibility
-
-      # Bring in the default (upstream) fontconfig configuration, only for fontconfig 2.10
-      environment.etc."fonts/fonts.conf".source =
-        pkgs.makeFontsConf { fontconfig = pkgs.fontconfig_210; fontDirectories = config.fonts.fonts; };
-
-      environment.etc."fonts/conf.d/98-nixos.conf".text =
-        ''
+        nixosConf = ''
           <?xml version='1.0'?>
           <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
           <fontconfig>
@@ -179,27 +170,33 @@ with lib;
             </match>
 
             <!-- Default fonts -->
-            ${optionalString (fontconfig.defaultFonts.sansSerif != "") ''
+            ${optionalString (fontconfig.defaultFonts.sansSerif != []) ''
             <alias>
               <family>sans-serif</family>
               <prefer>
-                <family>${fontconfig.defaultFonts.sansSerif}</family>
+                ${concatStringsSep "\n"
+                  (map (font: "<family>${font}</family>")
+                    fontconfig.defaultFonts.sansSerif)}
               </prefer>
             </alias>
             ''}
-            ${optionalString (fontconfig.defaultFonts.serif != "") ''
+            ${optionalString (fontconfig.defaultFonts.serif != []) ''
             <alias>
               <family>serif</family>
               <prefer>
-                <family>${fontconfig.defaultFonts.serif}</family>
+                ${concatStringsSep "\n"
+                  (map (font: "<family>${font}</family>")
+                    fontconfig.defaultFonts.serif)}
               </prefer>
             </alias>
             ''}
-            ${optionalString (fontconfig.defaultFonts.monospace != "") ''
+            ${optionalString (fontconfig.defaultFonts.monospace != []) ''
             <alias>
               <family>monospace</family>
               <prefer>
-                <family>${fontconfig.defaultFonts.monospace}</family>
+                ${concatStringsSep "\n"
+                  (map (font: "<family>${font}</family>")
+                    fontconfig.defaultFonts.monospace)}
               </prefer>
             </alias>
             ''}
@@ -214,6 +211,15 @@ with lib;
 
           </fontconfig>
         '';
+    in mkIf fontconfig.enable {
+
+      # Fontconfig 2.10 backward compatibility
+
+      # Bring in the default (upstream) fontconfig configuration, only for fontconfig 2.10
+      environment.etc."fonts/fonts.conf".source =
+        pkgs.makeFontsConf { fontconfig = pkgs.fontconfig_210; fontDirectories = config.fonts.fonts; };
+
+      environment.etc."fonts/conf.d/98-nixos.conf".text = nixosConf;
 
       # Versioned fontconfig > 2.10. Take shared fonts.conf from fontconfig.
       # Otherwise specify only font directories.
@@ -230,64 +236,7 @@ with lib;
           </fontconfig>
         '';
 
-      environment.etc."fonts/${pkgs.fontconfig.configVersion}/conf.d/98-nixos.conf".text =
-        ''
-          <?xml version='1.0'?>
-          <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
-          <fontconfig>
-
-            <!-- Default rendering settings -->
-            <match target="font">
-              <edit mode="assign" name="hinting">
-                ${fcBool fontconfig.hinting.enable}
-              </edit>
-              <edit mode="assign" name="autohint">
-                ${fcBool fontconfig.hinting.autohint}
-              </edit>
-              <edit mode="assign" name="hintstyle">
-                <const>hint${fontconfig.hinting.style}</const>
-              </edit>
-              <edit mode="assign" name="antialias">
-                ${fcBool fontconfig.antialias}
-              </edit>
-              <edit mode="assign" name="rgba">
-                <const>${fontconfig.subpixel.rgba}</const>
-              </edit>
-              <edit mode="assign" name="lcdfilter">
-                <const>lcd${fontconfig.subpixel.lcdfilter}</const>
-              </edit>
-            </match>
-
-            <!-- Default fonts -->
-            <alias>
-              <family>sans-serif</family>
-              <prefer>
-                <family>${fontconfig.defaultFonts.sansSerif}</family>
-              </prefer>
-            </alias>
-            <alias>
-              <family>serif</family>
-              <prefer>
-                <family>${fontconfig.defaultFonts.serif}</family>
-              </prefer>
-            </alias>
-            <alias>
-              <family>monospace</family>
-              <prefer>
-                <family>${fontconfig.defaultFonts.monospace}</family>
-              </prefer>
-            </alias>
-
-            ${optionalString (fontconfig.dpi != 0) ''
-            <match target="pattern">
-              <edit name="dpi" mode="assign">
-                <double>${fontconfig.dpi}</double>
-              </edit>
-            </match>
-            ''}
-
-          </fontconfig>
-        '';
+      environment.etc."fonts/${pkgs.fontconfig.configVersion}/conf.d/98-nixos.conf".text = nixosConf;
 
       environment.etc."fonts/${pkgs.fontconfig.configVersion}/conf.d/99-user.conf" = {
         enable = fontconfig.includeUserConf;
