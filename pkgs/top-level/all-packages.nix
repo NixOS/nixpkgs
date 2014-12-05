@@ -1069,6 +1069,8 @@ let
 
   edk2 = callPackage ../development/compilers/edk2 { };
 
+  eid-mw = callPackage ../tools/security/eid-mw { };
+
   eid-viewer = callPackage ../tools/security/eid-viewer { };
 
   emscripten = callPackage ../development/compilers/emscripten { };
