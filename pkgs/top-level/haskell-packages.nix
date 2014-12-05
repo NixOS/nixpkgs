@@ -1538,6 +1538,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   linear = callPackage ../development/libraries/haskell/linear {};
 
+  linearOpenGL = callPackage ../development/libraries/haskell/linear-opengl {};
+
   linuxInotify = callPackage ../development/libraries/haskell/linux-inotify {};
 
   List = callPackage ../development/libraries/haskell/List {};
