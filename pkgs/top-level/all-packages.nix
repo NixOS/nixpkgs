@@ -2642,7 +2642,7 @@ let
 
   html2text = callPackage ../tools/text/html2text { };
 
-  htmlTidy = callPackage ../tools/text/html-tidy { };
+  html-tidy = callPackage ../tools/text/html-tidy { };
 
   html-xml-utils = callPackage ../tools/text/xml/html-xml-utils { };
 
@@ -12907,6 +12907,7 @@ let
   jquery_ui = jquery-ui;  # added 2014-09-07
   youtubeDL = youtube-dl;  # added 2014-10-26
   rdiff_backup = rdiff-backup;  # added 2014-11-23
+  htmlTidy = html-tidy;  # added 2014-12-06
 
   opentsdb = callPackage ../tools/misc/opentsdb {};
 

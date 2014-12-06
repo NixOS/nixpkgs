@@ -121,7 +121,7 @@ let
       gzip = all;
       hddtemp = linux;
       host = linux;
-      htmlTidy = all;
+      html-tidy = all;
       iana_etc = linux;
       icewm = linux;
       ifplugd = linux;
