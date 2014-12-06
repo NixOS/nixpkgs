@@ -1562,6 +1562,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   liftedBase = callPackage ../development/libraries/haskell/lifted-base {};
 
+  linAlg = callPackage ../development/libraries/haskell/lin-alg {};
+
   linear = callPackage ../development/libraries/haskell/linear {};
 
   linearOpenGL = callPackage ../development/libraries/haskell/linear-opengl {};
