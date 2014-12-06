@@ -9069,6 +9069,8 @@ let
 
   milkytracker = callPackage ../applications/audio/milkytracker { };
 
+  schismtracker = callPackage ../applications/audio/schismtracker { };
+
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
   };
