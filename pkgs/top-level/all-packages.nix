@@ -1761,6 +1761,8 @@ let
 
   mr = callPackage ../applications/version-management/mr { };
 
+  mrtg = callPackage ../tools/misc/mrtg { };
+
   mscgen = callPackage ../tools/graphics/mscgen { };
 
   msf = builderDefsPackage (import ../tools/security/metasploit/3.1.nix) {
