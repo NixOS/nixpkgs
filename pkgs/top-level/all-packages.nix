@@ -7912,7 +7912,7 @@ let
 
   _915resolution = callPackage ../os-specific/linux/915resolution { };
 
-  nfsUtils = callPackage ../os-specific/linux/nfs-utils { };
+  nfs-utils = callPackage ../os-specific/linux/nfs-utils { };
 
   acpi = callPackage ../os-specific/linux/acpi { };
 
@@ -12909,6 +12909,7 @@ let
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   htmlTidy = html-tidy;  # added 2014-12-06
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
+  nfsUtils = nfs-utils;  # added 2014-12-06
 
   opentsdb = callPackage ../tools/misc/opentsdb {};
 
