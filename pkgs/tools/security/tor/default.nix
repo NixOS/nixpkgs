@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, libevent, openssl, zlib }:
+{ stdenv, fetchurl, libevent, openssl, zlib, static ? false }:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "tor-0.2.5.10";
@@ -10,9 +12,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libevent openssl zlib ];
 
-  CFLAGS = "-lgcc_s";
+  CFLAGS = optionalString (!static) "-lgcc_s";
+  NIX_LDFLAGS = optionalString (static) "-ldl";
 
-  doCheck = true;
+  configureFlags = optionals static [
+    "--enable-static-tor"
+    "--with-openssl-dir=${openssl.override { static = true; }}"
+    "--with-libevent-dir=${libevent.override {static = true; }}"
+    "--with-zlib-dir=${zlib.override {static = true;}}"
+  ];
+
+  doCheck = optional (!static) true;
 
   meta = {
     homepage = http://www.torproject.org/;

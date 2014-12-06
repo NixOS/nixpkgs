@@ -1,5 +1,7 @@
 { stdenv, fetchurl, perl
-, withCryptodev ? false, cryptodevHeaders }:
+, withCryptodev ? false, cryptodevHeaders, static ? false }:
+
+with stdenv.lib;
 
 let
   name = "openssl-1.0.1j";
@@ -74,7 +76,7 @@ stdenv.mkDerivation {
   # Parallel building is broken in OpenSSL.
   enableParallelBuilding = false;
 
-  postInstall =
+  postInstall = optionalString (!static)
     ''
       # If we're building dynamic libraries, then don't install static
       # libraries.
