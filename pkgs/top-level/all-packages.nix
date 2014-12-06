@@ -6913,7 +6913,7 @@ let
 
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
 
-  sqliteInteractive = appendToName "interactive" (sqlite.override { interactive = true; });
+  sqlite-interactive = appendToName "interactive" (sqlite.override { interactive = true; });
 
   sqlcipher = lowPrio (callPackage ../development/libraries/sqlcipher {
     readline = null;
@@ -12908,6 +12908,7 @@ let
   youtubeDL = youtube-dl;  # added 2014-10-26
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   htmlTidy = html-tidy;  # added 2014-12-06
+  sqliteInteractive = sqlite-interactive;  # added 2014-12-06
 
   opentsdb = callPackage ../tools/misc/opentsdb {};
 
