@@ -1442,10 +1442,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ivory = callPackage ../development/libraries/haskell/ivory {};
 
-  ixdopp = callPackage ../development/libraries/haskell/ixdopp {
-    preprocessorTools = self.preprocessorTools_0_1_3;
-  };
-
   ixset = callPackage ../development/libraries/haskell/ixset {};
 
   ixShapable = callPackage ../development/libraries/haskell/ix-shapable {};
