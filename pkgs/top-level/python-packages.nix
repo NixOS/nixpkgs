@@ -1856,11 +1856,11 @@ let
   };
 
   pycollada = buildPythonPackage rec {
-    name = "pycollada-0.4";
+    name = "pycollada-0.4.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pycollada/${name}.tar.gz";
-      md5 = "5d0f00c035491b945cdccdfd8a698ad2";
+      sha256 = "0i50lh98550pwr95zgzrgiqzsspm09wl52xlv83y5nrsz4mblylv";
     };
 
     # pycollada-0.4 needs python-dateutil==1.5
