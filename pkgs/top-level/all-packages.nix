@@ -10163,6 +10163,8 @@ let
 
   meshlab = callPackage ../applications/graphics/meshlab { };
 
+  metersLv2 = callPackage ../applications/audio/meters_lv2 { };
+
   mhwaveedit = callPackage ../applications/audio/mhwaveedit {};
 
   mid2key = callPackage ../applications/audio/mid2key { };
