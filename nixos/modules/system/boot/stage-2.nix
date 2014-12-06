@@ -87,6 +87,13 @@ in
 
   config = {
 
+    system.activationScripts.tmpfs =
+      ''
+        ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.devSize}" none /dev
+        ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.devShmSize}" none /dev/shm
+        ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.runSize}" none /run
+      '';
+
     system.build.bootStage2 = bootStage2;
 
   };
