@@ -212,6 +212,7 @@
       privoxy = 32;
       disnix = 33;
       osgi = 34;
+      tor = 35;
       ghostOne = 40;
       git = 41;
       fourstore = 42;
