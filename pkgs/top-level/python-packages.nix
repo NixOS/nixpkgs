@@ -6141,20 +6141,23 @@ let
 
 
   obfsproxy = buildPythonPackage ( rec {
-    name = "obfsproxy-0.2.2";
+    name = "obfsproxy-${version}";
+    version = "0.2.12";
+
     src = pkgs.fetchgit {
       url = meta.repositories.git;
-      rev = "3c4e843a30c430aec1de03e0e09ef654072efc03";
-      sha256 = "8fd1e63a37bc42add7609d97d50ecd81da81881bcf7015a9e2958531dbf39018";
+      rev = "refs/tags/${name}";
+      sha256 = "82d694aa7f3de7327fc4dc517fb262ab076f536ed6d4377573c76df8cf019dcf";
     };
 
-    propagatedBuildInputs = with self; [ pyptlib argparse twisted pycrypto ];
+    propagatedBuildInputs = with self;
+      [ pyptlib argparse twisted pycrypto pyyaml ];
 
     meta = {
       description = "a pluggable transport proxy";
       homepage = https://www.torproject.org/projects/obfsproxy;
       repositories.git = https://git.torproject.org/pluggable-transports/obfsproxy.git;
-      maintainers = [ stdenv.lib.maintainers.phreedom ];
+      maintainers = with stdenv.lib.maintainers; [ phreedom thoughtpolice ];
     };
   });
 
@@ -7391,10 +7394,11 @@ let
 
   pyptlib = buildPythonPackage (rec {
     name = "pyptlib-${version}";
-    version = "0.0.3";
+    version = "0.0.6";
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pyptlib/pyptlib-${version}.tar.gz";
-      sha256 = "0mklak456jqifx57j9jmpb69h3ybxc880qk86pg4g8jk0i14pxh3";
+      sha256 = "01y6vbwncqb0hxlnin6whd9wrrm5my4qzjhk76fnix78v7ip515r";
     };
     meta = {
       description = "A python implementation of the Pluggable Transports for Circumvention specification for Tor";
