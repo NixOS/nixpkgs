@@ -1,12 +1,12 @@
+set -e
 source $stdenv/setup
 
 tar xvfz $src
 
 cd plan9port
 
-cflags="echo \"CFLAGS='-I${libXt}/include'\" >> \$PLAN9/config"
-
-sed -i "43i\\${cflags}" INSTALL
+echo CFLAGS=\"-I${fontconfig}/include -I${libXt}/include\" > LOCAL.config
+echo X11=\"${libXt}/include\" >> LOCAL.config
 
 for p in $patches; do
   echo "applying patch $p"
