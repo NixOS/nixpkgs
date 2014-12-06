@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace dmtcp/src/dmtcp_coordinator.cpp \
-      --replace /bin/bash /bin/sh
+      --replace /bin/bash ${stdenv.shell}
     substituteInPlace utils/gdb-add-symbol-file \
-      --replace /bin/bash /bin/sh
+      --replace /bin/bash ${stdenv.shell}
     substituteInPlace test/autotest.py \
       --replace /usr/bin/env $(type -p env) \
       --replace /bin/bash $(type -p bash) \
