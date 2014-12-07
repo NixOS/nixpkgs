@@ -10,7 +10,7 @@
 , proprietaryCodecs ? true
 , enablePepperFlash ? false
 , enableWideVine ? false
-, cupsSupport ? false
+, cupsSupport ? true
 , pulseSupport ? false
 , hiDPISupport ? false
 }:
