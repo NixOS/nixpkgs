@@ -6,7 +6,21 @@
 , perl, pkgconfig, python, serd, sord, sratom, suil }:
 
 let
+
+  # Ardour git repo uses a mix of annotated and lightweight tags. Annotated
+  # tags are used for MAJOR.MINOR versioning, and lightweight tags are used
+  # in-between; MAJOR.MINOR.REV where REV is the number of commits since the
+  # last annotated tag. A slightly different version string format is needed
+  # for the 'revision' info that is built into the binary; it is the format of
+  # "git describe" when _not_ on an annotated tag(!): MAJOR.MINOR-REV-HASH.
+
+  # Version to build.
   tag = "3.5.403";
+
+  # Version info that is built into the binary. Keep in sync with 'tag'. The
+  # last 8 digits is a (fake) commit id.
+  revision = "3.5-403-00000000";
+
 in
 
 stdenv.mkDerivation rec {
@@ -15,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = git://git.ardour.org/ardour/ardour.git;
     rev = "refs/tags/${tag}";
-    sha256 = "7d7c8e2c7ccccca6c8324fd874509e1b0d89f3f42cb92982c50d212797463f4c";
+    sha256 = "0k1z8sbjf88dqn12kf9cykrqj38vkr879n2g6b4adk6cghn8wz3x";
   };
 
   buildInputs = 
@@ -27,10 +41,7 @@ stdenv.mkDerivation rec {
     ];
 
   patchPhase = ''
-    # The funny revision number is from `git describe rev`
-    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = \"${tag}-g2f6065b\"; }\n' > libs/ardour/revision.cc
-    # Note the different version number
-    sed -i '33i rev = \"3.5-380-g2f6065b\"' wscript
+    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = \"${revision}\"; }\n' > libs/ardour/revision.cc
     sed 's|/usr/include/libintl.h|${glibc}/include/libintl.h|' -i wscript
     sed -e 's|^#!/usr/bin/perl.*$|#!${perl}/bin/perl|g' -i tools/fmt-bindings
     sed -e 's|^#!/usr/bin/env.*$|#!${perl}/bin/perl|g' -i tools/*.pl
