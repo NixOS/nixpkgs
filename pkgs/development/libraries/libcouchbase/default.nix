@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://github.com/couchbase/libcouchbase.git";
     rev = "bd3a20f9e18a69dca199134956fd4ad3e1b80ca8";
-    sha256 = "0gimvfxvbmhm6zy4vgs2630ygilhryxl8apfmv3iqs23pafwzm8r";
+    sha256 = "1a1hg9zvnl1icw59xib5wnk3s120isf8c5awm8id6icvhxjv40hd";
     leaveDotGit = true;
   };
 
