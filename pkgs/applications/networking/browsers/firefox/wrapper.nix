@@ -1,4 +1,4 @@
-{ stdenv, lib, browser, makeDesktopItem, makeWrapper, plugins, libs, gtk_modules
+{ stdenv, lib, browser, makeDesktopItem, makeWrapper, plugins, gst_plugins, libs, gtk_modules
 , browserName, desktopName, nameSuffix, icon
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     categories = "Application;Network;WebBrowser;";
   };
 
-  buildInputs = [makeWrapper];
+  buildInputs = [makeWrapper] ++ gst_plugins;
 
   buildCommand = ''
     if [ ! -x "${browser}/bin/${browserName}" ]
@@ -32,6 +32,7 @@ stdenv.mkDerivation {
         --suffix-each LD_LIBRARY_PATH ':' "$libs" \
         --suffix-each GTK_PATH ':' "$gtk_modules" \
         --suffix-each LD_PRELOAD ':' "$(cat $(filterExisting $(addSuffix /extra-ld-preload $plugins)))" \
+        --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH" \
         --prefix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))"
 
     mkdir -p $out/share/applications
