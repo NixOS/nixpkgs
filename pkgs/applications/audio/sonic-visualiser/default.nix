@@ -8,12 +8,11 @@
 
 stdenv.mkDerivation rec {
   name = "sonic-visualiser-${version}";
-  version = "2.3";
+  version = "2.4.1";
 
   src = fetchurl {
-
-    url = "http://code.soundsoftware.ac.uk/attachments/download/918/${name}.tar.gz";
-    sha256 = "1f06w2rin4r2mbi00bg3nmqdi2xdy9vq4jcmfanxzj3ld66ik40c";
+    url = "http://code.soundsoftware.ac.uk/attachments/download/1185/${name}.tar.gz";
+    sha256 = "06nlha70kgrby16nyhngrv5q846xagnxdinv608v7ga7vpywwmyb";
   };
 
   buildInputs =

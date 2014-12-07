@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     substituteInPlace Makefile.config \
       --subst-var-by BINDIR $out/bin \
       --subst-var-by INSTALLDIR $out/lib/ocaml/${ocaml_version}/site-lib/lablgl \
-      --subst-var-by DLLDIR $out/lib/ocaml/${ocaml_version}/site-lib/lablgl/stublibs \
+      --subst-var-by DLLDIR $out/lib/ocaml/${ocaml_version}/site-lib/lablgl \
       --subst-var-by TKINCLUDES "" \
       --subst-var-by XINCLUDES ""
   '';

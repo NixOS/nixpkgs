@@ -26,7 +26,7 @@
   meta = with stdenv.lib; {
     homepage = http://www.rust-lang.org/;
     description = "A safe, concurrent, practical language";
-    maintainers = with maintainers; [ madjar cstrahan ];
+    maintainers = with maintainers; [ madjar cstrahan wizeman ];
     license = map (builtins.getAttr "shortName") [ licenses.mit licenses.asl20 ];
     platforms = platforms.linux;
   };

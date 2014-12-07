@@ -239,8 +239,9 @@ in rec {
   tests.chromium = callTest tests/chromium.nix {};
   tests.cjdns = callTest tests/cjdns.nix {};
   tests.containers = callTest tests/containers.nix {};
-  tests.dockerRegistry = callTest tests/docker-registry.nix {};
-  tests.etcd = callTest tests/etcd.nix {};
+  tests.docker = scrubDrv (import tests/docker.nix { system = "x86_64-linux"; });
+  tests.dockerRegistry = scrubDrv (import tests/docker-registry.nix { system = "x86_64-linux"; });
+  tests.etcd = scrubDrv (import tests/etcd.nix { system = "x86_64-linux"; });
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
@@ -258,6 +259,7 @@ in rec {
   tests.ipv6 = callTest tests/ipv6.nix {};
   tests.jenkins = callTest tests/jenkins.nix {};
   tests.kde4 = callTest tests/kde4.nix {};
+  tests.kubernetes = scrubDrv (import tests/kubernetes.nix { system = "x86_64-linux"; });
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
   tests.login = callTest tests/login.nix {};
   #tests.logstash = callTest tests/logstash.nix {};
@@ -268,9 +270,28 @@ in rec {
   tests.mysqlReplication = callTest tests/mysql-replication.nix {};
   tests.nat.firewall = callTest tests/nat.nix { withFirewall = true; };
   tests.nat.standalone = callTest tests/nat.nix { withFirewall = false; };
+  tests.networking.networkd.static = callTest tests/networking.nix { networkd = true; test = "static"; };
+  tests.networking.networkd.dhcpSimple = callTest tests/networking.nix { networkd = true; test = "dhcpSimple"; };
+  tests.networking.networkd.dhcpOneIf = callTest tests/networking.nix { networkd = true; test = "dhcpOneIf"; };
+  tests.networking.networkd.bond = callTest tests/networking.nix { networkd = true; test = "bond"; };
+  tests.networking.networkd.bridge = callTest tests/networking.nix { networkd = true; test = "bridge"; };
+  tests.networking.networkd.macvlan = callTest tests/networking.nix { networkd = true; test = "macvlan"; };
+  tests.networking.networkd.sit = callTest tests/networking.nix { networkd = true; test = "sit"; };
+  tests.networking.networkd.vlan = callTest tests/networking.nix { networkd = true; test = "vlan"; };
+  tests.networking.scripted.static = callTest tests/networking.nix { networkd = false; test = "static"; };
+  tests.networking.scripted.dhcpSimple = callTest tests/networking.nix { networkd = false; test = "dhcpSimple"; };
+  tests.networking.scripted.dhcpOneIf = callTest tests/networking.nix { networkd = false; test = "dhcpOneIf"; };
+  tests.networking.scripted.bond = callTest tests/networking.nix { networkd = false; test = "bond"; };
+  tests.networking.scripted.bridge = callTest tests/networking.nix { networkd = false; test = "bridge"; };
+  tests.networking.scripted.macvlan = callTest tests/networking.nix { networkd = false; test = "macvlan"; };
+  tests.networking.scripted.sit = callTest tests/networking.nix { networkd = false; test = "sit"; };
+  tests.networking.scripted.vlan = callTest tests/networking.nix { networkd = false; test = "vlan"; };
+  # TODO: put in networking.nix after the test becomes more complete
+  tests.networkingProxy = callTest tests/networking-proxy.nix {};
   tests.nfs3 = callTest tests/nfs.nix { version = 3; };
   tests.nsd = callTest tests/nsd.nix {};
   tests.openssh = callTest tests/openssh.nix {};
+  tests.peerflix = callTest tests/peerflix.nix {};
   tests.printing = callTest tests/printing.nix {};
   tests.proxy = callTest tests/proxy.nix {};
   tests.quake3 = callTest tests/quake3.nix {};

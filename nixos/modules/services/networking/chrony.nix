@@ -48,9 +48,10 @@ in
 
       servers = mkOption {
         default = [
-          "0.pool.ntp.org"
-          "1.pool.ntp.org"
-          "2.pool.ntp.org"
+          "0.nixos.pool.ntp.org"
+          "1.nixos.pool.ntp.org"
+          "2.nixos.pool.ntp.org"
+          "3.nixos.pool.ntp.org"
         ];
         description = ''
           The set of NTP servers from which to synchronise.
@@ -99,8 +100,8 @@ in
     jobs.chronyd =
       { description = "chrony daemon";
 
-        wantedBy = [ "ip-up.target" ];
-        partOf = [ "ip-up.target" ];
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
 
         path = [ chrony ];
 

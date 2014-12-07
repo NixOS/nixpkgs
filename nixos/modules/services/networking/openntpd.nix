@@ -41,8 +41,7 @@ in
 
     systemd.services.openntpd = {
       description = "OpenNTP Server";
-      wantedBy = [ "ip-up.target" ];
-      partOf = [ "ip-up.target" ];
+      wantedBy = [ "multi-user.target" ];
       serviceConfig.ExecStart = "${package}/sbin/ntpd -d -f ${cfgFile}";
     };
   };

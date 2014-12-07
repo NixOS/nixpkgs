@@ -2,8 +2,8 @@
 , libvpx, check, libconfig, pkgconfig }:
 
 let
-  version = "900d72f951";
-  date = "20140921";
+  version = "f6b3e6e8fe98d2457827ac6da944e715f008a08a";
+  date = "20141203";
 in
 stdenv.mkDerivation rec {
   name = "tox-core-${date}-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/irungentoo/toxcore/tarball/${version}";
     name = "${name}.tar.gz";
-    sha256 = "1fwgflizb21mp4jwkfac7mgmahlly1f3ldbma6h8h6a2qf3pkn2r";
+    sha256 = "1zsx7saqs25vva3pp0bw31yqzrn40fx84w42ig6fiv723k9gpdzy";
   };
 
   NIX_LDFLAGS = "-lgcc_s";
@@ -44,13 +44,18 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = stdenv.lib.optionals (!stdenv.isArm) [ libvpx ];
 
-  # Some tests fail in the Sheevaplug due to timeout
-  doCheck = !stdenv.isArm;
+  # Some tests fail randomly due to timeout. This kind of problem is well known
+  # by upstream: https://github.com/irungentoo/toxcore/issues/{950,1054}
+  # They don't recommend running tests on 50core machines with other cpu-bound
+  # tests running in parallel.
+  #
+  # NOTE: run the tests locally on your machine before upgrading this package!
+  doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "P2P FOSS instant messaging application aimed to replace Skype with crypto";
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ viric ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ viric jgeerds ];
+    platforms = platforms.all;
   };
 }

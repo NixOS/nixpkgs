@@ -81,27 +81,26 @@ in
 
   ###### implementation
 
-  config = {
-
-    systemd.services."synergy-client" = {
-      enable = cfgC.enable;
-      after = [ "network.target" ];
-      description = "Synergy client";
-      wantedBy = optional cfgC.autoStart "multi-user.target";
-      path = [ pkgs.synergy ];
-      serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergyc -f ${optionalString (cfgC.screenName != "") "-n ${cfgC.screenName}"} ${cfgC.serverAddress}'';
-    };
-
-    systemd.services."synergy-server" = {
-      enable = cfgS.enable;
-      after = [ "network.target" ];
-      description = "Synergy server";
-      wantedBy = optional cfgS.autoStart "multi-user.target";
-      path = [ pkgs.synergy ];
-      serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} -f ${optionalString (cfgS.address != "") "-a ${cfgS.address}"} ${optionalString (cfgS.screenName != "") "-n ${cfgS.screenName}" }'';
-    };
-
-  };
+  config = mkMerge [
+    (mkIf cfgC.enable {
+      systemd.services."synergy-client" = {
+        after = [ "network.target" ];
+        description = "Synergy client";
+        wantedBy = [ "multi-user.target" ];
+        path = [ pkgs.synergy ];
+        serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergyc -f ${optionalString (cfgC.screenName != "") "-n ${cfgC.screenName}"} ${cfgC.serverAddress}'';
+      };
+    })
+    (mkIf cfgS.enable {
+      systemd.services."synergy-server" = {
+        after = [ "network.target" ];
+        description = "Synergy server";
+        wantedBy = [ "multi-user.target" ];
+        path = [ pkgs.synergy ];
+        serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} -f ${optionalString (cfgS.address != "") "-a ${cfgS.address}"} ${optionalString (cfgS.screenName != "") "-n ${cfgS.screenName}" }'';
+      };
+    })
+  ];
 
 }
 

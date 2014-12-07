@@ -48,6 +48,7 @@ in
     systemd.mounts = map ({ what, where }: {
         bindsTo = [ "unifi.service" ];
         partOf = [ "unifi.service" ];
+        unitConfig.RequiresMountsFor = stateDir;
         options = "bind";
         what = what;
         where = where;
@@ -59,6 +60,7 @@ in
       after = [ "network.target" ] ++ systemdMountPoints;
       partOf = systemdMountPoints;
       bindsTo = systemdMountPoints;
+      unitConfig.RequiresMountsFor = stateDir;
 
       preStart = ''
         # Ensure privacy of state

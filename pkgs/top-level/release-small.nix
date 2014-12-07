@@ -119,7 +119,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   mysql51 = linux;
   ncat = linux;
   netcat = all;
-  nfsUtils = linux;
+  nfs-utils = linux;
   nix = all;
   nixUnstable = all;
   nss_ldap = linux;

@@ -21,7 +21,7 @@ rec {
       unpackFile ${src}
       chmod -R +w */
       mv */ package 2>/dev/null || true
-      sed -i -e "s/:\s*\"latest\"/:  \"*\"/" -e "s/:\s*\"\(https\?\|git\(\+\(ssh\|http\|https\)\)\?\):\/\/[^\"]*\"/: \"*\"/" package/package.json
+      sed -i -e "s/:\s*\"latest\"/:  \"*\"/" -e "s/:\s\+\"[A-Za-z0-9_-]\+\/[A-Za-z0-9_-]\+\"/:  \"*\"/" -e "s/:\s*\"\(https\?\|git\(\+\(ssh\|http\|https\)\)\?\):\/\/[^\"]*\"/: \"*\"/" package/package.json
       mv */ $out
     '';
 

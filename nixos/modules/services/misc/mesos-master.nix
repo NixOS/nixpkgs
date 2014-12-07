@@ -4,11 +4,11 @@ with lib;
 
 let
   cfg = config.services.mesos.master;
-  
+
 in {
 
   options.services.mesos = {
-    
+
     master = {
       enable = mkOption {
         description = "Whether to enable the Mesos Master.";
@@ -31,36 +31,36 @@ in {
         '';
         type = types.str;
       };
-      
+
       workDir = mkOption {
         description = "The Mesos work directory.";
         default = "/var/lib/mesos/master";
         type = types.str;
       };
-      
+
       extraCmdLineOptions = mkOption {
         description = ''
 	  Extra command line options for Mesos Master.
-	  
+
 	  See https://mesos.apache.org/documentation/latest/configuration/
 	'';
         default = [ "" ];
         type = types.listOf types.string;
         example = [ "--credentials=VALUE" ];
       };
-      
+
       quorum = mkOption {
         description = ''
           The size of the quorum of replicas when using 'replicated_log' based
           registry. It is imperative to set this value to be a majority of
           masters i.e., quorum > (number of masters)/2.
-          
+
           If 0 will fall back to --registry=in_memory.
         '';
         default = 0;
         type = types.int;
       };
-      
+
       logLevel = mkOption {
         description = ''
           The logging level used. Possible values:
@@ -86,11 +86,12 @@ in {
 	  ${pkgs.mesos}/bin/mesos-master \
 	    --port=${toString cfg.port} \
 	    --zk=${cfg.zk} \
-	    ${if cfg.quorum == 0 then "--registry=in_memory" else "--registry=replicated_log --quorum=${cfg.quorum}"} \
+	    ${if cfg.quorum == 0 then "--registry=in_memory" else "--registry=replicated_log --quorum=${toString cfg.quorum}"} \
 	    --work_dir=${cfg.workDir} \
 	    --logging_level=${cfg.logLevel} \
 	    ${toString cfg.extraCmdLineOptions}
 	'';
+	Restart = "on-failure";
 	PermissionsStartOnly = true;
       };
       preStart = ''
@@ -98,6 +99,6 @@ in {
       '';
     };
   };
-  
+
 }
 

@@ -1,6 +1,6 @@
 { fetchurl, stdenv, pkgconfig
 , openssl, db48, boost, zlib, miniupnpc, qt4, qrencode, glib, protobuf
-, utillinux, autogen, autoconf, autobuild, automake, db }:
+, utillinux, autogen, autoconf, autobuild, automake, autoreconfHook, db }:
 
 with stdenv.lib;
 
@@ -8,7 +8,7 @@ let
   buildAltcoin = makeOverridable ({walletName, gui ? true, ...}@a:
     stdenv.mkDerivation ({
       name = "${walletName}${toString (optional (!gui) "d")}-${a.version}";
-      buildInputs = [ openssl db48 boost zlib miniupnpc ]
+      buildInputs = [ pkgconfig openssl db48 boost zlib miniupnpc ]
         ++ optionals gui [ qt4 qrencode ] ++ a.extraBuildInputs or [];
 
       configurePhase = optional gui "qmake";
@@ -27,38 +27,13 @@ let
       meta = {
         platforms = platforms.unix;
         license = license.mit;
-        maintainers = [ maintainers.offline ];
+        maintainers = [ maintainers.offline ] ++ a.extraMaintainers;
       };
     } // a)
   );
 
 in rec {
   inherit buildAltcoin;
-
-  litecoin = buildAltcoin rec {
-    walletName = "litecoin";
-    version = "0.8.5.3-rc3";
-
-    src = fetchurl {
-      url = "https://github.com/litecoin-project/litecoin/archive/v${version}.tar.gz";
-      sha256 = "1z4a7bm3z9kd7n0s38kln31z8shsd32d5d5v3br5p0jlnr5g3lk7";
-    };
-
-    meta = {
-      description = "A lite version of Bitcoin using scrypt as a proof-of-work algorithm";
-      longDescription= ''
-        Litecoin is a peer-to-peer Internet currency that enables instant payments
-        to anyone in the world. It is based on the Bitcoin protocol but differs
-        from Bitcoin in that it can be efficiently mined with consumer-grade hardware.
-        Litecoin provides faster transaction confirmations (2.5 minutes on average)
-        and uses a memory-hard, scrypt-based mining proof-of-work algorithm to target
-        the regular computers and GPUs most people already have.
-        The Litecoin network is scheduled to produce 84 million currency units.
-      '';
-      homepage = https://litecoin.org/;
-    };
-  };
-  litecoind = litecoin.override { gui = false; };
 
   namecoin = buildAltcoin rec {
     walletName = "namecoin";
@@ -79,5 +54,29 @@ in rec {
       homepage = http://namecoin.info;
     };
   };
+
+  darkcoin = buildAltcoin rec {
+    walletName = "darkcoin";
+    version = "0.9.13.15";
+
+    src = fetchurl {
+      url = "https://github.com/darkcoin/darkcoin/archive/v${version}.tar.gz";
+      sha256 = "1kly2y3g4dr1jwwf81smqvc7k662x6rvg4ggmxva1yaifb67bgjb";
+    };
+
+    extraBuildInputs = [ glib ];
+
+    meta = {
+      description = "A decentralized key/value registration and transfer system";
+      longDescription = ''
+        Darkcoin (DRK) is an open sourced, privacy-centric digital
+        currency. It allows you keep your finances private as you make
+        transactions, similar to cash.
+      '';
+      homepage = http://darkcoin.io;
+      extraMaintainers = [ maintainers.AndersonTorres ];
+    };
+  };
+  darkcoind = darkcoin.override { gui = false; };
 
 }

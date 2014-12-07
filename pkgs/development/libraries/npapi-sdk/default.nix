@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
 
     homepage = https://code.google.com/p/npapi-sdk/;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ wizeman ];
     platforms = platforms.linux;
   };
 }

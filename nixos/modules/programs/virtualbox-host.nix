@@ -16,6 +16,22 @@ in
     boot.extraModulePackages = [ virtualbox ];
     environment.systemPackages = [ virtualbox ];
 
+    security.setuidOwners = let
+      mkVboxStub = program: {
+        inherit program;
+        owner = "root";
+        group = "vboxusers";
+        setuid = true;
+      };
+    in map mkVboxStub [
+      "VBoxBFE"
+      "VBoxBalloonCtrl"
+      "VBoxHeadless"
+      "VBoxManage"
+      "VBoxSDL"
+      "VirtualBox"
+    ];
+
     users.extraGroups.vboxusers.gid = config.ids.gids.vboxusers;
 
     services.udev.extraRules =

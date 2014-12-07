@@ -76,8 +76,7 @@ in
         exec ${pkgs.gogoclient}/bin/gogoc -y -f /var/lib/gogoc/gogoc.conf
       '';
     } // optionalAttrs cfg.autorun {
-      wantedBy = [ "ip-up.target" ];
-      partOf = [ "ip-up.target" ];
+      wantedBy = [ "multi-user.target" ];
     };
 
   };

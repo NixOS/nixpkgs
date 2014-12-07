@@ -4,11 +4,11 @@ stdenv.mkDerivation rec {
   shortName = "setuptools-${version}";
   name = "${python.executable}-${shortName}";
 
-  version = "5.8";
+  version = "7.0";
 
   src = fetchurl {
     url = "http://pypi.python.org/packages/source/s/setuptools/${shortName}.tar.gz";
-    sha256 = "15h643gf821b72d0s59cjj60c6dm5l57rggv5za9d05mccp3psff";
+    sha256 = "0qg07f035agwcz9m0p3kgdjs18xpl3h00rv28aqsfdyz1wm1m76x";
   };
 
   buildInputs = [ python wrapPython distutils-cfg ];

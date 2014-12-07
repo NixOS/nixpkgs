@@ -193,17 +193,6 @@ in
         '';
       };
 
-      proxy = mkOption {
-        type = types.str;
-        default = "";
-        description = ''
-          This option specifies the proxy to use for fetchurl. The real effect
-          is just exporting http_proxy, https_proxy and ftp_proxy with that
-          value.
-        '';
-        example = "http://127.0.0.1:3128";
-      };
-
       # Environment variables for running Nix.
       envVars = mkOption {
         type = types.attrs;
@@ -292,7 +281,9 @@ in
       { path = [ nix pkgs.openssl pkgs.utillinux pkgs.openssh ]
           ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
 
-        environment = cfg.envVars // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-bundle.crt"; };
+        environment = cfg.envVars
+          // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-bundle.crt"; }
+          // config.networking.proxy.envVars;
 
         serviceConfig =
           { Nice = cfg.daemonNiceLevel;
@@ -317,13 +308,6 @@ in
         NIX_BUILD_HOOK = "${nix}/libexec/nix/build-remote.pl";
         NIX_REMOTE_SYSTEMS = "/etc/nix/machines";
         NIX_CURRENT_LOAD = "/run/nix/current-load";
-      }
-
-      # !!! These should not be defined here, but in some general proxy configuration module!
-      // optionalAttrs (cfg.proxy != "") {
-        http_proxy = cfg.proxy;
-        https_proxy = cfg.proxy;
-        ftp_proxy = cfg.proxy;
       };
 
     # Set up the environment variables for running Nix.

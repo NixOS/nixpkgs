@@ -8,11 +8,11 @@ assert pulseaudioSupport -> pulseaudio != null;
 
 stdenv.mkDerivation rec {
   name = "gqrx-${version}";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/gqrx/${version}/${name}-src.tar.gz";
-    sha256 = "15ncx2shh43skph7sj3jvmkls9cbbbysld49c8xd23fhdsxanj9x";
+    url = "mirror://sourceforge/project/gqrx/${version}/${name}.tar.xz";
+    sha256 = "0fyfkdd2ailg54ppv1y2fy2c692jmlmsyl1lxr20lyn6bvd9gpyn";
   };
 
   buildInputs = [
@@ -20,6 +20,14 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals pulseaudioSupport [ pulseaudio ];
 
   configurePhase = ''qmake PREFIX="$out"'';
+
+  postInstall = ''
+    mkdir -p "$out/share/applications"
+    mkdir -p "$out/share/icons"
+
+    cp gqrx.desktop "$out/share/applications/"
+    cp icons/gqrx.svg "$out/share/icons/"
+  '';
 
   meta = with stdenv.lib; {
     description = "Software defined radio (SDR) receiver";
