@@ -8833,6 +8833,8 @@ let
     inherit (perlPackages) FontTTF;
   };
 
+  dina-font = callPackage ../data/fonts/dina { };
+
   docbook5 = callPackage ../data/sgml+xml/schemas/docbook-5.0 { };
 
   docbook_sgml_dtd_31 = callPackage ../data/sgml+xml/schemas/sgml-dtd/docbook/3.1.nix { };
