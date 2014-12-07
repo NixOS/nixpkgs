@@ -20,10 +20,11 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "k2pdfopt";
+  name = "k2pdfopt-${version}";
+  version = "2.30";
   src = fetchzip {
-    url = http://www.willus.com/k2pdfopt/src/k2pdfopt_v2.21_src.zip;
-    sha256 = "1vy0yw41z6p95gmivjk4r534zbg0kqap4lr9ps56kvjw51q8r54j";
+    url = "http://www.willus.com/k2pdfopt/src/k2pdfopt_v${version}_src.zip";
+    sha256 = "1fjjznkplrbyrg48wbij4kqgkz9i5icq7savl6brsf9haahdz6q5";
   };
 
   buildInputs = [ libX11 libXext autoconf automake libtool leptonica libpng libtiff zlib
