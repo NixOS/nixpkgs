@@ -6444,10 +6444,12 @@ in
   gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
   gnumake = self.gnumake42;
 
-  gnustep_back = callPackage ../development/libraries/gnustep-back { stdenv = clangStdenv; };
-  gnustep_base = callPackage ../development/libraries/gnustep-base { stdenv = clangStdenv; giflib = giflib_4_1; };
+  gnustep_builder = import ../development/tools/build-managers/gnustep-make/build-gnustep-package.nix { stdenv = clangStdenv; inherit gnustep_make; inherit buildEnv; };
+
+  gnustep_back = callPackage ../development/libraries/gnustep-back { };
+  gnustep_base = callPackage ../development/libraries/gnustep-base { giflib = giflib_4_1; };
   gnustep_make = callPackage ../development/tools/build-managers/gnustep-make { stdenv = clangStdenv; };
-  gnustep_gui = callPackage ../development/libraries/gnustep-gui { stdenv = clangStdenv; };
+  gnustep_gui = callPackage ../development/libraries/gnustep-gui { };
 
   gob2 = callPackage ../development/tools/misc/gob2 { };
 

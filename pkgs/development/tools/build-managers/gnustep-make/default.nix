@@ -8,8 +8,9 @@ stdenv.mkDerivation rec {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-make-2.6.6.tar.gz";
     sha256 = "07cqr8x17bia9w6clbmiv7ay6r9nplrjz2cyzinv4w7zfpc19vxw";
   };
-  configureFlags = "--with-layout=fhs-system";
+  configureFlags = "--with-installation-domain=SYSTEM";
   buildInputs = [ clang which libobjc2 ];
+  gnustepConfigTemplate = ./GNUstep.conf;
   meta = {
     description = "GNUstep-make is a build manager for GNUstep.";
 
@@ -18,6 +19,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = with stdenv.lib.maintainers; [ ashalkhakov ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
