@@ -199,7 +199,7 @@ rec {
   };
 
   ultimate-lightest = ultimate // {
-    INFINALITY_FT_FILTER_PARAMS="06 22 36 22 06";
+    INFINALITY_FT_FILTER_PARAMS="04 22 38 22 04";
   };
 
   ultimate-darker = ultimate // {
