@@ -1,12 +1,12 @@
 { stdenv, fetchgit, qt5, makeWrapper, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "cmst-2014.08.23";
+  name = "cmst-2014.12.05";
   rev = "refs/tags/${name}";
   src = fetchgit {
     url = "git://github.com/andrew-bibb/cmst.git";
     inherit rev;
-    sha256 = "07g5i929jxlh6vm0ad8x33qmf2sryiichlv37x7fpn20h3xcsia0";
+    sha256 = "070rxv3kyn41ra7nnk1wbqvy6fjg38h7hrdv4dn71b201kmzd194";
   };
 
   buildInputs = [ qt5 makeWrapper ];
@@ -15,6 +15,19 @@ stdenv.mkDerivation rec {
     substituteInPlace ./cmst.pro \
       --replace "/usr/bin" "$out/bin" \
       --replace "/usr/share" "$out/usr/share"
+
+    substituteInPlace ./cmst.pri \
+      --replace "/usr/lib" "$out/lib" \
+      --replace "/usr/share" "$out/share"
+
+    substituteInPlace ./apps/cmstapp/cmstapp.pro \
+      --replace "/usr/bin" "$out/bin" \
+      --replace "/usr/share" "$out/share"
+
+    substituteInPlace ./apps/rootapp/rootapp.pro \
+      --replace "/etc" "$out/etc" \
+      --replace "/usr/share" "$out/share"
+
   '';
 
   buildPhase = ''
