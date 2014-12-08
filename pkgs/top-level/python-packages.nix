@@ -821,6 +821,20 @@ let
     propagatedBuildInputs = with self; [ iowait psutil pyzmq tornado mock ];
   };
 
+  cornice = buildPythonPackage rec {
+    name = "cornice-${version}";
+    version = "0.17.0";
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/cornice.git;
+      rev = "refs/tags/${version}";
+      sha256 = "12yrcsv1sdl5w308y1cc939ppq7pi2490s54zfcbs481cvsyr1lg";
+    };
+
+    propagatedBuildInputs = with self; [ pyramid simplejson ];
+
+    doCheck = false; # lazy packager
+  };
+
   cvxopt = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "cvxopt";
