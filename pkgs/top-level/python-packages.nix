@@ -11161,10 +11161,10 @@ let
     src = pkgs.fetchgit {
       url = https://github.com/mozilla/PyBrowserID.git;
       rev = "refs/tags/${version}";
-      sha256 = "1v9pjb9idapjlc75p6h06kx7bi8zxhfgj93yxq1bn337kmyk1xdf";
+      sha256 = "0nyqb0v8yrkqnrqsh1hlhvzr2pyvkxvkw701p3gpsvk29c0gb5n6";
     };
 
-    buildInputs = with self; [ mock unittest2 argparse configparser ];
+    buildInputs = with self; [ mock unittest2 ];
     propagatedBuildInputs = with self; [ requests ];
 
     meta = with stdenv.lib; {
