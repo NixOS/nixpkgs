@@ -104,6 +104,7 @@
   ./services/backup/tarsnap.nix
   ./services/cluster/fleet.nix
   ./services/cluster/kubernetes.nix
+  ./services/cluster/panamax.nix
   ./services/computing/torque/server.nix
   ./services/computing/torque/mom.nix
   ./services/continuous-integration/jenkins/default.nix
