@@ -12632,6 +12632,8 @@ let
 
   thinkfan = callPackage ../tools/system/thinkfan { };
 
+  utf8proc = callPackage ../development/libraries/utf8proc { };
+
   vice = callPackage ../misc/emulators/vice {
     libX11 = xlibs.libX11;
     giflib = giflib_4_1;
