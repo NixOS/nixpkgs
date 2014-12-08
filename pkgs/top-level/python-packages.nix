@@ -11184,6 +11184,28 @@ let
     doCheck = false;
   };
 
+  tokenserver = buildPythonPackage rec {
+    name = "tokenserver-${version}";
+    version = "1.2.11";
+
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/tokenserver.git;
+      rev = "refs/tags/${version}";
+      sha256 = "1pjrw7xhhqx7h4s08h1lsaa499r2ymc41zdknjimn6zlqdjdk1fb";
+    };
+
+    doCheck = false;
+    propagatedBuildInputs = with self; [ cornice mozsvc pybrowserid ];
+
+    patchPhase = ''
+      sed -i "s|'testfixtures'||" setup.py
+    '';
+
+    meta = {
+      maintainers = [ ];
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
 
   tissue = buildPythonPackage rec {
     name = "tissue-0.9.2";
