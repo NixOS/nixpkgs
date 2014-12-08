@@ -5647,6 +5647,24 @@ let
     };
   };
 
+  pymysqlsa = self.buildPythonPackage rec {
+    name = "pymysqlsa-${version}";
+    version = "1.0";
+
+    propagatedBuildInputs = with self; [ pymysql sqlalchemy9 ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pymysql_sa/pymysql_sa-1.0.tar.gz";
+      sha256 = "a2676bce514a29b2d6ab418812259b0c2f7564150ac53455420a20bd7935314a";
+    };
+
+    meta = {
+      description = "PyMySQL dialect for SQL Alchemy";
+      homepage = https://pypi.python.org/pypi/pymysql_sa;
+      license = licenses.mit;
+    };
+  };
+
   MySQL_python = buildPythonPackage {
     name = "MySQL-python-1.2.3";
 
