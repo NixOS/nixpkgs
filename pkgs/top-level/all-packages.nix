@@ -12202,6 +12202,8 @@ let
 
     heq = callPackage ../development/coq-modules/heq {};
 
+    interval = callPackage ../development/coq-modules/interval {};
+
     mathcomp = callPackage ../development/coq-modules/mathcomp {};
 
     paco = callPackage ../development/coq-modules/paco {};
