@@ -1850,6 +1850,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   oeis = callPackage ../development/libraries/haskell/oeis {};
 
+  ofx = callPackage ../development/libraries/haskell/ofx {};
+
   opaleye = callPackage ../development/libraries/haskell/opaleye {};
 
   OpenAL = callPackage ../development/libraries/haskell/OpenAL {};
