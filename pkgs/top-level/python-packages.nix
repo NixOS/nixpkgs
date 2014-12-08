@@ -11155,6 +11155,24 @@ let
     propagatedBuildInputs = with self; [ pkgs.libarchive ];
   };
 
+  pybrowserid = buildPythonPackage rec {
+    name = "PyBrowserID-${version}";
+    version = "0.9.2";
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla/PyBrowserID.git;
+      rev = "refs/tags/${version}";
+      sha256 = "1v9pjb9idapjlc75p6h06kx7bi8zxhfgj93yxq1bn337kmyk1xdf";
+    };
+
+    buildInputs = with self; [ mock unittest2 argparse configparser ];
+    propagatedBuildInputs = with self; [ requests ];
+
+    meta = with stdenv.lib; {
+      description = "Python library for the BrowserID Protocol";
+      homepage    = "https://github.com/mozilla/PyBrowserID";
+      license     = licenses.mpl20;
+    };
+  };
 
   pyzmq = buildPythonPackage rec {
     name = "pyzmq-13.0.0";
