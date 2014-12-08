@@ -2,7 +2,7 @@
 , gnustep_builder
 , clang, cups
 , fetchurl
-, gmp, gnustep_make, gnutls
+, gmp, gnutls
 , libffi
 , libjpeg, libtiff, libpng, giflib, libungif
 , libxml2, libxslt, libiconv
@@ -44,7 +44,6 @@ gnustep_builder.mkDerivation {
     icu
     portaudio
   ];
-  deps = [ gnustep_make ];
   patches = [ ./fixup-base-makefile-installdir.patch ];
   meta = {
     description = "GNUstep-base is an implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa.";
