@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     license     = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ lovek323 garbas the-kenny ];
     platforms   = stdenv.lib.platforms.unix;
+    broken      = true; # we have a newer stable that builds
   };
 }

@@ -13,7 +13,7 @@ cross:
 
 let
 
-  version = "2.19";
+  version = "2.20";
 
 in
 
@@ -56,14 +56,6 @@ stdenv.mkDerivation ({
          "/bin:/usr/bin", which is inappropriate on NixOS machines. This
          patch extends the search path by "/run/current-system/sw/bin". */
       ./fix_path_attribute_in_getconf.patch
-
-      ./fix-math.patch
-
-      ./cve-2014-0475.patch
-      ./cve-2014-5119.patch
-
-      /* Remove references to the compilation date.  */
-      ./glibc-remove-date-from-compilation-banner.patch
     ];
 
   postPatch =
@@ -77,8 +69,11 @@ stdenv.mkDerivation ({
     + ''
       echo "LDFLAGS-nscd += -static-libgcc" >> nscd/Makefile
     ''
-    # Replace the date and time in nscd by $out.
-    #  It is used as a protocol compatibility check.
+    # Replace the date and time in nscd by a prefix of $out.
+    # It is used as a protocol compatibility check.
+    # Note: the size of the struct changes, but using only a part
+    # would break hash-rewriting. When receiving stats it does check
+    # that the struct sizes match and can't cause overflow or something.
     + ''
       cat ${./glibc-remove-datetime-from-nscd.patch} \
         | sed "s,@out@,$out," | patch -p1
@@ -155,7 +150,7 @@ stdenv.mkDerivation ({
     }
     else fetchurl {
       url = "mirror://gnu/glibc/glibc-${version}.tar.gz";
-      sha256 = "15n7x9mmzhd7w6s5hd9srx0h23b32gwb306x98k9ss940yvnvb8q";
+      sha256 = "1g6ysvk15arpi7c1f1fpx5slgfr2k3dqd5xr0yvijajp1m0xxq9p";
     };
 
   # Remove absolute paths from `configure' & co.; build out-of-tree.

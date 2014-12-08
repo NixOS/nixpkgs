@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "nix-generate-from-cpan-1";
 
-  buildInputs = [ makeWrapper perl perlPackages.YAMLLibYAML perlPackages.JSON ];
+  buildInputs = [ makeWrapper perl perlPackages.YAMLLibYAML perlPackages.JSON perlPackages.CPANPLUS ];
 
   unpackPhase = "true";
   buildPhase = "true";

@@ -4,7 +4,6 @@
 , scpSupport ? false, libssh2 ? null
 , gssSupport ? false, gss ? null
 , c-aresSupport ? false, c-ares ? null
-, linkStatic ? false
 }:
 
 assert zlibSupport -> zlib != null;
@@ -36,25 +35,20 @@ stdenv.mkDerivation rec {
     rm src/tool_hugehelp.c
   '';
 
+  # make curl honor CURL_CA_BUNDLE & SSL_CERT_FILE
+  postConfigure = ''
+    echo  '#define CURL_CA_BUNDLE (getenv("CURL_CA_BUNDLE") ? getenv("CURL_CA_BUNDLE") : getenv("SSL_CERT_FILE"))' >> lib/curl_config.h
+  '';
+
   configureFlags = [
       ( if sslSupport then "--with-ssl=${openssl}" else "--without-ssl" )
       ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
     ]
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
-    ++ stdenv.lib.optional gssSupport "--with-gssapi=${gss}"
-    ++ stdenv.lib.optionals linkStatic [ "--enable-static" "--disable-shared" ]
-  ;
+    ++ stdenv.lib.optional gssSupport "--with-gssapi=${gss}";
 
-  dontDisableStatic = linkStatic;
-
-  CFLAGS = if stdenv ? isDietLibC then "-DHAVE_INET_NTOA_R_2_ARGS=1" else "";
-  LDFLAGS = if linkStatic then "-static" else "";
   CXX = "g++";
   CXXCPP = "g++ -E";
-
-  # libtool hack to get a static binary. Notice that to 'configure' I passed
-  # other LDFLAGS, because it doesn't use libtool for linking in the tests.
-  makeFlags = if linkStatic then "LDFLAGS=-all-static" else "";
 
   crossAttrs = {
     # We should refer to the cross built openssl
@@ -62,9 +56,7 @@ stdenv.mkDerivation rec {
     configureFlags = [
         ( if sslSupport then "--with-ssl=${openssl.crossDrv}" else "--without-ssl" )
         "--with-random /dev/urandom"
-      ]
-      ++ stdenv.lib.optionals linkStatic [ "--enable-static" "--disable-shared" ]
-    ;
+      ];
   };
 
   passthru = {

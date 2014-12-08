@@ -1,10 +1,9 @@
-# Use the static tools for i686-linux.  They work on x86_64-linux
-# machines as well.
+# Use busybox for i686-linux since it works on x86_64-linux as well.
 (import ./i686.nix) //
 
 {
-  bootstrapTools = {
-    url = http://tarballs.nixos.org/stdenv-linux/x86_64/r23302/bootstrap-tools.cpio.bz2;
-    sha256 = "0w89kqhx47yl0jifp2vffp073pyrqha5f312kp971smi4h41drna";
+  bootstrapTools = import <nix/fetchurl.nix> {
+    url = http://tarballs.nixos.org/stdenv-linux/x86_64/73b75f6157db79fc899154a497823e82e409e76d/bootstrap-tools.tar.xz;
+    sha256 = "e29d47a5dc9f1ff10c3fbaacbd03a3cca0c784299df09fcdd9e25797ec6414ad";
   };
 }

@@ -16,6 +16,9 @@ stdenv.mkDerivation {
   # these tests take a long time and don't
   # always complete in the build environment
   postPatch = "sed -i '/add_subdirectory(tests)/d' CMakeLists.txt";
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+
   doCheck = false;
   checkTarget = "test-release"; # this would be the target
 

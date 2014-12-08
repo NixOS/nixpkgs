@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DWITH_READLINE=yes" "-DWITH_EMBEDDED_SERVER=yes" "-DINSTALL_SCRIPTDIR=bin" ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+
   enableParallelBuilding = true;
 
   prePatch = ''

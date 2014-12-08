@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, enableThreading ? true }:
+{ stdenv, fetchurl, enableThreading ? stdenv ? glibc }:
 
 # We can only compile perl with threading on platforms where we have a
 # real glibc in the stdenv.

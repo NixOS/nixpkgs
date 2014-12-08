@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, flex, bison, autoreconfHook, substituteAll
+{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, flex, bison, autoreconfHook, substituteAll
 , python, libxml2Python, file, expat, makedepend
 , libdrm, xorg, wayland, udev, llvm, libffi
 , libvdpau, libelf
@@ -45,6 +45,12 @@ stdenv.mkDerivation {
     ./glx_ro_text_segm.patch # fix for grsecurity/PaX
    # TODO: revive ./dricore-gallium.patch when it gets ported (from Ubuntu),
    #  as it saved ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
+    (fetchpatch {
+      name = "fix-lp_test_arit.diff";
+      url = "http://cgit.freedesktop.org/mesa/mesa/patch/"
+        + "?id=8148a06b8fdb734f7f9a11ce787ee6505939fdaa";
+      sha256 = "0k2bnl7d28nx2y88jchw6jj4f3xfdjjvz4vpvhc40060c2iz8fla";
+    })
   ] ++ optional stdenv.isLinux
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
@@ -78,7 +84,7 @@ stdenv.mkDerivation {
 
     "--with-dri-drivers=i965,r200,radeon"
     "--with-gallium-drivers=i915,nouveau,r300,r600,svga,swrast,radeonsi"
-    "--with-egl-platforms=x11,drm" "--enable-gbm"
+    "--with-egl-platforms=x11,wayland,drm" "--enable-gbm"
   ]
     ++ optional enableTextureFloats "--enable-texture-float"
     ++ optionals enableExtraFeatures [
@@ -97,13 +103,13 @@ stdenv.mkDerivation {
     autoreconfHook intltool expat libxml2Python llvm
     glproto dri2proto dri3proto presentproto
     libX11 libXext libxcb libXt libXfixes libxshmfence
-    libffi /* wayland */ libvdpau libelf
+    libffi wayland libvdpau libelf
   ] ++ optionals enableExtraFeatures [ /*libXvMC*/ ]
     ++ optional stdenv.isLinux udev
     ;
 
   enableParallelBuilding = true;
-  #doCheck = true; # https://bugs.freedesktop.org/show_bug.cgi?id=67672
+  doCheck = true;
 
   # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM;
   #   also move libOSMesa to $osmesa, as it's relatively big

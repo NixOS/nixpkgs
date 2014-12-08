@@ -2,7 +2,7 @@
 , qt4, bzip2, fam, shared_mime_info, giflib, jasper, strigi
 , openexr, avahi, kerberos, shared_desktop_ontologies, libXScrnSaver
 , automoc4, soprano, qca2, attica, enchant, libdbusmenu_qt, grantlee
-, docbook_xml_dtd_42, docbook_xsl, polkit_qt_1, acl, attr, libXtst
+, docbook_xml_dtd_42, docbook_xsl, polkit_qt4, acl, attr, libXtst
 , udev, herqq, phonon, libjpeg, xz, ilmbase, libxslt
 , pkgconfig
 }:
@@ -13,7 +13,7 @@ kde {
 
   buildInputs =
     [ pkgconfig attica avahi bzip2 enchant fam giflib grantlee herqq
-      libdbusmenu_qt libXScrnSaver polkit_qt_1 qca2 acl jasper libxslt
+      libdbusmenu_qt libXScrnSaver polkit_qt4 qca2 acl jasper libxslt
       shared_desktop_ontologies xz udev libjpeg kerberos openexr
       libXtst attr
     ];

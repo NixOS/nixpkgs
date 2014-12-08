@@ -4,7 +4,7 @@ assert cross == null -> stdenv.isLinux;
 
 let
 
-  version = "3.12.6";
+  version = "3.12.32";
 
   kernelHeadersBaseConfig =
     if cross == null
@@ -17,8 +17,8 @@ stdenv.mkDerivation {
   name = "linux-headers-${version}";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.bz2";
-    sha256 = "1qh6f1az0flfrbkdjx1i9r7yf31ad0gxigax91nd33z2jmd6h4df";
+    url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.xz";
+    sha256 = "1hzws2bf267hfk81ywqcxspkyi1lg56x63izdc0pv1338xcfas53";
   };
 
   targetConfig = if cross != null then cross.config else null;

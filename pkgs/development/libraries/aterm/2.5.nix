@@ -21,6 +21,8 @@ stdenv.mkDerivation {
 
   dontDisableStatic = true;
 
+  NIX_CFLAGS_COMPILE = "-D__USE_BSD";
+
   meta = {
     homepage = http://www.cwi.nl/htbin/sen1/twiki/bin/view/SEN1/ATerm;
     license = "LGPL";
