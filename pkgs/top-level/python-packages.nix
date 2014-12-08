@@ -4464,6 +4464,18 @@ let
     };
   };
 
+  hawkauthlib = buildPythonPackage rec {
+    name = "hawkauthlib-${version}";
+    version = "0.1.1";
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/hawkauthlib.git;
+      rev = "refs/tags/v${version}";
+      sha256 = "0b3xydii50ifs8qkgbpdlidfs2rzw63f807ahrq9flz90ahf582h";
+    };
+
+    propagatedBuildInputs = with self; [ requests webob ];
+  };
+
   hcs_utils = buildPythonPackage rec {
     name = "hcs_utils-1.5";
 
