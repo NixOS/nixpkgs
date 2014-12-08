@@ -142,7 +142,7 @@ in {
     };
 
     services.etcd.enable = mkDefault true;
-    services.docker.enable = mkDefault true;
+    virtualisation.docker.enable = mkDefault true;
 
     environment.systemPackages = [ pkgs.fleet ];
     users.extraGroups.fleet.gid = config.ids.gids.fleet;
