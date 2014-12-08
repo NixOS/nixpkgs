@@ -307,6 +307,7 @@
       scollector = 156;
       bosun = 157;
       kubernetes = 158;
+      fleet = 159;
 
       # When adding a gid, make sure it doesn't match an existing uid. And don't use gids above 399!
 
