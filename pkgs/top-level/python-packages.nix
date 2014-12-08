@@ -4836,6 +4836,24 @@ let
     };
   };
 
+  konfig = buildPythonPackage rec {
+    name = "konfig-${version}";
+    version = "0.9";
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/konfig.git;
+      rev = "refs/tags/${version}";
+      sha256 = "1v9pjb9idapjlc75p6h06kx7bi8zxhfgj93yxq1bn337kmyk1xdf";
+    };
+
+    buildInputs = with self; [ configparser argparse ];
+
+    meta = with stdenv.lib; {
+      description = "Yet Another Config Parser";
+      homepage    = "https://github.com/mozilla-services/konfig";
+      license     = licenses.mpl20;
+    };
+  };
+
   kitchen = buildPythonPackage (rec {
     name = "kitchen-1.1.1";
     disabled = isPy3k;
