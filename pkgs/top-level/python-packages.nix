@@ -11140,6 +11140,17 @@ let
     doCheck = false;
   };
 
+  tokenlib = buildPythonPackage rec {
+    name = "tokenlib-${version}";
+    version = "0.3.1";
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/tokenlib.git;
+      rev = "refs/tags/${version}";
+      sha256 = "0dmq41sy64jmkj7n49jgbpii5n5d41ci263lyhqbff5slr289m51";
+    };
+
+    propagatedBuildInputs = with self; [ requests webob ];
+  };
 
   tornadokick = buildPythonPackage rec {
     name = "tornadokick-0.2.1";
