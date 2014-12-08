@@ -5168,6 +5168,8 @@ let
 
   fontconfig = callPackage ../development/libraries/fontconfig { };
 
+  fontconfig-ultimate = callPackage ../development/libraries/fontconfig-ultimate {};
+
   folly = callPackage ../development/libraries/folly { };
 
   makeFontsConf = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
