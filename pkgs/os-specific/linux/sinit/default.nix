@@ -1,12 +1,13 @@
-{stdenv, fetchurl, rcinit ? null, rcshutdown ? null, rcreboot ? null}:
+{stdenv, fetchgit, rcinit ? null, rcshutdown ? null, rcreboot ? null}:
 let
   s = # Generated upstream information
   rec {
     baseName="sinit";
     version="0.9.2";
     name="${baseName}-${version}";
-    url="http://git.suckless.org/sinit/snapshot/sinit-0.9.2.tar.gz";
-    sha256="0dv4d20q93iffykf5gg8mlg2qfs3nmfrwdar73kg5xwka96c2523";
+    url="http://git.suckless.org/sinit/";
+    sha256="0nncyzwnszwlqcvx1jf42rn1n2dd5vcxkndqb1b546pgpifniivp";
+    rev = "refs/tags/v${version}";
   };
   buildInputs = [
   ];
@@ -14,8 +15,8 @@ in
 stdenv.mkDerivation {
   inherit (s) name version;
   inherit buildInputs;
-  src = fetchurl {
-    inherit (s) url sha256;
+  src = fetchgit {
+    inherit (s) url sha256 rev;
   };
   makeFlags = ["PREFIX=$(out)"];
   preConfigure = ""
@@ -31,6 +32,5 @@ stdenv.mkDerivation {
     platforms = stdenv.lib.platforms.linux;
     homepage = "http://tools.suckless.org/sinit";
     downloadPage = "http://git.suckless.org/sinit";
-    updateWalker = true;
   };
 }
