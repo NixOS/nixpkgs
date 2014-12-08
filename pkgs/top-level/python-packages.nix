@@ -12145,6 +12145,24 @@ let
     };
   };
 
+  serversyncstorage = buildPythonPackage rec {
+    name = "serversyncstorage-${version}";
+    version = "1.5.11";
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/server-syncstorage.git;
+      rev = "refs/tags/${version}";
+      sha256 = "yrcsv1sdl5w308y1cc939ppq7pi2490s54zfcbs481cvsyr1lg22";
+    };
+
+    propagatedBuildInputs = with self; [
+      pyramid sqlalchemy9 simplejson mozsvc cornice pyramidhawkauth pymysql
+      mysqlsa umemcache wsgiproxy2 requests pybrowserid
+    ];
+
+    doCheck = false; # lazy packager
+  };
+
+
   thumbor = self.buildPythonPackage rec {
     name = "thumbor-4.0.4";
 
