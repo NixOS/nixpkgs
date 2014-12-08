@@ -190,22 +190,41 @@ rec {
 
     overrides = pkgs: {
       inherit (stage1.pkgs) perl binutils paxctl;
-      # This also contains the full, dynamically linked, final Glibc.
+      glibc = pkgs.glibc.override { combineWithShell = true; };
     };
   };
 
 
-  # Construct a third stdenv identical to the 2nd, except that this
-  # one uses the rebuilt Glibc from stage2.  It still uses the recent
-  # binutils and rest of the bootstrap tools, including GCC.
+  # Construct a third stdenv to combine bash with glibc to avoid a
+  # dependency on /bin/sh
   stage3 = stageFun {
     gccPlain = bootstrapTools;
-    inherit (stage2.pkgs) glibc binutils;
+    inherit (stage2.pkgs) binutils glibc;
     coreutils = bootstrapTools;
     name = "bootstrap-gcc-wrapper";
 
     overrides = pkgs: {
-      inherit (stage2.pkgs) binutils glibc perl patchelf linuxHeaders;
+      inherit (stage2.pkgs) binutils perl paxctl glibc linuxHeaders;
+      bash = pkgs.bash.override { combineWithLibc = true; };
+      glibc-bash-final = pkgs.callPackage ./glibc-with-shell.nix {};
+    };
+  };
+
+
+  # Construct a fourth stdenv identical to the 3rd, except that this
+  # one uses the combined Glibc/sh from stage3.  It still uses the recent
+  # binutils and rest of the bootstrap tools, including GCC.
+  stage4 = stageFun {
+    gccPlain = bootstrapTools;
+    inherit (stage3.pkgs) binutils;
+    glibc = stage3.pkgs.glibc-bash-final;
+    coreutils = bootstrapTools;
+    name = "bootstrap-gcc-wrapper";
+
+    overrides = pkgs: {
+      inherit (stage3.pkgs) binutils perl patchelf linuxHeaders;
+      bash = stage3.pkgs.glibc-bash-final;
+      glibc = stage3.pkgs.glibc-bash-final;
       # Link GCC statically against GMP etc.  This makes sense because
       # these builds of the libraries are only used by GCC, so it
       # reduces the size of the stdenv closure.
@@ -216,14 +235,14 @@ rec {
       cloog = pkgs.cloog.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       gccPlain = pkgs.gcc.gcc;
     };
-    extraBuildInputs = [ stage2.pkgs.patchelf stage2.pkgs.paxctl ];
+    extraBuildInputs = [ stage3.pkgs.patchelf stage3.pkgs.paxctl ];
   };
 
 
-  # Construct a fourth stdenv that uses the new GCC.  But coreutils is
+  # Construct a fifth stdenv that uses the new GCC.  But coreutils is
   # still from the bootstrap tools.
-  stage4 = stageFun {
-    inherit (stage3.pkgs) gccPlain glibc binutils;
+  stage5 = stageFun {
+    inherit (stage4.pkgs) gccPlain glibc binutils;
     coreutils = bootstrapTools;
     name = "";
 
@@ -232,20 +251,19 @@ rec {
       # because gcc (since JAR support) already depends on zlib, and
       # then if we already have a zlib we want to use that for the
       # other purposes (binutils and top-level pkgs) too.
-      inherit (stage3.pkgs) gettext gnum4 gmp perl glibc zlib linuxHeaders;
-
+      inherit (stage4.pkgs) gettext gnum4 gmp perl glibc zlib linuxHeaders bash;
       gcc = lib.makeOverridable (import ../../build-support/gcc-wrapper) {
         nativeTools = false;
         nativeLibc = false;
-        gcc = stage4.stdenv.gcc.gcc;
-        libc = stage4.pkgs.glibc;
-        inherit (stage4.pkgs) binutils coreutils;
+        gcc = stage5.stdenv.gcc.gcc;
+        libc = stage5.pkgs.glibc;
+        inherit (stage5.pkgs) binutils coreutils;
         name = "";
-        stdenv = stage4.stdenv;
-        shell = stage4.pkgs.bash + "/bin/bash";
+        stdenv = stage5.stdenv;
+        shell = stage5.pkgs.bash + "/bin/bash";
       };
     };
-    extraBuildInputs = [ stage3.pkgs.patchelf stage3.pkgs.xz ];
+    extraBuildInputs = [ stage4.pkgs.patchelf stage4.pkgs.xz ];
   };
 
 
@@ -268,23 +286,23 @@ rec {
       '';
 
     initialPath =
-      ((import ../common-path.nix) {pkgs = stage4.pkgs;});
+      ((import ../common-path.nix) {pkgs = stage5.pkgs;});
 
-    extraBuildInputs = [ stage4.pkgs.patchelf stage4.pkgs.paxctl ];
+    extraBuildInputs = [ stage5.pkgs.patchelf stage5.pkgs.paxctl ];
 
-    gcc = stage4.pkgs.gcc;
+    gcc = stage5.pkgs.gcc;
 
     shell = gcc.shell;
 
-    inherit (stage4.stdenv) fetchurlBoot;
+    inherit (stage5.stdenv) fetchurlBoot;
 
     extraAttrs = {
-      inherit (stage4.pkgs) glibc;
+      inherit (stage5.pkgs) glibc;
       inherit platform bootstrapTools;
-      shellPackage = stage4.pkgs.bash;
+      shellPackage = stage5.pkgs.bash;
     };
 
-    allowedRequisites = with stage4.pkgs;
+    allowedRequisites = with stage5.pkgs;
       [ gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
         glibc gnumake gnused gnutar gnugrep gnupatch patchelf attr acl
         paxctl zlib pcre linuxHeaders ed gcc gcc.gcc libsigsegv
@@ -292,7 +310,7 @@ rec {
 
     overrides = pkgs: {
       inherit gcc;
-      inherit (stage4.pkgs)
+      inherit (stage5.pkgs)
         gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
         glibc gnumake gnused gnutar gnugrep gnupatch patchelf
         attr acl paxctl zlib pcre;

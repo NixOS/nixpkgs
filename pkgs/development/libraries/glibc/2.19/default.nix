@@ -6,6 +6,7 @@
 , gccCross ? null
 , debugSymbols ? false
 , withGd ? false, gd ? null, libpng ? null
+, combineWithShell ? false
 }:
 
 assert stdenv.gcc.gcc != null;
@@ -16,9 +17,18 @@ let
 in
   build cross ({
     name = "glibc"
+      + stdenv.lib.optionalString combineWithShell "-and-shell"
       + stdenv.lib.optionalString (hurdHeaders != null) "-hurd"
       + stdenv.lib.optionalString debugSymbols "-debug"
       + stdenv.lib.optionalString withGd "-gd";
+
+    postPatch = if combineWithShell then ''
+      mkdir -p $out/bin
+      ln -sv /bin/sh $out/bin
+      find . -type f -print0 | xargs -0 sed -i "s@/bin/sh@$out/bin/sh@g"
+      # Fake out make
+      touch locale/programs/{charmap,locfile}-kw.h
+    '' else null;
 
     inherit fetchurl fetchgit stdenv kernelHeaders installLocales
       profilingLibraries gccCross withGd gd libpng;
