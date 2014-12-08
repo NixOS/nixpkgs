@@ -9887,6 +9887,22 @@ let
     };
   };
 
+  umemcache = buildPythonPackage rec {
+    name = "umemcache-${version}";
+    version = "1.6.3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/u/umemcache/${name}.zip";
+      sha256 = "211031a03576b7796bf277dbc9c9e3e754ba066bbb7fb601ab5c6291b8ec1918";
+    };
+
+    meta = {
+      description = "Ultra fast memcache client written in highly optimized C++ with Python bindings";
+      homepage = https://github.com/esnme/ultramemcache;
+      license = licenses.bsdOriginal;
+    };
+  };
+
   unittest2 = buildPythonPackage rec {
     version = "0.5.1";
     name = "unittest2-${version}";
