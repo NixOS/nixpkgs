@@ -1521,6 +1521,21 @@ let
     };
   };
 
+  configparser = buildPythonPackage rec {
+    name = "configparser-${version}";
+    version = "3.3.0r2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/configparser/${name}.tar.gz";
+      sha256 = "6a2318590dfc4013fc5bf53c2bec14a8cb455a232295eb282a13f94786c4b0b2";
+    };
+
+    meta = {
+      maintainers = [ ];
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
+
 
   ColanderAlchemy = buildPythonPackage rec {
     name = "ColanderAlchemy-0.2.0";
