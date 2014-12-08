@@ -6378,6 +6378,26 @@ let
     };
   };
 
+   pasteScript = buildPythonPackage rec {
+    version = "1.7.5";
+    name = "PasterScript-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/P/PasteScript/${name}.tar.gz";
+      sha256 = "2b685be69d6ac8bc0fe6f558f119660259db26a15e16a4943c515fbee8093539";
+    };
+
+    doCheck = false;
+    buildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ paste paste_deploy cheetah ];
+
+    meta = {
+      description = "A pluggable command-line frontend, including commands to setup package file layouts";
+      homepage = http://pythonpaste.org/script/;
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
+
   pathpy = buildPythonPackage rec {
     name = "path.py-5.2";
 
