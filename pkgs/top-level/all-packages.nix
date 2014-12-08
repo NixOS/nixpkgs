@@ -8589,6 +8589,11 @@ let
 
   shadow = callPackage ../os-specific/linux/shadow { };
 
+  sinit = callPackage ../os-specific/linux/sinit {
+    rcinit = "/etc/rc.d/rc.init";
+    rcshutdown = "/etc/rc.d/rc.shutdown";
+  };
+
   smem = callPackage ../os-specific/linux/smem { };
 
   statifier = builderDefsPackage (import ../os-specific/linux/statifier) { };
