@@ -2,7 +2,7 @@
 , cairo
 , clang
 , fetchurl
-, gnustep_base, gnustep_make, gnustep_gui
+, gnustep_base, gnustep_gui
 , gnustep_builder
 , xlibs
 , x11
@@ -20,7 +20,7 @@ gnustep_builder.mkDerivation rec {
     sha256 = "0qixbilkkrqxrhhj9hnp7ygd5gs23b3qbbgk3gaxj73d0xqfvhjz";
   };
   buildInputs = [ cairo clang freetype pkgconfig x11 ];
-  deps = [ gnustep_make gnustep_base gnustep_gui ];
+  deps = [ gnustep_base gnustep_gui ];
   meta = {
     description = "GNUstep-back is a generic backend for GNUstep.";
     

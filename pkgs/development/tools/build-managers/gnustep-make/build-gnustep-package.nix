@@ -4,14 +4,14 @@ with stdenv.lib;
 
 {
   mkDerivation =
-    args @ { name, src, deps ? [], buildInputs, ... }:
+    args @ { name, src, deps ? [], buildInputs ? [], propagatedBuildInputs ? [], ... }:
     let
       GNUSTEP_env =
 	# buildEnv fails if there is only one path to symlink
-        if deps == null || length deps < 2 then gnustep_make
+        if deps == null || length deps < 1 then gnustep_make
 	else buildEnv {
-          name = "gnustep-env-${name}";
-          paths = deps;
+          name = "gnustep-env-for-${name}";
+          paths = [ gnustep_make ] ++ deps;
           pathsToLink = [ "/bin" "/sbin" "/lib" "/include" "/share" ];
 	};
     in
@@ -20,7 +20,8 @@ with stdenv.lib;
         inherit GNUSTEP_env;
         GNUSTEP_MAKEFILES = "${GNUSTEP_env}/share/GNUstep/Makefiles";
         GNUSTEP_INSTALLATION_DOMAIN = "SYSTEM";
-        buildInputs = args.buildInputs ++ deps;
+	buildInputs = buildInputs ++ deps ++ [ gnustep_make ];
+	propagatedBuildInputs = propagatedBuildInputs ++ deps;
         preConfigure = ''
 	  cp $GNUSTEP_conf $(pwd)/GNUstep-build.conf
           substituteInPlace $(pwd)/GNUstep-build.conf \
@@ -38,7 +39,9 @@ with stdenv.lib;
       	       --subst-var-by systemDocInfo "$GNUSTEP_env/share/info"
 	  export GNUSTEP_CONFIG_FILE=$(pwd)/GNUstep-build.conf
 	  . $GNUSTEP_MAKEFILES/GNUstep.sh
-        '';
+	'';
+	    buildFlags = "GNUSTEP_MAKEFILES=${GNUSTEP_env}/share/GNUstep/Makefiles";
+	    configureFlags = "GNUSTEP_MAKEFILES=${GNUSTEP_env}/share/GNUstep/Makefiles";
 	installFlags = "GNUSTEP_SYSTEM_APPS=\${out}/lib/GNUstep/Applications GNUSTEP_SYSTEM_ADMIN_APPS=\${out}/lib/GNUstep/Applications GNUSTEP_SYSTEM_WEB_APPS=\${out}/lib/GNUstep/WebApplications GNUSTEP_SYSTEM_TOOLS=\${out}/bin GNUSTEP_SYSTEM_ADMIN_TOOLS=\${out}/sbin GNUSTEP_SYSTEM_LIBRARY=\${out}/lib GNUSTEP_SYSTEM_HEADERS=\${out}/include GNUSTEP_SYSTEM_LIBRARIES=\${out}/lib GNUSTEP_SYSTEM_DOC=\${out}/share/GNUstep/Documentation GNUSTEP_SYSTEM_DOC_MAN=\${out}/share/man GNUSTEP_SYSTEM_DOC_INFO=\${out}/share/info GNUSTEP_SYSTEM_LIBRARIES=\${out}/lib GNUSTEP_HEADERS=\${out}/include DESTDIR_GNUSTEP_MAKEFILES=\${out}/share/GNUstep/Makefiles";
         });
 }

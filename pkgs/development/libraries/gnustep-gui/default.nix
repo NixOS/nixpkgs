@@ -1,7 +1,7 @@
 {
   clang
 , fetchurl
-, gnustep_base, gnustep_make
+, gnustep_base
 , gnustep_builder
 #, xlibs, x11, freetype
 #, pkgconfig
@@ -16,7 +16,7 @@ gnustep_builder.mkDerivation rec {
     sha256 = "0d6jzfcyacxjzrr2p398ysvs1akv1fcmngfzxxbfxa947miydjxg";
   };
   buildInputs = [ clang ];
-  deps = [ gnustep_base gnustep_make ];
+  deps = [ gnustep_base ];
   patches = [ ./fixup-gui-makefile-installdir.patch ./fixup-gui-tools-preamble.patch ./fixup-gui-textconverters-preamble.patch ];
   meta = {
     description = "GNUstep-gui is a GUI class library of GNUstep.";
