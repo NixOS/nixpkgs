@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, readline, libossp_uuid }:
+{ stdenv, fetchurl, zlib, readline, libossp_uuid, openssl }:
 
 with stdenv.lib;
 
@@ -12,18 +12,23 @@ stdenv.mkDerivation rec {
     sha256 = "14176ffb1f90a189e7626214365be08ea2bfc26f26994bafb4235be314b9b4b0";
   };
 
-  buildInputs = [ zlib readline ] ++ optionals (!stdenv.isDarwin) [ libossp_uuid ];
+  buildInputs = [ zlib readline openssl ] ++ optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
   enableParallelBuilding = true;
 
   makeFlags = [ "world" ];
 
-  configureFlags = optional (!stdenv.isDarwin)
-    ''
-      --with-ossp-uuid
-    '';
+  configureFlags = [
+    "--with-openssl"
+    ]
+    ++ optionals (!stdenv.isDarwin) ["--with-ossp-uuid"]
+    ;
 
-  patches = [ ./disable-resolve_symlinks.patch ./less-is-more.patch ];
+  patches = [
+    ./disable-resolve_symlinks.patch
+    ./less-is-more.patch
+    ./postgresql-9.4-dont-check-private-key.patch
+    ];
 
   installTargets = [ "install-world" ];
 

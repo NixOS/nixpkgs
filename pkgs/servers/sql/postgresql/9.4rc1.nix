@@ -2,14 +2,14 @@
 
 with stdenv.lib;
 
-let version = "9.2.9"; in
+let version = "9.4rc1"; in
 
 stdenv.mkDerivation rec {
   name = "postgresql-${version}";
 
   src = fetchurl {
     url = "mirror://postgresql/source/v${version}/${name}.tar.bz2";
-    sha256 = "94ec6d330f125b6fc725741293073b07d7d20cc3e7b8ed127bc3d14ad2370197";
+    sha256 = "6ce91d78fd6c306536f5734dbaca10889814b9d0fe0b38a41b3e635d95241c7c";
   };
 
   buildInputs = [ zlib readline openssl ] ++ optionals (!stdenv.isDarwin) [ libossp_uuid ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     ;
 
   patches = [
-    ./disable-resolve_symlinks.patch
+    ./disable-resolve_symlinks-94.patch
     ./less-is-more.patch
     ./postgresql-9.4-dont-check-private-key.patch
     ];
@@ -36,14 +36,14 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit readline;
-    psqlSchema = "9.2";
+    psqlSchema = "9.4";
   };
 
   meta = {
-    homepage = http://www.postgresql.org/;
+    homepage = http://www.postgresql.org/ ;
     description = "A powerful, open source object-relational database system";
     license = stdenv.lib.licenses.postgresql;
-    maintainers = [ stdenv.lib.maintainers.ocharles ];
+    maintainers = with stdenv.lib.maintainers; [ aristid ocharles ];
     hydraPlatforms = stdenv.lib.platforms.linux;
   };
 }
