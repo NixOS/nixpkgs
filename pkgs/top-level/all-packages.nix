@@ -1074,6 +1074,8 @@ let
 
   edk2 = callPackage ../development/compilers/edk2 { };
 
+  eid-mw = callPackage ../tools/security/eid-mw { };
+
   eid-viewer = callPackage ../tools/security/eid-viewer { };
 
   emscripten = callPackage ../development/compilers/emscripten { };
@@ -5166,6 +5168,8 @@ let
 
   fontconfig = callPackage ../development/libraries/fontconfig { };
 
+  fontconfig-ultimate = callPackage ../development/libraries/fontconfig-ultimate {};
+
   folly = callPackage ../development/libraries/folly { };
 
   makeFontsConf = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
@@ -6915,6 +6919,8 @@ let
 
   sratom = callPackage ../development/libraries/audio/sratom { };
 
+  srm = callPackage ../tools/security/srm { };
+
   srtp = callPackage ../development/libraries/srtp {};
 
   srtp_linphone = callPackage ../development/libraries/srtp/linphone.nix { };
@@ -7011,6 +7017,8 @@ let
   tremor = callPackage ../development/libraries/tremor { };
 
   unicap = callPackage ../development/libraries/unicap {};
+
+  tsocks = callPackage ../development/libraries/tsocks { };
 
   unixODBC = callPackage ../development/libraries/unixODBC { };
 
@@ -8589,6 +8597,11 @@ let
 
   shadow = callPackage ../os-specific/linux/shadow { };
 
+  sinit = callPackage ../os-specific/linux/sinit {
+    rcinit = "/etc/rc.d/rc.init";
+    rcshutdown = "/etc/rc.d/rc.shutdown";
+  };
+
   smem = callPackage ../os-specific/linux/smem { };
 
   statifier = builderDefsPackage (import ../os-specific/linux/statifier) { };
@@ -8832,6 +8845,8 @@ let
   dejavu_fonts = callPackage ../data/fonts/dejavu-fonts {
     inherit (perlPackages) FontTTF;
   };
+
+  dina-font = callPackage ../data/fonts/dina { };
 
   docbook5 = callPackage ../data/sgml+xml/schemas/docbook-5.0 { };
 
@@ -10956,7 +10971,7 @@ let
 
   vanitygen = callPackage ../applications/misc/vanitygen { };
 
-  vanubi = callPackage ../applications/editors/vanubi { };
+  vanubi = callPackage ../applications/editors/vanubi { vala = vala_0_26; };
 
   vbindiff = callPackage ../applications/editors/vbindiff { };
 
@@ -11162,6 +11177,7 @@ let
          );
       libs = [ gstreamer gst_plugins_base ] ++ lib.optionals (cfg.enableQuakeLive or false)
              (with xlibs; [ stdenv.gcc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ]);
+      gst_plugins = [ gst_plugins_base gst_plugins_good gst_ffmpeg ];
       gtk_modules = [ libcanberra ];
     };
 
@@ -11554,7 +11570,7 @@ let
   icbm3d = callPackage ../games/icbm3d { };
 
   ingen = callPackage ../applications/audio/ingen {
-    boost = boost155;
+    inherit (pythonPackages) rdflib;
   };
 
   instead = callPackage ../games/instead {
@@ -12193,6 +12209,8 @@ let
     flocq = callPackage ../development/coq-modules/flocq {};
 
     heq = callPackage ../development/coq-modules/heq {};
+
+    interval = callPackage ../development/coq-modules/interval {};
 
     mathcomp = callPackage ../development/coq-modules/mathcomp {};
 

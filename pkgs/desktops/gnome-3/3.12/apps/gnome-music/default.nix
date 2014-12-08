@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
   buildInputs = [ pkgconfig gtk3 glib intltool itstool gnome3.libmediaart
-                  gdk_pixbuf gnome3.gnome_icon_theme librsvg python3
+                  gdk_pixbuf gnome3.gnome_icon_theme librsvg python3 cairo
                   gnome3.grilo libxml2 python3Packages.pygobject3 libnotify
                   python3Packages.pycairo python3Packages.dbus gnome3.totem-pl-parser
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base
@@ -24,19 +24,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preFixup =
-    let
-      libPath = stdenv.lib.makeLibraryPath
-        [ glib gtk3 libnotify tracker gnome3.grilo cairo
-          gst_all_1.gstreamer gst_all_1.gst-plugins-base gnome3.totem-pl-parser
-          gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad ];
-    in
-    ''
+  preFixup = ''
     wrapProgram "$out/bin/gnome-music" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix LD_LIBRARY_PATH : "${libPath}" \
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0" \
       --prefix GRL_PLUGIN_PATH : "${gnome3.grilo-plugins}/lib/grilo-0.2" \
       --prefix PYTHONPATH : "$PYTHONPATH"

@@ -244,6 +244,7 @@ in rec {
   tests.etcd = scrubDrv (import tests/etcd.nix { system = "x86_64-linux"; });
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
+  tests.fleet = scrubDrv (import tests/fleet.nix { system = "x86_64-linux"; });
   tests.gnome3 = callTest tests/gnome3.nix {};
   tests.installer.grub1 = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).grub1.test);
   tests.installer.lvm = forAllSystems (system: scrubDrv (import tests/installer.nix { inherit system; }).lvm.test);

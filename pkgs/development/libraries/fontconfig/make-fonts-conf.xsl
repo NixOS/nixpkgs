@@ -27,8 +27,6 @@
       <include><xsl:value-of select="$fontconfig" />/etc/fonts/conf.d</include>
       <!-- versioned system-wide config -->
       <include ignore_missing="yes">/etc/fonts/<xsl:value-of select="$fontconfigConfigVersion" />/conf.d</include>
-      <!-- look into user config -->
-      <include prefix="xdg" ignore_missing="yes">fontconfig/conf.d</include>
 
       <!-- the first cachedir will be used to store the cache -->
       <cachedir prefix="xdg">fontconfig</cachedir>

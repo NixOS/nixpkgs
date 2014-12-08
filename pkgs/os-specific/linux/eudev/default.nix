@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, glib, gperf}:
+{stdenv, fetchurl, pkgconfig, glib, gperf, utillinux}:
 let
   s = # Generated upstream information
   rec {
@@ -9,7 +9,7 @@ let
     sha256="0shf5vqiz9fdxl95aa1a8vh0xjxwim3psc39wr2xr8lnahf11vva";
   };
   buildInputs = [
-    glib pkgconfig gperf
+    glib pkgconfig gperf utillinux
   ];
 in
 stdenv.mkDerivation {

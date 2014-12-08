@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   preferLocalBuild = true;
 
   meta = with stdenv.lib; {
-    descriptioon = "GTK3 port of the Clearlooks theme";
+    description = "GTK3 port of the Clearlooks theme";
     longDescription = ''
       The Clearlooks-Phénix project aims at creating a GTK3 port of Clearlooks,
       the default theme for Gnome 2. Style is also included for GTK2, Unity and

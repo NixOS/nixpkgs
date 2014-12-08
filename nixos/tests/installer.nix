@@ -58,8 +58,6 @@ let
 
         ${optionalString (!readOnly) "nix.readOnlyStore = false;"}
 
-        swapDevices = lib.mkOverride 0 [ ];
-
         environment.systemPackages = [ ${optionalString testChannel "pkgs.rlwrap"} ];
       }
     '';
@@ -187,8 +185,9 @@ let
       $machine->succeed("test -e /boot/grub");
 
       # Did the swap device get activated?
-      $machine->waitForUnit("swap.target");
-      $machine->succeed("cat /proc/swaps | grep -q /dev");
+      # uncomment once https://bugs.freedesktop.org/show_bug.cgi?id=86930 is resolved
+      #$machine->waitForUnit("swap.target");
+      $machine->waitUntilSucceeds("cat /proc/swaps | grep -q /dev");
 
       # Check whether the channel works.
       $machine->succeed("nix-env -i coreutils >&2");
