@@ -5410,7 +5410,6 @@ let
     };
   };
 
-
   mox = buildPythonPackage rec {
     name = "mox-0.5.3";
 
@@ -5428,6 +5427,24 @@ let
     };
   };
 
+  mozsvc = buildPythonPackage rec {
+    name = "mozsvc-${version}";
+    version = "0.8";
+
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/mozservices.git;
+      rev = "refs/tags/${version}";
+      sha256 = "0k1d7v8aa4xd3f9h8m5crl647136ba15i9nzdrpxg5aqmv2n0i0p";
+    };
+
+    doCheck = false; # lazy packager
+    propagatedBuildInputs = with self; [ pyramid simplejson konfig ];
+
+    meta = {
+      homepage = https://github.com/mozilla-services/mozservices;
+      description = "Various utilities for Mozilla apps";
+    };
+  };
 
   mpmath = buildPythonPackage rec {
     name = "mpmath-0.17";
