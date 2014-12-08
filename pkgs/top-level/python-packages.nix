@@ -3022,6 +3022,18 @@ let
     };
   };
 
+  pyramid_hawkauth = buildPythonPackage rec {
+    name = "pyramidhawkauth-${version}";
+    version = "0.1.0";
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/pyramid_hawkauth.git;
+      rev = "refs/tags/v${version}";
+      sha256 = "1ic7xl72qnz382xaqhcy9ql17gx7pxbs78znp8xr66sp3dcx2s3c";
+    };
+
+    propagatedBuildInputs = with self; [ pyramid hawkauthlib tokenlib webtest ];
+  };
+
   radicale = buildPythonPackage rec {
     name = "radicale-${version}";
     namePrefix = "";
@@ -4452,6 +4464,18 @@ let
     };
   };
 
+  hawkauthlib = buildPythonPackage rec {
+    name = "hawkauthlib-${version}";
+    version = "0.1.1";
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/hawkauthlib.git;
+      rev = "refs/tags/v${version}";
+      sha256 = "0b3xydii50ifs8qkgbpdlidfs2rzw63f807ahrq9flz90ahf582h";
+    };
+
+    propagatedBuildInputs = with self; [ requests webob ];
+  };
+
   hcs_utils = buildPythonPackage rec {
     name = "hcs_utils-1.5";
 
@@ -5613,6 +5637,33 @@ let
     };
   });
 
+  pymysql = buildPythonPackage rec {
+    name = "pymysql-${version}";
+    version = "0.6.3";
+    src = pkgs.fetchgit {
+      url = https://github.com/PyMySQL/PyMySQL.git;
+      rev = "refs/tags/pymysql-${version}";
+      sha256 = "1m9fr2x49s3aixlmccr3w80skl19dya9h3x69wgl6ly1z27iyg24";
+    };
+  };
+
+  pymysqlsa = self.buildPythonPackage rec {
+    name = "pymysqlsa-${version}";
+    version = "1.0";
+
+    propagatedBuildInputs = with self; [ pymysql sqlalchemy9 ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pymysql_sa/pymysql_sa-1.0.tar.gz";
+      sha256 = "a2676bce514a29b2d6ab418812259b0c2f7564150ac53455420a20bd7935314a";
+    };
+
+    meta = {
+      description = "PyMySQL dialect for SQL Alchemy";
+      homepage = https://pypi.python.org/pypi/pymysql_sa;
+      license = licenses.mit;
+    };
+  };
 
   MySQL_python = buildPythonPackage {
     name = "MySQL-python-1.2.3";
@@ -11089,6 +11140,17 @@ let
     doCheck = false;
   };
 
+  tokenlib = buildPythonPackage rec {
+    name = "tokenlib-${version}";
+    version = "0.3.1";
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/tokenlib.git;
+      rev = "refs/tags/${version}";
+      sha256 = "0dmq41sy64jmkj7n49jgbpii5n5d41ci263lyhqbff5slr289m51";
+    };
+
+    propagatedBuildInputs = with self; [ requests webob ];
+  };
 
   tornadokick = buildPythonPackage rec {
     name = "tornadokick-0.2.1";
@@ -12082,6 +12144,24 @@ let
       maintainers =  with pkgs.stdenv.lib.maintainers; [gal_bolle];
     };
   };
+
+  serversyncstorage = buildPythonPackage rec {
+    name = "serversyncstorage-${version}";
+    version = "1.5.11";
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/server-syncstorage.git;
+      rev = "refs/tags/${version}";
+      sha256 = "yrcsv1sdl5w308y1cc939ppq7pi2490s54zfcbs481cvsyr1lg22";
+    };
+
+    propagatedBuildInputs = with self; [
+      pyramid sqlalchemy9 simplejson mozsvc cornice pyramidhawkauth pymysql
+      mysqlsa umemcache wsgiproxy2 requests pybrowserid
+    ];
+
+    doCheck = false; # lazy packager
+  };
+
 
   thumbor = self.buildPythonPackage rec {
     name = "thumbor-4.0.4";
