@@ -3022,6 +3022,18 @@ let
     };
   };
 
+  pyramid_hawkauth = buildPythonPackage rec {
+    name = "pyramidhawkauth-${version}";
+    version = "0.1.0";
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/pyramid_hawkauth.git;
+      rev = "refs/tags/v${version}";
+      sha256 = "1ic7xl72qnz382xaqhcy9ql17gx7pxbs78znp8xr66sp3dcx2s3c";
+    };
+
+    propagatedBuildInputs = with self; [ pyramid hawkauthlib tokenlib webtest ];
+  };
+
   radicale = buildPythonPackage rec {
     name = "radicale-${version}";
     namePrefix = "";
