@@ -6370,6 +6370,7 @@ let
     };
 
     buildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ argparse configparser ];
 
     meta = {
       description = "Load, configure, and compose WSGI applications and servers";
@@ -6389,7 +6390,7 @@ let
 
     doCheck = false;
     buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ paste paste_deploy cheetah ];
+    propagatedBuildInputs = with self; [ paste paste_deploy cheetah argparse ];
 
     meta = {
       description = "A pluggable command-line frontend, including commands to setup package file layouts";
@@ -11293,7 +11294,7 @@ let
     };
 
     doCheck = false;
-    propagatedBuildInputs = with self; [ cornice mozsvc pybrowserid ];
+    propagatedBuildInputs = with self; [ cornice mozsvc pybrowserid tokenlib ];
 
     patchPhase = ''
       sed -i "s|'testfixtures'||" setup.py
@@ -12165,18 +12166,40 @@ let
     };
   };
 
+  syncserver = buildPythonPackage rec {
+    name = "syncserver-${version}";
+    version = "1.5.0";
+
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/syncserver.git;
+      rev = "refs/tags/${version}";
+      sha256 = "1xljylycxg7351hmqh7aa6fvvsjg06zvd4r7hcjqyd0k0sxvk7y6";
+    };
+
+    buildInputs = with self; [ unittest2 ];
+    propagatedBuildInputs = with self; [
+      cornice gunicorn pyramid requests simplejson sqlalchemy9 mozsvc tokenserver
+      serversyncstorage configparser
+    ];
+
+    meta = {
+      maintainers = [ ];
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
+
   serversyncstorage = buildPythonPackage rec {
     name = "serversyncstorage-${version}";
     version = "1.5.11";
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/server-syncstorage.git;
       rev = "refs/tags/${version}";
-      sha256 = "yrcsv1sdl5w308y1cc939ppq7pi2490s54zfcbs481cvsyr1lg22";
+      sha256 = "1byq2k2f36f1jli9599ygfm2qsb4adl9140sxjpgfjbznb74q90q";
     };
 
     propagatedBuildInputs = with self; [
-      pyramid sqlalchemy9 simplejson mozsvc cornice pyramidhawkauth pymysql
-      mysqlsa umemcache wsgiproxy2 requests pybrowserid
+      pyramid sqlalchemy9 simplejson mozsvc cornice pyramid_hawkauth pymysql
+      pymysqlsa umemcache wsgiproxy2 requests pybrowserid
     ];
 
     doCheck = false; # lazy packager
