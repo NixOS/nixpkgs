@@ -1,8 +1,8 @@
 { stdenv, intltool, fetchurl, libxml2, upower
-, pkgconfig, gtk3, glib, hicolor_icon_theme
-, bash, makeWrapper, itstool, vala, sqlite
+, pkgconfig, gtk3, glib, hicolor_icon_theme, gobjectIntrospection
+, bash, makeWrapper, itstool, vala, sqlite, automake114x, autoconf
 , gnome3, librsvg, gdk_pixbuf, file, libnotify
-, evolution_data_server, gst_all_1, poppler
+, evolution_data_server, gst_all_1, poppler, libtool
 , icu, taglib, libjpeg, libtiff, giflib, libcue
 , libvorbis, flac, exempi, networkmanager
 , libpng, libexif, libgsf, libuuid, bzip2 }:
@@ -21,8 +21,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  preConfigure = ''
+    substituteInPlace src/libtracker-sparql/Makefile.am --replace "shared-library=" "shared-library=$out/lib/"
+  '';
+  
   buildInputs = [ vala pkgconfig gtk3 glib intltool itstool libxml2
-                  bzip2 gnome3.totem-pl-parser
+                  bzip2 gnome3.totem-pl-parser gobjectIntrospection
+                  automake114x autoconf libtool
                   gnome3.gsettings_desktop_schemas makeWrapper file
                   gdk_pixbuf gnome3.gnome_icon_theme librsvg sqlite
                   upower libnotify evolution_data_server gnome3.libgee
