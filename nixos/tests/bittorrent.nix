@@ -81,7 +81,7 @@ in
       # Create the torrent.
       $tracker->succeed("mkdir /tmp/data");
       $tracker->succeed("cp ${file} /tmp/data/test.tar.bz2");
-      $tracker->succeed("transmission-create /tmp/data/test.tar.bz2 -t http://${(pkgs.lib.head nodes.tracker.config.networking.interfaces.eth1.ip4).address}:6969/announce -o /tmp/test.torrent");
+      $tracker->succeed("transmission-create /tmp/data/test.tar.bz2 -p -t http://${(pkgs.lib.head nodes.tracker.config.networking.interfaces.eth1.ip4).address}:6969/announce -o /tmp/test.torrent");
       $tracker->succeed("chmod 644 /tmp/test.torrent");
 
       # Start the tracker.  !!! use a less crappy tracker
