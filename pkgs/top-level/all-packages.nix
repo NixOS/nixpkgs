@@ -5012,7 +5012,7 @@ let
 
   ctl = dropCxx (callPackage ../development/libraries/ctl { });
 
-  cpp-netlib = callPackage ../development/libraries/cpp-netlib { };
+  cpp-netlib = callPackage ../development/libraries/cpp-netlib { boost = boost155; };
 
   cppunit = callPackage ../development/libraries/cppunit { };
 
