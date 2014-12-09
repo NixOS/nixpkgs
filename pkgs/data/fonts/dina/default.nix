@@ -13,14 +13,12 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
   patchPhase = "sed -i 's/microsoft-cp1252/ISO8859-1/' *.bdf";
-  preInstall = ''
-    export _get_font_size() {
+  installPhase = ''
+    _get_font_size() {
       _pt=$\{1%.bdf}
       _pt=$\{_pt#*-}
       echo $_pt
     }
-  '';
-  installPhase = ''
 
     for i in Dina_i400-*.bdf; do
         bdftopcf -t -o DinaItalic$(_get_font_size $i).pcf $i
