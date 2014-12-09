@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, pkgconfig, attica, boost, gnutls, libechonest
 , liblastfm, lucenepp, phonon, phonon_backend_vlc, qca2, qjson, qt4, qtkeychain
-, quazip, sparsehash, taglib, websocketpp
+, quazip, sparsehash, taglib, websocketpp, makeWrapper
 
 , enableXMPP      ? true,  libjreen     ? null
 , enableKDE       ? false, kdelibs      ? null
@@ -30,11 +30,18 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     cmake pkgconfig attica boost gnutls libechonest liblastfm lucenepp phonon
     qca2 qjson qt4 qtkeychain quazipQt4 sparsehash taglib websocketpp
+    makeWrapper
   ] ++ stdenv.lib.optional enableXMPP      libjreen
     ++ stdenv.lib.optional enableKDE       kdelibs
     ++ stdenv.lib.optional enableTelepathy telepathy_qt;
 
-  propagatedBuildInputs = [ phonon_backend_vlc ];
+  postInstall = let
+    pluginPath = "${phonon_backend_vlc}/lib/kde4/plugins";
+  in ''
+    for i in "$out"/bin/*; do
+      wrapProgram "$i" --prefix QT_PLUGIN_PATH : "${pluginPath}"
+    done
+  '';
 
   enableParallelBuilding = true;
 
