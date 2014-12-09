@@ -225,7 +225,7 @@ in
 
       binaryCaches = mkOption {
         type = types.listOf types.str;
-        default = [ http://cache.nixos.org/ ];
+        default = [ https://cache.nixos.org/ ];
         description = ''
           List of binary cache URLs used to obtain pre-built binaries
           of Nix packages.
