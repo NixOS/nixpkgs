@@ -3634,6 +3634,8 @@ let
 
     eliom = callPackage ../development/ocaml-modules/eliom { };
 
+    fieldslib = callPackage ../development/ocaml-modules/fieldslib { };
+
     findlib = callPackage ../development/tools/ocaml/findlib { };
 
     fix = callPackage ../development/ocaml-modules/fix { };
