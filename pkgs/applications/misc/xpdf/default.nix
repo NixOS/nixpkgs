@@ -1,5 +1,5 @@
 { enableGUI ? true, enablePDFtoPPM ? true, useT1Lib ? false
-, stdenv, fetchurl, x11 ? null, motif ? null, freetype ? null, t1lib ? null
+, stdenv, fetchurl, zlib, libpng, x11 ? null, motif ? null, freetype ? null, t1lib ? null
 , base14Fonts ? null
 }:
 
@@ -10,14 +10,14 @@ assert useT1Lib -> t1lib != null;
 assert !useT1Lib; # t1lib has multiple unpatched security vulnerabilities
 
 stdenv.mkDerivation {
-  name = "xpdf-3.03";
+  name = "xpdf-3.04";
 
   src = fetchurl {
-    url = ftp://ftp.foolabs.com/pub/xpdf/xpdf-3.03.tar.gz;
-    sha256 = "1jnfzdqc54wa73lw28kjv0m7120mksb0zkcn81jdlvijyvc67kq2";
+    url = ftp://ftp.foolabs.com/pub/xpdf/xpdf-3.04.tar.gz;
+    sha256 = "1rbp54mr3z2x3a3a1qmz8byzygzi223vckfam9ib5g1sfds0qf8i";
   };
 
-  buildInputs =
+  buildInputs = [ zlib libpng ] ++
     stdenv.lib.optionals enableGUI [x11 motif] ++
     stdenv.lib.optional useT1Lib t1lib ++
     stdenv.lib.optional enablePDFtoPPM freetype;
