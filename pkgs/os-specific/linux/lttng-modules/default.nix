@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "01gha02ybbzr86v6s6bqn649jiw5k89kb363b9s1iv8igrdlzhl1";
   };
 
+  # from upstream ML, should be in the next release
+  patches = [ ./build-fix.patch ];
+
   preConfigure = ''
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     export INSTALL_MOD_PATH="$out"
