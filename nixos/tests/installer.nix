@@ -29,6 +29,10 @@ let
                 pkgs.unionfs-fuse
                 pkgs.gummiboot
               ];
+
+            # Don't use https://cache.nixos.org since the fake
+            # cache.nixos.org doesn't do https.
+            nix.binaryCaches = [ http://cache.nixos.org/ ];
           }
         ];
     }).config.system.build.isoImage;
@@ -59,6 +63,8 @@ let
         ${optionalString (!readOnly) "nix.readOnlyStore = false;"}
 
         environment.systemPackages = [ ${optionalString testChannel "pkgs.rlwrap"} ];
+
+        nix.binaryCaches = [ http://cache.nixos.org/ ];
       }
     '';
 
