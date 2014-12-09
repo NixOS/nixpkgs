@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
   # there is a mysterious sh: command not found
   doCheck = false;
 
-  /* The build failed with a missing libranlib.la in hydra,
-     but worked on my computer. I think they have concurrency problems */
-  enableParallelBuilding = false;
+  # In the past, enabling Parallel Building broke some builds.
+  # Let's hope it is fixed.
+  enableParallelBuilding = true;
 
   configureFlags = [ "--enable-readline" "--enable-dl" ];
 
