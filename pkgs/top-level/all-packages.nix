@@ -4370,7 +4370,7 @@ let
     dateutil = pythonPackages.dateutil_1_5;
   };
 
-  buildbotSlave = callPackage ../development/tools/build-managers/buildbot-slave {
+  buildbot-slave = callPackage ../development/tools/build-managers/buildbot-slave {
     inherit (pythonPackages) twisted;
   };
 
@@ -12940,6 +12940,7 @@ let
   htmlTidy = html-tidy;  # added 2014-12-06
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
   nfsUtils = nfs-utils;  # added 2014-12-06
+  buildbotSlave = buildbot-slave;  # added 2014-12-09
 
   opentsdb = callPackage ../tools/misc/opentsdb {};
 
