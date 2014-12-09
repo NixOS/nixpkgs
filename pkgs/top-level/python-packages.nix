@@ -7394,6 +7394,7 @@ let
 
   pyptlib = buildPythonPackage (rec {
     name = "pyptlib-${version}";
+    disabled = isPyPy || isPy3k;
     version = "0.0.6";
 
     src = pkgs.fetchurl {
