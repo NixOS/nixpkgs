@@ -1,26 +1,23 @@
-{ fetchurl, stdenv, autoconf, automake, libtool
+{ fetchurl, stdenv, autoconf, automake, libtool, autoreconfHook
 , openssl, libcap, libnfnetlink, libnetfilter_queue
 }:
 
-let
-  rev = "0e07772316061ad67b8770e7d98d5dd099c9c7c7";
-in
 stdenv.mkDerivation rec {
-  name = "tcpcrypt-2011.07.22";
+  name = "tcpcrypt-0.3-rc1";
 
   src = fetchurl {
-    url = "https://github.com/sorbo/tcpcrypt/archive/${rev}.tar.gz";
-    sha256 = "1f1f1iawlvipnccwh31fxnb8yam1fgh36m0qcbc29qk1ggwrfnkk";
+    url = "https://github.com/scslab/tcpcrypt/archive/v0.3-rc1.tar.gz";
+    sha256 = "1k79xfip95kyy91b6rnmsgl66g52zrnm92ln4jms133nm2k9s4sa";
     name = "${name}.tar.gz";
   };
 
   dontStrip = true;
 
-  buildInputs = [ autoconf automake libtool openssl libcap libnfnetlink libnetfilter_queue ];
+  buildInputs = [ autoreconfHook autoconf automake libtool openssl libcap libnfnetlink libnetfilter_queue ];
 
-  patches = [ ./0001-Run-tcpcryptd-under-uid-93-instead-of-666.patch ];
-
-  preConfigure = "cd user; autoreconf -i";
+  postUnpack = ''
+    mkdir $sourceRoot/m4
+  '';
 
   meta = {
     homepage = "http://tcpcrypt.org/";
