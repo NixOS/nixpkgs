@@ -11121,8 +11121,6 @@ let
 
   weechat = callPackage ../applications/networking/irc/weechat { };
 
-  weechatDevel = lowPrio (callPackage ../applications/networking/irc/weechat/devel.nix { });
-
   westonLite = callPackage ../applications/window-managers/weston {
     pango = null;
     freerdp = null;
