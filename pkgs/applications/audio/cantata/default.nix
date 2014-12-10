@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake
-, withQt4 ? true, qt4
-, withQt5 ? false, qt5
+, withQt4 ? false, qt4
+, withQt5 ? true, qt5
 
 # I'm unable to make KDE work here, crashes at runtime so I simply
 # make Qt4 the default until someone who wants KDE can figure it out.
