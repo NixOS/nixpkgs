@@ -2044,6 +2044,11 @@ let
 
     propagatedBuildInputs = with self; [ self.six ];
 
+    preBuild = ''
+      export LOCALE_ARCHIVE=${localePath}
+      export LC_ALL="en_US.UTF-8"
+    '';
+
     meta = {
       description = "Powerful extensions to the standard datetime module";
       homepage = http://pypi.python.org/pypi/python-dateutil;
