@@ -25,5 +25,6 @@ cabal.mkDerivation (self: {
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ jzellner ];
+    broken = self.stdenv.isLinux && self.stdenv.isi686;
   };
 })
