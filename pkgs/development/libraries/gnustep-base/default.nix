@@ -1,5 +1,5 @@
 { aspell, audiofile
-, gnustep_builder
+, gnustep_make
 , clang, cups
 , fetchurl
 , gmp, gnutls
@@ -15,7 +15,7 @@
 let
   version = "1.24.7";
 in
-gnustep_builder.mkDerivation {
+stdenv.mkDerivation {
   name = "gnustep-base-${version}";
   src = fetchurl {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-base-1.24.7.tar.gz";
@@ -24,7 +24,7 @@ gnustep_builder.mkDerivation {
   buildInputs = [
     aspell audiofile
     clang cups
-    gmp gnutls
+    gmp gnustep_make gnutls
     libffi
     libjpeg libtiff libpng giflib libungif
     libxml2 libxslt libiconv
