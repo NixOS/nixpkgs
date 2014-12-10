@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hxt";
-  version = "9.3.1.7";
-  sha256 = "1dgdq2l9k8v36iahmkxxjmmv955f9gv6lq09nsah9zcscsgm0v2i";
+  version = "9.3.1.9";
+  sha256 = "1f0dri6v821cd7d3jkylnmx0y73z7yrnirl3x4jfcx8arscc27q9";
   buildDepends = [
     binary deepseq filepath HUnit hxtCharproperties hxtRegexXmlschema
     hxtUnicode mtl networkUri parsec
@@ -18,5 +18,6 @@ cabal.mkDerivation (self: {
     description = "A collection of tools for processing XML with Haskell";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ fuuzetsu ];
   };
 })
