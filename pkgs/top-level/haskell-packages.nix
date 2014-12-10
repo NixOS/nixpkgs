@@ -778,6 +778,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   entropy = callPackage ../development/libraries/haskell/entropy {};
 
+  elevator = callPackage ../development/libraries/haskell/elevator {};
+
   equationalReasoning = callPackage ../development/libraries/haskell/equational-reasoning {};
 
   equivalence = callPackage ../development/libraries/haskell/equivalence {};
