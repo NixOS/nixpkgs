@@ -263,6 +263,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     libusb = pkgs.libusb1;
   };
 
+  bindingsPortaudio = callPackage ../development/libraries/haskell/bindings-portaudio {};
+
   bindingsPosix = callPackage ../development/libraries/haskell/bindings-posix {};
 
   bitarray = callPackage ../development/libraries/haskell/bitarray {};
