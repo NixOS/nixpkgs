@@ -2730,6 +2730,10 @@ let
 
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
 
+  uwsgi = callPackage ../servers/uwsgi {
+    plugins = [];
+  };
+
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
 
   volatility = callPackage ../tools/security/volatility { };
