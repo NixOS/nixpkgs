@@ -4076,17 +4076,6 @@ let
     inherit php pkgs;
   });
 
-  php53 = callPackage ../development/interpreters/php/5.3.nix { };
-
-  php_fpm53 = callPackage ../development/interpreters/php/5.3.nix {
-    config = config // {
-      php = (config.php or {}) // {
-        fpm = true;
-        apxs2 = false;
-      };
-    };
-  };
-
   php54 = callPackage ../development/interpreters/php/5.4.nix { };
 
   picolisp = callPackage ../development/interpreters/picolisp {};
