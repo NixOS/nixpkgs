@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
       url = http://download.sarine.nl/Programs/gmpc/11.8/libmpd-11.8.17.tar.gz;
       sha256 = "10vspwsgr8pwf3qp2bviw6b2l8prgdiswgv7qiqiyr0h1mmk487y";
     };
+    patches = [ ./libmpd-11.8.17-remove-strndup.patch ];
     buildInputs = [ pkgconfig glib ];
   };
 
