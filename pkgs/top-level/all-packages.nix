@@ -4122,9 +4122,9 @@ let
     then pkgs.oraclejdk7distro true false
     else (callPackage ../development/compilers/jdk/jdk7-solaris.nix { });
 
-  oraclejdk7psu = pkgs.oraclejdk7psu_distro true false;
-
-  oraclejdk8 = pkgs.oraclejdk8distro true false;
+  oraclejdk8 = if !stdenv.isSunOS
+    then pkgs.oraclejdk8distro true false
+    else (callPackage ../development/compilers/jdk/jdk8-solaris.nix { });
 
   oraclejdk8psu = pkgs.oraclejdk8psu_distro true false;
 

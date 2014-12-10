@@ -1,6 +1,6 @@
 { swingSupport ? false
 , stdenv
-, fetchurl
+, requireFile
 , unzip
 , xlibs ? null
 , installjdk ? true
@@ -21,19 +21,21 @@ let
     else
       abort "this JDK requires i686-solaris or x86_64 solaris";
 
-  update = "60";
+  update = "72";
 
-  build = "15";
+  build = "";
 
   # Find new versions at: http://jdk7.java.net/download.html
-  x86 = fetchurl {
-    url = http://www.java.net/download/jdk7u60/archive/b15/binaries/jdk-7u60-ea-bin-b15-solaris-i586-16_apr_2014.tar.gz;
-    md5 = "aa77eb47ce7a1bc5940eb141d99b0d58";
+  x86 = requireFile {
+    name   = "jdk-7u72-solaris-i586.tar.gz";
+    url    = http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html;
+    sha256 = "a3eea6b8e6ba7196ff747001e5cef8f9efaa2c0c5b04dad7ec95476495f85b77";
   };
 
-  amd64 = fetchurl {
-    url = http://www.java.net/download/jdk7u60/archive/b15/binaries/jdk-7u60-ea-bin-b15-solaris-x64-16_apr_2014.tar.gz;
-    md5 = "c6b5370fed79bf0ebd445a22e8f7b846";
+  amd64 = requireFile {
+    name   = "jdk-7u72-solaris-x64.tar.gz";
+    url    = http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html;
+    sha256 = "23fb42a8f9131b231d097b568521f8e05a4f57879a375010386e665e06d743dc";
   };
 
 in
