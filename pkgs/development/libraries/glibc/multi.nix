@@ -1,7 +1,10 @@
 { runCommand, glibc, glibc32
 }:
 
-runCommand "${glibc.name}-multi"
+let
+  nameVersion = builtins.parseDrvName glibc.name;
+in
+runCommand "${nameVersion.name}-multi-${nameVersion.version}"
   { inherit glibc32;
    glibc64 = glibc;
   }
