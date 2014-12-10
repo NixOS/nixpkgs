@@ -11,6 +11,7 @@ g: # Get dependencies from patched gems
     activerecord = g.activerecord_4_1_8;
     activesupport = g.activesupport_4_1_8;
     addressable = g.addressable_2_3_6;
+    archive_tar_minitar = g.archive_tar_minitar_0_5_2;
     arel = g.arel_5_0_1_20140414130214;
     atoulme_Antwrap = g.atoulme_Antwrap_0_7_5;
     autotest_rails = g.autotest_rails_4_2_1;
@@ -38,6 +39,7 @@ g: # Get dependencies from patched gems
     daemons = g.daemons_1_1_9;
     diff_lcs = g.diff_lcs_1_2_5;
     dimensions = g.dimensions_1_2_0;
+    docker_api = g.docker_api_1_7_6;
     domain_name = g.domain_name_0_5_22;
     dotenv = g.dotenv_1_0_2;
     em_resolv_replace = g.em_resolv_replace_1_1_3;
@@ -79,8 +81,10 @@ g: # Get dependencies from patched gems
     launchy = g.launchy_2_4_3;
     liquid = g.liquid_2_6_1;
     listen = g.listen_2_8_3;
+    little_plugger = g.little_plugger_1_1_3;
     locale = g.locale_2_1_0;
     lockfile = g.lockfile_2_1_3;
+    logging = g.logging_1_8_2;
     macaddr = g.macaddr_1_7_1;
     mail = g.mail_2_6_3;
     mechanize = g.mechanize_2_7_3;
@@ -146,6 +150,7 @@ g: # Get dependencies from patched gems
     slop = g.slop_3_6_0;
     sprockets = g.sprockets_2_12_3;
     sprockets_rails = g.sprockets_rails_2_2_2;
+    synapse = g.synapse_0_11_1;
     syslog_protocol = g.syslog_protocol_0_9_2;
     systemu = g.systemu_2_6_4;
     taskjuggler = g.taskjuggler_3_5_0;
@@ -175,8 +180,10 @@ g: # Get dependencies from patched gems
     xapian_ruby = g.xapian_ruby_1_2_17;
     xml_simple = g.xml_simple_1_1_2;
     yajl_ruby = g.yajl_ruby_1_2_1;
+    zk = g.zk_1_9_4;
+    zookeeper = g.zookeeper_1_4_9;
   };
-  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''compass'' ''cucumber'' ''erubis'' ''execjs'' ''fakes3'' ''foreman'' ''gettext'' ''heroku'' ''iconv'' ''jekyll'' ''jsduck'' ''lockfile'' ''mechanize'' ''newrelic_plugin'' ''nix'' ''papertrail-cli'' ''rabbitmq_manager-0.1.0'' ''rails'' ''rake'' ''rb-fsevent'' ''rdoc'' ''redis'' ''remote_syslog'' ''riemann-dash'' ''right_aws'' ''rmail'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''taskjuggler'' ''terminal-notifier'' ''thin'' ''tmuxinator'' ''travis'' ''trollop'' ''uglifier'' ''uuid'' ''xapian-full'' ''xapian-ruby'' ''yajl-ruby'' ];
+  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''compass'' ''cucumber'' ''erubis'' ''execjs'' ''fakes3'' ''foreman'' ''gettext'' ''heroku'' ''iconv'' ''jekyll'' ''jsduck'' ''lockfile'' ''mechanize'' ''newrelic_plugin'' ''nix'' ''papertrail-cli'' ''rabbitmq_manager-0.1.0'' ''rails'' ''rake'' ''rb-fsevent'' ''rdoc'' ''redis'' ''remote_syslog'' ''riemann-dash'' ''right_aws'' ''rmail'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''synapse'' ''taskjuggler'' ''terminal-notifier'' ''thin'' ''tmuxinator'' ''travis'' ''trollop'' ''uglifier'' ''uuid'' ''xapian-full'' ''xapian-ruby'' ''yajl-ruby'' ];
   gems = {
     ZenTest_4_11_0 = {
       basename = ''ZenTest'';
@@ -288,6 +295,17 @@ adds support for IRIs and URI templates.
       name = ''addressable-2.3.6'';
       requiredGems = [  ];
       sha256 = ''137fj0whmn1kvaq8wjalp8x4qbblwzvg3g4bfx8d8lfi6f0w48p8'';
+    };
+    archive_tar_minitar_0_5_2 = {
+      basename = ''archive_tar_minitar'';
+      meta = {
+        description = ''Provides POSIX tarchive management from Ruby programs.'';
+        homepage = ''http://rubyforge.org/projects/ruwiki/'';
+        longDescription = ''Archive::Tar::Minitar is a pure-Ruby library and command-line utility that provides the ability to deal with POSIX tar(1) archive files. The implementation is based heavily on Mauricio Ferna'ndez's implementation in rpa-base, but has been reorganised to promote reuse in other projects.'';
+      };
+      name = ''archive-tar-minitar-0.5.2'';
+      requiredGems = [  ];
+      sha256 = ''1j666713r3cc3wb0042x0wcmq2v11vwwy5pcaayy5f0lnd26iqig'';
     };
     arel_5_0_1_20140414130214 = {
       basename = ''arel'';
@@ -671,6 +689,17 @@ We are happy to report that this issue has been resolved.'';
       name = ''dimensions-1.2.0'';
       requiredGems = [  ];
       sha256 = ''1pqb7yzjcpbgbyi196ifqbd1wy570cn12bkzcvpcha4xilhajja0'';
+    };
+    docker_api_1_7_6 = {
+      basename = ''docker_api'';
+      meta = {
+        description = ''A simple REST client for the Docker Remote API'';
+        homepage = ''https://github.com/swipely/docker-api'';
+        longDescription = ''A simple REST client for the Docker Remote API'';
+      };
+      name = ''docker-api-1.7.6'';
+      requiredGems = [ g.excon_0_42_1 g.json_1_8_1 g.archive_tar_minitar_0_5_2 ];
+      sha256 = ''1ari4f2rk9w5j5mci7wlqiabqispd2pr9m6qwbqq1ryrlqvksr28'';
     };
     domain_name_0_5_22 = {
       basename = ''domain_name'';
@@ -1158,6 +1187,19 @@ using a strict syntax definition and supporting several common extensions.
       requiredGems = [ g.celluloid_0_16_0 g.rb_fsevent_0_9_4 g.rb_inotify_0_9_5 ];
       sha256 = ''1cvnr8p6kq7z63a32lwcx24ama6rsyh501pzmlpd2gvi891jxbgw'';
     };
+    little_plugger_1_1_3 = {
+      basename = ''little_plugger'';
+      meta = {
+        description = ''LittlePlugger is a module that provides Gem based plugin management.'';
+        homepage = ''http://gemcutter.org/gems/little-plugger'';
+        longDescription = ''LittlePlugger is a module that provides Gem based plugin management.
+By extending your own class or module with LittlePlugger you can easily
+manage the loading and initializing of plugins provided by other gems.'';
+      };
+      name = ''little-plugger-1.1.3'';
+      requiredGems = [  ];
+      sha256 = ''0crxv0yl5iwmqzj2y7hh9s7qbwr7s7305vgdbsanbzq059ca98yp'';
+    };
     locale_2_1_0 = {
       basename = ''locale'';
       meta = {
@@ -1180,6 +1222,20 @@ using a strict syntax definition and supporting several common extensions.
       name = ''lockfile-2.1.3'';
       requiredGems = [  ];
       sha256 = ''0dij3ijywylvfgrpi2i0k17f6w0wjhnjjw0k9030f54z56cz7jrr'';
+    };
+    logging_1_8_2 = {
+      basename = ''logging'';
+      meta = {
+        description = ''A flexible and extendable logging library for Ruby'';
+        homepage = ''http://rubygems.org/gems/logging'';
+        longDescription = ''Logging is a flexible logging library for use in Ruby programs based on the
+design of Java's log4j library. It features a hierarchical logging system,
+custom level names, multiple output destinations per log event, custom
+formatting, and more.'';
+      };
+      name = ''logging-1.8.2'';
+      requiredGems = [ g.little_plugger_1_1_3 g.multi_json_1_10_1 ];
+      sha256 = ''0vcckpk3sffhz9phpzkbbqzzcffsg2n292rmq5b4gx6dp9g4n86p'';
     };
     macaddr_1_7_1 = {
       basename = ''macaddr'';
@@ -2202,6 +2258,16 @@ interpreters.'';
       requiredGems = [ g.sprockets_2_12_3 g.actionpack_4_1_8 g.activesupport_4_1_8 ];
       sha256 = ''192d4vfl1gjz6phli6sqk98364x6v4jkpl5imajvimsinvgyv81b'';
     };
+    synapse_0_11_1 = {
+      basename = ''synapse'';
+      meta = {
+        description = '': Write a gem summary'';
+        longDescription = '': Write a gem description'';
+      };
+      name = ''synapse-0.11.1'';
+      requiredGems = [ g.zk_1_9_4 g.docker_api_1_7_6 ];
+      sha256 = ''121ls0ypbz7i24acrldq8dzp8z6a4brl4vxngy51asgjwpalrx52'';
+    };
     syslog_protocol_0_9_2 = {
       basename = ''syslog_protocol'';
       meta = {
@@ -2542,6 +2608,35 @@ to Ruby/JRuby.
       name = ''yajl-ruby-1.2.1'';
       requiredGems = [  ];
       sha256 = ''0zvvb7i1bl98k3zkdrnx9vasq0rp2cyy5n7p9804dqs4fz9xh9vf'';
+    };
+    zk_1_9_4 = {
+      basename = ''zk'';
+      meta = {
+        description = ''A high-level wrapper around the zookeeper driver'';
+        homepage = ''https://github.com/slyphon/zk'';
+        longDescription = ''A high-level wrapper around the zookeeper driver
+'';
+      };
+      name = ''zk-1.9.4'';
+      requiredGems = [ g.zookeeper_1_4_9 g.logging_1_8_2 ];
+      sha256 = ''1rgghyhnbqp7lcn0vik3rn93msv51igsh5cwag88rp6hhnvd141j'';
+    };
+    zookeeper_1_4_9 = {
+      basename = ''zookeeper'';
+      meta = {
+        description = ''Apache ZooKeeper driver for Rubies'';
+        homepage = ''https://github.com/slyphon/zookeeper'';
+        longDescription = ''A low-level multi-Ruby wrapper around the ZooKeeper API bindings. For a
+friendlier interface, see http://github.com/slyphon/zk. Currently supported:
+MRI: {1.8.7, 1.9.2, 1.9.3}, JRuby: ~&gt; 1.6.7, Rubinius: 2.0.testing, REE 1.8.7.
+
+This library uses version 3.4.5 of zookeeper bindings.
+
+'';
+      };
+      name = ''zookeeper-1.4.9'';
+      requiredGems = [  ];
+      sha256 = ''1zjb8sri15nqyqv1w9v34dv2d7q1lf3phr126mcfrj8v6vawhzcc'';
     };
   };
 }
