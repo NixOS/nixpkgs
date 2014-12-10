@@ -1226,6 +1226,8 @@ let
 
   ftgl212 = callPackage ../development/libraries/ftgl/2.1.2.nix { };
 
+  ftop = callPackage ../os-specific/linux/ftop { };
+
   fuppes = callPackage ../tools/networking/fuppes {
     ffmpeg = ffmpeg_0_6_90;
   };
