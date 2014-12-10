@@ -77,9 +77,13 @@ stdenv.mkDerivation rec {
     cd ..
     cp -r  kernel-patches $out
   '';
-  installPhase = ''
+
+  installPhase = let
+    perlVersion = (builtins.parseDrvName perl.name).version;
+  in ''
     for i in $out/bin/*;  do
-      wrapProgram $i --prefix PERL5LIB : "$PERL5LIB:$out/lib/perl5/5.10.1/i686-linux-thread-multi/"
+      wrapProgram $i --prefix PERL5LIB : \
+        "$PERL5LIB:$out/lib/perl5/${perlVersion}/${stdenv.system}-thread-multi/"
     done
   '';
 
