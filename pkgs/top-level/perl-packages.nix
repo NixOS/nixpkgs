@@ -178,13 +178,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   AppCmd = buildPerlPackage {
-    name = "App-Cmd-0.320";
+    name = "App-Cmd-0.326";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/App-Cmd-0.320.tar.gz;
-      sha256 = "ca6174f634bbe5b73c5f5ad6e0f3b3385568934282f4e848da8e78025b2b185e";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/App-Cmd-0.326.tar.gz;
+      sha256 = "1z6vp1am170fczc0srj63rdvrdbrjk3acmj6ka5v5n6qim4xsv9b";
     };
     buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ CaptureTiny ClassLoad DataOptList GetoptLongDescriptive IOTieCombine StringRewritePrefix SubExporter SubInstall ];
+    propagatedBuildInputs = [ CaptureTiny ClassLoad DataOptList GetoptLongDescriptive IOTieCombine StringRewritePrefix SubExporter ModulePluggable SubInstall ];
     meta = {
       homepage = https://github.com/rjbs/app-cmd;
       description = "Write command line apps with less suffering";
@@ -1128,10 +1128,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CGIFormBuilder = buildPerlPackage rec {
-    name = "CGI-FormBuilder-3.0501";
+    name = "CGI-FormBuilder-3.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NW/NWIGER/${name}.tgz";
-      sha256 = "031sgxifl2dq8d4s4d9vnixvqdd3p952k0jrkyqp823k74glps25";
+      sha256 = "0qx8kxj0iy55ss9kraqr8q2m4igi2ylajff7d6qvphqpfx90fjb5";
     };
   };
 
@@ -1645,11 +1645,11 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ CGICookieXS ];
   };
 
-  Coro = buildPerlPackage {
-    name = "Coro-6.37";
+  Coro = buildPerlPackage rec {
+    name = "Coro-6.41";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/ML/MLEHMANN/Coro-6.37.tar.gz;
-      sha256 = "08qkwv7rpyb7zcp128crjakflc027sjkx9d2s1gzc21grsq9a456";
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${name}.tar.gz";
+      sha256 = "1r1gam4yyl6w88ga8rkbvj33v1r5ald3ryqlpg13c7y1i79yizxa";
     };
     propagatedBuildInputs = [ AnyEvent Guard CommonSense ];
     meta = {
@@ -3343,10 +3343,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExceptionBase = buildPerlPackage {
-    name = "Exception-Base-0.2401";
+    name = "Exception-Base-0.25";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DE/DEXTER/Exception-Base-0.2401.tar.gz;
-      sha256 = "0z4pckv3iwzz5s4xrv96kg9620s96kim57nfrxbqhh6pyd5jfazv";
+      url = mirror://cpan/authors/id/D/DE/DEXTER/Exception-Base-0.25.tar.gz;
+      sha256 = "1s2is862xba2yy633wn2nklrya36yrlwxlbpqjrv8m31xj2c8khw";
     };
     buildInputs = [ TestUnitLite ];
     meta = {
@@ -4209,11 +4209,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTMLFormHandler = buildPerlPackage {
-    name = "HTML-FormHandler-0.40056";
+    name = "HTML-FormHandler-0.40057";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GS/GSHANK/HTML-FormHandler-0.40056.tar.gz;
-      sha256 = "012wijl69qjazghq2ywikk0jdxjbd9rfsxmwwq7lbpfjy2fiymqx";
+      url = mirror://cpan/authors/id/G/GS/GSHANK/HTML-FormHandler-0.40057.tar.gz;
+      sha256 = "1hn9shhbsi4pdp396ia2hky3i0imnxgwvhy57gp0jjhy5qyvafvm";
     };
+    # a single test is failing on perl 5.20
+    doCheck = false;
     buildInputs = [ FileShareDirInstall PadWalker TestDifferences TestException TestMemoryCycle ];
     propagatedBuildInputs = [ ClassLoad DataClone DateTime DateTimeFormatStrptime EmailValid FileShareDir HTMLTree JSON ListAllUtils Moose MooseXGetopt MooseXTypes MooseXTypesCommon MooseXTypesLoadableClass SubExporter SubName TryTiny aliased namespaceautoclean ];
     meta = {
@@ -5920,13 +5922,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooseXAppCmd = buildPerlPackage {
-    name = "MooseX-App-Cmd-0.10";
+    name = "MooseX-App-Cmd-0.27";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MJ/MJGARDNER/MooseX-App-Cmd-0.10.tar.gz;
-      sha256 = "6d2d8fdc4f3f7fa76dc82c10d71b099f1572c054a72f373e5a9fa6237e48634a";
+      url = mirror://cpan/authors/id/M/MJ/MJGARDNER/MooseX-App-Cmd-0.27.tar.gz;
+      sha256 = "18wf8xmp0b8g76rlkmzw9m026w0l5k972w3z9xcskwqmg9p0wg3k";
     };
     buildInputs = [ MooseXConfigFromFile TestOutput YAML ];
-    propagatedBuildInputs = [ AppCmd GetoptLongDescriptive Moose MooseXConfigFromFile MooseXGetopt MooseXHasOptions MooseXMarkAsMethods Testuseok ];
+    propagatedBuildInputs = [ AppCmd GetoptLongDescriptive Moose AnyMoose MooseXConfigFromFile MooseXGetopt MooseXHasOptions MooseXMarkAsMethods Testuseok ];
     meta = {
       homepage = http://metacpan.org/release/MooseX-App-Cmd;
       description = "Mashes up MooseX::Getopt and App::Cmd";
@@ -5951,6 +5953,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/D/DR/DROLSKY/MooseX-AttributeHelpers-0.23.tar.gz;
       sha256 = "3f63f60d94d840a309d9137f78605e15f07c977fd15a4f4b55bd47b65ed52be1";
     };
+    patches = [ ../development/perl-modules/MooseXAttributeHelpers-perl-5.20.patch ];
     buildInputs = [ Moose TestException ];
     propagatedBuildInputs = [ Moose ];
     meta = {
