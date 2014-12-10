@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   # from upstream ML, should be in the next release
-  patches = [ ./build-fix.patch ];
+  patches = [ ./build-fix.patch ./6f0af2643c40b57280796eaa4fe60ce4f678b6dc.patch ];
 
   preConfigure = ''
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
