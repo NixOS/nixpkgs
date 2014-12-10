@@ -4,6 +4,8 @@
 }:
 
 kde {
+  patches = [ ./CVE-2014-8600.diff ];
+
   buildInputs = [
     kdelibs attica xz bzip2 libssh libjpeg exiv2 ntrack
     qca2 samba libcanberra pulseaudio gpgme
