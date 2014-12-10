@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
       --replace "lsof -wnPi"   "${lsof}/bin/lsof"
 
     substituteInPlace ./arm --replace '"$0" = /usr/bin/arm' 'true'
+    substituteInPlace ./arm --replace "python" "${python}/bin/python"
 
     for i in ./install ./arm ./src/gui/controller.py ./src/cli/wizard.py ./src/resources/torrcOverride/override.h ./src/resources/torrcOverride/override.py ./src/resources/arm.1 ./setup.py; do
       substituteInPlace $i --replace "/usr/share" "$out/share"
