@@ -10,7 +10,7 @@
 <para>This section lists the release notes for each stable version of NixOS.</para>
 </partintro>
 
-<xi:include href="rl-1411.xml" />
+<xi:include href="rl-1412.xml" />
 <xi:include href="rl-1404.xml" />
 <xi:include href="rl-1310.xml" />
 
