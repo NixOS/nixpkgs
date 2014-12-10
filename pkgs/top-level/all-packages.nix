@@ -4222,6 +4222,7 @@ let
   tcl = callPackage ../development/interpreters/tcl { };
 
   xulrunner = callPackage ../development/interpreters/xulrunner {
+    stdenv = if stdenv.isLinux then useGoldLinker stdenv else stdenv;
     inherit (gnome) libIDL;
     inherit (pythonPackages) pysqlite;
   };
