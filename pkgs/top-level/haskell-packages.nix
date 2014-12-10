@@ -345,6 +345,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   bzlib = callPackage ../development/libraries/haskell/bzlib {};
 
+  call = callPackage ../development/libraries/haskell/call {};
+
   c2hs = callPackage ../development/tools/haskell/c2hs {};
 
   c2hsc = callPackage ../development/tools/haskell/c2hsc {};
