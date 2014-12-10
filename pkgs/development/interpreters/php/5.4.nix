@@ -243,7 +243,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
   src = fetchurl {
     url = "http://www.php.net/distributions/php-${version}.tar.bz2";
-    sha256 = "0d425zxka3m1l0ygsls4r56qy374rf6skl4ggim0k2y1y08fmm2p";
+    sha256 = "0svlp5alqvm3fxzf2044ygziacy2ks9vbrnimkpqnxqgrmjl5nwc";
   };
 
   meta = {
