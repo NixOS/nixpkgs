@@ -1,5 +1,5 @@
---- cmake/modules/RootBuildOptions.cmake	1969-12-31 20:30:01.000000000 -0330
-+++ cmake/modules/RootBuildOptions.cmake	2014-01-10 14:09:29.424937408 -0330
+--- a/cmake/modules/RootBuildOptions.cmake	1969-12-31 20:30:01.000000000 -0330
++++ b/cmake/modules/RootBuildOptions.cmake	2014-01-10 14:09:29.424937408 -0330
 @@ -149,7 +149,7 @@
  
  #---General Build options----------------------------------------------------------------------
