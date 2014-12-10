@@ -1,0 +1,71 @@
+From 6f0af2643c40b57280796eaa4fe60ce4f678b6dc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andr=C3=A9=20Goddard=20Rosa?= <andre.goddard@gmail.com>
+Date: Thu, 13 Nov 2014 21:33:02 -0800
+Subject: [PATCH] Fix compilation on Linux kernel >= 3.18.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Since kernel commit 8a9522d2fe compilation fails as kvm_age_page
+tracepoint had its signature changed, so update it accordingly.
+
+Tested pointing to kernels:
+    git reset --hard v3.17; make init/version.o
+    git reset --hard v3.18-rc1; make init/version.o
+
+Signed-off-by: André Goddard Rosa <andre.goddard@gmail.com>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ instrumentation/events/lttng-module/kvm.h | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ mode change 100644 => 100755 instrumentation/events/lttng-module/kvm.h
+
+diff --git a/instrumentation/events/lttng-module/kvm.h b/instrumentation/events/lttng-module/kvm.h
+old mode 100644
+new mode 100755
+index c0d42e2..4f95095
+--- a/instrumentation/events/lttng-module/kvm.h
++++ b/instrumentation/events/lttng-module/kvm.h
+@@ -232,6 +232,34 @@ LTTNG_TRACEPOINT_EVENT(kvm_fpu,
+ 	TP_printk("%s", __print_symbolic(__entry->load, kvm_fpu_load_symbol))
+ )
+ 
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0))
++
++LTTNG_TRACEPOINT_EVENT(kvm_age_page,
++	TP_PROTO(ulong gfn, int level, struct kvm_memory_slot *slot, int ref),
++	TP_ARGS(gfn, level, slot, ref),
++
++	TP_STRUCT__entry(
++		__field(        u64,    hva             )
++		__field(        u64,    gfn             )
++		__field(        u8,     level           )
++		__field(        u8,     referenced      )
++	),
++
++	TP_fast_assign(
++		tp_assign(gfn, gfn)
++		tp_assign(level, level)
++		tp_assign(hva, ((gfn - slot->base_gfn) <<
++			PAGE_SHIFT) + slot->userspace_addr)
++		tp_assign(referenced, ref)
++	),
++
++	TP_printk("hva %llx gfn %llx level %u %s",
++		__entry->hva, __entry->gfn, __entry->level,
++		__entry->referenced ? "YOUNG" : "OLD")
++)
++
++#else
++
+ LTTNG_TRACEPOINT_EVENT(kvm_age_page,
+ 	TP_PROTO(ulong hva, struct kvm_memory_slot *slot, int ref),
+ 	TP_ARGS(hva, slot, ref),
+@@ -254,6 +282,7 @@ LTTNG_TRACEPOINT_EVENT(kvm_age_page,
+ 		  __entry->referenced ? "YOUNG" : "OLD")
+ )
+ #endif
++#endif
+ 
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38))
+ 
