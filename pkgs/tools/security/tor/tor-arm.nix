@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, python, setuptools, lsof, nettools, makeWrapper }:
+{ stdenv, fetchurl, python, setuptools, lsof, nettools, makeWrapper
+, pythonPackages, ncurses }:
 
 stdenv.mkDerivation rec {
   name    = "tor-arm-${version}";
@@ -9,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1yi87gdglkvi1a23hv5c3k7mc18g0rw7b05lfcw81qyxhlapf3pw";
   };
 
-  buildInputs = [ python setuptools lsof nettools makeWrapper ];
+  buildInputs =
+    [ python pythonPackages.curses setuptools lsof nettools makeWrapper ];
 
   patchPhase = ''
     substituteInPlace ./setup.py --replace "/usr/bin" "$out/bin"
@@ -34,7 +36,9 @@ stdenv.mkDerivation rec {
 
     for i in $(cd $out/bin && ls); do
       wrapProgram $out/bin/$i \
-        --prefix PYTHONPATH : "$(toPythonPath $out):$out/libexec:$PYTHONPATH"
+        --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pythonPackages.curses}):$out/libexec:$PYTHONPATH" \
+	--set TERMINFO "${ncurses}/share/terminfo" \
+	--set TERM     "xterm"
     done
   '';
 
