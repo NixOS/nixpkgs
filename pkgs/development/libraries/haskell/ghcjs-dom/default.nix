@@ -9,8 +9,8 @@ cabal.mkDerivation (self: {
   version = "0.1.0.0";
   src = fetchgit {
     url = https://github.com/ghcjs/ghcjs-dom;
-    rev = "81805e75ccd41501774b90c04efd9e00d52e9798";
-    sha256 = "3aa56fb81974533661aa056ed080edab29bef8ab26dae61999de4452f95949f6";
+    rev = "15414daf6d7478eb98b66a6bff76607f875684a4";
+    sha256 = "a1661eb3ad58c8214f75886fbeaa43b87bb3072c3abe087ad66832906a83e95a";
   };
   buildDepends = [ mtl ] ++ (if buildType == "jsffi" then [ ghcjsBase ] else if buildType == "webkit" then [ glib transformers gtk webkit ] else throw "unrecognized buildType");
   configureFlags = if buildType == "jsffi" then [ ] else if buildType == "webkit" then [ "-f-ghcjs" "-fwebkit" "-f-gtk3" ] else throw "unrecognized buildType";
