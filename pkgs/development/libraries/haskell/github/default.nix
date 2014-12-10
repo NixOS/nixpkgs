@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "github";
-  version = "0.13";
-  sha256 = "1vvfrlz6p43mrzskvhp9skh6xbgd5pqcn06wvxw31plpamf5pmzn";
+  version = "0.13.1";
+  sha256 = "0rz89lpswxxsdyfjb63v9md96bxr3abxzwqryh1a2jxhm7f1ia5l";
   buildDepends = [
     aeson attoparsec base16Bytestring byteable caseInsensitive conduit
     cryptohash dataDefault failure hashable HTTP httpConduit httpTypes
