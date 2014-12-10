@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     curlOpts = "--referer http://support.amd.com/en-us/download/desktop?os=Linux%20x86_64";
   };
 
-  # most patches are taken from gentoo
+  patchPhase = "patch -p1 < ${./fglrx_3.17rc6-no_hotplug.patch}";
   patchPhaseSamples = "patch -p2 < ${./patch-samples.patch}";
 
   buildInputs =
