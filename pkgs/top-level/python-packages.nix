@@ -428,13 +428,13 @@ let
 
 
   apscheduler = buildPythonPackage rec {
-    name = "APScheduler-2.1.2";
+    name = "APScheduler-3.0.1";
 
-    propagatedBuildInputs = with self; [ futures tzlocal six pytest mock];
+    propagatedBuildInputs = with self; [ futures tzlocal six pytest mock sqlalchemy9 ];
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/A/APScheduler/APScheduler-2.1.2.tar.gz";
-      md5 = "6862959d460c16ef325d63e1fc3a6684";
+      url = "https://pypi.python.org/packages/source/A/APScheduler/${name}.tar.gz";
+      sha256 = "1dcyk58svhhd7flpq0fbyzcp0z3a1as4ddmdv1rxqvqng0sxhwaf";
     };
 
     meta = with pkgs.stdenv.lib; {
@@ -2022,6 +2022,24 @@ let
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/python-dateutil/python-${name}.tar.gz";
       sha256 = "02dhw57jf5kjcp7ng1if7vdrbnlpb9yjmz7wygwwvf3gni4766bg";
+    };
+
+    propagatedBuildInputs = with self; [ self.six ];
+
+    meta = {
+      description = "Powerful extensions to the standard datetime module";
+      homepage = http://pypi.python.org/pypi/python-dateutil;
+      license = "BSD-style";
+    };
+  });
+
+  # flexget requires 2.1
+  dateutil_2_1 = buildPythonPackage (rec {
+    name = "dateutil-2.1";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/p/python-dateutil/python-${name}.tar.gz";
+      sha256 = "1vlx0lpsxjxz64pz87csx800cwfqznjyr2y7nk3vhmzhkwzyqi2c";
     };
 
     propagatedBuildInputs = with self; [ self.six ];
@@ -3975,21 +3993,22 @@ let
   };
 
   flexget = buildPythonPackage rec {
-    version = "1.2.201";
+    version = "1.2.234";
     name = "FlexGet-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/F/FlexGet/${name}.tar.gz";
-      md5 = "e940845fc38ee602109a876455a02084";
+      md5 = "0897b6db25e8a28e809d131a8ad017e4";
     };
 
+    doCheck = false;
+
     buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ paver feedparser sqlalchemy pyyaml rpyc
+    propagatedBuildInputs = with self; [ paver feedparser sqlalchemy9 pyyaml rpyc
 	    beautifulsoup4 html5lib pyrss2gen pynzb progressbar jinja2 flask
-	    cherrypy requests dateutil_1_5 jsonschema python_tvrage tmdb3
-            guessit pathpy
-        ]
+	    cherrypy requests dateutil_2_1 jsonschema python_tvrage tmdb3
+      guessit pathpy apscheduler ]
 	# enable deluge and transmission plugin support, if they're installed
 	++ stdenv.lib.optional (pkgs.config.pythonPackages.deluge or false)
 	    pythonpackages.deluge
@@ -4462,17 +4481,17 @@ let
   };
 
   guessit = buildPythonPackage rec {
-    version = "0.9.3";
+    version = "0.9.4";
     name = "guessit-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/g/guessit/${name}.tar.gz";
-      sha256 = "16kbxdz5zm3mfn739ynis04zw76x2gn1lz5d7vcwh8hzaj16yyk6";
+      sha256 = "068d3dmyk4v04p2zna0340lsdnpkm10gyza62apd9akgjh9rfs48";
     };
 
     propagatedBuildInputs = with self; [
-      dateutil_1_5 requests stevedore babelfish pyyaml
+      dateutil_2_1 requests stevedore babelfish pyyaml
     ];
 
     # A unicode test fails
