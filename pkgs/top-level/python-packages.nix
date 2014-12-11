@@ -4869,7 +4869,7 @@ let
       sha256 = "1v9pjb9idapjlc75p6h06kx7bi8zxhfgj93yxq1bn337kmyk1xdf";
     };
 
-    buildInputs = with self; [ configparser argparse ];
+    propagatedBuildInputs = with self; [ configparser argparse ];
 
     meta = with stdenv.lib; {
       description = "Yet Another Config Parser";
