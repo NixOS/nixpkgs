@@ -5461,6 +5461,11 @@ let
       sha256 = "0k1d7v8aa4xd3f9h8m5crl647136ba15i9nzdrpxg5aqmv2n0i0p";
     };
 
+    patches = singleton (pkgs.fetchurl {
+      url = https://github.com/nbp/mozservices/commit/f86c0b0b870cd8f80ce90accde9e16ecb2e88863.diff;
+      sha256 = "1lnghx821f6dqp3pa382ka07cncdz7hq0mkrh44d0q3grvrlrp9n";
+    });
+
     doCheck = false; # lazy packager
     propagatedBuildInputs = with self; [ pyramid simplejson konfig ];
 
