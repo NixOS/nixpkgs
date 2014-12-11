@@ -11088,8 +11088,6 @@ let
     ffmpeg = ffmpeg_2_3;
   };
 
-  libvlc = vlc.override { onlyLibVLC = true; };
-
   vmpk = callPackage ../applications/audio/vmpk { };
 
   vnstat = callPackage ../applications/networking/vnstat { };
