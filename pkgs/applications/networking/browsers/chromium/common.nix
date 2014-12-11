@@ -13,7 +13,7 @@
 , bison, gperf
 , glib, gtk, dbus_glib
 , libXScrnSaver, libXcursor, libXtst, mesa
-, protobuf, speechd, libXdamage
+, protobuf, speechd, libXdamage, cups
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -25,7 +25,7 @@
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome_keyring3 ? null
 , proprietaryCodecs ? true
-, cupsSupport ? false
+, cupsSupport ? true
 , pulseSupport ? false, pulseaudio ? null
 , hiDPISupport ? false
 
@@ -117,7 +117,7 @@ let
     ] ++ optional gnomeKeyringSupport libgnome_keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optional enableSELinux libselinux
-      ++ optional cupsSupport libgcrypt
+      ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional pulseSupport pulseaudio;
 
     # XXX: Wait for https://crbug.com/239107 and https://crbug.com/239181 to

@@ -41,7 +41,7 @@ mirror://xorg/X11R7.7/src/everything/font-mutt-misc-1.0.3.tar.bz2
 mirror://xorg/X11R7.7/src/everything/font-schumacher-misc-1.1.2.tar.bz2
 mirror://xorg/X11R7.7/src/everything/font-screen-cyrillic-1.0.4.tar.bz2
 mirror://xorg/X11R7.7/src/everything/font-sony-misc-1.0.3.tar.bz2
-mirror://xorg/X11R7.7/src/everything/fontsproto-2.1.3.tar.bz2
+mirror://xorg/individual/proto/fontsproto-2.1.3.tar.bz2
 mirror://xorg/X11R7.7/src/everything/font-sun-misc-1.0.3.tar.bz2
 mirror://xorg/X11R7.7/src/everything/font-util-1.3.0.tar.bz2
 mirror://xorg/X11R7.7/src/everything/font-winitzki-cyrillic-1.0.3.tar.bz2
@@ -115,7 +115,7 @@ mirror://xorg/individual/proto/xextproto-7.3.0.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86bigfontproto-1.2.0.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86dgaproto-2.1.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86driproto-2.1.1.tar.bz2
-mirror://xorg/individual/driver/xf86-input-evdev-2.8.4.tar.bz2
+mirror://xorg/individual/driver/xf86-input-evdev-2.9.1.tar.bz2
 mirror://xorg/individual/driver/xf86-input-joystick-1.6.2.tar.bz2
 mirror://xorg/individual/driver/xf86-input-keyboard-1.8.0.tar.bz2
 mirror://xorg/individual/driver/xf86-input-mouse-1.9.1.tar.bz2
@@ -138,7 +138,7 @@ mirror://xorg/individual/driver/xf86-video-intel-2.99.916.tar.bz2
 mirror://xorg/individual/driver/xf86-video-mach64-6.9.4.tar.bz2
 mirror://xorg/individual/driver/xf86-video-mga-1.6.3.tar.bz2
 mirror://xorg/individual/driver/xf86-video-modesetting-0.9.0.tar.bz2
-mirror://xorg/individual/driver/xf86-video-qxl-0.1.2.tar.bz2
+mirror://xorg/individual/driver/xf86-video-qxl-0.1.3.tar.bz2
 mirror://xorg/individual/driver/xf86-video-neomagic-1.2.8.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86-video-newport-0.2.4.tar.bz2
 mirror://xorg/individual/driver/xf86-video-nv-2.1.20.tar.bz2
@@ -162,7 +162,7 @@ mirror://xorg/X11R7.7/src/everything/xgamma-1.0.5.tar.bz2
 mirror://xorg/individual/app/xhost-1.0.6.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xineramaproto-1.2.1.tar.bz2
 mirror://xorg/individual/app/xinput-1.6.1.tar.bz2
-mirror://xorg/X11R7.7/src/everything/xkbcomp-1.2.4.tar.bz2
+mirror://xorg/individual/app/xkbcomp-1.3.0.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xkbevd-1.1.3.tar.bz2
 mirror://xorg/individual/app/xkbutils-1.0.4.tar.bz2
 mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.11.tar.bz2
@@ -171,7 +171,7 @@ mirror://xorg/X11R7.7/src/everything/xlsatoms-1.1.1.tar.bz2
 mirror://xorg/individual/app/xlsclients-1.1.3.tar.bz2
 mirror://xorg/individual/app/xmodmap-1.0.8.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xorg-docs-1.7.tar.bz2
-mirror://xorg/individual/xserver/xorg-server-1.16.1.tar.bz2
+mirror://xorg/individual/xserver/xorg-server-1.16.2.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xorg-sgml-doctools-1.11.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xpr-1.0.4.tar.bz2
 mirror://xorg/individual/app/xprop-1.2.2.tar.bz2

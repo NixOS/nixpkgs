@@ -1,0 +1,22 @@
+From 30b8bb70e0fdcc0b85abbfebf43ed9f127db5248 Mon Sep 17 00:00:00 2001
+From: Johnny Robeson <johnny@localmomentum.net>
+Date: Mon, 1 Dec 2014 23:26:27 -0500
+Subject: [PATCH] include gflags header in SSLSessionCacheManager
+
+this is one way to solve #104
+---
+ folly/experimental/wangle/ssl/SSLSessionCacheManager.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/folly/experimental/wangle/ssl/SSLSessionCacheManager.cpp b/folly/experimental/wangle/ssl/SSLSessionCacheManager.cpp
+index fc339a1..ca18242 100644
+--- folly/experimental/wangle/ssl/SSLSessionCacheManager.cpp
++++ folly/experimental/wangle/ssl/SSLSessionCacheManager.cpp
+@@ -7,6 +7,7 @@
+  *  of patent rights can be found in the PATENTS file in the same directory.
+  *
+  */
++#include <gflags/gflags.h>
+ #include <folly/experimental/wangle/ssl/SSLSessionCacheManager.h>
+ 
+ #include <folly/experimental/wangle/ssl/SSLCacheProvider.h>

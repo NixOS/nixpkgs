@@ -135,7 +135,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   };
 
   gpl1 = spdx {
-    shortName = "GPL-1.0";
+    spdxId = "GPL-1.0";
     fullName = "GNU General Public License v1.0 only";
   };
 

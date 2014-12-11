@@ -29,10 +29,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  configurePhase = ''
-    sed -i "makefile" -"es|PREFIX[[:blank:]]*=.*$|PREFIX = $out|g"
-    sed -i "makefile" -"es|gcc|$CC|g"
-  '';
+  makeFlags = "PREFIX=$(out) CC=cc";
 
   doCheck = true;
   checkPhase = ''HOME="$TMPDIR" PATH="$PWD:$PATH" make test'';

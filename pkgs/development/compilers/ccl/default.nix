@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, gcc, glibc, m4 }:
+{ stdenv, fetchsvn, gcc, glibc, m4, coreutils }:
 
 /* TODO: there are also MacOS, FreeBSD and Windows versions */
 assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
@@ -19,9 +19,17 @@ stdenv.mkDerivation rec {
   CCL_RUNTIME = if stdenv.system == "x86_64-linux" then "lx86cl64"   else "lx86cl";
   CCL_KERNEL  = if stdenv.system == "x86_64-linux" then "linuxx8664" else "linuxx8632";
 
-  buildPhase = ''
-    sed -i lisp-kernel/${CCL_KERNEL}/Makefile -e's/svnversion/echo ${revision}/g'
+  patchPhase = ''
+    substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
+      --replace "svnversion" "echo ${revision}" \
+      --replace "/bin/rm"    "${coreutils}/bin/rm" \
+      --replace "/bin/echo"  "${coreutils}/bin/echo"
 
+    substituteInPlace lisp-kernel/m4macros.m4 \
+      --replace "/bin/pwd" "${coreutils}/bin/pwd"
+  '';
+
+  buildPhase = ''
     make -C lisp-kernel/${CCL_KERNEL} clean
     make -C lisp-kernel/${CCL_KERNEL} all
 

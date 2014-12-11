@@ -3,6 +3,7 @@
 # $output/lib. The rationale is that lib64 directories are unnecessary
 # in Nix (since 32-bit and 64-bit builds of a package are in different
 # store paths anyway).
+# If the move would overwrite anything, it should fail on rmdir.
 
 fixupOutputHooks+=(_moveLib64)
 
@@ -13,7 +14,7 @@ _moveLib64() {
     mkdir -p $prefix/lib
     shopt -s dotglob
     for i in $prefix/lib64/*; do
-        mv "$i" $prefix/lib
+        mv --no-clobber "$i" $prefix/lib
     done
     shopt -u dotglob
     rmdir $prefix/lib64

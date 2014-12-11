@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libX11, libXt
+{stdenv, fetchurl, which, libX11, libXt, fontconfig
 , xproto ? null
 , xextproto ? null
 , libXext ? null }:
@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "1sza12j3db7i54r3pzli8wmby6aiyzmyfj8w0nidmawkwv6jdf6b";
   };
 
-  buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 xproto libXt xextproto libXext ];
+  NIX_LDFLAGS="-lgcc_s";
+  buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [ which libX11 fontconfig xproto libXt xextproto libXext ];
 
   enableParallelBuilding = true;
 
@@ -29,4 +30,5 @@ stdenv.mkDerivation rec {
   };
 
   inherit libXt;
+  inherit fontconfig;
 }

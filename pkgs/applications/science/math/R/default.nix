@@ -85,7 +85,9 @@ stdenv.mkDerivation rec {
       user-defined recursive functions and input and output facilities.
     '';
 
+    platforms = stdenv.lib.platforms.all;
     hydraPlatforms = stdenv.lib.platforms.linux;
+
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

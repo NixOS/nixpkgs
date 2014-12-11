@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.mesos.slave;
-  
+
 in {
 
   options.services.mesos = {
@@ -29,30 +29,30 @@ in {
         '';
         type = types.str;
       };
-      
+
       withHadoop = mkOption {
 	description = "Add the HADOOP_HOME to the slave.";
 	default = false;
 	type = types.bool;
       };
-      
+
       workDir = mkOption {
         description = "The Mesos work directory.";
         default = "/var/lib/mesos/slave";
         type = types.str;
       };
-      
+
       extraCmdLineOptions = mkOption {
         description = ''
 	  Extra command line options for Mesos Slave.
-	  
+
 	  See https://mesos.apache.org/documentation/latest/configuration/
 	'';
         default = [ "" ];
         type = types.listOf types.string;
         example = [ "--gc_delay=3days" ];
       };
-      
+
       logLevel = mkOption {
         description = ''
           The logging level used. Possible values:
@@ -72,6 +72,7 @@ in {
       description = "Mesos Slave";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
+      environment.MESOS_CONTAINERIZERS = "docker,mesos";
       serviceConfig = {
 	ExecStart = ''
 	  ${pkgs.mesos}/bin/mesos-slave \
@@ -80,6 +81,7 @@ in {
 	    ${optionalString cfg.withHadoop "--hadoop-home=${pkgs.hadoop}"} \
 	    --work_dir=${cfg.workDir} \
 	    --logging_level=${cfg.logLevel} \
+	    --docker=${pkgs.docker}/libexec/docker/docker \
 	    ${toString cfg.extraCmdLineOptions}
 	'';
 	PermissionsStartOnly = true;
@@ -89,5 +91,5 @@ in {
       '';
     };
   };
-  
+
 }

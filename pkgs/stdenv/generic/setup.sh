@@ -176,10 +176,11 @@ fi
 
 # Check that the pre-hook initialised SHELL.
 if [ -z "$SHELL" ]; then echo "SHELL not set"; exit 1; fi
+BASH="$SHELL"
+export CONFIG_SHELL="$SHELL"
 
 
 # Execute the pre-hook.
-export CONFIG_SHELL="$SHELL"
 if [ -z "$shell" ]; then export shell=$SHELL; fi
 runHook preHook
 
@@ -387,7 +388,7 @@ substituteAll() {
     local output="$2"
 
     # Select all environment variables that start with a lowercase character.
-    for envVar in $(env | sed "s/^[^a-z].*//" | sed "s/^\([^=]*\)=.*/\1/"); do
+    for envVar in $(env | sed -e $'s/^\([a-z][^=]*\)=.*/\\1/; t \n d'); do
         if [ "$NIX_DEBUG" = "1" ]; then
             echo "$envVar -> ${!envVar}"
         fi

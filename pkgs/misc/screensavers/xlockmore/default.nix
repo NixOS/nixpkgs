@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
 
-  name = "xlockmore-5.44";
+  name = "xlockmore-5.45";
   src = fetchurl {
     url = "http://www.tux.org/~bagleyd/xlock/${name}/${name}.tar.bz2";
-    sha256 = "07bxl2k84jzz2zn364jakd1sg8rlhynkb7pchb19wy785ssgwvfi";
+    sha256 = "1xqm61bbfn5q056w57vp16gvai8nqpcw570ysxlm5h46nh6ai0bz";
   };
 
   # Optionally, it can use GTK+.

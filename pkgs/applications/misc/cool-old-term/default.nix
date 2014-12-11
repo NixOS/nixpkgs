@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qt53 }:
+{ stdenv, fetchFromGitHub, qt5 }:
 
 stdenv.mkDerivation rec {
   version = "0.9";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "8462f3eded7b2219acc143258544b0dfac32d81e10cac61ff14276d426704c93";
   };
 
-  buildInputs = [ qt53 ];
+  buildInputs = [ qt5 ];
 
   buildPhase = ''
     pushd ./konsole-qml-plugin
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
     cat > $out/bin/cool-old-term <<EOF
     #!${stdenv.shell}
-    ${qt53}/bin/qmlscene -I $out/lib/cool-old-term/imports $out/share/cool-old-term/app/main.qml
+    ${qt5}/bin/qmlscene -I $out/lib/cool-old-term/imports $out/share/cool-old-term/app/main.qml
     EOF
     chmod a+x $out/bin/cool-old-term
   '';

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, pkgconfig, cmake, libiconvOrEmpty, libintlOrEmpty
+{ stdenv, fetchurl, fetchpatch, pkgconfig, cmake, libiconvOrEmpty, libintlOrEmpty
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
 , qt4Support ? false, qt4 ? null
 }:
@@ -6,6 +6,14 @@
 let
   version = "0.28.1"; # even major numbers are stable
   sha256 = "01pxjdbhvpxf00ncf8d9wxc8gkcqcxz59lwrpa151ah988inxkrc";
+
+  # This is for Okular (and similar) to support subpixel rendering.
+  # It's kept from upstream because of political reasons.
+  qtcairo_patch = fetchpatch {
+    url = "https://github.com/giddie/poppler-qt4-cairo-backend/compare/"
+      + "fa1d636...b30f96c.diff"; # update to current maint...qt4-lcd
+    sha256 = "0g18y247k2vcz1n56rnfpy226f22v4r9c7pk8cf2h9l12vz2qxkm";
+  };
 
   poppler_drv = nameSuff: merge: stdenv.mkDerivation (stdenv.lib.mergeAttrsByFuncDefaultsClean [
   rec {
@@ -53,6 +61,7 @@ let
   poppler_glib = poppler_drv "glib" { };
 
   poppler_qt4 = poppler_drv "qt4" {
+    patches = [ qtcairo_patch ];
     propagatedBuildInputs = [ qt4 poppler_glib ];
     NIX_LDFLAGS = "-lpoppler";
     postConfigure = ''

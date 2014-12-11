@@ -8,7 +8,6 @@ let
 
   configOptions = {
     data_dir = dataDir;
-    rejoin_after_leave = true;
   }
   // (if cfg.webUi then { ui_dir = "${pkgs.consul.ui}"; } else { })
   // cfg.extraConfig;
@@ -38,6 +37,35 @@ in
         default = false;
         description = ''
           Enables the web interface on the consul http port.
+        '';
+      };
+
+      leaveOnStop = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If enabled, causes a leave action to be sent when closing consul.
+          This allows a clean termination of the node, but permanently removes
+          it from the cluster. You probably don't want this option unless you
+          are running a node which going offline in a permanent / semi-permanent
+          fashion.
+        '';
+      };
+
+      joinNodes = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = ''
+          A list of addresses of nodes which should be joined at startup if the
+          current node is in a left state.
+        '';
+      };
+
+      joinRetries = mkOption {
+        type = types.int;
+        default = 10;
+        description = ''
+          The number of times to retry connecting to the join nodes.
         '';
       };
 
@@ -119,13 +147,14 @@ in
       serviceConfig = {
         ExecStart = "@${pkgs.consul}/bin/consul consul agent"
           + concatMapStrings (n: " -config-file ${n}") configFiles;
-        ExecStop = "${pkgs.consul}/bin/consul leave";
         ExecReload = "${pkgs.consul}/bin/consul reload";
         PermissionsStartOnly = true;
         User = if cfg.dropPrivileges then "consul" else null;
-      };
+      } // (optionalAttrs (cfg.leaveOnStop) {
+        ExecStop = "${pkgs.consul}/bin/consul leave";
+      });
 
-      path = with pkgs; [ iproute gnugrep gawk ];
+      path = with pkgs; [ iproute gnugrep gawk consul ];
       preStart = ''
         mkdir -m 0700 -p ${dataDir}
         chown -R consul ${dataDir}
@@ -159,6 +188,18 @@ in
       + ''
         echo "    \"\": \"\"" >> /etc/consul-addrs.json
         echo "}" >> /etc/consul-addrs.json
+      '';
+      postStart = ''
+        # Issues joins to nodes which we statically connect to
+        ${flip concatMapStrings cfg.joinNodes (addr: ''
+          for i in {0..${toString cfg.joinRetries}}; do
+            # Try to join the other nodes ${toString cfg.joinRetries} times before failing
+            consul join "${addr}" && break
+            sleep 1
+          done &
+        '')}
+        wait
+        exit 0
       '';
     };
 

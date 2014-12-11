@@ -151,12 +151,7 @@ init_submodules(){
         local name=$(
             git config -f .gitmodules --get-regexp submodule\..*\.path |
             sed -n "s,^\(.*\)\.path $dir\$,\\1,p")
-        local url=$(git config -f .gitmodules --get ${name}.url)
-
-        # Get Absolute URL if we have a relative URL
-        if ! echo "$url" | grep '^[a-zA-Z]\+://' >/dev/null 2>&1; then
-            url="$(git config --get remote.origin.url)/$url"
-        fi
+        local url=$(git config --get ${name}.url)
 
         clone "$dir" "$url" "$hash" ""
     done

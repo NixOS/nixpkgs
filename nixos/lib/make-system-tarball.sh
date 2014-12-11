@@ -33,7 +33,7 @@ for i in $storePaths; do
 done
 
 
-# TODO tar ruxo 
+# TODO tar ruxo
 # Also include a manifest of the closures in a format suitable for
 # nix-store --load-db.
 printRegistration=1 perl $pathsFromGraph closure-* > nix-path-registration
@@ -47,6 +47,8 @@ for ((n = 0; n < ${#objects[*]}; n++)); do
         ln -s $object ./$symlink
     fi
 done
+
+$extraCommands
 
 mkdir -p $out/tarball
 

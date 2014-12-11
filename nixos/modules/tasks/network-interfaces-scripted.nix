@@ -1,7 +1,7 @@
 { config, lib, pkgs, utils, ... }:
 
-with lib;
 with utils;
+with lib;
 
 let
 
@@ -54,7 +54,7 @@ in
         networkSetup =
           { description = "Networking Setup";
 
-            after = [ "network-interfaces.target" ];
+            after = [ "network-interfaces.target" "network-pre.target" ];
             before = [ "network.target" ];
             wantedBy = [ "network.target" ];
 
@@ -66,7 +66,7 @@ in
             serviceConfig.RemainAfterExit = true;
 
             script =
-              (optionalString (!config.services.resolved.enable) ''
+              ''
                 # Set the static DNS configuration, if given.
                 ${pkgs.openresolv}/sbin/resolvconf -m 1 -a static <<EOF
                 ${optionalString (cfg.nameservers != [] && cfg.domain != null) ''
@@ -77,9 +77,9 @@ in
                   nameserver ${ns}
                 '')}
                 EOF
-              '') + ''
+
                 # Set the default gateway.
-                ${optionalString (cfg.defaultGateway != null) ''
+                ${optionalString (cfg.defaultGateway != null && cfg.defaultGateway != "") ''
                   # FIXME: get rid of "|| true" (necessary to make it idempotent).
                   ip route add default via "${cfg.defaultGateway}" ${
                     optionalString (cfg.defaultGatewayWindowSize != null)
@@ -105,7 +105,7 @@ in
             wantedBy = [ "network-interfaces.target" ];
             before = [ "network-interfaces.target" ];
             bindsTo = [ (subsystemDevice i.name) ];
-            after = [ (subsystemDevice i.name) ];
+            after = [ (subsystemDevice i.name) "network-pre.target" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -155,7 +155,7 @@ in
         createTunDevice = i: nameValuePair "${i.name}-netdev"
           { description = "Virtual Network Interface ${i.name}";
             requires = [ "dev-net-tun.device" ];
-            after = [ "dev-net-tun.device" ];
+            after = [ "dev-net-tun.device" "network-pre.target" ];
             wantedBy = [ "network.target" (subsystemDevice i.name) ];
             before = [ "network-interfaces.target" (subsystemDevice i.name) ];
             path = [ pkgs.iproute ];
@@ -180,7 +180,8 @@ in
           { description = "Bridge Interface ${n}";
             wantedBy = [ "network.target" (subsystemDevice n) ];
             bindsTo = deps;
-            after = deps ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
+            after = [ "network-pre.target" ] ++ deps
+              ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
             before = [ "network-interfaces.target" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
@@ -214,7 +215,8 @@ in
           { description = "Bond Interface ${n}";
             wantedBy = [ "network.target" (subsystemDevice n) ];
             bindsTo = deps;
-            after = deps ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
+            after = [ "network-pre.target" ] ++ deps
+              ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
             before = [ "network-interfaces.target" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
@@ -250,7 +252,7 @@ in
           { description = "Vlan Interface ${n}";
             wantedBy = [ "network.target" (subsystemDevice n) ];
             bindsTo = deps;
-            after = deps;
+            after = [ "network-pre.target" ] ++ deps;
             before = [ "network-interfaces.target" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
@@ -274,7 +276,7 @@ in
           { description = "6-to-4 Tunnel Interface ${n}";
             wantedBy = [ "network.target" (subsystemDevice n) ];
             bindsTo = deps;
-            after = deps;
+            after = [ "network-pre.target" ] ++ deps;
             before = [ "network-interfaces.target" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
@@ -301,7 +303,7 @@ in
           { description = "Vlan Interface ${n}";
             wantedBy = [ "network.target" (subsystemDevice n) ];
             bindsTo = deps;
-            after = deps;
+            after = [ "network-pre.target" ] ++ deps;
             before = [ "network-interfaces.target" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;

@@ -25,6 +25,8 @@ stdenv.mkDerivation {
   buildInputs = [ elfutils python perl newt slang pkgconfig] ++
     stdenv.lib.optional withGtk gtk;
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+
   installFlags = "install install-man ASCIIDOC8=1";
 
   inherit elfutils;

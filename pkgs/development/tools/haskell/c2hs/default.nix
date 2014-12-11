@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "c2hs";
-  version = "0.19.1";
-  sha256 = "18vk4q43bn4n59mcjid382dlm113nwll94hsqhqvk52sp1jkmjn3";
+  version = "0.20.1";
+  sha256 = "1w2w9zxirzjd5lniwqakq59glgsh4mw3565x2l9qrin0bfjxkn3h";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ dlist filepath languageC ];

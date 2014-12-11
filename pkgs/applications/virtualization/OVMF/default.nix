@@ -1,4 +1,4 @@
-{ stdenv, edk2 }:
+{ stdenv, edk2, nasm, iasl }:
 
 let
 
@@ -12,8 +12,9 @@ let
 in
 
 stdenv.mkDerivation (edk2.setup "OvmfPkg/OvmfPkg${targetArch}.dsc" {
-  name = "OVMF-2014-02-01";
+  name = "OVMF-2014-12-10";
 
+  buildInputs = [nasm iasl];
   unpackPhase = ''
     for file in \
       "${edk2.src}"/{OvmfPkg,UefiCpuPkg,MdeModulePkg,IntelFrameworkModulePkg,PcAtChipsetPkg,FatBinPkg,EdkShellBinPkg,MdePkg,ShellPkg,OptionRomPkg,IntelFrameworkPkg};

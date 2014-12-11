@@ -24,7 +24,7 @@ with lib;
     programs.ssh.setXAuthLocation = false;
     security.pam.services.su.forwardXAuth = lib.mkForce false;
 
-    fonts.enableFontConfig = false;
+    fonts.fontconfig.enable = false;
 
     nixpkgs.config.packageOverrides = pkgs:
       { dbus = pkgs.dbus.override { useX11 = false; }; };

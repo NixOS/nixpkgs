@@ -23,6 +23,17 @@ let
     pathsToLink = [ "/" ];
   };
 
+  fontconfig = config.fonts.fontconfig;
+  xresourcesXft = pkgs.writeText "Xresources-Xft" ''
+    ${optionalString (fontconfig.dpi != 0) ''Xft.dpi: ${fontconfig.dpi}''}
+    Xft.antialias: ${if fontconfig.antialias then "1" else "0"}
+    Xft.rgba: ${fontconfig.subpixel.rgba}
+    Xft.lcdfilter: lcd${fontconfig.subpixel.lcdfilter}
+    Xft.hinting: ${if fontconfig.hinting.enable then "1" else "0"}
+    Xft.autohint: ${if fontconfig.hinting.autohint then "1" else "0"}
+    Xft.hintstyle: hint${fontconfig.hinting.style}
+  '';
+
   # file provided by services.xserver.displayManager.session.script
   xsession = wm: dm: pkgs.writeScript "xsession"
     ''
@@ -79,6 +90,7 @@ let
       ''}
 
       # Load X defaults.
+      ${xorg.xrdb}/bin/xrdb -merge ${xresourcesXft}
       if test -e ~/.Xresources; then
           ${xorg.xrdb}/bin/xrdb -merge ~/.Xresources
       elif test -e ~/.Xdefaults; then

@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ glew SDL ftgl pkgconfig libpng libjpeg pcre SDL_image mesa boost
                   glm ];
 
+  NIX_CFLAGS_COMPILE = "-std=c++11"; # fix build with glm >= 0.9.6.0
+
   meta = with stdenv.lib; {
     homepage = http://code.google.com/p/logstalgia;
     description = "Website traffic visualization tool";

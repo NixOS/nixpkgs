@@ -6,11 +6,11 @@ in
 
 stdenv.mkDerivation rec {
   #TODO add emacs support
-  name = "racer-git-2014-11-24";
+  name = "racer-git-2014-12-04";
   src = fetchgit {
     url = https://github.com/phildawes/racer;
-    rev = "50655ffd509bea09ea9b310970dedfeaf5a33cf3";
-    sha256 = "0bd456i4nz12z39ljnw1kjg8mcflvm7rjql2r80fb038c7rd6xi1";
+    rev = "cc633ad2477cb064ba6e4d23b58c124c8521410c";
+    sha256 = "1nqlgdqnqhzbnbxvhs60gk5hjzrxfq8blyh1riiknxdlq5kqaky7";
   };
 
   buildInputs = [ rust makeWrapper ];

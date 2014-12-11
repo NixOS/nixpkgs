@@ -3,9 +3,9 @@
 , mesaSupported, mesa, mesa_glu, openssl, dbus, cups, pkgconfig
 , libtiff, glib, icu, mysql, postgresql, sqlite, perl, coreutils, libXi
 , gdk_pixbuf, python, gdb, xlibs, libX11, libxcb, xcbutil, xcbutilimage
-, xcbutilkeysyms, xcbutilwm,udev, libxml2, libxslt, pcre, libxkbcommon
+, xcbutilkeysyms, xcbutilwm, udev, libxml2, libxslt, pcre, libxkbcommon
 , alsaLib, gstreamer, gst_plugins_base
-, pulseaudio, bison, flex, gperf, ruby, libwebp
+, pulseaudio, bison, flex, gperf, ruby, libwebp, libXcursor
 , flashplayerFix ? false
 , gtkStyle ? false, libgnomeui, gtk, GConf, gnome_vfs
 , buildDocs ? false
@@ -17,8 +17,8 @@
 with stdenv.lib;
 
 let
-  v_maj = "5.2";
-  v_min = "1";
+  v_maj = "5.3";
+  v_min = "2";
   ver = "${v_maj}.${v_min}";
 in
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/qt/"
       + "${v_maj}/${ver}/single/qt-everywhere-opensource-src-${ver}.tar.gz";
-    sha256 = "18bxrnyis7xbhpxpf7w42i54hs4qr062b1wx4c0dpmja3lc29sc4";
+    sha256 = "0b98n2jl62dyqxwn1gdj9xmk8wrrdxnazr65fdk5qw1hmlpgvly8";
   };
 
   # The version property must be kept because it will be included into the QtSDK package name
@@ -45,23 +45,40 @@ stdenv.mkDerivation rec {
   '';
 
   patches =
-    [ ./glib-2.32.patch
+    optional gtkStyle
       (substituteAll {
-        src = ./qt-5.2-dlopen-absolute-paths.patch;
-        inherit cups icu libXfixes;
-        glibc = stdenv.gcc.libc;
-        openglDriver = if mesaSupported then mesa.driverLink else "/no-such-path";
-      })
-    ] ++ optional gtkStyle (substituteAll {
-        src = ./dlopen-gtkstyle.patch;
+        src = ./0001-dlopen-gtkstyle.patch;
         # substituteAll ignores env vars starting with capital letter
         gconf = GConf;
         inherit gnome_vfs libgnomeui gtk;
       })
-    ++ optional flashplayerFix (substituteAll {
-        src = ./dlopen-webkit-nsplugin.patch;
+    ++ optional flashplayerFix
+      (substituteAll {
+        src = ./0002-dlopen-webkit-nsplugin.patch;
         inherit gtk gdk_pixbuf;
-      });
+      })
+    ++ optional flashplayerFix
+      (substituteAll {
+        src = ./0007-dlopen-webkit-gtk.patch;
+        inherit gtk;
+      })
+    ++ [
+      ./0003-glib-2.32.patch
+      (substituteAll {
+        src = ./0004-dlopen-resolv.patch;
+        glibc = stdenv.gcc.libc;
+      })
+      (substituteAll {
+        src = ./0005-dlopen-gl.patch;
+        openglDriver = if mesaSupported then mesa.driverLink else "/no-such-path";
+      })
+      ./0006-tzdir.patch
+      (substituteAll { src = ./0008-dlopen-webkit-udev.patch; inherit udev; })
+      (substituteAll { src = ./0009-dlopen-serialport-udev.patch; inherit udev; })
+      (substituteAll { src = ./0010-dlopen-libXcursor.patch; inherit libXcursor; })
+      (substituteAll { src = ./0011-dlopen-openssl.patch; inherit openssl; })
+      (substituteAll { src = ./0012-dlopen-dbus.patch; dbus_libs = dbus; })
+    ];
 
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/qtbase/lib:$PWD/qtbase/plugins/platforms:$PWD/qttools/lib:$LD_LIBRARY_PATH"
@@ -92,7 +109,6 @@ stdenv.mkDerivation rec {
     -gui
     -widgets
     -opengl desktop
-    -javascript-jit
     -qml-debug
     -nis
     -iconv
@@ -160,7 +176,7 @@ stdenv.mkDerivation rec {
     homepage = http://qt-project.org;
     description = "A cross-platform application framework for C++";
     license = "GPL/LGPL";
-    maintainers = [ maintainers.bbenoist ];
+    maintainers = with maintainers; [ bbenoist qknight ttuegel ];
     platforms = platforms.linux;
   };
 }

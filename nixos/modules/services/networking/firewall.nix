@@ -458,8 +458,9 @@ in
 
     systemd.services.firewall = {
       description = "Firewall";
-      wantedBy = [ "network.target" ];
-      after = [ "network-interfaces.target" "systemd-modules-load.service" ];
+      wantedBy = [ "network-pre.target" ];
+      before = [ "network-pre.target" ];
+      after = [ "systemd-modules-load.service" ];
 
       path = [ pkgs.iptables ];
 

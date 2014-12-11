@@ -1,12 +1,22 @@
-{stdenv, fetchurl, pkgconfig, glib}:
-
-assert pkgconfig != null && glib != null;
+{stdenv, fetchFromGitHub, pkgconfig, autoconf, automake, glib, libtool }:
 
 stdenv.mkDerivation {
-  name = "gnet-2.0.7";
-  src = fetchurl {
-    url = http://www.gnetlibrary.org/src/gnet-2.0.7.tar.gz;
-    md5 = "3a7a40411775688fe4c42141ab007048";
+  name = "gnet-2.0.8";
+  src = fetchFromGitHub {
+    owner = "GNOME";
+    repo = "gnet";
+    rev = "GNET_2_0_8";
+    sha256 = "1cy78kglzi235md964ikvm0rg801bx0yk9ya8zavndjnaarzqq87";
   };
-  buildInputs = [pkgconfig glib];
+
+  buildInputs = [ pkgconfig autoconf automake glib libtool ];
+
+  preConfigure = "./autogen.sh";
+
+  meta = with stdenv.lib; {
+    description = "A network library, written in C, object-oriented, and built upon GLib";
+    homepage = https://developer.gnome.org/gnet/;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pSub ];
+  };
 }

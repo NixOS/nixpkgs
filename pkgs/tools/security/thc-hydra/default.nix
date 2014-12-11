@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, libidn, ncurses, pcre, libssh }:
+{ stdenv, fetchurl, openssl, libidn, ncurses, pcre, libssh, postgresql92 }:
 
 with stdenv.lib;
 
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-   substituteInPlace configure --replace "\$LIBDIRS" "${openssl}/lib ${pcre}/lib ${libssh}/lib"
-   substituteInPlace configure --replace "\$INCDIRS" "${openssl}/include ${pcre}/include ${libssh}/include"
+   substituteInPlace configure --replace "\$LIBDIRS" "${openssl}/lib ${pcre}/lib ${libssh}/lib ${postgresql92}/lib"
+   substituteInPlace configure --replace "\$INCDIRS" "${openssl}/include ${pcre}/include ${libssh}/include ${postgresql92}/include"
   '';
 
   buildInputs = [ openssl libidn ncurses pcre libssh ];

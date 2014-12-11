@@ -3,120 +3,116 @@
 with lib;
 
 let
-
-  inherit (pkgs) tor privoxy;
-
-  stateDir = "/var/lib/tor";
-  privoxyDir = stateDir+"/privoxy";
-
   cfg = config.services.tor;
+  torDirectory = "/var/lib/tor";
 
-  torUser = "tor";
+  opt    = name: value: optionalString (value != null) "${name} ${value}";
+  optint = name: value: optionalString (value != 0)    "${name} ${toString value}";
 
-  opt = name: value: if value != "" then "${name} ${value}" else "";
-  optint = name: value: if value != 0 then "${name} ${toString value}" else "";
+  torRc = ''
+    User tor
+    DataDirectory ${torDirectory}
 
+    ${optint "ControlPort" cfg.controlPort}
+  ''
+  # Client connection config
+  + optionalString cfg.client.enable  ''
+    SOCKSPort ${cfg.client.socksListenAddress}
+    ${opt "SocksPolicy" cfg.client.socksPolicy}
+  ''
+  # Relay config
+  + optionalString cfg.relay.enable ''
+    ORPort ${cfg.relay.portSpec}
+    ${opt "Nickname" cfg.relay.nickname}
+    ${opt "ContactInfo" cfg.relay.contactInfo}
+
+    ${optint "RelayBandwidthRate" cfg.relay.bandwidthRate}
+    ${optint "RelayBandwidthBurst" cfg.relay.bandwidthBurst}
+    ${opt "AccountingMax" cfg.relay.accountingMax}
+    ${opt "AccountingStart" cfg.relay.accountingStart}
+
+    ${if cfg.relay.isExit then
+        opt "ExitPolicy" cfg.relay.exitPolicy
+      else
+        "ExitPolicy reject *:*"}
+
+    ${optionalString cfg.relay.isBridge ''
+      BridgeRelay 1
+      ServerTransportPlugin obfs2,obfs3 exec ${pkgs.pythonPackages.obfsproxy}/bin/obfsproxy managed
+    ''}
+  ''
+  + cfg.extraConfig;
+
+  torRcFile = pkgs.writeText "torrc" torRc;
 in
-
 {
-
-  ###### interface
-
   options = {
-
     services.tor = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable the Tor daemon. By default, the daemon is run without
+          relay, exit, bridge or client connectivity.
+        '';
+      };
 
-      config = mkOption {
+      extraConfig = mkOption {
+        type = types.lines;
         default = "";
         description = ''
           Extra configuration. Contents will be added verbatim to the
-          configuration file.
+          configuration file at the end.
+        '';
+      };
+
+      controlPort = mkOption {
+        type = types.int;
+        default = 0;
+        example = 9051;
+        description = ''
+          If set, Tor will accept connections on the specified port
+          and allow them to control the tor process.
         '';
       };
 
       client = {
-
         enable = mkOption {
+          type = types.bool;
           default = false;
           description = ''
-            Whether to enable Tor daemon to route application connections.
-            You might want to disable this if you plan running a dedicated Tor relay.
+            Whether to enable Tor daemon to route application
+            connections.  You might want to disable this if you plan
+            running a dedicated Tor relay.
           '';
         };
 
         socksListenAddress = mkOption {
+          type = types.str;
           default = "127.0.0.1:9050";
           example = "192.168.0.1:9100";
           description = ''
-            Bind to this address to listen for connections from Socks-speaking
-            applications.
-          '';
-        };
-
-        socksListenAddressFaster = mkOption {
-          default = "127.0.0.1:9063";
-          description = ''
-            Same as socksListenAddress but uses weaker circuit isolation to provide
-            performance suitable for a web browser.
+            Bind to this address to listen for connections from
+            Socks-speaking applications.
           '';
         };
 
         socksPolicy = mkOption {
-          default = "";
+          type = types.nullOr types.str;
+          default = null;
           example = "accept 192.168.0.0/16, reject *";
           description = ''
-            Entry policies to allow/deny SOCKS requests based on IP address.
-            First entry that matches wins. If no SocksPolicy is set, we accept
-            all (and only) requests from SocksListenAddress.
+            Entry policies to allow/deny SOCKS requests based on IP
+            address.  First entry that matches wins. If no SocksPolicy
+            is set, we accept all (and only) requests from
+            SocksListenAddress.
           '';
         };
-
-        privoxy = {
-
-          enable = mkOption {
-            default = true;
-            description = ''
-              Whether to enable a special instance of privoxy dedicated to Tor.
-              To have anonymity, protocols need to be scrubbed of identifying
-              information.
-              Most people using Tor want to anonymize their web traffic, so by
-              default we enable an special instance of privoxy specifically for
-              Tor.
-              However, if you are only going to use Tor only for other kinds of
-              traffic then you can disable this option.
-            '';
-          };
-
-          listenAddress = mkOption {
-            default = "127.0.0.1:8118";
-            description = ''
-              Address that Tor's instance of privoxy is listening to.
-              *This does not configure the standard NixOS instance of privoxy.*
-              This is for Tor connections only!
-              See services.privoxy.listenAddress to configure the standard NixOS
-              instace of privoxy.
-            '';
-          };
-
-          config = mkOption {
-            default = "";
-            description = ''
-              Extra configuration for Tor's instance of privoxy. Contents will be
-              added verbatim to the configuration file.
-              *This does not configure the standard NixOS instance of privoxy.*
-              This is for Tor connections only!
-              See services.privoxy.extraConfig to configure the standard NixOS
-              instace of privoxy.
-            '';
-          };
-
-        };
-
       };
 
       relay = {
-
         enable = mkOption {
+          type = types.bool;
           default = false;
           description = ''
             Whether to enable relaying TOR traffic for others.
@@ -126,16 +122,19 @@ in
         };
 
         isBridge = mkOption {
+          type = types.bool;
           default = false;
           description = ''
-            Bridge relays (or "bridges" ) are Tor relays that aren't listed in the
-            main directory. Since there is no complete public list of them, even if an
-            ISP is filtering connections to all the known Tor relays, they probably
+            Bridge relays (or "bridges") are Tor relays that aren't
+            listed in the main directory. Since there is no complete
+            public list of them, even if an ISP is filtering
+            connections to all the known Tor relays, they probably
             won't be able to block all the bridges.
 
             A bridge relay can't be an exit relay.
 
-            You need to set relay.enable to true for this option to take effect.
+            You need to set relay.enable to true for this option to
+            take effect.
 
             The bridge is set up with an obfuscated transport proxy.
 
@@ -144,25 +143,72 @@ in
         };
 
         isExit = mkOption {
+          type = types.bool;
           default = false;
           description = ''
-            An exit relay allows Tor users to access regular Internet services.
+            An exit relay allows Tor users to access regular Internet
+            services.
 
-            Unlike running a non-exit relay, running an exit relay may expose
-            you to abuse complaints. See https://www.torproject.org/faq.html.en#ExitPolicies for more info.
+            Unlike running a non-exit relay, running an exit relay may
+            expose you to abuse complaints. See
+            https://www.torproject.org/faq.html.en#ExitPolicies for
+            more info.
 
-            You can specify which services Tor users may access via your exit relay using exitPolicy option.
+            You can specify which services Tor users may access via
+            your exit relay using exitPolicy option.
           '';
         };
 
         nickname = mkOption {
+          type = types.str;
           default = "anonymous";
           description = ''
             A unique handle for your TOR relay.
           '';
         };
 
+        contactInfo = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "admin@relay.com";
+          description = ''
+            Contact information for the relay owner (e.g. a mail
+            address and GPG key ID).
+          '';
+        };
+
+        accountingMax = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "450 GBytes";
+          description = ''
+            Specify maximum bandwidth allowed during an accounting
+            period. This allows you to limit overall tor bandwidth
+            over some time period. See the
+            <literal>AccountingMax</literal> option by looking at the
+            tor manual (<literal>man tor</literal>) for more.
+
+            Note this limit applies individually to upload and
+            download; if you specify <literal>"500 GBytes"</literal>
+            here, then you may transfer up to 1 TBytes of overall
+            bandwidth (500 GB upload, 500 GB download).
+          '';
+        };
+
+        accountingStart = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "month 1 1:00";
+          description = ''
+            Specify length of an accounting period. This allows you to
+            limit overall tor bandwidth over some time period. See the
+            <literal>AccountingStart</literal> option by looking at
+            the tor manual (<literal>man tor</literal>) for more.
+          '';
+        };
+
         bandwidthRate = mkOption {
+          type = types.int;
           default = 0;
           example = 100;
           description = ''
@@ -172,6 +218,7 @@ in
         };
 
         bandwidthBurst = mkOption {
+          type = types.int;
           default = cfg.relay.bandwidthRate;
           example = 200;
           description = ''
@@ -181,143 +228,99 @@ in
           '';
         };
 
-        port = mkOption {
-          default = 9001;
+        portSpec = mkOption {
+          type    = types.str;
+          example = "143";
           description = ''
-            What port to advertise for Tor connections.
-          '';
-        };
+            What port to advertise for Tor connections. This corresponds
+            to the <literal>ORPort</literal> section in the Tor manual; see
+            <literal>man tor</literal> for more details.
 
-        listenAddress = mkOption {
-          default = "";
-          example = "0.0.0.0:9090";
-          description = ''
-            Set this if you need to listen on a port other than the one advertised
-            in relayPort (e.g. to advertise 443 but bind to 9090). You'll need to do
-            ipchains or other port forwsarding yourself to make this work.
+            At a minimum, you should just specify the port for the
+            relay to listen on; a common one like 143, 22, 80, or 443
+            to help Tor users who may have very restrictive port-based
+            firewalls.
           '';
         };
 
         exitPolicy = mkOption {
-          default = "";
+          type    = types.nullOr types.str;
+          default = null;
           example = "accept *:6660-6667,reject *:*";
           description = ''
-            A comma-separated list of exit policies. They're considered first
-            to last, and the first match wins. If you want to _replace_
-            the default exit policy, end this with either a reject *:* or an
-            accept *:*. Otherwise, you're _augmenting_ (prepending to) the
-            default exit policy. Leave commented to just use the default, which is
-            available in the man page or at https://www.torproject.org/documentation.html
+            A comma-separated list of exit policies. They're
+            considered first to last, and the first match wins. If you
+            want to _replace_ the default exit policy, end this with
+            either a reject *:* or an accept *:*. Otherwise, you're
+            _augmenting_ (prepending to) the default exit
+            policy. Leave commented to just use the default, which is
+            available in the man page or at
+            https://www.torproject.org/documentation.html
 
             Look at https://www.torproject.org/faq-abuse.html#TypicalAbuses
             for issues you might encounter if you use the default exit policy.
 
-            If certain IPs and ports are blocked externally, e.g. by your firewall,
-            you should update your exit policy to reflect this -- otherwise Tor
-            users will be told that those destinations are down.
+            If certain IPs and ports are blocked externally, e.g. by
+            your firewall, you should update your exit policy to
+            reflect this -- otherwise Tor users will be told that
+            those destinations are down.
           '';
         };
-
       };
-
     };
-
   };
 
-
-  ###### implementation
-
-  config = mkIf (cfg.client.enable || cfg.relay.enable) {
-
+  config = mkIf cfg.enable {
     assertions = singleton
-      { assertion = cfg.relay.enable -> !(cfg.relay.isBridge && cfg.relay.isExit);
-        message = "Can't be both an exit and a bridge relay at the same time";
+      { message = "Can't be both an exit and a bridge relay at the same time";
+        assertion =
+          cfg.relay.enable -> !(cfg.relay.isBridge && cfg.relay.isExit);
       };
 
-    users.extraUsers = singleton
-      { name = torUser;
-        uid = config.ids.uids.tor;
-        description = "Tor daemon user";
-        home = stateDir;
+    users.extraGroups.tor.gid = config.ids.gids.tor;
+    users.extraUsers.tor =
+      { description = "Tor Daemon User";
+        createHome  = true;
+        home        = torDirectory;
+        group       = "tor";
+        uid         = config.ids.uids.tor;
       };
 
-    jobs = {
-      tor = { name = "tor";
+    systemd.services.tor =
+      { description = "Tor Daemon";
+        path = [ pkgs.tor ];
 
-              startOn = "started network-interfaces";
-              stopOn = "stopping network-interfaces";
+        wantedBy = [ "multi-user.target" ];
+        after    = [ "network.target" ];
+        restartTriggers = [ torRcFile ];
 
-              preStart = ''
-                mkdir -m 0755 -p ${stateDir}
-                chown ${torUser} ${stateDir}
-              '';
-              exec = "${tor}/bin/tor -f ${pkgs.writeText "torrc" cfg.config}";
-    }; }
-    // optionalAttrs (cfg.client.privoxy.enable && cfg.client.enable) {
-      torPrivoxy = { name = "tor-privoxy";
+        # Translated from the upstream contrib/dist/tor.service.in
+        serviceConfig =
+          { Type         = "simple";
+            ExecStartPre = "${pkgs.tor}/bin/tor -f ${torRcFile} --verify-config";
+            ExecStart    = "${pkgs.tor}/bin/tor -f ${torRcFile} --RunAsDaemon 0";
+            ExecReload   = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+            KillSignal   = "SIGINT";
+            TimeoutSec   = 30;
+            Restart      = "on-failure";
+            LimitNOFILE  = 32768;
 
-                     startOn = "started network-interfaces";
-                     stopOn = "stopping network-interfaces";
+            # Hardening
+            # Note: DevicePolicy is set to 'closed', although the
+            # minimal permissions are really:
+            #   DeviceAllow /dev/null rw
+            #   DeviceAllow /dev/urandom r
+            # .. but we can't specify DeviceAllow multiple times. 'closed'
+            # is close enough.
+            PrivateTmp              = "yes";
+            DevicePolicy            = "closed";
+            InaccessibleDirectories = "/home";
+            ReadOnlyDirectories     = "/";
+            ReadWriteDirectories    = torDirectory;
+            NoNewPrivileges         = "yes";
+          };
+      };
 
-                     preStart = ''
-                       mkdir -m 0755 -p ${privoxyDir}
-                       chown ${torUser} ${privoxyDir}
-                     '';
-                     exec = "${privoxy}/sbin/privoxy --no-daemon --user ${torUser} ${pkgs.writeText "torPrivoxy.conf" cfg.client.privoxy.config}";
-    }; };
-
-      services.tor.config = ''
-        DataDirectory ${stateDir}
-        User ${torUser}
-      ''
-      + optionalString cfg.client.enable  ''
-        SOCKSPort ${cfg.client.socksListenAddress} IsolateDestAddr
-        SOCKSPort ${cfg.client.socksListenAddressFaster}
-        ${opt "SocksPolicy" cfg.client.socksPolicy}
-      ''
-      + optionalString cfg.relay.enable ''
-        ORPort ${toString cfg.relay.port}
-        ${opt "ORListenAddress" cfg.relay.listenAddress }
-        ${opt "Nickname" cfg.relay.nickname}
-        ${optint "RelayBandwidthRate" cfg.relay.bandwidthRate}
-        ${optint "RelayBandwidthBurst" cfg.relay.bandwidthBurst}
-        ${if cfg.relay.isExit then opt "ExitPolicy" cfg.relay.exitPolicy else "ExitPolicy reject *:*"}
-        ${if cfg.relay.isBridge then ''
-          BridgeRelay 1
-          ServerTransportPlugin obfs2,obfs3 exec ${pkgs.pythonPackages.obfsproxy}/bin/obfsproxy managed
-        '' else ""}
-      '';
-
-      services.tor.client.privoxy.config = ''
-        # Generally, this file goes in /etc/privoxy/config
-        #
-        # Tor listens as a SOCKS4a proxy here:
-        forward-socks4a / ${cfg.client.socksListenAddressFaster} .
-        confdir ${privoxy}/etc
-        logdir ${privoxyDir}
-        # actionsfile standard  # Internal purpose, recommended
-        actionsfile default.action   # Main actions file
-        actionsfile user.action      # User customizations
-        filterfile default.filter
-
-        # Don't log interesting things, only startup messages, warnings and errors
-        logfile logfile
-        #jarfile jarfile
-        #debug   0    # show each GET/POST/CONNECT request
-        debug   4096 # Startup banner and warnings
-        debug   8192 # Errors - *we highly recommended enabling this*
-
-        user-manual ${privoxy}/doc/privoxy/user-manual
-        listen-address  ${cfg.client.privoxy.listenAddress}
-        toggle  1
-        enable-remote-toggle 0
-        enable-edit-actions 0
-        enable-remote-http-toggle 0
-        buffer-limit 4096
-
-        # Extra config goes here
-      '';
-
+    environment.systemPackages = [ pkgs.tor ];
   };
-
 }

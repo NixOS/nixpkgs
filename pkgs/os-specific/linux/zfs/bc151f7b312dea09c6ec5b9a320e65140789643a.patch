@@ -1,0 +1,84 @@
+From bc151f7b312dea09c6ec5b9a320e65140789643a Mon Sep 17 00:00:00 2001
+From: Ned Bass <bass6@llnl.gov>
+Date: Thu, 16 Oct 2014 13:52:56 -0700
+Subject: [PATCH] Remove checks for mandatory locks
+
+The Linux VFS handles mandatory locks generically so we shouldn't
+need to check for conflicting locks in zfs_read(), zfs_write(), or
+zfs_freesp().  Linux 3.18 removed the lock_may_read() and
+lock_may_write() interfaces which we were relying on for this
+purpose.  Rather than emulating those interfaces we remove the
+redundant checks.
+
+Signed-off-by: Ned Bass <bass6@llnl.gov>
+Signed-off-by: Brian Behlendorf <behlendorf1@llnl.gov>
+Closes #2804
+---
+ module/zfs/zfs_vnops.c | 18 ------------------
+ module/zfs/zfs_znode.c | 10 ----------
+ 2 files changed, 28 deletions(-)
+
+diff --git a/module/zfs/zfs_vnops.c b/module/zfs/zfs_vnops.c
+index 33f9e0e..2f55e56 100644
+--- a/module/zfs/zfs_vnops.c
++++ b/module/zfs/zfs_vnops.c
+@@ -474,15 +474,6 @@ zfs_read(struct inode *ip, uio_t *uio, int ioflag, cred_t *cr)
+ 	}
+ 
+ 	/*
+-	 * Check for mandatory locks
+-	 */
+-	if (mandatory_lock(ip) &&
+-	    !lock_may_read(ip, uio->uio_loffset, uio->uio_resid)) {
+-		ZFS_EXIT(zsb);
+-		return (SET_ERROR(EAGAIN));
+-	}
+-
+-	/*
+ 	 * If we're in FRSYNC mode, sync out this znode before reading it.
+ 	 */
+ 	if (ioflag & FRSYNC || zsb->z_os->os_sync == ZFS_SYNC_ALWAYS)
+@@ -651,15 +642,6 @@ zfs_write(struct inode *ip, uio_t *uio, int ioflag, cred_t *cr)
+ 	}
+ 
+ 	/*
+-	 * Check for mandatory locks before calling zfs_range_lock()
+-	 * in order to prevent a deadlock with locks set via fcntl().
+-	 */
+-	if (mandatory_lock(ip) && !lock_may_write(ip, woff, n)) {
+-		ZFS_EXIT(zsb);
+-		return (SET_ERROR(EAGAIN));
+-	}
+-
+-	/*
+ 	 * Pre-fault the pages to ensure slow (eg NFS) pages
+ 	 * don't hold up txg.
+ 	 * Skip this if uio contains loaned arc_buf.
+diff --git a/module/zfs/zfs_znode.c b/module/zfs/zfs_znode.c
+index 90dbfd3..f02c021 100644
+--- a/module/zfs/zfs_znode.c
++++ b/module/zfs/zfs_znode.c
+@@ -1546,7 +1546,6 @@ zfs_trunc(znode_t *zp, uint64_t end)
+ int
+ zfs_freesp(znode_t *zp, uint64_t off, uint64_t len, int flag, boolean_t log)
+ {
+-	struct inode *ip = ZTOI(zp);
+ 	dmu_tx_t *tx;
+ 	zfs_sb_t *zsb = ZTOZSB(zp);
+ 	zilog_t *zilog = zsb->z_log;
+@@ -1567,15 +1566,6 @@ zfs_freesp(znode_t *zp, uint64_t off, uint64_t len, int flag, boolean_t log)
+ 		goto out;
+ 	}
+ 
+-	/*
+-	 * Check for any locks in the region to be freed.
+-	 */
+-	if (ip->i_flock && mandatory_lock(ip)) {
+-		uint64_t length = (len ? len : zp->z_size - off);
+-		if (!lock_may_write(ip, off, length))
+-			return (SET_ERROR(EAGAIN));
+-	}
+-
+ 	if (len == 0) {
+ 		error = zfs_trunc(zp, off);
+ 	} else {

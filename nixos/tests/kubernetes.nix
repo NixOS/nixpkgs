@@ -45,10 +45,10 @@ import ./make-test.nix rec {
 
   nodes = {
     master =
-      { config, pkgs, nodes, ... }:
+      { config, pkgs, lib, nodes, ... }:
         {
           virtualisation.memorySize = 512;
-          virtualisation.kubernetes = {
+          services.kubernetes = {
             roles = ["master" "node"];
             controllerManager.machines = ["master" "node"];
             kubelet.extraOpts = "-network_container_image=master:5000/pause";
@@ -75,6 +75,7 @@ import ./make-test.nix rec {
               ipAddress = "10.10.0.1";
               prefixLength = 24;
             };
+            eth2.ip4 = lib.mkOverride 0 [ ];
           };
           networking.localCommands = ''
             ip route add 10.10.0.0/16 dev cbr0
@@ -89,9 +90,9 @@ import ./make-test.nix rec {
         };
 
     node =
-      { config, pkgs, nodes, ... }:
+      { config, pkgs, lib, nodes, ... }:
         {
-          virtualisation.kubernetes = {
+          services.kubernetes = {
             roles = ["node"];
             kubelet.extraOpts = "-network_container_image=master:5000/pause";
             verbose = true;
@@ -112,6 +113,7 @@ import ./make-test.nix rec {
               ipAddress = "10.10.1.1";
               prefixLength = 24;
             };
+            eth2.ip4 = lib.mkOverride 0 [ ];
           };
           networking.localCommands = ''
             ip route add 10.10.0.0/16 dev cbr0

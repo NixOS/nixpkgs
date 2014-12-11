@@ -36,6 +36,7 @@ let
       "graphical.target"
       "multi-user.target"
       "network.target"
+      "network-pre.target"
       "network-online.target"
       "nss-lookup.target"
       "nss-user-lookup.target"
@@ -347,7 +348,8 @@ let
           [Service]
           ${let env = cfg.globalEnvironment // def.environment;
             in concatMapStrings (n:
-              let s = "Environment=\"${n}=${env.${n}}\"\n";
+              let s = optionalString (env."${n}" != null)
+                "Environment=\"${n}=${env.${n}}\"\n";
               in if stringLength s >= 2048 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env)}
           ${if def.reloadIfChanged then ''
             X-ReloadIfChanged=true
@@ -947,6 +949,16 @@ in
 
     systemd.targets.network-online.after = [ "ip-up.target" ];
 
+    systemd.targets.network-pre = {
+      wantedBy = [ "network.target" ];
+      before = [ "network.target" ];
+    };
+
+    systemd.targets.remote-fs-pre = {
+      wantedBy = [ "remote-fs.target" ];
+      before = [ "remote-fs.target" ];
+    };
+
     systemd.units =
       mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit n v)) cfg.targets
       // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
@@ -986,6 +998,15 @@ in
     users.extraUsers.systemd-journal-gateway.uid = config.ids.uids.systemd-journal-gateway;
     users.extraGroups.systemd-journal-gateway.gid = config.ids.gids.systemd-journal-gateway;
 
+    users.extraUsers.systemd-network.uid = config.ids.uids.systemd-network;
+    users.extraGroups.systemd-network.gid = config.ids.gids.systemd-network;
+
+    users.extraUsers.systemd-resolve.uid = config.ids.uids.systemd-resolve;
+    users.extraGroups.systemd-resolve.gid = config.ids.gids.systemd-resolve;
+
+    users.extraUsers.systemd-timesync.uid = config.ids.uids.systemd-timesync;
+    users.extraGroups.systemd-timesync.gid = config.ids.gids.systemd-timesync;
+
     # Generate timer units for all services that have a ‘startAt’ value.
     systemd.timers =
       mapAttrs (name: service:
@@ -1021,9 +1042,6 @@ in
 
   }
   (mkIf config.systemd.network.enable {
-    users.extraUsers.systemd-network.uid = config.ids.uids.systemd-network;
-    users.extraGroups.systemd-network.gid = config.ids.gids.systemd-network;
-
     systemd.services.systemd-networkd = {
       wantedBy = [ "multi-user.target" ];
       before = [ "network-interfaces.target" ];
@@ -1051,9 +1069,6 @@ in
     services.timesyncd.enable = mkDefault config.services.ntp.enable;
   })
   (mkIf config.services.resolved.enable {
-    users.extraUsers.systemd-resolve.uid = config.ids.uids.systemd-resolve;
-    users.extraGroups.systemd-resolve.gid = config.ids.gids.systemd-resolve;
-
     systemd.services.systemd-resolved = {
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."systemd/resolved.conf".source ];
@@ -1065,9 +1080,6 @@ in
     '';
   })
   (mkIf config.services.timesyncd.enable {
-    users.extraUsers.systemd-timesync.uid = config.ids.uids.systemd-timesync;
-    users.extraGroups.systemd-timesync.gid = config.ids.gids.systemd-timesync;
-
     systemd.services.systemd-timesyncd = {
       wantedBy = [ "sysinit.target" ];
       restartTriggers = [ config.environment.etc."systemd/timesyncd.conf".source ];

@@ -23,6 +23,7 @@ in
     services.nginx = {
       enable = mkOption {
         default = false;
+        type = types.bool;
         description = "
           Enable the nginx Web Server.
         ";
@@ -70,11 +71,13 @@ in
       };
 
       user = mkOption {
+        type = types.str;
         default = "nginx";
         description = "User account under which nginx runs.";
       };
 
       group = mkOption {
+        type = types.str;
         default = "nginx";
         description = "Group account under which nginx runs.";
       };
