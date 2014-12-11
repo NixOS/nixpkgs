@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ekg-bosun";
-  version = "1.0.2";
-  sha256 = "0q32yvl5j59s22v357j8vx0i3b5cd0gygh7gyibym5ka5d5xd82m";
+  version = "1.0.3";
+  sha256 = "0mlfsmw1aa24p6fhml8m2dj2v7hrp91a9d3cfl74rr8z8am61mqc";
   buildDepends = [
     aeson ekgCore httpClient lens network networkUri text time
     unorderedContainers vector wreq
