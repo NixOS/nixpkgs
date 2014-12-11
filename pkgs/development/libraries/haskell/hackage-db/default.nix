@@ -4,12 +4,12 @@
 
 cabal.mkDerivation (self: {
   pname = "hackage-db";
-  version = "1.9.1";
-  sha256 = "1cfbxdq8p904f5iif35k45psskx2j422rwjppcdja11j5dkax5sb";
+  version = "1.10";
+  sha256 = "06s75r5y78nm9rhhwxabw6p652abhpqrc1zimb3q8v34p1gsh35a";
   buildDepends = [ Cabal filepath tar utf8String ];
   meta = {
     homepage = "http://github.com/peti/hackage-db";
-    description = "provide access to the Hackage database via Data.Map";
+    description = "access Hackage's package database via Data.Map";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ simons ];
