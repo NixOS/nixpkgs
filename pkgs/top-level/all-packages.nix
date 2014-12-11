@@ -9196,6 +9196,8 @@ let
   };
   funpidgin = carrier;
 
+  cava = callPackage ../applications/audio/cava { };
+
   cc1394 = callPackage ../applications/video/cc1394 { };
 
   cddiscid = callPackage ../applications/audio/cd-discid { };
