@@ -2,6 +2,7 @@
   kernel, glibc, ncurses, perl, krb5 }:
 
 assert stdenv.isLinux;
+assert builtins.substring 0 4 kernel.version != "3.18";
 
 stdenv.mkDerivation {
   name = "openafs-1.6.9-${kernel.version}";
