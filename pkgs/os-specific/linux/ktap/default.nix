@@ -1,5 +1,7 @@
 { stdenv, fetchgit, kernel, useFFI ? false }:
 
+assert builtins.substring 0 4 kernel.version != "3.18";
+
 let
   ffiArgs = stdenv.lib.optionalString useFFI "FFI=1";
 in

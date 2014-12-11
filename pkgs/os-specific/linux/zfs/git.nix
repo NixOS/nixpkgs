@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "1yqsfdhyzh33aisfvwqd692n5kfgnlz7yjixd2gqn8vx9bv0dz0b";
   };
 
-  patches = [ ./mount_zfs_prefix.patch ./nix-build.patch ];
+  patches = [ ./mount_zfs_prefix.patch ./nix-build.patch ./bc151f7b312dea09c6ec5b9a320e65140789643a.patch ];
 
   buildInputs = [ spl_git perl autoconf automake libtool zlib libuuid coreutils ];
 
