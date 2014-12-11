@@ -14,7 +14,7 @@ import ./make-test.nix rec {
             };
          };
 
-          virtualisation.fleet = {
+          services.fleet = {
             enable = true;
             metadata.name = "node1";
           };
@@ -34,7 +34,7 @@ import ./make-test.nix rec {
             };
            };
 
-          virtualisation.fleet = {
+          services.fleet = {
             enable = true;
             metadata.name = "node2";
           };

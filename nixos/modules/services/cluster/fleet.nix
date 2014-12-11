@@ -3,12 +3,12 @@
 with lib;
 
 let
-  cfg = config.virtualisation.fleet;
+  cfg = config.services.fleet;
 
 in {
 
   ##### Interface
-  options.virtualisation.fleet = {
+  options.services.fleet = {
     enable = mkOption {
       type = types.bool;
       default = false;
