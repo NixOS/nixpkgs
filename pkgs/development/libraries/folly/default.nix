@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
     description = "A YAML parser and emitter for C++";
     homepage = https://code.google.com/p/yaml-cpp/;
     license = licenses.mit;
-    platforms = platforms.unix;
+    # 32bit is not supported: https://github.com/facebook/folly/issues/103
+    platforms = [ "x86_64-linux" ];
     maintainers = maintainers.abbradar;
   };
 }
