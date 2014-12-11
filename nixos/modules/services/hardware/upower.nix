@@ -63,15 +63,8 @@ in
         mkdir -m 0755 -p /var/lib/upower
       '';
 
-    # The upower daemon seems to get stuck after doing a suspend
-    # (i.e. subsequent suspend requests will say "Sleep has already
-    # been requested and is pending").  So as a workaround, restart
-    # the daemon.
-    powerManagement.resumeCommands =
-      ''
-        ${config.systemd.package}/bin/systemctl try-restart upower
-      '';
-
+    systemd.sleepHooks = [
+      "${pkgs.upower}/lib/systemd/system-sleep/system-sleep/notify-upower.sh"
+    ];
   };
-
 }

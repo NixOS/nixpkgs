@@ -1,0 +1,11 @@
+diff -ru systemd-212-orig/Makefile.am systemd-212/Makefile.am
+--- systemd-212-orig/Makefile.am	2014-05-18 22:54:57.743555394 -0700
++++ systemd-212/Makefile.am	2014-05-18 22:59:25.302463456 -0700
+@@ -4980,7 +4980,6 @@
+ 	$(prefix)/lib/kernel/install.d \
+ 	$(sysconfdir)/kernel/install.d \
+ 	$(systemshutdowndir) \
+-	$(systemsleepdir) \
+ 	$(systemgeneratordir) \
+ 	$(usergeneratordir) \
+ 	\

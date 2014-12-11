@@ -2,6 +2,8 @@
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux
 , glib, kbd, libxslt, coreutils, libgcrypt, sysvtools
 , kexectools, libmicrohttpd, linuxHeaders
+, automake113x
+, autoconf
 , pythonPackages ? null, pythonSupport ? false
 }:
 
@@ -25,12 +27,15 @@ stdenv.mkDerivation rec {
       # Fixes systemd-journald so that it does not get killed
       # by systemd-journal-flush starting too quickly
       ./systemd-journald-type-notify.patch
+      # removes the system sleep directory from install directories. NixOS handles creating the
+      # directory.
+      ./no-install-system-sleep-dir.patch
     ];
 
   buildInputs =
     [ pkgconfig intltool gperf libcap kmod xz pam acl
       /* cryptsetup */ libuuid m4 glib libxslt libgcrypt
-      libmicrohttpd linuxHeaders
+      libmicrohttpd linuxHeaders automake113x autoconf
     ] ++ stdenv.lib.optionals pythonSupport [pythonPackages.python pythonPackages.lxml];
 
   configureFlags =
@@ -112,13 +117,17 @@ stdenv.mkDerivation rec {
   # 1e1954f53386cb773e2a152748dd31c4d36aa2d8) because using /var is
   # forbidden in early boot, but in NixOS the initrd guarantees that
   # /var is mounted.
-  makeFlags = "hwdb_bin=/var/lib/udev/hwdb.bin";
+  makeFlags =
+    [ "hwdb_bin=/var/lib/udev/hwdb.bin"
+      "systemsleepdir=/etc/systemd/system-sleep"
+    ];
 
   installFlags =
     [ "localstatedir=$(TMPDIR)/var"
       "sysconfdir=$(out)/etc"
       "sysvinitdir=$(TMPDIR)/etc/init.d"
       "pamconfdir=$(out)/etc/pam.d"
+      "systemsleepdir=/etc/systemd/system-sleep"
     ];
 
   postInstall =
