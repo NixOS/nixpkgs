@@ -213,6 +213,12 @@ in rec {
     inherit system;
   });
 
+  # Provide container tarball for lxc, libvirt-lxc, docker-lxc, ...
+  container_tarball = forAllSystems (system: makeSystemTarball {
+    module = ./modules/virtualisation/lxc-container.nix;
+    inherit system;
+  });
+
   /*
   system_tarball_fuloong2f =
     assert builtins.currentSystem == "mips64-linux";
