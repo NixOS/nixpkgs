@@ -7421,6 +7421,8 @@ let
     disabled = isPyPy || isPy3k;
     version = "0.0.6";
 
+    doCheck = false;  # No such file or directory errors on 32bit
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pyptlib/pyptlib-${version}.tar.gz";
       sha256 = "01y6vbwncqb0hxlnin6whd9wrrm5my4qzjhk76fnix78v7ip515r";
