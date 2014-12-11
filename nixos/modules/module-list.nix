@@ -137,6 +137,7 @@
   ./services/desktops/gnome3/seahorse.nix
   ./services/desktops/gnome3/sushi.nix
   ./services/desktops/gnome3/tracker.nix
+  ./services/desktops/profile-sync-daemon.nix
   ./services/desktops/telepathy.nix
   ./services/games/ghost-one.nix
   ./services/games/minecraft-server.nix
