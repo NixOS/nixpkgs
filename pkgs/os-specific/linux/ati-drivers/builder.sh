@@ -224,6 +224,7 @@ fi
 
   # libstdc++ and gcc are needed by some libs
   patchelf --set-rpath $gcc/$lib_arch $out/lib/libatiadlxx.so
+  patchelf --set-rpath $gcc/$lib_arch $out/lib/xorg/modules/glesx.so
 }
 
 if test -z "$libsOnly"; then
