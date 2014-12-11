@@ -3498,11 +3498,11 @@ let
   };
 
   deluge = buildPythonPackage rec {
-    name = "deluge-1.3.10";
+    name = "deluge-1.3.11";
 
     src = pkgs.fetchurl {
       url = "http://download.deluge-torrent.org/source/${name}.tar.bz2";
-      sha256 = "1x8ylcw88a6x3zyvyxmzjsbcy9dr2s5dxam2aw6harb4n1l2v9kd";
+      sha256 = "16681sg7yi03jqyifhalnw4vavb8sj94cisldal7nviai8dz9qc3";
     };
 
     propagatedBuildInputs = with self; [
