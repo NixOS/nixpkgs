@@ -150,7 +150,7 @@ in stdenv.mkDerivation rec {
     mkdir build
     cd build
     ../configure --prefix=$out
-    patchShebangs ./build-aux/
+    patchShebangs ../build-aux/
   '';
 
   buildPhase =
