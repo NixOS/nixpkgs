@@ -3,13 +3,13 @@
 with lib;
 
 let
-  cfg = config.virtualisation.kubernetes;
+  cfg = config.services.kubernetes;
 
 in {
 
   ###### interface
 
-  options.virtualisation.kubernetes = {
+  options.services.kubernetes = {
     package = mkOption {
       description = "Kubernetes package to use.";
       type = types.package;
@@ -420,15 +420,15 @@ in {
     })
 
     (mkIf (any (el: el == "master") cfg.roles) {
-      virtualisation.kubernetes.apiserver.enable = mkDefault true;
-      virtualisation.kubernetes.scheduler.enable = mkDefault true;
-      virtualisation.kubernetes.controllerManager.enable = mkDefault true;
+      services.kubernetes.apiserver.enable = mkDefault true;
+      services.kubernetes.scheduler.enable = mkDefault true;
+      services.kubernetes.controllerManager.enable = mkDefault true;
     })
 
     (mkIf (any (el: el == "node") cfg.roles) {
       virtualisation.docker.enable = mkDefault true;
-      virtualisation.kubernetes.kubelet.enable = mkDefault true;
-      virtualisation.kubernetes.proxy.enable = mkDefault true;
+      services.kubernetes.kubelet.enable = mkDefault true;
+      services.kubernetes.proxy.enable = mkDefault true;
     })
 
     (mkIf (any (el: el == "node" || el == "master") cfg.roles) {
@@ -442,7 +442,7 @@ in {
         cfg.kubelet.enable ||
         cfg.proxy.enable
     ) {
-      virtualisation.kubernetes.package = mkDefault pkgs.kubernetes; 
+      services.kubernetes.package = mkDefault pkgs.kubernetes;
 
       environment.systemPackages = [ cfg.package ];
 

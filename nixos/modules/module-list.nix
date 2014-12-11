@@ -102,6 +102,8 @@
   ./services/backup/rsnapshot.nix
   ./services/backup/sitecopy-backup.nix
   ./services/backup/tarsnap.nix
+  ./services/cluster/fleet.nix
+  ./services/cluster/kubernetes.nix
   ./services/computing/torque/server.nix
   ./services/computing/torque/mom.nix
   ./services/continuous-integration/jenkins/default.nix
@@ -400,8 +402,6 @@
   ./virtualisation/container-config.nix
   ./virtualisation/containers.nix
   ./virtualisation/docker.nix
-  ./virtualisation/fleet.nix
-  ./virtualisation/kubernetes.nix
   ./virtualisation/libvirtd.nix
   ./virtualisation/lxc.nix
   #./virtualisation/nova.nix
