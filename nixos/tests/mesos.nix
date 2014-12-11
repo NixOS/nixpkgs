@@ -3,7 +3,7 @@ import ./make-test.nix {
 
   machine = { config, pkgs, ... }: {
     services.zookeeper.enable = true;
-    virtualistaion.docker.enable = true;
+    virtualisation.docker.enable = true;
     services.mesos = {
       slave = {
         enable = true;
