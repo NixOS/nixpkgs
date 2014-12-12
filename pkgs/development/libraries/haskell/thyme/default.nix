@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "thyme";
-  version = "0.3.5.4";
-  sha256 = "00qsd0ig1zjj7lni7xw5xaxk8w2zwq8jbii8admigrfqsj5qcnam";
+  version = "0.3.5.5";
+  sha256 = "0v3rbjl92bqggsdra72zdq6rxzb2qf1268424p94225lnwgp1il4";
   buildDepends = [
     aeson attoparsec deepseq mtl profunctors QuickCheck random text
     time vector vectorSpace vectorThUnbox
