@@ -6510,7 +6510,6 @@ let
     };
 
     buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ argparse configparser ];
 
     meta = {
       description = "Load, configure, and compose WSGI applications and servers";
