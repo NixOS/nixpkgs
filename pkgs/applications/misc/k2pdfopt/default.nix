@@ -96,7 +96,7 @@ in stdenv.mkDerivation rec {
             -ljbig2dec -ljpeg -lopenjp2 -lpng -lfreetype -lpthread -lmujs \
             -lPgm2asc -llept -ltesseract -lcrypto
 
-    mkdir -p $out/bin
+    mkdir -p $out/bin 
     cp k2pdfopt $out/bin
   '';
 
