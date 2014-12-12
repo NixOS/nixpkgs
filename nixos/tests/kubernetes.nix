@@ -48,7 +48,7 @@ import ./make-test.nix rec {
       { config, pkgs, lib, nodes, ... }:
         {
           virtualisation.memorySize = 512;
-          virtualisation.kubernetes = {
+          services.kubernetes = {
             roles = ["master" "node"];
             controllerManager.machines = ["master" "node"];
             kubelet.extraOpts = "-network_container_image=master:5000/pause";
@@ -92,7 +92,7 @@ import ./make-test.nix rec {
     node =
       { config, pkgs, lib, nodes, ... }:
         {
-          virtualisation.kubernetes = {
+          services.kubernetes = {
             roles = ["node"];
             kubelet.extraOpts = "-network_container_image=master:5000/pause";
             verbose = true;
