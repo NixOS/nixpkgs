@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "network-transport";
-  version = "0.4.0.0";
-  sha256 = "1485w86wzszlg4dvl0fkr7wa47snvpw825llrvdgrrkcxamhsmrz";
+  version = "0.4.1.0";
+  sha256 = "0xn879ngrbnm71i1wsbxxiih22sdb6csy6aip6fgqyafqlpc1c93";
   buildDepends = [ binary hashable transformers ];
   meta = {
     homepage = "http://haskell-distributed.github.com";
