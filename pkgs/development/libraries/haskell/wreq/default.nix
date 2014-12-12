@@ -11,8 +11,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wreq";
-  version = "0.3.0.0";
-  sha256 = "06k6ipbwx46816q0wq9ll0rj91qak2zf74vb2ggcsvdxcnzwm5dp";
+  version = "0.3.0.1";
+  sha256 = "13apqr8sfx2vi794ldqprmgqch79sqli9scgyk3k41v7wcwqaal4";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
