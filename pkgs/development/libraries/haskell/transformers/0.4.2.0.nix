@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "transformers";
-  version = "0.4.1.0";
-  sha256 = "0jlnz86f87jndv4sifg1zpv5b2g2cxy1x2575x727az6vyaarwwg";
+  version = "0.4.2.0";
+  sha256 = "0a364zfcm17mhpy0c4ms2j88sys4yvgd6071qsgk93la2wjm8mkr";
   noHaddock = self.stdenv.lib.versionOlder self.ghc.version "6.11";
   meta = {
     description = "Concrete functor and monad transformers";
