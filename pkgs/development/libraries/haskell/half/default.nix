@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "half";
-  version = "0.2";
-  sha256 = "0p5fw17mvcr6yizgdjy681a1gqdidb5yp80gksxrdm1dv6qf6xcp";
+  version = "0.2.0.1";
+  sha256 = "0lwh5bv8pnp9fzq64z1fg1i4fv8h2lcchs1298agq881hcay19qw";
   meta = {
     homepage = "http://github.com/ekmett/half";
     description = "Half-precision floating-point";
