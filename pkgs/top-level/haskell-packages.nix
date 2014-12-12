@@ -999,6 +999,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   glossRasterAccelerate = callPackage ../development/libraries/haskell/gloss-raster-accelerate {};
 
+  glossRendering = callPackage ../development/libraries/haskell/gloss-rendering {};
+
   glpkHs = callPackage ../development/libraries/haskell/glpk-hs {};
 
   GLURaw = callPackage ../development/libraries/haskell/GLURaw {};
