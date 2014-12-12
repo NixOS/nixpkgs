@@ -1595,7 +1595,8 @@ let
     };
   };
 
-  configparser = buildPythonPackage rec {
+  # Backported version of the ConfigParser library of Python 3.3
+  configparser = if isPy3k then null else buildPythonPackage rec {
     name = "configparser-${version}";
     version = "3.3.0r2";
 
@@ -4988,6 +4989,11 @@ let
   konfig = buildPythonPackage rec {
     name = "konfig-${version}";
     version = "0.9";
+
+    # konfig unconditionaly depend on configparser, even if it is part of
+    # the standard library in python 3.2 or above.
+    disabled = isPy3k;
+
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/konfig.git;
       rev = "refs/tags/${version}";
@@ -10154,6 +10160,7 @@ let
   umemcache = buildPythonPackage rec {
     name = "umemcache-${version}";
     version = "1.6.3";
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/u/umemcache/${name}.zip";
@@ -11449,6 +11456,8 @@ let
   pybrowserid = buildPythonPackage rec {
     name = "PyBrowserID-${version}";
     version = "0.9.2";
+    disabled = isPy3k; # Errors in the test suite.
+
     src = pkgs.fetchgit {
       url = https://github.com/mozilla/PyBrowserID.git;
       rev = "refs/tags/${version}";
