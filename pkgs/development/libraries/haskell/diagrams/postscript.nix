@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "diagrams-postscript";
-  version = "1.1.0.2";
-  sha256 = "1djvra4igw43746wqhwg1ms76w2qlrsdwhr0b795si4wdx8k28b3";
+  version = "1.1.0.3";
+  sha256 = "172r7q9jzhy2kv5bsbakakwv6gpvy308gvp8xpirbch9mrvnjxhz";
   buildDepends = [
     dataDefaultClass diagramsCore diagramsLib dlist filepath hashable
     lens monoidExtras mtl semigroups split vectorSpace
