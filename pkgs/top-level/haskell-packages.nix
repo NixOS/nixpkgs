@@ -1752,6 +1752,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   mtlparse = callPackage ../development/libraries/haskell/mtlparse {};
 
+  mtlPrelude = callPackage ../development/libraries/haskell/mtl-prelude {};
+
   mueval = callPackage ../development/libraries/haskell/mueval {};
 
   muevalWrapper = callPackage ../development/libraries/haskell/mueval/wrapper.nix {};
