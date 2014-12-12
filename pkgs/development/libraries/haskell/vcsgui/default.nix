@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vcsgui";
-  version = "0.1.0.0";
-  sha256 = "0wxalzil8ypvwp0z754m7g3848963znwwrjysdxp5q33imzbp60z";
+  version = "0.1.1.0";
+  sha256 = "1sjkg1ncmpymv9m5ag1f4ia4pdak05bgb03d28jd84p24qvshqyk";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ filepath gtk3 mtl text vcswrapper ];
