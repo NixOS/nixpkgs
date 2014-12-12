@@ -4,10 +4,9 @@ with lib;
 
 let
   cfg = config.services.firefox.syncserver;
-  syncServerSecretFile = "/etc/firefox/syncserver-secret.ini";
   syncServerIni = pkgs.writeText "syncserver.ini" ''
     [DEFAULT]
-    overrides = ${cfg.privateConfig} ${syncServerSecretFile}
+    overrides = ${cfg.privateConfig}
 
     [server:main]
     use = egg:Paste#http
@@ -100,12 +99,14 @@ in
       };
 
       privateConfig = mkOption {
-        type = types.separatedString " ";
-        default = "";
+        type = types.str;
+        default = "/etc/firefox/syncserver-secret.ini";
         description = ''
           If defined, this file would be used to set all fields which were omitted in the
           generated ini files used for configuring the syncserver.  This file is useful
-          for storing secrets, such as the syncserver.secret or the syncserver.sqluri
+          for storing secrets, such as the syncserver.secret or the syncserver.sqluri.
+
+          If this file does not exists, it would be created with a unique secret.
         '';
       };
     };
@@ -120,10 +121,11 @@ in
       path = [ pkgs.pythonPackages.pasteScript pkgs.coreutils ];
       environment.PYTHONPATH = "${pkgs.pythonPackages.syncserver}/lib/${pkgs.pythonPackages.python.libPrefix}/site-packages";
       preStart = ''
-        if ! test -e ${syncServerSecretFile}; then
-          mkdir -p $(dirname ${syncServerSecretFile})
-          echo  > ${syncServerSecretFile} '[syncserver]'
-          echo >> ${syncServerSecretFile} "secret = $(head -c 20 /dev/urandom | sha1sum | tr -d ' -')"
+        if ! test -e ${cfg.privateConfig}; then
+          umask u=rwx,g=x,o=x
+          mkdir -p $(dirname ${cfg.privateConfig})
+          echo  > ${cfg.privateConfig} '[syncserver]'
+          echo >> ${cfg.privateConfig} "secret = $(head -c 20 /dev/urandom | sha1sum | tr -d ' -')"
         fi
       '';
       serviceConfig.ExecStart = "paster serve ${syncServerIni}";
