@@ -12586,6 +12586,8 @@ let
 
   nixops = callPackage ../tools/package-management/nixops { };
 
+  nixopsUnstable = callPackage ../tools/package-management/nixops/unstable.nix { };
+
   nix-prefetch-scripts = callPackage ../tools/package-management/nix-prefetch-scripts { };
 
   nix-repl = callPackage ../tools/package-management/nix-repl { };
