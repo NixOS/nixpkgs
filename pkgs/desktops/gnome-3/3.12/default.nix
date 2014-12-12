@@ -234,6 +234,8 @@ rec {
 
   seahorse = callPackage ./apps/seahorse { };
 
+  polari = callPackage ./apps/polari { };
+
   pomodoro = callPackage ./apps/pomodoro { };
 
 #### Dev http://ftp.gnome.org/pub/GNOME/devtools/
