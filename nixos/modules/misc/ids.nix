@@ -172,6 +172,7 @@
       kubernetes = 162;
       peerflix = 163;
       chronos = 164;
+      gitlab = 165;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -308,6 +309,7 @@
       bosun = 157;
       kubernetes = 158;
       fleet = 159;
+      gitlab = 160;
 
       # When adding a gid, make sure it doesn't match an existing uid. And don't use gids above 399!
 
