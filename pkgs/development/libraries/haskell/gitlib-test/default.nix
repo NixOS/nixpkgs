@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "gitlib-test";
-  version = "3.1.0";
-  sha256 = "0hnwx5r9fdkxvx0zmqffpym921dvf1x2lky8w11y3rfhk9i1g7l4";
+  version = "3.1.0.1";
+  sha256 = "1c65v86brvw3sy48vg79j0ijc5n4cpafksqsmbjs50h3v80zkdm3";
   buildDepends = [
     conduit conduitCombinators exceptions gitlib hspec
     hspecExpectations HUnit monadControl tagged text time transformers
@@ -18,6 +18,5 @@ cabal.mkDerivation (self: {
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ ianwookim ];
-    broken = true;
   };
 })
