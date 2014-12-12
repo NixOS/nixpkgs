@@ -10212,6 +10212,8 @@ let
 
   minidjvu = callPackage ../applications/graphics/minidjvu { };
 
+  mimms = callPackage ../applications/audio/mimms {};
+
   mirage = callPackage ../applications/graphics/mirage {};
 
   mixxx = callPackage ../applications/audio/mixxx {
