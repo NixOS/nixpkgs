@@ -127,8 +127,6 @@ in
         fi
       '';
       serviceConfig.ExecStart = "paster serve ${syncServerIni}";
-      serviceConfig.User = "deluge";
-      serviceConfig.Group = "deluge";
     };
 
   };
