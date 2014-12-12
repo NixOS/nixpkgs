@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "monad-par";
-  version = "0.3.4.6";
-  sha256 = "1k345fpq31jg0mvfk8ap03wscnx8dvlp65gr567vai9ym1ahk6zy";
+  version = "0.3.4.7";
+  sha256 = "12n27hs274nrfkpa6hx0gdkrc76wxzliqf53x6689idl363sdf13";
   buildDepends = [
     abstractDeque abstractPar deepseq monadParExtras mtl mwcRandom
     parallel
