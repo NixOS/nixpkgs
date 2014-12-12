@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "aeson-pretty";
-  version = "0.7.1";
-  sha256 = "0gmm1kmdbanfyfdyij1gnazycp1x9703qfa5hgrz39j9046zg3y6";
+  version = "0.7.2";
+  sha256 = "03ap81853qi8yd9kdgczllrrni23a6glsfxrwj8zab6ipjrbh234";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
