@@ -18,6 +18,20 @@ stdenv.mkDerivation {
   src = fetchurl {
     inherit (s) url sha256;
   };
+  configureFlags = [
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+  ];
+  makeFlags = "hwdb_bin=/var/lib/udev/hwdb.bin";
+  installFlags =
+    [
+    "localstatedir=$(TMPDIR)/var"
+    "sysconfdir=$(out)/etc"
+    "udevconfdir=$(out)/etc/udev"
+    "udevhwdbbin=$(out)/var/lib/udev/hwdb.bin"
+    "udevhwdbdir=$(out)/var/lib/udev/hwdb.d"
+    ];
+  enableParallelBuilding = true;
   meta = {
     inherit (s) version;
     description = ''An udev fork by Gentoo'';
