@@ -6471,6 +6471,7 @@ in
 
   guileLint = callPackage ../development/tools/guile/guile-lint { };
 
+  gworkspace = callPackage ../applications/misc/gworkspace { stdenv = clangStdenv; };
   gwrap = callPackage ../development/tools/guile/g-wrap { };
 
   help2man = callPackage ../development/tools/misc/help2man {
@@ -9499,6 +9500,8 @@ in
   sword = callPackage ../development/libraries/sword { };
 
   biblesync = callPackage ../development/libraries/biblesync { };
+
+  system_preferences = callPackage ../applications/misc/systempreferences { stdenv = clangStdenv; };
 
   szip = callPackage ../development/libraries/szip { };
 
