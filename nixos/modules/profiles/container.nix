@@ -20,17 +20,18 @@ in {
     contents = [];
     extraArgs = "--owner=0";
 
-    # Some container managers like lxc need these
-    extraCommands = "mkdir -p proc sys dev";
-
     # Add init script to image
     storeContents = [
       { object = config.system.build.toplevel + "/init";
         symlink = "/init";
       }
     ] ++ (pkgs2storeContents [ pkgs.stdenv ]);
+
+    # Some container managers like lxc need these
+    extraCommands = "mkdir -p proc sys dev";
   };
 
+  boot.isContainer = true;
   boot.postBootCommands =
     ''
       # After booting, register the contents of the Nix store in the Nix
@@ -46,12 +47,12 @@ in {
       ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
     '';
 
-  boot.isContainer = true;
-
   # Disable some features that are not useful in a container.
   sound.enable = mkDefault false;
   services.udisks2.enable = mkDefault false;
 
-  # Shut up warnings about not having a boot loader.
-  system.build.installBootLoader = "${pkgs.coreutils}/bin/true";
+  # Install new init script
+  system.activationScripts.installInitScript = ''
+    ln -fs $systemConfig/init /init
+  '';
 }
