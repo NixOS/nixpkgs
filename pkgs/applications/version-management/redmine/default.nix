@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ruby, rubyLibs, libiconv, libxslt, libxml2, pkgconfig, libffi, imagemagickBig, postgresql }:
+{ stdenv, fetchurl, ruby, rubyLibs, libiconv, libiconvOrNull, libiconvOrLibc, libxslt, libxml2, pkgconfig, libffi, glibc, imagemagickBig, postgresql }:
 
 let
   gemspec = map (gem: fetchurl { url=gem.url; sha256=gem.hash; }) (import ./Gemfile.nix);
@@ -25,7 +25,9 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    ruby rubyLibs.bundler libiconv libxslt libxml2 pkgconfig libffi
+    ruby rubyLibs.bundler 
+  ] ++ (if (libiconvOrNull != null) then [libiconv] else []) ++ [
+    libxslt libxml2 pkgconfig libffi
     imagemagickBig postgresql
   ];
 
@@ -46,7 +48,7 @@ in stdenv.mkDerivation rec {
 
     bundle config build.nokogiri \
       --use-system-libraries \
-      --with-iconv-dir=${libiconv} \
+      --with-iconv-dir=${libiconvOrLibc} \
       --with-xslt-dir=${libxslt} \
       --with-xml2-dir=${libxml2} \
       --with-pkg-config \
