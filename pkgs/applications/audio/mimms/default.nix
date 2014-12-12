@@ -17,7 +17,7 @@ in
     meta = {
       homepage = https://savannah.nongnu.org/projects/mimms/;
       license = stdenv.lib.licenses.gpl3;
-      description = "mimms is an mms (e.g. mms://) stream downloader";
+      description = "An mms (e.g. mms://) stream downloader";
 
       longDescription = ''
         mimms is a program designed to allow you to download streams
