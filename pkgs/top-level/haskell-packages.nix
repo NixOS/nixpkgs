@@ -2752,8 +2752,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   vect = callPackage ../development/libraries/haskell/vect {};
 
   vector_0_10_9_3  = callPackage ../development/libraries/haskell/vector/0.10.9.3.nix {};
-  vector_0_10_12_1  = callPackage ../development/libraries/haskell/vector/0.10.12.1.nix {};
-  vector = self.vector_0_10_12_1;
+  vector_0_10_12_2  = callPackage ../development/libraries/haskell/vector/0.10.12.2.nix {};
+  vector = self.vector_0_10_12_2;
 
   vectorAlgorithms = callPackage ../development/libraries/haskell/vector-algorithms {};
 

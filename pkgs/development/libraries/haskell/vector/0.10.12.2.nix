@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vector";
-  version = "0.10.12.1";
-  sha256 = "0m4m650yxv92dz8xgcjfkbhsl46hgnf02viwgdja5xmvg3aa8fcp";
+  version = "0.10.12.2";
+  sha256 = "01hc71k1z9m0g0dv4zsvq5d2dvbgyc5p01hryw5c53792yi2fm25";
   buildDepends = [ deepseq primitive ];
   testDepends = [
     QuickCheck random testFramework testFrameworkQuickcheck2
