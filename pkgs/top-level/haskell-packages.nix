@@ -2088,6 +2088,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   quickcheckPropertyMonad = callPackage ../development/libraries/haskell/quickcheck-property-monad {};
 
+  quickcheckUnicode = callPackage ../development/libraries/haskell/quickcheck-unicode {};
+
   qrencode = callPackage ../development/libraries/haskell/qrencode {
     inherit (pkgs) qrencode;
   };
