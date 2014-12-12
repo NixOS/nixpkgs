@@ -11172,6 +11172,7 @@ let
     in
     import ../applications/networking/browsers/firefox/wrapper.nix {
       inherit stdenv lib makeWrapper makeDesktopItem browser browserName desktopName nameSuffix icon;
+      libtrick = true;
       plugins =
          assert !(enableGnash && enableAdobeFlash);
          assert !(jre && icedtea);
