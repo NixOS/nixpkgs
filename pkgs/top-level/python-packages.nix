@@ -8678,8 +8678,6 @@ let
   scikitlearn = buildPythonPackage {
     name = "scikit-learn-0.15.2";
 
-    disabled = isPy3k;
-
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/scikit-learn/scikit-learn-0.15.2.tar.gz";
       md5 = "d9822ad0238e17b382a3c756ea94fe0d";
