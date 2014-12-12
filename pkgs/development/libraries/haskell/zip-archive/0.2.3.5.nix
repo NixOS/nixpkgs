@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "zip-archive";
-  version = "0.2.3.4";
-  sha256 = "1c589cpl1jax1r60b92az1800b67zrva3dndhv9hcxidlgyf46gp";
+  version = "0.2.3.5";
+  sha256 = "0qa3qvaj0xkh4qw7s96rkbdmkyhnql6g92yplm7m6n7z7nxrcs18";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ binary digest filepath mtl text time zlib ];
