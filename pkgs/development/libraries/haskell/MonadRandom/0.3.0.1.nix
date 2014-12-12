@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "MonadRandom";
-  version = "0.3";
-  sha256 = "0bmsccjcz6glb0x0nkjlq3qywfibf0wxxv4dvdhjfw5sx6im9qx3";
+  version = "0.3.0.1";
+  sha256 = "0bbj6rkxskrvl14lngpggql4q41pw21cj4z8h592mizrxjfa3rj0";
   buildDepends = [ mtl random transformers ];
   meta = {
     description = "Random-number generation monad";
