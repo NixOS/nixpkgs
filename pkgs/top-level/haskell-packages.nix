@@ -1900,8 +1900,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   };
 
   parallel_3_2_0_3 = callPackage ../development/libraries/haskell/parallel/3.2.0.3.nix {};
-  parallel_3_2_0_4 = callPackage ../development/libraries/haskell/parallel/3.2.0.4.nix {};
-  parallel = self.parallel_3_2_0_4;
+  parallel_3_2_0_5 = callPackage ../development/libraries/haskell/parallel/3.2.0.5.nix {};
+  parallel = self.parallel_3_2_0_5;
 
   parallelIo = callPackage ../development/libraries/haskell/parallel-io {};
 

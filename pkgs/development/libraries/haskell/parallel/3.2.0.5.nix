@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "parallel";
-  version = "3.2.0.4";
-  sha256 = "0v8l2rbczjadynbz4q4r00k8a1mqj70y63zbklpxckafq1zn7nwc";
+  version = "3.2.0.5";
+  sha256 = "16hhsi8pr29qqg9ssks0y9j0vmnvpyy1qk46s0c0vgj3pyzl38mm";
   buildDepends = [ deepseq ];
   meta = {
     description = "Parallel programming library";
