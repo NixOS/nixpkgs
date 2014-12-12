@@ -2250,13 +2250,13 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   servant = callPackage ../development/libraries/haskell/servant {};
 
-  servantPool = callPackage ../development/libraries/haskell/servant-pool {};
+  servantServer = callPackage ../development/libraries/haskell/servant-server {};
 
-  servantPostgresql = callPackage ../development/libraries/haskell/servant-postgresql {};
+  servantClient = callPackage ../development/libraries/haskell/servant-client {};
 
-  servantResponse = callPackage ../development/libraries/haskell/servant-response {};
+  servantDocs = callPackage ../development/libraries/haskell/servant-docs {};
 
-  servantScotty = callPackage ../development/libraries/haskell/servant-scotty {};
+  servantJquery = callPackage ../development/libraries/haskell/servant-jquery {};
 
   setenv = callPackage ../development/libraries/haskell/setenv {};
 
