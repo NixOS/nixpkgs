@@ -1580,6 +1580,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   lists = callPackage ../development/libraries/haskell/lists {};
 
+  listT = callPackage ../development/libraries/haskell/list-t {};
+
   listExtras = callPackage ../development/libraries/haskell/listExtras {};
 
   listTries = callPackage ../development/libraries/haskell/list-tries {};
