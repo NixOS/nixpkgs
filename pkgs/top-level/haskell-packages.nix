@@ -2564,8 +2564,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   text_0_11_2_3 = callPackage ../development/libraries/haskell/text/0.11.2.3.nix {};
   text_1_1_1_3 = callPackage ../development/libraries/haskell/text/1.1.1.3.nix {};
-  text_1_2_0_0 = callPackage ../development/libraries/haskell/text/1.2.0.0.nix {};
-  text = self.text_1_2_0_0;
+  text_1_2_0_2 = callPackage ../development/libraries/haskell/text/1.2.0.2.nix {};
+  text = self.text_1_2_0_2;
 
   textBinary = callPackage ../development/libraries/haskell/text-binary {};
 
