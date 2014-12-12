@@ -1,0 +1,25 @@
+diff --git a/Control/Concurrent/Event.hs b/Control/Concurrent/Event.hs
+index f7e368b..26dda69 100644
+--- a/Control/Concurrent/Event.hs
++++ b/Control/Concurrent/Event.hs
+@@ -69,9 +69,10 @@ import Data.Maybe              ( isJust )
+ import Data.Typeable           ( Typeable )
+ 
+ #ifdef __HADDOCK__
+-import Control.Exception       ( block )
++import Control.Exception       ( mask )
+ #endif
+ 
++
+ import Prelude                 ( Integer )
+ import System.IO               ( IO )
+ 
+@@ -168,7 +169,7 @@ is 'set' again.
+ The semantics of signal are equivalent to the following definition:
+ 
+ @
+-  signal e = 'block' $ 'set' e >> 'clear' e
++  signal e = 'mask' $ 'set' e >> 'clear' e
+ @-}
+ signal :: Event -> IO ()
+ signal ev = Broadcast.signal (evBroadcast ev) ()
