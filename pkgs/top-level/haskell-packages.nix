@@ -2657,6 +2657,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   twitterTypesLens = callPackage ../development/libraries/haskell/twitter-types-lens {};
 
+  typeAligned = callPackage ../development/libraries/haskell/type-aligned {};
+
   TypeCompose = callPackage ../development/libraries/haskell/TypeCompose {};
 
   typeEq = callPackage ../development/libraries/haskell/type-eq {};
