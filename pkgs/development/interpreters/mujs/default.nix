@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = git://git.ghostscript.com/mujs.git;
-    rev  = "6afabf445cad0dd9afbc1f5870dba730801f09c0";
-    sha256 = "1afzmncw3jvfq6smhhhsi1ywfmdpxkjpzswb86pdmdh3p04g1r0n";
+    rev  = "9bc5fec0804381d59ef8dc62304ed6892fb7c4ca";
+    sha256 = "0ba6p92ygcssfzd4ij89vilfr2kwql2d1jpyqxflh5wyh1i92wjl";
   };
 
   buildInputs = [ clang ];
