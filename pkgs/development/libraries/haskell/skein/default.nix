@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "skein";
-  version = "1.0.9";
-  sha256 = "08hy40c0gzlalrpmgcvhc1v51a44idipamjjbh7zzwsvbxmp1cbb";
+  version = "1.0.9.1";
+  sha256 = "05as5glin9vikxxbnp5wpklqjd5hh9n28asxx147blmiz0x45dw8";
   buildDepends = [ cereal cryptoApi tagged ];
   testDepends = [ cereal cryptoApi filepath hspec tagged ];
   jailbreak = true;
