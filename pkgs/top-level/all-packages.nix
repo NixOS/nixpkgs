@@ -2721,7 +2721,7 @@ let
 
   unclutter = callPackage ../tools/misc/unclutter { };
 
-  unbound = callPackage ../tools/networking/unbound { };
+  unbound = callPackage ../servers/dns/unbound { };
 
   units = callPackage ../tools/misc/units { };
 
