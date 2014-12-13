@@ -1208,9 +1208,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hi = callPackage ../development/libraries/haskell/hi {};
 
-  hindent = callPackage ../development/libraries/haskell/hindent {
-    haskellSrcExts = self.haskellSrcExts_1_15_0_1;
-  };
+  hindent = callPackage ../development/libraries/haskell/hindent {};
 
   hint = callPackage ../development/libraries/haskell/hint {};
 
@@ -2963,7 +2961,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   # Compilers.
 
-  Agda = callPackage ../development/compilers/agda { haskellSrcExts = self.haskellSrcExts_1_15_0_1; };
+  Agda = callPackage ../development/compilers/agda {};
 
   epic = callPackage ../development/compilers/epic {};
 
