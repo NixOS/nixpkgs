@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "stm-containers";
-  version = "0.2.4";
-  sha256 = "0qwyy0znd97w52kq9azg9bnc6578x1wvfhknh7qd8sz50gz19qwy";
+  version = "0.2.6";
+  sha256 = "1kmrkwqqhgmbmycnxf86mdcc5yf3v8irbga3nmpi9wz1hmb0vcjy";
   buildDepends = [
     basePrelude focus hashable listT lochTh placeholders primitive
     transformers
