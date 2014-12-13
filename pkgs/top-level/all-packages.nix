@@ -4315,6 +4315,8 @@ let
 
   autoconf = callPackage ../development/tools/misc/autoconf { };
 
+  autoconf-archive = callPackage ../development/tools/misc/autoconf-archive { };
+
   autoconf213 = callPackage ../development/tools/misc/autoconf/2.13.nix { };
 
   autocutsel = callPackage ../tools/X11/autocutsel{ };
@@ -7725,6 +7727,8 @@ let
 
   influxdb = callPackage ../servers/nosql/influxdb { };
 
+  hyperdex = callPackage ../servers/nosql/hyperdex { };
+  
   mysql51 = import ../servers/sql/mysql/5.1.x.nix {
     inherit fetchurl ncurses zlib perl openssl stdenv;
     ps = procps; /* !!! Linux only */
