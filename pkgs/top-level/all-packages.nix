@@ -2546,6 +2546,8 @@ let
 
   tmin = callPackage ../tools/security/tmin { };
 
+  tmsu = callPackage ../tools/filesystems/tmsu { };
+
   tor = callPackage ../tools/security/tor { };
 
   tor-arm = callPackage ../tools/security/tor/tor-arm.nix { };
