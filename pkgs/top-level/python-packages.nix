@@ -5636,6 +5636,23 @@ let
     };
   };
 
+  mutag = buildPythonPackage rec {
+    disabled = ! isPy3k;
+    name = "mutag-0.0.1-b1b3ff2ad8";
+    src = pkgs.fetchgit {
+      url = "https://github.com/aroig/mutag.git";
+      sha256 = "1x9wl789ib62zmrbjy96jhcbjnym6fb1jvdjiw4smapifm2hnyr7";
+      rev = "efc9bc7e1ea345e7bd0568848598de";
+    };
+
+    propagatedBuildInputs = with self; [ pyparsing ];
+
+    meta = {
+      homepage = https://github.com/aroig/mutag;
+      license = stdenv.lib.licenses.gpl3;
+      maintainers = [ stdenv.lib.maintainers.DamienCassou ];
+    };
+  };
 
   mutagen = buildPythonPackage (rec {
     name = "mutagen-1.23";
