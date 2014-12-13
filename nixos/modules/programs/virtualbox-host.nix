@@ -29,10 +29,7 @@ in
         setuid = true;
       };
     in map mkVboxStub [
-      "VBoxBFE"
-      "VBoxBalloonCtrl"
       "VBoxHeadless"
-      "VBoxManage"
       "VBoxSDL"
       "VirtualBox"
     ];
