@@ -47,8 +47,12 @@
 , enableLibraryProfiling ? false
 , enableSharedLibraries ? pkgs.stdenv.lib.versionOlder "7.7" ghc.version
 , enableSharedExecutables ? pkgs.stdenv.lib.versionOlder "7.7" ghc.version
-, enableCheckPhase ? pkgs.stdenv.lib.versionOlder "7.4" ghc.version
+, buildCoreLibraries ? false
 , enableStaticLibraries ? true
+
+# FIXME: disable checks for buildCoreLibraries to avoid doctest dependency;
+#        probably we can implement something more selective in future.
+, enableCheckPhase ? (pkgs.stdenv.lib.versionOlder "7.4" ghc.version && !buildCoreLibraries)
 }:
 
 # We redefine callPackage to take into account the new scope. The optional
@@ -247,7 +251,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   bimap = callPackage ../development/libraries/haskell/bimap {};
 
   binary_0_7_2_2 = callPackage ../development/libraries/haskell/binary/0.7.2.2.nix {};
-  binary = null;                # core package since ghc >= 7.2.x
+  binary = if !buildCoreLibraries then null # core package since ghc >= 7.2.x
+    else callPackage ../development/libraries/haskell/binary/0.7.2.2.nix {};
 
   binaryStrict = callPackage ../development/libraries/haskell/binary-strict {};
 
@@ -354,6 +359,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   Cabal_1_16_0_3 = callPackage ../development/libraries/haskell/Cabal/1.16.0.3.nix {};
   Cabal_1_18_1_3 = callPackage ../development/libraries/haskell/Cabal/1.18.1.3.nix {};
   Cabal_1_20_0_2 = callPackage ../development/libraries/haskell/Cabal/1.20.0.2.nix {};
+  # We don't build it when buildCoreLibraries is enabled, since
+  # this (and dependencies) is used to build Setup.hs which fails
+  # without using built-in libraries.
   Cabal = null;                 # core package since forever
 
   cabalCargs = callPackage ../development/libraries/haskell/cabal-cargs {};
@@ -628,6 +636,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   deepseq_1_2_0_1 = callPackage ../development/libraries/haskell/deepseq/1.2.0.1.nix {};
   deepseq_1_3_0_2 = callPackage ../development/libraries/haskell/deepseq/1.3.0.2.nix {};
+  # dependency of Cabal; don't use buildCoreLibraries
   deepseq = null;               # core package since ghc >= 7.4.x
 
   deepseqGenerics = callPackage ../development/libraries/haskell/deepseq-generics {};
@@ -822,6 +831,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   fdoNotify = callPackage ../development/libraries/haskell/fdo-notify {};
 
+  # dependency of Cabal
   filepath = null;              # core package since forever
 
   fileLocation = callPackage ../development/libraries/haskell/file-location {};
@@ -1748,7 +1758,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   mtl_2_1_3_1 = callPackage ../development/libraries/haskell/mtl/2.1.3.1.nix {};
   mtl_2_2_1 = callPackage ../development/libraries/haskell/mtl/2.2.1.nix {};
-  mtl = null; # tightly coupled with 'transformers' which is a core package
+  mtl = if !buildCoreLibraries then null # tightly coupled with 'transformers' which is a core package
+    else callPackage ../development/libraries/haskell/mtl/2.2.1.nix {};
 
   mtlparse = callPackage ../development/libraries/haskell/mtlparse {};
 
@@ -2015,7 +2026,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   pqueue = callPackage ../development/libraries/haskell/pqueue {};
 
   process_1_2_0_0 = callPackage ../development/libraries/haskell/process/1.2.0.0.nix {};
-  process = null;      # core package since forever
+  process = if !buildCoreLibraries then null # core package since forever
+    else callPackage ../development/libraries/haskell/process/1.2.0.0.nix {};
 
   productProfunctors = callPackage ../development/libraries/haskell/product-profunctors {};
 
@@ -2605,6 +2617,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   time_1_1_2_4 = callPackage ../development/libraries/haskell/time/1.1.2.4.nix {};
   time_1_5 = callPackage ../development/libraries/haskell/time/1.5.nix {};
+  # dependency of Cabal
   time = null;                  # core package since ghc >= 6.12.x
 
   timerep = callPackage ../development/libraries/haskell/timerep {};
@@ -2625,7 +2638,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   transformers_0_3_0_0 = callPackage ../development/libraries/haskell/transformers/0.3.0.0.nix {};
   transformers_0_4_1_0 = callPackage ../development/libraries/haskell/transformers/0.4.1.0.nix {};
-  transformers = null;          # core package since ghc >= 7.8.x
+  transformers = if !buildCoreLibraries then null # core package since ghc >= 7.8.x
+    else callPackage ../development/libraries/haskell/transformers/0.4.1.0.nix {};
 
   transformersBase = callPackage ../development/libraries/haskell/transformers-base {};
 

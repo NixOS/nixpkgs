@@ -8,7 +8,11 @@
 # The actual Haskell packages are composed in haskell-packages.nix. There is
 # more documentation in there.
 
-{ makeOverridable, lowPrio, hiPrio, stdenv, pkgs, newScope, config, callPackage } : rec {
+{ makeOverridable, lowPrio, hiPrio, stdenv, pkgs, newScope, config, callPackage } :
+
+let buildCoreLibraries = config.haskell.buildCoreLibraries or false; in
+
+rec {
 
   # haskell-packages.nix provides the latest possible version of every package,
   # and this file overrides those version choices per compiler when appropriate.
@@ -24,7 +28,7 @@
     cabalInstall_1_20_0_3 = super.cabalInstall_1_20_0_3.override { Cabal = self.Cabal_1_20_0_2; };
     codex = super.codex.override { hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_20_0_2; }; };
     MonadRandom = self.MonadRandom_0_2_0_1; # newer versions require transformers >= 0.4.x
-    mtl = self.mtl_2_1_3_1;
+    mtl = if buildCoreLibraries then super.mtl else self.mtl_2_1_3_1;
   };
 
   ghc763Prefs = self : super : ghc783Prefs self super // {
@@ -151,7 +155,7 @@
     , extraArgs ? {}
     } :
     let haskellPackagesClass = import ./haskell-packages.nix {
-          inherit pkgs newScope modifyPrio;
+          inherit pkgs newScope modifyPrio buildCoreLibraries;
           enableLibraryProfiling =
             if profExplicit then profDefault
                             else config.cabal.libraryProfiling or profDefault;

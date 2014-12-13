@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     comonad free mtl pointed profunctors semigroups transformers void
   ];
   testDepends = [ doctest filepath ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/ekmett/machines/";
     description = "Networked stream transducers";
