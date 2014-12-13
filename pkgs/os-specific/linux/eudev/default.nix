@@ -22,7 +22,10 @@ stdenv.mkDerivation {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
   ];
-  makeFlags = "hwdb_bin=/var/lib/udev/hwdb.bin";
+  makeFlags = [
+    "hwdb_bin=/var/lib/udev/hwdb.bin"
+    "udevrulesdir=/etc/udev/rules.d"
+    ];
   installFlags =
     [
     "localstatedir=$(TMPDIR)/var"
@@ -30,6 +33,7 @@ stdenv.mkDerivation {
     "udevconfdir=$(out)/etc/udev"
     "udevhwdbbin=$(out)/var/lib/udev/hwdb.bin"
     "udevhwdbdir=$(out)/var/lib/udev/hwdb.d"
+    "udevrulesdir=$(out)/var/lib/udev/rules.d"
     ];
   enableParallelBuilding = true;
   meta = {
