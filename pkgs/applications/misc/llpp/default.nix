@@ -1,5 +1,5 @@
 { stdenv, makeWrapper, fetchgit, pkgconfig, ninja, ocaml, findlib, mupdf, lablgl
-, gtk3, openjpeg, jbig2dec, mujs }:
+, gtk3, openjpeg, jbig2dec, mujs, xsel }:
 
 let ocamlVersion = (builtins.parseDrvName (ocaml.name)).version;
 in stdenv.mkDerivation rec {
@@ -28,7 +28,8 @@ in stdenv.mkDerivation rec {
     install link.so $out/lib
     wrapProgram $out/bin/llpp \
         --prefix CAML_LD_LIBRARY_PATH ":" "${lablgl}/lib/ocaml/${ocamlVersion}/site-lib/lablgl" \
-        --prefix CAML_LD_LIBRARY_PATH ":" "$out/lib"
+        --prefix CAML_LD_LIBRARY_PATH ":" "$out/lib" \
+        --prefix PATH ":" "${xsel}/bin"
   '';
 
   meta = with stdenv.lib; {
