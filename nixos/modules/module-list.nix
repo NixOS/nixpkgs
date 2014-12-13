@@ -224,6 +224,7 @@
   ./services/networking/firewall.nix
   ./services/networking/flashpolicyd.nix
   ./services/networking/freenet.nix
+  ./services/networking/gdomap.nix
   ./services/networking/git-daemon.nix
   ./services/networking/gnunet.nix
   ./services/networking/gogoclient.nix
@@ -322,6 +323,7 @@
   ./services/x11/hardware/multitouch.nix
   ./services/x11/hardware/synaptics.nix
   ./services/x11/hardware/wacom.nix
+  ./services/x11/gdnc.nix
   ./services/x11/redshift.nix
   ./services/x11/window-managers/awesome.nix
   #./services/x11/window-managers/compiz.nix
