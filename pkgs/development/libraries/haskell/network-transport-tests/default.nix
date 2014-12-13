@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.2.1.0";
   sha256 = "17qf52a76an9ignhb85alz92j9vk3p0ydmaqys8b1ss5mkqipm64";
   buildDepends = [ ansiTerminal mtl networkTransport random ];
+  jailbreak = true;
   meta = {
     homepage = "http://haskell-distributed.github.com";
     description = "Unit tests for Network.Transport implementations";
