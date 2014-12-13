@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    ./3918a2ccceb98230ff517601ad60aa6bee36e2c4.patch
+    ./8207a31c26cc42fee79363a14c4a8f4fcbfffe63.patch
+  ];
+
   buildInputs =
     [ cmake pkgconfig boost libunwind mariadb libmemcached pcre gdb
       libevent gd curl libxml2 icu flex bison openssl zlib php expat libcap
