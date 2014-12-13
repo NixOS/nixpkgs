@@ -4,13 +4,12 @@
 
 cabal.mkDerivation (self: {
   pname = "vk-posix-pty";
-  version = "0.2.0.2";
-  sha256 = "0dp9kpn1qzfqykmyq20sg0snyk8zrqa2g8c5xp9rfp0zfgmh37dh";
+  version = "0.2.1";
+  sha256 = "1kj06niwcsb4lyhppv5bs67cf8frcs4g8fyyzv3cpipn0xdhsr97";
   isLibrary = true;
   isExecutable = true;
   meta = {
-    homepage = "https://bitbucket.org/merijnv/posix-pty
-https://github.com/proger/posix-pty/tree/fork";
+    homepage = "https://github.com/proger/posix-pty/tree/fork";
     description = "Pseudo terminal interaction with subprocesses";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
