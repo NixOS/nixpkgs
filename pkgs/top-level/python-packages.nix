@@ -6901,6 +6901,27 @@ let
     };
   };
 
+  pycosat = pythonPackages.buildPythonPackage rec {
+    name = "pycosat-0.6.0";
+
+    propagatedBuildInputs = with pythonPackages; [  ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pycosat/${name}.tar.gz";
+      sha256 = "02sdn2998jlrm35smn1530hix3kzwyc1jv49cjdcnvfvrqqi3rww";
+    };
+
+    meta = with stdenv.lib; {
+      description = ''PicoSAT is a popular SAT solver written by Armin
+          Biere in pure C. This package provides efficient Python bindings
+          to picosat on the C level, i.e. when importing pycosat, the
+          picosat solver becomes part of the Python process itself. For
+          ease of deployment, the picosat source (namely picosat.c and
+          picosat.h) is included in this project.'';
+      homepage = https://github.com/ContinuumIO/pycosat;
+      license = licenses.mit;
+    };
+  };
 
   pygit2 = buildPythonPackage rec {
     name = "pygit2-0.21.2";
