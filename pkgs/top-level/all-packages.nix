@@ -12603,6 +12603,8 @@ let
 
   nix-repl = callPackage ../tools/package-management/nix-repl { };
 
+  nix-serve = callPackage ../tools/package-management/nix-serve { };
+
   nut = callPackage ../applications/misc/nut { };
 
   solfege = callPackage ../misc/solfege {
