@@ -9,35 +9,44 @@
 , automake, libtool, cabalInstallGhcjs, gmp, base16Bytestring
 , cryptohash, executablePath, transformersCompat, haddockApi
 , haddock, hspec, xhtml, primitive, cacert, pkgs, ghc
+, coreutils
 }:
-cabal.mkDerivation (self: rec {
-  pname = "ghcjs";
+let
   version = "0.1.0";
-  src = fetchgit {
-    url = git://github.com/ghcjs/ghcjs.git;
-    rev = "5c2d279982466e076223fcbe1e1096e22956e5a9";
-    sha256 = "0bc37b4e8bd039208a126fea39850c99459265cb273ac7237939cdbaee6ef71f";
+  libDir = "share/ghcjs/${pkgs.stdenv.system}-${version}-${ghc.ghc.version}/ghcjs";
+  ghcjsBoot = fetchgit {
+    url = git://github.com/ghcjs/ghcjs-boot.git;
+    rev = "8bf2861c0c776eec42e0a1833f220e36681e810c";
+    sha256 = "0fwnng56d1y98fpp2s9yl9xy21584p7fsszr4m9d3wmjciiazcv2";
   };
   shims = fetchgit {
     url = git://github.com/ghcjs/shims.git;
     rev = "5e11d33cb74f8522efca0ace8365c0dc994b10f6";
-    sha256 = "64be139022e6f662086103fca3838330006d38e6454bd3f7b66013031a47278e";
+    sha256 = "13i78wd064v0nvvx6js5wqw6s01hhf1s7z03c4465xp64a817gk4";
   };
-  isLibrary = true;
-  isExecutable = true;
-  jailbreak = true;
-  noHaddock = true;
-  doCheck = false;
   ghcjsPrim = cabal.mkDerivation (self: {
     pname = "ghcjs-prim";
     version = "0.1.0.0";
     src = fetchgit {
       url = git://github.com/ghcjs/ghcjs-prim.git;
       rev = "915f263c06b7f4a246c6e02ecdf2b9a0550ed967";
-      sha256 = "34dd58b6e2d0ce780da46b509fc2701c28a7b2182f8d700b53a80981ac8bcf86";
+      sha256 = "11ngifn822d8ac5p139g32rafa0wf319yl3blh6piknhwav5ip9l";
     };
     buildDepends = [ primitive ];
   });
+in cabal.mkDerivation (self: rec {
+  pname = "ghcjs";
+  inherit version;
+  src = fetchgit {
+    url = git://github.com/ghcjs/ghcjs.git;
+    rev = "5c2d279982466e076223fcbe1e1096e22956e5a9";
+    sha256 = "07zpdvpbmk9rg4iwffi7rdjr4icr1j2kkskg2a520ffhid77phqb";
+  };
+  isLibrary = true;
+  isExecutable = true;
+  jailbreak = true;
+  noHaddock = true;
+  doCheck = false;
   buildDepends = [
     filepath HTTP mtl network random stm time zlib aeson attoparsec
     bzlib dataDefault ghcPaths hashable haskellSrcExts haskellSrcMeta
@@ -53,30 +62,32 @@ cabal.mkDerivation (self: rec {
   testDepends = [
     HUnit testFramework testFrameworkHunit
   ];
-  postConfigure = ''
-    echo Patching ghcjs with absolute paths to the Nix store
-    sed -i -e "s|getAppUserDataDirectory \"ghcjs\"|return \"$out/share/ghcjs\"|" \
-      src/Compiler/Info.hs
-    sed -i -e "s|str = \\[\\]|str = [\"--prefix=$out\", \"--libdir=$prefix/lib/$compiler\", \"--libsubdir=$pkgid\"]|" \
-      src-bin/Boot.hs
+  patches = [ ./ghcjs.patch ];
+  postPatch = ''
+    substituteInPlace Setup.hs --replace "/usr/bin/env" "${coreutils}/bin/env"
+    substituteInPlace src/Compiler/Info.hs --replace "@PREFIX@" "$out"
+    substituteInPlace src-bin/Boot.hs --replace "@PREFIX@" "$out"
   '';
-  libdir = "/share/ghcjs/${pkgs.stdenv.system}-${version}-${ghc.ghc.version}";
   postInstall = ''
-    export HOME=$(pwd)
-    export GIT_SSL_CAINFO="${cacert}/etc/ca-bundle.crt"
-    git clone git://github.com/ghcjs/ghcjs-boot.git
-    cd ghcjs-boot
-    git checkout 8bf2861c0c776eec42e0a1833f220e36681e810c
-    git submodule update --init --recursive
-    ( cd boot ; chmod u+w . ; ln -s .. ghcjs-boot )
-    chmod -R u+w .              # because fetchgit made it read-only
-    local GHCJS_LIBDIR=$out${libdir}
-    mkdir -p $GHCJS_LIBDIR
-    cp -R ${shims} $GHCJS_LIBDIR/shims
-    ${cabalInstallGhcjs}/bin/cabal-js update
+    local topDir=$out/${libDir}
+    mkdir -p $topDir
+
+    cp -r ${ghcjsBoot} $topDir/ghcjs-boot
+    chmod -R u+w $topDir/ghcjs-boot
+
+    cp -r ${shims} $topDir/shims
+    chmod -R u+w $topDir/shims
+
     PATH=$out/bin:${CabalGhcjs}/bin:$PATH LD_LIBRARY_PATH=${gmp}/lib:${gcc.gcc}/lib64:$LD_LIBRARY_PATH \
-      env -u GHC_PACKAGE_PATH $out/bin/ghcjs-boot --dev --with-cabal ${cabalInstallGhcjs}/bin/cabal-js --with-gmp-includes ${gmp}/include --with-gmp-libraries ${gmp}/lib
+      env -u GHC_PACKAGE_PATH $out/bin/ghcjs-boot \
+        --dev \
+        --with-cabal ${cabalInstallGhcjs}/bin/cabal-js \
+        --with-gmp-includes ${gmp}/include \
+        --with-gmp-libraries ${gmp}/lib
   '';
+  passthru = {
+    inherit libDir;
+  };
   meta = {
     homepage = "https://github.com/ghcjs/ghcjs";
     description = "GHCJS is a Haskell to JavaScript compiler that uses the GHC API";
