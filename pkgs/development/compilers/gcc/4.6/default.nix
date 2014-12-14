@@ -46,15 +46,12 @@ assert stdenv.isDarwin -> gnused != null;
 with stdenv.lib;
 with builtins;
 
-let version = "4.6.3";
+let version = "4.6.4";
 
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = cross != null && cross.config == "i586-pc-gnu";
 
-    patches =
-      [ # Fix building on Glibc 2.16.
-        ./siginfo_t_fix.patch
-      ]
+    patches = [ ]
       ++ optional (cross != null) ./libstdc++-target.patch
       ++ optional noSysDirs ./no-sys-dirs.patch
       # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
