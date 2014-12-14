@@ -19,6 +19,7 @@ if test "$leaveDotGit" != 1; then
     leaveDotGit=
 else
     leaveDotGit=true
+    deepClone=true
 fi
 
 
@@ -33,7 +34,7 @@ for arg; do
             --hash) argfun=set_hashType;;
             --deepClone) deepClone=true;;
             --no-deepClone) deepClone=false;;
-            --leave-dotGit) leaveDotGit=true;;
+            --leave-dotGit) leaveDotGit=true; deepClone=true;;
             --fetch-submodules) fetchSubmodules=true;;
             --builder) builder=true;;
             *)
