@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "libsepol-${version}";
   version = "2.3";
   se_release = "20140506";
-  se_url = "${meta.homepage}/releases";
+  se_url = "https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases";
 
   src = fetchurl {
     url = "${se_url}/${se_release}/libsepol-${version}.tar.gz";
