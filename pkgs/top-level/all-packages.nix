@@ -499,6 +499,8 @@ let
     jre = jdk;
   };
 
+  apitrace = callPackage ../applications/graphics/apitrace {};
+
   argyllcms = callPackage ../tools/graphics/argyllcms {};
 
   arp-scan = callPackage ../tools/misc/arp-scan { };
