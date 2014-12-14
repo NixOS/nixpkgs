@@ -504,6 +504,12 @@ in {
       { assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
         message = "UIDs and GIDs must be unique!";
       }
+      { assertion = cfg.mutableUsers ||
+                   (cfg.extraUsers.root.hashedPassword != "!") ||
+                   (cfg.extraUsers.root.password != null) ||
+                   (cfg.extraUsers.root.passwordFile != null);
+        message = "if users.mutableUsers is false, users.extraUsers.root requires hashedPassword/password/passwordFile to be set";
+      }
     ];
 
   };
