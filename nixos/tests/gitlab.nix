@@ -14,6 +14,7 @@ import ./make-test.nix {
   testScript = ''
     $gitlab->start();
     $gitlab->waitForUnit("gitlab.service");
-    $gitlab->waitUntilSucceeds("curl http://localhost:8080");
+    $gitlab->waitForUnit("gitlab-sidekiq.service");
+    $gitlab->waitUntilSucceeds("curl http://localhost:8080/users/sign_in");
   '';
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ruby, rubyLibs, libiconv, libxslt, libxml2, pkgconfig, libffi, postgresql, libyaml, ncurses, curl, openssh, redis, zlib, icu, checkinstall, logrotate, docutils, cmake, git, gdbm, readline, unzip, gnumake, which, tzdata }:
+{ stdenv, fetchurl, ruby, rubyLibs, libiconv, libxslt, libxml2, pkgconfig, libffi, postgresql, libyaml, ncurses, curl, openssh, redis, zlib, icu, checkinstall, logrotate, docutils, cmake, git, gdbm, readline, unzip, gnumake, which, tzdata, nodejs }:
 
 let
   gemspec = map (gem: fetchurl { url=gem.url; sha256=gem.hash; }) (import ./Gemfile.nix);
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     ruby rubyLibs.bundler libyaml gdbm readline ncurses curl openssh redis zlib
-    postgresql libxslt libxml2 pkgconfig libffi icu checkinstall logrotate docutils
+    postgresql libxslt libxml2 pkgconfig libffi icu checkinstall logrotate docutils nodejs
     git unzip gnumake which cmake
   ];
 
@@ -50,6 +50,9 @@ in stdenv.mkDerivation rec {
 
     mkdir -p vendor/cache
     ${stdenv.lib.concatStrings (map (gem: "ln -s ${gem} vendor/cache/${gem.name};") gemspec)}
+
+    cp ${./Gemfile.lock} Gemfile.lock
+    substituteInPlace Gemfile --replace 'gem "therubyracer"' ""
 
     bundle config build.nokogiri \
       --use-system-libraries \
