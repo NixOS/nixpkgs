@@ -50,8 +50,8 @@ Or, to base your local branch on the latest version available in the
 NixOS channel:
 
 <screen>
-$ curl -sI http://nixos.org/channels/nixos-unstable/ | grep Location
-Location: http://releases.nixos.org/nixos/unstable/nixos-14.10pre43986.acaf4a6/
+$ curl -sI https://nixos.org/channels/nixos-unstable/ | grep Location
+Location: https://releases.nixos.org/nixos/unstable/nixos-14.10pre43986.acaf4a6/
 
 $ git checkout -b local acaf4a6
 </screen>
