@@ -30,6 +30,8 @@ in stdenv.mkDerivation rec {
       adapter: postgresql
     EOF
 
+    substituteInPlace Gemfile --replace 'gem "therubyracer"' ""
+
     bundle config --local build.nokogiri --use-system-libraries \
       --with-iconv-dir=${libiconv} \
       --with-xslt-dir=${libxslt} \

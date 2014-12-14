@@ -193,6 +193,7 @@ in {
         gitAndTools.git
         ruby
         openssh
+        nodejs
       ];
       serviceConfig = {
         Type = "simple";
@@ -227,6 +228,7 @@ in {
         gitAndTools.git
         ruby
         openssh
+        nodejs
       ];
       preStart = ''
         # TODO: use env vars
