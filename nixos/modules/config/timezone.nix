@@ -14,7 +14,7 @@ in
     time = {
 
       timeZone = mkOption {
-        default = "CET";
+        default = "UTC";
         type = types.str;
         example = "America/New_York";
         description = "The time zone used when displaying times and dates.";
