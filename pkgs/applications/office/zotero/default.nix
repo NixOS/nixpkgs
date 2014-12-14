@@ -1,19 +1,24 @@
-{ stdenv, fetchurl, bash, callPackage, libIDL, pysqlite }:
+{ stdenv, fetchurl, useGoldLinker, bash, callPackage, gnome, xlibs }:
 
 assert (stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux");
 
 
 let
   /* Zotero always has a hard upper bound on its firefox/xulrunner dependency.
-   * Use private versions of firefox and xulrunner to prevent breakage when the
-   * system packages are updated. Please update these dependencies whenever
-   * zotero is updated; it should be as simple as copying the system firefox
-   * and xulrunner Nix expressions into place.
+   * Use private version of firefox to prevent breakage when the system
+   * packages are updated. Please update this dependency whenever zotero is
+   * updated; it should be as simple as copying the system firefox expression
+   * into place.
    */
-  firefox = callPackage ./firefox.nix { inherit libIDL pysqlite; };
-  xulrunner = callPackage ./xulrunner.nix { inherit libIDL pysqlite firefox; };
 
-  # Please update the firefox and xulrunner dependencies when zotero is updated!
+  firefox = callPackage ./firefox-bin {
+    gconf = gnome.GConf;
+    inherit (gnome) libgnome libgnomeui;
+    inherit (xlibs) libX11 libXScrnSaver libXcomposite libXdamage libXext
+      libXfixes libXinerama libXrender libXt;
+  };
+
+  # Please update the firefox dependency when zotero is updated!
   version = "4.0.23";
   arch = if stdenv.system == "x86_64-linux"
            then "linux-x86_64"
@@ -32,7 +37,7 @@ stdenv.mkDerivation {
   # Strip the bundled xulrunner
   prePatch = ''rm -fr run-zotero.sh zotero xulrunner/'';
 
-  inherit bash xulrunner;
+  inherit bash firefox;
   installPhase = ''
     mkdir -p "$out/libexec/zotero"
     cp -vR * "$out/libexec/zotero/"
