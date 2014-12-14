@@ -702,12 +702,6 @@ url = "http://rubygems.org/downloads/letter_opener-1.1.2.gem";
 version = "1.1.2";
 }
 {
-name = "libv8";
-hash = "64490f61e9aa928e2905e90fafde5403496925d7a9539026628b01854fd69862";
-url = "http://rubygems.org/downloads/libv8-3.16.14.3-x86_64-linux.gem";
-version = "3.16.14.3";
-}
-{
 name = "listen";
 hash = "5549b607337a95bb3248a97660ccaa0c3eeec70e01e61b8a08d4a6c36dd93720";
 url = "http://rubygems.org/downloads/listen-2.3.1.gem";
@@ -1086,12 +1080,6 @@ url = "http://rubygems.org/downloads/redis-store-1.1.4.gem";
 version = "1.1.4";
 }
 {
-name = "ref";
-hash = "8a8ec8f40f1e622c4324055d85300e03d9a78a9faf476ea0d382f1af9dbe0fa7";
-url = "http://rubygems.org/downloads/ref-1.0.5.gem";
-version = "1.0.5";
-}
-{
 name = "request_store";
 hash = "70adb9485eb22113bd165e259b929a449dfe2d2410a880566f06df6a164fc1cf";
 url = "http://rubygems.org/downloads/request_store-1.0.5.gem";
@@ -1372,12 +1360,6 @@ name = "test_after_commit";
 hash = "8be009b5b7dd8f6e712ea92a079625b9a84f9a010ef2d5d5e44bcd45c353fa8f";
 url = "http://rubygems.org/downloads/test_after_commit-0.2.2.gem";
 version = "0.2.2";
-}
-{
-name = "therubyracer";
-hash = "06a711c23c6fcabc60a38413d6e08023b4717b725c0f19b3fd3d6161f714b3a0";
-url = "http://rubygems.org/downloads/therubyracer-0.12.0.gem";
-version = "0.12.0";
 }
 {
 name = "thin";
