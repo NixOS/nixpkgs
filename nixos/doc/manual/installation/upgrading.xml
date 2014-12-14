@@ -60,7 +60,7 @@ $ nix-channel --add https://nixos.org/channels/<replaceable>channel-name</replac
 end.)  For instance, to use the NixOS 14.04 stable channel:
 
 <screen>
-$ nix-channel --add http:s//nixos.org/channels/nixos-14.04 nixos
+$ nix-channel --add https://nixos.org/channels/nixos-14.04 nixos
 </screen>
 
 But if you want to live on the bleeding edge:
