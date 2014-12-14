@@ -2803,6 +2803,8 @@ let
 
   wv2 = callPackage ../tools/misc/wv2 { };
 
+  wyrd = callPackage ../tools/misc/wyrd { };
+
   x86info = callPackage ../os-specific/linux/x86info { };
 
   x11_ssh_askpass = callPackage ../tools/networking/x11-ssh-askpass { };
