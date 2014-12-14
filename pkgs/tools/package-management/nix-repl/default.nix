@@ -1,17 +1,18 @@
-{ stdenv, fetchgit, nix, readline, boehmgc }:
+{ lib, stdenv, fetchFromGitHub, nix, readline, boehmgc }:
 
-with stdenv.lib;
+let rev = "f92408136ed08804bab14b3e2a2def9b8effd7eb"; in
 
-stdenv.mkDerivation rec {
-  name = "nix-repl-${getVersion nix}-${substring 0 7 src.rev}";
+stdenv.mkDerivation {
+  name = "nix-repl-${lib.getVersion nix}-${lib.substring 0 7 rev}";
 
-  src = fetchgit {
-    url = https://github.com/edolstra/nix-repl.git;
-    rev = "1734e8a1491ef831c83c2620b6b0f4a590b67c1f";
-    sha256 = "12fld2780jh3ww2n59s9z7afwjkmfhwh4dqn3wjva4ff8fx3n0mf";
+  src = fetchFromGitHub {
+    owner = "edolstra";
+    repo = "nix-repl";
+    inherit rev;
+    sha256 = "1vl36d3n7hrw4vy2n358zx210ygkj4lmd8zsiifna6x7w7q388bj";
   };
 
-  buildInputs = [ nix readline boehmgc ];
+  buildInputs = [ nix readline ];
 
   buildPhase = "true";
 
@@ -29,8 +30,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://github.com/edolstra/nix-repl;
     description = "An interactive environment for evaluating and building Nix expressions";
-    maintainers = [ maintainers.eelco ];
-    license = licenses.gpl3;
+    maintainers = [ lib.maintainers.eelco ];
+    license = lib.licenses.gpl3;
     platforms = nix.meta.platforms;
   };
 }
