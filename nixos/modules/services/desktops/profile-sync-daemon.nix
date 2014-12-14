@@ -6,18 +6,20 @@ let
   cfg = config.services.psd;
 
   configFile = ''
-    ${if cfg.users != [ ] then ''
+    ${optionalString (cfg.users != [ ]) ''
       USERS="${concatStringsSep " " cfg.users}"
-    '' else ""}
+    ''}
 
-    ${if cfg.browsers != [ ] then ''
+    ${optionalString (cfg.browsers != [ ]) ''
       BROWSERS="${concatStringsSep " " cfg.browsers}"
-    '' else ""}
+    ''}
 
     ${optionalString (cfg.volatile != "") "VOLATILE=${cfg.volatile}"}
     ${optionalString (cfg.daemonFile != "") "DAEMON_FILE=${cfg.daemonFile}"}
   '';
+
 in {
+
   options.services.psd = with types; {
     enable = mkOption {
       type = bool;
@@ -84,7 +86,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-
     systemd = {
       services = {
         psd = {
@@ -103,7 +104,6 @@ in {
             Type = "oneshot";
             RemainAfterExit = "yes";
             ExecStart = "${pkgs.profile-sync-daemon}/bin/profile-sync-daemon sync";
-
             ExecStop = "${pkgs.profile-sync-daemon}/bin/profile-sync-daemon unsync";
           };
         };
@@ -124,7 +124,7 @@ in {
       };
 
       timers.psd-resync = {
-        description = "Timer for profile sync daemon - 1 Hour";
+        description = "Timer for profile sync daemon - ${cfg.resyncTimer}";
         partOf = [ "psd-resync.service" "psd.service" ];
 
         timerConfig = {
