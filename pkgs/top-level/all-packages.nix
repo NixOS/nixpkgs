@@ -11452,10 +11452,7 @@ let
     pygtk = pyGtkGlade;
   };
 
-  zotero = callPackage ../applications/office/zotero {
-    inherit (gnome) libIDL;
-    inherit (pythonPackages) pysqlite;
-  };
+  zotero = callPackage ../applications/office/zotero {};
 
   zynaddsubfx = callPackage ../applications/audio/zynaddsubfx { };
 
