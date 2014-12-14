@@ -2,16 +2,17 @@
 
 { cabal, HUnit, QuickCheck, testFramework, testFrameworkHunit
 , testFrameworkQuickcheck2, transformers, transformersBase
+, typeAligned, void
 }:
 
 cabal.mkDerivation (self: {
   pname = "extensible-effects";
-  version = "1.7.1.2";
-  sha256 = "1mvyiqlga6al81j4b4rg9yl46ml5s0hnx1g2hyvqljzr12njmajv";
-  buildDepends = [ transformers transformersBase ];
+  version = "1.9.0.1";
+  sha256 = "17hl4x4052jfn7xs6xhnc6d3x75a8haw2zsbnjd6rr5gsd1hq5kx";
+  buildDepends = [ transformers transformersBase typeAligned void ];
   testDepends = [
     HUnit QuickCheck testFramework testFrameworkHunit
-    testFrameworkQuickcheck2
+    testFrameworkQuickcheck2 void
   ];
   jailbreak = true;
   meta = {

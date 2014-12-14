@@ -1,17 +1,27 @@
-{ stdenv, fetchFromGitHub, cmake, libpfm, zlib }:
+{ stdenv, fetchFromGitHub, cmake, libpfm, zlib, python }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.0";
+  version = "3.0.0";
   name = "rr-${version}";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "rr";
     rev = version;
-    sha256 = "0mlxkj35zmm15dgnc7rfynnh2s2hpym01147vwc8pwv8qgab903s";
+    sha256 = "1h4ddq7mmi0sfj6mh1qg2bfs3x7gz5qmn9dlnmpkrp38rqgnnhrg";
   };
 
-  buildInputs = [ cmake libpfm zlib ];
+  patchPhase = ''
+    substituteInPlace src/Command.cc --replace '_BSD_SOURCE' '_DEFAULT_SOURCE'
+  ''
+  # On 64bit machines, don't build the 32-bit components for debugging
+  # 32-bit binaries. This sucks but I don't know how to make 'gcc' cooperate
+  # easily with how CMake works to build 32 and 64bit binaries at once.
+  + stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
+    substituteInPlace CMakeLists.txt --replace 'if(rr_64BIT)' 'if(false)'
+  '';
+
+  buildInputs = [ cmake libpfm zlib python ];
   cmakeFlags = "-DCMAKE_C_FLAGS_RELEASE:STRING= -DCMAKE_CXX_FLAGS_RELEASE:STRING=";
 
   meta = {
@@ -25,7 +35,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = "custom";
-    maintainers = [ stdenv.lib.maintainers.pierron ];
-    platforms = [ "i686-linux" ];
+    maintainers = with stdenv.lib.maintainers; [ pierron thoughtpolice ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

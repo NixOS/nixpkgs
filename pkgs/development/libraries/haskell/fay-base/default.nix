@@ -4,11 +4,11 @@
 
 cabal.mkDerivation (self: {
   pname = "fay-base";
-  version = "0.19.2.1";
-  sha256 = "19vzrdbd1c8wws4mccycpq70594qy2ka3mr5x5fsdya56ff4xgld";
+  version = "0.19.4.1";
+  sha256 = "1pk1jjwyh2n9fg583v4cd0ll5qglphwnfm08q95klcvc61p4wqg6";
   buildDepends = [ fay ];
   meta = {
-    homepage = "https://github.com/faylang/fay-base";
+    homepage = "https://github.com/faylang/fay/";
     description = "The base package for Fay";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

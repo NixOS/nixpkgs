@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Allure";
-  version = "0.4.99.0";
-  sha256 = "1i4v1h4ynx4aap0nmf8qn2qx22wqfgypr83l7bh38fd4qibsvx3q";
+  version = "0.4.100.0";
+  sha256 = "15rkj5xab23wqr2d44xbri7hggbb3zmmka41xfiscqq4ifagfj4m";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ enummapsetTh filepath LambdaHack text ];
@@ -13,7 +13,7 @@ cabal.mkDerivation (self: {
   meta = {
     homepage = "http://allureofthestars.com";
     description = "Near-future Sci-Fi roguelike and tactical squad game";
-    license = "unknown";
+    license = "AGPL";
     platforms = self.ghc.meta.platforms;
   };
 })

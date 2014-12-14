@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "present";
-  version = "1.1";
-  sha256 = "1hmzq3qi4hz74xr7cnc33kpwki9ziyinvrwazag8hh77d02fl11z";
+  version = "2.2";
+  sha256 = "1z9zvmszda7h1h4inq4b6ig9bd205mskqq85ns3rzsffxaj471p4";
   buildDepends = [ aeson attoLisp dataDefault mtl semigroups text ];
   meta = {
     description = "Make presentations for data types";

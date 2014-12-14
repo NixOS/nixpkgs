@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
+    broken = true; # see http://sourceforge.net/p/gltron/bugs/15
   };
 }

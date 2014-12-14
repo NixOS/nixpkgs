@@ -75,7 +75,7 @@ m.run_command("mount {0} /mnt".format(device))
 m.run_command("touch /mnt/.ebs")
 m.run_command("mkdir -p /mnt/etc/nixos")
 
-m.run_command("nix-channel --add http://nixos.org/channels/nixos-{} nixos".format(args.channel))
+m.run_command("nix-channel --add https://nixos.org/channels/nixos-{} nixos".format(args.channel))
 m.run_command("nix-channel --update")
 
 version = m.run_command("nix-instantiate --eval-only -A lib.nixpkgsVersion '<nixpkgs>'", capture_stdout=True).split(' ')[0].replace('"','').strip()

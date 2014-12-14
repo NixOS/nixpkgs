@@ -9,8 +9,8 @@
 
 cabal.mkDerivation (self: {
   pname = "fay";
-  version = "0.21.0.2";
-  sha256 = "0hq9jfyl5ki3jcwffb9q7cxrgpchajgwk4j44kz37y1wji63lk96";
+  version = "0.21.2.1";
+  sha256 = "06ijfkm1x5a15hac9f4cs4f16rva2hkf07xfh0mm9q3wkamqxlfm";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -19,6 +19,7 @@ cabal.mkDerivation (self: {
     sourcemap split spoon syb text time transformers uniplate
     unorderedContainers utf8String vector
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/faylang/fay/wiki";
     description = "A compiler for Fay, a Haskell subset that compiles to JavaScript";

@@ -37,14 +37,19 @@ rec {
     builtins.trace "assuming ${a.stdenv.system} is 32 bits" "32";
 
   doBuildJ = a.fullDepEntry ''
-    sed -i bin/jconfig -e 's@bits=32@bits=${bits}@g; s@readline=0@readline=1@; s@LIBREADLINE=""@LIBREADLINE=" -lreadline "@'
+    sed -i bin/jconfig -e '
+        s@bits=32@bits=${bits}@g;
+        s@readline=0@readline=1@;
+        s@LIBREADLINE=""@LIBREADLINE=" -lreadline "@;
+        s@-W1,soname,libj.so@-Wl,-soname,libj.so@
+        '
     sed -i bin/build_libj -e 's@>& make.txt@ 2>\&1 | tee make.txt@'
 
     touch *.c *.h
-    sh bin/build_jconsole
-    sh bin/build_libj
-    sh bin/build_defs
-    sh bin/build_tsdll
+    sh -o errexit bin/build_jconsole
+    sh -o errexit bin/build_libj
+    sh -o errexit bin/build_defs
+    sh -o errexit bin/build_tsdll
 
     sed -i j/bin/profile.ijs -e "s@userx=[.] *'.j'@userx=. '/.j'@; 
         s@bin,'/profilex.ijs'@user,'/profilex.ijs'@ ;

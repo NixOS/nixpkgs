@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "FontyFruity";
-  version = "0.3";
-  sha256 = "0ivz7hkz5mx8bqqv5av56a8rw4231wyzzg0dhz6465d59iqmjhd4";
+  version = "0.4";
+  sha256 = "0nrlsiwav1mwbmp555vwnc24250yn166yr5fjazjg9g7a0ikkivf";
   buildDepends = [ binary deepseq filepath text vector ];
   meta = {
     description = "A true type file format loader";

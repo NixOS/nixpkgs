@@ -10,8 +10,8 @@
 
 cabal.mkDerivation (self: {
   pname = "snap";
-  version = "0.13.3.1";
-  sha256 = "016azx90gxjkhmncpnqvqrwsk9kbkz315z088wm7y67s97lpnr9c";
+  version = "0.13.3.2";
+  sha256 = "1k6sd2ww8zqkbfv4v5ryqwgicx6yprfil8cd5rgdvygyjs88fcrp";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -21,9 +21,6 @@ cabal.mkDerivation (self: {
     snapCore snapServer stm syb text time transformers
     unorderedContainers vector vectorAlgorithms xmlhtml
   ];
-  patchPhase = ''
-    sed -i -e 's|lens *>=.*|lens|' snap.cabal
-  '';
   meta = {
     homepage = "http://snapframework.com/";
     description = "Top-level package for the Snap Web Framework";

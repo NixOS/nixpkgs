@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "data-lens-light";
-  version = "0.1.2";
-  sha256 = "1xxphcd36vw1ib48rfmrg207h0i1hlby01bm3xsxnq90ygizvxk7";
+  version = "0.1.2.1";
+  sha256 = "038vfzb4vxk1qb0246l2kgv9br37wg59wnlhzyjpn97lypwlf68w";
   buildDepends = [ mtl ];
   meta = {
     homepage = "https://github.com/feuerbach/data-lens-light";

@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "diagrams-rasterific";
-  version = "0.1.0.4";
-  sha256 = "0l6072blz56rc4nxr2s7gh5p3zdcyq8cfndbqgzndsfak6wyixgb";
+  version = "0.1.0.5";
+  sha256 = "1a95l8g55jsmqhbv9flk5kfkfa40z93axbjfz6xb74lyvl6xccwr";
   buildDepends = [
     dataDefaultClass diagramsCore diagramsLib filepath FontyFruity
     JuicyPixels lens mtl optparseApplicative Rasterific split

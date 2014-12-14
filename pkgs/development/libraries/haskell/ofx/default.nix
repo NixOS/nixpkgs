@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ofx";
-  version = "0.4.0.0";
-  sha256 = "0j15qanrs625vaz76vkf9q9wkidkmr6c3iyx8z88mpagkj05r09h";
+  version = "0.4.0.2";
+  sha256 = "0vhr2pydnfc0ma7w1qdn5p5yylzlj3n47fnm16mlbhlb5ydnjshg";
   buildDepends = [ parsec time ];
   jailbreak = true;
   meta = {

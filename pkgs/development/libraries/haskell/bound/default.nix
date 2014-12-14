@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "bound";
-  version = "1.0.3";
-  sha256 = "0nfcxq87i9lzdkrg7g65cprn4rg9rhn9nyk2jpjh4c1rc7gdn0aq";
+  version = "1.0.4";
+  sha256 = "17qnrjmqhx07cpzwd1z4lp2d42jx1lfxl6b86d65g4fd79miipky";
   buildDepends = [
     bifunctors binary bytes cereal comonad hashable hashableExtras
     preludeExtras profunctors transformers
