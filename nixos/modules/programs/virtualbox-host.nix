@@ -97,10 +97,13 @@ in
         path = [ virtualbox ];
         serviceConfig.RemainAfterExit = true;
         serviceConfig.Type = "oneshot";
+        serviceConfig.PrivateTmp = true;
+        environment.VBOX_USER_HOME = "/tmp";
         script =
           ''
             if ! [ -e /sys/class/net/vboxnet0 ]; then
               VBoxManage hostonlyif create
+              cat /tmp/VBoxSVC.log >&2
             fi
           '';
         postStop =
