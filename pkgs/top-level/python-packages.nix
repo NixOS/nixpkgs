@@ -4733,18 +4733,32 @@ let
 
 
   html5lib = buildPythonPackage (rec {
-    name = "html5lib-0.95";
+    version = "0.999";
+    name = "html5lib-${version}";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/h/html5lib/${name}.tar.gz";
-      md5 = "fe607f9917d81763e842f818f23464ee";
+      url = "http://github.com/html5lib/html5lib-python/archive/${version}.tar.gz";
+      sha256 = "1kxl36p0csssaf37zbbc9p4h8l1s7yb1qnfv3d4nixplvrxqkybp";
     };
 
-    meta = {
-      homepage = http://code.google.com/p/html5lib/;
+    buildInputs = with self; [ nose flake8 ];
+    propagatedBuildInputs = with self; [
+      six
+    ] ++ optionals isPy26 [ ordereddict ];
+
+    checkPhase = "nosetests";
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/html5lib/html5lib-python;
+      downloadPage = https://github.com/html5lib/html5lib-python/releases;
       description = "HTML parser based on WHAT-WG HTML5 specification";
-      license = stdenv.lib.licenses.mit;
-      maintainers = [ stdenv.lib.maintainers.iElectric ];
+      longDescription = ''
+        html5lib is a pure-python library for parsing HTML. It is designed to
+        conform to the WHATWG HTML specification, as is implemented by all
+        major web browsers.
+      '';
+      license = licenses.mit;
+      maintainers = with maintainers; [ iElectric prikhi ];
     };
   });
 
