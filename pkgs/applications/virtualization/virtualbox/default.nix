@@ -1,7 +1,7 @@
 { stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
 , libXcursor, libXmu, qt4, libIDL, SDL, libcap, zlib, libpng, glib, kernel, lvm2
 , which, alsaLib, curl, libvpx, gawk
-, xorriso, makeself, perl, pkgconfig
+, xorriso, makeself, perl, pkgconfig, nukeReferences
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python ? null
 , enableExtensionPack ? false, requireFile ? null, patchelf ? null, fakeroot ? null
@@ -64,7 +64,7 @@ in stdenv.mkDerivation {
   buildInputs =
     [ iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt4 libIDL SDL
       libcap glib lvm2 python alsaLib curl libvpx pam xorriso makeself perl
-      pkgconfig which libXmu ]
+      pkgconfig which libXmu nukeReferences ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python
     ++ optional pulseSupport pulseaudio;
@@ -168,6 +168,12 @@ in stdenv.mkDerivation {
       mkdir -p $out/share/icons/hicolor/$size/apps
       ln -s $libexec/icons/$size/*.png $out/share/icons/hicolor/$size/apps
     done
+
+    # Get rid of src cruft.
+    rm -rf $out/libexec/virtualbox/src
+
+    # Get rid of a reference to linux.dev.
+    nuke-refs $out/lib/modules/*/misc/*.ko
   '';
 
   passthru = { inherit version; /* for guest additions */ };
