@@ -5587,6 +5587,58 @@ let
     };
   };
 
+  mezzanine = buildPythonPackage rec {
+    version = "3.1.10";
+    name = "mezzanine-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/stephenmcd/mezzanine/archive/${version}.tar.gz";
+      sha256 = "1cd7d3dji8q4mvcnf9asxn8j109pd5g5d5shr6xvn0iwr35qprgi";
+    };
+
+    buildInputs = with self; [ pyflakes pep8 ];
+    propagatedBuildInputs = with self; [
+      django_1_6 filebrowser_safe grappelli_safe bleach tzlocal beautifulsoup4
+      requests2 requests_oauthlib future pillow modules.sqlite3
+    ];
+
+    # Tests Fail Due to Syntax Warning, Fixed for v3.1.11+
+    doCheck = false;
+    # sed calls will be unecessary in v3.1.11+
+    preConfigure = ''
+      sed -i 's/future == 0.9.0/future>=0.9.0/' setup.py
+      sed -i 's/tzlocal == 1.0/tzlocal>=1.0/' setup.py
+      sed -i 's/pep8==1.4.1/pep8>=1.4.1/' setup.py
+      sed -i 's/pyflakes==0.6.1/pyflakes>=0.6.1/' setup.py
+      export LC_ALL="en_US.UTF-8"
+    '';
+
+    meta = with stdenv.lib; {
+      description = ''
+        A content management platform built using the Django framework.
+      '';
+      longDescription = ''
+        Mezzanine is a powerful, consistent, and flexible content management
+        platform. Built using the Django framework, Mezzanine provides a
+        simple yet highly extensible architecture that encourages diving in and
+        hacking on the code. Mezzanine is BSD licensed and supported by a
+        diverse and active community.
+
+        In some ways, Mezzanine resembles tools such as Wordpress that provide
+        an intuitive interface for managing pages, blog posts, form data, store
+        products, and other types of content. But Mezzanine is also different.
+        Unlike many other platforms that make extensive use of modules or
+        reusable applications, Mezzanine provides most of its functionality by
+        default. This approach yields a more integrated and efficient platform.
+      '';
+      homepage = http://mezzanine.jupo.org/;
+      downloadPage = https://github.com/stephenmcd/mezzanine/releases;
+      license = licenses.free;
+      maintainers = with maintainers; [ prikhi ];
+      platforms = platforms.linux;
+    };
+  };
+
   minimock = buildPythonPackage rec {
     version = "1.2.8";
     name = "minimock-${version}";
