@@ -35,6 +35,14 @@ services.httpd.package = pkgs.apacheHttpd_2_2;
 
   <listitem><para>GNOME 3.10 support has been dropped. The default GNOME version is now 3.12.</para></listitem>
 
+  <listitem><para>The system-wide default timezone for NixOS installations
+  changed from <literal>CET</literal> to <literal>UTC</literal>. To choose
+  a different timezone for your system, configure
+  <literal>time.timeZone</literal> in
+  <literal>configuration.nix</literal>. A fairly complete list of possible
+  values for that setting is available at <link
+  xlink:href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"/>.</para></listitem>
+
 </itemizedlist>
 
 </para>
