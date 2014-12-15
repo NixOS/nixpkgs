@@ -4,12 +4,12 @@ let local = config.openblas.preferLocalBuild or false;
     localTarget = config.openblas.target or "";
 in
 stdenv.mkDerivation rec {
-  version = "0.2.11";
+  version = "0.2.13";
 
   name = "openblas-${version}";
   src = fetchurl {
     url = "https://github.com/xianyi/OpenBLAS/tarball/v${version}";
-    sha256 = "1va4yhzgj2chcj6kaxgfbzirajp1zgvkic61959aka2xq2c5igms";
+    sha256 = "1asg5mix13ipxgj5h2yj2p0r8km1di5jbcjkn5gmhb37nx7qfv6k";
     name = "openblas-${version}.tar.gz";
   };
 
