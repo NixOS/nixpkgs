@@ -88,7 +88,7 @@ let
 
   failed = map (x: x.message) (filter (x: !x.assertion) config.assertions);
 
-  showWarnings = res: fold (w: x: builtins.trace "^[[1;31mwarning: ${w}^[[0m" x) res config.warnings;
+  showWarnings = res: fold (w: x: builtins.trace "[1;31mwarning: ${w}[0m" x) res config.warnings;
 
   # Putting it all together.  This builds a store path containing
   # symlinks to the various parts of the built configuration (the
