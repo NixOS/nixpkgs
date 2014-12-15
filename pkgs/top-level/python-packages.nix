@@ -6362,20 +6362,23 @@ let
 
 
   oauthlib = buildPythonPackage rec {
-    name = "oauthlib-0.5.0";
+    version = "0.7.2";
+    name = "oauthlib-${version}";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/o/oauthlib/${name}.tar.gz";
-      md5 = "d12c507de33403ebdf290fbffdb98213";
+      url = "https://github.com/idan/oauthlib/archive/${version}.tar.gz";
+      sha256 = "08b7swyswhxh90k9mp54rk1qks2l2s2pdcjap6x118y27p7dhp4h";
     };
 
     buildInputs = with self; [ mock nose unittest2 ];
 
-    propagatedBuildInputs = with self; [ pycrypto ];
+    propagatedBuildInputs = with self; [ pycrypto blinker pyjwt ];
 
     meta = {
       homepage = https://github.com/idan/oauthlib;
+      downloadPage = https://github.com/idan/oauthlib/releases;
       description = "A generic, spec-compliant, thorough implementation of the OAuth request-signing logic";
+      maintainers = with maintainers; [ prikhi ];
     };
   };
 
