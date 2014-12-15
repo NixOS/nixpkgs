@@ -122,7 +122,7 @@ in
           <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
           <fontconfig>
 
-            ${optionalString ultimate.allowBitmaps ''
+            ${optionalString (!ultimate.allowBitmaps) ''
             <!-- Reject bitmap fonts -->
             <selectfont>
               <rejectfont>
