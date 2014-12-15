@@ -500,7 +500,7 @@ EOF
 $bootLoaderConfig
   # networking.hostName = "nixos"; # Define your hostname.
   networking.hostId = "$hostIdHex";
-  # networking.wireless.enable = true;  # Enables wireless.
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Select internationalisation properties.
   # i18n = {
@@ -508,6 +508,9 @@ $bootLoaderConfig
   #   consoleKeyMap = "us";
   #   defaultLocale = "en_US.UTF-8";
   # };
+
+  # Set your time zone.
+  # time.timeZone = "Europe/Amsterdam";
 
   # List packages installed in system profile. To search by name, run:
   # \$ nix-env -qaP | grep wget
