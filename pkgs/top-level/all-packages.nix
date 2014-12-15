@@ -11425,6 +11425,8 @@ let
 
   zed = callPackage ../applications/editors/zed { };
 
+  zed-dev = callPackage ../applications/editors/zed/dev.nix { };
+
   zeroc_ice = callPackage ../development/libraries/zeroc-ice { };
 
   girara = callPackage ../applications/misc/girara {
