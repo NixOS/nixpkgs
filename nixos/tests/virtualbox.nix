@@ -60,6 +60,12 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
     ];
   };
 
+  mkLog = logfile: tag: let
+    rotated = map (i: "${logfile}.${toString i}") (range 1 9);
+    all = concatMapStringsSep " " (f: "\"${f}\"") ([logfile] ++ rotated);
+    logcmd = "tail -F ${all} 2> /dev/null | logger -t \"${tag}\"";
+  in "$machine->execute(ru '${logcmd} & disown');";
+
   testVM = vmName: vmScript: let
     cfg = (import ../lib/eval-config.nix {
       system = "i686-linux";
@@ -166,7 +172,7 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
           description = "VirtualBox Test Machine Log";
           serviceConfig.StandardInput = "socket";
           serviceConfig.StandardOutput = "syslog";
-          serviceConfig.SyslogIdentifier = "vbox-${name}";
+          serviceConfig.SyslogIdentifier = "GUEST-${name}";
           serviceConfig.ExecStart = "${pkgs.coreutils}/bin/cat";
         };
       });
@@ -195,8 +201,9 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
         vbm("storageattach ${name} ${diskFlags}");
         vbm("sharedfolder add ${name} ${sharedFlags}");
         vbm("sharedfolder add ${name} ${nixstoreFlags}");
-        vbm("showvminfo ${name} >&2");
         cleanup_${name};
+
+        ${mkLog "$HOME/VirtualBox VMs/${name}/Logs/VBox.log" "HOST-${name}"}
       }
 
       sub destroyVM_${name} {
@@ -313,6 +320,8 @@ in {
     ${concatStrings (mapAttrsToList (_: getAttr "testSubs") vboxVMs)}
 
     $machine->waitForX;
+
+    ${mkLog "$HOME/.config/VirtualBox/VBoxSVC.log" "HOST-SVC"}
 
     createVM_simple;
 
