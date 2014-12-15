@@ -972,6 +972,37 @@ let
     };
   };
 
+  bleach = buildPythonPackage rec {
+    version = "v1.4";
+    name = "bleach-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://github.com/jsocol/bleach/archive/${version}.tar.gz";
+      sha256 = "19v0zhvchz89w179rwkc4ah3cj2gbcng9alwa2yla89691g8b0b0";
+    };
+
+    propagatedBuildInputs = with self; [ six html5lib ];
+
+    meta = with stdenv.lib; {
+      description = "An easy, HTML5, whitelisting HTML sanitizer.";
+      longDescription = ''
+        Bleach is an HTML sanitizing library that escapes or strips markup and
+        attributes based on a white list. Bleach can also linkify text safely,
+        applying filters that Django's urlize filter cannot, and optionally
+        setting rel attributes, even on links already in the text.
+
+        Bleach is intended for sanitizing text from untrusted sources. If you
+        find yourself jumping through hoops to allow your site administrators
+        to do lots of things, you're probably outside the use cases. Either
+        trust those users, or don't.
+      '';
+      homepage = https://github.com/jsocol/bleach;
+      downloadPage = https://github.com/jsocol/bleach/releases;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ prikhi ];
+      platforms = platforms.linux;
+    };
+  };
 
   blinker = buildPythonPackage rec {
     name = "blinker-${version}";
