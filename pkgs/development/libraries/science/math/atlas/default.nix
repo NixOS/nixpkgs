@@ -2,6 +2,7 @@
 , cpuConfig ? if stdenv.isi686 then "-b 32 -A 12 -V 1" else "-b 64 -A 14 -V 384"
 , cacheEdge ? "262144"
 , threads ? "0"
+, liblapack, withLapack
 }:
 
 # Atlas detects the CPU and optimizes its build accordingly. This is great when
@@ -48,7 +49,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "atlas-${version}";
+  name = "atlas-${version}" + optionalString withLapack "-with-lapack";
 
   src = fetchurl {
     url = "mirror://sourceforge/math-atlas/atlas${version}.tar.bz2";
@@ -81,7 +82,8 @@ stdenv.mkDerivation {
     "-fPIC"
     "-t ${threads}"
     cpuConfig
-  ] ++ optional shared "--shared";
+  ] ++ optional shared "--shared"
+    ++ optional withLapack "--with-netlib-lapack-tarfile=${liblapack.src}";
 
   postConfigure = ''
     if [[ -n "${cacheEdge}" ]]; then
@@ -94,8 +96,10 @@ stdenv.mkDerivation {
 
   postInstall = ''
     # Avoid name collision with the real lapack (ATLAS only builds a partial
-    # lapack).
-    mv $out/lib/liblapack.a $out/lib/liblapack_atlas.a
+    # lapack unless withLapack = true).
+    if ${if withLapack then "false" else "true"}; then
+      mv $out/lib/liblapack.a $out/lib/liblapack_atlas.a
+    fi
   '';
 
   meta = {
