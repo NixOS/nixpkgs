@@ -1,9 +1,27 @@
 import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
 
-  testVMConfig = { config, pkgs, ... }: {
-    boot.kernelParams = [
+  testVMConfig = vmName: attrs: { config, pkgs, ... }: {
+    boot.kernelParams = let
+      miniInit = ''
+        #!${pkgs.stdenv.shell} -xe
+        export PATH="${pkgs.coreutils}/bin:${pkgs.utillinux}/bin"
+
+        ${pkgs.linuxPackages.virtualboxGuestAdditions}/sbin/VBoxService
+        ${(attrs.vmScript or (const "")) pkgs}
+
+        i=0
+        while [ ! -e /mnt-root/shutdown ]; do
+          sleep 10
+          i=$(($i + 10))
+          [ $i -le 120 ] || fail
+        done
+
+        rm -f /mnt-root/boot-done /mnt-root/shutdown
+      '';
+    in [
       "console=tty0" "console=ttyS0" "ignore_loglevel"
       "boot.trace" "panic=1" "boot.panic_on_fail"
+      "init=${pkgs.writeScript "mini-init.sh" miniInit}"
     ];
 
     fileSystems."/" = {
@@ -13,24 +31,26 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
 
     services.virtualboxGuest.enable = true;
 
-    boot.initrd.kernelModules = [ "vboxsf" ];
+    boot.initrd.kernelModules = [
+      "af_packet" "vboxsf"
+      "virtio" "virtio_pci" "virtio_ring" "virtio_net" "vboxguest"
+    ];
 
     boot.initrd.extraUtilsCommands = ''
       cp -av -t "$out/bin/" \
-        "${pkgs.linuxPackages.virtualboxGuestAdditions}/sbin/mount.vboxsf"
+        "${pkgs.linuxPackages.virtualboxGuestAdditions}/sbin/mount.vboxsf" \
+        "${pkgs.utillinux}/bin/unshare"
+      ${(attrs.extraUtilsCommands or (const "")) pkgs}
     '';
 
     boot.initrd.postMountCommands = ''
       touch /mnt-root/boot-done
-
-      i=0
-      while [ ! -e /mnt-root/shutdown ]; do
-        sleep 10
-        i=$(($i + 10))
-        [ $i -le 120 ] || fail
-      done
-
-      rm -f /mnt-root/boot-done /mnt-root/shutdown
+      hostname "${vmName}"
+      mkdir -p /nix/store
+      unshare -m "@shell@" -c '
+        mount -t vboxsf nixstore /nix/store
+        exec "$stage2Init"
+      '
       poweroff -f
     '';
 
@@ -40,12 +60,12 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
     ];
   };
 
-  testVM = let
+  testVM = vmName: vmScript: let
     cfg = (import ../lib/eval-config.nix {
       system = "i686-linux";
       modules = [
         ../modules/profiles/minimal.nix
-        testVMConfig
+        (testVMConfig vmName vmScript)
       ];
     }).config;
   in pkgs.vmTools.runInLinuxVM (pkgs.runCommand "virtualbox-image" {
@@ -86,7 +106,7 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
     umount /mnt
   '');
 
-  createVM = name: let
+  createVM = name: attrs: let
     mkFlags = concatStringsSep " ";
 
     sharePath = "/home/alice/vboxshare-${name}";
@@ -96,10 +116,10 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
       "--register"
     ];
 
-    vmFlags = mkFlags [
+    vmFlags = mkFlags ([
       "--uart1 0x3F8 4"
       "--uartmode1 client /run/virtualbox-log-${name}.sock"
-    ];
+    ] ++ (attrs.vmFlags or []));
 
     controllerFlags = mkFlags [
       "--name SATA"
@@ -114,12 +134,18 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
       "--device 0"
       "--type hdd"
       "--mtype immutable"
-      "--medium ${testVM}/disk.vdi"
+      "--medium ${testVM name attrs}/disk.vdi"
     ];
 
     sharedFlags = mkFlags [
       "--name vboxshare"
       "--hostpath ${sharePath}"
+    ];
+
+    nixstoreFlags = mkFlags [
+      "--name nixstore"
+      "--hostpath /nix/store"
+      "--readonly"
     ];
   in {
     machine = {
@@ -147,13 +173,35 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
     };
 
     testSubs = ''
+      sub checkRunning_${name} {
+        my $cmd = 'VBoxManage list runningvms | grep -q "^\"${name}\""';
+        my ($status, $out) = $machine->execute(ru $cmd);
+        return $status == 0;
+      }
+
+      sub cleanup_${name} {
+        $machine->execute(ru "VBoxManage controlvm ${name} poweroff")
+          if checkRunning_${name};
+        $machine->succeed("rm -rf ${sharePath}");
+        $machine->succeed("mkdir -p ${sharePath}");
+        $machine->succeed("chown alice.users ${sharePath}");
+      }
+
       sub createVM_${name} {
         vbm("createvm --name ${name} ${createFlags}");
         vbm("modifyvm ${name} ${vmFlags}");
+        vbm("setextradata ${name} VBoxInternal/PDM/HaltOnReset 1");
         vbm("storagectl ${name} ${controllerFlags}");
         vbm("storageattach ${name} ${diskFlags}");
         vbm("sharedfolder add ${name} ${sharedFlags}");
+        vbm("sharedfolder add ${name} ${nixstoreFlags}");
         vbm("showvminfo ${name} >&2");
+        cleanup_${name};
+      }
+
+      sub destroyVM_${name} {
+        cleanup_${name};
+        vbm("unregistervm ${name} --delete");
       }
 
       sub waitForVMBoot_${name} {
@@ -166,10 +214,22 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
         ));
       }
 
-      sub checkRunning_${name} {
-        my $cmd = 'VBoxManage list runningvms | grep -q "^\"${name}\""';
-        my ($status, $out) = $machine->execute(ru $cmd);
-        return $status == 0;
+      sub waitForIP_${name} ($) {
+        my $property = "/VirtualBox/GuestInfo/Net/$_[0]/V4/IP";
+        my $getip = "VBoxManage guestproperty get ${name} $property | ".
+                    "sed -n -e 's/^Value: //p'";
+        my $ip = $machine->succeed(ru(
+          'for i in $(seq 1000); do '.
+          'if ipaddr="$('.$getip.')" && [ -n "$ipaddr" ]; then '.
+          'echo "$ipaddr"; exit 0; '.
+          'fi; '.
+          'sleep 1; '.
+          'done; '.
+          'echo "Could not get IPv4 address for ${name}!" >&2; '.
+          'exit 1'
+        ));
+        chomp $ip;
+        return $ip;
       }
 
       sub waitForStartup_${name} {
@@ -196,18 +256,36 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
         );
         waitForShutdown_${name};
       }
-
-      sub cleanup_${name} {
-        $machine->execute(ru "VBoxManage controlvm ${name} poweroff")
-          if checkRunning_${name};
-        $machine->succeed("rm -rf ${sharePath}");
-        $machine->succeed("mkdir -p ${sharePath}");
-        $machine->succeed("chown alice.users ${sharePath}");
-      }
     '';
   };
 
-  vboxVMs.test1 = createVM "test1";
+  hostonlyVMFlags = [
+    "--nictype1 virtio"
+    "--nictype2 virtio"
+    "--nic2 hostonly"
+    "--hostonlyadapter2 vboxnet0"
+  ];
+
+  dhcpScript = pkgs: ''
+    ${pkgs.dhcp}/bin/dhclient \
+      -lf /run/dhcp.leases \
+      -pf /run/dhclient.pid \
+      -v eth0 eth1
+
+    otherIP="$(${pkgs.netcat}/bin/netcat -clp 1234 || :)"
+    ${pkgs.iputils}/bin/ping -I eth1 -c1 "$otherIP"
+    echo "$otherIP reachable" | ${pkgs.netcat}/bin/netcat -clp 5678 || :
+  '';
+
+  vboxVMs = mapAttrs createVM {
+    simple = {};
+
+    test1.vmFlags = hostonlyVMFlags;
+    test1.vmScript = dhcpScript;
+
+    test2.vmFlags = hostonlyVMFlags;
+    test2.vmScript = dhcpScript;
+  };
 
 in {
   name = "virtualbox";
@@ -217,12 +295,15 @@ in {
       mkVMConf = name: val: val.machine // { key = "${name}-config"; };
       vmConfigs = mapAttrsToList mkVMConf vboxVMs;
     in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
+    virtualisation.memorySize = 768;
     services.virtualboxHost.enable = true;
+    users.extraUsers.alice.extraGroups = [ "vboxusers" ];
   };
 
   testScript = ''
-    sub ru {
-      return "su - alice -c '$_[0]'";
+    sub ru ($) {
+      my $esc = $_[0] =~ s/'/'\\${"'"}'/gr;
+      return "su - alice -c '$esc'";
     }
 
     sub vbm {
@@ -233,9 +314,7 @@ in {
 
     $machine->waitForX;
 
-    createVM_test1;
-
-    cleanup_test1;
+    createVM_simple;
 
     subtest "simple-gui", sub {
       $machine->succeed(ru "VirtualBox &");
@@ -244,11 +323,11 @@ in {
       $machine->screenshot("gui_manager_started");
       $machine->sendKeys("ret");
       $machine->screenshot("gui_manager_sent_startup");
-      waitForStartup_test1;
+      waitForStartup_simple;
       $machine->screenshot("gui_started");
-      waitForVMBoot_test1;
+      waitForVMBoot_simple;
       $machine->screenshot("gui_booted");
-      shutdownVM_test1;
+      shutdownVM_simple;
       $machine->sleep(5);
       $machine->screenshot("gui_stopped");
       $machine->sendKeys("ctrl-q");
@@ -256,20 +335,53 @@ in {
       $machine->screenshot("gui_manager_stopped");
     };
 
-    cleanup_test1;
+    cleanup_simple;
 
     subtest "simple-cli", sub {
-      vbm("startvm test1");
-      waitForStartup_test1;
+      vbm("startvm simple");
+      waitForStartup_simple;
       $machine->screenshot("cli_started");
-      waitForVMBoot_test1;
+      waitForVMBoot_simple;
       $machine->screenshot("cli_booted");
-      shutdownVM_test1;
+      shutdownVM_simple;
     };
 
-    cleanup_test1;
+    subtest "privilege-escalation", sub {
+      $machine->fail("test -e '/root/VirtualBox VMs'");
+      $machine->succeed("test -e '/home/alice/VirtualBox VMs'");
+    };
 
-    $machine->fail("test -e '/root/VirtualBox VMs'");
-    $machine->succeed("test -e '/home/alice/VirtualBox VMs'");
+    destroyVM_simple;
+
+    subtest "net-hostonlyif", sub {
+      createVM_test1;
+      createVM_test2;
+
+      vbm("startvm test1");
+      waitForStartup_test1;
+
+      vbm("startvm test2");
+      waitForStartup_test2;
+
+      waitForVMBoot_test1;
+      waitForVMBoot_test2;
+
+      $machine->screenshot("net_booted");
+
+      my $test1IP = waitForIP_test1 1;
+      my $test2IP = waitForIP_test2 1;
+
+      $machine->succeed("echo '$test2IP' | netcat -c '$test1IP' 1234");
+      $machine->succeed("echo '$test1IP' | netcat -c '$test2IP' 1234");
+
+      $machine->waitUntilSucceeds("netcat -c '$test1IP' 5678 >&2");
+      $machine->waitUntilSucceeds("netcat -c '$test2IP' 5678 >&2");
+
+      shutdownVM_test1;
+      shutdownVM_test2;
+
+      destroyVM_test1;
+      destroyVM_test2;
+    };
   '';
 })
