@@ -12,7 +12,18 @@ in
 
 {
   options.services.virtualboxHost = {
-    enable = mkEnableOption "VirtualBox Host support";
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to enable host-side support for VirtualBox.
+
+        <note><para>
+          In order to pass USB devices from the host to the guests, the user
+          needs to be in the <literal>vboxusers</literal> group.
+        </para></note>
+      '';
+    };
 
     addNetworkInterface = mkOption {
       type = types.bool;
