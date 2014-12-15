@@ -4193,6 +4193,34 @@ let
     };
   };
 
+  grappelli_safe = buildPythonPackage rec {
+    version = "0.3.13";
+    name = "grappelli_safe-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/g/grappelli_safe/${name}.tar.gz";
+      md5 = "5c8c681a0b1df94ecd6dc0b3a8b80892";
+    };
+
+    meta = with stdenv.lib; {
+      description = "A snapshot of django-grappelli for the Mezzanine CMS";
+      longDescription = ''
+        grappelli_safe was created to provide a snapshot of the Grappelli admin
+        skin for Django, to be referenced as a dependency for the Mezzanine CMS
+        for Django.
+
+        At the time of grappelli_safe's creation, Grappelli was incorrectly
+        packaged on PyPI, and had also dropped compatibility with Django 1.1 -
+        grappelli_safe was therefore created to address these specific issues.
+      '';
+      homepage = https://github.com/stephenmcd/grappelli-safe;
+      downloadPage = http://pypi.python.org/pypi/grappelli_safe/;
+      license = licenses.free;
+      maintainers = with maintainers; [ prikhi ];
+      platforms = platforms.linux;
+    };
+  };
+
   python_tvrage = buildPythonPackage (rec {
     version = "0.4.1";
     name = "tvrage-${version}";
