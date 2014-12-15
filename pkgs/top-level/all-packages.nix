@@ -3500,13 +3500,14 @@ let
     liblapack = liblapack.override {shared = true;};
     llvm = llvm_33;
     openblas = openblas_0_2_2;
+    suitesparse = suitesparse_4_2;
   };
 
   julia033 = let
     liblapack = liblapack_3_5_0.override {shared = true;};
   in callPackage ../development/compilers/julia/0.3.3.nix {
     inherit liblapack;
-    suitesparse = suitesparse.override {
+    suitesparse = suitesparse_4_2.override {
       inherit liblapack;
     };
     llvm = llvm_33;
@@ -6979,8 +6980,6 @@ let
   subtitleeditor = callPackage ../applications/video/subtitleeditor { };
 
   suil = callPackage ../development/libraries/audio/suil { };
-
-  suitesparse = callPackage ../development/libraries/suitesparse { };
 
   sutils = callPackage ../tools/misc/sutils { };
 
@@ -12209,6 +12208,9 @@ let
   mathematica9 = callPackage ../applications/science/math/mathematica/9.nix { };
 
   sage = callPackage ../applications/science/math/sage { };
+
+  suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
+  suitesparse_4_4_1 = callPackage ../development/libraries/science/math/suitesparse {};
 
   ipopt = callPackage ../development/libraries/science/math/ipopt { };
 
