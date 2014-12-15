@@ -4,17 +4,17 @@
 
 let
   baseVersion = "40";
-  patchVersion = "18";
+  patchVersion = "19";
   srcs = {
     df_unfuck = fetchgit {
       url = "https://github.com/svenstaro/dwarf_fortress_unfuck";
-      rev = "f7ef8d4fa92bcbbf8e4790056c6c3668e3c3b20b";
-      sha256 = "0kpb3gzjllvi1lahhi74cp2ny1dl7kvnhdlca7i2yxkmyzaaj9qy";
+      rev = "dadf3d48e93a2800db5d4f98d775ba8453ca55a4";
+      sha256 = "011pbcfc3a0mnwqg3pkhngnb1h7z1jbx4qbvj03blpzfjia075sv";
     };
 
     df = fetchurl {
       url = "http://www.bay12games.com/dwarves/df_${baseVersion}_${patchVersion}_linux.tar.bz2";
-      sha256 = "0l29dn24xhkyj8fvmz8318i5sz2wpl420mwy1ccpdd3yfd3hrjmb";
+      sha256 = "16xb6py7l1hf9hc7gn50nwajqgmv01zdhbkh7g6a8gnx7wlhl2p9";
     };
   };
 
@@ -25,6 +25,7 @@ assert stdenv.system == "i686-linux";
 stdenv.mkDerivation rec {
   name = "dwarf-fortress-0.${baseVersion}.${patchVersion}";
 
+  inherit baseVersion patchVersion;
 
   buildInputs = [ SDL SDL_image SDL_ttf gtk2 glib glew mesa ncurses openal glibc libsndfile pango atk cmake gdk_pixbuf];
   src = "${srcs.df_unfuck} ${srcs.df}";
@@ -46,12 +47,19 @@ stdenv.mkDerivation rec {
     cd ../../
     cp -r ./df_linux/* $out/share/df_linux
     rm $out/share/df_linux/libs/lib*
+
+    # Store the original hash for dwarf-therapist 
+    echo $(md5sum $out/share/df_linux/libs/Dwarf_Fortress | cut -c1-8) > $out/share/df_linux/hash.md5.orig
+    # Fix rpath
     patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.gcc.gcc stdenv.glibc ]}:$out/share/df_linux/libs"  $out/share/df_linux/libs/Dwarf_Fortress
     cp -f ./git-export/build/libgraphics.so $out/share/df_linux/libs/libgraphics.so
 
     cp $permission $out/share/df_linux/nix_permission
 
     patchelf --set-interpreter ${glibc}/lib/ld-linux.so.2 $out/share/df_linux/libs/Dwarf_Fortress
+
+    # Store new hash for dwarf-therapist
+    echo $(md5sum $out/share/df_linux/libs/Dwarf_Fortress | cut -c1-8) > $out/share/df_linux/hash.md5.patched
 
     cat > $out/bin/dwarf-fortress << EOF
       #!${stdenv.shell}
