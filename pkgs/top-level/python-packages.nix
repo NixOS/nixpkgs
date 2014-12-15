@@ -6782,7 +6782,10 @@ let
       md5 = "56b6614499aacb7d6b5983c4914daea7";
     };
 
-    buildInputs = with self; [ pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.tcl ];
+    buildInputs = with self; [
+      pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.tcl ]
+      ++ optionals (isPy26 || isPyPy) [ pkgs.lcms2 ]
+      ++ optionals (isPyPy) [ pkgs.tk pkgs.xlibs.libX11 ];
 
     # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
     preConfigure = ''
@@ -6809,7 +6812,7 @@ let
 
       license = "http://www.pythonware.com/products/pil/license.htm";
 
-      maintainers = [ stdenv.lib.maintainers.goibhniu ];
+      maintainers = with stdenv.lib.maintainers; [ goibhniu prikhi ];
     };
   };
 
