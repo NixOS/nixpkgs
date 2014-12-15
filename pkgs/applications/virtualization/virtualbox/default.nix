@@ -6,7 +6,7 @@
 , pythonBindings ? false, python ? null
 , enableExtensionPack ? false, requireFile ? null, patchelf ? null, fakeroot ? null
 , pulseSupport ? false, pulseaudio ? null
-, enableHardening ? true
+, enableHardening ? false
 }:
 
 with stdenv.lib;
