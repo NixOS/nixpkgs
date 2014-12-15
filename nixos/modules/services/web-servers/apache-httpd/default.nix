@@ -98,9 +98,6 @@ let
       # Authorization: is the user allowed access?
       "authz_user" "authz_groupfile" "authz_host"
 
-      # For compatibility with old configurations, the new module mod_access_compat is provided.
-      (if version24 then "access_compat" else "")
-
       # Other modules.
       "ext_filter" "include" "log_config" "env" "mime_magic"
       "cern_meta" "expires" "headers" "usertrack" /* "unique_id" */ "setenvif"
@@ -115,6 +112,8 @@ let
       "cache" "cache_disk"
       "slotmem_shm"
       "socache_shmcb"
+      # For compatibility with old configurations, the new module mod_access_compat is provided.
+      "access_compat"
     ]
     ++ (if mainCfg.multiProcessingModule == "prefork" then [ "cgi" ] else [ "cgid" ])
     ++ optional enableSSL "ssl"
