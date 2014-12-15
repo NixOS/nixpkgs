@@ -348,6 +348,7 @@ in {
 
     subtest "privilege-escalation", sub {
       $machine->fail("test -e '/root/VirtualBox VMs'");
+      $machine->fail("test -e '/root/.config/VirtualBox'");
       $machine->succeed("test -e '/home/alice/VirtualBox VMs'");
     };
 
