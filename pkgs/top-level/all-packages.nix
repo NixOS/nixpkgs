@@ -516,6 +516,8 @@ let
     };
   };
 
+  attic = callPackage ../tools/backup/attic { };
+
   awscli = callPackage ../tools/admin/awscli { };
 
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
