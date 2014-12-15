@@ -2,11 +2,11 @@
 pkgconfig, perl, git, libevent, openssl}:
 
 stdenv.mkDerivation {
-  name = "libcouchbase-2.4.1";
+  name = "libcouchbase-2.4.4";
   src = fetchgit {
     url = "https://github.com/couchbase/libcouchbase.git";
-    rev = "bd3a20f9e18a69dca199134956fd4ad3e1b80ca8";
-    sha256 = "0gimvfxvbmhm6zy4vgs2630ygilhryxl8apfmv3iqs23pafwzm8r";
+    rev = "4410eebcd813844b6cd6f9c7eeb4ab3dfa2ab8ac";
+    sha256 = "02lzv5l6fvnqr2l9bqfha0pzkzlzjfddn3w5zcbjz36kw4p2p4h9";
     leaveDotGit = true;
   };
 
@@ -24,6 +24,5 @@ stdenv.mkDerivation {
     homepage = "https://github.com/couchbase/libcouchbase";
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.unix;
-
   };
 }
