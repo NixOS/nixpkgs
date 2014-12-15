@@ -6,11 +6,14 @@ kde {
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs =
-    [ gpgme libical libxslt qjson prison
+    [ boost gpgme libical libxslt qjson prison
       openldap cyrus_sasl akonadi shared_desktop_ontologies
     ];
 
-  propagatedBuildInputs = [ kdelibs nepomuk_core boost ];
+  propagatedBuildInputs = [ kdelibs nepomuk_core ];
+
+  # Prevent a dependency on boost.dev. FIXME: move this cmake file to .dev.
+  postInstall = "rm $out/lib/gpgmepp/GpgmeppConfig.cmake";
 
   meta = {
     description = "KDE PIM libraries";
