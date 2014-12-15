@@ -476,14 +476,6 @@ EOF
 EOF
         }
 
-        # Generate a random 32-bit value to use as the host id
-        open my $rnd, "<", "/dev/urandom" or die $!;
-        read $rnd, $hostIdBin, 4;
-        close $rnd;
-
-        # Convert the 32-bit value to a hex string
-        my $hostIdHex = unpack("H*", $hostIdBin);
-
         write_file($fn, <<EOF);
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
@@ -499,7 +491,6 @@ EOF
 
 $bootLoaderConfig
   # networking.hostName = "nixos"; # Define your hostname.
-  networking.hostId = "$hostIdHex";
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Select internationalisation properties.
