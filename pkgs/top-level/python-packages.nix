@@ -8389,18 +8389,21 @@ let
 
 
   requests_oauthlib = buildPythonPackage rec {
-    name = "requests-oauthlib-0.3.2";
+    version = "v0.4.1";
+    name = "requests-oauthlib-${version}";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/r/requests-oauthlib/${name}.tar.gz";
-      md5 = "35b3b750493c231145c39db0216813e7";
+      url = "http://github.com/requests/requests-oauthlib/archive/${version}.tar.gz";
+      sha256 = "0vx252nzq5h9m9brwnw2ph8aj526y26jr2dqcafzzcdx6z4l8vj4";
     };
 
-    propagatedBuildInputs = with self; [ oauthlib requests ];
+    doCheck = false;        # Internet tests fail when building in chroot
+    propagatedBuildInputs = with self; [ oauthlib requests2 ];
 
     meta = {
       description = "OAuthlib authentication support for Requests";
       homepage = https://github.com/requests/requests-oauthlib;
+      maintainers = with maintainers; [ prikhi ];
     };
   };
 
