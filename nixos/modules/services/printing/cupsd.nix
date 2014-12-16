@@ -164,17 +164,9 @@ in
 
     environment.variables.CUPS_SERVERROOT = "/etc/cups";
 
-    environment.etc = [
-      { source = pkgs.writeText "client.conf" cfg.clientConf;
-        target = "cups/client.conf";
-      }
-      { source = pkgs.writeText "cups-files.conf" cfg.cupsFilesConf;
-        target = "cups/cups-files.conf";
-      }
-      { source = pkgs.writeText "cupsd.conf" cfg.cupsdConf;
-        target = "cups/cupsd.conf";
-      }
-    ];
+    environment.etc."cups/client.conf".text = cfg.clientConf;
+    environment.etc."cups/cups-files.conf".text = cfg.cupsFilesConf;
+    environment.etc."cups/cupsd.conf".text = cfg.cupsdConf;
 
     services.dbus.packages = [ cups ];
 
