@@ -1,7 +1,10 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, libxml2, gtk3, gtkvnc, gmp
-, libgcrypt, gnupg, cyrus_sasl, spiceSupport ? true, spice_gtk, shared_mime_info
-, libvirt, libcap_ng, yajl
+, libgcrypt, gnupg, cyrus_sasl, shared_mime_info, libvirt, libcap_ng, yajl
+, spiceSupport ? true, spice_gtk ? null, spice_protocol ? null, libcap ? null, gdbm ? null
 }:
+
+assert spiceSupport ->
+  spice_gtk != null && spice_protocol != null && libcap != null && gdbm != null;
 
 with stdenv.lib;
 
@@ -24,7 +27,7 @@ stdenv.mkDerivation  {
   buildInputs = [ 
     pkgconfig intltool glib libxml2 gtk3 gtkvnc gmp libgcrypt gnupg cyrus_sasl
     shared_mime_info libvirt libcap_ng yajl
-  ] ++ optional spiceSupport spice_gtk;
+  ] ++ optionals spiceSupport [ spice_gtk spice_protocol libcap gdbm ];
 
   meta = {
     description = "A viewer for remote virtual machines";
