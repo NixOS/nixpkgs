@@ -108,7 +108,7 @@ in
           '';
 
         restartTriggers = [ config.environment.etc.localtime.source ];
-        serviceConfig.ExecStart = "${cronNixosPkg}/bin/cron -n";
+        serviceConfig.ExecStart = "${cronNixosPkg}/sbin/cron -n";
       };
 
   };
