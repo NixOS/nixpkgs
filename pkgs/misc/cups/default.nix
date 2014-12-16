@@ -38,6 +38,12 @@ stdenv.mkDerivation {
       "CUPS_PRIMARY_SYSTEM_GROUP=root"
     ];
 
+  postInstall =
+    ''
+      # Delete obsolete stuff that conflicts with cups-filters.
+      rm -rf $out/share/cups/banners $out/share/cups/data/testprint
+    '';
+
   meta = {
     homepage = "http://www.cups.org/";
     description = "A standards-based printing system for UNIX";
