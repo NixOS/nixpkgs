@@ -23,12 +23,15 @@ stdenv.mkDerivation rec {
 
   makeFlags = "CUPS_SERVERBIN=$(out)/lib/cups CUPS_DATADIR=$(out)/share/cups CUPS_SERVERROOT=$(out)/etc/cups";
 
-  # Ensure that bannertopdf can find the PDF templates in $out. (By
-  # default, it assumes that cups and cups-filters are installed in
-  # the same prefix.)
   postConfigure =
     ''
+      # Ensure that bannertopdf can find the PDF templates in
+      # $out. (By default, it assumes that cups and cups-filters are
+      # installed in the same prefix.)
       substituteInPlace config.h --replace ${cups}/share/cups/data $out/share/cups/data
+
+      # Ensure that gstoraster can find gs in $PATH.
+      substituteInPlace filter/gstoraster.c --replace execve execvpe
     '';
 
   postInstall =
