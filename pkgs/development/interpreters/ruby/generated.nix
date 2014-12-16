@@ -112,6 +112,7 @@ g: # Get dependencies from patched gems
     pry = g.pry_0_9_12_6;
     pusher_client = g.pusher_client_0_6_0;
     pygments_rb = g.pygments_rb_0_6_0;
+    rabbitmq_manager = g.rabbitmq_manager_0_1_0;
     rack = g.rack_1_5_2;
     rack_protection = g.rack_protection_1_5_3;
     rack_test = g.rack_test_0_6_2;
@@ -174,7 +175,7 @@ g: # Get dependencies from patched gems
     xml_simple = g.xml_simple_1_1_2;
     yajl_ruby = g.yajl_ruby_1_2_1;
   };
-  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''compass'' ''cucumber'' ''erubis'' ''execjs'' ''fakes3'' ''foreman'' ''gettext'' ''heroku'' ''iconv'' ''jekyll'' ''jsduck'' ''lockfile'' ''mechanize'' ''newrelic_plugin'' ''nix'' ''papertrail-cli'' ''rails'' ''rake'' ''rb-fsevent'' ''rdoc'' ''remote_syslog'' ''riemann-dash'' ''right_aws'' ''rmail'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''taskjuggler'' ''terminal-notifier'' ''thin'' ''tmuxinator'' ''travis'' ''trollop'' ''uglifier'' ''uuid'' ''xapian-full'' ''xapian-ruby'' ''yajl-ruby'' ];
+  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''compass'' ''cucumber'' ''erubis'' ''execjs'' ''fakes3'' ''foreman'' ''gettext'' ''heroku'' ''iconv'' ''jekyll'' ''jsduck'' ''lockfile'' ''mechanize'' ''newrelic_plugin'' ''nix'' ''papertrail-cli'' ''rabbitmq_manager-0.1.0'' ''rails'' ''rake'' ''rb-fsevent'' ''rdoc'' ''remote_syslog'' ''riemann-dash'' ''right_aws'' ''rmail'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''taskjuggler'' ''terminal-notifier'' ''thin'' ''tmuxinator'' ''travis'' ''trollop'' ''uglifier'' ''uuid'' ''xapian-full'' ''xapian-ruby'' ''yajl-ruby'' ];
   gems = {
     ZenTest_4_11_0 = {
       basename = ''ZenTest'';
@@ -1661,6 +1662,17 @@ enough of it.'';
       name = ''pygments.rb-0.6.0'';
       requiredGems = [ g.yajl_ruby_1_1_0 g.posix_spawn_0_3_9 ];
       sha256 = ''0jszj99cirbkxaqllbgnp9718v32xhvg08rfldvr10gy8i7bhy2s'';
+    };
+    rabbitmq_manager_0_1_0 = {
+      basename = ''rabbitmq_manager'';
+      meta = {
+        description = ''Ruby wrapper for RabbitMQ management HTTP API'';
+        homepage = ''https://github.com/carlhoerberg/rabbitmq_manager'';
+        longDescription = ''Ruby wrapper for RabbitMQ management HTTP API'';
+      };
+      name = ''rabbitmq_manager-0.1.0'';
+      requiredGems = [ g.faraday_0_9_0 g.faraday_middleware_0_9_1 ];
+      sha256 = ''0364ljnk9y13b7lj0i2mks62g6c9ywv4py4v17p6fzrfx693mmbc'';
     };
     rack_1_5_2 = {
       basename = ''rack'';
