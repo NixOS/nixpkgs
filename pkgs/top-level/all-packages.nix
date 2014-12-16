@@ -5135,7 +5135,7 @@ let
     vpxSupport = !stdenv.isMips;
   };
 
-  ffmpeg_2_3 = callPackage ../development/libraries/ffmpeg/2.3.x.nix { };
+  ffmpeg_2_2 = callPackage ../development/libraries/ffmpeg/2.2.x.nix { };
 
   ffmpeg_2 = callPackage ../development/libraries/ffmpeg/2.x.nix { };
 
@@ -11097,7 +11097,7 @@ let
   };
 
   vlc = callPackage ../applications/video/vlc {
-    ffmpeg = ffmpeg_2_3;
+    ffmpeg = ffmpeg_2_2;
   };
 
   vmpk = callPackage ../applications/audio/vmpk { };
