@@ -11,15 +11,16 @@
 , prefix ? []
 }:
 
-let extraArgs_ = extraArgs; pkgs_ = pkgs; system_ = system; in
-
-rec {
+let extraArgs_ = extraArgs; pkgs_ = pkgs; system_ = system;
+    extraModules = let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
+                   in if e == "" then [] else [(import (builtins.toPath e))];
+in rec {
 
   # Merge the option definitions in all modules, forming the full
   # system configuration.
   inherit (pkgs.lib.evalModules {
     inherit prefix;
-    modules = modules ++ baseModules;
+    modules = modules ++ extraModules ++ baseModules;
     args = extraArgs;
     check = check && options.environment.checkConfigurationOptions.value;
   }) config options;
