@@ -90,6 +90,15 @@ in
         '';
       };
 
+      cupsFilesConf = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          The contents of the configuration file of the CUPS daemon
+          (<filename>cups-files.conf</filename>).
+        '';
+      };
+
       extraConf = mkOption {
         type = types.lines;
         default = "";
@@ -159,6 +168,12 @@ in
       { source = pkgs.writeText "client.conf" cfg.clientConf;
         target = "cups/client.conf";
       }
+      { source = pkgs.writeText "cups-files.conf" cfg.cupsFilesConf;
+        target = "cups/cups-files.conf";
+      }
+      { source = pkgs.writeText "cupsd.conf" cfg.cupsdConf;
+        target = "cups/cupsd.conf";
+      }
     ];
 
     services.dbus.packages = [ cups ];
@@ -177,6 +192,10 @@ in
 
         path = [ cups ];
 
+        environment = {
+          CUPS_SERVERROOT = "/etc/cups";
+        };
+
         preStart =
           ''
             mkdir -m 0755 -p /etc/cups
@@ -186,7 +205,7 @@ in
           '';
 
         serviceConfig.Type = "forking";
-        serviceConfig.ExecStart = "@${cups}/sbin/cupsd cupsd -c ${pkgs.writeText "cupsd.conf" cfg.cupsdConf}";
+        serviceConfig.ExecStart = "@${cups}/sbin/cupsd cupsd -c /etc/cups/cupsd.conf";
       };
 
     services.printing.drivers =
@@ -194,26 +213,17 @@ in
         pkgs.perl pkgs.coreutils pkgs.gnused pkgs.bc pkgs.gawk pkgs.gnugrep
       ];
 
-    services.printing.cupsdConf =
+    services.printing.cupsFilesConf =
       ''
-        LogLevel info
-
         SystemGroup root wheel
-
-        ${concatMapStrings (addr: ''
-          Listen ${addr}
-        '') cfg.listenAddresses}
-        Listen /var/run/cups/cups.sock
 
         # Note: we can't use ${cups}/etc/cups as the ServerRoot, since
         # CUPS will write in the ServerRoot when e.g. adding new printers
         # through the web interface.
-        ServerRoot /etc/cups
+        #ServerRoot /etc/cups
 
         ServerBin ${bindir}/lib/cups
         DataDir ${bindir}/share/cups
-
-        SetEnv PATH ${bindir}/lib/cups/filter:${bindir}/bin:${bindir}/sbin
 
         AccessLog syslog
         ErrorLog syslog
@@ -227,6 +237,18 @@ in
         # these programs to run as `lp' as well.
         User cups
         Group lp
+      '';
+
+    services.printing.cupsdConf =
+      ''
+        LogLevel info
+
+        ${concatMapStrings (addr: ''
+          Listen ${addr}
+        '') cfg.listenAddresses}
+        Listen /var/run/cups/cups.sock
+
+        SetEnv PATH ${bindir}/lib/cups/filter:${bindir}/bin:${bindir}/sbin
 
         Browsing On
         BrowseOrder allow,deny
