@@ -54,12 +54,12 @@ in
     boot.extraModulePackages = [ virtualbox ];
     environment.systemPackages = [ virtualbox ];
 
-    warnings = singleton (
+    warnings = mkIf (!cfg.enableHardening) (singleton (
       "Hardening is currently disabled for VirtualBox, because of some " +
       "issues in conjunction with host-only-interfaces. If you don't use " +
       "hostonlyifs, it's strongly recommended to set " +
       "`services.virtualboxHost.enableHardening = true'!"
-    );
+    ));
 
     security.setuidOwners = let
       mkVboxStub = program: {
