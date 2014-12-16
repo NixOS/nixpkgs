@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ openssl ];
 
-  configureFlags = "--localstatedir=/var --enable-dbus"; # --with-dbusdir
+  configureFlags = "--localstatedir=/var --sysconfdir=/etc --enable-dbus"; # --with-dbusdir
 
   installFlags =
     [ # Don't try to write in /var at build time.
@@ -31,6 +31,7 @@ stdenv.mkDerivation {
       "DBUSDIR=$(out)/etc/dbus-1"
       "INITDIR=$(out)/etc/rc.d"
       "XINETD=$(out)/etc/xinetd.d"
+      "SERVERROOT=$(out)/etc/cups"
       # Idem for /usr.
       "MENUDIR=$(out)/share/applications"
       "ICONDIR=$(out)/share/icons"
