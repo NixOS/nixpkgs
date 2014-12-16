@@ -129,8 +129,8 @@ in stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    libexec=$out/libexec/virtualbox
-    share=$out/share/virtualbox
+    libexec="$out/libexec/virtualbox"
+    share="${if enableHardening then "$out/share/virtualbox" else "$libexec"}"
 
     # Install VirtualBox files
     cd out/linux.*/release/bin
