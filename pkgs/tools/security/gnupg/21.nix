@@ -5,11 +5,11 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "gnupg-2.1.0";
+  name = "gnupg-2.1.1";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "12q5shx6ldqad3rky154nv8f2cy57sxy9idivz93ggqm1bsw7a0n";
+    sha256 = "12q5shx6ldqad3rky154nv8f2cy57sxy9idivz93ggqm1bsw7a0a";
   };
 
   patches = [ ./socket-activate.patch ];
