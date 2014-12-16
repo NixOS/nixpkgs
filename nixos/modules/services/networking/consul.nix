@@ -150,6 +150,7 @@ in
         ExecReload = "${pkgs.consul}/bin/consul reload";
         PermissionsStartOnly = true;
         User = if cfg.dropPrivileges then "consul" else null;
+        TimeoutStartSec = "${toString (20 + (3 * cfg.joinRetries))}s";
       } // (optionalAttrs (cfg.leaveOnStop) {
         ExecStop = "${pkgs.consul}/bin/consul leave";
       });
