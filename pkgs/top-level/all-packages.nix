@@ -681,6 +681,8 @@ let
 
   bro = callPackage ../applications/networking/ids/bro { };
 
+  brotherDSSeries = callPackage ../misc/drivers/brother/dsseries.nix { };
+
   bsod = callPackage ../misc/emulators/bsod { };
 
   btrfsProgs = callPackage ../tools/filesystems/btrfsprogs { };
