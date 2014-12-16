@@ -1,18 +1,18 @@
 {stdenv, stdenv_32bit, fetchurl, unzip, zlib_32bit}:
 
 stdenv.mkDerivation {
-  name = "android-build-tools-r20";
+  name = "android-build-tools-r21.1.2";
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
-      url = https://dl-ssl.google.com/android/repository/build-tools_r20-linux.zip;
-      sha1 = "b688905526a5584d1327a662d871a635ff502758";
+      url = https://dl-ssl.google.com/android/repository/build-tools_r21.1.2-linux.zip;
+      sha1 = "5e35259843bf2926113a38368b08458735479658";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
-      url = https://dl-ssl.google.com/android/repository/build-tools_r20-macosx.zip;
-      sha1 = "1240f629411c108a714c4ddd756937c7fab93f83";
+      url = https://dl-ssl.google.com/android/repository/build-tools_r21.1.2-macosx.zip;
+      sha1 = "e7c906b4ba0eea93b32ba36c610dbd6b204bff48";
     }
     else throw "System ${stdenv.system} not supported!";
-  
+
   buildCommand = ''
     mkdir -p $out/build-tools
     cd $out/build-tools

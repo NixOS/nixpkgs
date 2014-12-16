@@ -1,10 +1,10 @@
 {stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation {
-  name = "android-support-repository-r5";
+  name = "android-support-repository-r9";
   src = fetchurl {
-    url = http://dl-ssl.google.com/android/repository/android_m2repository_r05.zip;
-    sha1 = "2ee9723da079ba0d4fe2a185e00ded842de96f13";
+    url = http://dl-ssl.google.com/android/repository/android_m2repository_r09.zip;
+    sha256 = "e5295cdbc086251a2904c081038a7f10056359481c66ecff40e59177fd1c753c";
   };
 
   buildCommand = ''

@@ -9,19 +9,19 @@
 
 stdenv.mkDerivation rec {
   name = "android-sdk-${version}";
-  version = "23.0.2";
-  
+  version = "24.0.1";
+
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
       url = "http://dl.google.com/android/android-sdk_r${version}-linux.tgz";
-      md5 = "94a8c62086a7398cc0e73e1c8e65f71e";
+      sha1 = "fb46b9afa04e09d3c33fa9bfee5c99e9ec6a9523";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
       url = "http://dl.google.com/android/android-sdk_r${version}-macosx.zip";
-      md5 = "322787b0e6c629d926c28690c79ac0d8";
+      sha1 = "7097c09c72645d7ad33c81a37b1a1363a9df2a54";
     }
     else throw "platform not ${stdenv.system} supported!";
-  
+
   buildCommand = ''
     mkdir -p $out/libexec
     cd $out/libexec
