@@ -124,6 +124,7 @@ g: # Get dependencies from patched gems
     rdiscount = g.rdiscount_2_1_7_1;
     rdoc = g.rdoc_4_2_0;
     redcarpet = g.redcarpet_3_2_2;
+    redis = g.redis_3_2_0;
     remote_syslog = g.remote_syslog_1_6_14;
     rest_client = g.rest_client_1_6_7;
     riemann_dash = g.riemann_dash_0_2_9;
@@ -175,7 +176,7 @@ g: # Get dependencies from patched gems
     xml_simple = g.xml_simple_1_1_2;
     yajl_ruby = g.yajl_ruby_1_2_1;
   };
-  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''compass'' ''cucumber'' ''erubis'' ''execjs'' ''fakes3'' ''foreman'' ''gettext'' ''heroku'' ''iconv'' ''jekyll'' ''jsduck'' ''lockfile'' ''mechanize'' ''newrelic_plugin'' ''nix'' ''papertrail-cli'' ''rabbitmq_manager-0.1.0'' ''rails'' ''rake'' ''rb-fsevent'' ''rdoc'' ''remote_syslog'' ''riemann-dash'' ''right_aws'' ''rmail'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''taskjuggler'' ''terminal-notifier'' ''thin'' ''tmuxinator'' ''travis'' ''trollop'' ''uglifier'' ''uuid'' ''xapian-full'' ''xapian-ruby'' ''yajl-ruby'' ];
+  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''compass'' ''cucumber'' ''erubis'' ''execjs'' ''fakes3'' ''foreman'' ''gettext'' ''heroku'' ''iconv'' ''jekyll'' ''jsduck'' ''lockfile'' ''mechanize'' ''newrelic_plugin'' ''nix'' ''papertrail-cli'' ''rabbitmq_manager-0.1.0'' ''rails'' ''rake'' ''rb-fsevent'' ''rdoc'' ''redis'' ''remote_syslog'' ''riemann-dash'' ''right_aws'' ''rmail'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''taskjuggler'' ''terminal-notifier'' ''thin'' ''tmuxinator'' ''travis'' ''trollop'' ''uglifier'' ''uuid'' ''xapian-full'' ''xapian-ruby'' ''yajl-ruby'' ];
   gems = {
     ZenTest_4_11_0 = {
       basename = ''ZenTest'';
@@ -1837,6 +1838,20 @@ from the command-line.'';
       name = ''redcarpet-3.2.2'';
       requiredGems = [  ];
       sha256 = ''1yf93kxnyk8dy3cdzq1lbdv8f47svns0k042w81kn8ilj1w88zhg'';
+    };
+    redis_3_2_0 = {
+      basename = ''redis'';
+      meta = {
+        description = ''A Ruby client library for Redis'';
+        homepage = ''https://github.com/redis/redis-rb'';
+        longDescription = ''    A Ruby client that tries to match Redis' API one-to-one, while still
+    providing an idiomatic interface. It features thread-safety,
+    client-side sharding, pipelining, and an obsession for performance.
+'';
+      };
+      name = ''redis-3.2.0'';
+      requiredGems = [  ];
+      sha256 = ''10h6a0dsh7yk1x6q6g75z5dlpbn8qg8z3wk9ymwqm3zv0r3himh6'';
     };
     remote_syslog_1_6_14 = {
       basename = ''remote_syslog'';
