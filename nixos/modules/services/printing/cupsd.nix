@@ -11,20 +11,16 @@ let
   additionalBackends = pkgs.runCommand "additional-cups-backends" { }
     ''
       mkdir -p $out
-      if [ ! -e ${pkgs.cups}/lib/cups/backend/smb ]; then
+      if [ ! -e ${cups}/lib/cups/backend/smb ]; then
         mkdir -p $out/lib/cups/backend
         ln -sv ${pkgs.samba}/bin/smbspool $out/lib/cups/backend/smb
       fi
 
       # Provide support for printing via HTTPS.
-      if [ ! -e ${pkgs.cups}/lib/cups/backend/https ]; then
+      if [ ! -e ${cups}/lib/cups/backend/https ]; then
         mkdir -p $out/lib/cups/backend
-        ln -sv ${pkgs.cups}/lib/cups/backend/ipp $out/lib/cups/backend/https
+        ln -sv ${cups}/lib/cups/backend/ipp $out/lib/cups/backend/https
       fi
-
-      # Import filter configuration from Ghostscript.
-      mkdir -p $out/share/cups/mime/
-      ln -v -s "${pkgs.ghostscript}/etc/cups/"* $out/share/cups/mime/
     '';
 
   # Here we can enable additional backends, filters, etc. that are not
@@ -162,8 +158,6 @@ in
 
     environment.systemPackages = [ cups ];
 
-    environment.variables.CUPS_SERVERROOT = "/etc/cups";
-
     environment.etc."cups/client.conf".text = cfg.clientConf;
     environment.etc."cups/cups-files.conf".text = cfg.cupsFilesConf;
     environment.etc."cups/cupsd.conf".text = cfg.cupsdConf;
@@ -184,10 +178,6 @@ in
 
         path = [ cups ];
 
-        environment = {
-          CUPS_SERVERROOT = "/etc/cups";
-        };
-
         preStart =
           ''
             mkdir -m 0755 -p /etc/cups
@@ -197,22 +187,22 @@ in
           '';
 
         serviceConfig.Type = "forking";
-        serviceConfig.ExecStart = "@${cups}/sbin/cupsd cupsd -c /etc/cups/cupsd.conf";
+        serviceConfig.ExecStart = "@${cups}/sbin/cupsd cupsd";
+
+        restartTriggers =
+          [ config.environment.etc."cups/cups-files.conf".source
+            config.environment.etc."cups/cupsd.conf".source
+          ];
       };
 
     services.printing.drivers =
-      [ pkgs.cups pkgs.ghostscript pkgs.cups_filters additionalBackends
+      [ cups pkgs.ghostscript pkgs.cups_filters additionalBackends
         pkgs.perl pkgs.coreutils pkgs.gnused pkgs.bc pkgs.gawk pkgs.gnugrep
       ];
 
     services.printing.cupsFilesConf =
       ''
         SystemGroup root wheel
-
-        # Note: we can't use ${cups}/etc/cups as the ServerRoot, since
-        # CUPS will write in the ServerRoot when e.g. adding new printers
-        # through the web interface.
-        #ServerRoot /etc/cups
 
         ServerBin ${bindir}/lib/cups
         DataDir ${bindir}/share/cups
@@ -286,6 +276,7 @@ in
             Order deny,allow
           </Limit>
         </Policy>
+
         ${cfg.extraConf}
       '';
 
