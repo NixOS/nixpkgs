@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
 , libXcursor, libXmu, qt4, libIDL, SDL, libcap, zlib, libpng, glib, kernel, lvm2
-, which, alsaLib, curl, libvpx, gawk
+, which, alsaLib, curl, libvpx, gawk, nettools
 , xorriso, makeself, perl, pkgconfig, nukeReferences
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python ? null
@@ -86,6 +86,11 @@ in stdenv.mkDerivation {
   '';
 
   patches = optional enableHardening ./hardened.patch;
+
+  postPatch = ''
+    sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
+      src/apps/adpctl/VBoxNetAdpCtl.cpp
+  '';
 
   configurePhase = ''
     cat >> LocalConfig.kmk <<LOCAL_CONFIG
