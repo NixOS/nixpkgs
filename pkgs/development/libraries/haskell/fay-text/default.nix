@@ -12,5 +12,6 @@ cabal.mkDerivation (self: {
     description = "Fay Text type represented as JavaScript strings";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    inherit (fay.meta) broken;
   };
 })
