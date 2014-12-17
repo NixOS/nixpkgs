@@ -5640,8 +5640,6 @@ let
     libpng = libpng12;
   };
 
-  lgi = callPackage ../development/libraries/lgi { };
-
   lib3ds = callPackage ../development/libraries/lib3ds { };
 
   libaacs = callPackage ../development/libraries/libaacs { };
