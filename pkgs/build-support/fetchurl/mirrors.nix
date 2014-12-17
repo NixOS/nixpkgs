@@ -426,4 +426,9 @@ rec {
     http://sagemath.org/src-old/
   ];
 
+  # MySQL mirrors
+  mysql = [
+    http://mysql.mirrors.pair.com/Downloads/
+    http://cdn.mysql.com/Downloads/
+  ];
 }
