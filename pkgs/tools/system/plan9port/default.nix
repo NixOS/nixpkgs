@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "http://swtch.com/plan9port/";
     description = "Plan 9 from User Space";
     license = licenses.lpl-102;
+    maintainers = [ stdenv.lib.maintainers.ftrvxmtrx ];
     platforms = platforms.unix;
   };
 
