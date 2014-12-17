@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxslt, kdelibs, kdepimlibs, grantlee, qjson, qca2, libofx, sqlite, gettext }:
+{ stdenv, fetchurl, libxslt, kdelibs, kdepimlibs, grantlee, qjson, qca2, libofx, sqlite, gettext, boost }:
 
 stdenv.mkDerivation rec {
   name = "skrooge-1.10.0";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0rsw2xdgws5bvnf3h4hg16liahigcxgaxls7f8hzr9wipxx5xqda";
   };
 
-  buildInputs = [ libxslt kdelibs kdepimlibs grantlee qjson qca2 libofx sqlite ];
+  buildInputs = [ libxslt kdelibs kdepimlibs grantlee qjson qca2 libofx sqlite boost ];
 
   nativeBuildInputs = [ gettext ];
 
