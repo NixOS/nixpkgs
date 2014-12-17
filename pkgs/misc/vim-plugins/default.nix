@@ -487,11 +487,11 @@ rec {
   };
 
   watchdogs = buildVimPlugin {
-    name = "watchdogs-git-2014-12-03";
+    name = "watchdogs-git-2014-10-18";
     src = fetchgit {
       url = "https://github.com/osyo-manga/vim-watchdogs.git";
-      rev = "f4c3a2b5e830aab733bea9d1c3ad3a3d24950301";
-      sha256 = "02csa9jixb7sy41mbywll1zwa596zp8vrlf1qbyq8vxvay0kjvxa";
+      rev = "ad222796eb88b44954340c19c39938046af26e05";
+      sha256 = "4c621ac2834864cf0c46f776029837913e1ba0c725a12d7cb24bf92e04ed1279";
      };
     meta = {
       homepage = https://github.com/osyo-manga/vim-watchdogs;
@@ -516,11 +516,11 @@ rec {
   YouCompleteMe = addRtp "${rtpPath}/youcompleteme" (stdenv.mkDerivation {
     src = fetchgit {
       url = "https://github.com/Valloric/YouCompleteMe.git";
-      rev = "c6f63aee1bfbd69c261b89282c0288f3a14ab50f";
-      sha256 = "1az10nz6pwj3npag57l9p70k88ydikhmf56wn0047sz9wbjbz8gi";
+      rev = "87b42c689391b69968950ae99c3aaacf2e14c329";
+      sha256 = "1f3pywv8bsqyyakvyarg7z9m73gmvp1lfbfp2f2jj73jmmlzb2kv";
      };
 
-    name = "vimplugin-youcompleteme-2014-12-17";
+    name = "vimplugin-youcompleteme-2014-10-06";
 
     buildInputs = [ python cmake llvmPackages.clang ];
 
@@ -622,8 +622,8 @@ rec {
     name = "Gist";
     src = fetchgit {
       url = "git://github.com/mattn/gist-vim";
-      rev = "8a567b823163d349406dffaff4519e0bac10eade";
-      sha256 = "";
+      rev = "d609d93472db9cf45bd701bebe51adc356631547";
+      sha256 = "e5cabc03d5015c589a32f11c654ab9fbd1e91d26ba01f4b737685be81852c511";
     };
     dependencies = [];
 
@@ -633,7 +633,7 @@ rec {
     src = fetchhg {
       url = "https://bitbucket.org/sjl/gundo.vim";
       rev = "eb9fc8676b89";
-      sha256 = "";
+      sha256 = "05lcxrd9ibfi02ja4jvl5y5pp884b8kh9aarw045b0mlldygv6cp";
     };
     dependencies = [];
 
@@ -643,7 +643,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/Twinside/vim-hoogle";
       rev = "81f28318b0d4174984c33df99db7752891c5c4e9";
-      sha256 = "";
+      sha256 = "0f96f3badb6218cac87d0f7027ff032ecc74f08ad3ada542898278ce11cbd5a0";
     };
     dependencies = [];
 
@@ -653,7 +653,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/altercation/vim-colors-solarized";
       rev = "528a59f26d12278698bb946f8fb82a63711eec21";
-      sha256 = "";
+      sha256 = "a1b2ef696eee94dafa76431c31ee260acdd13a7cf87939f27eca431d5aa5a315";
     };
     dependencies = [];
 
@@ -663,7 +663,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/ervandew/supertab";
       rev = "b0ca47f4570385043f270f9278ba6d50d1d2fa00";
-      sha256 = "";
+      sha256 = "24e3e63096a6b6f7f00d985ae6f31377154566d6483fb81572a474053fa43082";
     };
     dependencies = [];
 
@@ -672,8 +672,8 @@ rec {
     name = "Syntastic";
     src = fetchgit {
       url = "git://github.com/scrooloose/syntastic";
-      rev = "b340672bd03d877ede83f95ccec6a98bbd536d42";
-      sha256 = "";
+      rev = "30b4ce3411f539f695ab8def7fc69c2f835eb8fe";
+      sha256 = "c61e2bcd4455525ec2520d75e7b204e39757731f85f5f72ed179f2068ac33700";
     };
     dependencies = [];
 
@@ -683,7 +683,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/godlygeek/tabular";
       rev = "60f25648814f0695eeb6c1040d97adca93c4e0bb";
-      sha256 = "";
+      sha256 = "28c860ad621587f2c3213fae47d1a3997746527c17d51e9ab94c209eb7bfeb0f";
     };
     dependencies = [];
 
@@ -692,8 +692,8 @@ rec {
     name = "Tagbar";
     src = fetchgit {
       url = "git://github.com/majutsushi/tagbar";
-      rev = "bfc121dc38271ab3f050609bb2ca377de07d8bd6";
-      sha256 = "";
+      rev = "f9c5f24576e82aae5ab8a5480f1ae48615354e40";
+      sha256 = "e1ff486f27c0980fee959db69da5617c4653910504b20aeabe87037a8b68712a";
     };
     dependencies = [];
 
@@ -703,7 +703,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/scrooloose/nerdcommenter";
       rev = "6549cfde45339bd4f711504196ff3e8b766ef5e6";
-      sha256 = "";
+      sha256 = "ef270ae5617237d68b3d618068e758af8ffd8d3ba27a3799149f7a106cfd178e";
     };
     dependencies = [];
 
@@ -713,7 +713,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/scrooloose/nerdtree";
       rev = "3b98a7fcae8f9fff356907171f0406ff8cd28921";
-      sha256 = "";
+      sha256 = "deec2ce33249829ae3925478d7d1925ea99e20c37dcc86db7c3bfac4fdc706e0";
     };
     dependencies = [];
 
@@ -722,8 +722,8 @@ rec {
     name = "UltiSnips";
     src = fetchgit {
       url = "git://github.com/sirver/ultisnips";
-      rev = "67630f4aea1c77a7b74a5f922d93c751fbfd53d4";
-      sha256 = "";
+      rev = "b26f2c97b7d9be708eef0b4ba0cdfb53c868d9c3";
+      sha256 = "094055f6255d207c04e26f15ee15019eb9d4b1710c24061c7f8074d23583b9b2";
     };
     dependencies = [];
 
@@ -732,8 +732,8 @@ rec {
     name = "VimOutliner";
     src = fetchgit {
       url = "git://github.com/vimoutliner/vimoutliner";
-      rev = "65f21af2f22b8dacd48337690355db3f7a68d807";
-      sha256 = "";
+      rev = "469f49b5f28bc2b838a80568c9413f690cc3ffb6";
+      sha256 = "38f88f9bbc43622809404c0054a7a4e9b2214166f3b2784511e4fda05bcb4713";
     };
     dependencies = [];
 
@@ -743,7 +743,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/mattn/webapi-vim";
       rev = "a7789abffe936db56e3152e23733847f94755753";
-      sha256 = "";
+      sha256 = "455b84d9fd13200ff5ced5d796075f434a7fb9c00f506769174579266ae2be80";
     };
     dependencies = [];
 
@@ -768,7 +768,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/tpope/vim-commentary";
       rev = "9c685131a5facfa0d643feca3a61b41c007d8170";
-      sha256 = "";
+      sha256 = "2a9f394d0669429469c2f1ddaf9a722c2773f35da08ea9496d3b4b4e85b6038d";
     };
     dependencies = [];
 
@@ -778,7 +778,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/kien/ctrlp.vim";
       rev = "b5d3fe66a58a13d2ff8b6391f4387608496a030f";
-      sha256 = "";
+      sha256 = "41f7884973770552395b96f8693da70999dc815462d4018c560d3ff6be462e76";
     };
     dependencies = [];
 
@@ -788,7 +788,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/int3/vim-extradite";
       rev = "af4f3a51b6b654d655121b93c0cd9d8fe9a0c85d";
-      sha256 = "";
+      sha256 = "d1d29cfbc654134be383747f2cd6b14b7a87de75f997af6a041f14d7ef61ade6";
     };
     dependencies = [];
 
@@ -798,7 +798,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/tpope/vim-fugitive";
       rev = "2c8461db084d205903a792a23163faa546f143c9";
-      sha256 = "";
+      sha256 = "c2569877958fcc5d181cc5b9e26d6b0b022c30aa9ce0908dd96131b44eb90729";
     };
     dependencies = [];
 
@@ -808,17 +808,17 @@ rec {
     src = fetchgit {
       url = "git://github.com/eagletmt/ghcmod-vim";
       rev = "d5c6c7f3c85608b5b76dc3e7e001f60b86c32cb9";
-      sha256 = "";
+      sha256 = "ab56d470ea18da3fae021e22bba14460505e61a94f8bf707778dff5eec51cd6d";
     };
     dependencies = [];
 
   };
-  "vim-addon-vim2nix" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "vim-addon-vim2nix";
+  "github:MarcWeber/vim-addon-vim2nix" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "github-MarcWeber-vim-addon-vim2nix";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-vim2nix";
       rev = "1aef89c05ef199fccff34be807ed7eefd914ca41";
-      sha256 = "";
+      sha256 = "b078fd91cf978ee4cf7002630a83d3381ad781fa99e3ce118185b7f0f417ba2a";
     };
     dependencies = [];
 
@@ -849,7 +849,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/tpope/vim-pathogen";
       rev = "b9fb0dfd811004010f5f6903edef42d6004ebea2";
-      sha256 = "";
+      sha256 = "62ec7e9721651aa86aa716d47c2057771f7d093f414c3b98f50a759d210db4c7";
     };
     dependencies = [];
 
@@ -859,7 +859,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/dannyob/quickfixstatus";
       rev = "fd3875b914fc51bbefefa8c4995588c088163053";
-      sha256 = "";
+      sha256 = "7b6831d5da1c23d95f3158c67e4376d32c2f62ab2e30d02d3f3e14dcfd867d9b";
     };
     dependencies = [];
 
@@ -869,7 +869,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/kien/rainbow_parentheses.vim";
       rev = "eb8baa5428bde10ecc1cb14eed1d6e16f5f24695";
-      sha256 = "";
+      sha256 = "47975a426d06f41811882691d8a51f32bc72f590477ed52b298660486b2488e3";
     };
     dependencies = [];
 
@@ -878,8 +878,8 @@ rec {
     name = "rust";
     src = fetchgit {
       url = "git://github.com/wting/rust.vim";
-      rev = "3ed6c6afb4a1f5d1f7edc3ba0eb61fc723d49bbe";
-      sha256 = "";
+      rev = "0fd423990cfa69336fb6c1d5d58aa2091e7b4e76";
+      sha256 = "21f3decedb24478bc391152bf26a9b88d9e4fa5fcdbdb8a558d95b6bb7be2ff1";
     };
     dependencies = [];
 
@@ -889,9 +889,9 @@ rec {
     src = fetchgit {
       url = "git://github.com/garbas/vim-snipmate";
       rev = "8cb6c3ebe267873dc5abb9a36305c75d9564dea4";
-      sha256 = "";
+      sha256 = "f4692709724a50ff14ccdd5692d90ebdb950417267adb2228f5ce6006471bad4";
     };
-    dependencies = [];
+    dependencies = ["vim-addon-mw-utils" "tlib"];
 
   };
   "sourcemap.vim" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
@@ -899,7 +899,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/chikatoike/sourcemap.vim";
       rev = "0dd82d40faea2fdb0771067f46c01deb41610ba1";
-      sha256 = "";
+      sha256 = "a08c77aea39be4a0a980d62673d1d17fecc518a8aeb9101210e453aaacb78fbd";
     };
     dependencies = [];
 
@@ -909,7 +909,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/tpope/vim-surround";
       rev = "fa433e0b7330753688f715f3be5d10dc480f20e5";
-      sha256 = "";
+      sha256 = "5f01daf72d23fc065f4e4e8eac734275474f32bfa276a9d90ce0d20dfe24058d";
     };
     dependencies = [];
 
@@ -918,8 +918,8 @@ rec {
     name = "table-mode";
     src = fetchgit {
       url = "git://github.com/dhruvasagar/vim-table-mode";
-      rev = "1e94ae39ccc92534ee520c276946a476d91bf5cd";
-      sha256 = "";
+      rev = "e1258702126463b30e32a8a4cd1ba28689a93ef8";
+      sha256 = "2b8ac53a0a346f27db617dade3bd3e4da7d5b560a99c636da7d27cf5622a6690";
     };
     dependencies = [];
 
@@ -928,8 +928,8 @@ rec {
     name = "undotree";
     src = fetchgit {
       url = "git://github.com/mbbill/undotree";
-      rev = "6acc0aebb78aef5c3d97743c3556b73491c21446";
-      sha256 = "";
+      rev = "88e4a9bc2f7916f24441faf884853a01ba11d294";
+      sha256 = "ad55b88db051f57d0c7ddc226a7b7778daab58fa67dc8ac1d78432c0e7d38520";
     };
     dependencies = [];
 
@@ -939,9 +939,9 @@ rec {
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-async";
       rev = "dadc96e188f1cdacbac62129eb29a1eacfed792c";
-      sha256 = "";
+      sha256 = "27f941e21a8ca5940bd20914e2a9e3809e554f3ef2c27b3bafb9a153107a5d07";
     };
-    dependencies = [];
+    dependencies = ["vim-addon-signs"];
 
   };
   "vim-addon-commenting" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
@@ -949,7 +949,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-commenting";
       rev = "b7cf748ac1c9bf555cbd347589e3b7196030d20b";
-      sha256 = "";
+      sha256 = "4ad7d5f6669f0a1b4a24c9ce3649c030d7d3fc8588de4d4d6c3269140fbe9b3e";
     };
     dependencies = [];
 
@@ -959,7 +959,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-local-vimrc";
       rev = "7689b55ee86dd6046923fd28ceab49da3881abfe";
-      sha256 = "";
+      sha256 = "f11d13676e2fdfcc9cabc991577f0b2e85909665b6f245aa02f21ff78d6a8556";
     };
     dependencies = [];
 
@@ -968,8 +968,8 @@ rec {
     name = "vim-addon-manager";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-manager";
-      rev = "fda9d2f4522024aa8bd8b8305e6a71c4a4a28c07";
-      sha256 = "";
+      rev = "345c4b357843b14f4622f212e4d1e0e3f8a7f08a";
+      sha256 = "d8fba7dd089f4a919f91dc284537880d7a841c26dacb503ea08b15dce35e7626";
     };
     dependencies = [];
 
@@ -979,9 +979,9 @@ rec {
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-mru";
       rev = "e41e39bd9d1bf78ccfd8d5e1bc05ae5e1026c2bb";
-      sha256 = "";
+      sha256 = "15b70f796f28cbd999060fea7f47408fa8a6cb176cd4915b9cc3dc6c53eed960";
     };
-    dependencies = [];
+    dependencies = ["vim-addon-other" "vim-addon-mw-utils"];
 
   };
   "vim-addon-mw-utils" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
@@ -989,7 +989,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-mw-utils";
       rev = "0c5612fa31ee434ba055e21c76f456244b3b5109";
-      sha256 = "";
+      sha256 = "4e1b6d1b59050f1063e58ef4bee9e9603616ad184cd9ef7466d0ec3d8e22b91c";
     };
     dependencies = [];
 
@@ -999,9 +999,9 @@ rec {
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-nix";
       rev = "7b0a376bb1797fef8da2dc14e768f318bcb671e8";
-      sha256 = "";
+      sha256 = "c2b0f6f50083063b5e801b872f38d4f00307fe5d7a4f3977a108e5cd10c1c410";
     };
-    dependencies = [];
+    dependencies = ["vim-addon-completion" "vim-addon-goto-thing-at-cursor" "vim-addon-errorformats" "vim-addon-actions" "vim-addon-mw-utils" "tlib"];
 
   };
   "vim-addon-other" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
@@ -1009,9 +1009,9 @@ rec {
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-other";
       rev = "f78720c9cb5bf871cabb13c7cbf94378dbf0163b";
-      sha256 = "";
+      sha256 = "43f027e4b7576031072515c23c2b09f7f2c8bba7ee43a1e2041a4371bd954d1b";
     };
-    dependencies = [];
+    dependencies = ["vim-addon-actions" "vim-addon-mw-utils"];
 
   };
   "vim-addon-php-manual" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
@@ -1019,7 +1019,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-php-manual";
       rev = "e09ccdce3d2132771d0bd32884553207cc7122d0";
-      sha256 = "";
+      sha256 = "b2f44be3a1ceca9de7789ea9b5fd36035b720ea529f4301f3771b010d1e453c2";
     };
     dependencies = [];
 
@@ -1029,9 +1029,9 @@ rec {
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-sql";
       rev = "05b8a0c211f1ae4c515c64e91dec555cdf20d90b";
-      sha256 = "";
+      sha256 = "a1334ae694e0a03229bacc8ba7e08e7223df240244c7378e3f1bd91d74e957c2";
     };
-    dependencies = [];
+    dependencies = ["vim-addon-completion" "vim-addon-background-cmd" "tlib"];
 
   };
   "vim-addon-syntax-checker" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
@@ -1039,9 +1039,9 @@ rec {
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-syntax-checker";
       rev = "8eb7217e636ca717d4de5cd03cc0180c5b66ae77";
-      sha256 = "";
+      sha256 = "aef048e664653b5007df71ac24ed34ec55d8938c763d3f80885a122e445a9b3d";
     };
-    dependencies = [];
+    dependencies = ["vim-addon-mw-utils" "tlib"];
 
   };
   "vim-addon-toggle-buffer" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
@@ -1049,9 +1049,9 @@ rec {
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-toggle-buffer";
       rev = "a1b38b9c5709cba666ed2d84ef06548f675c6b0b";
-      sha256 = "";
+      sha256 = "672166ecfe0599177afb56b444366f587f77e9659c256ac4e41ee45cb2df6055";
     };
-    dependencies = [];
+    dependencies = ["vim-addon-mw-utils" "tlib"];
 
   };
   "vim-addon-xdebug" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
@@ -1059,17 +1059,17 @@ rec {
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-xdebug";
       rev = "45f26407305b4ce6f8f5f37d2b5e6e4354104172";
-      sha256 = "";
+      sha256 = "0a7bf2caf36772c94bd25bfbf46bf628623809c9cfab447ff788eb74149464ef";
     };
-    dependencies = [];
+    dependencies = ["WebAPI" "vim-addon-mw-utils" "vim-addon-signs" "vim-addon-async"];
 
   };
   "vim-airline" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-airline";
     src = fetchgit {
       url = "git://github.com/bling/vim-airline";
-      rev = "401ce611c6f9b9e8be0857cf6094604033e1b717";
-      sha256 = "";
+      rev = "4a2208821e1d334c4d3cdf66cd1fd0968755e16a";
+      sha256 = "ea2d8bb459ae2cc378a46409c7e86db9b1cc8349bd3d2451c9a5db8ae9c8ea1d";
     };
     dependencies = [];
 
@@ -1079,7 +1079,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/kchmck/vim-coffee-script";
       rev = "827e4a38b07479433b619091469a7495a392df8a";
-      sha256 = "";
+      sha256 = "89ee4c7cce9f3310be502df6b2dd2e70a715c0b06882afc9c8169fbf58b207d0";
     };
     dependencies = [];
 
@@ -1088,8 +1088,8 @@ rec {
     name = "vim-easy-align";
     src = fetchgit {
       url = "git://github.com/junegunn/vim-easy-align";
-      rev = "c62d124be614de65922b15d468c4049d1eee9353";
-      sha256 = "";
+      rev = "246139c57c4a82a9787974165dfeb7bee7dacc9c";
+      sha256 = "9205b94f985f633b5cbdde63a4c5a36ce5c4f92f8a89c124ff4ba66458f98cbf";
     };
     dependencies = [];
 
@@ -1098,8 +1098,8 @@ rec {
     name = "vim-gitgutter";
     src = fetchgit {
       url = "git://github.com/airblade/vim-gitgutter";
-      rev = "1a68abedf1115482beb02834ebc42bc3f6a07672";
-      sha256 = "";
+      rev = "88c7916d2f653e13cbbcd2c461c83c403d09ca46";
+      sha256 = "df56b3cd81a71cd3a4286d878a4cfd7b53c3b7b09f3cf45fa41653050315056c";
     };
     dependencies = [];
 
@@ -1109,7 +1109,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/noc7c9/vim-iced-coffee-script";
       rev = "e42e0775fa4b1f8840c55cd36ac3d1cedbc1dea2";
-      sha256 = "";
+      sha256 = "c7859591975a51a1736f99a433d7ca3e7638b417340a0472a63995e16d8ece93";
     };
     dependencies = [];
 
@@ -1119,7 +1119,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/xuhdev/vim-latex-live-preview";
       rev = "18625ceca4de5984f3df50cdd0202fc13eb9e37c";
-      sha256 = "";
+      sha256 = "261852d3830189a50176f997a4c6b4ec7e25893c5b7842a3eb57eb7771158722";
     };
     dependencies = [];
 
@@ -1129,7 +1129,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/kshenoy/vim-signature";
       rev = "598a9275668d772ca18cc052246b96edcbe61de0";
-      sha256 = "";
+      sha256 = "1c410aaec24840b0e0566cd6e6df100ca3c7fb83d92337efdfc359494b6c49f8";
     };
     dependencies = [];
 
@@ -1138,8 +1138,8 @@ rec {
     name = "vim-snippets";
     src = fetchgit {
       url = "git://github.com/honza/vim-snippets";
-      rev = "e0b29dd5536deaa586ffcb452bf6f1efad81d723";
-      sha256 = "";
+      rev = "436038094a27ed635aaa11ebf50ccddc2d4b9328";
+      sha256 = "1db34df31ff1526394de42997e21b47cea152dc2c014dbbb1f3bbeb8986820e1";
     };
     dependencies = [];
 
@@ -1149,7 +1149,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/dag/vim2hs";
       rev = "f2afd55704bfe0a2d66e6b270d247e9b8a7b1664";
-      sha256 = "";
+      sha256 = "485fc58595bb4e50f2239bec5a4cbb0d8f5662aa3f744e42c110cd1d66b7e5b0";
     };
     dependencies = [];
 
@@ -1159,7 +1159,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/gmarik/vundle";
       rev = "0b28e334e65b6628b0a61c412fcb45204a2f2bab";
-      sha256 = "";
+      sha256 = "9681d471d1391626cb9ad22b2b469003d9980cd23c5c3a8d34666376447e6204";
     };
     dependencies = [];
 
