@@ -12197,7 +12197,7 @@ let
     };
 
     propagatedBuildInputs = with self; [ boto-230 crcmod httplib2 gcs-oauth2-boto-plugin google_api_python_client gflags
-                                         retry_decorator pkgs.pyopenssl socksipy-branch ];
+                                         retry_decorator pkgs.pyopenssl socksipy-branch crcmod ];
   };
 
   pypi2nix = self.buildPythonPackage rec {
