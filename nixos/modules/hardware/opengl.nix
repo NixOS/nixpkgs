@@ -16,7 +16,6 @@ let
       [ p.mesa_drivers
         p.mesa_noglu # mainly for libGL
         (if cfg.s3tcSupport then p.libtxc_dxtn else p.libtxc_dxtn_s2tc)
-        p.udev
       ];
   };
 
