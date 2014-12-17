@@ -1,6 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, e19, xlibs, libffi, pam, alsaLib, luajit, bzip2, libpthreadstubs, gdbm, libcap, set_freqset_setuid ? false }:
-
-
+{ stdenv, fetchurl, pkgconfig, e19, xlibs, libffi, pam, alsaLib, luajit, bzip2
+, libpthreadstubs, gdbm, libcap, mesa_glu, xkeyboard_config, set_freqset_setuid ? false }:
 
 stdenv.mkDerivation rec {
   name = "enlightenment-${version}";
@@ -9,10 +8,15 @@ stdenv.mkDerivation rec {
     url = "http://download.enlightenment.org/rel/apps/enlightenment/${name}.tar.xz";
     sha256 = "016z1vilhjarpxzn5bwcw696d8b66rklnhkrwzfa5mcxn8gpmvap";
   };
-  buildInputs = [ pkgconfig e19.efl e19.elementary xlibs.libXdmcp xlibs.libxcb xlibs.xcbutilkeysyms xlibs.libXrandr libffi pam alsaLib luajit bzip2 libpthreadstubs gdbm ] ++ stdenv.lib.optionals stdenv.isLinux [ libcap ];
+  buildInputs = [ pkgconfig e19.efl e19.elementary xlibs.libXdmcp xlibs.libxcb
+    xlibs.xcbutilkeysyms xlibs.libXrandr libffi pam alsaLib luajit bzip2
+    libpthreadstubs gdbm ] ++ stdenv.lib.optionals stdenv.isLinux [ libcap ];
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="-I${e19.efl}/include/eo-1 -I${e19.efl}/include/ecore-imf-1 -I${e19.efl}/include/ethumb-client-1 -I${e19.efl}/include/ethumb-1 $NIX_CFLAGS_COMPILE"
     export USER_SESSION_DIR=$prefix/lib/systemd/user
+
+    substituteInPlace src/modules/xkbswitch/e_mod_parse.c \
+      --replace "/usr/share/X11/xkb/rules/xorg.lst" "${xkeyboard_config}/share/X11/xkb/rules/base.lst"
   '';
 
   # this is a hack and without this cpufreq module is not working:
