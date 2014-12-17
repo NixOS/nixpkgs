@@ -51,7 +51,7 @@ case "$QUERY_STRING" in
 	*.narinfo)
 		hash=${QUERY_STRING%.narinfo}
 		hash=${hash#/}
-		path="$(echo "$STORE_DIR/$hash-"* )"
+		path="$(echo "$STORE_DIR/$hash-"* | sort | head -n 1)"
 		if [ -n "$path" ] && [ -e "$path" ]; then
 			header
 			info="$(
