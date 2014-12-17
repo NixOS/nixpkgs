@@ -53,7 +53,7 @@ with lib;
       mkDefault (if pathExists fn then readFile fn else "master");
 
     # Note: code names must only increase in alphabetical order.
-    system.nixosCodeName = "Caterpillar";
+    system.nixosCodeName = "Dingo";
 
     # Generate /etc/os-release.  See
     # http://0pointer.de/public/systemd-man/os-release.html for the
