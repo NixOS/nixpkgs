@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="-I${e19.efl}/include/eo-1 -I${e19.efl}/include/ecore-imf-1 -I${e19.efl}/include/ethumb-client-1 -I${e19.efl}/include/ethumb-1 $NIX_CFLAGS_COMPILE"
     export USER_SESSION_DIR=$prefix/lib/systemd/user
+
+    substituteInPlace src/modules/xkbswitch/e_mod_parse.c \
+      --replace "/usr/share/X11/xkb/rules/xorg.lst" "${xkeyboard_config}/share/X11/xkb/rules/base.lst"
   '';
 
   # this is a hack and without this cpufreq module is not working:
