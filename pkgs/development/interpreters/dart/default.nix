@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     mkdir -p $out
     cp -R * $out/
     echo $libPath
-    patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+    patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
              --set-rpath $libPath \
              $out/bin/dart
     
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
         sha256 = "00935c4vxfj2h3x354g75qdazswwissbwc7kj5k05l1m3lizikf6";
       };
  
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.gcc.gcc ];
+  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.gcc ];
  
   dontStrip = true;
 }

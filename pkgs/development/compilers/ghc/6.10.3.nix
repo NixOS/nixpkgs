@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   configureFlags=[
     "--with-gmp-libraries=${gmp}/lib"
     "--with-gmp-includes=${gmp}/include"
-    "--with-gcc=${stdenv.gcc}/bin/gcc"
+    "--with-gcc=${stdenv.cc}/bin/gcc"
   ];
 
   meta = {

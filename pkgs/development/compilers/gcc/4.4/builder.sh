@@ -17,20 +17,20 @@ fi
 
 if test "$noSysDirs" = "1"; then
 
-    if test -e $NIX_GCC/nix-support/orig-libc; then
+    if test -e $NIX_CC/nix-support/orig-libc; then
 
         # Figure out what extra flags to pass to the gcc compilers
         # being generated to make sure that they use our glibc.
-        extraFlags="$(cat $NIX_GCC/nix-support/libc-cflags)"
-        extraLDFlags="$(cat $NIX_GCC/nix-support/libc-ldflags) $(cat $NIX_GCC/nix-support/libc-ldflags-before)"
+        extraFlags="$(cat $NIX_CC/nix-support/libc-cflags)"
+        extraLDFlags="$(cat $NIX_CC/nix-support/libc-ldflags) $(cat $NIX_CC/nix-support/libc-ldflags-before)"
 
         # Use *real* header files, otherwise a limits.h is generated
         # that does not include Glibc's limits.h (notably missing
         # SSIZE_MAX, which breaks the build).
-        export NIX_FIXINC_DUMMY=$(cat $NIX_GCC/nix-support/orig-libc)/include
+        export NIX_FIXINC_DUMMY=$(cat $NIX_CC/nix-support/orig-libc)/include
 
         # The path to the Glibc binaries such as `crti.o'.
-        glibc_libdir="$(cat $NIX_GCC/nix-support/orig-libc)/lib"
+        glibc_libdir="$(cat $NIX_CC/nix-support/orig-libc)/lib"
         
     else
         # Hack: support impure environments.
@@ -61,27 +61,27 @@ if test "$noSysDirs" = "1"; then
             EXTRA_LDFLAGS_TARGET="-Wl,-L${libcCross}/lib"
         fi
     else
-        if test -z "$NIX_GCC_CROSS"; then
+        if test -z "$NIX_CC_CROSS"; then
             EXTRA_FLAGS_TARGET="$EXTRA_FLAGS"
             EXTRA_LDFLAGS_TARGET="$EXTRA_LDFLAGS"
         else
             # This the case of cross-building the gcc.
             # We need special flags for the target, different than those of the build
             # Assertion:
-            test -e $NIX_GCC_CROSS/nix-support/orig-libc
+            test -e $NIX_CC_CROSS/nix-support/orig-libc
 
             # Figure out what extra flags to pass to the gcc compilers
             # being generated to make sure that they use our glibc.
-            extraFlags="$(cat $NIX_GCC_CROSS/nix-support/libc-cflags)"
-            extraLDFlags="$(cat $NIX_GCC_CROSS/nix-support/libc-ldflags) $(cat $NIX_GCC_CROSS/nix-support/libc-ldflags-before)"
+            extraFlags="$(cat $NIX_CC_CROSS/nix-support/libc-cflags)"
+            extraLDFlags="$(cat $NIX_CC_CROSS/nix-support/libc-ldflags) $(cat $NIX_CC_CROSS/nix-support/libc-ldflags-before)"
 
             # Use *real* header files, otherwise a limits.h is generated
             # that does not include Glibc's limits.h (notably missing
             # SSIZE_MAX, which breaks the build).
-            NIX_FIXINC_DUMMY_CROSS=$(cat $NIX_GCC_CROSS/nix-support/orig-libc)/include
+            NIX_FIXINC_DUMMY_CROSS=$(cat $NIX_CC_CROSS/nix-support/orig-libc)/include
 
             # The path to the Glibc binaries such as `crti.o'.
-            glibc_libdir="$(cat $NIX_GCC_CROSS/nix-support/orig-libc)/lib"
+            glibc_libdir="$(cat $NIX_CC_CROSS/nix-support/orig-libc)/lib"
 
             extraFlags="-g0 -O2 -I$NIX_FIXINC_DUMMY_CROSS $extraFlags"
             extraLDFlags="--strip-debug -L$glibc_libdir -rpath $glibc_libdir $extraLDFlags"

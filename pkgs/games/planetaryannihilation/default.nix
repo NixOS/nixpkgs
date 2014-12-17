@@ -34,13 +34,13 @@ stdenv.mkDerivation {
 
     ln -s ${systemd}/lib/libudev.so.1 $out/lib/libudev.so.0
 
-    patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" "$out/PA"
-    patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.gcc.gcc xlibs.libXdamage xorg.libXfixes gtk glib stdenv.glibc "$out" xlibs.libXext pango udev xlibs.libX11 xlibs.libXcomposite alsaLib atk nspr fontconfig cairo pango nss freetype gnome3.gconf gdk_pixbuf xlibs.libXrender ]}:{stdenv.gcc.gcc}/lib64:${stdenv.glibc}/lib64" "$out/host/CoherentUI_Host.bin" 
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$out/PA"
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.cc.gcc xlibs.libXdamage xorg.libXfixes gtk glib stdenv.glibc "$out" xlibs.libXext pango udev xlibs.libX11 xlibs.libXcomposite alsaLib atk nspr fontconfig cairo pango nss freetype gnome3.gconf gdk_pixbuf xlibs.libXrender ]}:{stdenv.cc.gcc}/lib64:${stdenv.glibc}/lib64" "$out/host/CoherentUI_Host.bin" 
 
-    wrapProgram $out/PA --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.gcc.gcc stdenv.glibc xlibs.libX11 xlibs.libXcursor gtk glib curl "$out" ]}:${stdenv.gcc.gcc}/lib64:${stdenv.glibc}/lib64"
+    wrapProgram $out/PA --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.gcc stdenv.glibc xlibs.libX11 xlibs.libXcursor gtk glib curl "$out" ]}:${stdenv.cc.gcc}/lib64:${stdenv.glibc}/lib64"
 
     for f in $out/lib/*; do
-      patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.gcc.gcc curl xlibs.libX11 stdenv.glibc xlibs.libXcursor "$out" ]}:${stdenv.gcc.gcc}/lib64:${stdenv.glibc}/lib64" $f
+      patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.cc.gcc curl xlibs.libX11 stdenv.glibc xlibs.libXcursor "$out" ]}:${stdenv.cc.gcc}/lib64:${stdenv.glibc}/lib64" $f
     done
   '';
 

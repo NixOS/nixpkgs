@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2}/include/libxml2 $additionalFlags"
-    export PATH="$PATH:${stdenv.gcc.libc}/sbin"
+    export PATH="$PATH:${stdenv.cc.libc}/sbin"
     patchShebangs .
   '';
 

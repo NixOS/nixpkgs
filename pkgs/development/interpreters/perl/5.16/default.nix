@@ -2,7 +2,7 @@
 
 let
 
-  libc = if stdenv.gcc.libc or null != null then stdenv.gcc.libc else "/usr";
+  libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
 
 in
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
       ''}
     '';
 
-  preBuild = lib.optionalString (!(stdenv ? gcc && stdenv.gcc.nativeTools))
+  preBuild = lib.optionalString (!(stdenv ? cc && stdenv.cc.nativeTools))
     ''
       # Make Cwd work on NixOS (where we don't have a /bin/pwd).
       substituteInPlace dist/Cwd/Cwd.pm --replace "'/bin/pwd'" "'$(type -tP pwd)'"

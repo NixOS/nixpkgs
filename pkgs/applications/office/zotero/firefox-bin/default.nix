@@ -125,7 +125,7 @@ stdenv.mkDerivation {
         firefox mozilla-xremote-client firefox-bin plugin-container \
         updater crashreporter webapprt-stub
       do
-        patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+        patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           "$out/usr/lib/firefox-bin-${version}/$executable"
       done
 

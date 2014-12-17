@@ -72,7 +72,7 @@ installPhase() {
 
         for i in nvidia-settings nvidia-xconfig; do
 	    cp $i $out/bin/$i
-	    patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+	    patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
 	        --set-rpath $out/lib:$programPath:$glPath $out/bin/$i
         done
 

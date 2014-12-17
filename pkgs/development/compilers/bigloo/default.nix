@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     # Help libgc's configure.
-    '' export CXXCPP="g++ -E"
+    '' export CXXCPP="$CXX -E"
     '';
 
   patchPhase = ''

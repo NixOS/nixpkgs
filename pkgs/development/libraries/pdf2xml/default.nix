@@ -21,6 +21,8 @@ stdenv.mkDerivation {
     sed -i 's|XPDF = xpdf_3.01|XPDF = ${libxpdf}/lib|' Makefile
 
     mkdir exe
+
+    buildFlags+=" CXX=$CXX"
   '';
   
   installPhase = ''

@@ -115,7 +115,7 @@ stdenv.mkDerivation {
         thunderbird mozilla-xremote-client thunderbird-bin plugin-container \
         updater
       do
-        patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+        patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           "$out/usr/lib/thunderbird-bin-${version}/$executable"
       done
 

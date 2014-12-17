@@ -56,9 +56,9 @@ let
         snappyPath="lib/snappy-java-1.0.5"
         7z x -o"$snappyPath" "$snappyPath.jar"
         if [ "${stdenv.system}" == "x86_64-linux" ]; then
-          patchelf --set-rpath ${stdenv.gcc.gcc}/lib64 "$snappyPath/org/xerial/snappy/native/Linux/amd64/libsnappyjava.so"
+          patchelf --set-rpath ${stdenv.cc.gcc}/lib64 "$snappyPath/org/xerial/snappy/native/Linux/amd64/libsnappyjava.so"
         else
-          patchelf --set-rpath ${stdenv.gcc.gcc}/lib "$snappyPath/org/xerial/snappy/native/Linux/i386/libsnappyjava.so"
+          patchelf --set-rpath ${stdenv.cc.gcc}/lib "$snappyPath/org/xerial/snappy/native/Linux/i386/libsnappyjava.so"
         fi
         7z a -tzip "$snappyPath.jar" ./"$snappyPath"/*
         rm -vr "$snappyPath"
@@ -76,7 +76,7 @@ let
 
       makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${loName}" \
         --prefix PATH : "${jdk}/bin:${coreutils}/bin:${gnugrep}/bin:${which}/bin:${git}/bin" \
-        --prefix LD_RUN_PATH : "${stdenv.gcc.gcc}/lib/" \
+        --prefix LD_RUN_PATH : "${stdenv.cc.gcc}/lib/" \
         --prefix JDK_HOME : "$jdk" \
         --prefix ${hiName}_JDK : "$jdk"
 

@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [openssl qt4 mesa zlib pkgconfig libav];
 
-  libPath = stdenv.lib.makeLibraryPath [stdenv.gcc.gcc openssl mesa qt4 zlib ] 
-          + ":" + stdenv.gcc.gcc + "/lib64";
+  libPath = stdenv.lib.makeLibraryPath [stdenv.cc.gcc openssl mesa qt4 zlib ] 
+          + ":" + stdenv.cc.gcc + "/lib64";
 
   meta = with stdenv.lib; {
     description = "convert blu-ray and dvd to mkv";

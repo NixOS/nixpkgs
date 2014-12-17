@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     ln -s ${libusb1}/lib/libusb-1.0.so.0 ./x10flasher_lib/linux/lib32/libusbx-1.0.so
 
     chmod +x x10flasher_lib/unyaffs.linux.x86 x10flasher_lib/bin2elf x10flasher_lib/bin2sin
-    patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" x10flasher_lib/unyaffs.linux.x86
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" x10flasher_lib/unyaffs.linux.x86
     ln -sf unyaffs.linux.x86 x10flasher_lib/unyaffs.linux
 
     ln -s swt32.jar x10flasher_lib/swtlin/swt.jar

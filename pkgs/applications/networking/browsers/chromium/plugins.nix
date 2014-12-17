@@ -35,7 +35,7 @@ let
     '';
 
     patchPhase = let
-      rpaths = [ stdenv.gcc.gcc ];
+      rpaths = [ stdenv.cc.gcc ];
       mkrpath = p: "${makeSearchPath "lib64" p}:${makeSearchPath "lib" p}";
     in ''
       for sofile in PepperFlash/libpepflashplayer.so \

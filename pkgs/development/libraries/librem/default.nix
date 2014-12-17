@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
     "LIBRE_INC=${libre}/include/re"
     ''PREFIX=$(out)''
   ]
-  ++ stdenv.lib.optional (stdenv.gcc.gcc != null) "SYSROOT_ALT=${stdenv.gcc.gcc}"
-  ++ stdenv.lib.optional (stdenv.gcc.libc != null) "SYSROOT=${stdenv.gcc.libc}"
+  ++ stdenv.lib.optional (stdenv.cc.gcc != null) "SYSROOT_ALT=${stdenv.cc.gcc}"
+  ++ stdenv.lib.optional (stdenv.cc.libc != null) "SYSROOT=${stdenv.cc.libc}"
   ;
   meta = {
     homepage = "http://www.creytiv.com/rem.html";

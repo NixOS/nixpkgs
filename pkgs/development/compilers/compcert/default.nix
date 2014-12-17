@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, coq, ocaml, ocamlPackages, gcc }:
+{ stdenv, fetchurl, coq, ocaml, ocamlPackages }:
 
 stdenv.mkDerivation rec {
   name    = "compcert-${version}";
@@ -12,7 +12,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ coq ocaml ocamlPackages.menhir ];
 
   enableParallelBuilding = true;
-  configurePhase = "./configure -prefix $out -toolprefix ${gcc}/bin/ " +
+
+  configurePhase = ''
+    substituteInPlace ./configure --replace '{toolprefix}gcc' '{toolprefix}cc'
+    ./configure -prefix $out -toolprefix ${stdenv.cc}/bin/ '' +
     (if stdenv.isDarwin then "ia32-macosx" else "ia32-linux");
 
   meta = with stdenv.lib; {

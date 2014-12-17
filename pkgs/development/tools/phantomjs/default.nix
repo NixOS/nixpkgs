@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
 
   buildPhase = if stdenv.isDarwin then "" else ''
     patchelf \
-      --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-      --set-rpath "${freetype}/lib:${fontconfig}/lib:${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib:${openssl}/lib" \
+      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-rpath "${freetype}/lib:${fontconfig}/lib:${stdenv.cc.gcc}/lib64:${stdenv.cc.gcc}/lib:${openssl}/lib" \
       bin/phantomjs
   '';
 

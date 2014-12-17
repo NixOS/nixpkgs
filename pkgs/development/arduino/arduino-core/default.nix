@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
             if echo "$filepath" | grep -q "\.elf$"; then
                 continue
             fi
-            echo "setting interpreter $(cat "$NIX_GCC"/nix-support/dynamic-linker) in $filepath"
-            patchelf --set-interpreter "$(cat "$NIX_GCC"/nix-support/dynamic-linker)" "$filepath"
+            echo "setting interpreter $(cat "$NIX_CC"/nix-support/dynamic-linker) in $filepath"
+            patchelf --set-interpreter "$(cat "$NIX_CC"/nix-support/dynamic-linker)" "$filepath"
             test $? -eq 0 || { echo "patchelf failed to process $filepath"; exit 1; }
         fi
     done

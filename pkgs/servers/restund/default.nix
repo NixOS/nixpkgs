@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
     ''PREFIX=$(out)''
     "USE_MYSQL=1"
   ]
-  ++ stdenv.lib.optional (stdenv.gcc.gcc != null) "SYSROOT_ALT=${stdenv.gcc.gcc}"
-  ++ stdenv.lib.optional (stdenv.gcc.libc != null) "SYSROOT=${stdenv.gcc.libc}"
+  ++ stdenv.lib.optional (stdenv.cc.gcc != null) "SYSROOT_ALT=${stdenv.cc.gcc}"
+  ++ stdenv.lib.optional (stdenv.cc.libc != null) "SYSROOT=${stdenv.cc.libc}"
   ;
   NIX_LDFLAGS='' -L${mysql}/lib/mysql '';
   meta = {

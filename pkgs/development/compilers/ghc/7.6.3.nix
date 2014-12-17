@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
   '';
 
-  configureFlags = "--with-gcc=${stdenv.gcc}/bin/gcc";
+  configureFlags = "--with-gcc=${stdenv.cc}/bin/gcc";
 
   postInstall = ''
     # ghci uses mmap with rwx protection at it implements dynamic

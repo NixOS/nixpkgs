@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     unzip -d $out/bin $src
-    patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
     $out/bin/atom
     mv $out/bin/atom $out/bin/atom-shell
     wrapProgram $out/bin/atom-shell \

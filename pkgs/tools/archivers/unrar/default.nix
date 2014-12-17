@@ -11,6 +11,10 @@ stdenv.mkDerivation {
     sha256 = "13ida8vcamiagl40d9yfjma9k6givxczhx278f1p7bv9wgb8gfmc";
   };
 
+  preBuild = ''
+    export buildFlags="CXX=$CXX"
+  '';
+
   installPhase = ''
     installBin unrar
 

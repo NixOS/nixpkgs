@@ -4,7 +4,7 @@
  , tcl, tk, xproto, libX11, git, mpfr
  } :
 let
-  realGcc = stdenv.gcc.gcc;
+  realGcc = stdenv.cc.gcc;
 in
 stdenv.mkDerivation rec {
   pname = "julia";
