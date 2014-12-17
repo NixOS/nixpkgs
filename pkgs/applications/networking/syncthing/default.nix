@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "syncthing-${version}";
-  version = "0.10.11";
+  version = "0.10.12";
 
   src = fetchgit {
     url = "git://github.com/syncthing/syncthing.git";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
     export GOPATH="`pwd`/Godeps/_workspace:`pwd`/dependencies"
 
-    #go test -cpu=1,2,4 ./...
+    go test -cpu=1,2,4 ./...
 
     mkdir ./bin
 
