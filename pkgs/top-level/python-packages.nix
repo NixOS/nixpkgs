@@ -2755,6 +2755,42 @@ let
     };
   };
 
+  jsonpatch = buildPythonPackage rec {
+    name = "jsonpatch-1.8";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/j/jsonpatch/jsonpatch-1.8.tar.gz";
+      sha256 = "0xhp6prvk219vnzixbj231wymd458nqbnmsf5fn4252092prvig5";
+    };
+
+    propagatedBuildInputs = with self; [ six jsonpointer ];
+
+    meta = {
+      description = "Apply JSON-Patches (RFC 6902)";
+      homepage = "https://github.com/stefankoegl/python-json-patch";
+      license = stdenv.lib.licenses.bsd3;
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
+
+  jsonpointer = buildPythonPackage rec {
+    name = "jsonpointer-1.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/j/jsonpointer/jsonpointer-1.4.tar.gz";
+      sha256 = "1d0555smqwdbi0nm48hyqzywb9m2jlz5izgv56ll3zk7viz3b7fb";
+    };
+
+    #propagatedBuildInputs = with self; [ six jsonpointer ];
+
+    meta = {
+      description = "Identify specific nodes in a JSON document (RFC 6901)";
+      homepage = "https://github.com/stefankoegl/python-json-pointer";
+      license = stdenv.lib.licenses.bsd3;
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
+
   jsonwatch = buildPythonPackage rec {
     name = "jsonwatch-0.2.0";
 
@@ -6135,6 +6171,22 @@ let
       license = "bsd";
     };
   };
+
+  oauth = buildPythonPackage (rec {
+    name = "oauth-1.0.1";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/o/oauth/oauth-1.0.1.tar.gz";
+      sha256 = "0pdgi35hczsslil4890xqawnbpdazkgf2v1443847h5hy2gq2sg7";
+    };
+
+    meta = {
+      homepage = "http://code.google.com/p/oauth";
+      description = "Library for OAuth version 1.0a.";
+      license = licenses.mit;
+      platforms = stdenv.lib.platforms.all;
+    };
+  });
 
   oauth2 = buildPythonPackage (rec {
     name = "oauth2-1.5.211";

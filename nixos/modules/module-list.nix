@@ -309,6 +309,7 @@
   ./services/security/haveged.nix
   ./services/security/tor.nix
   ./services/security/torsocks.nix
+  ./services/system/cloud-init.nix
   ./services/system/dbus.nix
   ./services/system/kerberos.nix
   ./services/system/nscd.nix
