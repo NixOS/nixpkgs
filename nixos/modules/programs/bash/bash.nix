@@ -105,7 +105,7 @@ in
       };
 
       enableCompletion = mkOption {
-        default = true;
+        default = false;
         description = ''
           Enable Bash completion for all interactive bash shells.
         '';
