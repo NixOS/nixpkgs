@@ -5,6 +5,13 @@ with lib;
 let
   cfg = config.services.mesos.slave;
 
+  mkAttributes =
+    attrs: concatStringsSep ";" (mapAttrsToList
+                                   (k: v: "${k}:${v}")
+                                   (filterAttrs (k: v: v != null) attrs));
+  attribsArg = optionalString (cfg.attributes != {})
+                              "--attributes=${mkAttributes cfg.attributes}";
+
 in {
 
   options.services.mesos = {
@@ -31,9 +38,9 @@ in {
       };
 
       withHadoop = mkOption {
-	description = "Add the HADOOP_HOME to the slave.";
-	default = false;
-	type = types.bool;
+        description = "Add the HADOOP_HOME to the slave.";
+        default = false;
+        type = types.bool;
       };
 
       workDir = mkOption {
@@ -44,10 +51,10 @@ in {
 
       extraCmdLineOptions = mkOption {
         description = ''
-	  Extra command line options for Mesos Slave.
+          Extra command line options for Mesos Slave.
 
-	  See https://mesos.apache.org/documentation/latest/configuration/
-	'';
+          See https://mesos.apache.org/documentation/latest/configuration/
+        '';
         default = [ "" ];
         type = types.listOf types.string;
         example = [ "--gc_delay=3days" ];
@@ -62,6 +69,19 @@ in {
         type = types.str;
       };
 
+      attributes = mkOption {
+        description = ''
+          Machine attributes for the slave instance.
+
+          Use caution when changing this; you may need to manually reset slave
+          metadata before the slave can re-register.
+        '';
+        default = {};
+        type = types.attrsOf types.str;
+        example = { rack = "aa";
+                    host = "aabc123";
+                    os = "nixos"; };
+      };
     };
 
   };
@@ -74,20 +94,21 @@ in {
       after = [ "network-interfaces.target" ];
       environment.MESOS_CONTAINERIZERS = "docker,mesos";
       serviceConfig = {
-	ExecStart = ''
-	  ${pkgs.mesos}/bin/mesos-slave \
-	    --port=${toString cfg.port} \
-	    --master=${cfg.master} \
-	    ${optionalString cfg.withHadoop "--hadoop-home=${pkgs.hadoop}"} \
-	    --work_dir=${cfg.workDir} \
-	    --logging_level=${cfg.logLevel} \
-	    --docker=${pkgs.docker}/libexec/docker/docker \
-	    ${toString cfg.extraCmdLineOptions}
-	'';
-	PermissionsStartOnly = true;
+        ExecStart = ''
+          ${pkgs.mesos}/bin/mesos-slave \
+            --port=${toString cfg.port} \
+            --master=${cfg.master} \
+            ${optionalString cfg.withHadoop "--hadoop-home=${pkgs.hadoop}"} \
+            ${attribsArg} \
+            --work_dir=${cfg.workDir} \
+            --logging_level=${cfg.logLevel} \
+            --docker=${pkgs.docker}/libexec/docker/docker \
+            ${toString cfg.extraCmdLineOptions}
+        '';
+        PermissionsStartOnly = true;
       };
       preStart = ''
-	mkdir -m 0700 -p ${cfg.workDir}
+        mkdir -m 0700 -p ${cfg.workDir}
       '';
     };
   };
