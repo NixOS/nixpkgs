@@ -11,6 +11,10 @@ python3Packages.buildPythonPackage rec {
   buildInputs = with python3Packages;
     [ cython msgpack openssl acl ];
 
+  preConfigure = ''
+    export ATTIC_OPENSSL_PREFIX="${openssl}"
+  '';
+
   meta = with stdenv.lib; {
     description = "A deduplication backup program";
     homepage = "https://attic-backup.org";
