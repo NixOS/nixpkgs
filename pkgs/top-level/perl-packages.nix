@@ -4496,6 +4496,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ImageSize = buildPerlPackage rec {
+    name = "Image-Size-3.232";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RJ/RJRAY/${name}.tar.gz";
+      sha256 = "1mx065134gy75pgdldh65118bpcs6yfbqmr7bf9clwq44zslxhxc";
+    };
+    buildInputs = [ TestMore ];
+    propagatedBuildInputs = [ ModuleRuntime ];
+    meta = {
+      description = "Read the dimensions of an image in several popular formats";
+      license = with stdenv.lib.licenses; [ artistic1 lgpl21Plus ];
+    };
+  };
+
   ImportInto = buildPerlPackage {
     name = "Import-Into-1.002004";
     src = fetchurl {

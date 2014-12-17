@@ -2806,6 +2806,8 @@ let
     inherit (xlibs) libX11 libXext libXrender;
   };
 
+  wml = callPackage ../development/web/wml { };
+  
   wv = callPackage ../tools/misc/wv { };
 
   wv2 = callPackage ../tools/misc/wv2 { };
