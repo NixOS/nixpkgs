@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = false;
+  doCheck = true;
 
   # Don't try to write to /var/cache/fontconfig at install time.
   installFlags = "fc_cachedir=$(TMPDIR)/dummy RUN_FC_CACHE_TEST=false";
