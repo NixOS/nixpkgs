@@ -11,7 +11,6 @@ cabal.mkDerivation (self: {
     description = "Generic Programming using True Sums of Products";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
-    broken = true;
+    maintainers = with self.stdenv.lib.maintainers; [ ocharles aycanirican ];
   };
 })
