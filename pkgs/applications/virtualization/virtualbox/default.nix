@@ -12,24 +12,25 @@
 with stdenv.lib;
 
 let
+  buildType = "release";
 
   version = "4.3.20"; # changes ./guest-additions as well
 
   forEachModule = action: ''
     for mod in \
-      out/linux.*/release/bin/src/vboxdrv \
-      out/linux.*/release/bin/src/vboxpci \
-      out/linux.*/release/bin/src/vboxnetadp \
-      out/linux.*/release/bin/src/vboxnetflt
+      out/linux.*/${buildType}/bin/src/vboxdrv \
+      out/linux.*/${buildType}/bin/src/vboxpci \
+      out/linux.*/${buildType}/bin/src/vboxnetadp \
+      out/linux.*/${buildType}/bin/src/vboxnetflt
     do
       if [ "x$(basename "$mod")" != xvboxdrv -a ! -e "$mod/Module.symvers" ]
       then
-        cp -v out/linux.*/release/bin/src/vboxdrv/Module.symvers \
+        cp -v out/linux.*/${buildType}/bin/src/vboxdrv/Module.symvers \
           "$mod/Module.symvers"
       fi
       INSTALL_MOD_PATH="$out" INSTALL_MOD_DIR=misc \
       make -C "$MODULES_BUILD_DIR" DEPMOD=/do_not_use_depmod \
-        "M=\$(PWD)/$mod" ${action}
+        "M=\$(PWD)/$mod" BUILD_TYPE="${buildType}" ${action}
     done
   '';
 
@@ -129,7 +130,7 @@ in stdenv.mkDerivation {
 
   buildPhase = ''
     source env.sh
-    kmk
+    kmk BUILD_TYPE="${buildType}"
     ${forEachModule "modules"}
   '';
 
@@ -139,7 +140,7 @@ in stdenv.mkDerivation {
 
     # Install VirtualBox files
     mkdir -p "$libexec"
-    find out/linux.*/release/bin -mindepth 1 -maxdepth 1 \
+    find out/linux.*/${buildType}/bin -mindepth 1 -maxdepth 1 \
       -name src -o -exec cp -avt "$libexec" {} +
 
     # Install kernel modules
