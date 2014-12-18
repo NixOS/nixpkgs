@@ -6634,6 +6634,8 @@ let
 
   podofo = callPackage ../development/libraries/podofo { lua5 = lua5_1; };
 
+  poker-eval = callPackage ../development/libraries/poker-eval { };
+
   polkit = callPackage ../development/libraries/polkit {
     spidermonkey = spidermonkey_185;
   };
