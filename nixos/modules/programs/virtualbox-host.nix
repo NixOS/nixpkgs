@@ -62,15 +62,20 @@ in
     ));
 
     security.setuidOwners = let
-      mkVboxStub = program: {
+      mkSuid = program: {
         inherit program;
+        source = "${virtualbox}/libexec/virtualbox/${program}";
         owner = "root";
         group = "vboxusers";
         setuid = true;
       };
-    in mkIf cfg.enableHardening (map mkVboxStub [
+    in mkIf cfg.enableHardening (map mkSuid [
       "VBoxHeadless"
+      "VBoxNetAdpCtl"
+      "VBoxNetDHCP"
+      "VBoxNetNAT"
       "VBoxSDL"
+      "VBoxVolInfo"
       "VirtualBox"
     ]);
 
