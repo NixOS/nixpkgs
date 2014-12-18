@@ -30,8 +30,7 @@ while [ "$#" -gt 0 ]; do
     case "$i" in
         -I)
             given_path="$1"; shift 1
-            absolute_path=$(readlink -m $given_path)
-            extraBuildFlags+=("$i" "/mnt$absolute_path")
+            extraBuildFlags+=("$i" "$given_path")
             ;;
         --root)
             mountPoint="$1"; shift 1
