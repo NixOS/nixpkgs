@@ -9,24 +9,21 @@ stdenv.mkDerivation rec {
     sha256 = "0487x0rvpz6c47v9qvc7rgk3hnabmali6c66mzh2bizkgmy1qpk0";
   };
 
-  buildInputs = [ ghc perl gmp ncurses happy alex ];
-
-  enableParallelBuilding = true;
-
-  buildMK = ''
-    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp}/lib"
-    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp}/include"
-    DYNAMIC_BY_DEFAULT = NO
-  '';
+  buildInputs = [ ghc perl ncurses happy alex ];
 
   preConfigure = ''
-    echo "${buildMK}" > mk/build.mk
+    echo >mk/build.mk "DYNAMIC_BY_DEFAULT = NO"
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
   '';
 
-  configureFlags = "--with-gcc=${stdenv.gcc}/bin/gcc";
+  configureFlags = [
+    "--with-gcc=${stdenv.gcc}/bin/gcc"
+    "--with-gmp-includes=${gmp}/include" "--with-gmp-libraries=${gmp}/lib"
+  ];
+
+  enableParallelBuilding = true;
 
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
@@ -35,11 +32,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
-    maintainers = [
-      stdenv.lib.maintainers.marcweber
-      stdenv.lib.maintainers.andres
-      stdenv.lib.maintainers.simons
-    ];
+    maintainers = with stdenv.lib.maintainers; [ marcweber andres simons ];
     inherit (ghc.meta) license platforms;
   };
 
