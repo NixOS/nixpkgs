@@ -167,6 +167,9 @@ xlink:href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"/>.</pa
 the ability to connect to sessions created by older versions of
 screen.</para></listitem>
 
+<listitem><para>The intel GPU driver was updated to 3-prerelease version (which most distros use),
+and it supports DRI3 now.</para></listitem>
+
 </itemizedlist>
 
 </para>
