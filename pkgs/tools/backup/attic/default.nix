@@ -1,12 +1,12 @@
 { stdenv, fetchurl, python3Packages, openssl, acl }:
 
 python3Packages.buildPythonPackage rec {
-  name = "attic-0.13";
+  name = "attic-0.14";
   namePrefix = "";
 
   src = fetchurl {
-    url = "https://github.com/jborg/attic/archive/0.13.tar.gz";
-    sha256 = "da1c4c0759b541e72f6928341c863b406448351769113165d86d8393a5db98a3";
+    url = "https://github.com/jborg/attic/archive/0.14.tar.gz";
+    sha256 = "929da4b2e900770cd31558e87074ade347b44937c944218549259ea64646f203";
   };
 
   buildInputs = with python3Packages;
