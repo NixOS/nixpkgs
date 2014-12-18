@@ -1556,6 +1556,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   libmpd = callPackage ../development/libraries/haskell/libmpd {};
 
+  libnotify = callPackage ../development/libraries/haskell/libnotify {};
+
   liblastfm = callPackage ../development/libraries/haskell/liblastfm {};
 
   libsystemdJournal = callPackage ../development/libraries/haskell/libsystemd-journal {};
