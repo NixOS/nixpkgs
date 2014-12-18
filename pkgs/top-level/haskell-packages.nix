@@ -916,7 +916,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   GenericPretty = callPackage ../development/libraries/haskell/GenericPretty {};
 
-  genericsSop = callPackage ../development/libraries/haskell/generics-sop {};
+  genericsSop = callPackage ../development/libraries/haskell/generics-sop {
+    Cabal = self.Cabal_1_20_0_2;
+  };
 
   ghcCore = callPackage ../development/libraries/haskell/ghc-core {};
 
