@@ -256,6 +256,15 @@ in
       '';
     };
 
+    networking.defaultGateway6 = mkOption {
+      default = null;
+      example = "2001:4d0:1e04:895::1";
+      type = types.nullOr types.str;
+      description = ''
+        The default ipv6 gateway.  It can be left empty if it is auto-detected through DHCP.
+      '';
+    };
+
     networking.defaultGatewayWindowSize = mkOption {
       default = null;
       example = 524288;
