@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
     description = "An online/offline backup solution";
     homepage = "http://www.crashplan.org";
     license = licenses.unfree;
-    maintainers = with maintainers; [ sztupi ];
+    maintainers = with maintainers; [ sztupi iElectric ];
   };
 
   buildInputs = [ makeWrapper cpio ];
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
 
   manifestdir = "${vardir}/manifest";
 
-  patches = [ ./CrashPlanEngine.patch ];
+  patches = [ ./CrashPlanEngine.patch ./CrashPlanDesktop.patch ];
 
   installPhase = ''
     mkdir $out
