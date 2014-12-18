@@ -1,5 +1,4 @@
 { stdenv, fetchurl, gettext, bzip2 }:
-
 stdenv.mkDerivation rec {
   name = "sysstat-11.0.1";
 
@@ -15,9 +14,12 @@ stdenv.mkDerivation rec {
     export PATH_CHKCONFIG=/no-such-program
     export BZIP=${bzip2}/bin/bzip2
     export SYSTEMCTL=systemctl
-    makeFlagsArray=(DESTDIR=$out SYSCONFIG_DIR=$out/etc IGNORE_MAN_GROUP=y CHOWN=true)
-    installTargets="install_base install_nls install_man"
   '';
+
+  makeFlags = "SYSCONFIG_DIR=$(out)/etc IGNORE_MAN_GROUP=y CHOWN=true";
+  installTargets = "install_base install_nls install_man";
+
+  patches = [ ./install.patch ];
 
   meta = {
     homepage = http://sebastien.godard.pagesperso-orange.fr/;
