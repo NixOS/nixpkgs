@@ -1561,8 +1561,8 @@ let
       url = mirror://xorg/individual/driver/xf86-video-intel-2.99.916.tar.bz2;
       sha256 = "00gd3v3xgrmj8aliwjxkml13gfqvcbjazb6l5m1wkry39agq36j0";
     };
-    buildInputs = [pkgconfig dri2proto dri3proto fontsproto glamoregl libdrm libpng udev libpciaccess presentproto randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXrandr libXrender libxshmfence libXvMC ];
-  }) // {inherit dri2proto dri3proto fontsproto glamoregl libdrm libpng udev libpciaccess presentproto randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXrandr libXrender libxshmfence libXvMC ;};
+    buildInputs = [pkgconfig dri2proto dri3proto fontsproto glamoregl libdrm libpng udev libpciaccess presentproto randrproto renderproto libX11 xcbutil libxcb libXcursor libXdamage libXext xextproto xf86driproto libXfixes xorgserver xproto libXrandr libXrender libxshmfence libXtst libXvMC ];
+  }) // {inherit dri2proto dri3proto fontsproto glamoregl libdrm libpng udev libpciaccess presentproto randrproto renderproto libX11 xcbutil libxcb libXcursor libXdamage libXext xextproto xf86driproto libXfixes xorgserver xproto libXrandr libXrender libxshmfence libXtst libXvMC ;};
 
   xf86videomach64 = (mkDerivation "xf86videomach64" {
     name = "xf86-video-mach64-6.9.4";
@@ -1991,8 +1991,8 @@ let
       url = mirror://xorg/individual/xserver/xorg-server-1.16.2.901.tar.bz2;
       sha256 = "19jb8v26wc332ramwjdg5vjh3s36kr7n46s6fdfaxrj1wif5m27g";
     };
-    buildInputs = [pkgconfig renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libxshmfence libXt ];
-  }) // {inherit renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libxshmfence libXt ;};
+    buildInputs = [pkgconfig dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libxshmfence libXt ];
+  }) // {inherit dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libxshmfence libXt ;};
 
   xorgsgmldoctools = (mkDerivation "xorgsgmldoctools" {
     name = "xorg-sgml-doctools-1.11";
