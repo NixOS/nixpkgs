@@ -17,7 +17,8 @@ let
   ''
   # Client connection config
   + optionalString cfg.client.enable  ''
-    SOCKSPort ${cfg.client.socksListenAddress}
+    SOCKSPort ${cfg.client.socksListenAddress} IsolateDestAddr
+    SOCKSPort ${cfg.client.socksListenAddressFaster}
     ${opt "SocksPolicy" cfg.client.socksPolicy}
   ''
   # Relay config
@@ -93,9 +94,22 @@ in
           example = "192.168.0.1:9100";
           description = ''
             Bind to this address to listen for connections from
-            Socks-speaking applications.
+            Socks-speaking applications. Provides strong circuit
+            isolation, separate circuit per IP address.
           '';
         };
+
+        socksListenAddressFaster = mkOption {
+          type = types.str;
+          default = "127.0.0.1:9063";
+          example = "192.168.0.1:9101";
+          description = ''
+            Bind to this address to listen for connections from
+            Socks-speaking applications. Same as socksListenAddress
+            but uses weaker circuit isolation to provide performance
+            suitable for a web browser.
+           '';
+         };
 
         socksPolicy = mkOption {
           type = types.nullOr types.str;
