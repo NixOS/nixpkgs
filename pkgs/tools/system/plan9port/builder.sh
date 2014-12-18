@@ -1,4 +1,3 @@
-set -e
 source $stdenv/setup
 
 tar xvfz $src
@@ -13,8 +12,12 @@ for p in $patches; do
   patch -p1 < $p
 done
 
-./INSTALL -r $out/plan9
-
 export PLAN9=$out/plan9
 mkdir -p $PLAN9
+
+for f in `grep -l -r /usr/local/plan9`; do
+  sed "s,/usr/local/plan9,${PLAN9},g" -i $f
+done
+
+./INSTALL -r $PLAN9
 cp -R * $PLAN9
