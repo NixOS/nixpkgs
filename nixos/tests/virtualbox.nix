@@ -297,14 +297,16 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
 in {
   name = "virtualbox";
 
-  machine = { pkgs, ... }: {
+  machine = { pkgs, lib, config, ... }: {
     imports = let
       mkVMConf = name: val: val.machine // { key = "${name}-config"; };
       vmConfigs = mapAttrsToList mkVMConf vboxVMs;
     in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
     virtualisation.memorySize = 768;
     services.virtualboxHost.enable = true;
-    users.extraUsers.alice.extraGroups = [ "vboxusers" ];
+    users.extraUsers.alice.extraGroups = let
+      inherit (config.services.virtualboxHost) enableHardening;
+    in lib.mkIf enableHardening (lib.singleton "vboxusers");
   };
 
   testScript = ''
