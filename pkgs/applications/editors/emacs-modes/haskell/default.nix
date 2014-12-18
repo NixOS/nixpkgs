@@ -1,11 +1,11 @@
-{ stdenv, fetchgit, emacs, texinfo }:
+{ stdenv, fetchurl, emacs, texinfo }:
 
 stdenv.mkDerivation rec {
   name = "haskell-mode-20141113";
 
-  src = fetchgit {
-    url = "https://github.com/haskell/haskell-mode.git";
-    sha256 = "fc2a15f3a88f2343663e8b078464991a1af5ffe36c8158ee4f61c5d0358c9daf";
+  src = fetchurl {
+    url = "https://github.com/haskell/haskell-mode/archive/fa6468ed36166799439ffea454dddf85335bb424.zip";
+    sha256 = "0y5nz565dyvwjgm16w2jbknnkhnqn3v0lgp08axmnxd6rbkpm33d";
   };
 
   buildInputs = [ emacs texinfo ];
