@@ -25,6 +25,9 @@ stdenv.mkDerivation rec {
       # Fixes systemd-journald so that it does not get killed
       # by systemd-journal-flush starting too quickly
       ./systemd-journald-type-notify.patch
+      # Enables /etc/systemd-mutable/{system,user} for persistent mutable
+      # units
+      ./etc-systemd-mutable.patch
     ];
 
   buildInputs =
