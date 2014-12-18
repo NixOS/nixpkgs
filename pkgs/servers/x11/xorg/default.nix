@@ -1561,8 +1561,8 @@ let
       url = mirror://xorg/individual/driver/xf86-video-intel-2.99.916.tar.bz2;
       sha256 = "00gd3v3xgrmj8aliwjxkml13gfqvcbjazb6l5m1wkry39agq36j0";
     };
-    buildInputs = [pkgconfig dri2proto dri3proto fontsproto glamoregl libdrm libpng udev libpciaccess presentproto randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXrandr libXrender libxshmfence libXvMC ];
-  }) // {inherit dri2proto dri3proto fontsproto glamoregl libdrm libpng udev libpciaccess presentproto randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXrandr libXrender libxshmfence libXvMC ;};
+    buildInputs = [ pkgconfig dri2proto dri3proto fontsproto glamoregl libdrm libpng udev libpciaccess presentproto randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXrandr libXrender libxshmfence libXvMC libXdamage libXcursor libXtst utilmacros pixman ];
+  }) // {inherit dri2proto dri3proto fontsproto glamoregl libdrm libpng udev libpciaccess presentproto randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXrandr libXrender libxshmfence libXvMC libXdamage libXcursor libXtst utilmacros ;};
 
   xf86videomach64 = (mkDerivation "xf86videomach64" {
     name = "xf86-video-mach64-6.9.4";
