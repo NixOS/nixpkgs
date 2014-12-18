@@ -266,7 +266,7 @@ in
         recordproto libXext pixman libXfont
         damageproto xcmiscproto  bigreqsproto
         libpciaccess inputproto xextproto randrproto renderproto presentproto
-        dri2proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
+        dri2proto dri3proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
       ];
       commonPatches = [ ./xorgserver-xkbcomp-path.patch ];
       # XQuartz requires two compilations: the first to get X / XQuartz,
