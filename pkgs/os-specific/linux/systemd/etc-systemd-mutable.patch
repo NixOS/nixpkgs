@@ -1,0 +1,41 @@
+diff -Naur systemd-217-orig/src/core/systemd.pc.in systemd-217/src/core/systemd.pc.in
+--- systemd-217-orig/src/core/systemd.pc.in	2014-06-30 17:19:00.693878016 -0400
++++ systemd-217/src/core/systemd.pc.in	2014-12-18 12:32:04.978371150 -0500
+@@ -14,8 +14,8 @@
+ systemduserpresetdir=@userpresetdir@
+ systemdsystemconfdir=@pkgsysconfdir@/system
+ systemduserconfdir=@pkgsysconfdir@/user
+-systemdsystemunitpath=${systemdsystemconfdir}:/etc/systemd/system:/run/systemd/system:/usr/local/lib/systemd/system:${systemdsystemunitdir}:/usr/lib/systemd/system:/lib/systemd/system
+-systemduserunitpath=${systemduserconfdir}:/etc/systemd/user:/run/systemd/user:/usr/local/lib/systemd/user:/usr/local/share/systemd/user:${systemduserunitdir}:/usr/lib/systemd/user:/usr/share/systemd/user
++systemdsystemunitpath=${systemdsystemconfdir}:/etc/systemd/system:/etc/systemd-mutable/system:/run/systemd/system:/usr/local/lib/systemd/system:${systemdsystemunitdir}:/usr/lib/systemd/system:/lib/systemd/system
++systemduserunitpath=${systemduserconfdir}:/etc/systemd/user:/etc/systemd-mutable/user:/run/systemd/user:/usr/local/lib/systemd/user:/usr/local/share/systemd/user:${systemduserunitdir}:/usr/lib/systemd/user:/usr/share/systemd/user
+ systemdsystemgeneratordir=@systemgeneratordir@
+ systemdusergeneratordir=@usergeneratordir@
+ systemdsleepdir=@systemsleepdir@
+diff -Naur systemd-217-orig/src/shared/path-lookup.c systemd-217/src/shared/path-lookup.c
+--- systemd-217-orig/src/shared/path-lookup.c	2014-10-07 09:59:01.480569950 -0400
++++ systemd-217/src/shared/path-lookup.c	2014-12-18 12:29:36.276567200 -0500
+@@ -86,6 +86,7 @@
+         const char * const config_unit_paths[] = {
+                 USER_CONFIG_UNIT_PATH,
+                 "/etc/systemd/user",
++                "/etc/systemd-mutable/user",
+                 NULL
+         };
+ 
+@@ -260,6 +261,7 @@
+                                         STRV_IFNOTNULL(generator_early),
+                                         USER_CONFIG_UNIT_PATH,
+                                         "/etc/systemd/user",
++                                        "/etc/systemd-mutable/user",
+                                         "/run/systemd/user",
+                                         STRV_IFNOTNULL(generator),
+                                         "/usr/local/lib/systemd/user",
+@@ -276,6 +278,7 @@
+                                 STRV_IFNOTNULL(generator_early),
+                                 SYSTEM_CONFIG_UNIT_PATH,
+                                 "/etc/systemd/system",
++                                "/etc/systemd-mutable/system",
+                                 "/run/systemd/system",
+                                 STRV_IFNOTNULL(generator),
+                                 "/usr/local/lib/systemd/system",
