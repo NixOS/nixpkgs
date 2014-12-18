@@ -10,6 +10,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ automake autoconf libtool pkgconfig ];
+  configureFlags = [ "--enable-shared" ];
 
   sourceRoot = "./ZenLib/Project/GNU/Library/";
 
