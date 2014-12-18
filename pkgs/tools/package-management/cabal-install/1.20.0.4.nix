@@ -18,11 +18,13 @@ cabal.mkDerivation (self: {
     Cabal filepath HTTP HUnit mtl network QuickCheck stm testFramework
     testFrameworkHunit testFrameworkQuickcheck2 time zlib
   ];
-  jailbreak = true;
   doCheck = false;
   postInstall = ''
     mkdir $out/etc
     mv bash-completion $out/etc/bash_completion.d
+  '';
+  patchPhase = ''
+    sed -i -e 's|random .*< 1.1,|random,|' cabal-install.cabal
   '';
   meta = {
     homepage = "http://www.haskell.org/cabal/";
