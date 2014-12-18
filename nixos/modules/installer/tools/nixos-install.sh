@@ -250,7 +250,7 @@ chroot $mountPoint /nix/var/nix/profiles/system/activate
 
 
 # Ask the user to set a root password.
-if [ -t 0 ] ; then
+if [ "$(chroot $mountPoint nix-instantiate --eval '<nixos>' -A config.users.mutableUsers)" = true ] && [ -t 0 ] ; then
     echo "setting root password..."
     chroot $mountPoint /var/setuid-wrappers/passwd
 fi
