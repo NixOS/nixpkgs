@@ -50,6 +50,7 @@
   davidrusu = "David Rusu <davidrusu.me@gmail.com>";
   dbohdan = "Danyil Bohdan <danyil.bohdan@gmail.com>";
   DerGuteMoritz = "Moritz Heidkamp <moritz@twoticketsplease.de>";
+  devhell = "devhell <\"^\"@regexmail.net>";
   dmalikov = "Dmitry Malikov <malikov.d.y@gmail.com>";
   doublec = "Chris Double <chris.double@double.co.nz>";
   ederoyd46 = "Matthew Brown <matt@ederoyd.co.uk>";

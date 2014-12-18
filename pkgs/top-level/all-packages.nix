@@ -5912,6 +5912,8 @@ let
 
   libmcrypt = callPackage ../development/libraries/libmcrypt {};
 
+  libmediainfo = callPackage ../development/libraries/libmediainfo { };
+
   libmhash = callPackage ../development/libraries/libmhash {};
 
   libmodbus = callPackage ../development/libraries/libmodbus {};
@@ -6319,6 +6321,8 @@ let
   libykneomgr = callPackage ../development/libraries/libykneomgr { };
 
   libyubikey = callPackage ../development/libraries/libyubikey { };
+
+  libzen = callPackage ../development/libraries/libzen { };
 
   libzip = callPackage ../development/libraries/libzip { };
 
@@ -10173,6 +10177,10 @@ let
   mcpp = callPackage ../development/compilers/mcpp { };
 
   mda_lv2 = callPackage ../applications/audio/mda-lv2 { };
+
+  mediainfo = callPackage ../applications/misc/mediainfo { };
+
+  mediainfo-gui = callPackage ../applications/misc/mediainfo-gui { };
 
   meld = callPackage ../applications/version-management/meld {
     inherit (gnome) scrollkeeper;
