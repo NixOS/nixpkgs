@@ -2378,12 +2378,12 @@ let
 
 
   dropbox = buildPythonPackage rec {
-    name = "dropbox-2.0.0";
-    doCheck = !isPy3k; # failures with hash randomization
+    name = "dropbox-2.2.0";
+    doCheck = false; # python 2.7.9 does verify ssl certificates
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/dropbox/${name}.zip";
-      sha256 = "1bi2z1lql6ryylfflmizhqn98ab55777vn7n5krhqz40pdcjilkx";
+      sha256 = "069jrwb67brqh0sics8fgqdf2mv5y5jl9k5729x8vf80pq2c9p36";
     };
 
     propagatedBuildInputs = with self; [ urllib3 mock setuptools ];
