@@ -25,5 +25,6 @@ stdenv.mkDerivation {
     homepage = http://mediaarena.net/;
     license = stdenv.lib.licenses.bsd2;
     platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.devhell ];
   };
 }
