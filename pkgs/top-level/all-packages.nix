@@ -2809,7 +2809,7 @@ let
   };
 
   wml = callPackage ../development/web/wml { };
-  
+
   wv = callPackage ../tools/misc/wv { };
 
   wv2 = callPackage ../tools/misc/wv2 { };
@@ -7208,6 +7208,8 @@ let
   zeromq4 = callPackage ../development/libraries/zeromq/4.x.nix {};
 
   cppzmq = callPackage ../development/libraries/cppzmq {};
+
+  czmq = callPackage ../development/libraries/czmq { };
 
   zziplib = callPackage ../development/libraries/zziplib { };
 
