@@ -10185,6 +10185,8 @@ let
 
   mediainfo = callPackage ../applications/misc/mediainfo { };
 
+  mediainfo-gui = callPackage ../applications/misc/mediainfo-gui { };
+
   meld = callPackage ../applications/version-management/meld {
     inherit (gnome) scrollkeeper;
     pygtk = pyGtkGlade;
