@@ -1,5 +1,7 @@
 import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
 
+  debug = false;
+
   testVMConfig = vmName: attrs: { config, pkgs, ... }: {
     boot.kernelParams = let
       miniInit = ''
@@ -64,7 +66,7 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
     rotated = map (i: "${logfile}.${toString i}") (range 1 9);
     all = concatMapStringsSep " " (f: "\"${f}\"") ([logfile] ++ rotated);
     logcmd = "tail -F ${all} 2> /dev/null | logger -t \"${tag}\"";
-  in "$machine->execute(ru '${logcmd} & disown');";
+  in optionalString debug "$machine->execute(ru '${logcmd} & disown');";
 
   testVM = vmName: vmScript: let
     cfg = (import ../lib/eval-config.nix {
