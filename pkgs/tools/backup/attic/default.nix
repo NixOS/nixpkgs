@@ -9,7 +9,7 @@ python3Packages.buildPythonPackage rec {
     sha256 = "929da4b2e900770cd31558e87074ade347b44937c944218549259ea64646f203";
   };
 
-  buildInputs = with python3Packages;
+  propagatedBuildInputs = with python3Packages;
     [ cython msgpack openssl acl ];
 
   preConfigure = ''
