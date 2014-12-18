@@ -23,6 +23,7 @@
   ghc783Prefs = self : super : ghcHEADPrefs self super // {
     cabalInstall_1_20_0_4 = super.cabalInstall_1_20_0_4.override { Cabal = self.Cabal_1_20_0_2; };
     codex = super.codex.override { hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_20_0_2; }; };
+    jailbreakCabal = super.jailbreakCabal.override { Cabal = self.Cabal_1_20_0_2; };
     MonadRandom = self.MonadRandom_0_2_0_1; # newer versions require transformers >= 0.4.x
     mtl = self.mtl_2_1_3_1;
   };
@@ -81,7 +82,6 @@
     binary = self.binary_0_7_2_2;       # core package in ghc >= 7.2.2
     caseInsensitive = super.caseInsensitive; # undo the override from ghc 7.2.2
     HsSyck = self.HsSyck_0_51;
-    jailbreakCabal = super.jailbreakCabal.override { Cabal = self.Cabal_1_16_0_3; };
     random = null;                      # core package in ghc <= 7.0.x
   };
 
@@ -94,6 +94,7 @@
     deepseq = self.deepseq_1_2_0_1;
     dlist = super.dlist.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     exceptions = null;                  # none of our versions compile
+    jailbreakCabal = super.jailbreakCabal.override { Cabal = self.Cabal_1_16_0_3; };
     logict = super.logict.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     monadPar = self.monadPar_0_1_0_3;
     nats = null;                        # none of our versions compile
