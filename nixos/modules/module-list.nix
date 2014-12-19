@@ -381,6 +381,7 @@
   ./system/upstart/upstart.nix
   ./tasks/bcache.nix
   ./tasks/cpu-freq.nix
+  ./tasks/device-power-management.nix
   ./tasks/encrypted-devices.nix
   ./tasks/filesystems.nix
   ./tasks/filesystems/btrfs.nix
