@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   version = "2.1.5";
 
   src = fetchurl {
-    url = "http://download.videolan.org/pub/videolan/vlc/${version}/${name}.tar.xz";
+    url = "http://download.videolan.org/vlc/${version}/${name}.tar.xz";
     sha256 = "0whzbn7ahn5maarcwl1yhk9lq10b0q0y9w5pjl9kh3frdjmncrbg";
   };
 
