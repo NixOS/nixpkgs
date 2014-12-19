@@ -5721,7 +5721,10 @@ let
 
   libctemplate = callPackage ../development/libraries/libctemplate { };
 
-  libcouchbase = callPackage ../development/libraries/libcouchbase { };
+  libcouchbase2_4_1 = callPackage ../development/libraries/libcouchbase/2-4-1.nix { };
+  libcouchbase2_4_4 = callPackage ../development/libraries/libcouchbase/2-4-4.nix { };
+
+  libcouchbase = libcouchbase2_4_4;
 
   libcue = callPackage ../development/libraries/libcue { };
 
