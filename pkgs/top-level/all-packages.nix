@@ -9911,6 +9911,10 @@ let
 
   gpsd = callPackage ../servers/gpsd { };
 
+  gtk2fontsel = callPackage ../applications/misc/gtk2fontsel {
+    inherit (gnome2) gtk;
+  };
+
   guitone = callPackage ../applications/version-management/guitone {
     graphviz = graphviz_2_32;
   };
