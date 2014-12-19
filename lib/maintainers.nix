@@ -91,6 +91,7 @@
   jzellner = "Jeff Zellner <jeffz@eml.cc>";
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   koral = "Koral <koral@mailoo.org>";
+  kovirobi = "Kovacsics Robert <kovirobi@gmail.com>";
   kragniz = "Louis Taylor <kragniz@gmail.com>";
   ktosiek = "Tomasz Kontusz <tomasz.kontusz@gmail.com>";
   lethalman = "Luca Bruno <lucabru@src.gnome.org>";
