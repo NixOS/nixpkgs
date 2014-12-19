@@ -613,7 +613,7 @@ let
 
   bchunk = callPackage ../tools/cd-dvd/bchunk { };
 
-  bfr = callPackage ../tools/misc/bfr { };
+  bfr = callPackage ../tools/misc/bfr { perl = perl516; };
 
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
