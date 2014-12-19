@@ -69,7 +69,18 @@ fi
 #############################
 
 evalNix(){
-  nix-instantiate - --eval-only "$@"
+  result=$(nix-instantiate - --eval-only "$@" 2>&1)
+  if test $? -eq 0; then
+      cat <<EOF
+$result
+EOF
+      return 0;
+  else
+      sed -n '/error/ { s/, at (string):[0-9]*:[0-9]*//; p; }' <<EOF
+$result
+EOF
+      return 1;
+  fi
 }
 
 evalAttr(){
