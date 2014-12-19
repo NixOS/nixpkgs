@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
-    make OPTLEVEL=0
+    make OPTLEVEL=0 USE_LIBPNG=0
   '';
 
   installPhase = ''
