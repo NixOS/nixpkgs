@@ -20,14 +20,8 @@ stdenv.mkDerivation rec {
 
   patches =
     [ # These are all changes between upstream and
-      # https://github.com/edolstra/systemd/tree/nixos-v216.
+      # https://github.com/edolstra/systemd/tree/nixos-v217.
       ./fixes.patch
-      # Fixes systemd-journald so that it does not get killed
-      # by systemd-journal-flush starting too quickly
-      ./systemd-journald-type-notify.patch
-      # Enables /etc/systemd-mutable/{system,user} for persistent mutable
-      # units
-      ./etc-systemd-mutable.patch
     ];
 
   buildInputs =
