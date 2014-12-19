@@ -28,10 +28,9 @@ stdenv.mkDerivation rec {
 
     homepage = "http://www.gust.org.pl/projects/e-foundry/tex-gyre/index_html#Readings";
 
-    # GUST Font License: http://www.gust.org.pl/projects/e-foundry/licenses
-    license = "unknown";
+    license = stdenv.lib.licenses.lppl13c;
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ "Daniel Bergey <bergey@teallabs.org>" ];
+    maintainers = with stdenv.lib.maintainers; [ bergey ];
   };
 }
