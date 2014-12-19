@@ -1959,6 +1959,8 @@ let
 
   obnam = callPackage ../tools/backup/obnam { };
 
+  ocz-toolbox = callPackage ../os-specific/linux/ocz-toolbox { };
+
   odt2txt = callPackage ../tools/text/odt2txt { };
 
   odamex = callPackage ../games/odamex { };
