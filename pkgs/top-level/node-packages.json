@@ -146,4 +146,6 @@
 , "sloc"
 , "peerflix"
 , "peerflix-server"
+, "trash"
+, "empty-trash"
 ]
