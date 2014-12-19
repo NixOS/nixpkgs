@@ -76,7 +76,18 @@ evalAttr(){
   local prefix="$1"
   local strict="$2"
   local suffix="$3"
-  echo "(import <nixos> {}).$prefix${option:+.$option}${suffix:+.$suffix}" | evalNix ${strict:+--strict}
+  evalNix ${strict:+--strict} <<EOF
+let
+  reach = attrs: attrs${option:+.$option}${suffix:+.$suffix};
+  nixos = import <nixos> {};
+  nixpkgs = import <nixpkgs> {};
+  cleanOutput = x: with nixpkgs.lib;
+    if isDerivation x then x.outPath
+    else if isFunction x then "<CODE>"
+    else x;
+in
+  cleanOutput (reach nixos.$prefix)
+EOF
 }
 
 evalOpt(){
