@@ -45,6 +45,7 @@ in stdenv.mkDerivation rec {
     install -D -m 644 run.conf $out/bin/run.conf
     install -D -m 755 scripts/CrashPlanDesktop $out/bin/CrashPlanDesktop
     install -D -m 755 scripts/CrashPlanEngine $out/bin/CrashPlanEngine
+    install -D -m 644 scripts/CrashPlan.desktop $out/share/applications/CrashPlan.desktop
 
     rm -r $out/log
     ln -s $vardir/log $out/log
@@ -72,6 +73,10 @@ in stdenv.mkDerivation rec {
       substituteInPlace $f --replace sed      ${gnused}/bin/sed
       substituteInPlace $f --replace grep     ${gnugrep}/bin/grep
     done
+    
+    substituteInPlace $out/share/applications/CrashPlan.desktop \
+      --replace /usr/local  $out \
+      --replace crashplan/skin skin
 
     wrapProgram $out/bin/CrashPlanDesktop --prefix LD_LIBRARY_PATH ":" "${gtk2}/lib:${glib}/lib:${libXtst}/lib"
   '';
