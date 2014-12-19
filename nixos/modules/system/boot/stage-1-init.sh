@@ -59,7 +59,7 @@ echo
 mkdir -p /etc/udev
 touch /etc/fstab # to shut up mount
 touch /etc/mtab # to shut up mke2fs
-touch /etc/udev/hwdb.bin # to shut up udeev
+touch /etc/udev/hwdb.bin # to shut up udev
 touch /etc/initrd-release
 mkdir -p /proc
 mount -t proc proc /proc
