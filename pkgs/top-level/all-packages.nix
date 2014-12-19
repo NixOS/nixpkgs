@@ -613,7 +613,9 @@ let
 
   bchunk = callPackage ../tools/cd-dvd/bchunk { };
 
-  bfr = callPackage ../tools/misc/bfr { perl = perl516; };
+  bfr = callPackage ../tools/misc/bfr {
+    perl = perl516; # Docs fail to build with newer versions
+  };
 
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
