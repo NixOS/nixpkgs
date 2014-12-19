@@ -25,7 +25,7 @@ in
     services.tor.torsocks = {
       enable = mkOption {
         type        = types.bool;
-        default     = false;
+        default     = config.services.tor.enable && config.services.tor.client.enable;
         description = ''
           Whether to build <literal>/etc/tor/torsocks.conf</literal>
           containing the specified global torsocks configuration.
