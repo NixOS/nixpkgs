@@ -1,12 +1,12 @@
-{ stdenv, fetchgit, go_1_1 }:
+{ stdenv, fetchgit, go }:
 stdenv.mkDerivation {
-  name = "logstash-forwarder-20140410";
+  name = "logstash-forwarder-20141216";
   src = fetchgit {
     url = https://github.com/elasticsearch/logstash-forwarder.git;
-    rev = "ec504792108ab6536b45bcf6dff6d26a6b56fef3";
-    sha256 = "309545ceaec171bee997cad260bef1433e041b9f3bfe617d475bcf79924f943d";
+    rev = "6082bd8aaecb2180f5b56f4fb1b2940a6935ef7b";
+    sha256 = "1686rlx5p7d2806cg8y4376m4l7nvg1yjgg52ccrs0v4fnqs6292";
   };
-  buildInputs = [ go_1_1 ];
+  buildInputs = [ go ];
   installPhase = ''
     mkdir -p $out/bin
     cp build/bin/logstash-forwarder $out/bin
@@ -15,6 +15,6 @@ stdenv.mkDerivation {
   meta = {
     license = stdenv.lib.licenses.asl20;
     homepage = https://github.com/elasticsearch/logstash-forwarder;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
