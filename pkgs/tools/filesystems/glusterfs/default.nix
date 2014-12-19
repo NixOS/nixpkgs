@@ -19,12 +19,17 @@ stdenv.mkDerivation
 rec {
   inherit (s) name version;
   inherit buildInputs;
+
   preConfigure = ''
     ./autogen.sh
     '';
+
   configureFlags = [
-    ''--with-mountutildir="$out/sbin"''
+    ''--with-mountutildir="$out/sbin" --localstatedir=/var''
     ];
+
+  makeFlags = "DESTDIR=$(out)";
+
   preInstall = ''
     substituteInPlace api/examples/Makefile --replace '$(DESTDIR)' $out
     substituteInPlace geo-replication/syncdaemon/Makefile --replace '$(DESTDIR)' $out
@@ -32,6 +37,12 @@ rec {
     substituteInPlace xlators/features/glupy/examples/Makefile --replace '$(DESTDIR)' $out
     substituteInPlace xlators/features/glupy/src/Makefile --replace '$(DESTDIR)' $out
     '';
+
+  postInstall = ''
+    cp -r $out/$out/* $out
+    rm -r $out/nix
+    '';
+
   src = fetchurl {
     inherit (s) url sha256;
   };
