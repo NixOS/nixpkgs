@@ -31,6 +31,8 @@
 # TODO: Confusing. Perhaps use "SubArch" instead of i686?
 , nvidia_x11_i686 ? null
 , virtualgl_i686 ? null
+, useDisplayDevice ? false
+, extraDeviceOptions ? ""
 }:
 with stdenv.lib;
 let
@@ -77,15 +79,26 @@ let
   allEnvs = [hostEnv] ++ optional (i686Env != null) i686Env;
   ldPathString = makeLibraryPath allEnvs;
 
+  # By default we don't want to use a display device
+  deviceOptions = if useDisplayDevice
+                  then ""
+                  else ''
+
+                         #   Disable display device
+                             Option "UseEDID" "false"
+                             Option "UseDisplayDevice" "none"
+                       ''
+                  + extraDeviceOptions;
+
 in stdenv.mkDerivation {
-  inherit name;
+  inherit name deviceOptions;
 
   src = fetchurl {
     url = "http://bumblebee-project.org/${name}.tar.gz";
     sha256 = "03p3gvx99lwlavznrpg9l7jnl1yfg2adcj8jcjj0gxp20wxp060h";
   };
 
-  patches = [ ./xopts.patch ];
+  patches = [ ./xopts.patch ./nvidia-conf.patch];
 
   preConfigure = ''
     # Substitute the path to the actual modinfo program in module.c.
@@ -98,6 +111,10 @@ in stdenv.mkDerivation {
     # Don't use a special group, just reuse wheel.
     substituteInPlace configure \
       --replace 'CONF_GID="bumblebee"' 'CONF_GID="wheel"'
+
+    # Apply configuration options
+    substituteInPlace conf/xorg.conf.nvidia \
+      --subst-var deviceOptions
   '';
 
   # Build-time dependencies of bumblebeed and optirun.
