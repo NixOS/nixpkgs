@@ -1,8 +1,10 @@
 {stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation rec {
-  name = "gyre-fonts";
-
+  baseName = "gyre-fonts";
+  version = "2.005";
+  name="${baseName}-${version}";
+  
   src = fetchurl {
     url = "http://www.gust.org.pl/projects/e-foundry/tex-gyre/whole/tg-2.005otf.zip";
     sha256 = "0kph9l3g7jb2bpmxdbdg5zl56wacmnvdvsdn7is1gc750sqvsn31";

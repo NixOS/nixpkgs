@@ -1,7 +1,9 @@
 {stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation rec {
-  name = "league-of-moveable-type";
+  baseName = "league-of-moveable-type";
+  version = "2014-12";
+  name="${baseName}-${version}";
 
   srcs = [(fetchurl {
     url = "https://www.theleagueofmoveabletype.com/league-gothic/download";
