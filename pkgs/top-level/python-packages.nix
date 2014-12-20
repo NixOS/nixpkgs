@@ -2644,6 +2644,8 @@ let
     propagatedBuildInputs = with self; [ gflags iso8601 ipaddr httplib2 google_apputils google_api_python_client ];
   };
 
+  gmpy = callPackage ../development/python-modules/gmpy { };
+
   gnutls = buildPythonPackage rec {
     name = "python-gnutls";
     src = pkgs.fetchurl {
@@ -5021,7 +5023,6 @@ let
       homepage = http://incubator.apache.org/libcloud/;
     };
   });
-
 
   limnoria = buildPythonPackage (rec {
     name = "limnoria-20130327";

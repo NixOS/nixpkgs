@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, makeWrapper, nettools
+{ stdenv, fetchgit, libtorrentRasterbar, pythonPackages, makeWrapper, nettools
 , enablePlayer ? false, vlc ? null }:
 
 let ver = "6.4.0"; in
@@ -6,18 +6,26 @@ let ver = "6.4.0"; in
 stdenv.mkDerivation {
   name = "tribler-${ver}";
 
-  src = fetchurl {
-    url = "https://github.com/Tribler/tribler/archive/v${ver}.tar.gz";
-    sha256 = "03wsdlx4hnpc6ryxy872rkf9vhgzasgil9801l1p9ar0swdcyqrz";
+  src = fetchgit {
+    url = "git://github.com/Tribler/tribler";
+    rev = "v${ver}";
+    sha256 = "c21fe700942df96e2f45f950d2800251e525664f0d5c39bf977a6c24499ec219";
+    fetchSubmodules = true;
   };
 
-  buildInputs = [ pythonPackages.python pythonPackages.wrapPython makeWrapper ];
+  buildInputs =
+    [ pythonPackages.python pythonPackages.wrapPython makeWrapper ];
 
   pythonPath =
     [ pythonPackages.wxPython pythonPackages.curses pythonPackages.apsw
       pythonPackages.setuptools pythonPackages.m2crypto pythonPackages.sqlite3
-      pythonPackages.twisted pytonPackages.dispersy
+      pythonPackages.twisted libtorrentRasterbar pythonPackages.pil pythonPackages.pyasn1
+      pythonPackages.pycrypto pythonPackages.requests pythonPackages.netifaces
+      pythonPackages.gmpy
     ];
+
+  propogatedBuildInputs =
+    [ pythonPackages.netifaces ];
 
   installPhase =
     ''
