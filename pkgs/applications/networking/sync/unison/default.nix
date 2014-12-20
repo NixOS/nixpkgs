@@ -5,7 +5,7 @@ stdenv.mkDerivation (rec {
 
   name = "unison-2.40.102";
   src = fetchurl {
-    url = "http://www.seas.upenn.edu/~bcpierce/unison/download/releases/stable/${name}.tar.gz";
+    url = "https://www.seas.upenn.edu/~bcpierce/unison/download/releases/stable/${name}.tar.gz";
     sha256 = "0m78q5vnsric1virvkmxxx32ipaq0cnj0kbirdbg36395gq94jix";
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation (rec {
   dontStrip = !ocaml.nativeCompilers;
 
   meta = {
-    homepage = http://www.cis.upenn.edu/~bcpierce/unison/;
+    homepage = https://www.cis.upenn.edu/~bcpierce/unison/;
     description = "Bidirectional file synchronizer";
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
