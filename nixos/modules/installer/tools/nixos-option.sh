@@ -94,7 +94,7 @@ in with nixpkgs.lib;
 # the user into accessors for reaching the definition and the declaration
 # corresponding to this option.
 generateAccessors(){
-  evalNix --strict --show-trace <<EOF
+  if result=$(evalNix --strict --show-trace <<EOF
 $header
 
 let
@@ -129,6 +129,17 @@ let
 in
   ''let option = \${walkResult.opt}; config = \${walkResult.cfg}; in''
 EOF
+)
+  then
+      echo $result
+  else
+      # In case of error we want to ignore the error message roduced by the
+      # script above, as it is iterating over each attribute, which does not
+      # produce a nice error message.  The following code is a fallback
+      # solution which is cause a nicer error message in the next
+      # evaluation.
+      echo "\"let option = nixos.options${option:+.$option}; config = nixos.config${option:+.$option}; in\""
+  fi
 }
 
 header="$header
