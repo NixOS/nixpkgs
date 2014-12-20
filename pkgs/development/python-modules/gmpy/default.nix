@@ -19,6 +19,6 @@ buildPythonPackage rec {
     homepage = "http://www.gmpy.org/";
     description = "gmpy is a C-coded Python extension module that provides fast multiprecision arithmetic to Python";
     platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.license.lgpl3;
+    license = stdenv.lib.licenses.lgpl3;
   };
 }
