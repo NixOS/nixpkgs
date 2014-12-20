@@ -1,15 +1,14 @@
-{ stdenv, fetchsvn, pythonPackages, makeWrapper, nettools
+{ stdenv, fetchurl, pythonPackages, makeWrapper, nettools
 , enablePlayer ? false, vlc ? null }:
 
-let rev = "25411"; in
+let ver = "6.4.0"; in
 
 stdenv.mkDerivation {
-  name = "tribler-5.5.21-pre${rev}";
+  name = "tribler-${ver}";
 
-  src = fetchsvn {
-    url = http://svn.tribler.org/abc/branches/release-5.5.x;
-    inherit rev;
-    sha256 = "17c9svy4zjchzihk6mf0kh4lnvaxjfmgfmimyby5w0d3cwbw49zx";
+  src = fetchurl {
+    url = "https://github.com/Tribler/tribler/archive/v${ver}.tar.gz";
+    sha256 = "03wsdlx4hnpc6ryxy872rkf9vhgzasgil9801l1p9ar0swdcyqrz";
   };
 
   buildInputs = [ pythonPackages.python pythonPackages.wrapPython makeWrapper ];
@@ -17,13 +16,14 @@ stdenv.mkDerivation {
   pythonPath =
     [ pythonPackages.wxPython pythonPackages.curses pythonPackages.apsw
       pythonPackages.setuptools pythonPackages.m2crypto pythonPackages.sqlite3
+      pythonPackages.twisted pytonPackages.dispersy
     ];
 
   installPhase =
     ''
-      substituteInPlace Tribler/Core/NATFirewall/guessip.py \
-          --replace /bin/netstat ${nettools}/bin/netstat \
-          --replace /sbin/ifconfig ${nettools}/sbin/ifconfig
+      #substituteInPlace Tribler/Core/NATFirewall/guessip.py \
+      #    --replace /bin/netstat ${nettools}/bin/netstat \
+      #    --replace /sbin/ifconfig ${nettools}/sbin/ifconfig
     
       # Nasty hack; call wrapPythonPrograms to set program_PYTHONPATH.
       wrapPythonPrograms
