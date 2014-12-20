@@ -10288,6 +10288,8 @@ let
     inherit (gnome3) gnome_icon_theme;
   };
 
+  mp3gain = callPackage ../applications/audio/mp3gain { };
+
   mp3info = callPackage ../applications/audio/mp3info { };
 
   mp3splt = callPackage ../applications/audio/mp3splt { };
