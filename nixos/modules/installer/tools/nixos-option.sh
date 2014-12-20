@@ -13,6 +13,7 @@ usage () {
 
 xml=false
 verbose=false
+nixPath=""
 
 option=""
 
@@ -26,6 +27,7 @@ for arg; do
         while test "$sarg" != "-"; do
           case $sarg in
             --*) longarg=$arg; sarg="--";;
+            -I) argfun="include_nixpath";;
             -*) usage;;
           esac
           # remove the first letter option
@@ -53,6 +55,9 @@ for arg; do
         var=$(echo $argfun | sed 's,^set_,,')
         eval $var=$arg
         ;;
+      include_nixpath)
+        nixPath="-I $arg $nixPath"
+        ;;
     esac
     argfun=""
   fi
@@ -69,14 +74,17 @@ fi
 #############################
 
 evalNix(){
-  result=$(nix-instantiate - --eval-only "$@" 2>&1)
+  result=$(nix-instantiate ${nixPath:+$nixPath} - --eval-only "$@" 2>&1)
   if test $? -eq 0; then
       cat <<EOF
 $result
 EOF
       return 0;
   else
-      sed -n '/error/ { s/, at (string):[0-9]*:[0-9]*//; p; }' <<EOF
+      sed -n '
+  /^error/ { s/, at (string):[0-9]*:[0-9]*//; p; };
+  /^warning: Nix search path/ { p; };
+' <<EOF
 $result
 EOF
       return 1;
