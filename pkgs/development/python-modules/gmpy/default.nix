@@ -9,7 +9,11 @@ buildPythonPackage rec {
     sha256 = "1kxypdbg77lbkvs0lx018jk88s7rc49z0xg5pkd0m5knv1snxc62";
   };
 
-  propagatedBuildInputs =  [ gmp mpfr mpc ];
+  # I think this it working fine, but I get a warning from tribler
+  # I don't think adding mpc to PYTHONPATH will work either
+  setupPyBuildFlags = [ "--prefix=${mpfr}" "--nompc" ];
+
+  buildInputs =  [ gmp mpfr ];
 
   meta = {
     homepage = "http://www.gmpy.org/";

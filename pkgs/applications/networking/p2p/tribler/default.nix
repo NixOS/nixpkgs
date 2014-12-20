@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libtorrentRasterbar, pythonPackages, makeWrapper, nettools
+{ stdenv, fetchgit, libtorrentRasterbar, libav, pythonPackages, makeWrapper, nettools
 , enablePlayer ? false, vlc ? null }:
 
 let ver = "6.4.0"; in
@@ -14,14 +14,15 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ pythonPackages.python pythonPackages.wrapPython makeWrapper ];
+    [ pythonPackages.python pythonPackages.gmpy pythonPackages.wrapPython makeWrapper
+      libav ];
 
   pythonPath =
     [ pythonPackages.wxPython pythonPackages.curses pythonPackages.apsw
       pythonPackages.setuptools pythonPackages.m2crypto pythonPackages.sqlite3
       pythonPackages.twisted libtorrentRasterbar pythonPackages.pil pythonPackages.pyasn1
       pythonPackages.pycrypto pythonPackages.requests pythonPackages.netifaces
-      pythonPackages.gmpy
+      pythonPackages.gmpy pythonPackages.cherrypy pythonPackages.feedparser
     ];
 
   propogatedBuildInputs =
@@ -29,9 +30,6 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
-      #substituteInPlace Tribler/Core/NATFirewall/guessip.py \
-      #    --replace /bin/netstat ${nettools}/bin/netstat \
-      #    --replace /sbin/ifconfig ${nettools}/sbin/ifconfig
     
       # Nasty hack; call wrapPythonPrograms to set program_PYTHONPATH.
       wrapPythonPrograms
