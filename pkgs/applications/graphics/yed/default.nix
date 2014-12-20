@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.yworks.com/en/products/yfiles/yed/;
     description = "A powerful desktop application that can be used to quickly and effectively generate high-quality diagrams";
     platforms = jre.meta.platforms;
-    maintainer = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar ];
   };
 }
