@@ -14,6 +14,9 @@ rec {
   litecoin  = callPackage ./litecoin.nix { withGui = true; };
   litecoind = callPackage ./litecoin.nix { withGui = false; };
 
+  memorycoin  = callPackage ./memorycoin.nix { withGui = true; };
+  memorycoind = callPackage ./memorycoin.nix { withGui = false; };
+
   namecoin  = callPackage ./namecoin.nix  { inherit namecoind; };
   namecoind = callPackage ./namecoind.nix { };
 }
