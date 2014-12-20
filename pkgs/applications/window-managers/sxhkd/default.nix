@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Simple X hotkey daemon";
     homepage = "http://github.com/baskerville/sxhkd";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd2;
     platforms = stdenv.lib.platforms.linux;
   };
 }

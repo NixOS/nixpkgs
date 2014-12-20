@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.alliedvisiontec.com/us/products/software/linux/avt-fire4linux.html;
     description = "AVT Viewer application for AVT cameras";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.viric ];
     platforms = stdenv.lib.platforms.linux;
     hydraPlatforms = []; # because libdc1394avt is broken

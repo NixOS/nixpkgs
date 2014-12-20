@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = {
     homepage = http://ipython.scipy.org/;
     description = "An interactive computing environment for Python";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
     longDescription = ''
       The goal of IPython is to create a comprehensive environment
       for interactive and exploratory computing. It consists of an

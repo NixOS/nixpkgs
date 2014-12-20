@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.semicomplete.com/projects/xdotool/;
     description = "Fake keyboard/mouse input, window management, and more";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

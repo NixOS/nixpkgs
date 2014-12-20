@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = http://opencv.willowgarage.com/;
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
     broken = true;

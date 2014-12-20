@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.openjpeg.org/;
     description = "Open-source JPEG 2000 codec written in C language";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd2;
     platforms = stdenv.lib.platforms.all;
   };
 }
