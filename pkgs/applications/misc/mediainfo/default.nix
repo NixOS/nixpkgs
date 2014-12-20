@@ -22,7 +22,7 @@ stdenv.mkDerivation {
       MediaInfo is a convenient unified display of the most relevant technical
       and tag data for video and audio files.
     '';
-    homepage = http://mediaarena.net/;
+    homepage = http://mediaarea.net/;
     license = stdenv.lib.licenses.bsd2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.devhell ];

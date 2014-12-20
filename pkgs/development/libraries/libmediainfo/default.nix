@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Shared library for mediainfo";
-    homepage = http://mediaarena.net/;
+    homepage = http://mediaarea.net/;
     license = stdenv.lib.licenses.bsd2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.devhell ];

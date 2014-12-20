@@ -556,6 +556,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   csv = callPackage ../development/libraries/haskell/csv {};
 
+  csv-conduit = callPackage ../development/libraries/haskell/csv-conduit {};
+
   cssText = callPackage ../development/libraries/haskell/css-text {};
 
   cufft = callPackage ../development/libraries/haskell/cufft {};
@@ -1883,6 +1885,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   optparseApplicative_0_10_0 = callPackage ../development/libraries/haskell/optparse-applicative/0.10.0.nix {};
   optparseApplicative_0_11_0_1 = callPackage ../development/libraries/haskell/optparse-applicative/0.11.0.1.nix {};
   optparseApplicative = self.optparseApplicative_0_11_0_1;
+
+  packdeps = callPackage ../development/tools/haskell/packdeps {};
 
   pathPieces = callPackage ../development/libraries/haskell/path-pieces {};
 
