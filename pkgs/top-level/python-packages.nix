@@ -5500,28 +5500,9 @@ let
   };
 
 
-  matplotlib = buildPythonPackage rec {
-    name = "matplotlib-1.4.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://sourceforge/matplotlib/${name}.tar.gz";
-      sha256 = "0m6v9nwdldlwk22gcd339zg6mny5m301fxgks7z8sb8m9wawg8qp";
-    };
-
-    buildInputs = with self; [ python pkgs.which pkgs.ghostscript ] ++
-        (if stdenv.isDarwin then [ pkgs.clangStdenv ] else [ pkgs.stdenv ]);
-
-    propagatedBuildInputs = with self;
-      [ dateutil nose numpy pyparsing tornado pkgs.freetype pkgs.libpng pkgs.pkgconfig
-        mock pytz
-      ];
-
-    meta = with stdenv.lib; {
-      description = "python plotting library, making publication quality plots";
-      homepage    = "http://matplotlib.sourceforge.net/";
-      maintainers = with maintainers; [ lovek323 ];
-      platforms   = platforms.unix;
-    };
+  matplotlib = callPackage ../development/python-modules/matplotlib/default.nix {
+    stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
+    enableGhostscript = true;
   };
 
 
