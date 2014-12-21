@@ -69,14 +69,45 @@ fi
 #############################
 
 evalNix(){
-  nix-instantiate - --eval-only "$@"
+  result=$(nix-instantiate - --eval-only "$@" 2>&1)
+  if test $? -eq 0; then
+      cat <<EOF
+$result
+EOF
+      return 0;
+  else
+      sed -n '/error/ { s/, at (string):[0-9]*:[0-9]*//; p; }' <<EOF
+$result
+EOF
+      return 1;
+  fi
 }
 
 evalAttr(){
   local prefix="$1"
   local strict="$2"
   local suffix="$3"
-  echo "(import <nixos> {}).$prefix${option:+.$option}${suffix:+.$suffix}" | evalNix ${strict:+--strict}
+
+  # If strict is set, then set it to "true".
+  test -n "$strict" && strict=true
+
+  evalNix ${strict:+--strict} <<EOF
+let
+  reach = attrs: attrs${option:+.$option}${suffix:+.$suffix};
+  nixos = import <nixos> {};
+  nixpkgs = import <nixpkgs> {};
+  strict = ${strict:-false};
+  cleanOutput = x: with nixpkgs.lib;
+    if isDerivation x then x.outPath
+    else if isFunction x then "<CODE>"
+    else if strict then
+      if isAttrs x then mapAttrs (n: cleanOutput) x
+      else if isList x then map cleanOutput x
+      else x
+    else x;
+in
+  cleanOutput (reach nixos.$prefix)
+EOF
 }
 
 evalOpt(){
