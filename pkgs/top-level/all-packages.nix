@@ -2268,6 +2268,8 @@ let
     inherit python libsexy pkgconfig libxml2 pygtk pango gtk glib;
   };
 
+  pytrainer = callPackage ../applications/misc/pytrainer { };
+
   openmpi = callPackage ../development/libraries/openmpi { };
 
   qastools = callPackage ../tools/audio/qastools {
