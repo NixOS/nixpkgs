@@ -83,6 +83,68 @@ EOF
   fi
 }
 
+header="let
+  nixos = import <nixpkgs/nixos> {};
+  nixpkgs = import <nixpkgs> {};
+in with nixpkgs.lib;
+"
+
+# This function is used for converting the option definition path given by
+# the user into accessors for reaching the definition and the declaration
+# corresponding to this option.
+generateAccessors(){
+  if result=$(evalNix --strict --show-trace <<EOF
+$header
+
+let
+  path = "${option:+$option}";
+  pathList = splitString "." path;
+
+  walkOptions = attrsNames: result:
+    if attrsNames == [] then
+      result
+    else
+      let name = head attrsNames; rest = tail attrsNames; in
+      if isOption result.options then
+        walkOptions rest {
+          options = result.options.type.getSubOptions "";
+          opt = ''(\${result.opt}.type.getSubOptions "")'';
+          cfg = ''\${result.cfg}."\${name}"'';
+        }
+      else
+        walkOptions rest {
+          options = result.options.\${name};
+          opt = ''\${result.opt}."\${name}"'';
+          cfg = ''\${result.cfg}."\${name}"'';
+        }
+    ;
+
+  walkResult = (if path == "" then x: x else walkOptions pathList) {
+    options = nixos.options;
+    opt = ''nixos.options'';
+    cfg = ''nixos.config'';
+  };
+
+in
+  ''let option = \${walkResult.opt}; config = \${walkResult.cfg}; in''
+EOF
+)
+  then
+      echo $result
+  else
+      # In case of error we want to ignore the error message roduced by the
+      # script above, as it is iterating over each attribute, which does not
+      # produce a nice error message.  The following code is a fallback
+      # solution which is cause a nicer error message in the next
+      # evaluation.
+      echo "\"let option = nixos.options${option:+.$option}; config = nixos.config${option:+.$option}; in\""
+  fi
+}
+
+header="$header
+$(eval echo $(generateAccessors))
+"
+
 evalAttr(){
   local prefix="$1"
   local strict="$2"
@@ -92,10 +154,10 @@ evalAttr(){
   test -n "$strict" && strict=true
 
   evalNix ${strict:+--strict} <<EOF
+$header
+
 let
-  reach = attrs: attrs${option:+.$option}${suffix:+.$suffix};
-  nixos = import <nixos> {};
-  nixpkgs = import <nixpkgs> {};
+  value = $prefix${suffix:+.$suffix};
   strict = ${strict:-false};
   cleanOutput = x: with nixpkgs.lib;
     if isDerivation x then x.outPath
@@ -106,12 +168,12 @@ let
       else x
     else x;
 in
-  cleanOutput (reach nixos.$prefix)
+  cleanOutput value
 EOF
 }
 
 evalOpt(){
-  evalAttr "options" "" "$@"
+  evalAttr "option" "" "$@"
 }
 
 evalCfg(){
@@ -121,8 +183,11 @@ evalCfg(){
 
 findSources(){
   local suffix=$1
-  echo "(import <nixos> {}).options${option:+.$option}.$suffix" |
-    evalNix --strict
+  evalNix --strict <<EOF
+$header
+
+option.$suffix
+EOF
 }
 
 # Given a result from nix-instantiate, recover the list of attributes it
@@ -152,13 +217,12 @@ nixMap() {
 # the output of nixos-option with other tools such as nixos-gui.
 if $xml; then
   evalNix --xml --no-location <<EOF
+$header
+
 let
-  reach = attrs: attrs${option:+.$option};
-  nixos = import <nixos> {};
-  nixpkgs = import <nixpkgs> {};
   sources = builtins.map (f: f.source);
-  opt = reach nixos.options;
-  cfg = reach nixos.config;
+  opt = option;
+  cfg = config;
 in
 
 with nixpkgs.lib;
