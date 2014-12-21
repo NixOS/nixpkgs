@@ -83,9 +83,8 @@ EOF
   fi
 }
 
-header="
-let
-  nixos = import <nixos> {};
+header="let
+  nixos = import <nixpkgs/nixos> {};
   nixpkgs = import <nixpkgs> {};
 in with nixpkgs.lib;
 "
