@@ -40,20 +40,22 @@ rebuild everything from source. So you may want to create a local
 branch based on your current NixOS version:
 
 <screen>
-$ nixos-version
-14.04.273.ea1952b (Baboon)
-
-$ git checkout -b local ea1952b
+$ <replaceable>/my/sources</replaceable>/nixpkgs/maintainers/scripts/update-channel-branches.sh
+Fetching channels from https://nixos.org/channels:
+ * [new branch]      cbe467e           -> channels/remotes/nixos-unstable
+Fetching channels from nixos-version:
+ * [new branch]      9ff4738           -> channels/current-system
+Fetching channels from ~/.nix-defexpr:
+ * [new branch]      0d4acad           -> channels/root/nixos
+$ git checkout -b local channels/current-system
 </screen>
 
 Or, to base your local branch on the latest version available in the
 NixOS channel:
 
 <screen>
-$ curl -sI https://nixos.org/channels/nixos-unstable/ | grep Location
-Location: https://releases.nixos.org/nixos/unstable/nixos-14.10pre43986.acaf4a6/
-
-$ git checkout -b local acaf4a6
+$ <replaceable>/my/sources</replaceable>/nixpkgs/maintainers/scripts/update-channel-branches.sh
+$ git checkout -b local channels/remotes/nixos-unstable
 </screen>
 
 You can then use <command>git rebase</command> to sync your local
