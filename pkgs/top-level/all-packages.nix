@@ -9991,6 +9991,8 @@ let
 
   fuze = callPackage ../applications/networking/instant-messengers/fuze {};
 
+  game-music-emu = callPackage ../applications/audio/game-music-emu { };
+
   gcolor2 = callPackage ../applications/graphics/gcolor2 { };
 
   get_iplayer = callPackage ../applications/misc/get_iplayer {};

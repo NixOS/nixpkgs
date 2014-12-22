@@ -19,6 +19,7 @@
 , aacSupport ? true, faad2
 , pulseaudioSupport ? true, pulseaudio
 , jackSupport ? true, jack2
+, gmeSupport ? true, game-music-emu
 , icuSupport ? true, icu
 }:
 
@@ -59,6 +60,7 @@ in stdenv.mkDerivation rec {
     ++ opt zipSupport zziplib
     ++ opt pulseaudioSupport pulseaudio
     ++ opt jackSupport jack2
+    ++ opt gmeSupport game-music-emu
     ++ opt icuSupport icu;
 
   configureFlags =
@@ -85,6 +87,7 @@ in stdenv.mkDerivation rec {
       (mkFlag jackSupport "jack")
       (mkFlag stdenv.isDarwin "osx")
       (mkFlag icuSupport "icu")
+      (mkFlag gmeSupport "gme")
       "--enable-debug"
     ]
     ++ opt stdenv.isLinux
