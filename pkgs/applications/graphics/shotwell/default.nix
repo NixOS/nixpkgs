@@ -50,7 +50,8 @@ in stdenv.mkDerivation rec {
   buildInputs = [ m4 glibc gtk3 libexif libgphoto2 libsoup libxml2 vala sqlite webkitgtk24x pkgconfig
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base gnome3.libgee which udev gnome3.gexiv2
                   libraw rest json_glib gettext desktop_file_utils glib lcms2 gdk_pixbuf librsvg
-                  makeWrapper gnome_doc_utils ];
+                  makeWrapper gnome_doc_utils
+                  gnome3.gnome_icon_theme gnome3.gnome_icon_theme_symbolic ];
 
   meta = with stdenv.lib; {
     description = "Popular photo organizer for the GNOME desktop";
