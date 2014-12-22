@@ -9369,6 +9369,8 @@ let
 
   dunst = callPackage ../applications/misc/dunst { };
 
+  devede = callPackage ../applications/video/devede { };
+
   dvb_apps  = callPackage ../applications/video/dvb-apps { };
 
   dvdauthor = callPackage ../applications/video/dvdauthor { };
