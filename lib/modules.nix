@@ -356,6 +356,31 @@ rec {
   mkBefore = mkOrder 500;
   mkAfter = mkOrder 1500;
 
+  # Convenient property used to transfer all definitions and their
+  # properties from one option to another. This property is useful for
+  # renaming options, and also for including properties from another module
+  # system, including sub-modules.
+  #
+  #   { config, options, ... }:
+  #
+  #   {
+  #     # 'bar' might not always be defined in the current module-set.
+  #     config.foo.enable = mkAliasDefinitions (options.bar.enable or {});
+  #
+  #     # 'barbaz' has to be defined in the current module-set.
+  #     config.foobar.paths = mkAliasDefinitions options.barbaz.paths;
+  #   }
+  #
+  # Note, this is different than taking the value of the option and using it
+  # as a definition, as the new definition will not keep the mkOverride /
+  # mkDefault properties of the previous option.
+  #
+  mkAliasDefinitions = mkAliasAndWrapDefinitions id;
+  mkAliasAndWrapDefinitions = wrap: option:
+    mkMerge
+      (optional (isOption option && option.isDefined)
+        (wrap (mkMerge option.definitions)));
+
 
   /* Compatibility. */
   fixMergeModules = modules: args: evalModules { inherit modules args; check = false; };
