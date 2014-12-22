@@ -13,7 +13,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp pkgconfig python autoreconfHook ];
 
   patches = [
+    ./ext_auth-path.patch
     ./firewall_defaults.patch
+    ./updown-path.patch
   ];
 
   configureFlags = [ "--enable-swanctl" "--enable-cmd" ];
