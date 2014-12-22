@@ -12597,6 +12597,8 @@ let
 
   lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
 
+  mailcore2 = callPackage ../development/libraries/mailcore2 { };
+
   martyr = callPackage ../development/libraries/martyr { };
 
   mess = callPackage ../misc/emulators/mess {
