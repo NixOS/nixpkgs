@@ -5713,6 +5713,8 @@ let
 
   libchardet = callPackage ../development/libraries/libchardet { };
 
+  libuchardet = callPackage ../development/libraries/libuchardet { };
+
   libchop = callPackage ../development/libraries/libchop { };
 
   libcm = callPackage ../development/libraries/libcm { };
