@@ -1644,6 +1644,8 @@ let
 
   liboauth = callPackage ../development/libraries/liboauth { };
 
+  libtidy = callPackage ../development/libraries/libtidy { };
+
   libtirpc = callPackage ../development/libraries/ti-rpc { };
 
   libshout = callPackage ../development/libraries/libshout { };
