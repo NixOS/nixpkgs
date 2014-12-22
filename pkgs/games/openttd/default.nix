@@ -17,6 +17,12 @@ stdenv.mkDerivation rec {
     "--without-liblzo2"
   ];
 
+  # NOTE: Remove this patch in 1.4.5 or greater
+  patches = [
+    # Adapted from svn r27079
+    ./fix-freetype-1.4.4.patch
+  ];
+
   makeFlags = "INSTALL_PERSONAL_DIR=";
 
   postInstall = ''
