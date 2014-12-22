@@ -10239,7 +10239,7 @@ let
   };
 
   easytag = callPackage ../applications/audio/easytag {
-    inherit (gnome3) gnome_icon_theme;
+    inherit (gnome3) gnome_icon_theme dconf;
   };
 
   mp3info = callPackage ../applications/audio/mp3info { };
