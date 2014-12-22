@@ -6,7 +6,7 @@ python3Packages.buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://github.com/jborg/attic/archive/0.14.tar.gz";
-    sha256 = "929da4b2e900770cd31558e87074ade347b44937c944218549259ea64646f203";
+    sha256 = "0zabh6cq7v1aml83y2r475vvy3mmmjbvkijk0bnyfx73z8hmsa3z";
   };
 
   propagatedBuildInputs = with python3Packages;
