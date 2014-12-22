@@ -55,8 +55,8 @@ let
             apply = x: use (toOf config);
             inherit visible;
           });
-        }
-        { config = setTo (mkMerge (if (fromOf options).isDefined then [ (define (mkMerge (fromOf options).definitions)) ] else []));
+
+          config = setTo (mkAliasAndWrapDefinitions define (fromOf options));
         }
       ];
 
