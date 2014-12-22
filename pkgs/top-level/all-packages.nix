@@ -7761,6 +7761,8 @@ let
 
   net_snmp = callPackage ../servers/monitoring/net-snmp { };
 
+  newrelic-sysmond = callPackage ../servers/monitoring/newrelic-sysmond { };
+
   riemann = callPackage ../servers/monitoring/riemann { };
 
   oidentd = callPackage ../servers/identd/oidentd { };
