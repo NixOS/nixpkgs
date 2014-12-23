@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, cups, poppler, fontconfig
-, libjpeg, libpng, perl, ijs, qpdf, dbus }:
+, libjpeg, libpng, perl, ijs, qpdf, dbus, substituteAll, bash }:
 
 stdenv.mkDerivation rec {
   name = "cups-filters-${version}";
@@ -33,6 +33,13 @@ stdenv.mkDerivation rec {
       # Ensure that gstoraster can find gs in $PATH.
       substituteInPlace filter/gstoraster.c --replace execve execvpe
     '';
+
+  patches = [
+    (substituteAll {
+      src = ./longer-shell-path.patch;
+      bash = "${bash}/bin/bash";
+    })
+  ];
 
   postInstall =
     ''
