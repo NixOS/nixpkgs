@@ -6540,6 +6540,8 @@ let
 
   opencascade_oce = callPackage ../development/libraries/opencascade/oce.nix { };
 
+  opencollada = callPackage ../development/libraries/opencollada { };
+
   opencsg = callPackage ../development/libraries/opencsg { };
 
   openct = callPackage ../development/libraries/openct { };
