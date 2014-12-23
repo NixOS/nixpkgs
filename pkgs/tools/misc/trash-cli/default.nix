@@ -1,5 +1,7 @@
 { stdenv, fetchurl, substituteAll, coreutils, python2, python2Packages }:
 
+assert stdenv.isLinux;
+
 python2Packages.buildPythonPackage rec {
   name = "trash-cli-${version}";
   version = "0.12.9.14";
