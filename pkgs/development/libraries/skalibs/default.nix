@@ -1,11 +1,11 @@
 { stdenv
-, skarnetConfCompile
 , fetchurl
+, gnumake40
 }:
 
 let
 
-  version = "1.6.0.0";
+  version = "2.0.0.0";
 
 in stdenv.mkDerivation rec {
 
@@ -13,19 +13,19 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://skarnet.org/software/skalibs/${name}.tar.gz";
-    sha256 = "0jz3farll9n5jvz3g6wri99s6njkgmnf0r9jqjlg03f20dzv8c8w";
+    sha256 = "0cz30wqg8fnkwjlacs4s3sjs3l34sa91xgci95fmb187zhiq693n";
   };
 
-  sourceRoot = "prog/${name}";
+  dontDisableStatic = true;
 
-  # See http://skarnet.org/cgi-bin/archive.cgi?1:mss:75:201405:pkmodhckjklemogbplje
-  patches = [ ./getpeereid.patch ];
+  buildInputs = [ gnumake40 ];
 
-  buildInputs = [ skarnetConfCompile ];
-
-  preInstall = ''
-    mkdir -p "$out/etc"
-  '';
+  configureFlags = [
+    "--enable-force-devr"       # assume /dev/random works
+    "--libdir=\${prefix}/lib"
+    "--includedir=\${prefix}/include"
+    "--sysdepdir=\${prefix}/lib/skalibs/sysdeps"
+  ] ++ (if stdenv.isDarwin then [ "--disable-shared" ] else [ "--enable-shared" ]);
 
   meta = {
     homepage = http://skarnet.org/software/skalibs/;

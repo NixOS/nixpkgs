@@ -1,12 +1,12 @@
 { stdenv
 , fetchurl
+, gnumake40
 , skalibs
-, skarnetConfCompile
 }:
 
 let
 
-  version = "1.0.3.1";
+  version = "2.0.0.0";
 
 in stdenv.mkDerivation rec {
 
@@ -14,12 +14,20 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.skarnet.org/software/s6-linux-utils/${name}.tar.gz";
-    sha256 = "1s17g03z5hfpiz32g001g5wyamyvn9l36fr2csk3k7r0jkqfnl0d";
+    sha256 = "0lfgfwnk81vjlkvmr1gzknz9swgcrp5s7x19dfkw6shvi95fyirh";
   };
 
-  buildInputs = [ skalibs skarnetConfCompile ];
+  dontDisableStatic = true;
 
-  sourceRoot = "admin/${name}";
+  buildInputs = [ gnumake40 ];
+
+  configureFlags = [
+    "--includedir=\${prefix}/include"
+    "--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
+    "--with-include=${skalibs}/include"
+    "--with-lib=${skalibs}/lib"
+    "--with-dynlib=${skalibs}/lib"
+  ];
 
   meta = {
     homepage = http://www.skarnet.org/software/s6-linux-utils/;
