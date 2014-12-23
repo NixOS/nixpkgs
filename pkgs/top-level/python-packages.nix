@@ -8833,15 +8833,14 @@ let
         sha256 = "13aqm0dwy17ghimy7m2mxjwlyc1k7zk5icxzrs1sa896056f1dyy";
       };
 
-    preInstall = ''
+    patchPhase = ''
       cp "${x_ignore_nofocus}/cpp/linux-specific/"* .
-      sed -i 's|dlopen(library,|dlopen("libX11.so.6",|' x_ignore_nofocus.c
+      substituteInPlace x_ignore_nofocus.c --replace "/usr/lib/libX11.so.6" "${pkgs.xlibs.libX11}/lib/libX11.so.6"
       gcc -c -fPIC x_ignore_nofocus.c -o x_ignore_nofocus.o
       gcc -shared \
         -Wl,${if stdenv.isDarwin then "-install_name" else "-soname"},x_ignore_nofocus.so \
         -o x_ignore_nofocus.so \
-        x_ignore_nofocus.o \
-        ${if stdenv.isDarwin then "-lx11" else ""}
+        x_ignore_nofocus.o
       cp -v x_ignore_nofocus.so py/selenium/webdriver/firefox/${if pkgs.stdenv.is64bit then "amd64" else "x86"}/
     '';
   };
