@@ -1840,6 +1840,8 @@ let
 
   ndjbdns = callPackage ../tools/networking/ndjbdns { };
 
+  nestopia = callPackage ../misc/emulators/nestopia { };
+
   netatalk = callPackage ../tools/filesystems/netatalk { };
 
   netcdf = callPackage ../development/libraries/netcdf { };
