@@ -1,6 +1,6 @@
 diff -Nurp morituri-0.2.3-orig/doc/Makefile.in morituri-0.2.3/doc/Makefile.in
---- morituri-0.2.3-orig/doc/Makefile.in	2014-11-01 00:13:01.231364181 +0100
-+++ morituri-0.2.3/doc/Makefile.in	2014-11-01 00:13:56.691812229 +0100
+--- morituri-0.2.3-orig/doc/Makefile.in	2014-12-23 12:44:46.222410092 +0100
++++ morituri-0.2.3/doc/Makefile.in	2014-12-23 12:46:49.619756940 +0100
 @@ -486,7 +486,7 @@ morituri.ics: $(top_srcdir)/morituri.doa
  	-moap doap -f $(top_srcdir)/morituri.doap ical > morituri.ics
  
@@ -10,3 +10,82 @@ diff -Nurp morituri-0.2.3-orig/doc/Makefile.in morituri-0.2.3/doc/Makefile.in
  
  clean-local:
  	@rm -rf reference
+diff -Nurp morituri-0.2.3-orig/morituri/common/program.py morituri-0.2.3/morituri/common/program.py
+--- morituri-0.2.3-orig/morituri/common/program.py	2014-12-23 12:44:46.218410048 +0100
++++ morituri-0.2.3/morituri/common/program.py	2014-12-23 12:46:49.647757245 +0100
+@@ -92,13 +92,13 @@ class Program(log.Loggable):
+         """
+         Load the given device.
+         """
+-        os.system('eject -t %s' % device)
++        os.system('@utillinux@/bin/eject -t %s' % device)
+ 
+     def ejectDevice(self, device):
+         """
+         Eject the given device.
+         """
+-        os.system('eject %s' % device)
++        os.system('@utillinux@/bin/eject %s' % device)
+ 
+     def unmountDevice(self, device):
+         """
+@@ -112,7 +112,7 @@ class Program(log.Loggable):
+         proc = open('/proc/mounts').read()
+         if device in proc:
+             print 'Device %s is mounted, unmounting' % device
+-            os.system('umount %s' % device)
++            os.system('@utillinux@/bin/umount %s' % device)
+ 
+     def getFastToc(self, runner, toc_pickle, device):
+         """
+diff -Nurp morituri-0.2.3-orig/morituri/extern/python-command/scripts/help2man morituri-0.2.3/morituri/extern/python-command/scripts/help2man
+--- morituri-0.2.3-orig/morituri/extern/python-command/scripts/help2man	2014-12-23 12:44:46.206409916 +0100
++++ morituri-0.2.3/morituri/extern/python-command/scripts/help2man	2014-12-23 12:46:49.631757074 +0100
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!@python@/bin/python
+ 
+ # -*- Mode: Python -*-
+ # vi:si:et:sw=4:sts=4:ts=4
+diff -Nurp morituri-0.2.3-orig/morituri/program/cdparanoia.py morituri-0.2.3/morituri/program/cdparanoia.py
+--- morituri-0.2.3-orig/morituri/program/cdparanoia.py	2014-12-23 12:44:46.202409873 +0100
++++ morituri-0.2.3/morituri/program/cdparanoia.py	2014-12-23 12:46:49.659757376 +0100
+@@ -278,7 +278,7 @@ class ReadTrackTask(log.Loggable, task.T
+             stopTrack, stopOffset)
+ 
+         bufsize = 1024
+-        argv = ["cdparanoia", "--stderr-progress",
++        argv = ["@cdparanoia@/bin/cdparanoia", "--stderr-progress",
+             "--sample-offset=%d" % self._offset, ]
+         if self._device:
+             argv.extend(["--force-cdrom-device", self._device, ])
+@@ -551,7 +551,7 @@ _VERSION_RE = re.compile(
+ 
+ def getCdParanoiaVersion():
+     getter = common.VersionGetter('cdparanoia',
+-        ["cdparanoia", "-V"],
++        ["@cdparanoia@/bin/cdparanoia", "-V"],
+         _VERSION_RE,
+         "%(version)s %(release)s")
+ 
+diff -Nurp morituri-0.2.3-orig/morituri/program/cdrdao.py morituri-0.2.3/morituri/program/cdrdao.py
+--- morituri-0.2.3-orig/morituri/program/cdrdao.py	2014-12-23 12:44:46.202409873 +0100
++++ morituri-0.2.3/morituri/program/cdrdao.py	2014-12-23 12:46:49.667757463 +0100
+@@ -257,7 +257,7 @@ class CDRDAOTask(ctask.PopenTask):
+ 
+     def start(self, runner):
+         self.debug('Starting cdrdao with options %r', self.options)
+-        self.command = ['cdrdao', ] + self.options
++        self.command = ['@cdrdao@/bin/cdrdao', ] + self.options
+ 
+         ctask.PopenTask.start(self, runner)
+ 
+@@ -515,7 +515,7 @@ _VERSION_RE = re.compile(
+ 
+ def getCDRDAOVersion():
+     getter = common.VersionGetter('cdrdao',
+-        ["cdrdao"],
++        ["@cdrdao@/bin/cdrdao"],
+         _VERSION_RE,
+         "%(version)s")
+ 
