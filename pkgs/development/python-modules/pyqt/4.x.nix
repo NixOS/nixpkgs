@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, sip, qt4, pythonDBus, pkgconfig, lndir, makeWrapper }:
+{ stdenv, fetchurl, python, pythonPackages, qt4, pythonDBus, pkgconfig, lndir, makeWrapper }:
 
 let version = "4.10.2"; # kde410.pykde4 doesn't build with 4.10.3
 in
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ python pkgconfig makeWrapper qt4 lndir ];
 
-  propagatedBuildInputs = [ sip ];
+  propagatedBuildInputs = [ pythonPackages.sip ];
 
   postInstall = ''
     for i in $out/bin/*; do
