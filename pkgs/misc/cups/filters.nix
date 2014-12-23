@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, cups, poppler, fontconfig
-, libjpeg, libpng, perl, ijs, qpdf, dbus, bash }:
+, libjpeg, libpng, perl, ijs, qpdf, dbus, substituteAll, bash }:
 
 stdenv.mkDerivation rec {
   name = "cups-filters-${version}";
@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
       substituteInPlace filter/gstoraster.c --replace execve execvpe
     '';
 
-  patches = [ ./longer-shell-path.patch ];
-
-  postPatch =
-    ''
-      substituteInPlace filter/foomatic-rip/foomaticrip.c --replace "/bin/bash" "${bash}/bin/bash"
-    '';
+  patches = [
+    (substituteAll {
+      src = ./longer-shell-path.patch;
+      bash = "${bash}/bin/bash";
+    })
+  ];
 
   postInstall =
     ''
