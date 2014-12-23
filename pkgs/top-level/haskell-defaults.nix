@@ -232,6 +232,13 @@
                prefFun = ghc783Prefs;
              };
 
+
+  packages_ghc784 =
+    packages { ghcPath = ../development/compilers/ghc/7.8.4.nix;
+               ghcBinary = if stdenv.isDarwin then ghc783Binary else ghc742Binary;
+               prefFun = ghc783Prefs;
+             };
+
   packages_ghc763 =
     packages { ghcPath = ../development/compilers/ghc/7.6.3.nix;
                ghcBinary = ghc704Binary;
