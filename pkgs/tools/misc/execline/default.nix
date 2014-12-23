@@ -1,12 +1,12 @@
 { stdenv
 , fetchurl
+, gnumake40
 , skalibs
-, skarnetConfCompile
 }:
 
 let
 
-  version = "1.3.1.1";
+  version = "2.0.0.0";
 
 in stdenv.mkDerivation rec {
 
@@ -14,12 +14,21 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://skarnet.org/software/execline/${name}.tar.gz";
-    sha256 = "1br3qzif166kbp4k813ljbyq058p7mfsp2lj88n8vi4dmj935nzg";
+    sha256 = "1g5v6icxsf7p2ccj9iq85iikkm12xph65ri86ydakihv6al3jw71";
   };
 
-  buildInputs = [ skalibs skarnetConfCompile ];
+  dontDisableStatic = true;
 
-  sourceRoot = "admin/${name}";
+  buildInputs = [ gnumake40 ];
+
+  configureFlags = [
+    "--libdir=\${prefix}/lib"
+    "--includedir=\${prefix}/include"
+    "--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
+    "--with-include=${skalibs}/include"
+    "--with-lib=${skalibs}/lib"
+    "--with-dynlib=${skalibs}/lib"
+  ] ++ (if stdenv.isDarwin then [ "--disable-shared" ] else [ "--enable-shared" ]);
 
   meta = {
     homepage = http://skarnet.org/software/execline/;
