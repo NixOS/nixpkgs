@@ -3352,7 +3352,7 @@ let
     builtins.substring 0 (builtins.stringLength "packages_") name == "packages_"
   ) haskell));
 
-  haskellPackages = haskellPackages_ghc783;
+  haskellPackages = haskellPackages_ghc784;
 
   haskellPackages_ghc6104 = haskell.packages_ghc6104;
   haskellPackages_ghc6123 = haskell.packages_ghc6123;
@@ -3360,10 +3360,9 @@ let
   haskellPackages_ghc722  = haskell.packages_ghc722;
   haskellPackages_ghc742  = haskell.packages_ghc742;
   haskellPackages_ghc763  = haskell.packages_ghc763;
-  haskellPackages_ghc783_no_profiling = recurseIntoAttrs haskell.packages_ghc783.noProfiling;
-  haskellPackages_ghc783_profiling    = recurseIntoAttrs haskell.packages_ghc783.profiling;
-  haskellPackages_ghc783              = recurseIntoAttrs haskell.packages_ghc783.highPrio;
-  haskellPackages_ghc784  = haskell.packages_ghc784;
+  haskellPackages_ghc784_no_profiling = recurseIntoAttrs haskell.packages_ghc784.noProfiling;
+  haskellPackages_ghc784_profiling    = recurseIntoAttrs haskell.packages_ghc784.profiling;
+  haskellPackages_ghc784              = recurseIntoAttrs haskell.packages_ghc784.highPrio;
   haskellPackages_ghcHEAD = haskell.packages_ghcHEAD;
 
   haxe = callPackage ../development/compilers/haxe { };
@@ -9313,7 +9312,7 @@ let
 
   d4x = callPackage ../applications/misc/d4x { };
 
-  darcs = with haskellPackages_ghc783; callPackage ../applications/version-management/darcs {
+  darcs = with haskellPackages_ghc784; callPackage ../applications/version-management/darcs {
     cabal = cabal.override {
       extension = self : super : {
         enableSharedExecutables = false;
