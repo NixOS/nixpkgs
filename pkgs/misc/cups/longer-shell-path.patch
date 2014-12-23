@@ -7,7 +7,7 @@ index 1c019aa..431d2f9 100644
                                  "/usr/lib/cups/filter";
  
 -char modern_shell[64] = "/bin/bash";
-+char modern_shell[128] = "/bin/bash";
++char modern_shell[128] = "@bash@";
  
  void config_set_option(const char *key, const char *value)
  {
