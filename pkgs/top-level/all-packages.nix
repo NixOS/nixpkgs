@@ -2579,6 +2579,8 @@ let
 
   traceroute = callPackage ../tools/networking/traceroute { };
 
+  trash-cli = callPackage ../tools/misc/trash-cli { };
+
   trickle = callPackage ../tools/networking/trickle {};
 
   trousers = callPackage ../tools/security/trousers { };
