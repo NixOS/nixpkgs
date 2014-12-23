@@ -4657,8 +4657,6 @@ let
 
   premake = premake4;
 
-  pstack = callPackage ../development/tools/misc/gdb/pstack.nix { };
-
   racerRust = callPackage ../development/tools/rust/racer { rust = rustcMaster; };
 
   radare = callPackage ../development/tools/analysis/radare {
