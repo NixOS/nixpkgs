@@ -2,12 +2,12 @@
 , libiconvOrEmpty, boost, readline }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.1";
+  version = "0.6.2";
   name = "ncmpcpp-${version}";
 
   src = fetchurl {
     url = "http://ncmpcpp.rybczak.net/stable/ncmpcpp-${version}.tar.bz2";
-    sha256 = "033a18hj0q0smm5n0ykld9az7w95myr7jm2b1bjm0h2q5927x8qm";
+    sha256 = "1mrd6m6ph0fscxp9x96ipxh6ai7w0n1miapcfqrqfy058qx5zbck";
   };
 
   configureFlags = "BOOST_LIB_SUFFIX=";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     description = "Curses-based interface for MPD (music player daemon)";
     homepage    = http://unkart.ovh.org/ncmpcpp/;
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 mornfall ];
+    maintainers = with maintainers; [ lovek323 mornfall koral ];
     platforms   = platforms.all;
   };
 }
