@@ -13,10 +13,7 @@ assert (!libsOnly) -> kernel != null;
 let
 
   versionNumber = "343.36";
-  /* This branch is needed for G8x, G9x, and GT2xx GPUs, and motherboard chipsets based on them.
-    Ongoing support for new Linux kernels and X servers, as well as fixes for critical bugs,
-    will be included in 340.* legacy releases through the end of 2019.
-  */
+  # Policy: use the highest stable version as the default (on our master).
   inherit (stdenv.lib) makeLibraryPath;
 in
 
