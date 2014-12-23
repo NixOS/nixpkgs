@@ -7743,7 +7743,7 @@ let
   influxdb = callPackage ../servers/nosql/influxdb { };
 
   hyperdex = callPackage ../servers/nosql/hyperdex { };
-  
+
   mysql51 = import ../servers/sql/mysql/5.1.x.nix {
     inherit fetchurl ncurses zlib perl openssl stdenv;
     ps = procps; /* !!! Linux only */
