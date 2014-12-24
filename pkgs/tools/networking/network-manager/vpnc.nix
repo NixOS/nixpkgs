@@ -1,20 +1,18 @@
-{ stdenv, fetchurl, vpnc, intltool, pkgconfig, networkmanager
-, withGnome ? true, gnome3, procps, module_init_tools }:
+{ stdenv, fetchurl, vpnc, intltool, pkgconfig, networkmanager, networkmanagerapplet
+, withGnome ? true, gnome3, procps, module_init_tools, libsecret }:
 
 stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
   pname = "NetworkManager-vpnc";
-  # TODO: version doesn't match due to bad release
-  #version = networkmanager.version;
-  version = "0.9.8.6";
+  version = networkmanager.version;
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/0.9/${pname}-${version}.tar.xz";
-    sha256 = "1mmbm3q27b3dbbs4vs976cxif8jdcs92j3ajdbgykrnl2gbnqc20";
+    sha256 = "cf9168876602af8d56c79c888ce168b62485dc65bb7690a86ce5f4603eb48774";
   };
 
-  buildInputs = [ vpnc networkmanager ]
-    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome_keyring ];
+  buildInputs = [ vpnc networkmanager libsecret ]
+    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome_keyring networkmanagerapplet ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
 

@@ -1882,7 +1882,7 @@ let
 
   networkmanager_openconnect = callPackage ../tools/networking/network-manager/openconnect.nix { };
 
-  networkmanagerapplet = newScope gnome ../tools/networking/network-manager-applet { dconf = gnome3.dconf; };
+  networkmanagerapplet = newScope gnome ../tools/networking/network-manager-applet { };
 
   newsbeuter = callPackage ../applications/networking/feedreaders/newsbeuter { };
 
@@ -5007,10 +5007,15 @@ let
     cogl = cogl_1_18;
   };
 
+  clutter_1_20 = callPackage ../development/libraries/clutter/1.20.nix {
+    cogl = cogl_1_18;
+  };
+
   clutter-gst = callPackage ../development/libraries/clutter-gst { };
 
   clutter_gtk = callPackage ../development/libraries/clutter-gtk { };
   clutter_gtk_0_10 = callPackage ../development/libraries/clutter-gtk/0.10.8.nix { };
+  clutter_gtk_1_4 = callPackage ../development/libraries/clutter-gtk/1.4.nix { };
 
   cminpack = callPackage ../development/libraries/cminpack { };
 
@@ -5469,6 +5474,8 @@ let
   };
 
   gtk3 = callPackage ../development/libraries/gtk+/3.x.nix { };
+
+  gtk3_14 = callPackage ../development/libraries/gtk+/3.14.nix { };
 
   gtk = pkgs.gtk2;
 
@@ -10921,7 +10928,7 @@ let
 
   termite = callPackage ../applications/misc/termite {
     gtk = gtk3;
-    vte = gnome3_12.vte-select-text;
+    vte = gnome3_14.vte-select-text;
    };
 
   tesseract = callPackage ../applications/graphics/tesseract { };
@@ -11881,6 +11888,11 @@ let
 
   gnome3_12 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.12 {
     callPackage = pkgs.newScope pkgs.gnome3_12;
+  });
+
+  gnome3_14 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.14 {
+    callPackage = pkgs.newScope pkgs.gnome3_14;
+    self = pkgs.gnome3_14;
   });
 
   gnome3 = gnome3_12;
