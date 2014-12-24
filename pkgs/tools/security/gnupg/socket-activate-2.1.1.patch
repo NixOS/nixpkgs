@@ -1,19 +1,9 @@
-From 8fde13d07c0059040ed531ca3ac365f5780ff240 Mon Sep 17 00:00:00 2001
-From: Shea Levy <shea@shealevy.com>
-Date: Tue, 18 Nov 2014 14:34:53 -0500
-Subject: [PATCH] gpg-agent: Enable socket activation
+Port Shea Levy's socket activation patch to version 2.1.1.
 
-This allows gpg-agent to be managed by tools such as systemd or launchd
----
- agent/gpg-agent.c  | 62 ++++++++++++++++++++++++++++++++++++------------------
- doc/gpg-agent.texi | 21 +++++++++++++++++-
- 2 files changed, 61 insertions(+), 22 deletions(-)
-
-diff --git a/agent/gpg-agent.c b/agent/gpg-agent.c
-index 5960fe3..2f06982 100644
---- a/agent/gpg-agent.c
-+++ b/agent/gpg-agent.c
-@@ -124,7 +124,9 @@ enum cmd_and_opt_values
+diff -Naur gnupg-2.1.1-upstream/agent/gpg-agent.c gnupg-2.1.1/agent/gpg-agent.c
+--- gnupg-2.1.1-upstream/agent/gpg-agent.c	2014-12-01 05:04:57.000000000 -0430
++++ gnupg-2.1.1/agent/gpg-agent.c	2014-12-23 17:13:48.029286035 -0430
+@@ -125,7 +125,9 @@
    oPuttySupport,
    oDisableScdaemon,
    oDisableCheckOwnSocket,
@@ -24,22 +14,22 @@ index 5960fe3..2f06982 100644
  };
  
  
-@@ -138,6 +140,8 @@ static ARGPARSE_OPTS opts[] = {
-   { 301, NULL, 0, N_("@Options:\n ") },
+@@ -143,6 +145,8 @@
+   ARGPARSE_group (301, N_("@Options:\n ")),
  
-   { oDaemon,   "daemon",     0, N_("run in daemon mode (background)") },
-+  { oAgentFD,   "agent-fd",  1, "@" },
-+  { oSSHAgentFD,   "ssh-agent-fd",  1, "@" },
-   { oServer,   "server",     0, N_("run in server mode (foreground)") },
-   { oVerbose, "verbose",     0, N_("verbose") },
-   { oQuiet,	"quiet",     0, N_("be somewhat more quiet") },
-@@ -596,6 +600,31 @@ parse_rereadable_options (ARGPARSE_ARGS *pargs, int reread)
+   ARGPARSE_s_n (oDaemon,  "daemon", N_("run in daemon mode (background)")),
++  ARGPARSE_s_i (oAgentFD,  "agent-fd", "@"),
++  ARGPARSE_s_i (oSSHAgentFD,  "ssh-agent-fd", "@"),
+   ARGPARSE_s_n (oServer,  "server", N_("run in server mode (foreground)")),
+   ARGPARSE_s_n (oVerbose, "verbose", N_("verbose")),
+   ARGPARSE_s_n (oQuiet,	  "quiet",     N_("be somewhat more quiet")),
+@@ -627,6 +631,31 @@
    return 1; /* handled */
  }
  
 +/* Handle agent socket(s) */
 +static void
-+handle_agent_socks(int fd, int fd_ssh)
++handle_agent_socks(int fd, int fd_extra, int fd_ssh)
 +{
 +#ifndef HAVE_W32_SYSTEM
 +  if (chdir("/"))
@@ -59,13 +49,13 @@ index 5960fe3..2f06982 100644
 +#endif /*!HAVE_W32_SYSTEM*/
 +
 +  log_info ("%s %s started\n", strusage(11), strusage(13) );
-+  handle_connections (fd, fd_ssh);
++  handle_connections (fd, fd_extra, fd_ssh);
 +  assuan_sock_close (fd);
 +}
  
  /* The main entry point.  */
  int
-@@ -612,6 +641,8 @@ main (int argc, char **argv )
+@@ -643,6 +672,8 @@
    int default_config =1;
    int pipe_server = 0;
    int is_daemon = 0;
@@ -74,7 +64,7 @@ index 5960fe3..2f06982 100644
    int nodetach = 0;
    int csh_style = 0;
    char *logfile = NULL;
-@@ -819,6 +850,8 @@ main (int argc, char **argv )
+@@ -850,6 +881,8 @@
          case oSh: csh_style = 0; break;
          case oServer: pipe_server = 1; break;
          case oDaemon: is_daemon = 1; break;
@@ -83,7 +73,7 @@ index 5960fe3..2f06982 100644
  
          case oDisplay: default_display = xstrdup (pargs.r.ret_str); break;
          case oTTYname: default_ttyname = xstrdup (pargs.r.ret_str); break;
-@@ -904,7 +937,8 @@ main (int argc, char **argv )
+@@ -940,7 +973,8 @@
      bind_textdomain_codeset (PACKAGE_GT, "UTF-8");
  #endif
  
@@ -93,18 +83,18 @@ index 5960fe3..2f06982 100644
      {
       /* We have been called without any options and thus we merely
          check whether an agent is already running.  We do this right
-@@ -1054,6 +1088,10 @@ main (int argc, char **argv )
+@@ -1090,6 +1124,10 @@
        agent_deinit_default_ctrl (ctrl);
        xfree (ctrl);
      }
 +  else if (fd_agent != GNUPG_INVALID_FD)
 +    {
-+      handle_agent_socks(fd_agent, fd_ssh_agent);
++      handle_agent_socks(fd_agent, GNUPG_INVALID_FD, fd_ssh_agent);
 +    }
    else if (!is_daemon)
      ; /* NOTREACHED */
    else
-@@ -1238,26 +1276,8 @@ main (int argc, char **argv )
+@@ -1287,26 +1325,8 @@
            log_set_prefix (NULL, oldflags | JNLIB_LOG_RUN_DETACHED);
            opt.running_detached = 1;
          }
@@ -123,19 +113,19 @@ index 5960fe3..2f06982 100644
 -        sa.sa_flags = 0;
 -        sigaction (SIGPIPE, &sa, NULL);
 -      }
- #endif /*!HAVE_W32_SYSTEM*/
+-#endif /*!HAVE_W32_SYSTEM*/
 -
 -      log_info ("%s %s started\n", strusage(11), strusage(13) );
--      handle_connections (fd, opt.ssh_support ? fd_ssh : GNUPG_INVALID_FD);
+-      handle_connections (fd, fd_extra, fd_ssh);
 -      assuan_sock_close (fd);
-+      handle_agent_socks(fd, opt.ssh_support ? fd_ssh : GNUPG_INVALID_FD);
++#endif /*!HAVE_W32_SYSTEM*/      
++      handle_agent_socks(fd, fd_extra, fd_ssh);
      }
  
    return 0;
-diff --git a/doc/gpg-agent.texi b/doc/gpg-agent.texi
-index a4079d7..1556e54 100644
---- a/doc/gpg-agent.texi
-+++ b/doc/gpg-agent.texi
+diff -Naur gnupg-2.1.1-upstream/doc/gpg-agent.texi gnupg-2.1.1/doc/gpg-agent.texi
+--- gnupg-2.1.1-upstream/doc/gpg-agent.texi	2014-12-05 09:56:37.000000000 -0430
++++ gnupg-2.1.1/doc/gpg-agent.texi	2014-12-23 16:26:38.366391186 -0430
 @@ -43,7 +43,15 @@
  .IR file ]
  .RI [ options ]
@@ -153,7 +143,7 @@ index a4079d7..1556e54 100644
  @end ifset
  
  @mansect description
-@@ -186,6 +194,11 @@ Yet another way is creating
+@@ -186,6 +194,11 @@
  a new process as a child of gpg-agent: @code{gpg-agent --daemon
  /bin/sh}.  This way you get a new shell with the environment setup
  properly; if you exit from this shell, gpg-agent terminates as well.
@@ -165,9 +155,9 @@ index a4079d7..1556e54 100644
  @end table
  
  @mansect options
-@@ -532,6 +545,12 @@ Ignore requests to change the current @code{tty} or X window system's
- @code{DISPLAY} variable respectively.  This is useful to lock the
- pinentry to pop up at the @code{tty} or display you started the agent.
+@@ -545,6 +558,12 @@
+ remote machine.
+ 
  
 +@item --ssh-agent-fd @var{fd}
 +@opindex ssh-agent-fd
