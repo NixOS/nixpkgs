@@ -1,40 +1,55 @@
 { stdenv, fetchurl, python, zlib, pkgconfig, glib, ncurses, perl, pixman
-, attr, libcap, vde2, alsaLib, texinfo, libuuid, flex, bison
+, attr, libcap, vde2, alsaLib, texinfo, libuuid, flex, bison, lzo, snappy
+, libseccomp, libaio, libcap_ng, gnutls
 , makeWrapper
+, pulseSupport ? true, pulseaudio
 , sdlSupport ? true, SDL
 , vncSupport ? true, libjpeg, libpng
 , spiceSupport ? true, spice, spice_protocol, usbredir
 , x86Only ? false
 }:
 
-let n = "qemu-2.0.0"; in
+with stdenv.lib;
+let
+  n = "qemu-2.2.0";
+  audio = optionalString (hasSuffix "linux" stdenv.system) "alsa,"
+    + optionalString pulseSupport "pa,"
+    + optionalString sdlSupport "sdl,";
+in
 
 stdenv.mkDerivation rec {
   name = n + (if x86Only then "-x86-only" else "");
 
   src = fetchurl {
     url = "http://wiki.qemu.org/download/${n}.tar.bz2";
-    sha256 = "0frsahiw56jr4cqr9m6s383lyj4ar9hfs2wp3y4yr76krah1mk30";
+    sha256 = "1703c3scl5n07gmpilg7g2xzyxnr7jczxgx6nn4m8kv9gin9p35n";
   };
-
-  patches = [ ./cve-2014-0150.patch ];
 
   buildInputs =
     [ python zlib pkgconfig glib ncurses perl pixman attr libcap
-      vde2 alsaLib texinfo libuuid flex bison makeWrapper
+      vde2 texinfo libuuid flex bison makeWrapper lzo snappy libseccomp
+      libcap_ng gnutls
     ]
-    ++ stdenv.lib.optionals sdlSupport [ SDL ]
-    ++ stdenv.lib.optionals vncSupport [ libjpeg libpng ]
-    ++ stdenv.lib.optionals spiceSupport [ spice_protocol spice usbredir ];
+    ++ optionals pulseSupport [ pulseaudio ]
+    ++ optionals sdlSupport [ SDL ]
+    ++ optionals vncSupport [ libjpeg libpng ]
+    ++ optionals spiceSupport [ spice_protocol spice usbredir ]
+    ++ optionals (hasSuffix "linux" stdenv.system) [ alsaLib libaio ];
 
   enableParallelBuilding = true;
 
+  patches = [ ./no-etc-install.patch ];
+
   configureFlags =
-    [ "--audio-drv-list=alsa"
+    [ "--enable-seccomp"
       "--smbd=smbd" # use `smbd' from $PATH
+      "--audio-drv-list=${audio}"
+      "--sysconfdir=/etc"
+      "--localstatedir=/var"
     ]
-    ++ stdenv.lib.optional spiceSupport "--enable-spice"
-    ++ stdenv.lib.optional x86Only "--target-list=i386-softmmu,x86_64-softmmu";
+    ++ optional spiceSupport "--enable-spice"
+    ++ optional x86Only "--target-list=i386-softmmu,x86_64-softmmu"
+    ++ optional (hasSuffix "linux" stdenv.system) "--enable-linux-aio";
 
   postInstall =
     ''
