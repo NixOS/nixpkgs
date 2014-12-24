@@ -1975,6 +1975,8 @@ let
     inherit (pythonPackages) sqlite3;
   };
 
+  openarena = callPackage ../games/openarena { };
+
   opencryptoki = callPackage ../tools/security/opencryptoki { };
 
   onscripter-en = callPackage ../games/onscripter-en { };
