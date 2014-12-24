@@ -1558,7 +1558,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   libmpd = callPackage ../development/libraries/haskell/libmpd {};
 
-  libnotify = callPackage ../development/libraries/haskell/libnotify {};
+  libnotify = callPackage ../development/libraries/haskell/libnotify { inherit (pkgs) libnotify; };
 
   liblastfm = callPackage ../development/libraries/haskell/liblastfm {};
 
