@@ -86,7 +86,7 @@ in
       systemd.services."synergy-client" = {
         after = [ "network.target" ];
         description = "Synergy client";
-        wantedBy = optional cfgC.autoStart [ "multi-user.target" ];
+        wantedBy = optional cfgC.autoStart "multi-user.target";
         path = [ pkgs.synergy ];
         serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergyc -f ${optionalString (cfgC.screenName != "") "-n ${cfgC.screenName}"} ${cfgC.serverAddress}'';
       };
@@ -95,7 +95,7 @@ in
       systemd.services."synergy-server" = {
         after = [ "network.target" ];
         description = "Synergy server";
-        wantedBy = optional cfgS.autoStart [ "multi-user.target" ];
+        wantedBy = optional cfgS.autoStart "multi-user.target";
         path = [ pkgs.synergy ];
         serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} -f ${optionalString (cfgS.address != "") "-a ${cfgS.address}"} ${optionalString (cfgS.screenName != "") "-n ${cfgS.screenName}" }'';
       };
