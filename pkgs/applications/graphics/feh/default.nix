@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A light-weight image viewer";
     homepage = https://derf.homelinux.org/projects/feh/;
-    license = "BSD";
+    license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

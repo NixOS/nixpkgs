@@ -233,8 +233,12 @@ in
         The 32-bit host ID of the machine, formatted as 8 hexadecimal characters.
 
         You should try to make this ID unique among your machines. You can
-        generate a random 32-bit ID using the following command:
+        generate a random 32-bit ID using the following commands:
 
+        <literal>cksum /etc/machine-id | while read c rest; do printf "%x" $c; done</literal>
+        
+        (this derives it from the machine-id that systemd generates) or
+        
         <literal>head -c4 /dev/urandom | od -A none -t x4</literal>
       '';
     };
@@ -253,6 +257,15 @@ in
       type = types.nullOr types.str;
       description = ''
         The default gateway.  It can be left empty if it is auto-detected through DHCP.
+      '';
+    };
+
+    networking.defaultGateway6 = mkOption {
+      default = null;
+      example = "2001:4d0:1e04:895::1";
+      type = types.nullOr types.str;
+      description = ''
+        The default ipv6 gateway.  It can be left empty if it is auto-detected through DHCP.
       '';
     };
 

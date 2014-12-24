@@ -35,7 +35,7 @@ in
 
     enableHardening = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
       description = ''
         Enable hardened VirtualBox, which ensures that only the binaries in the
         system path get access to the devices exposed by the kernel modules
@@ -54,23 +54,21 @@ in
     boot.extraModulePackages = [ virtualbox ];
     environment.systemPackages = [ virtualbox ];
 
-    warnings = mkIf (!cfg.enableHardening) (singleton (
-      "Hardening is currently disabled for VirtualBox, because of some " +
-      "issues in conjunction with host-only-interfaces. If you don't use " +
-      "hostonlyifs, it's strongly recommended to set " +
-      "`services.virtualboxHost.enableHardening = true'!"
-    ));
-
     security.setuidOwners = let
-      mkVboxStub = program: {
+      mkSuid = program: {
         inherit program;
+        source = "${virtualbox}/libexec/virtualbox/${program}";
         owner = "root";
         group = "vboxusers";
         setuid = true;
       };
-    in mkIf cfg.enableHardening (map mkVboxStub [
+    in mkIf cfg.enableHardening (map mkSuid [
       "VBoxHeadless"
+      "VBoxNetAdpCtl"
+      "VBoxNetDHCP"
+      "VBoxNetNAT"
       "VBoxSDL"
+      "VBoxVolInfo"
       "VirtualBox"
     ]);
 

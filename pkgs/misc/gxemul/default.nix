@@ -1,4 +1,4 @@
-{ composableDerivation, fetchurl }:
+{ stdenv, composableDerivation, fetchurl }:
 
 let edf = composableDerivation.edf;
     name = "gxemul-0.4.6";
@@ -29,9 +29,9 @@ composableDerivation.composableDerivation {} {
   configurePhase = "./configure";
 
   meta = {
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
     description = "A Machine Emulator, mainly emulates MIPS, but supports other CPU types";
-    homepage = http://gavare.se/gxemul/;
+    homepage = http://gxemul.sourceforge.net/;
   };
 
   mergeAttrBy = { installPhase = a : b : "${a}\n${b}"; };

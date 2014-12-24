@@ -3,13 +3,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.7.5";
+  version = "3.7.6";
   name = "afflib-${version}";
 
   src = fetchgit {
     url = "https://github.com/sshock/AFFLIBv3/";
     rev = "refs/tags/v${version}";
-    sha256 = "06dr3y6bd7vfjf0p9v85yp1xzg43x515zsa9587jcx7yy5h5ams5";
+    sha256 = "11wpjbyja6cn0828sw3951s7dbly11abijk41my3cpy9wnvmiggh";
     name = "afflib-${version}-checkout";
   };
 
@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsdOriginal;
     maintainers = [ stdenv.lib.maintainers.raskin ];
     inherit version;
-    downloadPage = "http://digitalcorpora.org/downloads/afflib/";
-    updateWalker = true;
+    downloadPage = "https://github.com/sshock/AFFLIBv3/tags";
   };
 }

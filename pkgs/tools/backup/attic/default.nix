@@ -1,19 +1,26 @@
-{stdenv, fetchurl, python3Packages, openssl, acl }:
+{ stdenv, fetchurl, python3Packages, openssl, acl }:
 
 python3Packages.buildPythonPackage rec {
-  name = "attic-0.13";
+  name = "attic-0.14";
+  namePrefix = "";
 
   src = fetchurl {
-      url = "https://github.com/jborg/attic/archive/0.13.tar.gz";
-      sha256 = "da1c4c0759b541e72f6928341c863b406448351769113165d86d8393a5db98a3";
-      };
+    url = "https://github.com/jborg/attic/archive/0.14.tar.gz";
+    sha256 = "0zabh6cq7v1aml83y2r475vvy3mmmjbvkijk0bnyfx73z8hmsa3z";
+  };
 
-  buildInputs = with python3Packages;
+  propagatedBuildInputs = with python3Packages;
     [ cython msgpack openssl acl ];
+
+  preConfigure = ''
+    export ATTIC_OPENSSL_PREFIX="${openssl}"
+  '';
 
   meta = with stdenv.lib; {
     description = "A deduplication backup program";
     homepage = "https://attic-backup.org";
-    license = stdenv.lib.licenses.bsd3;
- };
+    license = licenses.bsd3;
+    maintainers = [ maintainers.wscott ];
+    platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
+  };
 }

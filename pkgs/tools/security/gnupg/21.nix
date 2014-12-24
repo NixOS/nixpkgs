@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "12q5shx6ldqad3rky154nv8f2cy57sxy9idivz93ggqm1bsw7a0a";
+    sha256 = "0jffj23a02gw7gmrh9j9ynp50bvl2pc2y74i9ii65nvm50fx1v3h";
   };
 
   patches = [ ./socket-activate.patch ];

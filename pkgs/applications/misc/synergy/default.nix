@@ -7,13 +7,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "synergy-${version}";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "synergy";
     repo = "synergy";
-    rev = "1.6.1";
-    sha256 = "1043101c4phv1nbxiqp2jn1jhgzspv9q6v75z0kfzwgii5n5xq1c";
+    rev = version;
+    sha256 = "0himg6c50x5wz5nc6rgd54rph1w6nin6j9f08pa4spsxn9b5h8ks";
   };
 
   patches = optional stdenv.isLinux ./cryptopp.patch;

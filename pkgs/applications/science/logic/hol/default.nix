@@ -69,6 +69,6 @@ stdenv.mkDerivation {
       checking.
     '';
     homepage = "http://hol.sourceforge.net/";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
   };
 }

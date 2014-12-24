@@ -17,7 +17,11 @@ stdenv.mkDerivation rec {
     rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
-  meta = {
-   description = "GTK remote control for the Transmission BitTorrent client";
-  };
+  meta = with stdenv.lib;
+    { description = "GTK remote control for the Transmission BitTorrent client";
+      homepage = http://code.google.com/p/transmission-remote-gtk/;
+      license = licenses.gpl2;
+      maintainers = [ maintainers.emery ];
+      platforms = platforms.linux;
+    };
 }

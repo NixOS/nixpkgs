@@ -286,6 +286,7 @@
   ./services/networking/tcpcrypt.nix
   ./services/networking/teamspeak3.nix
   ./services/networking/tftpd.nix
+  ./services/networking/tox-bootstrapd.nix
   ./services/networking/unbound.nix
   ./services/networking/unifi.nix
   ./services/networking/vsftpd.nix
@@ -307,6 +308,7 @@
   ./services/security/fprot.nix
   ./services/security/frandom.nix
   ./services/security/haveged.nix
+  ./services/security/torify.nix
   ./services/security/tor.nix
   ./services/security/torsocks.nix
   ./services/system/cloud-init.nix

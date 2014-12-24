@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, docbook2x, docbook_xml_dtd_45
+{ stdenv, fetchurl, pkgconfig, docbook2x, docbook_xml_dtd_45
 , flex, bison, libmnl, libnftnl, gmp, readline }:
 
 stdenv.mkDerivation rec {
-  name = "nftables-0.3";
+  name = "nftables-0.4";
 
   src = fetchurl {
     url = "http://netfilter.org/projects/nftables/files/${name}.tar.bz2";
-    sha256 = "0bww48hc424svxfx3fpqxmbmp0n42ahs1f28f5f6g29d8i2jcdsd";
+    sha256 = "0g0x6mf5580kr1azrff0ryxxym43qr72fwir7agmz4b8bjvnkjpn";
   };
 
   configureFlags = [
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   XML_CATALOG_FILES = "${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
 
-  buildInputs = [ docbook2x flex bison libmnl libnftnl gmp readline ];
+  buildInputs = [ pkgconfig docbook2x flex bison libmnl libnftnl gmp readline ];
 
   meta = with stdenv.lib; {
     description = "the project that aims to replace the existing {ip,ip6,arp,eb}tables framework";

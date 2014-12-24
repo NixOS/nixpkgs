@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonPackages, pyqt4 ? null, sip ? null
+{ stdenv, fetchurl, buildPythonPackage, pythonPackages, pyqt4 ? null
 , notebookSupport ? true   # ipython notebook
 , qtconsoleSupport ? true  # ipython qtconsole
 , pylabSupport ? true      # ipython --pylab    (backend: agg - no gui, just file)
@@ -10,7 +10,7 @@
 # pyqt4 for both.
 
 assert qtconsoleSupport == true -> pyqt4 != null;
-assert pylabQtSupport == true -> pyqt4 != null && sip != null;
+assert pylabQtSupport == true -> pyqt4 != null;
 
 buildPythonPackage rec {
   name = "ipython-2.3.1";
@@ -37,7 +37,6 @@ buildPythonPackage rec {
   ] ++ stdenv.lib.optionals pylabQtSupport [
     pythonPackages.matplotlib
     pyqt4
-    sip
   ];
 
   doCheck = false;
@@ -45,7 +44,7 @@ buildPythonPackage rec {
   meta = {
     homepage = http://ipython.scipy.org/;
     description = "An interactive computing environment for Python";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
     longDescription = ''
       The goal of IPython is to create a comprehensive environment
       for interactive and exploratory computing. It consists of an

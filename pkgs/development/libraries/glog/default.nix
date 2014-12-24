@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://code.google.com/p/google-glog/;
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
     description = "Library for application-level logging";
   };
 }

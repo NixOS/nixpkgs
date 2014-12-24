@@ -6,46 +6,159 @@
 
 <title>Release 14.12 (“Caterpillar”, 2014/12/??)</title>
 
+<para>In addition to numerous new and upgraded packages, this release has the following highlights:
+
+<itemizedlist>
+
+<listitem><para>Systemd has been updated to version 217, which has numerous
+<link xlink:href="http://lists.freedesktop.org/archives/systemd-devel/2014-October/024662.html">improvements
+.</link></para></listitem>
+
+<listitem><para><link xlink:href="http://thread.gmane.org/gmane.linux.distributions.nixos/15165">
+Nix has been updated to 1.8.</link></para></listitem>
+
+<listitem><para>NixOS is now based on Glibc 2.20.</para></listitem>
+
+<listitem><para>KDE has been updated to 4.14.</para></listitem>
+
+<listitem><para>The default Linux kernel has been updated to 3.14.</para></listitem>
+
+<listitem><para><option>users.mutableUsers</option> set to <literal>true</literal> now respect any changes
+made after initial creation of a user or a group.
+</para></listitem>
+
+</itemizedlist></para>
+
+<para>Following new services were added since the last release:
+
+<itemizedlist>
+<listitem><para>parallels-guest</para></listitem>
+<listitem><para>docker</para></listitem>
+<listitem><para>lxc</para></listitem>
+<listitem><para>openvswitch</para></listitem>
+<listitem><para>fluxbox</para></listitem>
+<listitem><para>bspwm</para></listitem>
+<listitem><para>gdm</para></listitem>
+<listitem><para>fcgiwrap</para></listitem>
+<listitem><para>peerflix</para></listitem>
+<listitem><para>fail2ban</para></listitem>
+<listitem><para>chronos</para></listitem>
+<listitem><para>znc</para></listitem>
+<listitem><para>unifi</para></listitem>
+<listitem><para>teamspeak3</para></listitem>
+<listitem><para>strongswan</para></listitem>
+<listitem><para>seeks</para></listitem>
+<listitem><para>radicale</para></listitem>
+<listitem><para>prosody</para></listitem>
+<listitem><para>polipo</para></listitem>
+<listitem><para>openntpd</para></listitem>
+<listitem><para>nsd</para></listitem>
+<listitem><para>mailpile</para></listitem>
+<listitem><para>i2pd</para></listitem>
+<listitem><para>dnscrypt-proxy</para></listitem>
+<listitem><para>consul</para></listitem>
+<listitem><para>atftpd</para></listitem>
+<listitem><para>scollector</para></listitem>
+<listitem><para>collectd</para></listitem>
+<listitem><para>bosun</para></listitem>
+<listitem><para>riemann</para></listitem>
+<listitem><para>zookeeper</para></listitem>
+<listitem><para>uhub</para></listitem>
+<listitem><para>siproxd</para></listitem>
+<listitem><para>redmine</para></listitem>
+<listitem><para>phd</para></listitem>
+<listitem><para>mesos</para></listitem>
+<listitem><para>gitlab</para></listitem>
+<listitem><para>gitolite</para></listitem>
+<listitem><para>etcd</para></listitem>
+<listitem><para>docker-registry</para></listitem>
+<listitem><para>cpuminer-cryptonight</para></listitem>
+<listitem><para>thermald</para></listitem>
+<listitem><para>mlmmj</para></listitem>
+<listitem><para>tcsd</para></listitem>
+<listitem><para>gnome3.seahorse</para></listitem>
+<listitem><para>gnome3.gvfs</para></listitem>
+<listitem><para>gnome3.gnome-online-miners</para></listitem>
+<listitem><para>gnome3.gnome-documents</para></listitem>
+<listitem><para>geoclue2</para></listitem>
+<listitem><para>opentsdb</para></listitem>
+<listitem><para>neo4j</para></listitem>
+<listitem><para>monetdb</para></listitem>
+<listitem><para>influxdb</para></listitem>
+<listitem><para>hbase</para></listitem>
+<listitem><para>torque/mrom</para></listitem>
+<listitem><para>torque/server</para></listitem>
+<listitem><para>kubernetes</para></listitem>
+<listitem><para>fleet</para></listitem>
+<listitem><para>crashplan</para></listitem>
+<listitem><para>mopidy</para></listitem>
+<listitem><para>liquidsoap</para></listitem>
+</itemizedlist>
+</para>
+
 <para>When upgrading from a previous release, please be aware of the
 following incompatible changes:
 
 <itemizedlist>
 
-  <listitem><para>The default version of Apache httpd is now 2.4. If
-  you use the <option>extraConfig</option> option to pass literal
-  Apache configuration text, you may need to update it — see <link
-  xlink:href="http://httpd.apache.org/docs/2.4/upgrading.html">Apache’s
-  documentation</link> for details. If you wish to continue to use
-  httpd 2.2, add the following line to your NixOS configuration:
+<listitem><para>The default version of Apache httpd is now 2.4. If
+you use the <option>extraConfig</option> option to pass literal
+Apache configuration text, you may need to update it — see <link
+xlink:href="http://httpd.apache.org/docs/2.4/upgrading.html">Apache’s
+documentation</link> for details. If you wish to continue to use
+httpd 2.2, add the following line to your NixOS configuration:
 
-<programlisting>
-services.httpd.package = pkgs.apacheHttpd_2_2;
-</programlisting>
+rogramlisting>
+rvices.httpd.package = pkgs.apacheHttpd_2_2;
+programlisting>
 
-  </para></listitem>
+</para></listitem>
 
-  <listitem><para>PHP 5.3 has been removed because it is no longer
-  supported by the PHP project. A <link
-  xlink:href="http://php.net/migration54">migration guide</link> is
-  available.</para></listitem>
+<listitem><para>PHP 5.3 has been removed because it is no longer
+supported by the PHP project. A <link
+xlink:href="http://php.net/migration54">migration guide</link> is
+available.</para></listitem>
 
-  <listitem><para>The host side of a container virtual Ethernet pair
-  is now called <literal>ve-<replaceable>container-name</replaceable></literal>
-  rather than <literal>c-<replaceable>container-name</replaceable></literal>.</para></listitem>
+<listitem><para>The host side of a container virtual Ethernet pair
+is now called <literal>ve-<replaceable>container-name</replaceable></literal>
+rather than <literal>c-<replaceable>container-name</replaceable></literal>.</para></listitem>
 
-  <listitem><para>GNOME 3.10 support has been dropped. The default GNOME version is now 3.12.</para></listitem>
+<listitem><para>GNOME 3.10 support has been dropped. The default GNOME version is now 3.12.</para></listitem>
 
-  <listitem><para>The system-wide default timezone for NixOS installations
-  changed from <literal>CET</literal> to <literal>UTC</literal>. To choose
-  a different timezone for your system, configure
-  <literal>time.timeZone</literal> in
-  <literal>configuration.nix</literal>. A fairly complete list of possible
-  values for that setting is available at <link
-  xlink:href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"/>.</para></listitem>
+<listitem><para>VirtualBox has been upgraded to 4.3.20 release. Users may be required to run
+<command>rm -rf /tmp.vbox*</command>. <literal>imports = [ &lt;nixpkgs/nixos/modules/programs/virtualbox.nix&gt; ]</literal>
+is no longer necessary, use <literal>services.virtualboxHost.enable = true</literal> instead.
+</para>
+<para>Also, hardening mode is now enabled by default, which means that unless you want to use
+USB support, you no longer need to be a member of the <literal>vboxusers</literal> group.
+</para></listitem>
 
-  <listitem><para>GNU screen has been updated to 4.2.1, which breaks
-  the ability to connect to sessions created by older versions of
-  screen.</para></listitem>
+<listitem><para>Chromium has been updated to 39.0.2171.65. <option>enablePepperPDF</option> is now enabled by default.
+<literal>chromium*Wrapper</literal> packages no longer exist, because upstream removed NSAPI support.
+<literal>chromium-stable</literal> has been renamed to <literal>chromium</literal>.
+</para></listitem>
+
+<listitem><para>Python packaging documentation is now part of nixpkgs manual. To override
+the python packages available to a custom python you now use <literal>pkgs.pythonFull.buildEnv.override</literal>
+instead of <literal>pkgs.pythonFull.override</literal>.
+</para></listitem>
+
+<listitem><para><literal>boot.resumeDevice = "8:6"</literal> is no longer supported. Most users will
+want to leave it undefined, which takes the swap partitions automatically. There is an evaluation
+assertion to ensure that the string starts with a slash.
+</para></listitem>
+
+<listitem><para>The system-wide default timezone for NixOS installations
+changed from <literal>CET</literal> to <literal>UTC</literal>. To choose
+a different timezone for your system, configure
+<literal>time.timeZone</literal> in
+<literal>configuration.nix</literal>. A fairly complete list of possible
+values for that setting is available at <link
+xlink:href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"/>.</para></listitem>
+
+<listitem><para>GNU screen has been updated to 4.2.1, which breaks
+the ability to connect to sessions created by older versions of
+screen.</para></listitem>
 
 </itemizedlist>
 

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
 , libXcursor, libXmu, qt4, libIDL, SDL, libcap, zlib, libpng, glib, kernel, lvm2
-, which, alsaLib, curl, libvpx, gawk
+, which, alsaLib, curl, libvpx, gawk, nettools
 , xorriso, makeself, perl, pkgconfig, nukeReferences
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python ? null
@@ -12,23 +12,25 @@
 with stdenv.lib;
 
 let
+  buildType = "release";
 
   version = "4.3.20"; # changes ./guest-additions as well
 
   forEachModule = action: ''
     for mod in \
-      $sourcedir/out/linux.*/release/bin/src/vboxdrv \
-      $sourcedir/out/linux.*/release/bin/src/vboxpci \
-      $sourcedir/out/linux.*/release/bin/src/vboxnetadp \
-      $sourcedir/out/linux.*/release/bin/src/vboxnetflt
+      out/linux.*/${buildType}/bin/src/vboxdrv \
+      out/linux.*/${buildType}/bin/src/vboxpci \
+      out/linux.*/${buildType}/bin/src/vboxnetadp \
+      out/linux.*/${buildType}/bin/src/vboxnetflt
     do
       if [ "x$(basename "$mod")" != xvboxdrv -a ! -e "$mod/Module.symvers" ]
       then
-        cp -v $sourcedir/out/linux.*/release/bin/src/vboxdrv/Module.symvers \
-              "$mod/Module.symvers"
+        cp -v out/linux.*/${buildType}/bin/src/vboxdrv/Module.symvers \
+          "$mod/Module.symvers"
       fi
       INSTALL_MOD_PATH="$out" INSTALL_MOD_DIR=misc \
-      make -C "$MODULES_BUILD_DIR" "M=$mod" DEPMOD=/do_not_use_depmod ${action}
+      make -C "$MODULES_BUILD_DIR" DEPMOD=/do_not_use_depmod \
+        "M=\$(PWD)/$mod" BUILD_TYPE="${buildType}" ${action}
     done
   '';
 
@@ -86,8 +88,12 @@ in stdenv.mkDerivation {
 
   patches = optional enableHardening ./hardened.patch;
 
+  postPatch = ''
+    sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
+      src/apps/adpctl/VBoxNetAdpCtl.cpp
+  '';
+
   configurePhase = ''
-    sourcedir="$(pwd)"
     cat >> LocalConfig.kmk <<LOCAL_CONFIG
     VBOX_WITH_TESTCASES            :=
     VBOX_WITH_TESTSUITE            :=
@@ -124,7 +130,7 @@ in stdenv.mkDerivation {
 
   buildPhase = ''
     source env.sh
-    kmk
+    kmk BUILD_TYPE="${buildType}"
     ${forEachModule "modules"}
   '';
 
@@ -133,9 +139,9 @@ in stdenv.mkDerivation {
     share="${if enableHardening then "$out/share/virtualbox" else "$libexec"}"
 
     # Install VirtualBox files
-    cd out/linux.*/release/bin
-    mkdir -p $libexec
-    cp -av * $libexec
+    mkdir -p "$libexec"
+    find out/linux.*/${buildType}/bin -mindepth 1 -maxdepth 1 \
+      -name src -o -exec cp -avt "$libexec" {} +
 
     # Install kernel modules
     ${forEachModule "modules_install"}
@@ -168,9 +174,6 @@ in stdenv.mkDerivation {
       mkdir -p $out/share/icons/hicolor/$size/apps
       ln -s $libexec/icons/$size/*.png $out/share/icons/hicolor/$size/apps
     done
-
-    # Get rid of src cruft.
-    rm -rf $out/libexec/virtualbox/src
 
     # Get rid of a reference to linux.dev.
     nuke-refs $out/lib/modules/*/misc/*.ko

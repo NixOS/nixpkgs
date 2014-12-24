@@ -173,6 +173,7 @@
       peerflix = 163;
       chronos = 164;
       gitlab = 165;
+      tox-bootstrapd = 166;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 

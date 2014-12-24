@@ -1,5 +1,7 @@
 import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
 
+  debug = false;
+
   testVMConfig = vmName: attrs: { config, pkgs, ... }: {
     boot.kernelParams = let
       miniInit = ''
@@ -64,7 +66,7 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
     rotated = map (i: "${logfile}.${toString i}") (range 1 9);
     all = concatMapStringsSep " " (f: "\"${f}\"") ([logfile] ++ rotated);
     logcmd = "tail -F ${all} 2> /dev/null | logger -t \"${tag}\"";
-  in "$machine->execute(ru '${logcmd} & disown');";
+  in optionalString debug "$machine->execute(ru '${logcmd} & disown');";
 
   testVM = vmName: vmScript: let
     cfg = (import ../lib/eval-config.nix {
@@ -297,14 +299,16 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
 in {
   name = "virtualbox";
 
-  machine = { pkgs, ... }: {
+  machine = { pkgs, lib, config, ... }: {
     imports = let
       mkVMConf = name: val: val.machine // { key = "${name}-config"; };
       vmConfigs = mapAttrsToList mkVMConf vboxVMs;
     in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
     virtualisation.memorySize = 768;
     services.virtualboxHost.enable = true;
-    users.extraUsers.alice.extraGroups = [ "vboxusers" ];
+    users.extraUsers.alice.extraGroups = let
+      inherit (config.services.virtualboxHost) enableHardening;
+    in lib.mkIf enableHardening (lib.singleton "vboxusers");
   };
 
   testScript = ''

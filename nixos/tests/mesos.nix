@@ -8,6 +8,10 @@ import ./make-test.nix {
       slave = {
         enable = true;
         master = "zk://localhost:2181/mesos";
+        attributes = {
+          tag1 = "foo";
+          tag2 = "bar";
+        };
       };
       master = {
         enable = true;

@@ -4,14 +4,15 @@
 
 cabal.mkDerivation (self: {
   pname = "generics-sop";
-  version = "0.1.0.3";
-  sha256 = "0wvrav5armspfp6iixns1db45xfpqicx74asi14a2gnl28yqmfpl";
+  version = "0.1.0.4";
+  sha256 = "00rjlqsjb7hba5q0kbfwg4ajk75a4sd7m72wx18fa9rlz92qbx2j";
   buildDepends = [ tagged ];
   meta = {
     description = "Generic Programming using True Sums of Products";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
-    broken = true;
+    maintainers = with self.stdenv.lib.maintainers; [
+      aycanirican ocharles
+    ];
   };
 })

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, python, isPyPy }:
 
 if isPyPy then throw "sip not supported for interpreter ${python.executable}" else stdenv.mkDerivation rec {
-  name = "sip-4.16.1";
+  name = "sip-4.16.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/sip/${name}/${name}.tar.gz";
-    sha256 = "1hknl71ij924syc9ik9nk4z051q3n75y7w27q9i07awpd39sp7m4";
+    sha256 = "1xapklcz5ndilax0gr2h1fqzhdzh7yvxfb3y0rxfcag1qlzl9nnf";
   };
 
   configurePhase = ''

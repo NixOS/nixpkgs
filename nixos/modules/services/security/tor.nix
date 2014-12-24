@@ -17,7 +17,8 @@ let
   ''
   # Client connection config
   + optionalString cfg.client.enable  ''
-    SOCKSPort ${cfg.client.socksListenAddress}
+    SOCKSPort ${cfg.client.socksListenAddress} IsolateDestAddr
+    SOCKSPort ${cfg.client.socksListenAddressFaster}
     ${opt "SocksPolicy" cfg.client.socksPolicy}
   ''
   # Relay config
@@ -93,9 +94,22 @@ in
           example = "192.168.0.1:9100";
           description = ''
             Bind to this address to listen for connections from
-            Socks-speaking applications.
+            Socks-speaking applications. Provides strong circuit
+            isolation, separate circuit per IP address.
           '';
         };
+
+        socksListenAddressFaster = mkOption {
+          type = types.str;
+          default = "127.0.0.1:9063";
+          example = "192.168.0.1:9101";
+          description = ''
+            Bind to this address to listen for connections from
+            Socks-speaking applications. Same as socksListenAddress
+            but uses weaker circuit isolation to provide performance
+            suitable for a web browser.
+           '';
+         };
 
         socksPolicy = mkOption {
           type = types.nullOr types.str;
@@ -106,6 +120,22 @@ in
             address.  First entry that matches wins. If no SocksPolicy
             is set, we accept all (and only) requests from
             SocksListenAddress.
+          '';
+        };
+
+        privoxy.enable = mkOption {
+          default = true;
+          description = ''
+            Whether to enable and configure the system Privoxy to use Tor's
+            faster port, suitable for HTTP.
+
+            To have anonymity, protocols need to be scrubbed of identifying
+            information, and this can be accomplished for HTTP by Privoxy.
+
+            Privoxy can also be useful for KDE torification. A good setup would be:
+            setting SOCKS proxy to the default Tor port, providing maximum
+            circuit isolation where possible; and setting HTTP proxy to Privoxy
+            to route HTTP traffic over faster, but less isolated port.
           '';
         };
       };
@@ -322,5 +352,16 @@ in
       };
 
     environment.systemPackages = [ pkgs.tor ];
+
+    services.privoxy = mkIf (cfg.client.enable && cfg.client.privoxy.enable) {
+      enable = true;
+      extraConfig = ''
+        forward-socks4a / ${cfg.client.socksListenAddressFaster} .
+        toggle  1
+        enable-remote-toggle 0
+        enable-edit-actions 0
+        enable-remote-http-toggle 0
+      '';
+    };
   };
 }

@@ -6,6 +6,7 @@
 let version = "1.3"; in
 buildPythonPackage {
   name = "picard-${version}";
+  namePrefix = "";
 
   src = fetchurl {
     url = "ftp://ftp.musicbrainz.org/pub/musicbrainz/picard/picard-${version}.tar.gz";

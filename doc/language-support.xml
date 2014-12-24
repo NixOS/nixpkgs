@@ -502,7 +502,7 @@ exist in community to help save time. No tool is preferred at the moment.
 <section xml:id="python-development"><title>Development</title>
 
   <para>
-    To develop Python packages <function>bulidPythonPackage</function> has
+    To develop Python packages <function>buildPythonPackage</function> has
     additional logic inside <varname>shellPhase</varname> to run
     <command>${python.interpreter} setup.py develop</command> for the package.
   </para>

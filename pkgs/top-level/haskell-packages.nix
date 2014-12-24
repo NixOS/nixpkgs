@@ -556,6 +556,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   csv = callPackage ../development/libraries/haskell/csv {};
 
+  csv-conduit = callPackage ../development/libraries/haskell/csv-conduit {};
+
   cssText = callPackage ../development/libraries/haskell/css-text {};
 
   cufft = callPackage ../development/libraries/haskell/cufft {};
@@ -1556,6 +1558,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   libmpd = callPackage ../development/libraries/haskell/libmpd {};
 
+  libnotify = callPackage ../development/libraries/haskell/libnotify {};
+
   liblastfm = callPackage ../development/libraries/haskell/liblastfm {};
 
   libsystemdJournal = callPackage ../development/libraries/haskell/libsystemd-journal {};
@@ -1881,6 +1885,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   optparseApplicative_0_10_0 = callPackage ../development/libraries/haskell/optparse-applicative/0.10.0.nix {};
   optparseApplicative_0_11_0_1 = callPackage ../development/libraries/haskell/optparse-applicative/0.11.0.1.nix {};
   optparseApplicative = self.optparseApplicative_0_11_0_1;
+
+  packdeps = callPackage ../development/tools/haskell/packdeps {};
 
   pathPieces = callPackage ../development/libraries/haskell/path-pieces {};
 
@@ -2633,9 +2639,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   transformersBase = callPackage ../development/libraries/haskell/transformers-base {};
 
-  transformersCompat_0_3_3 = callPackage ../development/libraries/haskell/transformers-compat/0.3.3.nix {};
-  transformersCompat_0_3_3_4 = callPackage ../development/libraries/haskell/transformers-compat/0.3.3.4.nix {};
-  transformersCompat = self.transformersCompat_0_3_3_4;
+  transformersCompat = callPackage ../development/libraries/haskell/transformers-compat {};
 
   transformersFree = callPackage ../development/libraries/haskell/transformers-free {};
 
@@ -3148,11 +3152,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   cabalInstall_1_16_0_2 = callPackage ../tools/package-management/cabal-install/1.16.0.2.nix { Cabal = self.Cabal_1_16_0_3; };
   cabalInstall_1_18_0_3 = callPackage ../tools/package-management/cabal-install/1.18.0.3.nix { Cabal = self.Cabal_1_18_1_3; };
-  cabalInstall_1_20_0_3 = callPackage ../tools/package-management/cabal-install/1.20.0.3.nix {
-    HTTP = self.HTTP.override { network = self.network_2_5_0_0; };
-    Cabal = self.Cabal_1_20_0_2;
-  };
-  cabalInstall = self.cabalInstall_1_20_0_3;
+  cabalInstall_1_20_0_4 = callPackage ../tools/package-management/cabal-install/1.20.0.4.nix { Cabal = self.Cabal_1_20_0_2; };
+  cabalInstall = self.cabalInstall_1_20_0_4;
 
   codex = callPackage ../development/tools/haskell/codex {};
 

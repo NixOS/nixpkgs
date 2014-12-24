@@ -8,11 +8,11 @@ assert pulseaudioSupport -> pulseaudio != null;
 
 stdenv.mkDerivation rec {
   name = "gqrx-${version}";
-  version = "2.3.0";
+  version = "2.3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/gqrx/${version}/${name}.tar.xz";
-    sha256 = "0fyfkdd2ailg54ppv1y2fy2c692jmlmsyl1lxr20lyn6bvd9gpyn";
+    sha256 = "1vfqqa976xlbapqkpc9nka364zydvsy18xiwfqjy015kpasshdz1";
   };
 
   buildInputs = [

@@ -6,9 +6,9 @@ let
   cfg = config.services.tor.torsocks;
   optionalNullStr = b: v: optionalString (b != null) v;
 
-  configFile = ''
-    TorAddress ${toString (head (splitString ":" cfg.server))}
-    TorPort    ${toString (tail (splitString ":" cfg.server))}
+  configFile = server: ''
+    TorAddress ${toString (head (splitString ":" server))}
+    TorPort    ${toString (tail (splitString ":" server))}
 
     OnionAddrRange ${cfg.onionAddrRange}
 
@@ -19,13 +19,24 @@ let
 
     AllowInbound ${if cfg.allowInbound then "1" else "0"}
   '';
+
+  wrapTorsocks = name: server: pkgs.writeTextFile {
+    name = name;
+    text = ''
+        #!${pkgs.stdenv.shell}
+        TORSOCKS_CONF_FILE=${pkgs.writeText "torsocks.conf" (configFile server)} ${pkgs.torsocks}/bin/torsocks "$@"
+    '';
+    executable = true;
+    destination = "/bin/${name}";
+  };
+
 in
 {
   options = {
     services.tor.torsocks = {
       enable = mkOption {
         type        = types.bool;
-        default     = false;
+        default     = config.services.tor.enable && config.services.tor.client.enable;
         description = ''
           Whether to build <literal>/etc/tor/torsocks.conf</literal>
           containing the specified global torsocks configuration.
@@ -39,6 +50,16 @@ in
         description = ''
           IP/Port of the Tor SOCKS server. Currently, hostnames are
           NOT supported by torsocks.
+        '';
+      };
+
+      fasterServer = mkOption {
+        type    = types.str;
+        default = "127.0.0.1:9063";
+        example = "192.168.0.20:1234";
+        description = ''
+          IP/Port of the Tor SOCKS server for torsocks-faster wrapper suitable for HTTP.
+          Currently, hostnames are NOT supported by torsocks.
         '';
       };
 
@@ -89,10 +110,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.torsocks ];
+    environment.systemPackages = [ pkgs.torsocks (wrapTorsocks "torsocks-faster" cfg.fasterServer) ];
 
     environment.etc =
-      [ { source = pkgs.writeText "torsocks.conf" configFile;
+      [ { source = pkgs.writeText "torsocks.conf" (configFile cfg.server);
           target = "tor/torsocks.conf";
         }
       ];

@@ -43,7 +43,7 @@ import ./make-test.nix {
       $machine->fail("curl --fail --connect-timeout 2 http://$ip/ > /dev/null");
 
       # Make sure we have a NixOS tree (required by ‘nixos-container create’).
-      $machine->succeed("nix-env -qa -A nixos.pkgs.hello >&2");
+      $machine->succeed("PAGER=cat nix-env -qa -A nixos.pkgs.hello >&2");
 
       # Create some containers imperatively.
       my $id1 = $machine->succeed("nixos-container create foo --ensure-unique-name");

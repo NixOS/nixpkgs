@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, which, file, perl, curl, python27, makeWrapper
-, tzdata, git, valgrind
+, tzdata, git, valgrind, procps, coreutils
 }:
 
 assert stdenv.gcc.gcc != null;
@@ -18,19 +18,19 @@ assert stdenv.gcc.gcc != null;
 
 */
 
-with ((import ./common.nix) {inherit stdenv; version = "0.13.0-pre-1673-g3a325c6";});
+with ((import ./common.nix) {inherit stdenv; version = "0.13.0-pre-2604-g2f3cff6";});
 
 let snapshot = if stdenv.system == "i686-linux"
-      then "c8342e762a1720be939ed7c6a39bdaa27892f66f"
+      then "3daf531aed03f5769402f2fef852377e2838db98"
       else if stdenv.system == "x86_64-linux"
-      then "7a7fe6f5ed47b9cc66261f880e166c7c8738b73e"
+      then "4f3c8b092dd4fe159d6f25a217cf62e0e899b365"
       else if stdenv.system == "i686-darwin"
-      then "63e8644512bd5665c14389a83d5af564c7c0b103"
+      then "2a3e647b9c400505bd49cfe56091e866c83574ca"
       else if stdenv.system == "x86_64-darwin"
-      then "7933ae0e974d1b897806138b7052cb2b4514585f"
+      then "5e730efc34d79a33f464a87686c10eace0760a2e"
       else abort "no-snapshot for platform ${stdenv.system}";
-    snapshotDate = "2014-11-21";
-    snapshotRev = "c9f6d69";
+    snapshotDate = "2014-12-20";
+    snapshotRev = "8443b09";
     snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshot}.tar.bz2";
 
 in stdenv.mkDerivation {
@@ -40,8 +40,8 @@ in stdenv.mkDerivation {
 
   src = fetchgit {
     url = https://github.com/rust-lang/rust;
-    rev = "3a325c666d2cb7e297bf3057ff2442f96a79428b";
-    sha256 = "0a0byglfaf0wfsnlm53vng1gqkkz4i29zphdwqg93v26mciqqc61";
+    rev = "2f3cff6956d56048ef7afb6d33e17cbdb2dcf038";
+    sha256 = "113y74sd1gr7f0xs1lsgjw3jkvhz8s4dxx34r9cxlw5vjr7fp066";
   };
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
@@ -73,9 +73,12 @@ in stdenv.mkDerivation {
       --subst-var-by "ccPath" "${stdenv.gcc}/bin/cc"
     substituteInPlace src/librustc_back/archive.rs \
       --subst-var-by "arPath" "${stdenv.gcc.binutils}/bin/ar"
+
+    substituteInPlace src/rust-installer/gen-install-script.sh \
+      --replace /bin/echo "${coreutils}/bin/echo"
   '';
 
-  buildInputs = [ which file perl curl python27 makeWrapper git valgrind ];
+  buildInputs = [ which file perl curl python27 makeWrapper git valgrind procps ];
 
   enableParallelBuilding = false; # disabled due to rust-lang/rust#16305
 

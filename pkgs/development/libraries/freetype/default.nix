@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./enable-validation.patch ] # from Gentoo, bohoomil has the same patch as well
+    ++ [ ./fix-pcf.patch ]
     ++ optionals useEncumberedCode [
       (fetch_bohoomil "02-ftsmooth-2.5.4.patch" "11w4wb7gwgpijc788mpkxj92d7rfdwrdv7jzrpxwv5w5cgpx9iw9")
       (fetch_bohoomil "03-upstream-2014.12.07.patch" "0gq7y63mg3gc5z69nfkv2kl7xad0bjzsvnl6j1j9q79jjbvaqdq0")

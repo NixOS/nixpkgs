@@ -3,7 +3,7 @@
 {stdenv, fetchgit, writeText, pkgconfig, ocaml, findlib, camlp5, ncurses, lablgtk ? null}:
 
 let
-  version = "8.5pre-52f51fb3";
+  version = "8.5pre-0c999f02";
   coq-version = "8.5";
   buildIde = lablgtk != null;
   ideFlags = if buildIde then "-lablgtkdir ${lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt" else "";
@@ -17,8 +17,8 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = git://scm.gforge.inria.fr/coq/coq.git;
-    rev = "52f51fb385d6a1c90bd7d055185fee50ef2670be";
-    sha256 = "0pgp59j2j8vk7nmcja5smly39dpkqfhpp29wpsn71piq6n52pql3";
+    rev = "0c999f02ffcd61fcace0cc2d045056a82992a100";
+    sha256 = "1wk9lxdmw152665hr5cvnnzgnbbq7kg2845qkb4ag99nnfpsi26s";
   };
 
   buildInputs = [ pkgconfig ocaml findlib camlp5 ncurses lablgtk ];

@@ -11,14 +11,18 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Lightweight WebKitGTK+ web browser";
-    homepage = "http://www.midori-browser.org";
+    homepage = "http://midori-browser.org";
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ raskin iyzsong ];
   };
 
   src = fetchurl {
-    url = "${meta.homepage}/downloads/midori_${version}_all_.tar.bz2";
+    urls = [
+      "${meta.homepage}/downloads/midori_${version}_all_.tar.bz2"
+      "http://mirrors-ru.go-parts.com/blfs/conglomeration/midori/midori_${version}_all_.tar.bz2"
+    ];
+    name = "midori_${version}_all_.tar.bz2";
     sha256 = "10ckm98rfqfbwr84b8mc1ssgj84wjgkr4dadvx2l7c64sigi66dg";
   };
 

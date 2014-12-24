@@ -3,7 +3,7 @@
 let
   gemDefaults = { name, basename, requiredGems, sha256, meta }:
   {
-    buildInputs = [rubygems ruby makeWrapper];
+    buildInputs = [rubygems makeWrapper];
     unpackPhase = ":";
     configurePhase=":";
     bulidPhase=":";
@@ -15,7 +15,8 @@ let
 
     name = "ruby-${name}";
 
-    propagatedBuildInputs = requiredGems;
+    propagatedBuildInputs = requiredGems ++ [ruby];
+
     inherit meta;
 
     installPhase = ''

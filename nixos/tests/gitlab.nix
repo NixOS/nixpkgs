@@ -8,6 +8,7 @@ import ./make-test.nix {
       virtualisation.memorySize = 768;
       services.gitlab.enable = true;
       services.gitlab.databasePassword = "gitlab";
+      systemd.services.gitlab.serviceConfig.TimeoutStartSec = "10min";
     };
   };
 

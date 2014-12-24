@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://redis.io;
     description = "An open source, advanced key-value store";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
     platforms = platforms.unix;
     maintainers = [ maintainers.berdario ];
   };

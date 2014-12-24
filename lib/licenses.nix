@@ -255,6 +255,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "LaTeX Project Public License v1.2";
   };
 
+  lppl13c = spdx {
+    spdxId = "LPPL-1.3c";
+    fullName = "LaTeX Project Public License v1.3c";
+  };
+
   lpl-102 = spdx {
     spdxId = "LPL-1.02";
     fullName = "Lucent Public License v1.02";

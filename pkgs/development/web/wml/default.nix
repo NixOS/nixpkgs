@@ -8,12 +8,22 @@ perlPackages.buildPerlPackage rec {
     sha256 = "0jjxpq91x7y2mgixz7ghqp01m24qa37wl3zz515rrzv7x8cyy4cf";
   };
 
-  preConfigure = "touch Makefile.PL";
+  # Getting lots of Non-ASCII character errors from pod2man.
+  # Inserting =encoding utf8 before the first =head occurrence.
+  # Wasn't able to fix mp4h.
+  preConfigure = ''
+    touch Makefile.PL
+    for i in wml_backend/p6_asubst/asubst.src wml_aux/freetable/freetable.src wml_docs/*.pod wml_include/des/*.src wml_include/fmt/*.src; do
+      sed -i '0,/^=head/{s/^=head/=encoding utf8\n=head/}' $i
+    done
+    sed -i 's/ doc / /g' wml_backend/p2_mp4h/Makefile.in
+    sed -i '/p2_mp4h\/doc/d' Makefile.in
+  '';
   
   buildInputs = [ perlPackages.perl ncurses lynx makeWrapper ];
 
   patches = [ ./redhat-with-thr.patch ./dynaloader.patch ./no_bitvector.patch ];
-
+  
   preFixup = ''
     substituteInPlace $out/bin/wml \
       --replace "File::PathConvert::realpath" "Cwd::realpath" \

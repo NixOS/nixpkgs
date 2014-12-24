@@ -85,6 +85,12 @@ in
                     optionalString (cfg.defaultGatewayWindowSize != null)
                       "window ${cfg.defaultGatewayWindowSize}"} || true
                 ''}
+                ${optionalString (cfg.defaultGateway6 != null && cfg.defaultGateway6 != "") ''
+                  # FIXME: get rid of "|| true" (necessary to make it idempotent).
+                  ip -6 route add ::/0 via "${cfg.defaultGateway6}" ${
+                    optionalString (cfg.defaultGatewayWindowSize != null)
+                      "window ${cfg.defaultGatewayWindowSize}"} || true
+                ''}
               '';
           };
 
