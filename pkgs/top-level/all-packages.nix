@@ -11300,6 +11300,8 @@ let
     xbmc = xbmcPlain;
   };
 
+  kodi = callPackage ../applications/video/kodi { };
+
   xbmc-retroarch-advanced-launchers =
     callPackage ../misc/emulators/retroarch/xbmc-advanced-launchers.nix {
       cores = retroArchCores;
