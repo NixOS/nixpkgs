@@ -2633,6 +2633,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   tls = callPackage ../development/libraries/haskell/tls {};
 
+  torrent = callPackage ../development/libraries/haskell/torrent {};
+
   tostring = callPackage ../development/libraries/haskell/tostring {};
 
   transformers_0_3_0_0 = callPackage ../development/libraries/haskell/transformers/0.3.0.0.nix {};
