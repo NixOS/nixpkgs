@@ -10,15 +10,16 @@
 , networkProtocolXmpp, networkUri, openssh, optparseApplicative
 , pathPieces, perl, QuickCheck, random, regexTdfa, resourcet, rsync
 , SafeSemaphore, securemem, SHA, shakespeare, stm, tasty
-, tastyHunit, tastyQuickcheck, tastyRerun, text, time, transformers
-, unixCompat, utf8String, uuid, wai, waiExtra, warp, warpTls, which
-, xmlTypes, yesod, yesodCore, yesodDefault, yesodForm, yesodStatic
+, tastyHunit, tastyQuickcheck, tastyRerun, text, time, torrent
+, transformers, unixCompat, utf8String, uuid, wai, waiExtra, warp
+, warpTls, wget, which, xmlTypes, yesod, yesodCore, yesodDefault
+, yesodForm, yesodStatic
 }:
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "5.20141203";
-  sha256 = "01gifds86925vg7mh363i7qsii2wrgf3vpk3wgjff9rbb7z0fvfk";
+  version = "5.20141219";
+  sha256 = "1qxvsvys5hrpc5sm6s2ygr7hyrgfjc4qaycp1b0kkwjj4bl4cbvz";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -30,11 +31,13 @@ cabal.mkDerivation (self: {
     networkMulticast networkProtocolXmpp networkUri optparseApplicative
     pathPieces QuickCheck random regexTdfa resourcet SafeSemaphore
     securemem SHA shakespeare stm tasty tastyHunit tastyQuickcheck
-    tastyRerun text time transformers unixCompat utf8String uuid wai
-    waiExtra warp warpTls xmlTypes yesod yesodCore yesodDefault
-    yesodForm yesodStatic
+    tastyRerun text time torrent transformers unixCompat utf8String
+    uuid wai waiExtra warp warpTls xmlTypes yesod yesodCore
+    yesodDefault yesodForm yesodStatic
   ];
-  buildTools = [ bup curl git gnupg1 lsof openssh perl rsync which ];
+  buildTools = [
+    bup curl git gnupg1 lsof openssh perl rsync wget which
+  ];
   configureFlags = "-fAssistant -fProduction";
   preConfigure = "export HOME=$TEMPDIR";
   installPhase = "./Setup install";
