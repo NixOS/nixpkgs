@@ -9,6 +9,8 @@ pythonPackages.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with pythonPackages; [ feedparser ];
+
+  namePrefix = "";
   
   meta = {
     homepage = "http://offog.org/code/rawdog/";
