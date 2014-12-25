@@ -6633,6 +6633,26 @@ let
     };
   };
 
+  percol = buildPythonPackage rec {
+    name = "percol-${version}";
+    version = "0.0.7";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/percol/${name}.tar.gz";
+      sha256 = "01444z62clvx9rms9aiqx47s0fbvsfgbp6hlfff344xl7kc4l2gj";
+    };
+
+    propagatedBuildInputs = with self; [ modules.curses ];
+
+    meta = {
+      homepage = https://github.com/mooz/percol;
+      description = "Adds flavor of interactive filtering to the traditional pipe concept of shell";
+      license = licenses.mit;
+      maintainers = with stdenv.lib.maintainers; [ koral ];
+    };
+  };
+
 
   pexpect = buildPythonPackage {
     name = "pexpect-2.3";
