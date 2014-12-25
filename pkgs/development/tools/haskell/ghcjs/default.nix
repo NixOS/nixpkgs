@@ -16,8 +16,8 @@ let
   libDir = "share/ghcjs/${pkgs.stdenv.system}-${version}-${ghc.ghc.version}/ghcjs";
   ghcjsBoot = fetchgit {
     url = git://github.com/ghcjs/ghcjs-boot.git;
-    rev = "8bf2861c0c776eec42e0a1833f220e36681e810c";
-    sha256 = "0fwnng56d1y98fpp2s9yl9xy21584p7fsszr4m9d3wmjciiazcv2";
+    rev = "28f328ae5acb7427483ee1aaca66a4ed2df38472";
+    sha256 = "107sqpadbjqxs3ym23qbp141ihra0a8ijaar94dbpa69g8b0xyyl"; # no .git
   };
   shims = fetchgit {
     url = git://github.com/ghcjs/shims.git;
@@ -29,8 +29,8 @@ let
     version = "0.1.0.0";
     src = fetchgit {
       url = git://github.com/ghcjs/ghcjs-prim.git;
-      rev = "915f263c06b7f4a246c6e02ecdf2b9a0550ed967";
-      sha256 = "11ngifn822d8ac5p139g32rafa0wf319yl3blh6piknhwav5ip9l";
+      rev = "8e003e1a1df10233bc3f03d7bbd7d37de13d2a84";
+      sha256 = "11k2r87s58wmpxykn61lihn4vm3x67cm1dygvdl26papifinj6pz";
     };
     buildDepends = [ primitive ];
   });
@@ -39,8 +39,8 @@ in cabal.mkDerivation (self: rec {
   inherit version;
   src = fetchgit {
     url = git://github.com/ghcjs/ghcjs.git;
-    rev = "5c2d279982466e076223fcbe1e1096e22956e5a9";
-    sha256 = "07zpdvpbmk9rg4iwffi7rdjr4icr1j2kkskg2a520ffhid77phqb";
+    rev = "fa0cc146b2fbdac28136fdca621e95930e2fd035";
+    sha256 = "1mvs4x0x1cv11m32n5kjil3q1jxszj6capshvgz3a7mzdm5cdqp8";
   };
   isLibrary = true;
   isExecutable = true;
@@ -68,7 +68,7 @@ in cabal.mkDerivation (self: rec {
     substituteInPlace src/Compiler/Info.hs --replace "@PREFIX@" "$out"
     substituteInPlace src-bin/Boot.hs --replace "@PREFIX@" "$out"
   '';
-  postInstall = ''
+  preBuild = ''
     local topDir=$out/${libDir}
     mkdir -p $topDir
 
@@ -77,7 +77,8 @@ in cabal.mkDerivation (self: rec {
 
     cp -r ${shims} $topDir/shims
     chmod -R u+w $topDir/shims
-
+  '';
+  postInstall = ''
     PATH=$out/bin:${CabalGhcjs}/bin:$PATH LD_LIBRARY_PATH=${gmp}/lib:${gcc.gcc}/lib64:$LD_LIBRARY_PATH \
       env -u GHC_PACKAGE_PATH $out/bin/ghcjs-boot \
         --dev \

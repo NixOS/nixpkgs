@@ -1,8 +1,8 @@
 diff --git a/src-bin/Boot.hs b/src-bin/Boot.hs
-index ed348db..b102695 100644
+index d2c1fb3..15bf815 100644
 --- a/src-bin/Boot.hs
 +++ b/src-bin/Boot.hs
-@@ -510,9 +510,7 @@ initPackageDB :: B ()
+@@ -512,9 +512,7 @@ initPackageDB :: B ()
  initPackageDB = do
    msg info "creating package databases"
    initDB "--global" <^> beLocations . blGlobalDB
@@ -12,7 +12,7 @@ index ed348db..b102695 100644
      initDB dbName db = do
        rm_rf db >> mkdir_p db
        ghcjs_pkg_ ["init", toTextI db] `catchAny_` return ()
-@@ -536,29 +534,22 @@ installDevelopmentTree = subTop $ do
+@@ -538,29 +536,22 @@ installDevelopmentTree = subTop $ do
    msgD info $ "preparing development boot tree"
    checkpoint' "ghcjs-boot-git" "ghcjs-boot repository already cloned and prepared" $ do
      testGit "ghcjs-boot" >>= \case
@@ -46,7 +46,16 @@ index ed348db..b102695 100644
        mapM_ patchPackage =<< allPackages
        preparePrimops
        buildGenPrim
-@@ -1093,7 +1084,9 @@ cabalInstallFlags parmakeGhcjs = do
+@@ -672,7 +663,7 @@ patchPackage pkg
+ 	    p' <- absPath p
+ 	    cd (fromText pkg')
+             when isWindows (git_ ["config", "core.filemode", "false"])
+-	    git_ ["apply", "-3", toTextI p']
++	    git_ ["apply", toTextI p']
+       in  sub $ cond applyPatch (msg info $ "no patch for package " <> pkgName <> " found") =<< test_f p
+   | otherwise = return ()
+ 
+@@ -1082,7 +1073,9 @@ cabalInstallFlags parmakeGhcjs = do
             , "--builddir",      "dist"
             , "--with-compiler", ghcjs ^. pgmLocText
             , "--with-hc-pkg",   ghcjsPkg ^. pgmLocText
@@ -56,12 +65,12 @@ index ed348db..b102695 100644
 +           , "--libsubdir",     "$pkgid"
             , bool haddock "--enable-documentation" "--disable-documentation"
             , "--haddock-html"
-            , "--haddock-hoogle"
+ -- workaround for hoogle support being broken in haddock for GHC 7.10RC1
 diff --git a/src/Compiler/Info.hs b/src/Compiler/Info.hs
-index 2e19849..4c9e94d 100644
+index 33a401f..5d09c86 100644
 --- a/src/Compiler/Info.hs
 +++ b/src/Compiler/Info.hs
-@@ -48,7 +48,7 @@ compilerInfo nativeToo dflags = do
+@@ -49,7 +49,7 @@ compilerInfo nativeToo dflags = do
  -- | the directory to use if started without -B flag
  getDefaultTopDir :: IO FilePath
  getDefaultTopDir = do
