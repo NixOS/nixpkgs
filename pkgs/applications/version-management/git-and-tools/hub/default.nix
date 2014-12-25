@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, groff, rake, makeWrapper }:
+{ stdenv, fetchurl, groff, ruby, rake, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "hub-${version}";
@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ rake makeWrapper ];
 
   installPhase = ''
+    sed -i s,/usr/bin/ruby,${ruby}/bin/ruby,g lib/hub/standalone.rb
     rake install "prefix=$out"
   '';
 
