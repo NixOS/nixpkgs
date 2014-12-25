@@ -34,7 +34,7 @@ let
         cap=$(sed -nr 's/.*#%#\s+capabilities\s*=\s*(.+)/\1/p' $file)
 
         wrapProgram $file \
-          --set PATH "/run/current-system/sw/bin:/run/current-system/sw/sbin" \
+          --set PATH "/var/setuid-wrappers:/run/current-system/sw/bin:/run/current-system/sw/sbin" \
           --set MUNIN_LIBDIR "${pkgs.munin}/lib" \
           --set MUNIN_PLUGSTATE "/var/run/munin"
 
@@ -194,7 +194,7 @@ in
 
         mkdir -p /etc/munin/plugins
         rm -rf /etc/munin/plugins/*
-        PATH="/run/current-system/sw/bin:/run/current-system/sw/sbin" ${pkgs.munin}/sbin/munin-node-configure --shell --families contrib,auto,manual --config ${nodeConf} --libdir=${muninPlugins} --servicedir=/etc/munin/plugins 2>/dev/null | ${pkgs.bash}/bin/bash
+        PATH="/var/setuid-wrappers:/run/current-system/sw/bin:/run/current-system/sw/sbin" ${pkgs.munin}/sbin/munin-node-configure --shell --families contrib,auto,manual --config ${nodeConf} --libdir=${muninPlugins} --servicedir=/etc/munin/plugins 2>/dev/null | ${pkgs.bash}/bin/bash
       '';
       serviceConfig = {
         ExecStart = "${pkgs.munin}/sbin/munin-node --config ${nodeConf} --servicedir /etc/munin/plugins/";
