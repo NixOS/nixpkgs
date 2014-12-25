@@ -7,11 +7,12 @@ py.buildPythonPackage rec {
 
   src = fetchgit {
     url = "https://github.com/kliment/Printrun";
-    rev = "0a7f2335d0c02c3cc283200867b41f8b337b1387";
-    sha256 = "1zvh5ih89isv51sraljm29z9k00srrdnklwkyp27ymxzlbcwq6gv";
+    rev = "2299962bb338d3f4335b97211ee609ebaea008f7"; # printrun-20140801
+    sha256 = "19nay7xclm36x56hpm87gw4ca6rnygpqaw5ypbmrz0hyxx140abj";
   };
 
-  propagatedBuildInputs = [ py.wxPython py.pyserial py.dbus py.psutil ];
+  propagatedBuildInputs = with py; [ wxPython30 pyserial dbus psutil
+    numpy pyopengl pyglet cython ];
 
   doCheck = false;
 
