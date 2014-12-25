@@ -6636,6 +6636,7 @@ let
   percol = buildPythonPackage rec {
     name = "percol-${version}";
     version = "0.0.7";
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/percol/${name}.tar.gz";
