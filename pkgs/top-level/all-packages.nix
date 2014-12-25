@@ -4320,6 +4320,7 @@ let
       inherit fetchurl stdenv cabextract;
     });
 
+  xidel = callPackage ../tools/text/xidel { };
 
   ### DEVELOPMENT / TOOLS
 
