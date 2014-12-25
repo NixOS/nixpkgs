@@ -2280,6 +2280,8 @@ let
 
   remmina = callPackage ../applications/networking/remote/remmina {};
 
+  remotebox = callPackage ../applications/virtualization/remotebox {};
+
   renameutils = callPackage ../tools/misc/renameutils { };
 
   replace = callPackage ../tools/text/replace { };

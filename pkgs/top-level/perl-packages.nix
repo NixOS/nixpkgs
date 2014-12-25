@@ -548,6 +548,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Cairo = buildPerlPackage rec {
+    name = "Cairo-1.105";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
+      sha256 = "0im025wy1346w7b7hi6im08bfn6x4ma0cxmjz6xnk8riizm1s84q";
+    };
+    buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.cairo ];
+    meta = {
+      homepage = http://gtk2-perl.sourceforge.net/;
+      description = "Perl interface to the cairo 2d vector graphics library";
+      maintainers = with maintainers; [ nckx ];
+      license = with stdenv.lib.licenses; [ lgpl21Plus ];
+    };
+  };
+
   cam_pdf = buildPerlPackage rec {
     name = "CAM-PDF-1.60";
     src = fetchurl {
@@ -3993,6 +4008,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Glib = buildPerlPackage rec {
+    name = "Glib-1.306";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
+      sha256 = "0j4kf707vy9vhpifwl6icc7rqyf75z2lhc626af7ag8srqva81ic";
+    };
+    buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.glib ];
+    meta = {
+      homepage = http://gtk2-perl.sourceforge.net/;
+      description = "Perl wrappers for the GLib utility and Object libraries";
+      maintainers = with maintainers; [ nckx ];
+      license = with stdenv.lib.licenses; [ lgpl3Plus ];
+    };
+  };
+
   GnuPG = buildPerlPackage {
     name = "GnuPG-0.19";
     src = fetchurl {
@@ -4056,6 +4086,21 @@ let self = _self // overrides; _self = with self; {
       sha256 = "150x65lwf7pfsygcpmvj3679lhlfwx87xylwnrmwll67f9dpkjdi";
     };
     buildInputs = [ DataUUID CryptCBC ];
+  };
+
+  Gtk2 = buildPerlPackage rec {
+    name = "Gtk2-1.2493";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
+      sha256 = "1zhrvwl584yrf0b1rrkli0k2ly221xhdyix8ykmm9zs674gain0z";
+    };
+    buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Pango pkgs.gtk2 ];
+    meta = {
+      homepage = http://gtk2-perl.sourceforge.net/;
+      description = "Perl interface to the 2.x series of the Gimp Toolkit library";
+      maintainers = with maintainers; [ nckx ];
+      license = with stdenv.lib.licenses; [ lgpl21Plus ];
+    };
   };
 
   Guard = buildPerlPackage {
@@ -7090,6 +7135,22 @@ let self = _self // overrides; _self = with self; {
       homepage = http://metacpan.org/release/Package-Stash-XS;
       description = "Faster and more correct implementation of the Package::Stash API";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  Pango = buildPerlPackage rec {
+    name = "Pango-1.226";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
+      sha256 = "0r4jx7d6gj6ixk2r5yr70biy1lpjxir08aywkw02g85wg6zkjw4z";
+    };
+    buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.pango ];
+    propagatedBuildInputs = [ Cairo Glib ];
+    meta = {
+      homepage = http://gtk2-perl.sourceforge.net/;
+      description = "Layout and render international text";
+      maintainers = with maintainers; [ nckx ];
+      license = with stdenv.lib.licenses; [ lgpl21Plus ];
     };
   };
 
