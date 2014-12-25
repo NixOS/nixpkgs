@@ -7925,6 +7925,8 @@ let
 
   xorgVideoUnichrome = callPackage ../servers/x11/xorg/unichrome/default.nix { };
 
+  xwayland = with xorg; callPackage ../servers/x11/xorg/xwayland.nix { };
+
   yaws = callPackage ../servers/http/yaws { };
 
   zabbix = recurseIntoAttrs (import ../servers/monitoring/zabbix {
@@ -11154,6 +11156,7 @@ let
     vaapi = null;
     libva = null;
     libwebp = null;
+    xwayland = null;
   };
 
   weston = callPackage ../applications/window-managers/weston {
