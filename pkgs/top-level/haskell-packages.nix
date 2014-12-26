@@ -3178,7 +3178,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   jailbreakCabal = callPackage ../development/tools/haskell/jailbreak-cabal {};
 
-  journal-mailer = callPackage ../tools/system/journal-mailer {};
+  journalMailer = callPackage ../tools/system/journal-mailer {};
 
   keter = callPackage ../development/tools/haskell/keter {};
 
