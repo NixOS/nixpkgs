@@ -67,7 +67,7 @@ stdenv.mkDerivation {
   phases = "unpackPhase installPhase";
 
   libPath = stdenv.lib.makeLibraryPath
-    [ stdenv.gcc.gcc
+    [ stdenv.cc.gcc
       gconf
       alsaLib
       at_spi2_atk
@@ -100,7 +100,7 @@ stdenv.mkDerivation {
       nss
       pango
     ] + ":" + stdenv.lib.makeSearchPath "lib64" [
-      stdenv.gcc.gcc
+      stdenv.cc.gcc
     ];
 
   installPhase =

@@ -7,7 +7,7 @@
 assert stdenv.isLinux; 
 
 let
-  realGcc = stdenv.gcc.gcc;
+  realGcc = stdenv.cc.gcc;
 in
 stdenv.mkDerivation rec {
   pname = "julia";
@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
 
     patchShebangs . contrib
 
-    export PATH="$PATH:${stdenv.gcc.libc}/sbin"
+    export PATH="$PATH:${stdenv.cc.libc}/sbin"
 
     # ldconfig doesn't seem to ever work on NixOS; system-wide ldconfig cache
     # is probably not what we want anyway on non-NixOS

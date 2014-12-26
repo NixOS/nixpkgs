@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     # Store the original hash for dwarf-therapist 
     echo $(md5sum $out/share/df_linux/libs/Dwarf_Fortress | cut -c1-8) > $out/share/df_linux/hash.md5.orig
     # Fix rpath
-    patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.gcc.gcc stdenv.glibc ]}:$out/share/df_linux/libs"  $out/share/df_linux/libs/Dwarf_Fortress
+    patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.cc.gcc stdenv.glibc ]}:$out/share/df_linux/libs"  $out/share/df_linux/libs/Dwarf_Fortress
     cp -f ./git-export/build/libgraphics.so $out/share/df_linux/libs/libgraphics.so
 
     cp $permission $out/share/df_linux/nix_permission
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
       done
 
       # now run Dwarf Fortress!
-      export LD_LIBRARY_PATH=\${stdenv.gcc}/lib:${SDL}/lib:${SDL_image}/lib/:${SDL_ttf}/lib/:${gtk2}/lib/:${glib}/lib/:${mesa}/lib/:${openal}/lib/:${libsndfile}/lib:\$DF_DIR/df_linux/libs/
+      export LD_LIBRARY_PATH=\${stdenv.cc}/lib:${SDL}/lib:${SDL_image}/lib/:${SDL_ttf}/lib/:${gtk2}/lib/:${glib}/lib/:${mesa}/lib/:${openal}/lib/:${libsndfile}/lib:\$DF_DIR/df_linux/libs/
 
       export SDL_DISABLE_LOCK_KEYS=1 # Work around for bug in Debian/Ubuntu SDL patch.
       #export SDL_VIDEO_CENTERED=1    # Centre the screen.  Messes up resizing.

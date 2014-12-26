@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     install -v -m755 daemon/nrsysmond.x64 $out/bin/nrsysmond
-    patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       $out/bin/nrsysmond
   '';
 

@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   '';
 
   libPath = with xorg;
-            stdenv.lib.makeLibraryPath ([ stdenv.gcc.gcc libXrandr libXext libX11 libXcomposite libXinerama ]
+            stdenv.lib.makeLibraryPath ([ stdenv.cc.gcc libXrandr libXext libX11 libXcomposite libXinerama ]
             ++ lib.optionals (!libsOnly) [ libXi glib dbus_glib zlib ]);
 
   desktops = map (x: substituteAll ({
