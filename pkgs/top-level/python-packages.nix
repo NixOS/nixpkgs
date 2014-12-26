@@ -4978,11 +4978,11 @@ let
 
 
   jmespath = buildPythonPackage rec {
-    name = "jmespath-0.4.1";
+    name = "jmespath-0.5.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/j/jmespath/${name}.tar.gz";
-      md5 = "a11ae39472672a650dfb55feab7d65eb";
+      sha256 = "1hiqqaz1a9qv1j8n02r9c2c010krr0ar2sf35j2z2kci7ywky963";
     };
 
     propagatedBuildInputs = with self; [ ply ];
