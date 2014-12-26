@@ -235,4 +235,9 @@ rec {
       });
     };
 
+  dropCxx = drv: drv.override {
+    stdenv = if pkgs.stdenv.isDarwin
+      then pkgs.allStdenvs.stdenvDarwinNaked
+      else pkgs.stdenv;
+  };
 }
