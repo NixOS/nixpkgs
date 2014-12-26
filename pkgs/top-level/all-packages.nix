@@ -9147,6 +9147,7 @@ let
   };
   awesome-3-5 = callPackage ../applications/window-managers/awesome {
     cairo = cairo.override { xcbSupport = true; };
+    luaPackages = luaPackages.override { inherit lua; };
   };
   awesome = awesome-3-5;
 
