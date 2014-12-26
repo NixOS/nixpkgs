@@ -160,6 +160,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python perl pkgconfig ];
 
+  # freetype-2.5.4 changed signedness of some struct fields
+  NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare";
+
   postInstall =
     ''
       ${optionalString buildDocs ''
