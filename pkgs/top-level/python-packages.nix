@@ -1065,12 +1065,12 @@ let
   };
 
   botocore = buildPythonPackage rec {
-    version = "0.69.0";
+    version = "0.80.0";
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
-      md5 = "b71fe35ee01e636b54de28f1f875f084";
+      sha256 = "1zmsg0n21wq25v1dgnmf3hvw8yszxyryiylmp4alybcsg8nkg5fz";
     };
 
     propagatedBuildInputs =
@@ -4978,11 +4978,11 @@ let
 
 
   jmespath = buildPythonPackage rec {
-    name = "jmespath-0.4.1";
+    name = "jmespath-0.5.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/j/jmespath/${name}.tar.gz";
-      md5 = "a11ae39472672a650dfb55feab7d65eb";
+      sha256 = "1hiqqaz1a9qv1j8n02r9c2c010krr0ar2sf35j2z2kci7ywky963";
     };
 
     propagatedBuildInputs = with self; [ ply ];
