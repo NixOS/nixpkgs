@@ -1,30 +1,26 @@
-{ stdenv, fetchgit, python, pyxattr, pylibacl, setuptools, fuse, git, perl, pandoc, makeWrapper
+{ stdenv, fetchzip, python, pyxattr, pylibacl, setuptools, fuse, git, perl, pandoc, makeWrapper
 , par2cmdline, par2Support ? false }:
 
 assert par2Support -> par2cmdline != null;
 
-let rev = "96c6fa2a70425fff1e73d2e0945f8e242411ab58"; in
+let version = "0.26"; in
 
 with stdenv.lib;
 
 stdenv.mkDerivation {
-  name = "bup-0.25-rc1-107-${stdenv.lib.strings.substring 0 7 rev}";
+  name = "bup-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/bup/bup.git";
-    inherit rev;
-    sha256 = "0d9hgyh1g5qcpdvnqv3a5zy67x79yx9qx557rxrnxyzqckp9v75n";
+  src = fetchzip {
+    url = "https://github.com/bup/bup/archive/${version}.tar.gz";
+    sha256 = "0g7b0xl3kg0z6rn81fvzl1xnvva305i7pjih2hm68mcj0adk3v0d";
   };
 
   buildInputs = [ python git ];
   nativeBuildInputs = [ pandoc perl makeWrapper ];
 
   patchPhase = ''
+    patchShebangs .
     substituteInPlace Makefile --replace "-Werror" ""
-    for f in "cmd/"* "lib/tornado/"* "lib/tornado/test/"* "t/"* wvtest.py main.py; do
-      test -f $f || continue
-      substituteInPlace $f --replace "/usr/bin/env python" "${python}/bin/python"
-    done
     substituteInPlace Makefile --replace "./format-subst.pl" "perl ./format-subst.pl"
   '' + optionalString par2Support ''
     substituteInPlace cmd/fsck-cmd.py --replace "['par2'" "['${par2cmdline}/bin/par2'"
@@ -56,5 +52,7 @@ stdenv.mkDerivation {
     '';
 
     hydraPlatforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ muflax ];
+
   };
 }
