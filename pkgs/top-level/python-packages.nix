@@ -12166,6 +12166,21 @@ let
     };
   };
 
+  docopt = buildPythonPackage rec {
+    name = "docopt-0.6.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/docopt/${name}.tar.gz";
+      md5 = "4bc74561b37fad5d3e7d037f82a4c3b1";
+    };
+
+    meta = with stdenv.lib; {
+      description = "creates *beautiful* command-line interfaces";
+      homepage = http://docopt.org;
+      license = licenses.mit;
+    };
+  };
+
   udiskie = buildPythonPackage rec {
     version = "1.1.2";
     name = "udiskie-${version}";
@@ -12175,7 +12190,16 @@ let
       sha256 = "07fyvwp4rga47ayfsmb79p2784sqrih0sglwnd9c4x6g63xgljvb";
     };
 
-    propagatedBuildInputs = with self; [ pygtk pyyaml pygobject dbus notify pkgs.udisks2 pkgs.gettext ];
+    preConfigure = ''
+      export XDG_RUNTIME_DIR=/tmp
+    '';
+
+    propagatedBuildInputs = with self; [ pkgs.gobjectIntrospection pkgs.gtk3 pyyaml pygobject3 pkgs.libnotify pkgs.udisks2 pkgs.gettext self.docopt ];
+
+    preFixup = ''
+        wrapProgram $out/bin/* \
+          --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
+    '';
 
     # tests require dbusmock
     doCheck = false;
