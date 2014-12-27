@@ -12166,21 +12166,6 @@ let
     };
   };
 
-  docopt = buildPythonPackage rec {
-    name = "docopt-0.6.2";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/d/docopt/${name}.tar.gz";
-      md5 = "4bc74561b37fad5d3e7d037f82a4c3b1";
-    };
-
-    meta = with stdenv.lib; {
-      description = "creates *beautiful* command-line interfaces";
-      homepage = http://docopt.org;
-      license = licenses.mit;
-    };
-  };
-
   udiskie = buildPythonPackage rec {
     version = "1.1.2";
     name = "udiskie-${version}";
