@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://github.com/UpstandingHackers/hammer";
-    sha256 = "1v8f2a6bgjgdkhbqz751bqjlwb9lmqn5x63xcskwcl2b9n36vqi9";
-    rev = "e7aa73446e23f4af2fce5f88572aae848f212c16";
+    sha256 = "18bb0p896ch4crhcfxpbvpc17wg8gzv8696pcc51i34mza76jiz9";
+    rev = "47f34b81e4de834fd3537dd71928c4f3cdb7f533";
   };
 
   buildInputs = [ glib pkgconfig python scons ];
