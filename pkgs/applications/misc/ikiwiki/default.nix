@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     sed -i /ENV{PATH}/d ikiwiki.in
     # State the gcc dependency, and make the cgi use our wrapper
     sed -i -e 's@$0@"'$out/bin/ikiwiki'"@' \
-        -e "s@'cc'@'${stdenv.gcc}/bin/gcc'@" IkiWiki/Wrapper.pm
+        -e "s@'cc'@'${stdenv.cc}/bin/gcc'@" IkiWiki/Wrapper.pm
   '';
 
   configurePhase = "perl Makefile.PL PREFIX=$out";

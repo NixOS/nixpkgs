@@ -483,8 +483,6 @@ in
 
     services.xserver.displayManager.xserverArgs =
       [ "-ac"
-        "-logverbose"
-        "-verbose"
         "-terminate"
         "-logfile" "/var/log/X.${toString cfg.display}.log"
         "-config ${configFile}"

@@ -5,7 +5,7 @@
 
 let
 
-  version = "2.2.1163";
+  version = "2.2.1287";
 
   rpath = stdenv.lib.makeSearchPath "lib" [
     stdenv.glibc
@@ -41,18 +41,18 @@ let
     xz
     libcanberra
     xcbutilkeysyms
-  ] + ":${stdenv.gcc.gcc}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}";
+  ] + ":${stdenv.cc.gcc}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://downloads.hipchat.com/linux/arch/x86_64/hipchat-${version}-x86_64.pkg.tar.xz";
-        sha256 = "0yafin8qfnv9kj61z9vxza42r7fv8b9j04qs50masbly0jg5xsg8";
+        sha256 = "170izy3v18rgriz84h4gyf9354jvjrsbkgg53czq9l0scyz8x55b";
       }
     else if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://downloads.hipchat.com/linux/arch/i686/hipchat-${version}-i686.pkg.tar.xz";
-        sha256 = "1a0yvrnp41s53wpqv2jxsb3gd4vb49nfh89m6nwbw4qd85i5lfsp";
+        sha256 = "150q7pxg5vs14is5qf36yfsf7r70g49q9xr1d1rknmc5m4qa5rc5";
       }
     else
       throw "HipChat is not supported on ${stdenv.system}";
@@ -75,10 +75,8 @@ stdenv.mkDerivation {
     mv opt/HipChat/lib/ $d
     mv usr/share $out
 
-    patchShebangs $out/bin
-
     for file in $(find $d -type f); do
-        patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" $file || true
+        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $file || true
         patchelf --set-rpath ${rpath}:\$ORIGIN $file || true
     done
 

@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   '';
 
   libPath = with xorg;
-            stdenv.lib.makeLibraryPath ([ stdenv.gcc.gcc libXrandr libXext libX11 libXcomposite libXinerama ]
+            stdenv.lib.makeLibraryPath ([ stdenv.cc.gcc libXrandr libXext libX11 libXcomposite libXinerama ]
             ++ lib.optionals (!libsOnly) [ libXi glib dbus_glib zlib ]);
 
   desktops = map (x: substituteAll ({
@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
 
         for i in $out/bin/* $out/sbin/*; do
           patchelf \
-            --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+            --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
             --set-rpath "$out/lib:$libPath" \
             $i
         done

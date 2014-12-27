@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     inherit (s) url sha256;
   };
   preConfigure = ''
-    sed -e 's@/usr/include/linux@${stdenv.gcc.libc}/include/linux@g' -i configure
+    sed -e 's@/usr/include/linux@${stdenv.cc.libc}/include/linux@g' -i configure
   '';
   meta = {
     inherit (s) version;

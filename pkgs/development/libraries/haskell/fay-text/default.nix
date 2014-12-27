@@ -4,13 +4,14 @@
 
 cabal.mkDerivation (self: {
   pname = "fay-text";
-  version = "0.3.1";
-  sha256 = "0blr39vah0zd3i6clzzgmsfhxncwj8q6j4widk27iz3l27nlyin8";
+  version = "0.3.2";
+  sha256 = "1yjsn188ixpfqdr75xyl57rbv53dybik4g28h6p3jv73q494552m";
   buildDepends = [ fay fayBase text ];
   meta = {
     homepage = "https://github.com/faylang/fay-text";
     description = "Fay Text type represented as JavaScript strings";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    inherit (fay.meta) broken;
   };
 })

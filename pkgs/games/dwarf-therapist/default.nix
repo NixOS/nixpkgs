@@ -1,39 +1,30 @@
-{ stdenv, coreutils, fetchhg, qt4, dwarf_fortress, bash, makeWrapper }:
+{ stdenv, coreutils, fetchurl, qt4, dwarf_fortress, bash, makeWrapper }:
 
+let
+  version = "30.1.0";
+  df = dwarf_fortress;
+in
 stdenv.mkDerivation rec {
-  name = "dwarf-therapist-${rev}";
-  rev = "eeeac8544d94";
+  name = "dwarf-therapist-${version}";
 
-  src = fetchhg {
-    url = "https://code.google.com/r/splintermind-attributes/";
-    inherit rev;
-    sha256 = "0a9m967q6p2q3plrl6qysg1xrdmg65jzil6awjh2wr3g10x2x15z";
+  src = fetchurl {
+    url = "https://github.com/splintermind/Dwarf-Therapist/archive/v${version}.tar.gz";
+    sha256 = "1x9dkis6b3f8iqcfrc2cj9mcgkwf0rzhxhq2lgy4xdr2n0yjkyv7";
   };
 
   # Needed for hashing
-  dwarfBinary = "${dwarf_fortress}/share/df_linux/libs/Dwarf_Fortress";
+  dfHashFile = "${df}/share/df_linux/hash.md5";
 
-  buildInputs = [ coreutils qt4 dwarf_fortress makeWrapper ];
+  buildInputs = [ coreutils qt4 df makeWrapper ];
   enableParallelBuilding = false;
 
-  preConfigure = ''
+  configurePhase = ''
     substituteInPlace dwarftherapist.pro \
       --replace /usr/bin $out/bin     \
       --replace /usr/share $out/share \
       --replace "INSTALLS += doc" ""
-  '';
 
-  preBuild = ''
-    # Log to current directory, otherwise it crashes if log/ doesn't
-    # exist Note: Whis is broken because we cd to the nix store in the
-    # wrapper-script
-    substituteInPlace src/dwarftherapist.cpp \
-      --replace "log/run.log" "dwarf-therapist.log"
-  '';
-
-  buildPhase = ''
-    qmake INSTALL_PREFIX=$out;
-    make;
+    qmake INSTALL_PREFIX=$out
   '';
 
   postInstall = ''
@@ -46,8 +37,8 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     # Fix checksum of memory access directives
-    substituteInPlace $out/share/dwarftherapist/etc/memory_layouts/linux/v034.11.ini \
-      --replace "e966ee88" $(md5sum ${dwarfBinary} | cut -c1-8)
+    substituteInPlace $out/share/dwarftherapist/memory_layouts/linux/v0${df.baseVersion}.${df.patchVersion}.ini \
+      --replace $(cat "${dfHashFile}.orig") $(cat "${dfHashFile}.patched")
   '';
 
   meta = {
@@ -58,4 +49,4 @@ stdenv.mkDerivation rec {
     hydraPlatforms = [];
     homepage = https://code.google.com/r/splintermind-attributes/;
   };
-}
+} 

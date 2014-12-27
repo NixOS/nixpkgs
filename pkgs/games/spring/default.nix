@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/bin/spring" \
-      --prefix LD_LIBRARY_PATH : "${stdenv.gcc.gcc}/lib::${systemd}/lib"
+      --prefix LD_LIBRARY_PATH : "${stdenv.cc.gcc}/lib::${systemd}/lib"
   '';
 
   meta = with stdenv.lib; {

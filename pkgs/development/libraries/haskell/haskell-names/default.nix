@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haskell-names";
-  version = "0.4.1";
-  sha256 = "1zkfq54s7n17g77sqzfhhc4bmqwdwbynz0gzwyaf3m4nmz6lkfl8";
+  version = "0.5.0";
+  sha256 = "07fwdnhiqz6w323iw4xspar8m6sc6mv85i5f2vzbb5y8mrv352zr";
   buildDepends = [
     aeson Cabal dataLensLight filepath haskellPackages haskellSrcExts
     hseCpp mtl tagged transformers traverseWithClass typeEq uniplate

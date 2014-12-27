@@ -1,7 +1,7 @@
 FROM busybox
 
 RUN dir=`mktemp -d` && trap 'rm -rf "$dir"' EXIT && \
-    wget -O- http://nixos.org/releases/nix/nix-1.7/nix-1.7-x86_64-linux.tar.bz2  | bzcat | tar x -C $dir && \
+    wget -O- https://nixos.org/releases/nix/nix-1.7/nix-1.7-x86_64-linux.tar.bz2  | bzcat | tar x -C $dir && \
     mkdir -m 0755 /nix && USER=root sh $dir/*/install && \
     echo ". /root/.nix-profile/etc/profile.d/nix.sh" >> /etc/profile
 

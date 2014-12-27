@@ -27,8 +27,8 @@ let
       buildInputs = [ gmp ]
         ++ optional aclSupport acl.crossDrv
         ++ optionals selinuxSupport [ libselinux.crossDrv libsepol.crossDrv ]
-        ++ optional (stdenv.gccCross.libc ? libiconv)
-          stdenv.gccCross.libc.libiconv.crossDrv;
+        ++ optional (stdenv.ccCross.libc ? libiconv)
+          stdenv.ccCross.libc.libiconv.crossDrv;
 
       buildPhase = ''
         make || (

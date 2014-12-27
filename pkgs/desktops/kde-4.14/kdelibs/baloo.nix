@@ -1,4 +1,4 @@
-{ stdenv, kde, kdelibs, pkgconfig, doxygen, kdepimlibs, xapian, qjson, akonadi, kfilemetadata
+{ stdenv, kde, kdelibs, pkgconfig, doxygen, kdepimlibs, xapian, qjson, akonadi, kfilemetadata, boost
 }:
 
 kde {
@@ -6,7 +6,7 @@ kde {
 # TODO: qmobipocket
 
   buildInputs = [
-    kdelibs kdepimlibs xapian qjson akonadi kfilemetadata
+    kdelibs kdepimlibs xapian qjson akonadi kfilemetadata boost
   ];
 
   nativeBuildInputs = [ pkgconfig doxygen ];

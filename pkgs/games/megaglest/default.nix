@@ -8,7 +8,7 @@ let
     name = "megaglest-lib-env";
     paths = [ SDL xlibs.libSM xlibs.libICE xlibs.libX11 xlibs.libXext
       xercesc openal libvorbis lua libjpeg libpng curl fontconfig ftgl freetype
-      stdenv.gcc.gcc glew mesa_glu mesa_drivers wxGTK ];
+      stdenv.cc.gcc glew mesa_glu mesa_drivers wxGTK ];
   };
   path-env = buildEnv {
     name = "megaglest-path-env";

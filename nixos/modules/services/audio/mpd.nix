@@ -15,7 +15,6 @@ let
     state_file          "${cfg.dataDir}/state"
     sticker_file        "${cfg.dataDir}/sticker.sql"
     log_file            "syslog"
-    user                "mpd"
     ${if cfg.network.host != "any" then
    "bind_to_address     ${cfg.network.host}" else ""}
     ${if cfg.network.port != 6600 then
@@ -99,6 +98,9 @@ in {
       path = [ pkgs.mpd ];
       preStart = "mkdir -p ${cfg.dataDir} && chown -R mpd:mpd  ${cfg.dataDir}";
       script = "exec mpd --no-daemon ${mpdConf}";
+      serviceConfig = {
+        User = "mpd";
+      };
     };
 
     users.extraUsers.mpd = {

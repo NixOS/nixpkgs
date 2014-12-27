@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "nats";
-  version = "0.2";
-  sha256 = "05skqs5ahbrnwlsxjihkvmsw0n49k9mqdhrv9nqh4dmd1j622r73";
+  version = "1";
+  sha256 = "0r6s8l4s0yq3x2crrkv0b8zac13magfasr9v8hnq6rn1icsfhic0";
   buildDepends = [ hashable ];
   meta = {
     homepage = "http://github.com/ekmett/nats/";

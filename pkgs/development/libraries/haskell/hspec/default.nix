@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hspec";
-  version = "2.0.2";
-  sha256 = "19zxsadp1xwxdyp6zksaz4czdnmjd0x3gmbh7pqv6l4dxmd0545a";
+  version = "2.1.2";
+  sha256 = "04n34g7gbmbkyqzp9by4qdcf87m1gasmc2hnm8i0dqpcnssv05py";
   buildDepends = [
     hspecCore hspecDiscover hspecExpectations HUnit QuickCheck
     transformers

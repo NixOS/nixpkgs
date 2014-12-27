@@ -3,11 +3,11 @@
 , libvorbis, libtheora, speex, libkate, libopus }:
 
 stdenv.mkDerivation rec {
-  name = "icecast-2.4.0";
+  name = "icecast-2.4.1";
 
   src = fetchurl {
     url = "http://downloads.xiph.org/releases/icecast/${name}.tar.gz";
-    sha256 = "0chg8v3c0wkbakjcw73rsfccx13f28arrmmbz9p5fsmiw5bykdqp";
+    sha256 = "0js5lylrgklhvvaksx46zc8lc975qb1bns8h1ms545nv071rxy23";
   };
 
   buildInputs = [ libxml2 libxslt curl libvorbis libtheora speex libkate libopus ];

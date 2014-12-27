@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "opaleye";
-  version = "0.2";
-  sha256 = "08qlgsr8jcwn7sx2j08nk5lggx37mh0wc8gggj6gxqpafm0jn247";
+  version = "0.3";
+  sha256 = "1jq2q0dswgj5jksdd5xn2ny66d1nfqmwf7cv835gg59g4rd2yyrx";
   buildDepends = [
     contravariant postgresqlSimple productProfunctors profunctors
     semigroups text time transformers uuid

@@ -8,7 +8,7 @@ rec {
 
 
   # Override the compiler in stdenv for specific packages.
-  overrideGCC = stdenv: gcc: stdenv.override { allowedRequisites = null; inherit gcc; };
+  overrideGCC = stdenv: gcc: stdenv.override { allowedRequisites = null; cc = gcc; };
 
 
   # Add some arbitrary packages to buildInputs for specific packages.
@@ -27,63 +27,6 @@ rec {
   #     stdenv = overrideSetup stdenv ../stdenv/generic/setup-latest.sh;
   #   };
   overrideSetup = stdenv: setupScript: stdenv.override { inherit setupScript; };
-
-
-  # Return a modified stdenv that uses dietlibc to create small
-  # statically linked binaries.
-  useDietLibC = stdenv: stdenv //
-    { mkDerivation = args: stdenv.mkDerivation (args // {
-        NIX_CFLAGS_LINK = "-static";
-
-        # libcompat.a contains some commonly used functions.
-        NIX_LDFLAGS = "-lcompat";
-
-        # These are added *after* the command-line flags, so we'll
-        # always optimise for size.
-        NIX_CFLAGS_COMPILE =
-          args.NIX_CFLAGS_COMPILE or ""
-          + " -Os -s -D_BSD_SOURCE=1";
-
-        configureFlags =
-          args.configureFlags or ""
-          + " --disable-shared"; # brrr...
-
-        NIX_GCC = import ../build-support/gcc-wrapper {
-          inherit stdenv;
-          libc = pkgs.dietlibc;
-          inherit (stdenv.gcc) gcc binutils nativeTools nativePrefix;
-          nativeLibc = false;
-        };
-      });
-      isDietLibC = true;
-    };
-
-
-  # Return a modified stdenv that uses klibc to create small
-  # statically linked binaries.
-  useKlibc = stdenv: klibc: stdenv //
-    { mkDerivation = args: stdenv.mkDerivation (args // {
-        NIX_CFLAGS_LINK = "-static";
-
-        # These are added *after* the command-line flags, so we'll
-        # always optimise for size.
-        NIX_CFLAGS_COMPILE =
-          args.NIX_CFLAGS_COMPILE or "" + " -Os -s";
-
-        configureFlags =
-          args.configureFlags or "" + " --disable-shared"; # brrr...
-
-        NIX_GCC = pkgs.runCommand "klibc-wrapper" {} ''
-          mkdir -p $out/bin
-          ln -s ${klibc}/bin/klcc $out/bin/gcc
-          ln -s ${klibc}/bin/klcc $out/bin/cc
-          mkdir -p $out/nix-support
-          echo 'PATH=$PATH:${stdenv.gcc.binutils}/bin' > $out/nix-support/setup-hook
-        '';
-      });
-      isKlibc = true;
-      isStatic = true;
-    };
 
 
   # Return a modified stdenv that tries to build statically linked

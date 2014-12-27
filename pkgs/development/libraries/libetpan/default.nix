@@ -1,9 +1,19 @@
 { autoconf, automake, fetchgit, libtool, stdenv, openssl }:
 
-let version = "1.5"; in
+let version = "1.6"; in
 
 stdenv.mkDerivation {
   name = "libetpan-${version}";
+
+  src = fetchgit {
+    url = "git://github.com/dinhviethoa/libetpan";
+    rev = "refs/tags/" + version;
+    sha256 = "12n0vd0bwdyjcmwmpv1hdq5l04mqy6qfyy8mhsblddqaa1ah9qy8";
+  };
+
+  buildInputs = [ autoconf automake libtool openssl ];
+
+  configureScript = "./autogen.sh";
 
   meta = with stdenv.lib; {
     description = "An efficient, portable library for different kinds of mail access: IMAP, SMTP, POP, and NNTP";
@@ -11,14 +21,4 @@ stdenv.mkDerivation {
     license = licenses.bsd3;
     platforms = platforms.linux;
   };
-
-  src = fetchgit {
-    url = "git://github.com/dinhviethoa/libetpan";
-    rev = "refs/tags/" + version;
-    sha256 = "bf9465121a0fb09418215ee3474a400ea5bc5ed05a6811a2978afe4905e140c9";
-  };
-
-  buildInputs = [ autoconf automake libtool openssl ];
-
-  configureScript = "./autogen.sh";
 }

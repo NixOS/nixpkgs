@@ -23,14 +23,6 @@ stdenv.mkDerivation rec {
     sha256 = "16baa4g5lswkyjlyf1h5lwc0zjap7c4d8grw79349a5w6dsl8qnw";
   };
 
-  infinality_patch =
-    let subvers = "1";
-      in fetchurl {
-        url = http://www.infinality.net/fedora/linux/zips/fontconfig-infinality-1-20130104_1.tar.bz2;
-        sha256 = "1fm5xx0mx2243jrq5rxk4v0ajw2nawpj23399h710bx6hd1rviq7";
-      }
-    ;
-
   patches = [
     (fetchpatch ({
         url = "http://cgit.freedesktop.org/fontconfig/patch/?id=f44157c809d280e2a0ce87fb078fc4b278d24a67";
@@ -71,7 +63,7 @@ stdenv.mkDerivation rec {
   installFlags = "fc_cachedir=$(TMPDIR)/dummy RUN_FC_CACHE_TEST=false";
 
   postInstall = ''
-    cd "$out/etc/fonts" && tar xvf ${infinality_patch}
+    cd "$out/etc/fonts"
     rm conf.d/{50-user,51-local}.conf
     "${libxslt}/bin/xsltproc" --stringparam fontDirectories "${fontbhttf}" \
       --stringparam fontconfig "$out" \

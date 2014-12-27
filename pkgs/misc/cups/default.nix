@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ openssl ];
 
-  configureFlags = "--localstatedir=/var --enable-dbus"; # --with-dbusdir
+  configureFlags = "--localstatedir=/var --sysconfdir=/etc --enable-dbus"; # --with-dbusdir
 
   installFlags =
     [ # Don't try to write in /var at build time.
@@ -31,12 +31,19 @@ stdenv.mkDerivation {
       "DBUSDIR=$(out)/etc/dbus-1"
       "INITDIR=$(out)/etc/rc.d"
       "XINETD=$(out)/etc/xinetd.d"
+      "SERVERROOT=$(out)/etc/cups"
       # Idem for /usr.
       "MENUDIR=$(out)/share/applications"
       "ICONDIR=$(out)/share/icons"
       # Work around a Makefile bug.
       "CUPS_PRIMARY_SYSTEM_GROUP=root"
     ];
+
+  postInstall =
+    ''
+      # Delete obsolete stuff that conflicts with cups-filters.
+      rm -rf $out/share/cups/banners $out/share/cups/data/testprint
+    '';
 
   meta = {
     homepage = "http://www.cups.org/";

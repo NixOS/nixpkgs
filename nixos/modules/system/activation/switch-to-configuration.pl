@@ -181,7 +181,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
             } elsif ($unit =~ /\.mount$/) {
                 # Reload the changed mount unit to force a remount.
                 write_file($reloadListFile, { append => 1 }, "$unit\n");
-            } elsif ($unit =~ /\.socket$/ || $unit =~ /\.path$/) {
+            } elsif ($unit =~ /\.socket$/ || $unit =~ /\.path$/ || $unit =~ /\.slice$/) {
                 # FIXME: do something?
             } else {
                 my $unitInfo = parseUnit($newUnitFile);

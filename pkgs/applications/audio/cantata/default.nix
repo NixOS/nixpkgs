@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake
-, withQt4 ? true, qt4
-, withQt5 ? false, qt5
+, withQt4 ? false, qt4
+, withQt5 ? true, qt5
 
 # I'm unable to make KDE work here, crashes at runtime so I simply
 # make Qt4 the default until someone who wants KDE can figure it out.
@@ -39,7 +39,7 @@ assert withOnlineServices -> withTaglib;
 assert withReplaygain -> withTaglib;
 
 let
-  version = "1.5.0";
+  version = "1.5.1";
   pname = "cantata";
   fstat = x: fn: "-DENABLE_" + fn + "=" + (if x then "ON" else "OFF");
   fstats = x: map (fstat x);
@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     inherit name;
-    url = "https://drive.google.com/uc?export=download&id=0Bzghs6gQWi60c0pFbEtldEk1UnM";
-    sha256 = "0gnqfp3ps79d500hrivxj2xkkia042knhg86md6w8ycl3945611p";
+    url = "https://drive.google.com/uc?export=download&id=0Bzghs6gQWi60UktwaTRMTjRIUW8";
+    sha256 = "0y7y3nbiqgh1ghb47n4lfyp163wvazvhavlshb1c18ik03fkn5sp";
   };
 
   buildInputs =

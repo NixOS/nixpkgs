@@ -3,7 +3,7 @@
 
 with stdenv.lib;
 
-let version = "2.6.5";
+let version = "2.6.6";
     system-libraries = [
       "pcre"
       "boost"
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://downloads.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "0v58kyp4cj4yag0djnswfiifrcll5y7x772y99b3afg89xicpmjm";
+    sha256 = "0shb069xsqyslazdq66smr7ifppvdclbzpdjhrj2y3qb78y70pbm";
   };
 
   nativeBuildInputs = [ scons ];

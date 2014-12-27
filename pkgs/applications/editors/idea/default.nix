@@ -56,9 +56,9 @@ let
         snappyPath="lib/snappy-java-1.0.5"
         7z x -o"$snappyPath" "$snappyPath.jar"
         if [ "${stdenv.system}" == "x86_64-linux" ]; then
-          patchelf --set-rpath ${stdenv.gcc.gcc}/lib64 "$snappyPath/org/xerial/snappy/native/Linux/amd64/libsnappyjava.so"
+          patchelf --set-rpath ${stdenv.cc.gcc}/lib64 "$snappyPath/org/xerial/snappy/native/Linux/amd64/libsnappyjava.so"
         else
-          patchelf --set-rpath ${stdenv.gcc.gcc}/lib "$snappyPath/org/xerial/snappy/native/Linux/i386/libsnappyjava.so"
+          patchelf --set-rpath ${stdenv.cc.gcc}/lib "$snappyPath/org/xerial/snappy/native/Linux/i386/libsnappyjava.so"
         fi
         7z a -tzip "$snappyPath.jar" ./"$snappyPath"/*
         rm -vr "$snappyPath"
@@ -74,15 +74,9 @@ let
         && jdk=${jdk}/lib/openjdk \
         || jdk=${jdk}
 
-      if [ "${stdenv.system}" == "x86_64-linux" ]; then
-        makeWrapper "$out/$name/bin/fsnotifier64" "$out/bin/fsnotifier64"
-      else
-        makeWrapper "$out/$name/bin/fsnotifier" "$out/bin/fsnotifier"
-      fi
-
       makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${loName}" \
         --prefix PATH : "${jdk}/bin:${coreutils}/bin:${gnugrep}/bin:${which}/bin:${git}/bin" \
-        --prefix LD_RUN_PATH : "${stdenv.gcc.gcc}/lib/" \
+        --prefix LD_RUN_PATH : "${stdenv.cc.gcc}/lib/" \
         --prefix JDK_HOME : "$jdk" \
         --prefix ${hiName}_JDK : "$jdk"
 
@@ -295,13 +289,13 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "8.0.1";
-    build = "PS-138.2001";
+    version = "8.0.2";
+    build = "PS-139.732";
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "http://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "0d46442aa32174fe16846c3c31428178ab69b827d2e0ce31f633f13b64c01afc";
+      sha256 = "01b8vx6swi71sd0rc7i1jnicilqp11ch3zrm8gwb6xh1pmmpdirf";
     };
   };
 

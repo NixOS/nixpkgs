@@ -25,13 +25,13 @@ let
   opt = stdenv.lib.optional;
   mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
   major = "0.19";
-  minor = "5";
+  minor = "6";
 
 in stdenv.mkDerivation rec {
   name = "mpd-${major}.${minor}";
   src = fetchurl {
     url    = "http://www.musicpd.org/download/mpd/${major}/${name}.tar.gz";
-    sha256 = "09rhppfspzhx7jjz3rv8b71gasrkg6i9l25xm94l9sf36jgd2m33";
+    sha256 = "023h2d9x4yg1z2glnwf8h2j0p1xhn1hb0wf02mg70j3p0bz63imj";
   };
 
   buildInputs = [ pkgconfig glib boost ]

@@ -5,12 +5,12 @@ assert stdenv.isLinux;
 
 let
   libPath = stdenv.lib.makeLibraryPath
-    [ stdenv.gcc.libc stdenv.gcc.gcc gtk gdk_pixbuf atk pango glib cairo
+    [ stdenv.cc.libc stdenv.cc.gcc gtk gdk_pixbuf atk pango glib cairo
       freetype fontconfig libxml2 gnome2.gtksourceview
-    ] + ":${stdenv.gcc.gcc}/lib64";
+    ] + ":${stdenv.cc.gcc}/lib64";
 
   patchExe = x: ''
-    patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+    patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath ${libPath} ${x}
   '';
 in

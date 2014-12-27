@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ad";
-  version = "4.2.1";
-  sha256 = "05ndr26lsc4xa18vfb3qdjcp03gsq2bhc8dc0yr5g1x9dybq6dx2";
+  version = "4.2.1.1";
+  sha256 = "1zdpfh4k93ygrm91m7lw1la6n4yvaq3k2sqswgia04naf2wcmjka";
   buildDepends = [
     comonad dataReify erf free nats reflection tagged transformers
   ];

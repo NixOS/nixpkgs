@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "mysql-5.1.73";
 
   src = fetchurl {
-    url = "http://cdn.mysql.com/Downloads/MySQL-5.1/${name}.tar.gz";
+    url = "mirror://mysql/MySQL-5.1/${name}.tar.gz";
     sha256 = "1dfwi4ck0vq6sdci6gz0031s7zz5lc3pddqlgm0292s00l9y5sq5";
   };
 

@@ -8,7 +8,7 @@ let
     ln -sv /usr/sbin/dtrace $out/bin
   '';
 
-  version = if unstableVersion then "0.11.13" else "0.10.32";
+  version = if unstableVersion then "0.11.13" else "0.10.33";
 
   # !!! Should we also do shared libuv?
   deps = {
@@ -37,7 +37,7 @@ in stdenv.mkDerivation {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
     sha256 = if unstableVersion
              then "1642zj3sajhqflfhb8fsvy84w9mm85wagm8w8300gydd2q6fkmhm"
-             else "040g0gh2nl593ml1fcqp68vxa5kj7aiw1nqirda1c69d7l70s4n2";
+             else "07h8vl750svjg8x5zhxhwjkx03jpy2m6h3fbj7fd1rj4671jdp3m";
   };
 
   configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps);

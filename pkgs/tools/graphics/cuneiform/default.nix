@@ -31,7 +31,7 @@ rec {
   needLib64 = a.stdenv.system == "x86_64-linux";
 
   postInstall = a.fullDepEntry(''
-    patchelf --set-rpath $out/lib${if needLib64 then "64" else ""}${if a.stdenv.gcc.gcc != null then ":${a.stdenv.gcc.gcc}/lib" else ""}${if a.stdenv.gcc.gcc != null && needLib64 then ":${a.stdenv.gcc.gcc}/lib64" else ""}:${a.imagemagick}/lib $out/bin/cuneiform
+    patchelf --set-rpath $out/lib${if needLib64 then "64" else ""}${if a.stdenv.cc.gcc != null then ":${a.stdenv.cc.gcc}/lib" else ""}${if a.stdenv.cc.gcc != null && needLib64 then ":${a.stdenv.cc.gcc}/lib64" else ""}:${a.imagemagick}/lib $out/bin/cuneiform
   '') ["minInit" "addInputs" "doMakeInstall"];
 
   name = "cuneiform-" + version;

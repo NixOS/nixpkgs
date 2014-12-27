@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram "$out/bin/mysql-workbench" \
       --prefix LD_LIBRARY_PATH : "${python}/lib" \
-      --prefix LD_LIBRARY_PATH : "$(cat ${stdenv.gcc}/nix-support/orig-gcc)/lib64" \
+      --prefix LD_LIBRARY_PATH : "$(cat ${stdenv.cc}/nix-support/orig-gcc)/lib64" \
       --prefix PATH : "${gnome_keyring}/bin" \
       --prefix PATH : "${python}/bin" \
       --set PYTHONPATH $PYTHONPATH \

@@ -9,11 +9,11 @@ let
 in
 
 (
-assert a.stdenv ? gcc ;
-assert a.stdenv.gcc ? gcc ;
-assert a.stdenv.gcc ? libc ;
-assert a.stdenv.gcc.gcc != null ;
-assert a.stdenv.gcc.libc != null ;
+assert a.stdenv ? cc ;
+assert a.stdenv.cc ? gcc ;
+assert a.stdenv.cc ? libc ;
+assert a.stdenv.cc.gcc != null ;
+assert a.stdenv.cc.libc != null ;
 
 rec {
   src = a.fetchurl {
@@ -37,7 +37,7 @@ rec {
   preBuild = a.fullDepEntry (''
     sed -re "s@/bin/cat@$(which cat)@g" -i configure */configure
     sed -re "s@if test -d /proc/self @if false @" -i configure
-    sed -re 's^([ \t])cpp ^\1cpp -I${a.stdenv.gcc.gcc}/include -I${a.stdenv.gcc.libc}/include ^g' -i makefile
+    sed -re 's^([ \t])cpp ^\1cpp -I${a.stdenv.cc.gcc}/include -I${a.stdenv.cc.libc}/include ^g' -i makefile
   '') ["minInit" "doUnpack" "addInputs"];
 
   /* doConfigure should be removed if not needed */

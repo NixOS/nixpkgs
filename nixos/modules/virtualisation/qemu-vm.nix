@@ -57,8 +57,7 @@ let
           -name ${vmName} \
           -m ${toString config.virtualisation.memorySize} \
           ${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
-          -net nic,vlan=0,model=virtio \
-          -net user,vlan=0''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} \
+          ${concatStringsSep " " config.virtualisation.qemu.networkingOptions} \
           -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
           -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
           -virtfs local,path=''${SHARED_DIR:-$TMPDIR/xchg},security_model=none,mount_tag=shared \
@@ -248,12 +247,31 @@ in
         description = "Primary IP address used in /etc/hosts.";
       };
 
-    virtualisation.qemu.options =
-      mkOption {
-        default = [];
-        example = [ "-vga std" ];
-        description = "Options passed to QEMU.";
-      };
+    virtualisation.qemu = {
+      options =
+        mkOption {
+          default = [];
+          example = [ "-vga std" ];
+          description = "Options passed to QEMU.";
+        };
+
+      networkingOptions =
+        mkOption {
+          default = [
+            "-net nic,vlan=0,model=virtio"
+            "-net user,vlan=0\${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}"
+          ];
+          type = types.listOf types.str;
+          description = ''
+            Networking-related command-line options that should be passed to qemu.
+            The default is to use userspace networking (slirp).
+
+            If you override this option, be adviced to keep
+            ''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} (as seen in the default)
+            to keep the default runtime behaviour.
+          '';
+        };
+    };
 
     virtualisation.useBootLoader =
       mkOption {

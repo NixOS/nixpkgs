@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pipes-http";
-  version = "1.0.1";
-  sha256 = "15jmhf6lgqxv9zn08dky8biiv8cp4s3vf0xmp78pbllaqkvm4z9w";
+  version = "1.0.2";
+  sha256 = "0hqab1pzcj11qwvc4dznis0qsyn1zc1d0riqxy6b5k04p9i2jbzk";
   buildDepends = [ httpClient httpClientTls pipes ];
   jailbreak = true;
   meta = {

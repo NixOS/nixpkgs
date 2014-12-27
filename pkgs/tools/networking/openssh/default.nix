@@ -75,5 +75,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ eelco ];
+    broken = hpnSupport; # probably after 6.7 update
   };
 }

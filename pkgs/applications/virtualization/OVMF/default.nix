@@ -1,4 +1,4 @@
-{ stdenv, edk2 }:
+{ stdenv, edk2, nasm, iasl }:
 
 let
 
@@ -12,8 +12,9 @@ let
 in
 
 stdenv.mkDerivation (edk2.setup "OvmfPkg/OvmfPkg${targetArch}.dsc" {
-  name = "OVMF-2014-02-01";
+  name = "OVMF-2014-12-10";
 
+  buildInputs = [nasm iasl];
   unpackPhase = ''
     for file in \
       "${edk2.src}"/{OvmfPkg,UefiCpuPkg,MdeModulePkg,IntelFrameworkModulePkg,PcAtChipsetPkg,FatBinPkg,EdkShellBinPkg,MdePkg,ShellPkg,OptionRomPkg,IntelFrameworkPkg};
@@ -25,7 +26,7 @@ stdenv.mkDerivation (edk2.setup "OvmfPkg/OvmfPkg${targetArch}.dsc" {
   meta = {
     description = "Sample UEFI firmware for QEMU and KVM";
     homepage = http://sourceforge.net/apps/mediawiki/tianocore/index.php?title=OVMF;
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd2;
     maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms = ["x86_64-linux" "i686-linux"];
   };

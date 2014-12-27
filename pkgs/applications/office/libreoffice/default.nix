@@ -176,7 +176,8 @@ stdenv.mkDerivation rec {
 
     ln -s $out/lib/libreoffice/share/xdg $out/share/applications
     for f in $out/share/applications/*.desktop; do
-      substituteInPlace "$f" --replace "Exec=libreoffice4.0" "Exec=$out/bin/soffice"
+      substituteInPlace "$f" --replace "Exec=libreofficedev${major}.${minor}" "Exec=$out/bin/soffice"
+      substituteInPlace "$f" --replace "Exec=libreoffice${major}.${minor}" "Exec=$out/bin/soffice"
       substituteInPlace "$f" --replace "Exec=libreoffice" "Exec=$out/bin/soffice"
     done
   '';

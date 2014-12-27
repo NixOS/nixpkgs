@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   libPath =
     stdenv.lib.makeLibraryPath [
       openssl alsaLib libXext libXfixes libXrandr libjpeg curl_custom
-      libX11 libXmu libXv qt4 libXtst mesa stdenv.gcc.gcc zlib
+      libX11 libXmu libXv qt4 libXtst mesa stdenv.cc.gcc zlib
       gnome.GConf libidn rtmpdump c-ares openldap
     ];
   buildCommand = ''
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     cp -R usr/lib/fuzebox $out/lib
 
     patchelf \
-      --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath $out/lib/fuzebox:$libPath \
       $out/lib/fuzebox/FuzeLinuxApp
 

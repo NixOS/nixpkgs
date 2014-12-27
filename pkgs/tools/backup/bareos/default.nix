@@ -9,12 +9,12 @@ assert sqlite != null || postgresql != null || mysql != null;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "bareos-${version}";
-  version = "14.2.1";
+  version = "14.2.2";
 
   src = fetchgit {
     url = "git://github.com/bareos/bareos";
     rev = "refs/tags/Release/${version}";
-    sha256 = "0m7v1szi45m71zjhj3inn5hh9f4529slhiihm88rfw8006aqb6ly";
+    sha256 = "05mkhhgnkz6y3m5msf1zq3b63k2l2fci9xg0k9347b3shmg61pqd";
   };
 
   buildInputs = [

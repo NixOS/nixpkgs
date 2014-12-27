@@ -72,6 +72,8 @@ stdenv.mkDerivation rec {
 
     dontUseCmakeConfigure = true;
 
+    patches = [ ./0005-CEC-renamed-the-iDoubleTapTimeoutMs-in-the-new-libCE.patch ];
+
     preConfigure = ''
       substituteInPlace xbmc/linux/LinuxTimezone.cpp \
         --replace 'usr/share/zoneinfo' 'etc/zoneinfo'

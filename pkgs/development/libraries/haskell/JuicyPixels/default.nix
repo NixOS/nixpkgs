@@ -6,14 +6,14 @@
 
 cabal.mkDerivation (self: {
   pname = "JuicyPixels";
-  version = "3.1.7.1";
-  sha256 = "0mhsknqdrhxnm622mgrswvj4kvksh87x18s5ddgk4ylf0s2fjlap";
+  version = "3.2";
+  sha256 = "1z4i0464zdijv54b7wzc55zrp8h67ahm6mrdk7a6gi2qm0nihmy5";
   buildDepends = [
     binary deepseq mtl primitive transformers vector zlib
   ];
   meta = {
     homepage = "https://github.com/Twinside/Juicy.Pixels";
-    description = "Picture loading/serialization (in png, jpeg, bitmap, gif, tiff and radiance)";
+    description = "Picture loading/serialization (in png, jpeg, bitmap, gif, tga, tiff and radiance)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };

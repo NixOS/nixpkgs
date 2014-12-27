@@ -14,7 +14,7 @@ patchShebangs $out
 for f in $out/bin/*; do
   b=$(basename $f)
   if [ $b == "ozemulator" ] || [ $b == "ozwish" ]; then
-     patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+     patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
 	 --set-rpath $libPath \
 	 $f
     continue;

@@ -88,7 +88,7 @@ let
       done
 
       ${optionalString config.networking.usePredictableInterfaceNames ''
-        cp ${./80-net-name-slot.rules} $out/80-net-name-slot.rules
+        cp ${./80-net-setup-link.rules} $out/80-net-setup-link.rules
       ''}
 
       # If auto-configuration is disabled, then remove

@@ -1,0 +1,8 @@
+--- ./scripts/CrashPlanDesktop    2014-12-18 09:51:14.050804325 +0100
++++ ./scripts/CrashPlanDesktop-1  2014-12-18 09:51:32.271009382 +0100
+@@ -9,4 +9,4 @@
+ 
+ cd ${TARGETDIR}
+ 
+-${JAVACOMMON} ${GUI_JAVA_OPTS} -classpath "./lib/com.backup42.desktop.jar:./lang:./skin" com.backup42.desktop.CPDesktop > ${TARGETDIR}/log/ui_output.log 2> ${TARGETDIR}/log/ui_error.log &
++${JAVACOMMON} ${GUI_JAVA_OPTS} -classpath "./lib/com.backup42.desktop.jar:./lang:./skin" com.backup42.desktop.CPDesktop &

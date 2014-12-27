@@ -15,7 +15,7 @@ been built.  These channels are:
 <itemizedlist>
   <listitem>
     <para>Stable channels, such as <literal
-    xlink:href="http://nixos.org/channels/nixos-14.04">nixos-14.04</literal>.
+    xlink:href="https://nixos.org/channels/nixos-14.04">nixos-14.04</literal>.
     These only get conservative bug fixes and package upgrades.  For
     instance, a channel update may cause the Linux kernel on your
     system to be upgraded from 3.4.66 to 3.4.67 (a minor bug fix), but
@@ -26,7 +26,7 @@ been built.  These channels are:
   </listitem>
   <listitem>
     <para>The unstable channel, <literal
-    xlink:href="http://nixos.org/channels/nixos-unstable">nixos-unstable</literal>.
+    xlink:href="https://nixos.org/channels/nixos-unstable">nixos-unstable</literal>.
     This corresponds to NixOS’s main development branch, and may thus
     see radical changes between channel updates.  It’s not recommended
     for production systems.</para>
@@ -34,7 +34,7 @@ been built.  These channels are:
 </itemizedlist>
 
 To see what channels are available, go to <link
-xlink:href="http://nixos.org/channels"/>.  (Note that the URIs of the
+xlink:href="https://nixos.org/channels"/>.  (Note that the URIs of the
 various channels redirect to a directory that contains the channel’s
 latest version and includes ISO images and VirtualBox
 appliances.)</para>
@@ -53,20 +53,20 @@ nixos https://nixos.org/channels/nixos-unstable
 To switch to a different NixOS channel, do
 
 <screen>
-$ nix-channel --add http://nixos.org/channels/<replaceable>channel-name</replaceable> nixos
+$ nix-channel --add https://nixos.org/channels/<replaceable>channel-name</replaceable> nixos
 </screen>
 
 (Be sure to include the <literal>nixos</literal> parameter at the
 end.)  For instance, to use the NixOS 14.04 stable channel:
 
 <screen>
-$ nix-channel --add http://nixos.org/channels/nixos-14.04 nixos
+$ nix-channel --add https://nixos.org/channels/nixos-14.04 nixos
 </screen>
 
 But if you want to live on the bleeding edge:
 
 <screen>
-$ nix-channel --add http://nixos.org/channels/nixos-unstable nixos
+$ nix-channel --add https://nixos.org/channels/nixos-unstable nixos
 </screen>
 
 </para>

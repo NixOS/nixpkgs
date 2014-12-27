@@ -1,32 +1,29 @@
 { stdenv, fetchurl, ghc, perl, gmp, ncurses, happy, alex }:
 
 stdenv.mkDerivation rec {
-  version = "7.9.20141106";
+  version = "7.9.20141217";
   name = "ghc-${version}";
 
   src = fetchurl {
-    url = "http://deb.haskell.org/dailies/2014-11-06/ghc_${version}.orig.tar.bz2";
-    sha256 = "1si8wx8a2lrg5ba13vwpisssxa3rcxi5a7fqxhgapa8d2i2w7gaz";
+    url = "http://deb.haskell.org/dailies/2014-12-17/ghc_${version}.orig.tar.bz2";
+    sha256 = "1yfdi9r07aqbnv6xfdhs6cpj0y0yjdr03l5sa4dv0j1xs3lh1wkv";
   };
 
-  buildInputs = [ ghc perl gmp ncurses happy alex ];
-
-  enableParallelBuilding = true;
-
-  buildMK = ''
-    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp}/lib"
-    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp}/include"
-    DYNAMIC_BY_DEFAULT = NO
-  '';
+  buildInputs = [ ghc perl ncurses happy alex ];
 
   preConfigure = ''
-    echo "${buildMK}" > mk/build.mk
+    echo >mk/build.mk "DYNAMIC_BY_DEFAULT = NO"
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
   '';
 
-  configureFlags = "--with-gcc=${stdenv.gcc}/bin/gcc";
+  configureFlags = [
+    "--with-gcc=${stdenv.cc}/bin/cc"
+    "--with-gmp-includes=${gmp}/include" "--with-gmp-libraries=${gmp}/lib"
+  ];
+
+  enableParallelBuilding = true;
 
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
@@ -35,11 +32,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
-    maintainers = [
-      stdenv.lib.maintainers.marcweber
-      stdenv.lib.maintainers.andres
-      stdenv.lib.maintainers.simons
-    ];
+    maintainers = with stdenv.lib.maintainers; [ marcweber andres simons ];
     inherit (ghc.meta) license platforms;
   };
 

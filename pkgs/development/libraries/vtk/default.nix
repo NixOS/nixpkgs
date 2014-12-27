@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Open source libraries for 3D computer graphics, image processing and visualization";
     homepage = http://www.vtk.org/;
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ viric bbenoist ];
     platforms = with stdenv.lib.platforms; linux;
   };

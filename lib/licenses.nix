@@ -135,7 +135,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   };
 
   gpl1 = spdx {
-    shortName = "GPL-1.0";
+    spdxId = "GPL-1.0";
     fullName = "GNU General Public License v1.0 only";
   };
 
@@ -253,6 +253,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   lppl12 = spdx {
     spdxId = "LPPL-1.2";
     fullName = "LaTeX Project Public License v1.2";
+  };
+
+  lppl13c = spdx {
+    spdxId = "LPPL-1.3c";
+    fullName = "LaTeX Project Public License v1.3c";
   };
 
   lpl-102 = spdx {

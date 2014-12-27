@@ -20,11 +20,8 @@ stdenv.mkDerivation rec {
 
   patches =
     [ # These are all changes between upstream and
-      # https://github.com/edolstra/systemd/tree/nixos-v216.
+      # https://github.com/edolstra/systemd/tree/nixos-v217.
       ./fixes.patch
-      # Fixes systemd-journald so that it does not get killed
-      # by systemd-journal-flush starting too quickly
-      ./systemd-journald-type-notify.patch
     ];
 
   buildInputs =
@@ -89,7 +86,7 @@ stdenv.mkDerivation rec {
 
   # This is needed because systemd uses the gold linker, which doesn't
   # yet have the wrapper script to add rpath flags automatically.
-  NIX_LDFLAGS = "-rpath ${pam}/lib -rpath ${libcap}/lib -rpath ${acl}/lib -rpath ${stdenv.gcc.gcc}/lib";
+  NIX_LDFLAGS = "-rpath ${pam}/lib -rpath ${libcap}/lib -rpath ${acl}/lib -rpath ${stdenv.cc.gcc}/lib";
 
   PYTHON_BINARY = "${coreutils}/bin/env python"; # don't want a build time dependency on Python
 

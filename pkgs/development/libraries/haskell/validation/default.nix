@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "validation";
-  version = "0.4.1";
-  sha256 = "05mws9gqlqjmzcw6d3kclrh9dybchhp61qsfwg77h31n44j7w0mh";
+  version = "0.4.2";
+  sha256 = "0rsa3n3zawywbpi1gvhfrfglxf9mkmkidkc216ld3s02pmsdmclm";
   buildDepends = [
     bifunctors lens semigroupoids semigroups transformers
   ];

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "ONC RPC portmapper";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
     longDescription = ''
       Universal addresses to RPC program number mapper.
     '';

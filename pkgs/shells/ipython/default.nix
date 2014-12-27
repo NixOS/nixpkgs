@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonPackages, pyqt4 ? null, sip ? null
+{ stdenv, fetchurl, buildPythonPackage, pythonPackages, pyqt4 ? null
 , notebookSupport ? true   # ipython notebook
 , qtconsoleSupport ? true  # ipython qtconsole
 , pylabSupport ? true      # ipython --pylab    (backend: agg - no gui, just file)
@@ -10,15 +10,15 @@
 # pyqt4 for both.
 
 assert qtconsoleSupport == true -> pyqt4 != null;
-assert pylabQtSupport == true -> pyqt4 != null && sip != null;
+assert pylabQtSupport == true -> pyqt4 != null;
 
 buildPythonPackage rec {
-  name = "ipython-2.2.0";
+  name = "ipython-2.3.1";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://pypi.python.org/packages/source/i/ipython/${name}.tar.gz";
-    sha256 = "1qk44lmir24gnwb3gxh0mqcghc8ln1i5ygxpalh06bx0ajx7gjmp";
+    sha256 = "1764gi5m3ff481rjk336cw6i2h4zlc0nxam9rc5m8m7yl9m4d61y";
   };
 
   propagatedBuildInputs = [
@@ -37,7 +37,6 @@ buildPythonPackage rec {
   ] ++ stdenv.lib.optionals pylabQtSupport [
     pythonPackages.matplotlib
     pyqt4
-    sip
   ];
 
   doCheck = false;
@@ -45,7 +44,7 @@ buildPythonPackage rec {
   meta = {
     homepage = http://ipython.scipy.org/;
     description = "An interactive computing environment for Python";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
     longDescription = ''
       The goal of IPython is to create a comprehensive environment
       for interactive and exploratory computing. It consists of an

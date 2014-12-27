@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "uuid";
-  version = "1.3.4";
-  sha256 = "03gab2dg52i4ysxw6vdzdd018qy0lycq7x3gcbx0r9c8vsqvafmc";
+  version = "1.3.7";
+  sha256 = "01idfi9vdmcz8fkgnfa0bpz6khx4x2r0rzynzha42irl7881da21";
   buildDepends = [
     binary cryptohash deepseq hashable networkInfo random time
   ];
@@ -19,7 +19,7 @@ cabal.mkDerivation (self: {
   jailbreak = true;
   doCheck = false;
   meta = {
-    homepage = "http://projects.haskell.org/uuid/";
+    homepage = "https://github.com/aslatter/uuid";
     description = "For creating, comparing, parsing and printing Universally Unique Identifiers";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

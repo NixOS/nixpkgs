@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "DRBG";
-  version = "0.5.2";
-  sha256 = "0c8w8h2mxpk2avj6321q9a1smzp970cyn87aj98vn8dln7h9cqsi";
+  version = "0.5.3";
+  sha256 = "197kp2bchkj3zrl3f06glba9lbjf51mp710sx0qj8i4spvf3jfr8";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

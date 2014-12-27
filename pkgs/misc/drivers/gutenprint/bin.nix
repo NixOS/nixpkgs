@@ -38,7 +38,7 @@ stdenv.mkDerivation {
 
   phases = "buildPhase";
 
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.gcc.gcc zlib ];
+  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.gcc zlib ];
 
   buildPhase = ''
     ar -x $src data.tar.gz
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
         $out/cups/lib/backend/{canon,epson} \
         $out/sbin/cups-genppd.5.0 \
       ; do
-      patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+      patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath $libPath $p
     done
     

@@ -4,9 +4,10 @@
 
 cabal.mkDerivation (self: {
   pname = "product-profunctors";
-  version = "0.5";
-  sha256 = "02hkcq4vzk4641hkm1rf2v2qdbaqalbfgnwfdk7yfz497qv9lmad";
+  version = "0.6";
+  sha256 = "1qhl2v0shzip5yh7x7b6k7xsnd4d5spf1f69h0qr0l57lm6jywl4";
   buildDepends = [ contravariant profunctors ];
+  testDepends = [ profunctors ];
   jailbreak = true;
   meta = {
     homepage = "https://github.com/tomjaguarpaw/product-profunctors";

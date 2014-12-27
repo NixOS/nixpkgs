@@ -29,7 +29,8 @@ in stdenv.mkDerivation {
     export PYTHONPATH=$PYTHONPATH:$out/lib/${python.libPrefix}/site-packages
 
     substituteInPlace configure.py \
-      --replace 'install_dir=pydbusmoddir' "install_dir='$out/lib/${python.libPrefix}/site-packages/dbus/mainloop'"
+      --replace 'install_dir=pydbusmoddir' "install_dir='$out/lib/${python.libPrefix}/site-packages/dbus/mainloop'" \
+      --replace "ModuleMetadata(qmake_QT=['webkitwidgets'])" "ModuleMetadata(qmake_QT=['webkitwidgets', 'printsupport'])"
 
     ${python.executable} configure.py  -w \
       --confirm-license \

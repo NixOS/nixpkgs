@@ -1,7 +1,7 @@
 { config, lib, pkgs, utils, ... }:
 
-with lib;
 with utils;
+with lib;
 
 let
 
@@ -51,6 +51,8 @@ in
           DHCP = override (dhcpStr cfg.useDHCP);
         } // optionalAttrs (cfg.defaultGateway != null) {
           gateway = override [ cfg.defaultGateway ];
+        } // optionalAttrs (cfg.defaultGateway6 != null) {
+          gateway = override [ cfg.defaultGateway6 ];
         } // optionalAttrs (domains != [ ]) {
           domains = override domains;
         };

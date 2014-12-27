@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
       mv ts3client_linux_${arch} ts3client
       echo "patching ts3client..."
       patchelf \
-        --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-        --set-rpath ${stdenv.lib.makeLibraryPath deps}:$(cat $NIX_GCC/nix-support/orig-gcc)/${libDir} \
+        --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath ${stdenv.lib.makeLibraryPath deps}:$(cat $NIX_CC/nix-support/orig-gcc)/${libDir} \
         --force-rpath \
         ts3client
     '';

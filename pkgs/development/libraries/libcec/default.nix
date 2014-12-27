@@ -1,13 +1,13 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, udev }:
 
-let version = "2.1.4"; in
+let version = "2.2.0"; in
 
 stdenv.mkDerivation {
   name = "libcec-${version}";
 
   src = fetchurl {
-    url = "https://github.com/Pulse-Eight/libcec/archive/libcec-${version}.tar.gz";
-    sha256 = "0iz11zclbs3gk4ddq0pm4vyq015qmvy4nb9sra3vk6jw58izbgkr";
+    url = "https://github.com/Pulse-Eight/libcec/archive/libcec-${version}-repack.tar.gz";
+    sha256 = "1kdfak8y96v14d5vp2apkjjs0fvvim9phc0nkhlq5pjlagk8v32x";
   };
 
   buildInputs = [ autoreconfHook pkgconfig udev ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    description = "USB CEC adapter communication library";
+    description = "Allows you (with the right hardware) to control your device with your TV remote control using existing HDMI cabling";
     homepage = "http://libcec.pulse-eight.com";
     repositories.git = "https://github.com/Pulse-Eight/libcec.git";
     license = stdenv.lib.licenses.gpl2Plus;

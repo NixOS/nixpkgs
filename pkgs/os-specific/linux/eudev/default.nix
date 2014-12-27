@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, glib, gperf}:
+{stdenv, fetchurl, pkgconfig, glib, gperf, utillinux}:
 let
   s = # Generated upstream information
   rec {
@@ -9,7 +9,7 @@ let
     sha256="0shf5vqiz9fdxl95aa1a8vh0xjxwim3psc39wr2xr8lnahf11vva";
   };
   buildInputs = [
-    glib pkgconfig gperf
+    glib pkgconfig gperf utillinux
   ];
 in
 stdenv.mkDerivation {
@@ -18,6 +18,24 @@ stdenv.mkDerivation {
   src = fetchurl {
     inherit (s) url sha256;
   };
+  configureFlags = [
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+  ];
+  makeFlags = [
+    "hwdb_bin=/var/lib/udev/hwdb.bin"
+    "udevrulesdir=/etc/udev/rules.d"
+    ];
+  installFlags =
+    [
+    "localstatedir=$(TMPDIR)/var"
+    "sysconfdir=$(out)/etc"
+    "udevconfdir=$(out)/etc/udev"
+    "udevhwdbbin=$(out)/var/lib/udev/hwdb.bin"
+    "udevhwdbdir=$(out)/var/lib/udev/hwdb.d"
+    "udevrulesdir=$(out)/var/lib/udev/rules.d"
+    ];
+  enableParallelBuilding = true;
   meta = {
     inherit (s) version;
     description = ''An udev fork by Gentoo'';

@@ -2,22 +2,28 @@
 , libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php, re2c
 , expat, libcap, oniguruma, libdwarf, libmcrypt, tbb, gperftools, glog
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam, libpng
-, libxslt, ocaml, freetype
+, libxslt, ocaml, freetype, gdb
 }:
 
 stdenv.mkDerivation rec {
   name    = "hhvm-${version}";
-  version = "3.2.0";
+  version = "3.3.0";
 
+  # use git version since we need submodules
   src = fetchgit {
     url    = "https://github.com/facebook/hhvm.git";
-    rev    = "01228273b8cf709aacbd3df1c51b1e690ecebac8";
-    sha256 = "418d5a55ac4ba5335a42329ebfb7dd96fdb8d5edbc2700251c86e9fa2ae4a967";
+    rev    = "e0c98e21167b425dddf1fc9efe78c9f7a36db268";
+    sha256 = "0s32v713xgf4iim1zb9sg08sg1r1fs49czar3jxajsi0dwc0lkj9";
     fetchSubmodules = true;
   };
 
+  patches = [
+    ./3918a2ccceb98230ff517601ad60aa6bee36e2c4.patch
+    ./8207a31c26cc42fee79363a14c4a8f4fcbfffe63.patch
+  ];
+
   buildInputs =
-    [ cmake pkgconfig boost libunwind mariadb libmemcached pcre
+    [ cmake pkgconfig boost libunwind mariadb libmemcached pcre gdb
       libevent gd curl libxml2 icu flex bison openssl zlib php expat libcap
       oniguruma libdwarf libmcrypt tbb gperftools bzip2 openldap readline
       libelf uwimap binutils cyrus_sasl pam glog libpng libxslt ocaml
@@ -34,7 +40,7 @@ stdenv.mkDerivation rec {
   # work around broken build system
   NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2";
 
-  patchPhase = ''
+  prePatch = ''
     substituteInPlace hphp/util/generate-buildinfo.sh \
       --replace /bin/bash ${stdenv.shell}
     substituteInPlace ./configure \

@@ -64,7 +64,7 @@ in
     security.sudo.configFile =
       ''
         # Don't edit this file. Set the NixOS options ‘security.sudo.configFile’
-        # and security.sudo.extraConfig instead.
+        # or ‘security.sudo.extraConfig’ instead.
 
         # Environment variables to keep for root and %wheel.
         Defaults:root,%wheel env_keep+=TERMINFO_DIRS
@@ -90,11 +90,10 @@ in
     environment.etc = singleton
       { source =
           pkgs.runCommand "sudoers"
-	  {src = pkgs.writeText "sudoers-in" cfg.configFile; }
+          { src = pkgs.writeText "sudoers-in" cfg.configFile; }
           # Make sure that the sudoers file is syntactically valid.
           # (currently disabled - NIXOS-66)
-          "${pkgs.sudo}/sbin/visudo -f $src -c &&
-	      cp $src $out";
+          "${pkgs.sudo}/sbin/visudo -f $src -c && cp $src $out";
         target = "sudoers";
         mode = "0440";
       };

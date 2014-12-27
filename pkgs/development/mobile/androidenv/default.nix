@@ -128,6 +128,12 @@ rec {
     useGoogleAPIs = true;
   };
 
+  androidsdk_5_0_1 = androidsdk {
+    platformVersions = [ "21" ];
+    abiVersions = [ "armeabi-v7a" "x86" ];
+    useGoogleAPIs = true;
+  };
+
   androidndk = import ./androidndk.nix {
     inherit (pkgs) stdenv fetchurl zlib ncurses p7zip lib makeWrapper;
     inherit (pkgs) coreutils file findutils gawk gnugrep gnused jdk which;

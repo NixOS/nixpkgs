@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
            -e "s|/usr/src/unifont.bdf|$PWD/unifont.bdf|g"
     '';
 
-  patches = [ ./fix-bash-completion.patch ];
+  patches = [ ./fix-bash-completion.patch ./glibc-2.20.patch ];
 
   configureFlags = optional zfsSupport "--enable-libzfs"
     ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystems.${stdenv.system}.target}" "--program-prefix=" ];

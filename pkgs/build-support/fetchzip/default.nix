@@ -12,7 +12,7 @@
 , url
 , ... } @ args:
 
-fetchurl ({
+lib.overrideDerivation (fetchurl ({
   name = args.name or (baseNameOf url);
 
   recursiveHash = true;
@@ -39,4 +39,6 @@ fetchurl ({
       mv $out/$fn/* "$out/"
       rmdir "$out/$fn"
     '';
-} // args)
+} // args))
+# Hackety-hack: we actually need unzip hooks, too
+(x: {nativeBuildInputs = x.nativeBuildInputs++ [unzip];})

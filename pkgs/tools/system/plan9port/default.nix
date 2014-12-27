@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libX11, libXt
+{stdenv, fetchurl, which, libX11, libXt, fontconfig
 , xproto ? null
 , xextproto ? null
 , libXext ? null }:
@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "1sza12j3db7i54r3pzli8wmby6aiyzmyfj8w0nidmawkwv6jdf6b";
   };
 
-  buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 xproto libXt xextproto libXext ];
+  NIX_LDFLAGS="-lgcc_s";
+  buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [ which libX11 fontconfig xproto libXt xextproto libXext ];
 
   enableParallelBuilding = true;
 
@@ -25,8 +26,10 @@ stdenv.mkDerivation rec {
     homepage = "http://swtch.com/plan9port/";
     description = "Plan 9 from User Space";
     license = licenses.lpl-102;
+    maintainers = [ stdenv.lib.maintainers.ftrvxmtrx ];
     platforms = platforms.unix;
   };
 
   inherit libXt;
+  inherit fontconfig;
 }

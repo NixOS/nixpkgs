@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses libpcap ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+
   meta = with stdenv.lib; {
     description = "libpcap based program for live TCP connection monitoring";
     homepage = http://www.rhythm.cx/~steve/devel/tcptrack/; # dead link

@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "taffybar";
-  version = "0.4.3";
-  sha256 = "1h7acdzq3bndy44lyvgnm3gvxpbhzcs0ymvkrhmn3y41bfcwaac2";
+  version = "0.4.4";
+  sha256 = "046nfp878mqj9acsid94mqp8q1yqnm1hsdkv88m5qpmn182xljwh";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

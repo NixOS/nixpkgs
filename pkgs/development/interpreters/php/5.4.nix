@@ -41,8 +41,12 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       };
 
       curl = {
-        configureFlags = ["--with-curl=${curl}" "--with-curlwrappers"];
+        configureFlags = ["--with-curl=${curl}"];
         buildInputs = [curl openssl];
+      };
+
+      curlWrappers = {
+        configureFlags = ["--with-curlwrappers"];
       };
 
       zlib = {
@@ -199,6 +203,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     bcmathSupport = config.php.bcmath or true;
     socketsSupport = config.php.sockets or true;
     curlSupport = config.php.curl or true;
+    curlWrappersSupport = config.php.curlWrappers or false;
     gettextSupport = config.php.gettext or true;
     pcntlSupport = config.php.pcntl or true;
     postgresqlSupport = config.php.postgresql or true;
@@ -243,7 +248,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
   src = fetchurl {
     url = "http://www.php.net/distributions/php-${version}.tar.bz2";
-    sha256 = "0d425zxka3m1l0ygsls4r56qy374rf6skl4ggim0k2y1y08fmm2p";
+    sha256 = "0svlp5alqvm3fxzf2044ygziacy2ks9vbrnimkpqnxqgrmjl5nwc";
   };
 
   meta = {

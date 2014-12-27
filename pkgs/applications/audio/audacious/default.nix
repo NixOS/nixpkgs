@@ -4,20 +4,19 @@
 , mpg123, neon, faad2
 }:
 
-let
-  version = "3.5.1";
-in
+let version = "3.5.2"; in
+
 stdenv.mkDerivation {
   name = "audacious-${version}";
 
   src = fetchurl {
     url = "http://distfiles.audacious-media-player.org/audacious-${version}.tar.bz2";
-    sha256 = "01wmlvpp540gdjw759wif3byh98h3b3q6f5wawzp0b0ivqd0wf6z";
+    sha256 = "0mhrdj76h0g6q197wgp8rxk6gqsrirrw49hfidcb5b7q5rlvj59r";
   };
 
   pluginsSrc = fetchurl {
     url = "http://distfiles.audacious-media-player.org/audacious-plugins-${version}.tar.bz2";
-    sha256 = "09lyvi15hbn3pvb2izyz2bm4021917mhcdrwxrn3q3sjvx337np6";
+    sha256 = "1nacd8n46q3pqnwavq3i2ayls609gvxfcp3qqpcsfcdfz3bh15hp";
   };
 
   buildInputs =

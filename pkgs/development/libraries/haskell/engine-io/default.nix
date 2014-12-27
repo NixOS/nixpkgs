@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "engine-io";
-  version = "1.2.2";
-  sha256 = "1d8323nxklbhva2y8ymgm5h57j2p86sdjfh0yi1fjjr8p26dh2py";
+  version = "1.2.3";
+  sha256 = "05sc939x24f3na6nxywgbq0yx4wdamh6zk4spdclqgq65j7v0hxc";
   buildDepends = [
     aeson async attoparsec base64Bytestring either free monadLoops
     mwcRandom stm stmDelay text transformers unorderedContainers vector

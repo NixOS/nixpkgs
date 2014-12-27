@@ -1,10 +1,11 @@
 { stdenv, fetchurl, python, pythonPackages, cdparanoia, cdrdao
 , pygobject, gst_python, gst_plugins_base, gst_plugins_good
-, setuptools, utillinux, makeWrapper }:
+, setuptools, utillinux, makeWrapper, substituteAll }:
 
 stdenv.mkDerivation rec {
   name = "morituri-${version}";
   version = "0.2.3";
+  namePrefix = "";
 
   src = fetchurl {
     url = "http://thomas.apestaart.org/download/morituri/${name}.tar.bz2";
@@ -21,23 +22,12 @@ stdenv.mkDerivation rec {
     gst_plugins_base gst_plugins_good
   ] ++ pythonPath;
 
-  patches = [ ./paths.patch ];
-
-  postPatch =  ''
-    substituteInPlace morituri/extern/python-command/scripts/help2man \
-      --replace /usr/bin/python ${python}/bin/python
-
-    substituteInPlace morituri/common/program.py \
-      --replace umount ${utillinux}/bin/umount \
-      --replace \'eject \'${utillinux}/bin/eject
-
-    substituteInPlace morituri/program/cdparanoia.py \
-      --replace '"cdparanoia"' '"${cdparanoia}/bin/cdparanoia"'
-
-    substituteInPlace morituri/program/cdrdao.py \
-      --replace "['cdrdao', ]" "['${cdrdao}/bin/cdrdao', ]" \
-      --replace '"cdrdao"' '"${cdrdao}/bin/cdrdao"'
-  '';
+  patches = [
+    (substituteAll {
+      src = ./paths.patch;
+      inherit cdrdao cdparanoia python utillinux;
+    })
+  ];
 
   # This package contains no binaries to patch or strip.
   dontPatchELF = true;

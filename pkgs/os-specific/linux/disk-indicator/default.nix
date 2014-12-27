@@ -18,6 +18,8 @@ stdenv.mkDerivation {
 
   buildPhase = "make -f makefile";
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+
   installPhase = ''
     mkdir -p "$out/bin"
     cp ./disk_indicator "$out/bin/"
