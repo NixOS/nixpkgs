@@ -236,12 +236,11 @@
              };
 
   packages_ghcjs =
-    let parent = packages_ghc783.override {
+    let parent = packages_ghc784.override {
           extension = self: super: {
             ghcjs = super.ghcjs.override {
-              Cabal = packages_ghc783.CabalGhcjs;
+              Cabal = packages_ghc784.CabalGhcjs;
             };
-            transformersCompat = super.transformersCompat_0_3_3_3;
             network = super.network_2_6_0_2;
             haddock = super.haddock.override {
               Cabal = null;
@@ -338,7 +337,7 @@
         tfRandom = self.callPackage ../development/libraries/haskell/tf-random {};
 
 /*
-        buildLocalCabalWithArgs = { src, name, args ? {}, cabalDrvArgs ? { jailbreak = true; }, cabal2nix ? packages_ghc783.cabal2nix }: let
+        buildLocalCabalWithArgs = { src, name, args ? {}, cabalDrvArgs ? { jailbreak = true; }, cabal2nix ? packages_ghc784.cabal2nix }: let
           cabalExpr = pkgs.stdenv.mkDerivation ({
             name = "${name}.nix";
 
@@ -361,7 +360,7 @@
       };
       extension = self: super: {
         buildLocalCabalWithArgs = args: super.buildLocalCabalWithArgs (args // {
-          nativePkgs = packages_ghc783;
+          nativePkgs = packages_ghc784;
         });
       };
     };

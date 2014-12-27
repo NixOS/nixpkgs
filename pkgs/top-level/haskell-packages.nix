@@ -2652,10 +2652,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   transformersBase = callPackage ../development/libraries/haskell/transformers-base {};
 
-  transformersCompat_0_3_3 = callPackage ../development/libraries/haskell/transformers-compat/0.3.3.nix {};
-  transformersCompat_0_3_3_3 = callPackage ../development/libraries/haskell/transformers-compat/0.3.3.3.nix {};
-  transformersCompat_0_3_3_4 = callPackage ../development/libraries/haskell/transformers-compat/0.3.3.4.nix {};
-  transformersCompat = self.transformersCompat_0_3_3_4;
+  transformersCompat = callPackage ../development/libraries/haskell/transformers-compat {};
 
   transformersFree = callPackage ../development/libraries/haskell/transformers-free {};
 
