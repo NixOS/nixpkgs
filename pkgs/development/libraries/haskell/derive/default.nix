@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    process filepath haskellSrcExts syb transformers uniplate
+    filepath haskellSrcExts syb transformers uniplate
   ];
   meta = {
     homepage = "http://community.haskell.org/~ndm/derive/";

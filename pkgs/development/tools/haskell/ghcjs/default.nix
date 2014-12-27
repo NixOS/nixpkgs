@@ -4,12 +4,13 @@
 , haskellSrcExts, haskellSrcMeta, lens, optparseApplicative
 , parallel, safe, shelly, split, stringsearch, syb, systemFileio
 , systemFilepath, tar, terminfo, textBinary, unorderedContainers
-, vector, wlPprintText, yaml, fetchgit, Cabal, CabalGhcjs, cabalInstall
+, vector, wlPprintText, yaml, fetchgit, Cabal, cabalInstall
 , regexPosix, alex, happy, git, gnumake, gcc, autoconf, patch
-, automake, libtool, cabalInstallGhcjs, gmp, base16Bytestring
+, automake, libtool, gmp, base16Bytestring
 , cryptohash, executablePath, transformersCompat, haddockApi
 , haddock, hspec, xhtml, primitive, cacert, pkgs, ghc
 , coreutils
+, ghcjsPrim
 }:
 let
   version = "0.1.0";
@@ -24,17 +25,16 @@ let
     rev = "5e11d33cb74f8522efca0ace8365c0dc994b10f6";
     sha256 = "13i78wd064v0nvvx6js5wqw6s01hhf1s7z03c4465xp64a817gk4";
   };
-  # TOD: move this into haskell-packages proper
-  ghcjsPrim = cabal.mkDerivation (self: {
-    pname = "ghcjs-prim";
-    version = "0.1.0.0";
-    src = fetchgit {
-      url = git://github.com/ghcjs/ghcjs-prim.git;
-      rev = "8e003e1a1df10233bc3f03d7bbd7d37de13d2a84";
-      sha256 = "11k2r87s58wmpxykn61lihn4vm3x67cm1dygvdl26papifinj6pz";
-    };
-    buildDepends = [ primitive ];
-  });
+  #ghcjsPrim = cabal.mkDerivation (self: {
+  #  pname = "ghcjs-prim";
+  #  version = "0.1.0.0";
+  #  src = fetchgit {
+  #    url = git://github.com/ghcjs/ghcjs-prim.git;
+  #    rev = "8e003e1a1df10233bc3f03d7bbd7d37de13d2a84";
+  #    sha256 = "11k2r87s58wmpxykn61lihn4vm3x67cm1dygvdl26papifinj6pz";
+  #  };
+  #  buildDepends = [ primitive ];
+  #});
 in cabal.mkDerivation (self: rec {
   pname = "ghcjs";
   inherit version;
@@ -80,10 +80,10 @@ in cabal.mkDerivation (self: rec {
     chmod -R u+w $topDir/shims
   '';
   postInstall = ''
-    PATH=$out/bin:${CabalGhcjs}/bin:$PATH LD_LIBRARY_PATH=${gmp}/lib:${gcc.gcc}/lib64:$LD_LIBRARY_PATH \
+    PATH=$out/bin:${Cabal}/bin:$PATH LD_LIBRARY_PATH=${gmp}/lib:${gcc.gcc}/lib64:$LD_LIBRARY_PATH \
       env -u GHC_PACKAGE_PATH $out/bin/ghcjs-boot \
         --dev \
-        --with-cabal ${cabalInstallGhcjs}/bin/cabal-js \
+        --with-cabal ${cabalInstall}/bin/cabal \
         --with-gmp-includes ${gmp}/include \
         --with-gmp-libraries ${gmp}/lib
   '';

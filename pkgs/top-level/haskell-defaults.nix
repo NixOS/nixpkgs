@@ -239,9 +239,9 @@
     let parent = packages_ghc784.override {
           extension = self: super: {
             ghcjs = super.ghcjs.override {
-              Cabal = packages_ghc784.CabalGhcjs;
+              Cabal = packages_ghc784.Cabal_1_22_0_0;
+              cabalInstall = packages_ghc784.cabalInstall_1_22_0_0;
             };
-            network = super.network_2_6_0_2;
             haddock = super.haddock.override {
               Cabal = null;
             };
@@ -255,8 +255,8 @@
         # This is the list of packages that are built into a booted ghcjs installation
         # It can be generated with the command:
         # nix-shell '<nixpkgs>' -A pkgs.haskellPackages_ghcjs.ghc --command "ghcjs-pkg list | sed -n 's/^    \(.*\)-\([0-9.]*\)$/\1_\2/ p' | sed 's/\./_/g' | sed 's/-\(.\)/\U\1/' | sed 's/^\([^_]*\)\(.*\)$/\1\2 = null;\n\1 = self.\1\2;/'"
-        Cabal_1_21_0_0 = null;
-        Cabal = self.Cabal_1_21_0_0;
+        Cabal_1_20_0_2 = null;
+        Cabal = self.Cabal_1_22_0_0;
         aeson_0_8_0_0 = null;
         aeson = self.aeson_0_8_0_0;
         array_0_5_0_0 = null;

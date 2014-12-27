@@ -356,6 +356,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   Cabal_1_16_0_3 = callPackage ../development/libraries/haskell/Cabal/1.16.0.3.nix {};
   Cabal_1_18_1_3 = callPackage ../development/libraries/haskell/Cabal/1.18.1.3.nix {};
   Cabal_1_20_0_2 = callPackage ../development/libraries/haskell/Cabal/1.20.0.2.nix {};
+  Cabal_1_22_0_0 = callPackage ../development/libraries/haskell/Cabal/1.22.0.0.nix {};
   Cabal = null;                 # core package since forever
 
   cabalCargs = callPackage ../development/libraries/haskell/cabal-cargs {};
@@ -940,12 +941,13 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ghcjs = callPackage ../development/tools/haskell/ghcjs {
     Cabal = self.Cabal_1_18_1_3;
-    network = self.network_2_6_0_2;
   };
 
   ghcjsDom = callPackage ../development/libraries/haskell/ghcjs-dom {};
 
   ghcjsCodemirror = callPackage ../development/libraries/haskell/ghcjs-codemirror {};
+
+  ghcjsPrim = callPackage ../development/libraries/haskell/ghcjs-prim {};
 
   ghcMod = callPackage ../development/libraries/haskell/ghc-mod { inherit (pkgs) emacs; };
 
@@ -1543,9 +1545,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   lazysmallcheck = callPackage ../development/libraries/haskell/lazysmallcheck {};
 
-  lens_4_2 = callPackage ../development/libraries/haskell/lens/4.2.nix {};
-  lens_4_6_0_1 = callPackage ../development/libraries/haskell/lens/4.6.0.1.nix {};
-  lens = self.lens_4_6_0_1;
+  lens = callPackage ../development/libraries/haskell/lens {};
 
   lensAeson = callPackage ../development/libraries/haskell/lens-aeson {};
 
@@ -2994,8 +2994,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   cake3 = callPackage ../development/tools/haskell/cake3 {};
 
-  oldTime_1_1_0_2 = callPackage ../development/libraries/haskell/old-time/1.1.0.2.nix {};
-  oldTime = null; # By default, use the built-in old-time library
   cpphs = callPackage ../development/tools/misc/cpphs {};
 
   DrIFT = callPackage ../development/tools/haskell/DrIFT {};
@@ -3168,10 +3166,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   cabalInstall_1_16_0_2 = callPackage ../tools/package-management/cabal-install/1.16.0.2.nix { Cabal = self.Cabal_1_16_0_3; };
   cabalInstall_1_18_0_3 = callPackage ../tools/package-management/cabal-install/1.18.0.3.nix { Cabal = self.Cabal_1_18_1_3; };
   cabalInstall_1_20_0_4 = callPackage ../tools/package-management/cabal-install/1.20.0.4.nix { Cabal = self.Cabal_1_20_0_2; };
+  cabalInstall_1_22_0_0 = callPackage ../tools/package-management/cabal-install/1.22.0.0.nix { Cabal = self.Cabal_1_22_0_0; };
   cabalInstall = self.cabalInstall_1_20_0_4;
-
-  CabalGhcjs = callPackage ../development/tools/haskell/Cabal-ghcjs {};
-  cabalInstallGhcjs = callPackage ../development/tools/haskell/cabal-install-ghcjs {};
 
   codex = callPackage ../development/tools/haskell/codex {};
 

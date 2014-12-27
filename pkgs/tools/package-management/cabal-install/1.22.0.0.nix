@@ -1,23 +1,22 @@
-{ cabal, CabalGhcjs, filepath, HTTP, HUnit, mtl, network, QuickCheck
+{ cabal, Cabal, filepath, HTTP, HUnit, mtl, network, QuickCheck
 , random, stm, testFramework, testFrameworkHunit
 , testFrameworkQuickcheck2, time, zlib, fetchgit
 }:
 
 cabal.mkDerivation (self: {
-  pname = "cabal-install-ghcjs";
-  version = CabalGhcjs.version;
-  src = CabalGhcjs.src;
+  pname = "cabal-install";
+  version = Cabal.version;
+  src = Cabal.src;
   isLibrary = true;
   isExecutable = true;
   doCheck = false;
-  configureFlags = "--program-suffix=-js";
   preConfigure = "cd cabal-install";
   noHaddock = true;
   buildDepends = [
-    CabalGhcjs filepath HTTP mtl network random stm time zlib
+    Cabal filepath HTTP mtl network random stm time zlib
   ];
   testDepends = [
-    CabalGhcjs filepath HTTP HUnit mtl network QuickCheck stm testFramework
+    Cabal filepath HTTP HUnit mtl network QuickCheck stm testFramework
     testFrameworkHunit testFrameworkQuickcheck2 time zlib
   ];
   postInstall = ''
