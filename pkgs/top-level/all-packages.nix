@@ -12707,6 +12707,8 @@ let
 
   uae = callPackage ../misc/emulators/uae { };
 
+  fsuae = callPackage ../misc/emulators/fs-uae { };
+
   putty = callPackage ../applications/networking/remote/putty { };
 
   retroarchBare = callPackage ../misc/emulators/retroarch { };
