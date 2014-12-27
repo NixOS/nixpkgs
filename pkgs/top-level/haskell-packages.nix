@@ -1534,7 +1534,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   lazysmallcheck = callPackage ../development/libraries/haskell/lazysmallcheck {};
 
   lens_4_2 = callPackage ../development/libraries/haskell/lens/4.2.nix {};
-  lens_4_4 = callPackage ../development/libraries/haskell/lens/4.4.nix {};
   lens_4_6_0_1 = callPackage ../development/libraries/haskell/lens/4.6.0.1.nix {};
   lens = self.lens_4_6_0_1;
 

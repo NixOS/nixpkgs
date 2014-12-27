@@ -24,6 +24,7 @@ let
     rev = "5e11d33cb74f8522efca0ace8365c0dc994b10f6";
     sha256 = "13i78wd064v0nvvx6js5wqw6s01hhf1s7z03c4465xp64a817gk4";
   };
+  # TOD: move this into haskell-packages proper
   ghcjsPrim = cabal.mkDerivation (self: {
     pname = "ghcjs-prim";
     version = "0.1.0.0";
