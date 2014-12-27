@@ -25,16 +25,6 @@ let
     rev = "5e11d33cb74f8522efca0ace8365c0dc994b10f6";
     sha256 = "13i78wd064v0nvvx6js5wqw6s01hhf1s7z03c4465xp64a817gk4";
   };
-  #ghcjsPrim = cabal.mkDerivation (self: {
-  #  pname = "ghcjs-prim";
-  #  version = "0.1.0.0";
-  #  src = fetchgit {
-  #    url = git://github.com/ghcjs/ghcjs-prim.git;
-  #    rev = "8e003e1a1df10233bc3f03d7bbd7d37de13d2a84";
-  #    sha256 = "11k2r87s58wmpxykn61lihn4vm3x67cm1dygvdl26papifinj6pz";
-  #  };
-  #  buildDepends = [ primitive ];
-  #});
 in cabal.mkDerivation (self: rec {
   pname = "ghcjs";
   inherit version;
