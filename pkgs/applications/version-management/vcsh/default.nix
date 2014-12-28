@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     cp vcsh $out/bin
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Version Control System for $HOME";
     homepage = https://github.com/RichiH/vcsh;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.garbas ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ garbas ttuegel ];
+    platforms = platforms.unix;
   };
 }
