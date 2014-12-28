@@ -310,6 +310,7 @@
       kubernetes = 158;
       fleet = 159;
       gitlab = 160;
+      btsync = 161;
 
       # When adding a gid, make sure it doesn't match an existing uid. And don't use gids above 399!
 
