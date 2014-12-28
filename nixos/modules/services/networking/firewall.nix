@@ -462,7 +462,7 @@ in
       before = [ "network-pre.target" ];
       after = [ "systemd-modules-load.service" ];
 
-      path = [ pkgs.iptables pkg.ipset ];
+      path = [ pkgs.iptables pkgs.ipset ];
 
       # FIXME: this module may also try to load kernel modules, but
       # containers don't have CAP_SYS_MODULE. So the host system had
