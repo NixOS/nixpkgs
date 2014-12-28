@@ -249,6 +249,10 @@ in
       group           = "btsync";
     };
 
+    users.extraGroups = [
+      { name = "btsync";
+      }];
+
     systemd.services.btsync = with pkgs; {
       description = "Bittorrent Sync Service";
       wantedBy    = [ "multi-user.target" ];
