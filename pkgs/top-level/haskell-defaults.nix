@@ -260,8 +260,8 @@
         # This is the list of packages that are built into a booted ghcjs installation
         # It can be generated with the command:
         # nix-shell '<nixpkgs>' -A pkgs.haskellPackages_ghcjs.ghc --command "ghcjs-pkg list | sed -n 's/^    \(.*\)-\([0-9.]*\)$/\1_\2/ p' | sed 's/\./_/g' | sed 's/-\(.\)/\U\1/' | sed 's/^\([^_]*\)\(.*\)$/\1\2 = null;\n\1 = self.\1\2;/'"
-        Cabal_1_20_0_2 = null;
-        Cabal = self.Cabal_1_22_0_0;
+        Cabal_1_21_1_0 = null;
+        Cabal = self.Cabal_1_21_1_0;
         aeson_0_8_0_0 = null;
         aeson = self.aeson_0_8_0_0;
         array_0_5_0_0 = null;
@@ -276,8 +276,8 @@
         binary = self.binary_0_7_2_1;
         rts_1_0 = null;
         rts = self.rts_1_0;
-        # bytestring_0_10_4_1 = null;
-        # bytestring = self.bytestring_0_10_4_1;
+        bytestring_0_10_4_1 = null;
+        bytestring = self.bytestring_0_10_4_1;
         caseInsensitive_1_2_0_0 = null;
         caseInsensitive = self.caseInsensitive_1_2_0_0;
         containers_0_5_5_1 = null;
@@ -322,8 +322,8 @@
         stm = self.stm_2_4_3;
         syb_0_4_2 = null;
         syb = self.syb_0_4_2;
-        # templateHaskell_2_9_0_0 = null;
-        # templateHaskell = self.templateHaskell_2_9_0_0;
+        templateHaskell_2_9_0_0 = null;
+        templateHaskell = self.templateHaskell_2_9_0_0;
         text_1_1_1_3 = null;
         text = self.text_1_1_1_3;
         time_1_4_2 = null;
