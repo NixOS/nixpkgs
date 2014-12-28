@@ -11,19 +11,15 @@ let
   ntpUser = "ntp";
 
   configFile = pkgs.writeText "ntp.conf" ''
-    # Keep the drift file in ${stateDir}/ntp.drift.  However, since we
-    # chroot to ${stateDir}, we have to specify it as /ntp.drift.
-    driftfile /ntp.drift
+    driftfile ${stateDir}/ntp.drift
 
-    restrict default kod nomodify notrap nopeer noquery
-    restrict -6 default kod nomodify notrap nopeer noquery
     restrict 127.0.0.1
     restrict -6 ::1
 
     ${toString (map (server: "server " + server + " iburst\n") config.services.ntp.servers)}
   '';
 
-  ntpFlags = "-c ${configFile} -u ${ntpUser}:nogroup -i ${stateDir}";
+  ntpFlags = "-c ${configFile} -u ${ntpUser}:nogroup";
 
 in
 
@@ -64,7 +60,7 @@ in
 
   config = mkIf config.services.ntp.enable {
 
-    # Make tools such as ntpq available in the system path
+    # Make tools such as ntpq available in the system path.
     environment.systemPackages = [ pkgs.ntp ];
 
     users.extraUsers = singleton
@@ -74,12 +70,10 @@ in
         home = stateDir;
       };
 
-    jobs.ntpd =
+    systemd.services.ntpd =
       { description = "NTP Daemon";
 
         wantedBy = [ "multi-user.target" ];
-
-        path = [ ntp ];
 
         preStart =
           ''
@@ -87,7 +81,9 @@ in
             chown ${ntpUser} ${stateDir}
           '';
 
-        exec = "ntpd -g -n ${ntpFlags}";
+        serviceConfig = {
+          ExecStart = "@${ntp}/bin/ntpd ntpd -g -n ${ntpFlags}";
+        };
       };
 
   };
