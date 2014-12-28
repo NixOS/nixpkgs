@@ -247,10 +247,6 @@
   packages_ghcjs =
     let parent = packages_ghc784.override {
           extension = self: super: {
-            ghcjs = super.ghcjs.override {
-              Cabal = packages_ghc784.Cabal_1_22_0_0;
-              cabalInstall = packages_ghc784.cabalInstall_1_22_0_0;
-            };
             haddock = super.haddock.override {
               Cabal = null;
             };

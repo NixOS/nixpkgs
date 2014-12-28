@@ -938,7 +938,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   ghcid = callPackage ../development/tools/haskell/ghcid {};
 
   ghcjs = callPackage ../development/tools/haskell/ghcjs {
-    Cabal = self.Cabal_1_18_1_3;
+    Cabal = self.Cabal_1_22_0_0;
+    cabalInstall = self.cabalInstall_1_22_0_0;
   };
 
   ghcjsDom = callPackage ../development/libraries/haskell/ghcjs-dom {};
