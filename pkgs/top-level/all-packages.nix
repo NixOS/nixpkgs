@@ -3707,6 +3707,8 @@ let
 
     macaque = callPackage ../development/ocaml-modules/macaque { };
 
+    magick = callPackage ../development/ocaml-modules/magick { };
+
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
     merlin = callPackage ../development/tools/ocaml/merlin { };
