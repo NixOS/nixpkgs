@@ -755,6 +755,12 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   Elm = callPackage ../development/compilers/elm/elm.nix {};
 
+  elmCompiler = callPackage ../development/compilers/elm/elm-compiler.nix {};
+
+  elmMake = callPackage ../development/compilers/elm/elm-make.nix {};
+
+  elmPackage = callPackage ../development/compilers/elm/elm-package.nix {};
+
   elmServer = callPackage ../development/compilers/elm/elm-server.nix {};
 
   elmRepl = callPackage ../development/compilers/elm/elm-repl.nix {};
