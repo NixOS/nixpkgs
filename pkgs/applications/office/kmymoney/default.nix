@@ -1,23 +1,22 @@
 { stdenv, fetchurl, cmake, kdelibs, automoc4, kdepimlibs, gettext, pkgconfig
 , shared_mime_info, perl, boost, gpgme, gmpxx, libalkimia, libofx, libical
-, doxygen, oxygen_icons, kactivities }:
+, oxygen_icons, kactivities, aqbanking, perlPackages, gwenhywfar }:
 
 stdenv.mkDerivation rec {
-  name = "kmymoney-4.7.0";
-  #name = "kmymoney-4.6.4";
+  name = "kmymoney-4.7.1";
 
   src = fetchurl {
-#    url = "mirror://sourceforge/kmymoney2/${name}.tar.xz";
-    url = http://ftp5.gwdg.de/pub/linux/kde/stable/kmymoney/4.7.0/src/kmymoney-4.7.0.tar.xz;
-    sha256 = "e4b3ce10e2fe7d84314b7e1c77a995f41488d161b716f7d67ca8de715e833e09"; # v. 4.7.0
-#    sha256 = "04n0lgi2yrx67bgjzbdbcm10pxs7l53srmp240znzw59njnjyll9"; # v 4.6.4
+    url = http://kde.mirrorcatalogs.com/stable/kmymoney/4.7.1/src/kmymoney-4.7.1.tar.xz;
+    sha256 = "7749cbae146eb4adf5c92162c841ae321f971c5720bc32d0227a42a4dd4acfc4"; # v. 4.7.1
   };
 
   buildInputs = [ kdepimlibs perl boost gpgme gmpxx libalkimia libofx libical
-                  doxygen oxygen_icons kactivities shared_mime_info ];
+                  oxygen_icons kactivities shared_mime_info aqbanking
+                  perlPackages.FinanceQuote gwenhywfar ];
   nativeBuildInputs = [ cmake automoc4 gettext pkgconfig ]; 
 
-  KDEDIRS = libalkimia;
+  #KDEDIRS = libalkimia;
+  KDEDIRS="$out:${libalkimia}:${gwenhywfar}:${aqbanking}";
 
   postInstall = ''
     ln -s ${shared_mime_info}/share/mime/application/* $out/share/mime/application/
