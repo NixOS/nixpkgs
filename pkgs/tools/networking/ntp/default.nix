@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libcap, openssl }:
+{ stdenv, fetchurl, libcap, autoreconfHook }:
 
 assert stdenv.isLinux -> libcap != null;
 
@@ -10,10 +10,16 @@ stdenv.mkDerivation rec {
     sha256 = "1vnqa1542d01xmlkw8f3rq57y360b2j7yxkkg9b11955nvw0v4if";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  patches = [ ./no-openssl.patch ];
 
-  buildInputs = [ openssl ]
-    ++ stdenv.lib.optional stdenv.isLinux libcap;
+  configureFlags = ''
+    --without-crypto
+    ${if stdenv.isLinux then "--enable-linuxcaps" else ""}
+  '';
+
+  buildInputs = [ autoreconfHook ] ++ stdenv.lib.optional stdenv.isLinux libcap;
+
+  postInstall = "rm -rf $out/share/doc";
 
   meta = {
     homepage = http://www.ntp.org/;
