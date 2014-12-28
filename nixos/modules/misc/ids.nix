@@ -272,6 +272,7 @@
       jenkins = 109;
       systemd-journal-gateway = 110;
       notbit = 111;
+      btsync = 113;
       monetdb = 115;
       foundationdb = 118;
       newrelic = 119;
@@ -310,7 +311,6 @@
       kubernetes = 158;
       fleet = 159;
       gitlab = 160;
-      btsync = 161;
 
       # When adding a gid, make sure it doesn't match an existing uid. And don't use gids above 399!
 
