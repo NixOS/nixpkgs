@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
     export PKG_CONFIG_PATH="${gst_all_1.gst-plugins-base}/lib/pkgconfig/gstreamer-video-0.10.pc:$PKG_CONFIG_PATH"
   '';
 
+  enableParallelBuilding = true;
+
   setupHook = ./efl-setup-hook.sh;
 
   meta = {
