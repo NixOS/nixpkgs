@@ -336,27 +336,6 @@
         unorderedContainers = self.unorderedContainers_0_2_5_0;
         vector_0_10_11_0 = null;
         vector = self.vector_0_10_11_0;
-/*
-        buildLocalCabalWithArgs = { src, name, args ? {}, cabalDrvArgs ? { jailbreak = true; }, cabal2nix ? packages_ghc784.cabal2nix }: let
-          cabalExpr = pkgs.stdenv.mkDerivation ({
-            name = "${name}.nix";
-
-            buildCommand = ''
-            ${cabal2nix}/bin/cabal2nix ${src + "/${name}.cabal"} --sha256=FILTERME \
-                | grep -v FILTERME | sed \
-                  -e 's/licenses.proprietary/licenses.unfree/' \
-                  -e 's/{ cabal/{ cabal, cabalInstall, cabalDrvArgs ? {}, src/' \
-                  -e 's/cabal.mkDerivation (self: {/cabal.mkDerivation (self: cabalDrvArgs \/\/ {/' \
-                  -e 's/buildDepends = \[/buildDepends = \[ cabalInstall/' \
-                  -e 's/pname = \([^\n]*\)/pname = \1\n  inherit src;\n/'  > $out
-            '';
-
-          } // pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
-            LANG = "en_US.UTF-8";
-            LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
-          });
-        in self.callPackage cabalExpr ({ inherit src cabalDrvArgs; } // args);
-*/
       };
       extension = self: super: {
         ghcjsDom = with self; super.ghcjsDom.override {
