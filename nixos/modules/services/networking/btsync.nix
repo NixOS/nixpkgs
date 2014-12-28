@@ -246,6 +246,7 @@ in
       home            = "/var/lib/btsync";
       createHome      = true;
       uid             = config.ids.uids.btsync;
+      group           = "btsync";
     };
 
     systemd.services.btsync = with pkgs; {
