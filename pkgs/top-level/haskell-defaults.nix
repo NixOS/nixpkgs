@@ -336,11 +336,6 @@
         unorderedContainers = self.unorderedContainers_0_2_5_0;
         vector_0_10_11_0 = null;
         vector = self.vector_0_10_11_0;
-
-        # This is necessary because haskell-packages will refuse to generate tfRandom for this version of ghc (0.1.0)
-        #TODO: haskell-packages shouldn't use the ghcjs version as the ghc version
-        tfRandom = self.callPackage ../development/libraries/haskell/tf-random {};
-
 /*
         buildLocalCabalWithArgs = { src, name, args ? {}, cabalDrvArgs ? { jailbreak = true; }, cabal2nix ? packages_ghc784.cabal2nix }: let
           cabalExpr = pkgs.stdenv.mkDerivation ({
