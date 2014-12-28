@@ -257,6 +257,7 @@ in
       description = "Bittorrent Sync Service";
       wantedBy    = [ "multi-user.target" ];
       after       = [ "network.target" ];
+      UMask       = "0002";
       serviceConfig = {
         Restart   = "on-abort";
         User      = "btsync";
