@@ -17,6 +17,15 @@
   ghcHEADPrefs = self : super : super // {
     cabalInstall_1_20_0_4 = super.cabalInstall_1_20_0_4.override { Cabal = null; };
     mtl = self.mtl_2_2_1;
+    ghcjsBase = null;
+    ghcjsDom = with self; super.ghcjsDom.override {
+      cabal = self.cabal.override {
+        extension = self: super: {
+          configureFlags = [ "-f-ghcjs" "-fwebkit" "-f-gtk3" ];
+          buildDepends = [ mtl glib transformers gtk webkit ];
+        };
+      };
+    };
   };
 
   ghc784Prefs = self : super : ghcHEADPrefs self super // {
@@ -359,6 +368,14 @@
 */
       };
       extension = self: super: {
+        ghcjsDom = with self; super.ghcjsDom.override {
+          cabal = self.cabal.override {
+            extension = self: super: {
+              configureFlags = [ ];
+              buildDepends = [ mtl ghcjsBase ];
+            };
+          };
+        };
         buildLocalCabalWithArgs = args: super.buildLocalCabalWithArgs (args // {
           nativePkgs = packages_ghc784;
         });
