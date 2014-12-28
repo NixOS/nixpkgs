@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, lua, cairo, cmake, imagemagick, pkgconfig, gdk_pixbuf
+{ stdenv, fetchurl, luaPackages, cairo, cmake, imagemagick, pkgconfig, gdk_pixbuf
 , xlibs, libstartup_notification, libxdg_basedir, libpthreadstubs
-, xcb-util-cursor, lgi, makeWrapper, pango, gobjectIntrospection, unclutter
+, xcb-util-cursor, makeWrapper, pango, gobjectIntrospection, unclutter
 , compton, procps, iproute, coreutils, curl, alsaUtils, findutils, rxvt_unicode
 , which, dbus, nettools, git, asciidoc, doxygen, xmlto, docbook_xml_dtd_45
 , docbook_xsl }:
 
 let
   version = "3.5.5";
-in
+in with luaPackages;
 
 stdenv.mkDerivation rec {
   name = "awesome-${version}";
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     dbus
     doxygen
     gdk_pixbuf
+    gobjectIntrospection
     git
     imagemagick
     lgi
@@ -60,18 +61,22 @@ stdenv.mkDerivation rec {
 
   LD_LIBRARY_PATH = "${cairo}/lib:${pango}/lib:${gobjectIntrospection}/lib";
   GI_TYPELIB_PATH = "${pango}/lib/girepository-1.0";
-  LUA_CPATH = "${lgi}/lib/lua/5.1/?.so";
-  LUA_PATH  = "${lgi}/share/lua/5.1/?.lua;${lgi}/share/lua/5.1/lgi/?.lua";
+  LUA_CPATH = "${lgi}/lib/lua/${lua.luaversion}/?.so";
+  LUA_PATH  = "${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua";
 
   postInstall = ''
     wrapProgram $out/bin/awesome \
-      --set LUA_CPATH '"${lgi}/lib/lua/5.1/?.so"' \
-      --set LUA_PATH '"${lgi}/share/lua/5.1/?.lua;${lgi}/share/lua/5.1/lgi/?.lua"' \
-      --set GI_TYPELIB_PATH "${pango}/lib/girepository-1.0" \
+      --prefix LUA_CPATH ";" '"${lgi}/lib/lua/${lua.luaversion}/?.so"' \
+      --prefix LUA_PATH ";" '"${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua"' \
+      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --prefix LD_LIBRARY_PATH : "${cairo}/lib:${pango}/lib:${gobjectIntrospection}/lib" \
       --prefix PATH : "${compton}/bin:${unclutter}/bin:${procps}/bin:${iproute}/sbin:${coreutils}/bin:${curl}/bin:${alsaUtils}/bin:${findutils}/bin:${rxvt_unicode}/bin"
 
     wrapProgram $out/bin/awesome-client \
       --prefix PATH : "${which}/bin"
   '';
+
+  passthru = {
+    inherit lua;
+  };
 }

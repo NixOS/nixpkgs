@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
 
-  version = "2014.09.20";
+  version = "2014.11.29";
 
   name = "pharo-vm-core-i386-${version}";
   system = "x86_32-linux";
   src = fetchurl {
     url = "http://files.pharo.org/vm/src/vm-unix-sources/blessed/pharo-vm-${version}.tar.bz2";
-    md5 = "f4183566aeeb7cb9d0d7832b4e40b573";
+    md5 = "529cff4639cee313ddf55fd377bd6fb3";
   };
 
   sources10Zip = fetchurl {

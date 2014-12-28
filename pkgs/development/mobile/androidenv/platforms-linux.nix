@@ -229,6 +229,16 @@ in
       
     };
   };
-    
+
+  platform_21 = buildPlatform {
+    name = "android-platform-5.0.1";
+    src = fetchurl {
+      url = https://dl-ssl.google.com/android/repository/android-21_r02.zip;
+      sha1 = "53536556059bb29ae82f414fd2e14bc335a4eb4c";
+    };
+    meta = {
+      description = "Android SDK Platform 5.0.1";
+    };
+  };
+
 }
-  

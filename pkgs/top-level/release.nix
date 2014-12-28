@@ -32,7 +32,7 @@ let
               jobs.manual
               jobs.stdenv.x86_64-linux
               jobs.stdenv.i686-linux
-              jobs.stdenv.x86_64-darwin
+              #jobs.stdenv.x86_64-darwin
               jobs.linux.x86_64-linux
               jobs.linux.i686-linux
               # Ensure that X11/GTK+ are in order.
@@ -95,7 +95,6 @@ let
       gajim = linux;
       gawk = all;
       gcc = linux;
-      gcc33 = linux;
       gcc34 = linux;
       gcc44 = linux;
       gcj = linux;
@@ -122,14 +121,13 @@ let
       gzip = all;
       hddtemp = linux;
       host = linux;
-      htmlTidy = all;
+      html-tidy = all;
       iana_etc = linux;
       icewm = linux;
       ifplugd = linux;
       inkscape = linux;
       irssi = linux;
       jfsutils = linux;
-      jfsrec = linux;
       jnettop = linux;
       jwhois = linux;
       kbd = linux;

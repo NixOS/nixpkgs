@@ -43,11 +43,6 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.pythonPackages; rec {
     TMPDIR=/tmp/xchg/bigtmp
     export TMPDIR
 
-    mkPythonPath() {
-      nix-store -qR "$@" \
-        | sed -e 's|$|/lib/${pkgs.python.libPrefix}/site-packages|'
-    }
-
     cp -Rd "${blivet.src}/tests" .
 
     # Skip SELinux tests
@@ -73,8 +68,11 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.pythonPackages; rec {
       -e 's|_STORE_FILE_PATH = .*|_STORE_FILE_PATH = tempfile.gettempdir()|' \
       tests/loopbackedtestcase.py
 
-    PYTHONPATH=".:$(mkPythonPath "${blivet}" "${mock}" | paste -sd :)" \
-      python "${pythonTestRunner}"
+    PYTHONPATH=".:$(< "${pkgs.stdenv.mkDerivation {
+      name = "blivet-pythonpath";
+      buildInputs = [ blivet mock ];
+      buildCommand = "echo \"$PYTHONPATH\" > \"$out\"";
+    }}")" python "${pythonTestRunner}"
   '';
 
   testScript = ''

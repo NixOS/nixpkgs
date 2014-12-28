@@ -47,7 +47,7 @@ stdenv.mkDerivation (rec {
       interactive theorem provers), based on the customizable text editor Emacs.
     '';
     homepage = http://proofgeneral.inf.ed.ac.uk;
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;  # arbitrary choice
   };
 })

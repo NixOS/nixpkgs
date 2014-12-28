@@ -1,12 +1,12 @@
 { stdenv, fetchurl, gettext, libuuid, readline }:
 
 stdenv.mkDerivation rec {
-  name = "xfsprogs-3.2.1";
+  name = "xfsprogs-3.2.2";
 
   src = fetchurl {
     urls = map (dir: "ftp://oss.sgi.com/projects/xfs/${dir}/${name}.tar.gz")
       [ "cmd_tars" "previous" ];
-    sha256 = "0rsp31qrz0wskr70dwzl5ignkac7j98j7m9cy6wl57zy716fmy43";
+    sha256 = "1aszsqz7gkqdagads18ybslbfkyxq893rykmsz9lm7f33pi5qlhs";
   };
 
   prePatch = ''
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
-    # This patch fixes shared libs installation, still not fixed in 3.2.1
-    ./xfsprogs-3.1.11-sharelibs.patch
+    # This patch fixes shared libs installation, still not fixed in 3.2.2
+    ./xfsprogs-3.2.2-sharedlibs.patch
   ];
 
   buildInputs = [ gettext libuuid readline ];

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   phases = "installPhase";
   ld_preload = ./isatty.c;
 
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.gcc.gcc stdenv.gcc.libc ] 
+  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.gcc stdenv.cc.libc ] 
     + ":" + stdenv.lib.makeLibraryPath [ SDL pulseaudio alsaLib ] ;
 
   installPhase = ''
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     echo @@@ 
 
     # if we call ld.so $(bin) we don't need to set the ELF interpreter, and save a patchelf step. 
-    LD_PRELOAD=./isatty.so $(cat $NIX_GCC/nix-support/dynamic-linker) $src << IM_A_BOT
+    LD_PRELOAD=./isatty.so $(cat $NIX_CC/nix-support/dynamic-linker) $src << IM_A_BOT
     n
     $out/libexec/strangeloop/vessel/
     IM_A_BOT
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     # props to Ethan Lee (the Vessel porter) for understanding
     # how $ORIGIN works in rpath. There is hope for humanity. 
     patchelf \
-      --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+      --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath $libPath:$out/libexec/strangeloop/vessel/x86/ \
       $out/libexec/strangeloop/vessel/x86/vessel.x86
 

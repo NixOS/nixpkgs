@@ -4,26 +4,26 @@ export LANG=C LC_ALL=C LC_COLLATE=C
 
 # Load git log
 raw_git_log="$(git log)"
-git_data="$(echo "$raw_git_log" | grep 'Author:' | 
-  sed -e 's/^ *Author://; s/\\//g; s/^ *//; s/ *$//; 
+git_data="$(echo "$raw_git_log" | grep 'Author:' |
+  sed -e 's/^ *Author://; s/\\//g; s/^ *//; s/ *$//;
   s/ @ .*//; s/ *[<]/\t/; s/[>]//')"
 
 # Name - nick - email correspondence from log and from maintainer list
 # Also there are a few manual entries
-maintainers="$(cat "$(dirname "$0")/../../lib/maintainers.nix" | 
+maintainers="$(cat "$(dirname "$0")/../../lib/maintainers.nix" |
   grep '=' | sed -re 's/\\"/''/g;
   s/ *([^ =]*) *= *" *(.*[^ ]) *[<](.*)[>] *".*/\1\t\2\t\3/')"
-git_lines="$( ( echo "$git_data"; 
+git_lines="$( ( echo "$git_data";
     cat "$(dirname "$0")/vanity-manual-equalities.txt") | sort |uniq)"
 
-emails="$( 
-    ( echo "$maintainers" | cut -f 3; echo "$git_data" | cut -f 2 ) | 
-    sort | uniq | grep -E ".+@.+[.].+" 
+emails="$(
+    ( echo "$maintainers" | cut -f 3; echo "$git_data" | cut -f 2 ) |
+    sort | uniq | grep -E ".+@.+[.].+"
     )"
 
 fetchGithubName () {
     commitid="$(
-        echo "$raw_git_log" | grep -B3 "Author: .*[<]$1[>]" | head -n 3 | 
+        echo "$raw_git_log" | grep -B3 "Author: .*[<]$1[>]" | head -n 3 |
             grep '^commit ' | tail -n 1 | sed -e 's/^commit //'
     )"
     userid="$(
@@ -36,7 +36,7 @@ fetchGithubName () {
 }
 
 [ -n "$NIXPKGS_GITHUB_NAME_CACHE" ] && {
-    echo "$emails" | while read email; do 
+    echo "$emails" | while read email; do
         line="$(grep "$email	" "$NIXPKGS_GITHUB_NAME_CACHE")"
 	[ -z "$line" ] && {
             echo "$email	$(fetchGithubName "$email")" >> \
@@ -47,11 +47,11 @@ fetchGithubName () {
 
 # For RDF
 normalize_name () {
-	sed -e 's/%/%25/g; s/ /%20/g; s/'\''/%27/g; s/"/%22/g;'
+	sed -e 's/%/%25/g; s/ /%20/g; s/'\''/%27/g; s/"/%22/g; s/`/%60/g'
 }
 
 denormalize_name () {
-	sed -e 's/%20/ /g; s/%27/'\''/g; s/%22/"/g; s/%25/%/g;';
+	sed -e 's/%20/ /g; s/%27/'\''/g; s/%22/"/g; s/%60/`/g; s/%25/%/g;';
 }
 
 n3="$(mktemp --suffix .n3)"
@@ -80,8 +80,8 @@ name_list="$(
 	  ?x <my://can-be>+ ?y.
 	  ?x <my://is-name> ?g.
         }
-	" | tail -n +2 | 
-	sed -re 's@<my://name/@@g; s@<my://@@g; s@>@@g;' | 
+	" | tail -n +2 |
+	sed -re 's@<my://name/@@g; s@<my://@@g; s@>@@g;' |
 	sort -k 2,3 -t '	'
 )"
 github_name_list="$(
@@ -89,14 +89,14 @@ github_name_list="$(
 	select ?x ?y where {
 	  ?x (<my://can-be>+ / <my://at-github>) ?y.
         }
-	" | tail -n +2 | 
+	" | tail -n +2 |
 	sed -re 's@<my://(name|github)/@@g; s@<my://@@g; s@>@@g;'
 )"
 
 # Take first spelling option for every person
 name_list_canonical="$(echo "$name_list" | cut -f 1,2 | uniq -f1)"
 
-cleaner_script="$(echo "$name_list_canonical" | denormalize_name | 
+cleaner_script="$(echo "$name_list_canonical" | denormalize_name |
   sed -re 's/(.*)\t(.*)/s#^\2$#\1#g/g')"
 
 # Add github usernames
@@ -104,9 +104,9 @@ if [ -n "$NIXPKGS_GITHUB_NAME_CACHE" ]; then
     github_adder_script="$(echo "$github_name_list" |
         grep -E "$(echo "$name_list_canonical" | cut -f 2 |
 	    tr '\n' '|' )" |
-	sort | uniq | 
+	sort | uniq |
         sed -re 's/(.*)\t(.*)/s| \1$| \1\t\2|g;/' |
-	denormalize_name 
+	denormalize_name
 	)"
 else
     github_adder_script=''
@@ -117,6 +117,6 @@ echo "$name_list" | denormalize_name
 echo
 
 echo "$git_data" | cut -f 1 |
-    sed -re "$cleaner_script" | 
+    sed -e "$cleaner_script" |
     sort | uniq -c | sort -k1n | sed -re "$github_adder_script" |
     sed -re 's/^ *([0-9]+) /\1\t/'

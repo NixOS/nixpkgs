@@ -1,13 +1,13 @@
 { fetchgit, stdenv, love, curl, zip }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.1";
+  version = "0.12.1";
   name = "hawkthorne-${version}";
 
   src = fetchgit {
     url = "https://github.com/hawkthorne/hawkthorne-journey.git";
-    rev = "e48b5eef0058f63bb8ee746bc00b47b3e03f0854";
-    sha256 = "0rvcpv8fsi450xs2cglv4w6m5iqbhsr2n09pcvhh0krhg7xay538";
+    rev = "610b9b3907b2a1b21da2ae926e4c7c4c9e19959b";
+    sha256 = "0n2fkk34wr3kyzfhz2mbrzn94vjivblqk2xaid5mj7ls0ymxbmgd";
   };
 
   buildInputs = [

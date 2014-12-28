@@ -184,10 +184,10 @@ if test "$noSysDirs" = "1"; then
     if test "$noSysDirs" = "1"; then
         # Figure out what extra flags to pass to the gcc compilers
         # being generated to make sure that they use our glibc.
-        if test -e $NIX_GCC/nix-support/orig-glibc; then
-            glibc=$(cat $NIX_GCC/nix-support/orig-glibc)
+        if test -e $NIX_CC/nix-support/orig-glibc; then
+            glibc=$(cat $NIX_CC/nix-support/orig-glibc)
             # Ugh.  Copied from gcc-wrapper/builder.sh.  We can't just
-            # source in $NIX_GCC/nix-support/add-flags, since that
+            # source in $NIX_CC/nix-support/add-flags, since that
             # would cause *this* GCC to be linked against the
             # *previous* GCC.  Need some more modularity there.
             extraCFlags="-B$glibc/lib -isystem $glibc/include"

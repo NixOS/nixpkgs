@@ -8,14 +8,15 @@
 
 cabal.mkDerivation (self: {
   pname = "diagrams-lib";
-  version = "1.2.0.4";
-  sha256 = "01gcbgxsnrcsysvpjhprym5ix10350x7l57f28nm0hbrfrsgidhz";
+  version = "1.2.0.7";
+  sha256 = "12ddlipp47j2mifwhi0ilb2fjdh2whk24s4d5h6ais2znj3hh99a";
   buildDepends = [
     active colour dataDefaultClass diagramsCore dualTree filepath
     fingertree hashable intervals JuicyPixels lens MemoTrie
     monoidExtras optparseApplicative semigroups tagged vectorSpace
     vectorSpacePoints
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams";
     description = "Embedded domain-specific language for declarative graphics";

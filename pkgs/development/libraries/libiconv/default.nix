@@ -1,11 +1,13 @@
 { fetchurl, stdenv }:
 
+assert (!stdenv.isLinux);
+
 stdenv.mkDerivation rec {
-  name = "libiconv-1.13.1";
+  name = "libiconv-1.14";
 
   src = fetchurl {
     url = "mirror://gnu/libiconv/${name}.tar.gz";
-    sha256 = "0jcsjk2g28bq20yh7rvbn8xgq6q42g8dkkac0nfh12b061l638sm";
+    sha256 = "04q6lgl3kglmmhw59igq1n7v3rp1rpkypl366cy1k1yn2znlvckj";
   };
 
   # On Cygwin, Libtool produces a `.dll.a', which is not a "real" DLL

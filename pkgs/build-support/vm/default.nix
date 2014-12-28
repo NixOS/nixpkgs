@@ -52,11 +52,11 @@ rec {
 
   createDeviceNodes = dev:
     ''
-      mknod ${dev}/null    c 1 3
-      mknod ${dev}/zero    c 1 5
-      mknod ${dev}/random  c 1 8
-      mknod ${dev}/urandom c 1 9
-      mknod ${dev}/tty     c 5 0
+      mknod -m 666 ${dev}/null    c 1 3
+      mknod -m 666 ${dev}/zero    c 1 5
+      mknod -m 666 ${dev}/random  c 1 8
+      mknod -m 666 ${dev}/urandom c 1 9
+      mknod -m 666 ${dev}/tty     c 5 0
       mknod ${dev}/rtc     c 254 0
       . /sys/class/block/${hd}/uevent
       mknod ${dev}/${hd} b $MAJOR $MINOR
@@ -118,7 +118,7 @@ rec {
     mount -t 9p store /fs/nix/store -o trans=virtio,version=9p2000.L,msize=262144,cache=loose
 
     mkdir -p /fs/tmp
-    mount -t tmpfs -o "mode=755" none /fs/tmp
+    mount -t tmpfs -o "mode=1777" none /fs/tmp
 
     echo "mounting host's temporary directory..."
     mkdir -p /fs/tmp/xchg
@@ -1511,6 +1511,40 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
+    ubuntu1410i386 = {
+      name = "ubuntu-14.10-utopic-i386";
+      fullName = "Ubuntu 14.10 Utopic (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/utopic/main/binary-i386/Packages.bz2;
+            sha256 = "dc33a906ccb5625740251da759393d7daace65013d421c79fdd6c99a6490d989";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/utopic/universe/binary-i386/Packages.bz2;
+            sha256 = "e50553c033d9e478507405e63ce7d43c8060368ea851eca0c93b75b72fd85167";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1410x86_64 = {
+      name = "ubuntu-14.10-utopic-amd64";
+      fullName = "Ubuntu 14.10 Utopic (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/utopic/main/binary-amd64/Packages.bz2;
+            sha256 = "9650775abec90a24c26dbb03f91a488180309144338f64f7044f7119d60d7182";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/utopic/universe/binary-amd64/Packages.bz2;
+            sha256 = "2acf0e39e64b4fd6d2b68b55c598fc167d7c3cabae233fc31a1e6b69eb6ecc63";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
     debian40i386 = {
       name = "debian-4.0r9-etch-i386";
       fullName = "Debian 4.0r9 Etch (i386)";
@@ -1582,22 +1616,22 @@ rec {
     debian70x86_64 = debian7x86_64;
 
     debian7i386 = {
-      name = "debian-7.6-wheezy-i386";
-      fullName = "Debian 7.6 Wheezy (i386)";
+      name = "debian-7.7-wheezy-i386";
+      fullName = "Debian 7.7 Wheezy (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-i386/Packages.bz2;
-        sha256 = "1j093d6dwixyrk87sdvaayh3ffcn5aqwik36blndiw5njw2qkzgj";
+        sha256 = "f2fd890597b6f0d82c5d66ccc8b12a963937a0576a377dd0ccbe47de4c1b09c8";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian7x86_64 = {
-      name = "debian-7.6-wheezy-amd64";
-      fullName = "Debian 7.6 Wheezy (amd64)";
+      name = "debian-7.7-wheezy-amd64";
+      fullName = "Debian 7.7 Wheezy (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-amd64/Packages.bz2;
-        sha256 = "1n46fxq8a2dm1i7ysc80s5lg10z5dh0hyd8k3h532n5wzs44xqcc";
+        sha256 = "8ce14e88febc58310a1c13350f016ce583f068d10031ed4f0cb50985707786d8";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;

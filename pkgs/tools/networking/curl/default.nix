@@ -4,7 +4,6 @@
 , scpSupport ? false, libssh2 ? null
 , gssSupport ? false, gss ? null
 , c-aresSupport ? false, c-ares ? null
-, linkStatic ? false
 }:
 
 assert zlibSupport -> zlib != null;
@@ -13,11 +12,11 @@ assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.38.0";
+  name = "curl-7.39.0";
 
   src = fetchurl {
     url = "http://curl.haxx.se/download/${name}.tar.bz2";
-    sha256 = "1flybwbdahx0sm9ipgp9k60wlrpkrmfflk1zf5j4w6mak4gd8nq3";
+    sha256 = "1q545q853i2dadz6kiybq6613bk0ncs6dp81nc0rgkc7f1p5c8mj";
   };
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
@@ -36,25 +35,20 @@ stdenv.mkDerivation rec {
     rm src/tool_hugehelp.c
   '';
 
+  # make curl honor CURL_CA_BUNDLE & SSL_CERT_FILE
+  postConfigure = ''
+    echo  '#define CURL_CA_BUNDLE (getenv("CURL_CA_BUNDLE") ? getenv("CURL_CA_BUNDLE") : getenv("SSL_CERT_FILE"))' >> lib/curl_config.h
+  '';
+
   configureFlags = [
       ( if sslSupport then "--with-ssl=${openssl}" else "--without-ssl" )
       ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
     ]
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
-    ++ stdenv.lib.optional gssSupport "--with-gssapi=${gss}"
-    ++ stdenv.lib.optionals linkStatic [ "--enable-static" "--disable-shared" ]
-  ;
+    ++ stdenv.lib.optional gssSupport "--with-gssapi=${gss}";
 
-  dontDisableStatic = linkStatic;
-
-  CFLAGS = if stdenv ? isDietLibC then "-DHAVE_INET_NTOA_R_2_ARGS=1" else "";
-  LDFLAGS = if linkStatic then "-static" else "";
   CXX = "g++";
   CXXCPP = "g++ -E";
-
-  # libtool hack to get a static binary. Notice that to 'configure' I passed
-  # other LDFLAGS, because it doesn't use libtool for linking in the tests.
-  makeFlags = if linkStatic then "LDFLAGS=-all-static" else "";
 
   crossAttrs = {
     # We should refer to the cross built openssl
@@ -62,9 +56,7 @@ stdenv.mkDerivation rec {
     configureFlags = [
         ( if sslSupport then "--with-ssl=${openssl.crossDrv}" else "--without-ssl" )
         "--with-random /dev/urandom"
-      ]
-      ++ stdenv.lib.optionals linkStatic [ "--enable-static" "--disable-shared" ]
-    ;
+      ];
   };
 
   passthru = {

@@ -86,7 +86,7 @@ in
 
     boot.supportedFilesystems = [ "nfs" ]; # needed for statd and idmapd
 
-    environment.systemPackages = [ pkgs.nfsUtils ];
+    environment.systemPackages = [ pkgs.nfs-utils ];
 
     environment.etc = singleton
       { source = exports;
@@ -104,7 +104,7 @@ in
         after = [ "rpcbind.service" "mountd.service" "idmapd.service" ];
         before = [ "statd.service" ];
 
-        path = [ pkgs.nfsUtils ];
+        path = [ pkgs.nfs-utils ];
 
         script =
           ''
@@ -131,7 +131,7 @@ in
         requires = [ "rpcbind.service" ];
         after = [ "rpcbind.service" ];
 
-        path = [ pkgs.nfsUtils pkgs.sysvtools pkgs.utillinux ];
+        path = [ pkgs.nfs-utils pkgs.sysvtools pkgs.utillinux ];
 
         preStart =
           ''
@@ -157,7 +157,7 @@ in
 
         serviceConfig.Type = "forking";
         serviceConfig.ExecStart = ''
-          @${pkgs.nfsUtils}/sbin/rpc.mountd rpc.mountd \
+          @${pkgs.nfs-utils}/sbin/rpc.mountd rpc.mountd \
               ${if cfg.mountdPort != null then "-p ${toString cfg.mountdPort}" else ""}
         '';
         serviceConfig.Restart = "always";

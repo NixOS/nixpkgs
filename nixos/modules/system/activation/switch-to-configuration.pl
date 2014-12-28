@@ -181,7 +181,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
             } elsif ($unit =~ /\.mount$/) {
                 # Reload the changed mount unit to force a remount.
                 write_file($reloadListFile, { append => 1 }, "$unit\n");
-            } elsif ($unit =~ /\.socket$/ || $unit =~ /\.path$/) {
+            } elsif ($unit =~ /\.socket$/ || $unit =~ /\.path$/ || $unit =~ /\.slice$/) {
                 # FIXME: do something?
             } else {
                 my $unitInfo = parseUnit($newUnitFile);
@@ -321,6 +321,10 @@ system("@systemd@/bin/systemctl", "reset-failed");
 # Make systemd reload its units.
 system("@systemd@/bin/systemctl", "daemon-reload") == 0 or $res = 3;
 
+# Signal dbus to reload its configuration before starting other units.
+# Other units may rely on newly installed policy files under /etc/dbus-1
+system("@systemd@/bin/systemctl", "reload", "dbus.service");
+
 # Restart changed services (those that have to be restarted rather
 # than stopped and started).
 my @restart = unique(split('\n', read_file($restartListFile, err_mode => 'quiet') // ""));
@@ -350,8 +354,6 @@ if (scalar @reload > 0) {
     unlink($reloadListFile);
 }
 
-# Signal dbus to reload its configuration.
-system("@systemd@/bin/systemctl", "reload", "dbus.service");
 
 # Print failed and new units.
 my (@failed, @new, @restarting);

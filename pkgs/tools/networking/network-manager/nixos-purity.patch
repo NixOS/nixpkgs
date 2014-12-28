@@ -28,36 +28,6 @@ index 237661f..48bc33f 100644
  		NULL
  	};
  	const char **path = dhcpcd_paths;
-diff --git a/src/dns-manager/nm-dns-dnsmasq.c b/src/dns-manager/nm-dns-dnsmasq.c
-index 8e216f4..6e00210 100644
---- a/src/dns-manager/nm-dns-dnsmasq.c
-+++ b/src/dns-manager/nm-dns-dnsmasq.c
-@@ -52,9 +52,7 @@ static inline const char *
- find_dnsmasq (void)
- {
- 	static const char *paths[] = {
--		"/usr/local/sbin/dnsmasq",
--		"/usr/sbin/dnsmasq",
--		"/sbin/dnsmasq",
-+		"@dnsmasq@/bin/dnsmasq",
- 		NULL
- 	};
- 	const char **binary = paths;
-diff --git a/src/dnsmasq-manager/nm-dnsmasq-manager.c b/src/dnsmasq-manager/nm-dnsmasq-manager.c
-index ca2f9dc..ce718d0 100644
---- a/src/dnsmasq-manager/nm-dnsmasq-manager.c
-+++ b/src/dnsmasq-manager/nm-dnsmasq-manager.c
-@@ -170,9 +170,7 @@ static inline const char *
- nm_find_dnsmasq (void)
- {
- 	static const char *dnsmasq_binary_paths[] = {
--		"/usr/local/sbin/dnsmasq",
--		"/usr/sbin/dnsmasq",
--		"/sbin/dnsmasq",
-+		"@dnsmasq@/bin/dnsmasq",
- 		NULL
- 	};
- 
 diff --git a/src/nm-device.c b/src/nm-device.c
 index 1dc94ee..e60f3c8 100644
 --- a/src/nm-device.c

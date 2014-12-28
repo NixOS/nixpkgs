@@ -27,6 +27,14 @@ let
       mkdir -p ${privateDir}
     '';
 
+  shareConfig = name:
+    let share = getAttr name cfg.shares; in
+    "[${name}]\n " + (toString (
+       map
+         (key: "${key} = ${toString (getAttr key share)}\n")
+         (attrNames share)
+    ));
+
   configFile = pkgs.writeText "smb.conf"
     (if cfg.configText != null then cfg.configText else
     ''
@@ -36,6 +44,8 @@ let
       ${optionalString cfg.syncPasswordsByPam "pam password change = true"}
 
       ${cfg.extraConfig}
+
+      ${toString (map shareConfig (attrNames cfg.shares))}
     '');
 
   # This may include nss_ldap, needed for samba if it has to use ldap.
@@ -157,6 +167,23 @@ in
           Enabling it allows applications to resolve WINS/NetBIOS names (a.k.a.
           Windows machine names) by transparently querying the winbindd daemon.
         '';
+      };
+
+      shares = mkOption {
+        default = {};
+        description =
+          ''
+          A set describing shared resources.
+          See <command>man smb.conf</command> for options.
+          '';
+        type = types.attrsOf (types.attrsOf types.str);
+        example =
+          { srv =
+             { path = "/srv";
+               "read only" = "yes";
+                comment = "Public samba share.";
+             };
+          };
       };
 
     };

@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     sha256 = "b1ca708994180236917ae79e17606da5bd334ca6acd6873a550027e1c0ec874a";
   };
 
+  patches = [ ./fix-clang-build-on-osx.diff ];
+
   prefixKey = "-prefix ";
   configureFlags = ["-no-tk"] ++ optionals useX11 [ "-x11lib" x11lib
                                                     "-x11include" x11inc ];
@@ -48,6 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://caml.inria.fr/ocaml;
+    branch = "4.01";
     license = [ "QPL" /* compiler */ "LGPLv2" /* library */ ];
     description = "Most popular variant of the Caml language";
 

@@ -11,20 +11,16 @@ let
   additionalBackends = pkgs.runCommand "additional-cups-backends" { }
     ''
       mkdir -p $out
-      if [ ! -e ${pkgs.cups}/lib/cups/backend/smb ]; then
+      if [ ! -e ${cups}/lib/cups/backend/smb ]; then
         mkdir -p $out/lib/cups/backend
         ln -sv ${pkgs.samba}/bin/smbspool $out/lib/cups/backend/smb
       fi
 
       # Provide support for printing via HTTPS.
-      if [ ! -e ${pkgs.cups}/lib/cups/backend/https ]; then
+      if [ ! -e ${cups}/lib/cups/backend/https ]; then
         mkdir -p $out/lib/cups/backend
-        ln -sv ${pkgs.cups}/lib/cups/backend/ipp $out/lib/cups/backend/https
+        ln -sv ${cups}/lib/cups/backend/ipp $out/lib/cups/backend/https
       fi
-
-      # Import filter configuration from Ghostscript.
-      mkdir -p $out/share/cups/mime/
-      ln -v -s "${pkgs.ghostscript}/etc/cups/"* $out/share/cups/mime/
     '';
 
   # Here we can enable additional backends, filters, etc. that are not
@@ -37,6 +33,7 @@ let
     paths = cfg.drivers;
     pathsToLink = [ "/lib/cups" "/share/cups" "/bin" "/etc/cups" ];
     postBuild = cfg.bindirCmds;
+    ignoreCollisions = true;
   };
 
 in
@@ -89,6 +86,29 @@ in
         '';
       };
 
+      cupsFilesConf = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          The contents of the configuration file of the CUPS daemon
+          (<filename>cups-files.conf</filename>).
+        '';
+      };
+
+      extraConf = mkOption {
+        type = types.lines;
+        default = "";
+        example =
+          ''
+            BrowsePoll cups.example.com
+            LogLevel debug
+          '';
+        description = ''
+          Extra contents of the configuration file of the CUPS daemon
+          (<filename>cupsd.conf</filename>).
+        '';
+      };
+
       clientConf = mkOption {
         type = types.lines;
         default = "";
@@ -107,7 +127,7 @@ in
         type = types.listOf types.path;
         example = literalExample "[ pkgs.splix ]";
         description = ''
-          CUPS drivers to use. Drivers provided by CUPS, Ghostscript
+          CUPS drivers to use. Drivers provided by CUPS, cups-filters, Ghostscript
           and Samba are added unconditionally.
         '';
       };
@@ -138,13 +158,9 @@ in
 
     environment.systemPackages = [ cups ];
 
-    environment.variables.CUPS_SERVERROOT = "/etc/cups";
-
-    environment.etc = [
-      { source = pkgs.writeText "client.conf" cfg.clientConf;
-        target = "cups/client.conf";
-      }
-    ];
+    environment.etc."cups/client.conf".text = cfg.clientConf;
+    environment.etc."cups/cups-files.conf".text = cfg.cupsFilesConf;
+    environment.etc."cups/cupsd.conf".text = cfg.cupsdConf;
 
     services.dbus.packages = [ cups ];
 
@@ -171,34 +187,25 @@ in
           '';
 
         serviceConfig.Type = "forking";
-        serviceConfig.ExecStart = "@${cups}/sbin/cupsd cupsd -c ${pkgs.writeText "cupsd.conf" cfg.cupsdConf}";
+        serviceConfig.ExecStart = "@${cups}/sbin/cupsd cupsd";
+
+        restartTriggers =
+          [ config.environment.etc."cups/cups-files.conf".source
+            config.environment.etc."cups/cupsd.conf".source
+          ];
       };
 
     services.printing.drivers =
-      [ pkgs.cups pkgs.cups_pdf_filter pkgs.ghostscript additionalBackends
+      [ cups pkgs.ghostscript pkgs.cups_filters additionalBackends
         pkgs.perl pkgs.coreutils pkgs.gnused pkgs.bc pkgs.gawk pkgs.gnugrep
       ];
 
-    services.printing.cupsdConf =
+    services.printing.cupsFilesConf =
       ''
-        LogLevel info
-
         SystemGroup root wheel
-
-        ${concatMapStrings (addr: ''
-          Listen ${addr}
-        '') cfg.listenAddresses}
-        Listen /var/run/cups/cups.sock
-
-        # Note: we can't use ${cups}/etc/cups as the ServerRoot, since
-        # CUPS will write in the ServerRoot when e.g. adding new printers
-        # through the web interface.
-        ServerRoot /etc/cups
 
         ServerBin ${bindir}/lib/cups
         DataDir ${bindir}/share/cups
-
-        SetEnv PATH ${bindir}/lib/cups/filter:${bindir}/bin:${bindir}/sbin
 
         AccessLog syslog
         ErrorLog syslog
@@ -212,6 +219,18 @@ in
         # these programs to run as `lp' as well.
         User cups
         Group lp
+      '';
+
+    services.printing.cupsdConf =
+      ''
+        LogLevel info
+
+        ${concatMapStrings (addr: ''
+          Listen ${addr}
+        '') cfg.listenAddresses}
+        Listen /var/run/cups/cups.sock
+
+        SetEnv PATH ${bindir}/lib/cups/filter:${bindir}/bin:${bindir}/sbin
 
         Browsing On
         BrowseOrder allow,deny
@@ -257,6 +276,8 @@ in
             Order deny,allow
           </Limit>
         </Policy>
+
+        ${cfg.extraConf}
       '';
 
     security.pam.services.cups = {};

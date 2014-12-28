@@ -4,11 +4,11 @@ let inherit (composableDerivation) edf; in
 
 composableDerivation.composableDerivation {} {
 
-  name = "timidity-2.13.0";
+  name = "timidity-2.14.0";
 
   src = fetchurl {
-    url = mirror://sourceforge/timidity/TiMidity++-2.13.0.tar.bz2;
-    sha256 = "1jbmk0m375fh5nj2awqzns7pdjbi7dxpjdwcix04zipfcilppbmf";
+    url = mirror://sourceforge/timidity/TiMidity++-2.14.0.tar.bz2;
+    sha256 = "0xk41w4qbk23z1fvqdyfblbz10mmxsllw0svxzjw5sa9y11vczzr";
   };
 
   mergeAttrBy.audioModes = a : b : "${a},${b}";
@@ -55,8 +55,10 @@ composableDerivation.composableDerivation {} {
     tar --strip-components=1 -xf $instruments -C $out/share/timidity/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
+    homepage = http://sourceforge.net/projects/timidity/;
+    license = licenses.gpl2;
     description = "A software MIDI renderer";
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
+    maintainers = [ maintainers.marcweber ];
   };
 }

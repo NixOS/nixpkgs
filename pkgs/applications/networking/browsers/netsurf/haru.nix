@@ -15,10 +15,10 @@ stdenv.mkDerivation {
 
   installPhase = "make PREFIX=$out install";
 
-  meta = { 
+  meta = {
     description = "cross platform, open source library for generating PDF files";
     homepage = http://libharu.org/wiki/Main_Page;
-    license = "ZLIB/LIBPNG"; # see README.
+    license = with stdenv.lib.licenses; [ libpng zlib ];
     maintainers = [args.lib.maintainers.marcweber];
     platforms = args.lib.platforms.linux;
     broken = true;

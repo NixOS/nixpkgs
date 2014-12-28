@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "bmon-${version}";
-  version = "3.5";
+  version = "3.6";
 
   src = fetchFromGitHub {
     owner = "tgraf";
     repo = "bmon";
     rev = "v${version}";
-    sha256 = "0k6cwprwnrnilbs2fgkx7z9mg6rr11wf6djq6pjfc7fjn2fjvybi";
+    sha256 = "16qwazays2j448kmfckv6wvh4rhmhc9q4vp1s75hm9z02cmhvk8q";
   };
 
   buildInputs = [ autoconf automake pkgconfig ncurses confuse libnl ];

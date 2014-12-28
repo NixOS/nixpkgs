@@ -1,21 +1,19 @@
-{ stdenv, fetchurl, fetchgit, pkgconfig, cmake, libiconvOrEmpty, libintlOrEmpty
+{ stdenv, fetchurl, fetchpatch, pkgconfig, cmake, libiconvOrEmpty, libintlOrEmpty
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
 , qt4Support ? false, qt4 ? null
 }:
 
 let
-  version = "0.26.5"; # even major numbers are stable
-  sha256 = "1vni6kqpcx4jy9q8mhhxphfjych76xxmgs3jyg8yacbl6gxfazfy";
+  version = "0.28.1"; # even major numbers are stable
+  sha256 = "01pxjdbhvpxf00ncf8d9wxc8gkcqcxz59lwrpa151ah988inxkrc";
 
-  qtcairo_patches =
-    let qtcairo = fetchgit { # the version for poppler-0.24
-      url = "git://github.com/giddie/poppler-qt4-cairo-backend.git";
-      rev = "7b9e1ea763b579e635ee7614b10970b9635841cf";
-      sha256 = "0cdq0qw1sm6mxnrhmah4lfsd9wjlcdx86iyikwmjpwdmrkjk85r2";
-    }; in
-      [ "${qtcairo}/0001-Cairo-backend-added-to-Qt4-wrapper.patch"
-        "${qtcairo}/0002-Setting-default-Qt4-backend-to-Cairo.patch"
-        "${qtcairo}/0003-Forcing-subpixel-rendering-in-Cairo-backend.patch" ];
+  # This is for Okular (and similar) to support subpixel rendering.
+  # It's kept from upstream because of political reasons.
+  qtcairo_patch = fetchpatch {
+    url = "https://github.com/giddie/poppler-qt4-cairo-backend/compare/"
+      + "fa1d636...b30f96c.diff"; # update to current maint...qt4-lcd
+    sha256 = "0g18y247k2vcz1n56rnfpy226f22v4r9c7pk8cf2h9l12vz2qxkm";
+  };
 
   poppler_drv = nameSuff: merge: stdenv.mkDerivation (stdenv.lib.mergeAttrsByFuncDefaultsClean [
   rec {
@@ -63,8 +61,8 @@ let
   poppler_glib = poppler_drv "glib" { };
 
   poppler_qt4 = poppler_drv "qt4" {
+    patches = [ qtcairo_patch ];
     propagatedBuildInputs = [ qt4 poppler_glib ];
-    patches = qtcairo_patches;
     NIX_LDFLAGS = "-lpoppler";
     postConfigure = ''
       mkdir -p "$out/lib/pkgconfig"

@@ -189,12 +189,21 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
             configurePhase = ''
               eval "$preConfigure"
 
-              ${optionalString self.jailbreak "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal"}
+              ${let newCabalFile = fetchurl {
+                      url = "http://hackage.haskell.org/package/${self.fname}/${self.pname}.cabal";
+                      sha256 = self.editedCabalFile;
+                    };
+                in
+                  optionalString (self.editedCabalFile or "" != "") ''
+                    echo "Replace Cabal file with edited version ${newCabalFile}."
+                    cp ${newCabalFile} ${self.pname}.cabal
+                  ''
+              }${optionalString self.jailbreak "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal"}
 
               for i in Setup.hs Setup.lhs ${defaultSetupHs}; do
                 test -f $i && break
               done
-              ghc --make -o Setup -odir $TMPDIR $i
+              ghc --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
 
               for p in $extraBuildInputs $propagatedNativeBuildInputs; do
                 if [ -d "$p/lib/ghc-${ghc.ghc.version}/package.conf.d" ]; then
@@ -211,11 +220,20 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
                 done
               done
 
+              configureFlags+=" --with-gcc=$CC"
+
               ${optionalString (self.enableSharedExecutables && self.stdenv.isLinux) ''
                 configureFlags+=" --ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.ghc.name}/${self.pname}-${self.version}"
               ''}
               ${optionalString (self.enableSharedExecutables && self.stdenv.isDarwin) ''
                 configureFlags+=" --ghc-option=-optl=-Wl,-headerpad_max_install_names"
+              ''}
+              ${optionalString (versionOlder "7.8" ghc.version && !self.isLibrary) ''
+                configureFlags+=" --ghc-option=-j$NIX_BUILD_CORES"
+              ''}
+
+              ${optionalString self.stdenv.isDarwin ''
+                configureFlags+=" --with-gcc=clang"
               ''}
 
               echo "configure flags: $extraConfigureFlags $configureFlags"
@@ -240,6 +258,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
 
               export GHC_PACKAGE_PATH=$(${ghc.GHCPackages})
               test -n "$noHaddock" || ./Setup haddock --html --hoogle \
+                  ${optionalString (stdenv.lib.versionOlder "6.12" ghc.version) "--ghc-options=-optP-P"} \
                   ${optionalString self.hyperlinkSource "--hyperlink-source"}
 
               eval "$postBuild"

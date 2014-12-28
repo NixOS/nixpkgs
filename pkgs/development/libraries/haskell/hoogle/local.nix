@@ -24,7 +24,7 @@
 # refer to their documentation via symlink so they are not garbage collected.
 
 { stdenv, hoogle, rehoo
-, haskellPlatform, ghc, packages ? [ haskellPlatform ghc.ghc ]
+, ghc, packages ? [ ghc.ghc ]
 }:
 
 let

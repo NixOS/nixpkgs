@@ -204,8 +204,29 @@ in
 
     systemd.services.cjdns = {
       description = "encrypted networking for everybody";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" ];
+      wantedBy = [ "network.target" ];
+      after = [ "networkSetup.service" "network-interfaces.target" ];
+
+      preStart = if cfg.confFile != "" then "" else ''
+        [ -e /etc/cjdns.keys ] && source /etc/cjdns.keys
+
+        if [ -z "$CJDNS_PRIVATE_KEY" ]; then
+            shopt -s lastpipe
+            ${pkg}/bin/makekeys | { read private ipv6 public; }
+
+            umask 0077
+            echo "CJDNS_PRIVATE_KEY=$private" >> /etc/cjdns.keys
+            echo -e "CJDNS_IPV6=$ipv6\nCJDNS_PUBLIC_KEY=$public" > /etc/cjdns.public
+
+            chmod 600 /etc/cjdns.keys
+            chmod 444 /etc/cjdns.public
+        fi
+
+        if [ -z "$CJDNS_ADMIN_PASSWORD" ]; then
+            echo "CJDNS_ADMIN_PASSWORD=$(${pkgs.coreutils}/bin/head -c 96 /dev/urandom | ${pkgs.coreutils}/bin/tr -dc A-Za-z0-9)" \
+                >> /etc/cjdns.keys
+        fi
+      '';
 
       script = (
         if cfg.confFile != "" then "${pkg}/bin/cjdroute < ${cfg.confFile}" else
@@ -223,27 +244,6 @@ in
         Restart = "on-failure";
       };
     };
-
-    system.activationScripts.cjdns = if (cfg.confFile == "") then "" else ''
-      cjdnsWriteKeys() {
-        private=$1
-        ipv6=$2
-        public=$3
-
-        echo "CJDNS_PRIVATE_KEY=$1" >> /etc/cjdns.keys
-        echo -e "CJDNS_IPV6=$2\nCJDNS_PUBLIC_KEY=$3" > /etc/cjdns.public
-
-        chmod 600 /etc/cjdns.keys
-        chmod 444 /etc/cjdns.public
-      }
-
-      grep -q "CJDNS_PRIVATE_KEY=" /etc/cjdns.keys || \
-          cjdnsWriteKeys $(${pkg}/bin/makekeys)
-
-      grep -q "CJDNS_ADMIN_PASSWORD=" /etc/cjdns.keys || \
-          echo "CJDNS_ADMIN_PASSWORD=$(${pkgs.coreutils}/bin/head -c 96 /dev/urandom | ${pkgs.coreutils}/bin/tr -dc A-Za-z0-9)" \
-          >> /etc/cjdns.keys
-    '';
 
     networking.extraHosts = "${cjdnsHosts}";
 

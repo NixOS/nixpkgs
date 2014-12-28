@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Linter for Go source code.";
+    description = "Linter for Go source code";
     homepage = https://github.com/golang/lint;
     license = licenses.mit;
     maintainers = with maintainers; [ offline ];

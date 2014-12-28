@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gmp mpfr ];
 
+  CFLAGS = "-I${gmp}/include";
+
   doCheck = true;
 
   meta = {

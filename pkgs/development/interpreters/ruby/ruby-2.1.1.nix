@@ -51,24 +51,18 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # Fix a build failure on systems with nix store optimisation.
-  # (The build process attempted to copy file a overwriting file b, where a and
-  # b are hard-linked, which results in cp returning a non-zero exit code.)
-  # https://github.com/NixOS/nixpkgs/issues/4266
-  postUnpack = ''rm "$sourceRoot/enc/unicode/name2ctype.h"'';
-
   patches = ops useRailsExpress [
     "${patchSet}/patches/ruby/2.1.0/railsexpress/01-zero-broken-tests.patch"
     "${patchSet}/patches/ruby/2.1.0/railsexpress/02-improve-gc-stats.patch"
     "${patchSet}/patches/ruby/2.1.0/railsexpress/03-display-more-detailed-stack-trace.patch"
     "${patchSet}/patches/ruby/2.1.0/railsexpress/04-show-full-backtrace-on-stack-overflow.patch"
     "${patchSet}/patches/ruby/2.1.0/railsexpress/05-fix-missing-c-return-event.patch"
-    "${patchSet}/patches/ruby/2.1.0/railsexpress/06-backport-006e66b6680f60adfb434ee7397f0dbc77de7873.patch"
-    "${patchSet}/patches/ruby/2.1.0/railsexpress/07-funny-falcon-stc-density.patch"
-    "${patchSet}/patches/ruby/2.1.0/railsexpress/08-funny-falcon-stc-pool-allocation.patch"
-    "${patchSet}/patches/ruby/2.1.0/railsexpress/09-aman-opt-aset-aref-str.patch"
-    "${patchSet}/patches/ruby/2.1.0/railsexpress/10-funny-falcon-method-cache.patch"
-    "${patchSet}/patches/ruby/2.1.0/railsexpress/11-backport-r44370.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/07-backport-006e66b6680f60adfb434ee7397f0dbc77de7873.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/08-funny-falcon-stc-density.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/09-funny-falcon-stc-pool-allocation.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/10-aman-opt-aset-aref-str.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/11-funny-falcon-method-cache.patch"
+    "${patchSet}/patches/ruby/2.1.0/railsexpress/12-backport-r44370.patch"
   ];
 
   # Ruby >= 2.1.0 tries to download config.{guess,sub}
@@ -100,7 +94,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    license = "Ruby";
+    license = stdenv.lib.licenses.ruby;
     homepage = "http://www.ruby-lang.org/en/";
     description = "The Ruby language";
     platforms = stdenv.lib.platforms.all;

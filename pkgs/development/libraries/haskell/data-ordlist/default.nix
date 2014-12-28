@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "data-ordlist";
-  version = "0.4.6.1";
-  sha256 = "1qrvyin5567br99zfip7krdy6snnbm5z5jdi6ghmk0cfmhmyrwy3";
+  version = "0.4.7.0";
+  sha256 = "03a9ix1fcx08viwv2jg5ndw1qbkydyyrmjvqr9wasmcik9x1wv3g";
   meta = {
     description = "Set and bag operations on ordered lists";
     license = self.stdenv.lib.licenses.bsd3;

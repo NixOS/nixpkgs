@@ -43,7 +43,7 @@ import ./make-test.nix {
       $machine->fail("curl --fail --connect-timeout 2 http://$ip/ > /dev/null");
 
       # Make sure we have a NixOS tree (required by ‘nixos-container create’).
-      $machine->succeed("nix-env -qa -A nixos.pkgs.hello >&2");
+      $machine->succeed("PAGER=cat nix-env -qa -A nixos.pkgs.hello >&2");
 
       # Create some containers imperatively.
       my $id1 = $machine->succeed("nixos-container create foo --ensure-unique-name");
@@ -86,6 +86,13 @@ import ./make-test.nix {
       }
 
       # Start one of them.
+      $machine->succeed("nixos-container start $id1");
+
+      # Execute commands via the root shell.
+      $machine->succeed("nixos-container run $id1 -- uname") =~ /Linux/ or die;
+
+      # Stop and start (regression test for #4989)
+      $machine->succeed("nixos-container stop $id1");
       $machine->succeed("nixos-container start $id1");
 
       # Execute commands via the root shell.

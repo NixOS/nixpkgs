@@ -14,16 +14,16 @@ rec {
     else throw "no snapshot to boostrap for this platform (missing platform url suffix)";
 
   snapshotHash = if stdenv.system == "i686-linux"
-    then "c92895421e6fa170dbd713e74334b8c3cf22b817"
+    then "4dea04e278192c5409f43794a98f20a8f59df2d9"
     else if stdenv.system == "x86_64-linux"
-    then "66ee4126f9e4820cd82e78181931f8ea365904de"
+    then "3e48c573d3c4d26591feb7bfe988174720f08374"
     else if stdenv.system == "i686-darwin"
-    then "e2364b1f1ece338b9fc4c308c472fc2413bff04e"
+    then "dc3d498c0567af4a0820e91756dcfff8fde0efac"
     else if stdenv.system == "x86_64-darwin"
-    then "09f92f06ab4f048acf71d83dc0426ff1509779a9"
+    then "f301bd8c3c93a5c88698c69190e464af1525ac96"
     else throw "no snapshot for platform ${stdenv.system}";
 
-  snapshotDate = "2014-09-19";
+  snapshotDate = "2014-12-21";
   snapshotName = "cargo-nightly-${platform}.tar.gz";
 
   snapshot = stdenv.mkDerivation {
@@ -37,8 +37,8 @@ rec {
       mkdir -p "$out"
       cp -r bin "$out/bin"
     '' + (if stdenv.isLinux then ''
-      patchelf --interpreter "${stdenv.glibc}/lib/${stdenv.gcc.dynamicLinker}" \
-               --set-rpath "${stdenv.gcc.gcc}/lib/:${stdenv.gcc.gcc}/lib64/:${zlib}/lib" \
+      patchelf --interpreter "${stdenv.glibc}/lib/${stdenv.cc.dynamicLinker}" \
+               --set-rpath "${stdenv.cc.gcc}/lib/:${stdenv.cc.gcc}/lib64/:${zlib}/lib" \
                "$out/bin/cargo"
     '' else "");
   };

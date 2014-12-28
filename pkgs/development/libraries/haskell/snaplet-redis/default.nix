@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "snaplet-redis";
-  version = "0.1.4";
-  sha256 = "1xyff7hsafxjyiifm7fb2d43sscrzqrn3gxfdjzgrhf8b3ayi01y";
+  version = "0.1.4.1";
+  sha256 = "0vrsvmgrds7l4q88q7gmy1bz36z5ba45rib2vm5z6v2cf0x22qz2";
   buildDepends = [
     configurator hedis lens mtl network snap text transformers
   ];

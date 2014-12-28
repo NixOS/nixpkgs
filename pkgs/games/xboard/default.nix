@@ -5,11 +5,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="xboard";
-    version="4.7.3";
+    version="4.8.0";
     name="${baseName}-${version}";
-    hash="1amy9krr0qkvcc7gnp3i9x9ma91fc5cq8hy3gdc7rmfsaczv1l3z";
-    url="http://ftp.gnu.org/gnu/xboard/xboard-4.7.3.tar.gz";
-    sha256="1amy9krr0qkvcc7gnp3i9x9ma91fc5cq8hy3gdc7rmfsaczv1l3z";
+    hash="05rdj0nyirc4g1qi5hhrjy45y52ihp1j3ldq2c5bwrz0gzy4i3y8";
+    url="http://ftp.gnu.org/gnu/xboard/xboard-4.8.0.tar.gz";
+    sha256="05rdj0nyirc4g1qi5hhrjy45y52ihp1j3ldq2c5bwrz0gzy4i3y8";
   };
   buildInputs = [
     libX11 xproto libXt libXaw libSM libICE libXmu 

@@ -1,17 +1,17 @@
 { stdenv, fetchurl, libX11, libXtst, libXext, libXdamage, libXfixes, wineUnstable, makeWrapper, libXau
-, bash, patchelf }:
+, bash, patchelf, config }:
 
 let
   topath = "${wineUnstable}/bin";
 
   toldpath = stdenv.lib.concatStringsSep ":" (map (x: "${x}/lib") 
-    [ stdenv.gcc.gcc libX11 libXtst libXext libXdamage libXfixes wineUnstable ]);
+    [ stdenv.cc.gcc libX11 libXtst libXext libXdamage libXfixes wineUnstable ]);
 in
 stdenv.mkDerivation {
   name = "teamviewer-8.0.17147";
   src = fetchurl {
-    url = "http://download.teamviewer.com/download/version_8x/teamviewer_linux_x64.deb";
-    sha256 = "0s5m15f99rdmspzwx3gb9mqd6jx1bgfm0d6rfd01k9rf7gi7qk0k";
+    url = config.teamviewer8.url or "http://download.teamviewer.com/download/version_8x/teamviewer_linux_x64.deb";
+    sha256 = config.teamviewer8.sha256 or "0s5m15f99rdmspzwx3gb9mqd6jx1bgfm0d6rfd01k9rf7gi7qk0k";
   };
 
   buildInputs = [ makeWrapper patchelf ];
@@ -34,8 +34,8 @@ stdenv.mkDerivation {
     EOF
     chmod +x $out/bin/teamviewer
 
-    patchelf --set-rpath "${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib:${libX11}/lib:${libXext}/lib:${libXau}/lib:${libXdamage}/lib:${libXfixes}/lib" $out/share/teamviewer8/tv_bin/teamviewerd
-    patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" $out/share/teamviewer8/tv_bin/teamviewerd
+    patchelf --set-rpath "${stdenv.cc.gcc}/lib64:${stdenv.cc.gcc}/lib:${libX11}/lib:${libXext}/lib:${libXau}/lib:${libXdamage}/lib:${libXfixes}/lib" $out/share/teamviewer8/tv_bin/teamviewerd
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/share/teamviewer8/tv_bin/teamviewerd
     ln -s $out/share/teamviewer8/tv_bin/teamviewerd $out/bin/
   '';
 

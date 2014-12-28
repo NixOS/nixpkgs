@@ -39,6 +39,73 @@ in
       '';
     };
 
+    networking.proxy = {
+
+      default = lib.mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          This option specifies the default value for httpProxy, httpsProxy, ftpProxy and rsyncProxy.
+        '';
+        example = "http://127.0.0.1:3128";
+      };
+
+      httpProxy = lib.mkOption {
+        type = types.nullOr types.str;
+        default = cfg.proxy.default;
+        description = ''
+          This option specifies the http_proxy environment variable.
+        '';
+        example = "http://127.0.0.1:3128";
+      };
+
+      httpsProxy = lib.mkOption {
+        type = types.nullOr types.str;
+        default = cfg.proxy.default;
+        description = ''
+          This option specifies the https_proxy environment variable.
+        '';
+        example = "http://127.0.0.1:3128";
+      };
+
+      ftpProxy = lib.mkOption {
+        type = types.nullOr types.str;
+        default = cfg.proxy.default;
+        description = ''
+          This option specifies the ftp_proxy environment variable.
+        '';
+        example = "http://127.0.0.1:3128";
+      };
+
+      rsyncProxy = lib.mkOption {
+        type = types.nullOr types.str;
+        default = cfg.proxy.default;
+        description = ''
+          This option specifies the rsync_proxy environment variable.
+        '';
+        example = "http://127.0.0.1:3128";
+      };
+
+      noProxy = lib.mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          This option specifies the no_proxy environment variable.
+          If a default proxy is used and noProxy is null,
+          then noProxy will be set to 127.0.0.1,localhost.
+        '';
+        example = "127.0.0.1,localhost,.localdomain";
+      };
+
+      envVars = lib.mkOption {
+        type = types.attrs;
+        internal = true;
+        default = {};
+        description = ''
+          Environment variables used for the network proxy.
+        '';
+      };
+    };
   };
 
   config = {
@@ -73,7 +140,7 @@ in
             '' + optionalString config.services.nscd.enable ''
               # Invalidate the nscd cache whenever resolv.conf is
               # regenerated.
-              libc_restart='${pkgs.systemd}/bin/systemctl try-restart --no-block nscd.service'
+              libc_restart='${pkgs.systemd}/bin/systemctl try-restart --no-block nscd.service 2> /dev/null'
             '' + optionalString cfg.dnsSingleRequest ''
               # only send one DNS request at a time
               resolv_conf_options='single-request'
@@ -84,13 +151,59 @@ in
               dnsmasq_conf=/etc/dnsmasq-conf.conf
               dnsmasq_resolv=/etc/dnsmasq-resolv.conf
             '';
-      };
+
+      } // (optionalAttrs config.services.resolved.enable (
+        if dnsmasqResolve then {
+          "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
+        } else {
+          "resolv.conf".source = "/run/systemd/resolve/resolv.conf";
+        }
+      ));
+
+      networking.proxy.envVars =
+        optionalAttrs (cfg.proxy.default != null) {
+          # other options already fallback to proxy.default
+          no_proxy = "127.0.0.1,localhost";
+        } // optionalAttrs (cfg.proxy.httpProxy != null) {
+          http_proxy  = cfg.proxy.httpProxy;
+        } // optionalAttrs (cfg.proxy.httpsProxy != null) {
+          https_proxy = cfg.proxy.httpsProxy;
+        } // optionalAttrs (cfg.proxy.rsyncProxy != null) {
+          rsync_proxy = cfg.proxy.rsyncProxy;
+        } // optionalAttrs (cfg.proxy.ftpProxy != null) {
+          ftp_proxy   = cfg.proxy.ftpProxy;
+        } // optionalAttrs (cfg.proxy.noProxy != null) {
+          no_proxy    = cfg.proxy.noProxy;
+        };
+
+    # Install the proxy environment variables
+    environment.sessionVariables = cfg.proxy.envVars;
 
     # The ‘ip-up’ target is started when we have IP connectivity.  So
     # services that depend on IP connectivity (like ntpd) should be
     # pulled in by this target.
     systemd.targets.ip-up.description = "Services Requiring IP Connectivity";
 
+    # This is needed when /etc/resolv.conf is being overriden by networkd
+    # and other configurations. If the file is destroyed by an environment
+    # activation then it must be rebuilt so that applications which interface
+    # with /etc/resolv.conf directly don't break.
+    system.activationScripts.resolvconf = stringAfter [ "etc" "tmpfs" "var" ]
+      ''
+        # Systemd resolved controls its own resolv.conf
+        rm -f /run/resolvconf/interfaces/systemd
+        ${optionalString config.services.resolved.enable ''
+          rm -rf /run/resolvconf/interfaces
+          mkdir -p /run/resolvconf/interfaces
+          ln -s /run/systemd/resolve/resolv.conf /run/resolvconf/interfaces/systemd
+        ''}
+
+        # Make sure resolv.conf is up to date if not managed by systemd
+        ${optionalString (!config.services.resolved.enable) ''
+          ${pkgs.openresolv}/bin/resolvconf -u
+        ''}
+      '';
+
   };
 
-}
+  }

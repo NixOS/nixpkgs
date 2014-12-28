@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "A parametric 3d CAD program.";
+    description = "A parametric 3d CAD program";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
     platforms = stdenv.lib.platforms.linux;

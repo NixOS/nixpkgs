@@ -100,13 +100,13 @@ let inherit (builtins) head tail trace; in
                 ${stdenv.preHook}
                 
                 set -e
-                NIX_GCC=${stdenv.gcc}
+                NIX_CC=${stdenv.cc}
                 export SHELL=${stdenv.shell}
                 PATH_DELIMITER=':'
                 
                 # Set up the initial path.
                 PATH=
-                for i in \$NIX_GCC ${toString stdenv.initialPath}; do
+                for i in \$NIX_CC ${toString stdenv.initialPath}; do
                     PATH=\$PATH\${PATH:+\"\${PATH_DELIMITER}\"}\$i/bin
                 done
 
@@ -138,7 +138,7 @@ let inherit (builtins) head tail trace; in
                 }
 
                 pkgs=\"\"
-                for i in \$NIX_GCC ${toString realBuildInputs}; do
+                for i in \$NIX_CC ${toString realBuildInputs}; do
                     findInputs \$i
                 done
 

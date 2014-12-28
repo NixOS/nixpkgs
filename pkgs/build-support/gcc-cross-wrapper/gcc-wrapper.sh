@@ -1,7 +1,7 @@
 #! @shell@ -e
 
-if test -n "$NIX_GCC_WRAPPER_START_HOOK"; then
-    source "$NIX_GCC_WRAPPER_START_HOOK"
+if test -n "$NIX_CC_WRAPPER_START_HOOK"; then
+    source "$NIX_CC_WRAPPER_START_HOOK"
 fi
 
 if test -z "$NIX_CROSS_GLIBC_FLAGS_SET"; then
@@ -107,20 +107,11 @@ if test "$NIX_DEBUG" = "1"; then
   done
 fi
 
-if test -n "$NIX_GCC_WRAPPER_EXEC_HOOK"; then
-    source "$NIX_GCC_WRAPPER_EXEC_HOOK"
+if test -n "$NIX_CC_WRAPPER_EXEC_HOOK"; then
+    source "$NIX_CC_WRAPPER_EXEC_HOOK"
 fi
 
 # We want gcc to call the wrapper linker, not that of binutils.
 export PATH="@ldPath@:$PATH"
 
-# Call the real `gcc'.  Filter out warnings from stderr about unused
-# `-B' flags, since they confuse some programs.  Deep bash magic to
-# apply grep to stderr (by swapping stdin/stderr twice).
-if test -z "$NIX_GCC_NEEDS_GREP"; then
-    @gccProg@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]}
-else
-    (@gccProg@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]} 3>&2 2>&1 1>&3- \
-        | (grep -v 'file path prefix' || true); exit ${PIPESTATUS[0]}) 3>&2 2>&1 1>&3-
-    exit $?
-fi    
+exec @gccProg@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]}

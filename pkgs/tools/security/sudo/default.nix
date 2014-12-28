@@ -3,20 +3,20 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "sudo-1.8.11";
+  name = "sudo-1.8.11p2";
 
   src = fetchurl {
     urls =
       [ "ftp://ftp.sudo.ws/pub/sudo/${name}.tar.gz"
         "ftp://ftp.sudo.ws/pub/sudo/OLD/${name}.tar.gz"
       ];
-    sha256 = "0if82pvmz7m3qkj3sc9yy8mpcd7lmbn0mhrgnd1zpszvnpkps5x3";
+    sha256 = "1bd1zf85q15z015268w9vchzwypzalc3v2dnddmwy67s32a88cw1";
   };
 
   configureFlags = [
     "--with-env-editor"
     "--with-editor=/run/current-system/sw/bin/nano"
-    "--with-rundir=/var/run"
+    "--with-rundir=/run"
     "--with-vardir=/var/db/sudo"
     "--with-logpath=/var/log/sudo.log"
     "--with-sendmail=${sendmailPath}"
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall = 
+  postInstall =
     ''
     rm -f $out/share/doc/sudo/ChangeLog
     '';
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A command to run commands as root";
 
-    longDescription = 
+    longDescription =
       ''
       Sudo (su "do") allows a system administrator to delegate
       authority to give certain users (or groups of users) the ability

@@ -31,6 +31,7 @@ let
     buildCommand = ''
       mkdir -p $out
       shopt -s nullglob
+      set +o pipefail
 
       # Set a reasonable $PATH for programs called by udev rules.
       echo 'ENV{PATH}="${udevPath}/bin:${udevPath}/sbin"' > $out/00-path.rules
@@ -87,7 +88,7 @@ let
       done
 
       ${optionalString config.networking.usePredictableInterfaceNames ''
-        cp ${./80-net-name-slot.rules} $out/80-net-name-slot.rules
+        cp ${./80-net-setup-link.rules} $out/80-net-setup-link.rules
       ''}
 
       # If auto-configuration is disabled, then remove

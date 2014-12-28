@@ -1,14 +1,21 @@
-{stdenv, fetchurl, apacheHttpd, jdk}:
+{ stdenv, fetchurl, apacheHttpd, jdk }:
 
-stdenv.mkDerivation {
-  name = "tomcat-connectors-1.2.32";
-  builder = ./builder.sh;
+stdenv.mkDerivation rec {
+  name = "tomcat-connectors-1.2.40";
 
   src = fetchurl {
-    url = http://archive.apache.org/dist/tomcat/tomcat-connectors/jk/tomcat-connectors-1.2.32-src.tar.gz;
-    sha256 = "1dim62warzy1hqvc7cvnqsbq475sr6vpgwd6gfmddmkgw155saji";
+    url = "http://www.apache.si/tomcat/tomcat-connectors/jk/${name}-src.tar.gz";
+    sha256 = "0pbh6s19ba5k2kahiiqgx8lz8v4fjllzn0w6hjd08x7z9my38pl9";
   };
 
-  inherit apacheHttpd;
-  buildInputs = [apacheHttpd jdk];
+  configureFlags = "--with-apxs=${apacheHttpd}/bin/apxs --with-java-home=${jdk}";
+
+  sourceRoot = "${name}-src/native";
+
+  installPhase = ''
+    mkdir -p $out/modules
+    cp apache-2.0/mod_jk.so $out/modules
+  '';
+
+  buildInputs = [ apacheHttpd jdk ];
 }

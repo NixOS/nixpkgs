@@ -20,6 +20,7 @@ stdenv.mkDerivation {
     ./license.patch
     ./cfg80211_ibss_joined-channel-parameter.patch
     ./netdev-3.17.patch
+    ./cfg80211_inform_bss-3.18.patch
   ];
 
   makeFlags = "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}";
@@ -42,7 +43,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Kernel module driver for some Broadcom's wireless cards";
     homepage = http://www.broadcom.com/support/802.11/linux_sta.php;
-    license = "unfree-redistributable";
+    license = stdenv.lib.licenses.unfreeRedistributable;
     maintainers = with stdenv.lib.maintainers; [ phreedom vcunat ];
     platforms = stdenv.lib.platforms.linux;
   };

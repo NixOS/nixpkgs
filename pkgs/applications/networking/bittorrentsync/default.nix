@@ -5,15 +5,15 @@ let
     else if stdenv.system == "i686-linux" then "i386"
     else throw "Bittorrent Sync for: ${stdenv.system} not supported!";
 
-  sha256 = if stdenv.system == "x86_64-linux" then "115xsbi5z8ll0z07vx4rzzsgr6qba43f3z3nzx33pva5dpdr3ci9"
-    else if stdenv.system == "i686-linux" then "110k6cq6l3nr1gak2ri6i1kwis78r3zc1ilbipgcccdczf9fnx7p"
+  sha256 = if stdenv.system == "x86_64-linux" then "0hiapq24y02pm7zi0jvqj4jxwdn5k74yxq9n1jpv8jmgir3iwznn"
+    else if stdenv.system == "i686-linux" then "0jv3zg0jhdzsc56kkpylwihvhsz73gsl2i2pjmqk3r3x4gwjk8xx"
     else throw "Bittorrent Sync for: ${stdenv.system} not supported!";
 
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.gcc.libc ];
+  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.libc ];
 in
 stdenv.mkDerivation rec {
   name = "btsync-${version}";
-  version = "1.4.82";
+  version = "1.4.103";
 
   src  = fetchurl {
     url  = "http://syncapp.bittorrent.com/${version}/btsync_${arch}-${version}.tar.gz";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin/"
     cp -r "btsync" "$out/bin/"
 
-    patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+    patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath ${libPath} "$out/bin/btsync"
   '';
 

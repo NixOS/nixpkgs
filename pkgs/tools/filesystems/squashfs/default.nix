@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib xz ];
 
   preBuild = "cd squashfs-tools";
-  
-  NIX_LDFLAGS = "-lgcc_s"; # for pthread_cancel
 
   installFlags = "INSTALL_DIR=\${out}/bin";
 

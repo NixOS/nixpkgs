@@ -32,13 +32,13 @@ in
 
 stdenv.mkDerivation {
 
-  name = "debootstrap-1.0.63";
+  name = "debootstrap-1.0.64";
 
   src = fetchurl {
     # git clone git://git.debian.org/d-i/debootstrap.git
     # I'd like to use the source. However it's lacking the lanny script ? (still true?)
-    url = http://ftp.de.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.63.tar.xz;
-    sha256 = "1maavqg3qjfrmmh76zbl3fwy1hmws93qgwqrw9vh1dffjxgngvcw";
+    url = http://ftp.de.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.64.tar.xz;
+    sha256 = "0yrdgggqgb7g1h677zipaxs17iyw4fmnmhh0l5n17d8x39pqjkd8";
   };
 
   buildInputs = [ dpkg gettext gawk perl ];

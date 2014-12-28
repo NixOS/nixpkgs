@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     homepage = http://xca.sourceforge.net/;
     platforms = platforms.all;
     license = licenses.bsd3;
-    broken = true;
   };
 }

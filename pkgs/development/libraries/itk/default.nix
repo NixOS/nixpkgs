@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Insight Segmentation and Registration Toolkit";
     homepage = http://www.itk.org/;
-    license = "BSD";
+    license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

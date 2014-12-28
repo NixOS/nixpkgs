@@ -2,12 +2,12 @@
 , liblrdf, libsndfile, pkgconfig, qt4 }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.6";
+  version = "0.9.6.1";
   name = "hydrogen-${version}";
 
   src = fetchurl {
     url = "https://github.com/hydrogen-music/hydrogen/archive/${version}.tar.gz";
-    sha256 = "1z7j8aq158mp41iv78j0w6fyx98y1y51z592b4x5hkvicabgck5w";
+    sha256 = "0vxnaqfmcv7hhk0cj67imdcqngspnck7f0wfmvhfgfqa7x1xznll";
   };
 
   buildInputs = [ 

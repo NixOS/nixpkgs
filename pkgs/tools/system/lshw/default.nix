@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     ${if withGUI then "make DESTDIR=$out install-gui" else ""}
     mv $out/usr/* $out
     rmdir $out/usr
+    mv $out/sbin $out/bin
   '';
 
   meta = with stdenv.lib; {

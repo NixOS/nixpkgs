@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "linear";
-  version = "1.10.1.2";
-  sha256 = "05zbqdcdjq7anng2nymy05wsnk9qpk8mgivqcndbfjpk4l1r9k94";
+  version = "1.15.5";
+  sha256 = "17fxz49zj6vklgfs583zpn7naqgp5mv2zsvmxrv80ym8r52mp5mi";
   buildDepends = [
     adjunctions binary distributive hashable lens reflection
     semigroupoids semigroups tagged transformers unorderedContainers

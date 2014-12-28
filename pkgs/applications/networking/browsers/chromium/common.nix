@@ -13,7 +13,7 @@
 , bison, gperf
 , glib, gtk, dbus_glib
 , libXScrnSaver, libXcursor, libXtst, mesa
-, protobuf, speechd, libXdamage
+, protobuf, speechd, libXdamage, cups
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -25,7 +25,7 @@
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome_keyring3 ? null
 , proprietaryCodecs ? true
-, cupsSupport ? false
+, cupsSupport ? true
 , pulseSupport ? false, pulseaudio ? null
 , hiDPISupport ? false
 
@@ -69,7 +69,7 @@ let
     use_system_xdg_utils = true;
     use_system_yasm = true;
     use_system_zlib = false;
-    use_system_protobuf = true;
+    use_system_protobuf = false; # needs newer protobuf
 
     use_system_harfbuzz = false;
     use_system_icu = false; # Doesn't support ICU 52 yet.
@@ -117,7 +117,7 @@ let
     ] ++ optional gnomeKeyringSupport libgnome_keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optional enableSELinux libselinux
-      ++ optional cupsSupport libgcrypt
+      ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional pulseSupport pulseaudio;
 
     # XXX: Wait for https://crbug.com/239107 and https://crbug.com/239181 to
@@ -186,6 +186,9 @@ let
     } // (extraAttrs.gypFlags or {}));
 
     configurePhase = ''
+      # Precompile .pyc files to prevent race conditions during build
+      python -m compileall -q -f . || : # ignore errors
+
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
       python build/linux/unbundle/replace_gyp_files.py ${gypFlags}

@@ -3,13 +3,13 @@
   }:
 
 let
-  wine_patches_version = "1.7.28";
-  wine_hash = "04r3zk3dz2vzly2a4nqbcvppjs5iy3lq5ibx3wfrf877p5bz3hv7";
+  wine_patches_version = "1.7.33";
+  wine_hash = "0xcjsh3635i8wpzixzsl05m3dkq74vq193x3ipjr3fy0l9prslg3";
 
   wine_patches = fetchgit {
     url = "git://github.com/compholio/wine-compholio.git";
     rev = "refs/tags/v${wine_patches_version}";
-    sha256 = "17f1wmxbx6ly1ws4p528ijf9b4yvmnmap5k7npw9icvkyaky5xi9";
+    sha256 = "09af0cwdskz4clps39f48cp4lzm41kdzg30q8b511nyl0dppd75r";
   };
 
   wine_custom =
@@ -45,13 +45,13 @@ let
 
 in stdenv.mkDerivation rec {
 
-  version = "0.2.7.2";
+  version = "0.2.8";
 
   name = "pipelight-${version}";
 
   src = fetchurl {
     url = "https://bitbucket.org/mmueller2012/pipelight/get/v${version}.tar.gz";
-    sha256 = "02132151091f1f62d7409a537649efc86deb0eb4a323fd66907fc22947e2cfbd";
+    sha256 = "1i440rf22fmd2w86dlm1mpi3nb7410rfczc0yldnhgsvp5p3sm5f";
   };
 
   buildInputs = [ wine_custom xlibs.libX11 gcc48_multi mesa curl ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg, curl, libarchive, openssl, ruby, buildRubyGem, libiconv
+{ stdenv, fetchurl, dpkg, curl, libarchive, openssl, ruby, buildRubyGem, libiconvOrLibc
 , libxml2, libxslt }:
 
 assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
 
     # libiconv: iconv
     rm opt/vagrant/embedded/bin/iconv
-    ln -s ${libiconv}/bin/iconv opt/vagrant/embedded/bin
+    ln -s ${libiconvOrLibc}/bin/iconv opt/vagrant/embedded/bin
 
     # libxml: xml2-config, xmlcatalog, xmllint
     rm opt/vagrant/embedded/bin/{xml2-config,xmlcatalog,xmllint}

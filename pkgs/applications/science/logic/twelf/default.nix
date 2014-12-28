@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       Standard ML.
     '';
     homepage = http://twelf.org/wiki/Main_Page;
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ jwiegley ];
     platforms = stdenv.lib.platforms.unix;
   };

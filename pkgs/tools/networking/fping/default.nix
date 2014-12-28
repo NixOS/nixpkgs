@@ -12,5 +12,6 @@ stdenv.mkDerivation rec {
     homepage = "http://fping.org/";
     description = "Send ICMP echo probes to network hosts";
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
+    platforms = with stdenv.lib.platforms; all;
   };
 }

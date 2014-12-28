@@ -99,4 +99,6 @@ rec {
   git-remote-hg = callPackage ./git-remote-hg { };
 
   gitRemoteGcrypt = callPackage ./git-remote-gcrypt { };
+
+  git-extras = callPackage ./git-extras { };
 }

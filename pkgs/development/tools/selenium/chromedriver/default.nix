@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     mv chromedriver $out/bin
     patchelf --set-interpreter ${glibc}/lib/ld-linux-x86-64.so.2 $out/bin/chromedriver
     wrapProgram "$out/bin/chromedriver" \
-      --prefix LD_LIBRARY_PATH : "$(cat ${stdenv.gcc}/nix-support/orig-gcc)/lib64:${cairo}/lib:${fontconfig}/lib:${freetype}/lib:${gdk_pixbuf}/lib:${glib}/lib:${gtk}/lib:${libX11}/lib:${nspr}/lib:${nss}/lib:${pango}/lib:${libXrender}/lib:${gconf}/lib:${libXext}/lib:${libXi}/lib:\$LD_LIBRARY_PATH"
+      --prefix LD_LIBRARY_PATH : "$(cat ${stdenv.cc}/nix-support/orig-gcc)/lib64:${cairo}/lib:${fontconfig}/lib:${freetype}/lib:${gdk_pixbuf}/lib:${glib}/lib:${gtk}/lib:${libX11}/lib:${nspr}/lib:${nss}/lib:${pango}/lib:${libXrender}/lib:${gconf}/lib:${libXext}/lib:${libXi}/lib:\$LD_LIBRARY_PATH"
   '';
 
   meta = with stdenv.lib; {

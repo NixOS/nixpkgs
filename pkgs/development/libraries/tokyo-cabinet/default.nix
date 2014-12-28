@@ -1,16 +1,14 @@
 { fetchurl, stdenv, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
-  name = "tokyocabinet-1.4.46";
+  name = "tokyocabinet-1.4.48";
 
   src = fetchurl {
-    url = "http://www.1978th.net/tokyocabinet/${name}.tar.gz";
-    sha256 = "18rkv6kq43cqabc9mvfw534nsv6v8bc2i2r2bmax0yxnbhqa7ahf";
+    url = "http://fallabs.com/tokyocabinet/${name}.tar.gz";
+    sha256 = "140zvr0n8kvsl0fbn2qn3f2kh3yynfwnizn4dgbj47m975yg80x0";
   };
 
   buildInputs = [ zlib bzip2 ];
-
-  doCheck = true;
 
   postInstall =
     '' sed -i "$out/lib/pkgconfig/tokyocabinet.pc" \

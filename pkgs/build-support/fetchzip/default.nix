@@ -12,10 +12,8 @@
 , url
 , ... } @ args:
 
-fetchurl ({
-  # Remove the extension, because otherwise unpackPhase will get
-  # confused. FIXME: fix unpackPhase.
-  name = args.name or lib.removeSuffix ".zip" (lib.removeSuffix ".tar.gz" (baseNameOf url));
+lib.overrideDerivation (fetchurl ({
+  name = args.name or (baseNameOf url);
 
   recursiveHash = true;
 
@@ -41,4 +39,6 @@ fetchurl ({
       mv $out/$fn/* "$out/"
       rmdir "$out/$fn"
     '';
-} // args)
+} // args))
+# Hackety-hack: we actually need unzip hooks, too
+(x: {nativeBuildInputs = x.nativeBuildInputs++ [unzip];})

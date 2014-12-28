@@ -38,7 +38,8 @@ in
   testScript =
     ''
       $server->waitForUnit("nfsd");
-      $server->waitForUnit("network.target");
+      $server->succeed("systemctl start network-online.target");
+      $server->waitForUnit("network-online.target");
 
       startAll;
 

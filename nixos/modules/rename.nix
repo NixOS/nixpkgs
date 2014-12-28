@@ -74,6 +74,7 @@ in zipModules ([]
 ++ obsolete [ "environment" "x11Packages" ] [ "environment" "systemPackages" ]
 ++ obsolete [ "environment" "enableBashCompletion" ] [ "programs" "bash" "enableCompletion" ]
 ++ obsolete [ "environment" "nix" ] [ "nix" "package" ]
+++ obsolete [ "fonts" "enableFontConfig" ] [ "fonts" "fontconfig" "enable" ]
 ++ obsolete [ "fonts" "extraFonts" ] [ "fonts" "fonts" ]
 
 ++ obsolete [ "security" "extraSetuidPrograms" ] [ "security" "setuidPrograms" ]
@@ -107,6 +108,12 @@ in zipModules ([]
 ++ obsolete [ "services" "xserver" "startOpenSSHAgent" ] [ "programs" "ssh" "startAgent" ]
 ++ obsolete [ "services" "xserver" "windowManager" "xbmc" ] [ "services" "xserver" "desktopManager" "xbmc" ]
 
+# VirtualBox
+++ obsolete [ "services" "virtualbox" "enable" ] [ "services" "virtualboxGuest" "enable" ]
+
+# proxy
+++ obsolete [ "nix" "proxy" ] [ "networking" "proxy" "default" ]
+
 # KDE
 ++ deprecated [ "kde" "extraPackages" ] [ "environment" "kdePackages" ]
 # ++ obsolete [ "environment" "kdePackages" ] [ "environment" "systemPackages" ] # !!! doesn't work!
@@ -131,5 +138,6 @@ in zipModules ([]
 ++ obsolete' [ "programs" "bash" "enable" ]
 ++ obsolete' [ "services" "samba" "defaultShare" ]
 ++ obsolete' [ "services" "syslog-ng" "serviceName" ]
+++ obsolete' [ "services" "syslog-ng" "listenToJournal" ]
 
 )

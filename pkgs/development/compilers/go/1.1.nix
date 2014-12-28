@@ -17,6 +17,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ bison glibc bash makeWrapper ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+
   # I'm not sure what go wants from its 'src', but the go installation manual
   # describes an installation keeping the src.
   preUnpack = ''
@@ -89,6 +91,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    branch = "1.1";
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = "BSD";

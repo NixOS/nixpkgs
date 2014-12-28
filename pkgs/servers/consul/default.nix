@@ -2,7 +2,7 @@
 , ruby, rubyPackages, nodejs, loadRubyEnv }:
 
 let
-  version = "0.4.0";
+  version = "0.4.1";
   rubyEnv = loadRubyEnv { gemset = ./gemset.nix; };
 in
 

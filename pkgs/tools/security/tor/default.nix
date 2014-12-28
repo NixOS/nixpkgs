@@ -1,16 +1,26 @@
-{ stdenv, fetchurl, libevent, openssl, zlib }:
+{ stdenv, fetchurl, libevent, openssl, zlib, torsocks }:
 
 stdenv.mkDerivation rec {
-  name = "tor-0.2.4.24";
+  name = "tor-0.2.5.10";
 
   src = fetchurl {
     url = "https://archive.torproject.org/tor-package-archive/${name}.tar.gz";
-    sha256 = "1l8aczqz8injzcj3mabx4figl8ahkzb0vs9s3nir6kn0b1l5rccr";
+    sha256 = "0fx8qnwh2f8ykfx0np4hyznjfi4xfy96z59pk96y3zyjvjjh5pdk";
   };
 
-  buildInputs = [ libevent openssl zlib ];
+  # Note: torsocks is specified as a dependency, as the distributed
+  # 'torify' wrapper attempts to use it; although there is no
+  # ./configure time check for any of this.
+  buildInputs = [ libevent openssl zlib torsocks ];
 
   CFLAGS = "-lgcc_s";
+
+  # Patch 'torify' to point directly to torsocks.
+  patchPhase = ''
+    substituteInPlace contrib/client-tools/torify \
+      --replace 'pathfind torsocks' true          \
+      --replace 'exec torsocks' 'exec ${torsocks}/bin/torsocks'
+  '';
 
   doCheck = true;
 
@@ -31,7 +41,8 @@ stdenv.mkDerivation rec {
 
     license="mBSD";
 
-    maintainers = with stdenv.lib.maintainers; [ phreedom ludo ];
+    maintainers = with stdenv.lib.maintainers;
+      [ phreedom ludo doublec thoughtpolice ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

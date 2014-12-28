@@ -1,5 +1,8 @@
 args@{...}: with args;
 
+let tag = "20140827";
+    sha256 = "02adf2212872db3c5d133642d2c12fbfc28b506e4c0c42552e3d079756f63f65";
+in
 
 let inherit (args.composableDerivation) composableDerivation edf; in
 composableDerivation {
@@ -9,14 +12,14 @@ composableDerivation {
                    else stdenv ).mkDerivation;
 } (fix: {
 
-    name = "qvim-7.4";
+    name = "qvim-7.4." + tag;
 
     enableParallelBuilding = true; # test this
 
     src = fetchgit {
       url = https://bitbucket.org/equalsraf/vim-qt.git ;
-      rev = "4160bfd5c1380e899d2f426b494fc4f1cf6ae85e";
-      sha256 = "1qa3xl1b9gqw66p71h53l7ibs4y3zfyj553jss70ybxaxchbhi5b";
+      rev = "refs/tags/package-" + tag;
+      inherit sha256;
     };
 
     # FIXME: adopt Darwin fixes from vim/default.nix, then chage meta.platforms.linux
@@ -119,7 +122,7 @@ composableDerivation {
   meta = with stdenv.lib; {
     description = "The most popular clone of the VI editor (Qt GUI fork)";
     homepage    = https://bitbucket.org/equalsraf/vim-qt/wiki/Home;
-    maintainers = with maintainers; [ smironov ];
+    maintainers = with maintainers; [ smironov ttuegel ];
     platforms   = platforms.linux;
   };
 })

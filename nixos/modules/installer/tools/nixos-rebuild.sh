@@ -156,7 +156,7 @@ if [ -n "$buildNix" ]; then
                     exit 1
                 fi
                 if ! nix-store -r $nixStorePath --add-root $tmpDir/nix --indirect \
-                    --option extra-binary-caches http://cache.nixos.org/; then
+                    --option extra-binary-caches https://cache.nixos.org/; then
                     echo "warning: don't know how to get latest Nix" >&2
                 fi
                 # Older version of nix-store -r don't support --add-root.

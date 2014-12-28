@@ -1120,12 +1120,9 @@ echo @foo@
   <varlistentry>
     <term>Python</term>
     <listitem><para>Adds the
-    <filename>lib/python2.5/site-packages</filename> subdirectory of
+    <filename>lib/${python.libPrefix}/site-packages</filename> subdirectory of
     each build input to the <envar>PYTHONPATH</envar> environment
-    variable.</para>
-
-    <note><para>This should be generalised: the Python version
-    shouldn’t be hard-coded.</para></note></listitem>
+    variable.</para></listitem>
   </varlistentry>
 
   <varlistentry>

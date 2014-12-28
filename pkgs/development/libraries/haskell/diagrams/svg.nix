@@ -7,13 +7,14 @@
 
 cabal.mkDerivation (self: {
   pname = "diagrams-svg";
-  version = "1.1.0.1";
-  sha256 = "02krwy1v7rhcgg0ps7kd8ym50kh48dcfqm2xz3k6hr32jzqa5hlw";
+  version = "1.1.0.3";
+  sha256 = "0byqxwz9h1hi2yrq2vz32gv0az9q3l94qa2q3nl3j8sa64qmpdwq";
   buildDepends = [
     base64Bytestring blazeMarkup blazeSvg colour diagramsCore
     diagramsLib filepath hashable JuicyPixels lens monoidExtras mtl
     split time vectorSpace
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams/";
     description = "SVG backend for diagrams drawing EDSL";

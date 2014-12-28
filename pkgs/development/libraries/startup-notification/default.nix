@@ -15,6 +15,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.freedesktop.org/software/startup-notification;
     description = "Application startup notification and feedback library";
-    license = "BSD";
+    license = stdenv.lib.licenses.lgpl2;
   };
 }

@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "clientsession";
-  version = "0.9.1";
-  sha256 = "1hq4f5iq4xb9jilr6qprww9lql314vpfw5khwmizljry9cwd2gq7";
+  version = "0.9.1.1";
+  sha256 = "08h0461ydhfymw2pya472n81kx5rqp7awfgxlbz2r851rl5kqmn9";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

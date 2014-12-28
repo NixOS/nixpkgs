@@ -1,13 +1,14 @@
-{stdenv, fetchurl, ncurses}:
-stdenv.mkDerivation {
-  name = "kermit-8.0.211";
+{ stdenv, fetchurl, ncurses, glibc }:
+
+stdenv.mkDerivation rec {
+  name = "kermit-9.0.302";
 
   src = fetchurl {
-    url = ftp://kermit.columbia.edu/kermit/archives/cku211.tar.gz;
-    sha256 = "14xsmdlsk2pgsp51l7lxwncgljwvgm446a4m6nk488shj94cvrrr";
+    url = ftp://ftp.kermitproject.org/kermit/archives/cku302.tar.gz;
+    sha256 = "0487mh6s99ijqf1pfmbm302pa5i4pzmm8s439hdl1ffs5g8jqpqd";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ ncurses glibc ];
 
   unpackPhase = ''
     mkdir -p src
@@ -17,19 +18,21 @@ stdenv.mkDerivation {
 
   patchPhase = ''
     sed -i -e 's@-I/usr/include/ncurses@@' \
-      -e 's@-lncurses@-lncurses -lresolv -lcrypt@' \
       -e 's@/usr/local@'"$out"@ makefile
   '';
-  buildPhase = "make -f makefile linux";
+
+  buildPhase = "make -f makefile linux LNKFLAGS='-lcrypt -lresolv'";
+
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/man/man1
     make -f makefile install
   '';
 
-  meta = {
-    homepage = "http://www.columbia.edu/kermit/ck80.html";
+  meta = with stdenv.lib; {
+    homepage = http://www.kermitproject.org/ck90.html;
     description = "Portable Scriptable Network and Serial Communication Software";
-    license = "free non-commercial"; #Kermit http://www.columbia.edu/kermit/ckfaq.html#license
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ pSub ];
   };
 }

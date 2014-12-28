@@ -38,7 +38,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = "BSD";
+    license = a.lib.licenses.bsd2;
   };
   passthru = {
     updateInfo = {

@@ -15,6 +15,7 @@ cabal.mkDerivation (self: {
   pname = "pandoc";
   version = "1.13.1";
   sha256 = "0vvysa70xp4pskxrvslmddwdsalc479zb8wn6z1vmpvfssvvj6vv";
+  editedCabalFile = "1i57yk1pql4gv97cs86fk82hkwncics1wkzjqd9iz866204y4wrg";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

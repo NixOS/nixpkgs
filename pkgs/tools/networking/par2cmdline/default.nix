@@ -1,22 +1,28 @@
-{stdenv, fetchurl}:
+{stdenv, fetchzip, autoconf, automake}:
 
-stdenv.mkDerivation {
-  name = "par2cmdline-0.4";
-  
-  src = fetchurl {
-    url = mirror://sourceforge/parchive/par2cmdline-0.4.tar.gz;
-    sha256 = "0xznx4vgf9nd0ijm2xi2zrb42wb891ypa948z54q5jkvrzdvfcly";
+stdenv.mkDerivation rec {
+  name    = "par2cmdline-${version}";
+  version = "0.6.11";
+
+  src = fetchzip {
+    url = "https://github.com/BlackIkeEagle/par2cmdline/archive/v${version}.tar.gz";
+    sha256 = "0maywssv468ia7rf8jyq4axwahgli3nfykl7x3zip503psywjj8a";
   };
 
-  patches = [
-    (fetchurl {
-      url = "http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/app-arch/par2cmdline/files/par2cmdline-0.4-gcc4.patch?rev=1.1.1.1";
-      sha256 = "1xrkr13qw5vqi2qbr2p43nqbq83nywk4bgvq7nfvrca4z60s787d";
-    })
-  ];
+  buildInputs = [ autoconf automake ];
+
+  preConfigure = "autoreconf";
 
   meta = {
-    homepage = http://parchive.sourceforge.net/;
-    description = "A command-line tool for repairing downloaded files using PARs (parity archives)";
+    homepage = https://github.com/BlackIkeEagle/par2cmdline;
+    description = "PAR 2.0 compatible file verification and repair tool";
+    longDescription = ''
+      par2cmdline is a program for creating and using PAR2 files to detect
+      damage in data files and repair them if necessary. It can be used with
+      any kind of file.
+    '';
+    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = with stdenv.lib.maintainers; [ muflax ];
+
   };
 }

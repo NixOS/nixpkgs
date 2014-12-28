@@ -1,32 +1,47 @@
-{ stdenv, fetchurl, ant, jdk }:
+{stdenv, fetchurl, ant, jdk, commonsBsf, commonsLogging}:
 
-let version = "4.4.2"; in
+let
+  version = "5.1.0";
+  bsh = fetchurl {
+    url = http://www.beanshell.org/bsh-2.0b4.jar;
+    sha256 = "1di7hj2yms1m3wa8k70jpw0wzfnrgibpqnvdk33ahfaqi03mqfci";
+  };
+  bcpg = fetchurl {
+    url = http://central.maven.org/maven2/org/bouncycastle/bcpg-jdk16/1.46/bcpg-jdk16-1.46.jar;
+    sha256 = "16xhmwks4l65m5x150nd23y5lyppha9sa5fj65rzhxw66gbli82d";
+  };
+  jsr305 = fetchurl {
+    url = http://central.maven.org/maven2/com/google/code/findbugs/jsr305/2.0.0/jsr305-2.0.0.jar;
+    sha256 = "0s74pv8qjc42c7q8nbc0c3b1hgx0bmk3b8vbk1z80p4bbgx56zqy";
+  };
+in
 
 stdenv.mkDerivation {
   name = "jedit-${version}";
-
   src = fetchurl {
     url = "mirror://sourceforge/jedit/jedit${version}source.tar.bz2";
-    sha256 = "5e9ad9c32871b77ef0b9fe46dcfcea57ec52558d36113b7280194a33430b8ceb";
+    sha256 = "015rn4339mp4wrd901x56nr42wfcy429pg54n835c6n34b2jjdc6";
   };
 
-  buildInputs = [ ant jdk ];
+  buildInputs = [ ant jdk commonsBsf commonsLogging ];
 
-  sourceRoot = "jEdit";
+  # This patch removes from the build process:
+  #  - the automatic download of dependencies (see configurePhase);
+  #  - the tests
+  patches = [ ./build.xml.patch ];
+
+  configurePhase = ''
+    mkdir -p lib/ant-contrib/ lib/scripting lib/compile lib/default-plugins
+    cp ${ant}/lib/ant/lib/ant-contrib-*.jar lib/ant-contrib/
+    cp ${bsh} ${bcpg} lib/scripting/
+    cp ${jsr305} lib/compile/
+  '';
 
   buildPhase = "ant build";
 
   installPhase = ''
     mkdir -p $out/share/jEdit
-    cp build/jedit.jar $out/share/jEdit
-    mkdir -p $out/share/jEdit/modes
-    cp -r modes/* $out/share/jEdit/modes
-    mkdir -p $out/share/jEdit/icons
-    cp -r icons/* $out/share/jEdit/icons
-    mkdir -p $out/share/jEdit/macros
-    cp -r macros/* $out/share/jEdit/macros
-    mkdir -p $out/share/jEdit/doc
-    cp -r doc/* $out/share/jEdit/doc
+    cp -r build/jedit.jar doc icons keymaps macros modes startup $out/share/jEdit
 
     sed -i "s|Icon=.*|Icon=$out/share/jEdit/icons/jedit-icon48.png|g" package-files/linux/deb/jedit.desktop
     mkdir -p $out/share/applications
@@ -44,9 +59,11 @@ stdenv.mkDerivation {
     chmod +x $out/bin/jedit
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Mature programmer's text editor (Java based)";
     homepage = http://www.jedit.org;
-    license = "GPL";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.vbgl ];
   };
 }

@@ -97,12 +97,10 @@ in
 
     environment.systemPackages = [ cronNixosPkg ];
 
-    jobs.cron =
+    systemd.services.cron =
       { description = "Cron Daemon";
 
-        startOn = "startup";
-
-        path = [ cronNixosPkg ];
+        wantedBy = [ "multi-user.target" ];
 
         preStart =
           ''
@@ -119,7 +117,8 @@ in
             fi
           '';
 
-        exec = "cron -n";
+        restartTriggers = [ config.environment.etc.localtime.source ];
+        serviceConfig.ExecStart = "${cronNixosPkg}/bin/cron -n";
       };
 
   };

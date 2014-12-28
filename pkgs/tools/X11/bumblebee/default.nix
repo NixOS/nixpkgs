@@ -1,53 +1,81 @@
 # The bumblebee package allows a program to be rendered on an
-# dedicated video card by spawning an additional X11 server
-# and streaming the results via VirtualGL to the primary server.
+# dedicated video card by spawning an additional X11 server and
+# streaming the results via VirtualGL or primus to the primary server.
 
 # The package is rather chaotic; it's also quite recent.
 # As it may change a lot, some of the hacks in this nix expression
 # will hopefully not be needed in the future anymore.
 
-# To test: make sure that the 'bbswitch' kernel module is installed,
-# then run 'bumblebeed' as root and 'optirun glxgears' as user.
+# To test:
+# 1. make sure that the 'bbswitch' kernel module is installed,
+# 2. then run 'bumblebeed' as root
+# 3. Then either 'optirun glxinfo' or 'primusrun glxinfo' as user.
+#
+# The glxinfo output should indicate the NVidia driver is being used
+# and all expected extensions are supported.
+#
 # To use at startup, see hardware.bumblebee options.
 
 # This nix expression supports for now only the native nvidia driver.
 # It should not be hard to generalize this approach to support the
-# nouveau driver as well (parameterize commonEnv over the module
-# package, and parameterize the two wrappers as well)
+# nouveau driver as well (parameterize hostEnv, i686Env over the
+# module package, and parameterize the two wrappers as well)
 
 { stdenv, fetchurl, pkgconfig, help2man
 , libX11, glibc, glib, libbsd
 , makeWrapper, buildEnv, module_init_tools
-, linuxPackages, virtualgl, xorg, xkeyboard_config
+, xorg, xkeyboard_config
+, nvidia_x11, virtualgl
+# The below should only be non-null in a x86_64 system. On a i686
+# system the above nvidia_x11 and virtualgl will be the i686 packages.
+# TODO: Confusing. Perhaps use "SubArch" instead of i686?
+, nvidia_x11_i686 ? null
+, virtualgl_i686 ? null
 }:
-
+with stdenv.lib;
 let
   version = "3.2.1";
   name = "bumblebee-${version}";
 
-  # isolated X11 environment with the nvidia module
-  # it should include all components needed for bumblebeed and
+  # Isolated X11 environment without the acceleration driver module.
+  # Includes the rest of the components needed for bumblebeed and
   # optirun to spawn the second X server and to connect to it.
-  commonEnv = buildEnv {
+  x11Env = buildEnv {
     name = "bumblebee-env";
     paths = [
       module_init_tools
-
-      linuxPackages.nvidia_x11
       xorg.xorgserver
       xorg.xrandr
       xorg.xrdb
       xorg.setxkbmap
       xorg.libX11
       xorg.libXext
+      xorg.xf86inputevdev
+    ];
+  };
 
+  # The environment for the host architecture.
+  hostEnv = buildEnv {
+    name = "bumblebee-x64-env";
+    paths = [
+      nvidia_x11
       virtualgl
     ];
-
-    # the nvidia GLX module overwrites the one of xorgserver,
-    # thus nvidia_x11 must be before xorgserver in the paths.
-    ignoreCollisions = true;
   };
+
+  # The environment for the sub architecture, i686, if there is one
+  i686Env = if virtualgl_i686 != null
+    then buildEnv {
+      name = "bumblebee-i686-env";
+      paths = [
+       nvidia_x11_i686
+       virtualgl_i686
+      ];
+    }
+    else null;
+
+  allEnvs = [hostEnv] ++ optional (i686Env != null) i686Env;
+  ldPathString = makeLibraryPath allEnvs;
 
 in stdenv.mkDerivation {
   inherit name;
@@ -63,6 +91,7 @@ in stdenv.mkDerivation {
     # Substitute the path to the actual modinfo program in module.c.
     # Note: module.c also calls rmmod and modprobe, but those just have to
     # be in PATH, and thus no action for them is required.
+
     substituteInPlace src/module.c \
       --replace "/sbin/modinfo" "${module_init_tools}/sbin/modinfo"
 
@@ -75,26 +104,38 @@ in stdenv.mkDerivation {
   # Note that it has several runtime dependencies.
   buildInputs = [ stdenv makeWrapper pkgconfig help2man libX11 glib libbsd ];
 
+  # The order of LDPATH is very specific: First X11 then the host
+  # environment then the optional sub architecture paths.
+  #
+  # The order for MODPATH is the opposite: First the environment that
+  # includes the acceleration driver. As this is used for the X11
+  # server, which runs under the host architecture, this does not
+  # include the sub architecture components.
   configureFlags = [
     "--with-udev-rules=$out/lib/udev/rules.d"
     "CONF_DRIVER=nvidia"
     "CONF_DRIVER_MODULE_NVIDIA=nvidia"
-    "CONF_LDPATH_NVIDIA=${commonEnv}/lib"
-    "CONF_MODPATH_NVIDIA=${commonEnv}/lib/xorg/modules"
+    "CONF_LDPATH_NVIDIA=${x11Env}/lib:${ldPathString}"
+    "CONF_MODPATH_NVIDIA=${hostEnv}/lib/xorg/modules,${x11Env}/lib/xorg/modules"
   ];
 
   # create a wrapper environment for bumblebeed and optirun
   postInstall = ''
     wrapProgram "$out/sbin/bumblebeed" \
-      --prefix PATH : "${commonEnv}/sbin:${commonEnv}/bin:\$PATH" \
-      --prefix LD_LIBRARY_PATH : "${commonEnv}/lib:\$LD_LIBRARY_PATH" \
+      --prefix PATH : "${x11Env}/sbin:${x11Env}/bin:${hostEnv}/bin:\$PATH" \
+      --prefix LD_LIBRARY_PATH : "${x11Env}/lib:${hostEnv}/lib:\$LD_LIBRARY_PATH" \
+      --set FONTCONFIG_FILE "/etc/fonts/fonts.conf" \
       --set XKB_BINDIR "${xorg.xkbcomp}/bin" \
       --set XKB_DIR "${xkeyboard_config}/etc/X11/xkb"
 
     wrapProgram "$out/bin/optirun" \
-      --prefix PATH : "${commonEnv}/sbin:${commonEnv}/bin" \
-      --prefix LD_LIBRARY_PATH : "${commonEnv}/lib" \
-  '';
+      --prefix PATH : "${hostEnv}/bin"
+  '' + (if i686Env == null
+    then ""
+    else ''
+    makeWrapper "$out/bin/.optirun-wrapped" "$out/bin/optirun32" \
+      --prefix PATH : "${i686Env}/bin"
+  '');
 
   meta = {
     homepage = http://github.com/Bumblebee-Project/Bumblebee;

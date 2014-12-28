@@ -44,11 +44,11 @@ stdenv.mkDerivation {
     
     ${if stdenv.system == "i686-linux" then
       ''
-        patchelf --set-interpreter ${stdenv.gcc.libc}/lib/ld-linux.so.2 titanium_prep.linux32
+        patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 titanium_prep.linux32
       ''
       else if stdenv.system == "x86_64-linux" then
       ''
-        patchelf --set-interpreter ${stdenv.gcc.libc}/lib/ld-linux-x86-64.so.2 titanium_prep.linux64
+        patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 titanium_prep.linux64
       ''
       else ""}
     

@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--with-ssl=openssl";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Minimalistic Murmur (Mumble server)";
-    license = "BSD";
+    license = licenses.bsd3;
     homepage = http://code.google.com/p/umurmur/;
   };
 }

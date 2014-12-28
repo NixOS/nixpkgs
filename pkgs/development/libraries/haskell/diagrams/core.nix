@@ -6,12 +6,13 @@
 
 cabal.mkDerivation (self: {
   pname = "diagrams-core";
-  version = "1.2.0.2";
-  sha256 = "10glkp05pnxx7c7f33654rjcvahslxx010v36wf6zsa8nscdrccn";
+  version = "1.2.0.4";
+  sha256 = "1axkgprqs4jvzh5vfr118nzr1h0m48axr5jfiqqrqvy5xyjcagkq";
   buildDepends = [
     dualTree lens MemoTrie monoidExtras newtype semigroups vectorSpace
     vectorSpacePoints
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams";
     description = "Core libraries for diagrams EDSL";

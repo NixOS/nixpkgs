@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Fetches system/theme information in terminal for Linux desktop screenshots.";
+    description = "Fetches system/theme information in terminal for Linux desktop screenshots";
     longDescription = ''
     screenFetch is a "Bash Screenshot Information Tool". This handy Bash
     script can be used to generate one of those nifty terminal theme

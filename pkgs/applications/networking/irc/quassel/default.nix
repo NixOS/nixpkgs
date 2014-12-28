@@ -5,24 +5,27 @@
 , ssl ? true # enable SSL support
 , previews ? false # enable webpage previews on hovering over URLs
 , tag ? "" # tag added to the package name
-, stdenv, fetchurl, cmake, makeWrapper, qt4, kdelibs, automoc4, phonon, dconf }:
+, stdenv, fetchurl, cmake, makeWrapper, qt, kdelibs, automoc4, phonon, dconf }:
+
+assert monolithic -> !client && !daemon;
+assert client || daemon -> !monolithic;
 
 let
   edf = flag: feature: [("-D" + feature + (if flag then "=ON" else "=OFF"))];
 
 in with stdenv; mkDerivation rec {
 
-  version = "0.10.1";
+  version = "0.11.0";
   name = "quassel${tag}-${version}";
 
   src = fetchurl {
     url = "http://quassel-irc.org/pub/quassel-${version}.tar.bz2";
-    sha256 = "106zjn705vyh0msqwg3v4dhaahffhkn1bmfsljdz57jd539bf5qd";
+    sha256 = "01251y5i1fvm6s2g9acxaczk2jdyw1byr45q41q0yh9apjw938cr";
   };
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake makeWrapper qt4 ]
+  buildInputs = [ cmake makeWrapper qt ]
     ++ lib.optional withKDE kdelibs
     ++ lib.optional withKDE automoc4
     ++ lib.optional withKDE phonon;
@@ -63,6 +66,6 @@ in with stdenv; mkDerivation rec {
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ maintainers.phreedom ];
     repositories.git = https://github.com/quassel/quassel.git;
-    inherit (qt4.meta) platforms;
+    inherit (qt.meta) platforms;
   };
 }

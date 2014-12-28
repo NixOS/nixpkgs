@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
+    branch = "1.11";
     homepage = http://www.gnu.org/software/automake/;
     description = "GNU standard-compliant makefile generator";
 

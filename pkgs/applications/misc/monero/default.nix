@@ -11,11 +11,14 @@ stdenv.mkDerivation {
     sha256 = "0bbhqjjzh922aymjqrnl2hd3r8x6p7x5aa5jidv3l4d77drhlgzy";
   };
 
-  buildInputs = [ cmake boost boost.lib ];
+  buildInputs = [ cmake boost ];
 
   # these tests take a long time and don't
   # always complete in the build environment
   postPatch = "sed -i '/add_subdirectory(tests)/d' CMakeLists.txt";
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+
   doCheck = false;
   checkTarget = "test-release"; # this would be the target
 

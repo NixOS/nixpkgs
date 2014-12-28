@@ -52,7 +52,7 @@ assert langGo -> langCC;
 with stdenv.lib;
 with builtins;
 
-let version = "4.9.1";
+let version = "4.9.2";
 
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = cross != null && cross.config == "i586-pc-gnu";
@@ -153,7 +153,6 @@ let version = "4.9.1";
           " --disable-libssp --disable-nls" +
           " --without-headers" +
           " --disable-threads " +
-          " --disable-libmudflap " +
           " --disable-libgomp " +
           " --disable-libquadmath" +
           " --disable-shared" +
@@ -206,7 +205,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
-    sha256 = "0zki3ngi0gsidnmsp88mjl2868cc7cm5wm1vwqw6znja28d7hd6k";
+    sha256 = "1pbjp4blk2ycaa6r3jmw4ky5f1s9ji3klbqgv8zs2sl5jn1cj810";
   };
 
   inherit patches;
@@ -248,11 +247,11 @@ stdenv.mkDerivation ({
            sed -i "${gnu_h}" \
                -es'|#define STANDARD_INCLUDE_DIR.*$|#define STANDARD_INCLUDE_DIR "${libc}/include"|g'
         ''
-    else if cross != null || stdenv.gcc.libc != null then
+    else if cross != null || stdenv.cc.libc != null then
       # On NixOS, use the right path to the dynamic linker instead of
       # `/lib/ld*.so'.
       let
-        libc = if libcCross != null then libcCross else stdenv.gcc.libc;
+        libc = if libcCross != null then libcCross else stdenv.cc.libc;
       in
         '' echo "fixing the \`GLIBC_DYNAMIC_LINKER' and \`UCLIBC_DYNAMIC_LINKER' macros..."
            for header in "gcc/config/"*-gnu.h "gcc/config/"*"/"*.h
@@ -386,7 +385,7 @@ stdenv.mkDerivation ({
     NM_FOR_TARGET = "${stdenv.cross.config}-nm";
     CXX_FOR_TARGET = "${stdenv.cross.config}-g++";
     # If we are making a cross compiler, cross != null
-    NIX_GCC_CROSS = if cross == null then "${stdenv.gccCross}" else "";
+    NIX_CC_CROSS = if cross == null then "${stdenv.ccCross}" else "";
     dontStrip = true;
     configureFlags = ''
       ${if enableMultilib then "" else "--disable-multilib"}
@@ -513,4 +512,6 @@ stdenv.mkDerivation ({
 
 # Strip kills static libs of other archs (hence cross != null)
 // optionalAttrs (!stripped || cross != null) { dontStrip = true; NIX_STRIP_DEBUG = 0; }
+
+// optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
 )

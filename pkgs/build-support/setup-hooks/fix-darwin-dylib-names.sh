@@ -10,6 +10,8 @@
 # their absolute path (using "install_name_tool -id").  It also
 # rewrites references in other dylibs to absolute paths.
 
+postFixupHooks+=('fixDarwinDylibNamesIn $prefix')
+
 fixDarwinDylibNames() {
     local flags=()
     local old_id
@@ -28,8 +30,4 @@ fixDarwinDylibNames() {
 fixDarwinDylibNamesIn() {
     local dir="$1"
     fixDarwinDylibNames $(find "$dir" -name "*.dylib")
-}
-
-postFixup() {
-    fixDarwinDylibNamesIn "$prefix"
 }

@@ -67,7 +67,7 @@ with stdenv.lib;
   # Networking options.
   IP_PNP n
   ${optionalString (versionOlder version "3.13") ''
-  IPV6_PRIVACY y
+    IPV6_PRIVACY y
   ''}
   NETFILTER_ADVANCED y
   IP_VS_PROTO_TCP y
@@ -77,6 +77,9 @@ with stdenv.lib;
   IP_DCCP_CCID3 n # experimental
   CLS_U32_PERF y
   CLS_U32_MARK y
+  ${optionalString (stdenv.system == "x86_64-linux") ''
+    BPF_JIT y
+  ''}
 
   # Wireless networking.
   CFG80211_WEXT? y # Without it, ipw2200 drivers don't build
@@ -175,6 +178,12 @@ with stdenv.lib;
   CIFS_XATTR y
   CIFS_POSIX y
   CIFS_FSCACHE y
+  ${optionalString (versionAtLeast version "3.12") ''
+    CEPH_FSCACHE y
+  ''}
+  ${optionalString (versionAtLeast version "3.14") ''
+    CEPH_FS_POSIX_ACL y
+  ''}
 
   # Security related features.
   STRICT_DEVMEM y # Filter access to /dev/mem
@@ -239,6 +248,7 @@ with stdenv.lib;
   MTRR_SANITIZER y
   NET_FC y # Fibre Channel driver support
   PPP_MULTILINK y # PPP multilink support
+  PPP_FILTER y
   REGULATOR y # Voltage and Current Regulator Support
   ${optionalString (versionAtLeast version "3.6") ''
     RC_DEVICES? y # Enable IR devices
@@ -308,6 +318,10 @@ with stdenv.lib;
   ${optionalString (!stdenv.is64bit) ''
     HIGHMEM64G? y # We need 64 GB (PAE) support for Xen guest support.
   ''}
+  ${optionalString (versionAtLeast version "3.9" && stdenv.is64bit) ''
+    VFIO_PCI_VGA y
+  ''}
+  VIRT_DRIVERS y
 
   # Media support.
   ${optionalString (versionAtLeast version "3.6") ''

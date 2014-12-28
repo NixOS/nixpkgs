@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    license = "Ruby";
+    license = stdenv.lib.licenses.ruby;
     homepage = "http://www.codeforpeople.com/lib/ruby/rq/";
     description = "Simple cluster queue runner";
     longDescription = "rq creates instant linux clusters by managing priority work queues, even on a multi-core single machine. This cluster runner is easy to install and easy to manage, contrasting with the common complicated solutions.";

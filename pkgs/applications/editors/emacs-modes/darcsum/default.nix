@@ -26,8 +26,8 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "A pcl-cvs like interface for managing darcs patches.";
-    homepage = "http://hub.darcs.net/simon/darcsum";
+    description = "A pcl-cvs like interface for managing darcs patches";
+    homepage = http://hub.darcs.net/simon/darcsum;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.falsifian ];
   };

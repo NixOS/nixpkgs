@@ -1,0 +1,29 @@
+* grub-core/kern/emu/hostfs.c: squahes below warning
+  warning: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use 
+_DEFAULT_SOURCE"
+
+Signed-off-by: Khem Raj <address@hidden>
+
+Upstream-Status: Submitted
+---
+ grub-core/kern/emu/hostfs.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/grub-core/kern/emu/hostfs.c b/grub-core/kern/emu/hostfs.c
+index 7e725f6..823116d 100644
+--- a/grub-core/kern/emu/hostfs.c
++++ b/grub-core/kern/emu/hostfs.c
+@@ -19,7 +19,11 @@
+ 
+ #include <config-util.h>
+ 
++/* Legacy feature macro.*/
+ #define _BSD_SOURCE
++/* New feature macro that provides everything _BSD_SOURCE and
++ *    _SVID_SOURCE provided and possibly more.  */
++#define _DEFAULT_SOURCE
+ #include <grub/fs.h>
+ #include <grub/file.h>
+ #include <grub/disk.h>
+-- 
+2.1.0

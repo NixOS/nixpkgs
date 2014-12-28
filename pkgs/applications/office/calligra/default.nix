@@ -6,11 +6,11 @@
  }:
 
 stdenv.mkDerivation rec {
-  name = "calligra-2.7.5";
+  name = "calligra-2.8.7";
 
   src = fetchurl {
     url = "mirror://kde/stable/${name}/${name}.tar.xz";
-    sha256 = "0png8ac10xywxsml1z18as18kc9k9162l6an67hi6lgx0rv27ldi";
+    sha256 = "1d8fx0xn8n8y6jglw8hhpk7kr6kbhsbaxqwqlfzmnzh7x9s8nsxg";
   };
 
   nativeBuildInputs = [ cmake perl pkgconfig ];

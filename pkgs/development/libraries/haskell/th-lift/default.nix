@@ -4,11 +4,12 @@
 
 cabal.mkDerivation (self: {
   pname = "th-lift";
-  version = "0.6.1";
-  sha256 = "0m1ips0n06jnjr5lssq7x4jaa5878sw03l8iaprya37bnkxxak5d";
+  version = "0.7";
+  sha256 = "1mh5k6ifmc3mjavlrpkcq55ng737yb3nqv1q67fv8irkv5m6qpza";
   meta = {
+    homepage = "http://github.com/mboes/th-lift";
     description = "Derive Template Haskell's Lift class for datatypes";
-    license = "unknown";
+    license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };
 })

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   phases = ["installPhase"];
 
-  buildInputs = [ makeWrapper jre src ];
+  buildInputs = [ makeWrapper jre ];
 
   installPhase = ''
     mkdir -p "$out"/bin

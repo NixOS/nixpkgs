@@ -15,6 +15,7 @@ cabal.mkDerivation (self: {
     text transformers transformersBase
   ];
   testDepends = [ doctest filepath ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/bennofs/hcltest/";
     description = "A testing library for command line applications";

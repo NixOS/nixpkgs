@@ -1,29 +1,26 @@
-{stdenv, fetchurl, apacheHttpd, python}:
+{ stdenv, fetchurl, apacheHttpd, python }:
 
-stdenv.mkDerivation {
-  name = "mod_python-3.3.1";
+stdenv.mkDerivation rec {
+  name = "mod_python-3.5.0";
 
   src = fetchurl {
-    url = mirror://apache/httpd/modpython/mod_python-3.3.1.tgz;
-    sha256 = "0sss2xi6l1a2z8y6ji0cp8vgyvnhq8zrg0ilkvpj1mygbzyk28xd";
+    url = "http://dist.modpython.org/dist/${name}.tgz";
+    sha256 = "146apll3yfqk05s8fkf4acmxzqncl08bgn4rv0c1rd4qxmc91w0f";
   };
 
-  patches = [
-    ./install.patch
-
-    # See http://bugs.gentoo.org/show_bug.cgi?id=230211
-    (fetchurl {
-      url = "http://bugs.gentoo.org/attachment.cgi?id=160400";
-      sha256 = "0yx6x9c5rg5kn6y8vsi4xj3nvg016rrfk553ca1bw796v383xkyj";
-    })
-  ];
+  patches = [ ./install.patch ];
 
   preInstall = ''
     installFlags="LIBEXECDIR=$out/modules $installFlags"
-    mkdir -p $out/modules
+    mkdir -p $out/modules $out/bin
   '';
 
   passthru = { inherit apacheHttpd; };
-  
-  buildInputs = [apacheHttpd python];
+
+  buildInputs = [ apacheHttpd python ];
+
+  meta = {
+    homepage = http://modpython.org/;
+    description = "An Apache module that embeds the Python interpreter within the server";
+  };
 }

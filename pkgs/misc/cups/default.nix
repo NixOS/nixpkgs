@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam, openssl
 , dbus, libusb, acl }:
 
-let version = "1.5.4"; in
+let version = "1.7.5"; in
 
 stdenv.mkDerivation {
   name = "cups-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.cups.org/software/${version}/cups-${version}-source.tar.bz2";
-    sha256 = "1rfhlv9b37120d6shngvyrcp99vh4a3lwdkrfanv3sjqid7068w0";
+    sha256 = "00mx4rpiqw9cwx46bd3hd5lcgmcxy63zfnmkr02smanv8xl4rjqq";
   };
 
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb ]
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ openssl ];
 
-  configureFlags = "--localstatedir=/var --enable-dbus"; # --with-dbusdir
+  configureFlags = "--localstatedir=/var --sysconfdir=/etc --enable-dbus"; # --with-dbusdir
 
   installFlags =
     [ # Don't try to write in /var at build time.
@@ -31,12 +31,19 @@ stdenv.mkDerivation {
       "DBUSDIR=$(out)/etc/dbus-1"
       "INITDIR=$(out)/etc/rc.d"
       "XINETD=$(out)/etc/xinetd.d"
+      "SERVERROOT=$(out)/etc/cups"
       # Idem for /usr.
       "MENUDIR=$(out)/share/applications"
       "ICONDIR=$(out)/share/icons"
       # Work around a Makefile bug.
       "CUPS_PRIMARY_SYSTEM_GROUP=root"
     ];
+
+  postInstall =
+    ''
+      # Delete obsolete stuff that conflicts with cups-filters.
+      rm -rf $out/share/cups/banners $out/share/cups/data/testprint
+    '';
 
   meta = {
     homepage = "http://www.cups.org/";

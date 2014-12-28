@@ -2,7 +2,7 @@
 
 let
   pname = "cmdliner";
-  version = "0.9.5";
+  version = "0.9.6";
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
 in
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://erratique.ch/software/${pname}/releases/${pname}-${version}.tbz";
-    sha256 = "a0e199c4930450e12edf81604eeceddeeb32d55c43438be689e60df282277a7e";
+    sha256 = "1i08yjkk5wln60bw9rrllh6ajjgq14cvzvcci8y1nk5v6ys7jr8p";
   };
 
   unpackCmd = "tar xjf $src";

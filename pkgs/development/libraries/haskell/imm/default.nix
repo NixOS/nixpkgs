@@ -2,27 +2,27 @@
 
 { cabal, async, caseInsensitive, cond, dataDefault, dyre, feed
 , filepath, hslogger, httpConduit, httpTypes, lens, mimeMail
-, monadControl, mtl, network, opml, random, resourcet, text
-, textIcu, time, timerep, tls, transformers, transformersBase
+, monadControl, mtl, network, networkUri, opml, random, resourcet
+, text, textIcu, time, timerep, tls, transformers, transformersBase
 , utf8String, xdgBasedir, xml
 }:
 
 cabal.mkDerivation (self: {
   pname = "imm";
-  version = "0.6.0.2";
-  sha256 = "0bawp8zqpkxig33ybv0yxv6bh51rfhsyp0q7l0lh61gy17rx0gsa";
+  version = "0.6.0.3";
+  sha256 = "0fhqb36xj2xr1hhfrhk1npms9lnvbh6fmvki9mmm3gqs06hb925l";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     async caseInsensitive cond dataDefault dyre feed filepath hslogger
-    httpConduit httpTypes lens mimeMail monadControl mtl network opml
-    random resourcet text textIcu time timerep tls transformers
-    transformersBase utf8String xdgBasedir xml
+    httpConduit httpTypes lens mimeMail monadControl mtl network
+    networkUri opml random resourcet text textIcu time timerep tls
+    transformers transformersBase utf8String xdgBasedir xml
   ];
   meta = {
     description = "Retrieve RSS/Atom feeds and write one mail per new item in a maildir";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
-    broken = true;
+    maintainers = with self.stdenv.lib.maintainers; [ bergey ];
   };
 })

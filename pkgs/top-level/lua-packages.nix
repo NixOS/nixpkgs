@@ -5,8 +5,9 @@
    for each package in a separate file: the call to the function would
    be almost as must code as the function itself. */
 
-{ fetchurl, stdenv, lua, callPackage, unzip, zziplib
-, pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat
+{ fetchurl, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
+, pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
+, perl, gtk, python, glib, gobjectIntrospection
 }:
 
 let
@@ -14,6 +15,7 @@ let
   isLua52 = lua.luaversion == "5.2";
   self = _self;
   _self = with self; {
+  inherit lua;
   inherit (stdenv.lib) maintainers;
 
   #define build lua package function
@@ -216,6 +218,70 @@ let
       hydraPlatforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
     };
+  };
+
+  lpeg = buildLuaPackage rec {
+    name = "lpeg-${version}";
+    version = "0.12";
+    src = fetchurl {
+      url = "http://www.inf.puc-rio.br/~roberto/lpeg/${name}.tar.gz";
+      sha256 = "0xlbfw1w7l65a5qhnx5sfw327hkq1zcj8xmg4glfw6fj9ha4b9gg";
+    };
+    buildInputs = [ unzip ];
+
+    installPhase = ''
+      mkdir -p $out/lib/lua/${lua.luaversion}
+      install -p lpeg.so $out/lib/lua/${lua.luaversion}
+      install -p re.lua $out/lib/lua/${lua.luaversion}
+    '';
+
+    meta = {
+      homepage = "http://www.inf.puc-rio.br/~roberto/lpeg/";
+      hydraPlatforms = stdenv.lib.platforms.linux;
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  luaMessagePack = buildLuaPackage rec {
+    name = "lua-MessagePack-${version}";
+    version = "0.3.1";
+    src = fetchurl {
+      url = "https://github.com/fperrad/lua-MessagePack/archive/${version}.tar.gz";
+      sha256 = "185mrd6bagwwm94jxzanq01l72ama3x4hf160a7yw7hgim2y5h9c";
+    };
+    buildInputs = [ unzip ];
+
+    meta = {
+      homepage = "http://fperrad.github.io/lua-MessagePack/index.html";
+      hydraPlatforms = stdenv.lib.platforms.linux;
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  lgi = stdenv.mkDerivation rec {
+    name = "lgi-${version}";
+    version = "0.7.2";
+
+    src = fetchurl {
+      url    = "https://github.com/pavouk/lgi/archive/${version}.tar.gz";
+      sha256 = "0ihl7gg77b042vsfh0k7l53b7sl3d7mmrq8ns5lrsf71dzrr19bn";
+    };
+
+    meta = with stdenv.lib; {
+      description = "GObject-introspection based dynamic Lua binding to GObject based libraries";
+      homepage    = https://github.com/pavouk/lgi;
+      license     = "custom";
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+
+    buildInputs = [ glib gobjectIntrospection lua pkgconfig ];
+
+    makeFlags = [ "LUA_VERSION=${lua.luaversion}" ];
+
+    preBuild = ''
+      sed -i "s|/usr/local|$out|" lgi/Makefile
+    '';
   };
 
 }; in self

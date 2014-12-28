@@ -34,6 +34,6 @@ stdenv.mkDerivation {
       description = "A sandbox-building game";
       homepage = http://www.minecraft.net;
       maintainers = [ stdenv.lib.maintainers.page ];
-      license = "unfree-redistributable";
+      license = stdenv.lib.licenses.unfreeRedistributable;
   };
 }

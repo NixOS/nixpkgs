@@ -60,6 +60,8 @@ stdenv.mkDerivation {
           else throw "Unsupported system";
   GOARM = stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "5";
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+
   installPhase = ''
     mkdir -p "$out/bin"
     export GOROOT="$(pwd)/"
@@ -83,6 +85,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    branch = "1.0";
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = "BSD";

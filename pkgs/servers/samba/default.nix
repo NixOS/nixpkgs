@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
          "--localstatedir=/var"
        ]
     ++ (stdenv.lib.optional winbind "--with-winbind")
-    ++ (stdenv.lib.optional (stdenv.gcc.libc != null) "--with-libiconv=${stdenv.gcc.libc}");
+    ++ (stdenv.lib.optional (stdenv.cc.libc != null) "--with-libiconv=${stdenv.cc.libc}");
 
   # Need to use a DESTDIR because `make install' tries to write in /var and /etc.
   installFlags = "DESTDIR=$(TMPDIR)/inst";

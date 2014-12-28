@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.dxx-rebirth.com/;
     description = "Source Port of the Descent 1 engine";
-    license = "BSD"; # Parallax license, like BSD I think
+    license = stdenv.lib.licenses.mit;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [viric];
   };

@@ -62,7 +62,7 @@ for bin in $(find $binaryDist -executable -type f) :; do
         )
 
         if test "$names" = "glibc"; then names="stdenv.glibc"; fi
-        if echo $names | grep -c "gcc" &> /dev/null; then names="stdenv.gcc.gcc"; fi
+        if echo $names | grep -c "gcc" &> /dev/null; then names="stdenv.cc.gcc"; fi
 
         if test $lib != $libPath; then
             interpreter="--interpreter \${$names}/lib/$lib"

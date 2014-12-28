@@ -36,7 +36,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = "free";
+    license = a.lib.licenses.free;
     branch = "0.5.1";
   };
   passthru = {

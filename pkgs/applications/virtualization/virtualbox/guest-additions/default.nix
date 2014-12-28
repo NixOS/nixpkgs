@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "d58f678613bd37f5f94bcf324708af63572fc8582833a2558574090231fd080f";
+    sha256 = "9ab48f44ac26a6deb374cb5fe6bad103bbf4fdf5186140e2d40ebe48bd01f3ea";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/*/build";
@@ -70,7 +70,7 @@ stdenv.mkDerivation {
         ''
         else throw ("Architecture: "+stdenv.system+" not supported for VirtualBox guest additions")
         }
-        patchelf --set-rpath ${stdenv.gcc.gcc}/lib:${dbus}/lib:${libX11}/lib:${libXt}/lib:${libXext}/lib:${libXmu}/lib:${libXfixes}/lib:${libXrandr}/lib:${libXcursor}/lib $i
+        patchelf --set-rpath ${stdenv.cc.gcc}/lib:${dbus}/lib:${libX11}/lib:${libXt}/lib:${libXext}/lib:${libXmu}/lib:${libXfixes}/lib:${libXrandr}/lib:${libXcursor}/lib $i
     done
 
     for i in lib/VBoxOGL*.so

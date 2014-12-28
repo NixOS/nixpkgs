@@ -6,11 +6,11 @@
 assert useGtk || useNcurses || useQt4;
 
 stdenv.mkDerivation rec {
-  name = "pinentry-0.8.3";
+  name = "pinentry-0.9.0";
 
   src = fetchurl {
     url = "mirror://gnupg/pinentry/${name}.tar.bz2";
-    sha256 = "1bd047crf7xb8g61mval8v6qww98rddlsw2dz6j8h8qbnl4hp2sn";
+    sha256 = "1awhajq21hcjgqfxg9czaxg555gij4bba6axrwg8w6lfmc3ml14h";
   };
 
   buildInputs = let opt = stdenv.lib.optional; in []

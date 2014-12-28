@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [ cabalMacosx reactiveBanana wx wxcore ];
   configureFlags = "-f-buildExamples";
+  jailbreak = true;
   meta = {
     homepage = "http://haskell.org/haskellwiki/Reactive-banana";
     description = "Examples for the reactive-banana library, using wxHaskell";

@@ -3,7 +3,7 @@
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
   pname = "lablgtk";
-  version = "2.18.2";
+  version = "2.18.3";
 in
 
 assert stdenv.lib.versionAtLeast ocaml_version "3.12";
@@ -11,8 +11,8 @@ assert stdenv.lib.versionAtLeast ocaml_version "3.12";
 stdenv.mkDerivation {
   name = "${pname}-${version}";
   src = fetchurl {
-    url = https://forge.ocamlcore.org/frs/download.php/1456/lablgtk-2.18.2.tar.gz;
-    sha256 = "0f9rs4av0v7p5k8hifcq4b49xx8jmmfch3sdk9pij8a8jfgwxvfy";
+    url = https://forge.ocamlcore.org/frs/download.php/1479/lablgtk-2.18.3.tar.gz;
+    sha256 = "1bybn3jafxf4cx25zvn8h2xj9agn1xjbn7j3ywxxqx6az7rfnnwp";
   };
 
   buildInputs = [ocaml findlib pkgconfig gtk libgnomecanvas libglade gtksourceview camlp4];

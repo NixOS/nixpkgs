@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   p_name  = "xfce4-taskmanager";
-  ver_maj = "1.0";
-  ver_min = "1";
+  ver_maj = "1.1";
+  ver_min = "0";
 
   src = fetchurl {
     url = "mirror://xfce/src/apps/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "11pfiglfg3mzsmpiwva6l7dj44zsv76vyf0282pghwcrvnb2gapm";
+    sha256 = "1jwywmkkkmz7406m1jq40w6apiav25cznafhigbgpjv6z5hv27if";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 

@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     patchelf \
-      --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-      --set-rpath "${alsaLib}/lib:${qt48}/lib:${SDL}/lib:${fontconfig}/lib:${freetype}/lib:${SDL_ttf}/lib:${xlibs.libX11}/lib:${xlibs.libXinerama}/lib:${stdenv.gcc.gcc}/lib" \
+      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-rpath "${alsaLib}/lib:${qt48}/lib:${SDL}/lib:${fontconfig}/lib:${freetype}/lib:${SDL_ttf}/lib:${xlibs.libX11}/lib:${xlibs.libXinerama}/lib:${stdenv.cc.gcc}/lib" \
       share/sdlmame/sdlmame
 
     mkdir -p "$out/bin"
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage    = http://sdlmame.lngn.net;
-    description = "A port of the popular Multiple Arcade Machine Emulator using SDL with OpenGL support.";
+    description = "A port of the popular Multiple Arcade Machine Emulator using SDL with OpenGL support";
     license     = "MAME";
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.linux;

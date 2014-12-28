@@ -1,0 +1,11 @@
+--- opam-1.2.0/src_ext/Makefile	2014-10-15 21:32:13.000000000 -0400
++++ opam-1.2.0/src_ext/Makefile.new	2014-10-29 17:37:00.785365601 -0400
+@@ -51,7 +51,7 @@ archives: $(SRC_EXTS:=.download)
+ 	[ -e  $(notdir $(URL_$*)) ] || $(FETCH) $(URL_$*)
+ 	$(MD5CHECK) $(notdir $(URL_$*)) $(MD5_$*)
+ 
+-%.stamp: %.download
++%.stamp:
+ 	mkdir -p tmp
+ 	cd tmp && tar xf$(if $(patsubst %.tar.gz,,$(URL_$*)),j,z) ../$(notdir $(URL_$*))
+ 	rm -rf $*

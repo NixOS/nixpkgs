@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "persistent-mysql";
-  version = "2.1";
-  sha256 = "0r4xxv1250ny7x3298mqcv2x5l8vp0ncn9k9js7yi2lj9gcijj6f";
+  version = "2.1.2";
+  sha256 = "06i2wcrqvk216bq3853acqi6wgrdzkz3wzah231gv3yz348lr6sv";
   buildDepends = [
     aeson blazeBuilder conduit monadControl monadLogger mysql
     mysqlSimple persistent resourcet text transformers

@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1mx3nxcn5h33qhx4gbg0hgvvydwlwdvdhqcnvfwnmf9jy3b8frll";
   };
 
-  buildInputs = [ ocaml findlib pkgconfig gmp perl ];
+  buildInputs = [ ocaml findlib pkgconfig perl ];
+  propagatedBuildInputs = [ gmp ];
 
   patchPhase = ''
     substituteInPlace ./z_pp.pl --replace '/usr/bin/perl' '${perl}/bin/perl'

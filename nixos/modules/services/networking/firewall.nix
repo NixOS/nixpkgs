@@ -187,6 +187,12 @@ let
     # Clean up after added ruleset
     ip46tables -D INPUT -j nixos-fw 2>/dev/null || true
 
+    ${optionalString (kernelHasRPFilter && cfg.checkReversePath) ''
+      if ! ip46tables -D PREROUTING -t raw -m rpfilter --invert -j DROP; then
+        echo "<2>failed to stop rpfilter support" >&2
+      fi
+    ''}
+
     ${cfg.extraStopCommands}
   '';
 
@@ -437,7 +443,7 @@ in
 
     networking.firewall.trustedInterfaces = [ "lo" ];
 
-    environment.systemPackages = [ pkgs.iptables ];
+    environment.systemPackages = [ pkgs.iptables pkgs.ipset ];
 
     boot.kernelModules = map (x: "nf_conntrack_${x}") cfg.connectionTrackingModules;
     boot.extraModprobeConfig = optionalString (!cfg.autoLoadConntrackHelpers) ''
@@ -452,10 +458,11 @@ in
 
     systemd.services.firewall = {
       description = "Firewall";
-      wantedBy = [ "network.target" ];
-      after = [ "network-interfaces.target" "systemd-modules-load.service" ];
+      wantedBy = [ "network-pre.target" ];
+      before = [ "network-pre.target" ];
+      after = [ "systemd-modules-load.service" ];
 
-      path = [ pkgs.iptables ];
+      path = [ pkgs.iptables pkgs.ipset ];
 
       # FIXME: this module may also try to load kernel modules, but
       # containers don't have CAP_SYS_MODULE. So the host system had

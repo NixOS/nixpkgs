@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     license = licenses.gpl2;
-    description = "A Device Firmware Update based USB programmer for Atmel chips with a USB bootloader.";
+    description = "A Device Firmware Update based USB programmer for Atmel chips with a USB bootloader";
     homepage = http://dfu-programmer.sourceforge.net/;
     maintainers = [ maintainers.the-kenny ];
   };

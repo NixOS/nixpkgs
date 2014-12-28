@@ -1,4 +1,4 @@
-{ stdenv, bzip2, patchelf, glibc, gcc, fetchurl, version, releaseType, sha256 }:
+{ stdenv, bzip2, patchelf, glibc, gcc, fetchurl, version, releaseType, sha256, ncurses }:
 with stdenv.lib;
 let
   versionParts = splitString "-" version; # 4.7 2013q3 20130916
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     for f in $(find $out); do
       if [ -f "$f" ] && patchelf "$f" 2> /dev/null; then
         patchelf --set-interpreter ${glibc}/lib/ld-linux.so.2 \
-                 --set-rpath $out/lib:${gcc}/lib \
+                 --set-rpath $out/lib:${gcc}/lib:${ncurses}/lib \
                  "$f" || true
       fi
     done

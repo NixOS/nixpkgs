@@ -1,14 +1,13 @@
-{ stdenv, fetchurl, pkgconfig
-, SDL2 }:
+{ stdenv, fetchurl, pkgconfig, SDL2 }:
 
 stdenv.mkDerivation rec {
 
   name = "stella-${version}";
-  version = "4.0";
+  version = "4.2";
 
   src = fetchurl {
     url = "http://downloads.sourceforge.net/project/stella/stella/${version}/${name}-src.tar.gz";
-    sha256 = "1j96sj2qflq3agb7fvb08ih3pxy8nsvlkwj40q3n00q9k884ad5w";
+    sha256 = "0aikd7l5ill0vl5q06dg1wly8v9vav7wd78yjm6rmikd0cd2irzh";
   };
 
   buildInputs = with stdenv.lib;

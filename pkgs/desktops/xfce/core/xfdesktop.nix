@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
   p_name  = "xfdesktop";
   ver_maj = "4.10";
-  ver_min = "2";
+  ver_min = "3";
 
   src = fetchurl {
     url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "0zbrvfj4fxnjz593brxjsjy9pv5bbf12jnbydy4pwc1ya6zf19j9";
+    sha256 = "1kkj6axcbj82v3n2hkzsdranpqrxaarnyjxkpfs29dyqajjjpjh9";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 

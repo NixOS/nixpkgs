@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, pythonPackages, slowaes, ecdsa, pyqt4 }:
+{ stdenv, fetchurl, buildPythonPackage, slowaes, ecdsa, pyqt4 }:
 
-pythonPackages.buildPythonPackage rec {
+buildPythonPackage rec {
+  namePrefix = "";
   name = "electrum-${version}";
   version = "1.9.8";
 
@@ -11,7 +12,7 @@ pythonPackages.buildPythonPackage rec {
 
   buildInputs = [ slowaes ecdsa ];
 
-  propagatedBuildInputs = [ 
+  propagatedBuildInputs = [
     slowaes
     ecdsa
     pyqt4

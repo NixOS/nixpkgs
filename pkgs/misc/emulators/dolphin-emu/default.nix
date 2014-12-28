@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ stdenv pkgconfig cmake bluez ffmpeg libao mesa gtk2 glib
+  buildInputs = [ pkgconfig cmake bluez ffmpeg libao mesa gtk2 glib
                   gettext libpthreadstubs libXrandr libXext readline openal
                   libXdmcp portaudio SDL wxGTK30 pulseaudio ];
 
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     homepage = http://dolphin-emu.org/;
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARM";
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ MP2E ];
   };
 }

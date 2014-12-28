@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   # for the builder script
   inherit xauth fontDirectories perl;
-  gcc = stdenv.gcc.gcc;
+  gcc = stdenv.cc.gcc;
 
   buildInputs = [x11 zlib libjpeg imake gccmakedep libXmu libXaw libXpm libXp xauth];
   builder = ./builder.sh;

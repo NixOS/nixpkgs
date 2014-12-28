@@ -69,12 +69,15 @@ in
   };
 
   libX11 = attrs: attrs // {
-    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    preConfigure = setMalloc0ReturnsNullCrossCompiling + ''
+      sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
+    '';
     postInstall =
       ''
         # Remove useless DocBook XML files.
         rm -rf $out/share/doc
       '';
+    CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
   };
 
   libXfont = attrs: attrs // {
@@ -99,8 +102,11 @@ in
   # Note: most of these are in Requires.private, so maybe builder.sh
   # should propagate them automatically.
   libXt = attrs: attrs // {
-    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    preConfigure = setMalloc0ReturnsNullCrossCompiling + ''
+      sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
+    '';
     propagatedBuildInputs = [ xorg.libSM ];
+    CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
   };
 
   # See https://bugs.freedesktop.org/show_bug.cgi?id=47792
@@ -167,6 +173,7 @@ in
   xf86inputevdev = attrs: attrs // {
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
     installFlags = "sdkdir=\${out}/include/xorg";
+    buildInputs = attrs.buildInputs ++ [ args.mtdev args.libevdev ];
   };
 
   xf86inputmouse = attrs: attrs // {
@@ -178,7 +185,7 @@ in
   };
 
   xf86inputsynaptics = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [args.mtdev];
+    buildInputs = attrs.buildInputs ++ [args.mtdev args.libevdev];
     installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/share/X11/xorg.conf.d";
   };
 
@@ -188,6 +195,11 @@ in
       "--with-xorg-conf-dir=$(out)/share/X11/xorg.conf.d"
       "--with-udev-rules-dir=$(out)/lib/udev/rules.d"
     ];
+    patches = [( args.fetchpatch {
+      url = "http://cgit.freedesktop.org/xorg/driver/xf86-input-vmmouse/patch/"
+        + "?id=1cbbc03c4b37d57760c57bd2e0b0f89d744a5795";
+      sha256 = "1qkhwj2yal0cz15lv9557d10ylvxlq05ibq43pm2rrvqdg3mb6h4";
+    })];
   };
 
   xf86videoati = attrs: attrs // {
@@ -203,6 +215,11 @@ in
 
   xf86videovmware = attrs: attrs // {
     buildInputs =  attrs.buildInputs ++ [ args.mesa_drivers ]; # for libxatracker
+    patches = [( args.fetchpatch {
+      url = "http://cgit.freedesktop.org/xorg/driver/xf86-video-vmware/patch/"
+        + "?id=4664412d7a5266d2b392957406b34abc5db95e48";
+      sha256 = "1gix83f1is91iq1zd66nj4k72jm24jjjd9s9l0bzpzhgc8smqdk2";
+    })];
   };
 
   xf86videoqxl = attrs: attrs // {
@@ -248,8 +265,8 @@ in
         dmxproto /*libdmx not used*/ xf86vidmodeproto
         recordproto libXext pixman libXfont
         damageproto xcmiscproto  bigreqsproto
-        libpciaccess inputproto xextproto randrproto renderproto
-        dri2proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
+        libpciaccess inputproto xextproto randrproto renderproto presentproto
+        dri2proto dri3proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
       ];
       commonPatches = [ ./xorgserver-xkbcomp-path.patch ];
       # XQuartz requires two compilations: the first to get X / XQuartz,

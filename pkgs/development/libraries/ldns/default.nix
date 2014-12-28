@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Library with the aim of simplifying DNS programming in C";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
     homepage = "http://www.nlnetlabs.nl/projects/ldns/";
   };
 }

@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [readline ncurses gmp];
 
-  configureFlags = "--with-gcc=${stdenv.gcc}/bin/gcc";
+  configureFlags = "--with-gcc=${stdenv.cc}/bin/gcc";
 
   preConfigure =
     ''

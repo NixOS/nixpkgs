@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, db, gettext, pam }:
+{ lib, stdenv, fetchurl, openssl, db, gettext, pam, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   name = "cyrus-sasl-2.1.26";
@@ -8,7 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "1hvvbcsg21nlncbgs0cgn3iwlnb3vannzwsp6rwvnn9ba4v53g4g";
   };
 
-  buildInputs = [ openssl db gettext ] ++ stdenv.lib.optional stdenv.isLinux pam;
+  buildInputs =
+    [ openssl db gettext ]
+    ++ lib.optional stdenv.isLinux pam
+    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   patches = [ ./missing-size_t.patch ]; # https://bugzilla.redhat.com/show_bug.cgi?id=906519
   patchFlags = "-p0";
@@ -22,7 +25,7 @@ stdenv.mkDerivation rec {
                         )
   '';
 
-  installFlags = if stdenv.isDarwin then [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ] else null;
+  installFlags = lib.optional stdenv.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
 
   meta = {
     homepage = "http://cyrusimap.web.cmu.edu/";

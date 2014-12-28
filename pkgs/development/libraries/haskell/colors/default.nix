@@ -4,13 +4,14 @@
 
 cabal.mkDerivation (self: {
   pname = "colors";
-  version = "0.1.1";
-  sha256 = "1i1n05prbp0l3xgx0w2lxzc5r81pcmbzclsamdr7fmjvhvh8blqm";
+  version = "0.2.0.1";
+  sha256 = "0xl7hdp1di8gl0g28vz2lm6pbj7hihdkfnr18843016736hll4qn";
   buildDepends = [ profunctors ];
   meta = {
     homepage = "https://github.com/fumieval/colors";
     description = "A type for colors";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ fuuzetsu ];
   };
 })

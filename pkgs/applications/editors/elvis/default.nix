@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://elvis.vi-editor.org/;
     description = "A vi clone for Unix and other operating systems";
-    license = "free";
+    license = stdenv.lib.licenses.free;
   };
 }

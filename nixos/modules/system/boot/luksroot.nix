@@ -203,7 +203,7 @@ in
       description = ''
         Unless enabled, encryption keys can be easily recovered by an attacker with physical
         access to any machine with PCMCIA, ExpressCard, ThunderBolt or FireWire port.
-        More information: http://en.wikipedia.org/wiki/DMA_attack
+        More information is available at <link xlink:href="http://en.wikipedia.org/wiki/DMA_attack"/>.
 
         This option blacklists FireWire drivers, but doesn't remove them. You can manually
         load the drivers if you need to use a FireWire device, but don't forget to unload them!

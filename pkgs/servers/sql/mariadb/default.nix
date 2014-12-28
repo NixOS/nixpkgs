@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mariadb-${version}";
-  version = "10.0.14";
+  version = "10.0.15";
 
   src = fetchurl {
     url    = "https://downloads.mariadb.org/interstitial/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "07g3w841q8qw0mwi6grk65a2iky9x3axpxkb4c2a72i7pd7cl3mc";
+    sha256 = "1n09553brmprs9m6siwjc1ca4b9b1giqasv3mhdrnijda1lcnm4i";
   };
 
   buildInputs = [ cmake ncurses openssl bison boost libxml2 judy libevent groff ]
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   patches = stdenv.lib.optional stdenv.isDarwin ./my_context_asm.patch;
 
   cmakeFlags = [ "-DWITH_READLINE=yes" "-DWITH_EMBEDDED_SERVER=yes" "-DINSTALL_SCRIPTDIR=bin" ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
 
   enableParallelBuilding = true;
 

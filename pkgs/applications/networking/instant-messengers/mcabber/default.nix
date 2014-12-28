@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl, ncurses, pkgconfig, glib, loudmouth}:
+{stdenv, fetchurl, openssl, ncurses, pkgconfig, glib, loudmouth, libotr}:
 
 stdenv.mkDerivation rec {
   name = "mcabber-${version}";
@@ -6,12 +6,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://mcabber.com/files/mcabber-${version}.tar.bz2";
-    sha256 = "1248cgci1v2ypb90wfhyipwdyp1wskn3gzh78af5ai1a4w5rrjq0";
+    sha256 = "0vgsqw6yn0lzzcnr4fql4ycgf3gwqj6w4p0l4nqnvhkc94w62ikp";
   };
 
-  buildInputs = [openssl ncurses pkgconfig glib loudmouth];
+  buildInputs = [openssl ncurses pkgconfig glib loudmouth libotr];
 
-  configureFlags = "--with-openssl=${openssl}";
+  configureFlags = "--with-openssl=${openssl} --enable-modules --enable-otr";
   
   meta = with stdenv.lib; {
     homepage = http://mcabber.com/;

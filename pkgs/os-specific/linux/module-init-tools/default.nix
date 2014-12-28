@@ -12,7 +12,10 @@ stdenv.mkDerivation {
     # Upstream forgot to include the generated manpages.  Thankfully
     # the Gentoo people fixed this for us :-)
     (fetchurl {
-      url = mirror://gentoo/distfiles/module-init-tools-3.16-man.tar.bz2;
+      urls = [
+        mirror://gentoo/distfiles/module-init-tools-3.16-man.tar.bz2
+        http://mirror.meleeweb.net/pub/linux/gentoo/distfiles/module-init-tools-3.16-man.tar.bz2
+      ];
       sha256 = "1j1nzi87kgsh4scl645fhwhjvljxj83cmdasa4n4p5krhasgw358";
     })
   ];
@@ -22,10 +25,6 @@ stdenv.mkDerivation {
   patches = [ ./module-dir.patch ./docbook2man.patch ];
 
   postInstall = "rm $out/sbin/insmod.static"; # don't need it
-
-  # We don't want bash (and therefore glibc) in the closure of the
-  # output, since we want to put this in a initrd.
-  dontPatchShebangs = stdenv ? isDietLibC;
 
   meta = {
     homepage = http://www.kernel.org/pub/linux/utils/kernel/module-init-tools/;

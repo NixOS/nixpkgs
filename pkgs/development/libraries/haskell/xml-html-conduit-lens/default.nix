@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     doctest hspec hspecExpectationsLens lens xmlConduit
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/supki/xml-html-conduit-lens#readme";
     description = "Optics for xml-conduit and html-conduit";

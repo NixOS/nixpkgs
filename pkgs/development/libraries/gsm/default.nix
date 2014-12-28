@@ -1,9 +1,9 @@
 x@{builderDefsPackage
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     [];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -40,7 +40,7 @@ rec {
     ''INSTALL_ROOT="$out"''
     ''GSM_INSTALL_INC="$out/include/gsm"''
   ];
-      
+
   meta = {
     description = "A GSM codec library";
     maintainers = with a.lib.maintainers;
@@ -49,7 +49,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = "free-noncopyleft";
+    license = a.lib.licenses.free;
   };
   passthru = {
     updateInfo = {
@@ -57,4 +57,3 @@ rec {
     };
   };
 }) x
-

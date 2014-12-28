@@ -1,4 +1,4 @@
-{stdenv, fetchurl, intltool, pkgconfig, qt4, gtk2, gtk3, kdelibs, cmake, ... }:
+{stdenv, fetchurl, intltool, pkgconfig, qt4, gtk2, gtk3, kdelibs, cmake, anthy, ... }:
 
 stdenv.mkDerivation rec {
   version = "1.8.6";
@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
     gtk3
     kdelibs
     cmake
+    anthy
   ];
 
   patches = [ ./immodules_cache.patch ];
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
     "--with-qt4-immodule"
     "--with-skk"
     "--with-x"
+    "--with-anthy-utf8"
   ];
 
   dontUseCmakeConfigure = true;

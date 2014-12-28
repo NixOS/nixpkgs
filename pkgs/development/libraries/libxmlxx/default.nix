@@ -1,10 +1,10 @@
 { stdenv, fetchurl
 , pkgconfig, libxml2, glibmm, perl }:
 stdenv.mkDerivation rec {
-  name = "libxml++-2.37.1";
+  name = "libxml++-2.37.2";
   src = fetchurl {
     url = "mirror://gnome/sources/libxml++/2.37/${name}.tar.xz";
-    sha256 = "17xkdndcambij33k25cb5c4mg2457wi114kiaprjma9j0mh87cgk";
+    sha256 = "0fvpm95iapi5qrz6sil6vnqqdrsd7f9a16c415hzr44f2ji10gmv";
   };
 
   buildInputs = [ pkgconfig glibmm perl ];

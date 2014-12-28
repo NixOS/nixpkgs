@@ -1,12 +1,12 @@
 { fetchurl, stdenv, zlib }:
 
-let version = "0.94"; in
-  stdenv.mkDerivation rec {
+let version = "0.98"; in
+  stdenv.mkDerivation {
     name = "fastjar-${version}";
 
     src = fetchurl {
-      url = "mirror://sourceforge/fastjar/${version}/${name}.tar.gz";
-      sha256 = "15bvhvn2fzpziynk4myg1wl70wxa5a6v65hkzlcgnzh1wg1py8as";
+      url = "http://download.savannah.gnu.org/releases/fastjar/fastjar-${version}.tar.gz";
+      sha256 = "0iginbz2m15hcsa3x4y7v3mhk54gr1r7m3ghx0pg4n46vv2snmpi";
     };
 
     buildInputs = [ zlib ];
@@ -22,10 +22,10 @@ let version = "0.94"; in
         the stock `jar' program running without a JIT.
       '';
 
-      homepage = http://fastjar.sourceforge.net/;
+      homepage = http://savannah.nongnu.org/projects/fastjar/;
 
       license = stdenv.lib.licenses.gpl2Plus;
-
+      platforms = stdenv.lib.platforms.linux;
       maintainers = [ ];
     };
   }

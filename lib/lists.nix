@@ -223,4 +223,14 @@ rec {
 
   crossLists = f: foldl (fs: args: concatMap (f: map f args) fs) [f];
 
+  # Remove duplicate elements from the list
+  unique = list:
+    if list == [] then
+      []
+    else
+      let
+        x = head list;
+        xs = unique (drop 1 list);
+      in [x] ++ remove x xs;
+
 }

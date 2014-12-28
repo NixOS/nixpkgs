@@ -1,9 +1,10 @@
-{ stdenv, lib, makeWrapper, fetchurl, fetchzip, curl, sasl, openssh, autoconf
+{ stdenv, lib, makeWrapper, fetchurl, curl, sasl, openssh, autoconf
 , automake, libtool, unzip, gnutar, jdk, maven, python, wrapPython
-, setuptools, distutils-cfg, boto, pythonProtobuf
+, setuptools, distutils-cfg, boto, pythonProtobuf, apr, subversion
+, leveldb, glog
 }:
 
-let version = "0.19.1";
+let version = "0.21.0";
 in stdenv.mkDerivation {
   dontDisableStatic = true;
 
@@ -11,14 +12,13 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.apache.org/dist/mesos/${version}/mesos-${version}.tar.gz";
-    sha256 = "12li5xqfcw3124qg3h2cji3yhrc7gbx91lj45zfliicwgjkbmyf1";
+    sha256 = "01ap8blrb046w26zf3i4r7vvnnhjsbfi20vz5yinmncqbzjjyx6i";
   };
-
-  patches = [ ./darwin.patch ];
 
   buildInputs = [
     makeWrapper autoconf automake libtool curl sasl jdk maven
-    python wrapPython boto distutils-cfg setuptools
+    python wrapPython boto distutils-cfg setuptools leveldb
+    subversion apr glog
   ];
 
   propagatedBuildInputs = [
@@ -41,11 +41,11 @@ in stdenv.mkDerivation {
 
   configureFlags = [
     "--sbindir=\${out}/bin"
-    "--with-python-headers=${python}/include"
-    "--with-webui"
-    "--with-java-home=${jdk}"
-    "--with-java-headers=${jdk}/include"
-    "--with-included-zookeeper"
+    "--with-apr=${apr}"
+    "--with-svn=${subversion}"
+    "--with-leveldb=${leveldb}"
+    "--with-glog=${glog}"
+    "--disable-python-dependency-install"
   ];
 
   postInstall = ''
@@ -101,7 +101,7 @@ in stdenv.mkDerivation {
     homepage    = "http://mesos.apache.org";
     license     = licenses.asl20;
     description = "A cluster manager that provides efficient resource isolation and sharing across distributed applications, or frameworks";
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ cstrahan offline ];
     platforms   = with platforms; linux;
   };
 }

@@ -1,20 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, intltool, curl, gtk, gtkdatabox }:
+{ stdenv, fetchurl, makeWrapper, pkgconfig, intltool, curl, gtk3 }:
 
 stdenv.mkDerivation rec {
-  name = "klavaro-2.00";
+  name = "klavaro-3.01";
 
   src = fetchurl {
     url = "mirror://sourceforge/klavaro/${name}.tar.bz2";
-    sha256 = "1w94r7r132sg7554xhcgvymxxxgfas99lkgv6j3nmxa8m2fzhwlq";
+    sha256 = "11ay04lg362bh2di6y5r9g58bgmgbpwwnrbsa7bda4wiq8idawgd";
   };
 
-  buildInputs = [ pkgconfig intltool curl gtk gtkdatabox ];
+  buildInputs = [ makeWrapper pkgconfig intltool curl gtk3 ];
+
+  postInstall = ''
+    wrapProgram $out/bin/klavaro \
+      --prefix LD_LIBRARY_PATH : $out/lib
+  '';
 
   meta = {
     description = "Just another free touch typing tutor program";
-
+    homepage = http://klavaro.sourceforge.net/;
     license = stdenv.lib.licenses.gpl3Plus;
-
     platforms = stdenv.lib.platforms.linux;
   };
 }

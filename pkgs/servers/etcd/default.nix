@@ -1,11 +1,11 @@
 { stdenv, lib, go, fetchurl, fetchgit, fetchhg, fetchbzr, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.3";
+  version = "0.5.0-alpha.4";
   name = "etcd-${version}";
 
   src = import ./deps.nix {
-    inherit stdenv lib fetchgit fetchhg fetchbzr fetchFromGitHub;
+    inherit stdenv lib fetchFromGitHub;
   };
 
   buildInputs = [ go ];

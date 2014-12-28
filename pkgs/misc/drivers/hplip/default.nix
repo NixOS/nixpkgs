@@ -118,8 +118,10 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Print, scan and fax HP drivers for Linux";
     homepage = http://hplipopensource.com/;
-    license = if withPlugin then licenses.unfree else "free"; # MIT/BSD/GPL
+    license = if withPlugin
+      then licenses.unfree
+      else with licenses; [ mit bsd2 gpl2Plus ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with maintainers; [ ttuegel jgeerds ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, flex, bison, autoreconfHook, substituteAll
+{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, flex, bison, autoreconfHook, substituteAll
 , python, libxml2Python, file, expat, makedepend
 , libdrm, xorg, wayland, udev, llvm, libffi
 , libvdpau, libelf
@@ -24,7 +24,7 @@ else
 */
 
 let
-  version = "10.2.6";
+  version = "10.2.9";
   # this is the default search path for DRI drivers
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   src =  fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    sha256 = "01n8ib190s12m8hiiyi4wfm9jhkbqjd769npjwvf965smp918cqr";
+    sha256 = "f6031f8b7113a92325b60635c504c510490eebb2e707119bbff7bd86aa34657d";
   };
 
   prePatch = "patchShebangs .";
@@ -45,6 +45,12 @@ stdenv.mkDerivation {
     ./glx_ro_text_segm.patch # fix for grsecurity/PaX
    # TODO: revive ./dricore-gallium.patch when it gets ported (from Ubuntu),
    #  as it saved ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
+    (fetchpatch {
+      name = "fix-lp_test_arit.diff";
+      url = "http://cgit.freedesktop.org/mesa/mesa/patch/"
+        + "?id=8148a06b8fdb734f7f9a11ce787ee6505939fdaa";
+      sha256 = "0k2bnl7d28nx2y88jchw6jj4f3xfdjjvz4vpvhc40060c2iz8fla";
+    })
   ] ++ optional stdenv.isLinux
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
@@ -103,7 +109,7 @@ stdenv.mkDerivation {
     ;
 
   enableParallelBuilding = true;
-  #doCheck = true; # https://bugs.freedesktop.org/show_bug.cgi?id=67672
+  doCheck = true;
 
   # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM;
   #   also move libOSMesa to $osmesa, as it's relatively big
@@ -113,8 +119,8 @@ stdenv.mkDerivation {
   '' + optionalString enableExtraFeatures ''
       `#$out/lib/libXvMC*` \
       $out/lib/gbm $out/lib/libgbm* \
-      $out/lib/gallium-pipe \
   '' + ''
+      $out/lib/gallium-pipe \
       $out/lib/libdricore* \
       $out/lib/libgallium* \
       $out/lib/vdpau \
@@ -134,8 +140,8 @@ stdenv.mkDerivation {
     sed "/^libdir=/s,$out,$drivers," -i \
   '' + optionalString enableExtraFeatures ''
       `#$drivers/lib/libXvMC*.la` \
-      $drivers/lib/gallium-pipe/*.la \
   '' + ''
+      $drivers/lib/gallium-pipe/*.la \
       $drivers/lib/libgallium.la \
       $drivers/lib/vdpau/*.la \
       $drivers/lib/libdricore*.la

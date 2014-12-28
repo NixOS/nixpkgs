@@ -2,19 +2,19 @@
 
 let
 
-  version = "1.8.21";
+  version = "1.8.22";
 
   src = fetchurl {
     url = "mirror://sourceforge/zabbix/zabbix-${version}.tar.gz";
-    sha256 = "1ssqi31blkl1lyv9vjrsrrn494grdng187s8xwfv79adk2w94paw";
+    sha256 = "0cjj3c4j4b9sl3hgh1fck330z9q0gz2k68g227y0paal6k6f54g7";
   };
 
   preConfigure =
     ''
       substituteInPlace ./configure \
         --replace " -static" "" \
-        ${stdenv.lib.optionalString (stdenv.gcc.libc != null) ''
-          --replace /usr/include/iconv.h ${stdenv.gcc.libc}/include/iconv.h
+        ${stdenv.lib.optionalString (stdenv.cc.libc != null) ''
+          --replace /usr/include/iconv.h ${stdenv.cc.libc}/include/iconv.h
         ''}
     '';
 

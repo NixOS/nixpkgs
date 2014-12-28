@@ -7,7 +7,7 @@
 
 with stdenv.lib;
 
-assert stdenv.gcc.gcc != null;
+assert !stdenv.isDarwin -> stdenv.cc ? gcc;
 
 # TODO:
 # * Add gio-module-fam
@@ -39,8 +39,8 @@ let
     ln -sr -t "$out/include/" "$out"/lib/*/include/* 2>/dev/null || true
   '';
 
-  ver_maj = "2.40";
-  ver_min = "0";
+  ver_maj = "2.42";
+  ver_min = "1";
 in
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
-    sha256 = "1d98mbqjmc34s8095lkw1j1bwvnnkw9581yfvjaikjvfjsaz29qd";
+    sha256 = "16pqvikrps1fvwwqvk0qi4a13mfg7gw6w5qfhk7bhi8f51jhhgwg";
   };
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch ++ optional doCheck ./skip-timer-test.patch;
@@ -77,12 +77,13 @@ stdenv.mkDerivation rec {
     '';
 
   enableParallelBuilding = true;
+  DETERMINISTIC_BUILD = 1;
 
   inherit doCheck;
   preCheck = optionalString doCheck
     # libgcc_s.so.1 must be installed for pthread_cancel to work
     # also point to the glib/.libs path
-    '' export LD_LIBRARY_PATH="${stdenv.gcc.gcc}/lib:$NIX_BUILD_TOP/${name}/glib/.libs:$LD_LIBRARY_PATH"
+    '' export LD_LIBRARY_PATH="${stdenv.cc.gcc}/lib:$NIX_BUILD_TOP/${name}/glib/.libs:$LD_LIBRARY_PATH"
        export TZDIR="${tzdata}/share/zoneinfo"
        export XDG_CACHE_HOME="$TMP"
        export XDG_RUNTIME_HOME="$TMP"

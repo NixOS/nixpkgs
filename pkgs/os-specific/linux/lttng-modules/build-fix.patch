@@ -1,0 +1,30 @@
+[PATCH] Update compaction instrumentation for 3.14.x stable kernels
+
+Conditional compilation introduced by lttng-modules commit
+
+  0007344741ef65259bc52dea72259173dfbf96c0
+
+needs to be applied to kernels 3.14.25 and up in the 3.14.x branch.
+
+Signed-off-by: Simon Marchi <simon.marchi at polymtl.ca>
+Reported-by: Bjørn Forsman <bjorn.forsman at gmail.com>
+---
+ instrumentation/events/lttng-module/compaction.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/instrumentation/events/lttng-module/compaction.h b/instrumentation/events/lttng-module/compaction.h
+index ee23aa9..773a6ad 100644
+--- a/instrumentation/events/lttng-module/compaction.h
++++ b/instrumentation/events/lttng-module/compaction.h
+@@ -46,7 +46,8 @@ LTTNG_TRACEPOINT_EVENT_INSTANCE(mm_compaction_isolate_template, mm_compaction_is
+ 	TP_ARGS(nr_scanned, nr_taken)
+ )
+ 
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,16,0))
++#if LTTNG_KERNEL_RANGE(3,14,25, 3,15,0) || \
++	(LINUX_VERSION_CODE >= KERNEL_VERSION(3,16,0))
+ LTTNG_TRACEPOINT_EVENT(mm_compaction_migratepages,
+ 
+ 	TP_PROTO(unsigned long nr_all,
+-- 
+2.1.3

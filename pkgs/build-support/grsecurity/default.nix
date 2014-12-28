@@ -84,7 +84,7 @@ let
       let boolToKernOpt = b: if b then "y" else "n";
           # Disable RANDSTRUCT under virtualbox, as it has some kind of
           # breakage with the vbox guest drivers
-          #randstruct = optionalString config.services.virtualbox.enable
+          #randstruct = optionalString config.services.virtualboxGuest.enable
           #  "GRKERNSEC_RANDSTRUCT n";
 
           # Disable restricting links under the testing kernel, as something

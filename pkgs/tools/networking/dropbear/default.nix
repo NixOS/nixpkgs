@@ -2,11 +2,11 @@
 sftpPath ? "/var/run/current-system/sw/libexec/sftp-server" }:
 
 stdenv.mkDerivation rec {
-  name = "dropbear-2013.62";
+  name = "dropbear-2014.66";
 
   src = fetchurl {
     url = "http://matt.ucc.asn.au/dropbear/releases/${name}.tar.bz2";
-    sha256 = "1ylz0zd68cxdgs4x4cpc2y8h75395y10bxb1qflv0m6cpc166rf6";
+    sha256 = "0xmbcjm2pbhih459667wy8acs4nax4amvzwqwfxw0z2i19ky4gxb";
   };
 
   dontDisableStatic = enableStatic;
@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
 
   # http://www.gnu.org/software/make/manual/html_node/Libraries_002fSearch.html
   preConfigure = ''
-    makeFlags=VPATH=`cat $NIX_GCC/nix-support/orig-libc`/lib
+    makeFlags=VPATH=`cat $NIX_CC/nix-support/orig-libc`/lib
   '';
 
   crossAttrs = {
     # This works for uclibc, at least.
     preConfigure = ''
-      makeFlags=VPATH=`cat ${stdenv.gccCross}/nix-support/orig-libc`/lib
+      makeFlags=VPATH=`cat ${stdenv.ccCross}/nix-support/orig-libc`/lib
     '';
   };
 

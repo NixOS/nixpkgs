@@ -45,7 +45,7 @@ let
     pango
     qt4
     sqlite
-    stdenv.gcc.gcc
+    stdenv.cc.gcc
     xlibs.libX11
     xlibs.libXcomposite
     xlibs.libXdamage
@@ -113,16 +113,16 @@ stdenv.mkDerivation {
 
       mkdir -p $out/bin
 
-      rpath="$out/spotify-client/Data:$out/lib:$out/spotify-client:${stdenv.gcc.gcc}/lib64"
+      rpath="$out/spotify-client/Data:$out/lib:$out/spotify-client:${stdenv.cc.gcc}/lib64"
 
       ln -s $out/spotify-client/spotify $out/bin/spotify
 
       patchelf \
-        --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+        --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath $rpath $out/spotify-client/spotify
 
       patchelf \
-        --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+        --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath $rpath $out/spotify-client/Data/SpotifyHelper
 
       dpkg-deb -x ${qt4webkit} ./

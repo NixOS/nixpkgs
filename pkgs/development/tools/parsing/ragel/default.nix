@@ -1,42 +1,26 @@
-{stdenv, composableDerivation, fetchurl, transfig, texLive}:
+{stdenv, fetchurl, transfig, texLiveAggregationFun, texLive, texLiveExtra, ghostscript
+, build-manual ? false
+}:
 
-let
-  version = "6.3";
+stdenv.mkDerivation rec {
   name = "ragel-${version}";
-in
+  version = "6.9";
 
-composableDerivation.composableDerivation {} {
-  inherit name;
   src = fetchurl {
-    url = "http://www.complang.org/ragel/${name}.tar.gz";
-    sha256 = "018cedc8a68be85cda330fc53d0bb8a1ca6ad39b1cf790eed0311e7baa5a2520";
+    url = "http://www.colm.net/wp-content/uploads/2014/10/${name}.tar.gz";
+    sha256 = "02k6rwh8cr95f1p5sjjr3wa6dilg06572xz1v71dk8awmc7vw1vf";
   };
 
-  flags = {
-    doc = {
-      # require fig2dev & pdflatex (see README)
-      buildInputs = [transfig texLive];
-      # use post* because default values of buildPhase is empty.
-      postBuild = ''
-        pushd doc
-        make
-        popd
-      '';
-      postInstall = ''
-        pushd doc
-        make install
-        popd
-      '';
-    };
-  };
-
-  cfg = {
-    docSupport = false;
-  };
-
-  meta = {
+  buildInputs = stdenv.lib.optional build-manual [ transfig ghostscript (texLiveAggregationFun { paths=[ texLive texLiveExtra ]; }) ];
+   
+  preConfigure = stdenv.lib.optional build-manual ''
+    sed -i "s/build_manual=no/build_manual=yes/g" DIST
+  '';
+  
+  meta = with stdenv.lib; {
     homepage = http://www.complang.org/ragel;
     description = "State machine compiler";
-    license = stdenv.lib.licenses.gpl2;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ pSub ];
   };
 }

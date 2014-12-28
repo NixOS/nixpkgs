@@ -10,12 +10,12 @@ let
   jss-ver = "jss-0.4";
 
   libPath = stdenv.lib.makeLibraryPath
-    [ stdenv.gcc.libc
-      stdenv.gcc.gcc
+    [ stdenv.cc.libc
+      stdenv.cc.gcc
       gmp4
       ncurses
       zlib
-    ] + ":${stdenv.gcc.gcc}/lib64";
+    ] + ":${stdenv.cc.gcc}/lib64";
 
   cryptol-bin =
     if stdenv.system == "i686-linux"
@@ -94,12 +94,12 @@ stdenv.mkDerivation rec {
 
     # Hack around lack of libtinfo in NixOS
     ln -s ${ncurses}/lib/libncursesw.so.5.9 $out/lib/libtinfo.so.5
-    ln -s ${stdenv.gcc.libc}/lib/libpthread-2.19.so $out/lib/libpthread.so.0
+    ln -s ${stdenv.cc.libc}/lib/libpthread-2.19.so $out/lib/libpthread.so.0
   '';
 
   fixupPhase = ''
     for x in bin/cryptol bin/edif2verilog bin/copy-iverilog bin/symbolic_netlist bin/jaig bin/vvp-galois bin/lss libexec/jss; do
-      patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+      patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "$out/lib:${libPath}" $out/$x
       patchelf --shrink-rpath $out/$x
     done

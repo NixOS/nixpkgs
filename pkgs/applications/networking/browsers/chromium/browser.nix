@@ -12,7 +12,7 @@ mkChromiumDerivation (base: rec {
     cp -v "$buildPath/"*.pak "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
-    cp -v $buildPath/libffmpegsumo.so "$libExecPath/"
+    cp -v "$buildPath/libpdf.so" "$buildPath/libffmpegsumo.so" "$libExecPath/"
 
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"
 
@@ -35,7 +35,7 @@ mkChromiumDerivation (base: rec {
   meta = {
     description = "An open source web browser from Google";
     homepage = http://www.chromium.org/;
-    maintainers = with maintainers; [ goibhniu chaoflow aszlig wizeman ];
+    maintainers = with maintainers; [ goibhniu chaoflow aszlig ];
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

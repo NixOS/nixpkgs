@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gnutls, devicemapper, perl, python
 , iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, makeWrapper, pmutils, libcap_ng
-, dnsmasq, libnl
+, dnsmasq, libnl, libpcap
 , pythonPackages
 }:
 
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     "--with-init-script=redhat"
     "--with-macvtap"
     "--with-virtualport"
+    "--with-libpcap"
   ];
 
   installFlags = [
@@ -61,7 +62,6 @@ stdenv.mkDerivation rec {
       versions of Linux (and other OSes)
     '';
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ wizeman ];
     platforms = platforms.linux;
   };
 }

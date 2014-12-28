@@ -5,14 +5,14 @@
 , ghcPaths, httpConduit, httpReverseProxy, httpTypes, liftedBase
 , network, optparseApplicative, parsec, projectTemplate, resourcet
 , shakespeare, split, streamingCommons, systemFileio
-, systemFilepath, tar, text, time, transformers, unixCompat
-, unorderedContainers, wai, waiExtra, warp, yaml, zlib
+, systemFilepath, tar, text, time, transformers, transformersCompat
+, unixCompat, unorderedContainers, wai, waiExtra, warp, yaml, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-bin";
-  version = "1.4.0.4";
-  sha256 = "1f05y5nh218c2r7d67r3lpxkbf6f6irhy7mg8pvbgy9yz90k0j8b";
+  version = "1.4.1";
+  sha256 = "0kzhnq0mv8s4qdkzqj05c7jdmp2xllv02kqgihwhyr2s4wvqmviw";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -20,8 +20,9 @@ cabal.mkDerivation (self: {
     dataDefaultClass fileEmbed filepath fsnotify ghcPaths httpConduit
     httpReverseProxy httpTypes liftedBase network optparseApplicative
     parsec projectTemplate resourcet shakespeare split streamingCommons
-    systemFileio systemFilepath tar text time transformers unixCompat
-    unorderedContainers wai waiExtra warp yaml zlib
+    systemFileio systemFilepath tar text time transformers
+    transformersCompat unixCompat unorderedContainers wai waiExtra warp
+    yaml zlib
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";

@@ -32,9 +32,7 @@ elif [[ $1 == build ]]; then
         nix-build pkgs/top-level/release.nix -A tarball
     else
         echo "=== Checking PR"
-        # The current HEAD is the PR merged into origin/master, so we compare
-        # against origin/master
-        nox-review wip --against origin/master
+        nox-review pr ${TRAVIS_PULL_REQUEST}
     fi
 else
     echo "$0: Unknown option $1" >&2

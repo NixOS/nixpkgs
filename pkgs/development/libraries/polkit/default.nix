@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, expat, pam, intltool, spidermonkey
-, gobjectIntrospection, libxslt, docbook_xsl
+, gobjectIntrospection, libxslt, docbook_xsl, docbook_xml_dtd_412
 , useSystemd ? stdenv.isLinux, systemd }:
 
 let
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig glib expat pam intltool spidermonkey gobjectIntrospection ]
-    ++ [ libxslt docbook_xsl ] # man pages
+    ++ [ libxslt docbook_xsl docbook_xml_dtd_412 ] # man pages
     ++ stdenv.lib.optional useSystemd systemd;
 
   # Ugly hack to overwrite hardcoded directories

@@ -1,5 +1,5 @@
-{ kde, kdelibs, python, sip, pyqt4, kdepimlibs, shared_desktop_ontologies,
-  polkit_qt_1, boost, lndir, pkgconfig }:
+{ kde, kdelibs, python, pyqt4, kdepimlibs, shared_desktop_ontologies,
+  polkit_qt4, boost, lndir, pkgconfig }:
 
 let pydir = "lib/python${python.majorVersion}"; in
 
@@ -9,12 +9,12 @@ kde {
 
   buildInputs = [
     python kdepimlibs shared_desktop_ontologies
-    boost polkit_qt_1
+    boost polkit_qt4
   ];
 
   nativeBuildInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ pyqt4 sip ];
+  propagatedBuildInputs = [ pyqt4 ];
 
   preConfigure =
     ''

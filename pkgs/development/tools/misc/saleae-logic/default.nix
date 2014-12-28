@@ -62,8 +62,8 @@ stdenv.mkDerivation rec {
     cp -r * "$out"
 
     # Patch it
-    patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" "$out/Logic"
-    patchelf --set-rpath "${stdenv.gcc.gcc}/lib:${stdenv.gcc.gcc}/lib64:${libPath}:\$ORIGIN/Analyzers:\$ORIGIN" "$out/Logic"
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$out/Logic"
+    patchelf --set-rpath "${stdenv.cc.gcc}/lib:${stdenv.cc.gcc}/lib64:${libPath}:\$ORIGIN/Analyzers:\$ORIGIN" "$out/Logic"
 
     # Build the LD_PRELOAD library that makes Logic work from a read-only directory
     mkdir -p "$out/lib"
