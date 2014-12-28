@@ -257,9 +257,9 @@ in
       description = "Bittorrent Sync Service";
       wantedBy    = [ "multi-user.target" ];
       after       = [ "network.target" ];
-      UMask       = "0002";
       serviceConfig = {
         Restart   = "on-abort";
+        UMask     = "0002";
         User      = "btsync";
         ExecStart =
           "${bittorrentSync}/bin/btsync --nodaemon --config ${configFile}";
