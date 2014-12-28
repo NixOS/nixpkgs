@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     for f in $out/bin/*
     do
       wrapProgram $f \
-        --prefix PATH : ${stdenv.gcc}/bin
+        --prefix PATH : ${stdenv.cc}/bin
     done
   '';
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://www.call-cc.org/;
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
     platforms = with stdenv.lib.platforms; allBut darwin;
     description = "A portable compiler for the Scheme programming language";

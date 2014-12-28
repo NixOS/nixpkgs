@@ -80,7 +80,6 @@ in {
     services.telepathy.enable = mkDefault true;
     networking.networkmanager.enable = mkDefault true;
     services.upower.enable = config.powerManagement.enable;
-    services.upower.package = gnome3.upower;
 
     fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell_fonts ];
 

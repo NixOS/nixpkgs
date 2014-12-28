@@ -41,14 +41,14 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{opt/andyetitmoves,bin}
     cp -r * $out/opt/andyetitmoves/
 
-    fullPath=${stdenv.gcc.gcc}/lib64
+    fullPath=${stdenv.cc.gcc}/lib64
     for i in $nativeBuildInputs; do
       fullPath=$fullPath''${fullPath:+:}$i/lib
     done
 
     binName=${if commercialVersion then "AndYetItMoves" else "AndYetItMovesDemo"}
 
-    patchelf --set-interpreter $(cat $NIX_GCC/nix-support/dynamic-linker) --set-rpath $fullPath $out/opt/andyetitmoves/lib/$binName
+    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath $fullPath $out/opt/andyetitmoves/lib/$binName
     cat > $out/bin/$binName << EOF
     #!/bin/sh
     cd $out/opt/andyetitmoves

@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
       elif [ "$type" == "EXEC" ]; then
         echo "patching $f executable <<"
         patchelf \
-            --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+            --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
             --set-rpath "${ldpath}" \
             "$f"
         patchelf --shrink-rpath "$f"

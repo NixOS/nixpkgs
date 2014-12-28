@@ -1,10 +1,10 @@
 { stdenv, fetchurl, gdal, cmake, qt4, flex, bison, proj, geos, x11, sqlite, gsl,
-  pyqt4, qwt, fcgi, python, libspatialindex, libspatialite, sip }:
+  pyqt4, qwt, fcgi, python, libspatialindex, libspatialite }:
 
 stdenv.mkDerivation rec {
   name = "qgis-2.4.0";
 
-  buildInputs = [ gdal qt4 flex bison proj geos x11 sqlite gsl pyqt4 sip qwt
+  buildInputs = [ gdal qt4 flex bison proj geos x11 sqlite gsl pyqt4 qwt
     fcgi libspatialindex libspatialite ];
 
   nativeBuildInputs = [ cmake python ];

@@ -186,11 +186,13 @@ let
     } // (extraAttrs.gypFlags or {}));
 
     configurePhase = ''
+      # Precompile .pyc files to prevent race conditions during build
+      python -m compileall -q -f . || : # ignore errors
+
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
       python build/linux/unbundle/replace_gyp_files.py ${gypFlags}
       python build/gyp_chromium -f ninja --depth "$(pwd)" ${gypFlags}
-      find . -iname '*.py[co]' -delete
     '';
 
     buildPhase = let

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   NROFF = "${groff}/bin/nroff";
 
   postInstall = ''
-    sed -i ${stdenv.lib.optionalString (stdenv.isDarwin && stdenv.gcc.nativeTools) "''"} s/-lncurses/-lncursesw/g $out/lib/pkgconfig/libedit.pc
+    sed -i ${stdenv.lib.optionalString (stdenv.isDarwin && stdenv.cc.nativeTools) "''"} s/-lncurses/-lncursesw/g $out/lib/pkgconfig/libedit.pc
   '';
 
   configureFlags = [ "--enable-widec" ];

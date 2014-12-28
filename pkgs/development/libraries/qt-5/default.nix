@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
       ./0003-glib-2.32.patch
       (substituteAll {
         src = ./0004-dlopen-resolv.patch;
-        glibc = stdenv.gcc.libc;
+        glibc = stdenv.cc.libc;
       })
       (substituteAll {
         src = ./0005-dlopen-gl.patch;
@@ -159,6 +159,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ gdb bison flex gperf ruby ];
 
   nativeBuildInputs = [ python perl pkgconfig ];
+
+  # freetype-2.5.4 changed signedness of some struct fields
+  NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare";
 
   postInstall =
     ''

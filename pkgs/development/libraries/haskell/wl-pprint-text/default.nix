@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wl-pprint-text";
-  version = "1.1.0.2";
-  sha256 = "0wbfqp38as2qpn66sq4hvl3hzvj66v301cz9rmgnx2i62r0a3s81";
+  version = "1.1.0.3";
+  sha256 = "1ghrkqdfsdkn71mpipbxiaar2gd8mdyd3dxbsz68awwnlpapy4f3";
   buildDepends = [ text ];
   jailbreak = true;
   meta = {

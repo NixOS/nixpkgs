@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jffj23a02gw7gmrh9j9ynp50bvl2pc2y74i9ii65nvm50fx1v3h";
   };
 
-  patches = [ ./socket-activate.patch ];
+  patches = [ ./socket-activate-2.1.1.patch ];
 
   buildInputs = [
     pkgconfig libgcrypt libassuan libksba npth

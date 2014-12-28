@@ -1,6 +1,6 @@
 let lib = import ../../../lib; in lib.makeOverridable (
 
-{ system, name ? "stdenv", preHook ? "", initialPath, gcc, shell
+{ system, name ? "stdenv", preHook ? "", initialPath, cc, shell
 , allowedRequisites ? null, extraAttrs ? {}, overrides ? (pkgs: {}), config
 
 , # The `fetchurl' to use for downloading curl and its dependencies
@@ -48,7 +48,7 @@ let
       ../../build-support/setup-hooks/patch-shebangs.sh
       ../../build-support/setup-hooks/move-sbin.sh
       ../../build-support/setup-hooks/move-lib64.sh
-      gcc
+      cc
     ];
 
   # Add a utility function to produce derivations that use this
@@ -198,7 +198,7 @@ let
 
       inherit overrides;
 
-      inherit gcc;
+      inherit cc;
     }
 
     # Propagate any extra attributes.  For instance, we use this to

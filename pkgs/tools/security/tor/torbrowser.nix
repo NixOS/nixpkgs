@@ -9,7 +9,7 @@ let
   torEnv = buildEnv {
     name = "tor-env";
     paths = [
-      stdenv.gcc.gcc zlib glib alsaLib dbus dbus_glib gtk atk pango freetype
+      stdenv.cc.gcc zlib glib alsaLib dbus dbus_glib gtk atk pango freetype
       fontconfig gdk_pixbuf cairo xlibs.libXrender xlibs.libX11 xlibs.libXext
       xlibs.libXt
     ];
@@ -30,8 +30,8 @@ in stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
-    patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" Browser/firefox
-    patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" Browser/TorBrowser/Tor/tor
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" Browser/firefox
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" Browser/TorBrowser/Tor/tor
   '';
 
   doCheck = true;

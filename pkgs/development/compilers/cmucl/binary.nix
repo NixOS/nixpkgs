@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   buildCommand = ''
     mkdir -p $out
     tar -C $out -xjf ${dist}
-    patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       $out/bin/lisp
   '';
 

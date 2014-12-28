@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     ar x opensc-dnie*
     tar xf data.tar.gz
 
-    RPATH=${glib}/lib:${opensc}/lib:${openssl}/lib:${openct}/lib:${libtool}/lib:${pcsclite}/lib:${stdenv.gcc.libc}/lib:${zlib}/lib
+    RPATH=${glib}/lib:${opensc}/lib:${openssl}/lib:${openct}/lib:${libtool}/lib:${pcsclite}/lib:${stdenv.cc.libc}/lib:${zlib}/lib
 
     for a in "usr/lib/"*.so*; do
         if ! test -L $a; then

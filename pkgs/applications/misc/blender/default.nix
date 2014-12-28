@@ -4,6 +4,7 @@
 , zlib, fftw
 , jackaudioSupport ? false, jack2
 , cudaSupport ? false, cudatoolkit6
+, colladaSupport ? true, opencollada
 }:
 
 with lib;
@@ -16,13 +17,20 @@ stdenv.mkDerivation rec {
     sha256 = "0ixz8h3c08p4f84x8r85nzddwvc0h5lw1ci8gdg2x3m2mw2cfdj4";
   };
 
+  patches = [(fetchpatch {
+    url = "https://raw.githubusercontent.com/Exherbo/media-unofficial/b5b09fa35ed/"
+      + "packages/media-gfx/blender/files/blender-2.71-Fix-build-with-freetype-2.5.4.patch";
+    sha256 = "19kx9h030zy2f0ah5v69ank2ak8gfp1zv26pm4ixngfdbsiy5lvk";
+  })];
+
   buildInputs =
     [ SDL boost cmake ffmpeg gettext glew ilmbase libXi
       libjpeg libpng libsamplerate libsndfile libtiff mesa openal
       opencolorio openexr openimageio /* openjpeg */ python zlib fftw
     ]
     ++ optional jackaudioSupport jack2
-    ++ optional cudaSupport cudatoolkit6;
+    ++ optional cudaSupport cudatoolkit6
+    ++ optional colladaSupport opencollada;
 
   postUnpack =
     ''
@@ -30,8 +38,7 @@ stdenv.mkDerivation rec {
     '';
 
   cmakeFlags =
-    [ "-DWITH_OPENCOLLADA=OFF"
-      "-DWITH_MOD_OCEANSIM=ON"
+    [ "-DWITH_MOD_OCEANSIM=ON"
       "-DWITH_CODEC_FFMPEG=ON"
       "-DWITH_CODEC_SNDFILE=ON"
       "-DWITH_INSTALL_PORTABLE=OFF"
@@ -41,7 +48,8 @@ stdenv.mkDerivation rec {
       "-DPYTHON_VERSION=${python.majorVersion}"
     ]
     ++ optional jackaudioSupport "-DWITH_JACK=ON"
-    ++ optional cudaSupport "-DWITH_CYCLES_CUDA_BINARIES=ON";
+    ++ optional cudaSupport "-DWITH_CYCLES_CUDA_BINARIES=ON"
+    ++ optional colladaSupport "-DWITH_OPENCOLLADA=ON";
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR -I${python}/include/${python.libPrefix}m";
 

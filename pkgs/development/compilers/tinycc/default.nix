@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    configureFlagsArray+=("--elfinterp=$(cat $NIX_GCC/nix-support/dynamic-linker)")
+    configureFlagsArray+=("--elfinterp=$(cat $NIX_CC/nix-support/dynamic-linker)")
     configureFlagsArray+=("--crtprefix=${stdenv.glibc}/lib")
     configureFlagsArray+=("--sysincludepaths=${stdenv.glibc}/include:{B}/include")
     configureFlagsArray+=("--libpaths=${stdenv.glibc}/lib")

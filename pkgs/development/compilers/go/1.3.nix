@@ -1,7 +1,5 @@
 { stdenv, lib, fetchurl, fetchhg, bison, glibc, bash, coreutils, makeWrapper, tzdata, iana_etc, perl }:
 
-assert stdenv.gcc.gcc != null;
-
 let
   loader386 = "${glibc}/lib/ld-linux.so.2";
   loaderAmd64 = "${glibc}/lib/ld-linux-x86-64.so.2";
@@ -78,16 +76,16 @@ stdenv.mkDerivation {
            else throw "Unsupported system";
   GOARM = stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "5";
   GO386 = 387; # from Arch: don't assume sse2 on i686
-  CGO_ENABLED = 1;
+  CGO_ENABLED = if stdenv.isDarwin then 0 else 1;
 
   installPhase = ''
     export CC=cc
-
+  '' + stdenv.lib.optionalString (stdenv ? cc) ''
     # http://lists.science.uu.nl/pipermail/nix-dev/2013-October/011891.html
     # Fix for "libgcc_s.so.1 must be installed for pthread_cancel to work"
     # during tests:
-    export LD_LIBRARY_PATH="$(dirname $(echo ${stdenv.gcc.gcc}/lib/libgcc_s.so))"
-
+    export LD_LIBRARY_PATH="$(dirname $(echo ${stdenv.cc.gcc}/lib/libgcc_s.so))"
+  '' + ''
     mkdir -p "$out/bin"
     export GOROOT="$(pwd)/"
     export GOBIN="$out/bin"

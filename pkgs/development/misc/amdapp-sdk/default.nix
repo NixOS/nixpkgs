@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
 
   patchFlags = "-p0";
   buildInputs = [ makeWrapper perl mesa xorg.libX11 xorg.libXext xorg.libXaw xorg.libXi xorg.libXxf86vm ];
-  propagatedBuildInputs = [ stdenv.gcc ];
+  propagatedBuildInputs = [ stdenv.cc ];
   NIX_LDFLAGS = "-lX11 -lXext -lXmu -lXi -lXxf86vm";
   doCheck = false;
 
@@ -81,13 +81,13 @@ in stdenv.mkDerivation rec {
       cp -r "./samples/opencl/bin/${arch}/"* "$out/samples/opencl/bin"
       for f in $(find "$out/samples/opencl/bin/" -type f -not -name "*.*");
       do
-        wrapProgram "$f" --prefix PATH ":" "${stdenv.gcc}/bin"
+        wrapProgram "$f" --prefix PATH ":" "${stdenv.cc}/bin"
       done'' else ""
     }
 
     # Create wrappers
-    patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" $out/bin/clinfo
-    patchelf --set-rpath ${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib $out/bin/clinfo
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/bin/clinfo
+    patchelf --set-rpath ${stdenv.cc.gcc}/lib64:${stdenv.cc.gcc}/lib $out/bin/clinfo
 
     # Fix modes
     find "$out/" -type f -exec chmod 644 {} \;

@@ -17,8 +17,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ python bzip2 zlib gmp openssl boost ];
 
   configurePhase = ''
-    python configure.py --prefix=$out --with-gnump --with-bzip2 --with-zlib --with-openssl
+    python configure.py --prefix=$out --with-gnump --with-bzip2 --with-zlib --with-openssl --cc=$CC
   '';
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     cd "$out"/lib/pkgconfig

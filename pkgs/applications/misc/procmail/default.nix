@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "procmail-3.22";
 
-  buildInputs = [ stdenv.gcc.libc ];
+  buildInputs = [ stdenv.cc.libc ];
 
   # getline is defined differently in glibc now. So rename it.
   installPhase = "

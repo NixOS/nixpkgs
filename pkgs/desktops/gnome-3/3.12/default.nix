@@ -10,7 +10,6 @@ rec {
   clutter-gst = pkgs.clutter-gst.override { inherit clutter; };
   cogl = pkgs.cogl_1_18;
 
-  upower = pkgs.upower_99;
   gtk = gtk3; # just to be sure
   libcanberra = pkgs.libcanberra_gtk3; # just to be sure
   inherit (pkgs.gnome2) ORBit2;

@@ -25,18 +25,18 @@ stdenv.mkDerivation rec {
   phases = "unpackPhase installPhase";
 
   # XXX: stdenv.lib.makeLibraryPath doesn't pick up /lib64
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.gcc.gcc stdenv.gcc.libc ] 
+  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.gcc stdenv.cc.libc ] 
     + ":" + stdenv.lib.makeLibraryPath [ SDL SDL_image libjpeg62 libpng12 mesa ]
     + ":" + stdenv.lib.makeLibraryPath [ curl3 openal libvorbis libogg ]
     + ":" + stdenv.lib.makeLibraryPath [ libX11 libXext libXft fontconfig zlib ]
-    + ":" + stdenv.gcc.gcc + "/lib64";
+    + ":" + stdenv.cc.gcc + "/lib64";
 
   installPhase = ''
     mkdir -p $out/libexec/positech/GSB/
     mkdir -p $out/bin
 
     patchelf \
-      --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+      --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath $libPath \
       ./GSB.bin.$arch
 

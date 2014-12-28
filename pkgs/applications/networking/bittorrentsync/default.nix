@@ -9,7 +9,7 @@ let
     else if stdenv.system == "i686-linux" then "0jv3zg0jhdzsc56kkpylwihvhsz73gsl2i2pjmqk3r3x4gwjk8xx"
     else throw "Bittorrent Sync for: ${stdenv.system} not supported!";
 
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.gcc.libc ];
+  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.libc ];
 in
 stdenv.mkDerivation rec {
   name = "btsync-${version}";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin/"
     cp -r "btsync" "$out/bin/"
 
-    patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+    patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath ${libPath} "$out/bin/btsync"
   '';
 

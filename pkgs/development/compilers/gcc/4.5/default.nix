@@ -185,11 +185,11 @@ stdenv.mkDerivation ({
            sed -i gcc/config/t-gnu \
                -es'|NATIVE_SYSTEM_HEADER_DIR.*$|NATIVE_SYSTEM_HEADER_DIR = ${libc}/include|g'
         ''
-    else if cross != null || stdenv.gcc.libc != null then
+    else if cross != null || stdenv.cc.libc != null then
       # On NixOS, use the right path to the dynamic linker instead of
       # `/lib/ld*.so'.
       let
-        libc = if libcCross != null then libcCross else stdenv.gcc.libc;
+        libc = if libcCross != null then libcCross else stdenv.cc.libc;
       in
         '' echo "fixing the \`GLIBC_DYNAMIC_LINKER' and \`UCLIBC_DYNAMIC_LINKER' macros..."
            for header in "gcc/config/"*-gnu.h "gcc/config/"*"/"*.h
@@ -272,7 +272,7 @@ stdenv.mkDerivation ({
     NM_FOR_TARGET = "${stdenv.cross.config}-nm";
     CXX_FOR_TARGET = "${stdenv.cross.config}-g++";
     # If we are making a cross compiler, cross != null
-    NIX_GCC_CROSS = if cross == null then "${stdenv.gccCross}" else "";
+    NIX_CC_CROSS = if cross == null then "${stdenv.ccCross}" else "";
     dontStrip = true;
     configureFlags = ''
       ${if enableMultilib then "" else "--disable-multilib"}

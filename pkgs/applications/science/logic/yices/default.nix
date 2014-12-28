@@ -3,7 +3,7 @@
 assert stdenv.isLinux;
 
 let
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.gcc.libc ];
+  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.libc ];
 in
 stdenv.mkDerivation rec {
   name    = "yices-${version}";

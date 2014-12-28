@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     gtk2 glib fontconfig freetype unixODBC alsaLib
   ];
 
-  rpath = "${stdenv.lib.makeLibraryPath runtimeDependencies}:${stdenv.gcc.gcc}/lib64";
+  rpath = "${stdenv.lib.makeLibraryPath runtimeDependencies}:${stdenv.cc.gcc}/lib64";
 
   unpackPhase = ''
     sh $src --keep --noexec
@@ -38,10 +38,10 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     find . -type f -executable -exec patchelf \
-      --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       '{}' \; || true
     find . -type f -exec patchelf \
-      --set-rpath $rpath:$out/jre/lib/amd64/jli:$out/lib:$out/lib64:$out/nvvm/lib:$out/nvvm/lib64:$(cat $NIX_GCC/nix-support/orig-gcc)/lib \
+      --set-rpath $rpath:$out/jre/lib/amd64/jli:$out/lib:$out/lib64:$out/nvvm/lib:$out/nvvm/lib64:$(cat $NIX_CC/nix-support/orig-gcc)/lib \
       --force-rpath \
       '{}' \; || true
   '';

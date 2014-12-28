@@ -1,17 +1,19 @@
-{ stdenv, fetchurl, kernel, spl, perl, autoconf, automake, libtool, zlib, libuuid, coreutils, utillinux }:
+{ stdenv, fetchFromGitHub, kernel, spl, perl, autoconf, automake, libtool, zlib, libuuid, coreutils, utillinux }:
 
-stdenv.mkDerivation {
-  name = "zfs-0.6.3-${kernel.version}";
+stdenv.mkDerivation rec {
+  name = "zfs-${version}-${kernel.version}";
+  version = "0.6.3-1.2";
 
-  src = fetchurl {
-    url = http://archive.zfsonlinux.org/downloads/zfsonlinux/zfs/zfs-0.6.3.tar.gz;
-    sha256 = "06rrip9fxn13x6qnyp6br68r9pcygb95lld25hnnj88m2vagvg19";
+  src = fetchFromGitHub {
+    owner = "zfsonlinux";
+    repo = "zfs";
+    rev = "zfs-${version}";
+    sha256 = "1iqkh08ikmsg8zi7s2pr46z9z7lshbb65pv2ihg1llwmgcm42r9r";
   };
 
   patches = [
     ./mount_zfs_prefix.patch
     ./nix-build.patch # Remove in >=0.6.4
-    ./remove-lock-checks.patch # Remove in >=0.6.4
   ];
 
   buildInputs = [ spl perl autoconf automake libtool zlib libuuid coreutils ];

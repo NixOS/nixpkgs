@@ -4,15 +4,15 @@
 }:
 
 assert stdenv.isLinux;
-assert stdenv.gcc.gcc != null;
+assert stdenv.cc.gcc != null;
 
 let
-    version = "1.7.30";
+    version = "1.7.33";
     name = "wine-${version}";
 
     src = fetchurl {
       url = "mirror://sourceforge/wine/${name}.tar.bz2";
-      sha256 = "0v08w2av46y4wxrl8q4k9fhbi2cgawjaxclahqnpfw098bqcmxqh";
+      sha256 = "0xcjsh3635i8wpzixzsl05m3dkq74vq193x3ipjr3fy0l9prslg3";
     };
 
     gecko = fetchurl {
@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
   # them to the RPATH so that the user doesn't have to set them in
   # LD_LIBRARY_PATH.
   NIX_LDFLAGS = map (path: "-rpath ${path}/lib ") [
-    freetype fontconfig stdenv.gcc.gcc mesa mesa_noglu.osmesa libdrm
+    freetype fontconfig stdenv.cc.gcc mesa mesa_noglu.osmesa libdrm
     xlibs.libXinerama xlibs.libXrender xlibs.libXrandr
     xlibs.libXcursor xlibs.libXcomposite libpng libjpeg
     openssl gnutls cups ncurses
@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
     install -D ${gecko} $out/share/wine/gecko/${gecko64.name}
   '' + ''
     install -D ${mono} $out/share/wine/mono/${mono.name}
-    wrapProgram $out/bin/wine --prefix LD_LIBRARY_PATH : ${stdenv.gcc.gcc}/lib
+    wrapProgram $out/bin/wine --prefix LD_LIBRARY_PATH : ${stdenv.cc.gcc}/lib
   '';
 
   enableParallelBuilding = true;

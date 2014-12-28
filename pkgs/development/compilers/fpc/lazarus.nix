@@ -17,7 +17,7 @@ let
   buildInputs = [
     fpc gtk glib libXi inputproto
     libX11 xproto libXext xextproto pango atk
-    stdenv.gcc makeWrapper gdk_pixbuf
+    stdenv.cc makeWrapper gdk_pixbuf
   ];
 in
 stdenv.mkDerivation {

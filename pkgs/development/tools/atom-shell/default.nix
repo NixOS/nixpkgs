@@ -6,7 +6,7 @@ let
   atomEnv = buildEnv {
     name = "env-atom";
     paths = [
-      stdenv.gcc.gcc zlib glib dbus gtk atk pango freetype libgnome_keyring3
+      stdenv.cc.gcc zlib glib dbus gtk atk pango freetype libgnome_keyring3
       fontconfig gdk_pixbuf cairo cups expat libgpgerror alsaLib nspr gconf nss
       xlibs.libXrender xlibs.libX11 xlibs.libXext xlibs.libXdamage xlibs.libXtst
       xlibs.libXcomposite xlibs.libXi xlibs.libXfixes xlibs.libXrandr
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     unzip -d $out/bin $src
-    patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
     $out/bin/atom
     mv $out/bin/atom $out/bin/atom-shell
     wrapProgram $out/bin/atom-shell \

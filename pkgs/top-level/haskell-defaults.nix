@@ -19,7 +19,7 @@
     mtl = self.mtl_2_2_1;
   };
 
-  ghc783Prefs = self : super : ghcHEADPrefs self super // {
+  ghc784Prefs = self : super : ghcHEADPrefs self super // {
     cabalInstall_1_20_0_4 = super.cabalInstall_1_20_0_4.override { Cabal = self.Cabal_1_20_0_2; };
     codex = super.codex.override { hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_20_0_2; }; };
     jailbreakCabal = super.jailbreakCabal.override { Cabal = self.Cabal_1_20_0_2; };
@@ -30,7 +30,7 @@
     }; };
   };
 
-  ghc763Prefs = self : super : ghc783Prefs self super // {
+  ghc763Prefs = self : super : ghc784Prefs self super // {
     aeson = self.aeson_0_7_0_4;
     ariadne = super.ariadne.override {
       haskellNames = self.haskellNames.override {
@@ -226,10 +226,10 @@
                };
              };
 
-  packages_ghc783 =
-    packages { ghcPath = ../development/compilers/ghc/7.8.3.nix;
+  packages_ghc784 =
+    packages { ghcPath = ../development/compilers/ghc/7.8.4.nix;
                ghcBinary = if stdenv.isDarwin then ghc783Binary else ghc742Binary;
-               prefFun = ghc783Prefs;
+               prefFun = ghc784Prefs;
              };
 
   packages_ghc763 =

@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
 
     ${jdk}/bin/jar xf $src launchers/launcher-linux-amd64
     patchelf \
-      --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${gcc.gcc}/lib/:${gcc.gcc}/lib64:${xlibs.libX11}/lib" \
       launchers/launcher-linux-${arch}
     ${jdk}/bin/jar uf $src launchers/launcher-linux-${arch}

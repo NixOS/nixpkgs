@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, intltool
-, expat, acl, udev, glib, libatasmart, polkit
+, expat, acl, systemd, glib, libatasmart, polkit
 , libxslt, docbook_xsl, utillinux, mdadm
 }:
 
 stdenv.mkDerivation rec {
-  name = "udisks-2.1.3";
+  name = "udisks-2.1.4";
 
   src = fetchurl {
     url = "http://udisks.freedesktop.org/releases/${name}.tar.bz2";
-    sha256 = "0bb3403pa23j317b7z9ikdigr6ll5cl93l4hiy4afjgfa7b2zjaw";
+    sha256 = "1fqrwmdyn5vc5r7wixh2f013ca1qf3kwy4ia8mh9282a7bfliqd4";
   };
 
   patches = [ ./force-path.patch ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool ];
 
-  propagatedBuildInputs = [ expat acl udev glib libatasmart polkit ]; # in closure anyway
+  propagatedBuildInputs = [ expat acl systemd glib libatasmart polkit ]; # in closure anyway
 
   buildInputs = [ libxslt docbook_xsl ];
 

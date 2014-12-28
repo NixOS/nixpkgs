@@ -27,7 +27,7 @@ libPath="${libPath}:${out}/lib" # XXX: der. This should be in the nix file?
 
 for i in ${bin} ; do
   patchelf \
-    --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+    --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
     --set-rpath $libPath \
     ${i}
 done 

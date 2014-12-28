@@ -1,21 +1,25 @@
-{ stdenv, fetchurl, libcap }:
+{ stdenv, fetchurl, libcap, autoreconfHook }:
 
 assert stdenv.isLinux -> libcap != null;
 
 stdenv.mkDerivation rec {
-  name = "ntp-4.2.6p5";
+  name = "ntp-4.2.8";
 
   src = fetchurl {
     url = "http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/${name}.tar.gz";
-    sha256 = "077r69a41hasl8zf5c44km7cqgfhrkaj6a4jnr75j7nkz5qq7ayn";
+    sha256 = "1vnqa1542d01xmlkw8f3rq57y360b2j7yxkkg9b11955nvw0v4if";
   };
+
+  patches = [ ./no-openssl.patch ];
 
   configureFlags = ''
     --without-crypto
     ${if stdenv.isLinux then "--enable-linuxcaps" else ""}
   '';
 
-  buildInputs = stdenv.lib.optional stdenv.isLinux libcap;
+  buildInputs = [ autoreconfHook ] ++ stdenv.lib.optional stdenv.isLinux libcap;
+
+  postInstall = "rm -rf $out/share/doc";
 
   meta = {
     homepage = http://www.ntp.org/;

@@ -194,7 +194,7 @@ in {
     };
 
     powerManagement.resumeCommands = ''
-      systemctl restart network-manager
+      ${config.systemd.package}/bin/systemctl restart network-manager
     '';
 
     security.polkit.extraConfig = polkitConf;

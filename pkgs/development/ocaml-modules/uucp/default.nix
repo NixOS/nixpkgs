@@ -4,7 +4,7 @@ let
   inherit (stdenv.lib) getVersion versionAtLeast;
 
   pname = "uucp";
-  version = "0.9.0";
+  version = "0.9.1";
   webpage = "http://erratique.ch/software/${pname}";
 in
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "1cwjr16cg03h30r97lnb32g725qi7ma76kr2aly5smc3m413dhqy";
+    sha256 = "0mbrh5fi2b9a4bl71p7hfs0wwbw023ww44n20x0syxn806wjlrkm";
   };
 
   buildInputs = [ ocaml findlib opam ];

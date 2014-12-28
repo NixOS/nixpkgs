@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gmp, pkgconfig, python }:
+{ stdenv, fetchurl, gmp, pkgconfig, python, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "strongswan-5.2.1";
@@ -10,7 +10,13 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
-  buildInputs = [ gmp pkgconfig python ];
+  buildInputs = [ gmp pkgconfig python autoreconfHook ];
+
+  patches = [
+    ./ext_auth-path.patch
+    ./firewall_defaults.patch
+    ./updown-path.patch
+  ];
 
   configureFlags = [ "--enable-swanctl" "--enable-cmd" ];
 

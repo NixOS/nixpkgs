@@ -1,4 +1,4 @@
-{ callPackage, callPackageOrig, stdenv, qt48, release ? "4.14.1" }:
+{ callPackage, callPackageOrig, stdenv, qt48, release ? "4.14.3" }:
 
 let
   branch = "4.14";

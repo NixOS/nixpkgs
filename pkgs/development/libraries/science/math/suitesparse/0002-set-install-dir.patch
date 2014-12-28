@@ -1,0 +1,27 @@
+From e0fee492a315ce1ef8697b056af210beb1465334 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@gmail.com>
+Date: Mon, 15 Dec 2014 10:18:12 -0600
+Subject: [PATCH 2/3] set install dir
+
+---
+ SuiteSparse_config/SuiteSparse_config.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/SuiteSparse_config/SuiteSparse_config.mk b/SuiteSparse_config/SuiteSparse_config.mk
+index e1514bf..f1046a6 100644
+--- a/SuiteSparse_config/SuiteSparse_config.mk
++++ b/SuiteSparse_config/SuiteSparse_config.mk
+@@ -95,8 +95,8 @@ F77LIB =
+ # LIB = -lm
+ 
+ # For "make install"
+-INSTALL_LIB = /usr/local/lib
+-INSTALL_INCLUDE = /usr/local/include
++INSTALL_LIB = @out@/lib
++INSTALL_INCLUDE = @out@/include
+ 
+ # Which version of MAKE you are using (default is "make")
+ # MAKE = make
+-- 
+2.1.3
+

@@ -189,7 +189,7 @@ in
       xserverArgs = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "-ac" "-logverbose" "-nolisten tcp" ];
+        example = [ "-ac" "-logverbose" "-verbose" "-nolisten tcp" ];
         description = "List of arguments for the X server.";
         apply = toString;
       };

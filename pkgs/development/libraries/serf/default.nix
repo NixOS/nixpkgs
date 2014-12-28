@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     scons PREFIX="$out" OPENSSL="${openssl}" ZLIB="${zlib}" APR="$(echo "${apr}"/bin/*-config)" \
         APU="$(echo "${aprutil}"/bin/*-config)" GSSAPI="${krb5}" CC="${
-          if stdenv.isDarwin then "clang" else "${stdenv.gcc}/bin/gcc"
+          if stdenv.isDarwin then "clang" else "${stdenv.cc}/bin/gcc"
         }"
   '';
 

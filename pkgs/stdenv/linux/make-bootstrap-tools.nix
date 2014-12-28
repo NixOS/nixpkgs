@@ -52,6 +52,8 @@ rec {
         cp -d ${glibc}/lib/libpthread*.so* $out/lib
         cp -d ${glibc}/lib/libnsl*.so* $out/lib
         cp -d ${glibc}/lib/libutil*.so* $out/lib
+        cp -d ${glibc}/lib/libnss*.so* $out/lib
+        cp -d ${glibc}/lib/libresolv*.so* $out/lib
         cp -d ${glibc}/lib/crt?.o $out/lib
 
         cp -rL ${glibc}/include $out

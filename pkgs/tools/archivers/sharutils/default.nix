@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     ''
        # Fix for building on Glibc 2.16.  Won't be needed once the
        # gnulib in sharutils is updated.
-       sed -i ${stdenv.lib.optionalString (stdenv.isBSD && stdenv.gcc.nativeTools) "''"} '/gets is a security hole/d' lib/stdio.in.h
+       sed -i ${stdenv.lib.optionalString (stdenv.isBSD && stdenv.cc.nativeTools) "''"} '/gets is a security hole/d' lib/stdio.in.h
     '';
 
   # GNU Gettext is needed on non-GNU platforms.

@@ -88,7 +88,7 @@ in
           use <literal>systemctl start btsync@user</literal> to start
           the daemon only for user <literal>user</literal>, using the
           configuration file located at
-          <literal>$HOME/.config/btsync.conf</literal>
+          <literal>$HOME/.config/btsync.conf</literal>.
         '';
       };
 
@@ -223,6 +223,21 @@ in
           --generate-secret</literal>. Note that this secret will be
           put inside the Nix store, so it is realistically not very
           secret.
+
+          If you would like to be able to modify the contents of this
+          directories, it is recommended that you make your user a
+          member of the <literal>btsync</literal> group.
+
+          Directories in this list should be in the
+          <literal>btsync</literal> group, and that group must have
+          write access to the directory. It is also recommended that
+          <literal>chmod g+s</literal> is applied to the directory
+          so that any sub directories created will also belong to
+          the <literal>btsync</literal> group. Also,
+          <literal>setfacl -d -m group:btsync:rwx</literal> and
+          <literal>setfacl -m group:btsync:rwx</literal> should also
+          be applied so that the sub directories are writable by
+          the group.
         '';
       };
     };
@@ -246,7 +261,12 @@ in
       home            = "/var/lib/btsync";
       createHome      = true;
       uid             = config.ids.uids.btsync;
+      group           = "btsync";
     };
+
+    users.extraGroups = [
+      { name = "btsync";
+      }];
 
     systemd.services.btsync = with pkgs; {
       description = "Bittorrent Sync Service";
@@ -254,6 +274,7 @@ in
       after       = [ "network.target" ];
       serviceConfig = {
         Restart   = "on-abort";
+        UMask     = "0002";
         User      = "btsync";
         ExecStart =
           "${bittorrentSync}/bin/btsync --nodaemon --config ${configFile}";

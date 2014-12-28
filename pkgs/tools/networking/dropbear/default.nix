@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
 
   # http://www.gnu.org/software/make/manual/html_node/Libraries_002fSearch.html
   preConfigure = ''
-    makeFlags=VPATH=`cat $NIX_GCC/nix-support/orig-libc`/lib
+    makeFlags=VPATH=`cat $NIX_CC/nix-support/orig-libc`/lib
   '';
 
   crossAttrs = {
     # This works for uclibc, at least.
     preConfigure = ''
-      makeFlags=VPATH=`cat ${stdenv.gccCross}/nix-support/orig-libc`/lib
+      makeFlags=VPATH=`cat ${stdenv.ccCross}/nix-support/orig-libc`/lib
     '';
   };
 

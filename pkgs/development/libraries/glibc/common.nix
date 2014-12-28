@@ -167,8 +167,8 @@ stdenv.mkDerivation ({
 
     configureScript="`pwd`/../$sourceRoot/configure"
 
-    ${stdenv.lib.optionalString (stdenv.gcc.libc != null)
-      ''makeFlags="$makeFlags BUILD_LDFLAGS=-Wl,-rpath,${stdenv.gcc.libc}/lib"''
+    ${stdenv.lib.optionalString (stdenv.cc.libc != null)
+      ''makeFlags="$makeFlags BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib"''
     }
 
     ${preConfigure}

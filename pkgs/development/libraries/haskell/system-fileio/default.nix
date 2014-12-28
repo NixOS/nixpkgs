@@ -5,14 +5,14 @@
 
 cabal.mkDerivation (self: {
   pname = "system-fileio";
-  version = "0.3.15";
-  sha256 = "06cnr3hzw8xd75529nfqajgb5xy5i4ddqybgjw1v1nwpq04mhihi";
+  version = "0.3.16";
+  sha256 = "1x18ffhas6bhjis0glf0xd6ap8vy7cap8lkmnkn4px83d82yzi8k";
   buildDepends = [ systemFilepath text time ];
   testDepends = [
     chell systemFilepath temporary text time transformers
   ];
   meta = {
-    homepage = "https://john-millikin.com/software/haskell-filesystem/";
+    homepage = "https://github.com/fpco/haskell-filesystem";
     description = "Consistent filesystem interaction across GHC versions";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;

@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, intltool, pulseaudio, gtkmm3
-, libcanberra_gtk3 }:
+, libcanberra_gtk3, makeWrapper, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "pavucontrol-2.0";
@@ -9,7 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "02s775m1531sshwlbvfddk3pz8zjmwkv1sgzggn386ja3gc9vwi2";
   };
 
-  buildInputs = [ pulseaudio gtkmm3 libcanberra_gtk3 ];
+  preFixup = ''
+    wrapProgram "$out/bin/pavucontrol" \
+     --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
+  '';
+
+  buildInputs = [ pulseaudio gtkmm3 libcanberra_gtk3 makeWrapper
+                  gnome3.gnome_icon_theme ];
 
   nativeBuildInputs = [ pkgconfig intltool ];
 

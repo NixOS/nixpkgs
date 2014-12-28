@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   # find readline/gmp.
   postBuild = if stdenv.isLinux then "
     find . -type f -perm +100 \\
-        -exec patchelf --interpreter \"$(cat $NIX_GCC/nix-support/dynamic-linker)\" \\
+        -exec patchelf --interpreter \"$(cat $NIX_CC/nix-support/dynamic-linker)\" \\
         --set-rpath \"${readline}/lib:${ncurses}/lib:${gmp}/lib\" {} \\;
   " else "";
 
