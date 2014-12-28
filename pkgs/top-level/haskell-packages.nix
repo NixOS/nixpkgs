@@ -940,6 +940,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   ghcjs = callPackage ../development/tools/haskell/ghcjs {
     Cabal = self.Cabal_1_22_0_0;
     cabalInstall = self.cabalInstall_1_22_0_0;
+    haddock = self.haddock.override {
+      Cabal = null;
+    };
   };
 
   ghcjsDom = callPackage ../development/libraries/haskell/ghcjs-dom {};

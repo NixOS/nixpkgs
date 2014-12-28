@@ -245,15 +245,8 @@
              };
 
   packages_ghcjs =
-    let parent = packages_ghc784.override {
-          extension = self: super: {
-            haddock = super.haddock.override {
-              Cabal = null;
-            };
-          };
-        };
-    in packages {
-      ghc = parent.ghcjs // { inherit parent; };
+    packages {
+      ghc = let parent = packages_ghc784; in parent.ghcjs // { inherit parent; };
       cabalPackage = import ../build-support/cabal/ghcjs.nix;
       ghcWrapperPackage = import ../development/compilers/ghcjs/wrapper.nix;
       prefFun = self : super : super // {
