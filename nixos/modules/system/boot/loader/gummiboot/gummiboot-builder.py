@@ -63,7 +63,8 @@ def get_generations(profile):
         "@nix@/bin/nix-env",
         "--list-generations",
         "-p",
-        "/nix/var/nix/profiles/%s" % (profile)
+        "/nix/var/nix/profiles/%s" % (profile),
+        "--option", "build-users-group", ""
         ])
     gen_lines = gen_list.split('\n')
     gen_lines.pop()
