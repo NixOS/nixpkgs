@@ -10723,6 +10723,10 @@ let
 
   sbagen = callPackage ../applications/misc/sbagen { };
 
+  scantailor = callPackage ../applications/graphics/scantailor {
+    boost = boost155;
+  };
+
   scite = callPackage ../applications/editors/scite { };
 
   scribus = callPackage ../applications/office/scribus {
