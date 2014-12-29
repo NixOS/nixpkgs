@@ -158,13 +158,7 @@ in
               mv -f /root/ssh_host_ecdsa_key /etc/ssh/ssh_host_ecdsa_key
               echo "downloaded ssh_host_ecdsa_key"
               chmod 600 /etc/ssh/ssh_host_ecdsa_key
-          fi
-
-          echo "obtaining SSH public host key..."
-          ${wget} -O /root/ssh_host_ecdsa_key.pub http://metadata/0.1/meta-data/attributes/ssh_host_ecdsa_key_pub
-          if [ $? -eq 0 -a -e /root/ssh_host_ecdsa_key.pub ]; then
-              mv -f /root/ssh_host_ecdsa_key.pub /etc/ssh/ssh_host_ecdsa_key.pub
-              echo "downloaded ssh_host_ecdsa_key.pub"
+              ${config.programs.ssh.package}/bin/ssh-keygen -y -f /etc/ssh/ssh_host_ecdsa_key > /etc/ssh/ssh_host_ecdsa_key.pub
               chmod 644 /etc/ssh/ssh_host_ecdsa_key.pub
           fi
         '';
