@@ -132,17 +132,15 @@ in
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
 
-      path  = [ pkgs.wget ];
-      script =
+      script = let wget = "${pkgs.wget}/bin/wget --retry-connrefused -t 6 --waitretry=10"; in
         ''
           # When dealing with cryptographic keys, we want to keep things private.
           umask 077
-          wget="wget --retry-connrefused -t 6 --waitretry=10"
           # Don't download the SSH key if it has already been downloaded
           if ! [ -e /root/.ssh/authorized_keys ]; then
                 echo "obtaining SSH key..."
                 mkdir -p /root/.ssh
-                $wget -O /root/authorized-keys-metadata http://metadata/0.1/meta-data/authorized-keys
+                ${wget} -O /root/authorized-keys-metadata http://metadata/0.1/meta-data/authorized-keys
                 if [ $? -eq 0 -a -e /root/authorized-keys-metadata ]; then
                     cat /root/authorized-keys-metadata | cut -d: -f2- > /root/key.pub
                     if ! grep -q -f /root/key.pub /root/.ssh/authorized_keys; then
@@ -155,7 +153,7 @@ in
           fi
 
           echo "obtaining SSH private host key..."
-          $wget -O /root/ssh_host_ecdsa_key  http://metadata/0.1/meta-data/attributes/ssh_host_ecdsa_key
+          ${wget} -O /root/ssh_host_ecdsa_key  http://metadata/0.1/meta-data/attributes/ssh_host_ecdsa_key
           if [ $? -eq 0 -a -e /root/ssh_host_ecdsa_key ]; then
               mv -f /root/ssh_host_ecdsa_key /etc/ssh/ssh_host_ecdsa_key
               echo "downloaded ssh_host_ecdsa_key"
@@ -163,7 +161,7 @@ in
           fi
 
           echo "obtaining SSH public host key..."
-          $wget -O /root/ssh_host_ecdsa_key.pub http://metadata/0.1/meta-data/attributes/ssh_host_ecdsa_key_pub
+          ${wget} -O /root/ssh_host_ecdsa_key.pub http://metadata/0.1/meta-data/attributes/ssh_host_ecdsa_key_pub
           if [ $? -eq 0 -a -e /root/ssh_host_ecdsa_key.pub ]; then
               mv -f /root/ssh_host_ecdsa_key.pub /etc/ssh/ssh_host_ecdsa_key.pub
               echo "downloaded ssh_host_ecdsa_key.pub"
