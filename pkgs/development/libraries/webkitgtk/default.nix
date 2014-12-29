@@ -2,14 +2,18 @@
 , pkgconfig, gettext, gobjectIntrospection
 , gtk2, gtk3, wayland, libwebp, enchant
 , libxml2, libsoup, libsecret, libxslt, harfbuzz, libpthreadstubs
+, enableGeoLocation ? true, geoclue2
 , gst-plugins-base
 }:
 
+assert enableGeoLocation -> geoclue2 != null;
+
+with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
   version = "2.6.4";
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Web content rendering engine, GTK+ port";
     homepage = "http://webkitgtk.org/";
     license = licenses.bsd2;
@@ -37,7 +41,7 @@ stdenv.mkDerivation rec {
     gtk2 wayland libwebp enchant
     libxml2 libsecret libxslt harfbuzz libpthreadstubs
     gst-plugins-base
-  ];
+  ] ++ optional enableGeoLocation geoclue2;
 
   propagatedBuildInputs = [
     libsoup gtk3
