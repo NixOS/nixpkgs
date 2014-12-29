@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.6.2";
+  version = "2.6.4";
 
   meta = with stdenv.lib; {
     description = "Web content rendering engine, GTK+ port";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "1f9qm5g1mbjm2hrnlzymas99piws4h4y3yxz4p6f6gavnsvfjwji";
+    sha256 = "16rffxkz4w3sd7w4j3z3dycny8sdqxrz62yq4bgcmffrxlj5xvxy";
   };
 
   patches = [ ./finding-harfbuzz-icu.patch ];
