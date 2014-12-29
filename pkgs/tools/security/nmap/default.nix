@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/zenmap --prefix PYTHONPATH : "$(toPythonPath $out)" --prefix PYTHONPATH : "$PYTHONPATH" --prefix PYTHONPATH : $(toPythonPath ${pygtk})/gtk-2.0 --prefix PYTHONPATH : $(toPythonPath ${pygobject})/gtk-2.0 --prefix PYTHONPATH : $(toPythonPath ${pycairo})/gtk-2.0
   '';
 
-  buildInputs = [ libpcap pkgconfig openssl ]
+  buildInputs = [ libpcap pkgconfig openssl makeWrapper python ]
     ++ optionals graphicalSupport [
-      libX11 gtk python pygtk makeWrapper pysqlite pygobject pycairo
+      libX11 gtk pygtk pysqlite pygobject pycairo
     ];
 
   meta = {
