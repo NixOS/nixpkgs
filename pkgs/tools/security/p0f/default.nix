@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "p0f-${version}";
-  version = "3.07b";
+  version = "3.08b";
 
   src = fetchurl {
     url    = "http://lcamtuf.coredump.cx/p0f3/releases/${name}.tgz";
-    sha256 = "18hbkwvh8maswhka0cyq0rwznz8yacnf4h1jmvb8krz0695rmz2w";
+    sha256 = "1v4afs66qxk53h8vhfk5x17xvgj32qixwjvz4023gnx59gzag2fs";
   };
 
   buildInputs = [ libpcap ];
