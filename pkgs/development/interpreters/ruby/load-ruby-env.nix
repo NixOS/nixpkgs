@@ -1,4 +1,4 @@
-{ ruby, lib, callPackage, gemFixes, fetchurl, buildRubyGem }@defs:
+{ ruby, lib, callPackage, gemFixes, fetchurl, fetchgit, buildRubyGem }@defs:
 
 # This function builds a set of gems. You first convert your Gemfile to an attrset
 # called a "gemset", and then use this function to build the gemset.
@@ -35,6 +35,10 @@ let
   fetchers.gem = attrs: fetchurl {
     url = "${attrs.src.source or "https://rubygems.org"}/downloads/${attrs.name}-${attrs.version}.gem";
     inherit (attrs.src) sha256;
+  };
+  fetchers.git = attrs: fetchgit {
+    inherit (attrs.src) url rev sha256;
+    leaveDotGit = true;
   };
 
   instantiate = (attrs:
