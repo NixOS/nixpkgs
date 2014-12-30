@@ -1,4 +1,4 @@
-args@{fetchurl, composableDerivation, stdenv, perl, libxml2, postgresql, geos, proj, flex, ...}:
+args@{fetchurl, composableDerivation, stdenv, perl, libxml2, postgresql, geos, proj, flex, gdal, pkgconfig, file, ...}:
 
   /*
 
@@ -6,6 +6,8 @@ args@{fetchurl, composableDerivation, stdenv, perl, libxml2, postgresql, geos, p
   ==================
 
     services.posgresql.extraPlugins = [ pkgs.postgis.v_1_5_1 ];
+
+    services.postgresql.extraPlugins = [ (pkgs.postgis.override { postgresql = pkgs.postgresql94; }).v_2_1_4 ];  # BM - 2015/01/01
 
     or if you want to install 1.5.x and 1.3.x at the same time (which works
     because the .sql and .so files have different names):
@@ -52,7 +54,7 @@ let
     name = "postgis-${version}";
 
     src = fetchurl {
-      url = "http://download.osgeo.org/postgis/source/postgis-${fix.fixed.version}.tar.gz";
+      url = "http://postgis.refractions.net/download/postgis-${fix.fixed.version}.tar.gz";
       inherit (fix.fixed) sha256;
     };
 
@@ -64,36 +66,12 @@ let
       makeFlags="PERL=${perl}/bin/perl datadir=$out/share pkglibdir=$out/lib bindir=$out/bin"
     '';
 
-    pg_db_postgis_enable = ./pg_db_postgis_enable.sh;
-
-    scriptNames = [ "pg_db_postgis_enable" ]; # helper scripts
-
-    # prepare fixed parameters for script and create pg_db_postgis_enable script.
-    # The script just loads postgis features into a list of given databases
-    postgisEnableScript = ''
-      s=$out/bin/pg_db_postgis_enable
-
-      sql_comments=$out/share/postgis-${version}/comments.sql
-      mkdir -p $(dirname $sql_comments)
-      cp $(find -iname ${fix.fixed.sql_comments}) $sql_comments
-
-      for script in $scriptNames; do
-        tg=$out/bin/$script
-        substituteAll ''${!script} $tg
-        chmod +x $tg
-      done
-    '';
-
-    # create a script enabling postgis features
-    # also create aliases for all commands adding version information
+    # create aliases for all commands adding version information
     postInstall = ''
 
       sql_srcs=$(for sql in ${builtins.toString fix.fixed.sql_srcs}; do echo -n "$(find $out -iname "$sql") "; done )
 
-      eval "$postgisEnableScript"
-      eval "$postgisFixLibScript"
-
-      for prog in $out/bin/*; do
+      for prog in $out/bin/*; do # */
         ln -s $prog $prog-${version}
       done
 
@@ -113,6 +91,12 @@ let
     };
   });
 
+  pgDerivationBaseNewer = pgDerivationBase.merge (fix: {
+    src = fetchurl {
+      url = "http://download.osgeo.org/postgis/source/postgis-${builtins.toString fix.fixed.version}.tar.gz";
+      inherit (fix.fixed) sha256;
+    };
+  });
 
 in rec {
 
@@ -141,10 +125,49 @@ in rec {
     sha256 = "0i6inyiwc5zgf5a4ssg0y774f8vn45zn5c38ccgnln9r6i54vc6k";
   });
 
-  v_1_5_8 = pgDerivationBase.merge ( fix : {
+  v_1_5_1 = pgDerivationBase.merge ( fix : {
+    version = "1.5.1";
+    sha256 = "0nymvqqi6pp4nh4dcshzqm76x4sraf119jp7l27c2q1lygm6p6jr";
+    sql_srcs = ["postgis.sql" "spatial_ref_sys.sql"];
+  });
+
+  v_1_5_8 = pgDerivationBaseNewer.merge ( fix : {
     version = "1.5.8";
     sha256 = "016qn2hk3w8rg60rqn91l2nfk9zcsw0pv2s5rb1qhjw15ypgv5j8";
     sql_srcs = ["postgis.sql" "spatial_ref_sys.sql"];
+  });
+
+  v_2_0_6 = pgDerivationBaseNewer.merge ( fix : {
+    version = "2.0.6";
+    sha256 = "129lyd1crv1bbjadyisjm3wv2vkj1v1nnxyns9z57300ip7wk3s3";
+    sql_srcs = ["postgis.sql" "spatial_ref_sys.sql"];
+    builtInputs = [gdal pkgconfig];
+
+    preConfigure = ''
+      sed -i 's@/usr/bin/file@${file}/bin/file@' configure
+      configureFlags="$configureFlags --with-gdalconfig=${gdal}/bin/gdal-config"
+    '';
+  });
+
+  v_2_1_4 = pgDerivationBaseNewer.merge ( fix : {
+    version = "2.1.4";
+    sha256 = "1z00n5654r7l38ydkn2grbwl5gg0mravjwxfdipp7j18hjiw4wyd";
+    sql_srcs = ["postgis.sql" "spatial_ref_sys.sql"];
+    builtInputs = [gdal pkgconfig];
+    dontDisableStatic = true;
+    preConfigure = ''
+      sed -i 's@/usr/bin/file@${file}/bin/file@' configure
+      configureFlags="$configureFlags --with-gdalconfig=${gdal}/bin/gdal-config"
+    '';
+    postConfigure = ''
+      sed -i "s|@mkdir -p \$(DESTDIR)\$(PGSQL_BINDIR)||g ;
+              s|\$(DESTDIR)\$(PGSQL_BINDIR)|$prefix|g
+              " \
+          "raster/loader/Makefile";
+      sed -i "s|\$(DESTDIR)\$(PGSQL_BINDIR)|$prefix|g
+              " \
+          "raster/scripts/python/Makefile";
+    '';
   });
 
 }
