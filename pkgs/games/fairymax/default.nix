@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
        A version of micro-Max that reads the piece description
        from a file fmax.ini, so that arbitrary fairy pieces can be
        implemented. This version (4.8J) supports up to 15 piece types,
-       and board sizes upto 12x8 board. A Linux port exists in the
+       and board sizes up to 12x8. A Linux port exists in the
        format of a debian package.
     '';
     license = stdenv.lib.licenses.free ;

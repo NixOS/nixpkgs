@@ -11,7 +11,7 @@ in {
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = "Wherther to enable cadvisor service.";
+        description = "Whether to enable cadvisor service.";
       };
 
       host = mkOption {

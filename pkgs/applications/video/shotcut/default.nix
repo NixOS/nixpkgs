@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A free, open source, cross-platform video editor";
     longDescription = ''
-      An offical binary for Shotcut, which includes all the
+      An official binary for Shotcut, which includes all the
       dependencies pinned to specific versions, is provided on
       http://shotcut.org.
 

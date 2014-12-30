@@ -5904,7 +5904,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ ClassMethodModifiers DevelGlobalDestruction ImportInto ModuleRuntime RoleTiny strictures ];
     meta = {
-      description = "Minimalist Object Orientation (with Moose compatiblity)";
+      description = "Minimalist Object Orientation (with Moose compatibility)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };

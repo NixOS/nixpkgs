@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     description = "Access to the opensc tools and firefox using the Spanish national ID SmartCard";
     longDescription = ''
       Opensc needs a special configuration and special drivers to use the SmartCard
-      the Spanish governement provides to the citizens as ID card.
+      the Spanish government provides to the citizens as ID card.
       Some wrapper scripts take care for the proper opensc configuration to be used, in order
       to access the certificates in the SmartCard through the opensc tools or firefox.
       Opensc will require a pcscd daemon running, managing the access to the card reader.

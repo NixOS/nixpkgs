@@ -24,7 +24,7 @@ in
             default = false;
             description =
               ''
-                Whether to enable the Tox DHT boostrap daemon.
+                Whether to enable the Tox DHT bootstrap daemon.
               '';
           };
 
@@ -45,7 +45,7 @@ in
             default = "";
             description =
               ''
-                Configuration for boostrap daemon.
+                Configuration for bootstrap daemon.
                 See <link xlink:href="https://github.com/irungentoo/toxcore/blob/master/other/bootstrap_daemon/tox-bootstrapd.conf"/>
                 and <link xlink:href="http://wiki.tox.im/Nodes"/>.
              '';

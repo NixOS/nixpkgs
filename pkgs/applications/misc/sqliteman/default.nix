@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Sqliteman is simple but powerfull Sqlite3 GUI database manager.";
+    description = "A simple but powerful Sqlite3 GUI database manager";
     homepage = http://sqliteman.yarpen.cz/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
