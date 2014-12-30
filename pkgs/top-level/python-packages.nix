@@ -531,6 +531,36 @@ let
     };
   });
 
+  audioread = buildPythonPackage rec {
+    name = "audioread-1.2.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/audioread/${name}.tar.gz";
+      md5 = "01a80357f38dbd9bf8d7403802df89ac";
+    };
+
+    meta = {
+      description = "Cross-platform audio decoding";
+      homepage = "https://github.com/sampsyo/audioread";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  audiotools = buildPythonPackage rec {
+    name = "audiotools-2.22";
+
+    src = pkgs.fetchurl {
+      url = "mirror://sourceforge/audiotools/${name}.tar.gz";
+      sha256 = "1c52pggsbxdbj8h92njf4h0jgfndh4yv58ad723pidys47nw1y71";
+    };
+
+    meta = {
+      description = "Utilities and Python modules for handling audio.";
+      homepage = "http://audiotools.sourceforge.net/";
+      license = stdenv.lib.licenses.gpl2Plus;
+    };
+  };
+
   autopep8 = buildPythonPackage (rec {
     name = "autopep8-1.0.4";
 
@@ -786,44 +816,6 @@ let
       platforms = stdenv.lib.platforms.linux;
 
       maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
-    };
-  };
-
-  beets = buildPythonPackage rec {
-    name = "beets-1.3.6";
-
-    src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/b/beets/${name}.tar.gz";
-      md5 = "59615a54b3ac3983159e77ff9dda373e";
-    };
-
-    # tests depend on $HOME setting
-    preConfigure = "export HOME=$TMPDIR";
-
-    propagatedBuildInputs =
-      [ self.pyyaml
-        self.unidecode
-        self.mutagen
-        self.munkres
-        self.musicbrainzngs
-        self.enum34
-        self.pylast
-        self.rarfile
-        self.flask
-        modules.sqlite3
-        modules.readline
-      ];
-
-    buildInputs = with self; [ mock pyechonest six responses nose ];
-
-    # 10 tests are failing
-    doCheck = false;
-
-    meta = {
-      homepage = http://beets.radbox.org;
-      description = "Music tagger and library organizer";
-      license = licenses.mit;
-      maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
 
@@ -2188,6 +2180,23 @@ let
       description = "derpconf abstracts loading configuration files for your app";
       homepage = https://github.com/globocom/derpconf;
       license = licenses.mit;
+    };
+  };
+
+  discogs_client = buildPythonPackage rec {
+    name = "discogs-client-2.0.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/discogs-client/${name}.tar.gz";
+      md5 = "2cc57e1d134aa93404e779b9311676fa";
+    };
+
+    propagatedBuildInputs = with self; [ oauth2 requests ];
+
+    meta = {
+      description = "Official Python API client for Discogs";
+      license = licenses.bsd2;
+      homepage = "https://github.com/discogs/discogs_client";
     };
   };
 
@@ -5760,15 +5769,15 @@ let
   };
 
   mutagen = buildPythonPackage (rec {
-    name = "mutagen-1.23";
+    name = "mutagen-1.27";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/m/mutagen/${name}.tar.gz";
-      sha256 = "12f70aaf5ggdzll76bhhkn64b27xy9s1acx417dbsaqnnbis8s76";
+      md5 = "6a9bb5cc33214add35348f1bb3448340";
     };
 
-    # one unicode test fails
-    doCheck = false;
+    # Needed for tests only
+    buildInputs = [ pkgs.faad2 pkgs.flac pkgs.vorbisTools pkgs.liboggz ];
 
     meta = {
       description = "Python multimedia tagging library";
@@ -6980,6 +6989,30 @@ let
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/py/${name}.tar.gz";
       md5 = "8f32ee0cd1e01472a255fe1d28d81217";
+    };
+  };
+
+
+  pyacoustid = buildPythonPackage rec {
+    name = "pyacoustid-1.1.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyacoustid/${name}.tar.gz";
+      md5 = "b27c714d530300b917eb869726334226";
+    };
+
+    propagatedBuildInputs = with self; [ requests audioread ];
+
+    postPatch = ''
+      sed -i \
+          -e '/^FPCALC_COMMAND *=/s|=.*|= "${pkgs.chromaprint}/bin/fpcalc"|' \
+          acoustid.py
+    '';
+
+    meta = {
+      description = "Bindings for Chromaprint acoustic fingerprinting";
+      homepage = "https://github.com/sampsyo/pyacoustid";
+      license = stdenv.lib.licenses.mit;
     };
   };
 
