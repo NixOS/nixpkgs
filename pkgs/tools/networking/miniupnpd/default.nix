@@ -3,11 +3,11 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "miniupnpd-1.8.20140401";
+  name = "miniupnpd-1.9";
 
   src = fetchurl {
-    url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
-    sha256 = "1gfdbfqcw6ih830si51yzqbyymgcbwkiv9vk5dwnxs78b7xgyv88";
+    url = "http://miniupnp.free.fr/files/${name}.tar.gz";
+    sha256 = "1b52pcbs5hi8680wkn3klxgk60shpp5jripiivk7waj2lqhynxk1";
   };
 
   buildInputs = [ iptables libnfnetlink ];
