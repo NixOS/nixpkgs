@@ -53,6 +53,10 @@ let
   enabledOptionalPlugins = attrNames (filterAttrs (_: id) optionalPlugins);
 
   allPlugins = pluginsWithoutDeps ++ attrNames optionalPlugins;
+  allEnabledPlugins = pluginsWithoutDeps ++ enabledOptionalPlugins;
+
+  # Discogs plugin wants to have an API token, so skip install checks.
+  allTestablePlugins = remove "discogs" allEnabledPlugins;
 
   testShell = "${bashInteractive}/bin/bash --norc";
   completion = "${bashCompletion}/share/bash-completion/bash_completion";
@@ -143,6 +147,26 @@ in buildPythonPackage rec {
     runHook postCheck
   '';
 
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    tmphome="$(mktemp -d)"
+
+    EDITOR="${writeScript "beetconfig.sh" ''
+      #!${stdenv.shell}
+      cat > "$1" <<CFG
+      plugins: ${concatStringsSep " " allTestablePlugins}
+      musicbrainz:
+        user: dummy
+        pass: dummy
+      CFG
+    ''}" HOME="$tmphome" "$out/bin/beet" config -e
+    EDITOR=true HOME="$tmphome" "$out/bin/beet" config -e
+
+    runHook postInstallCheck
+  '';
 
   meta = {
     homepage = http://beets.radbox.org;
