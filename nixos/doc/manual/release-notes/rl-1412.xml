@@ -131,7 +131,7 @@ rather than <literal>c-<replaceable>container-name</replaceable></literal>.</par
 <listitem><para>GNOME 3.10 support has been dropped. The default GNOME version is now 3.12.</para></listitem>
 
 <listitem><para>VirtualBox has been upgraded to 4.3.20 release. Users
-may be required to run <command>rm -rf /tmp.vbox*</command>. The line
+may be required to run <command>rm -rf /tmp/.vbox*</command>. The line
 <literal>imports = [ &lt;nixpkgs/nixos/modules/programs/virtualbox.nix&gt; ]</literal> is
 no longer necessary, use <literal>services.virtualboxHost.enable =
 true</literal> instead.
