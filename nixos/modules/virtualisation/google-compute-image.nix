@@ -152,14 +152,26 @@ in
                 rm -f /root/key.pub /root/authorized-keys-metadata
           fi
 
-          echo "obtaining SSH private host key..."
-          ${wget} -O /root/ssh_host_ecdsa_key  http://metadata/0.1/meta-data/attributes/ssh_host_ecdsa_key
-          if [ $? -eq 0 -a -e /root/ssh_host_ecdsa_key ]; then
-              mv -f /root/ssh_host_ecdsa_key /etc/ssh/ssh_host_ecdsa_key
-              echo "downloaded ssh_host_ecdsa_key"
-              chmod 600 /etc/ssh/ssh_host_ecdsa_key
-              ${config.programs.ssh.package}/bin/ssh-keygen -y -f /etc/ssh/ssh_host_ecdsa_key > /etc/ssh/ssh_host_ecdsa_key.pub
-              chmod 644 /etc/ssh/ssh_host_ecdsa_key.pub
+          countKeys=0
+          ${flip concatMapStrings config.services.openssh.hostKeys (k :
+            let kName = baseNameOf k.path; in ''
+              echo "trying to obtain SSH private host key ${kName}"
+              ${wget} -O /root/${kName} http://metadata/0.1/meta-data/attributes/${kName} && :
+              if [ $? -eq 0 -a -e /root/${kName} ]; then
+                  countKeys=$((countKeys+1))
+                  mv -f /root/${kName} ${k.path}
+                  echo "downloaded ${k.path}"
+                  chmod 600 ${k.path}
+                  ${config.programs.ssh.package}/bin/ssh-keygen -y -f ${k.path} > ${k.path}.pub
+                  chmod 644 ${k.path}.pub
+              fi
+              rm -f /root/${kName}
+            ''
+          )}
+
+          if [[ $countKeys -le 0 ]]; then
+             echo "failed to obtain any SSH private host keys."
+             false
           fi
         '';
       serviceConfig.Type = "oneshot";
