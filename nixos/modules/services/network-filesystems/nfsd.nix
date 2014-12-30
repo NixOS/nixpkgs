@@ -61,7 +61,7 @@ in
           default = null;
           example = 4002;
           description = ''
-            Use fixed port for rpc.mountd, usefull if server is behind firewall.
+            Use fixed port for rpc.mountd, useful if server is behind firewall.
           '';
         };
 

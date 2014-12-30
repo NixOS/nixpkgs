@@ -11,7 +11,7 @@ rec {
     then "i686-apple-darwin"
     else if stdenv.system == "x86_64-darwin"
     then "x86_64-apple-darwin"
-    else throw "no snapshot to boostrap for this platform (missing platform url suffix)";
+    else throw "no snapshot to bootstrap for this platform (missing platform url suffix)";
 
   snapshotHash = if stdenv.system == "i686-linux"
     then "3204c8a38721199f69d2971db887d1dc71a63825"
