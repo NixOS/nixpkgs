@@ -1,5 +1,5 @@
 { stdenv, fetchurl, jdk, jdkPath, ant, wget, zip, unzip, cpio, file, libxslt
-, xorg, zlib, pkgconfig, libjpeg, libpng, giflib, lcms2, gtk2, krb5, attr
+, xorg, zlib, pkgconfig, libjpeg, libpng, giflib, lcms2, gtk2, kerberos, attr
 , alsaLib, procps, automake, autoconf, cups, which, perl, coreutils, binutils
 , cacert, setJavaClassPath
 }:
@@ -50,7 +50,7 @@ with srcInfo; stdenv.mkDerivation {
   buildInputs = [
     jdk ant wget zip unzip cpio file libxslt pkgconfig procps automake
     autoconf which perl coreutils xorg.lndir
-    zlib libjpeg libpng giflib lcms2 krb5 attr alsaLib cups
+    zlib libjpeg libpng giflib lcms2 kerberos attr alsaLib cups
     xorg.libX11 xorg.libXtst gtk2
   ];
 

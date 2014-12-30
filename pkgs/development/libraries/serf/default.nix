@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, apr, scons, openssl, aprutil, zlib, krb5, pkgconfig, gnused }:
+{ stdenv, fetchurl, apr, scons, openssl, aprutil, zlib, kerberos, pkgconfig, gnused }:
 
 stdenv.mkDerivation rec {
   name = "serf-1.3.7";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1bphz616dv1svc50kkm8xbgyszhg3ni2dqbij99sfvjycr7bgk7c";
   };
 
-  buildInputs = [ apr scons openssl aprutil zlib krb5 pkgconfig ];
+  buildInputs = [ apr scons openssl aprutil zlib kerberos pkgconfig ];
 
   configurePhase = ''
     ${gnused}/bin/sed -e '/^env[.]Append(BUILDERS/ienv.Append(ENV={"PATH":os.environ["PATH"]})' -i SConstruct
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     scons PREFIX="$out" OPENSSL="${openssl}" ZLIB="${zlib}" APR="$(echo "${apr}"/bin/*-config)" \
-        APU="$(echo "${aprutil}"/bin/*-config)" GSSAPI="${krb5}" CC="${
+        APU="$(echo "${aprutil}"/bin/*-config)" GSSAPI="${kerberos}" CC="${
           if stdenv.isDarwin then "clang" else "${stdenv.cc}/bin/gcc"
         }"
   '';
