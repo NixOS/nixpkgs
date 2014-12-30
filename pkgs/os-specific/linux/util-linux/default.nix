@@ -27,6 +27,13 @@ stdenv.mkDerivation rec {
     ${if ncurses == null then "--without-ncurses" else ""}
   '';
 
+  postConfigure = ''
+    # Substituting store paths would create a circular dependency on systemd
+    substituteInPlace include/pathnames.h \
+      --replace "/bin/login" "/run/current-system/sw/bin/login" \
+      --replace "/sbin/shutdown" "/run/current-system/sw/bin/shutdown"
+  '';
+
   buildInputs =
     [ zlib pam ]
     ++ stdenv.lib.optional (ncurses != null) ncurses
