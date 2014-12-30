@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Turn-based strategy artillery game similiar to Worms";
+    description = "Turn-based strategy artillery game similar to Worms";
     homepage = http://hedgewars.org/;
     license = licenses.gpl2;
     longDescription = ''

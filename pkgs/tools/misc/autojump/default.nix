@@ -42,7 +42,7 @@ in
         works by maintaining a database of the directories you use the
         most from the command line.  The jstat command shows you the
         current contents of the database.  You need to work a little
-        bit before the database becomes useable.  Once your database
+        bit before the database becomes usable.  Once your database
         is reasonably complete, you can “jump” to a directory by
         typing "j dirspec", where dirspec is a few characters of the
         directory you want to jump to.  It will jump to the most used

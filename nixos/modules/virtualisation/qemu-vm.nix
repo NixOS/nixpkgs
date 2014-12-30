@@ -266,7 +266,7 @@ in
             Networking-related command-line options that should be passed to qemu.
             The default is to use userspace networking (slirp).
 
-            If you override this option, be adviced to keep
+            If you override this option, be advised to keep
             ''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} (as seen in the default)
             to keep the default runtime behaviour.
           '';

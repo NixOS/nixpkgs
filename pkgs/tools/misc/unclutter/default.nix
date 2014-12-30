@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     longDescription = ''
       Unclutter hides your X mouse cursor when you do not need it, to prevent
       it from getting in the way. You have only to move the mouse to restore
-      the mouse cursor. Unclutter is very usefull in tiling wm's where you do
+      the mouse cursor. Unclutter is very useful in tiling wm's where you do
       not need the mouse often.
 
       Just run it from your .bash_profile like that:

@@ -53,7 +53,7 @@ in
     };
 
     mgmt_address = mkOption {
-      description = "Address to run managment TCP interface on";
+      description = "Address to run management TCP interface on";
       default = "127.0.0.1";
       type = types.str;
     };
@@ -65,7 +65,7 @@ in
     };
 
     backends = mkOption {
-      description = "List of backends statsd will use for data persistance";
+      description = "List of backends statsd will use for data persistence";
       default = ["graphite"];
       example = ["graphite" pkgs.nodePackages."statsd-influxdb-backend"];
       type = types.listOf (types.either types.str types.package);

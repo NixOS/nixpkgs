@@ -666,7 +666,7 @@ let
 
     meta = with stdenv.lib; {
       homepage = https://github.com/nicolargo/batinfo;
-      description = "A simple Python lib to retreive battery information";
+      description = "A simple Python lib to retrieve battery information";
       license = licenses.lgpl3;
       platforms = platforms.all;
       maintainers = [ maintainers.koral ];
@@ -12060,7 +12060,7 @@ let
     buildInputs = with self; [ requests gevent ];
 
     meta = {
-      description = "GRequests allows you to use Requests with Gevent to make asyncronous HTTP Requests easily.";
+      description = "GRequests allows you to use Requests with Gevent to make asynchronous HTTP Requests easily.";
       homepage = https://github.com/kennethreitz/grequests;
       license = "bsd";
       maintainers = [ stdenv.lib.maintainers.matejc ];

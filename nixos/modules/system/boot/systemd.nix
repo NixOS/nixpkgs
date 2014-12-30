@@ -695,21 +695,21 @@ in
       default = {};
       type = types.attrsOf types.optionSet;
       options = [ linkOptions ];
-      description = "Definiton of systemd network links.";
+      description = "Definition of systemd network links.";
     };
 
     systemd.network.netdevs = mkOption {
       default = {};
       type = types.attrsOf types.optionSet;
       options = [ netdevOptions ];
-      description = "Definiton of systemd network devices.";
+      description = "Definition of systemd network devices.";
     };
 
     systemd.network.networks = mkOption {
       default = {};
       type = types.attrsOf types.optionSet;
       options = [ networkOptions networkConfig ];
-      description = "Definiton of systemd networks.";
+      description = "Definition of systemd networks.";
     };
 
     systemd.network.units = mkOption {

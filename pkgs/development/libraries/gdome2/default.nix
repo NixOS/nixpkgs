@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://gdome2.cs.unibo.it/;
-    description = "DOM C library developped for the Gnome project";
+    description = "DOM C library developed for the Gnome project";
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [ stdenv.lib.maintainers.roconnor ];
     broken = true;

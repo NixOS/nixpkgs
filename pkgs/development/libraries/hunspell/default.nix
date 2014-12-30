@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       Main features:
 
       * Extended support for language peculiarities; Unicode character encoding, compounding and complex morphology.
-      * Improved suggestion using n-gram similarity, rule and dictionary based pronounciation data.
+      * Improved suggestion using n-gram similarity, rule and dictionary based pronunciation data.
       * Morphological analysis, stemming and generation.
       * Hunspell is based on MySpell and works also with MySpell dictionaries.
       * C++ library under GPL/LGPL/MPL tri-license.
