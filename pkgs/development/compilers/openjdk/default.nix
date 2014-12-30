@@ -61,7 +61,12 @@ stdenv.mkDerivation rec {
     makeFlagsArray+=(CUPS_HEADERS_PATH=$cupsDir)
   '';
 
-  patches = [ ./cppflags-include-fix.patch ./fix-java-home.patch ./paxctl.patch ];
+  patches = [
+    ./cppflags-include-fix.patch
+    ./fix-java-home.patch
+    ./paxctl.patch
+    ./currency-date-range.patch
+  ];
 
   NIX_NO_SELF_RPATH = true;
 
