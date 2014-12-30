@@ -858,6 +858,13 @@ in
       description = "Definition of systemd per-user service units.";
     };
 
+    systemd.user.timers = mkOption {
+      default = {};
+      type = types.attrsOf types.optionSet;
+      options = [ timerOptions unitConfig ];
+      description = "Definition of systemd per-user timer units.";
+    };
+
     systemd.user.sockets = mkOption {
       default = {};
       type = types.attrsOf types.optionSet;
@@ -978,8 +985,9 @@ in
       // mapAttrs' (n: v: nameValuePair "${n}.network" (networkToUnit n v)) cfg.network.networks;
 
     systemd.user.units =
-      mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.user.services
-      // mapAttrs' (n: v: nameValuePair "${n}.socket" (socketToUnit n v)) cfg.user.sockets;
+         mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.user.services
+      // mapAttrs' (n: v: nameValuePair "${n}.socket"  (socketToUnit  n v)) cfg.user.sockets
+      // mapAttrs' (n: v: nameValuePair "${n}.timer"   (timerToUnit   n v)) cfg.user.timers;
 
     system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled
       [ "DEVTMPFS" "CGROUPS" "INOTIFY_USER" "SIGNALFD" "TIMERFD" "EPOLL" "NET"
