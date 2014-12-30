@@ -11069,6 +11069,8 @@ let
     enableX11 = config.unison.enableX11 or true;
   };
 
+  unpaper = callPackage ../tools/graphics/unpaper { };
+
   uucp = callPackage ../tools/misc/uucp { };
 
   uvccapture = callPackage ../applications/video/uvccapture { };
