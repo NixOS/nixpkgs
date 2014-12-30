@@ -531,6 +531,21 @@ let
     };
   });
 
+  audioread = buildPythonPackage rec {
+    name = "audioread-1.2.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/audioread/${name}.tar.gz";
+      md5 = "01a80357f38dbd9bf8d7403802df89ac";
+    };
+
+    meta = {
+      description = "Cross-platform audio decoding";
+      homepage = "https://github.com/sampsyo/audioread";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   autopep8 = buildPythonPackage (rec {
     name = "autopep8-1.0.4";
 
@@ -6942,6 +6957,30 @@ let
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/py/${name}.tar.gz";
       md5 = "8f32ee0cd1e01472a255fe1d28d81217";
+    };
+  };
+
+
+  pyacoustid = buildPythonPackage rec {
+    name = "pyacoustid-1.1.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyacoustid/${name}.tar.gz";
+      md5 = "b27c714d530300b917eb869726334226";
+    };
+
+    propagatedBuildInputs = with self; [ requests audioread ];
+
+    postPatch = ''
+      sed -i \
+          -e '/^FPCALC_COMMAND *=/s|=.*|= "${pkgs.chromaprint}/bin/fpcalc"|' \
+          acoustid.py
+    '';
+
+    meta = {
+      description = "Bindings for Chromaprint acoustic fingerprinting";
+      homepage = "https://github.com/sampsyo/pyacoustid";
+      license = stdenv.lib.licenses.mit;
     };
   };
 
