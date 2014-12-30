@@ -546,6 +546,21 @@ let
     };
   };
 
+  audiotools = buildPythonPackage rec {
+    name = "audiotools-2.22";
+
+    src = pkgs.fetchurl {
+      url = "mirror://sourceforge/audiotools/${name}.tar.gz";
+      sha256 = "1c52pggsbxdbj8h92njf4h0jgfndh4yv58ad723pidys47nw1y71";
+    };
+
+    meta = {
+      description = "Utilities and Python modules for handling audio.";
+      homepage = "http://audiotools.sourceforge.net/";
+      license = stdenv.lib.licenses.gpl2Plus;
+    };
+  };
+
   autopep8 = buildPythonPackage (rec {
     name = "autopep8-1.0.4";
 
