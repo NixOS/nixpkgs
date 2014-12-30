@@ -99,7 +99,10 @@ in buildPythonPackage rec {
     responses
   ];
 
-  patches = [ ./mediafile-codec-fix.patch ];
+  patches = [
+    ./mediafile-codec-fix.patch
+    ./replaygain-default-audiotools.patch
+  ];
 
   postPatch = ''
     sed -i -e '/assertIn.*item.*path/d' test/test_info.py
