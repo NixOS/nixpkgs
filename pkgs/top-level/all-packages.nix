@@ -757,6 +757,8 @@ let
 
   beanstalkd = callPackage ../servers/beanstalkd { };
 
+  beets = callPackage ../tools/audio/beets { };
+
   bgs = callPackage ../tools/X11/bgs { };
 
   biber = callPackage ../tools/typesetting/biber {
