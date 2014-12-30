@@ -1,5 +1,5 @@
 { stdenv, fetchurl, which, autoconf, automake, flex, yacc,
-  kernel, glibc, ncurses, perl, krb5 }:
+  kernel, glibc, ncurses, perl, kerberos }:
 
 assert stdenv.isLinux;
 assert builtins.substring 0 4 kernel.version != "3.18";
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
     ./regen.sh
 
-    export KRB5_CONFIG=${krb5}/bin/krb5-config
+    export KRB5_CONFIG=${kerberos}/bin/krb5-config
 
     configureFlagsArray=(
       "--with-linux-kernel-build=$TMP/linux"

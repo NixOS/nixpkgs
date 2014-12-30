@@ -1,11 +1,11 @@
-{ stdenv, fetchgit, openssl, nss, nspr, krb5, gmp, zlib, libpcap, re2 }:
+{ stdenv, fetchgit, openssl, nss, nspr, kerberos, gmp, zlib, libpcap, re2 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "JohnTheRipper-${version}";
   version = "8a3e3c1d";
-  buildInputs = [ openssl nss nspr krb5 gmp zlib libpcap re2 ];
+  buildInputs = [ openssl nss nspr kerberos gmp zlib libpcap re2 ];
   NIX_CFLAGS_COMPILE = "-DJOHN_SYSTEMWIDE=1";
   preConfigure = ''cd src'';
   installPhase = ''
