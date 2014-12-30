@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
     ./fix-java-home.patch
     ./paxctl.patch
     ./read-truststore-from-env.patch
+    ./currency-date-range.patch
   ];
 
   NIX_NO_SELF_RPATH = true;
