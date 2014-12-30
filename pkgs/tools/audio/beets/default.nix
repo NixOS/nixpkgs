@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = http://beets.radbox.org;
     description = "Music tagger and library organizer";
     license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.iElectric ];
+    maintainers = with stdenv.lib.maintainers; [ iElectric aszlig ];
   };
 }
