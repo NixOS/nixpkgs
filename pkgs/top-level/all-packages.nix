@@ -7003,6 +7003,8 @@ let
 
   sutils = callPackage ../tools/misc/sutils { };
 
+  svrcore = callPackage ../development/libraries/svrcore { };
+
   sword = callPackage ../development/libraries/sword { };
 
   szip = callPackage ../development/libraries/szip { };
