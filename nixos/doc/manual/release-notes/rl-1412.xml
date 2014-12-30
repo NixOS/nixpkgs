@@ -23,9 +23,14 @@ Nix has been updated to 1.8.</link></para></listitem>
 
 <listitem><para>The default Linux kernel has been updated to 3.14.</para></listitem>
 
-<listitem><para><option>users.mutableUsers</option> set to <literal>true</literal> now respect any changes
-made after initial creation of a user or a group.
-</para></listitem>
+<listitem><para>If <option>users.mutableUsers</option> is enabled (the
+default), changes made to the declaration of a user or group will be
+correctly realised when running <command>nixos-rebuild</command>. For
+instance, removing a user specification from
+<filename>configuration.nix</filename> will cause the actual user
+account to be deleted. If <option>users.mutableUsers</option> is
+disabled, it is no longer necessary to specify UIDs or GIDs; if
+omitted, they are allocated dynamically.</para></listitem>
 
 </itemizedlist></para>
 
