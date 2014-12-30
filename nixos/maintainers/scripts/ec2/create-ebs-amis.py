@@ -34,13 +34,13 @@ ebs_size = 20
 # Start a NixOS machine in the given region.
 f = open("ebs-creator-config.nix", "w")
 f.write('''{{
-  resources.ec2KeyPairs.keypair.accessKeyId = "logicblox-dev";
+  resources.ec2KeyPairs.keypair.accessKeyId = "lb-nixos";
   resources.ec2KeyPairs.keypair.region = "{0}";
 
   machine =
     {{ pkgs, ... }}:
     {{
-      deployment.ec2.accessKeyId = "logicblox-dev";
+      deployment.ec2.accessKeyId = "lb-nixos";
       deployment.ec2.region = "{0}";
       deployment.ec2.blockDeviceMapping."/dev/xvdg".size = pkgs.lib.mkOverride 10 {1};
     }};
@@ -161,16 +161,16 @@ f.write(
     {{
       network.description = "NixOS EBS test";
 
-      resources.ec2KeyPairs.keypair.accessKeyId = "logicblox-dev";
+      resources.ec2KeyPairs.keypair.accessKeyId = "lb-nixos";
       resources.ec2KeyPairs.keypair.region = "{0}";
 
       machine = {{ config, pkgs, resources, ... }}: {{
         deployment.targetEnv = "ec2";
-        deployment.ec2.accessKeyId = "logicblox-dev";
+        deployment.ec2.accessKeyId = "lb-nixos";
         deployment.ec2.region = "{0}";
         deployment.ec2.instanceType = "{2}";
         deployment.ec2.keyPair = resources.ec2KeyPairs.keypair.name;
-        deployment.ec2.securityGroups = [ "admin" ];
+        deployment.ec2.securityGroups = [ "public-ssh" ];
         deployment.ec2.ami = "{1}";
       }};
     }}
