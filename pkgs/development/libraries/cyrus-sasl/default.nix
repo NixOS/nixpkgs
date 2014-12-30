@@ -1,7 +1,8 @@
-{ lib, stdenv, fetchurl, openssl, db, gettext, pam, fixDarwinDylibNames }:
+{ lib, stdenv, fetchurl, openssl, kerberos, db, gettext, pam, fixDarwinDylibNames }:
 
+with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "cyrus-sasl-2.1.26";
+  name = "cyrus-sasl-2.1.26${optionalString (kerberos == null) "-without-kerberos"}";
 
   src = fetchurl {
     url = "ftp://ftp.cyrusimap.org/cyrus-sasl/${name}.tar.gz";
@@ -9,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ openssl db gettext ]
+    [ openssl db gettext kerberos ]
     ++ lib.optional stdenv.isLinux pam
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://cyrusimap.web.cmu.edu/";
     description = "library for adding authentication support to connection-based protocols";
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ simons ];
   };
 }
