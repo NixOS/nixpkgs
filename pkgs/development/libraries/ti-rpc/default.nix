@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
        migrated their SunRPC library to a TI-RPC (Transport Independent
        RPC) implementation.  This implementation allows the support of
        other transports than UDP and TCP over IPv4.  FreeBSD provides a
-       TI-RPC library ported from NetBSD with improvments.  This library
+       TI-RPC library ported from NetBSD with improvements.  This library
        already supports IPv6.  So, the FreeBSD release 5.2.1 TI-RPC has
        been ported to replace the SunRPC of the glibc.
     '';

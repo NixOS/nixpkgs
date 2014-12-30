@@ -90,7 +90,7 @@ in
       enable = true;
       recipientDelimiter= "+";
       extraMasterConf = ''
-        mlmmj unix - n n - - pipe flags=ORhu user=mlmmj argv=${pkgs.mlmmj}/bin/mlmmj-recieve -F -L ${spoolDir}/$nextHop
+        mlmmj unix - n n - - pipe flags=ORhu user=mlmmj argv=${pkgs.mlmmj}/bin/mlmmj-receive -F -L ${spoolDir}/$nextHop
       '';
 
       extraAliases = concatMapStrings (alias cfg.listDomain) cfg.mailLists;
