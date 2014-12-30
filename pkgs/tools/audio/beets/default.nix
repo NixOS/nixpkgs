@@ -1,12 +1,15 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonPackages, python }:
+{ stdenv, fetchFromGitHub, buildPythonPackage, pythonPackages, python }:
 
 buildPythonPackage rec {
-  name = "beets-1.3.9";
+  name = "beets-${version}";
+  version = "1.3.9";
   namePrefix = "";
 
-  src = fetchurl {
-    url = "http://pypi.python.org/packages/source/b/beets/${name}.tar.gz";
-    md5 = "0211b4abfe7887da22c1413e761fdcb4";
+  src = fetchFromGitHub {
+    owner = "sampsyo";
+    repo = "beets";
+    rev = "v${version}";
+    sha256 = "1srhkiyjqx6i3gn20ihf087l5pa77yh5b81ivc52lj491fda7xqk";
   };
 
   # tests depend on $HOME setting
