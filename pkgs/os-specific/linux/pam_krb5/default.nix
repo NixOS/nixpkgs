@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pam, krb5 }:
+{ stdenv, fetchurl, pam, kerberos }:
 
 stdenv.mkDerivation rec {
   name = "pam_krb5-2.4.9";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vcb35shzp406jvvz0pkgqm8qq1qzhgwmkl0nrm0wrrkqlr22rfb";
   };
 
-  buildInputs = [ pam krb5 ];
+  buildInputs = [ pam kerberos ];
 
   meta = with stdenv.lib; {
     homepage = https://fedorahosted.org/pam_krb5;
