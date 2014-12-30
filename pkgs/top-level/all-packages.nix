@@ -8757,14 +8757,14 @@ let
 
   usermount = callPackage ../os-specific/linux/usermount { };
 
-  utillinux = lowPrio (callPackage ../os-specific/linux/util-linux {
+  utillinux = callPackage ../os-specific/linux/util-linux {
     ncurses = null;
     perl = null;
-  });
-
-  utillinuxCurses = utillinux.override {
-    inherit ncurses perl;
   };
+
+  utillinuxCurses = appendToName "curses" (utillinux.override {
+    inherit ncurses perl;
+  });
 
   v4l_utils = callPackage ../os-specific/linux/v4l-utils {
     withQt4 = true;
