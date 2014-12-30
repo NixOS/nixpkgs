@@ -120,6 +120,8 @@ in
     169.254.169.254 metadata.google.internal metadata
   '';
 
+  services.ntp.servers = [ "metadata.google.internal" ];
+
   networking.usePredictableInterfaceNames = false;
 
   systemd.services.fetch-ssh-keys =
