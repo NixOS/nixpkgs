@@ -5532,7 +5532,12 @@ let
   # TODO : Add MIT Kerberos and let admin choose.
   kerberos = heimdal;
 
-  heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
+  heimdal = callPackage ../development/libraries/kerberos/heimdal.nix {
+    openldap = openldap.override {
+      cyrus_sasl = cyrus_sasl.override { kerberos = null; };
+    };
+    cyrus_sasl = cyrus_sasl.override { kerberos = null; };
+  };
 
   harfbuzz = callPackage ../development/libraries/harfbuzz { };
   harfbuzz-icu = callPackage ../development/libraries/harfbuzz {
@@ -5640,7 +5645,11 @@ let
     automake = automake111x;
   };
 
-  krb5 = callPackage ../development/libraries/kerberos/krb5.nix { };
+  krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
+    openldap = openldap.override {
+      cyrus_sasl = cyrus_sasl.override { kerberos = null; };
+    };
+  };
 
   LASzip = callPackage ../development/libraries/LASzip { };
 
