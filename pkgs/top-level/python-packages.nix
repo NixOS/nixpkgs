@@ -5722,15 +5722,15 @@ let
   };
 
   mutagen = buildPythonPackage (rec {
-    name = "mutagen-1.23";
+    name = "mutagen-1.27";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/m/mutagen/${name}.tar.gz";
-      sha256 = "12f70aaf5ggdzll76bhhkn64b27xy9s1acx417dbsaqnnbis8s76";
+      md5 = "6a9bb5cc33214add35348f1bb3448340";
     };
 
-    # one unicode test fails
-    doCheck = false;
+    # Needed for tests only
+    buildInputs = [ pkgs.faad2 pkgs.flac pkgs.vorbisTools pkgs.liboggz ];
 
     meta = {
       description = "Python multimedia tagging library";
