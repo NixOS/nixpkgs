@@ -1,12 +1,13 @@
 {stdenv, fetchgit, mercurial, coreutils, git, makeWrapper, subversion}:
 
+with stdenv.lib;
 stdenv.mkDerivation {
   name = "fast-export";
 
   src = fetchgit {
-    url = "git://repo.or.cz/fast-export.git";
-    rev = "aaccfba";
-    sha256 = "c9d1498e31d32b8271c1e651175794718611f93b4843dea569d831005de0a750";
+    url = git://repo.or.cz/fast-export.git;
+    rev = "d202200fd9daa75cdb37d4cf067d4ca00e269535";
+    sha256 = "1ci0jbprs7hqqzq4mqi5b9vlc43lmk2bn2kjx49bdjkqajvlicd7";
   };
 
   buildInputs = [mercurial.python mercurial makeWrapper subversion];
@@ -30,10 +31,10 @@ stdenv.mkDerivation {
     done
   '';
 
-  # usage:
   meta = {
-      description = "import svn, mercurial into git";
-      homepage = "http://repo.or.cz/w/fast-export.git";
-      license = stdenv.lib.licenses.gpl2;
+    description = "Import svn, mercurial into git";
+    homepage = http://repo.or.cz/w/fast-export.git;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.koral ];
   };
 }
