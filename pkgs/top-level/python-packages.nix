@@ -2168,6 +2168,23 @@ let
     };
   };
 
+  discogs_client = buildPythonPackage rec {
+    name = "discogs-client-2.0.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/discogs-client/${name}.tar.gz";
+      md5 = "2cc57e1d134aa93404e779b9311676fa";
+    };
+
+    propagatedBuildInputs = with self; [ oauth2 requests ];
+
+    meta = {
+      description = "Official Python API client for Discogs";
+      license = licenses.bsd2;
+      homepage = "https://github.com/discogs/discogs_client";
+    };
+  };
+
   dns = buildPythonPackage rec {
     name = "dnspython-${version}";
     version = "1.12.0";
