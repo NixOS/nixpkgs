@@ -5,12 +5,12 @@ assert stdenv.isLinux;
 let
   p = if stdenv.is64bit then {
       arch = "x86_64";
-      gcclib = "${stdenv.gcc.gcc}/lib64";
+      gcclib = "${stdenv.cc.gcc}/lib64";
       sha256 = "09kw7f0qsvx3vx1c1zb117yf3yk7kkz66agspz5xx9b0zh6i82jw";
     }
     else {
       arch = "i386";
-      gcclib = "${stdenv.gcc.gcc}/lib";
+      gcclib = "${stdenv.cc.gcc}/lib";
       sha256 = "0f2230c91120f05159281b39c620ab6bad6559ce8a17a0874d0a82350ebba426";
     };
 in 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       $out/etc/bash_completion.d/yandex-disk-completion.bash
 
     ${patchelf}/bin/patchelf \
-      --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${zlib}/lib:${p.gcclib}" \
       $out/bin/yandex-disk
   '';

@@ -20,16 +20,20 @@ stdenv.mkDerivation rec {
     xlibs.libxkbfile xlibs.libxcb xlibs.xcbutilkeysyms openjpeg doxygen expat lua5_2
     harfbuzz jbig2dec librsvg dbus_libs alsaLib poppler libraw libspectre xineLib vlc libwebp curl ];
 
+  # ac_ct_CXX must be set to random value, because then it skips some magic which does alternative searching for g++
   configureFlags = [ "--with-tests=none" "--enable-sdl" "--enable-drm" "--with-opengl=full"
     "--enable-image-loader-jp2k" "--enable-xinput22" "--enable-multisense" "--enable-systemd"
     "--enable-image-loader-webp" "--enable-harfbuzz" "--enable-xine" "--enable-fb"
-    "--disable-tslib" "--with-systemdunitdir=$out/systemd/user" "--enable-lua-old" ];
+    "--disable-tslib" "--with-systemdunitdir=$out/systemd/user" "--enable-lua-old"
+    "ac_ct_CXX=foo" ];
 
   NIX_CFLAGS_COMPILE = [ "-I${xlibs.libXtst}" "-I${dbus_libs}/include/dbus-1.0" "-I${dbus_libs}/lib/dbus-1.0/include" ];
 
   preConfigure = ''
     export PKG_CONFIG_PATH="${gst_all_1.gst-plugins-base}/lib/pkgconfig/gstreamer-video-0.10.pc:$PKG_CONFIG_PATH"
   '';
+
+  enableParallelBuilding = true;
 
   setupHook = ./efl-setup-hook.sh;
 

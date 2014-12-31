@@ -72,7 +72,7 @@ stdenv.mkDerivation {
    * libXt is only needed on amd64
    */
   libraries =
-    [stdenv.gcc.libc] ++
+    [stdenv.cc.libc] ++
     (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi xlibs.libXp xlibs.libXt] else []);
 
   inherit swingSupport pluginSupport architecture jce;

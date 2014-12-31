@@ -19,7 +19,7 @@ python2Packages.buildPythonPackage rec {
       src = ./nix-paths.patch;
       df = "${coreutils}/bin/df";
       python = "${python2}/bin/${python2.executable}";
-      libc = "${stdenv.gcc.libc}/lib/libc.so.6";
+      libc = "${stdenv.cc.libc}/lib/libc.so.6";
     })
 
     # Apply https://github.com/JaviMerino/trash-cli/commit/4f45a37a3

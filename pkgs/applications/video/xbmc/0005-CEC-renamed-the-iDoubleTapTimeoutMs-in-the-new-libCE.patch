@@ -1,0 +1,32 @@
+From 9f1e45a10860dd23239de35673643e9e0e4a74f8 Mon Sep 17 00:00:00 2001
+From: Lars Op den Kamp <lars@opdenkamp.eu>
+Date: Tue, 28 Oct 2014 14:52:16 +0100
+Subject: [PATCH 5/8] [CEC] renamed the iDoubleTapTimeoutMs in the new libCEC
+ for clarity. does not change binary compatibility
+
+---
+ xbmc/peripherals/devices/PeripheralCecAdapter.cpp | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/xbmc/peripherals/devices/PeripheralCecAdapter.cpp b/xbmc/peripherals/devices/PeripheralCecAdapter.cpp
+index 1d068dc..ad123d9 100644
+--- a/xbmc/peripherals/devices/PeripheralCecAdapter.cpp
++++ b/xbmc/peripherals/devices/PeripheralCecAdapter.cpp
+@@ -1347,8 +1347,13 @@ void CPeripheralCecAdapter::SetConfigurationFromSettings(void)
+   m_configuration.bPowerOffOnStandby = iStandbyAction == 13011 ? 1 : 0;
+   m_configuration.bShutdownOnStandby = iStandbyAction == 13005 ? 1 : 0;
+ 
++#if defined(CEC_DOUBLE_TAP_TIMEOUT_MS_OLD)
+   // double tap prevention timeout in ms
+-  m_configuration.iDoubleTapTimeoutMs = GetSettingInt("double_tap_timeout_ms");
++  m_configuration.iDoubleTapTimeout50Ms = GetSettingInt("double_tap_timeout_ms") / 50;
++#else
++  // backwards compatibility. will be removed once the next major release of libCEC is out
++  m_configuration.iDoubleTapTimeoutMs = GetSettingInt("double_tap_timeout_ms");
++#endif
+ }
+ 
+ void CPeripheralCecAdapter::ReadLogicalAddresses(const CStdString &strString, cec_logical_addresses &addresses)
+-- 
+2.1.2
+

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     [ ( substituteAll {
         src = ./nixos-purity.patch;
         inherit avahi dnsmasq ppp bind;
-        glibc = stdenv.gcc.libc;
+        glibc = stdenv.cc.libc;
       })
       ./libnl-3.2.25.patch
     ];

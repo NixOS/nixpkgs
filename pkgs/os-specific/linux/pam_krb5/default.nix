@@ -1,24 +1,24 @@
-{stdenv, fetchurl, pam, kerberos}:
+{ stdenv, fetchurl, pam, kerberos }:
 
-stdenv.mkDerivation {
-  name = "pam_krb5-2.3.11-1";
+stdenv.mkDerivation rec {
+  name = "pam_krb5-2.4.9";
 
   src = fetchurl {
-    url = https://fedorahosted.org/releases/p/a/pam_krb5/pam_krb5-2.3.11-1.tar.gz;
-    sha256 = "1x6wgjzkfkx0h9a7wdgx0jwrdm15npbs79i510lk1n3fyx9lk4mq";
-#    url = http://archives.eyrie.org/software/kerberos/pam-krb5-4.2.tar.gz;
-#    sha256 = "0a0zyd4ddln8yf827qxbfqi1pryxnj0fykfz8lx6nxn2f9pqj1gv";
+    url = "https://fedorahosted.org/releases/p/a/pam_krb5/${name}.tar.gz";
+    sha256 = "0vcb35shzp406jvvz0pkgqm8qq1qzhgwmkl0nrm0wrrkqlr22rfb";
   };
 
-  buildInputs = [pam kerberos];
-  meta = {
-#    homepage = "http://www.eyrie.org/~eagle/software/pam-krb5";
-    homepage = "https://fedorahosted.org/pam_krb5/";
+  buildInputs = [ pam kerberos ];
+
+  meta = with stdenv.lib; {
+    homepage = https://fedorahosted.org/pam_krb5;
     description = "PAM module allowing PAM-aware applications to authenticate users by performing an AS exchange with a Kerberos KDC";
     longDescription = ''
       pam_krb5 can optionally convert Kerberos 5 credentials to Kerberos IV
       credentials and/or use them to set up AFS tokens for a user's session.
     '';
-    maintainers = [ stdenv.lib.maintainers.mornfall ];
+    platforms = platforms.linux;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ wkennington mornfall ];
   };
 }

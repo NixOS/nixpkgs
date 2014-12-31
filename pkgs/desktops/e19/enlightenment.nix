@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
       --replace "/usr/share/X11/xkb/rules/xorg.lst" "${xkeyboard_config}/share/X11/xkb/rules/base.lst"
   '';
 
+  enableParallelBuilding = true;
+
   # this is a hack and without this cpufreq module is not working:
   #   when set_freqset_setuid is true and "e19_freqset" is set in setuidPrograms (this is taken care of in e19 NixOS module),
   #   then this postInstall does the folowing:

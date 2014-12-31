@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     glibc
     glib
-    stdenv.gcc.gcc
+    stdenv.cc.gcc
     libSM 
     libICE 
     libXi 
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
       fullPath=$fullPath:$i/lib
     done
           
-    patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+    patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath $fullPath \
       $out/opt/googleearth/googleearth-bin
 

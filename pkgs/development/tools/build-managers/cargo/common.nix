@@ -11,7 +11,7 @@ rec {
     then "i686-apple-darwin"
     else if stdenv.system == "x86_64-darwin"
     then "x86_64-apple-darwin"
-    else throw "no snapshot to boostrap for this platform (missing platform url suffix)";
+    else throw "no snapshot to bootstrap for this platform (missing platform url suffix)";
 
   snapshotHash = if stdenv.system == "i686-linux"
     then "4dea04e278192c5409f43794a98f20a8f59df2d9"
@@ -37,8 +37,8 @@ rec {
       mkdir -p "$out"
       cp -r bin "$out/bin"
     '' + (if stdenv.isLinux then ''
-      patchelf --interpreter "${stdenv.glibc}/lib/${stdenv.gcc.dynamicLinker}" \
-               --set-rpath "${stdenv.gcc.gcc}/lib/:${stdenv.gcc.gcc}/lib64/:${zlib}/lib" \
+      patchelf --interpreter "${stdenv.glibc}/lib/${stdenv.cc.dynamicLinker}" \
+               --set-rpath "${stdenv.cc.gcc}/lib/:${stdenv.cc.gcc}/lib64/:${zlib}/lib" \
                "$out/bin/cargo"
     '' else "");
   };

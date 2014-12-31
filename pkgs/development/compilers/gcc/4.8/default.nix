@@ -54,14 +54,14 @@ assert langGo -> langCC;
 with stdenv.lib;
 with builtins;
 
-let version = "4.8.3";
+let version = "4.8.4";
 
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = cross != null && cross.config == "i586-pc-gnu";
 
     enableParallelBuilding = true;
 
-    patches = [ ./bug-61801.patch ]
+    patches = [ ]
       ++ optional enableParallelBuilding ./parallel-bconfig.patch
       ++ optional (cross != null) ./libstdc++-target.patch
       ++ optional noSysDirs ./no-sys-dirs.patch
@@ -209,7 +209,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
-    sha256 = "07hg10zs7gnqz58my10ch0zygizqh0z0bz6pv4pgxx45n48lz3ka";
+    sha256 = "15c6gwm6dzsaagamxkak5smdkf1rdfbqqjs9jdbrp3lbg4ism02a";
   };
 
   inherit patches;
@@ -251,11 +251,11 @@ stdenv.mkDerivation ({
            sed -i "${gnu_h}" \
                -es'|#define STANDARD_INCLUDE_DIR.*$|#define STANDARD_INCLUDE_DIR "${libc}/include"|g'
         ''
-    else if cross != null || stdenv.gcc.libc != null then
+    else if cross != null || stdenv.cc.libc != null then
       # On NixOS, use the right path to the dynamic linker instead of
       # `/lib/ld*.so'.
       let
-        libc = if libcCross != null then libcCross else stdenv.gcc.libc;
+        libc = if libcCross != null then libcCross else stdenv.cc.libc;
       in
         '' echo "fixing the \`GLIBC_DYNAMIC_LINKER' and \`UCLIBC_DYNAMIC_LINKER' macros..."
            for header in "gcc/config/"*-gnu.h "gcc/config/"*"/"*.h
@@ -397,7 +397,7 @@ stdenv.mkDerivation ({
     NM_FOR_TARGET = "${stdenv.cross.config}-nm";
     CXX_FOR_TARGET = "${stdenv.cross.config}-g++";
     # If we are making a cross compiler, cross != null
-    NIX_GCC_CROSS = if cross == null then "${stdenv.gccCross}" else "";
+    NIX_CC_CROSS = if cross == null then "${stdenv.ccCross}" else "";
     dontStrip = true;
     configureFlags = ''
       ${if enableMultilib then "" else "--disable-multilib"}

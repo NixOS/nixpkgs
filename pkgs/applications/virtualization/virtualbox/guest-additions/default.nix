@@ -70,7 +70,7 @@ stdenv.mkDerivation {
         ''
         else throw ("Architecture: "+stdenv.system+" not supported for VirtualBox guest additions")
         }
-        patchelf --set-rpath ${stdenv.gcc.gcc}/lib:${dbus}/lib:${libX11}/lib:${libXt}/lib:${libXext}/lib:${libXmu}/lib:${libXfixes}/lib:${libXrandr}/lib:${libXcursor}/lib $i
+        patchelf --set-rpath ${stdenv.cc.gcc}/lib:${dbus}/lib:${libX11}/lib:${libXt}/lib:${libXext}/lib:${libXmu}/lib:${libXfixes}/lib:${libXrandr}/lib:${libXcursor}/lib $i
     done
 
     for i in lib/VBoxOGL*.so

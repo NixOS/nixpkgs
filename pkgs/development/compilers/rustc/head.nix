@@ -2,8 +2,6 @@
 , tzdata, git, valgrind, procps, coreutils
 }:
 
-assert stdenv.gcc.gcc != null;
-
 /* Rust's build process has a few quirks :
 
 - It requires some patched in llvm that haven't landed upstream, so it
@@ -18,7 +16,7 @@ assert stdenv.gcc.gcc != null;
 
 */
 
-with ((import ./common.nix) {inherit stdenv; version = "0.13.0-pre-2604-g2f3cff6";});
+with ((import ./common.nix) {inherit stdenv; version = "0.13.0-pre-2763-g6366631";});
 
 let snapshot = if stdenv.system == "i686-linux"
       then "3daf531aed03f5769402f2fef852377e2838db98"
@@ -40,8 +38,8 @@ in stdenv.mkDerivation {
 
   src = fetchgit {
     url = https://github.com/rust-lang/rust;
-    rev = "2f3cff6956d56048ef7afb6d33e17cbdb2dcf038";
-    sha256 = "113y74sd1gr7f0xs1lsgjw3jkvhz8s4dxx34r9cxlw5vjr7fp066";
+    rev = "63666317214788329e0b7680929b09823f127d83";
+    sha256 = "1saf6ycy5dzp1bxypzqisi4g4p0y1czbgr82xbrw5c81x5c274zk";
   };
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
@@ -56,13 +54,14 @@ in stdenv.mkDerivation {
       mkdir -p "$out"
       cp -r bin "$out/bin"
     '' + (if stdenv.isLinux then ''
-      patchelf --interpreter "${stdenv.glibc}/lib/${stdenv.gcc.dynamicLinker}" \
-               --set-rpath "${stdenv.gcc.gcc}/lib/:${stdenv.gcc.gcc}/lib64/" \
+      patchelf --interpreter "${stdenv.glibc}/lib/${stdenv.cc.dynamicLinker}" \
+               --set-rpath "${stdenv.cc.gcc}/lib/:${stdenv.cc.gcc}/lib64/" \
                "$out/bin/rustc"
     '' else "");
   };
 
-  configureFlags = [ "--enable-local-rust" "--local-rust-root=$snapshot" ];
+  configureFlags = [ "--enable-local-rust" "--local-rust-root=$snapshot" ]
+                ++ stdenv.lib.optional (stdenv.cc ? clang) "--enable-clang";
 
   # The compiler requires cc, so we patch the source to tell it where to find it
   patches = [ ./hardcode_paths.HEAD.patch ./local_stage0.HEAD.patch ]
@@ -70,9 +69,9 @@ in stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace src/librustc_trans/back/link.rs \
-      --subst-var-by "ccPath" "${stdenv.gcc}/bin/cc"
+      --subst-var-by "ccPath" "${stdenv.cc}/bin/cc"
     substituteInPlace src/librustc_back/archive.rs \
-      --subst-var-by "arPath" "${stdenv.gcc.binutils}/bin/ar"
+      --subst-var-by "arPath" "${stdenv.cc.binutils}/bin/ar"
 
     substituteInPlace src/rust-installer/gen-install-script.sh \
       --replace /bin/echo "${coreutils}/bin/echo"

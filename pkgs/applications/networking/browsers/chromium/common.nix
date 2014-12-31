@@ -8,7 +8,7 @@
 , libusb1, libexif, pciutils
 
 , python, pythonPackages, perl, pkgconfig
-, nspr, udev, krb5
+, nspr, udev, kerberos
 , utillinux, alsaLib
 , bison, gperf
 , glib, gtk, dbus_glib
@@ -109,7 +109,7 @@ let
       nspr udev
       (if useOpenSSL then openssl else nss)
       utillinux alsaLib
-      bison gperf krb5
+      bison gperf kerberos
       glib gtk dbus_glib
       libXScrnSaver libXcursor libXtst mesa
       pciutils protobuf speechd libXdamage
@@ -186,11 +186,13 @@ let
     } // (extraAttrs.gypFlags or {}));
 
     configurePhase = ''
+      # Precompile .pyc files to prevent race conditions during build
+      python -m compileall -q -f . || : # ignore errors
+
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
       python build/linux/unbundle/replace_gyp_files.py ${gypFlags}
       python build/gyp_chromium -f ninja --depth "$(pwd)" ${gypFlags}
-      find . -iname '*.py[co]' -delete
     '';
 
     buildPhase = let

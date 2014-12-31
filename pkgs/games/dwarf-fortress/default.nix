@@ -4,17 +4,17 @@
 
 let
   baseVersion = "40";
-  patchVersion = "19";
+  patchVersion = "23";
   srcs = {
     df_unfuck = fetchgit {
       url = "https://github.com/svenstaro/dwarf_fortress_unfuck";
-      rev = "dadf3d48e93a2800db5d4f98d775ba8453ca55a4";
-      sha256 = "011pbcfc3a0mnwqg3pkhngnb1h7z1jbx4qbvj03blpzfjia075sv";
+      rev = "c6ec52520c44ba09d0d14c1688d2e9d70354fd01";
+      sha256 = "0pp602ykyrq4rhyrf3pyy9vplxlkl256lw8bcfmgh0mqzzap9wq9";
     };
 
     df = fetchurl {
       url = "http://www.bay12games.com/dwarves/df_${baseVersion}_${patchVersion}_linux.tar.bz2";
-      sha256 = "16xb6py7l1hf9hc7gn50nwajqgmv01zdhbkh7g6a8gnx7wlhl2p9";
+      sha256 = "12gjb19scdgsz7zgk9s01qjxqrvh7z0xr68svwgxxqn4wf8kppcl";
     };
   };
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     # Store the original hash for dwarf-therapist 
     echo $(md5sum $out/share/df_linux/libs/Dwarf_Fortress | cut -c1-8) > $out/share/df_linux/hash.md5.orig
     # Fix rpath
-    patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.gcc.gcc stdenv.glibc ]}:$out/share/df_linux/libs"  $out/share/df_linux/libs/Dwarf_Fortress
+    patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.cc.gcc stdenv.glibc ]}:$out/share/df_linux/libs"  $out/share/df_linux/libs/Dwarf_Fortress
     cp -f ./git-export/build/libgraphics.so $out/share/df_linux/libs/libgraphics.so
 
     cp $permission $out/share/df_linux/nix_permission
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
       done
 
       # now run Dwarf Fortress!
-      export LD_LIBRARY_PATH=\${stdenv.gcc}/lib:${SDL}/lib:${SDL_image}/lib/:${SDL_ttf}/lib/:${gtk2}/lib/:${glib}/lib/:${mesa}/lib/:${openal}/lib/:${libsndfile}/lib:\$DF_DIR/df_linux/libs/
+      export LD_LIBRARY_PATH=\${stdenv.cc}/lib:${SDL}/lib:${SDL_image}/lib/:${SDL_ttf}/lib/:${gtk2}/lib/:${glib}/lib/:${mesa}/lib/:${openal}/lib/:${libsndfile}/lib:\$DF_DIR/df_linux/libs/
 
       export SDL_DISABLE_LOCK_KEYS=1 # Work around for bug in Debian/Ubuntu SDL patch.
       #export SDL_VIDEO_CENTERED=1    # Centre the screen.  Messes up resizing.

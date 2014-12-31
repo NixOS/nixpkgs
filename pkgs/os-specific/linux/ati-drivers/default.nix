@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   inherit libXxf86vm xf86vidmodeproto;
-  gcc = stdenv.gcc.gcc;
+  gcc = stdenv.cc.gcc;
 
   src = fetchurl {
     url = http://www2.ati.com/drivers/linux/amd-catalyst-omega-14.12-linux-run-installers.zip;

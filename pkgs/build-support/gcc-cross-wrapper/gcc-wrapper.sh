@@ -1,7 +1,7 @@
 #! @shell@ -e
 
-if test -n "$NIX_GCC_WRAPPER_START_HOOK"; then
-    source "$NIX_GCC_WRAPPER_START_HOOK"
+if test -n "$NIX_CC_WRAPPER_START_HOOK"; then
+    source "$NIX_CC_WRAPPER_START_HOOK"
 fi
 
 if test -z "$NIX_CROSS_GLIBC_FLAGS_SET"; then
@@ -107,8 +107,8 @@ if test "$NIX_DEBUG" = "1"; then
   done
 fi
 
-if test -n "$NIX_GCC_WRAPPER_EXEC_HOOK"; then
-    source "$NIX_GCC_WRAPPER_EXEC_HOOK"
+if test -n "$NIX_CC_WRAPPER_EXEC_HOOK"; then
+    source "$NIX_CC_WRAPPER_EXEC_HOOK"
 fi
 
 # We want gcc to call the wrapper linker, not that of binutils.

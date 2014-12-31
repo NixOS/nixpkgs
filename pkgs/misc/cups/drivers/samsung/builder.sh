@@ -28,7 +28,7 @@ ln -s ppd model
 cd $out/lib/cups/filter
 for i in $(ls); do
     echo patching $i...
-    patchelf --set-interpreter $(cat $NIX_GCC/nix-support/dynamic-linker) $i || echo "(couldn't set interpreter)"
+    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $i || echo "(couldn't set interpreter)"
     patchelf --set-rpath $cups/lib:$gcc/lib:$glibc/lib $i  # This might not be necessary.
 done
 

@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="-I${e19.efl}/include/ethumb-1 $NIX_CFLAGS_COMPILE"
   '';
+  enableParallelBuilding = true;
   meta = {
     description = "Widget set/toolkit";
     homepage = http://enlightenment.org/;

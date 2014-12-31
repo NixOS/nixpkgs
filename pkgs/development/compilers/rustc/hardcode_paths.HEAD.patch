@@ -1,21 +1,21 @@
 diff --git a/src/librustc_back/archive.rs b/src/librustc_back/archive.rs
-index a88bcaf..9c3858d 100644
+index 0bd4265..bbdab9b 100644
 --- a/src/librustc_back/archive.rs
 +++ b/src/librustc_back/archive.rs
 @@ -54,7 +54,7 @@ fn run_ar(handler: &ErrorHandler, maybe_ar_prog: &Option<String>,
            paths: &[&Path]) -> ProcessOutput {
      let ar = match *maybe_ar_prog {
-         Some(ref ar) => ar.as_slice(),
+         Some(ref ar) => ar[],
 -        None => "ar"
 +        None => "@arPath@"
      };
      let mut cmd = Command::new(ar);
  
 diff --git a/src/librustc_trans/back/link.rs b/src/librustc_trans/back/link.rs
-index d27a338..c9b1508 100644
+index ec61d3a..8252939 100644
 --- a/src/librustc_trans/back/link.rs
 +++ b/src/librustc_trans/back/link.rs
-@@ -361,8 +361,8 @@ pub fn mangle_internal_name_by_path_and_seq(path: PathElems, flav: &str) -> Stri
+@@ -346,8 +346,8 @@ pub fn mangle_internal_name_by_path_and_seq(path: PathElems, flav: &str) -> Stri
  
  pub fn get_cc_prog(sess: &Session) -> String {
      match sess.opts.cg.linker {

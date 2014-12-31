@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       \( -name '*.sh' \
       -o -path "$basedir/bin/*" \
       \) -print -exec "${patchelf}/bin/patchelf" \
-           --interpreter "$(cat "$NIX_GCC/nix-support/dynamic-linker")" \
+           --interpreter "$(cat "$NIX_CC/nix-support/dynamic-linker")" \
            --set-rpath "${libs}:$out/libexec/oracle/lib" \
            --force-rpath '{}' \;
   '';

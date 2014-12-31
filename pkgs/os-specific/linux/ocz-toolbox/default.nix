@@ -16,12 +16,12 @@ in stdenv.mkDerivation rec {
     cd linux${arch}
   '';
 
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.gcc.gcc libXrender fontconfig freetype libXext libX11 ];
+  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.gcc libXrender fontconfig freetype libXext libX11 ];
 
   installPhase = ''
     install -Dm755 OCZToolbox $out/bin/OCZToolbox
     patchelf \
-      --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+      --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "$libPath" \
       $out/bin/OCZToolbox
   '';

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     stdenv.glibc
-    stdenv.gcc.gcc
+    stdenv.cc.gcc
     libXv
     libXext
     libX11
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       fullPath=$fullPath''${fullPath:+:}$i/lib
     done
 
-    patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+    patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "$fullPath" $out/libexec/skype/skype
 
     cat > $out/bin/skype << EOF

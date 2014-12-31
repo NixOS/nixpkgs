@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     mkdir -p "$out"
     tar --strip-components=1 -xjf "$src" -C "$out"
 
-    interpreter="$(cat "$NIX_GCC"/nix-support/dynamic-linker)"
+    interpreter="$(cat "$NIX_CC"/nix-support/dynamic-linker)"
     for a in "$out"/bin/*; do 
       patchelf --set-interpreter "$interpreter" "$a"
       patchelf --set-rpath "$out/lib:${boehmgc}/lib" "$a"

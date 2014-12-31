@@ -32,7 +32,7 @@ let
       xorg.libXfixes
       xorg.libXrender
       xorg.libXrandr
-      stdenv.gcc.gcc
+      stdenv.cc.gcc
       alsaLib
       pulseaudio
       dbus_glib
@@ -76,19 +76,19 @@ stdenv.mkDerivation rec {
       cp opt/google/talkplugin/*.so $plugins
 
       for i in libnpgoogletalk.so libppgoogletalk.so libppo1d.so; do
-        patchelf --set-rpath "${makeLibraryPath [ stdenv.gcc.gcc xorg.libX11 ]}:${stdenv.gcc.gcc}/lib64" $plugins/$i
+        patchelf --set-rpath "${makeLibraryPath [ stdenv.cc.gcc xorg.libX11 ]}:${stdenv.cc.gcc}/lib64" $plugins/$i
       done
 
       for i in libgoogletalkremoting.so libnpo1d.so; do
-        patchelf --set-rpath "$out/libexec/google/talkplugin/lib:${rpathPlugin}:${stdenv.gcc.gcc}/lib64" $plugins/$i
+        patchelf --set-rpath "$out/libexec/google/talkplugin/lib:${rpathPlugin}:${stdenv.cc.gcc}/lib64" $plugins/$i
       done
 
       mkdir -p $out/libexec/google/talkplugin
       cp -prd opt/google/talkplugin/{data,GoogleTalkPlugin,locale,remoting24x24.png,windowpicker.glade} $out/libexec/google/talkplugin/
 
       patchelf \
-        --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-        --set-rpath "${rpathProgram}:${stdenv.gcc.gcc}/lib64" \
+        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "${rpathProgram}:${stdenv.cc.gcc}/lib64" \
         $out/libexec/google/talkplugin/GoogleTalkPlugin
 
       # Generate an LD_PRELOAD wrapper to redirect execvp() calls to

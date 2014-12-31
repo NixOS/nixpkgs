@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   
   inherit game paks mesa name;
 
-  gcc = stdenv.gcc.gcc;
+  gcc = stdenv.cc.gcc;
   
   meta = {
     inherit description;

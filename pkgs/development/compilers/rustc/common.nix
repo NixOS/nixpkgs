@@ -11,7 +11,7 @@
     then "macos-i386"
     else if stdenv.system == "x86_64-darwin"
     then "macos-x86_64"
-    else abort "no snapshot to boostrap for this platform (missing platform url suffix)";
+    else abort "no snapshot to bootstrap for this platform (missing platform url suffix)";
 
   target = if stdenv.system == "i686-linux"
     then "i686-unknown-linux-gnu"
@@ -21,7 +21,7 @@
     then "i686-apple-darwin"
     else if stdenv.system == "x86_64-darwin"
     then "x86_64-apple-darwin"
-    else abort "no snapshot to boostrap for this platform (missing target triple";
+    else abort "no snapshot to bootstrap for this platform (missing target triple";
 
   meta = with stdenv.lib; {
     homepage = http://www.rust-lang.org/;

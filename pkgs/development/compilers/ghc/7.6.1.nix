@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags=[
-    "--with-gcc=${stdenv.gcc}/bin/gcc"
+    "--with-gcc=${stdenv.cc}/bin/gcc"
   ];
 
   # required, because otherwise all symbols from HSffi.o are stripped, and

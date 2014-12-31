@@ -7,7 +7,7 @@ let
 
   inherit (xlibs) libXext libX11;
 
-  lpath = "${stdenv.gcc.gcc}/lib64:" + stdenv.lib.makeSearchPath "lib" [
+  lpath = "${stdenv.cc.gcc}/lib64:" + stdenv.lib.makeSearchPath "lib" [
       zlib libmad libpng12 libcaca libXext libX11 mesa alsaLib pulseaudio];
 
 in
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     done
 
     ${patchelf}/bin/patchelf \
-      --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "$out/lib:${lpath}" \
       $out/adom
 

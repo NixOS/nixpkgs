@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   glPath = stdenv.lib.makeLibraryPath [xlibs.libXext xlibs.libX11 xlibs.libXrandr];
 
-  cudaPath = stdenv.lib.makeLibraryPath [zlib stdenv.gcc.gcc];
+  cudaPath = stdenv.lib.makeLibraryPath [zlib stdenv.cc.gcc];
 
   programPath = stdenv.lib.makeLibraryPath [ gtk atk pango glib gdk_pixbuf xlibs.libXv ];
 

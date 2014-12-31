@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonPackages, pyqt4 ? null, sip ? null
+{ stdenv, fetchurl, buildPythonPackage, pythonPackages, pyqt4 ? null
 , notebookSupport ? true   # ipython notebook
 , qtconsoleSupport ? true  # ipython qtconsole
 , pylabSupport ? true      # ipython --pylab    (backend: agg - no gui, just file)
@@ -10,7 +10,7 @@
 # pyqt4 for both.
 
 assert qtconsoleSupport == true -> pyqt4 != null;
-assert pylabQtSupport == true -> pyqt4 != null && sip != null;
+assert pylabQtSupport == true -> pyqt4 != null;
 
 buildPythonPackage rec {
   name = "ipython-2.3.1";
@@ -37,7 +37,6 @@ buildPythonPackage rec {
   ] ++ stdenv.lib.optionals pylabQtSupport [
     pythonPackages.matplotlib
     pyqt4
-    sip
   ];
 
   doCheck = false;

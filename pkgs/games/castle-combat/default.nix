@@ -39,8 +39,8 @@ buildPythonPackage rec {
   fixLoaderPath =
     let dollar = "\$"; in
     '' sed -i "$out/bin/castle-combat" \
-           -e "/^exec/ iexport LD_LIBRARY_PATH=\"$(cat ${stdenv.gcc}/nix-support/orig-gcc)/lib\:"'${dollar}'"LD_LIBRARY_PATH\"\\
-export LD_LIBRARY_PATH=\"$(cat ${stdenv.gcc}/nix-support/orig-gcc)/lib64\:"'${dollar}'"LD_LIBRARY_PATH\""
+           -e "/^exec/ iexport LD_LIBRARY_PATH=\"$(cat ${stdenv.cc}/nix-support/orig-gcc)/lib\:"'${dollar}'"LD_LIBRARY_PATH\"\\
+export LD_LIBRARY_PATH=\"$(cat ${stdenv.cc}/nix-support/orig-gcc)/lib64\:"'${dollar}'"LD_LIBRARY_PATH\""
     '';
       # ^
       # `--- The run-time says: "libgcc_s.so.1 must be installed for

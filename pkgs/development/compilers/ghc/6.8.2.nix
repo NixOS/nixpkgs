@@ -25,7 +25,7 @@ stdenv.mkDerivation (rec {
     "--with-gmp-libraries=${gmp}/lib"
     "--with-gmp-includes=${gmp}/include"
     "--with-readline-libraries=${readline}/lib"
-    "--with-gcc=${stdenv.gcc}/bin/gcc"
+    "--with-gcc=${stdenv.cc}/bin/gcc"
   ];
 
   preConfigure = "

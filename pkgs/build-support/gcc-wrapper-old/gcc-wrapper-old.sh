@@ -1,10 +1,10 @@
 #! @shell@ -e
 
-if [ -n "$NIX_GCC_WRAPPER_START_HOOK" ]; then
-    source "$NIX_GCC_WRAPPER_START_HOOK"
+if [ -n "$NIX_CC_WRAPPER_START_HOOK" ]; then
+    source "$NIX_CC_WRAPPER_START_HOOK"
 fi
 
-if [ -z "$NIX_GCC_WRAPPER_FLAGS_SET" ]; then
+if [ -z "$NIX_CC_WRAPPER_FLAGS_SET" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 
@@ -139,8 +139,8 @@ if [ -n "$NIX_DEBUG" ]; then
   done
 fi
 
-if [ -n "$NIX_GCC_WRAPPER_EXEC_HOOK" ]; then
-    source "$NIX_GCC_WRAPPER_EXEC_HOOK"
+if [ -n "$NIX_CC_WRAPPER_EXEC_HOOK" ]; then
+    source "$NIX_CC_WRAPPER_EXEC_HOOK"
 fi
 
 exec @prog@ ${extraBefore[@]} "${params[@]}" "${extraAfter[@]}"

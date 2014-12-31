@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ cmake qt4 perl shared_mime_info libvorbis taglib
       flac libsamplerate libdvdread lame libsndfile
-      libmad gettext stdenv.gcc.libc
+      libmad gettext stdenv.cc.libc
       kdelibs kdemultimedia automoc4 phonon
       libkcddb makeWrapper cdparanoia
     ];

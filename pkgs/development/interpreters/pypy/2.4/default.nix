@@ -22,13 +22,13 @@ let
     };
 
     buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite tk tcl x11 libX11 makeWrapper ]
-      ++ stdenv.lib.optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc
+      ++ stdenv.lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc
       ++ stdenv.lib.optional zlibSupport zlib;
 
     C_INCLUDE_PATH = stdenv.lib.concatStringsSep ":" (map (p: "${p}/include") buildInputs);
     LIBRARY_PATH = stdenv.lib.concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
     LD_LIBRARY_PATH = stdenv.lib.concatStringsSep ":" (map (p: "${p}/lib") 
-      (stdenv.lib.filter (x : x.outPath != stdenv.gcc.libc.outPath or "") buildInputs));
+      (stdenv.lib.filter (x : x.outPath != stdenv.cc.libc.outPath or "") buildInputs));
 
     preConfigure = ''
       substituteInPlace Makefile \

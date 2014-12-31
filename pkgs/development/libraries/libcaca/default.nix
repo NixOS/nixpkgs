@@ -4,7 +4,10 @@ stdenv.mkDerivation rec {
   name = "libcaca-0.99.beta19";
 
   src = fetchurl {
-    url = "http://caca.zoy.org/files/libcaca/${name}.tar.gz";
+    urls = [
+      "http://fossies.org/linux/privat/${name}.tar.gz"
+      "http://caca.zoy.org/files/libcaca/${name}.tar.gz"
+    ];
     sha256 = "1x3j6yfyxl52adgnabycr0n38j9hx2j74la0hz0n8cnh9ry4d2qj";
   };
 

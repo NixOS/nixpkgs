@@ -48,12 +48,12 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "uclibc-0.9.34-pre-20141029" + stdenv.lib.optionalString (cross != null)
+  name = "uclibc-0.9.34-pre-20141215" + stdenv.lib.optionalString (cross != null)
     ("-" + cross.config);
 
   src = fetchurl {
-    url = http://www.uclibc.org/downloads/snapshots/uClibc-20141029.tar.bz2;
-    sha256 = "018r3bhw1jyyihmm5xxq1psl3r5yx02a57p8qxvay3vvzxn2cvzm";
+    url = http://www.uclibc.org/downloads/snapshots/uClibc-20141215.tar.bz2;
+    sha256 = "07d1fmnc2yapfhhadr5c8q7591xqxxqmiicmcgcn8sqmaxppzp5f";
   };
 
   # 'ftw' needed to build acl, a coreutils dependency

@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "orc-0.4.22";
+  name = "orc-0.4.23";
 
   src = fetchurl {
     url = "http://gstreamer.freedesktop.org/src/orc/${name}.tar.xz";
-    sha256 = "0dgrbjm94y9l63s3srlddjcdxgrv6iazmvwh630jrw159dzhgjh4";
+    sha256 = "1ryz1gfgrxcj806cakcblxf0bcwq8p2mw8k86fs3f5wlwayawzkn";
   };
 
   # building memcpy_speed.log

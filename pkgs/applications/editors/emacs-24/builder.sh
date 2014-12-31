@@ -11,7 +11,7 @@ preConfigure() {
         *)              return;
     esac
 
-    libc=$(cat ${NIX_GCC}/nix-support/orig-libc)
+    libc=$(cat ${NIX_CC}/nix-support/orig-libc)
     echo "libc: $libc"
 
     for i in src/s/*.h src/m/*.h; do

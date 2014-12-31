@@ -25,32 +25,32 @@ stdenv.mkDerivation {
         # Patch the interpreter
         for i in aapt aidl dexdump llvm-rs-cc
         do
-            patchelf --set-interpreter ${stdenv_32bit.gcc.libc}/lib/ld-linux.so.2 $i
+            patchelf --set-interpreter ${stdenv_32bit.cc.libc}/lib/ld-linux.so.2 $i
         done
         
         # These binaries need to find libstdc++ and libgcc_s
         for i in aidl libLLVM.so
         do
-            patchelf --set-rpath ${stdenv_32bit.gcc.gcc}/lib $i
+            patchelf --set-rpath ${stdenv_32bit.cc.gcc}/lib $i
         done
         
         # These binaries need to find libstdc++, libgcc_s and libraries in the current folder
         for i in libbcc.so libbcinfo.so libclang.so llvm-rs-cc
         do
-            patchelf --set-rpath ${stdenv_32bit.gcc.gcc}/lib:`pwd` $i
+            patchelf --set-rpath ${stdenv_32bit.cc.gcc}/lib:`pwd` $i
         done
 
         # These binaries also need zlib in addition to libstdc++
         for i in zipalign
         do
-            patchelf --set-interpreter ${stdenv_32bit.gcc.libc}/lib/ld-linux.so.2 $i
-            patchelf --set-rpath ${stdenv_32bit.gcc.gcc}/lib:${zlib_32bit}/lib $i
+            patchelf --set-interpreter ${stdenv_32bit.cc.libc}/lib/ld-linux.so.2 $i
+            patchelf --set-rpath ${stdenv_32bit.cc.gcc}/lib:${zlib_32bit}/lib $i
         done
         
         # These binaries need to find libstdc++, libgcc_s, and zlib
         for i in aapt dexdump
         do
-            patchelf --set-rpath ${stdenv_32bit.gcc.gcc}/lib:${zlib_32bit}/lib $i
+            patchelf --set-rpath ${stdenv_32bit.cc.gcc}/lib:${zlib_32bit}/lib $i
         done
       ''}
       

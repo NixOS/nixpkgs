@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     substituteInPlace "src/cflow.h"					\
       --replace "/usr/bin/cpp"						\
-                "$(cat ${stdenv.gcc}/nix-support/orig-gcc)/bin/cpp"
+                "$(cat ${stdenv.cc}/nix-support/orig-gcc)/bin/cpp"
   '';
 
   buildInputs = [ gettext ] ++
