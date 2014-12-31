@@ -11,8 +11,7 @@
 <itemizedlist>
 
 <listitem><para>Systemd has been updated to version 217, which has numerous
-<link xlink:href="http://lists.freedesktop.org/archives/systemd-devel/2014-October/024662.html">improvements
-.</link></para></listitem>
+<link xlink:href="http://lists.freedesktop.org/archives/systemd-devel/2014-October/024662.html">improvements.</link></para></listitem>
 
 <listitem><para><link xlink:href="http://thread.gmane.org/gmane.linux.distributions.nixos/15165">
 Nix has been updated to 1.8.</link></para></listitem>
@@ -167,8 +166,9 @@ xlink:href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"/>.</pa
 the ability to connect to sessions created by older versions of
 screen.</para></listitem>
 
-<listitem><para>The intel GPU driver was updated to 3-prerelease version (which most distros use),
-and it supports DRI3 now.</para></listitem>
+<listitem><para>The Intel GPU driver was updated to the 3.x prerelease
+version (used by most distributions) and supports DRI3
+now.</para></listitem>
 
 </itemizedlist>
 
