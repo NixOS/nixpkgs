@@ -246,7 +246,7 @@
       ghcPath = ../development/compilers/ghc/7.8.4.nix;
       ghcBinary = if stdenv.isDarwin then ghc783Binary else ghc742Binary;
       prefFun = self : super : super // {
-        ghc = let parent = packages_ghc784; in 
+        ghc = let parent = packages_ghc784; in
           callPackage ../development/compilers/ghcjs/wrapper.nix {
             ghc = parent.ghcjs // { inherit parent; };
           };
