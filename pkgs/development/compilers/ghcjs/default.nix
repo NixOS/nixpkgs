@@ -22,16 +22,16 @@ let
   };
   shims = fetchgit {
     url = git://github.com/ghcjs/shims.git;
-    rev = "7e15b992b538298c0da1de73e202d950a279cbfb";
-    sha256 = "0ck7qwizrjxh9mjfqcaw083sjlwhd1kvgvdcp3plzh7g2kd1lmzn";
+    rev = "99bbd4bed584ec42bfcc5ea61c3808a2c670053d";
+    sha256 = "1my3gqkln7hgm0bpy32pnhwjfza096alh0n9x9ny8xfpxhmzz4h6";
   };
 in cabal.mkDerivation (self: rec {
   pname = "ghcjs";
   inherit version;
   src = fetchgit {
     url = git://github.com/ghcjs/ghcjs.git;
-    rev = "312a040d579133b4e251ac375e5f94e506c1a981";
-    sha256 = "0c3bjaz2wwi8lxmxp9bajyhcs97aazgzfgm1fc8mggk94nr4fhrk";
+    rev = "4b9461e8be646d5152a0ae7ece5b3616bf938637";
+    sha256 = "19g62j1kkdwcgp0042ppmskwbvfk7qkf1fjs8bpjc6wwd19ipiar";
   };
   isLibrary = true;
   isExecutable = true;
