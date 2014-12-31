@@ -180,6 +180,10 @@ stdenv.mkDerivation rec {
       substituteInPlace "$f" --replace "Exec=libreoffice${major}.${minor}" "Exec=$out/bin/soffice"
       substituteInPlace "$f" --replace "Exec=libreoffice" "Exec=$out/bin/soffice"
     done
+
+    mkdir -p "$out/share/desktop"
+    cp -r sysui/desktop/icons  "$out/share/desktop"
+    sed -re 's@Icon=libreofficedev[0-9.]*-?@Icon=@' -i "$out/share/applications/"*.desktop
   '';
 
   configureFlags = [
