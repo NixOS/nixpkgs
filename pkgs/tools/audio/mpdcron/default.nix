@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoconf, automake, libtool, pkgconfig, glib, libdaemon
+{ stdenv, fetchgit, autoconf, automake, libtool, pkgconfig, glib, libdaemon, buildRubyGem
 , mpd_clientlib, curl, sqlite, ruby, rubyPackages, libnotify, haskellPackages }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ autoconf automake libtool pkgconfig glib libdaemon haskellPackages.pandoc
-      mpd_clientlib curl sqlite ruby rubyPackages.nokogiri libnotify ];
+      mpd_clientlib curl sqlite ruby /*nokogiri*/ libnotify ];
 
   preConfigure = ''
     ./autogen.sh

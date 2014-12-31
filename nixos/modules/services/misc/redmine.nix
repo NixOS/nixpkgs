@@ -8,7 +8,6 @@ let
   cfg = config.services.redmine;
 
   ruby = pkgs.ruby;
-  rubyPackages = pkgs.rubyPackages;
 
   databaseYml = ''
     production:

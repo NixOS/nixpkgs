@@ -1,0 +1,6 @@
+source "https://rubygems.org"
+
+#gem "sup", "0.20.0"
+#gem 'sup', '~> 0.20.0'
+#gem 'gpgme'
+gem 'gpgme', '2.0.7'

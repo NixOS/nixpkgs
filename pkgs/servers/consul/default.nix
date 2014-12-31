@@ -1,5 +1,5 @@
 { stdenv, lib, go, fetchgit, fetchhg, fetchbzr, fetchFromGitHub
-, ruby, rubyPackages, nodejs, loadRubyEnv }:
+, ruby, nodejs, loadRubyEnv }:
 
 let
   version = "0.4.1";
