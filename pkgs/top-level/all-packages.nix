@@ -693,6 +693,8 @@ let
 
   datamash = callPackage ../tools/misc/datamash { };
 
+  ddate = callPackage ../tools/misc/ddate { };
+
   direnv = callPackage ../tools/misc/direnv { };
 
   discount = callPackage ../tools/text/discount { };
