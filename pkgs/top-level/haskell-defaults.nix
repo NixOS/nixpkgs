@@ -154,23 +154,20 @@
 
   # Abstraction for Haskell packages collections
   packagesFun = makeOverridable
-   ({ ghcPath ? null
-    , ghc ? callPackage ghcPath ({ ghc = ghcBinary; } // extraArgs)
+   ({ ghcPath
     , ghcBinary ? ghc6101Binary
     , prefFun
     , extension ? (self : super : {})
     , profExplicit ? false, profDefault ? false
     , modifyPrio ? lowPrio
     , extraArgs ? {}
-    , cabalPackage ? import ../build-support/cabal
-    , ghcWrapperPackage ? import ../development/compilers/ghc/wrapper.nix
     } :
     let haskellPackagesClass = import ./haskell-packages.nix {
-          inherit pkgs newScope modifyPrio cabalPackage ghcWrapperPackage;
+          inherit pkgs newScope modifyPrio;
           enableLibraryProfiling =
             if profExplicit then profDefault
                             else config.cabal.libraryProfiling or profDefault;
-          inherit ghc;
+          ghc = callPackage ghcPath ({ ghc = ghcBinary; } // extraArgs);
         };
         haskellPackagesPrefsClass = self : let super = haskellPackagesClass self; in super // prefFun self super;
         haskellPackagesExtensionClass = self : let super = haskellPackagesPrefsClass self; in super // extension self super;
@@ -246,91 +243,17 @@
 
   packages_ghcjs =
     packages {
-      ghc = let parent = packages_ghc784; in parent.ghcjs // { inherit parent; };
-      cabalPackage = import ../build-support/cabal/ghcjs.nix;
-      ghcWrapperPackage = import ../development/compilers/ghcjs/wrapper.nix;
+      ghcPath = ../development/compilers/ghc/7.8.4.nix;
+      ghcBinary = if stdenv.isDarwin then ghc783Binary else ghc742Binary;
       prefFun = self : super : super // {
-        # This is the list of packages that are built into a booted ghcjs installation
-        # It can be generated with the command:
-        # nix-shell '<nixpkgs>' -A pkgs.haskellPackages_ghcjs.ghc --command "ghcjs-pkg list | sed -n 's/^    \(.*\)-\([0-9.]*\)$/\1_\2/ p' | sed 's/\./_/g' | sed 's/-\(.\)/\U\1/' | sed 's/^\([^_]*\)\(.*\)$/\1\2 = null;\n\1 = self.\1\2;/'"
-        Cabal_1_21_1_0 = null;
-        Cabal = self.Cabal_1_21_1_0;
-        aeson_0_8_0_0 = null;
-        aeson = self.aeson_0_8_0_0;
-        array_0_5_0_0 = null;
-        array = self.array_0_5_0_0;
-        async_2_0_1_5 = null;
-        async = self.async_2_0_1_5;
-        attoparsec_0_12_1_0 = null;
-        attoparsec = self.attoparsec_0_12_1_0;
-        base_4_7_0_1 = null;
-        base = self.base_4_7_0_1;
-        binary_0_7_2_1 = null;
-        binary = self.binary_0_7_2_1;
-        rts_1_0 = null;
-        rts = self.rts_1_0;
-        bytestring_0_10_4_1 = null;
-        bytestring = self.bytestring_0_10_4_1;
-        caseInsensitive_1_2_0_0 = null;
-        caseInsensitive = self.caseInsensitive_1_2_0_0;
-        containers_0_5_5_1 = null;
-        containers = self.containers_0_5_5_1;
-        deepseq_1_3_0_2 = null;
-        deepseq = self.deepseq_1_3_0_2;
-        directory_1_2_1_0 = null;
-        directory = self.directory_1_2_1_0;
-        dlist_0_7_0_1 = null;
-        dlist = self.dlist_0_7_0_1;
-        extensibleExceptions_0_1_1_3 = null;
-        extensibleExceptions = self.extensibleExceptions_0_1_1_3;
-        filepath_1_3_0_2 = null;
-        filepath = self.filepath_1_3_0_2;
-        ghcPrim_0_3_1_0 = null;
-        ghcPrim = self.ghcPrim_0_3_1_0;
-        ghcjsBase_0_1_0_0 = null;
-        ghcjsBase = self.ghcjsBase_0_1_0_0;
-        ghcjsPrim_0_1_0_0 = null;
-        ghcjsPrim = self.ghcjsPrim_0_1_0_0;
-        hashable_1_2_2_0 = null;
-        hashable = self.hashable_1_2_2_0;
-        integerGmp_0_5_1_0 = null;
-        integerGmp = self.integerGmp_0_5_1_0;
-        mtl_2_2_1 = null;
-        mtl = self.mtl_2_2_1;
-        oldLocale_1_0_0_6 = null;
-        oldLocale = self.oldLocale_1_0_0_6;
-        oldTime_1_1_0_2 = null;
-        oldTime = self.oldTime_1_1_0_2;
-        parallel_3_2_0_4 = null;
-        parallel = self.parallel_3_2_0_4;
-        pretty_1_1_1_1 = null;
-        pretty = self.pretty_1_1_1_1;
-        primitive_0_5_3_0 = null;
-        primitive = self.primitive_0_5_3_0;
-        process_1_2_0_0 = null;
-        process = self.process_1_2_0_0;
-        scientific_0_3_3_0 = null;
-        scientific = self.scientific_0_3_3_0;
-        stm_2_4_3 = null;
-        stm = self.stm_2_4_3;
-        syb_0_4_2 = null;
-        syb = self.syb_0_4_2;
-        templateHaskell_2_9_0_0 = null;
-        templateHaskell = self.templateHaskell_2_9_0_0;
-        text_1_1_1_3 = null;
-        text = self.text_1_1_1_3;
-        time_1_4_2 = null;
-        time = self.time_1_4_2;
-        transformers_0_4_1_0 = null;
-        transformers = self.transformers_0_4_1_0;
-        unix_2_7_0_1 = null;
-        unix = self.unix_2_7_0_1;
-        unorderedContainers_0_2_5_0 = null;
-        unorderedContainers = self.unorderedContainers_0_2_5_0;
-        vector_0_10_11_0 = null;
-        vector = self.vector_0_10_11_0;
-      };
-      extension = self: super: {
+        ghc = let parent = packages_ghc784; in 
+          callPackage ../development/compilers/ghcjs/wrapper.nix {
+            ghc = parent.ghcjs // { inherit parent; };
+          };
+        cabal = self.cabalJs;
+        buildLocalCabalWithArgs = args: super.buildLocalCabalWithArgs (args // {
+          nativePkgs = packages_ghc784;
+        });
         ghcjsDom = with self; super.ghcjsDom.override {
           cabal = self.cabal.override {
             extension = self: super: {
@@ -339,9 +262,47 @@
             };
           };
         };
-        buildLocalCabalWithArgs = args: super.buildLocalCabalWithArgs (args // {
-          nativePkgs = packages_ghc784;
-        });
+        # This is the list of packages that are built into a booted ghcjs installation
+        # It can be generated with the command:
+        # nix-shell '<nixpkgs>' -A pkgs.haskellPackages_ghcjs.ghc --command "ghcjs-pkg list | sed -n 's/^    \(.*\)-\([0-9.]*\)$/\1_\2/ p' | sed 's/\./_/g' | sed 's/-\(.\)/\U\1/' | sed 's/^\([^_]*\)\(.*\)$/\1 = null;/'"
+        Cabal = null;
+        aeson = null;
+        array = null;
+        async = null;
+        attoparsec = null;
+        base = null;
+        binary = null;
+        rts = null;
+        bytestring = null;
+        caseInsensitive = null;
+        containers = null;
+        deepseq = null;
+        directory = null;
+        dlist = null;
+        extensibleExceptions = null;
+        filepath = null;
+        ghcPrim = null;
+        ghcjsBase = null;
+        ghcjsPrim = null;
+        hashable = null;
+        integerGmp = null;
+        mtl = null;
+        oldLocale = null;
+        oldTime = null;
+        parallel = null;
+        pretty = null;
+        primitive = null;
+        process = null;
+        scientific = null;
+        stm = null;
+        syb = null;
+        templateHaskell = null;
+        text = null;
+        time = null;
+        transformers = null;
+        unix = null;
+        unorderedContainers = null;
+        vector = null;
       };
     };
 

@@ -43,7 +43,7 @@
 #
 # For most packages, however, we keep only one version, and use default.nix.
 
-{ pkgs, newScope, ghc, cabalPackage, ghcWrapperPackage, modifyPrio ? (x : x)
+{ pkgs, newScope, ghc, modifyPrio ? (x : x)
 , enableLibraryProfiling ? false
 , enableSharedLibraries ? pkgs.stdenv.lib.versionOlder "7.7" ghc.version
 , enableSharedExecutables ? pkgs.stdenv.lib.versionOlder "7.7" ghc.version
@@ -74,7 +74,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
                                # refers to the function argument at the
                                # top of this file.
 
-  ghc = callPackage ghcWrapperPackage {
+  ghc = callPackage ../development/compilers/ghc/wrapper.nix {
     ghc = ghc; # refers to ghcPlain
   };
 
@@ -94,7 +94,16 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   # This is the Cabal builder, the function we use to build most Haskell
   # packages. It isn't the Cabal library, which is spelled "Cabal".
 
-  cabal = callPackage cabalPackage {
+  cabal = callPackage ../build-support/cabal {
+    Cabal = null;               # prefer the Cabal version shipped with the compiler
+    hscolour = self.hscolourBootstrap;
+    inherit enableLibraryProfiling enableCheckPhase
+      enableStaticLibraries enableSharedLibraries enableSharedExecutables;
+    glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
+    extension = self : super : {};
+  };
+
+  cabalJs = callPackage ../build-support/cabal/ghcjs.nix {
     Cabal = null;               # prefer the Cabal version shipped with the compiler
     hscolour = self.hscolourBootstrap;
     inherit enableLibraryProfiling enableCheckPhase
@@ -356,7 +365,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   Cabal_1_16_0_3 = callPackage ../development/libraries/haskell/Cabal/1.16.0.3.nix {};
   Cabal_1_18_1_3 = callPackage ../development/libraries/haskell/Cabal/1.18.1.3.nix {};
   Cabal_1_20_0_2 = callPackage ../development/libraries/haskell/Cabal/1.20.0.2.nix {};
-  Cabal_1_22_0_0 = callPackage ../development/libraries/haskell/Cabal/1.22.0.0.nix {};
+  Cabal_HEAD = callPackage ../development/libraries/haskell/Cabal/head.nix {};
   Cabal = null;                 # core package since forever
 
   cabalCargs = callPackage ../development/libraries/haskell/cabal-cargs {};
@@ -937,9 +946,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ghcid = callPackage ../development/tools/haskell/ghcid {};
 
-  ghcjs = callPackage ../development/tools/haskell/ghcjs {
-    Cabal = self.Cabal_1_22_0_0;
-    cabalInstall = self.cabalInstall_1_22_0_0;
+  ghcjs = callPackage ../development/compilers/ghcjs {
+    Cabal = self.Cabal_HEAD;
+    cabalInstall = self.cabalInstall_HEAD;
     haddock = self.haddock.override {
       Cabal = null;
     };
@@ -3168,7 +3177,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   cabalInstall_1_16_0_2 = callPackage ../tools/package-management/cabal-install/1.16.0.2.nix { Cabal = self.Cabal_1_16_0_3; };
   cabalInstall_1_18_0_3 = callPackage ../tools/package-management/cabal-install/1.18.0.3.nix { Cabal = self.Cabal_1_18_1_3; };
   cabalInstall_1_20_0_4 = callPackage ../tools/package-management/cabal-install/1.20.0.4.nix { Cabal = self.Cabal_1_20_0_2; };
-  cabalInstall_1_22_0_0 = callPackage ../tools/package-management/cabal-install/1.22.0.0.nix { Cabal = self.Cabal_1_22_0_0; };
+  cabalInstall_HEAD = callPackage ../tools/package-management/cabal-install/head.nix { Cabal = self.Cabal_HEAD; };
   cabalInstall = self.cabalInstall_1_20_0_4;
 
   codex = callPackage ../development/tools/haskell/codex {};

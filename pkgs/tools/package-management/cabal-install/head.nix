@@ -5,7 +5,7 @@
 
 cabal.mkDerivation (self: {
   pname = "cabal-install";
-  version = Cabal.version;
+  version = "HEAD";
   src = Cabal.src;
   isLibrary = true;
   isExecutable = true;

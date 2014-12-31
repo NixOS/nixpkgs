@@ -5,7 +5,7 @@
 
 cabal.mkDerivation (self: {
   pname = "Cabal";
-  version = "1.22.0.0";
+  version = "HEAD";
   src = fetchgit {
     url = git://github.com/haskell/cabal.git;
     rev = "699d4df12e1ec75e9100b521fb3690eaa6986635";
