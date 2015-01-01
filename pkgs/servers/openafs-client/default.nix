@@ -34,11 +34,13 @@ stdenv.mkDerivation {
 
     ./regen.sh
 
-    export KRB5_CONFIG=${kerberos}/bin/krb5-config
+    ${optionalString (kerberos != null) ''
+      export KRB5_CONFIG=${kerberos}/bin/krb5-config"
+    ''}
 
     configureFlagsArray=(
       "--with-linux-kernel-build=$TMP/linux"
-      "--with-krb5"
+      ${stdenv.lib.optionalString (kerberos != null) "--with-krb5"}
       "--sysconfdir=/etc/static"
     )
   '';

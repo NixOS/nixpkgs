@@ -5530,7 +5530,8 @@ let
   hamlib = callPackage ../development/libraries/hamlib { };
 
   # TODO : Add MIT Kerberos and let admin choose.
-  kerberos = heimdal;
+  # TODO : Fix kerberos on Darwin
+  kerberos = if stdenv.isDarwin then null else heimdal;
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix {
     openldap = openldap.override {
