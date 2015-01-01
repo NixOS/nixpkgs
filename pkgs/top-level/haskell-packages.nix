@@ -103,6 +103,15 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     extension = self : super : {};
   };
 
+  cabalJs = callPackage ../build-support/cabal/ghcjs.nix {
+    Cabal = null;               # prefer the Cabal version shipped with the compiler
+    hscolour = self.hscolourBootstrap;
+    inherit enableLibraryProfiling enableCheckPhase
+      enableStaticLibraries enableSharedLibraries enableSharedExecutables;
+    glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
+    extension = self : super : {};
+  };
+
   # A variant of the cabal build driver that disables unit testing.
   # Useful for breaking cycles, where the unit test of a package A
   # depends on package B, which has A as a regular build input.
@@ -356,6 +365,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   Cabal_1_16_0_3 = callPackage ../development/libraries/haskell/Cabal/1.16.0.3.nix {};
   Cabal_1_18_1_3 = callPackage ../development/libraries/haskell/Cabal/1.18.1.3.nix {};
   Cabal_1_20_0_2 = callPackage ../development/libraries/haskell/Cabal/1.20.0.2.nix {};
+  Cabal_HEAD = callPackage ../development/libraries/haskell/Cabal/head.nix {};
   Cabal = null;                 # core package since forever
 
   cabalCargs = callPackage ../development/libraries/haskell/cabal-cargs {};
@@ -942,9 +952,19 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ghcid = callPackage ../development/tools/haskell/ghcid {};
 
-  ghcjsDom = callPackage ../development/libraries/haskell/ghcjs-codemirror {};
+  ghcjs = callPackage ../development/compilers/ghcjs {
+    Cabal = self.Cabal_HEAD;
+    cabalInstall = self.cabalInstall_HEAD;
+    haddock = self.haddock.override {
+      Cabal = null;
+    };
+  };
+
+  ghcjsDom = callPackage ../development/libraries/haskell/ghcjs-dom {};
 
   ghcjsCodemirror = callPackage ../development/libraries/haskell/ghcjs-codemirror {};
+
+  ghcjsPrim = callPackage ../development/libraries/haskell/ghcjs-prim {};
 
   ghcMod = callPackage ../development/libraries/haskell/ghc-mod { inherit (pkgs) emacs; };
 
@@ -3163,6 +3183,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   cabalInstall_1_16_0_2 = callPackage ../tools/package-management/cabal-install/1.16.0.2.nix { Cabal = self.Cabal_1_16_0_3; };
   cabalInstall_1_18_0_3 = callPackage ../tools/package-management/cabal-install/1.18.0.3.nix { Cabal = self.Cabal_1_18_1_3; };
   cabalInstall_1_20_0_4 = callPackage ../tools/package-management/cabal-install/1.20.0.4.nix { Cabal = self.Cabal_1_20_0_2; };
+  cabalInstall_HEAD = callPackage ../tools/package-management/cabal-install/head.nix { Cabal = self.Cabal_HEAD; };
   cabalInstall = self.cabalInstall_1_20_0_4;
 
   codex = callPackage ../development/tools/haskell/codex {};
