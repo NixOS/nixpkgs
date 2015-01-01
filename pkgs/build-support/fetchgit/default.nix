@@ -1,6 +1,20 @@
-{stdenv, git, cacert}:
-{url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? false, fetchSubmodules ? true
-, name ? "git-export"
+{stdenv, git, cacert}: let
+  urlToName = url: rev: let
+    base = baseNameOf url;
+
+    matched = (builtins.match or (x: y:
+      abort "This version of fetchgit requires Nix >= 1.8, please upgrade!"
+    )) "(.*).git" base;
+
+    short = builtins.substring 0 7 rev;
+
+    appendShort = if (builtins.match "[a-f0-9]*" rev) != null
+      then "-${short}"
+      else "";
+  in "${if matched == null then base else builtins.head matched}${appendShort}";
+in {url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? false
+, fetchSubmodules ? true
+, name ? urlToName url rev
 }:
 
 /* NOTE:
