@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Cabal";
-  version = "1.20.0.2";
-  sha256 = "00mz24fj3qpq6rl3n3i73x6k0jzqix24k9izrlkzg07mpjcj4k93";
+  version = "1.20.0.3";
+  sha256 = "0vq1xcwvvk74jkzp7386ldyrls8qszg3rj4l37fyq3fvjkqnx80v";
   buildDepends = [ deepseq filepath time ];
   testDepends = [
     extensibleExceptions filepath HUnit QuickCheck regexPosix
