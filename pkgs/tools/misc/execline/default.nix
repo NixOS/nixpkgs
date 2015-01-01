@@ -1,8 +1,4 @@
-{ stdenv
-, fetchurl
-, gnumake40
-, skalibs
-}:
+{ stdenv, fetchurl, skalibs }:
 
 let
 
@@ -18,8 +14,6 @@ in stdenv.mkDerivation rec {
   };
 
   dontDisableStatic = true;
-
-  buildInputs = [ gnumake40 ];
 
   configureFlags = [
     "--libdir=\${prefix}/lib"

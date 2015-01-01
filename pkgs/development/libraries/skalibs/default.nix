@@ -1,7 +1,4 @@
-{ stdenv
-, fetchurl
-, gnumake40
-}:
+{ stdenv, fetchurl }:
 
 let
 
@@ -17,8 +14,6 @@ in stdenv.mkDerivation rec {
   };
 
   dontDisableStatic = true;
-
-  buildInputs = [ gnumake40 ];
 
   configureFlags = [
     "--enable-force-devr"       # assume /dev/random works

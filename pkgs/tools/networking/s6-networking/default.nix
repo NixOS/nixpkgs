@@ -1,10 +1,4 @@
-{ stdenv
-, execline
-, fetchurl
-, gnumake40
-, s6Dns
-, skalibs
-}:
+{ stdenv, execline, fetchurl, s6Dns, skalibs }:
 
 let
 
@@ -20,8 +14,6 @@ in stdenv.mkDerivation rec {
   };
 
   dontDisableStatic = true;
-
-  buildInputs = [ gnumake40 ];
 
   configureFlags = [
     "--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
