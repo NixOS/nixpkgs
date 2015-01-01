@@ -6914,8 +6914,6 @@ let
 
   skalibs = callPackage ../development/libraries/skalibs { };
 
-  skarnetConfCompile = callPackage ../development/tools/build-managers/skarnet { };
-
   slang = callPackage ../development/libraries/slang { };
 
   slibGuile = callPackage ../development/libraries/slib {
