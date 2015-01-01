@@ -2500,6 +2500,10 @@ let
 
   svnfs = callPackage ../tools/filesystems/svnfs { };
 
+  svtplay-dl = callPackage ../tools/misc/svtplay-dl {
+    inherit (pythonPackages) nose mock;
+  };
+
   sysbench = callPackage ../development/tools/misc/sysbench {};
 
   system_config_printer = callPackage ../tools/misc/system-config-printer {
