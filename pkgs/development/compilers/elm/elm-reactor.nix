@@ -22,5 +22,6 @@ cabal.mkDerivation (self: {
     description = "Interactive development tool for Elm programs";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })
