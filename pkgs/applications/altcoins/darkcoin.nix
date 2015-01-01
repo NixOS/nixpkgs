@@ -7,11 +7,11 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "darkcoin" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "0.9.13.15";
+  version = "0.10.99.99";
 
   src = fetchurl {
     url = "https://github.com/darkcoin/darkcoin/archive/v${version}.tar.gz";
-    sha256 = "1kly2y3g4dr1jwwf81smqvc7k662x6rvg4ggmxva1yaifb67bgjb";
+    sha256 = "1a05a7l878klg4wqk9ykndkhyknrd7jp75v38k99qgk5fi8wa752";
   };
 
   buildInputs = [ pkgconfig glib openssl db48 boost zlib miniupnpc ]
