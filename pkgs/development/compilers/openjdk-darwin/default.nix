@@ -31,7 +31,7 @@ let
       EOF
     '';
 
-    passthru.jre = jdk;
+    passthru = { jre = jdk; };
 
   };
 in jdk

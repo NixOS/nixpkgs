@@ -27,155 +27,157 @@ let
     md5 = "de3006e5cf1ee78a9c6145ce62c4e982";
   };
 
-in
+  openjdk = stdenv.mkDerivation rec {
+    name = "openjdk-7u${update}b${build}";
 
-stdenv.mkDerivation rec {
-  name = "openjdk-7u${update}b${build}";
+    src = fetchurl {
+      url = "http://tarballs.nixos.org/openjdk-7u${update}-b${build}.tar.xz";
+      sha256 = "0lyp75sl5w4b9azphb2nq5cwzli85inpksq4943q4j349rkmdprx";
+    };
 
-  src = fetchurl {
-    url = "http://tarballs.nixos.org/openjdk-7u${update}-b${build}.tar.xz";
-    sha256 = "0lyp75sl5w4b9azphb2nq5cwzli85inpksq4943q4j349rkmdprx";
-  };
+    outputs = [ "out" "jre" ];
 
-  outputs = [ "out" "jre" ];
+    buildInputs =
+      [ unzip procps ant which zip cpio nettools alsaLib
+        xorg.libX11 xorg.libXt xorg.libXext xorg.libXrender xorg.libXtst
+        xorg.libXi xorg.libXinerama xorg.libXcursor xorg.lndir
+        fontconfig perl file
+      ];
 
-  buildInputs =
-    [ unzip procps ant which zip cpio nettools alsaLib
-      xorg.libX11 xorg.libXt xorg.libXext xorg.libXrender xorg.libXtst
-      xorg.libXi xorg.libXinerama xorg.libXcursor xorg.lndir
-      fontconfig perl file
+    NIX_LDFLAGS = "-lfontconfig -lXcursor -lXinerama";
+
+    postUnpack = ''
+      sed -i -e "s@/usr/bin/test@${coreutils}/bin/test@" \
+        -e "s@/bin/ls@${coreutils}/bin/ls@" \
+        openjdk*/hotspot/make/linux/makefiles/sa.make
+
+      sed -i "s@/bin/echo -e@${coreutils}/bin/echo -e@" \
+        openjdk*/{jdk,corba}/make/common/shared/Defs-utils.gmk
+
+      tar xf ${cupsSrc}
+      cupsDir=$(echo $(pwd)/cups-*)
+      makeFlagsArray+=(CUPS_HEADERS_PATH=$cupsDir)
+    '';
+
+    patches = [
+      ./cppflags-include-fix.patch
+      ./fix-java-home.patch
+      ./paxctl.patch
+      ./read-truststore-from-env.patch
+      ./currency-date-range.patch
     ];
 
-  NIX_LDFLAGS = "-lfontconfig -lXcursor -lXinerama";
+    NIX_NO_SELF_RPATH = true;
 
-  postUnpack = ''
-    sed -i -e "s@/usr/bin/test@${coreutils}/bin/test@" \
-      -e "s@/bin/ls@${coreutils}/bin/ls@" \
-      openjdk*/hotspot/make/linux/makefiles/sa.make
+    makeFlags = [
+      "SORT=${coreutils}/bin/sort"
+      "ALSA_INCLUDE=${alsaLib}/include/alsa/version.h"
+      "FREETYPE_HEADERS_PATH=${freetype}/include"
+      "FREETYPE_LIB_PATH=${freetype}/lib"
+      "MILESTONE=u${update}"
+      "BUILD_NUMBER=b${build}"
+      "USRBIN_PATH="
+      "COMPILER_PATH="
+      "DEVTOOLS_PATH="
+      "UNIXCOMMAND_PATH="
+      "BOOTDIR=${jdk}"
+      "STATIC_CXX=false"
+      "UNLIMITED_CRYPTO=1"
+      "FULL_DEBUG_SYMBOLS=0"
+    ];
 
-    sed -i "s@/bin/echo -e@${coreutils}/bin/echo -e@" \
-      openjdk*/{jdk,corba}/make/common/shared/Defs-utils.gmk
+    configurePhase = "true";
 
-    tar xf ${cupsSrc}
-    cupsDir=$(echo $(pwd)/cups-*)
-    makeFlagsArray+=(CUPS_HEADERS_PATH=$cupsDir)
-  '';
+    preBuild = ''
+      # We also need to PaX-mark in the middle of the build
+      substituteInPlace hotspot/make/linux/makefiles/launcher.make \
+         --replace XXX_PAXFLAGS_XXX ${paxflags}
+      substituteInPlace jdk/make/common/Program.gmk  \
+         --replace XXX_PAXFLAGS_XXX ${paxflags}
+    '';
 
-  patches = [
-    ./cppflags-include-fix.patch
-    ./fix-java-home.patch
-    ./paxctl.patch
-    ./read-truststore-from-env.patch
-    ./currency-date-range.patch
-  ];
+    installPhase = ''
+      mkdir -p $out/lib/openjdk $out/share $jre/lib/openjdk
 
-  NIX_NO_SELF_RPATH = true;
+      cp -av build/*/j2sdk-image/* $out/lib/openjdk
 
-  makeFlags = [
-    "SORT=${coreutils}/bin/sort"
-    "ALSA_INCLUDE=${alsaLib}/include/alsa/version.h"
-    "FREETYPE_HEADERS_PATH=${freetype}/include"
-    "FREETYPE_LIB_PATH=${freetype}/lib"
-    "MILESTONE=u${update}"
-    "BUILD_NUMBER=b${build}"
-    "USRBIN_PATH="
-    "COMPILER_PATH="
-    "DEVTOOLS_PATH="
-    "UNIXCOMMAND_PATH="
-    "BOOTDIR=${jdk}"
-    "STATIC_CXX=false"
-    "UNLIMITED_CRYPTO=1"
-    "FULL_DEBUG_SYMBOLS=0"
-  ];
+      # Move some stuff to top-level.
+      mv $out/lib/openjdk/include $out/include
+      mv $out/lib/openjdk/man $out/share/man
 
-  configurePhase = "true";
+      # jni.h expects jni_md.h to be in the header search path.
+      ln -s $out/include/linux/*_md.h $out/include/
 
-  preBuild = ''
-    # We also need to PaX-mark in the middle of the build
-    substituteInPlace hotspot/make/linux/makefiles/launcher.make \
-       --replace XXX_PAXFLAGS_XXX ${paxflags}
-    substituteInPlace jdk/make/common/Program.gmk  \
-       --replace XXX_PAXFLAGS_XXX ${paxflags}
-  '';
+      # Remove some broken manpages.
+      rm -rf $out/share/man/ja*
 
-  installPhase = ''
-    mkdir -p $out/lib/openjdk $out/share $jre/lib/openjdk
+      # Remove crap from the installation.
+      rm -rf $out/lib/openjdk/demo $out/lib/openjdk/sample
 
-    cp -av build/*/j2sdk-image/* $out/lib/openjdk
+      # Move the JRE to a separate output.
+      mv $out/lib/openjdk/jre $jre/lib/openjdk/
+      mkdir $out/lib/openjdk/jre
+      lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
 
-    # Move some stuff to top-level.
-    mv $out/lib/openjdk/include $out/include
-    mv $out/lib/openjdk/man $out/share/man
+      rm -rf $out/lib/openjdk/jre/bin
+      ln -s $out/lib/openjdk/bin $out/lib/openjdk/jre/bin
 
-    # jni.h expects jni_md.h to be in the header search path.
-    ln -s $out/include/linux/*_md.h $out/include/
+      # Set PaX markings
+      exes=$(file $out/lib/openjdk/bin/* $jre/lib/openjdk/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
+      echo "to mark: *$exes*"
+      for file in $exes; do
+        echo "marking *$file*"
+        paxmark ${paxflags} "$file"
+      done
 
-    # Remove some broken manpages.
-    rm -rf $out/share/man/ja*
+      # Remove duplicate binaries.
+      for i in $(cd $out/lib/openjdk/bin && echo *); do
+        if [ "$i" = java ]; then continue; fi
+        if cmp -s $out/lib/openjdk/bin/$i $jre/lib/openjdk/jre/bin/$i; then
+          ln -sfn $jre/lib/openjdk/jre/bin/$i $out/lib/openjdk/bin/$i
+        fi
+      done
 
-    # Remove crap from the installation.
-    rm -rf $out/lib/openjdk/demo $out/lib/openjdk/sample
+      # Generate certificates.
+      pushd $jre/lib/openjdk/jre/lib/security
+      rm cacerts
+      perl ${./generate-cacerts.pl} $jre/lib/openjdk/jre/bin/keytool ${cacert}/etc/ca-bundle.crt
+      popd
 
-    # Move the JRE to a separate output.
-    mv $out/lib/openjdk/jre $jre/lib/openjdk/
-    mkdir $out/lib/openjdk/jre
-    lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
+      ln -s $out/lib/openjdk/bin $out/bin
+      ln -s $jre/lib/openjdk/jre/bin $jre/bin
+    ''; # */
 
-    rm -rf $out/lib/openjdk/jre/bin
-    ln -s $out/lib/openjdk/bin $out/lib/openjdk/jre/bin
+    # FIXME: this is unnecessary once the multiple-outputs branch is merged.
+    preFixup = ''
+      prefix=$jre stripDirs "$stripDebugList" "''${stripDebugFlags:--S}"
+      patchELF $jre
+      propagatedNativeBuildInputs+=" $jre"
 
-    # Set PaX markings
-    exes=$(file $out/lib/openjdk/bin/* $jre/lib/openjdk/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
-    echo "to mark: *$exes*"
-    for file in $exes; do
-      echo "marking *$file*"
-      paxmark ${paxflags} "$file"
-    done
+      # Propagate the setJavaClassPath setup hook from the JRE so that
+      # any package that depends on the JRE has $CLASSPATH set up
+      # properly.
+      mkdir -p $jre/nix-support
+      echo -n "${setJavaClassPath}" > $jre/nix-support/propagated-native-build-inputs
 
-    # Remove duplicate binaries.
-    for i in $(cd $out/lib/openjdk/bin && echo *); do
-      if [ "$i" = java ]; then continue; fi
-      if cmp -s $out/lib/openjdk/bin/$i $jre/lib/openjdk/jre/bin/$i; then
-        ln -sfn $jre/lib/openjdk/jre/bin/$i $out/lib/openjdk/bin/$i
-      fi
-    done
+      # Set JAVA_HOME automatically.
+      mkdir -p $out/nix-support
+      cat <<EOF > $out/nix-support/setup-hook
+      if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out/lib/openjdk; fi
+      EOF
+    '';
 
-    # Generate certificates.
-    pushd $jre/lib/openjdk/jre/lib/security
-    rm cacerts
-    perl ${./generate-cacerts.pl} $jre/lib/openjdk/jre/bin/keytool ${cacert}/etc/ca-bundle.crt
-    popd
+    meta = {
+      homepage = http://openjdk.java.net/;
+      license = stdenv.lib.licenses.gpl2;
+      description = "The open-source Java Development Kit";
+      maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.shlevy ];
+      platforms = stdenv.lib.platforms.linux;
+    };
 
-    ln -s $out/lib/openjdk/bin $out/bin
-    ln -s $jre/lib/openjdk/jre/bin $jre/bin
-  ''; # */
-
-  # FIXME: this is unnecessary once the multiple-outputs branch is merged.
-  preFixup = ''
-    prefix=$jre stripDirs "$stripDebugList" "''${stripDebugFlags:--S}"
-    patchELF $jre
-    propagatedNativeBuildInputs+=" $jre"
-
-    # Propagate the setJavaClassPath setup hook from the JRE so that
-    # any package that depends on the JRE has $CLASSPATH set up
-    # properly.
-    mkdir -p $jre/nix-support
-    echo -n "${setJavaClassPath}" > $jre/nix-support/propagated-native-build-inputs
-
-    # Set JAVA_HOME automatically.
-    mkdir -p $out/nix-support
-    cat <<EOF > $out/nix-support/setup-hook
-    if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out/lib/openjdk; fi
-    EOF
-  '';
-
-  meta = {
-    homepage = http://openjdk.java.net/;
-    license = stdenv.lib.licenses.gpl2;
-    description = "The open-source Java Development Kit";
-    maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.shlevy ];
-    platforms = stdenv.lib.platforms.linux;
+    passthru = {
+      inherit architecture;
+      home = "${openjdk}/lib/openjdk";
+    };
   };
-
-  passthru = { inherit architecture; };
-}
+in openjdk
