@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "e0457f715b73f4a349e1acb08cb410bf0edc9a74a3f75c357070f31f70e33cd6";
   };
 
+  patches = [ ./rtcwake-search-PATH-for-shutdown.patch ];
+
   crossAttrs = {
     # Work around use of `AC_RUN_IFELSE'.
     preConfigure = "export scanf_cv_type_modifier=ms";

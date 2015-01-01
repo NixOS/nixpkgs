@@ -1,0 +1,30 @@
+Search $PATH for the shutdown binary instead of hard-coding /sbin/shutdown,
+which isn't valid on NixOS (and a compatibility link on most other modern
+distros anyway).
+
+  -- nckx <tobias.geerinckx.rice@gmail.com>
+
+diff -Naur a/include/pathnames.h b/include/pathnames.h
+--- a/include/pathnames.h	2014-09-16 14:37:06.138551680 +0200
++++ b/include/pathnames.h	2015-01-01 20:41:02.510948314 +0100
+@@ -43,7 +43,7 @@
+ #define _PATH_INITTAB		"/etc/inittab"
+ #define _PATH_RC		"/etc/rc"
+ #define _PATH_REBOOT		"/sbin/reboot"
+-#define _PATH_SHUTDOWN		"/sbin/shutdown"
++#define _PATH_SHUTDOWN		"shutdown"
+ #define _PATH_SINGLE		"/etc/singleboot"
+ #define _PATH_SHUTDOWN_CONF	"/etc/shutdown.conf"
+ 
+diff -Naur a/sys-utils/rtcwake.c b/sys-utils/rtcwake.c
+--- a/sys-utils/rtcwake.c	2014-10-24 11:21:20.447389309 +0200
++++ b/sys-utils/rtcwake.c	2015-01-01 20:57:59.398911209 +0100
+@@ -582,7 +582,7 @@
+ 		arg[i]   = NULL;
+ 
+ 		if (!dryrun) {
+-			execv(arg[0], arg);
++			execvp(arg[0], arg);
+ 
+ 			warn(_("failed to execute %s"), _PATH_SHUTDOWN);
+ 			rc = EXIT_FAILURE;
