@@ -1,0 +1,22 @@
+Description: Do not check private key access mode.
+ This allows having a key in nix store
+Index: postgresql-9.4-9.4~rc1/src/backend/libpq/be-secure.c
+===================================================================
+--- postgresql-9.4-9.4~rc1.orig/src/backend/libpq/be-secure.c
++++ postgresql-9.4-9.4~rc1/src/backend/libpq/be-secure.c
+@@ -865,6 +865,7 @@ initialize_SSL(void)
+ 		 * of a reasonable check to apply on Windows.  (See also the data
+ 		 * directory permission check in postmaster.c)
+ 		 */
++#if 0
+ #if !defined(WIN32) && !defined(__CYGWIN__)
+ 		if (!S_ISREG(buf.st_mode) || (buf.st_mode & (S_IWGRP | S_IRWXO)) ||
+ 			((buf.st_uid != geteuid()) && buf.st_uid != 0))
+@@ -876,6 +877,7 @@ initialize_SSL(void)
+ database user or root, must have no write permission for \"group\", and must \
+ have no permissions for \"other\".")));
+ #endif
++#endif
+ 
+ 		if (SSL_CTX_use_PrivateKey_file(SSL_context,
+ 										ssl_key_file,
