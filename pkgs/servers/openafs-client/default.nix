@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
     ./regen.sh
 
-    ${optionalString (kerberos != null) ''
+    ${stdenv.lib.optionalString (kerberos != null) ''
       export KRB5_CONFIG=${kerberos}/bin/krb5-config"
     ''}
 
