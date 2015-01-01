@@ -1,14 +1,13 @@
 { stdenv, fetchurl, unzip
-# If jdkPath is null, require JAVA_HOME in runtime environment, else store
-# JAVA_HOME=${jdkPath} into grails.
-, jdkPath ? null
+# If jdk is null, require JAVA_HOME in runtime environment, else store
+# JAVA_HOME=${jdk.home} into grails.
+, jdk ? null
 , coreutils, ncurses, gnused, gnugrep  # for purity
 }:
 
 let
   binpath = stdenv.lib.makeSearchPath "bin"
-    ([ coreutils ncurses gnused gnugrep ]
-    ++ stdenv.lib.optional (jdkPath != null) jdkPath);
+    ([ coreutils ncurses gnused gnugrep ] ++ stdenv.lib.optional (jdk != null) jdk);
 in
 stdenv.mkDerivation rec {
   name = "grails-2.4.3";
@@ -29,9 +28,9 @@ stdenv.mkDerivation rec {
     rm -f "$out"/bin/*.bat
     # Improve purity
     sed -i -e '2iPATH=${binpath}:\$PATH' "$out"/bin/grails
-  '' + stdenv.lib.optionalString (jdkPath != null) ''
+  '' + stdenv.lib.optionalString (jdk != null) ''
     # Inject JDK path into grails
-    sed -i -e '2iJAVA_HOME=${jdkPath}' "$out"/bin/grails
+    sed -i -e '2iJAVA_HOME=${jdk.home}' "$out"/bin/grails
   '';
 
   preferLocalBuild = true;
