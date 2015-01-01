@@ -9706,6 +9706,8 @@ in
 
   vrpn = callPackage ../development/libraries/vrpn { };
 
+  vsqlite = callPackage ../development/libraries/vsqlite { };
+
   vtk = callPackage ../development/libraries/vtk { };
 
   vtkWithQt4 = vtk.override { qtLib = qt4; };
