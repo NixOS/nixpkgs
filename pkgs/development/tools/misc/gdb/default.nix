@@ -1,5 +1,5 @@
 { fetchurl, stdenv, ncurses, readline, gmp, mpfr, expat, texinfo
-, dejagnu, python, pkgconfig, guile, target ? null
+, dejagnu, python, perl, pkgconfig, guile, target ? null
 
 # Additional dependencies for GNU/Hurd.
 , mig ? null, hurd ? null
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   # I think python is not a native input, but I leave it
   # here while I will not need it cross building
-  nativeBuildInputs = [ texinfo python ]
+  nativeBuildInputs = [ texinfo python perl ]
     ++ stdenv.lib.optional isGNU mig;
 
   buildInputs = [ ncurses readline gmp mpfr expat pkgconfig guile ]
