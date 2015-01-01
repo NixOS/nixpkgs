@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   buildInputs = [ autoconf automake flex yacc ncurses perl which ];
 
   preConfigure = ''
-    ln -s ${kernel.dev}/lib/modules/*/build $TMP/linux
+    ln -s "${kernel.dev}/lib/modules/"*/build $TMP/linux
 
     patchShebangs .
     for i in `grep -l -R '/usr/\(include\|src\)' .`; do
