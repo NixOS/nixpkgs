@@ -2850,7 +2850,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   };
 
   webkitgtk3 = callPackage ../development/libraries/haskell/webkitgtk3 {
-    webkit = pkgs.webkitgtk24x;
+    webkitgtk = pkgs.webkitgtk24x;
   };
 
   webRoutes = callPackage ../development/libraries/haskell/web-routes {};
