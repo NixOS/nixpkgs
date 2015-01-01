@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   ## ugly, X should be made an option
   configureFlags = [
-	  "--enable-hdb-openldap-module"
+    "--enable-hdb-openldap-module"
     "--with-capng"
     "--with-openldap=${openldap}"
     "--with-sqlite3=${sqlite}"
