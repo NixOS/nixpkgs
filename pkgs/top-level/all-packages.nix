@@ -3483,12 +3483,17 @@ let
     { description = "The open-source Java Runtime Environment"; }
     pkgs.openjdk.jre)) // { outputs = [ "jre" ]; };
 
-  jdk = if stdenv.isDarwin || stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
-    then pkgs.openjdk
-    else pkgs.oraclejdk;
-  jre = if stdenv.isDarwin || stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
-    then pkgs.openjre
-    else pkgs.oraclejre;
+  jdk = if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
+    then pkgs.icedtea_jdk
+    else if stdenv.isDarwin
+      then pkgs.openjdk # TODO: Use icedtea for darwin
+      else pkgs.oraclejdk;
+
+  jre = if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
+    then pkgs.icedtea_jre
+    else if stdenv.isDarwin
+      then pkgs.openjre # TODO: Use icedtea for darwin
+      else pkgs.oraclejre;
 
   oraclejdk = pkgs.jdkdistro true false;
 
