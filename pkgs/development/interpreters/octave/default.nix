@@ -2,7 +2,7 @@
 , libX11, graphicsmagick, pcre, liblapack, pkgconfig, mesa, fltk
 , fftw, fftwSinglePrec, zlib, curl, qrupdate
 , qt ? null, qscintilla ? null, ghostscript ? null, llvm ? null, hdf5 ? null,glpk ? null
-, suitesparse ? null, gnuplot ? null, openjdk ? null, python ? null
+, suitesparse ? null, gnuplot ? null, jdk ? null, python ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ++ (stdenv.lib.optional (hdf5 != null) hdf5)
     ++ (stdenv.lib.optional (glpk != null) glpk)
     ++ (stdenv.lib.optional (suitesparse != null) suitesparse)
-    ++ (stdenv.lib.optional (openjdk != null) openjdk)
+    ++ (stdenv.lib.optional (jdk != null) jdk)
     ++ (stdenv.lib.optional (gnuplot != null) gnuplot)
     ++ (stdenv.lib.optional (python != null) python)
     ;

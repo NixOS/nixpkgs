@@ -213,7 +213,7 @@ stdenv.mkDerivation rec {
     "--disable-postgresql-sdbc"
     "--with-package-format=native"
     "--enable-epm"
-    "--with-jdk-home=${jdk}/lib/openjdk"
+    "--with-jdk-home=${jdk.home}"
     "--with-ant-home=${ant}/lib/ant"
     "--without-fonts"
     "--without-myspell-dicts"
