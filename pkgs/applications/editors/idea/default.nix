@@ -70,9 +70,7 @@ let
       cp -va . "$out/$name"
       ln -s "$out/$name/bin/${loName}.png" "$out/share/pixmaps/"
 
-      [ -d ${jdk}/lib/openjdk ] \
-        && jdk=${jdk}/lib/openjdk \
-        || jdk=${jdk}
+      jdk=${jdk.home}
 
       makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${loName}" \
         --prefix PATH : "${jdk}/bin:${coreutils}/bin:${gnugrep}/bin:${which}/bin:${git}/bin" \

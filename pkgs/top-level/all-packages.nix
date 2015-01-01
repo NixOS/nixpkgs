@@ -1360,7 +1360,7 @@ let
   grafx2 = callPackage ../applications/graphics/grafx2 {};
 
   grails = callPackage ../development/web/grails {
-    jdkPath = "${openjdk}/lib/openjdk";
+    jdkPath = jdk.home;
   };
 
   graphviz = callPackage ../tools/graphics/graphviz { };
@@ -3438,7 +3438,7 @@ let
 
   icedtea7_jdk = callPackage ../development/compilers/icedtea rec {
     jdk = openjdk;
-    jdkPath = "${openjdk}/lib/openjdk";
+    jdkPath = openjdk.home;
     giflib = giflib_5_0;
   } // { outputs = [ "out" ]; };
 
@@ -7613,7 +7613,7 @@ let
   cassandra = callPackage ../servers/nosql/cassandra { };
 
   apache-jena = callPackage ../servers/nosql/apache-jena/binary.nix {
-    java = icedtea_jdk;
+    java = jdk;
   };
 
   apcupsd = callPackage ../servers/apcupsd { };
@@ -11261,9 +11261,7 @@ let
 
   vorbisTools = callPackage ../applications/audio/vorbis-tools { };
 
-  vue = callPackage ../applications/misc/vue {
-    jre = icedtea_jre;
-  };
+  vue = callPackage ../applications/misc/vue { };
 
   vwm = callPackage ../applications/window-managers/vwm { };
 
