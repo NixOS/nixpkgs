@@ -3428,6 +3428,10 @@ let
     xulrunner = firefox;
   };
 
+  icedtea_jdk = icedtea7_jdk;
+  icedtea_jre = icedtea7_jre;
+  icedtea_web = icedtea7_web;
+
   ikarus = callPackage ../development/compilers/ikarus { };
 
   hugs = callPackage ../development/compilers/hugs { };
@@ -7579,7 +7583,7 @@ let
   cassandra = callPackage ../servers/nosql/cassandra { };
 
   apache-jena = callPackage ../servers/nosql/apache-jena/binary.nix {
-    java = icedtea7_jdk;
+    java = icedtea_jdk;
   };
 
   apcupsd = callPackage ../servers/apcupsd { };
@@ -11178,7 +11182,7 @@ let
   vorbisTools = callPackage ../applications/audio/vorbis-tools { };
 
   vue = callPackage ../applications/misc/vue {
-    jre = icedtea7_jre;
+    jre = icedtea_jre;
   };
 
   vwm = callPackage ../applications/window-managers/vwm { };
@@ -11257,7 +11261,7 @@ let
           ++ lib.optional (cfg.enableMPlayer or false) (MPlayerPlugin browser)
           ++ lib.optional (cfg.enableGeckoMediaPlayer or false) gecko_mediaplayer
           ++ lib.optional (supportsJDK && jre && jrePlugin ? mozillaPlugin) jrePlugin
-          ++ lib.optional icedtea icedtea7_web
+          ++ lib.optional icedtea icedtea_web
           ++ lib.optional (cfg.enableGoogleTalkPlugin or false) google_talk_plugin
           ++ lib.optional (cfg.enableFriBIDPlugin or false) fribid
           ++ lib.optional (cfg.enableGnomeExtensions or false) gnome3.gnome_shell
