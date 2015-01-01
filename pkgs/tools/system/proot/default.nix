@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     substituteInPlace GNUmakefile --replace "/usr/local" "$out"
   '';
 
-  sourceRoot = "git-export/src";
+  sourceRoot = "proot/src";
 
   meta = with stdenv.lib; {
     homepage = http://proot.me;
