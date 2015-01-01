@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk, jdkPath, ant, wget, zip, unzip, cpio, file, libxslt
+{ stdenv, fetchurl, jdk, ant, wget, zip, unzip, cpio, file, libxslt
 , xorg, zlib, pkgconfig, libjpeg, libpng, giflib, lcms2, gtk2, kerberos, attr
 , alsaLib, procps, automake, autoconf, cups, which, perl, coreutils, binutils
 , cacert, setJavaClassPath
@@ -58,7 +58,7 @@ let
 
       "--without-rhino"
       "--with-pax=paxctl"
-      "--with-jdk-home=${jdkPath}"
+      "--with-jdk-home=${jdk.home}"
     ];
 
     preConfigure = ''

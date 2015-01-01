@@ -1359,9 +1359,7 @@ let
 
   grafx2 = callPackage ../applications/graphics/grafx2 {};
 
-  grails = callPackage ../development/web/grails {
-    jdkPath = jdk.home;
-  };
+  grails = callPackage ../development/web/grails { jdk = null; };
 
   graphviz = callPackage ../tools/graphics/graphviz { };
 
@@ -3438,7 +3436,6 @@ let
 
   icedtea7_jdk = callPackage ../development/compilers/icedtea rec {
     jdk = openjdk;
-    jdkPath = openjdk.home;
     giflib = giflib_5_0;
   } // { outputs = [ "out" ]; };
 
