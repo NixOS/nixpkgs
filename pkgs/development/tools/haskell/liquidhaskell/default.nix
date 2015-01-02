@@ -13,7 +13,6 @@ cabal.mkDerivation (self: {
   sha256 = "172ki1pr096jc1azs6hq1p6czjr2gxb0zafmlg9bicn4nwp2h7vy";
   isLibrary = true;
   isExecutable = true;
-  doCheck = false;
   buildDepends = [
     aeson ansiTerminal bifunctors cmdargs cpphs dataDefault deepseq
     Diff filemanip filepath fingertree ghcPaths hashable hscolour
@@ -23,10 +22,11 @@ cabal.mkDerivation (self: {
   testDepends = [
     filepath optparseApplicative tagged tasty tastyHunit tastyRerun
   ];
+  doCheck = false;
   meta = {
     homepage = "http://goto.ucsd.edu/liquidhaskell";
     description = "Liquid Types for Haskell";
-    license = "GPL";
+    license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };
 })
