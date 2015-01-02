@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, groff, rake, makeWrapper }:
+{ stdenv, fetchurl, git, groff, rake, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "hub-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   fixupPhase = ''
-    wrapProgram $out/bin/hub --prefix PATH : ${groff}/bin
+    wrapProgram $out/bin/hub --prefix PATH : ${groff}/bin:${git}/bin
   '';
 
   meta = {
