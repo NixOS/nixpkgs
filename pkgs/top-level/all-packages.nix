@@ -2061,6 +2061,20 @@ let
 
   pal = callPackage ../tools/misc/pal { };
 
+  pandoc = with haskellPackages; pandoc.override {
+    cabal = cabal.override {
+      extension = self: super: {
+        configureFlags = super.configureFlags or "" + " -fembed_data_files";
+        buildTools = super.buildTools or [] ++ [hsb2hs];
+        enableSharedExecutables = false;
+        enableSharedLibraries = false;
+        isLibrary = false;
+        noHaddock = true;
+        postFixup = "rm -rf $out/lib $out/nix-support $out/share";
+      };
+    };
+  };
+
   panomatic = callPackage ../tools/graphics/panomatic { };
 
   par2cmdline = callPackage ../tools/networking/par2cmdline { };
