@@ -5278,6 +5278,25 @@ let
     };
   };
 
+  llfuse = buildPythonPackage rec {
+    name = "llfuse-0.40";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/l/llfuse/${name}.tar.bz2";
+      sha256 = "0mx87n6j2g63mgiimjqn0gj6jgqfdkc04xkxc56r1azjlqji32zf";
+    };
+
+    buildInputs = [ pkgs.pkgconfig pkgs.fuse pkgs.attr ];
+
+    meta = with stdenv.lib; {
+      description = "Python bindings for the low-level FUSE API";
+      homepage = https://code.google.com/p/python-llfuse/;
+      license = licenses.lgpl2Plus;
+      platforms = platforms.unix;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
   locustio = buildPythonPackage rec {
     name = "locustio-0.7.2";
 
