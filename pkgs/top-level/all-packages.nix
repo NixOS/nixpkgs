@@ -9406,6 +9406,8 @@ let
     inherit (vamp) vampSDK;
   };
 
+  mjpg_streamer = callPackage ../applications/video/mjpg-streamer { };
+
   mmex = callPackage ../applications/office/mmex { };
 
   moc = callPackage ../applications/audio/moc { };
