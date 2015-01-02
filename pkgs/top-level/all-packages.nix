@@ -703,9 +703,7 @@ let
 
   enca = callPackage ../tools/text/enca { };
 
-  fasd = callPackage ../tools/misc/fasd {
-    inherit (haskellPackages) pandoc;
-  };
+  fasd = callPackage ../tools/misc/fasd { };
 
   fop = callPackage ../tools/typesetting/fop { };
 
@@ -788,7 +786,6 @@ let
 
   bup = callPackage ../tools/backup/bup {
     inherit (pythonPackages) pyxattr pylibacl setuptools fuse;
-    inherit (haskellPackages) pandoc;
     par2Support = (config.bup.par2Support or false);
   };
 
