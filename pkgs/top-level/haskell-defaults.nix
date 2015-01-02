@@ -303,6 +303,24 @@
         unix = null;
         unorderedContainers = null;
         vector = null;
+
+        # GHCJS-specific workarounds
+        split = super.split.override {
+          cabal = self.cabal.override {
+            extension = self: super: {
+              doCheck = false; # Under ghcjs, the tests hang
+            };
+          };
+        };
+        dependentMap = super.dependentMap.override {
+          cabal = self.cabal.override {
+            extension = self: super: {
+              preConfigure = ''
+                sed -i 's/^.*ghc-options:.*$//' *.cabal
+              ''; # Without this, we get "target ‘base’ is not a module name or a source file"
+            };
+          };
+        };
       };
     };
 
