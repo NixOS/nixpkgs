@@ -2,12 +2,12 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  version = "0.3.76";
+  version = "0.3.80";
   name = "namecoind-${version}";
 
   src = fetchurl {
     url = "https://github.com/namecoin/namecoin/archive/nc${version}.tar.gz";
-    sha256 = "007372j47hb7p89smh3w0p6z70gii9gd4v6agpycqiv4r3n9sv5v";
+    sha256 = "1755mqxpg91wg9hf0ibpj59sdzfmhh73yrpi7hfi2ipabkwmlpiz";
   };
 
   buildInputs = [ db4 boost openssl unzip miniupnpc ];
