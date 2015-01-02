@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, qtLib, sdkBuild ? false, withDocumentation ? true }:
+{ stdenv, fetchurl, qtLib, sdkBuild ? false, withDocumentation ? false }:
 
 with stdenv.lib;
 
 let
-  baseVersion = "3.2";
-  revision = "1";
+  baseVersion = "3.3";
+  revision = "0";
   version = "${baseVersion}.${revision}";
 in
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/qtcreator/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.gz";
-    sha256 = "0kp7czn9mzncdpq8bx15s3sy13g4xlcdz7y7zy0s9350g4ijs8fx";
+    sha256 = "0njjj3ixmpmm8vyys2wvz7k4vpl6aqqzhis02dczk5dbby0wi997";
   };
 
   # This property can be used in a nix development environment to refer to the Qt package
