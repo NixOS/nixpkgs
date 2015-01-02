@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ldb-1.1.18";
+  name = "ldb-1.1.19";
 
   src = fetchurl {
     url = "http://samba.org/ftp/ldb/${name}.tar.gz";
-    sha256 = "1j69sla6shzcm5lmsb79c4igsjnx2ggygqmf9yyim9mkl8z9ksig";
+    sha256 = "1p2815z9sjack08pcdbv4xzp1fvr4lxcn30rj0wh3py4ly6ji1h0";
   };
 
   buildInputs = [
