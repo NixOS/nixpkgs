@@ -8,8 +8,6 @@ if isPyPy then throw "dbus-python not supported for interpreter ${python.executa
     sha256 = "1py62qir966lvdkngg0v8k1khsqxwk5m4s8nflpk1agk5f5nqb71";
   };
 
-  postPatch = "patchShebangs .";
-
   buildInputs = [ python pkgconfig dbus dbus_glib ]
     ++ stdenv.lib.optional doCheck dbus_tools;
 

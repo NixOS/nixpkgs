@@ -12,10 +12,6 @@ stdenv.mkDerivation rec {
     sha256 = "5d1f5ab3286bb748bd29cbf45df2ad2faf5ed86070f90deccf71c60be832f3d5";
   };
 
-  preBuild = ''
-    patchShebangs ./install.sh
-  '';
-
   buildInputs = [ bash makeWrapper ];
 
   installPhase = ''

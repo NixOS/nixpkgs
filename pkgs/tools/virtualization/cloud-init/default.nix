@@ -12,8 +12,6 @@ in pythonPackages.buildPythonPackage rec {
   };
 
   preBuild = ''
-    patchShebangs ./tools
-
     substituteInPlace setup.py \
       --replace /usr $out \
       --replace /etc $out/etc \

@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patchPhase = "patchShebangs .";
-
   # This file should normally require a gtk-update-icon-cache -q /usr/share/icons/hicolor command
   # It have no reasons to exist in a redistribuable package
   postInstall = "rm $out/share/icons/hicolor/icon-theme.cache";

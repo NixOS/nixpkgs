@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     PATH=${iproute}/sbin:${iptables}/sbin:${ebtables}/sbin:${lvm2}/sbin:${udev}/sbin:${dnsmasq}/bin:$PATH
-    patchShebangs . # fixes /usr/bin/python references
   '';
 
   configureFlags = [

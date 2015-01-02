@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    patchShebangs scripts/.
     sed -i 's;/usr;;g' INSTALL.im
     substituteInPlace build --replace /usr/bin/icmake ${icmake}/bin/icmake
     substituteInPlace macros/rawmacros/startdoc.pl --replace /usr/bin/perl ${perl}/bin/perl

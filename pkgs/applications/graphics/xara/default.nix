@@ -16,5 +16,4 @@ stdenv.mkDerivation {
 
   patches = map fetchurl (import ./debian-patches.nix);
 
-  prePatch = "patchShebangs Scripts";
 }

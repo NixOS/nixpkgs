@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
     gobjectIntrospection
   ];
 
-  preBuild = "patchShebangs ./scripts";
-
   meta = {
     homepage = "http://cinnamon.linuxmint.com";
     description = "JavaScript bindings for Cinnamon" ;

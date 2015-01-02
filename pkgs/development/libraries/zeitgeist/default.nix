@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
                   libtool python dbus_libs telepathy_glib vala dbus_glib
                   gtk3 json_glib librdf_raptor2 pythonPackages.rdflib ];
 
-  prePatch = "patchShebangs .";
-
   patches = [ ./dbus_glib.patch ];
 
   patchFlags = [ "-p0" ];

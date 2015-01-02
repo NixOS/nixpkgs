@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
     cp -R getopt riaknostic/deps
     cp -R meck riaknostic/deps
     popd
-    patchShebangs .
   '';
 
   buildPhase = ''

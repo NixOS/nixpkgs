@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper which go iptables rsync ];
 
-  preBuild = "patchShebangs ./hack";
-
   postBuild = ''go build --ldflags '-extldflags "-static" -s' build/pause/pause.go'';
 
   installPhase = ''

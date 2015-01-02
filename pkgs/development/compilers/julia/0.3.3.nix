@@ -106,8 +106,6 @@ stdenv.mkDerivation rec {
 
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PWD/usr/lib:$PWD/usr/lib/julia"
 
-    patchShebangs . contrib
-
     export PATH="$PATH:${stdenv.cc.libc}/sbin"
 
     # ldconfig doesn't seem to ever work on NixOS; system-wide ldconfig cache

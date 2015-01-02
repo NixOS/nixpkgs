@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
 
     # Ensure NSS installation works fine
     configureFlags="$configureFlags --with-nssdir=$out/lib"
-    patchShebangs src/gns/nss/install-nss-plugin.sh
   '';
 
   doCheck = false;

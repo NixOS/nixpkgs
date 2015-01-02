@@ -27,7 +27,6 @@ stdenv.mkDerivation {
 
   postPatch = ''
     ENV=$(type -p env)
-    patchShebangs "."
     substituteInPlace lib/Tools/env \
       --replace /usr/bin/env $ENV
     substituteInPlace lib/Tools/install \

@@ -12,10 +12,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python ];
 
-  postPatch = ''
-    patchShebangs .
-  '';
-
   meta = {
     description = "A simple but powerful template language for C++";
     longDescription = ''
