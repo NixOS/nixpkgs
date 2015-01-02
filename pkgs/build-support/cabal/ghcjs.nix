@@ -6,14 +6,13 @@
 , enableSharedLibraries ? false
 , enableSharedExecutables ? false
 , enableStaticLibraries ? true
-, enableCheckPhase ? stdenv.lib.versionOlder "7.4" ghc.version
+, enableCheckPhase ? true
 , enableHyperlinkSource ? false
 , extension ? (self : super : {})
 }:
 
 let
   enableFeature         = stdenv.lib.enableFeature;
-  versionOlder          = stdenv.lib.versionOlder;
   optional              = stdenv.lib.optional;
   optionals             = stdenv.lib.optionals;
   optionalString        = stdenv.lib.optionalString;
@@ -156,9 +155,9 @@ in
               (enableFeature self.enableSplitObjs "split-objs")
               (enableFeature enableLibraryProfiling "library-profiling")
               (enableFeature true "shared")
-              (optional (versionOlder "7" ghc.version) (enableFeature self.enableStaticLibraries "library-vanilla"))
-              (optional (versionOlder "7.4" ghc.version) (enableFeature self.enableSharedExecutables "executable-dynamic"))
-              (optional (versionOlder "7" ghc.version) (enableFeature self.doCheck "tests"))
+              (enableFeature self.enableStaticLibraries "library-vanilla")
+              (enableFeature self.enableSharedExecutables "executable-dynamic")
+              (enableFeature self.doCheck "tests")
             ];
 
             # GHC needs the locale configured during the Haddock phase.
