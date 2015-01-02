@@ -8,11 +8,11 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "dogecoin" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchurl {
     url = "https://github.com/dogecoin/dogecoin/archive/v${version}.tar.gz";
-    sha256 = "8a33958c04213cd621aa3c86910477813af22512f03b47c98995d20d31f3f935";
+    sha256 = "0h3jn400dj6qxl1gd4max7wl30cib2wczf9dd3qnbw42wngpdvx2";
   };
 
   buildInputs = [ autoreconfHook pkgconfig openssl
