@@ -25,6 +25,11 @@ let
     options.
   '';
 
+  hashedPasswordDescription = ''
+    To generate hashed password install <literal>mkpassword</literal>
+    package and run <literal>mkpasswd -m sha-512</literal>.
+  '';
+
   userOpts = { name, config, ... }: {
 
     options = {
@@ -165,6 +170,7 @@ let
         description = ''
           Specifies the hashed password for the user.
           ${passwordDescription}
+          ${hashedPasswordDescription}
         '';
       };
 
@@ -202,6 +208,8 @@ let
           password can be changed subsequently using the
           <command>passwd</command> command. Otherwise, it's
           equivalent to setting the <option>password</option> option.
+
+          ${hashedPasswordDescription}
         '';
       };
 
@@ -366,21 +374,24 @@ in {
       type = types.bool;
       default = true;
       description = ''
-        If true, you are free to add new users and groups to the system
+        If set to <literal>true</literal>, you are free to add new users and groups to the system
         with the ordinary <literal>useradd</literal> and
         <literal>groupadd</literal> commands. On system activation, the
         existing contents of the <literal>/etc/passwd</literal> and
         <literal>/etc/group</literal> files will be merged with the
         contents generated from the <literal>users.extraUsers</literal> and
-        <literal>users.extraGroups</literal> options. If
-        <literal>mutableUsers</literal> is false, the contents of the user and
-        group files will simply be replaced on system activation. This also
-        holds for the user passwords; if this option is false, all changed
-        passwords will be reset according to the
-        <literal>users.extraUsers</literal> configuration on activation. If
-        this option is true, the initial password for a user will be set
+        <literal>users.extraGroups</literal> options.
+        The initial password for a user will be set
         according to <literal>users.extraUsers</literal>, but existing passwords
         will not be changed.
+
+        <warning>
+        If set to <literal>false</literal>, the contents of the user and
+        group files will simply be replaced on system activation. This also
+        holds for the user passwords; all changed
+        passwords will be reset according to the
+        <literal>users.extraUsers</literal> configuration on activation.
+        </warning>
       '';
     };
 
