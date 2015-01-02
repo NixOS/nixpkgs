@@ -10,7 +10,7 @@ python3Packages.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with python3Packages;
-    [ cython msgpack openssl acl ];
+    [ cython msgpack openssl acl llfuse ];
 
   preConfigure = ''
     export ATTIC_OPENSSL_PREFIX="${openssl}"
