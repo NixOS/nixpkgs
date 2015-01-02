@@ -4122,7 +4122,7 @@ let
     hdf5 = null;
     glpk = null;
     suitesparse = null;
-    openjdk = null;
+    jdk = null;
     gnuplot = null;
   };
   octaveFull = (lowPrio (callPackage ../development/interpreters/octave {
@@ -4683,7 +4683,7 @@ let
   lttv = callPackage ../development/tools/misc/lttv { };
 
   maven = maven3;
-  maven3 = callPackage ../development/tools/build-managers/apache-maven { jdk = openjdk; };
+  maven3 = callPackage ../development/tools/build-managers/apache-maven { };
 
   mk = callPackage ../development/tools/build-managers/mk { };
 
@@ -10240,7 +10240,6 @@ let
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2 gnome_vfs;
     zip = zip.override { enableNLS = false; };
-    jdk = openjdk;
     boost = boost155;
     glm = glm_0954;
     fontsConf = makeFontsConf {
