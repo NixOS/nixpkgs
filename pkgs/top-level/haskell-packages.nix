@@ -1448,6 +1448,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   interlude = callPackage ../development/libraries/haskell/interlude {};
 
+  intern = callPackage ../development/libraries/haskell/intern {};
+
   interpolate = callPackage ../development/libraries/haskell/interpolate {};
 
   interpolatedstringPerl6 = callPackage ../development/libraries/haskell/interpolatedstring-perl6 {};
