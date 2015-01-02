@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
                   libglade scrollkeeper webkitgtk dbus_glib enchant isocodes libuuid ];
 
   prePatch = ''
-    patchShebangs .;
   '';
 
   preConfigure =  ''

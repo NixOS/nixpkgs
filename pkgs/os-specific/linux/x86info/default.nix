@@ -10,8 +10,6 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    patchShebangs .
-
     # ignore warnings
     sed -i 's/-Werror -Wall//' Makefile
   '';

@@ -21,10 +21,6 @@ stdenv.mkDerivation {
 
   cmakeFlags = "-DENABLE_AUTODOWNLOAD=OFF -DBUILD_DESCRIPTION='NixOS' -DCMAKE_BUILD_TYPE=Release";
 
-  prePatch = ''
-    patchShebangs .
-  '';
-
   # Disable the kadu plugins I wasn't able to get to work
   patchPhase = ''
     sed -i -e '/mpd_mediaplayer/d' \

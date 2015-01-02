@@ -14,11 +14,6 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ erlang python libxml2 libxslt xmlto docbook_xml_dtd_45 docbook_xsl zip unzip ];
 
-  preBuild =
-    ''
-      # Fix the "/usr/bin/env" in "calculate-relative".
-      patchShebangs .
-    '';
 
   installFlags = "TARGET_DIR=$(out)/libexec/rabbitmq SBIN_DIR=$(out)/sbin MAN_DIR=$(out)/share/man DOC_INSTALL_DIR=$(out)/share/doc";
 

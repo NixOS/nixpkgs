@@ -916,14 +916,6 @@ let
   ];
 
   otherOverrides = old: new: {
-    RcppArmadillo = old.RcppArmadillo.overrideDerivation (attrs: {
-      patchPhase = "patchShebangs configure";
-    });
-
-    rpf = old.rpf.overrideDerivation (attrs: {
-      patchPhase = "patchShebangs configure";
-    });
-
     BayesXsrc = old.BayesXsrc.overrideDerivation (attrs: {
       patches = [ ./patches/BayesXsrc.patch ];
     });

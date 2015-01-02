@@ -527,8 +527,6 @@ rec {
     configurePhase = ":";
 
     buildPhase = ''
-      patchShebangs .
-
       target=$out/${rtpPath}/youcompleteme
       mkdir -p $target
       cp -a ./ $target

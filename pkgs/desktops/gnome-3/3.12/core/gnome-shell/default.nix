@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
   installFlags = [ "keysdir=$(out)/share/gnome-control-center/keybindings" ];
 
   preBuild = ''
-    patchShebangs src/data-to-c.pl
     substituteInPlace data/Makefile --replace " install-keysDATA" ""
   '';
 

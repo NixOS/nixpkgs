@@ -38,7 +38,6 @@ stdenv.mkDerivation {
     sha256 = "f6031f8b7113a92325b60635c504c510490eebb2e707119bbff7bd86aa34657d";
   };
 
-  prePatch = "patchShebangs .";
 
   patches = [
     ./static-gallium.patch

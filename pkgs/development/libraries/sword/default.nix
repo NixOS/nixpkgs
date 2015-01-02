@@ -13,10 +13,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig icu clucene_core curl ];
 
-  prePatch = ''
-    patchShebangs .;
-  '';
-
   configureFlags = "--without-conf --enable-tests=no CXXFLAGS=-Wno-unused-but-set-variable";
 
   meta = with stdenv.lib; {

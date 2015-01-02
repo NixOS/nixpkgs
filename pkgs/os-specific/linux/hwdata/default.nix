@@ -8,8 +8,6 @@ stdenv.mkDerivation {
     sha256 = "1ak3h3psg3wk9yk0dqnzdzik3jadzja3ah22vjfmf71p3b5xc8ai";
   };
 
-  preConfigure = "patchShebangs ./configure";
-
   configureFlags = "--datadir=$(prefix)/data";
 
   meta = {

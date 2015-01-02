@@ -10,7 +10,6 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    patchShebangs ./
     sed -i "s;usr/;;g" INSTALL.im
   '';
 

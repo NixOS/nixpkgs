@@ -25,10 +25,6 @@ stdenv.mkDerivation rec {
     cd source
     # Related to issue #1963
     sed -i 's/-fuse-ld=gold//g' Makefile
-    for i in util/*.pl; do
-      patchShebangs $i
-    done
-    patchShebangs util/gen-mi-enum
   '';
 
   makeFlags = [ "prefix=$(out)" "FORCE_CC=gcc" "FORCE_CXX=g++" "HOSTCXX=g++"

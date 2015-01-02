@@ -20,8 +20,6 @@ stdenv.mkDerivation {
 
   opensslPatches = optional useOpenSSL openssl.patches;
 
-  prePatch = "patchShebangs .";
-
   patches = [ ./sandbox_userns_36.patch ./nix_plugin_paths.patch ];
 
   postPatch = ''

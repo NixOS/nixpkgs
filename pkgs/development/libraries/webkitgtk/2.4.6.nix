@@ -28,10 +28,6 @@ stdenv.mkDerivation rec {
 
   CC = "cc";
 
-  prePatch = ''
-    patchShebangs Tools/gtk
-  '';
-
   configureFlags = with stdenv.lib; [
     "--disable-geolocation"
     (optionalString enableIntrospection "--enable-introspection")
