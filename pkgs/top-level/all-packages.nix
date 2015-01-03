@@ -1166,6 +1166,8 @@ let
 
   flannel = callPackage ../tools/networking/flannel { };
 
+  flashbench = callPackage ../os-specific/linux/flashbench { };
+
   figlet = callPackage ../tools/misc/figlet { };
 
   file = callPackage ../tools/misc/file { };
