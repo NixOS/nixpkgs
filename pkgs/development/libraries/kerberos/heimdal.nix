@@ -22,8 +22,18 @@ stdenv.mkDerivation rec {
     "--without-x"
   ];
 
-  # dont succeed with --libexec=$out/sbin, so
+  # We need to build hcrypt for applications like samba
+  postBuild = ''
+    (cd lib/hcrypto; make)
+    (cd include/hcrypto; make)
+  '';
+
   postInstall = ''
+    # Install hcrypto
+    (cd lib/hcrypto; make install)
+    (cd include/hcrypto; make install)
+
+    # dont succeed with --libexec=$out/sbin, so
     mv "$out/libexec/"* $out/sbin/
     rmdir $out/libexec
   '';
