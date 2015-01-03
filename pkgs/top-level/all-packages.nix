@@ -5848,6 +5848,8 @@ let
     extraOnly = true;
   };
 
+  libfprint = callPackage ../development/libraries/libfprint { };
+
   libgadu = callPackage ../development/libraries/libgadu { };
 
   libgdata = gnome3.libgdata;
