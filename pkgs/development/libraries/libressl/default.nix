@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.0.5";
 
   src = fetchurl {
-    url    = "http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/${name}.tar.gz";
+    url    = "mirror://openbsd/LibreSSL/${name}.tar.gz";
     sha256 = "16pwgmj90k10pf03il39lnck5kqw59hj0fp2qhmgsgmrvssn6m1z";
   };
 
