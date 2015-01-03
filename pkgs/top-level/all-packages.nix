@@ -5680,8 +5680,7 @@ let
   lcms2 = callPackage ../development/libraries/lcms2 { };
 
   ldb = callPackage ../development/libraries/ldb {
-    sasl = cyrus_sasl;
-    libgcrypt = libgcrypt_1_6;
+    python = python2;
   };
 
   lensfun = callPackage ../development/libraries/lensfun { };
@@ -7034,7 +7033,7 @@ let
   taglib_extras = callPackage ../development/libraries/taglib-extras { };
 
   talloc = callPackage ../development/libraries/talloc {
-    libgcrypt = libgcrypt_1_6;
+    python = python2;
   };
 
   tclap = callPackage ../development/libraries/tclap {};
@@ -7045,9 +7044,14 @@ let
 
   tcltls = callPackage ../development/libraries/tcltls { };
 
+  ctdb = callPackage ../development/libraries/ctdb { };
+
+  ntdb = callPackage ../development/libraries/ntdb {
+    python = python2;
+  };
+
   tdb = callPackage ../development/libraries/tdb {
-    sasl = cyrus_sasl;
-    libgcrypt = libgcrypt_1_6;
+    python = python2;
   };
 
   tecla = callPackage ../development/libraries/tecla { };
@@ -7059,8 +7063,7 @@ let
   telepathy_qt = callPackage ../development/libraries/telepathy/qt { };
 
   tevent = callPackage ../development/libraries/tevent {
-    libgcrypt = libgcrypt_1_6;
-    sasl = cyrus_sasl;
+    python = python2;
   };
 
   thrift = callPackage ../development/libraries/thrift { };
