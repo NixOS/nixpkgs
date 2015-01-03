@@ -105,7 +105,6 @@ let
       '';
 
       buildFlags = [
-        "KBUILD_BUILD_TIMESTAMP=1" # (time_t)1
         "KBUILD_BUILD_VERSION=1-NixOS"
         platform.kernelTarget
       ] ++ optional isModular "modules";
