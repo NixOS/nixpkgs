@@ -1,7 +1,5 @@
-{ stdenv, fetchurl, python27, pkgconfig, gettext, readline, libxslt
+{ stdenv, fetchurl, python, pkgconfig, readline, libxslt
 , docbook_xsl, docbook_xml_dtd_42
-, libaio ? null, acl ? null, heimdal ? null, libcap ? null, sasl ? null, pam ? null, zlib ? null
-, libgcrypt ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -13,12 +11,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    python27 pkgconfig gettext readline libxslt docbook_xsl docbook_xml_dtd_42
-    libaio acl heimdal libcap sasl pam zlib libgcrypt
+    python pkgconfig readline libxslt docbook_xsl docbook_xml_dtd_42
   ];
 
   preConfigure = ''
-    sed -i 's,#!/usr/bin/env python,#!${python27}/bin/python,g' buildtools/bin/waf
+    sed -i 's,#!/usr/bin/env python,#!${python}/bin/python,g' buildtools/bin/waf
   '';
 
   configureFlags = [
