@@ -7,8 +7,8 @@ OLD_ftp_proxy="$http_proxy"
 source @myenvpath@
 
 PATH="$PATH:$OLDPATH"
-export PS1="\n@name@:[\u@\h:\w]\$ "
 export NIX_MYENV_NAME="@name@"
+export PS1="@ps1@"
 export buildInputs
 export NIX_STRIP_DEBUG=0
 export TZ="$OLDTZ"

@@ -11,9 +11,9 @@
     };
   }
 
-  # Then you can install it by:  
+  # Then you can install it by:
   #  $ nix-env -i env-sdl
-  # And you can load it simply calling:  
+  # And you can load it simply calling:
   #  $ load-env-sdl
   # and this will update your env vars to have 'make' and 'gcc' finding the SDL
   # headers and libs.
@@ -28,7 +28,7 @@
     let complicatedMyEnv = { name, buildInputs ? [], cTags ? [], extraCmds ? ""}:
             pkgs.myEnvFun {
               inherit name;
-            buildInputs = buildInputs 
+            buildInputs = buildInputs
                   ++ map (x : sourceWithTagsDerivation
                     ( (addCTaggingInfo x ).passthru.sourceWithTags ) ) cTags;
             extraCmds = ''
@@ -54,10 +54,24 @@
   # The result using that command should be:
   #  env-nix loaded
   and show you a shell with a prefixed prompt.
-*/
+
+  # The prompt of the new shell can be defined by setting ps1 in the
+  # arguments to myEnvFun.  The default value is
+  # ps1 = "\\\\n\${NIX_MYENV_NAME}:[\\\\u@\\\\h:\\\\w] $ "
+  # Note that 4 backslashes are needed to pass an escape which is recognized in
+  # PS1, and that the environment name is available in the shell variable
+  # $NIX_MYENV_NAME.
+
+ */
 
 { mkDerivation, substituteAll, pkgs }:
     { stdenv ? pkgs.stdenv, name, buildInputs ? []
+    # "\n$\{NIX_MYENV_NAME\}:[\u@\h:\w]\$ "
+    , ps1 ? "\\\\n\${NIX_MYENV_NAME}:[\\\\u@\\\\h:\\\\w] $ "
+        # , ps1 ? ''
+    #     test: \\$
+    #   ''
+      # ''${NIX_MYENV_NAME}:[\\u@\\h:\\w] $''
     , propagatedBuildInputs ? [], gcc ? stdenv.cc, cTags ? [], extraCmds ? ""
     , cleanupCmds ? "", shell ? "${pkgs.bashInteractive}/bin/bash --norc"}:
 
@@ -148,7 +162,8 @@ mkDerivation {
 
     mkdir -p $out/bin
     sed -e 's,@shell@,${shell},' -e s,@myenvpath@,$out/dev-envs/${name}, \
-      -e 's,@name@,${name},' ${./loadenv.sh} > $out/bin/load-env-${name}
+      -e 's,@name@,${name},' -e 's,@ps1@,${ps1},' ${./loadenv.sh} \
+      > $out/bin/load-env-${name}
     chmod +x $out/bin/load-env-${name}
   '';
 }
