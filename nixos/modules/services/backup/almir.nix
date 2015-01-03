@@ -34,11 +34,16 @@ sqlalchemy.url = ${cfg.sqlalchemy_engine_url}
 timezone = ${cfg.timezone}
 bconsole_config = ${bconsoleconf}
 
+filter-with = proxy-prefix
+
 [server:main]
 use = egg:waitress#main
 host = 127.0.0.1
 port = ${toString cfg.port}
 
+[filter:proxy-prefix]
+use = egg:PasteDeploy#prefix
+prefix = ${cfg.prefix}
 
 # Begin logging configuration
 
@@ -101,7 +106,17 @@ in {
         '';
       };
 
+      prefix = mkOption {
+	default = "/";
+	example = "/almir";
+	type = types.str;
+	description = ''
+	  Url prefix for Almir web server.
+	'';
+      };
+
       timezone = mkOption {
+	default = config.time.timeZone;
 	description = ''
          Timezone as specified in https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
         '';
@@ -151,11 +166,11 @@ in {
 
   config = mkIf cfg.enable {
     systemd.services.almir = {
-      after = [ "network.target" "postgresql.service" ];
+      after = [ "network.target" "postgresql.service" "bacula-dir.service" ];
       description = "Almir web app";
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.pythonPackages.almir ];
-      environment.PYTHONPATH = "${pkgs.pythonPackages.almir}/lib/${pkgs.pythonPackages.python.libPrefix}/site-packages";
+      environment.PYTHONPATH = "${pkgs.pythonPackages.almir}/lib/${pkgs.pythonPackages.python.libPrefix}/site-packages:${pkgs.pythonPackages.paste_deploy}/lib/${pkgs.pythonPackages.python.libPrefix}/site-packages";
       serviceConfig.ExecStart = "${pkgs.pythonPackages.pyramid}/bin/pserve ${productionini}";
     };
 
