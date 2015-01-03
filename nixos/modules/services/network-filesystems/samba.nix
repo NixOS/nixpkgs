@@ -9,7 +9,7 @@ let
   logDir = "/var/log/samba";
   privateDir = "/var/samba/private";
 
-  inherit (pkgs) samba;
+  samba = cfg.package;
 
   setupScript =
     ''
@@ -88,6 +88,14 @@ in
           Whether to enable Samba, which provides file and print
           services to Windows clients through the SMB/CIFS protocol.
         ";
+      };
+
+      package = mkOption {
+        default = pkgs.samba;
+        example = pkgs.samba4;
+        description = ''
+          Defines which package should be used for the samba server.
+        '';
       };
 
       syncPasswordsByPam = mkOption {
