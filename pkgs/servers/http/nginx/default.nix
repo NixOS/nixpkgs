@@ -33,8 +33,8 @@ let
   syslog-ext = fetchFromGitHub {
     owner = "yaoweibin";
     repo = "nginx_syslog_patch";
-    rev = "v0.25";
-    sha256 = "0734f884838wcjyrrddn8wzj834wid1zffrk093jrx18447cryxl";
+    rev = "3ca5ba65541637f74467038aa032e2586321d0cb";
+    sha256 = "0y8dxkx8m1jw4v5zsvw1gfah9vh3ryq0hfmrcbjzcmwp5b5lb1i8";
   };
 
   moreheaders-ext = fetchFromGitHub {
