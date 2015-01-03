@@ -10255,6 +10255,20 @@ let self = _self // overrides; _self = with self; {
     doCheck = false;
   };
 
+  X11IdleTime = buildPerlPackage rec {
+    name = "X11-IdleTime-0.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AW/AWENDT/${name}.tar.gz";
+      sha256 = "0j27cb9yy9ymni8cbiyxplbg086b8lv6b330nwqyx0briq3xrzfq";
+    };
+    buildInputs = [ pkgs.xlibs.libXext pkgs.xlibs.libXScrnSaver pkgs.xlibs.libX11 ];
+    propagatedBuildInputs = [ InlineC ];
+    patchPhase = ''sed -ie 's,-L/usr/X11R6/lib/,-L${pkgs.xlibs.libX11}/lib/ -L${pkgs.xlibs.libXext}/lib/ -L${pkgs.xlibs.libXScrnSaver}/lib/,' IdleTime.pm'';
+    meta = {
+      description = "Get the idle time of X11";
+    };
+  };
+
   X11Protocol = buildPerlPackage rec {
     name = "X11-Protocol-0.56";
     src = fetchurl {
