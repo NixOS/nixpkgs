@@ -7901,10 +7901,21 @@ let
       HTTPDate MailDKIM LWP IOSocketSSL;
   };
 
-  samba = callPackage ../servers/samba { };
+  samba3 = callPackage ../servers/samba/3.x.nix { };
 
-  # A lightweight Samba, useful for non-Linux-based OSes.
-  samba_light = lowPrio (callPackage ../servers/samba {
+  samba4 = callPackage ../servers/samba/4.x.nix {
+    python = python2;
+    pythonPackages = python2Packages;
+    libiconv = if stdenv.isLinux then null else libiconv;
+    libgcrypt = libgcrypt_1_6;
+  };
+
+  samba = samba4;
+
+  smbclient = samba;
+
+  # A lightweight Samba 3, useful for non-Linux-based OSes.
+  samba3_light = lowPrio samba3.override {
     pam = null;
     fam = null;
     cups = null;
@@ -7912,7 +7923,38 @@ let
     openldap = null;
     # libunwind 1.0.1 is not ported to GNU/Hurd.
     libunwind = null;
+  };
+
+  samba4_light = lowPrio (samba4.override {
+    # source3/wscript optionals
+    heimdal = null;
+    openldap = null;
+    cups = null;
+    pam = null;
+    avahi = null;
+    acl = null;
+    libaio = null;
+    fam = null;
+    ctdb = null;
+    ceph = null;
+    glusterfs = null;
+
+    # buildtools/wafsamba/wscript optionals
+    libiconv = null;
+    gettext = null;
+
+    # source4/lib/tls/wscript optionals
+    gnutls = null;
+    libgcrypt = null;
+    libgpgerror = null;
+
+    # other optionals
+    zlib = null;
+    ncurses = null;
+    libcap = null;
   });
+
+  samba_light = samba3_light;
 
   serfdom = callPackage ../servers/serfdom { };
 
