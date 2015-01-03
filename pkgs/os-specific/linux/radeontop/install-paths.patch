@@ -1,0 +1,36 @@
+diff -Nurp radeontop-0.8-orig/Makefile radeontop-0.8/Makefile
+--- radeontop-0.8-orig/Makefile	2015-01-03 09:34:30.205507608 +0100
++++ radeontop-0.8/Makefile	2015-01-03 09:43:22.835174006 +0100
+@@ -7,7 +7,6 @@
+ #	nostrip	disable stripping, default off
+ #	plain	apply neither -g nor -s.
+ 
+-PREFIX ?= /usr
+ INSTALL ?= install
+ 
+ nls ?= 1
+@@ -74,10 +73,10 @@ trans:
+ 	--package-name radeontop
+ 
+ install: all
+-	$(INSTALL) -D -m755 $(bin) $(DESTDIR)/$(PREFIX)/sbin/$(bin)
+-	$(INSTALL) -D -m644 radeontop.1 $(DESTDIR)/$(PREFIX)/share/man/man1/radeontop.1
++	$(INSTALL) -D -m755 $(bin) $(DESTDIR)/sbin/$(bin)
++	$(INSTALL) -D -m644 radeontop.1 $(DESTDIR)/share/man/man1/radeontop.1
+ ifeq ($(nls), 1)
+-	$(MAKE) -C translations install PREFIX=$(PREFIX)
++	$(MAKE) -C translations install DESTDIR=$(DESTDIR)
+ endif
+ 
+ man:
+diff -Nurp radeontop-0.8-orig/translations/Makefile radeontop-0.8/translations/Makefile
+--- radeontop-0.8-orig/translations/Makefile	2015-01-03 09:34:30.205507608 +0100
++++ radeontop-0.8/translations/Makefile	2015-01-03 09:43:40.235309691 +0100
+@@ -15,6 +15,6 @@ $(obj): $(src)
+ 	$(MSGFMT) -o $@ $<
+ 
+ %.inst: %.mo
+-	$(INSTALL) -D -m 644 $< $(DESTDIR)/$(PREFIX)/share/locale/$*/LC_MESSAGES/radeontop.mo
++	$(INSTALL) -D -m 644 $< $(DESTDIR)/share/locale/$*/LC_MESSAGES/radeontop.mo
+ 
+ install: all $(inst)

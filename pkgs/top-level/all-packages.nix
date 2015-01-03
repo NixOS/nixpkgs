@@ -8663,6 +8663,8 @@ let
 
   radeontools = callPackage ../os-specific/linux/radeontools { };
 
+  radeontop = callPackage ../os-specific/linux/radeontop { };
+
   raspberrypifw = callPackage ../os-specific/linux/firmware/raspberrypi {};
 
   regionset = callPackage ../os-specific/linux/regionset { };
